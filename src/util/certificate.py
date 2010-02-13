@@ -74,8 +74,8 @@ class ProductCertificate:
         """
         x509 = Certificate(path)
         redhat = OID(self.REDHAT)
-        self.__ext = x509.extensions().ltrim(len(redhat))
-        self.__x509 = x509
+        self.ext = x509.extensions().ltrim(len(redhat))
+        self.x509 = x509
         
     def consumerid(self):
         """
@@ -83,7 +83,7 @@ class ProductCertificate:
         @return: The serial number.
         @rtype: str
         """
-        return self.__x509.serial_number()
+        return self.x509.serial_number()
 
     def product(self):
         """
@@ -91,12 +91,12 @@ class ProductCertificate:
         @return: A list of product object.
         @rtype: [L{Product},..]
         """
-        products = self.__ext.find('2.7.1', 1)
+        products = self.ext.find('2.7.1', 1)
         if products:
             p = products[0]
             oid = p[0]
             root = oid.rtrim(1)
-            ext = self.__ext.branch(root)
+            ext = self.ext.branch(root)
             return Product(self.PRODUCT, ext)
         return None
     
@@ -107,19 +107,21 @@ class ProductCertificate:
         @rtype: [L{Entitlement},..]
         """
         lst = []
-        entitlements = self.__ext.find('3.*.1')
+        entitlements = self.ext.find('3.*.1')
         for ent in entitlements:
             oid = ent[0]
             root = oid.rtrim(1)
-            ext = self.__ext.branch(root)
+            ext = self.ext.branch(root)
             lst.append(Entitlement(self.ENTITLEMENT, ext))
         return lst
     
     def __str__(self):
         s = []
         s.append(str(self.product()))
+        s.append('')
         for e in self.entitlements():
             s.append(str(e))
+            s.append('')
         return '\n'.join(s)
 
 
@@ -454,4 +456,6 @@ import sys
 if __name__ == '__main__':
     for path in sys.argv[1:]:
         print path
-        print ProductCertificate(path)
+        pc = ProductCertificate(path)
+        print pc.x509
+        print pc
