@@ -23,27 +23,148 @@ Contains classes for working with x.509 certificates.
 The backing implementation is M2Crypto.X509 which has insufficient
 support for custom v3 extensions.  It is not intended to be a
 replacement of full wrapper but instead and extension.
-Usage:
-  from certificate import Certificate
-
-  x509 = Certificate('/tmp/mycert.pem')
-  
-  # textual representation of the cert
-  print x509
-
-  ext = x509.extensions()
-
-  # get the value of a specific OID
-  value = ext.get('1.3.1')
-  print value
-
-  # get a list of (OID, value) using wildcard OID.
-  values = ext.find('1.*.3')
-  print values
 """
 
 import re
 from M2Crypto import X509
+
+
+class ProductCertificate:
+    """
+    Represents a Red Hat product/entitlement certificate.
+    It is OID schema aware and provides methods to get
+    product and entitlement information.
+    @cvar REDHAT: The Red Hat base OID.
+    @type REDHAT: str
+    @cvar PRODUCT: The product attribute/OID mapping.
+    @type PRODUCT: dict
+    @cvar ENTITLEMENT: The entitlement attribute/OID mapping.
+    @type ENTITLEMENT: dict
+    """
+    
+    REDHAT = '1.3.6.1.4.1.2312'
+    
+    PRODUCT = {
+        'name':'1',
+        'description':'2',
+        'architecture':'3',
+        'version':'4',
+        'quantity':'5',
+        'subtype':'6',
+        'virtualizationLimit':'7',
+        'socketLimit':'8',
+        'productOptionCode':'9'
+    }
+
+    ENTITLEMENT = {
+        'name':'1',
+        'description':'2',
+        'architecture':'3.1',
+        'version':'4',
+        'guestQuantity':'5',
+        'quantity':'6',
+        'updatesAllowd':'7',
+        'vendor':'8',
+        'url':'9',
+    }
+    
+    def __init__(self, path):
+        """
+        @param path: The path to the .pem file.
+        @type path: str
+        """
+        x509 = Certificate(path)
+        redhat = OID(self.REDHAT)
+        self.__ext = x509.extensions().ltrim(len(redhat))
+        self.__x509 = x509
+        
+    def consumerid(self):
+        """
+        Get the consumer ID.
+        @return: The serial number.
+        @rtype: str
+        """
+        return self.__x509.serial_number()
+
+    def product(self):
+        """
+        Get the product defined in the certificate.
+        @return: A list of product object.
+        @rtype: [L{Product},..]
+        """
+        products = self.__ext.find('2.7.1', 1)
+        if products:
+            p = products[0]
+            oid = p[0]
+            root = oid.rtrim(1)
+            ext = self.__ext.branch(root)
+            return Product(self.PRODUCT, ext)
+        return None
+    
+    def entitlements(self):
+        """
+        Get the entitlements defined in the certificate.
+        @return: A list of entitlement object.
+        @rtype: [L{Entitlement},..]
+        """
+        lst = []
+        entitlements = self.__ext.find('3.*.1')
+        for ent in entitlements:
+            oid = ent[0]
+            root = oid.rtrim(1)
+            ext = self.__ext.branch(root)
+            lst.append(Entitlement(self.ENTITLEMENT, ext))
+        return lst
+    
+    def __str__(self):
+        s = []
+        s.append(str(self.product()))
+        for e in self.entitlements():
+            s.append(str(e))
+        return '\n'.join(s)
+
+
+class Product:
+
+    def __init__(self, schema, ext):
+        self.__schema = schema
+        self.__ext = ext
+    
+    def __getattr__(self, name):
+        if name in self.__schema:
+            oid = self.__schema[name]
+            return self.__ext.get(oid)
+        else:
+            self.__dict__[name]
+            
+    def __str__(self):
+        s = []
+        s.append('%s {' % self.__class__.__name__)
+        for n,oid in self.__schema.items():
+            v = getattr(self, n)
+            s.append('\t%s' % '='.join((n,str(v))))
+        s.append('}')
+        return '\n'.join(s)
+    
+    def __repr__(self):
+        return str(self)
+    
+    
+class Entitlement(Product):
+    pass
+
+
+##########################################################################
+# Lower level x.509 classes
+#
+# x509 = Certificate('/tmp/mycert.pem')
+# print x509  # textual representation of the cert
+# ext = x509.extensions()
+# value = ext.get('1.3.1')  # get the value of a specific OID
+# print value
+# values = ext.find('1.*.3') get a list of (OID, value) using wildcard OID.
+# print values
+##########################################################################
 
 
 class Certificate(object):
@@ -95,29 +216,47 @@ class Extensions(dict):
         @param cert: A certificate object.
         @type cert: L{Certificate}
         """
-        self.__parse(cert)
+        if isinstance(cert, Certificate):
+            self.__parse(cert)
+        else:
+            self.update(cert)
         
+    def ltrim(self, n):
+        """
+        Left trim I{n} parts.
+        @param n: The number of parts to trim.
+        @type n: int
+        @return: The trimmed OID
+        @rtype: L{Extensions}
+        """
+        d = {}
+        for oid,v in self.items():
+            d[oid.ltrim(n)] = v
+        return Extensions(d)
+                
     def get(self, oid):
         """
         Get the value of an extension by I{oid}.
         Note: The I{oid} may contain (*) wildcards.
         @param oid: An OID that may contain (*) wildcards.
-        @type oid: str
+        @type oid: str|L{OID}
         @return: The value of the first extension matched.
         @rtype: str
         """
-        ext = self.find(oid)
+        ext = self.find(oid, 1)
         if ext:
             return ext[0][1]
         else:
             return None
     
-    def find(self, oid):
+    def find(self, oid, limit=0):
         """
         Find all extensions matching the I{oid}.
         Note: The I{oid} may contain (*) wildcards.
         @param oid: An OID that may contain (*) wildcards.
-        @type oid: str
+        @type oid: str|L{OID}
+        @param limit: Limit the number returned, 0=unlimited
+        @type limit: int
         @return: A list of matching items.
         @rtype: (OID, value)
         @see: OID.match()
@@ -125,10 +264,33 @@ class Extensions(dict):
         ext = []
         if isinstance(oid, str):
             oid = OID(oid)
-        for item in self.items():
-            if item[0].match(oid):
-                ext.append(item)
+        keyset = sorted(self.keys())
+        for k in keyset:
+            v = self[k]
+            if k.match(oid):
+                ext.append((k, v))
+            if limit and len(ext) == limit:
+                break
         return ext
+    
+    def branch(self, root):
+        """
+        Find a subtree by matching the oid.
+        @param root: An OID that may contain (*) wildcards.
+        @type root: str|L{OID}
+        @return: A subtree.
+        @rtype: L{Extensions}
+        """
+        d = {}
+        if isinstance(root, str):
+            root = OID(root)
+        if root[-1]:
+            root = root.append('')
+        ln = len(root)-1
+        for oid,v in self.find(root):
+            trimmed = oid.ltrim(ln)
+            d[trimmed] = v
+        return Extensions(d)
     
     def __ext(self, cert):
         # get extensions substring
@@ -170,6 +332,10 @@ class OID(object):
     WILDCARD = '*'
     
     @classmethod
+    def join(cls, *oid):
+        return '.'.join(oid)
+    
+    @classmethod
     def split(cls, s):
         """
         Split an OID string.
@@ -200,12 +366,46 @@ class OID(object):
         if p:
             return OID(p)
         
+    def ltrim(self, n):
+        """
+        Left trim I{n} parts.
+        @param n: The number of parts to trim.
+        @type n: int
+        @return: The trimmed OID
+        @rtype: L{OID}
+        """
+        return OID(self.part[n:])
+    
+    def rtrim(self, n):
+        """
+        Right trim I{n} parts.
+        @param n: The number of parts to trim.
+        @type n: int
+        @return: The trimmed OID
+        @rtype: L{OID}
+        """
+        return OID(self.part[:-n])
+    
+    def append(self, oid):
+        """
+        Append the specified OID fragment.
+        @param oid: An OID fragment.
+        @type oid: str|L{OID}
+        @return: The concatenated OID.
+        @rtype: L{OID}
+        """
+        if isinstance(oid, str):
+            oid = OID(oid)
+        part = self.part + oid.part
+        return OID(part)
+        
     def match(self, oid):
         """
         Match the specified OID considering wildcards.
         Patterns:
           - 1.4.5.6.74 (not wildcarded)
-          -    .5.6.74 (match only last 4)
+          -    .5.6.74 (match on only last 4)
+          -    5.6.74. (match only first 4)
           - 1.4.*.6.*  (wildcard pattern)
         @param oid: An OID string or object.
         @type oid: str|L{OID}
@@ -218,6 +418,9 @@ class OID(object):
             if not oid[0]:
                 oid = OID(oid[1:])
                 parts = self.part[-len(oid):]
+            elif not oid[-1]:
+                oid = OID(oid[:-1])
+                parts = self.part[:len(oid)]
             else:
                 parts = self.part
             for x in parts:
