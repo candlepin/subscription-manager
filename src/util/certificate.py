@@ -1,5 +1,4 @@
-#
-# Subscription Manager
+#!/usr/bin/python
 # Copyright (C) 2005-2008 Red Hat, Inc.
 # All rights reserved.
 #
@@ -449,3 +448,10 @@ class OID(object):
     
     def __str__(self):
         return '.'.join(self.part)
+
+
+import sys
+if __name__ == '__main__':
+    for path in sys.argv[1:]:
+        print path
+        print ProductCertificate(path)
