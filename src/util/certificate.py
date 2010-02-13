@@ -35,37 +35,9 @@ class ProductCertificate:
     product and entitlement information.
     @cvar REDHAT: The Red Hat base OID.
     @type REDHAT: str
-    @cvar PRODUCT: The product attribute/OID mapping.
-    @type PRODUCT: dict
-    @cvar ENTITLEMENT: The entitlement attribute/OID mapping.
-    @type ENTITLEMENT: dict
     """
     
     REDHAT = '1.3.6.1.4.1.2312'
-    
-    PRODUCT = {
-        'name':'1',
-        'description':'2',
-        'architecture':'3',
-        'version':'4',
-        'quantity':'5',
-        'subtype':'6',
-        'virtualizationLimit':'7',
-        'socketLimit':'8',
-        'productOptionCode':'9'
-    }
-
-    ENTITLEMENT = {
-        'name':'1',
-        'description':'2',
-        'architecture':'3.1',
-        'version':'4',
-        'guestQuantity':'5',
-        'quantity':'6',
-        'updatesAllowd':'7',
-        'vendor':'8',
-        'url':'9',
-    }
     
     def __init__(self, path):
         """
@@ -77,7 +49,7 @@ class ProductCertificate:
         self.ext = x509.extensions().ltrim(len(redhat))
         self.x509 = x509
         
-    def consumerid(self):
+    def getConsumerId(self):
         """
         Get the consumer ID.
         @return: The serial number.
@@ -85,7 +57,7 @@ class ProductCertificate:
         """
         return self.x509.serial_number()
 
-    def product(self):
+    def getProduct(self):
         """
         Get the product defined in the certificate.
         @return: A list of product object.
@@ -97,10 +69,10 @@ class ProductCertificate:
             oid = p[0]
             root = oid.rtrim(1)
             ext = self.ext.branch(root)
-            return Product(self.PRODUCT, ext)
+            return Product(ext)
         return None
     
-    def entitlements(self):
+    def getEntitlements(self):
         """
         Get the entitlements defined in the certificate.
         @return: A list of entitlement object.
@@ -112,14 +84,14 @@ class ProductCertificate:
             oid = ent[0]
             root = oid.rtrim(1)
             ext = self.ext.branch(root)
-            lst.append(Entitlement(self.ENTITLEMENT, ext))
+            lst.append(Entitlement(ext))
         return lst
     
     def __str__(self):
         s = []
-        s.append(str(self.product()))
+        s.append(str(self.getProduct()))
         s.append('')
-        for e in self.entitlements():
+        for e in self.getEntitlements():
             s.append(str(e))
             s.append('')
         return '\n'.join(s)
@@ -127,32 +99,105 @@ class ProductCertificate:
 
 class Product:
 
-    def __init__(self, schema, ext):
-        self.__schema = schema
-        self.__ext = ext
+    def __init__(self, ext):
+        self.ext = ext
+        
+    def getName(self):
+        return self.ext.get('1')
     
-    def __getattr__(self, name):
-        if name in self.__schema:
-            oid = self.__schema[name]
-            return self.__ext.get(oid)
-        else:
-            self.__dict__[name]
-            
+    def getDescription(self):
+        return self.ext.get('2')
+    
+    def getArchitecture(self):
+        return self.ext.get('3')
+    
+    def getVersion(self):
+        return self.ext.get('4')
+    
+    def getQuantity(self):
+        return self.ext.get('5')
+    
+    def getSubtype(self):
+        return self.ext.get('6')
+    
+    def getVirtualizationLimit(self):
+        return self.ext.get('7')
+    
+    def getSocketLimit(self):
+        return self.ext.get('8')
+    
+    def getProductOptionCode(self):
+        return self.ext.get('9')
+    
     def __str__(self):
         s = []
-        s.append('%s {' % self.__class__.__name__)
-        for n,oid in self.__schema.items():
-            v = getattr(self, n)
-            s.append('\t%s' % '='.join((n,str(v))))
+        s.append('Product {')
+        s.append('\tName = %s' % self.getName())
+        s.append('\tDescription = %s' % self.getDescription())
+        s.append('\tArchitecture = %s' % self.getArchitecture())
+        s.append('\tVersion = %s' % self.getVersion())
+        s.append('\tQuantity = %s' % self.getQuantity())
+        s.append('\tSubtype = %s' % self.getSubtype())
+        s.append('\tVirtualization Limit = %s' % self.getVirtualizationLimit())
+        s.append('\tSocket Limit = %s' % self.getSocketLimit())
+        s.append('\tProduct Code = %s' % self.getProductOptionCode())
         s.append('}')
         return '\n'.join(s)
-    
+
     def __repr__(self):
         return str(self)
     
     
 class Entitlement(Product):
-    pass
+
+    def __init__(self, ext):
+        self.ext = ext
+        
+    def getName(self):
+        return self.ext.get('1')
+    
+    def getDescription(self):
+        return self.ext.get('2')
+    
+    def getArchitecture(self):
+        return self.ext.get('3.1')
+    
+    def getVersion(self):
+        return self.ext.get('4')
+    
+    def getGuestQuantity(self):
+        return self.ext.get('5')
+    
+    def getQuantity(self):
+        return self.ext.get('6')
+    
+    def getUpdatesAllowd(self):
+        return self.ext.get('7')
+    
+    def getVendor(self):
+        return self.ext.get('8')
+    
+    def getUrl(self):
+        return self.ext.get('9')
+    
+    def __str__(self):
+        s = []
+        s.append('Entitlement {')
+        s.append('\tName = %s' % self.getName())
+        s.append('\tDescription = %s' % self.getDescription())
+        s.append('\tArchitecture = %s' % self.getArchitecture())
+        s.append('\tVersion = %s' % self.getVersion())
+        s.append('\tGuest Quantity = %s' % self.getGuestQuantity())
+        s.append('\tQuantity = %s' % self.getQuantity())
+        s.append('\tUpdates Allowd = %s' % self.getUpdatesAllowd())
+        s.append('\tVirtualization Limit = %s' % self.getVirtualizationLimit())
+        s.append('\tVendor = %s' % self.getVendor())
+        s.append('\tURL = %s' % self.getUrl())
+        s.append('}')
+        return '\n'.join(s)
+
+    def __repr__(self):
+        return str(self)
 
 
 ##########################################################################
