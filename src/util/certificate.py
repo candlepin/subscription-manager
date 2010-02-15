@@ -148,7 +148,7 @@ class Product:
         return str(self)
     
     
-class Entitlement(Product):
+class Entitlement:
 
     def __init__(self, ext):
         self.ext = ext
@@ -190,7 +190,6 @@ class Entitlement(Product):
         s.append('\tGuest Quantity = %s' % self.getGuestQuantity())
         s.append('\tQuantity = %s' % self.getQuantity())
         s.append('\tUpdates Allowd = %s' % self.getUpdatesAllowd())
-        s.append('\tVirtualization Limit = %s' % self.getVirtualizationLimit())
         s.append('\tVendor = %s' % self.getVendor())
         s.append('\tURL = %s' % self.getUrl())
         s.append('}')
