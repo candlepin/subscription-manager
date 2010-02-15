@@ -55,7 +55,7 @@ class ProductCertificate:
         @return: The serial number.
         @rtype: str
         """
-        return self.x509.serial_number()
+        return self.x509.serialnumber()
 
     def getProduct(self):
         """
@@ -108,7 +108,7 @@ class Product:
     def getDescription(self):
         return self.ext.get('2')
     
-    def getArchitecture(self):
+    def getArch(self):
         return self.ext.get('3')
     
     def getVersion(self):
@@ -120,7 +120,7 @@ class Product:
     def getSubtype(self):
         return self.ext.get('6')
     
-    def getVirtualizationLimit(self):
+    def getVirtLimit(self):
         return self.ext.get('7')
     
     def getSocketLimit(self):
@@ -159,7 +159,7 @@ class Entitlement:
     def getDescription(self):
         return self.ext.get('2')
     
-    def getArchitecture(self):
+    def getArch(self):
         return self.ext.get('3.1')
     
     def getVersion(self):
@@ -237,7 +237,7 @@ class Certificate(object):
         """
         return self.__ext
     
-    def serial_number(self):
+    def serialnumber(self):
         """
         Get the serial number
         @return: The x.509 serial number
