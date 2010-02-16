@@ -72,7 +72,7 @@ class UEP:
     def ping(self):
         pass
     
-    def __credentials(self, u, u):
+    def __credentials(self, u, p):
         d = {}
         encoded = base64.encodestring(':'.join((u,p)))
         basic = 'Basic %s' % encoded[:-1]
