@@ -24,8 +24,7 @@ import simplejson as json
 import base64
 
 class RestlibException(Exception):
-    def __str__(self, msg=""):
-        return "Error : %s" % msg
+    pass
 
 class Restlib(object):
     """
@@ -46,14 +45,13 @@ class Restlib(object):
         response = conn.getresponse()
         self.validateResponse(response)
         rinfo = response.read()
-        print rinfo
         if not len(rinfo):
             return None
         return json.loads(rinfo)
 
     def validateResponse(self, response):
         if response.status not in ["200", 200, "204", 204]:
-            raise RestlibException(response)
+            raise RestlibException(response.reason)
 
     def request_get(self, method):
         return self._request("GET", method)
@@ -154,23 +152,26 @@ if __name__ == '__main__':
         "name":'admin',
         "facts":facts,
     }
-    consumer = uep.registerConsumer('admin', 'password', info=params)
-    print "Created a consumer ", consumer
-    # sync certs
-    print "Initiate cert synchronization for uuid"
-    print uep.syncCertificates(consumer['uuid'], []) 
-    # bind consumer to regNumber
-    #uep.bindByRegNumber(consumer['uuid'],"1234-5334-4e23-2432-4345") 
-    # bind consumer by poolId
-    #uep.bindByEntitlementPool(consumer['uuid'], "1001")
-    # bind consumer By Product
-    #uep.bindByProduct(consumer['uuid'], "monitoring") #product["label"])
-    # Unbind All
-    #print uep.unbindAll(consumer['uuid'])
-    # Unbind serialNumbers
-    #uep.unbindserialNumbers(consumer['uuid'], "1001,1002,1003")
-    print uep.getEntitlementPools(consumer['uuid'])
-    # delete a consumer
-    print uep.unregisterConsumer('admin', 'password', consumer['uuid'])
-    print "consumer unregistered"
-
+    try:
+        consumer = uep.registerConsumer('admin', 'password', info=params)
+        print "Created a consumer ", consumer
+        # sync certs
+        #print "Initiate cert synchronization for uuid"
+        #print uep.syncCertificates(consumer['uuid'], []) 
+        # bind consumer to regNumber
+        #uep.bindByRegNumber(consumer['uuid'],"1234-5334-4e23-2432-4345") 
+        # bind consumer by poolId
+        #uep.bindByEntitlementPool(consumer['uuid'], "1001")
+        # bind consumer By Product
+        print uep.bindByProduct(consumer['uuid'], "monitoring") #product["label"])
+        # Unbind All
+        #print uep.unbindAll(consumer['uuid'])
+        # Unbind serialNumbers
+        #uep.unbindserialNumbers(consumer['uuid'], "1001,1002,1003")
+        print uep.getEntitlementPools(consumer['uuid'])
+        # delete a consumer
+        print uep.unregisterConsumer('admin', 'password', consumer['uuid'])
+        print "consumer unregistered"
+    except RestlibException, e:
+        print"Error:", e
+        sys.exit(-1)
