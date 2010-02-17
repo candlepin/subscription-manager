@@ -4,6 +4,8 @@
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
+# Authors: Pradeep Kilambi <pkilambi@redhat.com>
+#
 # This software is licensed to you under the GNU General Public License,
 # version 2 (GPLv2). There is NO WARRANTY for this software, express or
 # implied, including the implied warranties of MERCHANTABILITY or FITNESS
@@ -44,7 +46,6 @@ class Restlib(object):
         response = conn.getresponse()
         self.validateResponse(response)
         rinfo = response.read()
-        #print rinfo
         if not len(rinfo):
             return None
         return json.loads(rinfo)
@@ -103,14 +104,12 @@ class UEPConnection:
             'facts':facts,
         }
         self.__authenticate(username, password)
-        response = self.conn.request_post('/consumer/',params)
-        return response
+        return self.conn.request_post('/consumer/',params)
     
     def unregisterConsumer(self, username, password, consumerId):
         self.__authenticate(username, password)
         method = '/consumer/%s' % consumerId
-        response = self.conn.request_delete(method)
-        return response
+        return self.conn.request_delete(method)
         
     def syncCertificates(self, consumerId, serialNumbers):
         method = '/consumer/%s/certificates' % consumerId
