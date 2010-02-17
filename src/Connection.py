@@ -136,8 +136,10 @@ class UEPConnection:
         pass
 
 if __name__ == '__main__':
-    #uep = UEPConnection("statler.usersys.redhat.com")
-    uep = UEPConnection()
+    if len(sys.argv) > 1:
+        uep = UEPConnection(sys.argv[1])
+    else:
+        uep = UEPConnection()
     # create a consumer
     stype = {'label':'system'}
     product = {"id":"1","label":"RHEL AP","name":"rhel"}
@@ -162,7 +164,7 @@ if __name__ == '__main__':
     # bind consumer by poolId
     #uep.bindByEntitlementPool(consumer['uuid'], "1001")
     # bind consumer By Product
-    #uep.bindByProduct(consumer['uuid'], product["label"])
+    #uep.bindByProduct(consumer['uuid'], "monitoring") #product["label"])
     # Unbind All
     #print uep.unbindAll(consumer['uuid'])
     # Unbind serialNumbers
