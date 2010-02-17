@@ -55,13 +55,23 @@ class Certificate(object):
         """
         return self.x509.get_serial_number()
     
-    def validDates(self):
+    def validRange(self):
         """
         Get the I{valid} date range.
         @return: The valid date range.
         @rtype: L{DateRange}
         """
         return DateRange(self.x509)
+    
+    def valid(self):
+        """
+        Get whether the certificate is valid based on date.
+        @return: True if valid.
+        @rtype: boolean
+        """
+        now = dt.utcnow()
+        range = self.validRange()
+        return ( now >= range.begin() and now <= range.end() )
     
     def extensions(self):
         """
