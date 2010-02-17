@@ -86,17 +86,37 @@ class Certificate(object):
     
     
 class DateRange:
+    """
+    Date range object converts between ASN1 and python
+    datetime objects.
+    @ivar x509: A certificate.
+    @type x509: X509
+    """
     
     ASN1_FORMAT = '%b %d %H:%M:%S %Y %Z'
     
     def __init__(self, x509):
+        """
+        @param x509: A certificate.
+        @type x509: X509
+        """
         self.x509 = x509
         
     def begin(self):
+        """
+        Get range beginning.
+        @return: The beginning date in UTC.
+        @rtype: L{datetime.datetime}
+        """
         asn1 = self.x509.get_not_before()
         return dt.strptime(str(asn1), self.ASN1_FORMAT)
     
     def end(self):
+        """
+        Get range end.
+        @return: The end date in UTC.
+        @rtype: L{datetime.datetime}
+        """
         asn1 = self.x509.get_not_after()
         return dt.strptime(str(asn1), self.ASN1_FORMAT)
     
