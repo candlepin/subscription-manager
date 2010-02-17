@@ -26,190 +26,7 @@ replacement of full wrapper but instead and extension.
 
 import re
 from M2Crypto import X509
-
-
-class ProductCertificate:
-    """
-    Represents a Red Hat product/entitlement certificate.
-    It is OID schema aware and provides methods to get
-    product and entitlement information.
-    @cvar REDHAT: The Red Hat base OID.
-    @type REDHAT: str
-    """
-    
-    REDHAT = '1.3.6.1.4.1.2312'
-    
-    def __init__(self, path):
-        """
-        @param path: The path to the .pem file.
-        @type path: str
-        """
-        x509 = Certificate(path)
-        redhat = OID(self.REDHAT)
-        self.ext = x509.extensions().ltrim(len(redhat))
-        self.x509 = x509
-        
-    def getConsumerId(self):
-        """
-        Get the consumer ID.
-        @return: The serial number.
-        @rtype: str
-        """
-        return self.x509.serialnumber()
-
-    def getProduct(self):
-        """
-        Get the product defined in the certificate.
-        @return: A list of product object.
-        @rtype: [L{Product},..]
-        """
-        products = self.ext.find('2.7.1', 1)
-        if products:
-            p = products[0]
-            oid = p[0]
-            root = oid.rtrim(1)
-            ext = self.ext.branch(root)
-            return Product(ext)
-        return None
-    
-    def getEntitlements(self):
-        """
-        Get the entitlements defined in the certificate.
-        @return: A list of entitlement object.
-        @rtype: [L{Entitlement},..]
-        """
-        lst = []
-        entitlements = self.ext.find('3.*.1')
-        for ent in entitlements:
-            oid = ent[0]
-            root = oid.rtrim(1)
-            ext = self.ext.branch(root)
-            lst.append(Entitlement(ext))
-        return lst
-    
-    def __str__(self):
-        s = []
-        s.append(str(self.getProduct()))
-        s.append('')
-        for e in self.getEntitlements():
-            s.append(str(e))
-            s.append('')
-        return '\n'.join(s)
-
-
-class Product:
-
-    def __init__(self, ext):
-        self.ext = ext
-        
-    def getName(self):
-        return self.ext.get('1')
-    
-    def getDescription(self):
-        return self.ext.get('2')
-    
-    def getArch(self):
-        return self.ext.get('3')
-    
-    def getVersion(self):
-        return self.ext.get('4')
-    
-    def getQuantity(self):
-        return self.ext.get('5')
-    
-    def getSubtype(self):
-        return self.ext.get('6')
-    
-    def getVirtLimit(self):
-        return self.ext.get('7')
-    
-    def getSocketLimit(self):
-        return self.ext.get('8')
-    
-    def getProductOptionCode(self):
-        return self.ext.get('9')
-    
-    def __str__(self):
-        s = []
-        s.append('Product {')
-        s.append('\tName = %s' % self.getName())
-        s.append('\tDescription = %s' % self.getDescription())
-        s.append('\tArchitecture = %s' % self.getArch())
-        s.append('\tVersion = %s' % self.getVersion())
-        s.append('\tQuantity = %s' % self.getQuantity())
-        s.append('\tSubtype = %s' % self.getSubtype())
-        s.append('\tVirtualization Limit = %s' % self.getVirtLimit())
-        s.append('\tSocket Limit = %s' % self.getSocketLimit())
-        s.append('\tProduct Code = %s' % self.getProductOptionCode())
-        s.append('}')
-        return '\n'.join(s)
-
-    def __repr__(self):
-        return str(self)
-    
-    
-class Entitlement:
-
-    def __init__(self, ext):
-        self.ext = ext
-        
-    def getName(self):
-        return self.ext.get('1')
-    
-    def getDescription(self):
-        return self.ext.get('2')
-    
-    def getArch(self):
-        return self.ext.get('3.1')
-    
-    def getVersion(self):
-        return self.ext.get('4')
-    
-    def getGuestQuantity(self):
-        return self.ext.get('5')
-    
-    def getQuantity(self):
-        return self.ext.get('6')
-    
-    def getUpdatesAllowd(self):
-        return self.ext.get('7')
-    
-    def getVendor(self):
-        return self.ext.get('8')
-    
-    def getUrl(self):
-        return self.ext.get('9')
-    
-    def __str__(self):
-        s = []
-        s.append('Entitlement {')
-        s.append('\tName = %s' % self.getName())
-        s.append('\tDescription = %s' % self.getDescription())
-        s.append('\tArchitecture = %s' % self.getArch())
-        s.append('\tVersion = %s' % self.getVersion())
-        s.append('\tGuest Quantity = %s' % self.getGuestQuantity())
-        s.append('\tQuantity = %s' % self.getQuantity())
-        s.append('\tUpdates Allowd = %s' % self.getUpdatesAllowd())
-        s.append('\tVendor = %s' % self.getVendor())
-        s.append('\tURL = %s' % self.getUrl())
-        s.append('}')
-        return '\n'.join(s)
-
-    def __repr__(self):
-        return str(self)
-
-
-##########################################################################
-# Lower level x.509 classes
-#
-# x509 = Certificate('/tmp/mycert.pem')
-# print x509  # textual representation of the cert
-# ext = x509.extensions()
-# value = ext.get('1.3.1')  # get the value of a specific OID
-# print value
-# values = ext.find('1.*.3') get a list of (OID, value) using wildcard OID.
-# print values
-##########################################################################
+from datetime import datetime as dt
 
 
 class Certificate(object):
@@ -226,27 +43,58 @@ class Certificate(object):
         @param path: The path to the .pem file.
         @type path: str
         """
-        self.x509 = X509.load_cert(path)
-        self.__ext = Extensions(self)
-        
-    def extensions(self):
-        """
-        Get the x.509 extensions object.
-        @return: The L{Extensions} object for the certificate.
-        @rtype: L{Extensions}
-        """
-        return self.__ext
+        x509 = X509.load_cert(path)
+        self.__ext = Extensions(x509)
+        self.x509 = x509
     
-    def serialnumber(self):
+    def serialNumber(self):
         """
         Get the serial number
         @return: The x.509 serial number
         @rtype: str
         """
         return self.x509.get_serial_number()
+    
+    def validDates(self):
+        """
+        Get the I{valid} date range.
+        @return: The valid date range.
+        @rtype: L{DateRange}
+        """
+        return DateRange(self.x509)
+    
+    def extensions(self):
+        """
+        Get custom extensions.
+        @return: An extensions object.
+        @rtype: L{Extensions}
+        """
+        return self.__ext
             
     def __str__(self):
         return self.x509.as_text()
+    
+    
+class DateRange:
+    
+    ASN1_FORMAT = '%b %d %H:%M:%S %Y %Z'
+    
+    def __init__(self, x509):
+        self.x509 = x509
+        
+    def begin(self):
+        asn1 = self.x509.get_not_before()
+        return dt.strptime(str(asn1), self.ASN1_FORMAT)
+    
+    def end(self):
+        asn1 = self.x509.get_not_after()
+        return dt.strptime(str(asn1), self.ASN1_FORMAT)
+    
+    def __str__(self):
+        s = []
+        s.append('Begin: %s' % self.begin())
+        s.append('End: %s' % self.end())
+        return '\n'.join(s)
 
 
 class Extensions(dict):
@@ -256,15 +104,15 @@ class Extensions(dict):
     
     pattern = re.compile('([0-9]+\.)+[0-9]:')
     
-    def __init__(self, cert):
+    def __init__(self, x509):
         """
-        @param cert: A certificate object.
-        @type cert: L{Certificate}
+        @param x509: A certificate object.
+        @type x509: L{X509}
         """
-        if isinstance(cert, Certificate):
-            self.__parse(cert)
+        if isinstance(x509, dict):
+            self.update(x509)
         else:
-            self.update(cert)
+            self.__parse(x509)
         
     def ltrim(self, n):
         """
@@ -337,18 +185,18 @@ class Extensions(dict):
             d[trimmed] = v
         return Extensions(d)
     
-    def __ext(self, cert):
+    def __ext(self, x509):
         # get extensions substring
-        text = str(cert)
+        text = x509.as_text()
         start = text.find('extensions:')
         end = text.rfind('Signature Algorithm:')
         text = text[start:end]
         return [s.strip() for s in text.split('\n')]
     
-    def __parse(self, cert):
+    def __parse(self, x509):
         # parse the extensions section
         oid = None
-        for entry in self.__ext(cert):
+        for entry in self.__ext(x509):
             if oid is not None:
                 self[oid] = entry[2:]
                 oid = None
@@ -494,6 +342,170 @@ class OID(object):
     
     def __str__(self):
         return '.'.join(self.part)
+    
+
+class ProductCertificate(Certificate):
+    """
+    Represents a Red Hat product/entitlement certificate.
+    It is OID schema aware and provides methods to get
+    product and entitlement information.
+    @cvar REDHAT: The Red Hat base OID.
+    @type REDHAT: str
+    """
+    
+    REDHAT = '1.3.6.1.4.1.2312'
+    
+    def __init__(self, path):
+        """
+        @param path: The path to the .pem file.
+        @type path: str
+        """
+        Certificate.__init__(self, path)
+        redhat = OID(self.REDHAT)
+        n = len(redhat)
+        self.trimmed = self.extensions().ltrim(n)
+
+    def getProduct(self):
+        """
+        Get the product defined in the certificate.
+        @return: A list of product object.
+        @rtype: [L{Product},..]
+        """
+        products = self.trimmed.find('2.7.1', 1)
+        if products:
+            p = products[0]
+            oid = p[0]
+            root = oid.rtrim(1)
+            ext = self.trimmed.branch(root)
+            return Product(ext)
+        return None
+    
+    def getEntitlements(self):
+        """
+        Get the entitlements defined in the certificate.
+        @return: A list of entitlement object.
+        @rtype: [L{Entitlement},..]
+        """
+        lst = []
+        entitlements = self.trimmed.find('3.*.1')
+        for ent in entitlements:
+            oid = ent[0]
+            root = oid.rtrim(1)
+            ext = self.trimmed.branch(root)
+            lst.append(Entitlement(ext))
+        return lst
+    
+    def __str__(self):
+        s = []
+        s.append(Certificate.__str__(self))
+        s.append(str(self.getProduct()))
+        s.append('')
+        for e in self.getEntitlements():
+            s.append(str(e))
+            s.append('')
+        return '\n'.join(s)
+
+
+class Product:
+
+    def __init__(self, ext):
+        self.ext = ext
+        
+    def getName(self):
+        return self.ext.get('1')
+    
+    def getDescription(self):
+        return self.ext.get('2')
+    
+    def getArch(self):
+        return self.ext.get('3')
+    
+    def getVersion(self):
+        return self.ext.get('4')
+    
+    def getQuantity(self):
+        return self.ext.get('5')
+    
+    def getSubtype(self):
+        return self.ext.get('6')
+    
+    def getVirtLimit(self):
+        return self.ext.get('7')
+    
+    def getSocketLimit(self):
+        return self.ext.get('8')
+    
+    def getProductOptionCode(self):
+        return self.ext.get('9')
+    
+    def __str__(self):
+        s = []
+        s.append('Product {')
+        s.append('\tName = %s' % self.getName())
+        s.append('\tDescription = %s' % self.getDescription())
+        s.append('\tArchitecture = %s' % self.getArch())
+        s.append('\tVersion = %s' % self.getVersion())
+        s.append('\tQuantity = %s' % self.getQuantity())
+        s.append('\tSubtype = %s' % self.getSubtype())
+        s.append('\tVirtualization Limit = %s' % self.getVirtLimit())
+        s.append('\tSocket Limit = %s' % self.getSocketLimit())
+        s.append('\tProduct Code = %s' % self.getProductOptionCode())
+        s.append('}')
+        return '\n'.join(s)
+
+    def __repr__(self):
+        return str(self)
+    
+    
+class Entitlement:
+
+    def __init__(self, ext):
+        self.ext = ext
+        
+    def getName(self):
+        return self.ext.get('1')
+    
+    def getDescription(self):
+        return self.ext.get('2')
+    
+    def getArch(self):
+        return self.ext.get('3.1')
+    
+    def getVersion(self):
+        return self.ext.get('4')
+    
+    def getGuestQuantity(self):
+        return self.ext.get('5')
+    
+    def getQuantity(self):
+        return self.ext.get('6')
+    
+    def getUpdatesAllowd(self):
+        return self.ext.get('7')
+    
+    def getVendor(self):
+        return self.ext.get('8')
+    
+    def getUrl(self):
+        return self.ext.get('9')
+    
+    def __str__(self):
+        s = []
+        s.append('Entitlement {')
+        s.append('\tName = %s' % self.getName())
+        s.append('\tDescription = %s' % self.getDescription())
+        s.append('\tArchitecture = %s' % self.getArch())
+        s.append('\tVersion = %s' % self.getVersion())
+        s.append('\tGuest Quantity = %s' % self.getGuestQuantity())
+        s.append('\tQuantity = %s' % self.getQuantity())
+        s.append('\tUpdates Allowd = %s' % self.getUpdatesAllowd())
+        s.append('\tVendor = %s' % self.getVendor())
+        s.append('\tURL = %s' % self.getUrl())
+        s.append('}')
+        return '\n'.join(s)
+
+    def __repr__(self):
+        return str(self)
 
 
 import sys
