@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-# A proxy interface to initiate and interact communication with Unified Entitlement Platform server such as candlepin.  
+# A proxy interface to initiate and interact communication with Unified Entitlement Platform server such as candlepin.
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -46,6 +46,7 @@ class Restlib(object):
         response = conn.getresponse()
         self.validateResponse(response)
         rinfo = response.read()
+        print rinfo
         if not len(rinfo):
             return None
         return json.loads(rinfo)
@@ -59,7 +60,7 @@ class Restlib(object):
 
     def request_post(self, method, params=""):
         return self._request("POST", method, params)
-    
+
     def request_head(self, method):
         return self._request("HEAD", method)
 
@@ -73,7 +74,7 @@ class UEPConnection:
     """
     Proxy for Unified Entitlement Platform.
     """
-    
+
     def __init__(self, host='localhost', port=8080, handler="/candlepin"):
         self.host = host
         self.port = port
@@ -82,43 +83,35 @@ class UEPConnection:
         # initialize connection
         self.setUp()
 
-    def setUp(self):  
+    def setUp(self):
         self.conn = Restlib(self.host, self.port, self.handler)
 
     def shutDown(self):
         self.conn.close()
-    
+
     def __authenticate(self, username, password):
         encoded = base64.encodestring(':'.join((username,password)))
         basic = 'Basic %s' % encoded[:-1]
         self.conn.headers['Authorization'] = basic
         return self.conn.headers
-            
-    def registerConsumer(self, username, password, hardware=None, products=None):
-        type = {'label':'system'}
-        facts = {'hardwareProfile': hardware,
-                 'InstalledProducts' : products}
-        params = {
-            'type':type,
-            'name':username,
-            'facts':facts,
-        }
+
+    def registerConsumer(self, username, password, info={}):
         self.__authenticate(username, password)
-        return self.conn.request_post('/consumer/',params)
-    
+        return self.conn.request_post('/consumer/', info)
+
     def unregisterConsumer(self, username, password, consumerId):
         self.__authenticate(username, password)
         method = '/consumer/%s' % consumerId
         return self.conn.request_delete(method)
-        
+
     def syncCertificates(self, consumerId, serialNumbers):
         method = '/consumer/%s/certificates' % consumerId
-        return self.conn.request_post(method, serialNumbers) 
- 
+        return self.conn.request_post(method, serialNumbers)
+
     def bindByRegNumber(self, consumerId, regnum=None):
         method = "/entitlement/consumer/%s/token/%s" % (consumerId, regnum)
         return self.conn.request_post(method)
- 
+
     def bindByEntitlementPool(self, consumerId, poolId=None):
         method = "/entitlement/consumer/%s/entitlement_pool/%s" % (consumerId, poolId)
         return self.conn.request_post(method)
@@ -126,7 +119,7 @@ class UEPConnection:
     def bindByProduct(self, consumerId, product=None):
         method = "/entitlement/consumer/%s/product/%s" % (consumerId, product)
         return self.conn.request_post(method)
-    
+
     def unbindserialNumbers(self, consumerId, serialNumbers):
         method = "/entitlement/consumer/%s/%s" % (consumerId, ','.join(serialNumbers))
         return self.conn.request_post(method)
@@ -134,18 +127,32 @@ class UEPConnection:
     def unbindAll(self, consumerId):
         method = "/entitlement/consumer/%s" % consumerId
         return self.conn.request_post(method)
-    
+
     def getEntitlementPools(self, consumerId):
         method = "/entitlementpool/consumer/%s" % consumerId
         return self.conn.request_get(method)
-    
+
     def ping(self):
         pass
 
 if __name__ == '__main__':
+    #uep = UEPConnection("statler.usersys.redhat.com")
     uep = UEPConnection()
     # create a consumer
-    consumer = uep.registerConsumer('admin', 'password', {}, {})
+    stype = {'label':'system'}
+    product = {"id":"1","label":"RHEL AP","name":"rhel"}
+    facts = {"metadata": {
+                "entry":[{"key":"arch","value":"i386"},
+                         {"key":"cpu", "value": "Intel" },
+                         {"key":"cores", "value":4}]
+                }
+            }
+    params = {
+        "type":stype,
+        "name":'admin',
+        "facts":facts,
+    }
+    consumer = uep.registerConsumer('admin', 'password', info=params)
     print "Created a consumer ", consumer
     # sync certs
     print "Initiate cert synchronization for uuid"
@@ -155,7 +162,7 @@ if __name__ == '__main__':
     # bind consumer by poolId
     #uep.bindByEntitlementPool(consumer['uuid'], "1001")
     # bind consumer By Product
-    #uep.bindByProduct(consumer['uuid'], "RHEL AP")
+    #uep.bindByProduct(consumer['uuid'], product["label"])
     # Unbind All
     #print uep.unbindAll(consumer['uuid'])
     # Unbind serialNumbers
@@ -164,4 +171,4 @@ if __name__ == '__main__':
     # delete a consumer
     print uep.unregisterConsumer('admin', 'password', consumer['uuid'])
     print "consumer unregistered"
-    
+
