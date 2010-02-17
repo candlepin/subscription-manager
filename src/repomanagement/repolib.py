@@ -21,6 +21,42 @@ import os
 from certificate import ProductCertificate
 
 
+class RepoLib:
+    
+    def __init__(self, cfg):
+        self.cfg = cfg
+
+    def update(self):
+        repod = RepoFile()
+        repod.read()
+        valid = set()
+        updates = 0
+        for bundle in self.bundles(Certificates()):
+            for cont in bundle.content():
+                name = cont.id
+                valid.add(name)
+                existing = repod[name]
+                if existing is None:
+                    updates += 1
+                    repod[name] = cont
+                    continue
+                updates += existing.update(cont)
+        delete = []
+        for name in repod.section:
+            if name not in valid:
+                delete.append(name)
+        for name in delete:
+            updates += 1
+            del repod.section[name]
+        repod.write()
+        return updates
+    def bundles(self, certificates):
+        bundles = []
+        for b in certificates.bundles():
+            bundles.append(b)
+        return bundles
+
+
 class Reader:
 
     def __init__(self):
@@ -125,11 +161,17 @@ class Repo(dict):
             self[k] = d
     
     def update(self, other):
+        count = 0
         for k,m,d in self.KEYS:
             v = other.get(k)
-            if m and v is not None:
+            if m:
+                if v is None:
+                    continue
+                if self[k] == v:
+                    continue
                 self[k] = v
-        return self
+                count += 1
+        return count
         
     def __str__(self):
         s = []
@@ -238,45 +280,13 @@ class Certificates(Directory):
         return bundles
 
 
-class Manager:
-    
-    def __init__(self, cfg):
-        self.cfg = cfg
-
-    def update(self):
-        repod = RepoFile()
-        repod.read()
-        valid = set()
-        for bundle in self.bundles(Certificates()):
-            for cont in bundle.content():
-                name = cont.id
-                valid.add(name)
-                existing = repod[name]
-                if existing is None:
-                    repod[name] = cont
-                    continue
-                existing.update(cont)
-        delete = []
-        for name in repod.section:
-            if name not in valid:
-                delete.append(name)
-        for name in delete:
-            del repod.section[name]
-        repod.write()
-        
-    def bundles(self, certificates):
-        bundles = []
-        for b in certificates.bundles():
-            bundles.append(b)
-        return bundles
-
-
 def main():
-    mgr = Manager(None)
-    mgr.update()
+    print 'Updating Red Hat repository'
+    repolib = RepoLib(None)
+    updates = repolib.update()
+    print '%d updates required' % updates
+    print 'done'
         
 if __name__ == '__main__':
-    print 'Updating Red Hat repository'
     main()
-    print 'done'
 
