@@ -18,7 +18,7 @@
 #
  
 import os
-from certificate import ProductCertificate
+from certificate import Key, ProductCertificate
 
 
 class RepoLib:
@@ -31,16 +31,16 @@ class RepoLib:
         repod.read()
         valid = set()
         updates = 0
-        for bundle in self.bundles(Certificates()):
-            for cont in bundle.content():
-                name = cont.id
-                valid.add(name)
-                existing = repod[name]
-                if existing is None:
-                    updates += 1
-                    repod[name] = cont
-                    continue
-                updates += existing.update(cont)
+        bundles = self.bundles()
+        for cont in self.content(bundles):
+            name = cont.id
+            valid.add(name)
+            existing = repod[name]
+            if existing is None:
+                updates += 1
+                repod[name] = cont
+                continue
+            updates += existing.update(cont)
         delete = []
         for name in repod.section:
             if name not in valid:
@@ -50,11 +50,21 @@ class RepoLib:
             del repod.section[name]
         repod.write()
         return updates
-    def bundles(self, certificates):
+
+    def bundles(self):
         bundles = []
-        for b in certificates.bundles():
+        for b in Certificates().bundles():
             bundles.append(b)
         return bundles
+    
+    def content(self, bundles):
+        unique = set()
+        bundles.sort()
+        bundles.reverse()
+        for bundle in bundles:
+            for repo in bundle.content():
+                unique.add(repo)
+        return unique 
 
 
 class Reader:
@@ -245,16 +255,26 @@ class Bundle:
         
     def content(self):
         cont = []
-        pe = ProductCertificate(self.cert)
-        for ent in pe.getEntitlements():
+        for ent in self.cert.getEntitlements():
             id = ent.getName()
             repo = Repo(id)
             repo['name'] = ent.getDescription()
             repo['baseurl'] = ent.getUrl()
-            repo['sslclientkey'] = self.key
-            repo['sslclientcert'] = self.cert
+            repo['sslclientkey'] = self.key.path
+            repo['sslclientcert'] = self.cert.path
             cont.append(repo)
-        return cont    
+        return cont
+    
+    def __cmp__(self, other):
+        range = self.cert.validRange()
+        exp1 = range.end()
+        range = other.cert.validRange()
+        exp2 = range.end()
+        if exp1 < exp2:
+            return -1
+        if exp1 > exp2:
+            return 1
+        return 0
 
 
 class Certificates(Directory):
@@ -276,7 +296,12 @@ class Certificates(Directory):
                 if fn == 'cert.pem':
                     d[2] = os.path.join(p, fn)
             if len(d) == 2:
-                bundles.append(Bundle(d[1], d[2]))
+                key = Key(d[1])
+                cert = ProductCertificate(d[2])
+                if not cert.valid():
+                    continue
+                b = Bundle(key, cert)
+                bundles.append(b)
         return bundles
 
 
