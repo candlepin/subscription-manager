@@ -53,7 +53,7 @@ class RepoLib:
 
     def bundles(self):
         bundles = []
-        for b in Certificates().bundles():
+        for b in CertDirectory().bundles():
             bundles.append(b)
         return bundles
     
@@ -277,7 +277,7 @@ class Bundle:
         return 0
 
 
-class Certificates(Directory):
+class CertDirectory(Directory):
     
     ROOT = '/etc/pki/redhat/entitlement'
     
