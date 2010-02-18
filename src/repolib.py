@@ -104,7 +104,7 @@ class Reader:
 
 class Configuration(Reader):
 
-    PATH = '/etc/subscription-manager/rhsm.conf'
+    PATH = '/etc/rhsm/rhsm.conf'
 
     def __init__(self):
         self.read(self.PATH)
@@ -279,7 +279,7 @@ class Bundle:
 
 class CertDirectory(Directory):
     
-    ROOT = '/etc/pki/redhat/entitlement'
+    ROOT = '/etc/pki/entitlement'
     
     def __init__(self):
         Directory.__init__(self, self.ROOT)
