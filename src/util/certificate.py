@@ -25,6 +25,7 @@ replacement of full wrapper but instead and extension.
 """
 
 import re
+import base64
 from M2Crypto import X509
 from datetime import datetime as dt
 
@@ -35,7 +36,9 @@ class Certificate(object):
     @ivar x509: The M2Crypto.X509 backing object.
     @type x509: L{X509}
     @ivar __ext: A dictionary of extensions L{OID}:value
-    @type __ext: L{Extensions} 
+    @type __ext: L{Extensions}
+    @ivar path: The path to the .pem file.
+    @type path: str
     """
 
     def __init__(self, path):
@@ -43,6 +46,7 @@ class Certificate(object):
         @param path: The path to the .pem file.
         @type path: str
         """
+        self.path = path
         x509 = X509.load_cert(path)
         self.__ext = Extensions(x509)
         self.x509 = x509
@@ -83,7 +87,22 @@ class Certificate(object):
             
     def __str__(self):
         return self.x509.as_text()
+
+
+class Key:
+    """
+    The (private|public) key.
+    @ivar path: The file path.
+    @type path: str
+    """
     
+    def __init__(self, path):
+        """
+        @param path: The path to the .pem file.
+        @type path: str
+        """
+        self.path = path
+
     
 class DateRange:
     """
@@ -536,6 +555,35 @@ class Entitlement:
 
     def __repr__(self):
         return str(self)
+    
+    
+class PKCS12:
+    """
+    Represents a PKCS12 bundle.
+    """
+    
+    def __init__(self, name, content=None):
+        """
+        @param name: The name of the bundle.
+        @type name: str
+        @param content: The (optional) pkcs12 base64 encoded content.
+        @type content: str
+        """
+        self.content = ''
+        if isinstance(content, str):
+            self.content = base64.decodestring(content)
+        
+    def key(self, passphrase=None):
+        pass
+    
+    def certificate(self):
+        pass
+    
+    def read(self, path):
+        pass
+        
+    def write(self, path):
+        pass
 
 
 import sys
