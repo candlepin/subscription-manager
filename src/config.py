@@ -22,8 +22,7 @@ import sys
 import gettext
 _ = gettext.gettext
 
-#DEFAULT_CONFIG_PATH="/etc/subscription-manager/rhsm.conf"
-DEFAULT_CONFIG_PATH="../etc-conf/rhsm.conf"
+DEFAULT_CONFIG_PATH="/etc/rhsm/rhsm.conf"
 
 # a peristent configuration storage class
 class ConfigFile:
