@@ -93,6 +93,12 @@ class UEPConnection:
         self.conn.headers['Authorization'] = basic
         return self.conn.headers
 
+    def registered(self):
+        needToRegister=0
+        if not os.access("/etc/pki/consumer/cert.pem", os.F_OK):
+            needToRegister = 1
+        return needToRegister
+
     def registerConsumer(self, username, password, info={}):
         self.__authenticate(username, password)
         return self.conn.request_post('/consumer/', info)
@@ -118,7 +124,7 @@ class UEPConnection:
         method = "/entitlement/consumer/%s/product/%s" % (consumerId, product)
         return self.conn.request_post(method)
 
-    def unbindserialNumbers(self, consumerId, serialNumbers):
+    def unBindBySerialNumbers(self, consumerId, serialNumbers):
         method = "/entitlement/consumer/%s/%s" % (consumerId, ','.join(serialNumbers))
         return self.conn.request_post(method)
 
@@ -128,6 +134,10 @@ class UEPConnection:
 
     def getEntitlementPools(self, consumerId):
         method = "/entitlementpool/consumer/%s" % consumerId
+        return self.conn.request_get(method)
+
+    def getEntitlementById(self, poolId):
+        method = "/entitlement/%s" % poolId
         return self.conn.request_get(method)
 
     def ping(self):
@@ -169,8 +179,10 @@ if __name__ == '__main__':
         # Unbind serialNumbers
         #uep.unbindserialNumbers(consumer['uuid'], "1001,1002,1003")
         print uep.getEntitlementPools(consumer['uuid'])
+        # lookup Entitlement Info by PoolId
+        print uep.getEntitlementById("4")
         # delete a consumer
-        print uep.unregisterConsumer('admin', 'password', consumer['uuid'])
+        #print uep.unregisterConsumer('admin', 'password', consumer['uuid'])
         print "consumer unregistered"
     except RestlibException, e:
         print"Error:", e
