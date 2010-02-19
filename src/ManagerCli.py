@@ -53,13 +53,13 @@ def generateOptions():
 
     group = OptionGroup(parser, "Subscribe Options Group")
     group.add_option('--subscribe-product', dest='bind_product', 
-        action='store',
+        metavar='product_label', action='store',
         help='Subscribe the client to a specific subscription serial number'),
-    group.add_option('--subscribe-serial-number', dest='bind_product', 
-        action='store',
+    group.add_option('--subscribe-serial-number', dest='bind_serial', 
+        metavar='serial_number', action='store',
         help='Subscribe the client to a specific subscription serial number'),
     group.add_option('--subscribe-reg-token', dest='bind_regtoken', 
-        action='store',
+        metavar='registration_token', action='store',
         help='Subscribe the client to a specific Registration Token'),
     parser.add_option_group(group)
 
@@ -94,7 +94,7 @@ class ManagerCLI:
 
     def run(self):
         self.initialize()
-        uep = Connection.UEPConnection(cfg['baseUrl'])
+        uep = Connection.UEPConnection(cfg['baseUrl'] or "localhost")
 
         if (self.options.username and self.options.password) and \
            not self.options.register:
@@ -134,20 +134,18 @@ class ManagerCLI:
             try:
                 print uep.bindByProduct(consumer['uuid'], self.options.bind_regtoken)
                 print uep.syncCertificates(consumer['uuid'], [])
-                sys.exit(0)
+
             except Exception, e:
                 sys.stderr.write(_("Error: %s - Unable to bind the registration token \'%s\'\n") % (e, self.options.bind_regtoken))
         if self.options.unsubscribe_serial:
             self.__registered()
             print uep.unBindBySerialNumbers(consumer['uuid'], self.options.unbind_serial)
             print uep.syncCertificates(consumer['uuid'], [])
-            sys.exit(0)
 
         if self.options.unsubscribeall:
             self.__registered()
             print uep.unbindAll(consumer['uuid'])
             print uep.syncCertificates(consumer['uuid'], [])
-            sys.exit(0)
 
     @staticmethod
     def __registered():
