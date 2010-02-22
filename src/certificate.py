@@ -587,7 +587,17 @@ class Bundle:
         return Bundle(key, cert)
     
     @classmethod
-    def join(cls):
+    def read(cls, path):
+        f = open(path)
+        bundle = cls.split(f.read())
+        f.close()
+        return bundle
+    
+    def __init__(self, key, cert):
+        self.key = key
+        self.cert = cert
+        
+    def join(self):
         s = []
         s.append('-----BEGIN RSA PRIVATE KEY-----')
         s.append(self.key)
@@ -596,10 +606,12 @@ class Bundle:
         s.append(self.cert)
         s.append('-----END CERTIFICATE-----')
         return '\n'.join(s)
-    
-    def __init__(self, key, cert):
-        self.key = key
-        self.cert = cert
+        
+    def write(self, path):
+        f = open(path, 'w')
+        f.write(self.join())
+        f.close()
+        return self
 
 
 import sys
