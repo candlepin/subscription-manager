@@ -34,8 +34,8 @@ class RepoLib:
         repod.read()
         valid = set()
         updates = 0
-        bundles = self.bundles()
-        for cont in self.content(bundles):
+        products = self.products()
+        for cont in self.content(products):
             name = cont.id
             valid.add(name)
             existing = repod[name]
@@ -54,11 +54,9 @@ class RepoLib:
         repod.write()
         return updates
 
-    def bundles(self):
-        bundles = []
-        for b in CertDirectory().bundles():
-            bundles.append(b)
-        return bundles
+    def products(self):
+        pd = ProductDirectory()
+        return pd.products()
     
     def content(self, bundles):
         unique = set()
@@ -152,7 +150,9 @@ class Directory:
                 d.delete()
             else:
                 os.remove(path)
-
+    
+    def __str__(self):
+        return self.path
    
 class Repo(dict):
     
@@ -250,10 +250,9 @@ class RepoFile(Reader):
         return '\n'.join(s)
     
 
-class Bundle:
+class Product:
     
-    def __init__(self, key, cert):
-        self.key = key
+    def __init__(self, cert):
         self.cert = cert
         
     def content(self):
@@ -263,7 +262,7 @@ class Bundle:
             repo = Repo(id)
             repo['name'] = ent.getDescription()
             repo['baseurl'] = ent.getUrl()
-            repo['sslclientkey'] = self.key.path
+            repo['sslclientkey'] = ProductDirectory.keypath()
             repo['sslclientcert'] = self.cert.path
             cont.append(repo)
         return cont
@@ -280,32 +279,35 @@ class Bundle:
         return 0
 
 
-class CertDirectory(Directory):
+class ProductDirectory(Directory):
     
     ROOT = '/etc/pki/entitlement'
+    KEY = 'key.pem'
+    PRODUCT = 'product'
+    
+    @classmethod
+    def keypath(cls):
+        return os.path.join(cls.ROOT, cls.KEY)
+    
+    @classmethod
+    def productpath(cls):
+        return os.path.join(cls.ROOT, cls.PRODUCT)
     
     def __init__(self):
-        Directory.__init__(self, self.ROOT)
+        Directory.__init__(self, self.productpath())
         self.create()
         
-    def bundles(self):
-        bundles = []
-        for dir in Directory.listdirs(self):
-            d = {}
-            for p,fn in dir.list():
-                if fn == 'key.pem':
-                    d[1] = os.path.join(p, fn)
-                    continue
-                if fn == 'cert.pem':
-                    d[2] = os.path.join(p, fn)
-            if len(d) == 2:
-                key = Key(d[1])
-                cert = ProductCertificate(d[2])
-                if not cert.valid():
-                    continue
-                b = Bundle(key, cert)
-                bundles.append(b)
-        return bundles
+    def products(self):
+        products = []
+        for p,fn in Directory.list(self):
+            if not fn.endswith('.pem'):
+                continue
+            path = os.path.join(p, fn)
+            crt = ProductCertificate(path)
+            if crt.valid():
+                p = Product(crt)
+                products.append(p)
+        return products
 
 
 def main():

@@ -20,7 +20,10 @@
 
 import re
 from connection import UEPConnection as UEP
-from util.certificate import Certificate
+from certificate import Certificate
+from logutil import getLogger
+
+log = getLogger(__name__)
 
 
 class CertLib:
