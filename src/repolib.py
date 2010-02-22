@@ -18,7 +18,7 @@
 #
  
 import os
-from util.certificate import Key, ProductCertificate
+from certificate import Key, ProductCertificate
 from logutil import getLogger
 
 log = getLogger(__name__)
