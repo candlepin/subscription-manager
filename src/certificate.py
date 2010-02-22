@@ -30,24 +30,35 @@ from M2Crypto import X509
 from datetime import datetime as dt
 
 
-class Certificate:
+class Certificate(object):
     """
     Represents and x.509 certificate.
     @ivar x509: The M2Crypto.X509 backing object.
     @type x509: L{X509}
     @ivar __ext: A dictionary of extensions L{OID}:value
     @type __ext: L{Extensions}
-    @ivar path: The path to the .pem file.
-    @type path: str
     """
-
-    def __init__(self, path):
+    
+    @classmethod
+    def read(cls, path):
         """
-        @param path: The path to the .pem file.
+        Read a certificate file.
+        @param path: The path to a .pem file.
         @type path: str
+        @return: A certificate
+        @rtype: L{Certificate}
         """
-        self.path = path
-        x509 = X509.load_cert(path)
+        f = open(path)
+        content = f.read()
+        f.close()
+        return Certificate(content)
+
+    def __init__(self, content):
+        """
+        @param content: The PEM encoded content.
+        @type content: str
+        """
+        x509 = X509.load_cert_string(content)
         self.__ext = Extensions(x509)
         self.x509 = x509
     
@@ -87,6 +98,17 @@ class Certificate:
             
     def __str__(self):
         return self.x509.as_text()
+    
+    def __cmp__(self, other):
+        range = self.validRange()
+        exp1 = range.end()
+        range = other.validRange()
+        exp2 = range.end()
+        if exp1 < exp2:
+            return -1
+        if exp1 > exp2:
+            return 1
+        return 0
 
 
 class Key:
@@ -416,12 +438,26 @@ class ProductCertificate(Certificate):
     
     REDHAT = '1.3.6.1.4.1.2312'
     
-    def __init__(self, path):
+    @classmethod
+    def read(cls, path):
         """
-        @param path: The path to the .pem file.
+        Read a certificate file.
+        @param path: The path to a .pem file.
         @type path: str
+        @return: A certificate
+        @rtype: L{Certificate}
         """
-        Certificate.__init__(self, path)
+        f = open(path)
+        content = f.read()
+        f.close()
+        return ProductCertificate(content)
+    
+    def __init__(self, content):
+        """
+        @param content: The PEM encoded content.
+        @type content: str
+        """
+        Certificate.__init__(self, content)
         redhat = OID(self.REDHAT)
         n = len(redhat)
         self.trimmed = self.extensions().ltrim(n)
@@ -618,6 +654,8 @@ import sys
 if __name__ == '__main__':
     for path in sys.argv[1:]:
         print path
-        pc = ProductCertificate(path)
+        f = open(path)
+        content = f.read()
+        pc = ProductCertificate(content)
         print pc.x509
         print pc
