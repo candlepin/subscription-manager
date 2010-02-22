@@ -38,36 +38,3 @@ class CertLib:
     
     def __fetch(self, serialnumbers):
         pass
-
-
-class Bundle:
-    
-    KEY_PATTERN = re.compile(
-        '(-----BEGIN.+KEY-----\n)(.+)(\n-----END.+KEY-----)',
-        re.DOTALL)
-    CERT_PATTERN = re.compile(
-        '(-----BEGIN CERTIFICATE-----\n)(.+)(\n-----END CERTIFICATE-----)',
-        re.DOTALL)
-    
-    @classmethod
-    def split(cls, pem):
-        m = cls.KEY_PATTERN.search(pem)
-        key = m.group(2)
-        m = cls.CERT_PATTERN.search(pem)
-        cert = m.group(2)
-        return Bundle(key, cert)
-    
-    @classmethod
-    def join(cls):
-        s = []
-        s.append('-----BEGIN RSA PRIVATE KEY-----')
-        s.append(self.key)
-        s.append('-----END RSA PRIVATE KEY-----')
-        s.append('-----BEGIN CERTIFICATE-----')
-        s.append(self.cert)
-        s.append('-----END CERTIFICATE-----')
-        return '\n'.join(s)
-    
-    def __init__(self, key, cert):
-        self.key = key
-        self.cert = cert

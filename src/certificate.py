@@ -569,33 +569,37 @@ class Entitlement:
         return str(self)
     
     
-class PKCS12:
-    """
-    Represents a PKCS12 bundle.
-    """
+class Bundle:
     
-    def __init__(self, name, content=None):
-        """
-        @param name: The name of the bundle.
-        @type name: str
-        @param content: The (optional) pkcs12 base64 encoded content.
-        @type content: str
-        """
-        self.content = ''
-        if isinstance(content, str):
-            self.content = base64.decodestring(content)
-        
-    def key(self, passphrase=None):
-        pass
+    KEY_PATTERN = re.compile(
+        '(-----BEGIN.+KEY-----\n)(.+)(\n-----END.+KEY-----)',
+        re.DOTALL)
+    CERT_PATTERN = re.compile(
+        '(-----BEGIN CERTIFICATE-----\n)(.+)(\n-----END CERTIFICATE-----)',
+        re.DOTALL)
     
-    def certificate(self):
-        pass
+    @classmethod
+    def split(cls, pem):
+        m = cls.KEY_PATTERN.search(pem)
+        key = m.group(2)
+        m = cls.CERT_PATTERN.search(pem)
+        cert = m.group(2)
+        return Bundle(key, cert)
     
-    def read(self, path):
-        pass
-        
-    def write(self, path):
-        pass
+    @classmethod
+    def join(cls):
+        s = []
+        s.append('-----BEGIN RSA PRIVATE KEY-----')
+        s.append(self.key)
+        s.append('-----END RSA PRIVATE KEY-----')
+        s.append('-----BEGIN CERTIFICATE-----')
+        s.append(self.cert)
+        s.append('-----END CERTIFICATE-----')
+        return '\n'.join(s)
+    
+    def __init__(self, key, cert):
+        self.key = key
+        self.cert = cert
 
 
 import sys

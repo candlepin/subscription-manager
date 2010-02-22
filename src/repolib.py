@@ -18,16 +18,13 @@
 #
  
 import os
-from certificate import Key, ProductCertificate
+from certificate import ProductCertificate
 from logutil import getLogger
 
 log = getLogger(__name__)
 
 
 class RepoLib:
-    
-    def __init__(self, cfg):
-        self.cfg = cfg
 
     def update(self):
         repod = RepoFile()
@@ -58,12 +55,12 @@ class RepoLib:
         pd = ProductDirectory()
         return pd.products()
     
-    def content(self, bundles):
+    def content(self, products):
         unique = set()
-        bundles.sort()
-        bundles.reverse()
-        for bundle in bundles:
-            for repo in bundle.content():
+        products.sort()
+        products.reverse()
+        for product in products:
+            for repo in product.content():
                 unique.add(repo)
         return unique 
 
@@ -101,17 +98,6 @@ class Reader:
         
     def __getitem__(self, name):
         return self.section.get(name)
-
-
-class Configuration(Reader):
-
-    PATH = '/etc/rhsm/rhsm.conf'
-
-    def __init__(self):
-        self.read(self.PATH)
-        
-    def __getitem__(self, name):
-        return self.section[None].get(name)
     
         
 class Directory:
@@ -312,7 +298,7 @@ class ProductDirectory(Directory):
 
 def main():
     print 'Updating Red Hat repository'
-    repolib = RepoLib(None)
+    repolib = RepoLib()
     updates = repolib.update()
     print '%d updates required' % updates
     print 'done'
