@@ -51,7 +51,7 @@ if os.getuid() != 0:
 
 try:
     # NOTE: importing
-    from rhsm import ManagerCli
+    from rhsm import managercli
 except KeyboardInterrupt:
     systemExit(0, "\nUser interrupted process.")
 except ImportError, e:
@@ -61,7 +61,7 @@ except ImportError, e:
 def main():
     # execute
     try:
-        return ManagerCli.ManagerCLI().run()
+        return managercli.CLI().main()
     except KeyboardInterrupt:
         systemExit(0, "\nUser interrupted process.")
 

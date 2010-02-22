@@ -52,22 +52,26 @@ def generateOptions():
     parser.add_option_group(group)
 
     group = OptionGroup(parser, "Subscribe Options Group")
-    group.add_option('--subscribe-product', dest='bind_product', 
+    group.add_option('--subscribe', action='store_true',
+        help='Subscribes the client to a product/serial_number or registration token'),
+    group.add_option('--product', dest='bind_product', 
         metavar='product_label', action='store',
-        help='Subscribe the client to a specific subscription serial number'),
-    group.add_option('--subscribe-serial-number', dest='bind_serial', 
+        help='Subscribe the client to a specific product label'),
+    group.add_option('--serial-number', dest='bind_serial', 
         metavar='serial_number', action='store',
         help='Subscribe the client to a specific subscription serial number'),
-    group.add_option('--subscribe-reg-token', dest='bind_regtoken', 
+    group.add_option('--reg-token', dest='bind_regtoken', 
         metavar='registration_token', action='store',
         help='Subscribe the client to a specific Registration Token'),
     parser.add_option_group(group)
 
     group = OptionGroup(parser, "UnSubscribe Options Group")
-    group.add_option(    '--unsubscribe-serial', action='store',
+    group.add_option(    '--unsubscribe', action='store_true',
+        help='UnSubscribe the client from specific or all Subscription'),
+    group.add_option(    '--serial-number', action='store',
         metavar='[num1,num2..]',
-        help='UnSubscribe the client from all Product Subscription'),
-    group.add_option(    '--unsubscribeall', action='store_true',
+        help='UnSubscribe the client from specifie Subscription serial numbers'),
+    group.add_option(    '--all', action='store_true',
         help='UnSubscribe the client from all Product Subscription'), 
     parser.add_option_group(group)
 
@@ -119,8 +123,13 @@ class ManagerCLI:
 
         if self.options.list_consumed:
             pass
+        if self.options.subscribe and not (self.options.bind_product \
+           or self.options.bind_regtoken \
+           or self.options.bind_serial):
+           sys.stderr.write( _("\nError: A --product or --serial-number or --regtoken is required with --subscribe.\n"))
+           sys.exit(0)
 
-        if self.options.bind_product:
+        if self.options.subscribe and self.options.bind_product:
             self.__registered()
             try:
                 print uep.bindByProduct(consumer['uuid'], self.options.bind_product)
