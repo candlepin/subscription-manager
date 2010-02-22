@@ -19,7 +19,7 @@
 
 
 import re
-from Connection import UEPConnection as UEP
+from connection import UEPConnection as UEP
 from util.certificate import Certificate
 
 

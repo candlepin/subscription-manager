@@ -20,7 +20,7 @@
 import os
 import sys
 import config
-import Connection
+import connection
 import hardware
 import optparse
 from optparse import OptionParser
@@ -42,7 +42,7 @@ class CliCommand(object):
         self._add_common_options()
         self.name = name
 
-        self.cp = Connection.UEPConnection(host=cfg['baseUrl'] or "localhost",\
+        self.cp = connection.UEPConnection(host=cfg['baseUrl'] or "localhost",\
                              port="8080", handler="/candlepin")
 
 

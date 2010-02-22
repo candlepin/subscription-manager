@@ -24,7 +24,7 @@ import getpass
 import config
 from optparse import Option, OptionParser, OptionGroup
 
-import Connection
+import connection
 import gettext
 _ = gettext.gettext
 
@@ -98,7 +98,7 @@ class ManagerCLI:
 
     def run(self):
         self.initialize()
-        uep = Connection.UEPConnection(cfg['baseUrl'] or "localhost")
+        uep = connection.UEPConnection(cfg['baseUrl'] or "localhost")
 
         if (self.options.username and self.options.password) and \
            not self.options.register:
