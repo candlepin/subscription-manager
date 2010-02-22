@@ -30,7 +30,7 @@ from M2Crypto import X509
 from datetime import datetime as dt
 
 
-class Certificate(object):
+class Certificate:
     """
     Represents and x.509 certificate.
     @ivar x509: The M2Crypto.X509 backing object.
@@ -94,6 +94,8 @@ class Key:
     The (private|public) key.
     @ivar path: The file path.
     @type path: str
+    @ivar content: The PEM encoded key.
+    @type content: str
     """
     
     def __init__(self, path):
@@ -102,6 +104,16 @@ class Key:
         @type path: str
         """
         self.path = path
+        self.content = self.__read()
+        
+    def __read(self):
+        f = open(path)
+        content = f.read()
+        f.close()
+        return content
+        
+    def __str__(self):
+        return self.content
 
     
 class DateRange:
