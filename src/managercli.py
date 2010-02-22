@@ -42,8 +42,8 @@ class CliCommand(object):
         self._add_common_options()
         self.name = name
 
-        self.cp = connection.UEPConnection(host=cfg['baseUrl'] or "localhost",\
-                             port="8080", handler="/candlepin")
+        self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost",\
+                             port=cfg['port'] or "8080", handler="/candlepin")
 
 
     def _add_common_options(self):
