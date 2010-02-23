@@ -88,7 +88,7 @@ class RegisterCommand(CliCommand):
     def _get_register_info(self):
         stype = {'label':'system'}
         product = {"id":"1","label":"RHEL AP","name":"rhel"}
-        facts = hardware.read_dmi()
+        facts = hardware.Hardware()
         params = {
                 "type":stype,
                 "name":'admin',
