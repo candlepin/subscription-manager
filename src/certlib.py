@@ -19,9 +19,11 @@
 
 
 import os
-from connection import UEPConnection as UEP
+from config import initConfig
+from connection import UEPConnection
 from certificate import ProductCertificate, Bundle
 from logutil import getLogger
+
 
 log = getLogger(__name__)
 
@@ -29,14 +31,38 @@ log = getLogger(__name__)
 class CertLib:
     
     def update(self):
-        pass
+        updates = 0
+        snlist = []
+        cdir = CertificateDirectory()
+        for valid in cdir.valid():
+            sn = valid.serialNumber()
+            snlist.append(sn)
+        uep = UEP()
+        for st in uep.syncCertificates(snlist):
+            sn = st['serialNumber']
+            status = st['status']
+            bundle = st.get('certificate')
+            if status == 'VALID':
+                continue
+            if status in ('NEW','REPLACE'):
+                updates += 1
+                self.write(Bundle.split(bundle))
+                continue
+            if status == 'REVOKE':
+                updates += 1
+                cert = cdir.find(sn)
+                os.remove(cert.path)
+                continue
+        for c in cdir.expired():
+            os.remove(c.path)
+        return updates
         
     def add(self, *bundles):
         for b in bundles:
-            self.writeBundle(Bundle.split(b))
+            self.write(Bundle.split(b))
         return self
     
-    def writeBundle(self, bundle):
+    def write(self, bundle):
         path = CertificateDirectory.keypath()
         f = open(path, 'w')
         f.write(bundle.key)
@@ -50,8 +76,23 @@ class CertLib:
         f.write(bundle.cert)
         f.close()
     
-    def fetch(self, serialnumbers):
-        pass
+
+class UEP(UEPConnection):
+    
+    def __init__(self):
+        cfg = initConfig()
+        host = cfg['hostname']
+        port = cfg['port']
+        UEPConnection.__init__(self, host, port)
+        
+    def syncCertificates(self, serialnumbers):
+        reply = []
+        for sn in serialnumbers:
+            d = {}
+            d['serialNumber'] = sn
+            d['status'] = 'VALID'
+            reply.append(d)
+        return reply
 
 
 class Directory:
@@ -114,13 +155,43 @@ class CertificateDirectory(Directory):
         self.create()
         
     def list(self):
-        valid = []
+        all = []
         for p,fn in Directory.list(self):
             if not fn.endswith('.pem'):
                 continue
             path = os.path.join(p, fn)
             crt = ProductCertificate.read(path)
             crt.path = path
-            if crt.valid():
-                valid.append(crt)
+            all.append(crt)
+        return all
+    
+    def valid(self):
+        valid = []
+        for c in self.list():
+             if c.valid():
+                valid.append(c)
         return valid
+    
+    def expired(self):
+        expired = []
+        for c in self.list():
+             if not c.valid():
+                expired.append(c)
+        return expired
+    
+    def find(self, sn):
+        for c in self.list():
+            if c.serialNumber() == sn:
+                return c
+        return None
+
+
+def main():
+    print 'Updating Red Hat certificates'
+    certlib = CertLib()
+    updates = certlib.update()
+    print '%d updates required' % updates
+    print 'done'
+        
+if __name__ == '__main__':
+    main()

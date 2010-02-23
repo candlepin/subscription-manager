@@ -52,8 +52,8 @@ class RepoLib:
         return updates
 
     def products(self):
-        dir = CertificateDirectory()
-        return dir.list()
+        cdir = CertificateDirectory()
+        return cdir.valid()
     
     def content(self, products):
         unique = set()
