@@ -24,7 +24,7 @@ import connection
 import hardware
 import optparse
 from optparse import OptionParser
-
+from certlib import CertLib, ConsumerIdentity, ProductDirectory, EntitlementDirectory
 import gettext
 _ = gettext.gettext
 
@@ -44,7 +44,7 @@ class CliCommand(object):
 
         self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost",\
                              port=cfg['port'] or "8080", handler="/candlepin")
-
+        self.certlib = CertLib()
 
     def _add_common_options(self):
         """ Add options that apply to all sub-commands. """
@@ -94,14 +94,16 @@ class RegisterCommand(CliCommand):
                 "name":'admin',
                 "facts":facts,
         }
-        print params
         return params
 
     def _write_consumer_cert(self, consumerinfo):
         if not os.path.isdir("/etc/pki/consumer/"):
             os.mkdir("/etc/pki/consumer/")
-        f = open("/etc/pki/consumer/cert.pem", "w")
         #TODO: this will a pki cert in future
+        # consumerid = ConsumerIdentity(consumerinfo['key'], \
+        #                               consumerinfo['cert'])
+        # consumerid.write()
+        f = open("/etc/pki/consumer/cert.pem", "w")
         f.write(consumerinfo)
         f.close()
 
@@ -132,8 +134,8 @@ class SubscribeCommand(CliCommand):
 
     def _validate_options(self):
         if self.options.regtoken and self.options.product:
-            print "Need either --product or --regtoken, not both"
-            sys.exit()
+            print _("Need either --product or --regtoken, not both")
+            sys.exit(-1)
 
         CliCommand._validate_options(self)
 
@@ -143,9 +145,12 @@ class SubscribeCommand(CliCommand):
         """
         consumer = check_registration()
         if self.options.product:
-            print self.cp.bindByProduct(consumer, self.options.product)
+            bundles = self.cp.bindByProduct(consumer, self.options.product)
+            self.certlib.add(bundle)
+
         if self.options.regtoken:
-            print self.cp.bindRegToken(consume, self.options.regtoken)
+            bundles = self.cp.bindRegToken(consume, self.options.regtoken)
+            self.certlib.add(bundle)
 
 class UnSubscribeCommand(CliCommand):
     def __init__(self):
@@ -168,27 +173,13 @@ class UnSubscribeCommand(CliCommand):
         consumer = check_registration()
 
         if not self.options.serial_numbers:
-            print self.cp.unbindAll(consumer)
+            self.cp.unbindAll(consumer)
+            self.certlib.update()
 
         if self.options.serial_numbers:
-            print self.cp.unBindBySerialNumbers(consumer, self.options.serial_numbers)
+            self.cp.unBindBySerialNumbers(consumer, self.options.serial_numbers)
+            self.certlib.update()
 
-class SyncCertificatesCommand(CliCommand):
-    def __init__(self):
-        usage = "usage: %prog syncCertificates "
-        shortdesc = "syncCertificates"
-        desc = "syncCertificates"
-        CliCommand.__init__(self, "syncCertificates", usage, shortdesc, desc)
-
-
-    def _validate_options(self):
-        CliCommand._validate_options(self)
-
-    def _do_command(self):
-        """
-        Executes the command.
-        """
-        print self.cp.syncCertificates(consumer_uuid, [])
 
 class GetEntitlementPoolsCommand(CliCommand):
     def __init__(self):
@@ -196,6 +187,13 @@ class GetEntitlementPoolsCommand(CliCommand):
         shortdesc = "listEntitlementPools"
         desc = "list available or consumed Entitlement Pools for this system."
         CliCommand.__init__(self, "list", usage, shortdesc, desc)
+        self.available = None
+        self.consumed = None
+        self.parser.add_option("--available", action='store_true',
+                               help="available")
+        self.parser.add_option("--consumed", action='store_true',
+                               help="consumed")
+
 
     def _validate_options(self):
         CliCommand._validate_options(self)
@@ -205,7 +203,13 @@ class GetEntitlementPoolsCommand(CliCommand):
         Executes the command.
         """
         consumer = check_registration()
-        print self.cp.getEntitlementPools(consumer)
+        if self.options.available:
+            print self.cp.getEntitlementPools(consumer)
+
+        if self.options.consumed:
+           entdir = EntitlementDirectory()
+           for cert in entdir.listValid().sort():
+               print cert
 
 
 # taken wholseale from rho...
