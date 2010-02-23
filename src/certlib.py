@@ -46,7 +46,7 @@ class CertLib:
                 continue
             if status in ('NEW','REPLACE'):
                 updates += 1
-                self.__write(Bundle.split(bundle))
+                self.__write(bundle)
                 continue
             if status == 'REVOKE':
                 updates += 1
@@ -59,22 +59,35 @@ class CertLib:
         
     def add(self, *bundles):
         for b in bundles:
-            self.__write(Bundle.split(b))
+            self.__write(b)
         return self
     
     def __write(self, bundle):
         path = self.entdir.keypath()
         f = open(path, 'w')
-        f.write(bundle.key)
+        f.write(bundle['key'])
         f.close()
-        cert = ProductCertificate(bundle.cert)
+        cert = ProductCertificate(bundle['certificate'])
         product = cert.getProduct()
         path = self.entdir.productpath()
-        fn = '%s.pem' % product.getName()
+        fn = self.__ufn(path, product)
         path = os.path.join(path, fn)
         f = open(path)
         f.write(bundle.cert)
         f.close()
+        
+    def __ufn(self, path, product):
+        n = 1
+        name = product.getName()
+        while True:
+            fn = '%s.pem' % name
+            path = os.path.join(path, fn)
+            if os.path.exists(path):
+                name += str(n)
+                n += 1
+            else:
+                break
+        return fn
     
 
 class UEP(UEPConnection):
