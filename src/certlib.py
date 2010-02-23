@@ -236,11 +236,10 @@ class ConsumerIdentity:
     
     @classmethod
     def read(cls):
-        self.__mkdir()
-        f = open(self.keypath())
+        f = open(cls.keypath())
         key = f.read()
         f.close()
-        f = open(self.certpath())
+        f = open(cls.certpath())
         cert = f.read()
         f.close()
         return ConsumerIdentity(key, cert) 
