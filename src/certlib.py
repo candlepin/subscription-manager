@@ -30,11 +30,13 @@ log = getLogger(__name__)
 
 class CertLib:
     
+    def __init__(self):
+        self.certdir = CertificateDirectory()
+    
     def update(self):
         updates = 0
         snlist = []
-        cdir = CertificateDirectory()
-        for valid in cdir.valid():
+        for valid in self.certdir.valid():
             sn = valid.serialNumber()
             snlist.append(sn)
         uep = UEP()
@@ -50,10 +52,10 @@ class CertLib:
                 continue
             if status == 'REVOKE':
                 updates += 1
-                cert = cdir.find(sn)
+                cert = self.certdir.find(sn)
                 os.remove(cert.path)
                 continue
-        for c in cdir.expired():
+        for c in self.certdir.expired():
             os.remove(c.path)
         return updates
         
@@ -63,13 +65,13 @@ class CertLib:
         return self
     
     def write(self, bundle):
-        path = CertificateDirectory.keypath()
+        path = self.certdir.keypath()
         f = open(path, 'w')
         f.write(bundle.key)
         f.close()
         cert = ProductCertificate(bundle.cert)
         product = cert.getProduct()
-        path = CertificateDirectory.productpath()
+        path = self.certdir.productpath()
         fn = '%s.pem' % product.getName()
         path = os.path.join(path, fn)
         f = open(path)
