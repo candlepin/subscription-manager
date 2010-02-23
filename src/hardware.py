@@ -28,7 +28,6 @@ import ethtool
 import gettext
 _ = gettext.gettext
 
-import dbus
 import dmidecode
 
 # Some systems don't have the _locale module installed
@@ -636,9 +635,6 @@ def Hardware():
             allhw.append(ret)
     except:
         print _("Error reading networking information:"), sys.exc_type
-    # dont like catchall exceptions but theres not
-    # really anything useful we could do at this point
-    # and its been trouble prone enough 
 
     # minimal DMI info
     try:
@@ -646,7 +642,6 @@ def Hardware():
         if ret:
             allhw.append(ret)
     except:
-        # bz253596 : Logging Dbus Error messages instead of printing on stdout
         pass 
     try:
         ret = read_installinfo()
@@ -662,13 +657,7 @@ def Hardware():
     except:
         print _("Error reading network interface information:"), sys.exc_type
     
-    # all Done.
     return allhw
-
-# XXX: Need more functions here:
-#  - filesystems layout (/proc.mounts and /proc/mdstat)
-#  - is the kudzu config enough or should we strat chasing lscpi and try to parse that
-#    piece of crap output?
 
 #
 # Main program
