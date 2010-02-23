@@ -23,6 +23,7 @@ if __name__ != '__main__':
     raise ImportError, "module cannot be imported"
 
 import sys
+import os
 def systemExit(code, msgs=None):
     "Exit with a code and optional message(s). Saved a few lines of code."
 
@@ -33,11 +34,6 @@ def systemExit(code, msgs=None):
             sys.stderr.write(str(msg)+'\n')
     sys.exit(code)
 
-try:
-    import os
-    import socket
-except KeyboardInterrupt:
-    systemExit(0, "\nUser interrupted process.")
 
 _LIBPATH = "/usr/share/"
 # add to the path if need be
