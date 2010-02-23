@@ -16,20 +16,23 @@
 #
  
 import os
-from certlib import CertificateDirectory
+from certlib import EntitlementDirectory
 from logutil import getLogger
 
 log = getLogger(__name__)
 
 
 class RepoLib:
+    
+    def __init__(self):
+        self.entdir = EntitlementDirectory()
 
     def update(self):
         repod = RepoFile()
         repod.read()
         valid = set()
         updates = 0
-        products = self.products()
+        products = self.entdir.listValid()
         for cont in self.content(products):
             name = cont.id
             valid.add(name)
@@ -48,10 +51,6 @@ class RepoLib:
             del repod.section[name]
         repod.write()
         return updates
-
-    def products(self):
-        cdir = CertificateDirectory()
-        return cdir.valid()
     
     def content(self, products):
         unique = set()
@@ -63,7 +62,7 @@ class RepoLib:
                 repo = Repo(id)
                 repo['name'] = ent.getDescription()
                 repo['baseurl'] = ent.getUrl()
-                repo['sslclientkey'] = CertificateDirectory.keypath()
+                repo['sslclientkey'] = EntitlementDirectory.keypath()
                 repo['sslclientcert'] = product.path
                 unique.add(repo)
         return unique 

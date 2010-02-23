@@ -29,12 +29,12 @@ log = getLogger(__name__)
 class CertLib:
     
     def __init__(self):
-        self.certdir = CertificateDirectory()
+        self.entdir = EntitlementDirectory()
     
     def update(self):
         updates = 0
         snlist = []
-        for valid in self.certdir.valid():
+        for valid in self.entdir.listValid():
             sn = valid.serialNumber()
             snlist.append(sn)
         uep = UEP()
@@ -46,30 +46,30 @@ class CertLib:
                 continue
             if status in ('NEW','REPLACE'):
                 updates += 1
-                self.write(Bundle.split(bundle))
+                self.__write(Bundle.split(bundle))
                 continue
             if status == 'REVOKE':
                 updates += 1
-                cert = self.certdir.find(sn)
+                cert = self.entdir.find(sn)
                 os.remove(cert.path)
                 continue
-        for c in self.certdir.expired():
+        for c in self.entdir.listExpired():
             os.remove(c.path)
         return updates
         
     def add(self, *bundles):
         for b in bundles:
-            self.write(Bundle.split(b))
+            self.__write(Bundle.split(b))
         return self
     
-    def write(self, bundle):
-        path = self.certdir.keypath()
+    def __write(self, bundle):
+        path = self.entdir.keypath()
         f = open(path, 'w')
         f.write(bundle.key)
         f.close()
         cert = ProductCertificate(bundle.cert)
         product = cert.getProduct()
-        path = self.certdir.productpath()
+        path = self.entdir.productpath()
         fn = '%s.pem' % product.getName()
         path = os.path.join(path, fn)
         f = open(path)
@@ -136,7 +136,7 @@ class Directory:
         return self.path
 
     
-class CertificateDirectory(Directory):
+class EntitlementDirectory(Directory):
     
     ROOT = '/etc/pki/entitlement'
     KEY = 'key.pem'
@@ -165,14 +165,14 @@ class CertificateDirectory(Directory):
             all.append(crt)
         return all
     
-    def valid(self):
+    def listValid(self):
         valid = []
         for c in self.list():
              if c.valid():
                 valid.append(c)
         return valid
     
-    def expired(self):
+    def listExpired(self):
         expired = []
         for c in self.list():
              if not c.valid():
@@ -184,6 +184,86 @@ class CertificateDirectory(Directory):
             if c.serialNumber() == sn:
                 return c
         return None
+    
+    
+class ProductDirectory(Directory):
+    
+    PATH = '/etc/pki/product'
+    
+    def __init__(self):
+        Directory.__init__(self, self.PATH)
+        self.create()
+        
+    def list(self):
+        all = []
+        for p,fn in Directory.list(self):
+            if not fn.endswith('.pem'):
+                continue
+            path = os.path.join(p, fn)
+            crt = ProductCertificate.read(path)
+            crt.path = path
+            all.append(crt)
+        return all
+    
+    def listValid(self):
+        valid = []
+        for c in self.list():
+             if c.valid():
+                valid.append(c)
+        return valid
+    
+    def listExpired(self):
+        expired = []
+        for c in self.list():
+             if not c.valid():
+                expired.append(c)
+        return expired
+    
+
+class ConsumerIdentity:
+    
+    LOCATION = '/etc/pki/consumer'
+    KEY = 'key.pem'
+    CERT = 'cert.pem'
+    
+    @classmethod
+    def keypath(cls):
+        return os.path.join(cls.LOCATION, cls.KEY)
+    
+    @classmethod
+    def certpath(cls):
+        return os.path.join(cls.LOCATION, cls.CERT)
+    
+    @classmethod
+    def read(cls):
+        self.__mkdir()
+        f = open(self.keypath())
+        key = f.read()
+        f.close()
+        f = open(self.certpath())
+        cert = f.read()
+        f.close()
+        return ConsumerIdentity(key, cert) 
+    
+    def __init__(self, keystring, certstring):
+        self.key = keystring
+        self.cert = certstring
+        
+    def getConsumerId(self):
+        return '99'
+        
+    def write(self):
+        self.__mkdir()
+        f = open(self.keypath(), 'w')
+        f.write(self.key)
+        f.close()
+        f = open(self.certpath(), 'w')
+        f.write(self.cert)
+        f.close()
+    
+    def __mkdir(self):
+        if not os.path.exists(self.LOCATION):
+            os.mkdir(path)
 
 
 def main():
