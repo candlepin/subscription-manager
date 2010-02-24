@@ -152,7 +152,7 @@ class SubscribeCommand(CliCommand):
         if self.options.product:
             bundles = self.cp.bindByProduct(consumer, self.options.product)
             #self.certlib.add(bundles)
-            self.cerlib.update()
+            self.certlib.update()
 
         if self.options.regtoken:
             bundles = self.cp.bindRegToken(consume, self.options.regtoken)
