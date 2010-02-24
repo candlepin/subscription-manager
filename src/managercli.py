@@ -112,6 +112,7 @@ class RegisterCommand(CliCommand):
         """
         self._validate_options()
         consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
+        print consumer
         self._write_consumer_cert(consumer['uuid'])
 
 class SubscribeCommand(CliCommand):
@@ -150,11 +151,13 @@ class SubscribeCommand(CliCommand):
         consumer = check_registration()
         if self.options.product:
             bundles = self.cp.bindByProduct(consumer, self.options.product)
-            self.certlib.add(bundle)
+            #self.certlib.add(bundles)
+            self.cerlib.update()
 
         if self.options.regtoken:
             bundles = self.cp.bindRegToken(consume, self.options.regtoken)
-            self.certlib.add(bundle)
+            #self.certlib.add(bundles)
+            self.certlib.update()
 
 class UnSubscribeCommand(CliCommand):
     def __init__(self):
