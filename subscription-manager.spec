@@ -9,6 +9,8 @@ Source0: %{name}-%{version}-%{release}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
 Requires: python-dmidecode
+Requires  python-ethtool 
+Requires  python-simplejson
 Requires:  m2crypto 
 Requires: yum >= 3.2.19-15
 
