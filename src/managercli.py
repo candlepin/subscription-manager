@@ -67,7 +67,7 @@ class CliCommand(object):
 class RegisterCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog register"
-        shortdesc = "register"
+        shortdesc = "register the client to a Unified Entitlement Platform."
         desc = "register"
 
         CliCommand.__init__(self, "register", usage, shortdesc, desc)
@@ -83,7 +83,6 @@ class RegisterCommand(CliCommand):
         if not (self.options.username and self.options.password):
             print (_("Error: username and password are required to register,try --help.\n"))
             sys.exit(-1)
-        CliCommand._validate_options(self)
 
     def _get_register_info(self):
         stype = {'label':'system'}
@@ -118,7 +117,7 @@ class RegisterCommand(CliCommand):
 class SubscribeCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog subscribe --product [product_label] --regtoken [regtoken]"
-        shortdesc = "subscribe"
+        shortdesc = "subscribe the registered user to a specified product or regtoken."
         desc = "subscribe"
         CliCommand.__init__(self, "subscribe", usage, shortdesc, desc)
 
@@ -160,7 +159,7 @@ class SubscribeCommand(CliCommand):
 class UnSubscribeCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog unsubscribe --serialnumbers [serial1,serial2,serial3]"
-        shortdesc = "unsubscribe"
+        shortdesc = "unsubscribe the registered user from all or specific subscriptions."
         desc = "unsubscribe"
         CliCommand.__init__(self, "unsubscribe", usage, shortdesc, desc)
 
@@ -189,7 +188,7 @@ class UnSubscribeCommand(CliCommand):
 class ListCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog list --available --consumed"
-        shortdesc = "listEntitlementPools"
+        shortdesc = "list available or consumer subscriptions for registered user"
         desc = "list available or consumed Entitlement Pools for this system."
         CliCommand.__init__(self, "list", usage, shortdesc, desc)
         self.available = None
@@ -225,8 +224,8 @@ class CLI:
     def __init__(self):
 
         self.cli_commands = {}
-        for clazz in [ RegisterCommand, SubscribeCommand,\
-                       UnSubscribeCommand,ListCommand]:
+        for clazz in [ RegisterCommand, ListCommand, SubscribeCommand,\
+                       UnSubscribeCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":
@@ -245,6 +244,7 @@ class CLI:
         items.sort()
         for (name, cmd) in items:
             print("\t%-14s %-25s" % (name, cmd.shortdesc))
+            #print(" %-25s" % cmd.parser.print_help())
         print("")
 
     def _find_best_match(self, args):
@@ -283,7 +283,6 @@ class CLI:
         return cmd
 
     def main(self):
-        #self._check_registration()
         if len(sys.argv) < 2 or not self._find_best_match(sys.argv):
             self._usage()
             sys.exit(1)
