@@ -17,6 +17,7 @@
 
 
 import os
+import re
 from config import initConfig
 from connection import UEPConnection
 from certificate import ProductCertificate, Bundle
@@ -63,22 +64,26 @@ class CertLib:
         return self
     
     def __write(self, bundle):
+        keypem = bundle['key']
+        crtpem = bundle['certificate']
         path = self.entdir.keypath()
         f = open(path, 'w')
-        f.write(bundle['key'])
+        f.write(keypem)
         f.close()
-        cert = ProductCertificate(bundle['certificate'])
+        cert = ProductCertificate(crtpem)
         product = cert.getProduct()
         path = self.entdir.productpath()
         fn = self.__ufn(path, product)
         path = os.path.join(path, fn)
-        f = open(path)
-        f.write(bundle.cert)
+        f = open(path, 'w')
+        f.write(crtpem)
         f.close()
         
     def __ufn(self, path, product):
         n = 1
         name = product.getName()
+        name = re.sub('\s+', '', name)
+        fn = None
         while True:
             fn = '%s.pem' % name
             path = os.path.join(path, fn)
@@ -103,7 +108,10 @@ class UEP(UEPConnection):
         for sn in serialnumbers:
             d = {}
             d['serialNumber'] = sn
-            d['status'] = 'VALID'
+            d['status'] = 'NEW'
+            d['certificate'] = \
+                {'key':open('/home/jortel/x509/client.key').read(),
+                 'certificate':open('/home/jortel/x509/client.pem').read()}
             reply.append(d)
         return reply
 
