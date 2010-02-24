@@ -25,6 +25,8 @@ from logging.handlers import RotatingFileHandler
 
 def getLogger(name):
     path = '/var/log/rhsm/rhsm.log'
+    if not os.path.isdir("/var/log/rhsm"):
+        os.mkdir("/var/log/rhsm")
     fmt = '%(asctime)s [%(levelname)s] %(funcName)s() @%(filename)s:%(lineno)d - %(message)s'
     handler = RotatingFileHandler(path, maxBytes=0x100000, backupCount=5)
     handler.setFormatter(Formatter(fmt))
