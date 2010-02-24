@@ -66,7 +66,7 @@ class CliCommand(object):
 
 class RegisterCommand(CliCommand):
     def __init__(self):
-        usage = "usage: %prog register"
+        usage = "usage: %prog register [OPTIONS]"
         shortdesc = "register the client to a Unified Entitlement Platform."
         desc = "register"
 
@@ -117,7 +117,7 @@ class RegisterCommand(CliCommand):
 
 class SubscribeCommand(CliCommand):
     def __init__(self):
-        usage = "usage: %prog subscribe --product [product_label] --regtoken [regtoken]"
+        usage = "usage: %prog subscribe [OPTIONS]"
         shortdesc = "subscribe the registered user to a specified product or regtoken."
         desc = "subscribe"
         CliCommand.__init__(self, "subscribe", usage, shortdesc, desc)
@@ -161,7 +161,7 @@ class SubscribeCommand(CliCommand):
 
 class UnSubscribeCommand(CliCommand):
     def __init__(self):
-        usage = "usage: %prog unsubscribe --serialnumbers [serial1,serial2,serial3]"
+        usage = "usage: %prog unsubscribe [OPTIONS]"
         shortdesc = "unsubscribe the registered user from all or specific subscriptions."
         desc = "unsubscribe"
         CliCommand.__init__(self, "unsubscribe", usage, shortdesc, desc)
@@ -190,7 +190,7 @@ class UnSubscribeCommand(CliCommand):
 
 class ListCommand(CliCommand):
     def __init__(self):
-        usage = "usage: %prog list --available --consumed"
+        usage = "usage: %prog list [OPTIONS]"
         shortdesc = "list available or consumer subscriptions for registered user"
         desc = "list available or consumed Entitlement Pools for this system."
         CliCommand.__init__(self, "list", usage, shortdesc, desc)
