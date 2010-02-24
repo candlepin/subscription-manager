@@ -613,7 +613,11 @@ def check_hal_dbus_status():
 # this one reads it all
 def Hardware():
     allhw = []
-
+    try:
+        ret = get_smbios()
+        if ret: allhw.append(ret)
+    except:
+        print _("Error reading smbios info:"), sys.exc_type
     # cpu info
     try:
         ret = read_cpuinfo()

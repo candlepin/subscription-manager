@@ -49,8 +49,6 @@ class CliCommand(object):
     def _add_common_options(self):
         """ Add options that apply to all sub-commands. """
 
-#        self.parser.add_option("--log", dest="log_file", metavar="FILENAME",
-#                help="log file name (will be overwritten)")
         self.parser.add_option("--debug", dest="debug",
                 default=0, help="debug level")
 
@@ -76,13 +74,15 @@ class RegisterCommand(CliCommand):
 
         self.username = None
         self.password = None
-        self.system = None
         self.parser.add_option("--username", dest="username", 
                                help="username")
         self.parser.add_option("--password", dest="password",
                                help="password")
 
     def _validate_options(self):
+        if not (self.options.username and self.options.password):
+            print (_("Error: username and password are required to register,try --help.\n"))
+            sys.exit(-1)
         CliCommand._validate_options(self)
 
     def _get_register_info(self):
@@ -111,13 +111,13 @@ class RegisterCommand(CliCommand):
         """
         Executes the command.
         """
-
+        self._validate_options()
         consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
         self._write_consumer_cert(consumer['uuid'])
 
 class SubscribeCommand(CliCommand):
     def __init__(self):
-        usage = "usage: %prog subscribe --product [product_label] --regtoken [regtoken] --substoken [subscription-number]"
+        usage = "usage: %prog subscribe --product [product_label] --regtoken [regtoken]"
         shortdesc = "subscribe"
         desc = "subscribe"
         CliCommand.__init__(self, "subscribe", usage, shortdesc, desc)
@@ -133,16 +133,21 @@ class SubscribeCommand(CliCommand):
                                help="substoken")
 
     def _validate_options(self):
-        if self.options.regtoken and self.options.product:
-            print _("Need either --product or --regtoken, not both")
+        if not (self.options.regtoken or self.options.product):
+            print _("Error: Need either --product or --regtoken, Try --help")
             sys.exit(-1)
 
-        CliCommand._validate_options(self)
+        if self.options.regtoken and self.options.product:
+            print _("Error: Need either --product or --regtoken, not both, Try --help")
+            sys.exit(-1)
+
+        #CliCommand._validate_options(self)
 
     def _do_command(self):
         """
         Executes the command.
         """
+        self._validate_options()
         consumer = check_registration()
         if self.options.product:
             bundles = self.cp.bindByProduct(consumer, self.options.product)
@@ -181,7 +186,7 @@ class UnSubscribeCommand(CliCommand):
             self.certlib.update()
 
 
-class GetEntitlementPoolsCommand(CliCommand):
+class ListCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog list --available --consumed"
         shortdesc = "listEntitlementPools"
@@ -196,19 +201,22 @@ class GetEntitlementPoolsCommand(CliCommand):
 
 
     def _validate_options(self):
-        CliCommand._validate_options(self)
+        if not (self.options.available or self.options.consumed):
+            print _("Error: --available or --consumed are required to list, try --help.")
+            sys.exit(-1)
 
     def _do_command(self):
         """
         Executes the command.
         """
+        self._validate_options()
         consumer = check_registration()
         if self.options.available:
             print self.cp.getEntitlementPools(consumer)
 
         if self.options.consumed:
            entdir = EntitlementDirectory()
-           for cert in entdir.listValid().sort():
+           for cert in entdir.listValid():
                print cert
 
 
@@ -218,7 +226,7 @@ class CLI:
 
         self.cli_commands = {}
         for clazz in [ RegisterCommand, SubscribeCommand,\
-                       UnSubscribeCommand,GetEntitlementPoolsCommand]:
+                       UnSubscribeCommand,ListCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":
