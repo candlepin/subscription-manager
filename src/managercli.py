@@ -218,9 +218,13 @@ class ListCommand(CliCommand):
 
         if self.options.consumed:
            entdir = EntitlementDirectory()
+           print("=============================================")
+           print("\t%-10s \t%-25s" % ("SerialNumber", "Product Consumed"))
+           print("=============================================")
            for cert in entdir.listValid():
-               print cert
+               print("\t%-10s \t%-25s" % (cert.serialNumber(), cert.getProduct().getName()))
 
+           #print("=============================================")
 
 # taken wholseale from rho...
 class CLI:
