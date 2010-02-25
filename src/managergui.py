@@ -13,8 +13,8 @@ _ = gettext.gettext
 gettext.textdomain("subscription-manager")
 gtk.glade.bindtextdomain("subscription-manager")
 
-gladegui = "subsgui.glade"
-gladexml = "subsMgr.glade"
+gladegui = "../data/subsgui.glade"
+gladexml = "../data/subsMgr.glade"
 UEP = None
 class LoginPage:
     def __init__(self):

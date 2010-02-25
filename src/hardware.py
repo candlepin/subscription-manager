@@ -546,16 +546,6 @@ def read_network_interfaces():
 
     return intDict
 
-
-def get_device_property(device, property_name):
-    """ Return a hal device property, or None if it does not exist. """
-    if device.PropertyExists(property_name):
-        # Convert from unicode to ascii in case the server can't handle it.
-        return str(device.GetProperty(property_name))
-    else:
-        return None
-
-# Read DMI information via hal.    
 def read_dmi():
     dmidict = {}
     dmidict["class"] = "DMI" 
@@ -610,6 +600,87 @@ def check_hal_dbus_status():
     dbus_status, msg = commands.getstatusoutput('/etc/init.d/messagebus status')
     return hal_status, dbus_status
 
+def get_virt_info():
+    """
+    This function returns the UUID and virtualization type of this system, if
+    it is a guest.  Otherwise, it returns None.  To figure this out, we'll
+    use a number of heuristics (list in order of precedence):
+
+       1.  Check /proc/xen/xsd_port.  If exists, we know the system is a
+           host; exit.
+       2.  Check /sys/hypervisor/uuid.  If exists and is non-zero, we know
+           the system is a para-virt guest; exit.
+       3.  Check SMBIOS.  If vendor='Xen' and UUID is non-zero, we know the
+           system is a fully-virt guest; exit.
+       4.  If non of the above checks worked; we know we have a
+           non-xen-enabled system; exit. 
+    """
+
+    # First, check whether /proc/xen/xsd_port exists.  If so, we know this is
+    # a host system.
+    try:
+        if os.path.exists("/proc/xen/xsd_port"):
+            # Ok, we know this is *at least* a host system.  However, it may
+            # also be a fully-virt guest.  Check for that next.  If it is, we'll
+            # just report that instead since we only support one level of 
+            # virtualization.
+            (uuid, virt_type) = get_fully_virt_info()
+            return (uuid, virt_type)
+    except IOError:
+        # Failed.  Move on to next strategy.
+        pass
+
+    # This is not a virt host system.  Check if it's a para-virt guest.
+    (uuid, virt_type) = get_para_virt_info()
+    if uuid is not None:
+        return (uuid, virt_type)
+        
+    # This is not a para-virt guest.  Check if it's a fully-virt guest.
+    (uuid, virt_type) = get_fully_virt_info()
+    if uuid is not None:
+        return (uuid, virt_type)
+
+    # If we got here, we have a system that does not have virtualization
+    # enabled.
+    return (None, None)
+
+def get_para_virt_info():
+    """
+    This function checks /sys/hypervisor/uuid to see if the system is a 
+    para-virt guest.  It returns a (uuid, virt_type) tuple.
+    """
+    try:
+        uuid_file = open('/sys/hypervisor/uuid', 'r')
+        uuid = uuid_file.read()
+        uuid_file.close()
+        uuid = uuid.lower().replace('-', '').rstrip("\r\n")
+        virt_type = "para"
+        return (uuid, virt_type)
+    except IOError:
+        # Failed; must not be para-virt.
+        pass
+
+    return (None, None)
+
+def get_fully_virt_info():
+    """
+    This function looks in the SMBIOS area to determine if this is a 
+    fully-virt guest.  It returns a (uuid, virt_type) tuple.
+    """
+    vendor = dmi_vendor()
+    uuid = dmi_system_uuid()
+    if vendor.lower() == "xen":
+        uuid = uuid.lower().replace('-', '')
+        virt_type = "fully"
+        return (uuid, virt_type)
+    else:
+        return (None, None)
+
+def _is_host_uuid(uuid):
+    uuid = eval('0x%s' % uuid)
+    return long(uuid) == 0L
+
+
 # this one reads it all
 def Hardware():
     allhw = []
@@ -618,6 +689,13 @@ def Hardware():
         if ret: allhw.append(ret)
     except:
         print _("Error reading smbios info:"), sys.exc_type
+
+    try:
+        ret = get_virt_info()
+        if ret: allhw.append({'virt-info' : ret})
+    except:
+        print _("Error reading virt info:"), sys.exc_type
+
     # cpu info
     try:
         ret = read_cpuinfo()
