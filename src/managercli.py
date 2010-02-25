@@ -99,11 +99,11 @@ class RegisterCommand(CliCommand):
         if not os.path.isdir("/etc/pki/consumer/"):
             os.mkdir("/etc/pki/consumer/")
         #TODO: this will a pki cert in future
-        # consumerid = ConsumerIdentity(consumerinfo['key'], \
-        #                               consumerinfo['cert'])
-        # consumerid.write()
-        f = open("/etc/pki/consumer/cert.pem", "w")
-        f.write(consumerinfo)
+        consumerid = ConsumerIdentity(consumerinfo['idCert']['key'], \
+                                      consumerinfo['idCert']['pem'])
+        consumerid.write()
+        f = open("/etc/pki/consumer/cert.uuid", "w")
+        f.write(consumerinfo['uuid'])
         f.close()
 
     def _do_command(self):
@@ -113,7 +113,7 @@ class RegisterCommand(CliCommand):
         self._validate_options()
         consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
         print consumer
-        self._write_consumer_cert(consumer['uuid'])
+        self._write_consumer_cert(consumer)
 
 class SubscribeCommand(CliCommand):
     def __init__(self):
@@ -302,7 +302,7 @@ class CLI:
         cmd.main()
 
 def check_registration():
-    if not os.access("/etc/pki/consumer/cert.pem", os.F_OK):
+    if not os.access("/etc/pki/consumer/cert.uuid", os.F_OK):
         needToRegister = \
             _("Error: You need to register this system by running " \
             "`register` command before using this option.")
