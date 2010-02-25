@@ -13,6 +13,8 @@ Requires  python-ethtool
 Requires  python-simplejson
 Requires:  m2crypto 
 Requires: yum >= 3.2.19-15
+Requires: pygtk2 pygtk2-libglade gnome-python2 gnome-python2-canvas
+Requires: usermode-gtk
 
 %description
 Subscription Manager package provides programs and libraries to allow users to manager subscriptions and repos from a unified entitlement or a deployment Platform.
@@ -26,6 +28,7 @@ mkdir -p $RPM_BUILD_ROOT/usr/share/rhsm
 mkdir -p $RPM_BUILD_ROOT/usr/sbin
 mkdir -p $RPM_BUILD_ROOT/etc/rhsm
 mkdir -p $RPM_BUILD_ROOT/%{_mandir}/man8/
+mkdir -p$RPM_BUILD_ROOT/var/log/rhsm 
 cp -R src/*.py $RPM_BUILD_ROOT/usr/share/rhsm
 cp src/subscription-manager-cli $RPM_BUILD_ROOT/usr/sbin
 cp etc-conf/* $RPM_BUILD_ROOT/etc/rhsm/
@@ -52,7 +55,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/rhsm/config.*
 /usr/share/rhsm/logutil.*
 %attr(755,root,root) %{_sbindir}/subscription-manager-cli
-%attr(770,root,root) %dir %{_var}/log/rhsm
+%attr(700,root,root) %dir %{_var}/log/rhsm
 
 # config files
 %attr(644,root,root) /etc/rhsm/rhsm.conf
