@@ -15,9 +15,8 @@
 # in this software or its documentation.
 #
 
-import sys
-sys.path.append('/usr/share/subscription-manager/repomanagement')
-
+import os, sys
+sys.path.append('/usr/share/rhsm')
 from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
 from repolib import RepoLib
 
@@ -26,7 +25,10 @@ plugin_type = (TYPE_CORE, TYPE_INTERACTIVE)
 
 def config_hook(conduit):
     try:
+        if os.getuid() != 0:
+            conduit.info(2, 'Not root, Red Hat repository not updated')
+            return
         rl = RepoLib()
         rl.update()
     except Exception, ex:
-        conduit.error(0, str(ex))
+        conduit.error(2, str(ex))
