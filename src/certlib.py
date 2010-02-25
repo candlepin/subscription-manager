@@ -20,7 +20,7 @@ import os
 import re
 from config import initConfig
 from connection import UEPConnection
-from certificate import ProductCertificate, Bundle
+from certificate import Certificate, ProductCertificate, Bundle
 from logutil import getLogger
 
 
@@ -42,7 +42,7 @@ class CertLib:
         for st in uep.syncCertificates(snlist):
             sn = st['serialNumber']
             status = st['status']
-            bundle = st.get('certificate')
+            bundle = st.get('clientCertificate')
             if status == 'VALID':
                 continue
             if status in ('NEW','REPLACE'):
@@ -93,7 +93,7 @@ class CertLib:
             else:
                 break
         return fn
-    
+
 
 class UEP(UEPConnection):
     
@@ -103,18 +103,20 @@ class UEP(UEPConnection):
         port = cfg['port']
         UEPConnection.__init__(self, host, port)
         
-    def syncCertificates(self, serialnumbers):
-        reply = []
-        for sn in serialnumbers:
-            d = {}
-            d['serialNumber'] = sn
-            d['status'] = 'NEW'
-            d['certificate'] = \
-                {'key':open('/home/jortel/x509/client.key').read(),
-                 'certificate':open('/home/jortel/x509/client.pem').read()}
-            reply.append(d)
-        return reply
-
+    def syncCertificates(self, snlist):
+        uuid = self.__consumeruuid()
+        if uuid is None:
+            return ()
+        result = UEPConnection.syncCertificates(self, uuid, snlist)
+        return result['clientCertStatus']
+        
+    def __consumeruuid(self):
+        try:
+            cid = ConsumerIdentity.read()
+            return cid.getConsumerId()
+        except:
+            pass
+        
 
 class Directory:
     
@@ -263,14 +265,21 @@ class ConsumerIdentity:
         f = open(cls.certpath())
         cert = f.read()
         f.close()
-        return ConsumerIdentity(key, cert) 
+        return ConsumerIdentity(key, cert)
+
+    @classmethod
+    def exists(cls):
+        return ( os.path.exists(cls.keypath()) and \
+                 os.path.exists(cls.certpath()) )
     
     def __init__(self, keystring, certstring):
         self.key = keystring
         self.cert = certstring
         
     def getConsumerId(self):
-        return '99'
+        cert = Certificate(self.cert)
+        subject = cert.subject()
+        return subject.get('CN')
         
     def write(self):
         self.__mkdir()
@@ -280,6 +289,14 @@ class ConsumerIdentity:
         f = open(self.certpath(), 'w')
         f.write(self.cert)
         f.close()
+        
+    def delete(self):
+        path = self.keypath()
+        if os.path.exists(path):
+            os.remove(path)
+        path = self.certpath()
+        if os.path.exists(path):
+            os.remove(path)
     
     def __mkdir(self):
         if not os.path.exists(self.LOCATION):

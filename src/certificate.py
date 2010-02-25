@@ -69,6 +69,22 @@ class Certificate(object):
         """
         return self.x509.get_serial_number()
     
+    def subject(self):
+        """
+        Get the certificate subject.
+        @return: A dictionary of subject fields.
+        @rtype: dict
+        """
+        d = {}
+        subject = self.x509.get_subject()
+        for key, nid in subject.nid.items():
+            entry = subject.get_entries_by_nid(nid)
+            if len(entry):
+                asn1 = entry[0].get_data()
+                d[key] = str(asn1)
+                continue
+        return d
+    
     def validRange(self):
         """
         Get the I{valid} date range.
