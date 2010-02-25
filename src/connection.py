@@ -93,6 +93,9 @@ class UEPConnection:
         self.conn.headers['Authorization'] = basic
         return self.conn.headers
 
+    def ping(self):
+        return self.conn.request_get("/status/")
+
     def registered(self):
         needToRegister=0
         if not os.access("/etc/pki/consumer/cert.pem", os.F_OK):
@@ -149,6 +152,7 @@ if __name__ == '__main__':
     else:
         uep = UEPConnection()
     # create a consumer
+    print "Ping Server", uep.ping()
     stype = {'label':'system'}
     product = {"id":"1","label":"RHEL AP","name":"rhel"}
     facts = {"metadata": {
