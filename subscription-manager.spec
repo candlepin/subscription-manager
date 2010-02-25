@@ -52,6 +52,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/rhsm/config.*
 /usr/share/rhsm/logutil.*
 %attr(755,root,root) %{_sbindir}/subscription-manager-cli
+%attr(770,root,root) %dir %{_var}/log/rhsm
 
 # config files
 %attr(644,root,root) /etc/rhsm/rhsm.conf
