@@ -16,6 +16,8 @@
 #
  
 import os
+from urllib import basejoin
+from config import initConfig
 from certlib import EntitlementDirectory
 from logutil import getLogger
 
@@ -56,12 +58,13 @@ class RepoLib:
         unique = set()
         products.sort()
         products.reverse()
+        cfg = initConfig()
         for product in products:
             for ent in product.getEntitlements():
                 id = ent.getName()
                 repo = Repo(id)
                 repo['name'] = ent.getDescription()
-                repo['baseurl'] = ent.getUrl()
+                repo['baseurl'] = basejoin(cfg['baseurl'], ent.getUrl())
                 repo['sslclientkey'] = EntitlementDirectory.keypath()
                 repo['sslclientcert'] = product.path
                 unique.add(repo)
