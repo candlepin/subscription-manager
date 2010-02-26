@@ -41,6 +41,15 @@ class Hardware:
         self.allhw.append(self.unameinfo)
         return self.unameinfo
 
+    def getReleaseInfo(self):
+        import platform
+        distro_data = platform.linux_distribution()
+        distro_keys = ('distribution.name','distribution.version', 
+                       'distribution.id')
+        self.releaseinfo = dict(zip(distro_keys, distro_data))
+        self.allhw.append(self.releaseinfo)
+        return self.releaseinfo
+
     def getMemInfo(self):
         self.meminfo = {}
         try:
@@ -143,11 +152,9 @@ class Hardware:
         self.allhw.append(self.netinfo)
         return self.netinfo
 
-    def getReleaseInfo(self):
-        pass
-
     def getAll(self):
         self.getUnameInfo()
+        self.getReleaseInfo()
         self.getDmiInfo()
         self.getVirtInfo()
         self.getCpuInfo()
