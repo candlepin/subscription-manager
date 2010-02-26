@@ -316,7 +316,7 @@ def check_registration():
             "`register` command before using this option.")
         print needToRegister
         sys.exit(1)
-    return open("/etc/pki/consumer/cert.pem").read()
+    return open("/etc/pki/consumer/cert.uuid").read()
 
 
 if __name__ == "__main__":

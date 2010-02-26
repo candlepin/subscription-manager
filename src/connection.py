@@ -136,7 +136,7 @@ class UEPConnection:
         return self.conn.request_post(method)
 
     def getEntitlementPools(self, consumerId):
-        method = "/entitlementpool/consumer/%s" % consumerId
+        method = "/pool/consumer/%s" % consumerId
         return self.conn.request_get(method)
 
     def getEntitlementById(self, poolId):
@@ -184,7 +184,7 @@ if __name__ == '__main__':
         #uep.unbindserialNumbers(consumer['uuid'], "1001,1002,1003")
         print uep.getEntitlementPools(consumer['uuid'])
         # lookup Entitlement Info by PoolId
-        print uep.getEntitlementById("4")
+        #print uep.getEntitlementById("4")
         # delete a consumer
         #print uep.unregisterConsumer('admin', 'password', consumer['uuid'])
         print "consumer unregistered"
