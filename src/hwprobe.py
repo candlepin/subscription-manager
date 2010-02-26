@@ -31,12 +31,18 @@ class Hardware:
     def __init__(self):
         self.allhw = []
         self.dmiinfo = {}
-        self.meminfo = {}
-        self.cpuinfo = {}
-        self.virtinfo = {}
-        self.netinfo = {}
+
+    def getUnameInfo(self):
+        
+        uname_data = os.uname()
+        uname_keys = ('uname.sysname', 'uname.nodename', 'uname.release', 
+                      'uname.version', 'uname.machine')
+        self.unameinfo = dict(zip(uname_keys, uname_data))
+        self.allhw.append(self.unameinfo)
+        return self.unameinfo
 
     def getMemInfo(self):
+        self.meminfo = {}
         try:
             parser = re.compile(r'^(?P<key>\S*):\s*(?P<value>\d*)\s*kB' )
             memdata = open('/proc/meminfo')
@@ -79,6 +85,7 @@ class Hardware:
         return ddict
 
     def getVirtInfo(self):
+        self.virtinfo = {'virt.type' : None, 'virt.uuid' : None}
         try:
             if os.path.exists("/proc/xen/xsd_port"):
                 self.virtinfo = self._get_fully_virt_info()
@@ -121,9 +128,10 @@ class Hardware:
         return virtinfo
 
     def getCpuInfo(self):
-        return self.cpuinfo
+        return {}
 
     def getNetworkInfo(self):
+        self.netinfo = {}
         try:
             self.netinfo['network.hostname'] = gethostname()
             try:
@@ -135,7 +143,11 @@ class Hardware:
         self.allhw.append(self.netinfo)
         return self.netinfo
 
+    def getReleaseInfo(self):
+        pass
+
     def getAll(self):
+        self.getUnameInfo()
         self.getDmiInfo()
         self.getVirtInfo()
         self.getCpuInfo()
