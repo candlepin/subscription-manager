@@ -112,6 +112,8 @@ class Hardware:
 
     def _get_fully_virt_info(self):
         virtinfo = {'virt.type' : None, 'virt.uuid' : None}
+        if not self.dmiinfo:
+            self.getDmiInfo()
         vendor = self.dmiinfo["dmi.bios.vendor"]
         uuid =   self.dmiinfo["dmi.system.uuid"]
         if vendor.lower() == "xen":
