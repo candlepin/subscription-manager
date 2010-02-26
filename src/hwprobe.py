@@ -156,25 +156,17 @@ class Hardware:
     def getNetworkInterfaces(self):
         netinfdict = {}
         metakeys = ['hwaddr', 'ipaddr', 'netmask', 'broadcast']
-        for interface in ethtool.get_devices():
-            intkey = '.'.join(['net.interface', interface])
-            try:
-                netinfdict[intkey] = ethtool.get_hwaddr(interface)
-            except:
-                netinfdict[intkey] = "unknown"
-            try:
-                netinfdict[intkey + ".ipaddr"] = ethtool.get_ipaddr(interface)
-            except:
-                netinfdict[intkey + ".ipaddr"] = "unknown"
-            try: 
-                netinfdict[intkey + ".netmask"] = ethtool.get_netmask(interface)
-            except:
-                netinfdict[intkey + ".netmask"] = "unknown"
-            try:
-                netinfdict[intkey + ".broadcast"] = ethtool.get_broadcast(
-                                                            interface)
-            except:
-                netinfdict[intkey + ".broadcast"] = "unknown"
+        try:
+            for interface in ethtool.get_devices():
+                for mkey in metakeys:
+                    key = '.'.join(['net.interface', interface, mkey])
+                    try:
+                        netinfdict[key] = getattr(
+                                            ethtool, 'get_' + mkey)(interface)
+                    except:
+                        netinfdict[key] = "unknown"
+        except:
+            print _("Error reading net Interface information:"), sys.exc_type
         self.allhw.append(netinfdict)
         return netinfdict
 
