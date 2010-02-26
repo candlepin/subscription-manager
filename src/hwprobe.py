@@ -69,7 +69,7 @@ class Hardware:
             for tag, func in dmi_data.items():
                 self.dmiinfo = self._get_dmi_data(func, tag, self.dmiinfo)
         except:
-            pass
+            print _("Error reading system DMI information:"), sys.exc_type
         self.allhw.append(self.dmiinfo)
         return self.dmiinfo
 
