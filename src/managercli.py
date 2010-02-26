@@ -21,7 +21,7 @@ import os
 import sys
 import config
 import connection
-import hardware
+import hwprobe
 import optparse
 from optparse import OptionParser
 from certlib import CertLib, ConsumerIdentity, ProductDirectory, EntitlementDirectory
@@ -87,7 +87,8 @@ class RegisterCommand(CliCommand):
     def _get_register_info(self):
         stype = {'label':'system'}
         product = {"id":"1","label":"RHEL AP","name":"rhel"}
-        facts = hardware.Hardware()
+        facts = hwprobe.Hardware().getAll()
+        print facts
         params = {
                 "type":stype,
                 "name":'admin',
