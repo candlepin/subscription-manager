@@ -56,7 +56,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/yum-plugins/rhsmplugin.*
 /usr/share/rhsm/certificate.*
 /usr/share/rhsm/certlib.*
-/usr/share/rhsm/hardware.*
+/usr/share/rhsm/hwprobe.*
 /usr/share/rhsm/config.*
 /usr/share/rhsm/logutil.*
 /usr/share/rhsm/rhsmcertd.*
