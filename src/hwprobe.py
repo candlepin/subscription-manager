@@ -1,5 +1,10 @@
+#!/usr/bin/python
 #
-# Copyright (c) 1999--2010 Red Hat Inc.
+# Module to probe Hardware info from the system 
+#
+# Copyright (c) 2010 Red Hat, Inc.
+#
+# Authors: Pradeep Kilambi
 #
 # This software is licensed to you under the GNU General Public License,
 # version 2 (GPLv2). There is NO WARRANTY for this software, express or
@@ -32,7 +37,7 @@ def read_memory():
         if not match:
             continue
         key, value = match.groups(['key', 'value'])
-        memdict["memory."+key] = int(value)
+        memdict["memory."+key.lower().replace(" ", "_")] = int(value)
 
     return memdict
 
