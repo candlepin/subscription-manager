@@ -21,15 +21,15 @@
 import os
 import sys
 import re
-from socket import gethostname,gethostbyname
 import gettext
 _ = gettext.gettext
 import dmidecode
 import ethtool
+import socket
 
 class Hardware:
     def __init__(self):
-        self.allhw = []
+        self.allhw = {}
         self.dmiinfo = {}
 
     def getUnameInfo(self):
@@ -38,7 +38,7 @@ class Hardware:
         uname_keys = ('uname.sysname', 'uname.nodename', 'uname.release', 
                       'uname.version', 'uname.machine')
         self.unameinfo = dict(zip(uname_keys, uname_data))
-        self.allhw.append(self.unameinfo)
+        self.allhw.update(self.unameinfo)
         return self.unameinfo
 
     def getReleaseInfo(self):
@@ -47,7 +47,7 @@ class Hardware:
         distro_keys = ('distribution.name','distribution.version', 
                        'distribution.id')
         self.releaseinfo = dict(zip(distro_keys, distro_data))
-        self.allhw.append(self.releaseinfo)
+        self.allhw.update(self.releaseinfo)
         return self.releaseinfo
 
     def getMemInfo(self):
@@ -61,10 +61,10 @@ class Hardware:
                     continue
                 key, value = match.groups(['key', 'value'])
                 self.meminfo["memory."+key.lower().replace(" ", "_")] = \
-                                   int(value)
+                                   "%s" % int(value)
         except:
             print _("Error reading system memory information:"), sys.exc_type
-        self.allhw.append(self.meminfo)
+        self.allhw.update(self.meminfo)
         return self.meminfo
 
     def getDmiInfo(self):
@@ -84,12 +84,14 @@ class Hardware:
                 self.dmiinfo = self._get_dmi_data(func, tag, self.dmiinfo)
         except:
             print _("Error reading system DMI information:"), sys.exc_type
-        self.allhw.append(self.dmiinfo)
+        self.allhw.update(self.dmiinfo)
         return self.dmiinfo
 
     def _get_dmi_data(self, func, tag, ddict):
         for key, value in func.items():
             for key1, value1 in value['data'].items():
+                if type(value1) is type([]):
+                    continue
                 ddict[tag+key1.lower().replace(" ", "_")] = str(value1)
 
         return ddict
@@ -109,7 +111,7 @@ class Hardware:
                 self.virtinfo = get_fully_virt_info()
         except:
             print _("Error reading virt info:"), sys.exc_type
-        self.allhw.append(self.virtinfo)
+        self.allhw.update(self.virtinfo)
         return self.virtinfo
 
     def _get_para_virt_info(self):
@@ -143,14 +145,14 @@ class Hardware:
     def getNetworkInfo(self):
         self.netinfo = {}
         try:
-            self.netinfo['network.hostname'] = gethostname()
+            self.netinfo['network.hostname'] = socket.gethostname()
             try:
-                self.netinfo['network.ipaddr']   = gethostbyname(gethostname())
+                self.netinfo['network.ipaddr']   = socket.gethostbyname(self.netinfo['network.hostname'])
             except:
                 self.netinfo['network.ipaddr'] = "127.0.0.1"
         except:
             print _("Error reading networking information:"), sys.exc_type
-        self.allhw.append(self.netinfo)
+        self.allhw.update(self.netinfo)
         return self.netinfo
 
     def getNetworkInterfaces(self):
@@ -167,7 +169,7 @@ class Hardware:
                         netinfdict[key] = "unknown"
         except:
             print _("Error reading net Interface information:"), sys.exc_type
-        self.allhw.append(netinfdict)
+        self.allhw.update(netinfdict)
         return netinfdict
 
     def getAll(self):
@@ -175,14 +177,13 @@ class Hardware:
         self.getReleaseInfo()
         self.getDmiInfo()
         self.getVirtInfo()
-        self.getCpuInfo()
         self.getMemInfo()
         self.getNetworkInfo()
         self.getNetworkInterfaces()
         return self.allhw
 
 if __name__ == '__main__':
-    for hw in Hardware().getAll():
-        for k in hw.keys():
-            print "'%s' : '%s'" % (k, hw[k])
+    for hkey, hvalue in Hardware().getAll().items():
+       # for k in hw.keys():
+        print "'%s' : '%s'" % (hkey, hvalue)
         print

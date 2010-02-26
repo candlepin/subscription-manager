@@ -88,12 +88,20 @@ class RegisterCommand(CliCommand):
         stype = {'label':'system'}
         product = {"id":"1","label":"RHEL AP","name":"rhel"}
         facts = hwprobe.Hardware().getAll()
-        print facts
+        entrys = []
+        for fact_key in facts.keys():
+            entry_facts = {}
+            entry_facts['key'] = fact_key
+            entry_facts['value'] = facts[fact_key]
+            entrys.append(entry_facts)
+
         params = {
                 "type":stype,
                 "name":'admin',
-                "facts":facts,
-        }
+                "facts":{'metadata': 
+                             {"entry":entrys}
+                        }
+                 }
         return params
 
     def _write_consumer_cert(self, consumerinfo):
@@ -113,7 +121,6 @@ class RegisterCommand(CliCommand):
         """
         self._validate_options()
         consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
-        print consumer
         self._write_consumer_cert(consumer)
 
 class SubscribeCommand(CliCommand):
