@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
-# Authors: Pradeep Kilambi
+# Authors: Pradeep Kilambi <pkilambi@redhat.com>
 #
 # This software is licensed to you under the GNU General Public License,
 # version 2 (GPLv2). There is NO WARRANTY for this software, express or
@@ -39,7 +39,6 @@ class Hardware:
     def getMemInfo(self):
         try:
             parser = re.compile(r'^(?P<key>\S*):\s*(?P<value>\d*)\s*kB' )
-            self.meminfo = {}
             memdata = open('/proc/meminfo')
             for info in memdata:
                 match = parser.match(info)
