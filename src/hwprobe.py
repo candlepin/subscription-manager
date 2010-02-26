@@ -90,7 +90,8 @@ class Hardware:
     def _get_dmi_data(self, func, tag, ddict):
         for key, value in func.items():
             for key1, value1 in value['data'].items():
-                ddict[tag+key1.lower().replace(" ", "_")] = value1
+                ddict[tag+key1.lower().replace(" ", "_")] = str(value1)
+
         return ddict
 
     def getVirtInfo(self):
