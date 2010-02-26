@@ -90,7 +90,7 @@ class Hardware:
     def _get_dmi_data(self, func, tag, ddict):
         for key, value in func.items():
             for key1, value1 in value['data'].items():
-                if type(value1) is type([]):
+                if not isinstance(value1, str):
                     continue
                 ddict[tag+key1.lower().replace(" ", "_")] = str(value1)
 
