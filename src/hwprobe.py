@@ -24,8 +24,8 @@ import re
 from socket import gethostname,gethostbyname
 import gettext
 _ = gettext.gettext
-
 import dmidecode
+import ethtool
 
 class Hardware:
     def __init__(self):
@@ -153,6 +153,31 @@ class Hardware:
         self.allhw.append(self.netinfo)
         return self.netinfo
 
+    def getNetworkInterfaces(self):
+        netinfdict = {}
+        metakeys = ['hwaddr', 'ipaddr', 'netmask', 'broadcast']
+        for interface in ethtool.get_devices():
+            intkey = '.'.join(['net.interface', interface])
+            try:
+                netinfdict[intkey] = ethtool.get_hwaddr(interface)
+            except:
+                netinfdict[intkey] = "unknown"
+            try:
+                netinfdict[intkey + ".ipaddr"] = ethtool.get_ipaddr(interface)
+            except:
+                netinfdict[intkey + ".ipaddr"] = "unknown"
+            try: 
+                netinfdict[intkey + ".netmask"] = ethtool.get_netmask(interface)
+            except:
+                netinfdict[intkey + ".netmask"] = "unknown"
+            try:
+                netinfdict[intkey + ".broadcast"] = ethtool.get_broadcast(
+                                                            interface)
+            except:
+                netinfdict[intkey + ".broadcast"] = "unknown"
+        self.allhw.append(netinfdict)
+        return netinfdict
+
     def getAll(self):
         self.getUnameInfo()
         self.getReleaseInfo()
@@ -161,6 +186,7 @@ class Hardware:
         self.getCpuInfo()
         self.getMemInfo()
         self.getNetworkInfo()
+        self.getNetworkInterfaces()
         return self.allhw
 
 if __name__ == '__main__':
