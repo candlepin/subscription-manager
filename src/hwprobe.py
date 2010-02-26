@@ -43,11 +43,11 @@ def read_memory():
 
 def read_dmi():
     global dmidict
-    def _get_dmi_data(func, tag, dmidict):
+    def _get_dmi_data(func, tag, ddict):
         for key, value in func.items():
             for key1,value1 in value['data'].items():
-                dmidict[tag+key1.lower().replace(" ", "_")] = value1
-        return dmidict
+                ddict[tag+key1.lower().replace(" ", "_")] = value1
+        return ddict
 
     dmi_data = { 
         "dmi.bios." : dmidecode.bios(),
