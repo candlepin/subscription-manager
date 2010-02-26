@@ -60,8 +60,8 @@ class Hardware:
                 if not match:
                     continue
                 key, value = match.groups(['key', 'value'])
-                self.meminfo["memory."+key.lower().replace(" ", "_")] = \
-                                   "%s" % int(value)
+                nkey = '.'.join(["memory", key.lower()])
+                self.meminfo[nkey] = "%s" % int(value)
         except:
             print _("Error reading system memory information:"), sys.exc_type
         self.allhw.update(self.meminfo)
@@ -92,7 +92,8 @@ class Hardware:
             for key1, value1 in value['data'].items():
                 if not isinstance(value1, str):
                     continue
-                ddict[tag+key1.lower().replace(" ", "_")] = str(value1)
+                nkey = ''.join([tag, key1.lower()]).replace(" ", "_")
+                ddict[nkey] = str(value1)
 
         return ddict
 
