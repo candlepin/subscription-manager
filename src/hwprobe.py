@@ -184,6 +184,4 @@ class Hardware:
 
 if __name__ == '__main__':
     for hkey, hvalue in Hardware().getAll().items():
-       # for k in hw.keys():
         print "'%s' : '%s'" % (hkey, hvalue)
-        print
