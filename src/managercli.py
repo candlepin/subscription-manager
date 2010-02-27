@@ -23,6 +23,7 @@ import config
 import connection
 import hwprobe
 import optparse
+import pprint
 from optparse import OptionParser
 from certlib import CertLib, ConsumerIdentity, ProductDirectory, EntitlementDirectory
 import gettext
@@ -222,8 +223,14 @@ class ListCommand(CliCommand):
         self._validate_options()
         consumer = check_registration()
         if self.options.available:
-            print self.cp.getEntitlementPools(consumer)
-
+           epools = self.cp.getEntitlementPools(consumer)['pool']
+           columns = epools[0].keys()
+           print '\t\t'.join(columns)
+           print "%s" % "--" * len('\t\t'.join(columns))
+           for data in epools:
+               dvalues = data.values()
+               dvalues = [dvalues[i] for i in range(len(columns))]
+               print '\t'.join(dvalues)
         if self.options.consumed:
            entdir = EntitlementDirectory()
            print("=============================================")
@@ -232,7 +239,6 @@ class ListCommand(CliCommand):
            for cert in entdir.listValid():
                print("\t%-10s \t%-25s" % (cert.serialNumber(), cert.getProduct().getName()))
 
-           #print("=============================================")
 
 # taken wholseale from rho...
 class CLI:
