@@ -1,6 +1,6 @@
 Name: subscription-manager      
-Version: 0.1
-Release: 4
+Version: 0.2
+Release: 1
 Summary: Supported tools and libraries for subscription and repo Management       
 
 Group:   System Environment/Base         
@@ -70,7 +70,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc
 
 %changelog
-* Mon Mar 01 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.1-5
+* Mon Mar 01 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.2-1
 - new build
 
 * Thu Feb 25 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.1-4
