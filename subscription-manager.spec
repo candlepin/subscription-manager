@@ -5,7 +5,7 @@ Summary: Supported tools and libraries for subscription and repo Management
 
 Group:   System Environment/Base         
 License: GPL       
-Source0: %{name}-%{version}-%{release}.tar.gz       
+Source0: %{name}-%{version}.tar.gz       
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
 Requires: python-dmidecode
