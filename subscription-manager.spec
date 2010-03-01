@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.4
+Version: 0.5
 Release: 1
 Summary: Supported tools and libraries for subscription and repo Management       
 
@@ -73,7 +73,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc
 
 %changelog
-* Mon Mar 01 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.4-1
+* Mon Mar 01 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.5-1
 - new build
 
 * Thu Feb 25 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.1-4
