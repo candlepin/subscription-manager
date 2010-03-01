@@ -59,7 +59,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/rhsm/hwprobe.*
 /usr/share/rhsm/config.*
 /usr/share/rhsm/logutil.*
-/usr/share/rhsm/rhsmcertd.*
+#/usr/share/rhsm/rhsmcertd.*
 %attr(755,root,root) %{_sbindir}/subscription-manager-cli
 %attr(700,root,root) %dir %{_var}/log/rhsm
 
