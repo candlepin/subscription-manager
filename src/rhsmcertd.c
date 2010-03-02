@@ -86,6 +86,7 @@ int run(int interval)
 int main(int argc, char *argv[])
 {
     log = fopen(LOGFILE, "a+");
+    if(log == 0) return 1;
     if(argc < 2)
     {
         printUsage();

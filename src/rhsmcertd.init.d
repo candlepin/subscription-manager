@@ -17,12 +17,18 @@
 BINDIR=/usr/bin
 PROG=rhsmcertd
 
+INTERVAL=`python -c "\
+import sys
+sys.path.append('/usr/share/rhsm')
+from config import initConfig
+cfg = initConfig()
+print cfg['certFrequency']"`
+
 RETVAL=0
 
 start() {
-  echo -n $"Starting rhsmcertd"
-  cd $BINDIR
-  ./$PROG
+  echo -n $"Starting rhsmcertd $INTERVAL"
+  $BINDIR/$PROG $INTERVAL
   RETVAL=$?
   echo
 }
