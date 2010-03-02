@@ -85,8 +85,13 @@ chkconfig --add rhsmcertd
 /sbin/service rhsmcertd start
 
 %preun
-/sbin/service rhsmcertd stop
-chkconfig --del rhsmcertd
+#/sbin/service rhsmcertd stop
+#chkconfig --del rhsmcertd
+if [ $1 = 0 ] ; then
+    /etc/rc.d/init.d/rhsmcertd stop >/dev/null 2>&1
+    /sbin/chkconfig --del rhsmcertd
+fi
+
 
 %doc
 

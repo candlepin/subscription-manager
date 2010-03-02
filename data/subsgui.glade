@@ -10,8 +10,8 @@
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_CENTER</property>
   <property name="modal">False</property>
-  <property name="default_width">480</property>
-  <property name="default_height">480</property>
+  <property name="default_width">500</property>
+  <property name="default_height">500</property>
   <property name="resizable">False</property>
   <property name="destroy_with_parent">False</property>
   <property name="decorated">True</property>
@@ -75,7 +75,7 @@
 	</widget>
       </child>
 
-      <!--<child>
+      <child>
 	<widget class="GnomeDruidPageStandard" id="finishPage">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes"></property>
@@ -96,7 +96,7 @@
 	    </widget>
 	  </child>
 	</widget>
-      </child>-->
+      </child>
     </widget>
   </child>
 </widget>

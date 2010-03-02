@@ -28,6 +28,7 @@ def getInstalledProductStatus():
         entdict[cert.getProduct().getName()] = {'Entitlements' : ents, 
                                                 'valid': cert.valid(), 
                                                 'expires' : cert.validRange().end()}
+    print entdict
     product_status = []
     columns = ("Product Installed", "activeSubscription", "Expires")
     print("\t%-25s \t%-20s \t%-10s" % columns)

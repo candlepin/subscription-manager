@@ -204,8 +204,8 @@ class Gui(LoginPage, ReviewSubscriptionPage, FinishPage):
               "onLoginPageNext" : self.onLoginPageNext,
               "onReviewSubscriptionPagePrepare" : self.onReviewSubscriptionPagePrepare,
               "onReviewSubscriptionPageNext" : self.onReviewSubscriptionPageNext,
-              #"onFinishPagePrepare" : self.onFinishPagePrepare,
-              #"onFinishPageFinish" : self.onFinishPageFinish,
+              "onFinishPagePrepare" : self.onFinishPagePrepare,
+              "onFinishPageFinish" : self.onFinishPageFinish,
         })
 
         LoginPage.__init__(self)
@@ -220,9 +220,9 @@ class Gui(LoginPage, ReviewSubscriptionPage, FinishPage):
         container = self.xml.get_widget("reviewSubscriptionPageVbox")
         container.pack_start(contents) #, True)
 
-        #contents = self.finishPageVbox()
-        #container = self.xml.get_widget("finishPageVbox")
-        #container.pack_start(contents, True)
+        contents = self.finishPageVbox()
+        container = self.xml.get_widget("finishPageVbox")
+        container.pack_start(contents, True)
 
         self.druid = self.xml.get_widget("druid")
         self.mainWin = self.xml.get_widget("mainWin")
