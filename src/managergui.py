@@ -204,8 +204,9 @@ class Gui(LoginPage, ReviewSubscriptionPage, FinishPage):
               "onLoginPageNext" : self.onLoginPageNext,
               "onReviewSubscriptionPagePrepare" : self.onReviewSubscriptionPagePrepare,
               "onReviewSubscriptionPageNext" : self.onReviewSubscriptionPageNext,
-              "onFinishPagePrepare" : self.onFinishPagePrepare,
-              "onFinishPageFinish" : self.onFinishPageFinish,})
+              #"onFinishPagePrepare" : self.onFinishPagePrepare,
+              #"onFinishPageFinish" : self.onFinishPageFinish,
+        })
 
         LoginPage.__init__(self)
         ReviewSubscriptionPage.__init__(self)
@@ -219,9 +220,9 @@ class Gui(LoginPage, ReviewSubscriptionPage, FinishPage):
         container = self.xml.get_widget("reviewSubscriptionPageVbox")
         container.pack_start(contents) #, True)
 
-        contents = self.finishPageVbox()
-        container = self.xml.get_widget("finishPageVbox")
-        container.pack_start(contents, True)
+        #contents = self.finishPageVbox()
+        #container = self.xml.get_widget("finishPageVbox")
+        #container.pack_start(contents, True)
 
         self.druid = self.xml.get_widget("druid")
         self.mainWin = self.xml.get_widget("mainWin")
@@ -230,7 +231,7 @@ class Gui(LoginPage, ReviewSubscriptionPage, FinishPage):
 
         self.loginPage = self.xml.get_widget("loginPage")
         self.reviewSubscriptionPage = self.xml.get_widget("dialog_updates")
-        self.finishPage = self.xml.get_widget("finishPage")
+        #self.finishPage = self.xml.get_widget("finishPage")
 
         def mySetBusyCursor():
             cursor = gtk.gdk.Cursor(gtk.gdk.WATCH)
@@ -280,8 +281,8 @@ class Gui(LoginPage, ReviewSubscriptionPage, FinishPage):
 
     def onReviewSubscriptionPagePrepare(self, page, dummy):
         self.reviewSubscriptionPagePrepare()
-        self.druid.set_buttons_sensitive(False, True, False, False)
-        self.reviewSubscriptionPage.emit_stop_by_name("prepare")
+        #self.druid.set_buttons_sensitive(False, True, False, False)
+        #self.reviewSubscriptionPage.emit_stop_by_name("prepare")
 
     def onReviewSubscriptionPageNext(self, page, dummy):
         print "NNNNNNNNNNNNN"

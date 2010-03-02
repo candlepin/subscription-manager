@@ -49,16 +49,17 @@ rm -rf $RPM_BUILD_ROOT
 %dir /usr/share/rhsm
 
 #files
-/usr/share/rhsm/__init__.*
-/usr/share/rhsm/connection.*
-/usr/share/rhsm/managercli.*
-/usr/share/rhsm/repolib.*
-/usr/lib/yum-plugins/rhsmplugin.*
-/usr/share/rhsm/certificate.*
-/usr/share/rhsm/certlib.*
-/usr/share/rhsm/hwprobe.*
-/usr/share/rhsm/config.*
-/usr/share/rhsm/logutil.*
+/usr/share/rhsm/__init__.py*
+/usr/share/rhsm/connection.py*
+/usr/share/rhsm/managercli.py*
+/usr/share/rhsm/managerlib.py*
+/usr/share/rhsm/repolib.py*
+/usr/lib/yum-plugins/rhsmplugin.py*
+/usr/share/rhsm/certificate.py*
+/usr/share/rhsm/certlib.py*
+/usr/share/rhsm/hwprobe.py*
+/usr/share/rhsm/config.py*
+/usr/share/rhsm/logutil.py*
 /usr/share/rhsm/OptionsCli.py*
 /usr/share/rhsm/managergui.py*
 /usr/share/rhsm/messageWindow.py*
@@ -73,6 +74,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc
 
 %changelog
+* Tue Mar 02 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.5-1
+- bug#568433 - Flushed out hardware info
+
 * Mon Mar 01 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.5-1
 - new build
 

@@ -26,6 +26,7 @@ import optparse
 import pprint
 from optparse import OptionParser
 from certlib import CertLib, ConsumerIdentity, ProductDirectory, EntitlementDirectory
+import managerlib
 import gettext
 _ = gettext.gettext
 
@@ -212,9 +213,7 @@ class ListCommand(CliCommand):
 
 
     def _validate_options(self):
-        if not (self.options.available or self.options.consumed):
-            print _("Error: --available or --consumed are required to list, try --help.")
-            sys.exit(-1)
+        pass
 
     def _do_command(self):
         """
@@ -222,6 +221,9 @@ class ListCommand(CliCommand):
         """
         self._validate_options()
         consumer = check_registration()
+        if not (self.options.available or self.options.consumed):
+           managerlib.getInstalledProductStatus()
+
         if self.options.available:
            epools = self.cp.getEntitlementPools(consumer)['pool']
            columns = epools[0].keys()
@@ -231,13 +233,9 @@ class ListCommand(CliCommand):
                dvalues = data.values()
                dvalues = [dvalues[i] for i in range(len(columns))]
                print '\t'.join(dvalues)
+
         if self.options.consumed:
-           entdir = EntitlementDirectory()
-           print("=============================================")
-           print("\t%-10s \t%-25s" % ("SerialNumber", "Product Consumed"))
-           print("=============================================")
-           for cert in entdir.listValid():
-               print("\t%-10s \t%-25s" % (cert.serialNumber(), cert.getProduct().getName()))
+           managerlib.getConsumedProductEntitlements()
 
 
 # taken wholseale from rho...

@@ -57,7 +57,7 @@
 	<widget class="GnomeDruidPageStandard" id="reviewSubscriptionPage">
 	  <property name="visible">True</property>
 	  <property name="logo">shadowman-round-48.png</property>
-	  <signal name="next" handler="onReviewSubscriptionPageNext"/>
+	  <!--<signal name="next" handler="onReviewSubscriptionPageNext"/>-->
 	  <signal name="prepare" handler="onReviewSubscriptionPagePrepare"/>
 
 	  <child internal-child="vbox">
@@ -75,7 +75,7 @@
 	</widget>
       </child>
 
-      <child>
+      <!--<child>
 	<widget class="GnomeDruidPageStandard" id="finishPage">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes"></property>
@@ -96,7 +96,7 @@
 	    </widget>
 	  </child>
 	</widget>
-      </child>
+      </child>-->
     </widget>
   </child>
 </widget>
