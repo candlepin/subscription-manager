@@ -54,31 +54,6 @@
       </child>
 
       <child>
-	<widget class="GnomeDruidPageStandard" id="activateSubscriptionPage">
-	  <property name="visible">True</property>
-	  <property name="title" translatable="yes">Product List Page</property>
-	  <property name="logo">shadowman-round-48.png</property>
-	  <signal name="next" handler="onActivateSubscriptionPageNext"/>
-	  <signal name="back" handler="onActivateSubscriptionPageBack"/>
-	  <signal name="prepare" handler="onActivateSubscriptionPagePrepare"/>
-
-	  <child internal-child="vbox">
-	    <widget class="GtkVBox" id="linkToSubscriptionPageVbox">
-	      <property name="border_width">16</property>
-	      <property name="visible">True</property>
-	      <property name="homogeneous">False</property>
-	      <property name="spacing">6</property>
-
-	      <child>
-		<placeholder/>
-	      </child>
-	    </widget>
-	  </child>
-	</widget>
-      </child>
-
-
-      <child>
 	<widget class="GnomeDruidPageStandard" id="reviewSubscriptionPage">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Manage subscriptions</property>
@@ -100,29 +75,6 @@
 	  </child>
 	</widget>
       </child>
-
-      <!--<child>
-	<widget class="GnomeDruidPageStandard" id="provideCertificatePage">
-	  <property name="visible">True</property>
-	  <property name="title" translatable="yes">Provide a Entitlement Certificate</property>
-	  <property name="logo">shadowman-round-48.png</property>
-	  <signal name="next" handler="onProvideCertificatePageNext"/>
-	  <signal name="back" handler="onProvideCertificatePageBack"/>
-
-	  <child internal-child="vbox">
-	    <widget class="GtkVBox" id="provideCertificatePageVbox">
-	      <property name="border_width">16</property>
-	      <property name="visible">True</property>
-	      <property name="homogeneous">False</property>
-	      <property name="spacing">6</property>
-
-	      <child>
-		<placeholder/>
-	      </child>
-	    </widget>
-	  </child>
-	</widget>
-      </child>-->
 
       <child>
 	<widget class="GnomeDruidPageStandard" id="finishPage">

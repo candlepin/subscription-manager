@@ -4,7 +4,7 @@ import signal
 import os
 import sys
 import messageWindow
-import hardware
+import hwprobe
 
 import connection
 from certlib import EntitlementDirectory, ProductDirectory
@@ -60,14 +60,13 @@ class LoginPage:
         global newAccount
         newAccount = False
         # validate / check user name
-        if self.loginUname.get_text() == "":
-            # we assume someone else creates this method...
+        if self.loginUname.get_text().strip() == "":
             setArrowCursor()
             errorWindow(_("You must enter a login."))
             self.loginUname.grab_focus()
             return True
 
-        if self.loginPw.get_text() == "":
+        if self.loginPw.get_text().strip() == "":
             setArrowCursor()
             errorWindow(_("You must enter a password."))
             self.loginPw.grab_focus()
@@ -77,10 +76,6 @@ class LoginPage:
 
 
     def loginPageApply(self):
-        """Returns True if an error happened (the user will have gotten an error 
-        message) or False if everything was ok.
-        
-        """
         status = callAndFilterExceptions(
                 self._loginPageApply,
                 [],
@@ -92,12 +87,8 @@ class LoginPage:
             return True
     
     def _loginPageApply(self):
-        """Returns False if everything's ok, True if there was a problem."""
         try:
             setBusyCursor()
-            # get the caps info before we show the activastion page which needs the
-            # caps. _but_ we need to do this after we configure the network...
-            print "ZZZZZZZZ", self.loginUname.get_text, self.loginPw.get_text()
             self.consumer = self.cp.registerConsumer(\
                  self.loginUname.get_text(), self.loginPw.get_text(),
                  self._get_register_info())
@@ -112,13 +103,10 @@ class LoginPage:
         setArrowCursor()
         return False
     
-    def showPrivacyDialog(self, button):
-        PrivacyDialog() 
-
     def _get_register_info(self):
         stype = {'label':'system'}
         product = {"id":"1","label":"RHEL AP","name":"rhel"}
-        facts = hardware.Hardware()
+        facts = hwprobe.Hardware().getAll()
         params = {
                 "type":stype,
                 "name":'admin',
@@ -137,47 +125,34 @@ class LoginPage:
         f.write(consumerinfo)
         f.close()
 
-class SubscriptionListPage:
-    def __init__(self):
-        self.activateSubscriptionNoneXml = gtk.glade.XML(gladexml,
-                                                "activateSubscriptionNoneWindowVbox",
-                                                domain="subscription-manager")
-        self.activateSubscriptionNoneVbox = \
-                self.activateSubscriptionNoneXml.get_widget(
-                "activateSubscriptionNoneWindowVbox")
-
-        self.registrationNumberEntry = \
-                self.activateSubscriptionNoneXml.get_widget(
-                "registrationNumberEntry")
-        self.registrationNumberStatusLabel = \
-                self.activateSubscriptionNoneXml.get_widget(
-                "registrationNumberStatusLabel")
-        self.registrationNumberEntry.connect("changed", 
-                self.activateSubscriptionPageRegistrationNumberChanged)
-        self.activatedRegNums = []
-
 class ReviewSubscriptionPage:
     def __init__(self):
-        self.reviewSubscriptionXml = gtk.glade.XML(gladexml,
-                                                "reviewSubscriptionWindowVbox",
-                                                domain="subscription-manager")
-        self.reviewTextView = \
-                        self.reviewSubscriptionXml.get_widget("reviewTextView")
-    
+        self.reviewSubscriptionXml = gtk.glade.XML(gladexml, "dialog_updates", domain="subscription-manager")
+        self.vbox = \
+                        self.reviewSubscriptionXml.get_widget("dialog-vbox1")
+        #self.gtkVBox1 = \
+        #                self.reviewSubscriptionXml.get_widget("vbox1")
+        #self.gtkHBox = \
+        #                self.reviewSubscriptionXml.get_widget("hbox_header")
+        #self.gtkVBox2 = \
+        #                self.reviewSubscriptionXml.get_widget("vbox2")
+
     def reviewSubscriptionPagePrepare(self):
         entdir = EntitlementDirectory()
-           #for cert in entdir.listValid():
-           #    print cert
-        self.reviewTextView.set_buffer(gtk.GtkTextBuffer("testttttttttt"))#entdir.listValid())
-    
+        self.vbox.show()
+        vpaned_upd =  self.reviewSubscriptionXml.get_widget("vpaned_updates")
+        print vpaned_upd.set_data
+        vpaned_upd.set_data('a',1)
+        #self.gtkHBox.show()
+        #self.gtkVBox2.show()
+
     def reviewSubscriptionPageVbox(self):
-        return self.reviewSubscriptionXml.get_widget("reviewSubscriptionWindowVbox")
+        return self.vbox
 
 
 class FinishPage:
     """The finish screen. This can show two different versions: successful and
     unsuccessful.
-    
     """
     def __init__(self):
         self.failedFinishXml = gtk.glade.XML(gladexml,
@@ -186,20 +161,16 @@ class FinishPage:
         self.successfulFinishXml = gtk.glade.XML(gladexml,
                                                 "successfulFinishWindowVbox",
                                                 domain="subscription-manager")
-        # This is an intermediate vbox that this class provides to it's users.
-        # On prepare, the right version of the screen will be put into it.
         self.finishContainerVbox = gtk.VBox()
-        # The vboxes that contain the two versions of the screen:
         self.failedFinishVbox = \
                 self.failedFinishXml.get_widget("failedFinishWindowVbox")
         self.successfulFinishVbox = \
                 self.successfulFinishXml.get_widget("successfulFinishWindowVbox")
-        # Put one in now (either one) to make the prepare code simpler
         self.finishContainerVbox.pack_start(self.failedFinishVbox)
-   
+
     def finishPageVbox(self):
         return self.finishContainerVbox
-    
+
     def finishPagePrepare(self):
         #containerChildren = self.finishContainerVbox.get_children()
         #assert len(containerChildren) == 1
@@ -209,12 +180,6 @@ class FinishPage:
 
 class ConfirmQuitDialog:
     def __init__(self):
-        """Returns when dialog closes. Dialog.rc will be set to 0 if the user
-        clicked "take me back" or closed the dialog, or 1 if they clicked "i'll 
-        register later". I've they clicked I'll register later, the remind file
-        will be written to disk.
-        
-        """
         self.xml = gtk.glade.XML(gladexml, "confirmQuitDialog", 
                                  domain="subscription-manager")
         self.dialog = self.xml.get_widget("confirmQuitDialog")
@@ -242,19 +207,17 @@ class Gui(LoginPage, ReviewSubscriptionPage, FinishPage):
               "onFinishPagePrepare" : self.onFinishPagePrepare,
               "onFinishPageFinish" : self.onFinishPageFinish,})
 
-        #dic = {"on_subsmgr_destroy" : gtk.main_quit }
-        #self.xml.signal_autoconnect(dic)
-
         LoginPage.__init__(self)
         ReviewSubscriptionPage.__init__(self)
         FinishPage.__init__(self)
+
         contents = self.loginPageVbox()
         container = self.xml.get_widget("loginPageVbox")
         container.pack_start(contents, True)
 
         contents = self.reviewSubscriptionPageVbox()
         container = self.xml.get_widget("reviewSubscriptionPageVbox")
-        container.pack_start(contents, True)
+        container.pack_start(contents) #, True)
 
         contents = self.finishPageVbox()
         container = self.xml.get_widget("finishPageVbox")
@@ -266,8 +229,7 @@ class Gui(LoginPage, ReviewSubscriptionPage, FinishPage):
         self.mainWin.connect("hide", gtk.main_quit)
 
         self.loginPage = self.xml.get_widget("loginPage")
-        self.reviewSubscriptionPage = \
-            self.xml.get_widget("reviewSubscriptionPage")
+        self.reviewSubscriptionPage = self.xml.get_widget("dialog_updates")
         self.finishPage = self.xml.get_widget("finishPage")
 
         def mySetBusyCursor():
@@ -284,8 +246,6 @@ class Gui(LoginPage, ReviewSubscriptionPage, FinishPage):
         self.setArrowCursor = mySetArrowCursor
 
         self.mainWin.show_all()
-        # Druid doesn't signal prepare to the first page when starting up
-        #self.onStartPagePrepare(None, None, manualPrepare=True)
 
     def onDruidCancel(self, dummy):
         dialog = ConfirmQuitDialog()
@@ -315,7 +275,6 @@ class Gui(LoginPage, ReviewSubscriptionPage, FinishPage):
         return True
 
     def goToPageAfterLogin(self):
-        #sys.exit(0)
         self.druid.set_page(self.reviewSubscriptionPage)
         return True
 
@@ -325,21 +284,19 @@ class Gui(LoginPage, ReviewSubscriptionPage, FinishPage):
         self.reviewSubscriptionPage.emit_stop_by_name("prepare")
 
     def onReviewSubscriptionPageNext(self, page, dummy):
+        print "NNNNNNNNNNNNN"
         self.druid.set_page(self.finishPage)
         return True
 
     def onFinishPagePrepare(self, page=None, dummy=None):
         self.druid.set_buttons_sensitive(False, False, False, False)
         self.druid.set_show_finish(True)
-        # Stopping the signal is needed to make the druid buttons change the way
-        # I want. I have no idea why.
         self.finishPage.emit_stop_by_name("prepare")
-        if rhnregGui.hasBaseChannelAndUpdates():
-            self.druid.finish.set_label(_("_Finish"))
-            title = _("Finish setting up software updates")
-        else:
-            self.druid.finish.set_label(_("_Exit software update setup"))
-            title = _("software updates setup unsuccessful")
+        self.druid.finish.set_label(_("_Finish"))
+        title = _("Finish setting up software updates")
+        #else:
+        #    self.druid.finish.set_label(_("_Exit software update setup"))
+        #    title = _("software updates setup unsuccessful")
         self.finishPagePrepare()
         self.mainWin.set_title(title)
         self.finishPage.set_title(title)
