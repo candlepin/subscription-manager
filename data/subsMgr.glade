@@ -140,7 +140,7 @@ To keep your system updated, secure, and supported, please register this system 
 
 <widget class="GtkWindow" id="initialLoginWindow">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Enter Your Account Information</property>
+  <property name="title" translatable="yes">Enter Your Subscription Account Information</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -164,7 +164,7 @@ To keep your system updated, secure, and supported, please register this system 
       <child>
 	<widget class="GtkLabel" id="instructionsLabel">
 	  <property name="visible">True</property>
-	  <property name="label" translatable="yes" context="yes">Please enter your account information for &lt;b&gt;Red Hat Network&lt;/b&gt; (http://rhn.redhat.com/)</property>
+	  <property name="label" translatable="yes" context="yes">Please enter your account information for &lt;b&gt;Red Hat Entitlement Platform&lt;/b&gt; (http://redhat.com/candlepin)</property>
 	  <property name="use_underline">False</property>
 	  <property name="use_markup">True</property>
 	  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3580,8 +3580,8 @@ You'll know when software updates are available when a package icon appears in t
             <property name="visible">True</property>
             <property name="layout_style">end</property>
             <child>
-              <widget class="GtkButton" id="button_help">
-                <property name="label">gtk-help</property>
+              <widget class="GtkButton" id="button_add">
+                <property name="label">Add Subscriptions</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -3595,8 +3595,8 @@ You'll know when software updates are available when a package icon appears in t
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="button_quit">
-                <property name="label">gtk-quit</property>
+              <widget class="GtkButton" id="button_import">
+                <property name="label">Import</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_focus">True</property>
@@ -3610,8 +3610,8 @@ You'll know when software updates are available when a package icon appears in t
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="button_install">
-                <property name="label">Add Subscriptions</property>
+              <widget class="GtkButton" id="button_unsubscribe">
+                <property name="label">UnSubscribe</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_focus">True</property>
@@ -3626,6 +3626,24 @@ You'll know when software updates are available when a package icon appears in t
                 <property name="position">2</property>
               </packing>
             </child>
+            <child>
+              <widget class="GtkButton" id="button_update">
+                <property name="label">Update Subscription..</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+
           </widget>
           <packing>
             <property name="expand">False</property>
@@ -3636,9 +3654,10 @@ You'll know when software updates are available when a package icon appears in t
       </widget>
     </child>
     <action-widgets>
-      <action-widget response="0">button_help</action-widget>
-      <action-widget response="0">button_quit</action-widget>
-      <action-widget response="0">button_install</action-widget>
+      <action-widget response="0">button_add</action-widget>
+      <action-widget response="0">button_import</action-widget>
+      <action-widget response="0">button_unsubscribe</action-widget>
+      <action-widget response="0">button_update</action-widget>
     </action-widgets>
   </widget>
 </glade-interface>

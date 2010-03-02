@@ -6,7 +6,7 @@
 
 <widget class="GtkWindow" id="mainWin">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Setting up software updates</property>
+  <property name="title" translatable="yes">Subscription Manager</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_CENTER</property>
   <property name="modal">False</property>
@@ -32,7 +32,7 @@
       <child>
 	<widget class="GnomeDruidPageStandard" id="loginPage">
 	  <property name="visible">True</property>
-	  <property name="title" translatable="yes">Enter your account information</property>
+	  <property name="title" translatable="yes">Enter your Subscription account information</property>
 	  <property name="logo">shadowman-round-48.png</property>
 	  <signal name="next" handler="onLoginPageNext"/>
 	  <signal name="back" handler="onLoginPageBack"/>
@@ -56,7 +56,6 @@
       <child>
 	<widget class="GnomeDruidPageStandard" id="reviewSubscriptionPage">
 	  <property name="visible">True</property>
-	  <property name="title" translatable="yes">Manage subscriptions</property>
 	  <property name="logo">shadowman-round-48.png</property>
 	  <signal name="next" handler="onReviewSubscriptionPageNext"/>
 	  <signal name="prepare" handler="onReviewSubscriptionPagePrepare"/>
