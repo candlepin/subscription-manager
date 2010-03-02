@@ -14,14 +14,14 @@
 # source function library
 . /etc/rc.d/init.d/functions
 
-DIR=/usr/share/rhsm
+BINDIR=/usr/bin
 PROG=rhsmcertd
 
 RETVAL=0
 
 start() {
   echo -n $"Starting rhsmcertd"
-  cd $DIR
+  cd $BINDIR
   ./$PROG
   RETVAL=$?
   echo
