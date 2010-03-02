@@ -29,7 +29,7 @@ def getInstalledProductStatus():
                                                 'valid': cert.valid(), 
                                                 'expires' : cert.validRange().end()}
     product_status = []
-    columns = ("Product Installed", "Status", "Expires")
+    columns = ("Product Installed", "activeSubscription", "Expires")
     print("\t%-25s \t%-20s \t%-10s" % columns)
     print "%s" % "--" * len('\t\t'.join(columns))
     for product in products:
@@ -42,13 +42,13 @@ def getInstalledProductStatus():
 
 def getConsumedProductEntitlements():
     entdir = EntitlementDirectory()
-    columns = ("SerialNumber", "Product Consumed", "Expires")
-    print("\t%-10s \t%-25s \t%-10s" % columns)
+    columns = ("Product Consumed", "activeSubscription", "endDate", "startDate")
+    print("\t%-10s \t%-10s \t%-25s \t%-25s " % columns)
     print "%s" % "--" * len('\t\t'.join(columns))
     consumed_products = []
     for cert in entdir.listValid():
-        data = (cert.serialNumber(), cert.getProduct().getName(), cert.validRange().end())
-        print("\t%-10s \t%-25s \t%-10s" % data)
+        data = (cert.getProduct().getName(), cert.valid(), cert.validRange().begin(), cert.validRange().end())
+        print("\t%-10s \t%-10s \t%-25s \t%-25s" % data)
         consumed_products.append(data)
     return consumed_products
 
