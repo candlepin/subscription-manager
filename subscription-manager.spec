@@ -1,13 +1,12 @@
 Name: subscription-manager      
 Version: 0.6
-Release: 1
+Release: 2
 Summary: Supported tools and libraries for subscription and repo Management       
-
 Group:   System Environment/Base         
 License: GPL       
 Source0: %{name}-%{version}.tar.gz       
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildArch: noarch
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch: %{_arch}
 Requires: python-dmidecode
 Requires:  python-ethtool 
 Requires:  python-simplejson
@@ -22,6 +21,10 @@ Subscription Manager package provides programs and libraries to allow users to m
 %prep
 %setup -q
 
+%build
+mkdir bin
+cc src/rhsmcertd.c -o bin/rhsmcertd
+
 %install
 # TODO: Need clean/Makefile
 rm -rf $RPM_BUILD_ROOT
@@ -32,11 +35,15 @@ mkdir -p $RPM_BUILD_ROOT/etc/rhsm
 mkdir -p $RPM_BUILD_ROOT/etc/yum/pluginconf.d/
 mkdir -p $RPM_BUILD_ROOT/%{_mandir}/man8/
 mkdir -p $RPM_BUILD_ROOT/var/log/rhsm 
+mkdir -p $RPM_BUILD_ROOT/%{_bindir}
+mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/init.d
 cp -R src/*.py $RPM_BUILD_ROOT/usr/share/rhsm
 cp -R src/plugin/*.py $RPM_BUILD_ROOT/usr/lib/yum-plugins/
 cp src/subscription-manager-cli $RPM_BUILD_ROOT/usr/sbin
 cp etc-conf/rhsm.conf $RPM_BUILD_ROOT/etc/rhsm/
 cp etc-conf/rhsmplugin.conf $RPM_BUILD_ROOT/etc/yum/pluginconf.d/
+cp bin/* $RPM_BUILD_ROOT/%{_bindir}
+cp src/rhsmcertd.init.d $RPM_BUILD_ROOT/%{_sysconfdir}/init.d/rhsmcertd
 #cp man/* $RPM_BUILD_ROOT/%{_mandir}/man8/
 
 %clean
@@ -66,14 +73,27 @@ rm -rf $RPM_BUILD_ROOT
 #/usr/share/rhsm/rhsmcertd.*
 %attr(755,root,root) %{_sbindir}/subscription-manager-cli
 %attr(700,root,root) %dir %{_var}/log/rhsm
+%attr(755,root,root) %{_bindir}/rhsmcertd
+%attr(755,root,root) %{_sysconfdir}/init.d/rhsmcertd
 
 # config files
 %attr(644,root,root) /etc/rhsm/rhsm.conf
 %attr(644,root,root) /etc/yum/pluginconf.d/rhsmplugin.conf
 
+%post
+chkconfig --add rhsmcertd
+/sbin/service rhsmcertd start
+
+%preun
+/sbin/service rhsmcertd stop
+chkconfig --del rhsmcertd
+
 %doc
 
 %changelog
+* Tue Mar 02 2010 Jeff Ortel <jortel@redhat.com> 0.6-2
+- add changes to build and install rhsmcertd
+
 * Tue Mar 02 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.6-1
 - bug#568433 - Flushed out hardware info
 

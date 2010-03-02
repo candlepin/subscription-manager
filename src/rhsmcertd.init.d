@@ -5,7 +5,7 @@
 #
 # Author:       Jeff Ortel <jortel@redhat.com>
 #
-# chkconfig:  - 97 01
+# chkconfig:    345 97 2
 #
 # description:  Enable periodic update of entitlement certificates.
 # processname:  rhsmsertd
@@ -28,14 +28,14 @@ RETVAL=0
 
 start() {
   echo -n $"Starting rhsmcertd $INTERVAL"
-  $BINDIR/$PROG $INTERVAL
+  daemon $BINDIR/$PROG $INTERVAL
   RETVAL=$?
   echo
 }
 
 stop() {
   echo -n $"Stopping rhsmcertd"
-  pkill $PROG
+  killproc $PROG
   RETVAL=$?
   echo
 }
