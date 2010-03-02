@@ -492,6 +492,36 @@ class ProductCertificate(Certificate):
             return Product(ext)
         return None
     
+    def __str__(self):
+        s = []
+        s.append(Certificate.__str__(self))
+        s.append(str(self.getProduct()))
+        s.append('')
+        for e in self.getEntitlements():
+            s.append(str(e))
+            s.append('')
+        return '\n'.join(s)
+    
+
+class EntitlementCertificate(ProductCertificate):
+    """
+    Represents an entitlement certificate.
+    """
+    
+    @classmethod
+    def read(cls, path):
+        """
+        Read a certificate file.
+        @param path: The path to a .pem file.
+        @type path: str
+        @return: A certificate
+        @rtype: L{Certificate}
+        """
+        f = open(path)
+        content = f.read()
+        f.close()
+        return EntitlementCertificate(content)
+
     def getEntitlements(self):
         """
         Get the entitlements defined in the certificate.
@@ -506,16 +536,6 @@ class ProductCertificate(Certificate):
             ext = self.trimmed.branch(root)
             lst.append(Entitlement(ext))
         return lst
-    
-    def __str__(self):
-        s = []
-        s.append(Certificate.__str__(self))
-        s.append(str(self.getProduct()))
-        s.append('')
-        for e in self.getEntitlements():
-            s.append(str(e))
-            s.append('')
-        return '\n'.join(s)
 
 
 class Product:
@@ -549,6 +569,9 @@ class Product:
     
     def getProductOptionCode(self):
         return self.ext.get('9')
+    
+    def __eq__(self, rhs):
+        return ( self.getName() == rhs.getName() )
     
     def __str__(self):
         s = []
@@ -600,6 +623,9 @@ class Entitlement:
     
     def getUrl(self):
         return self.ext.get('9')
+    
+    def __eq__(self, rhs):
+        return ( self.getName() == rhs.getName() )
     
     def __str__(self):
         s = []

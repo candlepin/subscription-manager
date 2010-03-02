@@ -20,7 +20,7 @@ import os
 import re
 from config import initConfig
 from connection import UEPConnection
-from certificate import Certificate, ProductCertificate, Bundle
+from certificate import *
 from logutil import getLogger
 
 
@@ -183,7 +183,7 @@ class EntitlementDirectory(Directory):
             if not fn.endswith('.pem'):
                 continue
             path = os.path.join(p, fn)
-            crt = ProductCertificate.read(path)
+            crt = EntitlementCertificate.read(path)
             crt.path = path
             all.append(crt)
         return all
