@@ -12,6 +12,9 @@ Requires:  python-ethtool
 Requires:  python-simplejson
 Requires:  m2crypto 
 Requires: yum >= 3.2.19-15
+Requires(post): chkconfig
+Requires(preun): chkconfig
+Requires(preun): initscripts
 #Requires: pygtk2 pygtk2-libglade gnome-python2 gnome-python2-canvas
 #Requires: usermode-gtk
 
@@ -85,17 +88,15 @@ chkconfig --add rhsmcertd
 /sbin/service rhsmcertd start
 
 %preun
-#/sbin/service rhsmcertd stop
-#chkconfig --del rhsmcertd
 if [ $1 = 0 ] ; then
-    /etc/rc.d/init.d/rhsmcertd stop >/dev/null 2>&1
-    /sbin/chkconfig --del rhsmcertd
+   /sbin/service rhsmcertd stop >/dev/null 2>&1
+   /sbin/chkconfig --del rhsmcertd
 fi
 
-
-%doc
-
 %changelog
+* Tue Mar 02 2010 Jeff Ortel <jortel@redhat.com>
+* fixing busted preun
+
 * Tue Mar 02 2010 Jeff Ortel <jortel@redhat.com> 0.6-2
 - add changes to build and install rhsmcertd
 
