@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.9
+Version: 0.10
 Release: 1
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -94,7 +94,7 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Wed Mar 03 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.9-1
+* Wed Mar 03 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.10-1
 - Resolves: #568433 - Flushed out hardware info
 
 * Mon Feb 22 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.1-1
