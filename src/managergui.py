@@ -1,5 +1,6 @@
 import gtk
 import gtk.glade
+import gobject
 import signal
 import os
 import sys
@@ -8,7 +9,7 @@ import hwprobe
 import managerlib
 
 import connection
-from certlib import EntitlementDirectory, ProductDirectory
+from certlib import EntitlementDirectory, ProductDirectory, ConsumerIdentity
 import gettext
 _ = gettext.gettext
 gettext.textdomain("subscription-manager")
@@ -93,8 +94,8 @@ class LoginPage:
             self.consumer = self.cp.registerConsumer(\
                  self.loginUname.get_text(), self.loginPw.get_text(),
                  self._get_register_info())
-            print self.consumer
-            self._write_consumer_cert(self.consumer['uuid'])
+            self._write_consumer_cert(self.consumer)
+            print "consumer Written AAAAAAAAAAAAAAAAAAAA"
             # Try to Auto Subscribe users
             for product in managerlib.getInstalledProductStatus():
                 print "Binding ", product[0]
@@ -126,11 +127,12 @@ class LoginPage:
         if not os.path.isdir("/etc/pki/consumer/"):
             os.mkdir("/etc/pki/consumer/")
         #TODO: this will a pki cert in future
-        # consumerid = ConsumerIdentity(consumerinfo['key'], \
-        #                               consumerinfo['cert'])
-        # consumerid.write()
-        f = open("/etc/pki/consumer/cert.pem", "w")
-        f.write(consumerinfo)
+        print consumerinfo
+        consumerid = ConsumerIdentity(consumerinfo['idCert']['key'], \
+                                      consumerinfo['idCert']['pem'])
+        consumerid.write()
+        f = open("/etc/pki/consumer/cert.uuid", "w")
+        f.write(consumerinfo['uuid'])
         f.close()
 
 class ReviewSubscriptionPage:
@@ -138,21 +140,37 @@ class ReviewSubscriptionPage:
         self.reviewSubscriptionXml = gtk.glade.XML(gladexml, "dialog_updates", domain="subscription-manager")
         self.vbox = \
                         self.reviewSubscriptionXml.get_widget("dialog-vbox1")
-        #self.gtkVBox1 = \
-        #                self.reviewSubscriptionXml.get_widget("vbox1")
-        #self.gtkHBox = \
-        #                self.reviewSubscriptionXml.get_widget("hbox_header")
-        #self.gtkVBox2 = \
-        #                self.reviewSubscriptionXml.get_widget("vbox2")
+        self.populateProductDialog()
 
     def reviewSubscriptionPagePrepare(self):
         entdir = EntitlementDirectory()
         self.vbox.show()
-        vpaned_upd =  self.reviewSubscriptionXml.get_widget("vpaned_updates")
-        print vpaned_upd.set_data
-        vpaned_upd.set_data('a',1)
-        #self.gtkHBox.show()
-        #self.gtkVBox2.show()
+
+    def populateProductDialog(self):
+        self.productList = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        for product in managerlib.getInstalledProductStatus():
+            self.productList.append(product)
+        self.tv_products =  self.reviewSubscriptionXml.get_widget("treeview_updates")
+        self.tv_products.set_model(self.productList)
+        
+        self.tv_products.set_rules_hint(True)
+
+        col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), text=0)
+        col.set_sort_column_id(0)
+        col.set_sort_order(gtk.SORT_ASCENDING)
+        self.tv_products.append_column(col)
+
+        col = gtk.TreeViewColumn(_("Subscription Status"), gtk.CellRendererText(), text=1)
+        col.set_sort_column_id(1)
+        col.set_sort_order(gtk.SORT_ASCENDING)
+        self.tv_products.append_column(col)
+
+        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=2)
+        col.set_sort_column_id(2)
+        col.set_sort_order(gtk.SORT_ASCENDING)
+        self.tv_products.append_column(col)
+
+        self.productList.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
     def reviewSubscriptionPageVbox(self):
         return self.vbox

@@ -57,7 +57,8 @@
 	<widget class="GnomeDruidPageStandard" id="reviewSubscriptionPage">
 	  <property name="visible">True</property>
 	  <property name="logo">shadowman-round-48.png</property>
-	  <!--<signal name="next" handler="onReviewSubscriptionPageNext"/>-->
+	  <property name="title" translatable="yes">Manage Your Product Subscriptions</property>
+	  <signal name="next" handler="onReviewSubscriptionPageNext"/>
 	  <signal name="prepare" handler="onReviewSubscriptionPagePrepare"/>
 
 	  <child internal-child="vbox">

@@ -19,37 +19,37 @@
 from certlib import CertLib, ConsumerIdentity, \
                     ProductDirectory, EntitlementDirectory
 
+def map_status(status):
+    smap = {True : "Subscribed", False : "Expired", None : "Not Subscribed"}
+    print smap
+    return smap[status]
+
 def getInstalledProductStatus():
     products = ProductDirectory().list()
-    entcerts = EntitlementDirectory().listValid()
+    entcerts = EntitlementDirectory().list()
     entdict = {}
+    print entcerts
     for cert in entcerts:
         ents = cert.getEntitlements()
         entdict[cert.getProduct().getName()] = {'Entitlements' : ents, 
                                                 'valid': cert.valid(), 
                                                 'expires' : cert.validRange().end()}
-    print entdict
+        print "Statussssssss",cert.getProduct().getName(), cert.valid()
     product_status = []
-    columns = ("Product Installed", "activeSubscription", "Expires")
-    print("\t%-25s \t%-20s \t%-10s" % columns)
-    print "%s" % "--" * len('\t\t'.join(columns))
     for product in products:
         pname = product.getProduct().getName()
         if entdict.has_key(pname):
-            data = (pname, entdict[pname]['valid'], entdict[pname]['expires'])
-            print("\t%-25s \t%-20s \t%-10s" % data)
+            data = (pname, map_status(entdict[pname]['valid']), str(entdict[pname]['expires']))
             product_status.append(data)
+        else:
+            product_status.append((pname, map_status(None), ""))
     return product_status
 
 def getConsumedProductEntitlements():
     entdir = EntitlementDirectory()
-    columns = ("Product Consumed", "activeSubscription", "endDate", "startDate")
-    print("\t%-10s \t%-10s \t%-25s \t%-25s " % columns)
-    print "%s" % "--" * len('\t\t'.join(columns))
     consumed_products = []
     for cert in entdir.listValid():
         data = (cert.getProduct().getName(), cert.valid(), cert.validRange().begin(), cert.validRange().end())
-        print("\t%-10s \t%-10s \t%-25s \t%-25s" % data)
         consumed_products.append(data)
     return consumed_products
 
