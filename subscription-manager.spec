@@ -96,23 +96,6 @@ fi
 %changelog
 * Wed Mar 03 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.8-1
 - bug#568433 - Flushed out hardware info
-- fixing busted preun
-- new build
-
-* Tue Mar 02 2010 Jeff Ortel <jortel@redhat.com> 0.6-2
-- add changes to build and install rhsmcertd
-
-* Tue Mar 02 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.7-1
-- bug#568433 - Flushed out hardware info
-
-* Mon Mar 01 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.5-1
-- new build
-
-* Thu Feb 25 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.1-4
-- new build
-
-* Tue Feb 23 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.1-2
-- more changes to probe dmidecode to get hardware info
 
 * Mon Feb 22 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.1-1
 - packaging subscription-manager
