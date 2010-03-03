@@ -46,7 +46,7 @@ cp etc-conf/rhsm.conf $RPM_BUILD_ROOT/etc/rhsm/
 cp etc-conf/rhsmplugin.conf $RPM_BUILD_ROOT/etc/yum/pluginconf.d/
 cp bin/* $RPM_BUILD_ROOT/%{_bindir}
 cp src/rhsmcertd.init.d $RPM_BUILD_ROOT/%{_sysconfdir}/init.d/rhsmcertd
-#cp man/* $RPM_BUILD_ROOT/%{_mandir}/man8/
+cp man/* $RPM_BUILD_ROOT/%{_mandir}/man8/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -82,6 +82,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(644,root,root) /etc/rhsm/rhsm.conf
 %attr(644,root,root) /etc/yum/pluginconf.d/rhsmplugin.conf
 
+%doc
+%{_mandir}/man8/subscription-manager-cli.8*
+
 %post
 chkconfig --add rhsmcertd
 /sbin/service rhsmcertd start
@@ -94,7 +97,8 @@ fi
 
 %changelog
 * Wed Mar 03 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.11-1
-- Resolves:  #568433 - Flushed out hardware info
+- Resolves: #568433 - Flushed out hardware info
+- man page for cli
 
 * Mon Feb 22 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.1-1
 - packaging subscription-manager

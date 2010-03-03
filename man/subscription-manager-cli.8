@@ -1,0 +1,110 @@
+.\" subscription-manager-cli - Subscription Manager Cli tool
+.TH "subscription-manager-cli" "8" ""  "Pradeep Kilambi" ""
+.SH "NAME"
+subscription-manager-cli \- Subscription Manager Cli tool
+.SH "SYNOPSIS"
+\fBsubscription-manager-cli\fP [command] [options]
+.SH "DESCRIPTION"
+.PP 
+\fBsubscription-manager-cli\fP is a command line utility to Register and Manage your Red Hat Enterprise Linux Subscriptions. It allows users to register clients to Red hat Entitlement Platform, list available and consumed subscription information, subscribe and unsubscribe specific subscriptions with ease.
+.PP
+.PP 
+\fIcommand\fP is one of:
+.br 
+.I \fR * register [options]
+.br 
+.I \fR * list [options]
+.br 
+.I \fR * subscribe [options]
+.br 
+.I \fR * unsubscribe [options] 
+.br
+.I \fR * help 
+.br
+.PP 
+Unless the \-\-help or \-h option is given, one of the above commands
+must be present\&.
+.PP
+.PP 
+.IP "\fBregister\fP"
+Registers your client to a Red Hat Entitlement Platform. This wil create an identity for this system for
+rest of the options\&.
+.IP 
+.IP "\fBlist\fP"
+list available, consumed or installed product/subscription information for a registered system\&.
+If --available is specified, a list of available subscription for your account is requested from
+the server. If --consumed is specified, a list of all the currently consumed product subscriptions
+will be listed. If neither option is specified, this will list currently installed products and their
+subscription status.
+.IP 
+.IP "\fBsubscribe\fP"
+subscribe the registered client to a product, registration token or entitlement Pool Id. The product here is the
+product name. Example Product names could be RHEL AP, RHEL Server, Virtualization etc.
+Registration token is your subscription number for this account. 
+.IP
+.IP "\fBunsubscribe\fP"
+unsubscribes the registered product from specific or all subscriptions. If no option is specified
+all consumed subscriptions will be relinquished and system will be unsubscribed. If you want to unsubscribe 
+a specific subscription/s provide its serial number.
+.IP 
+.IP "\fBhelp\fP"
+Produces help, either for all commands or if given a command name then the help
+for that particular command\&.
+.IP
+.PP
+.SH "GENERAL OPTIONS"
+.PP 
+.IP "\fB\-h, \-\-help\fP"
+Help; display a help message and then quit\&.
+.PP
+.SH "REGISTRATION OPTIONS"
+.PP
+.IP "\fB\-u, \-\-username\fP" 
+Your Red Hat user account information for registration\&.
+.br
+.IP "\fB\-p, \-\-password\fP" 
+Your Red Hat user account password\&.
+.br
+.IP "\fB\-v, \-\-verbose\fP" 
+Run with a lot of debugging output\&.
+.br
+.SH "LIST OPTIONS"
+.IP "\fB\ \-\-available\fP" 
+Lists available subscriptions information for the registered account.
+.br
+.IP "\fB\ \-\-consumed\fP"
+Lists consumed product subscription information for the registered account.
+.br
+.PP
+.SH "SUBSCRIBE OPTIONS"
+.PP
+.IP "\fB\ \-\-product\fP" 
+Name of the product to subscribe this registered client. Eg: RHEL AP, RHEL-Server-6
+.IP "\fB\ \-\-regtoken\fP"
+registration token number to subscribe this registered client
+.IP "\fB\ \-\-pool\fP"
+Entitlement Pool Id to subscribe this registered client.
+.br
+.PP
+.SH "UNSUBSCRIBE OPTIONS"
+.PP
+.IP "\fB\ \-\-product\fP"
+Name of the product to unsubscribe this registered client. Eg: RHEL AP, RHEL-Server-6
+.IP "\fB\ \-\-regtoken\fP"
+registration token number to unsubscribe this registered client
+.IP "\fB\ \-\-pool\fP"
+Entitlement Pool Id to unsubscribe this registered client.
+.br
+If none of the above options are specified, unsubscribe will removes all subscriptions\&.
+.br
+.PP
+.SH "FILES"
+.nf
+/etc/rhsm/rhsm.conf
+.fi 
+
+.PP
+.SH "AUTHORS"
+.nf
+.I Pradeep Kilambi <pkilambi@redhat.com>
+.fi
