@@ -46,7 +46,7 @@ restart() {
 }
 
 status() {
-  pgrep rhsmsertd
+  pgrep rhsmcertd
   if [ $? == 0 ]; then
     RETVAL=0
     echo $"$PROG is running"
