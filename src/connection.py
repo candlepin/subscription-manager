@@ -120,7 +120,7 @@ class UEPConnection:
         return self.conn.request_post(method)
 
     def bindByEntitlementPool(self, consumerId, poolId=None):
-        method = "/entitlement/consumer/%s/entitlement_pool/%s" % (consumerId, poolId)
+        method = "/entitlement/consumer/%s/pool/%s" % (consumerId, poolId)
         return self.conn.request_post(method)
 
     def bindByProduct(self, consumerId, product=None):
@@ -135,16 +135,17 @@ class UEPConnection:
         method = "/entitlement/consumer/%s" % consumerId
         return self.conn.request_post(method)
 
-    def getEntitlementPools(self, consumerId):
+    def getPoolsList(self, consumerId):
         method = "/pool/consumer/%s" % consumerId
+        return self.conn.request_get(method)
+
+    def getEntitlementList(self, consumerId):
+        method = "/entitlement/consumer/%s" % consumerId
         return self.conn.request_get(method)
 
     def getEntitlementById(self, poolId):
         method = "/entitlement/%s" % poolId
         return self.conn.request_get(method)
-
-    def ping(self):
-        pass
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:

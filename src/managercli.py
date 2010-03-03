@@ -139,15 +139,15 @@ class SubscribeCommand(CliCommand):
                                help="product")
         self.parser.add_option("--regtoken", dest="regtoken",
                                help="regtoken")
-        self.parser.add_option("--substoken", dest="substoken",
-                               help="substoken")
+        self.parser.add_option("--pool", dest="pool",
+                               help="Subscription Pool Id")
 
     def _validate_options(self):
-        if not (self.options.regtoken or self.options.product):
+        if not (self.options.regtoken or self.options.product or self.options.pool):
             print _("Error: Need either --product or --regtoken, Try --help")
             sys.exit(-1)
 
-        if self.options.regtoken and self.options.product:
+        if self.options.regtoken and self.options.product and self.options.pool:
             print _("Error: Need either --product or --regtoken, not both, Try --help")
             sys.exit(-1)
 
@@ -165,7 +165,12 @@ class SubscribeCommand(CliCommand):
             self.certlib.update()
 
         if self.options.regtoken:
-            bundles = self.cp.bindRegToken(consume, self.options.regtoken)
+            bundles = self.cp.bindRegToken(consumer, self.options.regtoken)
+            #self.certlib.add(bundles)
+            self.certlib.update()
+
+        if self.options.pool:
+            bundles = self.cp.bindByEntitlementPool(consumer, self.options.pool)
             #self.certlib.add(bundles)
             self.certlib.update()
 
@@ -177,8 +182,8 @@ class UnSubscribeCommand(CliCommand):
         CliCommand.__init__(self, "unsubscribe", usage, shortdesc, desc)
 
         self.serial_numbers = None
-        self.parser.add_option("--serialnumbers", dest="serial_numbers",
-                               help="serial_numbers")
+        self.parser.add_option("--serialnum", dest="serial_numbers",
+                               help="Entitlement Certificate serial number")
 
     def _validate_options(self):
         CliCommand._validate_options(self)
@@ -189,7 +194,7 @@ class UnSubscribeCommand(CliCommand):
         """
         consumer = check_registration()
 
-        if not self.options.serial_numbers:
+        if not self.options.pool:
             self.cp.unbindAll(consumer)
             self.certlib.update()
 
