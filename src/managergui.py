@@ -5,6 +5,7 @@ import os
 import sys
 import messageWindow
 import hwprobe
+import managerlib
 
 import connection
 from certlib import EntitlementDirectory, ProductDirectory
@@ -94,6 +95,13 @@ class LoginPage:
                  self._get_register_info())
             print self.consumer
             self._write_consumer_cert(self.consumer['uuid'])
+            # Try to Auto Subscribe users
+            for product in managerlib.getInstalledProductStatus():
+                print "Binding ", product[0]
+                try:
+                    self.cp.bindByProduct(self.consumer['uuid'], product[0])
+                except:
+                    pass
         except:
             raise
             setArrowCursor()

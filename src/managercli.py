@@ -124,6 +124,13 @@ class RegisterCommand(CliCommand):
         self._validate_options()
         consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
         self._write_consumer_cert(consumer)
+        # try to auomatically bind products
+        for product in managerlib.getInstalledProductStatus():
+            try:
+               print "Bind Product ", product[0]
+               self.cp.bindByProduct(self.consumer['uuid'], product[0])
+            except:
+               pass
 
 class SubscribeCommand(CliCommand):
     def __init__(self):
@@ -227,10 +234,15 @@ class ListCommand(CliCommand):
         self._validate_options()
         consumer = check_registration()
         if not (self.options.available or self.options.consumed):
-           managerlib.getInstalledProductStatus()
+           iproducts = managerlib.getInstalledProductStatus()
+           columns = ("Product Installed", "activeSubscription", "Expires")
+           print("\t%-25s \t%-20s \t%-10s" % columns)
+           print "%s" % "--" * len('\t\t'.join(columns))
+           for product in iproducts:
+               print("\t%-25s \t%-20s \t%-10s" % product)
 
         if self.options.available:
-           epools = self.cp.getEntitlementPools(consumer)['pool']
+           epools = self.cp.getPoolsList(consumer)['pool']
            columns = epools[0].keys()
            print '\t\t'.join(columns)
            print "%s" % "--" * len('\t\t'.join(columns))
@@ -240,7 +252,12 @@ class ListCommand(CliCommand):
                print '\t'.join(dvalues)
 
         if self.options.consumed:
-           managerlib.getConsumedProductEntitlements()
+           cpents = managerlib.getConsumedProductEntitlements()
+           columns = ("Product Consumed", "activeSubscription", "endDate", "startDate")
+           print("\t%-10s \t%-10s \t%-25s \t%-25s " % columns)
+           print "%s" % "--" * len('\t\t'.join(columns))
+           for product in cpents:
+               print("\t%-10s \t%-10s \t%-25s \t%-25s" % product)
 
 
 # taken wholseale from rho...
