@@ -95,7 +95,7 @@ fi
 
 %changelog
 * Wed Mar 03 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.9-1
-- bug#568433 - Flushed out hardware info
+- Resolves: #568433 - Flushed out hardware info
 
 * Mon Feb 22 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.1-1
 - packaging subscription-manager
