@@ -94,8 +94,10 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Tue Mar 02 2010 Jeff Ortel <jortel@redhat.com>
-* fixing busted preun
+* Wed Mar 03 2010 Pradeep Kilambi <pkilambi@redhat.com>
+- bug#568433 - Flushed out hardware info
+- fixing busted preun
+- new build
 
 * Tue Mar 02 2010 Jeff Ortel <jortel@redhat.com> 0.6-2
 - add changes to build and install rhsmcertd
