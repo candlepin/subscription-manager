@@ -115,7 +115,7 @@ class Repo(dict):
         ('enabled', 0, '1'),
         ('gpgcheck', 0, '0'),
         ('gpgkey', 1, None),
-        ('sslverify', 0, '1'),
+        ('sslverify', 0, '0'),
         ('sslclientkey', 1, None),
         ('sslclientcert', 1, None),
     )
