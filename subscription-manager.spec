@@ -6,7 +6,6 @@ Group:   System Environment/Base
 License: GPL       
 Source0: %{name}-%{version}.tar.gz       
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildArch: %{_arch}
 Requires: python-dmidecode
 Requires:  python-ethtool 
 Requires:  python-simplejson
@@ -95,7 +94,7 @@ fi
 
 %changelog
 * Wed Mar 03 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.10-1
-- Resolves: #568433 - Flushed out hardware info
+- Resolves:  #568433 - Flushed out hardware info
 
 * Mon Feb 22 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.1-1
 - packaging subscription-manager
