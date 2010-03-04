@@ -18,6 +18,8 @@
 
 import os
 import re
+from datetime import datetime as dt
+from datetime import timedelta
 from config import initConfig
 from connection import UEPConnection
 from certificate import *
@@ -29,6 +31,8 @@ log = getLogger(__name__)
 
 class CertLib:
     
+    LINGER = timedelta(days=30)
+
     def __init__(self):
         self.entdir = EntitlementDirectory()
     
@@ -55,6 +59,8 @@ class CertLib:
                 os.remove(cert.path)
                 continue
         for c in self.entdir.listExpired():
+            if self.__mayLinger(c):
+                continue
             os.remove(c.path)
         return updates
         
@@ -63,6 +69,12 @@ class CertLib:
             self.__write(b)
         return self
     
+    def __mayLinger(self, cert):
+        valid = cert.validRange()
+        end = valid.end()
+        graceperoid = dt.utcnow()+self.LINGER
+        return ( end < graceperoid )
+
     def __write(self, bundle):
         keypem = bundle['key']
         crtpem = bundle['certificate']
