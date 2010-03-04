@@ -497,9 +497,6 @@ class ProductCertificate(Certificate):
         s.append(Certificate.__str__(self))
         s.append(str(self.getProduct()))
         s.append('')
-        for e in self.getEntitlements():
-            s.append(str(e))
-            s.append('')
         return '\n'.join(s)
     
 
