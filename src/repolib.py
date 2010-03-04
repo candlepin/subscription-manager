@@ -108,6 +108,8 @@ class Reader:
    
 class Repo(dict):
     
+    CA = '/usr/share/rhn/RHNS-CA-CERT'
+    
     # (name, mutable, default)
     KEYS = (
         ('name', 0, None),
@@ -115,7 +117,8 @@ class Repo(dict):
         ('enabled', 0, '1'),
         ('gpgcheck', 0, '0'),
         ('gpgkey', 1, None),
-        ('sslverify', 0, '0'),
+        ('sslverify', 0, '1'),
+        ('sslcacert', 0, CA),
         ('sslclientkey', 1, None),
         ('sslclientcert', 1, None),
     )
