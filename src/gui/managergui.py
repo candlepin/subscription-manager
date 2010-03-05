@@ -1,21 +1,45 @@
+#!/usr/bin/python
+#
+# GUI Module for standalone subscription-manager cli 
+#
+# Copyright (c) 2010 Red Hat, Inc.
+#
+# Authors: Pradeep Kilambi <pkilambi@redhat.com>
+#
+# This software is licensed to you under the GNU General Public License,
+# version 2 (GPLv2). There is NO WARRANTY for this software, express or
+# implied, including the implied warranties of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2
+# along with this software; if not, see
+# http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
+#
+# Red Hat trademarks are not licensed under GPLv2. No permission is
+# granted to use or replicate Red Hat trademarks that are incorporated
+# in this software or its documentation.
+#
+
+import os
+import sys
+#sys.path.append('/usr/share/rhsm')
+sys.path.append('../')
+
 import gtk
 import gtk.glade
 import gobject
 import signal
-import os
-import sys
+
 import messageWindow
 import hwprobe
 import managerlib
-
 import connection
+
 from certlib import EntitlementDirectory, ProductDirectory, ConsumerIdentity
 import gettext
 _ = gettext.gettext
 gettext.textdomain("subscription-manager")
 gtk.glade.bindtextdomain("subscription-manager")
 
-gladexml = "../data/standaloneH.glade"
+gladexml = "standaloneH.glade"
 UEP = None
 class LoginPage:
     def __init__(self):

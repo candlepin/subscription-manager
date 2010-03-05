@@ -47,7 +47,7 @@ if os.getuid() != 0:
 
 try:
     # NOTE: importing
-    from rhsm import managergui
+    from rhsm.gui import managergui
     # import managergui
 except KeyboardInterrupt:
     systemExit(0, "\nUser interrupted process.")

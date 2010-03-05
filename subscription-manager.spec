@@ -31,6 +31,8 @@ cc src/rhsmcertd.c -o bin/rhsmcertd
 # TODO: Need clean/Makefile
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/usr/share/rhsm
+mkdir -p $RPM_BUILD_ROOT/usr/share/rhsm/gui
+mkdir -p $RPM_BUILD_ROOT/usr/share/rhsm/gui/data
 mkdir -p $RPM_BUILD_ROOT/usr/lib/yum-plugins/
 mkdir -p $RPM_BUILD_ROOT/usr/sbin
 mkdir -p $RPM_BUILD_ROOT/etc/rhsm
@@ -40,8 +42,12 @@ mkdir -p $RPM_BUILD_ROOT/var/log/rhsm
 mkdir -p $RPM_BUILD_ROOT/%{_bindir}
 mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/init.d
 cp -R src/*.py $RPM_BUILD_ROOT/usr/share/rhsm
+cp -R gui/* $RPM_BUILD_ROOT/usr/share/rhsm/gui
+cp -R gui/*.py $RPM_BUILD_ROOT/usr/share/rhsm/gui
+cp -R gui/data/* $RPM_BUILD_ROOT/usr/share/rhsm/gui/data/
 cp -R src/plugin/*.py $RPM_BUILD_ROOT/usr/lib/yum-plugins/
 cp src/subscription-manager-cli $RPM_BUILD_ROOT/usr/sbin
+cp src/subscription-manager-gui $RPM_BUILD_ROOT/usr/sbin
 cp etc-conf/rhsm.conf $RPM_BUILD_ROOT/etc/rhsm/
 cp etc-conf/rhsmplugin.conf $RPM_BUILD_ROOT/etc/yum/pluginconf.d/
 cp bin/* $RPM_BUILD_ROOT/%{_bindir}
@@ -56,6 +62,7 @@ rm -rf $RPM_BUILD_ROOT
 
 # dirs
 %dir /usr/share/rhsm
+%dir /usr/share/rhsm/gui
 
 #files
 /usr/share/rhsm/__init__.py*
@@ -72,8 +79,16 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/rhsm/OptionsCli.py*
 /usr/share/rhsm/managergui.py*
 /usr/share/rhsm/messageWindow.py*
+/usr/share/rhsm/gui/firstboot.py  
+/usr/share/rhsm/gui/managergui.py  
+/usr/share/rhsm/gui/messageWindow.py  
+/usr/share/rhsm/gui/data/standalone.glade  
+/usr/share/rhsm/gui/data/standaloneH.glade  
+/usr/share/rhsm/gui/data/subsgui.glade  
+/usr/share/rhsm/gui/data/subsMgr.glade
 #/usr/share/rhsm/rhsmcertd.*
 %attr(755,root,root) %{_sbindir}/subscription-manager-cli
+%attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(700,root,root) %dir %{_var}/log/rhsm
 %attr(755,root,root) %{_bindir}/rhsmcertd
 %attr(755,root,root) %{_sysconfdir}/init.d/rhsmcertd
