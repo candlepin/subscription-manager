@@ -42,7 +42,6 @@ mkdir -p $RPM_BUILD_ROOT/var/log/rhsm
 mkdir -p $RPM_BUILD_ROOT/%{_bindir}
 mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/init.d
 cp -R src/*.py $RPM_BUILD_ROOT/usr/share/rhsm
-cp -R gui/* $RPM_BUILD_ROOT/usr/share/rhsm/gui
 cp -R gui/*.py $RPM_BUILD_ROOT/usr/share/rhsm/gui
 cp -R gui/data/* $RPM_BUILD_ROOT/usr/share/rhsm/gui/data/
 cp -R src/plugin/*.py $RPM_BUILD_ROOT/usr/lib/yum-plugins/
