@@ -20,8 +20,7 @@
 
 import os
 import sys
-#sys.path.append('/usr/share/rhsm')
-sys.path.append('../')
+sys.path.append('/usr/share/rhsm')
 
 import gtk
 import gtk.glade
@@ -39,7 +38,7 @@ _ = gettext.gettext
 gettext.textdomain("subscription-manager")
 gtk.glade.bindtextdomain("subscription-manager")
 
-gladexml = "standaloneH.glade"
+gladexml = "/usr/share/rhsm/gui/data/standaloneH.glade"
 UEP = None
 class LoginPage:
     def __init__(self):

@@ -35,7 +35,7 @@ def systemExit(code, msgs=None):
     sys.exit(code)
 
 
-_LIBPATH = "/usr/share/"
+_LIBPATH = "/usr/share/rhsm"
 # add to the path if need be
 if _LIBPATH not in sys.path:
     sys.path.append(_LIBPATH)
@@ -47,7 +47,7 @@ if os.getuid() != 0:
 
 try:
     # NOTE: importing
-    from rhsm.gui import managergui
+    from gui import managergui
     # import managergui
 except KeyboardInterrupt:
     systemExit(0, "\nUser interrupted process.")
