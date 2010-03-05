@@ -76,9 +76,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/rhsm/config.py*
 /usr/share/rhsm/logutil.py*
 /usr/share/rhsm/OptionsCli.py*
-/usr/share/rhsm/gui/firstboot.py  
-/usr/share/rhsm/gui/managergui.py  
-/usr/share/rhsm/gui/messageWindow.py  
+/usr/share/rhsm/gui/firstboot.py* 
+/usr/share/rhsm/gui/managergui.py*  
+/usr/share/rhsm/gui/messageWindow.py*  
 /usr/share/rhsm/gui/data/standalone.glade  
 /usr/share/rhsm/gui/data/standaloneH.glade  
 /usr/share/rhsm/gui/data/subsgui.glade  
