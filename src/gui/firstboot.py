@@ -1,13 +1,15 @@
+import os
+import sys
+sys.path.append("/usr/share/rhsm/")
+
 import gtk
 import gtk.glade
 import gobject
 import signal
-import os
-import sys
+
 import messageWindow
 import hwprobe
 import managerlib
-
 import connection
 from certlib import EntitlementDirectory, ProductDirectory, ConsumerIdentity
 import gettext
@@ -15,8 +17,8 @@ _ = gettext.gettext
 gettext.textdomain("subscription-manager")
 gtk.glade.bindtextdomain("subscription-manager")
 
-gladegui = "../data/subsgui.glade"
-gladexml = "../data/subsMgr.glade"
+gladegui = "/usr/share/rhsm/gui/data/subsgui.glade"
+gladexml = "/usr/share/rhsm/gui/data/subsMgr.glade"
 UEP = None
 class LoginPage:
     def __init__(self):
@@ -193,13 +195,14 @@ class ReviewSubscriptionPage:
         raise various exceptions.
         
         """
-        try:
-            fileChooser = self.reviewSubscriptionXml.get_widget("button_import")
-            certFile = fileChooser.get_filename()
-            if certFile is None:
-                pass 
-        except:
-            raise
+        #try:
+        #    fileChooser = self.reviewSubscriptionXml.get_widget("button_import")
+        #    certFile = fileChooser.get_filename()
+        #    if certFile is None:
+        #        pass 
+        #except:
+        #    raise
+        pass
 
     def reviewSubscriptionPageVbox(self):
         return self.vbox
@@ -259,7 +262,6 @@ class Gui(LoginPage, ReviewSubscriptionPage, FinishPage):
               "onLoginPageNext" : self.onLoginPageNext,
               "onReviewSubscriptionPagePrepare" : self.onReviewSubscriptionPagePrepare,
               "onReviewSubscriptionPageNext" : self.onReviewSubscriptionPageNext,
-              "onDruidImport" : self.onDruidImport,
               #"onFinishPagePrepare" : self.onFinishPagePrepare,
               #"onFinishPageFinish" : self.onFinishPageFinish,
               #"onFilechooserbuttonFileActivated" : self.onDruidImport,
