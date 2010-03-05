@@ -15,7 +15,7 @@ _ = gettext.gettext
 gettext.textdomain("subscription-manager")
 gtk.glade.bindtextdomain("subscription-manager")
 
-gladexml = "../data/standalone.glade"
+gladexml = "../data/standaloneH.glade"
 UEP = None
 class LoginPage:
     def __init__(self):
@@ -135,9 +135,10 @@ class LoginPage:
 
 class ManageSubscriptionPage:
     def __init__(self):
-        self.subsxml = gtk.glade.XML("../data/standalone.glade", "dialog_updates", domain="subscription-manager")
+        self.subsxml = gtk.glade.XML(gladexml, "dialog_updates", domain="subscription-manager")
         self.vbox = \
                         self.subsxml.get_widget("dialog-vbox1")
+        print dir(self.subsxml)
         self.populateProductDialog()
         self.reviewSubscriptionPagePrepare()
         dic = { "onFilechooserbuttonFileActivated" : \
