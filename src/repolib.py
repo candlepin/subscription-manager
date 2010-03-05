@@ -61,10 +61,11 @@ class RepoLib:
         cfg = initConfig()
         for product in products:
             for ent in product.getEntitlements():
-                id = ent.getName()
+                id = ent.getLabel()
                 repo = Repo(id)
-                repo['name'] = ent.getDescription()
+                repo['name'] = ent.getName()
                 repo['baseurl'] = basejoin(cfg['baseurl'], ent.getUrl())
+                repo['gpgkey'] = basejoin(cfg['baseurl'], ent.getGpg())
                 repo['sslclientkey'] = EntitlementDirectory.keypath()
                 repo['sslclientcert'] = product.path
                 unique.add(repo)
@@ -115,7 +116,7 @@ class Repo(dict):
         ('name', 0, None),
         ('baseurl', 1, None),
         ('enabled', 0, '1'),
-        ('gpgcheck', 0, '0'),
+        ('gpgcheck', 0, '1'),
         ('gpgkey', 1, None),
         ('sslverify', 0, '1'),
         ('sslcacert', 0, CA),

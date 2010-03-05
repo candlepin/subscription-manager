@@ -494,7 +494,13 @@ class ProductCertificate(Certificate):
     
     def __str__(self):
         s = []
+        s.append('RAW:')
+        s.append('===================================')
         s.append(Certificate.__str__(self))
+        s.append('MODEL:')
+        s.append('===================================')
+        s.append('Serial#: %s' % self.serialNumber())
+        s.append('Consumer UUID: %s\n' % self.subject()['CN'])
         s.append(str(self.getProduct()))
         s.append('')
         return '\n'.join(s)
@@ -533,6 +539,13 @@ class EntitlementCertificate(ProductCertificate):
             ext = self.trimmed.branch(root)
             lst.append(Entitlement(ext))
         return lst
+
+    def __str__(self):
+        s = []
+        s.append(ProductCertificate.__str__(self))
+        for ent in self.getEntitlements():
+            s.append(str(ent))
+        return '\n'.join(s)
 
 
 class Product:
@@ -573,15 +586,15 @@ class Product:
     def __str__(self):
         s = []
         s.append('Product {')
-        s.append('\tName = %s' % self.getName())
-        s.append('\tDescription = %s' % self.getDescription())
-        s.append('\tArchitecture = %s' % self.getArch())
-        s.append('\tVersion = %s' % self.getVersion())
-        s.append('\tQuantity = %s' % self.getQuantity())
-        s.append('\tSubtype = %s' % self.getSubtype())
-        s.append('\tVirtualization Limit = %s' % self.getVirtLimit())
-        s.append('\tSocket Limit = %s' % self.getSocketLimit())
-        s.append('\tProduct Code = %s' % self.getProductOptionCode())
+        s.append('\tName ......... = %s' % self.getName())
+        s.append('\tDescription .. = %s' % self.getDescription())
+        s.append('\tArchitecture . = %s' % self.getArch())
+        s.append('\tVersion ...... = %s' % self.getVersion())
+        s.append('\tQuantity ..... = %s' % self.getQuantity())
+        s.append('\tSubtype ...... = %s' % self.getSubtype())
+        s.append('\tVirt Limit ... = %s' % self.getVirtLimit())
+        s.append('\tSocket Limit . = %s' % self.getSocketLimit())
+        s.append('\tProduct Code . = %s' % self.getProductOptionCode())
         s.append('}')
         return '\n'.join(s)
 
@@ -597,29 +610,23 @@ class Entitlement:
     def getName(self):
         return self.ext.get('1')
     
-    def getDescription(self):
+    def getLabel(self):
         return self.ext.get('2')
     
-    def getArch(self):
-        return self.ext.get('3.1')
+    def getQuantity(self):
+        return self.ext.get('3')
     
-    def getVersion(self):
+    def getFlexQuantity(self):
         return self.ext.get('4')
     
-    def getGuestQuantity(self):
+    def getVendor(self):
         return self.ext.get('5')
     
-    def getQuantity(self):
+    def getUrl(self):
         return self.ext.get('6')
     
-    def getUpdatesAllowd(self):
+    def getGpg(self):
         return self.ext.get('7')
-    
-    def getVendor(self):
-        return self.ext.get('8')
-    
-    def getUrl(self):
-        return self.ext.get('9')
     
     def __eq__(self, rhs):
         return ( self.getName() == rhs.getName() )
@@ -627,15 +634,13 @@ class Entitlement:
     def __str__(self):
         s = []
         s.append('Entitlement {')
-        s.append('\tName = %s' % self.getName())
-        s.append('\tDescription = %s' % self.getDescription())
-        s.append('\tArchitecture = %s' % self.getArch())
-        s.append('\tVersion = %s' % self.getVersion())
-        s.append('\tGuest Quantity = %s' % self.getGuestQuantity())
-        s.append('\tQuantity = %s' % self.getQuantity())
-        s.append('\tUpdates Allowd = %s' % self.getUpdatesAllowd())
-        s.append('\tVendor = %s' % self.getVendor())
-        s.append('\tURL = %s' % self.getUrl())
+        s.append('\tName ........ = %s' % self.getName())
+        s.append('\tLabel ....... = %s' % self.getLabel())
+        s.append('\tQuantity .... = %s' % self.getQuantity())
+        s.append('\tFlex Quantity = %s' % self.getFlexQuantity())
+        s.append('\tVendor ...... = %s' % self.getVendor())
+        s.append('\tURL ......... = %s' % self.getUrl())
+        s.append('\tGPG URL ..... = %s' % self.getGpg())
         s.append('}')
         return '\n'.join(s)
 
