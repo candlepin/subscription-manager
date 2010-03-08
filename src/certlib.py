@@ -23,6 +23,7 @@ from datetime import timedelta
 from config import initConfig
 from connection import UEPConnection
 from certificate import *
+from lock import Lock
 from logutil import getLogger
 
 
@@ -33,8 +34,51 @@ class CertLib:
     
     LINGER = timedelta(days=30)
 
+    def update(self):
+        l = ActionLock()
+        try:
+            l.acquire()
+            action = UpdateAction()
+            return action.update()
+        finally:
+            l.release()
+
+    def add(self, *bundles):
+        l = ActionLock()
+        try:
+            l.acquire()
+            action = AddAction()
+            return action.add(bundles)
+        finally:
+            l.release()
+
+
+class ActionLock(Lock):
+
+    PATH = '/var/run/subsys/rhsm/cert.pid'
+
+    def __init__(self):
+        Lock.__init__(self, self.PATH)
+
+
+class Action:
+
     def __init__(self):
         self.entdir = EntitlementDirectory()
+
+
+class AddAction(Action):
+
+    def add(self, *bundles):
+        writer = Writer()
+        for b in bundles:
+            writer.write(b)
+        return self
+
+
+class UpdateAction(Action):
+
+    LINGER = timedelta(days=30)
     
     def update(self):
         updates = 0
@@ -43,6 +87,7 @@ class CertLib:
             sn = valid.serialNumber()
             snlist.append(sn)
         uep = UEP()
+        writer = Writer()
         for st in uep.syncCertificates(snlist):
             sn = st['serialNumber']
             status = st['status']
@@ -51,7 +96,7 @@ class CertLib:
                 continue
             if status in ('NEW','REPLACE'):
                 updates += 1
-                self.__write(bundle)
+                writer.write(bundle)
                 continue
             if status == 'REVOKE':
                 updates += 1
@@ -63,11 +108,6 @@ class CertLib:
                 continue
             os.remove(c.path)
         return updates
-        
-    def add(self, *bundles):
-        for b in bundles:
-            self.__write(b)
-        return self
     
     def __mayLinger(self, cert):
         valid = cert.validRange()
@@ -75,7 +115,13 @@ class CertLib:
         graceperoid = dt.utcnow()+self.LINGER
         return ( end < graceperoid )
 
-    def __write(self, bundle):
+
+class Writer:
+
+    def __init__(self):
+        self.entdir = EntitlementDirectory()
+
+    def write(self, bundle):
         keypem = bundle['key']
         crtpem = bundle['certificate']
         path = self.entdir.keypath()
