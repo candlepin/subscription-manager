@@ -111,9 +111,34 @@ class UEPConnection:
         method = '/consumers/%s' % consumerId
         return self.conn.request_delete(method)
 
-    def syncCertificates(self, consumerId, serialNumbers):
+    def syncCertificates(self, consumerId):
+        """
+        Sync all applicable certificates for a given consumer\
+        @param consumerId: consumer uuid
+        @return: A list of entitlement certificates
+        """
         method = '/consumers/%s/certificates' % consumerId
-        return self.conn.request_post(method, serialNumbers)
+        return self.conn.request_get(method)
+
+    def SyncCertificatesBySerial(self, consumerId, serialNumbers):
+        """
+        Sync certificates for a given set of serial numbers
+        @param consumerId: consumer uuid
+        @param serialNumbers: list of serial numbers eg: ['SERIAL002', 'SERIAL001']
+        @return: A list of entitlement certificates
+        """
+        serialNumbers = ','.join(serialNumbers)
+        method = '/consumers/%s/certificates?serials=%s' % (consumerId, serialNumbers)
+        return self.conn.request_get(method)
+
+    def getCertificateSerials(self, consumerId):
+        """
+        Get serial numbers for certs for a given consumer
+        @param consumerId: consumer uuid
+        @return: A set of serial numbers
+        """
+        method = '/consumers/%s/certificates/serials' % consumerId
+        return self.conn.request_get(method)
 
     def bindByRegNumber(self, consumerId, regnum=None):
         method = "/consumers/%s/entitlements?token=%s" % (consumerId, regnum)
@@ -172,7 +197,9 @@ if __name__ == '__main__':
         print "Created a consumer ", consumer
         # sync certs
         #print "Initiate cert synchronization for uuid"
-        #print uep.syncCertificates(consumer['uuid'], []) 
+        print uep.syncCertificates(consumer['uuid'], []) 
+        print uep.getCertificateSerials(consumer['uuid'])
+        print uep.SyncCertificatesBySerial(consumer['uuid'], ['SERIAL001','SERIAL001'])
         # bind consumer to regNumber
         #uep.bindByRegNumber(consumer['uuid'],"1234-5334-4e23-2432-4345") 
         # bind consumer by poolId
@@ -189,7 +216,7 @@ if __name__ == '__main__':
         # delete a consumer
         print uep.unregisterConsumer('admin', 'password', consumer['uuid'])
         print "consumer unregistered"
-        print uep.getEntitlementList(consumer['uuid'])
+        #print uep.getEntitlementList(consumer['uuid'])
         #print uep.getEntitlementById("5")
     except RestlibException, e:
         print"Error:", e
