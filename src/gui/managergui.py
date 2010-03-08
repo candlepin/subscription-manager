@@ -161,11 +161,12 @@ class ManageSubscriptionPage:
         self.subsxml = gtk.glade.XML(gladexml, "dialog_updates", domain="subscription-manager")
         self.vbox = \
                         self.subsxml.get_widget("dialog-vbox1")
-        print dir(self.subsxml)
         self.populateProductDialog()
+        self.updateMessage()
         self.reviewSubscriptionPagePrepare()
-        dic = { "onFilechooserbuttonFileActivated" : \
-            self.provideCertificatePageApply,
+        dic = { "onFilechooserbuttonFileActivated" : self.provideCertificatePageApply,
+                "on_button_close_clicked" : gtk.main_quit,
+                "account_settings_clicked_cb" : self.loadAccountSettings()
             }
 
         self.subsxml.signal_autoconnect(dic)
@@ -176,6 +177,11 @@ class ManageSubscriptionPage:
 
         self.mainWin.show_all()
 
+    def loadAccountSettings(self):
+        print "cliecked account settings"
+        login_page = LoginPage()
+        login_page.loginPagePrepare()
+        return True
 
     def reviewSubscriptionPagePrepare(self):
         entdir = EntitlementDirectory()
@@ -183,11 +189,14 @@ class ManageSubscriptionPage:
 
     def populateProductDialog(self):
         self.productList = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.warn_count = 0
         for product in managerlib.getInstalledProductStatus():
             self.productList.append(product)
+            if product[1] in ["Expired", "Not Subscribed"]:
+                self.warn_count += 1
         self.tv_products =  self.subsxml.get_widget("treeview_updates")
         self.tv_products.set_model(self.productList)
-        
+
         self.tv_products.set_rules_hint(True)
 
         col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), text=0)
@@ -207,8 +216,12 @@ class ManageSubscriptionPage:
 
         self.productList.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
+
     def provideCertificatePageApply(self):
         self._provideCertificatePageApply()
+
+    def updateMessage(self):
+        print self.warn_count
 
     def _provideCertificatePageApply(self):
         """Does what the comment for provideCertificatePageApply says, but might 

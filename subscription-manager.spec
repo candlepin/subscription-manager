@@ -110,7 +110,7 @@ fi
 
 %changelog
 * Mon Mar 08 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.13-1
-- #568426 - new build
+- Resolves: #568426 - new build
 
 * Wed Mar 03 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.12-1
 - Resolves: #568433 - Flushed out hardware info

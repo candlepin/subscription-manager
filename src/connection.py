@@ -104,27 +104,27 @@ class UEPConnection:
 
     def registerConsumer(self, username, password, info={}):
         self.__authenticate(username, password)
-        return self.conn.request_post('/consumer/', info)
+        return self.conn.request_post('/consumers/', info)
 
     def unregisterConsumer(self, username, password, consumerId):
         self.__authenticate(username, password)
-        method = '/consumer/%s' % consumerId
+        method = '/consumers/%s' % consumerId
         return self.conn.request_delete(method)
 
     def syncCertificates(self, consumerId, serialNumbers):
-        method = '/consumer/%s/certificates' % consumerId
+        method = '/consumers/%s/certificates' % consumerId
         return self.conn.request_post(method, serialNumbers)
 
     def bindByRegNumber(self, consumerId, regnum=None):
-        method = "/entitlement/consumer/%s/token/%s" % (consumerId, regnum)
+        method = "/consumers/%s/entitlements?token=%s" % (consumerId, regnum)
         return self.conn.request_post(method)
 
     def bindByEntitlementPool(self, consumerId, poolId=None):
-        method = "/entitlement/consumer/%s/pool/%s" % (consumerId, poolId)
+        method = "/consumers/%s/entitlements?pool=%s" % (consumerId, poolId)
         return self.conn.request_post(method)
 
     def bindByProduct(self, consumerId, product=None):
-        method = "/entitlement/consumer/%s/product/%s" % (consumerId, product)
+        method = "/consumers/%s/entitlements?product=%s" % (consumerId, product)
         return self.conn.request_post(method)
 
     def unBindBySerialNumbers(self, consumerId, serialNumbers):
@@ -136,15 +136,15 @@ class UEPConnection:
         return self.conn.request_post(method)
 
     def getPoolsList(self, consumerId):
-        method = "/pool/consumer/%s" % consumerId
+        method = "/pools?consumer=%s" % consumerId
         return self.conn.request_get(method)
 
     def getEntitlementList(self, consumerId):
-        method = "/entitlement/consumer/%s" % consumerId
+        method = "consumers/%s/entitlements" % consumerId
         return self.conn.request_get(method)
 
     def getEntitlementById(self, poolId):
-        method = "/entitlement/%s" % poolId
+        method = "/entitlements/%s" % poolId
         return self.conn.request_get(method)
 
 if __name__ == '__main__':
@@ -183,12 +183,14 @@ if __name__ == '__main__':
         #print uep.unbindAll(consumer['uuid'])
         # Unbind serialNumbers
         #uep.unbindserialNumbers(consumer['uuid'], "1001,1002,1003")
-        print uep.getEntitlementPools(consumer['uuid'])
+        print uep.getPoolsList(consumer['uuid'])
         # lookup Entitlement Info by PoolId
         #print uep.getEntitlementById("4")
         # delete a consumer
-        #print uep.unregisterConsumer('admin', 'password', consumer['uuid'])
+        print uep.unregisterConsumer('admin', 'password', consumer['uuid'])
         print "consumer unregistered"
+        print uep.getEntitlementList(consumer['uuid'])
+        #print uep.getEntitlementById("5")
     except RestlibException, e:
         print"Error:", e
         sys.exit(-1)
