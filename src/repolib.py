@@ -110,8 +110,6 @@ class Reader:
             name = part[0].strip()
             value = part[1].strip()
             section[name] = value
-        if len(self.section) > 1:
-            del self.section[None]
         f.close()
         
     def newsection(self, name):
@@ -194,6 +192,7 @@ class RepoFile(Reader):
     
     def read(self):
         Reader.read(self, self.path)
+        del self.section[None]
         
     def write(self):
         f = open(self.path, "w")
