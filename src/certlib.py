@@ -82,34 +82,32 @@ class UpdateAction(Action):
     
     def update(self):
         updates = 0
-        snlist = []
+        local = {}
         for valid in self.entdir.listValid():
             sn = valid.serialNumber()
-            snlist.append(sn)
+            local[sn] = valid
         uep = UEP()
+        expected = uep.getCertificateSerials()
+        new = []
+        for sn in expected:
+            if not sn in local:
+                new.append(sn)
+        for sn in local:
+            if not sn in expected:
+                updates += 1
+                os.remove(local[sn].path)
         writer = Writer()
-        for st in uep.syncCertificates(snlist):
-            sn = st['serialNumber']
-            status = st['status']
-            bundle = st.get('clientCertificate')
-            if status == 'VALID':
-                continue
-            if status in ('NEW','REPLACE'):
-                updates += 1
-                writer.write(bundle)
-                continue
-            if status == 'REVOKE':
-                updates += 1
-                cert = self.entdir.find(sn)
-                os.remove(cert.path)
-                continue
+        for bundle in uep.getCertificates(new):
+            updates += 1
+            writer.write(bundle)
         for c in self.entdir.listExpired():
-            if self.__mayLinger(c):
+            if self.mayLinger(c):
                 continue
+            updates += 1
             os.remove(c.path)
         return updates
     
-    def __mayLinger(self, cert):
+    def mayLinger(self, cert):
         valid = cert.validRange()
         end = valid.end()
         graceperoid = dt.utcnow()+self.LINGER
@@ -123,12 +121,12 @@ class Writer:
 
     def write(self, bundle):
         keypem = bundle['key']
-        crtpem = bundle['certificate']
+        crtpem = bundle['cert']
         path = self.entdir.keypath()
         f = open(path, 'w')
         f.write(keypem)
         f.close()
-        cert = ProductCertificate(crtpem)
+        cert = EntitlementCertificate(crtpem)
         product = cert.getProduct()
         path = self.entdir.productpath()
         fn = self.__ufn(path, product)
@@ -161,14 +159,27 @@ class UEP(UEPConnection):
         port = cfg['port']
         UEPConnection.__init__(self, host, port)
         
-    def syncCertificates(self, snlist):
-        uuid = self.__consumeruuid()
+    def getCertificateSerials(self):
+        uuid = self.consumerId()
         if uuid is None:
             return ()
-        result = UEPConnection.syncCertificates(self, uuid, snlist)
-        return result['clientCertStatus']
+        expected = []
+        for sn in UEPConnection.getCertificateSerials(self, uuid):
+            expected.append(int(sn))
+        return expected
+
+    def getCertificates(self, wanted):
+        uuid = self.consumerId()
+        if uuid is None:
+            return ()
+        bundles = []
+        for b in UEPConnection.getCertificates(uuid, wanted):
+            sn = int(b['serial'])
+            if sn in wanted:
+                bundles.append(b)
+        return bundles
         
-    def __consumeruuid(self):
+    def consumerId(self):
         try:
             cid = ConsumerIdentity.read()
             return cid.getConsumerId()
