@@ -35,22 +35,22 @@ class CertLib:
     LINGER = timedelta(days=30)
 
     def update(self):
-        l = ActionLock()
+        lock = ActionLock()
         try:
-            l.acquire()
-            action = UpdateAction()
-            return action.update()
+            lock.acquire()
+            update = UpdateAction()
+            return update.perform()
         finally:
-            l.release()
+            lock.release()
 
     def add(self, *bundles):
-        l = ActionLock()
+        lock = ActionLock()
         try:
-            l.acquire()
-            action = AddAction()
-            return action.add(bundles)
+            lock.acquire()
+            add = AddAction()
+            return add.perform(bundles)
         finally:
-            l.release()
+            lock.release()
 
 
 class ActionLock(Lock):
@@ -69,7 +69,7 @@ class Action:
 
 class AddAction(Action):
 
-    def add(self, *bundles):
+    def perform(self, *bundles):
         writer = Writer()
         for b in bundles:
             writer.write(b)
@@ -80,7 +80,7 @@ class UpdateAction(Action):
 
     LINGER = timedelta(days=30)
     
-    def update(self):
+    def perform(self):
         updates = 0
         local = {}
         for valid in self.entdir.listValid():
@@ -97,7 +97,7 @@ class UpdateAction(Action):
                 updates += 1
                 os.remove(local[sn].path)
         writer = Writer()
-        for bundle in uep.getCertificates(new):
+        for bundle in uep.getCertificatesBySerial(new):
             updates += 1
             writer.write(bundle)
         for c in self.entdir.listExpired():
@@ -168,16 +168,11 @@ class UEP(UEPConnection):
             expected.append(int(sn))
         return expected
 
-    def getCertificates(self, wanted):
+    def getCertificatesBySerial(self, snList):
         uuid = self.consumerId()
         if uuid is None:
             return ()
-        bundles = []
-        for b in UEPConnection.getCertificates(uuid, wanted):
-            sn = int(b['serial'])
-            if sn in wanted:
-                bundles.append(b)
-        return bundles
+        return UEPConnection.getCertificatesBySerial(self, uuid, snList)
         
     def consumerId(self):
         try:

@@ -18,18 +18,32 @@
 import os
 from urllib import basejoin
 from config import initConfig
-from certlib import EntitlementDirectory
+from certlib import EntitlementDirectory, ActionLock
 from logutil import getLogger
 
 log = getLogger(__name__)
 
 
 class RepoLib:
-    
-    def __init__(self):
-        self.entdir = EntitlementDirectory()
 
     def update(self):
+        lock = ActionLock()
+        try:
+            update = UpdateAction()
+            return update.perform()
+        finally:
+            lock.release()
+    
+
+class Action:
+
+    def __init__(self):
+        self.entdir = EntitlementDirectory()
+        
+        
+class UpdateAction(Action):
+
+    def perform(self):
         repod = RepoFile()
         repod.read()
         valid = set()
@@ -69,7 +83,7 @@ class RepoLib:
                 repo['sslclientkey'] = EntitlementDirectory.keypath()
                 repo['sslclientcert'] = product.path
                 unique.add(repo)
-        return unique 
+        return unique
 
 
 class Reader:
