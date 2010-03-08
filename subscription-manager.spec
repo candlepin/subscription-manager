@@ -109,6 +109,9 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Mon Mar 08 2010 Pradeep Kilambi <pkilambi@redhat.com>
+- #568426 - new build
+
 * Wed Mar 03 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.12-1
 - Resolves: #568433 - Flushed out hardware info
 - man page for cli
