@@ -50,7 +50,7 @@ class Restlib(object):
         return json.loads(rinfo)
 
     def validateResponse(self, response):
-        if response.status not in ["200", 200, "204", 204]:
+        if str(response.status) not in ["200", "204"]:
             raise RestlibException(response.reason)
 
     def request_get(self, method):
