@@ -7,7 +7,7 @@
     <property name="title" translatable="yes">Subscription Manager</property>
     <property name="window_position">center</property>
     <property name="default_width">600</property>
-    <property name="default_height">300</property>
+    <property name="default_height">400</property>
     <child>
       <widget class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -99,7 +99,7 @@
                 </child>
               </widget>
               <packing>
-                <property name="resize">False</property>
+                <property name="resize">True</property>
                 <property name="shrink">False</property>
               </packing>
             </child>
