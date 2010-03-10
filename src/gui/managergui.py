@@ -221,7 +221,11 @@ class ManageSubscriptionPage:
         self._provideCertificatePageApply()
 
     def updateMessage(self):
-        print self.warn_count
+        self.sumlabel = self.subsxml.get_widget("summaryLabel1")
+        if self.warn_count:
+            self.sumlabel.set_label(_("<b>%s products or subscriptions need your attention.\n\n</b>Add or Update subscriptions for products you are using.\n" % self.warn_count))
+        else:
+            self.sumlabel.set_label(_("Add or Update subscriptions for products you are using."))
 
     def _provideCertificatePageApply(self):
         """Does what the comment for provideCertificatePageApply says, but might 

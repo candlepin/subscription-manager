@@ -21,20 +21,17 @@ from certlib import CertLib, ConsumerIdentity, \
 
 def map_status(status):
     smap = {True : "Subscribed", False : "Expired", None : "Not Subscribed"}
-    print smap
     return smap[status]
 
 def getInstalledProductStatus():
     products = ProductDirectory().list()
     entcerts = EntitlementDirectory().list()
     entdict = {}
-    print entcerts
     for cert in entcerts:
         ents = cert.getEntitlements()
         entdict[cert.getProduct().getName()] = {'Entitlements' : ents, 
                                                 'valid': cert.valid(), 
                                                 'expires' : cert.validRange().end()}
-        print "Statussssssss",cert.getProduct().getName(), cert.valid()
     product_status = []
     for product in products:
         pname = product.getProduct().getName()
