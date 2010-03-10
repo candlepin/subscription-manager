@@ -271,6 +271,13 @@ class AddSubscriptionScreen:
         self.tv_products.set_model(self.availableList)
 
         self.tv_products.set_rules_hint(True)
+        #renderer = gtk.CellRendererToggle()
+        #renderer.set_property('activatable', True)
+        
+        #renderer.connect( 'toggled', self.col_selected )
+        #col = gtk.TreeViewColumn(_("Select"), renderer)
+        #col.set_sort_column_id(0)
+        #self.tv_products.append_column(col)
 
         col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), text=0)
         col.set_sort_column_id(0)
@@ -290,6 +297,9 @@ class AddSubscriptionScreen:
         sel = self.tv_products.get_selection()
         sel.set_mode(gtk.SELECTION_SINGLE)
         self.availableList.set_sort_column_id(0, gtk.SORT_ASCENDING) 
+
+    def col_selected(self, cell, path):
+        pass
 
 class UpdateSubscriptionScreen:
     def __init__(self):

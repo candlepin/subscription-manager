@@ -34,6 +34,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
+                    <property name="padding">1</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -207,6 +208,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
+            <property name="padding">5</property>
             <property name="position">2</property>
           </packing>
         </child>
@@ -218,7 +220,7 @@
     <property name="title" translatable="yes">Add Subscriptions </property>
     <property name="window_position">center</property>
     <property name="default_width">500</property>
-    <property name="default_height">400</property>
+    <property name="default_height">200</property>
     <child>
       <widget class="GtkVBox" id="add-dialog-vbox2">
         <property name="visible">True</property>
@@ -255,7 +257,7 @@
                   <widget class="GtkTreeView" id="treeview_available">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="border_width">15</property>
+                    <property name="double_buffered">False</property>
                     <property name="hover_selection">True</property>
                   </widget>
                 </child>
