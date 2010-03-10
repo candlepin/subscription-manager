@@ -50,8 +50,18 @@ def getConsumedProductEntitlements():
         consumed_products.append(data)
     return consumed_products
 
+def getAvailableEntitlements(cpserver, consumer):
+    columns  = ['endDate', 'quantity', 'productId']
+    dlist = cpserver.getPoolsList(consumer)['pool']
+    data = [sub_dict(pool, columns) for pool in dlist]
+    return data
+
+def sub_dict(datadict, subkeys, default=None) :
+    return dict([ (k, datadict.get(k, default) ) for k in subkeys ] )
+
 if __name__=='__main__':
     print("\nInstalled Product Status:\n")
     getInstalledProductStatus()
     print("\nConsumed Product Status:\n")
     getConsumedProductEntitlements()
+    

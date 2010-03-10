@@ -242,14 +242,14 @@ class ListCommand(CliCommand):
                print("\t%-25s \t%-20s \t%-10s" % product)
 
         if self.options.available:
-           epools = self.cp.getPoolsList(consumer)['pool']
+           epools = managerlib.getAvailableEntitlements(self.cp, consumer)
            columns = epools[0].keys()
-           print '\t\t'.join(columns)
-           print "%s" % "--" * len('\t\t'.join(columns))
+           print '\t\t\t'.join(columns)
+           print "%s" % "---" * len('\t\t'.join(columns))
            for data in epools:
                dvalues = data.values()
                dvalues = [dvalues[i] for i in range(len(columns))]
-               print '\t'.join(dvalues)
+               print '\t\t'.join(dvalues)
 
         if self.options.consumed:
            cpents = managerlib.getConsumedProductEntitlements()
