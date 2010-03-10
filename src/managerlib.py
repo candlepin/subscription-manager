@@ -61,7 +61,7 @@ def getConsumedProductEntitlements():
     return consumed_products
 
 def getAvailableEntitlements(cpserver, consumer):
-    columns  = ['endDate', 'quantity', 'productId']
+    columns  = ['quantity', 'endDate', 'productId']
     dlist = cpserver.getPoolsList(consumer)['pool']
     data = [_sub_dict(pool, columns) for pool in dlist]
     return data

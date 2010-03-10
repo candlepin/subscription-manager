@@ -272,18 +272,18 @@ class AddSubscriptionScreen:
 
         self.tv_products.set_rules_hint(True)
 
-        col = gtk.TreeViewColumn(_("Available Product"), gtk.CellRendererText(), text=0)
+        col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), text=0)
         col.set_sort_column_id(0)
         col.set_sort_order(gtk.SORT_ASCENDING)
         self.tv_products.append_column(col)
 
-        col = gtk.TreeViewColumn(_("Quantity"), gtk.CellRendererText(), text=1)
-        col.set_sort_column_id(1)
+        col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
+        col.set_sort_column_id(2)
         col.set_sort_order(gtk.SORT_ASCENDING)
         self.tv_products.append_column(col)
 
-        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=2)
-        col.set_sort_column_id(2)
+        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=1)
+        col.set_sort_column_id(1)
         col.set_sort_order(gtk.SORT_ASCENDING)
         self.tv_products.append_column(col)
         
