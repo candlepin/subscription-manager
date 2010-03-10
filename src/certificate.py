@@ -699,6 +699,6 @@ if __name__ == '__main__':
         print path
         f = open(path)
         content = f.read()
-        pc = ProductCertificate(content)
+        pc = EntitlementCertificate(content)
         print pc.x509
         print pc
