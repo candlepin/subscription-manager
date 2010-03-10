@@ -15,9 +15,19 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
+import os
+import sys
 from certlib import CertLib, ConsumerIdentity, \
                     ProductDirectory, EntitlementDirectory
+
+def check_registration():
+    if not os.access("/etc/pki/consumer/cert.uuid", os.F_OK):
+        needToRegister = \
+            _("Error: You need to register this system by running " \
+            "`register` command before using this option.")
+        print needToRegister
+        sys.exit(1)
+    return open("/etc/pki/consumer/cert.uuid").read()
 
 def map_status(status):
     smap = {True : "Subscribed", False : "Expired", None : "Not Subscribed"}
@@ -53,10 +63,10 @@ def getConsumedProductEntitlements():
 def getAvailableEntitlements(cpserver, consumer):
     columns  = ['endDate', 'quantity', 'productId']
     dlist = cpserver.getPoolsList(consumer)['pool']
-    data = [sub_dict(pool, columns) for pool in dlist]
+    data = [_sub_dict(pool, columns) for pool in dlist]
     return data
 
-def sub_dict(datadict, subkeys, default=None) :
+def _sub_dict(datadict, subkeys, default=None) :
     return dict([ (k, datadict.get(k, default) ) for k in subkeys ] )
 
 if __name__=='__main__':

@@ -39,7 +39,7 @@ gettext.textdomain("subscription-manager")
 gtk.glade.bindtextdomain("subscription-manager")
 
 gladexml = "/usr/share/rhsm/gui/data/standaloneH.glade"
-UEP = None
+UEP = connection.UEPConnection()
 class LoginPage:
     def __init__(self):
         self.loginXml = gtk.glade.XML(gladexml,
@@ -163,22 +163,20 @@ class ManageSubscriptionPage:
                         self.subsxml.get_widget("dialog-vbox1")
         self.populateProductDialog()
         self.updateMessage()
-        self.reviewSubscriptionPagePrepare()
-        dic = { "onFilechooserbuttonFileActivated" : self.provideCertificatePageApply,
-                "on_button_close_clicked" : gtk.main_quit,
-                "account_settings_clicked_cb" : self.loadAccountSettings()
+        #self.reviewSubscriptionPagePrepare()
+        dic = { "on_button_close_clicked" : gtk.main_quit,
+                "account_settings_clicked_cb" : self.loadAccountSettings,
+                "on_button_add1_clicked" : self.addSubButtonAction
             }
-
         self.subsxml.signal_autoconnect(dic)
-
         self.mainWin = self.subsxml.get_widget("dialog_updates")
         self.mainWin.connect("delete-event", gtk.main_quit)
         self.mainWin.connect("hide", gtk.main_quit)
+        #self.mainWin.connect("on_button_add1_clicked", self.addSubButtonAction)
 
         self.mainWin.show_all()
 
-    def loadAccountSettings(self):
-        print "cliecked account settings"
+    def loadAccountSettings(self, button):
         login_page = LoginPage()
         login_page.loginPagePrepare()
         return True
@@ -186,6 +184,9 @@ class ManageSubscriptionPage:
     def reviewSubscriptionPagePrepare(self):
         entdir = EntitlementDirectory()
         self.vbox.show_all()
+
+    def addSubButtonAction(self, button):
+        AddSubscriptionScreen()
 
     def populateProductDialog(self):
         self.productList = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
@@ -242,6 +243,65 @@ class ManageSubscriptionPage:
 
     def reviewSubscriptionPageVbox(self):
         return self.vbox
+
+
+class AddSubscriptionScreen:
+    def __init__(self):
+        self.addxml = gtk.glade.XML(gladexml, "add_dialog", domain="subscription-manager")
+        self.add_vbox = \
+                        self.addxml.get_widget("add-dialog-vbox2")
+        self.populateAvailableList()
+
+        dic = { "on_button_close_clicked" : ManageSubscriptionPage,
+            }
+        self.addxml.signal_autoconnect(dic)
+        self.addWin = self.addxml.get_widget("add_dialog")
+        self.addWin.connect("delete-event", gtk.main_quit)
+        self.addWin.connect("hide", gtk.main_quit)
+        #self.mainWin.connect("on_button_add1_clicked", self.addSubButtonAction)
+
+        self.addWin.show_all()
+
+    def populateAvailableList(self):
+        consumer = managerlib.check_registration()
+        self.availableList = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        for product in managerlib.getAvailableEntitlements(UEP, consumer):
+            self.availableList.append(product.values())
+        self.tv_products =  self.addxml.get_widget("treeview_available")
+        self.tv_products.set_model(self.availableList)
+
+        self.tv_products.set_rules_hint(True)
+
+        col = gtk.TreeViewColumn(_("Available Product"), gtk.CellRendererText(), text=0)
+        col.set_sort_column_id(0)
+        col.set_sort_order(gtk.SORT_ASCENDING)
+        self.tv_products.append_column(col)
+
+        col = gtk.TreeViewColumn(_("Quantity"), gtk.CellRendererText(), text=1)
+        col.set_sort_column_id(1)
+        col.set_sort_order(gtk.SORT_ASCENDING)
+        self.tv_products.append_column(col)
+
+        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=2)
+        col.set_sort_column_id(2)
+        col.set_sort_order(gtk.SORT_ASCENDING)
+        self.tv_products.append_column(col)
+        
+        sel = self.tv_products.get_selection()
+        sel.set_mode(gtk.SELECTION_SINGLE)
+        self.availableList.set_sort_column_id(0, gtk.SORT_ASCENDING) 
+
+class UpdateSubscriptionScreen:
+    def __init__(self):
+        pass
+
+class RemoveSubscriptionScreen:
+    def __init__(self):
+        pass
+
+class UploadCertificate:
+    def __init__(self):
+        pass
 
 
 def unexpectedError(message, exc_info=None):
