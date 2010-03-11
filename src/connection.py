@@ -165,11 +165,11 @@ class UEPConnection:
         return self.conn.request_get(method)
 
     def getEntitlementList(self, consumerId):
-        method = "consumers/%s/entitlements" % consumerId
+        method = "/consumers/%s/entitlements" % consumerId
         return self.conn.request_get(method)
 
-    def getEntitlementById(self, poolId):
-        method = "/entitlements/%s" % poolId
+    def getEntitlementById(self, consumerId, entId):
+        method = "/consumers/%s/entitlements/%s" % (consumerId, entId)
         return self.conn.request_get(method)
 
 if __name__ == '__main__':
@@ -197,7 +197,7 @@ if __name__ == '__main__':
         print "Created a consumer ", consumer
         # sync certs
         #print "Initiate cert synchronization for uuid"
-        print uep.syncCertificates(consumer['uuid'], []) 
+        print uep.syncCertificates(consumer['uuid']) 
         print uep.getCertificateSerials(consumer['uuid'])
         print uep.SyncCertificatesBySerial(consumer['uuid'], ['SERIAL001','SERIAL001'])
         # bind consumer to regNumber
@@ -209,15 +209,15 @@ if __name__ == '__main__':
         # Unbind All
         #print uep.unbindAll(consumer['uuid'])
         # Unbind serialNumbers
-        #uep.unbindserialNumbers(consumer['uuid'], "1001,1002,1003")
+        #uep.unBindBySerialNumbers(consumer['uuid'], ['SERIAL001','SERIAL001'])
         print uep.getPoolsList(consumer['uuid'])
         # lookup Entitlement Info by PoolId
         #print uep.getEntitlementById("4")
+        print "print get Ent list", uep.getEntitlementList(consumer['uuid'])
+        print uep.getEntitlementById(consumer['uuid'], "3")
         # delete a consumer
         print uep.unregisterConsumer('admin', 'password', consumer['uuid'])
         print "consumer unregistered"
-        #print uep.getEntitlementList(consumer['uuid'])
-        #print uep.getEntitlementById("5")
     except RestlibException, e:
         print"Error:", e
         sys.exit(-1)
