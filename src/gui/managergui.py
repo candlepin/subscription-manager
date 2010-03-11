@@ -20,6 +20,7 @@
 
 import os
 import sys
+import shutil
 sys.path.append('/usr/share/rhsm')
 
 import gtk
@@ -40,8 +41,12 @@ gtk.glade.bindtextdomain("subscription-manager")
 
 gladexml = "/usr/share/rhsm/gui/data/standaloneH.glade"
 UEP = connection.UEPConnection()
+ENT_CONFIG_DIR="/etc/pki/entitlement/product/"
 
 class ManageSubscriptionPage:
+    """
+     Main subscription Manager Window
+    """
     def __init__(self):
         self.subsxml = gtk.glade.XML(gladexml, "dialog_updates", domain="subscription-manager")
         self.vbox = \
@@ -131,6 +136,9 @@ class ManageSubscriptionPage:
 
 
 class AddSubscriptionScreen:
+    """
+     Add subscriptions Widget screen
+    """
     def __init__(self):
         self.addxml = gtk.glade.XML(gladexml, "add_dialog", domain="subscription-manager")
         self.add_vbox = \
@@ -138,12 +146,11 @@ class AddSubscriptionScreen:
         self.populateAvailableList()
 
         dic = { "on_close_clicked" : self.cancel,
+                "on_import_cert_button_clicked"   : self.onImportPrepare,
             }
         self.addxml.signal_autoconnect(dic)
         self.addWin = self.addxml.get_widget("add_dialog")
-        #self.addWin.connect("delete-event", self.finish)
         self.addWin.connect("hide", self.cancel)
-        #self.mainWin.connect("on_button_add1_clicked", self.addSubButtonAction)
 
         self.addWin.show_all()
 
@@ -152,6 +159,10 @@ class AddSubscriptionScreen:
 
     def cancel(self, button):
         self.addWin.hide()
+
+    def onImportPrepare(self, button):
+        self.addWin.hide()
+        UploadCertificate()
 
     def populateAvailableList(self):
         consumer = managerlib.check_registration()
@@ -214,11 +225,38 @@ class RemoveSubscriptionScreen:
 
 class UploadCertificate:
     def __init__(self):
-        pass
+        self.importxml = gtk.glade.XML(gladexml, "import_dialog", domain="subscription-manager")
+        self.add_vbox = \
+                        self.importxml.get_widget("import_vbox")
 
+        dic = { "on_close_import" : self.cancel,
+                "on_import_cert_button2_clicked" : self.importCertificate,
+            }
+        self.importxml.signal_autoconnect(dic)
+        self.importWin = self.importxml.get_widget("import_dialog")
+        self.importWin.connect("hide", self.cancel)
+
+        self.importWin.show_all()
+
+    def cancel(self, button=None):
+      self.importWin.hide()
+
+    def importCertificate(self, button):
+        fileChooser = self.importxml.get_widget("certificateChooserButton")
+        src_cert_file = fileChooser.get_filename()
+        print src_cert_file
+        if src_cert_file is None:
+            errorWindow(_("You must select a certificate."))
+            return False
+        if os.access(ENT_CONFIG_DIR, os.R_OK):
+            dest_file_path = os.path.join(ENT_CONFIG_DIR, os.path.basename(src_cert_file))
+            print src_cert_file, dest_file_path
+            if not os.path.exists(dest_file_path):
+                shutil.copy(src_cert_file, dest_file_path)
+
+        self.importWin.hide()
 
 def unexpectedError(message, exc_info=None):
-    #logFile = '/var/log/up2date'
     message = message + "\n" + (_("This error shouldn't have happened. If you'd "
                                  "like to help us improve this program, please "
                                  "file a bug at bugzilla.redhat.com. Including "
