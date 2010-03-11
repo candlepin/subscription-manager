@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.14
+Version: 0.15
 Release: 1
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -109,7 +109,7 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Thu Mar 11 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.14-1
+* Thu Mar 11 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.15-1
 - Resolves: #568426 
 - more updates to connection.py api flush down
 - updates to new screens and layout in gui
