@@ -76,6 +76,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/rhsm/config.py*
 /usr/share/rhsm/logutil.py*
 /usr/share/rhsm/OptionsCli.py*
+/usr/share/rhsm/lock.py*
 /usr/share/rhsm/gui/__init__.py* 
 /usr/share/rhsm/gui/firstboot.py* 
 /usr/share/rhsm/gui/managergui.py*  
@@ -110,7 +111,7 @@ fi
 
 %changelog
 * Thu Mar 11 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.15-1
-- Resolves: #568426 
+- Resolves:  #568426 
 - more updates to connection.py api flush down
 - updates to new screens and layout in gui
 
