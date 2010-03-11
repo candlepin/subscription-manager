@@ -252,15 +252,21 @@ class AddSubscriptionScreen:
                         self.addxml.get_widget("add-dialog-vbox2")
         self.populateAvailableList()
 
-        dic = { "on_button_close_clicked" : ManageSubscriptionPage,
+        dic = { "on_close_clicked" : self.cancel,
             }
         self.addxml.signal_autoconnect(dic)
         self.addWin = self.addxml.get_widget("add_dialog")
-        self.addWin.connect("delete-event", gtk.main_quit)
-        self.addWin.connect("hide", gtk.main_quit)
+        #self.addWin.connect("delete-event", self.finish)
+        self.addWin.connect("hide", self.cancel)
         #self.mainWin.connect("on_button_add1_clicked", self.addSubButtonAction)
 
         self.addWin.show_all()
+
+    def finish(self):
+        self.addWin.hide()
+
+    def cancel(self, button):
+        self.addWin.hide()
 
     def populateAvailableList(self):
         consumer = managerlib.check_registration()
@@ -270,29 +276,35 @@ class AddSubscriptionScreen:
         self.tv_products =  self.addxml.get_widget("treeview_available")
         self.tv_products.set_model(self.availableList)
 
-        self.tv_products.set_rules_hint(True)
-        renderer = gtk.CellRendererToggle()
-        #renderer.set_property('activatable', True)
-        #renderer.set_clickable(True)
-        #renderer.connect ("toggled", self.col_selected) 
-        #renderer.connect( 'toggled', self.col_selected )
-        #col = gtk.TreeViewColumn(_("Select"), renderer, active=0)
-        #col.set_sort_column_id(0)
-        #col.set_clickable(True)
-        #self.tv_products.append_column(col)
+
+        column = gtk.TreeViewColumn(_(''))
+        cell = gtk.CellRendererToggle()
+        cell.connect('toggled', self.col_selected)
+        column.pack_start(cell, True)
+        column.set_attributes(cell, active=1)
+        column.set_clickable(True)
+        #hide toggle for separators
+        column.set_cell_data_func(cell, self._cell_data_toggle_func)
+        self.tv_products.append_column(column)
+
         col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), text=0)
+        col.set_spacing(4)
         col.set_sort_column_id(1)
         col.set_clickable(True)
         col.set_sort_order(gtk.SORT_ASCENDING)
         self.tv_products.append_column(col)
 
         col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
+        col.set_spacing(4)
         col.set_sort_column_id(3)
+        col.set_clickable(True)
         col.set_sort_order(gtk.SORT_ASCENDING)
         self.tv_products.append_column(col)
 
         col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=1)
+        col.set_spacing(4)
         col.set_sort_column_id(2)
+        col.set_clickable(True)
         col.set_sort_order(gtk.SORT_ASCENDING)
         self.tv_products.append_column(col)
         
@@ -302,6 +314,10 @@ class AddSubscriptionScreen:
 
     def col_selected(self, cell, path):
         pass
+
+    def _cell_data_toggle_func(self, tree_column, renderer, model, treeiter):
+        renderer.set_property('visible', True)
+
 
 class UpdateSubscriptionScreen:
     def __init__(self):
