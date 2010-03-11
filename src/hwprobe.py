@@ -26,6 +26,7 @@ _ = gettext.gettext
 import dmidecode
 import ethtool
 import socket
+import commands
 
 class Hardware:
     def __init__(self):
@@ -66,6 +67,19 @@ class Hardware:
             print _("Error reading system memory information:"), sys.exc_type
         self.allhw.update(self.meminfo)
         return self.meminfo
+
+    def getCpuInfo(self):
+        self.cpuinfo = {}
+        try:
+            cpudata = commands.getstatusoutput('/usr/bin/lscpu')[-1].split('\n')
+            for info in cpudata:
+                key, value = info.split(":")
+                nkey = '.'.join(["cpu", key.lower().strip().replace(" ", "_")])
+                self.cpuinfo[nkey] = "%s" % value.strip()
+        except:
+            print _("Error reading system cpu information:"), sys.exc_type
+        self.allhw.update(self.cpuinfo)
+        return self.cpuinfo
 
     def getDmiInfo(self):
         try:
@@ -140,9 +154,6 @@ class Hardware:
             virtinfo['virt.type'] = "fully"
         return virtinfo
 
-    def getCpuInfo(self):
-        return {}
-
     def getNetworkInfo(self):
         self.netinfo = {}
         try:
@@ -179,6 +190,7 @@ class Hardware:
         self.getDmiInfo()
         self.getVirtInfo()
         self.getMemInfo()
+        self.getCpuInfo()
         self.getNetworkInfo()
         self.getNetworkInterfaces()
         return self.allhw
