@@ -56,7 +56,9 @@ class ManageSubscriptionPage:
         #self.reviewSubscriptionPagePrepare()
         dic = { "on_button_close_clicked" : gtk.main_quit,
                 "account_settings_clicked_cb" : self.loadAccountSettings,
-                "on_button_add1_clicked" : self.addSubButtonAction
+                "on_button_add1_clicked" : self.addSubButtonAction,
+                "on_button_update1_clicked" : self.updateSubButtonAction,
+                "on_button_unsubscribe1_clicked" : self.onUnsubscribeAction,
             }
         self.subsxml.signal_autoconnect(dic)
         self.mainWin = self.subsxml.get_widget("dialog_updates")
@@ -77,6 +79,9 @@ class ManageSubscriptionPage:
 
     def addSubButtonAction(self, button):
         AddSubscriptionScreen()
+
+    def updateSubButtonAction(self, button):
+        UpdateSubscriptionScreen()
 
     def populateProductDialog(self):
         self.productList = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
@@ -115,6 +120,8 @@ class ManageSubscriptionPage:
         else:
             self.sumlabel.set_label(_("Add or Update subscriptions for products you are using."))
 
+    def onUnsubscribeAction(self, button):
+        pass
 
 class AddSubscriptionScreen:
     """
@@ -156,9 +163,10 @@ class AddSubscriptionScreen:
 
         column = gtk.TreeViewColumn(_(''))
         cell = gtk.CellRendererToggle()
+        cell.set_property('activatable', True)
         cell.connect('toggled', self.col_selected)
         column.pack_start(cell, True)
-        column.set_attributes(cell, active=1)
+        column.set_attributes(cell)
         column.set_clickable(True)
         #hide toggle for separators
         column.set_cell_data_func(cell, self._cell_data_toggle_func)
@@ -166,23 +174,19 @@ class AddSubscriptionScreen:
 
         col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), text=0)
         col.set_spacing(4)
-        col.set_sort_column_id(1)
-        col.set_clickable(True)
+        col.set_sort_column_id(0)
         col.set_sort_order(gtk.SORT_ASCENDING)
         self.tv_products.append_column(col)
 
         col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
         col.set_spacing(4)
-        col.set_sort_column_id(3)
-        col.set_clickable(True)
-        col.set_sort_order(gtk.SORT_ASCENDING)
+        col.set_sort_column_id(1)
+        #col.set_sort_order(gtk.SORT_ASCENDING)
         self.tv_products.append_column(col)
 
         col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=1)
         col.set_spacing(4)
         col.set_sort_column_id(2)
-        col.set_clickable(True)
-        col.set_sort_order(gtk.SORT_ASCENDING)
         self.tv_products.append_column(col)
         
         sel = self.tv_products.get_selection()
@@ -190,7 +194,9 @@ class AddSubscriptionScreen:
         self.availableList.set_sort_column_id(0, gtk.SORT_ASCENDING) 
 
     def col_selected(self, cell, path):
-        pass
+        items, iter = self.tv_products.get_selection().get_selected()
+        name, quantity = items[iter][0], items[iter][2]
+        print "selected: ", name, quantity
 
     def _cell_data_toggle_func(self, tree_column, renderer, model, treeiter):
         renderer.set_property('visible', True)
@@ -198,11 +204,29 @@ class AddSubscriptionScreen:
 
 class UpdateSubscriptionScreen:
     def __init__(self):
-        pass
+        self.updatexml = gtk.glade.XML(gladexml, "update_dialog", domain="subscription-manager")
+        dic = { "on_close_clicked" : self.cancel,
+                "on_import_cert_button_clicked" : self.onImportPrepare,
+            }
+        self.updatexml.signal_autoconnect(dic)
+        self.updateWin = self.updatexml.get_widget("update_dialog")
+        self.updateWin.connect("hide", self.cancel)
+        self.updateWin.show_all()
 
-class RemoveSubscriptionScreen:
-    def __init__(self):
-        pass
+    def cancel(self, button=None):
+        self.updateWin.hide()
+
+    def onImportPrepare(self, button):
+        self.updateWin.hide()
+        ImportCertificate()
+
+    def populateUpdatesDialog(self):
+        consumer = managerlib.check_registration()
+        self.updatesList = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        for product in managerlib.getAvailableEntitlements(UEP, consumer):
+            self.updatesList.append(product.values())
+        self.tv_products =  self.updatexml.get_widget("treeview_updates")
+        self.tv_products.set_model(self.updatesList)
 
 class ImportCertificate:
     """
