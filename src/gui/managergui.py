@@ -162,7 +162,7 @@ class AddSubscriptionScreen:
 
     def onImportPrepare(self, button):
         self.addWin.hide()
-        UploadCertificate()
+        ImportCertificate()
 
     def populateAvailableList(self):
         consumer = managerlib.check_registration()
@@ -223,7 +223,10 @@ class RemoveSubscriptionScreen:
     def __init__(self):
         pass
 
-class UploadCertificate:
+class ImportCertificate:
+    """
+     Import an Entitlement Certificate Widget screen
+    """
     def __init__(self):
         self.importxml = gtk.glade.XML(gladexml, "import_dialog", domain="subscription-manager")
         self.add_vbox = \
@@ -244,15 +247,16 @@ class UploadCertificate:
     def importCertificate(self, button):
         fileChooser = self.importxml.get_widget("certificateChooserButton")
         src_cert_file = fileChooser.get_filename()
-        print src_cert_file
         if src_cert_file is None:
             errorWindow(_("You must select a certificate."))
             return False
-        if os.access(ENT_CONFIG_DIR, os.R_OK):
-            dest_file_path = os.path.join(ENT_CONFIG_DIR, os.path.basename(src_cert_file))
-            print src_cert_file, dest_file_path
-            if not os.path.exists(dest_file_path):
-                shutil.copy(src_cert_file, dest_file_path)
+
+        if not os.access(ENT_CONFIG_DIR, os.R_OK):
+            os.mkdir(ENT_CONFIG_DIR)
+
+        dest_file_path = os.path.join(ENT_CONFIG_DIR, os.path.basename(src_cert_file))
+        if not os.path.exists(dest_file_path):
+            shutil.copy(src_cert_file, dest_file_path)
 
         self.importWin.hide()
 

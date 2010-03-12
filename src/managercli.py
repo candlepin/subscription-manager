@@ -189,8 +189,8 @@ class UnSubscribeCommand(CliCommand):
         CliCommand.__init__(self, "unsubscribe", usage, shortdesc, desc)
 
         self.serial_numbers = None
-        self.parser.add_option("--serialnum", dest="serial_numbers",
-                               help="Entitlement Certificate serial number")
+        self.parser.add_option("--entId", dest="entid",
+                               help="Entitlement Id for a given product")
 
     def _validate_options(self):
         CliCommand._validate_options(self)
@@ -201,13 +201,14 @@ class UnSubscribeCommand(CliCommand):
         """
         consumer = check_registration()
 
-        if not self.options.pool:
+        if self.options.entid:
+            pass
+            self.cp.unBindByEntitlementId(consumer, self.options.entid)
+            self.certlib.update()
+        else:
             self.cp.unbindAll(consumer)
             self.certlib.update()
 
-        if self.options.serial_numbers:
-            self.cp.unBindBySerialNumbers(consumer, self.options.serial_numbers)
-            self.certlib.update()
 
 
 class ListCommand(CliCommand):

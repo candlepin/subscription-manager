@@ -153,12 +153,16 @@ class UEPConnection:
         return self.conn.request_post(method)
 
     def unBindBySerialNumbers(self, consumerId, serialNumbers):
-        method = "/entitlement/consumer/%s/%s" % (consumerId, ','.join(serialNumbers))
-        return self.conn.request_post(method)
+        method = "/consumers/%s/entitlements?serial=%s" % (consumerId, ','.join(serialNumbers))
+        return self.conn.request_delete(method)
+
+    def unBindByEntitlementId(self, consumerId, entId):
+        method = "/consumers/%s/entitlements/%s" % (consumerId, entId)
+        return self.conn.request_delete(method)
 
     def unbindAll(self, consumerId):
-        method = "/entitlement/consumer/%s" % consumerId
-        return self.conn.request_post(method)
+        method = "/consumers/%s/entitlements" % consumerId
+        return self.conn.request_delete(method)
 
     def getPoolsList(self, consumerId):
         method = "/pools?consumer=%s" % consumerId
