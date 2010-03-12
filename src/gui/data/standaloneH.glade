@@ -392,6 +392,8 @@
     </child>
   </widget>
   <widget class="GtkWindow" id="update_dialog">
+    <property name="has_focus">True</property>
+    <property name="is_focus">True</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Update Subscriptions </property>
     <property name="window_position">center</property>
@@ -505,6 +507,8 @@
     </child>
   </widget>
   <widget class="GtkWindow" id="add_dialog">
+    <property name="has_focus">True</property>
+    <property name="is_focus">True</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Add Subscriptions </property>
     <property name="window_position">center</property>

@@ -154,49 +154,43 @@ class AddSubscriptionScreen:
 
     def populateAvailableList(self):
         consumer = managerlib.check_registration()
-        self.availableList = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         for product in managerlib.getAvailableEntitlements(UEP, consumer):
-            self.availableList.append(product.values())
+            self.availableList.append(None, [False] + product.values())
         self.tv_products =  self.addxml.get_widget("treeview_available")
         self.tv_products.set_model(self.availableList)
 
 
-        column = gtk.TreeViewColumn(_(''))
         cell = gtk.CellRendererToggle()
         cell.set_property('activatable', True)
-        cell.connect('toggled', self.col_selected)
-        column.pack_start(cell, True)
-        column.set_attributes(cell)
-        column.set_clickable(True)
-        #hide toggle for separators
-        column.set_cell_data_func(cell, self._cell_data_toggle_func)
+        cell.connect('toggled', self.col_selected, self.availableList)
+
+        column = gtk.TreeViewColumn(_('Select'), cell)
+        column.add_attribute(cell, "active", 0)
         self.tv_products.append_column(column)
 
-        col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), text=0)
+        col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), text=1)
         col.set_spacing(4)
-        col.set_sort_column_id(0)
+        col.set_sort_column_id(1)
         col.set_sort_order(gtk.SORT_ASCENDING)
         self.tv_products.append_column(col)
 
-        col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
-        col.set_spacing(4)
-        col.set_sort_column_id(1)
-        #col.set_sort_order(gtk.SORT_ASCENDING)
-        self.tv_products.append_column(col)
-
-        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=1)
+        col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=3)
         col.set_spacing(4)
         col.set_sort_column_id(2)
         self.tv_products.append_column(col)
-        
-        sel = self.tv_products.get_selection()
-        sel.set_mode(gtk.SELECTION_SINGLE)
-        self.availableList.set_sort_column_id(0, gtk.SORT_ASCENDING) 
 
-    def col_selected(self, cell, path):
-        items, iter = self.tv_products.get_selection().get_selected()
-        name, quantity = items[iter][0], items[iter][2]
-        print "selected: ", name, quantity
+        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=2)
+        col.set_spacing(4)
+        col.set_sort_column_id(3)
+        self.tv_products.append_column(col)
+        
+        self.availableList.set_sort_column_id(1, gtk.SORT_ASCENDING) 
+
+    def col_selected(self, cell, path, model):
+        #items, iter = self.tv_products.get_selection().get_selected()
+        model[path][0] = not model[path][0]
+        print "Toggle '%s' to: %s" % (model[path][1], model[path][0])
 
     def _cell_data_toggle_func(self, tree_column, renderer, model, treeiter):
         renderer.set_property('visible', True)
