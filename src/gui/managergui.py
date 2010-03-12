@@ -108,31 +108,12 @@ class ManageSubscriptionPage:
         self.productList.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
 
-    def provideCertificatePageApply(self):
-        self._provideCertificatePageApply()
-
     def updateMessage(self):
         self.sumlabel = self.subsxml.get_widget("summaryLabel1")
         if self.warn_count:
             self.sumlabel.set_label(_("<b>%s products or subscriptions need your attention.\n\n</b>Add or Update subscriptions for products you are using.\n" % self.warn_count))
         else:
             self.sumlabel.set_label(_("Add or Update subscriptions for products you are using."))
-
-    def _provideCertificatePageApply(self):
-        """Does what the comment for provideCertificatePageApply says, but might 
-        raise various exceptions.
-        
-        """
-        try:
-            fileChooser = self.subsxml.get_widget("button_import")
-            certFile = fileChooser.get_filename()
-            if certFile is None:
-                pass 
-        except:
-            raise
-
-    def reviewSubscriptionPageVbox(self):
-        return self.vbox
 
 
 class AddSubscriptionScreen:
