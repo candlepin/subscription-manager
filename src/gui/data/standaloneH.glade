@@ -564,6 +564,7 @@
               <widget class="GtkHButtonBox" id="add-hbuttonbox1">
                 <property name="visible">True</property>
                 <property name="homogeneous">True</property>
+                <property name="layout_style">end</property>
                 <child>
                   <widget class="GtkButton" id="import_cert_button1">
                     <property name="label">Import Certificate..</property>
@@ -575,12 +576,13 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
+                    <property name="padding">423</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkButton" id="cancel_add_button">
-                    <property name="label">gtk-cancel</property>
+                    <property name="label">gtk-close</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -590,26 +592,29 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkButton" id="add_subscribe_button">
-                    <property name="label">Subscribe to Selected</property>
+                    <property name="label">Apply</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="on_add_subscribe_button_clicked"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="position">2</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </widget>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
+                <property name="padding">4</property>
                 <property name="position">2</property>
               </packing>
             </child>

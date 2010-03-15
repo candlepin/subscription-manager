@@ -128,6 +128,7 @@ class AddSubscriptionScreen:
      Add subscriptions Widget screen
     """
     def __init__(self):
+        self.selected = {}
         self.addxml = gtk.glade.XML(gladexml, "add_dialog", domain="subscription-manager")
         self.add_vbox = \
                         self.addxml.get_widget("add-dialog-vbox2")
@@ -135,6 +136,7 @@ class AddSubscriptionScreen:
 
         dic = { "on_close_clicked" : self.cancel,
                 "on_import_cert_button_clicked"   : self.onImportPrepare,
+                "on_add_subscribe_button_clicked"   : self.onSubscribeAction,
             }
         self.addxml.signal_autoconnect(dic)
         self.addWin = self.addxml.get_widget("add_dialog")
@@ -151,6 +153,19 @@ class AddSubscriptionScreen:
     def onImportPrepare(self, button):
         self.addWin.hide()
         ImportCertificate()
+
+    def onSubscribeAction(self, button):
+        consumer = managerlib.check_registration()
+        for product, state in self.selected.items():
+            if state:
+                try:
+                    print "Binding: ", product
+                    print UEP.bindByProduct(consumer, product)
+                except:
+                    # Subscription failed, continue with rest
+                    continue
+        #self.finish()
+        
 
     def populateAvailableList(self):
         consumer = managerlib.check_registration()
@@ -184,13 +199,14 @@ class AddSubscriptionScreen:
         col.set_spacing(4)
         col.set_sort_column_id(3)
         self.tv_products.append_column(col)
-        
+
         self.availableList.set_sort_column_id(1, gtk.SORT_ASCENDING) 
 
     def col_selected(self, cell, path, model):
-        #items, iter = self.tv_products.get_selection().get_selected()
+        items, iter = self.tv_products.get_selection().get_selected()
         model[path][0] = not model[path][0]
         print "Toggle '%s' to: %s" % (model[path][1], model[path][0])
+        self.selected[model.get_value(iter, 1)] = model.get_value(iter, 0)
 
     def _cell_data_toggle_func(self, tree_column, renderer, model, treeiter):
         renderer.set_property('visible', True)
