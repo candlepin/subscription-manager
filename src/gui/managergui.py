@@ -109,7 +109,6 @@ class ManageSubscriptionPage:
         self.tv_products.append_column(col)
 
         self.productList.set_sort_column_id(0, gtk.SORT_ASCENDING)
-
         self.selection = self.tv_products.get_selection()
         self.selection.connect('changed', self.on_selection)
 
@@ -125,7 +124,7 @@ class ManageSubscriptionPage:
     def updateMessage(self):
         self.sumlabel = self.subsxml.get_widget("summaryLabel1")
         if self.warn_count:
-            self.sumlabel.set_label(_("<b>%s products or subscriptions need your attention.\n</b>Add or Update subscriptions for products you are using.\n" % self.warn_count))
+            self.sumlabel.set_label(_("<b>%s products or subscriptions need your attention.\n\n</b>Add or Update subscriptions for products you are using.\n" % self.warn_count))
         else:
             self.sumlabel.set_label(_("Add or Update subscriptions for products you are using."))
 
@@ -192,7 +191,6 @@ class AddSubscriptionScreen:
         self.tv_products.append_column(column)
 
         col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), text=1)
-        col.set_spacing(4)
         col.set_sort_column_id(1)
         col.set_sort_order(gtk.SORT_ASCENDING)
         self.tv_products.append_column(col)
@@ -203,7 +201,6 @@ class AddSubscriptionScreen:
         self.tv_products.append_column(col)
 
         col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=2)
-        col.set_spacing(4)
         col.set_sort_column_id(3)
         self.tv_products.append_column(col)
 
