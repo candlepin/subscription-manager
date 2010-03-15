@@ -60,6 +60,13 @@ def getConsumedProductEntitlements():
         consumed_products.append(data)
     return consumed_products
 
+def getProductDescription(qproduct):
+    products = ProductDirectory().list()
+    for product in products:
+        if qproduct == product.getProduct().getName():
+            data = product.__str__()
+    return data
+
 def getAvailableEntitlements(cpserver, consumer):
     columns  = ['quantity', 'consumed', 'endDate', 'productId']
     dlist = cpserver.getPoolsList(consumer)['pool']
@@ -67,7 +74,6 @@ def getAvailableEntitlements(cpserver, consumer):
     for d in data:
         d['quantity'] = int(d['quantity']) - int(d['consumed'])
         del d['consumed']
-    print data
     return data
 
 def _sub_dict(datadict, subkeys, default=None) :

@@ -53,7 +53,6 @@ class ManageSubscriptionPage:
                         self.subsxml.get_widget("dialog-vbox1")
         self.populateProductDialog()
         self.updateMessage()
-        #self.reviewSubscriptionPagePrepare()
         dic = { "on_button_close_clicked" : gtk.main_quit,
                 "account_settings_clicked_cb" : self.loadAccountSettings,
                 "on_button_add1_clicked" : self.addSubButtonAction,
@@ -64,7 +63,6 @@ class ManageSubscriptionPage:
         self.mainWin = self.subsxml.get_widget("dialog_updates")
         self.mainWin.connect("delete-event", gtk.main_quit)
         self.mainWin.connect("hide", gtk.main_quit)
-        #self.mainWin.connect("on_button_add1_clicked", self.addSubButtonAction)
 
         self.mainWin.show_all()
 
@@ -112,11 +110,22 @@ class ManageSubscriptionPage:
 
         self.productList.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
+        self.selection = self.tv_products.get_selection()
+        self.selection.connect('changed', self.on_selection)
+
+    def on_selection(self, selection):
+        items,iter = selection.get_selected()
+        pname_selected = items.get_value(iter,0)
+        desc = managerlib.getProductDescription(pname_selected)
+        pdetails = self.subsxml.get_widget("textview_details")
+        pdetails.get_buffer().set_text(desc)
+        pdetails.set_cursor_visible(False)
+        pdetails.show()
 
     def updateMessage(self):
         self.sumlabel = self.subsxml.get_widget("summaryLabel1")
         if self.warn_count:
-            self.sumlabel.set_label(_("<b>%s products or subscriptions need your attention.\n\n</b>Add or Update subscriptions for products you are using.\n" % self.warn_count))
+            self.sumlabel.set_label(_("<b>%s products or subscriptions need your attention.\n</b>Add or Update subscriptions for products you are using.\n" % self.warn_count))
         else:
             self.sumlabel.set_label(_("Add or Update subscriptions for products you are using."))
 
@@ -164,8 +173,6 @@ class AddSubscriptionScreen:
                 except:
                     # Subscription failed, continue with rest
                     continue
-        #self.finish()
-        
 
     def populateAvailableList(self):
         consumer = managerlib.check_registration()
