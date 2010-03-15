@@ -62,6 +62,7 @@ def getConsumedProductEntitlements():
 
 def getProductDescription(qproduct):
     products = ProductDirectory().list()
+    data = ""
     for product in products:
         if qproduct == product.getProduct().getName():
             data = product.__str__()

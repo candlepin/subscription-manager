@@ -83,9 +83,11 @@ class ManageSubscriptionPage:
 
     def populateProductDialog(self):
         self.productList = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.productList
         self.warn_count = 0
         for product in managerlib.getInstalledProductStatus():
-            self.productList.append(product)
+            self.productList.append((product[0], product[1], product[2]))
+            #self.productList.append(product)
             if product[1] in ["Expired", "Not Subscribed"]:
                 self.warn_count += 1
         self.tv_products =  self.subsxml.get_widget("treeview_updates")
@@ -93,7 +95,7 @@ class ManageSubscriptionPage:
 
         self.tv_products.set_rules_hint(True)
 
-        col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), text=0)
+        col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), markup=0, text=0)
         col.set_sort_column_id(0)
         col.set_sort_order(gtk.SORT_ASCENDING)
         self.tv_products.append_column(col)
@@ -138,8 +140,9 @@ class AddSubscriptionScreen:
     def __init__(self):
         self.selected = {}
         self.addxml = gtk.glade.XML(gladexml, "add_dialog", domain="subscription-manager")
+        #self.addxml = gtk.glade.XML(gladexml, "dialog1_add", domain="subscription-manager")
         self.add_vbox = \
-                        self.addxml.get_widget("add-dialog-vbox2")
+                        self.addxml.get_widget("add-dialog-vbox1")
         self.populateAvailableList()
 
         dic = { "on_close_clicked" : self.cancel,
@@ -148,8 +151,9 @@ class AddSubscriptionScreen:
             }
         self.addxml.signal_autoconnect(dic)
         self.addWin = self.addxml.get_widget("add_dialog")
+        #self.addWin = self.addxml.get_widget("dialog1_add")
         self.addWin.connect("hide", self.cancel)
-
+        #self.addWin.set_decorated(0) 
         self.addWin.show_all()
 
     def finish(self):
@@ -179,6 +183,7 @@ class AddSubscriptionScreen:
         for product in managerlib.getAvailableEntitlements(UEP, consumer):
             self.availableList.append(None, [False] + product.values())
         self.tv_products =  self.addxml.get_widget("treeview_available")
+        #self.tv_products =  self.addxml.get_widget("treeview_available1")
         self.tv_products.set_model(self.availableList)
 
 
