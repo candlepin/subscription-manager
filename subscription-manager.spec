@@ -110,6 +110,11 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Mon Mar 15 2010 Pradeep Kilambi <pkilambi@redhat.com>
+- Resolves:  #568426
+- More changes to api proxy
+- new gui screens 
+
 * Thu Mar 11 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.16-1
 - Resolves:  #568426 
 - more updates to connection.py api flush down
