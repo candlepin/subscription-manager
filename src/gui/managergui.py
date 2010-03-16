@@ -43,6 +43,16 @@ gladexml = "/usr/share/rhsm/gui/data/standaloneH.glade"
 UEP = connection.UEPConnection()
 ENT_CONFIG_DIR="/etc/pki/entitlement/product/"
 
+
+def get_consumer():
+    if not os.access("/etc/pki/consumer/cert.uuid", os.F_OK):
+        needToRegister = \
+            _("Error: You need to register this system by running " \
+            "`register` command before using this option.")
+        print needToRegister
+        return None
+    return open("/etc/pki/consumer/cert.uuid").read()
+
 class ManageSubscriptionPage:
     """
      Main subscription Manager Window
@@ -67,8 +77,11 @@ class ManageSubscriptionPage:
         self.mainWin.show_all()
 
     def loadAccountSettings(self, button):
-        login_page = LoginPage()
-        login_page.loginPagePrepare()
+        consumer = get_consumer()
+        if consumer:
+            RegistrationTokenScreen()
+        else:
+            RegisterScreen() 
         return True
 
     def reviewSubscriptionPagePrepare(self):
@@ -133,6 +146,108 @@ class ManageSubscriptionPage:
     def onUnsubscribeAction(self, button):
         pass
 
+class RegisterScreen:
+    """
+      Registration Widget Screen
+    """
+    def __init__(self):
+        self.registerxml = gtk.glade.XML(gladexml, "register_dialog", domain="subscription-manager")
+        dic = { "on_close_clicked" : self.cancel,
+                "on_register_button_clicked" : self.onRegisterAction, 
+            }
+        self.registerxml.signal_autoconnect(dic)
+        self.registerWin = self.registerxml.get_widget("register_dialog")
+        self.registerWin.connect("hide", self.cancel)
+        self.registerWin.show_all()
+
+    def cancel(self, button):
+        self.registerWin.hide()
+
+    def onRegisterAction(self, button):
+        self.uname = self.registerxml.get_widget("account_login")
+        self.passwd = self.registerxml.get_widget("account_password")
+
+        global username, password
+        username = self.uname.get_text()
+        password = self.passwd.get_text()
+
+        # validate / check user name
+        if self.uname.get_text().strip() == "":
+            setArrowCursor()
+            errorWindow(_("You must enter a login."))
+            self.uname.grab_focus()
+
+        if self.passwd.get_text().strip() == "":
+            setArrowCursor()
+            errorWindow(_("You must enter a password."))
+            self.passwd.grab_focus()
+        newAccount = UEP.registerConsumer(username, password, self._get_register_info())
+        self._write_consumer_cert(newAccount)
+        self.registerWin.hide()
+
+    def _get_register_info(self):
+        stype = {'label':'system'}
+        product = {"id":"1","label":"RHEL AP","name":"rhel"}
+        facts = hwprobe.Hardware().getAll()
+        entrys = []
+        for fact_key in facts.keys():
+            entry_facts = {}
+            entry_facts['key'] = fact_key
+            entry_facts['value'] = facts[fact_key]
+            entrys.append(entry_facts)
+
+        params = {
+                "type":stype,
+                "name":'admin',
+                "facts":{'metadata': 
+                             {"entry":entrys}
+                        }
+                 }
+        return params
+
+    def _write_consumer_cert(self, consumerinfo):
+        if not os.path.isdir("/etc/pki/consumer/"):
+            os.mkdir("/etc/pki/consumer/")
+        consumerid = ConsumerIdentity(consumerinfo['idCert']['key'], \
+                                      consumerinfo['idCert']['pem'])
+        consumerid.write()
+        f = open("/etc/pki/consumer/cert.uuid", "w")
+        f.write(consumerinfo['uuid'])
+        f.close()
+
+class RegistrationTokenScreen:
+    """
+     This screen handles reregistration and registration token activation
+    """
+    def __init__(self):
+        self.regtokenxml = gtk.glade.XML(gladexml, "register_token_dialog", domain="subscription-manager")
+        dic = { "on_close_clicked" : self.finish, 
+                "on_change_account_button" : self.reRegisterAction,
+                "on_submit_button_clicked" : self.submitToken, }
+        self.setAccountMsg()
+        self.regtokenxml.signal_autoconnect(dic)
+        self.regtokenWin = self.regtokenxml.get_widget("register_token_dialog")
+        self.regtokenWin.connect("hide", self.finish)
+        self.regtokenWin.show_all()
+
+    def finish(self, button=None):
+        self.regtokenWin.hide()
+
+    def reRegisterAction(self, button):
+        RegisterScreen()
+        self.regtokenWin.hide()
+
+    def setAccountMsg(self):
+        euser = "admin" #TODO:get this from identity cert
+        alabel = self.regtokenxml.get_widget("account_label")
+        alabel.set_label(_("This system is registered with the account <b>%s</b>" % euser))
+
+    def submitToken(self, button):
+        rlabel = self.regtokenxml.get_widget("regtoken_entry")
+        reg_token = rlabel.get_text()
+        consumer = get_consumer()
+        UEP.bindByRegNumber(consumer, reg_token)
+
 class AddSubscriptionScreen:
     """
      Add subscriptions Widget screen
@@ -168,7 +283,7 @@ class AddSubscriptionScreen:
 
     def onSubscribeAction(self, button):
         slabel = self.addxml.get_widget("label_status")
-        consumer = managerlib.check_registration()
+        consumer = get_consumer()
         subscribed_count = 0
         for product, state in self.selected.items():
             if state:
@@ -185,7 +300,7 @@ class AddSubscriptionScreen:
             slabel.set_label(_("<i><b>Please select atleast one subscription to apply</b></i>"))
 
     def populateAvailableList(self):
-        consumer = managerlib.check_registration()
+        consumer = get_consumer()
         self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         for product in managerlib.getAvailableEntitlements(UEP, consumer):
             self.availableList.append(None, [False] + product.values())
@@ -249,7 +364,7 @@ class UpdateSubscriptionScreen:
         ImportCertificate()
 
     def populateUpdatesDialog(self):
-        consumer = managerlib.check_registration()
+        consumer = get_consumer()
         self.updatesList = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         for product in managerlib.getAvailableEntitlements(UEP, consumer):
             self.updatesList.append(product.values())

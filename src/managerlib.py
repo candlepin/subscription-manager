@@ -19,6 +19,8 @@ import os
 import sys
 from certlib import CertLib, ConsumerIdentity, \
                     ProductDirectory, EntitlementDirectory
+import gettext
+_ = gettext.gettext
 
 def check_registration():
     if not os.access("/etc/pki/consumer/cert.uuid", os.F_OK):
