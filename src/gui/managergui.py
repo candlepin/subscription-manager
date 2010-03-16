@@ -139,8 +139,8 @@ class AddSubscriptionScreen:
     """
     def __init__(self):
         self.selected = {}
-        self.addxml = gtk.glade.XML(gladexml, "add_dialog", domain="subscription-manager")
-        #self.addxml = gtk.glade.XML(gladexml, "dialog1_add", domain="subscription-manager")
+        #self.addxml = gtk.glade.XML(gladexml, "add_dialog", domain="subscription-manager")
+        self.addxml = gtk.glade.XML(gladexml, "dialog1_add", domain="subscription-manager")
         self.add_vbox = \
                         self.addxml.get_widget("add-dialog-vbox1")
         self.populateAvailableList()
@@ -150,8 +150,8 @@ class AddSubscriptionScreen:
                 "on_add_subscribe_button_clicked"   : self.onSubscribeAction,
             }
         self.addxml.signal_autoconnect(dic)
-        self.addWin = self.addxml.get_widget("add_dialog")
-        #self.addWin = self.addxml.get_widget("dialog1_add")
+        #self.addWin = self.addxml.get_widget("add_dialog")
+        self.addWin = self.addxml.get_widget("dialog1_add")
         self.addWin.connect("hide", self.cancel)
         #self.addWin.set_decorated(0) 
         self.addWin.show_all()
@@ -182,8 +182,8 @@ class AddSubscriptionScreen:
         self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         for product in managerlib.getAvailableEntitlements(UEP, consumer):
             self.availableList.append(None, [False] + product.values())
-        self.tv_products =  self.addxml.get_widget("treeview_available")
-        #self.tv_products =  self.addxml.get_widget("treeview_available1")
+        #self.tv_products =  self.addxml.get_widget("treeview_available")
+        self.tv_products =  self.addxml.get_widget("treeview_available1")
         self.tv_products.set_model(self.availableList)
 
 
@@ -223,12 +223,14 @@ class AddSubscriptionScreen:
 
 class UpdateSubscriptionScreen:
     def __init__(self):
-        self.updatexml = gtk.glade.XML(gladexml, "update_dialog", domain="subscription-manager")
+        #self.updatexml = gtk.glade.XML(gladexml, "update_dialog", domain="subscription-manager")
+        self.updatexml = gtk.glade.XML(gladexml, "dialog1_updates", domain="subscription-manager")
         dic = { "on_close_clicked" : self.cancel,
                 "on_import_cert_button_clicked" : self.onImportPrepare,
             }
         self.updatexml.signal_autoconnect(dic)
-        self.updateWin = self.updatexml.get_widget("update_dialog")
+        #self.updateWin = self.updatexml.get_widget("update_dialog")
+        self.updateWin = self.updatexml.get_widget("dialog1_updates")
         self.updateWin.connect("hide", self.cancel)
         self.updateWin.show_all()
 
@@ -244,7 +246,7 @@ class UpdateSubscriptionScreen:
         self.updatesList = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         for product in managerlib.getAvailableEntitlements(UEP, consumer):
             self.updatesList.append(product.values())
-        self.tv_products =  self.updatexml.get_widget("treeview_updates")
+        self.tv_products =  self.updatexml.get_widget("treeview_updates2")
         self.tv_products.set_model(self.updatesList)
 
 class ImportCertificate:
@@ -252,7 +254,8 @@ class ImportCertificate:
      Import an Entitlement Certificate Widget screen
     """
     def __init__(self):
-        self.importxml = gtk.glade.XML(gladexml, "import_dialog", domain="subscription-manager")
+        #self.importxml = gtk.glade.XML(gladexml, "import_dialog", domain="subscription-manager")
+        self.importxml = gtk.glade.XML(gladexml, "dialog1_import", domain="subscription-manager")
         self.add_vbox = \
                         self.importxml.get_widget("import_vbox")
 
@@ -260,9 +263,10 @@ class ImportCertificate:
                 "on_import_cert_button2_clicked" : self.importCertificate,
             }
         self.importxml.signal_autoconnect(dic)
-        self.importWin = self.importxml.get_widget("import_dialog")
+        #self.importWin = self.importxml.get_widget("import_dialog")
+        self.importWin = self.importxml.get_widget("dialog1_import")
         self.importWin.connect("hide", self.cancel)
-
+        #self.importWin.set_has_frame(True)
         self.importWin.show_all()
 
     def cancel(self, button=None):
@@ -281,7 +285,7 @@ class ImportCertificate:
         dest_file_path = os.path.join(ENT_CONFIG_DIR, os.path.basename(src_cert_file))
         if not os.path.exists(dest_file_path):
             shutil.copy(src_cert_file, dest_file_path)
-
+        print dest_file_path
         self.importWin.hide()
 
 def unexpectedError(message, exc_info=None):
