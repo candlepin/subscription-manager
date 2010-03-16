@@ -982,20 +982,13 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
     </child>
   </widget>
   <widget class="GtkDialog" id="dialog1_add">
-    <property name="title" translatable="yes">Add Subscriptions</property>
     <property name="width_request">480</property>
     <property name="height_request">400</property>
-    <property name="type">GTK_WINDOW_TOPLEVEL</property>
     <property name="border_width">5</property>
+    <property name="title" translatable="yes">Add Subscriptions</property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
     <property name="type_hint">dialog</property>
-    <property name="destroy_with_parent">False</property>
-    <property name="skip_taskbar_hint">False</property>
-    <property name="skip_pager_hint">False</property>
-    <property name="focus_on_map">True</property>
-    <property name="urgency_hint">False</property>
-
     <property name="has_separator">False</property>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox4">
@@ -1052,7 +1045,15 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <widget class="GtkLabel" id="label_status">
+                    <property name="visible">True</property>
+                    <property name="use_markup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">2</property>
+                  </packing>
                 </child>
               </widget>
               <packing>
@@ -1125,8 +1126,8 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
     </child>
   </widget>
   <widget class="GtkDialog" id="dialog1_import">
-    <property name="title" translatable="yes">Provide a Subscription Certificate</property>
     <property name="border_width">5</property>
+    <property name="title" translatable="yes">Provide a Subscription Certificate</property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>
@@ -1263,8 +1264,8 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
     </child>
   </widget>
   <widget class="GtkDialog" id="dialog1_updates">
-    <property name="title" translatable="yes">Update Subscriptions</property>
     <property name="border_width">5</property>
+    <property name="title" translatable="yes">Update Subscriptions</property>
     <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>

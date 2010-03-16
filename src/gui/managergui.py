@@ -167,15 +167,22 @@ class AddSubscriptionScreen:
         ImportCertificate()
 
     def onSubscribeAction(self, button):
+        slabel = self.addxml.get_widget("label_status")
         consumer = managerlib.check_registration()
+        subscribed_count = 0
         for product, state in self.selected.items():
             if state:
                 try:
                     print "Binding: ", product
                     print UEP.bindByProduct(consumer, product)
+                    subscribed_count+=1
                 except:
                     # Subscription failed, continue with rest
                     continue
+        if len(self.selected.items()):
+            slabel.set_label(_("<i><b>Successfully consumed %s subscription(s)</b></i>" % subscribed_count))
+        else:
+            slabel.set_label(_("<i><b>Please select atleast one subscription to apply</b></i>"))
 
     def populateAvailableList(self):
         consumer = managerlib.check_registration()
