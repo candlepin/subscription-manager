@@ -67,16 +67,18 @@ class Certificate(object):
         @return: The x.509 serial number
         @rtype: str
         """
-        return self.x509.get_serial_number()
+        return str(self.x509.get_serial_number())
     
     def subject(self):
         """
         Get the certificate subject.
+        note: Missing NID mapping for UID added to patch openssl.
         @return: A dictionary of subject fields.
         @rtype: dict
         """
         d = {}
         subject = self.x509.get_subject()
+        subject.nid['UID'] = 458
         for key, nid in subject.nid.items():
             entry = subject.get_entries_by_nid(nid)
             if len(entry):
@@ -628,6 +630,9 @@ class Entitlement:
     def getGpg(self):
         return self.ext.get('7')
     
+    def getEnabled(self):
+        return self.ext.get('10')
+
     def __eq__(self, rhs):
         return ( self.getName() == rhs.getName() )
     
@@ -641,6 +646,7 @@ class Entitlement:
         s.append('\tVendor ...... = %s' % self.getVendor())
         s.append('\tURL ......... = %s' % self.getUrl())
         s.append('\tGPG URL ..... = %s' % self.getGpg())
+        s.append('\tEnabled ..... = %s' % self.getEnabled())
         s.append('}')
         return '\n'.join(s)
 

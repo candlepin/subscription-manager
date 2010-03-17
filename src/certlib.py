@@ -163,16 +163,22 @@ class UEP(UEPConnection):
         uuid = self.consumerId()
         if uuid is None:
             return ()
-        expected = []
+        result = []
         for sn in UEPConnection.getCertificateSerials(self, uuid):
-            expected.append(int(sn))
-        return expected
+            sn = sn['serial']
+            sn = sn['serial']
+            result.append(sn)
+        return result
 
     def getCertificatesBySerial(self, snList):
         uuid = self.consumerId()
         if uuid is None:
             return ()
-        return UEPConnection.getCertificatesBySerial(self, uuid, snList)
+        result = []
+        for crt in UEPConnection.getCertificatesBySerial(self, uuid, snList):
+            crt = crt['cert']
+            result.append(crt)
+        return result
         
     def consumerId(self):
         try:
@@ -339,12 +345,20 @@ class ConsumerIdentity:
     def __init__(self, keystring, certstring):
         self.key = keystring
         self.cert = certstring
+        self.x509 = Certificate(certstring)
         
-    def getConsumerId(self):
-        cert = Certificate(self.cert)
-        subject = cert.subject()
+    def getCustomerName(self):
+        subject = self.x509.subject()
         return subject.get('CN')
         
+    def getUser(self):
+        subject = self.x509.subject()
+        return subject.get('OU')
+
+    def getConsumerId(self):
+        subject = self.x509.subject()
+        return subject.get('UID')
+
     def write(self):
         self.__mkdir()
         f = open(self.keypath(), 'w')
@@ -365,6 +379,12 @@ class ConsumerIdentity:
     def __mkdir(self):
         if not os.path.exists(self.LOCATION):
             os.mkdir(path)
+
+    def __str__(self):
+        return 'customer: "%s", user: "%s", consumer (uuid): %s' % \
+            (self.getCustomerName(),
+             self.getUser(),
+             self.getConsumerId())
 
 
 def main():
