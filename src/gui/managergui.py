@@ -53,7 +53,6 @@ def get_consumer():
         needToRegister = \
             _("Error: You need to register this system by running " \
             "`register` command before using this option.")
-        print needToRegister
         return None
     return open("/etc/pki/consumer/cert.uuid").read()
 
@@ -133,8 +132,8 @@ class ManageSubscriptionPage:
 
     def on_selection(self, selection):
         items,iter = selection.get_selected()
-        pname_selected = items.get_value(iter,0)
-        desc = managerlib.getProductDescription(pname_selected)
+        self.pname_selected = items.get_value(iter,0)
+        desc = managerlib.getProductDescription(self.pname_selected)
         pdetails = self.subsxml.get_widget("textview_details")
         pdetails.get_buffer().set_text(desc)
         pdetails.set_cursor_visible(False)
@@ -148,7 +147,7 @@ class ManageSubscriptionPage:
             self.sumlabel.set_label(_("Add or Update subscriptions for products you are using."))
 
     def onUnsubscribeAction(self, button):
-        pass
+        print self.pname_selected
 
 class RegisterScreen:
     """
@@ -290,11 +289,13 @@ class AddSubscriptionScreen:
         slabel = self.addxml.get_widget("label_status")
         consumer = get_consumer()
         subscribed_count = 0
+        my_model = self.tv_products.get_model()
         for product, state in self.selected.items():
-            if state:
+            if state[0]:
                 try:
-                    print "Binding: ", product
-                    print UEP.bindByProduct(consumer, product)
+                    entitled_data = UEP.bindByProduct(consumer, product)['entitlement']['pool']
+                    updated_count = str(int(entitled_data['quantity']) - int(entitled_data['consumed']))
+                    my_model.set_value(state[-1], 3, updated_count)
                     subscribed_count+=1
                 except:
                     # Subscription failed, continue with rest
@@ -305,14 +306,13 @@ class AddSubscriptionScreen:
             slabel.set_label(_("<i><b>Please select atleast one subscription to apply</b></i>"))
 
     def populateAvailableList(self):
-        consumer = get_consumer()
+        self.consumer = get_consumer()
         self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
-        for product in managerlib.getAvailableEntitlements(UEP, consumer):
+        for product in managerlib.getAvailableEntitlements(UEP, self.consumer):
             self.availableList.append(None, [False] + product.values())
         #self.tv_products =  self.addxml.get_widget("treeview_available")
         self.tv_products =  self.addxml.get_widget("treeview_available1")
         self.tv_products.set_model(self.availableList)
-
 
         cell = gtk.CellRendererToggle()
         cell.set_property('activatable', True)
@@ -342,7 +342,8 @@ class AddSubscriptionScreen:
         items, iter = self.tv_products.get_selection().get_selected()
         model[path][0] = not model[path][0]
         print "Toggle '%s' to: %s" % (model[path][1], model[path][0])
-        self.selected[model.get_value(iter, 1)] = model.get_value(iter, 0)
+        self.model = model
+        self.selected[model.get_value(iter, 1)] = (model.get_value(iter, 0), iter)
 
     def _cell_data_toggle_func(self, tree_column, renderer, model, treeiter):
         renderer.set_property('visible', True)
