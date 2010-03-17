@@ -104,7 +104,7 @@ class UEPConnection:
 
     def registerConsumer(self, username, password, info={}):
         self.__authenticate(username, password)
-        return self.conn.request_post('/consumers/', info)
+        return self.conn.request_post('/consumers/', info)["consumer"]
 
     def unregisterConsumer(self, username, password, consumerId):
         self.__authenticate(username, password)
@@ -120,7 +120,7 @@ class UEPConnection:
         method = '/consumers/%s/certificates' % consumerId
         return self.conn.request_get(method)
 
-    def SyncCertificatesBySerial(self, consumerId, serialNumbers):
+    def getCertificatesBySerial(self, consumerId, serialNumbers):
         """
         Sync certificates for a given set of serial numbers
         @param consumerId: consumer uuid
@@ -135,7 +135,7 @@ class UEPConnection:
         """
         Get serial numbers for certs for a given consumer
         @param consumerId: consumer uuid
-        @return: A set of serial numbers
+        @return: A hash of serial numbers eg: {'serial': {'serial': 'SERIAL001'}}
         """
         method = '/consumers/%s/certificates/serials' % consumerId
         return self.conn.request_get(method)
@@ -191,10 +191,12 @@ if __name__ == '__main__':
                          {"key":"cores", "value":4}]
                 }
             }
-    params = {
+        
+    params = {"consumer" : {
         "type":stype,
         "name":'admin',
         "facts":facts,
+        }
     }
     try:
         consumer = uep.registerConsumer('admin', 'password', info=params)
@@ -202,19 +204,19 @@ if __name__ == '__main__':
         # sync certs
         #print "Initiate cert synchronization for uuid"
         print uep.syncCertificates(consumer['uuid']) 
-        print uep.getCertificateSerials(consumer['uuid'])
-        print uep.SyncCertificatesBySerial(consumer['uuid'], ['SERIAL001','SERIAL001'])
+        print "ZZZZZZZZZZZ",uep.getCertificateSerials(consumer['uuid'])
+        print uep.getCertificatesBySerial(consumer['uuid'], ['SERIAL001','SERIAL001'])
         # bind consumer to regNumber
         #uep.bindByRegNumber(consumer['uuid'],"1234-5334-4e23-2432-4345") 
         # bind consumer by poolId
         #uep.bindByEntitlementPool(consumer['uuid'], "1001")
         # bind consumer By Product
-        print uep.bindByProduct(consumer['uuid'], "monitoring") #product["label"])
+        print "bind by product", uep.bindByProduct(consumer['uuid'], "monitoring") #product["label"])
         # Unbind All
         #print uep.unbindAll(consumer['uuid'])
         # Unbind serialNumbers
         #uep.unBindBySerialNumbers(consumer['uuid'], ['SERIAL001','SERIAL001'])
-        print uep.getPoolsList(consumer['uuid'])
+        print "Pools List",uep.getPoolsList(consumer['uuid'])
         # lookup Entitlement Info by PoolId
         #print uep.getEntitlementById("4")
         print "print get Ent list", uep.getEntitlementList(consumer['uuid'])

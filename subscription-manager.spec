@@ -110,6 +110,9 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Wed Mar 17 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.17-1
+- Resolves:  #568427 - New registration/regtoken/add subscriptions screens
+
 * Mon Mar 15 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.17-1
 - Resolves:  #568426
 - More changes to api proxy

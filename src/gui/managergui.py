@@ -32,6 +32,7 @@ import messageWindow
 import hwprobe
 import managerlib
 import connection
+import config
 
 from certlib import EntitlementDirectory, ProductDirectory, ConsumerIdentity
 import gettext
@@ -40,7 +41,10 @@ gettext.textdomain("subscription-manager")
 gtk.glade.bindtextdomain("subscription-manager")
 
 gladexml = "/usr/share/rhsm/gui/data/standaloneH.glade"
-UEP = connection.UEPConnection()
+
+cfg = config.initConfig()
+
+UEP = connection.UEPConnection(cfg['hostname'] or 'localhost')
 ENT_CONFIG_DIR="/etc/pki/entitlement/product/"
 
 
@@ -196,13 +200,14 @@ class RegisterScreen:
             entry_facts['value'] = facts[fact_key]
             entrys.append(entry_facts)
 
-        params = {
+        params = { "consumer" : {
                 "type":stype,
                 "name":'admin',
                 "facts":{'metadata': 
                              {"entry":entrys}
                         }
                  }
+              }
         return params
 
     def _write_consumer_cert(self, consumerinfo):

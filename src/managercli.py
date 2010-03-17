@@ -97,13 +97,14 @@ class RegisterCommand(CliCommand):
             entry_facts['value'] = facts[fact_key]
             entrys.append(entry_facts)
 
-        params = {
+        params = { "consumer" :{
                 "type":stype,
                 "name":'admin',
                 "facts":{'metadata': 
                              {"entry":entrys}
                         }
                  }
+            }
         return params
 
     def _write_consumer_cert(self, consumerinfo):
