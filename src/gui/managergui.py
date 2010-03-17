@@ -64,6 +64,7 @@ class ManageSubscriptionPage:
         self.subsxml = gtk.glade.XML(gladexml, "dialog_updates", domain="subscription-manager")
         self.vbox = \
                         self.subsxml.get_widget("dialog-vbox1")
+        self.pname_selected = None
         self.populateProductDialog()
         self.updateMessage()
         dic = { "on_button_close_clicked" : gtk.main_quit,
@@ -95,11 +96,10 @@ class ManageSubscriptionPage:
         AddSubscriptionScreen()
 
     def updateSubButtonAction(self, button):
-        UpdateSubscriptionScreen()
+        UpdateSubscriptionScreen(self.pname_selected)
 
     def populateProductDialog(self):
         self.productList = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
-        self.productList
         self.warn_count = 0
         for product in managerlib.getInstalledProductStatus():
             self.productList.append((product[0], product[1], product[2]))
@@ -148,6 +148,11 @@ class ManageSubscriptionPage:
 
     def onUnsubscribeAction(self, button):
         print self.pname_selected
+        #try:
+        #    UEP.unbindByProduct(self.consumer, self.pname_selected)
+        #except:
+        #    # be gentle for now
+        #    pass
 
 class RegisterScreen:
     """
@@ -291,6 +296,7 @@ class AddSubscriptionScreen:
         subscribed_count = 0
         my_model = self.tv_products.get_model()
         for product, state in self.selected.items():
+            # state = (bool, iter)
             if state[0]:
                 try:
                     entitled_data = UEP.bindByProduct(consumer, product)['entitlement']['pool']
@@ -350,9 +356,12 @@ class AddSubscriptionScreen:
 
 
 class UpdateSubscriptionScreen:
-    def __init__(self):
+    def __init__(self, product_selection):
         #self.updatexml = gtk.glade.XML(gladexml, "update_dialog", domain="subscription-manager")
         self.updatexml = gtk.glade.XML(gladexml, "dialog1_updates", domain="subscription-manager")
+        self.product_select = product_selection
+        self.setHeadMsg()
+        self.populateUpdatesDialog()
         dic = { "on_close_clicked" : self.cancel,
                 "on_import_cert_button_clicked" : self.onImportPrepare,
             }
@@ -369,11 +378,17 @@ class UpdateSubscriptionScreen:
         self.updateWin.hide()
         ImportCertificate()
 
+    def setHeadMsg(self):
+        hlabel = self.updatexml.get_widget("update-label2")
+        hlabel.set_label(_("<b>Available Subscriptions for %s:</b>") % self.product_select)
+
     def populateUpdatesDialog(self):
         consumer = get_consumer()
         self.updatesList = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         for product in managerlib.getAvailableEntitlements(UEP, consumer):
-            self.updatesList.append(product.values())
+            if self.product_select in product.values():
+                # Only list selected product's pools
+                self.updatesList.append(product.values())
         self.tv_products =  self.updatexml.get_widget("treeview_updates2")
         self.tv_products.set_model(self.updatesList)
 
