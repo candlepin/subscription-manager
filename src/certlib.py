@@ -52,6 +52,15 @@ class CertLib:
         finally:
             lock.release()
 
+    def delete(self, *serialNumbers):
+        lock = ActionLock()
+        try:
+            lock.acquire()
+            delete = DeleteAction()
+            return delete.perform(serialNumbers)
+        finally:
+            lock.release()
+
 
 class ActionLock(Lock):
 
@@ -73,6 +82,17 @@ class AddAction(Action):
         writer = Writer()
         for b in bundles:
             writer.write(b)
+        return self
+
+
+class DeleteAction(Action):
+
+    def perform(self, *serialNumbers):
+        for sn in serialNumbers:
+            crt = self.entdir.find(sn)
+            if crt is None:
+                continue
+            os.remove(crt.path)
         return self
 
 
@@ -164,18 +184,17 @@ class UEP(UEPConnection):
         if uuid is None:
             return ()
         result = []
-        for sn in UEPConnection.getCertificateSerials(self, uuid):
-            sn = sn['serial']
-            sn = sn['serial']
-            result.append(sn)
-        return result
+        reply = UEPConnection.getCertificateSerials(self, uuid)
+        reply = reply['serials']
+        return reply['serial']
 
     def getCertificatesBySerial(self, snList):
         uuid = self.consumerId()
         if uuid is None:
             return ()
         result = []
-        for crt in UEPConnection.getCertificatesBySerial(self, uuid, snList):
+        reply = UEPConnection.getCertificatesBySerial(self, uuid, snList)
+        for crt in reply:
             crt = crt['cert']
             result.append(crt)
         return result
@@ -258,6 +277,12 @@ class EntitlementDirectory(Directory):
             all.append(crt)
         return all
     
+    def find(self, sn):
+        for c in self.list():
+            if c.serialNumber() == sn:
+                return c
+        return None
+
     def listValid(self):
         valid = []
         for c in self.list():
@@ -298,6 +323,12 @@ class ProductDirectory(Directory):
             all.append(crt)
         return all
     
+    def find(self, sn):
+        for c in self.list():
+            if c.serialNumber() == sn:
+                return c
+        return None
+
     def listValid(self):
         valid = []
         for c in self.list():
