@@ -96,7 +96,8 @@ class ManageSubscriptionPage:
         AddSubscriptionScreen()
 
     def updateSubButtonAction(self, button):
-        UpdateSubscriptionScreen(self.pname_selected)
+        if self.pname_selected:
+            UpdateSubscriptionScreen(self.pname_selected)
 
     def populateProductDialog(self):
         self.productList = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
@@ -114,16 +115,19 @@ class ManageSubscriptionPage:
         col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), markup=0, text=0)
         col.set_sort_column_id(0)
         col.set_sort_order(gtk.SORT_ASCENDING)
+        col.set_expand(True)
         self.tv_products.append_column(col)
 
         col = gtk.TreeViewColumn(_("Subscription Status"), gtk.CellRendererText(), text=1)
         col.set_sort_column_id(1)
         col.set_sort_order(gtk.SORT_ASCENDING)
+        col.set_expand(True)
         self.tv_products.append_column(col)
 
         col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=2)
         col.set_sort_column_id(2)
         col.set_sort_order(gtk.SORT_ASCENDING)
+        col.set_expand(True)
         self.tv_products.append_column(col)
 
         self.productList.set_sort_column_id(0, gtk.SORT_ASCENDING)
