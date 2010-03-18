@@ -112,7 +112,7 @@ class ManageSubscriptionPage:
             self.productList.append((self.status_icon, product[0], product[1], product[2]))
         self.tv_products.set_model(self.productList)
 
-        self.tv_products.set_rules_hint(True)
+        #self.tv_products.set_rules_hint(True)
 
         col = gtk.TreeViewColumn('')
         col.set_spacing(6)
@@ -127,22 +127,19 @@ class ManageSubscriptionPage:
         col.set_sort_column_id(1)
         col.set_spacing(6)
         cell.set_fixed_size(-1, 35)
-        col.set_expand(True)
         self.tv_products.append_column(col)
 
         col = gtk.TreeViewColumn(_("Subscription Status"), gtk.CellRendererText(), text=2)
         col.set_sort_column_id(2)
         col.set_spacing(6)
-        col.set_expand(True)
         self.tv_products.append_column(col)
 
         col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=3)
         col.set_sort_column_id(3)
         col.set_spacing(6)
-        col.set_expand(True)
         self.tv_products.append_column(col)
 
-        self.productList.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        #self.productList.set_sort_column_id(1, gtk.SORT_ASCENDING)
         self.selection = self.tv_products.get_selection()
         self.selection.connect('changed', self.on_selection)
 
