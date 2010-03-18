@@ -100,43 +100,56 @@ class ManageSubscriptionPage:
             UpdateSubscriptionScreen(self.pname_selected)
 
     def populateProductDialog(self):
-        self.productList = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.tv_products =  self.subsxml.get_widget("treeview_updates")
+        self.productList = gtk.ListStore(gtk.gdk.Pixbuf, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.warn_count = 0
         for product in managerlib.getInstalledProductStatus():
-            self.productList.append((product[0], product[1], product[2]))
-            #self.productList.append(product)
             if product[1] in ["Expired", "Not Subscribed"]:
                 self.warn_count += 1
-        self.tv_products =  self.subsxml.get_widget("treeview_updates")
+                self.status_icon = self.tv_products.render_icon(gtk.STOCK_DIALOG_QUESTION, size=gtk.ICON_SIZE_MENU)
+            else:
+                self.status_icon = self.tv_products.render_icon(gtk.STOCK_APPLY, size=gtk.ICON_SIZE_MENU)
+            self.productList.append((self.status_icon, product[0], product[1], product[2]))
         self.tv_products.set_model(self.productList)
 
         self.tv_products.set_rules_hint(True)
 
-        col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), markup=0, text=0)
-        col.set_sort_column_id(0)
-        col.set_sort_order(gtk.SORT_ASCENDING)
-        col.set_expand(True)
+        col = gtk.TreeViewColumn('')
+        col.set_spacing(6)
+        cell = gtk.CellRendererPixbuf()
+        col.pack_start(cell, False)
+        col.set_attributes(cell, pixbuf=0)
+        #col.set_sort_column_id(0)
+        #col.set_sort_order(gtk.SORT_ASCENDING)
+        #col.set_expand(True)
         self.tv_products.append_column(col)
 
-        col = gtk.TreeViewColumn(_("Subscription Status"), gtk.CellRendererText(), text=1)
+        cell = gtk.CellRendererText()
+        col = gtk.TreeViewColumn(_("Product"), cell, text=1)
         col.set_sort_column_id(1)
         col.set_sort_order(gtk.SORT_ASCENDING)
         col.set_expand(True)
         self.tv_products.append_column(col)
 
-        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=2)
+        col = gtk.TreeViewColumn(_("Subscription Status"), gtk.CellRendererText(), text=2)
         col.set_sort_column_id(2)
         col.set_sort_order(gtk.SORT_ASCENDING)
         col.set_expand(True)
         self.tv_products.append_column(col)
 
-        self.productList.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=3)
+        col.set_sort_column_id(3)
+        col.set_sort_order(gtk.SORT_ASCENDING)
+        col.set_expand(True)
+        self.tv_products.append_column(col)
+
+        self.productList.set_sort_column_id(1, gtk.SORT_ASCENDING)
         self.selection = self.tv_products.get_selection()
         self.selection.connect('changed', self.on_selection)
 
     def on_selection(self, selection):
         items,iter = selection.get_selected()
-        self.pname_selected = items.get_value(iter,0)
+        self.pname_selected = items.get_value(iter,1)
         desc = managerlib.getProductDescription(self.pname_selected)
         pdetails = self.subsxml.get_widget("textview_details")
         pdetails.get_buffer().set_text(desc)
