@@ -100,15 +100,16 @@ class ManageSubscriptionPage:
             UpdateSubscriptionScreen(self.pname_selected)
 
     def populateProductDialog(self):
+        state_icon_map = {"Expired" : gtk.STOCK_DIALOG_WARNING,
+                          "Not Subscribed" : gtk.STOCK_DIALOG_QUESTION,
+                          "Subscribed" : gtk.STOCK_APPLY, }
         self.tv_products =  self.subsxml.get_widget("treeview_updates")
         self.productList = gtk.ListStore(gtk.gdk.Pixbuf, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.warn_count = 0
         for product in managerlib.getInstalledProductStatus():
             if product[1] in ["Expired", "Not Subscribed"]:
                 self.warn_count += 1
-                self.status_icon = self.tv_products.render_icon(gtk.STOCK_DIALOG_QUESTION, size=gtk.ICON_SIZE_MENU)
-            else:
-                self.status_icon = self.tv_products.render_icon(gtk.STOCK_APPLY, size=gtk.ICON_SIZE_MENU)
+            self.status_icon = self.tv_products.render_icon(state_icon_map[product[1]], size=gtk.ICON_SIZE_MENU)
             self.productList.append((self.status_icon, product[0], product[1], product[2]))
         self.tv_products.set_model(self.productList)
 
@@ -327,8 +328,11 @@ class AddSubscriptionScreen:
     def populateAvailableList(self):
         self.consumer = get_consumer()
         self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
-        for product in managerlib.getAvailableEntitlements(UEP, self.consumer):
-            self.availableList.append(None, [False] + product.values())
+        try:
+            for product in managerlib.getAvailableEntitlements(UEP, self.consumer):
+                self.availableList.append(None, [False] + product.values())
+        except:
+            pass
         #self.tv_products =  self.addxml.get_widget("treeview_available")
         self.tv_products =  self.addxml.get_widget("treeview_available1")
         self.tv_products.set_model(self.availableList)
@@ -398,10 +402,13 @@ class UpdateSubscriptionScreen:
     def populateUpdatesDialog(self):
         consumer = get_consumer()
         self.updatesList = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
-        for product in managerlib.getAvailableEntitlements(UEP, consumer):
-            if self.product_select in product.values():
-                # Only list selected product's pools
-                self.updatesList.append(product.values())
+        try:
+            for product in managerlib.getAvailableEntitlements(UEP, consumer):
+                if self.product_select in product.values():
+                    # Only list selected product's pools
+                    self.updatesList.append(product.values())
+        except:
+            pass
         self.tv_products =  self.updatexml.get_widget("treeview_updates2")
         self.tv_products.set_model(self.updatesList)
 
