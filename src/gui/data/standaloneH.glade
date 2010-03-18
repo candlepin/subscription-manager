@@ -6,7 +6,7 @@
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Subscription Manager</property>
     <property name="window_position">center</property>
-    <property name="default_width">600</property>
+    <property name="default_width">700</property>
     <property name="default_height">600</property>
     <child>
       <widget class="GtkVBox" id="dialog-vbox2">
@@ -53,7 +53,8 @@
           <widget class="GtkHPaned" id="product_details_hpane">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="position">500</property>
+            <property name="position">600</property>
+            <property name="position_set">True</property>
             <child>
               <widget class="GtkVPaned" id="vpaned_updates">
                 <property name="visible">True</property>
@@ -64,16 +65,18 @@
                   <widget class="GtkScrolledWindow" id="scrolledwindow_updates">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="vadjustment">0 0 78 7.8000000000000007 70.200000000000003 78</property>
+                    <property name="vadjustment">0 0 200 20 180 200</property>
                     <property name="hscrollbar_policy">automatic</property>
                     <property name="vscrollbar_policy">automatic</property>
                     <property name="shadow_type">in</property>
                     <child>
                       <widget class="GtkTreeView" id="treeview_updates">
+                        <property name="width_request">400</property>
+                        <property name="height_request">200</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="can_default">True</property>
-                        <property name="has_default">True</property>
+                        <property name="double_buffered">False</property>
+                        <property name="enable_search">False</property>
+                        <property name="show_expanders">False</property>
                       </widget>
                     </child>
                   </widget>
@@ -104,16 +107,17 @@
                 </child>
               </widget>
               <packing>
-                <property name="resize">True</property>
-                <property name="shrink">False</property>
+                <property name="resize">False</property>
+                <property name="shrink">True</property>
               </packing>
             </child>
             <child>
               <widget class="GtkHButtonBox" id="dialog-action_area2">
+                <property name="width_request">100</property>
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
                 <property name="orientation">vertical</property>
-                <property name="spacing">2</property>
+                <property name="spacing">3</property>
                 <property name="layout_style">center</property>
                 <child>
                   <widget class="GtkButton" id="button_add1">
@@ -169,7 +173,7 @@
                 </child>
               </widget>
               <packing>
-                <property name="resize">False</property>
+                <property name="resize">True</property>
                 <property name="shrink">True</property>
               </packing>
             </child>
