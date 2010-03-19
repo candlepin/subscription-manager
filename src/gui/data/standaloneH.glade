@@ -52,6 +52,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
+                        <property name="padding">5</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -743,6 +744,8 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
     </child>
   </widget>
   <widget class="GtkDialog" id="dialog1_updates">
+    <property name="width_request">480</property>
+    <property name="height_request">400</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Update Subscriptions</property>
     <property name="window_position">center</property>
@@ -800,7 +803,15 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <widget class="GtkLabel" id="label_status_update">
+                    <property name="visible">True</property>
+                    <property name="use_markup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">2</property>
+                  </packing>
                 </child>
               </widget>
               <packing>
@@ -817,27 +828,12 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
             <property name="visible">True</property>
             <property name="layout_style">end</property>
             <child>
-              <widget class="GtkButton" id="import_cert_button5">
-                <property name="label">Import Certificate..</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_import_cert_button_clicked"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-                <property name="secondary">True</property>
-              </packing>
-            </child>
-            <child>
               <widget class="GtkButton" id="update_subscribe_button1">
                 <property name="label">Apply</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_update_subscribe_button1_clicked"/>
+                <signal name="clicked" handler="on_update_subscribe_button_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -858,6 +854,23 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkButton" id="import_cert_button5">
+                <property name="label">Import Certificate..</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_import_cert_button_clicked"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="padding">423</property>
+                <property name="pack_type">end</property>
+                <property name="position">0</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
           </widget>
