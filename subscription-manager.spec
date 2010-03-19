@@ -81,7 +81,6 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/rhsm/gui/firstboot.py* 
 /usr/share/rhsm/gui/managergui.py*  
 /usr/share/rhsm/gui/messageWindow.py*  
-/usr/share/rhsm/gui/data/standalone.glade  
 /usr/share/rhsm/gui/data/standaloneH.glade  
 /usr/share/rhsm/gui/data/subsgui.glade  
 /usr/share/rhsm/gui/data/subsMgr.glade
@@ -111,7 +110,7 @@ fi
 
 %changelog
 * Fri Mar 19 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.18-1
-- Resolves:  #568427 
+- Resolves: #568427 
 - Changes to support dynamic icon changes
 - changes to support resteasy api changes
 - fixed alignment issues in mainWindow
