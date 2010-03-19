@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.17
+Version: 0.18
 Release: 1
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -110,7 +110,7 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Fri Mar 19 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.17-1
+* Fri Mar 19 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.18-1
 - Resolves:  #568427 
 - Changes to support dynamic icon changes
 - changes to support resteasy api changes
