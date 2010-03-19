@@ -92,7 +92,7 @@ class DeleteAction(Action):
             crt = self.entdir.find(sn)
             if crt is None:
                 continue
-            os.remove(crt.path)
+            crt.delete()
         return self
 
 
@@ -115,7 +115,7 @@ class UpdateAction(Action):
         for sn in local:
             if not sn in expected:
                 updates += 1
-                os.remove(local[sn].path)
+                local[sn].delete()
         writer = Writer()
         for bundle in uep.getCertificatesBySerial(new):
             updates += 1
@@ -124,7 +124,7 @@ class UpdateAction(Action):
             if self.mayLinger(c):
                 continue
             updates += 1
-            os.remove(c.path)
+            c.delete()
         return updates
     
     def mayLinger(self, cert):
@@ -143,17 +143,14 @@ class Writer:
         keypem = bundle['key']
         crtpem = bundle['cert']
         path = self.entdir.keypath()
-        f = open(path, 'w')
-        f.write(keypem)
-        f.close()
+        key = Key(keypem)
+        key.write(path)
         cert = EntitlementCertificate(crtpem)
         product = cert.getProduct()
         path = self.entdir.productpath()
         fn = self.__ufn(path, product)
         path = os.path.join(path, fn)
-        f = open(path, 'w')
-        f.write(crtpem)
-        f.close()
+        cert.write(path)
         
     def __ufn(self, path, product):
         n = 1
@@ -182,7 +179,12 @@ class UEP(UEPConnection):
     def getCertificateSerials(self):
         uuid = self.consumerId()
         if uuid is None:
-            return ()
+            result = []
+            entdir = EntitlementDirectory()
+            for crt in entdir.listValid():
+                sn = crt.serialNumber()
+                result.append(sn) 
+            return result
         result = []
         reply = UEPConnection.getCertificateSerials(self, uuid)
         reply = reply['serials']
@@ -193,6 +195,7 @@ class UEP(UEPConnection):
         if uuid is None:
             return ()
         result = []
+        snList = [str(sn) for sn in snList]
         reply = UEPConnection.getCertificatesBySerial(self, uuid, snList)
         for crt in reply:
             crt = crt['cert']
@@ -242,7 +245,7 @@ class Directory:
                 d = Directory(path)
                 d.delete()
             else:
-                os.remove(path)
+                os.unlink(path)
     
     def __str__(self):
         return self.path
@@ -273,7 +276,6 @@ class EntitlementDirectory(Directory):
                 continue
             path = os.path.join(p, fn)
             crt = EntitlementCertificate.read(path)
-            crt.path = path
             all.append(crt)
         return all
     
@@ -319,7 +321,6 @@ class ProductDirectory(Directory):
                 continue
             path = os.path.join(p, fn)
             crt = ProductCertificate.read(path)
-            crt.path = path
             all.append(crt)
         return all
     
@@ -402,10 +403,10 @@ class ConsumerIdentity:
     def delete(self):
         path = self.keypath()
         if os.path.exists(path):
-            os.remove(path)
+            os.unlink(path)
         path = self.certpath()
         if os.path.exists(path):
-            os.remove(path)
+            os.unlink(path)
     
     def __mkdir(self):
         if not os.path.exists(self.LOCATION):

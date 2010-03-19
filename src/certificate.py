@@ -23,7 +23,7 @@ support for custom v3 extensions.  It is not intended to be a
 replacement of full wrapper but instead and extension.
 """
 
-import re
+import os, re
 import base64
 from M2Crypto import X509
 from datetime import datetime as dt
@@ -50,7 +50,9 @@ class Certificate(object):
         f = open(path)
         content = f.read()
         f.close()
-        return Certificate(content)
+        crt = Certificate(content)
+        crt.path = path
+        return crt
 
     def __init__(self, content):
         """
@@ -67,7 +69,7 @@ class Certificate(object):
         @return: The x.509 serial number
         @rtype: str
         """
-        return str(self.x509.get_serial_number())
+        return self.x509.get_serial_number()
     
     def subject(self):
         """
@@ -112,6 +114,27 @@ class Certificate(object):
         @rtype: L{Extensions}
         """
         return self.__ext
+    
+    def write(self, path):
+        """
+        Write the certificate.
+        @param path: The path to the .pem file.
+        @type path: str
+        @return: self
+        """
+        f = open(path, 'w')
+        f.write(self.x509.as_pem())
+        f.close()
+        return self
+    
+    def delete(self):
+        """
+        Delete the file associated with this certificate.
+        """
+        if hasattr(self, 'path'):
+            os.unlink(self.path)
+        else:
+            raise Exception, 'no path, not deleted'
             
     def __str__(self):
         return self.x509.as_text()
@@ -128,28 +151,55 @@ class Certificate(object):
         return 0
 
 
-class Key:
+class Key(object):
     """
     The (private|public) key.
-    @ivar path: The file path.
-    @type path: str
     @ivar content: The PEM encoded key.
     @type content: str
     """
     
-    def __init__(self, path):
+    @classmethod
+    def read(cls, path):
         """
+        Read the key.
         @param path: The path to the .pem file.
         @type path: str
         """
-        self.path = path
-        self.content = self.__read()
-        
-    def __read(self):
         f = open(path)
         content = f.read()
         f.close()
-        return content
+        key = Key(content)
+        key.path = path
+        return key
+    
+    def __init__(self, content):
+        """
+        @param content: The PEM encoded key.
+        @type content: str
+        """
+        self.content = content
+        
+    def write(self, path):
+        """
+        Write the key.
+        @param path: The path to the .pem file.
+        @type path: str
+        @return: self
+        """
+        f = open(path, 'w')
+        f.write(self.content)
+        self.path = path
+        f.close()
+        return self
+    
+    def delete(self):
+        """
+        Delete the file associated with this key.
+        """
+        if hasattr(self, 'path'):
+            os.unlink(self.path)
+        else:
+            raise Exception, 'no path, not deleted'
         
     def __str__(self):
         return self.content
@@ -467,7 +517,9 @@ class ProductCertificate(Certificate):
         f = open(path)
         content = f.read()
         f.close()
-        return ProductCertificate(content)
+        crt = ProductCertificate(content)
+        crt.path = path
+        return crt
     
     def __init__(self, content):
         """
@@ -525,7 +577,9 @@ class EntitlementCertificate(ProductCertificate):
         f = open(path)
         content = f.read()
         f.close()
-        return EntitlementCertificate(content)
+        crt = EntitlementCertificate(content)
+        crt.path = path
+        return crt
 
     def getEntitlements(self):
         """

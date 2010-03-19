@@ -65,7 +65,7 @@ class LockFile:
     def delete(self):
         if self.mypid() or not self.valid():
             self.close()
-            os.remove(self.path)
+            os.unlink(self.path)
 
     def close(self):
         try:
