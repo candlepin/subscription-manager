@@ -110,6 +110,12 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Fri Mar 19 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.17-1
+- Resolves:  #568427 
+- Changes to support dynamic icon changes
+- changes to support resteasy api changes
+- fixed alignment issues in mainWindow
+
 * Wed Mar 17 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.17-1
 - Resolves:  #568427 - New registration/regtoken/add subscriptions screens
 
