@@ -34,7 +34,7 @@ import managerlib
 import connection
 import config
 
-from certlib import EntitlementDirectory, ProductDirectory, ConsumerIdentity
+from certlib import EntitlementDirectory, ProductDirectory, ConsumerIdentity, CertLib
 import gettext
 _ = gettext.gettext
 gettext.textdomain("subscription-manager")
@@ -45,6 +45,7 @@ gladexml = "/usr/share/rhsm/gui/data/standaloneH.glade"
 cfg = config.initConfig()
 
 UEP = connection.UEPConnection(cfg['hostname'] or 'localhost')
+certlib = CertLib()
 ENT_CONFIG_DIR="/etc/pki/entitlement/product/"
 
 
@@ -169,6 +170,8 @@ class ManageSubscriptionPage:
         try:
             print UEP.getEntitlementList(consumer)
             #UEP.unbindByProduct(consumer, self.pname_selected)
+            # Force fetch all certs
+            certlib.update()
         except:
             # be gentle for now
             pass
@@ -337,6 +340,8 @@ class AddSubscriptionScreen:
                 except:
                     # Subscription failed, continue with rest
                     continue
+        # Force fetch all certs
+        certlib.update()
         if len(self.selected.items()):
             slabel.set_label(_("<i><b>Successfully consumed %s subscription(s)</b></i>" % subscribed_count))
         else:
@@ -480,6 +485,8 @@ class UpdateSubscriptionScreen:
                 except:
                     # Subscription failed, continue with rest
                     continue
+        # Force fetch all certs
+        certlib.update()
         if len(self.selected.items()):
             slabel.set_label(_("<i><b>Successfully consumed %s subscription(s)</b></i>" % subscribed_count))
         else:
