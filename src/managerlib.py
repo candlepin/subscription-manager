@@ -29,8 +29,8 @@ def persist_consumer_cert(consumerinfo):
     consumer = ConsumerIdentity(consumerinfo['idCert']['key'], \
                                   consumerinfo['idCert']['cert'])
     consumer.write()
-    print consumer.getConsumerId(), consumer.getCustomerName(), consumer.getUser()
-    consumer_info = {"consumer_name" : consumer.getCustomerName(),
+    print consumer.getConsumerId(), consumer.getConsumerName(), consumer.getUser()
+    consumer_info = {"consumer_name" : consumer.getConsumerName(),
                      "uuid" : consumer.getConsumerId(),
                      "user_account"  : consumer.getUser()
                     }

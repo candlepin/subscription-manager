@@ -51,9 +51,9 @@ ENT_CONFIG_DIR="/etc/pki/entitlement/product/"
 
 def get_consumer():
     if not ConsumerIdentity.exists():
-        return None
+        return {}
     consumer = ConsumerIdentity.read()
-    consumer_info = {"consumer_name" : consumer.getCustomerName(),
+    consumer_info = {"consumer_name" : consumer.getConsumerName(),
                      "uuid" : consumer.getConsumerId(),
                      "user_account"  : consumer.getUser()
                     }
@@ -86,7 +86,8 @@ class ManageSubscriptionPage:
         self.mainWin.show_all()
 
     def loadAccountSettings(self, button):
-        if consumer:
+        print consumer
+        if consumer.has_key('uuid'):
             RegistrationTokenScreen()
         else:
             RegisterScreen() 
@@ -199,7 +200,7 @@ class RegisterScreen:
         self.uname = self.registerxml.get_widget("account_login")
         self.passwd = self.registerxml.get_widget("account_password")
 
-        global username, password
+        global username, password, consumer
         username = self.uname.get_text()
         password = self.passwd.get_text()
 
@@ -214,7 +215,7 @@ class RegisterScreen:
             errorWindow(_("You must enter a password."))
             self.passwd.grab_focus()
         newAccount = UEP.registerConsumer(username, password, self._get_register_info())
-        managerlib.persist_consumer_cert(newAccount)
+        consumer = managerlib.persist_consumer_cert(newAccount)
         self.registerWin.hide()
 
     def _get_register_info(self):
@@ -290,7 +291,7 @@ class AddSubscriptionScreen:
                 available_ent += 1
         except:
             pass
-        if available_ent:
+        if available_ent and consumer['uuid']:
             self.populateAvailableList()
 
             dic = { "on_close_clicked" : self.cancel,
@@ -397,7 +398,7 @@ class UpdateSubscriptionScreen:
         except:
             pass
 
-        if self.available_updates:
+        if self.available_updates and consumer['uuid']:
             self.populateUpdatesDialog()
             dic = { "on_close_clicked" : self.cancel,
                     "on_import_cert_button_clicked" : self.onImportPrepare,
