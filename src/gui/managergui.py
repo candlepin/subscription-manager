@@ -171,13 +171,19 @@ class ManageSubscriptionPage:
     def onUnsubscribeAction(self, button):
         print self.pname_selected
         try:
-            print UEP.getEntitlementList(consumer['uuid'])
-            #UEP.unbindByProduct(consumer, self.pname_selected)
-            # Force fetch all certs
-            certlib.update()
+            ent_list = UEP.getEntitlementList(consumer['uuid'])
+            entId = None
+            for ent in ent_list:
+                print ent['entitlement']['pool']['productId']
+                if self.pname_selected == ent['entitlement']['pool']['productId']:
+                    entId = ent['entitlement']['id']
+            if entId:
+                print UEP.unBindByEntitlementId(consumer['uuid'], entId)
+                # Force fetch all certs
+                certlib.update()
         except:
             # be gentle for now
-            pass
+            raise #pass
 
 class RegisterScreen:
     """
