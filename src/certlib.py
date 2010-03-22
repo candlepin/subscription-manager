@@ -104,7 +104,7 @@ class UpdateAction(Action):
         updates = 0
         local = {}
         report = UpdateReport()
-        for valid in self.entdir.listValid():
+        for valid in self.entdir.list():
             sn = valid.serialNumber()
             report.valid.append(sn)
             local[sn] = valid
