@@ -102,14 +102,18 @@ class UpdateAction(Action):
     
     def perform(self):
         updates = 0
+        try:
+            uep = UEP()
+        except Disconnected:
+            log.info('Disconnected, not updated')
+            return 0
         local = {}
         report = UpdateReport()
-        for valid in self.entdir.list():
+        for valid in self.entdir.listValid():
             sn = valid.serialNumber()
             report.valid.append(sn)
             local[sn] = valid
-        uep = UEP()
-        expected = uep.getCertificateSerials(local.keys())
+        expected = uep.getCertificateSerials()
         report.expected = expected
         new = []
         for sn in expected:
@@ -156,23 +160,22 @@ class Writer:
         key = Key(keypem)
         key.write(path)
         cert = EntitlementCertificate(crtpem)
-        product = cert.getProduct()
+        sn = cert.serialNumber()
         path = self.entdir.productpath()
-        fn = self.__ufn(path, product)
+        fn = self.__ufn(path, sn)
         path = os.path.join(path, fn)
         cert.write(path)
         return cert
         
-    def __ufn(self, path, product):
+    def __ufn(self, path, sn):
         n = 1
-        name = product.getName()
-        name = re.sub('\s+', '', name)
+        name = str(sn)
         fn = None
         while True:
             fn = '%s.pem' % name
             path = os.path.join(path, fn)
             if os.path.exists(path):
-                name += str(n)
+                name += '(%d)' % n
                 n += 1
             else:
                 break
@@ -181,40 +184,40 @@ class Writer:
 
 class UEP(UEPConnection):
     
+    @classmethod
+    def consumerId(cls):
+        try:
+            cid = ConsumerIdentity.read()
+            return cid.getConsumerId()
+        except:
+            raise Disconnected()
+
     def __init__(self):
         cfg = initConfig()
         host = cfg['hostname']
         port = cfg['port']
         UEPConnection.__init__(self, host, port)
+        self.uuid = self.consumerId()
         
-    def getCertificateSerials(self, local):
-        uuid = self.consumerId()
-        if uuid is None:
-            return local
+    def getCertificateSerials(self):
         result = []
-        reply = UEPConnection.getCertificateSerials(self, uuid)
+        reply = UEPConnection.getCertificateSerials(self, self.uuid)
         reply = reply['serials']
         return reply['serial']
 
     def getCertificatesBySerial(self, snList):
-        uuid = self.consumerId()
-        if uuid is None:
-            return ()
         result = []
         if snList:
             snList = [str(sn) for sn in snList]
-            reply = UEPConnection.getCertificatesBySerial(self, uuid, snList)
+            reply = UEPConnection.getCertificatesBySerial(self, self.uuid, snList)
             for crt in reply:
                 crt = crt['cert']
                 result.append(crt)
         return result
-        
-    def consumerId(self):
-        try:
-            cid = ConsumerIdentity.read()
-            return cid.getConsumerId()
-        except:
-            pass
+
+
+class Disconnected(Exception):
+    pass
         
 
 class Directory:
@@ -438,12 +441,18 @@ class UpdateReport:
         self.expnd = []
 
     def write(self, s, title, clist):
+        indent = '  '
         s.append(title)
         if clist:
             for c in clist:
-                s.append('  %s' % repr(c))
+                p = c.getProduct().getName()
+                s.append('%s[sn:%d (%s,) @ %s]' % \
+                    (indent,
+                     c.serialNumber(),
+                     p,
+                     c.path))
         else:
-            s.append('\t<NONE>')
+            s.append('%s<NONE>' % indent)
 
     def __str__(self):
         s = []
