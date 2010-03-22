@@ -22,14 +22,20 @@ from certlib import CertLib, ConsumerIdentity, \
 import gettext
 _ = gettext.gettext
 
-def check_registration():
-    if not os.access("/etc/pki/consumer/cert.uuid", os.F_OK):
-        needToRegister = \
-            _("Error: You need to register this system by running " \
-            "`register` command before using this option.")
-        print needToRegister
-        sys.exit(1)
-    return open("/etc/pki/consumer/cert.uuid").read()
+def persist_consumer_cert(consumerinfo):
+    
+    if not os.path.isdir("/etc/pki/consumer/"):
+        os.mkdir("/etc/pki/consumer/")
+    consumer = ConsumerIdentity(consumerinfo['idCert']['key'], \
+                                  consumerinfo['idCert']['cert'])
+    consumer.write()
+    print consumer.getConsumerId(), consumer.getCustomerName(), consumer.getUser()
+    consumer_info = {"consumer_name" : consumer.getCustomerName(),
+                     "uuid" : consumer.getConsumerId(),
+                     "user_account"  : consumer.getUser()
+                    }
+    return consumer_info
+
 
 def map_status(status):
     smap = {True : "Subscribed", False : "Expired", None : "Not Subscribed"}

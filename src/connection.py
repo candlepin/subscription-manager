@@ -205,7 +205,7 @@ if __name__ == '__main__':
         #print "Initiate cert synchronization for uuid"
         print uep.syncCertificates(consumer['uuid']) 
         print "ZZZZZZZZZZZ",uep.getCertificateSerials(consumer['uuid'])
-        print uep.getCertificatesBySerial(consumer['uuid'], ['SERIAL001','SERIAL001'])
+        print "GetCertBySeriallllll",uep.getCertificatesBySerial(consumer['uuid'], ['SERIAL001','SERIAL001'])
         # bind consumer to regNumber
         #uep.bindByRegNumber(consumer['uuid'],"1234-5334-4e23-2432-4345") 
         # bind consumer by poolId

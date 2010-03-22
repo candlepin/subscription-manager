@@ -50,12 +50,14 @@ ENT_CONFIG_DIR="/etc/pki/entitlement/product/"
 
 
 def get_consumer():
-    if not os.access("/etc/pki/consumer/cert.uuid", os.F_OK):
-        needToRegister = \
-            _("Error: You need to register this system by running " \
-            "`register` command before using this option.")
+    if not ConsumerIdentity.exists():
         return None
-    return open("/etc/pki/consumer/cert.uuid").read()
+    consumer = ConsumerIdentity.read()
+    consumer_info = {"consumer_name" : consumer.getCustomerName(),
+                     "uuid" : consumer.getConsumerId(),
+                     "user_account"  : consumer.getUser()
+                    }
+    return consumer_info
 
 consumer = get_consumer()
 
@@ -168,7 +170,7 @@ class ManageSubscriptionPage:
     def onUnsubscribeAction(self, button):
         print self.pname_selected
         try:
-            print UEP.getEntitlementList(consumer)
+            print UEP.getEntitlementList(consumer['uuid'])
             #UEP.unbindByProduct(consumer, self.pname_selected)
             # Force fetch all certs
             certlib.update()
@@ -212,7 +214,7 @@ class RegisterScreen:
             errorWindow(_("You must enter a password."))
             self.passwd.grab_focus()
         newAccount = UEP.registerConsumer(username, password, self._get_register_info())
-        self._write_consumer_cert(newAccount)
+        managerlib.persist_consumer_cert(newAccount)
         self.registerWin.hide()
 
     def _get_register_info(self):
@@ -235,16 +237,6 @@ class RegisterScreen:
                  }
               }
         return params
-
-    def _write_consumer_cert(self, consumerinfo):
-        if not os.path.isdir("/etc/pki/consumer/"):
-            os.mkdir("/etc/pki/consumer/")
-        consumerid = ConsumerIdentity(consumerinfo['idCert']['key'], \
-                                      consumerinfo['idCert']['pem'])
-        consumerid.write()
-        f = open("/etc/pki/consumer/cert.uuid", "w")
-        f.write(consumerinfo['uuid'])
-        f.close()
 
 class RegistrationTokenScreen:
     """
@@ -277,7 +269,7 @@ class RegistrationTokenScreen:
         rlabel = self.regtokenxml.get_widget("regtoken_entry")
         reg_token = rlabel.get_text()
         #consumer = get_consumer()
-        UEP.bindByRegNumber(consumer, reg_token)
+        UEP.bindByRegNumber(consumer['uuid'], reg_token)
 
 class AddSubscriptionScreen:
     """
@@ -289,11 +281,11 @@ class AddSubscriptionScreen:
         self.addxml = gtk.glade.XML(gladexml, "dialog1_add", domain="subscription-manager")
         self.add_vbox = \
                         self.addxml.get_widget("add-dialog-vbox1")
-        self.consumer = get_consumer()
+        self.consumer = consumer #get_consumer()
         available_ent = 0
         self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         try:
-            for product in managerlib.getAvailableEntitlements(UEP, self.consumer):
+            for product in managerlib.getAvailableEntitlements(UEP, self.consumer['uuid']):
                 self.availableList.append(None, [False] + product.values())
                 available_ent += 1
         except:
@@ -326,14 +318,14 @@ class AddSubscriptionScreen:
 
     def onSubscribeAction(self, button):
         slabel = self.addxml.get_widget("label_status")
-        consumer = get_consumer()
+        #consumer = get_consumer()
         subscribed_count = 0
         my_model = self.tv_products.get_model()
         for product, state in self.selected.items():
             # state = (bool, iter)
             if state[0]:
                 try:
-                    entitled_data = UEP.bindByProduct(consumer, product)['entitlement']['pool']
+                    entitled_data = UEP.bindByProduct(consumer['uuid'], product)['entitlement']['pool']
                     updated_count = str(int(entitled_data['quantity']) - int(entitled_data['consumed']))
                     my_model.set_value(state[-1], 3, updated_count)
                     subscribed_count+=1
@@ -397,7 +389,7 @@ class UpdateSubscriptionScreen:
         self.updatesList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.available_updates = 0
         try:
-            for product in managerlib.getAvailableEntitlements(UEP, consumer):
+            for product in managerlib.getAvailableEntitlements(UEP, consumer['uuid']):
                 if self.product_select in product.values():
                     # Only list selected product's pools
                     self.updatesList.append(None, [False] + product.values())
@@ -471,14 +463,13 @@ class UpdateSubscriptionScreen:
 
     def onSubscribeAction(self, button):
         slabel = self.updatexml.get_widget("label_status_update")
-        consumer = get_consumer()
         subscribed_count = 0
         my_model = self.tv_products.get_model()
         for product, state in self.selected.items():
             # state = (bool, iter)
             if state[0]:
                 try:
-                    entitled_data = UEP.bindByProduct(consumer, product)['entitlement']['pool']
+                    entitled_data = UEP.bindByProduct(consumer['uuid'], product)['entitlement']['pool']
                     updated_count = str(int(entitled_data['quantity']) - int(entitled_data['consumed']))
                     my_model.set_value(state[-1], 3, updated_count)
                     subscribed_count+=1

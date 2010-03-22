@@ -107,24 +107,13 @@ class RegisterCommand(CliCommand):
             }
         return params
 
-    def _write_consumer_cert(self, consumerinfo):
-        if not os.path.isdir("/etc/pki/consumer/"):
-            os.mkdir("/etc/pki/consumer/")
-        #TODO: this will a pki cert in future
-        consumerid = ConsumerIdentity(consumerinfo['idCert']['key'], \
-                                      consumerinfo['idCert']['pem'])
-        consumerid.write()
-        f = open("/etc/pki/consumer/cert.uuid", "w")
-        f.write(consumerinfo['uuid'])
-        f.close()
-
     def _do_command(self):
         """
         Executes the command.
         """
         self._validate_options()
         consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
-        self._write_consumer_cert(consumer)
+        managerlib.persist_consumer_cert(consumer)
         # try to auomatically bind products
         for product in managerlib.getInstalledProductStatus():
             try:
@@ -166,7 +155,7 @@ class SubscribeCommand(CliCommand):
         Executes the command.
         """
         self._validate_options()
-        consumer = check_registration()
+        consumer = check_registration()['uuid']
         if self.options.product:
             bundles = self.cp.bindByProduct(consumer, self.options.product)
             #self.certlib.add(bundles)
@@ -200,7 +189,7 @@ class UnSubscribeCommand(CliCommand):
         """
         Executes the command.
         """
-        consumer = check_registration()
+        consumer = check_registration()['uuid']
 
         if self.options.entid:
             pass
@@ -234,7 +223,7 @@ class ListCommand(CliCommand):
         Executes the command.
         """
         self._validate_options()
-        consumer = check_registration()
+        consumer = check_registration()['uuid']
         if not (self.options.available or self.options.consumed):
            iproducts = managerlib.getInstalledProductStatus()
            columns = ("Product Installed", "activeSubscription", "Expires")
@@ -338,14 +327,18 @@ class CLI:
         cmd.main()
 
 def check_registration():
-    if not os.access("/etc/pki/consumer/cert.uuid", os.F_OK):
+    if not ConsumerIdentity.exists():
         needToRegister = \
             _("Error: You need to register this system by running " \
             "`register` command before using this option.")
         print needToRegister
         sys.exit(1)
-    return open("/etc/pki/consumer/cert.uuid").read()
-
+    consumer = ConsumerIdentity.read()
+    consumer_info = {"consumer_name" : consumer.getCustomerName(),
+                     "uuid" : consumer.getConsumerId(),
+                     "user_account"  : consumer.getUser()
+                    }
+    return consumer_info
 
 if __name__ == "__main__":
     CLI().main()
