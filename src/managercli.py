@@ -202,7 +202,7 @@ class UnSubscribeCommand(CliCommand):
                 if entId:
                     print self.cp.unBindByEntitlementId(consumer, entId)
                     # Force fetch all certs
-                    certlib.update()
+                    self.certlib.update()
             except:
                 # be gentle for now
                 raise #pass
