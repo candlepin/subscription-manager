@@ -420,10 +420,10 @@ class ConsumerIdentity:
             os.mkdir(path)
 
     def __str__(self):
-        return 'customer: "%s", user: "%s", consumer (uuid): %s' % \
-            (self.getCustomerName(),
-             self.getUser(),
-             self.getConsumerId())
+        return 'consumer: name="%s", uuid=%s, user: "%s"' % \
+            (self.getConsumerName(),
+             self.getConsumerId(),
+             self.getUser())
 
 
 class UpdateReport:
