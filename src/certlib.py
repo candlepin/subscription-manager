@@ -109,7 +109,7 @@ class UpdateAction(Action):
             report.valid.append(sn)
             local[sn] = valid
         uep = UEP()
-        expected = uep.getCertificateSerials(valid)
+        expected = uep.getCertificateSerials(local.keys())
         report.expected = expected
         new = []
         for sn in expected:
@@ -201,11 +201,12 @@ class UEP(UEPConnection):
         if uuid is None:
             return ()
         result = []
-        snList = [str(sn) for sn in snList]
-        reply = UEPConnection.getCertificatesBySerial(self, uuid, snList)
-        for crt in reply:
-            crt = crt['cert']
-            result.append(crt)
+        if snList:
+            snList = [str(sn) for sn in snList]
+            reply = UEPConnection.getCertificatesBySerial(self, uuid, snList)
+            for crt in reply:
+                crt = crt['cert']
+                result.append(crt)
         return result
         
     def consumerId(self):
