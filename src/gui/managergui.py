@@ -184,12 +184,11 @@ class ManageSubscriptionPage:
                 print ent['entitlement']['pool']['productId']
                 if self.pname_selected == ent['entitlement']['pool']['productId']:
                     entId = ent['entitlement']['id']
-            if entId:
-                print UEP.unBindByEntitlementId(consumer['uuid'], entId)
-                log.info("This machine is not unsubscribed from Product %s " % self.pname_selected)
-                # Force fetch all certs
-                certlib.update()
-        except:
+            print UEP.unBindByEntitlementId(consumer['uuid'], entId)
+            log.info("This machine is not unsubscribed from Product %s " % self.pname_selected)
+            # Force fetch all certs
+            certlib.update()
+        except Exception, e:
             log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
             # raise warning window
 
@@ -308,11 +307,12 @@ class AddSubscriptionScreen:
                 available_ent += 1
         except:
             log.error("Error populating available subscriptions from the server")
-        if available_ent and consumer.has_key('uuid'):
+        if consumer.has_key('uuid'):
+            # machine is talking to candlepin, invoke listing scheme
             self.populateAvailableList()
 
             dic = { "on_close_clicked" : self.cancel,
-                    "on_import_cert_button_clicked"   : self.onImportPrepare,
+                    #"on_import_cert_button_clicked"   : self.onImportPrepare,
                     "on_add_subscribe_button_clicked"   : self.onSubscribeAction,
                 }
             self.addxml.signal_autoconnect(dic)
@@ -322,6 +322,7 @@ class AddSubscriptionScreen:
             #self.addWin.set_decorated(0) 
             self.addWin.show_all()
         else:
+            # no CP to talk, use local certs uploads
             ImportCertificate()
 
     def finish(self):
@@ -416,10 +417,10 @@ class UpdateSubscriptionScreen:
         except:
             pass
 
-        if self.available_updates and consumer['uuid']:
+        if consumer.has_key('uuid'):
             self.populateUpdatesDialog()
             dic = { "on_close_clicked" : self.cancel,
-                    "on_import_cert_button_clicked" : self.onImportPrepare,
+                    #"on_import_cert_button_clicked" : self.onImportPrepare,
                     "on_update_subscribe_button_clicked"   : self.onSubscribeAction,
                 }
             self.updatexml.signal_autoconnect(dic)

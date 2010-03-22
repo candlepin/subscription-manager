@@ -550,7 +550,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
           <widget class="GtkHButtonBox" id="dialog-action_area3">
             <property name="visible">True</property>
             <property name="layout_style">end</property>
-            <child>
+            <!--<child>
               <widget class="GtkButton" id="import_cert_button3">
                 <property name="label">Import Certificate..</property>
                 <property name="visible">True</property>
@@ -565,7 +565,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="position">0</property>
                 <property name="secondary">True</property>
               </packing>
-            </child>
+            </child>-->
             <child>
               <widget class="GtkButton" id="add_subscribe_button1">
                 <property name="label">Apply</property>
@@ -856,7 +856,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="position">2</property>
               </packing>
             </child>
-            <child>
+            <!--<child>
               <widget class="GtkButton" id="import_cert_button5">
                 <property name="label">Import Certificate..</property>
                 <property name="visible">True</property>
@@ -872,7 +872,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="position">0</property>
                 <property name="secondary">True</property>
               </packing>
-            </child>
+            </child>-->
           </widget>
           <packing>
             <property name="expand">False</property>
