@@ -124,6 +124,7 @@ class Certificate(object):
         """
         f = open(path, 'w')
         f.write(self.x509.as_pem())
+        self.path = path
         f.close()
         return self
     
@@ -139,6 +140,13 @@ class Certificate(object):
     def __str__(self):
         return self.x509.as_text()
     
+    def __repr__(self):
+        sn = self.serialNumber()
+        path = None
+        if hasattr(self, 'path'):
+            path = self.path
+        return '[sn: %d, path: "%s"]' % (sn, path)
+
     def __cmp__(self, other):
         range = self.validRange()
         exp1 = range.end()

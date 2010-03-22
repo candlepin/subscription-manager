@@ -103,11 +103,14 @@ class UpdateAction(Action):
     def perform(self):
         updates = 0
         local = {}
+        report = UpdateReport()
         for valid in self.entdir.listValid():
             sn = valid.serialNumber()
+            report.valid.append(sn)
             local[sn] = valid
         uep = UEP()
-        expected = uep.getCertificateSerials()
+        expected = uep.getCertificateSerials(valid)
+        report.expected = expected
         new = []
         for sn in expected:
             if not sn in local:
@@ -115,16 +118,23 @@ class UpdateAction(Action):
         for sn in local:
             if not sn in expected:
                 updates += 1
-                local[sn].delete()
+                crt = local[sn]
+                report.rugue.append(crt)
+                crt.delete()
         writer = Writer()
         for bundle in uep.getCertificatesBySerial(new):
             updates += 1
-            writer.write(bundle)
+            crt = writer.write(bundle)
+            report.added.append(crt)
         for c in self.entdir.listExpired():
             if self.mayLinger(c):
+                report.expnd.append(c)
                 continue
+            report.expd.append(c)
             updates += 1
             c.delete()
+        report.updates = updates
+        log.info('updated:\n%s', report)
         return updates
     
     def mayLinger(self, cert):
@@ -151,6 +161,7 @@ class Writer:
         fn = self.__ufn(path, product)
         path = os.path.join(path, fn)
         cert.write(path)
+        return cert
         
     def __ufn(self, path, product):
         n = 1
@@ -176,15 +187,10 @@ class UEP(UEPConnection):
         port = cfg['port']
         UEPConnection.__init__(self, host, port)
         
-    def getCertificateSerials(self):
+    def getCertificateSerials(self, local):
         uuid = self.consumerId()
         if uuid is None:
-            result = []
-            entdir = EntitlementDirectory()
-            for crt in entdir.listValid():
-                sn = crt.serialNumber()
-                result.append(sn) 
-            return result
+            return local
         result = []
         reply = UEPConnection.getCertificateSerials(self, uuid)
         reply = reply['serials']
@@ -379,17 +385,17 @@ class ConsumerIdentity:
         self.cert = certstring
         self.x509 = Certificate(certstring)
         
-    def getCustomerName(self):
+    def getConsumerId(self):
+        subject = self.x509.subject()
+        return subject.get('UID')
+
+    def getConsumerName(self):
         subject = self.x509.subject()
         return subject.get('CN')
         
     def getUser(self):
         subject = self.x509.subject()
         return subject.get('OU')
-
-    def getConsumerId(self):
-        subject = self.x509.subject()
-        return subject.get('UID')
 
     def write(self):
         self.__mkdir()
@@ -417,6 +423,37 @@ class ConsumerIdentity:
             (self.getCustomerName(),
              self.getUser(),
              self.getConsumerId())
+
+
+class UpdateReport:
+
+    def __init__(self):
+        self.updates = 0
+        self.valid = []
+        self.expected = []
+        self.added = []
+        self.rugue = []
+        self.expd = []
+        self.expnd = []
+
+    def write(self, s, title, clist):
+        s.append(title)
+        if clist:
+            for c in clist:
+                s.append('  %s' % repr(c))
+        else:
+            s.append('\t<NONE>')
+
+    def __str__(self):
+        s = []
+        s.append('Total updates: %d' % self.updates)
+        s.append('Found (local) serial# %s' % self.valid)
+        s.append('Expected (UEP) serial# %s' % self.expected)
+        self.write(s, 'Added (new)', self.added)
+        self.write(s, 'Deleted (rogue):', self.rugue)
+        self.write(s, 'Expired (not deleted):', self.expnd)
+        self.write(s, 'Expired (deleted):', self.expd)
+        return '\n'.join(s)
 
 
 def main():
