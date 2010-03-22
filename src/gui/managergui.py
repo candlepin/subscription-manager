@@ -190,6 +190,7 @@ class ManageSubscriptionPage:
             certlib.update()
         except Exception, e:
             log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
+            errorWindow(_("<b>Unable to perform unsubscribe.</b>\n\nPlease see /var/log/rhsm/rhsm.log for more information."))
             # raise warning window
 
 class RegisterScreen:
@@ -321,6 +322,9 @@ class AddSubscriptionScreen:
             self.addWin.connect("hide", self.cancel)
             #self.addWin.set_decorated(0) 
             self.addWin.show_all()
+            if not available_ent:
+                infoWindow(_("<b>No subscriptions available for this account</b>"), self.addWin)
+                self.addWin.hide()
         else:
             # no CP to talk, use local certs uploads
             ImportCertificate()
@@ -351,6 +355,7 @@ class AddSubscriptionScreen:
                 except:
                     # Subscription failed, continue with rest
                     log.error("Failed to subscribe to product %s" % product)
+                    errorWindow("Failed to subscribe to product %s" % product)
                     continue
         # Force fetch all certs
         certlib.update()
@@ -428,6 +433,9 @@ class UpdateSubscriptionScreen:
             self.updateWin = self.updatexml.get_widget("dialog1_updates")
             self.updateWin.connect("hide", self.cancel)
             self.updateWin.show_all()
+            if not self.available_updates:
+                infoWindow(_("No subscription updates available"), self.updateWin)
+                self.updateWin.hide()
         else:
             ImportCertificate()
             
@@ -568,6 +576,9 @@ def callAndFilterExceptions(function, allowedExceptions,
 
 def errorWindow(message):
     messageWindow.ErrorDialog(messageWindow.wrap_text(message))
+
+def infoWindow(message, parent):
+    messageWindow.infoDialog(messageWindow.wrap_text(message), parent)
 
 def setArrowCursor():
     """Dummy function that will be overidden by rhn_register's standalone gui
