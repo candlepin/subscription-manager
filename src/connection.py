@@ -23,6 +23,10 @@ import httplib
 import simplejson as json
 import base64
 
+from logutil import getLogger
+
+log = getLogger(__name__)
+
 class RestlibException(Exception):
     pass
 
@@ -83,9 +87,11 @@ class UEPConnection:
 
     def setUp(self):
         self.conn = Restlib(self.host, self.port, self.handler)
+        log.info("Connection Established for cli: Host: %s, Port: %s, handler: %s" % (self.host, self.port, self.handler))
 
     def shutDown(self):
         self.conn.close()
+        log.info("remote connection closed")
 
     def __authenticate(self, username, password):
         encoded = base64.encodestring(':'.join((username,password)))

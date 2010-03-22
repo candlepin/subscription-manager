@@ -29,6 +29,9 @@ from certlib import CertLib, ConsumerIdentity, ProductDirectory, EntitlementDire
 import managerlib
 import gettext
 _ = gettext.gettext
+from logutil import getLogger
+
+log = getLogger(__name__)
 
 cfg = config.initConfig()
 
@@ -119,8 +122,9 @@ class RegisterCommand(CliCommand):
             try:
                print "Bind Product ", product[0]
                self.cp.bindByProduct(self.consumer['uuid'], product[0])
+               log.info("Automatically subscribe the machine to product %s " % product[0])
             except:
-               pass
+               log.warning("Warning: Unable to auto subscribe the machine to %s" % product[0])
 
 class SubscribeCommand(CliCommand):
     def __init__(self):
@@ -158,16 +162,19 @@ class SubscribeCommand(CliCommand):
         consumer = check_registration()['uuid']
         if self.options.product:
             bundles = self.cp.bindByProduct(consumer, self.options.product)
+            log.info("Info: Successfully subscribed the machine to product %s" % self.options.product)
             #self.certlib.add(bundles)
             self.certlib.update()
 
         if self.options.regtoken:
             bundles = self.cp.bindByRegNumber(consumer, self.options.regtoken)
+            log.info("Info: Successfully subscribed the machine to registration token %s" % self.options.regtoken)
             #self.certlib.add(bundles)
             self.certlib.update()
 
         if self.options.pool:
             bundles = self.cp.bindByEntitlementPool(consumer, self.options.pool)
+            log.info("Info: Successfully subscribed the machine the Entitlement Pool %s" % self.options.pool)
             #self.certlib.add(bundles)
             self.certlib.update()
 
@@ -201,13 +208,15 @@ class UnSubscribeCommand(CliCommand):
                         entId = ent['entitlement']['id']
                 if entId:
                     print self.cp.unBindByEntitlementId(consumer, entId)
+                    log.info("This machine has been Unsubscribed for product %s with EntitlementId %s" % (self.options.product, entId))
                     # Force fetch all certs
                     self.certlib.update()
-            except:
-                # be gentle for now
-                raise #pass
+            except Exception,e:
+                log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
+                #raise
         else:
             self.cp.unbindAll(consumer)
+            log.info("Warning: This machine has been unsubscribed from all its subscriptions as per user request.")
             self.certlib.update()
 
 

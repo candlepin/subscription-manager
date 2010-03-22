@@ -40,6 +40,9 @@ _ = gettext.gettext
 gettext.textdomain("subscription-manager")
 gtk.glade.bindtextdomain("subscription-manager")
 
+from logutil import getLogger
+log = getLogger(__name__)
+
 gladexml = "/usr/share/rhsm/gui/data/standaloneH.glade"
 
 cfg = config.initConfig()
@@ -88,8 +91,10 @@ class ManageSubscriptionPage:
     def loadAccountSettings(self, button):
         print consumer
         if consumer.has_key('uuid'):
+            log.info("Machine already registered, loading the re-registration/registration token")
             RegistrationTokenScreen()
         else:
+            log.info("loading registration..")
             RegisterScreen() 
         return True
 
@@ -102,6 +107,7 @@ class ManageSubscriptionPage:
 
     def updateSubButtonAction(self, button):
         if self.pname_selected:
+            log.info("Product %s selected for update" % self.pname_selected)
             UpdateSubscriptionScreen(self.pname_selected)
 
     def populateProductDialog(self):
@@ -170,6 +176,7 @@ class ManageSubscriptionPage:
 
     def onUnsubscribeAction(self, button):
         print self.pname_selected
+        log.info("Product %s selected for unsubscribe" % self.pname_selected)
         try:
             ent_list = UEP.getEntitlementList(consumer['uuid'])
             entId = None
@@ -179,11 +186,12 @@ class ManageSubscriptionPage:
                     entId = ent['entitlement']['id']
             if entId:
                 print UEP.unBindByEntitlementId(consumer['uuid'], entId)
+                log.info("This machine is not unsubscribed from Product %s " % self.pname_selected)
                 # Force fetch all certs
                 certlib.update()
         except:
-            # be gentle for now
-            raise #pass
+            log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
+            # raise warning window
 
 class RegisterScreen:
     """
@@ -276,7 +284,10 @@ class RegistrationTokenScreen:
         rlabel = self.regtokenxml.get_widget("regtoken_entry")
         reg_token = rlabel.get_text()
         #consumer = get_consumer()
-        UEP.bindByRegNumber(consumer['uuid'], reg_token)
+        try:
+            UEP.bindByRegNumber(consumer['uuid'], reg_token)
+        except Exception, e:
+            log.error("Could not subscribe registration token %s " % reg_token)
 
 class AddSubscriptionScreen:
     """
@@ -296,8 +307,8 @@ class AddSubscriptionScreen:
                 self.availableList.append(None, [False] + product.values())
                 available_ent += 1
         except:
-            pass
-        if available_ent and consumer['uuid']:
+            log.error("Error populating available subscriptions from the server")
+        if available_ent and consumer.has_key('uuid'):
             self.populateAvailableList()
 
             dic = { "on_close_clicked" : self.cancel,
@@ -338,6 +349,7 @@ class AddSubscriptionScreen:
                     subscribed_count+=1
                 except:
                     # Subscription failed, continue with rest
+                    log.error("Failed to subscribe to product %s" % product)
                     continue
         # Force fetch all certs
         certlib.update()

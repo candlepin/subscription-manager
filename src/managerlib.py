@@ -19,6 +19,10 @@ import os
 import sys
 from certlib import CertLib, ConsumerIdentity, \
                     ProductDirectory, EntitlementDirectory
+from logutil import getLogger
+
+log = getLogger(__name__)
+
 import gettext
 _ = gettext.gettext
 
@@ -34,6 +38,7 @@ def persist_consumer_cert(consumerinfo):
                      "uuid" : consumer.getConsumerId(),
                      "user_account"  : consumer.getUser()
                     }
+    log.info("Consumer created:%s" % consumer_info)
     return consumer_info
 
 
