@@ -109,6 +109,11 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Mon Mar 22 2010 Pradeep Kilambi <pkilambi@redhat.com>
+- Resolves: #568427
+- logging support
+- changes to support identity cert parsing
+
 * Fri Mar 19 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.19-1
 - Resolves: #568427 
 - Changes to support dynamic icon changes
