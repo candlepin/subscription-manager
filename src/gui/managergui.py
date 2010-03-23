@@ -98,6 +98,9 @@ class ManageSubscriptionPage:
             RegisterScreen() 
         return True
 
+    def refresh(self):
+        self.mainWin.destroy()
+
     def reviewSubscriptionPagePrepare(self):
         entdir = EntitlementDirectory()
         self.vbox.show_all()
@@ -230,7 +233,17 @@ class RegisterScreen:
             self.passwd.grab_focus()
         newAccount = UEP.registerConsumer(username, password, self._get_register_info())
         consumer = managerlib.persist_consumer_cert(newAccount)
+        # try to auomatically bind products
+        for product in managerlib.getInstalledProductStatus():
+            try:
+               UEP.bindByProduct(consumer['uuid'], product[0])
+               log.info("Automatically subscribe the machine to product %s " % product[0])
+            except:
+               log.warning("Warning: Unable to auto subscribe the machine to %s" % product[0])
+        certlib.update()
+        RegistrationTokenScreen()
         self.registerWin.hide()
+        reload()
 
     def _get_register_info(self):
         stype = {'label':'system'}
@@ -332,7 +345,7 @@ class AddSubscriptionScreen:
         self.addWin.hide()
 
     def cancel(self, button):
-        self.addWin.hide()
+        self.addWin.destroy()
 
     def onImportPrepare(self, button):
         self.addWin.hide()
@@ -367,6 +380,8 @@ class AddSubscriptionScreen:
             slabel.set_label(_("<i><b>No subscription(s) consumed</b></i>" % subscribed_count))
         else:
             slabel.set_label(_("<i><b>Please select atleast one subscription to apply</b></i>"))
+        # refresh main window
+        reload()
 
     def populateAvailableList(self):
         #self.tv_products =  self.addxml.get_widget("treeview_available")
@@ -444,7 +459,7 @@ class UpdateSubscriptionScreen:
             
 
     def cancel(self, button=None):
-        self.updateWin.hide()
+        self.updateWin.destroy()
 
     def onImportPrepare(self, button):
         self.updateWin.hide()
@@ -513,6 +528,7 @@ class UpdateSubscriptionScreen:
             slabel.set_label(_("<i><b>Successfully consumed %s subscription(s)</b></i>" % subscribed_count))
         else:
             slabel.set_label(_("<i><b>Please select atleast one subscription to apply</b></i>"))
+        reload()
 
 class ImportCertificate:
     """
@@ -552,6 +568,7 @@ class ImportCertificate:
             shutil.copy(src_cert_file, dest_file_path)
         print dest_file_path
         self.importWin.hide()
+        reload()
 
 def unexpectedError(message, exc_info=None):
     message = message + "\n" + (_("This error shouldn't have happened. If you'd "
@@ -597,8 +614,15 @@ def setBusyCursor():
     """
     pass
 
+def reload():
+    global gui
+    gui.refresh()
+    gtk.main_quit()
+    gui = None
+    main()
 
 def main():
+    global gui
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
     if os.geteuid() != 0 :
@@ -607,6 +631,7 @@ def main():
 
     gui = ManageSubscriptionPage()
     gtk.main()
+    print "main done"
 
 
 if __name__ == "__main__":

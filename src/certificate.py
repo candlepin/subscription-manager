@@ -707,7 +707,7 @@ class Entitlement:
         s.append('\tFlex Quantity = %s' % self.getFlexQuantity())
         s.append('\tVendor ...... = %s' % self.getVendor())
         s.append('\tURL ......... = %s' % self.getUrl())
-        s.append('\tGPG URL ..... = %s' % self.getGpg())
+        #s.append('\tGPG URL ..... = %s' % self.getGpg())
         s.append('\tEnabled ..... = %s' % self.getEnabled())
         s.append('}')
         return '\n'.join(s)
