@@ -274,9 +274,9 @@ class RegistrationTokenScreen:
         self.regtokenWin.hide()
 
     def setAccountMsg(self):
-        euser = "admin" #TODO:get this from identity cert
+        euser = consumer['user_account'] or None
         alabel = self.regtokenxml.get_widget("account_label")
-        alabel.set_label(_("This system is registered with the account <b>%s</b>" % euser))
+        alabel.set_label(_("\nThis system is registered with the account <b>%s</b>\n\n<b>UID:</b> %s" % (euser, consumer['uuid'])))
 
     def submitToken(self, button):
         rlabel = self.regtokenxml.get_widget("regtoken_entry")
@@ -297,7 +297,7 @@ class AddSubscriptionScreen:
         self.addxml = gtk.glade.XML(gladexml, "dialog1_add", domain="subscription-manager")
         self.add_vbox = \
                         self.addxml.get_widget("add-dialog-vbox1")
-        self.consumer = consumer #get_consumer()
+        self.consumer = consumer
         available_ent = 0
         self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         try:
@@ -315,10 +315,8 @@ class AddSubscriptionScreen:
                     "on_add_subscribe_button_clicked"   : self.onSubscribeAction,
                 }
             self.addxml.signal_autoconnect(dic)
-            #self.addWin = self.addxml.get_widget("add_dialog")
             self.addWin = self.addxml.get_widget("dialog1_add")
             self.addWin.connect("hide", self.cancel)
-            #self.addWin.set_decorated(0) 
             self.addWin.show_all()
             if not available_ent:
                 infoWindow(_("<b>No subscriptions available for this account</b>"), self.addWin)
@@ -371,7 +369,7 @@ class AddSubscriptionScreen:
         cell.set_property('activatable', True)
         cell.connect('toggled', self.col_selected, self.availableList)
 
-        column = gtk.TreeViewColumn(_('Select'), cell)
+        column = gtk.TreeViewColumn(_(''), cell)
         column.add_attribute(cell, "active", 0)
         self.tv_products.append_column(column)
 
@@ -394,7 +392,6 @@ class AddSubscriptionScreen:
     def col_selected(self, cell, path, model):
         items, iter = self.tv_products.get_selection().get_selected()
         model[path][0] = not model[path][0]
-        print "Toggle '%s' to: %s" % (model[path][1], model[path][0])
         self.model = model
         self.selected[model.get_value(iter, 1)] = (model.get_value(iter, 0), iter)
 

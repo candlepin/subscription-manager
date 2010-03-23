@@ -194,7 +194,7 @@ class UEP(UEPConnection):
 
     def __init__(self):
         cfg = initConfig()
-        host = cfg['hostname']
+        host = cfg['hostname'] or "localhost"
         port = cfg['port']
         UEPConnection.__init__(self, host, port)
         self.uuid = self.consumerId()
