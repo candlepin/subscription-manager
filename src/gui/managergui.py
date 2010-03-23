@@ -246,9 +246,7 @@ class RegisterScreen:
         params = { "consumer" : {
                 "type":stype,
                 "name":'admin',
-                "facts":{'metadata': 
-                             {"entry":entrys}
-                        }
+                "facts": {"entry":entrys}
                  }
               }
         return params

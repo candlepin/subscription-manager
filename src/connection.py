@@ -191,13 +191,11 @@ if __name__ == '__main__':
     print "Ping Server", uep.ping()
     stype = {'label':'system'}
     product = {"id":"1","label":"RHEL AP","name":"rhel"}
-    facts = {"metadata": {
-                "entry":[{"key":"arch","value":"i386"},
+    facts = {"entry":[{"key":"arch","value":"i386"},
                          {"key":"cpu", "value": "Intel" },
                          {"key":"cores", "value":4}]
-                }
             }
-        
+
     params = {"consumer" : {
         "type":stype,
         "name":'admin',
