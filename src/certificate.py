@@ -285,7 +285,7 @@ class Extensions(dict):
             d[oid.ltrim(n)] = v
         return Extensions(d)
                 
-    def get(self, oid):
+    def get(self, oid, default=None):
         """
         Get the value of an extension by I{oid}.
         Note: The I{oid} may contain (*) wildcards.
@@ -298,7 +298,7 @@ class Extensions(dict):
         if ext:
             return ext[0][1]
         else:
-            return None
+            return default
     
     def find(self, oid, limit=0):
         """
@@ -689,8 +689,8 @@ class Entitlement:
     def getUrl(self):
         return self.ext.get('6')
     
-    def getGpg(self):
-        return self.ext.get('7')
+    def getGpg(self, default):
+        return self.ext.get('7', default)
     
     def getEnabled(self):
         return self.ext.get('10')

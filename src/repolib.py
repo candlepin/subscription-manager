@@ -43,6 +43,8 @@ class Action:
         
 class UpdateAction(Action):
 
+    GPGKEY = 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release'
+
     def perform(self):
         repod = RepoFile()
         repod.read()
@@ -73,17 +75,24 @@ class UpdateAction(Action):
         products.sort()
         products.reverse()
         cfg = initConfig()
+        baseurl = cfg['baseurl']
         for product in products:
             for ent in product.getEntitlements():
                 id = ent.getLabel()
                 repo = Repo(id)
                 repo['name'] = ent.getName()
-                repo['baseurl'] = basejoin(cfg['baseurl'], ent.getUrl())
-                repo['gpgkey'] = basejoin(cfg['baseurl'], ent.getGpg())
+                repo['baseurl'] = self.join(baseurl, ent.getUrl())
+                repo['gpgkey'] = self.join(baseurl, ent.getGpg(self.GPGKEY))
                 repo['sslclientkey'] = EntitlementDirectory.keypath()
                 repo['sslclientcert'] = product.path
                 unique.add(repo)
         return unique
+
+    def join(self, base, url):
+        if '://' in url:
+            return url
+        else:
+            return basejoin(base, url)
 
 
 class Reader:
