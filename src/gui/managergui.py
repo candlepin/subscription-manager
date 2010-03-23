@@ -343,6 +343,7 @@ class AddSubscriptionScreen:
         #consumer = get_consumer()
         subscribed_count = 0
         my_model = self.tv_products.get_model()
+        busted_subs = []
         for product, state in self.selected.items():
             # state = (bool, iter)
             if state[0]:
@@ -351,15 +352,19 @@ class AddSubscriptionScreen:
                     updated_count = str(int(entitled_data['quantity']) - int(entitled_data['consumed']))
                     my_model.set_value(state[-1], 3, updated_count)
                     subscribed_count+=1
-                except:
+                except Exception, e:
                     # Subscription failed, continue with rest
-                    log.error("Failed to subscribe to product %s" % product)
-                    errorWindow("Failed to subscribe to product %s" % product)
+                    log.error("Failed to subscribe to product %s Error: %s" % (product, e))
+                    busted_subs.append(product)
                     continue
+        if len(busted_subs):
+            errorWindow(_("<b>Unable to subscribe to product(s) %s</b>\n\nPlease see /var/log/rhsm/rhsm.log for more information." % ', '.join(busted_subs[:])))
         # Force fetch all certs
         certlib.update()
         if len(self.selected.items()):
             slabel.set_label(_("<i><b>Successfully consumed %s subscription(s)</b></i>" % subscribed_count))
+        elif not len(subscribed_count):
+            slabel.set_label(_("<i><b>No subscription(s) consumed</b></i>" % subscribed_count))
         else:
             slabel.set_label(_("<i><b>Please select atleast one subscription to apply</b></i>"))
 
