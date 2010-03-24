@@ -132,7 +132,7 @@ class ManageSubscriptionPage:
         #self.tv_products.set_rules_hint(True)
 
         col = gtk.TreeViewColumn('')
-        col.set_spacing(6)
+        col.set_spacing(15)
         cell = gtk.CellRendererPixbuf()
         col.pack_start(cell, False)
         cell.set_fixed_size(-1, 35)
@@ -154,7 +154,7 @@ class ManageSubscriptionPage:
 
         col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=3)
         col.set_sort_column_id(3)
-        col.set_spacing(6)
+        #col.set_spacing(6)
         self.tv_products.append_column(col)
 
         #self.productList.set_sort_column_id(1, gtk.SORT_ASCENDING)
@@ -288,8 +288,12 @@ class RegistrationTokenScreen:
     def setAccountMsg(self):
         euser = consumer['user_account'] or None
         alabel = self.regtokenxml.get_widget("account_label")
-        alabel.set_label(_("\nThis system is registered with the account <b>%s</b>\n\n<b>UID:</b> %s" % (euser, consumer['uuid'])))
-
+        alabel.set_label(_("\n<b>User Account:</b>   %s" % euser))
+        alabel1 = self.regtokenxml.get_widget("account_label1")
+        alabel1.set_label(_("\nThis system is registered with the account"))
+        alabel = self.regtokenxml.get_widget("account_label2")
+        alabel.set_label(_("<b>  ConsumerID:</b>     %s" % consumer["uuid"]))
+        
     def submitToken(self, button):
         rlabel = self.regtokenxml.get_widget("regtoken_entry")
         reg_token = rlabel.get_text()

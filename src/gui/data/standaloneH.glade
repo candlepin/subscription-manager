@@ -29,7 +29,7 @@
                       <widget class="GtkImage" id="sm_icon">
                         <property name="visible">True</property>
                         <property name="xalign">0.25</property>
-                        <property name="stock">gtk-missing-image</property>
+                        <property name="stock">gtk-index</property>
                         <property name="icon-size">6</property>
                       </widget>
                       <packing>
@@ -76,8 +76,6 @@
           <widget class="GtkHPaned" id="product_details_hpane">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="position">600</property>
-            <property name="position_set">True</property>
             <child>
               <widget class="GtkVPaned" id="vpaned_updates">
                 <property name="visible">True</property>
@@ -129,18 +127,18 @@
                 </child>
               </widget>
               <packing>
-                <property name="resize">False</property>
-                <property name="shrink">True</property>
+                <property name="resize">True</property>
+                <property name="shrink">False</property>
               </packing>
             </child>
             <child>
               <widget class="GtkHButtonBox" id="dialog-action_area2">
-                <property name="width_request">100</property>
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">3</property>
-                <property name="layout_style">center</property>
+                <property name="homogeneous">True</property>
+                <property name="layout_style">end</property>
                 <child>
                   <widget class="GtkButton" id="button_add1">
                     <property name="label">gtk-add</property>
@@ -195,8 +193,8 @@
                 </child>
               </widget>
               <packing>
-                <property name="resize">True</property>
-                <property name="shrink">False</property>
+                <property name="resize">False</property>
+                <property name="shrink">True</property>
               </packing>
             </child>
           </widget>
@@ -243,6 +241,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
+            <property name="padding">1</property>
             <property name="position">2</property>
           </packing>
         </child>
@@ -274,10 +273,12 @@
                 <property name="label" translatable="yes" context="yes">Please enter your account information for &lt;b&gt;Red Hat Entitlement Platform&lt;/b&gt; (http://redhat.com/candlepin)</property>
                 <property name="use_markup">True</property>
                 <property name="wrap">True</property>
+                <property name="track_visited_links">False</property>
               </widget>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
+                <property name="padding">8</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -367,9 +368,8 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                       <widget class="GtkLabel" id="loginPasswordEntryLabel1">
                         <property name="visible">True</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes" context="yes">_Password:</property>
+                        <property name="label" translatable="yes" context="yes">Password:</property>
                         <property name="use_markup">True</property>
-                        <property name="use_underline">True</property>
                       </widget>
                       <packing>
                         <property name="top_attach">1</property>
@@ -382,9 +382,8 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                       <widget class="GtkLabel" id="loginUserEntryLabel1">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes" context="yes">_UserID:</property>
+                        <property name="label" translatable="yes" context="yes">UserID:</property>
                         <property name="use_markup">True</property>
-                        <property name="use_underline">True</property>
                       </widget>
                       <packing>
                         <property name="x_options">GTK_FILL</property>
@@ -412,6 +411,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
           </widget>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">False</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -452,7 +452,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
             </child>
           </widget>
           <packing>
-            <property name="expand">False</property>
+            <property name="fill">False</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
@@ -463,7 +463,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
   <widget class="GtkDialog" id="dialog1_add">
     <property name="width_request">480</property>
     <property name="height_request">300</property>
-    <property name="border_width">5</property>
+    <property name="border_width">10</property>
     <property name="title" translatable="yes">Add Subscriptions</property>
     <property name="window_position">center</property>
     <property name="type_hint">dialog</property>
@@ -510,7 +510,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="double_buffered">False</property>
-                        <property name="border_width">6</property>
+                        <property name="border_width">12</property>
                         <property name="hover_selection">True</property>
                         <property name="enable_tree_lines">True</property>
                         <property name="tooltip_column">0</property>
@@ -535,6 +535,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 </child>
               </widget>
               <packing>
+                <property name="padding">4</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -546,6 +547,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
         <child internal-child="action_area">
           <widget class="GtkHButtonBox" id="dialog-action_area3">
             <property name="visible">True</property>
+            <property name="homogeneous">True</property>
             <property name="layout_style">end</property>
             <child>
               <widget class="GtkButton" id="add_subscribe_button1">
@@ -726,7 +728,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
   </widget>
   <widget class="GtkDialog" id="dialog1_updates">
     <property name="width_request">480</property>
-    <property name="height_request">400</property>
+    <property name="height_request">300</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Update Subscriptions</property>
     <property name="window_position">center</property>
@@ -848,8 +850,11 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
     </child>
   </widget>
   <widget class="GtkDialog" id="register_token_dialog">
-    <property name="border_width">5</property>
+    <property name="width_request">400</property>
+    <property name="height_request">300</property>
+    <property name="border_width">12</property>
     <property name="title" translatable="yes">Registration Settings</property>
+    <property name="resizable">False</property>
     <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
@@ -883,7 +888,19 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                       </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <widget class="GtkLabel" id="account_label1">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">header</property>
+                        <property name="use_markup">True</property>
+                        <property name="ellipsize">middle</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="padding">5</property>
+                        <property name="position">1</property>
+                      </packing>
                     </child>
                     <child>
                       <widget class="GtkHBox" id="hbox3">
@@ -891,6 +908,8 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <child>
                           <widget class="GtkLabel" id="account_label">
                             <property name="visible">True</property>
+                            <property name="xalign">0.039999999105930328</property>
+                            <property name="label" translatable="yes">userId</property>
                             <property name="use_markup">True</property>
                             <property name="ellipsize">middle</property>
                           </widget>
@@ -921,7 +940,17 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                       </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <widget class="GtkLabel" id="account_label2">
+                        <property name="visible">True</property>
+                        <property name="xalign">0.05000000074505806</property>
+                        <property name="label" translatable="yes">consumerId</property>
+                        <property name="use_markup">True</property>
+                        <property name="ellipsize">middle</property>
+                      </widget>
+                      <packing>
+                        <property name="padding">5</property>
+                        <property name="position">3</property>
+                      </packing>
                     </child>
                   </widget>
                   <packing>
