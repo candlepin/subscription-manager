@@ -361,11 +361,13 @@ class AddSubscriptionScreen:
             # state = (bool, iter)
             if state[0]:
                 try:
-                    entitled_data = UEP.bindByProduct(consumer['uuid'], product)['entitlement']['pool']
+                    ent_ret = UEP.bindByProduct(consumer['uuid'], product)
+                    entitled_data = ent_ret[0]['entitlement']['pool']
                     updated_count = str(int(entitled_data['quantity']) - int(entitled_data['consumed']))
                     my_model.set_value(state[-1], 3, updated_count)
                     subscribed_count+=1
                 except Exception, e:
+                    raise e
                     # Subscription failed, continue with rest
                     log.error("Failed to subscribe to product %s Error: %s" % (product, e))
                     busted_subs.append(product)
@@ -376,12 +378,10 @@ class AddSubscriptionScreen:
         certlib.update()
         if len(self.selected.items()):
             slabel.set_label(_("<i><b>Successfully consumed %s subscription(s)</b></i>" % subscribed_count))
-        elif not len(subscribed_count):
-            slabel.set_label(_("<i><b>No subscription(s) consumed</b></i>" % subscribed_count))
+            # refresh main window
+            reload()
         else:
             slabel.set_label(_("<i><b>Please select atleast one subscription to apply</b></i>"))
-        # refresh main window
-        reload()
 
     def populateAvailableList(self):
         #self.tv_products =  self.addxml.get_widget("treeview_available")
@@ -631,7 +631,6 @@ def main():
 
     gui = ManageSubscriptionPage()
     gtk.main()
-    print "main done"
 
 
 if __name__ == "__main__":

@@ -250,8 +250,6 @@
     </child>
   </widget>
   <widget class="GtkDialog" id="register_dialog">
-    <property name="width_request">480</property>
-    <property name="height_request">200</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Account Registration</property>
     <property name="window_position">center</property>
@@ -550,22 +548,6 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
           <widget class="GtkHButtonBox" id="dialog-action_area3">
             <property name="visible">True</property>
             <property name="layout_style">end</property>
-            <!--<child>
-              <widget class="GtkButton" id="import_cert_button3">
-                <property name="label">Import Certificate..</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_import_cert_button_clicked"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="padding">423</property>
-                <property name="position">0</property>
-                <property name="secondary">True</property>
-              </packing>
-            </child>-->
             <child>
               <widget class="GtkButton" id="add_subscribe_button1">
                 <property name="label">Apply</property>
@@ -856,23 +838,6 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="position">2</property>
               </packing>
             </child>
-            <!--<child>
-              <widget class="GtkButton" id="import_cert_button5">
-                <property name="label">Import Certificate..</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_import_cert_button_clicked"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="padding">423</property>
-                <property name="pack_type">end</property>
-                <property name="position">0</property>
-                <property name="secondary">True</property>
-              </packing>
-            </child>-->
           </widget>
           <packing>
             <property name="expand">False</property>
@@ -941,10 +906,12 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="double_buffered">False</property>
                             <signal name="clicked" handler="on_change_account_button"/>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="fill">False</property>
                             <property name="padding">5</property>
                             <property name="position">1</property>
                           </packing>
@@ -977,7 +944,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="use_markup">True</property>
                       </widget>
                       <packing>
-                        <property name="padding">5</property>
+                        <property name="padding">20</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -989,7 +956,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="label" translatable="yes">Enter a registration number for products purchased from Red hat:</property>
                       </widget>
                       <packing>
-                        <property name="padding">5</property>
+                        <property name="padding">2</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -1100,6 +1067,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
           </widget>
           <packing>
             <property name="expand">False</property>
+            <property name="padding">3</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
