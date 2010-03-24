@@ -178,7 +178,6 @@ class ManageSubscriptionPage:
             self.sumlabel.set_label(_("Add or Update subscriptions for products you are using."))
 
     def onUnsubscribeAction(self, button):
-        print self.pname_selected
         log.info("Product %s selected for unsubscribe" % self.pname_selected)
         try:
             ent_list = UEP.getEntitlementList(consumer['uuid'])
@@ -187,14 +186,14 @@ class ManageSubscriptionPage:
                 print ent['entitlement']['pool']['productId']
                 if self.pname_selected == ent['entitlement']['pool']['productId']:
                     entId = ent['entitlement']['id']
-            print UEP.unBindByEntitlementId(consumer['uuid'], entId)
-            log.info("This machine is not unsubscribed from Product %s " % self.pname_selected)
+            UEP.unBindByEntitlementId(consumer['uuid'], entId)
+            log.info("This machine is now unsubscribed from Product %s " % self.pname_selected)
             # Force fetch all certs
-            certlib.update()
         except Exception, e:
+            # raise warning window
             log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
             errorWindow(_("<b>Unable to perform unsubscribe.</b>\n\nPlease see /var/log/rhsm/rhsm.log for more information."))
-            # raise warning window
+        certlib.update()
 
 class RegisterScreen:
     """
@@ -367,7 +366,6 @@ class AddSubscriptionScreen:
                     my_model.set_value(state[-1], 3, updated_count)
                     subscribed_count+=1
                 except Exception, e:
-                    raise e
                     # Subscription failed, continue with rest
                     log.error("Failed to subscribe to product %s Error: %s" % (product, e))
                     busted_subs.append(product)
@@ -477,7 +475,7 @@ class UpdateSubscriptionScreen:
         cell.set_property('activatable', True)
         cell.connect('toggled', self.col_update_selected, self.updatesList)
 
-        column = gtk.TreeViewColumn(_('Select'), cell)
+        column = gtk.TreeViewColumn(_(' '), cell)
         column.add_attribute(cell, "active", 0)
         self.tv_products.append_column(column)
 
