@@ -109,6 +109,12 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Wed Mar 24 2010 Pradeep Kilambi <pkilambi@redhat.com>
+- Resolves: #568427
+- event notification from add/remove and update subscription actions to main window
+- error notification windows
+- registration should now auto subscribe products and redirect to already-registered screen
+
 * Mon Mar 22 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.20-1
 - Resolves: #568427
 - logging support
