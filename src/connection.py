@@ -34,16 +34,21 @@ class Restlib(object):
     """
      A wrapper around httplib to make rest calls easier
     """
-    def __init__(self, host, port, apihandler):
+    def __init__(self, host, port, apihandler, cert_file=None, key_file=None,):
         self.host = host
         self.port = port
         self.apihandler = apihandler
         self.headers = {"Content-type":"application/json",
                         "Accept": "application/json"}
+        self.cert_file = cert_file
+        self.key_file  = key_file
 
     def _request(self, request_type, method, info=None):
         handler = self.apihandler + method
-        conn = httplib.HTTPConnection(self.host, self.port)
+        if self.cert_file:
+            conn = httplib.HTTPSConnection(self.host, self.port, key_file = self.key_file, cert_file = self.cert_file)
+        else:
+            conn = httplib.HTTPConnection(self.host, self.port)
         conn.request(request_type, handler, body=json.dumps(info), \
                      headers=self.headers)
         response = conn.getresponse()
@@ -77,16 +82,18 @@ class UEPConnection:
     Proxy for Unified Entitlement Platform.
     """
 
-    def __init__(self, host='localhost', port=8080, handler="/candlepin"):
+    def __init__(self, host='localhost', port=8080, handler="/candlepin", cert_file=None, key_file=None):
         self.host = host
         self.port = port
         self.handler = handler
         self.conn = None
+        self.cert_file = cert_file
+        self.key_file = key_file
         # initialize connection
         self.setUp()
 
     def setUp(self):
-        self.conn = Restlib(self.host, self.port, self.handler)
+        self.conn = Restlib(self.host, self.port, self.handler, self.cert_file, self.key_file)
         log.info("Connection Established for cli: Host: %s, Port: %s, handler: %s" % (self.host, self.port, self.handler))
 
     def shutDown(self):
@@ -186,7 +193,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         uep = UEPConnection(sys.argv[1])
     else:
-        uep = UEPConnection()
+        uep = UEPConnection(port="8443", cert_file="/etc/candlepin/certs/candlepin-ca.crt", key_file="/etc/candlepin/certs/candlepin-ca.key")
     # create a consumer
     print "Ping Server", uep.ping()
     stype = {'label':'system'}
