@@ -127,6 +127,7 @@ fi
 
 %changelog
 * Thu Mar 25 2010 Pradeep Kilambi <pkilambi@redhat.com> 
+- Resolves: #568427
 - Spec file clean up
 - moving gnome tools to separate package
 
