@@ -14,11 +14,23 @@ Requires: yum >= 3.2.19-15
 Requires(post): chkconfig
 Requires(preun): chkconfig
 Requires(preun): initscripts
-#Requires: pygtk2 pygtk2-libglade gnome-python2 gnome-python2-canvas
-#Requires: usermode-gtk
+BuildRequires: python-devel
+BuildRequires: gettext
+BuildRequires: intltool
 
 %description
 Subscription Manager package provides programs and libraries to allow users to manager subscriptions and repos from a unified entitlement or a deployment Platform.
+
+%package -n subscription-manager-gnome
+Summary: A GUI interface to manage Red Hat product subscriptions
+Group: System Environment/Base
+Requires: %{name} = %{version}-%{release}
+Requires: pygtk2 pygtk2-libglade gnome-python2 gnome-python2-canvas
+Requires: usermode-gtk
+
+%description -n subscription-manager-gnome
+subscription-manager-gnome contains a GTK+ graphical interface for configuring and registering a system with a Red Hat Entitlement platform and manage subscriptions.
+
 
 %prep
 %setup -q
@@ -60,33 +72,26 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 
 # dirs
-%dir /usr/share/rhsm
-%dir /usr/share/rhsm/gui
+%dir %{_datadir}/rhsm
+%dir %{_datadir}/rhsm/gui
+%dir %{_datadir}/rhsm/gui/data
 
 #files
-/usr/share/rhsm/__init__.py*
-/usr/share/rhsm/connection.py*
-/usr/share/rhsm/managercli.py*
-/usr/share/rhsm/managerlib.py*
-/usr/share/rhsm/repolib.py*
+%{_datadir}/rhsm/__init__.py*
+%{_datadir}/rhsm/connection.py*
+%{_datadir}/rhsm/managercli.py*
+%{_datadir}/rhsm/managerlib.py*
+%{_datadir}/rhsm/repolib.py*
 /usr/lib/yum-plugins/rhsmplugin.py*
-/usr/share/rhsm/certificate.py*
-/usr/share/rhsm/certlib.py*
-/usr/share/rhsm/hwprobe.py*
-/usr/share/rhsm/config.py*
-/usr/share/rhsm/logutil.py*
-/usr/share/rhsm/OptionsCli.py*
-/usr/share/rhsm/lock.py*
-/usr/share/rhsm/gui/__init__.py* 
-/usr/share/rhsm/gui/firstboot.py* 
-/usr/share/rhsm/gui/managergui.py*  
-/usr/share/rhsm/gui/messageWindow.py*  
-/usr/share/rhsm/gui/data/standaloneH.glade  
-/usr/share/rhsm/gui/data/subsgui.glade  
-/usr/share/rhsm/gui/data/subsMgr.glade
-#/usr/share/rhsm/rhsmcertd.*
+%{_datadir}/rhsm/certificate.py*
+%{_datadir}/rhsm/certlib.py*
+%{_datadir}/rhsm/hwprobe.py*
+%{_datadir}/rhsm/config.py*
+%{_datadir}/rhsm/logutil.py*
+%{_datadir}/rhsm/OptionsCli.py*
+%{_datadir}/rhsm/lock.py*
+#%{_datadir}/rhsm/rhsmcertd.*
 %attr(755,root,root) %{_sbindir}/subscription-manager-cli
-%attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(700,root,root) %dir %{_var}/log/rhsm
 %attr(755,root,root) %{_bindir}/rhsmcertd
 %attr(755,root,root) %{_sysconfdir}/init.d/rhsmcertd
@@ -97,6 +102,18 @@ rm -rf $RPM_BUILD_ROOT
 
 %doc
 %{_mandir}/man8/subscription-manager-cli.8*
+
+%files -n subscription-manager-gnome
+%defattr(-,root,root,-)
+%{_datadir}/rhsm/gui/__init__.py* 
+%{_datadir}/rhsm/gui/firstboot.py* 
+%{_datadir}/rhsm/gui/managergui.py*  
+%{_datadir}/rhsm/gui/messageWindow.py*  
+%{_datadir}/rhsm/gui/data/standaloneH.glade  
+%{_datadir}/rhsm/gui/data/subsgui.glade  
+%{_datadir}/rhsm/gui/data/subsMgr.glade
+%attr(755,root,root) %{_sbindir}/subscription-manager-gui
+
 
 %post
 chkconfig --add rhsmcertd
@@ -109,6 +126,10 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Thu Mar 25 2010 Pradeep Kilambi <pkilambi@redhat.com> 
+- Spec file clean up
+- moving gnome tools to separate package
+
 * Wed Mar 24 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.21-1
 - Resolves: #568427
 - event notification from add/remove and update subscription actions to main window
