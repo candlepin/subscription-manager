@@ -27,6 +27,7 @@ Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
 Requires: pygtk2 pygtk2-libglade gnome-python2 gnome-python2-canvas
 Requires: usermode-gtk
+Requires: subscription-manager
 
 %description -n subscription-manager-gnome
 subscription-manager-gnome contains a GTK+ graphical interface for configuring and registering a system with a Red Hat Entitlement platform and manage subscriptions.
@@ -131,6 +132,8 @@ fi
 - Resolves: #568427
 - Spec file clean up
 - moving gnome tools to separate package
+- methods to define concrete description for products based on the state, product info and entitlement info.
+- constants file to accumulate all static strings in one place 
 
 * Wed Mar 24 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.21-1
 - Resolves: #568427
