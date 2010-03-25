@@ -117,6 +117,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="editable">False</property>
+                        <property name="wrap_mode">word</property>
                       </widget>
                     </child>
                   </widget>
@@ -452,6 +453,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
             </child>
           </widget>
           <packing>
+            <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>

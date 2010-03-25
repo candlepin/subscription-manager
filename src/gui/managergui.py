@@ -33,6 +33,7 @@ import hwprobe
 import managerlib
 import connection
 import config
+import constants
 
 from certlib import EntitlementDirectory, ProductDirectory, ConsumerIdentity, CertLib
 import gettext
@@ -172,10 +173,14 @@ class ManageSubscriptionPage:
 
     def updateMessage(self):
         self.sumlabel = self.subsxml.get_widget("summaryLabel1")
-        if self.warn_count:
-            self.sumlabel.set_label(_("<b>\n %s products or subscriptions need your attention.\n\n</b>Add or Update subscriptions for products you are using.\n" % self.warn_count))
+        if self.warn_count > 1:
+            self.sumlabel.set_label(
+                          constants.WARN_SUBSCRIPTIONS % self.warn_count)
+        elif self.warn_count == 1:
+            self.sumlabel.set_label(
+                          constants.WARN_ONE_SUBSCRIPTION % self.warn_count)
         else:
-            self.sumlabel.set_label(_("Add or Update subscriptions for products you are using."))
+            self.sumlabel.set_label(constants.COMPLIANT_STATUS)
 
     def onUnsubscribeAction(self, button):
         log.info("Product %s selected for unsubscribe" % self.pname_selected)
@@ -192,7 +197,7 @@ class ManageSubscriptionPage:
         except Exception, e:
             # raise warning window
             log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
-            errorWindow(_("<b>Unable to perform unsubscribe.</b>\n\nPlease see /var/log/rhsm/rhsm.log for more information."))
+            errorWindow(constants.UNSUBSCRIBE_ERROR)
         certlib.update()
 
 class RegisterScreen:
@@ -304,7 +309,7 @@ class RegistrationTokenScreen:
             status.set_label(_("<b>Successfully subscribed to token %s</b>" % reg_token))
         except Exception, e:
             log.error("Could not subscribe registration token %s " % reg_token)
-            status.set_label(_("<b>\nCould not subscribe to token %s</b>\n" % reg_token))
+            status.set_label(constants.SUBSCRIBE_REGTOKEN_ERROR % reg_token)
 
 class AddSubscriptionScreen:
     """
@@ -338,7 +343,7 @@ class AddSubscriptionScreen:
             self.addWin.connect("hide", self.cancel)
             self.addWin.show_all()
             if not available_ent:
-                infoWindow(_("<b>No subscriptions available for this account</b>"), self.addWin)
+                infoWindow(constants.NO_SUBSCRIPTIONS_WARNING, self.addWin)
                 self.addWin.hide()
         else:
             # no CP to talk, use local certs uploads
@@ -375,15 +380,15 @@ class AddSubscriptionScreen:
                     busted_subs.append(product)
                     continue
         if len(busted_subs):
-            errorWindow(_("<b>Unable to subscribe to product(s) %s</b>\n\nPlease see /var/log/rhsm/rhsm.log for more information." % ', '.join(busted_subs[:])))
+            errorWindow(constants.SUBSCRIBE_ERROR % ', '.join(busted_subs[:]))
         # Force fetch all certs
         certlib.update()
         if len(self.selected.items()):
-            slabel.set_label(_("<i><b>Successfully consumed %s subscription(s)</b></i>" % subscribed_count))
+            slabel.set_label(constants.SUBSCRIBE_SUCCSSFUL % subscribed_count)
             # refresh main window
             reload()
         else:
-            slabel.set_label(_("<i><b>Please select atleast one subscription to apply</b></i>"))
+            slabel.set_label(constants.ATLEAST_ONE_SELECTION)
 
     def populateAvailableList(self):
         #self.tv_products =  self.addxml.get_widget("treeview_available")
@@ -454,7 +459,7 @@ class UpdateSubscriptionScreen:
             self.updateWin.connect("hide", self.cancel)
             self.updateWin.show_all()
             if not self.available_updates:
-                infoWindow(_("No subscription updates available"), self.updateWin)
+                infoWindow(constants.NO_UPDATES_WARNING, self.updateWin)
                 self.updateWin.hide()
         else:
             ImportCertificate()
@@ -527,9 +532,9 @@ class UpdateSubscriptionScreen:
         # Force fetch all certs
         certlib.update()
         if len(self.selected.items()):
-            slabel.set_label(_("<i><b>Successfully consumed %s subscription(s)</b></i>" % subscribed_count))
+            slabel.set_label(constants.SUBSCRIBE_SUCCSSFUL % subscribed_count)
         else:
-            slabel.set_label(_("<i><b>Please select atleast one subscription to apply</b></i>"))
+            slabel.set_label(constants.ATLEAST_ONE_SELECTION)
         reload()
 
 class ImportCertificate:
@@ -566,18 +571,14 @@ class ImportCertificate:
             os.mkdir(ENT_CONFIG_DIR)
 
         dest_file_path = os.path.join(ENT_CONFIG_DIR, os.path.basename(src_cert_file))
-        if not os.path.exists(dest_file_path):
-            shutil.copy(src_cert_file, dest_file_path)
+        #if not os.path.exists(dest_file_path):
+        shutil.copy(src_cert_file, dest_file_path)
         print dest_file_path
         self.importWin.hide()
         reload()
 
 def unexpectedError(message, exc_info=None):
-    message = message + "\n" + (_("This error shouldn't have happened. If you'd "
-                                 "like to help us improve this program, please "
-                                 "file a bug at bugzilla.redhat.com. Including "
-                                 "the relevant parts of would be very "
-                                 "helpful. Thanks!") )
+    message = message + "\n" + (constants.UNEXPECTED_ERROR)
     errorWindow(message)
     if exc_info:
         (etype, value, stack_trace) = exc_info

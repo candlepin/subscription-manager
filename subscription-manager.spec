@@ -87,6 +87,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/certlib.py*
 %{_datadir}/rhsm/hwprobe.py*
 %{_datadir}/rhsm/config.py*
+%{_datadir}/rhsm/constants.py*
 %{_datadir}/rhsm/logutil.py*
 %{_datadir}/rhsm/OptionsCli.py*
 %{_datadir}/rhsm/lock.py*

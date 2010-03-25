@@ -17,6 +17,7 @@
 #
 import os
 import sys
+import constants
 from certlib import CertLib, ConsumerIdentity, \
                     ProductDirectory, EntitlementDirectory
 from logutil import getLogger
@@ -74,11 +75,45 @@ def getConsumedProductEntitlements():
     return consumed_products
 
 def getProductDescription(qproduct):
+    entcerts = EntitlementDirectory().list()
     products = ProductDirectory().list()
+    product_status = getInstalledProductStatus()
     data = ""
+    for pst in product_status:
+        print pst
+        if qproduct == pst[0]:
+            if pst[1] == "Subscribed":
+                data = constants.subscribed_status % (pst[0], pst[2])
+            if pst[1] == "Not Subscribed":
+                data = constants.unsubscribed_status % (pst[0], pst[0], pst[0])
+            if pst[1] == "Expired":
+                data = constants.expired_status % (pst[0], pst[2], pst[0], pst[0])
+    
     for product in products:
         if qproduct == product.getProduct().getName():
-            data = product.__str__()
+            product = product.getProduct()
+            data += constants.product_describe % (product.getName(),
+                                       product.getDescription(), 
+                                       product.getArch(), 
+                                       product.getVersion(), 
+                                       product.getQuantity(), 
+                                       product.getSubtype(), 
+                                       product.getVirtLimit(), 
+                                       product.getSocketLimit(), 
+                                       product.getProductOptionCode())
+    for cert in entcerts:
+        if qproduct == cert.getProduct().getName():
+            ents =  cert.getEntitlements()
+            data += """ ENTITLEMENTS \n"""
+            data += """======================="""
+            for ent in ents:
+                data += constants.entitlement_describe % (ent.getName(),
+                                                str(ent.getLabel()),
+                                                ent.getQuantity(),
+                                                ent.getFlexQuantity(),
+                                                ent.getVendor(),
+                                                str(ent.getUrl()),
+                                                ent.getEnabled()) 
     return data
 
 def getAvailableEntitlements(cpserver, consumer):

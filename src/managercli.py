@@ -123,7 +123,7 @@ class RegisterCommand(CliCommand):
                log.info("Automatically subscribe the machine to product %s " % product[0])
             except:
                log.warning("Warning: Unable to auto subscribe the machine to %s" % product[0])
-
+        self.certlib.update()
 class SubscribeCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog subscribe [OPTIONS]"
