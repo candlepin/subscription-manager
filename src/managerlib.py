@@ -119,6 +119,16 @@ def getProductDescription(qproduct):
 def getAvailableEntitlements(cpserver, consumer):
     columns  = ['quantity', 'consumed', 'endDate', 'productId']
     dlist = cpserver.getPoolsList(consumer)
+    print dlist
+    data = [_sub_dict(pool['pool'], columns) for pool in dlist]
+    for d in data:
+        d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
+        del d['consumed']
+    return data
+
+def getAvailableEntitlementsCLI(cpserver, consumer):
+    columns  = ['id', 'quantity', 'consumed', 'endDate', 'productId']
+    dlist = cpserver.getPoolsList(consumer)
     data = [_sub_dict(pool['pool'], columns) for pool in dlist]
     for d in data:
         d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
