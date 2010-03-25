@@ -33,7 +33,13 @@ class RepoLib:
             return update.perform()
         finally:
             lock.release()
+
+    def setVersion(self, repo, version):
+        pass
     
+    def listVersions(self, repo):
+        pass
+
 
 class Action:
 
@@ -143,6 +149,7 @@ class Repo(dict):
         ('sslcacert', 0, CA),
         ('sslclientkey', 1, None),
         ('sslclientcert', 1, None),
+        ('version', 1, None),
     )
     
     def __init__(self, id):
@@ -226,6 +233,51 @@ class RepoFile(Reader):
             s.append(str(repo))
             s.append('')
         return '\n'.join(s)
+
+
+class URL:
+
+    VERSION = '$version'
+
+    @classmethod
+    def needsVersion(cls, baseurl):
+        for url in baseurl:
+            parts = url.split('/')
+            for p in parts:
+                if p == cls.VERSION:
+                    return True
+        return False
+
+    @classmethod
+    def versionUrl(cls, url):
+        suburl = []
+        parts = url.split('/')
+        for p in parts:
+            if p == cls.VERSION:
+                break
+            else:
+                suburl.append(p)
+        return suburl
+
+    @classmethod
+    def replaceVersion(cls, url, version):
+        updated = []
+        parts = url.split('/')
+        for p in parts:
+            if p == cls.VERSION:
+                updated.append(version)
+            else:
+                updated.append(p)
+        return '/'.join(updated)
+
+    @classmethod
+    def replaceVersions(cls, baseurl, version):
+        updated = []
+        for url in baseurl:
+            url = cls.replaceVersion(url, version)
+            updated.append(url)
+        return updated
+
 
 
 def main():
