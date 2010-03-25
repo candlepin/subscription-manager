@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.21
+Version: 0.22
 Release: 1
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -128,7 +128,7 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Thu Mar 25 2010 Pradeep Kilambi <pkilambi@redhat.com> 
+* Thu Mar 25 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.22-1
 - Resolves: #568427
 - Spec file clean up
 - moving gnome tools to separate package
