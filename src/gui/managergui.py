@@ -45,6 +45,9 @@ from logutil import getLogger
 log = getLogger(__name__)
 
 gladexml = "/usr/share/rhsm/gui/data/standaloneH.glade"
+subs_full = "/usr/share/rhsm/gui/data/icons/subsmgr-full.png"
+subs_empty = "/usr/share/rhsm/gui/data/icons/subsmgr-empty.png"
+
 
 cfg = config.initConfig()
 
@@ -179,14 +182,18 @@ class ManageSubscriptionPage:
 
     def updateMessage(self):
         self.sumlabel = self.subsxml.get_widget("summaryLabel1")
+        self.sm_icon  = self.subsxml.get_widget("sm_icon")
         if self.warn_count > 1:
             self.sumlabel.set_label(
                           constants.WARN_SUBSCRIPTIONS % self.warn_count)
+            self.sm_icon.set_from_file(subs_empty)
         elif self.warn_count == 1:
             self.sumlabel.set_label(
                           constants.WARN_ONE_SUBSCRIPTION % self.warn_count)
+            self.sm_icon.set_from_file(subs_empty)
         else:
             self.sumlabel.set_label(constants.COMPLIANT_STATUS)
+            self.sm_icon.set_from_file(subs_full)
 
     def onUnsubscribeAction(self, button):
         log.info("Product %s selected for unsubscribe" % self.pname_selected)

@@ -8,6 +8,8 @@
     <property name="window_position">center</property>
     <property name="default_width">700</property>
     <property name="default_height">600</property>
+    <property name="icon_name">subscription-manager</property>
+    <!--<property name="icon_name">zen-icon</property>-->
     <child>
       <widget class="GtkVBox" id="dialog-vbox2">
         <property name="visible">True</property>
@@ -29,8 +31,7 @@
                       <widget class="GtkImage" id="sm_icon">
                         <property name="visible">True</property>
                         <property name="xalign">0.25</property>
-                        <property name="stock">gtk-index</property>
-                        <property name="icon-size">6</property>
+                        <property name="icon-size">48</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>

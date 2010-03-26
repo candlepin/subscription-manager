@@ -43,9 +43,7 @@ cc src/rhsmcertd.c -o bin/rhsmcertd
 %install
 # TODO: Need clean/Makefile
 rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/usr/share/rhsm
-mkdir -p $RPM_BUILD_ROOT/usr/share/rhsm/gui
-mkdir -p $RPM_BUILD_ROOT/usr/share/rhsm/gui/data
+mkdir -p $RPM_BUILD_ROOT/usr/share/rhsm/gui/data/icons/16x16
 mkdir -p $RPM_BUILD_ROOT/usr/lib/yum-plugins/
 mkdir -p $RPM_BUILD_ROOT/usr/sbin
 mkdir -p $RPM_BUILD_ROOT/etc/rhsm
@@ -54,9 +52,12 @@ mkdir -p $RPM_BUILD_ROOT/%{_mandir}/man8/
 mkdir -p $RPM_BUILD_ROOT/var/log/rhsm 
 mkdir -p $RPM_BUILD_ROOT/%{_bindir}
 mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/init.d
+mkdir -p $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/16x16/apps/
 cp -R src/*.py $RPM_BUILD_ROOT/usr/share/rhsm
 cp -R src/gui/*.py $RPM_BUILD_ROOT/usr/share/rhsm/gui
-cp -R src/gui/data/* $RPM_BUILD_ROOT/usr/share/rhsm/gui/data/
+cp -R src/gui/data/*.glade $RPM_BUILD_ROOT/usr/share/rhsm/gui/data/
+cp -R src/gui/data/icons/*.png $RPM_BUILD_ROOT/usr/share/rhsm/gui/data/icons/
+cp -R src/gui/data/icons/16x16/subsmgr.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/16x16/apps/
 cp -R src/plugin/*.py $RPM_BUILD_ROOT/usr/lib/yum-plugins/
 cp src/subscription-manager-cli $RPM_BUILD_ROOT/usr/sbin
 cp src/subscription-manager-gui $RPM_BUILD_ROOT/usr/sbin
@@ -65,6 +66,19 @@ cp etc-conf/rhsmplugin.conf $RPM_BUILD_ROOT/etc/yum/pluginconf.d/
 cp bin/* $RPM_BUILD_ROOT/%{_bindir}
 cp src/rhsmcertd.init.d $RPM_BUILD_ROOT/%{_sysconfdir}/init.d/rhsmcertd
 cp man/* $RPM_BUILD_ROOT/%{_mandir}/man8/
+
+
+%post -n subscription-manager-gnome
+touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+
+%postun -n subscription-manager-gnome
+if [ $1 -eq 0 ] ; then
+    touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+    gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+fi
+
+%posttrans -n subscription-manager-gnome
+gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -76,6 +90,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/rhsm
 %dir %{_datadir}/rhsm/gui
 %dir %{_datadir}/rhsm/gui/data
+%dir %{_datadir}/rhsm/gui/data/icons
 
 #files
 %{_datadir}/rhsm/__init__.py*
@@ -114,6 +129,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/gui/data/standaloneH.glade  
 %{_datadir}/rhsm/gui/data/subsgui.glade  
 %{_datadir}/rhsm/gui/data/subsMgr.glade
+%{_datadir}/rhsm/gui/data/icons/subsmgr-empty.png
+%{_datadir}/rhsm/gui/data/icons/subsmgr-full.png
+%{_datadir}/icons/hicolor/16x16/apps/subsmgr.png
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 
 
