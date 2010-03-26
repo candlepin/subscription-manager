@@ -95,7 +95,6 @@ class UEPConnection:
         self.setUp()
 
     def setUp(self):
-        print self.host, self.port, self.handler, self.cert_file, self.key_file
         self.conn = Restlib(self.host, self.port, self.ssl_port, self.handler, self.cert_file, self.key_file)
         log.info("Connection Established for cli: Host: %s, Port: %s, handler: %s" % (self.host, self.port, self.handler))
 
@@ -196,7 +195,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         uep = UEPConnection(sys.argv[1])
     else:
-        uep = UEPConnection(port="8443", cert_file="/etc/candlepin/certs/candlepin-ca.crt", key_file="/etc/candlepin/certs/candlepin-ca.key")
+        uep = UEPConnection()
     # create a consumer
     print "Ping Server", uep.ping()
     stype = {'label':'system'}

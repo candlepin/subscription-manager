@@ -48,7 +48,7 @@ gladexml = "/usr/share/rhsm/gui/data/standaloneH.glade"
 
 cfg = config.initConfig()
 
-UEP = connection.UEPConnection(cfg['hostname'] or 'localhost')
+UEP = connection.UEPConnection(cfg['hostname'] or 'localhost', ssl_port=cfg['port'])
 certlib = CertLib()
 ENT_CONFIG_DIR="/etc/pki/entitlement/product/"
 
@@ -248,6 +248,11 @@ class RegisterScreen:
         RegistrationTokenScreen()
         self.registerWin.hide()
         reload()
+
+    def _reload_cp_with_certs(self):
+        cert_file = ConsumerIdentity.certpath()
+        key_file = ConsumerIdentity.keypath()
+        UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin", cert_file=cert_file, key_file=key_file)
 
     def _get_register_info(self):
         stype = {'label':'system'}
