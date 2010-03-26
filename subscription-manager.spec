@@ -99,6 +99,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sysconfdir}/init.d/rhsmcertd
 
 # config files
+%config(noreplace)
 %attr(644,root,root) /etc/rhsm/rhsm.conf
 %attr(644,root,root) /etc/yum/pluginconf.d/rhsmplugin.conf
 
