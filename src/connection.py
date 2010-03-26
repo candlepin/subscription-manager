@@ -34,9 +34,10 @@ class Restlib(object):
     """
      A wrapper around httplib to make rest calls easier
     """
-    def __init__(self, host, port, apihandler, cert_file=None, key_file=None,):
+    def __init__(self, host, port, ssl_port, apihandler, cert_file=None, key_file=None,):
         self.host = host
         self.port = port
+        self.ssl_port = ssl_port
         self.apihandler = apihandler
         self.headers = {"Content-type":"application/json",
                         "Accept": "application/json"}
@@ -46,7 +47,7 @@ class Restlib(object):
     def _request(self, request_type, method, info=None):
         handler = self.apihandler + method
         if self.cert_file:
-            conn = httplib.HTTPSConnection(self.host, self.port, key_file = self.key_file, cert_file = self.cert_file)
+            conn = httplib.HTTPSConnection(self.host, self.ssl_port, key_file = self.key_file, cert_file = self.cert_file)
         else:
             conn = httplib.HTTPConnection(self.host, self.port)
         conn.request(request_type, handler, body=json.dumps(info), \
@@ -82,9 +83,10 @@ class UEPConnection:
     Proxy for Unified Entitlement Platform.
     """
 
-    def __init__(self, host='localhost', port=8080, handler="/candlepin", cert_file=None, key_file=None):
+    def __init__(self, host='localhost', port=8080, ssl_port=8443, handler="/candlepin", cert_file=None, key_file=None):
         self.host = host
         self.port = port
+        self.ssl_port = ssl_port
         self.handler = handler
         self.conn = None
         self.cert_file = cert_file
@@ -94,7 +96,7 @@ class UEPConnection:
 
     def setUp(self):
         print self.host, self.port, self.handler, self.cert_file, self.key_file
-        self.conn = Restlib(self.host, self.port, self.handler, self.cert_file, self.key_file)
+        self.conn = Restlib(self.host, self.port, self.ssl_port, self.handler, self.cert_file, self.key_file)
         log.info("Connection Established for cli: Host: %s, Port: %s, handler: %s" % (self.host, self.port, self.handler))
 
     def shutDown(self):
