@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.25
+Version: 0.26
 Release: 1
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -146,7 +146,7 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Fri Mar 26 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.25-1
+* Fri Mar 26 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.26-1
 - Resolves:  #568427
 - bug#577238 dont replace config upon reinstall (pkilambi@redhat.com)
 - breaking clients. comment our ssl cert stuff until its functional on cp
