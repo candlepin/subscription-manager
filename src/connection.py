@@ -93,6 +93,7 @@ class UEPConnection:
         self.setUp()
 
     def setUp(self):
+        print self.host, self.port, self.handler, self.cert_file, self.key_file
         self.conn = Restlib(self.host, self.port, self.handler, self.cert_file, self.key_file)
         log.info("Connection Established for cli: Host: %s, Port: %s, handler: %s" % (self.host, self.port, self.handler))
 
@@ -210,12 +211,11 @@ if __name__ == '__main__':
         }
     }
     try:
-        consumer = uep.registerConsumer('admin', 'password', info=params)
+        consumer = uep.registerConsumer('admin', 'redhat', info=params)
         print "Created a consumer ", consumer
         # sync certs
         #print "Initiate cert synchronization for uuid"
         print uep.syncCertificates(consumer['uuid']) 
-        print "ZZZZZZZZZZZ",uep.getCertificateSerials(consumer['uuid'])
         print "GetCertBySeriallllll",uep.getCertificatesBySerial(consumer['uuid'], ['SERIAL001','SERIAL001'])
         # bind consumer to regNumber
         #uep.bindByRegNumber(consumer['uuid'],"1234-5334-4e23-2432-4345") 
@@ -223,6 +223,7 @@ if __name__ == '__main__':
         #uep.bindByEntitlementPool(consumer['uuid'], "1001")
         # bind consumer By Product
         print "bind by product", uep.bindByProduct(consumer['uuid'], "monitoring") #product["label"])
+        print "ZZZZZZZZZZZ",uep.getCertificateSerials(consumer['uuid'])
         # Unbind All
         #print uep.unbindAll(consumer['uuid'])
         # Unbind serialNumbers

@@ -48,7 +48,7 @@ class CliCommand(object):
         self.name = name
 
         self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost",\
-                             port=cfg['port'] or "8080", handler="/candlepin")
+                             port=cfg['port'] or "8080", handler="/candlepin",cert_file=cfg['ca_cert'], key_file=cfg['ca_key'])
         self.certlib = CertLib()
 
     def _add_common_options(self):
