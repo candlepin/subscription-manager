@@ -252,6 +252,9 @@ class ListCommand(CliCommand):
 
         if self.options.available:
            epools = managerlib.getAvailableEntitlementsCLI(self.cp, consumer)
+           if not len(epools):
+               print("No Available subscription pools to list")
+               sys.exit(0)
            columns = epools[0].keys()
            print(" \t%-25s \t%-25s \t%-10s \t%-25s " % tuple(columns))
            print "%s" % "---" * len('\t\t'.join(columns))
