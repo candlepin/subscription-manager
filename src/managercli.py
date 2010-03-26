@@ -46,7 +46,10 @@ class CliCommand(object):
         self.parser = OptionParser(usage=usage, description=description)
         self._add_common_options()
         self.name = name
-        self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin") 
+        if ConsumerIdentity.exists():
+            self.reload_cp_with_certs()
+        else:
+            self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin")
         self.certlib = CertLib()
 
     def _add_common_options(self):
@@ -57,6 +60,11 @@ class CliCommand(object):
 
     def _do_command(self):
         pass
+
+    def reload_cp_with_certs(self):
+        cert_file = ConsumerIdentity.certpath()
+        key_file = ConsumerIdentity.keypath()
+        self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin", cert_file=cert_file, key_file=key_file)
 
     def main(self):
 
@@ -113,7 +121,7 @@ class RegisterCommand(CliCommand):
         self._validate_options()
         consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
         managerlib.persist_consumer_cert(consumer)
-        self._reload_cp_with_certs()
+        self.reload_cp_with_certs()
         # try to auomatically bind products
         for product in managerlib.getInstalledProductStatus():
             try:
@@ -124,10 +132,6 @@ class RegisterCommand(CliCommand):
                log.warning("Warning: Unable to auto subscribe the machine to %s" % product[0])
         self.certlib.update()
 
-    def _reload_cp_with_certs(self):
-        cert_file = ConsumerIdentity.certpath()
-        key_file = ConsumerIdentity.keypath()
-        self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin", cert_file=cert_file, key_file=key_file)
 
 class SubscribeCommand(CliCommand):
     def __init__(self):

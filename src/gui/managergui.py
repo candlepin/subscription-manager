@@ -48,7 +48,13 @@ gladexml = "/usr/share/rhsm/gui/data/standaloneH.glade"
 
 cfg = config.initConfig()
 
-UEP = connection.UEPConnection(cfg['hostname'] or 'localhost', ssl_port=cfg['port'])
+if ConsumerIdentity.exists():
+    cert_file = ConsumerIdentity.certpath()
+    key_file = ConsumerIdentity.keypath()
+    UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin", cert_file=cert_file, key_file=key_file)
+else:
+    UEP = connection.UEPConnection(cfg['hostname'] or 'localhost', ssl_port=cfg['port'])
+
 certlib = CertLib()
 ENT_CONFIG_DIR="/etc/pki/entitlement/product/"
 
