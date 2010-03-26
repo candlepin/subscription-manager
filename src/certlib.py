@@ -195,11 +195,10 @@ class UEP(UEPConnection):
     def __init__(self):
         cfg = initConfig()
         host = cfg['hostname'] or "localhost"
-        port = cfg['port']
-        ssl_port = cfg['ssl_port']
+        ssl_port = cfg['port']
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
-        UEPConnection.__init__(self, host, port, ssl_port, cert_file=cert_file, key_file=key_file)
+        UEPConnection.__init__(self, host, ssl_port, cert_file=cert_file, key_file=key_file)
         self.uuid = self.consumerId()
         
     def getCertificateSerials(self):
