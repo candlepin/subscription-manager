@@ -383,7 +383,7 @@ class AddSubscriptionScreen:
             errorWindow(constants.SUBSCRIBE_ERROR % ', '.join(busted_subs[:]))
         # Force fetch all certs
         certlib.update()
-        if len(self.selected.items()):
+        if subscribed_count:
             slabel.set_label(constants.SUBSCRIBE_SUCCSSFUL % subscribed_count)
             # refresh main window
             reload()
@@ -434,7 +434,7 @@ class UpdateSubscriptionScreen:
         #self.updatexml = gtk.glade.XML(gladexml, "update_dialog", domain="subscription-manager")
         self.updatexml = gtk.glade.XML(gladexml, "dialog1_updates", domain="subscription-manager")
         self.product_select = product_selection
-        self.selected = {}
+        #self.selected = {}
         self.setHeadMsg()
         self.updatesList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.available_updates = 0
@@ -481,7 +481,6 @@ class UpdateSubscriptionScreen:
         self.tv_products.set_model(self.updatesList)
 
         cell = gtk.CellRendererToggle()
-        cell.set_property('activatable', True)
         cell.connect('toggled', self.col_update_selected, self.updatesList)
 
         column = gtk.TreeViewColumn(_(' '), cell)
@@ -505,8 +504,13 @@ class UpdateSubscriptionScreen:
         self.updatesList.set_sort_column_id(1, gtk.SORT_ASCENDING)
 
     def col_update_selected(self, cell, path, model):
+        self.selected = {}
         items, iter = self.tv_products.get_selection().get_selected()
-        model[path][0] = not model[path][0]
+        for col in range(model.get_n_columns()+1):
+            if str(path) == str(col):
+                model[path][0] = not model[path][0]
+            else:
+                model[col][0] = False
         print "Toggle '%s' to: %s" % (model[path][1], model[path][0])
         self.model = model
         self.selected[model.get_value(iter, 1)] = (model.get_value(iter, 0), iter)
@@ -522,20 +526,24 @@ class UpdateSubscriptionScreen:
             # state = (bool, iter)
             if state[0]:
                 try:
-                    entitled_data = UEP.bindByProduct(consumer['uuid'], product)['entitlement']['pool']
+                    ent_ret = UEP.bindByProduct(consumer['uuid'], product)
+                    entitled_data = ent_ret[0]['entitlement']['pool']
                     updated_count = str(int(entitled_data['quantity']) - int(entitled_data['consumed']))
                     my_model.set_value(state[-1], 3, updated_count)
                     subscribed_count+=1
                 except:
                     # Subscription failed, continue with rest
+                    log.error("Failed to subscribe to product %s Error: %s" % (product, e))
+                    errorWindow(constants.SUBSCRIBE_ERROR % product)
                     continue
         # Force fetch all certs
         certlib.update()
-        if len(self.selected.items()):
+        if subscribed_count:
             slabel.set_label(constants.SUBSCRIBE_SUCCSSFUL % subscribed_count)
+            # refresh main window
+            reload()
         else:
             slabel.set_label(constants.ATLEAST_ONE_SELECTION)
-        reload()
 
 class ImportCertificate:
     """
