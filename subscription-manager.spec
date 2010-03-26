@@ -129,6 +129,7 @@ fi
 
 %changelog
 * Fri Mar 26 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.23-1
+- Resolves: #568427
 - bug#577238 dont replace config upon reinstall (pkilambi@redhat.com)
 - breaking clients. comment our ssl cert stuff until its functional on cp
   (pkilambi@redhat.com)
