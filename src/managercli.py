@@ -347,12 +347,12 @@ class CLI:
     def main(self):
         if len(sys.argv) < 2 or not self._find_best_match(sys.argv):
             self._usage()
-            sys.exit(1)
+            sys.exit(0)
 
         cmd = self._find_best_match(sys.argv)
         if not cmd:
             self._usage()
-            sys.exit(1)
+            sys.exit(0)
 
         cmd.main()
 
