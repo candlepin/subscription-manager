@@ -86,9 +86,11 @@ class RegisterCommand(CliCommand):
         self.username = None
         self.password = None
         self.parser.add_option("--username", dest="username", 
-                               help="username")
+                               help="Specify a username")
         self.parser.add_option("--password", dest="password",
-                               help="password")
+                               help="Specify a password")
+        self.parser.add_option("--force", dest="force",
+                               help="Register the system even if it is already registered")
 
     def _validate_options(self):
         if not (self.options.username and self.options.password):
@@ -119,6 +121,9 @@ class RegisterCommand(CliCommand):
         Executes the command.
         """
         self._validate_options()
+        if ConsumerIdentity.exists() and not self.options.force:
+            print(_("This system is already registered. Use --force to override"))
+            sys.exit(1)
         consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
         managerlib.persist_consumer_cert(consumer)
         self.reload_cp_with_certs()
