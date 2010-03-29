@@ -1,6 +1,6 @@
 Name: subscription-manager      
 Version: 0.26
-Release: 1
+Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
 License: GPL       
