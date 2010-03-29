@@ -596,7 +596,7 @@ class EntitlementCertificate(ProductCertificate):
         @rtype: [L{Entitlement},..]
         """
         lst = []
-        entitlements = self.trimmed.find('3.*.1')
+        entitlements = self.trimmed.find('3.*.1.1')
         for ent in entitlements:
             oid = ent[0]
             root = oid.rtrim(1)
@@ -689,11 +689,11 @@ class Entitlement:
     def getUrl(self):
         return self.ext.get('6')
     
-    def getGpg(self, default):
+    def getGpg(self, default=None):
         return self.ext.get('7', default)
     
     def getEnabled(self):
-        return self.ext.get('10')
+        return self.ext.get('8')
 
     def __eq__(self, rhs):
         return ( self.getName() == rhs.getName() )
@@ -707,58 +707,13 @@ class Entitlement:
         s.append('\tFlex Quantity = %s' % self.getFlexQuantity())
         s.append('\tVendor ...... = %s' % self.getVendor())
         s.append('\tURL ......... = %s' % self.getUrl())
-        #s.append('\tGPG URL ..... = %s' % self.getGpg())
+        s.append('\tGPG Key ..... = %s' % self.getGpg())
         s.append('\tEnabled ..... = %s' % self.getEnabled())
         s.append('}')
         return '\n'.join(s)
 
     def __repr__(self):
         return str(self)
-    
-    
-class Bundle:
-    
-    KEY_PATTERN = re.compile(
-        '(-----BEGIN.+KEY-----\n)(.+)(\n-----END.+KEY-----)',
-        re.DOTALL)
-    CERT_PATTERN = re.compile(
-        '(-----BEGIN CERTIFICATE-----\n)(.+)(\n-----END CERTIFICATE-----)',
-        re.DOTALL)
-    
-    @classmethod
-    def split(cls, pem):
-        m = cls.KEY_PATTERN.search(pem)
-        key = m.group(2)
-        m = cls.CERT_PATTERN.search(pem)
-        cert = m.group(2)
-        return Bundle(key, cert)
-    
-    @classmethod
-    def read(cls, path):
-        f = open(path)
-        bundle = cls.split(f.read())
-        f.close()
-        return bundle
-    
-    def __init__(self, key, cert):
-        self.key = key
-        self.cert = cert
-        
-    def join(self):
-        s = []
-        s.append('-----BEGIN RSA PRIVATE KEY-----')
-        s.append(self.key)
-        s.append('-----END RSA PRIVATE KEY-----')
-        s.append('-----BEGIN CERTIFICATE-----')
-        s.append(self.cert)
-        s.append('-----END CERTIFICATE-----')
-        return '\n'.join(s)
-        
-    def write(self, path):
-        f = open(path, 'w')
-        f.write(self.join())
-        f.close()
-        return self
 
 
 import sys
