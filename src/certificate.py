@@ -474,6 +474,8 @@ class OID(object):
                 parts = self.part[:len(oid)]
             else:
                 parts = self.part
+            if len(parts) != len(oid):
+                raise Exception()
             for x in parts:
                 if ( x == oid[i] or oid[i] == self.WILDCARD ):
                     i += 1
