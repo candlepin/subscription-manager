@@ -89,7 +89,7 @@ class RegisterCommand(CliCommand):
                                help="Specify a username")
         self.parser.add_option("--password", dest="password",
                                help="Specify a password")
-        self.parser.add_option("--force", dest="force",
+        self.parser.add_option("--force",  action='store_true', 
                                help="Register the system even if it is already registered")
 
     def _validate_options(self):
