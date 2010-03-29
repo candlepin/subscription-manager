@@ -50,13 +50,11 @@ subs_empty = "/usr/share/rhsm/gui/data/icons/subsmgr-empty.png"
 
 
 cfg = config.initConfig()
-
+UEP = None
 if ConsumerIdentity.exists():
     cert_file = ConsumerIdentity.certpath()
     key_file = ConsumerIdentity.keypath()
     UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin", cert_file=cert_file, key_file=key_file)
-else:
-    UEP = connection.UEPConnection(cfg['hostname'] or 'localhost', ssl_port=cfg['port'])
 
 certlib = CertLib()
 ENT_CONFIG_DIR="/etc/pki/entitlement/product/"
@@ -196,7 +194,19 @@ class ManageSubscriptionPage:
             self.sm_icon.set_from_file(subs_full)
 
     def onUnsubscribeAction(self, button):
+        global UEP
         log.info("Product %s selected for unsubscribe" % self.pname_selected)
+        dlg = messageWindow.YesNoDialog(constants.CONFIRM_UNSUBSCRIBE % self.pname_selected, self.mainWin)
+        if not dlg.getrc():
+            return
+        if not UEP:
+            entcerts = EntitlementDirectory().list()
+            for cert in entcerts:
+                if self.pname_selected == cert.getProduct().getName():
+                    cert.delete()
+                    log.info("This machine is now unsubscribed from Product %s " % self.pname_selected)
+            reload()
+            return
         try:
             ent_list = UEP.getEntitlementList(consumer['uuid'])
             entId = None
@@ -218,6 +228,8 @@ class RegisterScreen:
       Registration Widget Screen
     """
     def __init__(self):
+        global UEP
+        UEP = connection.UEPConnection(cfg['hostname'] or 'localhost', ssl_port=cfg['port'])
         self.registerxml = gtk.glade.XML(gladexml, "register_dialog", domain="subscription-manager")
         dic = { "on_close_clicked" : self.cancel,
                 "on_register_button_clicked" : self.onRegisterAction, 
@@ -248,8 +260,12 @@ class RegisterScreen:
             setArrowCursor()
             errorWindow(_("You must enter a password."))
             self.passwd.grab_focus()
-        newAccount = UEP.registerConsumer(username, password, self._get_register_info())
-        consumer = managerlib.persist_consumer_cert(newAccount)
+        try:
+            newAccount = UEP.registerConsumer(username, password, self._get_register_info())
+            consumer = managerlib.persist_consumer_cert(newAccount)
+        except Exception, e:
+            log.error("Unable to register your system. \n Error: %s" % e)
+            errorWindow(constants.REGISTER_ERROR)
         # try to auomatically bind products
         for product in managerlib.getInstalledProductStatus():
             try:
@@ -334,6 +350,7 @@ class AddSubscriptionScreen:
      Add subscriptions Widget screen
     """
     def __init__(self):
+        global UEP
         self.selected = {}
         #self.addxml = gtk.glade.XML(gladexml, "add_dialog", domain="subscription-manager")
         self.addxml = gtk.glade.XML(gladexml, "dialog1_add", domain="subscription-manager")
@@ -449,6 +466,7 @@ class AddSubscriptionScreen:
 
 class UpdateSubscriptionScreen:
     def __init__(self, product_selection):
+        global UEP
         #self.updatexml = gtk.glade.XML(gladexml, "update_dialog", domain="subscription-manager")
         self.updatexml = gtk.glade.XML(gladexml, "dialog1_updates", domain="subscription-manager")
         self.product_select = product_selection
