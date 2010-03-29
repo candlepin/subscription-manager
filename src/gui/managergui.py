@@ -211,7 +211,6 @@ class ManageSubscriptionPage:
             ent_list = UEP.getEntitlementList(consumer['uuid'])
             entId = None
             for ent in ent_list:
-                print ent['entitlement']['pool']['productId']
                 if self.pname_selected == ent['entitlement']['pool']['productId']:
                     entId = ent['entitlement']['id']
             UEP.unBindByEntitlementId(consumer['uuid'], entId)

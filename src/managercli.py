@@ -171,6 +171,7 @@ class SubscribeCommand(CliCommand):
         Executes the command.
         """
         self._validate_options()
+        self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin")
         consumer = check_registration()['uuid']
         if self.options.product:
             bundles = self.cp.bindByProduct(consumer, self.options.product)
