@@ -111,49 +111,6 @@ class Hardware:
 
         return ddict
 
-    def getVirtInfo(self):
-        self.virtinfo = {'virt.type' : None, 'virt.uuid' : None}
-        try:
-            if os.path.exists("/proc/xen/xsd_port"):
-                self.virtinfo = self._get_fully_virt_info()
-
-            # Check if it's a para virt guest
-            if not self.virtinfo:
-                self.virtinfo = get_para_virt_info()
-        
-            # This is not a para-virt guest.Check if it's a fully-virt guest.
-            if not self.virtinfo:
-                self.virtinfo = get_fully_virt_info()
-        except:
-            print _("Error reading virt info:"), sys.exc_type
-        self.allhw.update(self.virtinfo)
-        return self.virtinfo
-
-    def _get_para_virt_info(self):
-        virtinfo = {'virt.type' : None, 'virt.uuid' : None}
-        try:
-            uuid_file = open('/sys/hypervisor/uuid', 'r')
-            uuid = uuid_file.read()
-            uuid_file.close()
-            virtinfo['virt.uuid'] = uuid.lower().replace('-', '').rstrip("\r\n")
-            virtinfo['virt.type'] = "para"
-            return virtinfo
-        except IOError:
-            # Failed; must not be para-virt.
-            pass
-        return virtinfo
-
-    def _get_fully_virt_info(self):
-        virtinfo = {'virt.type' : None, 'virt.uuid' : None}
-        if not self.dmiinfo:
-            self.getDmiInfo()
-        vendor = self.dmiinfo["dmi.bios.vendor"]
-        uuid =   self.dmiinfo["dmi.system.uuid"]
-        if vendor.lower() == "xen":
-            virtinfo['virt.uuid'] = uuid.lower().replace('-', '')
-            virtinfo['virt.type'] = "fully"
-        return virtinfo
-
     def getNetworkInfo(self):
         self.netinfo = {}
         try:
@@ -188,7 +145,6 @@ class Hardware:
         self.getUnameInfo()
         self.getReleaseInfo()
         self.getDmiInfo()
-        self.getVirtInfo()
         self.getMemInfo()
         self.getCpuInfo()
         self.getNetworkInfo()
