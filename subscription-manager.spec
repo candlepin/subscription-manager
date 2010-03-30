@@ -147,6 +147,7 @@ fi
 
 %changelog
 * Tue Mar 30 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.27-1
+- Resolves:  #577238 #577140
 - Use SSLv3 for Candlepin communication. (dgoodwin@redhat.com)
 - Fix edge case in OID seaching. (jortel@redhat.com)
 - dont use ssl certs for register even for re registration
