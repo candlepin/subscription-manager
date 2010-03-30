@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.27
+Version: 0.28
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -146,7 +146,7 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Tue Mar 30 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.27-1
+* Tue Mar 30 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.28-1
 - Resolves:  #577238 #577140
 - Use SSLv3 for Candlepin communication. (dgoodwin@redhat.com)
 - Fix edge case in OID seaching. (jortel@redhat.com)
