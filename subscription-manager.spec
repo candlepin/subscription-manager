@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.26
+Version: 0.27
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -146,6 +146,20 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Mar 30 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.27-1
+- Use SSLv3 for Candlepin communication. (dgoodwin@redhat.com)
+- Fix edge case in OID seaching. (jortel@redhat.com)
+- dont use ssl certs for register even for re registration
+  (pkilambi@redhat.com)
+- Update for entitlement OID schema 3-29-10 spec=DOC-33548 which includes yum
+  repo (.1) namespace. (jortel@redhat.com)
+- make --force default true (pkilambi@redhat.com)
+- Ability to unsubscribe in offline mode. Adding a confirm window before
+  unsubscribing (pkilambi@redhat.com)
+- --force option to override existing registrations (pkilambi@redhat.com)
+- adding dist to rpm spec (pkilambi@redhat.com)
+- bug#571242 return error code of 0 for help options (pkilambi@redhat.com)
+
 * Fri Mar 26 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.26-1
 - Resolves:  #568427
 - bug#577238 dont replace config upon reinstall (pkilambi@redhat.com)
