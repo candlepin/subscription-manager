@@ -349,6 +349,7 @@ class Extensions(dict):
         start = text.find('extensions:')
         end = text.rfind('Signature Algorithm:')
         text = text[start:end]
+        text = text.replace('.\n', '..')
         return [s.strip() for s in text.split('\n')]
     
     def __parse(self, x509):
