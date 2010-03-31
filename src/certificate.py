@@ -249,10 +249,7 @@ class DateRange:
         return dt.strptime(str(asn1), self.ASN1_FORMAT)
     
     def __str__(self):
-        s = []
-        s.append('Begin: %s' % self.begin())
-        s.append('End: %s' % self.end())
-        return '\n'.join(s)
+        return '%s .. %s' % (self.begin(), self.end())
 
 
 class Extensions(dict):
@@ -565,7 +562,8 @@ class ProductCertificate(Certificate):
         s.append('MODEL:')
         s.append('===================================')
         s.append('Serial#: %s' % self.serialNumber())
-        s.append('Consumer UUID: %s\n' % self.subject()['CN'])
+        s.append('Subject (CN): %s' % self.subject()['CN'])
+        s.append('Valid: [%s] %s\n' % (self.valid(), self.validRange()))
         s.append(str(self.getProduct()))
         s.append('')
         return '\n'.join(s)
