@@ -9,7 +9,6 @@
     <property name="default_width">700</property>
     <property name="default_height">600</property>
     <property name="icon_name">subscription-manager</property>
-    <!--<property name="icon_name">zen-icon</property>-->
     <child>
       <widget class="GtkVBox" id="dialog-vbox2">
         <property name="visible">True</property>
@@ -87,7 +86,7 @@
                   <widget class="GtkScrolledWindow" id="scrolledwindow_updates">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="vadjustment">0 0 78 7.8000000000000007 70.200000000000003 78</property>
+                    <property name="vadjustment">0 0 200 20 180 200</property>
                     <property name="hscrollbar_policy">automatic</property>
                     <property name="vscrollbar_policy">automatic</property>
                     <property name="shadow_type">in</property>
@@ -384,7 +383,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                       <widget class="GtkLabel" id="loginUserEntryLabel1">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes" context="yes">UserID:</property>
+                        <property name="label" translatable="yes" context="yes">Red Hat Login:</property>
                         <property name="use_markup">True</property>
                       </widget>
                       <packing>
@@ -984,7 +983,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="visible">True</property>
                         <property name="xalign">2.2351741291171123e-10</property>
                         <property name="yalign">0</property>
-                        <property name="label" translatable="yes">Enter a registration number for products purchased from Red hat:</property>
+                        <property name="label" translatable="yes">Enter a subscription number for products purchased from Red Hat</property>
                       </widget>
                       <packing>
                         <property name="padding">2</property>
@@ -999,7 +998,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
                             <property name="xpad">9</property>
-                            <property name="label" translatable="yes">Registration Token:</property>
+                            <property name="label" translatable="yes">Subscription Token:</property>
                           </widget>
                           <packing>
                             <property name="fill">False</property>
@@ -1063,6 +1062,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                     <property name="use_markup">True</property>
                   </widget>
                   <packing>
+                    <property name="padding">4</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
