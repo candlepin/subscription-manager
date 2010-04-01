@@ -541,7 +541,8 @@ class UpdateSubscriptionScreen:
     def col_update_selected(self, cell, path, model):
         self.selected = {}
         items, iter = self.tv_products.get_selection().get_selected()
-        for col in range(model.get_n_columns()+1):
+        #for col in range(model.get_n_columns()+1):
+        for col in range(self.available_updates):
             if str(path) == str(col):
                 model[path][0] = not model[path][0]
             else:

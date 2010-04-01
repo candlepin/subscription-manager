@@ -28,10 +28,10 @@ PRODUCT INFO
 Name               \t%-25s
 Description        \t%-25s
 Architecture       \t%-25s
-Version            \t%-25s
-Quantity           \t%-25s
+Version                  \t%-25s
+Quantity                 \t%-25s
 Subtype            \t%-25s
-Virt Limit         \t%-25s
+Virt Limit               \t%-25s
 Socket Limit       \t%-25s
 Product Code       \t%-25s
 \n 
@@ -40,7 +40,7 @@ Product Code       \t%-25s
 entitlement_describe = """
 Name               \t%-25s
 Label                    \t%-30s
-Quantity           \t%-25s
+Quantity                 \t%-25s
 Flex Quantity      \t%-25s
 Vendor             \t%-25s
 URL                      \t%-30s

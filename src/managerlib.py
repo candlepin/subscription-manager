@@ -80,7 +80,6 @@ def getProductDescription(qproduct):
     product_status = getInstalledProductStatus()
     data = ""
     for pst in product_status:
-        print pst
         if qproduct == pst[0]:
             if pst[1] == "Subscribed":
                 data = constants.subscribed_status % (pst[0], pst[2])
@@ -119,7 +118,6 @@ def getProductDescription(qproduct):
 def getAvailableEntitlements(cpserver, consumer):
     columns  = ['quantity', 'consumed', 'endDate', 'productId']
     dlist = cpserver.getPoolsList(consumer)
-    print dlist
     data = [_sub_dict(pool['pool'], columns) for pool in dlist]
     for d in data:
         d['quantity'] = str(int(d['quantity']) - int(d['consumed']))

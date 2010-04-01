@@ -171,25 +171,19 @@ class SubscribeCommand(CliCommand):
         Executes the command.
         """
         self._validate_options()
-        self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin")
         consumer = check_registration()['uuid']
         if self.options.product:
             bundles = self.cp.bindByProduct(consumer, self.options.product)
             log.info("Info: Successfully subscribed the machine to product %s" % self.options.product)
-            #self.certlib.add(bundles)
-            self.certlib.update()
 
         if self.options.regtoken:
             bundles = self.cp.bindByRegNumber(consumer, self.options.regtoken)
             log.info("Info: Successfully subscribed the machine to registration token %s" % self.options.regtoken)
-            #self.certlib.add(bundles)
-            self.certlib.update()
 
         if self.options.pool:
             bundles = self.cp.bindByEntitlementPool(consumer, self.options.pool)
             log.info("Info: Successfully subscribed the machine the Entitlement Pool %s" % self.options.pool)
-            #self.certlib.add(bundles)
-            self.certlib.update()
+        self.certlib.update()
 
 class UnSubscribeCommand(CliCommand):
     def __init__(self):
@@ -259,6 +253,9 @@ class ListCommand(CliCommand):
         consumer = check_registration()['uuid']
         if not (self.options.available or self.options.consumed):
            iproducts = managerlib.getInstalledProductStatus()
+           if not len(iproducts):
+               print("No installed Products to list")
+               sys.exit(0)
            columns = ("Product Installed", "activeSubscription", "Expires")
            print("\t%-25s \t%-20s \t%-10s" % columns)
            print "%s" % "--" * len('\t\t'.join(columns))
