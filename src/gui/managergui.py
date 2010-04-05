@@ -249,16 +249,8 @@ class RegisterScreen:
         username = self.uname.get_text()
         password = self.passwd.get_text()
 
-        # validate / check user name
-        if self.uname.get_text().strip() == "":
-            setArrowCursor()
-            errorWindow(_("You must enter a login."))
-            self.uname.grab_focus()
-
-        if self.passwd.get_text().strip() == "":
-            setArrowCursor()
-            errorWindow(_("You must enter a password."))
-            self.passwd.grab_focus()
+        if not self.validate_account():
+            self.onRegisterAction()
         try:
             newAccount = UEP.registerConsumer(username, password, self._get_register_info())
             consumer = managerlib.persist_consumer_cert(newAccount)
@@ -276,6 +268,21 @@ class RegisterScreen:
         RegistrationTokenScreen()
         self.registerWin.hide()
         reload()
+
+    def validate_account(self):
+        # validate / check user name
+        if self.uname.get_text().strip() == "":
+            setArrowCursor()
+            errorWindow(_("You must enter a login."))
+            self.uname.grab_focus()
+            return False
+
+        if self.passwd.get_text().strip() == "":
+            setArrowCursor()
+            errorWindow(_("You must enter a password."))
+            self.passwd.grab_focus()
+            return False
+        return True
 
     def _reload_cp_with_certs(self):
         cert_file = ConsumerIdentity.certpath()
