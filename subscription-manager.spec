@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.30
+Version: 0.31
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -122,7 +122,7 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Mon Apr 05 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.30-1
+* Mon Apr 05 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.31-1
 - Resolves: #578517 registration dialog validates for missing input
 - Resolves: #576568 catch the socket exceptions or any other unknow exception and  error gracefully (pkilambi@redhat.com)
 - removing test files (pkilambi@redhat.com)
