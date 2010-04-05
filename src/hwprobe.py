@@ -71,7 +71,7 @@ class Hardware:
     def getCpuInfo(self):
         self.cpuinfo = {}
         try:
-            cpudata = commands.getstatusoutput('/usr/bin/lscpu')[-1].split('\n')
+            cpudata = commands.getstatusoutput('LANG=en_US.UTF-8 /usr/bin/lscpu')[-1].split('\n')
             for info in cpudata:
                 key, value = info.split(":")
                 nkey = '.'.join(["cpu", key.lower().strip().replace(" ", "_")])
