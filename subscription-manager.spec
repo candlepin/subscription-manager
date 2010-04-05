@@ -135,8 +135,6 @@ fi
 - updating config to remove cert paths (pkilambi@redhat.com)
 - Fix extension parsing with values on following line as '.\n<value>'.
   (jortel@redhat.com)
-- rhel-6 wont support xen directly. lets jus rely on dmi info instead
-  (pkilambi@redhat.com)
 
 * Tue Mar 30 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.28-1
 - Resolves:  #577238 #577140
