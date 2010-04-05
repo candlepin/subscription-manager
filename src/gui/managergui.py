@@ -195,6 +195,8 @@ class ManageSubscriptionPage:
 
     def onUnsubscribeAction(self, button):
         global UEP
+        if not self.pname_selected:
+            return
         log.info("Product %s selected for unsubscribe" % self.pname_selected)
         dlg = messageWindow.YesNoDialog(constants.CONFIRM_UNSUBSCRIBE % self.pname_selected, self.mainWin)
         if not dlg.getrc():
