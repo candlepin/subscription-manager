@@ -123,6 +123,7 @@ fi
 
 %changelog
 * Mon Apr 05 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.30-1
+- Resolves: #578517 registration dialog validates for missing input
 - Resolves: #576568 catch the socket exceptions or any other unknow exception and  error gracefully (pkilambi@redhat.com)
 - removing test files (pkilambi@redhat.com)
 - specfile clean up (pkilambi@redhat.com)
