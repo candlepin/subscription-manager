@@ -123,8 +123,7 @@ fi
 
 %changelog
 * Mon Apr 05 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.29-1
-- bug#576568 catch the socket exceptions or any other unknow exception and
-  error gracefully (pkilambi@redhat.com)
+- Resolves: #576568 catch the socket exceptions or any other unknow exception and  error gracefully (pkilambi@redhat.com)
 - removing test files (pkilambi@redhat.com)
 - specfile clean up (pkilambi@redhat.com)
 - updated icons (pkilambi@redhat.com)
