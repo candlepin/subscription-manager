@@ -322,10 +322,11 @@ class EntitlementDirectory(Directory):
     
 class ProductDirectory(Directory):
     
-    PATH = '/etc/pki/product'
+    ROOT = '/etc/pki/product'
+    KEY = 'key.pem'
     
     def __init__(self):
-        Directory.__init__(self, self.PATH)
+        Directory.__init__(self, self.ROOT)
         self.create()
         
     def list(self):
