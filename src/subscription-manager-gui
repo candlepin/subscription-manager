@@ -70,3 +70,5 @@ if __name__ == '__main__':
         sys.exit(abs(main() or 0))
     except KeyboardInterrupt:
         systemExit(0, "\nUser interrupted process.")
+    except Exception, e:
+        systemExit(1, e)
