@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.28
+Version: 0.29
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -122,6 +122,23 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Mon Apr 05 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.29-1
+- bug#576568 catch the socket exceptions or any other unknow exception and
+  error gracefully (pkilambi@redhat.com)
+- removing test files (pkilambi@redhat.com)
+- specfile clean up (pkilambi@redhat.com)
+- updated icons (pkilambi@redhat.com)
+- some minor UI tweaks based on feedback from the demo (pkilambi@redhat.com)
+- multiple bug fixes to gui, cli and proxy (pkilambi@redhat.com)
+- Update product __str__ to show valid and valid date range.
+  (jortel@redhat.com)
+- test (pkilambi@redhat.com)
+- updating config to remove cert paths (pkilambi@redhat.com)
+- Fix extension parsing with values on following line as '.\n<value>'.
+  (jortel@redhat.com)
+- rhel-6 wont support xen directly. lets jus rely on dmi info instead
+  (pkilambi@redhat.com)
+
 * Tue Mar 30 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.28-1
 - Resolves:  #577238 #577140
 - Use SSLv3 for Candlepin communication. (dgoodwin@redhat.com)
