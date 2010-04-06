@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.35
+Version: 0.36
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -126,7 +126,7 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Tue Apr 06 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.35-1
+* Tue Apr 06 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.36-1
 - Support for register system by consumerId
 - rpmlint fixes
 - Resolves: #578860 - alignment issues on registration details screen
