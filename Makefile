@@ -10,9 +10,11 @@ VERSION = $(shell echo `grep ^Version: $(PKGNAME).spec | awk '{ print $$2 }'`)
 %.pyc: %.py
 	python -c "import py_compile; py_compile.compile('$<')"
 
-build:
-	@mkdir bin
-	cc src/rhsmcertd.c -o bin/rhsmcertd
+rhsmcertd: src/rhsmcertd.c
+	@mkdir -p bin
+	cc $? -o bin/rhsmcertd
+
+build:	rhsmcertd
 
 install: 
 	@mkdir -p ${PREFIX}/usr/share/rhsm/gui/data/icons/16x16

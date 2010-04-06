@@ -52,7 +52,7 @@ int run(int interval)
     int status = 0;
     fprintf(log, "%s: started: interval = %d\n", ts(), interval);
     fflush(log);
-    while(status == 0)
+    while(1)
     {
         int pid = fork();
         if(pid < 0)
@@ -75,7 +75,7 @@ int run(int interval)
         }
         else
         {
-            fprintf(log, "%s: updated failed (%d)\n", ts(), status);
+            fprintf(log, "%s: update failed (%d)\n", ts(), status);
             fflush(log);
         }
     }

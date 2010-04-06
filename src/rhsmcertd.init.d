@@ -16,6 +16,7 @@
 
 BINDIR=/usr/bin
 PROG=rhsmcertd
+LOCK=/var/lock/subsys/$PROG
 
 INTERVAL=`python -c "\
 import sys
@@ -30,7 +31,9 @@ start() {
   echo -n $"Starting rhsmcertd $INTERVAL"
   daemon $BINDIR/$PROG $INTERVAL
   RETVAL=$?
-  echo
+  echo $RETVAL
+  [ $RETVAL -eq 0 ] && touch $LOCK
+  return $RETVAL
 }
 
 stop() {
@@ -38,22 +41,13 @@ stop() {
   killproc $PROG
   RETVAL=$?
   echo
+  [ $RETVAL -eq 0 ] && rm -f $LOCK
+  return $RETVAL
 }
 
 restart() {
   stop
   start
-}
-
-status() {
-  pgrep rhsmcertd
-  if [ $? == 0 ]; then
-    RETVAL=0
-    echo $"$PROG is running"
-  else
-    RETVAL=3
-    echo $"$PROG is not running"
-  fi
 }
 
 case "$1" in
@@ -67,7 +61,7 @@ case "$1" in
   restart
   ;;
   status)
-  status
+  status $PROG
   ;;
   *)
   echo $"Usage: $0 {start|stop|status|restart|}"
