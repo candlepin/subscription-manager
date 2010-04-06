@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # This module has been originally modified and enhanced from Red Hat Update Agent's config module.
 #

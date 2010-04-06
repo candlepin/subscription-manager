@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # Subscription Manager commandline utility
 

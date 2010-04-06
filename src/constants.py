@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # String constants for the Subscription Manager CLI/GUI
 #

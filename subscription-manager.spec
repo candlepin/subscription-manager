@@ -20,7 +20,7 @@ BuildRequires: gettext
 BuildRequires: intltool
 
 %description
-Subscription Manager package provides programs and libraries to allow users to manager subscriptions and repos from a unified entitlement or a deployment Platform.
+Subscription Manager package provides programs and libraries to allow users to manager subscriptions/repos from Red Hat entitlement or deployment Platform.
 
 %package -n subscription-manager-gnome
 Summary: A GUI interface to manage Red Hat product subscriptions
@@ -31,7 +31,7 @@ Requires: usermode-gtk
 Requires: subscription-manager
 
 %description -n subscription-manager-gnome
-subscription-manager-gnome contains a GTK+ graphical interface for configuring and registering a system with a Red Hat Entitlement platform and manage subscriptions.
+This package contains a GTK+ graphical interface for configuring and registering a system with a Red Hat Entitlement platform and manage subscriptions.
 
 
 %prep
