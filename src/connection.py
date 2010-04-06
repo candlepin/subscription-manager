@@ -121,10 +121,23 @@ class UEPConnection:
         return needToRegister
 
     def registerConsumer(self, username, password, info={}):
+        """
+         Creates a consumer on candlepin server
+        """
         self.__authenticate(username, password)
         return self.conn.request_post('/consumers/', info)["consumer"]
 
+    def getConsumerById(self, consumerId):
+        """
+        Returns a consumer object with pem/key for existing consumers
+        """
+        method = '/consumers/%s' % consumerId
+        return self.conn.request_get(method)["consumer"]
+
     def unregisterConsumer(self, username, password, consumerId):
+        """
+         Deletes a consumer from candlepin server
+        """
         self.__authenticate(username, password)
         method = '/consumers/%s' % consumerId
         return self.conn.request_delete(method)
@@ -132,8 +145,6 @@ class UEPConnection:
     def syncCertificates(self, consumerId):
         """
         Sync all applicable certificates for a given consumer\
-        @param consumerId: consumer uuid
-        @return: A list of entitlement certificates
         """
         method = '/consumers/%s/certificates' % consumerId
         return self.conn.request_get(method)
@@ -141,9 +152,6 @@ class UEPConnection:
     def getCertificatesBySerial(self, consumerId, serialNumbers):
         """
         Sync certificates for a given set of serial numbers
-        @param consumerId: consumer uuid
-        @param serialNumbers: list of serial numbers eg: ['SERIAL002', 'SERIAL001']
-        @return: A list of entitlement certificates
         """
         serialNumbers = ','.join(serialNumbers)
         method = '/consumers/%s/certificates?serials=%s' % (consumerId, serialNumbers)
@@ -152,21 +160,28 @@ class UEPConnection:
     def getCertificateSerials(self, consumerId):
         """
         Get serial numbers for certs for a given consumer
-        @param consumerId: consumer uuid
-        @return: A hash of serial numbers eg: {'serial': {'serial': 'SERIAL001'}}
         """
         method = '/consumers/%s/certificates/serials' % consumerId
         return self.conn.request_get(method)
 
     def bindByRegNumber(self, consumerId, regnum=None):
+        """
+        Subscribe consumer to a subscription token
+        """
         method = "/consumers/%s/entitlements?token=%s" % (consumerId, regnum)
         return self.conn.request_post(method)
 
     def bindByEntitlementPool(self, consumerId, poolId=None):
+        """
+         Subscribe consumer to a subscription by poolId
+        """
         method = "/consumers/%s/entitlements?pool=%s" % (consumerId, poolId)
         return self.conn.request_post(method)
 
     def bindByProduct(self, consumerId, product=None):
+        """
+         Subscribe consumer directly to a product by Name
+        """
         product = product.replace(" ", "%20")
         method = "/consumers/%s/entitlements?product=%s" % (consumerId, product)
         return self.conn.request_post(method)
@@ -220,6 +235,7 @@ if __name__ == '__main__':
         print "Created a consumer ", consumer
         # sync certs
         #print "Initiate cert synchronization for uuid"
+        print "Get Consumer By Id", uep.getConsumerById(consumer['uuid'])
         print uep.syncCertificates(consumer['uuid']) 
         print "GetCertBySeriallllll",uep.getCertificatesBySerial(consumer['uuid'], ['SERIAL001','SERIAL001'])
         # bind consumer to regNumber

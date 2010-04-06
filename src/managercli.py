@@ -88,12 +88,20 @@ class RegisterCommand(CliCommand):
                                help="Specify a username")
         self.parser.add_option("--password", dest="password",
                                help="Specify a password")
+        self.parser.add_option("--consumerid", dest="consumerid",
+                               help="Register to an Existing consumer")
         self.parser.add_option("--force",  action='store_true', 
                                help="Register the system even if it is already registered")
 
     def _validate_options(self):
-        if not (self.options.username and self.options.password):
-            print (_("Error: username and password are required to register,try --help.\n"))
+        if not (self.options.username and self.options.password) and not \
+            self.options.consumerid:
+            print (_("Error: username and password or consumerid are required to register,try --help.\n"))
+            sys.exit(-1)
+
+        if (self.options.username and self.options.password) and \
+            self.options.consumerid:
+            print(_("Error: username and password or consumerid are required, not both. try --help.\n"))
             sys.exit(-1)
 
     def _get_register_info(self):
@@ -123,7 +131,12 @@ class RegisterCommand(CliCommand):
         if ConsumerIdentity.exists() and not self.options.force:
             print(_("This system is already registered. Use --force to override"))
             sys.exit(1)
-        consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
+
+        if self.options.consumerid:
+            consumer = self.cp.getConsumerById(self.options.consumerid)
+        else:
+            consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
+
         managerlib.persist_consumer_cert(consumer)
         self.reload_cp_with_certs()
         # try to auomatically bind products

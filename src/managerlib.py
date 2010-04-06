@@ -27,7 +27,9 @@ import gettext
 _ = gettext.gettext
 
 def persist_consumer_cert(consumerinfo):
-    
+    """
+     Calls the consumerIdentity, persists and gets consumer info
+    """
     if not os.path.isdir("/etc/pki/consumer/"):
         os.mkdir("/etc/pki/consumer/")
     consumer = ConsumerIdentity(consumerinfo['idCert']['key'], \
@@ -47,6 +49,9 @@ def map_status(status):
     return smap[status]
 
 def getInstalledProductStatus():
+    """
+     Returns the Installed products and their subscription states
+    """
     products = ProductDirectory().list()
     entcerts = EntitlementDirectory().list()
     entdict = {}
@@ -66,6 +71,10 @@ def getInstalledProductStatus():
     return product_status
 
 def getConsumedProductEntitlements():
+    """
+     Gets the list of available products with entitlements based on
+      its subscription cert
+    """
     entdir = EntitlementDirectory()
     consumed_products = []
     for cert in entdir.listValid():
@@ -74,6 +83,9 @@ def getConsumedProductEntitlements():
     return consumed_products
 
 def getProductDescription(qproduct):
+    """
+     Utility method to construct description info based on the state per product
+    """
     entcerts = EntitlementDirectory().list()
     products = ProductDirectory().list()
     product_status = getInstalledProductStatus()
@@ -115,6 +127,9 @@ def getProductDescription(qproduct):
     return data
 
 def getAvailableEntitlements(cpserver, consumer):
+    """
+     Gets the available Entitlements from the server
+    """
     columns  = ['quantity', 'consumed', 'endDate', 'productId']
     dlist = cpserver.getPoolsList(consumer)
     data = [_sub_dict(pool['pool'], columns) for pool in dlist]
