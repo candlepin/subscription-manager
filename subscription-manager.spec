@@ -123,7 +123,7 @@ fi
 
 %changelog
 * Tue Apr 06 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.34-1
-- 570489: Updating man page to reflect latest functionality
+- Resolves: #570489: Updating man page to reflect latest functionality
   (pkilambi@redhat.com)
 - updating frame icon (pkilambi@redhat.com)
 
