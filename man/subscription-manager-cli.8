@@ -16,7 +16,7 @@ must be present\&.
 .PP 
 .IP "\fBregister\fP [options]"
 Registers your client to a Red Hat Entitlement Platform. This will create an identity on this system for
-use with all other commands\&.
+use with all other commands\&. If a consumer already exists and user wishes to associate the system to this consumer, then use your consumerId.
 .IP 
 .IP "\fBlist\fP [options]"
 List available, consumed or installed product/subscription information for a registered system\&.
@@ -47,6 +47,9 @@ Specify your Red Hat user account information for registration\&.
 .br
 .IP "\fB\-p, \-\-password\fP" 
 Specify your Red Hat user account password\&.
+.br
+.IP "\fB\-\-consumerid\fP"
+Specify an existing consumerId to register this system\&.
 .br
 .IP "\fB\-v, \-\-verbose\fP" 
 Run with debugging output\&.
