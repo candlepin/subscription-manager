@@ -86,7 +86,7 @@
                   <widget class="GtkScrolledWindow" id="scrolledwindow_updates">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="vadjustment">0 0 200 20 180 200</property>
+                    <property name="vadjustment">0 0 78 7.8000000000000007 70.200000000000003 78</property>
                     <property name="hscrollbar_policy">automatic</property>
                     <property name="vscrollbar_policy">automatic</property>
                     <property name="shadow_type">in</property>
@@ -853,7 +853,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
   </widget>
   <widget class="GtkDialog" id="register_token_dialog">
     <property name="width_request">400</property>
-    <property name="height_request">300</property>
+    <property name="height_request">350</property>
     <property name="border_width">12</property>
     <property name="title" translatable="yes">Registration Settings</property>
     <property name="resizable">False</property>
@@ -965,6 +965,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                   <widget class="GtkVBox" id="vbox9">
                     <property name="visible">True</property>
                     <property name="orientation">vertical</property>
+                    <property name="spacing">2</property>
                     <child>
                       <widget class="GtkLabel" id="label8">
                         <property name="visible">True</property>
@@ -1062,7 +1063,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                     <property name="use_markup">True</property>
                   </widget>
                   <packing>
-                    <property name="padding">4</property>
+                    <property name="padding">7</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -1098,7 +1099,6 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="padding">3</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
