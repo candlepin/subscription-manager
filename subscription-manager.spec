@@ -21,7 +21,8 @@ BuildRequires: intltool
 
 %description
 Subscription Manager package provides programs and libraries to allow users 
-to manager subscriptions/yumrepos from Red Hat entitlement or deployment Platform.
+to manager subscriptions/yumrepos from Red Hat entitlement or deployment 
+Platform.
 
 %package -n subscription-manager-gnome
 Summary: A GUI interface to manage Red Hat product subscriptions
