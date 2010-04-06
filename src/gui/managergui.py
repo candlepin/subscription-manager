@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # GUI Module for standalone subscription-manager cli 
 #
