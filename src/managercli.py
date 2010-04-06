@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # Subscription manager commandline utility. This script is a modified version of
 # cp_client.py from candlepin scripts

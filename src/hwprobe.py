@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # Module to probe Hardware info from the system 
 #

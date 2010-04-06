@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # A proxy interface to initiate and interact communication with Unified Entitlement Platform server such as candlepin.
 #
