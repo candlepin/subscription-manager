@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.33
+Version: 0.34
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -122,6 +122,13 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Apr 06 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.34-1
+- 570489: Updating man page to reflect latest functionality
+  (pkilambi@redhat.com)
+- 570489: Updating man page to reflect latest functionality
+  (pkilambi@redhat.com)
+- updating frame icon (pkilambi@redhat.com)
+
 * Mon Apr 05 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.33-1
 - Resolves: #578113 - lscpu is localized, use the right locale to accumulate hwdata
 - Resolves: #578520 - if no products are selected, clicking 'Unsubscribe' should be a noop
