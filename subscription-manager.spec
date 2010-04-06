@@ -127,6 +127,9 @@ fi
 
 %changelog
 * Tue Apr 06 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.35-1
+- Support for register system by consumerId
+- rpmlint fixes
+- Resolves: #578860 - alignment issues on registration details screen
 - Resolves: #570489: Updating man page to reflect latest functionality
   (pkilambi@redhat.com)
 - updating frame icon (pkilambi@redhat.com)
