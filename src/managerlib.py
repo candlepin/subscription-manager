@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # common calls to get product and entitlemnt info for gui/tui
 #
