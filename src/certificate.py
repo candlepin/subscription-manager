@@ -510,7 +510,7 @@ class ProductCertificate(Certificate):
     @type REDHAT: str
     """
     
-    REDHAT = '1.3.6.1.4.1.2312'
+    REDHAT = '1.3.6.1.4.1.2312.9'
     
     @classmethod
     def read(cls, path):
@@ -544,7 +544,7 @@ class ProductCertificate(Certificate):
         @return: A list of product object.
         @rtype: [L{Product},..]
         """
-        products = self.trimmed.find('2.7.1', 1)
+        products = self.trimmed.find('1.*.1', 1)
         if products:
             p = products[0]
             oid = p[0]
@@ -591,17 +591,41 @@ class EntitlementCertificate(ProductCertificate):
 
     def getEntitlements(self):
         """
-        Get the entitlements defined in the certificate.
+        Get the B{content} entitlements defined in the certificate.
         @return: A list of entitlement object.
         @rtype: [L{Entitlement},..]
         """
+        return self.getContentEntitlements() \
+             + self.getRoleEntitlements()
+
+    def getContentEntitlements(self):
+        """
+        Get the B{content} entitlements defined in the certificate.
+        @return: A list of entitlement object.
+        @rtype: [L{Content},..]
+        """
         lst = []
-        entitlements = self.trimmed.find('3.*.1.1')
+        entitlements = self.trimmed.find('2.*.1.1')
         for ent in entitlements:
             oid = ent[0]
             root = oid.rtrim(1)
             ext = self.trimmed.branch(root)
-            lst.append(Entitlement(ext))
+            lst.append(Content(ext))
+        return lst
+
+    def getRoleEntitlements(self):
+        """
+        Get the B{role} entitlements defined in the certificate.
+        @return: A list of entitlement object.
+        @rtype: [L{Role},..]
+        """
+        lst = []
+        entitlements = self.trimmed.find('3.*.1')
+        for ent in entitlements:
+            oid = ent[0]
+            root = oid.rtrim(1)
+            ext = self.trimmed.branch(root)
+            lst.append(Role(ext))
         return lst
 
     def __str__(self):
@@ -620,7 +644,7 @@ class Product:
     def getName(self):
         return self.ext.get('1')
     
-    def getDescription(self):
+    def getVariant(self):
         return self.ext.get('2')
     
     def getArch(self):
@@ -629,21 +653,6 @@ class Product:
     def getVersion(self):
         return self.ext.get('4')
     
-    def getQuantity(self):
-        return self.ext.get('5')
-    
-    def getSubtype(self):
-        return self.ext.get('6')
-    
-    def getVirtLimit(self):
-        return self.ext.get('7')
-    
-    def getSocketLimit(self):
-        return self.ext.get('8')
-    
-    def getProductOptionCode(self):
-        return self.ext.get('9')
-    
     def __eq__(self, rhs):
         return ( self.getName() == rhs.getName() )
     
@@ -651,25 +660,23 @@ class Product:
         s = []
         s.append('Product {')
         s.append('\tName ......... = %s' % self.getName())
-        s.append('\tDescription .. = %s' % self.getDescription())
+        s.append('\tVariant ...... = %s' % self.getVariant())
         s.append('\tArchitecture . = %s' % self.getArch())
         s.append('\tVersion ...... = %s' % self.getVersion())
-        s.append('\tQuantity ..... = %s' % self.getQuantity())
-        s.append('\tSubtype ...... = %s' % self.getSubtype())
-        s.append('\tVirt Limit ... = %s' % self.getVirtLimit())
-        s.append('\tSocket Limit . = %s' % self.getSocketLimit())
-        s.append('\tProduct Code . = %s' % self.getProductOptionCode())
         s.append('}')
         return '\n'.join(s)
 
     def __repr__(self):
         return str(self)
-    
-    
+
+
 class Entitlement:
 
     def __init__(self, ext):
         self.ext = ext
+
+
+class Content(Entitlement):
         
     def getName(self):
         return self.ext.get('1')
@@ -689,18 +696,18 @@ class Entitlement:
     def getUrl(self):
         return self.ext.get('6')
     
-    def getGpg(self, default=None):
-        return self.ext.get('7', default)
+    def getGpg(self):
+        return self.ext.get('7')
     
     def getEnabled(self):
         return self.ext.get('8')
 
     def __eq__(self, rhs):
-        return ( self.getName() == rhs.getName() )
+        return ( self.getLabel() == rhs.getLabel() )
     
     def __str__(self):
         s = []
-        s.append('Entitlement {')
+        s.append('Entitlement (content) {')
         s.append('\tName ........ = %s' % self.getName())
         s.append('\tLabel ....... = %s' % self.getLabel())
         s.append('\tQuantity .... = %s' % self.getQuantity())
@@ -715,6 +722,28 @@ class Entitlement:
     def __repr__(self):
         return str(self)
 
+
+class Role(Entitlement):
+
+    def getName(self):
+        return self.ext.get('1')
+
+    def getDescription(self):
+        return self.ext.get('2')
+
+    def __eq__(self, rhs):
+        return ( self.getName() == rhs.getName() )
+
+    def __str__(self):
+        s = []
+        s.append('Entitlement (role) {')
+        s.append('\tName ......... = %s' % self.getName())
+        s.append('\tDescription .. = %s' % self.getDescription())
+        s.append('}')
+        return '\n'.join(s)
+
+    def __repr__(self):
+        return str(self)
 
 import sys
 if __name__ == '__main__':
