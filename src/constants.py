@@ -25,18 +25,13 @@ product_describe = """
 PRODUCT INFO
 =========================\n
 Name               \t%-25s
-Description        \t%-25s
+Variant            \t%-25s
 Architecture       \t%-25s
 Version                  \t%-25s
-Quantity                 \t%-25s
-Subtype            \t%-25s
-Virt Limit               \t%-25s
-Socket Limit       \t%-25s
-Product Code       \t%-25s
 \n 
 """
 
-entitlement_describe = """
+content_entitlement_describe = """
 Name               \t%-25s
 Label                    \t%-30s
 Quantity                 \t%-25s
@@ -45,6 +40,11 @@ Vendor             \t%-25s
 URL                      \t%-30s
 Enabled            \t%-25s
 \n
+"""
+
+role_entitlement_describe = """
+Name               \t%-25s
+Description        \t%-25s
 """
 
 subscribed_status = _("""

@@ -103,27 +103,28 @@ def getProductDescription(qproduct):
         if qproduct == product.getProduct().getName():
             product = product.getProduct()
             data += constants.product_describe % (product.getName(),
-                                       product.getDescription(), 
+                                       product.getVariant(), 
                                        product.getArch(), 
-                                       product.getVersion(), 
-                                       product.getQuantity(), 
-                                       product.getSubtype(), 
-                                       product.getVirtLimit(), 
-                                       product.getSocketLimit(), 
-                                       product.getProductOptionCode())
+                                       product.getVersion())
     for cert in entcerts:
         if qproduct == cert.getProduct().getName():
-            ents =  cert.getEntitlements()
-            data += """ ENTITLEMENTS \n"""
+            ents =  cert.getContentEntitlements()
+            data += """ CONTENT ENTITLEMENTS \n"""
             data += """======================="""
             for ent in ents:
-                data += constants.entitlement_describe % (ent.getName(),
+                data += constants.content_entitlement_describe % (ent.getName(),
                                                 str(ent.getLabel()),
                                                 ent.getQuantity(),
                                                 ent.getFlexQuantity(),
                                                 ent.getVendor(),
                                                 str(ent.getUrl()),
-                                                ent.getEnabled()) 
+                                                ent.getEnabled())
+            ents =  cert.getRoleEntitlements()
+            data += """ ROLE ENTITLEMENTS \n"""
+            data += """======================="""
+            for ent in ents:
+                data += constants.role_entitlement_describe % (ent.getName(),
+                                                ent.getDescription())
     return data
 
 def getAvailableEntitlements(cpserver, consumer):
