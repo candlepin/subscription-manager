@@ -252,6 +252,7 @@
   <widget class="GtkDialog" id="register_dialog">
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Account Registration</property>
+    <property name="resizable">False</property>
     <property name="window_position">center</property>
     <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
