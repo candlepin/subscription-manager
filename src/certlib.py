@@ -244,6 +244,14 @@ class Directory:
                 dir.append(Directory(path))
         return dir
     
+    def listModified(self, snapshot):
+        current = self.snapshot()
+        mod = []
+        for fn in current:
+            if snapshot.get(fn) != current.get(fn):
+                mod.append((self.path, fn))
+        return mod
+    
     def create(self):
         if not os.path.exists(self.path):
             os.makedirs(self.path)
@@ -260,10 +268,20 @@ class Directory:
                 d.delete()
             else:
                 os.unlink(path)
+                
+    def getSnapshot(self):
+        d = {}
+        stat = os.stat(self.path)
+        d['.'] = stat.st_mtime
+        for fn in os.listdir(self.path):
+            path = os.path.join(self.path, fn)
+            stat = os.stat(path)
+            d[fn] = stat.st_mtime
+        return d
     
     def __str__(self):
         return self.path
-
+    
     
 class EntitlementDirectory(Directory):
     
