@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.36
+Version: 0.37
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -126,6 +126,16 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Mon Apr 12 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.37-1
+- Resolves: #580576 - fixing error message on failed registration (pkilambi@redhat.com)
+- Resolves: #580955 - set ssl_port to cfg value instead of default (pkilambi@redhat.com)
+- Ground work for directory snapshot caching. (jortel@redhat.com)
+- Resolves: #580630 -  register window will now not be resizable (pkilambi@redhat.com)
+- Updated for OID structure 04-07-10. (jortel@redhat.com)
+- reflecting changes to the oid schema structure in the client tooling
+  (pkilambi@redhat.com)
+- Remove 'layered product versioning' prototype code. (jortel@redhat.com)
+
 * Tue Apr 06 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.36-1
 - Support for register system by consumerId
 - rpmlint fixes
