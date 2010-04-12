@@ -257,7 +257,7 @@ class RegisterScreen:
             consumer = managerlib.persist_consumer_cert(newAccount)
         except Exception, e:
             log.error("Unable to register your system. \n Error: %s" % e)
-            errorWindow(constants.REGISTER_ERROR)
+            errorWindow(constants.REGISTER_ERROR % e)
         # try to auomatically bind products
         for product in managerlib.getInstalledProductStatus():
             try:
