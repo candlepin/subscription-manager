@@ -102,9 +102,7 @@ class Certificate(object):
         @return: True if valid.
         @rtype: boolean
         """
-        now = dt.utcnow()
-        range = self.validRange()
-        return ( now >= range.begin() and now <= range.end() )
+        return self.validRange().hasNow()
     
     def extensions(self):
         """
@@ -222,12 +220,17 @@ class DateRange:
     
     ASN1_FORMAT = '%b %d %H:%M:%S %Y %Z'
     
-    def __init__(self, x509):
+    def __init__(self, x509=None, asn1=None):
         """
         @param x509: A certificate.
         @type x509: X509
         """
-        self.x509 = x509
+        if x509 is not None:
+            self.range = \
+                (str(x509.get_not_before()),
+                 str(x509.get_not_after()))
+        else:
+            self.range = asn1
         
     def begin(self):
         """
@@ -235,8 +238,7 @@ class DateRange:
         @return: The beginning date in UTC.
         @rtype: L{datetime.datetime}
         """
-        asn1 = self.x509.get_not_before()
-        return dt.strptime(str(asn1), self.ASN1_FORMAT)
+        return self.__parse(self.range[0])
     
     def end(self):
         """
@@ -244,11 +246,22 @@ class DateRange:
         @return: The end date in UTC.
         @rtype: L{datetime.datetime}
         """
-        asn1 = self.x509.get_not_after()
-        return dt.strptime(str(asn1), self.ASN1_FORMAT)
+        return self.__parse(self.range[1])
+
+    def hasNow(self):
+        """
+        Get whether the certificate is valid based on date.
+        @return: True if valid.
+        @rtype: boolean
+        """
+        now = dt.utcnow()
+        return ( now >= self.begin() and now <= self.end() )
+
+    def __parse(self, asn1):
+        return dt.strptime(asn1, self.ASN1_FORMAT)
     
     def __str__(self):
-        return '%s .. %s' % (self.begin(), self.end())
+        return '\n\t%s\n\t%s' % self.range
 
 
 class Extensions(dict):
@@ -589,6 +602,16 @@ class EntitlementCertificate(ProductCertificate):
         crt.path = path
         return crt
 
+    def getOrder(self):
+        products = self.trimmed.find('4.1', 1)
+        if products:
+            p = products[0]
+            oid = p[0]
+            root = oid.rtrim(1)
+            ext = self.trimmed.branch(root)
+            return Order(ext)
+        return None
+
     def getEntitlements(self):
         """
         Get the B{content} entitlements defined in the certificate.
@@ -630,9 +653,43 @@ class EntitlementCertificate(ProductCertificate):
 
     def __str__(self):
         s = []
+        order = self.getOrder()
         s.append(ProductCertificate.__str__(self))
         for ent in self.getEntitlements():
             s.append(str(ent))
+        s.append(str(order))
+        return '\n'.join(s)
+
+
+class Order:
+
+    def __init__(self, ext):
+        self.ext = ext
+
+    def getName(self):
+        return self.ext.get('1')
+
+    def getNumber(self):
+        return self.ext.get('2')
+
+    def getSku(self):
+        return self.ext.get('3')
+
+    def getRegnum(self):
+        return self.ext.get('4')
+
+    def getQuantity(self):
+        return self.ext.get('5')
+
+    def __str__(self):
+        s = []
+        s.append('Order {')
+        s.append('\tName ...... = %s' % self.getName())
+        s.append('\tNumber .... = %s' % self.getNumber())
+        s.append('\tSKU ....... = %s' % self.getSku())
+        s.append('\tRegnum .... = %s' % self.getRegnum())
+        s.append('\tQuantity .. = %s' % self.getQuantity())
+        s.append('}')
         return '\n'.join(s)
 
 

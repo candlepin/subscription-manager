@@ -18,6 +18,7 @@
 
 import os
 import re
+import simplejson as json
 from datetime import datetime as dt
 from datetime import timedelta
 from config import initConfig
@@ -244,14 +245,6 @@ class Directory:
                 dir.append(Directory(path))
         return dir
     
-    def listModified(self, snapshot):
-        current = self.snapshot()
-        mod = []
-        for fn in current:
-            if snapshot.get(fn) != current.get(fn):
-                mod.append((self.path, fn))
-        return mod
-    
     def create(self):
         if not os.path.exists(self.path):
             os.makedirs(self.path)
@@ -270,19 +263,70 @@ class Directory:
                 os.unlink(path)
                 
     def getSnapshot(self):
-        d = {}
-        stat = os.stat(self.path)
-        d['.'] = stat.st_mtime
-        for fn in os.listdir(self.path):
-            path = os.path.join(self.path, fn)
-            stat = os.stat(path)
-            d[fn] = stat.st_mtime
-        return d
+        return Snapshot(self.path)
     
     def __str__(self):
         return self.path
     
     
+class Snapshot:
+
+    def __init__(self, root):
+        self.content = {}
+        self.content['.'] = dict(mtime=0, path=root)
+
+    def snap(self):
+        stat = os.stat(self.path())
+        self.setModified('.', stat.st_mtime)
+        directory = Directory(self.path())
+        for p, fn in directory.list():
+            path = os.path.join(p, fn)
+            stat = os.stat(path)
+            d = dict(mtime=stat.st_mtime)
+            self.content[fn] = d
+        return self
+
+    def listModified(self, other):
+        if self.path() != other.path():
+            raise Exception, 'snapshot path not matched.'
+        mod = []
+        for fn in self.content:
+            if self.getModified(fn) != other.getModified(fn):
+                mod.append(fn)
+        return mod
+
+    def path(self):
+        return self.content['.']['path']
+
+    def getModified(self, fn):
+        return self.content[fn]['mtime']
+
+    def setModified(self, fn, value):
+        self.content[fn]['mtime'] = value
+
+    def read(self, path):
+        f = open(path)
+        try:
+            self.content = json.load(f)
+        except:
+            pass
+        finally:
+            f.close()
+
+    def write(self, path):
+        f = open(path, 'w')
+        try:
+            json.dump(self.content, f, indent=2)
+        finally:
+            f.close()
+
+    def __str__(self):
+        return str(self.content)
+
+    def __repr__(self):
+        return repr(self.content)
+
+
 class EntitlementDirectory(Directory):
     
     ROOT = '/etc/pki/entitlement'
@@ -336,8 +380,58 @@ class EntitlementDirectory(Directory):
             if c.serialNumber() == sn:
                 return c
         return None
+
+    def getSnapshot(self):
+        return ExtendedSnapshot(self.path)
+
+
+class ExtendedSnapshot(Snapshot):
     
-    
+    def write(self, path):
+        for fn,d in self.content.items():
+            if fn.endswith('.pem'):
+                p = os.path.join(self.path(), fn)
+                crt = EntitlementCertificate.read(p)
+                valid = crt.validRange()
+                d['valid'] = valid.range
+        Snapshot.write(self, path)
+
+    def listModified(self, other):
+        mod = []
+        for fn in Snapshot.listModified(self, other):
+            if fn.endswith('.pem'):
+                path = os.path.join(self.path(), fn)
+                crt = EntitlementCertificate.read(path)
+                mod.append(crt)
+        return mod
+
+    def listValid(self):
+        val = []
+        for fn,d in self.content.items():
+            valid = d.get('valid')
+            if valid is None:
+                continue
+            range = DateRange(asn1=valid)
+            if range.hasNow():
+                path = os.path.join(self.path(), fn)
+                crt = EntitlementCertificate.read(path)
+                val.append(crt)
+        return val
+
+    def listExpired(self):
+        exp = []
+        for fn,d in self.content.items():
+            valid = d.get('valid')
+            if valid is None:
+                continue
+            range = DateRange(asn1=valid)
+            if not range.hasNow():
+                path = os.path.join(self.path(), fn)
+                crt = EntitlementCertificate.read(path)
+                exp.append(crt)
+        return exp
+
+
 class ProductDirectory(Directory):
     
     ROOT = '/etc/pki/product'
