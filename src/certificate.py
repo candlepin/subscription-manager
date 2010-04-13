@@ -30,8 +30,12 @@ from datetime import datetime as dt
 
 class InvalidCertificate(Exception):
 
-    def __init__(self, reason):
-        Exception.__init__(self, reason)
+    def __init__(self, crt, reason):
+        if hasattr(crt, 'path'):
+            msg = '%s @ %s' % (reason, crt.path)
+        else:
+            msg = reason
+        Exception.__init__(self, msg)
 
 
 class Certificate(object):
@@ -570,7 +574,7 @@ class ProductCertificate(Certificate):
             root = oid.rtrim(1)
             ext = self.trimmed.branch(root)
             return Product(ext)
-        raise InvalidCertificate, 'No product (9.1.*) found'
+        raise InvalidCertificate(self, 'No product (9.1.*) found')
     
     def getProducts(self):
         """
@@ -630,7 +634,7 @@ class EntitlementCertificate(ProductCertificate):
             root = oid.rtrim(1)
             ext = self.trimmed.branch(root)
             return Order(ext)
-        raise InvalidCertificate, 'No order (9.4) found'
+        raise InvalidCertificate(self, 'No order (9.4) found')
 
     def getEntitlements(self):
         """
@@ -826,8 +830,5 @@ import sys
 if __name__ == '__main__':
     for path in sys.argv[1:]:
         print path
-        f = open(path)
-        content = f.read()
-        pc = EntitlementCertificate(content)
-        print pc.x509
+        pc = EntitlementCertificate.read(path)
         print pc
