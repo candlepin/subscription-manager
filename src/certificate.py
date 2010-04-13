@@ -230,17 +230,14 @@ class DateRange:
     
     ASN1_FORMAT = '%b %d %H:%M:%S %Y %Z'
     
-    def __init__(self, x509=None, asn1=None):
+    def __init__(self, x509):
         """
         @param x509: A certificate.
         @type x509: X509
         """
-        if x509 is not None:
-            self.range = \
-                (str(x509.get_not_before()),
-                 str(x509.get_not_after()))
-        else:
-            self.range = asn1
+        self.range = \
+            (str(x509.get_not_before()),
+             str(x509.get_not_after()))
         
     def begin(self):
         """

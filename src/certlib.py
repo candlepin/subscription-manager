@@ -271,41 +271,45 @@ class Directory:
     
 class Snapshot:
 
+    DIR = '.'
+    PATH = 'PATH'
+    MTIME = 'MTIME'
+
+
     def __init__(self, root):
         self.content = {}
-        self.content['.'] = dict(mtime=0, path=root)
+        self.content[self.DIR] = { self.PATH:root, self.MTIME:0 }
 
     def snap(self):
-        stat = os.stat(self.path())
-        self.setModified('.', stat.st_mtime)
+        mtime = os.path.getmtime(self.path())
+        self[self.DIR][self.MTIME] = mtime
         directory = Directory(self.path())
         for p, fn in directory.list():
             path = os.path.join(p, fn)
-            stat = os.stat(path)
-            d = dict(mtime=stat.st_mtime)
-            self.content[fn] = d
+            mtime = os.path.getmtime(path)
+            self[fn] = { self.MTIME:mtime }
         return self
 
-    def listModified(self, other):
-        if self.path() != other.path():
+    def modified(self, snapshot):
+        if self.path() != snapshot.path():
             raise Exception, 'snapshot path not matched.'
         mod = []
         for fn in self.content:
-            if self.getModified(fn) != other.getModified(fn):
-                mod.append(fn)
+            dA = self[fn]
+            dB = snapshot[fn]
+            if dA.get(self.MTIME) != dB.get(self.MTIME):
+                mod.append((fn, dA))
         return mod
 
     def path(self):
-        return self.content['.']['path']
-
-    def getModified(self, fn):
-        return self.content[fn]['mtime']
-
-    def setModified(self, fn, value):
-        self.content[fn]['mtime'] = value
+        d = self.content.get(self.DIR)
+        return d.get(self.PATH)
 
     def read(self, path):
-        f = open(path)
+        if os.path.exists(path):
+            f = open(path)
+        else:
+            return
         try:
             self.content = json.load(f)
         except:
@@ -314,11 +318,23 @@ class Snapshot:
             f.close()
 
     def write(self, path):
+        base,fn = os.path.split(path)
+        d = Directory(base)
+        d.create()
         f = open(path, 'w')
         try:
             json.dump(self.content, f, indent=2)
         finally:
             f.close()
+
+    def __getitem__(self, key):
+        d = self.content.get(key)
+        if d is None:
+            d = {}
+        return d
+
+    def __setitem__(self, key, value):
+        self.content[key] = value
 
     def __str__(self):
         return str(self.content)
@@ -380,56 +396,6 @@ class EntitlementDirectory(Directory):
             if c.serialNumber() == sn:
                 return c
         return None
-
-    def getSnapshot(self):
-        return CertificateSnapshot(self.path)
-
-
-class CertificateSnapshot(Snapshot):
-    
-    def write(self, path):
-        for fn,d in self.content.items():
-            if fn.endswith('.pem'):
-                p = os.path.join(self.path(), fn)
-                crt = EntitlementCertificate.read(p)
-                valid = crt.validRange()
-                d['valid'] = valid.range
-        Snapshot.write(self, path)
-
-    def listModified(self, other):
-        mod = []
-        for fn in Snapshot.listModified(self, other):
-            if fn.endswith('.pem'):
-                path = os.path.join(self.path(), fn)
-                crt = EntitlementCertificate.read(path)
-                mod.append(crt)
-        return mod
-
-    def listValid(self):
-        val = []
-        for fn,d in self.content.items():
-            valid = d.get('valid')
-            if valid is None:
-                continue
-            range = DateRange(asn1=valid)
-            if range.hasNow():
-                path = os.path.join(self.path(), fn)
-                crt = EntitlementCertificate.read(path)
-                val.append(crt)
-        return val
-
-    def listExpired(self):
-        exp = []
-        for fn,d in self.content.items():
-            valid = d.get('valid')
-            if valid is None:
-                continue
-            range = DateRange(asn1=valid)
-            if not range.hasNow():
-                path = os.path.join(self.path(), fn)
-                crt = EntitlementCertificate.read(path)
-                exp.append(crt)
-        return exp
 
 
 class ProductDirectory(Directory):
