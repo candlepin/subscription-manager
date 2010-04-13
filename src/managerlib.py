@@ -57,12 +57,17 @@ def getInstalledProductStatus():
     entdict = {}
     for cert in entcerts:
         ents = cert.getEntitlements()
-        entdict[cert.getProduct().getName()] = {'Entitlements' : ents, 
+        print cert.getOrder().getName()
+        eproducts = cert.getProducts()
+        for product in eproducts:
+            print product.getName()
+            entdict[product.getName()] = {'Entitlements' : ents,
                                                 'valid': cert.valid(), 
                                                 'expires' : cert.validRange().end()}
     product_status = []
     for product in products:
         pname = product.getProduct().getName()
+        print pname
         if entdict.has_key(pname):
             data = (pname, map_status(entdict[pname]['valid']), str(entdict[pname]['expires']))
             product_status.append(data)
@@ -78,8 +83,10 @@ def getConsumedProductEntitlements():
     entdir = EntitlementDirectory()
     consumed_products = []
     for cert in entdir.listValid():
-        data = (cert.getProduct().getName(), cert.valid(), cert.validRange().begin(), cert.validRange().end())
-        consumed_products.append(data)
+        eproducts = cert.getProducts()
+        for product in eproducts:
+            data = (product.getName(), cert.valid(), cert.validRange().begin(), cert.validRange().end())
+            consumed_products.append(data)
     return consumed_products
 
 def getProductDescription(qproduct):
@@ -107,24 +114,27 @@ def getProductDescription(qproduct):
                                        product.getArch(), 
                                        product.getVersion())
     for cert in entcerts:
-        if qproduct == cert.getProduct().getName():
-            ents =  cert.getContentEntitlements()
-            data += """ CONTENT ENTITLEMENTS \n"""
-            data += """======================="""
-            for ent in ents:
-                data += constants.content_entitlement_describe % (ent.getName(),
+        eproducts = cert.getProducts()
+        for product in eproducts:
+            if qproduct == product.getName():
+                ents =  cert.getContentEntitlements()
+                data += """ CONTENT ENTITLEMENTS \n"""
+                data += """======================="""
+                for ent in ents:
+                    data += constants.content_entitlement_describe % (\
+                                                ent.getName(),
                                                 str(ent.getLabel()),
                                                 ent.getQuantity(),
                                                 ent.getFlexQuantity(),
                                                 ent.getVendor(),
                                                 str(ent.getUrl()),
                                                 ent.getEnabled())
-            ents =  cert.getRoleEntitlements()
-            data += """ ROLE ENTITLEMENTS \n"""
-            data += """======================="""
-            for ent in ents:
-                data += constants.role_entitlement_describe % (ent.getName(),
-                                                ent.getDescription())
+                ents =  cert.getRoleEntitlements()
+                data += """ ROLE ENTITLEMENTS \n"""
+                data += """======================="""
+                for ent in ents:
+                    data += constants.role_entitlement_describe % (ent.getName(),
+                                                    ent.getDescription())
     return data
 
 def getAvailableEntitlements(cpserver, consumer):
@@ -153,7 +163,7 @@ def _sub_dict(datadict, subkeys, default=None) :
 
 if __name__=='__main__':
     print("\nInstalled Product Status:\n")
-    getInstalledProductStatus()
+    print getInstalledProductStatus()
     print("\nConsumed Product Status:\n")
     getConsumedProductEntitlements()
     
