@@ -125,7 +125,7 @@ class ManageSubscriptionPage:
                           "Not Subscribed" : gtk.STOCK_DIALOG_QUESTION,
                           "Subscribed" : gtk.STOCK_APPLY, }
         self.tv_products =  self.subsxml.get_widget("treeview_updates")
-        self.productList = gtk.ListStore(gtk.gdk.Pixbuf, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.productList = gtk.ListStore(gtk.gdk.Pixbuf, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.warn_count = 0
         for product in managerlib.getInstalledProductStatus():
             markup_status = product[1]
@@ -133,7 +133,7 @@ class ManageSubscriptionPage:
                 self.warn_count += 1
                 markup_status = '<span foreground="red"><b>%s</b></span>' % product[1]
             self.status_icon = self.tv_products.render_icon(state_icon_map[product[1]], size=gtk.ICON_SIZE_MENU)
-            self.productList.append((self.status_icon, product[0], markup_status, product[2]))
+            self.productList.append((self.status_icon, product[0], markup_status, product[2], product[3]))
         self.tv_products.set_model(self.productList)
 
         #self.tv_products.set_rules_hint(True)
@@ -161,6 +161,11 @@ class ManageSubscriptionPage:
 
         col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=3)
         col.set_sort_column_id(3)
+        #col.set_spacing(6)
+        self.tv_products.append_column(col)
+
+        col = gtk.TreeViewColumn(_("Subscription"), gtk.CellRendererText(), text=4)
+        col.set_sort_column_id(4)
         #col.set_spacing(6)
         self.tv_products.append_column(col)
 

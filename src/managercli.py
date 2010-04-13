@@ -300,11 +300,11 @@ class ListCommand(CliCommand):
            if not len(iproducts):
                print("No installed Products to list")
                sys.exit(0)
-           columns = ("Product Installed", "activeSubscription", "Expires")
-           print("\t%-25s \t%-20s \t%-10s" % columns)
+           columns = ("Product Installed", "activeSubscription", "Expires", "Subscription")
+           print("\t%-25s \t%-20s \t%-10s \t%-20s" % columns)
            print "%s" % "--" * len('\t\t'.join(columns))
            for product in iproducts:
-               print("\t%-25s \t%-20s \t%-10s" % product)
+               print("\t%-25s \t%-20s \t%-10s \t%-20s" % product)
 
         if self.options.available:
            epools = managerlib.getAvailableEntitlementsCLI(self.cp, consumer)
