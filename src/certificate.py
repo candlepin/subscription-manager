@@ -28,6 +28,12 @@ from M2Crypto import X509
 from datetime import datetime as dt
 
 
+class InvalidCertificate(Exception):
+
+    def __init__(self, reason):
+        Exception.__init__(self, reason)
+
+
 class Certificate(object):
     """
     Represents and x.509 certificate.
@@ -554,8 +560,8 @@ class ProductCertificate(Certificate):
     def getProduct(self):
         """
         Get the product defined in the certificate.
-        @return: A list of product object.
-        @rtype: [L{Product},..]
+        @return: A product object.
+        @rtype: L{Product}
         """
         products = self.trimmed.find('1.*.1', 1)
         if products:
@@ -564,7 +570,21 @@ class ProductCertificate(Certificate):
             root = oid.rtrim(1)
             ext = self.trimmed.branch(root)
             return Product(ext)
-        return None
+        raise InvalidCertificate, 'No product (9.1.*) found'
+    
+    def getProducts(self):
+        """
+        Get a list products defined in the certificate.
+        @return: A list of product objects.
+        @rtype: [L{Product},..]
+        """
+        lst = []
+        for p in self.trimmed.find('1.*.1'):
+            oid = p[0]
+            root = oid.rtrim(1)
+            ext = self.trimmed.branch(root)
+            lst.append(Product(ext))
+        return lst
     
     def __str__(self):
         s = []
@@ -576,8 +596,8 @@ class ProductCertificate(Certificate):
         s.append('Serial#: %s' % self.serialNumber())
         s.append('Subject (CN): %s' % self.subject()['CN'])
         s.append('Valid: [%s] %s\n' % (self.valid(), self.validRange()))
-        s.append(str(self.getProduct()))
-        s.append('')
+        for p in self.getProducts():
+            s.append(str(p))
         return '\n'.join(s)
     
 
@@ -603,14 +623,14 @@ class EntitlementCertificate(ProductCertificate):
         return crt
 
     def getOrder(self):
-        products = self.trimmed.find('4.1', 1)
-        if products:
-            p = products[0]
+        order = self.trimmed.find('4.1', 1)
+        if order:
+            p = order[0]
             oid = p[0]
             root = oid.rtrim(1)
             ext = self.trimmed.branch(root)
             return Order(ext)
-        return None
+        raise InvalidCertificate, 'No order (9.4) found'
 
     def getEntitlements(self):
         """

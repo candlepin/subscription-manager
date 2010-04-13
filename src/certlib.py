@@ -382,10 +382,10 @@ class EntitlementDirectory(Directory):
         return None
 
     def getSnapshot(self):
-        return ExtendedSnapshot(self.path)
+        return CertificateSnapshot(self.path)
 
 
-class ExtendedSnapshot(Snapshot):
+class CertificateSnapshot(Snapshot):
     
     def write(self, path):
         for fn,d in self.content.items():
