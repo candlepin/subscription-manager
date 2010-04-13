@@ -18,6 +18,7 @@
 
 import os
 import sys
+import shutil
 import config
 import connection
 import hwprobe
@@ -149,6 +150,30 @@ class RegisterCommand(CliCommand):
                log.warning("Warning: Unable to auto subscribe the machine to %s" % product[0])
         self.certlib.update()
 
+class UnRegisterCommand(CliCommand):
+    def __init__(self):
+        usage = "usage: %prog unregister [OPTIONS]"
+        shortdesc = "unregister the client from a Unified Entitlement Platform."
+        desc = "unregister"
+
+        CliCommand.__init__(self, "unregister", usage, shortdesc, desc)
+
+    def _validate_options(self):
+        pass
+
+    def _do_command(self):
+        if not ConsumerIdentity.exists():
+            print(_("This system is currently not registered."))
+            sys.exit(1)
+
+        try:
+           consumer = check_registration()['uuid']
+           self.cp.unregisterConsumer(consumer)
+           # clean up stale consumer ids
+           shutil.rmtree("/etc/pki/consumer/")
+           log.info("Successfully Unsubscribed the client from Entitlement Platform.")
+        except:
+           log.error("Error: Unable to UnRegister the system")
 
 class SubscribeCommand(CliCommand):
     def __init__(self):
@@ -301,7 +326,7 @@ class CLI:
     def __init__(self):
 
         self.cli_commands = {}
-        for clazz in [ RegisterCommand, ListCommand, SubscribeCommand,\
+        for clazz in [ RegisterCommand, UnRegisterCommand, ListCommand, SubscribeCommand,\
                        UnSubscribeCommand]:
             cmd = clazz()
             # ignore the base class
