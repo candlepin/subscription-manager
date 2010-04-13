@@ -252,6 +252,13 @@ class RegisterScreen:
 
         if not self.validate_account():
             self.onRegisterAction()
+        # Unregister consumer if exists
+        if ConsumerIdentity.exists():
+            try:
+                cid = consumer['uuid']
+                UEP.unregisterConsumer(cid)
+            except Exception, e:
+                log.error("Unable to unregister existing user credentials.")
         try:
             newAccount = UEP.registerConsumer(username, password, self._get_register_info())
             consumer = managerlib.persist_consumer_cert(newAccount)
