@@ -57,10 +57,8 @@ def getInstalledProductStatus():
     entdict = {}
     for cert in entcerts:
         ents = cert.getEntitlements()
-        print cert.getOrder().getName()
         eproducts = cert.getProducts()
         for product in eproducts:
-            print product.getName()
             entdict[product.getName()] = {'Entitlements' : ents,
                                           'valid': cert.valid(), 
                                           'expires' : cert.validRange().end(),
@@ -68,7 +66,6 @@ def getInstalledProductStatus():
     product_status = []
     for product in products:
         pname = product.getProduct().getName()
-        print pname
         if entdict.has_key(pname):
             data = (pname, map_status(entdict[pname]['valid']), str(entdict[pname]['expires']), entdict[pname]['order'])
             product_status.append(data)
