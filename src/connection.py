@@ -134,11 +134,10 @@ class UEPConnection:
         method = '/consumers/%s' % consumerId
         return self.conn.request_get(method)["consumer"]
 
-    def unregisterConsumer(self, username, password, consumerId):
+    def unregisterConsumer(self, consumerId):
         """
          Deletes a consumer from candlepin server
         """
-        self.__authenticate(username, password)
         method = '/consumers/%s' % consumerId
         return self.conn.request_delete(method)
 

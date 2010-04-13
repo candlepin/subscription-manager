@@ -105,6 +105,10 @@ class RegisterCommand(CliCommand):
             print(_("Error: username and password or consumerid are required, not both. try --help.\n"))
             sys.exit(-1)
 
+        if ConsumerIdentity.exists() and not self.options.force:
+            print(_("This system is already registered. Use --force to override"))
+            sys.exit(1)
+
     def _get_register_info(self):
         stype = {'label':'system'}
         product = {"id":"1","label":"RHEL AP","name":"rhel"}
@@ -129,12 +133,15 @@ class RegisterCommand(CliCommand):
         Executes the command.
         """
         self._validate_options()
-        if ConsumerIdentity.exists() and not self.options.force:
-            print(_("This system is already registered. Use --force to override"))
-            sys.exit(1)
 
         if self.options.consumerid:
             consumer = self.cp.getConsumerById(self.options.consumerid)
+
+        elif ConsumerIdentity.exists() and self.options.force:
+           consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
+           consumerid = check_registration()['uuid']
+           self.cp.unregisterConsumer(consumerid)
+           log.info("--force specified. Successfully Unsubscribed the old consumer.")
         else:
             consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
 
