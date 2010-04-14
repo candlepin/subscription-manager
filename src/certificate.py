@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -46,29 +47,19 @@ class Certificate(object):
     @ivar __ext: A dictionary of extensions L{OID}:value
     @type __ext: L{Extensions}
     """
-    
-    @classmethod
-    def read(cls, path):
-        """
-        Read a certificate file.
-        @param path: The path to a .pem file.
-        @type path: str
-        @return: A certificate
-        @rtype: L{Certificate}
-        """
-        f = open(path)
-        content = f.read()
-        f.close()
-        crt = Certificate(content)
-        crt.path = path
-        return crt
 
-    def __init__(self, content):
+    def __init__(self, content=None):
         """
-        @param content: The PEM encoded content.
-        @type content: str
+        @param pem: The (optional) PEM encoded content.
+        @type pem: str
         """
-        x509 = X509.load_cert_string(content)
+        self.update(content)
+        
+    def update(self, content):
+        if content:
+            x509 = X509.load_cert_string(content)
+        else:
+            x509 = X509.X509()
         self.__ext = Extensions(x509)
         self.x509 = x509
     
@@ -121,6 +112,22 @@ class Certificate(object):
         @rtype: L{Extensions}
         """
         return self.__ext
+    
+    def read(self, path):
+        """
+        Read a certificate file.
+        @param path: The path to a .pem file.
+        @type path: str
+        @return: A certificate
+        @rtype: L{Certificate}
+        """
+        f = open(path)
+        content = f.read()
+        try:
+            self.update(content)
+        finally:
+            f.close()
+        self.path = path
     
     def write(self, path):
         """
@@ -520,43 +527,40 @@ class OID(object):
     def __str__(self):
         return '.'.join(self.part)
     
-
-class ProductCertificate(Certificate):
+    
+class RedhatCertificate(Certificate):
     """
-    Represents a Red Hat product/entitlement certificate.
-    It is OID schema aware and provides methods to get
-    product and entitlement information.
+    Represents a Red Hat certificate.
     @cvar REDHAT: The Red Hat base OID.
     @type REDHAT: str
     """
     
     REDHAT = '1.3.6.1.4.1.2312.9'
     
-    @classmethod
-    def read(cls, path):
-        """
-        Read a certificate file.
-        @param path: The path to a .pem file.
-        @type path: str
-        @return: A certificate
-        @rtype: L{Certificate}
-        """
-        f = open(path)
-        content = f.read()
-        f.close()
-        crt = ProductCertificate(content)
-        crt.path = path
-        return crt
-    
-    def __init__(self, content):
-        """
-        @param content: The PEM encoded content.
-        @type content: str
-        """
-        Certificate.__init__(self, content)
+    def update(self, content):
+        Certificate.update(self, content)
         redhat = OID(self.REDHAT)
         n = len(redhat)
-        self.trimmed = self.extensions().ltrim(n)
+        self.__redhat = self.extensions().ltrim(n)
+        
+    def redhat(self):
+        """
+        Get the extension subtree for the B{redhat} namespace.
+        @return: The extensions with the RH namespace trimmed.
+        @rtype: L{Extension}
+        """
+        try:
+            return self.__redhat
+        except:
+            return self.extensions()
+    
+
+class ProductCertificate(RedhatCertificate):
+    """
+    Represents a Red Hat product/entitlement certificate.
+    It is OID schema aware and provides methods to
+    get product information.
+    """
 
     def getProduct(self):
         """
@@ -564,12 +568,13 @@ class ProductCertificate(Certificate):
         @return: A product object.
         @rtype: L{Product}
         """
-        products = self.trimmed.find('1.*.1', 1)
+        rhns = self.redhat()
+        products = rhns.find('1.*.1', 1)
         if products:
             p = products[0]
             oid = p[0]
             root = oid.rtrim(1)
-            ext = self.trimmed.branch(root)
+            ext = rhns.branch(root)
             return Product(ext)
         raise InvalidCertificate(self, 'No product (9.1.*) found')
     
@@ -580,10 +585,11 @@ class ProductCertificate(Certificate):
         @rtype: [L{Product},..]
         """
         lst = []
-        for p in self.trimmed.find('1.*.1'):
+        rhns = self.redhat()
+        for p in rhns.find('1.*.1'):
             oid = p[0]
             root = oid.rtrim(1)
-            ext = self.trimmed.branch(root)
+            ext = rhns.branch(root)
             lst.append(Product(ext))
         return lst
     
@@ -606,36 +612,26 @@ class EntitlementCertificate(ProductCertificate):
     """
     Represents an entitlement certificate.
     """
-    
-    @classmethod
-    def read(cls, path):
-        """
-        Read a certificate file.
-        @param path: The path to a .pem file.
-        @type path: str
-        @return: A certificate
-        @rtype: L{Certificate}
-        """
-        f = open(path)
-        content = f.read()
-        f.close()
-        crt = EntitlementCertificate(content)
-        crt.path = path
-        return crt
 
     def getOrder(self):
-        order = self.trimmed.find('4.1', 1)
+        """
+        Get the B{order} object defined in the certificate.
+        @return: An order object.
+        @rtype: L{Order}
+        """
+        rhns = self.redhat()
+        order = rhns.find('4.1', 1)
         if order:
             p = order[0]
             oid = p[0]
             root = oid.rtrim(1)
-            ext = self.trimmed.branch(root)
+            ext = rhns.branch(root)
             return Order(ext)
         raise InvalidCertificate(self, 'No order (9.4) found')
 
     def getEntitlements(self):
         """
-        Get the B{content} entitlements defined in the certificate.
+        Get the B{all} entitlements defined in the certificate.
         @return: A list of entitlement object.
         @rtype: [L{Entitlement},..]
         """
@@ -649,11 +645,12 @@ class EntitlementCertificate(ProductCertificate):
         @rtype: [L{Content},..]
         """
         lst = []
-        entitlements = self.trimmed.find('2.*.1.1')
+        rhns = self.redhat()
+        entitlements = rhns.find('2.*.1.1')
         for ent in entitlements:
             oid = ent[0]
             root = oid.rtrim(1)
-            ext = self.trimmed.branch(root)
+            ext = rhns.branch(root)
             lst.append(Content(ext))
         return lst
 
@@ -664,11 +661,12 @@ class EntitlementCertificate(ProductCertificate):
         @rtype: [L{Role},..]
         """
         lst = []
-        entitlements = self.trimmed.find('3.*.1')
+        rhns = self.redhat()
+        entitlements = rhns.find('3.*.1')
         for ent in entitlements:
             oid = ent[0]
             root = oid.rtrim(1)
-            ext = self.trimmed.branch(root)
+            ext = rhns.branch(root)
             lst.append(Role(ext))
         return lst
 
@@ -827,5 +825,6 @@ import sys
 if __name__ == '__main__':
     for path in sys.argv[1:]:
         print path
-        pc = EntitlementCertificate.read(path)
+        pc = EntitlementCertificate()
+        pc.read(path)
         print pc

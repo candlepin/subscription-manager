@@ -42,6 +42,8 @@ class Action:
         
         
 class UpdateAction(Action):
+    
+    SNAPSHOT = '/tmp/rhsm/entitlement/snapshot.p'
 
     def perform(self):
         repod = RepoFile()
@@ -49,7 +51,7 @@ class UpdateAction(Action):
         valid = set()
         updates = 0
         products = self.entdir.listValid()
-        for cont in self.content(products):
+        for cont in self.getUniqueContent():
             name = cont.id
             valid.add(name)
             existing = repod[name]
@@ -68,24 +70,31 @@ class UpdateAction(Action):
         repod.write()
         return updates
     
-    def content(self, products):
+    def getUniqueContent(self):
         unique = set()
+        products = self.entdir.listValid()
         products.sort()
         products.reverse()
         cfg = initConfig()
         baseurl = cfg['baseurl']
         for product in products:
-            for ent in product.getContentEntitlements():
-                id = ent.getLabel()
-                repo = Repo(id)
-                repo['name'] = ent.getName()
-                repo['baseurl'] = self.join(baseurl, ent.getUrl())
-                repo['gpgkey'] = self.join(baseurl, ent.getGpg())
-                repo['sslclientkey'] = EntitlementDirectory.keypath()
-                repo['sslclientcert'] = product.path
-                unique.add(repo)
+            for r in self.getContent(product, baseurl):
+                unique.add(r)
         return unique
-
+    
+    def getContent(self, product, baseurl):
+        lst = []
+        for ent in product.getContentEntitlements():
+            id = ent.getLabel()
+            repo = Repo(id)
+            repo['name'] = ent.getName()
+            repo['baseurl'] = self.join(baseurl, ent.getUrl())
+            repo['gpgkey'] = self.join(baseurl, ent.getGpg())
+            repo['sslclientkey'] = EntitlementDirectory.keypath()
+            repo['sslclientcert'] = product.path
+            lst.append(repo)
+        return lst
+    
     def join(self, base, url):
         if '://' in url:
             return url

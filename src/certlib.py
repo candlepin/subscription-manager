@@ -18,7 +18,6 @@
 
 import os
 import re
-import simplejson as json
 from datetime import datetime as dt
 from datetime import timedelta
 from config import initConfig
@@ -269,78 +268,7 @@ class Directory:
         return self.path
     
     
-class Snapshot:
 
-    DIR = '.'
-    PATH = 'PATH'
-    MTIME = 'MTIME'
-
-
-    def __init__(self, root):
-        self.content = {}
-        self.content[self.DIR] = { self.PATH:root, self.MTIME:0 }
-
-    def snap(self):
-        mtime = os.path.getmtime(self.path())
-        self[self.DIR][self.MTIME] = mtime
-        directory = Directory(self.path())
-        for p, fn in directory.list():
-            path = os.path.join(p, fn)
-            mtime = os.path.getmtime(path)
-            self[fn] = { self.MTIME:mtime }
-        return self
-
-    def modified(self, snapshot):
-        if self.path() != snapshot.path():
-            raise Exception, 'snapshot path not matched.'
-        mod = []
-        for fn in self.content:
-            dA = self[fn]
-            dB = snapshot[fn]
-            if dA.get(self.MTIME) != dB.get(self.MTIME):
-                mod.append((fn, dA))
-        return mod
-
-    def path(self):
-        d = self.content.get(self.DIR)
-        return d.get(self.PATH)
-
-    def read(self, path):
-        if os.path.exists(path):
-            f = open(path)
-        else:
-            return
-        try:
-            self.content = json.load(f)
-        except:
-            pass
-        finally:
-            f.close()
-
-    def write(self, path):
-        base,fn = os.path.split(path)
-        d = Directory(base)
-        d.create()
-        f = open(path, 'w')
-        try:
-            json.dump(self.content, f, indent=2)
-        finally:
-            f.close()
-
-    def __getitem__(self, key):
-        d = self.content.get(key)
-        if d is None:
-            d = {}
-        return d
-
-    def __setitem__(self, key, value):
-        self.content[key] = value
-
-    def __str__(self):
-        return str(self.content)
-
-    def __repr__(self):
-        return repr(self.content)
 
 
 class EntitlementDirectory(Directory):
@@ -367,7 +295,8 @@ class EntitlementDirectory(Directory):
             if not fn.endswith('.pem'):
                 continue
             path = os.path.join(p, fn)
-            crt = EntitlementCertificate.read(path)
+            crt = EntitlementCertificate()
+            crt.read(path)
             all.append(crt)
         return all
     
@@ -413,7 +342,8 @@ class ProductDirectory(Directory):
             if not fn.endswith('.pem'):
                 continue
             path = os.path.join(p, fn)
-            crt = ProductCertificate.read(path)
+            crt = ProductCertificate()
+            crt.read(path)
             all.append(crt)
         return all
     
