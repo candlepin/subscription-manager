@@ -184,7 +184,7 @@ class UnRegisterCommand(CliCommand):
            log.error("Error: Unable to UnRegister the system: %s" % re)
            systemExit(-1, msgs=re)
         except:
-            log.error("Error: Unable to UnRegister the system)
+            log.error("Error: Unable to UnRegister the system")
 
 class SubscribeCommand(CliCommand):
     def __init__(self):
