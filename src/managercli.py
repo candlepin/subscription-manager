@@ -304,7 +304,7 @@ class ListCommand(CliCommand):
            if not len(iproducts):
                print("No installed Products to list")
                sys.exit(0)
-           columns = ("Product Installed", "activeSubscription", "Expires", "Subscription")
+           columns = ("Product", "activeSubscription", "Expires", "Subscription")
            print("\t%-25s \t%-20s \t%-10s \t%-20s" % columns)
            print "%s" % "--" * len('\t\t'.join(columns))
            for product in iproducts:
