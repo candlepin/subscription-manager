@@ -23,13 +23,20 @@ import httplib
 import simplejson as json
 import base64
 from M2Crypto import SSL, httpslib
-
+from cStringIO import StringIO
 from logutil import getLogger
+
+import gettext
+_ = gettext.gettext
 
 log = getLogger(__name__)
 
 class RestlibException(Exception):
-    pass
+    def __init__(self, msg = ""):
+        self.msg = msg
+
+    def __str__(self):
+        return self.msg
 
 class Restlib(object):
     """
@@ -66,7 +73,11 @@ class Restlib(object):
 
     def validateResponse(self, response):
         if str(response.status) not in ["200", "204"]:
-            raise RestlibException(response.reason)
+            msg = json.loads(response.read())['exceptionMessage']['displayMessage']
+            s = StringIO()
+            s.write(_("Error Message:\n    %s\n") % msg)
+            s.write(_("Error Code: (%s) %s\n") % (response.status, response.reason))
+            raise RestlibException(s.getvalue())
 
     def request_get(self, method):
         return self._request("GET", method)

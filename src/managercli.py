@@ -180,8 +180,11 @@ class UnRegisterCommand(CliCommand):
            # clean up stale consumer ids
            shutil.rmtree("/etc/pki/consumer/")
            log.info("Successfully Unsubscribed the client from Entitlement Platform.")
+        except connection.RestlibException, re:
+           log.error("Error: Unable to UnRegister the system: %s" % re)
+           systemExit(-1, msgs=re)
         except:
-           log.error("Error: Unable to UnRegister the system")
+            log.error("Error: Unable to UnRegister the system)
 
 class SubscribeCommand(CliCommand):
     def __init__(self):
@@ -217,21 +220,24 @@ class SubscribeCommand(CliCommand):
         """
         self._validate_options()
         consumer = check_registration()['uuid']
-        if self.options.product:
-            bundles = self.cp.bindByProduct(consumer, self.options.product)
-            log.info("Info: Successfully subscribed the machine to product %s" % self.options.product)
-
-        if self.options.regtoken:
-            bundles = self.cp.bindByRegNumber(consumer, self.options.regtoken)
-            log.info("Info: Successfully subscribed the machine to registration token %s" % self.options.regtoken)
-
-        if self.options.pool:
-            bundles = self.cp.bindByEntitlementPool(consumer, self.options.pool)
-            log.info("Info: Successfully subscribed the machine the Entitlement Pool %s" % self.options.pool)
         try:
+            if self.options.product:
+                bundles = self.cp.bindByProduct(consumer, self.options.product)
+                log.info("Info: Successfully subscribed the machine to product %s" % self.options.product)
+
+            if self.options.regtoken:
+                bundles = self.cp.bindByRegNumber(consumer, self.options.regtoken)
+                log.info("Info: Successfully subscribed the machine to registration token %s" % self.options.regtoken)
+
+            if self.options.pool:
+                bundles = self.cp.bindByEntitlementPool(consumer, self.options.pool)
+                log.info("Info: Successfully subscribed the machine the Entitlement Pool %s" % self.options.pool)
             self.certlib.update()
+        except connection.RestlibException, re:
+            log.error(re)
+            systemExit(-1, msgs=re)
         except InvalidCertificate, e:
-            log.debug("Unable to update certificates: %s" % e)
+            log.error("Unable to update certificates: %s" % e)
 
 class UnSubscribeCommand(CliCommand):
     def __init__(self):
@@ -266,13 +272,20 @@ class UnSubscribeCommand(CliCommand):
                     log.info("This machine has been Unsubscribed for product %s with EntitlementId %s" % (self.options.product, entId))
                     # Force fetch all certs
                     self.certlib.update()
+            except connection.RestlibException, re:
+                log.error(re)
+                systemExit(-1, msgs=re)
             except Exception,e:
                 log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
                 #raise
         else:
-            self.cp.unbindAll(consumer)
-            log.info("Warning: This machine has been unsubscribed from all its subscriptions as per user request.")
-            self.certlib.update()
+            try:
+                self.cp.unbindAll(consumer)
+                log.info("Warning: This machine has been unsubscribed from all its subscriptions as per user request.")
+                self.certlib.update()
+            except connection.RestlibException, re:
+                log.error(re)
+                systemExit(-1, msgs=re)
 
 
 
@@ -406,6 +419,16 @@ class CLI:
             sys.exit(0)
 
         cmd.main()
+
+def systemExit(code, msgs=None):
+    "Exit with a code and optional message(s). Saved a few lines of code."
+
+    if msgs:
+        if type(msgs) not in [type([]), type(())]:
+            msgs = (msgs, )
+        for msg in msgs:
+            sys.stderr.write(str(msg)+'\n')
+    sys.exit(code)
 
 def check_registration():
     if not ConsumerIdentity.exists():
