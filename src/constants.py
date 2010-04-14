@@ -59,6 +59,10 @@ unsubscribed_status = _("""
 %s is installed but you are not subscribed to it. If you plan to use %s on this system, you should add a subscription. If you do not plan to use %s on this system, you should remove it from this system.
 """)
 
+not_installed_status = _(""" 
+%s is not installed but you are subscribed to it. If you do not plan to use %s on this system, you should unsubscribe in order to avoid unnecessarily consuming entitlements. If you plan to use %s on this system, you should install it.\n
+""")
+
 WARN_SUBSCRIPTIONS = _("<b>\n %s subscriptions need your attention.\n\n</b>Add or Update subscriptions for products you are using.\n")
 
 WARN_ONE_SUBSCRIPTION = _("<b>\n %s subscription need your attention.\n\n</b>Add or Update subscriptions for products you are using.\n")

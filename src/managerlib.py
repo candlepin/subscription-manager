@@ -71,6 +71,15 @@ def getInstalledProductStatus():
             product_status.append(data)
         else:
             product_status.append((pname, map_status(None), ""))
+
+    # Include entitled but not installed products
+    psnames = [prod[0] for prod in product_status]
+    for cert in EntitlementDirectory().list():
+       for product in cert.getProducts():
+           if product.getName() not in psnames:
+               psname = product.getName()
+               data = (psname, 'Not Installed', str(entdict[psname]['expires']), entdict[psname]['order'])
+               product_status.append(data)
     return product_status
 
 def getConsumedProductEntitlements():
@@ -103,6 +112,8 @@ def getProductDescription(qproduct):
                 data = constants.unsubscribed_status % (pst[0], pst[0], pst[0])
             if pst[1] == "Expired":
                 data = constants.expired_status % (pst[0], pst[2], pst[0], pst[0])
+            if pst[1] == "Not Installed":
+                data = constants.not_installed_status % (pst[0], pst[0], pst[0])
     
     for product in products:
         if qproduct == product.getProduct().getName():

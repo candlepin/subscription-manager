@@ -123,16 +123,18 @@ class ManageSubscriptionPage:
     def populateProductDialog(self):
         state_icon_map = {"Expired" : gtk.STOCK_DIALOG_WARNING,
                           "Not Subscribed" : gtk.STOCK_DIALOG_QUESTION,
-                          "Subscribed" : gtk.STOCK_APPLY, }
+                          "Subscribed" : gtk.STOCK_APPLY, 
+                          "Not Installed" : gtk.STOCK_DIALOG_QUESTION}
         self.tv_products =  self.subsxml.get_widget("treeview_updates")
         self.productList = gtk.ListStore(gtk.gdk.Pixbuf, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.warn_count = 0
         for product in managerlib.getInstalledProductStatus():
             markup_status = product[1]
-            if product[1] in ["Expired", "Not Subscribed"]:
+            if product[1] in ["Expired", "Not Subscribed", "Not Installed"]:
                 self.warn_count += 1
                 markup_status = '<span foreground="red"><b>%s</b></span>' % product[1]
             self.status_icon = self.tv_products.render_icon(state_icon_map[product[1]], size=gtk.ICON_SIZE_MENU)
+            print product
             self.productList.append((self.status_icon, product[0], markup_status, product[2], product[3]))
         self.tv_products.set_model(self.productList)
 

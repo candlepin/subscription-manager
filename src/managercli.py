@@ -26,6 +26,7 @@ import optparse
 import pprint
 from optparse import OptionParser
 from certlib import CertLib, ConsumerIdentity, ProductDirectory, EntitlementDirectory
+from certificate import InvalidCertificate
 import managerlib
 import gettext
 _ = gettext.gettext
@@ -227,7 +228,10 @@ class SubscribeCommand(CliCommand):
         if self.options.pool:
             bundles = self.cp.bindByEntitlementPool(consumer, self.options.pool)
             log.info("Info: Successfully subscribed the machine the Entitlement Pool %s" % self.options.pool)
-        self.certlib.update()
+        try:
+            self.certlib.update()
+        except InvalidCertificate, e:
+            log.debug("Unable to update certificates: %s" % e)
 
 class UnSubscribeCommand(CliCommand):
     def __init__(self):
