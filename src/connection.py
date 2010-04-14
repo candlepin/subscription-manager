@@ -18,6 +18,7 @@
 #
 
 import sys
+import locale
 import httplib
 import simplejson as json
 import base64
@@ -40,7 +41,8 @@ class Restlib(object):
         self.ssl_port = ssl_port
         self.apihandler = apihandler
         self.headers = {"Content-type":"application/json",
-                        "Accept": "application/json"}
+                        "Accept": "application/json",
+                        "Accept-Language": locale.getdefaultlocale()[0]}
         self.cert_file = cert_file
         self.key_file  = key_file
 
