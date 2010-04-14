@@ -70,7 +70,7 @@ def getInstalledProductStatus():
             data = (pname, map_status(entdict[pname]['valid']), str(entdict[pname]['expires']), entdict[pname]['order'])
             product_status.append(data)
         else:
-            product_status.append((pname, map_status(None), ""))
+            product_status.append((pname, map_status(None), "", ""))
 
     # Include entitled but not installed products
     psnames = [prod[0] for prod in product_status]
