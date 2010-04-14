@@ -134,7 +134,7 @@ class ManageSubscriptionPage:
                 self.warn_count += 1
                 markup_status = '<span foreground="red"><b>%s</b></span>' % product[1]
             self.status_icon = self.tv_products.render_icon(state_icon_map[product[1]], size=gtk.ICON_SIZE_MENU)
-            self.productList.append((self.status_icon, product[0], markup_status, product[2], product[3]))
+            self.productList.append((self.status_icon, product[0], product[3], markup_status, product[2]))
         self.tv_products.set_model(self.productList)
 
         #self.tv_products.set_rules_hint(True)
@@ -154,21 +154,22 @@ class ManageSubscriptionPage:
         cell.set_fixed_size(-1, 35)
         self.tv_products.append_column(col)
 
-        cell = gtk.CellRendererText()
-        col = gtk.TreeViewColumn(_("Subscription Status"), cell, markup=2)
+        col = gtk.TreeViewColumn(_("Subscription"), gtk.CellRendererText(), text=2)
         col.set_sort_column_id(2)
+        #col.set_spacing(6)
+        self.tv_products.append_column(col)
+
+        cell = gtk.CellRendererText()
+        col = gtk.TreeViewColumn(_("Subscription Status"), cell, markup=3)
+        col.set_sort_column_id(3)
         col.set_spacing(6)
         self.tv_products.append_column(col)
 
-        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=3)
-        col.set_sort_column_id(3)
-        #col.set_spacing(6)
-        self.tv_products.append_column(col)
-
-        col = gtk.TreeViewColumn(_("Subscription"), gtk.CellRendererText(), text=4)
+        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=4)
         col.set_sort_column_id(4)
         #col.set_spacing(6)
         self.tv_products.append_column(col)
+
 
         #self.productList.set_sort_column_id(1, gtk.SORT_ASCENDING)
         self.selection = self.tv_products.get_selection()
