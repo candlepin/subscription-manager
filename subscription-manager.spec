@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.37
+Version: 0.38
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -126,6 +126,31 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Wed Apr 14 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.38-1
+- Resolves: #568427
+- eol string literal missing (pkilambi@redhat.com)
+- modify the sequence in whihc subscription column is shown
+  (pkilambi@redhat.com)
+- fixing index issue due to mismatched product tuple (pkilambi@redhat.com)
+- Exception Handling for custom exceptions sent down from candlepin
+  (pkilambi@redhat.com)
+- Remove all certificate caching; Change certificate read() to be instance
+  based. (jortel@redhat.com)
+- change to right header based on product state (pkilambi@redhat.com)
+- Adding support to list products that are consuming a subscription but not
+  installed (pkilambi@redhat.com)
+- including locale info in request headers (pkilambi@redhat.com)
+- clean up (pkilambi@redhat.com)
+- adding a new column called subscription to gui/cli (pkilambi@redhat.com)
+- support to handle multiple products per certs for cli/tui
+  (pkilambi@redhat.com)
+- Backtrack on some of the snapshot stuff. (jortel@redhat.com)
+- unbregister account before re-registereing user from GUI
+  (pkilambi@redhat.com)
+- unregister existing consumer before re-registering with a force flag
+  (pkilambi@redhat.com)
+- Adding support to manually unregister a client to cli (pkilambi@redhat.com)
+
 * Mon Apr 12 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.37-1
 - Resolves: #580576 - fixing error message on failed registration (pkilambi@redhat.com)
 - Resolves: #580955 - set ssl_port to cfg value instead of default (pkilambi@redhat.com)
