@@ -75,13 +75,30 @@ class Action:
     def __init__(self):
         self.entdir = EntitlementDirectory()
 
+    def build(self, bundle):
+        keypem = bundle['key']
+        crtpem = bundle['cert']
+        key = Key(keypem)
+        cert = EntitlementCertificate(crtpem)
+        bogus = cert.bogus()
+        if bogus:
+            bogus.insert(0, 'Reasons(s):')
+            raise Exception, '\n - '.join(bogus)
+        return (key, cert)
+
 
 class AddAction(Action):
 
     def perform(self, *bundles):
-        writer = Writer()
-        for b in bundles:
-            writer.write(b)
+        for bundle in bundles:
+            try:
+                key,cert = self.build(bundle)
+                br.write(key, cert)
+            except Exception, e:
+                log.error(
+                    'Bundle not loaded:\n%s\n%s',
+                    bundle,
+                    e)
         return self
 
 
@@ -89,10 +106,10 @@ class DeleteAction(Action):
 
     def perform(self, *serialNumbers):
         for sn in serialNumbers:
-            crt = self.entdir.find(sn)
-            if crt is None:
+            cert = self.entdir.find(sn)
+            if cert is None:
                 continue
-            crt.delete()
+            cert.delete()
         return self
 
 
@@ -101,51 +118,77 @@ class UpdateAction(Action):
     LINGER = timedelta(days=30)
     
     def perform(self):
-        updates = 0
         try:
             uep = UEP()
         except Disconnected:
             log.info('Disconnected, not updated')
             return 0
-        local = {}
         report = UpdateReport()
+        local = self.getLocal(report)
+        expected = self.getExpected(uep, report)
+        missing, rogue = self.bashSerials(local, expected, report)
+        self.delete(rogue, report)
+        self.install(uep, missing, report)
+        self.purgeExpired(report)
+        log.info('updated:\n%s', report)
+        return report.updates()
+
+    def getLocal(self, report):
+        local = {}
         for valid in self.entdir.listValid():
             sn = valid.serialNumber()
             report.valid.append(sn)
             local[sn] = valid
-        expected = uep.getCertificateSerials()
-        report.expected = expected
-        new = []
+        return local
+
+    def getExpected(self, uep, report):
+        exp = uep.getCertificateSerials()
+        report.expected = exp
+        return exp
+
+    def bashSerials(self, local, expected, report):
+        missing = []
+        rogue = []
         for sn in expected:
             if not sn in local:
-                new.append(sn)
+                missing.append(sn)
         for sn in local:
             if not sn in expected:
-                updates += 1
-                crt = local[sn]
-                report.rugue.append(crt)
-                crt.delete()
-        writer = Writer()
-        for bundle in uep.getCertificatesBySerial(new):
-            updates += 1
-            crt = writer.write(bundle)
-            report.added.append(crt)
-        for c in self.entdir.listExpired():
-            if self.mayLinger(c):
-                report.expnd.append(c)
+                cert = local[sn]
+                rogue.append(cert)
+        return (missing, rogue)
+
+    def delete(self, rogue, report):
+        for cert in rogue:
+            cert.delete()
+            report.rogue.append(cert)
+
+    def install(self, uep, serials, report):
+        br = Writer()
+        for bundle in uep.getCertificatesBySerial(serials):
+            try:
+                key,cert = self.build(bundle)
+                br.write(key, cert)
+                report.added.append(cert)
+            except Exception, e:
+                log.error(
+                    'Bundle not loaded:\n%s\n%s',
+                    bundle,
+                    e)
+
+    def purgeExpired(self, report):
+        for cert in self.entdir.listExpired():
+            if self.mayLinger(cert):
+                report.expnd.append(cert)
                 continue
-            report.expd.append(c)
-            updates += 1
-            c.delete()
-        report.updates = updates
-        log.info('updated:\n%s', report)
-        return updates
+            report.expd.append(cert)
+            cert.delete()
     
     def mayLinger(self, cert):
         valid = cert.validRange()
         end = valid.end()
-        graceperoid = dt.utcnow()+self.LINGER
-        return ( end < graceperoid )
+        graceperoid = end+self.LINGER
+        return ( dt.utcnow() < graceperoid )
 
 
 class Writer:
@@ -153,19 +196,14 @@ class Writer:
     def __init__(self):
         self.entdir = EntitlementDirectory()
 
-    def write(self, bundle):
-        keypem = bundle['key']
-        crtpem = bundle['cert']
+    def write(self, key, cert):
         path = self.entdir.keypath()
-        key = Key(keypem)
         key.write(path)
-        cert = EntitlementCertificate(crtpem)
         sn = cert.serialNumber()
         path = self.entdir.productpath()
         fn = self.__ufn(path, sn)
         path = os.path.join(path, fn)
         cert.write(path)
-        return cert
         
     def __ufn(self, path, sn):
         n = 1
@@ -195,10 +233,10 @@ class UEP(UEPConnection):
     def __init__(self):
         cfg = initConfig()
         host = cfg['hostname'] or "localhost"
-        ssl_port = cfg['port']
-        cert_file = ConsumerIdentity.certpath()
-        key_file = ConsumerIdentity.keypath()
-        UEPConnection.__init__(self, host, ssl_port=ssl_port, cert_file=cert_file, key_file=key_file)
+        port = cfg['port']
+        cert = ConsumerIdentity.certpath()
+        key = ConsumerIdentity.keypath()
+        UEPConnection.__init__(self, host, ssl_port=port, cert_file=cert, key_file=key)
         self.uuid = self.consumerId()
         
     def getCertificateSerials(self):
@@ -214,9 +252,9 @@ class UEP(UEPConnection):
         if snList:
             snList = [str(sn) for sn in snList]
             reply = UEPConnection.getCertificatesBySerial(self, self.uuid, snList)
-            for crt in reply:
-                crt = crt['cert']
-                result.append(crt)
+            for cert in reply:
+                cert = cert['cert']
+                result.append(cert)
         return result
 
 
@@ -229,21 +267,31 @@ class Directory:
     def __init__(self, path):
         self.path = path
         
-    def list(self):
-        entries = []
+    def listAll(self):
+        all = []
         for fn in os.listdir(self.path):
             p = (self.path, fn)
-            entries.append(p)
-        return entries
+            all.append(p)
+        return all
+
+    def list(self):
+        files = []
+        for p,fn in self.listAll():
+            path = os.path.join(p, fn)
+            if os.path.isdir(path):
+                continue
+            else:
+                files.append((p,fn))
+        return files
     
     def listdirs(self):
         dir = []
-        for p,fn in self.list():
+        for p,fn in self.listAll():
             path = os.path.join(p, fn)
             if os.path.isdir(path):
                 dir.append(Directory(path))
         return dir
-    
+
     def create(self):
         if not os.path.exists(self.path):
             os.makedirs(self.path)
@@ -268,10 +316,79 @@ class Directory:
         return self.path
     
     
+class CertificateDirectory(Directory):
+    
+    def __init__(self, path):
+        Directory.__init__(self, path)
+        self.create()
+
+    def list(self):
+        listing = []
+        factory = self.Factory(self.certClass())
+        for p,fn in Directory.list(self):
+            if not fn.endswith('.pem'):
+                continue
+            path = os.path.join(p, fn)
+            factory.append(path, listing)
+        return listing
+
+    def listValid(self):
+        valid = []
+        for c in self.list():
+             if c.valid():
+                valid.append(c)
+        return valid
+    
+    def listExpired(self):
+        expired = []
+        for c in self.list():
+             if not c.valid():
+                expired.append(c)
+        return expired
+    
+    def find(self, sn):
+        for c in self.list():
+            if c.serialNumber() == sn:
+                return c
+        return None
+
+    def certClass(self):
+        return Certificate
+
+    class Factory:
+
+        def __init__(self, cls):
+            self.cls = cls
+
+        def append(self, path, certlist):
+            try:
+                cert = self.cls()
+                cert.read(path)
+                bogus = cert.bogus()
+                if bogus:
+                    bogus.insert(0, 'Reason(s):')
+                    raise Exception, '\n - '.join(bogus)
+                certlist.append(cert)
+            except Exception, e:
+                log.error(
+                    'File: %s, not loaded\n%s',
+                    path,
+                    e)
 
 
+class ProductDirectory(CertificateDirectory):
+    
+    ROOT = '/etc/pki/product'
+    KEY = 'key.pem'
+    
+    def __init__(self):
+        CertificateDirectory.__init__(self, self.ROOT)
+        
+    def certClass(self):
+        return ProductCertificate
 
-class EntitlementDirectory(Directory):
+
+class EntitlementDirectory(CertificateDirectory):
     
     ROOT = '/etc/pki/entitlement'
     KEY = 'key.pem'
@@ -280,93 +397,17 @@ class EntitlementDirectory(Directory):
     @classmethod
     def keypath(cls):
         return os.path.join(cls.ROOT, cls.KEY)
-    
+
     @classmethod
     def productpath(cls):
         return os.path.join(cls.ROOT, cls.PRODUCT)
-    
+
     def __init__(self):
-        Directory.__init__(self, self.productpath())
-        self.create()
-        
-    def list(self):
-        all = []
-        for p,fn in Directory.list(self):
-            if not fn.endswith('.pem'):
-                continue
-            path = os.path.join(p, fn)
-            crt = EntitlementCertificate()
-            crt.read(path)
-            all.append(crt)
-        return all
-    
-    def find(self, sn):
-        for c in self.list():
-            if c.serialNumber() == sn:
-                return c
-        return None
+        CertificateDirectory.__init__(self, self.productpath())
 
-    def listValid(self):
-        valid = []
-        for c in self.list():
-             if c.valid():
-                valid.append(c)
-        return valid
-    
-    def listExpired(self):
-        expired = []
-        for c in self.list():
-             if not c.valid():
-                expired.append(c)
-        return expired
-    
-    def find(self, sn):
-        for c in self.list():
-            if c.serialNumber() == sn:
-                return c
-        return None
+    def certClass(self):
+        return EntitlementCertificate
 
-
-class ProductDirectory(Directory):
-    
-    ROOT = '/etc/pki/product'
-    KEY = 'key.pem'
-    
-    def __init__(self):
-        Directory.__init__(self, self.ROOT)
-        self.create()
-        
-    def list(self):
-        all = []
-        for p,fn in Directory.list(self):
-            if not fn.endswith('.pem'):
-                continue
-            path = os.path.join(p, fn)
-            crt = ProductCertificate()
-            crt.read(path)
-            all.append(crt)
-        return all
-    
-    def find(self, sn):
-        for c in self.list():
-            if c.serialNumber() == sn:
-                return c
-        return None
-
-    def listValid(self):
-        valid = []
-        for c in self.list():
-             if c.valid():
-                valid.append(c)
-        return valid
-    
-    def listExpired(self):
-        expired = []
-        for c in self.list():
-             if not c.valid():
-                expired.append(c)
-        return expired
-    
 
 class ConsumerIdentity:
     
@@ -445,35 +486,39 @@ class ConsumerIdentity:
 class UpdateReport:
 
     def __init__(self):
-        self.updates = 0
         self.valid = []
         self.expected = []
         self.added = []
-        self.rugue = []
+        self.rogue = []
         self.expd = []
         self.expnd = []
 
-    def write(self, s, title, clist):
+    def updates(self):
+        return ( len(self.added)
+                +len(self.rogue)
+                +len(self.expd) )
+
+    def write(self, s, title, certificates):
         indent = '  '
         s.append(title)
-        if clist:
-            for c in clist:
-                p = c.getProduct().getName()
+        if certificates:
+            for c in certificates:
+                p = c.getProduct()
                 s.append('%s[sn:%d (%s,) @ %s]' % \
                     (indent,
                      c.serialNumber(),
-                     p,
+                     p.getName(),
                      c.path))
         else:
             s.append('%s<NONE>' % indent)
 
     def __str__(self):
         s = []
-        s.append('Total updates: %d' % self.updates)
+        s.append('Total updates: %d' % self.updates())
         s.append('Found (local) serial# %s' % self.valid)
         s.append('Expected (UEP) serial# %s' % self.expected)
         self.write(s, 'Added (new)', self.added)
-        self.write(s, 'Deleted (rogue):', self.rugue)
+        self.write(s, 'Deleted (rogue):', self.rogue)
         self.write(s, 'Expired (not deleted):', self.expnd)
         self.write(s, 'Expired (deleted):', self.expd)
         return '\n'.join(s)

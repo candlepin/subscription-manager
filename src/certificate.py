@@ -29,16 +29,6 @@ from M2Crypto import X509
 from datetime import datetime as dt
 
 
-class InvalidCertificate(Exception):
-
-    def __init__(self, crt, reason):
-        if hasattr(crt, 'path'):
-            msg = '%s @ %s' % (reason, crt.path)
-        else:
-            msg = reason
-        Exception.__init__(self, msg)
-
-
 class Certificate(object):
     """
     Represents and x.509 certificate.
@@ -105,6 +95,16 @@ class Certificate(object):
         """
         return self.validRange().hasNow()
     
+    def bogus(self):
+        """
+        Get whether the certificate contains bogus
+        data or is otherwise unsuitable.  The certificate
+        may be valid but still be considered bogus.
+        @return: List of reasons if bogus
+        @rtype: list
+        """
+        return []
+
     def extensions(self):
         """
         Get custom extensions.
@@ -137,7 +137,7 @@ class Certificate(object):
         @return: self
         """
         f = open(path, 'w')
-        f.write(self.x509.as_pem())
+        f.write(self.toPEM())
         self.path = path
         f.close()
         return self
@@ -150,6 +150,14 @@ class Certificate(object):
             os.unlink(self.path)
         else:
             raise Exception, 'no path, not deleted'
+
+    def toPEM(self):
+        """
+        Get PEM representation of the certificate.
+        @return: A PEM string
+        @rtype: str
+        """
+        return self.x509.as_pem()
             
     def __str__(self):
         return self.x509.as_text()
@@ -272,7 +280,10 @@ class DateRange:
         return ( now >= self.begin() and now <= self.end() )
 
     def __parse(self, asn1):
-        return dt.strptime(asn1, self.ASN1_FORMAT)
+        try:
+            return dt.strptime(asn1, self.ASN1_FORMAT)
+        except:
+            return dt(year=2000, month=1, day=1)
     
     def __str__(self):
         return '\n\t%s\n\t%s' % self.range
@@ -553,6 +564,15 @@ class RedhatCertificate(Certificate):
             return self.__redhat
         except:
             return self.extensions()
+
+    def bogus(self):
+        bogus = Certificate.bogus(self)
+        if self.serialNumber() < 1:
+            bogus.append('Serial Number must be > 0')
+        cn = self.subject().get('CN')
+        if not cn:
+            bogus.append('Common Name (%s) not-valid' % cn)
+        return bogus
     
 
 class ProductCertificate(RedhatCertificate):
@@ -576,7 +596,6 @@ class ProductCertificate(RedhatCertificate):
             root = oid.rtrim(1)
             ext = rhns.branch(root)
             return Product(ext)
-        raise InvalidCertificate(self, 'No product (9.1.*) found')
     
     def getProducts(self):
         """
@@ -593,6 +612,12 @@ class ProductCertificate(RedhatCertificate):
             lst.append(Product(ext))
         return lst
     
+    def bogus(self):
+        bogus = RedhatCertificate.bogus(self)
+        if self.getProduct() is None:
+            bogus.append('No product information')
+        return bogus
+
     def __str__(self):
         s = []
         s.append('RAW:')
@@ -601,7 +626,7 @@ class ProductCertificate(RedhatCertificate):
         s.append('MODEL:')
         s.append('===================================')
         s.append('Serial#: %s' % self.serialNumber())
-        s.append('Subject (CN): %s' % self.subject()['CN'])
+        s.append('Subject (CN): %s' % self.subject().get('CN'))
         s.append('Valid: [%s] %s\n' % (self.valid(), self.validRange()))
         for p in self.getProducts():
             s.append(str(p))
@@ -627,7 +652,6 @@ class EntitlementCertificate(ProductCertificate):
             root = oid.rtrim(1)
             ext = rhns.branch(root)
             return Order(ext)
-        raise InvalidCertificate(self, 'No order (9.4) found')
 
     def getEntitlements(self):
         """
@@ -669,6 +693,12 @@ class EntitlementCertificate(ProductCertificate):
             ext = rhns.branch(root)
             lst.append(Role(ext))
         return lst
+
+    def bogus(self):
+        bogus = ProductCertificate.bogus(self)
+        if self.getOrder() is None:
+            bogus.append('No order infomation')
+        return bogus
 
     def __str__(self):
         s = []
