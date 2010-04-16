@@ -26,7 +26,6 @@ import optparse
 import pprint
 from optparse import OptionParser
 from certlib import CertLib, ConsumerIdentity, ProductDirectory, EntitlementDirectory
-from certificate import InvalidCertificate
 import managerlib
 import gettext
 _ = gettext.gettext
@@ -236,8 +235,8 @@ class SubscribeCommand(CliCommand):
         except connection.RestlibException, re:
             log.error(re)
             systemExit(-1, msgs=re)
-        except InvalidCertificate, e:
-            log.error("Unable to update certificates: %s" % e)
+        except Exception, e:
+            log.error("Unable to subscribe: %s" % e)
 
 class UnSubscribeCommand(CliCommand):
     def __init__(self):

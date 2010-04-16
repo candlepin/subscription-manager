@@ -31,6 +31,9 @@ _ = gettext.gettext
 
 log = getLogger(__name__)
 
+NORMAL_COLOR = '\033[0m'
+ERROR_COLOR = '\033[91m'
+
 class RestlibException(Exception):
     def __init__(self, msg = ""):
         self.msg = msg
@@ -73,10 +76,11 @@ class Restlib(object):
 
     def validateResponse(self, response):
         if str(response.status) not in ["200", "204"]:
+            print response.status, response.read()
             msg = json.loads(response.read())['exceptionMessage']['displayMessage']
             s = StringIO()
-            s.write(_("Error Message:\n    %s\n") % msg)
-            s.write(_("Error Code: (%s) %s\n") % (response.status, response.reason))
+            s.write(_("%sError Message:%s\n    %s\n") % (ERROR_COLOR,NORMAL_COLOR,  msg))
+            s.write(_("%sError Code:%s \n    (%s) %s\n") % (ERROR_COLOR,NORMAL_COLOR, response.status, response.reason))
             raise RestlibException(s.getvalue())
 
     def request_get(self, method):
