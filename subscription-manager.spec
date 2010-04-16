@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.38
+Version: 0.39
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -126,6 +126,15 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Fri Apr 16 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.39-1
+- Resolves: #581032, #581489
+- cleaning up obsolete exceptions (pkilambi@redhat.com)
+- Certlib robustness & testing. Remove InvalidCertificate exception; no longer
+  raised by ProductCertificate.getProduct() and
+  EntitlementCertificate.getOrder() Ensure Directory classes only return 'good'
+  certificates (not bogus ones). Detect and log invalid cert bundles from UEP.
+  Overall more robust error handling. (jortel@redhat.com)
+
 * Wed Apr 14 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.38-1
 - Resolves: #568427
 - eol string literal missing (pkilambi@redhat.com)
