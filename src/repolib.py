@@ -88,6 +88,7 @@ class UpdateAction(Action):
             id = ent.getLabel()
             repo = Repo(id)
             repo['name'] = ent.getName()
+            repo['enabled'] = ent.getEnabled()
             repo['baseurl'] = self.join(baseurl, ent.getUrl())
             repo['gpgkey'] = self.join(baseurl, ent.getGpg())
             repo['sslclientkey'] = EntitlementDirectory.keypath()
@@ -142,15 +143,24 @@ class Repo(dict):
     # (name, mutable, default)
     KEYS = (
         ('name', 0, None),
-        ('baseurl', 1, None),
-        ('enabled', 0, '1'),
+        ('baseurl', 0, None),
+        ('enabled', 1, '1'),
         ('gpgcheck', 0, '1'),
-        ('gpgkey', 1, None),
+        ('gpgkey', 0, None),
         ('sslverify', 0, '1'),
         ('sslcacert', 0, CA),
-        ('sslclientkey', 1, None),
-        ('sslclientcert', 1, None),
+        ('sslclientkey', 0, None),
+        ('sslclientcert', 0, None),
     )
+
+    @classmethod
+    def ord(cls, key):
+        i = 0
+        for k,m,d in cls.KEYS:
+            if k == key:
+                return i
+            i += 1
+        return 0x64
     
     def __init__(self, id):
         self.id = id
@@ -161,7 +171,7 @@ class Repo(dict):
         count = 0
         for k,m,d in self.KEYS:
             v = other.get(k)
-            if m:
+            if not m:
                 if v is None:
                     continue
                 if self[k] == v:
@@ -169,15 +179,23 @@ class Repo(dict):
                 self[k] = v
                 count += 1
         return count
+
+    def sorted(self):
+        def cmpfn(a,b):
+            n1 = Repo.ord(a)
+            n2 = Repo.ord(b)
+            return (n1-n2)
+        return sorted(self.keys(), cmp=cmpfn)
         
     def __str__(self):
         s = []
         s.append('[%s]' % self.id)
-        for k,m,d in self.KEYS:
+        for k in self.sorted():
             v = self.get(k)
             if v is None:
                 continue
             s.append('%s=%s' % (k, v))
+
         return '\n'.join(s)
     
     def __repr__(self):
