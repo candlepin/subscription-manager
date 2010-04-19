@@ -594,8 +594,9 @@ class ProductCertificate(RedhatCertificate):
             p = products[0]
             oid = p[0]
             root = oid.rtrim(1)
+            hash = oid[1]
             ext = rhns.branch(root)
-            return Product(ext)
+            return Product(hash, ext)
     
     def getProducts(self):
         """
@@ -608,8 +609,9 @@ class ProductCertificate(RedhatCertificate):
         for p in rhns.find('1.*.1'):
             oid = p[0]
             root = oid.rtrim(1)
+            hash = oid[1]
             ext = rhns.branch(root)
-            lst.append(Product(ext))
+            lst.append(Product(hash, ext))
         return lst
     
     def bogus(self):
@@ -744,8 +746,12 @@ class Order:
 
 class Product:
 
-    def __init__(self, ext):
+    def __init__(self, hash, ext):
+        self.hash = hash
         self.ext = ext
+        
+    def getHash(self):
+        return self.hash
         
     def getName(self):
         return self.ext.get('1')
@@ -760,11 +766,12 @@ class Product:
         return self.ext.get('4')
     
     def __eq__(self, rhs):
-        return ( self.getName() == rhs.getName() )
+        return ( self.getHash() == rhs.getHash() )
     
     def __str__(self):
         s = []
         s.append('Product {')
+        s.append('\tHash ......... = %s' % self.getHash())
         s.append('\tName ......... = %s' % self.getName())
         s.append('\tVariant ...... = %s' % self.getVariant())
         s.append('\tArchitecture . = %s' % self.getArch())
