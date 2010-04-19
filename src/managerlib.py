@@ -127,6 +127,8 @@ def getProductDescription(qproduct):
         for product in eproducts:
             if qproduct == product.getName():
                 ents =  cert.getContentEntitlements()
+                if not len(ents):
+                    continue
                 data += """ CONTENT ENTITLEMENTS \n"""
                 data += """======================="""
                 for ent in ents:
