@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.40
+Version: 0.41
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -126,7 +126,7 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Tue Apr 20 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.40-1
+* Tue Apr 20 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.41-1
 - Resolves: #580043
 - jbowes's fix for locale string replacement (pkilambi@redhat.com)
 - unsubscribe products based on ent id from cert serial (pkilambi@redhat.com)
