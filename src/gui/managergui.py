@@ -216,19 +216,19 @@ class ManageSubscriptionPage:
             reload()
             return
         try:
-            ent_list = UEP.getEntitlementList(consumer['uuid'])
-            entId = None
-            for ent in ent_list:
-                if self.pname_selected == ent['entitlement']['pool']['productId']:
-                    entId = ent['entitlement']['id']
-            UEP.unBindByEntitlementId(consumer['uuid'], entId)
-            log.info("This machine is now unsubscribed from Product %s " % self.pname_selected)
-            # Force fetch all certs
+            entcerts = EntitlementDirectory().list()
+            for cert in entcerts:
+                for product in cert.getProducts():
+                    if self.pname_selected == product.getName():
+                        UEP.unBindByEntitlementId(consumer['uuid'], cert.serialNumber())
+                        log.info("This machine is now unsubscribed from Product %s " % self.pname_selected)
         except Exception, e:
             # raise warning window
             log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
             errorWindow(constants.UNSUBSCRIBE_ERROR)
+        # Force fetch all certs
         certlib.update()
+        reload()
 
 class RegisterScreen:
     """
