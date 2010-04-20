@@ -52,7 +52,7 @@ class Restlib(object):
         self.apihandler = apihandler
         self.headers = {"Content-type":"application/json",
                         "Accept": "application/json",
-                        "Accept-Language": locale.getdefaultlocale()[0]}
+                        "Accept-Language": locale.getdefaultlocale()[0].lower().replace('_', '-')}
         self.cert_file = cert_file
         self.key_file  = key_file
 
