@@ -127,7 +127,7 @@ fi
 
 %changelog
 * Tue Apr 20 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.40-1
-- Resolves: #568426
+- Resolves: #580043
 - jbowes's fix for locale string replacement (pkilambi@redhat.com)
 - unsubscribe products based on ent id from cert serial (pkilambi@redhat.com)
 - dont show the content/role sets if the list is empty (pkilambi@redhat.com)
