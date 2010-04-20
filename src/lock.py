@@ -19,6 +19,7 @@ import os
 import re
 import time
 import fcntl
+from threading import RLock as Mutex
 
 
 class LockFile:
@@ -86,7 +87,10 @@ class LockFile:
 
 class Lock:
 
+    mutex = Mutex()
+
     def __init__(self, path):
+        self.depth = 0
         self.path = path
         dir, fn = os.path.split(self.path)
         if not os.path.exists(dir):
@@ -99,23 +103,56 @@ class Lock:
                 f.open()
                 pid = f.getpid()
                 if f.mypid():
+                    self.P()
                     return
                 if f.valid():
                     f.close()
                     time.sleep(0.5)
                 else:
                     break
+            self.P()
             f.setpid()
         finally:
             f.close()
 
     def release(self):
+        if not self.acquired():
+            return
+        self.V()
+        if self.acquired():
+            return
         f = LockFile(self.path)
         try:
             f.open()
             f.delete()
         finally:
             f.close()
+
+    def acquired(self):
+        mutex = self.mutex
+        mutex.acquire()
+        try:
+            return ( self.depth > 0 )
+        finally:
+            mutex.release()
+
+    def P(self):
+        mutex = self.mutex
+        mutex.acquire()
+        try:
+            self.depth += 1
+        finally:
+            mutex.release()
+        return self
+
+    def V(self):
+        mutex = self.mutex
+        mutex.acquire()
+        try:
+            if self.acquired():
+                self.depth -= 1
+        finally:
+            mutex.release()
 
     def __del__(self):
         try:

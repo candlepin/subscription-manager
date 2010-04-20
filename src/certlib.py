@@ -30,44 +30,47 @@ from logutil import getLogger
 log = getLogger(__name__)
 
 
-class CertLib:
-    
-    LINGER = timedelta(days=30)
-
-    def update(self):
-        lock = ActionLock()
-        try:
-            lock.acquire()
-            update = UpdateAction()
-            return update.perform()
-        finally:
-            lock.release()
-
-    def add(self, *bundles):
-        lock = ActionLock()
-        try:
-            lock.acquire()
-            add = AddAction()
-            return add.perform(bundles)
-        finally:
-            lock.release()
-
-    def delete(self, *serialNumbers):
-        lock = ActionLock()
-        try:
-            lock.acquire()
-            delete = DeleteAction()
-            return delete.perform(serialNumbers)
-        finally:
-            lock.release()
-
-
 class ActionLock(Lock):
 
     PATH = '/var/run/subsys/rhsm/cert.pid'
 
     def __init__(self):
         Lock.__init__(self, self.PATH)
+
+
+class CertLib:
+    
+    LINGER = timedelta(days=30)
+
+    def __init__(self, lock=ActionLock()):
+        self.lock = lock
+
+    def update(self):
+        lock = self.lock
+        lock.acquire()
+        try:
+            action = UpdateAction()
+            return action.perform()
+        finally:
+            lock.release()
+
+    def add(self, *bundles):
+        lock = self.lock
+        lock.acquire()
+        try:
+            action = AddAction()
+            return action.perform(bundles)
+        finally:
+            lock.release()
+
+    def delete(self, *serialNumbers):
+        lock = self.lock
+        lock.acquire()
+        try:
+            action = DeleteAction()
+            return action.perform(serialNumbers)
+        finally:
+            lock.release()
 
 
 class Action:

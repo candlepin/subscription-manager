@@ -80,6 +80,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/repolib.py*
 /usr/lib/yum-plugins/rhsmplugin.py*
 %{_datadir}/rhsm/certificate.py*
+%{_datadir}/rhsm/certmgr.py*
 %{_datadir}/rhsm/certlib.py*
 %{_datadir}/rhsm/hwprobe.py*
 %{_datadir}/rhsm/config.py*

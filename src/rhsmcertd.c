@@ -63,7 +63,7 @@ int run(int interval)
         }
         if(pid == 0)
         {
-            execl("/usr/bin/python", "python", "/usr/share/rhsm/certlib.py", 0);
+            execl("/usr/bin/python", "python", "/usr/share/rhsm/certmgr.py", 0);
         }
         waitpid(pid, &status, 0);
         status = WEXITSTATUS(status);

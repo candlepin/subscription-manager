@@ -26,11 +26,15 @@ log = getLogger(__name__)
 
 class RepoLib:
 
+    def __init__(self, lock=ActionLock()):
+        self.lock = lock
+
     def update(self):
-        lock = ActionLock()
+        lock = self.lock
+        lock.acquire()
         try:
-            update = UpdateAction()
-            return update.perform()
+            action = UpdateAction()
+            return action.perform()
         finally:
             lock.release()
 
