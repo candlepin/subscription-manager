@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.39
+Version: 0.40
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -126,6 +126,14 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Apr 20 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.40-1
+- Resolves: #568426
+- jbowes's fix for locale string replacement (pkilambi@redhat.com)
+- unsubscribe products based on ent id from cert serial (pkilambi@redhat.com)
+- dont show the content/role sets if the list is empty (pkilambi@redhat.com)
+- Add access to product hash. (jortel@redhat.com)
+- Preserve custom repo properties. (jortel@redhat.com)
+
 * Fri Apr 16 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.39-1
 - Resolves: #581032, #581489
 - cleaning up obsolete exceptions (pkilambi@redhat.com)
