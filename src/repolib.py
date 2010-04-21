@@ -163,7 +163,7 @@ class Repo(dict):
     
     def __hash__(self):
         return hash(self.id)
-
+    
 
 class RepoFile(Parser):
     
@@ -175,7 +175,8 @@ class RepoFile(Parser):
         self.create()
     
     def read(self):
-        Parser.read(self, self.path)
+        r = Reader(self.path)
+        Parser.readfp(self, r)
         
     def write(self):
         f = open(self.path, 'w')
@@ -211,6 +212,35 @@ class RepoFile(Parser):
         s.append('#')
         f.write('\n'.join(s))
         f.close()
+        
+        
+class Reader:
+    
+    def __init__(self, path):
+        f = open(path)
+        bfr = f.read()
+        self.idx = 0
+        self.lines = bfr.split('\n')
+        f.close()
+        
+    def readline(self):
+        nl = 0
+        i = self.idx
+        eof = len(self.lines)
+        while 1:
+            if i == eof:
+                return
+            ln = self.lines[i]
+            i += 1
+            if not ln:
+                nl += 1
+            else:
+                break
+        if nl:
+            i -= 1
+            ln = '\n'
+        self.idx = i
+        return ln
 
 
 def main():
@@ -222,4 +252,3 @@ def main():
         
 if __name__ == '__main__':
     main()
-
