@@ -10,6 +10,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: python-dmidecode
 Requires:  python-ethtool 
 Requires:  python-simplejson
+Requires:  python-iniparse
 Requires:  m2crypto 
 Requires: yum >= 3.2.19-15
 Requires(post): chkconfig

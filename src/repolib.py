@@ -19,6 +19,7 @@ import os
 from urllib import basejoin
 from config import initConfig
 from certlib import EntitlementDirectory, ActionLock
+from iniparse import ConfigParser as Parser
 from logutil import getLogger
 
 log = getLogger(__name__)
@@ -56,21 +57,18 @@ class UpdateAction(Action):
         updates = 0
         products = self.entdir.listValid()
         for cont in self.getUniqueContent():
-            name = cont.id
-            valid.add(name)
-            existing = repod[name]
+            valid.add(cont.id)
+            existing = repod.section(cont.id)
             if existing is None:
                 updates += 1
-                repod[name] = cont
+                repod.add(cont)
                 continue
             updates += existing.update(cont)
-        delete = []
-        for name in repod.section:
-            if name not in valid:
-                delete.append(name)
-        for name in delete:
-            updates += 1
-            del repod.section[name]
+            repod.update(existing)
+        for section in repod.sections():
+            if section not in valid:
+                updates += 1
+                repod.delete(section)
         repod.write()
         return updates
     
@@ -106,46 +104,13 @@ class UpdateAction(Action):
         else:
             return basejoin(base, url)
 
-
-class Reader:
-
-    def __init__(self):
-        self.section = {}
-        self.section[None] = self.newsection(None)
-
-    def read(self, path):
-        f = open(path)
-        section = self.section[None]
-        for line in f.readlines():
-            line = line.strip()
-            if line.startswith('[') and line.endswith(']'):
-                name = line[1:-1].strip()
-                section = self.newsection(name)
-                self.section[name] = section
-                continue
-            if line.startswith('#'):
-                continue
-            part = line.split('=', 1)
-            if len(part) != 2:
-                continue
-            name = part[0].strip()
-            value = part[1].strip()
-            section[name] = value
-        f.close()
-        
-    def newsection(self, name):
-        return {}
-        
-    def __getitem__(self, name):
-        return self.section.get(name)
-
    
 class Repo(dict):
     
     CA = '/usr/share/rhn/RHNS-CA-CERT'
     
     # (name, mutable, default)
-    KEYS = (
+    PROPERTIES = (
         ('name', 0, None),
         ('baseurl', 0, None),
         ('enabled', 1, '1'),
@@ -156,24 +121,22 @@ class Repo(dict):
         ('sslclientkey', 0, None),
         ('sslclientcert', 0, None),
     )
-
-    @classmethod
-    def ord(cls, key):
-        i = 0
-        for k,m,d in cls.KEYS:
-            if k == key:
-                return i
-            i += 1
-        return 0x64
     
     def __init__(self, id):
         self.id = id
-        for k,m,d in self.KEYS:
+        for k,m,d in self.PROPERTIES:
             self[k] = d
+
+    def items(self):
+        lst = []
+        for k,m,d in self.PROPERTIES:
+            v = self[k]
+            lst.append((k,v))
+        return tuple(lst)
     
     def update(self, other):
         count = 0
-        for k,m,d in self.KEYS:
+        for k,m,d in self.PROPERTIES:
             v = other.get(k)
             if not m:
                 if v is None:
@@ -183,30 +146,16 @@ class Repo(dict):
                 self[k] = v
                 count += 1
         return count
-
-    def sorted(self):
-        def cmpfn(a,b):
-            n1 = Repo.ord(a)
-            n2 = Repo.ord(b)
-            return (n1-n2)
-        return sorted(self.keys(), cmp=cmpfn)
         
     def __str__(self):
         s = []
         s.append('[%s]' % self.id)
-        for k in self.sorted():
+        for k in self.PROPERTIES:
             v = self.get(k)
             if v is None:
                 continue
             s.append('%s=%s' % (k, v))
 
-        return '\n'.join(s)
-    
-    def __repr__(self):
-        s = []
-        for k,m,d in self.KEYS:
-            v = self.get(k)
-            s.append('%s=%s' % (k, v))
         return '\n'.join(s)
         
     def __eq__(self, other):
@@ -216,45 +165,52 @@ class Repo(dict):
         return hash(self.id)
 
 
-class RepoFile(Reader):
+class RepoFile(Parser):
     
     PATH = '/etc/yum.repos.d/'
     
     def __init__(self, name='redhat.repo'):
-        Reader.__init__(self)
+        Parser.__init__(self)
         self.path = os.path.join(self.PATH, name)
         self.create()
-        
-    def newsection(self, name):
-        return Repo(name)
     
     def read(self):
-        Reader.read(self, self.path)
-        del self.section[None]
+        Parser.read(self, self.path)
         
     def write(self):
-        f = open(self.path, "w")
-        f.write(str(self))
+        f = open(self.path, 'w')
+        Parser.write(self, f)
         f.close()
         
+    def add(self, repo):
+        self.add_section(repo.id)
+        self.update(repo)
+        
+    def delete(self, section):
+        return self.remove_section(section)
+        
+    def update(self, repo):
+        for k,v in repo.items():
+            Parser.set(self, repo.id, k, v)
+
+    def section(self, section):
+        if self.has_section(section):
+            repo = Repo(section)
+            for k,v in self.items(section):
+                repo[k] = v
+            return repo
+
     def create(self):
-        if not os.path.exists(self.path):
-            f = open(self.path, 'w')
-            f.close()
-        
-    def __setitem__(self, name, value):
-        self.section[name] = value
-        
-    def __str__(self):
+        if os.path.exists(self.path):
+            return
+        f = open(self.path, 'w')
         s = []
         s.append('#')
         s.append('# Red Hat Repositories')
-        s.append('# managed by subscription-manager')
-        s.append('#\n')
-        for name, repo in self.section.items():
-            s.append(str(repo))
-            s.append('')
-        return '\n'.join(s)
+        s.append('# Managed by (rhsm) subscription-manager')
+        s.append('#')
+        f.write('\n'.join(s))
+        f.close()
 
 
 def main():
