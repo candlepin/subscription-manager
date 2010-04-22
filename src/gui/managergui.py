@@ -263,6 +263,7 @@ class RegisterScreen:
         if ConsumerIdentity.exists():
             try:
                 cid = consumer['uuid']
+                print "XXXXXXXXXX",cid
                 UEP.unregisterConsumer(cid)
             except Exception, e:
                 log.error("Unable to unregister existing user credentials.")

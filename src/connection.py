@@ -59,10 +59,10 @@ class Restlib(object):
     def _request(self, request_type, method, info=None):
         handler = self.apihandler + method
         if self.cert_file:
-            #context = SSL.Context("sslv3")
-            #context.load_cert(self.cert_file, keyfile=self.key_file)
-            #conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
-            conn = httplib.HTTPSConnection(self.host, self.ssl_port, key_file = self.key_file, cert_file = self.cert_file)
+            context = SSL.Context("sslv3")
+            context.load_cert(self.cert_file, keyfile=self.key_file)
+            conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
+            #conn = httplib.HTTPSConnection(self.host, self.ssl_port, key_file = self.key_file, cert_file = self.cert_file)
         else:
             conn = httplib.HTTPConnection(self.host, self.port)
         conn.request(request_type, handler, body=json.dumps(info), \

@@ -260,12 +260,12 @@ class UnSubscribeCommand(CliCommand):
 
         if self.options.product:
             try:
-                ent_list = self.cp.getEntitlementList(consumer)
+                entcerts = EntitlementDirectory().list()
                 entId = None
-                for ent in ent_list:
-                    print ent['entitlement']['pool']['productId']
-                    if self.options.product == ent['entitlement']['pool']['productId']:
-                        entId = ent['entitlement']['id']
+                for cert in entcerts:
+                    for product in cert.getProducts():
+                        if self.options.product == product.getName():
+                            entId = cert.serialNumber()
                 if entId:
                     print self.cp.unBindByEntitlementId(consumer, entId)
                     log.info("This machine has been Unsubscribed for product %s with EntitlementId %s" % (self.options.product, entId))
@@ -276,7 +276,7 @@ class UnSubscribeCommand(CliCommand):
                 systemExit(-1, msgs=re)
             except Exception,e:
                 log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
-                #raise
+                raise
         else:
             try:
                 self.cp.unbindAll(consumer)
