@@ -81,6 +81,7 @@ class ManageSubscriptionPage:
                         self.subsxml.get_widget("dialog-vbox1")
         self.pname_selected = None
         self.populateProductDialog()
+        self.setRegistrationStatus()
         self.updateMessage()
         dic = { "on_button_close_clicked" : gtk.main_quit,
                 "account_settings_clicked_cb" : self.loadAccountSettings,
@@ -198,6 +199,17 @@ class ManageSubscriptionPage:
         else:
             self.sumlabel.set_label(constants.COMPLIANT_STATUS)
             self.sm_icon.set_from_file(subs_full)
+
+    def setRegistrationStatus(self):
+        self.reg_label = self.subsxml.get_widget("reg_status")
+        self.reg_button_label = self.subsxml.get_widget("account_settings")
+        if ConsumerIdentity.exists():
+            self.reg_label.set_label(constants.REG_REMOTE_STATUS % cfg['hostname'])
+            self.reg_button_label.set_label(_("Modify Registration"))
+        else:
+            self.reg_label.set_label(constants.REG_LOCAL_STATUS)
+            self.reg_button_label.set_label(_("Register System..."))
+        
 
     def onUnsubscribeAction(self, button):
         global UEP

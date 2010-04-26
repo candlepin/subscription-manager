@@ -91,3 +91,6 @@ UNEXPECTED_ERROR = _("This error shouldn't have happened. If you'd "
 REGISTER_ERROR = _("Unable to register the system. %s</b>\n\nPlease see /var/log/rhsm/rhsm.log for more information.")
 
 CONFIRM_UNSUBSCRIBE = _("Are you sure you want to unsubscribe product %s")
+
+REG_REMOTE_STATUS = _("This system is registered to <b>%s</b>")
+REG_LOCAL_STATUS = _("This system's subscriptions are <b>locally-managed.</b>")
