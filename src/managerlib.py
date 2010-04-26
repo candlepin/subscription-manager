@@ -17,6 +17,8 @@
 import os
 import sys
 import constants
+import xml.utils.iso8601
+from datetime import datetime
 from certlib import CertLib, ConsumerIdentity, \
                     ProductDirectory, EntitlementDirectory
 from logutil import getLogger
@@ -166,11 +168,17 @@ def getAvailableEntitlementsCLI(cpserver, consumer):
     data = [_sub_dict(pool['pool'], columns) for pool in dlist]
     for d in data:
         d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
+        d['endDate'] = formatDate(d['endDate'])
         del d['consumed']
     return data
 
 def _sub_dict(datadict, subkeys, default=None) :
     return dict([ (k, datadict.get(k, default) ) for k in subkeys ] )
+
+def formatDate(datestring):
+    tf = xml.utils.iso8601.parse(datestring)
+    return datetime.fromtimestamp(tf).ctime()
+
 
 if __name__=='__main__':
     print("\nInstalled Product Status:\n")
