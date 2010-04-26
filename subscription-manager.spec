@@ -105,7 +105,6 @@ rm -rf $RPM_BUILD_ROOT
 %files -n subscription-manager-gnome
 %defattr(-,root,root,-)
 %{_datadir}/rhsm/gui/__init__.py* 
-%{_datadir}/rhsm/gui/firstboot.py* 
 %{_datadir}/rhsm/gui/managergui.py*  
 %{_datadir}/rhsm/gui/messageWindow.py*  
 %{_datadir}/rhsm/gui/data/standaloneH.glade  
