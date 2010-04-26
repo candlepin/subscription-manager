@@ -91,6 +91,9 @@ class RegisterCommand(CliCommand):
                                help="Specify a password")
         self.parser.add_option("--consumerid", dest="consumerid",
                                help="Register to an Existing consumer")
+        self.parser.add_option("--autosubscribe", action='store_true',
+                               help="Automatically subscribe this system to\
+                                     compatible subscriptions.")
         self.parser.add_option("--force",  action='store_true', 
                                help="Register the system even if it is already registered")
 
@@ -147,15 +150,16 @@ class RegisterCommand(CliCommand):
 
         managerlib.persist_consumer_cert(consumer)
         self.reload_cp_with_certs()
-        # try to auomatically bind products
-        for product in managerlib.getInstalledProductStatus():
-            try:
-               print "Bind Product ", product[0]
-               self.cp.bindByProduct(self.consumer['uuid'], product[0])
-               log.info("Automatically subscribe the machine to product %s " % product[0])
-            except:
-               log.warning("Warning: Unable to auto subscribe the machine to %s" % product[0])
-        self.certlib.update()
+        if self.options.autosubscribe:
+            # try to auomatically bind products
+            for product in managerlib.getInstalledProductStatus():
+                try:
+                   print "Bind Product ", product[0]
+                   self.cp.bindByProduct(self.consumer['uuid'], product[0])
+                   log.info("Automatically subscribe the machine to product %s " % product[0])
+                except:
+                   log.warning("Warning: Unable to auto subscribe the machine to %s" % product[0])
+            self.certlib.update()
 
 class UnRegisterCommand(CliCommand):
     def __init__(self):

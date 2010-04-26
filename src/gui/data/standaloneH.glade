@@ -421,7 +421,16 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <widget class="GtkCheckButton" id="auto_bind">
+                <property name="label" translatable="yes">Automatically subscribe this system to compatible subscriptions</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="draw_indicator">True</property>
+              </widget>
+              <packing>
+                <property name="position">2</property>
+              </packing>
             </child>
             <child>
               <placeholder/>

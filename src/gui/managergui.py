@@ -284,17 +284,23 @@ class RegisterScreen:
         except Exception, e:
             log.error("Unable to register your system. \n Error: %s" % e)
             errorWindow(constants.REGISTER_ERROR % e)
-        # try to auomatically bind products
-        for product in managerlib.getInstalledProductStatus():
-            try:
-               UEP.bindByProduct(consumer['uuid'], product[0])
-               log.info("Automatically subscribe the machine to product %s " % product[0])
-            except:
-               log.warning("Warning: Unable to auto subscribe the machine to %s" % product[0])
-        certlib.update()
+
+        if self.auto_subscribe():
+            # try to auomatically bind products
+            for product in managerlib.getInstalledProductStatus():
+                try:
+                   UEP.bindByProduct(consumer['uuid'], product[0])
+                   log.info("Automatically subscribe the machine to product %s " % product[0])
+                except:
+                   log.warning("Warning: Unable to auto subscribe the machine to %s" % product[0])
+            certlib.update()
         RegistrationTokenScreen()
         self.registerWin.hide()
         reload()
+
+    def auto_subscribe(self):
+        self.autobind = self.registerxml.get_widget("auto_bind")
+        return self.autobind.get_active()
 
     def validate_account(self):
         # validate / check user name
