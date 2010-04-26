@@ -63,7 +63,7 @@ def getInstalledProductStatus():
         for product in eproducts:
             entdict[product.getName()] = {'Entitlements' : ents,
                                           'valid': cert.valid(), 
-                                          'expires' : cert.validRange().end(),
+                                          'expires' : formatDate(cert.validRange().end().isoformat()),
                                           'order'   : cert.getOrder().getName() }
     product_status = []
     for product in products:
@@ -94,7 +94,8 @@ def getConsumedProductEntitlements():
     for cert in entdir.listValid():
         eproducts = cert.getProducts()
         for product in eproducts:
-            data = (product.getName(), cert.valid(), cert.validRange().begin(), cert.validRange().end())
+            data = (product.getName(), cert.valid(), formatDate(cert.validRange().begin().isoformat()), \
+                    formatDate(cert.validRange().end().isoformat()))
             consumed_products.append(data)
     return consumed_products
 
