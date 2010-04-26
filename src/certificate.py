@@ -27,6 +27,7 @@ import os, re
 import base64
 from M2Crypto import X509
 from datetime import datetime as dt
+from datetime import tzinfo, timedelta
 
 
 class Certificate(object):
@@ -276,17 +277,32 @@ class DateRange:
         @return: True if valid.
         @rtype: boolean
         """
-        now = dt.utcnow()
-        return ( now >= self.begin() and now <= self.end() )
+        gmt = dt.utcnow()
+        gmt = gmt.replace(tzinfo=GMT())
+        return ( gmt >= self.begin() and gmt <= self.end() )
 
     def __parse(self, asn1):
         try:
-            return dt.strptime(asn1, self.ASN1_FORMAT)
+            d = dt.strptime(asn1, self.ASN1_FORMAT)
         except:
-            return dt(year=2000, month=1, day=1)
+            d = dt(year=2000, month=1, day=1)
+        return d.replace(tzinfo=GMT())
     
     def __str__(self):
         return '\n\t%s\n\t%s' % self.range
+
+
+class GMT(tzinfo):
+    """GMT"""
+
+    def utcoffset(self, dt):
+        return timedelta(seconds=0)
+
+    def tzname(self, dt):
+        return 'GMT'
+
+    def dst(self, dt):
+        return 0
 
 
 class Extensions(dict):
