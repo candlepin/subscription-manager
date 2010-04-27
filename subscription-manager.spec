@@ -12,6 +12,7 @@ Requires:  python-ethtool
 Requires:  python-simplejson
 Requires:  python-iniparse
 Requires:  m2crypto 
+Requires:  PyXML 
 Requires: yum >= 3.2.19-15
 Requires(post): chkconfig
 Requires(preun): chkconfig
