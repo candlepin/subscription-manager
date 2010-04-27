@@ -272,7 +272,6 @@ class UnSubscribeCommand(CliCommand):
                 entId = None
                 for cert in entcerts:
                     for product in cert.getProducts():
-                        print product.getName()
                         if self.options.product == product.getName():
                             entId = cert.serialNumber()
                 if entId:

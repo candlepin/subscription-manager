@@ -597,7 +597,6 @@ class UpdateSubscriptionScreen:
                 model[col][0] = False
         print "Toggle '%s' to: %s" % (model[path][1], model[path][0])
         self.model = model
-        #self.selected[model.get_value(iter, 1)] = (model.get_value(iter, 0), iter)
         self.selected[model.get_value(iter, 4)] = (model.get_value(iter, 0), model.get_value(iter, 1), iter)
 
     def _cell_data_toggle_func(self, tree_column, renderer, model, treeiter):
