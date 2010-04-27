@@ -155,7 +155,7 @@ def getAvailableEntitlements(cpserver, consumer):
     """
      Gets the available Entitlements from the server
     """
-    columns  = ['quantity', 'consumed', 'endDate', 'productId']
+    columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName']
     dlist = cpserver.getPoolsList(consumer)
     data = [_sub_dict(pool['pool'], columns) for pool in dlist]
     for d in data:

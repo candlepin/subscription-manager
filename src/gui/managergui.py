@@ -402,10 +402,11 @@ class AddSubscriptionScreen:
                         self.addxml.get_widget("add-dialog-vbox1")
         self.consumer = consumer
         available_ent = 0
-        self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         try:
             for product in managerlib.getAvailableEntitlements(UEP, self.consumer['uuid']):
-                self.availableList.append(None, [False] + product.values())
+                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
+                self.availableList.append(None, [False] + pdata)
                 available_ent += 1
         except:
             log.error("Error populating available subscriptions from the server")
@@ -444,19 +445,19 @@ class AddSubscriptionScreen:
         subscribed_count = 0
         my_model = self.tv_products.get_model()
         busted_subs = []
-        for product, state in self.selected.items():
+        for pool, state in self.selected.items():
             # state = (bool, iter)
             if state[0]:
                 try:
-                    ent_ret = UEP.bindByProduct(consumer['uuid'], product)
+                    ent_ret = UEP.bindByEntitlementPool(consumer['uuid'], pool)
                     entitled_data = ent_ret[0]['entitlement']['pool']
                     updated_count = str(int(entitled_data['quantity']) - int(entitled_data['consumed']))
-                    my_model.set_value(state[-1], 3, updated_count)
+                    my_model.set_value(state[-1], 2, updated_count)
                     subscribed_count+=1
                 except Exception, e:
                     # Subscription failed, continue with rest
-                    log.error("Failed to subscribe to product %s Error: %s" % (product, e))
-                    busted_subs.append(product)
+                    log.error("Failed to subscribe to product %s Error: %s" % (state[1], e))
+                    busted_subs.append(state[1])
                     continue
         if len(busted_subs):
             errorWindow(constants.SUBSCRIBE_ERROR % ', '.join(busted_subs[:]))
@@ -487,12 +488,12 @@ class AddSubscriptionScreen:
         col.set_sort_order(gtk.SORT_ASCENDING)
         self.tv_products.append_column(col)
 
-        col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=3)
+        col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
         col.set_spacing(4)
         col.set_sort_column_id(2)
         self.tv_products.append_column(col)
 
-        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=2)
+        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=3)
         col.set_sort_column_id(3)
         self.tv_products.append_column(col)
 
@@ -502,7 +503,8 @@ class AddSubscriptionScreen:
         items, iter = self.tv_products.get_selection().get_selected()
         model[path][0] = not model[path][0]
         self.model = model
-        self.selected[model.get_value(iter, 1)] = (model.get_value(iter, 0), iter)
+        self.selected[model.get_value(iter, 4)] = (model.get_value(iter, 0), model.get_value(iter, 1), iter)
+        print self.selected
 
     def _cell_data_toggle_func(self, tree_column, renderer, model, treeiter):
         renderer.set_property('visible', True)
@@ -516,13 +518,14 @@ class UpdateSubscriptionScreen:
         self.product_select = product_selection
         #self.selected = {}
         self.setHeadMsg()
-        self.updatesList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.updatesList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.available_updates = 0
         try:
             for product in managerlib.getAvailableEntitlements(UEP, consumer['uuid']):
                 if self.product_select in product.values():
                     # Only list selected product's pools
-                    self.updatesList.append(None, [False] + product.values())
+                    pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
+                    self.updatesList.append(None, [False] + pdata)
                     self.available_updates+= 1
         except:
             pass
@@ -572,12 +575,12 @@ class UpdateSubscriptionScreen:
         col.set_sort_order(gtk.SORT_ASCENDING)
         self.tv_products.append_column(col)
 
-        col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=3)
+        col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
         col.set_spacing(4)
         col.set_sort_column_id(2)
         self.tv_products.append_column(col)
 
-        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=2)
+        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=3)
         col.set_sort_column_id(3)
         self.tv_products.append_column(col)
 
@@ -594,7 +597,8 @@ class UpdateSubscriptionScreen:
                 model[col][0] = False
         print "Toggle '%s' to: %s" % (model[path][1], model[path][0])
         self.model = model
-        self.selected[model.get_value(iter, 1)] = (model.get_value(iter, 0), iter)
+        #self.selected[model.get_value(iter, 1)] = (model.get_value(iter, 0), iter)
+        self.selected[model.get_value(iter, 4)] = (model.get_value(iter, 0), model.get_value(iter, 1), iter)
 
     def _cell_data_toggle_func(self, tree_column, renderer, model, treeiter):
         renderer.set_property('visible', True)
@@ -603,19 +607,19 @@ class UpdateSubscriptionScreen:
         slabel = self.updatexml.get_widget("label_status_update")
         subscribed_count = 0
         my_model = self.tv_products.get_model()
-        for product, state in self.selected.items():
+        for pool, state in self.selected.items():
             # state = (bool, iter)
             if state[0]:
                 try:
-                    ent_ret = UEP.bindByProduct(consumer['uuid'], product)
+                    ent_ret = UEP.bindByEntitlementPool(consumer['uuid'], pool)
                     entitled_data = ent_ret[0]['entitlement']['pool']
                     updated_count = str(int(entitled_data['quantity']) - int(entitled_data['consumed']))
-                    my_model.set_value(state[-1], 3, updated_count)
+                    my_model.set_value(state[-1], 2, updated_count)
                     subscribed_count+=1
-                except:
+                except Exception, e:
                     # Subscription failed, continue with rest
-                    log.error("Failed to subscribe to product %s Error: %s" % (product, e))
-                    errorWindow(constants.SUBSCRIBE_ERROR % product)
+                    log.error("Failed to subscribe to product %s Error: %s" % (state[1], e))
+                    errorWindow(constants.SUBSCRIBE_ERROR % state[1])
                     continue
         # Force fetch all certs
         certlib.update()
