@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.45
+Version: 0.46
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -128,7 +128,7 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Tue Apr 27 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.45-1
+* Tue Apr 27 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.46-1
 - Resolves: #584330
 - Add PyXML to the requires
 - fixing the date format to be human readable for GUI (pkilambi@redhat.com)
