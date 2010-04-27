@@ -88,7 +88,7 @@ UNEXPECTED_ERROR = _("This error shouldn't have happened. If you'd "
                                  "file a bug at bugzilla.redhat.com. Including "
                                  "the relevant parts of would be very "
                                  "helpful. Thanks!")
-REGISTER_ERROR = _("Unable to register the system. %s</b>\n\nPlease see /var/log/rhsm/rhsm.log for more information.")
+REGISTER_ERROR = _("<b>Unable to register the system.</b>\n\n %s\n\nPlease see /var/log/rhsm/rhsm.log for more information.")
 
 CONFIRM_UNSUBSCRIBE = _("Are you sure you want to unsubscribe product %s")
 

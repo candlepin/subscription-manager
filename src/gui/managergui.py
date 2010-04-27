@@ -18,6 +18,7 @@
 #
 
 import os
+import re
 import sys
 import shutil
 sys.path.append('/usr/share/rhsm')
@@ -278,11 +279,15 @@ class RegisterScreen:
                 UEP.unregisterConsumer(cid)
             except Exception, e:
                 log.error("Unable to unregister existing user credentials.")
+        failed_msg = "Unable to register your system. \n Error: %s"
         try:
             newAccount = UEP.registerConsumer(username, password, self._get_register_info())
             consumer = managerlib.persist_consumer_cert(newAccount)
+        except connection.RestlibException, e:
+            log.error(failed_msg % e.msg)
+            errorWindow(constants.REGISTER_ERROR % linkify(e.msg))
         except Exception, e:
-            log.error("Unable to register your system. \n Error: %s" % e)
+            log.error(failed_msg % e)
             errorWindow(constants.REGISTER_ERROR % e)
 
         if self.auto_subscribe():
@@ -707,6 +712,20 @@ def reload():
     gtk.main_quit()
     gui = None
     main()
+
+def linkify(msg):
+    """
+    Parse a string for any urls and wrap them in a hrefs, for use in a
+    gtklabel.
+    """
+    # lazy regex; should be good enough.
+    url_regex = re.compile("https?://\S*")
+
+    def add_markup(mo):
+        url = mo.group(0)
+        return '<a href="%s">%s</a>' % (url, url)
+
+    return url_regex.sub(add_markup, msg)
 
 def main():
     global gui

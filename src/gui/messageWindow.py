@@ -68,9 +68,8 @@ class MessageWindow:
 
         # this seems to be wordwrapping text passed to
         # it, which is making for ugly error messages
-        self.dialog = gtk.MessageDialog(parent, 0, style, buttons, text)
-        self.dialog.label.set_line_wrap(True)
-        self.dialog.label.set_use_markup(True)
+        self.dialog = gtk.MessageDialog(parent, 0, style, buttons)
+        self.dialog.set_markup(text)
         if default == "no":
             self.dialog.set_default_response(0)
         elif default == "yes" or default == "ok":

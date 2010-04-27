@@ -146,7 +146,11 @@ class RegisterCommand(CliCommand):
            self.cp.unregisterConsumer(consumerid)
            log.info("--force specified. Successfully Unsubscribed the old consumer.")
         else:
-            consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
+            try:
+                consumer = self.cp.registerConsumer(self.options.username,
+                        self.options.password, self._get_register_info())
+            except connection.RestlibException, re:
+                systemExit(-1, _("Unable to register: %s") % re.msg)
 
         managerlib.persist_consumer_cert(consumer)
         self.reload_cp_with_certs()
