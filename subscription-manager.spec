@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.41
+Version: 0.42
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -127,6 +127,25 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Apr 27 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.42-1
+- fixing the date format to be human readable for GUI (pkilambi@redhat.com)
+- Add tzinfo to datetime objects returned by DateRange.begin() and
+  DateRange.end() (jortel@redhat.com)
+- Provide a command line and GUI option for user to automacally subscribe upon
+  register. By default we only register the system (pkilambi@redhat.com)
+- fixing the cli date format to be human readable (pkilambi@redhat.com)
+- spec clean up (pkilambi@redhat.com)
+- Adding support to show registration status on the main screen and direct
+  users appropriately (pkilambi@redhat.com)
+- 584330: Fix init.d script start() output. (jortel@redhat.com)
+- 584137 - cli subscribe now uses cert serial number as ent Id until told
+  otherwise (pkilambi@redhat.com)
+- Add Reader to skip double newlines left by iniparse when sections are
+  removed. (jortel@redhat.com)
+- Migrate to iniparse. (jortel@redhat.com)
+- Add certmgr to replace direct calling of certlib & repolib.
+  (jortel@redhat.com)
+
 * Tue Apr 20 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.41-1
 - Resolves: #580043
 - jbowes's fix for locale string replacement (pkilambi@redhat.com)
