@@ -265,9 +265,8 @@ class UnSubscribeCommand(CliCommand):
         Executes the command.
         """
         consumer = check_registration()['uuid']
-
-        if self.options.product:
-            try:
+        try:
+            if self.options.product:
                 entcerts = EntitlementDirectory().list()
                 entId = None
                 for cert in entcerts:
@@ -279,20 +278,18 @@ class UnSubscribeCommand(CliCommand):
                     log.info("This machine has been Unsubscribed for product %s with EntitlementId %s" % (self.options.product, entId))
                     # Force fetch all certs
                     self.certlib.update()
-            except connection.RestlibException, re:
-                log.error(re)
-                systemExit(-1, msgs=re)
-            except Exception,e:
-                log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
-                raise
-        else:
-            try:
+                else:
+                    raise Exception("Error: Invalid Product %s. Unable to perform unsubscribe." % self.options.product)
+            else:
                 self.cp.unbindAll(consumer)
                 log.info("Warning: This machine has been unsubscribed from all its subscriptions as per user request.")
                 self.certlib.update()
-            except connection.RestlibException, re:
-                log.error(re)
-                systemExit(-1, msgs=re)
+        except connection.RestlibException, re:
+            log.error(re)
+            systemExit(-1, msgs=re)
+        except Exception,e:
+            log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
+            systemExit(-1, msgs=e)
 
 
 
