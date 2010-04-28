@@ -203,23 +203,17 @@ class SubscribeCommand(CliCommand):
         self.product = None
         self.regtoken = None
         self.substoken = None
-        self.parser.add_option("--product", dest="product",
+        self.parser.add_option("--product", dest="product", action='append',
                                help="product")
-        self.parser.add_option("--regtoken", dest="regtoken",
+        self.parser.add_option("--regtoken", dest="regtoken", action='append',
                                help="regtoken")
-        self.parser.add_option("--pool", dest="pool",
+        self.parser.add_option("--pool", dest="pool", action='append',
                                help="Subscription Pool Id")
 
     def _validate_options(self):
         if not (self.options.regtoken or self.options.product or self.options.pool):
             print _("Error: Need either --product or --regtoken, Try --help")
             sys.exit(-1)
-
-        if self.options.regtoken and self.options.product and self.options.pool:
-            print _("Error: Need either --product or --regtoken, not both, Try --help")
-            sys.exit(-1)
-
-        #CliCommand._validate_options(self)
 
     def _do_command(self):
         """
@@ -229,16 +223,19 @@ class SubscribeCommand(CliCommand):
         consumer = check_registration()['uuid']
         try:
             if self.options.product:
-                bundles = self.cp.bindByProduct(consumer, self.options.product)
-                log.info("Info: Successfully subscribed the machine to product %s" % self.options.product)
+                for product in self.options.product:
+                    bundles = self.cp.bindByProduct(consumer, product)
+                    log.info("Info: Successfully subscribed the machine to product %s" % product)
 
             if self.options.regtoken:
-                bundles = self.cp.bindByRegNumber(consumer, self.options.regtoken)
-                log.info("Info: Successfully subscribed the machine to registration token %s" % self.options.regtoken)
+                for regnum in self.options.regtoken:
+                    bundles = self.cp.bindByRegNumber(consumer, regtoken)
+                    log.info("Info: Successfully subscribed the machine to registration token %s" % regtoken)
 
             if self.options.pool:
-                bundles = self.cp.bindByEntitlementPool(consumer, self.options.pool)
-                log.info("Info: Successfully subscribed the machine the Entitlement Pool %s" % self.options.pool)
+                for pool in self.options.pool:
+                    bundles = self.cp.bindByEntitlementPool(consumer, pool)
+                    log.info("Info: Successfully subscribed the machine the Entitlement Pool %s" % pool)
             self.certlib.update()
         except connection.RestlibException, re:
             log.error(re)
