@@ -50,7 +50,7 @@ char *ts()
 int run(int interval)
 {
     int status = 0;
-    fprintf(log, "%s: started: interval = %d\n", ts(), interval);
+    fprintf(log, "%s: started: interval = %d minutes\n", ts(), interval);
     fflush(log);
     while(1)
     {
@@ -71,7 +71,7 @@ int run(int interval)
         {
             fprintf(log, "%s: certificates updated\n", ts());
             fflush(log);
-            sleep(interval);
+            sleep(interval*60);
         }
         else
         {
