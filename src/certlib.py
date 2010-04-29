@@ -40,7 +40,8 @@ class ActionLock(Lock):
 
 class CertLib:
     
-    LINGER = timedelta(days=30)
+    # 100 years
+    LINGER = timedelta(days=0x8E94)
 
     def __init__(self, lock=ActionLock()):
         self.lock = lock
@@ -352,6 +353,13 @@ class CertificateDirectory(Directory):
     def find(self, sn):
         for c in self.list():
             if c.serialNumber() == sn:
+                return c
+        return None
+
+    def findByProduct(self, hash):
+        for c in self.list():
+            p = c.getProduct()
+            if p.getHash() == hash:
                 return c
         return None
 
