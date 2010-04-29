@@ -39,9 +39,6 @@ class ActionLock(Lock):
 
 
 class CertLib:
-    
-    # 100 years
-    LINGER = timedelta(days=0x8E94)
 
     def __init__(self, lock=ActionLock()):
         self.lock = lock
@@ -119,7 +116,8 @@ class DeleteAction(Action):
 
 class UpdateAction(Action):
 
-    LINGER = timedelta(days=30)
+    # 100 years
+    LINGER = timedelta(days=0x8E94)
     
     def perform(self):
         try:
@@ -189,10 +187,12 @@ class UpdateAction(Action):
             cert.delete()
     
     def mayLinger(self, cert):
+        gmt = dt.utcnow()
+        gmt = gmt.replace(tzinfo=GMT())
         valid = cert.validRange()
         end = valid.end()
         graceperoid = end+self.LINGER
-        return ( dt.utcnow() < graceperoid )
+        return ( gmt < graceperoid )
 
 
 class Writer:
