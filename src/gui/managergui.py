@@ -465,6 +465,7 @@ class AddSubscriptionScreen:
         certlib.update()
         if subscribed_count:
             slabel.set_label(constants.SUBSCRIBE_SUCCSSFUL % subscribed_count)
+            self.addWin.hide()
             # refresh main window
             reload()
         else:
@@ -504,7 +505,6 @@ class AddSubscriptionScreen:
         model[path][0] = not model[path][0]
         self.model = model
         self.selected[model.get_value(iter, 4)] = (model.get_value(iter, 0), model.get_value(iter, 1), iter)
-        print self.selected
 
     def _cell_data_toggle_func(self, tree_column, renderer, model, treeiter):
         renderer.set_property('visible', True)
@@ -624,6 +624,7 @@ class UpdateSubscriptionScreen:
         certlib.update()
         if subscribed_count:
             slabel.set_label(constants.SUBSCRIBE_SUCCSSFUL % subscribed_count)
+            self.updateWin.hide()
             # refresh main window
             reload()
         else:
@@ -696,17 +697,9 @@ def infoWindow(message, parent):
     messageWindow.infoDialog(messageWindow.wrap_text(message), parent)
 
 def setArrowCursor():
-    """Dummy function that will be overidden by rhn_register's standalone gui
-    and firstboot in different ways.
-    
-    """
     pass
 
 def setBusyCursor():
-    """Dummy function that will be overidden by rhn_register's standalone gui
-    and firstboot in different ways.
-    
-    """
     pass
 
 def reload():
