@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.47
+Version: 0.48
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -127,6 +127,29 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Fri Apr 30 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.48-1
+- Resolves: #586388, #586525
+- Adding support to unsubscribe user by serial number (pkilambi@redhat.com)
+- Disable update/unsubscribe buttons if a product is not selected or if a
+  selected product is not yet subscribed to any subscription
+  (pkilambi@redhat.com)
+- hide the add/update windows after successfully applying the subscription
+  (pkilambi@redhat.com)
+- Fix certlib exception and linger bug. (jortel@redhat.com)
+- Removing testing comment.  Add code doc. (jortel@redhat.com)
+- Stop removing expired certificates; Display warning in yum for expired
+  certificates. (jortel@redhat.com)
+- 586388 - Allow multiple pools/products/regnumbers to be able to subscribe
+  from commandline (pkilambi@redhat.com)
+- exception handling for unsubscribe functionality (pkilambi@redhat.com)
+- 586525: Interpret interval as minutes. (jortel@redhat.com)
+- clean up (pkilambi@redhat.com)
+- Subscribe to pools in Add/Update button by pool id instead of
+  productName.Ignore the productId and use productname in the list to identity
+  the product pool in the list (pkilambi@redhat.com)
+- Beautify error message display on bad login (jbowes@redhat.com)
+- clean up old modules (pkilambi@redhat.com)
+
 * Tue Apr 27 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.47-1
 - Resolves:  #584330
 - Add PyXML to the requires
