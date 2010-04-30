@@ -248,12 +248,16 @@ class ManageSubscriptionPage:
             for cert in entcerts:
                 for product in cert.getProducts():
                     if self.pname_selected == product.getName():
-                        UEP.unBindByEntitlementId(consumer['uuid'], cert.serialNumber())
+                        UEP.unBindBySerialNumber(consumer['uuid'], cert.serialNumber())
                         log.info("This machine is now unsubscribed from Product %s " % self.pname_selected)
+        except connection.RestlibException, re:
+            log.error(re)
+            errorWindow(constants.UNSUBSCRIBE_ERROR)
         except Exception, e:
             # raise warning window
             log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
             errorWindow(constants.UNSUBSCRIBE_ERROR)
+            raise
         # Force fetch all certs
         certlib.update()
         reload()

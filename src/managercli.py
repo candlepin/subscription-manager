@@ -271,7 +271,7 @@ class UnSubscribeCommand(CliCommand):
                         if self.options.product == product.getName():
                             entId = cert.serialNumber()
                 if entId:
-                    print self.cp.unBindByEntitlementId(consumer, entId)
+                    self.cp.unBindBySerialNumber(consumer, entId)
                     log.info("This machine has been Unsubscribed for product %s with EntitlementId %s" % (self.options.product, entId))
                     # Force fetch all certs
                     self.certlib.update()

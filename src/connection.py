@@ -196,8 +196,8 @@ class UEPConnection:
         method = "/consumers/%s/entitlements?product=%s" % (consumerId, product)
         return self.conn.request_post(method)
 
-    def unBindBySerialNumbers(self, consumerId, serialNumbers):
-        method = "/consumers/%s/entitlements?serial=%s" % (consumerId, ','.join(serialNumbers))
+    def unBindBySerialNumber(self, consumerId, serial):
+        method = "/consumers/%s/certificates/%s" % (consumerId, serial)
         return self.conn.request_delete(method)
 
     def unBindByEntitlementId(self, consumerId, entId):
