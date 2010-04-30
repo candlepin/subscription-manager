@@ -81,6 +81,7 @@ class ManageSubscriptionPage:
         self.vbox = \
                         self.subsxml.get_widget("dialog-vbox1")
         self.pname_selected = None
+        self.pselect_status = None
         self.populateProductDialog()
         self.setRegistrationStatus()
         self.updateMessage()
@@ -91,6 +92,7 @@ class ManageSubscriptionPage:
                 "on_button_unsubscribe1_clicked" : self.onUnsubscribeAction,
             }
         self.subsxml.signal_autoconnect(dic)
+        self.setButtonState()
         self.mainWin = self.subsxml.get_widget("dialog_updates")
         self.mainWin.connect("delete-event", gtk.main_quit)
         self.mainWin.connect("hide", gtk.main_quit)
@@ -121,6 +123,13 @@ class ManageSubscriptionPage:
         if self.pname_selected:
             log.info("Product %s selected for update" % self.pname_selected)
             UpdateSubscriptionScreen(self.pname_selected)
+
+    def setButtonState(self, state=False):
+        self.button_update =  self.subsxml.get_widget("button_update1")
+        self.button_unsubscribe =  self.subsxml.get_widget("button_unsubscribe1")
+        self.button_update.set_sensitive(state)
+        self.button_unsubscribe.set_sensitive(state)
+
 
     def populateProductDialog(self):
         state_icon_map = {"Expired" : gtk.STOCK_DIALOG_WARNING,
@@ -180,11 +189,17 @@ class ManageSubscriptionPage:
     def on_selection(self, selection):
         items,iter = selection.get_selected()
         self.pname_selected = items.get_value(iter,1)
+        self.pselect_status = items.get_value(iter,3)
         desc = managerlib.getProductDescription(self.pname_selected)
         pdetails = self.subsxml.get_widget("textview_details")
         pdetails.get_buffer().set_text(desc)
         pdetails.set_cursor_visible(False)
         pdetails.show()
+        status = ''.join([x.split('>',1)[-1] for x in self.pselect_status.split('<')])
+        if status == "Not Subscribed":
+            self.setButtonState(state=False)
+        else:
+            self.setButtonState(state=True)
 
     def updateMessage(self):
         self.sumlabel = self.subsxml.get_widget("summaryLabel1")
