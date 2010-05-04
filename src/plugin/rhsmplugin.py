@@ -48,13 +48,13 @@ def update(conduit):
 def warnExpired(conduit):
     """ display warning for expired entitlements """
     entdir = EntitlementDirectory()
-    products = []
+    products = set()
     for cert in entdir.listExpired():
         for p in cert.getProducts():
             m = '  - %s' % p.getName()
-            products.append(m)
+            products.add(m)
     if products:
-        msg = warning % '\n'.join(products)
+        msg = warning % '\n'.join(sorted(products))
         conduit.info(2, msg)
 
 
