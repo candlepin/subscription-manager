@@ -42,9 +42,8 @@ class Restlib(object):
     """
      A wrapper around httplib to make rest calls easier
     """
-    def __init__(self, host, port, ssl_port, apihandler, cert_file=None, key_file=None,):
+    def __init__(self, host, ssl_port, apihandler, cert_file=None, key_file=None,):
         self.host = host
-        self.port = port
         self.ssl_port = ssl_port
         self.apihandler = apihandler
         self.headers = {"Content-type":"application/json",
@@ -59,9 +58,8 @@ class Restlib(object):
             context = SSL.Context("sslv3")
             context.load_cert(self.cert_file, keyfile=self.key_file)
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
-            #conn = httplib.HTTPSConnection(self.host, self.ssl_port, key_file = self.key_file, cert_file = self.cert_file)
         else:
-            conn = httplib.HTTPConnection(self.host, self.port)
+            conn = httplib.HTTPConnection(self.host, self.ssl_port)
         conn.request(request_type, handler, body=json.dumps(info), \
                      headers=self.headers)
         response = conn.getresponse()
@@ -97,9 +95,8 @@ class UEPConnection:
     Proxy for Unified Entitlement Platform.
     """
 
-    def __init__(self, host='localhost', port=8080, ssl_port=8443, handler="/candlepin", cert_file=None, key_file=None):
+    def __init__(self, host='localhost', ssl_port=8443, handler="/candlepin", cert_file=None, key_file=None):
         self.host = host
-        self.port = port
         self.ssl_port = ssl_port
         self.handler = handler
         self.conn = None
@@ -109,8 +106,8 @@ class UEPConnection:
         self.setUp()
 
     def setUp(self):
-        self.conn = Restlib(self.host, self.port, self.ssl_port, self.handler, self.cert_file, self.key_file)
-        log.info("Connection Established for cli: Host: %s, Port: %s, handler: %s" % (self.host, self.port, self.handler))
+        self.conn = Restlib(self.host, self.ssl_port, self.handler, self.cert_file, self.key_file)
+        log.info("Connection Established for cli: Host: %s, Port: %s, handler: %s" % (self.host, self.ssl_port, self.handler))
 
     def shutDown(self):
         self.conn.close()
@@ -244,7 +241,6 @@ if __name__ == '__main__':
         consumer = uep.registerConsumer('admin', 'redhat', info=params)
         print "Created a consumer ", consumer
         # sync certs
-        #print "Initiate cert synchronization for uuid"
         print "Get Consumer By Id", uep.getConsumerById(consumer['uuid'])
         print uep.syncCertificates(consumer['uuid']) 
         print "GetCertBySeriallllll",uep.getCertificatesBySerial(consumer['uuid'], ['SERIAL001','SERIAL001'])
