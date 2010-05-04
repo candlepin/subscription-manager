@@ -308,7 +308,8 @@ class RegisterScreen:
         except Exception, e:
             log.error(failed_msg % e)
             errorWindow(constants.REGISTER_ERROR % e)
-
+        # reload cP instance with new ssl certs
+        self._reload_cp_with_certs()
         if self.auto_subscribe():
             # try to auomatically bind products
             for product in managerlib.getInstalledProductStatus():
@@ -344,7 +345,8 @@ class RegisterScreen:
     def _reload_cp_with_certs(self):
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
-        UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin", cert_file=cert_file, key_file=key_file)
+        UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], \
+                                       handler="/candlepin", cert_file=cert_file, key_file=key_file)
 
     def _get_register_info(self):
         stype = {'label':'system'}
