@@ -49,7 +49,8 @@ class CliCommand(object):
         if ConsumerIdentity.exists():
             self.reload_cp_with_certs()
         else:
-            self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin")
+            self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", 
+                                               ssl_port=cfg['port'], handler="/candlepin")
         self.certlib = CertLib()
 
     def _add_common_options(self):
@@ -64,7 +65,9 @@ class CliCommand(object):
     def reload_cp_with_certs(self):
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
-        self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin", cert_file=cert_file, key_file=key_file)
+        self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", 
+                                           ssl_port=cfg['port'], handler="/candlepin", 
+                                           cert_file=cert_file, key_file=key_file)
 
     def main(self):
 
@@ -85,6 +88,8 @@ class RegisterCommand(CliCommand):
 
         self.username = None
         self.password = None
+        self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", 
+                                               ssl_port=cfg['port'], handler="/candlepin")
         self.parser.add_option("--username", dest="username", 
                                help="Specify a username")
         self.parser.add_option("--password", dest="password",
@@ -143,8 +148,11 @@ class RegisterCommand(CliCommand):
         elif ConsumerIdentity.exists() and self.options.force:
            consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
            consumerid = check_registration()['uuid']
-           self.cp.unregisterConsumer(consumerid)
-           log.info("--force specified. Successfully Unsubscribed the old consumer.")
+           try:
+               self.cp.unregisterConsumer(consumerid)
+               log.info("--force specified. Successfully Unsubscribed the old consumer.")
+           except:
+               log.error("Unable to unregister with consumer %s" % consumerid)
         else:
             try:
                 consumer = self.cp.registerConsumer(self.options.username,
@@ -242,6 +250,7 @@ class SubscribeCommand(CliCommand):
             systemExit(-1, msgs=re)
         except Exception, e:
             log.error("Unable to subscribe: %s" % e)
+            systemExit(-1, msgs=e)
 
 class UnSubscribeCommand(CliCommand):
     def __init__(self):
