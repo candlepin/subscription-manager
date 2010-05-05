@@ -128,7 +128,9 @@ fi
 
 %changelog
 * Wed May 05 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.50-1
-- Resolves:  #586462, #588408
+- Resolves: #585193, #587647, #584440, #586462, #588408
+- 585193, 587647 - Handle Non-Network case Gracefully
+- 584440 - Validate manually uploaded entitlement certs
 - 586462 - strip out http connection stuff and default all connections through
   ssl (pkilambi@redhat.com)
 - 588408 - re initialize CP instance with consumer certs post registration
