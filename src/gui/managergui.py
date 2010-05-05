@@ -74,6 +74,14 @@ def get_consumer():
 
 consumer = get_consumer()
 
+def fetch_certificates():
+    # Force fetch all certs
+    try:
+        certlib.update()
+    except Exception, e:
+        log.error("Certificate sync failed")
+        return
+
 class ManageSubscriptionPage:
     """
      Main subscription Manager Window
@@ -261,7 +269,8 @@ class ManageSubscriptionPage:
             errorWindow(constants.UNSUBSCRIBE_ERROR)
             raise
         # Force fetch all certs
-        certlib.update()
+        if not fetch_certificates():
+            return
         reload()
 
 class RegisterScreen:
@@ -292,7 +301,7 @@ class RegisterScreen:
         password = self.passwd.get_text()
 
         if not self.validate_account():
-            self.onRegisterAction()
+            return False
         # Unregister consumer if exists
         if ConsumerIdentity.exists():
             try:
@@ -304,26 +313,29 @@ class RegisterScreen:
         try:
             newAccount = UEP.registerConsumer(username, password, self._get_register_info())
             consumer = managerlib.persist_consumer_cert(newAccount)
+            # reload cP instance with new ssl certs
+            self._reload_cp_with_certs()
+            if self.auto_subscribe():
+                # try to auomatically bind products
+                for product in managerlib.getInstalledProductStatus():
+                    try:
+                       UEP.bindByProduct(consumer['uuid'], product[0])
+                       log.info("Automatically subscribe the machine to product %s " % product[0])
+                    except:
+                       log.warning("Warning: Unable to auto subscribe the machine to %s" % product[0])
+                if not fetch_certificates():
+                    return
+            RegistrationTokenScreen()
+            self.registerWin.hide()
+            reload()
         except connection.RestlibException, e:
             log.error(failed_msg % e.msg)
             errorWindow(constants.REGISTER_ERROR % linkify(e.msg))
+            self.registerWin.hide()
         except Exception, e:
             log.error(failed_msg % e)
             errorWindow(constants.REGISTER_ERROR % e)
-        # reload cP instance with new ssl certs
-        self._reload_cp_with_certs()
-        if self.auto_subscribe():
-            # try to auomatically bind products
-            for product in managerlib.getInstalledProductStatus():
-                try:
-                   UEP.bindByProduct(consumer['uuid'], product[0])
-                   log.info("Automatically subscribe the machine to product %s " % product[0])
-                except:
-                   log.warning("Warning: Unable to auto subscribe the machine to %s" % product[0])
-            certlib.update()
-        RegistrationTokenScreen()
-        self.registerWin.hide()
-        reload()
+            self.registerWin.hide()
 
     def auto_subscribe(self):
         self.autobind = self.registerxml.get_widget("auto_bind")
@@ -485,7 +497,8 @@ class AddSubscriptionScreen:
         if len(busted_subs):
             errorWindow(constants.SUBSCRIBE_ERROR % ', '.join(busted_subs[:]))
         # Force fetch all certs
-        certlib.update()
+        if not fetch_certificates():
+            return
         if subscribed_count:
             slabel.set_label(constants.SUBSCRIBE_SUCCSSFUL % subscribed_count)
             self.addWin.hide()
@@ -644,7 +657,8 @@ class UpdateSubscriptionScreen:
                     errorWindow(constants.SUBSCRIBE_ERROR % state[1])
                     continue
         # Force fetch all certs
-        certlib.update()
+        if not fetch_certificates():
+            return
         if subscribed_count:
             slabel.set_label(constants.SUBSCRIBE_SUCCSSFUL % subscribed_count)
             self.updateWin.hide()
@@ -700,6 +714,12 @@ class ImportCertificate:
         self.importWin.hide()
         reload()
 
+def unexpectedError(message, exc_info=None):
+    message = message + "\n" + (constants.UNEXPECTED_ERROR)
+    errorWindow(message)
+    if exc_info:
+        (etype, value, stack_trace) = exc_info
+
 def errorWindow(message):
     messageWindow.ErrorDialog(messageWindow.wrap_text(message))
 
@@ -740,10 +760,11 @@ def main():
     if os.geteuid() != 0 :
         #rootWarning()
         sys.exit(1)
-
-    gui = ManageSubscriptionPage()
-    gtk.main()
-
+    try:
+        gui = ManageSubscriptionPage()
+        gtk.main()
+    except Exception, e:
+        unexpectedError(e)
 
 if __name__ == "__main__":
     main()
