@@ -36,6 +36,8 @@ import config
 import constants
 
 from certlib import EntitlementDirectory, ProductDirectory, ConsumerIdentity, CertLib
+from OpenSSL.crypto import load_certificate, FILETYPE_PEM
+
 import gettext
 _ = gettext.gettext
 gettext.textdomain("subscription-manager")
@@ -681,6 +683,13 @@ class ImportCertificate:
             errorWindow(_("You must select a certificate."))
             return False
 
+        try:
+            data = open(src_cert_file).read()
+            x509 = load_certificate(FILETYPE_PEM, data)
+        except:
+            errorWindow(_("%s is not a valid certificate file. Please upload a valid certificate." % os.path.basename(src_cert_file)))
+            return False
+
         if not os.access(ENT_CONFIG_DIR, os.R_OK):
             os.mkdir(ENT_CONFIG_DIR)
 
@@ -690,26 +699,6 @@ class ImportCertificate:
         print dest_file_path
         self.importWin.hide()
         reload()
-
-def unexpectedError(message, exc_info=None):
-    message = message + "\n" + (constants.UNEXPECTED_ERROR)
-    errorWindow(message)
-    if exc_info:
-        (etype, value, stack_trace) = exc_info
-
-def callAndFilterExceptions(function, allowedExceptions, 
-        disallowedExceptionMessage, errorHandler=unexpectedError):
-    assert callable(function)
-    allowedExceptions.append(SystemExit)
-    try:
-        return function()
-    except:
-        (exceptionType, exception, stackTrace) = sys.exc_info()
-        if exceptionType in allowedExceptions:
-            raise
-        else:
-            errorHandler(disallowedExceptionMessage, 
-                    (exceptionType, exception, stackTrace))
 
 def errorWindow(message):
     messageWindow.ErrorDialog(messageWindow.wrap_text(message))
