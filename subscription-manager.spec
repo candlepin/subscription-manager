@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.50
+Version: 0.51
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -127,7 +127,7 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Wed May 05 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.50-1
+* Wed May 05 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.51-1
 - Resolves: #585193, #587647, #584440, #586462, #588408
 - 585193, 587647 - Handle Non-Network case Gracefully
 - 584440 - Validate manually uploaded entitlement certs
