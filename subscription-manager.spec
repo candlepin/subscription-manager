@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.49
+Version: 0.50
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -127,7 +127,7 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Wed May 05 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.49-1
+* Wed May 05 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.50-1
 - Resolves:  #586462, #588408
 - 586462 - strip out http connection stuff and default all connections through
   ssl (pkilambi@redhat.com)
