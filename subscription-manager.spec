@@ -128,7 +128,7 @@ fi
 
 %changelog
 * Wed May 05 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.49-1
-- Resolves: #586462, #588408
+- Resolves:  #586462, #588408
 - 586462 - strip out http connection stuff and default all connections through
   ssl (pkilambi@redhat.com)
 - 588408 - re initialize CP instance with consumer certs post registration
