@@ -80,7 +80,8 @@ def fetch_certificates():
         certlib.update()
     except Exception, e:
         log.error("Certificate sync failed")
-        return
+        return False
+    return True
 
 class ManageSubscriptionPage:
     """
