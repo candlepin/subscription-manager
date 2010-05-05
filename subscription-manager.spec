@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.48
+Version: 0.49
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -127,6 +127,16 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Wed May 05 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.49-1
+- Resolves: #586462, #588408
+- 586462 - strip out http connection stuff and default all connections through
+  ssl (pkilambi@redhat.com)
+- 588408 - re initialize CP instance with consumer certs post registration
+  (pkilambi@redhat.com)
+- fixing registration to not load certs while creating a cp instance
+  (pkilambi@redhat.com)
+- 588389: Ensure list of expired products is unique. (jortel@redhat.com)
+
 * Fri Apr 30 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.48-1
 - Resolves: #586388, #586525
 - Adding support to unsubscribe user by serial number (pkilambi@redhat.com)
