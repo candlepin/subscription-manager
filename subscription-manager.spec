@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.51
+Version: 0.52
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -127,6 +127,9 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Thu May 06 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.52-1
+- Resolves: #589626 - unregister now removes stale entitlement certs from the clients (pkilambi@redhat.com)
+
 * Wed May 05 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.51-1
 - Resolves: #585193, #587647, #584440, #586462, #588408
 - 585193, 587647 - Handle Non-Network case Gracefully
