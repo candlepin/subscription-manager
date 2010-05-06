@@ -192,8 +192,9 @@ class UnRegisterCommand(CliCommand):
         try:
            consumer = check_registration()['uuid']
            self.cp.unregisterConsumer(consumer)
-           # clean up stale consumer ids
+           # clean up stale consumer/entitlement certs
            shutil.rmtree("/etc/pki/consumer/")
+           shutil.rmtree("/etc/pki/entitlement/")
            log.info("Successfully Unsubscribed the client from Entitlement Platform.")
         except connection.RestlibException, re:
            log.error("Error: Unable to UnRegister the system: %s" % re)
