@@ -130,6 +130,7 @@ fi
 
 %changelog
 * Fri May 07 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.53-1
+- Resolves: #584510
 - Adding a progress bar to Apply subscriptions process (pkilambi@redhat.com)
 
 * Thu May 06 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.52-1
