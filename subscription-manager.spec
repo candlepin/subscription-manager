@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.52
+Version: 0.53
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -129,6 +129,9 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Fri May 07 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.53-1
+- Adding a progress bar to Apply subscriptions process (pkilambi@redhat.com)
+
 * Thu May 06 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.52-1
 - Resolves: #589626 - unregister now removes stale entitlement certs from the clients (pkilambi@redhat.com)
 
