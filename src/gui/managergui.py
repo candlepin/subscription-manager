@@ -29,6 +29,7 @@ import gobject
 import signal
 
 import messageWindow
+import progress
 import hwprobe
 import managerlib
 import connection
@@ -467,9 +468,12 @@ class AddSubscriptionScreen:
 
     def finish(self):
         self.addWin.hide()
+        self.addWin.destroy()
+        gtk.main_iteration()
 
     def cancel(self, button):
         self.addWin.destroy()
+        gtk.main_iteration()
 
     def onImportPrepare(self, button):
         self.addWin.hide()
@@ -480,8 +484,13 @@ class AddSubscriptionScreen:
         #consumer = get_consumer()
         subscribed_count = 0
         my_model = self.tv_products.get_model()
+        pwin = progress.Progress()
+        pwin.setLabel(_("Performing Subscribe. Please wait."))
         busted_subs = []
+        count = 0
         for pool, state in self.selected.items():
+            count += 1
+            pwin.setProgress(count, len(self.selected.items()))
             # state = (bool, iter)
             if state[0]:
                 try:
@@ -502,6 +511,7 @@ class AddSubscriptionScreen:
             return
         if subscribed_count:
             slabel.set_label(constants.SUBSCRIBE_SUCCSSFUL % subscribed_count)
+            pwin.hide()
             self.addWin.hide()
             # refresh main window
             reload()
@@ -587,6 +597,7 @@ class UpdateSubscriptionScreen:
 
     def cancel(self, button=None):
         self.updateWin.destroy()
+        gtk.main_iteration()
 
     def onImportPrepare(self, button):
         self.updateWin.hide()
@@ -690,6 +701,8 @@ class ImportCertificate:
 
     def cancel(self, button=None):
       self.importWin.hide()
+      self.importWin.destroy()
+      gtk.main_iteration()
 
     def importCertificate(self, button):
         fileChooser = self.importxml.get_widget("certificateChooserButton")
