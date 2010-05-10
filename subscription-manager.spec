@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.54
+Version: 0.55
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -129,6 +129,10 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Mon May 10 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.55-1
+- Resolves: #590094 - encode translated error strings before displaying
+  (pkilambi@redhat.com)
+
 * Fri May 07 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.54-1
 - Resolves: #584510
 - Adding a progress bar to Apply subscriptions process (pkilambi@redhat.com)
