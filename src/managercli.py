@@ -146,19 +146,22 @@ class RegisterCommand(CliCommand):
             consumer = self.cp.getConsumerById(self.options.consumerid)
 
         elif ConsumerIdentity.exists() and self.options.force:
-           consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
-           consumerid = check_registration()['uuid']
+           try:
+               consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
+               consumerid = check_registration()['uuid']
+           except connection.RestlibException, re:
+               systemExit(-1, re.msg)
            try:
                self.cp.unregisterConsumer(consumerid)
                log.info("--force specified. Successfully Unsubscribed the old consumer.")
            except:
-               log.error("Unable to unregister with consumer %s" % consumerid)
+                log.error("Unable to unregister with consumer %s" % consumerid)
         else:
             try:
                 consumer = self.cp.registerConsumer(self.options.username,
                         self.options.password, self._get_register_info())
             except connection.RestlibException, re:
-                systemExit(-1, _("Unable to register: %s") % re.msg)
+                systemExit(-1, re.msg)
 
         managerlib.persist_consumer_cert(consumer)
         self.reload_cp_with_certs()
@@ -198,7 +201,7 @@ class UnRegisterCommand(CliCommand):
            log.info("Successfully Unsubscribed the client from Entitlement Platform.")
         except connection.RestlibException, re:
            log.error("Error: Unable to UnRegister the system: %s" % re)
-           systemExit(-1, msgs=re)
+           systemExit(-1, re.msg)
         except:
             log.error("Error: Unable to UnRegister the system")
 
@@ -248,10 +251,10 @@ class SubscribeCommand(CliCommand):
             self.certlib.update()
         except connection.RestlibException, re:
             log.error(re)
-            systemExit(-1, msgs=re)
+            systemExit(-1, re.msg)
         except Exception, e:
             log.error("Unable to subscribe: %s" % e)
-            systemExit(-1, msgs=e)
+            systemExit(-1, msgs=e.msg)
 
 class UnSubscribeCommand(CliCommand):
     def __init__(self):
@@ -293,7 +296,7 @@ class UnSubscribeCommand(CliCommand):
                 self.certlib.update()
         except connection.RestlibException, re:
             log.error(re)
-            systemExit(-1, msgs=re)
+            systemExit(-1, re.msg)
         except Exception,e:
             log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
             systemExit(-1, msgs=e)
@@ -438,7 +441,7 @@ def systemExit(code, msgs=None):
         if type(msgs) not in [type([]), type(())]:
             msgs = (msgs, )
         for msg in msgs:
-            sys.stderr.write(str(msg)+'\n')
+            sys.stderr.write(unicode(msg).encode("utf-8") + '\n')
     sys.exit(code)
 
 def check_registration():
