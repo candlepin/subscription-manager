@@ -254,7 +254,7 @@ class SubscribeCommand(CliCommand):
             systemExit(-1, re.msg)
         except Exception, e:
             log.error("Unable to subscribe: %s" % e)
-            systemExit(-1, msgs=e.msg)
+            systemExit(-1, msgs=e)
 
 class UnSubscribeCommand(CliCommand):
     def __init__(self):
