@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.59
+Version: 0.60
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -129,7 +129,7 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Tue May 11 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.59-1
+* Tue May 11 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.60-1
 - Resolves: #591247 - format the dat correctly for gui add
 - send in product hash as part of autobind  
 - Format the cli print to be sequential instead of a table form. This makes the
