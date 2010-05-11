@@ -264,8 +264,8 @@ class UnSubscribeCommand(CliCommand):
         CliCommand.__init__(self, "unsubscribe", usage, shortdesc, desc)
 
         self.serial_numbers = None
-        self.parser.add_option("--product", dest="product",
-                               help="Product name to unsubscribe")
+        self.parser.add_option("--serial", dest="serial",
+                               help="Certificate serial to unsubscribe")
 
     def _validate_options(self):
         CliCommand._validate_options(self)
@@ -276,24 +276,13 @@ class UnSubscribeCommand(CliCommand):
         """
         consumer = check_registration()['uuid']
         try:
-            if self.options.product:
-                entcerts = EntitlementDirectory().list()
-                entId = None
-                for cert in entcerts:
-                    for product in cert.getProducts():
-                        if self.options.product == product.getName():
-                            entId = cert.serialNumber()
-                if entId:
-                    self.cp.unBindBySerialNumber(consumer, entId)
-                    log.info("This machine has been Unsubscribed for product %s with EntitlementId %s" % (self.options.product, entId))
-                    # Force fetch all certs
-                    self.certlib.update()
-                else:
-                    raise Exception("Error: Invalid Product %s. Unable to perform unsubscribe." % self.options.product)
+            if self.options.serial:
+                self.cp.unBindBySerialNumber(consumer, self.options.serial)
+                log.info("This machine has been Unsubscribed from subcription with Serial number %s" % (self.options.serial))
             else:
                 self.cp.unbindAll(consumer)
                 log.info("Warning: This machine has been unsubscribed from all its subscriptions as per user request.")
-                self.certlib.update()
+            self.certlib.update()
         except connection.RestlibException, re:
             log.error(re)
             systemExit(-1, re.msg)
@@ -352,11 +341,11 @@ class ListCommand(CliCommand):
 
         if self.options.consumed:
            cpents = managerlib.getConsumedProductEntitlements()
-           columns = ("Product Consumed", "activeSubscription", "endDate", "startDate")
-           print(" \t%-10s \t%-10s \t%-25s \t%-25s " % columns)
+           columns = ("Product Consumed", "SerialNumber", "activeSubscription", "endDate", "startDate")
+           print(" \t%-10s \t%-10s \t%-10s \t%-25s \t%-25s " % columns)
            print "%s" % "--" * len('\t\t'.join(columns))
            for product in cpents:
-               print("\t%-10s \t%-10s \t%-25s \t%-25s" % product)
+               print("\t%-10s \t%-10s \t%-10s \t%-25s \t%-25s" % product)
 
 
 # taken wholseale from rho...

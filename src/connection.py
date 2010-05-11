@@ -195,6 +195,7 @@ class UEPConnection:
 
     def unBindBySerialNumber(self, consumerId, serial):
         method = "/consumers/%s/certificates/%s" % (consumerId, serial)
+        print method 
         return self.conn.request_delete(method)
 
     def unBindByEntitlementId(self, consumerId, entId):
