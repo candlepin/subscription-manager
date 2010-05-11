@@ -20,6 +20,7 @@ import os
 import sys
 import shutil
 import config
+import constants
 import connection
 import hwprobe
 import optparse
@@ -320,32 +321,31 @@ class ListCommand(CliCommand):
            if not len(iproducts):
                print("No installed Products to list")
                sys.exit(0)
-           columns = ("Product", "activeSubscription", "Expires", "Subscription")
-           print("\t%-25s \t%-20s \t%-10s \t%-20s" % columns)
-           print "%s" % "--" * len('\t\t'.join(columns))
+           print """+-------------------------------------------+\n    Installed Product Status\n+-------------------------------------------+"""
            for product in iproducts:
-               print("\t%-25s \t%-20s \t%-10s \t%-20s" % product)
+               print constants.installed_product_status % product
 
         if self.options.available:
            epools = managerlib.getAvailableEntitlementsCLI(self.cp, consumer)
            if not len(epools):
                print("No Available subscription pools to list")
                sys.exit(0)
-           columns = epools[0].keys()
-           print(" \t%-25s \t%-25s \t%-10s \t%-25s \t%-25s" % tuple(columns))
-           print "%s" % "---" * len('\t\t'.join(columns))
+           print """+-------------------------------------------+\n    Available Subscriptions\n+-------------------------------------------+\n"""
            for data in epools:
-               dvalues = data.values()
-               dvalues = [str(dvalues[i]) for i in range(len(columns))]
-               print("\t%-25s \t%-25s \t%-10s \t%-25s \t%-25s" % tuple(dvalues))
+               print constants.available_subs_list % (data['productName'], 
+                                                      data['productId'], 
+                                                      data['id'], 
+                                                      data['quantity'], 
+                                                      data['endDate'])
 
         if self.options.consumed:
            cpents = managerlib.getConsumedProductEntitlements()
-           columns = ("Product Consumed", "SerialNumber", "activeSubscription", "endDate", "startDate")
-           print(" \t%-10s \t%-10s \t%-10s \t%-25s \t%-25s " % columns)
-           print "%s" % "--" * len('\t\t'.join(columns))
+           if not len(cpents):
+               print("No Consumed subscription pools to list")
+               sys.exit(0)
+           print """+-------------------------------------------+\n    Consumed Product Subscriptions\n+-------------------------------------------+\n"""
            for product in cpents:
-               print("\t%-10s \t%-10s \t%-10s \t%-25s \t%-25s" % product)
+                print constants.consumed_subs_list % product 
 
 
 # taken wholseale from rho...

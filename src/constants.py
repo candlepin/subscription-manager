@@ -51,6 +51,29 @@ subscribed_status = _("""
 The subscription for %s is valid until %s.
 """)
 
+installed_product_status =  """
+ProductName:        \t%-25s
+Status:             \t%-25s
+Expires:            \t%-25s
+Subscription:       \t%-25s
+"""
+
+available_subs_list = """
+Name:              \t%-25s
+Product SKU:       \t%-25s
+PoolId:            \t%-25s
+quantity:          \t%-25s
+Expires:           \t%-25s
+"""
+
+consumed_subs_list = """
+Name:               \t%-25s
+SerialNumber:       \t%-25s
+Active:             \t%-25s
+Begins:             \t%-25s
+Expires:            \t%-25s
+"""
+
 expired_status = _("""
 The subscription for %s expired on %s. If you plan to continue using %s on this system you should update the subscription. If you no longer wish to use %s on this machine, you should unsubscribe and remove it from this system.
 """)

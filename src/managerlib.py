@@ -93,7 +93,6 @@ def getConsumedProductEntitlements():
     consumed_products = []
     for cert in entdir.listValid():
         eproducts = cert.getProducts()
-        print dir(cert)
         for product in eproducts:
             data = (product.getName(), cert.serialNumber(), cert.valid(), formatDate(cert.validRange().begin().isoformat()), \
                     formatDate(cert.validRange().end().isoformat()))
@@ -167,7 +166,6 @@ def getAvailableEntitlements(cpserver, consumer):
 def getAvailableEntitlementsCLI(cpserver, consumer):
     columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'productId']
     dlist = cpserver.getPoolsList(consumer)
-    print dlist
     data = [_sub_dict(pool['pool'], columns) for pool in dlist]
     for d in data:
         d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
