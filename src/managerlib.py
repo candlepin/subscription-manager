@@ -64,12 +64,12 @@ def getInstalledProductStatus():
             entdict[product.getName()] = {'Entitlements' : ents,
                                           'valid': cert.valid(), 
                                           'expires' : formatDate(cert.validRange().end().isoformat()),
-                                          'order'   : cert.getOrder().getName() }
+                                          'serial'   : cert.serialNumber() } #getOrder().getName() }
     product_status = []
     for product in products:
         pname = product.getProduct().getName()
         if entdict.has_key(pname):
-            data = (pname, map_status(entdict[pname]['valid']), str(entdict[pname]['expires']), entdict[pname]['order'])
+            data = (pname, map_status(entdict[pname]['valid']), str(entdict[pname]['expires']), entdict[pname]['serial'])
             product_status.append(data)
         else:
             product_status.append((pname, map_status(None), "", ""))
@@ -80,7 +80,7 @@ def getInstalledProductStatus():
        for product in cert.getProducts():
            if product.getName() not in psnames:
                psname = product.getName()
-               data = (psname, 'Not Installed', str(entdict[psname]['expires']), entdict[psname]['order'])
+               data = (psname, 'Not Installed', str(entdict[psname]['expires']), entdict[psname]['serial'])
                product_status.append(data)
     return product_status
 

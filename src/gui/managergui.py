@@ -94,6 +94,7 @@ class ManageSubscriptionPage:
                         self.subsxml.get_widget("dialog-vbox1")
         self.pname_selected = None
         self.pselect_status = None
+        self.psubs_selected = None
         self.populateProductDialog()
         self.setRegistrationStatus()
         self.updateMessage()
@@ -201,6 +202,7 @@ class ManageSubscriptionPage:
     def on_selection(self, selection):
         items,iter = selection.get_selected()
         self.pname_selected = items.get_value(iter,1)
+        self.psubs_selected = items.get_value(iter,2)
         self.pselect_status = items.get_value(iter,3)
         desc = managerlib.getProductDescription(self.pname_selected)
         pdetails = self.subsxml.get_widget("textview_details")
@@ -241,7 +243,7 @@ class ManageSubscriptionPage:
 
     def onUnsubscribeAction(self, button):
         global UEP
-        if not self.pname_selected:
+        if not self.psubs_selected:
             return
         log.info("Product %s selected for unsubscribe" % self.pname_selected)
         dlg = messageWindow.YesNoDialog(constants.CONFIRM_UNSUBSCRIBE % self.pname_selected, self.mainWin)
@@ -256,12 +258,9 @@ class ManageSubscriptionPage:
             reload()
             return
         try:
-            entcerts = EntitlementDirectory().list()
-            for cert in entcerts:
-                for product in cert.getProducts():
-                    if self.pname_selected == product.getName():
-                        UEP.unBindBySerialNumber(consumer['uuid'], cert.serialNumber())
-                        log.info("This machine is now unsubscribed from Product %s " % self.pname_selected)
+            UEP.unBindBySerialNumber(consumer['uuid'], self.psubs_selected)
+            log.info("This machine is now unsubscribed from Product %s " \
+                      % self.pname_selected)
         except connection.RestlibException, re:
             log.error(re)
             errorWindow(constants.UNSUBSCRIBE_ERROR)
