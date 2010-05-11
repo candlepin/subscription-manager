@@ -130,7 +130,8 @@ fi
 
 %changelog
 * Tue May 11 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.57-1
-- Resolves: #590094
+- Resolves: 591247 - format the dat correctly for gui add
+- send in product hash as part of autobind  
 - Format the cli print to be sequential instead of a table form. This makes the
   output more reliable (pkilambi@redhat.com)
 - Fix rhsmcertd not sleeping properly.  Add Bundle class for combining key &
