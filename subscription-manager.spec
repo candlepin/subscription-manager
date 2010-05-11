@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.56
+Version: 0.57
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -129,6 +129,17 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue May 11 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.57-1
+- Resolves: #590094
+- Format the cli print to be sequential instead of a table form. This makes the
+  output more reliable (pkilambi@redhat.com)
+- Fix rhsmcertd not sleeping properly.  Add Bundle class for combining key &
+  cert next sprint. (jortel@redhat.com)
+- unsubscribe uses serial number directly from subscription info per subscribed
+  product (pkilambi@redhat.com)
+- Change unsubscribe to use serial number instead of product names
+  (pkilambi@redhat.com)
+
 * Mon May 10 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.55-1
 - Resolves:  #590094 - encode translated error strings before displaying
   (pkilambi@redhat.com)
