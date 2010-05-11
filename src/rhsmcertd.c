@@ -22,6 +22,8 @@
 #include <wait.h>
 
 #define LOGFILE "/var/log/rhsm/rhsmcertd.log"
+#define INTERVAL 240 /*4 hours*/
+#define RETRY 10 /*10 min*/
 
 static FILE *log = 0;
 
@@ -65,19 +67,21 @@ int run(int interval)
         {
             execl("/usr/bin/python", "python", "/usr/share/rhsm/certmgr.py", 0);
         }
+        int delay = interval;
         waitpid(pid, &status, 0);
         status = WEXITSTATUS(status);
         if(status == 0)
         {
             fprintf(log, "%s: certificates updated\n", ts());
             fflush(log);
-            sleep(interval*60);
         }
         else
         {
-            fprintf(log, "%s: update failed (%d)\n", ts(), status);
+            if(delay > RETRY) delay = RETRY;
+            fprintf(log, "%s: update failed (%d), retry in %d minutes\n", ts(), status, delay);
             fflush(log);
         }
+        sleep(delay*60);
     }
 
     return status;
@@ -90,13 +94,18 @@ int main(int argc, char *argv[])
     if(argc < 2)
     {
         printUsage();
-        return 0;
+        return 1;
+    }
+    int interval = atoi(argv[1]);
+    if(interval < 1)
+    {
+        interval = INTERVAL;
     }
     int pid = fork();
     if(pid == 0)
     {
         daemon(0, 0);
-        run(atoi(argv[1]));
+        run(interval);
     }
     fclose(log);
 }

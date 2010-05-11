@@ -874,6 +874,60 @@ class Role(Entitlement):
     def __repr__(self):
         return str(self)
 
+
+class Bundle(object):
+
+    KEY_PATTERN = re.compile(
+        '-----BEGIN.+KEY-----\n.+\n-----END.+KEY-----',
+        re.DOTALL)
+    CERT_PATTERN = re.compile(
+        '-----BEGIN CERTIFICATE-----\n.+\n-----END CERTIFICATE-----',
+        re.DOTALL)
+
+    @classmethod
+    def split(cls, pem):
+        m = cls.KEY_PATTERN.search(pem)
+        if m is None:
+            raise Exception, 'Key not found.'
+        key = m.group(0)
+        m = cls.CERT_PATTERN.search(pem)
+        if m is None:
+            raise Exception, 'Certificate not found.'
+        cert = m.group(0)
+        return (key, cert)
+
+    def __init__(self, key=None, cert=None):
+        self.key = key
+        self.cert = cert
+
+    def read(self, path):
+        f = open(path)
+        try:
+            b = self.split(f.read())
+            self.key = b[0]
+            self.cert = b[1]
+            self.path = path
+        finally:
+            f.close()
+        return self
+
+    def write(self, path):
+        f = open(path, 'w')
+        try:
+            f.write(str(self))
+            self.path = path
+        finally:
+            f.close()
+        return self
+
+    def __str__(self):
+        s = []
+        s.append(self.key)
+        s.append(self.cert)
+        s.append('')
+        return '\n'.join(s)
+
+
 import sys
 if __name__ == '__main__':
     for path in sys.argv[1:]:
