@@ -84,6 +84,13 @@ def getInstalledProductStatus():
                product_status.append(data)
     return product_status
 
+def getInstalledProductHashMap():
+    products = ProductDirectory().list()
+    phash = {}
+    for product in products:
+        phash[product.getProduct().getName()] = product.getProduct().getHash()
+    return phash
+
 def getConsumedProductEntitlements():
     """
      Gets the list of available products with entitlements based on
@@ -186,4 +193,4 @@ if __name__=='__main__':
     print getInstalledProductStatus()
     print("\nConsumed Product Status:\n")
     getConsumedProductEntitlements()
-    
+    getInstalledProductHashMap()

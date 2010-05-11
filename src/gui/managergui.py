@@ -318,12 +318,12 @@ class RegisterScreen:
             self._reload_cp_with_certs()
             if self.auto_subscribe():
                 # try to auomatically bind products
-                for product in managerlib.getInstalledProductStatus():
+                for pname, phash in managerlib.getInstalledProductHashMap().items():
                     try:
-                       UEP.bindByProduct(consumer['uuid'], product[0])
-                       log.info("Automatically subscribe the machine to product %s " % product[0])
+                       UEP.bindByProduct(consumer['uuid'], phash)
+                       log.info("Automatically subscribe the machine to product %s " % pname)
                     except:
-                       log.warning("Warning: Unable to auto subscribe the machine to %s" % product[0])
+                       log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
                 if not fetch_certificates():
                     return
             RegistrationTokenScreen()

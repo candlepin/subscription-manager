@@ -168,13 +168,13 @@ class RegisterCommand(CliCommand):
         self.reload_cp_with_certs()
         if self.options.autosubscribe:
             # try to auomatically bind products
-            for product in managerlib.getInstalledProductStatus():
+            for pname, phash in managerlib.getInstalledProductHashMap().items():
                 try:
-                   print "Bind Product ", product[0]
-                   self.cp.bindByProduct(self.consumer['uuid'], product[0])
-                   log.info("Automatically subscribe the machine to product %s " % product[0])
+                   print "Bind Product ", pname,phash
+                   self.cp.bindByProduct(self.consumer['uuid'], phash)
+                   log.info("Automatically subscribe the machine to product %s " % pname)
                 except:
-                   log.warning("Warning: Unable to auto subscribe the machine to %s" % product[0])
+                   log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
             self.certlib.update()
 
 class UnRegisterCommand(CliCommand):
