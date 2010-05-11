@@ -130,7 +130,7 @@ fi
 
 %changelog
 * Mon May 10 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.55-1
-- Resolves: #590094 - encode translated error strings before displaying
+- Resolves:  #590094 - encode translated error strings before displaying
   (pkilambi@redhat.com)
 
 * Fri May 07 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.54-1

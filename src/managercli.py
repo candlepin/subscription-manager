@@ -216,7 +216,7 @@ class SubscribeCommand(CliCommand):
         self.regtoken = None
         self.substoken = None
         self.parser.add_option("--product", dest="product", action='append',
-                               help="product")
+                               help="product ID")
         self.parser.add_option("--regtoken", dest="regtoken", action='append',
                                help="regtoken")
         self.parser.add_option("--pool", dest="pool", action='append',
@@ -343,12 +343,12 @@ class ListCommand(CliCommand):
                print("No Available subscription pools to list")
                sys.exit(0)
            columns = epools[0].keys()
-           print(" \t%-25s \t%-25s \t%-10s \t%-25s " % tuple(columns))
+           print(" \t%-25s \t%-25s \t%-10s \t%-25s \t%-25s" % tuple(columns))
            print "%s" % "---" * len('\t\t'.join(columns))
            for data in epools:
                dvalues = data.values()
                dvalues = [str(dvalues[i]) for i in range(len(columns))]
-               print("\t%-25s \t%-25s \t%-10s \t%-25s" % tuple(dvalues))
+               print("\t%-25s \t%-25s \t%-10s \t%-25s \t%-25s" % tuple(dvalues))
 
         if self.options.consumed:
            cpents = managerlib.getConsumedProductEntitlements()
