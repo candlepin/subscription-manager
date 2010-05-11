@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.55
+Version: 0.56
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -129,6 +129,10 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue May 11 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.56-1
+- Adding sku info to list available call (pkilambi@redhat.com)
+- fix err msg (pkilambi@redhat.com)
+
 * Mon May 10 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.55-1
 - Resolves:  #590094 - encode translated error strings before displaying
   (pkilambi@redhat.com)
