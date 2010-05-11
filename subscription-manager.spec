@@ -130,7 +130,7 @@ fi
 
 %changelog
 * Tue May 11 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.58-1
-- Resolves: 591247 - format the dat correctly for gui add
+- Resolves: #591247 - format the dat correctly for gui add
 - send in product hash as part of autobind  
 - Format the cli print to be sequential instead of a table form. This makes the
   output more reliable (pkilambi@redhat.com)
