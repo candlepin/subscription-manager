@@ -171,7 +171,7 @@ class RegisterCommand(CliCommand):
             for pname, phash in managerlib.getInstalledProductHashMap().items():
                 try:
                    print "Bind Product ", pname,phash
-                   self.cp.bindByProduct(self.consumer['uuid'], phash)
+                   self.cp.bindByProduct(consumer['uuid'], phash)
                    log.info("Automatically subscribe the machine to product %s " % pname)
                 except:
                    log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
