@@ -516,7 +516,24 @@ class AddSubscriptionScreen:
             reload()
         else:
             slabel.set_label(constants.ATLEAST_ONE_SELECTION)
-
+            
+    def populateMatchingSubscriptions(self):
+        """
+        populate subscriptions matching currently installed products
+        """
+        pass
+    
+    def populateCompatibleSubscriptions(self):
+        """
+        populate subscriptions compatible with your system facts
+        """
+        pass
+    def populateAllAvailableSubscriptions(self):
+        """
+        populate all available subscriptions
+        """
+        pass
+    
     def populateAvailableList(self):
         #self.tv_products =  self.addxml.get_widget("treeview_available")
         self.tv_products =  self.addxml.get_widget("treeview_available1")

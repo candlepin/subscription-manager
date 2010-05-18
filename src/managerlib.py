@@ -158,6 +158,12 @@ def getProductDescription(qproduct):
                                                     ent.getDescription())
     return data
 
+def getAllAvailableSubscriptions(cpserver, consumer):
+    pass
+
+def getCompatibleSubscriptions(cpserver, consumer):
+    pass
+
 def getAvailableEntitlements(cpserver, consumer):
     """
      Gets the available Entitlements from the server
