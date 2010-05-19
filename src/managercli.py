@@ -242,8 +242,8 @@ class SubscribeCommand(CliCommand):
 
             if self.options.regtoken:
                 for regnum in self.options.regtoken:
-                    bundles = self.cp.bindByRegNumber(consumer, regtoken)
-                    log.info("Info: Successfully subscribed the machine to registration token %s" % regtoken)
+                    bundles = self.cp.bindByRegNumber(consumer, regnum)
+                    log.info("Info: Successfully subscribed the machine to registration token %s" % regnum)
 
             if self.options.pool:
                 for pool in self.options.pool:
