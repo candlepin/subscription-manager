@@ -249,6 +249,7 @@ class ManageSubscriptionPage:
         dlg = messageWindow.YesNoDialog(constants.CONFIRM_UNSUBSCRIBE % self.pname_selected, self.mainWin)
         if not dlg.getrc():
             return
+        print UEP
         if not UEP:
             entcerts = EntitlementDirectory().list()
             for cert in entcerts:
@@ -417,7 +418,7 @@ class RegistrationTokenScreen:
         rlabel = self.regtokenxml.get_widget("regtoken_entry")
         reg_token = rlabel.get_text()
         status = self.regtokenxml.get_widget("regtoken_status")
-        #consumer = get_consumer()
+        
         try:
             UEP.bindByRegNumber(consumer['uuid'], reg_token)
             status.set_label(_("<b>Successfully subscribed to token %s</b>" % reg_token))
@@ -432,35 +433,63 @@ class AddSubscriptionScreen:
     def __init__(self):
         global UEP
         self.selected = {}
-        #self.addxml = gtk.glade.XML(gladexml, "add_dialog", domain="subscription-manager")
-        self.addxml = gtk.glade.XML(gladexml, "dialog1_add", domain="subscription-manager")
-        self.add_vbox = \
-                        self.addxml.get_widget("add-dialog-vbox1")
+        self.addxml = gtk.glade.XML(gladexml, "dialog_add", domain="subscription-manager")
+        self.csstatus = self.addxml.get_widget("select_status")
+        self.total = 0
         self.consumer = consumer
         available_ent = 0
         self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.matchedList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.compatList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+
         try:
-            for product in managerlib.getAvailableEntitlements(UEP, self.consumer['uuid']):
+            compatible = managerlib.getCompatibleSubscriptions(UEP, self.consumer['uuid'])
+
+            matched = managerlib.getMatchedSubscriptions(compatible)
+            for product in matched:
+                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
+                self.matchedList.append(None, [False] + pdata)
+                available_ent += 1
+            compat = []
+            for prod in compatible:
+                if prod not in matched:
+                    compat.append(prod)
+            for product in compat:
+                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
+                self.compatList.append(None, [False] + pdata)
+                available_ent += 1
+            all = managerlib.getAllAvailableSubscriptions(UEP, self.consumer['uuid'])
+
+            other = []
+            for prod in all:
+                if prod not in compatible:
+                    other.append(prod)
+            for product in other:
                 pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
                 self.availableList.append(None, [False] + pdata)
                 available_ent += 1
+            
         except:
             log.error("Error populating available subscriptions from the server")
         if consumer.has_key('uuid'):
             # machine is talking to candlepin, invoke listing scheme
-            self.populateAvailableList()
+            self.populateMatchingSubscriptions()
+            self.populateCompatibleSubscriptions()
+            self.populateOtherSubscriptions()
 
             dic = { "on_close_clicked" : self.cancel,
-                    #"on_import_cert_button_clicked"   : self.onImportPrepare,
                     "on_add_subscribe_button_clicked"   : self.onSubscribeAction,
                 }
             self.addxml.signal_autoconnect(dic)
-            self.addWin = self.addxml.get_widget("dialog1_add")
+            self.addWin = self.addxml.get_widget("dialog_add")
             self.addWin.connect("hide", self.cancel)
             self.addWin.show_all()
             if not available_ent:
                 infoWindow(constants.NO_SUBSCRIPTIONS_WARNING, self.addWin)
                 self.addWin.hide()
+            if not len(other):
+                other_tab = self.addxml.get_widget("treeview_available4")
+                print dir(other_tab)
         else:
             # no CP to talk, use local certs uploads
             ImportCertificate()
@@ -479,15 +508,17 @@ class AddSubscriptionScreen:
         ImportCertificate()
 
     def onSubscribeAction(self, button):
-        slabel = self.addxml.get_widget("label_status")
+        slabel = self.addxml.get_widget("label_status1")
         #consumer = get_consumer()
         subscribed_count = 0
-        my_model = self.tv_products.get_model()
+        #my_model = self.tv_products.get_model()
+        my_model = self.other_tv.get_model()
         pwin = progress.Progress()
         pwin.setLabel(_("Performing Subscribe. Please wait."))
         busted_subs = []
         count = 0
         for pool, state in self.selected.items():
+            print pool, state
             count += 1
             pwin.setProgress(count, len(self.selected.items()))
             # state = (bool, iter)
@@ -508,67 +539,166 @@ class AddSubscriptionScreen:
         # Force fetch all certs
         if not fetch_certificates():
             return
-        if subscribed_count:
-            slabel.set_label(constants.SUBSCRIBE_SUCCSSFUL % subscribed_count)
-            pwin.hide()
-            self.addWin.hide()
-            # refresh main window
-            reload()
-        else:
-            slabel.set_label(constants.ATLEAST_ONE_SELECTION)
+
+        pwin.hide()
+        self.addWin.hide()
+        reload()
             
     def populateMatchingSubscriptions(self):
         """
         populate subscriptions matching currently installed products
         """
-        pass
+        self.match_tv =  self.addxml.get_widget("treeview_available2")
+        self.match_tv.set_model(self.matchedList)
+
+        cell = gtk.CellRendererToggle()
+        cell.set_property('activatable', True)
+        cell.connect('toggled', self.col_matched_selected, self.matchedList)
+
+        column = gtk.TreeViewColumn(_(''), cell)
+        column.add_attribute(cell, "active", 0)
+        self.match_tv.append_column(column)
+
+        col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), text=1)
+        col.set_sort_column_id(1)
+        col.set_sort_order(gtk.SORT_ASCENDING)
+        col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+        col.set_fixed_width(250)
+        self.match_tv.append_column(col)
+
+        col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
+        col.set_spacing(4)
+        col.set_sort_column_id(2)
+        col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+        col.set_fixed_width(100)
+        self.match_tv.append_column(col)
+
+        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=3)
+        col.set_sort_column_id(3)
+        self.match_tv.append_column(col)
+
+        self.availableList.set_sort_column_id(1, gtk.SORT_ASCENDING)
     
     def populateCompatibleSubscriptions(self):
         """
         populate subscriptions compatible with your system facts
         """
-        pass
-    def populateAllAvailableSubscriptions(self):
-        """
-        populate all available subscriptions
-        """
-        pass
-    
-    def populateAvailableList(self):
-        #self.tv_products =  self.addxml.get_widget("treeview_available")
-        self.tv_products =  self.addxml.get_widget("treeview_available1")
-        self.tv_products.set_model(self.availableList)
+        self.compatible_tv =  self.addxml.get_widget("treeview_available3")
+        self.compatible_tv.set_model(self.compatList)
 
         cell = gtk.CellRendererToggle()
         cell.set_property('activatable', True)
-        cell.connect('toggled', self.col_selected, self.availableList)
+        cell.connect('toggled', self.col_compat_selected, self.compatList)
 
         column = gtk.TreeViewColumn(_(''), cell)
         column.add_attribute(cell, "active", 0)
-        self.tv_products.append_column(column)
+        self.compatible_tv.append_column(column)
 
         col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), text=1)
         col.set_sort_column_id(1)
         col.set_sort_order(gtk.SORT_ASCENDING)
-        self.tv_products.append_column(col)
+        col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+        col.set_fixed_width(250)
+        self.compatible_tv.append_column(col)
 
         col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
         col.set_spacing(4)
         col.set_sort_column_id(2)
-        self.tv_products.append_column(col)
+        col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+        col.set_fixed_width(100)
+        self.compatible_tv.append_column(col)
 
         col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=3)
         col.set_sort_column_id(3)
-        self.tv_products.append_column(col)
+        self.compatible_tv.append_column(col)
 
-        self.availableList.set_sort_column_id(1, gtk.SORT_ASCENDING) 
+        self.availableList.set_sort_column_id(1, gtk.SORT_ASCENDING)
 
-    def col_selected(self, cell, path, model):
-        items, iter = self.tv_products.get_selection().get_selected()
+    def populateOtherSubscriptions(self):
+        """
+        populate all available subscriptions
+        """
+        self.other_tv = self.addxml.get_widget("treeview_available4")
+        self.other_tv.set_model(self.availableList)
+
+        cell = gtk.CellRendererToggle()
+        cell.set_property('activatable', True)
+        cell.connect('toggled', self.col_other_selected, self.availableList)
+
+        column = gtk.TreeViewColumn(_(''), cell)
+        column.add_attribute(cell, "active", 0)
+        self.other_tv.append_column(column)
+
+        col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), text=1)
+        col.set_sort_column_id(1)
+        col.set_sort_order(gtk.SORT_ASCENDING)
+        col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+        col.set_fixed_width(250)
+        self.other_tv.append_column(col)
+
+        col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
+        col.set_spacing(4)
+        col.set_sort_column_id(2)
+        col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+        col.set_fixed_width(100)
+        self.other_tv.append_column(col)
+
+        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=3)
+        col.set_sort_column_id(3)
+        self.other_tv.append_column(col)
+
+        self.availableList.set_sort_column_id(1, gtk.SORT_ASCENDING)
+
+    def col_other_selected(self, cell, path, model):
+        items, iter = self.other_tv.get_selection().get_selected()
         model[path][0] = not model[path][0]
         self.model = model
-        self.selected[model.get_value(iter, 4)] = (model.get_value(iter, 0), model.get_value(iter, 1), iter)
+        state = model.get_value(iter, 0)
+        self.selected[model.get_value(iter, 4)] = (state, model.get_value(iter, 1), iter)
+        if state:
+            self.total += 1
+        else:
+            self.total -= 1
+        if not self.total:
+            self.csstatus.hide()
+            return
+        self.csstatus.show()
+        self.csstatus.set_label(constants.SELECT_STATUS % self.total)
 
+    def col_matched_selected(self, cell, path, model):
+        items, iter = self.match_tv.get_selection().get_selected()
+        model[path][0] = not model[path][0]
+        self.model = model
+        state = model.get_value(iter, 0)
+        self.selected[model.get_value(iter, 4)] = (state, model.get_value(iter, 1), iter)
+        if state:
+            self.total += 1
+        else:
+            self.total -= 1    
+        if not self.total:
+            self.csstatus.hide()
+            return
+        self.csstatus.show()
+        self.csstatus.set_label(constants.SELECT_STATUS % self.total)
+
+        print self.total
+        
+    def col_compat_selected(self, cell, path, model):
+        items, iter = self.compatible_tv.get_selection().get_selected()
+        model[path][0] = not model[path][0]
+        self.model = model
+        state = model.get_value(iter, 0)
+        self.selected[model.get_value(iter, 4)] = (state, model.get_value(iter, 1), iter)
+        if state:
+            self.total += 1
+        else:
+            self.total -= 1
+        if not self.total:
+            self.csstatus.hide()
+            return
+        self.csstatus.show()
+        self.csstatus.set_label(constants.SELECT_STATUS % self.total)
+        
     def _cell_data_toggle_func(self, tree_column, renderer, model, treeiter):
         renderer.set_property('visible', True)
 

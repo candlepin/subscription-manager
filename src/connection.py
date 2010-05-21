@@ -217,6 +217,11 @@ class UEPConnection:
     def getEntitlementById(self, consumerId, entId):
         method = "/consumers/%s/entitlements/%s" % (consumerId, entId)
         return self.conn.request_get(method)
+    
+    def getAllAvailableEntitlements(self, consumerId):
+        method = "/pools?consumer=%s&listall=true" % consumerId
+        return self.conn.request_get(method)
+        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -239,11 +244,12 @@ if __name__ == '__main__':
         }
     }
     try:
-        consumer = uep.registerConsumer('admin', 'redhat', info=params)
+        consumer = uep.registerConsumer('pkilambi', 'redhat', info=params)
         print "Created a consumer ", consumer
         # sync certs
         print "Get Consumer By Id", uep.getConsumerById(consumer['uuid'])
         print uep.syncCertificates(consumer['uuid']) 
+        print "All available", uep.getAllAvailableEntitlements(consumer['uuid'])
         print "GetCertBySeriallllll",uep.getCertificatesBySerial(consumer['uuid'], ['SERIAL001','SERIAL001'])
         # bind consumer to regNumber
         #uep.bindByRegNumber(consumer['uuid'],"1234-5334-4e23-2432-4345") 

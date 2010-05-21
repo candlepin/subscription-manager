@@ -159,10 +159,26 @@ def getProductDescription(qproduct):
     return data
 
 def getAllAvailableSubscriptions(cpserver, consumer):
-    pass
+    columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName']
+    dlist = cpserver.getAllAvailableEntitlements(consumer)
+    data = [_sub_dict(pool['pool'], columns) for pool in dlist]
+    for d in data:
+        d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
+        d['endDate'] = formatDate(d['endDate'])
+        del d['consumed']
+    return data
+
+def getMatchedSubscriptions(compatible):
+    products = ProductDirectory().list()
+    matched_data = []
+    for product in products:
+        for data in compatible:
+            if product.getProduct().getName() == data['productName']:
+                matched_data.append(data)
+    return matched_data
 
 def getCompatibleSubscriptions(cpserver, consumer):
-    pass
+    return getAvailableEntitlements(cpserver, consumer)
 
 def getAvailableEntitlements(cpserver, consumer):
     """
@@ -201,3 +217,4 @@ if __name__=='__main__':
     print("\nConsumed Product Status:\n")
     getConsumedProductEntitlements()
     getInstalledProductHashMap()
+    

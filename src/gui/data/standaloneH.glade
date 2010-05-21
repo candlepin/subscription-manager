@@ -488,135 +488,6 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
       </widget>
     </child>
   </widget>
-  <widget class="GtkDialog" id="dialog1_add">
-    <property name="width_request">480</property>
-    <property name="height_request">300</property>
-    <property name="border_width">10</property>
-    <property name="title" translatable="yes">Add Subscriptions</property>
-    <property name="window_position">center</property>
-    <property name="type_hint">dialog</property>
-    <property name="has_separator">False</property>
-    <child internal-child="vbox">
-      <widget class="GtkVBox" id="dialog-vbox4">
-        <property name="visible">True</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
-        <child>
-          <widget class="GtkVBox" id="add-dialog-vbox1">
-            <property name="visible">True</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <widget class="GtkVBox" id="add-vbox2">
-                <property name="visible">True</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <widget class="GtkLabel" id="add-label2">
-                    <property name="visible">True</property>
-                    <property name="double_buffered">False</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Available Subscriptions:&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
-                    <property name="single_line_mode">True</property>
-                    <property name="track_visited_links">False</property>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="padding">6</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkScrolledWindow" id="add-scrolledwindow2">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hscrollbar_policy">automatic</property>
-                    <property name="vscrollbar_policy">automatic</property>
-                    <child>
-                      <widget class="GtkTreeView" id="treeview_available1">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="double_buffered">False</property>
-                        <property name="border_width">12</property>
-                        <property name="hover_selection">True</property>
-                        <property name="enable_tree_lines">True</property>
-                        <property name="tooltip_column">0</property>
-                      </widget>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="padding">11</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label_status">
-                    <property name="visible">True</property>
-                    <property name="use_markup">True</property>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-              </widget>
-              <packing>
-                <property name="padding">4</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-          </widget>
-          <packing>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="dialog-action_area3">
-            <property name="visible">True</property>
-            <property name="homogeneous">True</property>
-            <property name="layout_style">end</property>
-            <child>
-              <widget class="GtkButton" id="add_subscribe_button1">
-                <property name="label">Apply</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_add_subscribe_button_clicked"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkButton" id="cancel_add_button3">
-                <property name="label">gtk-close</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_close_clicked"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </widget>
-    </child>
-  </widget>
   <widget class="GtkDialog" id="dialog1_import">
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Provide a Subscription Certificate</property>
@@ -1131,129 +1002,224 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
       </widget>
     </child>
   </widget>
-  <widget class="GtkDialog" id="dialog_expand_add">
+  <widget class="GtkDialog" id="dialog_add">
     <property name="width_request">480</property>
     <property name="height_request">300</property>
     <property name="border_width">10</property>
     <property name="title" translatable="yes">Add Subscriptions</property>
     <property name="window_position">center</property>
+    <property name="default_width">600</property>
+    <property name="default_height">500</property>
     <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
-      <widget class="GtkVBox" id="dialog-vbox10">
+      <widget class="GtkVBox" id="dialog-vbox12">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
-          <widget class="GtkVBox" id="add-dialog-vbox2">
+          <widget class="GtkVBox" id="add-dialog-vbox3">
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <child>
-              <widget class="GtkVBox" id="vbox1">
+              <widget class="GtkVBox" id="vbox3">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <widget class="GtkLabel" id="add-label1">
+                  <widget class="GtkLabel" id="label1">
                     <property name="visible">True</property>
-                    <property name="double_buffered">False</property>
                     <property name="xalign">0</property>
-                    <property name="yalign">0</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Select subscriptions to add &lt;/b&gt;</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Select Subscriptions to add&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
-                    <property name="single_line_mode">True</property>
-                    <property name="track_visited_links">False</property>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="padding">6</property>
+                    <property name="padding">7</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkExpander" id="match_exist_expander">
+                  <widget class="GtkNotebook" id="notebook1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="tab_border">5</property>
+                    <property name="tab_hborder">30</property>
+                    <property name="tab_vborder">4</property>
+                    <child>
+                      <widget class="GtkScrolledWindow" id="scrolledwindow1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hscrollbar_policy">automatic</property>
+                        <property name="vscrollbar_policy">automatic</property>
+                        <child>
+                          <widget class="GtkViewport" id="viewport1">
+                            <property name="visible">True</property>
+                            <property name="resize_mode">queue</property>
+                            <child>
+                              <widget class="GtkVBox" id="vbox4">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <widget class="GtkLabel" id="label5">
+                                    <property name="visible">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Subscriptions matching your existing products&lt;/b&gt;</property>
+                                    <property name="use_markup">True</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="padding">4</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkViewport" id="viewport2">
+                                    <property name="visible">True</property>
+                                    <property name="resize_mode">queue</property>
+                                    <child>
+                                      <widget class="GtkTreeView" id="treeview_available2">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="double_buffered">False</property>
+                                        <property name="hover_selection">True</property>
+                                      </widget>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkLabel" id="label12">
+                                    <property name="visible">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Subscriptions compatible with your system&lt;/b&gt;</property>
+                                    <property name="use_markup">True</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="padding">5</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkViewport" id="viewport3">
+                                    <property name="visible">True</property>
+                                    <property name="resize_mode">queue</property>
+                                    <child>
+                                      <widget class="GtkTreeView" id="treeview_available3">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="double_buffered">False</property>
+                                        <property name="hover_selection">True</property>
+                                      </widget>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">3</property>
+                                  </packing>
+                                </child>
+                              </widget>
+                            </child>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label2">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Suggested</property>
+                      </widget>
+                      <packing>
+                        <property name="tab_expand">True</property>
+                        <property name="tab_fill">False</property>
+                        <property name="type">tab</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkVBox" id="vbox5">
+                        <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <widget class="GtkLabel" id="label13">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Other Available Subscriptions&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="padding">4</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkScrolledWindow" id="scrolledwindow2">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hscrollbar_policy">automatic</property>
+                            <property name="vscrollbar_policy">automatic</property>
+                            <child>
+                              <widget class="GtkTreeView" id="treeview_available4">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="double_buffered">False</property>
+                                <property name="hover_selection">True</property>
+                              </widget>
+                            </child>
+                          </widget>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label3">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Other</property>
+                      </widget>
+                      <packing>
+                        <property name="position">1</property>
+                        <property name="tab_expand">True</property>
+                        <property name="tab_fill">False</property>
+                        <property name="type">tab</property>
+                      </packing>
+                    </child>
                     <child>
                       <placeholder/>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="expand_label1">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Subscriptions matching your existing products</property>
-                      </widget>
+                      <placeholder/>
                       <packing>
-                        <property name="type">label_item</property>
+                        <property name="type">tab</property>
                       </packing>
                     </child>
                   </widget>
                   <packing>
+                    <property name="padding">4</property>
                     <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkExpander" id="compatible_expander">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="expand_label2">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Subscriptions compatible with your system</property>
-                      </widget>
-                      <packing>
-                        <property name="type">label_item</property>
-                      </packing>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkExpander" id="all_expander2">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="expand_label3">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">All available subscriptions</property>
-                      </widget>
-                      <packing>
-                        <property name="type">label_item</property>
-                      </packing>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="add-label3">
-                    <property name="visible">True</property>
-                    <property name="double_buffered">False</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0</property>
-                    <property name="label" translatable="yes">status</property>
-                    <property name="use_markup">True</property>
-                    <property name="single_line_mode">True</property>
-                    <property name="track_visited_links">False</property>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="padding">6</property>
-                    <property name="position">4</property>
                   </packing>
                 </child>
               </widget>
               <packing>
                 <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="select_status">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="use_markup">True</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="padding">3</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </widget>
@@ -1262,16 +1228,17 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
           </packing>
         </child>
         <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="dialog-action_area8">
+          <widget class="GtkHButtonBox" id="dialog-action_area7">
             <property name="visible">True</property>
             <property name="homogeneous">True</property>
             <property name="layout_style">end</property>
             <child>
-              <widget class="GtkButton" id="add_subscribe_button2">
+              <widget class="GtkButton" id="add_subscribe_button3">
                 <property name="label">Apply</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_add_subscribe_button_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -1280,12 +1247,13 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="cancel_add_button1">
+              <widget class="GtkButton" id="cancel_add_button2">
                 <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_close_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
