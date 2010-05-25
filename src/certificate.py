@@ -310,7 +310,7 @@ class Extensions(dict):
     Represents x.509 (v3) I{custom} extensions.
     """
     
-    pattern = re.compile('([0-9]+\.)+[0-9]:')
+    pattern = re.compile('([0-9]+\.)+[0-9]+:')
     
     def __init__(self, x509):
         """
@@ -742,20 +742,48 @@ class Order:
     def getSku(self):
         return self.ext.get('3')
 
-    def getRegnum(self):
+    def getSubscription(self):
         return self.ext.get('4')
 
     def getQuantity(self):
         return self.ext.get('5')
+    
+    def getStart(self):
+        return self.ext.get('6')
+    
+    def getEnd(self):
+        return self.ext.get('7')
+    
+    def getSubtype(self):
+        return self.ext.get('8')
+
+    def getVirtLimit(self):
+        return self.ext.get('9')
+    
+    def getSocketLimit(self):
+        return self.ext.get('10')
+    
+    def getOptionCode(self):
+        return self.ext.get('11')
+    
+    def getContract(self):
+        return self.ext.get('12')
 
     def __str__(self):
         s = []
         s.append('Order {')
-        s.append('\tName ...... = %s' % self.getName())
-        s.append('\tNumber .... = %s' % self.getNumber())
-        s.append('\tSKU ....... = %s' % self.getSku())
-        s.append('\tRegnum .... = %s' % self.getRegnum())
-        s.append('\tQuantity .. = %s' % self.getQuantity())
+        s.append('\tName .......... = %s' % self.getName())
+        s.append('\tNumber ........ = %s' % self.getNumber())
+        s.append('\tSKU ........... = %s' % self.getSku())
+        s.append('\tSubscription .. = %s' % self.getSubscription())
+        s.append('\tQuantity ...... = %s' % self.getQuantity())
+        s.append('\tStart (Ent) ... = %s' % self.getStart())
+        s.append('\tEnd (Ent) ..... = %s' % self.getEnd())
+        s.append('\tSubtype ....... = %s' % self.getSubtype())
+        s.append('\tVirt Limit .... = %s' % self.getVirtLimit())
+        s.append('\tSocket Limit .. = %s' % self.getSocketLimit())
+        s.append('\tOption Code ... = %s' % self.getOptionCode())
+        s.append('\tContract ...... = %s' % self.getContract())
         s.append('}')
         return '\n'.join(s)
 
