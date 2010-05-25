@@ -73,7 +73,7 @@ class Restlib(object):
         if str(response.status) not in ["200", "204"]:
             parsed = json.loads(response.read())
             raise RestlibException(response.status,
-                    parsed['exceptionMessage']['displayMessage'])
+                    parsed['displayMessage'])
 
     def request_get(self, method):
         return self._request("GET", method)
@@ -133,14 +133,14 @@ class UEPConnection:
          Creates a consumer on candlepin server
         """
         self.__authenticate(username, password)
-        return self.conn.request_post('/consumers/', info)["consumer"]
+        return self.conn.request_post('/consumers/', info)
 
     def getConsumerById(self, consumerId):
         """
         Returns a consumer object with pem/key for existing consumers
         """
         method = '/consumers/%s' % consumerId
-        return self.conn.request_get(method)["consumer"]
+        return self.conn.request_get(method)
 
     def unregisterConsumer(self, consumerId):
         """
@@ -229,22 +229,21 @@ if __name__ == '__main__':
     else:
         uep = UEPConnection()
     # create a consumer
-    print "Ping Server", uep.ping()
     stype = {'label':'system'}
     product = {"id":"1","label":"RHEL AP","name":"rhel"}
-    facts = {"entry":[{"key":"arch","value":"i386"},
-                         {"key":"cpu", "value": "Intel" },
-                         {"key":"cores", "value":4}]
-            }
+    facts = {
+        "arch": "i386",
+        "cpu": "Intel" ,
+        "cores": 4,
+    }
 
-    params = {"consumer" : {
-        "type":stype,
-        "name":'admin',
-        "facts":facts,
-        }
+    params = {
+        "type": 'system',
+        "name": 'admin',
+        "facts": facts,
     }
     try:
-        consumer = uep.registerConsumer('pkilambi', 'redhat', info=params)
+        consumer = uep.registerConsumer('admin', 'admin', info=params)
         print "Created a consumer ", consumer
         # sync certs
         print "Get Consumer By Id", uep.getConsumerById(consumer['uuid'])

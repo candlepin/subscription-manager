@@ -119,22 +119,15 @@ class RegisterCommand(CliCommand):
             sys.exit(1)
 
     def _get_register_info(self):
-        stype = {'label':'system'}
+        stype = 'system'
         product = {"id":"1","label":"RHEL AP","name":"rhel"}
         facts = hwprobe.Hardware().getAll()
-        entrys = []
-        for fact_key in facts.keys():
-            entry_facts = {}
-            entry_facts['key'] = fact_key
-            entry_facts['value'] = facts[fact_key]
-            entrys.append(entry_facts)
 
-        params = { "consumer" :{
-                "type":stype,
-                "name":'admin',
-                "facts":{"entry":entrys}
-                 }
-            }
+        params = {
+            "type":stype,
+            "name":'admin',
+            "facts": facts
+        }
         return params
 
     def _do_command(self):

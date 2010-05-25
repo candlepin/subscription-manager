@@ -365,21 +365,13 @@ class RegisterScreen:
                                        handler="/candlepin", cert_file=cert_file, key_file=key_file)
 
     def _get_register_info(self):
-        stype = {'label':'system'}
         product = {"id":"1","label":"RHEL AP","name":"rhel"}
         facts = hwprobe.Hardware().getAll()
-        entrys = []
-        for fact_key in facts.keys():
-            entry_facts = {}
-            entry_facts['key'] = fact_key
-            entry_facts['value'] = facts[fact_key]
-            entrys.append(entry_facts)
 
-        params = { "consumer" : {
-                "type":stype,
+        params = {
+                "type": "system",
                 "name":'admin',
-                "facts": {"entry":entrys}
-                 }
+                "facts": facts
               }
         return params
 
@@ -525,7 +517,7 @@ class AddSubscriptionScreen:
             if state[0]:
                 try:
                     ent_ret = UEP.bindByEntitlementPool(consumer['uuid'], pool)
-                    entitled_data = ent_ret[0]['entitlement']['pool']
+                    entitled_data = ent_ret[0]['pool']
                     updated_count = str(int(entitled_data['quantity']) - int(entitled_data['consumed']))
                     my_model.set_value(state[-1], 2, updated_count)
                     subscribed_count+=1
@@ -805,7 +797,7 @@ class UpdateSubscriptionScreen:
             if state[0]:
                 try:
                     ent_ret = UEP.bindByEntitlementPool(consumer['uuid'], pool)
-                    entitled_data = ent_ret[0]['entitlement']['pool']
+                    entitled_data = ent_ret[0]['pool']
                     updated_count = str(int(entitled_data['quantity']) - int(entitled_data['consumed']))
                     my_model.set_value(state[-1], 2, updated_count)
                     subscribed_count+=1

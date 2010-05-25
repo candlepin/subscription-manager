@@ -186,7 +186,7 @@ def getAvailableEntitlements(cpserver, consumer):
     """
     columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName']
     dlist = cpserver.getPoolsList(consumer)
-    data = [_sub_dict(pool['pool'], columns) for pool in dlist]
+    data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
         d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
         d['endDate'] = formatDate(d['endDate'])
@@ -196,7 +196,7 @@ def getAvailableEntitlements(cpserver, consumer):
 def getAvailableEntitlementsCLI(cpserver, consumer):
     columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'productId']
     dlist = cpserver.getPoolsList(consumer)
-    data = [_sub_dict(pool['pool'], columns) for pool in dlist]
+    data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
         d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
         d['endDate'] = formatDate(d['endDate'])
@@ -206,8 +206,8 @@ def getAvailableEntitlementsCLI(cpserver, consumer):
 def _sub_dict(datadict, subkeys, default=None) :
     return dict([ (k, datadict.get(k, default) ) for k in subkeys ] )
 
-def formatDate(datestring):
-    tf = xml.utils.iso8601.parse(datestring)
+def formatDate(date):
+    tf = xml.utils.iso8601.parse(date)
     return datetime.fromtimestamp(tf).ctime()
 
 
