@@ -150,7 +150,8 @@ class ManageSubscriptionPage:
                           "Subscribed" : gtk.STOCK_APPLY, 
                           "Not Installed" : gtk.STOCK_DIALOG_QUESTION}
         self.tv_products =  self.subsxml.get_widget("treeview_updates")
-        self.productList = gtk.ListStore(gtk.gdk.Pixbuf, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.productList = gtk.ListStore(gtk.gdk.Pixbuf, gobject.TYPE_STRING, gobject.TYPE_STRING, \
+                                         gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.warn_count = 0
         for product in managerlib.getInstalledProductStatus():
             markup_status = product[1]
@@ -158,7 +159,7 @@ class ManageSubscriptionPage:
                 self.warn_count += 1
                 markup_status = '<span foreground="red"><b>%s</b></span>' % product[1]
             self.status_icon = self.tv_products.render_icon(state_icon_map[product[1]], size=gtk.ICON_SIZE_MENU)
-            self.productList.append((self.status_icon, product[0], product[3], markup_status, product[2]))
+            self.productList.append((self.status_icon, product[0], product[3], markup_status, product[2], product[4]))
         self.tv_products.set_model(self.productList)
 
         #self.tv_products.set_rules_hint(True)
@@ -178,7 +179,7 @@ class ManageSubscriptionPage:
         cell.set_fixed_size(-1, 35)
         self.tv_products.append_column(col)
 
-        col = gtk.TreeViewColumn(_("Subscription"), gtk.CellRendererText(), text=2)
+        col = gtk.TreeViewColumn(_("Order"), gtk.CellRendererText(), text=5)
         col.set_sort_column_id(2)
         #col.set_spacing(6)
         self.tv_products.append_column(col)
@@ -249,7 +250,7 @@ class ManageSubscriptionPage:
         dlg = messageWindow.YesNoDialog(constants.CONFIRM_UNSUBSCRIBE % self.pname_selected, self.mainWin)
         if not dlg.getrc():
             return
-        print UEP
+        print self.psubs_selected
         if not UEP:
             entcerts = EntitlementDirectory().list()
             for cert in entcerts:

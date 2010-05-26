@@ -69,6 +69,7 @@ Expires:           \t%-25s
 consumed_subs_list = """
 Name:               \t%-25s
 SerialNumber:       \t%-25s
+OrderNumber:       \t%-25s
 Active:             \t%-25s
 Begins:             \t%-25s
 Expires:            \t%-25s

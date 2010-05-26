@@ -64,15 +64,16 @@ def getInstalledProductStatus():
             entdict[product.getName()] = {'Entitlements' : ents,
                                           'valid': cert.valid(), 
                                           'expires' : formatDate(cert.validRange().end().isoformat()),
-                                          'serial'   : cert.serialNumber() } #getOrder().getName() }
+                                          'serial'   : cert.serialNumber(),
+                                          'contract' : cert.getOrder().getContract() }
     product_status = []
     for product in products:
         pname = product.getProduct().getName()
         if entdict.has_key(pname):
-            data = (pname, map_status(entdict[pname]['valid']), str(entdict[pname]['expires']), entdict[pname]['serial'])
+            data = (pname, map_status(entdict[pname]['valid']), str(entdict[pname]['expires']), entdict[pname]['serial'], entdict[pname]['contract'])
             product_status.append(data)
         else:
-            product_status.append((pname, map_status(None), "", ""))
+            product_status.append((pname, map_status(None), "", "", ""))
 
     # Include entitled but not installed products
     psnames = [prod[0] for prod in product_status]
@@ -80,7 +81,7 @@ def getInstalledProductStatus():
        for product in cert.getProducts():
            if product.getName() not in psnames:
                psname = product.getName()
-               data = (psname, 'Not Installed', str(entdict[psname]['expires']), entdict[psname]['serial'])
+               data = (psname, 'Not Installed', str(entdict[psname]['expires']), entdict[psname]['serial'], entdict[pname]['contract'])
                product_status.append(data)
     return product_status
 
@@ -101,7 +102,7 @@ def getConsumedProductEntitlements():
     for cert in entdir.listValid():
         eproducts = cert.getProducts()
         for product in eproducts:
-            data = (product.getName(), cert.serialNumber(), cert.valid(), formatDate(cert.validRange().begin().isoformat()), \
+            data = (product.getName(), cert.serialNumber(), cert.getOrder().getContract(), cert.valid(), formatDate(cert.validRange().begin().isoformat()), \
                     formatDate(cert.validRange().end().isoformat()))
             consumed_products.append(data)
     return consumed_products
