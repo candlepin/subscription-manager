@@ -21,7 +21,6 @@ import os
 import re
 import sys
 import shutil
-sys.path.append('/usr/share/rhsm')
 
 import gtk
 import gtk.glade
@@ -47,9 +46,10 @@ gtk.glade.bindtextdomain("subscription-manager")
 from logutil import getLogger
 log = getLogger(__name__)
 
-gladexml = "/usr/share/rhsm/gui/data/standaloneH.glade"
-subs_full = "/usr/share/rhsm/gui/data/icons/subsmgr-full.png"
-subs_empty = "/usr/share/rhsm/gui/data/icons/subsmgr-empty.png"
+prefix = os.path.dirname(__file__)
+gladexml = os.path.join(prefix, "data/standaloneH.glade")
+subs_full = os.path.join(prefix, "data/icons/subsmgr-full.png")
+subs_empty = os.path.join(prefix, "data/icons/subsmgr-empty.png")
 
 
 cfg = config.initConfig()

@@ -1,10 +1,12 @@
+import os
 import gtk
 
 class Progress:
     def __init__(self):
-        glade_prefix = "/usr/share/rhsm/gui/data/"
+        glade_prefix = os.path.dirname(__file__)
 
-        self.xml = gtk.glade.XML(glade_prefix + "progress.glade", "progressWindow")
+        self.xml = gtk.glade.XML(os.path.join(glade_prefix, "progress.glade"),
+                "progressWindow")
         self.progressWindow = self.xml.get_widget("progressWindow")
         self.progressWindow.connect("delete-event", self.progressWindow.hide)
         #self.progressWindow.connect("hide", self.progressWindow.hide)
