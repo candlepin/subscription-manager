@@ -498,9 +498,6 @@ class AddSubscriptionScreen:
             if not available_ent:
                 infoWindow(constants.NO_SUBSCRIPTIONS_WARNING, self.addWin)
                 self.addWin.hide()
-            if not len(other):
-                other_tab = self.addxml.get_widget("treeview_available4")
-                print dir(other_tab)
         else:
             # no CP to talk, use local certs uploads
             ImportCertificate()
