@@ -431,10 +431,11 @@ class RegistrationTokenScreen:
             UEP.bindByRegNumber(consumer['uuid'], reg_token)
             #status.set_label(_("<b>Successfully subscribed to token %s</b>" % reg_token))
             infoWindow(constants.SUBSCRIBE_REGTOKEN_SUCCESS % reg_token)
+        except connection.RestlibException, e:
+            log.error("Could not subscribe registration token %s error %s" % (reg_token, e))
+            errorWindow(e)
         except Exception, e:
-            log.error("Could not subscribe registration token %s " % reg_token)
-            #status.show()
-            #status.set_label(constants.SUBSCRIBE_REGTOKEN_ERROR % reg_token)
+            log.error("Could not subscribe registration token [%s] \nError: %s" % (reg_token, e))
             errorWindow(constants.SUBSCRIBE_REGTOKEN_ERROR % reg_token)
 
 class AddSubscriptionScreen:
