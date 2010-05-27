@@ -410,14 +410,17 @@ class RegistrationTokenScreen:
     def submitToken(self, button):
         rlabel = self.regtokenxml.get_widget("regtoken_entry")
         reg_token = rlabel.get_text()
-        status = self.regtokenxml.get_widget("regtoken_status")
-        
+        #status = self.regtokenxml.get_widget("regtoken_status")
+        #status.hide() 
         try:
             UEP.bindByRegNumber(consumer['uuid'], reg_token)
-            status.set_label(_("<b>Successfully subscribed to token %s</b>" % reg_token))
+            #status.set_label(_("<b>Successfully subscribed to token %s</b>" % reg_token))
+            infoWindow(constants.SUBSCRIBE_REGTOKEN_SUCCESS % reg_token)
         except Exception, e:
             log.error("Could not subscribe registration token %s " % reg_token)
-            status.set_label(constants.SUBSCRIBE_REGTOKEN_ERROR % reg_token)
+            #status.show()
+            #status.set_label(constants.SUBSCRIBE_REGTOKEN_ERROR % reg_token)
+            errorWindow(constants.SUBSCRIBE_REGTOKEN_ERROR % reg_token)
 
 class AddSubscriptionScreen:
     """

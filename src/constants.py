@@ -95,7 +95,9 @@ COMPLIANT_STATUS = _("<b>\n All your subscriptions are in compliance.\n\n</b>Add
 
 UNSUBSCRIBE_ERROR = _("<b>Unable to perform unsubscribe.</b>\n\nPlease see /var/log/rhsm/rhsm.log for more information.")
 
-SUBSCRIBE_REGTOKEN_ERROR = _("<b>\nCould not subscribe to token %s</b>\n")
+SUBSCRIBE_REGTOKEN_ERROR = _("<b>\nCould not subscribe to token %s</b>\n\nPlease see /var/log/rhsm/rhsm.log for more information.")
+
+SUBSCRIBE_REGTOKEN_SUCCESS = _("Successfully subscribed your system to token %s")
 
 NO_SUBSCRIPTIONS_WARNING = _("<b>No subscriptions available for this account</b>")
 
