@@ -34,7 +34,6 @@ import managerlib
 import connection
 import config
 import constants
-import async_uep
 
 from certlib import EntitlementDirectory, ProductDirectory, ConsumerIdentity, CertLib
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
@@ -58,7 +57,7 @@ UEP = None
 if ConsumerIdentity.exists():
     cert_file = ConsumerIdentity.certpath()
     key_file = ConsumerIdentity.keypath()
-    UEP = async_uep.UEP(cfg['hostname'] or "localhost", cfg['port'], cert_file=cert_file, key_file=key_file)
+    UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin", cert_file=cert_file, key_file=key_file)
 
 certlib = CertLib()
 ENT_CONFIG_DIR="/etc/pki/entitlement/product/"
@@ -283,7 +282,7 @@ class RegisterScreen:
     """
     def __init__(self):
         global UEP
-        UEP = async_uep.UEP(cfg['hostname'] or 'localhost', cfg['port'])
+        UEP = connection.UEPConnection(cfg['hostname'] or 'localhost', ssl_port=cfg['port'])
         self.registerxml = gtk.glade.XML(gladexml, "register_dialog", domain="subscription-manager")
         dic = { "on_close_clicked" : self.cancel,
                 "on_register_button_clicked" : self.onRegisterAction, 
@@ -363,8 +362,8 @@ class RegisterScreen:
     def _reload_cp_with_certs(self):
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
-        UEP = async_uep.UEP(cfg['hostname'] or "localhost", cfg['port'], \
-                                       cert_file=cert_file, key_file=key_file)
+        UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], \
+                                       handler="/candlepin", cert_file=cert_file, key_file=key_file)
 
     def _get_register_info(self):
         product = {"id":"1","label":"RHEL AP","name":"rhel"}
