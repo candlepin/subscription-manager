@@ -296,47 +296,6 @@ class RegisterScreen:
     def cancel(self, button):
         self.registerWin.hide()
 
-    def _registerCallback(self, newAccount):
-        consumer = managerlib.persist_consumer_cert(newAccount)
-        # reload cP instance with new ssl certs
-        self._reload_cp_with_certs()
-        if self.auto_subscribe():
-            # try to auomatically bind products
-            for pname, phash in managerlib.getInstalledProductHashMap().items():
-                try:
-                   UEP.bindByProduct(consumer['uuid'], phash)
-                   log.info("Automatically subscribe the machine to product %s " % pname)
-                except:
-                   log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
-            if not fetch_certificates():
-                return
-        RegistrationTokenScreen()
-        self.registerWin.hide()
-        reload()
-
-    def _registerFailedCallback(self, exception):
-        failed_msg = "Unable to register your system. \n Error: %s"
-        try:
-            # XXX hacky but easy for copy/paste
-            raise exception
-        except connection.RestlibException, e:
-            log.error(failed_msg % e.msg)
-            errorWindow(constants.REGISTER_ERROR % linkify(e.msg))
-            self.registerWin.hide()
-        except Exception, e:
-            log.error(failed_msg % e)
-            errorWindow(constants.REGISTER_ERROR % e)
-            self.registerWin.hide()
-
-    def _unregisterCallback(self):
-            UEP.registerConsumer(self._registerCallback,
-                    self._registerFailedCallback, username, password,
-                    self._get_register_info())
-
-    def _unregisterFailedCallback(self, exception):
-        log.error("Unable to unregister existing user credentials.")
-        self._unregisterCallback()
-
     def onRegisterAction(self, button):
         self.uname = self.registerxml.get_widget("account_login")
         self.passwd = self.registerxml.get_widget("account_password")
@@ -349,11 +308,38 @@ class RegisterScreen:
             return False
         # Unregister consumer if exists
         if ConsumerIdentity.exists():
-            cid = consumer['uuid']
-            UEP.unregisterConsumer(self._unregisterCallback,
-                    self._unregisterFailedCallback, cid)
-        else:
-            self._unregisterCallback()
+            try:
+                cid = consumer['uuid']
+                UEP.unregisterConsumer(cid)
+            except Exception, e:
+                log.error("Unable to unregister existing user credentials.")
+        failed_msg = "Unable to register your system. \n Error: %s"
+        try:
+            newAccount = UEP.registerConsumer(username, password, self._get_register_info())
+            consumer = managerlib.persist_consumer_cert(newAccount)
+            # reload cP instance with new ssl certs
+            self._reload_cp_with_certs()
+            if self.auto_subscribe():
+                # try to auomatically bind products
+                for pname, phash in managerlib.getInstalledProductHashMap().items():
+                    try:
+                       UEP.bindByProduct(consumer['uuid'], phash)
+                       log.info("Automatically subscribe the machine to product %s " % pname)
+                    except:
+                       log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
+                if not fetch_certificates():
+                    return
+            RegistrationTokenScreen()
+            self.registerWin.hide()
+            reload()
+        except connection.RestlibException, e:
+            log.error(failed_msg % e.msg)
+            errorWindow(constants.REGISTER_ERROR % linkify(e.msg))
+            self.registerWin.hide()
+        except Exception, e:
+            log.error(failed_msg % e)
+            errorWindow(constants.REGISTER_ERROR % e)
+            self.registerWin.hide()
 
     def auto_subscribe(self):
         self.autobind = self.registerxml.get_widget("auto_bind")
@@ -455,7 +441,7 @@ class AddSubscriptionScreen:
         self.compatList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
 
         try:
-            compatible = UEP.getCompatibleSubscriptions(self.consumer['uuid'])
+            compatible = managerlib.getCompatibleSubscriptions(UEP, self.consumer['uuid'])
 
             matched = managerlib.getMatchedSubscriptions(compatible)
             for product in matched:
@@ -470,7 +456,7 @@ class AddSubscriptionScreen:
                 pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
                 self.compatList.append(None, [False] + pdata)
                 available_ent += 1
-            all = UEP.getAllAvailableSubscriptions(self.consumer['uuid'])
+            all = managerlib.getAllAvailableSubscriptions(UEP, self.consumer['uuid'])
 
             other = []
             for prod in all:
@@ -723,7 +709,7 @@ class UpdateSubscriptionScreen:
         self.updatesList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.available_updates = 0
         try:
-            for product in UEP.getAvailableEntitlements(consumer['uuid']):
+            for product in managerlib.getAvailableEntitlements(UEP, consumer['uuid']):
                 if self.product_select in product.values():
                     # Only list selected product's pools
                     pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
