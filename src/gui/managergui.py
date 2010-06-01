@@ -554,7 +554,7 @@ class AddSubscriptionScreen:
         col.set_sort_column_id(1)
         col.set_sort_order(gtk.SORT_ASCENDING)
         col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-        col.set_fixed_width(250)
+        col.set_fixed_width(350)
         self.match_tv.append_column(col)
 
         col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
@@ -589,7 +589,7 @@ class AddSubscriptionScreen:
         col.set_sort_column_id(1)
         col.set_sort_order(gtk.SORT_ASCENDING)
         col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-        col.set_fixed_width(250)
+        col.set_fixed_width(350)
         self.compatible_tv.append_column(col)
 
         col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
@@ -866,7 +866,7 @@ class ImportCertificate:
         reload()
 
 def unexpectedError(message, exc_info=None):
-    message = message + "\n" + (constants.UNEXPECTED_ERROR)
+    message = message + "\n" + constants.UNEXPECTED_ERROR
     errorWindow(message)
     if exc_info:
         (etype, value, stack_trace) = exc_info

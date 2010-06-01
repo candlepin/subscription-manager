@@ -81,7 +81,7 @@ def getInstalledProductStatus():
        for product in cert.getProducts():
            if product.getName() not in psnames:
                psname = product.getName()
-               data = (psname, 'Not Installed', str(entdict[psname]['expires']), entdict[psname]['serial'], entdict[pname]['contract'])
+               data = (psname, 'Not Installed', str(entdict[psname]['expires']), entdict[psname]['serial'], entdict[psname]['contract'])
                product_status.append(data)
     return product_status
 
