@@ -179,7 +179,7 @@ class ManageSubscriptionPage:
         cell.set_fixed_size(-1, 35)
         self.tv_products.append_column(col)
 
-        col = gtk.TreeViewColumn(_("Order"), gtk.CellRendererText(), text=5)
+        col = gtk.TreeViewColumn(_("ContractNumber"), gtk.CellRendererText(), text=5)
         col.set_sort_column_id(2)
         #col.set_spacing(6)
         self.tv_products.append_column(col)
