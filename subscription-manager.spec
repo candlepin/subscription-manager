@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.60
+Version: 0.61
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -129,6 +129,31 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Jun 01 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.61-1
+- Resolves: #591247
+- clean up (pkilambi@redhat.com)
+- Revert "Add uep wrapper where async logic will live" (pkilambi@redhat.com)
+- Revert "Hook up register/unregister to be async" (pkilambi@redhat.com)
+- if we get an error from IT lets show it instead of generic error for reg
+  token activation (pkilambi@redhat.com)
+- removing test checks (pkilambi@redhat.com)
+- Hook up register/unregister to be async (jbowes@redhat.com)
+- Add uep wrapper where async logic will live (jbowes@redhat.com)
+- error message is now a popup (pkilambi@redhat.com)
+- Load gui resources relative to the python code (to run from src)
+  (jbowes@redhat.com)
+- Append consistant python path (jbowes@redhat.com)
+- Add .gitignore (jbowes@redhat.com)
+- Adding Order info to cli and gui (pkilambi@redhat.com)
+- Convert to using candlepin's jackson formatted json (jbowes@redhat.com)
+- Fix OID ending in 10+.  Add Order.getContract(). (jortel@redhat.com)
+- Changing the Add subscriptions screen to bucketize entitlements into
+  categories and use a tabbed interface (pkilambi@redhat.com)
+- Changing name of referenced variable to regnum (calfonso@redhat.com)
+- test (pkilambi@redhat.com)
+- test (pkilambi@redhat.com)
+- fix autosubscribe to user right consumer (pkilambi@redhat.com)
+
 * Tue May 11 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.60-1
 - Resolves: #591247 - format the dat correctly for gui add
 - send in product hash as part of autobind  
