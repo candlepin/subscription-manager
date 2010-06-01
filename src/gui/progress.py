@@ -5,7 +5,7 @@ class Progress:
     def __init__(self):
         glade_prefix = os.path.dirname(__file__)
 
-        self.xml = gtk.glade.XML(os.path.join(glade_prefix, "progress.glade"),
+        self.xml = gtk.glade.XML(os.path.join(glade_prefix, "data/progress.glade"),
                 "progressWindow")
         self.progressWindow = self.xml.get_widget("progressWindow")
         self.progressWindow.connect("delete-event", self.progressWindow.hide)
