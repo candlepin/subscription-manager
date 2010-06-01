@@ -56,6 +56,7 @@ ProductName:        \t%-25s
 Status:             \t%-25s
 Expires:            \t%-25s
 Subscription:       \t%-25s
+OrderNumber:        \t%-25s
 """
 
 available_subs_list = """
