@@ -452,10 +452,9 @@ class AddSubscriptionScreen:
                 pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
                 self.compatList.append(None, [False] + pdata)
                 available_ent += 1
-            all = managerlib.getAllAvailableSubscriptions(UEP, self.consumer['uuid'])
-
+            all_subs = managerlib.getAllAvailableSubscriptions(UEP, self.consumer['uuid'])
             other = []
-            for prod in all:
+            for prod in all_subs:
                 if prod not in compatible:
                     other.append(prod)
             for product in other:
@@ -624,7 +623,7 @@ class AddSubscriptionScreen:
         col.set_sort_column_id(1)
         col.set_sort_order(gtk.SORT_ASCENDING)
         col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-        col.set_fixed_width(250)
+        col.set_fixed_width(350)
         self.other_tv.append_column(col)
 
         col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)

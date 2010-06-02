@@ -162,7 +162,8 @@ def getProductDescription(qproduct):
 def getAllAvailableSubscriptions(cpserver, consumer):
     columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName']
     dlist = cpserver.getAllAvailableEntitlements(consumer)
-    data = [_sub_dict(pool['pool'], columns) for pool in dlist]
+    #data = [_sub_dict(pool['pool'], columns) for pool in dlist]
+    data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
         d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
         d['endDate'] = formatDate(d['endDate'])
