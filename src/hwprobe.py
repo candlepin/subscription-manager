@@ -68,6 +68,8 @@ class Hardware:
         return self.meminfo
 
     def getCpuInfo(self):
+        # TODO:(prad) Revisit this and see if theres a better way to parse /proc/cpuinfo 
+        # perhaps across all arches 
         self.cpuinfo = {}
         try:
             cpudata = commands.getstatusoutput('LANG=en_US.UTF-8 /usr/bin/lscpu')[-1].split('\n')
