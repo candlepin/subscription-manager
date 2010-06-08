@@ -29,6 +29,7 @@ from optparse import OptionParser
 from certlib import CertLib, ConsumerIdentity, ProductDirectory, EntitlementDirectory
 import managerlib
 import gettext
+import facts
 _ = gettext.gettext
 from logutil import getLogger
 
@@ -121,12 +122,12 @@ class RegisterCommand(CliCommand):
     def _get_register_info(self):
         stype = 'system'
         product = {"id":"1","label":"RHEL AP","name":"rhel"}
-        facts = hwprobe.Hardware().getAll()
+	fact_data = facts.get_facts()
 
         params = {
             "type":stype,
             "name":'admin',
-            "facts": facts
+            "facts": fact_data
         }
         return params
 

@@ -21,7 +21,9 @@ import sys
 import gettext
 _ = gettext.gettext
 
-DEFAULT_CONFIG_PATH="/etc/rhsm/rhsm.conf"
+
+DEFAULT_CONFIG_DIR="/etc/rhsm"
+DEFAULT_CONFIG_PATH="%s/rhsm.conf" % DEFAULT_CONFIG_DIR
 
 # a peristent configuration storage class
 class ConfigFile:

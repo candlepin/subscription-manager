@@ -29,7 +29,7 @@ import signal
 
 import messageWindow
 import progress
-import hwprobe
+import facts
 import managerlib
 import connection
 import config
@@ -367,12 +367,12 @@ class RegisterScreen:
 
     def _get_register_info(self):
         product = {"id":"1","label":"RHEL AP","name":"rhel"}
-        facts = hwprobe.Hardware().getAll()
+        fact_data = facts.get_facts()
 
         params = {
                 "type": "system",
                 "name":'admin',
-                "facts": facts
+                "facts": fact_data
               }
         return params
 
