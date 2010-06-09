@@ -61,7 +61,7 @@ Subscription:       \t%-25s
 
 available_subs_list = """
 Name:              \t%-25s
-Product SKU:       \t%-25s
+ProductId:         \t%-25s
 PoolId:            \t%-25s
 quantity:          \t%-25s
 Expires:           \t%-25s

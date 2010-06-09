@@ -130,7 +130,6 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-
 * Wed Jun 09 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.63-1
 - Resolves: #589626
 - Adding accessibility string for widgets for automation support
