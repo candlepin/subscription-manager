@@ -9,27 +9,45 @@
     <property name="default_width">700</property>
     <property name="default_height">600</property>
     <property name="icon_name">subsmgr</property>
+    <accessibility>
+      <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog_updates</atkproperty>
+    </accessibility>
     <child>
       <widget class="GtkVBox" id="dialog-vbox2">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
+        <accessibility>
+          <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog-vbox2</atkproperty>
+        </accessibility>
         <child>
           <widget class="GtkHBox" id="hbox_header">
             <property name="visible">True</property>
             <property name="spacing">9</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">hbox_header</atkproperty>
+            </accessibility>
             <child>
               <widget class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
                 <property name="border_width">6</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">vbox2</atkproperty>
+                </accessibility>
                 <child>
                   <widget class="GtkHBox" id="hbox1">
                     <property name="visible">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">hbox1</atkproperty>
+                    </accessibility>
                     <child>
                       <widget class="GtkImage" id="sm_icon">
                         <property name="visible">True</property>
                         <property name="xalign">0.25</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">sm_icon</atkproperty>
+                        </accessibility>
                         <property name="icon-size">48</property>
                       </widget>
                       <packing>
@@ -48,6 +66,9 @@
                         <property name="label" translatable="yes" context="yes">Substitute summary</property>
                         <property name="use_markup">True</property>
                         <property name="wrap">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">summaryLabel1</atkproperty>
+                        </accessibility>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -76,20 +97,29 @@
           <widget class="GtkHPaned" id="product_details_hpane">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">product_details_hpane</atkproperty>
+            </accessibility>
             <child>
               <widget class="GtkVPaned" id="vpaned_updates">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="border_width">12</property>
                 <property name="orientation">vertical</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">vpaned_updates</atkproperty>
+                </accessibility>
                 <child>
                   <widget class="GtkScrolledWindow" id="scrolledwindow_updates">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="vadjustment">0 0 78 7.8000000000000007 70.200000000000003 78</property>
+                    <property name="vadjustment">0 0 200 20 180 200</property>
                     <property name="hscrollbar_policy">automatic</property>
                     <property name="vscrollbar_policy">automatic</property>
                     <property name="shadow_type">in</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">scrolledwindow_updates</atkproperty>
+                    </accessibility>
                     <child>
                       <widget class="GtkTreeView" id="treeview_updates">
                         <property name="width_request">400</property>
@@ -97,6 +127,9 @@
                         <property name="visible">True</property>
                         <property name="double_buffered">False</property>
                         <property name="enable_search">False</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">treeview_updates</atkproperty>
+                        </accessibility>
                       </widget>
                     </child>
                   </widget>
@@ -112,12 +145,18 @@
                     <property name="hscrollbar_policy">automatic</property>
                     <property name="vscrollbar_policy">automatic</property>
                     <property name="shadow_type">in</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">scrolledwindow_details</atkproperty>
+                    </accessibility>
                     <child>
                       <widget class="GtkTextView" id="textview_details">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="editable">False</property>
                         <property name="wrap_mode">word</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">textview_details</atkproperty>
+                        </accessibility>
                       </widget>
                     </child>
                   </widget>
@@ -140,6 +179,9 @@
                 <property name="spacing">3</property>
                 <property name="homogeneous">True</property>
                 <property name="layout_style">end</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog-action_area2</atkproperty>
+                </accessibility>
                 <child>
                   <widget class="GtkButton" id="button_add1">
                     <property name="label">gtk-add</property>
@@ -147,6 +189,9 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_stock">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">button_add1</atkproperty>
+                    </accessibility>
                     <signal name="clicked" handler="on_button_add1_clicked"/>
                   </widget>
                   <packing>
@@ -165,6 +210,9 @@
                     <property name="has_default">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">button_update1</atkproperty>
+                    </accessibility>
                     <signal name="clicked" handler="on_button_update1_clicked"/>
                   </widget>
                   <packing>
@@ -183,6 +231,9 @@
                     <property name="has_default">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">button_unsubscribe1</atkproperty>
+                    </accessibility>
                     <signal name="clicked" handler="on_button_unsubscribe1_clicked"/>
                   </widget>
                   <packing>
@@ -209,6 +260,9 @@
             <property name="xalign">0.039999999105930328</property>
             <property name="label" translatable="yes">label</property>
             <property name="use_markup">True</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">reg_status</atkproperty>
+            </accessibility>
           </widget>
           <packing>
             <property name="expand">False</property>
@@ -222,12 +276,18 @@
             <property name="border_width">12</property>
             <property name="homogeneous">True</property>
             <property name="layout_style">edge</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">hbuttonbox1</atkproperty>
+            </accessibility>
             <child>
               <widget class="GtkButton" id="account_settings">
                 <property name="label">Registration..</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">account_settings</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="account_settings_clicked_cb" object="loginPage"/>
               </widget>
               <packing>
@@ -246,6 +306,9 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">button_close</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_button_close_clicked" object="onCloseQuit"/>
               </widget>
               <packing>
@@ -272,17 +335,26 @@
     <property name="window_position">center</property>
     <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
+    <accessibility>
+      <atkproperty name="AtkObject::accessible-name" translatable="yes">register_dialog</atkproperty>
+    </accessibility>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox3">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
+        <accessibility>
+          <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog-vbox3</atkproperty>
+        </accessibility>
         <child>
           <widget class="GtkVBox" id="initialLoginWindowVbox1">
             <property name="visible">True</property>
             <property name="border_width">25</property>
             <property name="orientation">vertical</property>
             <property name="spacing">7</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">initialLoginWindowVbox1</atkproperty>
+            </accessibility>
             <child>
               <widget class="GtkLabel" id="instructionsLabel1">
                 <property name="visible">True</property>
@@ -292,6 +364,9 @@
                 <property name="use_markup">True</property>
                 <property name="wrap">True</property>
                 <property name="track_visited_links">False</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">instructionsLabel1</atkproperty>
+                </accessibility>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -304,6 +379,9 @@
               <widget class="GtkAlignment" id="alignment1">
                 <property name="visible">True</property>
                 <property name="left_padding">12</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">alignment1</atkproperty>
+                </accessibility>
                 <child>
                   <widget class="GtkTable" id="table1">
                     <property name="visible">True</property>
@@ -311,14 +389,23 @@
                     <property name="n_columns">2</property>
                     <property name="column_spacing">15</property>
                     <property name="row_spacing">15</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">table1</atkproperty>
+                    </accessibility>
                     <child>
                       <widget class="GtkHBox" id="forgotInfoHbox1">
                         <property name="visible">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">forgotInfoHbox1</atkproperty>
+                        </accessibility>
                         <child>
                           <widget class="GtkImage" id="tipIconHosted1">
                             <property name="visible">True</property>
                             <property name="yalign">0</property>
                             <property name="stock">gtk-info</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">tipIconHosted1</atkproperty>
+                            </accessibility>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -337,6 +424,9 @@
 https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="wrap">True</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">forgotInfoHosted1</atkproperty>
+                            </accessibility>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -360,6 +450,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">&#x25CF;</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">account_login</atkproperty>
+                        </accessibility>
                       </widget>
                       <packing>
                         <property name="left_attach">1</property>
@@ -373,6 +466,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="can_focus">True</property>
                         <property name="visibility">False</property>
                         <property name="invisible_char">&#x25CF;</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">account_password</atkproperty>
+                        </accessibility>
                       </widget>
                       <packing>
                         <property name="left_attach">1</property>
@@ -388,6 +484,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes" context="yes">Password:</property>
                         <property name="use_markup">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">loginPasswordEntryLabel1</atkproperty>
+                        </accessibility>
                       </widget>
                       <packing>
                         <property name="top_attach">1</property>
@@ -402,6 +501,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="yes">Red Hat Login:</property>
                         <property name="use_markup">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">loginUserEntryLabel1</atkproperty>
+                        </accessibility>
                       </widget>
                       <packing>
                         <property name="x_options">GTK_FILL</property>
@@ -427,6 +529,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="draw_indicator">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">auto_bind</atkproperty>
+                </accessibility>
               </widget>
               <packing>
                 <property name="position">2</property>
@@ -446,6 +551,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
           <widget class="GtkHButtonBox" id="dialog-action_area1">
             <property name="visible">True</property>
             <property name="layout_style">end</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog-action_area1</atkproperty>
+            </accessibility>
             <child>
               <widget class="GtkButton" id="cancel_reg_button1">
                 <property name="label">gtk-cancel</property>
@@ -454,6 +562,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
                 <property name="image_position">right</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">cancel_reg_button1</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_close_clicked"/>
               </widget>
               <packing>
@@ -469,6 +580,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="image_position">right</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-description" translatable="yes">register_button</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_register_button_clicked"/>
               </widget>
               <packing>
@@ -496,11 +610,17 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
+    <accessibility>
+      <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog1_import</atkproperty>
+    </accessibility>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox5">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
+        <accessibility>
+          <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog-vbox5</atkproperty>
+        </accessibility>
         <child>
           <widget class="GtkVBox" id="import_vbox1">
             <property name="visible">True</property>
@@ -508,6 +628,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
             <property name="orientation">vertical</property>
             <property name="spacing">10</property>
             <property name="homogeneous">True</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">import_vbox1</atkproperty>
+            </accessibility>
             <child>
               <widget class="GtkLabel" id="certLabel1">
                 <property name="visible">True</property>
@@ -515,6 +638,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="label" translatable="yes" context="yes">To add a subscription, choose a certificate to import to your subscription certificate directory.</property>
                 <property name="use_markup">True</property>
                 <property name="single_line_mode">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">certLabel1</atkproperty>
+                </accessibility>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -526,6 +652,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
               <widget class="GtkVBox" id="vbox6">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">vbox6</atkproperty>
+                </accessibility>
                 <child>
                   <placeholder/>
                 </child>
@@ -533,18 +662,27 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                   <widget class="GtkAlignment" id="alignment2">
                     <property name="visible">True</property>
                     <property name="left_padding">13</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">alignment2</atkproperty>
+                    </accessibility>
                     <child>
                       <widget class="GtkTable" id="table2">
                         <property name="visible">True</property>
                         <property name="border_width">8</property>
                         <property name="n_columns">2</property>
                         <property name="column_spacing">10</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">table2</atkproperty>
+                        </accessibility>
                         <child>
                           <widget class="GtkLabel" id="label7">
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="yes">Certificate _Location:</property>
                             <property name="use_underline">True</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">label7</atkproperty>
+                            </accessibility>
                           </widget>
                           <packing>
                             <property name="x_options"></property>
@@ -555,6 +693,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                           <widget class="GtkFileChooserButton" id="certificateChooserButton">
                             <property name="visible">True</property>
                             <property name="create_folders">False</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">certificateChooserButton</atkproperty>
+                            </accessibility>
                           </widget>
                           <packing>
                             <property name="left_attach">1</property>
@@ -584,6 +725,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
           <widget class="GtkHButtonBox" id="dialog-action_area4">
             <property name="visible">True</property>
             <property name="layout_style">end</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog-action_area4</atkproperty>
+            </accessibility>
             <child>
               <widget class="GtkButton" id="cancel_import_button1">
                 <property name="label">gtk-cancel</property>
@@ -592,6 +736,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
                 <property name="image_position">right</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">cancel_import_button1</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_close_import"/>
               </widget>
               <packing>
@@ -607,6 +754,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="image_position">right</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">import_cert_button4</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_import_cert_button2_clicked"/>
               </widget>
               <packing>
@@ -634,19 +784,31 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
+    <accessibility>
+      <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog1_updates</atkproperty>
+    </accessibility>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox6">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
+        <accessibility>
+          <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog-vbox6</atkproperty>
+        </accessibility>
         <child>
           <widget class="GtkVBox" id="update-dialog-vbox1">
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">update-dialog-vbox1</atkproperty>
+            </accessibility>
             <child>
               <widget class="GtkVBox" id="update-vbox2">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">update-vbox2</atkproperty>
+                </accessibility>
                 <child>
                   <widget class="GtkLabel" id="update-label2">
                     <property name="visible">True</property>
@@ -656,6 +818,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                     <property name="use_markup">True</property>
                     <property name="single_line_mode">True</property>
                     <property name="track_visited_links">False</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">update-label2</atkproperty>
+                    </accessibility>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -670,12 +835,18 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                     <property name="can_focus">True</property>
                     <property name="hscrollbar_policy">automatic</property>
                     <property name="vscrollbar_policy">automatic</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">update-scrolledwindow2</atkproperty>
+                    </accessibility>
                     <child>
                       <widget class="GtkTreeView" id="treeview_updates2">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="double_buffered">False</property>
                         <property name="hover_selection">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">treeview_updates2</atkproperty>
+                        </accessibility>
                       </widget>
                     </child>
                   </widget>
@@ -688,6 +859,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                   <widget class="GtkLabel" id="label_status_update">
                     <property name="visible">True</property>
                     <property name="use_markup">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">label_status_update</atkproperty>
+                    </accessibility>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -709,12 +883,18 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
           <widget class="GtkHButtonBox" id="dialog-action_area5">
             <property name="visible">True</property>
             <property name="layout_style">end</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog-action_area5</atkproperty>
+            </accessibility>
             <child>
               <widget class="GtkButton" id="update_subscribe_button1">
                 <property name="label">Apply</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">update_subscribe_button1</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_update_subscribe_button_clicked"/>
               </widget>
               <packing>
@@ -730,6 +910,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">cancel_update_button1</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_close_clicked"/>
               </widget>
               <packing>
@@ -759,30 +942,48 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
+    <accessibility>
+      <atkproperty name="AtkObject::accessible-name" translatable="yes">register_token_dialog</atkproperty>
+    </accessibility>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox7">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
+        <accessibility>
+          <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog-vbox7</atkproperty>
+        </accessibility>
         <child>
           <widget class="GtkVBox" id="dialog-vbox8">
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <property name="spacing">4</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog-vbox8</atkproperty>
+            </accessibility>
             <child>
               <widget class="GtkVBox" id="vbox7">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">vbox7</atkproperty>
+                </accessibility>
                 <child>
                   <widget class="GtkVBox" id="vbox8">
                     <property name="visible">True</property>
                     <property name="orientation">vertical</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">vbox8</atkproperty>
+                    </accessibility>
                     <child>
                       <widget class="GtkLabel" id="label6">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">&lt;b&gt;Red Hat Entitlements Account&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">label6</atkproperty>
+                        </accessibility>
                       </widget>
                       <packing>
                         <property name="position">0</property>
@@ -795,6 +996,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="label" translatable="yes">header</property>
                         <property name="use_markup">True</property>
                         <property name="ellipsize">middle</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">account_label1</atkproperty>
+                        </accessibility>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -806,6 +1010,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                     <child>
                       <widget class="GtkHBox" id="hbox3">
                         <property name="visible">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">hbox3</atkproperty>
+                        </accessibility>
                         <child>
                           <widget class="GtkLabel" id="account_label">
                             <property name="visible">True</property>
@@ -813,6 +1020,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                             <property name="label" translatable="yes">userId</property>
                             <property name="use_markup">True</property>
                             <property name="ellipsize">middle</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">account_label</atkproperty>
+                            </accessibility>
                           </widget>
                           <packing>
                             <property name="padding">5</property>
@@ -826,6 +1036,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="double_buffered">False</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">button1</atkproperty>
+                            </accessibility>
                             <signal name="clicked" handler="on_change_account_button"/>
                           </widget>
                           <packing>
@@ -847,6 +1060,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="label" translatable="yes">consumerId</property>
                         <property name="use_markup">True</property>
                         <property name="ellipsize">middle</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">account_label2</atkproperty>
+                        </accessibility>
                       </widget>
                       <packing>
                         <property name="padding">5</property>
@@ -864,6 +1080,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                     <property name="visible">True</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">4</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">vbox9</atkproperty>
+                    </accessibility>
                     <child>
                       <widget class="GtkLabel" id="label8">
                         <property name="visible">True</property>
@@ -871,6 +1090,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="yalign">0</property>
                         <property name="label" translatable="yes">&lt;b&gt; Product Registration (Optional) &lt;/b&gt;</property>
                         <property name="use_markup">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">label8</atkproperty>
+                        </accessibility>
                       </widget>
                       <packing>
                         <property name="padding">20</property>
@@ -883,6 +1105,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="xalign">2.2351741291171123e-10</property>
                         <property name="yalign">0</property>
                         <property name="label" translatable="yes">Enter a subscription number for products purchased from Red Hat</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">label9</atkproperty>
+                        </accessibility>
                       </widget>
                       <packing>
                         <property name="padding">2</property>
@@ -892,12 +1117,18 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                     <child>
                       <widget class="GtkHBox" id="hbox2">
                         <property name="visible">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">hbox2</atkproperty>
+                        </accessibility>
                         <child>
                           <widget class="GtkLabel" id="label10">
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
                             <property name="xpad">9</property>
                             <property name="label" translatable="yes">Subscription Token:</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">label10</atkproperty>
+                            </accessibility>
                           </widget>
                           <packing>
                             <property name="fill">False</property>
@@ -909,6 +1140,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">&#x25CF;</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">regtoken_entry</atkproperty>
+                            </accessibility>
                           </widget>
                           <packing>
                             <property name="position">1</property>
@@ -921,6 +1155,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="xalign">0</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">submit_button</atkproperty>
+                            </accessibility>
                             <signal name="clicked" handler="on_submit_button_clicked"/>
                           </widget>
                           <packing>
@@ -943,6 +1180,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="xalign">0.57999998331069946</property>
                         <property name="yalign">0</property>
                         <property name="label" translatable="yes">Ex: XXXX-XXXX-XXXX-XXXX</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">label11</atkproperty>
+                        </accessibility>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -971,6 +1211,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
           <widget class="GtkHButtonBox" id="dialog-action_area6">
             <property name="visible">True</property>
             <property name="layout_style">end</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog-action_area6</atkproperty>
+            </accessibility>
             <child>
               <widget class="GtkButton" id="cancel_add_button4">
                 <property name="label">gtk-close</property>
@@ -978,6 +1221,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">cancel_add_button4</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_close_clicked"/>
               </widget>
               <packing>
@@ -1007,25 +1253,40 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
     <property name="default_height">500</property>
     <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
+    <accessibility>
+      <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog_add</atkproperty>
+    </accessibility>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox12">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
+        <accessibility>
+          <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog-vbox12</atkproperty>
+        </accessibility>
         <child>
           <widget class="GtkVBox" id="add-dialog-vbox3">
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">add-dialog-vbox3</atkproperty>
+            </accessibility>
             <child>
               <widget class="GtkVBox" id="vbox3">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">vbox3</atkproperty>
+                </accessibility>
                 <child>
                   <widget class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Select Subscriptions to add&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">label1</atkproperty>
+                    </accessibility>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -1040,26 +1301,41 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                     <property name="tab_border">5</property>
                     <property name="tab_hborder">30</property>
                     <property name="tab_vborder">4</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">notebook1</atkproperty>
+                    </accessibility>
                     <child>
                       <widget class="GtkScrolledWindow" id="scrolledwindow1">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hscrollbar_policy">automatic</property>
                         <property name="vscrollbar_policy">automatic</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">scrolledwindow1</atkproperty>
+                        </accessibility>
                         <child>
                           <widget class="GtkViewport" id="viewport1">
                             <property name="visible">True</property>
                             <property name="resize_mode">queue</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">viewport1</atkproperty>
+                            </accessibility>
                             <child>
                               <widget class="GtkVBox" id="vbox4">
                                 <property name="visible">True</property>
                                 <property name="orientation">vertical</property>
+                                <accessibility>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">vbox4</atkproperty>
+                                </accessibility>
                                 <child>
                                   <widget class="GtkLabel" id="label5">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">&lt;b&gt;Subscriptions matching your existing products&lt;/b&gt;</property>
                                     <property name="use_markup">True</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">label5</atkproperty>
+                                    </accessibility>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
@@ -1071,12 +1347,18 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                                   <widget class="GtkViewport" id="viewport2">
                                     <property name="visible">True</property>
                                     <property name="resize_mode">queue</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">viewport2</atkproperty>
+                                    </accessibility>
                                     <child>
                                       <widget class="GtkTreeView" id="treeview_available2">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="double_buffered">False</property>
                                         <property name="hover_selection">True</property>
+                                        <accessibility>
+                                          <atkproperty name="AtkObject::accessible-name" translatable="yes">treeview_available2</atkproperty>
+                                        </accessibility>
                                       </widget>
                                     </child>
                                   </widget>
@@ -1090,6 +1372,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">&lt;b&gt;Subscriptions compatible with your system&lt;/b&gt;</property>
                                     <property name="use_markup">True</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">label12</atkproperty>
+                                    </accessibility>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
@@ -1101,12 +1386,18 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                                   <widget class="GtkViewport" id="viewport3">
                                     <property name="visible">True</property>
                                     <property name="resize_mode">queue</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">viewport3</atkproperty>
+                                    </accessibility>
                                     <child>
                                       <widget class="GtkTreeView" id="treeview_available3">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="double_buffered">False</property>
                                         <property name="hover_selection">True</property>
+                                        <accessibility>
+                                          <atkproperty name="AtkObject::accessible-name" translatable="yes">treeview_available3</atkproperty>
+                                        </accessibility>
                                       </widget>
                                     </child>
                                   </widget>
@@ -1124,6 +1415,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                       <widget class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Suggested</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">label2</atkproperty>
+                        </accessibility>
                       </widget>
                       <packing>
                         <property name="tab_expand">True</property>
@@ -1135,12 +1429,18 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                       <widget class="GtkVBox" id="vbox5">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">vbox5</atkproperty>
+                        </accessibility>
                         <child>
                           <widget class="GtkLabel" id="label13">
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">&lt;b&gt;Other Available Subscriptions&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">label13</atkproperty>
+                            </accessibility>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -1154,12 +1454,18 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                             <property name="can_focus">True</property>
                             <property name="hscrollbar_policy">automatic</property>
                             <property name="vscrollbar_policy">automatic</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">scrolledwindow2</atkproperty>
+                            </accessibility>
                             <child>
                               <widget class="GtkTreeView" id="treeview_available4">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="double_buffered">False</property>
                                 <property name="hover_selection">True</property>
+                                <accessibility>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">treeview_available4</atkproperty>
+                                </accessibility>
                               </widget>
                             </child>
                           </widget>
@@ -1176,6 +1482,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                       <widget class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Other</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">label3</atkproperty>
+                        </accessibility>
                       </widget>
                       <packing>
                         <property name="position">1</property>
@@ -1209,6 +1518,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="use_markup">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">select_status</atkproperty>
+                </accessibility>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -1227,12 +1539,18 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
             <property name="visible">True</property>
             <property name="homogeneous">True</property>
             <property name="layout_style">end</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog-action_area7</atkproperty>
+            </accessibility>
             <child>
               <widget class="GtkButton" id="add_subscribe_button3">
                 <property name="label">Apply</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">add_subscribe_button3</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_add_subscribe_button_clicked"/>
               </widget>
               <packing>
@@ -1248,6 +1566,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">cancel_add_button2</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_close_clicked"/>
               </widget>
               <packing>
