@@ -216,6 +216,15 @@ class SubscribeCommand(CliCommand):
                                help="regtoken")
         self.parser.add_option("--pool", dest="pool", action='append',
                                help="Subscription Pool Id")
+        self.parser.add_option("--email", dest="email", action='store',
+                               help=_("Optional email address to notify when "
+                               "token actication is complete. Used with "
+                               "--regtoken only"))
+        self.parser.add_option("--lang", dest="lang", action='store',
+                               help=_("Optional language to use for email "
+                               "notification when token actication is "
+                               "complete. Used with --regtoken and --email "
+                               "only"))
 
     def _validate_options(self):
         if not (self.options.regtoken or self.options.product or self.options.pool):
@@ -236,7 +245,8 @@ class SubscribeCommand(CliCommand):
 
             if self.options.regtoken:
                 for regnum in self.options.regtoken:
-                    bundles = self.cp.bindByRegNumber(consumer, regnum)
+                    bundles = self.cp.bindByRegNumber(consumer, regnum,
+                            self.options.email, self.options.lang)
                     log.info("Info: Successfully subscribed the machine to registration token %s" % regnum)
 
             if self.options.pool:
