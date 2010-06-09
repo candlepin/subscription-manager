@@ -53,10 +53,10 @@ The subscription for %s is valid until %s.
 
 installed_product_status =  """
 ProductName:        \t%-25s
-ContractNumber:        \t%-25s
 Status:             \t%-25s
 Expires:            \t%-25s
 Subscription:       \t%-25s
+ContractNumber:        \t%-25s
 """
 
 available_subs_list = """
