@@ -131,6 +131,7 @@ fi
 
 %changelog
 * Wed Jun 09 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.62-1
+- Resolves: #591247
 - Adding accessibility string for widgets for automation support
   (pkilambi@redhat.com)
 - updating spec to include new files (pkilambi@prad.rdu.redhat.com)
