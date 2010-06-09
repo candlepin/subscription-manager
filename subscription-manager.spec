@@ -89,6 +89,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/constants.py*
 %{_datadir}/rhsm/logutil.py*
 %{_datadir}/rhsm/lock.py*
+%{_datadir}/rhsm/facts.py*
 #%{_datadir}/rhsm/rhsmcertd.*
 %attr(755,root,root) %{_sbindir}/subscription-manager-cli
 %attr(755,root,root) %dir %{_var}/log/rhsm
