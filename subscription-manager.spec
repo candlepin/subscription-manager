@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.62
+Version: 0.63
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -130,7 +130,8 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Wed Jun 09 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.62-1
+
+* Wed Jun 09 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.63-1
 - Resolves: #589626
 - Adding accessibility string for widgets for automation support
   (pkilambi@redhat.com)
