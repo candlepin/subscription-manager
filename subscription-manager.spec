@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.61
+Version: 0.62
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -130,6 +130,20 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Wed Jun 09 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.62-1
+- Adding accessibility string for widgets for automation support
+  (pkilambi@redhat.com)
+- updating spec to include new files (pkilambi@prad.rdu.redhat.com)
+- Add support for a /etc/rhsn/facts/*.facts files that can define additional
+  facts (adrian@alikins.usersys.redhat.com)
+- test (pkilambi@redhat.com)
+- adding some todos for later (pkilambi@redhat.com)
+- get the other tab to populate entitlements (pkilambi@redhat.com)
+- rename oder with contract (pkilambi@redhat.com)
+- fixing progress dialog path (pkilambi@redhat.com)
+- minor fixed (pkilambi@redhat.com)
+- Adding order info to list call (pkilambi@redhat.com)
+
 * Tue Jun 01 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.61-1
 - Resolves: #591247
 - clean up (pkilambi@redhat.com)
