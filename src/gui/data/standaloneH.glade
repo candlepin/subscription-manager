@@ -113,8 +113,8 @@
                   <widget class="GtkScrolledWindow" id="scrolledwindow_updates">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="vadjustment">0 0 200 20 180 200</property>
-                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vadjustment">0 0 70 7 63 70</property>
+                    <property name="hscrollbar_policy">never</property>
                     <property name="vscrollbar_policy">automatic</property>
                     <property name="shadow_type">in</property>
                     <accessibility>
@@ -1308,7 +1308,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                       <widget class="GtkScrolledWindow" id="scrolledwindow1">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">automatic</property>
+                        <property name="hscrollbar_policy">never</property>
                         <property name="vscrollbar_policy">automatic</property>
                         <accessibility>
                           <atkproperty name="AtkObject::accessible-name" translatable="yes">scrolledwindow1</atkproperty>
@@ -1328,13 +1328,13 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                                   <atkproperty name="AtkObject::accessible-name" translatable="yes">vbox4</atkproperty>
                                 </accessibility>
                                 <child>
-                                  <widget class="GtkLabel" id="label5">
+                                  <widget class="GtkLabel" id="match_label">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">&lt;b&gt;Subscriptions matching your existing products&lt;/b&gt;</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Subscriptions matching your installed products&lt;/b&gt;</property>
                                     <property name="use_markup">True</property>
                                     <accessibility>
-                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">label5</atkproperty>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">match_label</atkproperty>
                                     </accessibility>
                                   </widget>
                                   <packing>
@@ -1452,7 +1452,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                           <widget class="GtkScrolledWindow" id="scrolledwindow2">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="hscrollbar_policy">automatic</property>
+                            <property name="hscrollbar_policy">never</property>
                             <property name="vscrollbar_policy">automatic</property>
                             <accessibility>
                               <atkproperty name="AtkObject::accessible-name" translatable="yes">scrolledwindow2</atkproperty>

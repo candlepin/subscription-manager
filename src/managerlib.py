@@ -210,7 +210,7 @@ def _sub_dict(datadict, subkeys, default=None) :
 
 def formatDate(date):
     tf = xml.utils.iso8601.parse(date)
-    return datetime.fromtimestamp(tf).ctime()
+    return datetime.fromtimestamp(tf).date()
 
 
 if __name__=='__main__':

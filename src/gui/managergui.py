@@ -26,6 +26,7 @@ import gtk
 import gtk.glade
 import gobject
 import signal
+import pango
 
 import messageWindow
 import progress
@@ -174,25 +175,30 @@ class ManageSubscriptionPage:
 
         cell = gtk.CellRendererText()
         col = gtk.TreeViewColumn(_("Product"), cell, text=1)
-        col.set_sort_column_id(1)
         col.set_spacing(6)
-        cell.set_fixed_size(-1, 35)
+        col.set_sort_column_id(1)
+        col.set_resizable(True)
+        cell.set_fixed_size(250, -1)
+        cell.set_property("ellipsize", pango.ELLIPSIZE_END)
         self.tv_products.append_column(col)
 
-        col = gtk.TreeViewColumn(_("ContractNumber"), gtk.CellRendererText(), text=5)
+        col = gtk.TreeViewColumn(_("Contract"), gtk.CellRendererText(), text=5)
         col.set_sort_column_id(2)
-        #col.set_spacing(6)
+        col.set_spacing(6)
         self.tv_products.append_column(col)
 
         cell = gtk.CellRendererText()
-        col = gtk.TreeViewColumn(_("Subscription Status"), cell, markup=3)
+        col = gtk.TreeViewColumn(_("Status"), cell, markup=3)
         col.set_sort_column_id(3)
         col.set_spacing(6)
         self.tv_products.append_column(col)
 
-        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=4)
+        cell = gtk.CellRendererText()
+        cell.set_fixed_size(250, -1)
+        col = gtk.TreeViewColumn(_("Expires"), cell, text=4)
         col.set_sort_column_id(4)
-        #col.set_spacing(6)
+        col.set_resizable(True)
+        col.set_spacing(6)
         self.tv_products.append_column(col)
 
 
@@ -439,25 +445,25 @@ class AddSubscriptionScreen:
         try:
             compatible = managerlib.getCompatibleSubscriptions(UEP, self.consumer['uuid'])
 
-            matched = managerlib.getMatchedSubscriptions(compatible)
-            for product in matched:
+            self.matched = managerlib.getMatchedSubscriptions(compatible)
+            for product in self.matched:
                 pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
                 self.matchedList.append(None, [False] + pdata)
                 available_ent += 1
-            compat = []
+            self.compat = []
             for prod in compatible:
-                if prod not in matched:
-                    compat.append(prod)
-            for product in compat:
+                if prod not in self.matched:
+                    self.compat.append(prod)
+            for product in self.compat:
                 pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
                 self.compatList.append(None, [False] + pdata)
                 available_ent += 1
             all_subs = managerlib.getAllAvailableSubscriptions(UEP, self.consumer['uuid'])
-            other = []
+            self.other = []
             for prod in all_subs:
                 if prod not in compatible:
-                    other.append(prod)
-            for product in other:
+                    self.other.append(prod)
+            for product in self.other:
                 pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
                 self.availableList.append(None, [False] + pdata)
                 available_ent += 1
@@ -548,12 +554,13 @@ class AddSubscriptionScreen:
         column = gtk.TreeViewColumn(_(''), cell)
         column.add_attribute(cell, "active", 0)
         self.match_tv.append_column(column)
-
-        col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), text=1)
+        cell = gtk.CellRendererText()
+        col = gtk.TreeViewColumn(_("Product"), cell, text=1)
         col.set_sort_column_id(1)
         col.set_sort_order(gtk.SORT_ASCENDING)
-        col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-        col.set_fixed_width(350)
+        cell.set_fixed_size(250, -1)
+        col.set_resizable(True)
+        cell.set_property("ellipsize", pango.ELLIPSIZE_END)
         self.match_tv.append_column(col)
 
         col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
@@ -584,11 +591,13 @@ class AddSubscriptionScreen:
         column.add_attribute(cell, "active", 0)
         self.compatible_tv.append_column(column)
 
-        col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), text=1)
+        cell = gtk.CellRendererText()
+        col = gtk.TreeViewColumn(_("Product"), cell, text=1)
         col.set_sort_column_id(1)
         col.set_sort_order(gtk.SORT_ASCENDING)
-        col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-        col.set_fixed_width(350)
+        cell.set_fixed_size(250, -1)
+        col.set_resizable(True)
+        cell.set_property("ellipsize", pango.ELLIPSIZE_END)
         self.compatible_tv.append_column(col)
 
         col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
@@ -619,11 +628,13 @@ class AddSubscriptionScreen:
         column.add_attribute(cell, "active", 0)
         self.other_tv.append_column(column)
 
-        col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), text=1)
+        cell = gtk.CellRendererText()
+        col = gtk.TreeViewColumn(_("Product"), cell, text=1)
         col.set_sort_column_id(1)
         col.set_sort_order(gtk.SORT_ASCENDING)
-        col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-        col.set_fixed_width(350)
+        col.set_resizable(True)
+        cell.set_fixed_size(250, -1)
+        cell.set_property("ellipsize", pango.ELLIPSIZE_END)
         self.other_tv.append_column(col)
 
         col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
@@ -914,7 +925,7 @@ def main():
         gui = ManageSubscriptionPage()
         gtk.main()
     except Exception, e:
-        unexpectedError(e)
+        unexpectedError(e.message)
 
 if __name__ == "__main__":
     main()
