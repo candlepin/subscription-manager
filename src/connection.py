@@ -178,8 +178,9 @@ class UEPConnection:
         method = "/consumers/%s/entitlements?token=%s" % (consumerId, regnum)
         if email:
             method += "&email=%s" % email
-            if lang:
-                method += "&lang=%s" % lang
+            if not lang:
+                lang = locale.getdefaultlocale()[0].lower().replace('_', '-')
+            method += "&emailLocale=%s" % lang
         return self.conn.request_post(method)
 
     def bindByEntitlementPool(self, consumerId, poolId=None):

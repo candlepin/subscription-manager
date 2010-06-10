@@ -412,12 +412,16 @@ class RegistrationTokenScreen:
         alabel1.set_label(_("\nThis system is registered with the account"))
         alabel = self.regtokenxml.get_widget("account_label2")
         alabel.set_label(_("<b>  ConsumerID:</b>     %s" % consumer["uuid"]))
-        
+
     def submitToken(self, button):
         rlabel = self.regtokenxml.get_widget("regtoken_entry")
         reg_token = rlabel.get_text()
+        elabel = self.regtokenxml.get_widget("email_entry")
+        email = elabel.get_text()
+        if email == "":
+            email = None
         try:
-            UEP.bindByRegNumber(consumer['uuid'], reg_token)
+            UEP.bindByRegNumber(consumer['uuid'], reg_token, email)
             infoWindow(constants.SUBSCRIBE_REGTOKEN_SUCCESS % reg_token)
         except connection.RestlibException, e:
             log.error("Could not subscribe registration token %s error %s" % (reg_token, e))
