@@ -102,7 +102,7 @@ def getConsumedProductEntitlements():
     for cert in entdir.listValid():
         eproducts = cert.getProducts()
         for product in eproducts:
-            data = (product.getName(), cert.serialNumber(), cert.getOrder().getContract(), cert.valid(), formatDate(cert.validRange().begin().isoformat()), \
+            data = (product.getName(), cert.getOrder().getContract(), cert.serialNumber(), cert.valid(), formatDate(cert.validRange().begin().isoformat()), \
                     formatDate(cert.validRange().end().isoformat()))
             consumed_products.append(data)
     return consumed_products
