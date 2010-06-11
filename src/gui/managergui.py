@@ -478,7 +478,11 @@ class AddSubscriptionScreen:
             # machine is talking to candlepin, invoke listing scheme
             self.populateMatchingSubscriptions()
             self.populateCompatibleSubscriptions()
-            self.populateOtherSubscriptions()
+            if cfg['showIncompatiblePools']:
+                self.populateOtherSubscriptions()
+            else:
+                notebook = self.addxml.get_widget("notebook1")
+                notebook.remove_page(1)
 
             dic = { "on_close_clicked" : self.cancel,
                     "on_add_subscribe_button_clicked"   : self.onSubscribeAction,

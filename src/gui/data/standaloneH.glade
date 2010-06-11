@@ -1146,9 +1146,6 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
-                            <accessibility>
-                              <atkproperty name="AtkObject::accessible-name" translatable="yes">submit_button</atkproperty>
-                            </accessibility>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -1533,7 +1530,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                     <child>
                       <widget class="GtkLabel" id="label3">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Other</property>
+                        <property name="label" translatable="yes">Not Compatible</property>
                         <accessibility>
                           <atkproperty name="AtkObject::accessible-name" translatable="yes">label3</atkproperty>
                         </accessibility>
