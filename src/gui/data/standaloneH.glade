@@ -936,7 +936,6 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
     <property name="height_request">350</property>
     <property name="border_width">12</property>
     <property name="title" translatable="yes">Registration Settings</property>
-    <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>
@@ -1131,7 +1130,6 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                             </accessibility>
                           </widget>
                           <packing>
-                            <property name="fill">False</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -1146,24 +1144,6 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                           </widget>
                           <packing>
                             <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkButton" id="submit_button">
-                            <property name="label" translatable="yes">Submit</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="xalign">0</property>
-                            <accessibility>
-                              <atkproperty name="AtkObject::accessible-name" translatable="yes">submit_button</atkproperty>
-                            </accessibility>
-                            <signal name="clicked" handler="on_submit_button_clicked"/>
-                          </widget>
-                          <packing>
-                            <property name="padding">4</property>
-                            <property name="pack_type">end</property>
-                            <property name="position">2</property>
                           </packing>
                         </child>
                       </widget>
@@ -1188,6 +1168,75 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label4">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Enter an optional email address for notification when registration is complete.</property>
+                      </widget>
+                      <packing>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkHBox" id="hbox5">
+                        <property name="visible">True</property>
+                        <child>
+                          <widget class="GtkLabel" id="label14">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="xpad">9</property>
+                            <property name="label" translatable="yes">Email Address:</property>
+                          </widget>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkEntry" id="email_entry">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="invisible_char">&#x25CF;</property>
+                          </widget>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="position">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkHBox" id="hbox4">
+                        <property name="visible">True</property>
+                        <property name="spacing">1</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <widget class="GtkButton" id="submit_button">
+                            <property name="label" translatable="yes">Submit</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">submit_button</atkproperty>
+                            </accessibility>
+                            <signal name="clicked" handler="on_submit_button_clicked"/>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="pack_type">end</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="position">6</property>
                       </packing>
                     </child>
                   </widget>
@@ -1481,7 +1530,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                     <child>
                       <widget class="GtkLabel" id="label3">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Other</property>
+                        <property name="label" translatable="yes">Not Compatible</property>
                         <accessibility>
                           <atkproperty name="AtkObject::accessible-name" translatable="yes">label3</atkproperty>
                         </accessibility>

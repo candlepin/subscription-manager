@@ -412,12 +412,16 @@ class RegistrationTokenScreen:
         alabel1.set_label(_("\nThis system is registered with the account"))
         alabel = self.regtokenxml.get_widget("account_label2")
         alabel.set_label(_("<b>  ConsumerID:</b>     %s" % consumer["uuid"]))
-        
+
     def submitToken(self, button):
         rlabel = self.regtokenxml.get_widget("regtoken_entry")
         reg_token = rlabel.get_text()
+        elabel = self.regtokenxml.get_widget("email_entry")
+        email = elabel.get_text()
+        if email == "":
+            email = None
         try:
-            UEP.bindByRegNumber(consumer['uuid'], reg_token)
+            UEP.bindByRegNumber(consumer['uuid'], reg_token, email)
             infoWindow(constants.SUBSCRIBE_REGTOKEN_SUCCESS % reg_token)
         except connection.RestlibException, e:
             log.error("Could not subscribe registration token %s error %s" % (reg_token, e))
@@ -474,7 +478,11 @@ class AddSubscriptionScreen:
             # machine is talking to candlepin, invoke listing scheme
             self.populateMatchingSubscriptions()
             self.populateCompatibleSubscriptions()
-            self.populateOtherSubscriptions()
+            if cfg['showIncompatiblePools']:
+                self.populateOtherSubscriptions()
+            else:
+                notebook = self.addxml.get_widget("notebook1")
+                notebook.remove_page(1)
 
             dic = { "on_close_clicked" : self.cancel,
                     "on_add_subscribe_button_clicked"   : self.onSubscribeAction,

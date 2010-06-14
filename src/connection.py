@@ -171,11 +171,16 @@ class UEPConnection:
         method = '/consumers/%s/certificates/serials' % consumerId
         return self.conn.request_get(method)
 
-    def bindByRegNumber(self, consumerId, regnum=None):
+    def bindByRegNumber(self, consumerId, regnum, email=None, lang=None):
         """
         Subscribe consumer to a subscription token
         """
         method = "/consumers/%s/entitlements?token=%s" % (consumerId, regnum)
+        if email:
+            method += "&email=%s" % email
+            if not lang:
+                lang = locale.getdefaultlocale()[0].lower().replace('_', '-')
+            method += "&emailLocale=%s" % lang
         return self.conn.request_post(method)
 
     def bindByEntitlementPool(self, consumerId, poolId=None):
