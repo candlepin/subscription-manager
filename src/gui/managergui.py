@@ -472,7 +472,7 @@ class AddSubscriptionScreen:
                 all_subs = managerlib.getAllAvailableSubscriptions(UEP, self.consumer['uuid'])
                 self.other = []
                 for prod in all_subs:
-                    if prod['productId'] not in compatible_pids:
+                    if prod['productId'] not in compatible_pids + matched_pids:
                         self.other.append(prod)
                 for product in self.other:
                     pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]

@@ -938,6 +938,8 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
     <property name="title" translatable="yes">Registration Settings</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
+    <property name="default_width">500</property>
+    <property name="default_height">375</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
@@ -1214,7 +1216,12 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="visible">True</property>
                         <property name="spacing">1</property>
                         <child>
-                          <placeholder/>
+                          <widget class="GtkLabel" id="label5">
+                            <property name="visible">True</property>
+                          </widget>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
                         </child>
                         <child>
                           <widget class="GtkButton" id="submit_button">
@@ -1230,7 +1237,6 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="pack_type">end</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -1283,6 +1289,8 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
             </child>
           </widget>
           <packing>
+            <property name="expand">False</property>
+            <property name="padding">5</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
