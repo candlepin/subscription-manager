@@ -480,7 +480,6 @@ class AddSubscriptionScreen:
                     available_ent += 1
             
             except:
-                raise
                 log.error("Error populating available subscriptions from the server")
             # machine is talking to candlepin, invoke listing scheme
             self.populateMatchingSubscriptions()
