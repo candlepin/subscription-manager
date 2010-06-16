@@ -170,13 +170,18 @@ def getAllAvailableSubscriptions(cpserver, consumer):
         del d['consumed']
     return data
 
-def getMatchedSubscriptions(compatible):
+def getMatchedSubscriptions(poollist):
     products = ProductDirectory().list()
     matched_data = []
+    columns  = ['id', 'quantity', 'endDate', 'productName', 'providedProductIds', 'productId']
+    data = [_sub_dict(pool, columns) for pool in poollist]
     for product in products:
-        for data in compatible:
+        for data in data:
             productid = product.getProduct().getHash()
             if productid in data['providedProductIds'] or productid == data['productId']:
+                del data['providedProductIds']
+                del data['productId']
+                del d['consumed']
                 matched_data.append(data)
     return matched_data
 
@@ -194,7 +199,7 @@ def getAvailableEntitlements(cpserver, consumer):
         d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
         d['endDate'] = formatDate(d['endDate'])
         del d['consumed']
-    return data
+    return data, dlist
 
 def getAvailableEntitlementsCLI(cpserver, consumer):
     columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'productId']

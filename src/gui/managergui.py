@@ -447,9 +447,9 @@ class AddSubscriptionScreen:
         self.compatList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
 
         try:
-            compatible = managerlib.getCompatibleSubscriptions(UEP, self.consumer['uuid'])
+            compatible, dlist = managerlib.getCompatibleSubscriptions(UEP, self.consumer['uuid'])
 
-            self.matched = managerlib.getMatchedSubscriptions(compatible)
+            self.matched = managerlib.getMatchedSubscriptions(dlist)
             for product in self.matched:
                 pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
                 self.matchedList.append(None, [False] + pdata)
@@ -723,7 +723,8 @@ class UpdateSubscriptionScreen:
         self.updatesList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.available_updates = 0
         try:
-            for product in managerlib.getAvailableEntitlements(UEP, consumer['uuid']):
+            products, dlist = managerlib.getAvailableEntitlements(UEP, consumer['uuid'])
+            for product in products:
                 if self.product_select in product.values():
                     # Only list selected product's pools
                     pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
