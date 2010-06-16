@@ -522,7 +522,8 @@ class AddSubscriptionScreen:
         #consumer = get_consumer()
         subscribed_count = 0
         #my_model = self.tv_products.get_model()
-        my_model = self.other_tv.get_model()
+        #my_model = self.other_tv.get_model()
+        my_model = self.match_tv.get_model()
         pwin = progress.Progress()
         pwin.setLabel(_("Performing Subscribe. Please wait."))
         busted_subs = []
