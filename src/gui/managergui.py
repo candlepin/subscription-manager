@@ -442,39 +442,45 @@ class AddSubscriptionScreen:
         self.total = 0
         self.consumer = consumer
         available_ent = 0
-        self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
-        self.matchedList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
-        self.compatList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
-
-        try:
-            compatible = managerlib.getCompatibleSubscriptions(UEP, self.consumer['uuid'])
-
-            self.matched = managerlib.getMatchedSubscriptions(compatible)
-            for product in self.matched:
-                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
-                self.matchedList.append(None, [False] + pdata)
-                available_ent += 1
-            self.compat = []
-            for prod in compatible:
-                if prod not in self.matched:
-                    self.compat.append(prod)
-            for product in self.compat:
-                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
-                self.compatList.append(None, [False] + pdata)
-                available_ent += 1
-            all_subs = managerlib.getAllAvailableSubscriptions(UEP, self.consumer['uuid'])
-            self.other = []
-            for prod in all_subs:
-                if prod not in compatible:
-                    self.other.append(prod)
-            for product in self.other:
-                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
-                self.availableList.append(None, [False] + pdata)
-                available_ent += 1
-            
-        except:
-            log.error("Error populating available subscriptions from the server")
         if consumer.has_key('uuid'):
+            self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
+                                               gobject.TYPE_STRING, gobject.TYPE_STRING)
+            self.matchedList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
+                                               gobject.TYPE_STRING, gobject.TYPE_STRING)
+            self.compatList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
+                                               gobject.TYPE_STRING, gobject.TYPE_STRING)
+
+            try:
+                compatible, dlist = managerlib.getCompatibleSubscriptions(UEP, self.consumer['uuid']) 
+                self.matched = managerlib.getMatchedSubscriptions(dlist) or []
+                matched_pids = []
+                for product in self.matched:
+                    pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
+                    self.matchedList.append(None, [False] + pdata)
+                    matched_pids.append(product['productId'])
+                    available_ent += 1
+                self.compat = []
+                for prod in compatible:
+                    if prod['productId'] not in matched_pids:
+                        self.compat.append(prod)
+                compatible_pids= []
+                for product in self.compat:
+                    pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
+                    self.compatList.append(None, [False] + pdata)
+                    compatible_pids.append(product['productId'])
+                    available_ent += 1
+                all_subs = managerlib.getAllAvailableSubscriptions(UEP, self.consumer['uuid'])
+                self.other = []
+                for prod in all_subs:
+                    if prod['productId'] not in compatible_pids + matched_pids:
+                        self.other.append(prod)
+                for product in self.other:
+                    pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
+                    self.availableList.append(None, [False] + pdata)
+                    available_ent += 1
+            
+            except:
+                log.error("Error populating available subscriptions from the server")
             # machine is talking to candlepin, invoke listing scheme
             self.populateMatchingSubscriptions()
             self.populateCompatibleSubscriptions()
@@ -516,7 +522,8 @@ class AddSubscriptionScreen:
         #consumer = get_consumer()
         subscribed_count = 0
         #my_model = self.tv_products.get_model()
-        my_model = self.other_tv.get_model()
+        #my_model = self.other_tv.get_model()
+        my_model = self.match_tv.get_model()
         pwin = progress.Progress()
         pwin.setLabel(_("Performing Subscribe. Please wait."))
         busted_subs = []
@@ -534,6 +541,7 @@ class AddSubscriptionScreen:
                     my_model.set_value(state[-1], 2, updated_count)
                     subscribed_count+=1
                 except Exception, e:
+                    raise
                     # Subscription failed, continue with rest
                     log.error("Failed to subscribe to product %s Error: %s" % (state[1], e))
                     busted_subs.append(state[1])
@@ -723,7 +731,8 @@ class UpdateSubscriptionScreen:
         self.updatesList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.available_updates = 0
         try:
-            for product in managerlib.getAvailableEntitlements(UEP, consumer['uuid']):
+            products, dlist = managerlib.getAvailableEntitlements(UEP, consumer['uuid'])
+            for product in products:
                 if self.product_select in product.values():
                     # Only list selected product's pools
                     pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]

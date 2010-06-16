@@ -160,7 +160,7 @@ def getProductDescription(qproduct):
     return data
 
 def getAllAvailableSubscriptions(cpserver, consumer):
-    columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName']
+    columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'providedProductIds', 'productId']
     dlist = cpserver.getAllAvailableEntitlements(consumer)
     #data = [_sub_dict(pool['pool'], columns) for pool in dlist]
     data = [_sub_dict(pool, columns) for pool in dlist]
@@ -170,13 +170,21 @@ def getAllAvailableSubscriptions(cpserver, consumer):
         del d['consumed']
     return data
 
-def getMatchedSubscriptions(compatible):
+def getMatchedSubscriptions(poollist):
     products = ProductDirectory().list()
     matched_data = []
-    for product in products:
-        for data in compatible:
-            if product.getProduct().getName() == data['productName']:
-                matched_data.append(data)
+    columns  = ['id', 'quantity', 'endDate', 'productName', 'providedProductIds', 'productId']
+    if not poollist:
+        return None
+    data = [_sub_dict(pool, columns) for pool in poollist]
+    for d in data:
+        d['endDate'] = formatDate(d['endDate'])
+        for product in products:
+            productid = product.getProduct().getHash()
+            if str(productid) in d['providedProductIds'] or str(productid) == d['productId']:
+                matched_data.append(d)
+    #columns  = ['id', 'quantity', 'endDate', 'productName']
+    #matched_data = [_sub_dict(pool, columns) for pool in matched_data]
     return matched_data
 
 def getCompatibleSubscriptions(cpserver, consumer):
@@ -186,14 +194,16 @@ def getAvailableEntitlements(cpserver, consumer):
     """
      Gets the available Entitlements from the server
     """
-    columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName']
+    columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'providedProductIds', 'productId']
     dlist = cpserver.getPoolsList(consumer)
+    if not dlist:
+        return None, None
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
         d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
         d['endDate'] = formatDate(d['endDate'])
         del d['consumed']
-    return data
+    return data, dlist
 
 def getAvailableEntitlementsCLI(cpserver, consumer):
     columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'productId']
