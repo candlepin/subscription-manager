@@ -175,7 +175,8 @@ def getMatchedSubscriptions(compatible):
     matched_data = []
     for product in products:
         for data in compatible:
-            if product.getProduct().getName() == data['productName']:
+            productid = product.getProduct().getHash()
+            if productid in data['providedProductIds'] or productid == data['productId']:
                 matched_data.append(data)
     return matched_data
 
