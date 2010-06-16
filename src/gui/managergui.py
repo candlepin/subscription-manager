@@ -450,13 +450,15 @@ class AddSubscriptionScreen:
             compatible, dlist = managerlib.getCompatibleSubscriptions(UEP, self.consumer['uuid'])
 
             self.matched = managerlib.getMatchedSubscriptions(dlist)
+            matched_pids = []
             for product in self.matched:
                 pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
                 self.matchedList.append(None, [False] + pdata)
+                matched_pids.append(product['productId'])
                 available_ent += 1
             self.compat = []
             for prod in compatible:
-                if prod not in self.matched:
+                if prod['productId'] not in matched_pids:
                     self.compat.append(prod)
             for product in self.compat:
                 pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
@@ -473,6 +475,7 @@ class AddSubscriptionScreen:
                 available_ent += 1
             
         except:
+            raise
             log.error("Error populating available subscriptions from the server")
         if consumer.has_key('uuid'):
             # machine is talking to candlepin, invoke listing scheme
