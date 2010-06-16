@@ -174,6 +174,8 @@ def getMatchedSubscriptions(poollist):
     products = ProductDirectory().list()
     matched_data = []
     columns  = ['id', 'quantity', 'endDate', 'productName', 'providedProductIds', 'productId']
+    if not poollist:
+        return None
     data = [_sub_dict(pool, columns) for pool in poollist]
     for d in data:
         d['endDate'] = formatDate(d['endDate'])
@@ -194,6 +196,8 @@ def getAvailableEntitlements(cpserver, consumer):
     """
     columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'providedProductIds', 'productId']
     dlist = cpserver.getPoolsList(consumer)
+    if not dlist:
+        return None, None
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
         d['quantity'] = str(int(d['quantity']) - int(d['consumed']))

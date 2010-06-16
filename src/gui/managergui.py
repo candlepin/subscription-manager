@@ -442,45 +442,46 @@ class AddSubscriptionScreen:
         self.total = 0
         self.consumer = consumer
         available_ent = 0
-        self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
-        self.matchedList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
-        self.compatList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
-
-        try:
-            compatible, dlist = managerlib.getCompatibleSubscriptions(UEP, self.consumer['uuid'])
-
-            self.matched = managerlib.getMatchedSubscriptions(dlist)
-            matched_pids = []
-            for product in self.matched:
-                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
-                self.matchedList.append(None, [False] + pdata)
-                matched_pids.append(product['productId'])
-                available_ent += 1
-            self.compat = []
-            for prod in compatible:
-                if prod['productId'] not in matched_pids:
-                    self.compat.append(prod)
-            compatible_pids= []
-            for product in self.compat:
-                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
-                self.compatList.append(None, [False] + pdata)
-                compatible_pids.append(product['productId'])
-                available_ent += 1
-            all_subs = managerlib.getAllAvailableSubscriptions(UEP, self.consumer['uuid'])
-            self.other = []
-            for prod in all_subs:
-                print prod['productId'], compatible_pids
-                if prod['productId'] not in compatible_pids:
-                    self.other.append(prod)
-            for product in self.other:
-                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
-                self.availableList.append(None, [False] + pdata)
-                available_ent += 1
-            
-        except:
-            raise
-            log.error("Error populating available subscriptions from the server")
         if consumer.has_key('uuid'):
+            self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
+                                               gobject.TYPE_STRING, gobject.TYPE_STRING)
+            self.matchedList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
+                                               gobject.TYPE_STRING, gobject.TYPE_STRING)
+            self.compatList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
+                                               gobject.TYPE_STRING, gobject.TYPE_STRING)
+
+            try:
+                compatible, dlist = managerlib.getCompatibleSubscriptions(UEP, self.consumer['uuid']) 
+                self.matched = managerlib.getMatchedSubscriptions(dlist) or []
+                matched_pids = []
+                for product in self.matched:
+                    pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
+                    self.matchedList.append(None, [False] + pdata)
+                    matched_pids.append(product['productId'])
+                    available_ent += 1
+                self.compat = []
+                for prod in compatible:
+                    if prod['productId'] not in matched_pids:
+                        self.compat.append(prod)
+                compatible_pids= []
+                for product in self.compat:
+                    pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
+                    self.compatList.append(None, [False] + pdata)
+                    compatible_pids.append(product['productId'])
+                    available_ent += 1
+                all_subs = managerlib.getAllAvailableSubscriptions(UEP, self.consumer['uuid'])
+                self.other = []
+                for prod in all_subs:
+                    if prod['productId'] not in compatible_pids:
+                        self.other.append(prod)
+                for product in self.other:
+                    pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
+                    self.availableList.append(None, [False] + pdata)
+                    available_ent += 1
+            
+            except:
+                raise
+                log.error("Error populating available subscriptions from the server")
             # machine is talking to candlepin, invoke listing scheme
             self.populateMatchingSubscriptions()
             self.populateCompatibleSubscriptions()
@@ -535,13 +536,13 @@ class AddSubscriptionScreen:
             # state = (bool, iter)
             if state[0]:
                 try:
-                    print pool
                     ent_ret = UEP.bindByEntitlementPool(consumer['uuid'], pool)
                     entitled_data = ent_ret[0]['pool']
                     updated_count = str(int(entitled_data['quantity']) - int(entitled_data['consumed']))
                     my_model.set_value(state[-1], 2, updated_count)
                     subscribed_count+=1
                 except Exception, e:
+                    raise
                     # Subscription failed, continue with rest
                     log.error("Failed to subscribe to product %s Error: %s" % (state[1], e))
                     busted_subs.append(state[1])
