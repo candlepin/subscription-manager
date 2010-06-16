@@ -160,7 +160,7 @@ def getProductDescription(qproduct):
     return data
 
 def getAllAvailableSubscriptions(cpserver, consumer):
-    columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName']
+    columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'providedProductIds', 'productId']
     dlist = cpserver.getAllAvailableEntitlements(consumer)
     #data = [_sub_dict(pool['pool'], columns) for pool in dlist]
     data = [_sub_dict(pool, columns) for pool in dlist]
