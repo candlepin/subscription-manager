@@ -135,10 +135,11 @@ class UEPConnection:
         self.__authenticate(username, password)
         return self.conn.request_post('/consumers/', info)
 
-    def getConsumerById(self, consumerId):
+    def getConsumerById(self, consumerId, username, password):
         """
         Returns a consumer object with pem/key for existing consumers
         """
+        self.__authenticate(username, password)
         method = '/consumers/%s' % consumerId
         return self.conn.request_get(method)
 
@@ -251,7 +252,7 @@ if __name__ == '__main__':
         consumer = uep.registerConsumer('admin', 'admin', info=params)
         print "Created a consumer ", consumer
         # sync certs
-        print "Get Consumer By Id", uep.getConsumerById(consumer['uuid'])
+        print "Get Consumer By Id", uep.getConsumerById(consumer['uuid'], 'admin', 'admin')
         print uep.syncCertificates(consumer['uuid']) 
         print "All available", uep.getAllAvailableEntitlements(consumer['uuid'])
         print "GetCertBySeriallllll",uep.getCertificatesBySerial(consumer['uuid'], ['SERIAL001','SERIAL001'])

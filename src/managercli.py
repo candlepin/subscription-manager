@@ -105,14 +105,8 @@ class RegisterCommand(CliCommand):
                                help="Register the system even if it is already registered")
 
     def _validate_options(self):
-        if not (self.options.username and self.options.password) and not \
-            self.options.consumerid:
-            print (_("Error: username and password or consumerid are required to register,try --help.\n"))
-            sys.exit(-1)
-
-        if (self.options.username and self.options.password) and \
-            self.options.consumerid:
-            print(_("Error: username and password or consumerid are required, not both. try --help.\n"))
+        if not (self.options.username and self.options.password):
+            print (_("Error: username and password are required to register,try --help.\n"))
             sys.exit(-1)
 
         if ConsumerIdentity.exists() and not self.options.force:
@@ -121,8 +115,7 @@ class RegisterCommand(CliCommand):
 
     def _get_register_info(self):
         stype = 'system'
-        product = {"id":"1","label":"RHEL AP","name":"rhel"}
-	fact_data = facts.get_facts()
+        fact_data = facts.get_facts()
 
         params = {
             "type":stype,
@@ -138,7 +131,7 @@ class RegisterCommand(CliCommand):
         self._validate_options()
 
         if self.options.consumerid:
-            consumer = self.cp.getConsumerById(self.options.consumerid)
+            consumer = self.cp.getConsumerById(self.options.consumerid, self.options.username, self.options.password)
 
         elif ConsumerIdentity.exists() and self.options.force:
            try:
