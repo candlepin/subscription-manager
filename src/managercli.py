@@ -92,8 +92,10 @@ class RegisterCommand(CliCommand):
         self.password = None
         self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", 
                                                ssl_port=cfg['port'], handler="/candlepin")
-        self.parser.add_option("--username", dest="username", 
+        self.parser.add_option("--username", dest="username",
                                help="Specify a username")
+        self.parser.add_option("--type", dest="consumertype",
+                               help="The type of consumer to create. Defaults to sytem")
         self.parser.add_option("--password", dest="password",
                                help="Specify a password")
         self.parser.add_option("--consumerid", dest="consumerid",
@@ -114,7 +116,9 @@ class RegisterCommand(CliCommand):
             sys.exit(1)
 
     def _get_register_info(self):
-        stype = 'system'
+        stype = self.options.consumertype
+        if not(stype):
+            stype = 'system'
         fact_data = facts.get_facts()
 
         params = {
