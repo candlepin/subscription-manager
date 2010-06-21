@@ -94,7 +94,7 @@ class RegisterCommand(CliCommand):
                                                ssl_port=cfg['port'], handler="/candlepin")
         self.parser.add_option("--username", dest="username",
                                help="Specify a username")
-        self.parser.add_option("--type", dest="consumertype",
+        self.parser.add_option("--type", dest="consumertype", default="system",
                                help="The type of consumer to create. Defaults to sytem")
         self.parser.add_option("--password", dest="password",
                                help="Specify a password")
@@ -115,19 +115,6 @@ class RegisterCommand(CliCommand):
             print(_("This system is already registered. Use --force to override"))
             sys.exit(1)
 
-    def _get_register_info(self):
-        stype = self.options.consumertype
-        if not(stype):
-            stype = 'system'
-        fact_data = facts.get_facts()
-
-        params = {
-            "type":stype,
-            "name":'admin',
-            "facts": fact_data
-        }
-        return params
-
     def _do_command(self):
         """
         Executes the command.
@@ -139,7 +126,9 @@ class RegisterCommand(CliCommand):
 
         elif ConsumerIdentity.exists() and self.options.force:
            try:
-               consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
+               consumer = self.cp.registerConsumer(self.options.username,
+                       self.options.password, name="admin", type=self.options.consumertype,
+                       facts=facts.get_facts())
                consumerid = check_registration()['uuid']
            except connection.RestlibException, re:
                systemExit(-1, re.msg)
@@ -150,8 +139,9 @@ class RegisterCommand(CliCommand):
                 log.error("Unable to unregister with consumer %s" % consumerid)
         else:
             try:
-                consumer = self.cp.registerConsumer(self.options.username,
-                        self.options.password, self._get_register_info())
+               consumer = self.cp.registerConsumer(self.options.username,
+                       self.options.password, name="admin", type=self.options.consumertype,
+                       facts=facts.get_facts())
             except connection.RestlibException, re:
                 systemExit(-1, re.msg)
 

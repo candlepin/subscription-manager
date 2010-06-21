@@ -30,7 +30,6 @@ import pango
 
 import messageWindow
 import progress
-import facts
 import managerlib
 import connection
 import config
@@ -46,6 +45,8 @@ gtk.glade.bindtextdomain("subscription-manager")
 
 from logutil import getLogger
 log = getLogger(__name__)
+
+import facts
 
 prefix = os.path.dirname(__file__)
 gladexml = os.path.join(prefix, "data/standaloneH.glade")
@@ -82,6 +83,7 @@ def fetch_certificates():
         certlib.update()
     except Exception, e:
         log.error("Certificate sync failed")
+        log.error(e)
         return False
     return True
 
@@ -320,7 +322,8 @@ class RegisterScreen:
                 log.error("Unable to unregister existing user credentials.")
         failed_msg = "Unable to register your system. \n Error: %s"
         try:
-            newAccount = UEP.registerConsumer(username, password, self._get_register_info())
+            newAccount = UEP.registerConsumer(username, password, name="admin",
+                    facts=facts.get_facts())
             consumer = managerlib.persist_consumer_cert(newAccount)
             # reload cP instance with new ssl certs
             self._reload_cp_with_certs()
@@ -371,16 +374,6 @@ class RegisterScreen:
         UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], \
                                        handler="/candlepin", cert_file=cert_file, key_file=key_file)
 
-    def _get_register_info(self):
-        product = {"id":"1","label":"RHEL AP","name":"rhel"}
-        fact_data = facts.get_facts()
-
-        params = {
-                "type": "system",
-                "name":'admin',
-                "facts": fact_data
-              }
-        return params
 
 class RegistrationTokenScreen:
     """
