@@ -92,8 +92,10 @@ class RegisterCommand(CliCommand):
         self.password = None
         self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", 
                                                ssl_port=cfg['port'], handler="/candlepin")
-        self.parser.add_option("--username", dest="username", 
+        self.parser.add_option("--username", dest="username",
                                help="Specify a username")
+        self.parser.add_option("--type", dest="consumertype", default="system",
+                               help="The type of consumer to create. Defaults to sytem")
         self.parser.add_option("--password", dest="password",
                                help="Specify a password")
         self.parser.add_option("--consumerid", dest="consumerid",
@@ -105,31 +107,13 @@ class RegisterCommand(CliCommand):
                                help="Register the system even if it is already registered")
 
     def _validate_options(self):
-        if not (self.options.username and self.options.password) and not \
-            self.options.consumerid:
-            print (_("Error: username and password or consumerid are required to register,try --help.\n"))
-            sys.exit(-1)
-
-        if (self.options.username and self.options.password) and \
-            self.options.consumerid:
-            print(_("Error: username and password or consumerid are required, not both. try --help.\n"))
+        if not (self.options.username and self.options.password):
+            print (_("Error: username and password are required to register,try --help.\n"))
             sys.exit(-1)
 
         if ConsumerIdentity.exists() and not self.options.force:
             print(_("This system is already registered. Use --force to override"))
             sys.exit(1)
-
-    def _get_register_info(self):
-        stype = 'system'
-        product = {"id":"1","label":"RHEL AP","name":"rhel"}
-	fact_data = facts.get_facts()
-
-        params = {
-            "type":stype,
-            "name":'admin',
-            "facts": fact_data
-        }
-        return params
 
     def _do_command(self):
         """
@@ -138,11 +122,13 @@ class RegisterCommand(CliCommand):
         self._validate_options()
 
         if self.options.consumerid:
-            consumer = self.cp.getConsumerById(self.options.consumerid)
+            consumer = self.cp.getConsumerById(self.options.consumerid, self.options.username, self.options.password)
 
         elif ConsumerIdentity.exists() and self.options.force:
            try:
-               consumer = self.cp.registerConsumer(self.options.username, self.options.password, self._get_register_info())
+               consumer = self.cp.registerConsumer(self.options.username,
+                       self.options.password, name="admin", type=self.options.consumertype,
+                       facts=facts.get_facts())
                consumerid = check_registration()['uuid']
            except connection.RestlibException, re:
                systemExit(-1, re.msg)
@@ -153,8 +139,9 @@ class RegisterCommand(CliCommand):
                 log.error("Unable to unregister with consumer %s" % consumerid)
         else:
             try:
-                consumer = self.cp.registerConsumer(self.options.username,
-                        self.options.password, self._get_register_info())
+               consumer = self.cp.registerConsumer(self.options.username,
+                       self.options.password, name="admin", type=self.options.consumertype,
+                       facts=facts.get_facts())
             except connection.RestlibException, re:
                 systemExit(-1, re.msg)
 

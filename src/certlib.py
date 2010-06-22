@@ -255,7 +255,7 @@ class UEP(UEPConnection):
         result = []
         if snList:
             snList = [str(sn) for sn in snList]
-            reply = UEPConnection.getCertificatesBySerial(self, self.uuid, snList)
+            reply = UEPConnection.getCertificates(self, self.uuid, serials=snList)
             for cert in reply:
                 result.append(cert)
         return result

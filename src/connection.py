@@ -95,19 +95,20 @@ class UEPConnection:
     Proxy for Unified Entitlement Platform.
     """
 
-    def __init__(self, host='localhost', ssl_port=8443, handler="/candlepin", cert_file=None, key_file=None):
+    def __init__(self, host='localhost', ssl_port=8443, handler="/candlepin",
+            cert_file=None, key_file=None):
         self.host = host
         self.ssl_port = ssl_port
         self.handler = handler
         self.conn = None
         self.cert_file = cert_file
         self.key_file = key_file
-        # initialize connection
-        self.setUp()
 
-    def setUp(self):
-        self.conn = Restlib(self.host, self.ssl_port, self.handler, self.cert_file, self.key_file)
-        log.info("Connection Established for cli: Host: %s, Port: %s, handler: %s" % (self.host, self.ssl_port, self.handler))
+        # initialize connection
+        self.conn = Restlib(self.host, self.ssl_port, self.handler,
+                self.cert_file, self.key_file)
+        log.info("Connection Established: host: %s, port: %s, handler: %s" %
+                (self.host, self.ssl_port, self.handler))
 
     def shutDown(self):
         self.conn.close()
@@ -128,17 +129,24 @@ class UEPConnection:
             needToRegister = 1
         return needToRegister
 
-    def registerConsumer(self, username, password, info={}):
+    def registerConsumer(self, username, password, name="unknown",
+            type="system", facts={}):
         """
          Creates a consumer on candlepin server
         """
+        params = {
+                "type": type,
+                "name": name,
+                "facts": facts
+        }
         self.__authenticate(username, password)
-        return self.conn.request_post('/consumers/', info)
+        return self.conn.request_post('/consumers/', params)
 
-    def getConsumerById(self, consumerId):
+    def getConsumerById(self, consumerId, username, password):
         """
         Returns a consumer object with pem/key for existing consumers
         """
+        self.__authenticate(username, password)
         method = '/consumers/%s' % consumerId
         return self.conn.request_get(method)
 
@@ -156,12 +164,15 @@ class UEPConnection:
         method = '/consumers/%s/certificates' % consumerId
         return self.conn.request_get(method)
 
-    def getCertificatesBySerial(self, consumerId, serialNumbers):
+    def getCertificates(self, consumer_uuid, serials=[]):
         """
-        Sync certificates for a given set of serial numbers
+        Fetch all entitlement certificates for this consumer.
+        Specify a list of serial numbers to filter if desired.
         """
-        serialNumbers = ','.join(serialNumbers)
-        method = '/consumers/%s/certificates?serials=%s' % (consumerId, serialNumbers)
+        method = '/consumers/%s/certificates' % (consumer_uuid)
+        if len(serials) > 0:
+            serials_str = ','.join(serials)
+            method = "%s?serials=%s" % (method, serials_str)
         return self.conn.request_get(method)
 
     def getCertificateSerials(self, consumerId):
@@ -183,11 +194,13 @@ class UEPConnection:
             method += "&emailLocale=%s" % lang
         return self.conn.request_post(method)
 
-    def bindByEntitlementPool(self, consumerId, poolId=None):
+    def bindByEntitlementPool(self, consumerId, poolId, quantity=None):
         """
          Subscribe consumer to a subscription by poolId
         """
         method = "/consumers/%s/entitlements?pool=%s" % (consumerId, poolId)
+        if quantity:
+            method = "%s&quantity=%s" % (method, quantity)
         return self.conn.request_post(method)
 
     def bindByProduct(self, consumerId, product=None):
@@ -215,6 +228,10 @@ class UEPConnection:
         method = "/pools?consumer=%s" % consumerId
         return self.conn.request_get(method)
 
+    def getPool(self, poolId):
+        method = "/pools/%s" % poolId
+        return self.conn.request_get(method)
+
     def getEntitlementList(self, consumerId):
         method = "/consumers/%s/entitlements" % consumerId
         return self.conn.request_get(method)
@@ -223,6 +240,8 @@ class UEPConnection:
         method = "/consumers/%s/entitlements/%s" % (consumerId, entId)
         return self.conn.request_get(method)
     
+    # TODO: Bad method name, this is listing pools, not entitlements.
+    # Also nearly the same as getPoolsList.
     def getAllAvailableEntitlements(self, consumerId):
         method = "/pools?consumer=%s&listall=true" % consumerId
         return self.conn.request_get(method)
@@ -251,10 +270,11 @@ if __name__ == '__main__':
         consumer = uep.registerConsumer('admin', 'admin', info=params)
         print "Created a consumer ", consumer
         # sync certs
-        print "Get Consumer By Id", uep.getConsumerById(consumer['uuid'])
+        print "Get Consumer By Id", uep.getConsumerById(consumer['uuid'], 'admin', 'admin')
         print uep.syncCertificates(consumer['uuid']) 
         print "All available", uep.getAllAvailableEntitlements(consumer['uuid'])
-        print "GetCertBySeriallllll",uep.getCertificatesBySerial(consumer['uuid'], ['SERIAL001','SERIAL001'])
+        print "GetCertBySerials",uep.getCertificates(consumer['uuid'],
+                serials=['SERIAL001','SERIAL001'])
         # bind consumer to regNumber
         #uep.bindByRegNumber(consumer['uuid'],"1234-5334-4e23-2432-4345") 
         # bind consumer by poolId
