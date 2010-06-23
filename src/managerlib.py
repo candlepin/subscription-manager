@@ -194,23 +194,31 @@ def getAvailableEntitlements(cpserver, consumer):
     """
      Gets the available Entitlements from the server
     """
-    columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'providedProductIds', 'productId']
+    columns  = ['id', 'quantity', 'unlimited', 'consumed', 'endDate', 'productName', 'providedProductIds', 'productId']
     dlist = cpserver.getPoolsList(consumer)
     if not dlist:
         return None, None
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
-        d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
+        if d['unlimited']:
+            d['quantity'] = 'unlimited'
+        else:
+            d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
+
         d['endDate'] = formatDate(d['endDate'])
         del d['consumed']
     return data, dlist
 
 def getAvailableEntitlementsCLI(cpserver, consumer):
-    columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'productId']
+    columns  = ['id', 'quantity', 'unlimited', 'consumed', 'endDate', 'productName', 'productId']
     dlist = cpserver.getPoolsList(consumer)
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
-        d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
+        if d['unlimited']:
+            d['quantity'] = 'unlimited'
+        else:
+            d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
+
         d['endDate'] = formatDate(d['endDate'])
         del d['consumed']
     return data
