@@ -131,6 +131,7 @@ fi
 
 %changelog
 * Thu Jun 24 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.64-1
+- Resolves: #589626
 - Adding in 'unlimited' quantity support. (jharris@redhat.com)
 - Candlepin connection library updates. (dgoodwin@redhat.com)
 - Allow the user to sepcify a type at registration (bkearney@redhat.com)
