@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.65
+Version: 0.66
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -130,7 +130,7 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Thu Jun 24 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.64-1
+* Thu Jun 24 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.66-1
 - Resolves: #589626
 - Adding in 'unlimited' quantity support. (jharris@redhat.com)
 - Candlepin connection library updates. (dgoodwin@redhat.com)
