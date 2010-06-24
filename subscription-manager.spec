@@ -130,9 +130,6 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Thu Jun 24 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.65-1
-- new build (pkilambi@redhat.com)
-
 * Thu Jun 24 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.64-1
 - Resolves: #589626
 - Adding in 'unlimited' quantity support. (jharris@redhat.com)
