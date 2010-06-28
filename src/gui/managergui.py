@@ -415,7 +415,7 @@ class RegistrationTokenScreen:
             email = None
         try:
             UEP.bindByRegNumber(consumer['uuid'], reg_token, email)
-            infoWindow(constants.SUBSCRIBE_REGTOKEN_SUCCESS % reg_token)
+            infoWindow(constants.SUBSCRIBE_REGTOKEN_SUCCESS % reg_token, self.regtokenWin)
         except connection.RestlibException, e:
             log.error("Could not subscribe registration token %s error %s" % (reg_token, e))
             errorWindow(linkify(e.msg))

@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.63
+Version: 0.66
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -130,6 +130,40 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Thu Jun 24 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.66-1
+- Resolves: #589626
+- Adding in 'unlimited' quantity support. (jharris@redhat.com)
+- Candlepin connection library updates. (dgoodwin@redhat.com)
+- Allow the user to sepcify a type at registration (bkearney@redhat.com)
+- Force username and password to always be required on register
+  (bkearney@redhat.com)
+- more alignment changes on reg token screen (pkilambi@redhat.com)
+- fxing alignment issues on reg token screen and fix for other tab content
+  (pkilambi@redhat.com)
+- removing raise (pkilambi@redhat.com)
+- fixing unregistered case to load cert import (pkilambi@redhat.com)
+- load match object intead of other by default (pkilambi@redhat.com)
+- compare by productId for other tab as well (pkilambi@redhat.com)
+- compare matched and compatible by productId (pkilambi@redhat.com)
+- comare matched package list with productids (pkilambi@redhat.com)
+- changing the matched bucket to use productId for matching
+  (pkilambi@redhat.com)
+- Hide the incompatible pools tab by default and make it a config option
+  (pkilambi@redhat.com)
+- Teach the gui to send up email/lang during token activation, too
+  (jbowes@redhat.com)
+- Update cli option names for regtoken activation to match api
+  (jbowes@redhat.com)
+- Teach the cli to send up email/lang on regtoken activation
+  (jbowes@redhat.com)
+- Swap OrderNumber and SerialNumber fields for formatting in list --consumed
+  (adrian@alikins.usersys.redhat.com)
+- Adding some changes to disable horizontal scrolling and align the columns
+  appropriately (pkilambi@redhat.com)
+- fix the display order for contract info (pkilambi@redhat.com)
+- 602258 - represent subscription data as productId instead of sku
+  (pkilambi@redhat.com)
+
 * Wed Jun 09 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.63-1
 - Resolves: #589626
 - Adding accessibility string for widgets for automation support
