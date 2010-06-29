@@ -289,6 +289,36 @@ class UnSubscribeCommand(CliCommand):
             log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
             systemExit(-1, msgs=e)
 
+class FactsCommand(CliCommand):
+    def __init__(self):
+        usage = "usage: %prog facts [options]"
+        shortdesc = "show information for facts"
+        desc = "facts"
+        CliCommand.__init__(self, "facts", usage, shortdesc, desc)
+        
+        self.parser.add_option("--list", action="store_true",
+                               help="list known facts for this system")
+        self.parser.add_option("--update", action="store_true",
+                               help="update the system facts")
+
+    def _validate_options(self):
+        # one or the other
+        CliCommand._validate_options(self)
+
+    def _do_command(self):
+        if self.options.list:
+            facts = getFacts()
+            fact_dict = facts.get_facts()
+            fact_keys = fact_dict.keys()
+            fact_keys.sort()
+            for key in fact_keys:
+                print "%s: %s" % (key, fact_dict[key])
+
+        if self.options.update:
+            facts = getFacts()
+            consumer = check_registration()['uuid']
+            print consumer, self.cp
+            self.cp.updateConsumerFacts(consumer, facts.get_facts())
 
 
 class ListCommand(CliCommand):
@@ -352,7 +382,7 @@ class CLI:
 
         self.cli_commands = {}
         for clazz in [ RegisterCommand, UnRegisterCommand, ListCommand, SubscribeCommand,\
-                       UnSubscribeCommand]:
+                       UnSubscribeCommand, FactsCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":

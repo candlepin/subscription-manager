@@ -22,7 +22,6 @@ class Facts():
     def __init__(self):
         self.facts = {}
         self.fact_cache = "/var/lib/rhsm/facts/facts.json"
-        print "created Facts"
 
     def write(self, facts, path="/var/lib/rhsm/facts/facts.json"):
         try:
