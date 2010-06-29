@@ -24,6 +24,7 @@ install:
 	@mkdir -p ${PREFIX}/etc/yum/pluginconf.d/
 	@mkdir -p ${PREFIX}/usr/share/man/man8/
 	@mkdir -p ${PREFIX}/var/log/rhsm
+	@mkdir -p ${PREFIX}/var/lib/rhsm/facts
 	@mkdir -p ${PREFIX}/usr/bin
 	@mkdir -p ${PREFIX}/etc/init.d
 	@mkdir -p ${PREFIX}/usr/share/icons/hicolor/16x16/apps

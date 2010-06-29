@@ -142,6 +142,17 @@ class UEPConnection:
         self.__authenticate(username, password)
         return self.conn.request_post('/consumers/', params)
 
+    def updateConsumerFacts(self, consumer_uuid, facts={}):
+        """
+        Update a consumers facts on candlepin server
+        """
+        params = {
+            "facts": facts
+            }
+        method = "/consumers/%s" % consumer_uuid
+        ret = self.conn.request_put(method, params)
+        return ret
+
     def getConsumerById(self, consumerId, username, password):
         """
         Returns a consumer object with pem/key for existing consumers

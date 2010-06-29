@@ -34,6 +34,7 @@ import managerlib
 import connection
 import config
 import constants
+from facts import getFacts
 
 from certlib import EntitlementDirectory, ProductDirectory, ConsumerIdentity, CertLib
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
@@ -46,7 +47,6 @@ gtk.glade.bindtextdomain("subscription-manager")
 from logutil import getLogger
 log = getLogger(__name__)
 
-import facts
 
 prefix = os.path.dirname(__file__)
 gladexml = os.path.join(prefix, "data/standaloneH.glade")
@@ -56,6 +56,8 @@ subs_empty = os.path.join(prefix, "data/icons/subsmgr-empty.png")
 
 cfg = config.initConfig()
 UEP = None
+
+
 if ConsumerIdentity.exists():
     cert_file = ConsumerIdentity.certpath()
     key_file = ConsumerIdentity.keypath()
@@ -86,6 +88,7 @@ def fetch_certificates():
         log.error(e)
         return False
     return True
+
 
 class ManageSubscriptionPage:
     """
@@ -291,6 +294,8 @@ class RegisterScreen:
     def __init__(self):
         global UEP
         UEP = connection.UEPConnection(cfg['hostname'] or 'localhost', ssl_port=cfg['port'])
+        
+
         self.registerxml = gtk.glade.XML(gladexml, "register_dialog", domain="subscription-manager")
         dic = { "on_close_clicked" : self.cancel,
                 "on_register_button_clicked" : self.onRegisterAction, 
@@ -311,6 +316,8 @@ class RegisterScreen:
         username = self.uname.get_text()
         password = self.passwd.get_text()
 
+
+        facts = getFacts()
         if not self.validate_account():
             return False
         # Unregister consumer if exists
@@ -521,6 +528,8 @@ class AddSubscriptionScreen:
         pwin.setLabel(_("Performing Subscribe. Please wait."))
         busted_subs = []
         count = 0
+        
+
         for pool, state in self.selected.items():
             print pool, state
             count += 1

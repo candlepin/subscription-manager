@@ -22,11 +22,14 @@ from datetime import datetime
 from certlib import CertLib, ConsumerIdentity, \
                     ProductDirectory, EntitlementDirectory
 from logutil import getLogger
+#from facts import Facts
+from facts import getFacts
 
 log = getLogger(__name__)
 
 import gettext
 _ = gettext.gettext
+
 
 def persist_consumer_cert(consumerinfo):
     """
@@ -161,6 +164,11 @@ def getProductDescription(qproduct):
 
 def getAllAvailableSubscriptions(cpserver, consumer):
     columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'providedProductIds', 'productId']
+    # update facts first
+    facts = getFacts()
+    if facts.delta():
+        cpserver.updateConsumerFacts(consumer, facts.get_facts())
+
     dlist = cpserver.getAllAvailableEntitlements(consumer)
     #data = [_sub_dict(pool['pool'], columns) for pool in dlist]
     data = [_sub_dict(pool, columns) for pool in dlist]
@@ -195,6 +203,12 @@ def getAvailableEntitlements(cpserver, consumer):
      Gets the available Entitlements from the server
     """
     columns  = ['id', 'quantity', 'unlimited', 'consumed', 'endDate', 'productName', 'providedProductIds', 'productId']
+    
+    # update facts
+    facts = getFacts()
+    if facts.delta():
+        cpserver.updateConsumerFacts(consumer, facts.get_facts())
+
     dlist = cpserver.getPoolsList(consumer)
     if not dlist:
         return None, None
@@ -211,6 +225,12 @@ def getAvailableEntitlements(cpserver, consumer):
 
 def getAvailableEntitlementsCLI(cpserver, consumer):
     columns  = ['id', 'quantity', 'unlimited', 'consumed', 'endDate', 'productName', 'productId']
+    # update facts if we need it
+    print consumer, cpserver
+    facts = getFacts()
+#    print facts.find_facts()
+    if facts.delta():
+        cpserver.updateConsumerFacts(consumer, facts.get_facts())
     dlist = cpserver.getPoolsList(consumer)
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
