@@ -29,7 +29,7 @@ from optparse import OptionParser
 from certlib import CertLib, ConsumerIdentity, ProductDirectory, EntitlementDirectory
 import managerlib
 import gettext
-import facts
+from facts import getFacts
 _ = gettext.gettext
 from logutil import getLogger
 
@@ -121,6 +121,7 @@ class RegisterCommand(CliCommand):
         """
         self._validate_options()
 
+        facts = getFacts()
         if self.options.consumerid:
             consumer = self.cp.getConsumerById(self.options.consumerid, self.options.username, self.options.password)
 
@@ -225,6 +226,12 @@ class SubscribeCommand(CliCommand):
         self._validate_options()
         consumer = check_registration()['uuid']
         try:
+            # update facts first, if we need to
+            facts = getFacts()
+
+            if facts.delta():
+                self.cp.updateConsumerFacts(consumer, facts.get_facts())
+            
             if self.options.product:
                 for product in self.options.product:
                     bundles = self.cp.bindByProduct(consumer, product)

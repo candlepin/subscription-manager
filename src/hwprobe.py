@@ -52,6 +52,12 @@ class Hardware:
 
     def getMemInfo(self):
         self.meminfo = {}
+
+        # most of this mem info changes constantly, which makes decding
+        # when to update facts painful, so lets try to just collect the
+        # useful bits
+
+        useful = ["MemTotal", "SwapTotal"]
         try:
             parser = re.compile(r'^(?P<key>\S*):\s*(?P<value>\d*)\s*kB' )
             memdata = open('/proc/meminfo')
@@ -60,8 +66,9 @@ class Hardware:
                 if not match:
                     continue
                 key, value = match.groups(['key', 'value'])
-                nkey = '.'.join(["memory", key.lower()])
-                self.meminfo[nkey] = "%s" % int(value)
+                if key in useful:
+                    nkey = '.'.join(["memory", key.lower()])
+                    self.meminfo[nkey] = "%s" % int(value)
         except:
             print _("Error reading system memory information:"), sys.exc_type
         self.allhw.update(self.meminfo)

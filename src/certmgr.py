@@ -18,6 +18,8 @@
 
 from certlib import CertLib, ActionLock
 from repolib import RepoLib
+from factlib import FactLib
+
 
 class CertManager:
     """
@@ -32,6 +34,7 @@ class CertManager:
         self.lock = lock
         self.certlib = CertLib(self.lock)
         self.repolib = RepoLib(self.lock)
+        self.factlib = FactLib(self.lock)
 
     def add(self, *bundles):
         """
@@ -59,7 +62,7 @@ class CertManager:
         lock = self.lock
         try:
             lock.acquire()
-            for lib in (self.certlib, self.repolib,):
+            for lib in (self.certlib, self.repolib, self.factlib):
                 updates += lib.update()
         finally:
             lock.release()
