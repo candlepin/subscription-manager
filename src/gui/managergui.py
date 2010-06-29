@@ -407,15 +407,14 @@ class RegistrationTokenScreen:
 
     def factsUpdateAction(self, button):
         facts = getFacts()
-        if facts.delta():
-            try:
-                UEP.updateConsumerFacts(consumer['uuid'], facts.get_facts())
-            except connection.RestlibException, e:
-                log.error("Could not update system facts:  error %s" % ( e))
-                errorWindow(linkify(e.msg))
-            except Exception, e:
-                log.error("Could not update system facts \nError: %s" % (e))
-                errorWindow(linkify(e.msg))
+        try:
+            UEP.updateConsumerFacts(consumer['uuid'], facts.get_facts())
+        except connection.RestlibException, e:
+            log.error("Could not update system facts:  error %s" % ( e))
+            errorWindow(linkify(e.msg))
+        except Exception, e:
+            log.error("Could not update system facts \nError: %s" % (e))
+            errorWindow(linkify(e.msg))
 
     def setAccountMsg(self):
         euser = consumer['user_account'] or None
