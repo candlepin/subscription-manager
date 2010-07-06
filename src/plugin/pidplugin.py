@@ -15,15 +15,32 @@
 # in this software or its documentation.
 #
 
+import os
 import sys
 sys.path.append('/usr/share/rhsm')
 from yum.plugins import TYPE_CORE
 from productid import ProductManager
+from certlib import Path
 
 requires_api_version = '2.6'
 plugin_type = (TYPE_CORE,)
 
+
+
+def chroot():
+    """
+    Use /mnt/sysimage when it exists to support operating
+    within an Anaconda installation.
+    """
+    sysimage = '/mnt/sysimage'
+    if os.path.exists(sysimage):
+        Path.ROOT = sysimage
+
 def postverifytrans_hook(conduit):
+    """
+    Update product ID certificates.
+    """
+    chroot()
     try:
         pm = ProductManager()
         pm.update(conduit._base)

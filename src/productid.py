@@ -26,10 +26,10 @@ from certlib import Directory, ProductDirectory
 
 class DatabaseDirectory(Directory):
 
-    ROOT = '/var/lib/rhsm'
+    PATH = 'var/lib/rhsm'
 
     def __init__(self):
-        Directory.__init__(self, self.ROOT)
+        Directory.__init__(self, self.PATH)
         self.create()
 
 
@@ -74,7 +74,7 @@ class ProductDatabase:
         f.close()
 
     def __fn(self):
-        return os.path.join(self.dir.ROOT, 'productid.js')
+        return self.dir.abspath('productid.js')
 
 
 class ProductManager:
@@ -102,7 +102,7 @@ class ProductManager:
             if self.pdir.findByProduct(hash):
                 continue
             fn = '%s.pem' % hash
-            path = os.path.join(self.pdir.ROOT, fn)
+            path = self.pdir.abspath(fn)
             print 'installing: %s' % fn
             cert.write(path)
             self.db.add(hash, repo)

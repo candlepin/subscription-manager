@@ -14,10 +14,11 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
- 
+
 import os
 from urllib import basejoin
-from certlib import EntitlementDirectory, ActionLock
+from config import initConfig
+from certlib import Path, EntitlementDirectory, ActionLock
 from iniparse import ConfigParser as Parser
 from logutil import getLogger
 
@@ -163,11 +164,11 @@ class Repo(dict):
 
 class RepoFile(Parser):
     
-    PATH = '/etc/yum.repos.d/'
+    PATH = 'etc/yum.repos.d/'
     
     def __init__(self, name='redhat.repo'):
         Parser.__init__(self)
-        self.path = os.path.join(self.PATH, name)
+        self.path = Path.join(self.PATH, name)
         self.create()
     
     def read(self):
