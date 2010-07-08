@@ -390,6 +390,7 @@ class RegistrationTokenScreen:
         self.regtokenxml = gtk.glade.XML(gladexml, "register_token_dialog", domain="subscription-manager")
         dic = { "on_close_clicked" : self.finish, 
                 "on_change_account_button" : self.reRegisterAction,
+                "on_facts_update_button_clicked" : self.factsUpdateAction,
                 "on_submit_button_clicked" : self.submitToken, }
         self.setAccountMsg()
         self.regtokenxml.signal_autoconnect(dic)
@@ -403,6 +404,17 @@ class RegistrationTokenScreen:
     def reRegisterAction(self, button):
         RegisterScreen()
         self.regtokenWin.hide()
+
+    def factsUpdateAction(self, button):
+        facts = getFacts()
+        try:
+            UEP.updateConsumerFacts(consumer['uuid'], facts.get_facts())
+        except connection.RestlibException, e:
+            log.error("Could not update system facts:  error %s" % ( e))
+            errorWindow(linkify(e.msg))
+        except Exception, e:
+            log.error("Could not update system facts \nError: %s" % (e))
+            errorWindow(linkify(e.msg))
 
     def setAccountMsg(self):
         euser = consumer['user_account'] or None
