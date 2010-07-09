@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.67
+Version: 0.68
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -133,6 +133,11 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Fri Jul 09 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.68-1
+- Resolves: #613003
+- putting back accessibility strings overridden by facts commit
+  (pkilambi@redhat.com)
+
 * Fri Jul 09 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.67-1
 - Resolves: #613003
 - Create /var/lib/rhsm/facts if it doesn't exist. Fix for bz#613003
