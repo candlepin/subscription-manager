@@ -21,9 +21,12 @@ def getFacts():
 class Facts():
     def __init__(self):
         self.facts = {}
-        self.fact_cache = "/var/lib/rhsm/facts/facts.json"
+	self.fact_cache_dir = "/var/lib/rhsm/facts"
+        self.fact_cache = self.fact_cache_dir + "/facts.json"
 
     def write(self, facts, path="/var/lib/rhsm/facts/facts.json"):
+	if not os.access(self.fact_cache_dir, os.R_OK):
+	    os.makedirs(self.fact_cache_dir)
         try:
             f = open(path, "w+")
             json.dump(facts, f)
@@ -37,7 +40,7 @@ class Facts():
             json_buffer = f.read()
             cached_facts = json.loads(json_buffer)
         except IOError, e:
-            print e
+	    print "Unable to read %s" % path
 
         return cached_facts
 
