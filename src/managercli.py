@@ -198,8 +198,6 @@ class SubscribeCommand(CliCommand):
         self.product = None
         self.regtoken = None
         self.substoken = None
-        self.parser.add_option("--product", dest="product", action='append',
-                               help="product ID")
         self.parser.add_option("--regtoken", dest="regtoken", action='append',
                                help="regtoken")
         self.parser.add_option("--pool", dest="pool", action='append',
@@ -215,8 +213,8 @@ class SubscribeCommand(CliCommand):
                                "only. Examples: en-us, de-de"))
 
     def _validate_options(self):
-        if not (self.options.regtoken or self.options.product or self.options.pool):
-            print _("Error: Need either --product or --regtoken, Try --help")
+        if not (self.options.regtoken or self.options.pool):
+            print _("Error: Need either --pool or --regtoken, Try --help")
             sys.exit(-1)
 
     def _do_command(self):
@@ -232,10 +230,6 @@ class SubscribeCommand(CliCommand):
             if facts.delta():
                 self.cp.updateConsumerFacts(consumer, facts.get_facts())
             
-            if self.options.product:
-                for product in self.options.product:
-                    bundles = self.cp.bindByProduct(consumer, product)
-                    log.info("Info: Successfully subscribed the machine to product %s" % product)
 
             if self.options.regtoken:
                 for regnum in self.options.regtoken:
