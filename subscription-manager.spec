@@ -81,6 +81,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/managerlib.py*
 %{_datadir}/rhsm/repolib.py*
 /usr/lib/yum-plugins/rhsmplugin.py*
+/usr/lib/yum-plugins/pidplugin.py*
 %{_datadir}/rhsm/certificate.py*
 %{_datadir}/rhsm/certmgr.py*
 %{_datadir}/rhsm/certlib.py*
@@ -91,6 +92,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/lock.py*
 %{_datadir}/rhsm/facts.py*
 %{_datadir}/rhsm/factlib.py*
+%{_datadir}/rhsm/productid.py*
 #%{_datadir}/rhsm/rhsmcertd.*
 %attr(755,root,root) %{_sbindir}/subscription-manager-cli
 %attr(755,root,root) %dir %{_var}/log/rhsm

@@ -206,7 +206,7 @@ class Writer:
         sn = cert.serialNumber()
         path = self.entdir.productpath()
         fn = self.__ufn(path, sn)
-        path = os.path.join(path, fn)
+        path = Path.join(path, fn)
         cert.write(path)
         
     def __ufn(self, path, sn):
@@ -215,7 +215,7 @@ class Writer:
         fn = None
         while True:
             fn = '%s.pem' % name
-            path = os.path.join(path, fn)
+            path = Path.join(path, fn)
             if os.path.exists(path):
                 name += '(%d)' % n
                 n += 1
@@ -263,12 +263,33 @@ class UEP(UEPConnection):
 
 class Disconnected(Exception):
     pass
+
+
+class Path:
+
+    ROOT = '/'
+
+    @classmethod
+    def join(cls, a, b):
+        path = os.path.join(a, b)
+        return cls.abs(path)
+
+    @classmethod
+    def abs(cls, path):
+        if os.path.isabs(path):
+            return path
+        else:
+            return os.path.join(cls.ROOT, path)
+
+    @classmethod
+    def isdir(cls, path):
+        return os.path.isdir(path)
         
 
 class Directory:
     
     def __init__(self, path):
-        self.path = path
+        self.path = Path.abs(path)
         
     def listAll(self):
         all = []
@@ -280,8 +301,8 @@ class Directory:
     def list(self):
         files = []
         for p,fn in self.listAll():
-            path = os.path.join(p, fn)
-            if os.path.isdir(path):
+            path = self.abspath(fn)
+            if Path.isdir(path):
                 continue
             else:
                 files.append((p,fn))
@@ -290,8 +311,8 @@ class Directory:
     def listdirs(self):
         dir = []
         for p,fn in self.listAll():
-            path = os.path.join(p, fn)
-            if os.path.isdir(path):
+            path = self.abspath(fn)
+            if Path.isdir(path):
                 dir.append(Directory(path))
         return dir
 
@@ -305,22 +326,22 @@ class Directory:
             
     def clean(self):
         for x in os.listdir(self.path):
-            path = os.path.join(self.path, x)
-            if os.path.isdir(path):
+            path = self.abspath(x)
+            if Path.isdir(path):
                 d = Directory(path)
                 d.delete()
             else:
                 os.unlink(path)
                 
-    def getSnapshot(self):
-        return Snapshot(self.path)
+    def abspath(self, path):
+        return Path.join(self.path, path)
     
     def __str__(self):
         return self.path
     
     
 class CertificateDirectory(Directory):
-    
+
     def __init__(self, path):
         Directory.__init__(self, path)
         self.create()
@@ -331,7 +352,7 @@ class CertificateDirectory(Directory):
         for p,fn in Directory.list(self):
             if not fn.endswith('.pem'):
                 continue
-            path = os.path.join(p, fn)
+            path = self.abspath(fn)
             factory.append(path, listing)
         return listing
 
@@ -388,11 +409,11 @@ class CertificateDirectory(Directory):
 
 class ProductDirectory(CertificateDirectory):
     
-    ROOT = '/etc/pki/product'
+    PATH = 'etc/pki/product'
     KEY = 'key.pem'
     
     def __init__(self):
-        CertificateDirectory.__init__(self, self.ROOT)
+        CertificateDirectory.__init__(self, self.PATH)
         
     def certClass(self):
         return ProductCertificate
@@ -400,17 +421,17 @@ class ProductDirectory(CertificateDirectory):
 
 class EntitlementDirectory(CertificateDirectory):
     
-    ROOT = '/etc/pki/entitlement'
+    PATH = 'etc/pki/entitlement'
     KEY = 'key.pem'
     PRODUCT = 'product'
     
     @classmethod
     def keypath(cls):
-        return os.path.join(cls.ROOT, cls.KEY)
+        return Path.join(cls.PATH, cls.KEY)
 
     @classmethod
     def productpath(cls):
-        return os.path.join(cls.ROOT, cls.PRODUCT)
+        return Path.join(cls.PATH, cls.PRODUCT)
 
     def __init__(self):
         CertificateDirectory.__init__(self, self.productpath())
@@ -421,17 +442,17 @@ class EntitlementDirectory(CertificateDirectory):
 
 class ConsumerIdentity:
     
-    LOCATION = '/etc/pki/consumer'
+    PATH = 'etc/pki/consumer'
     KEY = 'key.pem'
     CERT = 'cert.pem'
     
     @classmethod
     def keypath(cls):
-        return os.path.join(cls.LOCATION, cls.KEY)
+        return Path.join(cls.PATH, cls.KEY)
     
     @classmethod
     def certpath(cls):
-        return os.path.join(cls.LOCATION, cls.CERT)
+        return Path.join(cls.PATH, cls.CERT)
     
     @classmethod
     def read(cls):
@@ -483,7 +504,8 @@ class ConsumerIdentity:
             os.unlink(path)
     
     def __mkdir(self):
-        if not os.path.exists(self.LOCATION):
+        path = Path.abs(self.PATH)
+        if not os.path.exists(path):
             os.mkdir(path)
 
     def __str__(self):
