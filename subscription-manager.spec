@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.66
+Version: 0.68
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -133,6 +133,21 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Fri Jul 09 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.68-1
+- Resolves: #613003
+- putting back accessibility strings overridden by facts commit
+  (pkilambi@redhat.com)
+
+* Fri Jul 09 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.67-1
+- Resolves: #613003
+- Create /var/lib/rhsm/facts if it doesn't exist. Fix for bz#613003
+  (alikins@redhat.com)
+- New button in gui for refreshing facts - alikins (pkilambi@redhat.com)
+- Adding the facts lib (pkilambi@redhat.com)
+- First pass at support for supporting updating facts for subscription-manager.
+  (pkilambi@redhat.com)
+- subscribing to a regnumber was failing (bkearney@redhat.com)
+
 * Thu Jun 24 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.66-1
 - Resolves: #589626
 - Adding in 'unlimited' quantity support. (jharris@redhat.com)
