@@ -38,6 +38,7 @@ install:
 	cp src/subscription-manager-gui ${PREFIX}/usr/sbin
 	cp etc-conf/rhsm.conf ${PREFIX}/etc/rhsm/
 	cp etc-conf/rhsmplugin.conf ${PREFIX}/etc/yum/pluginconf.d/
+	cp etc-conf/pidplugin.conf ${PREFIX}/etc/yum/pluginconf.d/
 	cp bin/* ${PREFIX}/usr/bin
 	cp src/rhsmcertd.init.d ${PREFIX}/etc/init.d/rhsmcertd
 	cp man/* ${PREFIX}/usr/share/man/man8/
