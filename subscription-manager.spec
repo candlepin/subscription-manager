@@ -104,6 +104,7 @@ rm -rf $RPM_BUILD_ROOT
 # config files
 %config(noreplace) %attr(644,root,root) /etc/rhsm/rhsm.conf
 %attr(644,root,root) /etc/yum/pluginconf.d/rhsmplugin.conf
+%attr(644,root,root) /etc/yum/pluginconf.d/pidplugin.conf
 
 %doc
 %{_mandir}/man8/subscription-manager-cli.8*
@@ -126,7 +127,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 chkconfig --add rhsmcertd
-/sbin/service rhsmcertd start
+# /sbin/service rhsmcertd start
 
 %preun
 if [ $1 = 0 ] ; then
