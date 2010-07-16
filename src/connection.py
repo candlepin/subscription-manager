@@ -24,12 +24,13 @@ import simplejson as json
 import base64
 from M2Crypto import SSL, httpslib
 from logutil import getLogger
+from config import initConfig
 
 import gettext
 _ = gettext.gettext
 
 log = getLogger(__name__)
-
+DEFAULT_CA_FILE="/etc/pki/CA/candlepin.pem"
 class RestlibException(Exception):
     def __init__(self, code, msg = ""):
         self.code = code
@@ -42,7 +43,7 @@ class Restlib(object):
     """
      A wrapper around httplib to make rest calls easier
     """
-    def __init__(self, host, ssl_port, apihandler, cert_file=None, key_file=None,):
+    def __init__(self, host, ssl_port, apihandler, cert_file=None, key_file=None, ca_file=None, insecure=False):
         self.host = host
         self.ssl_port = ssl_port
         self.apihandler = apihandler
@@ -51,15 +52,22 @@ class Restlib(object):
                         "Accept-Language": locale.getdefaultlocale()[0].lower().replace('_', '-')}
         self.cert_file = cert_file
         self.key_file  = key_file
-
+        self.ca_file = ca_file
+        self.insecure = insecure
     def _request(self, request_type, method, info=None):
         handler = self.apihandler + method
+        context = SSL.Context("sslv3")
+        if self.ca_file != None:
+          log.info('loading ca_file located at: %s', self.ca_file)
+          context.load_verify_locations(self.ca_file)
+        log.info('work in insecure mode ?:%s', self.insecure)
+        if not self.insecure: #allow clients to work insecure mode if required..
+          context.set_verify(SSL.verify_fail_if_no_peer_cert, 1)
         if self.cert_file:
-            context = SSL.Context("sslv3")
             context.load_cert(self.cert_file, keyfile=self.key_file)
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
         else:
-            conn = httplib.HTTPSConnection(self.host, self.ssl_port)
+            conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
         conn.request(request_type, handler, body=json.dumps(info), \
                      headers=self.headers)
         response = conn.getresponse()
@@ -94,9 +102,8 @@ class UEPConnection:
     """
     Proxy for Unified Entitlement Platform.
     """
-
     def __init__(self, host='localhost', ssl_port=8443, handler="/candlepin",
-            cert_file=None, key_file=None):
+            cert_file=None, key_file=None, insecure_mode=False):
         self.host = host
         self.ssl_port = ssl_port
         self.handler = handler
@@ -104,13 +111,20 @@ class UEPConnection:
         self.basic_auth_conn = None
         self.cert_file = cert_file
         self.key_file = key_file
-
+        config = initConfig()
+        candlepin_ca_file = config['candlepin_ca_file']
+        if candlepin_ca_file == None:
+          log.info("Value \'candlepin_ca_file\' not present in config file. Assuming default value: %s",
+              DEFAULT_CA_FILE)
+          candlepin_ca_file = DEFAULT_CA_FILE
         # initialize connection
         self.conn = Restlib(self.host, self.ssl_port, self.handler,
-                self.cert_file, self.key_file)
+        self.cert_file, self.key_file, candlepin_ca_file, insecure_mode)
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
 
+    def set_insecure(self, insecure=False):
+      self.conn.insecure = insecure
 
     def shutDown(self):
         self.conn.close()
@@ -119,7 +133,7 @@ class UEPConnection:
     def __authenticate(self, username, password):
         # a connection for basic auth stuff, aka, not using the consumer cert
         self.basic_auth_conn =  Restlib(self.host, self.ssl_port, self.handler,
-              None, None)
+              ca_file=candlepin_ca_file, insecure=self.conn.insecure)
         log.info("Basic Auth Connection Established: host: %s, port: %s, handler: %s" %
               (self.host, self.ssl_port, self.handler))
         encoded = base64.encodestring(':'.join((username,password)))

@@ -60,6 +60,8 @@ class CliCommand(object):
 
         self.parser.add_option("--debug", dest="debug",
                 default=0, help="debug level")
+        self.parser.add_option("-k", "--insecure",dest="insecure", action="store_true",
+                default=False, help="communicate with candlepin server without verifying server's certificate")
 
     def _do_command(self):
         pass
@@ -76,7 +78,10 @@ class CliCommand(object):
         (self.options, self.args) = self.parser.parse_args()
         # we dont need argv[0] in this list...
         self.args = self.args[1:]
-
+        log.info(self.options)
+        if self.options.insecure:
+          self.cp.set_insecure(True)
+          self.certlib.set_insecure(True)
         # do the work, catch most common errors here:
         self._do_command()
 
