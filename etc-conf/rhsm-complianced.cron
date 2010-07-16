@@ -1,0 +1,4 @@
+# nightly run of rhsm-complianced to log compliance errors to syslog
+# this is a cron job because it doesn't need to 'phone home'. should that
+# change, look into calling the dbus interface from rhsmcertd instead.
+/usr/libexec/rhsm-complianced -s

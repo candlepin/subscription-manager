@@ -20,6 +20,11 @@ Requires(preun): initscripts
 BuildRequires: python-devel
 BuildRequires: gettext
 BuildRequires: intltool
+BuildRequires: unique-devel
+BuildRequires: libnotify-devel
+BuildRequires: gtk2-devel
+BuildRequires: desktop-file-utils
+
 
 %description
 Subscription Manager package provides programs and libraries to allow users 
@@ -49,6 +54,9 @@ make -f Makefile
 %install
 rm -rf $RPM_BUILD_ROOT
 make -f Makefile install VERSION=%{version}-%{release} PREFIX=$RPM_BUILD_ROOT MANPATH=%{_mandir}
+
+desktop-file-validate \
+        %{buildroot}/etc/xdg/autostart/rhsm-compliance-icon.desktop
 
 %post -n subscription-manager-gnome
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
@@ -100,11 +108,16 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %dir %{_var}/lib/rhsm/facts
 %attr(755,root,root) %{_bindir}/rhsmcertd
 %attr(755,root,root) %{_sysconfdir}/init.d/rhsmcertd
+%attr(755,root,root) %{_libexecdir}/rhsm-complianced
 
 # config files
 %config(noreplace) %attr(644,root,root) /etc/rhsm/rhsm.conf
 %attr(644,root,root) /etc/yum/pluginconf.d/rhsmplugin.conf
 %attr(644,root,root) /etc/yum/pluginconf.d/pidplugin.conf
+
+%{_sysconfdir}/cron.daily/rhsm-complianced
+%{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
+%{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
 
 %doc
 %{_mandir}/man8/subscription-manager-cli.8*
@@ -123,7 +136,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/gui/data/icons/subsmgr-full.png
 %{_datadir}/icons/hicolor/16x16/apps/subsmgr.png
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
-
+%{_bindir}/rhsm-compliance-icon
+%{_sysconfdir}/xdg/autostart/rhsm-compliance-icon.desktop
 
 %post
 chkconfig --add rhsmcertd
