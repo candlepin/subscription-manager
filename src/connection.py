@@ -101,6 +101,7 @@ class UEPConnection:
         self.ssl_port = ssl_port
         self.handler = handler
         self.conn = None
+        self.basic_auth_conn = None
         self.cert_file = cert_file
         self.key_file = key_file
 
@@ -110,15 +111,21 @@ class UEPConnection:
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
 
+
     def shutDown(self):
         self.conn.close()
         log.info("remote connection closed")
 
     def __authenticate(self, username, password):
+        # a connection for basic auth stuff, aka, not using the consumer cert
+        self.basic_auth_conn =  Restlib(self.host, self.ssl_port, self.handler,
+              None, None)
+        log.info("Basic Auth Connection Established: host: %s, port: %s, handler: %s" %
+              (self.host, self.ssl_port, self.handler))
         encoded = base64.encodestring(':'.join((username,password)))
         basic = 'Basic %s' % encoded[:-1]
-        self.conn.headers['Authorization'] = basic
-        return self.conn.headers
+        self.basic_auth_conn.headers['Authorization'] = basic
+        return self.basic_auth_conn.headers
 
     def ping(self):
         return self.conn.request_get("/status/")
@@ -140,7 +147,7 @@ class UEPConnection:
                 "facts": facts
         }
         self.__authenticate(username, password)
-        return self.conn.request_post('/consumers/', params)
+        return self.basic_auth_conn.request_post('/consumers/', params)
 
     def updateConsumerFacts(self, consumer_uuid, facts={}):
         """
