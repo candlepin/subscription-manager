@@ -112,14 +112,13 @@ class UEPConnection:
         self.cert_file = cert_file
         self.key_file = key_file
         config = initConfig()
-        candlepin_ca_file = config['candlepin_ca_file']
-        if candlepin_ca_file == None:
+        self.candlepin_ca_file = config['candlepin_ca_file']
+        if self.candlepin_ca_file == None:
           log.info("Value \'candlepin_ca_file\' not present in config file. Assuming default value: %s",
               DEFAULT_CA_FILE)
-          candlepin_ca_file = DEFAULT_CA_FILE
+          self.candlepin_ca_file = DEFAULT_CA_FILE
         # initialize connection
-        self.conn = Restlib(self.host, self.ssl_port, self.handler,
-        self.cert_file, self.key_file, candlepin_ca_file, insecure_mode)
+        self.conn = Restlib(self.host, self.ssl_port, self.handler, self.cert_file, self.key_file, self.candlepin_ca_file, insecure_mode)
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
 
@@ -133,7 +132,7 @@ class UEPConnection:
     def __authenticate(self, username, password):
         # a connection for basic auth stuff, aka, not using the consumer cert
         self.basic_auth_conn =  Restlib(self.host, self.ssl_port, self.handler,
-              ca_file=candlepin_ca_file, insecure=self.conn.insecure)
+              ca_file=self.candlepin_ca_file, insecure=self.conn.insecure)
         log.info("Basic Auth Connection Established: host: %s, port: %s, handler: %s" %
               (self.host, self.ssl_port, self.handler))
         encoded = base64.encodestring(':'.join((username,password)))
