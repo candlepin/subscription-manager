@@ -44,6 +44,8 @@ install: dbus-service-install
 	@mkdir -p ${PREFIX}/etc/rhsm
 	@mkdir -p ${PREFIX}/etc/xdg/autostart
 	@mkdir -p ${PREFIX}/etc/cron.daily
+	@mkdir -p ${PREFIX}/etc/pam.d
+	@mkdir -p ${PREFIX}/etc/security/console.apps
 	@mkdir -p ${PREFIX}/etc/yum/pluginconf.d/
 	@mkdir -p ${PREFIX}/usr/share/man/man8/
 	@mkdir -p ${PREFIX}/var/log/rhsm
@@ -69,6 +71,11 @@ install: dbus-service-install
 		${PREFIX}/etc/xdg/autostart
 	install -m 755 etc-conf/rhsm-complianced.cron \
 		${PREFIX}/etc/cron.daily/rhsm-complianced
+	ln -s consolehelper ${PREFIX}/usr/bin/subscription-manager-gui
+	install -m 644 etc-conf/subscription-manager-gui.pam \
+		${PREFIX}/etc/pam.d/subscription-manager-gui
+	install -m 644 etc-conf/subscription-manager-gui.console \
+		${PREFIX}/etc/security/console.apps/subscription-manager-gui
 
 clean:
 	rm -f *.pyc *.pyo *~ *.bak *.tar.gz

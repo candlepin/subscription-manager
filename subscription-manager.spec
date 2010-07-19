@@ -136,8 +136,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/gui/data/icons/subsmgr-full.png
 %{_datadir}/icons/hicolor/16x16/apps/subsmgr.png
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
+%attr(755,root,root) %{_bindir}/subscription-manager-gui
 %{_bindir}/rhsm-compliance-icon
 %{_sysconfdir}/xdg/autostart/rhsm-compliance-icon.desktop
+%{_sysconfdir}/pam.d/subscription-manager-gui
+%{_sysconfdir}/security/console.apps/subscription-manager-gui
 
 %post
 chkconfig --add rhsmcertd

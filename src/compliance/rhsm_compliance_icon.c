@@ -64,7 +64,6 @@ destroy_icon(Compliance *compliance)
 static void
 run_smg(Compliance *compliance)
 {
-	/* XXX this doesn't work because s-m-g expects to be run as root */
 	g_spawn_command_line_async("subscription-manager-gui", NULL);
 	destroy_icon(compliance);
 }
