@@ -42,13 +42,14 @@ class CertLib:
 
     def __init__(self, lock=ActionLock()):
         self.lock = lock
+        self.insecure = False
 
     def update(self):
         lock = self.lock
         lock.acquire()
         try:
             action = UpdateAction()
-            return action.perform()
+            return action.perform(self.insecure)
         finally:
             lock.release()
 
@@ -69,7 +70,8 @@ class CertLib:
             return action.perform(serialNumbers)
         finally:
             lock.release()
-
+    def set_insecure(self, insecure=False):
+      self.insecure = True
 
 class Action:
 
@@ -119,9 +121,9 @@ class UpdateAction(Action):
     # 100 years
     LINGER = timedelta(days=0x8E94)
     
-    def perform(self):
+    def perform(self, insecure=False):
         try:
-            uep = UEP()
+            uep = UEP(insecure)
         except Disconnected:
             log.info('Disconnected, not updated')
             return 0
@@ -234,13 +236,13 @@ class UEP(UEPConnection):
         except:
             raise Disconnected()
 
-    def __init__(self):
+    def __init__(self, insecure=False):
         cfg = initConfig()
         host = cfg['hostname'] or "localhost"
         port = cfg['port']
         cert = ConsumerIdentity.certpath()
         key = ConsumerIdentity.keypath()
-        UEPConnection.__init__(self, host, ssl_port=port, cert_file=cert, key_file=key)
+        UEPConnection.__init__(self, host, ssl_port=port, cert_file=cert, key_file=key, insecure_mode=insecure)
         self.uuid = self.consumerId()
         
     def getCertificateSerials(self):
