@@ -478,16 +478,12 @@ class ConsumerIdentity:
         
     def getConsumerId(self):
         subject = self.x509.subject()
-        return subject.get('UID')
+        return subject.get('CN')
 
     def getConsumerName(self):
-        subject = self.x509.subject()
-        return subject.get('CN')
+        altName = self.x509.alternateName()
+        return altName.replace("DirName:/CN=", "")
         
-    def getUser(self):
-        subject = self.x509.subject()
-        return subject.get('OU')
-
     def write(self):
         self.__mkdir()
         f = open(self.keypath(), 'w')
@@ -511,10 +507,9 @@ class ConsumerIdentity:
             os.mkdir(path)
 
     def __str__(self):
-        return 'consumer: name="%s", uuid=%s, user: "%s"' % \
+        return 'consumer: name="%s", uuid=%s' % \
             (self.getConsumerName(),
-             self.getConsumerId(),
-             self.getUser())
+             self.getConsumerId())
 
 
 class UpdateReport:

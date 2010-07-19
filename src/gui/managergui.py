@@ -72,8 +72,7 @@ def get_consumer():
         return {}
     consumer = ConsumerIdentity.read()
     consumer_info = {"consumer_name" : consumer.getConsumerName(),
-                     "uuid" : consumer.getConsumerId(),
-                     "user_account"  : consumer.getUser()
+                     "uuid" : consumer.getConsumerId()
                     }
     return consumer_info
 
@@ -417,9 +416,7 @@ class RegistrationTokenScreen:
             errorWindow(linkify(e.msg))
 
     def setAccountMsg(self):
-        euser = consumer['user_account'] or None
         alabel = self.regtokenxml.get_widget("account_label")
-        alabel.set_label(_("\n<b>User Account:</b>   %s" % euser))
         alabel1 = self.regtokenxml.get_widget("account_label1")
         alabel1.set_label(_("\nThis system is registered with the account"))
         alabel = self.regtokenxml.get_widget("account_label2")
