@@ -79,7 +79,21 @@ class Certificate(object):
                 d[key] = str(asn1)
                 continue
         return d
-    
+
+    def alternateName(self):
+        """
+        Return the altername name of the certificate.
+        @return: A string representation of hte alternate name
+        @rtype: str
+        """
+        nameExt = self.x509.get_ext('subjectAltName')
+
+        altName = None
+        if (nameExt):
+            altName = nameExt.get_value()
+        return altName
+
+
     def validRange(self):
         """
         Get the I{valid} date range.

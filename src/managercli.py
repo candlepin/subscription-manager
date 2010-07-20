@@ -469,8 +469,7 @@ def check_registration():
         sys.exit(1)
     consumer = ConsumerIdentity.read()
     consumer_info = {"consumer_name" : consumer.getConsumerName(),
-                     "uuid" : consumer.getConsumerId(),
-                     "user_account"  : consumer.getUser()
+                     "uuid" : consumer.getConsumerId()
                     }
     return consumer_info
 
