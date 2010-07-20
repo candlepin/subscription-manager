@@ -7,20 +7,45 @@ PKGDIR = /usr/share/rhsm/
 PKGNAME = subscription-manager
 VERSION = $(shell echo `grep ^Version: $(PKGNAME).spec | awk '{ print $$2 }'`)
 
+CFLAGS = -Wall -g
+
 %.pyc: %.py
 	python -c "import py_compile; py_compile.compile('$<')"
 
-rhsmcertd: src/rhsmcertd.c
+build:	rhsmcertd rhsm-compliance-icon
+
+bin:
 	@mkdir -p bin
-	cc $? -o bin/rhsmcertd
 
-build:	rhsmcertd
+rhsmcertd: src/rhsmcertd.c bin
+	cc src/rhsmcertd.c -o bin/rhsmcertd
 
-install: 
+COMPLIANCE_FLAGS=`pkg-config --cflags --libs gtk+-2.0 unique-1.0 libnotify`
+
+rhsm-compliance-icon: src/compliance/rhsm_compliance_icon.c bin
+	${CC} ${CFLAGS} ${COMPLIANCE_FLAGS} -o bin/rhsm-compliance-icon \
+		src/compliance/rhsm_compliance_icon.c
+
+dbus-service-install:
+	@mkdir -p ${PREFIX}/etc/dbus-1/system.d
+	@mkdir -p ${PREFIX}/usr/share/dbus-1/system-services
+	@mkdir -p ${PREFIX}/usr/libexec
+	install -m 644 etc-conf/com.redhat.SubscriptionManager.conf \
+		${PREFIX}/etc/dbus-1/system.d
+	install -m 644 etc-conf/com.redhat.SubscriptionManager.service \
+		${PREFIX}/usr/share/dbus-1/system-services
+	install -m 744 src/compliance/rhsm_compliance_d.py \
+		${PREFIX}/usr/libexec/rhsm-complianced
+
+install: dbus-service-install
 	@mkdir -p ${PREFIX}/usr/share/rhsm/gui/data/icons/16x16
 	@mkdir -p ${PREFIX}/usr/lib/yum-plugins/
 	@mkdir -p ${PREFIX}/usr/sbin
 	@mkdir -p ${PREFIX}/etc/rhsm
+	@mkdir -p ${PREFIX}/etc/xdg/autostart
+	@mkdir -p ${PREFIX}/etc/cron.daily
+	@mkdir -p ${PREFIX}/etc/pam.d
+	@mkdir -p ${PREFIX}/etc/security/console.apps
 	@mkdir -p ${PREFIX}/etc/yum/pluginconf.d/
 	@mkdir -p ${PREFIX}/usr/share/man/man8/
 	@mkdir -p ${PREFIX}/var/log/rhsm
@@ -42,6 +67,15 @@ install:
 	cp bin/* ${PREFIX}/usr/bin
 	cp src/rhsmcertd.init.d ${PREFIX}/etc/init.d/rhsmcertd
 	cp man/* ${PREFIX}/usr/share/man/man8/
+	install -m 755 etc-conf/rhsm-compliance-icon.desktop \
+		${PREFIX}/etc/xdg/autostart
+	install -m 755 etc-conf/rhsm-complianced.cron \
+		${PREFIX}/etc/cron.daily/rhsm-complianced
+	ln -s consolehelper ${PREFIX}/usr/bin/subscription-manager-gui
+	install -m 644 etc-conf/subscription-manager-gui.pam \
+		${PREFIX}/etc/pam.d/subscription-manager-gui
+	install -m 644 etc-conf/subscription-manager-gui.console \
+		${PREFIX}/etc/security/console.apps/subscription-manager-gui
 
 clean:
 	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
