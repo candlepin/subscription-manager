@@ -60,8 +60,9 @@ class CliCommand(object):
 
         self.parser.add_option("--debug", dest="debug",
                 default=0, help="debug level")
+        # insecure mode turned on by default for testing purposes. please change default=False when done!
         self.parser.add_option("-k", "--insecure",dest="insecure", action="store_true",
-                default=False, help="communicate with candlepin server without verifying server's certificate")
+                default=True, help="communicate with candlepin server without verifying server's certificate")
 
     def _do_command(self):
         pass
