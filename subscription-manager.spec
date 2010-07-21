@@ -123,6 +123,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/subscription-manager-cli.8*
 
 %files -n subscription-manager-gnome
+%dir %{_datadir}/firstboot/modules
 %defattr(-,root,root,-)
 %{_datadir}/rhsm/gui/__init__.py* 
 %{_datadir}/rhsm/gui/managergui.py*  
@@ -135,6 +136,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/gui/data/icons/subsmgr-empty.png
 %{_datadir}/rhsm/gui/data/icons/subsmgr-full.png
 %{_datadir}/icons/hicolor/16x16/apps/subsmgr.png
+%{_datadir}/firstboot/modules/rhms_module.py*
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(755,root,root) %{_bindir}/subscription-manager-gui
 %{_bindir}/rhsm-compliance-icon
@@ -206,6 +208,9 @@ fi
 - Remove unnecessary import. (jortel@redhat.com)
 - Removing bind by product name. Use pool or reg-token to do future binds
   (pkilambi@redhat.com)
+
+*Wed Jul 21 2010 Adrian Likins <alikins@redhat.com> 0.69-1
+- add firstboot modules
 
 * Fri Jul 09 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.68-1
 - Resolves: #613003
