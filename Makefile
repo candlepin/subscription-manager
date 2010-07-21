@@ -61,7 +61,7 @@ install: dbus-service-install
 	cp -R src/plugin/*.py ${PREFIX}/usr/lib/yum-plugins/
 	cp src/subscription-manager-cli ${PREFIX}/usr/sbin
 	cp src/subscription-manager-gui ${PREFIX}/usr/sbin
-	cp etc-conf/rhsm.conf ${PREFIX}/etc/rhsm/
+	#cp etc-conf/rhsm.conf ${PREFIX}/etc/rhsm/
 	cp etc-conf/rhsmplugin.conf ${PREFIX}/etc/yum/pluginconf.d/
 	cp etc-conf/pidplugin.conf ${PREFIX}/etc/yum/pluginconf.d/
 	cp bin/* ${PREFIX}/usr/bin
@@ -71,7 +71,7 @@ install: dbus-service-install
 		${PREFIX}/etc/xdg/autostart
 	install -m 755 etc-conf/rhsm-complianced.cron \
 		${PREFIX}/etc/cron.daily/rhsm-complianced
-	ln -s consolehelper ${PREFIX}/usr/bin/subscription-manager-gui
+	ln -sf consolehelper ${PREFIX}/usr/bin/subscription-manager-gui
 	install -m 644 etc-conf/subscription-manager-gui.pam \
 		${PREFIX}/etc/pam.d/subscription-manager-gui
 	install -m 644 etc-conf/subscription-manager-gui.console \
