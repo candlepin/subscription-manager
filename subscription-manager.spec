@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.70
+Version: 0.71
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -153,7 +153,8 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Wed Jul 21 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.69-1
+
+* Wed Jul 21 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.71-1
 - Resolves: #613003
 - Make subscription-manager-gui run as root (jbowes@redhat.com)
 - Pass the UUID in the subject, and name in the subjectAlternateName
