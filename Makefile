@@ -53,6 +53,8 @@ install: dbus-service-install
 	@mkdir -p ${PREFIX}/usr/bin
 	@mkdir -p ${PREFIX}/etc/init.d
 	@mkdir -p ${PREFIX}/usr/share/icons/hicolor/16x16/apps
+	@mkdir -p ${PREFIX}/usr/share/firstboot/
+	@mkdir -p ${PREFIX}/usr/share/firstboot/modules
 	cp -R src/*.py ${PREFIX}/usr/share/rhsm
 	cp -R src/gui/*.py ${PREFIX}/usr/share/rhsm/gui
 	cp -R src/gui/data/*.glade ${PREFIX}/usr/share/rhsm/gui/data/
