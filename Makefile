@@ -63,7 +63,7 @@ install: dbus-service-install
 	cp -R src/plugin/*.py ${PREFIX}/usr/lib/yum-plugins/
 	cp src/subscription-manager-cli ${PREFIX}/usr/sbin
 	cp src/subscription-manager-gui ${PREFIX}/usr/sbin
-	#cp etc-conf/rhsm.conf ${PREFIX}/etc/rhsm/
+	cp etc-conf/rhsm.conf ${PREFIX}/etc/rhsm/
 	cp etc-conf/rhsmplugin.conf ${PREFIX}/etc/yum/pluginconf.d/
 	cp etc-conf/pidplugin.conf ${PREFIX}/etc/yum/pluginconf.d/
 	cp bin/* ${PREFIX}/usr/bin
