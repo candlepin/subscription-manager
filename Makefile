@@ -67,6 +67,7 @@ install: dbus-service-install
 	cp bin/* ${PREFIX}/usr/bin
 	cp src/rhsmcertd.init.d ${PREFIX}/etc/init.d/rhsmcertd
 	cp man/* ${PREFIX}/usr/share/man/man8/
+	cp src/gui/firstboot/*.py ${PREFIX}/usr/share/firstboot/modules
 	install -m 755 etc-conf/rhsm-compliance-icon.desktop \
 		${PREFIX}/etc/xdg/autostart
 	install -m 755 etc-conf/rhsm-complianced.cron \
