@@ -154,6 +154,7 @@ fi
 
 %changelog
 * Wed Jul 21 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.69-1
+- Resolves: #613003
 - Make subscription-manager-gui run as root (jbowes@redhat.com)
 - Pass the UUID in the subject, and name in the subjectAlternateName
   (bkearney@redhat.com)
