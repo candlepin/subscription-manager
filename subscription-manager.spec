@@ -153,9 +153,6 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Wed Jul 21 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.70-1
-- new build (pkilambi@redhat.com)
-
 * Wed Jul 21 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.69-1
 - Resolves: #613003
 - Make subscription-manager-gui run as root (jbowes@redhat.com)
