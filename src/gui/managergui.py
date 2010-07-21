@@ -307,7 +307,12 @@ class RegisterScreen:
     def cancel(self, button):
         self.registerWin.hide()
 
+
+    # callback needs the extra arg, so just a wrapper here
     def onRegisterAction(self, button):
+        self.register()
+
+    def register(self, testing=None):
         self.uname = self.registerxml.get_widget("account_login")
         self.passwd = self.registerxml.get_widget("account_password")
 
@@ -315,10 +320,14 @@ class RegisterScreen:
         username = self.uname.get_text()
         password = self.passwd.get_text()
 
-
         facts = getFacts()
         if not self.validate_account():
             return False
+
+        # for firstboot -t
+        if testing:
+            return True
+
         # Unregister consumer if exists
         if ConsumerIdentity.exists():
             try:
@@ -344,16 +353,19 @@ class RegisterScreen:
                 if not fetch_certificates():
                     return
             RegistrationTokenScreen()
-            self.registerWin.hide()
-            reload()
+            self.close_window()
+#            reload()
         except connection.RestlibException, e:
             log.error(failed_msg % e.msg)
             errorWindow(constants.REGISTER_ERROR % linkify(e.msg))
-            self.registerWin.hide()
+            self.close_window()
         except Exception, e:
             log.error(failed_msg % e)
             errorWindow(constants.REGISTER_ERROR % e)
-            self.registerWin.hide()
+            self.close_window()
+
+    def close_window(self):
+        self.registerWin.hide()
 
     def auto_subscribe(self):
         self.autobind = self.registerxml.get_widget("auto_bind")
