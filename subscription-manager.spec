@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.68
+Version: 0.69
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -153,6 +153,31 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Wed Jul 21 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.69-1
+- Make subscription-manager-gui run as root (jbowes@redhat.com)
+- Pass the UUID in the subject, and name in the subjectAlternateName
+  (bkearney@redhat.com)
+- hook up consolehelper for subscription-manager-gui (jbowes@redhat.com)
+- Add compliance notification syslogging/desktop icon (jbowes@redhat.com)
+- Make candlepin_ca_file an instance variable (root@localhost.localdomain)
+- subscription-manager now checks server's certificate before performing
+  further commands (anadathu@redhat.com)
+- From: Adrian Likins <alikins@redhat.com> Date: Mon, 12 Jul 2010 15:23:59
+  -0400 Subject: [PATCH 7/7] Don't try to use any existing consumer certs for
+  registration (anadathu@redhat.com)
+- Need to add pidplugin.conf to Makefile. (jortel@redhat.com)
+- Daemon not started at install; pidplugin disabled. As per fedora packaging
+  guidelines, the rhsm daemon is not started during rpm install.
+  (jortel@redhat.com)
+- Add product ID (yum) plugin conf. (jortel@redhat.com)
+- Add support for alternate root directories. Change the root dir to
+  /mnt/sysimage when it exists to support running the product id plugin within
+  an Anaconda install. (jortel@redhat.com)
+- Add productid plugin. (jortel@redhat.com)
+- Remove unnecessary import. (jortel@redhat.com)
+- Removing bind by product name. Use pool or reg-token to do future binds
+  (pkilambi@redhat.com)
+
 * Fri Jul 09 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.68-1
 - Resolves: #613003
 - putting back accessibility strings overridden by facts commit
