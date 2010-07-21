@@ -136,7 +136,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/gui/data/icons/subsmgr-empty.png
 %{_datadir}/rhsm/gui/data/icons/subsmgr-full.png
 %{_datadir}/icons/hicolor/16x16/apps/subsmgr.png
-%{_datadir}/firstboot/modules/rhms_module.py*
+%{_datadir}/firstboot/modules/rhms_login.py*
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(755,root,root) %{_bindir}/subscription-manager-gui
 %{_bindir}/rhsm-compliance-icon
