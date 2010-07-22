@@ -99,22 +99,22 @@ class RegisterCommand(CliCommand):
         self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", 
                                                ssl_port=cfg['port'], handler="/candlepin")
         self.parser.add_option("--username", dest="username",
-                               help="Specify a username")
+                               help="specify a username")
         self.parser.add_option("--type", dest="consumertype", default="system",
-                               help="The type of consumer to create. Defaults to sytem")
+                               help="the type of consumer to create. Defaults to system")
         self.parser.add_option("--password", dest="password",
-                               help="Specify a password")
+                               help="specify a password")
         self.parser.add_option("--consumerid", dest="consumerid",
-                               help="Register to an Existing consumer")
+                               help="register to an existing consumer")
         self.parser.add_option("--autosubscribe", action='store_true',
-                               help="Automatically subscribe this system to\
+                               help="automatically subscribe this system to\
                                      compatible subscriptions.")
         self.parser.add_option("--force",  action='store_true', 
-                               help="Register the system even if it is already registered")
+                               help="register the system even if it is already registered")
 
     def _validate_options(self):
         if not (self.options.username and self.options.password):
-            print (_("Error: username and password are required to register,try --help.\n"))
+            print (_("Error: username and password are required to register, try register --help.\n"))
             sys.exit(-1)
 
         if ConsumerIdentity.exists() and not self.options.force:
@@ -141,7 +141,7 @@ class RegisterCommand(CliCommand):
                systemExit(-1, re.msg)
            try:
                self.cp.unregisterConsumer(consumerid)
-               log.info("--force specified. Successfully Unsubscribed the old consumer.")
+               log.info("--force specified. Successfully unsubscribed the old consumer.")
            except:
                 log.error("Unable to unregister with consumer %s" % consumerid)
         else:
@@ -207,20 +207,20 @@ class SubscribeCommand(CliCommand):
         self.parser.add_option("--regtoken", dest="regtoken", action='append',
                                help="regtoken")
         self.parser.add_option("--pool", dest="pool", action='append',
-                               help="Subscription Pool Id")
+                               help="subscription pool id")
         self.parser.add_option("--email", dest="email", action='store',
-                               help=_("Optional email address to notify when "
-                               "token actication is complete. Used with "
+                               help=_("optional email address to notify when "
+                               "token activation is complete. Used with "
                                "--regtoken only"))
         self.parser.add_option("--locale", dest="locale", action='store',
-                               help=_("Optional language to use for email "
-                               "notification when token actication is "
+                               help=_("optional language to use for email "
+                               "notification when token activation is "
                                "complete. Used with --regtoken and --email "
                                "only. Examples: en-us, de-de"))
 
     def _validate_options(self):
         if not (self.options.regtoken or self.options.pool):
-            print _("Error: Need either --pool or --regtoken, Try --help")
+            print _("Error: Need either --pool or --regtoken, Try subscribe --help")
             sys.exit(-1)
 
     def _do_command(self):
@@ -291,7 +291,7 @@ class UnSubscribeCommand(CliCommand):
 
 class FactsCommand(CliCommand):
     def __init__(self):
-        usage = "usage: %prog facts [options]"
+        usage = "usage: %prog facts [OPTIONS]"
         shortdesc = "show information for facts"
         desc = "facts"
         CliCommand.__init__(self, "facts", usage, shortdesc, desc)
