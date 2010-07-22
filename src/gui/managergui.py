@@ -115,6 +115,9 @@ class ManageSubscriptionPage:
         self.mainWin.connect("delete-event", gtk.main_quit)
         self.mainWin.connect("hide", gtk.main_quit)
 
+        self.show_all()
+    
+    def show_all(self):
         self.mainWin.show_all()
 
     def loadAccountSettings(self, button):
@@ -150,6 +153,7 @@ class ManageSubscriptionPage:
 
 
     def populateProductDialog(self):
+        print "populateProductDialog"
         state_icon_map = {"Expired" : gtk.STOCK_DIALOG_WARNING,
                           "Not Subscribed" : gtk.STOCK_DIALOG_QUESTION,
                           "Subscribed" : gtk.STOCK_APPLY, 
@@ -159,6 +163,7 @@ class ManageSubscriptionPage:
                                          gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.warn_count = 0
         for product in managerlib.getInstalledProductStatus():
+            print "adding product %s to product list widget" % (product,)
             markup_status = product[1]
             if product[1] in ["Expired", "Not Subscribed", "Not Installed"]:
                 self.warn_count += 1
@@ -250,7 +255,10 @@ class ManageSubscriptionPage:
         else:
             self.reg_label.set_label(constants.REG_LOCAL_STATUS)
             self.reg_button_label.set_label(_("Register System..."))
-        
+
+    def gui_reload(self):
+        self.populateProductDialog()
+        reload()
 
     def onUnsubscribeAction(self, button):
         global UEP
@@ -267,7 +275,8 @@ class ManageSubscriptionPage:
                 if self.pname_selected == cert.getProduct().getName():
                     cert.delete()
                     log.info("This machine is now unsubscribed from Product %s " % self.pname_selected)
-            reload()
+             #FIXME:
+            self.gui_reload()
             return
         try:
             UEP.unBindBySerialNumber(consumer['uuid'], self.psubs_selected)
@@ -284,7 +293,7 @@ class ManageSubscriptionPage:
         # Force fetch all certs
         if not fetch_certificates():
             return
-        reload()
+        self.gui_reload()
 
 class RegisterScreen:
     """
@@ -531,11 +540,13 @@ class AddSubscriptionScreen:
             # no CP to talk, use local certs uploads
             ImportCertificate()
 
+    # hook to forward
     def finish(self):
         self.addWin.hide()
         self.addWin.destroy()
         gtk.main_iteration()
 
+    # back?
     def cancel(self, button):
         self.addWin.destroy()
         gtk.main_iteration()
@@ -583,7 +594,7 @@ class AddSubscriptionScreen:
 
         pwin.hide()
         self.addWin.hide()
-        reload()
+#        reload()
             
     def populateMatchingSubscriptions(self):
         """
@@ -919,7 +930,7 @@ class ImportCertificate:
         shutil.copy(src_cert_file, dest_file_path)
         print dest_file_path
         self.importWin.hide()
-        reload()
+#        reload()
 
 def unexpectedError(message, exc_info=None):
     message = message + "\n" + constants.UNEXPECTED_ERROR
@@ -940,10 +951,10 @@ def setBusyCursor():
     pass
 
 def reload():
-    global gui
-    gui.refresh()
-    gtk.main_quit()
-    gui = None
+#    global gui
+#    gui.refresh()
+#    gtk.main_quit()
+#    gui = None
     main()
 
 def linkify(msg):
