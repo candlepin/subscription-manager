@@ -318,7 +318,7 @@ class FactsCommand(CliCommand):
         if self.options.update:
             facts = getFacts()
             consumer = check_registration()['uuid']
-            print consumer, self.cp
+            print consumer
             self.cp.updateConsumerFacts(consumer, facts.get_facts())
 
 
