@@ -191,8 +191,9 @@ class UnRegisterCommand(CliCommand):
         except connection.RestlibException, re:
            log.error("Error: Unable to UnRegister the system: %s" % re)
            systemExit(-1, re.msg)
-        except:
+        except Exception, e:
             log.error("Error: Unable to UnRegister the system")
+            systemExit(-1, e)
 
 class SubscribeCommand(CliCommand):
     def __init__(self):
