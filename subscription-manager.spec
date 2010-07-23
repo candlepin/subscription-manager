@@ -128,7 +128,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/gui/managergui.py*  
 %{_datadir}/rhsm/gui/messageWindow.py*  
 %{_datadir}/rhsm/gui/progress.py* 
-%{_datadir}/rhsm/gui/data/standaloneH.glade  
+%{_datadir}/rhsm/gui/data/rhsm.glade  
 %{_datadir}/rhsm/gui/data/subsgui.glade  
 %{_datadir}/rhsm/gui/data/subsMgr.glade
 %{_datadir}/rhsm/gui/data/progress.glade

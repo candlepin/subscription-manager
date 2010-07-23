@@ -49,7 +49,7 @@ log = getLogger(__name__)
 
 
 prefix = os.path.dirname(__file__)
-gladexml = os.path.join(prefix, "data/standaloneH.glade")
+gladexml = os.path.join(prefix, "data/rhsm.glade")
 subs_full = os.path.join(prefix, "data/icons/subsmgr-full.png")
 subs_empty = os.path.join(prefix, "data/icons/subsmgr-empty.png")
 
