@@ -418,9 +418,11 @@ class RegistrationTokenScreen:
     def setAccountMsg(self):
         alabel = self.regtokenxml.get_widget("account_label")
         alabel1 = self.regtokenxml.get_widget("account_label1")
-        alabel1.set_label(_("\nThis system is registered with the account"))
+        alabel1.set_label(_("\nThis system is registered with following consumer information"))
         alabel = self.regtokenxml.get_widget("account_label2")
-        alabel.set_label(_("<b>  ConsumerID:</b>     %s" % consumer["uuid"]))
+        alabel.set_label(_("<b>    ID:</b>       %s" % consumer["uuid"]))
+        alabel = self.regtokenxml.get_widget("account_label3")
+        alabel.set_label(_("<b>  Name:</b>     %s" % consumer["consumer_name"]))        
 
     def submitToken(self, button):
         rlabel = self.regtokenxml.get_widget("regtoken_entry")
