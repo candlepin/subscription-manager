@@ -138,6 +138,7 @@ class RegisterCommand(CliCommand):
                        facts=facts.get_facts())
                consumerid = check_registration()['uuid']
            except connection.RestlibException, re:
+               log.exception(re)
                systemExit(-1, re.msg)
            try:
                self.cp.unregisterConsumer(consumerid)
@@ -150,6 +151,7 @@ class RegisterCommand(CliCommand):
                        self.options.password, name="admin", type=self.options.consumertype,
                        facts=facts.get_facts())
             except connection.RestlibException, re:
+                log.exception(re)
                 systemExit(-1, re.msg)
 
         managerlib.persist_consumer_cert(consumer)
@@ -185,13 +187,15 @@ class UnRegisterCommand(CliCommand):
            consumer = check_registration()['uuid']
            self.cp.unregisterConsumer(consumer)
            # clean up stale consumer/entitlement certs
-           shutil.rmtree("/etc/pki/consumer/")
-           shutil.rmtree("/etc/pki/entitlement/")
+           shutil.rmtree("/etc/pki/consumer/", ignore_errors=True)
+           shutil.rmtree("/etc/pki/entitlement/", ignore_errors=True)
            log.info("Successfully Unsubscribed the client from Entitlement Platform.")
         except connection.RestlibException, re:
+           log.exception(re)
            log.error("Error: Unable to UnRegister the system: %s" % re)
            systemExit(-1, re.msg)
         except Exception, e:
+            log.exception(e)
             log.error("Error: Unable to UnRegister the system")
             systemExit(-1, e)
 
@@ -250,10 +254,11 @@ class SubscribeCommand(CliCommand):
                     log.info("Info: Successfully subscribed the machine the Entitlement Pool %s" % pool)
             self.certlib.update()
         except connection.RestlibException, re:
-            log.error(re)
+            log.exception(re)
             systemExit(-1, re.msg)
         except Exception, e:
             log.error("Unable to subscribe: %s" % e)
+            log.exception(e)
             systemExit(-1, msgs=e)
 
 class UnSubscribeCommand(CliCommand):
@@ -287,6 +292,7 @@ class UnSubscribeCommand(CliCommand):
             log.error(re)
             systemExit(-1, re.msg)
         except Exception,e:
+            log.exception(e)
             log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
             systemExit(-1, msgs=e)
 
