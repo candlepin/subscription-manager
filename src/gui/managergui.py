@@ -310,10 +310,14 @@ class RegisterScreen:
     def onRegisterAction(self, button):
         self.uname = self.registerxml.get_widget("account_login")
         self.passwd = self.registerxml.get_widget("account_password")
+        self.consumer_name = self.registerxml.get_widget("consumer_name")
 
-        global username, password, consumer
+        global username, password, consumer, consumername
         username = self.uname.get_text()
         password = self.passwd.get_text()
+        consumername = self.consumer_name.get_text()
+        if consumername == None:
+            consumername = username
 
 
         facts = getFacts()
@@ -328,7 +332,7 @@ class RegisterScreen:
                 log.error("Unable to unregister existing user credentials.")
         failed_msg = "Unable to register your system. \n Error: %s"
         try:
-            newAccount = UEP.registerConsumer(username, password, name="admin",
+            newAccount = UEP.registerConsumer(username, password, name=consumername,
                     facts=facts.get_facts())
             consumer = managerlib.persist_consumer_cert(newAccount)
             # reload cP instance with new ssl certs
