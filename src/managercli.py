@@ -102,6 +102,8 @@ class RegisterCommand(CliCommand):
                                help="specify a username")
         self.parser.add_option("--type", dest="consumertype", default="system",
                                help="the type of consumer to create. Defaults to system")
+        self.parser.add_option("--name", dest="consumername",
+                               help="name of the consuemr to create. Defaults to the username.")
         self.parser.add_option("--password", dest="password",
                                help="specify a password")
         self.parser.add_option("--consumerid", dest="consumerid",
@@ -128,13 +130,19 @@ class RegisterCommand(CliCommand):
         self._validate_options()
 
         facts = getFacts()
+
+        #Default the username if not there.
+        consumername = self.options.consumername
+        if consumername == None:
+            consumername = self.options.username
+
         if self.options.consumerid:
             consumer = self.cp.getConsumerById(self.options.consumerid, self.options.username, self.options.password)
 
         elif ConsumerIdentity.exists() and self.options.force:
            try:
                consumer = self.cp.registerConsumer(self.options.username,
-                       self.options.password, name="admin", type=self.options.consumertype,
+                       self.options.password, name=consumername, type=self.options.consumertype,
                        facts=facts.get_facts())
                consumerid = check_registration()['uuid']
            except connection.RestlibException, re:
@@ -148,7 +156,7 @@ class RegisterCommand(CliCommand):
         else:
             try:
                consumer = self.cp.registerConsumer(self.options.username,
-                       self.options.password, name="admin", type=self.options.consumertype,
+                       self.options.password, name=consumername, type=self.options.consumertype,
                        facts=facts.get_facts())
             except connection.RestlibException, re:
                 log.exception(re)
