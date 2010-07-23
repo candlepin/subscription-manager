@@ -109,7 +109,7 @@ class UEPConnection:
     Proxy for Unified Entitlement Platform.
     """
     def __init__(self, host='localhost', ssl_port=8443, handler="/candlepin",
-            cert_file=None, key_file=None, insecure_mode=False):
+            cert_file=None, key_file=None, insecure=False):
         self.host = host
         self.ssl_port = ssl_port
         self.handler = handler
@@ -124,13 +124,9 @@ class UEPConnection:
               DEFAULT_CA_FILE)
           self.candlepin_ca_file = DEFAULT_CA_FILE
         # initialize connection
-        self.conn = Restlib(self.host, self.ssl_port, self.handler, self.cert_file, self.key_file, self.candlepin_ca_file, insecure_mode)
+        self.conn = Restlib(self.host, self.ssl_port, self.handler, self.cert_file, self.key_file, self.candlepin_ca_file, insecure)
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
-
-    def set_insecure(self, insecure=False):
-      self.conn.insecure = insecure
-
     def shutDown(self):
         self.conn.close()
         log.info("remote connection closed")

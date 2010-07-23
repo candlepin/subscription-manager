@@ -45,15 +45,12 @@ class CliCommand(object):
         if shortdesc is not None and description is None:
             description = shortdesc
         self.debug = 0
+        self._cp = None
         self.parser = OptionParser(usage=usage, description=description)
         self._add_common_options()
         self.name = name
-        if ConsumerIdentity.exists():
-            self.reload_cp_with_certs()
-        else:
-            self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", 
-                                               ssl_port=cfg['port'], handler="/candlepin")
         self.certlib = CertLib()
+        self.insecure = False
 
     def _add_common_options(self):
         """ Add options that apply to all sub-commands. """
@@ -67,26 +64,47 @@ class CliCommand(object):
     def _do_command(self):
         pass
 
-    def reload_cp_with_certs(self):
+    @property
+    def cp(self):
+        if not self._cp:
+            if ConsumerIdentity.exists():
+                self._cp = self.create_connection_with_userIdentity()
+            else:
+                self._cp = self.create_connection()
+        return self._cp
+
+    @cp.setter
+    def cp(self, cp):
+        self._cp = cp
+
+    def create_connection_with_userIdentity(self):
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
-        self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", 
+        return connection.UEPConnection(host=cfg['hostname'] or "localhost",
                                            ssl_port=cfg['port'], handler="/candlepin", 
-                                           cert_file=cert_file, key_file=key_file)
+                                           cert_file=cert_file, key_file=key_file,
+                                           insecure=self.insecure)
+    def create_connection(self):
+        return connection.UEPConnection(host=cfg['hostname'] or "localhost",
+                                               ssl_port=cfg['port'], handler="/candlepin",
+                                               insecure=self.insecure)
 
     def main(self):
 
         (self.options, self.args) = self.parser.parse_args()
         # we dont need argv[0] in this list...
         self.args = self.args[1:]
-        log.info(self.options)
         if self.options.insecure:
-          self.cp.set_insecure(True)
-          self.certlib.set_insecure(True)
+          self.insecure = True
+          self.certlib.insecure = True
         # do the work, catch most common errors here:
         self._do_command()
 
 class RegisterCommand(CliCommand):
+    def create_connection(self):
+        return connection.UEPConnection(host=cfg['hostname'] or "localhost",
+                                               ssl_port=cfg['port'], handler="/candlepin",
+                                               insecure=self.insecure)
     def __init__(self):
         usage = "usage: %prog register [OPTIONS]"
         shortdesc = "register the client to a Unified Entitlement Platform."
@@ -96,8 +114,7 @@ class RegisterCommand(CliCommand):
 
         self.username = None
         self.password = None
-        self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", 
-                                               ssl_port=cfg['port'], handler="/candlepin")
+
         self.parser.add_option("--username", dest="username",
                                help="specify a username")
         self.parser.add_option("--type", dest="consumertype", default="system",
@@ -163,7 +180,7 @@ class RegisterCommand(CliCommand):
                 systemExit(-1, re.msg)
 
         managerlib.persist_consumer_cert(consumer)
-        self.reload_cp_with_certs()
+        self.cp = self.create_connection_with_userIdentity()
         if self.options.autosubscribe:
             # try to auomatically bind products
             for pname, phash in managerlib.getInstalledProductHashMap().items():
