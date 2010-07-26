@@ -30,6 +30,7 @@ from certlib import CertLib, ConsumerIdentity, ProductDirectory, EntitlementDire
 import managerlib
 import gettext
 from facts import getFacts
+from M2Crypto import X509
 _ = gettext.gettext
 from logutil import getLogger
 
@@ -45,47 +46,70 @@ class CliCommand(object):
         if shortdesc is not None and description is None:
             description = shortdesc
         self.debug = 0
+        self._cp = None
         self.parser = OptionParser(usage=usage, description=description)
         self._add_common_options()
         self.name = name
-        if ConsumerIdentity.exists():
-            self.reload_cp_with_certs()
-        else:
-            self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", 
-                                               ssl_port=cfg['port'], handler="/candlepin")
         self.certlib = CertLib()
+        self.insecure = False
 
     def _add_common_options(self):
         """ Add options that apply to all sub-commands. """
 
         self.parser.add_option("--debug", dest="debug",
                 default=0, help="debug level")
+        # insecure mode turned on by default for testing purposes. please change default=False when done!
         self.parser.add_option("-k", "--insecure",dest="insecure", action="store_true",
-                default=False, help="communicate with candlepin server without verifying server's certificate")
+                default=True, help="communicate with candlepin server without verifying server's certificate")
 
     def _do_command(self):
         pass
 
-    def reload_cp_with_certs(self):
+    @property
+    def cp(self):
+        if not self._cp:
+            if ConsumerIdentity.exists():
+                self._cp = self.create_connection_with_userIdentity()
+            else:
+                self._cp = self.create_connection()
+        return self._cp
+
+    @cp.setter
+    def cp(self, cp):
+        self._cp = cp
+
+    def create_connection_with_userIdentity(self):
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
-        self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", 
+        return connection.UEPConnection(host=cfg['hostname'] or "localhost",
                                            ssl_port=cfg['port'], handler="/candlepin", 
-                                           cert_file=cert_file, key_file=key_file)
+                                           cert_file=cert_file, key_file=key_file,
+                                           insecure=self.insecure)
+    def create_connection(self):
+        return connection.UEPConnection(host=cfg['hostname'] or "localhost",
+                                               ssl_port=cfg['port'], handler="/candlepin",
+                                               insecure=self.insecure)
 
     def main(self):
 
         (self.options, self.args) = self.parser.parse_args()
         # we dont need argv[0] in this list...
         self.args = self.args[1:]
-        log.info(self.options)
         if self.options.insecure:
-          self.cp.set_insecure(True)
-          self.certlib.set_insecure(True)
+          self.insecure = True
+          self.certlib.insecure = True
         # do the work, catch most common errors here:
-        self._do_command()
+        try:
+            self._do_command()
+        except X509.X509Error, e:
+            log.error(e)
+            print 'Consumer certificates corrupted. Please re-register'
 
 class RegisterCommand(CliCommand):
+    def create_connection(self):
+        return connection.UEPConnection(host=cfg['hostname'] or "localhost",
+                                               ssl_port=cfg['port'], handler="/candlepin",
+                                               insecure=self.insecure)
     def __init__(self):
         usage = "usage: %prog register [OPTIONS]"
         shortdesc = "register the client to a Unified Entitlement Platform."
@@ -95,25 +119,26 @@ class RegisterCommand(CliCommand):
 
         self.username = None
         self.password = None
-        self.cp = connection.UEPConnection(host=cfg['hostname'] or "localhost", 
-                                               ssl_port=cfg['port'], handler="/candlepin")
+
         self.parser.add_option("--username", dest="username",
-                               help="Specify a username")
+                               help="specify a username")
         self.parser.add_option("--type", dest="consumertype", default="system",
-                               help="The type of consumer to create. Defaults to sytem")
+                               help="the type of consumer to create. Defaults to system")
+        self.parser.add_option("--name", dest="consumername",
+                               help="name of the consuemr to create. Defaults to the username.")
         self.parser.add_option("--password", dest="password",
-                               help="Specify a password")
+                               help="specify a password")
         self.parser.add_option("--consumerid", dest="consumerid",
-                               help="Register to an Existing consumer")
+                               help="register to an existing consumer")
         self.parser.add_option("--autosubscribe", action='store_true',
-                               help="Automatically subscribe this system to\
+                               help="automatically subscribe this system to\
                                      compatible subscriptions.")
         self.parser.add_option("--force",  action='store_true', 
-                               help="Register the system even if it is already registered")
+                               help="register the system even if it is already registered")
 
     def _validate_options(self):
         if not (self.options.username and self.options.password):
-            print (_("Error: username and password are required to register,try --help.\n"))
+            print (_("Error: username and password are required to register, try register --help.\n"))
             sys.exit(-1)
 
         if ConsumerIdentity.exists() and not self.options.force:
@@ -127,32 +152,40 @@ class RegisterCommand(CliCommand):
         self._validate_options()
 
         facts = getFacts()
+
+        #Default the username if not there.
+        consumername = self.options.consumername
+        if consumername == None:
+            consumername = self.options.username
+
         if self.options.consumerid:
             consumer = self.cp.getConsumerById(self.options.consumerid, self.options.username, self.options.password)
 
         elif ConsumerIdentity.exists() and self.options.force:
            try:
                consumer = self.cp.registerConsumer(self.options.username,
-                       self.options.password, name="admin", type=self.options.consumertype,
+                       self.options.password, name=consumername, type=self.options.consumertype,
                        facts=facts.get_facts())
                consumerid = check_registration()['uuid']
            except connection.RestlibException, re:
+               log.exception(re)
                systemExit(-1, re.msg)
            try:
                self.cp.unregisterConsumer(consumerid)
-               log.info("--force specified. Successfully Unsubscribed the old consumer.")
+               log.info("--force specified. Successfully unsubscribed the old consumer.")
            except:
                 log.error("Unable to unregister with consumer %s" % consumerid)
         else:
             try:
                consumer = self.cp.registerConsumer(self.options.username,
-                       self.options.password, name="admin", type=self.options.consumertype,
+                       self.options.password, name=consumername, type=self.options.consumertype,
                        facts=facts.get_facts())
             except connection.RestlibException, re:
+                log.exception(re)
                 systemExit(-1, re.msg)
 
         managerlib.persist_consumer_cert(consumer)
-        self.reload_cp_with_certs()
+        self.cp = self.create_connection_with_userIdentity()
         if self.options.autosubscribe:
             # try to auomatically bind products
             for pname, phash in managerlib.getInstalledProductHashMap().items():
@@ -184,14 +217,17 @@ class UnRegisterCommand(CliCommand):
            consumer = check_registration()['uuid']
            self.cp.unregisterConsumer(consumer)
            # clean up stale consumer/entitlement certs
-           shutil.rmtree("/etc/pki/consumer/")
-           shutil.rmtree("/etc/pki/entitlement/")
+           shutil.rmtree("/etc/pki/consumer/", ignore_errors=True)
+           shutil.rmtree("/etc/pki/entitlement/", ignore_errors=True)
            log.info("Successfully Unsubscribed the client from Entitlement Platform.")
         except connection.RestlibException, re:
+           log.exception(re)
            log.error("Error: Unable to UnRegister the system: %s" % re)
            systemExit(-1, re.msg)
-        except:
+        except Exception, e:
+            log.exception(e)
             log.error("Error: Unable to UnRegister the system")
+            systemExit(-1, e)
 
 class SubscribeCommand(CliCommand):
     def __init__(self):
@@ -206,20 +242,20 @@ class SubscribeCommand(CliCommand):
         self.parser.add_option("--regtoken", dest="regtoken", action='append',
                                help="regtoken")
         self.parser.add_option("--pool", dest="pool", action='append',
-                               help="Subscription Pool Id")
+                               help="subscription pool id")
         self.parser.add_option("--email", dest="email", action='store',
-                               help=_("Optional email address to notify when "
-                               "token actication is complete. Used with "
+                               help=_("optional email address to notify when "
+                               "token activation is complete. Used with "
                                "--regtoken only"))
         self.parser.add_option("--locale", dest="locale", action='store',
-                               help=_("Optional language to use for email "
-                               "notification when token actication is "
+                               help=_("optional language to use for email "
+                               "notification when token activation is "
                                "complete. Used with --regtoken and --email "
                                "only. Examples: en-us, de-de"))
 
     def _validate_options(self):
         if not (self.options.regtoken or self.options.pool):
-            print _("Error: Need either --pool or --regtoken, Try --help")
+            print _("Error: Need either --pool or --regtoken, Try subscribe --help")
             sys.exit(-1)
 
     def _do_command(self):
@@ -248,10 +284,11 @@ class SubscribeCommand(CliCommand):
                     log.info("Info: Successfully subscribed the machine the Entitlement Pool %s" % pool)
             self.certlib.update()
         except connection.RestlibException, re:
-            log.error(re)
+            log.exception(re)
             systemExit(-1, re.msg)
         except Exception, e:
             log.error("Unable to subscribe: %s" % e)
+            log.exception(e)
             systemExit(-1, msgs=e)
 
 class UnSubscribeCommand(CliCommand):
@@ -285,12 +322,13 @@ class UnSubscribeCommand(CliCommand):
             log.error(re)
             systemExit(-1, re.msg)
         except Exception,e:
+            log.exception(e)
             log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
             systemExit(-1, msgs=e)
 
 class FactsCommand(CliCommand):
     def __init__(self):
-        usage = "usage: %prog facts [options]"
+        usage = "usage: %prog facts [OPTIONS]"
         shortdesc = "show information for facts"
         desc = "facts"
         CliCommand.__init__(self, "facts", usage, shortdesc, desc)
@@ -316,7 +354,7 @@ class FactsCommand(CliCommand):
         if self.options.update:
             facts = getFacts()
             consumer = check_registration()['uuid']
-            print consumer, self.cp
+            print consumer
             self.cp.updateConsumerFacts(consumer, facts.get_facts())
 
 

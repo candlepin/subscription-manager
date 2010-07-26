@@ -70,8 +70,6 @@ class CertLib:
             return action.perform(serialNumbers)
         finally:
             lock.release()
-    def set_insecure(self, insecure=False):
-      self.insecure = True
 
 class Action:
 
@@ -242,7 +240,7 @@ class UEP(UEPConnection):
         port = cfg['port']
         cert = ConsumerIdentity.certpath()
         key = ConsumerIdentity.keypath()
-        UEPConnection.__init__(self, host, ssl_port=port, cert_file=cert, key_file=key, insecure_mode=insecure)
+        UEPConnection.__init__(self, host, ssl_port=port, cert_file=cert, key_file=key, insecure=insecure)
         self.uuid = self.consumerId()
         
     def getCertificateSerials(self):
