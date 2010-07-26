@@ -361,8 +361,9 @@ class FactsCommand(CliCommand):
 
         if self.options.regen:
             print "regen"
-            consumer = check_registration()['uuid']
-            self.cp.regenIdCertificate(consumer)
+            consumerid = check_registration()['uuid']
+            consumer = self.cp.regenIdCertificate(consumerid)
+            managerlib.persist_consumer_cert(consumer)
 
 
 class ListCommand(CliCommand):
