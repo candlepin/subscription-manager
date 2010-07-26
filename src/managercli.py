@@ -30,6 +30,7 @@ from certlib import CertLib, ConsumerIdentity, ProductDirectory, EntitlementDire
 import managerlib
 import gettext
 from facts import getFacts
+from M2Crypto import X509
 _ = gettext.gettext
 from logutil import getLogger
 
@@ -98,7 +99,11 @@ class CliCommand(object):
           self.insecure = True
           self.certlib.insecure = True
         # do the work, catch most common errors here:
-        self._do_command()
+        try:
+            self._do_command()
+        except X509.X509Error, e:
+            log.error(e)
+            print 'Consumer certificates corrupted. Please re-register'
 
 class RegisterCommand(CliCommand):
     def create_connection(self):
