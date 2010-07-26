@@ -225,7 +225,7 @@ def getAvailableEntitlements(cpserver, consumer):
 def getAvailableEntitlementsCLI(cpserver, consumer):
     columns  = ['id', 'quantity', 'unlimited', 'consumed', 'endDate', 'productName', 'productId']
     # update facts if we need it
-    print consumer, cpserver
+    print consumer
     facts = getFacts()
 #    print facts.find_facts()
     if facts.delta():
