@@ -360,11 +360,9 @@ class FactsCommand(CliCommand):
             self.cp.updateConsumerFacts(consumer, facts.get_facts())
 
         if self.options.regen:
-            print "regen"
             consumerid = check_registration()['uuid']
             consumer = self.cp.regenIdCertificate(consumerid)
             managerlib.persist_consumer_cert(consumer)
-
 
 class ListCommand(CliCommand):
     def __init__(self):

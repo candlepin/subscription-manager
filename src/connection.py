@@ -279,7 +279,7 @@ class UEPConnection:
         method = "/pools?consumer=%s&listall=true" % consumerId
         return self.conn.request_get(method)
 
-    def regenIdCertificates(self, consumerId):
+    def regenIdCertificate(self, consumerId):
         method = "/consumers/%s" % consumerId
         return self.conn.request_post(method)
         
