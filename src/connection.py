@@ -278,6 +278,10 @@ class UEPConnection:
     def getAllAvailableEntitlements(self, consumerId):
         method = "/pools?consumer=%s&listall=true" % consumerId
         return self.conn.request_get(method)
+
+    def regenIdCertificate(self, consumerId):
+        method = "/consumers/%s" % consumerId
+        return self.conn.request_post(method)
         
 
 if __name__ == '__main__':
