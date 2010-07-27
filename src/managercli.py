@@ -51,16 +51,12 @@ class CliCommand(object):
         self._add_common_options()
         self.name = name
         self.certlib = CertLib()
-        self.insecure = False
 
     def _add_common_options(self):
         """ Add options that apply to all sub-commands. """
 
         self.parser.add_option("--debug", dest="debug",
                 default=0, help="debug level")
-        # insecure mode turned on by default for testing purposes. please change default=False when done!
-        self.parser.add_option("-k", "--insecure",dest="insecure", action="store_true",
-                default=True, help="communicate with candlepin server without verifying server's certificate")
 
     def _do_command(self):
         pass
@@ -83,21 +79,16 @@ class CliCommand(object):
         key_file = ConsumerIdentity.keypath()
         return connection.UEPConnection(host=cfg['hostname'] or "localhost",
                                            ssl_port=cfg['port'], handler="/candlepin", 
-                                           cert_file=cert_file, key_file=key_file,
-                                           insecure=self.insecure)
+                                           cert_file=cert_file, key_file=key_file)
     def create_connection(self):
         return connection.UEPConnection(host=cfg['hostname'] or "localhost",
-                                               ssl_port=cfg['port'], handler="/candlepin",
-                                               insecure=self.insecure)
+                                               ssl_port=cfg['port'], handler="/candlepin")
 
     def main(self):
 
         (self.options, self.args) = self.parser.parse_args()
         # we dont need argv[0] in this list...
         self.args = self.args[1:]
-        if self.options.insecure:
-          self.insecure = True
-          self.certlib.insecure = True
         # do the work, catch most common errors here:
         try:
             self._do_command()
@@ -108,8 +99,7 @@ class CliCommand(object):
 class RegisterCommand(CliCommand):
     def create_connection(self):
         return connection.UEPConnection(host=cfg['hostname'] or "localhost",
-                                               ssl_port=cfg['port'], handler="/candlepin",
-                                               insecure=self.insecure)
+                                               ssl_port=cfg['port'], handler="/candlepin")
     def __init__(self):
         usage = "usage: %prog register [OPTIONS]"
         shortdesc = "register the client to a Unified Entitlement Platform."

@@ -109,7 +109,7 @@ class UEPConnection:
     Proxy for Unified Entitlement Platform.
     """
     def __init__(self, host='localhost', ssl_port=8443, handler="/candlepin",
-            cert_file=None, key_file=None, insecure=False):
+            cert_file=None, key_file=None):
         self.host = host
         self.ssl_port = ssl_port
         self.handler = handler
@@ -119,12 +119,16 @@ class UEPConnection:
         self.key_file = key_file
         config = initConfig()
         self.candlepin_ca_file = config['candlepin_ca_file']
+        config_insecure = config['insecure_mode']
+        self.insecure = False
+        if config_insecure in ['True', 'true', 't', 1]:
+            self.insecure = True
         if self.candlepin_ca_file == None:
           log.info("Value \'candlepin_ca_file\' not present in config file. Assuming default value: %s",
               DEFAULT_CA_FILE)
           self.candlepin_ca_file = DEFAULT_CA_FILE
         # initialize connection
-        self.conn = Restlib(self.host, self.ssl_port, self.handler, self.cert_file, self.key_file, self.candlepin_ca_file, insecure)
+        self.conn = Restlib(self.host, self.ssl_port, self.handler, self.cert_file, self.key_file, self.candlepin_ca_file, self.insecure)
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
     def shutDown(self):
