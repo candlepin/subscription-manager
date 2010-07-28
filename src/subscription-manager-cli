@@ -48,6 +48,8 @@ if os.getuid() != 0:
 try:
     # NOTE: importing
     import managercli
+    from logutil import getLogger
+    logger = getLogger(__name__)
 except KeyboardInterrupt:
     systemExit(0, "\nUser interrupted process.")
 except ImportError, e:
@@ -70,4 +72,6 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         systemExit(0, "\nUser interrupted process.")
     except Exception, e:
+        logger.exception(e)
         systemExit(1, e)
+        

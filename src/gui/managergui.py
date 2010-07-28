@@ -49,7 +49,7 @@ log = getLogger(__name__)
 
 
 prefix = os.path.dirname(__file__)
-gladexml = os.path.join(prefix, "data/standaloneH.glade")
+gladexml = os.path.join(prefix, "data/rhsm.glade")
 subs_full = os.path.join(prefix, "data/icons/subsmgr-full.png")
 subs_empty = os.path.join(prefix, "data/icons/subsmgr-empty.png")
 
@@ -302,7 +302,6 @@ class RegisterScreen:
     def __init__(self):
         global UEP
         UEP = connection.UEPConnection(cfg['hostname'] or 'localhost', ssl_port=cfg['port'])
-        
 
         self.registerxml = gtk.glade.XML(gladexml, "register_dialog", domain="subscription-manager")
         dic = { "on_close_clicked" : self.cancel,
@@ -324,10 +323,14 @@ class RegisterScreen:
     def register(self, testing=None):
         self.uname = self.registerxml.get_widget("account_login")
         self.passwd = self.registerxml.get_widget("account_password")
+        self.consumer_name = self.registerxml.get_widget("consumer_name")
 
-        global username, password, consumer
+        global username, password, consumer, consumername
         username = self.uname.get_text()
         password = self.passwd.get_text()
+        consumername = self.consumer_name.get_text()
+        if consumername == None:
+            consumername = username
 
         facts = getFacts()
         if not self.validate_account():
@@ -346,7 +349,7 @@ class RegisterScreen:
                 log.error("Unable to unregister existing user credentials.")
         failed_msg = "Unable to register your system. \n Error: %s"
         try:
-            newAccount = UEP.registerConsumer(username, password, name="admin",
+            newAccount = UEP.registerConsumer(username, password, name=consumername,
                     facts=facts.get_facts())
             consumer = managerlib.persist_consumer_cert(newAccount)
             # reload cP instance with new ssl certs
@@ -439,9 +442,11 @@ class RegistrationTokenScreen:
     def setAccountMsg(self):
         alabel = self.regtokenxml.get_widget("account_label")
         alabel1 = self.regtokenxml.get_widget("account_label1")
-        alabel1.set_label(_("\nThis system is registered with the account"))
+        alabel1.set_label(_("\nThis system is registered with following consumer information"))
         alabel = self.regtokenxml.get_widget("account_label2")
-        alabel.set_label(_("<b>  ConsumerID:</b>     %s" % consumer["uuid"]))
+        alabel.set_label(_("<b>    ID:</b>       %s" % consumer["uuid"]))
+        alabel = self.regtokenxml.get_widget("account_label3")
+        alabel.set_label(_("<b>  Name:</b>     %s" % consumer["consumer_name"]))        
 
     def submitToken(self, button):
         rlabel = self.regtokenxml.get_widget("regtoken_entry")
