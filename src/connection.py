@@ -44,6 +44,8 @@ class Restlib(object):
      A wrapper around httplib to make rest calls easier
     """
     def __init__(self, host, ssl_port, apihandler, cert_file=None, key_file=None, ca_file=None, insecure=False):
+        print "Restlib.init"
+        print "cert_file", cert_file
         self.host = host
         self.ssl_port = ssl_port
         self.apihandler = apihandler
@@ -67,6 +69,7 @@ class Restlib(object):
             context.load_cert(self.cert_file, keyfile=self.key_file)
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
         else:
+            print "gh100"
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
         conn.request(request_type, handler, body=json.dumps(info), \
                      headers=self.headers)
@@ -131,6 +134,12 @@ class UEPConnection:
         self.conn = Restlib(self.host, self.ssl_port, self.handler, self.cert_file, self.key_file, self.candlepin_ca_file, self.insecure)
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
+        print "init UEP"
+        print "self.conn", self.conn
+        print "self.cert_file", self.cert_file
+        print "self.candlepin_ca_file", self.candlepin_ca_file
+        print "self.key_file", self.key_file
+
     def shutDown(self):
         self.conn.close()
         log.info("remote connection closed")
@@ -263,6 +272,10 @@ class UEPConnection:
 
     def getPoolsList(self, consumerId):
         method = "/pools?consumer=%s" % consumerId
+        print "getPoolsList"
+        print self.conn
+        print self.conn.cert_file
+
         return self.conn.request_get(method)
 
     def getPool(self, poolId):
