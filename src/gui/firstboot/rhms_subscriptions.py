@@ -41,8 +41,8 @@ class moduleClass(Module,managergui.ManageSubscriptionPage):
     def close_window(self):
         pass
 
-    def gui_reload(self):
-        print "gui_reload"
+#    def gui_reload(self):
+#        print "gui_reload"
 
     def createScreen(self):
         print "createScreen"
@@ -61,7 +61,7 @@ class moduleClass(Module,managergui.ManageSubscriptionPage):
         print "ffffffffffffff"
 
     def initializeUI(self):
-        pass
+        self.gui_reload()
         # prepare your screen
         # self.mymodule.initialize()
 

@@ -12,7 +12,7 @@ _ = lambda x: gettext.ldgettext("firstboot", x)
 N_ = lambda x: x
 
 sys.path.append("/usr/share/rhsm")
-print sys.path
+#print sys.path
 from gui import managergui
 
 class moduleClass(Module,managergui.RegisterScreen):
@@ -37,8 +37,12 @@ class moduleClass(Module,managergui.RegisterScreen):
         else:
             return RESULT_FAILURE
 
+
+    def registrationTokenScreen(self):
+        print "ffffffffffff, registrationTokenScreen"
+    
     def close_window(self):
-        pass
+        print "rhms_login.close_window"
 
     def cancel(self, button):
         # Ignore this for now

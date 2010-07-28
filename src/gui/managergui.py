@@ -94,14 +94,22 @@ class ManageSubscriptionPage:
      Main subscription Manager Window
     """
     def __init__(self):
-        self.subsxml = gtk.glade.XML(gladexml, "dialog_updates", domain="subscription-manager")
-        self.vbox = \
-                        self.subsxml.get_widget("dialog-vbox1")
         self.pname_selected = None
         self.pselect_status = None
         self.psubs_selected = None
+
+#        self.subsxml = gtk.glade.XML(gladexml, "dialog_updates", domain="subscription-manager")
+#        self.vbox = self.subsxml.get_widget("dialog-vbox1")
+        self.create_gui()
+
+    def create_gui(self):
+        print "create_gui"
+
+        self.subsxml = gtk.glade.XML(gladexml, "dialog_updates", domain="subscription-manager")
+        self.vbox = self.subsxml.get_widget("dialog-vbox1")
+        
         self.populateProductDialog()
-        self.setRegistrationStatus()
+#        self.setRegistrationStatus()
         self.updateMessage()
         dic = { "on_button_close_clicked" : gtk.main_quit,
                 "account_settings_clicked_cb" : self.loadAccountSettings,
@@ -121,7 +129,6 @@ class ManageSubscriptionPage:
         self.mainWin.show_all()
 
     def loadAccountSettings(self, button):
-        print consumer
         if consumer.has_key('uuid'):
             log.info("Machine already registered, loading the re-registration/registration token")
             RegistrationTokenScreen()
@@ -163,7 +170,6 @@ class ManageSubscriptionPage:
                                          gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.warn_count = 0
         for product in managerlib.getInstalledProductStatus():
-            print "adding product %s to product list widget" % (product,)
             markup_status = product[1]
             if product[1] in ["Expired", "Not Subscribed", "Not Installed"]:
                 self.warn_count += 1
@@ -215,8 +221,12 @@ class ManageSubscriptionPage:
         self.selection = self.tv_products.get_selection()
         self.selection.connect('changed', self.on_selection)
 
+        self.setRegistrationStatus()
+
     def on_selection(self, selection):
+        print "SELECTION", selection
         items,iter = selection.get_selected()
+        print items, iter
         self.pname_selected = items.get_value(iter,1)
         self.psubs_selected = items.get_value(iter,2)
         self.pselect_status = items.get_value(iter,3)
@@ -247,6 +257,7 @@ class ManageSubscriptionPage:
             self.sm_icon.set_from_file(subs_full)
 
     def setRegistrationStatus(self):
+        print " === ManageSubscription.setRegistrationStatus"
         self.reg_label = self.subsxml.get_widget("reg_status")
         self.reg_button_label = self.subsxml.get_widget("account_settings")
         if ConsumerIdentity.exists():
@@ -257,8 +268,10 @@ class ManageSubscriptionPage:
             self.reg_button_label.set_label(_("Register System..."))
 
     def gui_reload(self):
-        self.populateProductDialog()
-        reload()
+        print "ManageSubscriptionDialog.gui_reload"
+#        self.vbox.destroy()
+#        self.create_gui()
+#        reload()
 
     def onUnsubscribeAction(self, button):
         global UEP
@@ -268,7 +281,7 @@ class ManageSubscriptionPage:
         dlg = messageWindow.YesNoDialog(constants.CONFIRM_UNSUBSCRIBE % self.pname_selected, self.mainWin)
         if not dlg.getrc():
             return
-        print self.psubs_selected
+        #print self.psubs_selected
         if not UEP:
             entcerts = EntitlementDirectory().list()
             for cert in entcerts:
@@ -315,9 +328,12 @@ class RegisterScreen:
     def cancel(self, button):
         self.registerWin.hide()
 
+        
+        
 
     # callback needs the extra arg, so just a wrapper here
     def onRegisterAction(self, button):
+        print "gh100 onRegisterAction"
         self.register()
 
     def register(self, testing=None):
@@ -364,7 +380,13 @@ class RegisterScreen:
                        log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
                 if not fetch_certificates():
                     return
-            RegistrationTokenScreen()
+
+#            print "gh 3000000"
+#            log.debug("gh300000 test")
+
+                #FIXME, skip this for  now
+#            self.registrationTokenScreen()
+            
             self.close_window()
 #            reload()
         except connection.RestlibException, e:
@@ -375,6 +397,10 @@ class RegisterScreen:
             log.error(failed_msg % e)
             errorWindow(constants.REGISTER_ERROR % e)
             self.close_window()
+        return True
+
+    def registrationTokenScreen(self):
+        RegistrationTokenScreen()
 
     def close_window(self):
         self.registerWin.hide()
@@ -569,7 +595,6 @@ class AddSubscriptionScreen:
         
 
         for pool, state in self.selected.items():
-            print pool, state
             count += 1
             pwin.setProgress(count, len(self.selected.items()))
             # state = (bool, iter)
