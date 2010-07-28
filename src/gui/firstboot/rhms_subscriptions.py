@@ -28,20 +28,6 @@ class moduleClass(Module,managergui.ManageSubscriptionPage):
         self.sidebarTitle = _("RHSM Subscriptions Management Screen")
         self.title = _("Subscription Manager Screen")
 
-#    def register_init(self):
-#        UEP = managergui.connection.UEPConnection(managergui.cfg['hostname'] or 'localhost', ssl_port=managergui.cfg['port'])
-#        #
-
-#        self.registerxml = gtk.glade.XML(managergui.gladexml, "register_dialog", domain="subscription-manager")
-#        dic = { "on_close_clicked" : self.cancel,
-#                "on_register_button_clicked" : self.onRegisterAction, 
-#            }
-#        self.registerxml.signal_autoconnect(dic)
-#        print self.registerxml.get_widget("dialog-vbox3")
-#        self.registerWin = self.registerxml.get_widget("register_dialog")
-#        self.registerWin.connect("hide", self.cancel)
-#        self.registerWin.show_all()
-
     def apply(self, interface, testing=False):
         print "interface", interface
         print "testing", testing
