@@ -399,6 +399,7 @@ class RegisterScreen:
         return True
 
     def _reload_cp_with_certs(self):
+        global UEP
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
         UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], \
