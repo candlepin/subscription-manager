@@ -313,7 +313,7 @@ class RegisterScreen:
         self.registerWin.show_all()
 
     def cancel(self, button):
-        self.registerWin.hide()
+        self.close_window()
 
 
     # callback needs the extra arg, so just a wrapper here
