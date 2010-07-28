@@ -326,7 +326,7 @@ class RegisterScreen:
         self.registerWin.show_all()
 
     def cancel(self, button):
-        self.registerWin.hide()
+        self.close_window()
 
         
         
