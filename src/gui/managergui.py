@@ -302,7 +302,6 @@ class RegisterScreen:
     def __init__(self):
         global UEP
         UEP = connection.UEPConnection(cfg['hostname'] or 'localhost', ssl_port=cfg['port'])
-        
 
         self.registerxml = gtk.glade.XML(gladexml, "register_dialog", domain="subscription-manager")
         dic = { "on_close_clicked" : self.cancel,

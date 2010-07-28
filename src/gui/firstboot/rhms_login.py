@@ -1,6 +1,4 @@
-
 import sys
-
 import gtk
 
 from firstboot.config import *
@@ -8,7 +6,6 @@ from firstboot.constants import *
 from firstboot.functions import *
 from firstboot.module import *
 from firstboot.module import Module
-
 
 import gettext
 _ = lambda x: gettext.ldgettext("firstboot", x)
@@ -28,8 +25,8 @@ class moduleClass(Module,managergui.RegisterScreen):
         self.title = _("Subscription Manager Screen")
 
     def register_init(self):
-        self.UEP = managergui.connection.UEPConnection( \
-            managergui.cfg['hostname'] or 'localhost',  \
+        managergui.UEP = managergui.connection.UEPConnection(  \
+            managergui.cfg['hostname'] or 'localhost',         \
             ssl_port=managergui.cfg['port'])
 
     def apply(self, interface, testing=False):
@@ -39,6 +36,13 @@ class moduleClass(Module,managergui.RegisterScreen):
             return RESULT_SUCCESS
         else:
             return RESULT_FAILURE
+
+    def close_window(self):
+        pass
+
+    def cancel(self, button):
+        # Ignore this for now
+        pass
 
     def createScreen(self):
         self.registerxml = gtk.glade.XML(managergui.gladexml, "register_dialog", domain="subscription-manager")

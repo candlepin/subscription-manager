@@ -182,7 +182,6 @@ fi
 - BZ613650: Clean up the help text (root@localhost.localdomain)
 - Make insecure by default for testing purposes. (anadathu@redhat.com)
 
-
 * Wed Jul 21 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.71-1
 - Resolves: #613003
 - Make subscription-manager-gui run as root (jbowes@redhat.com)
