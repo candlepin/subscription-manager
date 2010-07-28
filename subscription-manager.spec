@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.72
+Version: 0.73
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -153,6 +153,28 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Jul 27 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.73-1
+- Resolves: #614015, #613635, #612730
+- remove prints, use proper method name (jesusr@redhat.com)
+- store the cert (jesusr@redhat.com)
+- adding regen identity certs to client (jesusr@redhat.com)
+- moving importing of logutils after PYTHONPATH is set (pkilambi@redhat.com)
+- fix for bugzilla#607162 (anadathu@redhat.com)
+- bugfix for 'connection.UEPConnection' instance. (anadathu@redhat.com)
+- renaming the main subscription-manager-gui glade as rhsm
+  (pkilambi@redhat.com)
+- Show and accept consumer names via the gui (bkearney@redhat.com)
+- Show the name in the register page (bkearney@redhat.com)
+- Removed setters. Multiple connections not spawned for every execution.
+  (anadathu@redhat.com)
+- BZ616065: Allow a name to passed into the register command
+  (bkearney@redhat.com)
+- added exception logging and fix for one bug. (anadathu@redhat.com)
+- 614015 - fixing name mismatches (pkilambi@redhat.com)
+- 613635 - remove printing cp instance (pkilambi@redhat.com)
+- 612730 - fixing typo (pkilambi@redhat.com)
+- display error when unregister fails (pkilambi@redhat.com)
+
 * Thu Jul 22 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.72-1
 - Resolves: #617303
 - BZ613650: Clean up the help text (root@localhost.localdomain)
