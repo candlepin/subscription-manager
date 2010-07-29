@@ -380,8 +380,6 @@ class FactsCommand(CliCommand):
                                help="list known facts for this system")
         self.parser.add_option("--update", action="store_true",
                                help="update the system facts")
-        self.parser.add_option("--regen", action="store_true",
-                               help="regenerate the identity certificate")
 
     def _validate_options(self):
         # one or the other
@@ -401,11 +399,6 @@ class FactsCommand(CliCommand):
             consumer = check_registration()['uuid']
             print consumer
             self.cp.updateConsumerFacts(consumer, facts.get_facts())
-
-        if self.options.regen:
-            consumerid = check_registration()['uuid']
-            consumer = self.cp.regenIdCertificate(consumerid)
-            managerlib.persist_consumer_cert(consumer)
 
 class ListCommand(CliCommand):
     def __init__(self):
