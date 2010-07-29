@@ -126,11 +126,8 @@ class ReRegisterCommand(CliCommand):
         if not ConsumerIdentity.exists():
             # this should REGISTER
             rc = RegisterCommand()
-            rc.parser = self.parser
-            rc._do_command()
-            print("DEBUG: THIS SHOULD JUST REGISTER THEN")
-            print(_("This system is currently not registered."))
-            sys.exit(1)
+            rc.main()
+            sys.exit(0)
 
         try:
             #consumerid = self.options.consumerid
