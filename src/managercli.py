@@ -168,7 +168,7 @@ class RegisterCommand(CliCommand):
         self.parser.add_option("--type", dest="consumertype", default="system",
                                help="the type of consumer to create. Defaults to system")
         self.parser.add_option("--name", dest="consumername",
-                               help="name of the consuemr to create. Defaults to the username.")
+                               help="name of the consumer to create. Defaults to the username.")
         self.parser.add_option("--password", dest="password",
                                help="specify a password")
         self.parser.add_option("--consumerid", dest="consumerid",
