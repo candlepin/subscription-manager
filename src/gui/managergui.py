@@ -147,12 +147,13 @@ class ManageSubscriptionPage:
     def reviewSubscriptionPagePrepare(self):
         entdir = EntitlementDirectory()
         self.vbox.show_all()
-
         
 
     def addSubButtonAction(self, button):
         AddSubscriptionScreen()
+        print "gh 2001"
         self.gui_reload()
+
 
     def updateSubButtonAction(self, button):
         if self.pname_selected:
@@ -572,7 +573,8 @@ class AddSubscriptionScreen:
             self.addxml.signal_autoconnect(dic)
             self.addWin = self.addxml.get_widget("dialog_add")
             self.addWin.connect("hide", self.cancel)
-            self.addWin.show_all()
+#            self.addWin.show_all()
+            self.addWin.run()
             if not available_ent:
                 infoWindow(constants.NO_SUBSCRIPTIONS_WARNING, self.addWin)
                 self.addWin.hide()
@@ -582,7 +584,6 @@ class AddSubscriptionScreen:
 
     # hook to forward
     def finish(self):
-        print "FIIIIIIIIIIIIIIIIIIIIINISH, please dont destroy me"
         self.addWin.hide()
         self.addWin.destroy()
         gtk.main_iteration()
@@ -630,15 +631,12 @@ class AddSubscriptionScreen:
             errorWindow(constants.SUBSCRIBE_ERROR % ', '.join(busted_subs[:]))
         # Force fetch all certs
         if not fetch_certificates():
-            print "WTF?"
             return
 
         pwin.hide()
         self.addWin.hide()
         print "gh 2000"
-#        gtk.main_iteration()
 
-#        reload()
             
     def populateMatchingSubscriptions(self):
         """
@@ -995,8 +993,8 @@ def setBusyCursor():
     pass
 
 def reload():
-#    global gui
-#    gui.refresh()
+    global gui
+    gui.refresh()
 #    gtk.main_quit()
 #    gui = None
     main()
