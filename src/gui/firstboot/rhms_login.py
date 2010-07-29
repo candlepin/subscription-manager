@@ -1,5 +1,6 @@
 import sys
 import gtk
+import socket
 
 from firstboot.config import *
 from firstboot.constants import *
@@ -11,7 +12,6 @@ import gettext
 _ = lambda x: gettext.ldgettext("firstboot", x)
 
 sys.path.append("/usr/share/rhsm")
-#print sys.path
 from gui import managergui
 
 class moduleClass(Module,managergui.RegisterScreen):
@@ -23,8 +23,8 @@ class moduleClass(Module,managergui.RegisterScreen):
         self.register_init()
         self.priority = 50    #this value is relative to when you want to load the screen
                               # so check other modules before setting
-        self.sidebarTitle = _("RHSM Login Screen")
-        self.title = _("Subscription Manager Screen")
+        self.sidebarTitle = _("Entitlement Registration")
+        self.title = _("Entitlement Platform Registration")
 
     def register_init(self):
         """
@@ -48,12 +48,10 @@ class moduleClass(Module,managergui.RegisterScreen):
         else:
             return RESULT_FAILURE
 
+    def registrationTokenScreen(self):
+        pass
     
     def close_window(self):
-        print "rhms_login.close_window"
-
-    def cancel(self, button):
-        # Ignore this for now
         """
         Overridden from RegisterScreen - we want to bypass the default behavior
         of hiding the GTK window.
@@ -77,7 +75,16 @@ class moduleClass(Module,managergui.RegisterScreen):
         self._destroy_widget('cancel_reg_button1')
 
     def initializeUI(self):
-        pass
+        consumer_name = self.registerxml.get_widget("consumer_name")
+        if not consumer_name.get_text():
+            consumer_name.set_text(socket.gethostname())
+
+    def needsNetwork(self):
+        """
+        This lets firsboot know that networking is required, in order to
+        talk to hosted UEP.
+        """
+        return True
 
     def focus(self):
         """

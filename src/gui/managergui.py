@@ -342,8 +342,6 @@ class RegisterScreen:
         username = self.uname.get_text()
         password = self.passwd.get_text()
         consumername = self.consumer_name.get_text()
-        if consumername == None:
-            consumername = username
 
         facts = getFacts()
         if not self.validate_account():
@@ -376,20 +374,23 @@ class RegisterScreen:
                     except:
                        log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
                 if not fetch_certificates():
-                    return
+                    return False
 
             self.registrationTokenScreen()
-            
             self.close_window()
 #            reload()
         except connection.RestlibException, e:
             log.error(failed_msg % e.msg)
             errorWindow(constants.REGISTER_ERROR % linkify(e.msg))
             self.close_window()
+
+            return False
         except Exception, e:
             log.error(failed_msg % e)
             errorWindow(constants.REGISTER_ERROR % e)
             self.close_window()
+
+            return False
         return True
 
     def registrationTokenScreen(self):
