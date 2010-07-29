@@ -151,7 +151,6 @@ class ManageSubscriptionPage:
 
     def addSubButtonAction(self, button):
         AddSubscriptionScreen()
-        print "gh 2001"
         self.gui_reload()
 
 
@@ -169,7 +168,6 @@ class ManageSubscriptionPage:
 
     def updateProductDialog(self):
         self.warn_count = 0
-        print "updateProductDialog"
         self.productList.clear()
         for product in managerlib.getInstalledProductStatus():
             markup_status = product[1]
@@ -179,11 +177,8 @@ class ManageSubscriptionPage:
             self.status_icon = self.tv_products.render_icon(self.state_icon_map[product[1]], size=gtk.ICON_SIZE_MENU)
             self.productList.append((self.status_icon, product[0], product[3], markup_status, product[2], product[4]))
         self.tv_products.set_model(self.productList)
-        print "product model UPDATED!"
 
     def populateProductDialog(self):
-        print "populateProductDialog"
-
         self.tv_products =  self.subsxml.get_widget("treeview_updates")
         self.productList = gtk.ListStore(gtk.gdk.Pixbuf, gobject.TYPE_STRING, gobject.TYPE_STRING, \
                                          gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
@@ -235,9 +230,7 @@ class ManageSubscriptionPage:
         self.setRegistrationStatus()
 
     def on_selection(self, selection):
-        print "SELECTION", selection
         items,iter = selection.get_selected()
-        print items, iter
         self.pname_selected = items.get_value(iter,1)
         self.psubs_selected = items.get_value(iter,2)
         self.pselect_status = items.get_value(iter,3)
@@ -268,7 +261,6 @@ class ManageSubscriptionPage:
             self.sm_icon.set_from_file(subs_full)
 
     def setRegistrationStatus(self):
-        print " === ManageSubscription.setRegistrationStatus"
         self.reg_label = self.subsxml.get_widget("reg_status")
         self.reg_button_label = self.subsxml.get_widget("account_settings")
         if ConsumerIdentity.exists():
@@ -281,10 +273,6 @@ class ManageSubscriptionPage:
     def gui_reload(self):
         self.setRegistrationStatus()
         self.updateProductDialog()
-        print "ManageSubscriptionDialog.gui_reload"
-#        self.vbox.destroy()
-#        self.create_gui()
-#        reload()
 
     def onUnsubscribeAction(self, button):
         global UEP
@@ -341,12 +329,8 @@ class RegisterScreen:
     def cancel(self, button):
         self.close_window()
 
-        
-        
-
     # callback needs the extra arg, so just a wrapper here
     def onRegisterAction(self, button):
-        print "gh100 onRegisterAction"
         self.register()
 
     def register(self, testing=None):
@@ -394,13 +378,7 @@ class RegisterScreen:
                 if not fetch_certificates():
                     return
 
-#            print "gh 3000000"
-#            log.debug("gh300000 test")
-
-                #FIXME, skip this for  now
-             #FIXME make this return something useful, and return to apply() if
-             # we need to
-#            self.registrationTokenScreen()
+            self.registrationTokenScreen()
             
             self.close_window()
 #            reload()
@@ -461,7 +439,8 @@ class RegistrationTokenScreen:
         self.regtokenxml.signal_autoconnect(dic)
         self.regtokenWin = self.regtokenxml.get_widget("register_token_dialog")
         self.regtokenWin.connect("hide", self.finish)
-        self.regtokenWin.show_all()
+        self.regtokenWin.run()
+#        self.regtokenWin.show_all()
 
     def finish(self, button=None):
         self.regtokenWin.hide()

@@ -48,9 +48,6 @@ class moduleClass(Module,managergui.RegisterScreen):
         else:
             return RESULT_FAILURE
 
-
-    def registrationTokenScreen(self):
-        print "ffffffffffff, registrationTokenScreen"
     
     def close_window(self):
         print "rhms_login.close_window"
