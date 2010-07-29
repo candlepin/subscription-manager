@@ -98,6 +98,10 @@ class ManageSubscriptionPage:
         self.pselect_status = None
         self.psubs_selected = None
 
+        self.state_icon_map = {"Expired" : gtk.STOCK_DIALOG_WARNING,
+                               "Not Subscribed" : gtk.STOCK_DIALOG_QUESTION,
+                               "Subscribed" : gtk.STOCK_APPLY, 
+                               "Not Installed" : gtk.STOCK_DIALOG_QUESTION}
 #        self.subsxml = gtk.glade.XML(gladexml, "dialog_updates", domain="subscription-manager")
 #        self.vbox = self.subsxml.get_widget("dialog-vbox1")
         self.create_gui()
@@ -144,8 +148,11 @@ class ManageSubscriptionPage:
         entdir = EntitlementDirectory()
         self.vbox.show_all()
 
+        
+
     def addSubButtonAction(self, button):
         AddSubscriptionScreen()
+        self.gui_reload()
 
     def updateSubButtonAction(self, button):
         if self.pname_selected:
@@ -159,24 +166,28 @@ class ManageSubscriptionPage:
         self.button_unsubscribe.set_sensitive(state)
 
 
-    def populateProductDialog(self):
-        print "populateProductDialog"
-        state_icon_map = {"Expired" : gtk.STOCK_DIALOG_WARNING,
-                          "Not Subscribed" : gtk.STOCK_DIALOG_QUESTION,
-                          "Subscribed" : gtk.STOCK_APPLY, 
-                          "Not Installed" : gtk.STOCK_DIALOG_QUESTION}
-        self.tv_products =  self.subsxml.get_widget("treeview_updates")
-        self.productList = gtk.ListStore(gtk.gdk.Pixbuf, gobject.TYPE_STRING, gobject.TYPE_STRING, \
-                                         gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+    def updateProductDialog(self):
         self.warn_count = 0
+        print "updateProductDialog"
+        self.productList.clear()
         for product in managerlib.getInstalledProductStatus():
             markup_status = product[1]
             if product[1] in ["Expired", "Not Subscribed", "Not Installed"]:
                 self.warn_count += 1
                 markup_status = '<span foreground="red"><b>%s</b></span>' % product[1]
-            self.status_icon = self.tv_products.render_icon(state_icon_map[product[1]], size=gtk.ICON_SIZE_MENU)
+            self.status_icon = self.tv_products.render_icon(self.state_icon_map[product[1]], size=gtk.ICON_SIZE_MENU)
             self.productList.append((self.status_icon, product[0], product[3], markup_status, product[2], product[4]))
         self.tv_products.set_model(self.productList)
+        print "product model UPDATED!"
+
+    def populateProductDialog(self):
+        print "populateProductDialog"
+
+        self.tv_products =  self.subsxml.get_widget("treeview_updates")
+        self.productList = gtk.ListStore(gtk.gdk.Pixbuf, gobject.TYPE_STRING, gobject.TYPE_STRING, \
+                                         gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+   
+        self.updateProductDialog()
 
         #self.tv_products.set_rules_hint(True)
 
@@ -215,7 +226,6 @@ class ManageSubscriptionPage:
         col.set_resizable(True)
         col.set_spacing(6)
         self.tv_products.append_column(col)
-
 
         #self.productList.set_sort_column_id(1, gtk.SORT_ASCENDING)
         self.selection = self.tv_products.get_selection()
@@ -268,6 +278,8 @@ class ManageSubscriptionPage:
             self.reg_button_label.set_label(_("Register System..."))
 
     def gui_reload(self):
+        self.setRegistrationStatus()
+        self.updateProductDialog()
         print "ManageSubscriptionDialog.gui_reload"
 #        self.vbox.destroy()
 #        self.create_gui()
@@ -385,6 +397,8 @@ class RegisterScreen:
 #            log.debug("gh300000 test")
 
                 #FIXME, skip this for  now
+             #FIXME make this return something useful, and return to apply() if
+             # we need to
 #            self.registrationTokenScreen()
             
             self.close_window()
@@ -568,6 +582,7 @@ class AddSubscriptionScreen:
 
     # hook to forward
     def finish(self):
+        print "FIIIIIIIIIIIIIIIIIIIIINISH, please dont destroy me"
         self.addWin.hide()
         self.addWin.destroy()
         gtk.main_iteration()
@@ -615,10 +630,14 @@ class AddSubscriptionScreen:
             errorWindow(constants.SUBSCRIBE_ERROR % ', '.join(busted_subs[:]))
         # Force fetch all certs
         if not fetch_certificates():
+            print "WTF?"
             return
 
         pwin.hide()
         self.addWin.hide()
+        print "gh 2000"
+#        gtk.main_iteration()
+
 #        reload()
             
     def populateMatchingSubscriptions(self):
