@@ -96,6 +96,59 @@ class CliCommand(object):
             log.error(e)
             print 'Consumer certificates corrupted. Please re-register'
 
+class ReRegisterCommand(CliCommand):
+    def __init__(self):
+        usage = "usage: %prog reregister [OPTIONS]"
+        shortdesc = "re-register the client to a Unified Entitlement Platform."
+        desc = shortdesc
+
+        CliCommand.__init__(self, "reregister", usage, shortdesc, desc)
+
+        self.username = None
+        self.password = None
+
+        self.parser.add_option("--username", dest="username",
+                               help="specify a username")
+        self.parser.add_option("--password", dest="password",
+                               help="specify a password")
+        #self.parser.add_option("--consumerid", dest="consumerid",
+        #                       help="register to an existing consumer")
+
+    def _validate_options(self):
+        if not ConsumerIdentity.exists() and not (self.options.username and self.options.password):
+            print (_("Error: username and password are required to re-register, try re-register --help.\n"))
+            sys.exit(-1)
+
+    def _do_command(self):
+
+        self._validate_options()
+
+        if not ConsumerIdentity.exists():
+            # this should REGISTER
+            rc = RegisterCommand()
+            rc.parser = self.parser
+            rc._do_command()
+            print("DEBUG: THIS SHOULD JUST REGISTER THEN")
+            print(_("This system is currently not registered."))
+            sys.exit(1)
+
+        try:
+            #consumerid = self.options.consumerid
+            #if not consumerid:
+            #    consumerid = check_registration()['uuid']
+            consumerid = check_registration()['uuid']
+            consumer = self.cp.regenIdCertificate(consumerid)
+            managerlib.persist_consumer_cert(consumer)
+            log.info("Successfully ReRegistered the client from Entitlement Platform.")
+        except connection.RestlibException, re:
+            log.exception(re)
+            log.error("Error: Unable to ReRegister the system: %s" % re)
+            systemExit(-1, re.msg)
+        except Exception, e:
+            log.exception(e)
+            log.error("Error: Unable to ReRegister the system")
+            systemExit(-1, e)
+
 class RegisterCommand(CliCommand):
     def create_connection(self):
         return connection.UEPConnection(host=cfg['hostname'] or "localhost",
@@ -415,7 +468,7 @@ class CLI:
 
         self.cli_commands = {}
         for clazz in [ RegisterCommand, UnRegisterCommand, ListCommand, SubscribeCommand,\
-                       UnSubscribeCommand, FactsCommand]:
+                       UnSubscribeCommand, FactsCommand, ReRegisterCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":
