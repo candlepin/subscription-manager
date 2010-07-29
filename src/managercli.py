@@ -147,9 +147,7 @@ class ReRegisterCommand(CliCommand):
             systemExit(-1, e)
 
 class RegisterCommand(CliCommand):
-    def create_connection(self):
-        return connection.UEPConnection(host=cfg['hostname'] or "localhost",
-                                               ssl_port=cfg['port'], handler="/candlepin")
+
     def __init__(self):
         usage = "usage: %prog register [OPTIONS]"
         shortdesc = "register the client to a Unified Entitlement Platform."
