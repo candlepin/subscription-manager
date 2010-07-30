@@ -1,6 +1,5 @@
 import sys
 import gtk
-import socket
 
 from firstboot.config import *
 from firstboot.constants import *
@@ -55,6 +54,13 @@ class moduleClass(Module,managergui.RegisterScreen):
         """
         pass
 
+    def registrationTokenScreen(self):
+        """
+        Overridden from RegisterScreen - ignore any requests to show the registration
+        screen on this particular page.
+        """
+        pass
+
     def createScreen(self):
         """
         Create a new instance of gtk.VBox, pulling in child widgets from the glade file.
@@ -72,9 +78,7 @@ class moduleClass(Module,managergui.RegisterScreen):
         self._destroy_widget('cancel_reg_button1')
 
     def initializeUI(self):
-        consumer_name = self.registerxml.get_widget("consumer_name")
-        if not consumer_name.get_text():
-            consumer_name.set_text(socket.gethostname())
+        self.initializeConsumerName()
 
     def needsNetwork(self):
         """

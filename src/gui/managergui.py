@@ -21,6 +21,7 @@ import os
 import re
 import sys
 import shutil
+import socket
 
 import gtk
 import gtk.glade
@@ -114,7 +115,7 @@ class ManageSubscriptionPage:
         self.vbox = self.subsxml.get_widget("dialog-vbox1")
         
         self.populateProductDialog()
-#        self.setRegistrationStatus()
+        self.setRegistrationStatus()
         self.updateMessage()
         dic = { "on_button_close_clicked" : gtk.main_quit,
                 "account_settings_clicked_cb" : self.loadAccountSettings,
@@ -323,11 +324,18 @@ class RegisterScreen:
         self.registerxml.signal_autoconnect(dic)
         self.registerWin = self.registerxml.get_widget("register_dialog")
         self.registerWin.connect("hide", self.cancel)
+        self.initializeConsumerName()
+
         self.registerWin.run()
 
 
     def cancel(self, button):
         self.close_window()
+
+    def initializeConsumerName(self):
+        consumername = self.registerxml.get_widget("consumer_name")
+        if not consumername.get_text():
+            consumername.set_text(socket.gethostname())
 
     # callback needs the extra arg, so just a wrapper here
     def onRegisterAction(self, button):
@@ -342,6 +350,9 @@ class RegisterScreen:
         username = self.uname.get_text()
         password = self.passwd.get_text()
         consumername = self.consumer_name.get_text()
+
+        if not consumername:
+            consumername = None
 
         facts = getFacts()
         if not self.validate_account():

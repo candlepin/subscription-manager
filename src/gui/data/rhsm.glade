@@ -520,18 +520,25 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkCheckButton" id="auto_bind">
-                <property name="label" translatable="yes">Automatically subscribe this system to compatible subscriptions</property>
+              <widget class="GtkHSeparator" id="hseparator1">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="draw_indicator">True</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">auto_bind</atkproperty>
-                </accessibility>
               </widget>
               <packing>
+                <property name="expand">False</property>
+                <property name="padding">10</property>
                 <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="systemInstructionsLabel">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="yalign">0</property>
+                <property name="label" translatable="yes">Please enter the information for this &lt;b&gt;system&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </widget>
+              <packing>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -541,19 +548,22 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <child>
                   <widget class="GtkTable" id="table3">
                     <property name="visible">True</property>
+                    <property name="n_rows">2</property>
                     <property name="n_columns">2</property>
                     <property name="column_spacing">15</property>
+                    <property name="row_spacing">10</property>
                     <child>
                       <widget class="GtkLabel" id="label15">
                         <property name="visible">True</property>
                         <property name="xalign">1</property>
-                        <property name="yalign">0.50999999046325684</property>
-                        <property name="label" translatable="yes">System Name (Optional):</property>
+                        <property name="label" translatable="yes">System Name:</property>
                       </widget>
+                      <packing>
+                        <property name="x_options">GTK_FILL</property>
+                      </packing>
                     </child>
                     <child>
                       <widget class="GtkEntry" id="consumer_name">
-                        <property name="width_request">310</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip" translatable="yes">A unique label for this system</property>
@@ -567,11 +577,34 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="right_attach">2</property>
                       </packing>
                     </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <widget class="GtkCheckButton" id="auto_bind">
+                        <property name="label" translatable="yes">Automatically subscribe this system to compatible subscriptions</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="draw_indicator">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">auto_bind</atkproperty>
+                        </accessibility>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                      </packing>
+                    </child>
                   </widget>
                 </child>
               </widget>
               <packing>
-                <property name="position">3</property>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </widget>
