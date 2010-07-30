@@ -48,9 +48,6 @@ class moduleClass(Module,managergui.RegisterScreen):
         else:
             return RESULT_FAILURE
 
-    def registrationTokenScreen(self):
-        pass
-    
     def close_window(self):
         """
         Overridden from RegisterScreen - we want to bypass the default behavior
