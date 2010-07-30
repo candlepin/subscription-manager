@@ -110,8 +110,6 @@ class ManageSubscriptionPage:
         self.create_gui()
 
     def create_gui(self):
-        print "create_gui"
-
         self.subsxml = gtk.glade.XML(gladexml, "dialog_updates", domain="subscription-manager")
         self.vbox = self.subsxml.get_widget("dialog-vbox1")
         
