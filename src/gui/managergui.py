@@ -328,7 +328,6 @@ class RegisterScreen:
 
         self.registerWin.run()
 
-
     def cancel(self, button):
         self.close_window()
 

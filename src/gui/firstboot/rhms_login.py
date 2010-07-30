@@ -20,19 +20,11 @@ class moduleClass(Module,managergui.RegisterScreen):
         """
         Module.__init__(self)
         self.register_init()
+        managergui.create_and_set_basic_connection()
         self.priority = 50    #this value is relative to when you want to load the screen
                               # so check other modules before setting
         self.sidebarTitle = _("Entitlement Registration")
         self.title = _("Entitlement Platform Registration")
-
-    def register_init(self):
-        """
-        Create a new UEPConnection for use by this module.
-        """
-        # TODO:  Should this be moved to self.UEP in the base class?
-        managergui.UEP = managergui.connection.UEPConnection(  \
-            managergui.cfg['hostname'] or 'localhost',         \
-            ssl_port=managergui.cfg['port'])
 
     def apply(self, interface, testing=False):
         """
