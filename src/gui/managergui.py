@@ -139,6 +139,7 @@ class ManageSubscriptionPage:
         else:
             log.info("loading registration..")
             RegisterScreen() 
+        self.gui_reload()
         return True
 
     def refresh(self):
@@ -147,12 +148,10 @@ class ManageSubscriptionPage:
     def reviewSubscriptionPagePrepare(self):
         entdir = EntitlementDirectory()
         self.vbox.show_all()
-        
 
     def addSubButtonAction(self, button):
         AddSubscriptionScreen()
         self.gui_reload()
-
 
     def updateSubButtonAction(self, button):
         if self.pname_selected:
@@ -324,7 +323,7 @@ class RegisterScreen:
         self.registerxml.signal_autoconnect(dic)
         self.registerWin = self.registerxml.get_widget("register_dialog")
         self.registerWin.connect("hide", self.cancel)
-        self.registerWin.show_all()
+        self.registerWin.run()
 
     def cancel(self, button):
         self.close_window()
@@ -901,9 +900,10 @@ class UpdateSubscriptionScreen:
             slabel.set_label(constants.SUBSCRIBE_SUCCSSFUL % subscribed_count)
             self.updateWin.hide()
             # refresh main window
-            reload()
         else:
             slabel.set_label(constants.ATLEAST_ONE_SELECTION)
+        self.gui_reload()
+
 
 class ImportCertificate:
     """
