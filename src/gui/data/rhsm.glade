@@ -112,7 +112,7 @@
                   <widget class="GtkScrolledWindow" id="scrolledwindow_updates">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="vadjustment">0 0 60 6 54 60</property>
+                    <property name="vadjustment">0 0 61 6.1000000000000005 54.899999999999999 61</property>
                     <property name="hscrollbar_policy">never</property>
                     <property name="vscrollbar_policy">automatic</property>
                     <property name="shadow_type">in</property>
@@ -1333,20 +1333,16 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
               <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog-action_area6</atkproperty>
             </accessibility>
             <child>
-              <widget class="GtkButton" id="button1">
-                <property name="label" translatable="yes">Change Account</property>
+              <widget class="GtkButton" id="unregister_button">
+                <property name="label" translatable="yes">Unregister</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">button1</atkproperty>
-                </accessibility>
-                <signal name="clicked" handler="on_change_account_button"/>
+                <signal name="clicked" handler="on_unregister_button_click"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="padding">5</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -1366,6 +1362,24 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkButton" id="button1">
+                <property name="label" translatable="yes">Change Account</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">button1</atkproperty>
+                </accessibility>
+                <signal name="clicked" handler="on_change_account_button"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="padding">5</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </widget>

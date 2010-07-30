@@ -66,6 +66,9 @@ if ConsumerIdentity.exists():
 certlib = CertLib()
 ENT_CONFIG_DIR="/etc/pki/entitlement/product/"
 
+def create_and_set_basic_connection():
+    global UEP
+    UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin")
 
 def get_consumer():
     if not ConsumerIdentity.exists():
@@ -135,11 +138,10 @@ class ManageSubscriptionPage:
     def loadAccountSettings(self, button):
         if consumer.has_key('uuid'):
             log.info("Machine already registered, loading the re-registration/registration token")
-            RegistrationTokenScreen()
+            RegistrationTokenScreen(self)
         else:
             log.info("loading registration..")
-            RegisterScreen() 
-        self.gui_reload()
+            RegisterScreen(self)
         return True
 
     def refresh(self):
@@ -262,6 +264,7 @@ class ManageSubscriptionPage:
     def setRegistrationStatus(self):
         self.reg_label = self.subsxml.get_widget("reg_status")
         self.reg_button_label = self.subsxml.get_widget("account_settings")
+        log.info("updating registration status.. consumer exists?: %s", ConsumerIdentity.exists())
         if ConsumerIdentity.exists():
             self.reg_label.set_label(constants.REG_REMOTE_STATUS % cfg['hostname'])
             self.reg_button_label.set_label(_("Modify Registration"))
@@ -312,10 +315,9 @@ class RegisterScreen:
     """
       Registration Widget Screen
     """
-    def __init__(self):
-        global UEP
-        UEP = connection.UEPConnection(cfg['hostname'] or 'localhost', ssl_port=cfg['port'])
-
+    def __init__(self, parentWindow):
+        create_and_set_basic_connection()
+        self.parentWindow = parentWindow
         self.registerxml = gtk.glade.XML(gladexml, "register_dialog", domain="subscription-manager")
         dic = { "on_close_clicked" : self.cancel,
                 "on_register_button_clicked" : self.onRegisterAction, 
@@ -324,6 +326,7 @@ class RegisterScreen:
         self.registerWin = self.registerxml.get_widget("register_dialog")
         self.registerWin.connect("hide", self.cancel)
         self.registerWin.run()
+
 
     def cancel(self, button):
         self.close_window()
@@ -337,7 +340,7 @@ class RegisterScreen:
         self.passwd = self.registerxml.get_widget("account_password")
         self.consumer_name = self.registerxml.get_widget("consumer_name")
 
-        global username, password, consumer, consumername
+        global username, password, consumer, consumername, UEP
         username = self.uname.get_text()
         password = self.passwd.get_text()
         consumername = self.consumer_name.get_text()
@@ -374,9 +377,10 @@ class RegisterScreen:
                        log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
                 if not fetch_certificates():
                     return False
-
-            self.registrationTokenScreen()
             self.close_window()
+            self.parentWindow.gui_reload()
+            self.registrationTokenScreen()
+
 #            reload()
         except connection.RestlibException, e:
             log.error(failed_msg % e.msg)
@@ -393,7 +397,7 @@ class RegisterScreen:
         return True
 
     def registrationTokenScreen(self):
-        RegistrationTokenScreen()
+        RegistrationTokenScreen(self.parentWindow)
 
     def close_window(self):
         self.registerWin.hide()
@@ -429,21 +433,41 @@ class RegistrationTokenScreen:
     """
      This screen handles reregistration and registration token activation
     """
-    def __init__(self):
+    def __init__(self, parentWindow):
         self.regtokenxml = gtk.glade.XML(gladexml, "register_token_dialog", domain="subscription-manager")
         dic = { "on_close_clicked" : self.finish, 
                 "on_change_account_button" : self.reRegisterAction,
                 "on_facts_update_button_clicked" : self.factsUpdateAction,
-                "on_submit_button_clicked" : self.submitToken, }
+                "on_submit_button_clicked" : self.submitToken,
+                "on_unregister_button_click" : self.unregisterAction}
+        self.parentWindow = parentWindow
+        print "parent window: %s", self.parentWindow
         self.setAccountMsg()
         self.regtokenxml.signal_autoconnect(dic)
         self.regtokenWin = self.regtokenxml.get_widget("register_token_dialog")
         self.regtokenWin.connect("hide", self.finish)
         self.regtokenWin.run()
+
 #        self.regtokenWin.show_all()
 
     def finish(self, button=None):
         self.regtokenWin.hide()
+
+    def unregisterAction(self, button):
+        global UEP, consumer
+        log.info("Unregister called in gui. Asking for confirmation")
+        prompt = messageWindow.YesNoDialog(constants.CONFIRM_UNREGISTER)
+        if not prompt.getrc():
+            log.info("de-registration not confirmed. cancelling unregister call")
+            return
+        log.info("Going ahead with un-registering consumer: %s", consumer['uuid'])
+        UEP.unregisterConsumer(consumer['uuid'])
+        shutil.rmtree("/etc/pki/consumer/", ignore_errors=True)
+        shutil.rmtree("/etc/pki/entitlement/", ignore_errors=True)
+        create_and_set_basic_connection()
+        consumer = get_consumer()
+        self.parentWindow.gui_reload()
+        self.finish(button)
 
     def reRegisterAction(self, button):
         RegisterScreen()
