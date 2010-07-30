@@ -137,6 +137,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/gui/data/icons/subsmgr-full.png
 %{_datadir}/icons/hicolor/16x16/apps/subsmgr.png
 %{_datadir}/firstboot/modules/rhms_login.py*
+%{_datadir}/firstboot/modules/rhms_subscriptions.py*
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(755,root,root) %{_bindir}/subscription-manager-gui
 %{_bindir}/rhsm-compliance-icon
@@ -155,6 +156,9 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Fri Jul 30 2010 Adrian Likins <alikins@redhat.com> 0.74-1
+- add rhms_subscriptions firstboot module
+
 * Tue Jul 27 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.73-1
 - Resolves: #614015, #613635, #612730
 - remove prints, use proper method name (jesusr@redhat.com)
