@@ -177,22 +177,28 @@ def getAllAvailableSubscriptions(cpserver, consumer):
         del d['consumed']
     return data
 
+
 def getMatchedSubscriptions(poollist):
-    products = ProductDirectory().list()
+    """
+    Gets the list of products that matched the list of installed products.
+
+    Returns a list of product info _and_ pool info (the id is actually pool id)
+    """
+    installedProducts = ProductDirectory().list()
     matched_data = []
     columns  = ['id', 'quantity', 'endDate', 'productName', 'providedProductIds', 'productId']
     if not poollist:
         return None
     data = [_sub_dict(pool, columns) for pool in poollist]
+    matched_data_dict = {}
     for d in data:
         d['endDate'] = formatDate(d['endDate'])
-        for product in products:
-            productid = product.getProduct().getHash()
+        for installedProduct in installedProducts:
+            productid = installedProduct.getProduct().getHash()
+            # we only need one matched item per pool id, so add to dict to uniq
             if str(productid) in d['providedProductIds'] or str(productid) == d['productId']:
-                matched_data.append(d)
-    #columns  = ['id', 'quantity', 'endDate', 'productName']
-    #matched_data = [_sub_dict(pool, columns) for pool in matched_data]
-    return matched_data
+                matched_data_dict[d['id']] = d
+    return matched_data_dict.values()
 
 def getCompatibleSubscriptions(cpserver, consumer):
     return getAvailableEntitlements(cpserver, consumer)
