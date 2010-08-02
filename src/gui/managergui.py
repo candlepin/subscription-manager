@@ -48,16 +48,19 @@ gtk.glade.bindtextdomain("subscription-manager")
 from logutil import getLogger
 log = getLogger(__name__)
 
-
 prefix = os.path.dirname(__file__)
 gladexml = os.path.join(prefix, "data/rhsm.glade")
 subs_full = os.path.join(prefix, "data/icons/subsmgr-full.png")
 subs_empty = os.path.join(prefix, "data/icons/subsmgr-empty.png")
 
-
 cfg = config.initConfig()
 UEP = None
 
+CONSUMER_SIGNAL = "on_consumer_changed"
+
+# Register new signal emitted by various dialogs when entitlement data changes
+gobject.signal_new(CONSUMER_SIGNAL, gtk.Dialog, gobject.SIGNAL_ACTION, gobject.TYPE_NONE, ())
+rhsm_xml = gtk.glade.XML(gladexml, domain="subscription-manager")
 
 if ConsumerIdentity.exists():
     cert_file = ConsumerIdentity.certpath()
@@ -106,13 +109,12 @@ class ManageSubscriptionPage:
                                "Not Subscribed" : gtk.STOCK_DIALOG_QUESTION,
                                "Subscribed" : gtk.STOCK_APPLY, 
                                "Not Installed" : gtk.STOCK_DIALOG_QUESTION}
-#        self.subsxml = gtk.glade.XML(gladexml, "dialog_updates", domain="subscription-manager")
-#        self.vbox = self.subsxml.get_widget("dialog-vbox1")
         self.create_gui()
 
     def create_gui(self):
-        self.subsxml = gtk.glade.XML(gladexml, "dialog_updates", domain="subscription-manager")
-        self.vbox = self.subsxml.get_widget("dialog-vbox1")
+        global UEP
+
+        self.vbox = rhsm_xml.get_widget("dialog-vbox1")
         
         self.populateProductDialog()
         self.setRegistrationStatus()
@@ -123,11 +125,16 @@ class ManageSubscriptionPage:
                 "on_button_update1_clicked" : self.updateSubButtonAction,
                 "on_button_unsubscribe1_clicked" : self.onUnsubscribeAction,
             }
-        self.subsxml.signal_autoconnect(dic)
+        rhsm_xml.signal_autoconnect(dic)
         self.setButtonState()
-        self.mainWin = self.subsxml.get_widget("dialog_updates")
+        self.mainWin = rhsm_xml.get_widget("dialog_updates")
         self.mainWin.connect("delete-event", gtk.main_quit)
         self.mainWin.connect("hide", gtk.main_quit)
+
+        # Register custom signal for consumer changes
+        for widget_name in ('register_dialog', 'register_token_dialog'):
+            widget = rhsm_xml.get_widget(widget_name)
+            widget.connect(CONSUMER_SIGNAL, self.gui_reload)
 
         self.show_all()
     
@@ -137,10 +144,10 @@ class ManageSubscriptionPage:
     def loadAccountSettings(self, button):
         if consumer.has_key('uuid'):
             log.info("Machine already registered, loading the re-registration/registration token")
-            RegistrationTokenScreen(self)
+            RegistrationTokenScreen()
         else:
             log.info("loading registration..")
-            RegisterScreen(self)
+            RegisterScreen()
         return True
 
     def refresh(self):
@@ -160,11 +167,10 @@ class ManageSubscriptionPage:
             UpdateSubscriptionScreen(self.pname_selected)
 
     def setButtonState(self, state=False):
-        self.button_update =  self.subsxml.get_widget("button_update1")
-        self.button_unsubscribe =  self.subsxml.get_widget("button_unsubscribe1")
+        self.button_update =  rhsm_xml.get_widget("button_update1")
+        self.button_unsubscribe =  rhsm_xml.get_widget("button_unsubscribe1")
         self.button_update.set_sensitive(state)
         self.button_unsubscribe.set_sensitive(state)
-
 
     def updateProductDialog(self):
         self.warn_count = 0
@@ -179,7 +185,7 @@ class ManageSubscriptionPage:
         self.tv_products.set_model(self.productList)
 
     def populateProductDialog(self):
-        self.tv_products =  self.subsxml.get_widget("treeview_updates")
+        self.tv_products = rhsm_xml.get_widget("treeview_updates")
         self.productList = gtk.ListStore(gtk.gdk.Pixbuf, gobject.TYPE_STRING, gobject.TYPE_STRING, \
                                          gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
    
@@ -235,7 +241,7 @@ class ManageSubscriptionPage:
         self.psubs_selected = items.get_value(iter,2)
         self.pselect_status = items.get_value(iter,3)
         desc = managerlib.getProductDescription(self.pname_selected)
-        pdetails = self.subsxml.get_widget("textview_details")
+        pdetails = rhsm_xml.get_widget("textview_details")
         pdetails.get_buffer().set_text(desc)
         pdetails.set_cursor_visible(False)
         pdetails.show()
@@ -246,8 +252,8 @@ class ManageSubscriptionPage:
             self.setButtonState(state=True)
 
     def updateMessage(self):
-        self.sumlabel = self.subsxml.get_widget("summaryLabel1")
-        self.sm_icon  = self.subsxml.get_widget("sm_icon")
+        self.sumlabel = rhsm_xml.get_widget("summaryLabel1")
+        self.sm_icon  = rhsm_xml.get_widget("sm_icon")
         if self.warn_count > 1:
             self.sumlabel.set_label(
                           constants.WARN_SUBSCRIPTIONS % self.warn_count)
@@ -261,8 +267,8 @@ class ManageSubscriptionPage:
             self.sm_icon.set_from_file(subs_full)
 
     def setRegistrationStatus(self):
-        self.reg_label = self.subsxml.get_widget("reg_status")
-        self.reg_button_label = self.subsxml.get_widget("account_settings")
+        self.reg_label = rhsm_xml.get_widget("reg_status")
+        self.reg_button_label = rhsm_xml.get_widget("account_settings")
         log.info("updating registration status.. consumer exists?: %s", ConsumerIdentity.exists())
         if ConsumerIdentity.exists():
             self.reg_label.set_label(constants.REG_REMOTE_STATUS % cfg['hostname'])
@@ -271,7 +277,7 @@ class ManageSubscriptionPage:
             self.reg_label.set_label(constants.REG_LOCAL_STATUS)
             self.reg_button_label.set_label(_("Register System..."))
 
-    def gui_reload(self):
+    def gui_reload(self, widget=None):
         self.setRegistrationStatus()
         self.updateProductDialog()
 
@@ -314,15 +320,13 @@ class RegisterScreen:
     """
       Registration Widget Screen
     """
-    def __init__(self, parentWindow):
+    def __init__(self):
         create_and_set_basic_connection()
-        self.parentWindow = parentWindow
-        self.registerxml = gtk.glade.XML(gladexml, "register_dialog", domain="subscription-manager")
         dic = { "on_close_clicked" : self.cancel,
                 "on_register_button_clicked" : self.onRegisterAction, 
             }
-        self.registerxml.signal_autoconnect(dic)
-        self.registerWin = self.registerxml.get_widget("register_dialog")
+        rhsm_xml.signal_autoconnect(dic)
+        self.registerWin = rhsm_xml.get_widget("register_dialog")
         self.registerWin.connect("hide", self.cancel)
         self.initializeConsumerName()
 
@@ -332,7 +336,7 @@ class RegisterScreen:
         self.close_window()
 
     def initializeConsumerName(self):
-        consumername = self.registerxml.get_widget("consumer_name")
+        consumername = rhsm_xml.get_widget("consumer_name")
         if not consumername.get_text():
             consumername.set_text(socket.gethostname())
 
@@ -341,9 +345,9 @@ class RegisterScreen:
         self.register()
 
     def register(self, testing=None):
-        self.uname = self.registerxml.get_widget("account_login")
-        self.passwd = self.registerxml.get_widget("account_password")
-        self.consumer_name = self.registerxml.get_widget("consumer_name")
+        self.uname = rhsm_xml.get_widget("account_login")
+        self.passwd = rhsm_xml.get_widget("account_password")
+        self.consumer_name = rhsm_xml.get_widget("consumer_name")
 
         global username, password, consumer, consumername, UEP
         username = self.uname.get_text()
@@ -385,11 +389,13 @@ class RegisterScreen:
                        log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
                 if not fetch_certificates():
                     return False
+
             self.close_window()
-            self.parentWindow.gui_reload()
+
+            # Emit a signal that the entitlements have changed
+            self.registerWin.emit(CONSUMER_SIGNAL)
             self.registrationTokenScreen()
 
-#            reload()
         except connection.RestlibException, e:
             log.error(failed_msg % e.msg)
             errorWindow(constants.REGISTER_ERROR % linkify(e.msg))
@@ -405,13 +411,13 @@ class RegisterScreen:
         return True
 
     def registrationTokenScreen(self):
-        RegistrationTokenScreen(self.parentWindow)
+        RegistrationTokenScreen()
 
     def close_window(self):
         self.registerWin.hide()
 
     def auto_subscribe(self):
-        self.autobind = self.registerxml.get_widget("auto_bind")
+        self.autobind = rhsm_xml.get_widget("auto_bind")
         return self.autobind.get_active()
 
     def validate_account(self):
@@ -441,18 +447,15 @@ class RegistrationTokenScreen:
     """
      This screen handles reregistration and registration token activation
     """
-    def __init__(self, parentWindow):
-        self.regtokenxml = gtk.glade.XML(gladexml, "register_token_dialog", domain="subscription-manager")
+    def __init__(self):
         dic = { "on_close_clicked" : self.finish, 
                 "on_change_account_button" : self.reRegisterAction,
                 "on_facts_update_button_clicked" : self.factsUpdateAction,
                 "on_submit_button_clicked" : self.submitToken,
                 "on_unregister_button_click" : self.unregisterAction}
-        self.parentWindow = parentWindow
-        print "parent window: %s", self.parentWindow
         self.setAccountMsg()
-        self.regtokenxml.signal_autoconnect(dic)
-        self.regtokenWin = self.regtokenxml.get_widget("register_token_dialog")
+        rhsm_xml.signal_autoconnect(dic)
+        self.regtokenWin = rhsm_xml.get_widget("register_token_dialog")
         self.regtokenWin.connect("hide", self.finish)
         self.regtokenWin.run()
 
@@ -474,7 +477,9 @@ class RegistrationTokenScreen:
         shutil.rmtree("/etc/pki/entitlement/", ignore_errors=True)
         create_and_set_basic_connection()
         consumer = get_consumer()
-        self.parentWindow.gui_reload()
+
+        # Emit a signal that the entitlements have changed
+        self.regtokenWin.emit(CONSUMER_SIGNAL)
         self.finish(button)
 
     def reRegisterAction(self, button):
@@ -493,18 +498,18 @@ class RegistrationTokenScreen:
             errorWindow(linkify(e.msg))
 
     def setAccountMsg(self):
-        alabel = self.regtokenxml.get_widget("account_label")
-        alabel1 = self.regtokenxml.get_widget("account_label1")
+        alabel = rhsm_xml.get_widget("account_label")
+        alabel1 = rhsm_xml.get_widget("account_label1")
         alabel1.set_label(_("\nThis system is registered with following consumer information"))
-        alabel = self.regtokenxml.get_widget("account_label2")
+        alabel = rhsm_xml.get_widget("account_label2")
         alabel.set_label(_("<b>    ID:</b>       %s" % consumer["uuid"]))
-        alabel = self.regtokenxml.get_widget("account_label3")
+        alabel = rhsm_xml.get_widget("account_label3")
         alabel.set_label(_("<b>  Name:</b>     %s" % consumer["consumer_name"]))        
 
     def submitToken(self, button):
-        rlabel = self.regtokenxml.get_widget("regtoken_entry")
+        rlabel = rhsm_xml.get_widget("regtoken_entry")
         reg_token = rlabel.get_text()
-        elabel = self.regtokenxml.get_widget("email_entry")
+        elabel = rhsm_xml.get_widget("email_entry")
         email = elabel.get_text()
         if email == "":
             email = None
@@ -525,8 +530,7 @@ class AddSubscriptionScreen:
     def __init__(self):
         global UEP
         self.selected = {}
-        self.addxml = gtk.glade.XML(gladexml, "dialog_add", domain="subscription-manager")
-        self.csstatus = self.addxml.get_widget("select_status")
+        self.csstatus = rhsm_xml.get_widget("select_status")
         self.total = 0
         self.consumer = consumer
         available_ent = 0
@@ -575,14 +579,14 @@ class AddSubscriptionScreen:
             if cfg['showIncompatiblePools']:
                 self.populateOtherSubscriptions()
             else:
-                notebook = self.addxml.get_widget("notebook1")
+                notebook = rhsm_xml.get_widget("notebook1")
                 notebook.remove_page(1)
 
             dic = { "on_close_clicked" : self.cancel,
                     "on_add_subscribe_button_clicked"   : self.onSubscribeAction,
                 }
-            self.addxml.signal_autoconnect(dic)
-            self.addWin = self.addxml.get_widget("dialog_add")
+            rhsm_xml.signal_autoconnect(dic)
+            self.addWin = rhsm_xml.get_widget("dialog_add")
             self.addWin.connect("hide", self.cancel)
 #            self.addWin.show_all()
             self.addWin.run()
@@ -609,7 +613,7 @@ class AddSubscriptionScreen:
         ImportCertificate()
 
     def onSubscribeAction(self, button):
-        slabel = self.addxml.get_widget("label_status1")
+        slabel = rhsm_xml.get_widget("label_status1")
         #consumer = get_consumer()
         subscribed_count = 0
         #my_model = self.tv_products.get_model()
@@ -655,7 +659,7 @@ class AddSubscriptionScreen:
         """
         populate subscriptions matching currently installed products
         """
-        self.match_tv =  self.addxml.get_widget("treeview_available2")
+        self.match_tv = rhsm_xml.get_widget("treeview_available2")
         self.match_tv.set_model(self.matchedList)
 
         cell = gtk.CellRendererToggle()
@@ -691,7 +695,7 @@ class AddSubscriptionScreen:
         """
         populate subscriptions compatible with your system facts
         """
-        self.compatible_tv =  self.addxml.get_widget("treeview_available3")
+        self.compatible_tv =  rhsm_xml.get_widget("treeview_available3")
         self.compatible_tv.set_model(self.compatList)
 
         cell = gtk.CellRendererToggle()
@@ -728,7 +732,7 @@ class AddSubscriptionScreen:
         """
         populate all available subscriptions
         """
-        self.other_tv = self.addxml.get_widget("treeview_available4")
+        self.other_tv = rhsm_xml.get_widget("treeview_available4")
         self.other_tv.set_model(self.availableList)
 
         cell = gtk.CellRendererToggle()
@@ -818,10 +822,8 @@ class AddSubscriptionScreen:
 class UpdateSubscriptionScreen:
     def __init__(self, product_selection):
         global UEP
-        #self.updatexml = gtk.glade.XML(gladexml, "update_dialog", domain="subscription-manager")
-        self.updatexml = gtk.glade.XML(gladexml, "dialog1_updates", domain="subscription-manager")
+
         self.product_select = product_selection
-        #self.selected = {}
         self.setHeadMsg()
         self.updatesList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.available_updates = 0
@@ -842,9 +844,8 @@ class UpdateSubscriptionScreen:
                     #"on_import_cert_button_clicked" : self.onImportPrepare,
                     "on_update_subscribe_button_clicked"   : self.onSubscribeAction,
                 }
-            self.updatexml.signal_autoconnect(dic)
-            #self.updateWin = self.updatexml.get_widget("update_dialog")
-            self.updateWin = self.updatexml.get_widget("dialog1_updates")
+            rhsm_xml.signal_autoconnect(dic)
+            self.updateWin = rhsm_xml.get_widget("dialog1_updates")
             self.updateWin.connect("hide", self.cancel)
             self.updateWin.show_all()
             if not self.available_updates:
@@ -863,11 +864,11 @@ class UpdateSubscriptionScreen:
         ImportCertificate()
 
     def setHeadMsg(self):
-        hlabel = self.updatexml.get_widget("update-label2")
+        hlabel = rhsm_xml.get_widget("update-label2")
         hlabel.set_label(_("<b>Available Subscriptions for %s:</b>") % self.product_select)
 
     def populateUpdatesDialog(self):
-        self.tv_products =  self.updatexml.get_widget("treeview_updates2")
+        self.tv_products =  rhsm_xml.get_widget("treeview_updates2")
         self.tv_products.set_model(self.updatesList)
 
         cell = gtk.CellRendererToggle()
@@ -910,7 +911,7 @@ class UpdateSubscriptionScreen:
         renderer.set_property('visible', True)
 
     def onSubscribeAction(self, button):
-        slabel = self.updatexml.get_widget("label_status_update")
+        slabel = rhsm_xml.get_widget("label_status_update")
         subscribed_count = 0
         my_model = self.tv_products.get_model()
         for pool, state in self.selected.items():
@@ -944,19 +945,14 @@ class ImportCertificate:
      Import an Entitlement Certificate Widget screen
     """
     def __init__(self):
-        #self.importxml = gtk.glade.XML(gladexml, "import_dialog", domain="subscription-manager")
-        self.importxml = gtk.glade.XML(gladexml, "dialog1_import", domain="subscription-manager")
-        self.add_vbox = \
-                        self.importxml.get_widget("import_vbox")
+        self.add_vbox = rhsm_xml.get_widget("import_vbox")
 
         dic = { "on_close_import" : self.cancel,
                 "on_import_cert_button2_clicked" : self.importCertificate,
             }
-        self.importxml.signal_autoconnect(dic)
-        #self.importWin = self.importxml.get_widget("import_dialog")
-        self.importWin = self.importxml.get_widget("dialog1_import")
+        rhsm_xml.signal_autoconnect(dic)
+        self.importWin = rhsm_xml.get_widget("dialog1_import")
         self.importWin.connect("hide", self.cancel)
-        #self.importWin.set_has_frame(True)
         self.importWin.show_all()
 
     def cancel(self, button=None):
@@ -965,7 +961,7 @@ class ImportCertificate:
       gtk.main_iteration()
 
     def importCertificate(self, button):
-        fileChooser = self.importxml.get_widget("certificateChooserButton")
+        fileChooser = rhsm_xml.get_widget("certificateChooserButton")
         src_cert_file = fileChooser.get_filename()
         if src_cert_file is None:
             errorWindow(_("You must select a certificate."))

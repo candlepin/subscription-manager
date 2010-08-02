@@ -19,7 +19,6 @@ class moduleClass(Module,managergui.RegisterScreen):
         Create a new firstboot Module for the 'register' screen.
         """
         Module.__init__(self)
-        self.register_init()
         managergui.create_and_set_basic_connection()
         self.priority = 50    #this value is relative to when you want to load the screen
                               # so check other modules before setting
