@@ -620,10 +620,9 @@ class AddSubscriptionScreen:
         busted_subs = []
         count = 0
         
+        pwin.setProgress(count, len(self.selected.items()))
 
         for pool, state in self.selected.items():
-            count += 1
-            pwin.setProgress(count, len(self.selected.items()))
             # state = (bool, iter)
             if state[0]:
                 try:
@@ -638,6 +637,9 @@ class AddSubscriptionScreen:
                     log.error("Failed to subscribe to product %s Error: %s" % (state[1], e))
                     busted_subs.append(state[1])
                     continue
+            count += 1
+            pwin.setProgress(count, len(self.selected.items()))
+
         if len(busted_subs):
             errorWindow(constants.SUBSCRIBE_ERROR % ', '.join(busted_subs[:]))
         # Force fetch all certs
