@@ -95,6 +95,24 @@ def fetch_certificates():
         return False
     return True
 
+register_screen = None
+regtoken_screen = None
+
+def show_register_screen():
+    global register_screen
+
+    if register_screen:
+        register_screen.show()
+    else:
+        register_screen = RegisterScreen()
+
+def show_regtoken_screen():
+    global regtoken_screen
+
+    if regtoken_screen:
+        regtoken_screen.show()
+    else:
+        regtoken_screen = RegistrationTokenScreen()
 
 class ManageSubscriptionPage:
     """
@@ -144,10 +162,10 @@ class ManageSubscriptionPage:
     def loadAccountSettings(self, button):
         if consumer.has_key('uuid'):
             log.info("Machine already registered, loading the re-registration/registration token")
-            RegistrationTokenScreen()
+            show_regtoken_screen()
         else:
             log.info("loading registration..")
-            RegisterScreen()
+            show_register_screen()
         return True
 
     def refresh(self):
@@ -332,6 +350,9 @@ class RegisterScreen:
 
         self.registerWin.run()
 
+    def show(self):
+        self.registerWin.present()
+
     def cancel(self, button):
         self.close_window()
 
@@ -413,7 +434,7 @@ class RegisterScreen:
         self.registerWin.emit(CONSUMER_SIGNAL)
 
     def registrationTokenScreen(self):
-        RegistrationTokenScreen()
+        show_regtoken_screen()
 
     def close_window(self):
         self.registerWin.hide()
@@ -463,6 +484,9 @@ class RegistrationTokenScreen:
 
 #        self.regtokenWin.show_all()
 
+    def show(self):
+        self.regtokenWin.present()
+
     def finish(self, button=None):
         self.regtokenWin.hide()
 
@@ -485,7 +509,7 @@ class RegistrationTokenScreen:
         self.finish(button)
 
     def reRegisterAction(self, button):
-        RegisterScreen()
+        show_register_screen()
         self.regtokenWin.hide()
 
     def factsUpdateAction(self, button):
