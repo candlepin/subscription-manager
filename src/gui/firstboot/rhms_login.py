@@ -45,6 +45,12 @@ class moduleClass(Module,managergui.RegisterScreen):
         """
         pass
 
+    def emit_consumer_signal(self):
+        """
+        Overriden from RegisterScreen - we don't care about consumer update signals.
+        """
+        pass
+
     def registrationTokenScreen(self):
         """
         Overridden from RegisterScreen - ignore any requests to show the registration
@@ -56,10 +62,8 @@ class moduleClass(Module,managergui.RegisterScreen):
         """
         Create a new instance of gtk.VBox, pulling in child widgets from the glade file.
         """
-        self.registerxml = gtk.glade.XML(managergui.gladexml, "register_dialog", domain="subscription-manager")
-
         self.vbox = gtk.VBox(spacing=10)
-        self.register_dialog = self.registerxml.get_widget("dialog-vbox3")
+        self.register_dialog = managergui.rhsm_xml.get_widget("dialog-vbox3")
         self.register_dialog.reparent(self.vbox)
 
         # Get ride of the 'register' and 'cancel' buttons, as we are going to use
@@ -84,7 +88,7 @@ class moduleClass(Module,managergui.RegisterScreen):
         login name field.
         """
         # FIXME:  This is currently broken
-        login_text = self.registerxml.get_widget("account_login")
+        login_text = managergui.rhsm_xml.get_widget("account_login")
         login_text.grab_focus()
 
     def _destroy_widget(self, widget_name):
@@ -93,6 +97,6 @@ class moduleClass(Module,managergui.RegisterScreen):
 
         See gtk.Widget.destroy()
         """
-        widget = self.registerxml.get_widget(widget_name)
+        widget = managergui.rhsm_xml.get_widget(widget_name)
         widget.destroy()
 

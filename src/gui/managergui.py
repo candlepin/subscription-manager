@@ -392,8 +392,7 @@ class RegisterScreen:
 
             self.close_window()
 
-            # Emit a signal that the entitlements have changed
-            self.registerWin.emit(CONSUMER_SIGNAL)
+            self.emit_consumer_signal()
             self.registrationTokenScreen()
 
         except connection.RestlibException, e:
@@ -409,6 +408,9 @@ class RegisterScreen:
 
             return False
         return True
+
+    def emit_consumer_signal(self):
+        self.registerWin.emit(CONSUMER_SIGNAL)
 
     def registrationTokenScreen(self):
         RegistrationTokenScreen()
