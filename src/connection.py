@@ -229,7 +229,7 @@ class UEPConnection:
             method += "&email=%s" % email
             if not lang:
                 lang = locale.getdefaultlocale()[0].lower().replace('_', '-')
-            method += "&emailLocale=%s" % lang
+            method += "&email_locale=%s" % lang
         return self.conn.request_post(method)
 
     def bindByEntitlementPool(self, consumerId, poolId, quantity=None):
