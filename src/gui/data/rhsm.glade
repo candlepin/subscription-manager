@@ -112,7 +112,7 @@
                   <widget class="GtkScrolledWindow" id="scrolledwindow_updates">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="vadjustment">0 0 61 6.1000000000000005 54.899999999999999 61</property>
+                    <property name="vadjustment">0 0 60 6 54 60</property>
                     <property name="hscrollbar_policy">never</property>
                     <property name="vscrollbar_policy">automatic</property>
                     <property name="shadow_type">in</property>
@@ -307,7 +307,7 @@
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">button_close</atkproperty>
                 </accessibility>
-                <signal name="clicked" handler="on_button_close_clicked" object="onCloseQuit"/>
+                <signal name="clicked" handler="on_update_close_clicked" object="onCloseQuit"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -578,9 +578,6 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                       </packing>
                     </child>
                     <child>
-                      <placeholder/>
-                    </child>
-                    <child>
                       <widget class="GtkCheckButton" id="auto_bind">
                         <property name="label" translatable="yes">Automatically subscribe this system to compatible subscriptions</property>
                         <property name="visible">True</property>
@@ -597,6 +594,9 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </widget>
                 </child>
@@ -632,7 +632,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">cancel_reg_button1</atkproperty>
                 </accessibility>
-                <signal name="clicked" handler="on_close_clicked"/>
+                <signal name="clicked" handler="on_register_close_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -805,7 +805,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">cancel_import_button1</atkproperty>
                 </accessibility>
-                <signal name="clicked" handler="on_close_import"/>
+                <signal name="clicked" handler="on_close_import_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -976,7 +976,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">cancel_update_button1</atkproperty>
                 </accessibility>
-                <signal name="clicked" handler="on_close_clicked"/>
+                <signal name="clicked" handler="on_update_subscriptions_close_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -1389,7 +1389,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">cancel_add_button4</atkproperty>
                 </accessibility>
-                <signal name="clicked" handler="on_close_clicked"/>
+                <signal name="clicked" handler="on_register_token_close_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -1749,7 +1749,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">cancel_add_button2</atkproperty>
                 </accessibility>
-                <signal name="clicked" handler="on_close_clicked"/>
+                <signal name="clicked" handler="on_add_subscribe_close_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>

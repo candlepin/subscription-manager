@@ -97,6 +97,7 @@ def fetch_certificates():
 
 register_screen = None
 regtoken_screen = None
+add_subscription_screen = None
 
 def show_register_screen():
     global register_screen
@@ -113,6 +114,14 @@ def show_regtoken_screen():
         regtoken_screen.show()
     else:
         regtoken_screen = RegistrationTokenScreen()
+
+def show_add_subscription_screen():
+    global add_subscription_screen
+    
+    if add_subscription_screen:
+        add_subscription_screen.show()
+    else:
+        add_subscription_screen = AddSubscriptionScreen()
 
 class ManageSubscriptionPage:
     """
@@ -133,11 +142,11 @@ class ManageSubscriptionPage:
         global UEP
 
         self.vbox = rhsm_xml.get_widget("dialog-vbox1")
-        
+
         self.populateProductDialog()
         self.setRegistrationStatus()
         self.updateMessage()
-        dic = { "on_button_close_clicked" : gtk.main_quit,
+        dic = { "on_update_close_clicked" : gtk.main_quit,
                 "account_settings_clicked_cb" : self.loadAccountSettings,
                 "on_button_add1_clicked" : self.addSubButtonAction,
                 "on_button_update1_clicked" : self.updateSubButtonAction,
@@ -176,7 +185,7 @@ class ManageSubscriptionPage:
         self.vbox.show_all()
 
     def addSubButtonAction(self, button):
-        AddSubscriptionScreen()
+        show_add_subscription_screen()
         self.gui_reload()
 
     def updateSubButtonAction(self, button):
@@ -255,6 +264,10 @@ class ManageSubscriptionPage:
 
     def on_selection(self, selection):
         items,iter = selection.get_selected()
+        if iter is None:
+            print "nothing was selected"
+            return
+
         self.pname_selected = items.get_value(iter,1)
         self.psubs_selected = items.get_value(iter,2)
         self.pselect_status = items.get_value(iter,3)
@@ -340,7 +353,7 @@ class RegisterScreen:
     """
     def __init__(self):
         create_and_set_basic_connection()
-        dic = { "on_close_clicked" : self.cancel,
+        dic = { "on_register_close_clicked" : self.cancel,
                 "on_register_button_clicked" : self.onRegisterAction, 
             }
         rhsm_xml.signal_autoconnect(dic)
@@ -471,7 +484,8 @@ class RegistrationTokenScreen:
      This screen handles reregistration and registration token activation
     """
     def __init__(self):
-        dic = { "on_close_clicked" : self.finish, 
+        dic = { 
+                "on_register_token_close_clicked" : self.finish, 
                 "on_change_account_button" : self.reRegisterAction,
                 "on_facts_update_button_clicked" : self.factsUpdateAction,
                 "on_submit_button_clicked" : self.submitToken,
@@ -608,7 +622,7 @@ class AddSubscriptionScreen:
                 notebook = rhsm_xml.get_widget("notebook1")
                 notebook.remove_page(1)
 
-            dic = { "on_close_clicked" : self.cancel,
+            dic = { "on_add_subscribe_close_clicked" : self.cancel,
                     "on_add_subscribe_button_clicked"   : self.onSubscribeAction,
                 }
             rhsm_xml.signal_autoconnect(dic)
@@ -626,13 +640,16 @@ class AddSubscriptionScreen:
     # hook to forward
     def finish(self):
         self.addWin.hide()
-        self.addWin.destroy()
+        #self.addWin.destroy()
         gtk.main_iteration()
 
     # back?
     def cancel(self, button):
-        self.addWin.destroy()
-        gtk.main_iteration()
+        self.addWin.hide()
+#        gtk.main_iteration()
+
+    def show(self):
+        self.addWin.present()
 
     def onImportPrepare(self, button):
         self.addWin.hide()
@@ -660,6 +677,11 @@ class AddSubscriptionScreen:
                     entitled_data = ent_ret[0]['pool']
                     updated_count = str(int(entitled_data['quantity']) - int(entitled_data['consumed']))
                     my_model.set_value(state[-1], 2, updated_count)
+  
+                    # unselect the row
+                    my_model.set_value(state[-1], 0, False)
+                    self.selected[pool] = (False, state[1], state[2])
+
                     subscribed_count+=1
                 except Exception, e:
                     raise
@@ -678,7 +700,6 @@ class AddSubscriptionScreen:
 
         pwin.hide()
         self.addWin.hide()
-        print "gh 2000"
 
             
     def populateMatchingSubscriptions(self):
@@ -823,7 +844,6 @@ class AddSubscriptionScreen:
         self.csstatus.show()
         self.csstatus.set_label(constants.SELECT_STATUS % self.total)
 
-        print self.total
         
     def col_compat_selected(self, cell, path, model):
         items, iter = self.compatible_tv.get_selection().get_selected()
@@ -866,7 +886,7 @@ class UpdateSubscriptionScreen:
 
         if consumer.has_key('uuid'):
             self.populateUpdatesDialog()
-            dic = { "on_close_clicked" : self.cancel,
+            dic = { "on_update_subscriptions_close_clicked" : self.cancel,
                     #"on_import_cert_button_clicked" : self.onImportPrepare,
                     "on_update_subscribe_button_clicked"   : self.onSubscribeAction,
                 }
@@ -973,7 +993,7 @@ class ImportCertificate:
     def __init__(self):
         self.add_vbox = rhsm_xml.get_widget("import_vbox")
 
-        dic = { "on_close_import" : self.cancel,
+        dic = { "on_close_import_clicked" : self.cancel,
                 "on_import_cert_button2_clicked" : self.importCertificate,
             }
         rhsm_xml.signal_autoconnect(dic)
