@@ -24,7 +24,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <unique/unique.h>
-#include <libnotify/notification.h>
+#include <libnotify/notify.h>
 #include <dbus/dbus-glib.h>
 
 #define ONE_DAY 86400
@@ -53,6 +53,9 @@ typedef struct _Compliance {
 static void
 destroy_icon(Compliance *compliance)
 {
+	if (!compliance->is_visible) {
+		return;
+	}
 	gtk_status_icon_set_visible(compliance->icon, false);
 	g_object_unref(compliance->icon);
 	compliance->is_visible = false;
@@ -74,6 +77,17 @@ icon_clicked(GtkStatusIcon *icon G_GNUC_UNUSED, Compliance *compliance)
 	g_debug("icon click detected");
 	run_smg(compliance);
 }
+
+static void
+icon_right_clicked(GtkStatusIcon *icon G_GNUC_UNUSED,
+		   guint button G_GNUC_UNUSED,
+		   guint activate_time G_GNUC_UNUSED,
+		   Compliance *compliance)
+{
+	g_debug("icon right click detected");
+	run_smg(compliance);
+}
+
 
 static void
 remind_me_later_clicked(NotifyNotification *notification G_GNUC_UNUSED,
@@ -107,7 +121,7 @@ display_icon(Compliance *compliance)
 	g_signal_connect(compliance->icon, "activate",
 			 G_CALLBACK(icon_clicked), compliance);
 	g_signal_connect(compliance->icon, "popup-menu",
-			 G_CALLBACK(icon_clicked), compliance);
+			 G_CALLBACK(icon_right_clicked), compliance);
 	compliance->is_visible = true;
 
 	compliance->notification = notify_notification_new_with_status_icon(
@@ -231,6 +245,8 @@ main(int argc, char **argv)
 		g_object_unref(app);
 		return 0;
 	}
+
+	notify_init("rhsm-compliance-icon");
 
 	check_compliance(&compliance);
 	g_timeout_add_seconds(check_period, (GSourceFunc) check_compliance,
