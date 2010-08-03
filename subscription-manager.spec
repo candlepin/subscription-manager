@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.73
+Version: 0.74
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -156,6 +156,104 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Aug 03 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.74-1
+- Resolves: #614015, #613635, #612730
+- Merge branch 'master' of git+ssh://axiom.rdu.redhat.com/scm/git/subscription-
+  manager (alikins@redhat.com)
+- compliance-icon: fix up right click handling (jbowes@redhat.com)
+- compliance-icon: call notify_init for older distros (jbowes@redhat.com)
+- make add subscriptions dialog a singleton (alikins@redhat.com)
+- Making register screen and regtoken screen singletons. (jharris@redhat.com)
+- Getting the firstboot screens working again with the common glade file.
+  (jharris@redhat.com)
+-     Refactoring managergui to use signals for consumer updates.
+  (jharris@redhat.com)
+- Make the progress dialog for subscribing to channels a little better.
+  (alikins@redhat.com)
+- Change getMatchedSubscriptions to uniq the list of products based on pool id.
+  (alikins@redhat.com)
+- Moving firstboot regsiter screen to use common network init method.
+  (jharris@redhat.com)
+- Tweaking the registration screen. (jharris@redhat.com)
+- remove unwanted print statement (anadathu@redhat.com)
+- unregister functionality implemented (anadathu@redhat.com)
+- Make RegisterScreen run as a dialog (alikins@redhat.com)
+- remove redundant connection method (jesusr@redhat.com)
+- register client if consumer cert doesn't exist (jesusr@redhat.com)
+- fix typo (jesusr@redhat.com)
+- remove --regen option from facts, use the reregister command
+  (jesusr@redhat.com)
+- add reregister command (jesusr@redhat.com)
+- add rhms_subscriptions module to spec (alikins@redhat.com)
+- remove debug spew (alikins@redhat.com)
+- Turn subscriptionToken/status/factupdate/kitchen sink screen back on
+  (alikins@redhat.com)
+- Several small UI tweaks to register screen. (jharris@redhat.com)
+- turn on "subscriptionTokenScreen" again (alikins@redhat.com)
+- change the add subscription dialog to "run" so we don't block in it's main
+  loop. (alikins@redhat.com)
+- refactoring to make firstboot gui work (alikins@redhat.com)
+- Merge branch 'firstboot' of git+ssh://axiom.rdu.redhat.com/scm/git
+  /subscription-manager into firstboot (alikins@redhat.com)
+- abstract more rhsm gui stuff so we can redefine them in firstboot
+  (alikins@redhat.com)
+- Basically adding documentation. (jharris@redhat.com)
+- Merge branch 'firstboot' of git+ssh://axiom.rdu.redhat.com/scm/git
+  /subscription-manager into firstboot (alikins@redhat.com)
+- Merge branch 'master' of git+ssh://axiom.rdu.redhat.com/scm/git/subscription-
+  manager into firstboot (alikins@redhat.com)
+- bugfix for connection not using usr credentials after registration.
+  (anadathu@redhat.com)
+- remove unused code (alikins@redhat.com)
+- Merging in master and doing further work on register screen.
+  (jharris@redhat.com)
+- Getting the basics of the register screen in and working.
+  (jharris@redhat.com)
+- add the main "rhms_subscriptions" screen. (alikins@redhat.com)
+- Disarm "reload" since it causes firstboot ui to freak out.
+  (alikins@redhat.com)
+- s/rhms_module/rhms_login (alikins@redhat.com)
+- reenabled installing rhsm.conf. (alikins@redhat.com)
+- create firstboot dirs in make install (alikins@redhat.com)
+- add rhms firstboot module to repo (alikins@redhat.com)
+- add firstboot modules to spec (alikins@redhat.com)
+- install the firstboot modules in make install (alikins@redhat.com)
+- Changes to make this module also work as a firstboot screen.
+  (alikins@redhat.com)
+- force the symlink to console helper. Do not install the config file on make
+  install. (alikins@redhat.com)
+- Merging in master and doing further work on register screen.
+  (jharris@redhat.com)
+- insecure mode option moved to rhsm.conf file (anadathu@redhat.com)
+- Getting the basics of the register screen in and working.
+  (jharris@redhat.com)
+- add the main "rhms_subscriptions" screen. (alikins@redhat.com)
+- Disarm "reload" since it causes firstboot ui to freak out.
+  (alikins@redhat.com)
+- s/rhms_module/rhms_login (alikins@redhat.com)
+- reenabled installing rhsm.conf. (alikins@redhat.com)
+- create firstboot dirs in make install (alikins@redhat.com)
+- add rhms firstboot module to repo (alikins@redhat.com)
+- add firstboot modules to spec (alikins@redhat.com)
+- install the firstboot modules in make install (alikins@redhat.com)
+- Changes to make this module also work as a firstboot screen.
+  (alikins@redhat.com)
+- force the symlink to console helper. Do not install the config file on make
+  install. (alikins@redhat.com)
+- Create /var/lib/rhsm/facts if it doesn't exist. Fix for bz#613003
+  (alikins@redhat.com)
+- Always push the facts up if users click "update facts" even if we don't think
+  there has been a change. (adrian@alikins.usersys.redhat.com)
+- Add a "update facts" button the the "modify registration" screen.
+  (adrian@alikins.usersys.redhat.com)
+- Merge branch 'master' of git://axiom.rdu.redhat.com/scm/git/subscription-
+  manager (adrian@alikins.usersys.redhat.com)
+- add "facts --list" and "facts --update" to cli
+  (adrian@alikins.usersys.redhat.com)
+- add factlib.py to repo (adrian@alikins.usersys.redhat.com)
+- Swap OrderNumber and SerialNumber fields for formatting in list --consumed
+  (adrian@alikins.usersys.redhat.com)
+
 * Fri Jul 30 2010 Adrian Likins <alikins@redhat.com> 0.74-1
 - add rhms_subscriptions firstboot module
 
