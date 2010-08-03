@@ -24,7 +24,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <unique/unique.h>
-#include <libnotify/notification.h>
+#include <libnotify/notify.h>
 #include <dbus/dbus-glib.h>
 
 #define ONE_DAY 86400
@@ -231,6 +231,8 @@ main(int argc, char **argv)
 		g_object_unref(app);
 		return 0;
 	}
+
+	notify_init("rhsm-compliance-icon");
 
 	check_compliance(&compliance);
 	g_timeout_add_seconds(check_period, (GSourceFunc) check_compliance,
