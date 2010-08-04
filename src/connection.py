@@ -22,6 +22,7 @@ import locale
 import httplib
 import simplejson as json
 import base64
+import os
 from M2Crypto import SSL, httpslib
 from logutil import getLogger
 from config import initConfig
