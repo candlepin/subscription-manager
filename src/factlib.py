@@ -15,10 +15,8 @@
 # in this software or its documentation.
 #
  
-import os
 from certlib import  ActionLock, UEP, Disconnected
 from logutil import getLogger
-from connection import UEPConnection
 from facts import Facts
 
 log = getLogger(__name__)
