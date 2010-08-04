@@ -71,7 +71,6 @@ class Facts():
         return diff
 
     def get_facts(self):
-        f = {}
         if self.facts:
             return self.facts
         self.facts =  self.find_facts()
