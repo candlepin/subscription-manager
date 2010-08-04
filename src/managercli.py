@@ -407,16 +407,21 @@ class ListCommand(CliCommand):
                                help="available")
         self.parser.add_option("--consumed", action='store_true',
                                help="consumed")
+        self.parser.add_option("--all", action='store_true',
+                               help="if supplied with --available then all subscriptions are returned")                               
 
 
     def _validate_options(self):
-        pass
+        if (self.options.all and not self.options.available):
+            print _("Error: --all is only applicable with --available")
+            sys.exit(-1)
 
     def _do_command(self):
         """
         Executes the command.
         """
         self._validate_options()
+        
         consumer = check_registration()['uuid']
         if not (self.options.available or self.options.consumed):
            iproducts = managerlib.getInstalledProductStatus()
@@ -428,7 +433,10 @@ class ListCommand(CliCommand):
                print constants.installed_product_status % product
 
         if self.options.available:
-           epools = managerlib.getAvailableEntitlementsCLI(self.cp, consumer)
+           if self.options.all:
+               epools = managerlib.getAllAvailableSubscriptions(self.cp, consumer)
+           else:
+               epools = managerlib.getAvailableEntitlementsCLI(self.cp, consumer)
            if not len(epools):
                print("No Available subscription pools to list")
                sys.exit(0)
@@ -439,7 +447,7 @@ class ListCommand(CliCommand):
                                                       data['id'], 
                                                       data['quantity'], 
                                                       data['endDate'])
-
+            
         if self.options.consumed:
            cpents = managerlib.getConsumedProductEntitlements()
            if not len(cpents):
