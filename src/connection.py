@@ -59,11 +59,11 @@ class Restlib(object):
         handler = self.apihandler + method
         context = SSL.Context("sslv3")
         if self.ca_file != None:
-          log.info('loading ca_file located at: %s', self.ca_file)
-          context.load_verify_locations(self.ca_file)
+            log.info('loading ca_file located at: %s', self.ca_file)
+            context.load_verify_locations(self.ca_file)
         log.info('work in insecure mode ?:%s', self.insecure)
         if not self.insecure: #allow clients to work insecure mode if required..
-          context.set_verify(SSL.verify_fail_if_no_peer_cert, 1)
+            context.set_verify(SSL.verify_fail_if_no_peer_cert, 1)
         if self.cert_file:
             context.load_cert(self.cert_file, keyfile=self.key_file)
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
@@ -125,9 +125,9 @@ class UEPConnection:
         if config_insecure in ['True', 'true', 't', 1]:
             self.insecure = True
         if self.candlepin_ca_file == None:
-          log.info("Value \'candlepin_ca_file\' not present in config file. Assuming default value: %s",
-              DEFAULT_CA_FILE)
-          self.candlepin_ca_file = DEFAULT_CA_FILE
+            log.info("Value \'candlepin_ca_file\' not present in config file. Assuming default value: %s",
+                     DEFAULT_CA_FILE)
+            self.candlepin_ca_file = DEFAULT_CA_FILE
         # initialize connection
         self.conn = Restlib(self.host, self.ssl_port, self.handler, self.cert_file, self.key_file, self.candlepin_ca_file, self.insecure)
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
