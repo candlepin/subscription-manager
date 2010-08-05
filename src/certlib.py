@@ -93,7 +93,6 @@ class AddAction(Action):
         for bundle in bundles:
             try:
                 key,cert = self.build(bundle)
-                br.write(key, cert)
             except Exception, e:
                 log.error(
                     'Bundle not loaded:\n%s\n%s',
