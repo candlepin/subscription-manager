@@ -442,7 +442,10 @@ class ListCommand(CliCommand):
                sys.exit(0)
            print """+-------------------------------------------+\n    Available Subscriptions\n+-------------------------------------------+\n"""
            for data in epools:
-               print constants.available_subs_list % (data['productName'], 
+               # TODO:  Something about these magic numbers!
+               product_name = self._format_name(data['productName'], 24, 80)
+
+               print constants.available_subs_list % (product_name, 
                                                       data['productId'], 
                                                       data['id'], 
                                                       data['quantity'], 
@@ -456,6 +459,32 @@ class ListCommand(CliCommand):
            print """+-------------------------------------------+\n    Consumed Product Subscriptions\n+-------------------------------------------+\n"""
            for product in cpents:
                 print constants.consumed_subs_list % product 
+
+    def _format_name(self, name, indent, max_length):
+        """
+        Formats a potentially long name for multi-line display, giving
+        it a columned effect.
+        """
+        words = name.split()
+        current = indent
+        lines = []
+        line = [words.pop(0)]
+
+        def add_line():
+            lines.append(' '.join(line))
+
+        # Split here and build it back up by word, this way we get word wrapping
+        for word in words:
+            if current + len(word) < max_length:
+                current += len(word) + 1  # Have to account for the extra space
+                line.append(word)
+            else:
+                add_line()
+                line = [' ' * (indent - 1), word]
+                current = indent
+
+        add_line()
+        return '\n'.join(lines)
 
 
 # taken wholseale from rho...
