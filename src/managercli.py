@@ -65,7 +65,7 @@ class CliCommand(object):
     def cp(self):
         if not self._cp:
             if ConsumerIdentity.exists():
-                self._cp = self.create_connection_with_userIdentity()
+                self._cp = self.create_connection_with_user_identity()
             else:
                 self._cp = self.create_connection()
         return self._cp
@@ -74,7 +74,7 @@ class CliCommand(object):
     def cp(self, cp):
         self._cp = cp
 
-    def create_connection_with_userIdentity(self):
+    def create_connection_with_user_identity(self):
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
         return connection.UEPConnection(host=cfg['hostname'] or "localhost",
