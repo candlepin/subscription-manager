@@ -204,7 +204,10 @@ class ManageSubscriptionPage:
     def updateSubButtonAction(self, button):
         if self.pname_selected:
             log.info("Product %s selected for update" % self.pname_selected)
-            UpdateSubscriptionScreen(self.pname_selected)
+            if consumer.has_key('uuid'):
+                UpdateSubscriptionScreen(self.pname_selected)
+            else:
+                show_import_certificate_screen()
 
     def setButtonState(self, state=False):
         self.button_update =  rhsm_xml.get_widget("button_update1")
@@ -899,23 +902,20 @@ class UpdateSubscriptionScreen:
         except:
             pass
 
-        if consumer.has_key('uuid'):
-            self.populateUpdatesDialog()
-            dic = { "on_update_subscriptions_close_clicked" : self.cancel,
-                    #"on_import_cert_button_clicked" : self.onImportPrepare,
-                    "on_update_subscribe_button_clicked"   : self.onSubscribeAction,
-                }
-            rhsm_xml.signal_autoconnect(dic)
-            self.updateWin = rhsm_xml.get_widget("dialog1_updates")
-            self.updateWin.connect("hide", self.cancel)
-            self.updateWin.show_all()
-            if not self.available_updates:
-                infoWindow(constants.NO_UPDATES_WARNING, self.updateWin)
-                self.updateWin.hide()
-        else:
-            show_import_certificate_screen()
-            #ImportCertificate()
-            
+
+        self.populateUpdatesDialog()
+        dic = { "on_update_subscriptions_close_clicked" : self.cancel,
+                #"on_import_cert_button_clicked" : self.onImportPrepare,
+                "on_update_subscribe_button_clicked"   : self.onSubscribeAction,
+            }
+        rhsm_xml.signal_autoconnect(dic)
+        self.updateWin = rhsm_xml.get_widget("dialog1_updates")
+        self.updateWin.connect("hide", self.cancel)
+        self.updateWin.show_all()
+        if not self.available_updates:
+            infoWindow(constants.NO_UPDATES_WARNING, self.updateWin)
+            self.updateWin.hide()
+
 
     def cancel(self, button=None):
         self.updateWin.destroy()
@@ -923,7 +923,7 @@ class UpdateSubscriptionScreen:
 
     def onImportPrepare(self, button):
         self.updateWin.hide()
-        ImportCertificate()
+        show_import_certificate_screen()
 
     def setHeadMsg(self):
         hlabel = rhsm_xml.get_widget("update-label2")
