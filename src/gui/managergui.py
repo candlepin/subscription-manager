@@ -574,68 +574,71 @@ class AddSubscriptionScreen:
         self.total = 0
         self.consumer = consumer
         available_ent = 0
-        if consumer.has_key('uuid'):
-            self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
-                                               gobject.TYPE_STRING, gobject.TYPE_STRING)
-            self.matchedList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
-                                               gobject.TYPE_STRING, gobject.TYPE_STRING)
-            self.compatList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
-                                               gobject.TYPE_STRING, gobject.TYPE_STRING)
-
-            try:
-                compatible, dlist = managerlib.getCompatibleSubscriptions(UEP, self.consumer['uuid']) 
-                self.matched = managerlib.getMatchedSubscriptions(dlist) or []
-                matched_pids = []
-                for product in self.matched:
-                    pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
-                    self.matchedList.append(None, [False] + pdata)
-                    matched_pids.append(product['productId'])
-                    available_ent += 1
-                self.compat = []
-                for prod in compatible:
-                    if prod['productId'] not in matched_pids:
-                        self.compat.append(prod)
-                compatible_pids= []
-                for product in self.compat:
-                    pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
-                    self.compatList.append(None, [False] + pdata)
-                    compatible_pids.append(product['productId'])
-                    available_ent += 1
-                all_subs = managerlib.getAllAvailableSubscriptions(UEP, self.consumer['uuid'])
-                self.other = []
-                for prod in all_subs:
-                    if prod['productId'] not in compatible_pids + matched_pids:
-                        self.other.append(prod)
-                for product in self.other:
-                    pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
-                    self.availableList.append(None, [False] + pdata)
-                    available_ent += 1
-            
-            except:
-                log.error("Error populating available subscriptions from the server")
-            # machine is talking to candlepin, invoke listing scheme
-            self.populateMatchingSubscriptions()
-            self.populateCompatibleSubscriptions()
-            if cfg['showIncompatiblePools']:
-                self.populateOtherSubscriptions()
-            else:
-                notebook = rhsm_xml.get_widget("notebook1")
-                notebook.remove_page(1)
-
-            dic = { "on_add_subscribe_close_clicked" : self.cancel,
-                    "on_add_subscribe_button_clicked"   : self.onSubscribeAction,
-                }
-            rhsm_xml.signal_autoconnect(dic)
-            self.addWin = rhsm_xml.get_widget("dialog_add")
-            self.addWin.connect("hide", self.cancel)
-#            self.addWin.show_all()
-            self.addWin.run()
-            if not available_ent:
-                infoWindow(constants.NO_SUBSCRIPTIONS_WARNING, self.addWin)
-                self.addWin.hide()
-        else:
-            # no CP to talk, use local certs uploads
+        if not consumer.has_key('uuid'):
             ImportCertificate()
+            return
+
+        self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
+                                           gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.matchedList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
+                                           gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.compatList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
+                                           gobject.TYPE_STRING, gobject.TYPE_STRING)
+
+        try:
+            compatible, dlist = managerlib.getCompatibleSubscriptions(UEP, self.consumer['uuid']) 
+            self.matched = managerlib.getMatchedSubscriptions(dlist) or []
+            matched_pids = []
+            for product in self.matched:
+                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
+                self.matchedList.append(None, [False] + pdata)
+                matched_pids.append(product['productId'])
+                available_ent += 1
+            self.compat = []
+            for prod in compatible:
+                if prod['productId'] not in matched_pids:
+                    self.compat.append(prod)
+            compatible_pids= []
+            for product in self.compat:
+                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
+                self.compatList.append(None, [False] + pdata)
+                compatible_pids.append(product['productId'])
+                available_ent += 1
+            all_subs = managerlib.getAllAvailableSubscriptions(UEP, self.consumer['uuid'])
+            self.other = []
+            for prod in all_subs:
+                if prod['productId'] not in compatible_pids + matched_pids:
+                    self.other.append(prod)
+            for product in self.other:
+                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
+                self.availableList.append(None, [False] + pdata)
+                available_ent += 1
+
+        except:
+            log.error("Error populating available subscriptions from the server")
+        # machine is talking to candlepin, invoke listing scheme
+        self.populateMatchingSubscriptions()
+        self.populateCompatibleSubscriptions()
+        if cfg['showIncompatiblePools']:
+            self.populateOtherSubscriptions()
+        else:
+            notebook = rhsm_xml.get_widget("notebook1")
+            notebook.remove_page(1)
+
+        dic = { "on_add_subscribe_close_clicked" : self.cancel,
+                "on_add_subscribe_button_clicked"   : self.onSubscribeAction,
+            }
+        rhsm_xml.signal_autoconnect(dic)
+        self.addWin = rhsm_xml.get_widget("dialog_add")
+        self.addWin.connect("hide", self.cancel)
+
+        self.addWin.run()
+        if not available_ent:
+            infoWindow(constants.NO_SUBSCRIPTIONS_WARNING, self.addWin)
+            self.addWin.hide()
+
+
+
 
     # hook to forward
     def finish(self):
