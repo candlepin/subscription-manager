@@ -98,6 +98,7 @@ def fetch_certificates():
 register_screen = None
 regtoken_screen = None
 add_subscription_screen = None
+import_certificate_screen = None
 
 def show_register_screen():
     global register_screen
@@ -122,6 +123,14 @@ def show_add_subscription_screen():
         add_subscription_screen.show()
     else:
         add_subscription_screen = AddSubscriptionScreen()
+
+def show_import_certificate_screen():
+    global import_certificate_screen
+
+    if import_certificate_screen:
+        import_certificate_screen.show()
+    else:
+        import_certificate_screen = ImportCertificate()
 
 class ManageSubscriptionPage:
     """
@@ -185,7 +194,11 @@ class ManageSubscriptionPage:
         self.vbox.show_all()
 
     def addSubButtonAction(self, button):
-        show_add_subscription_screen()
+        if consumer.has_key('uuid'):
+            show_add_subscription_screen()
+        else:
+            show_import_certificate_screen()
+
         self.gui_reload()
 
     def updateSubButtonAction(self, button):
@@ -574,9 +587,6 @@ class AddSubscriptionScreen:
         self.total = 0
         self.consumer = consumer
         self.available_ent = 0
-        if not consumer.has_key('uuid'):
-            ImportCertificate()
-            return
 
         self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
                                            gobject.TYPE_STRING, gobject.TYPE_STRING)
@@ -658,7 +668,7 @@ class AddSubscriptionScreen:
 
     def onImportPrepare(self, button):
         self.addWin.hide()
-        ImportCertificate()
+        show_import_certificate_screen()
 
     def onSubscribeAction(self, button):
         slabel = rhsm_xml.get_widget("label_status1")
@@ -903,7 +913,8 @@ class UpdateSubscriptionScreen:
                 infoWindow(constants.NO_UPDATES_WARNING, self.updateWin)
                 self.updateWin.hide()
         else:
-            ImportCertificate()
+            show_import_certificate_screen()
+            #ImportCertificate()
             
 
     def cancel(self, button=None):
@@ -1008,8 +1019,11 @@ class ImportCertificate:
 
     def cancel(self, button=None):
       self.importWin.hide()
-      self.importWin.destroy()
+#      self.importWin.destroy()
       gtk.main_iteration()
+
+    def show(self):
+        self.importWin.present()
 
     def importCertificate(self, button):
         fileChooser = rhsm_xml.get_widget("certificateChooserButton")
@@ -1031,7 +1045,7 @@ class ImportCertificate:
         dest_file_path = os.path.join(ENT_CONFIG_DIR, os.path.basename(src_cert_file))
         #if not os.path.exists(dest_file_path):
         shutil.copy(src_cert_file, dest_file_path)
-        print dest_file_path
+ #       print dest_file_path
         self.importWin.hide()
 #        reload()
 
