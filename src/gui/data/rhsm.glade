@@ -678,7 +678,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
     <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
     <accessibility>
-      <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog1_import</atkproperty>
+      <atkproperty name="AtkObject::accessible-name" translatable="yes">Provide a Subscription Certificate</atkproperty>
     </accessibility>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox5">
@@ -821,7 +821,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="receives_default">True</property>
                 <property name="image_position">right</property>
                 <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">import_cert_button4</atkproperty>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Import Certificate</atkproperty>
                 </accessibility>
                 <signal name="clicked" handler="on_import_cert_button2_clicked"/>
               </widget>
@@ -850,9 +850,6 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
-    <accessibility>
-      <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog1_updates</atkproperty>
-    </accessibility>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox6">
         <property name="visible">True</property>
