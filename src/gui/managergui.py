@@ -573,7 +573,7 @@ class AddSubscriptionScreen:
         self.csstatus = rhsm_xml.get_widget("select_status")
         self.total = 0
         self.consumer = consumer
-        available_ent = 0
+        self.available_ent = 0
         if not consumer.has_key('uuid'):
             ImportCertificate()
             return
@@ -585,37 +585,8 @@ class AddSubscriptionScreen:
         self.compatList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
                                            gobject.TYPE_STRING, gobject.TYPE_STRING)
 
-        try:
-            compatible, dlist = managerlib.getCompatibleSubscriptions(UEP, self.consumer['uuid']) 
-            self.matched = managerlib.getMatchedSubscriptions(dlist) or []
-            matched_pids = []
-            for product in self.matched:
-                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
-                self.matchedList.append(None, [False] + pdata)
-                matched_pids.append(product['productId'])
-                available_ent += 1
-            self.compat = []
-            for prod in compatible:
-                if prod['productId'] not in matched_pids:
-                    self.compat.append(prod)
-            compatible_pids= []
-            for product in self.compat:
-                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
-                self.compatList.append(None, [False] + pdata)
-                compatible_pids.append(product['productId'])
-                available_ent += 1
-            all_subs = managerlib.getAllAvailableSubscriptions(UEP, self.consumer['uuid'])
-            self.other = []
-            for prod in all_subs:
-                if prod['productId'] not in compatible_pids + matched_pids:
-                    self.other.append(prod)
-            for product in self.other:
-                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
-                self.availableList.append(None, [False] + pdata)
-                available_ent += 1
+        self.populateSubscriptionLists()
 
-        except:
-            log.error("Error populating available subscriptions from the server")
         # machine is talking to candlepin, invoke listing scheme
         self.populateMatchingSubscriptions()
         self.populateCompatibleSubscriptions()
@@ -633,11 +604,42 @@ class AddSubscriptionScreen:
         self.addWin.connect("hide", self.cancel)
 
         self.addWin.run()
-        if not available_ent:
+        if not self.available_ent:
             infoWindow(constants.NO_SUBSCRIPTIONS_WARNING, self.addWin)
             self.addWin.hide()
 
-
+    def populateSubscriptionLists(self):
+        try:    
+            compatible, dlist = managerlib.getCompatibleSubscriptions(UEP, self.consumer['uuid']) 
+            self.matched = managerlib.getMatchedSubscriptions(dlist) or []
+            matched_pids = []
+            for product in self.matched:
+                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
+                self.matchedList.append(None, [False] + pdata)
+                matched_pids.append(product['productId'])
+                self.available_ent += 1
+            self.compat = []
+            for prod in compatible:
+                if prod['productId'] not in matched_pids:
+                    self.compat.append(prod)
+            compatible_pids= []
+            for product in self.compat:
+                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
+                self.compatList.append(None, [False] + pdata)
+                compatible_pids.append(product['productId'])
+                self.available_ent += 1
+            all_subs = managerlib.getAllAvailableSubscriptions(UEP, self.consumer['uuid'])
+            self.other = []
+            for prod in all_subs:
+                if prod['productId'] not in compatible_pids + matched_pids:
+                    self.other.append(prod)
+            for product in self.other:
+                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
+                self.availableList.append(None, [False] + pdata)
+                self.available_ent += 1
+        except Exception, e:
+            log.error("Error populating available subscriptions from the server")
+            log.error("Exception: %s" % e)
 
 
     # hook to forward
