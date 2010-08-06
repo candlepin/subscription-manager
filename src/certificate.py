@@ -100,7 +100,8 @@ class Certificate(object):
         @return: The valid date range.
         @rtype: L{DateRange}
         """
-        return DateRange(self.x509)
+        return DateRange(self.x509.get_not_before().get_datetime(),
+                self.x509.get_not_after().get_datetime())
     
     def valid(self):
         """
@@ -252,30 +253,31 @@ class Key(object):
     
 class DateRange:
     """
-    Date range object converts between ASN1 and python
-    datetime objects.
-    @ivar x509: A certificate.
-    @type x509: X509
+    Date range object.
+
+    @ivar begin_date: The begining date
+    @type begin_date: datetime
+    @ivar end_date: The ending date
+    @type end_date: datetime
     """
-    
-    ASN1_FORMAT = '%b %d %H:%M:%S %Y %Z'
-    
-    def __init__(self, x509):
-        """
-        @param x509: A certificate.
-        @type x509: X509
-        """
-        self.range = \
-            (str(x509.get_not_before()),
-             str(x509.get_not_after()))
-        
+
+    def __init__(self, begin_date, end_date):
+        self._begin = self._convert_to_utc(begin_date)
+        self._end = self._convert_to_utc(end_date)
+
+    def _convert_to_utc(self, timestamp):
+        if timestamp.tzinfo is None:
+            return timestamp.replace(tzinfo=GMT())
+        else:
+            return timestamp.astimezone(GMT())
+
     def begin(self):
         """
         Get range beginning.
         @return: The beginning date in UTC.
         @rtype: L{datetime.datetime}
         """
-        return self.__parse(self.range[0])
+        return self._begin
     
     def end(self):
         """
@@ -283,7 +285,7 @@ class DateRange:
         @return: The end date in UTC.
         @rtype: L{datetime.datetime}
         """
-        return self.__parse(self.range[1])
+        return self._end
 
     def hasNow(self):
         """
@@ -294,16 +296,9 @@ class DateRange:
         gmt = dt.utcnow()
         gmt = gmt.replace(tzinfo=GMT())
         return ( gmt >= self.begin() and gmt <= self.end() )
-
-    def __parse(self, asn1):
-        try:
-            d = dt.strptime(asn1, self.ASN1_FORMAT)
-        except:
-            d = dt(year=2000, month=1, day=1)
-        return d.replace(tzinfo=GMT())
     
     def __str__(self):
-        return '\n\t%s\n\t%s' % self.range
+        return '\n\t%s\n\t%s' % (self._begin, self._end)
 
 
 class GMT(tzinfo):
@@ -316,7 +311,7 @@ class GMT(tzinfo):
         return 'GMT'
 
     def dst(self, dt):
-        return 0
+        return timedelta(seconds=0)
 
 
 class Extensions(dict):
@@ -725,6 +720,31 @@ class EntitlementCertificate(ProductCertificate):
             ext = rhns.branch(root)
             lst.append(Role(ext))
         return lst
+
+    def validRange(self):
+        """
+        Get the I{valid} date range.
+
+        Overrides the L{Certificate} method to look at the L{Order} end date,
+        ignoring the grace period (if there is one).
+
+        @return: The valid date range.
+        @rtype: L{DateRange}
+        """
+        fmt = "%Y-%m-%dT%H:%M:%SZ"
+        order = self.getOrder()
+
+        print order.getStart()
+        begin = dt.strptime(order.getStart(), fmt)
+        end = dt.strptime(order.getEnd(), fmt)
+
+        return DateRange(begin, end)
+
+    def validRangeWithGracePeriod(self):
+        return super(EntitlementCertificate, self).validRange()
+
+    def validWithGracePeriod(self):
+        return self.validRangeWithGracePeriod().hasNow()
 
     def bogus(self):
         bogus = ProductCertificate.bogus(self)

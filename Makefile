@@ -80,6 +80,10 @@ install: dbus-service-install
 	install -m 644 etc-conf/subscription-manager-gui.console \
 		${PREFIX}/etc/security/console.apps/subscription-manager-gui
 
+check:
+	nosetests
+
+
 clean:
 	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
 
