@@ -7,6 +7,8 @@ from firstboot.functions import *
 from firstboot.module import *
 from firstboot.module import Module
 
+from certlib import ConsumerIdentity
+
 import gettext
 _ = lambda x: gettext.ldgettext("firstboot", x)
 
@@ -24,6 +26,7 @@ class moduleClass(Module,managergui.RegisterScreen):
                               # so check other modules before setting
         self.sidebarTitle = _("Entitlement Registration")
         self.title = _("Entitlement Platform Registration")
+        self._cached_credentials = None
 
     def apply(self, interface, testing=False):
         """
@@ -31,12 +34,21 @@ class moduleClass(Module,managergui.RegisterScreen):
         provided user credentials and return the appropriate result
         value.
         """
-        valid_registration = self.register(testing=testing)
+        credentials = self._get_credentials_hash()
 
-        if valid_registration:
+        if credentials == self._cached_credentials and ConsumerIdentity.exists():
+            # User has already successfully authenticaed with these
+            # credentials, just go on to the next module without
+            # reregistering the consumer
             return RESULT_SUCCESS
         else:
-            return RESULT_FAILURE
+            valid_registration = self.register(testing=testing)
+
+            if valid_registration:
+                self._cached_credentials = credentials
+                return RESULT_SUCCESS
+            else:
+                return RESULT_FAILURE
 
     def close_window(self):
         """
@@ -77,7 +89,7 @@ class moduleClass(Module,managergui.RegisterScreen):
 
     def needsNetwork(self):
         """
-        This lets firsboot know that networking is required, in order to
+        This lets firstboot know that networking is required, in order to
         talk to hosted UEP.
         """
         return True
@@ -91,6 +103,23 @@ class moduleClass(Module,managergui.RegisterScreen):
         login_text = managergui.rhsm_xml.get_widget("account_login")
         login_text.grab_focus()
 
+    def shouldAppear(self):
+        """
+        Indicates to firstboot whether to show this screen.  In this case
+        we want to skip over this screen if there is already an identity
+        certificate on the machine (most likely laid down in a kickstart),
+        but showing the screen and allowing the user to reregister if 
+        firstboot is run in reconfig mode.
+        """
+        return self._is_mode(MODE_RECONFIG) or not ConsumerIdentity.exists()
+
+    def _is_mode(self, mode):
+        """
+        Is firstboot in the specified mode?
+        """
+        # config.mode is a bitmask off all current modes
+        return config.mode & mode == mode
+
     def _destroy_widget(self, widget_name):
         """
         Destroy a widget by name.
@@ -99,4 +128,22 @@ class moduleClass(Module,managergui.RegisterScreen):
         """
         widget = managergui.rhsm_xml.get_widget(widget_name)
         widget.destroy()
+
+    def _get_credentials_hash(self):
+        """
+        Return an internal hash representation of the text input
+        widgets.  This is used to compare if we have changed anything
+        when moving back and forth across modules.
+        """
+        credentials = [self._get_text(name) for name in \
+                           ('account_login', 'account_password', 'consumer_name')]
+        return hash(tuple(credentials))
+
+    def _get_text(self, widget_name):
+        """
+        Return the text value of an input widget referenced
+        by name.
+        """
+        widget = managergui.rhsm_xml.get_widget(widget_name)
+        return widget.get_text()
 
