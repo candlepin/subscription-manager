@@ -223,7 +223,7 @@ class RegisterCommand(CliCommand):
                 systemExit(-1, re.msg)
 
         managerlib.persist_consumer_cert(consumer)
-        self.cp = self.create_connection_with_userIdentity()
+        self.cp = self.create_connection_with_user_identity()
         if self.options.autosubscribe:
             # try to auomatically bind products
             for pname, phash in managerlib.getInstalledProductHashMap().items():
