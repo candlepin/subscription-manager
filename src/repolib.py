@@ -71,7 +71,9 @@ class UpdateAction(Action):
     
     def getUniqueContent(self):
         unique = set()
-        products = self.entdir.listValid()
+        # Though they are expired, we keep repos around that are within their
+        # grace period, as they will still allow access to the content.
+        products = self.entdir.listValid(grace_period=True)
         products.sort()
         products.reverse()
         cfg = initConfig()

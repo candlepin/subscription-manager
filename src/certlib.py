@@ -18,7 +18,6 @@
 
 import os
 import re
-from datetime import datetime as dt
 from datetime import timedelta
 from config import initConfig
 from connection import UEPConnection
@@ -114,9 +113,6 @@ class DeleteAction(Action):
 
 class UpdateAction(Action):
 
-    # 100 years
-    LINGER = timedelta(days=0x8E94)
-    
     def perform(self):
         try:
             uep = UEP()
@@ -185,12 +181,7 @@ class UpdateAction(Action):
             cert.delete()
     
     def mayLinger(self, cert):
-        gmt = dt.utcnow()
-        gmt = gmt.replace(tzinfo=GMT())
-        valid = cert.validRange()
-        end = valid.end()
-        graceperoid = end+self.LINGER
-        return ( gmt < graceperoid )
+        return cert.validWithGracePeriod()
 
 
 class Writer:
@@ -355,10 +346,13 @@ class CertificateDirectory(Directory):
             factory.append(path, listing)
         return listing
 
-    def listValid(self):
+    def listValid(self, grace_period=False):
         valid = []
         for c in self.list():
-             if c.valid():
+            if grace_period:
+                if c.validWithGracePeriod():
+                    valid.append(c)
+            elif c.valid():
                 valid.append(c)
         return valid
     
