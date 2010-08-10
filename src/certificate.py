@@ -734,7 +734,6 @@ class EntitlementCertificate(ProductCertificate):
         fmt = "%Y-%m-%dT%H:%M:%SZ"
         order = self.getOrder()
 
-        print order.getStart()
         begin = dt.strptime(order.getStart(), fmt)
         end = dt.strptime(order.getEnd(), fmt)
 
