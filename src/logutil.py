@@ -19,9 +19,19 @@
 
 import os
 import logging
+import string
+import traceback
+
 from logging import Formatter
 from logging.handlers import RotatingFileHandler
 
+
+
+
+def trace_me():
+    x = traceback.extract_stack()
+    bar = string.join(traceback.format_list(x))
+    return bar
 
 def getLogger(name):
     path = '/var/log/rhsm/rhsm.log'
