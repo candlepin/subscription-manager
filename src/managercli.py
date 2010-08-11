@@ -47,6 +47,8 @@ class CliCommand(object):
             description = shortdesc
         self.debug = 0
         self._cp = None
+        self.new_cp = self.create_connection()
+        self.cp = self.new_cp
         self.parser = OptionParser(usage=usage, description=description)
         self._add_common_options()
         self.name = name
@@ -61,22 +63,28 @@ class CliCommand(object):
     def _do_command(self):
         pass
 
-    @property
-    def cp(self):
-        if not self._cp:
-            if ConsumerIdentity.exists():
-                self._cp = self.create_connection_with_user_identity()
-            else:
-                self._cp = self.create_connection()
-        return self._cp
+    # ditch all this, self.cp is a UEPConnection that kind figure out
+    # where it needs to authtenticate
+#    @property
+#    def cp_Two(self):
+#        if not self._cp:
+#            if ConsumerIdentity.exists():
+#                self._cp = self.create_connection_with_user_identity()
+#            else:
+#                self._cp = self.create_connection()
+#        return self._cp
 
-    @cp.setter
-    def cp(self, cp):
-        self._cp = cp
+#    @cp.setter
+#    def cp_Two(self, cp):
+#        self._cp = cp
 
-    def create_connection_with_user_identity(self):
+    def add_user_identity(self):
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
+
+        print cert_file
+        self.new_cp.add_ssl_certs(cert_file=cert_file, key_file=key_file)
+
         return connection.UEPConnection(host=cfg['hostname'] or "localhost",
                                            ssl_port=cfg['port'], handler="/candlepin", 
                                            cert_file=cert_file, key_file=key_file)
@@ -223,10 +231,13 @@ class RegisterCommand(CliCommand):
                 systemExit(-1, re.msg)
 
         managerlib.persist_consumer_cert(consumer)
-        self.cp = self.create_connection_with_user_identity()
+
+        # instead of recreating cp here, lets just add an auth'ed connection to it
+#        self.cp = self.create_connection_with_user_identity()
+        self.add_user_identity()
         if self.options.autosubscribe:
             # try to auomatically bind products
-            for pname, phash in managerlib.getInstalledProductHashMap().items():
+            for pname, phash in managerlib.getUnstalledProductHashMap().items():
                 try:
                    print "Bind Product ", pname,phash
                    self.cp.bindByProduct(consumer['uuid'], phash)
