@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.74
+Version: 0.75
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -156,6 +156,42 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Wed Aug 11 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.75-1
+- Resolves: #622839, #612250 
+- get rid of stray print debug (jbowes@redhat.com)
+- missed an instance of create_connection_with_userIdentity
+  (alikins@redhat.com)
+- remove unneeded printing of consumer id bz#622839 (alikins@redhat.com)
+- Merge branch 'master' of git+ssh://axiom.rdu.redhat.com/scm/git/subscription-
+  manager (alikins@redhat.com)
+- implement entitlement grace periods (jbowes@redhat.com)
+- Merge branch 'master' of git+ssh://axiom.rdu.redhat.com/scm/git/subscription-
+  manager (alikins@redhat.com)
+- Adding some firstboot niceties for registration. (jharris@redhat.com)
+- Merge branch 'master' of git+ssh://axiom.rdu.redhat.com/scm/git/subscription-
+  manager (alikins@redhat.com)
+- Somewhat rough fix for BZ #612250 (jharris@redhat.com)
+- Add back some missing atk strings (alikins@redhat.com)
+- remove the executable bit from productid.py (jbowes@redhat.com)
+- Add bin to gitignore (jbowes@redhat.com)
+- Remove unused 'test' file (from repo check) (jbowes@redhat.com)
+- s/create_connection_with_userIdentity/create_connection_with_userIdentity
+  (alikins@redhat.com)
+- remove reference to non existent variable (alikins@redhat.com)
+- More moving of ImportCertificate screen dialog around (alikins@redhat.com)
+- refactor ImportCertificate screen a bit. (alikins@redhat.com)
+- more refactoring (alikins@redhat.com)
+- refactor AddSubscriptionScreen.init to be slightly less indented
+  (alikins@redhat.com)
+- remove unused imports cleanup indention (alikins@redhat.com)
+- remove unused "os" import (alikins@redhat.com)
+- indention cleanup pylint cleanups (alikins@redhat.com)
+- unused variable removed pychecker cleanups (alikins@redhat.com)
+- import os here pychecker fix (alikins@redhat.com)
+- BZ615357: Can now pass in --all if you are doing list --available
+  (root@localhost.localdomain)
+- BZ615404 changed the name (bkearney@redhat.com)
+
 * Tue Aug 03 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.74-1
 - Resolves: #614015, #613635, #612730
 - Merge branch 'master' of git+ssh://axiom.rdu.redhat.com/scm/git/subscription-
