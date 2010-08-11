@@ -62,17 +62,21 @@ CONSUMER_SIGNAL = "on_consumer_changed"
 gobject.signal_new(CONSUMER_SIGNAL, gtk.Dialog, gobject.SIGNAL_ACTION, gobject.TYPE_NONE, ())
 rhsm_xml = gtk.glade.XML(gladexml, domain="subscription-manager")
 
+def create_and_set_basic_connection():
+    global UEP
+    UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin")
+
+
 if ConsumerIdentity.exists():
     cert_file = ConsumerIdentity.certpath()
     key_file = ConsumerIdentity.keypath()
     UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin", cert_file=cert_file, key_file=key_file)
+else:
+    create_and_set_basic_connection()
 
 certlib = CertLib()
 ENT_CONFIG_DIR="/etc/pki/entitlement/product/"
 
-def create_and_set_basic_connection():
-    global UEP
-    UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin")
 
 def get_consumer():
     if not ConsumerIdentity.exists():

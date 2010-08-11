@@ -30,6 +30,7 @@ from config import initConfig
 import gettext
 _ = gettext.gettext
 
+
 log = getLogger(__name__)
 DEFAULT_CA_FILE="/etc/pki/CA/candlepin.pem"
 class RestlibException(Exception):
@@ -55,6 +56,7 @@ class Restlib(object):
         self.key_file  = key_file
         self.ca_file = ca_file
         self.insecure = insecure
+
     def _request(self, request_type, method, info=None):
         handler = self.apihandler + method
         context = SSL.Context("sslv3")
@@ -132,6 +134,7 @@ class UEPConnection:
         self.conn = Restlib(self.host, self.ssl_port, self.handler, self.cert_file, self.key_file, self.candlepin_ca_file, self.insecure)
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
+        log.info("Connection using cert_file: %s, key_file: %s, ca_file: %s insecure_mode: %s" % (self.cert_file, self.key_file, self.candlepin_ca_file, self.insecure))
 
     def shutDown(self):
         self.conn.close()
@@ -264,6 +267,8 @@ class UEPConnection:
 
     def getPoolsList(self, consumerId):
         method = "/pools?consumer=%s" % consumerId
+        print "self.conn", self.conn
+        print "self.conn.cert_file", self.conn.cert_file, self.conn.key_file, self.conn.ca_file
         return self.conn.request_get(method)
 
     def getPool(self, poolId):
