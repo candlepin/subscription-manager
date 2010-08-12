@@ -706,7 +706,6 @@ class AddSubscriptionScreen:
 
                     subscribed_count+=1
                 except Exception, e:
-                    raise
                     # Subscription failed, continue with rest
                     log.error("Failed to subscribe to product %s Error: %s" % (state[1], e))
                     busted_subs.append(state[1])
