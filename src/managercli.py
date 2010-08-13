@@ -129,6 +129,7 @@ class ReRegisterCommand(CliCommand):
     def _do_command(self):
 
         self._validate_options()
+        self.add_user_identity()
 
         if not ConsumerIdentity.exists():
             # this should REGISTER
@@ -301,6 +302,7 @@ class SubscribeCommand(CliCommand):
                                "notification when token activation is "
                                "complete. Used with --regtoken and --email "
                                "only. Examples: en-us, de-de"))
+        self.add_user_identity()
 
     def _validate_options(self):
         if not (self.options.regtoken or self.options.pool):
@@ -358,6 +360,7 @@ class UnSubscribeCommand(CliCommand):
         """
         Executes the command.
         """
+        self.add_user_identity()
         consumer = check_registration()['uuid']
         try:
             if self.options.serial:
@@ -392,6 +395,7 @@ class FactsCommand(CliCommand):
         CliCommand._validate_options(self)
 
     def _do_command(self):
+        self.add_user_identity()
         if self.options.list:
             facts = getFacts()
             fact_dict = facts.get_facts()
@@ -431,7 +435,9 @@ class ListCommand(CliCommand):
         """
         Executes the command.
         """
+
         self._validate_options()
+        self.add_user_identity()
         
         consumer = check_registration()['uuid']
         if not (self.options.available or self.options.consumed):
