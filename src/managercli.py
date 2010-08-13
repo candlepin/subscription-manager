@@ -82,7 +82,6 @@ class CliCommand(object):
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
 
-        print cert_file
         self.new_cp.add_ssl_certs(cert_file=cert_file, key_file=key_file)
 
         return connection.UEPConnection(host=cfg['hostname'] or "localhost",
@@ -258,6 +257,7 @@ class UnRegisterCommand(CliCommand):
         pass
 
     def _do_command(self):
+        self.add_user_identity()
         if not ConsumerIdentity.exists():
             print(_("This system is currently not registered."))
             sys.exit(1)
