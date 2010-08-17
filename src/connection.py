@@ -135,7 +135,7 @@ class UEPConnection:
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
         log.info("Connection using cert_file: %s, key_file: %s, ca_file: %s insecure_mode: %s" % (self.cert_file, self.key_file, self.candlepin_ca_file, self.insecure))
-        log.info("trace: %s" % trace_me())
+        #log.info("trace: %s" % trace_me())
 
     def add_ssl_certs(self, cert_file=None, key_file=None):
         self.cert_file = cert_file
@@ -273,8 +273,6 @@ class UEPConnection:
 
     def getPoolsList(self, consumerId):
         method = "/pools?consumer=%s" % consumerId
-        print "self.conn", self.conn
-        print "self.conn.cert_file", self.conn.cert_file, self.conn.key_file, self.conn.ca_file
         return self.conn.request_get(method)
 
     def getPool(self, poolId):
