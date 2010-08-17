@@ -731,7 +731,7 @@ class EntitlementCertificate(ProductCertificate):
         @return: The valid date range.
         @rtype: L{DateRange}
         """
-        fmt = "%Y-%m-%d %H:%M:%S.%f"
+        fmt = "%Y-%m-%dT%H:%M:%SZ"
         order = self.getOrder()
 
         begin = dt.strptime(order.getStart(), fmt)
