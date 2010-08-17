@@ -196,7 +196,7 @@ class UEPConnection:
         """
         self.__authenticate(username, password)
         method = '/consumers/%s' % consumerId
-        return self.conn.request_get(method)
+        return self.basic_auth_conn.request_get(method)
 
     def unregisterConsumer(self, consumerId):
         """
