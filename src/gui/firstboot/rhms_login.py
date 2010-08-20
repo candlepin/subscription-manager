@@ -22,7 +22,7 @@ class moduleClass(Module,managergui.RegisterScreen):
         """
         Module.__init__(self)
 #        managergui.create_and_set_basic_connection()
-        self.priority = 50    #this value is relative to when you want to load the screen
+        self.priority = 120    #this value is relative to when you want to load the screen
                               # so check other modules before setting
         self.sidebarTitle = _("Entitlement Registration")
         self.title = _("Entitlement Platform Registration")
