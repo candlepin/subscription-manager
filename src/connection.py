@@ -122,9 +122,9 @@ class UEPConnection:
         self.key_file = key_file
         config = initConfig()
         self.candlepin_ca_file = config['candlepin_ca_file']
-        config_insecure = config['insecure_mode']
+        config_insecure = config['insecure']
         self.insecure = False
-        if config_insecure in ['True', 'true', 't', 1]:
+        if config_insecure:
             self.insecure = True
         if self.candlepin_ca_file == None:
             log.info("Value \'candlepin_ca_file\' not present in config file. Assuming default value: %s",
@@ -135,7 +135,7 @@ class UEPConnection:
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
         log.info("Connection using cert_file: %s, key_file: %s, ca_file: %s insecure_mode: %s" % (self.cert_file, self.key_file, self.candlepin_ca_file, self.insecure))
-        log.info("trace: %s" % trace_me())
+        #log.info("trace: %s" % trace_me())
 
     def add_ssl_certs(self, cert_file=None, key_file=None):
         self.cert_file = cert_file
@@ -196,7 +196,7 @@ class UEPConnection:
         """
         self.__authenticate(username, password)
         method = '/consumers/%s' % consumerId
-        return self.conn.request_get(method)
+        return self.basic_auth_conn.request_get(method)
 
     def unregisterConsumer(self, consumerId):
         """
@@ -273,8 +273,6 @@ class UEPConnection:
 
     def getPoolsList(self, consumerId):
         method = "/pools?consumer=%s" % consumerId
-        print "self.conn", self.conn
-        print "self.conn.cert_file", self.conn.cert_file, self.conn.key_file, self.conn.ca_file
         return self.conn.request_get(method)
 
     def getPool(self, poolId):

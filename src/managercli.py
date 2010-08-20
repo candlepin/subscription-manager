@@ -331,12 +331,17 @@ class SubscribeCommand(CliCommand):
 
             if self.options.pool:
                 for pool in self.options.pool:
-                    bundles = self.cp.bindByEntitlementPool(consumer, pool)
-                    log.info("Info: Successfully subscribed the machine the Entitlement Pool %s" % pool)
+                    try:
+                        bundles = self.cp.bindByEntitlementPool(consumer, pool)
+                        log.info("Info: Successfully subscribed the machine the Entitlement Pool %s" % pool)
+                    except connection.RestlibException, re:
+                        log.exception(re)
+                        if re.code == 403:
+                            print re.msg  #already subscribed.
+                        else:
+                            systemExit(-1, re.msg) #some other error.. don't try again
+
             self.certlib.update()
-        except connection.RestlibException, re:
-            log.exception(re)
-            systemExit(-1, re.msg)
         except Exception, e:
             log.error("Unable to subscribe: %s" % e)
             log.exception(e)

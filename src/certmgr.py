@@ -77,4 +77,12 @@ def main():
     print 'done'
 
 if __name__ == '__main__':
-    main()
+    import logutil, sys
+    log = logutil.getLogger(__name__)
+    try:
+        main()
+    except Exception, e:
+        log.error("Error while updating certificates using daemon")
+        print 'Unable to update Red Hat certificates & repositories'
+        log.exception(e)
+        sys.exit(-1)
