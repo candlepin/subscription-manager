@@ -172,7 +172,10 @@ def getAllAvailableSubscriptions(cpserver, consumer):
     #data = [_sub_dict(pool['pool'], columns) for pool in dlist]
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
-        d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
+        if int(d['quantity']) < 0:
+            d['quantity'] = 'unlimited'
+        else:
+            d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
         d['endDate'] = formatDate(d['endDate'])
         del d['consumed']
     return data
@@ -207,7 +210,7 @@ def getAvailableEntitlements(cpserver, consumer):
     """
      Gets the available Entitlements from the server
     """
-    columns  = ['id', 'quantity', 'unlimited', 'consumed', 'endDate', 'productName', 'providedProductIds', 'productId']
+    columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'providedProductIds', 'productId']
     
     # update facts
     facts = getFacts()
@@ -219,7 +222,7 @@ def getAvailableEntitlements(cpserver, consumer):
         return None, None
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
-        if d['unlimited']:
+        if int(d['quantity']) < 0:
             d['quantity'] = 'unlimited'
         else:
             d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
@@ -229,7 +232,7 @@ def getAvailableEntitlements(cpserver, consumer):
     return data, dlist
 
 def getAvailableEntitlementsCLI(cpserver, consumer):
-    columns  = ['id', 'quantity', 'unlimited', 'consumed', 'endDate', 'productName', 'productId']
+    columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'productId']
     # update facts if we need it
     facts = getFacts()
 #    print facts.find_facts()
@@ -238,7 +241,7 @@ def getAvailableEntitlementsCLI(cpserver, consumer):
     dlist = cpserver.getPoolsList(consumer)
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
-        if d['unlimited']:
+        if int(d['quantity']) < 0:
             d['quantity'] = 'unlimited'
         else:
             d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
