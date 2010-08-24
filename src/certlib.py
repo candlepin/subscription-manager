@@ -131,7 +131,10 @@ class UpdateAction(Action):
 
     def getLocal(self, report):
         local = {}
-        for valid in self.entdir.listValid():
+        #certificates in grace period were being renamed everytime.
+        #this makes sure we don't try to re-write certificates in
+        #grace period
+        for valid in self.entdir.listValid(grace_period=True):
             sn = valid.serialNumber()
             report.valid.append(sn)
             local[sn] = valid
