@@ -338,6 +338,8 @@ class SubscribeCommand(CliCommand):
                         log.exception(re)
                         if re.code == 403:
                             print re.msg  #already subscribed.
+                        elif re.code == 400:
+                            print re.msg #no such pool.
                         else:
                             systemExit(-1, re.msg) #some other error.. don't try again
 
