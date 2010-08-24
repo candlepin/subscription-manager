@@ -33,10 +33,21 @@ from facts import getFacts
 from M2Crypto import X509
 _ = gettext.gettext
 from logutil import getLogger
+from httplib import socket
+from socket import error as socket_error
 
 log = getLogger(__name__)
 
 cfg = config.initConfig()
+
+def handle_exception(msg, ex):
+    log.error(msg)
+    log.exception(ex)
+    if isinstance(ex, socket_error):
+        print 'network error, unable to connect to server'
+        sys.exit(-1)
+    else:
+        systemExit(-1, e)
 
 class CliCommand(object):
     """ Base class for all sub-commands. """
@@ -103,6 +114,7 @@ class CliCommand(object):
             log.error(e)
             print 'Consumer certificates corrupted. Please re-register'
 
+
 class ReRegisterCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog reregister [OPTIONS]"
@@ -152,9 +164,7 @@ class ReRegisterCommand(CliCommand):
             log.error("Error: Unable to ReRegister the system: %s" % re)
             systemExit(-1, re.msg)
         except Exception, e:
-            log.exception(e)
-            log.error("Error: Unable to ReRegister the system")
-            systemExit(-1, e)
+            handle_exception("Error: Unable to ReRegister the system", e)
 
 class RegisterCommand(CliCommand):
 
@@ -277,9 +287,7 @@ class UnRegisterCommand(CliCommand):
            log.error("Error: Unable to UnRegister the system: %s" % re)
            systemExit(-1, re.msg)
         except Exception, e:
-            log.exception(e)
-            log.error("Error: Unable to UnRegister the system")
-            systemExit(-1, e)
+            handle_exception("Error: Unable to UnRegister the system", e)
 
 class SubscribeCommand(CliCommand):
     def __init__(self):
@@ -347,9 +355,7 @@ class SubscribeCommand(CliCommand):
 
             self.certlib.update()
         except Exception, e:
-            log.error("Unable to subscribe: %s" % e)
-            log.exception(e)
-            systemExit(-1, msgs=e)
+            handle_exception("Unable to subscribe: %s" % e, e)
 
 class UnSubscribeCommand(CliCommand):
     def __init__(self):
@@ -383,9 +389,7 @@ class UnSubscribeCommand(CliCommand):
             log.error(re)
             systemExit(-1, re.msg)
         except Exception,e:
-            log.exception(e)
-            log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
-            systemExit(-1, msgs=e)
+            handle_exception("Unable to perform unsubscribe due to the following exception \n Error: %s" % e, e)
 
 class FactsCommand(CliCommand):
     def __init__(self):

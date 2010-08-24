@@ -49,6 +49,7 @@ try:
     # NOTE: importing
     import managercli
     from logutil import getLogger
+    from managercli import handle_exception
     logger = getLogger(__name__)
 except KeyboardInterrupt:
     systemExit(0, "\nUser interrupted process.")
@@ -72,6 +73,5 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         systemExit(0, "\nUser interrupted process.")
     except Exception, e:
-        logger.exception(e)
-        systemExit(1, e)
+        handle_exception("exception caught in subscription-manager-cli", e)
         
