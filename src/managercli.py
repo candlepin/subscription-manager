@@ -131,18 +131,21 @@ class ReRegisterCommand(CliCommand):
         self._validate_options()
         self.add_user_identity()
 
-        if not ConsumerIdentity.exists():
+        if not ConsumerIdentity.exists() and not self.options.consumerid:
             # this should REGISTER
             rc = RegisterCommand()
             rc.main()
             sys.exit(0)
 
         try:
-            consumerid = self.options.consumerid
-            if not consumerid:
+            if self.options.consumerid:
+                consumer = self.cp.getConsumerById(self.options.consumerid, self.options.username, self.options.password)
+                managerlib.persist_consumer_cert(consumer)
+            else:
                 consumerid = check_registration()['uuid']
-            consumer = self.cp.regenIdCertificate(consumerid)
-            managerlib.persist_consumer_cert(consumer)
+                consumer = self.cp.regenIdCertificate(consumerid)
+                managerlib.persist_consumer_cert(consumer)
+
             log.info("Successfully ReRegistered the client from Entitlement Platform.")
         except connection.RestlibException, re:
             log.exception(re)
