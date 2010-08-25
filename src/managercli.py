@@ -118,8 +118,8 @@ class ReRegisterCommand(CliCommand):
                                help="specify a username")
         self.parser.add_option("--password", dest="password",
                                help="specify a password")
-        #self.parser.add_option("--consumerid", dest="consumerid",
-        #                       help="register to an existing consumer")
+        self.parser.add_option("--consumerid", dest="consumerid",
+                               help="register to an existing consumer")
 
     def _validate_options(self):
         if not ConsumerIdentity.exists() and not (self.options.username and self.options.password):
@@ -138,10 +138,9 @@ class ReRegisterCommand(CliCommand):
             sys.exit(0)
 
         try:
-            #consumerid = self.options.consumerid
-            #if not consumerid:
-            #    consumerid = check_registration()['uuid']
-            consumerid = check_registration()['uuid']
+            consumerid = self.options.consumerid
+            if not consumerid:
+                consumerid = check_registration()['uuid']
             consumer = self.cp.regenIdCertificate(consumerid)
             managerlib.persist_consumer_cert(consumer)
             log.info("Successfully ReRegistered the client from Entitlement Platform.")
