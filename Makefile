@@ -42,6 +42,7 @@ install: dbus-service-install
 	@mkdir -p ${PREFIX}/usr/lib/yum-plugins/
 	@mkdir -p ${PREFIX}/usr/sbin
 	@mkdir -p ${PREFIX}/etc/rhsm
+	@mkdir -p ${PREFIX}/etc/rhsm/facts
 	@mkdir -p ${PREFIX}/etc/xdg/autostart
 	@mkdir -p ${PREFIX}/etc/cron.daily
 	@mkdir -p ${PREFIX}/etc/pam.d
