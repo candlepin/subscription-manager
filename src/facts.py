@@ -1,5 +1,6 @@
 
 
+
 import glob
 import os
 import simplejson as json
@@ -70,6 +71,11 @@ class Facts():
 
     def get_facts(self):
         if self.facts:
+            # see bz #627707
+            # there is a little bit of a race between when we load the facts, and when
+            # we decide to save them, so delete facts out from under a Fact object means
+            # it wasn't detecting it missing in that case and not writing a new one
+            self.write(facts)
             return self.facts
         self.facts =  self.find_facts()
         return self.facts
