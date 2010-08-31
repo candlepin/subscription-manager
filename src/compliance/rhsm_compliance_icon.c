@@ -31,7 +31,7 @@
 
 static int check_period = ONE_DAY;
 static bool debug = false;
-static bool force_icon = false;
+static char *force_icon = NULL;
 
 static GOptionEntry entries[] =
 {
@@ -39,8 +39,9 @@ static GOptionEntry entries[] =
 		"How often to check for compliance (in seconds)", NULL},
 	{"debug", 'd', 0, G_OPTION_ARG_NONE, &debug,
 		"Show debug messages", NULL},
-	{"force-icon", 'f', 0, G_OPTION_ARG_NONE, &force_icon,
-		"Force display of the compliance icon", NULL},
+	{"force-icon", 'f', 0, G_OPTION_ARG_STRING, &force_icon,
+		"Force display of the compliance icon (expired or warning)",
+		"TYPE"},
 	{NULL}
 };
 
@@ -49,6 +50,12 @@ typedef struct _Compliance {
 	GtkStatusIcon *icon;
 	NotifyNotification *notification;
 } Compliance;
+
+typedef enum _ComplianceType {
+	RHSM_COMPLIANT,
+	RHSM_WARNING,
+	RHSM_EXPIRED
+} ComplianceType;
 
 static void
 destroy_icon(Compliance *compliance)
@@ -108,16 +115,36 @@ manage_subs_clicked(NotifyNotification *notification G_GNUC_UNUSED,
 }
 
 static void
-display_icon(Compliance *compliance)
+display_icon(Compliance *compliance, ComplianceType compliance_type)
 {
+	static char *tooltip;
+	static char *notification_title;
+	static char *notification_body;
+
 	if (compliance->is_visible) {
 		g_debug("Icon already visible");
 		return;
 	}
 
+	if (compliance_type == RHSM_EXPIRED) {
+		tooltip = "This system is non-compliant";
+		notification_title = "This System is Non-Compliant";
+		notification_body = "This system is missing one or more "
+			"subscriptions required for compliance with your "
+			"software license agreements.";
+
+	} else {
+		tooltip ="This system's subscriptions are about to expire";
+		notification_title =
+			"This System's Subscriptions Are About to Expire";
+		notification_body = "One or more of this system's "
+			"subscriptions are about to expire. These "
+			"subscriptions are required for compliance with your "
+			"software license agreements.";
+	}
+
 	compliance->icon = gtk_status_icon_new_from_icon_name("subsmgr");
-	gtk_status_icon_set_tooltip(compliance->icon,
-				    "This system is non-compliant");
+	gtk_status_icon_set_tooltip(compliance->icon, tooltip);
 	g_signal_connect(compliance->icon, "activate",
 			 G_CALLBACK(icon_clicked), compliance);
 	g_signal_connect(compliance->icon, "popup-menu",
@@ -125,10 +152,7 @@ display_icon(Compliance *compliance)
 	compliance->is_visible = true;
 
 	compliance->notification = notify_notification_new_with_status_icon(
-		"This System is Non-Compliant",
-		"This system is missing one or more subscriptions required "
-		"for compliance with your software license agreements.",
-		"subsmgr",
+		notification_title, notification_body, "subsmgr",
 		compliance->icon);
 	
 	notify_notification_add_action(compliance->notification,
@@ -156,13 +180,13 @@ do_nothing_logger(const gchar *log_domain G_GNUC_UNUSED,
 	/* really, do nothing */
 }
 
-static bool
+static ComplianceType
 check_compliance_over_dbus()
 {
 	DBusGConnection *connection;
 	GError *error;
 	DBusGProxy *proxy;
-	bool is_compliant;
+	int is_compliant;
   
   	error = NULL;
   	connection = dbus_g_bus_get(DBUS_BUS_SYSTEM, &error);
@@ -180,7 +204,7 @@ check_compliance_over_dbus()
 
   	error = NULL;
   	if (!dbus_g_proxy_call(proxy, "check_compliance", &error,
-			       G_TYPE_INVALID, G_TYPE_BOOLEAN, &is_compliant,
+			       G_TYPE_INVALID, G_TYPE_INT, &is_compliant,
 			       G_TYPE_INVALID)) {
         	g_printerr("Error: %s\n", error->message);
       		g_error_free(error);
@@ -190,20 +214,42 @@ check_compliance_over_dbus()
 	g_object_unref(proxy);
 	dbus_g_connection_unref(connection);
 
-	return is_compliant;
+	switch (is_compliant) {
+		case 0:
+			return RHSM_EXPIRED;
+		case 1:
+			return RHSM_COMPLIANT;
+		case 2:
+			return RHSM_WARNING;
+		default:
+			// we don't know this one, better to play it safe
+			return RHSM_EXPIRED;
+	}
 }
 
 static bool
 check_compliance(Compliance *compliance)
 {
+	ComplianceType compliance_type;
 	g_debug("Running compliance check");
 
 	if (force_icon) {
 		g_debug("Forcing display of icon (simulated non-compliance)");
+		if (g_str_equal(force_icon, "expired")) {
+			compliance_type = RHSM_EXPIRED;
+		} else if (g_str_equal(force_icon, "warning")) {
+			compliance_type = RHSM_WARNING;
+		} else {
+			g_print("Unknown argument to force-icon: %s\n",
+				force_icon);
+			exit(1);
+		}
+	} else {
+		compliance_type = check_compliance_over_dbus();
 	}
-	
-	if (force_icon || !check_compliance_over_dbus()) {
-		display_icon(compliance);
+
+	if (compliance_type != RHSM_COMPLIANT) {
+		display_icon(compliance, compliance_type);
 	}
 
 	return true;

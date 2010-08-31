@@ -802,6 +802,9 @@ class Order:
     def getContract(self):
         return self.ext.get('12')
 
+    def getWarningPeriod(self):
+        return self.ext.get('14')
+
     def __str__(self):
         s = []
         s.append('Order {')
@@ -817,6 +820,7 @@ class Order:
         s.append('\tSocket Limit .. = %s' % self.getSocketLimit())
         s.append('\tOption Code ... = %s' % self.getOptionCode())
         s.append('\tContract ...... = %s' % self.getContract())
+        s.append('\tWarning Period  = %s' % self.getWarningPeriod())
         s.append('}')
         return '\n'.join(s)
 

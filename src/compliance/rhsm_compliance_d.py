@@ -16,6 +16,7 @@
 # in this software or its documentation.
 #
 
+import datetime
 import syslog
 import glib
 import gobject
@@ -28,12 +29,28 @@ from optparse import OptionParser
 import sys
 sys.path.append("/usr/share/rhsm")
 import managerlib
+import certificate
 
 enable_debug = False
 
 def debug(msg):
     if enable_debug:
         print msg
+
+def in_warning_period(products):
+    for product in products:
+        if product[1] not in ["Subscribed", "Not Installed"]:
+            continue
+
+        for entitlement in managerlib.getEntitlementsForProduct(product[0]):
+            warning_period = datetime.timedelta(
+                    days=int(entitlement.getOrder().getWarningPeriod()))
+            valid_range = entitlement.validRange()
+            warning_range = certificate.DateRange(
+                    valid_range.end() - warning_period, valid_range.end())
+            if warning_range.hasNow():
+                return True
+    return False
 
 
 def check_compliance():
@@ -47,9 +64,14 @@ def check_compliance():
     if len(not_compliant) > 0:
         debug("System is not in compliance")
         debug(not_compliant)
+        return 0
     else:
-        debug("System appears compliant")
-    return len(not_compliant) == 0
+        if in_warning_period(products):
+            debug("System has one or more entitlements in their warning period")
+            return 2
+        else:
+            debug("System appears compliant")
+            return 1
 
 
 def check_if_ran_once(compliance, loop):
@@ -66,8 +88,11 @@ class ComplianceChecker(dbus.service.Object):
 
     @dbus.service.method(
         dbus_interface="com.redhat.SubscriptionManager.Compliance",
-        out_signature='b')
+        out_signature='i')
     def check_compliance(self):
+        """
+        returns: 0 if not compliant, 1 if compliant, 2 if close to expiry
+        """
         ret = check_compliance()
         self.has_run = True
         return ret
@@ -92,11 +117,17 @@ def main():
     # short-circuit dbus initialization
     if options.syslog:
         compliant = check_compliance()
-        if not compliant:
+        if compliant == 0:
             syslog.openlog("rhsm-complianced")
             syslog.syslog(syslog.LOG_NOTICE,
                     "This system is non-compliant. " +
                     "Please run subscription-manager-cli for more information.")
+        elif compliant == 2:
+            syslog.openlog("rhsm-complianced")
+            syslog.syslog(syslog.LOG_NOTICE,
+                    "This system's entitlements are about to expire. " +
+                    "Please run subscription-manager-cli for more information.")
+
         return
 
 

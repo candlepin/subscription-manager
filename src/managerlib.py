@@ -87,6 +87,16 @@ def getInstalledProductStatus():
                product_status.append(data)
     return product_status
 
+
+def getEntitlementsForProduct(product_name):
+    entitlements = []
+    for cert in EntitlementDirectory().list():
+       for cert_product in cert.getProducts():
+           if product_name == cert_product.getName():
+               entitlements.append(cert)
+    return entitlements
+
+
 def getInstalledProductHashMap():
     products = ProductDirectory().list()
     phash = {}
