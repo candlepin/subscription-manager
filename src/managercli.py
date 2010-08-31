@@ -47,7 +47,7 @@ def handle_exception(msg, ex):
         print 'network error, unable to connect to server'
         sys.exit(-1)
     else:
-        systemExit(-1, e)
+        systemExit(-1, ex)
 
 class CliCommand(object):
     """ Base class for all sub-commands. """
