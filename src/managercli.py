@@ -249,10 +249,10 @@ class RegisterCommand(CliCommand):
         self.add_user_identity()
         if self.options.autosubscribe:
             # try to auomatically bind products
-            for pname, phash in managerlib.getUnstalledProductHashMap().items():
+            for pname, phash in managerlib.getInstalledProductHashMap().items():
                 try:
-                   print "Bind Product ", pname,phash
                    self.cp.bindByProduct(consumer['uuid'], phash)
+                   print "Bind Product ", pname,phash
                    log.info("Automatically subscribe the machine to product %s " % pname)
                 except:
                    log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
