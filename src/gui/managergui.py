@@ -79,7 +79,7 @@ ENT_CONFIG_DIR="/etc/pki/entitlement/product/"
 
 
 def get_consumer():
-    if not ConsumerIdentity.exists():
+    if not ConsumerIdentity.existsAndValid():
         return {}
     consumer = ConsumerIdentity.read()
     consumer_info = {"consumer_name" : consumer.getConsumerName(),
@@ -320,8 +320,9 @@ class ManageSubscriptionPage:
     def setRegistrationStatus(self):
         self.reg_label = rhsm_xml.get_widget("reg_status")
         self.reg_button_label = rhsm_xml.get_widget("account_settings")
-        log.info("updating registration status.. consumer exists?: %s", ConsumerIdentity.exists())
-        if ConsumerIdentity.exists():
+        exists = ConsumerIdentity.existsAndValid()
+        log.info("updating registration status.. consumer exists?: %s", exists)
+        if exists:
             self.reg_label.set_label(constants.REG_REMOTE_STATUS % cfg['hostname'])
             self.reg_button_label.set_label(_("Modify Registration"))
         else:

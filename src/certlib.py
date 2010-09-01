@@ -464,6 +464,19 @@ class ConsumerIdentity:
     def exists(cls):
         return ( os.path.exists(cls.keypath()) and \
                  os.path.exists(cls.certpath()) )
+
+    @classmethod
+    def existsAndValid(cls):
+        from M2Crypto import X509
+        if cls.exists():
+            try:
+                cls.read()
+                return True
+            except X509.X509Error, e:
+                log.error(e)
+                log.warn('possible certificate corruption')
+        return False
+
     
     def __init__(self, keystring, certstring):
         self.key = keystring
