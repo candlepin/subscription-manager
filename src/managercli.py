@@ -134,8 +134,8 @@ class ReRegisterCommand(CliCommand):
                                help="register to an existing consumer")
 
     def _validate_options(self):
-        if not ConsumerIdentity.exists() and not (self.options.username and self.options.password):
-            print (_("Error: username and password are required to re-register, try re-register --help.\n"))
+        if not ConsumerIdentity.existsAndValid() and not (self.options.username and self.options.password):
+            print (_("""Error: username and password are required to re-register. \nConsumer identity either does not exists or is corrupted. Try re-register --help."""))
             sys.exit(-1)
 
     def _do_command(self):
@@ -143,7 +143,12 @@ class ReRegisterCommand(CliCommand):
         self._validate_options()
         self.add_user_identity()
 
-        if not ConsumerIdentity.exists() and not self.options.consumerid:
+        if not ConsumerIdentity.existsAndValid() and not self.options.consumerid:
+            #identity is corrupted, and if register is called it will fail saying consumer
+            #already exists. So only way to force register to succeed is to delete the certs for now.
+            #ugly!
+            log.info("consumer identity is not valid and consumer id was not passed. Deleting old ones and calling register")
+            shutil.rmtree("/etc/pki/consumer", ignore_errors=True)
             # this should REGISTER
             rc = RegisterCommand()
             rc.main()
@@ -155,6 +160,8 @@ class ReRegisterCommand(CliCommand):
                 managerlib.persist_consumer_cert(consumer)
             else:
                 consumerid = check_registration()['uuid']
+                if self.options.username and self.options.password:
+                    print 'Ignoring username and password options. Using old uuid %s' % consumerid
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
 
@@ -224,15 +231,17 @@ class RegisterCommand(CliCommand):
                consumer = self.cp.registerConsumer(self.options.username,
                        self.options.password, name=consumername, type=self.options.consumertype,
                        facts=facts.get_facts())
-               consumerid = check_registration()['uuid']
            except connection.RestlibException, re:
                log.exception(re)
                systemExit(-1, re.msg)
-           try:
-               self.cp.unregisterConsumer(consumerid)
-               log.info("--force specified. Successfully unsubscribed the old consumer.")
-           except:
-                log.error("Unable to unregister with consumer %s" % consumerid)
+
+           if ConsumerIdentity.existsAndValid():
+               consumerid = ConsumerIdentity.read().getConsumerId()
+               try:
+                   self.cp.unregisterConsumer(consumerid)
+                   log.info("--force specified. Successfully unsubscribed the old consumer.")
+               except:
+                   log.error("Unable to unregister with consumer %s" % consumerid)
         else:
             try:
                consumer = self.cp.registerConsumer(self.options.username,
