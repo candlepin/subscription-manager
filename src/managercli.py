@@ -344,14 +344,14 @@ class SubscribeCommand(CliCommand):
 
             if self.options.regtoken:
                 for regnum in self.options.regtoken:
-                    bundles = self.cp.bindByRegNumber(consumer, regnum,
+                    self.cp.bindByRegNumber(consumer, regnum,
                             self.options.email, self.options.locale)
                     log.info("Info: Successfully subscribed the machine to registration token %s" % regnum)
 
             if self.options.pool:
                 for pool in self.options.pool:
                     try:
-                        bundles = self.cp.bindByEntitlementPool(consumer, pool)
+                        self.cp.bindByEntitlementPool(consumer, pool)
                         log.info("Info: Successfully subscribed the machine the Entitlement Pool %s" % pool)
                     except connection.RestlibException, re:
                         log.exception(re)

@@ -697,8 +697,10 @@ class AddSubscriptionScreen:
             if state[0]:
                 try:
                     ent_ret = UEP.bindByEntitlementPool(consumer['uuid'], pool)
-                    entitled_data = ent_ret[0]['pool']
-                    updated_count = str(int(entitled_data['quantity']) - int(entitled_data['consumed']))
+                    ent = UEP.getEntitlementById(ent_ret[0]['id'])
+                    updated_pool = UEP.getPool(ent['pool']['id'])
+                    updated_count = str(int(updated_pool['quantity']) -
+                            int(updated_pool['consumed']))
                     my_model.set_value(state[-1], 2, updated_count)
   
                     # unselect the row

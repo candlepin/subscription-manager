@@ -178,7 +178,7 @@ def getAllAvailableSubscriptions(cpserver, consumer):
     if facts.delta():
         cpserver.updateConsumerFacts(consumer, facts.get_facts())
 
-    dlist = cpserver.getAllAvailableEntitlements(consumer)
+    dlist = cpserver.getAllAvailableEntitlements(consumer, fetch=True)
     #data = [_sub_dict(pool['pool'], columns) for pool in dlist]
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
@@ -227,7 +227,7 @@ def getAvailableEntitlements(cpserver, consumer):
     if facts.delta():
         cpserver.updateConsumerFacts(consumer, facts.get_facts())
 
-    dlist = cpserver.getPoolsList(consumer)
+    dlist = cpserver.getPoolsList(consumer, fetch=True)
     if not dlist:
         return None, None
     data = [_sub_dict(pool, columns) for pool in dlist]
@@ -248,7 +248,7 @@ def getAvailableEntitlementsCLI(cpserver, consumer):
 #    print facts.find_facts()
     if facts.delta():
         cpserver.updateConsumerFacts(consumer, facts.get_facts())
-    dlist = cpserver.getPoolsList(consumer)
+    dlist = cpserver.getPoolsList(consumer, fetch=True)
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
         if int(d['quantity']) < 0:

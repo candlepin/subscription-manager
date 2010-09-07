@@ -271,27 +271,49 @@ class UEPConnection:
         method = "/consumers/%s/entitlements" % consumerId
         return self.conn.request_delete(method)
 
-    def getPoolsList(self, consumerId):
+    def getPoolsList(self, consumerId, fetch=False):
         method = "/pools?consumer=%s" % consumerId
-        return self.conn.request_get(method)
+        results = self.conn.request_get(method)
+
+        if fetch:
+            new_results = []
+            for pool in results:
+                new_results.append(self.getPool(pool['id']))
+            results = new_results
+
+        return results
 
     def getPool(self, poolId):
         method = "/pools/%s" % poolId
         return self.conn.request_get(method)
 
-    def getEntitlementList(self, consumerId):
+    def getEntitlementList(self, consumerId, fetch=False):
         method = "/consumers/%s/entitlements" % consumerId
-        return self.conn.request_get(method)
+        results = self.conn.request_get(method)
+        if fetch:
+            new_results = []
+            for ent in results:
+                new_results.append(self.getEntitlementById(ent['id']))
+            results = new_results
 
-    def getEntitlementById(self, consumerId, entId):
-        method = "/consumers/%s/entitlements/%s" % (consumerId, entId)
+        return results
+
+    def getEntitlementById(self, entId):
+        method = "/entitlements/%s" % entId
         return self.conn.request_get(method)
     
-    # TODO: Bad method name, this is listing pools, not entitlements.
-    # Also nearly the same as getPoolsList.
-    def getAllAvailableEntitlements(self, consumerId):
+    # TODO: bad method name, also virtually identical to getPoolsList.
+    def getAllAvailableEntitlements(self, consumerId, fetch=False):
         method = "/pools?consumer=%s&listall=true" % consumerId
-        return self.conn.request_get(method)
+        results = self.conn.request_get(method)
+
+        if fetch:
+            new_results = []
+            for pool in results:
+                new_results.append(self.getPool(pool['id']))
+            results = new_results
+
+        return results
 
     def regenIdCertificate(self, consumerId):
         method = "/consumers/%s" % consumerId
@@ -323,7 +345,7 @@ if __name__ == '__main__':
         # sync certs
         print "Get Consumer By Id", uep.getConsumerById(consumer['uuid'], 'admin', 'admin')
         print uep.syncCertificates(consumer['uuid']) 
-        print "All available", uep.getAllAvailableEntitlements(consumer['uuid'])
+        print "All available", uep.getAllAvailableEntitlements(consumer['uuid'], fetch=True)
         print "GetCertBySerials",uep.getCertificates(consumer['uuid'],
                 serials=['SERIAL001','SERIAL001'])
         # bind consumer to regNumber
@@ -337,7 +359,7 @@ if __name__ == '__main__':
         #print uep.unbindAll(consumer['uuid'])
         # Unbind serialNumbers
         #uep.unBindBySerialNumbers(consumer['uuid'], ['SERIAL001','SERIAL001'])
-        print "Pools List",uep.getPoolsList(consumer['uuid'])
+        print "Pools List",uep.getPoolsList(consumer['uuid'], fetch=True)
         # lookup Entitlement Info by PoolId
         #print uep.getEntitlementById("4")
         print "print get Ent list", uep.getEntitlementList(consumer['uuid'])
