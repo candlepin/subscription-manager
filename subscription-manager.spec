@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.75
+Version: 0.76
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -157,6 +157,50 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Wed Sep 08 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.76-1
+Resolves: #627681, #616137, #618819, #627707
+- bugfix for bz#627681 (anadathu@redhat.com)
+- compliance-icon: support warning period notification (jbowes@redhat.com)
+- bugfix for bz#618819 (anadathu@redhat.com)
+- fix for bz#616137 (anadathu@redhat.com)
+- Fix broken exception handling. (dgoodwin@redhat.com)
+- Use the write method name when saving facts. fix bz#628679
+  (alikins@redhat.com)
+- fix for bz#585193 (anadathu@redhat.com)
+- Fix  bz #627707 - facts cache not being updated for "update facts now" button
+  if the facts file is deleted under it (alikins@redhat.com)
+- add /etc/rhsm/facts to makefile (alikins@redhat.com)
+- add /etc/rhsm/facts to spec file (alikins@redhat.com)
+- Merge branch 'master' of git+ssh://axiom.rdu.redhat.com/scm/git/subscription-
+  manager (alikins@redhat.com)
+- 624106 - handle the consumerid properly (jesusr@redhat.com)
+- 624106 - add consumerid param to reregister. (jesusr@redhat.com)
+- fix for bz#609126 (anadathu@redhat.com)
+- bugzilla fix#601848 (anadathu@redhat.com)
+- 624816 - unlimited flag unavailable, check quantity for -1.
+  (jesusr@redhat.com)
+- Merge branch 'master' of git+ssh://axiom.rdu.redhat.com/scm/git/subscription-
+  manager (alikins@redhat.com)
+- Change the firstboot ordering (alikins@redhat.com)
+- Missing config options for insecure options and ca certs.
+  (pkilambi@redhat.com)
+- bugfix/enhancement for bugzilla#597210 (anadathu@redhat.com)
+- BZ624794: Start using basic auth (bkearney@redhat.com)
+- date format did not change. reverting it back to original
+  (anadathu@redhat.com)
+- Fix format string and added logging to detect failures when running cert-
+  daemon (anadathu@redhat.com)
+- add user certs in all the places it makes sense (alikins@redhat.com)
+- add user/cert based auth for unregister as well. fix bz#624025
+  (alikins@redhat.com)
+- Remove debug "raise" that was breaking some of the error handling
+  (alikins@redhat.com)
+- Try to only create the UEP once, and add ssl certs to it when we get them
+  (alikins@redhat.com)
+- move around where we init the connection object (alikins@redhat.com)
+- add my favorite "trace_me" helper method that dumps the stack of where it is
+  called from to logutil.py. (alikins@redhat.com)
+
 * Wed Aug 11 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.75-1
 - Resolves: #622839, #612250 
 - get rid of stray print debug (jbowes@redhat.com)
