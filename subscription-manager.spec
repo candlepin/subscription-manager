@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.76
+Version: 0.77
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -157,6 +157,11 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Thu Sep 09 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.77-1
+- Resolves: #627915
+- Update for Candlepin HATEOAS changes. (dgoodwin@redhat.com)
+- Comment out logging response from server. bz#627915 (anadathu@redhat.com)
+
 * Wed Sep 08 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.76-1
 Resolves: #627681, #616137, #618819, #627707
 - bugfix for bz#627681 (anadathu@redhat.com)
