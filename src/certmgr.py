@@ -16,7 +16,7 @@
 # in this software or its documentation.
 #
 
-from certlib import CertLib, ActionLock
+from certlib import CertLib, ActionLock, ConsumerIdentity
 from repolib import RepoLib
 from factlib import FactLib
 
@@ -70,6 +70,10 @@ class CertManager:
 
 
 def main():
+    if not ConsumerIdentity.existsAndValid():
+        log.error('Either the consumer is not registered with candlepin or the certificates are corrupted.' +
+                     ' Certificate updation using daemon failed.')
+        sys.exit(-1)
     print 'Updating Red Hat certificates & repositories'
     mgr = CertManager()
     updates = mgr.update()

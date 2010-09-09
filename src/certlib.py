@@ -114,11 +114,7 @@ class DeleteAction(Action):
 class UpdateAction(Action):
 
     def perform(self):
-        try:
-            uep = UEP()
-        except Disconnected:
-            log.info('Disconnected, not updated')
-            return 0
+        uep = UEP()
         report = UpdateReport()
         local = self.getLocal(report)
         expected = self.getExpected(uep, report)
@@ -223,7 +219,8 @@ class UEP(UEPConnection):
         try:
             cid = ConsumerIdentity.read()
             return cid.getConsumerId()
-        except:
+        except Exception, e:
+            log.error(e)
             raise Disconnected()
 
     def __init__(self):
