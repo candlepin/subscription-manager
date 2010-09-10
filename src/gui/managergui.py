@@ -383,12 +383,16 @@ class RegisterScreen:
         rhsm_xml.signal_autoconnect(dic)
         self.registerWin = rhsm_xml.get_widget("register_dialog")
         self.registerWin.connect("hide", self.cancel)
+        self.registerWin.connect("delete_event", self.delete_event)
         self.initializeConsumerName()
 
         self.registerWin.run()
 
     def show(self):
         self.registerWin.present()
+
+    def delete_event(self, event, data=None):
+        return self.finish()
 
     def cancel(self, button):
         self.close_window()
@@ -518,12 +522,17 @@ class RegistrationTokenScreen:
         rhsm_xml.signal_autoconnect(dic)
         self.regtokenWin = rhsm_xml.get_widget("register_token_dialog")
         self.regtokenWin.connect("hide", self.finish)
+        self.regtokenWin.connect("delete_event", self.delete_event)
+
         self.regtokenWin.run()
 
 #        self.regtokenWin.show_all()
 
     def show(self):
         self.regtokenWin.present()
+
+    def delete_event(self, event, data=None):
+        return self.finish()
 
     def finish(self, button=None):
         self.regtokenWin.hide()
@@ -623,6 +632,7 @@ class AddSubscriptionScreen:
         rhsm_xml.signal_autoconnect(dic)
         self.addWin = rhsm_xml.get_widget("dialog_add")
         self.addWin.connect("hide", self.cancel)
+        self.addWin.connect("delete_event", self.delete_event)
 
         self.addWin.run()
         if not self.available_ent:
@@ -673,6 +683,9 @@ class AddSubscriptionScreen:
     def cancel(self, button):
         self.addWin.hide()
 #        gtk.main_iteration()
+
+    def delete_event(self, event, data=None):
+        return self.finish()
 
     def show(self):
         self.addWin.present()
@@ -920,6 +933,7 @@ class UpdateSubscriptionScreen:
         rhsm_xml.signal_autoconnect(dic)
         self.updateWin = rhsm_xml.get_widget("dialog1_updates")
         self.updateWin.connect("hide", self.cancel)
+        self.updateWin.connect("delete_event", self.delete_event)
         self.updateWin.show_all()
         if not self.available_updates:
             infoWindow(constants.NO_UPDATES_WARNING, self.updateWin)
@@ -929,6 +943,9 @@ class UpdateSubscriptionScreen:
     def cancel(self, button=None):
         self.updateWin.destroy()
         gtk.main_iteration()
+
+    def delete_event(self, event, data=None):
+        return self.cancel()
 
     def onImportPrepare(self, button):
         self.updateWin.hide()
@@ -1024,6 +1041,7 @@ class ImportCertificate:
         rhsm_xml.signal_autoconnect(dic)
         self.importWin = rhsm_xml.get_widget("dialog1_import")
         self.importWin.connect("hide", self.cancel)
+        self.importWin.connect("delete_event", self.delete_event)
         self.importWin.show_all()
 
     def cancel(self, button=None):
@@ -1033,6 +1051,9 @@ class ImportCertificate:
 
     def show(self):
         self.importWin.present()
+
+    def delete_event(self, event, data=None):
+        return self.cancel()
 
     def importCertificate(self, button):
         fileChooser = rhsm_xml.get_widget("certificateChooserButton")
