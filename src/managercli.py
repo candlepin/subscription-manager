@@ -351,6 +351,9 @@ class SubscribeCommand(CliCommand):
             if self.options.pool:
                 for pool in self.options.pool:
                     try:
+                        # odd html strings will cause issues, reject them here.
+                        if (pool.find("#") >= 0):
+                            systemExit(-1, _("Please enter a valid numeric pool id."))
                         self.cp.bindByEntitlementPool(consumer, pool)
                         log.info("Info: Successfully subscribed the machine the Entitlement Pool %s" % pool)
                     except connection.RestlibException, re:
