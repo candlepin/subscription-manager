@@ -135,7 +135,7 @@ class ReRegisterCommand(CliCommand):
 
     def _validate_options(self):
         if not ConsumerIdentity.existsAndValid() and not (self.options.username and self.options.password):
-            print (_("""Error: username and password are required to re-register. \nConsumer identity either does not exists or is corrupted. Try re-register --help."""))
+            print (_("""Error: username and password are required to re-register. \nConsumer identity either does not exist or is corrupted. Try re-register --help."""))
             sys.exit(-1)
 
     def _do_command(self):
