@@ -341,8 +341,23 @@ class ManageSubscriptionPage:
         dlg = messageWindow.YesNoDialog(constants.CONFIRM_UNSUBSCRIBE % self.pname_selected, self.mainWin)
         if not dlg.getrc():
             return
-        #print self.psubs_selected
-        if not UEP:
+
+        # only unbind if we are registered to a server
+        if ConsumerIdentity.exists():
+            try:
+                UEP.unBindBySerialNumber(consumer['uuid'], self.psubs_selected)
+                log.info("This machine is now unsubscribed from Product %s " \
+                          % self.pname_selected)
+            except connection.RestlibException, re:
+                log.error(re)
+                errorWindow(constants.UNSUBSCRIBE_ERROR)
+            except Exception, e:
+                # raise warning window
+                log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
+                errorWindow(constants.UNSUBSCRIBE_ERROR)
+                raise
+        # not registered, locally managed
+        else:
             entcerts = EntitlementDirectory().list()
             for cert in entcerts:
                 if self.pname_selected == cert.getProduct().getName():
@@ -351,18 +366,6 @@ class ManageSubscriptionPage:
              #FIXME:
             self.gui_reload()
             return
-        try:
-            UEP.unBindBySerialNumber(consumer['uuid'], self.psubs_selected)
-            log.info("This machine is now unsubscribed from Product %s " \
-                      % self.pname_selected)
-        except connection.RestlibException, re:
-            log.error(re)
-            errorWindow(constants.UNSUBSCRIBE_ERROR)
-        except Exception, e:
-            # raise warning window
-            log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
-            errorWindow(constants.UNSUBSCRIBE_ERROR)
-            raise
         # Force fetch all certs
         if not fetch_certificates():
             return
