@@ -112,13 +112,13 @@ class CliCommand(object):
             self._do_command()
         except X509.X509Error, e:
             log.error(e)
-            print 'Consumer certificates corrupted. Please re-register'
+            print 'Consumer certificates corrupted. Please reregister'
 
 
 class ReRegisterCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog reregister [OPTIONS]"
-        shortdesc = "re-register the client to a Unified Entitlement Platform."
+        shortdesc = "reregister the client to a Unified Entitlement Platform."
         desc = shortdesc
 
         CliCommand.__init__(self, "reregister", usage, shortdesc, desc)
@@ -135,7 +135,7 @@ class ReRegisterCommand(CliCommand):
 
     def _validate_options(self):
         if not ConsumerIdentity.existsAndValid() and not (self.options.username and self.options.password):
-            print (_("""Error: username and password are required to re-register. \nConsumer identity either does not exist or is corrupted. Try re-register --help."""))
+            print (_("""Error: username and password are required to reregister. \nConsumer identity either does not exist or is corrupted. Try reregister --help."""))
             sys.exit(-1)
 
     def _do_command(self):
