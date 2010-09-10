@@ -90,7 +90,7 @@ not_installed_status = _("""
 
 WARN_SUBSCRIPTIONS = _("<b>\n %s subscriptions need your attention.\n\n</b>Add or Update subscriptions for products you are using.\n")
 
-WARN_ONE_SUBSCRIPTION = _("<b>\n %s subscription need your attention.\n\n</b>Add or Update subscriptions for products you are using.\n")
+WARN_ONE_SUBSCRIPTION = _("<b>\n %s subscription needs your attention.\n\n</b>Add or Update subscriptions for products you are using.\n")
 
 COMPLIANT_STATUS = _("<b>\n All your subscriptions are in compliance.\n\n</b>Add or Update subscriptions for products you are using.")
 

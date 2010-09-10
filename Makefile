@@ -100,3 +100,9 @@ archive: clean
 
 rpm: archive
 	rpmbuild -ta ${PKGNAME}-$(VERSION).tar.gz
+
+gettext:
+	xgettext --language=Python --keyword=_ --keyword=N_ -ktrc:1c,2 -ktrnc:1c,2,3 -ktr -kmarktr -ktrn:1,2 -o po/keys.pot $(shell find src/ -name "*.py")
+	for f in $(shell find po/ -name "*.po") ; do \
+		msgmerge --backup=none -U $$f po/keys.pot ; \
+	done

@@ -1,0 +1,358 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: src/gui/managergui.py:740 src/gui/managergui.py:776
+#: src/gui/managergui.py:813
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-09-10 10:31-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/gui/messageWindow.py:93
+msgid "Error:"
+msgstr ""
+
+#: src/gui/messageWindow.py:100
+msgid "Warning:"
+msgstr ""
+
+#: src/gui/messageWindow.py:107
+msgid "OK dialog:"
+msgstr ""
+
+#: src/gui/messageWindow.py:114
+msgid "Info dialog:"
+msgstr ""
+
+#: src/gui/messageWindow.py:122
+msgid "Yes/No dialog:"
+msgstr ""
+
+#: src/gui/messageWindow.py:129
+msgid "Question dialog:"
+msgstr ""
+
+#: src/gui/managergui.py:252 src/gui/managergui.py:744
+#: src/gui/managergui.py:781 src/gui/managergui.py:818
+#: src/gui/managergui.py:949
+msgid "Product"
+msgstr ""
+
+#: src/gui/managergui.py:260
+msgid "Contract"
+msgstr ""
+
+#: src/gui/managergui.py:266
+msgid "Status"
+msgstr ""
+
+#: src/gui/managergui.py:273 src/gui/managergui.py:759
+#: src/gui/managergui.py:796 src/gui/managergui.py:833
+#: src/gui/managergui.py:959
+msgid "Expires"
+msgstr ""
+
+#: src/gui/managergui.py:327
+msgid "Modify Registration"
+msgstr ""
+
+#: src/gui/managergui.py:330
+msgid "Register System..."
+msgstr ""
+
+#: src/gui/managergui.py:484
+msgid "You must enter a login."
+msgstr ""
+
+#: src/gui/managergui.py:490
+msgid "You must enter a password."
+msgstr ""
+
+#: src/gui/managergui.py:564
+msgid ""
+"\n"
+"This system is registered with following consumer information"
+msgstr ""
+
+#: src/gui/managergui.py:566
+#, python-format
+msgid "<b>    ID:</b>       %s"
+msgstr ""
+
+#: src/gui/managergui.py:568
+#, python-format
+msgid "<b>  Name:</b>     %s"
+msgstr ""
+
+#: src/gui/managergui.py:689
+msgid "Performing Subscribe. Please wait."
+msgstr ""
+
+#: src/gui/managergui.py:752 src/gui/managergui.py:789
+#: src/gui/managergui.py:826 src/gui/managergui.py:954
+msgid "Available Slots"
+msgstr ""
+
+#: src/gui/managergui.py:936
+#, python-format
+msgid "<b>Available Subscriptions for %s:</b>"
+msgstr ""
+
+#: src/gui/managergui.py:945
+msgid " "
+msgstr ""
+
+#: src/gui/managergui.py:1038
+msgid "You must select a certificate."
+msgstr ""
+
+#: src/gui/managergui.py:1045
+#, python-format
+msgid "%s is not a valid certificate file. Please upload a valid certificate."
+msgstr ""
+
+#: src/gui/firstboot/rhms_subscriptions.py:25
+msgid "RHSM Subscriptions Management Screen"
+msgstr ""
+
+#: src/gui/firstboot/rhms_subscriptions.py:26
+msgid "Subscription Manager Screen"
+msgstr ""
+
+#: src/gui/firstboot/rhms_login.py:27
+msgid "Entitlement Registration"
+msgstr ""
+
+#: src/gui/firstboot/rhms_login.py:28
+msgid "Entitlement Platform Registration"
+msgstr ""
+
+#: src/hwprobe.py:73
+msgid "Error reading system memory information:"
+msgstr ""
+
+#: src/hwprobe.py:88
+msgid "Error reading system cpu information:"
+msgstr ""
+
+#: src/hwprobe.py:108
+msgid "Error reading system DMI information:"
+msgstr ""
+
+#: src/hwprobe.py:131
+msgid "Error reading networking information:"
+msgstr ""
+
+#: src/hwprobe.py:148
+msgid "Error reading net Interface information:"
+msgstr ""
+
+#: src/managercli.py:138
+msgid ""
+"Error: username and password are required to re-register. \n"
+"Consumer identity either does not exists or is corrupted. Try re-register --"
+"help."
+msgstr ""
+
+#: src/managercli.py:206
+msgid ""
+"Error: username and password are required to register, try register --help.\n"
+msgstr ""
+
+#: src/managercli.py:210
+msgid "This system is already registered. Use --force to override"
+msgstr ""
+
+#: src/managercli.py:284
+msgid "This system is currently not registered."
+msgstr ""
+
+#: src/managercli.py:316
+msgid ""
+"optional email address to notify when token activation is complete. Used "
+"with --regtoken only"
+msgstr ""
+
+#: src/managercli.py:320
+msgid ""
+"optional language to use for email notification when token activation is "
+"complete. Used with --regtoken and --email only. Examples: en-us, de-de"
+msgstr ""
+
+#: src/managercli.py:328
+msgid "Error: Need either --pool or --regtoken, Try subscribe --help"
+msgstr ""
+
+#: src/managercli.py:453
+msgid "Error: --all is only applicable with --available"
+msgstr ""
+
+#: src/managercli.py:617
+msgid ""
+"Error: You need to register this system by running `register` command before "
+"using this option."
+msgstr ""
+
+#: src/config.py:103
+#, python-format
+msgid "%s was not found"
+msgstr ""
+
+#: src/constants.py:50
+#, python-format
+msgid ""
+"\n"
+"The subscription for %s is valid until %s.\n"
+msgstr ""
+
+#: src/constants.py:79
+#, python-format
+msgid ""
+"\n"
+"The subscription for %s expired on %s. If you plan to continue using %s on "
+"this system you should update the subscription. If you no longer wish to use "
+"%s on this machine, you should unsubscribe and remove it from this system.\n"
+msgstr ""
+
+#: src/constants.py:83
+#, python-format
+msgid ""
+"\n"
+"%s is installed but you are not subscribed to it. If you plan to use %s on "
+"this system, you should add a subscription. If you do not plan to use %s on "
+"this system, you should remove it from this system.\n"
+msgstr ""
+
+#: src/constants.py:87
+#, python-format
+msgid ""
+" \n"
+"%s is not installed but you are subscribed to it. If you do not plan to use "
+"%s on this system, you should unsubscribe in order to avoid unnecessarily "
+"consuming entitlements. If you plan to use %s on this system, you should "
+"install it.\n"
+"\n"
+msgstr ""
+
+#: src/constants.py:91
+#, python-format
+msgid ""
+"<b>\n"
+" %s subscriptions need your attention.\n"
+"\n"
+"</b>Add or Update subscriptions for products you are using.\n"
+msgstr ""
+
+#: src/constants.py:93
+#, python-format
+msgid ""
+"<b>\n"
+" %s subscription needs your attention.\n"
+"\n"
+"</b>Add or Update subscriptions for products you are using.\n"
+msgstr ""
+
+#: src/constants.py:95
+msgid ""
+"<b>\n"
+" All your subscriptions are in compliance.\n"
+"\n"
+"</b>Add or Update subscriptions for products you are using."
+msgstr ""
+
+#: src/constants.py:97
+msgid ""
+"<b>Unable to perform unsubscribe.</b>\n"
+"\n"
+"Please see /var/log/rhsm/rhsm.log for more information."
+msgstr ""
+
+#: src/constants.py:99
+#, python-format
+msgid ""
+"<b>\n"
+"Could not subscribe to token %s</b>\n"
+"\n"
+"Please see /var/log/rhsm/rhsm.log for more information."
+msgstr ""
+
+#: src/constants.py:101
+#, python-format
+msgid "Successfully subscribed your system to token %s"
+msgstr ""
+
+#: src/constants.py:103
+msgid "<b>No subscriptions available for this account</b>"
+msgstr ""
+
+#: src/constants.py:105
+msgid "<b>No subscriptions updates available</b>"
+msgstr ""
+
+#: src/constants.py:107
+#, python-format
+msgid ""
+"<b>Unable to subscribe to product(s) %s</b>\n"
+"\n"
+"Please see /var/log/rhsm/rhsm.log for more information."
+msgstr ""
+
+#: src/constants.py:109
+msgid "<i><b>Please select atleast one subscription to apply</b></i>"
+msgstr ""
+
+#: src/constants.py:111
+#, python-format
+msgid "<i><b>Successfully consumed %s subscription(s)</b></i>"
+msgstr ""
+
+#: src/constants.py:113
+msgid ""
+"This error shouldn't have happened. If you'd like to help us improve this "
+"program, please file a bug at bugzilla.redhat.com. Including the relevant "
+"parts of would be very helpful. Thanks!"
+msgstr ""
+
+#: src/constants.py:118
+#, python-format
+msgid ""
+"<b>Unable to register the system.</b>\n"
+"\n"
+" %s\n"
+"\n"
+"Please see /var/log/rhsm/rhsm.log for more information."
+msgstr ""
+
+#: src/constants.py:120
+#, python-format
+msgid "Are you sure you want to unsubscribe product %s"
+msgstr ""
+
+#: src/constants.py:122
+#, python-format
+msgid "This system is registered to <b>%s</b>"
+msgstr ""
+
+#: src/constants.py:123
+msgid "This system's subscriptions are <b>locally-managed.</b>"
+msgstr ""
+
+#: src/constants.py:125
+#, python-format
+msgid "<b>Total of %s subscriptions selected for consumption.</b>"
+msgstr ""
+
+#: src/constants.py:127
+msgid "<b>Are you sure you want to unregister?</b>"
+msgstr ""
