@@ -2,8 +2,6 @@ PREFIX ?= /
 SYSCONF ?= etc
 PYTHON ?= python
 
-PKGDIR = /usr/share/rhsm/
-
 PKGNAME = subscription-manager
 VERSION = $(shell echo `grep ^Version: $(PKGNAME).spec | awk '{ print $$2 }'`)
 
@@ -37,8 +35,9 @@ dbus-service-install:
 	install -m 744 src/compliance/rhsm_compliance_d.py \
 		${PREFIX}/usr/libexec/rhsm-complianced
 
-install: dbus-service-install
+install: dbus-service-install compile_pos
 	@mkdir -p ${PREFIX}/usr/share/rhsm/gui/data/icons/16x16
+	@mkdir -p ${PREFIX}/usr/share/rhsm/translations
 	@mkdir -p ${PREFIX}/usr/lib/yum-plugins/
 	@mkdir -p ${PREFIX}/usr/sbin
 	@mkdir -p ${PREFIX}/etc/rhsm
@@ -56,6 +55,7 @@ install: dbus-service-install
 	@mkdir -p ${PREFIX}/usr/share/icons/hicolor/16x16/apps
 	@mkdir -p ${PREFIX}/usr/share/firstboot/
 	@mkdir -p ${PREFIX}/usr/share/firstboot/modules
+	cp -R po/build/* ${PREFIX}/usr/share/rhsm/translations
 	cp -R src/*.py ${PREFIX}/usr/share/rhsm
 	cp -R src/gui/*.py ${PREFIX}/usr/share/rhsm/gui
 	cp -R src/gui/data/*.glade ${PREFIX}/usr/share/rhsm/gui/data/
@@ -91,6 +91,7 @@ clean:
 archive: clean
 	@rm -rf ${PKGNAME}-%{VERSION}.tar.gz
 	@rm -rf /tmp/${PKGNAME}-$(VERSION) /tmp/${PKGNAME}
+	@rm -rf po/build
 	@dir=$$PWD; cd /tmp; cp -a $$dir ${PKGNAME}
 	@rm -f /tmp/${PKGNAME}/${PKGNAME}-daily.spec
 	@mv /tmp/${PKGNAME} /tmp/${PKGNAME}-$(VERSION)
@@ -106,3 +107,16 @@ gettext:
 	for f in $(shell find po/ -name "*.po") ; do \
 		msgmerge --backup=none -U $$f po/keys.pot ; \
 	done
+
+# Compile translations
+# TODO: look for .po files instead of hardcoding, couldn't get this to work:
+#		basename $$f .po ; \
+	
+LANGUAGES = en_CA
+compile_pos:
+	for lang in $(LANGUAGES) ; do \
+		echo $$lang ; \
+		mkdir -p po/build/$$lang/LC_MESSAGES/ ; \
+		msgfmt -c --statistics -o po/build/$$lang/LC_MESSAGES/rhsm.mo po/$$lang.po ; \
+	done
+
