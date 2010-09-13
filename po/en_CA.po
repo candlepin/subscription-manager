@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 #  <dgoodwin@redhat.com>, 2010.
 #
-#: src/gui/managergui.py:740 src/gui/managergui.py:776
-#: src/gui/managergui.py:813
+#: src/gui/managergui.py:738 src/gui/managergui.py:774
+#: src/gui/managergui.py:811
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-10 10:30-0300\n"
-"PO-Revision-Date: 2010-09-10 10:26-0300\n"
+"POT-Creation-Date: 2010-09-14 11:45-0300\n"
+"PO-Revision-Date: 2010-09-14 10:17-0300\n"
 "Last-Translator:  <dgoodwin@redhat.com>\n"
 "Language-Team: English\n"
 "Language: en_CA\n"
@@ -43,9 +43,9 @@ msgstr "Yes/No dialog:"
 msgid "Question dialog:"
 msgstr "Question dialog:"
 
-#: src/gui/managergui.py:252 src/gui/managergui.py:744
-#: src/gui/managergui.py:781 src/gui/managergui.py:818
-#: src/gui/managergui.py:949
+#: src/gui/managergui.py:252 src/gui/managergui.py:742
+#: src/gui/managergui.py:779 src/gui/managergui.py:816
+#: src/gui/managergui.py:947
 msgid "Product"
 msgstr "Product"
 
@@ -57,9 +57,9 @@ msgstr "Contract"
 msgid "Status"
 msgstr "Status"
 
-#: src/gui/managergui.py:273 src/gui/managergui.py:759
-#: src/gui/managergui.py:796 src/gui/managergui.py:833
-#: src/gui/managergui.py:959
+#: src/gui/managergui.py:273 src/gui/managergui.py:757
+#: src/gui/managergui.py:794 src/gui/managergui.py:831
+#: src/gui/managergui.py:957
 msgid "Expires"
 msgstr "Expires"
 
@@ -101,25 +101,25 @@ msgstr "<b>  Name:</b>     %s"
 msgid "Performing Subscribe. Please wait."
 msgstr "Performing Subscribe. Please wait."
 
-#: src/gui/managergui.py:752 src/gui/managergui.py:789
-#: src/gui/managergui.py:826 src/gui/managergui.py:954
+#: src/gui/managergui.py:750 src/gui/managergui.py:787
+#: src/gui/managergui.py:824 src/gui/managergui.py:952
 msgid "Available Slots"
 msgstr "Available Slots"
 
-#: src/gui/managergui.py:936
+#: src/gui/managergui.py:934
 #, python-format
 msgid "<b>Available Subscriptions for %s:</b>"
 msgstr "<b>Available Subscriptions for %s:</b>"
 
-#: src/gui/managergui.py:945
+#: src/gui/managergui.py:943
 msgid " "
 msgstr " "
 
-#: src/gui/managergui.py:1038
+#: src/gui/managergui.py:1036
 msgid "You must select a certificate."
 msgstr "You must select a certificate."
 
-#: src/gui/managergui.py:1045
+#: src/gui/managergui.py:1043
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
 msgstr "%s is not a valid certificate file. Please upload a valid certificate."
@@ -160,7 +160,7 @@ msgstr "Error reading networking information:"
 msgid "Error reading net Interface information:"
 msgstr "Error reading net Interface information:"
 
-#: src/managercli.py:138
+#: src/managercli.py:141
 msgid ""
 "Error: username and password are required to re-register. \n"
 "Consumer identity either does not exists or is corrupted. Try re-register --"
@@ -170,21 +170,21 @@ msgstr ""
 "Consumer identity either does not exists or is corrupted. Try re-register --"
 "help."
 
-#: src/managercli.py:206
+#: src/managercli.py:209
 msgid ""
 "Error: username and password are required to register, try register --help.\n"
 msgstr ""
 "Error: username and password are required to register, try register --help.\n"
 
-#: src/managercli.py:210
+#: src/managercli.py:213
 msgid "This system is already registered. Use --force to override"
 msgstr "This system is already registered. Use --force to override"
 
-#: src/managercli.py:284
+#: src/managercli.py:287
 msgid "This system is currently not registered."
 msgstr "This system is currently not registered."
 
-#: src/managercli.py:316
+#: src/managercli.py:319
 msgid ""
 "optional email address to notify when token activation is complete. Used "
 "with --regtoken only"
@@ -192,7 +192,7 @@ msgstr ""
 "optional email address to notify when token activation is complete. Used "
 "with --regtoken only"
 
-#: src/managercli.py:320
+#: src/managercli.py:323
 msgid ""
 "optional language to use for email notification when token activation is "
 "complete. Used with --regtoken and --email only. Examples: en-us, de-de"
@@ -200,15 +200,19 @@ msgstr ""
 "optional language to use for email notification when token activation is "
 "complete. Used with --regtoken and --email only. Examples: en-us, de-de"
 
-#: src/managercli.py:328
+#: src/managercli.py:331
 msgid "Error: Need either --pool or --regtoken, Try subscribe --help"
 msgstr "Error: Need either --pool or --regtoken, Try subscribe --help"
 
-#: src/managercli.py:453
+#: src/managercli.py:456
 msgid "Error: --all is only applicable with --available"
 msgstr "Error: --all is only applicable with --available"
 
-#: src/managercli.py:617
+#: src/managercli.py:485
+msgid "Available Subscriptions"
+msgstr "Available Subscriptions, eh?"
+
+#: src/managercli.py:620
 msgid ""
 "Error: You need to register this system by running `register` command before "
 "using this option."
@@ -282,12 +286,12 @@ msgid ""
 "</b>Add or Update subscriptions for products you are using.\n"
 msgstr ""
 "<b>\n"
-" %s subscriptions need your attention.\n"
+" %s subscriptions need your attention OK Canuck?\n"
 "\n"
 "</b>Add or Update subscriptions for products you are using.\n"
 
 #: src/constants.py:93
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "<b>\n"
 " %s subscription needs your attention.\n"
@@ -295,7 +299,7 @@ msgid ""
 "</b>Add or Update subscriptions for products you are using.\n"
 msgstr ""
 "<b>\n"
-" %s subscription needs your attention eh?\n"
+" %s subscription needs your attention Mr. Canadian.\n"
 "\n"
 "</b>Add or Update subscriptions for products you are using.\n"
 

@@ -112,7 +112,7 @@ gettext:
 # TODO: look for .po files instead of hardcoding, couldn't get this to work:
 #		basename $$f .po ; \
 	
-LANGUAGES = en_CA
+LANGUAGES = en_CA en_US
 compile_pos:
 	for lang in $(LANGUAGES) ; do \
 		echo $$lang ; \

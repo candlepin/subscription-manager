@@ -31,6 +31,23 @@ import gettext
 _ = gettext.gettext
 
 
+# Localization domain:
+APP = 'rhsm'
+# Directory where translations are deployed:
+DIR = '/usr/share/rhsm/translations/'
+
+def configure_i18n():
+    """ 
+    Configure internationalization for the application. Should only be 
+    called once per invocation. (once for CLI, once for GUI)
+    """
+    import locale
+    import gettext
+    locale.setlocale(locale.LC_ALL, '')
+    gettext.bindtextdomain(APP, DIR)
+    gettext.textdomain(APP)
+    print "Configured I18N for %s" % locale.getlocale()[0]
+
 def persist_consumer_cert(consumerinfo):
     """
      Calls the consumerIdentity, persists and gets consumer info

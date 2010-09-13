@@ -31,7 +31,10 @@ import managerlib
 import gettext
 from facts import getFacts
 from M2Crypto import X509
+
+import gettext
 _ = gettext.gettext
+
 from logutil import getLogger
 from httplib import socket
 from socket import error as socket_error
@@ -479,7 +482,7 @@ class ListCommand(CliCommand):
            if not len(epools):
                print("No Available subscription pools to list")
                sys.exit(0)
-           print """+-------------------------------------------+\n    Available Subscriptions\n+-------------------------------------------+\n"""
+           print "+-------------------------------------------+\n    %s\n+-------------------------------------------+\n" % _("Available Subscriptions")
            for data in epools:
                # TODO:  Something about these magic numbers!
                product_name = self._format_name(data['productName'], 24, 80)

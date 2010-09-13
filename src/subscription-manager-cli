@@ -18,12 +18,12 @@
 # in this software or its documentation.
 #
 
-
 if __name__ != '__main__':
     raise ImportError, "module cannot be imported"
 
 import sys
 import os
+
 def systemExit(code, msgs=None):
     "Exit with a code and optional message(s). Saved a few lines of code."
 
@@ -56,6 +56,9 @@ except KeyboardInterrupt:
 except ImportError, e:
     systemExit(2, "Unable to find Subscription Manager module.\n"
                   "Error: %s" % e)
+
+from managerlib import configure_i18n
+configure_i18n()
 
 def main():
     # execute
