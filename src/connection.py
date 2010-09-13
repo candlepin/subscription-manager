@@ -271,15 +271,9 @@ class UEPConnection:
         method = "/consumers/%s/entitlements" % consumerId
         return self.conn.request_delete(method)
 
-    def getPoolsList(self, consumerId, fetch=False):
+    def getPoolsList(self, consumerId):
         method = "/pools?consumer=%s" % consumerId
         results = self.conn.request_get(method)
-
-        if fetch:
-            new_results = []
-            for pool in results:
-                new_results.append(self.getPool(pool['id']))
-            results = new_results
 
         return results
 
@@ -287,15 +281,9 @@ class UEPConnection:
         method = "/pools/%s" % poolId
         return self.conn.request_get(method)
 
-    def getEntitlementList(self, consumerId, fetch=False):
+    def getEntitlementList(self, consumerId):
         method = "/consumers/%s/entitlements" % consumerId
         results = self.conn.request_get(method)
-        if fetch:
-            new_results = []
-            for ent in results:
-                new_results.append(self.getEntitlementById(ent['id']))
-            results = new_results
-
         return results
 
     def getEntitlementById(self, entId):
@@ -303,15 +291,9 @@ class UEPConnection:
         return self.conn.request_get(method)
     
     # TODO: bad method name, also virtually identical to getPoolsList.
-    def getAllAvailableEntitlements(self, consumerId, fetch=False):
+    def getAllAvailableEntitlements(self, consumerId):
         method = "/pools?consumer=%s&listall=true" % consumerId
         results = self.conn.request_get(method)
-
-        if fetch:
-            new_results = []
-            for pool in results:
-                new_results.append(self.getPool(pool['id']))
-            results = new_results
 
         return results
 
@@ -345,7 +327,7 @@ if __name__ == '__main__':
         # sync certs
         print "Get Consumer By Id", uep.getConsumerById(consumer['uuid'], 'admin', 'admin')
         print uep.syncCertificates(consumer['uuid']) 
-        print "All available", uep.getAllAvailableEntitlements(consumer['uuid'], fetch=True)
+        print "All available", uep.getAllAvailableEntitlements(consumer['uuid'])
         print "GetCertBySerials",uep.getCertificates(consumer['uuid'],
                 serials=['SERIAL001','SERIAL001'])
         # bind consumer to regNumber
@@ -359,7 +341,7 @@ if __name__ == '__main__':
         #print uep.unbindAll(consumer['uuid'])
         # Unbind serialNumbers
         #uep.unBindBySerialNumbers(consumer['uuid'], ['SERIAL001','SERIAL001'])
-        print "Pools List",uep.getPoolsList(consumer['uuid'], fetch=True)
+        print "Pools List",uep.getPoolsList(consumer['uuid'])
         # lookup Entitlement Info by PoolId
         #print uep.getEntitlementById("4")
         print "print get Ent list", uep.getEntitlementList(consumer['uuid'])
