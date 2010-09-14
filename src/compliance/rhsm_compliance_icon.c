@@ -20,6 +20,8 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
+#include <libintl.h>
+#include <locale.h>
 
 #include <glib.h>
 #include <gtk/gtk.h>
@@ -28,6 +30,8 @@
 #include <dbus/dbus-glib.h>
 
 #define ONE_DAY 86400
+#define _(STRING)   gettext(STRING)
+#define N_(x)   x
 
 static int check_period = ONE_DAY;
 static bool debug = false;
@@ -36,11 +40,11 @@ static char *force_icon = NULL;
 static GOptionEntry entries[] =
 {
 	{"check-period", 'c', 0, G_OPTION_ARG_INT, &check_period,
-		"How often to check for compliance (in seconds)", NULL},
+		N_("How often to check for compliance (in seconds)"), NULL},
 	{"debug", 'd', 0, G_OPTION_ARG_NONE, &debug,
-		"Show debug messages", NULL},
+		N_("Show debug messages"), NULL},
 	{"force-icon", 'f', 0, G_OPTION_ARG_STRING, &force_icon,
-		"Force display of the compliance icon (expired or warning)",
+		N_("Force display of the compliance icon (expired or warning)"),
 		"TYPE"},
 	{NULL}
 };
@@ -127,20 +131,20 @@ display_icon(Compliance *compliance, ComplianceType compliance_type)
 	}
 
 	if (compliance_type == RHSM_EXPIRED) {
-		tooltip = "This system is non-compliant";
-		notification_title = "This System is Non-Compliant";
-		notification_body = "This system is missing one or more "
+		tooltip = _("This system is non-compliant");
+		notification_title = _("This System is Non-Compliant");
+		notification_body = _("This system is missing one or more "
 			"subscriptions required for compliance with your "
-			"software license agreements.";
+			"software license agreements.");
 
 	} else {
-		tooltip ="This system's subscriptions are about to expire";
+		tooltip = _("This system's subscriptions are about to expire");
 		notification_title =
-			"This System's Subscriptions Are About to Expire";
-		notification_body = "One or more of this system's "
+			_("This System's Subscriptions Are About to Expire");
+		notification_body = _("One or more of this system's "
 			"subscriptions are about to expire. These "
 			"subscriptions are required for compliance with your "
-			"software license agreements.";
+			"software license agreements.");
 	}
 
 	compliance->icon = gtk_status_icon_new_from_icon_name("subsmgr");
@@ -157,13 +161,13 @@ display_icon(Compliance *compliance, ComplianceType compliance_type)
 	
 	notify_notification_add_action(compliance->notification,
 				       "remind-me-later",
-				       "Remind Me Later",
+				       _("Remind Me Later"),
 				       (NotifyActionCallback)
 				       remind_me_later_clicked,
 				       compliance, NULL);
 	notify_notification_add_action(compliance->notification,
 				       "manage-subscriptions",
-				       "Manage My Subscriptions...",
+				       _("Manage My Subscriptions..."),
 				       (NotifyActionCallback)
 				       manage_subs_clicked,
 				       compliance, NULL);
@@ -191,7 +195,7 @@ check_compliance_over_dbus()
   	error = NULL;
   	connection = dbus_g_bus_get(DBUS_BUS_SYSTEM, &error);
 	if (connection == NULL) {
-      		g_printerr("Failed to open connection to bus: %s\n",
+      		g_printerr(N_("Failed to open connection to bus: %s\n"),
 			   error->message);
 		g_error_free(error);
 		exit(1);
@@ -240,7 +244,7 @@ check_compliance(Compliance *compliance)
 		} else if (g_str_equal(force_icon, "warning")) {
 			compliance_type = RHSM_WARNING;
 		} else {
-			g_print("Unknown argument to force-icon: %s\n",
+			g_print(N_("Unknown argument to force-icon: %s\n"),
 				force_icon);
 			exit(1);
 		}
@@ -258,6 +262,9 @@ check_compliance(Compliance *compliance)
 int
 main(int argc, char **argv)
 {
+    setlocale(LC_ALL, "");
+    bindtextdomain("rhsm", "/usr/share/rhsm/translations");
+    textdomain("rhsm");
 	GError *error = NULL;
 	GOptionContext *context;
 	UniqueApp *app;
@@ -265,12 +272,11 @@ main(int argc, char **argv)
 	compliance.is_visible = false;
 
 	context = g_option_context_new ("rhsm compliance icon");
-	/* XXX: need to set translation domain */
 	g_option_context_add_main_entries (context, entries, NULL);
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
 	
 	if (!g_option_context_parse (context, &argc, &argv, &error)) {
-		g_print ("option parsing failed: %s\n", error->message);
+		g_print (N_("option parsing failed: %s\n"), error->message);
       		return 1;
 	}
 

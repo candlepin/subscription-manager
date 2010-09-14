@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-14 15:40-0300\n"
+"POT-Creation-Date: 2010-09-15 11:35-0300\n"
 "PO-Revision-Date: 2010-09-14 15:40-0300\n"
 "Last-Translator:  <dgoodwin@redhat.com>\n"
 "Language-Team: English\n"
@@ -971,3 +971,67 @@ msgstr "System software updates already set up"
 #: src/gui/data/subsMgr.glade.h:8
 msgid "Why Register"
 msgstr "Why Register"
+
+#: src/compliance/rhsm_compliance_icon.c:43
+msgid "How often to check for compliance (in seconds)"
+msgstr ""
+
+#: src/compliance/rhsm_compliance_icon.c:45
+msgid "Show debug messages"
+msgstr ""
+
+#: src/compliance/rhsm_compliance_icon.c:47
+msgid "Force display of the compliance icon (expired or warning)"
+msgstr ""
+
+#: src/compliance/rhsm_compliance_icon.c:134
+msgid "This system is non-compliant"
+msgstr "This System is non-compliant eh?"
+
+#: src/compliance/rhsm_compliance_icon.c:135
+msgid "This System is Non-Compliant"
+msgstr "This System is Non-Compliant eh?"
+
+#: src/compliance/rhsm_compliance_icon.c:136
+msgid ""
+"This system is missing one or more subscriptions required for compliance "
+"with your software license agreements."
+msgstr ""
+
+#: src/compliance/rhsm_compliance_icon.c:141
+msgid "This system's subscriptions are about to expire"
+msgstr ""
+
+#: src/compliance/rhsm_compliance_icon.c:143
+msgid "This System's Subscriptions Are About to Expire"
+msgstr ""
+
+#: src/compliance/rhsm_compliance_icon.c:144
+msgid ""
+"One or more of this system's subscriptions are about to expire. These "
+"subscriptions are required for compliance with your software license "
+"agreements."
+msgstr ""
+
+#: src/compliance/rhsm_compliance_icon.c:164
+msgid "Remind Me Later"
+msgstr ""
+
+#: src/compliance/rhsm_compliance_icon.c:170
+msgid "Manage My Subscriptions..."
+msgstr ""
+
+#: src/compliance/rhsm_compliance_icon.c:198
+#, python-format
+msgid "Failed to open connection to bus: %s\n"
+msgstr ""
+
+#: src/compliance/rhsm_compliance_icon.c:247
+#, python-format
+msgid "Unknown argument to force-icon: %s\n"
+msgstr ""
+
+#: src/compliance/rhsm_compliance_icon.c:279
+#, python-format
+msgid "option parsing failed: %s\n"
+msgstr ""
