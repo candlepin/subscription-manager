@@ -60,7 +60,7 @@ CONSUMER_SIGNAL = "on_consumer_changed"
 
 # Register new signal emitted by various dialogs when entitlement data changes
 gobject.signal_new(CONSUMER_SIGNAL, gtk.Dialog, gobject.SIGNAL_ACTION, gobject.TYPE_NONE, ())
-rhsm_xml = gtk.glade.XML(gladexml, domain="subscription-manager")
+rhsm_xml = gtk.glade.XML(gladexml)
 
 def create_and_set_basic_connection():
     global UEP

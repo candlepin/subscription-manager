@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-14 11:45-0300\n"
-"PO-Revision-Date: 2010-09-14 10:17-0300\n"
+"POT-Creation-Date: 2010-09-14 15:40-0300\n"
+"PO-Revision-Date: 2010-09-14 15:40-0300\n"
 "Last-Translator:  <dgoodwin@redhat.com>\n"
 "Language-Team: English\n"
 "Language: en_CA\n"
@@ -210,7 +210,7 @@ msgstr "Error: --all is only applicable with --available"
 
 #: src/managercli.py:485
 msgid "Available Subscriptions"
-msgstr "Available Subscriptions, eh?"
+msgstr "Available Subscriptions Eh?"
 
 #: src/managercli.py:620
 msgid ""
@@ -286,7 +286,7 @@ msgid ""
 "</b>Add or Update subscriptions for products you are using.\n"
 msgstr ""
 "<b>\n"
-" %s subscriptions need your attention OK Canuck?\n"
+" %s subscriptions need your attention eh?\n"
 "\n"
 "</b>Add or Update subscriptions for products you are using.\n"
 
@@ -299,7 +299,7 @@ msgid ""
 "</b>Add or Update subscriptions for products you are using.\n"
 msgstr ""
 "<b>\n"
-" %s subscription needs your attention Mr. Canadian.\n"
+" %s subscription needs your attention.\n"
 "\n"
 "</b>Add or Update subscriptions for products you are using.\n"
 
@@ -418,3 +418,556 @@ msgstr "<b>Total of %s subscriptions selected for consumption.</b>"
 #: src/constants.py:127
 msgid "<b>Are you sure you want to unregister?</b>"
 msgstr "<b>Are you sure you want to unregister?</b>"
+
+#: src/gui/data/progress.glade.h:1
+msgid "Progress Dialog"
+msgstr "Progress Dialog"
+
+#: src/gui/data/rhsm.glade.h:1
+msgid "<b> Product Registration (Optional) </b>"
+msgstr "<b> Product Registration (Optional) </b>"
+
+#: src/gui/data/rhsm.glade.h:2
+msgid "<b>Other Available Subscriptions</b>"
+msgstr "<b>Other Available Subscriptions</b>"
+
+#: src/gui/data/rhsm.glade.h:3
+msgid "<b>Red Hat Entitlements Account</b>"
+msgstr "<b>Red Hat Entitlements Account</b>"
+
+#: src/gui/data/rhsm.glade.h:4
+msgid "<b>Select Subscriptions to add</b>"
+msgstr "<b>Select Subscriptions to add</b>"
+
+#: src/gui/data/rhsm.glade.h:5
+msgid "<b>Subscriptions compatible with your system</b>"
+msgstr "<b>Subscriptions compatible with your system</b>"
+
+#: src/gui/data/rhsm.glade.h:6
+msgid "<b>Subscriptions matching your installed products</b>"
+msgstr "<b>Subscriptions matching your installed products</b>"
+
+#: src/gui/data/rhsm.glade.h:7
+msgid "<b>System Facts</b>"
+msgstr "<b>System Facts</b>"
+
+#: src/gui/data/rhsm.glade.h:8 src/gui/data/subsMgr.glade.h:1
+msgid ""
+"<small>Tip: Forgot your login or password? Look it up at \n"
+"https://www.redhat.com/wapps/sso/rhn/lostPassword.html</small>"
+msgstr ""
+"<small>Tip: Forgot your login or password? Look it up at \n"
+"https://www.redhat.com/wapps/sso/rhn/lostPassword.html</small>"
+
+#: src/gui/data/rhsm.glade.h:10
+msgid "A unique label for this system"
+msgstr "A unique label for this system"
+
+#: src/gui/data/rhsm.glade.h:11
+msgid "Account Registration"
+msgstr "Account Registration"
+
+#: src/gui/data/rhsm.glade.h:12 src/gui/data/subsMgr.glade.h:3
+msgid "Add Subscriptions"
+msgstr "Add Subscriptions"
+
+#: src/gui/data/rhsm.glade.h:13
+msgid "Automatically subscribe this system to compatible subscriptions"
+msgstr "Automatically subscribe this system to compatible subscriptions"
+
+#: src/gui/data/rhsm.glade.h:14
+msgid "Change Account"
+msgstr "Change Account"
+
+#: src/gui/data/rhsm.glade.h:15
+msgid "Email Address:"
+msgstr "Email Address:"
+
+#: src/gui/data/rhsm.glade.h:16
+msgid "Enter a subscription number for products purchased from Red Hat"
+msgstr "Enter a subscription number for products purchased from Red Hat"
+
+#: src/gui/data/rhsm.glade.h:17
+msgid ""
+"Enter an optional email address for notification when registration is "
+"complete."
+msgstr ""
+"Enter an optional email address for notification when registration is "
+"complete."
+
+#: src/gui/data/rhsm.glade.h:18
+msgid "Ex: XXXX-XXXX-XXXX-XXXX"
+msgstr "Ex: XXXX-XXXX-XXXX-XXXX"
+
+#: src/gui/data/rhsm.glade.h:19
+msgid "Import Certificate"
+msgstr "Import Certificate"
+
+#: src/gui/data/rhsm.glade.h:20
+msgid "Not Compatible"
+msgstr "Not Compatible"
+
+#: src/gui/data/rhsm.glade.h:21
+msgid "Please enter the information for this <b>system</b>"
+msgstr "Please enter the information for this <b>system</b>"
+
+#: src/gui/data/rhsm.glade.h:22
+msgid "Provide a Subscription Certificate"
+msgstr "Provide a Subscription Certificate"
+
+#: src/gui/data/rhsm.glade.h:23
+msgid "Registration Settings"
+msgstr "Registration Settings"
+
+#: src/gui/data/rhsm.glade.h:24
+msgid "Submit"
+msgstr "Submit"
+
+#: src/gui/data/rhsm.glade.h:25 src/gui/data/subsgui.glade.h:3
+#: src/gui/data/subsMgr.glade.h:6
+msgid "Subscription Manager"
+msgstr "Subscription Manager For Canada"
+
+#: src/gui/data/rhsm.glade.h:26
+msgid "Subscription Token:"
+msgstr "Subscription Token:"
+
+#: src/gui/data/rhsm.glade.h:27
+msgid "Suggested"
+msgstr "Suggested"
+
+#: src/gui/data/rhsm.glade.h:28
+msgid "System Name:"
+msgstr "System Name:"
+
+#: src/gui/data/rhsm.glade.h:29
+msgid "Unregister"
+msgstr "Unregister"
+
+#: src/gui/data/rhsm.glade.h:30
+msgid "Update Facts"
+msgstr "Update Facts"
+
+#: src/gui/data/rhsm.glade.h:31
+msgid "Update Subscriptions"
+msgstr "Update Subscriptions"
+
+#: src/gui/data/rhsm.glade.h:32
+msgid "account_label"
+msgstr "account_label"
+
+#: src/gui/data/rhsm.glade.h:33
+msgid "account_label1"
+msgstr "account_label1"
+
+#: src/gui/data/rhsm.glade.h:34
+msgid "account_label2"
+msgstr "account_label2"
+
+#: src/gui/data/rhsm.glade.h:35
+msgid "account_label3"
+msgstr "account_label3"
+
+#: src/gui/data/rhsm.glade.h:36
+msgid "account_login"
+msgstr "account_login"
+
+#: src/gui/data/rhsm.glade.h:37
+msgid "account_password"
+msgstr "account_password"
+
+#: src/gui/data/rhsm.glade.h:38
+msgid "account_settings"
+msgstr "account_settings"
+
+#: src/gui/data/rhsm.glade.h:39
+msgid "add-dialog-vbox3"
+msgstr "add-dialog-vbox3"
+
+#: src/gui/data/rhsm.glade.h:40
+msgid "add_subscribe_button3"
+msgstr "add_subscribe_button3"
+
+#: src/gui/data/rhsm.glade.h:41
+msgid "alignment1"
+msgstr "alignment1"
+
+#: src/gui/data/rhsm.glade.h:42
+msgid "alignment2"
+msgstr "alignment2"
+
+#: src/gui/data/rhsm.glade.h:43
+msgid "auto_bind"
+msgstr "auto_bind"
+
+#: src/gui/data/rhsm.glade.h:44
+msgid "button1"
+msgstr "button1"
+
+#: src/gui/data/rhsm.glade.h:45
+msgid "button_add1"
+msgstr "button_add1"
+
+#: src/gui/data/rhsm.glade.h:46
+msgid "button_close"
+msgstr "button_close"
+
+#: src/gui/data/rhsm.glade.h:47
+msgid "button_unsubscribe1"
+msgstr "button_unsubscribe1"
+
+#: src/gui/data/rhsm.glade.h:48
+msgid "button_update1"
+msgstr "button_update1"
+
+#: src/gui/data/rhsm.glade.h:49
+msgid "cancel_add_button2"
+msgstr "cancel_add_button2"
+
+#: src/gui/data/rhsm.glade.h:50
+msgid "cancel_add_button4"
+msgstr "cancel_add_button4"
+
+#: src/gui/data/rhsm.glade.h:51
+msgid "cancel_import_button1"
+msgstr "cancel_import_button1"
+
+#: src/gui/data/rhsm.glade.h:52
+msgid "cancel_reg_button1"
+msgstr "cancel_reg_button1"
+
+#: src/gui/data/rhsm.glade.h:53
+msgid "cancel_update_button1"
+msgstr "cancel_update_button1"
+
+#: src/gui/data/rhsm.glade.h:54
+msgid "certLabel1"
+msgstr "certLabel1"
+
+#: src/gui/data/rhsm.glade.h:55
+msgid "certificateChooserButton"
+msgstr "certificateChooserButton"
+
+#: src/gui/data/rhsm.glade.h:56
+msgid "consumerId"
+msgstr "consumerId"
+
+#: src/gui/data/rhsm.glade.h:57
+msgid "consumerName"
+msgstr "consumerName"
+
+#: src/gui/data/rhsm.glade.h:58
+msgid "consumer_name\t"
+msgstr "consumer_name\t"
+
+#: src/gui/data/rhsm.glade.h:59
+msgid "dialog-action_area1"
+msgstr "dialog-action_area1"
+
+#: src/gui/data/rhsm.glade.h:60
+msgid "dialog-action_area2"
+msgstr "dialog-action_area2"
+
+#: src/gui/data/rhsm.glade.h:61
+msgid "dialog-action_area4"
+msgstr "dialog-action_area4"
+
+#: src/gui/data/rhsm.glade.h:62
+msgid "dialog-action_area5"
+msgstr "dialog-action_area5"
+
+#: src/gui/data/rhsm.glade.h:63
+msgid "dialog-action_area6"
+msgstr "dialog-action_area6"
+
+#: src/gui/data/rhsm.glade.h:64
+msgid "dialog-action_area7"
+msgstr "dialog-action_area7"
+
+#: src/gui/data/rhsm.glade.h:65
+msgid "dialog-vbox12"
+msgstr "dialog-vbox12"
+
+#: src/gui/data/rhsm.glade.h:66
+msgid "dialog-vbox2"
+msgstr "dialog-vbox2"
+
+#: src/gui/data/rhsm.glade.h:67
+msgid "dialog-vbox3"
+msgstr "dialog-vbox3"
+
+#: src/gui/data/rhsm.glade.h:68
+msgid "dialog-vbox5"
+msgstr "dialog-vbox5"
+
+#: src/gui/data/rhsm.glade.h:69
+msgid "dialog-vbox6"
+msgstr "dialog-vbox6"
+
+#: src/gui/data/rhsm.glade.h:70
+msgid "dialog-vbox7"
+msgstr "dialog-vbox7"
+
+#: src/gui/data/rhsm.glade.h:71
+msgid "dialog-vbox8"
+msgstr "dialog-vbox8"
+
+#: src/gui/data/rhsm.glade.h:72
+msgid "dialog_add"
+msgstr "dialog_add"
+
+#: src/gui/data/rhsm.glade.h:73
+msgid "dialog_updates"
+msgstr "dialog_updates"
+
+#: src/gui/data/rhsm.glade.h:74
+msgid "forgotInfoHbox1"
+msgstr "forgotInfoHbox1"
+
+#: src/gui/data/rhsm.glade.h:75
+msgid "forgotInfoHosted1"
+msgstr "forgotInfoHosted1"
+
+#: src/gui/data/rhsm.glade.h:76
+msgid "hbox1"
+msgstr "hbox1"
+
+#: src/gui/data/rhsm.glade.h:77
+msgid "hbox2"
+msgstr "hbox2"
+
+#: src/gui/data/rhsm.glade.h:78
+msgid "hbox3"
+msgstr "hbox3"
+
+#: src/gui/data/rhsm.glade.h:79
+msgid "hbox_header"
+msgstr "hbox_header"
+
+#: src/gui/data/rhsm.glade.h:80
+msgid "hbuttonbox1"
+msgstr "hbuttonbox1"
+
+#: src/gui/data/rhsm.glade.h:81
+msgid "header"
+msgstr "header"
+
+#: src/gui/data/rhsm.glade.h:82
+msgid "import_vbox1"
+msgstr "import_vbox1"
+
+#: src/gui/data/rhsm.glade.h:83
+msgid "initialLoginWindowVbox1"
+msgstr "initialLoginWindowVbox1"
+
+#: src/gui/data/rhsm.glade.h:84
+msgid "instructionsLabel1"
+msgstr "instructionsLabel1"
+
+#: src/gui/data/rhsm.glade.h:85
+msgid "label"
+msgstr "label"
+
+#: src/gui/data/rhsm.glade.h:86
+msgid "label_status_update"
+msgstr "label_status_update"
+
+#: src/gui/data/rhsm.glade.h:87
+msgid "loginPasswordEntryLabel1"
+msgstr "loginPasswordEntryLabel1"
+
+#: src/gui/data/rhsm.glade.h:88
+msgid "loginUserEntryLabel1"
+msgstr "loginUserEntryLabel1"
+
+#: src/gui/data/rhsm.glade.h:89
+msgid "match_label"
+msgstr "match_label"
+
+#: src/gui/data/rhsm.glade.h:90
+msgid "notebook1"
+msgstr "notebook1"
+
+#: src/gui/data/rhsm.glade.h:91
+msgid "product_details_hpane"
+msgstr "product_details_hpane"
+
+#: src/gui/data/rhsm.glade.h:92
+msgid "reg_status"
+msgstr "reg_status"
+
+#: src/gui/data/rhsm.glade.h:93
+msgid "register_button"
+msgstr "register_button"
+
+#: src/gui/data/rhsm.glade.h:94
+msgid "register_dialog"
+msgstr "register_dialog"
+
+#: src/gui/data/rhsm.glade.h:95
+msgid "register_token_dialog"
+msgstr "register_token_dialog"
+
+#: src/gui/data/rhsm.glade.h:96
+msgid "regtoken_entry"
+msgstr "regtoken_entry"
+
+#: src/gui/data/rhsm.glade.h:97
+msgid "scrolledwindow1"
+msgstr "scrolledwindow1"
+
+#: src/gui/data/rhsm.glade.h:98
+msgid "scrolledwindow2"
+msgstr "scrolledwindow2"
+
+#: src/gui/data/rhsm.glade.h:99
+msgid "scrolledwindow_details"
+msgstr "scrolledwindow_details"
+
+#: src/gui/data/rhsm.glade.h:100
+msgid "scrolledwindow_updates"
+msgstr "scrolledwindow_updates"
+
+#: src/gui/data/rhsm.glade.h:101
+msgid "select_status"
+msgstr "select_status"
+
+#: src/gui/data/rhsm.glade.h:102
+msgid "sm_icon"
+msgstr "sm_icon"
+
+#: src/gui/data/rhsm.glade.h:103
+msgid "submit_button"
+msgstr "submit_button"
+
+#: src/gui/data/rhsm.glade.h:104
+msgid "summaryLabel1"
+msgstr "summaryLabel1"
+
+#: src/gui/data/rhsm.glade.h:105
+msgid "table1"
+msgstr "table1"
+
+#: src/gui/data/rhsm.glade.h:106
+msgid "table2"
+msgstr "table2"
+
+#: src/gui/data/rhsm.glade.h:107
+msgid "textview_details"
+msgstr "textview_details"
+
+#: src/gui/data/rhsm.glade.h:108
+msgid "tipIconHosted1"
+msgstr "tipIconHosted1"
+
+#: src/gui/data/rhsm.glade.h:109
+msgid "treeview_available2"
+msgstr "treeview_available2"
+
+#: src/gui/data/rhsm.glade.h:110
+msgid "treeview_available3"
+msgstr "treeview_available3"
+
+#: src/gui/data/rhsm.glade.h:111
+msgid "treeview_available4"
+msgstr "treeview_available4"
+
+#: src/gui/data/rhsm.glade.h:112
+msgid "treeview_updates"
+msgstr "treeview_updates"
+
+#: src/gui/data/rhsm.glade.h:113
+msgid "treeview_updates2"
+msgstr "treeview_updates2"
+
+#: src/gui/data/rhsm.glade.h:114
+msgid "update-dialog-vbox1"
+msgstr "update-dialog-vbox1"
+
+#: src/gui/data/rhsm.glade.h:115
+msgid "update-label2"
+msgstr "update-label2"
+
+#: src/gui/data/rhsm.glade.h:116
+msgid "update-scrolledwindow2"
+msgstr "update-scrolledwindow2"
+
+#: src/gui/data/rhsm.glade.h:117
+msgid "update-vbox2"
+msgstr "update-vbox2"
+
+#: src/gui/data/rhsm.glade.h:118
+msgid "update_subscribe_button1"
+msgstr "update_subscribe_button1"
+
+#: src/gui/data/rhsm.glade.h:119
+msgid "vbox2"
+msgstr "vbox2"
+
+#: src/gui/data/rhsm.glade.h:120
+msgid "vbox3"
+msgstr "vbox3"
+
+#: src/gui/data/rhsm.glade.h:121
+msgid "vbox4"
+msgstr "vbox4"
+
+#: src/gui/data/rhsm.glade.h:122
+msgid "vbox5"
+msgstr "vbox5"
+
+#: src/gui/data/rhsm.glade.h:123
+msgid "vbox6"
+msgstr "vbox6"
+
+#: src/gui/data/rhsm.glade.h:124
+msgid "vbox7"
+msgstr "vbox7"
+
+#: src/gui/data/rhsm.glade.h:125
+msgid "vbox8"
+msgstr "vbox8"
+
+#: src/gui/data/rhsm.glade.h:126
+msgid "vbox9"
+msgstr "vbox9"
+
+#: src/gui/data/rhsm.glade.h:127
+msgid "viewport1"
+msgstr "viewport1"
+
+#: src/gui/data/rhsm.glade.h:128
+msgid "viewport2"
+msgstr "viewport2"
+
+#: src/gui/data/rhsm.glade.h:129
+msgid "viewport3"
+msgstr "viewport3"
+
+#: src/gui/data/rhsm.glade.h:130
+msgid "vpaned_updates"
+msgstr "vpaned_updates"
+
+#: src/gui/data/subsgui.glade.h:1
+msgid "Enter your Subscription account information"
+msgstr "Enter your Subscription account information"
+
+#: src/gui/data/subsgui.glade.h:2
+msgid "Manage Your Product Subscriptions"
+msgstr "Manage Your Product Subscriptions"
+
+#: src/gui/data/subsMgr.glade.h:4
+msgid "Enter Your Subscription Account Information"
+msgstr "Enter Your Subscription Account Information"
+
+#: src/gui/data/subsMgr.glade.h:5
+msgid "Red Hat Privacy Statement"
+msgstr "Red Hat Privacy Statement"
+
+#: src/gui/data/subsMgr.glade.h:7
+msgid "System software updates already set up"
+msgstr "System software updates already set up"
+
+#: src/gui/data/subsMgr.glade.h:8
+msgid "Why Register"
+msgstr "Why Register"

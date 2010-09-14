@@ -48,9 +48,11 @@ APP = 'rhsm'
 DIR = '/usr/share/rhsm/translations/'
 import locale
 import gettext
+import gtk.glade
 locale.setlocale(locale.LC_ALL, '')
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
+for module in (gettext, gtk.glade):
+    module.bindtextdomain(APP, DIR)
+    module.textdomain(APP)
 
 # quick check to see if you are a super-user.
 if os.getuid() != 0:
