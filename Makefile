@@ -49,6 +49,7 @@ install: dbus-service-install
 	@mkdir -p ${PREFIX}/etc/security/console.apps
 	@mkdir -p ${PREFIX}/etc/yum/pluginconf.d/
 	@mkdir -p ${PREFIX}/usr/share/man/man8/
+	@mkdir -p ${PREFIX}/usr/share/applications
 	@mkdir -p ${PREFIX}/var/log/rhsm
 	@mkdir -p ${PREFIX}/var/lib/rhsm/facts
 	@mkdir -p ${PREFIX}/usr/bin
@@ -75,6 +76,8 @@ install: dbus-service-install
 		${PREFIX}/etc/xdg/autostart
 	install -m 755 etc-conf/rhsm-complianced.cron \
 		${PREFIX}/etc/cron.daily/rhsm-complianced
+	install -m 755 etc-conf/subscription-manager.desktop \
+		${PREFIX}/usr/share/applications	
 	ln -sf consolehelper ${PREFIX}/usr/bin/subscription-manager-gui
 	install -m 644 etc-conf/subscription-manager-gui.pam \
 		${PREFIX}/etc/pam.d/subscription-manager-gui

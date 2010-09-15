@@ -57,6 +57,8 @@ make -f Makefile install VERSION=%{version}-%{release} PREFIX=$RPM_BUILD_ROOT MA
 
 desktop-file-validate \
         %{buildroot}/etc/xdg/autostart/rhsm-compliance-icon.desktop
+desktop-file-validate \
+        %{buildroot}/usr/share/applications/subscription-manager.desktop        
 
 %post -n subscription-manager-gnome
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
@@ -139,6 +141,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/icons/hicolor/16x16/apps/subsmgr.png
 %{_datadir}/firstboot/modules/rhms_login.py*
 %{_datadir}/firstboot/modules/rhms_subscriptions.py*
+%{_datadir}/applications/subscription-manager.desktop
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(755,root,root) %{_bindir}/subscription-manager-gui
 %{_bindir}/rhsm-compliance-icon
