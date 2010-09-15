@@ -103,7 +103,7 @@ class ProductManager:
                 continue
             fn = '%s.pem' % hash
             path = self.pdir.abspath(fn)
-            print 'installing: %s' % fn
+            print _('installing: %s') % fn
             cert.write(path)
             self.db.add(hash, repo)
             self.db.write()
@@ -117,7 +117,7 @@ class ProductManager:
                 continue
             if repo in active:
                 continue
-            print 'deleting: %s' % cert.path
+            print _('deleting: %s') % cert.path
             cert.delete()
             self.db.delete(hash)
             self.db.write()
@@ -134,7 +134,7 @@ class ProductManager:
             active.add(repo)
         end = time.time()
         ms = (end-start)*1000
-        print 'duration: %d(ms)' % ms
+        print _('duration: %d(ms)') % ms
         return active
 
     def getEnabled(self, yb):

@@ -47,7 +47,7 @@ def handle_exception(msg, ex):
     log.error(msg)
     log.exception(ex)
     if isinstance(ex, socket_error):
-        print 'network error, unable to connect to server'
+        print _('network error, unable to connect to server')
         sys.exit(-1)
     else:
         systemExit(-1, ex)
@@ -72,7 +72,7 @@ class CliCommand(object):
         """ Add options that apply to all sub-commands. """
 
         self.parser.add_option("--debug", dest="debug",
-                default=0, help="debug level")
+                default=0, help=_("debug level"))
 
     def _do_command(self):
         pass
@@ -115,13 +115,13 @@ class CliCommand(object):
             self._do_command()
         except X509.X509Error, e:
             log.error(e)
-            print 'Consumer certificates corrupted. Please re-register'
+            print _('Consumer certificates corrupted. Please re-register')
 
 
 class ReRegisterCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog reregister [OPTIONS]"
-        shortdesc = "re-register the client to a Unified Entitlement Platform."
+        shortdesc = _("re-register the client to a Unified Entitlement Platform.")
         desc = shortdesc
 
         CliCommand.__init__(self, "reregister", usage, shortdesc, desc)
@@ -130,15 +130,15 @@ class ReRegisterCommand(CliCommand):
         self.password = None
 
         self.parser.add_option("--username", dest="username",
-                               help="specify a username")
+                               help=_("specify a username"))
         self.parser.add_option("--password", dest="password",
-                               help="specify a password")
+                               help=_("specify a password"))
         self.parser.add_option("--consumerid", dest="consumerid",
-                               help="register to an existing consumer")
+                               help=_("register to an existing consumer"))
 
     def _validate_options(self):
         if not ConsumerIdentity.existsAndValid() and not (self.options.username and self.options.password):
-            print (_("""Error: username and password are required to re-register. \nConsumer identity either does not exists or is corrupted. Try re-register --help."""))
+            print (_("Error: username and password are required to re-register. \nConsumer identity either does not exists or is corrupted. Try re-register --help."))
             sys.exit(-1)
 
     def _do_command(self):
@@ -164,7 +164,7 @@ class ReRegisterCommand(CliCommand):
             else:
                 consumerid = check_registration()['uuid']
                 if self.options.username and self.options.password:
-                    print 'Ignoring username and password options. Using old uuid %s' % consumerid
+                    print _('Ignoring username and password options. Using old uuid %s') % consumerid
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
 
@@ -174,13 +174,13 @@ class ReRegisterCommand(CliCommand):
             log.error("Error: Unable to ReRegister the system: %s" % re)
             systemExit(-1, re.msg)
         except Exception, e:
-            handle_exception("Error: Unable to ReRegister the system", e)
+            handle_exception(_("Error: Unable to Re-register the system", e))
 
 class RegisterCommand(CliCommand):
 
     def __init__(self):
         usage = "usage: %prog register [OPTIONS]"
-        shortdesc = "register the client to a Unified Entitlement Platform."
+        shortdesc = _("register the client to a Unified Entitlement Platform.")
         desc = "register"
 
         CliCommand.__init__(self, "register", usage, shortdesc, desc)
@@ -189,20 +189,20 @@ class RegisterCommand(CliCommand):
         self.password = None
 
         self.parser.add_option("--username", dest="username",
-                               help="specify a username")
+                               help=_("specify a username"))
         self.parser.add_option("--type", dest="consumertype", default="system",
-                               help="the type of consumer to create. Defaults to system")
+                               help=_("the type of consumer to create. Defaults to system"))
         self.parser.add_option("--name", dest="consumername",
-                               help="name of the consumer to create. Defaults to the username.")
+                               help=_("name of the consumer to create. Defaults to the username."))
         self.parser.add_option("--password", dest="password",
-                               help="specify a password")
+                               help=_("specify a password"))
         self.parser.add_option("--consumerid", dest="consumerid",
-                               help="register to an existing consumer")
+                               help=_("register to an existing consumer"))
         self.parser.add_option("--autosubscribe", action='store_true',
-                               help="automatically subscribe this system to\
-                                     compatible subscriptions.")
+                               help=_("automatically subscribe this system to\
+                                     compatible subscriptions."))
         self.parser.add_option("--force",  action='store_true', 
-                               help="register the system even if it is already registered")
+                               help=_("register the system even if it is already registered"))
 
     def _validate_options(self):
         if not (self.options.username and self.options.password):
@@ -264,7 +264,7 @@ class RegisterCommand(CliCommand):
             for pname, phash in managerlib.getInstalledProductHashMap().items():
                 try:
                    self.cp.bindByProduct(consumer['uuid'], phash)
-                   print "Bind Product ", pname,phash
+                   print _("Bind Product "), pname,phash
                    log.info("Automatically subscribe the machine to product %s " % pname)
                 except:
                    log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
@@ -273,7 +273,7 @@ class RegisterCommand(CliCommand):
 class UnRegisterCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog unregister [OPTIONS]"
-        shortdesc = "unregister the client from a Unified Entitlement Platform."
+        shortdesc = _("unregister the client from a Unified Entitlement Platform.")
         desc = "unregister"
 
         CliCommand.__init__(self, "unregister", usage, shortdesc, desc)
@@ -299,12 +299,12 @@ class UnRegisterCommand(CliCommand):
            log.error("Error: Unable to UnRegister the system: %s" % re)
            systemExit(-1, re.msg)
         except Exception, e:
-            handle_exception("Error: Unable to UnRegister the system", e)
+            handle_exception(_("Error: Unable to Un-register the system"), e)
 
 class SubscribeCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog subscribe [OPTIONS]"
-        shortdesc = "subscribe the registered user to a specified product or regtoken."
+        shortdesc = _("subscribe the registered user to a specified product or regtoken.")
         desc = "subscribe"
         CliCommand.__init__(self, "subscribe", usage, shortdesc, desc)
 
@@ -312,9 +312,9 @@ class SubscribeCommand(CliCommand):
         self.regtoken = None
         self.substoken = None
         self.parser.add_option("--regtoken", dest="regtoken", action='append',
-                               help="regtoken")
+                               help=_("regtoken"))
         self.parser.add_option("--pool", dest="pool", action='append',
-                               help="subscription pool id")
+                               help=_("subscription pool id"))
         self.parser.add_option("--email", dest="email", action='store',
                                help=_("optional email address to notify when "
                                "token activation is complete. Used with "
@@ -372,13 +372,13 @@ class SubscribeCommand(CliCommand):
 class UnSubscribeCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog unsubscribe [OPTIONS]"
-        shortdesc = "unsubscribe the registered user from all or specific subscriptions."
+        shortdesc = _("unsubscribe the registered user from all or specific subscriptions.")
         desc = "unsubscribe"
         CliCommand.__init__(self, "unsubscribe", usage, shortdesc, desc)
 
         self.serial_numbers = None
         self.parser.add_option("--serial", dest="serial",
-                               help="Certificate serial to unsubscribe")
+                               help=_("Certificate serial to unsubscribe"))
 
     def _validate_options(self):
         CliCommand._validate_options(self)
@@ -401,19 +401,19 @@ class UnSubscribeCommand(CliCommand):
             log.error(re)
             systemExit(-1, re.msg)
         except Exception,e:
-            handle_exception("Unable to perform unsubscribe due to the following exception \n Error: %s" % e, e)
+            handle_exception(_("Unable to perform unsubscribe due to the following exception \n Error: %s") % e, e)
 
 class FactsCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog facts [OPTIONS]"
-        shortdesc = "show information for facts"
+        shortdesc = _("show information for facts")
         desc = "facts"
         CliCommand.__init__(self, "facts", usage, shortdesc, desc)
         
         self.parser.add_option("--list", action="store_true",
-                               help="list known facts for this system")
+                               help=_("list known facts for this system"))
         self.parser.add_option("--update", action="store_true",
-                               help="update the system facts")
+                               help=_("update the system facts"))
 
     def _validate_options(self):
         # one or the other
@@ -438,18 +438,17 @@ class FactsCommand(CliCommand):
 class ListCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog list [OPTIONS]"
-        shortdesc = "list available or consumer subscriptions for registered user"
+        shortdesc = _("list available or consumer subscriptions for registered user")
         desc = "list available or consumed Entitlement Pools for this system."
         CliCommand.__init__(self, "list", usage, shortdesc, desc)
         self.available = None
         self.consumed = None
         self.parser.add_option("--available", action='store_true',
-                               help="available")
+                               help=_("available"))
         self.parser.add_option("--consumed", action='store_true',
-                               help="consumed")
+                               help=_("consumed"))
         self.parser.add_option("--all", action='store_true',
-                               help="if supplied with --available then all subscriptions are returned")                               
-
+                               help=_("if supplied with --available then all subscriptions are returned"))
 
     def _validate_options(self):
         if (self.options.all and not self.options.available):
@@ -468,9 +467,11 @@ class ListCommand(CliCommand):
         if not (self.options.available or self.options.consumed):
            iproducts = managerlib.getInstalledProductStatus()
            if not len(iproducts):
-               print("No installed Products to list")
+               print(_("No installed Products to list"))
                sys.exit(0)
-           print """+-------------------------------------------+\n    Installed Product Status\n+-------------------------------------------+"""
+           print "+-------------------------------------------+"
+           print _("    Installed Product Status")
+           print "+-------------------------------------------+"
            for product in iproducts:
                print constants.installed_product_status % product
 
@@ -480,7 +481,7 @@ class ListCommand(CliCommand):
            else:
                epools = managerlib.getAvailableEntitlementsCLI(self.cp, consumer)
            if not len(epools):
-               print("No Available subscription pools to list")
+               print(_("No Available subscription pools to list"))
                sys.exit(0)
            print "+-------------------------------------------+\n    %s\n+-------------------------------------------+\n" % _("Available Subscriptions")
            for data in epools:
@@ -496,9 +497,9 @@ class ListCommand(CliCommand):
         if self.options.consumed:
            cpents = managerlib.getConsumedProductEntitlements()
            if not len(cpents):
-               print("No Consumed subscription pools to list")
+               print(_("No Consumed subscription pools to list"))
                sys.exit(0)
-           print """+-------------------------------------------+\n    Consumed Product Subscriptions\n+-------------------------------------------+\n"""
+           print """+-------------------------------------------+\n    %s\n+-------------------------------------------+\n""" % _("Consumed Product Subscriptions")
            for product in cpents:
                 print constants.consumed_subs_list % product 
 
@@ -546,15 +547,15 @@ class CLI:
         self.cli_commands[cmd.name] = cmd
 
     def _usage(self):
-        print "\nUsage: %s [options] MODULENAME --help\n" % os.path.basename(sys.argv[0])
-        print "Supported modules:\n"
+        print _("\nUsage: %s [options] MODULENAME --help\n") % os.path.basename(sys.argv[0])
+        print _("Supported modules:")
+        print "\n"
 
         # want the output sorted
         items = self.cli_commands.items()
         items.sort()
         for (name, cmd) in items:
             print("\t%-14s %-25s" % (name, cmd.shortdesc))
-            #print(" %-25s" % cmd.parser.print_help())
         print("")
 
     def _find_best_match(self, args):

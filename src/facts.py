@@ -39,7 +39,7 @@ class Facts():
             json_buffer = f.read()
             cached_facts = json.loads(json_buffer)
         except IOError, e:
-            print "Unable to read %s" % path
+            print _("Unable to read %s") % path
 
         return cached_facts
 

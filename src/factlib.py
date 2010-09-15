@@ -69,11 +69,11 @@ class UpdateAction(Action):
 
    
 def main():
-    print 'Updating facts'
+    print _('Updating facts')
     factlib = FactLib()
     updates = factlib.update()
-    print '%d updates required' % updates
-    print 'done'
+    print _('%d updates required') % updates
+    print _('done')
         
 if __name__ == '__main__':
     main()

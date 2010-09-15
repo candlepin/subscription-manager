@@ -427,7 +427,7 @@ class RegisterScreen:
                 UEP.unregisterConsumer(cid)
             except Exception, e:
                 log.error("Unable to unregister existing user credentials.")
-        failed_msg = "Unable to register your system. \n Error: %s"
+        failed_msg = _("Unable to register your system. \n Error: %s")
         try:
             newAccount = UEP.registerConsumer(username, password, name=consumername,
                     facts=facts.get_facts())

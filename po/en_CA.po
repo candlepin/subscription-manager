@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-15 12:45-0300\n"
+"POT-Creation-Date: 2010-09-15 13:57-0300\n"
 "PO-Revision-Date: 2010-09-14 15:40-0300\n"
 "Last-Translator:  <dgoodwin@redhat.com>\n"
 "Language-Team: English\n"
@@ -18,6 +18,39 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/managerlib.py:68
+msgid "Subscribed"
+msgstr ""
+
+#: src/managerlib.py:68
+msgid "Expired"
+msgstr ""
+
+#: src/managerlib.py:68
+msgid "Not Subscribed"
+msgstr ""
+
+#: src/managerlib.py:102
+msgid "Not Installed"
+msgstr ""
+
+#: src/certmgr.py:73
+msgid "Updating Red Hat certificates & repositories"
+msgstr ""
+
+#: src/certmgr.py:76 src/factlib.py:75 src/certlib.py:570
+#, python-format
+msgid "%d updates required"
+msgstr ""
+
+#: src/certmgr.py:77 src/factlib.py:76 src/certlib.py:571
+msgid "done"
+msgstr ""
+
+#: src/certmgr.py:86
+msgid "Unable to update Red Hat certificates & repositories"
+msgstr ""
 
 #: src/gui/messageWindow.py:93
 msgid "Error:"
@@ -70,6 +103,13 @@ msgstr "Modify Registration"
 #: src/gui/managergui.py:330
 msgid "Register System..."
 msgstr "Register System..."
+
+#: src/gui/managergui.py:430
+#, python-format
+msgid ""
+"Unable to register your system. \n"
+" Error: %s"
+msgstr ""
 
 #: src/gui/managergui.py:484
 msgid "You must enter a login."
@@ -160,6 +200,34 @@ msgstr "Error reading networking information:"
 msgid "Error reading net Interface information:"
 msgstr "Error reading net Interface information:"
 
+#: src/managercli.py:50
+msgid "network error, unable to connect to server"
+msgstr ""
+
+#: src/managercli.py:75
+msgid "debug level"
+msgstr ""
+
+#: src/managercli.py:118
+msgid "Consumer certificates corrupted. Please re-register"
+msgstr ""
+
+#: src/managercli.py:124
+msgid "re-register the client to a Unified Entitlement Platform."
+msgstr ""
+
+#: src/managercli.py:133 src/managercli.py:192
+msgid "specify a username"
+msgstr ""
+
+#: src/managercli.py:135 src/managercli.py:198
+msgid "specify a password"
+msgstr ""
+
+#: src/managercli.py:137 src/managercli.py:200
+msgid "register to an existing consumer"
+msgstr ""
+
 #: src/managercli.py:141
 msgid ""
 "Error: username and password are required to re-register. \n"
@@ -169,6 +237,37 @@ msgstr ""
 "Error: username and password are required to re-register. \n"
 "Consumer identity either does not exists or is corrupted. Try re-register --"
 "help."
+
+#: src/managercli.py:167
+#, python-format
+msgid "Ignoring username and password options. Using old uuid %s"
+msgstr ""
+
+#: src/managercli.py:177
+msgid "Error: Unable to Re-register the system"
+msgstr ""
+
+#: src/managercli.py:183
+msgid "register the client to a Unified Entitlement Platform."
+msgstr ""
+
+#: src/managercli.py:194
+msgid "the type of consumer to create. Defaults to system"
+msgstr ""
+
+#: src/managercli.py:196
+msgid "name of the consumer to create. Defaults to the username."
+msgstr ""
+
+#: src/managercli.py:202
+msgid ""
+"automatically subscribe this system to                                     "
+"compatible subscriptions."
+msgstr ""
+
+#: src/managercli.py:205
+msgid "register the system even if it is already registered"
+msgstr ""
 
 #: src/managercli.py:209
 msgid ""
@@ -180,9 +279,33 @@ msgstr ""
 msgid "This system is already registered. Use --force to override"
 msgstr "This system is already registered. Use --force to override"
 
+#: src/managercli.py:267
+msgid "Bind Product "
+msgstr ""
+
+#: src/managercli.py:276
+msgid "unregister the client from a Unified Entitlement Platform."
+msgstr ""
+
 #: src/managercli.py:287
 msgid "This system is currently not registered."
 msgstr "This system is currently not registered."
+
+#: src/managercli.py:302
+msgid "Error: Unable to Un-register the system"
+msgstr ""
+
+#: src/managercli.py:307
+msgid "subscribe the registered user to a specified product or regtoken."
+msgstr ""
+
+#: src/managercli.py:315
+msgid "regtoken"
+msgstr ""
+
+#: src/managercli.py:317
+msgid "subscription pool id"
+msgstr ""
 
 #: src/managercli.py:319
 msgid ""
@@ -204,15 +327,89 @@ msgstr ""
 msgid "Error: Need either --pool or --regtoken, Try subscribe --help"
 msgstr "Error: Need either --pool or --regtoken, Try subscribe --help"
 
-#: src/managercli.py:456
+#: src/managercli.py:375
+msgid "unsubscribe the registered user from all or specific subscriptions."
+msgstr ""
+
+#: src/managercli.py:381
+msgid "Certificate serial to unsubscribe"
+msgstr ""
+
+#: src/managercli.py:404
+#, python-format
+msgid ""
+"Unable to perform unsubscribe due to the following exception \n"
+" Error: %s"
+msgstr ""
+
+#: src/managercli.py:409
+msgid "show information for facts"
+msgstr ""
+
+#: src/managercli.py:414
+msgid "list known facts for this system"
+msgstr ""
+
+#: src/managercli.py:416
+msgid "update the system facts"
+msgstr ""
+
+#: src/managercli.py:441
+msgid "list available or consumer subscriptions for registered user"
+msgstr ""
+
+#: src/managercli.py:447
+msgid "available"
+msgstr ""
+
+#: src/managercli.py:449
+msgid "consumed"
+msgstr ""
+
+#: src/managercli.py:451
+msgid "if supplied with --available then all subscriptions are returned"
+msgstr ""
+
+#: src/managercli.py:455
 msgid "Error: --all is only applicable with --available"
 msgstr "Error: --all is only applicable with --available"
 
-#: src/managercli.py:485
+#: src/managercli.py:470
+msgid "No installed Products to list"
+msgstr ""
+
+#: src/managercli.py:473
+msgid "    Installed Product Status"
+msgstr ""
+
+#: src/managercli.py:484
+msgid "No Available subscription pools to list"
+msgstr ""
+
+#: src/managercli.py:486
 msgid "Available Subscriptions"
 msgstr "Available Subscriptions Eh?"
 
-#: src/managercli.py:620
+#: src/managercli.py:500
+msgid "No Consumed subscription pools to list"
+msgstr ""
+
+#: src/managercli.py:502
+msgid "Consumed Product Subscriptions"
+msgstr ""
+
+#: src/managercli.py:550
+#, python-format
+msgid ""
+"\n"
+"Usage: %s [options] MODULENAME --help\n"
+msgstr ""
+
+#: src/managercli.py:551
+msgid "Supported modules:"
+msgstr ""
+
+#: src/managercli.py:621
 msgid ""
 "Error: You need to register this system by running `register` command before "
 "using this option."
@@ -225,6 +422,111 @@ msgstr ""
 msgid "%s was not found"
 msgstr "%s was not found"
 
+#: src/productid.py:106
+#, python-format
+msgid "installing: %s"
+msgstr ""
+
+#: src/productid.py:120
+#, python-format
+msgid "deleting: %s"
+msgstr ""
+
+#: src/productid.py:137
+#, python-format
+msgid "duration: %d(ms)"
+msgstr ""
+
+#: src/factlib.py:72
+msgid "Updating facts"
+msgstr ""
+
+#: src/certlib.py:87
+msgid "Reasons(s):"
+msgstr ""
+
+#: src/certlib.py:399
+msgid "Reason(s):"
+msgstr ""
+
+#: src/certlib.py:556
+#, python-format
+msgid "Total updates: %d"
+msgstr ""
+
+#: src/certlib.py:557
+#, python-format
+msgid "Found (local) serial# %s"
+msgstr ""
+
+#: src/certlib.py:558
+#, python-format
+msgid "Expected (UEP) serial# %s"
+msgstr ""
+
+#: src/certlib.py:559
+msgid "Added (new)"
+msgstr ""
+
+#: src/certlib.py:560
+msgid "Deleted (rogue):"
+msgstr ""
+
+#: src/certlib.py:561
+msgid "Expired (not deleted):"
+msgstr ""
+
+#: src/certlib.py:562
+msgid "Expired (deleted):"
+msgstr ""
+
+#: src/certlib.py:567
+msgid "Updating Red Hat certificates"
+msgstr ""
+
+#: src/facts.py:42
+#, python-format
+msgid "Unable to read %s"
+msgstr ""
+
+#: src/constants.py:24
+#, python-format
+msgid ""
+"\n"
+"PRODUCT INFO\n"
+"=========================\n"
+"\n"
+"Name               \t%-25s\n"
+"Variant            \t%-25s\n"
+"Architecture       \t%-25s\n"
+"Version                  \t%-25s\n"
+"\n"
+" \n"
+msgstr ""
+
+#: src/constants.py:34
+#, python-format
+msgid ""
+"\n"
+"Name               \t%-25s\n"
+"Label                    \t%-30s\n"
+"Quantity                 \t%-25s\n"
+"Flex Quantity      \t%-25s\n"
+"Vendor             \t%-25s\n"
+"URL                      \t%-30s\n"
+"Enabled            \t%-25s\n"
+"\n"
+"\n"
+msgstr ""
+
+#: src/constants.py:45
+#, python-format
+msgid ""
+"\n"
+"Name               \t%-25s\n"
+"Description        \t%-25s\n"
+msgstr ""
+
 #: src/constants.py:50
 #, python-format
 msgid ""
@@ -233,6 +535,40 @@ msgid ""
 msgstr ""
 "\n"
 "The subscription for %s is valid until %s.\n"
+
+#: src/constants.py:54
+#, python-format
+msgid ""
+"\n"
+"ProductName:        \t%-25s\n"
+"Status:             \t%-25s\n"
+"Expires:            \t%-25s\n"
+"Subscription:       \t%-25s\n"
+"ContractNumber:        \t%-25s\n"
+msgstr ""
+
+#: src/constants.py:62
+#, python-format
+msgid ""
+"\n"
+"ProductName:       \t%-25s\n"
+"ProductId:         \t%-25s\n"
+"PoolId:            \t%-25s\n"
+"Quantity:          \t%-25s\n"
+"Expires:           \t%-25s\n"
+msgstr ""
+
+#: src/constants.py:70
+#, python-format
+msgid ""
+"\n"
+"ProductName:        \t%-25s\n"
+"ContractNumber:     \t%-25s\n"
+"SerialNumber:       \t%-25s\n"
+"Active:             \t%-25s\n"
+"Begins:             \t%-25s\n"
+"Expires:            \t%-25s\n"
+msgstr ""
 
 #: src/constants.py:79
 #, python-format
@@ -418,6 +754,196 @@ msgstr "<b>Total of %s subscriptions selected for consumption.</b>"
 #: src/constants.py:127
 msgid "<b>Are you sure you want to unregister?</b>"
 msgstr "<b>Are you sure you want to unregister?</b>"
+
+#: src/certificate.py:598
+msgid "Serial Number must be > 0"
+msgstr ""
+
+#: src/certificate.py:601
+#, python-format
+msgid "Common Name (%s) not-valid"
+msgstr ""
+
+#: src/certificate.py:652
+msgid "RAW:"
+msgstr ""
+
+#: src/certificate.py:655
+msgid "MODEL:"
+msgstr ""
+
+#: src/certificate.py:657
+#, python-format
+msgid "Serial#: %s"
+msgstr ""
+
+#: src/certificate.py:658
+#, python-format
+msgid "Subject (CN): %s"
+msgstr ""
+
+#: src/certificate.py:753
+msgid "No order infomation"
+msgstr ""
+
+#: src/certificate.py:812
+msgid "Order {"
+msgstr ""
+
+#: src/certificate.py:813
+#, python-format
+msgid "\tName .......... = %s"
+msgstr ""
+
+#: src/certificate.py:814
+#, python-format
+msgid "\tNumber ........ = %s"
+msgstr ""
+
+#: src/certificate.py:815
+#, python-format
+msgid "\tSKU ........... = %s"
+msgstr ""
+
+#: src/certificate.py:816
+#, python-format
+msgid "\tSubscription .. = %s"
+msgstr ""
+
+#: src/certificate.py:817
+#, python-format
+msgid "\tQuantity ...... = %s"
+msgstr ""
+
+#: src/certificate.py:818
+#, python-format
+msgid "\tStart (Ent) ... = %s"
+msgstr ""
+
+#: src/certificate.py:819
+#, python-format
+msgid "\tEnd (Ent) ..... = %s"
+msgstr ""
+
+#: src/certificate.py:820
+#, python-format
+msgid "\tSubtype ....... = %s"
+msgstr ""
+
+#: src/certificate.py:821
+#, python-format
+msgid "\tVirt Limit .... = %s"
+msgstr ""
+
+#: src/certificate.py:822
+#, python-format
+msgid "\tSocket Limit .. = %s"
+msgstr ""
+
+#: src/certificate.py:823
+#, python-format
+msgid "\tOption Code ... = %s"
+msgstr ""
+
+#: src/certificate.py:824
+#, python-format
+msgid "\tContract ...... = %s"
+msgstr ""
+
+#: src/certificate.py:825
+#, python-format
+msgid "\tWarning Period  = %s"
+msgstr ""
+
+#: src/certificate.py:856
+msgid "Product {"
+msgstr ""
+
+#: src/certificate.py:857
+#, python-format
+msgid "\tHash ......... = %s"
+msgstr ""
+
+#: src/certificate.py:858 src/certificate.py:936
+#, python-format
+msgid "\tName ......... = %s"
+msgstr ""
+
+#: src/certificate.py:859
+#, python-format
+msgid "\tVariant ...... = %s"
+msgstr ""
+
+#: src/certificate.py:860
+#, python-format
+msgid "\tArchitecture . = %s"
+msgstr ""
+
+#: src/certificate.py:861
+#, python-format
+msgid "\tVersion ...... = %s"
+msgstr ""
+
+#: src/certificate.py:906
+msgid "Entitlement (content) {"
+msgstr ""
+
+#: src/certificate.py:907
+#, python-format
+msgid "\tName ........ = %s"
+msgstr ""
+
+#: src/certificate.py:908
+#, python-format
+msgid "\tLabel ....... = %s"
+msgstr ""
+
+#: src/certificate.py:909
+#, python-format
+msgid "\tQuantity .... = %s"
+msgstr ""
+
+#: src/certificate.py:910
+#, python-format
+msgid "\tFlex Quantity = %s"
+msgstr ""
+
+#: src/certificate.py:911
+#, python-format
+msgid "\tVendor ...... = %s"
+msgstr ""
+
+#: src/certificate.py:912
+#, python-format
+msgid "\tURL ......... = %s"
+msgstr ""
+
+#: src/certificate.py:913
+#, python-format
+msgid "\tGPG Key ..... = %s"
+msgstr ""
+
+#: src/certificate.py:914
+#, python-format
+msgid "\tEnabled ..... = %s"
+msgstr ""
+
+#: src/certificate.py:935
+msgid "Entitlement (role) {"
+msgstr ""
+
+#: src/certificate.py:937
+#, python-format
+msgid "\tDescription .. = %s"
+msgstr ""
+
+#: src/certificate.py:958
+msgid "Key not found."
+msgstr ""
+
+#: src/certificate.py:962
+msgid "Certificate not found."
+msgstr ""
 
 #: src/gui/data/progress.glade.h:1
 msgid "Progress Dialog"
@@ -639,4 +1165,3 @@ msgstr ""
 #, python-format
 msgid "option parsing failed: %s\n"
 msgstr ""
-

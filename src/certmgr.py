@@ -70,11 +70,11 @@ class CertManager:
 
 
 def main():
-    print 'Updating Red Hat certificates & repositories'
+    print _('Updating Red Hat certificates & repositories')
     mgr = CertManager()
     updates = mgr.update()
-    print '%d updates required' % updates
-    print 'done'
+    print _('%d updates required') % updates
+    print _('done')
 
 if __name__ == '__main__':
     import logutil, sys
@@ -83,6 +83,6 @@ if __name__ == '__main__':
         main()
     except Exception, e:
         log.error("Error while updating certificates using daemon")
-        print 'Unable to update Red Hat certificates & repositories'
+        print _('Unable to update Red Hat certificates & repositories')
         log.exception(e)
         sys.exit(-1)

@@ -46,7 +46,6 @@ def configure_i18n():
     locale.setlocale(locale.LC_ALL, '')
     gettext.bindtextdomain(APP, DIR)
     gettext.textdomain(APP)
-    print "Configured I18N for %s" % locale.getlocale()[0]
 
 def persist_consumer_cert(consumerinfo):
     """
@@ -66,7 +65,7 @@ def persist_consumer_cert(consumerinfo):
 
 
 def map_status(status):
-    smap = {True : "Subscribed", False : "Expired", None : "Not Subscribed"}
+    smap = {True : _("Subscribed"), False : _("Expired"), None : _("Not Subscribed")}
     return smap[status]
 
 def getInstalledProductStatus():
@@ -100,7 +99,7 @@ def getInstalledProductStatus():
        for product in cert.getProducts():
            if product.getName() not in psnames:
                psname = product.getName()
-               data = (psname, 'Not Installed', str(entdict[psname]['expires']), entdict[psname]['serial'], entdict[psname]['contract'])
+               data = (psname, _('Not Installed'), str(entdict[psname]['expires']), entdict[psname]['serial'], entdict[psname]['contract'])
                product_status.append(data)
     return product_status
 

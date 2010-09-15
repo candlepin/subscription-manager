@@ -44,7 +44,7 @@ class Hardware:
     def getReleaseInfo(self):
         import platform
         distro_data = platform.linux_distribution()
-        distro_keys = ('distribution.name','distribution.version', 
+        distro_keys = ('distribution.name', 'distribution.version', 
                        'distribution.id')
         self.releaseinfo = dict(zip(distro_keys, distro_data))
         self.allhw.update(self.releaseinfo)

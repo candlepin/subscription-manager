@@ -29,6 +29,8 @@ from M2Crypto import X509
 from datetime import datetime as dt
 from datetime import tzinfo, timedelta
 
+import gettext
+_ = gettext.gettext
 
 class Certificate(object):
     """
@@ -593,10 +595,10 @@ class RedhatCertificate(Certificate):
     def bogus(self):
         bogus = Certificate.bogus(self)
         if self.serialNumber() < 1:
-            bogus.append('Serial Number must be > 0')
+            bogus.append(_('Serial Number must be > 0'))
         cn = self.subject().get('CN')
         if not cn:
-            bogus.append('Common Name (%s) not-valid' % cn)
+            bogus.append(_('Common Name (%s) not-valid') % cn)
         return bogus
     
 
@@ -647,14 +649,14 @@ class ProductCertificate(RedhatCertificate):
 
     def __str__(self):
         s = []
-        s.append('RAW:')
+        s.append(_('RAW:'))
         s.append('===================================')
         s.append(Certificate.__str__(self))
-        s.append('MODEL:')
+        s.append(_('MODEL:'))
         s.append('===================================')
-        s.append('Serial#: %s' % self.serialNumber())
-        s.append('Subject (CN): %s' % self.subject().get('CN'))
-        s.append('Valid: [%s] %s\n' % (self.valid(), self.validRange()))
+        s.append(_('Serial#: %s') % self.serialNumber())
+        s.append(_('Subject (CN): %s') % self.subject().get('CN'))
+        s.append(_('Valid: [%s] %s\n') % (self.valid(), self.validRange()))
         for p in self.getProducts():
             s.append(str(p))
         return '\n'.join(s)
@@ -748,7 +750,7 @@ class EntitlementCertificate(ProductCertificate):
     def bogus(self):
         bogus = ProductCertificate.bogus(self)
         if self.getOrder() is None:
-            bogus.append('No order infomation')
+            bogus.append(_('No order infomation'))
         return bogus
 
     def __str__(self):
@@ -807,20 +809,20 @@ class Order:
 
     def __str__(self):
         s = []
-        s.append('Order {')
-        s.append('\tName .......... = %s' % self.getName())
-        s.append('\tNumber ........ = %s' % self.getNumber())
-        s.append('\tSKU ........... = %s' % self.getSku())
-        s.append('\tSubscription .. = %s' % self.getSubscription())
-        s.append('\tQuantity ...... = %s' % self.getQuantity())
-        s.append('\tStart (Ent) ... = %s' % self.getStart())
-        s.append('\tEnd (Ent) ..... = %s' % self.getEnd())
-        s.append('\tSubtype ....... = %s' % self.getSubtype())
-        s.append('\tVirt Limit .... = %s' % self.getVirtLimit())
-        s.append('\tSocket Limit .. = %s' % self.getSocketLimit())
-        s.append('\tOption Code ... = %s' % self.getOptionCode())
-        s.append('\tContract ...... = %s' % self.getContract())
-        s.append('\tWarning Period  = %s' % self.getWarningPeriod())
+        s.append(_('Order {'))
+        s.append(_('\tName .......... = %s') % self.getName())
+        s.append(_('\tNumber ........ = %s') % self.getNumber())
+        s.append(_('\tSKU ........... = %s') % self.getSku())
+        s.append(_('\tSubscription .. = %s') % self.getSubscription())
+        s.append(_('\tQuantity ...... = %s') % self.getQuantity())
+        s.append(_('\tStart (Ent) ... = %s') % self.getStart())
+        s.append(_('\tEnd (Ent) ..... = %s') % self.getEnd())
+        s.append(_('\tSubtype ....... = %s') % self.getSubtype())
+        s.append(_('\tVirt Limit .... = %s') % self.getVirtLimit())
+        s.append(_('\tSocket Limit .. = %s') % self.getSocketLimit())
+        s.append(_('\tOption Code ... = %s') % self.getOptionCode())
+        s.append(_('\tContract ...... = %s') % self.getContract())
+        s.append(_('\tWarning Period  = %s') % self.getWarningPeriod())
         s.append('}')
         return '\n'.join(s)
 
@@ -851,12 +853,12 @@ class Product:
     
     def __str__(self):
         s = []
-        s.append('Product {')
-        s.append('\tHash ......... = %s' % self.getHash())
-        s.append('\tName ......... = %s' % self.getName())
-        s.append('\tVariant ...... = %s' % self.getVariant())
-        s.append('\tArchitecture . = %s' % self.getArch())
-        s.append('\tVersion ...... = %s' % self.getVersion())
+        s.append(_('Product {'))
+        s.append(_('\tHash ......... = %s') % self.getHash())
+        s.append(_('\tName ......... = %s') % self.getName())
+        s.append(_('\tVariant ...... = %s') % self.getVariant())
+        s.append(_('\tArchitecture . = %s') % self.getArch())
+        s.append(_('\tVersion ...... = %s') % self.getVersion())
         s.append('}')
         return '\n'.join(s)
 
@@ -901,15 +903,15 @@ class Content(Entitlement):
     
     def __str__(self):
         s = []
-        s.append('Entitlement (content) {')
-        s.append('\tName ........ = %s' % self.getName())
-        s.append('\tLabel ....... = %s' % self.getLabel())
-        s.append('\tQuantity .... = %s' % self.getQuantity())
-        s.append('\tFlex Quantity = %s' % self.getFlexQuantity())
-        s.append('\tVendor ...... = %s' % self.getVendor())
-        s.append('\tURL ......... = %s' % self.getUrl())
-        s.append('\tGPG Key ..... = %s' % self.getGpg())
-        s.append('\tEnabled ..... = %s' % self.getEnabled())
+        s.append(_('Entitlement (content) {'))
+        s.append(_('\tName ........ = %s') % self.getName())
+        s.append(_('\tLabel ....... = %s') % self.getLabel())
+        s.append(_('\tQuantity .... = %s') % self.getQuantity())
+        s.append(_('\tFlex Quantity = %s') % self.getFlexQuantity())
+        s.append(_('\tVendor ...... = %s') % self.getVendor())
+        s.append(_('\tURL ......... = %s') % self.getUrl())
+        s.append(_('\tGPG Key ..... = %s') % self.getGpg())
+        s.append(_('\tEnabled ..... = %s') % self.getEnabled())
         s.append('}')
         return '\n'.join(s)
 
@@ -930,9 +932,9 @@ class Role(Entitlement):
 
     def __str__(self):
         s = []
-        s.append('Entitlement (role) {')
-        s.append('\tName ......... = %s' % self.getName())
-        s.append('\tDescription .. = %s' % self.getDescription())
+        s.append(_('Entitlement (role) {'))
+        s.append(_('\tName ......... = %s') % self.getName())
+        s.append(_('\tDescription .. = %s') % self.getDescription())
         s.append('}')
         return '\n'.join(s)
 
@@ -953,11 +955,11 @@ class Bundle(object):
     def split(cls, pem):
         m = cls.KEY_PATTERN.search(pem)
         if m is None:
-            raise Exception, 'Key not found.'
+            raise Exception, _('Key not found.')
         key = m.group(0)
         m = cls.CERT_PATTERN.search(pem)
         if m is None:
-            raise Exception, 'Certificate not found.'
+            raise Exception, _('Certificate not found.')
         cert = m.group(0)
         return (key, cert)
 
