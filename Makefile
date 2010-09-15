@@ -103,22 +103,34 @@ rpm: archive
 	rpmbuild -ta ${PKGNAME}-$(VERSION).tar.gz
 
 gettext:
+	# intltool-extract with --local option will place the generated glade.h 
+	# files into a local directory called tmp/. Just to make sure we never 
+	# trash something we shouldn't, if this directory already exists when we 
+	# start, error out.
+	if test -d tmp; then \
+		echo "tmp directory already exists, please clean it up before running gettext." ; \
+		exit 2; \
+	fi
+	
 	# Extract glade strings into .h files:
 	for f in $(shell find src/ -name "*.glade") ; do \
-		intltool-extract --type=gettext/glade $$f; \
+		intltool-extract --local --type=gettext/glade $$f; \
 	done
+
 	# Extract strings from Python and glade.h:
 	# TODO: glade.h files are getting written out into source tree, 
 	# how should we deal with these?
-	xgettext --language=Python --keyword=_ --keyword=N_ -ktrc:1c,2 -ktrnc:1c,2,3 -ktr -kmarktr -ktrn:1,2 -o po/keys.pot $(shell find src/ -name "*.py") src/gui/data/*.glade.h src/compliance/*.c
+	xgettext --language=Python --keyword=_ --keyword=N_ -ktrc:1c,2 -ktrnc:1c,2,3 -ktr -kmarktr -ktrn:1,2 -o po/keys.pot $(shell find src/ -name "*.py") tmp/*.glade.h src/compliance/*.c
 	for f in $(shell find po/ -name "*.po") ; do \
 		msgmerge -N --backup=none -U $$f po/keys.pot ; \
 	done
 
+	# Cleanup the tmp/ directory of glade.h files.
+	rm -rf tmp/
+
 # Compile translations
 # TODO: look for .po files instead of hardcoding, couldn't get this to work:
 #		basename $$f .po ; \
-	
 LANGUAGES = en_CA en_US
 compile_pos:
 	for lang in $(LANGUAGES) ; do \
