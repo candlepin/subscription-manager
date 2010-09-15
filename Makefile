@@ -129,11 +129,8 @@ gettext:
 	rm -rf tmp/
 
 # Compile translations
-# TODO: look for .po files instead of hardcoding, couldn't get this to work:
-#		basename $$f .po ; \
-LANGUAGES = en_CA en_US
 compile_pos:
-	for lang in $(LANGUAGES) ; do \
+	for lang in $(basename $(notdir $(wildcard po/*.po))) ; do \
 		echo $$lang ; \
 		mkdir -p po/build/$$lang/LC_MESSAGES/ ; \
 		msgfmt -c --statistics -o po/build/$$lang/LC_MESSAGES/rhsm.mo po/$$lang.po ; \
