@@ -263,7 +263,7 @@ int
 main(int argc, char **argv)
 {
     setlocale(LC_ALL, "");
-    bindtextdomain("rhsm", "/usr/share/rhsm/translations");
+    bindtextdomain("rhsm", "/usr/share/locale");
     textdomain("rhsm");
 	GError *error = NULL;
 	GOptionContext *context;

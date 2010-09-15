@@ -34,7 +34,7 @@ _ = gettext.gettext
 # Localization domain:
 APP = 'rhsm'
 # Directory where translations are deployed:
-DIR = '/usr/share/rhsm/translations/'
+DIR = '/usr/share/locale/'
 
 def configure_i18n():
     """ 

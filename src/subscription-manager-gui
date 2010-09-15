@@ -45,7 +45,7 @@ if _LIBPATH not in sys.path:
 #from managerlib import configure_i18n
 #configure_i18n()
 APP = 'rhsm'
-DIR = '/usr/share/rhsm/translations/'
+DIR = '/usr/share/locale/'
 import locale
 import gettext
 import gtk.glade

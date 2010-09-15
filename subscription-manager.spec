@@ -82,7 +82,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/rhsm/gui/data
 %dir %{_datadir}/rhsm/gui/data/icons
 %dir /etc/rhsm/facts
-%dir %{_datadir}/rhsm/translations/*
+%dir %{_datarootdir}/locale/*
 
 #files
 %{_datadir}/rhsm/__init__.py*
@@ -103,7 +103,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/facts.py*
 %{_datadir}/rhsm/factlib.py*
 %{_datadir}/rhsm/productid.py*
-%{_datadir}/rhsm/translations/*
+%{_datarootdir}/locale/*
 #%{_datadir}/rhsm/rhsmcertd.*
 %attr(755,root,root) %{_sbindir}/subscription-manager-cli
 %attr(755,root,root) %dir %{_var}/log/rhsm

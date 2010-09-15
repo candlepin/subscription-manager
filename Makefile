@@ -37,7 +37,7 @@ dbus-service-install:
 
 install: dbus-service-install compile-po
 	@mkdir -p ${PREFIX}/usr/share/rhsm/gui/data/icons/16x16
-	@mkdir -p ${PREFIX}/usr/share/rhsm/translations
+	@mkdir -p ${PREFIX}/usr/share/locale/
 	@mkdir -p ${PREFIX}/usr/lib/yum-plugins/
 	@mkdir -p ${PREFIX}/usr/sbin
 	@mkdir -p ${PREFIX}/etc/rhsm
@@ -55,7 +55,7 @@ install: dbus-service-install compile-po
 	@mkdir -p ${PREFIX}/usr/share/icons/hicolor/16x16/apps
 	@mkdir -p ${PREFIX}/usr/share/firstboot/
 	@mkdir -p ${PREFIX}/usr/share/firstboot/modules
-	cp -R po/build/* ${PREFIX}/usr/share/rhsm/translations
+	cp -R po/build/* ${PREFIX}/usr/share/locale/
 	cp -R src/*.py ${PREFIX}/usr/share/rhsm
 	cp -R src/gui/*.py ${PREFIX}/usr/share/rhsm/gui
 	cp -R src/gui/data/*.glade ${PREFIX}/usr/share/rhsm/gui/data/
