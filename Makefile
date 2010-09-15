@@ -35,7 +35,7 @@ dbus-service-install:
 	install -m 744 src/compliance/rhsm_compliance_d.py \
 		${PREFIX}/usr/libexec/rhsm-complianced
 
-install: dbus-service-install compile_pos
+install: dbus-service-install compile-po
 	@mkdir -p ${PREFIX}/usr/share/rhsm/gui/data/icons/16x16
 	@mkdir -p ${PREFIX}/usr/share/rhsm/translations
 	@mkdir -p ${PREFIX}/usr/lib/yum-plugins/
@@ -128,8 +128,13 @@ gettext:
 	# Cleanup the tmp/ directory of glade.h files.
 	rm -rf tmp/
 
+update-po:
+	for f in $(shell find po/ -name "*.po") ; do \
+		msgmerge -N --backup=none -U $$f po/keys.pot ; \
+	done
+
 # Compile translations
-compile_pos:
+compile-po:
 	for lang in $(basename $(notdir $(wildcard po/*.po))) ; do \
 		echo $$lang ; \
 		mkdir -p po/build/$$lang/LC_MESSAGES/ ; \
