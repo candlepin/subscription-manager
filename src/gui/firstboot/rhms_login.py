@@ -7,13 +7,12 @@ from firstboot.functions import *
 from firstboot.module import *
 from firstboot.module import Module
 
-from certlib import ConsumerIdentity
-
 import gettext
 _ = lambda x: gettext.ldgettext("firstboot", x)
 
 sys.path.append("/usr/share/rhsm")
 from gui import managergui
+from certlib import ConsumerIdentity
 
 class moduleClass(Module,managergui.RegisterScreen):
     def __init__(self):
