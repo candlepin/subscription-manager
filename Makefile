@@ -121,9 +121,6 @@ gettext:
 	# TODO: glade.h files are getting written out into source tree, 
 	# how should we deal with these?
 	xgettext --language=Python --keyword=_ --keyword=N_ -ktrc:1c,2 -ktrnc:1c,2,3 -ktr -kmarktr -ktrn:1,2 -o po/keys.pot $(shell find src/ -name "*.py") tmp/*.glade.h src/compliance/*.c
-	for f in $(shell find po/ -name "*.po") ; do \
-		msgmerge -N --backup=none -U $$f po/keys.pot ; \
-	done
 
 	# Cleanup the tmp/ directory of glade.h files.
 	rm -rf tmp/
