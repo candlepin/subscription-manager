@@ -25,12 +25,12 @@ import base64
 import os
 from M2Crypto import SSL, httpslib
 from logutil import getLogger, trace_me
-from config import initConfig
+from config import initConfig 
 
 import gettext
 _ = gettext.gettext
 
-cfg = config.initConfig()
+config = initConfig()
 
 log = getLogger(__name__)
 DEFAULT_CA_FILE="/etc/pki/CA/candlepin.pem"
@@ -112,16 +112,15 @@ class UEPConnection:
     """
     Proxy for Unified Entitlement Platform.
     """
-    def __init__(self, host='localhost', ssl_port=8443, handler=cfg['prefix'] or "/candlepin",
+    def __init__(self, host='localhost', ssl_port=8443, handler=config['prefix'] or "/candlepin",
             cert_file=None, key_file=None):
         self.host = host
         self.ssl_port = ssl_port
-        self.handler = handler
+	self.handler = handler
         self.conn = None
         self.basic_auth_conn = None
         self.cert_file = cert_file
         self.key_file = key_file
-        config = initConfig()
         self.candlepin_ca_file = config['candlepin_ca_file']
         config_insecure = config['insecure']
         self.insecure = False
