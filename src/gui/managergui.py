@@ -45,8 +45,10 @@ _ = gettext.gettext
 gettext.textdomain("subscription-manager")
 gtk.glade.bindtextdomain("subscription-manager")
 
+import logutil
 from logutil import getLogger
 log = getLogger(__name__)
+
 
 prefix = os.path.dirname(__file__)
 gladexml = os.path.join(prefix, "data/rhsm.glade")
@@ -198,6 +200,7 @@ class ManageSubscriptionPage:
         self.vbox.show_all()
 
     def addSubButtonAction(self, button):
+        print "addSubButtonAction"
         if consumer.has_key('uuid'):
             show_add_subscription_screen()
         else:
@@ -220,6 +223,7 @@ class ManageSubscriptionPage:
         self.button_unsubscribe.set_sensitive(state)
 
     def updateProductDialog(self):
+        print "updateProductDialog"
         self.warn_count = 0
         self.productList.clear()
         for product in managerlib.getInstalledProductStatus():
@@ -232,6 +236,7 @@ class ManageSubscriptionPage:
         self.tv_products.set_model(self.productList)
 
     def populateProductDialog(self):
+        print "populateProductDialog"
         self.tv_products = rhsm_xml.get_widget("treeview_updates")
         self.productList = gtk.ListStore(gtk.gdk.Pixbuf, gobject.TYPE_STRING, gobject.TYPE_STRING, \
                                          gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
@@ -330,12 +335,16 @@ class ManageSubscriptionPage:
             self.reg_button_label.set_label(_("Register System..."))
 
     def gui_reload(self, widget=None):
+        print "gui_reload"
+        print logutil.trace_me_more()
         self.setRegistrationStatus()
         self.updateProductDialog()
 
     def onUnsubscribeAction(self, button):
+        print "onUnsubscriveAction"
         global UEP
         if not self.psubs_selected:
+            print "\nwtf\n"
             return
         log.info("Product %s selected for unsubscribe" % self.pname_selected)
         dlg = messageWindow.YesNoDialog(constants.CONFIRM_UNSUBSCRIBE % self.pname_selected, self.mainWin)
@@ -695,6 +704,8 @@ class AddSubscriptionScreen:
         show_import_certificate_screen()
 
     def onSubscribeAction(self, button):
+        print "onSubscribeAction"
+        print logutil.trace_me()
         slabel = rhsm_xml.get_widget("label_status1")
         #consumer = get_consumer()
         subscribed_count = 0
@@ -1027,7 +1038,26 @@ class UpdateSubscriptionScreen:
             slabel.set_label(constants.ATLEAST_ONE_SELECTION)
         self.gui_reload()
 
+class ChooseEntitlement:
+    """
+    Choose which entitlement system we'd like, 
+    new style Rhesus, or old style RHN
+    """
+    def __init__(self):
+        self.vbox = rhsm_xml.get_widget("entitlementChooseVbox2")
+        #rhesus_button_toggled
+        
+        self.choose_win = rhsm_xml.get_widget("entitlement_selection_2")
+        self.rhesus_button = rhsm_xml.get_widget("rhesus_button2")
+        self.rhn_button = rhsm_xml.get_widget("rhn_button")
 
+        print "bloop", self.rhesus_button
+#        self.choose_win.show_all()
+
+     #   self.choose_win.run()
+
+
+        
 class ImportCertificate:
     """
      Import an Entitlement Certificate Widget screen

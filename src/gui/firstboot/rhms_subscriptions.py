@@ -25,6 +25,8 @@ class moduleClass(Module,managergui.ManageSubscriptionPage):
         self.sidebarTitle = _("RHSM Subscriptions Management Screen")
         self.title = _("Subscription Manager Screen")
 
+        self._destroy_widget('button_close')
+        
     def apply(self, interface, testing=False):
         return RESULT_SUCCESS
 
@@ -46,3 +48,11 @@ class moduleClass(Module,managergui.ManageSubscriptionPage):
     def shouldAppear(self):
         return True
 
+    def _destroy_widget(self, widget_name):
+        """
+        Destroy a widget by name.
+
+        See gtk.Widget.destroy()
+        """
+        widget = managergui.rhsm_xml.get_widget(widget_name)
+        widget.destroy()
