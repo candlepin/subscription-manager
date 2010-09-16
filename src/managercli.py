@@ -99,11 +99,11 @@ class CliCommand(object):
         self.new_cp.add_ssl_certs(cert_file=cert_file, key_file=key_file)
 
         return connection.UEPConnection(host=cfg['hostname'] or "localhost",
-                                           ssl_port=cfg['port'], handler="/candlepin", 
+                                           ssl_port=cfg['port'], handler=cfg['prefix'] or "/candlepin", 
                                            cert_file=cert_file, key_file=key_file)
     def create_connection(self):
         return connection.UEPConnection(host=cfg['hostname'] or "localhost",
-                                               ssl_port=cfg['port'], handler="/candlepin")
+                                               ssl_port=cfg['port'], handler=cfg['prefix'] or "/candlepin")
 
     def main(self):
 

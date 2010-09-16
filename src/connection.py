@@ -30,6 +30,7 @@ from config import initConfig
 import gettext
 _ = gettext.gettext
 
+cfg = config.initConfig()
 
 log = getLogger(__name__)
 DEFAULT_CA_FILE="/etc/pki/CA/candlepin.pem"
@@ -111,7 +112,7 @@ class UEPConnection:
     """
     Proxy for Unified Entitlement Platform.
     """
-    def __init__(self, host='localhost', ssl_port=8443, handler="/candlepin",
+    def __init__(self, host='localhost', ssl_port=8443, handler=cfg['prefix'] or "/candlepin",
             cert_file=None, key_file=None):
         self.host = host
         self.ssl_port = ssl_port

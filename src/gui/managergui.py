@@ -64,13 +64,13 @@ rhsm_xml = gtk.glade.XML(gladexml)
 
 def create_and_set_basic_connection():
     global UEP
-    UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin")
+    UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler=cfg['prefix'] or "/candlepin")
 
 
 if ConsumerIdentity.exists():
     cert_file = ConsumerIdentity.certpath()
     key_file = ConsumerIdentity.keypath()
-    UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler="/candlepin", cert_file=cert_file, key_file=key_file)
+    UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler=cfg['prefix'] or "/candlepin", cert_file=cert_file, key_file=key_file)
 else:
     create_and_set_basic_connection()
 
@@ -504,7 +504,7 @@ class RegisterScreen:
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
         UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], \
-                                       handler="/candlepin", cert_file=cert_file, key_file=key_file)
+                                       handler=cfg['prefix'] or "/candlepin", cert_file=cert_file, key_file=key_file)
 
 
 class RegistrationTokenScreen:
