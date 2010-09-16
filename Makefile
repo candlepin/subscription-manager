@@ -2,8 +2,6 @@ PREFIX ?= /
 SYSCONF ?= etc
 PYTHON ?= python
 
-PKGDIR = /usr/share/rhsm/
-
 PKGNAME = subscription-manager
 VERSION = $(shell echo `grep ^Version: $(PKGNAME).spec | awk '{ print $$2 }'`)
 
@@ -37,8 +35,9 @@ dbus-service-install:
 	install -m 744 src/compliance/rhsm_compliance_d.py \
 		${PREFIX}/usr/libexec/rhsm-complianced
 
-install: dbus-service-install
+install: dbus-service-install compile-po
 	@mkdir -p ${PREFIX}/usr/share/rhsm/gui/data/icons/16x16
+	@mkdir -p ${PREFIX}/usr/share/locale/
 	@mkdir -p ${PREFIX}/usr/lib/yum-plugins/
 	@mkdir -p ${PREFIX}/usr/sbin
 	@mkdir -p ${PREFIX}/etc/rhsm
@@ -57,6 +56,7 @@ install: dbus-service-install
 	@mkdir -p ${PREFIX}/usr/share/icons/hicolor/16x16/apps
 	@mkdir -p ${PREFIX}/usr/share/firstboot/
 	@mkdir -p ${PREFIX}/usr/share/firstboot/modules
+	cp -R po/build/* ${PREFIX}/usr/share/locale/
 	cp -R src/*.py ${PREFIX}/usr/share/rhsm
 	cp -R src/gui/*.py ${PREFIX}/usr/share/rhsm/gui
 	cp -R src/gui/data/*.glade ${PREFIX}/usr/share/rhsm/gui/data/
@@ -94,6 +94,7 @@ clean:
 archive: clean
 	@rm -rf ${PKGNAME}-%{VERSION}.tar.gz
 	@rm -rf /tmp/${PKGNAME}-$(VERSION) /tmp/${PKGNAME}
+	@rm -rf po/build
 	@dir=$$PWD; cd /tmp; cp -a $$dir ${PKGNAME}
 	@rm -f /tmp/${PKGNAME}/${PKGNAME}-daily.spec
 	@mv /tmp/${PKGNAME} /tmp/${PKGNAME}-$(VERSION)
@@ -103,3 +104,40 @@ archive: clean
 
 rpm: archive
 	rpmbuild -ta ${PKGNAME}-$(VERSION).tar.gz
+
+gettext:
+	# intltool-extract with --local option will place the generated glade.h 
+	# files into a local directory called tmp/. Just to make sure we never 
+	# trash something we shouldn't, if this directory already exists when we 
+	# start, error out.
+	if test -d tmp; then \
+		echo "tmp directory already exists, please clean it up before running gettext." ; \
+		exit 2; \
+	fi
+	
+	# Extract glade strings into .h files:
+	for f in $(shell find src/ -name "*.glade") ; do \
+		intltool-extract --local --type=gettext/glade $$f; \
+	done
+
+	# Extract strings from Python and glade.h:
+	# TODO: glade.h files are getting written out into source tree, 
+	# how should we deal with these?
+	xgettext --language=Python --keyword=_ --keyword=N_ -ktrc:1c,2 -ktrnc:1c,2,3 -ktr -kmarktr -ktrn:1,2 -o po/keys.pot $(shell find src/ -name "*.py") tmp/*.glade.h src/compliance/*.c
+
+	# Cleanup the tmp/ directory of glade.h files.
+	rm -rf tmp/
+
+update-po:
+	for f in $(shell find po/ -name "*.po") ; do \
+		msgmerge -N --backup=none -U $$f po/keys.pot ; \
+	done
+
+# Compile translations
+compile-po:
+	for lang in $(basename $(notdir $(wildcard po/*.po))) ; do \
+		echo $$lang ; \
+		mkdir -p po/build/$$lang/LC_MESSAGES/ ; \
+		msgfmt -c --statistics -o po/build/$$lang/LC_MESSAGES/rhsm.mo po/$$lang.po ; \
+	done
+

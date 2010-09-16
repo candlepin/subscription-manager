@@ -21,7 +21,7 @@
 import gettext
 _ = gettext.gettext
 
-product_describe = """
+product_describe = _("""
 PRODUCT INFO
 =========================\n
 Name               \t%-25s
@@ -29,9 +29,9 @@ Variant            \t%-25s
 Architecture       \t%-25s
 Version                  \t%-25s
 \n 
-"""
+""")
 
-content_entitlement_describe = """
+content_entitlement_describe = _("""
 Name               \t%-25s
 Label                    \t%-30s
 Quantity                 \t%-25s
@@ -40,41 +40,41 @@ Vendor             \t%-25s
 URL                      \t%-30s
 Enabled            \t%-25s
 \n
-"""
+""")
 
-role_entitlement_describe = """
+role_entitlement_describe = _("""
 Name               \t%-25s
 Description        \t%-25s
-"""
+""")
 
 subscribed_status = _("""
 The subscription for %s is valid until %s.
 """)
 
-installed_product_status =  """
+installed_product_status =  _("""
 ProductName:        \t%-25s
 Status:             \t%-25s
 Expires:            \t%-25s
 Subscription:       \t%-25s
 ContractNumber:        \t%-25s
-"""
+""")
 
-available_subs_list = """
+available_subs_list = _("""
 ProductName:       \t%-25s
 ProductId:         \t%-25s
 PoolId:            \t%-25s
 Quantity:          \t%-25s
 Expires:           \t%-25s
-"""
+""")
 
-consumed_subs_list = """
+consumed_subs_list = _("""
 ProductName:        \t%-25s
 ContractNumber:     \t%-25s
 SerialNumber:       \t%-25s
 Active:             \t%-25s
 Begins:             \t%-25s
 Expires:            \t%-25s
-"""
+""")
 
 expired_status = _("""
 The subscription for %s expired on %s. If you plan to continue using %s on this system you should update the subscription. If you no longer wish to use %s on this machine, you should unsubscribe and remove it from this system.
@@ -90,7 +90,7 @@ not_installed_status = _("""
 
 WARN_SUBSCRIPTIONS = _("<b>\n %s subscriptions need your attention.\n\n</b>Add or Update subscriptions for products you are using.\n")
 
-WARN_ONE_SUBSCRIPTION = _("<b>\n %s subscription need your attention.\n\n</b>Add or Update subscriptions for products you are using.\n")
+WARN_ONE_SUBSCRIPTION = _("<b>\n %s subscription needs your attention.\n\n</b>Add or Update subscriptions for products you are using.\n")
 
 COMPLIANT_STATUS = _("<b>\n All your subscriptions are in compliance.\n\n</b>Add or Update subscriptions for products you are using.")
 

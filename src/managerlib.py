@@ -31,6 +31,22 @@ import gettext
 _ = gettext.gettext
 
 
+# Localization domain:
+APP = 'rhsm'
+# Directory where translations are deployed:
+DIR = '/usr/share/locale/'
+
+def configure_i18n():
+    """ 
+    Configure internationalization for the application. Should only be 
+    called once per invocation. (once for CLI, once for GUI)
+    """
+    import locale
+    import gettext
+    locale.setlocale(locale.LC_ALL, '')
+    gettext.bindtextdomain(APP, DIR)
+    gettext.textdomain(APP)
+
 def persist_consumer_cert(consumerinfo):
     """
      Calls the consumerIdentity, persists and gets consumer info
@@ -49,7 +65,7 @@ def persist_consumer_cert(consumerinfo):
 
 
 def map_status(status):
-    smap = {True : "Subscribed", False : "Expired", None : "Not Subscribed"}
+    smap = {True : _("Subscribed"), False : _("Expired"), None : _("Not Subscribed")}
     return smap[status]
 
 def getInstalledProductStatus():
@@ -83,7 +99,7 @@ def getInstalledProductStatus():
        for product in cert.getProducts():
            if product.getName() not in psnames:
                psname = product.getName()
-               data = (psname, 'Not Installed', str(entdict[psname]['expires']), entdict[psname]['serial'], entdict[psname]['contract'])
+               data = (psname, _('Not Installed'), str(entdict[psname]['expires']), entdict[psname]['serial'], entdict[psname]['contract'])
                product_status.append(data)
     return product_status
 

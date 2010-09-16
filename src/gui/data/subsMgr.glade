@@ -142,7 +142,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
 		  <property name="editable">True</property>
 		  <property name="visibility">True</property>
 		  <property name="max_length">0</property>
-		  <property name="text" translatable="yes"></property>
+		  <property name="text"></property>
 		  <property name="has_frame">True</property>
 		  <property name="invisible_char">*</property>
 		  <property name="activates_default">False</property>
@@ -164,7 +164,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
 		  <property name="editable">True</property>
 		  <property name="visibility">False</property>
 		  <property name="max_length">0</property>
-		  <property name="text" translatable="yes"></property>
+		  <property name="text"></property>
 		  <property name="has_frame">True</property>
 		  <property name="invisible_char">•</property>
 		  <property name="activates_default">False</property>
@@ -1691,7 +1691,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
 		<widget class="GtkLabel" id="serverUrlLabel">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes" context="yes">label</property>
+		  <property name="label" context="yes">label</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1720,7 +1720,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
 		<widget class="GtkLabel" id="usernameLabel">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes" context="yes">label</property>
+		  <property name="label" context="yes">label</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1749,7 +1749,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
 		<widget class="GtkLabel" id="systemIdLabel">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes" context="yes">label</property>
+		  <property name="label" context="yes">label</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>

@@ -28,6 +28,9 @@ from logutil import getLogger
 
 log = getLogger(__name__)
 
+import gettext
+_ = gettext.gettext
+
 
 class ActionLock(Lock):
 
@@ -81,7 +84,7 @@ class Action:
         cert = EntitlementCertificate(crtpem)
         bogus = cert.bogus()
         if bogus:
-            bogus.insert(0, 'Reasons(s):')
+            bogus.insert(0, _('Reasons(s):'))
             raise Exception, '\n - '.join(bogus)
         return (key, cert)
 
@@ -390,7 +393,7 @@ class CertificateDirectory(Directory):
                 cert.read(path)
                 bogus = cert.bogus()
                 if bogus:
-                    bogus.insert(0, 'Reason(s):')
+                    bogus.insert(0, _('Reason(s):'))
                     raise Exception, '\n - '.join(bogus)
                 certlist.append(cert)
             except Exception, e:
@@ -547,22 +550,22 @@ class UpdateReport:
 
     def __str__(self):
         s = []
-        s.append('Total updates: %d' % self.updates())
-        s.append('Found (local) serial# %s' % self.valid)
-        s.append('Expected (UEP) serial# %s' % self.expected)
-        self.write(s, 'Added (new)', self.added)
-        self.write(s, 'Deleted (rogue):', self.rogue)
-        self.write(s, 'Expired (not deleted):', self.expnd)
-        self.write(s, 'Expired (deleted):', self.expd)
+        s.append(_('Total updates: %d') % self.updates())
+        s.append(_('Found (local) serial# %s') % self.valid)
+        s.append(_('Expected (UEP) serial# %s') % self.expected)
+        self.write(s, _('Added (new)'), self.added)
+        self.write(s, _('Deleted (rogue):'), self.rogue)
+        self.write(s, _('Expired (not deleted):'), self.expnd)
+        self.write(s, _('Expired (deleted):'), self.expd)
         return '\n'.join(s)
 
 
 def main():
-    print 'Updating Red Hat certificates'
+    print _('Updating Red Hat certificates')
     certlib = CertLib()
     updates = certlib.update()
-    print '%d updates required' % updates
-    print 'done'
+    print _('%d updates required') % updates
+    print _('done')
         
 if __name__ == '__main__':
     main()
