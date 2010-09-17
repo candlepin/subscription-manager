@@ -20,6 +20,9 @@ from certlib import CertLib, ActionLock, ConsumerIdentity
 from repolib import RepoLib
 from factlib import FactLib
 
+import gettext
+_ = gettext.gettext
+
 
 class CertManager:
     """
