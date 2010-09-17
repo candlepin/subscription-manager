@@ -20,7 +20,7 @@ class moduleClass(Module, managergui.ChooseEntitlement):
         Module.__init__(self)
         managergui.ChooseEntitlement.__init__(self)
 
-        self.priority = 105
+        self.priority = 2
         # ugh, what a horrible label FIXME
         self.sidebarTitle = _("Entitlement Selection")
         self.title = _("Entitlement Selection")
@@ -34,6 +34,15 @@ class moduleClass(Module, managergui.ChooseEntitlement):
     def apply(self, interface, testing=False):
         print "rhesus_button", self.rhesus_button.get_active()
         print "rhn_button", self.rhn_button.get_active()
+
+        if self.rhesus_button.get_active():
+            interface.moveToPage(moduleTitle=_("Entitlement Platform Registration"))
+            return RESULT_JUMP
+
+        if self.rhn_button.get_active():
+            interface.moveToPage(moduleTitle=_("Set Up Software Updates"))
+            return RESULT_JUMP
+
         return RESULT_SUCCESS
 
     def initializeUI(self):
