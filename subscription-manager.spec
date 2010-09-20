@@ -84,7 +84,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/rhsm/gui/data
 %dir %{_datadir}/rhsm/gui/data/icons
 %dir /etc/rhsm/facts
-%dir %{_datarootdir}/locale/*
+%dir %{_datarootdir}/locale
 
 #files
 %{_datadir}/rhsm/__init__.py*
@@ -129,6 +129,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n subscription-manager-gnome
 %dir %{_datadir}/firstboot/modules
+%{_datadir}/firstboot/modules/rhms_entitlement_choose.py*
 %defattr(-,root,root,-)
 %{_datadir}/rhsm/gui/__init__.py* 
 %{_datadir}/rhsm/gui/managergui.py*  
