@@ -129,7 +129,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n subscription-manager-gnome
 %dir %{_datadir}/firstboot/modules
-%{_datadir}/firstboot/modules/rhms_entitlement_choose.py*
 %defattr(-,root,root,-)
 %{_datadir}/rhsm/gui/__init__.py* 
 %{_datadir}/rhsm/gui/managergui.py*  
@@ -142,8 +141,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/gui/data/icons/subsmgr-empty.png
 %{_datadir}/rhsm/gui/data/icons/subsmgr-full.png
 %{_datadir}/icons/hicolor/16x16/apps/subsmgr.png
-%{_datadir}/firstboot/modules/rhms_login.py*
-%{_datadir}/firstboot/modules/rhms_subscriptions.py*
+%{_datadir}/firstboot/modules/rhsm_entitlement_choose.py*
+%{_datadir}/firstboot/modules/rhsm_login.py*
+%{_datadir}/firstboot/modules/rhsm_subscriptions.py*
 %{_datadir}/applications/subscription-manager.desktop
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(755,root,root) %{_bindir}/subscription-manager-gui
@@ -163,6 +163,9 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Mon Sep 20 2010 Adrian Likins <alikins@redhat.com>
+- names on firstboot modules changed
+
 * Thu Sep 09 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.77-1
 - Resolves: #627915
 - Update for Candlepin HATEOAS changes. (dgoodwin@redhat.com)
