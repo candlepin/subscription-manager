@@ -1,9 +1,10 @@
 
 import string
-
+import xml.sax.saxutils
 import gtk
 import gettext
 _ = gettext.gettext
+
 
 # wrap a long line...
 def wrap_line(line, max_line_size = 100):
@@ -69,7 +70,9 @@ class MessageWindow:
         # this seems to be wordwrapping text passed to
         # it, which is making for ugly error messages
         self.dialog = gtk.MessageDialog(parent, 0, style, buttons)
-        self.dialog.set_markup(text)
+
+        # escape product strings see rh bz#633438
+        self.dialog.set_markup(xml.sax.saxutils.escape(text))
         if default == "no":
             self.dialog.set_default_response(0)
         elif default == "yes" or default == "ok":
