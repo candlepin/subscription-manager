@@ -1377,24 +1377,6 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="cancel_add_button4">
-                <property name="label">gtk-close</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name">cancel_add_button4</atkproperty>
-                </accessibility>
-                <signal name="clicked" handler="on_register_token_close_clicked"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
               <widget class="GtkButton" id="button1">
                 <property name="label" translatable="yes">Change Account</property>
                 <property name="visible">True</property>
@@ -1409,6 +1391,24 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="padding">5</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkButton" id="cancel_add_button4">
+                <property name="label">gtk-close</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name">cancel_add_button4</atkproperty>
+                </accessibility>
+                <signal name="clicked" handler="on_register_token_close_clicked"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">2</property>
               </packing>
             </child>
