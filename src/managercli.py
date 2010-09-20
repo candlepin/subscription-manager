@@ -31,7 +31,6 @@ import managerlib
 import gettext
 from facts import getFacts
 from M2Crypto import X509
-
 import gettext
 _ = gettext.gettext
 
@@ -48,6 +47,9 @@ def handle_exception(msg, ex):
     log.exception(ex)
     if isinstance(ex, socket_error):
         print _('network error, unable to connect to server')
+        sys.exit(-1)
+    elif isinstance(ex, connection.RestlibException):
+        print _ (ex.msg)
         sys.exit(-1)
     else:
         systemExit(-1, ex)
