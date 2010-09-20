@@ -273,7 +273,7 @@
             <property name="visible">True</property>
             <property name="border_width">12</property>
             <property name="homogeneous">True</property>
-            <property name="layout_style">edge</property>
+            <property name="layout_style">end</property>
             <accessibility>
               <atkproperty name="AtkObject::accessible-name">hbuttonbox1</atkproperty>
             </accessibility>
@@ -295,9 +295,6 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
               <widget class="GtkButton" id="button_close">
                 <property name="label">gtk-close</property>
                 <property name="visible">True</property>
@@ -312,7 +309,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">2</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </widget>
