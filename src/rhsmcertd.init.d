@@ -28,17 +28,21 @@ print cfg['certFrequency']"`
 RETVAL=0
 
 start() {
-  echo -n "Starting rhsmcertd $INTERVAL"
-  daemon $BINDIR/$PROG $INTERVAL
-  RETVAL=$?
+  if [ ! -f $LOCK ]; then
+    echo -n "Starting rhsmcertd $INTERVAL"
+    daemon $BINDIR/$PROG $INTERVAL
+    RETVAL=$?
+    [ $RETVAL -eq 0 ] && touch $LOCK
+  else
+    echo -n "rhsmcertd is already running"
+  fi
   echo
-  [ $RETVAL -eq 0 ] && touch $LOCK
   return $RETVAL
 }
 
 stop() {
   echo -n "Stopping rhsmcertd"
-  killproc $PROG
+  killproc $PROG || failure
   RETVAL=$?
   echo
   [ $RETVAL -eq 0 ] && rm -f $LOCK
