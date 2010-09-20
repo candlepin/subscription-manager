@@ -49,7 +49,11 @@ DIR = '/usr/share/locale/'
 import locale
 import gettext
 import gtk.glade
-locale.setlocale(locale.LC_ALL, '')
+try:
+    locale.setlocale(locale.LC_ALL, '')
+except locale.Error:
+    locale.setlocale(locale.LC_ALL, 'en_US')
+    
 for module in (gettext, gtk.glade):
     module.bindtextdomain(APP, DIR)
     module.textdomain(APP)
