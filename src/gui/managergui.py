@@ -39,6 +39,7 @@ from facts import getFacts
 import time
 from certlib import EntitlementDirectory, ProductDirectory, ConsumerIdentity, CertLib
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
+import xml.sax.saxutils
 
 import gettext
 _ = gettext.gettext
@@ -219,7 +220,6 @@ class ManageSubscriptionPage:
         self.button_unsubscribe.set_sensitive(state)
 
     def updateProductDialog(self):
-        print "[%s] updateProductDialog called" % time.time()
         self.warn_count = 0
         self.productList.clear()
         for product in managerlib.getInstalledProductStatus():
@@ -227,13 +227,12 @@ class ManageSubscriptionPage:
             markup_status = product[1]
             if product[1] in ["Expired", "Not Subscribed", "Not Installed"]:
                 self.warn_count += 1
-                markup_status = '<span foreground="red"><b>%s</b></span>' % product[1]
+                markup_status = '<span foreground="red"><b>%s</b></span>' % xml.sax.saxutils.escape(product[1])
             self.status_icon = self.tv_products.render_icon(self.state_icon_map[product[1]], size=gtk.ICON_SIZE_MENU)
             self.productList.append((self.status_icon, product[0], product[3], markup_status, product[2], product[4]))
         self.tv_products.set_model(self.productList)
 
     def populateProductDialog(self):
-        print "populateProductDialog"
         self.tv_products = rhsm_xml.get_widget("treeview_updates")
         self.productList = gtk.ListStore(gtk.gdk.Pixbuf, gobject.TYPE_STRING, gobject.TYPE_STRING, \
                                          gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)

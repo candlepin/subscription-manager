@@ -1,6 +1,5 @@
 
 import string
-import xml.sax.saxutils
 import gtk
 import gettext
 _ = gettext.gettext
@@ -72,7 +71,7 @@ class MessageWindow:
         self.dialog = gtk.MessageDialog(parent, 0, style, buttons)
 
         # escape product strings see rh bz#633438
-        self.dialog.set_markup(xml.sax.saxutils.escape(text))
+        self.dialog.set_markup(text)
         if default == "no":
             self.dialog.set_default_response(0)
         elif default == "yes" or default == "ok":
