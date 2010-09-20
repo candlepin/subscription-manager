@@ -22,8 +22,8 @@ class moduleClass(Module,managergui.ManageSubscriptionPage):
         managergui.ManageSubscriptionPage.__init__(self)
         self.priority = 4#this value is relative to when you want to load the screen
                         # so check other modules before setting
-        self.sidebarTitle = _("RHSM Subscriptions Management Screen")
-        self.title = _("Subscription Manager Screen")
+        self.sidebarTitle = _("RHSM Subscriptions Management")
+        self.title = _("Subscription Manager")
 
         self._destroy_widget('button_close')
         

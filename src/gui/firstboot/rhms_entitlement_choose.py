@@ -13,7 +13,7 @@ _ = lambda x: gettext.ldgettext("firstboot", x)
 
 sys.path.append("/usr/share/rhsm")
 from gui import managergui
-
+from certlib import ConsumerIdentity
 
 class moduleClass(Module, managergui.ChooseEntitlement):
     def __init__(self):
@@ -31,12 +31,22 @@ class moduleClass(Module, managergui.ChooseEntitlement):
         self.choose_dialog = managergui.rhsm_xml.get_widget("entitlementChooseVbox2")
         self.choose_dialog.reparent(self.vbox)
 
-    def apply(self, interface, testing=False):
-        print "rhesus_button", self.rhesus_button.get_active()
-        print "rhn_button", self.rhn_button.get_active()
 
+        # default to local
+        self.local_button.set_active(True)
+
+        # FIXME: need to see if we are in reconfig mode too
+        if managergui.UEP and not ConsumerIdentity.exists():
+            self.rhesus_button.set_sensitive(True)
+            self.rhesus_button.set_active(True)
+
+    def apply(self, interface, testing=False):
         if self.rhesus_button.get_active():
             interface.moveToPage(moduleTitle=_("Entitlement Platform Registration"))
+            return RESULT_JUMP
+
+        if self.local_button.get_active():
+            interface.moveToPage(moduleTitle=_("Subscription Manager"))
             return RESULT_JUMP
 
         if self.rhn_button.get_active():
