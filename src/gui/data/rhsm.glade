@@ -273,7 +273,7 @@
             <property name="visible">True</property>
             <property name="border_width">12</property>
             <property name="homogeneous">True</property>
-            <property name="layout_style">edge</property>
+            <property name="layout_style">end</property>
             <accessibility>
               <atkproperty name="AtkObject::accessible-name">hbuttonbox1</atkproperty>
             </accessibility>
@@ -295,9 +295,6 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
               <widget class="GtkButton" id="button_close">
                 <property name="label">gtk-close</property>
                 <property name="visible">True</property>
@@ -312,7 +309,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">2</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </widget>
@@ -1377,24 +1374,6 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="cancel_add_button4">
-                <property name="label">gtk-close</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name">cancel_add_button4</atkproperty>
-                </accessibility>
-                <signal name="clicked" handler="on_register_token_close_clicked"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
               <widget class="GtkButton" id="button1">
                 <property name="label" translatable="yes">Change Account</property>
                 <property name="visible">True</property>
@@ -1409,6 +1388,24 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="padding">5</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkButton" id="cancel_add_button4">
+                <property name="label">gtk-close</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name">cancel_add_button4</atkproperty>
+                </accessibility>
+                <signal name="clicked" handler="on_register_token_close_clicked"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">2</property>
               </packing>
             </child>
@@ -1761,6 +1758,152 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+  <widget class="GtkWindow" id="entitlement_selection">
+    <child>
+      <widget class="GtkVBox" id="entitlementChooseVbox">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <widget class="GtkAlignment" id="alignment4">
+            <property name="visible">True</property>
+            <property name="xalign">0.99000000953674316</property>
+            <property name="left_padding">12</property>
+            <child>
+              <widget class="GtkVBox" id="vbox13">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">15</property>
+                <property name="homogeneous">True</property>
+                <child>
+                  <widget class="GtkRadioButton" id="RhesusButton">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <signal name="toggled" handler="rhesus_button_toggled"/>
+                    <child>
+                      <widget class="GtkLabel" id="RhesusButtonLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="label" translatable="yes" context="yes">I'd like to receive updates from &lt;b&gt;Red Hat Entitlement System User Service&lt;/b&gt;. (I don't have access to a Red Hat Network Satellite or Proxy.)</property>
+                        <property name="use_markup">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="wrap">True</property>
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkRadioButton" id="RhnButton">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                    <signal name="group_changed" handler="group_changed"/>
+                    <child>
+                      <widget class="GtkLabel" id="RhnButtonLabel">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes" context="yes">I have access to a &lt;b&gt;Red Hat Network&lt;/b&gt;, &lt;b&gt;Red Hat Network Satellite&lt;/b&gt;, &lt;b&gt;Red Hat Network Proxy&lt;/b&gt;. </property>
+                        <property name="use_markup">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="wrap">True</property>
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </widget>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+  <widget class="GtkWindow" id="entitlement_selection_2">
+    <child>
+      <widget class="GtkAlignment" id="alignment5">
+        <property name="visible">True</property>
+        <property name="xalign">0</property>
+        <property name="yalign">0</property>
+        <property name="yscale">0</property>
+        <property name="left_padding">12</property>
+        <child>
+          <widget class="GtkVBox" id="entitlementChooseVbox2">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">5</property>
+            <child>
+              <widget class="GtkRadioButton" id="rhesus_button2">
+                <property name="label" translatable="yes">Register with Red Hat Entitlement Service User Service</property>
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="relief">none</property>
+                <property name="xalign">0.4699999988079071</property>
+                <property name="draw_indicator">True</property>
+                <property name="group">local_button</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkRadioButton" id="local_button">
+                <property name="label" translatable="yes">Manage entitlements locally</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="relief">none</property>
+                <property name="xalign">0.43000000715255737</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+                <property name="group">rhesus_button2</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkRadioButton" id="rhn_button">
+                <property name="label" translatable="yes">Register with Red Hat Network or Red Hat Network Satellite</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="xalign">0.4699999988079071</property>
+                <property name="draw_indicator">True</property>
+                <property name="group">local_button</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </widget>
         </child>
       </widget>
     </child>

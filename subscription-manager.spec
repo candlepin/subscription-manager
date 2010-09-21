@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.77
+Version: 0.79
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -84,7 +84,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/rhsm/gui/data
 %dir %{_datadir}/rhsm/gui/data/icons
 %dir /etc/rhsm/facts
-%dir %{_datarootdir}/locale/*
+%dir %{_datarootdir}/locale
 
 #files
 %{_datadir}/rhsm/__init__.py*
@@ -141,8 +141,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/gui/data/icons/subsmgr-empty.png
 %{_datadir}/rhsm/gui/data/icons/subsmgr-full.png
 %{_datadir}/icons/hicolor/16x16/apps/subsmgr.png
-%{_datadir}/firstboot/modules/rhms_login.py*
-%{_datadir}/firstboot/modules/rhms_subscriptions.py*
+%{_datadir}/firstboot/modules/rhsm_entitlement_choose.py*
+%{_datadir}/firstboot/modules/rhsm_login.py*
+%{_datadir}/firstboot/modules/rhsm_subscriptions.py*
 %{_datadir}/applications/subscription-manager.desktop
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(755,root,root) %{_bindir}/subscription-manager-gui
@@ -162,6 +163,87 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Sep 21 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.79-1
+- Resolves: #631472
+- update these screens priorities so we show the management screen first to
+  simplify the flow (alikins@redhat.com)
+- Have the UEP Connection read the values from the local config file
+  (bkearney@redhat.com)
+- escape the product name in unsubscribe confirm dialog. (alikins@redhat.com)
+- return True from delete_event handlers. fix bz#631472 (alikins@redhat.com)
+- 635844:If there is a colossal failure, and no json is returned.. then assume
+  it is a network erorr and provide a generic response (bkearney@redhat.com)
+- Merge branch 'master' of git+ssh://axiom.rdu.redhat.com/scm/git/subscription-
+  manager (alikins@redhat.com)
+- Change the name of the entitlement chooser module to a more vibrant and
+  impressive name as to better establish our brand and mark in a challenging
+  marketplace. (alikins@redhat.com)
+
+* Tue Sep 21 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.78-1
+- Resolves: #631537, #633514
+- Only escape strings that need it (aka, product name for now) instead of all
+  strings sent to the messageWindow. Escaping all of them broke the formating.
+  (alikins@redhat.com)
+- Merge branch 'master' of git+ssh://axiom.rdu.redhat.com/scm/git/subscription-
+  manager (alikins@redhat.com)
+- change packing on register/close buttons so they display correctly in
+  firstboot (alikins@redhat.com)
+- Catch locale errors (bkearney@redhat.com)
+- Move close button in the subscription token/modify subscription dialog
+  (alikins@redhat.com)
+- change paths for firstboot modules (alikins@redhat.com)
+- Merge branch 'master' of git+ssh://axiom.rdu.redhat.com/scm/git/subscription-
+  manager (alikins@redhat.com)
+- Escape text passed to gtk's text markup. (alikins@redhat.com)
+- 623448: Added the new config options to the example config file
+  (bkearney@redhat.com)
+- 596136 ensure that the daemon only runs one time (jbowes@redhat.com)
+- Fix up some spec file issues with the local being double listed and the first
+  boot stuff not being included (bkearney@redhat.com)
+- bugfix for bz#631537 (anadathu@redhat.com)
+- rename files firstboot modules (alikins@redhat.com)
+- Add an option on the entitlement choose screen for "local"
+  (alikins@redhat.com)
+- bugfix for bz#633514 (anadathu@redhat.com)
+- Change rhms screen priority to match those of rhn. (alikins@redhat.com)
+- add chooser screen (alikins@redhat.com)
+- start of adding a rhn or rhesus screen (alikins@redhat.com)
+- Fix missing gettext import. (dgoodwin@redhat.com)
+- fixed a problem with prefix config (dmitri@redhat.com)
+- made '/candlepin' prefix configurable as 'prefix' configuration file
+  parameter (dmitri@redhat.com)
+- Merge branch 'i18n' (dgoodwin@redhat.com)
+- Remove the translations used for testing. (dgoodwin@redhat.com)
+- Deploy translations to /usr/share/locale/. (dgoodwin@redhat.com)
+- Add po/build to gitignore (jbowes@redhat.com)
+- Make a seperate update-po makefile target (jbowes@redhat.com)
+- glob po files for compile_pos (jbowes@redhat.com)
+- Add a menu icon for subscription-manager (bkearney@redhat.com)
+- Minor strings update. (dgoodwin@redhat.com)
+- Safer generation of glade.h string files. (dgoodwin@redhat.com)
+- Add missing translation markers in Python code. (dgoodwin@redhat.com)
+- Remove bad glade translatable markers. (dgoodwin@redhat.com)
+- We need to import certlib after setting path in include rhsm
+  (alikins@redhat.com)
+- I18N for compliance icon. (dgoodwin@redhat.com)
+- Include Glade strings for translation. (dgoodwin@redhat.com)
+- Enable I18N in subscription manager itself. (dgoodwin@redhat.com)
+- Compile .po files during install. (dgoodwin@redhat.com)
+- Remove (most of) HATEOAS. (dgoodwin@redhat.com)
+- 608005: checking for bad html characters on the client (bkearney@redhat.com)
+- Handle window manager delete_entry signals. fix bz#631472
+  (alikins@redhat.com)
+- fix for bz#628070 Do not try to unsubscribe from the server for local
+  management (alikins@redhat.com)
+- 632019: Remove hyphen from re-register (bkearney@redhat.com)
+- 613650: Improved the text a bit (bkearney@redhat.com)
+- 632019: Clean up typo in the help message (bkearney@redhat.com)
+- Add make target to extract strings for i18n. (dgoodwin@redhat.com)
+- bugfix for bz#617703 (anadathu@redhat.com)
+
+* Mon Sep 20 2010 Adrian Likins <alikins@redhat.com>
+- names on firstboot modules changed
+
 * Thu Sep 09 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.77-1
 - Resolves: #627915
 - Update for Candlepin HATEOAS changes. (dgoodwin@redhat.com)

@@ -20,8 +20,10 @@
 #include <fcntl.h>
 #include <time.h>
 #include <wait.h>
+#include <errno.h>
 
 #define LOGFILE "/var/log/rhsm/rhsmcertd.log"
+#define LOCKFILE "/var/lock/subsys/rhsmcertd"
 #define INTERVAL 240 /*4 hours*/
 #define RETRY 10 /*10 min*/
 
@@ -87,6 +89,25 @@ int run(int interval)
     return status;
 }
 
+int get_lock()
+{
+    int fdlock;
+    struct flock fl;
+
+    fl.l_type = F_WRLCK;
+    fl.l_whence = SEEK_SET;
+    fl.l_start = 0;
+    fl.l_len = 1;
+
+    if((fdlock = open(LOCKFILE, O_WRONLY|O_CREAT, 0640)) == -1)
+        return 1;
+
+    if(flock(fdlock, LOCK_EX|LOCK_NB, 0) == -1)
+        return 1;
+
+    return 0;
+}
+
 int main(int argc, char *argv[])
 {
     log = fopen(LOGFILE, "a+");
@@ -101,10 +122,18 @@ int main(int argc, char *argv[])
     {
         interval = INTERVAL;
     }
+
     int pid = fork();
     if(pid == 0)
     {
         daemon(0, 0);
+        
+        if (get_lock() != 0) {
+            fprintf(log, "%s: unable to get lock, exiting\n", ts());
+            fflush(log);
+            return 1;
+        }
+
         run(interval);
     }
     fclose(log);

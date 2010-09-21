@@ -20,11 +20,13 @@ class moduleClass(Module,managergui.ManageSubscriptionPage):
     def __init__(self):
         Module.__init__(self)
         managergui.ManageSubscriptionPage.__init__(self)
-        self.priority = 121#this value is relative to when you want to load the screen
+        self.priority = 5 #this value is relative to when you want to load the screen
                         # so check other modules before setting
-        self.sidebarTitle = _("RHSM Subscriptions Management Screen")
-        self.title = _("Subscription Manager Screen")
+        self.sidebarTitle = _("RHSM Subscriptions Management")
+        self.title = _("Subscription Manager")
 
+        self._destroy_widget('button_close')
+        
     def apply(self, interface, testing=False):
         return RESULT_SUCCESS
 
@@ -46,3 +48,11 @@ class moduleClass(Module,managergui.ManageSubscriptionPage):
     def shouldAppear(self):
         return True
 
+    def _destroy_widget(self, widget_name):
+        """
+        Destroy a widget by name.
+
+        See gtk.Widget.destroy()
+        """
+        widget = managergui.rhsm_xml.get_widget(widget_name)
+        widget.destroy()

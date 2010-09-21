@@ -89,7 +89,12 @@ class Restlib(object):
 
     def validateResponse(self, response):
         if str(response['status']) not in ["200", "204"]:
-            parsed = json.loads(response['content'])
+            parsed = {}
+            try:
+                parsed = json.loads(response['content'])
+            except:
+                raise RestlibException(response['status'], _("Network error. Please check the connection details."))
+
             raise RestlibException(response['status'],
                     parsed['displayMessage'])
 
@@ -112,8 +117,10 @@ class UEPConnection:
     """
     Proxy for Unified Entitlement Platform.
     """
-    def __init__(self, host='localhost', ssl_port=8443, handler=config['prefix'] or "/candlepin",
-            cert_file=None, key_file=None):
+    def __init__(self, host=config['hostname'] or 'localhost',\
+                 ssl_port=config['port'] or 8443, \
+                 handler=config['prefix'] or "/candlepin",\
+                 cert_file=None, key_file=None):
         self.host = host
         self.ssl_port = ssl_port
 	self.handler = handler
@@ -157,8 +164,12 @@ class UEPConnection:
         self.basic_auth_conn.headers['Authorization'] = basic
         return self.basic_auth_conn.headers
 
-    def ping(self):
-        return self.conn.request_get("/status/")
+    def ping(self, username=None, password=None):
+        if ((username is not None ) and (password is not None)):
+            self.__authenticate(username, password)
+            return self.basic_auth_conn.request_get("/status")
+        else:
+            return self.conn.request_get("/status/")
 
     def registered(self):
         needToRegister=0

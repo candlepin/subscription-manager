@@ -36,17 +36,20 @@ import connection
 import config
 import constants
 from facts import getFacts
-
+import time
 from certlib import EntitlementDirectory, ProductDirectory, ConsumerIdentity, CertLib
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
+import xml.sax.saxutils
 
 import gettext
 _ = gettext.gettext
 gettext.textdomain("subscription-manager")
 gtk.glade.bindtextdomain("subscription-manager")
 
+import logutil
 from logutil import getLogger
 log = getLogger(__name__)
+
 
 prefix = os.path.dirname(__file__)
 gladexml = os.path.join(prefix, "data/rhsm.glade")
@@ -101,7 +104,6 @@ def fetch_certificates():
 
 register_screen = None
 regtoken_screen = None
-add_subscription_screen = None
 import_certificate_screen = None
 
 def show_register_screen():
@@ -119,15 +121,7 @@ def show_regtoken_screen():
         regtoken_screen.show()
     else:
         regtoken_screen = RegistrationTokenScreen()
-
-def show_add_subscription_screen():
-    global add_subscription_screen
     
-    if add_subscription_screen:
-        add_subscription_screen.show()
-    else:
-        add_subscription_screen = AddSubscriptionScreen()
-
 def show_import_certificate_screen():
     global import_certificate_screen
 
@@ -155,7 +149,7 @@ class ManageSubscriptionPage:
         global UEP
 
         self.vbox = rhsm_xml.get_widget("dialog-vbox1")
-
+        self.add_subscription_screen = None
         self.populateProductDialog()
         self.setRegistrationStatus()
         self.updateMessage()
@@ -197,13 +191,19 @@ class ManageSubscriptionPage:
         entdir = EntitlementDirectory()
         self.vbox.show_all()
 
+    def show_add_subscription_screen(self):
+        if not self.add_subscription_screen:
+            self.add_subscription_screen = AddSubscriptionScreen()
+            self.add_subscription_screen.addWin.connect('hide', self.gui_reload)
+
+        self.add_subscription_screen.show()
+
     def addSubButtonAction(self, button):
+        print 'ManageSubscriptionPage.addSubButtonAction() -> show_add_subscription_screen()'
         if consumer.has_key('uuid'):
-            show_add_subscription_screen()
+            self.show_add_subscription_screen()
         else:
             show_import_certificate_screen()
-
-        self.gui_reload()
 
     def updateSubButtonAction(self, button):
         if self.pname_selected:
@@ -223,10 +223,11 @@ class ManageSubscriptionPage:
         self.warn_count = 0
         self.productList.clear()
         for product in managerlib.getInstalledProductStatus():
+            log.info("Product %s", product)
             markup_status = product[1]
             if product[1] in ["Expired", "Not Subscribed", "Not Installed"]:
                 self.warn_count += 1
-                markup_status = '<span foreground="red"><b>%s</b></span>' % product[1]
+                markup_status = '<span foreground="red"><b>%s</b></span>' % xml.sax.saxutils.escape(product[1])
             self.status_icon = self.tv_products.render_icon(self.state_icon_map[product[1]], size=gtk.ICON_SIZE_MENU)
             self.productList.append((self.status_icon, product[0], product[3], markup_status, product[2], product[4]))
         self.tv_products.set_model(self.productList)
@@ -338,7 +339,7 @@ class ManageSubscriptionPage:
         if not self.psubs_selected:
             return
         log.info("Product %s selected for unsubscribe" % self.pname_selected)
-        dlg = messageWindow.YesNoDialog(constants.CONFIRM_UNSUBSCRIBE % self.pname_selected, self.mainWin)
+        dlg = messageWindow.YesNoDialog(constants.CONFIRM_UNSUBSCRIBE % xml.sax.saxutils.escape(self.pname_selected), self.mainWin)
         if not dlg.getrc():
             return
 
@@ -392,7 +393,7 @@ class RegisterScreen:
         self.registerWin.present()
 
     def delete_event(self, event, data=None):
-        return self.finish()
+        return self.close_window()
 
     def cancel(self, button):
         self.close_window()
@@ -479,6 +480,7 @@ class RegisterScreen:
 
     def close_window(self):
         self.registerWin.hide()
+        return True
 
     def auto_subscribe(self):
         self.autobind = rhsm_xml.get_widget("auto_bind")
@@ -536,6 +538,7 @@ class RegistrationTokenScreen:
 
     def finish(self, button=None):
         self.regtokenWin.hide()
+        return True
 
     def unregisterAction(self, button):
         global UEP, consumer
@@ -616,7 +619,7 @@ class AddSubscriptionScreen:
                                            gobject.TYPE_STRING, gobject.TYPE_STRING)
 
         self.populateSubscriptionLists()
-
+        print "[%s] in AddSubscriptinScreen.__init__" % time.time()
         # machine is talking to candlepin, invoke listing scheme
         self.populateMatchingSubscriptions()
         self.populateCompatibleSubscriptions()
@@ -631,10 +634,8 @@ class AddSubscriptionScreen:
             }
         rhsm_xml.signal_autoconnect(dic)
         self.addWin = rhsm_xml.get_widget("dialog_add")
-        self.addWin.connect("hide", self.cancel)
         self.addWin.connect("delete_event", self.delete_event)
-
-        self.addWin.run()
+        #self.addWin.connect("hide", self.cancel)
         if not self.available_ent:
             infoWindow(constants.NO_SUBSCRIPTIONS_WARNING, self.addWin)
             self.addWin.hide()
@@ -678,11 +679,11 @@ class AddSubscriptionScreen:
         self.addWin.hide()
         #self.addWin.destroy()
         gtk.main_iteration()
+        return True
 
     # back?
     def cancel(self, button):
         self.addWin.hide()
-#        gtk.main_iteration()
 
     def delete_event(self, event, data=None):
         return self.finish()
@@ -943,6 +944,7 @@ class UpdateSubscriptionScreen:
     def cancel(self, button=None):
         self.updateWin.destroy()
         gtk.main_iteration()
+        return True
 
     def delete_event(self, event, data=None):
         return self.cancel()
@@ -1027,7 +1029,27 @@ class UpdateSubscriptionScreen:
             slabel.set_label(constants.ATLEAST_ONE_SELECTION)
         self.gui_reload()
 
+class ChooseEntitlement:
+    """
+    Choose which entitlement system we'd like, 
+    new style Rhesus, or old style RHN
+    """
+    def __init__(self):
+        self.vbox = rhsm_xml.get_widget("entitlementChooseVbox2")
+        #rhesus_button_toggled
+        
+        self.choose_win = rhsm_xml.get_widget("entitlement_selection_2")
+        self.rhesus_button = rhsm_xml.get_widget("rhesus_button2")
+        self.rhn_button = rhsm_xml.get_widget("rhn_button")
+        self.local_button = rhsm_xml.get_widget("local_button")
 
+        print "bloop", self.rhesus_button
+#        self.choose_win.show_all()
+
+     #   self.choose_win.run()
+
+
+        
 class ImportCertificate:
     """
      Import an Entitlement Certificate Widget screen
@@ -1048,6 +1070,7 @@ class ImportCertificate:
       self.importWin.hide()
 #      self.importWin.destroy()
       gtk.main_iteration()
+      return True
 
     def show(self):
         self.importWin.present()

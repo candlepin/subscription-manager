@@ -31,7 +31,6 @@ import managerlib
 import gettext
 from facts import getFacts
 from M2Crypto import X509
-
 import gettext
 _ = gettext.gettext
 
@@ -48,6 +47,9 @@ def handle_exception(msg, ex):
     log.exception(ex)
     if isinstance(ex, socket_error):
         print _('network error, unable to connect to server')
+        sys.exit(-1)
+    elif isinstance(ex, connection.RestlibException):
+        print _ (ex.msg)
         sys.exit(-1)
     else:
         systemExit(-1, ex)
@@ -191,8 +193,6 @@ class RegisterCommand(CliCommand):
                                help=_("name of the consumer to register. Defaults to the username."))
         self.parser.add_option("--password", dest="password",
                                help=_("specify a password"))
-        self.parser.add_option("--consumerid", dest="consumerid",
-                               help=_("register to an existing consumer"))
         self.parser.add_option("--autosubscribe", action='store_true',
                                help=_("automatically subscribe this system to\
                                      compatible subscriptions."))
@@ -221,11 +221,7 @@ class RegisterCommand(CliCommand):
         if consumername == None:
             consumername = self.options.username
 
-        if self.options.consumerid:
-            consumer = self.cp.getConsumerById(self.options.consumerid, 
-                    self.options.username, self.options.password)
-
-        elif ConsumerIdentity.exists() and self.options.force:
+        if ConsumerIdentity.exists() and self.options.force:
 
             # First let's try to un-register previous consumer. This may fail 
             # if consumer has already been deleted so we will continue even if
