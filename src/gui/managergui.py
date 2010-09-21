@@ -331,19 +331,15 @@ class ManageSubscriptionPage:
             self.reg_button_label.set_label(_("Register System..."))
 
     def gui_reload(self, widget=None):
-        print logutil.trace_me_more()
-        print "[%s] ManageSubscriptionPage.gui_reload() called" % time.time()
         self.setRegistrationStatus()
         self.updateProductDialog()
 
     def onUnsubscribeAction(self, button):
-        print "onUnsubscriveAction"
         global UEP
         if not self.psubs_selected:
-            print "\nwtf\n"
             return
         log.info("Product %s selected for unsubscribe" % self.pname_selected)
-        dlg = messageWindow.YesNoDialog(constants.CONFIRM_UNSUBSCRIBE % self.pname_selected, self.mainWin)
+        dlg = messageWindow.YesNoDialog(constants.CONFIRM_UNSUBSCRIBE % xml.sax.saxutils.escape(self.pname_selected), self.mainWin)
         if not dlg.getrc():
             return
 
