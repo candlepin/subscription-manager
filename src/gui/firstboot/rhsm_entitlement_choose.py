@@ -23,8 +23,8 @@ class moduleClass(Module, managergui.ChooseEntitlement):
         self.priority = 2
         # ugh, what a horrible label FIXME
         self.sidebarTitle = _("Entitlement Selection")
-        self.title = _("Entitlement Selection")
-
+#        self.title = _("Entitlement Selection")
+        self.title = _("RHMS Entitlement Selection")
     
     def createScreen(self):
         self.vbox = gtk.VBox(spacing=10)
