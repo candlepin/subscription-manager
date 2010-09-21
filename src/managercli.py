@@ -156,6 +156,10 @@ class ReRegisterCommand(CliCommand):
 
         try:
             if self.options.consumerid:
+                if not (self.options.username and self.options.password):
+                  print (_("Error: username and password are required to reregister --consumerid, try reregister --help.\n"))
+                  sys.exit(-1)
+
                 consumer = self.cp.getConsumerById(self.options.consumerid, self.options.username, self.options.password)
                 managerlib.persist_consumer_cert(consumer)
             else:
