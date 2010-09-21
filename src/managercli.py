@@ -198,8 +198,6 @@ class RegisterCommand(CliCommand):
                                help=_("name of the consumer to register. Defaults to the username."))
         self.parser.add_option("--password", dest="password",
                                help=_("specify a password"))
-        self.parser.add_option("--consumerid", dest="consumerid",
-                               help=_("register to an existing consumer"))
         self.parser.add_option("--autosubscribe", action='store_true',
                                help=_("automatically subscribe this system to\
                                      compatible subscriptions."))
@@ -228,10 +226,7 @@ class RegisterCommand(CliCommand):
         if consumername == None:
             consumername = self.options.username
 
-        if self.options.consumerid:
-            consumer = self.cp.getConsumerById(self.options.consumerid, self.options.username, self.options.password)
-
-        elif ConsumerIdentity.exists() and self.options.force:
+        if ConsumerIdentity.exists() and self.options.force:
            try:
                consumer = self.cp.registerConsumer(self.options.username,
                        self.options.password, name=consumername, type=self.options.consumertype,
