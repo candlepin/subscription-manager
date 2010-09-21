@@ -89,7 +89,12 @@ class Restlib(object):
 
     def validateResponse(self, response):
         if str(response['status']) not in ["200", "204"]:
-            parsed = json.loads(response['content'])
+            parsed = {}
+            try:
+                parsed = json.loads(response['content'])
+            except:
+                raise RestlibException(response['status'], _("Network error. Please check the connection details."))
+
             raise RestlibException(response['status'],
                     parsed['displayMessage'])
 
