@@ -397,7 +397,7 @@ class RegisterScreen:
         self.registerWin.present()
 
     def delete_event(self, event, data=None):
-        return self.finish()
+        return self.close_window()
 
     def cancel(self, button):
         self.close_window()
@@ -484,6 +484,7 @@ class RegisterScreen:
 
     def close_window(self):
         self.registerWin.hide()
+        return True
 
     def auto_subscribe(self):
         self.autobind = rhsm_xml.get_widget("auto_bind")
@@ -541,6 +542,7 @@ class RegistrationTokenScreen:
 
     def finish(self, button=None):
         self.regtokenWin.hide()
+        return True
 
     def unregisterAction(self, button):
         global UEP, consumer
@@ -681,11 +683,11 @@ class AddSubscriptionScreen:
         self.addWin.hide()
         #self.addWin.destroy()
         gtk.main_iteration()
+        return True
 
     # back?
     def cancel(self, button):
         self.addWin.hide()
-        print 'subscribe window hiding'
 
     def delete_event(self, event, data=None):
         return self.finish()
@@ -698,8 +700,6 @@ class AddSubscriptionScreen:
         show_import_certificate_screen()
 
     def onSubscribeAction(self, button):
-        print "onSubscribeAction"
-        print logutil.trace_me()
         slabel = rhsm_xml.get_widget("label_status1")
         #consumer = get_consumer()
         subscribed_count = 0
@@ -948,6 +948,7 @@ class UpdateSubscriptionScreen:
     def cancel(self, button=None):
         self.updateWin.destroy()
         gtk.main_iteration()
+        return True
 
     def delete_event(self, event, data=None):
         return self.cancel()
@@ -1073,6 +1074,7 @@ class ImportCertificate:
       self.importWin.hide()
 #      self.importWin.destroy()
       gtk.main_iteration()
+      return True
 
     def show(self):
         self.importWin.present()
