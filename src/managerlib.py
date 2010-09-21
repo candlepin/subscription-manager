@@ -17,6 +17,7 @@
 import os
 import sys
 import constants
+import shutil
 import xml.utils.iso8601
 from datetime import datetime
 from certlib import CertLib, ConsumerIdentity, \
@@ -60,7 +61,7 @@ def persist_consumer_cert(consumerinfo):
     consumer_info = {"consumer_name" : consumer.getConsumerName(),
                      "uuid" : consumer.getConsumerId()
                     }
-    log.info("Consumer created:%s" % consumer_info)
+    log.info("Consumer created: %s" % consumer_info)
     return consumer_info
 
 
@@ -283,6 +284,13 @@ def formatDate(date):
     tf = xml.utils.iso8601.parse(date)
     return datetime.fromtimestamp(tf).date()
 
+def unregister(uep, consumer_uuid):
+    """ Shared logic for un-registration. """
+    uep.unregisterConsumer(consumer_uuid)
+    # Clean up certificates, these are no longer valid:
+    shutil.rmtree("/etc/pki/consumer/", ignore_errors=True)
+    shutil.rmtree("/etc/pki/entitlement/", ignore_errors=True)
+    log.info("Successfully un-registered.")
 
 if __name__=='__main__':
     print("\nInstalled Product Status:\n")

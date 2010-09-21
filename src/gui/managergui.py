@@ -545,9 +545,9 @@ class RegistrationTokenScreen:
             log.info("de-registration not confirmed. cancelling unregister call")
             return
         log.info("Going ahead with un-registering consumer: %s", consumer['uuid'])
-        UEP.unregisterConsumer(consumer['uuid'])
-        shutil.rmtree("/etc/pki/consumer/", ignore_errors=True)
-        shutil.rmtree("/etc/pki/entitlement/", ignore_errors=True)
+
+        managerlib.unregister(UEP, consumer['uuid'])
+
         create_and_set_basic_connection()
         consumer = get_consumer()
 
