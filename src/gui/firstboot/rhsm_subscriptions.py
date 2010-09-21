@@ -20,7 +20,7 @@ class moduleClass(Module,managergui.ManageSubscriptionPage):
     def __init__(self):
         Module.__init__(self)
         managergui.ManageSubscriptionPage.__init__(self)
-        self.priority = 4#this value is relative to when you want to load the screen
+        self.priority = 5 #this value is relative to when you want to load the screen
                         # so check other modules before setting
         self.sidebarTitle = _("RHSM Subscriptions Management")
         self.title = _("Subscription Manager")
