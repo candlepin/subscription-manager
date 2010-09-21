@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.78
+Version: 0.79
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -163,6 +163,22 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Sep 21 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.79-1
+- Resolves: #631472
+- update these screens priorities so we show the management screen first to
+  simplify the flow (alikins@redhat.com)
+- Have the UEP Connection read the values from the local config file
+  (bkearney@redhat.com)
+- escape the product name in unsubscribe confirm dialog. (alikins@redhat.com)
+- return True from delete_event handlers. fix bz#631472 (alikins@redhat.com)
+- 635844:If there is a colossal failure, and no json is returned.. then assume
+  it is a network erorr and provide a generic response (bkearney@redhat.com)
+- Merge branch 'master' of git+ssh://axiom.rdu.redhat.com/scm/git/subscription-
+  manager (alikins@redhat.com)
+- Change the name of the entitlement chooser module to a more vibrant and
+  impressive name as to better establish our brand and mark in a challenging
+  marketplace. (alikins@redhat.com)
+
 * Tue Sep 21 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.78-1
 - Resolves: #631537, #633514
 - Only escape strings that need it (aka, product name for now) instead of all
