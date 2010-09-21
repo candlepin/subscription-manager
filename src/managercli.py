@@ -169,7 +169,7 @@ class ReRegisterCommand(CliCommand):
             log.error("Error: Unable to ReRegister the system: %s" % re)
             systemExit(-1, re.msg)
         except Exception, e:
-            handle_exception(_("Error: Unable to Re-register the system", e))
+            handle_exception(_("Error: Unable to Re-register the system"), e)
 
 class RegisterCommand(CliCommand):
 
