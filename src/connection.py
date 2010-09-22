@@ -1,4 +1,3 @@
-#
 # A proxy interface to initiate and interact communication with Unified Entitlement Platform server such as candlepin.
 #
 # Copyright (c) 2010 Red Hat, Inc.
@@ -92,7 +91,8 @@ class Restlib(object):
             parsed = {}
             try:
                 parsed = json.loads(response['content'])
-            except:
+            except Exception, e:
+                log.exception(e)
                 raise RestlibException(response['status'], _("Network error. Please check the connection details."))
 
             raise RestlibException(response['status'],
