@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.79
+Version: 0.80
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -163,6 +163,15 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Wed Sep 22 2010 Devan Goodwin <dgoodwin@redhat.com> 0.80-1
+- Updated I18N strings. (dgoodwin@redhat.com)
+- added username & password check for reregister with --consumerid option
+  command (dmitri@redhat.com)
+- Fix bad translation. (dgoodwin@redhat.com)
+- fix for #628589 -removed --consumerid option from register command
+  (dmitri@redhat.com)
+- 623264: Fix multiple issues with registration. (dgoodwin@redhat.com)
+
 * Tue Sep 21 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.79-1
 - Resolves: #631472
 - update these screens priorities so we show the management screen first to
