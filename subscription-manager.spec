@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.80
+Version: 0.81
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
