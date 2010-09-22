@@ -164,6 +164,7 @@ fi
 
 %changelog
 * Wed Sep 22 2010 Devan Goodwin <dgoodwin@redhat.com> 0.80-1
+- Resolves: #623264,#628589
 - Updated I18N strings. (dgoodwin@redhat.com)
 - added username & password check for reregister with --consumerid option
   command (dmitri@redhat.com)
