@@ -117,10 +117,13 @@ class UEPConnection:
     """
     Proxy for Unified Entitlement Platform.
     """
-    def __init__(self, host=config['hostname'] or 'localhost',\
-                 ssl_port=config['port'] or 8443, \
-                 handler=config['prefix'] or "/candlepin",\
-                 cert_file=None, key_file=None):
+
+    def __init__(self, 
+            host=config.get('server', 'hostname', 'localhost'),
+            ssl_port=int(config.get('server', 'port', 8443)),
+            handler=config.get('server', 'prefix', '/candlepin'),
+            cert_file=None, key_file=None):
+
         self.host = host
         self.ssl_port = ssl_port
         self.handler = handler
@@ -128,8 +131,8 @@ class UEPConnection:
         self.basic_auth_conn = None
         self.cert_file = cert_file
         self.key_file = key_file
-        self.candlepin_ca_file = config['candlepin_ca_file']
-        config_insecure = config['insecure']
+        self.candlepin_ca_file = config.get('server', 'candlepin_ca_file')
+        config_insecure = config.get('server', 'insecure')
         self.insecure = False
         if config_insecure:
             self.insecure = True

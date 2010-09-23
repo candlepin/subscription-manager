@@ -23,7 +23,7 @@ import sys
 sys.path.append('/usr/share/rhsm')
 from config import initConfig
 cfg = initConfig()
-print cfg['certFrequency']"`
+print cfg.get('rhsmcertd', 'certFrequency')"`
 
 RETVAL=0
 

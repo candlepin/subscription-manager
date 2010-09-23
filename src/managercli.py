@@ -40,8 +40,6 @@ from socket import error as socket_error
 
 log = getLogger(__name__)
 
-cfg = config.initConfig()
-
 def handle_exception(msg, ex):
     log.error(msg)
     log.exception(ex)
@@ -94,13 +92,10 @@ class CliCommand(object):
 
         # TODO: return value is never used, self.cp appears to reference self.new_cp,
         # so I guess changing new_cp is also changing self.cp...
-        return connection.UEPConnection(host=cfg['hostname'] or "localhost",
-                ssl_port=cfg['port'], handler=cfg['prefix'] or "/candlepin", 
-                cert_file=cert_file, key_file=key_file)
+        return connection.UEPConnection(cert_file=cert_file, key_file=key_file)
 
     def create_connection(self):
-        return connection.UEPConnection(host=cfg['hostname'] or "localhost",
-                ssl_port=cfg['port'], handler=cfg['prefix'] or "/candlepin")
+        return connection.UEPConnection()
 
     def main(self):
 

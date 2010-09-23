@@ -77,7 +77,7 @@ class UpdateAction(Action):
         products.sort()
         products.reverse()
         cfg = initConfig()
-        baseurl = cfg['baseurl']
+        baseurl = cfg.get('rhsm', 'baseurl')
         for product in products:
             for r in self.getContent(product, baseurl):
                 unique.add(r)

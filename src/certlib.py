@@ -227,13 +227,9 @@ class UEP(UEPConnection):
             raise Disconnected()
 
     def __init__(self):
-        cfg = initConfig()
-        host = cfg['hostname'] or "localhost"
-        port = cfg['port']
         cert = ConsumerIdentity.certpath()
         key = ConsumerIdentity.keypath()
-        UEPConnection.__init__(self, host, ssl_port=port, cert_file=cert,
-                               key_file=key)
+        UEPConnection.__init__(self, cert_file=cert, key_file=key)
         self.uuid = self.consumerId()
         
     def getCertificateSerials(self):

@@ -67,13 +67,13 @@ rhsm_xml = gtk.glade.XML(gladexml)
 
 def create_and_set_basic_connection():
     global UEP
-    UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler=cfg['prefix'] or "/candlepin")
+    UEP = connection.UEPConnection()
 
 
 if ConsumerIdentity.exists():
     cert_file = ConsumerIdentity.certpath()
     key_file = ConsumerIdentity.keypath()
-    UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], handler=cfg['prefix'] or "/candlepin", cert_file=cert_file, key_file=key_file)
+    UEP = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
 else:
     create_and_set_basic_connection()
 
@@ -324,7 +324,7 @@ class ManageSubscriptionPage:
         exists = ConsumerIdentity.existsAndValid()
         log.info("updating registration status.. consumer exists?: %s", exists)
         if exists:
-            self.reg_label.set_label(constants.REG_REMOTE_STATUS % cfg['hostname'])
+            self.reg_label.set_label(constants.REG_REMOTE_STATUS % cfg.get('server', 'hostname'))
             self.reg_button_label.set_label(_("Modify Registration"))
         else:
             self.reg_label.set_label(constants.REG_LOCAL_STATUS)
@@ -505,8 +505,7 @@ class RegisterScreen:
         global UEP
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
-        UEP = connection.UEPConnection(host=cfg['hostname'] or "localhost", ssl_port=cfg['port'], \
-                                       handler=cfg['prefix'] or "/candlepin", cert_file=cert_file, key_file=key_file)
+        UEP = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
 
 
 class RegistrationTokenScreen:
@@ -623,7 +622,7 @@ class AddSubscriptionScreen:
         # machine is talking to candlepin, invoke listing scheme
         self.populateMatchingSubscriptions()
         self.populateCompatibleSubscriptions()
-        if cfg['showIncompatiblePools']:
+        if (cfg.get('rhsm', 'showIncompatiblePools')):
             self.populateOtherSubscriptions()
         else:
             notebook = rhsm_xml.get_widget("notebook1")
