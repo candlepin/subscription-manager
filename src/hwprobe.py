@@ -1,5 +1,5 @@
 #
-# Module to probe Hardware info from the system 
+# Module to probe Hardware info from the system
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -33,9 +33,9 @@ class Hardware:
         self.dmiinfo = {}
 
     def getUnameInfo(self):
-        
+
         uname_data = os.uname()
-        uname_keys = ('uname.sysname', 'uname.nodename', 'uname.release', 
+        uname_keys = ('uname.sysname', 'uname.nodename', 'uname.release',
                       'uname.version', 'uname.machine')
         self.unameinfo = dict(zip(uname_keys, uname_data))
         self.allhw.update(self.unameinfo)
@@ -44,7 +44,7 @@ class Hardware:
     def getReleaseInfo(self):
         import platform
         distro_data = platform.linux_distribution()
-        distro_keys = ('distribution.name', 'distribution.version', 
+        distro_keys = ('distribution.name', 'distribution.version',
                        'distribution.id')
         self.releaseinfo = dict(zip(distro_keys, distro_data))
         self.allhw.update(self.releaseinfo)
@@ -75,8 +75,8 @@ class Hardware:
         return self.meminfo
 
     def getCpuInfo(self):
-        # TODO:(prad) Revisit this and see if theres a better way to parse /proc/cpuinfo 
-        # perhaps across all arches 
+        # TODO:(prad) Revisit this and see if theres a better way to parse /proc/cpuinfo
+        # perhaps across all arches
         self.cpuinfo = {}
         try:
             cpudata = commands.getstatusoutput('LANG=en_US.UTF-8 /usr/bin/lscpu')[-1].split('\n')
@@ -91,7 +91,7 @@ class Hardware:
 
     def getDmiInfo(self):
         try:
-            dmi_data = { 
+            dmi_data = {
                 "dmi.bios." : dmidecode.bios(),
                 "dmi.processor." : dmidecode.processor(),
                 "dmi.baseboard." : dmidecode.baseboard(),

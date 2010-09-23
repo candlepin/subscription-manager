@@ -1,5 +1,5 @@
 #
-# GUI Module for standalone subscription-manager cli 
+# GUI Module for standalone subscription-manager cli
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -121,7 +121,7 @@ def show_regtoken_screen():
         regtoken_screen.show()
     else:
         regtoken_screen = RegistrationTokenScreen()
-    
+
 def show_import_certificate_screen():
     global import_certificate_screen
 
@@ -141,7 +141,7 @@ class ManageSubscriptionPage:
 
         self.state_icon_map = {"Expired" : gtk.STOCK_DIALOG_WARNING,
                                "Not Subscribed" : gtk.STOCK_DIALOG_QUESTION,
-                               "Subscribed" : gtk.STOCK_APPLY, 
+                               "Subscribed" : gtk.STOCK_APPLY,
                                "Not Installed" : gtk.STOCK_DIALOG_QUESTION}
         self.create_gui()
 
@@ -171,7 +171,7 @@ class ManageSubscriptionPage:
             widget.connect(CONSUMER_SIGNAL, self.gui_reload)
 
         self.show_all()
-    
+
     def show_all(self):
         self.mainWin.show_all()
 
@@ -236,7 +236,7 @@ class ManageSubscriptionPage:
         self.tv_products = rhsm_xml.get_widget("treeview_updates")
         self.productList = gtk.ListStore(gtk.gdk.Pixbuf, gobject.TYPE_STRING, gobject.TYPE_STRING, \
                                          gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
-   
+
         self.updateProductDialog()
 
         #self.tv_products.set_rules_hint(True)
@@ -379,7 +379,7 @@ class RegisterScreen:
     def __init__(self):
         create_and_set_basic_connection()
         dic = { "on_register_close_clicked" : self.cancel,
-                "on_register_button_clicked" : self.onRegisterAction, 
+                "on_register_button_clicked" : self.onRegisterAction,
             }
         rhsm_xml.signal_autoconnect(dic)
         self.registerWin = rhsm_xml.get_widget("register_dialog")
@@ -514,8 +514,8 @@ class RegistrationTokenScreen:
      This screen handles reregistration and registration token activation
     """
     def __init__(self):
-        dic = { 
-                "on_register_token_close_clicked" : self.finish, 
+        dic = {
+                "on_register_token_close_clicked" : self.finish,
                 "on_change_account_button" : self.reRegisterAction,
                 "on_facts_update_button_clicked" : self.factsUpdateAction,
                 "on_submit_button_clicked" : self.submitToken,
@@ -580,7 +580,7 @@ class RegistrationTokenScreen:
         alabel = rhsm_xml.get_widget("account_label2")
         alabel.set_label(_("<b>    ID:</b>       %s" % consumer["uuid"]))
         alabel = rhsm_xml.get_widget("account_label3")
-        alabel.set_label(_("<b>  Name:</b>     %s" % consumer["consumer_name"]))        
+        alabel.set_label(_("<b>  Name:</b>     %s" % consumer["consumer_name"])
 
     def submitToken(self, button):
         rlabel = rhsm_xml.get_widget("regtoken_entry")
@@ -641,8 +641,9 @@ class AddSubscriptionScreen:
             self.addWin.hide()
 
     def populateSubscriptionLists(self):
-        try:    
-            compatible, dlist = managerlib.getCompatibleSubscriptions(UEP, self.consumer['uuid']) 
+        try:
+            compatible, dlist = managerlib.getCompatibleSubscriptions(UEP,
+                    self.consumer['uuid'])
             self.matched = managerlib.getMatchedSubscriptions(dlist) or []
             matched_pids = []
             for product in self.matched:
@@ -706,7 +707,7 @@ class AddSubscriptionScreen:
         pwin.setLabel(_("Performing Subscribe. Please wait."))
         busted_subs = []
         count = 0
-        
+
         pwin.setProgress(count, len(self.selected.items()))
 
         for pool, state in self.selected.items():
@@ -719,7 +720,7 @@ class AddSubscriptionScreen:
                     updated_count = str(int(updated_pool['quantity']) -
                             int(updated_pool['consumed']))
                     my_model.set_value(state[-1], 2, updated_count)
-  
+
                     # unselect the row
                     my_model.set_value(state[-1], 0, False)
                     self.selected[pool] = (False, state[1], state[2])
@@ -742,7 +743,7 @@ class AddSubscriptionScreen:
         pwin.hide()
         self.addWin.hide()
 
-            
+
     def populateMatchingSubscriptions(self):
         """
         populate subscriptions matching currently installed products
@@ -778,7 +779,7 @@ class AddSubscriptionScreen:
         self.match_tv.append_column(col)
 
         self.availableList.set_sort_column_id(1, gtk.SORT_ASCENDING)
-    
+
     def populateCompatibleSubscriptions(self):
         """
         populate subscriptions compatible with your system facts
@@ -878,14 +879,14 @@ class AddSubscriptionScreen:
         if state:
             self.total += 1
         else:
-            self.total -= 1    
+            self.total -= 1
         if not self.total:
             self.csstatus.hide()
             return
         self.csstatus.show()
         self.csstatus.set_label(constants.SELECT_STATUS % self.total)
 
-        
+
     def col_compat_selected(self, cell, path, model):
         items, iter = self.compatible_tv.get_selection().get_selected()
         model[path][0] = not model[path][0]
@@ -901,7 +902,7 @@ class AddSubscriptionScreen:
             return
         self.csstatus.show()
         self.csstatus.set_label(constants.SELECT_STATUS % self.total)
-        
+
     def _cell_data_toggle_func(self, tree_column, renderer, model, treeiter):
         renderer.set_property('visible', True)
 
@@ -1031,18 +1032,18 @@ class UpdateSubscriptionScreen:
 
 class ChooseEntitlement:
     """
-    Choose which entitlement system we'd like, 
+    Choose which entitlement system we'd like,
     new style Rhesus, or old style RHN
     """
     def __init__(self):
         self.vbox = rhsm_xml.get_widget("entitlementChooseVbox")
-        
+
         self.choose_win = rhsm_xml.get_widget("entitlement_selection")
         self.rhesus_button = rhsm_xml.get_widget("rhesus_button")
         self.rhn_button = rhsm_xml.get_widget("rhn_button")
         self.local_button = rhsm_xml.get_widget("local_button")
 
-        
+
 class ImportCertificate:
     """
      Import an Entitlement Certificate Widget screen

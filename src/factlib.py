@@ -14,7 +14,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
- 
+
 from certlib import  ActionLock, UEP, Disconnected
 from logutil import getLogger
 from facts import Facts
@@ -42,10 +42,10 @@ class Action:
 
     def __init__(self):
         self.factdir = "somewhere"
-        
-        
+
+
 class UpdateAction(Action):
-    
+
     def perform(self):
         try:
             uep = UEP()
@@ -67,13 +67,13 @@ class UpdateAction(Action):
         uep.updateConsumerFacts(uep.uuid, facts)
         return updates
 
-   
+
 def main():
     print _('Updating facts')
     factlib = FactLib()
     updates = factlib.update()
     print _('%d updates required') % updates
     print _('done')
-        
+
 if __name__ == '__main__':
     main()

@@ -26,13 +26,13 @@ class moduleClass(Module,managergui.ManageSubscriptionPage):
         self.title = _("Subscription Manager")
 
         self._destroy_widget('button_close')
-        
+
     def apply(self, interface, testing=False):
         return RESULT_SUCCESS
 
     def show_all(self):
         print "show_all"
-        
+
     def close_window(self):
         pass
 

@@ -25,7 +25,7 @@ class moduleClass(Module, managergui.ChooseEntitlement):
         self.sidebarTitle = _("Entitlement Selection")
 #        self.title = _("Entitlement Selection")
         self.title = _("RHMS Entitlement Selection")
-    
+
     def createScreen(self):
         self.vbox = gtk.VBox(spacing=10)
         self.choose_dialog = managergui.rhsm_xml.get_widget("entitlementChooseVbox")
@@ -63,4 +63,3 @@ class moduleClass(Module, managergui.ChooseEntitlement):
 
     def shouldAppear(self):
         return True
-    

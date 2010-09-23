@@ -110,7 +110,7 @@ def main():
             action="store_true", default=False)
 
     options, args = parser.parse_args()
-    
+
     global enable_debug
     enable_debug = options.debug
 

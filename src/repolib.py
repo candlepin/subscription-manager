@@ -44,8 +44,8 @@ class Action:
 
     def __init__(self):
         self.entdir = EntitlementDirectory()
-        
-        
+
+
 class UpdateAction(Action):
 
     def perform(self):
@@ -68,7 +68,7 @@ class UpdateAction(Action):
                 repod.delete(section)
         repod.write()
         return updates
-    
+
     def getUniqueContent(self):
         unique = set()
         # Though they are expired, we keep repos around that are within their
@@ -82,7 +82,7 @@ class UpdateAction(Action):
             for r in self.getContent(product, baseurl):
                 unique.add(r)
         return unique
-    
+
     def getContent(self, product, baseurl):
         lst = []
         for ent in product.getContentEntitlements():
@@ -96,18 +96,18 @@ class UpdateAction(Action):
             repo['sslclientcert'] = product.path
             lst.append(repo)
         return lst
-    
+
     def join(self, base, url):
         if '://' in url:
             return url
         else:
             return basejoin(base, url)
 
-   
+
 class Repo(dict):
-    
+
     CA = '/usr/share/rhn/RHNS-CA-CERT'
-    
+
     # (name, mutable, default)
     PROPERTIES = (
         ('name', 0, None),
@@ -120,7 +120,7 @@ class Repo(dict):
         ('sslclientkey', 0, None),
         ('sslclientcert', 0, None),
     )
-    
+
     def __init__(self, id):
         self.id = id
         for k,m,d in self.PROPERTIES:
@@ -132,7 +132,7 @@ class Repo(dict):
             v = self[k]
             lst.append((k,v))
         return tuple(lst)
-    
+
     def update(self, other):
         count = 0
         for k,m,d in self.PROPERTIES:
@@ -145,7 +145,7 @@ class Repo(dict):
                 self[k] = v
                 count += 1
         return count
-        
+
     def __str__(self):
         s = []
         s.append('[%s]' % self.id)
@@ -156,39 +156,39 @@ class Repo(dict):
             s.append('%s=%s' % (k, v))
 
         return '\n'.join(s)
-        
+
     def __eq__(self, other):
         return ( self.id == other.id )
-    
+
     def __hash__(self):
         return hash(self.id)
-    
+
 
 class RepoFile(Parser):
-    
+
     PATH = 'etc/yum.repos.d/'
-    
+
     def __init__(self, name='redhat.repo'):
         Parser.__init__(self)
         self.path = Path.join(self.PATH, name)
         self.create()
-    
+
     def read(self):
         r = Reader(self.path)
         Parser.readfp(self, r)
-        
+
     def write(self):
         f = open(self.path, 'w')
         Parser.write(self, f)
         f.close()
-        
+
     def add(self, repo):
         self.add_section(repo.id)
         self.update(repo)
-        
+
     def delete(self, section):
         return self.remove_section(section)
-        
+
     def update(self, repo):
         for k,v in repo.items():
             Parser.set(self, repo.id, k, v)
@@ -211,17 +211,17 @@ class RepoFile(Parser):
         s.append('#')
         f.write('\n'.join(s))
         f.close()
-        
-        
+
+
 class Reader:
-    
+
     def __init__(self, path):
         f = open(path)
         bfr = f.read()
         self.idx = 0
         self.lines = bfr.split('\n')
         f.close()
-        
+
     def readline(self):
         nl = 0
         i = self.idx
@@ -248,6 +248,6 @@ def main():
     updates = repolib.update()
     print '%d updates required' % updates
     print 'done'
-        
+
 if __name__ == '__main__':
     main()

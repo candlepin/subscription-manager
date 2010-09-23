@@ -24,7 +24,7 @@ import base64
 import os
 from M2Crypto import SSL, httpslib
 from logutil import getLogger, trace_me
-from config import initConfig 
+from config import initConfig
 
 import gettext
 _ = gettext.gettext
@@ -123,7 +123,7 @@ class UEPConnection:
                  cert_file=None, key_file=None):
         self.host = host
         self.ssl_port = ssl_port
-	self.handler = handler
+        self.handler = handler
         self.conn = None
         self.basic_auth_conn = None
         self.cert_file = cert_file
@@ -300,7 +300,7 @@ class UEPConnection:
     def getEntitlementById(self, entId):
         method = "/entitlements/%s" % entId
         return self.conn.request_get(method)
-    
+
     # TODO: bad method name, also virtually identical to getPoolsList.
     def getAllAvailableEntitlements(self, consumerId):
         method = "/pools?consumer=%s&listall=true" % consumerId
@@ -311,7 +311,7 @@ class UEPConnection:
     def regenIdCertificate(self, consumerId):
         method = "/consumers/%s" % consumerId
         return self.conn.request_post(method)
-        
+
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -337,12 +337,12 @@ if __name__ == '__main__':
         print "Created a consumer ", consumer
         # sync certs
         print "Get Consumer By Id", uep.getConsumerById(consumer['uuid'], 'admin', 'admin')
-        print uep.syncCertificates(consumer['uuid']) 
+        print uep.syncCertificates(consumer['uuid'])
         print "All available", uep.getAllAvailableEntitlements(consumer['uuid'])
         print "GetCertBySerials",uep.getCertificates(consumer['uuid'],
                 serials=['SERIAL001','SERIAL001'])
         # bind consumer to regNumber
-        #uep.bindByRegNumber(consumer['uuid'],"1234-5334-4e23-2432-4345") 
+        #uep.bindByRegNumber(consumer['uuid'],"1234-5334-4e23-2432-4345")
         # bind consumer by poolId
         #uep.bindByEntitlementPool(consumer['uuid'], "1001")
         # bind consumer By Product

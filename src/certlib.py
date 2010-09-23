@@ -181,7 +181,7 @@ class UpdateAction(Action):
                 continue
             report.expd.append(cert)
             cert.delete()
-    
+
     def mayLinger(self, cert):
         return cert.validWithGracePeriod()
 
@@ -199,7 +199,7 @@ class Writer:
         fn = self.__ufn(path, sn)
         path = Path.join(path, fn)
         cert.write(path)
-        
+
     def __ufn(self, path, sn):
         n = 1
         name = str(sn)
@@ -216,7 +216,7 @@ class Writer:
 
 
 class UEP(UEPConnection):
-    
+
     @classmethod
     def consumerId(cls):
         try:
@@ -235,7 +235,7 @@ class UEP(UEPConnection):
         UEPConnection.__init__(self, host, ssl_port=port, cert_file=cert,
                                key_file=key)
         self.uuid = self.consumerId()
-        
+
     def getCertificateSerials(self):
         result = []
         reply = UEPConnection.getCertificateSerials(self, self.uuid)
@@ -277,13 +277,13 @@ class Path:
     @classmethod
     def isdir(cls, path):
         return os.path.isdir(path)
-        
+
 
 class Directory:
-    
+
     def __init__(self, path):
         self.path = Path.abs(path)
-        
+
     def listAll(self):
         all = []
         for fn in os.listdir(self.path):
@@ -300,7 +300,7 @@ class Directory:
             else:
                 files.append((p,fn))
         return files
-    
+
     def listdirs(self):
         dir = []
         for p,fn in self.listAll():
@@ -312,11 +312,11 @@ class Directory:
     def create(self):
         if not os.path.exists(self.path):
             os.makedirs(self.path)
-            
+
     def delete(self):
         self.clean()
         os.rmdir(self.path)
-            
+
     def clean(self):
         for x in os.listdir(self.path):
             path = self.abspath(x)
@@ -325,14 +325,14 @@ class Directory:
                 d.delete()
             else:
                 os.unlink(path)
-                
+
     def abspath(self, path):
         return Path.join(self.path, path)
-    
+
     def __str__(self):
         return self.path
-    
-    
+
+
 class CertificateDirectory(Directory):
 
     def __init__(self, path):
@@ -358,14 +358,14 @@ class CertificateDirectory(Directory):
             elif c.valid():
                 valid.append(c)
         return valid
-    
+
     def listExpired(self):
         expired = []
         for c in self.list():
              if not c.valid():
                 expired.append(c)
         return expired
-    
+
     def find(self, sn):
         for c in self.list():
             if c.serialNumber() == sn:
@@ -404,23 +404,23 @@ class CertificateDirectory(Directory):
 
 
 class ProductDirectory(CertificateDirectory):
-    
+
     PATH = 'etc/pki/product'
     KEY = 'key.pem'
-    
+
     def __init__(self):
         CertificateDirectory.__init__(self, self.PATH)
-        
+
     def certClass(self):
         return ProductCertificate
 
 
 class EntitlementDirectory(CertificateDirectory):
-    
+
     PATH = 'etc/pki/entitlement'
     KEY = 'key.pem'
     PRODUCT = 'product'
-    
+
     @classmethod
     def keypath(cls):
         return Path.join(cls.PATH, cls.KEY)
@@ -437,19 +437,19 @@ class EntitlementDirectory(CertificateDirectory):
 
 
 class ConsumerIdentity:
-    
+
     PATH = 'etc/pki/consumer'
     KEY = 'key.pem'
     CERT = 'cert.pem'
-    
+
     @classmethod
     def keypath(cls):
         return Path.join(cls.PATH, cls.KEY)
-    
+
     @classmethod
     def certpath(cls):
         return Path.join(cls.PATH, cls.CERT)
-    
+
     @classmethod
     def read(cls):
         f = open(cls.keypath())
@@ -477,12 +477,12 @@ class ConsumerIdentity:
                 log.warn('possible certificate corruption')
         return False
 
-    
+
     def __init__(self, keystring, certstring):
         self.key = keystring
         self.cert = certstring
         self.x509 = Certificate(certstring)
-        
+
     def getConsumerId(self):
         subject = self.x509.subject()
         return subject.get('CN')
@@ -490,7 +490,7 @@ class ConsumerIdentity:
     def getConsumerName(self):
         altName = self.x509.alternateName()
         return altName.replace("DirName:/CN=", "")
-        
+
     def write(self):
         self.__mkdir()
         f = open(self.keypath(), 'w')
@@ -499,7 +499,7 @@ class ConsumerIdentity:
         f = open(self.certpath(), 'w')
         f.write(self.cert)
         f.close()
-        
+
     def delete(self):
         path = self.keypath()
         if os.path.exists(path):
@@ -507,7 +507,7 @@ class ConsumerIdentity:
         path = self.certpath()
         if os.path.exists(path):
             os.unlink(path)
-    
+
     def __mkdir(self):
         path = Path.abs(self.PATH)
         if not os.path.exists(path):
@@ -566,6 +566,6 @@ def main():
     updates = certlib.update()
     print _('%d updates required') % updates
     print _('done')
-        
+
 if __name__ == '__main__':
     main()

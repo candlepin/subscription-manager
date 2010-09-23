@@ -107,7 +107,7 @@ class moduleClass(Module,managergui.RegisterScreen):
         Indicates to firstboot whether to show this screen.  In this case
         we want to skip over this screen if there is already an identity
         certificate on the machine (most likely laid down in a kickstart),
-        but showing the screen and allowing the user to reregister if 
+        but showing the screen and allowing the user to reregister if
         firstboot is run in reconfig mode.
         """
         return self._is_mode(MODE_RECONFIG) or not ConsumerIdentity.exists()

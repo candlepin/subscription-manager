@@ -95,7 +95,7 @@ class CliCommand(object):
         # TODO: return value is never used, self.cp appears to reference self.new_cp,
         # so I guess changing new_cp is also changing self.cp...
         return connection.UEPConnection(host=cfg['hostname'] or "localhost",
-                ssl_port=cfg['port'], handler=cfg['prefix'] or "/candlepin", 
+                ssl_port=cfg['port'], handler=cfg['prefix'] or "/candlepin",
                 cert_file=cert_file, key_file=key_file)
 
     def create_connection(self):
@@ -200,7 +200,7 @@ class RegisterCommand(CliCommand):
         self.parser.add_option("--autosubscribe", action='store_true',
                                help=_("automatically subscribe this system to\
                                      compatible subscriptions."))
-        self.parser.add_option("--force",  action='store_true', 
+        self.parser.add_option("--force",  action='store_true',
                                help=_("register the system even if it is already registered"))
 
     def _validate_options(self):
@@ -227,7 +227,7 @@ class RegisterCommand(CliCommand):
 
         if ConsumerIdentity.exists() and self.options.force:
 
-            # First let's try to un-register previous consumer. This may fail 
+            # First let's try to un-register previous consumer. This may fail
             # if consumer has already been deleted so we will continue even if
             # errors are encountered.
             if ConsumerIdentity.existsAndValid():
@@ -343,7 +343,7 @@ class SubscribeCommand(CliCommand):
 
             if facts.delta():
                 self.cp.updateConsumerFacts(consumer, facts.get_facts())
-            
+
 
             if self.options.regtoken:
                 for regnum in self.options.regtoken:
@@ -412,7 +412,7 @@ class FactsCommand(CliCommand):
         shortdesc = _("show information for facts")
         desc = "facts"
         CliCommand.__init__(self, "facts", usage, shortdesc, desc)
-        
+
         self.parser.add_option("--list", action="store_true",
                                help=_("list known facts for this system"))
         self.parser.add_option("--update", action="store_true",
@@ -465,7 +465,7 @@ class ListCommand(CliCommand):
 
         self._validate_options()
         self.auth_as_consumer()
-        
+
         consumer = check_registration()['uuid']
         if not (self.options.available or self.options.consumed):
            iproducts = managerlib.getInstalledProductStatus()
@@ -491,12 +491,12 @@ class ListCommand(CliCommand):
                # TODO:  Something about these magic numbers!
                product_name = self._format_name(data['productName'], 24, 80)
 
-               print constants.available_subs_list % (product_name, 
-                                                      data['productId'], 
-                                                      data['id'], 
-                                                      data['quantity'], 
+               print constants.available_subs_list % (product_name,
+                                                      data['productId'],
+                                                      data['id'],
+                                                      data['quantity'],
                                                       data['endDate'])
-            
+
         if self.options.consumed:
            cpents = managerlib.getConsumedProductEntitlements()
            if not len(cpents):
@@ -504,7 +504,7 @@ class ListCommand(CliCommand):
                sys.exit(0)
            print """+-------------------------------------------+\n    %s\n+-------------------------------------------+\n""" % _("Consumed Product Subscriptions")
            for product in cpents:
-                print constants.consumed_subs_list % product 
+                print constants.consumed_subs_list % product
 
     def _format_name(self, name, indent, max_length):
         """
@@ -543,7 +543,7 @@ class CLI:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":
-                self.cli_commands[cmd.name] = cmd 
+                self.cli_commands[cmd.name] = cmd
 
 
     def _add_command(self, cmd):

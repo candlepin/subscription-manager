@@ -38,8 +38,8 @@ APP = 'rhsm'
 DIR = '/usr/share/locale/'
 
 def configure_i18n():
-    """ 
-    Configure internationalization for the application. Should only be 
+    """
+    Configure internationalization for the application. Should only be
     called once per invocation. (once for CLI, once for GUI)
     """
     import locale
@@ -81,7 +81,7 @@ def getInstalledProductStatus():
         eproducts = cert.getProducts()
         for product in eproducts:
             entdict[product.getName()] = {'Entitlements' : ents,
-                                          'valid': cert.valid(), 
+                                          'valid': cert.valid(),
                                           'expires' : formatDate(cert.validRange().end().isoformat()),
                                           'serial'   : cert.serialNumber(),
                                           'contract' : cert.getOrder().getContract() }
@@ -154,13 +154,13 @@ def getProductDescription(qproduct):
                 data = constants.expired_status % (pst[0], pst[2], pst[0], pst[0])
             if pst[1] == "Not Installed":
                 data = constants.not_installed_status % (pst[0], pst[0], pst[0])
-    
+
     for product in products:
         if qproduct == product.getProduct().getName():
             product = product.getProduct()
             data += constants.product_describe % (product.getName(),
-                                       product.getVariant(), 
-                                       product.getArch(), 
+                                       product.getVariant(),
+                                       product.getArch(),
                                        product.getVersion())
     for cert in entcerts:
         eproducts = cert.getProducts()
@@ -238,7 +238,7 @@ def getAvailableEntitlements(cpserver, consumer):
      Gets the available Entitlements from the server
     """
     columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'providedProductIds', 'productId']
-    
+
     # update facts
     facts = getFacts()
     if facts.delta():
@@ -298,4 +298,4 @@ if __name__=='__main__':
     print("\nConsumed Product Status:\n")
     getConsumedProductEntitlements()
     getInstalledProductHashMap()
-    
+

@@ -28,7 +28,7 @@ Name               \t%-25s
 Variant            \t%-25s
 Architecture       \t%-25s
 Version                  \t%-25s
-\n 
+\n
 """)
 
 content_entitlement_describe = _("""
@@ -84,7 +84,7 @@ unsubscribed_status = _("""
 %s is installed but you are not subscribed to it. If you plan to use %s on this system, you should add a subscription. If you do not plan to use %s on this system, you should remove it from this system.
 """)
 
-not_installed_status = _(""" 
+not_installed_status = _("""
 %s is not installed but you are subscribed to it. If you do not plan to use %s on this system, you should unsubscribe in order to avoid unnecessarily consuming entitlements. If you plan to use %s on this system, you should install it.\n
 """)
 
