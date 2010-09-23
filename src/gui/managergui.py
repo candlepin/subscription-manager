@@ -1035,19 +1035,12 @@ class ChooseEntitlement:
     new style Rhesus, or old style RHN
     """
     def __init__(self):
-        self.vbox = rhsm_xml.get_widget("entitlementChooseVbox2")
-        #rhesus_button_toggled
+        self.vbox = rhsm_xml.get_widget("entitlementChooseVbox")
         
-        self.choose_win = rhsm_xml.get_widget("entitlement_selection_2")
-        self.rhesus_button = rhsm_xml.get_widget("rhesus_button2")
+        self.choose_win = rhsm_xml.get_widget("entitlement_selection")
+        self.rhesus_button = rhsm_xml.get_widget("rhesus_button")
         self.rhn_button = rhsm_xml.get_widget("rhn_button")
         self.local_button = rhsm_xml.get_widget("local_button")
-
-        print "bloop", self.rhesus_button
-#        self.choose_win.show_all()
-
-     #   self.choose_win.run()
-
 
         
 class ImportCertificate:

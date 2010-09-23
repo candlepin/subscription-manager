@@ -28,7 +28,7 @@ class moduleClass(Module, managergui.ChooseEntitlement):
     
     def createScreen(self):
         self.vbox = gtk.VBox(spacing=10)
-        self.choose_dialog = managergui.rhsm_xml.get_widget("entitlementChooseVbox2")
+        self.choose_dialog = managergui.rhsm_xml.get_widget("entitlementChooseVbox")
         self.choose_dialog.reparent(self.vbox)
 
 
