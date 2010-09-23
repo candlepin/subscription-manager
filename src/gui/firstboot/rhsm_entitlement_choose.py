@@ -15,7 +15,9 @@ sys.path.append("/usr/share/rhsm")
 from gui import managergui
 from certlib import ConsumerIdentity
 
+
 class moduleClass(Module, managergui.ChooseEntitlement):
+
     def __init__(self):
         Module.__init__(self)
         managergui.ChooseEntitlement.__init__(self)

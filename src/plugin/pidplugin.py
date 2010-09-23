@@ -26,7 +26,6 @@ requires_api_version = '2.6'
 plugin_type = (TYPE_CORE,)
 
 
-
 def chroot():
     """
     Use /mnt/sysimage when it exists to support operating
@@ -35,6 +34,7 @@ def chroot():
     sysimage = '/mnt/sysimage'
     if os.path.exists(sysimage):
         Path.ROOT = sysimage
+
 
 def postverifytrans_hook(conduit):
     """

@@ -72,6 +72,7 @@ class CertLib:
         finally:
             lock.release()
 
+
 class Action:
 
     def __init__(self):
@@ -85,7 +86,7 @@ class Action:
         bogus = cert.bogus()
         if bogus:
             bogus.insert(0, _('Reasons(s):'))
-            raise Exception, '\n - '.join(bogus)
+            raise Exception('\n - '.join(bogus))
         return (key, cert)
 
 
@@ -94,7 +95,7 @@ class AddAction(Action):
     def perform(self, *bundles):
         for bundle in bundles:
             try:
-                key,cert = self.build(bundle)
+                key, cert = self.build(bundle)
             except Exception, e:
                 log.error(
                     'Bundle not loaded:\n%s\n%s',
@@ -165,7 +166,7 @@ class UpdateAction(Action):
         br = Writer()
         for bundle in uep.getCertificatesBySerial(serials):
             try:
-                key,cert = self.build(bundle)
+                key, cert = self.build(bundle)
                 br.write(key, cert)
                 report.added.append(cert)
             except Exception, e:
@@ -248,7 +249,8 @@ class UEP(UEPConnection):
         result = []
         if snList:
             snList = [str(sn) for sn in snList]
-            reply = UEPConnection.getCertificates(self, self.uuid, serials=snList)
+            reply = UEPConnection.getCertificates(self, self.uuid,
+                                                  serials=snList)
             for cert in reply:
                 result.append(cert)
         return result
@@ -293,17 +295,17 @@ class Directory:
 
     def list(self):
         files = []
-        for p,fn in self.listAll():
+        for p, fn in self.listAll():
             path = self.abspath(fn)
             if Path.isdir(path):
                 continue
             else:
-                files.append((p,fn))
+                files.append((p, fn))
         return files
 
     def listdirs(self):
         dir = []
-        for p,fn in self.listAll():
+        for p, fn in self.listAll():
             path = self.abspath(fn)
             if Path.isdir(path):
                 dir.append(Directory(path))
@@ -342,7 +344,7 @@ class CertificateDirectory(Directory):
     def list(self):
         listing = []
         factory = self.Factory(self.certClass())
-        for p,fn in Directory.list(self):
+        for p, fn in Directory.list(self):
             if not fn.endswith('.pem'):
                 continue
             path = self.abspath(fn)
@@ -362,7 +364,7 @@ class CertificateDirectory(Directory):
     def listExpired(self):
         expired = []
         for c in self.list():
-             if not c.valid():
+            if not c.valid():
                 expired.append(c)
         return expired
 
@@ -394,7 +396,7 @@ class CertificateDirectory(Directory):
                 bogus = cert.bogus()
                 if bogus:
                     bogus.insert(0, _('Reason(s):'))
-                    raise Exception, '\n - '.join(bogus)
+                    raise Exception('\n - '.join(bogus))
                 certlist.append(cert)
             except Exception, e:
                 log.error(
@@ -462,8 +464,8 @@ class ConsumerIdentity:
 
     @classmethod
     def exists(cls):
-        return ( os.path.exists(cls.keypath()) and \
-                 os.path.exists(cls.certpath()) )
+        return (os.path.exists(cls.keypath()) and \
+                 os.path.exists(cls.certpath()))
 
     @classmethod
     def existsAndValid(cls):
@@ -476,7 +478,6 @@ class ConsumerIdentity:
                 log.error(e)
                 log.warn('possible certificate corruption')
         return False
-
 
     def __init__(self, keystring, certstring):
         self.key = keystring
@@ -530,9 +531,7 @@ class UpdateReport:
         self.expnd = []
 
     def updates(self):
-        return ( len(self.added)
-                +len(self.rogue)
-                +len(self.expd) )
+        return (len(self.added) + len(self.rogue) + len(self.expd))
 
     def write(self, s, title, certificates):
         indent = '  '

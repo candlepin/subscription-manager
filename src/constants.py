@@ -51,7 +51,7 @@ subscribed_status = _("""
 The subscription for %s is valid until %s.
 """)
 
-installed_product_status =  _("""
+installed_product_status = _("""
 ProductName:        \t%-25s
 Status:             \t%-25s
 Expires:            \t%-25s

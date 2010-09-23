@@ -27,7 +27,9 @@ import ethtool
 import socket
 import commands
 
+
 class Hardware:
+
     def __init__(self):
         self.allhw = {}
         self.dmiinfo = {}
@@ -59,7 +61,7 @@ class Hardware:
 
         useful = ["MemTotal", "SwapTotal"]
         try:
-            parser = re.compile(r'^(?P<key>\S*):\s*(?P<value>\d*)\s*kB' )
+            parser = re.compile(r'^(?P<key>\S*):\s*(?P<value>\d*)\s*kB')
             memdata = open('/proc/meminfo')
             for info in memdata:
                 match = parser.match(info)
@@ -92,14 +94,14 @@ class Hardware:
     def getDmiInfo(self):
         try:
             dmi_data = {
-                "dmi.bios." : dmidecode.bios(),
-                "dmi.processor." : dmidecode.processor(),
-                "dmi.baseboard." : dmidecode.baseboard(),
-                "dmi.chassis." : dmidecode.chassis(),
-                "dmi.slot."  : dmidecode.slot(),
-                "dmi.system." : dmidecode.system(),
-                "dmi.memory." : dmidecode.memory(),
-                "dmi.connector." : dmidecode.connector(),
+                "dmi.bios.": dmidecode.bios(),
+                "dmi.processor.": dmidecode.processor(),
+                "dmi.baseboard.": dmidecode.baseboard(),
+                "dmi.chassis.": dmidecode.chassis(),
+                "dmi.slot.": dmidecode.slot(),
+                "dmi.system.": dmidecode.system(),
+                "dmi.memory.": dmidecode.memory(),
+                "dmi.connector.": dmidecode.connector(),
             }
 
             for tag, func in dmi_data.items():
@@ -124,7 +126,7 @@ class Hardware:
         try:
             self.netinfo['network.hostname'] = socket.gethostname()
             try:
-                self.netinfo['network.ipaddr']   = socket.gethostbyname(self.netinfo['network.hostname'])
+                self.netinfo['network.ipaddr'] = socket.gethostbyname(self.netinfo['network.hostname'])
             except:
                 self.netinfo['network.ipaddr'] = "127.0.0.1"
         except:

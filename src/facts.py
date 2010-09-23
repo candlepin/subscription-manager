@@ -1,6 +1,3 @@
-
-
-
 import glob
 import os
 import simplejson as json
@@ -10,6 +7,7 @@ import hwprobe
 
 factsObj = None
 
+
 def getFacts():
     global factsObj
     if factsObj:
@@ -17,7 +15,9 @@ def getFacts():
     factsObj = Facts()
     return factsObj
 
+
 class Facts():
+
     def __init__(self):
         self.facts = {}
         self.fact_cache_dir = "/var/lib/rhsm/facts"
@@ -32,7 +32,7 @@ class Facts():
         except IOError, e:
             print e
 
-    def read(self,  path="/var/lib/rhsm/facts/facts.json"):
+    def read(self, path="/var/lib/rhsm/facts/facts.json"):
         cached_facts = {}
         try:
             f = open(path)
@@ -43,9 +43,11 @@ class Facts():
 
         return cached_facts
 
-    # return a dict of any key/values that have changed
-    # including new keys or deleted keys
     def delta(self):
+        """
+        return a dict of any key/values that have changed
+        including new keys or deleted keys
+        """
         cached_facts = self.read(self.fact_cache)
         diff = {}
         self.facts = self.get_facts()
@@ -77,7 +79,7 @@ class Facts():
             # it wasn't detecting it missing in that case and not writing a new one
             self.write(self.facts)
             return self.facts
-        self.facts =  self.find_facts()
+        self.facts = self.find_facts()
         return self.facts
 
     def find_facts(self):
@@ -92,7 +94,7 @@ class Facts():
                 json_buffer = f.read()
                 file_facts.update(json.loads(json_buffer))
 
-        facts ={}
+        facts = {}
         hw_facts = hwprobe.Hardware().getAll()
 
         facts.update(hw_facts)
@@ -101,4 +103,3 @@ class Facts():
 
         self.write(facts)
         return facts
-

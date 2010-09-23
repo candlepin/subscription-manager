@@ -60,7 +60,7 @@ class UpdateAction(Action):
         return updates
 
     def updateFacts(self, uep, facts):
-        updates  = len(facts)
+        updates = len(facts)
         # figure out the diff between latest facts and
         # report that as updates
         # TODO: don't update if there is nothing to update

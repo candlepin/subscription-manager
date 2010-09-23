@@ -22,19 +22,20 @@ import gettext
 _ = gettext.gettext
 
 
-DEFAULT_CONFIG_DIR="/etc/rhsm"
-DEFAULT_CONFIG_PATH="%s/rhsm.conf" % DEFAULT_CONFIG_DIR
+DEFAULT_CONFIG_DIR = "/etc/rhsm"
+DEFAULT_CONFIG_PATH = "%s/rhsm.conf" % DEFAULT_CONFIG_DIR
 
-# a peristent configuration storage class
+
 class ConfigFile:
     "class for handling persistent config options for the client"
-    def __init__(self, filename = None):
+
+    def __init__(self, filename=None):
         self.dict = {}
         self.fileName = filename
         if self.fileName:
             self.load()
 
-    def load(self, filename = None):
+    def load(self, filename=None):
         if filename:
             self.fileName = filename
         if self.fileName == None:
@@ -132,9 +133,9 @@ class ConfigFile:
     def update(self, dict):
         self.dict.update(dict)
 
-    # we return None when we reference an invalid key instead of
-    # raising an exception
     def __getitem__(self, name):
+        # we return None when we reference an invalid key instead of
+        # raising an exception
         if self.dict.has_key(name):
             return self.dict[name][1]
         return None
@@ -153,10 +154,13 @@ class ConfigFile:
         return ""
 
 
-# a superclass for the ConfigFile that also handles runtime-only
-# config values
 class Config:
-    def __init__(self, filename = None):
+    """
+    a superclass for the ConfigFile that also handles runtime-only
+    config values
+    """
+
+    def __init__(self, filename=None):
         self.stored = ConfigFile()
         #self.stored.update(Defaults)
         if filename:
@@ -165,6 +169,7 @@ class Config:
 
     # classic dictionary interface: we prefer values from the runtime
     # dictionary over the ones from the stored config
+
     def has_key(self, name):
         if self.runtime.has_key(name):
             return True
@@ -207,6 +212,7 @@ class Config:
 
     # These function expose access to the peristent storage for
     # updates and saves
+
     def info(self, name): # retrieve comments
         return self.stored.info(name)
 
@@ -230,7 +236,7 @@ class Config:
             del self.runtime[name]
 
 
-def initConfig(cfg_file = DEFAULT_CONFIG_PATH):
+def initConfig(cfg_file=DEFAULT_CONFIG_PATH):
     global cfg
     try:
         cfg = cfg

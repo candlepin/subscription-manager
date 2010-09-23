@@ -6,7 +6,7 @@ _ = gettext.gettext
 
 
 # wrap a long line...
-def wrap_line(line, max_line_size = 100):
+def wrap_line(line, max_line_size=100):
     if len(line) < max_line_size:
         return line
     ret = []
@@ -24,9 +24,11 @@ def wrap_line(line, max_line_size = 100):
         ret.append(l)
     return string.join(ret, '\n')
 
+
 # wrap an entire piece of text
 def wrap_text(txt):
     return string.join(map(wrap_line, string.split(txt, '\n')), '\n')
+
 
 def addFrame(dialog):
     contents = dialog.get_children()[0]
@@ -36,8 +38,10 @@ def addFrame(dialog):
     frame.add(contents)
     dialog.add(frame)
 
+
 class MessageWindow:
-    def getrc (self):
+
+    def getrc(self):
         return self.rc
 
     def hide(self):
@@ -45,7 +49,7 @@ class MessageWindow:
         self.dialog.destroy()
         gtk.main_iteration()
 
-    def __init__ (self, title, text, type="ok", default=None, parent=None):
+    def __init__(self, title, text, type="ok", default=None, parent=None):
         self.rc = None
         if type == 'ok':
             buttons = gtk.BUTTONS_OK
@@ -80,8 +84,8 @@ class MessageWindow:
             self.dialog.set_default_response(0)
 
         addFrame(self.dialog)
-        self.dialog.set_position (gtk.WIN_POS_CENTER)
-        self.dialog.show_all ()
+        self.dialog.set_position(gtk.WIN_POS_CENTER)
+        self.dialog.show_all()
         rc = self.dialog.run()
         if rc == gtk.RESPONSE_OK or rc == gtk.RESPONSE_YES:
             self.rc = 1
@@ -90,29 +94,37 @@ class MessageWindow:
             self.rc = 0
         self.dialog.destroy()
 
+
 class ErrorDialog(MessageWindow):
-    def __init__ (self, text, parent=None):
-        MessageWindow.__init__(self,_("Error:"),
+
+    def __init__(self, text, parent=None):
+        MessageWindow.__init__(self, _("Error:"),
                                text,
                                type="error",
                                parent=parent)
 
+
 class WarningDialog(MessageWindow):
-    def __init__ (self, text, parent=None):
+
+    def __init__(self, text, parent=None):
         MessageWindow.__init__(self, _("Warning:"),
                                text,
                                type="warning",
                                parent=parent)
 
+
 class OkDialog(MessageWindow):
-    def __init__ (self, text, parent=None):
+
+    def __init__(self, text, parent=None):
         MessageWindow.__init__(self, _("OK dialog:"),
                                text,
                                type="ok",
                                parent=parent)
 
+
 class infoDialog(MessageWindow):
-    def __init__ (self, text, parent=None):
+
+    def __init__(self, text, parent=None):
         MessageWindow.__init__(self, _("Info dialog:"),
                                text,
                                type="ok",
@@ -120,26 +132,31 @@ class infoDialog(MessageWindow):
 
 
 class YesNoDialog(MessageWindow):
-    def __init__ (self, text, parent=None):
-        MessageWindow.__init__(self,_("Yes/No dialog:"),
+
+    def __init__(self, text, parent=None):
+        MessageWindow.__init__(self, _("Yes/No dialog:"),
                                text,
                                type="yesno",
                                parent=parent)
 
+
 class QuestionDialog(MessageWindow):
-    def __init__ (self, text, parent=None):
-        MessageWindow.__init__(self,_("Question dialog:"),
+
+    def __init__(self, text, parent=None):
+        MessageWindow.__init__(self, _("Question dialog:"),
                                text,
                                type="question",
                                parent=parent)
 
 
 class BulletedOkDialog:
+
     """
     A dialog box that can have one more sections of text. Each section can
     be standard blob of text or a bulleted item.
     """
-    def __init__ (self, title=None, parent=None):
+
+    def __init__(self, title=None, parent=None):
         self.rc = None
         self.dialog = gtk.Dialog(title, parent, 0, ("Close", 1))
         self.dialog.set_has_separator(False)
@@ -178,5 +195,5 @@ class BulletedOkDialog:
         self.dialog.destroy()
         gtk.main_iteration()
 
-    def getrc (self):
+    def getrc(self):
         return self.rc

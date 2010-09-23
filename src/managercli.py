@@ -42,6 +42,7 @@ log = getLogger(__name__)
 
 cfg = config.initConfig()
 
+
 def handle_exception(msg, ex):
     log.error(msg)
     log.exception(ex)
@@ -49,13 +50,15 @@ def handle_exception(msg, ex):
         print _('network error, unable to connect to server')
         sys.exit(-1)
     elif isinstance(ex, connection.RestlibException):
-        print _ (ex.msg)
+        print _(ex.msg)
         sys.exit(-1)
     else:
         systemExit(-1, ex)
 
+
 class CliCommand(object):
     """ Base class for all sub-commands. """
+
     def __init__(self, name="cli", usage=None, shortdesc=None,
             description=None):
         self.shortdesc = shortdesc
@@ -79,14 +82,14 @@ class CliCommand(object):
     def _do_command(self):
         pass
 
-    # TODO: we shouldn't be morphing self.cp magically depending on whether
-    # or not this method has been called. We should be explicit about
-    # how we are authenticating and when...
     def auth_as_consumer(self):
         """
         Morph the existing Candlepin connection to authenticate as a consumer.
         Reads cert and key from location on disk.
         """
+        # TODO: we shouldn't be morphing self.cp magically depending on whether
+        # or not this method has been called. We should be explicit about
+        # how we are authenticating and when...
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
 
@@ -116,6 +119,7 @@ class CliCommand(object):
 
 
 class ReRegisterCommand(CliCommand):
+
     def __init__(self):
         usage = "usage: %prog reregister [OPTIONS]"
         shortdesc = _("reregister the client to a Unified Entitlement Platform.")
@@ -157,8 +161,8 @@ class ReRegisterCommand(CliCommand):
         try:
             if self.options.consumerid:
                 if not (self.options.username and self.options.password):
-                  print (_("Error: username and password are required to reregister --consumerid, try reregister --help.\n"))
-                  sys.exit(-1)
+                    print (_("Error: username and password are required to reregister --consumerid, try reregister --help.\n"))
+                    sys.exit(-1)
 
                 consumer = self.cp.getConsumerById(self.options.consumerid, self.options.username, self.options.password)
                 managerlib.persist_consumer_cert(consumer)
@@ -176,6 +180,7 @@ class ReRegisterCommand(CliCommand):
             systemExit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Error: Unable to Re-register the system"), e)
+
 
 class RegisterCommand(CliCommand):
 
@@ -200,7 +205,7 @@ class RegisterCommand(CliCommand):
         self.parser.add_option("--autosubscribe", action='store_true',
                                help=_("automatically subscribe this system to\
                                      compatible subscriptions."))
-        self.parser.add_option("--force",  action='store_true',
+        self.parser.add_option("--force", action='store_true',
                                help=_("register the system even if it is already registered"))
 
     def _validate_options(self):
@@ -267,14 +272,16 @@ class RegisterCommand(CliCommand):
             # try to auomatically bind products
             for pname, phash in managerlib.getInstalledProductHashMap().items():
                 try:
-                   self.cp.bindByProduct(consumer['uuid'], phash)
-                   print _("Bind Product "), pname,phash
-                   log.info("Automatically subscribe the machine to product %s " % pname)
+                    self.cp.bindByProduct(consumer['uuid'], phash)
+                    print _("Bind Product "), pname, phash
+                    log.info("Automatically subscribe the machine to product %s " % pname)
                 except:
-                   log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
+                    log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
             self.certlib.update()
 
+
 class UnRegisterCommand(CliCommand):
+
     def __init__(self):
         usage = "usage: %prog unregister [OPTIONS]"
         shortdesc = _("unregister the client from a Unified Entitlement Platform.")
@@ -292,16 +299,18 @@ class UnRegisterCommand(CliCommand):
             sys.exit(1)
 
         try:
-           consumer = check_registration()['uuid']
-           managerlib.unregister(self.cp, consumer)
+            consumer = check_registration()['uuid']
+            managerlib.unregister(self.cp, consumer)
         except connection.RestlibException, re:
-           log.exception(re)
-           log.error("Error: Unable to un-register the system: %s" % re)
-           systemExit(-1, re.msg)
+            log.exception(re)
+            log.error("Error: Unable to un-register the system: %s" % re)
+            systemExit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Error: Unable to un-register the system"), e)
 
+
 class SubscribeCommand(CliCommand):
+
     def __init__(self):
         usage = "usage: %prog subscribe [OPTIONS]"
         shortdesc = _("subscribe the registered user to a specified product or regtoken.")
@@ -372,7 +381,9 @@ class SubscribeCommand(CliCommand):
         except Exception, e:
             handle_exception("Unable to subscribe: %s" % e, e)
 
+
 class UnSubscribeCommand(CliCommand):
+
     def __init__(self):
         usage = "usage: %prog unsubscribe [OPTIONS]"
         shortdesc = _("unsubscribe the registered user from all or specific subscriptions.")
@@ -403,10 +414,12 @@ class UnSubscribeCommand(CliCommand):
         except connection.RestlibException, re:
             log.error(re)
             systemExit(-1, re.msg)
-        except Exception,e:
+        except Exception, e:
             handle_exception(_("Unable to perform unsubscribe due to the following exception \n Error: %s") % e, e)
 
+
 class FactsCommand(CliCommand):
+
     def __init__(self):
         usage = "usage: %prog facts [OPTIONS]"
         shortdesc = _("show information for facts")
@@ -438,7 +451,9 @@ class FactsCommand(CliCommand):
             print consumer
             self.cp.updateConsumerFacts(consumer, facts.get_facts())
 
+
 class ListCommand(CliCommand):
+
     def __init__(self):
         usage = "usage: %prog list [OPTIONS]"
         shortdesc = _("list available or consumer subscriptions for registered user")
@@ -468,42 +483,42 @@ class ListCommand(CliCommand):
 
         consumer = check_registration()['uuid']
         if not (self.options.available or self.options.consumed):
-           iproducts = managerlib.getInstalledProductStatus()
-           if not len(iproducts):
-               print(_("No installed Products to list"))
-               sys.exit(0)
-           print "+-------------------------------------------+"
-           print _("    Installed Product Status")
-           print "+-------------------------------------------+"
-           for product in iproducts:
-               print constants.installed_product_status % product
+            iproducts = managerlib.getInstalledProductStatus()
+            if not len(iproducts):
+                print(_("No installed Products to list"))
+                sys.exit(0)
+            print "+-------------------------------------------+"
+            print _("    Installed Product Status")
+            print "+-------------------------------------------+"
+            for product in iproducts:
+                print constants.installed_product_status % product
 
         if self.options.available:
-           if self.options.all:
-               epools = managerlib.getAllAvailableSubscriptions(self.cp, consumer)
-           else:
-               epools = managerlib.getAvailableEntitlementsCLI(self.cp, consumer)
-           if not len(epools):
-               print(_("No Available subscription pools to list"))
-               sys.exit(0)
-           print "+-------------------------------------------+\n    %s\n+-------------------------------------------+\n" % _("Available Subscriptions")
-           for data in epools:
-               # TODO:  Something about these magic numbers!
-               product_name = self._format_name(data['productName'], 24, 80)
+            if self.options.all:
+                epools = managerlib.getAllAvailableSubscriptions(self.cp, consumer)
+            else:
+                epools = managerlib.getAvailableEntitlementsCLI(self.cp, consumer)
+            if not len(epools):
+                print(_("No Available subscription pools to list"))
+                sys.exit(0)
+            print "+-------------------------------------------+\n    %s\n+-------------------------------------------+\n" % _("Available Subscriptions")
+            for data in epools:
+                # TODO:  Something about these magic numbers!
+                product_name = self._format_name(data['productName'], 24, 80)
 
-               print constants.available_subs_list % (product_name,
-                                                      data['productId'],
-                                                      data['id'],
-                                                      data['quantity'],
-                                                      data['endDate'])
+                print constants.available_subs_list % (product_name,
+                                                       data['productId'],
+                                                       data['id'],
+                                                       data['quantity'],
+                                                       data['endDate'])
 
         if self.options.consumed:
-           cpents = managerlib.getConsumedProductEntitlements()
-           if not len(cpents):
-               print(_("No Consumed subscription pools to list"))
-               sys.exit(0)
-           print """+-------------------------------------------+\n    %s\n+-------------------------------------------+\n""" % _("Consumed Product Subscriptions")
-           for product in cpents:
+            cpents = managerlib.getConsumedProductEntitlements()
+            if not len(cpents):
+                print(_("No Consumed subscription pools to list"))
+                sys.exit(0)
+            print """+-------------------------------------------+\n    %s\n+-------------------------------------------+\n""" % _("Consumed Product Subscriptions")
+            for product in cpents:
                 print constants.consumed_subs_list % product
 
     def _format_name(self, name, indent, max_length):
@@ -535,16 +550,15 @@ class ListCommand(CliCommand):
 
 # taken wholseale from rho...
 class CLI:
-    def __init__(self):
 
+    def __init__(self):
         self.cli_commands = {}
-        for clazz in [ RegisterCommand, UnRegisterCommand, ListCommand, SubscribeCommand,\
+        for clazz in [RegisterCommand, UnRegisterCommand, ListCommand, SubscribeCommand,\
                        UnSubscribeCommand, FactsCommand, ReRegisterCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":
                 self.cli_commands[cmd.name] = cmd
-
 
     def _add_command(self, cmd):
         self.cli_commands[cmd.name] = cmd
@@ -608,6 +622,7 @@ class CLI:
 
         cmd.main()
 
+
 def systemExit(code, msgs=None):
     "Exit with a code and optional message(s). Saved a few lines of code."
 
@@ -618,6 +633,7 @@ def systemExit(code, msgs=None):
             sys.stderr.write(unicode(msg).encode("utf-8") + '\n')
     sys.exit(code)
 
+
 def check_registration():
     if not ConsumerIdentity.exists():
         needToRegister = \
@@ -626,9 +642,8 @@ def check_registration():
         print needToRegister
         sys.exit(1)
     consumer = ConsumerIdentity.read()
-    consumer_info = {"consumer_name" : consumer.getConsumerName(),
-                     "uuid" : consumer.getConsumerId()
-                    }
+    consumer_info = {"consumer_name": consumer.getConsumerName(),
+                     "uuid": consumer.getConsumerId()}
     return consumer_info
 
 if __name__ == "__main__":

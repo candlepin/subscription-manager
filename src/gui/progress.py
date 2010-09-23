@@ -1,7 +1,9 @@
 import os
 import gtk
 
+
 class Progress:
+
     def __init__(self):
         glade_prefix = os.path.dirname(__file__)
 
@@ -30,9 +32,7 @@ class Progress:
         while gtk.events_pending():
             gtk.main_iteration(False)
 
-    # the xmlrpc callbacks only use the first three
-    # the GET style use all 4, so pass em but dont use them
-    def setProgress(self, amount, total, speed = 0, secs = 0):
+    def setProgress(self, amount, total):
         if total:
             i = float(amount) / total
         else:
@@ -63,4 +63,3 @@ class Progress:
 
     def noop(self, win, event):
         return True
-

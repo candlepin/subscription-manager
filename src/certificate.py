@@ -23,7 +23,8 @@ support for custom v3 extensions.  It is not intended to be a
 replacement of full wrapper but instead and extension.
 """
 
-import os, re
+import os
+import re
 import base64
 from M2Crypto import X509
 from datetime import datetime as dt
@@ -31,6 +32,7 @@ from datetime import tzinfo, timedelta
 
 import gettext
 _ = gettext.gettext
+
 
 class Certificate(object):
     """
@@ -94,7 +96,6 @@ class Certificate(object):
         if (nameExt):
             altName = nameExt.get_value()
         return altName
-
 
     def validRange(self):
         """
@@ -167,7 +168,7 @@ class Certificate(object):
         if hasattr(self, 'path'):
             os.unlink(self.path)
         else:
-            raise Exception, 'no path, not deleted'
+            raise Exception('no path, not deleted')
 
     def toPEM(self):
         """
@@ -247,7 +248,7 @@ class Key(object):
         if hasattr(self, 'path'):
             os.unlink(self.path)
         else:
-            raise Exception, 'no path, not deleted'
+            raise Exception('no path, not deleted')
 
     def __str__(self):
         return self.content
@@ -297,7 +298,7 @@ class DateRange:
         """
         gmt = dt.utcnow()
         gmt = gmt.replace(tzinfo=GMT())
-        return ( gmt >= self.begin() and gmt <= self.end() )
+        return (gmt >= self.begin() and gmt <= self.end())
 
     def __str__(self):
         return '\n\t%s\n\t%s' % (self._begin, self._end)
@@ -342,7 +343,7 @@ class Extensions(dict):
         @rtype: L{Extensions}
         """
         d = {}
-        for oid,v in self.items():
+        for oid, v in self.items():
             d[oid.ltrim(n)] = v
         return Extensions(d)
 
@@ -399,7 +400,7 @@ class Extensions(dict):
         if root[-1]:
             root = root.append('')
         ln = len(root)-1
-        for oid,v in self.find(root):
+        for oid, v in self.find(root):
             trimmed = oid.ltrim(ln)
             d[trimmed] = v
         return Extensions(d)
@@ -539,7 +540,7 @@ class OID(object):
             if len(parts) != len(oid):
                 raise Exception()
             for x in parts:
-                if ( x == oid[i] or oid[i] == self.WILDCARD ):
+                if (x == oid[i] or oid[i] == self.WILDCARD):
                     i += 1
                 else:
                     raise Exception()
@@ -560,7 +561,7 @@ class OID(object):
         return hash(str(self))
 
     def __eq__(self, other):
-        return ( str(self) == str(other) )
+        return (str(self) == str(other))
 
     def __str__(self):
         return '.'.join(self.part)
@@ -849,7 +850,7 @@ class Product:
         return self.ext.get('4')
 
     def __eq__(self, rhs):
-        return ( self.getHash() == rhs.getHash() )
+        return (self.getHash() == rhs.getHash())
 
     def __str__(self):
         s = []
@@ -899,7 +900,7 @@ class Content(Entitlement):
         return self.ext.get('8')
 
     def __eq__(self, rhs):
-        return ( self.getLabel() == rhs.getLabel() )
+        return (self.getLabel() == rhs.getLabel())
 
     def __str__(self):
         s = []
@@ -928,7 +929,7 @@ class Role(Entitlement):
         return self.ext.get('2')
 
     def __eq__(self, rhs):
-        return ( self.getName() == rhs.getName() )
+        return (self.getName() == rhs.getName())
 
     def __str__(self):
         s = []
@@ -955,11 +956,11 @@ class Bundle(object):
     def split(cls, pem):
         m = cls.KEY_PATTERN.search(pem)
         if m is None:
-            raise Exception, _('Key not found.')
+            raise Exception(_('Key not found.'))
         key = m.group(0)
         m = cls.CERT_PATTERN.search(pem)
         if m is None:
-            raise Exception, _('Certificate not found.')
+            raise Exception(_('Certificate not found.'))
         cert = m.group(0)
         return (key, cert)
 

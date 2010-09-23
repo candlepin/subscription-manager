@@ -14,7 +14,9 @@ sys.path.append("/usr/share/rhsm")
 from gui import managergui
 from certlib import ConsumerIdentity
 
-class moduleClass(Module,managergui.RegisterScreen):
+
+class moduleClass(Module, managergui.RegisterScreen):
+
     def __init__(self):
         """
         Create a new firstboot Module for the 'register' screen.
@@ -145,4 +147,3 @@ class moduleClass(Module,managergui.RegisterScreen):
         """
         widget = managergui.rhsm_xml.get_widget(widget_name)
         return widget.get_text()
-

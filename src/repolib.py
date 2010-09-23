@@ -123,19 +123,19 @@ class Repo(dict):
 
     def __init__(self, id):
         self.id = id
-        for k,m,d in self.PROPERTIES:
+        for k, m, d in self.PROPERTIES:
             self[k] = d
 
     def items(self):
         lst = []
-        for k,m,d in self.PROPERTIES:
+        for k, m, d in self.PROPERTIES:
             v = self[k]
-            lst.append((k,v))
+            lst.append((k, v))
         return tuple(lst)
 
     def update(self, other):
         count = 0
-        for k,m,d in self.PROPERTIES:
+        for k, m, d in self.PROPERTIES:
             v = other.get(k)
             if not m:
                 if v is None:
@@ -158,7 +158,7 @@ class Repo(dict):
         return '\n'.join(s)
 
     def __eq__(self, other):
-        return ( self.id == other.id )
+        return (self.id == other.id)
 
     def __hash__(self):
         return hash(self.id)
@@ -190,13 +190,13 @@ class RepoFile(Parser):
         return self.remove_section(section)
 
     def update(self, repo):
-        for k,v in repo.items():
+        for k, v in repo.items():
             Parser.set(self, repo.id, k, v)
 
     def section(self, section):
         if self.has_section(section):
             repo = Repo(section)
-            for k,v in self.items(section):
+            for k, v in self.items(section):
                 repo[k] = v
             return repo
 

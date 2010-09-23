@@ -155,6 +155,9 @@ trailinglint:
 whitespacelint: tablint trailinglint
 
 pep8:
-	@! pep8 src
+	@TMPFILE=`mktemp` || exit 1; \
+	pep8 --repeat src | tee $$TMPFILE; \
+	! test -s $$TMPFILE
+
 
 stylish: whitespacelint pep8 pyflakes

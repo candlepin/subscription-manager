@@ -16,7 +16,9 @@
 # in this software or its documentation.
 #
 
-from certlib import CertLib, ActionLock, ConsumerIdentity
+from certlib import CertLib
+from certlib import ActionLock
+from certlib import ConsumerIdentity
 from repolib import RepoLib
 from factlib import FactLib
 
@@ -84,7 +86,8 @@ def main():
     print _('done')
 
 if __name__ == '__main__':
-    import logutil, sys
+    import logutil
+    import sys
     log = logutil.getLogger(__name__)
     try:
         main()
