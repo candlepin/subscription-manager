@@ -23,7 +23,7 @@ import simplejson as json
 import base64
 import os
 from M2Crypto import SSL, httpslib
-from logutil import getLogger, trace_me
+from logutil import getLogger
 from config import initConfig 
 
 import gettext
@@ -123,7 +123,7 @@ class UEPConnection:
                  cert_file=None, key_file=None):
         self.host = host
         self.ssl_port = ssl_port
-	self.handler = handler
+        self.handler = handler
         self.conn = None
         self.basic_auth_conn = None
         self.cert_file = cert_file
@@ -142,7 +142,6 @@ class UEPConnection:
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
         log.info("Connection using cert_file: %s, key_file: %s, ca_file: %s insecure_mode: %s" % (self.cert_file, self.key_file, self.candlepin_ca_file, self.insecure))
-        #log.info("trace: %s" % trace_me())
 
     def add_ssl_certs(self, cert_file=None, key_file=None):
         self.cert_file = cert_file
