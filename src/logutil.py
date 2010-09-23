@@ -46,9 +46,17 @@ def getLogger(name):
     if not os.path.isdir("/var/log/rhsm"):
         os.mkdir("/var/log/rhsm")
     fmt = '%(asctime)s [%(levelname)s] %(funcName)s() @%(filename)s:%(lineno)d - %(message)s'
-    handler = RotatingFileHandler(path, maxBytes=0x100000, backupCount=5)
-    handler.setFormatter(Formatter(fmt))
+
     log = logging.getLogger(name)
+
+    # Try to write to /var/log, fallback on console logging:
+    try:
+        handler = RotatingFileHandler(path, maxBytes=0x100000, backupCount=5)
+    except IOError, e:
+        handler = logging.StreamHandler()
+        log.warn("Unable to write to: %s" % path)
+
+    handler.setFormatter(Formatter(fmt))
     log.addHandler(handler)
     log.setLevel(logging.INFO)
     return log
