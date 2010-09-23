@@ -116,6 +116,7 @@ class Restlib(object):
     def request_delete(self, method):
         return self._request("DELETE", method)
 
+
 class UEPConnection:
     """
     Proxy for Unified Entitlement Platform.
@@ -135,7 +136,7 @@ class UEPConnection:
         self.cert_file = cert_file
         self.key_file = key_file
         self.ca_cert = config.get('server', 'ca_cert')
-        config_insecure = config.get('server', 'insecure')
+        config_insecure = int(config.get('server', 'insecure'))
         self.insecure = False
         if config_insecure:
             self.insecure = True
