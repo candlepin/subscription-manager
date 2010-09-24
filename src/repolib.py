@@ -101,6 +101,10 @@ class UpdateAction(Action):
         if '://' in url:
             return url
         else:
+            if (base and (not base.endswith('/'))):
+                base = base + '/'
+            if (url and (url.startswith('/'))):
+                url = url.lstrip('/')
             return basejoin(base, url)
 
    
