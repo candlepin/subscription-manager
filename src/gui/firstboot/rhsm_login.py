@@ -14,15 +14,18 @@ sys.path.append("/usr/share/rhsm")
 from gui import managergui
 from certlib import ConsumerIdentity
 
-class moduleClass(Module,managergui.RegisterScreen):
+
+class moduleClass(Module, managergui.RegisterScreen):
+
     def __init__(self):
         """
         Create a new firstboot Module for the 'register' screen.
         """
         Module.__init__(self)
 #        managergui.create_and_set_basic_connection()
-        self.priority = 4    #this value is relative to when you want to load the screen
-                              # so check other modules before setting
+        # this value is relative to when you want to load the screen
+        # so check other modules before setting
+        self.priority = 4
         self.sidebarTitle = _("Entitlement Registration")
         self.title = _("Entitlement Platform Registration")
         self._cached_credentials = None
@@ -35,7 +38,8 @@ class moduleClass(Module,managergui.RegisterScreen):
         """
         credentials = self._get_credentials_hash()
 
-        if credentials == self._cached_credentials and ConsumerIdentity.exists():
+        if credentials == self._cached_credentials and \
+                ConsumerIdentity.exists():
             # User has already successfully authenticaed with these
             # credentials, just go on to the next module without
             # reregistering the consumer
@@ -58,28 +62,30 @@ class moduleClass(Module,managergui.RegisterScreen):
 
     def emit_consumer_signal(self):
         """
-        Overriden from RegisterScreen - we don't care about consumer update signals.
+        Overriden from RegisterScreen - we don't care about consumer update
+        signals.
         """
         pass
 
     def registrationTokenScreen(self):
         """
-        Overridden from RegisterScreen - ignore any requests to show the registration
-        screen on this particular page.
+        Overridden from RegisterScreen - ignore any requests to show the
+        registration screen on this particular page.
         """
         pass
 
     def createScreen(self):
         """
-        Create a new instance of gtk.VBox, pulling in child widgets from the glade file.
+        Create a new instance of gtk.VBox, pulling in child widgets from the
+        glade file.
         """
         self.vbox = gtk.VBox(spacing=10)
         self.register_dialog = managergui.rhsm_xml.get_widget("dialog-vbox3")
         self.register_dialog.reparent(self.vbox)
 
-        # Get ride of the 'register' and 'cancel' buttons, as we are going to use
-        # the 'forward' and 'back' buttons provided by the firsboot module to drive
-        # the same functionality
+        # Get ride of the 'register' and 'cancel' buttons, as we are going to
+        # use the 'forward' and 'back' buttons provided by the firsboot module
+        # to drive the same functionality
         self._destroy_widget('register_button')
         self._destroy_widget('cancel_reg_button1')
 
@@ -107,7 +113,7 @@ class moduleClass(Module,managergui.RegisterScreen):
         Indicates to firstboot whether to show this screen.  In this case
         we want to skip over this screen if there is already an identity
         certificate on the machine (most likely laid down in a kickstart),
-        but showing the screen and allowing the user to reregister if 
+        but showing the screen and allowing the user to reregister if
         firstboot is run in reconfig mode.
         """
         return self._is_mode(MODE_RECONFIG) or not ConsumerIdentity.exists()
@@ -135,7 +141,8 @@ class moduleClass(Module,managergui.RegisterScreen):
         when moving back and forth across modules.
         """
         credentials = [self._get_text(name) for name in \
-                           ('account_login', 'account_password', 'consumer_name')]
+                           ('account_login', 'account_password',
+                               'consumer_name')]
         return hash(tuple(credentials))
 
     def _get_text(self, widget_name):
@@ -145,4 +152,3 @@ class moduleClass(Module,managergui.RegisterScreen):
         """
         widget = managergui.rhsm_xml.get_widget(widget_name)
         return widget.get_text()
-

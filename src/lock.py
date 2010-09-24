@@ -52,7 +52,7 @@ class LockFile:
         self.fp.flush()
 
     def mypid(self):
-        return ( os.getpid() == self.getpid() )
+        return (os.getpid() == self.getpid())
 
     def valid(self):
         status = False
@@ -79,7 +79,7 @@ class LockFile:
         self.fp = None
 
     def notcreated(self):
-        return ( not os.path.exists(self.path) )
+        return (not os.path.exists(self.path))
 
     def __del__(self):
         self.close()
@@ -132,7 +132,7 @@ class Lock:
         mutex = self.mutex
         mutex.acquire()
         try:
-            return ( self.depth > 0 )
+            return (self.depth > 0)
         finally:
             mutex.release()
 

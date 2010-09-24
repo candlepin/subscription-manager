@@ -141,3 +141,23 @@ compile-po:
 		msgfmt -c --statistics -o po/build/$$lang/LC_MESSAGES/rhsm.mo po/$$lang.po ; \
 	done
 
+pyflakes:
+	@TMPFILE=`mktemp` || exit 1; \
+	find -name \*.py | xargs pyflakes | tee $$TMPFILE; \
+	! test -s $$TMPFILE
+
+tablint:
+	@! find -name \*py | xargs grep -nP "^\W*\t"
+
+trailinglint:
+	@! find -name \*py | xargs grep -nP "[ \t]$$"
+
+whitespacelint: tablint trailinglint
+
+pep8:
+	@TMPFILE=`mktemp` || exit 1; \
+	pep8 --repeat src | tee $$TMPFILE; \
+	! test -s $$TMPFILE
+
+
+stylish: pyflakes whitespacelint pep8 

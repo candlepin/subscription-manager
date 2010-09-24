@@ -15,7 +15,9 @@ sys.path.append("/usr/share/rhsm")
 from gui import managergui
 from certlib import ConsumerIdentity
 
+
 class moduleClass(Module, managergui.ChooseEntitlement):
+
     def __init__(self):
         Module.__init__(self)
         managergui.ChooseEntitlement.__init__(self)
@@ -25,10 +27,11 @@ class moduleClass(Module, managergui.ChooseEntitlement):
         self.sidebarTitle = _("Entitlement Selection")
 #        self.title = _("Entitlement Selection")
         self.title = _("RHMS Entitlement Selection")
-    
+
     def createScreen(self):
         self.vbox = gtk.VBox(spacing=10)
-        self.choose_dialog = managergui.rhsm_xml.get_widget("entitlementChooseVbox")
+        self.choose_dialog = managergui.rhsm_xml.get_widget(
+                "entitlementChooseVbox")
         self.choose_dialog.reparent(self.vbox)
 
 
@@ -42,7 +45,8 @@ class moduleClass(Module, managergui.ChooseEntitlement):
 
     def apply(self, interface, testing=False):
         if self.rhesus_button.get_active():
-            interface.moveToPage(moduleTitle=_("Entitlement Platform Registration"))
+            interface.moveToPage(
+                    moduleTitle=_("Entitlement Platform Registration"))
             return RESULT_JUMP
 
         if self.local_button.get_active():
@@ -63,4 +67,3 @@ class moduleClass(Module, managergui.ChooseEntitlement):
 
     def shouldAppear(self):
         return True
-    

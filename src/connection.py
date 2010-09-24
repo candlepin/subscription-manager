@@ -24,7 +24,7 @@ import base64
 import os
 from M2Crypto import SSL, httpslib
 from logutil import getLogger, trace_me
-from config import initConfig 
+from config import initConfig
 
 import gettext
 _ = gettext.gettext
@@ -32,28 +32,33 @@ _ = gettext.gettext
 config = initConfig()
 
 log = getLogger(__name__)
-DEFAULT_CA_FILE="/etc/pki/CA/candlepin.pem"
+DEFAULT_CA_FILE = "/etc/pki/CA/candlepin.pem"
+
+
 class RestlibException(Exception):
-    def __init__(self, code, msg = ""):
+
+    def __init__(self, code, msg=""):
         self.code = code
         self.msg = msg
 
     def __str__(self):
         return self.msg
 
+
 class Restlib(object):
     """
      A wrapper around httplib to make rest calls easier
     """
+
     def __init__(self, host, ssl_port, apihandler, cert_file=None, key_file=None, ca_file=None, insecure=False):
         self.host = host
         self.ssl_port = ssl_port
         self.apihandler = apihandler
-        self.headers = {"Content-type":"application/json",
+        self.headers = {"Content-type": "application/json",
                         "Accept": "application/json",
                         "Accept-Language": locale.getdefaultlocale()[0].lower().replace('_', '-')}
         self.cert_file = cert_file
-        self.key_file  = key_file
+        self.key_file = key_file
         self.ca_file = ca_file
         self.insecure = insecure
 
@@ -76,8 +81,7 @@ class Restlib(object):
         response = conn.getresponse()
         result = {
             "content": response.read(),
-            "status" : response.status
-        }
+            "status": response.status}
         #TODO: change logging to debug.
        # log.info('response:' + str(result['content']))
         log.info('status code: ' + str(result['status']))
@@ -113,17 +117,19 @@ class Restlib(object):
     def request_delete(self, method):
         return self._request("DELETE", method)
 
+
 class UEPConnection:
     """
     Proxy for Unified Entitlement Platform.
     """
+
     def __init__(self, host=config['hostname'] or 'localhost',\
                  ssl_port=config['port'] or 8443, \
                  handler=config['prefix'] or "/candlepin",\
                  cert_file=None, key_file=None):
         self.host = host
         self.ssl_port = ssl_port
-	self.handler = handler
+        self.handler = handler
         self.conn = None
         self.basic_auth_conn = None
         self.cert_file = cert_file
@@ -155,24 +161,24 @@ class UEPConnection:
 
     def __authenticate(self, username, password):
         # a connection for basic auth stuff, aka, not using the consumer cert
-        self.basic_auth_conn =  Restlib(self.host, self.ssl_port, self.handler,
+        self.basic_auth_conn = Restlib(self.host, self.ssl_port, self.handler,
               ca_file=self.candlepin_ca_file, insecure=self.conn.insecure)
         log.info("Basic Auth Connection Established: host: %s, port: %s, handler: %s" %
               (self.host, self.ssl_port, self.handler))
-        encoded = base64.encodestring(':'.join((username,password)))
+        encoded = base64.encodestring(':'.join((username, password)))
         basic = 'Basic %s' % encoded[:-1]
         self.basic_auth_conn.headers['Authorization'] = basic
         return self.basic_auth_conn.headers
 
     def ping(self, username=None, password=None):
-        if ((username is not None ) and (password is not None)):
+        if ((username is not None) and (password is not None)):
             self.__authenticate(username, password)
             return self.basic_auth_conn.request_get("/status")
         else:
             return self.conn.request_get("/status/")
 
     def registered(self):
-        needToRegister=0
+        needToRegister = 0
         if not os.access("/etc/pki/consumer/cert.pem", os.F_OK):
             needToRegister = 1
         return needToRegister
@@ -182,11 +188,9 @@ class UEPConnection:
         """
          Creates a consumer on candlepin server
         """
-        params = {
-                "type": type,
-                "name": name,
-                "facts": facts
-        }
+        params = {"type": type,
+                  "name": name,
+                  "facts": facts}
         self.__authenticate(username, password)
         return self.basic_auth_conn.request_post('/consumers/', params)
 
@@ -194,9 +198,7 @@ class UEPConnection:
         """
         Update a consumers facts on candlepin server
         """
-        params = {
-            "facts": facts
-            }
+        params = {"facts": facts}
         method = "/consumers/%s" % consumer_uuid
         ret = self.conn.request_put(method, params)
         return ret
@@ -300,7 +302,7 @@ class UEPConnection:
     def getEntitlementById(self, entId):
         method = "/entitlements/%s" % entId
         return self.conn.request_get(method)
-    
+
     # TODO: bad method name, also virtually identical to getPoolsList.
     def getAllAvailableEntitlements(self, consumerId):
         method = "/pools?consumer=%s&listall=true" % consumerId
@@ -311,7 +313,7 @@ class UEPConnection:
     def regenIdCertificate(self, consumerId):
         method = "/consumers/%s" % consumerId
         return self.conn.request_post(method)
-        
+
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -319,11 +321,11 @@ if __name__ == '__main__':
     else:
         uep = UEPConnection()
     # create a consumer
-    stype = {'label':'system'}
-    product = {"id":"1","label":"RHEL AP","name":"rhel"}
+    stype = {'label': 'system'}
+    product = {"id": "1", "label": "RHEL AP", "name": "rhel"}
     facts = {
         "arch": "i386",
-        "cpu": "Intel" ,
+        "cpu": "Intel",
         "cores": 4,
     }
 
@@ -337,22 +339,22 @@ if __name__ == '__main__':
         print "Created a consumer ", consumer
         # sync certs
         print "Get Consumer By Id", uep.getConsumerById(consumer['uuid'], 'admin', 'admin')
-        print uep.syncCertificates(consumer['uuid']) 
+        print uep.syncCertificates(consumer['uuid'])
         print "All available", uep.getAllAvailableEntitlements(consumer['uuid'])
-        print "GetCertBySerials",uep.getCertificates(consumer['uuid'],
-                serials=['SERIAL001','SERIAL001'])
+        print "GetCertBySerials", uep.getCertificates(consumer['uuid'],
+                serials=['SERIAL001', 'SERIAL001'])
         # bind consumer to regNumber
-        #uep.bindByRegNumber(consumer['uuid'],"1234-5334-4e23-2432-4345") 
+        #uep.bindByRegNumber(consumer['uuid'],"1234-5334-4e23-2432-4345")
         # bind consumer by poolId
         #uep.bindByEntitlementPool(consumer['uuid'], "1001")
         # bind consumer By Product
         print "bind by product", uep.bindByProduct(consumer['uuid'], "monitoring") #product["label"])
-        print "ZZZZZZZZZZZ",uep.getCertificateSerials(consumer['uuid'])
+        print "ZZZZZZZZZZZ", uep.getCertificateSerials(consumer['uuid'])
         # Unbind All
         #print uep.unbindAll(consumer['uuid'])
         # Unbind serialNumbers
         #uep.unBindBySerialNumbers(consumer['uuid'], ['SERIAL001','SERIAL001'])
-        print "Pools List",uep.getPoolsList(consumer['uuid'])
+        print "Pools List", uep.getPoolsList(consumer['uuid'])
         # lookup Entitlement Info by PoolId
         #print uep.getEntitlementById("4")
         print "print get Ent list", uep.getEntitlementList(consumer['uuid'])

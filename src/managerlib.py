@@ -37,9 +37,10 @@ APP = 'rhsm'
 # Directory where translations are deployed:
 DIR = '/usr/share/locale/'
 
+
 def configure_i18n():
-    """ 
-    Configure internationalization for the application. Should only be 
+    """
+    Configure internationalization for the application. Should only be
     called once per invocation. (once for CLI, once for GUI)
     """
     import locale
@@ -47,6 +48,7 @@ def configure_i18n():
     locale.setlocale(locale.LC_ALL, '')
     gettext.bindtextdomain(APP, DIR)
     gettext.textdomain(APP)
+
 
 def persist_consumer_cert(consumerinfo):
     """
@@ -58,16 +60,16 @@ def persist_consumer_cert(consumerinfo):
                                   consumerinfo['idCert']['cert'])
     consumer.write()
     print consumer.getConsumerId(), consumer.getConsumerName()
-    consumer_info = {"consumer_name" : consumer.getConsumerName(),
-                     "uuid" : consumer.getConsumerId()
-                    }
+    consumer_info = {"consumer_name": consumer.getConsumerName(),
+                     "uuid": consumer.getConsumerId()}
     log.info("Consumer created: %s" % consumer_info)
     return consumer_info
 
 
 def map_status(status):
-    smap = {True : _("Subscribed"), False : _("Expired"), None : _("Not Subscribed")}
+    smap = {True: _("Subscribed"), False: _("Expired"), None: _("Not Subscribed")}
     return smap[status]
+
 
 def getInstalledProductStatus():
     """
@@ -80,11 +82,11 @@ def getInstalledProductStatus():
         ents = cert.getEntitlements()
         eproducts = cert.getProducts()
         for product in eproducts:
-            entdict[product.getName()] = {'Entitlements' : ents,
-                                          'valid': cert.valid(), 
-                                          'expires' : formatDate(cert.validRange().end().isoformat()),
-                                          'serial'   : cert.serialNumber(),
-                                          'contract' : cert.getOrder().getContract() }
+            entdict[product.getName()] = {'Entitlements': ents,
+                                          'valid': cert.valid(),
+                                          'expires': formatDate(cert.validRange().end().isoformat()),
+                                          'serial': cert.serialNumber(),
+                                          'contract': cert.getOrder().getContract()}
     product_status = []
     for product in products:
         pname = product.getProduct().getName()
@@ -97,20 +99,20 @@ def getInstalledProductStatus():
     # Include entitled but not installed products
     psnames = [prod[0] for prod in product_status]
     for cert in EntitlementDirectory().list():
-       for product in cert.getProducts():
-           if product.getName() not in psnames:
-               psname = product.getName()
-               data = (psname, _('Not Installed'), str(entdict[psname]['expires']), entdict[psname]['serial'], entdict[psname]['contract'])
-               product_status.append(data)
+        for product in cert.getProducts():
+            if product.getName() not in psnames:
+                psname = product.getName()
+                data = (psname, _('Not Installed'), str(entdict[psname]['expires']), entdict[psname]['serial'], entdict[psname]['contract'])
+                product_status.append(data)
     return product_status
 
 
 def getEntitlementsForProduct(product_name):
     entitlements = []
     for cert in EntitlementDirectory().list():
-       for cert_product in cert.getProducts():
-           if product_name == cert_product.getName():
-               entitlements.append(cert)
+        for cert_product in cert.getProducts():
+            if product_name == cert_product.getName():
+                entitlements.append(cert)
     return entitlements
 
 
@@ -120,6 +122,7 @@ def getInstalledProductHashMap():
     for product in products:
         phash[product.getProduct().getName()] = product.getProduct().getHash()
     return phash
+
 
 def getConsumedProductEntitlements():
     """
@@ -135,6 +138,7 @@ def getConsumedProductEntitlements():
                     formatDate(cert.validRange().end().isoformat()))
             consumed_products.append(data)
     return consumed_products
+
 
 def getProductDescription(qproduct):
     """
@@ -154,19 +158,19 @@ def getProductDescription(qproduct):
                 data = constants.expired_status % (pst[0], pst[2], pst[0], pst[0])
             if pst[1] == "Not Installed":
                 data = constants.not_installed_status % (pst[0], pst[0], pst[0])
-    
+
     for product in products:
         if qproduct == product.getProduct().getName():
             product = product.getProduct()
             data += constants.product_describe % (product.getName(),
-                                       product.getVariant(), 
-                                       product.getArch(), 
+                                       product.getVariant(),
+                                       product.getArch(),
                                        product.getVersion())
     for cert in entcerts:
         eproducts = cert.getProducts()
         for product in eproducts:
             if qproduct == product.getName():
-                ents =  cert.getContentEntitlements()
+                ents = cert.getContentEntitlements()
                 if not len(ents):
                     continue
                 data += """ CONTENT ENTITLEMENTS \n"""
@@ -180,7 +184,7 @@ def getProductDescription(qproduct):
                                                 ent.getVendor(),
                                                 str(ent.getUrl()),
                                                 ent.getEnabled())
-                ents =  cert.getRoleEntitlements()
+                ents = cert.getRoleEntitlements()
                 data += """ ROLE ENTITLEMENTS \n"""
                 data += """======================="""
                 for ent in ents:
@@ -188,8 +192,9 @@ def getProductDescription(qproduct):
                                                     ent.getDescription())
     return data
 
+
 def getAllAvailableSubscriptions(cpserver, consumer):
-    columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'providedProductIds', 'productId']
+    columns = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'providedProductIds', 'productId']
     # update facts first
     facts = getFacts()
     if facts.delta():
@@ -216,7 +221,7 @@ def getMatchedSubscriptions(poollist):
     """
     installedProducts = ProductDirectory().list()
     matched_data = []
-    columns  = ['id', 'quantity', 'endDate', 'productName', 'providedProductIds', 'productId']
+    columns = ['id', 'quantity', 'endDate', 'productName', 'providedProductIds', 'productId']
     if not poollist:
         return None
     data = [_sub_dict(pool, columns) for pool in poollist]
@@ -230,15 +235,17 @@ def getMatchedSubscriptions(poollist):
                 matched_data_dict[d['id']] = d
     return matched_data_dict.values()
 
+
 def getCompatibleSubscriptions(cpserver, consumer):
     return getAvailableEntitlements(cpserver, consumer)
+
 
 def getAvailableEntitlements(cpserver, consumer):
     """
      Gets the available Entitlements from the server
     """
-    columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'providedProductIds', 'productId']
-    
+    columns = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'providedProductIds', 'productId']
+
     # update facts
     facts = getFacts()
     if facts.delta():
@@ -258,8 +265,9 @@ def getAvailableEntitlements(cpserver, consumer):
         del d['consumed']
     return data, dlist
 
+
 def getAvailableEntitlementsCLI(cpserver, consumer):
-    columns  = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'productId']
+    columns = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'productId']
     # update facts if we need it
     facts = getFacts()
 #    print facts.find_facts()
@@ -277,12 +285,15 @@ def getAvailableEntitlementsCLI(cpserver, consumer):
         del d['consumed']
     return data
 
-def _sub_dict(datadict, subkeys, default=None) :
-    return dict([ (k, datadict.get(k, default) ) for k in subkeys ] )
+
+def _sub_dict(datadict, subkeys, default=None):
+    return dict([(k, datadict.get(k, default)) for k in subkeys])
+
 
 def formatDate(date):
     tf = xml.utils.iso8601.parse(date)
     return datetime.fromtimestamp(tf).date()
+
 
 def unregister(uep, consumer_uuid):
     """ Shared logic for un-registration. """
@@ -292,10 +303,9 @@ def unregister(uep, consumer_uuid):
     shutil.rmtree("/etc/pki/entitlement/", ignore_errors=True)
     log.info("Successfully un-registered.")
 
-if __name__=='__main__':
+if __name__ == '__main__':
     print("\nInstalled Product Status:\n")
     print getInstalledProductStatus()
     print("\nConsumed Product Status:\n")
     getConsumedProductEntitlements()
     getInstalledProductHashMap()
-    

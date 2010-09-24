@@ -72,6 +72,7 @@ class CertLib:
         finally:
             lock.release()
 
+
 class Action:
 
     def __init__(self):
@@ -85,7 +86,7 @@ class Action:
         bogus = cert.bogus()
         if bogus:
             bogus.insert(0, _('Reasons(s):'))
-            raise Exception, '\n - '.join(bogus)
+            raise Exception('\n - '.join(bogus))
         return (key, cert)
 
 
@@ -94,7 +95,7 @@ class AddAction(Action):
     def perform(self, *bundles):
         for bundle in bundles:
             try:
-                key,cert = self.build(bundle)
+                key, cert = self.build(bundle)
             except Exception, e:
                 log.error(
                     'Bundle not loaded:\n%s\n%s',
@@ -165,7 +166,7 @@ class UpdateAction(Action):
         br = Writer()
         for bundle in uep.getCertificatesBySerial(serials):
             try:
-                key,cert = self.build(bundle)
+                key, cert = self.build(bundle)
                 br.write(key, cert)
                 report.added.append(cert)
             except Exception, e:
@@ -181,7 +182,7 @@ class UpdateAction(Action):
                 continue
             report.expd.append(cert)
             cert.delete()
-    
+
     def mayLinger(self, cert):
         return cert.validWithGracePeriod()
 
@@ -199,7 +200,7 @@ class Writer:
         fn = self.__ufn(path, sn)
         path = Path.join(path, fn)
         cert.write(path)
-        
+
     def __ufn(self, path, sn):
         n = 1
         name = str(sn)
@@ -216,7 +217,7 @@ class Writer:
 
 
 class UEP(UEPConnection):
-    
+
     @classmethod
     def consumerId(cls):
         try:
@@ -235,7 +236,7 @@ class UEP(UEPConnection):
         UEPConnection.__init__(self, host, ssl_port=port, cert_file=cert,
                                key_file=key)
         self.uuid = self.consumerId()
-        
+
     def getCertificateSerials(self):
         result = []
         reply = UEPConnection.getCertificateSerials(self, self.uuid)
@@ -248,7 +249,8 @@ class UEP(UEPConnection):
         result = []
         if snList:
             snList = [str(sn) for sn in snList]
-            reply = UEPConnection.getCertificates(self, self.uuid, serials=snList)
+            reply = UEPConnection.getCertificates(self, self.uuid,
+                                                  serials=snList)
             for cert in reply:
                 result.append(cert)
         return result
@@ -277,13 +279,13 @@ class Path:
     @classmethod
     def isdir(cls, path):
         return os.path.isdir(path)
-        
+
 
 class Directory:
-    
+
     def __init__(self, path):
         self.path = Path.abs(path)
-        
+
     def listAll(self):
         all = []
         for fn in os.listdir(self.path):
@@ -293,17 +295,17 @@ class Directory:
 
     def list(self):
         files = []
-        for p,fn in self.listAll():
+        for p, fn in self.listAll():
             path = self.abspath(fn)
             if Path.isdir(path):
                 continue
             else:
-                files.append((p,fn))
+                files.append((p, fn))
         return files
-    
+
     def listdirs(self):
         dir = []
-        for p,fn in self.listAll():
+        for p, fn in self.listAll():
             path = self.abspath(fn)
             if Path.isdir(path):
                 dir.append(Directory(path))
@@ -312,11 +314,11 @@ class Directory:
     def create(self):
         if not os.path.exists(self.path):
             os.makedirs(self.path)
-            
+
     def delete(self):
         self.clean()
         os.rmdir(self.path)
-            
+
     def clean(self):
         for x in os.listdir(self.path):
             path = self.abspath(x)
@@ -325,14 +327,14 @@ class Directory:
                 d.delete()
             else:
                 os.unlink(path)
-                
+
     def abspath(self, path):
         return Path.join(self.path, path)
-    
+
     def __str__(self):
         return self.path
-    
-    
+
+
 class CertificateDirectory(Directory):
 
     def __init__(self, path):
@@ -342,7 +344,7 @@ class CertificateDirectory(Directory):
     def list(self):
         listing = []
         factory = self.Factory(self.certClass())
-        for p,fn in Directory.list(self):
+        for p, fn in Directory.list(self):
             if not fn.endswith('.pem'):
                 continue
             path = self.abspath(fn)
@@ -358,14 +360,14 @@ class CertificateDirectory(Directory):
             elif c.valid():
                 valid.append(c)
         return valid
-    
+
     def listExpired(self):
         expired = []
         for c in self.list():
-             if not c.valid():
+            if not c.valid():
                 expired.append(c)
         return expired
-    
+
     def find(self, sn):
         for c in self.list():
             if c.serialNumber() == sn:
@@ -394,7 +396,7 @@ class CertificateDirectory(Directory):
                 bogus = cert.bogus()
                 if bogus:
                     bogus.insert(0, _('Reason(s):'))
-                    raise Exception, '\n - '.join(bogus)
+                    raise Exception('\n - '.join(bogus))
                 certlist.append(cert)
             except Exception, e:
                 log.error(
@@ -404,23 +406,23 @@ class CertificateDirectory(Directory):
 
 
 class ProductDirectory(CertificateDirectory):
-    
+
     PATH = 'etc/pki/product'
     KEY = 'key.pem'
-    
+
     def __init__(self):
         CertificateDirectory.__init__(self, self.PATH)
-        
+
     def certClass(self):
         return ProductCertificate
 
 
 class EntitlementDirectory(CertificateDirectory):
-    
+
     PATH = 'etc/pki/entitlement'
     KEY = 'key.pem'
     PRODUCT = 'product'
-    
+
     @classmethod
     def keypath(cls):
         return Path.join(cls.PATH, cls.KEY)
@@ -437,19 +439,19 @@ class EntitlementDirectory(CertificateDirectory):
 
 
 class ConsumerIdentity:
-    
+
     PATH = 'etc/pki/consumer'
     KEY = 'key.pem'
     CERT = 'cert.pem'
-    
+
     @classmethod
     def keypath(cls):
         return Path.join(cls.PATH, cls.KEY)
-    
+
     @classmethod
     def certpath(cls):
         return Path.join(cls.PATH, cls.CERT)
-    
+
     @classmethod
     def read(cls):
         f = open(cls.keypath())
@@ -462,8 +464,8 @@ class ConsumerIdentity:
 
     @classmethod
     def exists(cls):
-        return ( os.path.exists(cls.keypath()) and \
-                 os.path.exists(cls.certpath()) )
+        return (os.path.exists(cls.keypath()) and \
+                 os.path.exists(cls.certpath()))
 
     @classmethod
     def existsAndValid(cls):
@@ -477,12 +479,11 @@ class ConsumerIdentity:
                 log.warn('possible certificate corruption')
         return False
 
-    
     def __init__(self, keystring, certstring):
         self.key = keystring
         self.cert = certstring
         self.x509 = Certificate(certstring)
-        
+
     def getConsumerId(self):
         subject = self.x509.subject()
         return subject.get('CN')
@@ -490,7 +491,7 @@ class ConsumerIdentity:
     def getConsumerName(self):
         altName = self.x509.alternateName()
         return altName.replace("DirName:/CN=", "")
-        
+
     def write(self):
         self.__mkdir()
         f = open(self.keypath(), 'w')
@@ -499,7 +500,7 @@ class ConsumerIdentity:
         f = open(self.certpath(), 'w')
         f.write(self.cert)
         f.close()
-        
+
     def delete(self):
         path = self.keypath()
         if os.path.exists(path):
@@ -507,7 +508,7 @@ class ConsumerIdentity:
         path = self.certpath()
         if os.path.exists(path):
             os.unlink(path)
-    
+
     def __mkdir(self):
         path = Path.abs(self.PATH)
         if not os.path.exists(path):
@@ -530,9 +531,7 @@ class UpdateReport:
         self.expnd = []
 
     def updates(self):
-        return ( len(self.added)
-                +len(self.rogue)
-                +len(self.expd) )
+        return (len(self.added) + len(self.rogue) + len(self.expd))
 
     def write(self, s, title, certificates):
         indent = '  '
@@ -566,6 +565,6 @@ def main():
     updates = certlib.update()
     print _('%d updates required') % updates
     print _('done')
-        
+
 if __name__ == '__main__':
     main()

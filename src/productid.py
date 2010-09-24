@@ -15,7 +15,8 @@
 # in this software or its documentation.
 #
 
-import os, sys
+import os
+import sys
 import time
 import simplejson as json
 from yum import YumBase
@@ -94,7 +95,7 @@ class ProductManager:
         self.updateInstalled(enabled, active)
 
     def updateInstalled(self, enabled, active):
-        for cert,repo in enabled:
+        for cert, repo in enabled:
             if repo not in active:
                 continue
             p = cert.getProduct()
@@ -133,7 +134,7 @@ class ProductManager:
                 continue
             active.add(repo)
         end = time.time()
-        ms = (end-start)*1000
+        ms = (end - start) * 1000
         print _('duration: %d(ms)') % ms
         return active
 
