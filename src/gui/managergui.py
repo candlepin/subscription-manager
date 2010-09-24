@@ -41,6 +41,8 @@ from certlib import EntitlementDirectory, ProductDirectory, ConsumerIdentity, Ce
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
 import xml.sax.saxutils
 
+import factsgui
+
 import gettext
 _ = gettext.gettext
 gettext.textdomain("subscription-manager")
@@ -158,11 +160,15 @@ class ManageSubscriptionPage:
         self.populateProductDialog()
         self.setRegistrationStatus()
         self.updateMessage()
-        dic = {"on_update_close_clicked": gtk.main_quit,
-               "account_settings_clicked_cb": self.loadAccountSettings,
-               "on_button_add1_clicked": self.addSubButtonAction,
-               "on_button_update1_clicked": self.updateSubButtonAction,
-               "on_button_unsubscribe1_clicked": self.onUnsubscribeAction,
+
+        self.system_facts_dialog = factsgui.SystemFactsDialog()
+
+        dic = { "on_update_close_clicked" : gtk.main_quit,
+                "account_settings_clicked_cb" : self.loadAccountSettings,
+                "on_button_add1_clicked" : self.addSubButtonAction,
+                "on_button_update1_clicked" : self.updateSubButtonAction,
+                "on_button_unsubscribe1_clicked" : self.onUnsubscribeAction,
+                "on_system_facts_button_clicked" : self.showFactsDialog
             }
         rhsm_xml.signal_autoconnect(dic)
         self.setButtonState()
@@ -179,6 +185,9 @@ class ManageSubscriptionPage:
 
     def show_all(self):
         self.mainWin.show_all()
+
+    def showFactsDialog(self, button):
+        self.system_facts_dialog.show()
 
     def loadAccountSettings(self, button):
         if consumer.has_key('uuid'):
@@ -517,12 +526,13 @@ class RegistrationTokenScreen:
     """
 
     def __init__(self):
-        dic = {
-                "on_register_token_close_clicked": self.finish,
-                "on_change_account_button": self.reRegisterAction,
-                "on_facts_update_button_clicked": self.factsUpdateAction,
-                "on_submit_button_clicked": self.submitToken,
-                "on_unregister_button_click": self.unregisterAction}
+        dic = { 
+                "on_register_token_close_clicked" : self.finish, 
+                "on_change_account_button" : self.reRegisterAction,
+                "on_facts_update_button_clicked" : self.factsUpdateAction,
+                "on_submit_button_clicked" : self.submitToken,
+                "on_unregister_button_click" : self.unregisterAction
+                }
         self.setAccountMsg()
         rhsm_xml.signal_autoconnect(dic)
         self.regtokenWin = rhsm_xml.get_widget("register_token_dialog")
