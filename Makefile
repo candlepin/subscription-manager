@@ -160,4 +160,4 @@ pep8:
 	! test -s $$TMPFILE
 
 
-stylish: whitespacelint pep8 pyflakes
+stylish: pyflakes whitespacelint pep8 
