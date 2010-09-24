@@ -13,22 +13,28 @@
 # in this software or its documentation.
 #
 
-from fixture import RhsmFunctionalTest
-
-import connection
-from managercli import RegisterCommand
-import config
-
+# WARNING: Important that this runs early to make sure the config is 
+# overwritten before things start happening:
 import os
+import config
+test_config = os.path.abspath(os.path.join(os.path.dirname(__file__),
+    'rhsmtest.conf'))
+cfg = config.initConfig(config_file=test_config)
+
 import unittest
+import shutil
 
-class CliRegistrationTests(RhsmFunctionalTest):
 
-    def test_registration(self):
-        cmd = RegisterCommand()
-        cmd.main(['register', '--username=testuser1', '--password=password'])
-        self.assertTrue(os.path.exists(os.path.join(self.test_dir, 'etc', 'pki', 
-            'consumer', 'cert.pem')))
-        self.assertTrue(os.path.exists(os.path.join(self.test_dir, 'etc', 'pki', 
-            'consumer', 'key.pem')))
+class RhsmFunctionalTest(unittest.TestCase):
+
+    def setUp(self):
+        self.test_dir = cfg.get('test', 'tmpDir')
+        if not os.path.exists(self.test_dir):
+            os.mkdir(self.test_dir)
+            os.makedirs(os.path.join(self.test_dir, 'etc', 'pki', 'consumer'))
+
+    def tearDown(self):
+        shutil.rmtree(self.test_dir)
+
+
 
