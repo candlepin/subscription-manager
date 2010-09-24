@@ -28,7 +28,7 @@ class moduleClass(Module, managergui.ManageSubscriptionPage):
         self.sidebarTitle = _("RHSM Subscriptions Management")
         self.title = _("Subscription Manager")
 
-        self._destroy_widget('button_close')
+        self._destroy_widget('close_button')
 
     def apply(self, interface, testing=False):
         return RESULT_SUCCESS
@@ -40,10 +40,9 @@ class moduleClass(Module, managergui.ManageSubscriptionPage):
         pass
 
     def createScreen(self):
-        print "createScreen"
         self.vbox = gtk.VBox(spacing=10)
         self.subscription_dialog = managergui.rhsm_xml.get_widget(
-                "dialog-vbox2")
+                "main_vbox")
         self.subscription_dialog.reparent(self.vbox)
 
     def initializeUI(self):

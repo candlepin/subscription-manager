@@ -63,8 +63,22 @@ CONSUMER_SIGNAL = "on_consumer_changed"
 
 # Register new signal emitted by various dialogs when entitlement data changes
 gobject.signal_new(CONSUMER_SIGNAL, gtk.Dialog, gobject.SIGNAL_ACTION, gobject.TYPE_NONE, ())
-rhsm_xml = gtk.glade.XML(gladexml)
+#rhsm_xml = gtk.glade.XML(gladexml)
 
+class GladeWrapper(gtk.glade.XML):
+    def __init__(self, filename):
+        gtk.glade.XML.__init__(self, filename)
+
+    def get_widget(self, widget_name):
+        widget = gtk.glade.XML.get_widget(self, widget_name)
+        print widget_name, widget
+        if widget is None:
+            print "ERROR: widget %s was not found" % widget_name
+            raise Exception ("Widget %s not found" % widget_name)
+        return widget
+
+#rhsm_xml = gtk.glade.XML(gladexml)
+rhsm_xml = GladeWrapper(gladexml)
 
 def create_and_set_basic_connection():
     global UEP
@@ -158,15 +172,15 @@ class ManageSubscriptionPage:
         self.populateProductDialog()
         self.setRegistrationStatus()
         self.updateMessage()
-        dic = {"on_update_close_clicked": gtk.main_quit,
-               "account_settings_clicked_cb": self.loadAccountSettings,
-               "on_button_add1_clicked": self.addSubButtonAction,
-               "on_button_update1_clicked": self.updateSubButtonAction,
-               "on_button_unsubscribe1_clicked": self.onUnsubscribeAction,
+        dic = {"on_close_button_clicked": gtk.main_quit,
+               "on_account_settings_button_clicked": self.loadAccountSettings,
+               "on_add_button_clicked": self.addSubButtonAction,
+               "on_update_button_clicked": self.updateSubButtonAction,
+               "on_unsubscrib__clicked": self.onUnsubscribeAction,
             }
         rhsm_xml.signal_autoconnect(dic)
         self.setButtonState()
-        self.mainWin = rhsm_xml.get_widget("dialog_updates")
+        self.mainWin = rhsm_xml.get_widget("manage_subscriptions_dialog")
         self.mainWin.connect("delete-event", gtk.main_quit)
         self.mainWin.connect("hide", gtk.main_quit)
 
@@ -215,8 +229,8 @@ class ManageSubscriptionPage:
                 show_import_certificate_screen()
 
     def setButtonState(self, state=False):
-        self.button_update = rhsm_xml.get_widget("button_update1")
-        self.button_unsubscribe = rhsm_xml.get_widget("button_unsubscribe1")
+        self.button_update = rhsm_xml.get_widget("update_button")
+        self.button_unsubscribe = rhsm_xml.get_widget("unsubscribe_button")
         self.button_update.set_sensitive(state)
         self.button_unsubscribe.set_sensitive(state)
 
@@ -305,7 +319,7 @@ class ManageSubscriptionPage:
             self.setButtonState(state=True)
 
     def updateMessage(self):
-        self.sumlabel = rhsm_xml.get_widget("summaryLabel1")
+        self.sumlabel = rhsm_xml.get_widget("summary_label")
         self.sm_icon = rhsm_xml.get_widget("sm_icon")
         if self.warn_count > 1:
             self.sumlabel.set_label(
@@ -320,8 +334,8 @@ class ManageSubscriptionPage:
             self.sm_icon.set_from_file(subs_full)
 
     def setRegistrationStatus(self):
-        self.reg_label = rhsm_xml.get_widget("reg_status")
-        self.reg_button_label = rhsm_xml.get_widget("account_settings")
+        self.reg_label = rhsm_xml.get_widget("registration_status")
+        self.reg_button_label = rhsm_xml.get_widget("account_settings_button")
         exists = ConsumerIdentity.existsAndValid()
         log.info("updating registration status.. consumer exists?: %s", exists)
         if exists:
