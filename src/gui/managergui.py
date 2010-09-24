@@ -78,7 +78,7 @@ else:
     create_and_set_basic_connection()
 
 certlib = CertLib()
-ENT_CONFIG_DIR="/etc/pki/entitlement/product/"
+ENT_CONFIG_DIR = os.path.join(cfg.get('rhsm', 'entitlementCertDir'), 'product')
 
 
 def get_consumer():

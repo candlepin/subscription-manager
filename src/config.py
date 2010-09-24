@@ -26,19 +26,25 @@ _ = gettext.gettext
 DEFAULT_CONFIG_DIR="/etc/rhsm"
 DEFAULT_CONFIG_PATH="%s/rhsm.conf" % DEFAULT_CONFIG_DIR
 
-def initConfig():
+def initConfig(config_file=None):
 
     global CFG
+
+    # If a config file was specified, assume we should overwrite the global config
+    # to use it. This should only be used in testing. Could be switch to env var?
+    if config_file:
+        CFG = ConfigParser.ConfigParser()
+        CFG.read(config_file)
+        return CFG
+
+    # Normal application behavior, just read the default file if we haven't
+    # already:
     try:
         CFG = CFG
     except NameError:
         CFG = None
     if CFG == None:
         CFG = ConfigParser.ConfigParser()
-        cfg_file = DEFAULT_CONFIG_PATH
-
-        # TODO: os.environ check for another file?
-
-        CFG.read(cfg_file)
+        CFG.read(DEFAULT_CONFIG_PATH)
 
     return CFG

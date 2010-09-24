@@ -99,9 +99,14 @@ class CliCommand(object):
     def create_connection(self):
         return connection.UEPConnection()
 
-    def main(self):
+    def main(self, args=None):
 
-        (self.options, self.args) = self.parser.parse_args()
+        # In testing we sometimes specify args, otherwise use the default:
+        if not args:
+            args = sys.argv[1:]
+
+        (self.options, self.args) = self.parser.parse_args(args)
+
         # we dont need argv[0] in this list...
         self.args = self.args[1:]
         # do the work, catch most common errors here:
@@ -109,7 +114,7 @@ class CliCommand(object):
             self._do_command()
         except X509.X509Error, e:
             log.error(e)
-            print _('Consumer certificates corrupted. Please reregister')
+            print _('Consumer certificates corrupted. Please reregister.')
 
 
 class ReRegisterCommand(CliCommand):
