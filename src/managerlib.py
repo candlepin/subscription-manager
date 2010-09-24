@@ -23,14 +23,15 @@ from datetime import datetime
 from certlib import CertLib, ConsumerIdentity, \
                     ProductDirectory, EntitlementDirectory
 from logutil import getLogger
-#from facts import Facts
 from facts import getFacts
+from config import initConfig
 
 log = getLogger(__name__)
 
 import gettext
 _ = gettext.gettext
 
+cfg = initConfig()
 
 # Localization domain:
 APP = 'rhsm'
@@ -52,8 +53,9 @@ def persist_consumer_cert(consumerinfo):
     """
      Calls the consumerIdentity, persists and gets consumer info
     """
-    if not os.path.isdir("/etc/pki/consumer/"):
-        os.mkdir("/etc/pki/consumer/")
+    cert_dir = cfg.get('rhsm', 'consumerCertDir')
+    if not os.path.isdir(cert_dir):
+        os.mkdir(cert_dir)
     consumer = ConsumerIdentity(consumerinfo['idCert']['key'], \
                                   consumerinfo['idCert']['cert'])
     consumer.write()
@@ -288,8 +290,8 @@ def unregister(uep, consumer_uuid):
     """ Shared logic for un-registration. """
     uep.unregisterConsumer(consumer_uuid)
     # Clean up certificates, these are no longer valid:
-    shutil.rmtree("/etc/pki/consumer/", ignore_errors=True)
-    shutil.rmtree("/etc/pki/entitlement/", ignore_errors=True)
+    shutil.rmtree(cfg.get('rhsm', 'consumerCertDir'), ignore_errors=True)
+    shutil.rmtree(cfg.get('rhsm', 'entitlementCertDir'), ignore_errors=True)
     log.info("Successfully un-registered.")
 
 if __name__=='__main__':

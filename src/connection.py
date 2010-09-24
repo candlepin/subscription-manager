@@ -181,12 +181,6 @@ class UEPConnection:
         else:
             return self.conn.request_get("/status/")
 
-    def registered(self):
-        needToRegister=0
-        if not os.access("/etc/pki/consumer/cert.pem", os.F_OK):
-            needToRegister = 1
-        return needToRegister
-
     def registerConsumer(self, username, password, name="unknown",
             type="system", facts={}):
         """

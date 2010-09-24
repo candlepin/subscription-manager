@@ -40,6 +40,8 @@ from socket import error as socket_error
 
 log = getLogger(__name__)
 
+cfg = config.initConfig()
+
 def handle_exception(msg, ex):
     log.error(msg)
     log.exception(ex)
@@ -143,7 +145,7 @@ class ReRegisterCommand(CliCommand):
             #already exists. So only way to force register to succeed is to delete the certs for now.
             #ugly!
             log.info("consumer identity is not valid and consumer id was not passed. Deleting old ones and calling register")
-            shutil.rmtree("/etc/pki/consumer", ignore_errors=True)
+            shutil.rmtree(cfg.get('rhsm', 'consumerCertDir'), ignore_errors=True)
             # this should REGISTER
             rc = RegisterCommand()
             rc.main()

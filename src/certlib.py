@@ -24,12 +24,15 @@ from connection import UEPConnection
 from certificate import *
 from lock import Lock
 from logutil import getLogger
+from config import initConfig
 
 
 log = getLogger(__name__)
 
 import gettext
 _ = gettext.gettext
+
+cfg = initConfig()
 
 
 class ActionLock(Lock):
@@ -401,7 +404,7 @@ class CertificateDirectory(Directory):
 
 class ProductDirectory(CertificateDirectory):
     
-    PATH = 'etc/pki/product'
+    PATH = cfg.get('rhsm', 'productCertDir')
     KEY = 'key.pem'
     
     def __init__(self):
@@ -413,7 +416,7 @@ class ProductDirectory(CertificateDirectory):
 
 class EntitlementDirectory(CertificateDirectory):
     
-    PATH = 'etc/pki/entitlement'
+    PATH = cfg.get('rhsm', 'entitlementCertDir')
     KEY = 'key.pem'
     PRODUCT = 'product'
     
@@ -434,7 +437,7 @@ class EntitlementDirectory(CertificateDirectory):
 
 class ConsumerIdentity:
     
-    PATH = 'etc/pki/consumer'
+    PATH = cfg.get('rhsm', 'consumerCertDir')
     KEY = 'key.pem'
     CERT = 'cert.pem'
     
