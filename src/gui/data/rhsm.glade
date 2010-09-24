@@ -166,7 +166,7 @@
                 </child>
               </widget>
               <packing>
-                <property name="resize">False</property>
+                <property name="resize">True</property>
                 <property name="shrink">False</property>
               </packing>
             </child>
@@ -233,7 +233,7 @@
                     <accessibility>
                       <atkproperty name="AtkObject::accessible-name">button_unsubscribe1</atkproperty>
                     </accessibility>
-                    <signal name="clicked" handler="on_button_unsubscribe1_clicked"/>
+                    <signal name="clicked" handler="on_unsubscribe_button_clicked"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
