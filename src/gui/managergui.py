@@ -154,7 +154,6 @@ class ManageSubscriptionPage:
     def create_gui(self):
         global UEP
 
-        self.vbox = rhsm_xml.get_widget("dialog-vbox1")
         self.add_subscription_screen = None
         self.populateProductDialog()
         self.setRegistrationStatus()
@@ -192,10 +191,6 @@ class ManageSubscriptionPage:
 
     def refresh(self):
         self.mainWin.destroy()
-
-    def reviewSubscriptionPagePrepare(self):
-        entdir = EntitlementDirectory()
-        self.vbox.show_all()
 
     def show_add_subscription_screen(self):
         if not self.add_subscription_screen:
@@ -1166,6 +1161,7 @@ def main():
         gui = ManageSubscriptionPage()
         gtk.main()
     except Exception, e:
+        raise
         unexpectedError(e.message)
 
 
