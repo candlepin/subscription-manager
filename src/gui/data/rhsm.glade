@@ -96,6 +96,7 @@
           <widget class="GtkHPaned" id="product_details_hpane">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="position">1</property>
             <accessibility>
               <atkproperty name="AtkObject::accessible-name">product_details_hpane</atkproperty>
             </accessibility>
@@ -278,6 +279,20 @@
               <atkproperty name="AtkObject::accessible-name">hbuttonbox1</atkproperty>
             </accessibility>
             <child>
+              <widget class="GtkButton" id="system_facts_button">
+                <property name="label" translatable="yes">View System Facts</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_system_facts_button_clicked"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
               <widget class="GtkButton" id="account_settings_button">
                 <property name="label">Registration..</property>
                 <property name="visible">True</property>
@@ -291,7 +306,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -309,7 +324,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </widget>
@@ -1098,75 +1113,6 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkVBox" id="vbox1">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <widget class="GtkLabel" id="facts_label">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">&lt;b&gt;System Facts&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
-                        <accessibility>
-                          <atkproperty name="AtkObject::accessible-name">label6</atkproperty>
-                        </accessibility>
-                      </widget>
-                      <packing>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkHBox" id="hbox2">
-                        <property name="visible">True</property>
-                        <accessibility>
-                          <atkproperty name="AtkObject::accessible-name">hbox3</atkproperty>
-                        </accessibility>
-                        <child>
-                          <widget class="GtkLabel" id="facts_update_label">
-                            <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="use_markup">True</property>
-                            <property name="ellipsize">middle</property>
-                            <accessibility>
-                              <atkproperty name="AtkObject::accessible-name">account_label</atkproperty>
-                            </accessibility>
-                          </widget>
-                          <packing>
-                            <property name="padding">5</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkButton" id="facts_update_button">
-                            <property name="label" translatable="yes">Update Facts</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="xalign">0.55000001192092896</property>
-                            <property name="yalign">0.5899999737739563</property>
-                            <accessibility>
-                              <atkproperty name="AtkObject::accessible-name">button1</atkproperty>
-                            </accessibility>
-                            <signal name="clicked" handler="on_facts_update_button_clicked"/>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="padding">5</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </widget>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
                   <widget class="GtkVBox" id="vbox9">
                     <property name="visible">True</property>
                     <property name="orientation">vertical</property>
@@ -1337,7 +1283,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                     </child>
                   </widget>
                   <packing>
-                    <property name="position">2</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </widget>
