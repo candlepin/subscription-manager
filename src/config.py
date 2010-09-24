@@ -23,13 +23,13 @@ import ConfigParser
 _ = gettext.gettext
 
 
-DEFAULT_CONFIG_DIR="/etc/rhsm"
-DEFAULT_CONFIG_PATH="%s/rhsm.conf" % DEFAULT_CONFIG_DIR
+DEFAULT_CONFIG_DIR = "/etc/rhsm"
+DEFAULT_CONFIG_PATH = "%s/rhsm.conf" % DEFAULT_CONFIG_DIR
+
 
 def initConfig(config_file=None):
 
     global CFG
-
     # If a config file was specified, assume we should overwrite the global config
     # to use it. This should only be used in testing. Could be switch to env var?
     if config_file:
@@ -46,5 +46,4 @@ def initConfig(config_file=None):
     if CFG == None:
         CFG = ConfigParser.ConfigParser()
         CFG.read(DEFAULT_CONFIG_PATH)
-
     return CFG

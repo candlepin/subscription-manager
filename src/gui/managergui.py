@@ -1,5 +1,5 @@
 #
-# GUI Module for standalone subscription-manager cli 
+# GUI Module for standalone subscription-manager cli
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -65,6 +65,7 @@ CONSUMER_SIGNAL = "on_consumer_changed"
 gobject.signal_new(CONSUMER_SIGNAL, gtk.Dialog, gobject.SIGNAL_ACTION, gobject.TYPE_NONE, ())
 rhsm_xml = gtk.glade.XML(gladexml)
 
+
 def create_and_set_basic_connection():
     global UEP
     UEP = connection.UEPConnection()
@@ -85,12 +86,12 @@ def get_consumer():
     if not ConsumerIdentity.existsAndValid():
         return {}
     consumer = ConsumerIdentity.read()
-    consumer_info = {"consumer_name" : consumer.getConsumerName(),
-                     "uuid" : consumer.getConsumerId()
-                    }
+    consumer_info = {"consumer_name": consumer.getConsumerName(),
+                     "uuid": consumer.getConsumerId()}
     return consumer_info
 
 consumer = get_consumer()
+
 
 def fetch_certificates():
     # Force fetch all certs
@@ -106,6 +107,7 @@ register_screen = None
 regtoken_screen = None
 import_certificate_screen = None
 
+
 def show_register_screen():
     global register_screen
 
@@ -114,6 +116,7 @@ def show_register_screen():
     else:
         register_screen = RegisterScreen()
 
+
 def show_regtoken_screen():
     global regtoken_screen
 
@@ -121,7 +124,8 @@ def show_regtoken_screen():
         regtoken_screen.show()
     else:
         regtoken_screen = RegistrationTokenScreen()
-    
+
+
 def show_import_certificate_screen():
     global import_certificate_screen
 
@@ -130,19 +134,21 @@ def show_import_certificate_screen():
     else:
         import_certificate_screen = ImportCertificate()
 
+
 class ManageSubscriptionPage:
     """
      Main subscription Manager Window
     """
+
     def __init__(self):
         self.pname_selected = None
         self.pselect_status = None
         self.psubs_selected = None
 
-        self.state_icon_map = {"Expired" : gtk.STOCK_DIALOG_WARNING,
-                               "Not Subscribed" : gtk.STOCK_DIALOG_QUESTION,
-                               "Subscribed" : gtk.STOCK_APPLY, 
-                               "Not Installed" : gtk.STOCK_DIALOG_QUESTION}
+        self.state_icon_map = {"Expired": gtk.STOCK_DIALOG_WARNING,
+                               "Not Subscribed": gtk.STOCK_DIALOG_QUESTION,
+                               "Subscribed": gtk.STOCK_APPLY,
+                               "Not Installed": gtk.STOCK_DIALOG_QUESTION}
         self.create_gui()
 
     def create_gui(self):
@@ -153,11 +159,11 @@ class ManageSubscriptionPage:
         self.populateProductDialog()
         self.setRegistrationStatus()
         self.updateMessage()
-        dic = { "on_update_close_clicked" : gtk.main_quit,
-                "account_settings_clicked_cb" : self.loadAccountSettings,
-                "on_button_add1_clicked" : self.addSubButtonAction,
-                "on_button_update1_clicked" : self.updateSubButtonAction,
-                "on_button_unsubscribe1_clicked" : self.onUnsubscribeAction,
+        dic = {"on_update_close_clicked": gtk.main_quit,
+               "account_settings_clicked_cb": self.loadAccountSettings,
+               "on_button_add1_clicked": self.addSubButtonAction,
+               "on_button_update1_clicked": self.updateSubButtonAction,
+               "on_button_unsubscribe1_clicked": self.onUnsubscribeAction,
             }
         rhsm_xml.signal_autoconnect(dic)
         self.setButtonState()
@@ -171,7 +177,7 @@ class ManageSubscriptionPage:
             widget.connect(CONSUMER_SIGNAL, self.gui_reload)
 
         self.show_all()
-    
+
     def show_all(self):
         self.mainWin.show_all()
 
@@ -214,8 +220,8 @@ class ManageSubscriptionPage:
                 show_import_certificate_screen()
 
     def setButtonState(self, state=False):
-        self.button_update =  rhsm_xml.get_widget("button_update1")
-        self.button_unsubscribe =  rhsm_xml.get_widget("button_unsubscribe1")
+        self.button_update = rhsm_xml.get_widget("button_update1")
+        self.button_unsubscribe = rhsm_xml.get_widget("button_unsubscribe1")
         self.button_update.set_sensitive(state)
         self.button_unsubscribe.set_sensitive(state)
 
@@ -236,7 +242,7 @@ class ManageSubscriptionPage:
         self.tv_products = rhsm_xml.get_widget("treeview_updates")
         self.productList = gtk.ListStore(gtk.gdk.Pixbuf, gobject.TYPE_STRING, gobject.TYPE_STRING, \
                                          gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
-   
+
         self.updateProductDialog()
 
         #self.tv_products.set_rules_hint(True)
@@ -284,20 +290,20 @@ class ManageSubscriptionPage:
         self.setRegistrationStatus()
 
     def on_selection(self, selection):
-        items,iter = selection.get_selected()
+        items, iter = selection.get_selected()
         if iter is None:
             print "nothing was selected"
             return
 
-        self.pname_selected = items.get_value(iter,1)
-        self.psubs_selected = items.get_value(iter,2)
-        self.pselect_status = items.get_value(iter,3)
+        self.pname_selected = items.get_value(iter, 1)
+        self.psubs_selected = items.get_value(iter, 2)
+        self.pselect_status = items.get_value(iter, 3)
         desc = managerlib.getProductDescription(self.pname_selected)
         pdetails = rhsm_xml.get_widget("textview_details")
         pdetails.get_buffer().set_text(desc)
         pdetails.set_cursor_visible(False)
         pdetails.show()
-        status = ''.join([x.split('>',1)[-1] for x in self.pselect_status.split('<')])
+        status = ''.join([x.split('>', 1)[-1] for x in self.pselect_status.split('<')])
         if status == "Not Subscribed":
             self.setButtonState(state=False)
         else:
@@ -305,7 +311,7 @@ class ManageSubscriptionPage:
 
     def updateMessage(self):
         self.sumlabel = rhsm_xml.get_widget("summaryLabel1")
-        self.sm_icon  = rhsm_xml.get_widget("sm_icon")
+        self.sm_icon = rhsm_xml.get_widget("sm_icon")
         if self.warn_count > 1:
             self.sumlabel.set_label(
                           constants.WARN_SUBSCRIPTIONS % self.warn_count)
@@ -372,14 +378,16 @@ class ManageSubscriptionPage:
             return
         self.gui_reload()
 
+
 class RegisterScreen:
     """
       Registration Widget Screen
     """
+
     def __init__(self):
         create_and_set_basic_connection()
-        dic = { "on_register_close_clicked" : self.cancel,
-                "on_register_button_clicked" : self.onRegisterAction, 
+        dic = {"on_register_close_clicked": self.cancel,
+               "on_register_button_clicked": self.onRegisterAction,
             }
         rhsm_xml.signal_autoconnect(dic)
         self.registerWin = rhsm_xml.get_widget("register_dialog")
@@ -446,10 +454,10 @@ class RegisterScreen:
                 # try to auomatically bind products
                 for pname, phash in managerlib.getInstalledProductHashMap().items():
                     try:
-                       UEP.bindByProduct(consumer['uuid'], phash)
-                       log.info("Automatically subscribe the machine to product %s " % pname)
+                        UEP.bindByProduct(consumer['uuid'], phash)
+                        log.info("Automatically subscribe the machine to product %s " % pname)
                     except:
-                       log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
+                        log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
                 if not fetch_certificates():
                     return False
 
@@ -512,13 +520,14 @@ class RegistrationTokenScreen:
     """
      This screen handles reregistration and registration token activation
     """
+
     def __init__(self):
-        dic = { 
-                "on_register_token_close_clicked" : self.finish, 
-                "on_change_account_button" : self.reRegisterAction,
-                "on_facts_update_button_clicked" : self.factsUpdateAction,
-                "on_submit_button_clicked" : self.submitToken,
-                "on_unregister_button_click" : self.unregisterAction}
+        dic = {
+                "on_register_token_close_clicked": self.finish,
+                "on_change_account_button": self.reRegisterAction,
+                "on_facts_update_button_clicked": self.factsUpdateAction,
+                "on_submit_button_clicked": self.submitToken,
+                "on_unregister_button_click": self.unregisterAction}
         self.setAccountMsg()
         rhsm_xml.signal_autoconnect(dic)
         self.regtokenWin = rhsm_xml.get_widget("register_token_dialog")
@@ -566,7 +575,7 @@ class RegistrationTokenScreen:
         try:
             UEP.updateConsumerFacts(consumer['uuid'], facts.get_facts())
         except connection.RestlibException, e:
-            log.error("Could not update system facts:  error %s" % ( e))
+            log.error("Could not update system facts:  error %s" % (e))
             errorWindow(linkify(e.msg))
         except Exception, e:
             log.error("Could not update system facts \nError: %s" % (e))
@@ -579,7 +588,7 @@ class RegistrationTokenScreen:
         alabel = rhsm_xml.get_widget("account_label2")
         alabel.set_label(_("<b>    ID:</b>       %s" % consumer["uuid"]))
         alabel = rhsm_xml.get_widget("account_label3")
-        alabel.set_label(_("<b>  Name:</b>     %s" % consumer["consumer_name"]))        
+        alabel.set_label(_("<b>  Name:</b>     %s" % consumer["consumer_name"]))
 
     def submitToken(self, button):
         rlabel = rhsm_xml.get_widget("regtoken_entry")
@@ -598,10 +607,12 @@ class RegistrationTokenScreen:
             log.error("Could not subscribe registration token [%s] \nError: %s" % (reg_token, e))
             errorWindow(constants.SUBSCRIBE_REGTOKEN_ERROR % reg_token)
 
+
 class AddSubscriptionScreen:
     """
      Add subscriptions Widget screen
     """
+
     def __init__(self):
         global UEP
         self.selected = {}
@@ -628,8 +639,8 @@ class AddSubscriptionScreen:
             notebook = rhsm_xml.get_widget("notebook1")
             notebook.remove_page(1)
 
-        dic = { "on_add_subscribe_close_clicked" : self.cancel,
-                "on_add_subscribe_button_clicked"   : self.onSubscribeAction,
+        dic = {"on_add_subscribe_close_clicked": self.cancel,
+               "on_add_subscribe_button_clicked": self.onSubscribeAction,
             }
         rhsm_xml.signal_autoconnect(dic)
         self.addWin = rhsm_xml.get_widget("dialog_add")
@@ -640,8 +651,9 @@ class AddSubscriptionScreen:
             self.addWin.hide()
 
     def populateSubscriptionLists(self):
-        try:    
-            compatible, dlist = managerlib.getCompatibleSubscriptions(UEP, self.consumer['uuid']) 
+        try:
+            compatible, dlist = managerlib.getCompatibleSubscriptions(UEP,
+                    self.consumer['uuid'])
             self.matched = managerlib.getMatchedSubscriptions(dlist) or []
             matched_pids = []
             for product in self.matched:
@@ -653,7 +665,7 @@ class AddSubscriptionScreen:
             for prod in compatible:
                 if prod['productId'] not in matched_pids:
                     self.compat.append(prod)
-            compatible_pids= []
+            compatible_pids = []
             for product in self.compat:
                 pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
                 self.compatList.append(None, [False] + pdata)
@@ -671,7 +683,6 @@ class AddSubscriptionScreen:
         except Exception, e:
             log.error("Error populating available subscriptions from the server")
             log.error("Exception: %s" % e)
-
 
     # hook to forward
     def finish(self):
@@ -705,7 +716,7 @@ class AddSubscriptionScreen:
         pwin.setLabel(_("Performing Subscribe. Please wait."))
         busted_subs = []
         count = 0
-        
+
         pwin.setProgress(count, len(self.selected.items()))
 
         for pool, state in self.selected.items():
@@ -718,12 +729,12 @@ class AddSubscriptionScreen:
                     updated_count = str(int(updated_pool['quantity']) -
                             int(updated_pool['consumed']))
                     my_model.set_value(state[-1], 2, updated_count)
-  
+
                     # unselect the row
                     my_model.set_value(state[-1], 0, False)
                     self.selected[pool] = (False, state[1], state[2])
 
-                    subscribed_count+=1
+                    subscribed_count += 1
                 except Exception, e:
                     # Subscription failed, continue with rest
                     log.error("Failed to subscribe to product %s Error: %s" % (state[1], e))
@@ -741,7 +752,6 @@ class AddSubscriptionScreen:
         pwin.hide()
         self.addWin.hide()
 
-            
     def populateMatchingSubscriptions(self):
         """
         populate subscriptions matching currently installed products
@@ -777,12 +787,12 @@ class AddSubscriptionScreen:
         self.match_tv.append_column(col)
 
         self.availableList.set_sort_column_id(1, gtk.SORT_ASCENDING)
-    
+
     def populateCompatibleSubscriptions(self):
         """
         populate subscriptions compatible with your system facts
         """
-        self.compatible_tv =  rhsm_xml.get_widget("treeview_available3")
+        self.compatible_tv = rhsm_xml.get_widget("treeview_available3")
         self.compatible_tv.set_model(self.compatList)
 
         cell = gtk.CellRendererToggle()
@@ -877,14 +887,13 @@ class AddSubscriptionScreen:
         if state:
             self.total += 1
         else:
-            self.total -= 1    
+            self.total -= 1
         if not self.total:
             self.csstatus.hide()
             return
         self.csstatus.show()
         self.csstatus.set_label(constants.SELECT_STATUS % self.total)
 
-        
     def col_compat_selected(self, cell, path, model):
         items, iter = self.compatible_tv.get_selection().get_selected()
         model[path][0] = not model[path][0]
@@ -900,12 +909,13 @@ class AddSubscriptionScreen:
             return
         self.csstatus.show()
         self.csstatus.set_label(constants.SELECT_STATUS % self.total)
-        
+
     def _cell_data_toggle_func(self, tree_column, renderer, model, treeiter):
         renderer.set_property('visible', True)
 
 
 class UpdateSubscriptionScreen:
+
     def __init__(self, product_selection):
         global UEP
 
@@ -920,15 +930,15 @@ class UpdateSubscriptionScreen:
                     # Only list selected product's pools
                     pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
                     self.updatesList.append(None, [False] + pdata)
-                    self.available_updates+= 1
+                    self.available_updates += 1
         except:
             pass
 
 
         self.populateUpdatesDialog()
-        dic = { "on_update_subscriptions_close_clicked" : self.cancel,
-                #"on_import_cert_button_clicked" : self.onImportPrepare,
-                "on_update_subscribe_button_clicked"   : self.onSubscribeAction,
+        dic = {"on_update_subscriptions_close_clicked": self.cancel,
+               #"on_import_cert_button_clicked": self.onImportPrepare,
+               "on_update_subscribe_button_clicked": self.onSubscribeAction,
             }
         rhsm_xml.signal_autoconnect(dic)
         self.updateWin = rhsm_xml.get_widget("dialog1_updates")
@@ -938,7 +948,6 @@ class UpdateSubscriptionScreen:
         if not self.available_updates:
             infoWindow(constants.NO_UPDATES_WARNING, self.updateWin)
             self.updateWin.hide()
-
 
     def cancel(self, button=None):
         self.updateWin.destroy()
@@ -957,7 +966,7 @@ class UpdateSubscriptionScreen:
         hlabel.set_label(_("<b>Available Subscriptions for %s:</b>") % self.product_select)
 
     def populateUpdatesDialog(self):
-        self.tv_products =  rhsm_xml.get_widget("treeview_updates2")
+        self.tv_products = rhsm_xml.get_widget("treeview_updates2")
         self.tv_products.set_model(self.updatesList)
 
         cell = gtk.CellRendererToggle()
@@ -1011,7 +1020,7 @@ class UpdateSubscriptionScreen:
                     entitled_data = ent_ret[0]['pool']
                     updated_count = str(int(entitled_data['quantity']) - int(entitled_data['consumed']))
                     my_model.set_value(state[-1], 2, updated_count)
-                    subscribed_count+=1
+                    subscribed_count += 1
                 except Exception, e:
                     # Subscription failed, continue with rest
                     log.error("Failed to subscribe to product %s Error: %s" % (state[1], e))
@@ -1028,36 +1037,34 @@ class UpdateSubscriptionScreen:
             slabel.set_label(constants.ATLEAST_ONE_SELECTION)
         self.gui_reload()
 
+
 class ChooseEntitlement:
+
     """
-    Choose which entitlement system we'd like, 
+    Choose which entitlement system we'd like,
     new style Rhesus, or old style RHN
     """
+
     def __init__(self):
-        self.vbox = rhsm_xml.get_widget("entitlementChooseVbox2")
-        #rhesus_button_toggled
-        
-        self.choose_win = rhsm_xml.get_widget("entitlement_selection_2")
-        self.rhesus_button = rhsm_xml.get_widget("rhesus_button2")
+        self.vbox = rhsm_xml.get_widget("entitlementChooseVbox")
+
+        self.choose_win = rhsm_xml.get_widget("entitlement_selection")
+        self.rhesus_button = rhsm_xml.get_widget("rhesus_button")
         self.rhn_button = rhsm_xml.get_widget("rhn_button")
         self.local_button = rhsm_xml.get_widget("local_button")
 
-        print "bloop", self.rhesus_button
-#        self.choose_win.show_all()
 
-     #   self.choose_win.run()
-
-
-        
 class ImportCertificate:
+
     """
      Import an Entitlement Certificate Widget screen
     """
+
     def __init__(self):
         self.add_vbox = rhsm_xml.get_widget("import_vbox")
 
-        dic = { "on_close_import_clicked" : self.cancel,
-                "on_import_cert_button2_clicked" : self.importCertificate,
+        dic = {"on_close_import_clicked": self.cancel,
+               "on_import_cert_button2_clicked": self.importCertificate,
             }
         rhsm_xml.signal_autoconnect(dic)
         self.importWin = rhsm_xml.get_widget("dialog1_import")
@@ -1066,10 +1073,10 @@ class ImportCertificate:
         self.importWin.show_all()
 
     def cancel(self, button=None):
-      self.importWin.hide()
-#      self.importWin.destroy()
-      gtk.main_iteration()
-      return True
+        self.importWin.hide()
+#        self.importWin.destroy()
+        gtk.main_iteration()
+        return True
 
     def show(self):
         self.importWin.present()
@@ -1101,23 +1108,29 @@ class ImportCertificate:
         self.importWin.hide()
 #        reload()
 
+
 def unexpectedError(message, exc_info=None):
     message = message + "\n" + constants.UNEXPECTED_ERROR
     errorWindow(message)
     if exc_info:
         (etype, value, stack_trace) = exc_info
 
+
 def errorWindow(message):
     messageWindow.ErrorDialog(messageWindow.wrap_text(message))
+
 
 def infoWindow(message, parent):
     messageWindow.infoDialog(messageWindow.wrap_text(message), parent)
 
+
 def setArrowCursor():
     pass
 
+
 def setBusyCursor():
     pass
+
 
 def reload():
     global gui
@@ -1125,6 +1138,7 @@ def reload():
 #    gtk.main_quit()
 #    gui = None
     main()
+
 
 def linkify(msg):
     """
@@ -1140,11 +1154,12 @@ def linkify(msg):
 
     return url_regex.sub(add_markup, msg)
 
+
 def main():
     global gui
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-    if os.geteuid() != 0 :
+    if os.geteuid() != 0:
         #rootWarning()
         sys.exit(1)
     try:
@@ -1152,6 +1167,7 @@ def main():
         gtk.main()
     except Exception, e:
         unexpectedError(e.message)
+
 
 if __name__ == "__main__":
     main()

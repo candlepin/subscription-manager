@@ -1,5 +1,5 @@
 #
-# Module to probe Hardware info from the system 
+# Module to probe Hardware info from the system
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -27,15 +27,17 @@ import ethtool
 import socket
 import commands
 
+
 class Hardware:
+
     def __init__(self):
         self.allhw = {}
         self.dmiinfo = {}
 
     def getUnameInfo(self):
-        
+
         uname_data = os.uname()
-        uname_keys = ('uname.sysname', 'uname.nodename', 'uname.release', 
+        uname_keys = ('uname.sysname', 'uname.nodename', 'uname.release',
                       'uname.version', 'uname.machine')
         self.unameinfo = dict(zip(uname_keys, uname_data))
         self.allhw.update(self.unameinfo)
@@ -44,7 +46,7 @@ class Hardware:
     def getReleaseInfo(self):
         import platform
         distro_data = platform.linux_distribution()
-        distro_keys = ('distribution.name', 'distribution.version', 
+        distro_keys = ('distribution.name', 'distribution.version',
                        'distribution.id')
         self.releaseinfo = dict(zip(distro_keys, distro_data))
         self.allhw.update(self.releaseinfo)
@@ -59,7 +61,7 @@ class Hardware:
 
         useful = ["MemTotal", "SwapTotal"]
         try:
-            parser = re.compile(r'^(?P<key>\S*):\s*(?P<value>\d*)\s*kB' )
+            parser = re.compile(r'^(?P<key>\S*):\s*(?P<value>\d*)\s*kB')
             memdata = open('/proc/meminfo')
             for info in memdata:
                 match = parser.match(info)
@@ -75,8 +77,8 @@ class Hardware:
         return self.meminfo
 
     def getCpuInfo(self):
-        # TODO:(prad) Revisit this and see if theres a better way to parse /proc/cpuinfo 
-        # perhaps across all arches 
+        # TODO:(prad) Revisit this and see if theres a better way to parse /proc/cpuinfo
+        # perhaps across all arches
         self.cpuinfo = {}
         try:
             cpudata = commands.getstatusoutput('LANG=en_US.UTF-8 /usr/bin/lscpu')[-1].split('\n')
@@ -91,15 +93,15 @@ class Hardware:
 
     def getDmiInfo(self):
         try:
-            dmi_data = { 
-                "dmi.bios." : dmidecode.bios(),
-                "dmi.processor." : dmidecode.processor(),
-                "dmi.baseboard." : dmidecode.baseboard(),
-                "dmi.chassis." : dmidecode.chassis(),
-                "dmi.slot."  : dmidecode.slot(),
-                "dmi.system." : dmidecode.system(),
-                "dmi.memory." : dmidecode.memory(),
-                "dmi.connector." : dmidecode.connector(),
+            dmi_data = {
+                "dmi.bios.": dmidecode.bios(),
+                "dmi.processor.": dmidecode.processor(),
+                "dmi.baseboard.": dmidecode.baseboard(),
+                "dmi.chassis.": dmidecode.chassis(),
+                "dmi.slot.": dmidecode.slot(),
+                "dmi.system.": dmidecode.system(),
+                "dmi.memory.": dmidecode.memory(),
+                "dmi.connector.": dmidecode.connector(),
             }
 
             for tag, func in dmi_data.items():
@@ -124,7 +126,7 @@ class Hardware:
         try:
             self.netinfo['network.hostname'] = socket.gethostname()
             try:
-                self.netinfo['network.ipaddr']   = socket.gethostbyname(self.netinfo['network.hostname'])
+                self.netinfo['network.ipaddr'] = socket.gethostbyname(self.netinfo['network.hostname'])
             except:
                 self.netinfo['network.ipaddr'] = "127.0.0.1"
         except:

@@ -15,7 +15,8 @@
 # in this software or its documentation.
 #
 
-import os, sys
+import os
+import sys
 sys.path.append('/usr/share/rhsm')
 from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
 from repolib import RepoLib, EntitlementDirectory
@@ -34,6 +35,7 @@ provide these products.  It is important that you renew
 these subscriptions immediatly to resume access to security
 and other critical updates.
 """
+
 
 def update(conduit):
     """ update entitlement certificates """
