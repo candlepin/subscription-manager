@@ -32,7 +32,6 @@ _ = gettext.gettext
 config = initConfig()
 
 log = getLogger(__name__)
-DEFAULT_CA_FILE = "/etc/pki/CA/candlepin.pem"
 
 
 class RestlibException(Exception):
@@ -124,9 +123,9 @@ class UEPConnection:
     """
 
     def __init__(self, 
-            host=config.get('server', 'hostname', 'localhost'),
-            ssl_port=int(config.get('server', 'port', 8443)),
-            handler=config.get('server', 'prefix', '/candlepin'),
+            host=config.get('server', 'hostname'),
+            ssl_port=int(config.get('server', 'port')),
+            handler=config.get('server', 'prefix'),
             cert_file=None, key_file=None):
         self.host = host
         self.ssl_port = ssl_port
@@ -140,10 +139,6 @@ class UEPConnection:
         self.insecure = False
         if config_insecure:
             self.insecure = True
-        if self.ca_cert == None:
-            log.info("Value \'ca_cert\' not present in config file. "
-                    "Assuming default value: %s", DEFAULT_CA_FILE)
-            self.ca_cert = DEFAULT_CA_FILE
         # initialize connection
         self.conn = Restlib(self.host, self.ssl_port, self.handler, 
                 self.cert_file, self.key_file, self.ca_cert, self.insecure)

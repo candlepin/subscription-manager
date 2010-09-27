@@ -11,9 +11,9 @@ Requires: python-dmidecode
 Requires:  python-ethtool 
 Requires:  python-simplejson
 Requires:  python-iniparse
-Requires:  m2crypto 
 Requires:  PyXML 
-Requires: yum >= 3.2.19-15
+Requires:  python-rhsm
+Requires:  yum >= 3.2.19-15
 Requires(post): chkconfig
 Requires(preun): chkconfig
 Requires(preun): initscripts
@@ -30,6 +30,18 @@ BuildRequires: desktop-file-utils
 Subscription Manager package provides programs and libraries to allow users 
 to manager subscriptions/yumrepos from Red Hat entitlement or deployment 
 Platform.
+
+%package -n python-rhsm
+Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
+Group: Development/Libraries
+Requires: m2crypto
+Requires: python-simplejson
+BuildArch: noarch
+
+%description -n python-rhsm
+A small library for communicating with the REST interface of a Red Hat Unified
+Entitlement Platform. This interface is used for the management of system
+entitlements, certificates, and access to content.
 
 %package -n subscription-manager-gnome
 Summary: A GUI interface to manage Red Hat product subscriptions
@@ -78,7 +90,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 
-# dirs
 %dir %{_datadir}/rhsm
 %dir %{_datadir}/rhsm/gui
 %dir %{_datadir}/rhsm/gui/data
@@ -86,9 +97,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir /etc/rhsm/facts
 %dir %{_datarootdir}/locale
 
-#files
 %{_datadir}/rhsm/__init__.py*
-%{_datadir}/rhsm/connection.py*
 %{_datadir}/rhsm/managercli.py*
 %{_datadir}/rhsm/managerlib.py*
 %{_datadir}/rhsm/repolib.py*
@@ -98,15 +107,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/certmgr.py*
 %{_datadir}/rhsm/certlib.py*
 %{_datadir}/rhsm/hwprobe.py*
-%{_datadir}/rhsm/config.py*
 %{_datadir}/rhsm/constants.py*
-%{_datadir}/rhsm/logutil.py*
 %{_datadir}/rhsm/lock.py*
 %{_datadir}/rhsm/facts.py*
 %{_datadir}/rhsm/factlib.py*
 %{_datadir}/rhsm/productid.py*
 %{_datarootdir}/locale/*
-#%{_datadir}/rhsm/rhsmcertd.*
 %attr(755,root,root) %{_sbindir}/subscription-manager-cli
 %attr(755,root,root) %dir %{_var}/log/rhsm
 %attr(755,root,root) %dir %{_var}/lib/rhsm
@@ -138,7 +144,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/gui/data/factsdialog.glade  
 %{_datadir}/rhsm/gui/data/rhsm.glade  
 %{_datadir}/rhsm/gui/data/subsgui.glade  
-%{_datadir}/rhsm/gui/data/subsMgr.glade
 %{_datadir}/rhsm/gui/data/progress.glade
 %{_datadir}/rhsm/gui/data/icons/subsmgr-empty.png
 %{_datadir}/rhsm/gui/data/icons/subsmgr-full.png
@@ -153,6 +158,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/xdg/autostart/rhsm-compliance-icon.desktop
 %{_sysconfdir}/pam.d/subscription-manager-gui
 %{_sysconfdir}/security/console.apps/subscription-manager-gui
+
+%files -n python-rhsm
+%{_datadir}/rhsm/connection.py*
+%{_datadir}/rhsm/logutil.py*
+%{_datadir}/rhsm/config.py*
 
 %post
 chkconfig --add rhsmcertd
