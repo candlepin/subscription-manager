@@ -131,9 +131,11 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/firstboot/modules
 %defattr(-,root,root,-)
 %{_datadir}/rhsm/gui/__init__.py* 
+%{_datadir}/rhsm/gui/factsgui.py*
 %{_datadir}/rhsm/gui/managergui.py*  
 %{_datadir}/rhsm/gui/messageWindow.py*  
 %{_datadir}/rhsm/gui/progress.py* 
+%{_datadir}/rhsm/gui/data/factsdialog.glade  
 %{_datadir}/rhsm/gui/data/rhsm.glade  
 %{_datadir}/rhsm/gui/data/subsgui.glade  
 %{_datadir}/rhsm/gui/data/subsMgr.glade
