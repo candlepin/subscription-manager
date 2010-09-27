@@ -44,9 +44,9 @@ class SystemFactsDialog:
     def __init__(self):
         glade = gtk.glade.XML(GLADE_XML)
         glade.signal_autoconnect({
-                "on_system_facts_dialog_delete_event" : self.__hide_callback,
-                "on_close_button_clicked" : self.__hide_callback,
-                "on_facts_update_button_clicked" : self.__update_facts_callback
+                "on_system_facts_dialog_delete_event" : self._hide_callback,
+                "on_close_button_clicked" : self._hide_callback,
+                "on_facts_update_button_clicked" : self._update_facts_callback
                 })
 
         self.dialog = glade.get_widget("system_facts_dialog")
@@ -58,8 +58,8 @@ class SystemFactsDialog:
         self.facts_view.set_model(self.facts_store)
 
         # Set up columns on the view
-        self.__add_column(_("Fact"), 0)
-        self.__add_column(_("Value"), 1)
+        self._add_column(_("Fact"), 0)
+        self._add_column(_("Value"), 1)
 
         # Update the displayed facts
         self.display_facts()
@@ -101,17 +101,17 @@ class SystemFactsDialog:
             managergui.errorWindow(managergui.linkify(str(e)))
 
     # GTK callback function for hiding this dialog.
-    def __hide_callback(self, button, event=None):
+    def _hide_callback(self, button, event=None):
         self.hide()
 
         # Stop the gtk signal from propogating
         return True
 
     # GTK callback function for sending system facts to the server
-    def __update_facts_callback(self, button):
+    def _update_facts_callback(self, button):
         self.update_facts()
 
-    def __add_column(self, name, order):
+    def _add_column(self, name, order):
         """Adds a gtk.TreeViewColumn suitable for displaying text to
         the facts gtk.TreeView.
 
