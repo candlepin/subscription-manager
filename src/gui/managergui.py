@@ -1080,7 +1080,7 @@ class ImportCertificate:
     """
 
     def __init__(self):
-        self.add_vbox = rhsm_xml.get_widget("import_vbox")
+        self.add_vbox = rhsm_xml.get_widget("import_vbox1")
 
         dic = {"on_close_import_clicked": self.cancel,
                "on_import_cert_button2_clicked": self.importCertificate,
