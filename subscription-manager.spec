@@ -103,7 +103,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/repolib.py*
 /usr/lib/yum-plugins/rhsmplugin.py*
 /usr/lib/yum-plugins/pidplugin.py*
-%{_datadir}/rhsm/certificate.py*
 %{_datadir}/rhsm/certmgr.py*
 %{_datadir}/rhsm/certlib.py*
 %{_datadir}/rhsm/hwprobe.py*
@@ -163,6 +162,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/connection.py*
 %{_datadir}/rhsm/logutil.py*
 %{_datadir}/rhsm/config.py*
+%{_datadir}/rhsm/certificate.py*
 
 %post
 chkconfig --add rhsmcertd
