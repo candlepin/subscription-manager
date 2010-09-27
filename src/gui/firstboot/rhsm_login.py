@@ -80,14 +80,14 @@ class moduleClass(Module, managergui.RegisterScreen):
         glade file.
         """
         self.vbox = gtk.VBox(spacing=10)
-        self.register_dialog = managergui.rhsm_xml.get_widget("dialog-vbox3")
+        self.register_dialog = managergui.rhsm_xml.get_widget("main_vbox")
         self.register_dialog.reparent(self.vbox)
 
         # Get ride of the 'register' and 'cancel' buttons, as we are going to
         # use the 'forward' and 'back' buttons provided by the firsboot module
         # to drive the same functionality
         self._destroy_widget('register_button')
-        self._destroy_widget('cancel_reg_button1')
+        self._destroy_widget('cancel_button')
 
     def initializeUI(self):
         self.initializeConsumerName()

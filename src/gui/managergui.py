@@ -404,7 +404,7 @@ class RegisterScreen:
 
     def __init__(self):
         create_and_set_basic_connection()
-        dic = {"on_register_close_clicked": self.cancel,
+        dic = {"on_register_cancel_button_clicked": self.cancel,
                "on_register_button_clicked": self.onRegisterAction,
             }
         rhsm_xml.signal_autoconnect(dic)

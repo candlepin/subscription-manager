@@ -349,12 +349,12 @@
       <atkproperty name="AtkObject::accessible-name">register_dialog</atkproperty>
     </accessibility>
     <child internal-child="vbox">
-      <widget class="GtkVBox" id="dialog-vbox3">
+      <widget class="GtkVBox" id="main_vbox">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <accessibility>
-          <atkproperty name="AtkObject::accessible-name">dialog-vbox3</atkproperty>
+          <atkproperty name="AtkObject::accessible-name">main_vbox</atkproperty>
         </accessibility>
         <child>
           <widget class="GtkVBox" id="initialLoginWindowVbox1">
@@ -634,7 +634,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
               <atkproperty name="AtkObject::accessible-name">dialog-action_area1</atkproperty>
             </accessibility>
             <child>
-              <widget class="GtkButton" id="cancel_reg_button1">
+              <widget class="GtkButton" id="cancel_button">
                 <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -644,7 +644,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name">cancel_reg_button1</atkproperty>
                 </accessibility>
-                <signal name="clicked" handler="on_register_close_clicked"/>
+                <signal name="clicked" handler="on_register_cancel_button_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
