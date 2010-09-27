@@ -18,9 +18,7 @@
 import os
 import sys
 
-import gettext
 import ConfigParser
-_ = gettext.gettext
 
 
 DEFAULT_CONFIG_DIR = "/etc/rhsm"
