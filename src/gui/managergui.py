@@ -723,7 +723,7 @@ class AddSubscriptionScreen:
         show_import_certificate_screen()
 
     def onSubscribeAction(self, button):
-        slabel = rhsm_xml.get_widget("label_status1")
+        slabel = rhsm_xml.get_widget("available_subscriptions_label")
         #consumer = get_consumer()
         subscribed_count = 0
         #my_model = self.tv_products.get_model()
@@ -955,7 +955,7 @@ class UpdateSubscriptionScreen:
         self.populateUpdatesDialog()
         dic = {"on_update_subscriptions_close_clicked": self.cancel,
                #"on_import_cert_button_clicked": self.onImportPrepare,
-               "on_update_subscribe_button_clicked": self.onSubscribeAction,
+               "on_update_subscriptions_button_clicked": self.onSubscribeAction,
             }
         rhsm_xml.signal_autoconnect(dic)
         self.updateWin = rhsm_xml.get_widget("update_subscriptions_dialog")
@@ -979,7 +979,7 @@ class UpdateSubscriptionScreen:
         show_import_certificate_screen()
 
     def setHeadMsg(self):
-        hlabel = rhsm_xml.get_widget("available_subscriptios_label")
+        hlabel = rhsm_xml.get_widget("available_subscriptions_label")
         hlabel.set_label(_("<b>Available Subscriptions for %s:</b>") % self.product_select)
 
     def populateUpdatesDialog(self):
@@ -1025,7 +1025,6 @@ class UpdateSubscriptionScreen:
         renderer.set_property('visible', True)
 
     def onSubscribeAction(self, button):
-        slabel = rhsm_xml.get_widget("subscription_staus_label")
         subscribed_count = 0
         my_model = self.tv_products.get_model()
         for pool, state in self.selected.items():
