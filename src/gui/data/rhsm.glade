@@ -284,6 +284,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">system_facts_button</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_system_facts_button_clicked"/>
               </widget>
               <packing>
@@ -317,7 +320,7 @@
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
                 <accessibility>
-                  <atkproperty name="AtkObject::accessible-name">button_close</atkproperty>
+                  <atkproperty name="AtkObject::accessible-name">close_button</atkproperty>
                 </accessibility>
                 <signal name="clicked" handler="on_close_button_clicked" object="onCloseQuit"/>
               </widget>
@@ -681,7 +684,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
       </widget>
     </child>
   </widget>
-  <widget class="GtkDialog" id="dialog1_import">
+  <widget class="GtkDialog" id="entitlement_import_dialog">
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Provide a Subscription Certificate</property>
     <property name="resizable">False</property>
@@ -693,7 +696,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
       <atkproperty name="AtkObject::accessible-name" translatable="yes">Provide a Subscription Certificate</atkproperty>
     </accessibility>
     <child internal-child="vbox">
-      <widget class="GtkVBox" id="dialog-vbox5">
+      <widget class="GtkVBox" id="entitlement_import_vbox">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
@@ -701,7 +704,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
           <atkproperty name="AtkObject::accessible-name">dialog-vbox5</atkproperty>
         </accessibility>
         <child>
-          <widget class="GtkVBox" id="import_vbox1">
+          <widget class="GtkVBox" id="import_vbox">
             <property name="visible">True</property>
             <property name="border_width">20</property>
             <property name="orientation">vertical</property>
@@ -800,14 +803,15 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
           </packing>
         </child>
         <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="dialog-action_area4">
+          <widget class="GtkHButtonBox" id="entitlement_import_action_area">
             <property name="visible">True</property>
             <property name="layout_style">end</property>
             <accessibility>
-              <atkproperty name="AtkObject::accessible-name">dialog-action_area4</atkproperty>
+              <atkproperty name="AtkObject::accessible-name">entitlement_import_action_area
+</atkproperty>
             </accessibility>
             <child>
-              <widget class="GtkButton" id="cancel_import_button1">
+              <widget class="GtkButton" id="import_cancel_button">
                 <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -815,7 +819,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="use_stock">True</property>
                 <property name="image_position">right</property>
                 <accessibility>
-                  <atkproperty name="AtkObject::accessible-name">cancel_import_button1</atkproperty>
+                  <atkproperty name="AtkObject::accessible-name">import_cancel_button</atkproperty>
                 </accessibility>
                 <signal name="clicked" handler="on_close_import_clicked"/>
               </widget>
@@ -826,7 +830,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="import_cert_button4">
+              <widget class="GtkButton" id="certificate_import_button">
                 <property name="label">Import Certificate</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -835,7 +839,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">Import Certificate</atkproperty>
                 </accessibility>
-                <signal name="clicked" handler="on_import_cert_button2_clicked"/>
+                <signal name="clicked" handler="on_certificate_import_button_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -853,7 +857,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
       </widget>
     </child>
   </widget>
-  <widget class="GtkDialog" id="dialog1_updates">
+  <widget class="GtkDialog" id="update_subscriptions_dialog">
     <property name="width_request">480</property>
     <property name="height_request">300</property>
     <property name="border_width">5</property>
@@ -863,7 +867,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
     <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
-      <widget class="GtkVBox" id="dialog-vbox6">
+      <widget class="GtkVBox" id="update_subscriptions_vbox">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
@@ -885,7 +889,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                   <atkproperty name="AtkObject::accessible-name">update-vbox2</atkproperty>
                 </accessibility>
                 <child>
-                  <widget class="GtkLabel" id="update-label2">
+                  <widget class="GtkLabel" id="available_susbcriptions_label">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
@@ -912,12 +916,13 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                       <atkproperty name="AtkObject::accessible-name">update-scrolledwindow2</atkproperty>
                     </accessibility>
                     <child>
-                      <widget class="GtkTreeView" id="treeview_updates2">
+                      <widget class="GtkTreeView" id="subscriptions_update_treeview">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hover_selection">True</property>
                         <accessibility>
-                          <atkproperty name="AtkObject::accessible-name">treeview_updates2</atkproperty>
+                          <atkproperty name="AtkObject::accessible-name">subscriptions_update_treeview
+</atkproperty>
                         </accessibility>
                       </widget>
                     </child>
@@ -928,11 +933,11 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="label_status_update">
+                  <widget class="GtkLabel" id="subscriptions_status_label">
                     <property name="visible">True</property>
                     <property name="use_markup">True</property>
                     <accessibility>
-                      <atkproperty name="AtkObject::accessible-name">label_status_update</atkproperty>
+                      <atkproperty name="AtkObject::accessible-name">subscriptions_status_label</atkproperty>
                     </accessibility>
                   </widget>
                   <packing>

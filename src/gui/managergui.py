@@ -647,7 +647,6 @@ class AddSubscriptionScreen:
                                            gobject.TYPE_STRING, gobject.TYPE_STRING)
 
         self.populateSubscriptionLists()
-        print "[%s] in AddSubscriptinScreen.__init__" % time.time()
         # machine is talking to candlepin, invoke listing scheme
         self.populateMatchingSubscriptions()
         self.populateCompatibleSubscriptions()
@@ -959,7 +958,7 @@ class UpdateSubscriptionScreen:
                "on_update_subscribe_button_clicked": self.onSubscribeAction,
             }
         rhsm_xml.signal_autoconnect(dic)
-        self.updateWin = rhsm_xml.get_widget("dialog1_updates")
+        self.updateWin = rhsm_xml.get_widget("update_subscriptions_dialog")
         self.updateWin.connect("hide", self.cancel)
         self.updateWin.connect("delete_event", self.delete_event)
         self.updateWin.show_all()
@@ -980,11 +979,11 @@ class UpdateSubscriptionScreen:
         show_import_certificate_screen()
 
     def setHeadMsg(self):
-        hlabel = rhsm_xml.get_widget("update-label2")
+        hlabel = rhsm_xml.get_widget("available_subscriptios_label")
         hlabel.set_label(_("<b>Available Subscriptions for %s:</b>") % self.product_select)
 
     def populateUpdatesDialog(self):
-        self.tv_products = rhsm_xml.get_widget("treeview_updates2")
+        self.tv_products = rhsm_xml.get_widget("subscriptions_update_treeview")
         self.tv_products.set_model(self.updatesList)
 
         cell = gtk.CellRendererToggle()
@@ -1019,7 +1018,6 @@ class UpdateSubscriptionScreen:
                 model[path][0] = not model[path][0]
             else:
                 model[col][0] = False
-        print "Toggle '%s' to: %s" % (model[path][1], model[path][0])
         self.model = model
         self.selected[model.get_value(iter, 4)] = (model.get_value(iter, 0), model.get_value(iter, 1), iter)
 
@@ -1027,7 +1025,7 @@ class UpdateSubscriptionScreen:
         renderer.set_property('visible', True)
 
     def onSubscribeAction(self, button):
-        slabel = rhsm_xml.get_widget("label_status_update")
+        slabel = rhsm_xml.get_widget("subscription_staus_label")
         subscribed_count = 0
         my_model = self.tv_products.get_model()
         for pool, state in self.selected.items():
@@ -1079,13 +1077,13 @@ class ImportCertificate:
     """
 
     def __init__(self):
-        self.add_vbox = rhsm_xml.get_widget("import_vbox1")
+        self.add_vbox = rhsm_xml.get_widget("import_vbox")
 
-        dic = {"on_close_import_clicked": self.cancel,
-               "on_import_cert_button2_clicked": self.importCertificate,
+        dic = {"on_import_cancel_clicked": self.cancel,
+               "on_certificate_import_button_clicked": self.importCertificate,
             }
         rhsm_xml.signal_autoconnect(dic)
-        self.importWin = rhsm_xml.get_widget("dialog1_import")
+        self.importWin = rhsm_xml.get_widget("entitlement_import_dialog")
         self.importWin.connect("hide", self.cancel)
         self.importWin.connect("delete_event", self.delete_event)
         self.importWin.show_all()
