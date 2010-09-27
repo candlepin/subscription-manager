@@ -27,6 +27,11 @@ import managergui
 import logutil
 log = logutil.getLogger(__name__)
 
+import gettext
+_ = gettext.gettext
+gettext.textdomain("subscription-manager")
+gtk.glade.bindtextdomain("subscription-manager")
+
 DIR = os.path.dirname(__file__)
 GLADE_XML = os.path.join(DIR, "data/factsdialog.glade")
 
@@ -53,8 +58,8 @@ class SystemFactsDialog:
         self.facts_view.set_model(self.facts_store)
 
         # Set up columns on the view
-        self.__add_column("Fact", 0)
-        self.__add_column("Value", 1)
+        self.__add_column(_("Fact"), 0)
+        self.__add_column(_("Value"), 1)
 
         # Update the displayed facts
         self.display_facts()
