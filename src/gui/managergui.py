@@ -1079,7 +1079,7 @@ class ImportCertificate:
     def __init__(self):
         self.add_vbox = rhsm_xml.get_widget("import_vbox")
 
-        dic = {"on_import_cancel_clicked": self.cancel,
+        dic = {"on_import_cancel_button_clicked": self.cancel,
                "on_certificate_import_button_clicked": self.importCertificate,
             }
         rhsm_xml.signal_autoconnect(dic)
@@ -1101,7 +1101,7 @@ class ImportCertificate:
         return self.cancel()
 
     def importCertificate(self, button):
-        fileChooser = rhsm_xml.get_widget("certificateChooserButton")
+        fileChooser = rhsm_xml.get_widget("certificate_chooser_button")
         src_cert_file = fileChooser.get_filename()
         if src_cert_file is None:
             errorWindow(_("You must select a certificate."))
