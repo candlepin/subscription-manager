@@ -26,6 +26,12 @@ _ = gettext.gettext
 DEFAULT_CONFIG_DIR = "/etc/rhsm"
 DEFAULT_CONFIG_PATH = "%s/rhsm.conf" % DEFAULT_CONFIG_DIR
 
+DEFAULTS = {
+        'hostname': 'localhost',
+        'prefix': '/candlepin',
+        'port': '8443',
+        'ca_cert': '/etc/rhsm/ca/candlepin.pem',
+        }
 
 def initConfig(config_file=None):
 
@@ -33,7 +39,7 @@ def initConfig(config_file=None):
     # If a config file was specified, assume we should overwrite the global config
     # to use it. This should only be used in testing. Could be switch to env var?
     if config_file:
-        CFG = ConfigParser.ConfigParser()
+        CFG = ConfigParser.ConfigParser(defaults=DEFAULTS)
         CFG.read(config_file)
         return CFG
 
@@ -44,6 +50,6 @@ def initConfig(config_file=None):
     except NameError:
         CFG = None
     if CFG == None:
-        CFG = ConfigParser.ConfigParser()
+        CFG = ConfigParser.ConfigParser(defaults=DEFAULTS)
         CFG.read(DEFAULT_CONFIG_PATH)
     return CFG
