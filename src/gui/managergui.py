@@ -601,7 +601,6 @@ class RegistrationTokenScreen:
             errorWindow(linkify(e.msg))
 
     def setAccountMsg(self):
-        alabel = rhsm_xml.get_widget("account_label")
         alabel1 = rhsm_xml.get_widget("account_label1")
         alabel1.set_label(_("\nThis system is registered with following consumer information"))
         alabel = rhsm_xml.get_widget("account_label2")
@@ -655,14 +654,14 @@ class AddSubscriptionScreen:
         if (cfg.get('rhsm', 'showIncompatiblePools')):
             self.populateOtherSubscriptions()
         else:
-            notebook = rhsm_xml.get_widget("notebook1")
+            notebook = rhsm_xml.get_widget("add_subscription_notebook")
             notebook.remove_page(1)
 
         dic = {"on_add_subscribe_close_clicked": self.cancel,
                "on_add_subscribe_button_clicked": self.onSubscribeAction,
             }
         rhsm_xml.signal_autoconnect(dic)
-        self.addWin = rhsm_xml.get_widget("dialog_add")
+        self.addWin = rhsm_xml.get_widget("add_subscription_dialog")
         self.addWin.connect("delete_event", self.delete_event)
         #self.addWin.connect("hide", self.cancel)
         if not self.available_ent:
