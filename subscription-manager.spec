@@ -95,6 +95,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/rhsm/gui/data
 %dir %{_datadir}/rhsm/gui/data/icons
 %dir /etc/rhsm/facts
+%dir /etc/rhsm/ca
 %dir %{_datarootdir}/locale
 
 %{_datadir}/rhsm/__init__.py*

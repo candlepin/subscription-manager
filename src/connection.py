@@ -33,8 +33,17 @@ _ = gettext.gettext
 
 config = initConfig()
 
+log = getLogger(__name__)
 
-class RestlibException(Exception):
+class ConnectionException(Exception):
+    pass
+
+
+class ConnectionSetupException(ConnectionException):
+    pass
+
+
+class RestlibException(ConnectionException):
 
     def __init__(self, code, msg=""):
         self.code = code
@@ -52,7 +61,7 @@ class Restlib(object):
     def __init__(self, host, ssl_port, apihandler,
             username=None, password=None,
             cert_file=None, key_file=None,
-            ca_file=None, insecure=False):
+            ca_dir=None, insecure=False):
         self.host = host
         self.ssl_port = ssl_port
         self.apihandler = apihandler
@@ -61,7 +70,7 @@ class Restlib(object):
                         "Accept-Language": locale.getdefaultlocale()[0].lower().replace('_', '-')}
         self.cert_file = cert_file
         self.key_file = key_file
-        self.ca_file = ca_file
+        self.ca_dir = ca_dir
         self.insecure = insecure
         self.username = username
         self.password = password
@@ -72,12 +81,32 @@ class Restlib(object):
             basic = 'Basic %s' % encoded[:-1]
             self.headers['Authorization'] = basic
 
+    def _load_ca_certificates(self, context):
+        try:
+            for cert_file in os.listdir(self.ca_dir):
+                if cert_file.endswith(".pem"):
+                    cert_path = os.path.join(self.ca_dir, cert_file)
+                    log.info("loading ca certificate '%s'" % cert_path)
+                    res = context.load_verify_info(cert_path)
+
+                    if res == 0:
+                        raise ConnectionSetupException(
+                                _("Bad CA Certificate: %s" % cert_path))
+        except OSError, e:
+            msg = _("Unable to read CA certificates from '%s'." % self.ca_dir)
+            if e.errno == 20:
+                msg = _(" '%s' is a file." % self.ca_dir)
+            elif e.errno == 2:
+                msg = _(" No such directory.")
+            raise ConnectionSetupException(e.strerror) 
+
+
     def _request(self, request_type, method, info=None):
         handler = self.apihandler + method
         context = SSL.Context("sslv3")
-        if self.ca_file != None:
-            log.info('loading ca_file located at: %s', self.ca_file)
-            context.load_verify_locations(self.ca_file)
+        if self.ca_dir != None:
+            log.info('loading ca pem certificates from: %s', self.ca_dir)
+            self._load_ca_certificates(context)
         log.info('work in insecure mode ?:%s', self.insecure)
         if not self.insecure: #allow clients to work insecure mode if required..
             context.set_verify(SSL.verify_fail_if_no_peer_cert, 1)
@@ -157,7 +186,7 @@ class UEPConnection:
         self.username = username
         self.password = password
 
-        self.ca_cert = config.get('server', 'ca_cert')
+        self.ca_cert_dir = config.get('server', 'ca_cert_dir')
         config_insecure = int(config.get('server', 'insecure'))
         self.insecure = False
         if config_insecure:
@@ -182,18 +211,25 @@ class UEPConnection:
         if using_basic_auth:
             self.conn = Restlib(self.host, self.ssl_port, self.handler,
                     username=self.username, password=self.password,
-                    ca_file=self.ca_cert, insecure=self.insecure)
+                    ca_dir=self.ca_cert_dir, insecure=self.insecure)
             log.info("Using basic authentication as: %s" % username)
         else:
             self.conn = Restlib(self.host, self.ssl_port, self.handler,
                     cert_file=self.cert_file, key_file=self.key_file,
-                    ca_file=self.ca_cert, insecure=self.insecure)
+                    ca_dir=self.ca_cert_dir, insecure=self.insecure)
             log.info("Using certificate authentication: key = %s, cert = %s, "
                     "ca = %s, insecure = %s" %
-                    (self.key_file, self.cert_file, self.ca_cert, self.insecure))
+                    (self.key_file, self.cert_file, self.ca_cert_dir,
+                        self.insecure))
 
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
+
+    def add_ssl_certs(self, cert_file=None, key_file=None):
+        self.cert_file = cert_file
+        self.key_file = key_file
+        self.conn = Restlib(self.host, self.ssl_port, self.handler, 
+                self.cert_file, self.key_file, self.ca_cert_dir, self.insecure)
 
     def shutDown(self):
         self.conn.close()

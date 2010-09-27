@@ -28,7 +28,7 @@ DEFAULTS = {
         'hostname': 'localhost',
         'prefix': '/candlepin',
         'port': '8443',
-        'ca_cert': '/etc/rhsm/ca/candlepin.pem',
+        'ca_cert_dir': '/etc/rhsm/ca/',
         }
 
 def initConfig(config_file=None):
