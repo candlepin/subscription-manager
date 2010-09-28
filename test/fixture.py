@@ -28,10 +28,18 @@ import shutil
 class RhsmFunctionalTest(unittest.TestCase):
 
     def setUp(self):
+        global cfg
+        self.test_cfg = cfg
+
         self.test_dir = cfg.get('test', 'tmpDir')
         if not os.path.exists(self.test_dir):
             os.mkdir(self.test_dir)
             os.makedirs(os.path.join(self.test_dir, 'etc', 'pki', 'consumer'))
+
+        self.admin_username = self.test_cfg.get('test', 'adminUsername')
+        self.admin_password = self.test_cfg.get('test', 'adminPassword')
+
+        self.owner =
 
     def tearDown(self):
         shutil.rmtree(self.test_dir)

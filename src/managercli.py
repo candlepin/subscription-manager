@@ -65,9 +65,13 @@ class CliCommand(object):
         if shortdesc is not None and description is None:
             description = shortdesc
         self.debug = 0
-        self._cp = None
-        self.new_cp = self.create_connection()
+
+        # Create a connection using the default configuration:
+        cert_file = ConsumerIdentity.certpath()
+        key_file = ConsumerIdentity.keypath()
+        self.new_cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
         self.cp = self.new_cp
+
         self.parser = OptionParser(usage=usage, description=description)
         self._add_common_options()
         self.name = name
@@ -81,26 +85,6 @@ class CliCommand(object):
 
     def _do_command(self):
         pass
-
-    def auth_as_consumer(self):
-        """
-        Morph the existing Candlepin connection to authenticate as a consumer.
-        Reads cert and key from location on disk.
-        """
-        # TODO: we shouldn't be morphing self.cp magically depending on whether
-        # or not this method has been called. We should be explicit about
-        # how we are authenticating and when...
-        cert_file = ConsumerIdentity.certpath()
-        key_file = ConsumerIdentity.keypath()
-
-        self.new_cp.add_ssl_certs(cert_file=cert_file, key_file=key_file)
-
-        # TODO: return value is never used, self.cp appears to reference self.new_cp,
-        # so I guess changing new_cp is also changing self.cp...
-        return connection.UEPConnection(cert_file=cert_file, key_file=key_file)
-
-    def create_connection(self):
-        return connection.UEPConnection()
 
     def main(self, args=None):
 
@@ -147,7 +131,6 @@ class ReRegisterCommand(CliCommand):
     def _do_command(self):
 
         self._validate_options()
-        self.auth_as_consumer()
 
         if not ConsumerIdentity.existsAndValid() and not self.options.consumerid:
             #identity is corrupted, and if register is called it will fail saying consumer
@@ -232,44 +215,32 @@ class RegisterCommand(CliCommand):
         if consumername == None:
             consumername = self.options.username
 
-        if ConsumerIdentity.exists() and self.options.force:
+        admin_cp = connection.UEPConnection(username=self.options.username,
+                password=self.options.password)
 
+        if ConsumerIdentity.exists() and self.options.force:
             # First let's try to un-register previous consumer. This may fail
             # if consumer has already been deleted so we will continue even if
             # errors are encountered.
             if ConsumerIdentity.existsAndValid():
                 old_uuid = ConsumerIdentity.read().getConsumerId()
                 try:
-                    self.auth_as_consumer()
                     managerlib.unregister(self.cp, old_uuid)
                     log.info("--force specified, un-registered old consumer: %s" % old_uuid)
                 except Exception, e:
                     log.error("Unable to un-register consumer: %s" % old_uuid)
                     log.exception(e)
 
-            # Proceed with new registration:
-            try:
-                consumer = self.cp.registerConsumer(self.options.username,
-                        self.options.password, name=consumername, type=self.options.consumertype,
-                        facts=facts.get_facts())
-            except connection.RestlibException, re:
-                log.exception(re)
-                systemExit(-1, re.msg)
-
-        else:
-            try:
-                consumer = self.cp.registerConsumer(self.options.username,
-                        self.options.password, name=consumername, type=self.options.consumertype,
-                        facts=facts.get_facts())
-            except connection.RestlibException, re:
-                log.exception(re)
-                systemExit(-1, re.msg)
+        # Proceed with new registration:
+        try:
+            consumer = admin_cp.registerConsumer(name=consumername,
+                    type=self.options.consumertype, facts=facts.get_facts())
+        except connection.RestlibException, re:
+            log.exception(re)
+            systemExit(-1, re.msg)
 
         managerlib.persist_consumer_cert(consumer)
 
-        # instead of recreating cp here, lets just add an auth'ed connection to it
-#        self.cp = self.create_connection_with_user_identity()
-        self.auth_as_consumer()
         if self.options.autosubscribe:
             # try to auomatically bind products
             for pname, phash in managerlib.getInstalledProductHashMap().items():
@@ -295,7 +266,6 @@ class UnRegisterCommand(CliCommand):
         pass
 
     def _do_command(self):
-        self.auth_as_consumer()
         if not ConsumerIdentity.exists():
             print(_("This system is currently not registered."))
             sys.exit(1)
@@ -335,7 +305,6 @@ class SubscribeCommand(CliCommand):
                                "notification when token activation is "
                                "complete. Used with --regtoken and --email "
                                "only. Examples: en-us, de-de"))
-        self.auth_as_consumer()
 
     def _validate_options(self):
         if not (self.options.regtoken or self.options.pool):
@@ -403,7 +372,6 @@ class UnSubscribeCommand(CliCommand):
         """
         Executes the command.
         """
-        self.auth_as_consumer()
         consumer = check_registration()['uuid']
         try:
             if self.options.serial:
@@ -438,7 +406,6 @@ class FactsCommand(CliCommand):
         CliCommand._validate_options(self)
 
     def _do_command(self):
-        self.auth_as_consumer()
         if self.options.list:
             facts = getFacts()
             fact_dict = facts.get_facts()
@@ -481,7 +448,6 @@ class ListCommand(CliCommand):
         """
 
         self._validate_options()
-        self.auth_as_consumer()
 
         consumer = check_registration()['uuid']
         if not (self.options.available or self.options.consumed):

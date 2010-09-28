@@ -59,7 +59,9 @@ subs_full = os.path.join(prefix, "data/icons/subsmgr-full.png")
 subs_empty = os.path.join(prefix, "data/icons/subsmgr-empty.png")
 
 cfg = config.initConfig()
-UEP = None
+cert_file = ConsumerIdentity.certpath()
+key_file = ConsumerIdentity.keypath()
+UEP = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
 
 CONSUMER_SIGNAL = "on_consumer_changed"
 
@@ -81,18 +83,6 @@ class GladeWrapper(gtk.glade.XML):
 
 #rhsm_xml = gtk.glade.XML(gladexml)
 rhsm_xml = GladeWrapper(gladexml)
-
-def create_and_set_basic_connection():
-    global UEP
-    UEP = connection.UEPConnection()
-
-
-if ConsumerIdentity.exists():
-    cert_file = ConsumerIdentity.certpath()
-    key_file = ConsumerIdentity.keypath()
-    UEP = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
-else:
-    create_and_set_basic_connection()
 
 certlib = CertLib()
 ENT_CONFIG_DIR = os.path.join(cfg.get('rhsm', 'entitlementCertDir'), 'product')
@@ -403,7 +393,6 @@ class RegisterScreen:
     """
 
     def __init__(self):
-        create_and_set_basic_connection()
         dic = {"on_register_cancel_button_clicked": self.cancel,
                "on_register_button_clicked": self.onRegisterAction,
             }
@@ -463,10 +452,12 @@ class RegisterScreen:
                 log.error("Unable to unregister existing user credentials.")
         failed_msg = _("Unable to register your system. \n Error: %s")
         try:
-            newAccount = UEP.registerConsumer(username, password, name=consumername,
+            admin_cp = connection.UEPConnection(username=username,
+                    password=password)
+            newAccount = admin_cp.registerConsumer(name=consumername,
                     facts=facts.get_facts())
             consumer = managerlib.persist_consumer_cert(newAccount)
-            # reload cP instance with new ssl certs
+            # reload CP instance with new ssl certs
             self._reload_cp_with_certs()
             if self.auto_subscribe():
                 # try to auomatically bind products
@@ -578,7 +569,6 @@ class RegistrationTokenScreen:
 
         managerlib.unregister(UEP, consumer['uuid'])
 
-        create_and_set_basic_connection()
         consumer = get_consumer()
 
         # Emit a signal that the entitlements have changed
