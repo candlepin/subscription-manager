@@ -195,23 +195,12 @@ class UEPConnection:
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
 
-
     def shutDown(self):
         self.conn.close()
         log.info("remote connection closed")
 
     def ping(self, username=None, password=None):
         return self.conn.request_get("/status/")
-
-    def createOwner(name):
-        owner = {
-                'key': name,
-                'displayName': name,
-        }
-        self.conn.request_post('/owners/', owner)
-
-    def deleteOwner(key):
-        self.conn.request_delete('/owners/%s' % key)
 
     def registerConsumer(self, name="unknown", type="system", facts={}):
         """
@@ -231,11 +220,11 @@ class UEPConnection:
         ret = self.conn.request_put(method, params)
         return ret
 
-    def getConsumerById(self, consumerId, username, password):
+    def getConsumer(self, uuid, username, password):
         """
         Returns a consumer object with pem/key for existing consumers
         """
-        method = '/consumers/%s' % consumerId
+        method = '/consumers/%s' % uuid
         return self.conn.request_get(method)
 
     def unregisterConsumer(self, consumerId):
@@ -244,13 +233,6 @@ class UEPConnection:
         """
         method = '/consumers/%s' % consumerId
         return self.conn.request_delete(method)
-
-    def syncCertificates(self, consumerId):
-        """
-        Sync all applicable certificates for a given consumer\
-        """
-        method = '/consumers/%s/certificates' % consumerId
-        return self.conn.request_get(method)
 
     def getCertificates(self, consumer_uuid, serials=[]):
         """
@@ -284,7 +266,7 @@ class UEPConnection:
 
     def bindByEntitlementPool(self, consumerId, poolId, quantity=None):
         """
-         Subscribe consumer to a subscription by poolId
+         Subscribe consumer to a subscription by pool ID.
         """
         method = "/consumers/%s/entitlements?pool=%s" % (consumerId, poolId)
         if quantity:
@@ -293,17 +275,19 @@ class UEPConnection:
 
     def bindByProduct(self, consumerId, product=None):
         """
-         Subscribe consumer directly to a product by Name
+         Subscribe consumer directly to a product by it's ID. This will cause
+         the UEP to look for a pool which provides access to the given product.
         """
         product = product.replace(" ", "%20")
         method = "/consumers/%s/entitlements?product=%s" % (consumerId, product)
         return self.conn.request_post(method)
 
-    def unBindBySerialNumber(self, consumerId, serial):
+    def unbindBySerial(self, consumerId, serial):
         method = "/consumers/%s/certificates/%s" % (consumerId, serial)
         return self.conn.request_delete(method)
 
-    def unBindByEntitlementId(self, consumerId, entId):
+    # TODO: not actually used...
+    def unbindByEntitlementId(self, consumerId, entId):
         method = "/consumers/%s/entitlements/%s" % (consumerId, entId)
         return self.conn.request_delete(method)
 
@@ -316,7 +300,6 @@ class UEPConnection:
         if listAll:
             method = "%s?listall=true" % method
         results = self.conn.request_get(method)
-
         return results
 
     def getPool(self, poolId):
@@ -328,7 +311,7 @@ class UEPConnection:
         results = self.conn.request_get(method)
         return results
 
-    def getEntitlementById(self, entId):
+    def getEntitlement(self, entId):
         method = "/entitlements/%s" % entId
         return self.conn.request_get(method)
 
@@ -361,8 +344,7 @@ if __name__ == '__main__':
         consumer = admin_cp.registerConsumer(info=params)
         print "Created a consumer ", consumer
         # sync certs
-        print "Get Consumer By Id", uep.getConsumerById(consumer['uuid'], 'admin', 'admin')
-        print uep.syncCertificates(consumer['uuid'])
+        print "Get Consumer By Id", uep.getConsumer(consumer['uuid'], 'admin', 'admin')
         print "GetCertBySerials", uep.getCertificates(consumer['uuid'],
                 serials=['SERIAL001', 'SERIAL001'])
         # bind consumer to regNumber
@@ -372,15 +354,10 @@ if __name__ == '__main__':
         # bind consumer By Product
         print "bind by product", uep.bindByProduct(consumer['uuid'], "monitoring") #product["label"])
         print "ZZZZZZZZZZZ", uep.getCertificateSerials(consumer['uuid'])
-        # Unbind All
-        #print uep.unbindAll(consumer['uuid'])
-        # Unbind serialNumbers
-        #uep.unBindBySerialNumbers(consumer['uuid'], ['SERIAL001','SERIAL001'])
         print "Pools List", uep.getPoolsList(consumer['uuid'])
         # lookup Entitlement Info by PoolId
-        #print uep.getEntitlementById("4")
         print "print get Ent list", uep.getEntitlementList(consumer['uuid'])
-        print uep.getEntitlementById(consumer['uuid'], "3")
+        print uep.getEntitlement(consumer['uuid'], "3")
         # delete a consumer
         print uep.unregisterConsumer('admin', 'password', consumer['uuid'])
         print "consumer unregistered"

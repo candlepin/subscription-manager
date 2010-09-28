@@ -149,7 +149,7 @@ class ReRegisterCommand(CliCommand):
                     print (_("Error: username and password are required to reregister --consumerid, try reregister --help.\n"))
                     sys.exit(-1)
 
-                consumer = self.cp.getConsumerById(self.options.consumerid, self.options.username, self.options.password)
+                consumer = self.cp.getConsumer(self.options.consumerid, self.options.username, self.options.password)
                 managerlib.persist_consumer_cert(consumer)
             else:
                 consumerid = check_registration()['uuid']
@@ -375,7 +375,7 @@ class UnSubscribeCommand(CliCommand):
         consumer = check_registration()['uuid']
         try:
             if self.options.serial:
-                self.cp.unBindBySerialNumber(consumer, self.options.serial)
+                self.cp.unbindBySerial(consumer, self.options.serial)
                 log.info("This machine has been Unsubscribed from subcription with Serial number %s" % (self.options.serial))
             else:
                 self.cp.unbindAll(consumer)

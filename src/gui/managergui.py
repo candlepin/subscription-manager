@@ -360,7 +360,7 @@ class ManageSubscriptionPage:
         # only unbind if we are registered to a server
         if ConsumerIdentity.exists():
             try:
-                UEP.unBindBySerialNumber(consumer['uuid'], self.psubs_selected)
+                UEP.unbindBySerial(consumer['uuid'], self.psubs_selected)
                 log.info("This machine is now unsubscribed from Product %s " \
                           % self.pname_selected)
             except connection.RestlibException, re:
@@ -731,7 +731,7 @@ class AddSubscriptionScreen:
             if state[0]:
                 try:
                     ent_ret = UEP.bindByEntitlementPool(consumer['uuid'], pool)
-                    ent = UEP.getEntitlementById(ent_ret[0]['id'])
+                    ent = UEP.getEntitlement(ent_ret[0]['id'])
                     updated_pool = UEP.getPool(ent['pool']['id'])
                     updated_count = str(int(updated_pool['quantity']) -
                             int(updated_pool['consumed']))
