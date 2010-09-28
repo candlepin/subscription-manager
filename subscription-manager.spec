@@ -121,7 +121,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libexecdir}/rhsm-complianced
 
 # config files
-%config(noreplace) %attr(644,root,root) /etc/rhsm/rhsm.conf
 %attr(644,root,root) /etc/yum/pluginconf.d/rhsmplugin.conf
 %attr(644,root,root) /etc/yum/pluginconf.d/pidplugin.conf
 
@@ -163,6 +162,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/logutil.py*
 %{_datadir}/rhsm/config.py*
 %{_datadir}/rhsm/certificate.py*
+%config(noreplace) %attr(644,root,root) /etc/rhsm/rhsm.conf
 
 %post
 chkconfig --add rhsmcertd
