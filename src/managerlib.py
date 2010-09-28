@@ -202,7 +202,7 @@ def getAllAvailableSubscriptions(cpserver, consumer):
     if facts.delta():
         cpserver.updateConsumerFacts(consumer, facts.get_facts())
 
-    dlist = cpserver.getAllAvailableEntitlements(consumer)
+    dlist = cpserver.getPoolsList(consumer, listAll=True)
     #data = [_sub_dict(pool['pool'], columns) for pool in dlist]
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:

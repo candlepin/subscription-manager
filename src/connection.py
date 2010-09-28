@@ -311,8 +311,10 @@ class UEPConnection:
         method = "/consumers/%s/entitlements" % consumerId
         return self.conn.request_delete(method)
 
-    def getPoolsList(self, consumerId):
+    def getPoolsList(self, consumerId, listAll=False):
         method = "/pools?consumer=%s" % consumerId
+        if listAll:
+            method = "%s?listall=true" % method
         results = self.conn.request_get(method)
 
         return results
@@ -329,12 +331,6 @@ class UEPConnection:
     def getEntitlementById(self, entId):
         method = "/entitlements/%s" % entId
         return self.conn.request_get(method)
-
-    # TODO: bad method name, also virtually identical to getPoolsList.
-    def getAllAvailableEntitlements(self, consumerId):
-        method = "/pools?consumer=%s&listall=true" % consumerId
-        results = self.conn.request_get(method)
-        return results
 
     def regenIdCertificate(self, consumerId):
         method = "/consumers/%s" % consumerId
@@ -367,7 +363,6 @@ if __name__ == '__main__':
         # sync certs
         print "Get Consumer By Id", uep.getConsumerById(consumer['uuid'], 'admin', 'admin')
         print uep.syncCertificates(consumer['uuid'])
-        print "All available", uep.getAllAvailableEntitlements(consumer['uuid'])
         print "GetCertBySerials", uep.getCertificates(consumer['uuid'],
                 serials=['SERIAL001', 'SERIAL001'])
         # bind consumer to regNumber
