@@ -438,7 +438,7 @@ class EntitlementDirectory(CertificateDirectory):
 
 
 class ConsumerIdentity:
-    
+
     PATH = cfg.get('rhsm', 'consumerCertDir')
     KEY = 'key.pem'
     CERT = 'cert.pem'

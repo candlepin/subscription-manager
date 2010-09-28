@@ -24,7 +24,7 @@ import base64
 import os
 from M2Crypto import SSL, httpslib
 from logutil import getLogger
-from config import initConfig 
+from config import initConfig
 
 log = getLogger(__name__)
 
@@ -97,7 +97,7 @@ class Restlib(object):
                 msg = _(" '%s' is a file." % self.ca_dir)
             elif e.errno == 2:
                 msg = _(" No such directory.")
-            raise ConnectionSetupException(e.strerror) 
+            raise ConnectionSetupException(e.strerror)
 
 
     def _request(self, request_type, method, info=None):
@@ -162,7 +162,7 @@ class UEPConnection:
     Entitlement Platform.
     """
 
-    def __init__(self, 
+    def __init__(self,
             host=config.get('server', 'hostname'),
             ssl_port=int(config.get('server', 'port')),
             handler=config.get('server', 'prefix'),
@@ -227,7 +227,7 @@ class UEPConnection:
     def add_ssl_certs(self, cert_file=None, key_file=None):
         self.cert_file = cert_file
         self.key_file = key_file
-        self.conn = Restlib(self.host, self.ssl_port, self.handler, 
+        self.conn = Restlib(self.host, self.ssl_port, self.handler,
                 self.cert_file, self.key_file, self.ca_cert_dir, self.insecure)
 
     def shutDown(self):

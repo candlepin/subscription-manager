@@ -13,7 +13,7 @@
 # in this software or its documentation.
 #
 
-# WARNING: Important that this runs early to make sure the config is 
+# WARNING: Important that this runs early to make sure the config is
 # overwritten before things start happening:
 import os
 import config

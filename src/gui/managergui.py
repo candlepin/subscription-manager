@@ -165,14 +165,14 @@ class ManageSubscriptionPage:
         self.setRegistrationStatus()
         self.updateMessage()
 
-	self.system_facts_dialog = factsgui.SystemFactsDialog()
+        self.system_facts_dialog = factsgui.SystemFactsDialog()
 
         dic = {"on_close_button_clicked": gtk.main_quit,
                "on_account_settings_button_clicked": self.loadAccountSettings,
                "on_add_button_clicked": self.addSubButtonAction,
                "on_update_button_clicked": self.updateSubButtonAction,
                "on_unsubscribe_button_clicked": self.onUnsubscribeAction,
-	       "on_system_facts_button_clicked" : self.showFactsDialog	
+               "on_system_facts_button_clicked" : self.showFactsDialog
             }
         rhsm_xml.signal_autoconnect(dic)
         self.setButtonState()
@@ -531,8 +531,8 @@ class RegistrationTokenScreen:
     """
 
     def __init__(self):
-        dic = { 
-                "on_register_token_close_clicked" : self.finish, 
+        dic = {
+                "on_register_token_close_clicked" : self.finish,
                 "on_change_account_button" : self.reRegisterAction,
                 "on_facts_update_button_clicked" : self.factsUpdateAction,
                 "on_submit_button_clicked" : self.submitToken,

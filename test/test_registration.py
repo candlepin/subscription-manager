@@ -27,8 +27,8 @@ class CliRegistrationTests(RhsmFunctionalTest):
     def test_registration(self):
         cmd = RegisterCommand()
         cmd.main(['register', '--username=testuser1', '--password=password'])
-        self.assertTrue(os.path.exists(os.path.join(self.test_dir, 'etc', 'pki', 
+        self.assertTrue(os.path.exists(os.path.join(self.test_dir, 'etc', 'pki',
             'consumer', 'cert.pem')))
-        self.assertTrue(os.path.exists(os.path.join(self.test_dir, 'etc', 'pki', 
+        self.assertTrue(os.path.exists(os.path.join(self.test_dir, 'etc', 'pki',
             'consumer', 'key.pem')))
 
