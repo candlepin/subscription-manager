@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.82
+Version: 0.83
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -175,6 +175,24 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Sep 28 2010 Devan Goodwin <dgoodwin@redhat.com> 0.83-1
+- Resolves: #617685
+- Cleanup authentication logic. (dgoodwin@redhat.com)
+- Split out REST lib into seprate rpm. (dgoodwin@redhat.com)
+- config: define defaults in the config module (jbowes@redhat.com)
+- Start of glade name cleanup. Make glade names per top level.
+  (alikins@redhat.com)
+- Initial work in adding facts dialog. (jharris@redhat.com)
+- Line length fixups in the firstboot module (jbowes@redhat.com)
+- 617685: Ensure that the baseurl works with and without trailing slashes.
+  (bkearney@redhat.com)
+- Use config file for directories to use. (dgoodwin@redhat.com)
+- Specify default cert location in default config. (dgoodwin@redhat.com)
+- Fix insecure setting comparison. (dgoodwin@redhat.com)
+- Refactor to use Python ConfigParser. (dgoodwin@redhat.com)
+- Fallback to console logging if we cannot write to /var/log.
+  (dgoodwin@redhat.com)
+
 * Wed Sep 22 2010 Devan Goodwin <dgoodwin@redhat.com> 0.80-1
 - Resolves: #628589
 - Updated I18N strings. (dgoodwin@redhat.com)
