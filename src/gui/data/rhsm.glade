@@ -97,7 +97,6 @@
           <widget class="GtkHPaned" id="product_details_hpane">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="position">1</property>
             <accessibility>
               <atkproperty name="AtkObject::accessible-name">product_details_hpane</atkproperty>
             </accessibility>
@@ -114,9 +113,11 @@
                   <widget class="GtkScrolledWindow" id="scrolledwindow_updates">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="hadjustment">0 0 103 1 10 10</property>
                     <property name="vadjustment">0 0 200 20 180 200</property>
                     <property name="hscrollbar_policy">never</property>
                     <property name="vscrollbar_policy">automatic</property>
+                    <property name="window_placement">bottom-left</property>
                     <property name="shadow_type">in</property>
                     <accessibility>
                       <atkproperty name="AtkObject::accessible-name">scrolledwindow_updates</atkproperty>
@@ -134,7 +135,7 @@
                     </child>
                   </widget>
                   <packing>
-                    <property name="resize">False</property>
+                    <property name="resize">True</property>
                     <property name="shrink">True</property>
                   </packing>
                 </child>
@@ -587,7 +588,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                         <property name="tooltip" translatable="yes">A unique label for this system</property>
                         <property name="invisible_char">&#x25CF;</property>
                         <accessibility>
-                          <atkproperty name="AtkObject::accessible-name">consumer_name	</atkproperty>
+                          <atkproperty name="AtkObject::accessible-name">consumer_name</atkproperty>
                         </accessibility>
                       </widget>
                       <packing>
