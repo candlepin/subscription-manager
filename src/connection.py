@@ -33,7 +33,6 @@ _ = gettext.gettext
 
 config = initConfig()
 
-log = getLogger(__name__)
 
 class ConnectionException(Exception):
     pass
