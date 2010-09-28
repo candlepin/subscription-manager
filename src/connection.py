@@ -26,12 +26,12 @@ from M2Crypto import SSL, httpslib
 from logutil import getLogger
 from config import initConfig 
 
+log = getLogger(__name__)
+
 import gettext
 _ = gettext.gettext
 
 config = initConfig()
-
-log = getLogger(__name__)
 
 
 class RestlibException(Exception):
@@ -334,7 +334,6 @@ class UEPConnection:
     def getAllAvailableEntitlements(self, consumerId):
         method = "/pools?consumer=%s&listall=true" % consumerId
         results = self.conn.request_get(method)
-
         return results
 
     def regenIdCertificate(self, consumerId):

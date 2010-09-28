@@ -54,7 +54,6 @@ def getLogger(name):
         handler = RotatingFileHandler(path, maxBytes=0x100000, backupCount=5)
     except IOError, e:
         handler = logging.StreamHandler()
-        log.warn("Unable to write to: %s" % path)
 
     handler.setFormatter(Formatter(fmt))
     log.addHandler(handler)
