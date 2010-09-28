@@ -141,6 +141,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/gui/progress.py* 
 %{_datadir}/rhsm/gui/data/factsdialog.glade  
 %{_datadir}/rhsm/gui/data/rhsm.glade  
+%{_datadir}/rhsm/gui/data/registration.glade
+%{_datadir}/rhsm/gui/data/regtoken.glade
 %{_datadir}/rhsm/gui/data/subsgui.glade  
 %{_datadir}/rhsm/gui/data/progress.glade
 %{_datadir}/rhsm/gui/data/icons/subsmgr-empty.png

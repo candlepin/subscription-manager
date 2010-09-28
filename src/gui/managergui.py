@@ -54,7 +54,6 @@ log = getLogger(__name__)
 
 
 prefix = os.path.dirname(__file__)
-gladexml = os.path.join(prefix, "data/rhsm.glade")
 subs_full = os.path.join(prefix, "data/icons/subsmgr-full.png")
 subs_empty = os.path.join(prefix, "data/icons/subsmgr-empty.png")
 
@@ -67,7 +66,6 @@ CONSUMER_SIGNAL = "on_consumer_changed"
 
 # Register new signal emitted by various dialogs when entitlement data changes
 gobject.signal_new(CONSUMER_SIGNAL, gtk.Dialog, gobject.SIGNAL_ACTION, gobject.TYPE_NONE, ())
-#rhsm_xml = gtk.glade.XML(gladexml)
 
 class GladeWrapper(gtk.glade.XML):
     def __init__(self, filename):
@@ -81,8 +79,11 @@ class GladeWrapper(gtk.glade.XML):
             raise Exception ("Widget %s not found" % widget_name)
         return widget
 
-#rhsm_xml = gtk.glade.XML(gladexml)
-rhsm_xml = GladeWrapper(gladexml)
+rhsm_xml = GladeWrapper(os.path.join(prefix, "data/rhsm.glade"))
+registration_xml = GladeWrapper(os.path.join(prefix,
+    "data/registration.glade"))
+regtoken_xml = GladeWrapper(os.path.join(prefix,
+    "data/regtoken.glade"))
 
 certlib = CertLib()
 ENT_CONFIG_DIR = os.path.join(cfg.get('rhsm', 'entitlementCertDir'), 'product')
@@ -181,9 +182,10 @@ class ManageSubscriptionPage:
         self.mainWin.connect("hide", gtk.main_quit)
 
         # Register custom signal for consumer changes
-        for widget_name in ('register_dialog', 'register_token_dialog'):
-            widget = rhsm_xml.get_widget(widget_name)
-            widget.connect(CONSUMER_SIGNAL, self.gui_reload)
+        registration_window = registration_xml.get_widget('register_dialog')
+        registration_window.connect(CONSUMER_SIGNAL, self.gui_reload)
+        regtoken_window = regtoken_xml.get_widget('register_token_dialog')
+        regtoken_window.connect(CONSUMER_SIGNAL, self.gui_reload)
 
         self.show_all()
 
@@ -396,8 +398,8 @@ class RegisterScreen:
         dic = {"on_register_cancel_button_clicked": self.cancel,
                "on_register_button_clicked": self.onRegisterAction,
             }
-        rhsm_xml.signal_autoconnect(dic)
-        self.registerWin = rhsm_xml.get_widget("register_dialog")
+        registration_xml.signal_autoconnect(dic)
+        self.registerWin = registration_xml.get_widget("register_dialog")
         self.registerWin.connect("hide", self.cancel)
         self.registerWin.connect("delete_event", self.delete_event)
         self.initializeConsumerName()
@@ -414,7 +416,7 @@ class RegisterScreen:
         self.close_window()
 
     def initializeConsumerName(self):
-        consumername = rhsm_xml.get_widget("consumer_name")
+        consumername = registration_xml.get_widget("consumer_name")
         if not consumername.get_text():
             consumername.set_text(socket.gethostname())
 
@@ -423,9 +425,9 @@ class RegisterScreen:
         self.register()
 
     def register(self, testing=None):
-        self.uname = rhsm_xml.get_widget("account_login")
-        self.passwd = rhsm_xml.get_widget("account_password")
-        self.consumer_name = rhsm_xml.get_widget("consumer_name")
+        self.uname = registration_xml.get_widget("account_login")
+        self.passwd = registration_xml.get_widget("account_password")
+        self.consumer_name = registration_xml.get_widget("consumer_name")
 
         global username, password, consumer, consumername, UEP
         username = self.uname.get_text()
@@ -500,7 +502,7 @@ class RegisterScreen:
         return True
 
     def auto_subscribe(self):
-        self.autobind = rhsm_xml.get_widget("auto_bind")
+        self.autobind = registration_xml.get_widget("auto_bind")
         return self.autobind.get_active()
 
     def validate_account(self):
@@ -518,6 +520,7 @@ class RegisterScreen:
             return False
         return True
 
+    # TODO: I don't think this is necessary
     def _reload_cp_with_certs(self):
         global UEP
         cert_file = ConsumerIdentity.certpath()
@@ -539,14 +542,12 @@ class RegistrationTokenScreen:
                 "on_unregister_button_click" : self.unregisterAction
                 }
         self.setAccountMsg()
-        rhsm_xml.signal_autoconnect(dic)
-        self.regtokenWin = rhsm_xml.get_widget("register_token_dialog")
+        regtoken_xml.signal_autoconnect(dic)
+        self.regtokenWin = regtoken_xml.get_widget("register_token_dialog")
         self.regtokenWin.connect("hide", self.finish)
         self.regtokenWin.connect("delete_event", self.delete_event)
 
         self.regtokenWin.run()
-
-#        self.regtokenWin.show_all()
 
     def show(self):
         self.regtokenWin.present()
@@ -591,17 +592,17 @@ class RegistrationTokenScreen:
             errorWindow(linkify(e.msg))
 
     def setAccountMsg(self):
-        alabel1 = rhsm_xml.get_widget("account_label1")
+        alabel1 = regtoken_xml.get_widget("account_label1")
         alabel1.set_label(_("\nThis system is registered with following consumer information"))
-        alabel = rhsm_xml.get_widget("account_label2")
+        alabel = regtoken_xml.get_widget("account_label2")
         alabel.set_label(_("<b>    ID:</b>       %s" % consumer["uuid"]))
-        alabel = rhsm_xml.get_widget("account_label3")
+        alabel = regtoken_xml.get_widget("account_label3")
         alabel.set_label(_("<b>  Name:</b>     %s" % consumer["consumer_name"]))
 
     def submitToken(self, button):
-        rlabel = rhsm_xml.get_widget("regtoken_entry")
+        rlabel = regtoken_xml.get_widget("regtoken_entry")
         reg_token = rlabel.get_text()
-        elabel = rhsm_xml.get_widget("email_entry")
+        elabel = regtoken_xml.get_widget("email_entry")
         email = elabel.get_text()
         if email == "":
             email = None

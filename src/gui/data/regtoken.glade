@@ -1,0 +1,368 @@
+<?xml version="1.0"?>
+<glade-interface>
+  <!-- interface-requires gtk+ 2.16 -->
+  <!-- interface-naming-policy project-wide -->
+  <widget class="GtkDialog" id="register_token_dialog">
+    <property name="border_width">12</property>
+    <property name="title" translatable="yes">Registration Settings</property>
+    <property name="modal">True</property>
+    <property name="window_position">center</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">dialog</property>
+    <property name="has_separator">False</property>
+    <accessibility>
+      <atkproperty name="AtkObject::accessible-name">register_token_dialog</atkproperty>
+    </accessibility>
+    <child internal-child="vbox">
+      <widget class="GtkVBox" id="dialog-vbox1">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <accessibility>
+          <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog-vbox7</atkproperty>
+        </accessibility>
+        <child>
+          <widget class="GtkVBox" id="dialog-vbox8">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">4</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name">dialog-vbox8</atkproperty>
+            </accessibility>
+            <child>
+              <widget class="GtkVBox" id="vbox7">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name">vbox7</atkproperty>
+                </accessibility>
+                <child>
+                  <widget class="GtkVBox" id="vbox8">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name">vbox8</atkproperty>
+                    </accessibility>
+                    <child>
+                      <widget class="GtkLabel" id="label6">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Red Hat Entitlements Account&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name">label6</atkproperty>
+                        </accessibility>
+                      </widget>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="account_label1">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="label">header</property>
+                        <property name="use_markup">True</property>
+                        <property name="ellipsize">middle</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name">account_label1</atkproperty>
+                        </accessibility>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="padding">5</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="account_label2">
+                        <property name="visible">True</property>
+                        <property name="xalign">0.05000000074505806</property>
+                        <property name="label">consumerId</property>
+                        <property name="use_markup">True</property>
+                        <property name="ellipsize">middle</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name">account_label2</atkproperty>
+                        </accessibility>
+                      </widget>
+                      <packing>
+                        <property name="padding">5</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="account_label3">
+                        <property name="visible">True</property>
+                        <property name="xalign">0.05000000074505806</property>
+                        <property name="label">consumerName</property>
+                        <property name="use_markup">True</property>
+                        <property name="ellipsize">middle</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name">account_label3</atkproperty>
+                        </accessibility>
+                      </widget>
+                      <packing>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="padding">7</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkVBox" id="vbox9">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">4</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name">vbox9</atkproperty>
+                    </accessibility>
+                    <child>
+                      <widget class="GtkLabel" id="label8">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="yalign">0</property>
+                        <property name="label" translatable="yes">&lt;b&gt; Product Registration (Optional) &lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name">label8</atkproperty>
+                        </accessibility>
+                      </widget>
+                      <packing>
+                        <property name="padding">20</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label9">
+                        <property name="visible">True</property>
+                        <property name="xalign">2.2351741291171123e-10</property>
+                        <property name="yalign">0</property>
+                        <property name="label" translatable="yes">Enter a subscription number for products purchased from Red Hat</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name">label9</atkproperty>
+                        </accessibility>
+                      </widget>
+                      <packing>
+                        <property name="padding">2</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkHBox" id="hbox4">
+                        <property name="visible">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name">hbox2</atkproperty>
+                        </accessibility>
+                        <child>
+                          <widget class="GtkLabel" id="label10">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="xpad">9</property>
+                            <property name="label" translatable="yes">Subscription Token:</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name">label10</atkproperty>
+                            </accessibility>
+                          </widget>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkEntry" id="regtoken_entry">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="invisible_char">&#x25CF;</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name">regtoken_entry</atkproperty>
+                            </accessibility>
+                          </widget>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="padding">5</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label11">
+                        <property name="visible">True</property>
+                        <property name="xalign">0.57999998331069946</property>
+                        <property name="yalign">0</property>
+                        <property name="label" translatable="yes">Ex: XXXX-XXXX-XXXX-XXXX</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name">label11</atkproperty>
+                        </accessibility>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label4">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Enter an optional email address for notification when registration is complete.</property>
+                      </widget>
+                      <packing>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkHBox" id="hbox5">
+                        <property name="visible">True</property>
+                        <child>
+                          <widget class="GtkLabel" id="label14">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="xpad">9</property>
+                            <property name="label" translatable="yes">Email Address:</property>
+                          </widget>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkEntry" id="email_entry">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="invisible_char">&#x25CF;</property>
+                          </widget>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="position">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkHBox" id="hbox6">
+                        <property name="visible">True</property>
+                        <property name="spacing">1</property>
+                        <child>
+                          <widget class="GtkLabel" id="label5">
+                            <property name="visible">True</property>
+                          </widget>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkButton" id="submit_button">
+                            <property name="label" translatable="yes">Submit</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name">submit_button</atkproperty>
+                            </accessibility>
+                            <signal name="clicked" handler="on_submit_button_clicked"/>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="position">6</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child internal-child="action_area">
+          <widget class="GtkHButtonBox" id="dialog-action_area1">
+            <property name="visible">True</property>
+            <property name="layout_style">end</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog-action_area6</atkproperty>
+            </accessibility>
+            <child>
+              <widget class="GtkButton" id="unregister_button">
+                <property name="label" translatable="yes">Unregister</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_unregister_button_click"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkButton" id="button1">
+                <property name="label" translatable="yes">Change Account</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name">button1</atkproperty>
+                </accessibility>
+                <signal name="clicked" handler="on_change_account_button"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="padding">5</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkButton" id="cancel_add_button4">
+                <property name="label">gtk-close</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name">cancel_add_button4</atkproperty>
+                </accessibility>
+                <signal name="clicked" handler="on_register_token_close_clicked"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="padding">5</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+</glade-interface>
