@@ -80,7 +80,7 @@ class moduleClass(Module, managergui.RegisterScreen):
         glade file.
         """
         self.vbox = gtk.VBox(spacing=10)
-        self.register_dialog = managergui.rhsm_xml.get_widget("main_vbox")
+        self.register_dialog = managergui.rhsm_xml.get_widget("register_dialog_main_vbox")
         self.register_dialog.reparent(self.vbox)
 
         # Get ride of the 'register' and 'cancel' buttons, as we are going to
