@@ -95,7 +95,6 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/rhsm/gui/data
 %dir %{_datadir}/rhsm/gui/data/icons
 %dir /etc/rhsm/facts
-%dir /etc/rhsm/ca
 %dir %{_datarootdir}/locale
 
 %{_datadir}/rhsm/__init__.py*
@@ -164,6 +163,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/config.py*
 %{_datadir}/rhsm/certificate.py*
 %config(noreplace) %attr(644,root,root) /etc/rhsm/rhsm.conf
+%dir %{_sysconfdir}/rhsm/ca
+%{_sysconfdir}/rhsm/ca
 
 %post
 chkconfig --add rhsmcertd

@@ -69,6 +69,7 @@ install: dbus-service-install compile-po
 	cp etc-conf/rhsm.conf ${PREFIX}/etc/rhsm/
 	cp etc-conf/rhsmplugin.conf ${PREFIX}/etc/yum/pluginconf.d/
 	cp etc-conf/pidplugin.conf ${PREFIX}/etc/yum/pluginconf.d/
+	cp etc-conf/ca/*.pem ${PREFIX}/etc/rhsm/ca/
 	cp bin/* ${PREFIX}/usr/bin
 	cp src/rhsmcertd.init.d ${PREFIX}/etc/init.d/rhsmcertd
 	cp man/* ${PREFIX}/usr/share/man/man8/
