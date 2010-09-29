@@ -4,7 +4,7 @@
   <!-- interface-naming-policy project-wide -->
   <widget class="GtkDialog" id="register_dialog">
     <property name="border_width">5</property>
-    <property name="title" translatable="yes">Account Registration</property>
+    <property name="title" translatable="yes">System Registration</property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
     <property name="type_hint">dialog</property>
@@ -34,9 +34,9 @@
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>
-                <property name="label" translatable="yes" context="yes">Please enter your account information for &lt;b&gt;Red Hat Entitlement Platform&lt;/b&gt; (http://redhat.com/candlepin)</property>
+                <property name="label" translatable="yes" context="yes">&lt;b&gt;Please enter your Red Hat Entitlement Platform account information:&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
-                <property name="wrap">True</property>
+                <property name="single_line_mode">True</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name">instructionsLabel1</atkproperty>
                 </accessibility>
@@ -94,7 +94,7 @@
                             <property name="xpad">1</property>
                             <property name="ypad">2</property>
                             <property name="label" translatable="yes">&lt;small&gt;Tip: Forgot your login or password? Look it up at
-https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
+&lt;a href="https://www.redhat.com/wapps/sso/rhn/lostPassword.html"&gt;https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/a&gt;&lt;/small&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="wrap">True</property>
                             <accessibility>
@@ -210,7 +210,7 @@ https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/small&gt;</property>
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>
-                <property name="label" translatable="yes">Please enter the information for this &lt;b&gt;system&lt;/b&gt;</property>
+                <property name="label" translatable="yes">&lt;b&gt;Please enter the following for this system:&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
               </widget>
               <packing>
