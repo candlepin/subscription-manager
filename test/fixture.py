@@ -39,7 +39,7 @@ class RhsmFunctionalTest(unittest.TestCase):
         self.admin_username = self.test_cfg.get('test', 'adminUsername')
         self.admin_password = self.test_cfg.get('test', 'adminPassword')
 
-        self.owner =
+        #self.owner =
 
     def tearDown(self):
         shutil.rmtree(self.test_dir)
