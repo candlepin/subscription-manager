@@ -333,7 +333,7 @@ class UEPConnection:
     def getPoolsList(self, consumerId, listAll=False):
         method = "/pools?consumer=%s" % consumerId
         if listAll:
-            method = "%s?listall=true" % method
+            method = "%s&listall=true" % method
         results = self.conn.request_get(method)
         return results
 
