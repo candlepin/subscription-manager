@@ -149,7 +149,11 @@ class ReRegisterCommand(CliCommand):
                     print (_("Error: username and password are required to reregister --consumerid, try reregister --help.\n"))
                     sys.exit(-1)
 
-                consumer = self.cp.getConsumer(self.options.consumerid, self.options.username, self.options.password)
+                admin_cp = connection.UEPConnection(username=self.options.username,
+                        password=self.options.password)
+
+                consumer = admin_cp.getConsumer(self.options.consumerid, 
+                        self.options.username, self.options.password)
                 managerlib.persist_consumer_cert(consumer)
             else:
                 consumerid = check_registration()['uuid']
