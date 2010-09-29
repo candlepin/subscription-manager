@@ -64,6 +64,7 @@ CONSUMER_SIGNAL = "on_consumer_changed"
 
 # Register new signal emitted by various dialogs when entitlement data changes
 gobject.signal_new(CONSUMER_SIGNAL, gtk.Dialog, gobject.SIGNAL_ACTION, gobject.TYPE_NONE, ())
+gobject.signal_new(CONSUMER_SIGNAL, gtk.Window, gobject.SIGNAL_ACTION, gobject.TYPE_NONE, ())
 
 class GladeWrapper(gtk.glade.XML):
     def __init__(self, filename):
@@ -166,11 +167,12 @@ class ManageSubscriptionPage:
         self.system_facts_dialog = factsgui.SystemFactsDialog()
 
         dic = {"on_close_button_clicked": gtk.main_quit,
-               "on_account_settings_button_clicked": self.loadAccountSettings,
+               "on_register_button_clicked": self.loadAccountSettings,
                "on_add_button_clicked": self.addSubButtonAction,
                "on_update_button_clicked": self.updateSubButtonAction,
                "on_unsubscribe_button_clicked": self.onUnsubscribeAction,
-               "on_system_facts_button_clicked" : self.showFactsDialog
+               "on_system_facts_button_clicked" : self.showFactsDialog,
+               "on_unregister_button_clicked" : self.unregisterAction,
             }
         rhsm_xml.signal_autoconnect(dic)
         self.setButtonState()
@@ -182,13 +184,9 @@ class ManageSubscriptionPage:
         # Register custom signal for consumer changes
         registration_window = registration_xml.get_widget('register_dialog')
         registration_window.connect(CONSUMER_SIGNAL, self.gui_reload)
-        regtoken_window = regtoken_xml.get_widget('register_token_dialog')
-        regtoken_window.connect(CONSUMER_SIGNAL, self.gui_reload)
+        self.mainWin.connect(CONSUMER_SIGNAL, self.gui_reload)
 
-        self.show_all()
-
-    def show_all(self):
-        self.mainWin.show_all()
+        self.mainWin.show()
 
     def showFactsDialog(self, button):
         self.system_facts_dialog.show()
@@ -337,21 +335,27 @@ class ManageSubscriptionPage:
             self.sm_icon.set_from_file(subs_full)
 
     def setRegistrationStatus(self):
+        """
+        Updates portions of the main window to reflect current registration status.
+        """
+        exists = ConsumerIdentity.existsAndValid()
+        log.debug("updating registration status.. consumer exists?: %s", exists)
 
         reg_as_label = rhsm_xml.get_widget('registered_as_label')
         reg_label = rhsm_xml.get_widget("registration_status")
-        reg_button_label = rhsm_xml.get_widget("account_settings_button")
-        exists = ConsumerIdentity.existsAndValid()
-        log.info("updating registration status.. consumer exists?: %s", exists)
+        register_button = rhsm_xml.get_widget("register_button")
+        unregister_button = rhsm_xml.get_widget("unregister_button")
         if exists:
             reg_label.set_label(constants.REG_REMOTE_STATUS % cfg.get('server', 'hostname'))
-            reg_button_label.set_label(_("Modify Registration"))
             reg_as_label.set_label(_("This system is registered as: <b>%s</b>" %
                 ConsumerIdentity.read().getConsumerId()))
+            register_button.hide()
+            unregister_button.show()
         else:
             reg_label.set_label(constants.REG_LOCAL_STATUS)
-            reg_button_label.set_label(_("Register System..."))
             reg_as_label.set_label(_("This system is not registered."))
+            register_button.show()
+            unregister_button.hide()
 
     def gui_reload(self, widget=None):
         self.setRegistrationStatus()
@@ -395,6 +399,22 @@ class ManageSubscriptionPage:
         if not fetch_certificates():
             return
         self.gui_reload()
+
+    def unregisterAction(self, button):
+        global UEP, consumer
+        log.info("Unregister called in gui. Asking for confirmation")
+        prompt = messageWindow.YesNoDialog(constants.CONFIRM_UNREGISTER)
+        if not prompt.getrc():
+            log.info("de-registration not confirmed. cancelling unregister call")
+            return
+        log.info("Proceeding with un-registration: %s", consumer['uuid'])
+
+        managerlib.unregister(UEP, consumer['uuid'])
+
+        consumer = get_consumer()
+
+        # Emit a signal that the entitlements have changed
+        self.mainWin.emit(CONSUMER_SIGNAL)
 
 
 class RegisterScreen:
@@ -547,7 +567,6 @@ class RegistrationTokenScreen:
                 "on_change_account_button" : self.reRegisterAction,
                 "on_facts_update_button_clicked" : self.factsUpdateAction,
                 "on_submit_button_clicked" : self.submitToken,
-                "on_unregister_button_click" : self.unregisterAction
                 }
         self.setAccountMsg()
         regtoken_xml.signal_autoconnect(dic)
@@ -566,23 +585,6 @@ class RegistrationTokenScreen:
     def finish(self, button=None):
         self.regtokenWin.hide()
         return True
-
-    def unregisterAction(self, button):
-        global UEP, consumer
-        log.info("Unregister called in gui. Asking for confirmation")
-        prompt = messageWindow.YesNoDialog(constants.CONFIRM_UNREGISTER)
-        if not prompt.getrc():
-            log.info("de-registration not confirmed. cancelling unregister call")
-            return
-        log.info("Going ahead with un-registering consumer: %s", consumer['uuid'])
-
-        managerlib.unregister(UEP, consumer['uuid'])
-
-        consumer = get_consumer()
-
-        # Emit a signal that the entitlements have changed
-        self.regtokenWin.emit(CONSUMER_SIGNAL)
-        self.finish(button)
 
     def reRegisterAction(self, button):
         show_register_screen()

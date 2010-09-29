@@ -305,18 +305,7 @@
               <atkproperty name="AtkObject::accessible-name" translatable="yes">dialog-action_area6</atkproperty>
             </accessibility>
             <child>
-              <widget class="GtkButton" id="unregister_button">
-                <property name="label" translatable="yes">Unregister</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_unregister_button_click"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
+              <placeholder/>
             </child>
             <child>
               <widget class="GtkButton" id="button1">
