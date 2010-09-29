@@ -255,6 +255,7 @@ class UEPConnection:
         ret = self.conn.request_put(method, params)
         return ret
 
+    # TODO: username and password not used here
     def getConsumer(self, uuid, username, password):
         """
         Returns a consumer object with pem/key for existing consumers

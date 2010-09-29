@@ -179,6 +179,7 @@ class ManageSubscriptionPage:
         self.mainWin.connect("delete-event", gtk.main_quit)
         self.mainWin.connect("hide", gtk.main_quit)
 
+        # TODO: Do we really need to redraw the whole GUI for this?
         # Register custom signal for consumer changes
         registration_window = registration_xml.get_widget('register_dialog')
         registration_window.connect(CONSUMER_SIGNAL, self.gui_reload)
@@ -241,15 +242,19 @@ class ManageSubscriptionPage:
             markup_status = product[1]
             if product[1] in ["Expired", "Not Subscribed", "Not Installed"]:
                 self.warn_count += 1
-                markup_status = '<span foreground="red"><b>%s</b></span>' % xml.sax.saxutils.escape(product[1])
-            self.status_icon = self.tv_products.render_icon(self.state_icon_map[product[1]], size=gtk.ICON_SIZE_MENU)
-            self.productList.append((self.status_icon, product[0], product[3], markup_status, product[2], product[4]))
+                markup_status = '<span foreground="red"><b>%s</b></span>' % \
+                        xml.sax.saxutils.escape(product[1])
+            self.status_icon = self.tv_products.render_icon(
+                    self.state_icon_map[product[1]], size=gtk.ICON_SIZE_MENU)
+            self.productList.append((self.status_icon, product[0], product[3], 
+                markup_status, product[2], product[4]))
         self.tv_products.set_model(self.productList)
 
     def populateProductDialog(self):
         self.tv_products = rhsm_xml.get_widget("treeview_updates")
-        self.productList = gtk.ListStore(gtk.gdk.Pixbuf, gobject.TYPE_STRING, gobject.TYPE_STRING, \
-                                         gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.productList = gtk.ListStore(gtk.gdk.Pixbuf, 
+                gobject.TYPE_STRING, gobject.TYPE_STRING,
+                gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
 
         self.updateProductDialog()
 
@@ -333,16 +338,21 @@ class ManageSubscriptionPage:
             self.sm_icon.set_from_file(subs_full)
 
     def setRegistrationStatus(self):
-        self.reg_label = rhsm_xml.get_widget("registration_status")
-        self.reg_button_label = rhsm_xml.get_widget("account_settings_button")
+
+        reg_as_label = rhsm_xml.get_widget('registered_as_label')
+        reg_label = rhsm_xml.get_widget("registration_status")
+        reg_button_label = rhsm_xml.get_widget("account_settings_button")
         exists = ConsumerIdentity.existsAndValid()
         log.info("updating registration status.. consumer exists?: %s", exists)
         if exists:
-            self.reg_label.set_label(constants.REG_REMOTE_STATUS % cfg.get('server', 'hostname'))
-            self.reg_button_label.set_label(_("Modify Registration"))
+            reg_label.set_label(constants.REG_REMOTE_STATUS % cfg.get('server', 'hostname'))
+            reg_button_label.set_label(_("Modify Registration"))
+            reg_as_label.set_label(_("This system is registered as: <b>%s</b>" %
+                ConsumerIdentity.read().getConsumerId()))
         else:
-            self.reg_label.set_label(constants.REG_LOCAL_STATUS)
-            self.reg_button_label.set_label(_("Register System..."))
+            reg_label.set_label(constants.REG_LOCAL_STATUS)
+            reg_button_label.set_label(_("Register System..."))
+            reg_as_label.set_label(_("This system is not registered."))
 
     def gui_reload(self, widget=None):
         self.setRegistrationStatus()
@@ -353,7 +363,8 @@ class ManageSubscriptionPage:
         if not self.psubs_selected:
             return
         log.info("Product %s selected for unsubscribe" % self.pname_selected)
-        dlg = messageWindow.YesNoDialog(constants.CONFIRM_UNSUBSCRIBE % xml.sax.saxutils.escape(self.pname_selected), self.mainWin)
+        dlg = messageWindow.YesNoDialog(constants.CONFIRM_UNSUBSCRIBE % 
+                xml.sax.saxutils.escape(self.pname_selected), self.mainWin)
         if not dlg.getrc():
             return
 
