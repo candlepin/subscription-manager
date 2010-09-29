@@ -15,6 +15,9 @@
 # in this software or its documentation.
 #
 
+import gettext
+_ = gettext.gettext
+
 from certlib import  ActionLock, UEP, Disconnected
 from logutil import getLogger
 from facts import Facts

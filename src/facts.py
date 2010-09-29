@@ -1,6 +1,8 @@
 import glob
 import os
 import simplejson as json
+import gettext
+_ = gettext.gettext
 
 import config
 import hwprobe

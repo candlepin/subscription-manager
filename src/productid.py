@@ -19,6 +19,9 @@ import os
 import sys
 import time
 import simplejson as json
+import gettext
+_ = gettext.gettext
+
 from yum import YumBase
 from gzip import GzipFile
 from certificate import ProductCertificate
