@@ -6,12 +6,16 @@
     <property name="width_request">400</property>
     <property name="height_request">300</property>
     <property name="border_width">5</property>
+    <property name="title" translatable="yes">Subscription Manager - Facts</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="default_width">600</property>
     <property name="default_height">600</property>
     <property name="type_hint">normal</property>
     <property name="has_separator">False</property>
+    <accessibility>
+      <atkproperty name="AtkObject::accessible-name">facts_dialog</atkproperty>
+    </accessibility>
     <signal name="delete_event" handler="on_system_facts_dialog_delete_event"/>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox1">
@@ -71,6 +75,9 @@
                     <property name="can_focus">True</property>
                     <property name="headers_clickable">False</property>
                     <property name="enable_grid_lines">both</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">facts_view</atkproperty>
+                    </accessibility>
                   </widget>
                 </child>
               </widget>
@@ -97,6 +104,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">close_button</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_close_button_clicked"/>
               </widget>
               <packing>

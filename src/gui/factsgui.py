@@ -93,9 +93,6 @@ class SystemFactsDialog:
 
         try:
             managergui.UEP.updateConsumerFacts(consumer_uuid, system_facts)
-        except connection.RestlibException, e:
-            log.error("Could not update system facts:  error %s" % e)
-            managergui.errorWindow(managergui.linkify(str(e)))
         except Exception, e:
             log.error("Could not update system facts \nError: %s" % e)
             managergui.errorWindow(managergui.linkify(str(e)))
