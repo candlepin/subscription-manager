@@ -203,7 +203,6 @@ def getAllAvailableSubscriptions(cpserver, consumer):
         cpserver.updateConsumerFacts(consumer, facts.get_facts())
 
     dlist = cpserver.getPoolsList(consumer, listAll=True)
-    #data = [_sub_dict(pool['pool'], columns) for pool in dlist]
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
         if int(d['quantity']) < 0:
@@ -236,10 +235,6 @@ def getMatchedSubscriptions(poollist):
             if str(productid) in d['providedProductIds'] or str(productid) == d['productId']:
                 matched_data_dict[d['id']] = d
     return matched_data_dict.values()
-
-
-def getCompatibleSubscriptions(cpserver, consumer):
-    return getAvailableEntitlements(cpserver, consumer)
 
 
 def getAvailableEntitlements(cpserver, consumer):

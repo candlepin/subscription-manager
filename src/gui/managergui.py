@@ -676,7 +676,7 @@ class AddSubscriptionScreen:
 
     def populateSubscriptionLists(self):
         try:
-            compatible, dlist = managerlib.getCompatibleSubscriptions(UEP,
+            compatible, dlist = managerlib.getAvailableEntitlements(UEP,
                     self.consumer['uuid'])
             self.matched = managerlib.getMatchedSubscriptions(dlist) or []
             matched_pids = []
