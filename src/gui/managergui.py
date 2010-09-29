@@ -36,8 +36,7 @@ import connection
 import config
 import constants
 from facts import getFacts
-import time
-from certlib import EntitlementDirectory, ProductDirectory, ConsumerIdentity, CertLib
+from certlib import EntitlementDirectory, ConsumerIdentity, CertLib
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
 import xml.sax.saxutils
 
@@ -48,7 +47,6 @@ _ = gettext.gettext
 gettext.textdomain("subscription-manager")
 gtk.glade.bindtextdomain("subscription-manager")
 
-import logutil
 from logutil import getLogger
 log = getLogger(__name__)
 

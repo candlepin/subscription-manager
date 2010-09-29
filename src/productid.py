@@ -16,7 +16,6 @@
 #
 
 import os
-import sys
 import time
 import simplejson as json
 import gettext

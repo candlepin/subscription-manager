@@ -16,7 +16,6 @@
 #
 
 import os
-import re
 import time
 import fcntl
 from threading import RLock as Mutex
