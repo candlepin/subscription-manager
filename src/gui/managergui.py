@@ -167,12 +167,13 @@ class ManageSubscriptionPage:
         self.system_facts_dialog = factsgui.SystemFactsDialog()
 
         dic = {"on_close_button_clicked": gtk.main_quit,
-               "on_register_button_clicked": self.loadAccountSettings,
                "on_add_button_clicked": self.addSubButtonAction,
                "on_update_button_clicked": self.updateSubButtonAction,
                "on_unsubscribe_button_clicked": self.onUnsubscribeAction,
                "on_system_facts_button_clicked" : self.showFactsDialog,
-               "on_unregister_button_clicked" : self.unregisterAction,
+               "on_register_button_clicked": self.showRegisterDialog,
+               "on_unregister_button_clicked": self.showUnregisterDialog,
+               "on_regtoken_button_clicked": self.showRegTokenDialog,
             }
         rhsm_xml.signal_autoconnect(dic)
         self.setButtonState()
@@ -191,14 +192,11 @@ class ManageSubscriptionPage:
     def showFactsDialog(self, button):
         self.system_facts_dialog.show()
 
-    def loadAccountSettings(self, button):
-        if consumer.has_key('uuid'):
-            log.info("Machine already registered, loading the re-registration/registration token")
-            show_regtoken_screen()
-        else:
-            log.info("loading registration..")
-            show_register_screen()
-        return True
+    def showRegTokenDialog(self, button):
+        show_regtoken_screen()
+
+    def showRegisterDialog(self, button):
+        show_register_screen()
 
     def refresh(self):
         self.mainWin.destroy()
@@ -345,16 +343,19 @@ class ManageSubscriptionPage:
         reg_label = rhsm_xml.get_widget("registration_status")
         register_button = rhsm_xml.get_widget("register_button")
         unregister_button = rhsm_xml.get_widget("unregister_button")
+        regtoken_button = rhsm_xml.get_widget("regtoken_button")
         if exists:
             reg_label.set_label(constants.REG_REMOTE_STATUS % cfg.get('server', 'hostname'))
             reg_as_label.set_label(_("This system is registered as: <b>%s</b>" %
                 ConsumerIdentity.read().getConsumerId()))
             register_button.hide()
+            regtoken_button.show()
             unregister_button.show()
         else:
             reg_label.set_label(constants.REG_LOCAL_STATUS)
             reg_as_label.set_label(_("This system is not registered."))
             register_button.show()
+            regtoken_button.hide()
             unregister_button.hide()
 
     def gui_reload(self, widget=None):
@@ -400,7 +401,7 @@ class ManageSubscriptionPage:
             return
         self.gui_reload()
 
-    def unregisterAction(self, button):
+    def showUnregisterDialog(self, button):
         global UEP, consumer
         log.info("Unregister called in gui. Asking for confirmation")
         prompt = messageWindow.YesNoDialog(constants.CONFIRM_UNREGISTER)
@@ -503,7 +504,6 @@ class RegisterScreen:
             self.close_window()
 
             self.emit_consumer_signal()
-            self.registrationTokenScreen()
 
         except connection.RestlibException, e:
             log.error(failed_msg % e.msg)
@@ -521,9 +521,6 @@ class RegisterScreen:
 
     def emit_consumer_signal(self):
         self.registerWin.emit(CONSUMER_SIGNAL)
-
-    def registrationTokenScreen(self):
-        show_regtoken_screen()
 
     def close_window(self):
         self.registerWin.hide()
