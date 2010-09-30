@@ -195,25 +195,6 @@ def getProductDescription(qproduct):
     return data
 
 
-def getAllAvailableSubscriptions(cpserver, consumer):
-    columns = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'providedProductIds', 'productId']
-    # update facts first
-    facts = getFacts()
-    if facts.delta():
-        cpserver.updateConsumerFacts(consumer, facts.get_facts())
-
-    dlist = cpserver.getPoolsList(consumer, listAll=True)
-    data = [_sub_dict(pool, columns) for pool in dlist]
-    for d in data:
-        if int(d['quantity']) < 0:
-            d['quantity'] = 'unlimited'
-        else:
-            d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
-        d['endDate'] = formatDate(d['endDate'])
-        del d['consumed']
-    return data
-
-
 def getMatchedSubscriptions(poollist):
     """
     Gets the list of products that matched the list of installed products.
@@ -221,14 +202,8 @@ def getMatchedSubscriptions(poollist):
     Returns a list of product info _and_ pool info (the id is actually pool id)
     """
     installedProducts = ProductDirectory().list()
-    matched_data = []
-    columns = ['id', 'quantity', 'endDate', 'productName', 'providedProductIds', 'productId']
-    if not poollist:
-        return None
-    data = [_sub_dict(pool, columns) for pool in poollist]
     matched_data_dict = {}
-    for d in data:
-        d['endDate'] = formatDate(d['endDate'])
+    for d in poollist:
         for installedProduct in installedProducts:
             productid = installedProduct.getProduct().getHash()
             # we only need one matched item per pool id, so add to dict to uniq
@@ -237,40 +212,12 @@ def getMatchedSubscriptions(poollist):
     return matched_data_dict.values()
 
 
-def getAvailableEntitlements(cpserver, consumer):
-    """
-     Gets the available Entitlements from the server
-    """
-    columns = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'providedProductIds', 'productId']
-
-    # update facts
+def _get_entitlements(cpserver, consumer, columns, all=False):
     facts = getFacts()
     if facts.delta():
         cpserver.updateConsumerFacts(consumer, facts.get_facts())
-
-    dlist = cpserver.getPoolsList(consumer)
-    if not dlist:
-        return None, None
-    data = [_sub_dict(pool, columns) for pool in dlist]
-    for d in data:
-        if int(d['quantity']) < 0:
-            d['quantity'] = 'unlimited'
-        else:
-            d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
-
-        d['endDate'] = formatDate(d['endDate'])
-        del d['consumed']
-    return data, dlist
-
-
-def getAvailableEntitlementsCLI(cpserver, consumer):
-    columns = ['id', 'quantity', 'consumed', 'endDate', 'productName', 'productId']
-    # update facts if we need it
-    facts = getFacts()
-#    print facts.find_facts()
-    if facts.delta():
-        cpserver.updateConsumerFacts(consumer, facts.get_facts())
-    dlist = cpserver.getPoolsList(consumer)
+    
+    dlist = cpserver.getPoolsList(consumer, all)
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
         if int(d['quantity']) < 0:
@@ -281,6 +228,27 @@ def getAvailableEntitlementsCLI(cpserver, consumer):
         d['endDate'] = formatDate(d['endDate'])
         del d['consumed']
     return data
+
+
+def getAvailableEntitlementsCLI(cpserver, consumer):
+    columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
+            'productId']
+    return _get_entitlements(cpserver, consumer, columns)
+
+
+def getAllAvailableSubscriptions(cpserver, consumer):
+    columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
+            'providedProductIds', 'productId']
+    return _get_entitlements(cpserver, consumer, columns, all=True)
+
+
+def getAvailableEntitlements(cpserver, consumer):
+    """
+     Gets the available Entitlements from the server
+    """
+    columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
+            'providedProductIds', 'productId']
+    return _get_entitlements(cpserver, consumer, columns)
 
 
 def _sub_dict(datadict, subkeys, default=None):

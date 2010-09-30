@@ -676,9 +676,9 @@ class AddSubscriptionScreen:
 
     def populateSubscriptionLists(self):
         try:
-            compatible, dlist = managerlib.getAvailableEntitlements(UEP,
+            compatible = managerlib.getAvailableEntitlements(UEP,
                     self.consumer['uuid'])
-            self.matched = managerlib.getMatchedSubscriptions(dlist) or []
+            self.matched = managerlib.getMatchedSubscriptions(compatible)
             matched_pids = []
             for product in self.matched:
                 pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
@@ -948,7 +948,7 @@ class UpdateSubscriptionScreen:
         self.updatesList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.available_updates = 0
         try:
-            products, dlist = managerlib.getAvailableEntitlements(UEP, consumer['uuid'])
+            products = managerlib.getAvailableEntitlements(UEP, consumer['uuid'])
             for product in products:
                 if self.product_select in product.values():
                     # Only list selected product's pools
