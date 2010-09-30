@@ -474,7 +474,7 @@ class ListCommand(CliCommand):
             if self.options.all:
                 epools = managerlib.getAllAvailableSubscriptions(self.cp, consumer)
             else:
-                epools = managerlib.getAvailableEntitlementsCLI(self.cp, consumer)
+                epools = managerlib.getAvailableEntitlements(self.cp, consumer)
             if not len(epools):
                 print(_("No Available subscription pools to list"))
                 sys.exit(0)

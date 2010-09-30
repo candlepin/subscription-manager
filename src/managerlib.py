@@ -230,12 +230,6 @@ def _get_entitlements(cpserver, consumer, columns, all=False):
     return data
 
 
-def getAvailableEntitlementsCLI(cpserver, consumer):
-    columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
-            'productId']
-    return _get_entitlements(cpserver, consumer, columns)
-
-
 def getAllAvailableSubscriptions(cpserver, consumer):
     columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
             'providedProductIds', 'productId']
