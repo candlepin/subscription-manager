@@ -297,13 +297,21 @@ def formatDate(date):
     return datetime.fromtimestamp(tf).date()
 
 
-def unregister(uep, consumer_uuid):
-    """ Shared logic for un-registration. """
-    uep.unregisterConsumer(consumer_uuid)
-    # Clean up certificates, these are no longer valid:
-    shutil.rmtree(cfg.get('rhsm', 'consumerCertDir'), ignore_errors=True)
-    shutil.rmtree(cfg.get('rhsm', 'entitlementCertDir'), ignore_errors=True)
-    log.info("Successfully un-registered.")
+def unregister(uep, consumer_uuid, force=True):
+    """ 
+    Shared logic for un-registration. 
+    
+    If an unregistration fails, we always clean up locally, but allow the 
+    exception to be thrown so the caller can decide how to handle it.
+    """
+    try:
+        uep.unregisterConsumer(consumer_uuid)
+    finally:
+        if force:
+            # Clean up certificates, these are no longer valid:
+            shutil.rmtree(cfg.get('rhsm', 'consumerCertDir'), ignore_errors=True)
+            shutil.rmtree(cfg.get('rhsm', 'entitlementCertDir'), ignore_errors=True)
+            log.info("Successfully un-registered.")
 
 if __name__ == '__main__':
     print("\nInstalled Product Status:\n")

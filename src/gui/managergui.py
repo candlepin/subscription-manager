@@ -379,11 +379,12 @@ class ManageSubscriptionPage:
                 log.info("This machine is now unsubscribed from Product %s " \
                           % self.pname_selected)
             except connection.RestlibException, re:
-                log.error(re)
+                log.exception(re)
                 errorWindow(constants.UNSUBSCRIBE_ERROR)
             except Exception, e:
                 # raise warning window
-                log.error("Unable to perform unsubscribe due to the following exception \n Error: %s" % e)
+                log.error("Unable to perform unsubscribe due to the following exception:")
+                log.exception(e)
                 errorWindow(constants.UNSUBSCRIBE_ERROR)
                 raise
         # not registered, locally managed
@@ -406,12 +407,20 @@ class ManageSubscriptionPage:
         log.info("Unregister called in gui. Asking for confirmation")
         prompt = messageWindow.YesNoDialog(constants.CONFIRM_UNREGISTER)
         if not prompt.getrc():
-            log.info("de-registration not confirmed. cancelling unregister call")
+            log.info("unregistrater not confirmed. cancelling")
             return
         log.info("Proceeding with un-registration: %s", consumer['uuid'])
 
-        managerlib.unregister(UEP, consumer['uuid'])
+        try:
+            managerlib.unregister(UEP, consumer['uuid'])
+        except connection.RestlibException, e:
+            log.error("Error unregistering system with entitlement platform.")
+            log.error("Consumer may need to be manually cleaned up: %s" % consumer)
+            log.exception(e)
+            errorWindow(constants.UNREGISTER_ERROR)
 
+        # TODO: probably not a great idea to use a global variable here.
+        # Reset the global consumer variable.
         consumer = get_consumer()
 
         # Emit a signal that the entitlements have changed
@@ -474,6 +483,7 @@ class RegisterScreen:
         if testing:
             return True
 
+        # TODO: Can't really hit this block anymore.
         # Unregister consumer if exists
         if ConsumerIdentity.exists():
             try:
@@ -481,6 +491,8 @@ class RegisterScreen:
                 UEP.unregisterConsumer(cid)
             except Exception, e:
                 log.error("Unable to unregister existing user credentials.")
+                log.exception(e)
+
         failed_msg = _("Unable to register your system. \n Error: %s")
         try:
             admin_cp = connection.UEPConnection(username=username,

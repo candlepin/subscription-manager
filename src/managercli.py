@@ -278,11 +278,16 @@ class UnRegisterCommand(CliCommand):
             consumer = check_registration()['uuid']
             managerlib.unregister(self.cp, consumer)
         except connection.RestlibException, re:
+            # If errors are encountered unregistering with the UEP, we will 
+            # report them, but proceed.
+            log.error("Error unregistering system with entitlement platform.")
+            log.error("Consumer may need to be manually cleaned up: %s" % consumer)
             log.exception(re)
-            log.error("Error: Unable to un-register the system: %s" % re)
-            systemExit(-1, re.msg)
+            print(_("Errors were encountered during unregister. Please see /var/log/rhsm/rhsm.log for more information."))
         except Exception, e:
             handle_exception(_("Error: Unable to un-register the system"), e)
+
+        print(_("System has been un-registered."))
 
 
 class SubscribeCommand(CliCommand):
