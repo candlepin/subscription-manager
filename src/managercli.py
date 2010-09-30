@@ -373,6 +373,9 @@ class UnSubscribeCommand(CliCommand):
         self.serial_numbers = None
         self.parser.add_option("--serial", dest="serial",
                                help=_("Certificate serial to unsubscribe"))
+        self.parser.add_option("--all", dest="all", action="store_true",
+                               help=_("Unsubscribe from all subscriptions"))
+
 
     def _validate_options(self):
         CliCommand._validate_options(self)
@@ -383,12 +386,16 @@ class UnSubscribeCommand(CliCommand):
         """
         consumer = check_registration()['uuid']
         try:
-            if self.options.serial:
+            if self.options.all:
+                self.cp.unbindAll(consumer)
+                log.info("Warning: This machine has been unsubscribed from all its subscriptions as per user request.")
+            elif self.options.serial:
                 self.cp.unbindBySerial(consumer, self.options.serial)
                 log.info("This machine has been Unsubscribed from subcription with Serial number %s" % (self.options.serial))
             else:
-                self.cp.unbindAll(consumer)
-                log.info("Warning: This machine has been unsubscribed from all its subscriptions as per user request.")
+                print _("One of --serial or --all must be provided")
+                self.parser.print_help()
+                return
             self.certlib.update()
         except connection.RestlibException, re:
             log.error(re)
