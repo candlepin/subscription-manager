@@ -21,18 +21,6 @@
 </atkproperty>
         </accessibility>
         <child>
-          <widget class="GtkLabel" id="registered_as_label">
-            <property name="visible">True</property>
-            <property name="xalign">0</property>
-            <property name="label" translatable="yes">Registered As Label</property>
-            <property name="use_markup">True</property>
-            <property name="single_line_mode">True</property>
-          </widget>
-          <packing>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
           <widget class="GtkHBox" id="hbox_header">
             <property name="visible">True</property>
             <property name="spacing">9</property>
@@ -96,13 +84,13 @@
                 </child>
               </widget>
               <packing>
-                <property name="position">1</property>
+                <property name="position">0</property>
               </packing>
             </child>
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="position">1</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
@@ -125,8 +113,8 @@
                   <widget class="GtkScrolledWindow" id="scrolledwindow_updates">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hadjustment">0 0 495 49.5 445.5 495</property>
-                    <property name="vadjustment">0 0 60 6 54 60</property>
+                    <property name="hadjustment">0 0 539 53.900000000000006 485.10000000000002 539</property>
+                    <property name="vadjustment">0 0 69 6.9000000000000004 62.100000000000001 69</property>
                     <property name="hscrollbar_policy">never</property>
                     <property name="vscrollbar_policy">automatic</property>
                     <property name="window_placement">bottom-left</property>
@@ -265,23 +253,19 @@
             </child>
           </widget>
           <packing>
-            <property name="position">2</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="registration_status">
+          <widget class="GtkLabel" id="registered_as_label">
             <property name="visible">True</property>
-            <property name="xalign">0.039999999105930328</property>
-            <property name="label">label</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">Registered As Label</property>
             <property name="use_markup">True</property>
-            <accessibility>
-              <atkproperty name="AtkObject::accessible-name">registration_status</atkproperty>
-            </accessibility>
+            <property name="single_line_mode">True</property>
           </widget>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">3</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -344,7 +328,7 @@
                 <property name="label">Register System</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
+                <property name="receives_default">True</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name">account_settings</atkproperty>
                 </accessibility>
@@ -379,7 +363,7 @@
             <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="padding">1</property>
-            <property name="position">4</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </widget>

@@ -121,9 +121,6 @@ REGISTER_ERROR = _("<b>Unable to register the system.</b>\n\n %s\n\nPlease see /
 
 CONFIRM_UNSUBSCRIBE = _("Are you sure you want to unsubscribe product %s")
 
-REG_REMOTE_STATUS = _("This system is registered to <b>%s</b>")
-REG_LOCAL_STATUS = _("This system's subscriptions are <b>locally-managed.</b>")
-
 SELECT_STATUS = _("<b>Total of %s subscriptions selected for consumption.</b>")
 
 CONFIRM_UNREGISTER = _("<b>Are you sure you want to unregister?</b>")

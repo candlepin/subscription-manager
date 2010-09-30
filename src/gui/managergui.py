@@ -340,19 +340,16 @@ class ManageSubscriptionPage:
         log.debug("updating registration status.. consumer exists?: %s", exists)
 
         reg_as_label = rhsm_xml.get_widget('registered_as_label')
-        reg_label = rhsm_xml.get_widget("registration_status")
         register_button = rhsm_xml.get_widget("register_button")
         unregister_button = rhsm_xml.get_widget("unregister_button")
         regtoken_button = rhsm_xml.get_widget("regtoken_button")
         if exists:
-            reg_label.set_label(constants.REG_REMOTE_STATUS % cfg.get('server', 'hostname'))
             reg_as_label.set_label(_("This system is registered as: <b>%s</b>" %
                 ConsumerIdentity.read().getConsumerId()))
             register_button.hide()
             regtoken_button.show()
             unregister_button.show()
         else:
-            reg_label.set_label(constants.REG_LOCAL_STATUS)
             reg_as_label.set_label(_("This system is not registered."))
             register_button.show()
             regtoken_button.hide()
