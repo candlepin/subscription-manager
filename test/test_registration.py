@@ -12,23 +12,38 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-from fixture import RhsmFunctionalTest
-
 import connection
+from certlib import ConsumerIdentity
 from managercli import RegisterCommand
-import config
+import managerlib
 
 import os
 import unittest
 
-class CliRegistrationTests(RhsmFunctionalTest):
+class CliRegistrationTests(unittest.TestCase):
 
-    def test_registration(self):
+    def test_register_persists_consumer_cert(self):
+        class StubUEP:
+            def __init__(self, username=None, password=None, cert_file=None, key_file=None):
+                pass
+  
+            def registerConsumer(self, name, type, facts):
+                return 'Dummy Consumer'
+
+        self.persisted_consumer = None
+
+        def stub_persist(consumer):
+            self.persisted_consumer = consumer
+
+        # Given
+        connection.UEPConnection = StubUEP
+        managerlib.persist_consumer_cert = stub_persist
+        ConsumerIdentity.exists = classmethod(lambda cls: False)
+
+        # When
         cmd = RegisterCommand()
         cmd.main(['register', '--username=testuser1', '--password=password'])
-        self.assertTrue(os.path.exists(os.path.join(self.test_dir, 'etc', 'pki',
-            'consumer', 'cert.pem')))
-        self.assertTrue(os.path.exists(os.path.join(self.test_dir, 'etc', 'pki',
-            'consumer', 'key.pem')))
+
+        # Then
+        self.assertEqual('Dummy Consumer', self.persisted_consumer)
 
