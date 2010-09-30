@@ -695,7 +695,7 @@ class AddSubscriptionScreen:
                 self.compatList.append(None, [False] + pdata)
                 compatible_pids.append(product['productId'])
                 self.available_ent += 1
-            all_subs = managerlib.getAllAvailableSubscriptions(UEP, self.consumer['uuid'])
+            all_subs = managerlib.getAvailableEntitlements(UEP, self.consumer['uuid'], all=True)
             self.other = []
             for prod in all_subs:
                 if prod['productId'] not in compatible_pids + matched_pids:

@@ -212,7 +212,12 @@ def getMatchedSubscriptions(poollist):
     return matched_data_dict.values()
 
 
-def _get_entitlements(cpserver, consumer, columns, all=False):
+def getAvailableEntitlements(cpserver, consumer, all=False):
+    """
+     Gets the available Entitlements from the server
+    """
+    columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
+            'providedProductIds', 'productId']
     facts = getFacts()
     if facts.delta():
         cpserver.updateConsumerFacts(consumer, facts.get_facts())
@@ -228,21 +233,6 @@ def _get_entitlements(cpserver, consumer, columns, all=False):
         d['endDate'] = formatDate(d['endDate'])
         del d['consumed']
     return data
-
-
-def getAllAvailableSubscriptions(cpserver, consumer):
-    columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
-            'providedProductIds', 'productId']
-    return _get_entitlements(cpserver, consumer, columns, all=True)
-
-
-def getAvailableEntitlements(cpserver, consumer):
-    """
-     Gets the available Entitlements from the server
-    """
-    columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
-            'providedProductIds', 'productId']
-    return _get_entitlements(cpserver, consumer, columns)
 
 
 def _sub_dict(datadict, subkeys, default=None):
