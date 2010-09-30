@@ -80,7 +80,7 @@ class moduleClass(Module, managergui.RegisterScreen):
         glade file.
         """
         self.vbox = gtk.VBox(spacing=10)
-        self.register_dialog = managergui.rhsm_xml.get_widget("register_dialog_main_vbox")
+        self.register_dialog = managergui.registration_xml.get_widget("dialog-vbox6")
         self.register_dialog.reparent(self.vbox)
 
         # Get ride of the 'register' and 'cancel' buttons, as we are going to
@@ -105,7 +105,7 @@ class moduleClass(Module, managergui.RegisterScreen):
         login name field.
         """
         # FIXME:  This is currently broken
-        login_text = managergui.rhsm_xml.get_widget("account_login")
+        login_text = managergui.registration_xml.get_widget("account_login")
         login_text.grab_focus()
 
     def shouldAppear(self):
@@ -131,7 +131,7 @@ class moduleClass(Module, managergui.RegisterScreen):
 
         See gtk.Widget.destroy()
         """
-        widget = managergui.rhsm_xml.get_widget(widget_name)
+        widget = managergui.registration_xml.get_widget(widget_name)
         widget.destroy()
 
     def _get_credentials_hash(self):
@@ -150,5 +150,5 @@ class moduleClass(Module, managergui.RegisterScreen):
         Return the text value of an input widget referenced
         by name.
         """
-        widget = managergui.rhsm_xml.get_widget(widget_name)
+        widget = managergui.registration_xml.get_widget(widget_name)
         return widget.get_text()

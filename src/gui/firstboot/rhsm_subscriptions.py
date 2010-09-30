@@ -33,8 +33,9 @@ class moduleClass(Module, managergui.ManageSubscriptionPage):
     def apply(self, interface, testing=False):
         return RESULT_SUCCESS
 
-    def show_all(self):
-        print "show_all"
+    def show(self):
+        # Override parent method to display separate window.
+        pass
 
     def close_window(self):
         pass

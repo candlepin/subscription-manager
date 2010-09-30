@@ -186,7 +186,10 @@ class ManageSubscriptionPage:
         registration_window = registration_xml.get_widget('register_dialog')
         registration_window.connect(CONSUMER_SIGNAL, self.gui_reload)
         self.mainWin.connect(CONSUMER_SIGNAL, self.gui_reload)
+        self.show()
 
+
+    def show(self):
         self.mainWin.show()
 
     def showFactsDialog(self, button):
