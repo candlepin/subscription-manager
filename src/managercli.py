@@ -104,14 +104,14 @@ class CliCommand(object):
             print _('Consumer certificates corrupted. Please reregister.')
 
 
-class ReRegisterCommand(CliCommand):
+class IdentityCommand(CliCommand):
 
     def __init__(self):
-        usage = "usage: %prog reregister [OPTIONS]"
-        shortdesc = _("reregister the client to a Unified Entitlement Platform.")
+        usage = "usage: %prog identity [OPTIONS]"
+        shortdesc = _("request a new identity certficate for this machine.")
         desc = shortdesc
 
-        CliCommand.__init__(self, "reregister", usage, shortdesc, desc)
+        CliCommand.__init__(self, "identity", usage, shortdesc, desc)
 
         self.username = None
         self.password = None
@@ -120,55 +120,36 @@ class ReRegisterCommand(CliCommand):
                                help=_("specify a username"))
         self.parser.add_option("--password", dest="password",
                                help=_("specify a password"))
-        self.parser.add_option("--consumerid", dest="consumerid",
-                               help=_("register to an existing consumer"))
+        self.parser.add_option("--regenerate", action='store_true',
+                               help=_("request a new certificate be generated"))
 
     def _validate_options(self):
-        if not ConsumerIdentity.existsAndValid() and not (self.options.username and self.options.password):
-            print (_("Error: username and password are required to reregister. \nConsumer identity either does not exists or is corrupted. Try reregister --help."))
+        if not ConsumerIdentity.existsAndValid():
+            print (_("Consumer identity either does not exists or is corrupted. Try register --help"))
             sys.exit(-1)
 
     def _do_command(self):
 
         self._validate_options()
 
-        if not ConsumerIdentity.existsAndValid() and not self.options.consumerid:
-            #identity is corrupted, and if register is called it will fail saying consumer
-            #already exists. So only way to force register to succeed is to delete the certs for now.
-            #ugly!
-            log.info("consumer identity is not valid and consumer id was not passed. Deleting old ones and calling register")
-            shutil.rmtree(cfg.get('rhsm', 'consumerCertDir'), ignore_errors=True)
-            # this should REGISTER
-            rc = RegisterCommand()
-            rc.main()
-            sys.exit(0)
-
         try:
-            if self.options.consumerid:
-                if not (self.options.username and self.options.password):
-                    print (_("Error: username and password are required to reregister --consumerid, try reregister --help.\n"))
-                    sys.exit(-1)
-
-                admin_cp = connection.UEPConnection(username=self.options.username,
-                        password=self.options.password)
-
-                consumer = admin_cp.getConsumer(self.options.consumerid, 
-                        self.options.username, self.options.password)
-                managerlib.persist_consumer_cert(consumer)
+            consumerid = check_registration()['uuid']
+            if not self.options.regenerate:
+                print _('Current identity is %s') % consumerid
             else:
-                consumerid = check_registration()['uuid']
-                if self.options.username and self.options.password:
-                    print _('Ignoring username and password options. Using old uuid %s') % consumerid
+                if (self.options.username and self.options.password):
+                    self.cp = connection.UEPConnection(username=self.options.username,
+                                                       password=self.options.password)
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
 
-            log.info("Successfully ReRegistered the client from Entitlement Platform.")
+            log.info("Successfully generated a new identity from Entitlement Platform.")
         except connection.RestlibException, re:
             log.exception(re)
-            log.error("Error: Unable to ReRegister the system: %s" % re)
+            log.error("Error: Unable to generate a new identity for the system: %s" % re)
             systemExit(-1, re.msg)
         except Exception, e:
-            handle_exception(_("Error: Unable to Re-register the system"), e)
+            handle_exception(_("Error: Unable to generate a new identity for the system"), e)
 
 
 class RegisterCommand(CliCommand):
@@ -536,7 +517,7 @@ class CLI:
     def __init__(self):
         self.cli_commands = {}
         for clazz in [RegisterCommand, UnRegisterCommand, ListCommand, SubscribeCommand,\
-                       UnSubscribeCommand, FactsCommand, ReRegisterCommand]:
+                       UnSubscribeCommand, FactsCommand, IdentityCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":
