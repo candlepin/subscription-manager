@@ -172,6 +172,8 @@ class RegisterCommand(CliCommand):
                                help=_("name of the consumer to register. Defaults to the username."))
         self.parser.add_option("--password", dest="password",
                                help=_("specify a password"))
+        self.parser.add_option("--consumerid", dest="consumerid",
+                               help=_("register to an existing consumer"))
         self.parser.add_option("--autosubscribe", action='store_true',
                                help=_("automatically subscribe this system to\
                                      compatible subscriptions."))
@@ -199,7 +201,7 @@ class RegisterCommand(CliCommand):
         consumername = self.options.consumername
         if consumername == None:
             consumername = self.options.username
-
+            
         admin_cp = connection.UEPConnection(username=self.options.username,
                 password=self.options.password)
 
@@ -218,8 +220,12 @@ class RegisterCommand(CliCommand):
 
         # Proceed with new registration:
         try:
-            consumer = admin_cp.registerConsumer(name=consumername,
-                    type=self.options.consumertype, facts=facts.get_facts())
+            if self.options.consumerid:
+            #TODO remove the username/password
+                consumer = admin_cp.getConsumer(self.options.consumerid, self.options.username, self.options.password)
+            else:
+                consumer = admin_cp.registerConsumer(name=consumername,
+                        type=self.options.consumertype, facts=facts.get_facts())
         except connection.RestlibException, re:
             log.exception(re)
             systemExit(-1, re.msg)
