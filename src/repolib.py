@@ -67,6 +67,7 @@ class UpdateAction(Action):
                 updates += 1
                 repod.delete(section)
         repod.write()
+        log.info("repos updated: %s" % updates)
         return updates
 
     def getUniqueContent(self):

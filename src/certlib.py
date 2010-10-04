@@ -129,7 +129,7 @@ class UpdateAction(Action):
         self.delete(rogue, report)
         self.install(uep, missing, report)
         self.purgeExpired(report)
-        log.info('updated:\n%s', report)
+        log.info('certs updated:\n%s', report)
         return report.updates()
 
     def getLocal(self, report):

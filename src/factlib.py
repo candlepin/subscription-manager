@@ -33,7 +33,6 @@ class FactLib:
     def update(self):
         lock = self.lock
         lock.acquire()
-        print "gh FactLib.update"
         try:
             action = UpdateAction()
             return action.perform()
@@ -60,6 +59,7 @@ class UpdateAction(Action):
         facts = Facts()
         if facts.delta():
             updates = self.updateFacts(uep, facts.get_facts())
+        log.info("facts updated: %s" % updates)
         return updates
 
     def updateFacts(self, uep, facts):
