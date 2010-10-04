@@ -45,7 +45,7 @@ class moduleClass(Module, managergui.ManageSubscriptionPage):
         self.gui_reload()
 
         # Clear out all the buttons on the bottom of the page
-        self._get_widget('action_area').destroy()
+        self._get_widget('action_area').hide()
 
     def initializeUI(self):
         pass
