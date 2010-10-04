@@ -121,7 +121,7 @@ class Restlib(object):
             "content": response.read(),
             "status": response.status}
         #TODO: change logging to debug.
-        log.info('response:' + str(result['content']))
+       # log.info('response:' + str(result['content']))
         log.info('status code: ' + str(result['status']))
         self.validateResponse(result)
         if not len(result['content']):
