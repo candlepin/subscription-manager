@@ -377,8 +377,11 @@ class UnSubscribeCommand(CliCommand):
                 self.cp.unbindAll(consumer)
                 log.info("Warning: This machine has been unsubscribed from all its subscriptions as per user request.")
             elif self.options.serial:
-                self.cp.unbindBySerial(consumer, self.options.serial)
-                log.info("This machine has been Unsubscribed from subcription with Serial number %s" % (self.options.serial))
+                if not self.options.serial.isdigit():
+                    systemExit(-1, "'%s' is not a valid serial number" % self.options.serial)
+                else:
+                    self.cp.unbindBySerial(consumer, self.options.serial)
+                    log.info("This machine has been Unsubscribed from subcription with Serial number %s" % (self.options.serial))
             else:
                 print _("One of --serial or --all must be provided")
                 self.parser.print_help()
