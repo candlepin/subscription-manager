@@ -497,8 +497,7 @@ class RegisterScreen:
                 cid = consumer['uuid']
                 UEP.unregisterConsumer(cid)
             except Exception, e:
-                handle_gui_exception(e=e, logMsg="Unable to unregister existing user credentials.",
-                                     showMsg=False)
+                handle_gui_exception(e, None, "Unable to unregister existing user credentials.", False)
 
         failed_msg = _("Unable to register your system. \n Error: %s")
         try:
