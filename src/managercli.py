@@ -125,7 +125,7 @@ class IdentityCommand(CliCommand):
 
     def _validate_options(self):
         if not ConsumerIdentity.existsAndValid():
-            print (_("Consumer identity either does not exists or is corrupted. Try register --help"))
+            print (_("Consumer identity either does not exist or is corrupted. Try register --help"))
             sys.exit(-1)
 
     def _do_command(self):
