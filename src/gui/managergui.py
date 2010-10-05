@@ -212,7 +212,6 @@ class ManageSubscriptionPage:
         self.add_subscription_screen.show()
 
     def addSubButtonAction(self, button):
-        print 'ManageSubscriptionPage.addSubButtonAction() -> show_add_subscription_screen()'
         if consumer.has_key('uuid'):
             self.show_add_subscription_screen()
         else:
@@ -688,21 +687,25 @@ class AddSubscriptionScreen:
                 self.matchedList.append(None, [False] + pdata)
                 matched_pids.append(product['productId'])
                 self.available_ent += 1
+
             self.compat = []
             for prod in compatible:
                 if prod['productId'] not in matched_pids:
                     self.compat.append(prod)
+
             compatible_pids = []
             for product in self.compat:
                 pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
                 self.compatList.append(None, [False] + pdata)
                 compatible_pids.append(product['productId'])
                 self.available_ent += 1
+
             all_subs = managerlib.getAvailableEntitlements(UEP, self.consumer['uuid'], all=True)
             self.other = []
             for prod in all_subs:
                 if prod['productId'] not in compatible_pids + matched_pids:
                     self.other.append(prod)
+
             for product in self.other:
                 pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
                 self.availableList.append(None, [False] + pdata)
@@ -736,9 +739,6 @@ class AddSubscriptionScreen:
         slabel = rhsm_xml.get_widget("available_subscriptions_label")
         #consumer = get_consumer()
         subscribed_count = 0
-        #my_model = self.tv_products.get_model()
-        #my_model = self.other_tv.get_model()
-        my_model = self.match_tv.get_model()
         pwin = progress.Progress()
         pwin.setLabel(_("Performing Subscribe. Please wait."))
         busted_subs = []
@@ -755,10 +755,11 @@ class AddSubscriptionScreen:
                     updated_pool = UEP.getPool(ent['pool']['id'])
                     updated_count = str(int(updated_pool['quantity']) -
                             int(updated_pool['consumed']))
-                    my_model.set_value(state[-1], 2, updated_count)
+                    my_model = state[3]
+                    my_model.set_value(state[2], 2, updated_count)
 
                     # unselect the row
-                    my_model.set_value(state[-1], 0, False)
+                    my_model.set_value(state[2], 0, False)
                     self.selected[pool] = (False, state[1], state[2])
 
                     subscribed_count += 1
@@ -889,12 +890,12 @@ class AddSubscriptionScreen:
 
         self.availableList.set_sort_column_id(1, gtk.SORT_ASCENDING)
 
-    def col_other_selected(self, cell, path, model):
-        items, iter = self.other_tv.get_selection().get_selected()
+
+    def _update_tree_model(self, model, path, iter):
         model[path][0] = not model[path][0]
         self.model = model
         state = model.get_value(iter, 0)
-        self.selected[model.get_value(iter, 4)] = (state, model.get_value(iter, 1), iter)
+        self.selected[model.get_value(iter, 4)] = (state, model.get_value(iter, 1), iter, model)
         if state:
             self.total += 1
         else:
@@ -904,38 +905,18 @@ class AddSubscriptionScreen:
             return
         self.csstatus.show()
         self.csstatus.set_label(constants.SELECT_STATUS % self.total)
+
+    def col_other_selected(self, cell, path, model):
+        items, iter = self.other_tv.get_selection().get_selected()
+        self._update_tree_model(model, path, iter)
 
     def col_matched_selected(self, cell, path, model):
         items, iter = self.match_tv.get_selection().get_selected()
-        model[path][0] = not model[path][0]
-        self.model = model
-        state = model.get_value(iter, 0)
-        self.selected[model.get_value(iter, 4)] = (state, model.get_value(iter, 1), iter)
-        if state:
-            self.total += 1
-        else:
-            self.total -= 1
-        if not self.total:
-            self.csstatus.hide()
-            return
-        self.csstatus.show()
-        self.csstatus.set_label(constants.SELECT_STATUS % self.total)
+        self._update_tree_model(model, path, iter)
 
     def col_compat_selected(self, cell, path, model):
         items, iter = self.compatible_tv.get_selection().get_selected()
-        model[path][0] = not model[path][0]
-        self.model = model
-        state = model.get_value(iter, 0)
-        self.selected[model.get_value(iter, 4)] = (state, model.get_value(iter, 1), iter)
-        if state:
-            self.total += 1
-        else:
-            self.total -= 1
-        if not self.total:
-            self.csstatus.hide()
-            return
-        self.csstatus.show()
-        self.csstatus.set_label(constants.SELECT_STATUS % self.total)
+        self._update_tree_model(model, path, iter)
 
     def _cell_data_toggle_func(self, tree_column, renderer, model, treeiter):
         renderer.set_property('visible', True)
