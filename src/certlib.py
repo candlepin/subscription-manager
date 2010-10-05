@@ -492,13 +492,16 @@ class ConsumerIdentity:
         return altName.replace("DirName:/CN=", "")
 
     def write(self):
+        import managerlib
         self.__mkdir()
         f = open(self.keypath(), 'w')
         f.write(self.key)
         f.close()
+        os.chmod(self.keypath(), managerlib.ID_CERT_PERMS)
         f = open(self.certpath(), 'w')
         f.write(self.cert)
         f.close()
+        os.chmod(self.certpath(), managerlib.ID_CERT_PERMS)
 
     def delete(self):
         path = self.keypath()
