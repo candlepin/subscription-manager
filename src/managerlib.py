@@ -246,6 +246,10 @@ def formatDate(date):
     tf = xml.utils.iso8601.parse(date)
     return datetime.fromtimestamp(tf).date()
 
+def delete_consumer_certs():
+    shutil.rmtree(cfg.get('rhsm', 'consumerCertDir'), ignore_errors=True)
+    shutil.rmtree(cfg.get('rhsm', 'entitlementCertDir'), ignore_errors=True)
+
 
 def unregister(uep, consumer_uuid, force=True):
     """ 
@@ -256,12 +260,12 @@ def unregister(uep, consumer_uuid, force=True):
     """
     try:
         uep.unregisterConsumer(consumer_uuid)
+        log.info("Successfully un-registered.")
+        force=True
     finally:
         if force:
             # Clean up certificates, these are no longer valid:
-            shutil.rmtree(cfg.get('rhsm', 'consumerCertDir'), ignore_errors=True)
-            shutil.rmtree(cfg.get('rhsm', 'entitlementCertDir'), ignore_errors=True)
-            log.info("Successfully un-registered.")
+            delete_consumer_certs()
 
 def check_identity_cert_perms():
     """
