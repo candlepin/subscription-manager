@@ -583,6 +583,8 @@ class CLI:
         return cmd
 
     def main(self):
+        managerlib.check_identity_cert_perms()
+
         if len(sys.argv) < 2 or not self._find_best_match(sys.argv):
             self._usage()
             sys.exit(0)
