@@ -38,6 +38,7 @@ import constants
 from facts import getFacts
 from certlib import EntitlementDirectory, ConsumerIdentity, CertLib
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
+from socket import error as socket_error
 import xml.sax.saxutils
 
 import factsgui
@@ -138,6 +139,23 @@ def show_import_certificate_screen():
         import_certificate_screen.show()
     else:
         import_certificate_screen = ImportCertificate()
+
+def handle_gui_exception(e, callback, logMsg = None, showMsg = True):
+    if logMsg:
+        log.error(logMsg)
+    log.exception(e)
+
+    if showMsg:
+        if isinstance(e, socket_error):
+            errorWindow(_('network error, unable to connect to server'))
+        elif isinstance(e, connection.RestlibException):
+            errorWindow(_(callback % linkify(e.msg)))
+        else:
+            if hasattr(callback, '__call__'):
+                errorWindow(_(callback(e)))
+            else:
+                errorWindow(_(callback)) #just a string
+    return False
 
 
 class ManageSubscriptionPage:
@@ -377,14 +395,8 @@ class ManageSubscriptionPage:
                 UEP.unbindBySerial(consumer['uuid'], self.psubs_selected)
                 log.info("This machine is now unsubscribed from Product %s " \
                           % self.pname_selected)
-            except connection.RestlibException, re:
-                log.exception(re)
-                errorWindow(constants.UNSUBSCRIBE_ERROR)
             except Exception, e:
-                # raise warning window
-                log.error("Unable to perform unsubscribe due to the following exception:")
-                log.exception(e)
-                errorWindow(constants.UNSUBSCRIBE_ERROR)
+                handle_gui_exception(re, constants.UNSUBSCRIBE_ERROR)
                 raise
         # not registered, locally managed
         else:
@@ -409,21 +421,17 @@ class ManageSubscriptionPage:
             log.info("unregistrater not confirmed. cancelling")
             return
         log.info("Proceeding with un-registration: %s", consumer['uuid'])
-
         try:
-            managerlib.unregister(UEP, consumer['uuid'])
-        except connection.RestlibException, e:
+            managerlib.unregister(UEP, consumer['uuid'], False)
+            # TODO: probably not a great idea to use a global variable here.
+            # Reset the global consumer variable.
+            consumer = get_consumer()
+            self.mainWin.emit(CONSUMER_SIGNAL)
+        except Exception, e:
             log.error("Error unregistering system with entitlement platform.")
-            log.error("Consumer may need to be manually cleaned up: %s" % consumer)
-            log.exception(e)
-            errorWindow(constants.UNREGISTER_ERROR)
+            handle_gui_exception(e, constants.UNREGISTER_ERROR,
+                                 "Consumer may need to be manually cleaned up: %s" % consumer)
 
-        # TODO: probably not a great idea to use a global variable here.
-        # Reset the global consumer variable.
-        consumer = get_consumer()
-
-        # Emit a signal that the entitlements have changed
-        self.mainWin.emit(CONSUMER_SIGNAL)
 
 
 class RegisterScreen:
@@ -489,8 +497,8 @@ class RegisterScreen:
                 cid = consumer['uuid']
                 UEP.unregisterConsumer(cid)
             except Exception, e:
-                log.error("Unable to unregister existing user credentials.")
-                log.exception(e)
+                handle_gui_exception(e=e, logMsg="Unable to unregister existing user credentials.",
+                                     showMsg=False)
 
         failed_msg = _("Unable to register your system. \n Error: %s")
         try:
@@ -516,18 +524,8 @@ class RegisterScreen:
 
             self.emit_consumer_signal()
 
-        except connection.RestlibException, e:
-            log.error(failed_msg % e.msg)
-            errorWindow(constants.REGISTER_ERROR % linkify(e.msg))
-            self.close_window()
-
-            return False
         except Exception, e:
-            log.error(failed_msg % e)
-            errorWindow(constants.REGISTER_ERROR % e)
-            self.close_window()
-
-            return False
+           return handle_gui_exception(e, constants.REGISTER_ERROR)
         return True
 
     def emit_consumer_signal(self):
@@ -602,12 +600,8 @@ class RegistrationTokenScreen:
         facts = getFacts()
         try:
             UEP.updateConsumerFacts(consumer['uuid'], facts.get_facts())
-        except connection.RestlibException, e:
-            log.error("Could not update system facts:  error %s" % (e))
-            errorWindow(linkify(e.msg))
         except Exception, e:
-            log.error("Could not update system facts \nError: %s" % (e))
-            errorWindow(linkify(e.msg))
+            handle_gui_exception(e, "Could not update facts.\nError: %s" % e)
 
     def setAccountMsg(self):
         alabel1 = regtoken_xml.get_widget("account_label1")
@@ -627,12 +621,9 @@ class RegistrationTokenScreen:
         try:
             UEP.bindByRegNumber(consumer['uuid'], reg_token, email)
             infoWindow(constants.SUBSCRIBE_REGTOKEN_SUCCESS % reg_token, self.regtokenWin)
-        except connection.RestlibException, e:
-            log.error("Could not subscribe registration token %s error %s" % (reg_token, e))
-            errorWindow(linkify(e.msg))
         except Exception, e:
-            log.error("Could not subscribe registration token [%s] \nError: %s" % (reg_token, e))
-            errorWindow(constants.SUBSCRIBE_REGTOKEN_ERROR % reg_token)
+            handle_gui_exception(e, constants.SUBSCRIBE_REGTOKEN_ERROR % reg_token,
+                                 "Could not subscribe registration token %s.\nError: %s" % (reg_token, e))
 
 
 class AddSubscriptionScreen:
@@ -1029,8 +1020,8 @@ class UpdateSubscriptionScreen:
                     subscribed_count += 1
                 except Exception, e:
                     # Subscription failed, continue with rest
-                    log.error("Failed to subscribe to product %s Error: %s" % (state[1], e))
-                    errorWindow(constants.SUBSCRIBE_ERROR % state[1])
+                    handle_gui_exception(e, constants.SUBSCRIBE_ERROR % state[1],
+                              "Failed to subscribe to product %s Error: %s" % (state[1], e))
                     continue
         # Force fetch all certs
         if not fetch_certificates():
@@ -1101,7 +1092,8 @@ class ImportCertificate:
             data = open(src_cert_file).read()
             x509 = load_certificate(FILETYPE_PEM, data)
         except:
-            errorWindow(_("%s is not a valid certificate file. Please upload a valid certificate." % os.path.basename(src_cert_file)))
+            errorWindow(_("%s is not a valid certificate file. Please upload a valid certificate." %
+                          os.path.basename(src_cert_file)))
             return False
 
         if not os.access(ENT_CONFIG_DIR, os.R_OK):
