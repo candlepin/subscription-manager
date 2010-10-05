@@ -1187,6 +1187,9 @@ def main():
     if os.geteuid() != 0:
         #rootWarning()
         sys.exit(1)
+
+    managerlib.check_identity_cert_perms()
+
     try:
         gui = ManageSubscriptionPage()
         gtk.main()

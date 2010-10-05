@@ -15,6 +15,7 @@
 # in this software or its documentation.
 #
 import os
+import stat
 import sys
 import constants
 import shutil
@@ -38,6 +39,8 @@ APP = 'rhsm'
 # Directory where translations are deployed:
 DIR = '/usr/share/locale/'
 
+# Expected permissions for identity certificates:
+ID_CERT_PERMS = stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP
 
 def configure_i18n():
     """
@@ -259,6 +262,28 @@ def unregister(uep, consumer_uuid, force=True):
             shutil.rmtree(cfg.get('rhsm', 'consumerCertDir'), ignore_errors=True)
             shutil.rmtree(cfg.get('rhsm', 'entitlementCertDir'), ignore_errors=True)
             log.info("Successfully un-registered.")
+
+def check_identity_cert_perms():
+    """
+    Ensure the identity certs on this system have the correct permissions, and
+    fix them if not.
+    """
+    certs = [ConsumerIdentity.keypath(), ConsumerIdentity.certpath()]
+    for cert in certs:
+        if not os.path.exists(cert):
+            # Only relevant if these files exist.
+            continue
+        statinfo = os.stat(cert)
+        if statinfo[stat.ST_UID] != 0 or statinfo[stat.ST_GID] != 0:
+            os.chown(cert, 0, 0)
+            log.warn("Corrected incorrect ownership of %s." % cert)
+
+        mode = stat.S_IMODE(statinfo[stat.ST_MODE])
+        if mode != ID_CERT_PERMS:
+            os.chmod(cert, ID_CERT_PERMS)
+            log.warn("Corrected incorrect permissions on %s." % cert)
+
+
 
 if __name__ == '__main__':
     print("\nInstalled Product Status:\n")
