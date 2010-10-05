@@ -657,10 +657,10 @@ class AddSubscriptionScreen:
 
         self.populateSubscriptionLists()
         # machine is talking to candlepin, invoke listing scheme
-        self.populateMatchingSubscriptions()
-        self.populateCompatibleSubscriptions()
+        self.createMatchingSubscriptionsTreeview()
+        self.createCompatibleSubscriptionsTreeview()
         if (cfg.get('rhsm', 'showIncompatiblePools')):
-            self.populateOtherSubscriptions()
+            self.createOtherSubscriptionsTreeview()
         else:
             notebook = rhsm_xml.get_widget("add_subscription_notebook")
             notebook.remove_page(1)
@@ -780,115 +780,63 @@ class AddSubscriptionScreen:
         pwin.hide()
         self.addWin.hide()
 
-    def populateMatchingSubscriptions(self):
-        """
-        populate subscriptions matching currently installed products
-        """
-        self.match_tv = rhsm_xml.get_widget("treeview_available2")
-        self.match_tv.set_model(self.matchedList)
-
-        cell = gtk.CellRendererToggle()
-        cell.set_property('activatable', True)
-        cell.connect('toggled', self.col_matched_selected, self.matchedList)
-
-        column = gtk.TreeViewColumn(_(''), cell)
-        column.add_attribute(cell, "active", 0)
-        self.match_tv.append_column(column)
-        cell = gtk.CellRendererText()
-        col = gtk.TreeViewColumn(_("Product"), cell, text=1)
-        col.set_sort_column_id(1)
-        col.set_sort_order(gtk.SORT_ASCENDING)
-        cell.set_fixed_size(250, -1)
-        col.set_resizable(True)
-        cell.set_property("ellipsize", pango.ELLIPSIZE_END)
-        self.match_tv.append_column(col)
-
-        col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
-        col.set_spacing(4)
-        col.set_sort_column_id(2)
-        col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-        col.set_fixed_width(100)
-        self.match_tv.append_column(col)
-
-        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=3)
-        col.set_sort_column_id(3)
-        self.match_tv.append_column(col)
-
-        self.availableList.set_sort_column_id(1, gtk.SORT_ASCENDING)
-
-    def populateCompatibleSubscriptions(self):
+    def createSubscriptionsTreeview(self, treeview, subscriptions, toggle_callback):
         """
         populate subscriptions compatible with your system facts
         """
+        treeview.set_model(subscriptions)
+
+        print "gh", treeview, subscriptions, toggle_callback
+        cell = gtk.CellRendererToggle()
+        cell.set_property('activatable', True)
+        cell.connect('toggled', toggle_callback, subscriptions)
+
+        column = gtk.TreeViewColumn(_(''), cell)
+        column.add_attribute(cell, "active", 0)
+        treeview.append_column(column)
+
+        cell = gtk.CellRendererText()
+        col = gtk.TreeViewColumn(_("Product"), cell, text=1)
+        col.set_sort_column_id(1)
+        col.set_sort_order(gtk.SORT_ASCENDING)
+        cell.set_fixed_size(250, -1)
+        col.set_resizable(True)
+        cell.set_property("ellipsize", pango.ELLIPSIZE_END)
+        treeview.append_column(col)
+
+        col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
+        col.set_spacing(4)
+        col.set_sort_column_id(2)
+        col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+        col.set_fixed_width(100)
+        treeview.append_column(col)
+
+        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=3)
+        col.set_sort_column_id(3)
+        treeview.append_column(col)
+        
+        subscriptions.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        
+        
+    def createMatchingSubscriptionsTreeview(self):
+        self.match_tv = rhsm_xml.get_widget("treeview_available2")
+        self.createSubscriptionsTreeview(self.match_tv,
+                                           self.matchedList,
+                                           self.col_matched_selected)
+
+
+    def createCompatibleSubscriptionsTreeview(self):
         self.compatible_tv = rhsm_xml.get_widget("treeview_available3")
-        self.compatible_tv.set_model(self.compatList)
+        self.createSubscriptionsTreeview(self.compatible_tv,
+                                           self.compatList, 
+                                           self.col_compat_selected)
 
-        cell = gtk.CellRendererToggle()
-        cell.set_property('activatable', True)
-        cell.connect('toggled', self.col_compat_selected, self.compatList)
-
-        column = gtk.TreeViewColumn(_(''), cell)
-        column.add_attribute(cell, "active", 0)
-        self.compatible_tv.append_column(column)
-
-        cell = gtk.CellRendererText()
-        col = gtk.TreeViewColumn(_("Product"), cell, text=1)
-        col.set_sort_column_id(1)
-        col.set_sort_order(gtk.SORT_ASCENDING)
-        cell.set_fixed_size(250, -1)
-        col.set_resizable(True)
-        cell.set_property("ellipsize", pango.ELLIPSIZE_END)
-        self.compatible_tv.append_column(col)
-
-        col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
-        col.set_spacing(4)
-        col.set_sort_column_id(2)
-        col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-        col.set_fixed_width(100)
-        self.compatible_tv.append_column(col)
-
-        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=3)
-        col.set_sort_column_id(3)
-        self.compatible_tv.append_column(col)
-
-        self.availableList.set_sort_column_id(1, gtk.SORT_ASCENDING)
-
-    def populateOtherSubscriptions(self):
-        """
-        populate all available subscriptions
-        """
+  
+    def createOtherSubscriptionsTreeview(self):
         self.other_tv = rhsm_xml.get_widget("treeview_available4")
-        self.other_tv.set_model(self.availableList)
-
-        cell = gtk.CellRendererToggle()
-        cell.set_property('activatable', True)
-        cell.connect('toggled', self.col_other_selected, self.availableList)
-
-        column = gtk.TreeViewColumn(_(''), cell)
-        column.add_attribute(cell, "active", 0)
-        self.other_tv.append_column(column)
-
-        cell = gtk.CellRendererText()
-        col = gtk.TreeViewColumn(_("Product"), cell, text=1)
-        col.set_sort_column_id(1)
-        col.set_sort_order(gtk.SORT_ASCENDING)
-        col.set_resizable(True)
-        cell.set_fixed_size(250, -1)
-        cell.set_property("ellipsize", pango.ELLIPSIZE_END)
-        self.other_tv.append_column(col)
-
-        col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
-        col.set_spacing(4)
-        col.set_sort_column_id(2)
-        col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-        col.set_fixed_width(100)
-        self.other_tv.append_column(col)
-
-        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=3)
-        col.set_sort_column_id(3)
-        self.other_tv.append_column(col)
-
-        self.availableList.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        self.createSubscriptionsTreeview(self.other_tv,
+                                           self.availableList,
+                                           self.col_other_selected)
 
 
     def _update_tree_model(self, model, path, iter):
