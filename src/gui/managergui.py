@@ -777,7 +777,6 @@ class AddSubscriptionScreen:
         """
         treeview.set_model(subscriptions)
 
-        print "gh", treeview, subscriptions, toggle_callback
         cell = gtk.CellRendererToggle()
         cell.set_property('activatable', True)
         cell.connect('toggled', toggle_callback, subscriptions)
