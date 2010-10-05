@@ -113,7 +113,7 @@
                   <widget class="GtkScrolledWindow" id="scrolledwindow_updates">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hadjustment">0 0 539 53.900000000000006 485.10000000000002 539</property>
+                    <property name="hadjustment">0 0 721 72.100000000000009 648.89999999999998 721</property>
                     <property name="vadjustment">0 0 60 6 54 60</property>
                     <property name="hscrollbar_policy">never</property>
                     <property name="vscrollbar_policy">automatic</property>
@@ -812,12 +812,12 @@
                                       <atkproperty name="AtkObject::accessible-name">viewport2</atkproperty>
                                     </accessibility>
                                     <child>
-                                      <widget class="GtkTreeView" id="treeview_available2">
+                                      <widget class="GtkTreeView" id="treeview_matching">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="hover_selection">True</property>
                                         <accessibility>
-                                          <atkproperty name="AtkObject::accessible-name">treeview_available2</atkproperty>
+                                          <atkproperty name="AtkObject::accessible-name">treeview_matching</atkproperty>
                                         </accessibility>
                                       </widget>
                                     </child>
@@ -850,12 +850,12 @@
                                       <atkproperty name="AtkObject::accessible-name">viewport3</atkproperty>
                                     </accessibility>
                                     <child>
-                                      <widget class="GtkTreeView" id="treeview_available3">
+                                      <widget class="GtkTreeView" id="treeview_compatible">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="hover_selection">True</property>
                                         <accessibility>
-                                          <atkproperty name="AtkObject::accessible-name">treeview_available3</atkproperty>
+                                          <atkproperty name="AtkObject::accessible-name">treeview_compatible</atkproperty>
                                         </accessibility>
                                       </widget>
                                     </child>
@@ -917,12 +917,12 @@
                               <atkproperty name="AtkObject::accessible-name">scrolledwindow2</atkproperty>
                             </accessibility>
                             <child>
-                              <widget class="GtkTreeView" id="treeview_available4">
+                              <widget class="GtkTreeView" id="treeview_not_compatible">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hover_selection">True</property>
                                 <accessibility>
-                                  <atkproperty name="AtkObject::accessible-name">treeview_available4</atkproperty>
+                                  <atkproperty name="AtkObject::accessible-name">treeview_not_compatible</atkproperty>
                                 </accessibility>
                               </widget>
                             </child>

@@ -809,21 +809,21 @@ class AddSubscriptionScreen:
         
         
     def createMatchingSubscriptionsTreeview(self):
-        self.match_tv = rhsm_xml.get_widget("treeview_available2")
+        self.match_tv = rhsm_xml.get_widget("treeview_matching")
         self.createSubscriptionsTreeview(self.match_tv,
                                            self.matchedList,
                                            self.col_matched_selected)
 
 
     def createCompatibleSubscriptionsTreeview(self):
-        self.compatible_tv = rhsm_xml.get_widget("treeview_available3")
+        self.compatible_tv = rhsm_xml.get_widget("treeview_compatible")
         self.createSubscriptionsTreeview(self.compatible_tv,
                                            self.compatList, 
                                            self.col_compat_selected)
 
   
     def createOtherSubscriptionsTreeview(self):
-        self.other_tv = rhsm_xml.get_widget("treeview_available4")
+        self.other_tv = rhsm_xml.get_widget("treeview_not_compatible")
         self.createSubscriptionsTreeview(self.other_tv,
                                            self.availableList,
                                            self.col_other_selected)
