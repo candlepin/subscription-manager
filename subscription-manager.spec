@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.83
+Version: 0.84
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -179,6 +179,45 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Oct 05 2010 Devan Goodwin <dgoodwin@redhat.com> 0.84-1
+- Resolves: #632612,#640128,#639320,#639491,#637160,#638289
+- When re-registering, previously subscribed-to subscriptions are checked 
+  by default) (alikins@redhat.com)
+- update CA trust chain (jbowes@redhat.com)
+- Write identity cert with correct permissions initially. (dgoodwin@redhat.com)
+- Check and fix identity cert permissions on every run. (dgoodwin@redhat.com)
+- Type in the identity command (bkearney@redhat.com)
+- fix for bz#639320 (anadathu@redhat.com)
+- Fix segfault when adding subs during firstboot. (dgoodwin@redhat.com)
+- 639491: Put register by consumer back in (bkearney@redhat.com)
+- Moving re-register to be identity. (bkearney@redhat.com)
+- Get firstboot displaying the right subscription screen. (dgoodwin@redhat.com)
+- Fix separate subscription window in firstboot. (dgoodwin@redhat.com)
+- 637160 - require --all to unsubscribe to unsub all (jbowes@redhat.com)
+- merge getAllAvailableSubscriptions and getAvailableEntitlements
+  (jbowes@redhat.com)
+- getAvailableEntitlementsCLI isn't needed, just call the regular version
+  (jbowes@redhat.com)
+- remove some code duplication for getting available entitlements/subscriptions
+  (jbowes@redhat.com)
+- remove unneeded wrapper method (jbowes@redhat.com)
+- Move registration status on main UI page. (dgoodwin@redhat.com)
+- Handle errors during unregistration. (dgoodwin@redhat.com)
+- Add "Activate Subscription" button. (dgoodwin@redhat.com)
+- Add unregister button to main screen. (dgoodwin@redhat.com)
+- Display UUID on main page of the GUI. (dgoodwin@redhat.com)
+- 638289: Fix broken re-register if identity cert doesn't exist.
+  (dgoodwin@redhat.com)
+- Fix broken list all subscriptions. (dgoodwin@redhat.com)
+- Update registration screen to match new mockups. (dgoodwin@redhat.com)
+- remove some unused imports (jbowes@redhat.com)
+- Add missing imports (jbowes@redhat.com)
+- Split registration screens into separate glade files. (dgoodwin@redhat.com)
+- Remove duplicate log initialization in connection.py (jbowes@redhat.com)
+- Ship the CA chain (jbowes@redhat.com)
+- Load CA trust chains from a directory of pem formatted files
+  (jbowes@redhat.com)
+
 * Tue Sep 28 2010 Devan Goodwin <dgoodwin@redhat.com> 0.83-1
 - Resolves: #617685
 - Cleanup authentication logic. (dgoodwin@redhat.com)
