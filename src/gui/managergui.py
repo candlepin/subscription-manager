@@ -625,6 +625,17 @@ class RegistrationTokenScreen:
                                  "Could not subscribe registration token %s.\nError: %s" % (reg_token, e))
 
 
+def show_busted_subs(busted_subs):
+    if len(busted_subs):
+        products = [x[0] for x in busted_subs]
+        reasons = [linkify(x[1].msg) for x in busted_subs \
+                if isinstance(x[1], connection.RestlibException)]
+        msg = constants.SUBSCRIBE_ERROR % ', '.join(products)
+        msg += "\n\n"
+        msg += "\n".join(reasons)
+        errorWindow(msg)
+
+
 class AddSubscriptionScreen:
     """
      Add subscriptions Widget screen
@@ -756,13 +767,12 @@ class AddSubscriptionScreen:
                 except Exception, e:
                     # Subscription failed, continue with rest
                     log.error("Failed to subscribe to product %s Error: %s" % (state[1], e))
-                    busted_subs.append(state[1])
+                    busted_subs.append((state[1], e))
                     continue
             count += 1
             pwin.setProgress(count, len(self.selected.items()))
 
-        if len(busted_subs):
-            errorWindow(constants.SUBSCRIBE_ERROR % ', '.join(busted_subs[:]))
+        show_busted_subs(busted_subs)
         # Force fetch all certs
         if not fetch_certificates():
             return
@@ -955,6 +965,7 @@ class UpdateSubscriptionScreen:
     def onSubscribeAction(self, button):
         subscribed_count = 0
         my_model = self.tv_products.get_model()
+        busted_subs = []
         for pool, state in self.selected.items():
             # state = (bool, iter)
             if state[0]:
@@ -966,9 +977,12 @@ class UpdateSubscriptionScreen:
                     subscribed_count += 1
                 except Exception, e:
                     # Subscription failed, continue with rest
-                    handle_gui_exception(e, constants.SUBSCRIBE_ERROR % state[1],
-                              "Failed to subscribe to product %s Error: %s" % (state[1], e))
+                    log.error("Failed to subscribe to product %s Error: %s" % (state[1], e))
+                    busted_subs.append((state[1], e))
                     continue
+
+        show_busted_subs(busted_subs)
+
         # Force fetch all certs
         if not fetch_certificates():
             return
