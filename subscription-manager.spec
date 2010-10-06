@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.84
+Version: 0.85
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -179,6 +179,22 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Wed Oct 06 2010 Devan Goodwin <dgoodwin@redhat.com> 0.85-1
+- Resolves: #638696,#585193
+- Fix broken directory path joining. (dgoodwin@redhat.com)
+- Display error messages sent from the server on entitlement bind
+  (jbowes@redhat.com)
+- Update the config name for the ca cert dir to ca_cert_dir (jbowes@redhat.com)
+- clean up a gtk warning about the bad button group (alikins@redhat.com)
+- 638696: bugfix 'cli fails silently with wrong server SSL cert'
+  (anadathu@redhat.com)
+- unregister should delete identity certs if candlepin call is successfull.
+  (anadathu@redhat.com)
+- some glade reference renaming s/treeview_2/treeview_matching, etc
+  (alikins@redhat.com)
+- refactor the populate*Subscriptions methods. (alikins@redhat.com)
+- 585193: refractor error handling code. (anadathu@redhat.com)
+
 * Tue Oct 05 2010 Devan Goodwin <dgoodwin@redhat.com> 0.84-1
 - Resolves: #632612,#640128,#639320,#639491,#637160,#638289
 - When re-registering, previously subscribed-to subscriptions are checked 
