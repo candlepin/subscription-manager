@@ -180,7 +180,7 @@ fi
 
 %changelog
 * Wed Oct 06 2010 Devan Goodwin <dgoodwin@redhat.com> 0.85-1
-- Resolves: #638696,#585193
+- Resolves: #585193
 - Fix broken directory path joining. (dgoodwin@redhat.com)
 - Display error messages sent from the server on entitlement bind
   (jbowes@redhat.com)
