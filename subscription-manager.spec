@@ -179,11 +179,7 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Wed Oct 06 2010 Devan Goodwin <dgoodwin@redhat.com> 0.86-1
-- Removing unapproved bug. (dgoodwin@redhat.com)
-
 * Wed Oct 06 2010 Devan Goodwin <dgoodwin@redhat.com> 0.85-1
-- Resolves: #585193
 - Fix broken directory path joining. (dgoodwin@redhat.com)
 - Display error messages sent from the server on entitlement bind
   (jbowes@redhat.com)
