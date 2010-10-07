@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.88
+Version: 0.89
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -179,6 +179,9 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Thu Oct 07 2010 Devan Goodwin <dgoodwin@redhat.com> 0.89-1
+- Resolves: #640980
+
 * Thu Oct 07 2010 Devan Goodwin <dgoodwin@redhat.com> 0.88-1
 - Resolves: #638696,#585193
 - Fix broken directory path joining. (dgoodwin@redhat.com)
