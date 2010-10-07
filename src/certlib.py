@@ -205,18 +205,7 @@ class Writer:
         cert.write(path)
 
     def __ufn(self, path, sn):
-        n = 1
-        name = str(sn)
-        fn = None
-        while True:
-            fn = '%s.pem' % name
-            path = Path.join(path, fn)
-            if os.path.exists(path):
-                name += '(%d)' % n
-                n += 1
-            else:
-                break
-        return fn
+        return '%s.pem' % str(sn)
 
 
 class UEP(UEPConnection):
