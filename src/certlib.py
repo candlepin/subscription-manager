@@ -250,6 +250,8 @@ class Disconnected(Exception):
 
 class Path:
 
+    # Used during Anaconda install by the yum pidplugin to ensure we operate
+    # beneath /mnt/sysimage/ instead of /.
     ROOT = '/'
 
     @classmethod
@@ -259,6 +261,7 @@ class Path:
 
     @classmethod
     def abs(cls, path):
+        """ Append the ROOT path to the given path. """
         if os.path.isabs(path):
             return os.path.join(cls.ROOT, path[1:])
         else:
@@ -316,8 +319,13 @@ class Directory:
             else:
                 os.unlink(path)
 
-    def abspath(self, path):
-        return Path.join(self.path, path)
+    def abspath(self, filename):
+        """ 
+        Return path for a filename relative to this directory.
+        """
+        # NOTE: self.path is already aware of the Path.ROOT setting, so we
+        # can just join normally.
+        return os.path.join(self.path, filename)
 
     def __str__(self):
         return self.path

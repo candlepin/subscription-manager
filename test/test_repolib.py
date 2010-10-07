@@ -14,23 +14,22 @@
 #
 
 import unittest
-from productid import *
 from certlib import Path
-import os.path
+from repolib import *
 
-class ProductDatabaseTests(unittest.TestCase):
+class RepoFileTests(unittest.TestCase):
 
-    # Testing an error that surfaced during anaconda:
-    def test_path(self):
-        # Fake that the product database exists to avoid permissions problems:
+    def test_repolib_path(self):
+        # Fake that the redhat.repo exists:
         def dummy_exists(filename):
             return True
         os.path.exists = dummy_exists
 
         Path.ROOT = '/mnt/sysimage'
-        prod_db = ProductDatabase()
-        self.assertEquals('/mnt/sysimage/var/lib/rhsm/productid.js',
-                prod_db.dir.abspath('productid.js'))
+        rf = RepoFile()
+        self.assertEquals("/mnt/sysimage/etc/yum.repos.d/redhat.repo", rf.path)
 
     def tearDown(self):
         Path.ROOT = "/"
+
+

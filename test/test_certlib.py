@@ -21,7 +21,6 @@ class PathTests(unittest.TestCase):
     def test_normal_root(self):
         # this is the default, but have to set it as other tests can modify
         # it if they run first.
-        Path.ROOT = '/'
         self.assertEquals('/etc/pki/consumer/', Path.abs('/etc/pki/consumer/'))
         self.assertEquals('/etc/pki/consumer/', Path.abs('etc/pki/consumer/'))
 
@@ -38,3 +37,22 @@ class PathTests(unittest.TestCase):
                 Path.abs('/etc/pki/consumer/'))
         self.assertEquals('/mnt/sysimage/etc/pki/consumer/',
                 Path.abs('etc/pki/consumer/'))
+
+    def tearDown(self):
+        Path.ROOT = "/"
+
+
+class EntitlementDirectoryTests(unittest.TestCase):
+
+    def test_sysimage_keypath(self):
+        ed = EntitlementDirectory()
+        Path.ROOT = '/mnt/sysimage'
+        self.assertEquals('/mnt/sysimage/etc/pki/entitlement/key.pem', ed.keypath())
+
+    def test_keypath(self):
+        ed = EntitlementDirectory()
+        self.assertEquals('/etc/pki/entitlement/key.pem', ed.keypath())
+
+    def tearDown(self):
+        Path.ROOT = "/"
+
