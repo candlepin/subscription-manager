@@ -271,7 +271,7 @@ class Path:
     @classmethod
     def abs(cls, path):
         if os.path.isabs(path):
-            return os.path.join(cls.ROOT, path[1:]
+            return os.path.join(cls.ROOT, path[1:])
         else:
             return os.path.join(cls.ROOT, path)
 
