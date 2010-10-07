@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.89
+Version: 0.90
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -179,6 +179,12 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Thu Oct 07 2010 Devan Goodwin <dgoodwin@redhat.com> 0.90-1
+- Resolves: #641082,#640338
+- 641082: Fix double call to Path.abs. (dgoodwin@redhat.com)
+- 640338: subscribe is occasionally dropping duplicate entitlement certs
+  (anadathu@redhat.com)
+
 * Thu Oct 07 2010 Devan Goodwin <dgoodwin@redhat.com> 0.89-1
 - Resolves: #640980
 
