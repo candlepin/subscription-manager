@@ -76,8 +76,8 @@ class CertManager:
 
 def main():
     if not ConsumerIdentity.existsAndValid():
-        log.error('Either the consumer is not registered with candlepin or the certificates are corrupted.' +
-                     ' Certificate updation using daemon failed.')
+        log.error('Either the consumer is not registered or the certificates' +
+                  'are corrupted. Certificate update using daemon failed.')
         sys.exit(-1)
     print _('Updating Red Hat certificates & repositories')
     mgr = CertManager()
