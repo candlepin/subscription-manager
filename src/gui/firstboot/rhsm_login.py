@@ -25,7 +25,7 @@ class moduleClass(Module, managergui.RegisterScreen):
 #        managergui.create_and_set_basic_connection()
         # this value is relative to when you want to load the screen
         # so check other modules before setting
-        self.priority = 4
+        self.priority = 1.2
         self.sidebarTitle = _("Entitlement Registration")
         self.title = _("Entitlement Platform Registration")
         self._cached_credentials = None

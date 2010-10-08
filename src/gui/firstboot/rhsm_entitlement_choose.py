@@ -22,7 +22,7 @@ class moduleClass(Module, managergui.ChooseEntitlement):
         Module.__init__(self)
         managergui.ChooseEntitlement.__init__(self)
 
-        self.priority = 2
+        self.priority = 1.1
         # ugh, what a horrible label FIXME
         self.sidebarTitle = _("Entitlement Selection")
 #        self.title = _("Entitlement Selection")
