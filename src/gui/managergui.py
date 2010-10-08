@@ -239,7 +239,7 @@ class ManageSubscriptionPage:
         if self.pname_selected:
             log.info("Product %s selected for update" % self.pname_selected)
             if consumer.has_key('uuid'):
-                UpdateSubscriptionScreen(self.pname_selected)
+                UpdateSubscriptionScreen(self.pname_selected, self.mainWin)
             else:
                 show_import_certificate_screen()
 
@@ -871,7 +871,7 @@ class AddSubscriptionScreen:
 
 class UpdateSubscriptionScreen:
 
-    def __init__(self, product_selection):
+    def __init__(self, product_selection, parentWindow):
         global UEP
 
         self.product_select = product_selection
@@ -889,6 +889,10 @@ class UpdateSubscriptionScreen:
         except:
             pass
 
+        #if no updates are available, just return. no point in creating update window.
+        if not self.available_updates:
+            infoWindow(constants.NO_UPDATES_WARNING, parentWindow)
+            return
 
         self.populateUpdatesDialog()
         dic = {"on_update_subscriptions_close_clicked": self.cancel,
@@ -900,9 +904,6 @@ class UpdateSubscriptionScreen:
         self.updateWin.connect("hide", self.cancel)
         self.updateWin.connect("delete_event", self.delete_event)
         self.updateWin.show_all()
-        if not self.available_updates:
-            infoWindow(constants.NO_UPDATES_WARNING, self.updateWin)
-            self.updateWin.hide()
 
     def cancel(self, button=None):
         self.updateWin.destroy()

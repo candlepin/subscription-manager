@@ -87,11 +87,7 @@ class MessageWindow:
         self.dialog.set_position(gtk.WIN_POS_CENTER)
         self.dialog.show_all()
         rc = self.dialog.run()
-        if rc == gtk.RESPONSE_OK or rc == gtk.RESPONSE_YES:
-            self.rc = 1
-        elif (rc == gtk.RESPONSE_CANCEL or rc == gtk.RESPONSE_NO
-            or rc == gtk.RESPONSE_CLOSE):
-            self.rc = 0
+        self.rc = rc in [gtk.RESPONSE_OK, gtk.RESPONSE_YES]
         self.dialog.destroy()
 
 
