@@ -62,8 +62,5 @@ class moduleClass(Module, managergui.ChooseEntitlement):
     def initializeUI(self):
         pass
 
-    def needsNetwork(self):
-        return True
-
     def shouldAppear(self):
         return True
