@@ -318,24 +318,25 @@ class ManageSubscriptionPage:
         self.setRegistrationStatus()
 
     def on_selection(self, selection):
+        def set_text(text):
+            pdetails = rhsm_xml.get_widget("textview_details")
+            pdetails.get_buffer().set_text(text)
+            pdetails.set_cursor_visible(False)
+            pdetails.show()
+
         items, iter = selection.get_selected()
         if iter is None:
-            print "nothing was selected"
+            set_text('')
+            self.setButtonState(False)
             return
 
         self.pname_selected = items.get_value(iter, 1)
         self.psubs_selected = items.get_value(iter, 2)
         self.pselect_status = items.get_value(iter, 3)
         desc = managerlib.getProductDescription(self.pname_selected)
-        pdetails = rhsm_xml.get_widget("textview_details")
-        pdetails.get_buffer().set_text(desc)
-        pdetails.set_cursor_visible(False)
-        pdetails.show()
+        set_text(desc)
         status = ''.join([x.split('>', 1)[-1] for x in self.pselect_status.split('<')])
-        if status == "Not Subscribed":
-            self.setButtonState(state=False)
-        else:
-            self.setButtonState(state=True)
+        self.setButtonState(status != "Not Subscribed")
 
     def updateMessage(self):
         self.sumlabel = rhsm_xml.get_widget("summary_label")

@@ -27,14 +27,14 @@ PRODUCT INFO
 Name               \t%-25s
 Variant            \t%-25s
 Architecture       \t%-25s
-Version                  \t%-25s
+Version            \t%-25s
 \n
 """)
 
 content_entitlement_describe = _("""
 Name               \t%-25s
-Label                    \t%-30s
-Quantity                 \t%-25s
+Label              \t%-30s
+Quantity           \t%-25s
 Flex Quantity      \t%-25s
 Vendor             \t%-25s
 URL                      \t%-30s
