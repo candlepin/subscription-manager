@@ -107,6 +107,19 @@ class CliCommand(object):
             log.error(e)
             print _('Consumer certificates corrupted. Please reregister.')
 
+class CleanCommand(CliCommand):
+    def __init__(self):
+        usage = "usage: %prog clean"
+        shortdesc = _("removes all local consumer data, does not effect the server.")
+        desc = shortdesc
+
+        CliCommand.__init__(self, "clean", usage, shortdesc, desc)
+
+    def _do_command(self):
+        managerlib.delete_consumer_certs()
+        log.info("Cleaned local data")
+        print (_("All local data removed"))
+
 
 class IdentityCommand(CliCommand):
 
@@ -530,7 +543,7 @@ class CLI:
     def __init__(self):
         self.cli_commands = {}
         for clazz in [RegisterCommand, UnRegisterCommand, ListCommand, SubscribeCommand,\
-                       UnSubscribeCommand, FactsCommand, IdentityCommand]:
+                       UnSubscribeCommand, FactsCommand, IdentityCommand, CleanCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":
