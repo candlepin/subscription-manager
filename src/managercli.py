@@ -280,6 +280,8 @@ class RegisterCommand(CliCommand):
                     log.info("Automatically subscribe the machine to product %s " % pname)
                 except:
                     log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
+
+        if (self.options.autosubscribe or self.options.consumerid):
             self.certlib.update()
 
 
