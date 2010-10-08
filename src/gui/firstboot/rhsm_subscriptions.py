@@ -42,10 +42,19 @@ class moduleClass(Module, managergui.ManageSubscriptionPage):
         self.vbox = gtk.VBox(spacing=10)
         self._get_widget("main_vbox").reparent(self.vbox)
 
-        self.gui_reload()
+        self.reload_gui()
 
         # Clear out all the buttons on the bottom of the page
         self._get_widget('action_area').hide()
+
+    def show_buttons(self):
+        """
+        Override parent method which displays the action buttons.
+
+        During firstboot, we don't want any of these to appear, so just
+        do nothing.
+        """
+        pass
 
     def initializeUI(self):
         pass

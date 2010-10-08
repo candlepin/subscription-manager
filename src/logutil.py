@@ -57,5 +57,5 @@ def getLogger(name):
 
     handler.setFormatter(Formatter(fmt))
     log.addHandler(handler)
-    log.setLevel(logging.INFO)
+    log.setLevel(logging.DEBUG)
     return log

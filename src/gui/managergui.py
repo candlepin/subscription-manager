@@ -62,11 +62,6 @@ key_file = ConsumerIdentity.keypath()
 UEP = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
 
 CONSUMER_SIGNAL = "on_consumer_changed"
-def set_visible(widget, visible=True):
-    if visible:
-        widget.show()
-    else:
-        widget.hide()
 
 # Register new signal emitted by various dialogs when entitlement data changes
 gobject.signal_new(CONSUMER_SIGNAL, gtk.Dialog, gobject.SIGNAL_ACTION, gobject.TYPE_NONE, ())
@@ -164,9 +159,7 @@ def handle_gui_exception(e, callback, logMsg = None, showMsg = True):
 
 
 class ManageSubscriptionPage:
-    """
-     Main subscription Manager Window
-    """
+    """ Main Subscription Manager window. """
 
     def __init__(self):
         self.pname_selected = None
@@ -189,14 +182,10 @@ class ManageSubscriptionPage:
 
         self.system_facts_dialog = factsgui.SystemFactsDialog()
 
-        dic = {"on_close_button_clicked": gtk.main_quit,
+        dic = {
                "on_add_button_clicked": self.addSubButtonAction,
                "on_update_button_clicked": self.updateSubButtonAction,
                "on_unsubscribe_button_clicked": self.onUnsubscribeAction,
-               "on_system_facts_button_clicked" : self.showFactsDialog,
-               "on_register_button_clicked": self.showRegisterDialog,
-               "on_unregister_button_clicked": self.showUnregisterDialog,
-               "on_regtoken_button_clicked": self.showRegTokenDialog,
             }
         rhsm_xml.signal_autoconnect(dic)
         self.setButtonState()
@@ -204,24 +193,93 @@ class ManageSubscriptionPage:
         self.mainWin.connect("delete-event", gtk.main_quit)
         self.mainWin.connect("hide", gtk.main_quit)
 
+        self.button_bar = rhsm_xml.get_widget("action_area")
+        self.show_buttons()
+
         # TODO: Do we really need to redraw the whole GUI for this?
         # Register custom signal for consumer changes
         registration_window = registration_xml.get_widget('register_dialog')
-        registration_window.connect(CONSUMER_SIGNAL, self.gui_reload)
-        self.mainWin.connect(CONSUMER_SIGNAL, self.gui_reload)
+        registration_window.connect(CONSUMER_SIGNAL, self.reload_gui)
+        self.mainWin.connect(CONSUMER_SIGNAL, self.reload_gui)
         self.show()
 
+    def reload_gui(self, widget=None):
+        log.debug("reload_gui")
+        self.setRegistrationStatus()
+        self.updateProductDialog()
+        self.show_buttons()
+
+    def show_buttons(self):
+        """
+        Display the button bar. Called both when the screen is created, and
+        upon subsequent refreshes.
+
+        Subclasses (i.e. firstboot) may override this method to hide
+        certain buttons.
+        """
+        log.debug("Showing buttons.")
+        self.button_bar.foreach(lambda widget: self.button_bar.remove(widget))
+        exists = ConsumerIdentity.existsAndValid()
+        self._show_facts_button()
+        if exists:
+            self._show_regtoken_button()
+            self._show_unregister_button()
+        else:
+            self._show_register_button()
+        self._show_close_button()
+
+        self.button_bar.show_all()
+
+    def _show_regtoken_button(self):
+        """
+        Adds the activate subscription button to the button bar.
+        """
+        button = gtk.Button(label=_("Activate a Subscription"))
+        button.connect("clicked", self.show_regtoken_dialog)
+        self.button_bar.add(button)
+
+    def _show_facts_button(self):
+        """
+        Adds the show facts button to the button bar.
+        """
+        button = gtk.Button(label=_("View System Facts"))
+        button.connect("clicked", self.show_facts_dialog)
+        self.button_bar.add(button)
+
+    def _show_register_button(self):
+        """
+        Adds the register button to the button bar.
+        """
+        button = gtk.Button(label=_("Register System"))
+        button.connect("clicked", self.show_register_dialog)
+        self.button_bar.add(button)
+
+    def _show_unregister_button(self):
+        """
+        Adds the unregister button to the button bar.
+        """
+        button = gtk.Button(label=_("Unregister System"))
+        button.connect("clicked", self.show_unregister_dialog)
+        self.button_bar.add(button)
+
+    def _show_close_button(self):
+        """
+        Adds the close button to the button bar.
+        """
+        button = gtk.Button(label=_("Close"))
+        button.connect("clicked", gtk.main_quit)
+        self.button_bar.add(button)
 
     def show(self):
         self.mainWin.show()
 
-    def showFactsDialog(self, button):
+    def show_facts_dialog(self, button):
         self.system_facts_dialog.show()
 
-    def showRegTokenDialog(self, button):
+    def show_regtoken_dialog(self, button):
         show_regtoken_screen()
 
-    def showRegisterDialog(self, button):
+    def show_register_dialog(self, button):
         show_register_screen()
 
     def refresh(self):
@@ -230,7 +288,7 @@ class ManageSubscriptionPage:
     def show_add_subscription_screen(self):
         if not self.add_subscription_screen:
             self.add_subscription_screen = AddSubscriptionScreen()
-            self.add_subscription_screen.addWin.connect('hide', self.gui_reload)
+            self.add_subscription_screen.addWin.connect('hide', self.reload_gui)
 
         self.add_subscription_screen.show()
 
@@ -362,25 +420,17 @@ class ManageSubscriptionPage:
 
     def setRegistrationStatus(self):
         """
-        Updates portions of the main window to reflect current registration status.
+        Updates the main window to reflect current registration status.
         """
         exists = ConsumerIdentity.existsAndValid()
         log.debug("updating registration status.. consumer exists?: %s", exists)
 
         reg_as_label = rhsm_xml.get_widget('registered_as_label')
-        register_button = rhsm_xml.get_widget("register_button")
-        unregister_button = rhsm_xml.get_widget("unregister_button")
-        regtoken_button = rhsm_xml.get_widget("regtoken_button")
         if exists:
             reg_as_label.set_label(_("This system is registered as: <b>%s</b>" %
                 ConsumerIdentity.read().getConsumerId()))
         else:
             reg_as_label.set_label(_("This system is not registered."))
-
-        set_visible(register_button, not exists)
-        set_visible(regtoken_button, exists)
-        set_visible(unregister_button, exists)
-
 
     def gui_reload(self, widget=None):
         self.setRegistrationStatus()
@@ -413,14 +463,14 @@ class ManageSubscriptionPage:
                     cert.delete()
                     log.info("This machine is now unsubscribed from Product %s " % self.pname_selected)
              #FIXME:
-            self.gui_reload()
+            self.reload_gui()
             return
         # Force fetch all certs
         if not fetch_certificates():
             return
-        self.gui_reload()
+        self.reload_gui()
 
-    def showUnregisterDialog(self, button):
+    def show_unregister_dialog(self, button):
         global UEP, consumer
         log.info("Unregister called in gui. Asking for confirmation")
         prompt = messageWindow.YesNoDialog(constants.CONFIRM_UNREGISTER)
@@ -1000,7 +1050,7 @@ class UpdateSubscriptionScreen:
             # refresh main window
         else:
             slabel.set_label(constants.ATLEAST_ONE_SELECTION)
-        self.gui_reload()
+        self.reload_gui()
 
 
 class ChooseEntitlement:

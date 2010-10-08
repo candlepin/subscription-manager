@@ -113,8 +113,8 @@
                   <widget class="GtkScrolledWindow" id="scrolledwindow_updates">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hadjustment">0 0 751 75.100000000000009 675.89999999999998 751</property>
-                    <property name="vadjustment">0 0 60 6 54 60</property>
+                    <property name="hadjustment">0 0 400 40 360 400</property>
+                    <property name="vadjustment">0 0 200 20 180 200</property>
                     <property name="hscrollbar_policy">never</property>
                     <property name="vscrollbar_policy">automatic</property>
                     <property name="window_placement">bottom-left</property>
@@ -279,84 +279,7 @@
 </atkproperty>
             </accessibility>
             <child>
-              <widget class="GtkButton" id="regtoken_button">
-                <property name="label" translatable="yes">Activate a Subscription</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_regtoken_button_clicked"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkButton" id="system_facts_button">
-                <property name="label" translatable="yes">View System Facts</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">system_facts_button</atkproperty>
-                </accessibility>
-                <signal name="clicked" handler="on_system_facts_button_clicked"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkButton" id="unregister_button">
-                <property name="label" translatable="yes">Unregister System</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_unregister_button_clicked"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkButton" id="register_button">
-                <property name="label">Register System</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name">account_settings</atkproperty>
-                </accessibility>
-                <signal name="clicked" handler="on_register_button_clicked" object="loginPage"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkButton" id="close_button">
-                <property name="label">gtk-close</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name">close_button</atkproperty>
-                </accessibility>
-                <signal name="clicked" handler="on_close_button_clicked" object="onCloseQuit"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">4</property>
-              </packing>
+              <placeholder/>
             </child>
           </widget>
           <packing>
