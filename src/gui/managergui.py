@@ -62,6 +62,11 @@ key_file = ConsumerIdentity.keypath()
 UEP = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
 
 CONSUMER_SIGNAL = "on_consumer_changed"
+def set_visible(widget, visible=True):
+    if visible:
+        widget.show()
+    else:
+        widget.hide()
 
 # Register new signal emitted by various dialogs when entitlement data changes
 gobject.signal_new(CONSUMER_SIGNAL, gtk.Dialog, gobject.SIGNAL_ACTION, gobject.TYPE_NONE, ())
@@ -264,6 +269,8 @@ class ManageSubscriptionPage:
             self.productList.append((self.status_icon, product[0], product[3], 
                 markup_status, product[2], product[4]))
         self.tv_products.set_model(self.productList)
+        self.updateMessage()
+
 
     def populateProductDialog(self):
         self.tv_products = rhsm_xml.get_widget("treeview_updates")
@@ -323,7 +330,7 @@ class ManageSubscriptionPage:
             pdetails.get_buffer().set_text(text)
             pdetails.set_cursor_visible(False)
             pdetails.show()
-
+            
         items, iter = selection.get_selected()
         if iter is None:
             set_text('')
@@ -367,14 +374,13 @@ class ManageSubscriptionPage:
         if exists:
             reg_as_label.set_label(_("This system is registered as: <b>%s</b>" %
                 ConsumerIdentity.read().getConsumerId()))
-            register_button.hide()
-            regtoken_button.show()
-            unregister_button.show()
         else:
             reg_as_label.set_label(_("This system is not registered."))
-            register_button.show()
-            regtoken_button.hide()
-            unregister_button.hide()
+
+        set_visible(register_button, not exists)
+        set_visible(regtoken_button, exists)
+        set_visible(unregister_button, exists)
+
 
     def gui_reload(self, widget=None):
         self.setRegistrationStatus()
