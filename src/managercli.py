@@ -107,6 +107,7 @@ class CliCommand(object):
             log.error(e)
             print _('Consumer certificates corrupted. Please reregister.')
 
+
 class CleanCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog clean"
@@ -119,6 +120,30 @@ class CleanCommand(CliCommand):
         managerlib.delete_consumer_certs()
         log.info("Cleaned local data")
         print (_("All local data removed"))
+
+
+class RefreshCommand(CliCommand):
+    def __init__(self):
+        usage = "usage: %prog refresh"
+        shortdesc = _("pulls the latest entitlement data from the server")
+        desc = shortdesc
+
+        CliCommand.__init__(self, "refresh", usage, shortdesc, desc)
+
+    def _do_command(self):
+        if not ConsumerIdentity.exists():
+            print(_("Error: You need to register this system by running `register` command before using this option."))
+            sys.exit(1)
+
+        try:
+            self.certlib.update()
+            log.info("Refreshed local data")
+            print (_("All local data refreshed"))
+        except connection.RestlibException, re:
+            log.error(re)
+            systemExit(-1, re.msg)
+        except Exception, e:
+            handle_exception(_("Unable to perform refresh due to the following exception \n Error: %s") % e, e)
 
 
 class IdentityCommand(CliCommand):
@@ -543,7 +568,8 @@ class CLI:
     def __init__(self):
         self.cli_commands = {}
         for clazz in [RegisterCommand, UnRegisterCommand, ListCommand, SubscribeCommand,\
-                       UnSubscribeCommand, FactsCommand, IdentityCommand, CleanCommand]:
+                       UnSubscribeCommand, FactsCommand, IdentityCommand, \
+                       RefreshCommand, CleanCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":
