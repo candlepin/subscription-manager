@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.90
+Version: 0.91
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -179,6 +179,24 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Fri Oct 08 2010 Devan Goodwin <dgoodwin@redhat.com> 0.91-1
+- Resolves: #641040,#633814,#632570,#631472
+- Display buttons on main screen dynamically. (dgoodwin@redhat.com)
+- Adjust firstboot screen priorities. (dgoodwin@redhat.com)
+- No network required for firstboot entitlement chooser. (dgoodwin@redhat.com)
+- remove the content portion from the fakamai url (bkearney@redhat.com)
+- Pull down the latest code if you autosubscribe, or register as an existing
+  consumer (bkearney@redhat.com)
+- Add a 'refresh' command which will pull down the latest entitlement data
+  (bkearney@redhat.com)
+- Add a clean command. (bkearney@redhat.com)
+- Add configuration and certificate for the dev environment
+  (bkearney@redhat.com)
+- Make the cfg check work for show compatible screen (bkearney@redhat.com)
+- 633814: fix 'Compliance icon not refreshed' (anadathu@redhat.com)
+- 632570: alignment issues with product description text (anadathu@redhat.com)
+- 631472: Using close button in update screen breaks GUI (anadathu@redhat.com)
+
 * Thu Oct 07 2010 Devan Goodwin <dgoodwin@redhat.com> 0.90-1
 - Resolves: #641082,#640338
 - 641082: Fix double call to Path.abs. (dgoodwin@redhat.com)
