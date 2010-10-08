@@ -667,7 +667,7 @@ class AddSubscriptionScreen:
         # machine is talking to candlepin, invoke listing scheme
         self.createMatchingSubscriptionsTreeview()
         self.createCompatibleSubscriptionsTreeview()
-        if (cfg.get('rhsm', 'showIncompatiblePools')):
+        if (cfg.get('rhsm', 'showIncompatiblePools') == '1'):
             self.createOtherSubscriptionsTreeview()
         else:
             notebook = rhsm_xml.get_widget("add_subscription_notebook")
