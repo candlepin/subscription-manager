@@ -263,7 +263,7 @@ class Path:
     def abs(cls, path):
         """ Append the ROOT path to the given path. """
         if os.path.isabs(path):
-            return path
+            return os.path.join(cls.ROOT, path[1:])
         else:
             return os.path.join(cls.ROOT, path)
 
@@ -271,12 +271,6 @@ class Path:
     def isdir(cls, path):
         return os.path.isdir(path)
 
-    @classmethod
-    def make_relative(cls, path):
-        if os.path.isabs(path):
-            return path[1:]
-        else:
-            return path
 
 class Directory:
 
@@ -409,7 +403,7 @@ class CertificateDirectory(Directory):
 
 class ProductDirectory(CertificateDirectory):
 
-    PATH = Path.make_relative(cfg.get('rhsm', 'productCertDir'))
+    PATH = cfg.get('rhsm', 'productCertDir')
     KEY = 'key.pem'
 
     def __init__(self):
@@ -421,7 +415,7 @@ class ProductDirectory(CertificateDirectory):
 
 class EntitlementDirectory(CertificateDirectory):
 
-    PATH = Path.make_relative(cfg.get('rhsm', 'entitlementCertDir'))
+    PATH = cfg.get('rhsm', 'entitlementCertDir')
     KEY = 'key.pem'
     PRODUCT = 'product'
 
@@ -442,7 +436,7 @@ class EntitlementDirectory(CertificateDirectory):
 
 class ConsumerIdentity:
 
-    PATH = Path.make_relative(cfg.get('rhsm', 'consumerCertDir'))
+    PATH = cfg.get('rhsm', 'consumerCertDir')
     KEY = 'key.pem'
     CERT = 'cert.pem'
 
