@@ -131,10 +131,7 @@ class RefreshCommand(CliCommand):
         CliCommand.__init__(self, "refresh", usage, shortdesc, desc)
 
     def _do_command(self):
-        if not ConsumerIdentity.exists():
-            print(_("Error: You need to register this system by running `register` command before using this option."))
-            sys.exit(1)
-
+        check_registration()
         try:
             self.certlib.update()
             log.info("Refreshed local data")
