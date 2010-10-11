@@ -44,7 +44,9 @@ class moduleClass(Module):
             return RESULT_JUMP
 
         if self.local_button.get_active():
-            interface.moveToPage(moduleTitle=_("Subscription Manager"))
+            subPage = interface.titleToPageNum(_("Subscription Manager"),
+                                               interface.moduleList)
+            interface.moveToPage(pageNum=subPage + 1)
             return RESULT_JUMP
 
         if self.rhn_button.get_active():
