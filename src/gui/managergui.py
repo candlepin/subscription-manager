@@ -404,19 +404,18 @@ class ManageSubscriptionPage:
         self.setButtonState(status != "Not Subscribed")
 
     def updateMessage(self):
-        self.sumlabel = rhsm_xml.get_widget("summary_label")
-        self.sm_icon = rhsm_xml.get_widget("sm_icon")
+        def set_label_and_icon(msg, icon = subs_empty):
+            self.sumlabel = rhsm_xml.get_widget("summary_label")
+            self.sm_icon = rhsm_xml.get_widget("sm_icon")
+            self.sumlabel.set_label(msg)
+            self.sm_icon.set_from_file(icon)
+
         if self.warn_count > 1:
-            self.sumlabel.set_label(
-                          constants.WARN_SUBSCRIPTIONS % self.warn_count)
-            self.sm_icon.set_from_file(subs_empty)
+            set_label_and_icon(constants.WARN_SUBSCRIPTIONS % self.warn_count)
         elif self.warn_count == 1:
-            self.sumlabel.set_label(
-                          constants.WARN_ONE_SUBSCRIPTION % self.warn_count)
-            self.sm_icon.set_from_file(subs_empty)
+            set_label_and_icon(constants.WARN_ONE_SUBSCRIPTION % self.warn_count)
         else:
-            self.sumlabel.set_label(constants.COMPLIANT_STATUS)
-            self.sm_icon.set_from_file(subs_full)
+            set_label_and_icon(constants.COMPLIANT_STATUS, subs_full)
 
     def setRegistrationStatus(self):
         """
@@ -452,6 +451,10 @@ class ManageSubscriptionPage:
                 UEP.unbindBySerial(consumer['uuid'], self.psubs_selected)
                 log.info("This machine is now unsubscribed from Product %s " \
                           % self.pname_selected)
+                if self.add_subscription_screen:
+                    print self.add_subscription_screen
+                    self.add_subscription_screen.subs_changed = True
+
             except Exception, e:
                 handle_gui_exception(re, constants.UNSUBSCRIBE_ERROR)
                 raise
@@ -705,7 +708,7 @@ class AddSubscriptionScreen:
         self.total = 0
         self.consumer = consumer
         self.available_ent = 0
-
+        self.subs_changed = False
         self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
                                            gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.matchedList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
@@ -787,6 +790,18 @@ class AddSubscriptionScreen:
         return self.finish()
 
     def show(self):
+        global consumer
+        if consumer['uuid'] != self.consumer['uuid']:
+            log.info('consumer has changed \nfrom: %s \nto: %s',
+                     self.consumer, consumer)
+            self.consumer = consumer
+            self.subs_changed = True
+
+        if self.subs_changed:
+            for item in [self.compatList, self.availableList, self.matchedList]:
+                item.clear()
+            self.populateSubscriptionLists()
+            self.subs_changed = False
         self.addWin.present()
 
     def onImportPrepare(self, button):
@@ -809,8 +824,7 @@ class AddSubscriptionScreen:
             if state[0]:
                 try:
                     ent_ret = UEP.bindByEntitlementPool(consumer['uuid'], pool)
-                    ent = UEP.getEntitlement(ent_ret[0]['id'])
-                    updated_pool = UEP.getPool(ent['pool']['id'])
+                    updated_pool = UEP.getPool(ent_ret[0]['pool']['id'])
                     updated_count = str(int(updated_pool['quantity']) -
                             int(updated_pool['consumed']))
                     my_model = state[3]
@@ -824,6 +838,7 @@ class AddSubscriptionScreen:
                 except Exception, e:
                     # Subscription failed, continue with rest
                     log.error("Failed to subscribe to product %s Error: %s" % (state[1], e))
+                    log.exception(e)
                     busted_subs.append((state[1], e))
                     continue
             count += 1
