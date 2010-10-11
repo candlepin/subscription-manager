@@ -1076,23 +1076,6 @@ class UpdateSubscriptionScreen:
             slabel.set_label(constants.ATLEAST_ONE_SELECTION)
         self.reload_gui()
 
-
-class ChooseEntitlement:
-
-    """
-    Choose which entitlement system we'd like,
-    new style Rhesus, or old style RHN
-    """
-
-    def __init__(self):
-        self.vbox = rhsm_xml.get_widget("entitlementChooseVbox")
-
-        self.choose_win = rhsm_xml.get_widget("entitlement_selection")
-        self.rhesus_button = rhsm_xml.get_widget("rhesus_button")
-        self.rhn_button = rhsm_xml.get_widget("rhn_button")
-        self.local_button = rhsm_xml.get_widget("local_button")
-
-
 class ImportCertificate:
 
     """
