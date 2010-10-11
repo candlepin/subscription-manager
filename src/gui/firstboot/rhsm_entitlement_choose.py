@@ -34,7 +34,6 @@ class moduleClass(Module, managergui.ChooseEntitlement):
                 "entitlementChooseVbox")
         self.choose_dialog.reparent(self.vbox)
 
-
         # default to local
         self.local_button.set_active(True)
 
@@ -63,4 +62,4 @@ class moduleClass(Module, managergui.ChooseEntitlement):
         pass
 
     def shouldAppear(self):
-        return True
+        return not ConsumerIdentity.exists()
