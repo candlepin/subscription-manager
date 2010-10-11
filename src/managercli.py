@@ -110,7 +110,7 @@ class CliCommand(object):
 
 class CleanCommand(CliCommand):
     def __init__(self):
-        usage = "usage: %prog clean"
+        usage = "usage: %prog clean [OPTIONS]"
         shortdesc = _("removes all local consumer data, does not effect the server.")
         desc = shortdesc
 
@@ -124,7 +124,7 @@ class CleanCommand(CliCommand):
 
 class RefreshCommand(CliCommand):
     def __init__(self):
-        usage = "usage: %prog refresh"
+        usage = "usage: %prog refresh [OPTIONS]"
         shortdesc = _("pulls the latest entitlement data from the server")
         desc = shortdesc
 
