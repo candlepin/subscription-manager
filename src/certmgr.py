@@ -72,7 +72,7 @@ class CertManager:
             ret = self.certlib.update()
             updates += ret[0]
             for e in ret[1]:
-                print ' '.join(str(e).split('-')[1:].strip()
+                print ' '.join(str(e).split('-')[1:]).strip()
         finally:
             lock.release()
         return updates
