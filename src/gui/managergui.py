@@ -39,6 +39,7 @@ from facts import getFacts
 from certlib import EntitlementDirectory, ConsumerIdentity, CertLib
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
 from socket import error as socket_error
+from M2Crypto import SSL
 import xml.sax.saxutils
 
 import factsgui
@@ -154,6 +155,8 @@ def handle_gui_exception(e, callback, logMsg = None, showMsg = True):
     if showMsg:
         if isinstance(e, socket_error):
             errorWindow(_('network error, unable to connect to server'))
+        elif isinstance(e, SSL.SSLError):
+            errorWindow(_('Unable to verify server\'s identity: %s' % str(e)))
         elif isinstance(e, connection.RestlibException):
             errorWindow(_(callback % linkify(e.msg)))
         else:
