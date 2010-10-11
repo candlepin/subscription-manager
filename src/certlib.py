@@ -127,10 +127,10 @@ class UpdateAction(Action):
         expected = self.getExpected(uep, report)
         missing, rogue = self.bashSerials(local, expected, report)
         self.delete(rogue, report)
-        self.install(uep, missing, report)
+        exceptions = self.install(uep, missing, report)
         self.purgeExpired(report)
         log.info('certs updated:\n%s', report)
-        return report.updates()
+        return (report.updates(), exceptions)
 
     def getLocal(self, report):
         local = {}
@@ -167,6 +167,7 @@ class UpdateAction(Action):
 
     def install(self, uep, serials, report):
         br = Writer()
+        exceptions = []
         for bundle in uep.getCertificatesBySerial(serials):
             try:
                 key, cert = self.build(bundle)
@@ -177,6 +178,8 @@ class UpdateAction(Action):
                     'Bundle not loaded:\n%s\n%s',
                     bundle,
                     e)
+                exceptions.append(e)
+        return exceptions
 
     def purgeExpired(self, report):
         for cert in self.entdir.listExpired():

@@ -67,8 +67,12 @@ class CertManager:
         lock = self.lock
         try:
             lock.acquire()
-            for lib in (self.certlib, self.repolib, self.factlib):
+            for lib in (self.repolib, self.factlib):
                 updates += lib.update()
+            ret = self.certlib.update()
+            updates += ret[0]
+            for e in ret[1]:
+                print ' '.join(str(e).split('-')[1:].strip()
         finally:
             lock.release()
         return updates

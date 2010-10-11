@@ -100,12 +100,18 @@ consumer = get_consumer()
 
 
 def fetch_certificates():
+    def errToMsg(err):
+        return ' '.join(str(err).split('-')[1:]).strip()
     # Force fetch all certs
     try:
-        certlib.update()
+        result = certlib.update()
+        if result[1]:
+            msg = 'Entitlement Certificate(s) update failed due to the following reasons:\n' + \
+            '\n'.join(map(errToMsg , result[1]))
+            errorWindow(msg)
     except Exception, e:
         log.error("Certificate sync failed")
-        log.error(e)
+        log.exception(e)
         return False
     return True
 

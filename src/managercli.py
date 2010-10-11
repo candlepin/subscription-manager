@@ -385,7 +385,12 @@ class SubscribeCommand(CliCommand):
                         else:
                             systemExit(-1, re.msg) #some other error.. don't try again
 
-            self.certlib.update()
+            result = self.certlib.update()
+            if result[1]:
+                print 'Entitlement Certificate(s) update failed due to the following reasons:'
+                for e in result[1]:
+                    print '\t-', ' '.join(str(e).split('-')[1:]).strip()
+
         except Exception, e:
             handle_exception("Unable to subscribe: %s" % e, e)
 
