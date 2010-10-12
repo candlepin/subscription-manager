@@ -805,6 +805,9 @@ class Order:
     def getContract(self):
         return self.ext.get('12')
 
+    def getQuantityUsed(self):
+        return self.ext.get('13')
+
     def getWarningPeriod(self):
         return self.ext.get('14')
 
