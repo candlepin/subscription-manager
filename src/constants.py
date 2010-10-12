@@ -94,7 +94,7 @@ WARN_ONE_SUBSCRIPTION = _("<b>\n %s subscription needs your attention.\n\n</b>Ad
 
 COMPLIANT_STATUS = _("<b>\n All your subscriptions are in compliance.\n\n</b>Add or Update subscriptions for products you are using.")
 
-UNREGISTER_ERROR = _("<b>Errors were encountered during unregister.</b>\n\nPlease see /var/log/rhsm/rhsm.log for more information.")
+UNREGISTER_ERROR = _("<b>Errors were encountered during unregister.</b>\n%s\nPlease see /var/log/rhsm/rhsm.log for more information.")
 
 UNSUBSCRIBE_ERROR = _("<b>Unable to perform unsubscribe.</b>\n\nPlease see /var/log/rhsm/rhsm.log for more information.")
 

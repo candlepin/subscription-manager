@@ -158,7 +158,7 @@ def handle_gui_exception(e, callback, logMsg = None, showMsg = True):
         elif isinstance(e, SSL.SSLError):
             errorWindow(_('Unable to verify server\'s identity: %s' % str(e)))
         elif isinstance(e, connection.RestlibException):
-            errorWindow(_(callback % linkify(e.msg)))
+            errorWindow(callback % linkify(e.msg))
         else:
             if hasattr(callback, '__call__'):
                 errorWindow(_(callback(e)))
