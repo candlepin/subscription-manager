@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.91
+Version: 0.92
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -179,6 +179,22 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Wed Oct 13 2010 Devan Goodwin <dgoodwin@redhat.com> 0.92-1
+- Resolves: #641037,#641448,#641479,#641502
+- Update I18N strings. (dgoodwin@redhat.com)
+- Add helper for quantity used OID extension. (dgoodwin@redhat.com)
+- Add string substituion parameter to UNREGISTER_ERROR. (anadathu@redhat.com)
+- 641037:  Skipping past RHSM screens when selecting 'Do not register'
+  (jharris@redhat.com)
+- 641037:  Skipping Entitlement choice screen in firstboot if network is
+  not avaiable (jharris@redhat.com)
+- 641448: invalid error message on SSL failure(s) (anadathu@redhat.com)
+- 641479: users should be informed of invalid certs from candlepin.
+  (anadathu@redhat.com)
+- Skipping entitlement selection page if id cert exists (jharris@redhat.com)
+- Reload subscriptions on changes. (anadathu@redhat.com)
+- 641502: Add the options prepend to the description (bkearney@redhat.com)
+
 * Fri Oct 08 2010 Devan Goodwin <dgoodwin@redhat.com> 0.91-1
 - Resolves: #641040,#633814,#632570,#631472
 - Display buttons on main screen dynamically. (dgoodwin@redhat.com)
