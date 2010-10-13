@@ -3,14 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: src/gui/managergui.py:757 src/gui/managergui.py:793
-#: src/gui/managergui.py:830
+#: src/gui/managergui.py:874
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-22 16:23-0300\n"
+"POT-Creation-Date: 2010-10-13 13:32-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,160 +18,214 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/managerlib.py:69
+#: src/managerlib.py:75
 msgid "Subscribed"
 msgstr ""
 
-#: src/managerlib.py:69
+#: src/managerlib.py:75
 msgid "Expired"
 msgstr ""
 
-#: src/managerlib.py:69
+#: src/managerlib.py:75
 msgid "Not Subscribed"
 msgstr ""
 
-#: src/managerlib.py:103
+#: src/managerlib.py:110
 msgid "Not Installed"
 msgstr ""
 
-#: src/connection.py:96
+#: src/connection.py:93
+#, python-format
+msgid "Bad CA Certificate: %s"
+msgstr ""
+
+#: src/connection.py:95
+#, python-format
+msgid "Unable to read CA certificates from '%s'."
+msgstr ""
+
+#: src/connection.py:97
+#, python-format
+msgid " '%s' is a file."
+msgstr ""
+
+#: src/connection.py:99
+msgid " No such directory."
+msgstr ""
+
+#: src/connection.py:138
 msgid "Network error. Please check the connection details."
 msgstr ""
 
-#: src/certmgr.py:80
+#: src/certmgr.py:86
 msgid "Updating Red Hat certificates & repositories"
 msgstr ""
 
-#: src/certmgr.py:83 src/factlib.py:75 src/certlib.py:567
+#: src/certmgr.py:89 src/factlib.py:78 src/certlib.py:568
 #, python-format
 msgid "%d updates required"
 msgstr ""
 
-#: src/certmgr.py:84 src/factlib.py:76 src/certlib.py:568
+#: src/certmgr.py:90 src/factlib.py:79 src/certlib.py:569
 msgid "done"
 msgstr ""
 
-#: src/certmgr.py:93
+#: src/certmgr.py:100
 msgid "Unable to update Red Hat certificates & repositories"
 msgstr ""
 
-#: src/gui/messageWindow.py:95
+#: src/gui/messageWindow.py:97
 msgid "Error:"
 msgstr ""
 
-#: src/gui/messageWindow.py:102
+#: src/gui/messageWindow.py:106
 msgid "Warning:"
 msgstr ""
 
-#: src/gui/messageWindow.py:109
+#: src/gui/messageWindow.py:115
 msgid "OK dialog:"
 msgstr ""
 
-#: src/gui/messageWindow.py:116
+#: src/gui/messageWindow.py:124
 msgid "Info dialog:"
 msgstr ""
 
-#: src/gui/messageWindow.py:124
+#: src/gui/messageWindow.py:133
 msgid "Yes/No dialog:"
 msgstr ""
 
-#: src/gui/messageWindow.py:131
+#: src/gui/messageWindow.py:142
 msgid "Question dialog:"
 msgstr ""
 
-#: src/gui/managergui.py:253 src/gui/managergui.py:761
-#: src/gui/managergui.py:798 src/gui/managergui.py:835
-#: src/gui/managergui.py:971
+#: src/gui/factsgui.py:61
+msgid "Fact"
+msgstr ""
+
+#: src/gui/factsgui.py:62
+msgid "Value"
+msgstr ""
+
+#: src/gui/managergui.py:157 src/managercli.py:51
+msgid "network error, unable to connect to server"
+msgstr ""
+
+#: src/gui/managergui.py:159
+#, python-format
+msgid "Unable to verify server's identity: %s"
+msgstr ""
+
+#: src/gui/managergui.py:246
+msgid "Activate a Subscription"
+msgstr ""
+
+#: src/gui/managergui.py:254
+msgid "View System Facts"
+msgstr ""
+
+#: src/gui/managergui.py:262
+msgid "Register System"
+msgstr ""
+
+#: src/gui/managergui.py:270
+msgid "Unregister System"
+msgstr ""
+
+#: src/gui/managergui.py:278 tmp/factsdialog.glade.h:2
+msgid "Close"
+msgstr ""
+
+#: src/gui/managergui.py:361 src/gui/managergui.py:879
+#: src/gui/managergui.py:1016
 msgid "Product"
 msgstr ""
 
-#: src/gui/managergui.py:261
+#: src/gui/managergui.py:369
 msgid "Contract"
 msgstr ""
 
-#: src/gui/managergui.py:267
+#: src/gui/managergui.py:375
 msgid "Status"
 msgstr ""
 
-#: src/gui/managergui.py:274 src/gui/managergui.py:776
-#: src/gui/managergui.py:813 src/gui/managergui.py:850
-#: src/gui/managergui.py:981
+#: src/gui/managergui.py:382 src/gui/managergui.py:894
+#: src/gui/managergui.py:1026
 msgid "Expires"
 msgstr ""
 
-#: src/gui/managergui.py:328
-msgid "Modify Registration"
-msgstr ""
-
-#: src/gui/managergui.py:331
-msgid "Register System..."
-msgstr ""
-
 #: src/gui/managergui.py:438
+#, python-format
+msgid "This system is registered as: <b>%s</b>"
+msgstr ""
+
+#: src/gui/managergui.py:441
+msgid "This system is not registered."
+msgstr ""
+
+#: src/gui/managergui.py:571
 #, python-format
 msgid ""
 "Unable to register your system. \n"
 " Error: %s"
 msgstr ""
 
-#: src/gui/managergui.py:493
+#: src/gui/managergui.py:614
 msgid "You must enter a login."
 msgstr ""
 
-#: src/gui/managergui.py:499
+#: src/gui/managergui.py:620
 msgid "You must enter a password."
 msgstr ""
 
-#: src/gui/managergui.py:579
+#: src/gui/managergui.py:676
 msgid ""
 "\n"
 "This system is registered with following consumer information"
 msgstr ""
 
-#: src/gui/managergui.py:581
+#: src/gui/managergui.py:678
 #, python-format
 msgid "<b>    ID:</b>       %s"
 msgstr ""
 
-#: src/gui/managergui.py:583
+#: src/gui/managergui.py:680
 #, python-format
 msgid "<b>  Name:</b>     %s"
 msgstr ""
 
-#: src/gui/managergui.py:706
+#: src/gui/managergui.py:825
 msgid "Performing Subscribe. Please wait."
 msgstr ""
 
-#: src/gui/managergui.py:769 src/gui/managergui.py:806
-#: src/gui/managergui.py:843 src/gui/managergui.py:976
+#: src/gui/managergui.py:887 src/gui/managergui.py:1021
 msgid "Available Slots"
 msgstr ""
 
-#: src/gui/managergui.py:958
+#: src/gui/managergui.py:1003
 #, python-format
 msgid "<b>Available Subscriptions for %s:</b>"
 msgstr ""
 
-#: src/gui/managergui.py:967
+#: src/gui/managergui.py:1012
 msgid " "
 msgstr ""
 
-#: src/gui/managergui.py:1085
+#: src/gui/managergui.py:1113
 msgid "You must select a certificate."
 msgstr ""
 
-#: src/gui/managergui.py:1092
+#: src/gui/managergui.py:1120
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
 msgstr ""
 
-#: src/gui/firstboot/rhsm_subscriptions.py:25
+#: src/gui/firstboot/rhsm_subscriptions.py:28
 msgid "RHSM Subscriptions Management"
 msgstr ""
 
-#: src/gui/firstboot/rhsm_subscriptions.py:26
-#: src/gui/firstboot/rhsm_entitlement_choose.py:49 tmp/rhsm.glade.h:28
-#: tmp/subsgui.glade.h:3 tmp/subsMgr.glade.h:6
+#: src/gui/firstboot/rhsm_subscriptions.py:29
+#: src/gui/firstboot/rhsm_entitlement_choose.py:47 tmp/rhsm.glade.h:13
+#: tmp/subsgui.glade.h:3
 msgid "Subscription Manager"
 msgstr ""
 
@@ -180,12 +233,12 @@ msgstr ""
 msgid "Entitlement Selection"
 msgstr ""
 
-#: src/gui/firstboot/rhsm_entitlement_choose.py:27
-msgid "RHMS Entitlement Selection"
+#: src/gui/firstboot/rhsm_entitlement_choose.py:26
+msgid "RHSM Entitlement Selection"
 msgstr ""
 
-#: src/gui/firstboot/rhsm_entitlement_choose.py:45
-#: src/gui/firstboot/rhsm_login.py:27
+#: src/gui/firstboot/rhsm_entitlement_choose.py:43
+#: src/gui/firstboot/rhsm_login.py:30
 msgid "Entitlement Platform Registration"
 msgstr ""
 
@@ -193,315 +246,343 @@ msgstr ""
 msgid "Set Up Software Updates"
 msgstr ""
 
-#: src/gui/firstboot/rhsm_login.py:26
+#: src/gui/firstboot/rhsm_login.py:29
 msgid "Entitlement Registration"
 msgstr ""
 
-#: src/hwprobe.py:73
+#: src/hwprobe.py:75
 msgid "Error reading system memory information:"
 msgstr ""
 
-#: src/hwprobe.py:88
+#: src/hwprobe.py:90
 msgid "Error reading system cpu information:"
 msgstr ""
 
-#: src/hwprobe.py:108
+#: src/hwprobe.py:110
 msgid "Error reading system DMI information:"
 msgstr ""
 
-#: src/hwprobe.py:131
+#: src/hwprobe.py:133
 msgid "Error reading networking information:"
 msgstr ""
 
-#: src/hwprobe.py:148
+#: src/hwprobe.py:150
 msgid "Error reading net Interface information:"
 msgstr ""
 
-#: src/managercli.py:49
-msgid "network error, unable to connect to server"
-msgstr ""
-
-#: src/managercli.py:77
+#: src/managercli.py:88
 msgid "debug level"
 msgstr ""
 
-#: src/managercli.py:115
-msgid "Consumer certificates corrupted. Please reregister"
+#: src/managercli.py:108
+msgid "Consumer certificates corrupted. Please reregister."
 msgstr ""
 
-#: src/managercli.py:121
-msgid "reregister the client to a Unified Entitlement Platform."
+#: src/managercli.py:114
+msgid "removes all local consumer data, does not effect the server."
 msgstr ""
 
-#: src/managercli.py:130 src/managercli.py:193
-msgid "specify a username"
+#: src/managercli.py:122
+msgid "All local data removed"
 msgstr ""
 
-#: src/managercli.py:132 src/managercli.py:199
-msgid "specify a password"
-msgstr ""
-
-#: src/managercli.py:134
-msgid "register to an existing consumer"
+#: src/managercli.py:128
+msgid "pulls the latest entitlement data from the server"
 msgstr ""
 
 #: src/managercli.py:138
-msgid ""
-"Error: username and password are required to reregister. \n"
-"Consumer identity either does not exists or is corrupted. Try reregister --"
-"help."
+msgid "All local data refreshed"
 msgstr ""
 
-#: src/managercli.py:160
-msgid ""
-"Error: username and password are required to reregister --consumerid, try "
-"reregister --help.\n"
-msgstr ""
-
-#: src/managercli.py:168
+#: src/managercli.py:143
 #, python-format
-msgid "Ignoring username and password options. Using old uuid %s"
+msgid ""
+"Unable to perform refresh due to the following exception \n"
+" Error: %s"
 msgstr ""
 
-#: src/managercli.py:178
-msgid "Error: Unable to Re-register the system"
+#: src/managercli.py:150
+msgid "request a new identity certficate for this machine."
 msgstr ""
 
-#: src/managercli.py:184
+#: src/managercli.py:159 src/managercli.py:207
+msgid "specify a username"
+msgstr ""
+
+#: src/managercli.py:161 src/managercli.py:213
+msgid "specify a password"
+msgstr ""
+
+#: src/managercli.py:163
+msgid "request a new certificate be generated"
+msgstr ""
+
+#: src/managercli.py:167
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
+msgstr ""
+
+#: src/managercli.py:177
+#, python-format
+msgid "Current identity is %s"
+msgstr ""
+
+#: src/managercli.py:191
+msgid "Error: Unable to generate a new identity for the system"
+msgstr ""
+
+#: src/managercli.py:198
 msgid "register the client to a Unified Entitlement Platform."
 msgstr ""
 
-#: src/managercli.py:195
+#: src/managercli.py:209
 msgid "the type of consumer to register. Defaults to system"
 msgstr ""
 
-#: src/managercli.py:197
+#: src/managercli.py:211
 msgid "name of the consumer to register. Defaults to the username."
 msgstr ""
 
-#: src/managercli.py:201
+#: src/managercli.py:215
+msgid "register to an existing consumer"
+msgstr ""
+
+#: src/managercli.py:217
 msgid ""
 "automatically subscribe this system to                                     "
 "compatible subscriptions."
 msgstr ""
 
-#: src/managercli.py:204
+#: src/managercli.py:220
 msgid "register the system even if it is already registered"
 msgstr ""
 
-#: src/managercli.py:208
+#: src/managercli.py:224
 msgid ""
 "Error: username and password are required to register, try register --help.\n"
 msgstr ""
 
-#: src/managercli.py:212
+#: src/managercli.py:228
 msgid "This system is already registered. Use --force to override"
 msgstr ""
 
-#: src/managercli.py:271
+#: src/managercli.py:279
 msgid "Bind Product "
 msgstr ""
 
-#: src/managercli.py:280
+#: src/managercli.py:292
 msgid "unregister the client from a Unified Entitlement Platform."
 msgstr ""
 
-#: src/managercli.py:291
+#: src/managercli.py:302
 msgid "This system is currently not registered."
 msgstr ""
 
-#: src/managercli.py:302
+#: src/managercli.py:314
+msgid ""
+"Errors were encountered during unregister. Please see /var/log/rhsm/rhsm.log "
+"for more information."
+msgstr ""
+
+#: src/managercli.py:316
 msgid "Error: Unable to un-register the system"
 msgstr ""
 
-#: src/managercli.py:307
+#: src/managercli.py:318
+msgid "System has been un-registered."
+msgstr ""
+
+#: src/managercli.py:325
 msgid "subscribe the registered user to a specified product or regtoken."
 msgstr ""
 
-#: src/managercli.py:315
+#: src/managercli.py:333
 msgid "regtoken"
 msgstr ""
 
-#: src/managercli.py:317
+#: src/managercli.py:335
 msgid "subscription pool id"
 msgstr ""
 
-#: src/managercli.py:319
+#: src/managercli.py:337
 msgid ""
 "optional email address to notify when token activation is complete. Used "
 "with --regtoken only"
 msgstr ""
 
-#: src/managercli.py:323
+#: src/managercli.py:341
 msgid ""
 "optional language to use for email notification when token activation is "
 "complete. Used with --regtoken and --email only. Examples: en-us, de-de"
 msgstr ""
 
-#: src/managercli.py:331
+#: src/managercli.py:348
 msgid "Error: Need either --pool or --regtoken, Try subscribe --help"
 msgstr ""
 
-#: src/managercli.py:359
+#: src/managercli.py:376
 msgid "Please enter a valid numeric pool id."
 msgstr ""
 
-#: src/managercli.py:378
+#: src/managercli.py:402
 msgid "unsubscribe the registered user from all or specific subscriptions."
 msgstr ""
 
-#: src/managercli.py:384
+#: src/managercli.py:408
 msgid "Certificate serial to unsubscribe"
 msgstr ""
 
-#: src/managercli.py:407
+#: src/managercli.py:410
+msgid "Unsubscribe from all subscriptions"
+msgstr ""
+
+#: src/managercli.py:432
+msgid "One of --serial or --all must be provided"
+msgstr ""
+
+#: src/managercli.py:440
 #, python-format
 msgid ""
 "Unable to perform unsubscribe due to the following exception \n"
 " Error: %s"
 msgstr ""
 
-#: src/managercli.py:412
+#: src/managercli.py:447
 msgid "show information for facts"
 msgstr ""
 
-#: src/managercli.py:417
+#: src/managercli.py:452
 msgid "list known facts for this system"
 msgstr ""
 
-#: src/managercli.py:419
+#: src/managercli.py:454
 msgid "update the system facts"
 msgstr ""
 
-#: src/managercli.py:444
+#: src/managercli.py:480
 msgid "list available or consumer subscriptions for registered user"
 msgstr ""
 
-#: src/managercli.py:450
+#: src/managercli.py:486
 msgid "available"
 msgstr ""
 
-#: src/managercli.py:452
+#: src/managercli.py:488
 msgid "consumed"
 msgstr ""
 
-#: src/managercli.py:454
+#: src/managercli.py:490
 msgid "if supplied with --available then all subscriptions are returned"
 msgstr ""
 
-#: src/managercli.py:458
+#: src/managercli.py:494
 msgid "Error: --all is only applicable with --available"
 msgstr ""
 
-#: src/managercli.py:473
+#: src/managercli.py:508
 msgid "No installed Products to list"
 msgstr ""
 
-#: src/managercli.py:476
+#: src/managercli.py:511
 msgid "    Installed Product Status"
 msgstr ""
 
-#: src/managercli.py:487
+#: src/managercli.py:520
 msgid "No Available subscription pools to list"
 msgstr ""
 
-#: src/managercli.py:489
+#: src/managercli.py:522
 msgid "Available Subscriptions"
 msgstr ""
 
-#: src/managercli.py:503
+#: src/managercli.py:536
 msgid "No Consumed subscription pools to list"
 msgstr ""
 
-#: src/managercli.py:505
+#: src/managercli.py:538
 msgid "Consumed Product Subscriptions"
 msgstr ""
 
-#: src/managercli.py:553
+#: src/managercli.py:586
 #, python-format
 msgid ""
 "\n"
 "Usage: %s [options] MODULENAME --help\n"
 msgstr ""
 
-#: src/managercli.py:554
+#: src/managercli.py:587
 msgid "Supported modules:"
 msgstr ""
 
-#: src/managercli.py:624
+#: src/managercli.py:661
 msgid ""
 "Error: You need to register this system by running `register` command before "
 "using this option."
 msgstr ""
 
-#: src/config.py:103
-#, python-format
-msgid "%s was not found"
-msgstr ""
-
-#: src/productid.py:106
+#: src/productid.py:109
 #, python-format
 msgid "installing: %s"
 msgstr ""
 
-#: src/productid.py:120
+#: src/productid.py:123
 #, python-format
 msgid "deleting: %s"
 msgstr ""
 
-#: src/productid.py:137
+#: src/productid.py:140
 #, python-format
 msgid "duration: %d(ms)"
 msgstr ""
 
-#: src/factlib.py:72
+#: src/factlib.py:75
 msgid "Updating facts"
 msgstr ""
 
-#: src/certlib.py:87
+#: src/certlib.py:91
 msgid "Reasons(s):"
 msgstr ""
 
-#: src/certlib.py:396
+#: src/certlib.py:397
 msgid "Reason(s):"
-msgstr ""
-
-#: src/certlib.py:553
-#, python-format
-msgid "Total updates: %d"
 msgstr ""
 
 #: src/certlib.py:554
 #, python-format
-msgid "Found (local) serial# %s"
+msgid "Total updates: %d"
 msgstr ""
 
 #: src/certlib.py:555
 #, python-format
-msgid "Expected (UEP) serial# %s"
+msgid "Found (local) serial# %s"
 msgstr ""
 
 #: src/certlib.py:556
-msgid "Added (new)"
+#, python-format
+msgid "Expected (UEP) serial# %s"
 msgstr ""
 
 #: src/certlib.py:557
-msgid "Deleted (rogue):"
+msgid "Added (new)"
 msgstr ""
 
 #: src/certlib.py:558
-msgid "Expired (not deleted):"
+msgid "Deleted (rogue):"
 msgstr ""
 
 #: src/certlib.py:559
+msgid "Expired (not deleted):"
+msgstr ""
+
+#: src/certlib.py:560
 msgid "Expired (deleted):"
 msgstr ""
 
-#: src/certlib.py:564
+#: src/certlib.py:565
 msgid "Updating Red Hat certificates"
 msgstr ""
 
-#: src/facts.py:42
+#: src/facts.py:44
 #, python-format
 msgid "Unable to read %s"
 msgstr ""
@@ -516,9 +597,9 @@ msgid ""
 "Name               \t%-25s\n"
 "Variant            \t%-25s\n"
 "Architecture       \t%-25s\n"
-"Version                  \t%-25s\n"
+"Version            \t%-25s\n"
 "\n"
-" \n"
+"\n"
 msgstr ""
 
 #: src/constants.py:34
@@ -526,8 +607,8 @@ msgstr ""
 msgid ""
 "\n"
 "Name               \t%-25s\n"
-"Label                    \t%-30s\n"
-"Quantity                 \t%-25s\n"
+"Label              \t%-30s\n"
+"Quantity           \t%-25s\n"
 "Flex Quantity      \t%-25s\n"
 "Vendor             \t%-25s\n"
 "URL                      \t%-30s\n"
@@ -606,7 +687,7 @@ msgstr ""
 #: src/constants.py:87
 #, python-format
 msgid ""
-" \n"
+"\n"
 "%s is not installed but you are subscribed to it. If you do not plan to use "
 "%s on this system, you should unsubscribe in order to avoid unnecessarily "
 "consuming entitlements. If you plan to use %s on this system, you should "
@@ -641,13 +722,21 @@ msgid ""
 msgstr ""
 
 #: src/constants.py:97
+#, python-format
+msgid ""
+"<b>Errors were encountered during unregister.</b>\n"
+"%s\n"
+"Please see /var/log/rhsm/rhsm.log for more information."
+msgstr ""
+
+#: src/constants.py:99
 msgid ""
 "<b>Unable to perform unsubscribe.</b>\n"
 "\n"
 "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
 
-#: src/constants.py:99
+#: src/constants.py:101
 #, python-format
 msgid ""
 "<b>\n"
@@ -656,20 +745,20 @@ msgid ""
 "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
 
-#: src/constants.py:101
+#: src/constants.py:103
 #, python-format
 msgid "Successfully subscribed your system to token %s"
 msgstr ""
 
-#: src/constants.py:103
+#: src/constants.py:105
 msgid "<b>No subscriptions available for this account</b>"
 msgstr ""
 
-#: src/constants.py:105
+#: src/constants.py:107
 msgid "<b>No subscriptions updates available</b>"
 msgstr ""
 
-#: src/constants.py:107
+#: src/constants.py:109
 #, python-format
 msgid ""
 "<b>Unable to subscribe to product(s) %s</b>\n"
@@ -677,23 +766,23 @@ msgid ""
 "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
 
-#: src/constants.py:109
+#: src/constants.py:111
 msgid "<i><b>Please select atleast one subscription to apply</b></i>"
 msgstr ""
 
-#: src/constants.py:111
+#: src/constants.py:113
 #, python-format
 msgid "<i><b>Successfully consumed %s subscription(s)</b></i>"
 msgstr ""
 
-#: src/constants.py:113
+#: src/constants.py:115
 msgid ""
 "This error shouldn't have happened. If you'd like to help us improve this "
 "program, please file a bug at bugzilla.redhat.com. Including the relevant "
 "parts of would be very helpful. Thanks!"
 msgstr ""
 
-#: src/constants.py:118
+#: src/constants.py:120
 #, python-format
 msgid ""
 "<b>Unable to register the system.</b>\n"
@@ -703,358 +792,386 @@ msgid ""
 "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
 
-#: src/constants.py:120
+#: src/constants.py:122
 #, python-format
 msgid "Are you sure you want to unsubscribe product %s"
 msgstr ""
 
-#: src/constants.py:122
-#, python-format
-msgid "This system is registered to <b>%s</b>"
-msgstr ""
-
-#: src/constants.py:123
-msgid "This system's subscriptions are <b>locally-managed.</b>"
-msgstr ""
-
-#: src/constants.py:125
+#: src/constants.py:124
 #, python-format
 msgid "<b>Total of %s subscriptions selected for consumption.</b>"
 msgstr ""
 
-#: src/constants.py:127
+#: src/constants.py:126
 msgid "<b>Are you sure you want to unregister?</b>"
 msgstr ""
 
-#: src/certificate.py:598
+#: src/certificate.py:599
 msgid "Serial Number must be > 0"
 msgstr ""
 
-#: src/certificate.py:601
+#: src/certificate.py:602
 #, python-format
 msgid "Common Name (%s) not-valid"
 msgstr ""
 
-#: src/certificate.py:652
+#: src/certificate.py:653
 msgid "RAW:"
 msgstr ""
 
-#: src/certificate.py:655
+#: src/certificate.py:656
 msgid "MODEL:"
-msgstr ""
-
-#: src/certificate.py:657
-#, python-format
-msgid "Serial#: %s"
 msgstr ""
 
 #: src/certificate.py:658
 #, python-format
-msgid "Subject (CN): %s"
+msgid "Serial#: %s"
 msgstr ""
 
 #: src/certificate.py:659
 #, python-format
+msgid "Subject (CN): %s"
+msgstr ""
+
+#: src/certificate.py:660
+#, python-format
 msgid "Valid: [%s] %s\n"
 msgstr ""
 
-#: src/certificate.py:753
+#: src/certificate.py:754
 msgid "No order infomation"
 msgstr ""
 
-#: src/certificate.py:812
-msgid "Order {"
-msgstr ""
-
-#: src/certificate.py:813
-#, python-format
-msgid "\tName .......... = %s"
-msgstr ""
-
-#: src/certificate.py:814
-#, python-format
-msgid "\tNumber ........ = %s"
-msgstr ""
-
-#: src/certificate.py:815
-#, python-format
-msgid "\tSKU ........... = %s"
-msgstr ""
-
 #: src/certificate.py:816
-#, python-format
-msgid "\tSubscription .. = %s"
+msgid "Order {"
 msgstr ""
 
 #: src/certificate.py:817
 #, python-format
-msgid "\tQuantity ...... = %s"
+msgid "\tName .......... = %s"
 msgstr ""
 
 #: src/certificate.py:818
 #, python-format
-msgid "\tStart (Ent) ... = %s"
+msgid "\tNumber ........ = %s"
 msgstr ""
 
 #: src/certificate.py:819
 #, python-format
-msgid "\tEnd (Ent) ..... = %s"
+msgid "\tSKU ........... = %s"
 msgstr ""
 
 #: src/certificate.py:820
 #, python-format
-msgid "\tSubtype ....... = %s"
+msgid "\tSubscription .. = %s"
 msgstr ""
 
 #: src/certificate.py:821
 #, python-format
-msgid "\tVirt Limit .... = %s"
+msgid "\tQuantity ...... = %s"
 msgstr ""
 
 #: src/certificate.py:822
 #, python-format
-msgid "\tSocket Limit .. = %s"
+msgid "\tStart (Ent) ... = %s"
 msgstr ""
 
 #: src/certificate.py:823
 #, python-format
-msgid "\tOption Code ... = %s"
+msgid "\tEnd (Ent) ..... = %s"
 msgstr ""
 
 #: src/certificate.py:824
 #, python-format
-msgid "\tContract ...... = %s"
+msgid "\tSubtype ....... = %s"
 msgstr ""
 
 #: src/certificate.py:825
 #, python-format
+msgid "\tVirt Limit .... = %s"
+msgstr ""
+
+#: src/certificate.py:826
+#, python-format
+msgid "\tSocket Limit .. = %s"
+msgstr ""
+
+#: src/certificate.py:827
+#, python-format
+msgid "\tOption Code ... = %s"
+msgstr ""
+
+#: src/certificate.py:828
+#, python-format
+msgid "\tContract ...... = %s"
+msgstr ""
+
+#: src/certificate.py:829
+#, python-format
 msgid "\tWarning Period  = %s"
 msgstr ""
 
-#: src/certificate.py:856
-msgid "Product {"
-msgstr ""
-
-#: src/certificate.py:857
-#, python-format
-msgid "\tHash ......... = %s"
-msgstr ""
-
-#: src/certificate.py:858 src/certificate.py:936
-#, python-format
-msgid "\tName ......... = %s"
-msgstr ""
-
-#: src/certificate.py:859
-#, python-format
-msgid "\tVariant ...... = %s"
-msgstr ""
-
 #: src/certificate.py:860
-#, python-format
-msgid "\tArchitecture . = %s"
+msgid "Product {"
 msgstr ""
 
 #: src/certificate.py:861
 #, python-format
+msgid "\tHash ......... = %s"
+msgstr ""
+
+#: src/certificate.py:862 src/certificate.py:940
+#, python-format
+msgid "\tName ......... = %s"
+msgstr ""
+
+#: src/certificate.py:863
+#, python-format
+msgid "\tVariant ...... = %s"
+msgstr ""
+
+#: src/certificate.py:864
+#, python-format
+msgid "\tArchitecture . = %s"
+msgstr ""
+
+#: src/certificate.py:865
+#, python-format
 msgid "\tVersion ...... = %s"
 msgstr ""
 
-#: src/certificate.py:906
-msgid "Entitlement (content) {"
-msgstr ""
-
-#: src/certificate.py:907
-#, python-format
-msgid "\tName ........ = %s"
-msgstr ""
-
-#: src/certificate.py:908
-#, python-format
-msgid "\tLabel ....... = %s"
-msgstr ""
-
-#: src/certificate.py:909
-#, python-format
-msgid "\tQuantity .... = %s"
-msgstr ""
-
 #: src/certificate.py:910
-#, python-format
-msgid "\tFlex Quantity = %s"
+msgid "Entitlement (content) {"
 msgstr ""
 
 #: src/certificate.py:911
 #, python-format
-msgid "\tVendor ...... = %s"
+msgid "\tName ........ = %s"
 msgstr ""
 
 #: src/certificate.py:912
 #, python-format
-msgid "\tURL ......... = %s"
+msgid "\tLabel ....... = %s"
 msgstr ""
 
 #: src/certificate.py:913
 #, python-format
-msgid "\tGPG Key ..... = %s"
+msgid "\tQuantity .... = %s"
 msgstr ""
 
 #: src/certificate.py:914
 #, python-format
+msgid "\tFlex Quantity = %s"
+msgstr ""
+
+#: src/certificate.py:915
+#, python-format
+msgid "\tVendor ...... = %s"
+msgstr ""
+
+#: src/certificate.py:916
+#, python-format
+msgid "\tURL ......... = %s"
+msgstr ""
+
+#: src/certificate.py:917
+#, python-format
+msgid "\tGPG Key ..... = %s"
+msgstr ""
+
+#: src/certificate.py:918
+#, python-format
 msgid "\tEnabled ..... = %s"
 msgstr ""
 
-#: src/certificate.py:935
+#: src/certificate.py:939
 msgid "Entitlement (role) {"
 msgstr ""
 
-#: src/certificate.py:937
+#: src/certificate.py:941
 #, python-format
 msgid "\tDescription .. = %s"
 msgstr ""
 
-#: src/certificate.py:958
+#: src/certificate.py:962
 msgid "Key not found."
 msgstr ""
 
-#: src/certificate.py:962
+#: src/certificate.py:966
 msgid "Certificate not found."
+msgstr ""
+
+#: tmp/factsdialog.glade.h:1
+msgid "<b>System Facts:</b>"
+msgstr ""
+
+#: tmp/factsdialog.glade.h:3
+msgid "Subscription Manager - Facts"
+msgstr ""
+
+#: tmp/factsdialog.glade.h:4
+msgid "Update Facts"
+msgstr ""
+
+#: tmp/factsdialog.glade.h:5
+msgid "close_button"
+msgstr ""
+
+#: tmp/factsdialog.glade.h:6
+msgid "facts_view"
 msgstr ""
 
 #: tmp/progress.glade.h:1
 msgid "Progress Dialog"
 msgstr ""
 
-#: tmp/rhsm.glade.h:1
-msgid "<b> Product Registration (Optional) </b>"
+#: tmp/registration.glade.h:1
+msgid "<b>Please enter the following for this system:</b>"
 msgstr ""
 
-#: tmp/rhsm.glade.h:2
-msgid "<b>Other Available Subscriptions</b>"
-msgstr ""
-
-#: tmp/rhsm.glade.h:3
-msgid "<b>Red Hat Entitlements Account</b>"
-msgstr ""
-
-#: tmp/rhsm.glade.h:4
-msgid "<b>Select Subscriptions to add</b>"
-msgstr ""
-
-#: tmp/rhsm.glade.h:5
-msgid "<b>Subscriptions compatible with your system</b>"
-msgstr ""
-
-#: tmp/rhsm.glade.h:6
-msgid "<b>Subscriptions matching your installed products</b>"
-msgstr ""
-
-#: tmp/rhsm.glade.h:7
-msgid "<b>System Facts</b>"
-msgstr ""
-
-#: tmp/rhsm.glade.h:8 tmp/subsMgr.glade.h:1
+#: tmp/registration.glade.h:2
 msgid ""
-"<small>Tip: Forgot your login or password? Look it up at \n"
-"https://www.redhat.com/wapps/sso/rhn/lostPassword.html</small>"
+"<small>Tip: Forgot your login or password? Look it up at\n"
+"<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
+"www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
 msgstr ""
 
-#: tmp/rhsm.glade.h:10
+#: tmp/registration.glade.h:4
 msgid "A unique label for this system"
 msgstr ""
 
-#: tmp/rhsm.glade.h:11
-msgid "Account Registration"
-msgstr ""
-
-#: tmp/rhsm.glade.h:12 tmp/subsMgr.glade.h:3
-msgid "Add Subscriptions"
-msgstr ""
-
-#: tmp/rhsm.glade.h:13
+#: tmp/registration.glade.h:5
 msgid "Automatically subscribe this system to compatible subscriptions"
 msgstr ""
 
-#: tmp/rhsm.glade.h:14
+#: tmp/registration.glade.h:6
+msgid "System Name:"
+msgstr ""
+
+#: tmp/registration.glade.h:7
+msgid "System Registration"
+msgstr ""
+
+#: tmp/registration.glade.h:8
+msgid "register_button"
+msgstr ""
+
+#: tmp/registration.glade.h:9
+msgid "register_dialog_main_vbox"
+msgstr ""
+
+#: tmp/registration.glade.h:10
+msgid "registration_dialog_action_area\n"
+msgstr ""
+
+#: tmp/regtoken.glade.h:1
+msgid "<b> Product Registration (Optional) </b>"
+msgstr ""
+
+#: tmp/regtoken.glade.h:2
+msgid "<b>Red Hat Entitlements Account</b>"
+msgstr ""
+
+#: tmp/regtoken.glade.h:3
 msgid "Change Account"
 msgstr ""
 
-#: tmp/rhsm.glade.h:15
+#: tmp/regtoken.glade.h:4
 msgid "Email Address:"
 msgstr ""
 
-#: tmp/rhsm.glade.h:16
+#: tmp/regtoken.glade.h:5
 msgid "Enter a subscription number for products purchased from Red Hat"
 msgstr ""
 
-#: tmp/rhsm.glade.h:17
+#: tmp/regtoken.glade.h:6
 msgid ""
 "Enter an optional email address for notification when registration is "
 "complete."
 msgstr ""
 
-#: tmp/rhsm.glade.h:18
+#: tmp/regtoken.glade.h:7
 msgid "Ex: XXXX-XXXX-XXXX-XXXX"
 msgstr ""
 
-#: tmp/rhsm.glade.h:19
-msgid "Import Certificate"
-msgstr ""
-
-#: tmp/rhsm.glade.h:20
-msgid "Manage entitlements locally"
-msgstr ""
-
-#: tmp/rhsm.glade.h:21
-msgid "Not Compatible"
-msgstr ""
-
-#: tmp/rhsm.glade.h:22
-msgid "Please enter the information for this <b>system</b>"
-msgstr ""
-
-#: tmp/rhsm.glade.h:23
-msgid "Provide a Subscription Certificate"
-msgstr ""
-
-#: tmp/rhsm.glade.h:24
-msgid "Register with Red Hat Entitlement Service User Service"
-msgstr ""
-
-#: tmp/rhsm.glade.h:25
-msgid "Register with Red Hat Network or Red Hat Network Satellite"
-msgstr ""
-
-#: tmp/rhsm.glade.h:26
+#: tmp/regtoken.glade.h:8
 msgid "Registration Settings"
 msgstr ""
 
-#: tmp/rhsm.glade.h:27
+#: tmp/regtoken.glade.h:9
 msgid "Submit"
 msgstr ""
 
-#: tmp/rhsm.glade.h:29
+#: tmp/regtoken.glade.h:10
 msgid "Subscription Token:"
 msgstr ""
 
-#: tmp/rhsm.glade.h:30
+#: tmp/regtoken.glade.h:11
+msgid "dialog-action_area6"
+msgstr ""
+
+#: tmp/regtoken.glade.h:12
+msgid "dialog-vbox7"
+msgstr ""
+
+#: tmp/rhsm.glade.h:1
+msgid "<b>Other Available Subscriptions</b>"
+msgstr ""
+
+#: tmp/rhsm.glade.h:2
+msgid "<b>Select Subscriptions to add</b>"
+msgstr ""
+
+#: tmp/rhsm.glade.h:3
+msgid "<b>Subscriptions compatible with your system</b>"
+msgstr ""
+
+#: tmp/rhsm.glade.h:4
+msgid "<b>Subscriptions matching your installed products</b>"
+msgstr ""
+
+#: tmp/rhsm.glade.h:5
+msgid "Add Subscriptions"
+msgstr ""
+
+#: tmp/rhsm.glade.h:6
+msgid "Do not register"
+msgstr ""
+
+#: tmp/rhsm.glade.h:7
+msgid "Import Certificate"
+msgstr ""
+
+#: tmp/rhsm.glade.h:8
+msgid "Not Compatible"
+msgstr ""
+
+#: tmp/rhsm.glade.h:9
+msgid "Provide a Subscription Certificate"
+msgstr ""
+
+#: tmp/rhsm.glade.h:10
+msgid "Register with Red Hat Entitlement Service User Service"
+msgstr ""
+
+#: tmp/rhsm.glade.h:11
+msgid "Register with Red Hat Network or Red Hat Network Satellite"
+msgstr ""
+
+#: tmp/rhsm.glade.h:12
+msgid "Registered As Label"
+msgstr ""
+
+#: tmp/rhsm.glade.h:14
 msgid "Suggested"
 msgstr ""
 
-#: tmp/rhsm.glade.h:31
-msgid "System Name:"
-msgstr ""
-
-#: tmp/rhsm.glade.h:32
-msgid "Unregister"
-msgstr ""
-
-#: tmp/rhsm.glade.h:33
-msgid "Update Facts"
-msgstr ""
-
-#: tmp/rhsm.glade.h:34
+#: tmp/rhsm.glade.h:15
 msgid "Update Subscriptions"
+msgstr ""
+
+#: tmp/rhsm.glade.h:16
+msgid "update_subscriptions_dialog\n"
 msgstr ""
 
 #: tmp/subsgui.glade.h:1
@@ -1063,22 +1180,6 @@ msgstr ""
 
 #: tmp/subsgui.glade.h:2
 msgid "Manage Your Product Subscriptions"
-msgstr ""
-
-#: tmp/subsMgr.glade.h:4
-msgid "Enter Your Subscription Account Information"
-msgstr ""
-
-#: tmp/subsMgr.glade.h:5
-msgid "Red Hat Privacy Statement"
-msgstr ""
-
-#: tmp/subsMgr.glade.h:7
-msgid "System software updates already set up"
-msgstr ""
-
-#: tmp/subsMgr.glade.h:8
-msgid "Why Register"
 msgstr ""
 
 #: src/compliance/rhsm_compliance_icon.c:43
