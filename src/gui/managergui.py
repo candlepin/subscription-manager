@@ -167,6 +167,30 @@ def handle_gui_exception(e, callback, logMsg = None, showMsg = True):
     return False
 
 
+class MainWindow(object):
+    """
+    The new RHSM main window.
+    """
+
+    def __init__(self):
+        self.main_window_xml = GladeWrapper(os.path.join(prefix, 
+            "data/mainwindow.glade"))
+        self.main_window = self.main_window_xml.get_widget('main_window')
+        self.notebook = self.main_window_xml.get_widget('notebook')
+
+        # NOTE: Separate glade file, but just to grab a complex widget and
+        # add to this window, so keeping it in this class for now.
+        self.all_subs_xml = GladeWrapper(os.path.join(prefix, 
+            "data/allsubs.glade"))
+        self.all_subs_tab = self.main_window_xml.get_widget('all_subs_tab_vbox')
+        self.all_subs_vbox = self.all_subs_xml.get_widget('all_subs_vbox')
+        self.all_subs_vbox.reparent(self.all_subs_tab)
+        self.all_subs_tab.pack_start(self.all_subs_vbox)
+        self.all_subs_vbox.show()
+        
+        self.main_window.show_all()
+
+
 class ManageSubscriptionPage:
     """ Main Subscription Manager window. """
 
