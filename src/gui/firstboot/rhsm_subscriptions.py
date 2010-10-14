@@ -57,7 +57,7 @@ class moduleClass(Module, managergui.ManageSubscriptionPage):
         pass
 
     def initializeUI(self):
-        pass
+        self.reload_gui()
 
     def shouldAppear(self):
         return True
