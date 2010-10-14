@@ -467,9 +467,6 @@ class ManageSubscriptionPage:
         else:
             reg_as_label.set_label(_("This system is not registered."))
 
-    def gui_reload(self, widget=None):
-        self.setRegistrationStatus()
-        self.updateProductDialog()
 
     def onUnsubscribeAction(self, button):
         global UEP
