@@ -29,6 +29,7 @@ class moduleClass(Module):
         self.choose_win = managergui.rhsm_xml.get_widget("entitlement_selection")
         self.rhesus_button = managergui.rhsm_xml.get_widget("rhesus_button")
         self.rhn_button = managergui.rhsm_xml.get_widget("rhn_button")
+        self.rhn_satellite_button = managergui.rhsm_xml.get_widget("rhn_satellite_button")
         self.local_button = managergui.rhsm_xml.get_widget("local_button")
 
     def createScreen(self):
@@ -49,9 +50,10 @@ class moduleClass(Module):
             interface.moveToPage(pageNum=subPage + 1)
             return RESULT_JUMP
 
-        if self.rhn_button.get_active():
+        if self.rhn_button.get_active() or self.rhn_satellite_button.get_active():
             interface.moveToPage(moduleTitle=_("Set Up Software Updates"))
             return RESULT_JUMP
+
 
         # if none of these have been selected, then 
         # we can't go any further
