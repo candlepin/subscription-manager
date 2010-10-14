@@ -43,6 +43,7 @@ from M2Crypto import SSL
 import xml.sax.saxutils
 
 import factsgui
+import mysubstab
 
 import gettext
 _ = gettext.gettext
@@ -178,16 +179,17 @@ class MainWindow(object):
         self.main_window = self.main_window_xml.get_widget('main_window')
         self.notebook = self.main_window_xml.get_widget('notebook')
 
-        # NOTE: Separate glade file, but just to grab a complex widget and
-        # add to this window, so keeping it in this class for now.
-        self.all_subs_xml = GladeWrapper(os.path.join(prefix, 
-            "data/allsubs.glade"))
-        self.all_subs_tab = self.main_window_xml.get_widget('all_subs_tab_vbox')
-        self.all_subs_vbox = self.all_subs_xml.get_widget('all_subs_vbox')
-        self.all_subs_vbox.reparent(self.all_subs_tab)
-        self.all_subs_tab.pack_start(self.all_subs_vbox)
-        self.all_subs_vbox.show()
-        
+        tab_classes = [mysubstab.MySubscriptionsTab]
+
+        # Populate the tabs dynamically
+        for tab_class in tab_classes:
+            tab = tab_class()
+
+            content = tab.get_content()
+            content.unparent()
+
+            self.notebook.append_page(content, gtk.Label(tab.get_label()))
+            
         self.main_window.show_all()
 
 
