@@ -28,6 +28,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="draw_indicator">True</property>
+                <signal name="clicked" handler="on_match_hw_checkbutton_clicked"/>
               </widget>
               <packing>
                 <property name="position">1</property>
@@ -40,6 +41,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="draw_indicator">True</property>
+                <signal name="clicked" handler="on_not_installed_checkbutton_clicked"/>
               </widget>
               <packing>
                 <property name="position">2</property>
@@ -49,12 +51,13 @@
               <widget class="GtkHBox" id="hbox1">
                 <property name="visible">True</property>
                 <child>
-                  <widget class="GtkCheckButton" id="contain_text_checkbutton">
+                  <widget class="GtkCheckButton" id="contains_text_checkbutton">
                     <property name="label" translatable="yes">contain the text:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
+                    <signal name="clicked" handler="on_contains_text_checkbutton_clicked"/>
                   </widget>
                   <packing>
                     <property name="position">0</property>
@@ -85,6 +88,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
+                    <signal name="clicked" handler="on_active_on_checkbutton_clicked"/>
                   </widget>
                   <packing>
                     <property name="position">0</property>

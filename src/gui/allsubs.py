@@ -35,26 +35,38 @@ class AllSubscriptionsTab(object):
         self.all_subs_xml = gtk.glade.XML(ALL_SUBS_GLADE)
         self.all_subs_vbox = self.all_subs_xml.get_widget('all_subs_vbox')
 
-        self.all_subs_store = gtk.ListStore(str, str, str, str, str)
-        self.all_subs_view = self.all_subs_xml.get_widget('all_subs_treeview')
-        self.all_subs_view.set_model(self.all_subs_store)
+        self.all_subs_xml.signal_autoconnect({
+            "on_match_hw_checkbutton_clicked": self.filter_changed,
+            "on_not_installed_checkbutton_clicked": self.filter_changed,
+            "on_contains_text_checkbutton_clicked": self.filter_changed,
+            "on_active_on_checkbutton_clicked": self.filter_changed,
+        })
+
+        self.subs_store = gtk.ListStore(str, str, str, str, str)
+        self.subs_treeview = self.all_subs_xml.get_widget('all_subs_treeview')
+        self.subs_treeview.set_model(self.subs_store)
         self._add_column(_("Subscription"), 0)
-        self._add_column(_("# Bundled Products"), 0)
-        self._add_column(_("Total Contracts"), 0)
-        self._add_column(_("Total Subscriptions"), 0)
-        self._add_column(_("Available Subscriptions"), 0)
+        self._add_column(_("# Bundled Products"), 1)
+        self._add_column(_("Total Contracts"), 2)
+        self._add_column(_("Total Subscriptions"), 3)
+        self._add_column(_("Available Subscriptions"), 4)
         self.load_all_subs()
         
     def load_all_subs(self):
-        self.all_subs_store.clear()
-        self.all_subs_store.append(['RHEL 5', '10', '10,000', '25,000', '1,000'])
-        self.all_subs_store.append(['RHEL 6', '10', '10,000', '25,000', '1,000'])
+        log.debug("Loading subscriptions.")
+        self.subs_store.clear()
+        self.subs_store.append(['RHEL 5', '10', '10,000', '25,000', '1,000'])
+        self.subs_store.append(['RHEL 6', '10', '10,000', '25,000', '1,000'])
 
     def _add_column(self, name, order):
         column = gtk.TreeViewColumn(name, gtk.CellRendererText(), text=order)
-        self.all_subs_view.append_column(column)
+        self.subs_treeview.append_column(column)
 
     def get_content(self):
         return self.all_subs_vbox
 
-
+    def filter_changed(self, widget):
+        """ Handler for whenever a filter item is changed. """
+        log.debug("Filter changed.")
+        # TODO: should we reload subs or wait for an explicit refresh button 
+        # press?
