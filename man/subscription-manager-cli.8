@@ -1,96 +1,392 @@
-.\" subscription-manager-cli - Subscription Manager Command-Line tool
-.TH "subscription-manager-cli" "8" ""  "Pradeep Kilambi" ""
-.SH "NAME"
-subscription-manager-cli \- Subscription Manager Cli tool
-.SH "SYNOPSIS"
-\fBsubscription-manager-cli\fP [command] [options]
-.SH "DESCRIPTION"
-.PP 
-\fBsubscription-manager-cli\fP is a command line utility to Register and Manage Red Hat Enterprise Linux Subscriptions. It allows users to register clients to Red Hat Entitlement Platform, list available and consumed subscription information, and subscribe to and unsubscribe from specific subscriptions.
-.PP
-.PP 
-.SH "COMMANDS"
-Unless the --help or -h option is given, one of the following commands
-must be present\&.
-.PP
-.PP 
-.IP "\fBregister\fP [options]"
-Registers your client to a Red Hat Entitlement Platform. This will create an identity on this system for
-use with all other commands\&. If a consumer already exists and user wishes to associate the system to this consumer, then use your consumerId.
-.IP 
-.IP "\fBlist\fP [options]"
-List available, consumed or installed product/subscription information for a registered system\&.
-If no options are specified, this command lists currently installed products and their
-subscription status.
-.IP 
-.IP "\fBsubscribe\fP [options]"
-Subscribe the registered client to a product, registration token or entitlement Pool ID. 
-Specify your account subscription number as your registration token.
-.IP
-.IP "\fBunsubscribe\fP [options]"
-Unsubscribes the registered product from specific or all subscriptions. If no option is specified
-\fIall\fP consumed subscriptions will be relinquished and system will be unsubscribed. If you want to unsubscribe specific subscription(s), provide the product name.
-.IP 
-.IP "\fBhelp\fP [command]"
-Displays the help content for a given command or for all commands if left blank\&.
-.IP
-.PP
-.SH "GENERAL OPTIONS"
-.PP 
-.IP "\fB\-h, \-\-help\fP"
-Display a help message and exit\&.
-.PP
-.SH "REGISTRATION OPTIONS"
-.PP
-.IP "\fB\-u, \-\-username\fP" 
-Specify your Red Hat user account information for registration\&.
-.br
-.IP "\fB\-p, \-\-password\fP" 
-Specify your Red Hat user account password\&.
-.br
-.IP "\fB\-\-consumerid\fP"
-Specify an existing consumerId to register this system\&.
-.br
-.IP "\fB\-v, \-\-verbose\fP" 
-Run with debugging output\&.
-.br
-.SH "LIST OPTIONS"
-.PP
-.br
-If none of the following options are specified, this command lists currently installed products and their subscription state.
-.br
-.IP "\fB\ \-\-available\fP" 
-Lists all available subscriptions for the registered account.
-.br
-.IP "\fB\ \-\-consumed\fP"
-Lists any consumed product subscriptions for the registered account.
-.br
-.PP
-.SH "SUBSCRIBE OPTIONS"
-.PP
-.IP "\fB\ \-\-product\fP" 
-Specify products by their name (examples include RHEL AP, RHEL-Server-6, Virtualization, and more).
-.IP "\fB\ \-\-regtoken\fP"
-Specify the registration token number to subscribe this registered client.
-.IP "\fB\ \-\-pool\fP"
-Specify the entitlement Pool ID to subscribe this registered client.
-.br
-.PP
-.SH "UNSUBSCRIBE OPTIONS"
-.PP
-.br
-If none of the following options are specified, this command removes \fIall\fP subscriptions\&.
-.br
-.IP "\fB\ \-\-product\fP"
-Specify products to unsubscribe from by their name (examples include RHEL AP, RHEL-Server-6, Virtualization, and more).
-.PP
-.SH "FILES"
-.nf
-/etc/rhsm/rhsm.conf
-.fi 
+.TH subscription-manager-cli 9 "October 6, 2010" "version 0.9" "Subscription Management"  Pradeep Kilambi
+.SH NAME
+subscription-manager-cli \- Register machines and manage subscriptions to products.
+
+.SH SYNOPSIS
+subscription-manager-cli
+.I command [options]
+
+.SH DESCRIPTION
+subscription-manager-cli registers machines to an entitlement service so that the machine can receive updates based on its subscriptions to Red Hat products.
+The Subscription Manager Tool can list both available and used (consumed) subscriptions and subscribe to and
+unsubscribe from specific subscriptions. This tool can be used to autosubscribe a system, as well.
 
 .PP
-.SH "AUTHORS"
+Entitlement and subscription tracking are a new compliance feature available through Red Hat platforms. The
+.B subscription-manager-cli
+script allows machines to be registered and subscribed as part of the kickstart process and to be managed remotely or automatically
+through the command line after installation.
+
+.PP
+Available subscriptions are based on the specific information about the machine's architecture. An entitlement is only considered
+.I available
+if the platform and hardware can support that specific product. As a secondary feature, the Subscription Manager also collects and
+summarizes system facts. These facts can be edited in the Subscription Manager configuration and displayed through the Subscription Manager Tool.
+
+.PP
+There is also a Subscription Manager GUI tool, which can be invoked simply by running
+.B subscription-manager-gui
+from the command line.
+
+.SH COMMANDS AND OPTIONS
+.B subscription-manager-cli
+has specific options available for each command, depending on what operation is being performed. There are seven commands, related to the different subscription operations:
+
+.IP
+1. register
+
+.IP
+2. unregister
+
+.IP
+3. identity
+
+.IP
+4. subscribe
+
+.IP
+5. unsubscribe
+
+.IP
+6. list
+
+.IP
+7. facts
+
+
+.SS COMMON OPTIONS
+.TP
+.B -h, --help
+Prints the specific help information for the given command.
+
+.TP
+.B --debug=DEBUG
+Sets the debug level to use for verbose output.
+
+.SS REGISTER OPTIONS
+The
+.B register
+command registers a new machine to the entitlement service.
+
+.TP
+.B --username=USERNAME
+Gives the RHN or Satellite username for the account which is registering the system. This is required.
+
+.TP
+.B --password=PASSWORD
+Gives the RHN or Satellite password. This is required.
+
+.TP
+.B --type=CONSUMERTYPE
+Sets the type of consumer to register. Most systems will use the default value of
+.B system.
+
+.TP
+.B --name=CONSUMERNAME
+Sets the name of the consumer (machine) to register. This defaults to be the same as the username.
+
+.TP
+.B --autosubscribe
+Automatically subscribes this system to the best-matched compatible subscription.
+
+.TP
+.B --force
+Registers the system even if it is already registered. Normally, any register operations will fail if the machine is already registered.
+
+.SS UNREGISTER OPTIONS
+The
+.B unregister
+command unregisters a machine, which strips its subscriptions and removes the machine from the entitlement service.
+
+.PP
+This command has no options.
+
+.SS IDENTITY OPTIONS
+The
+.B identity
+command handles the UUID of a system, which identifies the system to the entitlement service after registration. This command can simply return the UUID or it can be used to restore the registration of a previously-registered system to the entitlement service.
+
+.TP
+.B --regenerate
+Requests that the entitlement service issue a new identity certificate for the system, using an existing UUID in the original identity certificate. If this is used alone, then the
+.B identity
+command also uses the original identity certificate to bind to the entitlement server, using certificate-based authentication.
+
+.TP
+.B --username=USERNAME
+Gives the RHN username for the account which is registering the system. Optional, for user-based authentication.
+
+.TP
+.B --password=PASSWORD
+Gives the RHN password. Optional, for user-based authentication.
+
+
+.SS SUBSCRIBE OPTIONS
+The
+.B subscribe
+command allocates a specific subscription to the machine.
+
+.TP
+.B --regtoken=TOKEN
+Gives the registration token or subscription ID that identifies a specific product entitlement. Either the
+.B --regtoken
+or the
+.B --pool
+option is required.
+
+.TP
+.B --pool=POOLID
+Gives the ID for the entitlements pool (collection of products) to subscribe the machine to. Either the
+.B --regtoken
+or the
+.B --pool
+option is required.
+
+.TP
+.B --email=EMAIL
+Gives an optional email address to which to send a notification email when the activation is complete. This is only used with the
+.B --regtoken
+option.
+
+.TP
+.B --locale=LOCALE
+Sets an optional language to use for for the email notification. This uses the four-letter locale codes like
+.I en-us
+for English or
+.I de-de
+for German.
+
+.SS UNSUBSCRIBE OPTIONS
+The
+.B unsubscribe
+command removes a subscription allocation from the machine. (This does not uninstall the associated products.)
+
+.TP
+.B --serial=SERIALNUMBER
+Gives the serial number of the product certificate for the product that is being unsubscribed. Product certificates are in the
+.B /etc/pki/product/<product_name>/
+directory. If this is not given, then the machine is unsubscribed from
+.I all
+of the products it's subscribed to.
+
+
+.SS LIST OPTIONS
+The
+.B list
+command lists all of the subscriptions that are compatible with a machine. The options allow the list to be filtered by subscriptions that are used by the machine or unused subscriptions that are available to the machine.
+
+.TP
+.B --available
+Lists available subscriptions which the machine has not subscribed to.
+
+.TP
+.B --consumed
+Lists all of the subscriptions that the machine is currently subscribed to.
+
+.TP
+.B --all
+Lists every subscription for the machine, both available and consumed.
+
+.SS FACTS OPTIONS
+The
+.B facts
+command lists the system information, like the release version, number of CPUs, and other architecture information.
+
+.TP
+.B --list
+Lists the system information. These are simple
+.I attribute: value
+pairs that reflect much of the information in the
+.B /etc/sysconfig
+directory.
 .nf
-.I Pradeep Kilambi <pkilambi@redhat.com>
+cpu.architecture: x86_64
+cpu.core(s)_per_socket: 1
+cpu.cpu(s): 2
+cpu.cpu_family: 6
+cpu.cpu_mhz: 1861.776
+cpu.cpu_op-mode(s): 64-bit
+cpu.cpu_socket(s): 2
+cpu.hypervisor_vendor: KVM
+cpu.model: 2
+cpu.numa_node(s): 1
+cpu.numa_node0_cpu(s): 0,1
+cpu.stepping: 3
+cpu.thread(s)_per_core: 1
+cpu.vendor_id: GenuineIntel
+cpu.virtualization_type: full
+distribution.id: Santiago
+distribution.name: Red Hat Enterprise Linux Workstation
+distribution.version: 6.0
+----
+
 .fi
+
+.TP
+.B --update
+Updates the system information. This is particularly important whenever there is a hardware change (such as adding a CPU) or a system upgrade because these changes can affect the subscriptions that are compatible with the system.
+
+.SH USAGE
+.B subscription-manager-cli
+has two major tasks:
+
+.IP
+1. Handling the registration for a given system to an entitlement service
+
+.IP
+2. Handling the product subscriptions for a machine.
+
+.PP
+.B subscription-manager-cli
+makes it easier for network administrators to maintain compliance with software subscriptions and updates by tracking and managing what machines are subscribed to and when those subscriptions expire or are exceeded.
+
+
+
+.SS REGISTERING AND UNREGISTERING MACHINES
+A machine is either
+.I registered
+to an entitlement and content service -- which makes all of the subscriptions available to the machine -- or it is not registered. Unregistered machines are necessarily out of compliance with software entitlements because there is no way to record that the subscriptions have been used or to renew them.
+
+.PP
+Machines are usually registered to an entitlement service as part of their initial configuration, such as the firstboot process. However, machines can be registered manually after they are configured, can be removed from a content service, or reregistered.
+
+.PP
+If a machine has never been registered (not even during firstboot), then the
+.B register
+command will register the machine with whatever entitlement service is configured in the
+.B /etc/rhsm/rhsm.conf
+file. This command requires, at a minimum, the username and password for an account to connect to the entitlement service.
+
+.PP
+For example:
+.nf
+subscription-manager-cli register --username=admin --password=secret
+.fi
+
+
+.PP
+Some information is assigned automatically. The Subscription Manager tool automatically generates a unique consumer ID for the system which is used by the entitlement service and it assigns a consumer type, which indicates what kinds of software are available for the machine. The consumer ID can be manually assigned (for use within a local inventory system, for instance). A handful of subscriptions (RHEL Personal and some specialized servers for content or identity management) have their own specific consumer type. For example:
+.nf
+subscription-manager-cli register --username=admin --password=secret --type=system --name=server1
+.fi
+
+A machine is unregistered and removed as a consumer from the entitlements service simply by running the
+.B unregister
+command.
+.nf
+subscription-manager-cli unregister
+.fi
+
+.PP
+If a machine is unregistered from an entitlement service, it can be reregistered at a later timeby reusing the original consumer UUID. Unregistering and unsubscribing a service can free up entitlement subscriptions when a machine is taken offline or moved to a different department. Reregistering allows the machine to be re-introduced to the entitlements service, with its subscriptions restored, without reconfiguring it.
+.nf
+subscription-manager-cli identity --regenerate --username=admin --password=secret
+.fi
+
+
+.SS SUBSCRIBING AND UNSUBSCRIBING TO PRODUCTS
+A
+.I subscription
+is the essentially right to install, use, and receive updates for a Red Hat product. (Sometimes multiple individual software products are bundled together into a single subscription.) When a machine is registered, the entitlements and content service is aware of the machine and has a list of all of the possible product subscriptions that the machine can install and use. A machine is allocated a product subscription by
+.I subscribing
+to the entitlement pool that makes that product available. A machine releases that entitlement (meaning, it unassigns that product so that another machine can use that entitlement count) by
+.I unsubscribing.
+
+.PP
+Subscribing a machine requires either the registration ID that was given when a product was purchased or the ID for the entitlement pool. For example:
+.nf
+subscription-manager-cli subscribe --regtoken=XYZ01234567 --email="admin@example.com"
+.fi
+
+.PP
+Unsubscribing a machine removes it from the product or entitlement pool, which releases that entitlement subscription it had consumed. The machine remains registered with the entitlement service. Each product has an identifying X.509 certificate installed with it. To unsubscribe to a subscription for a specific product, specify the serial number of the certificate:
+.nf
+subscription-manager-cli unsubscribe --serial=9
+.fi
+
+.PP
+Giving just the
+.B unsubscribe
+command unsubscribes the machine from every subscription it has consumed.
+
+.PP
+A special option with registration,
+.B --autosubscribe
+, will automatically subscribe the newly-registered system to the entitlements pool which best matches the system architecture and configuration. This option allows the system to be subscribed as part of the registration process, rather than separately managing subscriptions.
+.nf
+subscription-manager-cli register --username=admin --password=secret --autosubscribe
+.fi
+
+
+.SS UPDATING FACTS
+The information about a system, such as its hardware and CPU, its operating system versions, and memory, are collected by Subscription Manager in a list of
+.I facts.
+Subscription Manager uses these facts to determine what purchased entitlements are compatible with the system. Whenever these facts changes (such as installing an additional CPU), the facts can be updated immediately using the
+.B facts
+command.
+
+.nf
+subscription-manager-cli facts --update
+.fi
+
+The collected facts can also be overridden by creating a JSON file in the
+.B /etc/rhsm/facts/
+directory. These have simple formats that define a fact and value:
+.nf
+{"fact1": "value1","fact2": "value2"}
+.fi
+
+.PP
+When these fact files are added, then running the
+.B facts
+command will update the collected facts with the new, manual facts or values.
+
+.SS ENTITLEMENTS AND KICKSTART
+The
+.B subscription-manager-cli
+tool can be run as a post-install script as part of the kickstart installation process. This allows entitlement management (registration and subscription) to be automated along with installation. For example:
+.nf
+%post --log=/root/ks-post.log
+/usr/sbin/subscription-manager-cli register --username admin --password secret --autosubscribe
+.fi
+
+.SS GETTING INFORMATION FROM CERTIFICATES
+Both Subscription Manager and product information is contained in X.509 certificates. To obtain this information, use tools like
+.B openssl
+or
+.B pk12util
+to pretty-print the certificate information. For example:
+.nf
+openssl x509 -text -in /etc/pki/consumer/cert.pem
+
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 9 (0x9)
+        Signature Algorithm: sha1WithRSAEncryption
+        Issuer: CN=server.example.com, C=US, L=Mountain View
+        Validity
+            Not Before: Sep 21 19:01:01 2010 GMT
+            Not After : Sep 21 19:01:01 2011 GMT
+        Subject: CN=78cf3c59-24ec-4228-a039-1b554ea21319
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:cd:22:86:2b:77:1b:40:b2:be:8e:06:8e:b8:df:
+---- snip ----
+.fi
+
+
+.SH ASSOCIATED FILES
+.IP
+* /etc/pki/consumer/*.pem
+.IP
+* /etc/pki/consumer/product/*.pem
+.IP
+* /etc/rhsm/rhsm.conf
+.IP
+* /etc/rhsm/facts/*.facts
+
+.SH AUTHORS
+Pradeep Kilambi, <pkilambi@redhat.com>
