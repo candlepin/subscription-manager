@@ -43,6 +43,7 @@ from M2Crypto import SSL
 import xml.sax.saxutils
 
 import factsgui
+from allsubs import AllSubscriptionsTab
 
 import gettext
 _ = gettext.gettext
@@ -178,37 +179,16 @@ class MainWindow(object):
         self.main_window = self.main_window_xml.get_widget('main_window')
         self.notebook = self.main_window_xml.get_widget('notebook')
 
-        # NOTE: Separate glade file, but just to grab a complex widget and
-        # add to this window, so keeping it in this class for now.
-        self.all_subs_xml = GladeWrapper(os.path.join(prefix, 
-            "data/allsubs.glade"))
-        self.all_subs_tab = self.main_window_xml.get_widget('all_subs_tab_vbox')
-        self.all_subs_vbox = self.all_subs_xml.get_widget('all_subs_vbox')
-        self.all_subs_vbox.reparent(self.all_subs_tab)
-        self.all_subs_tab.pack_start(self.all_subs_vbox)
-        self.all_subs_vbox.show()
-        self.all_subs_store = gtk.ListStore(str, str, str, str, str)
-        self.all_subs_view = self.all_subs_xml.get_widget('all_subs_treeview')
-        self.all_subs_view.set_model(self.all_subs_store)
-        self._add_column(_("Subscription"), 0)
-        self._add_column(_("# Bundled Products"), 0)
-        self._add_column(_("Total Contracts"), 0)
-        self._add_column(_("Total Subscriptions"), 0)
-        self._add_column(_("Available Subscriptions"), 0)
-        self.load_all_subs()
-        
+        self.load_all_subs_tab()
+
         self.main_window.show_all()
 
-    def load_all_subs(self):
-        self.all_subs_store.clear()
-        self.all_subs_store.append(['RHEL 5', '10', '10,000', '25,000', '1,000'])
-        self.all_subs_store.append(['RHEL 6', '10', '10,000', '25,000', '1,000'])
-
-    def _add_column(self, name, order):
-        column = gtk.TreeViewColumn(name, gtk.CellRendererText(), text=order)
-        self.all_subs_view.append_column(column)
-
-
+    def load_all_subs_tab(self):
+        self.all_subs_tab = AllSubscriptionsTab(self)
+        all_subs_widget = self.main_window_xml.get_widget('all_subs_tab_vbox')
+        all_subs_content = self.all_subs_tab.get_content()
+        all_subs_content.reparent(all_subs_widget)
+        all_subs_widget.pack_start(all_subs_content)
 
 
 class ManageSubscriptionPage:
