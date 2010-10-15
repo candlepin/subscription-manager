@@ -22,71 +22,29 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <child>
-                  <widget class="GtkLinkButton" id="linkbutton1">
-                    <property name="label" translatable="yes">Hello World</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="relief">none</property>
-                    <property name="uri">http://glade.gnome.org</property>
-                  </widget>
+                  <placeholder/>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="installed_label">
-                    <property name="visible">True</property>
-                    <property name="label" translatable="yes">My Installed Software</property>
-                  </widget>
+                  <placeholder/>
                   <packing>
-                    <property name="tab_fill">False</property>
                     <property name="type">tab</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLinkButton" id="linkbutton2">
-                    <property name="label" translatable="yes">Hello World Again</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="relief">none</property>
-                    <property name="uri">http://glade.gnome.org</property>
-                  </widget>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
+                  <placeholder/>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="my_subs_label">
-                    <property name="visible">True</property>
-                    <property name="label" translatable="yes">My Subscriptions</property>
-                  </widget>
+                  <placeholder/>
                   <packing>
-                    <property name="position">1</property>
-                    <property name="tab_fill">False</property>
                     <property name="type">tab</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkVBox" id="all_subs_tab_vbox">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="position">2</property>
-                  </packing>
+                  <placeholder/>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="all_subs_label">
-                    <property name="visible">True</property>
-                    <property name="label" translatable="yes">All Available Subscriptions</property>
-                  </widget>
+                  <placeholder/>
                   <packing>
-                    <property name="position">2</property>
-                    <property name="tab_fill">False</property>
                     <property name="type">tab</property>
                   </packing>
                 </child>

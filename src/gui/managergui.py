@@ -44,6 +44,7 @@ import xml.sax.saxutils
 
 import factsgui
 from allsubs import AllSubscriptionsTab
+import mysubstab
 
 import gettext
 _ = gettext.gettext
@@ -179,16 +180,18 @@ class MainWindow(object):
         self.main_window = self.main_window_xml.get_widget('main_window')
         self.notebook = self.main_window_xml.get_widget('notebook')
 
-        self.load_all_subs_tab()
+        tab_classes = [mysubstab.MySubscriptionsTab, AllSubscriptionsTab]
 
+        # Populate the tabs dynamically
+        for tab_class in tab_classes:
+            tab = tab_class()
+
+            content = tab.get_content()
+            content.unparent()
+
+            self.notebook.append_page(content, gtk.Label(tab.get_label()))
+            
         self.main_window.show_all()
-
-    def load_all_subs_tab(self):
-        self.all_subs_tab = AllSubscriptionsTab(self)
-        all_subs_widget = self.main_window_xml.get_widget('all_subs_tab_vbox')
-        all_subs_content = self.all_subs_tab.get_content()
-        all_subs_content.reparent(all_subs_widget)
-        all_subs_widget.pack_start(all_subs_content)
 
 
 class ManageSubscriptionPage:

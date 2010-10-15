@@ -29,8 +29,7 @@ ALL_SUBS_GLADE = os.path.join(prefix, "data/allsubs.glade")
 
 class AllSubscriptionsTab(object):
 
-    def __init__(self, main_window):
-        self.main_win = main_window
+    def __init__(self):
 
         self.all_subs_xml = gtk.glade.XML(ALL_SUBS_GLADE)
         self.all_subs_vbox = self.all_subs_xml.get_widget('all_subs_vbox')
@@ -64,6 +63,9 @@ class AllSubscriptionsTab(object):
 
     def get_content(self):
         return self.all_subs_vbox
+
+    def get_label(self):
+        return _("All Available Subscriptions")
 
     def filter_changed(self, widget):
         """ Handler for whenever a filter item is changed. """
