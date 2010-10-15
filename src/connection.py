@@ -309,13 +309,15 @@ class UEPConnection:
             method = "%s&quantity=%s" % (method, quantity)
         return self.conn.request_post(method)
 
-    def bindByProduct(self, consumerId, product=None):
+    def bindByProduct(self, consumerId, products):
         """
-         Subscribe consumer directly to a product by it's ID. This will cause
-         the UEP to look for a pool which provides access to the given product.
+        Subscribe consumer directly to one or more products by their ID.
+        This will cause the UEP to look for one or more pools which provide
+        access to the given product.
         """
-        product = product.replace(" ", "%20")
-        method = "/consumers/%s/entitlements?product=%s" % (consumerId, product)
+        args = "&".join(["product=" + product.replace(" ", "%20") \
+                for product in products])
+        method = "/consumers/%s/entitlements?" + args
         return self.conn.request_post(method)
 
     def unbindBySerial(self, consumerId, serial):

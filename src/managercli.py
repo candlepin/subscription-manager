@@ -273,13 +273,17 @@ class RegisterCommand(CliCommand):
 
         if self.options.autosubscribe:
             # try to auomatically bind products
-            for pname, phash in managerlib.getInstalledProductHashMap().items():
-                try:
-                    self.cp.bindByProduct(consumer['uuid'], phash)
-                    print _("Bind Product "), pname, phash
-                    log.info("Automatically subscribe the machine to product %s " % pname)
-                except:
-                    log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
+            products = managerlib.getInstalledProductHashMap()
+            try:
+                UEP.bindByProduct(consumer['uuid'], products.values())
+                log.info("Automatically subscribed to products: %s " \
+                        % ", ".join(products.keys()))
+                print _("Subscribed to Products:")
+                for pname, phash in products:
+                    print pname, phash
+            except:
+                log.warning("Warning: Unable to auto subscribe to %s" \
+                        % ", ".join(products.keys()))
 
         if (self.options.autosubscribe or self.options.consumerid):
             self.certlib.update()
