@@ -254,7 +254,9 @@ check_compliance(Compliance *compliance)
 
 	if (compliance_type != RHSM_COMPLIANT) {
 		display_icon(compliance, compliance_type);
-	}
+	} else {
+        destroy_icon(compliance);
+    }
 
 	return true;
 }
