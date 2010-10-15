@@ -118,7 +118,6 @@ def fetch_certificates():
 
 register_screen = None
 regtoken_screen = None
-import_certificate_screen = None
 
 
 def show_register_screen():
@@ -138,14 +137,6 @@ def show_regtoken_screen():
     else:
         regtoken_screen = RegistrationTokenScreen()
 
-
-def show_import_certificate_screen():
-    global import_certificate_screen
-
-    if import_certificate_screen:
-        import_certificate_screen.show()
-    else:
-        import_certificate_screen = ImportCertificate()
 
 def handle_gui_exception(e, callback, logMsg = None, showMsg = True):
     if logMsg:
@@ -185,6 +176,7 @@ class ManageSubscriptionPage:
         global UEP
 
         self.add_subscription_screen = None
+        self.import_certificate_screen = None
         self.populateProductDialog()
         self.setRegistrationStatus()
         self.updateMessage()
@@ -301,11 +293,19 @@ class ManageSubscriptionPage:
 
         self.add_subscription_screen.show()
 
+    def show_import_certificate_screen(self):
+        if not self.import_certificate_screen:
+            self.import_certificate_screen = ImportCertificate()
+            self.import_certificate_screen.importWin.connect('hide',
+                    self.reload_gui)
+
+        self.import_certificate_screen.show()
+
     def addSubButtonAction(self, button):
         if consumer.has_key('uuid'):
             self.show_add_subscription_screen()
         else:
-            show_import_certificate_screen()
+            self.show_import_certificate_screen()
 
     def updateSubButtonAction(self, button):
         if self.pname_selected:
@@ -313,7 +313,7 @@ class ManageSubscriptionPage:
             if consumer.has_key('uuid'):
                 UpdateSubscriptionScreen(self.pname_selected, self.mainWin)
             else:
-                show_import_certificate_screen()
+                self.show_import_certificate_screen()
 
     def setButtonState(self, state=False):
         self.button_update = rhsm_xml.get_widget("update_button")
@@ -810,10 +810,6 @@ class AddSubscriptionScreen:
             self.subs_changed = False
         self.addWin.present()
 
-    def onImportPrepare(self, button):
-        self.addWin.hide()
-        show_import_certificate_screen()
-
     def onSubscribeAction(self, button):
         slabel = rhsm_xml.get_widget("available_subscriptions_label")
         #consumer = get_consumer()
@@ -974,7 +970,6 @@ class UpdateSubscriptionScreen:
 
         self.populateUpdatesDialog()
         dic = {"on_update_subscriptions_close_clicked": self.cancel,
-               #"on_import_cert_button_clicked": self.onImportPrepare,
                "on_update_subscriptions_button_clicked": self.onSubscribeAction,
             }
         rhsm_xml.signal_autoconnect(dic)
@@ -990,10 +985,6 @@ class UpdateSubscriptionScreen:
 
     def delete_event(self, event, data=None):
         return self.cancel()
-
-    def onImportPrepare(self, button):
-        self.updateWin.hide()
-        show_import_certificate_screen()
 
     def setHeadMsg(self):
         hlabel = rhsm_xml.get_widget("available_subscriptions_label")
