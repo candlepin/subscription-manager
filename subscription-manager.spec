@@ -91,9 +91,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 
 %dir %{_datadir}/rhsm
-%dir %{_datadir}/rhsm/gui
-%dir %{_datadir}/rhsm/gui/data
-%dir %{_datadir}/rhsm/gui/data/icons
 %dir /etc/rhsm/facts
 %dir %{_datarootdir}/locale
 
@@ -132,16 +129,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/subscription-manager-cli.8*
 
 %files -n subscription-manager-gnome
+%dir %{_datadir}/rhsm/gui
+%dir %{_datadir}/rhsm/gui/data
+%dir %{_datadir}/rhsm/gui/data/icons
 %dir %{_datadir}/firstboot/modules
 %defattr(-,root,root,-)
-%{_datadir}/rhsm/gui/__init__.py* 
-%{_datadir}/rhsm/gui/factsgui.py*
-%{_datadir}/rhsm/gui/managergui.py*  
-%{_datadir}/rhsm/gui/messageWindow.py*  
-%{_datadir}/rhsm/gui/progress.py* 
-%{_datadir}/rhsm/gui/data/*.glade  
-%{_datadir}/rhsm/gui/data/icons/subsmgr-empty.png
-%{_datadir}/rhsm/gui/data/icons/subsmgr-full.png
+%{_datadir}/rhsm/gui/* 
 %{_datadir}/icons/hicolor/16x16/apps/subsmgr.png
 %{_datadir}/firstboot/modules/rhsm_entitlement_choose.py*
 %{_datadir}/firstboot/modules/rhsm_login.py*
