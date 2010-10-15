@@ -36,7 +36,10 @@ GLADE_XML = os.path.join(DIR, "data/mysubs.glade")
 
 class MySubscriptionsTab:
 
-    def __init__(self):
+    def __init__(self, backend, consumer):
+        self.backend = backend
+        self.consumer = consumer
+
         glade = gtk.glade.XML(GLADE_XML)
         self.subscription_view = glade.get_widget("subscription_view")
         self.content = glade.get_widget("content")

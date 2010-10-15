@@ -29,7 +29,9 @@ ALL_SUBS_GLADE = os.path.join(prefix, "data/allsubs.glade")
 
 class AllSubscriptionsTab(object):
 
-    def __init__(self):
+    def __init__(self, backend, consumer):
+        self.backend = backend
+        self.consumer = consumer
 
         self.all_subs_xml = gtk.glade.XML(ALL_SUBS_GLADE)
         self.all_subs_vbox = self.all_subs_xml.get_widget('all_subs_vbox')
@@ -50,12 +52,33 @@ class AllSubscriptionsTab(object):
         self._add_column(_("Total Subscriptions"), 3)
         self._add_column(_("Available Subscriptions"), 4)
         self.load_all_subs()
+
+        self.no_hw_match_checkbutton = self.all_subs_xml.get_widget(
+                'match_hw_checkbutton')
+        self.not_installed_checkbutton = self.all_subs_xml.get_widget(
+                'not_installed_checkbutton')
+
+    def include_incompatible(self):
+        """ Return True if we're to include pools which failed a rule check. """
+        return self.no_hw_match_checkbutton.get_active()
+
+    def include_uninstalled(self):
+        """ 
+        Return True if we're to include pools for products that are 
+        not installed.
+        """
+        return self.not_installed_checkbutton.get_active()
         
     def load_all_subs(self):
         log.debug("Loading subscriptions.")
         self.subs_store.clear()
         self.subs_store.append(['RHEL 5', '10', '10,000', '25,000', '1,000'])
         self.subs_store.append(['RHEL 6', '10', '10,000', '25,000', '1,000'])
+
+        #if self.include_incompatible():
+        #    pools = managerlib.getAvailableEntitlements(self.backend.uep, 
+
+        # Filter out products that are not installed if necessary:
 
     def _add_column(self, name, order):
         column = gtk.TreeViewColumn(name, gtk.CellRendererText(), text=order)
@@ -70,5 +93,7 @@ class AllSubscriptionsTab(object):
     def filter_changed(self, widget):
         """ Handler for whenever a filter item is changed. """
         log.debug("Filter changed.")
+        log.debug("   include hw mismatch = %s" % self.include_incompatible())
+        log.debug("   include uninstalled = %s" % self.include_uninstalled())
         # TODO: should we reload subs or wait for an explicit refresh button 
         # press?

@@ -91,6 +91,7 @@ certlib = CertLib()
 ENT_CONFIG_DIR = os.path.join(cfg.get('rhsm', 'entitlementCertDir'), 'product')
 
 
+# TODO: Drop this global variable
 def get_consumer():
     if not ConsumerIdentity.existsAndValid():
         return {}
@@ -98,8 +99,41 @@ def get_consumer():
     consumer_info = {"consumer_name": consumer.getConsumerName(),
                      "uuid": consumer.getConsumerId()}
     return consumer_info
-
 consumer = get_consumer()
+
+
+class Backend(object):
+    """ 
+    Wrapper for sharing UEP connections to Candlepin.
+
+    Reference to a Backend object will be passed around UI components, so
+    the UEP connection it contains can be modified/recreated and all 
+    components will have the updated connection.
+    """
+
+    def __init__(self, uep):
+        self.uep = uep
+
+
+class Consumer(object):
+    """
+    Wrapper for sharing consumer identity information throughout GUI
+    components.
+    """
+    def __init__(self):
+        self.reload()
+
+    def reload(self):
+        """
+        Check for consumer certificate on disk and update our info accordingly.
+        """
+        if not ConsumerIdentity.existsAndValid():
+            self.name = None
+            self.uuid = None
+        else:
+            consumer = ConsumerIdentity.read()
+            self.name = consumer.getConsumerName()
+            self.uuid = consumer.getConsumerId()
 
 
 def fetch_certificates():
@@ -175,6 +209,11 @@ class MainWindow(object):
     """
 
     def __init__(self):
+        self.backend = Backend(connection.UEPConnection(
+            cert_file=ConsumerIdentity.certpath(), 
+            key_file=ConsumerIdentity.keypath()))
+        self.consumer = Consumer()
+        
         self.main_window_xml = GladeWrapper(os.path.join(prefix, 
             "data/mainwindow.glade"))
         self.main_window = self.main_window_xml.get_widget('main_window')
@@ -184,7 +223,7 @@ class MainWindow(object):
 
         # Populate the tabs dynamically
         for tab_class in tab_classes:
-            tab = tab_class()
+            tab = tab_class(self.backend, self.consumer)
 
             content = tab.get_content()
             content.unparent()
@@ -843,7 +882,6 @@ class AddSubscriptionScreen:
 
     def onSubscribeAction(self, button):
         slabel = rhsm_xml.get_widget("available_subscriptions_label")
-        #consumer = get_consumer()
         subscribed_count = 0
         pwin = progress.Progress()
         pwin.setLabel(_("Performing Subscribe. Please wait."))

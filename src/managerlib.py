@@ -215,17 +215,23 @@ def getMatchedSubscriptions(poollist):
     return matched_data_dict.values()
 
 
-def getAvailableEntitlements(cpserver, consumer, all=False):
+def getAvailableEntitlements(cpserver, consumer_uuid, all=False):
     """
-     Gets the available Entitlements from the server
+    Returns a list of entitlement pools from the server.
+
+    Facts will be updated if appropriate before making the request, to ensure
+    the rules on the server will pass if appropriate.
+
+    The 'all' setting can be used to return all pools, even if the rules do
+    not pass. (i.e. show pools that are incompatible for your hardware)
     """
     columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
             'providedProductIds', 'productId']
     facts = getFacts()
     if facts.delta():
-        cpserver.updateConsumerFacts(consumer, facts.get_facts())
+        cpserver.updateConsumerFacts(consumer_uuid, facts.get_facts())
     
-    dlist = cpserver.getPoolsList(consumer, all)
+    dlist = cpserver.getPoolsList(consumer_uuid, all)
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
         if int(d['quantity']) < 0:
