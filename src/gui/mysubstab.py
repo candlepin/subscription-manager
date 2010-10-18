@@ -20,7 +20,6 @@
 import os
 import gtk
 
-import connection
 import managergui
 
 import logutil
@@ -45,28 +44,54 @@ class MySubscriptionsTab:
         self.content = glade.get_widget("content")
 
         # Set up the model
-        self.subscription_store = gtk.ListStore(str, str, str, str, str, str, gtk.Button)
+        self.subscription_store = gtk.ListStore(str, str, str, str, str, str, bool)
         self.subscription_view.set_model(self.subscription_store)
 
         text_renderer = gtk.CellRendererText()
-        #button_renderer = gtk.CellRenderer()
 
-        def add_text_column(name):
+        def add_column(name, renderer=text_renderer):
             column_number = len(self.subscription_view.get_columns())
-            column = gtk.TreeViewColumn(_(name), text_renderer, text=column_number)
+            column = gtk.TreeViewColumn(name, renderer, text=column_number)
 
             self.subscription_view.append_column(column)
 
         # Set up columns on the view
-        add_text_column("Subscription")
-        add_text_column("Installed Products")
-        add_text_column("Contract")
-        add_text_column("Start Date")
-        add_text_column("Expiration Date")
-        add_text_column("Available Renewals")
+        add_column(_("Subscription"))
+        add_column(_("Installed Products"))
+        add_column(_("Contract"))
+        add_column(_("Start Date"))
+        add_column(_("Expiration Date"))
+        add_column(_("Available Renewals"))
 
-        # Set sorting by fact name
-#        self.facts_store.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        renew_renderer = gtk.CellRendererToggle()
+        renew_renderer.set_property('activatable', True)
+        renew_renderer.connect('toggled', self.on_renew_click, None)
+
+        add_column(_("Actions"), renderer=renew_renderer)
+
+        self.update_subscriptions()
+
+    def on_renew_click(self, cell, path, model):
+        pass
+
+    def update_subscriptions(self):
+        # Just short-circuit if we are not registered...
+        if not managergui.consumer:
+            return
+
+        pools = managergui.UEP.getPoolsList(managergui.consumer['uuid'])
+
+        for pool in pools:
+            subscription = []
+            subscription.append(pool['productName'])
+            subscription.append('%s/%s' % (pool['consumed'], pool['quantity']))
+            subscription.append('Contract...')
+            subscription.append(pool['startDate'])
+            subscription.append(pool['endDate'])
+            subscription.append('?')
+            subscription.append(True)
+
+            self.subscription_store.append(subscription)
 
     def get_content(self):
         return self.content
