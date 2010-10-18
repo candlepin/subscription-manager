@@ -120,6 +120,18 @@
                 <property name="position">4</property>
               </packing>
             </child>
+            <child>
+              <widget class="GtkButton" id="search_button">
+                <property name="label" translatable="yes">Search</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_search_button_clicked"/>
+              </widget>
+              <packing>
+                <property name="position">5</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="expand">False</property>
