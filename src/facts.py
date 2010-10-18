@@ -25,6 +25,13 @@ class Facts():
         self.fact_cache_dir = "/var/lib/rhsm/facts"
         self.fact_cache = self.fact_cache_dir + "/facts.json"
 
+        # see bz #627962  
+        # we would like to have this info, but for now, since it
+        # can change constantly on laptops, it makes for a lot of
+        # fact churn, so we report it, but ignore it as an indicator
+        # that we need to update
+        self.graylist = ['cpu.cpu_mhz']
+
     def write(self, facts, path="/var/lib/rhsm/facts/facts.json"):
         if not os.access(self.fact_cache_dir, os.R_OK):
             os.makedirs(self.fact_cache_dir)
@@ -61,8 +68,8 @@ class Facts():
             if key not in cached_facts:
                 diff[key] = value
             if key in cached_facts:
-                # key changed values
-                if value != cached_facts[key]:
+                # key changed values, ignore changes in graylist facts
+                if value != cached_facts[key] and key not in self.graylist:
                     diff[key] = value
 
         # look for keys that went away
