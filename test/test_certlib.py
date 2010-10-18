@@ -14,9 +14,30 @@
 #
 
 import unittest
+import os
 from certlib import *
+from repolib import RepoFile
+from productid import ProductDatabase
+
+
+def dummy_exists(filename):
+    return True
 
 class PathTests(unittest.TestCase):
+    """
+    Tests for the certlib Path class, changes to it's ROOT setting can affect
+    a variety of things that only surface in anaconda.
+    """
+
+    def setUp(self):
+        # monkey patch os.path.exists, be careful, this can break things 
+        # including python-nose if we don't set it back in tearDown.
+        self.actual_exists = os.path.exists
+        os.path.exists = dummy_exists
+
+    def tearDown(self):
+        Path.ROOT = "/"
+        os.path.exists = self.actual_exists
 
     def test_normal_root(self):
         # this is the default, but have to set it as other tests can modify
@@ -38,11 +59,19 @@ class PathTests(unittest.TestCase):
         self.assertEquals('/mnt/sysimage/etc/pki/consumer/',
                 Path.abs('etc/pki/consumer/'))
 
-    def tearDown(self):
-        Path.ROOT = "/"
+    def test_repo_file(self):
+        # Fake that the redhat.repo exists:
+        old = os.path.exists
 
+        Path.ROOT = '/mnt/sysimage'
+        rf = RepoFile()
+        self.assertEquals("/mnt/sysimage/etc/yum.repos.d/redhat.repo", rf.path)
 
-class EntitlementDirectoryTests(unittest.TestCase):
+    def test_product_database(self):
+        Path.ROOT = '/mnt/sysimage'
+        prod_db = ProductDatabase()
+        self.assertEquals('/mnt/sysimage/var/lib/rhsm/productid.js',
+                prod_db.dir.abspath('productid.js'))
 
     def test_sysimage_keypath(self):
         ed = EntitlementDirectory()
@@ -53,6 +82,4 @@ class EntitlementDirectoryTests(unittest.TestCase):
         ed = EntitlementDirectory()
         self.assertEquals('/etc/pki/entitlement/key.pem', ed.keypath())
 
-    def tearDown(self):
-        Path.ROOT = "/"
 
