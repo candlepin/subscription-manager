@@ -57,6 +57,10 @@ class AllSubscriptionsTab(object):
                 'match_hw_checkbutton')
         self.not_installed_checkbutton = self.all_subs_xml.get_widget(
                 'not_installed_checkbutton')
+        self.contains_text_checkbutton = self.all_subs_xml.get_widget(
+                'contains_text_checkbutton')
+        self.contains_text_entry = self.all_subs_xml.get_widget(
+                'contain_text_entry')
 
     def include_incompatible(self):
         """ Return True if we're to include pools which failed a rule check. """
@@ -68,6 +72,17 @@ class AllSubscriptionsTab(object):
         not installed.
         """
         return self.not_installed_checkbutton.get_active()
+
+    def get_filter_text(self):
+        """
+        Returns the text to filter subscriptions based on. Will return None
+        if the text box is empty, or the filter checkbox is not enabled.
+        """
+        if self.contains_text_checkbutton.get_active():
+            contains_text = self.contains_text_entry.get_text()
+            if contains_text != "":
+                return contains_text
+        return None
         
     def load_all_subs(self):
         log.debug("Loading subscriptions.")
@@ -95,5 +110,6 @@ class AllSubscriptionsTab(object):
         log.debug("Filter changed.")
         log.debug("   include hw mismatch = %s" % self.include_incompatible())
         log.debug("   include uninstalled = %s" % self.include_uninstalled())
+        log.debug("   contains text = %s" % self.get_filter_text())
         # TODO: should we reload subs or wait for an explicit refresh button 
         # press?
