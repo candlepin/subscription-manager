@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.92.0
+Version: 0.92.1
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -179,6 +179,17 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Mon Oct 18 2010 Devan Goodwin <dgoodwin@redhat.com> 0.92.1-1
+- Resolves: #627962,#642705,#643402,#642997,#642661,#643054
+- Switch to webqa in default rhsm.conf. (dgoodwin@redhat.com)
+- 627962: Fix issue with cpu.cpu_mhz causing facts to always update
+  (alikins@redhat.com)
+- 642705: destroy icon when compliant (jesusr@redhat.com)
+- 643402: update the gui after a manual cert import (jbowes@redhat.com)
+- 642997: split RHN or RHN sat option into two choices (alikins@redhat.com)
+- 642661: Fix registration status during firstboot (alikins@redhat.com)
+- 643054: Update man page. (bkearney@redhat.com)
+
 * Wed Oct 13 2010 Devan Goodwin <dgoodwin@redhat.com> 0.92-1
 - Resolves: #641037,#641448,#641479,#641502
 - Update I18N strings. (dgoodwin@redhat.com)
