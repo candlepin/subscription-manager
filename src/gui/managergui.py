@@ -35,7 +35,7 @@ import managerlib
 import connection
 import config
 import constants
-from facts import getFacts
+from facts import Facts
 from certlib import EntitlementDirectory, ConsumerIdentity, CertLib
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
 from socket import error as socket_error
@@ -147,22 +147,22 @@ register_screen = None
 regtoken_screen = None
 
 
-def show_register_screen(consumer):
+def show_register_screen(consumer, facts):
     global register_screen
 
     if register_screen:
         register_screen.show()
     else:
-        register_screen = RegisterScreen(consumer)
+        register_screen = RegisterScreen(consumer, facts)
 
 
-def show_regtoken_screen(consumer):
+def show_regtoken_screen(consumer, facts):
     global regtoken_screen
 
     if regtoken_screen:
         regtoken_screen.show()
     else:
-        regtoken_screen = RegistrationTokenScreen(consumer)
+        regtoken_screen = RegistrationTokenScreen(consumer, facts)
 
 
 def handle_gui_exception(e, callback, logMsg = None, showMsg = True):
@@ -223,6 +223,7 @@ class ManageSubscriptionPage:
         self.pselect_status = None
         self.psubs_selected = None
         self.consumer = Consumer()
+        self.facts = Facts()
 
         self.state_icon_map = {"Expired": gtk.STOCK_DIALOG_WARNING,
                                "Not Subscribed": gtk.STOCK_DIALOG_QUESTION,
@@ -239,7 +240,8 @@ class ManageSubscriptionPage:
         self.setRegistrationStatus()
         self.updateMessage()
 
-        self.system_facts_dialog = factsgui.SystemFactsDialog(self.consumer)
+        self.system_facts_dialog = factsgui.SystemFactsDialog(self.consumer,
+                self.facts)
 
         dic = {
                "on_add_button_clicked": self.addSubButtonAction,
@@ -336,17 +338,18 @@ class ManageSubscriptionPage:
         self.system_facts_dialog.show()
 
     def show_regtoken_dialog(self, button):
-        show_regtoken_screen()
+        show_regtoken_screen(self.consumer, self.facts)
 
     def show_register_dialog(self, button):
-        show_register_screen(self.consumer)
+        show_register_screen(self.consumer, self.facts)
 
     def refresh(self):
         self.mainWin.destroy()
 
     def show_add_subscription_screen(self):
         if not self.add_subscription_screen:
-            self.add_subscription_screen = AddSubscriptionScreen(self.consumer)
+            self.add_subscription_screen = AddSubscriptionScreen(self.consumer, 
+                    self.facts)
             self.add_subscription_screen.addWin.connect('hide', self.reload_gui)
 
         self.add_subscription_screen.show()
@@ -370,7 +373,7 @@ class ManageSubscriptionPage:
             log.info("Product %s selected for update" % self.pname_selected)
             if self.consumer.uuid:
                 UpdateSubscriptionScreen(self.pname_selected, self.mainWin, 
-                        self.consumer)
+                        self.consumer, self.facts)
             else:
                 self.show_import_certificate_screen()
 
@@ -563,11 +566,14 @@ class RegisterScreen:
       Registration Widget Screen
     """
 
-    def __init__(self, consumer):
+    def __init__(self, consumer, facts=None):
         self.consumer = consumer
+        self.facts = facts
+
         dic = {"on_register_cancel_button_clicked": self.cancel,
                "on_register_button_clicked": self.onRegisterAction,
             }
+
         registration_xml.signal_autoconnect(dic)
         self.registerWin = registration_xml.get_widget("register_dialog")
         self.registerWin.connect("hide", self.cancel)
@@ -607,7 +613,6 @@ class RegisterScreen:
         if not consumername:
             consumername = None
 
-        facts = getFacts()
         if not self.validate_account():
             return False
 
@@ -631,7 +636,7 @@ class RegisterScreen:
             admin_cp = connection.UEPConnection(username=username,
                     password=password)
             newAccount = admin_cp.registerConsumer(name=consumername,
-                    facts=facts.get_facts())
+                    facts=self.facts.get_facts())
             managerlib.persist_consumer_cert(newAccount)
             self.consumer.reload()
             # reload CP instance with new ssl certs
@@ -694,8 +699,9 @@ class RegistrationTokenScreen:
      This screen handles reregistration and registration token activation
     """
 
-    def __init__(self, consumer):
+    def __init__(self, consumer, facts):
         self.consumer = consumer
+        self.facts = facts
         dic = {
                 "on_register_token_close_clicked" : self.finish,
                 "on_change_account_button" : self.reRegisterAction,
@@ -725,9 +731,8 @@ class RegistrationTokenScreen:
         self.regtokenWin.hide()
 
     def factsUpdateAction(self, button):
-        facts = getFacts()
         try:
-            UEP.updateConsumerFacts(self.consumer.uuid, facts.get_facts())
+            UEP.updateConsumerFacts(self.consumer.uuid, self.facts.get_facts())
         except Exception, e:
             handle_gui_exception(e, "Could not update facts.\nError: %s" % e)
 
@@ -770,12 +775,14 @@ class AddSubscriptionScreen:
      Add subscriptions Widget screen
     """
 
-    def __init__(self, consumer):
+    def __init__(self, consumer, facts):
         global UEP
+        self.consumer = consumer
+        self.facts = facts
+
         self.selected = {}
         self.csstatus = rhsm_xml.get_widget("select_status")
         self.total = 0
-        self.consumer = consumer
         self.available_ent = 0
         self.subs_changed = False
         self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
@@ -809,7 +816,7 @@ class AddSubscriptionScreen:
     def populateSubscriptionLists(self):
         try:
             compatible = managerlib.getAvailableEntitlements(UEP,
-                    self.consumer.uuid)
+                    self.consumer.uuid, self.facts)
             self.matched = managerlib.getMatchedSubscriptions(compatible)
             matched_pids = []
             for product in self.matched:
@@ -830,7 +837,8 @@ class AddSubscriptionScreen:
                 compatible_pids.append(product['productId'])
                 self.available_ent += 1
 
-            all_subs = managerlib.getAvailableEntitlements(UEP, self.consumer.uuid, all=True)
+            all_subs = managerlib.getAvailableEntitlements(UEP, self.consumer.uuid, 
+                    self.facts, all=True)
             self.other = []
             for prod in all_subs:
                 if prod['productId'] not in compatible_pids + matched_pids:
@@ -1001,9 +1009,10 @@ class AddSubscriptionScreen:
 
 class UpdateSubscriptionScreen:
 
-    def __init__(self, product_selection, parentWindow, consumer):
+    def __init__(self, product_selection, parentWindow, consumer, facts):
         global UEP
         self.consumer = consumer
+        self.facts = facts
 
         self.product_select = product_selection
         self.setHeadMsg()
@@ -1012,7 +1021,8 @@ class UpdateSubscriptionScreen:
                 gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.available_updates = 0
         try:
-            products = managerlib.getAvailableEntitlements(UEP, self.consumer.uuid)
+            products = managerlib.getAvailableEntitlements(UEP, 
+                    self.consumer.uuid, self.facts)
             for product in products:
                 if self.product_select in product.values():
                     # Only list selected product's pools

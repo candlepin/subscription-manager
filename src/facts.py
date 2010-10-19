@@ -5,18 +5,6 @@ import gettext
 _ = gettext.gettext
 
 import config
-import hwprobe
-
-factsObj = None
-
-
-def getFacts():
-    global factsObj
-    if factsObj:
-        return factsObj
-    factsObj = Facts()
-    return factsObj
-
 
 class Facts():
 
@@ -104,6 +92,7 @@ class Facts():
                 file_facts.update(json.loads(json_buffer))
 
         facts = {}
+        import hwprobe
         hw_facts = hwprobe.Hardware().getAll()
 
         facts.update(hw_facts)

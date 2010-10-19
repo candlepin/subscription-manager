@@ -25,6 +25,8 @@ from logutil import getLogger
 log = getLogger(__name__)
 import managerlib
 
+from facts import Facts
+
 prefix = os.path.dirname(__file__)
 ALL_SUBS_GLADE = os.path.join(prefix, "data/allsubs.glade")
 
@@ -33,6 +35,7 @@ class AllSubscriptionsTab(object):
     def __init__(self, backend, consumer):
         self.backend = backend
         self.consumer = consumer
+        self.facts = Facts()
 
         self.all_subs_xml = gtk.glade.XML(ALL_SUBS_GLADE)
         self.all_subs_vbox = self.all_subs_xml.get_widget('all_subs_vbox')
@@ -88,7 +91,7 @@ class AllSubscriptionsTab(object):
         self.subs_store.append(['RHEL 6', '10', '10,000', '25,000', '1,000'])
 
         pools = managerlib.getAvailableEntitlements(self.backend.uep,
-                self.consumer.uuid, all=self.include_incompatible())
+                self.consumer.uuid, self.facts, all=self.include_incompatible())
 
         # Filter out products that are not installed if necessary:
         if log.isEnabledFor(logging.debug):

@@ -15,8 +15,7 @@ class FactDialogTests(unittest.TestCase):
                 return expected_facts
 
         self.expected_facts = expected_facts
-
-        facts.getFacts = lambda: StubFacts()
+        self.stub_facts = StubFacts()
 
         self.consumer = Mock()
         self.consumer.uuid = "MOCKUUID"
@@ -28,7 +27,8 @@ class FactDialogTests(unittest.TestCase):
         def check_facts(fact):
             found_facts[fact[0]] = fact[1]
 
-        dialog = factsgui.SystemFactsDialog(self.consumer)
+        dialog = factsgui.SystemFactsDialog(self.consumer,
+                self.stub_facts)
         dialog.facts_store.append = check_facts
         dialog.display_facts()
 
@@ -40,7 +40,8 @@ class FactDialogTests(unittest.TestCase):
         unregistered_consumer.uuid = None
         unregistered_consumer.name = None
 
-        dialog = factsgui.SystemFactsDialog(unregistered_consumer)
+        dialog = factsgui.SystemFactsDialog(unregistered_consumer,
+                self.stub_facts)
         dialog.show()
 
         enabled = dialog.update_button.get_sensitive()
@@ -51,7 +52,8 @@ class FactDialogTests(unittest.TestCase):
         managergui.consumer = { 'uuid': 'Random UUID',
                                 'consumer_name': 'system' }
 
-        dialog = factsgui.SystemFactsDialog(self.consumer)
+        dialog = factsgui.SystemFactsDialog(self.consumer,
+                self.stub_facts)
         dialog.show()
 
         enabled = dialog.update_button.get_sensitive()

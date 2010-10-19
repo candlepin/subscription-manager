@@ -15,10 +15,12 @@
 import connection
 from certlib import ConsumerIdentity
 from managercli import RegisterCommand
+from facts import Facts
 import managerlib
 
 import os
 import unittest
+from mock import Mock
 
 class CliRegistrationTests(unittest.TestCase):
 
@@ -42,6 +44,11 @@ class CliRegistrationTests(unittest.TestCase):
 
         # When
         cmd = RegisterCommand()
+
+        # Mock out facts:
+        cmd.facts.get_facts = Mock()
+        cmd.facts.get_facts.return_value = {'fact1': 'val1', 'fact2': 'val2'}
+
         cmd.main(['register', '--username=testuser1', '--password=password'])
 
         # Then

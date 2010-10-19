@@ -22,14 +22,13 @@ import shutil
 import config
 import constants
 import connection
-import hwprobe
 import optparse
 import pprint
 from optparse import OptionParser
 from certlib import CertLib, ConsumerIdentity, ProductDirectory, EntitlementDirectory
 import managerlib
 import gettext
-from facts import getFacts
+from facts import Facts
 from M2Crypto import X509
 from M2Crypto import SSL
 import gettext
@@ -218,6 +217,7 @@ class RegisterCommand(CliCommand):
                                      compatible subscriptions."))
         self.parser.add_option("--force", action='store_true',
                                help=_("register the system even if it is already registered"))
+        self.facts = Facts()
 
     def _validate_options(self):
         if not (self.options.username and self.options.password):
@@ -233,8 +233,6 @@ class RegisterCommand(CliCommand):
         Executes the command.
         """
         self._validate_options()
-
-        facts = getFacts()
 
         # Set consumer's name to username registered with by default:
         consumername = self.options.consumername
@@ -261,10 +259,12 @@ class RegisterCommand(CliCommand):
         try:
             if self.options.consumerid:
             #TODO remove the username/password
-                consumer = admin_cp.getConsumer(self.options.consumerid, self.options.username, self.options.password)
+                consumer = admin_cp.getConsumer(self.options.consumerid, 
+                        self.options.username, self.options.password)
             else:
                 consumer = admin_cp.registerConsumer(name=consumername,
-                        type=self.options.consumertype, facts=facts.get_facts())
+                        type=self.options.consumertype, 
+                        facts=self.facts.get_facts())
         except connection.RestlibException, re:
             log.exception(re)
             systemExit(-1, re.msg)
@@ -356,7 +356,7 @@ class SubscribeCommand(CliCommand):
         consumer = check_registration()['uuid']
         try:
             # update facts first, if we need to
-            facts = getFacts()
+            facts = Facts()
 
             if facts.delta():
                 self.cp.updateConsumerFacts(consumer, facts.get_facts())
@@ -459,7 +459,7 @@ class FactsCommand(CliCommand):
 
     def _do_command(self):
         if self.options.list:
-            facts = getFacts()
+            facts = Facts()
             fact_dict = facts.get_facts()
             fact_keys = fact_dict.keys()
             fact_keys.sort()
@@ -467,7 +467,7 @@ class FactsCommand(CliCommand):
                 print "%s: %s" % (key, fact_dict[key])
 
         if self.options.update:
-            facts = getFacts()
+            facts = Facts()
             consumer = check_registration()['uuid']
             print consumer
             self.cp.updateConsumerFacts(consumer, facts.get_facts())
@@ -514,8 +514,9 @@ class ListCommand(CliCommand):
                 print constants.installed_product_status % product
 
         if self.options.available:
+            facts = Facts()
             epools = managerlib.getAvailableEntitlements(self.cp, consumer,
-                    self.options.all)
+                    facts, self.options.all)
             if not len(epools):
                 print(_("No Available subscription pools to list"))
                 sys.exit(0)

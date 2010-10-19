@@ -13,6 +13,7 @@ _ = lambda x: gettext.ldgettext("firstboot", x)
 sys.path.append("/usr/share/rhsm")
 from gui import managergui
 from certlib import ConsumerIdentity
+from facts import Facts
 
 
 class moduleClass(Module, managergui.RegisterScreen):
@@ -23,6 +24,8 @@ class moduleClass(Module, managergui.RegisterScreen):
         """
         Module.__init__(self)
         self.consumer = managergui.Consumer()
+        self.facts = Facts()
+
 #        managergui.create_and_set_basic_connection()
         # this value is relative to when you want to load the screen
         # so check other modules before setting

@@ -24,7 +24,6 @@ from datetime import datetime
 from certlib import CertLib, ConsumerIdentity, \
                     ProductDirectory, EntitlementDirectory
 from logutil import getLogger
-from facts import getFacts
 from config import initConfig
 
 log = getLogger(__name__)
@@ -215,7 +214,7 @@ def getMatchedSubscriptions(poollist):
     return matched_data_dict.values()
 
 
-def getAvailableEntitlements(cpserver, consumer_uuid, all=False):
+def getAvailableEntitlements(cpserver, consumer_uuid, facts, all=False):
     """
     Returns a list of entitlement pools from the server.
 
@@ -227,7 +226,6 @@ def getAvailableEntitlements(cpserver, consumer_uuid, all=False):
     """
     columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
             'providedProductIds', 'productId']
-    facts = getFacts()
     if facts.delta():
         cpserver.updateConsumerFacts(consumer_uuid, facts.get_facts())
     

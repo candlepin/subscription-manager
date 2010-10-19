@@ -21,7 +21,6 @@ import os
 import gtk
 
 import connection
-import facts
 import managergui
 
 import logutil
@@ -41,8 +40,9 @@ class SystemFactsDialog:
     system facts.
     """
 
-    def __init__(self, consumer):
+    def __init__(self, consumer, facts):
         self.consumer = consumer
+        self.facts = facts
         glade = gtk.glade.XML(GLADE_XML)
         glade.signal_autoconnect({
                 "on_system_facts_dialog_delete_event" : self._hide_callback,
@@ -83,13 +83,13 @@ class SystemFactsDialog:
         """Updates the list store with the current system facts."""
         self.facts_store.clear()
 
-        system_facts = facts.getFacts().get_facts()
+        system_facts = self.facts.get_facts()
         for fact, value in system_facts.items():
             self.facts_store.append([fact, value])
 
     def update_facts(self):
         """Sends the current system facts to the UEP server."""
-        system_facts = facts.getFacts().get_facts()
+        system_facts = self.facts.get_facts()
         consumer_uuid = self.consumer.uuid
 
         try:
