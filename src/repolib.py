@@ -77,12 +77,13 @@ class UpdateAction:
         products.reverse()
         cfg = initConfig()
         baseurl = cfg.get('rhsm', 'baseurl')
+        ca_cert = cfg.get('rhsm', 'repo_ca_cert')
         for product in products:
-            for r in self.getContent(product, baseurl):
+            for r in self.getContent(product, baseurl, ca_cert):
                 unique.add(r)
         return unique
 
-    def getContent(self, product, baseurl):
+    def getContent(self, product, baseurl, ca_cert):
         lst = []
         for ent in product.getContentEntitlements():
             id = ent.getLabel()
@@ -93,6 +94,7 @@ class UpdateAction:
             repo['gpgkey'] = self.join(baseurl, ent.getGpg())
             repo['sslclientkey'] = EntitlementDirectory.keypath()
             repo['sslclientcert'] = product.path
+            repo['sslcacert'] = ca_cert
             lst.append(repo)
         return lst
 
@@ -109,8 +111,6 @@ class UpdateAction:
 
 class Repo(dict):
 
-    CA = '/usr/share/rhn/RHNS-CA-CERT'
-
     # (name, mutable, default)
     PROPERTIES = (
         ('name', 0, None),
@@ -119,7 +119,7 @@ class Repo(dict):
         ('gpgcheck', 0, '1'),
         ('gpgkey', 0, None),
         ('sslverify', 0, '1'),
-        ('sslcacert', 0, CA),
+        ('sslcacert', 0, None),
         ('sslclientkey', 0, None),
         ('sslclientcert', 0, None),
     )

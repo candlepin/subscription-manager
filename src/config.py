@@ -26,6 +26,7 @@ DEFAULTS = {
         'prefix': '/candlepin',
         'port': '8443',
         'ca_cert_dir': '/etc/rhsm/ca/',
+        'repo_ca_cert': '/etc/rhsm/ca/redhat-uep.pem',
         }
 
 def initConfig(config_file=None):
