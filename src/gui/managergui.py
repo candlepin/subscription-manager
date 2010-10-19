@@ -91,16 +91,6 @@ certlib = CertLib()
 ENT_CONFIG_DIR = os.path.join(cfg.get('rhsm', 'entitlementCertDir'), 'product')
 
 
-# TODO: Drop this global variable
-def get_consumer():
-    if not ConsumerIdentity.existsAndValid():
-        return {}
-    consumer = ConsumerIdentity.read()
-    consumer_info = {"consumer_name": consumer.getConsumerName(),
-                     "uuid": consumer.getConsumerId()}
-    return consumer_info
-consumer = get_consumer()
-
 
 class Backend(object):
     """ 
@@ -127,6 +117,7 @@ class Consumer(object):
         """
         Check for consumer certificate on disk and update our info accordingly.
         """
+        log.debug("Loading consumer info from identity certificates.")
         if not ConsumerIdentity.existsAndValid():
             self.name = None
             self.uuid = None
@@ -156,22 +147,22 @@ register_screen = None
 regtoken_screen = None
 
 
-def show_register_screen():
+def show_register_screen(consumer):
     global register_screen
 
     if register_screen:
         register_screen.show()
     else:
-        register_screen = RegisterScreen()
+        register_screen = RegisterScreen(consumer)
 
 
-def show_regtoken_screen():
+def show_regtoken_screen(consumer):
     global regtoken_screen
 
     if regtoken_screen:
         regtoken_screen.show()
     else:
-        regtoken_screen = RegistrationTokenScreen()
+        regtoken_screen = RegistrationTokenScreen(consumer)
 
 
 def handle_gui_exception(e, callback, logMsg = None, showMsg = True):
@@ -231,6 +222,7 @@ class ManageSubscriptionPage:
         self.pname_selected = None
         self.pselect_status = None
         self.psubs_selected = None
+        self.consumer = Consumer()
 
         self.state_icon_map = {"Expired": gtk.STOCK_DIALOG_WARNING,
                                "Not Subscribed": gtk.STOCK_DIALOG_QUESTION,
@@ -247,7 +239,7 @@ class ManageSubscriptionPage:
         self.setRegistrationStatus()
         self.updateMessage()
 
-        self.system_facts_dialog = factsgui.SystemFactsDialog()
+        self.system_facts_dialog = factsgui.SystemFactsDialog(self.consumer)
 
         dic = {
                "on_add_button_clicked": self.addSubButtonAction,
@@ -347,14 +339,14 @@ class ManageSubscriptionPage:
         show_regtoken_screen()
 
     def show_register_dialog(self, button):
-        show_register_screen()
+        show_register_screen(self.consumer)
 
     def refresh(self):
         self.mainWin.destroy()
 
     def show_add_subscription_screen(self):
         if not self.add_subscription_screen:
-            self.add_subscription_screen = AddSubscriptionScreen()
+            self.add_subscription_screen = AddSubscriptionScreen(self.consumer)
             self.add_subscription_screen.addWin.connect('hide', self.reload_gui)
 
         self.add_subscription_screen.show()
@@ -368,7 +360,7 @@ class ManageSubscriptionPage:
         self.import_certificate_screen.show()
 
     def addSubButtonAction(self, button):
-        if consumer.has_key('uuid'):
+        if self.consumer.uuid:
             self.show_add_subscription_screen()
         else:
             self.show_import_certificate_screen()
@@ -376,8 +368,9 @@ class ManageSubscriptionPage:
     def updateSubButtonAction(self, button):
         if self.pname_selected:
             log.info("Product %s selected for update" % self.pname_selected)
-            if consumer.has_key('uuid'):
-                UpdateSubscriptionScreen(self.pname_selected, self.mainWin)
+            if self.consumer.uuid:
+                UpdateSubscriptionScreen(self.pname_selected, self.mainWin, 
+                        self.consumer)
             else:
                 self.show_import_certificate_screen()
 
@@ -520,7 +513,7 @@ class ManageSubscriptionPage:
         # only unbind if we are registered to a server
         if ConsumerIdentity.exists():
             try:
-                UEP.unbindBySerial(consumer['uuid'], self.psubs_selected)
+                UEP.unbindBySerial(self.consumer.uuid, self.psubs_selected)
                 log.info("This machine is now unsubscribed from Product %s " \
                           % self.pname_selected)
                 if self.add_subscription_screen:
@@ -546,23 +539,22 @@ class ManageSubscriptionPage:
         self.reload_gui()
 
     def show_unregister_dialog(self, button):
-        global UEP, consumer
+        global UEP
         log.info("Unregister called in gui. Asking for confirmation")
         prompt = messageWindow.YesNoDialog(constants.CONFIRM_UNREGISTER)
         if not prompt.getrc():
             log.info("unregistrater not confirmed. cancelling")
             return
-        log.info("Proceeding with un-registration: %s", consumer['uuid'])
+        log.info("Proceeding with un-registration: %s", self.consumer.uuid)
         try:
-            managerlib.unregister(UEP, consumer['uuid'], False)
-            # TODO: probably not a great idea to use a global variable here.
-            # Reset the global consumer variable.
-            consumer = get_consumer()
+            managerlib.unregister(UEP, self.consumer.uuid, False)
+            self.consumer.reload()
             self.mainWin.emit(CONSUMER_SIGNAL)
         except Exception, e:
             log.error("Error unregistering system with entitlement platform.")
             handle_gui_exception(e, constants.UNREGISTER_ERROR,
-                                 "Consumer may need to be manually cleaned up: %s" % consumer)
+                    "Consumer may need to be manually cleaned up: %s" % 
+                    self.consumer.uuid)
 
 
 
@@ -571,7 +563,8 @@ class RegisterScreen:
       Registration Widget Screen
     """
 
-    def __init__(self):
+    def __init__(self, consumer):
+        self.consumer = consumer
         dic = {"on_register_cancel_button_clicked": self.cancel,
                "on_register_button_clicked": self.onRegisterAction,
             }
@@ -606,7 +599,7 @@ class RegisterScreen:
         self.passwd = registration_xml.get_widget("account_password")
         self.consumer_name = registration_xml.get_widget("consumer_name")
 
-        global username, password, consumer, consumername, UEP
+        global username, password, consumername, UEP
         username = self.uname.get_text()
         password = self.passwd.get_text()
         consumername = self.consumer_name.get_text()
@@ -626,10 +619,12 @@ class RegisterScreen:
         # Unregister consumer if exists
         if ConsumerIdentity.exists():
             try:
-                cid = consumer['uuid']
+                cid = self.consumer.uuid
                 UEP.unregisterConsumer(cid)
             except Exception, e:
-                handle_gui_exception(e, None, "Unable to unregister existing user credentials.", False)
+                handle_gui_exception(e, None, 
+                        "Unable to unregister existing user credentials.", 
+                        False)
 
         failed_msg = _("Unable to register your system. \n Error: %s")
         try:
@@ -637,14 +632,15 @@ class RegisterScreen:
                     password=password)
             newAccount = admin_cp.registerConsumer(name=consumername,
                     facts=facts.get_facts())
-            consumer = managerlib.persist_consumer_cert(newAccount)
+            managerlib.persist_consumer_cert(newAccount)
+            self.consumer.reload()
             # reload CP instance with new ssl certs
             self._reload_cp_with_certs()
             if self.auto_subscribe():
                 # try to auomatically bind products
                 for pname, phash in managerlib.getInstalledProductHashMap().items():
                     try:
-                        UEP.bindByProduct(consumer['uuid'], phash)
+                        UEP.bindByProduct(self.consumer.uuid, phash)
                         log.info("Automatically subscribe the machine to product %s " % pname)
                     except:
                         log.warning("Warning: Unable to auto subscribe the machine to %s" % pname)
@@ -698,7 +694,8 @@ class RegistrationTokenScreen:
      This screen handles reregistration and registration token activation
     """
 
-    def __init__(self):
+    def __init__(self, consumer):
+        self.consumer = consumer
         dic = {
                 "on_register_token_close_clicked" : self.finish,
                 "on_change_account_button" : self.reRegisterAction,
@@ -724,13 +721,13 @@ class RegistrationTokenScreen:
         return True
 
     def reRegisterAction(self, button):
-        show_register_screen()
+        show_register_screen(self.consumer)
         self.regtokenWin.hide()
 
     def factsUpdateAction(self, button):
         facts = getFacts()
         try:
-            UEP.updateConsumerFacts(consumer['uuid'], facts.get_facts())
+            UEP.updateConsumerFacts(self.consumer.uuid, facts.get_facts())
         except Exception, e:
             handle_gui_exception(e, "Could not update facts.\nError: %s" % e)
 
@@ -738,9 +735,9 @@ class RegistrationTokenScreen:
         alabel1 = regtoken_xml.get_widget("account_label1")
         alabel1.set_label(_("\nThis system is registered with following consumer information"))
         alabel = regtoken_xml.get_widget("account_label2")
-        alabel.set_label(_("<b>    ID:</b>       %s" % consumer["uuid"]))
+        alabel.set_label(_("<b>    ID:</b>       %s" % self.consumer.uuid))
         alabel = regtoken_xml.get_widget("account_label3")
-        alabel.set_label(_("<b>  Name:</b>     %s" % consumer["consumer_name"]))
+        alabel.set_label(_("<b>  Name:</b>     %s" % self.consumer.name))
 
     def submitToken(self, button):
         rlabel = regtoken_xml.get_widget("regtoken_entry")
@@ -750,7 +747,7 @@ class RegistrationTokenScreen:
         if email == "":
             email = None
         try:
-            UEP.bindByRegNumber(consumer['uuid'], reg_token, email)
+            UEP.bindByRegNumber(self.consumer.uuid, reg_token, email)
             infoWindow(constants.SUBSCRIBE_REGTOKEN_SUCCESS % reg_token, self.regtokenWin)
         except Exception, e:
             handle_gui_exception(e, constants.SUBSCRIBE_REGTOKEN_ERROR % reg_token,
@@ -773,7 +770,7 @@ class AddSubscriptionScreen:
      Add subscriptions Widget screen
     """
 
-    def __init__(self):
+    def __init__(self, consumer):
         global UEP
         self.selected = {}
         self.csstatus = rhsm_xml.get_widget("select_status")
@@ -812,7 +809,7 @@ class AddSubscriptionScreen:
     def populateSubscriptionLists(self):
         try:
             compatible = managerlib.getAvailableEntitlements(UEP,
-                    self.consumer['uuid'])
+                    self.consumer.uuid)
             self.matched = managerlib.getMatchedSubscriptions(compatible)
             matched_pids = []
             for product in self.matched:
@@ -833,7 +830,7 @@ class AddSubscriptionScreen:
                 compatible_pids.append(product['productId'])
                 self.available_ent += 1
 
-            all_subs = managerlib.getAvailableEntitlements(UEP, self.consumer['uuid'], all=True)
+            all_subs = managerlib.getAvailableEntitlements(UEP, self.consumer.uuid, all=True)
             self.other = []
             for prod in all_subs:
                 if prod['productId'] not in compatible_pids + matched_pids:
@@ -862,18 +859,12 @@ class AddSubscriptionScreen:
         return self.finish()
 
     def show(self):
-        global consumer
-        if consumer['uuid'] != self.consumer['uuid']:
-            log.info('consumer has changed \nfrom: %s \nto: %s',
-                     self.consumer, consumer)
-            self.consumer = consumer
-            self.subs_changed = True
+        # Reload subscriptions every time this window is opened:
+        for item in [self.compatList, self.availableList, self.matchedList]:
+            item.clear()
+        self.populateSubscriptionLists()
+        self.subs_changed = False
 
-        if self.subs_changed:
-            for item in [self.compatList, self.availableList, self.matchedList]:
-                item.clear()
-            self.populateSubscriptionLists()
-            self.subs_changed = False
         self.addWin.present()
 
     def onSubscribeAction(self, button):
@@ -890,7 +881,7 @@ class AddSubscriptionScreen:
             # state = (bool, iter)
             if state[0]:
                 try:
-                    ent_ret = UEP.bindByEntitlementPool(consumer['uuid'], pool)
+                    ent_ret = UEP.bindByEntitlementPool(self.consumer.uuid, pool)
                     updated_pool = UEP.getPool(ent_ret[0]['pool']['id'])
                     updated_count = str(int(updated_pool['quantity']) -
                             int(updated_pool['consumed']))
@@ -1010,15 +1001,18 @@ class AddSubscriptionScreen:
 
 class UpdateSubscriptionScreen:
 
-    def __init__(self, product_selection, parentWindow):
+    def __init__(self, product_selection, parentWindow, consumer):
         global UEP
+        self.consumer = consumer
 
         self.product_select = product_selection
         self.setHeadMsg()
-        self.updatesList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.updatesList = gtk.TreeStore(gobject.TYPE_BOOLEAN, 
+                gobject.TYPE_STRING, gobject.TYPE_STRING, 
+                gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.available_updates = 0
         try:
-            products = managerlib.getAvailableEntitlements(UEP, consumer['uuid'])
+            products = managerlib.getAvailableEntitlements(UEP, self.consumer.uuid)
             for product in products:
                 if self.product_select in product.values():
                     # Only list selected product's pools
@@ -1105,7 +1099,7 @@ class UpdateSubscriptionScreen:
             # state = (bool, iter)
             if state[0]:
                 try:
-                    ent_ret = UEP.bindByEntitlementPool(consumer['uuid'], pool)
+                    ent_ret = UEP.bindByEntitlementPool(self.consumer.uuid, pool)
                     entitled_data = ent_ret[0]['pool']
                     updated_count = str(int(entitled_data['quantity']) - int(entitled_data['consumed']))
                     my_model.set_value(state[-1], 2, updated_count)

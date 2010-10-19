@@ -22,6 +22,7 @@ class moduleClass(Module, managergui.RegisterScreen):
         Create a new firstboot Module for the 'register' screen.
         """
         Module.__init__(self)
+        self.consumer = managergui.Consumer()
 #        managergui.create_and_set_basic_connection()
         # this value is relative to when you want to load the screen
         # so check other modules before setting

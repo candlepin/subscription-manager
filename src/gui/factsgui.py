@@ -41,7 +41,8 @@ class SystemFactsDialog:
     system facts.
     """
 
-    def __init__(self):
+    def __init__(self, consumer):
+        self.consumer = consumer
         glade = gtk.glade.XML(GLADE_XML)
         glade.signal_autoconnect({
                 "on_system_facts_dialog_delete_event" : self._hide_callback,
@@ -71,7 +72,7 @@ class SystemFactsDialog:
         """Make this dialog visible."""
         # Disable the 'Update' button if there is
         # no registered consumer to update
-        self.update_button.set_sensitive(bool(managergui.consumer))
+        self.update_button.set_sensitive(bool(self.consumer.uuid))
         self.dialog.present()
 
     def hide(self):
@@ -89,7 +90,7 @@ class SystemFactsDialog:
     def update_facts(self):
         """Sends the current system facts to the UEP server."""
         system_facts = facts.getFacts().get_facts()
-        consumer_uuid = managergui.consumer['uuid']
+        consumer_uuid = self.consumer.uuid
 
         try:
             managergui.UEP.updateConsumerFacts(consumer_uuid, system_facts)

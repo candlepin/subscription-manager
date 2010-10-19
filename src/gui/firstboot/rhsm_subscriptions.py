@@ -67,3 +67,17 @@ class moduleClass(Module, managergui.ManageSubscriptionPage):
         Returns a widget by name.
         """
         return managergui.rhsm_xml.get_widget(widget_name)
+
+    def addSubButtonAction(self, button):
+        """
+        Override parent method to always reload the consumer identity when 
+        called.
+
+        This is a minimally slower but gets us past a problem with the core 
+        GUI classes which share a reference to the consumer object. In 
+        firstboot we do not control when these are created or even the order 
+        they are created, and thus cannot easily share a reference to the 
+        consumer.
+        """
+        self.consumer.reload()
+        managergui.ManageSubscriptionPage.addSubButtonAction(self, button)
