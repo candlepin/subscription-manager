@@ -1,3 +1,4 @@
+
 #
 # GUI Module for standalone subscription-manager - 'My Subscriptions' tab
 #
@@ -20,7 +21,7 @@
 import os
 import gtk
 
-import managergui
+from certlib import EntitlementDirectory, ProductDirectory
 
 import logutil
 log = logutil.getLogger(__name__)
@@ -44,14 +45,14 @@ class MySubscriptionsTab:
         self.content = glade.get_widget("content")
 
         # Set up the model
-        self.subscription_store = gtk.ListStore(str, str, str, str, str, str, bool)
+        self.subscription_store = gtk.ListStore(str, str, str, str, str, str)
         self.subscription_view.set_model(self.subscription_store)
 
         text_renderer = gtk.CellRendererText()
 
-        def add_column(name, renderer=text_renderer):
+        def add_column(name):
             column_number = len(self.subscription_view.get_columns())
-            column = gtk.TreeViewColumn(name, renderer, text=column_number)
+            column = gtk.TreeViewColumn(name, text_renderer, text=column_number)
 
             self.subscription_view.append_column(column)
 
@@ -63,33 +64,24 @@ class MySubscriptionsTab:
         add_column(_("Expiration Date"))
         add_column(_("Available Renewals"))
 
-        renew_renderer = gtk.CellRendererToggle()
-        renew_renderer.set_property('activatable', True)
-        renew_renderer.connect('toggled', self.on_renew_click, None)
-
-        add_column(_("Actions"), renderer=renew_renderer)
-
         self.update_subscriptions()
 
-    def on_renew_click(self, cell, path, model):
-        pass
-
     def update_subscriptions(self):
-        # Just short-circuit if we are not registered...
-        if not self.consumer.uuid:
-            return
+        entcerts = EntitlementDirectory().list()
+        for cert in entcerts:
+            order = cert.getOrder()
 
-        pools = managergui.UEP.getPoolsList(self.consumer.uuid)
-
-        for pool in pools:
             subscription = []
-            subscription.append(pool['productName'])
-            subscription.append('%s/%s' % (pool['consumed'], pool['quantity']))
-            subscription.append('Contract...')
-            subscription.append(pool['startDate'])
-            subscription.append(pool['endDate'])
+            subscription.append(order.getName())
+
+            products = cert.getProducts()
+            installed = self._get_installed(products)
+
+            subscription.append('%s/%s' % (len(installed), len(products)))
+            subscription.append(order.getContract())
+            subscription.append(order.getStart())
+            subscription.append(order.getEnd())
             subscription.append('?')
-            subscription.append(True)
 
             self.subscription_store.append(subscription)
 
@@ -98,3 +90,15 @@ class MySubscriptionsTab:
 
     def get_label(self):
         return _("My Subscriptions")
+
+    def _get_installed(self, products):
+        installed_dir = ProductDirectory()
+        installed_products = []
+
+        for product in products:
+            installed = installed_dir.findByProduct(product.getHash())
+
+            if installed:
+                installed_products.append(installed)
+
+        return installed_products
