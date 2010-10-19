@@ -550,14 +550,14 @@ class ManageSubscriptionPage:
             return
         log.info("Proceeding with un-registration: %s", self.consumer.uuid)
         try:
-            managerlib.unregister(UEP, self.consumer.uuid, False)
-            self.consumer.reload()
-            self.mainWin.emit(CONSUMER_SIGNAL)
+            managerlib.unregister(UEP, self.consumer.uuid, True)
         except Exception, e:
             log.error("Error unregistering system with entitlement platform.")
             handle_gui_exception(e, constants.UNREGISTER_ERROR,
                     "Consumer may need to be manually cleaned up: %s" % 
                     self.consumer.uuid)
+        self.consumer.reload()
+        self.mainWin.emit(CONSUMER_SIGNAL)
 
 
 
