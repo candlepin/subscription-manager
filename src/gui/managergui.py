@@ -179,9 +179,9 @@ def handle_gui_exception(e, callback, logMsg = None, showMsg = True):
             errorWindow(callback % linkify(e.msg))
         else:
             if hasattr(callback, '__call__'):
-                errorWindow(_(callback(e)))
+                errorWindow(callback(e))
             else:
-                errorWindow(_(callback)) #just a string
+                errorWindow(callback) #just a string
     return False
 
 
