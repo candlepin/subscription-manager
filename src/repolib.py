@@ -16,6 +16,7 @@
 #
 
 import os
+import string
 from urllib import basejoin
 from config import initConfig
 from certlib import Path, EntitlementDirectory, ActionLock
@@ -40,13 +41,10 @@ class RepoLib:
             lock.release()
 
 
-class Action:
+class UpdateAction:
 
     def __init__(self):
         self.entdir = EntitlementDirectory()
-
-
-class UpdateAction(Action):
 
     def perform(self):
         repod = RepoFile()
@@ -127,9 +125,24 @@ class Repo(dict):
     )
 
     def __init__(self, id):
-        self.id = id
+        self.id = self._clean_id(id)
         for k, m, d in self.PROPERTIES:
             self[k] = d
+
+    def _clean_id(self, id):
+        """
+        Format the config file id to contain only characters that yum expects
+        (we'll just replace 'bad' chars with -)
+        """
+        new_id = ""
+        valid_chars = string.ascii_letters + string.digits + "-_.:"
+        for byte in id:
+            if byte not in valid_chars:
+                new_id += '-'
+            else:
+                new_id += byte
+
+        return new_id
 
     def items(self):
         lst = []

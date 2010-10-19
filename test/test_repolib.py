@@ -13,9 +13,12 @@
 # in this software or its documentation.
 #
 
+import os
 import unittest
 from certlib import Path
-from repolib import *
+from repolib import Repo
+from repolib import RepoFile
+
 
 class RepoFileTests(unittest.TestCase):
 
@@ -33,3 +36,17 @@ class RepoFileTests(unittest.TestCase):
         Path.ROOT = "/"
 
 
+class RepoTests(unittest.TestCase):
+    """
+    Tests for the repolib Repo class
+    """
+
+    def test_valid_label_for_id(self):
+        id = 'valid-label'
+        repo = Repo(id)
+        self.assertEquals(id, repo.id)
+
+    def test_invalid_label_with_spaces(self):
+        id = 'label with spaces'
+        repo = Repo(id)
+        self.assertEquals('label-with-spaces', repo.id)
