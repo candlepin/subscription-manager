@@ -92,6 +92,7 @@ class AllSubscriptionsTab(object):
 
         pools = managerlib.getAvailableEntitlements(self.backend.uep,
                 self.consumer.uuid, self.facts, all=self.include_incompatible())
+        log.debug(pools)
 
         # Filter out products that are not installed if necessary:
         if log.isEnabledFor(logging.debug):

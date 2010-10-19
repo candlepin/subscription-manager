@@ -76,10 +76,10 @@ class MySubscriptionsTab:
 
     def update_subscriptions(self):
         # Just short-circuit if we are not registered...
-        if not managergui.consumer:
+        if not self.consumer.uuid:
             return
 
-        pools = managergui.UEP.getPoolsList(managergui.consumer['uuid'])
+        pools = managergui.UEP.getPoolsList(self.consumer.uuid)
 
         for pool in pools:
             subscription = []
