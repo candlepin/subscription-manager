@@ -87,15 +87,21 @@ class AllSubscriptionsTab(object):
     def load_all_subs(self):
         log.debug("Loading subscriptions.")
         self.subs_store.clear()
-        self.subs_store.append(['RHEL 5', '10', '10,000', '25,000', '1,000'])
-        self.subs_store.append(['RHEL 6', '10', '10,000', '25,000', '1,000'])
 
         pools = managerlib.list_pools(self.backend.uep,
                 self.consumer.uuid, self.facts, all=self.include_incompatible())
-        log.debug(pools)
-        merged_pools = managerlib.merge_pools(pools)
 
         # Filter out products that are not installed if necessary:
+
+        merged_pools = managerlib.merge_pools(pools)
+        for entry in merged_pools.values():
+            self.subs_store.append([
+                entry.product_name, 
+                entry.bundled_products,
+                len(entry.pools),
+                entry.quantity,
+                entry.quantity - entry.consumed,
+        ])
 
     def _add_column(self, name, order):
         column = gtk.TreeViewColumn(name, gtk.CellRendererText(), text=order)
