@@ -214,6 +214,17 @@ def getMatchedSubscriptions(poollist):
     return matched_data_dict.values()
 
 
+def list_pools(uep, consumer_uuid, facts, all=False):
+    """
+    Wrapper around the UEP call to fetch pools, which forces a facts update
+    if anything has changed before making the request. This ensures the
+    rule checks server side will have the most up to date info about the
+    consumer possible.
+    """
+    if facts.delta():
+        uep.updateConsumerFacts(consumer_uuid, facts.get_facts())
+    return uep.getPoolsList(consumer_uuid, all)
+
 def getAvailableEntitlements(cpserver, consumer_uuid, facts, all=False):
     """
     Returns a list of entitlement pools from the server.
@@ -226,10 +237,9 @@ def getAvailableEntitlements(cpserver, consumer_uuid, facts, all=False):
     """
     columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
             'providedProductIds', 'productId']
-    if facts.delta():
-        cpserver.updateConsumerFacts(consumer_uuid, facts.get_facts())
     
-    dlist = cpserver.getPoolsList(consumer_uuid, all)
+    dlist = list_pools(cpserver, consumer_uuid, facts, all)
+
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
         if int(d['quantity']) < 0:
@@ -240,6 +250,59 @@ def getAvailableEntitlements(cpserver, consumer_uuid, facts, all=False):
         d['endDate'] = formatDate(d['endDate'])
         del d['consumed']
     return data
+
+
+class MergedPools(object):
+    """
+    Class to track the view of merged pools for the same product.
+    Used to view total entitlement information across all pools for a
+    particular product.
+    """
+    def __init__(self, product_id, product_name):
+        self.product_id = product_id
+        self.product_name = product_name
+        self.bundled_products = 0
+        self.quantity = 0 # how many entitlements were purchased
+        self.consumed = 0 # how many are in use
+        self.pools = []
+
+    def add_pool(self, pool):
+        # TODO: check if product id and name match?
+
+        self.consumed += pool['consumed']
+        self.quantity += pool['quantity']
+        self.pools.append(pool)
+
+        # This is a little tricky, technically speaking, subscriptions
+        # decide what products they provide, so it *could* vary in some
+        # edge cases from one sub to another even though they are for the
+        # same product. For now we'll just set this value each time a pool
+        # is added and hope they are consistent.
+        self.bundled_products = len(pool['providedProductIds'])
+
+
+def merge_pools(pools):
+    """
+    Merges the given pools into a data structure representing the totals
+    for a particular product, across all pools for that product.
+
+    This provides an overview for a given product, how many total entitlements
+    you have available and in use across all subscriptions for that product.
+
+    Returns a dict mapping product ID to MergedPools object.
+    """
+    # Map product ID to MergedPools object:
+    merged_pools = {}
+
+    for pool in pools:
+        if not merged_pools.has_key(pool['productId']):
+            merged_pools[pool['productId']] = MergedPools(pool['productId'],
+                    pool['productName'])
+        merged_pools[pool['productId']].add_pool(pool)
+
+    # Just return a list of the MergedPools objects, without the product ID
+    # key hashing:
+    return merged_pools
 
 
 def _sub_dict(datadict, subkeys, default=None):
