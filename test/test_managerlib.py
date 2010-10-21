@@ -57,3 +57,61 @@ class MergePoolsTests(unittest.TestCase):
         self.assertEquals(product2, merged_pools.product_id)
         self.assertEquals(10, merged_pools.quantity)
         self.assertEquals(5, merged_pools.consumed)
+
+
+class PoolFilterTests(unittest.TestCase):
+
+    def _setup_installed_products(self, product_ids):
+        """ Simulate a ProductDirectory object for installed product certs. """
+        installed = []
+        for product_id in product_ids:
+            cert_mock = Mock()
+            cert_mock.getProduct().getHash.return_value = product_id
+            installed.append(cert_mock)
+        mock_product_dir = Mock()
+        mock_product_dir.list.return_value = installed
+        return mock_product_dir
+
+    def test_uninstalled_filter_direct_match(self):
+        filter = PoolFilter()
+        product1 = 'product1'
+        product2 = 'product2'
+        filter.product_directory = self._setup_installed_products([product2])
+
+        pools = [
+                create_pool(product1, product1),
+                create_pool(product1, product1),
+                create_pool(product2, product2),
+        ]
+        result = filter.filter_uninstalled(pools)
+        self.assertEquals(1, len(result))
+        self.assertEquals(product2, result[0]['productId'])
+
+    def test_uninstalled_filter_provided_match(self):
+        filter = PoolFilter()
+        product1 = 'product1'
+        product2 = 'product2'
+        provided = 'providedProduct'
+        filter.product_directory = self._setup_installed_products([provided])
+
+        pools = [
+                create_pool(product1, product1),
+                create_pool(product2, product2, provided_products=[provided]),
+        ]
+        result = filter.filter_uninstalled(pools)
+        self.assertEquals(1, len(result))
+        self.assertEquals(product2, result[0]['productId'])
+
+    def test_filter_product_name(self):
+        filter = PoolFilter()
+        product1 = 'Foo Product'
+        product2 = 'Bar Product'
+        filter.product_directory = self._setup_installed_products([])
+
+        pools = [
+                create_pool(product1, product1),
+                create_pool(product2, product2),
+        ]
+        result = filter.filter_product_name(pools, "Foo")
+        self.assertEquals(1, len(result))
+        self.assertEquals(product1, result[0]['productId'])

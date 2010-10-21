@@ -817,7 +817,8 @@ class AddSubscriptionScreen:
         try:
             compatible = managerlib.getAvailableEntitlements(UEP,
                     self.consumer.uuid, self.facts)
-            self.matched = managerlib.getMatchedSubscriptions(compatible)
+            pool_filter = managerlib.PoolFilter()
+            self.matched = pool_filter.filter_uninstalled(compatible)
             matched_pids = []
             for product in self.matched:
                 pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]

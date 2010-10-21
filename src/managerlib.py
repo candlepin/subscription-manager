@@ -197,21 +197,40 @@ def getProductDescription(qproduct):
     return data
 
 
-def getMatchedSubscriptions(poollist):
+class PoolFilter(object):
     """
-    Gets the list of products that matched the list of installed products.
+    Helper to filter a list of pools.
+    """
+    def __init__(self):
+        self.product_directory = ProductDirectory()
 
-    Returns a list of product info _and_ pool info (the id is actually pool id)
-    """
-    installedProducts = ProductDirectory().list()
-    matched_data_dict = {}
-    for d in poollist:
-        for installedProduct in installedProducts:
-            productid = installedProduct.getProduct().getHash()
-            # we only need one matched item per pool id, so add to dict to uniq
-            if str(productid) in d['providedProductIds'] or str(productid) == d['productId']:
-                matched_data_dict[d['id']] = d
-    return matched_data_dict.values()
+    def filter_uninstalled(self, pools):
+        """
+        Filter the given list of pools, removing those which do not provide
+        a product installed on this system.
+        """
+        installed_products = self.product_directory.list()
+        matched_data_dict = {}
+        for d in pools:
+            for product in installed_products:
+                productid = product.getProduct().getHash()
+                # we only need one matched item per pool id, so add to dict to keep unique:
+                if str(productid) in d['providedProductIds'] or \
+                        str(productid) == d['productId']:
+                    matched_data_dict[d['id']] = d
+
+        return matched_data_dict.values()
+
+    def filter_product_name(self, pools, contains_text):
+        """
+        Filter the given list of pools, removing those whose product name
+        does not contain the given text.
+        """
+        filtered_pools = []
+        for pool in pools:
+            if contains_text.lower() in pool['productName'].lower():
+                filtered_pools.append(pool)
+        return filtered_pools
 
 
 def list_pools(uep, consumer_uuid, facts, all=False):
@@ -225,6 +244,9 @@ def list_pools(uep, consumer_uuid, facts, all=False):
         uep.updateConsumerFacts(consumer_uuid, facts.get_facts())
     return uep.getPoolsList(consumer_uuid, all)
 
+# TODO: This method is morphing the actual pool json and returning a new 
+# dict which does not contain all the pool info. Not sure if this is really
+# necessary. Also some "view" specific things going on in here.
 def getAvailableEntitlements(cpserver, consumer_uuid, facts, all=False):
     """
     Returns a list of entitlement pools from the server.

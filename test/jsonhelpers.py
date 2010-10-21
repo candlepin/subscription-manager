@@ -15,7 +15,7 @@
 
 from datetime import timedelta, datetime
 
-def create_pool(product_id, product_name, quantity=10, consumed=0):
+def create_pool(product_id, product_name, quantity=10, consumed=0, provided_products=[]):
     """
     Returns a hash representing a pool. Used to simulate the JSON returned
     from Candlepin.
@@ -32,7 +32,7 @@ def create_pool(product_id, product_name, quantity=10, consumed=0):
             'updated': datetime.now() - timedelta(days=365),
             'created': datetime.now() - timedelta(days=365),
             'activeSubscription': True,
-            'providedProductIds': [],
+            'providedProductIds': provided_products,
             'sourceEntitlement': None,
             'href': '/pools/402881062bc9a379012bc9a4095c00c9',
             'restrictedToUsername': None,
