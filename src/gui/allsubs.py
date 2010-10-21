@@ -91,7 +91,15 @@ class AllSubscriptionsTab(object):
         pools = managerlib.list_pools(self.backend.uep,
                 self.consumer.uuid, self.facts, all=self.include_incompatible())
 
+        pool_filter = managerlib.PoolFilter()
+
         # Filter out products that are not installed if necessary:
+        if not self.include_uninstalled():
+            pools = pool_filter.filter_uninstalled(pools)
+
+        # Filter by product name if necessary:
+        if self.get_filter_text():
+            pools = pool_filter.filter_product_name(pools, self.get_filter_text())
 
         merged_pools = managerlib.merge_pools(pools)
         for entry in merged_pools.values():
