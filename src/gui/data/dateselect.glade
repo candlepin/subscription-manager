@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<glade-interface>
+  <!-- interface-requires gtk+ 2.16 -->
+  <!-- interface-naming-policy project-wide -->
+  <widget class="GtkWindow" id="date_select_window">
+    <property name="window_position">mouse</property>
+    <property name="type_hint">dialog</property>
+    <property name="decorated">False</property>
+    <child>
+      <widget class="GtkCalendar" id="calendar">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="year">2010</property>
+        <property name="month">9</property>
+        <property name="day">21</property>
+        <signal name="day_selected_double_click" handler="on_calendar_day_selected_double_click"/>
+      </widget>
+    </child>
+  </widget>
+</glade-interface>

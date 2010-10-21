@@ -95,9 +95,10 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="entry1">
+                  <widget class="GtkEntry" id="active_on_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="editable">False</property>
                     <property name="invisible_char">&#x25CF;</property>
                   </widget>
                   <packing>
@@ -105,11 +106,13 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkButton" id="button1">
-                    <property name="label" translatable="yes">button</property>
+                  <widget class="GtkButton" id="date_select_button">
+                    <property name="label">gtk-edit</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="use_stock">True</property>
+                    <signal name="clicked" handler="on_date_select_button_clicked"/>
                   </widget>
                   <packing>
                     <property name="position">2</property>

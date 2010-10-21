@@ -1,6 +1,4 @@
 #
-# GUI Module for standalone subscription-manager cli
-#
 # Copyright (c) 2010 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -26,9 +24,11 @@ log = getLogger(__name__)
 import managerlib
 
 from facts import Facts
+from dateselect import DateSelector
 
 prefix = os.path.dirname(__file__)
 ALL_SUBS_GLADE = os.path.join(prefix, "data/allsubs.glade")
+
 
 class AllSubscriptionsTab(object):
 
@@ -40,8 +40,11 @@ class AllSubscriptionsTab(object):
         self.all_subs_xml = gtk.glade.XML(ALL_SUBS_GLADE)
         self.all_subs_vbox = self.all_subs_xml.get_widget('all_subs_vbox')
 
+        self.date_selector = DateSelector(self.active_on_date_changed)
+
         self.all_subs_xml.signal_autoconnect({
             "on_search_button_clicked": self.search_button_clicked,
+            "on_date_select_button_clicked": self.date_select_button_clicked,
         })
 
         self.subs_store = gtk.ListStore(str, str, str, str, str)
@@ -61,6 +64,8 @@ class AllSubscriptionsTab(object):
                 'contains_text_checkbutton')
         self.contains_text_entry = self.all_subs_xml.get_widget(
                 'contain_text_entry')
+
+        self.active_on_entry = self.all_subs_xml.get_widget('active_on_entry')
 
     def include_incompatible(self):
         """ Return True if we're to include pools which failed a rule check. """
@@ -128,3 +133,15 @@ class AllSubscriptionsTab(object):
         log.debug("   include uninstalled = %s" % self.include_uninstalled())
         log.debug("   contains text = %s" % self.get_filter_text())
         self.load_all_subs()
+
+    def date_select_button_clicked(self, widget):
+        self.date_selector.show()
+
+    def active_on_date_changed(self, widget):
+        """
+        Callback for the date selector whenever the user has selected a new
+        active on date.
+        """
+        year, month, day = widget.get_date()
+        month += 1 # this starts at 0
+        self.active_on_entry.set_text("%s-%s-%s" % (year, month, day))
