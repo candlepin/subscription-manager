@@ -545,8 +545,8 @@ class RegisterScreen:
         password = self.passwd.get_text()
         consumername = self.consumer_name.get_text()
 
-        if not consumername:
-            consumername = None
+        if not self.validate_consumername(consumername):
+            return False
 
         facts = getFacts()
         if not self.validate_account():
@@ -603,6 +603,14 @@ class RegisterScreen:
     def auto_subscribe(self):
         self.autobind = registration_xml.get_widget("auto_bind")
         return self.autobind.get_active()
+
+    def validate_consumername(self, consumername):
+        if not consumername:
+            setArrowCursor()
+            errorWindow(_("You must enter a system name."))
+            self.consumer_name.grab_focus()
+            return False
+        return True
 
     def validate_account(self):
         # validate / check user name
