@@ -251,6 +251,7 @@ class RegisterCommand(CliCommand):
                 try:
                     managerlib.unregister(self.cp, old_uuid)
                     log.info("--force specified, un-registered old consumer: %s" % old_uuid)
+                    print(_("The system with UUID %s has been unregistered") % old_uuid)
                 except Exception, e:
                     log.error("Unable to un-register consumer: %s" % old_uuid)
                     log.exception(e)
