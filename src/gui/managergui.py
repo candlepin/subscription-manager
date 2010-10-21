@@ -88,7 +88,7 @@ regtoken_xml = GladeWrapper(os.path.join(prefix,
     "data/regtoken.glade"))
 
 certlib = CertLib()
-ENT_CONFIG_DIR = os.path.join(cfg.get('rhsm', 'entitlementCertDir'), 'product')
+ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
 
 
 

@@ -428,7 +428,7 @@ class EntitlementDirectory(CertificateDirectory):
 
     @classmethod
     def productpath(cls):
-        return Path.join(cls.PATH, cls.PRODUCT)
+         return cls.PATH
 
     def __init__(self):
         CertificateDirectory.__init__(self, self.productpath())
