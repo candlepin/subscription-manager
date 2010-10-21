@@ -18,9 +18,11 @@
 # in this software or its documentation.
 #
 
+import datetime
 import os
 import gtk
 
+from xml.utils.iso8601 import parse
 from certlib import EntitlementDirectory, ProductDirectory
 
 import logutil
@@ -45,7 +47,7 @@ class MySubscriptionsTab:
         self.content = glade.get_widget("content")
 
         # Set up the model
-        self.subscription_store = gtk.ListStore(str, str, str, str, str, str)
+        self.subscription_store = gtk.ListStore(str, str, str, str, str)
         self.subscription_view.set_model(self.subscription_store)
 
         text_renderer = gtk.CellRendererText()
@@ -62,7 +64,6 @@ class MySubscriptionsTab:
         add_column(_("Contract"))
         add_column(_("Start Date"))
         add_column(_("Expiration Date"))
-        add_column(_("Available Renewals"))
 
         self.update_subscriptions()
 
@@ -79,9 +80,8 @@ class MySubscriptionsTab:
 
             subscription.append('%s/%s' % (len(installed), len(products)))
             subscription.append(order.getContract())
-            subscription.append(order.getStart())
-            subscription.append(order.getEnd())
-            subscription.append('?')
+            subscription.append(self._parse_date(order.getStart()))
+            subscription.append(self._parse_date(order.getEnd()))
 
             self.subscription_store.append(subscription)
 
@@ -90,6 +90,12 @@ class MySubscriptionsTab:
 
     def get_label(self):
         return _("My Subscriptions")
+
+    def _parse_date(self, date_string):
+        try:
+            return datetime.date.fromtimestamp(parse(date_string))
+        except:
+            return None
 
     def _get_installed(self, products):
         installed_dir = ProductDirectory()
