@@ -76,8 +76,8 @@ class Restlib(object):
 
         # Setup basic authentication if specified:
         if username and password:
-            encoded = base64.encodestring(':'.join((username, password)))
-            basic = 'Basic %s' % encoded[:-1]
+            encoded = base64.b64encode(':'.join((username, password)))
+            basic = 'Basic %s' % encoded
             self.headers['Authorization'] = basic
 
     def _load_ca_certificates(self, context):
