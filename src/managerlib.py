@@ -240,9 +240,7 @@ class PoolFilter(object):
         filtered_pools = []
         for pool in pools:
             start_date = parse_date(pool['startDate'])
-            print "Start date = %s" % start_date
             end_date = parse_date(pool['endDate'])
-            print "End date = %s" % end_date
             if start_date <= date <= end_date:
                 filtered_pools.append(pool)
         return filtered_pools

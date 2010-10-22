@@ -22,7 +22,7 @@ DATE_SELECT_GLADE = os.path.join(prefix, "data/dateselect.glade")
 
 class DateSelector(object):
 
-    def __init__(self, callback):
+    def __init__(self, callback, initial_date=None):
         """
         Pass callback to be run when a date is selected by the user.
         """
@@ -35,6 +35,12 @@ class DateSelector(object):
         self.date_select_xml.signal_autoconnect({
             "on_calendar_day_selected_double_click": self.date_selected,
         })
+
+        if initial_date:
+            # Note: watchout for the month offset:
+            self.calendar.select_month(initial_date.month - 1,
+                    initial_date.year)
+            self.calendar.select_day(initial_date.day)
 
     def date_selected(self, widget):
         self.hide()

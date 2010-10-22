@@ -41,7 +41,8 @@ class AllSubscriptionsTab(object):
         self.all_subs_xml = gtk.glade.XML(ALL_SUBS_GLADE)
         self.all_subs_vbox = self.all_subs_xml.get_widget('all_subs_vbox')
 
-        self.date_selector = DateSelector(self.active_on_date_changed)
+        today = datetime.date.today()
+        self.date_selector = DateSelector(self.active_on_date_changed, initial_date=today)
 
         self.all_subs_xml.signal_autoconnect({
             "on_search_button_clicked": self.search_button_clicked,
@@ -68,6 +69,9 @@ class AllSubscriptionsTab(object):
 
         self.active_on_checkbutton = self.all_subs_xml.get_widget('active_on_checkbutton')
         self.active_on_entry = self.all_subs_xml.get_widget('active_on_entry')
+
+        # Set the date filter to todays date by default:
+        self.active_on_entry.set_text(today.strftime("%Y-%m-%d"))
 
     def include_incompatible(self):
         """ Return True if we're to include pools which failed a rule check. """
