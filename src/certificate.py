@@ -790,43 +790,39 @@ class Order:
     def getEnd(self):
         return self.ext.get('7')
 
-    def getSubtype(self):
+    def getVirtLimit(self):
         return self.ext.get('8')
 
-    def getVirtLimit(self):
+    def getSocketLimit(self):
         return self.ext.get('9')
 
-    def getSocketLimit(self):
+    def getContract(self):
         return self.ext.get('10')
 
-    def getOptionCode(self):
+    def getQuantityUsed(self):
         return self.ext.get('11')
 
-    def getContract(self):
+    def getWarningPeriod(self):
         return self.ext.get('12')
 
-    def getQuantityUsed(self):
+    def getAccountNumber(self):
         return self.ext.get('13')
-
-    def getWarningPeriod(self):
-        return self.ext.get('14')
 
     def __str__(self):
         s = []
         s.append(_('Order {'))
-        s.append(_('\tName .......... = %s') % self.getName())
-        s.append(_('\tNumber ........ = %s') % self.getNumber())
-        s.append(_('\tSKU ........... = %s') % self.getSku())
-        s.append(_('\tSubscription .. = %s') % self.getSubscription())
-        s.append(_('\tQuantity ...... = %s') % self.getQuantity())
-        s.append(_('\tStart (Ent) ... = %s') % self.getStart())
-        s.append(_('\tEnd (Ent) ..... = %s') % self.getEnd())
-        s.append(_('\tSubtype ....... = %s') % self.getSubtype())
-        s.append(_('\tVirt Limit .... = %s') % self.getVirtLimit())
-        s.append(_('\tSocket Limit .. = %s') % self.getSocketLimit())
-        s.append(_('\tOption Code ... = %s') % self.getOptionCode())
-        s.append(_('\tContract ...... = %s') % self.getContract())
-        s.append(_('\tWarning Period  = %s') % self.getWarningPeriod())
+        s.append(_('\tName ............ = %s') % self.getName())
+        s.append(_('\tNumber .......... = %s') % self.getNumber())
+        s.append(_('\tSKU ............. = %s') % self.getSku())
+        s.append(_('\tSubscription .... = %s') % self.getSubscription())
+        s.append(_('\tQuantity ........ = %s') % self.getQuantity())
+        s.append(_('\tStart (Ent) ..... = %s') % self.getStart())
+        s.append(_('\tEnd (Ent) ....... = %s') % self.getEnd())
+        s.append(_('\tVirt Limit ...... = %s') % self.getVirtLimit())
+        s.append(_('\tSocket Limit .... = %s') % self.getSocketLimit())
+        s.append(_('\tContract ........ = %s') % self.getContract())
+        s.append(_('\tWarning Period .. = %s') % self.getWarningPeriod())
+        s.append(_('\tAccount Number .. = %s') % self.getAccountNumber())
         s.append('}')
         return '\n'.join(s)
 
