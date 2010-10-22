@@ -43,8 +43,14 @@ class MySubscriptionsTab:
         self.consumer = consumer
 
         glade = gtk.glade.XML(GLADE_XML)
-        self.subscription_view = glade.get_widget("subscription_view")
-        self.content = glade.get_widget("content")
+        self._pull_widget(glade, 'subscription_view')
+        self._pull_widget(glade, 'content')
+        self._pull_widget(glade, 'subscription_text')
+        self._pull_widget(glade, 'start_date_text')
+        self._pull_widget(glade, 'expiration_date_text')
+        self._pull_widget(glade, 'contract_number_text')
+
+        self.subscription_view.get_selection().connect('changed', self.update_details)
 
         # Set up the model
         self.subscription_store = gtk.ListStore(str, str, str, str, str)
@@ -66,6 +72,9 @@ class MySubscriptionsTab:
         add_column(_("Expiration Date"))
 
         self.update_subscriptions()
+
+    def _pull_widget(self, glade, name):
+        setattr(self, name, glade.get_widget(name))
 
     def update_subscriptions(self):
         entcerts = EntitlementDirectory().list()
@@ -90,6 +99,20 @@ class MySubscriptionsTab:
 
     def get_label(self):
         return _("My Subscriptions")
+
+    def update_details(self, treeselection):
+        model, tree_iter = treeselection.get_selected()
+        
+        sub = model.get_value(tree_iter, 0)
+        contract = model.get_value(tree_iter, 2)
+        start = model.get_value(tree_iter, 3)
+        end = model.get_value(tree_iter, 4)
+
+        self.subscription_text.get_buffer().set_text(sub)
+        self.contract_number_text.get_buffer().set_text(contract)
+        self.start_date_text.get_buffer().set_text(start)
+        self.expiration_date_text.get_buffer().set_text(end)
+
 
     def _parse_date(self, date_string):
         try:

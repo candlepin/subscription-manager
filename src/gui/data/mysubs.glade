@@ -123,9 +123,10 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkTextView" id="textview1">
+                  <widget class="GtkTextView" id="subscription_text">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="editable">False</property>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -133,9 +134,10 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkTextView" id="textview2">
+                  <widget class="GtkTextView" id="start_date_text">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="editable">False</property>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -145,9 +147,10 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkTextView" id="textview3">
+                  <widget class="GtkTextView" id="expiration_date_text">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="editable">False</property>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -157,9 +160,10 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkTextView" id="textview4">
+                  <widget class="GtkTextView" id="contract_number_text">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="editable">False</property>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
