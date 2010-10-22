@@ -20,11 +20,12 @@ import sys
 import constants
 import shutil
 import xml.utils.iso8601
-from datetime import datetime
+from datetime import datetime, date
 from certlib import CertLib, ConsumerIdentity, \
                     ProductDirectory, EntitlementDirectory
 from logutil import getLogger
 from config import initConfig
+from xml.utils.iso8601 import parse
 
 log = getLogger(__name__)
 
@@ -232,6 +233,20 @@ class PoolFilter(object):
                 filtered_pools.append(pool)
         return filtered_pools
 
+    def filter_active_on(self, pools, date):
+        """
+        Filter out pools which will not be active on the given date.
+        """
+        filtered_pools = []
+        for pool in pools:
+            start_date = parse_date(pool['startDate'])
+            print "Start date = %s" % start_date
+            end_date = parse_date(pool['endDate'])
+            print "End date = %s" % end_date
+            if start_date <= date <= end_date:
+                filtered_pools.append(pool)
+        return filtered_pools
+
 
 def list_pools(uep, consumer_uuid, facts, all=False):
     """
@@ -376,7 +391,9 @@ def check_identity_cert_perms():
             os.chmod(cert, ID_CERT_PERMS)
             log.warn("Corrected incorrect permissions on %s." % cert)
 
-
+def parse_date(date_string):
+    """ Parse and ISO 8601 date string into a Python date. """
+    return date.fromtimestamp(parse(date_string))
 
 if __name__ == '__main__':
     print("\nInstalled Product Status:\n")

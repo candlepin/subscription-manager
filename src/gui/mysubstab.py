@@ -22,8 +22,8 @@ import datetime
 import os
 import gtk
 
-from xml.utils.iso8601 import parse
 from certlib import EntitlementDirectory, ProductDirectory
+from managerlib import parse_date
 
 import logutil
 log = logutil.getLogger(__name__)
@@ -89,8 +89,8 @@ class MySubscriptionsTab:
 
             subscription.append('%s/%s' % (len(installed), len(products)))
             subscription.append(order.getContract())
-            subscription.append(self._parse_date(order.getStart()))
-            subscription.append(self._parse_date(order.getEnd()))
+            subscription.append(parse_date(order.getStart()))
+            subscription.append(parse_date(order.getEnd()))
 
             self.subscription_store.append(subscription)
 
@@ -112,13 +112,6 @@ class MySubscriptionsTab:
         self.contract_number_text.get_buffer().set_text(contract)
         self.start_date_text.get_buffer().set_text(start)
         self.expiration_date_text.get_buffer().set_text(end)
-
-
-    def _parse_date(self, date_string):
-        try:
-            return datetime.date.fromtimestamp(parse(date_string))
-        except:
-            return None
 
     def _get_installed(self, products):
         installed_dir = ProductDirectory()

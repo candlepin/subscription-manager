@@ -13,6 +13,7 @@
 # in this software or its documentation.
 #
 
+import datetime
 import os
 import gtk
 import logging
@@ -65,6 +66,7 @@ class AllSubscriptionsTab(object):
         self.contains_text_entry = self.all_subs_xml.get_widget(
                 'contain_text_entry')
 
+        self.active_on_checkbutton = self.all_subs_xml.get_widget('active_on_checkbutton')
         self.active_on_entry = self.all_subs_xml.get_widget('active_on_entry')
 
     def include_incompatible(self):
@@ -88,6 +90,20 @@ class AllSubscriptionsTab(object):
             if contains_text != "":
                 return contains_text
         return None
+
+    def get_active_on_date(self):
+        """
+        Returns a datetime for the "active on" filter, if one is selected.
+        Otherwise returns None.
+        """
+        if self.active_on_checkbutton.get_active():
+            text = self.active_on_entry.get_text()
+            if text != '':
+                year, month, day = text.split('-')
+                active_on_date = datetime.date(int(year), int(month),
+                        int(day))
+                return active_on_date
+        return None
         
     def load_all_subs(self):
         log.debug("Loading subscriptions.")
@@ -105,6 +121,9 @@ class AllSubscriptionsTab(object):
         # Filter by product name if necessary:
         if self.get_filter_text():
             pools = pool_filter.filter_product_name(pools, self.get_filter_text())
+
+        if self.get_active_on_date():
+            pools = pool_filter.filter_active_on(pools, self.get_active_on_date())
 
         merged_pools = managerlib.merge_pools(pools)
         for entry in merged_pools.values():
