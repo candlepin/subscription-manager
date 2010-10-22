@@ -4,6 +4,8 @@
   <!-- interface-naming-policy project-wide -->
   <widget class="GtkWindow" id="main_window">
     <property name="title" translatable="yes">Subscription Manager</property>
+    <property name="default_width">1024</property>
+    <property name="default_height">768</property>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
