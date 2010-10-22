@@ -307,11 +307,13 @@ file. This command requires, at a minimum, the username and password for an acco
 
 .PP
 For example:
+.RS
 .nf
 subscription-manager-cli register --username=admin --password=secret
 .fi
 
 
+.RE
 .PP
 Some information is assigned automatically. Subscription Manager automatically generates a unique consumer ID for the system which is used by the entitlement service and it assigns a consumer type, which indicates what kinds of software are available for the machine. The name for the consumer entry can be manually assigned (for use within a local inventory system, for instance). A handful of subscriptions (such as specialized servers for content or identity management) have their own specific consumer type. For example:
 .nf
@@ -321,25 +323,32 @@ subscription-manager-cli register --username=admin --password=secret --type=syst
 
 .PP
 If a system is registered and then somehow its entitlement information is lost -- a drive crashes or the certificates are deleted or corrupted -- the system can be reregistered, with all of its subscriptions restored, by registering with the existing consumer ID.
+
+.RS
 .nf
 subscription-manager-cli register --username=admin --password=secret --consumerid=1234abcd
 .fi
+.RE
 
 .PP
 A consumer uses an SSL client certificate (its identity certificate) to authenticate to the entitlements system to check for updates or changes to subscriptions. If the identity certificate is lost or corrupted, it can be regenerated using the 
 .B identity
 command.
+.RS
 .nf
 subscription-manager-cli identity --regenerate --username=admin --password=secret
 .fi
+.RE
 
 .PP
 A machine is unregistered and removed as a consumer from the entitlements service simply by running the 
 .B unregister
 command. Unregistering and unsubscribing a service can free up entitlement subscriptions when a machine is taken offline or moved to a different department. 
+.RS
 .nf
 subscription-manager-cli unregister
 .fi
+.RE
 
 
 .SS SUBSCRIBING AND UNSUBSCRIBING TO PRODUCTS
@@ -356,16 +365,20 @@ Subscribing a machine requires either the registration ID that was given when a 
 option) or the ID for the entitlement pool (the 
 .I --pool
 option). For example:
+.RS
 .nf
 subscription-manager-cli subscribe --email="admin@example.com" --regtoken=XYZ01234567
 subscription-manager-cli subscribe --pool=ff8080812bc382e3012bc3845da100d2
 .fi
+.RE
 
 .PP
 Unsubscribing a machine removes it from the product or entitlement pool, which releases that entitlement subscription it had consumed. The machine remains registered with the entitlement service. Each product has an identifying X.509 certificate installed with it. To unsubscribe from a subscription for a specific product, specify the serial number of the certificate:
+.RS
 .nf
 subscription-manager-cli unsubscribe --serial=1128750306742160
 .fi
+.RE
 
 .PP
 Giving the 
@@ -378,9 +391,11 @@ option unsubscribes the machine from every subscription it has consumed.
 An option with registration, 
 .B --autosubscribe
 , will automatically subscribe the newly-registered system to the entitlements pool which best matches the system architecture and configuration. This option allows the system to be subscribed as part of the registration process, rather than separately managing subscriptions.
+.RS
 .nf
 subscription-manager-cli register --username=admin --password=secret --autosubscribe
 .fi
+.RE
 
 
 .SS UPDATING FACTS
@@ -390,16 +405,20 @@ Subscription Manager uses these facts to determine what purchased entitlements a
 .B facts
 command.
 
+.RS
 .nf
 subscription-manager-cli facts --update
 .fi
+.RE
 
 The collected facts can also be overridden by creating a JSON file in the 
 .B /etc/rhsm/facts/
 directory. These have simple formats that define a fact and value:
+.RS
 .nf
 {"fact1": "value1","fact2": "value2"}
 .fi
+.RE
 
 .PP
 When these fact files are added, running the 
@@ -410,10 +429,12 @@ command will update the collected facts with the new, manual facts or values.
 The 
 .B subscription-manager-cli
 tool can be run as a post-install script as part of the kickstart installation process. This allows entitlement management (registration and subscription) to be automated along with installation. For example:
+.RS
 .nf
 %post --log=/root/ks-post.log
 /usr/sbin/subscription-manager-cli register --username admin --password secret --autosubscribe
 .fi
+.RE
 
 .SS GETTING INFORMATION FROM CERTIFICATES
 Both Subscription Manager and product information is contained in X.509 certificates. To obtain this information, use tools like 
@@ -439,7 +460,6 @@ Certificate:
                 Public-Key: (2048 bit)
                 Modulus:
                     00:cd:22:86:2b:77:1b:40:b2:be:8e:06:8e:b8:df:
----- snip ----
 .fi
 
 
