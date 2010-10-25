@@ -43,12 +43,14 @@ class MySubscriptionsTab:
         self.consumer = consumer
 
         glade = gtk.glade.XML(GLADE_XML)
-        self._pull_widget(glade, 'subscription_view')
-        self._pull_widget(glade, 'content')
-        self._pull_widget(glade, 'subscription_text')
-        self._pull_widget(glade, 'start_date_text')
-        self._pull_widget(glade, 'expiration_date_text')
-        self._pull_widget(glade, 'contract_number_text')
+
+        widget_names = ['subscription_view',
+                        'content',
+                        'subscription_text',
+                        'start_date_text',
+                        'expiration_date_text',
+                        'contract_number_text']
+        self._pull_widgets(glade, widget_names)
 
         self.subscription_view.get_selection().connect('changed', self.update_details)
 
@@ -73,8 +75,9 @@ class MySubscriptionsTab:
 
         self.update_subscriptions()
 
-    def _pull_widget(self, glade, name):
-        setattr(self, name, glade.get_widget(name))
+    def _pull_widgets(self, glade, names):
+        for name in names:
+            setattr(self, name, glade.get_widget(name))
 
     def update_subscriptions(self):
         entcerts = EntitlementDirectory().list()
@@ -102,7 +105,8 @@ class MySubscriptionsTab:
 
     def update_details(self, treeselection):
         model, tree_iter = treeselection.get_selected()
-        
+
+        # TODO:  Do something about these magic numbers!
         sub = model.get_value(tree_iter, 0)
         contract = model.get_value(tree_iter, 2)
         start = model.get_value(tree_iter, 3)
