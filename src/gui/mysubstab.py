@@ -55,23 +55,25 @@ class MySubscriptionsTab:
         self.subscription_view.get_selection().connect('changed', self.update_details)
 
         # Set up the model
-        self.subscription_store = gtk.ListStore(str, str, str, str, str)
+        self.subscription_store = gtk.ListStore(str, float, str, str, str, str)
         self.subscription_view.set_model(self.subscription_store)
 
         text_renderer = gtk.CellRendererText()
 
-        def add_column(name):
-            column_number = len(self.subscription_view.get_columns())
+        def add_column(name, column_number):
             column = gtk.TreeViewColumn(name, text_renderer, text=column_number)
-
             self.subscription_view.append_column(column)
 
         # Set up columns on the view
-        add_column(_("Subscription"))
-        add_column(_("Installed Products"))
-        add_column(_("Contract"))
-        add_column(_("Start Date"))
-        add_column(_("Expiration Date"))
+        add_column(_("Subscription"), 0)
+        products_column = gtk.TreeViewColumn(_("Installed Products"), \
+                                             gtk.CellRendererProgress(), \
+                                             value=1, text=2)
+        self.subscription_view.append_column(products_column)
+
+        add_column(_("Contract"), 3)
+        add_column(_("Start Date"), 4)
+        add_column(_("Expiration Date"), 5)
 
         self.update_subscriptions()
 
@@ -81,6 +83,7 @@ class MySubscriptionsTab:
 
     def update_subscriptions(self):
         entcerts = EntitlementDirectory().list()
+
         for cert in entcerts:
             order = cert.getOrder()
 
@@ -90,7 +93,8 @@ class MySubscriptionsTab:
             products = cert.getProducts()
             installed = self._get_installed(products)
 
-            subscription.append('%s/%s' % (len(installed), len(products)))
+            subscription.append(float(len(installed)) / len(products))
+            subscription.append('%s / %s' % (len(installed), len(products)))
             subscription.append(order.getContract())
             subscription.append(parse_date(order.getStart()))
             subscription.append(parse_date(order.getEnd()))
