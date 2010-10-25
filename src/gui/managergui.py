@@ -154,6 +154,7 @@ def show_register_screen(consumer, facts):
         register_screen.show()
     else:
         register_screen = RegisterScreen(consumer, facts)
+        register_screen.show()
 
 
 def show_regtoken_screen(consumer, facts):
@@ -202,6 +203,10 @@ class MainWindow(object):
         self.main_window = self.main_window_xml.get_widget('main_window')
         self.notebook = self.main_window_xml.get_widget('notebook')
 
+        self.system_facts_dialog = factsgui.SystemFactsDialog(self.consumer,
+                self.facts)
+        self.registration_dialog = RegisterScreen(self.consumer, self.facts)
+
         tab_classes = [mysubstab.MySubscriptionsTab, AllSubscriptionsTab]
 
         # Populate the tabs dynamically
@@ -215,13 +220,16 @@ class MainWindow(object):
             
         self.main_window_xml.signal_autoconnect({
             "on_registration_button_clicked": self.registration_button_clicked,
+            "on_facts_button_clicked": self.facts_button_clicked,
         })
 
         self.main_window.show_all()
 
     def registration_button_clicked(self, widget):
-        show_register_screen(self.consumer, self.facts)
+        self.registration_dialog.show()
 
+    def facts_button_clicked(self, widget):
+        self.system_facts_dialog.show()
 
 
 class ManageSubscriptionPage:
@@ -588,8 +596,6 @@ class RegisterScreen:
         self.registerWin.connect("hide", self.cancel)
         self.registerWin.connect("delete_event", self.delete_event)
         self.initializeConsumerName()
-
-        self.registerWin.run()
 
     def show(self):
         self.registerWin.present()
