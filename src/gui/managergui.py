@@ -195,6 +195,7 @@ class MainWindow(object):
             cert_file=ConsumerIdentity.certpath(), 
             key_file=ConsumerIdentity.keypath()))
         self.consumer = Consumer()
+        self.facts = Facts()
         
         self.main_window_xml = GladeWrapper(os.path.join(prefix, 
             "data/mainwindow.glade"))
@@ -205,14 +206,22 @@ class MainWindow(object):
 
         # Populate the tabs dynamically
         for tab_class in tab_classes:
-            tab = tab_class(self.backend, self.consumer)
+            tab = tab_class(self.backend, self.consumer, self.facts)
 
             content = tab.get_content()
             content.unparent()
 
             self.notebook.append_page(content, gtk.Label(tab.get_label()))
             
+        self.main_window_xml.signal_autoconnect({
+            "on_registration_button_clicked": self.registration_button_clicked,
+        })
+
         self.main_window.show_all()
+
+    def registration_button_clicked(self, widget):
+        show_register_screen(self.consumer, self.facts)
+
 
 
 class ManageSubscriptionPage:

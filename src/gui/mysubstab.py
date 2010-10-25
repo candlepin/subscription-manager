@@ -38,7 +38,7 @@ GLADE_XML = os.path.join(DIR, "data/mysubs.glade")
 
 class MySubscriptionsTab:
 
-    def __init__(self, backend, consumer):
+    def __init__(self, backend, consumer, facts):
         self.backend = backend
         self.consumer = consumer
 

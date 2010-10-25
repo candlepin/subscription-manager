@@ -33,10 +33,10 @@ ALL_SUBS_GLADE = os.path.join(prefix, "data/allsubs.glade")
 
 class AllSubscriptionsTab(object):
 
-    def __init__(self, backend, consumer):
+    def __init__(self, backend, consumer, facts):
         self.backend = backend
         self.consumer = consumer
-        self.facts = Facts()
+        self.facts = facts
 
         self.all_subs_xml = gtk.glade.XML(ALL_SUBS_GLADE)
         self.all_subs_vbox = self.all_subs_xml.get_widget('all_subs_vbox')
