@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.92.1
+Version: 0.92.2
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -179,6 +179,20 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Mon Oct 25 2010 Devan Goodwin <dgoodwin@redhat.com> 0.92.2-1
+- Resolves: #644431,#645347,#645347,#645378,#645372,#617662,#613709
+- Update the new settings (bkearney@redhat.com)
+- 644431: Man page updates (bkearney@redhat.com)
+- 645347: Long usernames caused httpd server to reject the request.
+  (bkearney@redhat.com)
+- 645378: do not allow empty system names on registration (alikins@redhat.com)
+- 645372: better logging during a force register to say what is going on
+  (bkearney@redhat.com)
+- 617662: Add a config value for the default yum repo ca cert location
+  (jbowes@redhat.com)
+- 613709: Munge product labels so we always have a valid repo id
+  (jbowes@redhat.com)
+
 * Mon Oct 18 2010 Devan Goodwin <dgoodwin@redhat.com> 0.92.1-1
 - Resolves: #627962,#642705,#643402,#642997,#642661,#643054
 - Switch to webqa in default rhsm.conf. (dgoodwin@redhat.com)
