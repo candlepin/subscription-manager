@@ -93,7 +93,7 @@ class MySubscriptionsTab:
             products = cert.getProducts()
             installed = self._get_installed(products)
 
-            subscription.append(float(len(installed)) / len(products))
+            subscription.append(self._calculate_percentage(installed, products))
             subscription.append('%s / %s' % (len(installed), len(products)))
             subscription.append(order.getContract())
             subscription.append(parse_date(order.getStart()))
@@ -120,6 +120,9 @@ class MySubscriptionsTab:
         self.contract_number_text.get_buffer().set_text(contract)
         self.start_date_text.get_buffer().set_text(start)
         self.expiration_date_text.get_buffer().set_text(end)
+
+    def _calculate_percentage(self, subset, full_set):
+        return (float(len(subset)) / len(full_set)) * 100
 
     def _get_installed(self, products):
         installed_dir = ProductDirectory()
