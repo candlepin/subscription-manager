@@ -458,7 +458,6 @@ class ManageSubscriptionPage:
                 log.info("This machine is now unsubscribed from Product %s " \
                           % self.pname_selected)
                 if self.add_subscription_screen:
-                    print self.add_subscription_screen
                     self.add_subscription_screen.subs_changed = True
 
             except Exception, e:
@@ -834,11 +833,8 @@ class AddSubscriptionScreen:
             if state[0]:
                 try:
                     ent_ret = UEP.bindByEntitlementPool(consumer['uuid'], pool)
-                    updated_pool = UEP.getPool(ent_ret[0]['pool']['id'])
-                    updated_count = str(int(updated_pool['quantity']) -
-                            int(updated_pool['consumed']))
+
                     my_model = state[3]
-                    my_model.set_value(state[2], 2, updated_count)
 
                     # unselect the row
                     my_model.set_value(state[2], 0, False)
