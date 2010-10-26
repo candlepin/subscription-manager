@@ -190,7 +190,6 @@ class MainWindow(object):
     """
     The new RHSM main window.
     """
-
     def __init__(self):
         self.backend = Backend(connection.UEPConnection(
             cert_file=ConsumerIdentity.certpath(), 
@@ -202,6 +201,12 @@ class MainWindow(object):
             "data/mainwindow.glade"))
         self.main_window = self.main_window_xml.get_widget('main_window')
         self.notebook = self.main_window_xml.get_widget('notebook')
+        self.compliance_count_label = self.main_window_xml.get_widget(
+                'compliance_count_label')
+        self.compliance_status_label = self.main_window_xml.get_widget(
+                'compliance_status_label')
+        self.compliance_status_image = self.main_window_xml.get_widget(
+                'compliance_status_image')
 
         self.system_facts_dialog = factsgui.SystemFactsDialog(self.consumer,
                 self.facts)
@@ -223,6 +228,8 @@ class MainWindow(object):
             "on_facts_button_clicked": self.facts_button_clicked,
         })
 
+        self.set_compliance_status()
+
         self.main_window.show_all()
 
     def registration_button_clicked(self, widget):
@@ -230,6 +237,33 @@ class MainWindow(object):
 
     def facts_button_clicked(self, widget):
         self.system_facts_dialog.show()
+
+    def set_compliance_status(self):
+        """ Updates the compliance status portion of the UI. """
+        # Look for products which are out of compliance:
+        warn_count = 0
+        for product in managerlib.getInstalledProductStatus():
+            if product[1] in ["Expired", "Not Subscribed"]:
+                warn_count += 1
+        if warn_count > 0:
+            self.compliance_status_image.set_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_BUTTON)
+            self.compliance_count_label.set_markup(
+                    '<span size="large"><b>%s</b></span>' % str(warn_count))
+            # Change wording slightly if just one product out of compliance:
+            if warn_count > 1:
+                self.compliance_status_label.set_text(
+                        _("You have %s products which are out of compliance.")
+                        % warn_count)
+            else:
+                self.compliance_status_label.set_text(
+                        _("You have 1 product which is out of compliance.") )
+
+        else:
+            self.compliance_status_image.set_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_BUTTON)
+            self.compliance_count_label.set_text("")
+            self.compliance_status_label.set_text(
+                    _("Your system is compliant.") )
+
 
 
 class ManageSubscriptionPage:
