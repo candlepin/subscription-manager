@@ -180,7 +180,7 @@ fi
 
 %changelog
 * Tue Oct 26 2010 jesus m. rodriguez <jesusr@redhat.com> 0.92.5-1
-- Resolves: #646431, #646916, #646557
+- Resolves: #646431, #646916
 - remove extra changelog message (jesusr@redhat.com)
 
 * Tue Oct 26 2010 jesus m. rodriguez <jesusr@redhat.com> 0.92.4-1
