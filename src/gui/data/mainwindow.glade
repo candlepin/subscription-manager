@@ -21,6 +21,7 @@
             <property name="visible">True</property>
             <child>
               <widget class="GtkNotebook" id="notebook">
+                <property name="width_request">824</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <child>
@@ -57,7 +58,7 @@
             </child>
             <child>
               <widget class="GtkVBox" id="vbox2">
-                <property name="width_request">50</property>
+                <property name="width_request">200</property>
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">100</property>
@@ -107,8 +108,11 @@
                             </child>
                             <child>
                               <widget class="GtkLabel" id="compliance_status_label">
+                                <property name="width_request">200</property>
                                 <property name="visible">True</property>
                                 <property name="label" translatable="yes">You have one product which is out of compliance.</property>
+                                <property name="wrap">True</property>
+                                <property name="wrap_mode">word-char</property>
                               </widget>
                               <packing>
                                 <property name="position">1</property>
@@ -128,8 +132,11 @@
                             </child>
                             <child>
                               <widget class="GtkLabel" id="label5">
+                                <property name="width_request">200</property>
                                 <property name="visible">True</property>
                                 <property name="label" translatable="yes">Why is compliance important?</property>
+                                <property name="wrap">True</property>
+                                <property name="wrap_mode">word-char</property>
                               </widget>
                               <packing>
                                 <property name="position">3</property>
