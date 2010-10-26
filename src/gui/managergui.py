@@ -937,6 +937,10 @@ class AddSubscriptionScreen:
             pwin.setProgress(count, len(self.selected.items()))
 
         show_busted_subs(busted_subs)
+
+        # Signal to refresh the Add Subscriptions page on next show:
+        self.subs_changed = True
+
         # Force fetch all certs
         if not fetch_certificates():
             return
