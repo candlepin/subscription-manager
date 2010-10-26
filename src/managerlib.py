@@ -389,10 +389,6 @@ def check_identity_cert_perms():
             os.chmod(cert, ID_CERT_PERMS)
             log.warn("Corrected incorrect permissions on %s." % cert)
 
-def parse_date(date_string):
-    """ Parse and ISO 8601 date string into a Python date. """
-    return date.fromtimestamp(parse(date_string))
-
 if __name__ == '__main__':
     print("\nInstalled Product Status:\n")
     print getInstalledProductStatus()

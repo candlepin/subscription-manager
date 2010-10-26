@@ -23,7 +23,7 @@ import os
 import gtk
 
 from certlib import EntitlementDirectory, ProductDirectory
-from managerlib import parse_date
+from managerlib import formatDate
 
 from productstable import ProductsTable
 
@@ -101,8 +101,8 @@ class MySubscriptionsTab:
             subscription.append(self._calculate_percentage(installed, products))
             subscription.append('%s / %s' % (len(installed), len(products)))
             subscription.append(order.getContract())
-            subscription.append(parse_date(order.getStart()))
-            subscription.append(parse_date(order.getEnd()))
+            subscription.append(formatDate(order.getStart()))
+            subscription.append(formatDate(order.getEnd()))
 
             self.subscription_store.append(subscription)
 
