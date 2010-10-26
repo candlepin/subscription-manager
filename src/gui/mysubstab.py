@@ -25,6 +25,8 @@ import gtk
 from certlib import EntitlementDirectory, ProductDirectory
 from managerlib import parse_date
 
+from productstable import ProductsTable
+
 import logutil
 log = logutil.getLogger(__name__)
 
@@ -49,7 +51,8 @@ class MySubscriptionsTab:
                         'subscription_text',
                         'start_date_text',
                         'expiration_date_text',
-                        'contract_number_text']
+                        'contract_number_text',
+                        'products_view']
         self._pull_widgets(glade, widget_names)
 
         self.subscription_view.get_selection().connect('changed', self.update_details)
@@ -74,6 +77,8 @@ class MySubscriptionsTab:
         add_column(_("Contract"), 3)
         add_column(_("Start Date"), 4)
         add_column(_("Expiration Date"), 5)
+
+        self.products_table = ProductsTable(self.products_view)
 
         self.update_subscriptions()
 
