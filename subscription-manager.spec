@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.92.2
+Version: 0.92.4
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -179,6 +179,16 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Oct 26 2010 jesus m. rodriguez <jesusr@redhat.com> 0.92.4-1
+- 646431: Fix missing refresh for add screen. (dgoodwin@redhat.com)
+- 646916: Enable the plugin by default (bkearney@redhat.com)
+- 646557: remove extraneous "user service" in the selector (alikins@redhat.com)
+
+* Tue Oct 26 2010 jesus m. rodriguez <jesusr@redhat.com>
+- 646431: Fix missing refresh for add screen. (dgoodwin@redhat.com)
+- 646916: Enable the plugin by default (bkearney@redhat.com)
+- 646557: remove extraneous "user service" in the selector (alikins@redhat.com)
+
 * Mon Oct 25 2010 Devan Goodwin <dgoodwin@redhat.com> 0.92.2-1
 - Resolves: #644431,#645347,#645347,#645378,#645372,#617662,#613709
 - Update the new settings (bkearney@redhat.com)
