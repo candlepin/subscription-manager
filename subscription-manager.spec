@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.92.4
+Version: 0.92.5
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -179,6 +179,10 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Oct 26 2010 jesus m. rodriguez <jesusr@redhat.com> 0.92.5-1
+- Resolves: #646431, #646916, #646557
+- remove extra changelog message (jesusr@redhat.com)
+
 * Tue Oct 26 2010 jesus m. rodriguez <jesusr@redhat.com> 0.92.4-1
 - 646431: Fix missing refresh for add screen. (dgoodwin@redhat.com)
 - 646916: Enable the plugin by default (bkearney@redhat.com)
