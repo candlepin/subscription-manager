@@ -25,6 +25,7 @@ log = getLogger(__name__)
 import managerlib
 
 from facts import Facts
+from mysubstab import SubDetailsWidget
 from dateselect import DateSelector
 
 prefix = os.path.dirname(__file__)
@@ -44,12 +45,7 @@ class AllSubscriptionsTab(object):
         today = datetime.date.today()
         self.date_selector = DateSelector(self.active_on_date_changed, initial_date=today)
 
-        self.all_subs_xml.signal_autoconnect({
-            "on_search_button_clicked": self.search_button_clicked,
-            "on_date_select_button_clicked": self.date_select_button_clicked,
-        })
-
-        self.subs_store = gtk.ListStore(str, str, str, str, str)
+        self.subs_store = gtk.ListStore(str, str, str, str, str, str)
         self.subs_treeview = self.all_subs_xml.get_widget('all_subs_treeview')
         self.subs_treeview.set_model(self.subs_store)
         self._add_column(_("Subscription"), 0)
@@ -66,12 +62,21 @@ class AllSubscriptionsTab(object):
                 'contains_text_checkbutton')
         self.contains_text_entry = self.all_subs_xml.get_widget(
                 'contain_text_entry')
+        self.sub_details = SubDetailsWidget()
+        self.all_subs_vbox.pack_end(self.sub_details.get_widget())
 
         self.active_on_checkbutton = self.all_subs_xml.get_widget('active_on_checkbutton')
         self.active_on_entry = self.all_subs_xml.get_widget('active_on_entry')
 
         # Set the date filter to todays date by default:
         self.active_on_entry.set_text(today.strftime("%Y-%m-%d"))
+
+        self.all_subs_xml.signal_autoconnect({
+            "on_search_button_clicked": self.search_button_clicked,
+            "on_date_select_button_clicked": self.date_select_button_clicked,
+        })
+        self.subs_treeview.get_selection().connect('changed', self.update_sub_details)
+
 
     def include_incompatible(self):
         """ Return True if we're to include pools which failed a rule check. """
@@ -137,6 +142,7 @@ class AllSubscriptionsTab(object):
                 len(entry.pools),
                 entry.quantity,
                 entry.quantity - entry.consumed,
+                entry.product_id,
         ])
 
     def _add_column(self, name, order):
@@ -168,3 +174,10 @@ class AllSubscriptionsTab(object):
         year, month, day = widget.get_date()
         month += 1 # this starts at 0
         self.active_on_entry.set_text("%s-%s-%s" % (year, month, day))
+
+    def update_sub_details(self, widget):
+        model, tree_iter = widget.get_selected()
+        if tree_iter:
+            product_name = model.get_value(tree_iter, 0)
+            self.sub_details.show(product_name)
+

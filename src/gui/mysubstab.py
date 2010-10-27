@@ -56,16 +56,22 @@ class SubDetailsWidget:
 
         self.bundled_products = ProductsTable(self.bundled_products_view)
 
-    def show(self, name, contract, start, end):
+    def show(self, name, contract=None, start=None, end=None, 
+            bundled_products=None):
         """ 
         Show subscription details. 
         
         Start and end should be formatted strings, not actual date objects.
         """
         self.subscription_text.get_buffer().set_text(name)
-        self.contract_number_text.get_buffer().set_text(contract)
-        self.start_date_text.get_buffer().set_text(start)
-        self.expiration_date_text.get_buffer().set_text(end)
+        if contract:
+            self.contract_number_text.get_buffer().set_text(contract)
+        if start:
+            self.start_date_text.get_buffer().set_text(start)
+        if end:
+            self.expiration_date_text.get_buffer().set_text(end)
+
+        # TODO: handle bundled products
 
     def clear(self):
         """ No subscription to display. """
