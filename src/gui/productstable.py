@@ -20,7 +20,7 @@
 
 import gtk
 
-from certlib import EntitlementDirectory, ProductDirectory
+from certlib import ProductDirectory
 
 import logutil
 log = logutil.getLogger(__name__)
@@ -32,32 +32,52 @@ gtk.glade.bindtextdomain("subscription-manager")
 
 class ProductsTable:
 
-    def __init__(self, table_widget, yes_id=gtk.STOCK_APPLY, no_id=gtk.STOCK_REMOVE):
-        self.table_widget = table_widget
-        self.yes_icon = self._render_icon(yes_id)
-        self.no_icon = self._render_icon(no_id)
+    def __init__(self, table_widget, yes_id=gtk.STOCK_APPLY, 
+                 no_id=gtk.STOCK_REMOVE):
+        """
+        Create a new products table, populating the gtk.TreeView.
 
-        self.product_store = gtk.ListStore(str, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf)
+        yes_id and no_id are GTK constants that specify the icon to
+        use for representing if a product is installed.
+        """
+
+        self.table_widget = table_widget
+        self.product_store = gtk.ListStore(str, gtk.gdk.Pixbuf)
         table_widget.set_model(self.product_store)
 
-        name_column = gtk.TreeViewColumn(_("Product"), \
-                                         gtk.CellRendererText(), \
+        self.yes_icon = self._render_icon(yes_id)
+        self.no_icon = self._render_icon(no_id)
+        self.product_dir = ProductDirectory()
+
+        name_column = gtk.TreeViewColumn(_("Product"),
+                                         gtk.CellRendererText(),
                                          text=0)
         name_column.set_expand(True)
-
-        pix_renderer = gtk.CellRendererPixbuf()
-        installed_column = gtk.TreeViewColumn(_("Installed"), pix_renderer, pixbuf=1)
-        hardware_column = gtk.TreeViewColumn(_("H/W Compatible"), pix_renderer, pixbuf=2)
+        installed_column = gtk.TreeViewColumn(_("Installed"), 
+                                              gtk.CellRendererPixbuf(), 
+                                              pixbuf=1)
 
         table_widget.append_column(name_column)
         table_widget.append_column(installed_column)
-        table_widget.append_column(hardware_column)
 
-        # Temp sample data
-        self.product_store.append(['Some Product', self.no_icon, self.yes_icon])
-        self.product_store.append(['Another', self.no_icon, self.no_icon])
-        self.product_store.append(['Installed Product', self.yes_icon, self.yes_icon])
+    def clear(self):
+        """
+        Remove all products from the table.
+        """
+        self.product_store.clear()
 
+    def add_product(self, product_name, product_id):
+        """
+        Add a product with the given name and id (hash) to the table.
+        """
+        self.product_store.append([product_name, self._get_icon(product_id)])
+    
     def _render_icon(self, icon_id):
         return self.table_widget.render_icon(icon_id, gtk.ICON_SIZE_MENU)
+
+    def _get_icon(self, product_id):
+        if self.product_dir.findByProduct(product_id):
+            return self.yes_icon
+        else:
+            return self.no_icon
         

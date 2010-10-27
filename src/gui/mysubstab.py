@@ -56,12 +56,13 @@ class SubDetailsWidget:
 
         self.bundled_products = ProductsTable(self.bundled_products_view)
 
-    def show(self, name, contract=None, start=None, end=None, 
-            bundled_products=None):
+
+    def show(self, name, contract=None, start=None, end=None, products=[]):
         """ 
         Show subscription details. 
         
         Start and end should be formatted strings, not actual date objects.
+        Products is a list of tuples (or lists) of the form (name, id)
         """
         self.subscription_text.get_buffer().set_text(name)
         if contract:
@@ -72,6 +73,10 @@ class SubDetailsWidget:
             self.expiration_date_text.get_buffer().set_text(end)
 
         # TODO: handle bundled products
+
+        self.bundled_products.clear()
+        for product in products:
+            self.bundled_products.add_product(product[0], product[1])
 
     def clear(self):
         """ No subscription to display. """
@@ -130,7 +135,6 @@ class MySubscriptionsTab:
         entcerts = EntitlementDirectory().list()
 
         for cert in entcerts:
-            print cert.serialNumber()
             order = cert.getOrder()
 
             subscription = []
@@ -161,9 +165,13 @@ class MySubscriptionsTab:
         serial = model.get_value(tree_iter, 6)
         cert = EntitlementDirectory().find(int(serial))
         order = cert.getOrder()
-        self.sub_details.show(order.getName(), contract=order.getContract() or "", 
-                start=str(formatDate(order.getStart())), 
-                end=str(formatDate(order.getEnd())))
+        products = [(product.getName(), product.getHash()) for product in cert.getProducts()]
+
+        self.sub_details.show(order.getName(), 
+                              contract=order.getContract() or "", 
+                              start=str(formatDate(order.getStart())), 
+                              end=str(formatDate(order.getEnd())),
+                              products=products)
 
     def _calculate_percentage(self, subset, full_set):
         return (float(len(subset)) / len(full_set)) * 100
