@@ -368,6 +368,7 @@ class CertificateDirectory(Directory):
         return expired
 
     def find(self, sn):
+        # TODO: could optimize to just load SERIAL.pem? Maybe not in all cases.
         for c in self.list():
             if c.serialNumber() == sn:
                 return c

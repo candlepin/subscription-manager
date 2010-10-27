@@ -37,6 +37,44 @@ gtk.glade.bindtextdomain("subscription-manager")
 
 DIR = os.path.dirname(__file__)
 GLADE_XML = os.path.join(DIR, "data/mysubs.glade")
+SUB_DETAILS_XML = os.path.join(DIR, "data/subdetails.glade")
+
+
+class SubDetailsWidget:
+
+    def __init__(self):
+        # TODO: move to a separate glade file?
+        glade = gtk.glade.XML(SUB_DETAILS_XML)
+        self.main_widget = glade.get_widget('sub_details_vbox')
+        self.main_widget.unparent()
+
+        self.subscription_text = glade.get_widget('subscription_text')
+        self.contract_number_text = glade.get_widget('contract_number_text')
+        self.start_date_text = glade.get_widget('start_date_text')
+        self.expiration_date_text = glade.get_widget('expiration_date_text')
+        self.bundled_products_view = glade.get_widget('products_view')
+
+        self.bundled_products = ProductsTable(self.bundled_products_view)
+
+    def show(self, name, contract, start, end):
+        """ 
+        Show subscription details. 
+        
+        Start and end should be formatted strings, not actual date objects.
+        """
+        self.subscription_text.get_buffer().set_text(name)
+        self.contract_number_text.get_buffer().set_text(contract)
+        self.start_date_text.get_buffer().set_text(start)
+        self.expiration_date_text.get_buffer().set_text(end)
+
+    def clear(self):
+        """ No subscription to display. """
+        pass
+
+    def get_widget(self):
+        """ Returns the widget to be packed into a parent window. """
+        return self.main_widget
+
 
 class MySubscriptionsTab:
 
@@ -48,17 +86,15 @@ class MySubscriptionsTab:
 
         widget_names = ['subscription_view',
                         'content',
-                        'subscription_text',
-                        'start_date_text',
-                        'expiration_date_text',
-                        'contract_number_text',
-                        'products_view']
+        ]
         self._pull_widgets(glade, widget_names)
+        self.sub_details = SubDetailsWidget()
+        self.content.pack_end(self.sub_details.get_widget())
 
         self.subscription_view.get_selection().connect('changed', self.update_details)
 
         # Set up the model
-        self.subscription_store = gtk.ListStore(str, float, str, str, str, str)
+        self.subscription_store = gtk.ListStore(str, float, str, str, str, str, str)
         self.subscription_view.set_model(self.subscription_store)
 
         text_renderer = gtk.CellRendererText()
@@ -78,8 +114,6 @@ class MySubscriptionsTab:
         add_column(_("Start Date"), 4)
         add_column(_("Expiration Date"), 5)
 
-        self.products_table = ProductsTable(self.products_view)
-
         self.update_subscriptions()
 
     def _pull_widgets(self, glade, names):
@@ -90,6 +124,7 @@ class MySubscriptionsTab:
         entcerts = EntitlementDirectory().list()
 
         for cert in entcerts:
+            print cert.serialNumber()
             order = cert.getOrder()
 
             subscription = []
@@ -103,6 +138,7 @@ class MySubscriptionsTab:
             subscription.append(order.getContract())
             subscription.append(formatDate(order.getStart()))
             subscription.append(formatDate(order.getEnd()))
+            subscription.append(cert.serialNumber())
 
             self.subscription_store.append(subscription)
 
@@ -115,16 +151,13 @@ class MySubscriptionsTab:
     def update_details(self, treeselection):
         model, tree_iter = treeselection.get_selected()
 
-        # TODO:  Do something about these magic numbers!
-        sub = model.get_value(tree_iter, 0)
-        contract = model.get_value(tree_iter, 2)
-        start = model.get_value(tree_iter, 3)
-        end = model.get_value(tree_iter, 4)
-
-        self.subscription_text.get_buffer().set_text(sub)
-        self.contract_number_text.get_buffer().set_text(contract)
-        self.start_date_text.get_buffer().set_text(start)
-        self.expiration_date_text.get_buffer().set_text(end)
+        # Load the entitlement certificate for the selected row:
+        serial = model.get_value(tree_iter, 6)
+        cert = EntitlementDirectory().find(int(serial))
+        order = cert.getOrder()
+        self.sub_details.show(order.getName(), contract=order.getContract() or "", 
+                start=str(formatDate(order.getStart())), 
+                end=str(formatDate(order.getEnd())))
 
     def _calculate_percentage(self, subset, full_set):
         return (float(len(subset)) / len(full_set)) * 100
