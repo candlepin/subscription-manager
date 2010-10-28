@@ -7,6 +7,7 @@
       <widget class="GtkVBox" id="content">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
+        <property name="homogeneous">True</property>
         <child>
           <widget class="GtkTreeView" id="subscription_view">
             <property name="visible">True</property>
