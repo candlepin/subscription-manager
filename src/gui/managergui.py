@@ -54,7 +54,6 @@ gtk.glade.bindtextdomain("subscription-manager")
 from logutil import getLogger
 log = getLogger(__name__)
 
-
 prefix = os.path.dirname(__file__)
 subs_full = os.path.join(prefix, "data/icons/subsmgr-full.png")
 subs_empty = os.path.join(prefix, "data/icons/subsmgr-empty.png")
@@ -137,6 +136,10 @@ def fetch_certificates():
             msg = 'Entitlement Certificate(s) update failed due to the following reasons:\n' + \
             '\n'.join(map(errToMsg , result[1]))
             errorWindow(msg)
+    except socket.error, e:
+        log.error("Socket error: %s %s" %  (e, e.strerror))
+        handle_gui_exception(e, e.strerror)
+        return False
     except Exception, e:
         log.error("Certificate sync failed")
         log.exception(e)
@@ -872,6 +875,11 @@ class AddSubscriptionScreen:
             self.addWin.hide()
 
     def populateSubscriptionLists(self):
+
+
+        self.compat = []
+        self.matched = []
+        self.other = []
         try:
             compatible = managerlib.getAvailableEntitlements(UEP,
                     self.consumer.uuid, self.facts)
@@ -884,7 +892,6 @@ class AddSubscriptionScreen:
                 matched_pids.append(product['productId'])
                 self.available_ent += 1
 
-            self.compat = []
             for prod in compatible:
                 if prod['productId'] not in matched_pids:
                     self.compat.append(prod)
@@ -907,9 +914,17 @@ class AddSubscriptionScreen:
                 pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
                 self.availableList.append(None, [False] + pdata)
                 self.available_ent += 1
+        except socket.error, e:
+            handle_gui_exception(e, e.strerror)
         except Exception, e:
             log.error("Error populating available subscriptions from the server")
             log.error("Exception: %s" % e)
+
+        # bz 646451: grey out apply button if there is nothing to subscribe to
+        apply_button = rhsm_xml.get_widget("add_subscribe_apply_button")
+        apply_button.set_sensitive(False)
+        if self.compat or self.matched or self.other:
+            apply_button.set_sensitive(True)
 
     # hook to forward
     def finish(self):
@@ -972,6 +987,7 @@ class AddSubscriptionScreen:
 
         # Force fetch all certs
         if not fetch_certificates():
+            pwin.hide()
             return
 
         pwin.hide()

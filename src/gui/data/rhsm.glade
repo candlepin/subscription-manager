@@ -924,13 +924,13 @@
               <atkproperty name="AtkObject::accessible-name">dialog-action_area7</atkproperty>
             </accessibility>
             <child>
-              <widget class="GtkButton" id="add_subscribe_button3">
+              <widget class="GtkButton" id="add_subscribe_apply_button">
                 <property name="label">Apply</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <accessibility>
-                  <atkproperty name="AtkObject::accessible-name">add_subscribe_button3</atkproperty>
+                  <atkproperty name="AtkObject::accessible-name">add_subscribe_apply_button</atkproperty>
                 </accessibility>
                 <signal name="clicked" handler="on_add_subscribe_button_clicked"/>
               </widget>
