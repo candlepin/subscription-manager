@@ -68,7 +68,7 @@ class ProductsTable:
 
     def add_product(self, product_name, product_id):
         """
-        Add a product with the given name and id (hash) to the table.
+        Add a product with the given name and id to the table.
         """
         self.product_store.append([product_name, self._get_icon(product_id)])
     

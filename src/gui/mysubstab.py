@@ -72,8 +72,6 @@ class SubDetailsWidget:
         if end:
             self.expiration_date_text.get_buffer().set_text(end)
 
-        # TODO: handle bundled products
-
         self.bundled_products.clear()
         for product in products:
             self.bundled_products.add_product(product[0], product[1])
@@ -100,7 +98,11 @@ class MySubscriptionsTab:
         ]
         self._pull_widgets(glade, widget_names)
         self.sub_details = SubDetailsWidget()
-        self.content.pack_end(self.sub_details.get_widget())
+
+        # Put the details widget in the middle
+        details = self.sub_details.get_widget()
+        self.content.add(details)
+        self.content.reorder_child(details, 1)
 
         self.subscription_view.get_selection().connect('changed', self.update_details)
 
