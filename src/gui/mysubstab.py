@@ -161,6 +161,9 @@ class MySubscriptionsTab:
     def update_details(self, treeselection):
         model, tree_iter = treeselection.get_selected()
 
+        if tree_iter is None:
+            return
+
         # Load the entitlement certificate for the selected row:
         serial = model.get_value(tree_iter, 6)
         cert = EntitlementDirectory().find(int(serial))
