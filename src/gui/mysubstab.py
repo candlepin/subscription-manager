@@ -39,6 +39,9 @@ DIR = os.path.dirname(__file__)
 GLADE_XML = os.path.join(DIR, "data/mysubs.glade")
 SUB_DETAILS_XML = os.path.join(DIR, "data/subdetails.glade")
 
+# Color constants for background rendering
+YELLOW = '#FFFB82'
+RED = '#FFAF99'
 
 class SubDetailsWidget:
 
@@ -106,7 +109,7 @@ class MySubscriptionsTab:
         self.subscription_view.get_selection().connect('changed', self.update_details)
 
         # Set up the model
-        self.subscription_store = gtk.ListStore(str, float, str, str, str, str, str, float)
+        self.subscription_store = gtk.ListStore(str, float, str, str, str, str, str, float, str)
         self.subscription_view.set_model(self.subscription_store)
 
         def add_column(name, column_number, expand=False):
@@ -117,6 +120,8 @@ class MySubscriptionsTab:
             else:
                 # This is probably too hard-coded
                 column.add_attribute(text_renderer, 'xalign', 7)
+
+            column.add_attribute(text_renderer, 'cell-background', 8)
 
             self.subscription_view.append_column(column)
 
@@ -156,6 +161,7 @@ class MySubscriptionsTab:
             subscription.append(formatDate(order.getEnd()))
             subscription.append(cert.serialNumber())
             subscription.append(0.5)    # Center horizontally
+            subscription.append(self._get_background_color(cert))
 
             self.subscription_store.append(subscription)
 
@@ -182,6 +188,15 @@ class MySubscriptionsTab:
                               start=str(formatDate(order.getStart())), 
                               end=str(formatDate(order.getEnd())),
                               products=products)
+
+    def _get_background_color(self, entitlement_cert):
+        date_range = entitlement_cert.validRange()
+
+        # TODO:  Not sure if it is possible to have future-dated
+        #        subscriptions here.  If so, this will need to change
+        if not date_range.hasNow():
+            return RED
+
 
     def _calculate_percentage(self, subset, full_set):
         return (float(len(subset)) / len(full_set)) * 100
