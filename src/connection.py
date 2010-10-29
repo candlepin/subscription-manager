@@ -317,7 +317,7 @@ class UEPConnection:
         """
         args = "&".join(["product=" + product.replace(" ", "%20") \
                 for product in products])
-        method = "/consumers/%s/entitlements?" + args
+        method = "/consumers/%s/entitlements?%s" % (str(consumerId), args)
         return self.conn.request_post(method)
 
     def unbindBySerial(self, consumerId, serial):

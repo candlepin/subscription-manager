@@ -698,7 +698,8 @@ class RegisterScreen:
                     UEP.bindByProduct(self.consumer.uuid, products.values())
                     log.info("Automatically subscribed to products: %s " \
                             % ", ".join(products.keys()))
-                except:
+                except Exception, e:
+                    log.exception(e)
                     log.warning("Warning: Unable to auto subscribe to %s" \
                             % ", ".join(products.keys()))
                 if not fetch_certificates():

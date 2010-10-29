@@ -276,13 +276,14 @@ class RegisterCommand(CliCommand):
             # try to auomatically bind products
             products = managerlib.getInstalledProductHashMap()
             try:
-                UEP.bindByProduct(consumer['uuid'], products.values())
+                admin_cp.bindByProduct(consumer['uuid'], products.values())
                 log.info("Automatically subscribed to products: %s " \
                         % ", ".join(products.keys()))
                 print _("Subscribed to Products:")
                 for pname, phash in products:
                     print pname, phash
-            except:
+            except Exception, e:
+                log.exception(e)
                 log.warning("Warning: Unable to auto subscribe to %s" \
                         % ", ".join(products.keys()))
 
