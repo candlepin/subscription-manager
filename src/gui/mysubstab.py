@@ -106,17 +106,22 @@ class MySubscriptionsTab:
         self.subscription_view.get_selection().connect('changed', self.update_details)
 
         # Set up the model
-        self.subscription_store = gtk.ListStore(str, float, str, str, str, str, str)
+        self.subscription_store = gtk.ListStore(str, float, str, str, str, str, str, float)
         self.subscription_view.set_model(self.subscription_store)
 
-        text_renderer = gtk.CellRendererText()
-
-        def add_column(name, column_number):
+        def add_column(name, column_number, expand=False):
+            text_renderer = gtk.CellRendererText()
             column = gtk.TreeViewColumn(name, text_renderer, text=column_number)
+            if expand:
+                column.set_expand(True)
+            else:
+                # This is probably too hard-coded
+                column.add_attribute(text_renderer, 'xalign', 7)
+
             self.subscription_view.append_column(column)
 
         # Set up columns on the view
-        add_column(_("Subscription"), 0)
+        add_column(_("Subscription"), 0, True)
         products_column = gtk.TreeViewColumn(_("Installed Products"), \
                                              gtk.CellRendererProgress(), \
                                              value=1, text=2)
@@ -150,6 +155,7 @@ class MySubscriptionsTab:
             subscription.append(formatDate(order.getStart()))
             subscription.append(formatDate(order.getEnd()))
             subscription.append(cert.serialNumber())
+            subscription.append(0.5)    # Center horizontally
 
             self.subscription_store.append(subscription)
 
