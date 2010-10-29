@@ -31,6 +31,15 @@ from dateselect import DateSelector
 prefix = os.path.dirname(__file__)
 ALL_SUBS_GLADE = os.path.join(prefix, "data/allsubs.glade")
 
+# Pointers into the data store we're displaying:
+PRODUCT_NAME_INDEX = 0
+BUNDLED_COUNT_INDEX = 1
+POOL_COUNT_INDEX = 2
+QUANTITY_INDEX = 3
+AVAIL_INDEX = 4
+PRODUCT_ID_INDEX = 5
+POOL_ID_INDEX = 6
+
 
 class AllSubscriptionsTab(object):
 
@@ -48,14 +57,14 @@ class AllSubscriptionsTab(object):
         today = datetime.date.today()
         self.date_selector = DateSelector(self.active_on_date_changed, initial_date=today)
 
-        self.subs_store = gtk.ListStore(str, str, str, str, str, str)
+        self.subs_store = gtk.ListStore(str, str, str, str, str, str, str)
         self.subs_treeview = self.all_subs_xml.get_widget('all_subs_treeview')
         self.subs_treeview.set_model(self.subs_store)
-        self._add_column(_("Subscription"), 0)
-        self._add_column(_("# Bundled Products"), 1)
-        self._add_column(_("Total Contracts"), 2)
-        self._add_column(_("Total Subscriptions"), 3)
-        self._add_column(_("Available Subscriptions"), 4)
+        self._add_column(_("Subscription"), PRODUCT_NAME_INDEX)
+        self._add_column(_("# Bundled Products"), BUNDLED_COUNT_INDEX)
+        self._add_column(_("Total Contracts"), POOL_COUNT_INDEX)
+        self._add_column(_("Total Subscriptions"), QUANTITY_INDEX)
+        self._add_column(_("Available Subscriptions"), AVAIL_INDEX)
 
         self.no_hw_match_checkbutton = self.all_subs_xml.get_widget(
                 'match_hw_checkbutton')
@@ -128,13 +137,14 @@ class AllSubscriptionsTab(object):
         """
         self.subs_store.clear()
 
-        merged_pools = self.pool_stash.get_merged_pools(
+        merged_pools = self.pool_stash.merge_pools(
                 incompatible=self.include_incompatible(),
                 uninstalled=self.include_uninstalled(),
                 text=self.get_filter_text(),
                 active_on=self.get_active_on_date())
 
         for entry in merged_pools.values():
+            print entry.pools
             self.subs_store.append([
                 entry.product_name, 
                 entry.bundled_products,
@@ -142,6 +152,7 @@ class AllSubscriptionsTab(object):
                 entry.quantity,
                 entry.quantity - entry.consumed,
                 entry.product_id,
+                entry.pools[0]['id'], # not displayed, just for lookup later
         ])
 
     def _add_column(self, name, order):
@@ -191,10 +202,17 @@ class AllSubscriptionsTab(object):
         """ Shows details for the current selected pool. """
         model, tree_iter = widget.get_selected()
         if tree_iter:
-            product_name = model.get_value(tree_iter, 0)
-            self.sub_details.show(product_name)
-            product_id = model.get_value(tree_iter, 5)
-            #provided = self._load_product_data(product_id)
+            product_name = model.get_value(tree_iter, PRODUCT_NAME_INDEX)
+            pool_id = model.get_value(tree_iter, POOL_ID_INDEX)
+            provided = self._load_product_data(pool_id)
+            self.sub_details.show(product_name, products=provided)
 
-#    def _load_product_data(self, product_id):
+
+    def _load_product_data(self, pool_id):
+        pool = self.pool_stash.all_pools[pool_id]
+        provided_products = []
+        log.debug(pool)
+        for prod_id in pool['providedProductIds']:
+            provided_products.append((prod_id, prod_id))
+        return provided_products
 
