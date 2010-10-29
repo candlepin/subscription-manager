@@ -144,7 +144,6 @@ class AllSubscriptionsTab(object):
                 active_on=self.get_active_on_date())
 
         for entry in merged_pools.values():
-            print entry.pools
             self.subs_store.append([
                 entry.product_name, 
                 entry.bundled_products,
@@ -212,7 +211,11 @@ class AllSubscriptionsTab(object):
         pool = self.pool_stash.all_pools[pool_id]
         provided_products = []
         log.debug(pool)
+        # NOTE: Not happy about this, but the only way we can get a friendly
+        # name for each provided product is to ask for it, the pool only
+        # carries the ID:
         for prod_id in pool['providedProductIds']:
-            provided_products.append((prod_id, prod_id))
+            product = self.backend.uep.getProduct(prod_id)
+            provided_products.append((product['name'], prod_id))
         return provided_products
 

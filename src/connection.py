@@ -344,6 +344,10 @@ class UEPConnection:
         method = "/pools/%s" % poolId
         return self.conn.request_get(method)
 
+    def getProduct(self, product_id):
+        method = "/products/%s" % product_id
+        return self.conn.request_get(method)
+
     def getEntitlementList(self, consumerId):
         method = "/consumers/%s/entitlements" % consumerId
         results = self.conn.request_get(method)
