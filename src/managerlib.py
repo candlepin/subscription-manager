@@ -349,17 +349,26 @@ class PoolStash(object):
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
+
+        # Pools which passed rules server side for this consumer:
         self.compatible_pools = {}
+
+        # Pools which failed a rule check server side:
         self.incompatible_pools = {}
+
+        # All pools:
+        self.all_pools = {}
 
     def refresh(self):
         """
         Refresh the list of pools from the server.
         """
+        self.all_pools = {}
         self.compatible_pools = {}
         for pool in list_pools(self.backend.uep,
                 self.consumer.uuid, self.facts):
             self.compatible_pools[pool['id']] = pool
+            self.all_pools[pool['id']] = pool
 
         # Filter the list of all pools, removing those we know are compatible.
         # Sadly this currently requires a second query to the server.
@@ -368,8 +377,9 @@ class PoolStash(object):
                 self.consumer.uuid, self.facts, all=True):
             if not pool['id'] in self.compatible_pools:
                 self.incompatible_pools[pool['id']] = pool
+                self.all_pools[pool['id']] = pool
 
-    def get_pools(self, incompatible=False, uninstalled=False, text=None,
+    def filter_pools(self, incompatible=False, uninstalled=False, text=None,
             active_on=None):
         """
         Return a list of pool hashes, filtered according to the given options.
@@ -396,12 +406,12 @@ class PoolStash(object):
 
         return pools
 
-    def get_merged_pools(self, incompatible=False, uninstalled=False, text=None, active_on=None):
+    def merge_pools(self, incompatible=False, uninstalled=False, text=None, active_on=None):
         """
         Return a merged view of pools filtered according to the given options.
         Pools for the same product will be merged into a MergedPool object.
         """
-        pools = self.get_pools(incompatible, uninstalled, text, active_on)
+        pools = self.filter_pools(incompatible, uninstalled, text, active_on)
         merged_pools = merge_pools(pools)
         return merged_pools
 
