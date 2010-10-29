@@ -77,6 +77,11 @@ class AllSubscriptionsTab(object):
         self.all_subs_xml.signal_autoconnect({
             "on_search_button_clicked": self.search_button_clicked,
             "on_date_select_button_clicked": self.date_select_button_clicked,
+            "on_match_hw_checkbutton_clicked": self.filters_changed,
+            "on_not_installed_checkbutton_clicked": self.filters_changed,
+            "on_contains_text_checkbutton_clicked": self.filters_changed,
+            "on_contain_text_entry_changed": self.filters_changed,
+            "on_active_on_checkbutton_clicked": self.filters_changed,
         })
         self.subs_treeview.get_selection().connect('changed', self.update_sub_details)
 
@@ -117,11 +122,12 @@ class AllSubscriptionsTab(object):
                 return active_on_date
         return None
         
-    def load_all_subs(self):
-        log.debug("Loading subscriptions.")
+    def display_pools(self):
+        """
+        Re-display the list of pools last queried, based on current filter options.
+        """
         self.subs_store.clear()
 
-        self.pool_stash.reload()
         merged_pools = self.pool_stash.get_merged_pools(
                 incompatible=self.include_incompatible(),
                 uninstalled=self.include_uninstalled(),
@@ -149,15 +155,27 @@ class AllSubscriptionsTab(object):
         return _("All Available Subscriptions")
 
     def search_button_clicked(self, widget):
-        """ Reload the subscriptions when the Search button is clicked. """
+        """
+        Reload the subscriptions from the server when the Search button
+        is clicked.
+        """
         log.debug("Search button clicked.")
         log.debug("   include hw mismatch = %s" % self.include_incompatible())
         log.debug("   include uninstalled = %s" % self.include_uninstalled())
         log.debug("   contains text = %s" % self.get_filter_text())
-        self.load_all_subs()
+        self.pool_stash.refresh()
+        self.display_pools()
 
     def date_select_button_clicked(self, widget):
         self.date_selector.show()
+
+    def filters_changed(self, widget):
+        """
+        Callback used by several widgets related to filtering, anytime
+        something changes, we re-display based on the latest choices.
+        """
+        log.debug("filters changed")
+        self.display_pools()
 
     def active_on_date_changed(self, widget):
         """
@@ -167,8 +185,10 @@ class AllSubscriptionsTab(object):
         year, month, day = widget.get_date()
         month += 1 # this starts at 0
         self.active_on_entry.set_text("%s-%s-%s" % (year, month, day))
+        self.filters_changed(widget)
 
     def update_sub_details(self, widget):
+        """ Shows details for the current selected pool. """
         model, tree_iter = widget.get_selected()
         if tree_iter:
             product_name = model.get_value(tree_iter, 0)

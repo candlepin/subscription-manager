@@ -349,8 +349,13 @@ class PoolStash(object):
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
+        self.compatible_pools = {}
+        self.incompatible_pools = {}
 
-    def reload(self):
+    def refresh(self):
+        """
+        Refresh the list of pools from the server.
+        """
         self.compatible_pools = {}
         for pool in list_pools(self.backend.uep,
                 self.consumer.uuid, self.facts):
