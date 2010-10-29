@@ -20,32 +20,6 @@
         <child>
           <placeholder/>
         </child>
-        <child>
-          <widget class="GtkAlignment" id="alignment1">
-            <property name="visible">True</property>
-            <property name="xalign">1</property>
-            <property name="yalign">1</property>
-            <property name="xscale">0</property>
-            <property name="yscale">0</property>
-            <property name="top_padding">10</property>
-            <property name="bottom_padding">10</property>
-            <property name="right_padding">15</property>
-            <child>
-              <widget class="GtkButton" id="renew_button">
-                <property name="label" translatable="yes">Renew</property>
-                <property name="width_request">80</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-              </widget>
-            </child>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
       </widget>
     </child>
   </widget>

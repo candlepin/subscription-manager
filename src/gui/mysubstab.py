@@ -102,7 +102,6 @@ class MySubscriptionsTab:
         # Put the details widget in the middle
         details = self.sub_details.get_widget()
         self.content.add(details)
-        self.content.reorder_child(details, 1)
 
         self.subscription_view.get_selection().connect('changed', self.update_details)
 
