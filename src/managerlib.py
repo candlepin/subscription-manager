@@ -239,8 +239,8 @@ class PoolFilter(object):
         """
         filtered_pools = []
         for pool in pools:
-            start_date = parse_date(pool['startDate'])
-            end_date = parse_date(pool['endDate'])
+            start_date = formatDate(pool['startDate'])
+            end_date = formatDate(pool['endDate'])
             if start_date <= date <= end_date:
                 filtered_pools.append(pool)
         return filtered_pools
@@ -338,6 +338,67 @@ def merge_pools(pools):
     # Just return a list of the MergedPools objects, without the product ID
     # key hashing:
     return merged_pools
+
+
+class PoolStash(object):
+    """
+    Object used to fetch pools from the server, sort them into compatible,
+    incompatible, and installed lists. Also does filtering based on name.
+    """
+    def __init__(self, backend, consumer, facts):
+        self.backend = backend
+        self.consumer = consumer
+        self.facts = facts
+
+    def reload(self):
+        self.compatible_pools = {}
+        for pool in list_pools(self.backend.uep,
+                self.consumer.uuid, self.facts):
+            self.compatible_pools[pool['id']] = pool
+
+        # Filter the list of all pools, removing those we know are compatible.
+        # Sadly this currently requires a second query to the server.
+        self.incompatible_pools = {}
+        for pool in list_pools(self.backend.uep,
+                self.consumer.uuid, self.facts, all=True):
+            if not pool['id'] in self.compatible_pools:
+                self.incompatible_pools[pool['id']] = pool
+
+    def get_pools(self, incompatible=False, uninstalled=False, text=None,
+            active_on=None):
+        """
+        Return a list of pool hashes, filtered according to the given options.
+
+        This method does not actually hit the server, filtering is done in
+        memory.
+        """
+        pools = self.compatible_pools.values()
+        if incompatible:
+            pools = pools + self.incompatible_pools.values()
+
+        pool_filter = PoolFilter()
+
+        # Filter out products that are not installed if necessary:
+        if not uninstalled:
+            pools = pool_filter.filter_uninstalled(pools)
+
+        # Filter by product name if necessary:
+        if text:
+            pools = pool_filter.filter_product_name(pools, text)
+
+        if active_on:
+            pools = pool_filter.filter_active_on(pools, active_on)
+
+        return pools
+
+    def get_merged_pools(self, incompatible=False, uninstalled=False, text=None, active_on=None):
+        """
+        Return a merged view of pools filtered according to the given options.
+        Pools for the same product will be merged into a MergedPool object.
+        """
+        pools = self.get_pools(incompatible, uninstalled, text, active_on)
+        merged_pools = merge_pools(pools)
+        return merged_pools
 
 
 def _sub_dict(datadict, subkeys, default=None):

@@ -39,6 +39,9 @@ class AllSubscriptionsTab(object):
         self.consumer = consumer
         self.facts = facts
 
+        self.pool_stash = managerlib.PoolStash(self.backend, self.consumer,
+                self.facts)
+
         self.all_subs_xml = gtk.glade.XML(ALL_SUBS_GLADE)
         self.all_subs_vbox = self.all_subs_xml.get_widget('all_subs_vbox')
 
@@ -102,7 +105,7 @@ class AllSubscriptionsTab(object):
 
     def get_active_on_date(self):
         """
-        Returns a datetime for the "active on" filter, if one is selected.
+        Returns a date for the "active on" filter, if one is selected.
         Otherwise returns None.
         """
         if self.active_on_checkbutton.get_active():
@@ -118,23 +121,13 @@ class AllSubscriptionsTab(object):
         log.debug("Loading subscriptions.")
         self.subs_store.clear()
 
-        pools = managerlib.list_pools(self.backend.uep,
-                self.consumer.uuid, self.facts, all=self.include_incompatible())
+        self.pool_stash.reload()
+        merged_pools = self.pool_stash.get_merged_pools(
+                incompatible=self.include_incompatible(),
+                uninstalled=self.include_uninstalled(),
+                text=self.get_filter_text(),
+                active_on=self.get_active_on_date())
 
-        pool_filter = managerlib.PoolFilter()
-
-        # Filter out products that are not installed if necessary:
-        if not self.include_uninstalled():
-            pools = pool_filter.filter_uninstalled(pools)
-
-        # Filter by product name if necessary:
-        if self.get_filter_text():
-            pools = pool_filter.filter_product_name(pools, self.get_filter_text())
-
-        if self.get_active_on_date():
-            pools = pool_filter.filter_active_on(pools, self.get_active_on_date())
-
-        merged_pools = managerlib.merge_pools(pools)
         for entry in merged_pools.values():
             self.subs_store.append([
                 entry.product_name, 
@@ -180,4 +173,8 @@ class AllSubscriptionsTab(object):
         if tree_iter:
             product_name = model.get_value(tree_iter, 0)
             self.sub_details.show(product_name)
+            product_id = model.get_value(tree_iter, 5)
+            #provided = self._load_product_data(product_id)
+
+#    def _load_product_data(self, product_id):
 
