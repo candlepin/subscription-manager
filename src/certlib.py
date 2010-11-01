@@ -336,6 +336,8 @@ class Directory:
 
 class CertificateDirectory(Directory):
 
+    KEY = 'key.pem'
+
     def __init__(self, path):
         Directory.__init__(self, path)
         self.create()
@@ -344,7 +346,7 @@ class CertificateDirectory(Directory):
         listing = []
         factory = self.Factory(self.certClass())
         for p, fn in Directory.list(self):
-            if not fn.endswith('.pem'):
+            if not fn.endswith('.pem') or fn == self.KEY:
                 continue
             path = self.abspath(fn)
             factory.append(path, listing)
@@ -408,7 +410,6 @@ class CertificateDirectory(Directory):
 class ProductDirectory(CertificateDirectory):
 
     PATH = cfg.get('rhsm', 'productCertDir')
-    KEY = 'key.pem'
 
     def __init__(self):
         CertificateDirectory.__init__(self, self.PATH)
@@ -420,7 +421,6 @@ class ProductDirectory(CertificateDirectory):
 class EntitlementDirectory(CertificateDirectory):
 
     PATH = cfg.get('rhsm', 'entitlementCertDir')
-    KEY = 'key.pem'
     PRODUCT = 'product'
 
     @classmethod
