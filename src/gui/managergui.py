@@ -465,7 +465,7 @@ class ManageSubscriptionPage:
 
             except Exception, e:
                 handle_gui_exception(re, constants.UNSUBSCRIBE_ERROR)
-                raise
+
         # not registered, locally managed
         else:
             entcerts = EntitlementDirectory().list()
