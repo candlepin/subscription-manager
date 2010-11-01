@@ -299,7 +299,7 @@ class ManageSubscriptionPage:
 
         dic = {
                "on_add_button_clicked": self.addSubButtonAction,
-               "on_update_button_clicked": self.updateSubButtonAction,
+#               "on_update_button_clicked": self.updateSubButtonAction,
                "on_unsubscribe_button_clicked": self.onUnsubscribeAction,
             }
         rhsm_xml.signal_autoconnect(dic)
@@ -432,9 +432,9 @@ class ManageSubscriptionPage:
                 self.show_import_certificate_screen()
 
     def setButtonState(self, state=False):
-        self.button_update = rhsm_xml.get_widget("update_button")
+#        self.button_update = rhsm_xml.get_widget("update_button")
         self.button_unsubscribe = rhsm_xml.get_widget("unsubscribe_button")
-        self.button_update.set_sensitive(state)
+#        self.button_update.set_sensitive(state)
         self.button_unsubscribe.set_sensitive(state)
 
     def updateProductDialog(self):

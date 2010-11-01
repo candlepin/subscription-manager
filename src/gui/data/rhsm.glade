@@ -204,27 +204,6 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkButton" id="update_button">
-                    <property name="label">Update</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="can_default">True</property>
-                    <property name="has_default">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="use_underline">True</property>
-                    <accessibility>
-                      <atkproperty name="AtkObject::accessible-name">update_button</atkproperty>
-                    </accessibility>
-                    <signal name="clicked" handler="on_update_button_clicked"/>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                    <property name="secondary">True</property>
-                  </packing>
-                </child>
-                <child>
                   <widget class="GtkButton" id="unsubscribe_button">
                     <property name="label">UnSubscribe</property>
                     <property name="visible">True</property>
@@ -241,7 +220,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="position">2</property>
+                    <property name="position">1</property>
                     <property name="secondary">True</property>
                   </packing>
                 </child>
