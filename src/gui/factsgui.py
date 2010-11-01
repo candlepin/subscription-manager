@@ -55,7 +55,7 @@ class SystemFactsDialog:
         self.update_button = glade.get_widget("update_facts_button")
 
         # Set up the model
-        self.facts_store = gtk.ListStore(str, str)
+        self.facts_store = gtk.TreeStore(str, str)
         self.facts_view.set_model(self.facts_store)
 
         # Set up columns on the view
@@ -83,9 +83,17 @@ class SystemFactsDialog:
         """Updates the list store with the current system facts."""
         self.facts_store.clear()
 
-        system_facts = self.facts.get_facts()
-        for fact, value in system_facts.items():
-            self.facts_store.append([fact, value])
+        system_facts = self.facts.get_facts().items()
+        if self.consumer.uuid:
+            system_facts.append(["system.uuid", self.consumer.uuid])
+        system_facts.sort()
+        group = None
+        for fact, value in system_facts:
+            new_group = fact.split(".", 1)[0]
+            if new_group != group:
+                group = new_group
+                parent = self.facts_store.append(None, [group, ""])
+            self.facts_store.append(parent, [fact, value])
 
     def update_facts(self):
         """Sends the current system facts to the UEP server."""
@@ -108,6 +116,7 @@ class SystemFactsDialog:
     # GTK callback function for sending system facts to the server
     def _update_facts_callback(self, button):
         self.update_facts()
+        self.display_facts()
 
     def _add_column(self, name, order):
         """Adds a gtk.TreeViewColumn suitable for displaying text to
