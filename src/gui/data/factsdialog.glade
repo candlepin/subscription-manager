@@ -37,23 +37,7 @@
                     <property name="use_markup">True</property>
                   </widget>
                   <packing>
-                    <property name="padding">15</property>
                     <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkButton" id="update_facts_button">
-                    <property name="label" translatable="yes">Update Facts</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_facts_update_button_clicked"/>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="padding">15</property>
-                    <property name="position">1</property>
                   </packing>
                 </child>
               </widget>
@@ -96,7 +80,19 @@
             <property name="visible">True</property>
             <property name="layout_style">end</property>
             <child>
-              <placeholder/>
+              <widget class="GtkButton" id="update_facts_button">
+                <property name="label" translatable="yes">Update Facts</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_facts_update_button_clicked"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="padding">15</property>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
               <widget class="GtkButton" id="close_button">
