@@ -46,17 +46,31 @@ RED = '#FFAF99'
 
 class SubDetailsWidget:
 
-    def __init__(self):
+    def __init__(self, show_contract=True):
         # TODO: move to a separate glade file?
         glade = gtk.glade.XML(SUB_DETAILS_XML)
         self.main_widget = glade.get_widget('sub_details_vbox')
         self.main_widget.unparent()
 
+        self.show_contract = show_contract
         self.subscription_text = glade.get_widget('subscription_text')
-        self.contract_number_text = glade.get_widget('contract_number_text')
-        self.start_date_text = glade.get_widget('start_date_text')
-        self.expiration_date_text = glade.get_widget('expiration_date_text')
         self.bundled_products_view = glade.get_widget('products_view')
+
+        if not show_contract:
+            def destroy(widget_name):
+                glade.get_widget(widget_name).destroy()
+
+            destroy('contract_number_label')
+            destroy('contract_number_text')
+            destroy('start_date_label')
+            destroy('start_date_text')
+            destroy('expiration_date_label')
+            destroy('expiration_date_text')
+        else:
+            self.contract_number_text = glade.get_widget('contract_number_text')
+            self.start_date_text = glade.get_widget('start_date_text')
+            self.expiration_date_text = glade.get_widget('expiration_date_text')
+            
 
         self.bundled_products = ProductsTable(self.bundled_products_view)
 
@@ -69,12 +83,14 @@ class SubDetailsWidget:
         Products is a list of tuples (or lists) of the form (name, id)
         """
         self.subscription_text.get_buffer().set_text(name)
-        if contract:
-            self.contract_number_text.get_buffer().set_text(contract)
-        if start:
-            self.start_date_text.get_buffer().set_text(start)
-        if end:
-            self.expiration_date_text.get_buffer().set_text(end)
+
+        if self.show_contract:
+            if contract:
+                self.contract_number_text.get_buffer().set_text(contract)
+            if start:
+                self.start_date_text.get_buffer().set_text(start)
+            if end:
+                self.expiration_date_text.get_buffer().set_text(end)
 
         self.bundled_products.clear()
         for product in products:

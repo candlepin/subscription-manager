@@ -42,7 +42,7 @@
                     <property name="n_columns">2</property>
                     <property name="column_spacing">8</property>
                     <child>
-                      <widget class="GtkLabel" id="label2">
+                      <widget class="GtkLabel" id="subscription_label">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">&lt;b&gt;Subscription:&lt;/b&gt;</property>
@@ -56,7 +56,7 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label3">
+                      <widget class="GtkLabel" id="start_date_label">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">&lt;b&gt;Start Date:&lt;/b&gt;</property>
@@ -72,7 +72,7 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label4">
+                      <widget class="GtkLabel" id="expiration_date_label">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">&lt;b&gt;Expiration Date:&lt;/b&gt;</property>
@@ -88,7 +88,7 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label5">
+                      <widget class="GtkLabel" id="contract_number_label">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">&lt;b&gt;Contract Number:&lt;/b&gt;</property>
@@ -104,7 +104,7 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label6">
+                      <widget class="GtkLabel" id="products_label">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">&lt;b&gt;Bundled Products:&lt;/b&gt;</property>

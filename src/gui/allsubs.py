@@ -74,7 +74,7 @@ class AllSubscriptionsTab(object):
                 'contains_text_checkbutton')
         self.contains_text_entry = self.all_subs_xml.get_widget(
                 'contain_text_entry')
-        self.sub_details = SubDetailsWidget()
+        self.sub_details = SubDetailsWidget(show_contract=False)
         self.all_subs_vbox.pack_end(self.sub_details.get_widget())
 
         self.active_on_checkbutton = self.all_subs_xml.get_widget('active_on_checkbutton')
