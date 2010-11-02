@@ -9,7 +9,9 @@ class FactDialogTests(unittest.TestCase):
     def setUp(self):
 
         expected_facts = { 'fact1': 'one',
-                           'fact2': 'two' }
+                           'fact2': 'two',
+                           'system': '',
+                           'system.uuid': 'MOCKUUID'}
         class StubFacts:
             def get_facts(self):
                 return expected_facts
@@ -24,8 +26,8 @@ class FactDialogTests(unittest.TestCase):
     def test_facts_are_displayed(self):
         found_facts = {}
 
-        def check_facts(fact):
-            found_facts[fact[0]] = fact[1]
+        def check_facts(parent, facts):
+            found_facts[facts[0]] = facts[1]
 
         dialog = factsgui.SystemFactsDialog(self.consumer,
                 self.stub_facts)
