@@ -18,11 +18,12 @@
 # in this software or its documentation.
 #
 
-import datetime
 import os
 import gtk
 
+from datetime import datetime, timedelta
 from certlib import EntitlementDirectory, ProductDirectory
+from certificate import GMT
 from managerlib import formatDate
 
 from productstable import ProductsTable
@@ -91,6 +92,9 @@ class SubDetailsWidget:
 class MySubscriptionsTab:
 
     def __init__(self, backend, consumer, facts):
+        """
+        Create a new 'My Subscriptions' tab.
+        """
         self.backend = backend
         self.consumer = consumer
 
@@ -139,10 +143,19 @@ class MySubscriptionsTab:
         self.update_subscriptions()
 
     def _pull_widgets(self, glade, names):
+        """
+        This is a convenience method to pull the widgets from the 'names' list
+        out of the given glade file, and make them available as variables on self.
+
+        For example:  a widget with the name age_input could be accessed via self.age_input
+        """
         for name in names:
             setattr(self, name, glade.get_widget(name))
 
     def update_subscriptions(self):
+        """
+        Pulls the entitlement certificates and updates the subscription model.
+        """
         entcerts = EntitlementDirectory().list()
 
         for cert in entcerts:
@@ -172,6 +185,10 @@ class MySubscriptionsTab:
         return _("My Subscriptions")
 
     def update_details(self, treeselection):
+        """
+        Updates the 'Subscription Details' panel with the currently selected
+        subscription.
+        """
         model, tree_iter = treeselection.get_selected()
 
         if tree_iter is None:
@@ -181,7 +198,8 @@ class MySubscriptionsTab:
         serial = model.get_value(tree_iter, 6)
         cert = EntitlementDirectory().find(int(serial))
         order = cert.getOrder()
-        products = [(product.getName(), product.getHash()) for product in cert.getProducts()]
+        products = [(product.getName(), product.getHash())
+                        for product in cert.getProducts()]
 
         self.sub_details.show(order.getName(), 
                               contract=order.getContract() or "", 
@@ -191,12 +209,14 @@ class MySubscriptionsTab:
 
     def _get_background_color(self, entitlement_cert):
         date_range = entitlement_cert.validRange()
+        now = datetime.now(GMT())
 
-        # TODO:  Not sure if it is possible to have future-dated
-        #        subscriptions here.  If so, this will need to change
-        if not date_range.hasNow():
+        if date_range.end() < now:
             return RED
 
+        # 6 weeks - get rid of magic numbers!
+        if date_range.end() - timedelta(days=42) < now:
+            return YELLOW
 
     def _calculate_percentage(self, subset, full_set):
         return (float(len(subset)) / len(full_set)) * 100
