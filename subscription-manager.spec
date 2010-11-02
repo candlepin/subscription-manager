@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.92.6
+Version: 0.92.7
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -179,6 +179,17 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Nov 02 2010 Devan Goodwin <dgoodwin@redhat.com> 0.92.7-1
+- Resolves: #648947,#647855,#647410,#646451
+- 648947: update certs and config for stage env (jbowes@redhat.com)
+- 647855: subscription update button doesn't work, remove it
+  (alikins@redhat.com)
+- 647410: handle error on unbindBySerial call in ui (don't reraise)
+  (alikins@redhat.com)
+- 646451: Handle network outages on the add subscription screen
+  (alikins@redhat.com)
+- Remove unecessary call to server after GUI bind. (dgoodwin@redhat.com)
+
 * Tue Oct 26 2010 jesus m. rodriguez <jesusr@redhat.com> 0.92.6-1
 - fix changelog of spec file (jesusr@redhat.com)
 
