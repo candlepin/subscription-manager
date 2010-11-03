@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.92.7
+Version: 0.92.8
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -179,6 +179,10 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Wed Nov 03 2010 Devan Goodwin <dgoodwin@redhat.com> 0.92.8-1
+- Resolves: #649374
+- 649374: Make the ssl verify depth configurable (bkearney@redhat.com)
+
 * Tue Nov 02 2010 Devan Goodwin <dgoodwin@redhat.com> 0.92.7-1
 - Resolves: #648947,#647855,#647410,#646451
 - 648947: update certs and config for stage env (jbowes@redhat.com)
