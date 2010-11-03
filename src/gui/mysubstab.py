@@ -28,6 +28,8 @@ from managerlib import formatDate
 
 from productstable import ProductsTable
 
+import widgets
+
 import logutil
 log = logutil.getLogger(__name__)
 
@@ -36,91 +38,23 @@ _ = gettext.gettext
 gettext.textdomain("subscription-manager")
 gtk.glade.bindtextdomain("subscription-manager")
 
-DIR = os.path.dirname(__file__)
-GLADE_XML = os.path.join(DIR, "data/mysubs.glade")
-SUB_DETAILS_XML = os.path.join(DIR, "data/subdetails.glade")
-
 # Color constants for background rendering
 YELLOW = '#FFFB82'
 RED = '#FFAF99'
 
-class SubDetailsWidget:
-
-    def __init__(self, show_contract=True):
-        # TODO: move to a separate glade file?
-        glade = gtk.glade.XML(SUB_DETAILS_XML)
-        self.main_widget = glade.get_widget('sub_details_vbox')
-        self.main_widget.unparent()
-
-        self.show_contract = show_contract
-        self.subscription_text = glade.get_widget('subscription_text')
-        self.bundled_products_view = glade.get_widget('products_view')
-
-        if not show_contract:
-            def destroy(widget_name):
-                glade.get_widget(widget_name).destroy()
-
-            destroy('contract_number_label')
-            destroy('contract_number_text')
-            destroy('start_date_label')
-            destroy('start_date_text')
-            destroy('expiration_date_label')
-            destroy('expiration_date_text')
-        else:
-            self.contract_number_text = glade.get_widget('contract_number_text')
-            self.start_date_text = glade.get_widget('start_date_text')
-            self.expiration_date_text = glade.get_widget('expiration_date_text')
-            
-
-        self.bundled_products = ProductsTable(self.bundled_products_view)
-
-
-    def show(self, name, contract=None, start=None, end=None, products=[]):
-        """ 
-        Show subscription details. 
-        
-        Start and end should be formatted strings, not actual date objects.
-        Products is a list of tuples (or lists) of the form (name, id)
-        """
-        self.subscription_text.get_buffer().set_text(name)
-
-        if self.show_contract:
-            if contract:
-                self.contract_number_text.get_buffer().set_text(contract)
-            if start:
-                self.start_date_text.get_buffer().set_text(start)
-            if end:
-                self.expiration_date_text.get_buffer().set_text(end)
-
-        self.bundled_products.clear()
-        for product in products:
-            self.bundled_products.add_product(product[0], product[1])
-
-    def clear(self):
-        """ No subscription to display. """
-        pass
-
-    def get_widget(self):
-        """ Returns the widget to be packed into a parent window. """
-        return self.main_widget
-
-
-class MySubscriptionsTab:
+class MySubscriptionsTab(widgets.GladeWidget):
 
     def __init__(self, backend, consumer, facts):
         """
         Create a new 'My Subscriptions' tab.
         """
+        widget_names = ['subscription_view', 'content']
+        super(MySubscriptionsTab, self).__init__('mysubs.glade', widget_names)
+        
         self.backend = backend
         self.consumer = consumer
 
-        glade = gtk.glade.XML(GLADE_XML)
-
-        widget_names = ['subscription_view',
-                        'content',
-        ]
-        self._pull_widgets(glade, widget_names)
-        self.sub_details = SubDetailsWidget()
+        self.sub_details = widgets.SubDetailsWidget()
 
         # Put the details widget in the middle
         details = self.sub_details.get_widget()
@@ -158,15 +92,6 @@ class MySubscriptionsTab:
 
         self.update_subscriptions()
 
-    def _pull_widgets(self, glade, names):
-        """
-        This is a convenience method to pull the widgets from the 'names' list
-        out of the given glade file, and make them available as variables on self.
-
-        For example:  a widget with the name age_input could be accessed via self.age_input
-        """
-        for name in names:
-            setattr(self, name, glade.get_widget(name))
 
     def update_subscriptions(self):
         """

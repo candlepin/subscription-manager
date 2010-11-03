@@ -25,7 +25,7 @@ log = getLogger(__name__)
 import managerlib
 
 from facts import Facts
-from mysubstab import SubDetailsWidget
+from widgets import SubDetailsWidget
 from dateselect import DateSelector
 
 prefix = os.path.dirname(__file__)
