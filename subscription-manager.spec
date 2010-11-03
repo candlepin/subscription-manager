@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.93.0
+Version: 0.93.1
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -167,6 +167,120 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Wed Nov 03 2010 Devan Goodwin <dgoodwin@redhat.com> 0.93.1-1
+- Update I18N strings. (dgoodwin@redhat.com)
+- Pulling out contract info in 'All Subscriptions' tab (jharris@redhat.com)
+- 648947: update certs and config for stage env (jbowes@redhat.com)
+- Fixing up facts test (jharris@redhat.com)
+- 647855: subscription update button doesn't work, remove it
+  (alikins@redhat.com)
+- Adding working logic around subscription date coloring (jharris@redhat.com)
+- 646565: Don't load key.pem as an entitlement cert (jbowes@redhat.com)
+- Make the facts a tree view (bkearney@redhat.com)
+- Ensure that autosubscribe is called from the cli, and exceptions are logged
+  (bkearney@redhat.com)
+- Display bundled product names in details for all subs tab.
+  (dgoodwin@redhat.com)
+- Hookup all subs display of provided products. (dgoodwin@redhat.com)
+- 647410: handle error on unbindBySerial call in ui (don't reraise)
+  (alikins@redhat.com)
+- Adding first pass at date-based subscription coloring (jharris@redhat.com)
+- 646451: Handle network outages on the add subscription screen
+  (alikins@redhat.com)
+- Tweaking subscription table renderering options (grid lines, centering)
+  (jharris@redhat.com)
+- Filter pools in memory. (dgoodwin@redhat.com)
+- Stash pool results in the all subs tab. (dgoodwin@redhat.com)
+- Pulling out the Renew button from My Subscriptions (jharris@redhat.com)
+- Adding renew button back to My Subscriptions tab (jharris@redhat.com)
+- Lots of glade cleanup and tweaks. (jharris@redhat.com)
+- Adding in none check for tree_iter to get rid of initial traceback
+  (jharris@redhat.com)
+- Removing hardware column and making products table functional.
+  (jharris@redhat.com)
+- Remove unecessary call to server after GUI bind. (dgoodwin@redhat.com)
+- Touchups for compliance status width/wrapping. (dgoodwin@redhat.com)
+- Calculate and display products out of compliance status.
+  (dgoodwin@redhat.com)
+- Hookup All Subs tab to the subscription details below. (dgoodwin@redhat.com)
+- Break subscription details out into a class. (dgoodwin@redhat.com)
+- Getting rid of duplicate date formatting method (jharris@redhat.com)
+- Adding products table layout - currently showing dummy data
+  (jharris@redhat.com)
+- 646431: Fix missing refresh for add screen. (dgoodwin@redhat.com)
+- 646916: Enable the plugin by default (bkearney@redhat.com)
+- 646557: remove extraneous "user service" in the selector (alikins@redhat.com)
+- Fixing bug in percentage calculation of installed products
+  (jharris@redhat.com)
+- Rendering installed products as a progress bar (jharris@redhat.com)
+- Hookup View Facts button. (dgoodwin@redhat.com)
+- Enable Registration Settings button. (dgoodwin@redhat.com)
+- Add new UI sidebar. (dgoodwin@redhat.com)
+- Refactoring how to obtain widget refs (jharris@redhat.com)
+- More All Subs tab UI touchups. (dgoodwin@redhat.com)
+- Set new UI main window size to 1024x768. (dgoodwin@redhat.com)
+- All Subs tab UI touchups. (dgoodwin@redhat.com)
+- Set all subs date selector to current date by default. (dgoodwin@redhat.com)
+- Hookup all subs date filtering. (dgoodwin@redhat.com)
+- Enable active on date selection UI components. (dgoodwin@redhat.com)
+- Adding in selection listener to update mysubs info (jharris@redhat.com)
+- 64431 Man page updates (bkearney@redhat.com)
+- 645347: Long usernames caused httpd server to reject the request.
+  (bkearney@redhat.com)
+- 640463: Update the oids in the order namespace (bkearney@redhat.com)
+- 645115: clean up the location of the entitlement certificates
+  (bkearney@redhat.com)
+- 645378: do not allow empty system names on registration (alikins@redhat.com)
+- 645372: better logging during a force register to say what is going on
+  (bkearney@redhat.com)
+- Latest man page from Deon. This is version 49774 (bkearney@redhat.com)
+- 643027: Use the new bind by product API (jbowes@redhat.com)
+- Moving out renew button and adding a little polish (jharris@redhat.com)
+- Hookup uninstalled/name filtering in new UI. (dgoodwin@redhat.com)
+- Add helper for filtering a list of pools. (dgoodwin@redhat.com)
+- Hookup pool list on all subscriptions tab. (dgoodwin@redhat.com)
+- Calculate 'merged' pool data. (dgoodwin@redhat.com)
+- cleanup rhsm.conf a bit, make everything of form "a = b" (alikins@redhat.com)
+- 617662: Add a config value for the default yum repo ca cert location
+  (jbowes@redhat.com)
+- Moving 'My Subscriptions' page to look at entitlement certs (whoops!)
+  (jharris@redhat.com)
+- Force local cleanup if GUI unregister fails. (dgoodwin@redhat.com)
+- Fix bad i18n calls. (dgoodwin@redhat.com)
+- Fix my subs tab. (dgoodwin@redhat.com)
+- Remove global facts object. (dgoodwin@redhat.com)
+- Begin using mocks in tests. (dgoodwin@redhat.com)
+- 613709: Munge product labels so we always have a valid repo id
+  (jbowes@redhat.com)
+- Remove use of 'consumer' global in GUI. (dgoodwin@redhat.com)
+- Fix monkey-patching test error. (dgoodwin@redhat.com)
+- Switch to webqa in default rhsm.conf. (dgoodwin@redhat.com)
+- Add All Subs search button. (dgoodwin@redhat.com)
+- Enable the 'contains text' UI widgets. (dgoodwin@redhat.com)
+- Adding several additions to 'My Subscriptions' page. (jharris@redhat.com)
+- 627962: Fix issue with cpu.cpu_mhz causing facts to always update
+  (alikins@redhat.com)
+- 642705: destroy icon wen compliant (jesusr@redhat.com)
+- 643402: update the gui after a manual cert import (jbowes@redhat.com)
+- 642705: destroy icon when compliant (jesusr@redhat.com)
+- Wildcard GNOME files in spec. (dgoodwin@redhat.com)
+- Pass data between new main window and tab classes. (dgoodwin@redhat.com)
+- 642997: split RHN or RHN sat option into two choices (alikins@redhat.com)
+- 642997: split RHN or RHN sat option into two choices (alikins@redhat.com)
+- 642661: Fix registration status during firstboot (alikins@redhat.com)
+- 642661: Fix registration status during firstboot (alikins@redhat.com)
+- 643054: Add in the latest man page. (bkearney@redhat.com)
+- 643054: Add in the latest man page. (bkearney@redhat.com)
+- Dynamically loading subscriptoin tabs. (jharris@redhat.com)
+- Hookup signals for all subs filter checkboxes. (dgoodwin@redhat.com)
+- Refactor all subs tab into separate class. (dgoodwin@redhat.com)
+- Get all subs treeview operational. (dgoodwin@redhat.com)
+- Mockup "all subscriptions" tab. (dgoodwin@redhat.com)
+- Wildcard glade files in spec. (dgoodwin@redhat.com)
+- Skeleton code for new UI. (dgoodwin@redhat.com)
+- Reversion alpha branch, next tag 0.92.1 (dgoodwin@redhat.com)
+- Reversion for beta, next tag will go to 0.93.1. (dgoodwin@redhat.com)
+
 * Wed Oct 13 2010 Devan Goodwin <dgoodwin@redhat.com> 0.92-1
 - Resolves: #641037,#641448,#641479,#641502
 - Update I18N strings. (dgoodwin@redhat.com)
