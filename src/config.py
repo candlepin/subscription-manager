@@ -27,6 +27,7 @@ DEFAULTS = {
         'port': '8443',
         'ca_cert_dir': '/etc/rhsm/ca/',
         'repo_ca_cert': '/etc/rhsm/ca/redhat-uep.pem',
+        'ssl_verify_depth': '3',
         }
 
 def initConfig(config_file=None):

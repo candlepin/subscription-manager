@@ -60,7 +60,7 @@ class Restlib(object):
     def __init__(self, host, ssl_port, apihandler,
             username=None, password=None,
             cert_file=None, key_file=None,
-            ca_dir=None, insecure=False):
+            ca_dir=None, insecure=False, ssl_verify_depth=1):
         self.host = host
         self.ssl_port = ssl_port
         self.apihandler = apihandler
@@ -73,6 +73,7 @@ class Restlib(object):
         self.insecure = insecure
         self.username = username
         self.password = password
+        self.ssl_verify_depth = ssl_verify_depth
 
         # Setup basic authentication if specified:
         if username and password:
@@ -108,7 +109,7 @@ class Restlib(object):
             self._load_ca_certificates(context)
         log.info('work in insecure mode ?:%s', self.insecure)
         if not self.insecure: #allow clients to work insecure mode if required..
-            context.set_verify(SSL.verify_fail_if_no_peer_cert, 1)
+            context.set_verify(SSL.verify_fail_if_no_peer_cert, self.ssl_verify_depth)
         if self.cert_file:
             context.load_cert(self.cert_file, keyfile=self.key_file)
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
@@ -186,6 +187,7 @@ class UEPConnection:
         self.password = password
 
         self.ca_cert_dir = config.get('server', 'ca_cert_dir')
+        self.ssl_verify_depth = int(config.get('server', 'ssl_verify_depth'))
         config_insecure = int(config.get('server', 'insecure'))
         self.insecure = False
         if config_insecure:
@@ -210,12 +212,14 @@ class UEPConnection:
         if using_basic_auth:
             self.conn = Restlib(self.host, self.ssl_port, self.handler,
                     username=self.username, password=self.password,
-                    ca_dir=self.ca_cert_dir, insecure=self.insecure)
+                    ca_dir=self.ca_cert_dir, insecure=self.insecure,
+                    ssl_verify_depth=self.ssl_verify_depth)
             log.info("Using basic authentication as: %s" % username)
         else:
             self.conn = Restlib(self.host, self.ssl_port, self.handler,
                     cert_file=self.cert_file, key_file=self.key_file,
-                    ca_dir=self.ca_cert_dir, insecure=self.insecure)
+                    ca_dir=self.ca_cert_dir, insecure=self.insecure,
+                    ssl_verify_depth=self.ssl_verify_depth)
             log.info("Using certificate authentication: key = %s, cert = %s, "
                     "ca = %s, insecure = %s" %
                     (self.key_file, self.cert_file, self.ca_cert_dir,
