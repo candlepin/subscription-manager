@@ -33,6 +33,11 @@ GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
 class GladeWidget(object):
 
     def __init__(self, glade_file, initial_widget_names=None):
+        """
+        Create a new widget backed by the give glade file (assumed to be in data/).
+        The initial_widget_names is a list of widgets to pull in as instance
+        variables.
+        """
         self.glade = gtk.glade.XML(os.path.join(GLADE_DIR, glade_file))
         
         if initial_widget_names:
