@@ -18,6 +18,7 @@
 
 import os
 import re
+import syslog
 from datetime import timedelta
 from config import initConfig
 from connection import UEPConnection
@@ -35,6 +36,10 @@ _ = gettext.gettext
 cfg = initConfig()
 
 
+def system_log(message, priority=syslog.LOG_NOTICE):
+	syslog.openlog("subscription-manager")
+	syslog.syslog(priority, message)
+    
 class ActionLock(Lock):
 
     PATH = '/var/run/subsys/rhsm/cert.pid'
@@ -130,7 +135,19 @@ class UpdateAction(Action):
         exceptions = self.install(uep, missing, report)
         self.purgeExpired(report)
         log.info('certs updated:\n%s', report)
+        self.syslogResults(report)
         return (report.updates(), exceptions)
+
+    def syslogResults(self, report):
+        for cert in report.added:
+            system_log("Added subscription for '%s' contract '%s'" % \
+                (cert.getOrder().getName(), cert.getOrder().getContract()))
+        for cert in report.rogue:
+            system_log("Removed subscription for '%s' contract '%s'" % \
+                (cert.getOrder().getName(), cert.getOrder().getContract()))
+        for cert in report.expnd:
+            system_log("Expired subscription for '%s' contract '%s'" % \
+                (cert.getOrder().getName(), cert.getOrder().getContract()))
 
     def getLocal(self, report):
         local = {}

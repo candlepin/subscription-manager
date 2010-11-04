@@ -36,7 +36,7 @@ import connection
 import config
 import constants
 from facts import Facts
-from certlib import EntitlementDirectory, ConsumerIdentity, CertLib
+from certlib import EntitlementDirectory, ConsumerIdentity, CertLib, syslog
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
 from socket import error as socket_error
 from M2Crypto import SSL
