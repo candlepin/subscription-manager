@@ -26,8 +26,6 @@ from certlib import EntitlementDirectory, ProductDirectory
 from certificate import GMT
 from managerlib import formatDate
 
-from productstable import ProductsTable
-
 import widgets
 
 import logutil
