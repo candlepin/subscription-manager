@@ -37,7 +37,7 @@ Label              \t%-30s
 Quantity           \t%-25s
 Flex Quantity      \t%-25s
 Vendor             \t%-25s
-URL                      \t%-30s
+URL                \t%-30s
 Enabled            \t%-25s
 \n
 """)
@@ -56,7 +56,7 @@ ProductName:        \t%-25s
 Status:             \t%-25s
 Expires:            \t%-25s
 Subscription:       \t%-25s
-ContractNumber:        \t%-25s
+ContractNumber:     \t%-25s
 """)
 
 available_subs_list = _("""
