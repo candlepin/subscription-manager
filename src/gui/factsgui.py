@@ -1,9 +1,5 @@
 #
-# GUI Module for standalone subscription-manager - System Facts Dialog
-#
 # Copyright (c) 2010 Red Hat, Inc.
-#
-# Authors: Justin Harris <jharris@redhat.com>
 #
 # This software is licensed to you under the GNU General Public License,
 # version 2 (GPLv2). There is NO WARRANTY for this software, express or
