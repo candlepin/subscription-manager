@@ -94,19 +94,24 @@ def getInstalledProductStatus():
         ents = cert.getEntitlements()
         eproducts = cert.getProducts()
         for product in eproducts:
-            entdict[product.getName()] = {'Entitlements': ents,
-                                          'valid': cert.valid(),
-                                          'expires': formatDate(cert.validRange().end().isoformat()),
-                                          'serial': cert.serialNumber(),
-                                          'contract': cert.getOrder().getContract()}
+            entdict[product.getName()] = {
+                    'Entitlements': ents,
+                    'valid': cert.valid(),
+                    'expires': formatDate(cert.validRange().end().isoformat()),
+                    'serial': cert.serialNumber(),
+                    'contract': cert.getOrder().getContract(),
+                    'account': cert.getOrder().getAccountNumber()
+            }
     product_status = []
     for product in products:
         pname = product.getProduct().getName()
         if entdict.has_key(pname):
-            data = (pname, map_status(entdict[pname]['valid']), str(entdict[pname]['expires']), entdict[pname]['serial'], entdict[pname]['contract'])
+            data = (pname, map_status(entdict[pname]['valid']),
+                    str(entdict[pname]['expires']), entdict[pname]['serial'],
+                    entdict[pname]['contract'], entdict[pname]['account'])
             product_status.append(data)
         else:
-            product_status.append((pname, map_status(None), "", "", ""))
+            product_status.append((pname, map_status(None), "", "", "", ""))
 
     # Include entitled but not installed products
     psnames = [prod[0] for prod in product_status]
@@ -114,7 +119,10 @@ def getInstalledProductStatus():
         for product in cert.getProducts():
             if product.getName() not in psnames:
                 psname = product.getName()
-                data = (psname, _('Not Installed'), str(entdict[psname]['expires']), entdict[psname]['serial'], entdict[psname]['contract'])
+                data = (psname, _('Not Installed'),
+                        str(entdict[psname]['expires']),
+                        entdict[psname]['serial'], entdict[psname]['contract'],
+                        entdict[psname]['account'])
                 product_status.append(data)
     return product_status
 
@@ -146,7 +154,10 @@ def getConsumedProductEntitlements():
     for cert in entdir.listValid():
         eproducts = cert.getProducts()
         for product in eproducts:
-            data = (product.getName(), cert.getOrder().getContract(), cert.serialNumber(), cert.valid(), formatDate(cert.validRange().begin().isoformat()), \
+            data = (product.getName(), cert.getOrder().getContract(),
+                    cert.getOrder().getAccountNumber(), cert.serialNumber(),
+                    cert.valid(),
+                    formatDate(cert.validRange().begin().isoformat()),
                     formatDate(cert.validRange().end().isoformat()))
             consumed_products.append(data)
     return consumed_products
