@@ -42,7 +42,6 @@ log = getLogger(__name__)
 
 cfg = config.initConfig()
 
-
 def handle_exception(msg, ex):
     log.error(msg)
     log.exception(ex)

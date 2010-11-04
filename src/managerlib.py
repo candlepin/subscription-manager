@@ -19,6 +19,7 @@ import stat
 import sys
 import constants
 import shutil
+import syslog
 import xml.utils.iso8601
 from datetime import datetime, date
 from certlib import CertLib, ConsumerIdentity, \
@@ -54,6 +55,11 @@ def configure_i18n():
     gettext.textdomain(APP)
 
 
+def system_log(message, priority=syslog.LOG_NOTICE):
+	syslog.openlog("subscription-manager")
+	syslog.syslog(priority, message)
+
+
 def persist_consumer_cert(consumerinfo):
     """
      Calls the consumerIdentity, persists and gets consumer info
@@ -68,6 +74,7 @@ def persist_consumer_cert(consumerinfo):
     consumer_info = {"consumer_name": consumer.getConsumerName(),
                      "uuid": consumer.getConsumerId()}
     log.info("Consumer created: %s" % consumer_info)
+    system_log("Registered machine with identity: %s" % consumer.getConsumerId())
     return consumer_info
 
 
@@ -439,6 +446,7 @@ def unregister(uep, consumer_uuid, force=True):
     try:
         uep.unregisterConsumer(consumer_uuid)
         log.info("Successfully un-registered.")
+        system_log("Unregistered machine with identity: %s" % consumer_uuid)
         force=True
     finally:
         if force:

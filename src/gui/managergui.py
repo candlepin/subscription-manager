@@ -675,7 +675,7 @@ class RegisterScreen:
         if ConsumerIdentity.exists():
             try:
                 cid = self.consumer.uuid
-                UEP.unregisterConsumer(cid)
+                managerlib.unregisterConsumer(UEP, cid)
             except Exception, e:
                 handle_gui_exception(e, None, 
                         "Unable to unregister existing user credentials.", 
