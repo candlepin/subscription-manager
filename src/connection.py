@@ -337,10 +337,12 @@ class UEPConnection:
         method = "/consumers/%s/entitlements" % consumerId
         return self.conn.request_delete(method)
 
-    def getPoolsList(self, consumerId, listAll=False):
+    def getPoolsList(self, consumerId, listAll=False, active_on=None):
         method = "/pools?consumer=%s" % consumerId
         if listAll:
             method = "%s&listall=true" % method
+        if active_on:
+            method = "%s&activeon=%s" % (method, active_on.strftime("%Y%m%d"))
         results = self.conn.request_get(method)
         return results
 

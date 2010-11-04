@@ -240,20 +240,8 @@ class PoolFilter(object):
                 filtered_pools.append(pool)
         return filtered_pools
 
-    def filter_active_on(self, pools, date):
-        """
-        Filter out pools which will not be active on the given date.
-        """
-        filtered_pools = []
-        for pool in pools:
-            start_date = formatDate(pool['startDate'])
-            end_date = formatDate(pool['endDate'])
-            if start_date <= date <= end_date:
-                filtered_pools.append(pool)
-        return filtered_pools
 
-
-def list_pools(uep, consumer_uuid, facts, all=False):
+def list_pools(uep, consumer_uuid, facts, all=False, active_on=None):
     """
     Wrapper around the UEP call to fetch pools, which forces a facts update
     if anything has changed before making the request. This ensures the
@@ -262,7 +250,7 @@ def list_pools(uep, consumer_uuid, facts, all=False):
     """
     if facts.delta():
         uep.updateConsumerFacts(consumer_uuid, facts.get_facts())
-    return uep.getPoolsList(consumer_uuid, all)
+    return uep.getPoolsList(consumer_uuid, all, active_on)
 
 # TODO: This method is morphing the actual pool json and returning a new 
 # dict which does not contain all the pool info. Not sure if this is really
@@ -366,14 +354,14 @@ class PoolStash(object):
         # All pools:
         self.all_pools = {}
 
-    def refresh(self):
+    def refresh(self, active_on):
         """
-        Refresh the list of pools from the server.
+        Refresh the list of pools from the server, active on the given date.
         """
         self.all_pools = {}
         self.compatible_pools = {}
         for pool in list_pools(self.backend.uep,
-                self.consumer.uuid, self.facts):
+                self.consumer.uuid, self.facts, active_on=active_on):
             self.compatible_pools[pool['id']] = pool
             self.all_pools[pool['id']] = pool
 
@@ -381,13 +369,12 @@ class PoolStash(object):
         # Sadly this currently requires a second query to the server.
         self.incompatible_pools = {}
         for pool in list_pools(self.backend.uep,
-                self.consumer.uuid, self.facts, all=True):
+                self.consumer.uuid, self.facts, all=True, active_on=active_on):
             if not pool['id'] in self.compatible_pools:
                 self.incompatible_pools[pool['id']] = pool
                 self.all_pools[pool['id']] = pool
 
-    def filter_pools(self, incompatible=False, uninstalled=False, text=None,
-            active_on=None):
+    def filter_pools(self, incompatible=False, uninstalled=False, text=None):
         """
         Return a list of pool hashes, filtered according to the given options.
 
@@ -408,17 +395,14 @@ class PoolStash(object):
         if text:
             pools = pool_filter.filter_product_name(pools, text)
 
-        if active_on:
-            pools = pool_filter.filter_active_on(pools, active_on)
-
         return pools
 
-    def merge_pools(self, incompatible=False, uninstalled=False, text=None, active_on=None):
+    def merge_pools(self, incompatible=False, uninstalled=False, text=None):
         """
         Return a merged view of pools filtered according to the given options.
         Pools for the same product will be merged into a MergedPool object.
         """
-        pools = self.filter_pools(incompatible, uninstalled, text, active_on)
+        pools = self.filter_pools(incompatible, uninstalled, text)
         merged_pools = merge_pools(pools)
         return merged_pools
 

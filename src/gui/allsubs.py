@@ -90,7 +90,6 @@ class AllSubscriptionsTab(object):
             "on_not_installed_checkbutton_clicked": self.filters_changed,
             "on_contains_text_checkbutton_clicked": self.filters_changed,
             "on_contain_text_entry_changed": self.filters_changed,
-            "on_active_on_checkbutton_clicked": self.filters_changed,
         })
         self.subs_treeview.get_selection().connect('changed', self.update_sub_details)
 
@@ -119,17 +118,13 @@ class AllSubscriptionsTab(object):
 
     def get_active_on_date(self):
         """
-        Returns a date for the "active on" filter, if one is selected.
-        Otherwise returns None.
+        Returns a date for the "active on" field.
         """
-        if self.active_on_checkbutton.get_active():
-            text = self.active_on_entry.get_text()
-            if text != '':
-                year, month, day = text.split('-')
-                active_on_date = datetime.date(int(year), int(month),
-                        int(day))
-                return active_on_date
-        return None
+        text = self.active_on_entry.get_text()
+        year, month, day = text.split('-')
+        active_on_date = datetime.date(int(year), int(month),
+                int(day))
+        return active_on_date
         
     def display_pools(self):
         """
@@ -140,8 +135,7 @@ class AllSubscriptionsTab(object):
         merged_pools = self.pool_stash.merge_pools(
                 incompatible=self.include_incompatible(),
                 uninstalled=self.include_uninstalled(),
-                text=self.get_filter_text(),
-                active_on=self.get_active_on_date())
+                text=self.get_filter_text())
 
         for entry in merged_pools.values():
             self.subs_store.append([
@@ -173,7 +167,7 @@ class AllSubscriptionsTab(object):
         log.debug("   include hw mismatch = %s" % self.include_incompatible())
         log.debug("   include uninstalled = %s" % self.include_uninstalled())
         log.debug("   contains text = %s" % self.get_filter_text())
-        self.pool_stash.refresh()
+        self.pool_stash.refresh(self.get_active_on_date())
         self.display_pools()
 
     def date_select_button_clicked(self, widget):
@@ -195,7 +189,6 @@ class AllSubscriptionsTab(object):
         year, month, day = widget.get_date()
         month += 1 # this starts at 0
         self.active_on_entry.set_text("%s-%s-%s" % (year, month, day))
-        self.filters_changed(widget)
 
     def update_sub_details(self, widget):
         """ Shows details for the current selected pool. """
