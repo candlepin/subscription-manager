@@ -138,7 +138,7 @@ display_icon(Compliance *compliance, ComplianceType compliance_type)
 			"software license agreements.");
 
 	} else {
-		tooltip = _("This system's subscriptions are about to expire");
+		tooltip = _("Some of the system's subscriptions are about to expire");
 		notification_title =
 			_("This System's Subscriptions Are About to Expire");
 		notification_body = _("One or more of this system's "
