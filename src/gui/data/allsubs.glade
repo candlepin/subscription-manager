@@ -133,6 +133,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
                 <property name="draw_indicator">True</property>
                 <signal name="clicked" handler="on_not_installed_checkbutton_clicked" swapped="no"/>
               </widget>
@@ -142,13 +143,14 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkCheckButton" id="match_hw_checkbutton">
-                <property name="label" translatable="yes">do not match my hardware</property>
+              <widget class="GtkCheckButton" id="compatible_checkbutton">
+                <property name="label" translatable="yes">match my hardware</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
                 <property name="draw_indicator">True</property>
-                <signal name="clicked" handler="on_match_hw_checkbutton_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_compatible_checkbutton_clicked" swapped="no"/>
               </widget>
               <packing>
                 <property name="top_attach">1</property>
@@ -195,7 +197,12 @@
               <placeholder/>
             </child>
             <child>
-              <placeholder/>
+              <widget class="GtkLabel" id="label2">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">&lt;b&gt;Only show subscriptions that:&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </widget>
             </child>
           </widget>
           <packing>

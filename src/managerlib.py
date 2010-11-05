@@ -225,9 +225,9 @@ class PoolFilter(object):
     def __init__(self):
         self.product_directory = ProductDirectory()
 
-    def filter_uninstalled(self, pools):
+    def filter_out_uninstalled(self, pools):
         """
-        Filter the given list of pools, removing those which do not provide
+        Filter the given list of pools, return only those which provide
         a product installed on this system.
         """
         installed_products = self.product_directory.list()
@@ -238,6 +238,23 @@ class PoolFilter(object):
                 # we only need one matched item per pool id, so add to dict to keep unique:
                 if str(productid) in d['providedProductIds'] or \
                         str(productid) == d['productId']:
+                    matched_data_dict[d['id']] = d
+
+        return matched_data_dict.values()
+
+    def filter_out_installed(self, pools):
+        """
+        Filter the given list of pools, return only those which do not provide
+        a product installed on this system.
+        """
+        installed_products = self.product_directory.list()
+        matched_data_dict = {}
+        for d in pools:
+            for product in installed_products:
+                productid = product.getProduct().getHash()
+                # we only need one matched item per pool id, so add to dict to keep unique:
+                if str(productid) not in d['providedProductIds'] and \
+                        str(productid) != d['productId']:
                     matched_data_dict[d['id']] = d
 
         return matched_data_dict.values()
@@ -387,22 +404,24 @@ class PoolStash(object):
                 self.incompatible_pools[pool['id']] = pool
                 self.all_pools[pool['id']] = pool
 
-    def filter_pools(self, incompatible=False, uninstalled=False, text=None):
+    def filter_pools(self, compatible=False, uninstalled=False, text=None):
         """
         Return a list of pool hashes, filtered according to the given options.
 
         This method does not actually hit the server, filtering is done in
         memory.
         """
-        pools = self.compatible_pools.values()
-        if incompatible:
-            pools = pools + self.incompatible_pools.values()
+        pools = self.incompatible_pools.values()
+        if compatible:
+            pools = self.compatible_pools.values()
 
         pool_filter = PoolFilter()
 
         # Filter out products that are not installed if necessary:
-        if not uninstalled:
-            pools = pool_filter.filter_uninstalled(pools)
+        if uninstalled:
+            pools = pool_filter.filter_out_installed(pools)
+        else:
+            pools = pool_filter.filter_out_uninstalled(pools)
 
         # Filter by product name if necessary:
         if text:
@@ -410,12 +429,12 @@ class PoolStash(object):
 
         return pools
 
-    def merge_pools(self, incompatible=False, uninstalled=False, text=None):
+    def merge_pools(self, compatible=True, uninstalled=False, text=None):
         """
         Return a merged view of pools filtered according to the given options.
         Pools for the same product will be merged into a MergedPool object.
         """
-        pools = self.filter_pools(incompatible, uninstalled, text)
+        pools = self.filter_pools(compatible, uninstalled, text)
         merged_pools = merge_pools(pools)
         return merged_pools
 

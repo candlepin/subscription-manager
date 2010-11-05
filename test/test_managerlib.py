@@ -83,7 +83,7 @@ class PoolFilterTests(unittest.TestCase):
                 create_pool(product1, product1),
                 create_pool(product2, product2),
         ]
-        result = filter.filter_uninstalled(pools)
+        result = filter.filter_out_uninstalled(pools)
         self.assertEquals(1, len(result))
         self.assertEquals(product2, result[0]['productId'])
 
@@ -98,9 +98,39 @@ class PoolFilterTests(unittest.TestCase):
                 create_pool(product1, product1),
                 create_pool(product2, product2, provided_products=[provided]),
         ]
-        result = filter.filter_uninstalled(pools)
+        result = filter.filter_out_uninstalled(pools)
         self.assertEquals(1, len(result))
         self.assertEquals(product2, result[0]['productId'])
+
+    def test_installed_filter_direct_match(self):
+        filter = PoolFilter()
+        product1 = 'product1'
+        product2 = 'product2'
+        filter.product_directory = self._setup_installed_products([product2])
+
+        pools = [
+                create_pool(product1, product1),
+                create_pool(product1, product1),
+                create_pool(product2, product2),
+        ]
+        result = filter.filter_out_installed(pools)
+        self.assertEquals(1, len(result))
+        self.assertEquals(product1, result[0]['productId'])
+
+    def test_installed_filter_provided_match(self):
+        filter = PoolFilter()
+        product1 = 'product1'
+        product2 = 'product2'
+        provided = 'providedProduct'
+        filter.product_directory = self._setup_installed_products([provided])
+
+        pools = [
+                create_pool(product1, product1),
+                create_pool(product2, product2, provided_products=[provided]),
+        ]
+        result = filter.filter_out_installed(pools)
+        self.assertEquals(1, len(result))
+        self.assertEquals(product1, result[0]['productId'])
 
     def test_filter_product_name(self):
         filter = PoolFilter()

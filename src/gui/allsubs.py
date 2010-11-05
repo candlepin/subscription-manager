@@ -66,8 +66,10 @@ class AllSubscriptionsTab(object):
         self._add_column(_("Total Subscriptions"), QUANTITY_INDEX)
         self._add_column(_("Available Subscriptions"), AVAIL_INDEX)
 
-        self.no_hw_match_checkbutton = self.all_subs_xml.get_widget(
-                'match_hw_checkbutton')
+        self.compatible_checkbutton = self.all_subs_xml.get_widget(
+                'compatible_checkbutton')
+        # This option should be selected by default:
+        self.compatible_checkbutton.set_active(True)
         self.not_installed_checkbutton = self.all_subs_xml.get_widget(
                 'not_installed_checkbutton')
         self.contains_text_checkbutton = self.all_subs_xml.get_widget(
@@ -86,7 +88,7 @@ class AllSubscriptionsTab(object):
         self.all_subs_xml.signal_autoconnect({
             "on_search_button_clicked": self.search_button_clicked,
             "on_date_select_button_clicked": self.date_select_button_clicked,
-            "on_match_hw_checkbutton_clicked": self.filters_changed,
+            "on_compatible_checkbutton_clicked": self.filters_changed,
             "on_not_installed_checkbutton_clicked": self.filters_changed,
             "on_contains_text_checkbutton_clicked": self.filters_changed,
             "on_contain_text_entry_changed": self.filters_changed,
@@ -94,11 +96,11 @@ class AllSubscriptionsTab(object):
         self.subs_treeview.get_selection().connect('changed', self.update_sub_details)
 
 
-    def include_incompatible(self):
+    def show_compatible(self):
         """ Return True if we're to include pools which failed a rule check. """
-        return self.no_hw_match_checkbutton.get_active()
+        return self.compatible_checkbutton.get_active()
 
-    def include_uninstalled(self):
+    def show_uninstalled(self):
         """ 
         Return True if we're to include pools for products that are 
         not installed.
@@ -133,8 +135,8 @@ class AllSubscriptionsTab(object):
         self.subs_store.clear()
 
         merged_pools = self.pool_stash.merge_pools(
-                incompatible=self.include_incompatible(),
-                uninstalled=self.include_uninstalled(),
+                compatible=self.show_compatible(),
+                uninstalled=self.show_uninstalled(),
                 text=self.get_filter_text())
 
         for entry in merged_pools.values():
@@ -163,10 +165,6 @@ class AllSubscriptionsTab(object):
         Reload the subscriptions from the server when the Search button
         is clicked.
         """
-        log.debug("Search button clicked.")
-        log.debug("   include hw mismatch = %s" % self.include_incompatible())
-        log.debug("   include uninstalled = %s" % self.include_uninstalled())
-        log.debug("   contains text = %s" % self.get_filter_text())
         self.pool_stash.refresh(self.get_active_on_date())
         self.display_pools()
 
