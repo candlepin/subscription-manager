@@ -121,13 +121,16 @@ class SubDetailsWidget(GladeWidget):
             destroy('start_date_text')
             destroy('expiration_date_label')
             destroy('expiration_date_text')
+            destroy('account_label')
+            destroy('account_text')
         else:
             self.pull_widgets(["contract_number_text", "start_date_text",
-                               "expiration_date_text"])
+                               "expiration_date_text", "account_text"])
 
         self.bundled_products = ProductsTable(self.products_view)
 
-    def show(self, name, contract=None, start=None, end=None, products=[]):
+    def show(self, name, contract=None, start=None, end=None, account=None,
+            products=[]):
         """ 
         Show subscription details. 
         
@@ -140,6 +143,7 @@ class SubDetailsWidget(GladeWidget):
             self._set(self.contract_number_text, contract)
             self._set(self.start_date_text, start)
             self._set(self.expiration_date_text, end)
+            self._set(self.account_text, account)
 
         self.bundled_products.clear()
         for product in products:

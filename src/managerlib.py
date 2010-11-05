@@ -175,11 +175,13 @@ def getProductDescription(qproduct):
         if qproduct == pst[0]:
             if pst[1] == "Subscribed":
                 data = constants.subscribed_status % (pst[0], pst[2])
-            if pst[1] == "Not Subscribed":
+            elif pst[1] == "Not Subscribed":
                 data = constants.unsubscribed_status % (pst[0], pst[0], pst[0])
-            if pst[1] == "Expired":
-                data = constants.expired_status % (pst[0], pst[2], pst[0], pst[0])
-            if pst[1] == "Not Installed":
+            elif pst[1] == "Expired":
+                data = constants.expired_status % (pst[0], pst[2], pst[0],
+                        pst[0])
+            else:
+                # Not Installed
                 data = constants.not_installed_status % (pst[0], pst[0], pst[0])
 
     for product in products:

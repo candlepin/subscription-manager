@@ -157,6 +157,7 @@ class MySubscriptionsTab(widgets.GladeWidget):
                               contract=order.getContract() or "", 
                               start=str(formatDate(order.getStart())), 
                               end=str(formatDate(order.getEnd())),
+                              account=order.getAccountNumber() or "",
                               products=products)
 
     def _get_background_color(self, entitlement_cert):
