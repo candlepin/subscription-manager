@@ -170,9 +170,11 @@ class IdentityCommand(CliCommand):
         self._validate_options()
 
         try:
-            consumerid = check_registration()['uuid']
+            consumer =  check_registration()
+            consumerid = consumer['uuid']
+            consumer_name = consumer['consumer_name']
             if not self.options.regenerate:
-                print _('Current identity is %s') % consumerid
+                print _('Current identity is: %s name: %s') % (consumerid, consumer_name)
             else:
                 if (self.options.username and self.options.password):
                     self.cp = connection.UEPConnection(username=self.options.username,
@@ -237,7 +239,7 @@ class RegisterCommand(CliCommand):
         consumername = self.options.consumername
         if consumername == None:
             consumername = self.options.username
-            
+
         admin_cp = connection.UEPConnection(username=self.options.username,
                 password=self.options.password)
 
@@ -259,11 +261,11 @@ class RegisterCommand(CliCommand):
         try:
             if self.options.consumerid:
             #TODO remove the username/password
-                consumer = admin_cp.getConsumer(self.options.consumerid, 
+                consumer = admin_cp.getConsumer(self.options.consumerid,
                         self.options.username, self.options.password)
             else:
                 consumer = admin_cp.registerConsumer(name=consumername,
-                        type=self.options.consumertype, 
+                        type=self.options.consumertype,
                         facts=self.facts.get_facts())
         except connection.RestlibException, re:
             log.exception(re)
@@ -311,7 +313,7 @@ class UnRegisterCommand(CliCommand):
             consumer = check_registration()['uuid']
             managerlib.unregister(self.cp, consumer)
         except connection.RestlibException, re:
-            # If errors are encountered unregistering with the UEP, we will 
+            # If errors are encountered unregistering with the UEP, we will
             # report them, but proceed.
             log.error("Error unregistering system with entitlement platform.")
             log.error("Consumer may need to be manually cleaned up: %s" % consumer)
