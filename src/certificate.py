@@ -833,6 +833,11 @@ class Product:
         self.hash = hash
         self.ext = ext
 
+    def getId(self):
+        return self.hash
+
+    # TODO: Drop this, hash terminology is not supposed to be used due to
+    # confusion, what this actually is is product ID.
     def getHash(self):
         return self.hash
 

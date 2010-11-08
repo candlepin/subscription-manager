@@ -83,6 +83,76 @@ def map_status(status):
     return smap[status]
 
 
+class InstalledProductStash(object):
+    """
+    Class used to calculate the various products installed and entitled.
+    """
+    def __init__(self):
+        product_certs = ProductDirectory().list()
+        entcerts = EntitlementDirectory().list()
+        entdict = {}
+
+        for cert in entcerts:
+            ents = cert.getEntitlements()
+            eproducts = cert.getProducts()
+            for product in eproducts:
+                entdict[product.getName()] = {
+                        'Entitlements': ents,
+                        'valid': cert.valid(),
+                        'expires': formatDate(cert.validRange().end().isoformat()),
+                        'serial': cert.serialNumber(),
+                        'contract': cert.getOrder().getContract(),
+                        'account': cert.getOrder().getAccountNumber()
+                }
+
+        self.installed_and_entitled = {}
+        self.installed_and_unentitled = {}
+        self.uninstalled_and_entitled = {}
+
+        for cert in product_certs:
+            product = cert.getProduct()
+            pname = product.getName()
+            if entdict.has_key(pname):
+                #data = (pname, map_status(entdict[pname]['valid']),
+                #        str(entdict[pname]['expires']), entdict[pname]['serial'],
+                #        entdict[pname]['contract'], entdict[pname]['account'])
+                #product_status.append(data)
+                self.installed_and_entitled[product.getId()] = {
+                        'id': product.getId(),
+                        'name': pname,
+                        'status': map_status(entdict[pname]['valid']),
+                        'expires': str(entdict[pname]['expires']),
+                        'serial': entdict[pname]['serial'],
+                        'contract': entdict[pname]['contract'],
+                        'account': entdict[pname]['account'],
+                }
+
+
+            else:
+                self.installed_and_unentitled[product.getId()] = {
+                        'id': product.getId(),
+                        'name': pname,
+                        'status': map_status(None),
+                }
+
+        # Include entitled but not installed product_certs
+        psnames = [prod[0] for prod in product_status]
+        for cert in EntitlementDirectory().list():
+            for product in cert.getProducts():
+                if product.getName() not in psnames:
+                    psname = product.getName()
+
+                    self.uninstalled_and_entitled[product.getId()] = {
+                            'id': product.getId(),
+                            'name': psname,
+                            'status': _('Not Installed'),
+                            'expires': str(entdict[psname]['expires']),
+                            'serial': entdict[psname]['serial'],
+                            'contract': entdict[psname]['contract'],
+                            'account': entdict[psname]['account'],
+                    }
+
+
 def getInstalledProductStatus():
     """
      Returns the Installed products and their subscription states
