@@ -44,6 +44,7 @@ import xml.sax.saxutils
 
 import factsgui
 from allsubs import AllSubscriptionsTab
+from compliance import ComplianceAssistant
 import mysubstab
 
 import gettext
@@ -214,6 +215,7 @@ class MainWindow(object):
         self.system_facts_dialog = factsgui.SystemFactsDialog(self.consumer,
                 self.facts)
         self.registration_dialog = RegisterScreen(self.consumer, self.facts)
+        self.compliance_assistant = ComplianceAssistant()
 
         tab_classes = [mysubstab.MySubscriptionsTab, AllSubscriptionsTab]
 
@@ -229,6 +231,7 @@ class MainWindow(object):
         self.main_window_xml.signal_autoconnect({
             "on_registration_button_clicked": self.registration_button_clicked,
             "on_facts_button_clicked": self.facts_button_clicked,
+            "on_compliant_button_clicked": self.compliant_button_clicked,
         })
 
         self.set_compliance_status()
@@ -240,6 +243,9 @@ class MainWindow(object):
 
     def facts_button_clicked(self, widget):
         self.system_facts_dialog.show()
+
+    def compliant_button_clicked(self, widget):
+        self.compliance_assistant.show()
 
     def set_compliance_status(self):
         """ Updates the compliance status portion of the UI. """
