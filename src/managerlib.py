@@ -184,6 +184,11 @@ def getProductDescription(qproduct):
                 # Not Installed
                 data = constants.not_installed_status % (pst[0], pst[0], pst[0])
 
+            if pst[1] != "Not Subscribed":
+                data += "\n"
+                data += _("Account Number: \t%s") % pst[5]
+                data += "\n\n"
+
     for product in products:
         if qproduct == product.getProduct().getName():
             product = product.getProduct()
