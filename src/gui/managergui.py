@@ -254,13 +254,9 @@ class MainWindow(object):
         """ Updates the compliance status portion of the UI. """
         # Look for products which are out of compliance:
         warn_count = 0
-        installed_stash = managerlib.InstalledProductStash()
-
         for product in managerlib.getInstalledProductStatus():
-            print product
             if product[1] in ["Expired", "Not Subscribed"]:
                 warn_count += 1
-
         if warn_count > 0:
             self.compliance_status_image.set_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_BUTTON)
             self.compliance_count_label.set_markup(
