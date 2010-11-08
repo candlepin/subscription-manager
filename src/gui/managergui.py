@@ -43,9 +43,10 @@ from M2Crypto import SSL
 import xml.sax.saxutils
 
 import factsgui
+from installedtab import InstalledProductsTab
+from mysubstab import MySubscriptionsTab
 from allsubs import AllSubscriptionsTab
 from compliance import ComplianceAssistant
-import mysubstab
 
 import gettext
 _ = gettext.gettext
@@ -217,7 +218,9 @@ class MainWindow(object):
         self.registration_dialog = RegisterScreen(self.consumer, self.facts)
         self.compliance_assistant = ComplianceAssistant()
 
-        tab_classes = [mysubstab.MySubscriptionsTab, AllSubscriptionsTab]
+        tab_classes = [InstalledProductsTab, 
+                       MySubscriptionsTab,
+                       AllSubscriptionsTab]
 
         # Populate the tabs dynamically
         for tab_class in tab_classes:

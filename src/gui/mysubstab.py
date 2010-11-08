@@ -13,7 +13,6 @@
 # in this software or its documentation.
 #
 
-import os
 import gtk
 
 from datetime import datetime, timedelta
@@ -22,6 +21,7 @@ from certificate import GMT
 from managerlib import formatDate
 
 import widgets
+import storage
 
 import logutil
 log = logutil.getLogger(__name__)
@@ -35,17 +35,6 @@ gtk.glade.bindtextdomain("subscription-manager")
 YELLOW = '#FFFB82'
 RED = '#FFAF99'
 
-# subscription_store indices
-SUBSCRIPTION = 0
-INSTALLED_PERCENT = 1
-INSTALLED_TEXT = 2
-CONTRACT = 3
-START_DATE = 4
-EXPIRATION_DATE = 5
-SERIAL = 6
-ALIGN = 7
-BACKGROUND = 8
-
 WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
 
 class MySubscriptionsTab(widgets.GladeWidget):
@@ -57,9 +46,6 @@ class MySubscriptionsTab(widgets.GladeWidget):
         widget_names = ['subscription_view', 'content']
         super(MySubscriptionsTab, self).__init__('mysubs.glade', widget_names)
         
-        self.backend = backend
-        self.consumer = consumer
-
         self.sub_details = widgets.SubDetailsWidget()
 
         # Put the details widget in the middle
@@ -70,9 +56,20 @@ class MySubscriptionsTab(widgets.GladeWidget):
         selection.connect('changed', self.update_details)
 
         # Set up the model
-        self.subscription_store = gtk.ListStore(str, float, str, str, str, 
-            str, str, float, str)
-        self.subscription_view.set_model(self.subscription_store)
+        type_map = {
+            'subscription': str,
+            'installed_value': float,
+            'installed_text': str,
+            'contract': str,
+            'start_date': str,
+            'expiration_date': str,
+            'serial': str,
+            'align': float,
+            'background': str
+        }
+            
+        self.store = storage.MappedListStore(type_map)
+        self.subscription_view.set_model(self.store)
 
         def add_column(name, column_number, expand=False):
             text_renderer = gtk.CellRendererText()
@@ -80,24 +77,24 @@ class MySubscriptionsTab(widgets.GladeWidget):
             if expand:
                 column.set_expand(True)
             else:
-                # This is probably too hard-coded
-                column.add_attribute(text_renderer, 'xalign', ALIGN)
+                column.add_attribute(text_renderer, 'xalign', self.store.align)
 
-            column.add_attribute(text_renderer, 'cell-background', BACKGROUND)
+            column.add_attribute(text_renderer, 'cell-background', 
+                                 self.store.background)
 
             self.subscription_view.append_column(column)
 
         # Set up columns on the view
-        add_column(_("Subscription"), SUBSCRIPTION, True)
+        add_column(_("Subscription"), self.store.subscription, True)
         products_column = gtk.TreeViewColumn(_("Installed Products"),
                                              gtk.CellRendererProgress(),
-                                             value=INSTALLED_PERCENT,
-                                             text=INSTALLED_TEXT)
+                                             value=self.store.installed_value,
+                                             text=self.store.installed_text)
         self.subscription_view.append_column(products_column)
 
-        add_column(_("Contract"), CONTRACT)
-        add_column(_("Start Date"), START_DATE)
-        add_column(_("Expiration Date"), EXPIRATION_DATE)
+        add_column(_("Contract"), self.store.contract)
+        add_column(_("Start Date"), self.store.start_date)
+        add_column(_("Expiration Date"), self.store.expiration_date)
 
         self.update_subscriptions()
 
@@ -106,29 +103,10 @@ class MySubscriptionsTab(widgets.GladeWidget):
         """
         Pulls the entitlement certificates and updates the subscription model.
         """
-        entcerts = EntitlementDirectory().list()
 
-        for cert in entcerts:
-            order = cert.getOrder()
-            products = cert.getProducts()
-            installed = self._get_installed(products)
-
-            # Initialize an entry list of the proper length
-            columns = self.subscription_store.get_n_columns()
-            entry = [None for i in range(columns)]
-            
-            entry[SUBSCRIPTION] = order.getName()
-            entry[INSTALLED_PERCENT] = \
-                self._calculate_percentage(installed, products)
-            entry[INSTALLED_TEXT] = '%s / %s' % (len(installed), len(products))
-            entry[CONTRACT] = order.getContract()
-            entry[START_DATE] = formatDate(order.getStart())
-            entry[EXPIRATION_DATE] = formatDate(order.getEnd())
-            entry[SERIAL] = cert.serialNumber()
-            entry[ALIGN] = 0.5         # Center horizontally
-            entry[BACKGROUND] = self._get_background_color(cert)
-            
-            self.subscription_store.append(entry)
+        for cert in EntitlementDirectory().list():
+            entry = self._create_entry_map(cert)   
+            self.store.add_map(entry)
 
     def get_content(self):
         return self.content
@@ -147,7 +125,7 @@ class MySubscriptionsTab(widgets.GladeWidget):
             return
 
         # Load the entitlement certificate for the selected row:
-        serial = model.get_value(tree_iter, SERIAL)
+        serial = model.get_value(tree_iter, self.store.serial)
         cert = EntitlementDirectory().find(int(serial))
         order = cert.getOrder()
         products = [(product.getName(), product.getHash())
@@ -159,6 +137,25 @@ class MySubscriptionsTab(widgets.GladeWidget):
                               end=str(formatDate(order.getEnd())),
                               account=order.getAccountNumber() or "",
                               products=products)
+                              
+    def _create_entry_map(self, cert):
+        order = cert.getOrder()
+        products = cert.getProducts()
+        installed = self._get_installed(products)
+
+        # Initialize an entry list of the proper length
+        entry = {}
+        entry['subscription'] = order.getName()
+        entry['installed_value'] = self._percentage(installed, products)
+        entry['installed_text'] = '%s / %s' % (len(installed), len(products))
+        entry['contract'] = order.getContract()
+        entry['start_date'] = formatDate(order.getStart())
+        entry['expiration_date'] = formatDate(order.getEnd())
+        entry['serial'] = cert.serialNumber()
+        entry['align'] = 0.5         # Center horizontally
+        entry['background'] = self._get_background_color(cert)
+        
+        return entry
 
     def _get_background_color(self, entitlement_cert):
         date_range = entitlement_cert.validRange()
@@ -170,7 +167,7 @@ class MySubscriptionsTab(widgets.GladeWidget):
         if date_range.end() - timedelta(days=WARNING_DAYS) < now:
             return YELLOW
 
-    def _calculate_percentage(self, subset, full_set):
+    def _percentage(self, subset, full_set):
         return (float(len(subset)) / len(full_set)) * 100
 
     def _get_installed(self, products):
