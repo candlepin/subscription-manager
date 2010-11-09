@@ -281,8 +281,8 @@ class RegisterCommand(CliCommand):
                 log.info("Automatically subscribed to products: %s " \
                         % ", ".join(products.keys()))
                 print _("Subscribed to Products:")
-                for pname, phash in products:
-                    print pname, phash
+                for pname in products.keys():
+                    print ("%s(%s)") % (pname, products[pname])
             except Exception, e:
                 log.exception(e)
                 log.warning("Warning: Unable to auto subscribe to %s" \
