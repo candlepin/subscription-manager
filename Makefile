@@ -43,7 +43,7 @@ install-conf:
 
 install: install-file install-conf
 
-install-file: dbus-service-install compile-po
+install-files: dbus-service-install compile-po
 	@mkdir -p ${PREFIX}/usr/share/rhsm/gui/data/icons/16x16
 	@mkdir -p ${PREFIX}/usr/share/locale/
 	@mkdir -p ${PREFIX}/usr/lib/yum-plugins/
