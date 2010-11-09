@@ -35,7 +35,15 @@ dbus-service-install:
 	install -m 744 src/compliance/rhsm_compliance_d.py \
 		${PREFIX}/usr/libexec/rhsm-complianced
 
-install: dbus-service-install compile-po
+install-conf:
+	cp etc-conf/rhsm.conf ${PREFIX}/etc/rhsm/
+	cp etc-conf/rhsmplugin.conf ${PREFIX}/etc/yum/pluginconf.d/
+	cp etc-conf/pidplugin.conf ${PREFIX}/etc/yum/pluginconf.d/
+	cp etc-conf/ca/*.pem ${PREFIX}/etc/rhsm/ca/
+
+install: install-file install-conf
+
+install-file: dbus-service-install compile-po
 	@mkdir -p ${PREFIX}/usr/share/rhsm/gui/data/icons/16x16
 	@mkdir -p ${PREFIX}/usr/share/locale/
 	@mkdir -p ${PREFIX}/usr/lib/yum-plugins/
@@ -66,10 +74,6 @@ install: dbus-service-install compile-po
 	cp -R src/plugin/*.py ${PREFIX}/usr/lib/yum-plugins/
 	cp src/subscription-manager-cli ${PREFIX}/usr/sbin
 	cp src/subscription-manager-gui ${PREFIX}/usr/sbin
-	cp etc-conf/rhsm.conf ${PREFIX}/etc/rhsm/
-	cp etc-conf/rhsmplugin.conf ${PREFIX}/etc/yum/pluginconf.d/
-	cp etc-conf/pidplugin.conf ${PREFIX}/etc/yum/pluginconf.d/
-	cp etc-conf/ca/*.pem ${PREFIX}/etc/rhsm/ca/
 	cp bin/* ${PREFIX}/usr/bin
 	cp src/rhsmcertd.init.d ${PREFIX}/etc/init.d/rhsmcertd
 	cp man/* ${PREFIX}/usr/share/man/man8/
