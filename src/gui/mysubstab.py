@@ -77,24 +77,24 @@ class MySubscriptionsTab(widgets.GladeWidget):
             if expand:
                 column.set_expand(True)
             else:
-                column.add_attribute(text_renderer, 'xalign', self.store.align)
+                column.add_attribute(text_renderer, 'xalign', self.store['align'])
 
             column.add_attribute(text_renderer, 'cell-background', 
-                                 self.store.background)
+                                 self.store['background'])
 
             self.subscription_view.append_column(column)
 
         # Set up columns on the view
-        add_column(_("Subscription"), self.store.subscription, True)
+        add_column(_("Subscription"), self.store['subscription'], True)
         products_column = gtk.TreeViewColumn(_("Installed Products"),
                                              gtk.CellRendererProgress(),
-                                             value=self.store.installed_value,
-                                             text=self.store.installed_text)
+                                             value=self.store['installed_value'],
+                                             text=self.store['installed_text'])
         self.subscription_view.append_column(products_column)
 
-        add_column(_("Contract"), self.store.contract)
-        add_column(_("Start Date"), self.store.start_date)
-        add_column(_("Expiration Date"), self.store.expiration_date)
+        add_column(_("Contract"), self.store['contract'])
+        add_column(_("Start Date"), self.store['start_date'])
+        add_column(_("Expiration Date"), self.store['expiration_date'])
 
         self.update_subscriptions()
 
@@ -125,7 +125,7 @@ class MySubscriptionsTab(widgets.GladeWidget):
             return
 
         # Load the entitlement certificate for the selected row:
-        serial = model.get_value(tree_iter, self.store.serial)
+        serial = model.get_value(tree_iter, self.store['serial'])
         cert = EntitlementDirectory().find(int(serial))
         order = cert.getOrder()
         products = [(product.getName(), product.getHash())

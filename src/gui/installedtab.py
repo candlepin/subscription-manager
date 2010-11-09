@@ -53,19 +53,19 @@ class InstalledProductsTab(widgets.GladeWidget):
             if expand:
                 column.set_expand(True)
             else:
-                column.add_attribute(text_renderer, 'xalign', self.store.align)
+                column.add_attribute(text_renderer, 'xalign', self.store['align'])
 
             column.add_attribute(text_renderer, 'cell-background', 
-                                 self.store.background)
+                                 self.store['background'])
 
             self.product_view.append_column(column)
             
-        add_column(_('Product'), self.store.product, True)
-        add_column(_('Version'), self.store.version)
-        add_column(_('Compliance Status'), self.store.status)
-        add_column(_('Contract'), self.store.contract)
-        add_column(_('Start Date'), self.store.start_date)
-        add_column(_('Expiration Date'), self.store.expiration_date)
+        add_column(_('Product'), self.store['product'], True)
+        add_column(_('Version'), self.store['version'])
+        add_column(_('Compliance Status'), self.store['status'])
+        add_column(_('Contract'), self.store['contract'])
+        add_column(_('Start Date'), self.store['start_date'])
+        add_column(_('Expiration Date'), self.store['expiration_date'])
  
         
         # Temp
