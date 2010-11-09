@@ -35,17 +35,9 @@ class MappedListStore(gtk.ListStore):
         # Use the types from the map to call the parent constructor
         super(MappedListStore, self).__init__(*type_map.values())
 
-    def __getitem__(self, attr):
-        """
-        Shorthand way to access the index value for a certain key.  For example,
-        given:
-        
-        example_store = MappedListStore({'foo': str, 'bar': bool})
-        
-        Then calling example_store['bar'] would return 1.
-        """
-        return self.type_index[attr]
-        
+    def __getitem__(self, key):
+        return self.type_index[key]
+
     def add_map(self, item_map):
         """
         Add an entry to the store, where item_map is a dictionary in the format
