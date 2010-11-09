@@ -395,9 +395,9 @@ class CertificateDirectory(Directory):
 
     def findByProduct(self, hash):
         for c in self.list():
-            p = c.getProduct()
-            if p.getHash() == hash:
-                return c
+            for p in c.getProducts():
+                if p.getHash() == hash:
+                    return c
         return None
 
     def certClass(self):

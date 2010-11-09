@@ -10,6 +10,8 @@
           <widget class="GtkTreeView" id="product_view">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="headers_clickable">False</property>
+            <property name="rules_hint">True</property>
           </widget>
           <packing>
             <property name="position">0</property>
