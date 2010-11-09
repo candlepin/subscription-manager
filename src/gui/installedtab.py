@@ -15,9 +15,13 @@
 
 import gtk
 
+from datetime import datetime
+
 import widgets
 import storage
 from certlib import EntitlementDirectory, ProductDirectory
+from certificate import GMT
+from managerlib import formatDate
 
 import gettext
 _ = gettext.gettext
@@ -30,6 +34,9 @@ class InstalledProductsTab(widgets.GladeWidget):
     
         widget_names = ['product_view', 'content']
         super(InstalledProductsTab, self).__init__('installed.glade', widget_names)
+        
+        self.product_dir = ProductDirectory()
+        self.entitlement_dir = EntitlementDirectory()
         
         type_map = {
             'product': str,
@@ -67,20 +74,43 @@ class InstalledProductsTab(widgets.GladeWidget):
         add_column(_('Start Date'), self.store['start_date'])
         add_column(_('Expiration Date'), self.store['expiration_date'])
  
+        self.update_products()
         
-        # Temp
-        entry = {}
-        entry['product'] = 'Awesome Product'
-        entry['version'] = '34.3'
-        entry['status'] = 'In Compliance'
-        entry['contract'] = 'al97970690v3'
-        entry['start_date'] = '10/11/2010'
-        entry['expiration_date'] = '10/11/2011'
-        entry['align'] = 0.5
-        
-        self.store.add_map(entry)
-        
-        
+    def update_products(self):
+        for product_cert in self.product_dir.list():
+            for product in product_cert.getProducts():
+                product_hash = product.getHash()
+                entitlement_cert = self.entitlement_dir.findByProduct(product_hash)
+                   
+                entry = {}
+                entry['product'] = product.getName()
+                entry['version'] = product.getVersion()
+                # Common properties
+                entry['align'] = 0.5
+                
+                if entitlement_cert:
+                    order = entitlement_cert.getOrder()
+                
+                    entry['contract'] = order.getContract()
+                    entry['start_date'] = formatDate(order.getStart())
+                    entry['expiration_date'] = formatDate(order.getEnd())
+                    
+                    # TODO:  Pull this date logic out into a separate lib!
+                    #        This is also used in mysubstab...
+                    date_range = entitlement_cert.validRange()
+                    now = datetime.now(GMT())
+                    
+                    if now < date_range.begin():
+                        entry['status'] = _('Future Subscription')
+                    elif now > date_range.end():
+                        entry['status'] = _('Out of Compliance')                    
+                    else:
+                        entry['status'] = _('In Compliance')
+                else:
+                    entry['status'] = _('Out of Compliance')
+                
+                self.store.add_map(entry)
+    
     def get_content(self):
         return self.content
 
