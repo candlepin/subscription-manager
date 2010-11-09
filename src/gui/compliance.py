@@ -72,12 +72,13 @@ class ComplianceAssistant(object):
 
         self.subscriptions_store = storage.MappedListStore(subscriptions_type_map)
 
-        print "s.s.product_name", self.subscriptions_store['product_name']
         self.subscriptions_treeview = MappedListTreeView(self.subscriptions_store)
-#        self.subscriptions_treeview = self.compliance_xml.get_widget(
-#                'subscriptions_treeview')
         self.subscriptions_treeview.set_model(self.subscriptions_store)
         self._display_subscriptions()
+
+        vbox = self.compliance_xml.get_widget("vbox1")
+        vbox.pack_end(self.subscriptions_treeview)
+        self.subscriptions_treeview.show()
         
 
     def _display_subscriptions(self):
@@ -92,13 +93,13 @@ class ComplianceAssistant(object):
         self.subscriptions_treeview.add_column("Available Subscriptions",
                                                self.subscriptions_store['available_subscriptions'], True)
 
-        fake_subscriptions = [("Awesomeness", 1000.0, 222222.0, 4.0, 0.0),
-                              ("Cheese", 4.0, 3.0, 2.0, 0.0),
-                              ("dude, lasers", 10.0, 10.0, 10.0, 0.0)]
+        fake_subscriptions = [{"product_name":"Awesomeness", "total_contracts":1000, "total_subscriptions":222, "available_subscriptions":4, "align":0.0}]
+#                              ("Cheese", 4.0, 3.0, 2.0, 0.0),
+#                              ("dude, lasers", 10.0, 10.0, 10.0, 0.0)]
         
         for fake_subscription in fake_subscriptions:
             print fake_subscription
-            self.subscriptions_store.append(fake_subscription)
+            self.subscriptions_store.add_map(fake_subscription)
 
     def _display_uncompliant(self):
         # These display the list of products uncompliant on the selected date:
