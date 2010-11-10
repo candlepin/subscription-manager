@@ -21,7 +21,6 @@ from certificate import GMT
 from managerlib import formatDate
 
 import widgets
-import storage
 
 import logutil
 log = logutil.getLogger(__name__)
@@ -37,67 +36,33 @@ RED = '#FFAF99'
 
 WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
 
-class MySubscriptionsTab(widgets.GladeWidget):
+class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def __init__(self, backend, consumer, facts):
         """
         Create a new 'My Subscriptions' tab.
         """
-        widget_names = ['subscription_view', 'content']
-        super(MySubscriptionsTab, self).__init__('mysubs.glade', widget_names)
+        super(MySubscriptionsTab, self).__init__('mysubs.glade')
         
         self.sub_details = widgets.SubDetailsWidget()
 
         # Put the details widget in the middle
         details = self.sub_details.get_widget()
         self.content.add(details)
-
-        selection = self.subscription_view.get_selection()
-        selection.connect('changed', self.update_details)
-
-        # Set up the model
-        type_map = {
-            'subscription': str,
-            'installed_value': float,
-            'installed_text': str,
-            'contract': str,
-            'start_date': str,
-            'expiration_date': str,
-            'serial': str,
-            'align': float,
-            'background': str
-        }
             
-        self.store = storage.MappedListStore(type_map)
-        self.subscription_view.set_model(self.store)
-
-        def add_column(name, column_number, expand=False):
-            text_renderer = gtk.CellRendererText()
-            column = gtk.TreeViewColumn(name, text_renderer, text=column_number)
-            if expand:
-                column.set_expand(True)
-            else:
-                column.add_attribute(text_renderer, 'xalign', self.store['align'])
-
-            column.add_attribute(text_renderer, 'cell-background', 
-                                 self.store['background'])
-
-            self.subscription_view.append_column(column)
-
         # Set up columns on the view
-        add_column(_("Subscription"), self.store['subscription'], True)
+        self.add_text_column(_("Subscription"), 'subscription', True)
         products_column = gtk.TreeViewColumn(_("Installed Products"),
                                              gtk.CellRendererProgress(),
                                              value=self.store['installed_value'],
                                              text=self.store['installed_text'])
-        self.subscription_view.append_column(products_column)
+        self.top_view.append_column(products_column)
 
-        add_column(_("Contract"), self.store['contract'])
-        add_column(_("Start Date"), self.store['start_date'])
-        add_column(_("Expiration Date"), self.store['expiration_date'])
+        self.add_text_column(_("Contract"), 'contract')
+        self.add_text_column(_("Start Date"), 'start_date')
+        self.add_text_column(_("Expiration Date"), 'expiration_date')
 
         self.update_subscriptions()
-
 
     def update_subscriptions(self):
         """
@@ -108,13 +73,23 @@ class MySubscriptionsTab(widgets.GladeWidget):
             entry = self._create_entry_map(cert)   
             self.store.add_map(entry)
 
-    def get_content(self):
-        return self.content
-
     def get_label(self):
         return _("My Subscriptions")
+        
+    def get_type_map(self):
+        return {
+            'subscription': str,
+            'installed_value': float,
+            'installed_text': str,
+            'contract': str,
+            'start_date': str,
+            'expiration_date': str,
+            'serial': str,
+            'align': float,
+            'background': str
+        }
 
-    def update_details(self, treeselection):
+    def on_selection(self, treeselection):
         """
         Updates the 'Subscription Details' panel with the currently selected
         subscription.

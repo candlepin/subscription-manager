@@ -21,6 +21,7 @@ _ = gettext.gettext
 gettext.textdomain("subscription-manager")
 gtk.glade.bindtextdomain("subscription-manager")
 
+import storage
 from certlib import ProductDirectory
 
 GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
@@ -48,6 +49,40 @@ class GladeWidget(object):
         
         for name in names:
             setattr(self, name, self.glade.get_widget(name))
+
+class SubscriptionManagerTab(GladeWidget):
+
+    def __init__(self, glade_file, initial_widget_names=[]):
+        
+        widgets = ['top_view', 'content'] + initial_widget_names
+        super(SubscriptionManagerTab, self).__init__(glade_file, widgets)
+        
+        self.store = storage.MappedListStore(self.get_type_map())
+        self.top_view.set_model(self.store)
+        
+        selection = self.top_view.get_selection()
+        selection.connect('changed', self.on_selection)
+        
+    def add_text_column(self, name, store_key, expand=False):
+        text_renderer = gtk.CellRendererText()
+        column = gtk.TreeViewColumn(name, 
+                                    text_renderer,
+                                    text=self.store[store_key])
+        if expand:
+            column.set_expand(True)
+        else:
+            column.add_attribute(text_renderer, 'xalign', self.store['align'])
+
+        column.add_attribute(text_renderer, 'cell-background', 
+                             self.store['background'])
+
+        self.top_view.append_column(column)
+        
+    def get_content(self):
+        return self.content
+        
+    def on_selection(self, treeselection):
+        pass
             
             
 class ProductsTable(object):

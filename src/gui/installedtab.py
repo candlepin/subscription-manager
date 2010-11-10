@@ -18,7 +18,6 @@ import gtk
 from datetime import datetime
 
 import widgets
-import storage
 from certlib import EntitlementDirectory, ProductDirectory
 from certificate import GMT
 from managerlib import formatDate
@@ -28,51 +27,21 @@ _ = gettext.gettext
 gettext.textdomain('subscription-manager')
 gtk.glade.bindtextdomain('subscription-manager')
 
-class InstalledProductsTab(widgets.GladeWidget):
+class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def __init__(self, backend, consumer, facts):
     
-        widget_names = ['product_view', 'content']
-        super(InstalledProductsTab, self).__init__('installed.glade', widget_names)
+        super(InstalledProductsTab, self).__init__('installed.glade')
         
         self.product_dir = ProductDirectory()
         self.entitlement_dir = EntitlementDirectory()
         
-        type_map = {
-            'product': str,
-            'version': str,
-            'status': str,
-            'contract': str,
-            'start_date': str,
-            'expiration_date': str,
-            'serial': str,
-            'align': float,
-            'background': str
-        }
-        
-        self.store = storage.MappedListStore(type_map)
-        self.product_view.set_model(self.store)
-        
-        # TODO:  copy-paste from mysubstab - refactor this!
-        def add_column(name, column_number, expand=False):
-            text_renderer = gtk.CellRendererText()
-            column = gtk.TreeViewColumn(name, text_renderer, text=column_number)
-            if expand:
-                column.set_expand(True)
-            else:
-                column.add_attribute(text_renderer, 'xalign', self.store['align'])
-
-            column.add_attribute(text_renderer, 'cell-background', 
-                                 self.store['background'])
-
-            self.product_view.append_column(column)
-            
-        add_column(_('Product'), self.store['product'], True)
-        add_column(_('Version'), self.store['version'])
-        add_column(_('Compliance Status'), self.store['status'])
-        add_column(_('Contract'), self.store['contract'])
-        add_column(_('Start Date'), self.store['start_date'])
-        add_column(_('Expiration Date'), self.store['expiration_date'])
+        self.add_text_column(_('Product'), 'product', True)
+        self.add_text_column(_('Version'), 'version')
+        self.add_text_column(_('Compliance Status'), 'status')
+        self.add_text_column(_('Contract'), 'contract')
+        self.add_text_column(_('Start Date'), 'start_date')
+        self.add_text_column(_('Expiration Date'), 'expiration_date')
  
         self.update_products()
         
@@ -110,9 +79,19 @@ class InstalledProductsTab(widgets.GladeWidget):
                     entry['status'] = _('Out of Compliance')
                 
                 self.store.add_map(entry)
-    
-    def get_content(self):
-        return self.content
+
+    def get_type_map(self):
+        return {
+            'product': str,
+            'version': str,
+            'status': str,
+            'contract': str,
+            'start_date': str,
+            'expiration_date': str,
+            'serial': str,
+            'align': float,
+            'background': str
+        }    
 
     def get_label(self):
         return _('My Installed Software')
