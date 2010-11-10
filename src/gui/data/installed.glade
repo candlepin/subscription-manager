@@ -6,6 +6,7 @@
     <child>
       <widget class="GtkVBox" id="content">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <child>
           <widget class="GtkTreeView" id="top_view">
             <property name="visible">True</property>
@@ -20,6 +21,8 @@
         <child>
           <widget class="GtkVBox" id="sub_details_vbox">
             <property name="visible">True</property>
+            <property name="border_width">7</property>
+            <property name="orientation">vertical</property>
             <child>
               <widget class="GtkLabel" id="label1">
                 <property name="visible">True</property>
@@ -39,13 +42,14 @@
               <widget class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="border_width">3</property>
+                <property name="vadjustment">0 0 81 7.8000000000000007 70.200000000000003 78</property>
                 <property name="hscrollbar_policy">automatic</property>
                 <property name="vscrollbar_policy">automatic</property>
                 <property name="shadow_type">in</property>
                 <child>
                   <widget class="GtkViewport" id="viewport1">
                     <property name="visible">True</property>
-                    <property name="border_width">2</property>
                     <property name="resize_mode">queue</property>
                     <property name="shadow_type">none</property>
                     <child>
@@ -160,6 +164,8 @@
             </child>
           </widget>
           <packing>
+            <property name="expand">False</property>
+            <property name="padding">7</property>
             <property name="position">1</property>
           </packing>
         </child>

@@ -31,7 +31,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def __init__(self, backend, consumer, facts):
     
-        super(InstalledProductsTab, self).__init__('installed.glade')
+        widgets = ['product_text', 'compliance_text', 'subscription_text']
+        super(InstalledProductsTab, self).__init__('installed.glade', widgets)
         
         self.product_dir = ProductDirectory()
         self.entitlement_dir = EntitlementDirectory()
@@ -61,6 +62,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                     order = entitlement_cert.getOrder()
                 
                     entry['contract'] = order.getContract()
+                    entry['subscription'] = order.getName()
                     entry['start_date'] = formatDate(order.getStart())
                     entry['expiration_date'] = formatDate(order.getEnd())
                     
@@ -72,20 +74,48 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                     if now < date_range.begin():
                         entry['status'] = _('Future Subscription')
                     elif now > date_range.end():
-                        entry['status'] = _('Out of Compliance')                    
+                        entry['status'] = _('Out of Compliance')
+                        entry['compliance_note'] = \
+                            _('Subscription %s is expired' % order.getSubscription())
                     else:
                         entry['status'] = _('In Compliance')
+                        entry['compliance_note'] = \
+                            _('Covered by subscription %s through %s' % \
+                            (order.getSubscription(), entry['expiration_date']))
                 else:
                     entry['status'] = _('Out of Compliance')
+                    entry['compliance_note'] = _("Never Subscribed")
                 
                 self.store.add_map(entry)
+    
+    def on_selection(self, treeselection):
+               
+        model, tree_iter = treeselection.get_selected()
+
+        if tree_iter is None:
+            return
+
+        def _get_value(key):
+            return model.get_value(tree_iter, self.store[key])
+
+        # Load the entitlement certificate for the selected row:
+        product = _get_value('product')
+        self.product_text.get_buffer().set_text(product)
+        
+        compliance = _get_value('compliance_note')
+        self.compliance_text.get_buffer().set_text(compliance)
+        
+        subscription = _get_value('subscription') or ''
+        self.subscription_text.get_buffer().set_text(subscription)
 
     def get_type_map(self):
         return {
             'product': str,
             'version': str,
             'status': str,
+            'compliance_note': str,
             'contract': str,
+            'subscription': str,
             'start_date': str,
             'expiration_date': str,
             'serial': str,
