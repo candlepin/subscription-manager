@@ -68,17 +68,6 @@ class ComplianceAssistant(object):
         self.last_compliant_date = self._find_last_compliant()
 
         self.compliance_xml = gtk.glade.XML(COMPLIANCE_GLADE)
-        self.window = self.compliance_xml.get_widget('compliance_assistant_window')
-        self.uncompliant_store = gtk.ListStore(str, str, str)
-        self.uncompliant_treeview = self.compliance_xml.get_widget(
-                'uncompliant_products_treeview')
-        self.uncompliant_treeview.set_model(self.uncompliant_store)
-        self._display_uncompliant()
-
-
- 
-
-
         self.compliance_label = self.compliance_xml.get_widget(
             "compliance_label")
         self.compliant_today_label = self.compliance_xml.get_widget(
@@ -88,6 +77,28 @@ class ComplianceAssistant(object):
                                              self.last_compliant_date.strftime(locale.nl_langinfo(locale.D_FMT)))
         self.compliant_today_label.set_label(_("%s (First date of non-compliance)") %
                                              self.last_compliant_date.strftime(locale.nl_langinfo(locale.D_FMT)))
+
+
+
+        uncompliant_type_map = {'product_name':str,
+                                'contract':str,
+                                'end_date':str,
+                                'align':float}
+
+       
+        self.window = self.compliance_xml.get_widget('compliance_assistant_window')
+        self.uncompliant_store = storage.MappedListStore(uncompliant_type_map)
+#        self.uncompliant_store = gtk.ListStore(str, str, str)
+        self.uncompliant_treeview = MappedListTreeView(self.uncompliant_store)
+#        self.uncompliant_treeview = self.compliance_xml.get_widget(
+#                'uncompliant_products_treeview')
+        self.uncompliant_treeview.set_model(self.uncompliant_store)
+        self._display_uncompliant()
+        vbox = self.compliance_xml.get_widget("uncompliant_vbox")
+        vbox.pack_end(self.uncompliant_treeview)
+        self.uncompliant_treeview.show()
+
+  
 
         subscriptions_type_map = {'product_name':str, 
                                   'total_contracts': float,
@@ -101,7 +112,7 @@ class ComplianceAssistant(object):
         self.subscriptions_treeview.set_model(self.subscriptions_store)
         self._display_subscriptions()
 
-        vbox = self.compliance_xml.get_widget("vbox1")
+        vbox = self.compliance_xml.get_widget("subscriptions_vbox")
         vbox.pack_end(self.subscriptions_treeview)
         self.subscriptions_treeview.show()
         
@@ -136,8 +147,6 @@ class ComplianceAssistant(object):
                                                self.subscriptions_store['available_subscriptions'], True)
 
         fake_subscriptions = [{"product_name":"Awesomeness", "total_contracts":1000, "total_subscriptions":222, "available_subscriptions":4, "align":0.0}]
-#                              ("Cheese", 4.0, 3.0, 2.0, 0.0),
-#                              ("dude, lasers", 10.0, 10.0, 10.0, 0.0)]
         
         for fake_subscription in fake_subscriptions:
             print fake_subscription
@@ -150,13 +159,12 @@ class ComplianceAssistant(object):
 
         # These display the list of products uncompliant on the selected date:
         self.uncompliant_store.clear()
-        self._add_column(_('Product'), PRODUCT_NAME_INDEX)
-        self._add_column(_('Contract'), CONTRACT_INDEX)
-        self._add_column(_('Expiration'), EXPIRATION_INDEX)
-
-        self.uncompliant_store.append(['Fake Product 1', 'FAKE01010010', '2010-01-01'])
-        self.uncompliant_store.append(['Fake Product 2', 'N/A', 'N/A'])
-
+        self.uncompliant_treeview.add_column("Product",
+                                             self.uncompliant_store['product_name'], True)
+        self.uncompliant_treeview.add_column("Contract",
+                                             self.uncompliant_store['contract'], True)
+        self.uncompliant_treeview.add_column("Expiration",
+                                             self.uncompliant_store['end_date'], True)
         products = self.pool_stash.merge_pools(compatible=True, uninstalled=False)
         for key in products:
             #print products[key].product_id
@@ -164,7 +172,10 @@ class ComplianceAssistant(object):
             #print products[key].pools
             pools = products[key].pools
             for pool in pools:
-                print "=== %s %s %s" % (pool['endDate'], pool['contractNumber'], pool['productName'])
+                self.uncompliant_store.add_map({'product_name':pool['productName'],
+                                                'contract':pool['contractNumber'],
+                                                'end_date':'%s' % pool['endDate'],
+                                                'align':0.0})
         
         # Dummy data for now:
 
