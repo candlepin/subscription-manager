@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.92.8
+Version: 0.92.9
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -179,6 +179,9 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Thu Nov 11 2010 Bryan Kearney <bkearney@redhat.com> 0.92.9-1
+- Resolves: #651560
+- 651560: Add the production configurations (bkearney@redhat.com)
 * Wed Nov 03 2010 Devan Goodwin <dgoodwin@redhat.com> 0.92.8-1
 - Resolves: #649374
 - 649374: Make the ssl verify depth configurable (bkearney@redhat.com)
