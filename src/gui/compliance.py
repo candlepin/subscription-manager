@@ -58,15 +58,6 @@ class MappedListTreeView(gtk.TreeView):
 class ComplianceAssistant(object):
     """ Compliance Assistant GUI window. """
     def __init__(self, backend, consumer, facts):
-        self.compliance_xml = gtk.glade.XML(COMPLIANCE_GLADE)
-        self.window = self.compliance_xml.get_widget('compliance_assistant_window')
-        self.uncompliant_store = gtk.ListStore(str, str, str)
-        self.uncompliant_treeview = self.compliance_xml.get_widget(
-                'uncompliant_products_treeview')
-        self.uncompliant_treeview.set_model(self.uncompliant_store)
-        self._display_uncompliant()
-
-
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
@@ -76,15 +67,25 @@ class ComplianceAssistant(object):
         # end date of first subs to expire 
         self.last_compliant_date = self._find_last_compliant()
 
+        self.compliance_xml = gtk.glade.XML(COMPLIANCE_GLADE)
+        self.window = self.compliance_xml.get_widget('compliance_assistant_window')
+        self.uncompliant_store = gtk.ListStore(str, str, str)
+        self.uncompliant_treeview = self.compliance_xml.get_widget(
+                'uncompliant_products_treeview')
+        self.uncompliant_treeview.set_model(self.uncompliant_store)
+        self._display_uncompliant()
+
+
+ 
+
+
         self.compliance_label = self.compliance_xml.get_widget(
             "compliance_label")
-
         self.compliant_today_label = self.compliance_xml.get_widget(
             "compliant_today_label")
 
         self.compliance_label.set_label(_("All software is in compliance until %s.") % 
                                              self.last_compliant_date.strftime(locale.nl_langinfo(locale.D_FMT)))
-
         self.compliant_today_label.set_label(_("%s (First date of non-compliance)") %
                                              self.last_compliant_date.strftime(locale.nl_langinfo(locale.D_FMT)))
 
@@ -143,6 +144,10 @@ class ComplianceAssistant(object):
             self.subscriptions_store.add_map(fake_subscription)
 
     def _display_uncompliant(self):
+
+        #uncompliant??
+        self.pool_stash.refresh(active_on=self.last_compliant_date)
+
         # These display the list of products uncompliant on the selected date:
         self.uncompliant_store.clear()
         self._add_column(_('Product'), PRODUCT_NAME_INDEX)
@@ -152,6 +157,15 @@ class ComplianceAssistant(object):
         self.uncompliant_store.append(['Fake Product 1', 'FAKE01010010', '2010-01-01'])
         self.uncompliant_store.append(['Fake Product 2', 'N/A', 'N/A'])
 
+        products = self.pool_stash.merge_pools(compatible=True, uninstalled=False)
+        for key in products:
+            #print products[key].product_id
+            #print products[key].product_name
+            #print products[key].pools
+            pools = products[key].pools
+            for pool in pools:
+                print "=== %s %s %s" % (pool['endDate'], pool['contractNumber'], pool['productName'])
+        
         # Dummy data for now:
 
     def _display_providing_subs(self):
