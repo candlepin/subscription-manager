@@ -216,7 +216,7 @@ class MainWindow(object):
         self.system_facts_dialog = factsgui.SystemFactsDialog(self.consumer,
                 self.facts)
         self.registration_dialog = RegisterScreen(self.consumer, self.facts)
-        self.compliance_assistant = ComplianceAssistant()
+        self.compliance_assistant = ComplianceAssistant(self.backend, self.consumer, self.facts)
 
         tab_classes = [InstalledProductsTab, 
                        MySubscriptionsTab,

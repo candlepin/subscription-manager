@@ -15,17 +15,23 @@
 #
 
 import os
+import datetime
 import gtk
+import locale
 import logging
 import gettext
+
 _ = gettext.gettext
 
 from logutil import getLogger
 log = getLogger(__name__)
 
+import certlib
+import managerlib
 import storage
 from dateselect import DateSelector
 from widgets import SubDetailsWidget
+
 
 prefix = os.path.dirname(__file__)
 COMPLIANCE_GLADE = os.path.join(prefix, "data/compliance.glade")
@@ -37,11 +43,8 @@ EXPIRATION_INDEX = 2
 class MappedListTreeView(gtk.TreeView):
     def add_column(self, name, column_number, expand=False):
         text_renderer = gtk.CellRendererText()
-        print "name", type(name), name
-        print "text_render", type(text_renderer), text_renderer
         column = gtk.TreeViewColumn(name, text_renderer, text=column_number)
         self.store = self.get_model()
-#        print type(self.store), self.store, dir(self.store)
         if expand:
             column.set_expand(True)
         else:
@@ -54,7 +57,7 @@ class MappedListTreeView(gtk.TreeView):
 
 class ComplianceAssistant(object):
     """ Compliance Assistant GUI window. """
-    def __init__(self):
+    def __init__(self, backend, consumer, facts):
         self.compliance_xml = gtk.glade.XML(COMPLIANCE_GLADE)
         self.window = self.compliance_xml.get_widget('compliance_assistant_window')
         self.uncompliant_store = gtk.ListStore(str, str, str)
@@ -63,6 +66,21 @@ class ComplianceAssistant(object):
         self.uncompliant_treeview.set_model(self.uncompliant_store)
         self._display_uncompliant()
 
+
+        self.backend = backend
+        self.consumer = consumer
+        self.facts = facts
+        self.pool_stash = managerlib.PoolStash(self.backend, self.consumer,
+                self.facts)
+
+        # end date of first subs to expire 
+        self.last_compliant_date = self._find_last_compliant()
+
+        self.compliance_label = self.compliance_xml.get_widget(
+            "compliance_label")
+
+        self.compliance_label.set_label("All software is in compliance until %s" % 
+                                             self.last_compliant_date.strftime(locale.nl_langinfo(locale.D_FMT)))
 
         subscriptions_type_map = {'product_name':str, 
                                   'total_contracts': float,
@@ -80,6 +98,23 @@ class ComplianceAssistant(object):
         vbox.pack_end(self.subscriptions_treeview)
         self.subscriptions_treeview.show()
         
+
+
+    # FIXME: should this methods on CertificateDirectory? 
+    def _find_last_compliant(self):
+        self.valid_subs = certlib.EntitlementDirectory().listValid()
+
+        # FIXME: remote debug
+        for valid_sub in self.valid_subs:
+            print "valid_range", valid_sub.validRange().end(), type(valid_sub.validRange().end())
+
+        def get_date(sub):
+            return sub.validRange().end()
+
+        self.valid_subs.sort(key=get_date)
+
+        if self.valid_subs:
+            return self.valid_subs[0].validRange().end()
 
     def _display_subscriptions(self):
 #        self.subscriptions_store.clear()
