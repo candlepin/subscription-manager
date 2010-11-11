@@ -17,8 +17,12 @@
           </packing>
         </child>
         <child>
+          <placeholder/>
+        </child>
+        <child>
           <widget class="GtkTable" id="table1">
             <property name="visible">True</property>
+            <property name="n_rows">2</property>
             <property name="n_columns">2</property>
             <property name="column_spacing">5</property>
             <child>
@@ -29,49 +33,124 @@
               </widget>
             </child>
             <child>
-              <widget class="GtkHBox" id="hbox1">
+              <placeholder/>
+            </child>
+            <child>
+              <widget class="GtkRadioButton" id="compliant_today_label">
+                <property name="label" translatable="yes">01/05/1974 (First date of non-compliance)</property>
                 <property name="visible">True</property>
-                <child>
-                  <widget class="GtkEntry" id="active_on_entry">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="editable">False</property>
-                    <property name="max_length">10</property>
-                    <property name="invisible_char">●</property>
-                    <property name="width_chars">10</property>
-                    <property name="invisible_char_set">True</property>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkButton" id="date_select_button">
-                    <property name="label">gtk-edit</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="use_stock">True</property>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
+                <property name="xalign">0.46000000834465027</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+                <property name="group">non_compliant_different_date_radiobutton</property>
               </widget>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
               </packing>
             </child>
+            <child>
+              <widget class="GtkHBox" id="hbox1">
+                <property name="visible">True</property>
+                <child>
+                  <widget class="GtkRadioButton" id="non_compliant_different_date_radiobutton">
+                    <property name="label" translatable="yes">On a different date:</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="relief">none</property>
+                    <property name="draw_indicator">True</property>
+                  </widget>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="entry1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">●</property>
+                    <property name="width_chars">4</property>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label1">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">/</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="entry2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">●</property>
+                    <property name="width_chars">4</property>
+                  </widget>
+                  <packing>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label2">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">/</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="entry3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">●</property>
+                    <property name="width_chars">4</property>
+                  </widget>
+                  <packing>
+                    <property name="position">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkButton" id="magic_calendar_button">
+                    <property name="label" translatable="yes">calendar</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="xalign">0.50999999046325684</property>
+                    <property name="yalign">0.54000002145767212</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">6</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">2</property>
+                <property name="top_attach">1</property>
+                <property name="bottom_attach">2</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -80,7 +159,7 @@
             <property name="can_focus">True</property>
           </widget>
           <packing>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
@@ -89,7 +168,7 @@
             <property name="label" translatable="yes">The following subscriptions will cover the products selected above on 2010-01-01:</property>
           </widget>
           <packing>
-            <property name="position">3</property>
+            <property name="position">4</property>
           </packing>
         </child>
         <child>
@@ -98,11 +177,8 @@
             <property name="can_focus">True</property>
           </widget>
           <packing>
-            <property name="position">4</property>
+            <property name="position">5</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
         <child>
           <placeholder/>
