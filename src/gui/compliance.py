@@ -79,7 +79,7 @@ class ComplianceAssistant(object):
         self.compliance_label = self.compliance_xml.get_widget(
             "compliance_label")
 
-        self.compliance_label.set_label("All software is in compliance until %s" % 
+        self.compliance_label.set_label(_("All software is in compliance until %s.") % 
                                              self.last_compliant_date.strftime(locale.nl_langinfo(locale.D_FMT)))
 
         subscriptions_type_map = {'product_name':str, 
