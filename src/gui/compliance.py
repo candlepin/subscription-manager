@@ -41,6 +41,12 @@ CONTRACT_INDEX = 1
 EXPIRATION_INDEX = 2
 
 class MappedListTreeView(gtk.TreeView):
+
+    def add_toggle_column(self, name, column_number):
+        toggle_renderer = gtk.CellRendererToggle()
+        column = gtk.TreeViewColumn(name, toggle_renderer, active=column_number)
+        self.append_column(column)
+
     def add_column(self, name, column_number, expand=False):
         text_renderer = gtk.CellRendererText()
         column = gtk.TreeViewColumn(name, text_renderer, text=column_number)
@@ -80,7 +86,8 @@ class ComplianceAssistant(object):
 
 
 
-        uncompliant_type_map = {'product_name':str,
+        uncompliant_type_map = {'active':bool,
+                                'product_name':str,
                                 'contract':str,
                                 'end_date':str,
                                 'align':float}
@@ -137,6 +144,8 @@ class ComplianceAssistant(object):
     def _display_subscriptions(self):
 #        self.subscriptions_store.clear()
 
+
+
         self.subscriptions_treeview.add_column("Product Name", 
                                                self.subscriptions_store['product_name'], True)
         self.subscriptions_treeview.add_column("Total Contracts",
@@ -159,6 +168,9 @@ class ComplianceAssistant(object):
 
         # These display the list of products uncompliant on the selected date:
         self.uncompliant_store.clear()
+
+        self.uncompliant_treeview.add_toggle_column(None,
+                                                    self.uncompliant_store['active'])
         self.uncompliant_treeview.add_column("Product",
                                              self.uncompliant_store['product_name'], True)
         self.uncompliant_treeview.add_column("Contract",
@@ -172,7 +184,8 @@ class ComplianceAssistant(object):
             #print products[key].pools
             pools = products[key].pools
             for pool in pools:
-                self.uncompliant_store.add_map({'product_name':pool['productName'],
+                self.uncompliant_store.add_map({'active':False, 
+                                                'product_name':pool['productName'],
                                                 'contract':pool['contractNumber'],
                                                 'end_date':'%s' % pool['endDate'],
                                                 'align':0.0})
