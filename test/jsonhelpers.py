@@ -22,7 +22,7 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
     """
     provided = []
     for pid in provided_products:
-        provided.append({'id': pid})
+        provided.append({'productId': pid})
 
     return {
             'productName': product_name,

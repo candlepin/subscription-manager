@@ -103,17 +103,23 @@ class ComplianceAssistant(object):
                                   'total_contracts': float,
                                   'total_subscriptions':float,
                                   'available_subscriptions':float,
-                                  'align': float}
+                                  'align': float,
+                                  'pool_id': str}
 
         self.subscriptions_store = storage.MappedListStore(subscriptions_type_map)
 
         self.subscriptions_treeview = MappedListTreeView(self.subscriptions_store)
         self.subscriptions_treeview.set_model(self.subscriptions_store)
+        self.subscriptions_treeview.get_selection().connect('changed',
+                self._update_sub_details)
         self._display_subscriptions()
 
         vbox = self.compliance_xml.get_widget("subscriptions_vbox")
-        vbox.pack_end(self.subscriptions_treeview)
+        vbox.pack_start(self.subscriptions_treeview)
         self.subscriptions_treeview.show()
+
+        self.sub_details = SubDetailsWidget(show_contract=False)
+        vbox.pack_start(self.sub_details.get_widget())
         
 
     # FIXME: should this methods on CertificateDirectory? 
@@ -144,13 +150,17 @@ class ComplianceAssistant(object):
         self.subscriptions_treeview.add_column("Available Subscriptions",
                                                self.subscriptions_store['available_subscriptions'], True)
 
-        fake_subscriptions = [{"product_name":"Awesomeness", "total_contracts":1000, "total_subscriptions":222, "available_subscriptions":4, "align":0.0}]
+        fake_subscriptions = [{"product_name":"Awesomeness", "total_contracts":1000, "total_subscriptions":222, "available_subscriptions":4, "align":0.0, "pool_id": "fakepoolid"}]
         
         for fake_subscription in fake_subscriptions:
             print fake_subscription
             self.subscriptions_store.add_map(fake_subscription)
 
     def _display_uncompliant(self):
+
+        # TODO: For testing, this is querying subs from the server. This method
+        # will eventually calculate uncompliant products installed on the machine.
+        # (and likely soon to expire entitlements that are for products not installed)
 
         #uncompliant??
         self.pool_stash.refresh(active_on=self.last_compliant_date)
@@ -186,3 +196,12 @@ class ComplianceAssistant(object):
     def _add_column(self, name, order):
         column = gtk.TreeViewColumn(name, gtk.CellRendererText(), text=order)
         self.uncompliant_treeview.append_column(column)
+
+    def _update_sub_details(self, widget):
+        """ Shows details for the current selected pool. """
+        model, tree_iter = widget.get_selected()
+        if tree_iter:
+            product_name = model.get_value(tree_iter, self.subscriptions_store['product_name'])
+            # TODO: need to show provided products here once we have a pool stash:
+            self.sub_details.show(product_name)
+

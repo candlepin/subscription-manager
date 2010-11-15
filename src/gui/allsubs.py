@@ -202,9 +202,6 @@ class AllSubscriptionsTab(object):
         pool = self.pool_stash.all_pools[pool_id]
         provided_products = []
         log.debug(pool)
-        # NOTE: Not happy about this, but the only way we can get a friendly
-        # name for each provided product is to ask for it, the pool only
-        # carries the ID:
         for product in pool['providedProducts']:
             provided_products.append((product['productName'], product['productId']))
         return provided_products
