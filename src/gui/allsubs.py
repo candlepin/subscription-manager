@@ -205,8 +205,7 @@ class AllSubscriptionsTab(object):
         # NOTE: Not happy about this, but the only way we can get a friendly
         # name for each provided product is to ask for it, the pool only
         # carries the ID:
-        for prod_id in pool['providedProductIds']:
-            product = self.backend.uep.getProduct(prod_id)
-            provided_products.append((product['name'], prod_id))
+        for product in pool['providedProducts']:
+            provided_products.append((product['productName'], product['productId']))
         return provided_products
 

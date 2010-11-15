@@ -20,6 +20,10 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
     Returns a hash representing a pool. Used to simulate the JSON returned
     from Candlepin.
     """
+    provided = []
+    for pid in provided_products:
+        provided.append({'id': pid})
+
     return {
             'productName': product_name,
             'productId': product_id,
@@ -32,7 +36,7 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
             'updated': datetime.now() - timedelta(days=365),
             'created': datetime.now() - timedelta(days=365),
             'activeSubscription': True,
-            'providedProductIds': provided_products,
+            'providedProducts': provided,
             'sourceEntitlement': None,
             'href': '/pools/402881062bc9a379012bc9a4095c00c9',
             'restrictedToUsername': None,
