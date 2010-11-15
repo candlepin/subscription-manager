@@ -73,18 +73,17 @@ class ComplianceAssistant(object):
         self.compliant_today_label = self.compliance_xml.get_widget(
             "compliant_today_label")
 
-        self.compliance_label.set_label(_("All software is in compliance until %s.") % 
-                                             self.last_compliant_date.strftime(locale.nl_langinfo(locale.D_FMT)))
-        self.compliant_today_label.set_label(_("%s (First date of non-compliance)") %
-                                             self.last_compliant_date.strftime(locale.nl_langinfo(locale.D_FMT)))
-
-
+        if self.last_compliant_date:
+            formatted = self.last_compliant_date.strftime(locale.nl_langinfo(locale.D_FMT))
+            self.compliance_label.set_label(
+                    _("All software is in compliance until %s.") % formatted)
+            self.compliant_today_label.set_label(
+                    _("%s (First date of non-compliance)") % formatted)
 
         uncompliant_type_map = {'product_name':str,
                                 'contract':str,
                                 'end_date':str,
                                 'align':float}
-
        
         self.window = self.compliance_xml.get_widget('compliance_assistant_window')
         self.uncompliant_store = storage.MappedListStore(uncompliant_type_map)
@@ -116,7 +115,6 @@ class ComplianceAssistant(object):
         vbox.pack_end(self.subscriptions_treeview)
         self.subscriptions_treeview.show()
         
-
 
     # FIXME: should this methods on CertificateDirectory? 
     def _find_last_compliant(self):
