@@ -53,7 +53,12 @@ class GladeWidget(object):
 class SubscriptionManagerTab(GladeWidget):
 
     def __init__(self, glade_file, initial_widget_names=[]):
-        
+        """
+        Creates a new tab widget, given the specified glade file and a list of 
+        widget names to extract to instance variables.
+        """
+        # Mix the specified widgets with standard names in the 
+        # glade file by convention
         widgets = ['top_view', 'content'] + initial_widget_names
         super(SubscriptionManagerTab, self).__init__(glade_file, widgets)
         
@@ -61,7 +66,7 @@ class SubscriptionManagerTab(GladeWidget):
         self.top_view.set_model(self.store)
         
         selection = self.top_view.get_selection()
-        selection.connect('changed', self.on_selection)
+        selection.connect('changed', self._selection_callback)
         
     def add_text_column(self, name, store_key, expand=False):
         text_renderer = gtk.CellRendererText()
@@ -81,8 +86,26 @@ class SubscriptionManagerTab(GladeWidget):
     def get_content(self):
         return self.content
         
-    def on_selection(self, treeselection):
+    def _selection_callback(self, treeselection):
+        selection = SelectionWrapper(treeselection, self.store)
+        
+        if selection.is_valid():
+            self.on_selection(selection)
+        
+    def on_selection(self, selection):
         pass
+        
+class SelectionWrapper(object):
+
+    def __init__(self, treeselection, store):
+        self.model, self.tree_iter = treeselection.get_selected()
+        self.store = store
+            
+    def is_valid(self):
+        return self.tree_iter is not None
+
+    def __getitem__(self, key):
+        return self.model.get_value(self.tree_iter, self.store[key])
             
             
 class ProductsTable(object):
