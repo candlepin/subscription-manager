@@ -70,6 +70,8 @@ class AllSubscriptionsTab(object):
                 'compatible_checkbutton')
         # This option should be selected by default:
         self.compatible_checkbutton.set_active(True)
+        self.overlap_checkbutton = self.all_subs_xml.get_widget(
+                'overlap_checkbutton')
         self.not_installed_checkbutton = self.all_subs_xml.get_widget(
                 'not_installed_checkbutton')
         self.contains_text_checkbutton = self.all_subs_xml.get_widget(
@@ -89,6 +91,7 @@ class AllSubscriptionsTab(object):
             "on_search_button_clicked": self.search_button_clicked,
             "on_date_select_button_clicked": self.date_select_button_clicked,
             "on_compatible_checkbutton_clicked": self.filters_changed,
+            "on_overlap_checkbutton_clicked": self.filters_changed,
             "on_not_installed_checkbutton_clicked": self.filters_changed,
             "on_contains_text_checkbutton_clicked": self.filters_changed,
             "on_contain_text_entry_changed": self.filters_changed,
@@ -99,6 +102,13 @@ class AllSubscriptionsTab(object):
     def show_compatible(self):
         """ Return True if we're to include pools which failed a rule check. """
         return self.compatible_checkbutton.get_active()
+
+    def show_overlapping(self):
+        """
+        Return True if we're to include pools which provide products for
+        which we already have subscriptions.
+        """
+        return self.overlap_checkbutton.get_active()
 
     def show_uninstalled(self):
         """ 
@@ -136,6 +146,7 @@ class AllSubscriptionsTab(object):
 
         merged_pools = self.pool_stash.merge_pools(
                 compatible=self.show_compatible(),
+                overlapping=self.show_overlapping(),
                 uninstalled=self.show_uninstalled(),
                 text=self.get_filter_text())
 

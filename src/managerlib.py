@@ -229,6 +229,7 @@ class PoolFilter(object):
     """
     def __init__(self):
         self.product_directory = ProductDirectory()
+        self.entitlement_directory = EntitlementDirectory()
 
     def filter_out_uninstalled(self, pools):
         """
@@ -278,6 +279,32 @@ class PoolFilter(object):
             if contains_text.lower() in pool['productName'].lower():
                 filtered_pools.append(pool)
         return filtered_pools
+
+    def _get_entitled_product_ids(self):
+        entitled_products = []
+        for cert in self.product_directory.list():
+            for product in cert.getProducts():
+                entitled_products.append(product.getHash()) 
+        return entitled_products
+
+    def filter_out_overlapping(self, pools):
+        entitled_product_ids = self._get_entitled_product_ids()
+        filtered_pools = []
+        for pool in pools:
+            provided_ids = [p['productId'] for p in pool['providedProducts']]
+            overlap = False
+            for productid in entitled_product_ids:
+                if str(productid) in provided_ids or \
+                    str(productid) == pool['productId']:
+                        overlap = True
+                        break
+            if not overlap:
+                filtered_pools.append(pool)
+        return filtered_pools
+
+    def filter_out_non_overlapping(self, pools):
+        not_overlapping = self.filter_out_overlapping(pools)
+        return [pool for pool in pools if pool not in not_overlapping]
 
 
 def list_pools(uep, consumer_uuid, facts, all=False, active_on=None):
@@ -413,7 +440,7 @@ class PoolStash(object):
                 self.incompatible_pools[pool['id']] = pool
                 self.all_pools[pool['id']] = pool
 
-    def filter_pools(self, compatible=False, uninstalled=False, text=None):
+    def filter_pools(self, compatible, overlapping, uninstalled, text):
         """
         Return a list of pool hashes, filtered according to the given options.
 
@@ -432,18 +459,24 @@ class PoolStash(object):
         else:
             pools = pool_filter.filter_out_uninstalled(pools)
 
+        if overlapping:
+            pools = pool_filter.filter_out_non_overlapping(pools)
+        else:
+            pools = pool_filter.filter_out_overlapping(pools)
+
         # Filter by product name if necessary:
         if text:
             pools = pool_filter.filter_product_name(pools, text)
 
         return pools
 
-    def merge_pools(self, compatible=True, uninstalled=False, text=None):
+    def merge_pools(self, compatible=True, overlapping=True, uninstalled=False,
+            text=None):
         """
         Return a merged view of pools filtered according to the given options.
         Pools for the same product will be merged into a MergedPool object.
         """
-        pools = self.filter_pools(compatible, uninstalled, text)
+        pools = self.filter_pools(compatible, overlapping, uninstalled, text)
         merged_pools = merge_pools(pools)
         return merged_pools
 
