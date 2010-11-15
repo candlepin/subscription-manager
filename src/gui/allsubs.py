@@ -197,7 +197,6 @@ class AllSubscriptionsTab(object):
             provided = self._load_product_data(pool_id)
             self.sub_details.show(product_name, products=provided)
 
-
     def _load_product_data(self, pool_id):
         pool = self.pool_stash.all_pools[pool_id]
         provided_products = []
