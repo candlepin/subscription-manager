@@ -14,6 +14,7 @@
 #
 
 import gtk
+import gio
 
 from datetime import datetime
 
@@ -46,7 +47,16 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
  
         self.update_products()
         
+        # Monitor products for additions/deletions
+        def on_product_change(filemonitor, first_file, other_file, event_type):
+            self.update_products()
+        
+        monitor = gio.File(self.product_dir.path).monitor()
+        monitor.connect("changed", on_product_change)
+        
     def update_products(self):
+        self.store.clear()
+    
         for product_cert in self.product_dir.list():
             for product in product_cert.getProducts():
                 product_hash = product.getHash()
