@@ -14,6 +14,7 @@
 #
 
 import gtk
+import gio
 
 from datetime import datetime
 
@@ -46,7 +47,16 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
  
         self.update_products()
         
+        # Monitor products for additions/deletions
+        def on_product_change(filemonitor, first_file, other_file, event_type):
+            self.update_products()
+        
+        monitor = gio.File(self.product_dir.path).monitor()
+        monitor.connect("changed", on_product_change)
+        
     def update_products(self):
+        self.store.clear()
+    
         for product_cert in self.product_dir.list():
             for product in product_cert.getProducts():
                 product_hash = product.getHash()
@@ -88,24 +98,15 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 
                 self.store.add_map(entry)
     
-    def on_selection(self, treeselection):
-               
-        model, tree_iter = treeselection.get_selected()
-
-        if tree_iter is None:
-            return
-
-        def _get_value(key):
-            return model.get_value(tree_iter, self.store[key])
-
+    def on_selection(self, selection):
         # Load the entitlement certificate for the selected row:
-        product = _get_value('product')
+        product = selection['product']
         self.product_text.get_buffer().set_text(product)
         
-        compliance = _get_value('compliance_note')
+        compliance = selection['compliance_note']
         self.compliance_text.get_buffer().set_text(compliance)
         
-        subscription = _get_value('subscription') or ''
+        subscription = selection['subscription'] or ''
         self.subscription_text.get_buffer().set_text(subscription)
 
     def get_type_map(self):

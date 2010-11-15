@@ -33,9 +33,6 @@
               </widget>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
               <widget class="GtkRadioButton" id="compliant_today_label">
                 <property name="label" translatable="yes">01/05/1974 (First date of non-compliance)</property>
                 <property name="visible">True</property>
@@ -146,6 +143,9 @@
                 <property name="bottom_attach">2</property>
               </packing>
             </child>
+            <child>
+              <placeholder/>
+            </child>
           </widget>
           <packing>
             <property name="expand">False</property>
@@ -172,12 +172,6 @@
           <packing>
             <property name="position">4</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </widget>
     </child>

@@ -89,18 +89,13 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             'background': str
         }
 
-    def on_selection(self, treeselection):
+    def on_selection(self, selection):
         """
         Updates the 'Subscription Details' panel with the currently selected
         subscription.
         """
-        model, tree_iter = treeselection.get_selected()
-
-        if tree_iter is None:
-            return
-
         # Load the entitlement certificate for the selected row:
-        serial = model.get_value(tree_iter, self.store['serial'])
+        serial = selection['serial']
         cert = EntitlementDirectory().find(int(serial))
         order = cert.getOrder()
         products = [(product.getName(), product.getHash())
