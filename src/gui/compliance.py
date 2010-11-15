@@ -86,6 +86,10 @@ class ComplianceAssistant(object):
         self.window.connect('delete_event', self.hide)
         self.uncompliant_store = storage.MappedListStore(uncompliant_type_map)
         self.uncompliant_treeview = MappedListTreeView(self.uncompliant_store)
+
+        self.uncompliant_treeview.add_toggle_column(None,
+                                                    self.uncompliant_store['active'],
+                                                    self._on_uncompliant_active_toggled)
         self.uncompliant_treeview.add_column("Product",
                 self.uncompliant_store['product_name'], True)
         self.uncompliant_treeview.add_column("Contract",
@@ -164,9 +168,7 @@ class ComplianceAssistant(object):
         # These display the list of products uncompliant on the selected date:
         self.uncompliant_store.clear()
 
-        self.uncompliant_treeview.add_toggle_column(None,
-                                                    self.uncompliant_store['active'],
-                                                    self._on_uncompliant_active_toggled)
+ 
         products = self.pool_stash.merge_pools(compatible=True, uninstalled=False)
         for key in products:
             pools = products[key].pools
@@ -177,12 +179,16 @@ class ComplianceAssistant(object):
                                                 'end_date':'%s' % pool['endDate'],
                                                 'align':0.0})
         
-    def show(self):
 
     def _on_uncompliant_active_toggled(self, cell, path):
         treeiter = self.uncompliant_store.get_iter_from_string(path)
         item = self.uncompliant_store.get_value(treeiter, 0)
         self.uncompliant_store.set_value(treeiter, 0, not item)
+
+
+    def show(self):
+        """
+        Called by the main window when this page is to be displayed.
 
         All required data will be refreshed.
         """
