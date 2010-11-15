@@ -38,7 +38,21 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.product_dir = ProductDirectory()
         self.entitlement_dir = EntitlementDirectory()
         
-        self.add_text_column(_('Product'), 'product', True)
+        # Product column
+        text_renderer = gtk.CellRendererText()
+        image_renderer = gtk.CellRendererPixbuf()
+        column = gtk.TreeViewColumn(_('Product'), 
+                                    image_renderer,
+                                    pixbuf=self.store['image'])
+
+        column.set_expand(True)
+        column.pack_end(text_renderer, True)
+        column.add_attribute(text_renderer, 'text', self.store['product'])
+        column.add_attribute(text_renderer, 'cell-background', 
+                             self.store['background'])
+                             
+        self.top_view.append_column(column)
+        
         self.add_text_column(_('Version'), 'version')
         self.add_text_column(_('Compliance Status'), 'status')
         self.add_text_column(_('Contract'), 'contract')
@@ -52,7 +66,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
             self.update_products()
         
         monitor = gio.File(self.product_dir.path).monitor()
-        monitor.connect("changed", on_product_change)
+        monitor.connect('changed', on_product_change)
         
     def update_products(self):
         self.store.clear()
@@ -84,19 +98,25 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                     if now < date_range.begin():
                         entry['status'] = _('Future Subscription')
                     elif now > date_range.end():
+                        entry['image'] = self._render_icon(gtk.STOCK_REMOVE)
                         entry['status'] = _('Out of Compliance')
                         entry['compliance_note'] = \
                             _('Subscription %s is expired' % order.getSubscription())
                     else:
+                        entry['image'] = self._render_icon(gtk.STOCK_APPLY)
                         entry['status'] = _('In Compliance')
                         entry['compliance_note'] = \
                             _('Covered by subscription %s through %s' % \
                             (order.getSubscription(), entry['expiration_date']))
                 else:
+                    entry['image'] = self._render_icon(gtk.STOCK_REMOVE)
                     entry['status'] = _('Out of Compliance')
                     entry['compliance_note'] = _("Never Subscribed")
                 
                 self.store.add_map(entry)
+                
+    def _render_icon(self, icon_id):
+        return self.content.render_icon(icon_id, gtk.ICON_SIZE_MENU)
     
     def on_selection(self, selection):
         # Load the entitlement certificate for the selected row:
@@ -111,6 +131,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def get_type_map(self):
         return {
+            'image': gtk.gdk.Pixbuf,
             'product': str,
             'version': str,
             'status': str,
