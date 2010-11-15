@@ -42,8 +42,11 @@ EXPIRATION_INDEX = 2
 
 class MappedListTreeView(gtk.TreeView):
 
-    def add_toggle_column(self, name, column_number):
+    def add_toggle_column(self, name, column_number, callback):
         toggle_renderer = gtk.CellRendererToggle()
+        toggle_renderer.set_property("activatable", True)
+        toggle_renderer.set_radio(False)
+        toggle_renderer.connect("toggled", callback)
         column = gtk.TreeViewColumn(name, toggle_renderer, active=column_number)
         self.append_column(column)
 
@@ -103,8 +106,6 @@ class ComplianceAssistant(object):
         vbox = self.compliance_xml.get_widget("uncompliant_vbox")
         vbox.pack_end(self.uncompliant_treeview)
         self.uncompliant_treeview.show()
-
-  
 
         subscriptions_type_map = {'product_name':str, 
                                   'total_contracts': float,
@@ -168,7 +169,8 @@ class ComplianceAssistant(object):
         self.uncompliant_store.clear()
 
         self.uncompliant_treeview.add_toggle_column(None,
-                                                    self.uncompliant_store['active'])
+                                                    self.uncompliant_store['active'],
+                                                    self._on_uncompliant_active_toggled)
         self.uncompliant_treeview.add_column("Product",
                                              self.uncompliant_store['product_name'], True)
         self.uncompliant_treeview.add_column("Contract",
@@ -189,6 +191,11 @@ class ComplianceAssistant(object):
                                                 'align':0.0})
         
         # Dummy data for now:
+
+    def _on_uncompliant_active_toggled(self, cell, path):
+        treeiter = self.uncompliant_store.get_iter_from_string(path)
+        item = self.uncompliant_store.get_value(treeiter, 0)
+        self.uncompliant_store.set_value(treeiter, 0, not item)
 
     def _display_providing_subs(self):
         pass
