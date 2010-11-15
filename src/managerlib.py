@@ -241,7 +241,10 @@ class PoolFilter(object):
             for product in installed_products:
                 productid = product.getProduct().getHash()
                 # we only need one matched item per pool id, so add to dict to keep unique:
-                if str(productid) in d['providedProductIds'] or \
+                # Build a list of provided product IDs for comparison:
+                provided_ids = [p['productId'] for p in d['providedProducts']]
+
+                if str(productid) in provided_ids or \
                         str(productid) == d['productId']:
                     matched_data_dict[d['id']] = d
 
@@ -258,7 +261,8 @@ class PoolFilter(object):
             for product in installed_products:
                 productid = product.getProduct().getHash()
                 # we only need one matched item per pool id, so add to dict to keep unique:
-                if str(productid) not in d['providedProductIds'] and \
+                provided_ids = [p['productId'] for p in d['providedProducts']]
+                if str(productid) not in provided_ids and \
                         str(productid) != d['productId']:
                     matched_data_dict[d['id']] = d
 
@@ -301,7 +305,7 @@ def getAvailableEntitlements(cpserver, consumer_uuid, facts, all=False):
     not pass. (i.e. show pools that are incompatible for your hardware)
     """
     columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
-            'providedProductIds', 'productId']
+            'providedProducts', 'productId']
     
     dlist = list_pools(cpserver, consumer_uuid, facts, all)
 
@@ -343,7 +347,7 @@ class MergedPools(object):
         # edge cases from one sub to another even though they are for the
         # same product. For now we'll just set this value each time a pool
         # is added and hope they are consistent.
-        self.bundled_products = len(pool['providedProductIds'])
+        self.bundled_products = len(pool['providedProducts'])
 
 
 def merge_pools(pools):
