@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy project-wide -->
@@ -6,13 +6,13 @@
     <child>
       <widget class="GtkVBox" id="content">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <child>
           <widget class="GtkTreeView" id="top_view">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="headers_clickable">False</property>
             <property name="rules_hint">True</property>
+            <property name="enable_grid_lines">vertical</property>
           </widget>
           <packing>
             <property name="position">0</property>
@@ -22,7 +22,6 @@
           <widget class="GtkVBox" id="sub_details_vbox">
             <property name="visible">True</property>
             <property name="border_width">7</property>
-            <property name="orientation">vertical</property>
             <child>
               <widget class="GtkLabel" id="label1">
                 <property name="visible">True</property>
@@ -43,7 +42,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="border_width">3</property>
-                <property name="vadjustment">0 0 81 7.8000000000000007 70.200000000000003 78</property>
+                <property name="vadjustment">0 0 81 6.9000000000000004 62.100000000000001 69</property>
                 <property name="hscrollbar_policy">automatic</property>
                 <property name="vscrollbar_policy">automatic</property>
                 <property name="shadow_type">in</property>
