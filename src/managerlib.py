@@ -282,7 +282,7 @@ class PoolFilter(object):
 
     def _get_entitled_product_ids(self):
         entitled_products = []
-        for cert in self.product_directory.list():
+        for cert in self.entitlement_directory.list():
             for product in cert.getProducts():
                 entitled_products.append(product.getHash()) 
         return entitled_products
