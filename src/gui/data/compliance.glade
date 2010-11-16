@@ -33,7 +33,7 @@
               </widget>
             </child>
             <child>
-              <widget class="GtkRadioButton" id="compliant_today_label">
+              <widget class="GtkRadioButton" id="first_noncompliant_radiobutton">
                 <property name="label" translatable="yes">01/05/1974 (First date of non-compliance)</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -42,7 +42,8 @@
                 <property name="xalign">0.46000000834465027</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
-                <property name="group">non_compliant_different_date_radiobutton</property>
+                <property name="group">noncompliant_date_radiobutton</property>
+                <signal name="toggled" handler="on_first_noncompliant_radiobutton_toggled" swapped="no"/>
               </widget>
               <packing>
                 <property name="left_attach">1</property>
@@ -53,7 +54,7 @@
               <widget class="GtkHBox" id="hbox1">
                 <property name="visible">True</property>
                 <child>
-                  <widget class="GtkRadioButton" id="non_compliant_different_date_radiobutton">
+                  <widget class="GtkRadioButton" id="noncompliant_date_radiobutton">
                     <property name="label" translatable="yes">On a different date:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -61,13 +62,14 @@
                     <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                     <property name="draw_indicator">True</property>
+                    <signal name="toggled" handler="on_noncompliant_date_radiobutton_toggled" swapped="no"/>
                   </widget>
                   <packing>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="entry1">
+                  <widget class="GtkEntry" id="month_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">●</property>
@@ -88,7 +90,7 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="entry2">
+                  <widget class="GtkEntry" id="day_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">●</property>
@@ -109,7 +111,7 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="entry3">
+                  <widget class="GtkEntry" id="year_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">●</property>
@@ -120,14 +122,14 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkButton" id="magic_calendar_button">
-                    <property name="label" translatable="yes">calendar</property>
+                  <widget class="GtkButton" id="compliance_date_button">
+                    <property name="label">gtk-edit</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_action_appearance">False</property>
-                    <property name="xalign">0.50999999046325684</property>
-                    <property name="yalign">0.54000002145767212</property>
+                    <property name="use_stock">True</property>
+                    <signal name="clicked" handler="on_compliance_date_button_clicked" swapped="no"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>

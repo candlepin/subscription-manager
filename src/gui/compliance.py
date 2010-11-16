@@ -20,6 +20,7 @@ import gtk
 import locale
 import logging
 import gettext
+from datetime import date
 
 _ = gettext.gettext
 
@@ -76,6 +77,16 @@ class ComplianceAssistant(object):
         self.compliant_today_label = self.compliance_xml.get_widget(
             "compliant_today_label")
 
+        # Setup initial last compliant date:
+        self.last_compliant_date = self._find_last_compliant()
+        self.month_entry = self.compliance_xml.get_widget("month_entry")
+        self.day_entry = self.compliance_xml.get_widget("day_entry")
+        self.year_entry = self.compliance_xml.get_widget("year_entry")
+        if self.last_compliant_date:
+            self._set_noncompliant_date(self.last_compliant_date)
+        else:
+            self._set_noncompliant_date(date.today())
+
         uncompliant_type_map = {'active':bool,
                                 'product_name':str,
                                 'contract':str,
@@ -109,6 +120,7 @@ class ComplianceAssistant(object):
                                   'pool_id': str}
 
         self.subscriptions_store = storage.MappedListStore(subscriptions_type_map)
+        self.date_selector = DateSelector(self._compliance_date_selected)
 
         self.subscriptions_treeview = MappedListTreeView(self.subscriptions_store)
         self.subscriptions_treeview.add_column("Product Name",
@@ -131,11 +143,52 @@ class ComplianceAssistant(object):
         self.sub_details = SubDetailsWidget(show_contract=False)
         vbox.pack_start(self.sub_details.get_widget())
 
-    # FIXME: should this methods on CertificateDirectory? 
+        self.first_noncompliant_radiobutton = \
+            self.compliance_xml.get_widget('first_noncompliant_radiobutton')
+        self.first_noncompliant_radiobutton.set_active(True)
+        self.noncompliant_date_radiobutton = \
+            self.compliance_xml.get_widget('noncompliant_date_radiobutton')
+
+        self.compliance_xml.signal_autoconnect({
+            "on_compliance_date_button_clicked": self._date_select_button_clicked,
+            "on_first_noncompliant_radiobutton_toggled": self._reload_screen,
+            "on_noncompliant_date_radiobutton_toggled": self._reload_screen,
+        })
+
+    def _compliance_date_selected(self, widget):
+        """
+        Callback for the date selector to execute when the date has been chosen.
+        """
+        year, month, day = widget.get_date()
+        month += 1 # this starts at 0 in GTK
+        d = date(year, month, day)
+        self._set_noncompliant_date(d)
+        self.noncompliant_date_radiobutton.set_active(True)
+        self._reload_screen()
+
+    def _date_select_button_clicked(self, widget):
+        self.date_selector.show()
+
+    def _get_noncompliant_date(self):
+        """
+        Returns a date object for the non-compliant date to use based on current
+        state of the GUI controls.
+        """
+        if self.first_noncompliant_radiobutton.get_active():
+            return self.last_compliant_date
+        else:
+            return date(int(self.year_entry.get_text()),
+                    int(self.month_entry.get_text()),
+                    int(self.day_entry.get_text()))
+
     def _find_last_compliant(self):
         """
         Find the first date where an entitlement will be uncompliant.
         """
+        # TODO: what about products installed but not covered by *any* entitlement?
+        # TODO: should we be listing valid? does this work if everything is already out of compliance?
+        # TODO: setting a member variable here that isn't used anywhere else, should keep this local unless needed
+        # TODO: needs unit testing imo, probably could be moved to a standalone method for that purpose
         self.valid_subs = certlib.EntitlementDirectory().listValid()
 
         # FIXME: remote debug
@@ -149,6 +202,8 @@ class ComplianceAssistant(object):
 
         if self.valid_subs:
             return self.valid_subs[0].validRange().end()
+        else:
+            return date.today()
 
     def _display_subscriptions(self):
         self.subscriptions_store.clear()
@@ -189,27 +244,32 @@ class ComplianceAssistant(object):
     def show(self):
         """
         Called by the main window when this page is to be displayed.
-
-        All required data will be refreshed.
         """
+        self._reload_screen()
+        self.window.show()
+
+    def _reload_screen(self, widget=None):
+        """
+        Draws the entire screen, called when window is shown, or something
+        changes and we need to refresh.
+        """
+        log.debug("reloading screen")
         # end date of first subs to expire
         self.last_compliant_date = self._find_last_compliant()
 
         #uncompliant??
         # TODO: needs to be switched to use date from the date selector gui controls:
-        self.pool_stash.refresh(active_on=self.last_compliant_date)
+        self.pool_stash.refresh(active_on=self._get_noncompliant_date())
 
         if self.last_compliant_date:
             formatted = self.last_compliant_date.strftime(locale.nl_langinfo(locale.D_FMT))
             self.compliance_label.set_label(
                     _("All software is in compliance until %s.") % formatted)
-            self.compliant_today_label.set_label(
-                    _("%s (First date of non-compliance)") % formatted)
+            self.first_noncompliant_radiobutton.set_label(
+                    _("%s (first date of non-compliance)") % formatted)
 
         self._display_uncompliant()
         self._display_subscriptions()
-
-        self.window.show()
 
     def hide(self, widget, event, data=None):
         self.window.hide()
@@ -223,3 +283,7 @@ class ComplianceAssistant(object):
             # TODO: need to show provided products here once we have a pool stash:
             self.sub_details.show(product_name)
 
+    def _set_noncompliant_date(self, noncompliant_date):
+        self.month_entry.set_text(str(noncompliant_date.month))
+        self.day_entry.set_text(str(noncompliant_date.day))
+        self.year_entry.set_text(str(noncompliant_date.year))
