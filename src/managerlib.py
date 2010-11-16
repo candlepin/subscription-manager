@@ -434,6 +434,7 @@ class PoolStash(object):
         """
         self.all_pools = {}
         self.compatible_pools = {}
+        log.debug("Refreshing pools from server...")
         for pool in list_pools(self.backend.uep,
                 self.consumer.uuid, self.facts, active_on=active_on):
             self.compatible_pools[pool['id']] = pool
@@ -447,6 +448,10 @@ class PoolStash(object):
             if not pool['id'] in self.compatible_pools:
                 self.incompatible_pools[pool['id']] = pool
                 self.all_pools[pool['id']] = pool
+
+        log.debug("found %s pools:" % len(self.all_pools))
+        log.debug("   %s compatible" % len(self.compatible_pools))
+        log.debug("   %s incompatible" % len(self.incompatible_pools))
 
     def filter_pools(self, compatible, overlapping, uninstalled, text):
         """
@@ -485,6 +490,8 @@ class PoolStash(object):
         Pools for the same product will be merged into a MergedPool object.
         """
         pools = self.filter_pools(compatible, overlapping, uninstalled, text)
+        log.debug("pools = ")
+        log.debug(pools)
         merged_pools = merge_pools(pools)
         return merged_pools
 
