@@ -29,10 +29,11 @@ import base64
 from M2Crypto import X509
 from datetime import datetime as dt
 from datetime import tzinfo, timedelta
-
+from logutil import getLogger
 import gettext
 _ = gettext.gettext
 
+log = getLogger(__name__)
 
 class Certificate(object):
     """
@@ -112,7 +113,10 @@ class Certificate(object):
         @return: True if valid.
         @rtype: boolean
         """
-        return self.validRange().hasNow()
+        range = self.validRange()
+        gmt = dt.utcnow()
+        gmt = gmt.replace(tzinfo=GMT())      
+        return range.end() >= gmt
 
     def bogus(self):
         """
@@ -645,7 +649,7 @@ class ProductCertificate(RedhatCertificate):
     def bogus(self):
         bogus = RedhatCertificate.bogus(self)
         if self.getProduct() is None:
-            bogus.append('No product information in certificate: %s' % self.serialNumber())
+            log.warn('No product information in certificate: %s' % self.serialNumber())
         return bogus
 
     def __str__(self):

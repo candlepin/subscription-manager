@@ -559,6 +559,9 @@ class UpdateReport:
         if certificates:
             for c in certificates:
                 p = c.getProduct()
+                if not p:
+                   p = c.getOrder()  
+
                 s.append('%s[sn:%d (%s,) @ %s]' % \
                     (indent,
                      c.serialNumber(),

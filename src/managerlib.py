@@ -149,17 +149,25 @@ def getConsumedProductEntitlements():
      Gets the list of available products with entitlements based on
       its subscription cert
     """
-    entdir = EntitlementDirectory()
     consumed_products = []
+    def append_consumed_product(cert, product):
+        consumed_products.append((product.getName(), cert.getOrder().getContract(),
+                                  cert.getOrder().getAccountNumber(), cert.serialNumber(),
+                                  cert.valid(),
+                                  formatDate(cert.validRange().begin().isoformat()),
+                                  formatDate(cert.validRange().end().isoformat()))
+                                 )
+
+    entdir = EntitlementDirectory()
     for cert in entdir.listValid():
         eproducts = cert.getProducts()
-        for product in eproducts:
-            data = (product.getName(), cert.getOrder().getContract(),
-                    cert.getOrder().getAccountNumber(), cert.serialNumber(),
-                    cert.valid(),
-                    formatDate(cert.validRange().begin().isoformat()),
-                    formatDate(cert.validRange().end().isoformat()))
-            consumed_products.append(data)
+        #for entitlement certificates with no product data,
+        #use Order's details.
+        if len(eproducts) == 0:
+            append_consumed_product(cert, cert.getOrder())
+        else:
+            for product in eproducts:
+                append_consumed_product(cert, product)
     return consumed_products
 
 
