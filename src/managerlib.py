@@ -472,9 +472,10 @@ class PoolStash(object):
         else:
             pools = pool_filter.filter_out_uninstalled(pools)
 
+        # Do nothing if set to None:
         if overlapping:
             pools = pool_filter.filter_out_non_overlapping(pools)
-        else:
+        elif overlapping == False:
             pools = pool_filter.filter_out_overlapping(pools)
 
         # Filter by product name if necessary:
@@ -483,15 +484,17 @@ class PoolStash(object):
 
         return pools
 
-    def merge_pools(self, compatible=True, overlapping=True, uninstalled=False,
+    def merge_pools(self, compatible=True, overlapping=None, uninstalled=False,
             text=None):
         """
         Return a merged view of pools filtered according to the given options.
         Pools for the same product will be merged into a MergedPool object.
+
+        Overlapping filter by default is None, meaning the pools will not be
+        filtered at all. Use True to filter out pools which do not overlap,
+        or False to filter out pools which do.
         """
         pools = self.filter_pools(compatible, overlapping, uninstalled, text)
-        log.debug("pools = ")
-        log.debug(pools)
         merged_pools = merge_pools(pools)
         return merged_pools
 

@@ -223,8 +223,7 @@ class ComplianceAssistant(object):
         # These display the list of products uncompliant on the selected date:
         self.uncompliant_store.clear()
  
-        products = self.pool_stash.merge_pools(compatible=True, uninstalled=False,
-                overlapping=False)
+        products = self.pool_stash.merge_pools(compatible=True, uninstalled=False)
         for key in products:
             pools = products[key].pools
             for pool in pools:
