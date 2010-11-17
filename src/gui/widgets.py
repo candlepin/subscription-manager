@@ -61,6 +61,7 @@ class SubscriptionManagerTab(GladeWidget):
         # glade file by convention
         widgets = ['top_view', 'content'] + initial_widget_names
         super(SubscriptionManagerTab, self).__init__(glade_file, widgets)
+        self.content.unparent()
         
         self.store = storage.MappedListStore(self.get_type_map())
         self.top_view.set_model(self.store)

@@ -237,28 +237,49 @@ class MainWindow(object):
         self.compliance_assistant = ComplianceAssistant(self.backend,
                 self.consumer, self.facts)
 
+
         tab_classes = [InstalledProductsTab, 
                        MySubscriptionsTab,
                        AllSubscriptionsTab]
 
-        # Populate the tabs dynamically
-        for tab_class in tab_classes:
-            tab = tab_class(self.backend, self.consumer, self.facts)
+        self.installed_tab = InstalledProductsTab(self.backend, self.consumer,
+                self.facts)
+        self.my_subs_tab = MySubscriptionsTab(self.backend, self.consumer,
+                self.facts)
+        self.all_subs_tab = AllSubscriptionsTab(self.backend, self.consumer,
+                self.facts)
 
-            content = tab.get_content()
-            content.unparent()
-
-            self.notebook.append_page(content, gtk.Label(tab.get_label()))
+        for tab in [self.installed_tab, self.my_subs_tab]:
+            self.notebook.append_page(tab.get_content(), gtk.Label(tab.get_label()))
             
         self.main_window_xml.signal_autoconnect({
             "on_registration_button_clicked": self.registration_button_clicked,
             "on_facts_button_clicked": self.facts_button_clicked,
             "on_compliant_button_clicked": self.compliant_button_clicked,
         })
-
-        self.set_compliance_status()
+        self.refresh()
 
         self.main_window.show_all()
+
+    def registered(self):
+        return ConsumerIdentity.existsAndValid()
+
+    def registration_changed(self):
+        log.debug("Registration changed, updating main window.")
+
+        self.refresh()
+
+    def refresh(self):
+        """ Refresh the UI. """
+        self.set_compliance_status()
+
+        # Show the All Subscriptions tab if registered, hide it otherwise:
+        if self.registered() and self.notebook.get_n_pages() == 2:
+            self.notebook.append_page(self.all_subs_tab.get_content(),
+                    gtk.Label(self.all_subs_tab.get_label()))
+        elif not self.registered() and self.notebook.get_n_pages() == 3:
+            self.notebook.set_current_page(0)
+            self.notebook.remove_page(2)
 
     def registration_button_clicked(self, widget):
         self.registration_dialog.show()
@@ -294,10 +315,6 @@ class MainWindow(object):
             self.compliance_count_label.set_text("")
             self.compliance_status_label.set_text(
                     _("Your system is compliant.") )
-
-    def registration_changed(self):
-        log.debug("Registration changed, updating main window.")
-
 
 
 class ManageSubscriptionPage:

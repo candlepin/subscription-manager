@@ -53,6 +53,7 @@ class AllSubscriptionsTab(object):
 
         self.all_subs_xml = gtk.glade.XML(ALL_SUBS_GLADE)
         self.all_subs_vbox = self.all_subs_xml.get_widget('all_subs_vbox')
+        self.all_subs_vbox.unparent()
 
         today = datetime.date.today()
         self.date_selector = DateSelector(self.active_on_date_changed, initial_date=today)
