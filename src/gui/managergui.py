@@ -95,29 +95,29 @@ ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
 
 
 class Backend(object):
-    """ 
+    """
     Wrapper for sharing UEP connections to Candlepin.
 
     Reference to a Backend object will be passed around UI components, so
-    the UEP connection it contains can be modified/recreated and all 
+    the UEP connection it contains can be modified/recreated and all
     components will have the updated connection.
-    
+
     This also serves as a common wrapper for certifcate directories and methods
     to monitor those directories for changes.
     """
 
     def __init__(self, uep):
         self.uep = uep
-        
+
         self.product_dir = ProductDirectory()
         self.entitlement_dir = EntitlementDirectory()
-        
+
         self.product_monitor = self._monitor(self.product_dir)
         self.entitlement_monitor = self._monitor(self.entitlement_dir)
-        
+
     def _monitor(self, directory):
         return gio.File(directory.path).monitor()
-        
+
     def monitor_certs(self, callback):
         self.product_monitor.connect('changed', callback)
         self.entitlement_monitor.connect('changed', callback)
@@ -214,14 +214,15 @@ class MainWindow(object):
     """
     def __init__(self):
         self.backend = Backend(connection.UEPConnection(
-            cert_file=ConsumerIdentity.certpath(), 
+            cert_file=ConsumerIdentity.certpath(),
             key_file=ConsumerIdentity.keypath()))
         self.consumer = Consumer()
         self.facts = Facts()
-        
-        self.main_window_xml = GladeWrapper(os.path.join(prefix, 
+
+        self.main_window_xml = GladeWrapper(os.path.join(prefix,
             "data/mainwindow.glade"))
         self.main_window = self.main_window_xml.get_widget('main_window')
+
         self.notebook = self.main_window_xml.get_widget('notebook')
         self.compliance_count_label = self.main_window_xml.get_widget(
                 'compliance_count_label')
@@ -238,7 +239,7 @@ class MainWindow(object):
                 self.consumer, self.facts)
 
 
-        tab_classes = [InstalledProductsTab, 
+        tab_classes = [InstalledProductsTab,
                        MySubscriptionsTab,
                        AllSubscriptionsTab]
 
@@ -251,7 +252,7 @@ class MainWindow(object):
 
         for tab in [self.installed_tab, self.my_subs_tab]:
             self.notebook.append_page(tab.get_content(), gtk.Label(tab.get_label()))
-            
+
         self.main_window_xml.signal_autoconnect({
             "on_registration_button_clicked": self.registration_button_clicked,
             "on_facts_button_clicked": self.facts_button_clicked,
@@ -455,7 +456,7 @@ class ManageSubscriptionPage:
 
     def show_add_subscription_screen(self):
         if not self.add_subscription_screen:
-            self.add_subscription_screen = AddSubscriptionScreen(self.consumer, 
+            self.add_subscription_screen = AddSubscriptionScreen(self.consumer,
                     self.facts)
             self.add_subscription_screen.addWin.connect('hide', self.reload_gui)
 
@@ -479,7 +480,7 @@ class ManageSubscriptionPage:
         if self.pname_selected:
             log.info("Product %s selected for update" % self.pname_selected)
             if self.consumer.uuid:
-                UpdateSubscriptionScreen(self.pname_selected, self.mainWin, 
+                UpdateSubscriptionScreen(self.pname_selected, self.mainWin,
                         self.consumer, self.facts)
             else:
                 self.show_import_certificate_screen()
@@ -502,14 +503,14 @@ class ManageSubscriptionPage:
                         xml.sax.saxutils.escape(product[1])
             self.status_icon = self.tv_products.render_icon(
                     self.state_icon_map[product[1]], size=gtk.ICON_SIZE_MENU)
-            self.productList.append((self.status_icon, product[0], product[3], 
+            self.productList.append((self.status_icon, product[0], product[3],
                 markup_status, product[2], product[4]))
         self.tv_products.set_model(self.productList)
         self.updateMessage()
 
     def populateProductDialog(self):
         self.tv_products = rhsm_xml.get_widget("treeview_updates")
-        self.productList = gtk.ListStore(gtk.gdk.Pixbuf, 
+        self.productList = gtk.ListStore(gtk.gdk.Pixbuf,
                 gobject.TYPE_STRING, gobject.TYPE_STRING,
                 gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
 
@@ -565,7 +566,7 @@ class ManageSubscriptionPage:
             pdetails.get_buffer().set_text(text)
             pdetails.set_cursor_visible(False)
             pdetails.show()
-            
+
         items, iter = selection.get_selected()
         if iter is None:
             set_text('')
@@ -614,7 +615,7 @@ class ManageSubscriptionPage:
         if not self.psubs_selected:
             return
         log.info("Product %s selected for unsubscribe" % self.pname_selected)
-        dlg = messageWindow.YesNoDialog(constants.CONFIRM_UNSUBSCRIBE % 
+        dlg = messageWindow.YesNoDialog(constants.CONFIRM_UNSUBSCRIBE %
                 xml.sax.saxutils.escape(self.pname_selected), self.mainWin)
         if not dlg.getrc():
             return
@@ -658,7 +659,7 @@ class ManageSubscriptionPage:
         except Exception, e:
             log.error("Error unregistering system with entitlement platform.")
             handle_gui_exception(e, constants.UNREGISTER_ERROR,
-                    "Consumer may need to be manually cleaned up: %s" % 
+                    "Consumer may need to be manually cleaned up: %s" %
                     self.consumer.uuid)
         self.consumer.reload()
         self.mainWin.emit(CONSUMER_SIGNAL)
@@ -733,8 +734,8 @@ class RegisterScreen:
                 cid = self.consumer.uuid
                 managerlib.unregisterConsumer(UEP, cid)
             except Exception, e:
-                handle_gui_exception(e, None, 
-                        "Unable to unregister existing user credentials.", 
+                handle_gui_exception(e, None,
+                        "Unable to unregister existing user credentials.",
                         False)
 
         failed_msg = _("Unable to register your system. \n Error: %s")
@@ -961,7 +962,7 @@ class AddSubscriptionScreen:
                 compatible_pids.append(product['productId'])
                 self.available_ent += 1
 
-            all_subs = managerlib.getAvailableEntitlements(UEP, self.consumer.uuid, 
+            all_subs = managerlib.getAvailableEntitlements(UEP, self.consumer.uuid,
                     self.facts, all=True)
             self.other = []
             for prod in all_subs:
@@ -1084,10 +1085,10 @@ class AddSubscriptionScreen:
         col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=3)
         col.set_sort_column_id(3)
         treeview.append_column(col)
-        
+
         subscriptions.set_sort_column_id(1, gtk.SORT_ASCENDING)
-        
-        
+
+
     def createMatchingSubscriptionsTreeview(self):
         self.match_tv = rhsm_xml.get_widget("treeview_matching")
         self.createSubscriptionsTreeview(self.match_tv,
@@ -1098,10 +1099,10 @@ class AddSubscriptionScreen:
     def createCompatibleSubscriptionsTreeview(self):
         self.compatible_tv = rhsm_xml.get_widget("treeview_compatible")
         self.createSubscriptionsTreeview(self.compatible_tv,
-                                           self.compatList, 
+                                           self.compatList,
                                            self.col_compat_selected)
 
-  
+
     def createOtherSubscriptionsTreeview(self):
         self.other_tv = rhsm_xml.get_widget("treeview_not_compatible")
         self.createSubscriptionsTreeview(self.other_tv,
@@ -1149,12 +1150,12 @@ class UpdateSubscriptionScreen:
 
         self.product_select = product_selection
         self.setHeadMsg()
-        self.updatesList = gtk.TreeStore(gobject.TYPE_BOOLEAN, 
-                gobject.TYPE_STRING, gobject.TYPE_STRING, 
+        self.updatesList = gtk.TreeStore(gobject.TYPE_BOOLEAN,
+                gobject.TYPE_STRING, gobject.TYPE_STRING,
                 gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.available_updates = 0
         try:
-            products = managerlib.getAvailableEntitlements(UEP, 
+            products = managerlib.getAvailableEntitlements(UEP,
                     self.consumer.uuid, self.facts)
             for product in products:
                 if self.product_select in product.values():
@@ -1367,24 +1368,3 @@ def linkify(msg):
 
     return url_regex.sub(add_markup, msg)
 
-
-def main():
-    global gui
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
-
-    if os.geteuid() != 0:
-        #rootWarning()
-        sys.exit(1)
-
-    managerlib.check_identity_cert_perms()
-
-    try:
-        gui = ManageSubscriptionPage()
-        gtk.main()
-    except Exception, e:
-        raise
-        unexpectedError(e.message)
-
-
-if __name__ == "__main__":
-    main()

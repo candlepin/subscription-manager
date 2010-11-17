@@ -40,7 +40,7 @@ _LIBPATH = "/usr/share/rhsm"
 if _LIBPATH not in sys.path:
     sys.path.append(_LIBPATH)
 
-# TODO: This works fine for CLI, but has no effect for GUI!? Have to 
+# TODO: This works fine for CLI, but has no effect for GUI!? Have to
 # duplicate the i18n lines below for now:
 #from managerlib import configure_i18n
 #configure_i18n()
@@ -53,7 +53,7 @@ try:
     locale.setlocale(locale.LC_ALL, '')
 except locale.Error:
     locale.setlocale(locale.LC_ALL, 'en_US')
-    
+
 for module in (gettext, gtk.glade):
     module.bindtextdomain(APP, DIR)
     module.textdomain(APP)
@@ -65,26 +65,20 @@ if os.getuid() != 0:
 
 try:
     from gui import managergui
-except KeyboardInterrupt:
-    systemExit(0, "\nUser interrupted process.")
 except ImportError, e:
     systemExit(2, "Unable to find Subscription Manager module.\n"
                   "Error: %s" % e)
 
-def main():
-    # execute
-    try:
-        return managergui.main()
-    except KeyboardInterrupt:
-        systemExit(0, "\nUser interrupted process.")
-
-    return 0
-
-
 if __name__ == '__main__':
     try:
-        sys.exit(abs(main() or 0))
+        main = managergui.MainWindow()
+
+        # Exit the gtk loop when the window is closed
+        main.main_window.connect('hide', gtk.main_quit)
+
+        sys.exit(gtk.main() or 0)
     except KeyboardInterrupt:
         systemExit(0, "\nUser interrupted process.")
     except Exception, e:
         systemExit(1, e)
+
