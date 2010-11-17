@@ -14,6 +14,7 @@
 #
 
 from datetime import timedelta, datetime
+import hashlib
 
 def create_pool(product_id, product_name, quantity=10, consumed=0, provided_products=[]):
     """
@@ -24,12 +25,14 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
     for pid in provided_products:
         provided.append({'productId': pid})
 
+    id = hashlib.md5(product_id).hexdigest()
+
     return {
             'productName': product_name,
             'productId': product_id,
             'quantity': quantity,
             'consumed': consumed,
-            'id': '402881062bc9a379012bc9a4095c00c9',
+            'id': id,
             'subscriptionId': '402881062bc9a379012bc9a3d7380050',
             'startDate': datetime.now() - timedelta(days=365),
             'endDate': datetime.now() + timedelta(days=365),
@@ -38,7 +41,7 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
             'activeSubscription': True,
             'providedProducts': provided,
             'sourceEntitlement': None,
-            'href': '/pools/402881062bc9a379012bc9a4095c00c9',
+            'href': '/pools/%s' % id,
             'restrictedToUsername': None,
             'owner': {
                 'href': '/owners/admin',

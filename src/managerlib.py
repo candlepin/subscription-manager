@@ -267,13 +267,14 @@ class PoolFilter(object):
         installed_products = self.product_directory.list()
         matched_data_dict = {}
         for d in pools:
+            matched_data_dict[d['id']] = d
+            provided_ids = [p['productId'] for p in d['providedProducts']]
             for product in installed_products:
                 productid = product.getProduct().getHash()
                 # we only need one matched item per pool id, so add to dict to keep unique:
-                provided_ids = [p['productId'] for p in d['providedProducts']]
-                if str(productid) not in provided_ids and \
-                        str(productid) != d['productId']:
-                    matched_data_dict[d['id']] = d
+                if str(productid) in provided_ids or \
+                        str(productid) == d['productId']:
+                    del matched_data_dict[d['id']]
 
         return matched_data_dict.values()
 
@@ -461,6 +462,7 @@ class PoolStash(object):
         memory.
         """
         pools = self.incompatible_pools.values()
+
         if compatible:
             pools = self.compatible_pools.values()
 
@@ -473,10 +475,10 @@ class PoolStash(object):
             pools = pool_filter.filter_out_uninstalled(pools)
 
         # Do nothing if set to None:
-        if overlapping:
-            pools = pool_filter.filter_out_non_overlapping(pools)
-        elif overlapping == False:
-            pools = pool_filter.filter_out_overlapping(pools)
+        #if overlapping:
+            #pools = pool_filter.filter_out_non_overlapping(pools)
+        #elif overlapping == False:
+            #pools = pool_filter.filter_out_overlapping(pools)
 
         # Filter by product name if necessary:
         if text:
