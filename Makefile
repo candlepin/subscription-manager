@@ -41,7 +41,7 @@ install-conf:
 	cp etc-conf/pidplugin.conf ${PREFIX}/etc/yum/pluginconf.d/
 	cp etc-conf/ca/*.pem ${PREFIX}/etc/rhsm/ca/
 
-install: install-file install-conf
+install: install-files install-conf
 
 install-files: dbus-service-install compile-po
 	@mkdir -p ${PREFIX}/usr/share/rhsm/gui/data/icons/16x16
