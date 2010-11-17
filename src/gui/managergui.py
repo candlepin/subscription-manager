@@ -232,7 +232,8 @@ class MainWindow(object):
 
         self.system_facts_dialog = factsgui.SystemFactsDialog(self.consumer,
                 self.facts)
-        self.registration_dialog = RegisterScreen(self.consumer, self.facts)
+        self.registration_dialog = RegisterScreen(self.consumer, self.facts,
+                callbacks=[self.registration_changed])
         self.compliance_assistant = ComplianceAssistant(self.backend,
                 self.consumer, self.facts)
 
@@ -293,6 +294,9 @@ class MainWindow(object):
             self.compliance_count_label.set_text("")
             self.compliance_status_label.set_text(
                     _("Your system is compliant.") )
+
+    def registration_changed(self):
+        log.debug("Registration changed, updating main window.")
 
 
 
@@ -645,9 +649,13 @@ class RegisterScreen:
       Registration Widget Screen
     """
 
-    def __init__(self, consumer, facts=None):
+    def __init__(self, consumer, facts=None, callbacks=None):
+        """
+        Callbacks will be executed when registration status changes.
+        """
         self.consumer = consumer
         self.facts = facts
+        self.callbacks = callbacks
 
         dic = {"on_register_cancel_button_clicked": self.cancel,
                "on_register_button_clicked": self.onRegisterAction,
@@ -741,6 +749,8 @@ class RegisterScreen:
         return True
 
     def emit_consumer_signal(self):
+        for method in self.callbacks:
+            method()
         self.registerWin.emit(CONSUMER_SIGNAL)
 
     def close_window(self):
