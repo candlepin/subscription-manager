@@ -118,7 +118,7 @@ class OkDialog(MessageWindow):
                                parent=parent)
 
 
-class infoDialog(MessageWindow):
+class InfoDialog(MessageWindow):
 
     def __init__(self, text, parent=None):
         MessageWindow.__init__(self, _("Info dialog:"),

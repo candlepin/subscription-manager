@@ -288,7 +288,12 @@ class MainWindow(object):
         self.system_facts_dialog.show()
 
     def compliant_button_clicked(self, widget):
-        self.compliance_assistant.show()
+        if self.registered():
+            self.compliance_assistant.show()
+        else:
+            messageWindow.OkDialog(messageWindow.wrap_text(
+                _("You must register before using the compliance assistant.")),
+                self.main_window)
 
     def set_compliance_status(self):
         """ Updates the compliance status portion of the UI. """
@@ -501,7 +506,6 @@ class ManageSubscriptionPage:
                 markup_status, product[2], product[4]))
         self.tv_products.set_model(self.productList)
         self.updateMessage()
-
 
     def populateProductDialog(self):
         self.tv_products = rhsm_xml.get_widget("treeview_updates")
@@ -1330,7 +1334,7 @@ def errorWindow(message):
 
 
 def infoWindow(message, parent):
-    messageWindow.infoDialog(messageWindow.wrap_text(message), parent)
+    messageWindow.InfoDialog(messageWindow.wrap_text(message), parent)
 
 
 def setArrowCursor():
