@@ -23,6 +23,7 @@ import sys
 import shutil
 import socket
 
+import gio
 import gtk
 import gtk.glade
 import gobject
@@ -36,7 +37,7 @@ import connection
 import config
 import constants
 from facts import Facts
-from certlib import EntitlementDirectory, ConsumerIdentity, CertLib, syslog
+from certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, CertLib, syslog
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
 from socket import error as socket_error
 from M2Crypto import SSL
@@ -100,10 +101,26 @@ class Backend(object):
     Reference to a Backend object will be passed around UI components, so
     the UEP connection it contains can be modified/recreated and all 
     components will have the updated connection.
+    
+    This also serves as a common wrapper for certifcate directories and methods
+    to monitor those directories for changes.
     """
 
     def __init__(self, uep):
         self.uep = uep
+        
+        self.product_dir = ProductDirectory()
+        self.entitlement_dir = EntitlementDirectory()
+        
+        self.product_monitor = self._monitor(self.product_dir)
+        self.entitlement_monitor = self._monitor(self.entitlement_dir)
+        
+    def _monitor(self, directory):
+        return gio.File(directory.path).monitor()
+        
+    def monitor_certs(self, callback):
+        self.product_monitor.connect('changed', callback)
+        self.entitlement_monitor.connect('changed', callback)
 
 
 class Consumer(object):

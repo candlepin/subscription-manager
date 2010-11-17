@@ -63,11 +63,18 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.add_text_column(_("Expiration Date"), 'expiration_date')
 
         self.update_subscriptions()
+        
+        # Monitor entitlements/products for additions/deletions
+        def on_cert_change(filemonitor, first_file, other_file, event_type):
+            self.update_subscriptions()
+
+        backend.monitor_certs(on_cert_change)
 
     def update_subscriptions(self):
         """
         Pulls the entitlement certificates and updates the subscription model.
         """
+        self.store.clear()
 
         for cert in EntitlementDirectory().list():
             entry = self._create_entry_map(cert)   
