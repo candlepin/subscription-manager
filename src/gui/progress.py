@@ -32,6 +32,11 @@ class Progress:
         while gtk.events_pending():
             gtk.main_iteration(False)
 
+    def pulse(self):
+        self.xml.get_widget("progressBar").pulse()
+        while gtk.events_pending():
+            gtk.main_iteration(False)
+
     def setProgress(self, amount, total):
         if total:
             i = float(amount) / total
