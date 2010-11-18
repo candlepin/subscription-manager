@@ -72,8 +72,9 @@
                   <widget class="GtkEntry" id="month_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="max_length">2</property>
                     <property name="invisible_char">●</property>
-                    <property name="width_chars">4</property>
+                    <property name="width_chars">2</property>
                   </widget>
                   <packing>
                     <property name="position">1</property>
@@ -93,8 +94,9 @@
                   <widget class="GtkEntry" id="day_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="max_length">2</property>
                     <property name="invisible_char">●</property>
-                    <property name="width_chars">4</property>
+                    <property name="width_chars">2</property>
                   </widget>
                   <packing>
                     <property name="position">3</property>
@@ -114,6 +116,7 @@
                   <widget class="GtkEntry" id="year_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="max_length">4</property>
                     <property name="invisible_char">●</property>
                     <property name="width_chars">4</property>
                   </widget>

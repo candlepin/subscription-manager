@@ -79,14 +79,16 @@ class AllSubscriptionsTab(object):
                 'contains_text_checkbutton')
         self.contains_text_entry = self.all_subs_xml.get_widget(
                 'contain_text_entry')
+        self.month_entry = self.all_subs_xml.get_widget("month_entry")
+        self.day_entry = self.all_subs_xml.get_widget("day_entry")
+        self.year_entry = self.all_subs_xml.get_widget("year_entry")
         self.sub_details = SubDetailsWidget(show_contract=False)
         self.all_subs_vbox.pack_end(self.sub_details.get_widget())
 
         self.active_on_checkbutton = self.all_subs_xml.get_widget('active_on_checkbutton')
-        self.active_on_entry = self.all_subs_xml.get_widget('active_on_entry')
 
         # Set the date filter to todays date by default:
-        self.active_on_entry.set_text(today.strftime("%Y-%m-%d"))
+        self._set_active_on_text(today.year, today.month, today.day)
 
         self.all_subs_xml.signal_autoconnect({
             "on_search_button_clicked": self.search_button_clicked,
@@ -133,8 +135,10 @@ class AllSubscriptionsTab(object):
         """
         Returns a date for the "active on" field.
         """
-        text = self.active_on_entry.get_text()
-        year, month, day = text.split('-')
+        year = self.year_entry.get_text()
+        month = self.month_entry.get_text()
+        day = self.day.get_text()
+
         active_on_date = datetime.date(int(year), int(month),
                 int(day))
         return active_on_date
@@ -198,7 +202,12 @@ class AllSubscriptionsTab(object):
         """
         year, month, day = widget.get_date()
         month += 1 # this starts at 0
-        self.active_on_entry.set_text("%s-%s-%s" % (year, month, day))
+        self._set_active_on_text(year, month, day)
+
+    def _set_active_on_text(self, year, month, day):
+        self.day_entry.set_text(str(day))
+        self.month_entry.set_text(str(month))
+        self.year_entry.set_text(str(year))
 
     def update_sub_details(self, widget):
         """ Shows details for the current selected pool. """
