@@ -475,10 +475,10 @@ class PoolStash(object):
             pools = pool_filter.filter_out_uninstalled(pools)
 
         # Do nothing if set to None:
-        #if overlapping:
-            #pools = pool_filter.filter_out_non_overlapping(pools)
-        #elif overlapping == False:
-            #pools = pool_filter.filter_out_overlapping(pools)
+        if overlapping:
+            pools = pool_filter.filter_out_non_overlapping(pools)
+        elif overlapping == False:
+            pools = pool_filter.filter_out_overlapping(pools)
 
         # Filter by product name if necessary:
         if text:
