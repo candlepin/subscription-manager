@@ -227,11 +227,16 @@ class RegisterCommand(CliCommand):
         self.facts = Facts()
 
     def _validate_options(self):
-        if not (self.options.username and self.options.password):
-            print (_("Error: username and password are required to register, try register --help.\n"))
+        if bool(self.options.username) ^ bool(self.options.password):
+            if not self.options.username:
+                print(_("Error: username not provided. Use --username <name>"))
+            else:
+                print(_("Error: password not provided. Use --password <value>"))
             sys.exit(-1)
-
-        if ConsumerIdentity.exists() and not self.options.force:
+        elif not (self.options.username and self.options.password):
+            print (_("Error: username and password are required to register, try register --help."))
+            sys.exit(-1)
+        elif ConsumerIdentity.exists() and not self.options.force:
             print(_("This system is already registered. Use --force to override"))
             sys.exit(1)
 
