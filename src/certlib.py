@@ -401,12 +401,21 @@ class CertificateDirectory(Directory):
                 return c
         return None
 
+    def findAllByProduct(self, hash):
+        certs = []
+	for c in self.list():
+            for p in c.getProducts():
+                if p.getHash() == hash:
+                    certs.append(c)
+        return certs
+
     def findByProduct(self, hash):
         for c in self.list():
             for p in c.getProducts():
                 if p.getHash() == hash:
                     return c
         return None
+
 
     def certClass(self):
         return Certificate
