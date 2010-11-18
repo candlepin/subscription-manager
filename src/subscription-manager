@@ -76,5 +76,5 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         systemExit(0, "\nUser interrupted process.")
     except Exception, e:
-        handle_exception("exception caught in subscription-manager-cli", e)
+        handle_exception("exception caught in subscription-manager", e)
         

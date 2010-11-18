@@ -109,7 +109,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/factlib.py*
 %{_datadir}/rhsm/productid.py*
 %{_datarootdir}/locale/*
-%attr(755,root,root) %{_sbindir}/subscription-manager-cli
+%attr(755,root,root) %{_sbindir}/subscription-manager
 %attr(755,root,root) %dir %{_var}/log/rhsm
 %attr(755,root,root) %dir %{_var}/lib/rhsm
 %attr(755,root,root) %dir %{_var}/lib/rhsm/facts
@@ -126,7 +126,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
 
 %doc
-%{_mandir}/man8/subscription-manager-cli.8*
+%{_mandir}/man8/subscription-manager.8*
 
 %files -n subscription-manager-gnome
 %dir %{_datadir}/rhsm/gui

@@ -72,7 +72,7 @@ install-files: dbus-service-install compile-po
 	cp -R src/gui/data/icons/*.png ${PREFIX}/usr/share/rhsm/gui/data/icons/
 	cp -R src/gui/data/icons/16x16/subsmgr.png ${PREFIX}/usr/share/icons/hicolor/16x16/apps/
 	cp -R src/plugin/*.py ${PREFIX}/usr/lib/yum-plugins/
-	cp src/subscription-manager-cli ${PREFIX}/usr/sbin
+	cp src/subscription-manager ${PREFIX}/usr/sbin
 	cp src/subscription-manager-gui ${PREFIX}/usr/sbin
 	cp bin/* ${PREFIX}/usr/bin
 	cp src/rhsmcertd.init.d ${PREFIX}/etc/init.d/rhsmcertd

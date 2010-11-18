@@ -1,19 +1,19 @@
-.TH subscription-manager-cli 8 "November 12, 2010" "version 1.0" "Subscription Management"  Pradeep Kilambi 
+.TH subscription-manager 8 "November 12, 2010" "version 1.0" "Subscription Management"  Pradeep Kilambi 
 .SH NAME
-subscription-manager-cli \- Register machines and manage subscriptions to products.
+subscription-manager \- Register machines and manage subscriptions to products.
 
 .SH SYNOPSIS
-subscription-manager-cli
+subscription-manager
 .I command [options]
 
 .SH DESCRIPTION
-subscription-manager-cli registers machines to an entitlement service so that the machine can receive updates based on its subscriptions to any kind of software products.
+subscription-manager registers machines to an entitlement service so that the machine can receive updates based on its subscriptions to any kind of software products.
 Subscription Manager can list both available and used (consumed) subscriptions and subscribe to and 
 unsubscribe from specific subscriptions. This tool can be used to autosubscribe a system, as well.
 
 .PP
 Entitlement and subscription tracking are a new compliance feature available for Red Hat platforms. The 
-.B subscription-manager-cli 
+.B subscription-manager 
 script allows machines to be registered and subscribed as part of the kickstart process and to be managed 
 through the command line after installation.
 
@@ -29,7 +29,7 @@ There is also a Subscription Manager GUI, which can be invoked simply by running
 from the command line.
 
 .SH COMMANDS AND OPTIONS
-.B subscription-manager-cli 
+.B subscription-manager 
 has specific options available for each command, depending on what operation is being performed. The Subscription Manager commands are related to the different subscription operations:
 
 .IP
@@ -275,7 +275,7 @@ command.
 This command has no options.
 
 .SH USAGE
-.B subscription-manager-cli 
+.B subscription-manager 
 has two major tasks:
 
 .IP
@@ -285,7 +285,7 @@ has two major tasks:
 2. Handling the product subscriptions for a machine.
 
 .PP
-.B subscription-manager-cli 
+.B subscription-manager 
 makes it easier for network administrators to maintain compliance with software subscriptions and updates by tracking and managing what machines are subscribed to and when those subscriptions expire or are exceeded.
 
 
@@ -309,7 +309,7 @@ file. This command requires, at a minimum, the username and password for an acco
 For example:
 .RS
 .nf
-subscription-manager-cli register --username=admin --password=secret
+subscription-manager register --username=admin --password=secret
 .fi
 
 
@@ -317,7 +317,7 @@ subscription-manager-cli register --username=admin --password=secret
 .PP
 Some information is assigned automatically. Subscription Manager automatically generates a unique consumer ID for the system which is used by the entitlement service and it assigns a consumer type, which indicates what kinds of software are available for the machine. The name for the consumer entry can be manually assigned (for use within a local inventory system, for instance). A handful of subscriptions (such as specialized servers for content or identity management) have their own specific consumer type. For example:
 .nf
-subscription-manager-cli register --username=admin --password=secret --type=system --name=server1
+subscription-manager register --username=admin --password=secret --type=system --name=server1
 .fi
 
 
@@ -326,7 +326,7 @@ If a system is registered and then somehow its entitlement information is lost -
 
 .RS
 .nf
-subscription-manager-cli register --username=admin --password=secret --consumerid=1234abcd
+subscription-manager register --username=admin --password=secret --consumerid=1234abcd
 .fi
 .RE
 
@@ -336,7 +336,7 @@ A consumer uses an SSL client certificate (its identity certificate) to authenti
 command.
 .RS
 .nf
-subscription-manager-cli identity --regenerate --username=admin --password=secret
+subscription-manager identity --regenerate --username=admin --password=secret
 .fi
 .RE
 
@@ -346,7 +346,7 @@ A machine is unregistered and removed as a consumer from the entitlements servic
 command. Unregistering and unsubscribing a service can free up entitlement subscriptions when a machine is taken offline or moved to a different department. 
 .RS
 .nf
-subscription-manager-cli unregister
+subscription-manager unregister
 .fi
 .RE
 
@@ -367,8 +367,8 @@ option) or the ID for the entitlement pool (the
 option). For example:
 .RS
 .nf
-subscription-manager-cli subscribe --email="admin@example.com" --regtoken=XYZ01234567
-subscription-manager-cli subscribe --pool=ff8080812bc382e3012bc3845da100d2
+subscription-manager subscribe --email="admin@example.com" --regtoken=XYZ01234567
+subscription-manager subscribe --pool=ff8080812bc382e3012bc3845da100d2
 .fi
 .RE
 
@@ -376,7 +376,7 @@ subscription-manager-cli subscribe --pool=ff8080812bc382e3012bc3845da100d2
 Unsubscribing a machine removes it from the product or entitlement pool, which releases that entitlement subscription it had consumed. The machine remains registered with the entitlement service. Each product has an identifying X.509 certificate installed with it. To unsubscribe from a subscription for a specific product, specify the serial number of the certificate:
 .RS
 .nf
-subscription-manager-cli unsubscribe --serial=1128750306742160
+subscription-manager unsubscribe --serial=1128750306742160
 .fi
 .RE
 
@@ -393,7 +393,7 @@ An option with registration,
 , will automatically subscribe the newly-registered system to the entitlements pool which best matches the system architecture and configuration. This option allows the system to be subscribed as part of the registration process, rather than separately managing subscriptions.
 .RS
 .nf
-subscription-manager-cli register --username=admin --password=secret --autosubscribe
+subscription-manager register --username=admin --password=secret --autosubscribe
 .fi
 .RE
 
@@ -407,7 +407,7 @@ command.
 
 .RS
 .nf
-subscription-manager-cli facts --update
+subscription-manager facts --update
 .fi
 .RE
 
@@ -427,12 +427,12 @@ command will update the collected facts with the new, manual facts or values.
 
 .SS ENTITLEMENTS AND KICKSTART
 The 
-.B subscription-manager-cli
+.B subscription-manager
 tool can be run as a post-install script as part of the kickstart installation process. This allows entitlement management (registration and subscription) to be automated along with installation. For example:
 .RS
 .nf
 %post --log=/root/ks-post.log
-/usr/sbin/subscription-manager-cli register --username admin --password secret --autosubscribe
+/usr/sbin/subscription-manager register --username admin --password secret --autosubscribe
 .fi
 .RE
 
