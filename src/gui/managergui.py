@@ -195,7 +195,7 @@ def handle_gui_exception(e, callback, logMsg = None, showMsg = True):
 
     if showMsg:
         if isinstance(e, socket_error):
-            errorWindow(_('network error, unable to connect to server'))
+            errorWindow(_('Network error, unable to connect to server.'))
         elif isinstance(e, SSL.SSLError):
             errorWindow(_('Unable to verify server\'s identity: %s' % str(e)))
         elif isinstance(e, connection.RestlibException):
