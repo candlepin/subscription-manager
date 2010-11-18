@@ -4,6 +4,9 @@
   <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="contract_selection_window">
     <property name="title" translatable="yes" context="yes">Contract Selection</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
     <property name="mnemonics_visible">False</property>
     <child>
       <widget class="GtkVBox" id="vbox1">
