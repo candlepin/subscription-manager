@@ -27,6 +27,7 @@ _ = gettext.gettext
 from logutil import getLogger
 log = getLogger(__name__)
 
+import certificate
 import certlib
 import managerlib
 import storage
@@ -71,6 +72,9 @@ class ComplianceAssistant(object):
         self.pool_stash = managerlib.PoolStash(self.backend, self.consumer,
                 self.facts)
 
+        self.product_dir = certlib.ProductDirectory()
+        self.entitlement_dir = certlib.EntitlementDirectory()
+
         self.compliance_xml = gtk.glade.XML(COMPLIANCE_GLADE)
         self.compliance_label = self.compliance_xml.get_widget(
             "compliance_label")
@@ -86,11 +90,15 @@ class ComplianceAssistant(object):
             self._set_noncompliant_date(self.last_compliant_date)
         else:
             self._set_noncompliant_date(date.today())
+        self.noncompliant_date_radiobutton = self.compliance_xml.get_widget("noncompliant_date_radiobutton")
+
 
         uncompliant_type_map = {'active':bool,
                                 'product_name':str,
                                 'contract':str,
                                 'end_date':str,
+                                'entitlement_id':str,
+                                'product_id':str,
                                 'align':float}
        
         self.window = self.compliance_xml.get_widget('compliance_assistant_window')
@@ -117,7 +125,7 @@ class ComplianceAssistant(object):
                                   'total_subscriptions':float,
                                   'available_subscriptions':float,
                                   'align': float,
-                                  'pool_id': str}
+                                  'pool_id':str}
 
         self.subscriptions_store = storage.MappedListStore(subscriptions_type_map)
         self.date_selector = DateSelector(self._compliance_date_selected)
@@ -171,15 +179,15 @@ class ComplianceAssistant(object):
 
     def _get_noncompliant_date(self):
         """
-        Returns a date object for the non-compliant date to use based on current
+        Returns a datetime.datetime object for the non-compliant date to use based on current
         state of the GUI controls.
         """
         if self.first_noncompliant_radiobutton.get_active():
             return self.last_compliant_date
         else:
-            return date(int(self.year_entry.get_text()),
-                    int(self.month_entry.get_text()),
-                    int(self.day_entry.get_text()))
+            return datetime.datetime(int(self.year_entry.get_text()),
+                                     int(self.month_entry.get_text()),
+                                     int(self.day_entry.get_text()), tzinfo=certificate.GMT())
 
     def _find_last_compliant(self):
         """
@@ -191,6 +199,7 @@ class ComplianceAssistant(object):
         # TODO: needs unit testing imo, probably could be moved to a standalone method for that purpose
         self.valid_subs = certlib.EntitlementDirectory().listValid()
 
+        print "valid_subs", self.valid_subs
         # FIXME: remote debug
         for valid_sub in self.valid_subs:
             print "valid_range", valid_sub.validRange().end(), type(valid_sub.validRange().end())
@@ -208,6 +217,20 @@ class ComplianceAssistant(object):
     def _display_subscriptions(self):
         self.subscriptions_store.clear()
 
+
+        selection = self.uncompliant_treeview.get_selection()
+        print "selection", selection, "foo"
+
+
+
+        for row in self.uncompliant_treeview:
+            print "row", row, len(row)
+            print row[0]
+            print row[1]
+            print row[2]
+        
+#        print "selected", selection.get_selected()
+        
         fake_subscriptions = [{"product_name":"Awesomeness", "total_contracts":1000, "total_subscriptions":222, "available_subscriptions":4, "align":0.0, "pool_id": "fakepoolid"}]
 
         
@@ -215,6 +238,11 @@ class ComplianceAssistant(object):
             self.subscriptions_store.add_map(fake_subscription)
 
     def _display_uncompliant(self):
+        uncompliant = []
+        if self.last_compliant_date:
+            uncompliant = self.entitlement_dir.listExpiredOnDate(date=self._get_noncompliant_date())
+            
+        noncompliant_products = self.product_dir.listExpiredOnDate(date=self._get_noncompliant_date())
 
         # TODO: For testing, this is querying subs from the server. This method
         # will eventually calculate uncompliant products installed on the machine.
@@ -223,21 +251,53 @@ class ComplianceAssistant(object):
         # These display the list of products uncompliant on the selected date:
         self.uncompliant_store.clear()
  
-        products = self.pool_stash.merge_pools(compatible=True, uninstalled=False)
-        for key in products:
-            pools = products[key].pools
-            for pool in pools:
-                self.uncompliant_store.add_map({'active':False, 
-                                                'product_name':pool['productName'],
-                                                'contract':pool['contractNumber'],
-                                                'end_date':'%s' % pool['endDate'],
-                                                'align':0.0})
+        # find installed products with no entitlements
+        entitlement_filter = managerlib.EntitlementFilter()
+        noncompliant_installed_products = entitlement_filter.filter_entitlements_by_uninstalled()
+
+        # add all the installed but not entitled products
+        na = _("N/A")
+        for product in noncompliant_installed_products:
+            self.uncompliant_store.add_map({'active':False,
+                                            'product_name':product.getProduct().getName(),
+                                            'contract':na,
+                                            'end_date':na,
+                                            'entitlement_id':None,
+                                            'product_id':product.getProduct().getHash(),
+                                            'align':0.0})
+
+        for product in noncompliant_products:
+            entitlement = self.entitlement_dir.findByProduct(product.getProduct().getHash())
+            if entitlement is None:
+                print "No entitlement found for ", product.getProduct().getName()
+                continue
+
+            self.uncompliant_store.add_map({'active':False,
+                                            'product_name':product.getProduct().getName(),
+                                            'contract':entitlement.getOrder().getNumber(),
+                                            # is end_date when the cert expires or the orders end date? is it differnt?
+                                            'end_date':'%s' % self.format_date(entitlement.validRange().end()),
+                                            'entitlement_id':entitlement.serialNumber(),
+                                            'product_id':product.getProduct().getHash(),
+                                            'align':0.0})
         
 
     def _on_uncompliant_active_toggled(self, cell, path):
+        print "toggled"
         treeiter = self.uncompliant_store.get_iter_from_string(path)
         item = self.uncompliant_store.get_value(treeiter, 0)
         self.uncompliant_store.set_value(treeiter, 0, not item)
+
+
+#        print self.uncompliant_store.next()
+#        print self.uncompliant_store.next()
+        for row in self.uncompliant_store:
+#            print "row", row, len(row)
+#            print row[0], row[1], row[2], row[3], row[4], row[5]
+            #print row[self.uncompliant_store['pool_id']]
+            #print row[self.uncompliant_store['product_name']]
+            print row[self.uncompliant_store['product_id']]
+            print self.entitlement_dir.findByProduct(row[self.uncompliant_store['product_id']])
 
 
     def show(self):
@@ -254,14 +314,16 @@ class ComplianceAssistant(object):
         """
         log.debug("reloading screen")
         # end date of first subs to expire
+        
         self.last_compliant_date = self._find_last_compliant()
 
-        #uncompliant??
-        # TODO: needs to be switched to use date from the date selector gui controls:
+
+#        for product_cert in self.product_dir.list():
+            
         self.pool_stash.refresh(active_on=self._get_noncompliant_date())
 
         if self.last_compliant_date:
-            formatted = self.last_compliant_date.strftime(locale.nl_langinfo(locale.D_FMT))
+            formatted = self.format_date(self.last_compliant_date)
             self.compliance_label.set_label(
                     _("All software is in compliance until %s.") % formatted)
             self.first_noncompliant_radiobutton.set_label(
@@ -269,6 +331,9 @@ class ComplianceAssistant(object):
 
         self._display_uncompliant()
         self._display_subscriptions()
+
+    def format_date(self, date):
+        return date.strftime(locale.nl_langinfo(locale.D_FMT))
 
     def hide(self, widget, event, data=None):
         self.window.hide()

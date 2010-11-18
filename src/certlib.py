@@ -379,6 +379,14 @@ class CertificateDirectory(Directory):
                 valid.append(c)
         return valid
 
+    # date is datetime.datetime object
+    def listExpiredOnDate(self, date):
+        expired = []
+	for c in self.list():
+            if not c.validRange().hasDate(date):
+                expired.append(c)
+	return expired 
+
     def listExpired(self):
         expired = []
         for c in self.list():

@@ -296,13 +296,23 @@ class DateRange:
 
     def hasNow(self):
         """
-        Get whether the certificate is valid based on date.
+        Get whether the certificate is valid based on the date now.
         @return: True if valid.
         @rtype: boolean
         """
         gmt = dt.utcnow()
         gmt = gmt.replace(tzinfo=GMT())
         return (gmt >= self.begin() and gmt <= self.end())
+
+    def hasDate(self, date):
+        """
+        Get whether the certificate is valid based on the date now.
+        @param: date
+        @type: datetime.datetime
+        @return: True if valid.
+        @rtype: boolean
+        """
+        return (date >= self.begin() and date <= self.end())
 
     def __str__(self):
         return '\n\t%s\n\t%s' % (self._begin, self._end)

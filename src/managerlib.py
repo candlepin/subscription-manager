@@ -231,6 +231,30 @@ def getProductDescription(qproduct):
     return data
 
 
+
+
+class EntitlementFilter(object):
+    def __init__(self):
+        self.product_directory = ProductDirectory()
+        self.entitlement_directory = EntitlementDirectory()
+
+    
+    def filter_entitlements_by_products(self, products):
+        matched_data_dict = {}
+        for c in self.entitlement_directory.list():
+            print "cert", c
+            for product in products:
+                productid = product.getProduct().getHash()
+                print productid, c.getProduct().getHash()
+                if productid == c.getProduct().getHash():
+                    matched_data_dict[c.serialNumber()] = c
+        return matched_data_dict.values()
+
+    def filter_entitlements_by_uninstalled(self):
+        matched_data_dict = {}
+        installed_product_list = self.product_directory.list()
+        return self.filter_entitlements_by_products(installed_product_list)
+
 class PoolFilter(object):
     """
     Helper to filter a list of pools.
@@ -238,6 +262,34 @@ class PoolFilter(object):
     def __init__(self):
         self.product_directory = ProductDirectory()
         self.entitlement_directory = EntitlementDirectory()
+
+
+
+    def filter_entitlements_by_products(self, products):
+        matched_data_dict = {}
+        for c in self.entitlement_directory.list():
+            print "cert", c
+            for product in products:
+                productid = product.getProduct().getHash()
+                print productid, c.getProduct().getHash()
+                if productid == c.getProduct().getHash():
+                    matched_data_dict[c.serialNumber()] = c
+        return matched_data_dict
+
+    def filter_pools_by_products(self, pools, products):
+        """
+        Filter a list of pools and return just those that have the
+        products in the list of products and returns those pools
+        """
+        matched_data_dict = {}
+        for d in pools:
+            print "pool", d
+            for product in products:
+                productid = product.getProduct().getHash()
+                if productid == d['productId']:
+                    matched_data_dict[d['id']] = d
+
+        return matched_data_dict.values()
 
     def filter_out_uninstalled(self, pools):
         """
