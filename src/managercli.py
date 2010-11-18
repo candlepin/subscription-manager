@@ -88,6 +88,11 @@ class CliCommand(object):
     def _do_command(self):
         pass
 
+    def assert_should_be_registered(self):
+        if not ConsumerIdentity.exists():
+            print (_("Consumer not registered. Please register using --username and --password"))
+            sys.exit(-1)
+
     def main(self, args=None):
 
         # In testing we sometimes specify args, otherwise use the default:
@@ -161,6 +166,7 @@ class IdentityCommand(CliCommand):
                                help=_("request a new certificate be generated"))
 
     def _validate_options(self):
+        self.assert_should_be_registered()
         if not ConsumerIdentity.existsAndValid():
             print (_("Consumer identity either does not exist or is corrupted. Try register --help"))
             sys.exit(-1)
@@ -454,9 +460,13 @@ class FactsCommand(CliCommand):
 
     def _validate_options(self):
         # one or the other
-        CliCommand._validate_options(self)
+        self.assert_should_be_registered()
+        if not (self.options.list or self.options.update):
+            print _("Error: Need either --list or --update, Try facts --help")
+            sys.exit(-1)
 
     def _do_command(self):
+        self._validate_options()
         if self.options.list:
             facts = Facts()
             fact_dict = facts.get_facts()
