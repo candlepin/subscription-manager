@@ -75,6 +75,8 @@ class ComplianceAssistant(object):
         self.product_dir = certlib.ProductDirectory()
         self.entitlement_dir = certlib.EntitlementDirectory()
 
+        self.chosen_entitlements = []
+
         self.compliance_xml = gtk.glade.XML(COMPLIANCE_GLADE)
         self.compliance_label = self.compliance_xml.get_widget(
             "compliance_label")
@@ -121,9 +123,9 @@ class ComplianceAssistant(object):
         self.uncompliant_treeview.show()
 
         subscriptions_type_map = {'product_name':str, 
-                                  'total_contracts': float,
-                                  'total_subscriptions':float,
-                                  'available_subscriptions':float,
+                                  'total_contracts': str,
+                                  'total_subscriptions':str,
+                                  'available_subscriptions':str,
                                   'align': float,
                                   'pool_id':str}
 
@@ -199,11 +201,6 @@ class ComplianceAssistant(object):
         # TODO: needs unit testing imo, probably could be moved to a standalone method for that purpose
         self.valid_subs = certlib.EntitlementDirectory().listValid()
 
-        print "valid_subs", self.valid_subs
-        # FIXME: remote debug
-        for valid_sub in self.valid_subs:
-            print "valid_range", valid_sub.validRange().end(), type(valid_sub.validRange().end())
-
         def get_date(sub):
             return sub.validRange().end()
 
@@ -217,25 +214,22 @@ class ComplianceAssistant(object):
     def _display_subscriptions(self):
         self.subscriptions_store.clear()
 
-
         selection = self.uncompliant_treeview.get_selection()
-        print "selection", selection, "foo"
 
-
-
-        for row in self.uncompliant_treeview:
-            print "row", row, len(row)
-            print row[0]
-            print row[1]
-            print row[2]
+        # this should be roughly correct for locally manager certs, needs
+        # remote subs/pools as well
+        for entitlement in self.chosen_entitlements:
+            for product in entitlement.getProducts():
+                self.subscriptions_store.add_map({'product_name':product.getName(),
+                                                  # how many ents match this product?
+                                                  'total_contracts':entitlement.getOrder().getQuantity(),
+                                                  # this should eventually be the total of all the ents/pools for this product
+                                                  'total_subscriptions':entitlement.getOrder().getQuantity(),
+                                                  # pretty sure this is wrong
+                                                  'available_subscriptions':entitlement.getOrder().getQuantityUsed(),
+                                                  'align':0.0})
         
-#        print "selected", selection.get_selected()
-        
-        fake_subscriptions = [{"product_name":"Awesomeness", "total_contracts":1000, "total_subscriptions":222, "available_subscriptions":4, "align":0.0, "pool_id": "fakepoolid"}]
 
-        
-        for fake_subscription in fake_subscriptions:
-            self.subscriptions_store.add_map(fake_subscription)
 
     def _display_uncompliant(self):
         uncompliant = []
@@ -283,22 +277,20 @@ class ComplianceAssistant(object):
         
 
     def _on_uncompliant_active_toggled(self, cell, path):
-        print "toggled"
         treeiter = self.uncompliant_store.get_iter_from_string(path)
-        item = self.uncompliant_store.get_value(treeiter, 0)
-        self.uncompliant_store.set_value(treeiter, 0, not item)
+        item = self.uncompliant_store.get_value(treeiter, self.uncompliant_store['active'])
+        self.uncompliant_store.set_value(treeiter, self.uncompliant_store['active'], not item)
 
-
-#        print self.uncompliant_store.next()
-#        print self.uncompliant_store.next()
+        # chosen is a weird word, but selected in this context means something else
+        self.chosen_entitlements = []
         for row in self.uncompliant_store:
-#            print "row", row, len(row)
-#            print row[0], row[1], row[2], row[3], row[4], row[5]
-            #print row[self.uncompliant_store['pool_id']]
-            #print row[self.uncompliant_store['product_name']]
-            print row[self.uncompliant_store['product_id']]
-            print self.entitlement_dir.findByProduct(row[self.uncompliant_store['product_id']])
+            if row[self.uncompliant_store['active']]:
+                for entitlement in self.entitlement_dir.findAllByProduct(row[self.uncompliant_store['product_id']]):
+                    self.chosen_entitlements.append(entitlement)
 
+        # refresh subscriptions
+        self._display_subscriptions()
+        
 
     def show(self):
         """
@@ -317,8 +309,6 @@ class ComplianceAssistant(object):
         
         self.last_compliant_date = self._find_last_compliant()
 
-
-#        for product_cert in self.product_dir.list():
             
         self.pool_stash.refresh(active_on=self._get_noncompliant_date())
 
