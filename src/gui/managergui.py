@@ -230,6 +230,8 @@ class MainWindow(object):
                 'compliance_status_label')
         self.compliance_status_image = self.main_window_xml.get_widget(
                 'compliance_status_image')
+        self.button_bar = self.main_window_xml.get_widget(
+                'button_bar')
 
         self.system_facts_dialog = factsgui.SystemFactsDialog(self.consumer,
                 self.facts)
@@ -254,9 +256,7 @@ class MainWindow(object):
             self.notebook.append_page(tab.get_content(), gtk.Label(tab.get_label()))
 
         self.main_window_xml.signal_autoconnect({
-            "on_registration_button_clicked": self.registration_button_clicked,
-            "on_facts_button_clicked": self.facts_button_clicked,
-            "on_compliant_button_clicked": self.compliant_button_clicked,
+            "on_compliant_button_clicked": self._compliant_button_clicked,
         })
         self.refresh()
 
@@ -272,7 +272,7 @@ class MainWindow(object):
 
     def refresh(self):
         """ Refresh the UI. """
-        self.set_compliance_status()
+        self._set_compliance_status()
 
         # Show the All Subscriptions tab if registered, hide it otherwise:
         if self.registered() and self.notebook.get_n_pages() == 2:
@@ -282,13 +282,89 @@ class MainWindow(object):
             self.notebook.set_current_page(0)
             self.notebook.remove_page(2)
 
-    def registration_button_clicked(self, widget):
+        self._show_buttons()
+
+    def _show_buttons(self):
+        """
+        Renders the Tools buttons dynamically.
+        """
+        log.debug("Showing buttons.")
+        self.button_bar.foreach(lambda widget: self.button_bar.remove(widget))
+        registered = self.registered()
+        if not registered:
+            self._show_register_button()
+        else:
+            self._show_add_sub_button()
+
+        self._show_facts_button()
+
+        # Putting the unregister button at the bottom:
+        if registered:
+            self._show_unregister_button()
+
+        self.button_bar.show_all()
+
+    def _show_register_button(self):
+        """
+        Adds the register button to the button bar.
+        """
+        button = gtk.Button(label=_("Register System"))
+        button.connect("clicked", self._register_button_clicked)
+        self.button_bar.add(button)
+
+    def _show_unregister_button(self):
+        """
+        Adds the unregister button to the button bar.
+        """
+        button = gtk.Button(label=_("Unregister System"))
+        button.connect("clicked", self._unregister_button_clicked)
+        self.button_bar.add(button)
+
+    def _show_facts_button(self):
+        """
+        Adds the show facts button to the button bar.
+        """
+        button = gtk.Button(label=_("View My System Facts"))
+        button.connect("clicked", self._facts_button_clicked)
+        self.button_bar.add(button)
+
+    def _show_add_sub_button(self):
+        """
+        Adds the dialog for manually importing a subscription.
+        """
+        log.debug("Add subscription button pressed.")
+        button = gtk.Button(label=_("Add Subscription"))
+        button.connect("clicked", self._add_sub_button_clicked)
+        self.button_bar.add(button)
+
+    def _register_button_clicked(self, widget):
         self.registration_dialog.show()
 
-    def facts_button_clicked(self, widget):
+    def _unregister_button_clicked(self, widget):
+        log.info("Unregister button pressed, asking for confirmation.")
+        prompt = messageWindow.YesNoDialog(constants.CONFIRM_UNREGISTER)
+        if not prompt.getrc():
+            log.info("unregistrater not confirmed. cancelling")
+            return
+        log.info("Proceeding with un-registration: %s", self.consumer.uuid)
+        try:
+            managerlib.unregister(self.backend.uep, self.consumer.uuid, True)
+        except Exception, e:
+            log.error("Error unregistering system with entitlement platform.")
+            handle_gui_exception(e, constants.UNREGISTER_ERROR,
+                    "Consumer may need to be manually cleaned up: %s" %
+                    self.consumer.uuid)
+        self.consumer.reload()
+        self.refresh()
+
+    def _facts_button_clicked(self, widget):
         self.system_facts_dialog.show()
 
-    def compliant_button_clicked(self, widget):
+    def _add_sub_button_clicked(self, widget):
+        # TODO
+        pass
+
+    def _compliant_button_clicked(self, widget):
         if self.registered():
             self.compliance_assistant.show()
         else:
@@ -296,7 +372,7 @@ class MainWindow(object):
                 _("You must register before using the compliance assistant.")),
                 self.main_window)
 
-    def set_compliance_status(self):
+    def _set_compliance_status(self):
         """ Updates the compliance status portion of the UI. """
         # Look for products which are out of compliance:
         warn_count = 0
@@ -405,14 +481,6 @@ class ManageSubscriptionPage:
         """
         button = gtk.Button(label=_("Activate a Subscription"))
         button.connect("clicked", self.show_regtoken_dialog)
-        self.button_bar.add(button)
-
-    def _show_facts_button(self):
-        """
-        Adds the show facts button to the button bar.
-        """
-        button = gtk.Button(label=_("View System Facts"))
-        button.connect("clicked", self.show_facts_dialog)
         self.button_bar.add(button)
 
     def _show_register_button(self):

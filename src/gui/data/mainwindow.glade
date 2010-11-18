@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy project-wide -->
@@ -9,7 +9,6 @@
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <child>
           <placeholder/>
         </child>
@@ -60,7 +59,6 @@
               <widget class="GtkVBox" id="vbox2">
                 <property name="width_request">200</property>
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
                 <property name="spacing">100</property>
                 <child>
                   <widget class="GtkFrame" id="compliance_frame">
@@ -74,7 +72,6 @@
                         <child>
                           <widget class="GtkVBox" id="vbox3">
                             <property name="visible">True</property>
-                            <property name="orientation">vertical</property>
                             <property name="spacing">15</property>
                             <child>
                               <widget class="GtkHBox" id="hbox2">
@@ -124,7 +121,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_compliant_button_clicked"/>
+                                <signal name="clicked" handler="on_compliant_button_clicked" swapped="no"/>
                               </widget>
                               <packing>
                                 <property name="position">2</property>
@@ -173,57 +170,20 @@
                         <property name="visible">True</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <widget class="GtkVBox" id="vbox4">
+                          <widget class="GtkVBox" id="button_bar">
                             <property name="visible">True</property>
-                            <property name="orientation">vertical</property>
                             <property name="spacing">15</property>
                             <child>
-                              <widget class="GtkButton" id="registration_button">
-                                <property name="label" translatable="yes">Registration Settings</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_registration_button_clicked"/>
-                              </widget>
-                              <packing>
-                                <property name="position">0</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                             <child>
-                              <widget class="GtkButton" id="add_subscription_button">
-                                <property name="label" translatable="yes">Add Subscription</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_add_subscription_button_clicked"/>
-                              </widget>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                             <child>
-                              <widget class="GtkButton" id="facts_button">
-                                <property name="label" translatable="yes">View My System Facts</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_facts_button_clicked"/>
-                              </widget>
-                              <packing>
-                                <property name="position">2</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                             <child>
-                              <widget class="GtkButton" id="glossary_button">
-                                <property name="label" translatable="yes">Glossary</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_glossary_button_clicked"/>
-                              </widget>
-                              <packing>
-                                <property name="position">3</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                           </widget>
                         </child>
