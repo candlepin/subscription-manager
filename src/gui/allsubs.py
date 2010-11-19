@@ -27,6 +27,7 @@ import managerlib
 from facts import Facts
 from widgets import SubDetailsWidget
 from dateselect import DateSelector
+from utils import handle_gui_exception
 
 prefix = os.path.dirname(__file__)
 ALL_SUBS_GLADE = os.path.join(prefix, "data/allsubs.glade")
@@ -181,8 +182,11 @@ class AllSubscriptionsTab(object):
         Reload the subscriptions from the server when the Search button
         is clicked.
         """
-        self.pool_stash.refresh(self.get_active_on_date())
-        self.display_pools()
+        try:
+            self.pool_stash.refresh(self.get_active_on_date())
+            self.display_pools()
+        except Exception, e:
+            handle_gui_exception(e, _("Error fetching subscriptions from server: %s"))
 
     def date_select_button_clicked(self, widget):
         self.date_selector.show()

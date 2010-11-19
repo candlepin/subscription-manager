@@ -33,6 +33,7 @@ import managerlib
 import storage
 from dateselect import DateSelector
 from widgets import SubDetailsWidget
+from utils import handle_gui_exception
 
 
 prefix = os.path.dirname(__file__)
@@ -296,8 +297,11 @@ class ComplianceAssistant(object):
         """
         Called by the main window when this page is to be displayed.
         """
-        self._reload_screen()
-        self.window.show()
+        try:
+            self._reload_screen()
+            self.window.show()
+        except Exception, e:
+            handle_gui_exception(e, _("Error fetching subscriptions from server: %s"))
 
     def _reload_screen(self, widget=None):
         """
@@ -311,7 +315,6 @@ class ComplianceAssistant(object):
 
             
         self.pool_stash.refresh(active_on=self._get_noncompliant_date())
-
         if self.last_compliant_date:
             formatted = self.format_date(self.last_compliant_date)
             self.compliance_label.set_label(
