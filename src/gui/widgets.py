@@ -194,7 +194,7 @@ class SubDetailsWidget(GladeWidget):
         Show subscription details. 
         
         Start and end should be formatted strings, not actual date objects.
-        Products is a list of tuples (or lists) of the form (name, id)
+        Products is a list of certificate.Products
         """
         self.subscription_text.get_buffer().set_text(name)
 
@@ -206,7 +206,7 @@ class SubDetailsWidget(GladeWidget):
 
         self.bundled_products.clear()
         for product in products:
-            self.bundled_products.add_product(product[0], product[1])
+            self.bundled_products.add_product(product.getName(), product.getHash())
             
     def _set(self, text_view, text):
         """Set the buffer of the given TextView to contain the text"""

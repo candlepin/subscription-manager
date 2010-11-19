@@ -18,7 +18,6 @@
 #
 
 import os
-import re
 import sys
 import shutil
 import socket
@@ -40,7 +39,6 @@ from facts import Facts
 from certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, CertLib, syslog
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
 from socket import error as socket_error
-from M2Crypto import SSL
 import xml.sax.saxutils
 
 import factsgui
@@ -48,6 +46,7 @@ from installedtab import InstalledProductsTab
 from mysubstab import MySubscriptionsTab
 from allsubs import AllSubscriptionsTab
 from compliance import ComplianceAssistant
+from utils import handle_gui_exception, errorWindow, linkify
 
 import gettext
 _ = gettext.gettext
@@ -186,26 +185,6 @@ def show_regtoken_screen(consumer, facts):
         regtoken_screen.show()
     else:
         regtoken_screen = RegistrationTokenScreen(consumer, facts)
-
-
-def handle_gui_exception(e, callback, logMsg = None, showMsg = True):
-    if logMsg:
-        log.error(logMsg)
-    log.exception(e)
-
-    if showMsg:
-        if isinstance(e, socket_error):
-            errorWindow(_('Network error, unable to connect to server.'))
-        elif isinstance(e, SSL.SSLError):
-            errorWindow(_('Unable to verify server\'s identity: %s' % str(e)))
-        elif isinstance(e, connection.RestlibException):
-            errorWindow(callback % linkify(e.msg))
-        else:
-            if hasattr(callback, '__call__'):
-                errorWindow(callback(e))
-            else:
-                errorWindow(callback) #just a string
-    return False
 
 
 class MainWindow(object):
@@ -352,7 +331,7 @@ class MainWindow(object):
         except Exception, e:
             log.error("Error unregistering system with entitlement platform.")
             handle_gui_exception(e, constants.UNREGISTER_ERROR,
-                    "Consumer may need to be manually cleaned up: %s" %
+                    logMsg="Consumer may need to be manually cleaned up: %s" %
                     self.consumer.uuid)
         self.consumer.reload()
         self.refresh()
@@ -727,7 +706,7 @@ class ManageSubscriptionPage:
         except Exception, e:
             log.error("Error unregistering system with entitlement platform.")
             handle_gui_exception(e, constants.UNREGISTER_ERROR,
-                    "Consumer may need to be manually cleaned up: %s" %
+                    logMsg="Consumer may need to be manually cleaned up: %s" %
                     self.consumer.uuid)
         self.consumer.reload()
         self.mainWin.emit(CONSUMER_SIGNAL)
@@ -802,9 +781,8 @@ class RegisterScreen:
                 cid = self.consumer.uuid
                 managerlib.unregisterConsumer(UEP, cid)
             except Exception, e:
-                handle_gui_exception(e, None,
-                        "Unable to unregister existing user credentials.",
-                        False)
+                log.error("Unable to unregister with existing credentials.")
+                log.exception(e)
 
         failed_msg = _("Unable to register your system. \n Error: %s")
         try:
@@ -922,7 +900,7 @@ class RegistrationTokenScreen:
         try:
             UEP.updateConsumerFacts(self.consumer.uuid, self.facts.get_facts())
         except Exception, e:
-            handle_gui_exception(e, "Could not update facts.\nError: %s" % e)
+            handle_gui_exception(e, _("Error updating facts. Please see /var/log/rhsm/rhsm.log for more information."))
 
     def setAccountMsg(self):
         alabel1 = regtoken_xml.get_widget("account_label1")
@@ -944,7 +922,7 @@ class RegistrationTokenScreen:
             infoWindow(constants.SUBSCRIBE_REGTOKEN_SUCCESS % reg_token, self.regtokenWin)
         except Exception, e:
             handle_gui_exception(e, constants.SUBSCRIBE_REGTOKEN_ERROR % reg_token,
-                                 "Could not subscribe registration token %s.\nError: %s" % (reg_token, e))
+                "Could not subscribe registration token %s." % (reg_token))
 
 
 def show_busted_subs(busted_subs):
@@ -1398,10 +1376,6 @@ def unexpectedError(message, exc_info=None):
         (etype, value, stack_trace) = exc_info
 
 
-def errorWindow(message):
-    messageWindow.ErrorDialog(messageWindow.wrap_text(message))
-
-
 def infoWindow(message, parent):
     messageWindow.InfoDialog(messageWindow.wrap_text(message), parent)
 
@@ -1421,18 +1395,4 @@ def reload():
 #    gui = None
     main()
 
-
-def linkify(msg):
-    """
-    Parse a string for any urls and wrap them in a hrefs, for use in a
-    gtklabel.
-    """
-    # lazy regex; should be good enough.
-    url_regex = re.compile("https?://\S*")
-
-    def add_markup(mo):
-        url = mo.group(0)
-        return '<a href="%s">%s</a>' % (url, url)
-
-    return url_regex.sub(add_markup, msg)
 

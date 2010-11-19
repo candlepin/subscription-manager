@@ -14,6 +14,7 @@
 #
 
 import os
+import gobject
 import gtk
 import gtk.glade
 import gettext
@@ -29,7 +30,9 @@ CONTRACT_SELECTION_GLADE = os.path.join(prefix, "data/contract_selection.glade")
 
 class ContractSelectionWindow(object):
 
-    def __init__(self):
+    def __init__(self, selected_callback, cancel_callback):
+        self._selected_callback = selected_callback
+        self._cancel_callback = cancel_callback
         self.total_contracts = 0
         self.contract_selection_xml = gtk.glade.XML(CONTRACT_SELECTION_GLADE)
         self.contract_selection_win = self.contract_selection_xml.get_widget(
@@ -48,16 +51,18 @@ class ContractSelectionWindow(object):
         self.contract_selection_xml.signal_autoconnect({
             "on_cancel_button_clicked": self._cancel_button_clicked,
             "on_subscribe_button_clicked": self._subscribe_button_clicked,
-            "on_contract_selection_treeview_cursor_changed": \
-                    self._cursor_changed,
         })
 
-        self.model = gtk.ListStore(str, str, str, str, str, str)
+        self.model = gtk.ListStore(str, str, str, str, str,
+                gobject.TYPE_PYOBJECT)
         self.contract_selection_treeview.set_model(self.model)
 
     def show(self):
         self.populate_treeview()
         self.contract_selection_win.show_all()
+
+    def destroy(self):
+        self.contract_selection_win.destroy()
 
     def populate_treeview(self):
         renderer = gtk.CellRendererText()
@@ -88,43 +93,8 @@ class ContractSelectionWindow(object):
         self.model.append(row)
     
     def _cancel_button_clicked(self, button):
-        print "cancel clicked"
+        self._cancel_callback()
 
     def _subscribe_button_clicked(self, button):
-        print "subscribe clicked"
-
-    def _cursor_changed(self, treeview):
-        print "cursor"
-        selected_row = self.model[treeview.get_cursor()[0][0]]
-        print selected_row
-
-#        self.subscription_name_label.set_text(selected_row[4])
-#        self.total_contracts_label.set_text(selected_row[5])
-
-
-def main():
-    pool1 = {
-            'productId': 'asdfsa',
-            'productName': 'foobar',
-            'consumed': '5',
-            'quantity': '10',
-            'startDate': '1232',
-            'endDate': '12312',
-            }
-    pool2 = {
-            'productId': 'asdfsa2',
-            'productName': 'foobar2',
-            'consumed': '5',
-            'quantity': '15',
-            'startDate': '21232',
-            'endDate': '212312',
-            }
-
-    win = ContractSelectionWindow()
-    win.add_pool(pool1)
-    win.add_pool(pool1)
-    win.show()
-    gtk.main()
-
-if __name__ == "__main__":
-    main()
+        self._selected_callback(
+                self.model[self.contract_selection_treeview.get_cursor()[0][0]][5])

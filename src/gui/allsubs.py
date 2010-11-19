@@ -16,18 +16,20 @@
 import datetime
 import os
 import gtk
+import gobject
+import progress
 import gettext
 _ = gettext.gettext
 
 from logutil import getLogger
 log = getLogger(__name__)
-
+import managergui
 import managerlib_async
 
 from widgets import SubDetailsWidget
 from dateselect import DateSelector
-import progress
-import gobject
+from utils import handle_gui_exception
+from contract_selection import ContractSelectionWindow
 
 prefix = os.path.dirname(__file__)
 ALL_SUBS_GLADE = os.path.join(prefix, "data/allsubs.glade")
@@ -40,6 +42,7 @@ QUANTITY_INDEX = 3
 AVAIL_INDEX = 4
 PRODUCT_ID_INDEX = 5
 POOL_ID_INDEX = 6
+MERGED_POOLS_INDEX = 7
 
 
 def progress_pulse(pb):
@@ -63,7 +66,8 @@ class AllSubscriptionsTab(object):
         today = datetime.date.today()
         self.date_selector = DateSelector(self.active_on_date_changed, initial_date=today)
 
-        self.subs_store = gtk.ListStore(str, str, str, str, str, str, str)
+        self.subs_store = gtk.ListStore(str, str, str, str, str, str, str,
+                gobject.TYPE_PYOBJECT)
         self.subs_treeview = self.all_subs_xml.get_widget('all_subs_treeview')
         self.subs_treeview.set_model(self.subs_store)
         self._add_column(_("Subscription"), PRODUCT_NAME_INDEX)
@@ -88,12 +92,14 @@ class AllSubscriptionsTab(object):
         self.day_entry = self.all_subs_xml.get_widget("day_entry")
         self.year_entry = self.all_subs_xml.get_widget("year_entry")
         self.sub_details = SubDetailsWidget(show_contract=False)
-        self.all_subs_vbox.pack_end(self.sub_details.get_widget())
+        self.all_subs_vbox.pack_start(self.sub_details.get_widget())
 
         self.active_on_checkbutton = self.all_subs_xml.get_widget('active_on_checkbutton')
 
         # Set the date filter to todays date by default:
         self._set_active_on_text(today.year, today.month, today.day)
+
+        self.subscribe_button = self.all_subs_xml.get_widget('subscribe_button')
 
         self.all_subs_xml.signal_autoconnect({
             "on_search_button_clicked": self.search_button_clicked,
@@ -103,6 +109,7 @@ class AllSubscriptionsTab(object):
             "on_not_installed_checkbutton_clicked": self.filters_changed,
             "on_contains_text_checkbutton_clicked": self.filters_changed,
             "on_contain_text_entry_changed": self.filters_changed,
+            "on_subscribe_button_clicked": self.subscribe_button_clicked,
         })
         self.subs_treeview.get_selection().connect('changed', self.update_sub_details)
 
@@ -169,6 +176,7 @@ class AllSubscriptionsTab(object):
                 entry.quantity - entry.consumed,
                 entry.product_id,
                 entry.pools[0]['id'], # not displayed, just for lookup later
+                entry, # likewise not displayed, for subscription
         ])
 
     def _add_column(self, name, order):
@@ -186,11 +194,14 @@ class AllSubscriptionsTab(object):
         Reload the subscriptions from the server when the Search button
         is clicked.
         """
-        self.pool_stash.refresh(self.get_active_on_date(), self.updatedisplay)
-        # show pulsating progress bar while we wait for results
-        self.pb = progress.Progress()
-        self.pb.setLabel(_("Searching for subscriptions. Please wait."))
-        self.timer = gobject.timeout_add(100, progress_pulse, self.pb)
+        try:
+            self.pool_stash.refresh(self.get_active_on_date(), self.updatedisplay)
+            # show pulsating progress bar while we wait for results
+            self.pb = progress.Progress()
+            self.pb.setLabel(_("Searching for subscriptions. Please wait."))
+            self.timer = gobject.timeout_add(100, progress_pulse, self.pb)
+        except Exception, e:
+            handle_gui_exception(e, _("Error fetching subscriptions from server: %s"))
 
     def updatedisplay(self, compat, incompat, all):
         # should probably use the params instead
@@ -225,6 +236,40 @@ class AllSubscriptionsTab(object):
         self.month_entry.set_text(str(month))
         self.year_entry.set_text(str(year))
 
+
+    def _contract_selected(self, pool):
+        self._contract_selection_cancelled()
+        try:
+            self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'])
+            managergui.fetch_certificates()
+        except Exception, e:
+            handle_gui_exception(e, _("Error getting subscription: %s"))
+
+        #Force the search results to refresh with the new info
+        self.search_button_clicked(None)
+
+    def _contract_selection_cancelled(self):
+        self.contract_selection.destroy()
+        self.contract_selection = None
+
+    def subscribe_button_clicked(self, button):
+        model, tree_iter = self.subs_treeview.get_selection().get_selected()
+        pools = model.get_value(tree_iter, MERGED_POOLS_INDEX)
+      
+        # Decide if we need to show the contract selection dialog or not.
+        # if there's just one pool, shortcut right to the callback that the
+        # dialog would have run.
+        if len(pools.pools) == 1:
+            self._contract_selected(pools.pools[1])
+
+        self.contract_selection = ContractSelectionWindow(
+                self._contract_selected, self._contract_selection_cancelled)
+
+        for pool in pools.pools:
+            self.contract_selection.add_pool(pool)
+
+        self.contract_selection.show()
+
     def update_sub_details(self, widget):
         """ Shows details for the current selected pool. """
         model, tree_iter = widget.get_selected()
@@ -233,6 +278,8 @@ class AllSubscriptionsTab(object):
             pool_id = model.get_value(tree_iter, POOL_ID_INDEX)
             provided = self._load_product_data(pool_id)
             self.sub_details.show(product_name, products=provided)
+            
+        self.subscribe_button.set_sensitive(tree_iter != None)
 
     def _load_product_data(self, pool_id):
         pool = self.pool_stash.all_pools[pool_id]

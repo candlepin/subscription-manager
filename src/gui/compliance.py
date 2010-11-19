@@ -15,12 +15,12 @@
 #
 
 import os
-import datetime
 import gtk
+import gobject
 import locale
 import logging
 import gettext
-from datetime import date
+from datetime import date, time, datetime
 
 _ = gettext.gettext
 
@@ -31,8 +31,10 @@ import certificate
 import certlib
 import managerlib
 import storage
+from connection import RestlibException
 from dateselect import DateSelector
 from widgets import SubDetailsWidget
+from utils import handle_gui_exception
 
 
 prefix = os.path.dirname(__file__)
@@ -101,6 +103,7 @@ class ComplianceAssistant(object):
                                 'end_date':str,
                                 'entitlement_id':str,
                                 'product_id':str,
+                                'entitlement':gobject.TYPE_PYOBJECT,
                                 'align':float}
        
         self.window = self.compliance_xml.get_widget('compliance_assistant_window')
@@ -123,17 +126,18 @@ class ComplianceAssistant(object):
         self.uncompliant_treeview.show()
 
         subscriptions_type_map = {'product_name':str, 
-                                  'total_contracts': str,
+                                  'total_contracts':str,
                                   'total_subscriptions':str,
                                   'available_subscriptions':str,
-                                  'align': float,
+                                  'align':float,
+                                  'entitlement':gobject.TYPE_PYOBJECT,
                                   'pool_id':str}
 
         self.subscriptions_store = storage.MappedListStore(subscriptions_type_map)
         self.date_selector = DateSelector(self._compliance_date_selected)
 
         self.subscriptions_treeview = MappedListTreeView(self.subscriptions_store)
-        self.subscriptions_treeview.add_column("Product Name",
+        self.subscriptions_treeview.add_column("Subscription Name",
                 self.subscriptions_store['product_name'], True)
         self.subscriptions_treeview.add_column("Total Contracts",
                 self.subscriptions_store['total_contracts'], True)
@@ -187,9 +191,9 @@ class ComplianceAssistant(object):
         if self.first_noncompliant_radiobutton.get_active():
             return self.last_compliant_date
         else:
-            return datetime.datetime(int(self.year_entry.get_text()),
-                                     int(self.month_entry.get_text()),
-                                     int(self.day_entry.get_text()), tzinfo=certificate.GMT())
+            return datetime(int(self.year_entry.get_text()),
+                            int(self.month_entry.get_text()),
+                            int(self.day_entry.get_text()), tzinfo=certificate.GMT())
 
     def _find_last_compliant(self):
         """
@@ -209,38 +213,47 @@ class ComplianceAssistant(object):
         if self.valid_subs:
             return self.valid_subs[0].validRange().end()
         else:
-            return date.today()
+            return datetime.now(certificate.GMT())
 
     def _display_subscriptions(self):
         self.subscriptions_store.clear()
 
         selection = self.uncompliant_treeview.get_selection()
 
+#        pools = self.pool_stash.filter_pools(compatible=True, overlapping=False, uninstalled=False, text=None)
+#        self.pool_stash.refresh(active_on=self._get_noncompliant_date())
+#        pool_filter = managerlib.PoolFilter()
+
+        subscriptions_map = {}
         # this should be roughly correct for locally manager certs, needs
         # remote subs/pools as well
         for entitlement in self.chosen_entitlements:
-            for product in entitlement.getProducts():
-                self.subscriptions_store.add_map({'product_name':product.getName(),
-                                                  # how many ents match this product?
-                                                  'total_contracts':entitlement.getOrder().getQuantity(),
-                                                  # this should eventually be the total of all the ents/pools for this product
-                                                  'total_subscriptions':entitlement.getOrder().getQuantity(),
-                                                  # pretty sure this is wrong
-                                                  'available_subscriptions':entitlement.getOrder().getQuantityUsed(),
-                                                  'align':0.0})
-        
+#            pools_for_products = pool_filter.filter_pools_by_products(pools, entitlement.getProducts())
+#            print pools_for_products
 
+            for product in entitlement.getProducts():
+                subscriptions_map[product.getHash()] = {'product_name':product.getName(),
+                                                        # how many ents match this product?
+                                                        'total_contracts':entitlement.getOrder().getQuantity(),
+                                                        # this should eventually be the total of all the ents/pools for this product
+                                                        'total_subscriptions':entitlement.getOrder().getQuantity(),
+                                                        # pretty sure this is wrong
+                                                        'available_subscriptions':entitlement.getOrder().getQuantityUsed(),
+                                                        'entitlement': entitlement,
+                                                        'align':0.0}
+
+        for key in subscriptions_map:
+            self.subscriptions_store.add_map(subscriptions_map[key])
 
     def _display_uncompliant(self):
         uncompliant = []
         if self.last_compliant_date:
-            uncompliant = self.entitlement_dir.listExpiredOnDate(date=self._get_noncompliant_date())
-            
-        noncompliant_products = self.product_dir.listExpiredOnDate(date=self._get_noncompliant_date())
+            noncompliant_entitlements = self.entitlement_dir.listExpiredOnDate(date=self._get_noncompliant_date())
 
-        # TODO: For testing, this is querying subs from the server. This method
-        # will eventually calculate uncompliant products installed on the machine.
-        # (and likely soon to expire entitlements that are for products not installed)
+        noncompliant_products = []
+        for noncompliant_entitlement in noncompliant_entitlements:
+            noncompliant_products.append(noncompliant_entitlement.getProduct())
+#        noncompliant_products = self.product_dir.listExpiredOnDate(date=self._get_noncompliant_date())
 
         # These display the list of products uncompliant on the selected date:
         self.uncompliant_store.clear()
@@ -257,22 +270,25 @@ class ComplianceAssistant(object):
                                             'contract':na,
                                             'end_date':na,
                                             'entitlement_id':None,
+                                            'entitlement':None,
                                             'product_id':product.getProduct().getHash(),
                                             'align':0.0})
 
+        # installed and out of compliance
         for product in noncompliant_products:
-            entitlement = self.entitlement_dir.findByProduct(product.getProduct().getHash())
+            entitlement = self.entitlement_dir.findByProduct(product.getHash())
             if entitlement is None:
-                print "No entitlement found for ", product.getProduct().getName()
+                print "No entitlement found for ", product.getName()
                 continue
 
             self.uncompliant_store.add_map({'active':False,
-                                            'product_name':product.getProduct().getName(),
+                                            'product_name':product.getName(),
                                             'contract':entitlement.getOrder().getNumber(),
                                             # is end_date when the cert expires or the orders end date? is it differnt?
                                             'end_date':'%s' % self.format_date(entitlement.validRange().end()),
                                             'entitlement_id':entitlement.serialNumber(),
-                                            'product_id':product.getProduct().getHash(),
+                                            'entitlement':entitlement,
+                                            'product_id':product.getHash(),
                                             'align':0.0})
         
 
@@ -296,8 +312,13 @@ class ComplianceAssistant(object):
         """
         Called by the main window when this page is to be displayed.
         """
-        self._reload_screen()
-        self.window.show()
+        try:
+            self._reload_screen()
+            self.window.show()
+        except RestlibException, e:
+            handle_gui_exception(e, _("Error fetching subscriptions from server: %s"))
+        except Exception, e:
+            handle_gui_exception(e, _("Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log for more information."))
 
     def _reload_screen(self, widget=None):
         """
@@ -311,7 +332,6 @@ class ComplianceAssistant(object):
 
             
         self.pool_stash.refresh(active_on=self._get_noncompliant_date())
-
         if self.last_compliant_date:
             formatted = self.format_date(self.last_compliant_date)
             self.compliance_label.set_label(
@@ -334,8 +354,15 @@ class ComplianceAssistant(object):
         model, tree_iter = widget.get_selected()
         if tree_iter:
             product_name = model.get_value(tree_iter, self.subscriptions_store['product_name'])
-            # TODO: need to show provided products here once we have a pool stash:
-            self.sub_details.show(product_name)
+
+            entitlement = model.get_value(tree_iter, self.subscriptions_store['entitlement'])
+
+            self.sub_details.show(product_name, 
+                                  contract=entitlement.getOrder().getContract(),
+                                  start=entitlement.validRange().begin(),
+                                  end=entitlement.validRange().end(),
+                                  account=entitlement.getOrder().getAccountNumber(),
+                                  products=entitlement.getProducts())
 
     def _set_noncompliant_date(self, noncompliant_date):
         self.month_entry.set_text(str(noncompliant_date.month))
