@@ -225,8 +225,11 @@ class AllSubscriptionsTab(object):
 
     def _contract_selected(self, pool):
         self._contract_selection_cancelled()
-        self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'])
-        managergui.fetch_certificates()
+        try:
+            self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'])
+            managergui.fetch_certificates()
+        except Exception, e:
+            handle_gui_exception(e, _("Error getting subscription: %s"))
 
         #Force the search results to refresh with the new info
         self.search_button_clicked(None)
