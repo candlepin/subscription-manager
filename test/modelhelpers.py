@@ -13,8 +13,14 @@
 # in this software or its documentation.
 #
 
-from datetime import timedelta, datetime
+"""
+Helper methods for mocking up JSON model objects, certificates, etc.
+"""
+
 import hashlib
+
+from datetime import timedelta, datetime
+from mock import Mock
 
 def create_pool(product_id, product_name, quantity=10, consumed=0, provided_products=[]):
     """
@@ -48,3 +54,18 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
                 'id': '402881062bc9a379012bc9a393fe0005'},
             'attributes': [],
         }
+
+def build_mock_product_dir(product_ids):
+    """ Mock a ProductDirectory object for installed product certs. """
+    installed = []
+
+    # Create the ProductCertificate mocks:
+    for product_id in product_ids:
+        cert_mock = Mock()
+        cert_mock.getProduct().getHash.return_value = product_id
+        installed.append(cert_mock)
+
+    # Create the ProductDirectory mock:
+    mock_product_dir = Mock()
+    mock_product_dir.list.return_value = installed
+    return mock_product_dir

@@ -17,7 +17,7 @@ import unittest
 from mock import Mock
 
 from managerlib import *
-from jsonhelpers import *
+from modelhelpers import *
 
 class MergePoolsTests(unittest.TestCase):
 
@@ -61,22 +61,11 @@ class MergePoolsTests(unittest.TestCase):
 
 class PoolFilterTests(unittest.TestCase):
 
-    def _setup_installed_products(self, product_ids):
-        """ Simulate a ProductDirectory object for installed product certs. """
-        installed = []
-        for product_id in product_ids:
-            cert_mock = Mock()
-            cert_mock.getProduct().getHash.return_value = product_id
-            installed.append(cert_mock)
-        mock_product_dir = Mock()
-        mock_product_dir.list.return_value = installed
-        return mock_product_dir
-
     def test_uninstalled_filter_direct_match(self):
         filter = PoolFilter()
         product1 = 'product1'
         product2 = 'product2'
-        filter.product_directory = self._setup_installed_products([product2])
+        filter.product_directory = build_mock_product_dir([product2])
 
         pools = [
                 create_pool(product1, product1),
@@ -92,7 +81,7 @@ class PoolFilterTests(unittest.TestCase):
         product1 = 'product1'
         product2 = 'product2'
         provided = 'providedProduct'
-        filter.product_directory = self._setup_installed_products([provided])
+        filter.product_directory = build_mock_product_dir([provided])
 
         pools = [
                 create_pool(product1, product1),
@@ -106,7 +95,7 @@ class PoolFilterTests(unittest.TestCase):
         filter = PoolFilter()
         product1 = 'product1'
         product2 = 'product2'
-        filter.product_directory = self._setup_installed_products([product2])
+        filter.product_directory = build_mock_product_dir([product2])
 
         pools = [
                 create_pool(product1, product1),
@@ -122,7 +111,7 @@ class PoolFilterTests(unittest.TestCase):
         product1 = 'product1'
         product2 = 'product2'
         provided = 'providedProduct'
-        filter.product_directory = self._setup_installed_products([provided])
+        filter.product_directory = build_mock_product_dir([provided])
 
         pools = [
                 create_pool(product1, product1),
@@ -136,7 +125,7 @@ class PoolFilterTests(unittest.TestCase):
         filter = PoolFilter()
         product1 = 'Foo Product'
         product2 = 'Bar Product'
-        filter.product_directory = self._setup_installed_products([])
+        filter.product_directory = build_mock_product_dir([])
 
         pools = [
                 create_pool(product1, product1),

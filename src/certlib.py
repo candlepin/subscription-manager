@@ -600,7 +600,7 @@ class UpdateReport:
 
 
 
-def find_last_compliant():
+def find_last_compliant(ent_dir=None):
     """
     Find the first datetime where an entitlement will be uncompliant.
     If there are currently unentitled products, then return the current
@@ -610,7 +610,9 @@ def find_last_compliant():
     # TODO: should we be listing valid? does this work if everything is already out of compliance?
     # TODO: setting a member variable here that isn't used anywhere else, should keep this local unless needed
     # TODO: needs unit testing imo, probably could be moved to a standalone method for that purpose
-    valid_ents = EntitlementDirectory().listValid()
+    if not ent_dir:
+        ent_dir = EntitlementDirectory()
+    valid_ents = ent_dir.listValid()
 
     def get_date(ent_cert):
         return ent_cert.validRange().end()
