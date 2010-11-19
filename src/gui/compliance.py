@@ -31,6 +31,7 @@ import certificate
 import certlib
 import managerlib
 import storage
+from connection import RestlibException
 from dateselect import DateSelector
 from widgets import SubDetailsWidget
 from utils import handle_gui_exception
@@ -300,8 +301,10 @@ class ComplianceAssistant(object):
         try:
             self._reload_screen()
             self.window.show()
-        except Exception, e:
+        except RestlibException, e:
             handle_gui_exception(e, _("Error fetching subscriptions from server: %s"))
+        except Exception, e:
+            handle_gui_exception(e, _("Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log for more information."))
 
     def _reload_screen(self, widget=None):
         """
