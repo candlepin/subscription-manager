@@ -65,7 +65,7 @@ class PoolFilterTests(unittest.TestCase):
         filter = PoolFilter()
         product1 = 'product1'
         product2 = 'product2'
-        filter.product_directory = build_mock_product_dir([product2])
+        filter.product_directory = mock_product_dir([product2])
 
         pools = [
                 create_pool(product1, product1),
@@ -81,7 +81,7 @@ class PoolFilterTests(unittest.TestCase):
         product1 = 'product1'
         product2 = 'product2'
         provided = 'providedProduct'
-        filter.product_directory = build_mock_product_dir([provided])
+        filter.product_directory = mock_product_dir([provided])
 
         pools = [
                 create_pool(product1, product1),
@@ -95,7 +95,7 @@ class PoolFilterTests(unittest.TestCase):
         filter = PoolFilter()
         product1 = 'product1'
         product2 = 'product2'
-        filter.product_directory = build_mock_product_dir([product2])
+        filter.product_directory = mock_product_dir([product2])
 
         pools = [
                 create_pool(product1, product1),
@@ -111,7 +111,7 @@ class PoolFilterTests(unittest.TestCase):
         product1 = 'product1'
         product2 = 'product2'
         provided = 'providedProduct'
-        filter.product_directory = build_mock_product_dir([provided])
+        filter.product_directory = mock_product_dir([provided])
 
         pools = [
                 create_pool(product1, product1),
@@ -125,7 +125,7 @@ class PoolFilterTests(unittest.TestCase):
         filter = PoolFilter()
         product1 = 'Foo Product'
         product2 = 'Bar Product'
-        filter.product_directory = build_mock_product_dir([])
+        filter.product_directory = mock_product_dir([])
 
         pools = [
                 create_pool(product1, product1),

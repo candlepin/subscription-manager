@@ -20,6 +20,7 @@ Helper methods for mocking up JSON model objects, certificates, etc.
 import hashlib
 
 from datetime import timedelta, datetime
+from certificate import DateRange
 from mock import Mock
 
 def create_pool(product_id, product_name, quantity=10, consumed=0, provided_products=[]):
@@ -55,7 +56,7 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
             'attributes': [],
         }
 
-def build_mock_product_dir(product_ids):
+def mock_product_dir(product_ids):
     """ Mock a ProductDirectory object for installed product certs. """
     installed = []
 
@@ -69,3 +70,14 @@ def build_mock_product_dir(product_ids):
     mock_product_dir = Mock()
     mock_product_dir.list.return_value = installed
     return mock_product_dir
+
+def mock_ent_cert(product_id, start_date=None, end_date=None):
+    cert = Mock()
+    cert.validRange.return_value = DateRange(start_date, end_date)
+    return cert
+
+def mock_ent_dir(ent_certs):
+    """ Mock an EntitlementDirectory object. """
+    mock_ent_dir = Mock()
+    mock_ent_dir.list.return_value = ent_certs
+    return mock_ent_dir

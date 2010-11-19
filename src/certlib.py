@@ -600,7 +600,7 @@ class UpdateReport:
 
 
 
-def find_last_compliant(ent_dir=None):
+def find_last_compliant(ent_dir=None, product_dir=None):
     """
     Find the first datetime where an entitlement will be uncompliant.
     If there are currently unentitled products, then return the current
@@ -612,6 +612,9 @@ def find_last_compliant(ent_dir=None):
     # TODO: needs unit testing imo, probably could be moved to a standalone method for that purpose
     if not ent_dir:
         ent_dir = EntitlementDirectory()
+    if not product_dir:
+        product_dir = ProductDirectory()
+
     valid_ents = ent_dir.listValid()
 
     def get_date(ent_cert):
