@@ -29,6 +29,7 @@ log = getLogger(__name__)
 
 import certificate
 import certlib
+from certlib import find_last_compliant
 import managerlib
 import storage
 from connection import RestlibException
@@ -39,6 +40,7 @@ from utils import handle_gui_exception
 
 prefix = os.path.dirname(__file__)
 COMPLIANCE_GLADE = os.path.join(prefix, "data/compliance.glade")
+
 
 class MappedListTreeView(gtk.TreeView):
 
@@ -86,7 +88,7 @@ class ComplianceAssistant(object):
             "compliant_today_label")
 
         # Setup initial last compliant date:
-        self.last_compliant_date = self._find_last_compliant()
+        self.last_compliant_date = find_last_compliant()
         self.month_entry = self.compliance_xml.get_widget("month_entry")
         self.day_entry = self.compliance_xml.get_widget("day_entry")
         self.year_entry = self.compliance_xml.get_widget("year_entry")
@@ -185,7 +187,7 @@ class ComplianceAssistant(object):
 
     def _get_noncompliant_date(self):
         """
-        Returns a datetime.datetime object for the non-compliant date to use based on current
+        Returns a datetime object for the non-compliant date to use based on current
         state of the GUI controls.
         """
         if self.first_noncompliant_radiobutton.get_active():
@@ -194,26 +196,6 @@ class ComplianceAssistant(object):
             return datetime(int(self.year_entry.get_text()),
                             int(self.month_entry.get_text()),
                             int(self.day_entry.get_text()), tzinfo=certificate.GMT())
-
-    def _find_last_compliant(self):
-        """
-        Find the first date where an entitlement will be uncompliant.
-        """
-        # TODO: what about products installed but not covered by *any* entitlement?
-        # TODO: should we be listing valid? does this work if everything is already out of compliance?
-        # TODO: setting a member variable here that isn't used anywhere else, should keep this local unless needed
-        # TODO: needs unit testing imo, probably could be moved to a standalone method for that purpose
-        self.valid_subs = certlib.EntitlementDirectory().listValid()
-
-        def get_date(sub):
-            return sub.validRange().end()
-
-        self.valid_subs.sort(key=get_date)
-
-        if self.valid_subs:
-            return self.valid_subs[0].validRange().end()
-        else:
-            return datetime.now(certificate.GMT())
 
     def _display_subscriptions(self):
         self.subscriptions_store.clear()
@@ -328,7 +310,7 @@ class ComplianceAssistant(object):
         log.debug("reloading screen")
         # end date of first subs to expire
         
-        self.last_compliant_date = self._find_last_compliant()
+        self.last_compliant_date = find_last_compliant()
 
             
         self.pool_stash.refresh(active_on=self._get_noncompliant_date())

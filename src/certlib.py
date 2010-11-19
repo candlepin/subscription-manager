@@ -19,7 +19,7 @@
 import os
 import re
 import syslog
-from datetime import timedelta
+from datetime import timedelta, datetime
 from config import initConfig
 from connection import UEPConnection
 from certificate import *
@@ -597,6 +597,32 @@ class UpdateReport:
         self.write(s, _('Expired (not deleted):'), self.expnd)
         self.write(s, _('Expired (deleted):'), self.expd)
         return '\n'.join(s)
+
+
+
+def find_last_compliant():
+    """
+    Find the first datetime where an entitlement will be uncompliant.
+    If there are currently unentitled products, then return the current
+    datetime.
+    """
+    # TODO: what about products installed but not covered by *any* entitlement?
+    # TODO: should we be listing valid? does this work if everything is already out of compliance?
+    # TODO: setting a member variable here that isn't used anywhere else, should keep this local unless needed
+    # TODO: needs unit testing imo, probably could be moved to a standalone method for that purpose
+    valid_ents = EntitlementDirectory().listValid()
+
+    def get_date(ent_cert):
+        return ent_cert.validRange().end()
+
+    valid_ents.sort(key=get_date)
+
+    if valid_ents:
+        return valid_ents[0].validRange().end()
+    else:
+        return datetime.now(GMT())
+
+
 
 
 def main():
