@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: src/gui/managergui.py:1006
+#: src/gui/managergui.py:1133
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-03 13:16-0300\n"
+"POT-Creation-Date: 2010-11-19 08:51-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,92 +18,199 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/managerlib.py:75
-msgid "Subscribed"
+#: src/gui/firstboot/rhsm_entitlement_choose.py:25
+msgid "Entitlement Selection"
 msgstr ""
 
-#: src/managerlib.py:75
-msgid "Expired"
+#: src/gui/firstboot/rhsm_entitlement_choose.py:26
+msgid "RHSM Entitlement Selection"
 msgstr ""
 
-#: src/managerlib.py:75
-msgid "Not Subscribed"
+#: src/gui/firstboot/rhsm_entitlement_choose.py:44
+#: src/gui/firstboot/rhsm_login.py:34
+msgid "Entitlement Platform Registration"
 msgstr ""
 
-#: src/managerlib.py:110
-msgid "Not Installed"
+#: src/gui/firstboot/rhsm_entitlement_choose.py:48
+#: src/gui/firstboot/rhsm_subscriptions.py:29 tmp/mainwindow.glade.h:4
+#: tmp/rhsm.glade.h:14 tmp/subsgui.glade.h:3
+msgid "Subscription Manager"
 msgstr ""
 
-#: src/connection.py:93
-#, python-format
-msgid "Bad CA Certificate: %s"
+#: src/gui/firstboot/rhsm_entitlement_choose.py:54
+msgid "Set Up Software Updates"
 msgstr ""
 
-#: src/connection.py:95
-#, python-format
-msgid "Unable to read CA certificates from '%s'."
+#: src/gui/firstboot/rhsm_subscriptions.py:28
+msgid "RHSM Subscriptions Management"
 msgstr ""
 
-#: src/connection.py:97
-#, python-format
-msgid " '%s' is a file."
+#: src/gui/firstboot/rhsm_login.py:33
+msgid "Entitlement Registration"
 msgstr ""
 
-#: src/connection.py:99
-msgid " No such directory."
-msgstr ""
-
-#: src/connection.py:138
-msgid "Network error. Please check the connection details."
-msgstr ""
-
-#: src/certmgr.py:86
-msgid "Updating Red Hat certificates & repositories"
-msgstr ""
-
-#: src/certmgr.py:89 src/factlib.py:78 src/certlib.py:569
-#, python-format
-msgid "%d updates required"
-msgstr ""
-
-#: src/certmgr.py:90 src/factlib.py:79 src/certlib.py:570
-msgid "done"
-msgstr ""
-
-#: src/certmgr.py:100
-msgid "Unable to update Red Hat certificates & repositories"
-msgstr ""
-
-#: src/gui/productstable.py:52 src/gui/managergui.py:477
-#: src/gui/managergui.py:1011 src/gui/managergui.py:1148
+#: src/gui/widgets.py:131 src/gui/managergui.py:598 src/gui/managergui.py:1138
+#: src/gui/managergui.py:1275 src/gui/installedtab.py:43
 msgid "Product"
 msgstr ""
 
-#: src/gui/productstable.py:56
+#: src/gui/widgets.py:135
 msgid "Installed"
 msgstr ""
 
-#: src/gui/mysubstab.py:149 src/gui/allsubs.py:63
-msgid "Subscription"
+#: src/gui/managergui.py:198 src/managercli.py:49
+msgid "Network error, unable to connect to server."
 msgstr ""
 
-#: src/gui/mysubstab.py:150
-msgid "Installed Products"
+#: src/gui/managergui.py:200
+#, python-format
+msgid "Unable to verify server's identity: %s"
 msgstr ""
 
-#: src/gui/mysubstab.py:155 src/gui/managergui.py:485
+#: src/gui/managergui.py:311 src/gui/managergui.py:490
+msgid "Register System"
+msgstr ""
+
+#: src/gui/managergui.py:319 src/gui/managergui.py:498
+msgid "Unregister System"
+msgstr ""
+
+#: src/gui/managergui.py:327
+msgid "View My System Facts"
+msgstr ""
+
+#: src/gui/managergui.py:336
+msgid "Add Subscription"
+msgstr ""
+
+#: src/gui/managergui.py:372
+msgid "You must register before using the compliance assistant."
+msgstr ""
+
+#: src/gui/managergui.py:389
+#, python-format
+msgid "You have %s products which are out of compliance."
+msgstr ""
+
+#: src/gui/managergui.py:393
+msgid "You have 1 product which is out of compliance."
+msgstr ""
+
+#: src/gui/managergui.py:399
+msgid "Your system is compliant."
+msgstr ""
+
+#: src/gui/managergui.py:482
+msgid "Activate a Subscription"
+msgstr ""
+
+#: src/gui/managergui.py:506 tmp/factsdialog.glade.h:2
+msgid "Close"
+msgstr ""
+
+#: src/gui/managergui.py:606 src/gui/mysubstab.py:61
+#: src/gui/installedtab.py:57
 msgid "Contract"
 msgstr ""
 
-#: src/gui/mysubstab.py:156
+#: src/gui/managergui.py:612
+msgid "Status"
+msgstr ""
+
+#: src/gui/managergui.py:619 src/gui/managergui.py:1153
+#: src/gui/managergui.py:1285
+msgid "Expires"
+msgstr ""
+
+#: src/gui/managergui.py:675
+#, python-format
+msgid "This system is registered as: <b>%s</b>"
+msgstr ""
+
+#: src/gui/managergui.py:678
+msgid "This system is not registered."
+msgstr ""
+
+#: src/gui/managergui.py:809
+#, python-format
+msgid ""
+"Unable to register your system. \n"
+" Error: %s"
+msgstr ""
+
+#: src/gui/managergui.py:857
+msgid "You must enter a system name."
+msgstr ""
+
+#: src/gui/managergui.py:866
+msgid "You must enter a login."
+msgstr ""
+
+#: src/gui/managergui.py:872
+msgid "You must enter a password."
+msgstr ""
+
+#: src/gui/managergui.py:929
+msgid ""
+"\n"
+"This system is registered with following consumer information"
+msgstr ""
+
+#: src/gui/managergui.py:931
+#, python-format
+msgid "<b>    ID:</b>       %s"
+msgstr ""
+
+#: src/gui/managergui.py:933
+#, python-format
+msgid "<b>  Name:</b>     %s"
+msgstr ""
+
+#: src/gui/managergui.py:1083
+msgid "Performing Subscribe. Please wait."
+msgstr ""
+
+#: src/gui/managergui.py:1146 src/gui/managergui.py:1280
+msgid "Available Slots"
+msgstr ""
+
+#: src/gui/managergui.py:1262
+#, python-format
+msgid "<b>Available Subscriptions for %s:</b>"
+msgstr ""
+
+#: src/gui/managergui.py:1271
+msgid " "
+msgstr ""
+
+#: src/gui/managergui.py:1372
+msgid "You must select a certificate."
+msgstr ""
+
+#: src/gui/managergui.py:1379
+#, python-format
+msgid "%s is not a valid certificate file. Please upload a valid certificate."
+msgstr ""
+
+#: src/gui/mysubstab.py:54 src/gui/allsubs.py:64
+msgid "Subscription"
+msgstr ""
+
+#: src/gui/mysubstab.py:55
+msgid "Installed Products"
+msgstr ""
+
+#: src/gui/mysubstab.py:62 src/gui/contract_selection.py:73
+#: src/gui/installedtab.py:58
 msgid "Start Date"
 msgstr ""
 
-#: src/gui/mysubstab.py:157
+#: src/gui/mysubstab.py:63 src/gui/contract_selection.py:77
+#: src/gui/installedtab.py:59
 msgid "Expiration Date"
 msgstr ""
 
-#: src/gui/mysubstab.py:201
+#: src/gui/mysubstab.py:84
 msgid "My Subscriptions"
 msgstr ""
 
@@ -131,455 +238,178 @@ msgstr ""
 msgid "Question dialog:"
 msgstr ""
 
-#: src/gui/allsubs.py:64
-msgid "# Bundled Products"
+#: src/gui/contract_selection.py:64
+msgid "Contract Number"
+msgstr ""
+
+#: src/gui/contract_selection.py:68
+msgid "Contracts Used / Available"
 msgstr ""
 
 #: src/gui/allsubs.py:65
-msgid "Total Contracts"
+msgid "# Bundled Products"
 msgstr ""
 
 #: src/gui/allsubs.py:66
+msgid "Total Contracts"
+msgstr ""
+
+#: src/gui/allsubs.py:67
 msgid "Total Subscriptions"
 msgstr ""
 
-#: src/gui/allsubs.py:67 src/managercli.py:529
+#: src/gui/allsubs.py:68 src/managercli.py:537
 msgid "Available Subscriptions"
 msgstr ""
 
-#: src/gui/allsubs.py:165
+#: src/gui/allsubs.py:177
 msgid "All Available Subscriptions"
 msgstr ""
 
-#: src/gui/factsgui.py:62
+#: src/gui/factsgui.py:58
 msgid "Fact"
 msgstr ""
 
-#: src/gui/factsgui.py:63
+#: src/gui/factsgui.py:59
 msgid "Value"
 msgstr ""
 
-#: src/gui/managergui.py:179 src/managercli.py:50
-msgid "network error, unable to connect to server"
+#: src/gui/compliance.py:253
+msgid "N/A"
 msgstr ""
 
-#: src/gui/managergui.py:181
+#: src/gui/compliance.py:318
 #, python-format
-msgid "Unable to verify server's identity: %s"
+msgid "All software is in compliance until %s."
 msgstr ""
 
-#: src/gui/managergui.py:258
+#: src/gui/compliance.py:320
 #, python-format
-msgid "You have %s products which are out of compliance."
+msgid "%s (first date of non-compliance)"
 msgstr ""
 
-#: src/gui/managergui.py:262
-msgid "You have 1 product which is out of compliance."
+#: src/gui/installedtab.py:55
+msgid "Version"
 msgstr ""
 
-#: src/gui/managergui.py:268
-msgid "Your system is compliant."
+#: src/gui/installedtab.py:56
+msgid "Compliance Status"
 msgstr ""
 
-#: src/gui/managergui.py:352
-msgid "Activate a Subscription"
+#: src/gui/installedtab.py:97
+msgid "Future Subscription"
 msgstr ""
 
-#: src/gui/managergui.py:360
-msgid "View System Facts"
+#: src/gui/installedtab.py:98 src/gui/installedtab.py:113
+msgid "Never Subscribed"
 msgstr ""
 
-#: src/gui/managergui.py:368
-msgid "Register System"
+#: src/gui/installedtab.py:101 src/gui/installedtab.py:112
+msgid "Out of Compliance"
 msgstr ""
 
-#: src/gui/managergui.py:376
-msgid "Unregister System"
-msgstr ""
-
-#: src/gui/managergui.py:384 tmp/factsdialog.glade.h:2
-msgid "Close"
-msgstr ""
-
-#: src/gui/managergui.py:491
-msgid "Status"
-msgstr ""
-
-#: src/gui/managergui.py:498 src/gui/managergui.py:1026
-#: src/gui/managergui.py:1158
-msgid "Expires"
-msgstr ""
-
-#: src/gui/managergui.py:554
+#: src/gui/installedtab.py:103
 #, python-format
-msgid "This system is registered as: <b>%s</b>"
+msgid "Subscription %s is expired"
 msgstr ""
 
-#: src/gui/managergui.py:557
-msgid "This system is not registered."
+#: src/gui/installedtab.py:106
+msgid "In Compliance"
 msgstr ""
 
-#: src/gui/managergui.py:684
+#: src/gui/installedtab.py:108
 #, python-format
-msgid ""
-"Unable to register your system. \n"
-" Error: %s"
+msgid "Covered by contract %s through %s"
 msgstr ""
 
-#: src/gui/managergui.py:730
-msgid "You must enter a system name."
+#: src/gui/installedtab.py:148
+msgid "My Installed Software"
 msgstr ""
 
-#: src/gui/managergui.py:739
-msgid "You must enter a login."
-msgstr ""
-
-#: src/gui/managergui.py:745
-msgid "You must enter a password."
-msgstr ""
-
-#: src/gui/managergui.py:802
-msgid ""
-"\n"
-"This system is registered with following consumer information"
-msgstr ""
-
-#: src/gui/managergui.py:804
+#: src/facts.py:39
 #, python-format
-msgid "<b>    ID:</b>       %s"
+msgid "Unable to read %s"
 msgstr ""
 
-#: src/gui/managergui.py:806
+#: src/certlib.py:96
+msgid "Reasons(s):"
+msgstr ""
+
+#: src/certlib.py:434
+msgid "Reason(s):"
+msgstr ""
+
+#: src/certlib.py:592
 #, python-format
-msgid "<b>  Name:</b>     %s"
+msgid "Total updates: %d"
 msgstr ""
 
-#: src/gui/managergui.py:956
-msgid "Performing Subscribe. Please wait."
-msgstr ""
-
-#: src/gui/managergui.py:1019 src/gui/managergui.py:1153
-msgid "Available Slots"
-msgstr ""
-
-#: src/gui/managergui.py:1135
+#: src/certlib.py:593
 #, python-format
-msgid "<b>Available Subscriptions for %s:</b>"
+msgid "Found (local) serial# %s"
 msgstr ""
 
-#: src/gui/managergui.py:1144
-msgid " "
-msgstr ""
-
-#: src/gui/managergui.py:1245
-msgid "You must select a certificate."
-msgstr ""
-
-#: src/gui/managergui.py:1252
+#: src/certlib.py:594
 #, python-format
-msgid "%s is not a valid certificate file. Please upload a valid certificate."
+msgid "Expected (UEP) serial# %s"
 msgstr ""
 
-#: src/gui/firstboot/rhsm_subscriptions.py:28
-msgid "RHSM Subscriptions Management"
+#: src/certlib.py:595
+msgid "Added (new)"
 msgstr ""
 
-#: src/gui/firstboot/rhsm_subscriptions.py:29
-#: src/gui/firstboot/rhsm_entitlement_choose.py:48 tmp/mainwindow.glade.h:7
-#: tmp/rhsm.glade.h:14 tmp/subsgui.glade.h:3
-msgid "Subscription Manager"
+#: src/certlib.py:596
+msgid "Deleted (rogue):"
 msgstr ""
 
-#: src/gui/firstboot/rhsm_entitlement_choose.py:25
-msgid "Entitlement Selection"
+#: src/certlib.py:597
+msgid "Expired (not deleted):"
 msgstr ""
 
-#: src/gui/firstboot/rhsm_entitlement_choose.py:26
-msgid "RHSM Entitlement Selection"
+#: src/certlib.py:598
+msgid "Expired (deleted):"
 msgstr ""
 
-#: src/gui/firstboot/rhsm_entitlement_choose.py:44
-#: src/gui/firstboot/rhsm_login.py:34
-msgid "Entitlement Platform Registration"
+#: src/certlib.py:603
+msgid "Updating Red Hat certificates"
 msgstr ""
 
-#: src/gui/firstboot/rhsm_entitlement_choose.py:54
-msgid "Set Up Software Updates"
-msgstr ""
-
-#: src/gui/firstboot/rhsm_login.py:33
-msgid "Entitlement Registration"
-msgstr ""
-
-#: src/hwprobe.py:75
-msgid "Error reading system memory information:"
-msgstr ""
-
-#: src/hwprobe.py:90
-msgid "Error reading system cpu information:"
-msgstr ""
-
-#: src/hwprobe.py:110
-msgid "Error reading system DMI information:"
-msgstr ""
-
-#: src/hwprobe.py:133
-msgid "Error reading networking information:"
-msgstr ""
-
-#: src/hwprobe.py:150
-msgid "Error reading net Interface information:"
-msgstr ""
-
-#: src/managercli.py:87
-msgid "debug level"
-msgstr ""
-
-#: src/managercli.py:107
-msgid "Consumer certificates corrupted. Please reregister."
-msgstr ""
-
-#: src/managercli.py:113
-msgid "removes all local consumer data, does not effect the server."
-msgstr ""
-
-#: src/managercli.py:121
-msgid "All local data removed"
-msgstr ""
-
-#: src/managercli.py:127
-msgid "pulls the latest entitlement data from the server"
-msgstr ""
-
-#: src/managercli.py:137
-msgid "All local data refreshed"
-msgstr ""
-
-#: src/managercli.py:142
+#: src/certlib.py:606 src/certmgr.py:89 src/factlib.py:78
 #, python-format
-msgid ""
-"Unable to perform refresh due to the following exception \n"
-" Error: %s"
+msgid "%d updates required"
 msgstr ""
 
-#: src/managercli.py:149
-msgid "request a new identity certficate for this machine."
+#: src/certlib.py:607 src/certmgr.py:90 src/factlib.py:79
+msgid "done"
 msgstr ""
 
-#: src/managercli.py:158 src/managercli.py:206
-msgid "specify a username"
+#: src/managerlib.py:82
+msgid "Subscribed"
 msgstr ""
 
-#: src/managercli.py:160 src/managercli.py:212
-msgid "specify a password"
+#: src/managerlib.py:82
+msgid "Expired"
 msgstr ""
 
-#: src/managercli.py:162
-msgid "request a new certificate be generated"
+#: src/managerlib.py:82
+msgid "Not Subscribed"
 msgstr ""
 
-#: src/managercli.py:166
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+#: src/managerlib.py:122
+msgid "Not Installed"
 msgstr ""
 
-#: src/managercli.py:176
+#: src/managerlib.py:197
 #, python-format
-msgid "Current identity is %s"
+msgid "Account Number: \t%s"
 msgstr ""
 
-#: src/managercli.py:190
-msgid "Error: Unable to generate a new identity for the system"
+#: src/certmgr.py:86
+msgid "Updating Red Hat certificates & repositories"
 msgstr ""
 
-#: src/managercli.py:197
-msgid "register the client to a Unified Entitlement Platform."
-msgstr ""
-
-#: src/managercli.py:208
-msgid "the type of consumer to register. Defaults to system"
-msgstr ""
-
-#: src/managercli.py:210
-msgid "name of the consumer to register. Defaults to the username."
-msgstr ""
-
-#: src/managercli.py:214
-msgid "register to an existing consumer"
-msgstr ""
-
-#: src/managercli.py:216
-msgid ""
-"automatically subscribe this system to                                     "
-"compatible subscriptions."
-msgstr ""
-
-#: src/managercli.py:219
-msgid "register the system even if it is already registered"
-msgstr ""
-
-#: src/managercli.py:224
-msgid ""
-"Error: username and password are required to register, try register --help.\n"
-msgstr ""
-
-#: src/managercli.py:228
-msgid "This system is already registered. Use --force to override"
-msgstr ""
-
-#: src/managercli.py:254
-#, python-format
-msgid "The system with UUID %s has been unregistered"
-msgstr ""
-
-#: src/managercli.py:282
-msgid "Subscribed to Products:"
-msgstr ""
-
-#: src/managercli.py:298
-msgid "unregister the client from a Unified Entitlement Platform."
-msgstr ""
-
-#: src/managercli.py:308
-msgid "This system is currently not registered."
-msgstr ""
-
-#: src/managercli.py:320
-msgid ""
-"Errors were encountered during unregister. Please see /var/log/rhsm/rhsm.log "
-"for more information."
-msgstr ""
-
-#: src/managercli.py:322
-msgid "Error: Unable to un-register the system"
-msgstr ""
-
-#: src/managercli.py:324
-msgid "System has been un-registered."
-msgstr ""
-
-#: src/managercli.py:331
-msgid "subscribe the registered user to a specified product or regtoken."
-msgstr ""
-
-#: src/managercli.py:339
-msgid "regtoken"
-msgstr ""
-
-#: src/managercli.py:341
-msgid "subscription pool id"
-msgstr ""
-
-#: src/managercli.py:343
-msgid ""
-"optional email address to notify when token activation is complete. Used "
-"with --regtoken only"
-msgstr ""
-
-#: src/managercli.py:347
-msgid ""
-"optional language to use for email notification when token activation is "
-"complete. Used with --regtoken and --email only. Examples: en-us, de-de"
-msgstr ""
-
-#: src/managercli.py:354
-msgid "Error: Need either --pool or --regtoken, Try subscribe --help"
-msgstr ""
-
-#: src/managercli.py:382
-msgid "Please enter a valid numeric pool id."
-msgstr ""
-
-#: src/managercli.py:408
-msgid "unsubscribe the registered user from all or specific subscriptions."
-msgstr ""
-
-#: src/managercli.py:414
-msgid "Certificate serial to unsubscribe"
-msgstr ""
-
-#: src/managercli.py:416
-msgid "Unsubscribe from all subscriptions"
-msgstr ""
-
-#: src/managercli.py:438
-msgid "One of --serial or --all must be provided"
-msgstr ""
-
-#: src/managercli.py:446
-#, python-format
-msgid ""
-"Unable to perform unsubscribe due to the following exception \n"
-" Error: %s"
-msgstr ""
-
-#: src/managercli.py:453
-msgid "show information for facts"
-msgstr ""
-
-#: src/managercli.py:458
-msgid "list known facts for this system"
-msgstr ""
-
-#: src/managercli.py:460
-msgid "update the system facts"
-msgstr ""
-
-#: src/managercli.py:486
-msgid "list available or consumer subscriptions for registered user"
-msgstr ""
-
-#: src/managercli.py:492
-msgid "available"
-msgstr ""
-
-#: src/managercli.py:494
-msgid "consumed"
-msgstr ""
-
-#: src/managercli.py:496
-msgid "if supplied with --available then all subscriptions are returned"
-msgstr ""
-
-#: src/managercli.py:500
-msgid "Error: --all is only applicable with --available"
-msgstr ""
-
-#: src/managercli.py:514
-msgid "No installed Products to list"
-msgstr ""
-
-#: src/managercli.py:517
-msgid "    Installed Product Status"
-msgstr ""
-
-#: src/managercli.py:527
-msgid "No Available subscription pools to list"
-msgstr ""
-
-#: src/managercli.py:543
-msgid "No Consumed subscription pools to list"
-msgstr ""
-
-#: src/managercli.py:545
-msgid "Consumed Product Subscriptions"
-msgstr ""
-
-#: src/managercli.py:593
-#, python-format
-msgid ""
-"\n"
-"Usage: %s [options] MODULENAME --help\n"
-msgstr ""
-
-#: src/managercli.py:594
-msgid "Supported modules:"
-msgstr ""
-
-#: src/managercli.py:668
-msgid ""
-"Error: You need to register this system by running `register` command before "
-"using this option."
+#: src/certmgr.py:100
+msgid "Unable to update Red Hat certificates & repositories"
 msgstr ""
 
 #: src/productid.py:109
@@ -597,56 +427,198 @@ msgstr ""
 msgid "duration: %d(ms)"
 msgstr ""
 
+#: src/certificate.py:613
+msgid "Serial Number must be > 0"
+msgstr ""
+
+#: src/certificate.py:616
+#, python-format
+msgid "Common Name (%s) not-valid"
+msgstr ""
+
+#: src/certificate.py:667
+msgid "RAW:"
+msgstr ""
+
+#: src/certificate.py:670
+msgid "MODEL:"
+msgstr ""
+
+#: src/certificate.py:672
+#, python-format
+msgid "Serial#: %s"
+msgstr ""
+
+#: src/certificate.py:673
+#, python-format
+msgid "Subject (CN): %s"
+msgstr ""
+
+#: src/certificate.py:674
+#, python-format
+msgid "Valid: [%s] %s\n"
+msgstr ""
+
+#: src/certificate.py:768
+msgid "No order infomation"
+msgstr ""
+
+#: src/certificate.py:827
+msgid "Order {"
+msgstr ""
+
+#: src/certificate.py:828
+#, python-format
+msgid "\tName ............ = %s"
+msgstr ""
+
+#: src/certificate.py:829
+#, python-format
+msgid "\tNumber .......... = %s"
+msgstr ""
+
+#: src/certificate.py:830
+#, python-format
+msgid "\tSKU ............. = %s"
+msgstr ""
+
+#: src/certificate.py:831
+#, python-format
+msgid "\tSubscription .... = %s"
+msgstr ""
+
+#: src/certificate.py:832
+#, python-format
+msgid "\tQuantity ........ = %s"
+msgstr ""
+
+#: src/certificate.py:833
+#, python-format
+msgid "\tStart (Ent) ..... = %s"
+msgstr ""
+
+#: src/certificate.py:834
+#, python-format
+msgid "\tEnd (Ent) ....... = %s"
+msgstr ""
+
+#: src/certificate.py:835
+#, python-format
+msgid "\tVirt Limit ...... = %s"
+msgstr ""
+
+#: src/certificate.py:836
+#, python-format
+msgid "\tSocket Limit .... = %s"
+msgstr ""
+
+#: src/certificate.py:837
+#, python-format
+msgid "\tContract ........ = %s"
+msgstr ""
+
+#: src/certificate.py:838
+#, python-format
+msgid "\tWarning Period .. = %s"
+msgstr ""
+
+#: src/certificate.py:839
+#, python-format
+msgid "\tAccount Number .. = %s"
+msgstr ""
+
+#: src/certificate.py:870
+msgid "Product {"
+msgstr ""
+
+#: src/certificate.py:871
+#, python-format
+msgid "\tHash ......... = %s"
+msgstr ""
+
+#: src/certificate.py:872 src/certificate.py:950
+#, python-format
+msgid "\tName ......... = %s"
+msgstr ""
+
+#: src/certificate.py:873
+#, python-format
+msgid "\tVariant ...... = %s"
+msgstr ""
+
+#: src/certificate.py:874
+#, python-format
+msgid "\tArchitecture . = %s"
+msgstr ""
+
+#: src/certificate.py:875
+#, python-format
+msgid "\tVersion ...... = %s"
+msgstr ""
+
+#: src/certificate.py:920
+msgid "Entitlement (content) {"
+msgstr ""
+
+#: src/certificate.py:921
+#, python-format
+msgid "\tName ........ = %s"
+msgstr ""
+
+#: src/certificate.py:922
+#, python-format
+msgid "\tLabel ....... = %s"
+msgstr ""
+
+#: src/certificate.py:923
+#, python-format
+msgid "\tQuantity .... = %s"
+msgstr ""
+
+#: src/certificate.py:924
+#, python-format
+msgid "\tFlex Quantity = %s"
+msgstr ""
+
+#: src/certificate.py:925
+#, python-format
+msgid "\tVendor ...... = %s"
+msgstr ""
+
+#: src/certificate.py:926
+#, python-format
+msgid "\tURL ......... = %s"
+msgstr ""
+
+#: src/certificate.py:927
+#, python-format
+msgid "\tGPG Key ..... = %s"
+msgstr ""
+
+#: src/certificate.py:928
+#, python-format
+msgid "\tEnabled ..... = %s"
+msgstr ""
+
+#: src/certificate.py:949
+msgid "Entitlement (role) {"
+msgstr ""
+
+#: src/certificate.py:951
+#, python-format
+msgid "\tDescription .. = %s"
+msgstr ""
+
+#: src/certificate.py:972
+msgid "Key not found."
+msgstr ""
+
+#: src/certificate.py:976
+msgid "Certificate not found."
+msgstr ""
+
 #: src/factlib.py:75
 msgid "Updating facts"
-msgstr ""
-
-#: src/certlib.py:91
-msgid "Reasons(s):"
-msgstr ""
-
-#: src/certlib.py:400
-msgid "Reason(s):"
-msgstr ""
-
-#: src/certlib.py:555
-#, python-format
-msgid "Total updates: %d"
-msgstr ""
-
-#: src/certlib.py:556
-#, python-format
-msgid "Found (local) serial# %s"
-msgstr ""
-
-#: src/certlib.py:557
-#, python-format
-msgid "Expected (UEP) serial# %s"
-msgstr ""
-
-#: src/certlib.py:558
-msgid "Added (new)"
-msgstr ""
-
-#: src/certlib.py:559
-msgid "Deleted (rogue):"
-msgstr ""
-
-#: src/certlib.py:560
-msgid "Expired (not deleted):"
-msgstr ""
-
-#: src/certlib.py:561
-msgid "Expired (deleted):"
-msgstr ""
-
-#: src/certlib.py:566
-msgid "Updating Red Hat certificates"
-msgstr ""
-
-#: src/facts.py:39
-#, python-format
-msgid "Unable to read %s"
 msgstr ""
 
 #: src/constants.py:24
@@ -673,7 +645,7 @@ msgid ""
 "Quantity           \t%-25s\n"
 "Flex Quantity      \t%-25s\n"
 "Vendor             \t%-25s\n"
-"URL                      \t%-30s\n"
+"URL                \t%-30s\n"
 "Enabled            \t%-25s\n"
 "\n"
 "\n"
@@ -702,10 +674,11 @@ msgid ""
 "Status:             \t%-25s\n"
 "Expires:            \t%-25s\n"
 "Subscription:       \t%-25s\n"
-"ContractNumber:        \t%-25s\n"
+"ContractNumber:     \t%-25s\n"
+"AccountNumber:      \t%-25s\n"
 msgstr ""
 
-#: src/constants.py:62
+#: src/constants.py:63
 #, python-format
 msgid ""
 "\n"
@@ -716,19 +689,20 @@ msgid ""
 "Expires:           \t%-25s\n"
 msgstr ""
 
-#: src/constants.py:70
+#: src/constants.py:71
 #, python-format
 msgid ""
 "\n"
 "ProductName:        \t%-25s\n"
 "ContractNumber:     \t%-25s\n"
+"AccountNumber:      \t%-25s\n"
 "SerialNumber:       \t%-25s\n"
 "Active:             \t%-25s\n"
 "Begins:             \t%-25s\n"
 "Expires:            \t%-25s\n"
 msgstr ""
 
-#: src/constants.py:79
+#: src/constants.py:81
 #, python-format
 msgid ""
 "\n"
@@ -737,7 +711,7 @@ msgid ""
 "%s on this machine, you should unsubscribe and remove it from this system.\n"
 msgstr ""
 
-#: src/constants.py:83
+#: src/constants.py:85
 #, python-format
 msgid ""
 "\n"
@@ -746,7 +720,7 @@ msgid ""
 "this system, you should remove it from this system.\n"
 msgstr ""
 
-#: src/constants.py:87
+#: src/constants.py:89
 #, python-format
 msgid ""
 "\n"
@@ -757,7 +731,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/constants.py:91
+#: src/constants.py:93
 #, python-format
 msgid ""
 "<b>\n"
@@ -766,7 +740,7 @@ msgid ""
 "</b>Add or Update subscriptions for products you are using.\n"
 msgstr ""
 
-#: src/constants.py:93
+#: src/constants.py:95
 #, python-format
 msgid ""
 "<b>\n"
@@ -775,7 +749,7 @@ msgid ""
 "</b>Add or Update subscriptions for products you are using.\n"
 msgstr ""
 
-#: src/constants.py:95
+#: src/constants.py:97
 msgid ""
 "<b>\n"
 " All your subscriptions are in compliance.\n"
@@ -783,7 +757,7 @@ msgid ""
 "</b>Add or Update subscriptions for products you are using."
 msgstr ""
 
-#: src/constants.py:97
+#: src/constants.py:99
 #, python-format
 msgid ""
 "<b>Errors were encountered during unregister.</b>\n"
@@ -791,14 +765,14 @@ msgid ""
 "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
 
-#: src/constants.py:99
+#: src/constants.py:101
 msgid ""
 "<b>Unable to perform unsubscribe.</b>\n"
 "\n"
 "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
 
-#: src/constants.py:101
+#: src/constants.py:103
 #, python-format
 msgid ""
 "<b>\n"
@@ -807,20 +781,20 @@ msgid ""
 "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
 
-#: src/constants.py:103
+#: src/constants.py:105
 #, python-format
 msgid "Successfully subscribed your system to token %s"
 msgstr ""
 
-#: src/constants.py:105
+#: src/constants.py:107
 msgid "<b>No subscriptions available for this account</b>"
 msgstr ""
 
-#: src/constants.py:107
+#: src/constants.py:109
 msgid "<b>No subscriptions updates available</b>"
 msgstr ""
 
-#: src/constants.py:109
+#: src/constants.py:111
 #, python-format
 msgid ""
 "<b>Unable to subscribe to product(s) %s</b>\n"
@@ -828,23 +802,23 @@ msgid ""
 "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
 
-#: src/constants.py:111
+#: src/constants.py:113
 msgid "<i><b>Please select atleast one subscription to apply</b></i>"
 msgstr ""
 
-#: src/constants.py:113
+#: src/constants.py:115
 #, python-format
 msgid "<i><b>Successfully consumed %s subscription(s)</b></i>"
 msgstr ""
 
-#: src/constants.py:115
+#: src/constants.py:117
 msgid ""
 "This error shouldn't have happened. If you'd like to help us improve this "
 "program, please file a bug at bugzilla.redhat.com. Including the relevant "
 "parts of would be very helpful. Thanks!"
 msgstr ""
 
-#: src/constants.py:120
+#: src/constants.py:122
 #, python-format
 msgid ""
 "<b>Unable to register the system.</b>\n"
@@ -854,232 +828,378 @@ msgid ""
 "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
 
-#: src/constants.py:122
+#: src/constants.py:124
 #, python-format
 msgid "Are you sure you want to unsubscribe product %s"
 msgstr ""
 
-#: src/constants.py:124
+#: src/constants.py:126
 #, python-format
 msgid "<b>Total of %s subscriptions selected for consumption.</b>"
 msgstr ""
 
-#: src/constants.py:126
+#: src/constants.py:128
 msgid "<b>Are you sure you want to unregister?</b>"
 msgstr ""
 
-#: src/certificate.py:599
-msgid "Serial Number must be > 0"
+#: src/managercli.py:86
+msgid "debug level"
 msgstr ""
 
-#: src/certificate.py:602
+#: src/managercli.py:93
+msgid ""
+"Consumer not registered. Please register using --username and --password"
+msgstr ""
+
+#: src/managercli.py:111
+msgid "Consumer certificates corrupted. Please reregister."
+msgstr ""
+
+#: src/managercli.py:117
+msgid "removes all local consumer data, does not effect the server."
+msgstr ""
+
+#: src/managercli.py:125
+msgid "All local data removed"
+msgstr ""
+
+#: src/managercli.py:131
+msgid "pulls the latest entitlement data from the server"
+msgstr ""
+
+#: src/managercli.py:141
+msgid "All local data refreshed"
+msgstr ""
+
+#: src/managercli.py:146
 #, python-format
-msgid "Common Name (%s) not-valid"
+msgid ""
+"Unable to perform refresh due to the following exception \n"
+" Error: %s"
 msgstr ""
 
-#: src/certificate.py:653
-msgid "RAW:"
+#: src/managercli.py:153
+msgid "request a new identity certficate for this machine."
 msgstr ""
 
-#: src/certificate.py:656
-msgid "MODEL:"
+#: src/managercli.py:162 src/managercli.py:213
+msgid "specify a username"
 msgstr ""
 
-#: src/certificate.py:658
+#: src/managercli.py:164 src/managercli.py:219
+msgid "specify a password"
+msgstr ""
+
+#: src/managercli.py:166
+msgid "request a new certificate be generated"
+msgstr ""
+
+#: src/managercli.py:171
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
+msgstr ""
+
+#: src/managercli.py:183
 #, python-format
-msgid "Serial#: %s"
+msgid "Current identity is: %s name: %s"
 msgstr ""
 
-#: src/certificate.py:659
+#: src/managercli.py:197
+msgid "Error: Unable to generate a new identity for the system"
+msgstr ""
+
+#: src/managercli.py:204
+msgid "register the client to a Unified Entitlement Platform."
+msgstr ""
+
+#: src/managercli.py:215
+msgid "the type of consumer to register. Defaults to system"
+msgstr ""
+
+#: src/managercli.py:217
+msgid "name of the consumer to register. Defaults to the username."
+msgstr ""
+
+#: src/managercli.py:221
+msgid "register to an existing consumer"
+msgstr ""
+
+#: src/managercli.py:223
+msgid ""
+"automatically subscribe this system to                                     "
+"compatible subscriptions."
+msgstr ""
+
+#: src/managercli.py:226
+msgid "register the system even if it is already registered"
+msgstr ""
+
+#: src/managercli.py:232
+msgid "Error: username not provided. Use --username <name>"
+msgstr ""
+
+#: src/managercli.py:234
+msgid "Error: password not provided. Use --password <value>"
+msgstr ""
+
+#: src/managercli.py:237
+msgid ""
+"Error: username and password are required to register, try register --help."
+msgstr ""
+
+#: src/managercli.py:240
+msgid "This system is already registered. Use --force to override"
+msgstr ""
+
+#: src/managercli.py:266
 #, python-format
-msgid "Subject (CN): %s"
+msgid "The system with UUID %s has been unregistered"
 msgstr ""
 
-#: src/certificate.py:660
+#: src/managercli.py:294
+msgid "Subscribed to Products:"
+msgstr ""
+
+#: src/managercli.py:296
 #, python-format
-msgid "Valid: [%s] %s\n"
+msgid "     %s(%s)"
 msgstr ""
 
-#: src/certificate.py:754
-msgid "No order infomation"
+#: src/managercli.py:310
+msgid "unregister the client from a Unified Entitlement Platform."
 msgstr ""
 
-#: src/certificate.py:813
-msgid "Order {"
+#: src/managercli.py:320
+msgid "This system is currently not registered."
 msgstr ""
 
-#: src/certificate.py:814
+#: src/managercli.py:328
+msgid "System has been un-registered."
+msgstr ""
+
+#: src/managercli.py:335
+msgid "subscribe the registered user to a specified product or regtoken."
+msgstr ""
+
+#: src/managercli.py:343
+msgid "regtoken"
+msgstr ""
+
+#: src/managercli.py:345
+msgid "subscription pool id"
+msgstr ""
+
+#: src/managercli.py:347
+msgid ""
+"optional email address to notify when token activation is complete. Used "
+"with --regtoken only"
+msgstr ""
+
+#: src/managercli.py:351
+msgid ""
+"optional language to use for email notification when token activation is "
+"complete. Used with --regtoken and --email only. Examples: en-us, de-de"
+msgstr ""
+
+#: src/managercli.py:358
+msgid "Error: Need either --pool or --regtoken, Try subscribe --help"
+msgstr ""
+
+#: src/managercli.py:386
+msgid "Please enter a valid numeric pool id."
+msgstr ""
+
+#: src/managercli.py:412
+msgid "unsubscribe the registered user from all or specific subscriptions."
+msgstr ""
+
+#: src/managercli.py:418
+msgid "Certificate serial to unsubscribe"
+msgstr ""
+
+#: src/managercli.py:420
+msgid "Unsubscribe from all subscriptions"
+msgstr ""
+
+#: src/managercli.py:442
+msgid "One of --serial or --all must be provided"
+msgstr ""
+
+#: src/managercli.py:450
 #, python-format
-msgid "\tName ............ = %s"
+msgid ""
+"Unable to perform unsubscribe due to the following exception \n"
+" Error: %s"
 msgstr ""
 
-#: src/certificate.py:815
+#: src/managercli.py:457
+msgid "show information for facts"
+msgstr ""
+
+#: src/managercli.py:462
+msgid "list known facts for this system"
+msgstr ""
+
+#: src/managercli.py:464
+msgid "update the system facts"
+msgstr ""
+
+#: src/managercli.py:470
+msgid "Error: Need either --list or --update, Try facts --help"
+msgstr ""
+
+#: src/managercli.py:494
+msgid "list available or consumer subscriptions for registered user"
+msgstr ""
+
+#: src/managercli.py:500
+msgid "available"
+msgstr ""
+
+#: src/managercli.py:502
+msgid "consumed"
+msgstr ""
+
+#: src/managercli.py:504
+msgid "if supplied with --available then all subscriptions are returned"
+msgstr ""
+
+#: src/managercli.py:508
+msgid "Error: --all is only applicable with --available"
+msgstr ""
+
+#: src/managercli.py:522
+msgid "No installed Products to list"
+msgstr ""
+
+#: src/managercli.py:525
+msgid "    Installed Product Status"
+msgstr ""
+
+#: src/managercli.py:535
+msgid "No Available subscription pools to list"
+msgstr ""
+
+#: src/managercli.py:551
+msgid "No Consumed subscription pools to list"
+msgstr ""
+
+#: src/managercli.py:553
+msgid "Consumed Product Subscriptions"
+msgstr ""
+
+#: src/managercli.py:601
 #, python-format
-msgid "\tNumber .......... = %s"
+msgid ""
+"\n"
+"Usage: %s [options] MODULENAME --help\n"
 msgstr ""
 
-#: src/certificate.py:816
+#: src/managercli.py:602
+msgid "Supported modules:"
+msgstr ""
+
+#: src/managercli.py:676
+msgid ""
+"Error: You need to register this system by running `register` command before "
+"using this option."
+msgstr ""
+
+#: src/connection.py:94
 #, python-format
-msgid "\tSKU ............. = %s"
+msgid "Bad CA Certificate: %s"
 msgstr ""
 
-#: src/certificate.py:817
+#: src/connection.py:96
 #, python-format
-msgid "\tSubscription .... = %s"
+msgid "Unable to read CA certificates from '%s'."
 msgstr ""
 
-#: src/certificate.py:818
+#: src/connection.py:98
 #, python-format
-msgid "\tQuantity ........ = %s"
+msgid " '%s' is a file."
 msgstr ""
 
-#: src/certificate.py:819
-#, python-format
-msgid "\tStart (Ent) ..... = %s"
+#: src/connection.py:100
+msgid " No such directory."
 msgstr ""
 
-#: src/certificate.py:820
-#, python-format
-msgid "\tEnd (Ent) ....... = %s"
+#: src/connection.py:139
+msgid "Network error. Please check the connection details."
 msgstr ""
 
-#: src/certificate.py:821
-#, python-format
-msgid "\tVirt Limit ...... = %s"
+#: src/hwprobe.py:75
+msgid "Error reading system memory information:"
 msgstr ""
 
-#: src/certificate.py:822
-#, python-format
-msgid "\tSocket Limit .... = %s"
+#: src/hwprobe.py:90
+msgid "Error reading system cpu information:"
 msgstr ""
 
-#: src/certificate.py:823
-#, python-format
-msgid "\tContract ........ = %s"
+#: src/hwprobe.py:110
+msgid "Error reading system DMI information:"
 msgstr ""
 
-#: src/certificate.py:824
-#, python-format
-msgid "\tWarning Period .. = %s"
+#: src/hwprobe.py:133
+msgid "Error reading networking information:"
 msgstr ""
 
-#: src/certificate.py:825
-#, python-format
-msgid "\tAccount Number .. = %s"
+#: src/hwprobe.py:150
+msgid "Error reading net Interface information:"
 msgstr ""
 
-#: src/certificate.py:856
-msgid "Product {"
-msgstr ""
-
-#: src/certificate.py:857
-#, python-format
-msgid "\tHash ......... = %s"
-msgstr ""
-
-#: src/certificate.py:858 src/certificate.py:936
-#, python-format
-msgid "\tName ......... = %s"
-msgstr ""
-
-#: src/certificate.py:859
-#, python-format
-msgid "\tVariant ...... = %s"
-msgstr ""
-
-#: src/certificate.py:860
-#, python-format
-msgid "\tArchitecture . = %s"
-msgstr ""
-
-#: src/certificate.py:861
-#, python-format
-msgid "\tVersion ...... = %s"
-msgstr ""
-
-#: src/certificate.py:906
-msgid "Entitlement (content) {"
-msgstr ""
-
-#: src/certificate.py:907
-#, python-format
-msgid "\tName ........ = %s"
-msgstr ""
-
-#: src/certificate.py:908
-#, python-format
-msgid "\tLabel ....... = %s"
-msgstr ""
-
-#: src/certificate.py:909
-#, python-format
-msgid "\tQuantity .... = %s"
-msgstr ""
-
-#: src/certificate.py:910
-#, python-format
-msgid "\tFlex Quantity = %s"
-msgstr ""
-
-#: src/certificate.py:911
-#, python-format
-msgid "\tVendor ...... = %s"
-msgstr ""
-
-#: src/certificate.py:912
-#, python-format
-msgid "\tURL ......... = %s"
-msgstr ""
-
-#: src/certificate.py:913
-#, python-format
-msgid "\tGPG Key ..... = %s"
-msgstr ""
-
-#: src/certificate.py:914
-#, python-format
-msgid "\tEnabled ..... = %s"
-msgstr ""
-
-#: src/certificate.py:935
-msgid "Entitlement (role) {"
-msgstr ""
-
-#: src/certificate.py:937
-#, python-format
-msgid "\tDescription .. = %s"
-msgstr ""
-
-#: src/certificate.py:958
-msgid "Key not found."
-msgstr ""
-
-#: src/certificate.py:962
-msgid "Certificate not found."
-msgstr ""
-
-#: tmp/allsubs.glade.h:1
-msgid "<b>Include subscriptions which:</b>"
+#: tmp/allsubs.glade.h:1 tmp/compliance.glade.h:1
+msgid "/"
 msgstr ""
 
 #: tmp/allsubs.glade.h:2
-msgid "Search"
+msgid "<b>Only show subscriptions that:</b>"
 msgstr ""
 
 #: tmp/allsubs.glade.h:3
-msgid "contain the text:"
+msgid "<b>Show subscriptions active on:</b>"
 msgstr ""
 
 #: tmp/allsubs.glade.h:4
-msgid "do not match my hardware"
+msgid "Search"
 msgstr ""
 
 #: tmp/allsubs.glade.h:5
-msgid "provide software not yet installed"
+msgid "contain the text:"
 msgstr ""
 
 #: tmp/allsubs.glade.h:6
-msgid "will be active on:"
+msgid "match my hardware"
+msgstr ""
+
+#: tmp/allsubs.glade.h:7
+msgid "overlap with existing subscriptions"
+msgstr ""
+
+#: tmp/allsubs.glade.h:8
+msgid "provide software not yet installed"
+msgstr ""
+
+#: tmp/compliance.glade.h:2
+msgid "01/05/1974 (First date of non-compliance)"
+msgstr ""
+
+#: tmp/compliance.glade.h:3
+msgid "All software is in compliance until"
+msgstr ""
+
+#: tmp/compliance.glade.h:4
+msgid "On a different date:"
+msgstr ""
+
+#: tmp/compliance.glade.h:5
+msgid "Show products that will be out of compliance as of:"
+msgstr ""
+
+#: tmp/compliance.glade.h:6
+msgid ""
+"The following subscriptions will cover the products selected above on "
+"2010-01-01:"
 msgstr ""
 
 #: tmp/factsdialog.glade.h:1
@@ -1102,43 +1222,43 @@ msgstr ""
 msgid "facts_view"
 msgstr ""
 
+#: tmp/installed.glade.h:1
+msgid "<b>Compliance:</b>"
+msgstr ""
+
+#: tmp/installed.glade.h:2
+msgid "<b>Product:</b>"
+msgstr ""
+
+#: tmp/installed.glade.h:3 tmp/subdetails.glade.h:6
+msgid "<b>Subscription:</b>"
+msgstr ""
+
+#: tmp/installed.glade.h:4
+msgid "<span size=\"large\"><b>Product's Subscription Details</b></span>"
+msgstr ""
+
 #: tmp/mainwindow.glade.h:1
 msgid "<span size=\"large\"><b>1</b></span>"
 msgstr ""
 
 #: tmp/mainwindow.glade.h:2
-msgid "Add Subscription"
-msgstr ""
-
-#: tmp/mainwindow.glade.h:3
 msgid "Become Compliant"
 msgstr ""
 
-#: tmp/mainwindow.glade.h:4
+#: tmp/mainwindow.glade.h:3
 msgid "Compliance"
 msgstr ""
 
 #: tmp/mainwindow.glade.h:5
-msgid "Glossary"
-msgstr ""
-
-#: tmp/mainwindow.glade.h:6 tmp/regtoken.glade.h:8
-msgid "Registration Settings"
-msgstr ""
-
-#: tmp/mainwindow.glade.h:8
 msgid "Tools"
 msgstr ""
 
-#: tmp/mainwindow.glade.h:9
-msgid "View My System Facts"
-msgstr ""
-
-#: tmp/mainwindow.glade.h:10
+#: tmp/mainwindow.glade.h:6
 msgid "Why is compliance important?"
 msgstr ""
 
-#: tmp/mainwindow.glade.h:11
+#: tmp/mainwindow.glade.h:7
 msgid "You have one product which is out of compliance."
 msgstr ""
 
@@ -1213,6 +1333,10 @@ msgstr ""
 
 #: tmp/regtoken.glade.h:7
 msgid "Ex: XXXX-XXXX-XXXX-XXXX"
+msgstr ""
+
+#: tmp/regtoken.glade.h:8
+msgid "Registration Settings"
 msgstr ""
 
 #: tmp/regtoken.glade.h:9
@@ -1296,26 +1420,26 @@ msgid "update_subscriptions_dialog\n"
 msgstr ""
 
 #: tmp/subdetails.glade.h:1
-msgid "<b>Bundled Products:</b>"
+msgid "<b>Account Number:</b>"
 msgstr ""
 
 #: tmp/subdetails.glade.h:2
-msgid "<b>Contract Number:</b>"
+msgid "<b>Bundled Products:</b>"
 msgstr ""
 
 #: tmp/subdetails.glade.h:3
-msgid "<b>Expiration Date:</b>"
+msgid "<b>Contract Number:</b>"
 msgstr ""
 
 #: tmp/subdetails.glade.h:4
-msgid "<b>Start Date:</b>"
+msgid "<b>Expiration Date:</b>"
 msgstr ""
 
 #: tmp/subdetails.glade.h:5
-msgid "<b>Subscription:</b>"
+msgid "<b>Start Date:</b>"
 msgstr ""
 
-#: tmp/subdetails.glade.h:6
+#: tmp/subdetails.glade.h:7
 msgid "<span size=\"large\"><b>Subscription Details</b></span>"
 msgstr ""
 
@@ -1350,11 +1474,11 @@ msgstr ""
 #: src/compliance/rhsm_compliance_icon.c:136
 msgid ""
 "This system is missing one or more subscriptions required for compliance "
-"with your software license agreements."
+"with your subscription agreements."
 msgstr ""
 
 #: src/compliance/rhsm_compliance_icon.c:141
-msgid "This system's subscriptions are about to expire"
+msgid "Some of the system's subscriptions are about to expire"
 msgstr ""
 
 #: src/compliance/rhsm_compliance_icon.c:143
@@ -1364,8 +1488,7 @@ msgstr ""
 #: src/compliance/rhsm_compliance_icon.c:144
 msgid ""
 "One or more of this system's subscriptions are about to expire. These "
-"subscriptions are required for compliance with your software license "
-"agreements."
+"subscriptions are required for compliance with your subscription agreements."
 msgstr ""
 
 #: src/compliance/rhsm_compliance_icon.c:164

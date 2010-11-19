@@ -135,7 +135,7 @@ display_icon(Compliance *compliance, ComplianceType compliance_type)
 		notification_title = _("This System is Non-Compliant");
 		notification_body = _("This system is missing one or more "
 			"subscriptions required for compliance with your "
-			"software license agreements.");
+			"subscription agreements.");
 
 	} else {
 		tooltip = _("Some of the system's subscriptions are about to expire");
@@ -144,7 +144,7 @@ display_icon(Compliance *compliance, ComplianceType compliance_type)
 		notification_body = _("One or more of this system's "
 			"subscriptions are about to expire. These "
 			"subscriptions are required for compliance with your "
-			"software license agreements.");
+			"subscription agreements.");
 	}
 
 	compliance->icon = gtk_status_icon_new_from_icon_name("subsmgr");
