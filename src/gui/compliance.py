@@ -15,12 +15,12 @@
 #
 
 import os
-import datetime
 import gtk
+import gobject
 import locale
 import logging
 import gettext
-from datetime import date, datetime
+from datetime import date, time, datetime
 
 _ = gettext.gettext
 
@@ -103,6 +103,7 @@ class ComplianceAssistant(object):
                                 'end_date':str,
                                 'entitlement_id':str,
                                 'product_id':str,
+                                'entitlement':gobject.TYPE_PYOBJECT,
                                 'align':float}
        
         self.window = self.compliance_xml.get_widget('compliance_assistant_window')
@@ -125,17 +126,18 @@ class ComplianceAssistant(object):
         self.uncompliant_treeview.show()
 
         subscriptions_type_map = {'product_name':str, 
-                                  'total_contracts': str,
+                                  'total_contracts':str,
                                   'total_subscriptions':str,
                                   'available_subscriptions':str,
-                                  'align': float,
+                                  'align':float,
+                                  'entitlement':gobject.TYPE_PYOBJECT,
                                   'pool_id':str}
 
         self.subscriptions_store = storage.MappedListStore(subscriptions_type_map)
         self.date_selector = DateSelector(self._compliance_date_selected)
 
         self.subscriptions_treeview = MappedListTreeView(self.subscriptions_store)
-        self.subscriptions_treeview.add_column("Product Name",
+        self.subscriptions_treeview.add_column("Subscription Name",
                 self.subscriptions_store['product_name'], True)
         self.subscriptions_treeview.add_column("Total Contracts",
                 self.subscriptions_store['total_contracts'], True)
@@ -189,9 +191,9 @@ class ComplianceAssistant(object):
         if self.first_noncompliant_radiobutton.get_active():
             return self.last_compliant_date
         else:
-            return datetime.datetime(int(self.year_entry.get_text()),
-                                     int(self.month_entry.get_text()),
-                                     int(self.day_entry.get_text()), tzinfo=certificate.GMT())
+            return datetime(int(self.year_entry.get_text()),
+                            int(self.month_entry.get_text()),
+                            int(self.day_entry.get_text()), tzinfo=certificate.GMT())
 
     def _find_last_compliant(self):
         """
@@ -237,6 +239,7 @@ class ComplianceAssistant(object):
                                                         'total_subscriptions':entitlement.getOrder().getQuantity(),
                                                         # pretty sure this is wrong
                                                         'available_subscriptions':entitlement.getOrder().getQuantityUsed(),
+                                                        'entitlement': entitlement,
                                                         'align':0.0}
 
         for key in subscriptions_map:
@@ -267,9 +270,11 @@ class ComplianceAssistant(object):
                                             'contract':na,
                                             'end_date':na,
                                             'entitlement_id':None,
+                                            'entitlement':None,
                                             'product_id':product.getProduct().getHash(),
                                             'align':0.0})
 
+        # installed and out of compliance
         for product in noncompliant_products:
             entitlement = self.entitlement_dir.findByProduct(product.getHash())
             if entitlement is None:
@@ -282,6 +287,7 @@ class ComplianceAssistant(object):
                                             # is end_date when the cert expires or the orders end date? is it differnt?
                                             'end_date':'%s' % self.format_date(entitlement.validRange().end()),
                                             'entitlement_id':entitlement.serialNumber(),
+                                            'entitlement':entitlement,
                                             'product_id':product.getHash(),
                                             'align':0.0})
         
@@ -348,8 +354,15 @@ class ComplianceAssistant(object):
         model, tree_iter = widget.get_selected()
         if tree_iter:
             product_name = model.get_value(tree_iter, self.subscriptions_store['product_name'])
-            # TODO: need to show provided products here once we have a pool stash:
-            self.sub_details.show(product_name)
+
+            entitlement = model.get_value(tree_iter, self.subscriptions_store['entitlement'])
+
+            self.sub_details.show(product_name, 
+                                  contract=entitlement.getOrder().getContract(),
+                                  start=entitlement.validRange().begin(),
+                                  end=entitlement.validRange().end(),
+                                  account=entitlement.getOrder().getAccountNumber(),
+                                  products=entitlement.getProducts())
 
     def _set_noncompliant_date(self, noncompliant_date):
         self.month_entry.set_text(str(noncompliant_date.month))
