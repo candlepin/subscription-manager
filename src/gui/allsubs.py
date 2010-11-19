@@ -21,13 +21,13 @@ _ = gettext.gettext
 
 from logutil import getLogger
 log = getLogger(__name__)
-#import managerlib
+
 import managerlib_async
 
 from widgets import SubDetailsWidget
 from dateselect import DateSelector
-#import progress
-#import gobject
+import progress
+import gobject
 
 prefix = os.path.dirname(__file__)
 ALL_SUBS_GLADE = os.path.join(prefix, "data/allsubs.glade")
@@ -43,8 +43,8 @@ POOL_ID_INDEX = 6
 
 
 def progress_pulse(pb):
-    print "pulse called"
     pb.pulse()
+    return True
 
 class AllSubscriptionsTab(object):
 
@@ -186,15 +186,19 @@ class AllSubscriptionsTab(object):
         Reload the subscriptions from the server when the Search button
         is clicked.
         """
-        #pb = progress.Progress()
-        #pb.setLabel(_("Searching for subscriptions. Please wait."))
-        #gobject.idle_add(progress_pulse, pb)
         self.pool_stash.refresh(self.get_active_on_date(), self.updatedisplay)
-        print "returned from refresh"
-        #self.display_pools()
+        # show pulsating progress bar while we wait for results
+        self.pb = progress.Progress()
+        self.pb.setLabel(_("Searching for subscriptions. Please wait."))
+        self.timer = gobject.timeout_add(100, progress_pulse, self.pb)
 
     def updatedisplay(self, compat, incompat, all):
+        # should probably use the params instead
         self.display_pools()
+        if self.pb:
+            self.pb.hide()
+            gobject.source_remove(self.timer)
+            self.timer = 0
 
     def date_select_button_clicked(self, widget):
         self.date_selector.show()
