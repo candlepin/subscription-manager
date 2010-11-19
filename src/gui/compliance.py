@@ -20,7 +20,7 @@ import gtk
 import locale
 import logging
 import gettext
-from datetime import date
+from datetime import date, datetime
 
 _ = gettext.gettext
 
@@ -210,7 +210,7 @@ class ComplianceAssistant(object):
         if self.valid_subs:
             return self.valid_subs[0].validRange().end()
         else:
-            return date.today()
+            return datetime.now(certificate.GMT())
 
     def _display_subscriptions(self):
         self.subscriptions_store.clear()
