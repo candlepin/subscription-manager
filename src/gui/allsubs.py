@@ -228,6 +228,9 @@ class AllSubscriptionsTab(object):
         self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'])
         managergui.fetch_certificates()
 
+        #Force the search results to refresh with the new info
+        self.search_button_clicked(None)
+
     def _contract_selection_cancelled(self):
         self.contract_selection.destroy()
         self.contract_selection = None
