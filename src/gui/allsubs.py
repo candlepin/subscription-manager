@@ -22,11 +22,14 @@ _ = gettext.gettext
 
 from logutil import getLogger
 log = getLogger(__name__)
-import managerlib
+#import managerlib
+import managerlib_async
 
 from facts import Facts
 from widgets import SubDetailsWidget
 from dateselect import DateSelector
+#import progress
+#import gobject
 
 prefix = os.path.dirname(__file__)
 ALL_SUBS_GLADE = os.path.join(prefix, "data/allsubs.glade")
@@ -41,6 +44,10 @@ PRODUCT_ID_INDEX = 5
 POOL_ID_INDEX = 6
 
 
+def progress_pulse(pb):
+    print "pulse called"
+    pb.pulse()
+
 class AllSubscriptionsTab(object):
 
     def __init__(self, backend, consumer, facts):
@@ -48,7 +55,7 @@ class AllSubscriptionsTab(object):
         self.consumer = consumer
         self.facts = facts
 
-        self.pool_stash = managerlib.PoolStash(self.backend, self.consumer,
+        self.pool_stash = managerlib_async.PoolStash(self.backend, self.consumer,
                 self.facts)
 
         self.all_subs_xml = gtk.glade.XML(ALL_SUBS_GLADE)
@@ -181,7 +188,13 @@ class AllSubscriptionsTab(object):
         Reload the subscriptions from the server when the Search button
         is clicked.
         """
-        self.pool_stash.refresh(self.get_active_on_date())
+        #pb = progress.Progress()
+        #pb.setLabel(_("Searching for subscriptions. Please wait."))
+        #gobject.idle_add(progress_pulse, pb)
+        self.pool_stash.refresh(self.get_active_on_date(), self.updatedisplay)
+        #self.display_pools()
+
+    def updatedisplay(self, compat, incompat, all):
         self.display_pools()
 
     def date_select_button_clicked(self, widget):

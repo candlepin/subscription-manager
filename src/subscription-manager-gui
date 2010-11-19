@@ -26,6 +26,9 @@ import sys
 import os
 import dbus
 import dbus.service, dbus.glib
+import gtk
+
+gtk.gdk.threads_init()
 
 def systemExit(code, msgs=None):
     "Exit with a code and optional message(s). Saved a few lines of code."
