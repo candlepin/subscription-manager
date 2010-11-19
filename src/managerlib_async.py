@@ -28,7 +28,6 @@ class PoolStash(object):
         self.all_pools = {}
 
     def refresh(self, active_on, callback):
-        print("refresh")
         Thread(target=self.refresh_async, args=(active_on, callback,)).start()
 
     def refresh_async(self, active_on, callback):
