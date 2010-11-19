@@ -51,8 +51,6 @@ class ContractSelectionWindow(object):
         self.contract_selection_xml.signal_autoconnect({
             "on_cancel_button_clicked": self._cancel_button_clicked,
             "on_subscribe_button_clicked": self._subscribe_button_clicked,
-            "on_contract_selection_treeview_cursor_changed": \
-                    self._cursor_changed,
         })
 
         self.model = gtk.ListStore(str, str, str, str, str,
@@ -100,39 +98,3 @@ class ContractSelectionWindow(object):
     def _subscribe_button_clicked(self, button):
         self._selected_callback(
                 self.model[self.contract_selection_treeview.get_cursor()[0][0]][5])
-
-    def _cursor_changed(self, treeview):
-        print "cursor"
-        selected_row = self.model[treeview.get_cursor()[0][0]]
-        print selected_row
-
-#        self.subscription_name_label.set_text(selected_row[4])
-#        self.total_contracts_label.set_text(selected_row[5])
-
-
-def main():
-    pool1 = {
-            'productId': 'asdfsa',
-            'productName': 'foobar',
-            'consumed': '5',
-            'quantity': '10',
-            'startDate': '1232',
-            'endDate': '12312',
-            }
-    pool2 = {
-            'productId': 'asdfsa2',
-            'productName': 'foobar2',
-            'consumed': '5',
-            'quantity': '15',
-            'startDate': '21232',
-            'endDate': '212312',
-            }
-
-    win = ContractSelectionWindow()
-    win.add_pool(pool1)
-    win.add_pool(pool1)
-    win.show()
-    gtk.main()
-
-if __name__ == "__main__":
-    main()
