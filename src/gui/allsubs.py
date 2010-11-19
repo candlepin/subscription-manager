@@ -137,7 +137,7 @@ class AllSubscriptionsTab(object):
         """
         year = self.year_entry.get_text()
         month = self.month_entry.get_text()
-        day = self.day.get_text()
+        day = self.day_entry.get_text()
 
         active_on_date = datetime.date(int(year), int(month),
                 int(day))
