@@ -16,7 +16,6 @@
 import datetime
 import os
 import gtk
-import logging
 import gettext
 _ = gettext.gettext
 
@@ -25,7 +24,6 @@ log = getLogger(__name__)
 #import managerlib
 import managerlib_async
 
-from facts import Facts
 from widgets import SubDetailsWidget
 from dateselect import DateSelector
 #import progress
@@ -192,6 +190,7 @@ class AllSubscriptionsTab(object):
         #pb.setLabel(_("Searching for subscriptions. Please wait."))
         #gobject.idle_add(progress_pulse, pb)
         self.pool_stash.refresh(self.get_active_on_date(), self.updatedisplay)
+        print "returned from refresh"
         #self.display_pools()
 
     def updatedisplay(self, compat, incompat, all):
