@@ -60,8 +60,8 @@ class MappedListTreeView(gtk.TreeView):
             column.set_expand(True)
         else:
             column.add_attribute(text_renderer, 'xalign', self.store['align'])
-            
-#        column.add_attribute(text_renderer, 'cell-background', 
+
+#        column.add_attribute(text_renderer, 'cell-background',
 #                             self.store['background'])
 
         self.append_column(column)
@@ -107,7 +107,7 @@ class ComplianceAssistant(object):
                                 'product_id':str,
                                 'entitlement':gobject.TYPE_PYOBJECT,
                                 'align':float}
-       
+
         self.window = self.compliance_xml.get_widget('compliance_assistant_window')
         self.window.connect('delete_event', self.hide)
         self.uncompliant_store = storage.MappedListStore(uncompliant_type_map)
@@ -127,7 +127,7 @@ class ComplianceAssistant(object):
         vbox.pack_end(self.uncompliant_treeview)
         self.uncompliant_treeview.show()
 
-        subscriptions_type_map = {'product_name':str, 
+        subscriptions_type_map = {'product_name':str,
                                   'total_contracts':str,
                                   'total_subscriptions':str,
                                   'available_subscriptions':str,
@@ -239,7 +239,7 @@ class ComplianceAssistant(object):
 
         # These display the list of products uncompliant on the selected date:
         self.uncompliant_store.clear()
- 
+
         # find installed products with no entitlements
         entitlement_filter = managerlib.EntitlementFilter()
         noncompliant_installed_products = entitlement_filter.filter_entitlements_by_uninstalled()
@@ -272,7 +272,7 @@ class ComplianceAssistant(object):
                                             'entitlement':entitlement,
                                             'product_id':product.getHash(),
                                             'align':0.0})
-        
+
 
     def _on_uncompliant_active_toggled(self, cell, path):
         treeiter = self.uncompliant_store.get_iter_from_string(path)
@@ -288,7 +288,7 @@ class ComplianceAssistant(object):
 
         # refresh subscriptions
         self._display_subscriptions()
-        
+
 
     def show(self):
         """
@@ -309,10 +309,10 @@ class ComplianceAssistant(object):
         """
         log.debug("reloading screen")
         # end date of first subs to expire
-        
+
         self.last_compliant_date = find_last_compliant()
 
-            
+
         self.pool_stash.refresh(active_on=self._get_noncompliant_date())
         if self.last_compliant_date:
             formatted = self.format_date(self.last_compliant_date)
@@ -338,15 +338,18 @@ class ComplianceAssistant(object):
             product_name = model.get_value(tree_iter, self.subscriptions_store['product_name'])
 
             entitlement = model.get_value(tree_iter, self.subscriptions_store['entitlement'])
+            products_list = [(product.getName(), product.getHash()) \
+                             for product in entitlement.getProducts()]
 
-            self.sub_details.show(product_name, 
+            self.sub_details.show(product_name,
                                   contract=entitlement.getOrder().getContract(),
                                   start=entitlement.validRange().begin(),
                                   end=entitlement.validRange().end(),
                                   account=entitlement.getOrder().getAccountNumber(),
-                                  products=entitlement.getProducts())
+                                  products=products_list)
 
     def _set_noncompliant_date(self, noncompliant_date):
         self.month_entry.set_text(str(noncompliant_date.month))
         self.day_entry.set_text(str(noncompliant_date.day))
         self.year_entry.set_text(str(noncompliant_date.year))
+

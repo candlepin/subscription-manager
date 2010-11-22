@@ -35,10 +35,10 @@ class GladeWidget(object):
         variables.
         """
         self.glade = gtk.glade.XML(os.path.join(GLADE_DIR, glade_file))
-        
+
         if initial_widget_names:
             self.pull_widgets(initial_widget_names)
-        
+
     def pull_widgets(self, names):
         """
         This is a convenience method to pull the widgets from the 'names' list
@@ -46,7 +46,7 @@ class GladeWidget(object):
 
         For example:  a widget with the name age_input could be accessed via self.age_input
         """
-        
+
         for name in names:
             setattr(self, name, self.glade.get_widget(name))
 
@@ -54,24 +54,24 @@ class SubscriptionManagerTab(GladeWidget):
 
     def __init__(self, glade_file, initial_widget_names=[]):
         """
-        Creates a new tab widget, given the specified glade file and a list of 
+        Creates a new tab widget, given the specified glade file and a list of
         widget names to extract to instance variables.
         """
-        # Mix the specified widgets with standard names in the 
+        # Mix the specified widgets with standard names in the
         # glade file by convention
         widgets = ['top_view', 'content'] + initial_widget_names
         super(SubscriptionManagerTab, self).__init__(glade_file, widgets)
         self.content.unparent()
-        
+
         self.store = storage.MappedListStore(self.get_type_map())
         self.top_view.set_model(self.store)
-        
+
         selection = self.top_view.get_selection()
         selection.connect('changed', self._selection_callback)
-        
+
     def add_text_column(self, name, store_key, expand=False):
         text_renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn(name, 
+        column = gtk.TreeViewColumn(name,
                                     text_renderer,
                                     text=self.store[store_key])
         if expand:
@@ -79,39 +79,39 @@ class SubscriptionManagerTab(GladeWidget):
         else:
             column.add_attribute(text_renderer, 'xalign', self.store['align'])
 
-        column.add_attribute(text_renderer, 'cell-background', 
+        column.add_attribute(text_renderer, 'cell-background',
                              self.store['background'])
 
         self.top_view.append_column(column)
-        
+
     def get_content(self):
         return self.content
-        
+
     def _selection_callback(self, treeselection):
         selection = SelectionWrapper(treeselection, self.store)
-        
+
         if selection.is_valid():
             self.on_selection(selection)
-        
+
     def on_selection(self, selection):
         pass
-        
+
 class SelectionWrapper(object):
 
     def __init__(self, treeselection, store):
         self.model, self.tree_iter = treeselection.get_selected()
         self.store = store
-            
+
     def is_valid(self):
         return self.tree_iter is not None
 
     def __getitem__(self, key):
         return self.model.get_value(self.tree_iter, self.store[key])
-            
-            
+
+
 class ProductsTable(object):
 
-    def __init__(self, table_widget, yes_id=gtk.STOCK_APPLY, 
+    def __init__(self, table_widget, yes_id=gtk.STOCK_APPLY,
                  no_id=gtk.STOCK_REMOVE):
         """
         Create a new products table, populating the gtk.TreeView.
@@ -132,8 +132,8 @@ class ProductsTable(object):
                                          gtk.CellRendererText(),
                                          text=0)
         name_column.set_expand(True)
-        installed_column = gtk.TreeViewColumn(_("Installed"), 
-                                              gtk.CellRendererPixbuf(), 
+        installed_column = gtk.TreeViewColumn(_("Installed"),
+                                              gtk.CellRendererPixbuf(),
                                               pixbuf=1)
 
         table_widget.append_column(name_column)
@@ -150,7 +150,7 @@ class ProductsTable(object):
         Add a product with the given name and id to the table.
         """
         self.product_store.append([product_name, self._get_icon(product_id)])
-    
+
     def _render_icon(self, icon_id):
         return self.table_widget.render_icon(icon_id, gtk.ICON_SIZE_MENU)
 
@@ -165,7 +165,7 @@ class SubDetailsWidget(GladeWidget):
     def __init__(self, show_contract=True):
         widget_names = ["sub_details_vbox", "subscription_text", "products_view"]
         super(SubDetailsWidget, self).__init__("subdetails.glade", widget_names)
-    
+
         self.show_contract = show_contract
         self.sub_details_vbox.unparent()
 
@@ -190,11 +190,11 @@ class SubDetailsWidget(GladeWidget):
 
     def show(self, name, contract=None, start=None, end=None, account=None,
             products=[]):
-        """ 
-        Show subscription details. 
-        
+        """
+        Show subscription details.
+
         Start and end should be formatted strings, not actual date objects.
-        Products is a list of certificate.Products
+        Products is a list of tuples in the format (name, id)
         """
         self.subscription_text.get_buffer().set_text(name)
 
@@ -206,8 +206,8 @@ class SubDetailsWidget(GladeWidget):
 
         self.bundled_products.clear()
         for product in products:
-            self.bundled_products.add_product(product.getName(), product.getHash())
-            
+            self.bundled_products.add_product(product[0], product[1])
+
     def _set(self, text_view, text):
         """Set the buffer of the given TextView to contain the text"""
         if text:
