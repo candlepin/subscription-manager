@@ -42,6 +42,7 @@ from socket import error as socket_error
 import xml.sax.saxutils
 
 import factsgui
+import widgets
 from installedtab import InstalledProductsTab
 from mysubstab import MySubscriptionsTab
 from allsubs import AllSubscriptionsTab
@@ -187,30 +188,21 @@ def show_regtoken_screen(consumer, facts):
         regtoken_screen = RegistrationTokenScreen(consumer, facts)
 
 
-class MainWindow(object):
+class MainWindow(widgets.GladeWidget):
     """
     The new RHSM main window.
     """
     def __init__(self):
+        super(MainWindow, self).__init__('mainwindow.glade',
+              ['main_window', 'notebook', 'compliance_count_label',
+               'compliance_status_label', 'compliance_status_image',
+               'button_bar'])
+
         self.backend = Backend(connection.UEPConnection(
             cert_file=ConsumerIdentity.certpath(),
             key_file=ConsumerIdentity.keypath()))
         self.consumer = Consumer()
         self.facts = Facts()
-
-        self.main_window_xml = GladeWrapper(os.path.join(prefix,
-            "data/mainwindow.glade"))
-        self.main_window = self.main_window_xml.get_widget('main_window')
-
-        self.notebook = self.main_window_xml.get_widget('notebook')
-        self.compliance_count_label = self.main_window_xml.get_widget(
-                'compliance_count_label')
-        self.compliance_status_label = self.main_window_xml.get_widget(
-                'compliance_status_label')
-        self.compliance_status_image = self.main_window_xml.get_widget(
-                'compliance_status_image')
-        self.button_bar = self.main_window_xml.get_widget(
-                'button_bar')
 
         self.system_facts_dialog = factsgui.SystemFactsDialog(self.consumer,
                 self.facts)
@@ -218,11 +210,6 @@ class MainWindow(object):
                 callbacks=[self.registration_changed])
         self.compliance_assistant = ComplianceAssistant(self.backend,
                 self.consumer, self.facts)
-
-
-        tab_classes = [InstalledProductsTab,
-                       MySubscriptionsTab,
-                       AllSubscriptionsTab]
 
         self.installed_tab = InstalledProductsTab(self.backend, self.consumer,
                 self.facts)
@@ -234,9 +221,16 @@ class MainWindow(object):
         for tab in [self.installed_tab, self.my_subs_tab]:
             self.notebook.append_page(tab.get_content(), gtk.Label(tab.get_label()))
 
-        self.main_window_xml.signal_autoconnect({
+        self.glade.signal_autoconnect({
             "on_compliant_button_clicked": self._compliant_button_clicked,
         })
+
+        # Register callback for when product/entitlement certs are updated
+        def on_cert_change(filemonitor, first_file, other_file, event_type):
+            self._set_compliance_status()
+
+        self.backend.monitor_certs(on_cert_change)
+
         self.refresh()
 
         self.main_window.show_all()
@@ -1394,5 +1388,4 @@ def reload():
 #    gtk.main_quit()
 #    gui = None
     main()
-
 
