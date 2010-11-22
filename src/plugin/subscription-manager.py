@@ -62,6 +62,8 @@ def warnExpired(conduit):
 
 def config_hook(conduit):
     """ update """
+    # register rpm name for yum history recording"
+    conduit.registerPackageName("subscription-manager")
     try:
         update(conduit)
         warnExpired(conduit)

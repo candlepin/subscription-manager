@@ -40,6 +40,8 @@ def postverifytrans_hook(conduit):
     """
     Update product ID certificates.
     """
+    # register rpm name for yum history recording"
+    conduit.registerPackageName("subscription-manager")
     chroot()
     try:
         pm = ProductManager()
