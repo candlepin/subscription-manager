@@ -256,10 +256,9 @@ class EntitlementFilter(object):
     def installed_products_without_entitlements(self):
         installed_products_no_entitlements = []
         for product_cert in self.product_directory.list():
-            if not self.entitlement_directory.findByProduct(
-                product_cert.getProduct().getHash()):
-		        installed_products_no_entitlements.append(product_cert)
-	    return installed_products_no_entitlements	
+            if not self.entitlement_directory.findByProduct(product_cert.getProduct().getHash()):
+                installed_products_no_entitlements.append(product_cert)
+        return installed_products_no_entitlements	
 
 class PoolFilter(object):
     """
@@ -269,15 +268,11 @@ class PoolFilter(object):
         self.product_directory = ProductDirectory()
         self.entitlement_directory = EntitlementDirectory()
 
-
-
     def filter_entitlements_by_products(self, products):
         matched_data_dict = {}
         for c in self.entitlement_directory.list():
-            print "cert", c
             for product in products:
                 productid = product.getProduct().getHash()
-                print productid, c.getProduct().getHash()
                 if productid == c.getProduct().getHash():
                     matched_data_dict[c.serialNumber()] = c
         return matched_data_dict
@@ -289,7 +284,6 @@ class PoolFilter(object):
         """
         matched_data_dict = {}
         for d in pools:
-            print "pool", d
             for product in products:
                 productid = product.getProduct().getHash()
                 if productid == d['productId']:
