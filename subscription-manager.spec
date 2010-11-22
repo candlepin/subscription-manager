@@ -99,8 +99,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/managerlib.py*
 %{_datadir}/rhsm/managerlib_async.py*
 %{_datadir}/rhsm/repolib.py*
-/usr/lib/yum-plugins/rhsmplugin.py*
-/usr/lib/yum-plugins/pidplugin.py*
+/usr/lib/yum-plugins/subscription-manager.py*
+/usr/lib/yum-plugins/product-id.py*
 %{_datadir}/rhsm/certmgr.py*
 %{_datadir}/rhsm/certlib.py*
 %{_datadir}/rhsm/hwprobe.py*
@@ -119,8 +119,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libexecdir}/rhsm-complianced
 
 # config files
-%attr(644,root,root) /etc/yum/pluginconf.d/rhsmplugin.conf
-%attr(644,root,root) /etc/yum/pluginconf.d/pidplugin.conf
+%attr(644,root,root) /etc/yum/pluginconf.d/subscription-manager.conf
+%attr(644,root,root) /etc/yum/pluginconf.d/product-id.conf
 
 %{_sysconfdir}/cron.daily/rhsm-complianced
 %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
