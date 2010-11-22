@@ -76,8 +76,17 @@ def mock_ent_cert(product_id, start_date=None, end_date=None):
     cert.validRange.return_value = DateRange(start_date, end_date)
     return cert
 
+def mock_ent_dir_no_product(ent_certs):
+    """ Mock an EntitlementDirectory object that doesn't
+    find an installed product
+    """
+    mock_ent_dir = Mock()
+    mock_ent_dir.list.return_value = ent_certs
+    mock_ent_dir.findByProduct.return_value = None
+    return mock_ent_dir
+
 def mock_ent_dir(ent_certs):
-    """ Mock an EntitlementDirectory object. """
+    """Mock an EntitlementDirectory object"""
     mock_ent_dir = Mock()
     mock_ent_dir.list.return_value = ent_certs
     return mock_ent_dir

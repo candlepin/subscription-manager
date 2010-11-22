@@ -232,6 +232,8 @@ class ComplianceAssistant(object):
         if self.last_compliant_date:
             noncompliant_entitlements = self.entitlement_dir.listExpiredOnDate(date=self._get_noncompliant_date())
 
+
+
         noncompliant_products = []
         for noncompliant_entitlement in noncompliant_entitlements:
             noncompliant_products.append(noncompliant_entitlement.getProduct())
@@ -242,7 +244,7 @@ class ComplianceAssistant(object):
 
         # find installed products with no entitlements
         entitlement_filter = managerlib.EntitlementFilter()
-        noncompliant_installed_products = entitlement_filter.filter_entitlements_by_uninstalled()
+        noncompliant_installed_products = entitlement_filter.installed_products_without_entitlements()
 
         # add all the installed but not entitled products
         na = _("N/A")

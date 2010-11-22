@@ -103,13 +103,13 @@ class FindLastCompliantTests(unittest.TestCase):
                 end_date=datetime(2050, 1, 1))
         cert2 = mock_ent_cert('product2', start_date=datetime(2010, 1, 1),
                 end_date=datetime(2060, 1, 1))
-        ent_dir = mock_ent_dir([cert1, cert2])
+        ent_dir = mock_ent_dir_no_product([cert1, cert2])
         ent_dir.listValid.return_value = [cert1, cert2]
 
         # Because we have an unentitled product, we should get back the current
         # date as the last date of compliance:
         today = datetime.now(GMT())
-        last_compliant_date = find_last_compliant(ent_dir=ent_dir)
+        last_compliant_date = find_last_compliant(ent_dir=ent_dir, product_dir=product_dir)
         self.assertEqual(today.year, last_compliant_date.year)
         self.assertEqual(today.month, last_compliant_date.month)
         self.assertEqual(today.day, last_compliant_date.day)
@@ -126,7 +126,7 @@ class FindLastCompliantTests(unittest.TestCase):
         # Because we have an unentitled product, we should get back the current
         # date as the last date of compliance:
         today = datetime.now(GMT())
-        last_compliant_date = find_last_compliant(ent_dir=ent_dir)
+        last_compliant_date = find_last_compliant(ent_dir=ent_dir, product_dir=product_dir)
         self.assertEqual(2050, last_compliant_date.year)
 
     def test_all_expired_entitlements(self):

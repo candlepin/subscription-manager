@@ -403,7 +403,7 @@ class CertificateDirectory(Directory):
 
     def findAllByProduct(self, hash):
         certs = []
-	for c in self.list():
+        for c in self.list():
             for p in c.getProducts():
                 if p.getHash() == hash:
                     certs.append(c)
@@ -606,7 +606,6 @@ def find_last_compliant(ent_dir=None, product_dir=None):
     If there are currently unentitled products, then return the current
     datetime.
     """
-    # TODO: what about products installed but not covered by *any* entitlement?
     # TODO: should we be listing valid? does this work if everything is already out of compliance?
     # TODO: setting a member variable here that isn't used anywhere else, should keep this local unless needed
     # TODO: needs unit testing imo, probably could be moved to a standalone method for that purpose
@@ -617,15 +616,22 @@ def find_last_compliant(ent_dir=None, product_dir=None):
 
     valid_ents = ent_dir.listValid()
 
+    installed_not_entitled = []
+    for product_cert in product_dir.list():
+        if not ent_dir.findByProduct(product_cert.getProduct().getHash()):
+            installed_not_entitled.append(product_cert)
+
     def get_date(ent_cert):
         return ent_cert.validRange().end()
 
     valid_ents.sort(key=get_date)
 
-    if valid_ents:
+    # next cert to go noncompliant
+    if valid_ents and not installed_not_entitled:
         return valid_ents[0].validRange().end()
     else:
         return datetime.now(GMT())
+
 
 
 
