@@ -1,5 +1,5 @@
 Name: subscription-manager      
-Version: 0.93.1
+Version: 0.93.2
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management       
 Group:   System Environment/Base         
@@ -168,6 +168,101 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Nov 23 2010 Devan Goodwin <dgoodwin@redhat.com> 0.93.2-1
+- Resolves: 654442,654435,654113,643931,645883,650965,654430,654429,648977,647891,649374
+- I18N strings update. (dgoodwin@redhat.com)
+- 654442: Record rpm package name in yum history (jbowes@redhat.com)
+- 654435: Give the yum plugins better names (jbowes@redhat.com)
+- make sure we show all noncompliant products (alikins@redhat.com)
+- show installed but not compliant on compliance screen (alikins@redhat.com)
+- Refactoring main window to use common widget and adding cert monitoring
+  (jharris@redhat.com)
+- Add tests for find last compliant date. (dgoodwin@redhat.com)
+- add progressbar (jesusr@redhat.com)
+- Hook up the subscriptions detail pane to the date (alikins@redhat.com)
+- Check for expiration on entitlment certs not product certs.
+  (alikins@redhat.com)
+- allsubs: handle errors during bind (jbowes@redhat.com)
+- refresh the all subs search results after a subscribe (jbowes@redhat.com)
+- Allow for subscribing from the all subscriptions tab (jbowes@redhat.com)
+- thread search results (jesusr@redhat.com)
+- Fix compliance error comparing date/datetime. (dgoodwin@redhat.com)
+- Error handling improvements. (dgoodwin@redhat.com)
+- 654113: software license -> subscription (jesusr@redhat.com)
+- s/day/day_entry to fix traceback (jesusr@redhat.com)
+- add pulse() method (jesusr@redhat.com)
+- BZ 643931 (jharris@redhat.com)
+- Make all subs date selector match the compliance assistants.
+  (dgoodwin@redhat.com)
+- Minor error message touchup. (dgoodwin@redhat.com)
+- 645883: repo_ca_cert in rhsm.conf should make use of ca_cert_dir
+  (anadathu@redhat.com)
+- Make the name subscription-manager instead of subscription-manager-cli
+  (bkearney@redhat.com)
+- Populate the subscriptions list based on products chosen (alikins@redhat.com)
+- Add findAllByProduct method to EntitlementDir (alikins@redhat.com)
+- BZ 650965 (jharris@redhat.com)
+- Get  uncompliant list working (alikins@redhat.com)
+- 654430: Calling register with no username or password should result in clear
+  text (anadathu@redhat.com)
+- 654429: when running facts/identity command, notify user when not registered.
+  (anadathu@redhat.com)
+- Uncomment overlapping filter. (dgoodwin@redhat.com)
+- Add new UI support for unregistration. (dgoodwin@redhat.com)
+- remove duplicate code in unregister method. (anadathu@redhat.com)
+- Moving new ui to sm-gui (jharris@redhat.com)
+- filter out installed products properly (jesusr@redhat.com)
+- Prompt to register when trying to open compliance assistant.
+  (dgoodwin@redhat.com)
+- Display/hide all subs tab depending on registration status.
+  (dgoodwin@redhat.com)
+- Add registration callbacks. (dgoodwin@redhat.com)
+- Add start of a contract selection window (jbowes@redhat.com)
+- Fix a busted Makefile target. (dgoodwin@redhat.com)
+- Allow overlapping pool filter to be skipped. (dgoodwin@redhat.com)
+- Moving cert monitoring to the backend object (jharris@redhat.com)
+- Fixing bugs around subscription display and adding some ui tweaks
+  (jharris@redhat.com)
+- Fix overlapping option in compliance assistant. (dgoodwin@redhat.com)
+- Hookup date selector in compliance assistant. (dgoodwin@redhat.com)
+- stop subscription manager from deleting entitlement certificates without
+  product information (anadathu@redhat.com)
+- list from entitlements, not products, for overlap (jbowes@redhat.com)
+- Add a filter for overlapping subscriptions (jbowes@redhat.com)
+- Adding status icon to product column (jharris@redhat.com)
+- Allow compliance assistant to be used more than once per run.
+  (dgoodwin@redhat.com)
+- Adding product directory monitoring in installed tab (jharris@redhat.com)
+- Add sub details to compliance assistant. (dgoodwin@redhat.com)
+- Fix for server side provided product changes. (dgoodwin@redhat.com)
+  manager (alikins@redhat.com)
+- add a toggle button to the product list on compliance page
+  (alikins@redhat.com)
+- Figure out what products to display in the out of compliance product list
+  (alikins@redhat.com)
+- Make compliance date filter widget comply with mockup (alikins@redhat.com)
+- Make the compliance label use actual date (alikins@redhat.com)
+- Ensured that the cli prints out products which have been autosubscribed
+  (bkearney@redhat.com)
+- add a "install-file" and "install-conf" targets (alikins@redhat.com)
+- Introducing MappedListStore and adding installed table headers
+  (jharris@redhat.com)
+- Hookup compliance assistant button. (dgoodwin@redhat.com)
+- 648977: Changed the tool tip to be more specific (bkearney@redhat.com)
+- 647891: Add consumer name to the output (bkearney@redhat.com)
+- Refactor All Subs to better match wireframe spec. (dgoodwin@redhat.com)
+- gui: show account number for subscriptions (jbowes@redhat.com)
+- cli: show account number during 'list' (jbowes@redhat.com)
+- fix up some whitespace alignment in constants (jbowes@redhat.com)
+- add syslogging of adding and removing subscriptions (bkearney@redhat.com)
+- Getting all the headers in order (jharris@redhat.com)
+- Adding documentation and refactoring mysubs table (jharris@redhat.com)
+- Use new server-side date filtering. (dgoodwin@redhat.com)
+- gui: Remove unused broken import (jbowes@redhat.com)
+- Add syslogging of register and unregister (bkearney@redhat.com)
+- Refactoring common widgets into a widgets module (jharris@redhat.com)
+- 649374: Make the ssl verify depth configurable (bkearney@redhat.com)
+
 * Wed Nov 03 2010 Devan Goodwin <dgoodwin@redhat.com> 0.93.1-1
 - Update I18N strings. (dgoodwin@redhat.com)
 - Pulling out contract info in 'All Subscriptions' tab (jharris@redhat.com)
