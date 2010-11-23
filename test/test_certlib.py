@@ -98,7 +98,7 @@ class FindLastCompliantTests(unittest.TestCase):
         self.assertEqual(2050, last_compliant_date.year)
 
     def test_unentitled_products(self):
-        product_dir = mock_product_dir(['unentitledProduct'])
+        product_dir = mock_product_dir([mock_product_cert('unentitledProduct')])
         cert1 = mock_ent_cert('product1', start_date=datetime(2010, 1, 1),
                 end_date=datetime(2050, 1, 1))
         cert2 = mock_ent_cert('product2', start_date=datetime(2010, 1, 1),
@@ -115,7 +115,7 @@ class FindLastCompliantTests(unittest.TestCase):
         self.assertEqual(today.day, last_compliant_date.day)
 
     def test_entitled_products(self):
-        product_dir = mock_product_dir(['product1'])
+        product_dir = mock_product_dir([mock_product_cert('product1')])
         cert1 = mock_ent_cert('product1', start_date=datetime(2010, 1, 1),
                 end_date=datetime(2050, 1, 1))
         cert2 = mock_ent_cert('product2', start_date=datetime(2010, 1, 1),
@@ -130,4 +130,23 @@ class FindLastCompliantTests(unittest.TestCase):
         self.assertEqual(2050, last_compliant_date.year)
 
     def test_all_expired_entitlements(self):
+        pass
+
+
+
+class CertSorterTests(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def test_unentitled_products(self):
+        pass
+
+    def test_entitled_products(self):
+        pass
+
+    def test_entitled_but_not_installed(self):
+        pass
+
+    def test_expired(self):
         pass

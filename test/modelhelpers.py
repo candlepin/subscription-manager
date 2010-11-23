@@ -56,20 +56,19 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
             'attributes': [],
         }
 
-def mock_product_dir(product_ids):
+def mock_product_dir(product_certs):
     """ Mock a ProductDirectory object for installed product certs. """
-    installed = []
-
-    # Create the ProductCertificate mocks:
-    for product_id in product_ids:
-        cert_mock = Mock()
-        cert_mock.getProduct().getHash.return_value = product_id
-        installed.append(cert_mock)
+    installed = product_certs
 
     # Create the ProductDirectory mock:
     mock_product_dir = Mock()
     mock_product_dir.list.return_value = installed
     return mock_product_dir
+
+def mock_product_cert(product_id):
+    cert = Mock()
+    cert.getProduct().getHash.return_value = product_id
+    return cert
 
 def mock_ent_cert(product_id, start_date=None, end_date=None):
     cert = Mock()
@@ -77,8 +76,9 @@ def mock_ent_cert(product_id, start_date=None, end_date=None):
     return cert
 
 def mock_ent_dir_no_product(ent_certs):
-    """ Mock an EntitlementDirectory object that doesn't
-    find an installed product
+    """
+    Mock an EntitlementDirectory object that doesn't
+    find any certs for a particular product.
     """
     mock_ent_dir = Mock()
     mock_ent_dir.list.return_value = ent_certs
