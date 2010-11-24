@@ -14,6 +14,7 @@
 #
 
 import os
+import gobject
 import gtk
 
 import gettext
@@ -21,6 +22,7 @@ _ = gettext.gettext
 gettext.textdomain("subscription-manager")
 gtk.glade.bindtextdomain("subscription-manager")
 
+import managerlib
 import storage
 from certlib import ProductDirectory
 
@@ -80,6 +82,21 @@ class SubscriptionManagerTab(GladeWidget):
             column.add_attribute(text_renderer, 'xalign', self.store['align'])
 
         column.add_attribute(text_renderer, 'cell-background',
+                             self.store['background'])
+
+        self.top_view.append_column(column)
+
+    def add_date_column(self, name, store_key, expand=False):
+        date_renderer = CellRendererDate()
+        column = gtk.TreeViewColumn(name,
+                                    date_renderer,
+                                    date=self.store[store_key])
+        if expand:
+            column.set_expand(True)
+        else:
+            column.add_attribute(date_renderer, 'xalign', self.store['align'])
+
+        column.add_attribute(date_renderer, 'cell-background',
                              self.store['background'])
 
         self.top_view.append_column(column)
@@ -221,3 +238,27 @@ class SubDetailsWidget(GladeWidget):
         """ Returns the widget to be packed into a parent window. """
         return self.sub_details_vbox
 
+
+class CellRendererDate(gtk.CellRendererText):
+
+    """
+    Custom cell renderer to display the date in the user's locale.
+    """
+
+    __gproperties__ = {
+            'date' : (gobject.TYPE_STRING, 'date', 'date displayed', '',
+                gobject.PARAM_READWRITE)
+    }
+
+    def __init__(self):
+        self.__gobject_init__()
+
+    def do_set_property(self, property, value):
+        """
+        called to set the date property for rendering in a cell.
+        we convert to display in the user's locale, then pass on to the cell
+        renderer.
+        """
+
+        date = managerlib.formatDate(value)
+        gtk.CellRendererText.set_property(self, 'text', date.strftime("%x"))

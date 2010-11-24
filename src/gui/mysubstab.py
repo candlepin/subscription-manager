@@ -18,7 +18,6 @@ import gtk
 from datetime import datetime, timedelta
 from certlib import EntitlementDirectory, ProductDirectory
 from certificate import GMT
-from managerlib import formatDate
 
 import widgets
 
@@ -59,8 +58,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.top_view.append_column(products_column)
 
         self.add_text_column(_("Contract"), 'contract')
-        self.add_text_column(_("Start Date"), 'start_date')
-        self.add_text_column(_("Expiration Date"), 'expiration_date')
+        self.add_date_column(_("Start Date"), 'start_date')
+        self.add_date_column(_("Expiration Date"), 'expiration_date')
 
         self.update_subscriptions()
         
@@ -110,8 +109,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.sub_details.show(order.getName(), 
                               contract=order.getContract() or "", 
-                              start=str(formatDate(order.getStart())), 
-                              end=str(formatDate(order.getEnd())),
+                              start=order.getStart(),
+                              end=order.getEnd(),
                               account=order.getAccountNumber() or "",
                               products=products)
                               
@@ -126,8 +125,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         entry['installed_value'] = self._percentage(installed, products)
         entry['installed_text'] = '%s / %s' % (len(installed), len(products))
         entry['contract'] = order.getContract()
-        entry['start_date'] = formatDate(order.getStart())
-        entry['expiration_date'] = formatDate(order.getEnd())
+        entry['start_date'] = order.getStart()
+        entry['expiration_date'] = order.getEnd()
         entry['serial'] = cert.serialNumber()
         entry['align'] = 0.5         # Center horizontally
         entry['background'] = self._get_background_color(cert)

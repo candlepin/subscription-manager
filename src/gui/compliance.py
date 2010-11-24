@@ -32,9 +32,9 @@ import certlib
 from certlib import find_last_compliant
 import managerlib
 import storage
+import widgets
 from connection import RestlibException
 from dateselect import DateSelector
-from widgets import SubDetailsWidget
 from utils import handle_gui_exception
 
 
@@ -63,6 +63,17 @@ class MappedListTreeView(gtk.TreeView):
 
 #        column.add_attribute(text_renderer, 'cell-background',
 #                             self.store['background'])
+
+        self.append_column(column)
+
+    def add_date_column(self, name, column_number, expand=False):
+        date_renderer = widgets.CellRendererDate()
+        column = gtk.TreeViewColumn(name, date_renderer, text=column_number)
+        self.store = self.get_model()
+        if expand:
+            column.set_expand(True)
+        else:
+            column.add_attribute(date_renderer, 'xalign', self.store['align'])
 
         self.append_column(column)
 
@@ -120,7 +131,7 @@ class ComplianceAssistant(object):
                 self.uncompliant_store['product_name'], True)
         self.uncompliant_treeview.add_column("Contract",
                 self.uncompliant_store['contract'], True)
-        self.uncompliant_treeview.add_column("Expiration",
+        self.uncompliant_treeview.add_date_column("Expiration",
                 self.uncompliant_store['end_date'], True)
         self.uncompliant_treeview.set_model(self.uncompliant_store)
         vbox = self.compliance_xml.get_widget("uncompliant_vbox")
@@ -156,7 +167,7 @@ class ComplianceAssistant(object):
         vbox.pack_start(self.subscriptions_treeview)
         self.subscriptions_treeview.show()
 
-        self.sub_details = SubDetailsWidget(show_contract=False)
+        self.sub_details = widgets.SubDetailsWidget(show_contract=False)
         vbox.pack_start(self.sub_details.get_widget())
 
         self.first_noncompliant_radiobutton = \

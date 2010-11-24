@@ -23,6 +23,7 @@ _ = gettext.gettext
 from logutil import getLogger
 log = getLogger(__name__)
 import managerlib
+import widgets
 
 prefix = os.path.dirname(__file__)
 CONTRACT_SELECTION_GLADE = os.path.join(prefix, "data/contract_selection.glade")
@@ -74,11 +75,11 @@ class ContractSelectionWindow(object):
                 text=1)
         self.contract_selection_treeview.append_column(column)
 
-        renderer = gtk.CellRendererText()
+        renderer = widgets.CellRendererDate()
         column = gtk.TreeViewColumn(_("Start Date"), renderer, text=2)
         self.contract_selection_treeview.append_column(column)
 
-        renderer = gtk.CellRendererText()
+        renderer = widgets.CellRendererDate()
         column = gtk.TreeViewColumn(_("Expiration Date"), renderer, text=3)
         self.contract_selection_treeview.append_column(column)
 

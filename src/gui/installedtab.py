@@ -20,7 +20,6 @@ from datetime import datetime
 import widgets
 from certlib import EntitlementDirectory, ProductDirectory
 from certificate import GMT
-from managerlib import formatDate
 
 import gettext
 _ = gettext.gettext
@@ -55,8 +54,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.add_text_column(_('Version'), 'version')
         self.add_text_column(_('Compliance Status'), 'status')
         self.add_text_column(_('Contract'), 'contract')
-        self.add_text_column(_('Start Date'), 'start_date')
-        self.add_text_column(_('Expiration Date'), 'expiration_date')
+        self.add_date_column(_('Start Date'), 'start_date')
+        self.add_date_column(_('Expiration Date'), 'expiration_date')
 
         self.update_products()
 
@@ -85,8 +84,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
                     entry['contract'] = order.getContract()
                     entry['subscription'] = order.getName()
-                    entry['start_date'] = formatDate(order.getStart())
-                    entry['expiration_date'] = formatDate(order.getEnd())
+                    entry['start_date'] = order.getStart()
+                    entry['expiration_date'] = order.getEnd()
 
                     # TODO:  Pull this date logic out into a separate lib!
                     #        This is also used in mysubstab...
