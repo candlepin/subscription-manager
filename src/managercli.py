@@ -46,7 +46,7 @@ def handle_exception(msg, ex):
     log.error(msg)
     log.exception(ex)
     if isinstance(ex, socket_error):
-        print _('Network error, unable to connect to server.')
+        print _('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.')
         sys.exit(-1)
     elif isinstance(ex, connection.RestlibException):
         print _(ex.msg)

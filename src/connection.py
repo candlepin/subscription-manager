@@ -136,7 +136,8 @@ class Restlib(object):
                 parsed = json.loads(response['content'])
             except Exception, e:
                 log.exception(e)
-                raise RestlibException(response['status'], _("Network error. Please check the connection details."))
+                raise RestlibException(response['status'], \
+                    _("Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."))
 
             raise RestlibException(response['status'],
                     parsed['displayMessage'])

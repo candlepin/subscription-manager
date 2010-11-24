@@ -40,7 +40,7 @@ def handle_gui_exception(e, msg, logMsg=None):
 
     # If exception is of these types we ignore the given display msg:
     if isinstance(e, socket_error):
-        errorWindow(_('Network error, unable to connect to server.'))
+        errorWindow(_('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.'))
     elif isinstance(e, SSL.SSLError):
         errorWindow(_('Unable to verify server\'s identity: %s' % str(e)))
     elif isinstance(e, connection.RestlibException):
