@@ -1,17 +1,18 @@
-Name: subscription-manager      
+Name: subscription-manager
 Version: 0.93.2
 Release: 1%{?dist}
-Summary: Supported tools and libraries for subscription and repo Management       
-Group:   System Environment/Base         
-License: GPLv2 
+Summary: Supported tools and libraries for subscription and repo Management
+Group:   System Environment/Base
+License: GPLv2
 Source0: %{name}-%{version}.tar.gz
-URL:     https://engineering.redhat.com/trac/subscription-manager 
+URL:     https://engineering.redhat.com/trac/subscription-manager
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-Requires: python-dmidecode
-Requires:  python-ethtool 
+Requires:  python-dmidecode
+Requires:  python-ethtool
 Requires:  python-simplejson
 Requires:  python-iniparse
-Requires:  PyXML 
+Requires:  PyXML
+Requires:  virt-what
 Requires:  python-rhsm
 Requires:  yum >= 3.2.19-15
 Requires(post): chkconfig
@@ -27,8 +28,8 @@ BuildRequires: desktop-file-utils
 
 
 %description
-Subscription Manager package provides programs and libraries to allow users 
-to manager subscriptions/yumrepos from Red Hat entitlement or deployment 
+Subscription Manager package provides programs and libraries to allow users
+to manager subscriptions/yumrepos from Red Hat entitlement or deployment
 Platform.
 
 %package -n python-rhsm
@@ -52,8 +53,8 @@ Requires: usermode-gtk
 Requires: subscription-manager
 
 %description -n subscription-manager-gnome
-This package contains a GTK+ graphical interface for configuring and 
-registering a system with a Red Hat Entitlement platform and manage 
+This package contains a GTK+ graphical interface for configuring and
+registering a system with a Red Hat Entitlement platform and manage
 subscriptions.
 
 
@@ -70,7 +71,7 @@ make -f Makefile install VERSION=%{version}-%{release} PREFIX=$RPM_BUILD_ROOT MA
 desktop-file-validate \
         %{buildroot}/etc/xdg/autostart/rhsm-compliance-icon.desktop
 desktop-file-validate \
-        %{buildroot}/usr/share/applications/subscription-manager.desktop        
+        %{buildroot}/usr/share/applications/subscription-manager.desktop
 
 %post -n subscription-manager-gnome
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
@@ -135,7 +136,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/rhsm/gui/data/icons
 %dir %{_datadir}/firstboot/modules
 %defattr(-,root,root,-)
-%{_datadir}/rhsm/gui/* 
+%{_datadir}/rhsm/gui/*
 %{_datadir}/icons/hicolor/16x16/apps/subsmgr.png
 %{_datadir}/firstboot/modules/rhsm_entitlement_choose.py*
 %{_datadir}/firstboot/modules/rhsm_login.py*
@@ -439,7 +440,7 @@ fi
 
 * Tue Oct 05 2010 Devan Goodwin <dgoodwin@redhat.com> 0.84-1
 - Resolves: #632612,#640128,#639320,#639491,#637160,#638289
-- When re-registering, previously subscribed-to subscriptions are checked 
+- When re-registering, previously subscribed-to subscriptions are checked
   by default) (alikins@redhat.com)
 - update CA trust chain (jbowes@redhat.com)
 - Write identity cert with correct permissions initially. (dgoodwin@redhat.com)
@@ -635,7 +636,7 @@ Resolves: #627681, #616137, #618819, #627707
   called from to logutil.py. (alikins@redhat.com)
 
 * Wed Aug 11 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.75-1
-- Resolves: #622839, #612250 
+- Resolves: #622839, #612250
 - get rid of stray print debug (jbowes@redhat.com)
 - missed an instance of create_connection_with_userIdentity
   (alikins@redhat.com)
@@ -918,7 +919,7 @@ Resolves: #627681, #616137, #618819, #627707
 
 * Tue May 11 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.60-1
 - Resolves: #591247 - format the dat correctly for gui add
-- send in product hash as part of autobind  
+- send in product hash as part of autobind
 - Format the cli print to be sequential instead of a table form. This makes the
   output more reliable (pkilambi@redhat.com)
 - Fix rhsmcertd not sleeping properly.  Add Bundle class for combining key &
@@ -1105,7 +1106,7 @@ Resolves: #627681, #616137, #618819, #627707
 - Spec file clean up
 - moving gnome tools to separate package
 - methods to define concrete description for products based on the state, product info and entitlement info.
-- constants file to accumulate all static strings in one place 
+- constants file to accumulate all static strings in one place
 
 * Wed Mar 24 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.21-1
 - Resolves: #568427
@@ -1119,7 +1120,7 @@ Resolves: #627681, #616137, #618819, #627707
 - changes to support identity cert parsing
 
 * Fri Mar 19 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.19-1
-- Resolves: #568427 
+- Resolves: #568427
 - Changes to support dynamic icon changes
 - changes to support resteasy api changes
 - fixed alignment issues in mainWindow
@@ -1130,10 +1131,10 @@ Resolves: #627681, #616137, #618819, #627707
 * Mon Mar 15 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.17-1
 - Resolves:  #568426
 - More changes to api proxy
-- new gui screens 
+- new gui screens
 
 * Thu Mar 11 2010 Pradeep Kilambi <pkilambi@redhat.com> 0.16-1
-- Resolves:  #568426 
+- Resolves:  #568426
 - more updates to connection.py api flush down
 - updates to new screens and layout in gui
 

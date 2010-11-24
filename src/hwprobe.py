@@ -151,6 +151,27 @@ class Hardware:
         self.allhw.update(netinfdict)
         return netinfdict
 
+    def getVirtInfo(self):
+        virt_dict = {}
+
+        # TODO:  This should probably use the subprocess module, but using this
+        #        mainly for RHEL 5 compatability
+        virt_output = commands.getstatusoutput('virt-what')
+        host_type = None
+
+        if virt_output[0] == 0:
+            host_type = virt_output[1].strip()
+            virt_dict['virt.host_type'] = host_type
+
+            # If this is blank, then not a guest
+            virt_dict['virt.is_guest'] = bool(host_type)
+        else:
+            # Otherwise there was an error running virt-what - who knows
+            virt_dict['virt.is_guest'] = 'Unknown'
+
+        self.allhw.update(virt_dict)
+        return virt_dict
+
     def getAll(self):
         self.getUnameInfo()
         self.getReleaseInfo()
@@ -159,8 +180,10 @@ class Hardware:
         self.getCpuInfo()
         self.getNetworkInfo()
         self.getNetworkInterfaces()
+        self.getVirtInfo()
         return self.allhw
 
 if __name__ == '__main__':
     for hkey, hvalue in Hardware().getAll().items():
         print "'%s' : '%s'" % (hkey, hvalue)
+
