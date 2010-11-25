@@ -217,8 +217,10 @@ class SubDetailsWidget(GladeWidget):
 
         if self.show_contract:
             self._set(self.contract_number_text, contract)
-            self._set(self.start_date_text, start)
-            self._set(self.expiration_date_text, end)
+            self._set(self.start_date_text,
+                    managerlib.formatDate(start).strftime("%x"))
+            self._set(self.expiration_date_text,
+                    managerlib.formatDate(end).strftime("%x"))
             self._set(self.account_text, account)
 
         self.bundled_products.clear()

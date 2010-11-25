@@ -20,6 +20,7 @@ from datetime import datetime
 import widgets
 from certlib import EntitlementDirectory, ProductDirectory
 from certificate import GMT
+import managerlib
 
 import gettext
 _ = gettext.gettext
@@ -84,8 +85,10 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
                     entry['contract'] = order.getContract()
                     entry['subscription'] = order.getName()
-                    entry['start_date'] = order.getStart()
-                    entry['expiration_date'] = order.getEnd()
+                    entry['start_date'] = managerlib.formatDate(
+                            order.getStart())
+                    entry['expiration_date'] = managerlib.formatDate(
+                            order.getEnd())
 
                     # TODO:  Pull this date logic out into a separate lib!
                     #        This is also used in mysubstab...
@@ -105,7 +108,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['status'] = _('In Compliance')
                         entry['compliance_note'] = \
                             _('Covered by contract %s through %s' % \
-                            (order.getContract(), entry['expiration_date']))
+                            (order.getContract(),
+                                entry['expiration_date'].strftime("%x")))
                 else:
                     entry['image'] = self._render_icon(gtk.STOCK_REMOVE)
                     entry['status'] = _('Out of Compliance')
