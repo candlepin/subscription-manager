@@ -67,12 +67,12 @@ class StubEntitlementCertificate(StubProductCertificate):
         if not start_date:
             self.start_date = datetime.now()
         if not end_date:
-            self.end_date = start_date + timedelta(days=365)
+            self.end_date = self.start_date + timedelta(days=365)
 
     def validRange(self):
         return DateRange(self.start_date, self.end_date)
 
-    def valid(self):
+    def valid(self, on_date=None):
         return self.start_date < datetime.now() < self.end_date
 
 

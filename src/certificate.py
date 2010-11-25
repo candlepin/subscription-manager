@@ -49,9 +49,9 @@ class Certificate(object):
         @param pem: The (optional) PEM encoded content.
         @type pem: str
         """
-        self.update(content)
+        self._update(content)
 
-    def update(self, content):
+    def _update(self, content):
         if content:
             x509 = X509.load_cert_string(content)
         else:
@@ -149,7 +149,7 @@ class Certificate(object):
         f = open(path)
         content = f.read()
         try:
-            self.update(content)
+            self._update(content)
         finally:
             f.close()
         self.path = path
@@ -592,8 +592,8 @@ class RedhatCertificate(Certificate):
 
     REDHAT = '1.3.6.1.4.1.2312.9'
 
-    def update(self, content):
-        Certificate.update(self, content)
+    def _update(self, content):
+        Certificate._update(self, content)
         redhat = OID(self.REDHAT)
         n = len(redhat)
         self.__redhat = self.extensions().ltrim(n)

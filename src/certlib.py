@@ -613,16 +613,27 @@ class CertSorter(object):
     def __init__(self, product_dir, entitlement_dir, on_date=None):
         self.product_dir = product_dir
         self.entitlement_dir = entitlement_dir
+        if not on_date:
+            on_date = datetime.now()
 
         prod_certs = self.product_dir.list()
         ent_certs = self.entitlement_dir.list()
 
         # These are the sorted cert lists we'll be populating:
-        self.unentitled = [] # products with no entitlement (i.e. always uncompliant)
-        self.expired = [] # expired entitlements on the given date
-        self.valid = [] # valid entitlements on the given date (all of them)
 
-        log.debug("Sorting product and entitlement certs.")
+        # products installed but not entitled (at all, even expired)
+        self.unentitled = []
+
+        # expired entitlements on the given date
+        self.expired = []
+
+        # valid entitlements on the given date, includes both installed
+        # products, and those that are not installed but we have an
+        # entitlement for anyhow.
+        self.valid = []
+
+        log.debug("Sorting product and entitlement cert status on: %s" %
+                on_date)
 
         entdict = {}
         for cert in ent_certs:
@@ -636,18 +647,32 @@ class CertSorter(object):
                 #        'contract': cert.getOrder().getContract(),
                 #        'account': cert.getOrder().getAccountNumber()
                 #}
-        for product in prod_certs :
-            pname = product.getProduct().getHash()
-            if entdict.has_key(pname):
-                if entdict[pname].valid(on_date=on_date):
-                    self.valid.append(entdict[pname])
-                else:
-                    self.expired.append(entdict[pname])
-            else:
-                self.unentitled.append(entdict[pname])
 
-        ## Include entitled but not installed products
-        #psnames = [prod[0] for prod in product_status]
+        # track a list of entitlement product IDs we encounter product certs for:
+        ent_product_ids_seen = []
+        for product in prod_certs :
+            product_id = product.getProduct().getHash()
+            ent_product_ids_seen.append(product_id)
+            if entdict.has_key(product_id):
+                ent_product_ids_seen.append(product_id)
+                if entdict[product_id].valid(on_date=on_date):
+                    log.debug("%s valid" % product_id)
+                    self.valid.append(entdict[product_id])
+                else:
+                    log.debug("%s expired" % product_id)
+                    self.expired.append(entdict[product_id])
+            else:
+                self.unentitled.append(product)
+
+        for product_id in entdict:
+            if product_id not in ent_product_ids_seen:
+                if entdict[product_id].valid(on_date=on_date):
+                    log.debug("%s uninstalled but valid" % product_id)
+                    self.valid.append(entdict[product_id])
+                else:
+                    log.debug("%s uninstalled and expired" % product_id)
+                    self.expired.append(entdict[product_id])
+
         #for cert in EntitlementDirectory().list():
         #    for product in cert.getProducts():
         #        if product.getHash() not in psnames:

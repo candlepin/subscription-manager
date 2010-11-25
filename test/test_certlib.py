@@ -146,63 +146,57 @@ class FindLastCompliantTests(unittest.TestCase):
         pass
 
 
-#class CertSorterTests(unittest.TestCase):
+class CertSorterTests(unittest.TestCase):
 
-#    def setUp(self):
-#        # Setup mock product and entitlement certs:
-#        self.prod_dir = StubCertificateDirectory([
-#            # Will be unentitled:
-#            StubProductCertificate(StubProduct('product1')),
-#            # Will be entitled:
-#            StubProductCertificate(StubProduct('product2')),
-#            # Will be entitled but expired:
-#            StubProductCertificate(StubProduct('product3')),
-#        ])
+    def setUp(self):
+        # Setup mock product and entitlement certs:
+        self.prod_dir = StubCertificateDirectory([
+            # Will be unentitled:
+            StubProductCertificate(StubProduct('product1')),
+            # Will be entitled:
+            StubProductCertificate(StubProduct('product2')),
+            # Will be entitled but expired:
+            StubProductCertificate(StubProduct('product3')),
+        ])
 
-#        #self.ent_dir = StubCertificateDirectory([
-#        #    StubEntitlementCertificate(
+        #self.ent_dir = StubCertificateDirectory([
+        #    StubEntitlementCertificate(
+        self.ent_dir = StubCertificateDirectory([
+            StubEntitlementCertificate(StubProduct('product2')),
+            StubEntitlementCertificate(StubProduct('product3'),
+                start_date=datetime.now() - timedelta(days=365),
+                end_date=datetime.now() - timedelta(days=2)),
+            StubEntitlementCertificate(StubProduct('product4'))
+        ])
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir)
 
-#        self.prod_dir = mock_product_dir([
-#            # will be unentitled:
-#            mock_product_cert('product1'),
-#            # will be entitled:
-#            mock_product_cert('product2'),
-#            # will be entitled but expired:
-#            mock_product_cert('product3')])
-#        self.ent_dir = mock_ent_dir([
-#            mock_ent_cert(['product2']),
-#            mock_ent_cert(['product3'],
-#                start_date=datetime.now() - timedelta(days=365),
-#                end_date=datetime.now() - timedelta(days=2)),
-#            # entitled but not installed:
-#            mock_ent_cert(['product4'])])
-#        self.sorter = CertSorter(self.prod_dir, self.ent_dir)
+    def test_unentitled_products(self):
+        self.assertEqual(1, len(self.sorter.unentitled))
+        self.assertTrue(cert_list_has_product(self.sorter.unentitled, 'product1'))
 
-#    def test_unentitled_products(self):
-#        self.assertEqual(1, len(sorter.unentitled))
-#        self.assertTrue(cert_list_has_product(sorter.unentitled, 'product1'))
+    def test_entitled_products(self):
+        self.assertEqual(2, len(self.sorter.valid))
+        self.assertTrue(cert_list_has_product(self.sorter.valid, 'product2'))
+        self.assertTrue(cert_list_has_product(self.sorter.valid, 'product4'))
 
-#    def test_entitled_products(self):
-#        self.assertEqual(2, len(sorter.valid))
-#        self.assertTrue(cert_list_has_product(sorter.valid, 'product2'))
-#        self.assertTrue(cert_list_has_product(sorter.valid, 'product4'))
+    def test_expired(self):
+        self.assertEqual(1, len(self.sorter.expired))
+        self.assertTrue(cert_list_has_product(self.sorter.expired, 'product3'))
 
-#    def test_expired(self):
-#        self.assertEqual(1, len(sorter.valid))
-#        self.assertTrue(cert_list_has_product(sorter.expired, 'product3'))
+    def test_expired_in_future(self):
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir,
+                on_date=datetime(2050, 1, 1))
+        self.assertEqual(3, len(self.sorter.expired))
+        self.assertTrue(cert_list_has_product(self.sorter.expired, 'product2'))
+        self.assertTrue(cert_list_has_product(self.sorter.expired, 'product3'))
+        self.assertTrue(cert_list_has_product(self.sorter.expired, 'product4'))
 
-#    def test_expired_in_future(self):
-#        pass
-
-#    def test_not_yet_active(self):
-#        pass
-
-#def cert_list_has_product(cert_list, product_id):
-#    found = False
-#    for cert in cert_list:
-#        if cert.getProduct().getHash() == product_id:
-#            found = True
-#            break
-#    return found
+def cert_list_has_product(cert_list, product_id):
+    found = False
+    for cert in cert_list:
+        if cert.getProduct().getHash() == product_id:
+            found = True
+            break
+    return found
 
 
