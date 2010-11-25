@@ -100,13 +100,6 @@ class ComplianceAssistant(object):
 
         # Setup initial last compliant date:
         self.last_compliant_date = find_last_compliant()
-        self.month_entry = self.compliance_xml.get_widget("month_entry")
-        self.day_entry = self.compliance_xml.get_widget("day_entry")
-        self.year_entry = self.compliance_xml.get_widget("year_entry")
-        if self.last_compliant_date:
-            self._set_noncompliant_date(self.last_compliant_date)
-        else:
-            self._set_noncompliant_date(date.today())
         self.noncompliant_date_radiobutton = self.compliance_xml.get_widget("noncompliant_date_radiobutton")
 
 
@@ -147,8 +140,6 @@ class ComplianceAssistant(object):
                                   'pool_id':str}
 
         self.subscriptions_store = storage.MappedListStore(subscriptions_type_map)
-        self.date_selector = DateSelector(self._compliance_date_selected)
-
         self.subscriptions_treeview = MappedListTreeView(self.subscriptions_store)
         self.subscriptions_treeview.add_column("Subscription Name",
                 self.subscriptions_store['product_name'], True)
@@ -176,8 +167,13 @@ class ComplianceAssistant(object):
         self.noncompliant_date_radiobutton = \
             self.compliance_xml.get_widget('noncompliant_date_radiobutton')
 
+        
+        self.date_picker = widgets.DatePicker(date.today())
+        date_picker_hbox = self.compliance_xml.get_widget("date_picker_hbox")
+        date_picker_hbox.pack_start(self.date_picker, False, False)
+        self.date_picker.show_all()
+
         self.compliance_xml.signal_autoconnect({
-            "on_compliance_date_button_clicked": self._date_select_button_clicked,
             "on_first_noncompliant_radiobutton_toggled": self._reload_screen,
             "on_noncompliant_date_radiobutton_toggled": self._reload_screen,
         })
@@ -189,12 +185,8 @@ class ComplianceAssistant(object):
         year, month, day = widget.get_date()
         month += 1 # this starts at 0 in GTK
         d = date(year, month, day)
-        self._set_noncompliant_date(d)
         self.noncompliant_date_radiobutton.set_active(True)
         self._reload_screen()
-
-    def _date_select_button_clicked(self, widget):
-        self.date_selector.show()
 
     def _get_noncompliant_date(self):
         """
@@ -204,9 +196,7 @@ class ComplianceAssistant(object):
         if self.first_noncompliant_radiobutton.get_active():
             return self.last_compliant_date
         else:
-            return datetime(int(self.year_entry.get_text()),
-                            int(self.month_entry.get_text()),
-                            int(self.day_entry.get_text()), tzinfo=certificate.GMT())
+            return self.date_picker.date
 
     def _display_subscriptions(self):
         self.subscriptions_store.clear()
@@ -360,9 +350,3 @@ class ComplianceAssistant(object):
                                   end=entitlement.validRange().end(),
                                   account=entitlement.getOrder().getAccountNumber(),
                                   products=products_list)
-
-    def _set_noncompliant_date(self, noncompliant_date):
-        self.month_entry.set_text(str(noncompliant_date.month))
-        self.day_entry.set_text(str(noncompliant_date.day))
-        self.year_entry.set_text(str(noncompliant_date.year))
-

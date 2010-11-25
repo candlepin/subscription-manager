@@ -26,8 +26,7 @@ log = getLogger(__name__)
 import managergui
 import managerlib_async
 
-from widgets import SubDetailsWidget
-from dateselect import DateSelector
+import widgets
 from utils import handle_gui_exception
 from contract_selection import ContractSelectionWindow
 
@@ -64,7 +63,10 @@ class AllSubscriptionsTab(object):
         self.all_subs_vbox.unparent()
 
         today = datetime.date.today()
-        self.date_selector = DateSelector(self.active_on_date_changed, initial_date=today)
+
+        self.date_picker = widgets.DatePicker(today)
+        date_picker_hbox = self.all_subs_xml.get_widget("date_picker_hbox")
+        date_picker_hbox.pack_start(self.date_picker)
 
         self.subs_store = gtk.ListStore(str, str, str, str, str, str, str,
                 gobject.TYPE_PYOBJECT)
@@ -91,19 +93,15 @@ class AllSubscriptionsTab(object):
         self.month_entry = self.all_subs_xml.get_widget("month_entry")
         self.day_entry = self.all_subs_xml.get_widget("day_entry")
         self.year_entry = self.all_subs_xml.get_widget("year_entry")
-        self.sub_details = SubDetailsWidget(show_contract=False)
+        self.sub_details = widgets.SubDetailsWidget(show_contract=False)
         self.all_subs_vbox.pack_start(self.sub_details.get_widget())
 
         self.active_on_checkbutton = self.all_subs_xml.get_widget('active_on_checkbutton')
-
-        # Set the date filter to todays date by default:
-        self._set_active_on_text(today.year, today.month, today.day)
 
         self.subscribe_button = self.all_subs_xml.get_widget('subscribe_button')
 
         self.all_subs_xml.signal_autoconnect({
             "on_search_button_clicked": self.search_button_clicked,
-            "on_date_select_button_clicked": self.date_select_button_clicked,
             "on_compatible_checkbutton_clicked": self.filters_changed,
             "on_overlap_checkbutton_clicked": self.filters_changed,
             "on_not_installed_checkbutton_clicked": self.filters_changed,
@@ -143,17 +141,6 @@ class AllSubscriptionsTab(object):
                 return contains_text
         return None
 
-    def get_active_on_date(self):
-        """
-        Returns a date for the "active on" field.
-        """
-        year = self.year_entry.get_text()
-        month = self.month_entry.get_text()
-        day = self.day_entry.get_text()
-
-        active_on_date = datetime.date(int(year), int(month),
-                int(day))
-        return active_on_date
         
     def display_pools(self):
         """
@@ -195,7 +182,7 @@ class AllSubscriptionsTab(object):
         is clicked.
         """
         try:
-            self.pool_stash.refresh(self.get_active_on_date(), self.updatedisplay)
+            self.pool_stash.refresh(self.date_picker.date, self.updatedisplay)
             # show pulsating progress bar while we wait for results
             self.pb = progress.Progress()
             self.pb.setLabel(_("Searching for subscriptions. Please wait."))
@@ -211,9 +198,6 @@ class AllSubscriptionsTab(object):
             gobject.source_remove(self.timer)
             self.timer = 0
 
-    def date_select_button_clicked(self, widget):
-        self.date_selector.show()
-
     def filters_changed(self, widget):
         """
         Callback used by several widgets related to filtering, anytime
@@ -221,21 +205,6 @@ class AllSubscriptionsTab(object):
         """
         log.debug("filters changed")
         self.display_pools()
-
-    def active_on_date_changed(self, widget):
-        """
-        Callback for the date selector whenever the user has selected a new
-        active on date.
-        """
-        year, month, day = widget.get_date()
-        month += 1 # this starts at 0
-        self._set_active_on_text(year, month, day)
-
-    def _set_active_on_text(self, year, month, day):
-        self.day_entry.set_text(str(day))
-        self.month_entry.set_text(str(month))
-        self.year_entry.set_text(str(year))
-
 
     def _contract_selected(self, pool):
         self._contract_selection_cancelled()

@@ -14,6 +14,7 @@
 #
 
 import os
+import datetime
 import gobject
 import gtk
 
@@ -267,3 +268,53 @@ class CellRendererDate(gtk.CellRendererText):
         else:
             date = value
         gtk.CellRendererText.set_property(self, 'text', date)
+
+
+class DatePicker(gtk.Button):
+
+    def __init__(self, date):
+        """
+        Initialize the DatePicker. date is a python datetime.date object.
+        """
+        gtk.Button.__init__(self)
+        self.set_label("BUTTTTON")
+        self.connect("clicked", self._button_clicked)
+
+        self._date = date
+
+        self._hbox = gtk.HBox(spacing = 3)
+        self.remove(self.get_child())
+        self.add(self._hbox)
+
+        self._label = gtk.Label(self._date.strftime("%x"))
+
+        self._hbox.pack_start(self._label)
+        self._hbox.pack_start(gtk.VSeparator())
+        self._hbox.pack_start(gtk.Arrow(gtk.ARROW_DOWN, gtk.SHADOW_IN))
+
+        self._calendar = None
+
+    @property
+    def date(self):
+        return self._date
+
+    def _button_clicked(self, button):
+        self._calendar_window = gtk.Window(gtk.WINDOW_POPUP)
+        
+        self._calendar = gtk.Calendar()
+        self._calendar.select_month(self._date.month - 1, self._date.year)
+        self._calendar.select_day(self._date.day)
+
+        self._calendar_window.add(self._calendar)
+        self._calendar_window.set_position(gtk.WIN_POS_MOUSE)
+        self._calendar_window.show_all()
+
+        self._calendar.connect("day-selected-double-click",
+                self._calendar_clicked)
+
+
+    def _calendar_clicked(self, calendar):
+        (year, month, day) = self._calendar.get_date()
+        self._date = datetime.date(year, month + 1, day)
+        self._label.set_label(self._date.strftime("%x"))
+        self._calendar_window.destroy()
