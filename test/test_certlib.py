@@ -19,6 +19,7 @@ from certlib import *
 from repolib import RepoFile
 from productid import ProductDatabase
 from modelhelpers import *
+from stubs import *
 from certificate import GMT
 
 
@@ -88,23 +89,31 @@ class PathTests(unittest.TestCase):
 class FindLastCompliantTests(unittest.TestCase):
 
     def test_just_entitlements(self):
-        cert1 = mock_ent_cert('product1', start_date=datetime(2010, 1, 1),
-                end_date=datetime(2050, 1, 1))
-        cert2 = mock_ent_cert('product2', start_date=datetime(2010, 1, 1),
-                end_date=datetime(2060, 1, 1))
-        ent_dir = mock_ent_dir([cert1, cert2])
-        ent_dir.listValid.return_value = [cert1, cert2]
-        last_compliant_date = find_last_compliant(ent_dir=ent_dir)
+        cert1 = StubEntitlementCertificate(
+                    StubProduct('product1'), start_date=datetime(2010, 1, 1),
+                    end_date=datetime(2050, 1, 1))
+        cert2 = StubEntitlementCertificate(
+                    StubProduct('product2'),
+                    start_date=datetime(2010, 1, 1),
+                    end_date=datetime(2060, 1, 1))
+        ent_dir = StubCertificateDirectory([cert1, cert2])
+        prod_dir = StubCertificateDirectory([])
+        last_compliant_date = find_last_compliant(ent_dir=ent_dir,
+                product_dir=prod_dir)
         self.assertEqual(2050, last_compliant_date.year)
 
     def test_unentitled_products(self):
-        product_dir = mock_product_dir([mock_product_cert('unentitledProduct')])
-        cert1 = mock_ent_cert('product1', start_date=datetime(2010, 1, 1),
+        cert = StubProductCertificate(StubProduct('unentitledProduct'))
+        product_dir = StubCertificateDirectory([cert])
+
+        cert1 = StubEntitlementCertificate(
+                StubProduct('product1'), start_date=datetime(2010, 1, 1),
                 end_date=datetime(2050, 1, 1))
-        cert2 = mock_ent_cert('product2', start_date=datetime(2010, 1, 1),
+        cert2 = StubEntitlementCertificate(
+                StubProduct('product2'),
+                start_date=datetime(2010, 1, 1),
                 end_date=datetime(2060, 1, 1))
-        ent_dir = mock_ent_dir_no_product([cert1, cert2])
-        ent_dir.listValid.return_value = [cert1, cert2]
+        ent_dir = StubCertificateDirectory([cert1, cert2])
 
         # Because we have an unentitled product, we should get back the current
         # date as the last date of compliance:
@@ -115,13 +124,17 @@ class FindLastCompliantTests(unittest.TestCase):
         self.assertEqual(today.day, last_compliant_date.day)
 
     def test_entitled_products(self):
-        product_dir = mock_product_dir([mock_product_cert('product1')])
-        cert1 = mock_ent_cert('product1', start_date=datetime(2010, 1, 1),
+        cert = StubProductCertificate(StubProduct('product1'))
+        product_dir = StubCertificateDirectory([cert])
+
+        cert1 = StubEntitlementCertificate(
+                StubProduct('product1'), start_date=datetime(2010, 1, 1),
                 end_date=datetime(2050, 1, 1))
-        cert2 = mock_ent_cert('product2', start_date=datetime(2010, 1, 1),
+        cert2 = StubEntitlementCertificate(
+                StubProductCertificate(StubProduct('product2')),
+                start_date=datetime(2010, 1, 1),
                 end_date=datetime(2060, 1, 1))
-        ent_dir = mock_ent_dir([cert1, cert2])
-        ent_dir.listValid.return_value = [cert1, cert2]
+        ent_dir = StubCertificateDirectory([cert1, cert2])
 
         # Because we have an unentitled product, we should get back the current
         # date as the last date of compliance:
@@ -133,20 +146,63 @@ class FindLastCompliantTests(unittest.TestCase):
         pass
 
 
+#class CertSorterTests(unittest.TestCase):
 
-class CertSorterTests(unittest.TestCase):
+#    def setUp(self):
+#        # Setup mock product and entitlement certs:
+#        self.prod_dir = StubCertificateDirectory([
+#            # Will be unentitled:
+#            StubProductCertificate(StubProduct('product1')),
+#            # Will be entitled:
+#            StubProductCertificate(StubProduct('product2')),
+#            # Will be entitled but expired:
+#            StubProductCertificate(StubProduct('product3')),
+#        ])
 
-    def setUp(self):
-        pass
+#        #self.ent_dir = StubCertificateDirectory([
+#        #    StubEntitlementCertificate(
 
-    def test_unentitled_products(self):
-        pass
+#        self.prod_dir = mock_product_dir([
+#            # will be unentitled:
+#            mock_product_cert('product1'),
+#            # will be entitled:
+#            mock_product_cert('product2'),
+#            # will be entitled but expired:
+#            mock_product_cert('product3')])
+#        self.ent_dir = mock_ent_dir([
+#            mock_ent_cert(['product2']),
+#            mock_ent_cert(['product3'],
+#                start_date=datetime.now() - timedelta(days=365),
+#                end_date=datetime.now() - timedelta(days=2)),
+#            # entitled but not installed:
+#            mock_ent_cert(['product4'])])
+#        self.sorter = CertSorter(self.prod_dir, self.ent_dir)
 
-    def test_entitled_products(self):
-        pass
+#    def test_unentitled_products(self):
+#        self.assertEqual(1, len(sorter.unentitled))
+#        self.assertTrue(cert_list_has_product(sorter.unentitled, 'product1'))
 
-    def test_entitled_but_not_installed(self):
-        pass
+#    def test_entitled_products(self):
+#        self.assertEqual(2, len(sorter.valid))
+#        self.assertTrue(cert_list_has_product(sorter.valid, 'product2'))
+#        self.assertTrue(cert_list_has_product(sorter.valid, 'product4'))
 
-    def test_expired(self):
-        pass
+#    def test_expired(self):
+#        self.assertEqual(1, len(sorter.valid))
+#        self.assertTrue(cert_list_has_product(sorter.expired, 'product3'))
+
+#    def test_expired_in_future(self):
+#        pass
+
+#    def test_not_yet_active(self):
+#        pass
+
+#def cert_list_has_product(cert_list, product_id):
+#    found = False
+#    for cert in cert_list:
+#        if cert.getProduct().getHash() == product_id:
+#            found = True
+#            break
+#    return found
+
+

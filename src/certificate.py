@@ -107,7 +107,7 @@ class Certificate(object):
         return DateRange(self.x509.get_not_before().get_datetime(),
                 self.x509.get_not_after().get_datetime())
 
-    def valid(self):
+    def valid(self, on_date=None):
         """
         Get whether the certificate is valid based on date.
         @return: True if valid.
@@ -115,6 +115,8 @@ class Certificate(object):
         """
         range = self.validRange()
         gmt = dt.utcnow()
+        if on_date:
+            gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())      
         return range.end() >= gmt
 
@@ -846,21 +848,25 @@ class Product:
     def __init__(self, hash, ext):
         self.hash = hash
         self.ext = ext
+        self.name = self.ext.get('1')
+        self.variant = self.ext.get('2')
+        self.arch = self.ext.get('3')
+        self.version = self.ext.get('4')
 
     def getHash(self):
         return self.hash
 
     def getName(self):
-        return self.ext.get('1')
+        return self.name
 
     def getVariant(self):
-        return self.ext.get('2')
+        return self.variant
 
     def getArch(self):
-        return self.ext.get('3')
+        return self.arch
 
     def getVersion(self):
-        return self.ext.get('4')
+        return self.version
 
     def __eq__(self, rhs):
         return (self.getHash() == rhs.getHash())

@@ -599,6 +599,69 @@ class UpdateReport:
         return '\n'.join(s)
 
 
+class CertSorter(object):
+    """
+    Class used to sort all certificates in the given Entitlement and Product
+    directories into status for a particular date.
+
+    Certs will be sorted into: installed, entitled, installed + entitled,
+    installed + unentitled, expired.
+
+    The date can be used to examine the state this system will likely be in
+    at some point in the future.
+    """
+    def __init__(self, product_dir, entitlement_dir, on_date=None):
+        self.product_dir = product_dir
+        self.entitlement_dir = entitlement_dir
+
+        prod_certs = self.product_dir.list()
+        ent_certs = self.entitlement_dir.list()
+
+        # These are the sorted cert lists we'll be populating:
+        self.unentitled = [] # products with no entitlement (i.e. always uncompliant)
+        self.expired = [] # expired entitlements on the given date
+        self.valid = [] # valid entitlements on the given date (all of them)
+
+        log.debug("Sorting product and entitlement certs.")
+
+        entdict = {}
+        for cert in ent_certs:
+            eproducts = cert.getProducts()
+            for product in eproducts:
+                entdict[product.getHash()] = cert
+                #{
+                #        'valid': cert.valid(),
+                #        'expires': formatDate(cert.validRange().end().isoformat()),
+                #        'serial': cert.serialNumber(),
+                #        'contract': cert.getOrder().getContract(),
+                #        'account': cert.getOrder().getAccountNumber()
+                #}
+        for product in prod_certs :
+            pname = product.getProduct().getHash()
+            if entdict.has_key(pname):
+                if entdict[pname].valid(on_date=on_date):
+                    self.valid.append(entdict[pname])
+                else:
+                    self.expired.append(entdict[pname])
+            else:
+                self.unentitled.append(entdict[pname])
+
+        ## Include entitled but not installed products
+        #psnames = [prod[0] for prod in product_status]
+        #for cert in EntitlementDirectory().list():
+        #    for product in cert.getProducts():
+        #        if product.getHash() not in psnames:
+        #            psname = product.getHash()
+        #            data = (psname, _('Not Installed'),
+        #                    str(entdict[psname]['expires']),
+        #                    entdict[psname]['serial'], entdict[psname]['contract'],
+        #                    entdict[psname]['account'])
+        #            product_status.append(data)
+        #return product_status
+
+
+
+
 
 def find_last_compliant(ent_dir=None, product_dir=None):
     """
