@@ -16,7 +16,8 @@
 from datetime import datetime, timedelta
 
 from certlib import EntitlementDirectory
-from certificate import Certificate, Product, GMT, DateRange
+from certificate import EntitlementCertificate, Product, GMT, DateRange, \
+        ProductCertificate
 
 class StubProduct(Product):
 
@@ -39,10 +40,24 @@ class StubProduct(Product):
             self.version = "1.0"
 
 
-# TODO: inherit from Certificate, will need a refactor:
-class StubProductCertificate(object):
+class StubOrder(object):
+
+    # Start/end are formatted strings, not actual datetimes.
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+
+    def getStart(self):
+        return self.start
+
+    def getEnd(self):
+        return self.end
+
+
+class StubProductCertificate(ProductCertificate):
 
     def __init__(self, product, provided_products=None, start_date=None, end_date=None):
+        # TODO: product should be a StubProduct, check for strings coming in and error out
         self.product = product
         self.provided_products = provided_products
         if not provided_products:
@@ -57,9 +72,11 @@ class StubProductCertificate(object):
             prods.extend(self.prods)
         return prods
 
-class StubEntitlementCertificate(StubProductCertificate):
 
-    def __init__(self, product, provided_products=None, start_date=None, end_date=None):
+class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate):
+
+    def __init__(self, product, provided_products=None, start_date=None, end_date=None,
+            order_end_date=None):
         StubProductCertificate.__init__(self, product, provided_products)
 
         self.start_date = start_date
@@ -69,11 +86,18 @@ class StubEntitlementCertificate(StubProductCertificate):
         if not end_date:
             self.end_date = self.start_date + timedelta(days=365)
 
-    def validRange(self):
+        if not order_end_date:
+            order_end_date = self.end_date
+        fmt = "%Y-%m-%dT%H:%M:%SZ"
+        self.order = StubOrder(self.start_date.strftime(fmt),
+                order_end_date.strftime(fmt))
+
+        self.valid_range = DateRange(self.start_date, self.end_date)
+
+    # Need to override this implementation to avoid requirement on X509:
+    def validRangeWithGracePeriod(self):
         return DateRange(self.start_date, self.end_date)
 
-    def valid(self, on_date=None):
-        return self.start_date < datetime.now() < self.end_date
 
 
 class StubCertificateDirectory(EntitlementDirectory):

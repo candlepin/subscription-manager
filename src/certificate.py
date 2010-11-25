@@ -59,13 +59,37 @@ class Certificate(object):
         self.__ext = Extensions(x509)
         self.x509 = x509
 
+        self._parse_subject()
+        self.serial = self.x509.get_serial_number()
+
+        self.altName = None
+        try:
+            nameExt = self.x509.get_ext('subjectAltName')
+            if nameExt:
+                self.altName = nameExt.get_value()
+        except LookupError:
+            # This may not be defined, seems to only be used for identity
+            # certificates:
+            pass
+
+    def _parse_subject(self):
+        self.subj = {}
+        subject = self.x509.get_subject()
+        subject.nid['UID'] = 458
+        for key, nid in subject.nid.items():
+            entry = subject.get_entries_by_nid(nid)
+            if len(entry):
+                asn1 = entry[0].get_data()
+                self.subj[key] = str(asn1)
+                continue
+
     def serialNumber(self):
         """
         Get the serial number
         @return: The x.509 serial number
         @rtype: str
         """
-        return self.x509.get_serial_number()
+        return self.serial
 
     def subject(self):
         """
@@ -74,16 +98,7 @@ class Certificate(object):
         @return: A dictionary of subject fields.
         @rtype: dict
         """
-        d = {}
-        subject = self.x509.get_subject()
-        subject.nid['UID'] = 458
-        for key, nid in subject.nid.items():
-            entry = subject.get_entries_by_nid(nid)
-            if len(entry):
-                asn1 = entry[0].get_data()
-                d[key] = str(asn1)
-                continue
-        return d
+        return self.subj
 
     def alternateName(self):
         """
@@ -91,12 +106,7 @@ class Certificate(object):
         @return: A string representation of hte alternate name
         @rtype: str
         """
-        nameExt = self.x509.get_ext('subjectAltName')
-
-        altName = None
-        if (nameExt):
-            altName = nameExt.get_value()
-        return altName
+        return self.altName
 
     def validRange(self):
         """
@@ -106,6 +116,7 @@ class Certificate(object):
         """
         return DateRange(self.x509.get_not_before().get_datetime(),
                 self.x509.get_not_after().get_datetime())
+
 
     def valid(self, on_date=None):
         """
@@ -138,6 +149,7 @@ class Certificate(object):
         """
         return self.__ext
 
+    # TODO: This looks like it should be in the c-tor:
     def read(self, path):
         """
         Read a certificate file.
@@ -204,6 +216,207 @@ class Certificate(object):
         if exp1 > exp2:
             return 1
         return 0
+
+
+class RedhatCertificate(Certificate):
+    """
+    Represents a Red Hat certificate.
+    @cvar REDHAT: The Red Hat base OID.
+    @type REDHAT: str
+    """
+
+    REDHAT = '1.3.6.1.4.1.2312.9'
+
+    def _update(self, content):
+        Certificate._update(self, content)
+        redhat = OID(self.REDHAT)
+        n = len(redhat)
+        self.__redhat = self.extensions().ltrim(n)
+
+    def redhat(self):
+        """
+        Get the extension subtree for the B{redhat} namespace.
+        @return: The extensions with the RH namespace trimmed.
+        @rtype: L{Extension}
+        """
+        try:
+            return self.__redhat
+        except:
+            return self.extensions()
+
+    def bogus(self):
+        bogus = Certificate.bogus(self)
+        if self.serialNumber() < 1:
+            bogus.append(_('Serial Number must be > 0'))
+        cn = self.subject().get('CN')
+        if not cn:
+            bogus.append(_('Common Name (%s) not-valid') % cn)
+        return bogus
+
+
+class ProductCertificate(RedhatCertificate):
+    """
+    Represents a Red Hat product/entitlement certificate.
+    It is OID schema aware and provides methods to
+    get product information.
+    """
+
+    def getProduct(self):
+        """
+        Get the product defined in the certificate.
+        @return: A product object.
+        @rtype: L{Product}
+        """
+        rhns = self.redhat()
+        products = rhns.find('1.*.1', 1)
+        if products:
+            p = products[0]
+            oid = p[0]
+            root = oid.rtrim(1)
+            hash = oid[1]
+            ext = rhns.branch(root)
+            return Product(hash, ext)
+
+    def getProducts(self):
+        """
+        Get a list products defined in the certificate.
+        @return: A list of product objects.
+        @rtype: [L{Product},..]
+        """
+        lst = []
+        rhns = self.redhat()
+        for p in rhns.find('1.*.1'):
+            oid = p[0]
+            root = oid.rtrim(1)
+            hash = oid[1]
+            ext = rhns.branch(root)
+            lst.append(Product(hash, ext))
+        return lst
+
+    def bogus(self):
+        bogus = RedhatCertificate.bogus(self)
+        if self.getProduct() is None:
+            log.warn('No product information in certificate: %s' % self.serialNumber())
+        return bogus
+
+    def __str__(self):
+        s = []
+        s.append(_('RAW:'))
+        s.append('===================================')
+        s.append(Certificate.__str__(self))
+        s.append(_('MODEL:'))
+        s.append('===================================')
+        s.append(_('Serial#: %s') % self.serialNumber())
+        s.append(_('Subject (CN): %s') % self.subject().get('CN'))
+#        s.append(_('Valid: [%s] %s\n') % (self.valid(), self.validRange()))
+        for p in self.getProducts():
+            s.append(str(p))
+        return '\n'.join(s)
+
+
+class EntitlementCertificate(ProductCertificate):
+    """
+    Represents an entitlement certificate.
+    """
+    def _update(self, content):
+        ProductCertificate._update(self, content)
+
+        rhns = self.redhat()
+        self.order = rhns.find('4.1', 1)
+        if self.order:
+            p = self.order[0]
+            oid = p[0]
+            root = oid.rtrim(1)
+            ext = rhns.branch(root)
+            self.order = Order(ext)
+
+    def getOrder(self):
+        """
+        Get the B{order} object defined in the certificate.
+        @return: An order object.
+        @rtype: L{Order}
+        """
+        return self.order
+
+    def getEntitlements(self):
+        """
+        Get the B{all} entitlements defined in the certificate.
+        @return: A list of entitlement object.
+        @rtype: [L{Entitlement},..]
+        """
+        return self.getContentEntitlements() \
+             + self.getRoleEntitlements()
+
+    def getContentEntitlements(self):
+        """
+        Get the B{content} entitlements defined in the certificate.
+        @return: A list of entitlement object.
+        @rtype: [L{Content},..]
+        """
+        lst = []
+        rhns = self.redhat()
+        entitlements = rhns.find('2.*.1.1')
+        for ent in entitlements:
+            oid = ent[0]
+            root = oid.rtrim(1)
+            ext = rhns.branch(root)
+            lst.append(Content(ext))
+        return lst
+
+    def getRoleEntitlements(self):
+        """
+        Get the B{role} entitlements defined in the certificate.
+        @return: A list of entitlement object.
+        @rtype: [L{Role},..]
+        """
+        lst = []
+        rhns = self.redhat()
+        entitlements = rhns.find('3.*.1')
+        for ent in entitlements:
+            oid = ent[0]
+            root = oid.rtrim(1)
+            ext = rhns.branch(root)
+            lst.append(Role(ext))
+        return lst
+
+    def validRange(self):
+        """
+        Get the I{valid} date range.
+
+        Overrides the L{Certificate} method to look at the L{Order} end date,
+        ignoring the grace period (if there is one).
+
+        @return: The valid date range.
+        @rtype: L{DateRange}
+        """
+        fmt = "%Y-%m-%dT%H:%M:%SZ"
+        order = self.getOrder()
+
+        begin = dt.strptime(order.getStart(), fmt)
+        end = dt.strptime(order.getEnd(), fmt)
+
+        return DateRange(begin, end)
+
+    def validRangeWithGracePeriod(self):
+        return super(EntitlementCertificate, self).validRange()
+
+    def validWithGracePeriod(self):
+        return self.validRangeWithGracePeriod().hasNow()
+
+    def bogus(self):
+        bogus = ProductCertificate.bogus(self)
+        if self.getOrder() is None:
+            bogus.append(_('No order infomation'))
+        return bogus
+
+    def __str__(self):
+        s = []
+        order = self.getOrder()
+        s.append(ProductCertificate.__str__(self))
+        for ent in self.getEntitlements():
+            s.append(str(ent))
+        s.append(str(order))
+        return '\n'.join(s)
 
 
 class Key(object):
@@ -581,203 +794,6 @@ class OID(object):
 
     def __str__(self):
         return '.'.join(self.part)
-
-
-class RedhatCertificate(Certificate):
-    """
-    Represents a Red Hat certificate.
-    @cvar REDHAT: The Red Hat base OID.
-    @type REDHAT: str
-    """
-
-    REDHAT = '1.3.6.1.4.1.2312.9'
-
-    def _update(self, content):
-        Certificate._update(self, content)
-        redhat = OID(self.REDHAT)
-        n = len(redhat)
-        self.__redhat = self.extensions().ltrim(n)
-
-    def redhat(self):
-        """
-        Get the extension subtree for the B{redhat} namespace.
-        @return: The extensions with the RH namespace trimmed.
-        @rtype: L{Extension}
-        """
-        try:
-            return self.__redhat
-        except:
-            return self.extensions()
-
-    def bogus(self):
-        bogus = Certificate.bogus(self)
-        if self.serialNumber() < 1:
-            bogus.append(_('Serial Number must be > 0'))
-        cn = self.subject().get('CN')
-        if not cn:
-            bogus.append(_('Common Name (%s) not-valid') % cn)
-        return bogus
-
-
-class ProductCertificate(RedhatCertificate):
-    """
-    Represents a Red Hat product/entitlement certificate.
-    It is OID schema aware and provides methods to
-    get product information.
-    """
-
-    def getProduct(self):
-        """
-        Get the product defined in the certificate.
-        @return: A product object.
-        @rtype: L{Product}
-        """
-        rhns = self.redhat()
-        products = rhns.find('1.*.1', 1)
-        if products:
-            p = products[0]
-            oid = p[0]
-            root = oid.rtrim(1)
-            hash = oid[1]
-            ext = rhns.branch(root)
-            return Product(hash, ext)
-
-    def getProducts(self):
-        """
-        Get a list products defined in the certificate.
-        @return: A list of product objects.
-        @rtype: [L{Product},..]
-        """
-        lst = []
-        rhns = self.redhat()
-        for p in rhns.find('1.*.1'):
-            oid = p[0]
-            root = oid.rtrim(1)
-            hash = oid[1]
-            ext = rhns.branch(root)
-            lst.append(Product(hash, ext))
-        return lst
-
-    def bogus(self):
-        bogus = RedhatCertificate.bogus(self)
-        if self.getProduct() is None:
-            log.warn('No product information in certificate: %s' % self.serialNumber())
-        return bogus
-
-    def __str__(self):
-        s = []
-        s.append(_('RAW:'))
-        s.append('===================================')
-        s.append(Certificate.__str__(self))
-        s.append(_('MODEL:'))
-        s.append('===================================')
-        s.append(_('Serial#: %s') % self.serialNumber())
-        s.append(_('Subject (CN): %s') % self.subject().get('CN'))
-        s.append(_('Valid: [%s] %s\n') % (self.valid(), self.validRange()))
-        for p in self.getProducts():
-            s.append(str(p))
-        return '\n'.join(s)
-
-
-class EntitlementCertificate(ProductCertificate):
-    """
-    Represents an entitlement certificate.
-    """
-
-    def getOrder(self):
-        """
-        Get the B{order} object defined in the certificate.
-        @return: An order object.
-        @rtype: L{Order}
-        """
-        rhns = self.redhat()
-        order = rhns.find('4.1', 1)
-        if order:
-            p = order[0]
-            oid = p[0]
-            root = oid.rtrim(1)
-            ext = rhns.branch(root)
-            return Order(ext)
-
-    def getEntitlements(self):
-        """
-        Get the B{all} entitlements defined in the certificate.
-        @return: A list of entitlement object.
-        @rtype: [L{Entitlement},..]
-        """
-        return self.getContentEntitlements() \
-             + self.getRoleEntitlements()
-
-    def getContentEntitlements(self):
-        """
-        Get the B{content} entitlements defined in the certificate.
-        @return: A list of entitlement object.
-        @rtype: [L{Content},..]
-        """
-        lst = []
-        rhns = self.redhat()
-        entitlements = rhns.find('2.*.1.1')
-        for ent in entitlements:
-            oid = ent[0]
-            root = oid.rtrim(1)
-            ext = rhns.branch(root)
-            lst.append(Content(ext))
-        return lst
-
-    def getRoleEntitlements(self):
-        """
-        Get the B{role} entitlements defined in the certificate.
-        @return: A list of entitlement object.
-        @rtype: [L{Role},..]
-        """
-        lst = []
-        rhns = self.redhat()
-        entitlements = rhns.find('3.*.1')
-        for ent in entitlements:
-            oid = ent[0]
-            root = oid.rtrim(1)
-            ext = rhns.branch(root)
-            lst.append(Role(ext))
-        return lst
-
-    def validRange(self):
-        """
-        Get the I{valid} date range.
-
-        Overrides the L{Certificate} method to look at the L{Order} end date,
-        ignoring the grace period (if there is one).
-
-        @return: The valid date range.
-        @rtype: L{DateRange}
-        """
-        fmt = "%Y-%m-%dT%H:%M:%SZ"
-        order = self.getOrder()
-
-        begin = dt.strptime(order.getStart(), fmt)
-        end = dt.strptime(order.getEnd(), fmt)
-
-        return DateRange(begin, end)
-
-    def validRangeWithGracePeriod(self):
-        return super(EntitlementCertificate, self).validRange()
-
-    def validWithGracePeriod(self):
-        return self.validRangeWithGracePeriod().hasNow()
-
-    def bogus(self):
-        bogus = ProductCertificate.bogus(self)
-        if self.getOrder() is None:
-            bogus.append(_('No order infomation'))
-        return bogus
-
-    def __str__(self):
-        s = []
-        order = self.getOrder()
-        s.append(ProductCertificate.__str__(self))
-        for ent in self.getEntitlements():
-            s.append(str(ent))
-        s.append(str(order))
-        return '\n'.join(s)
 
 
 class Order:

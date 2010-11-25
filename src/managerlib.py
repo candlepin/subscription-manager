@@ -264,9 +264,15 @@ class PoolFilter(object):
     """
     Helper to filter a list of pools.
     """
-    def __init__(self):
-        self.product_directory = ProductDirectory()
-        self.entitlement_directory = EntitlementDirectory()
+    def __init__(self, product_dir=None, entitlement_dir=None):
+
+        self.product_directory = product_dir
+        if not product_dir:
+            self.product_directory = ProductDirectory()
+
+        self.entitlement_directory = entitlement_dir
+        if not entitlement_dir:
+            self.entitlement_directory = EntitlementDirectory()
 
     def filter_entitlements_by_products(self, products):
         matched_data_dict = {}

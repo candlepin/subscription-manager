@@ -105,6 +105,7 @@ class AddAction(Action):
             try:
                 key, cert = self.build(bundle)
             except Exception, e:
+                log.exception(e)
                 log.error(
                     'Bundle not loaded:\n%s\n%s',
                     bundle,
@@ -191,6 +192,7 @@ class UpdateAction(Action):
                 br.write(key, cert)
                 report.added.append(cert)
             except Exception, e:
+                log.exception(e)
                 log.error(
                     'Bundle not loaded:\n%s\n%s',
                     bundle,
@@ -435,6 +437,7 @@ class CertificateDirectory(Directory):
                     raise Exception('\n - '.join(bogus))
                 certlist.append(cert)
             except Exception, e:
+                log.exception(e)
                 log.error(
                     'File: %s, not loaded\n%s',
                     path,

@@ -14,31 +14,20 @@
 #
 
 import time
-import datetime
+from datetime import datetime, timedelta
 import unittest
 
 import M2Crypto
 
 import certificate
 
-class StubOrder(object):
-
-    def __init__(self, start, end):
-        self.start = start
-        self.end = end
-
-    def getStart(self):
-        return self.start
-
-    def getEnd(self):
-        return self.end
-
+from stubs import *
 
 def yesterday():
     fmt = "%Y-%m-%dT%H:%M:%SZ"
-    now = datetime.datetime.now()
-    then = now - datetime.timedelta(days=1)
-    return then.strftime(fmt)
+    now = datetime.now()
+    then = now - timedelta(days=1)
+    return then
 
 class EntitlementCertificateTests(unittest.TestCase):
 
@@ -47,8 +36,9 @@ class EntitlementCertificateTests(unittest.TestCase):
             return StubOrder("2010-07-27T16:06:52Z",
                     "2011-07-26T20:00:00Z")
 
-        cert = certificate.EntitlementCertificate()
-        cert.getOrder = getStubOrder
+        cert = StubEntitlementCertificate(StubProduct('product'),
+                start_date=datetime(2010, 7, 27),
+                end_date=datetime(2050, 7, 26))
 
         self.assertTrue(cert.valid())
 
@@ -57,8 +47,9 @@ class EntitlementCertificateTests(unittest.TestCase):
             return StubOrder("2010-07-27T16:06:52Z",
                     yesterday())
 
-        cert = certificate.EntitlementCertificate()
-        cert.getOrder = getStubOrder
+        cert = StubEntitlementCertificate(StubProduct('product'),
+                start_date=datetime(2010, 7, 27),
+                end_date=yesterday())
 
         self.assertFalse(cert.valid())
 
@@ -67,17 +58,11 @@ class EntitlementCertificateTests(unittest.TestCase):
             return StubOrder("2010-07-27T16:06:52Z",
                     yesterday())
 
-        cert = certificate.EntitlementCertificate()
-        cert.getOrder = getStubOrder
-
-        begin = M2Crypto.ASN1.ASN1_UTCTIME()
-        begin.set_time(long(time.time()) - 200)
-
-        end = M2Crypto.ASN1.ASN1_UTCTIME()
-        end.set_time(long(time.time()) + 1000)
-
-        cert.x509.set_not_before(begin)
-        cert.x509.set_not_after(end)
+        # order ends yesterday, but cert expires tomorrow
+        cert = StubEntitlementCertificate(StubProduct('product'),
+                start_date=datetime(2010, 7, 27),
+                end_date=datetime.now() + timedelta(days=1),
+                order_end_date=yesterday())
 
         self.assertTrue(cert.validWithGracePeriod())
 
@@ -86,16 +71,10 @@ class EntitlementCertificateTests(unittest.TestCase):
             return StubOrder("2010-07-27T16:06:52Z",
                     yesterday())
 
-        cert = certificate.EntitlementCertificate()
-        cert.getOrder = getStubOrder
-
-        begin = M2Crypto.ASN1.ASN1_UTCTIME()
-        begin.set_time(long(time.time()) - 200)
-
-        end = M2Crypto.ASN1.ASN1_UTCTIME()
-        end.set_time(long(time.time()) - 100)
-
-        cert.x509.set_not_before(begin)
-        cert.x509.set_not_after(end)
+        # order ends yesterday, cert expires 5 minutes ago
+        cert = StubEntitlementCertificate(StubProduct('product'),
+                start_date=datetime(2010, 7, 27),
+                end_date=datetime.now() - timedelta(minutes=5),
+                order_end_date=yesterday())
 
         self.assertFalse(cert.validWithGracePeriod())

@@ -63,12 +63,13 @@ class MergePoolsTests(unittest.TestCase):
 class PoolFilterTests(unittest.TestCase):
 
     def test_uninstalled_filter_direct_match(self):
-        filter = PoolFilter()
         product1 = 'product1'
         product2 = 'product2'
 
-        filter.product_directory = StubCertificateDirectory([
+        pd = StubCertificateDirectory([
             StubProductCertificate(StubProduct(product2))])
+        filter = PoolFilter(product_dir=pd,
+                entitlement_dir=StubCertificateDirectory([]))
 
         pools = [
                 create_pool(product1, product1),
@@ -80,13 +81,13 @@ class PoolFilterTests(unittest.TestCase):
         self.assertEquals(product2, result[0]['productId'])
 
     def test_uninstalled_filter_provided_match(self):
-        filter = PoolFilter()
         product1 = 'product1'
         product2 = 'product2'
         provided = 'providedProduct'
-        filter.product_directory = StubCertificateDirectory([
+        pd = StubCertificateDirectory([
             StubProductCertificate(StubProduct(provided))])
-
+        filter = PoolFilter(product_dir=pd,
+                entitlement_dir=StubCertificateDirectory([]))
 
         pools = [
                 create_pool(product1, product1),
@@ -97,11 +98,12 @@ class PoolFilterTests(unittest.TestCase):
         self.assertEquals(product2, result[0]['productId'])
 
     def test_installed_filter_direct_match(self):
-        filter = PoolFilter()
         product1 = 'product1'
         product2 = 'product2'
-        filter.product_directory = StubCertificateDirectory([
+        pd = StubCertificateDirectory([
             StubProductCertificate(StubProduct(product2))])
+        filter = PoolFilter(product_dir=pd,
+                entitlement_dir=StubCertificateDirectory([]))
 
         pools = [
                 create_pool(product1, product1),
@@ -113,12 +115,14 @@ class PoolFilterTests(unittest.TestCase):
         self.assertEquals(product1, result[0]['productId'])
 
     def test_installed_filter_provided_match(self):
-        filter = PoolFilter()
         product1 = 'product1'
         product2 = 'product2'
         provided = 'providedProduct'
-        filter.product_directory = StubCertificateDirectory([
+        pd = StubCertificateDirectory([
             StubProductCertificate(StubProduct(provided))])
+        filter = PoolFilter(product_dir=pd,
+                entitlement_dir=StubCertificateDirectory([]))
+
 
         pools = [
                 create_pool(product1, product1),
@@ -129,10 +133,11 @@ class PoolFilterTests(unittest.TestCase):
         self.assertEquals(product1, result[0]['productId'])
 
     def test_filter_product_name(self):
-        filter = PoolFilter()
         product1 = 'Foo Product'
         product2 = 'Bar Product'
-        filter.product_directory = StubCertificateDirectory([])
+        pd = StubCertificateDirectory([])
+        filter = PoolFilter(product_dir=pd,
+                entitlement_dir=StubCertificateDirectory([]))
 
         pools = [
                 create_pool(product1, product1),

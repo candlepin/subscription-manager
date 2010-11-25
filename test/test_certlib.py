@@ -191,6 +191,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertTrue(cert_list_has_product(self.sorter.expired, 'product3'))
         self.assertTrue(cert_list_has_product(self.sorter.expired, 'product4'))
 
+
 def cert_list_has_product(cert_list, product_id):
     found = False
     for cert in cert_list:
