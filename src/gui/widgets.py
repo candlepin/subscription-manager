@@ -262,5 +262,8 @@ class CellRendererDate(gtk.CellRendererText):
         renderer.
         """
 
-        date = managerlib.formatDate(value)
-        gtk.CellRendererText.set_property(self, 'text', date.strftime("%x"))
+        if value:
+            date = managerlib.formatDate(value).strftime("%x")
+        else:
+            date = value
+        gtk.CellRendererText.set_property(self, 'text', date)
