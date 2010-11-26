@@ -29,7 +29,7 @@ log = getLogger(__name__)
 
 import certificate
 import certlib
-from certlib import find_last_compliant
+from certlib import find_last_compliant, CertSorter
 import managerlib
 import storage
 import widgets
@@ -99,7 +99,8 @@ class ComplianceAssistant(object):
 
         # Setup initial last compliant date:
         self.last_compliant_date = find_last_compliant()
-        self.noncompliant_date_radiobutton = self.compliance_xml.get_widget("noncompliant_date_radiobutton")
+        self.noncompliant_date_radiobutton = self.compliance_xml.get_widget(
+                "noncompliant_date_radiobutton")
 
 
         uncompliant_type_map = {'active':bool,
@@ -228,52 +229,39 @@ class ComplianceAssistant(object):
             self.subscriptions_store.add_map(subscriptions_map[key])
 
     def _display_uncompliant(self):
-        uncompliant = []
-        if self.last_compliant_date:
-            noncompliant_entitlements = self.entitlement_dir.listExpiredOnDate(date=self._get_noncompliant_date())
-
-        noncompliant_products = []
-        for noncompliant_entitlement in noncompliant_entitlements:
-            for np in noncompliant_entitlement.getProducts():
-                noncompliant_products.append(np)
-#        noncompliant_products = self.product_dir.listExpiredOnDate(date=self._get_noncompliant_date())
+        sorter = CertSorter(self.product_dir, self.entitlement_dir,
+                on_date=self.last_compliant_date)
 
         # These display the list of products uncompliant on the selected date:
         self.uncompliant_store.clear()
 
-        # find installed products with no entitlements
-        entitlement_filter = managerlib.EntitlementFilter()
-        noncompliant_installed_products = entitlement_filter.installed_products_without_entitlements()
-
-        # add all the installed but not entitled products
+        # installed but not entitled products:
         na = _("N/A")
-        for product in noncompliant_installed_products:
-            self.uncompliant_store.add_map({'active':False,
-                                            'product_name':product.getProduct().getName(),
-                                            'contract':na,
-                                            'end_date':na,
-                                            'entitlement_id':None,
-                                            'entitlement':None,
-                                            'product_id':product.getProduct().getHash(),
-                                            'align':0.0})
+        for product in sorter.unentitled:
+            self.uncompliant_store.add_map({
+                'active': False,
+                'product_name': product.getProduct().getName(),
+                'contract': na,
+                'end_date': na,
+                'entitlement_id': None,
+                'entitlement': None,
+                'product_id': product.getProduct().getHash(),
+                'align':0.0
+            })
 
         # installed and out of compliance
-        for product in noncompliant_products:
-            entitlements = self.entitlement_dir.findAllByProduct(product.getHash())
-            if entitlements is None:
-                print "No entitlement found for ", product.getName()
-                continue
-
-            for entitlement in entitlements:
-                self.uncompliant_store.add_map({'active':False,
-                                                'product_name':product.getName(),
-                                                'contract':entitlement.getOrder().getNumber(),
-                                                # is end_date when the cert expires or the orders end date? is it differnt?
-                                                'end_date':'%s' % self.format_date(entitlement.validRange().end()),
-                                                'entitlement_id':entitlement.serialNumber(),
-                                                'entitlement':entitlement,
-                                                'product_id':product.getHash(),
-                                                'align':0.0})
+        for ent_cert in sorter.expired:
+            self.uncompliant_store.add_map({
+                'active': False,
+                'product_name': ent_cert.getName(),
+                'contract': ent_cert.getOrder().getNumber(),
+                # is end_date when the cert expires or the orders end date? is it differnt?
+                'end_date': '%s' % self.format_date(ent_cert.validRange().end()),
+                'entitlement_id': ent_cert.serialNumber(),
+                'entitlement': entitlement,
+                'product_id': ent_cert.getProduct().getHash(),
+                'align':0.0
+            })
 
 
     def _on_uncompliant_active_toggled(self, cell, path):

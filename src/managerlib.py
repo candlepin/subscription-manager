@@ -248,17 +248,6 @@ class EntitlementFilter(object):
                     matched_data_dict[c.serialNumber()] = c
         return matched_data_dict.values()
 
-    def filter_entitlements_by_installed_products(self):
-        matched_data_dict = {}
-        installed_product_list = self.product_directory.list()
-        return self.filter_entitlements_by_products(installed_product_list)
-
-    def installed_products_without_entitlements(self):
-        installed_products_no_entitlements = []
-        for product_cert in self.product_directory.list():
-            if not self.entitlement_directory.findByProduct(product_cert.getProduct().getHash()):
-                installed_products_no_entitlements.append(product_cert)
-        return installed_products_no_entitlements	
 
 class PoolFilter(object):
     """
