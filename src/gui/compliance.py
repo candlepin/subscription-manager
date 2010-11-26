@@ -254,12 +254,12 @@ class ComplianceAssistant(object):
         for ent_cert in sorter.expired:
             self.uncompliant_store.add_map({
                 'active': False,
-                'product_name': ent_cert.getName(),
+                'product_name': ent_cert.getProduct().getName(),
                 'contract': ent_cert.getOrder().getNumber(),
                 # is end_date when the cert expires or the orders end date? is it differnt?
                 'end_date': '%s' % self.format_date(ent_cert.validRange().end()),
                 'entitlement_id': ent_cert.serialNumber(),
-                'entitlement': entitlement,
+                'entitlement': ent_cert,
                 'product_id': ent_cert.getProduct().getHash(),
                 'align':0.0
             })
@@ -299,6 +299,7 @@ class ComplianceAssistant(object):
         changes and we need to refresh.
         """
         log.debug("reloading screen")
+        log.debug("   widget = %s" % widget)
         # end date of first subs to expire
 
         self.last_compliant_date = find_last_compliant()
