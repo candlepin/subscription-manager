@@ -195,7 +195,9 @@ class ComplianceAssistant(object):
         if self.first_noncompliant_radiobutton.get_active():
             return self.last_compliant_date
         else:
-            return self.date_picker.date
+            # Need to convert to a datetime:
+            d = self.date_picker.date
+            return datetime(d.year, d.month, d.day)
 
     def _display_subscriptions(self):
         self.subscriptions_store.clear()
@@ -229,7 +231,7 @@ class ComplianceAssistant(object):
 
     def _display_uncompliant(self):
         sorter = CertSorter(self.product_dir, self.entitlement_dir,
-                on_date=self.last_compliant_date)
+                on_date=self._get_noncompliant_date())
 
         # These display the list of products uncompliant on the selected date:
         self.uncompliant_store.clear()
