@@ -169,6 +169,7 @@ class ComplianceAssistant(object):
 
         
         self.date_picker = widgets.DatePicker(date.today())
+        self.date_picker.connect('date-picked', self._compliance_date_selected)
         date_picker_hbox = self.compliance_xml.get_widget("date_picker_hbox")
         date_picker_hbox.pack_start(self.date_picker, False, False)
         self.date_picker.show_all()
@@ -182,9 +183,7 @@ class ComplianceAssistant(object):
         """
         Callback for the date selector to execute when the date has been chosen.
         """
-        year, month, day = widget.get_date()
-        month += 1 # this starts at 0 in GTK
-        d = date(year, month, day)
+        log.debug("Compliance date selected.")
         self.noncompliant_date_radiobutton.set_active(True)
         self._reload_screen()
 
@@ -302,8 +301,9 @@ class ComplianceAssistant(object):
 
         self.last_compliant_date = find_last_compliant()
 
-
-        self.pool_stash.refresh(active_on=self._get_noncompliant_date())
+        noncompliant_date = self._get_noncompliant_date()
+        log.debug("using noncompliance date: %s" % noncompliant_date)
+        self.pool_stash.refresh(active_on=noncompliant_date)
         if self.last_compliant_date:
             formatted = self.format_date(self.last_compliant_date)
             self.compliance_label.set_label(
