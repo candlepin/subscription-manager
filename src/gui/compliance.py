@@ -34,7 +34,6 @@ import managerlib
 import storage
 import widgets
 from connection import RestlibException
-from dateselect import DateSelector
 from utils import handle_gui_exception
 
 
