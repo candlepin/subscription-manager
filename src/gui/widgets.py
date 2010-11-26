@@ -272,6 +272,10 @@ class CellRendererDate(gtk.CellRendererText):
 
 class DatePicker(gtk.Button):
 
+    __gsignals__ = {
+            'date-picked': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, tuple())
+    }
+
     def __init__(self, date):
         """
         Initialize the DatePicker. date is a python datetime.date object.
@@ -318,3 +322,5 @@ class DatePicker(gtk.Button):
         self._date = datetime.date(year, month + 1, day)
         self._label.set_label(self._date.strftime("%x"))
         self._calendar_window.destroy()
+
+        self.emit('date-picked')
