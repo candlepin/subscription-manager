@@ -28,6 +28,7 @@ from certlib import system_log as inner_system_log
 from logutil import getLogger
 from config import initConfig
 from xml.utils.iso8601 import parse
+from threading import Thread
 
 log = getLogger(__name__)
 
@@ -476,7 +477,7 @@ class PoolStash(object):
         # All pools:
         self.all_pools = {}
 
-    def refresh(self, active_on):
+    def refresh(self, active_on, callback=None):
         """
         Refresh the list of pools from the server, active on the given date.
         """
@@ -500,6 +501,13 @@ class PoolStash(object):
         log.debug("found %s pools:" % len(self.all_pools))
         log.debug("   %s compatible" % len(self.compatible_pools))
         log.debug("   %s incompatible" % len(self.incompatible_pools))
+        if callback:
+            callback(self.compatible_pools, self.incompatible_pools,
+                    self.all_pools)
+
+    def async_refresh(self, active_on, callback):
+        Thread(target=self.refresh, args=(active_on, callback,)).start()
+
 
     def filter_pools(self, compatible, overlapping, uninstalled, text):
         """

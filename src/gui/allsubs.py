@@ -24,7 +24,7 @@ _ = gettext.gettext
 from logutil import getLogger
 log = getLogger(__name__)
 import managergui
-import managerlib_async
+import managerlib
 
 import widgets
 from utils import handle_gui_exception
@@ -55,7 +55,7 @@ class AllSubscriptionsTab(object):
         self.consumer = consumer
         self.facts = facts
 
-        self.pool_stash = managerlib_async.PoolStash(self.backend, self.consumer,
+        self.pool_stash = managerlib.PoolStash(self.backend, self.consumer,
                 self.facts)
 
         self.all_subs_xml = gtk.glade.XML(ALL_SUBS_GLADE)
@@ -183,7 +183,7 @@ class AllSubscriptionsTab(object):
         is clicked.
         """
         try:
-            self.pool_stash.refresh(self.date_picker.date, self.updatedisplay)
+            self.pool_stash.async_refresh(self.date_picker.date, self.update_display)
             # show pulsating progress bar while we wait for results
             self.pb = progress.Progress()
             self.pb.setLabel(_("Searching for subscriptions. Please wait."))
@@ -191,7 +191,7 @@ class AllSubscriptionsTab(object):
         except Exception, e:
             handle_gui_exception(e, _("Error fetching subscriptions from server: %s"))
 
-    def updatedisplay(self, compat, incompat, all):
+    def update_display(self, compat, incompat, all):
         # should probably use the params instead
         self.display_pools()
         if self.pb:
