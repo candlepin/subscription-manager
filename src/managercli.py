@@ -68,22 +68,27 @@ class CliCommand(object):
             description = shortdesc
         self.debug = 0
 
-        # Create a connection using the default configuration:
-        cert_file = ConsumerIdentity.certpath()
-        key_file = ConsumerIdentity.keypath()
-        self.new_cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
-        self.cp = self.new_cp
-
         self.parser = OptionParser(usage=usage, description=description)
         self._add_common_options()
+
         self.name = name
         self.certlib = CertLib()
+
+        self.proxy_url = None
+        self.proxy_hostname = None
+        self.proxy_port = None
 
     def _add_common_options(self):
         """ Add options that apply to all sub-commands. """
 
         self.parser.add_option("--debug", dest="debug",
-                default=0, help=_("debug level"))
+                               default=0, help=_("debug level"))
+        self.parser.add_option("--proxy", dest="proxy_url",
+                               default=None, help=_("http proxy url"))
+        self.parser.add_option("--proxyhostname", dest="proxy_hostname",
+                               default=None, help=_("http proxy hostname"))
+        self.parser.add_option("--proxyport", dest="proxy_port",
+                               default=None, help=_("http proxy port")) 
 
     def _do_command(self):
         pass
@@ -95,6 +100,7 @@ class CliCommand(object):
 
     def main(self, args=None):
 
+
         # In testing we sometimes specify args, otherwise use the default:
         if not args:
             args = sys.argv[1:]
@@ -103,6 +109,26 @@ class CliCommand(object):
 
         # we dont need argv[0] in this list...
         self.args = self.args[1:]
+
+        # support foo.example.com:3128 format
+        if self.options.proxy_url:
+            proxy_hostname, proxy_port = self.options.proxy_url.split(':')
+        if self.options.proxy_hostname:
+            proxy_hostname = self.options.proxy_hostname
+#            cfg.set('server','proxy_hostname', self.proxy_hostname)
+        if self.options.proxy_port:
+            proxy_port = self.options.proxy_port
+#            cfg.set('server', 'proxy_port', self.proxy_port)
+
+        # Create a connection using the default configuration:
+        cert_file = ConsumerIdentity.certpath()
+        key_file = ConsumerIdentity.keypath()
+ 
+        self.new_cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
+                                               proxy_hostname=proxy_hostname,
+                                               proxy_port=proxy_port)
+        self.cp = self.new_cp
+
         # do the work, catch most common errors here:
         try:
             self._do_command()
@@ -585,6 +611,7 @@ class ListCommand(CliCommand):
 class CLI:
 
     def __init__(self):
+        
         self.cli_commands = {}
         for clazz in [RegisterCommand, UnRegisterCommand, ListCommand, SubscribeCommand,\
                        UnSubscribeCommand, FactsCommand, IdentityCommand, \
@@ -593,6 +620,7 @@ class CLI:
             # ignore the base class
             if cmd.name != "cli":
                 self.cli_commands[cmd.name] = cmd
+        
 
     def _add_command(self, cmd):
         self.cli_commands[cmd.name] = cmd
