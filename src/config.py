@@ -28,6 +28,8 @@ DEFAULTS = {
         'ca_cert_dir': '/etc/rhsm/ca/',
         'repo_ca_cert': '/etc/rhsm/ca/redhat-uep.pem',
         'ssl_verify_depth': '3',
+        'proxy_hostname': None,
+        'proxy_port':None 
         }
 
 def initConfig(config_file=None):

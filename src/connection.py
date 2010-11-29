@@ -52,6 +52,18 @@ class RestlibException(ConnectionException):
         return self.msg
 
 
+class RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
+    # 2.7 httplib expects to be able to pass a body argument to
+    # endheaders, which the m2crypto.httpslib.ProxyHTTPSConnect does
+    # not support
+    def endheaders(self, body=None):
+        if not self._proxy_auth:
+            self._proxy_auth = self._encode_auth()
+
+        httpslib.HTTPSConnection.endheaders(self, body)
+
+        
+
 class Restlib(object):
     """
      A wrapper around httplib to make rest calls easier
@@ -59,6 +71,7 @@ class Restlib(object):
 
     def __init__(self, host, ssl_port, apihandler,
             username=None, password=None,
+            proxy_hostname=None, proxy_port=None,
             cert_file=None, key_file=None,
             ca_dir=None, insecure=False, ssl_verify_depth=1):
         self.host = host
@@ -74,6 +87,8 @@ class Restlib(object):
         self.username = username
         self.password = password
         self.ssl_verify_depth = ssl_verify_depth
+        self.proxy_hostname = proxy_hostname
+        self.proxy_port = proxy_port
 
         # Setup basic authentication if specified:
         if username and password:
@@ -112,11 +127,20 @@ class Restlib(object):
             context.set_verify(SSL.verify_fail_if_no_peer_cert, self.ssl_verify_depth)
         if self.cert_file:
             context.load_cert(self.cert_file, keyfile=self.key_file)
-            conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
+
+        if self.proxy_hostname and self.proxy_port:
+            log.info("using proxy %s:%s" % (self.proxy_hostname, self.proxy_port))
+            conn = RhsmProxyHTTPSConnection(self.proxy_hostname, self.proxy_port, ssl_context=context)
+            # this connection class wants the full url 
+            handler = "https://%s:%s%s" % (self.host, self.ssl_port, handler)
+            log.info("handler: %s" % handler)
         else:
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
-        conn.request(request_type, handler, body=json.dumps(info), \
+
+        conn.request(request_type, handler,
+                     body=json.dumps(info), 
                      headers=self.headers)
+
         response = conn.getresponse()
         result = {
             "content": response.read(),
@@ -168,6 +192,8 @@ class UEPConnection:
             host=config.get('server', 'hostname'),
             ssl_port=int(config.get('server', 'port')),
             handler=config.get('server', 'prefix'),
+            proxy_hostname=config.get('server', 'proxy_hostname'),
+            proxy_port=config.get('server', 'proxy_port'),
             username=None, password=None,
             cert_file=None, key_file=None):
         """
@@ -181,6 +207,9 @@ class UEPConnection:
         self.host = host
         self.ssl_port = ssl_port
         self.handler = handler
+        
+        self.proxy_hostname = proxy_hostname
+        self.proxy_port = proxy_port
 
         self.cert_file = cert_file
         self.key_file = key_file
@@ -213,12 +242,14 @@ class UEPConnection:
         if using_basic_auth:
             self.conn = Restlib(self.host, self.ssl_port, self.handler,
                     username=self.username, password=self.password,
+                    proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
                     ca_dir=self.ca_cert_dir, insecure=self.insecure,
                     ssl_verify_depth=self.ssl_verify_depth)
             log.info("Using basic authentication as: %s" % username)
         else:
             self.conn = Restlib(self.host, self.ssl_port, self.handler,
                     cert_file=self.cert_file, key_file=self.key_file,
+                    proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
                     ca_dir=self.ca_cert_dir, insecure=self.insecure,
                     ssl_verify_depth=self.ssl_verify_depth)
             log.info("Using certificate authentication: key = %s, cert = %s, "
