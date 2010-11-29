@@ -88,6 +88,7 @@ class ComplianceAssistant(object):
 
         self.product_dir = certlib.ProductDirectory()
         self.entitlement_dir = certlib.EntitlementDirectory()
+        self.cached_date = None
 
         self.chosen_entitlements = []
 
@@ -175,9 +176,61 @@ class ComplianceAssistant(object):
         self.date_picker.show_all()
 
         self.compliance_xml.signal_autoconnect({
-            "on_first_noncompliant_radiobutton_toggled": self._reload_screen,
-            "on_noncompliant_date_radiobutton_toggled": self._reload_screen,
+            "on_first_noncompliant_radiobutton_toggled": self._check_for_date_change,
+            "on_noncompliant_date_radiobutton_toggled": self._check_for_date_change,
         })
+
+    def show(self):
+        """
+        Called by the main window when this page is to be displayed.
+        """
+        try:
+            self._reload_screen()
+            self.window.show()
+        except RestlibException, e:
+            handle_gui_exception(e, _("Error fetching subscriptions from server: %s"))
+        except Exception, e:
+            handle_gui_exception(e, _("Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log for more information."))
+
+    def _reload_screen(self, widget=None):
+        """
+        Draws the entire screen, called when window is shown, or something
+        changes and we need to refresh.
+        """
+        log.debug("reloading screen")
+        log.debug("   widget = %s" % widget)
+        # end date of first subs to expire
+
+        self.last_compliant_date = find_last_compliant()
+
+        noncompliant_date = self._get_noncompliant_date()
+        log.debug("using noncompliance date: %s" % noncompliant_date)
+        self.pool_stash.refresh(active_on=noncompliant_date)
+        if self.last_compliant_date:
+            formatted = self.format_date(self.last_compliant_date)
+            self.compliance_label.set_label(
+                    _("All software is in compliance until %s.") % formatted)
+            self.first_noncompliant_radiobutton.set_label(
+                    _("%s (first date of non-compliance)") % formatted)
+
+        self._display_uncompliant()
+        self._display_subscriptions()
+
+    def _check_for_date_change(self, widget):
+        """
+        Called when the compliance date selection *may* have changed. 
+        Several signals must be sent out to cover all situations and thus
+        multiple may trigger at once. As such we need to store the 
+        non-compliant date last calculated, and compare it to see if 
+        anything has changed before we trigger an expensive refresh.
+        """
+        d = self._get_noncompliant_date()
+        if self.cached_date != d:
+            log.debug("New compliance date selected, reloading screen.")
+            self.cached_date = d
+            self._reload_screen()
+        else:
+            log.debug("No change in compliance date, skipping screen reload.")
 
     def _compliance_date_selected(self, widget):
         """
@@ -185,7 +238,7 @@ class ComplianceAssistant(object):
         """
         log.debug("Compliance date selected.")
         self.noncompliant_date_radiobutton.set_active(True)
-        self._reload_screen()
+        self._check_for_date_change(widget)
 
     def _get_noncompliant_date(self):
         """
@@ -278,43 +331,6 @@ class ComplianceAssistant(object):
                     self.chosen_entitlements.append(entitlement)
 
         # refresh subscriptions
-        self._display_subscriptions()
-
-
-    def show(self):
-        """
-        Called by the main window when this page is to be displayed.
-        """
-        try:
-            self._reload_screen()
-            self.window.show()
-        except RestlibException, e:
-            handle_gui_exception(e, _("Error fetching subscriptions from server: %s"))
-        except Exception, e:
-            handle_gui_exception(e, _("Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log for more information."))
-
-    def _reload_screen(self, widget=None):
-        """
-        Draws the entire screen, called when window is shown, or something
-        changes and we need to refresh.
-        """
-        log.debug("reloading screen")
-        log.debug("   widget = %s" % widget)
-        # end date of first subs to expire
-
-        self.last_compliant_date = find_last_compliant()
-
-        noncompliant_date = self._get_noncompliant_date()
-        log.debug("using noncompliance date: %s" % noncompliant_date)
-        self.pool_stash.refresh(active_on=noncompliant_date)
-        if self.last_compliant_date:
-            formatted = self.format_date(self.last_compliant_date)
-            self.compliance_label.set_label(
-                    _("All software is in compliance until %s.") % formatted)
-            self.first_noncompliant_radiobutton.set_label(
-                    _("%s (first date of non-compliance)") % formatted)
-
-        self._display_uncompliant()
         self._display_subscriptions()
 
     def format_date(self, date):
