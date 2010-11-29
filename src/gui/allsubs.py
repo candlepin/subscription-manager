@@ -67,6 +67,7 @@ class AllSubscriptionsTab(object):
         self.date_picker = widgets.DatePicker(today)
         date_picker_hbox = self.all_subs_xml.get_widget("date_picker_hbox")
         date_picker_hbox.pack_start(self.date_picker)
+        date_picker_hbox.show_all()
 
         self.subs_store = gtk.ListStore(str, str, str, str, str, str, str,
                 gobject.TYPE_PYOBJECT)
