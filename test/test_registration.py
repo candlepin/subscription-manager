@@ -26,7 +26,9 @@ class CliRegistrationTests(unittest.TestCase):
 
     def test_register_persists_consumer_cert(self):
         class StubUEP:
-            def __init__(self, username=None, password=None, cert_file=None, key_file=None):
+            def __init__(self, username=None, password=None,
+                         proxy_hostname=None, proxy_port=None,
+                         cert_file=None, key_file=None):
                 pass
   
             def registerConsumer(self, name, type, facts):
