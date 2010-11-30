@@ -27,26 +27,18 @@ import managergui
 import managerlib
 
 import widgets
+import storage
 from utils import handle_gui_exception
 from contract_selection import ContractSelectionWindow
 
 prefix = os.path.dirname(__file__)
 ALL_SUBS_GLADE = os.path.join(prefix, "data/allsubs.glade")
 
-# Pointers into the data store we're displaying:
-PRODUCT_NAME_INDEX = 0
-BUNDLED_COUNT_INDEX = 1
-POOL_COUNT_INDEX = 2
-QUANTITY_INDEX = 3
-AVAIL_INDEX = 4
-PRODUCT_ID_INDEX = 5
-POOL_ID_INDEX = 6
-MERGED_POOLS_INDEX = 7
-
 
 def progress_pulse(pb):
     pb.pulse()
     return True
+
 
 class AllSubscriptionsTab(object):
 
@@ -69,15 +61,26 @@ class AllSubscriptionsTab(object):
         date_picker_hbox.pack_start(self.date_picker)
         date_picker_hbox.show_all()
 
-        self.subs_store = gtk.ListStore(str, str, str, str, str, str, str,
-                gobject.TYPE_PYOBJECT)
+#        self.subs_store = gtk.ListStore(str, str, str, str, str, str, str,
+#                gobject.TYPE_PYOBJECT)
+        self.subs_store = storage.MappedListStore({
+            'product_name': str,
+            'bundled_count': str,
+            'pool_count': str,
+            'quantity': str,
+            'available': str,
+            'product_id': str,
+            'pool_id': str,
+            'merged_pools': gobject.TYPE_PYOBJECT,
+        })
+
         self.subs_treeview = self.all_subs_xml.get_widget('all_subs_treeview')
         self.subs_treeview.set_model(self.subs_store)
-        self._add_column(_("Subscription"), PRODUCT_NAME_INDEX)
-        self._add_column(_("# Bundled Products"), BUNDLED_COUNT_INDEX)
-        self._add_column(_("Total Contracts"), POOL_COUNT_INDEX)
-        self._add_column(_("Total Subscriptions"), QUANTITY_INDEX)
-        self._add_column(_("Available Subscriptions"), AVAIL_INDEX)
+        self._add_column(_("Subscription"), self.subs_store['product_name'])
+        self._add_column(_("# Bundled Products"), self.subs_store['bundled_count'])
+        self._add_column(_("Total Contracts"), self.subs_store['pool_count'])
+        self._add_column(_("Total Subscriptions"), self.subs_store['quantity'])
+        self._add_column(_("Available Subscriptions"), self.subs_store['available'])
 
         self.compatible_checkbutton = self.all_subs_xml.get_widget(
                 'compatible_checkbutton')
@@ -156,16 +159,16 @@ class AllSubscriptionsTab(object):
                 text=self.get_filter_text())
 
         for entry in merged_pools.values():
-            self.subs_store.append([
-                entry.product_name, 
-                entry.bundled_products,
-                len(entry.pools),
-                entry.quantity,
-                entry.quantity - entry.consumed,
-                entry.product_id,
-                entry.pools[0]['id'], # not displayed, just for lookup later
-                entry, # likewise not displayed, for subscription
-        ])
+            self.subs_store.add_map({
+                'product_name': entry.product_name, 
+                'bundled_count': entry.bundled_products,
+                'pool_count': len(entry.pools),
+                'quantity': entry.quantity,
+                'available': entry.quantity - entry.consumed,
+                'product_id': entry.product_id,
+                'pool_id': entry.pools[0]['id'], # not displayed, just for lookup later
+                'merged_pools': entry, # likewise not displayed, for subscription
+        })
 
     def _add_column(self, name, order):
         column = gtk.TreeViewColumn(name, gtk.CellRendererText(), text=order)
@@ -244,8 +247,8 @@ class AllSubscriptionsTab(object):
         """ Shows details for the current selected pool. """
         model, tree_iter = widget.get_selected()
         if tree_iter:
-            product_name = model.get_value(tree_iter, PRODUCT_NAME_INDEX)
-            pool_id = model.get_value(tree_iter, POOL_ID_INDEX)
+            product_name = model.get_value(tree_iter, self.subs_store['product_name'])
+            pool_id = model.get_value(tree_iter, self.subs_store['pool_id'])
             provided = self.pool_stash.lookup_provided_products(pool_id)
             self.sub_details.show(product_name, products=provided)
             
