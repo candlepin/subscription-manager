@@ -29,8 +29,22 @@ DEFAULTS = {
         'repo_ca_cert': '/etc/rhsm/ca/redhat-uep.pem',
         'ssl_verify_depth': '3',
         'proxy_hostname': None,
-        'proxy_port':None 
+        'proxy_port': None,
+        'proxy_user': None,
+        'proxy_password': None
         }
+
+class RhsmConfigParser(ConfigParser.ConfigParser):
+    def __init__(self, config_file=None, defaults=None):
+        self.config_file = config_file
+        ConfigParser.ConfigParser.__init__(self, defaults=defaults)
+        self.read(self.config_file)
+
+    def save(self, config_file=None):
+        fo = open(self.config_file, "wb")
+        print "writing to ", self.config_file
+        self.write(fo)
+
 
 def initConfig(config_file=None):
 
@@ -38,8 +52,7 @@ def initConfig(config_file=None):
     # If a config file was specified, assume we should overwrite the global config
     # to use it. This should only be used in testing. Could be switch to env var?
     if config_file:
-        CFG = ConfigParser.ConfigParser(defaults=DEFAULTS)
-        CFG.read(config_file)
+        CFG = RhsmConfigParser(config_file=config_file, defaults=DEFAULTS)
         return CFG
 
     # Normal application behavior, just read the default file if we haven't
@@ -49,6 +62,5 @@ def initConfig(config_file=None):
     except NameError:
         CFG = None
     if CFG == None:
-        CFG = ConfigParser.ConfigParser(defaults=DEFAULTS)
-        CFG.read(DEFAULT_CONFIG_PATH)
+        CFG = RhsmConfigParser(config_file=DEFAULT_CONFIG_PATH, defaults=DEFAULTS)
     return CFG
