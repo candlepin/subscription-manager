@@ -98,7 +98,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/__init__.py*
 %{_datadir}/rhsm/managercli.py*
 %{_datadir}/rhsm/managerlib.py*
-%{_datadir}/rhsm/managerlib_async.py*
 %{_datadir}/rhsm/repolib.py*
 /usr/lib/yum-plugins/subscription-manager.py*
 /usr/lib/yum-plugins/product-id.py*
