@@ -234,22 +234,6 @@ def getProductDescription(qproduct):
 
 
 
-class EntitlementFilter(object):
-    def __init__(self):
-        self.product_directory = ProductDirectory()
-        self.entitlement_directory = EntitlementDirectory()
-
-    
-    def filter_entitlements_by_products(self, products):
-        matched_data_dict = {}
-        for c in self.entitlement_directory.list():
-            for product in products:
-                productid = product.getProduct().getHash()
-                if productid == c.getProduct().getHash():
-                    matched_data_dict[c.serialNumber()] = c
-        return matched_data_dict.values()
-
-
 class PoolFilter(object):
     """
     Helper to filter a list of pools.
@@ -263,16 +247,6 @@ class PoolFilter(object):
         self.entitlement_directory = entitlement_dir
         if not entitlement_dir:
             self.entitlement_directory = EntitlementDirectory()
-
-    # TODO used? pool filter, not entitlement filter, this may not belong here:
-    def filter_entitlements_by_products(self, products):
-        matched_data_dict = {}
-        for c in self.entitlement_directory.list():
-            for product in products:
-                productid = product.getProduct().getHash()
-                if productid == c.getProduct().getHash():
-                    matched_data_dict[c.serialNumber()] = c
-        return matched_data_dict
 
     def filter_product_ids(self, pools, product_ids):
         """
