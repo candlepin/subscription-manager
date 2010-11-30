@@ -90,8 +90,6 @@ class ComplianceAssistant(object):
         self.entitlement_dir = certlib.EntitlementDirectory()
         self.cached_date = None
 
-        self.chosen_entitlements = []
-
         self.compliance_xml = gtk.glade.XML(COMPLIANCE_GLADE)
         self.compliance_label = self.compliance_xml.get_widget(
             "compliance_label")
@@ -132,13 +130,12 @@ class ComplianceAssistant(object):
         vbox.pack_end(self.uncompliant_treeview)
         self.uncompliant_treeview.show()
 
-        subscriptions_type_map = {'product_name':str,
-                                  'total_contracts':str,
-                                  'total_subscriptions':str,
-                                  'available_subscriptions':str,
-                                  'align':float,
-                                  'entitlement':gobject.TYPE_PYOBJECT,
-                                  'pool_id':str}
+        subscriptions_type_map = {
+            'product_name': str,
+            'total_contracts': int,
+            'total_subscriptions': int,
+            'available_subscriptions': int,
+        }
 
         self.subscriptions_store = storage.MappedListStore(subscriptions_type_map)
         self.subscriptions_treeview = MappedListTreeView(self.subscriptions_store)
@@ -252,37 +249,11 @@ class ComplianceAssistant(object):
             d = self.date_picker.date
             return datetime(d.year, d.month, d.day)
 
-    def _display_subscriptions(self):
-        self.subscriptions_store.clear()
-
-        selection = self.uncompliant_treeview.get_selection()
-
-#        pools = self.pool_stash.filter_pools(compatible=True, overlapping=False, uninstalled=False, text=None)
-#        self.pool_stash.refresh(active_on=self._get_noncompliant_date())
-#        pool_filter = managerlib.PoolFilter()
-
-        subscriptions_map = {}
-        # this should be roughly correct for locally manager certs, needs
-        # remote subs/pools as well
-        for entitlement in self.chosen_entitlements:
-#            pools_for_products = pool_filter.filter_pools_by_products(pools, entitlement.getProducts())
-#            print pools_for_products
-
-            for product in entitlement.getProducts():
-                subscriptions_map[product.getHash()] = {'product_name':product.getName(),
-                                                        # how many ents match this product?
-                                                        'total_contracts':entitlement.getOrder().getQuantity(),
-                                                        # this should eventually be the total of all the ents/pools for this product
-                                                        'total_subscriptions':entitlement.getOrder().getQuantity(),
-                                                        # pretty sure this is wrong
-                                                        'available_subscriptions':entitlement.getOrder().getQuantityUsed(),
-                                                        'entitlement': entitlement,
-                                                        'align':0.0}
-
-        for key in subscriptions_map:
-            self.subscriptions_store.add_map(subscriptions_map[key])
-
     def _display_uncompliant(self):
+        """
+        Displays the list of products or entitlements that will be out of
+        compliance on the selected date.
+        """
         sorter = CertSorter(self.product_dir, self.entitlement_dir,
                 on_date=self._get_noncompliant_date())
 
@@ -300,7 +271,7 @@ class ComplianceAssistant(object):
                 'entitlement_id': None,
                 'entitlement': None,
                 'product_id': product.getProduct().getHash(),
-                'align':0.0
+                'align': 0.0
             })
 
         # installed and out of compliance
@@ -314,21 +285,77 @@ class ComplianceAssistant(object):
                 'entitlement_id': ent_cert.serialNumber(),
                 'entitlement': ent_cert,
                 'product_id': ent_cert.getProduct().getHash(),
-                'align':0.0
+                'align': 0.0
             })
 
 
+    def _display_subscriptions(self):
+        """
+        Displays the list of subscriptions that will replace the selected
+        products/entitlements that will be out of compliance.
+
+        To do this, will will build a master list of all product IDs selected,
+        both the top level marketing products and provided products. We then
+        look for any subscription valid for the given date, which provides
+        *any* of those product IDs. Note that there may be duplicate subscriptions
+        shown. The user can select one subscription at a time to request an
+        entitlement for, after which we will refresh the screen based on this new
+        state.
+        """
+        self.subscriptions_store.clear()
+
+        subscriptions_map = {}
+        # this should be roughly correct for locally manager certs, needs
+        # remote subs/pools as well
+
+        # TODO: the above only hits entitlements, un-entitled products are not covered
+
+        selected_products = self._get_selected_product_ids()
+        pool_filter = managerlib.PoolFilter(self.product_dir, self.entitlement_dir)
+        relevant_pools = pool_filter.filter_product_ids(
+                self.pool_stash.all_pools.values(), selected_products)
+        merged_pools = managerlib.merge_pools(relevant_pools).values()
+
+        for entry in merged_pools:
+            self.subscriptions_store.add_map({
+                'product_name': entry.product_name,
+                'total_contracts': len(entry.pools),
+                'total_subscriptions': entry.quantity,
+                'available_subscriptions': entry.quantity - entry.consumed,
+            })
+
+
+    def _get_selected_product_ids(self):
+        """
+        Builds a master list of all product IDs for the selected non-compliant
+        products/entitlements. In the case of entitlements which will be expired,
+        we assume you want to keep all provided products you have now, so these
+        provided product IDs will be included in the list.
+        """
+        all_product_ids = []
+        for row in self.uncompliant_store:
+            if row[self.uncompliant_store['active']]:
+                ent_cert = row[self.uncompliant_store['entitlement']]
+                if not ent_cert:
+                    # This must be a completely unentitled product installed, just add it's
+                    # top level product ID:
+                    # TODO: can these product certs have provided products as well?
+                    all_product_ids.append(row[self.uncompliant_store['product_id']])
+                else:
+                    for product in ent_cert.getProducts():
+                        all_product_ids.append(product.getHash())
+        log.debug("Calculated all selected non-compliant product IDs:")
+        log.debug(all_product_ids)
+        return all_product_ids
+
     def _on_uncompliant_active_toggled(self, cell, path):
+        """
+        Triggered whenever the user checks one of the products/entitlements
+        in the non-compliant section of the UI.
+        """
         treeiter = self.uncompliant_store.get_iter_from_string(path)
         item = self.uncompliant_store.get_value(treeiter, self.uncompliant_store['active'])
         self.uncompliant_store.set_value(treeiter, self.uncompliant_store['active'], not item)
-
-        # chosen is a weird word, but selected in this context means something else
-        self.chosen_entitlements = []
-        for row in self.uncompliant_store:
-            if row[self.uncompliant_store['active']]:
-                for entitlement in self.entitlement_dir.findAllByProduct(row[self.uncompliant_store['product_id']]):
-                    self.chosen_entitlements.append(entitlement)
 
         # refresh subscriptions
         self._display_subscriptions()

@@ -264,6 +264,7 @@ class PoolFilter(object):
         if not entitlement_dir:
             self.entitlement_directory = EntitlementDirectory()
 
+    # TODO used? pool filter, not entitlement filter, this may not belong here:
     def filter_entitlements_by_products(self, products):
         matched_data_dict = {}
         for c in self.entitlement_directory.list():
@@ -273,19 +274,25 @@ class PoolFilter(object):
                     matched_data_dict[c.serialNumber()] = c
         return matched_data_dict
 
-    def filter_pools_by_products(self, pools, products):
+    def filter_product_ids(self, pools, product_ids):
         """
-        Filter a list of pools and return just those that have the
-        products in the list of products and returns those pools
+        Filter a list of pools and return just those that provide products
+        in the requested list of product ids. Both the top level product
+        and all provided products will be checked.
         """
-        matched_data_dict = {}
-        for d in pools:
-            for product in products:
-                productid = product.getProduct().getHash()
-                if productid == d['productId']:
-                    matched_data_dict[d['id']] = d
+        matched_pools = []
+        for pool in pools:
+            if pool['productId'] in product_ids:
+                log.debug("pool matches: %s" % pool['productId'])
+                matched_pools.append(pool)
+                continue
 
-        return matched_data_dict.values()
+            for provided in pool['providedProducts']:
+                if provided['productId'] in product_ids:
+                    log.debug("pool provides: %s" % provided['productId'])
+                    matched_pools.append(pool)
+                    break
+        return matched_pools
 
     def filter_out_uninstalled(self, pools):
         """
@@ -515,6 +522,10 @@ class PoolStash(object):
 
         This method does not actually hit the server, filtering is done in
         memory.
+
+        TODO: discrepancy here, we assume filtering in many cases when we may need tri-state
+        filtering like with the overlapping param. Inconsistent with our use of filtering
+        vs choosing one set over another.
         """
         pools = self.incompatible_pools.values()
 
