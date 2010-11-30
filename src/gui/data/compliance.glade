@@ -8,6 +8,8 @@
     <child>
       <widget class="GtkVBox" id="subscriptions_vbox">
         <property name="visible">True</property>
+        <property name="border_width">12</property>
+        <property name="spacing">12</property>
         <child>
           <widget class="GtkLabel" id="compliance_label">
             <property name="visible">True</property>
@@ -18,9 +20,6 @@
             <property name="expand">False</property>
             <property name="position">0</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
         <child>
           <widget class="GtkTable" id="table1">
@@ -92,7 +91,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">2</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -103,17 +102,18 @@
             </child>
           </widget>
           <packing>
-            <property name="position">3</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
           <widget class="GtkLabel" id="label5">
             <property name="visible">True</property>
+            <property name="xalign">0</property>
             <property name="label" translatable="yes">The following subscriptions will cover the products selected above on 2010-01-01:</property>
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="position">4</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </widget>
