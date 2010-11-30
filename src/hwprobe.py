@@ -27,6 +27,8 @@ import ethtool
 import socket
 import commands
 
+import subprocess
+from subprocess import CalledProcessError
 
 class Hardware:
 
@@ -154,18 +156,13 @@ class Hardware:
     def getVirtInfo(self):
         virt_dict = {}
 
-        # TODO:  This should probably use the subprocess module, but using this
-        #        mainly for RHEL 5 compatability
-        virt_output = commands.getstatusoutput('virt-what')
-        host_type = None
-
-        if virt_output[0] == 0:
-            host_type = virt_output[1].strip()
+        try:
+            host_type = subprocess.check_output('virt-what').strip()
             virt_dict['virt.host_type'] = host_type
 
             # If this is blank, then not a guest
             virt_dict['virt.is_guest'] = bool(host_type)
-        else:
+        except CalledProcessError:
             # Otherwise there was an error running virt-what - who knows
             virt_dict['virt.is_guest'] = 'Unknown'
 
