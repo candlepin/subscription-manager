@@ -566,6 +566,21 @@ class PoolStash(object):
         merged_pools = merge_pools(pools)
         return merged_pools
 
+    def lookup_provided_products(self, pool_id):
+        """
+        Return a list of tuples (product name, product id) for all products
+        provided for a given pool. If we do not actually have any info on this
+        pool, return None.
+        """
+        pool = self.all_pools[pool_id]
+        if pool is None:
+            return None
+
+        provided_products = []
+        for product in pool['providedProducts']:
+            provided_products.append((product['productName'], product['productId']))
+        return provided_products
+
 
 def _sub_dict(datadict, subkeys, default=None):
     return dict([(k, datadict.get(k, default)) for k in subkeys])

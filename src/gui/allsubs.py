@@ -246,16 +246,8 @@ class AllSubscriptionsTab(object):
         if tree_iter:
             product_name = model.get_value(tree_iter, PRODUCT_NAME_INDEX)
             pool_id = model.get_value(tree_iter, POOL_ID_INDEX)
-            provided = self._load_product_data(pool_id)
+            provided = self.pool_stash.lookup_provided_products(pool_id)
             self.sub_details.show(product_name, products=provided)
             
         self.subscribe_button.set_sensitive(tree_iter != None)
-
-    def _load_product_data(self, pool_id):
-        pool = self.pool_stash.all_pools[pool_id]
-        provided_products = []
-        log.debug(pool)
-        for product in pool['providedProducts']:
-            provided_products.append((product['productName'], product['productId']))
-        return provided_products
 

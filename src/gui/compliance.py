@@ -135,6 +135,7 @@ class ComplianceAssistant(object):
             'total_contracts': int,
             'total_subscriptions': int,
             'available_subscriptions': int,
+            'pool_id': str, # not displayed, just for lookup
         }
 
         self.subscriptions_store = storage.MappedListStore(subscriptions_type_map)
@@ -322,6 +323,7 @@ class ComplianceAssistant(object):
                 'total_contracts': len(entry.pools),
                 'total_subscriptions': entry.quantity,
                 'available_subscriptions': entry.quantity - entry.consumed,
+                'pool_id': entry.pools[0]['id'],
             })
 
 
@@ -372,14 +374,6 @@ class ComplianceAssistant(object):
         model, tree_iter = widget.get_selected()
         if tree_iter:
             product_name = model.get_value(tree_iter, self.subscriptions_store['product_name'])
-
-            entitlement = model.get_value(tree_iter, self.subscriptions_store['entitlement'])
-            products_list = [(product.getName(), product.getHash()) \
-                             for product in entitlement.getProducts()]
-
-            self.sub_details.show(product_name,
-                                  contract=entitlement.getOrder().getContract(),
-                                  start=entitlement.validRange().begin(),
-                                  end=entitlement.validRange().end(),
-                                  account=entitlement.getOrder().getAccountNumber(),
-                                  products=products_list)
+            pool_id = model.get_value(tree_iter, self.subscriptions_store['pool_id'])
+            provided = self.pool_stash.lookup_provided_products(pool_id)
+            self.sub_details.show(product_name, products=provided)
