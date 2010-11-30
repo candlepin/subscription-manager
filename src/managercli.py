@@ -110,6 +110,8 @@ class CliCommand(object):
         # we dont need argv[0] in this list...
         self.args = self.args[1:]
 
+        proxy_hostname = None
+        proxy_port = None
         # support foo.example.com:3128 format
         if self.options.proxy_url:
             proxy_hostname, proxy_port = self.options.proxy_url.split(':')
