@@ -14,7 +14,6 @@
           <widget class="GtkLabel" id="compliance_label">
             <property name="visible">True</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">All software is in compliance until</property>
           </widget>
           <packing>
             <property name="expand">False</property>
@@ -36,7 +35,6 @@
             </child>
             <child>
               <widget class="GtkRadioButton" id="first_noncompliant_radiobutton">
-                <property name="label" translatable="yes">01/05/1974 (First date of non-compliance)</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -106,10 +104,10 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="label5">
+          <widget class="GtkLabel" id="providing_subs_label">
             <property name="visible">True</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">The following subscriptions will cover the products selected above on 2010-01-01:</property>
+            <property name="label" translatable="yes">The following subscriptions will cover the products selected above:</property>
           </widget>
           <packing>
             <property name="expand">False</property>

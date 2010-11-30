@@ -92,9 +92,11 @@ class ComplianceAssistant(object):
 
         self.compliance_xml = gtk.glade.XML(COMPLIANCE_GLADE)
         self.compliance_label = self.compliance_xml.get_widget(
-            "compliance_label")
+                'compliance_label')
         self.compliant_today_label = self.compliance_xml.get_widget(
-            "compliant_today_label")
+                'compliant_today_label')
+        self.providing_subs_label = self.compliance_xml.get_widget(
+                'providing_subs_label')
 
         # Setup initial last compliant date:
         self.last_compliant_date = find_last_compliant()
@@ -210,6 +212,8 @@ class ComplianceAssistant(object):
                     _("All software is in compliance until %s.") % formatted)
             self.first_noncompliant_radiobutton.set_label(
                     _("%s (first date of non-compliance)") % formatted)
+            self.providing_subs_label.set_label(
+                    _("The following subscriptions will cover the products selected on %s" % noncompliant_date.strftime("%x")))
 
         self._display_uncompliant()
         self._display_subscriptions()
