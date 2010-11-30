@@ -30,6 +30,7 @@ import signal
 import pango
 
 import messageWindow
+import networkConfig
 import progress
 import managerlib
 import connection
@@ -211,6 +212,8 @@ class MainWindow(widgets.GladeWidget):
         self.compliance_assistant = ComplianceAssistant(self.backend,
                 self.consumer, self.facts)
 
+        self.network_config_dialog = networkConfig.NetworkConfigDialog()
+
         self.installed_tab = InstalledProductsTab(self.backend, self.consumer,
                 self.facts)
         self.my_subs_tab = MySubscriptionsTab(self.backend, self.consumer,
@@ -275,6 +278,8 @@ class MainWindow(widgets.GladeWidget):
         if registered:
             self._show_unregister_button()
 
+        self._show_network_config_button()
+
         self.button_bar.show_all()
 
     def _show_register_button(self):
@@ -291,6 +296,14 @@ class MainWindow(widgets.GladeWidget):
         """
         button = gtk.Button(label=_("Unregister System"))
         button.connect("clicked", self._unregister_button_clicked)
+        self.button_bar.add(button)
+
+    def _show_network_config_button(self):
+        """
+        Adds the network config button to the button bar.
+        """
+        button = gtk.Button(label=_("Advanced Network Config"))
+        button.connect("clicked", self._network_config_button_clicked)
         self.button_bar.add(button)
 
     def _show_facts_button(self):
@@ -329,6 +342,9 @@ class MainWindow(widgets.GladeWidget):
                     self.consumer.uuid)
         self.consumer.reload()
         self.refresh()
+
+    def _network_config_button_clicked(self, widget):
+        self.network_config_dialog.show()
 
     def _facts_button_clicked(self, widget):
         self.system_facts_dialog.show()
