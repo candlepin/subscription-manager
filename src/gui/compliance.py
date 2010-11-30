@@ -252,7 +252,7 @@ class ComplianceAssistant(object):
         else:
             # Need to convert to a datetime:
             d = self.date_picker.date
-            return datetime(d.year, d.month, d.day)
+            return datetime(d.year, d.month, d.day, tzinfo=certificate.GMT())
 
     def _display_uncompliant(self):
         """
