@@ -117,10 +117,8 @@ class CliCommand(object):
             proxy_hostname, proxy_port = self.options.proxy_url.split(':')
         if self.options.proxy_hostname:
             proxy_hostname = self.options.proxy_hostname
-#            cfg.set('server','proxy_hostname', self.proxy_hostname)
         if self.options.proxy_port:
             proxy_port = self.options.proxy_port
-#            cfg.set('server', 'proxy_port', self.proxy_port)
 
         # Create a connection using the default configuration:
         cert_file = ConsumerIdentity.certpath()
