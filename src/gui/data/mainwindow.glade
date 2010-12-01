@@ -9,6 +9,8 @@
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
+        <property name="border_width">12</property>
+        <property name="spacing">12</property>
         <child>
           <placeholder/>
         </child>
@@ -18,6 +20,7 @@
         <child>
           <widget class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
+            <property name="spacing">6</property>
             <child>
               <widget class="GtkNotebook" id="notebook">
                 <property name="width_request">824</property>
@@ -59,7 +62,7 @@
               <widget class="GtkVBox" id="vbox2">
                 <property name="width_request">200</property>
                 <property name="visible">True</property>
-                <property name="spacing">100</property>
+                <property name="spacing">12</property>
                 <child>
                   <widget class="GtkFrame" id="compliance_frame">
                     <property name="visible">True</property>
@@ -72,7 +75,7 @@
                         <child>
                           <widget class="GtkVBox" id="vbox3">
                             <property name="visible">True</property>
-                            <property name="spacing">15</property>
+                            <property name="spacing">12</property>
                             <child>
                               <widget class="GtkHBox" id="hbox2">
                                 <property name="visible">True</property>
@@ -172,7 +175,7 @@
                         <child>
                           <widget class="GtkVBox" id="button_bar">
                             <property name="visible">True</property>
-                            <property name="spacing">15</property>
+                            <property name="spacing">12</property>
                             <child>
                               <placeholder/>
                             </child>
