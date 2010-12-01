@@ -1,10 +1,11 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy project-wide -->
   <widget class="GtkWindow" id="window1">
     <child>
       <widget class="GtkVBox" id="sub_details_vbox">
+        <property name="height_request">250</property>
         <property name="visible">True</property>
         <child>
           <widget class="GtkLabel" id="label1">

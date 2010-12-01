@@ -91,7 +91,7 @@ class AllSubscriptionsTab(object):
         self.day_entry = self.all_subs_xml.get_widget("day_entry")
         self.year_entry = self.all_subs_xml.get_widget("year_entry")
         self.sub_details = widgets.SubDetailsWidget(show_contract=False)
-        self.all_subs_vbox.pack_start(self.sub_details.get_widget())
+        self.all_subs_vbox.pack_start(self.sub_details.get_widget(), expand=False)
 
         self.active_on_checkbutton = self.all_subs_xml.get_widget('active_on_checkbutton')
 

@@ -161,7 +161,7 @@ class ComplianceAssistant(object):
         self.subscriptions_treeview.show()
 
         self.sub_details = widgets.SubDetailsWidget(show_contract=False)
-        vbox.pack_start(self.sub_details.get_widget())
+        vbox.pack_start(self.sub_details.get_widget(), expand=False)
 
         self.first_noncompliant_radiobutton = \
             self.compliance_xml.get_widget('first_noncompliant_radiobutton')

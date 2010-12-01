@@ -54,7 +54,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         # Put the details widget in the middle
         details = self.sub_details.get_widget()
-        self.content.add(details)
+        self.content.pack_start(details, expand=False)
             
         # Set up columns on the view
         self.add_text_column(_("Subscription"), 'subscription', True)
