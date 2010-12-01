@@ -61,8 +61,6 @@ class AllSubscriptionsTab(object):
         date_picker_hbox.pack_start(self.date_picker)
         date_picker_hbox.show_all()
 
-#        self.subs_store = gtk.ListStore(str, str, str, str, str, str, str,
-#                gobject.TYPE_PYOBJECT)
         self.subs_store = storage.MappedListStore({
             'product_name': str,
             'bundled_count': str,
@@ -227,7 +225,7 @@ class AllSubscriptionsTab(object):
 
     def subscribe_button_clicked(self, button):
         model, tree_iter = self.subs_treeview.get_selection().get_selected()
-        pools = model.get_value(tree_iter, MERGED_POOLS_INDEX)
+        pools = model.get_value(tree_iter, self.subs_store['merged_pools'])
       
         # Decide if we need to show the contract selection dialog or not.
         # if there's just one pool, shortcut right to the callback that the
