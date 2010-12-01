@@ -83,10 +83,6 @@ class CliCommand(object):
                                default=0, help=_("debug level"))
         self.parser.add_option("--proxy", dest="proxy_url",
                                default=None, help=_("http proxy url"))
-        self.parser.add_option("--proxyhostname", dest="proxy_hostname",
-                               default=None, help=_("http proxy hostname"))
-        self.parser.add_option("--proxyport", dest="proxy_port",
-                               default=None, help=_("http proxy port"))
         self.parser.add_option("--proxyuser", dest="proxy_user",
                                 default=None, help=_("user for http proxy with basic authentication"))
         self.parser.add_option("--proxypassword", dest="proxy_password",
@@ -117,10 +113,6 @@ class CliCommand(object):
         # support foo.example.com:3128 format
         if self.options.proxy_url:
             self.proxy_hostname, self.proxy_port = self.options.proxy_url.split(':')
-        if self.options.proxy_hostname:
-            self.proxy_hostname = self.options.proxy_hostname
-        if self.options.proxy_port:
-            self.proxy_port = self.options.proxy_port
 
         # Create a connection using the default configuration:
         cert_file = ConsumerIdentity.certpath()
