@@ -18,12 +18,10 @@
 
 import os
 import sys
-import shutil
 import config
 import constants
 import connection
 import optparse
-import pprint
 from optparse import OptionParser
 from certlib import CertLib, ConsumerIdentity, ProductDirectory, EntitlementDirectory
 import managerlib
@@ -88,7 +86,11 @@ class CliCommand(object):
         self.parser.add_option("--proxyhostname", dest="proxy_hostname",
                                default=None, help=_("http proxy hostname"))
         self.parser.add_option("--proxyport", dest="proxy_port",
-                               default=None, help=_("http proxy port")) 
+                               default=None, help=_("http proxy port"))
+        self.parser.add_option("--proxyuser", dest="proxy_user",
+                                default=None, help=_("user for http proxy with basic authentication"))
+        self.parser.add_option("--proxypassword", dest="proxy_password",
+                                default=None, help=_("password for http proxy with basic authentication"))
 
     def _do_command(self):
         pass
@@ -114,21 +116,22 @@ class CliCommand(object):
         proxy_port = None
         # support foo.example.com:3128 format
         if self.options.proxy_url:
-            proxy_hostname, proxy_port = self.options.proxy_url.split(':')
+            self.proxy_hostname, self.proxy_port = self.options.proxy_url.split(':')
         if self.options.proxy_hostname:
-            proxy_hostname = self.options.proxy_hostname
+            self.proxy_hostname = self.options.proxy_hostname
         if self.options.proxy_port:
-            proxy_port = self.options.proxy_port
+            self.proxy_port = self.options.proxy_port
 
         # Create a connection using the default configuration:
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
  
-        self.new_cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
-                                               proxy_hostname=proxy_hostname,
-                                               proxy_port=proxy_port)
-        self.cp = self.new_cp
-
+        self.cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
+                                           proxy_hostname=self.proxy_hostname,
+                                           proxy_port=self.proxy_port,
+                                           proxy_user=self.options.proxy_user,
+                                           proxy_password=self.options.proxy_password)
+        
         # do the work, catch most common errors here:
         try:
             self._do_command()
@@ -210,7 +213,11 @@ class IdentityCommand(CliCommand):
             else:
                 if (self.options.username and self.options.password):
                     self.cp = connection.UEPConnection(username=self.options.username,
-                                                       password=self.options.password)
+                                                       password=self.options.password,
+                                                       proxy_hostname=self.proxy_hostname,
+                                                       proxy_port=self.proxy_port,
+                                                       proxy_user=self.options.proxy_user,
+                                                       proxy_password=self.options.proxy_password)
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
 
@@ -278,8 +285,12 @@ class RegisterCommand(CliCommand):
             consumername = self.options.username
 
         admin_cp = connection.UEPConnection(username=self.options.username,
-                password=self.options.password)
-
+                                            password=self.options.password,
+                                            proxy_hostname=self.proxy_hostname,
+                                            proxy_port=self.proxy_port,
+                                            proxy_user=self.options.proxy_user,
+                                            proxy_password=self.options.proxy_password)
+        
         if ConsumerIdentity.exists() and self.options.force:
             # First let's try to un-register previous consumer. This may fail
             # if consumer has already been deleted so we will continue even if
