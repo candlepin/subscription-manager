@@ -72,6 +72,7 @@ class Restlib(object):
     def __init__(self, host, ssl_port, apihandler,
             username=None, password=None,
             proxy_hostname=None, proxy_port=None,
+            proxy_user=None, proxy_password=None,
             cert_file=None, key_file=None,
             ca_dir=None, insecure=False, ssl_verify_depth=1):
         self.host = host
@@ -89,6 +90,8 @@ class Restlib(object):
         self.ssl_verify_depth = ssl_verify_depth
         self.proxy_hostname = proxy_hostname
         self.proxy_port = proxy_port
+        self.proxy_user = proxy_user
+        self.proxy_password = proxy_password
 
         # Setup basic authentication if specified:
         if username and password:
@@ -130,7 +133,10 @@ class Restlib(object):
 
         if self.proxy_hostname and self.proxy_port:
             log.info("using proxy %s:%s" % (self.proxy_hostname, self.proxy_port))
-            conn = RhsmProxyHTTPSConnection(self.proxy_hostname, self.proxy_port, ssl_context=context)
+            conn = RhsmProxyHTTPSConnection(self.proxy_hostname, self.proxy_port,
+                                            username=self.proxy_user,
+                                            password=self.proxy_password,
+                                            ssl_context=context)
             # this connection class wants the full url 
             handler = "https://%s:%s%s" % (self.host, self.ssl_port, handler)
             log.info("handler: %s" % handler)
@@ -194,6 +200,8 @@ class UEPConnection:
             handler=config.get('server', 'prefix'),
             proxy_hostname=config.get('server', 'proxy_hostname'),
             proxy_port=config.get('server', 'proxy_port'),
+            proxy_user=config.get('server', 'proxy_user'),
+            proxy_password=config.get('server', 'proxy_password'),
             username=None, password=None,
             cert_file=None, key_file=None):
         """
@@ -210,6 +218,8 @@ class UEPConnection:
         
         self.proxy_hostname = proxy_hostname
         self.proxy_port = proxy_port
+        self.proxy_user = proxy_user
+        self.proxy_password = proxy_password
 
         self.cert_file = cert_file
         self.key_file = key_file
@@ -243,6 +253,7 @@ class UEPConnection:
             self.conn = Restlib(self.host, self.ssl_port, self.handler,
                     username=self.username, password=self.password,
                     proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
+                    proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                     ca_dir=self.ca_cert_dir, insecure=self.insecure,
                     ssl_verify_depth=self.ssl_verify_depth)
             log.info("Using basic authentication as: %s" % username)
@@ -250,6 +261,7 @@ class UEPConnection:
             self.conn = Restlib(self.host, self.ssl_port, self.handler,
                     cert_file=self.cert_file, key_file=self.key_file,
                     proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
+                    proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                     ca_dir=self.ca_cert_dir, insecure=self.insecure,
                     ssl_verify_depth=self.ssl_verify_depth)
             log.info("Using certificate authentication: key = %s, cert = %s, "
