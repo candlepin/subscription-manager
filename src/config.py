@@ -34,7 +34,7 @@ DEFAULTS = {
         'proxy_password': None
         }
 
-class RhsmConfigParser(ConfigParser.ConfigParser):
+class RhsmConfigParser(ConfigParser.SafeConfigParser):
     def __init__(self, config_file=None, defaults=None):
         self.config_file = config_file
         ConfigParser.ConfigParser.__init__(self, defaults=defaults)
@@ -42,9 +42,7 @@ class RhsmConfigParser(ConfigParser.ConfigParser):
 
     def save(self, config_file=None):
         fo = open(self.config_file, "wb")
-        print "writing to ", self.config_file
         self.write(fo)
-
 
 def initConfig(config_file=None):
 
