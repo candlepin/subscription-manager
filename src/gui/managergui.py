@@ -265,18 +265,19 @@ class MainWindow(widgets.GladeWidget):
         Renders the Tools buttons dynamically.
         """
         log.debug("Showing buttons.")
+        # Clear all existing buttons:
         self.button_bar.foreach(lambda widget: self.button_bar.remove(widget))
+
         registered = self.registered()
         if not registered:
             self._show_register_button()
         else:
-            self._show_add_sub_button()
+            self._show_unregister_button()
+
+        self._show_add_sub_button()
+
 
         self._show_facts_button()
-
-        # Putting the unregister button at the bottom:
-        if registered:
-            self._show_unregister_button()
 
         self._show_network_config_button()
 
