@@ -27,8 +27,7 @@ import ethtool
 import socket
 import commands
 
-import subprocess
-from subprocess import CalledProcessError
+from subprocess import Popen, PIPE
 
 class Hardware:
 
@@ -157,17 +156,21 @@ class Hardware:
         virt_dict = {}
 
         try:
-            host_type = subprocess.check_output('virt-what').strip()
+            host_type = self._get_output('virt-what')
             virt_dict['virt.host_type'] = host_type
 
             # If this is blank, then not a guest
             virt_dict['virt.is_guest'] = bool(host_type)
-        except CalledProcessError:
+        # TODO:  Should this only catch OSErrors?
+        except:
             # Otherwise there was an error running virt-what - who knows
             virt_dict['virt.is_guest'] = 'Unknown'
 
         self.allhw.update(virt_dict)
         return virt_dict
+        
+    def _get_output(self, cmd):
+        return Popen([cmd], stdout=PIPE).communicate()[0].strip()
 
     def getAll(self):
         self.getUnameInfo()
