@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy project-wide -->
@@ -6,13 +6,21 @@
     <child>
       <widget class="GtkVBox" id="content">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <child>
-          <widget class="GtkTreeView" id="top_view">
+          <widget class="GtkScrolledWindow" id="scrolledwindow1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="rules_hint">True</property>
-            <property name="enable_grid_lines">vertical</property>
+            <property name="hscrollbar_policy">automatic</property>
+            <property name="vscrollbar_policy">automatic</property>
+            <property name="shadow_type">etched-in</property>
+            <child>
+              <widget class="GtkTreeView" id="top_view">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="rules_hint">True</property>
+                <property name="enable_grid_lines">vertical</property>
+              </widget>
+            </child>
           </widget>
           <packing>
             <property name="position">0</property>

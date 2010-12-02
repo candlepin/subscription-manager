@@ -217,9 +217,18 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkTreeView" id="all_subs_treeview">
+          <widget class="GtkScrolledWindow" id="scrolledwindow1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="hscrollbar_policy">automatic</property>
+            <property name="vscrollbar_policy">automatic</property>
+            <property name="shadow_type">etched-in</property>
+            <child>
+              <widget class="GtkTreeView" id="all_subs_treeview">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+              </widget>
+            </child>
           </widget>
           <packing>
             <property name="position">2</property>

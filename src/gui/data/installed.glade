@@ -7,12 +7,20 @@
       <widget class="GtkVBox" id="content">
         <property name="visible">True</property>
         <child>
-          <widget class="GtkTreeView" id="top_view">
+          <widget class="GtkScrolledWindow" id="scrolledwindow2">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="headers_clickable">False</property>
-            <property name="rules_hint">True</property>
-            <property name="enable_grid_lines">vertical</property>
+            <property name="hscrollbar_policy">automatic</property>
+            <property name="vscrollbar_policy">automatic</property>
+            <property name="shadow_type">etched-in</property>
+            <child>
+              <widget class="GtkTreeView" id="top_view">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="rules_hint">True</property>
+                <property name="enable_grid_lines">vertical</property>
+              </widget>
+            </child>
           </widget>
           <packing>
             <property name="position">0</property>

@@ -101,9 +101,19 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkTreeView" id="contract_selection_treeview">
+                      <widget class="GtkScrolledWindow" id="scrolledwindow1">
                         <property name="visible">True</property>
-                        <signal name="cursor_changed" handler="on_contract_selection_treeview_cursor_changed" swapped="no"/>
+                        <property name="can_focus">True</property>
+                        <property name="hscrollbar_policy">never</property>
+                        <property name="vscrollbar_policy">automatic</property>
+                        <property name="shadow_type">etched-in</property>
+                        <child>
+                          <widget class="GtkTreeView" id="contract_selection_treeview">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <signal name="cursor_changed" handler="on_contract_selection_treeview_cursor_changed" swapped="no"/>
+                          </widget>
+                        </child>
                       </widget>
                       <packing>
                         <property name="position">1</property>
