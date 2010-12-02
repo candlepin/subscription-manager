@@ -39,7 +39,7 @@ cfg = initConfig()
 def system_log(message, priority=syslog.LOG_NOTICE):
 	syslog.openlog("subscription-manager")
 	syslog.syslog(priority, message)
-    
+
 class ActionLock(Lock):
 
     PATH = '/var/run/subsys/rhsm/cert.pid'
@@ -342,7 +342,7 @@ class Directory:
                 os.unlink(path)
 
     def abspath(self, filename):
-        """ 
+        """
         Return path for a filename relative to this directory.
         """
         # NOTE: self.path is already aware of the Path.ROOT setting, so we
@@ -387,7 +387,7 @@ class CertificateDirectory(Directory):
 	for c in self.list():
             if not c.validRange().hasDate(date):
                 expired.append(c)
-	return expired 
+	return expired
 
     def listExpired(self):
         expired = []
@@ -580,7 +580,7 @@ class UpdateReport:
             for c in certificates:
                 p = c.getProduct()
                 if not p:
-                   p = c.getOrder()  
+                   p = c.getOrder()
 
                 s.append('%s[sn:%d (%s,) @ %s]' % \
                     (indent,
@@ -736,3 +736,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

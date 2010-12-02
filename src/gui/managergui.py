@@ -115,6 +115,7 @@ class Backend(object):
 
         self.product_monitor = self._monitor(self.product_dir)
         self.entitlement_monitor = self._monitor(self.entitlement_dir)
+        self.identity_monitor = gio.File(ConsumerIdentity.PATH).monitor()
 
     def _monitor(self, directory):
         return gio.File(directory.path).monitor()
@@ -122,6 +123,9 @@ class Backend(object):
     def monitor_certs(self, callback):
         self.product_monitor.connect('changed', callback)
         self.entitlement_monitor.connect('changed', callback)
+
+    def monitor_identity(self, callback):
+        self.identity_monitor.connect('changed', callback)
 
 
 class Consumer(object):
@@ -197,7 +201,7 @@ class MainWindow(widgets.GladeWidget):
         super(MainWindow, self).__init__('mainwindow.glade',
               ['main_window', 'notebook', 'compliance_count_label',
                'compliance_status_label', 'compliance_status_image',
-               'button_bar'])
+               'button_bar', 'system_name_label'])
 
         self.backend = Backend(connection.UEPConnection(
             cert_file=ConsumerIdentity.certpath(),
@@ -232,7 +236,11 @@ class MainWindow(widgets.GladeWidget):
         def on_cert_change(filemonitor, first_file, other_file, event_type):
             self._set_compliance_status()
 
+        def on_identity_change(filemonitor, first_file, other_file, event_type):
+            self._set_system_name()
+
         self.backend.monitor_certs(on_cert_change)
+        self.backend.monitor_identity(on_identity_change)
 
         self.refresh()
 
@@ -249,6 +257,7 @@ class MainWindow(widgets.GladeWidget):
     def refresh(self):
         """ Refresh the UI. """
         self._set_compliance_status()
+        self._set_system_name()
 
         # Show the All Subscriptions tab if registered, hide it otherwise:
         if self.registered() and self.notebook.get_n_pages() == 2:
@@ -387,6 +396,13 @@ class MainWindow(widgets.GladeWidget):
             self.compliance_count_label.set_text("")
             self.compliance_status_label.set_text(
                     _("Your system is compliant.") )
+
+    def _set_system_name(self):
+        self.consumer.reload()
+
+        # TODO:  Need to escape markup here
+        name = self.consumer.name or _('Not registered')
+        self.system_name_label.set_markup('<b>%s</b>' % name)
 
 
 class ManageSubscriptionPage:
