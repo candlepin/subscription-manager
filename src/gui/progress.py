@@ -4,7 +4,7 @@ import gtk
 
 class Progress:
 
-    def __init__(self):
+    def __init__(self, label):
         glade_prefix = os.path.dirname(__file__)
 
         self.xml = gtk.glade.XML(os.path.join(glade_prefix, "data/progress.glade"),
@@ -16,6 +16,8 @@ class Progress:
 
         self.lastProgress = 0.0
 
+        self.setLabel(label)
+
     def hide(self):
         self.progressWindow.hide()
 
@@ -26,7 +28,11 @@ class Progress:
         label.set_text(text)
 
     def pulse(self):
+        """
+        pulse for a glib mainloop timeout callback
+        """
         self.xml.get_widget("progressBar").pulse()
+        return True
 
     def setProgress(self, amount, total):
         if total:

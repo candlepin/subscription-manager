@@ -35,11 +35,6 @@ prefix = os.path.dirname(__file__)
 ALL_SUBS_GLADE = os.path.join(prefix, "data/allsubs.glade")
 
 
-def progress_pulse(pb):
-    pb.pulse()
-    return True
-
-
 class AllSubscriptionsTab(object):
 
     def __init__(self, backend, consumer, facts):
@@ -186,9 +181,9 @@ class AllSubscriptionsTab(object):
         try:
             self.pool_stash.async_refresh(self.date_picker.date, self.update_display)
             # show pulsating progress bar while we wait for results
-            self.pb = progress.Progress()
-            self.pb.setLabel(_("Searching for subscriptions. Please wait."))
-            self.timer = gobject.timeout_add(100, progress_pulse, self.pb)
+            self.pb = progress.Progress(
+                    _("Searching for subscriptions. Please wait."))
+            self.timer = gobject.timeout_add(100, self.pb.pulse)
         except Exception, e:
             handle_gui_exception(e, _("Error fetching subscriptions from server: %s"))
 

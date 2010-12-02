@@ -33,6 +33,7 @@ from certlib import find_last_compliant, CertSorter
 import managerlib
 import storage
 import widgets
+import progress
 from connection import RestlibException
 from utils import handle_gui_exception
 
@@ -180,6 +181,9 @@ class ComplianceAssistant(object):
             "on_noncompliant_date_radiobutton_toggled": self._check_for_date_change,
         })
 
+        self.pb = None
+        self.timer = None
+
     def show(self):
         """
         Called by the main window when this page is to be displayed.
@@ -191,6 +195,16 @@ class ComplianceAssistant(object):
             handle_gui_exception(e, _("Error fetching subscriptions from server: %s"))
         except Exception, e:
             handle_gui_exception(e, _("Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log for more information."))
+
+    def _reload_callback(self, compat, incompat, allsubs):
+        if self.pb:
+            self.pb.hide()
+            gobject.source_remove(self.timer)
+            self.pb = None
+            self.timer = None
+
+        self._display_uncompliant()
+        self._display_subscriptions()
 
     def _reload_screen(self, widget=None):
         """
@@ -205,7 +219,6 @@ class ComplianceAssistant(object):
 
         noncompliant_date = self._get_noncompliant_date()
         log.debug("using noncompliance date: %s" % noncompliant_date)
-        self.pool_stash.refresh(active_on=noncompliant_date)
         if self.last_compliant_date:
             formatted = self.format_date(self.last_compliant_date)
             self.compliance_label.set_label(
@@ -215,8 +228,12 @@ class ComplianceAssistant(object):
             self.providing_subs_label.set_label(
                     _("The following subscriptions will cover the products selected on %s" % noncompliant_date.strftime("%x")))
 
-        self._display_uncompliant()
-        self._display_subscriptions()
+        self.pool_stash.async_refresh(noncompliant_date, self._reload_callback)
+
+        # show pulsating progress bar while we wait for results
+        self.pb = progress.Progress(
+                _("Searching for subscriptions. Please wait."))
+        self.timer = gobject.timeout_add(100, self.pb.pulse)
 
     def _check_for_date_change(self, widget):
         """
