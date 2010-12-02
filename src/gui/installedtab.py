@@ -131,6 +131,11 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         subscription = selection['subscription'] or ''
         self.subscription_text.get_buffer().set_text(subscription)
 
+    def on_no_selection(self):
+        self.product_text.get_buffer().set_text("")
+        self.compliance_text.get_buffer().set_text("")
+        self.subscription_text.get_buffer().set_text("")
+
     def get_type_map(self):
         return {
             'image': gtk.gdk.Pixbuf,

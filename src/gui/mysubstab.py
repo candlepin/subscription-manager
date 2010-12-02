@@ -113,7 +113,14 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                               end=order.getEnd(),
                               account=order.getAccountNumber() or "",
                               products=products)
-                              
+ 
+    def on_no_selection(self):
+        """
+        Clears out the subscription details panel when no subscription is
+        selected. 
+        """
+        self.sub_details.clear()
+
     def _create_entry_map(self, cert):
         order = cert.getOrder()
         products = cert.getProducts()

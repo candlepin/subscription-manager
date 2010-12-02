@@ -245,10 +245,13 @@ class AllSubscriptionsTab(object):
         """ Shows details for the current selected pool. """
         model, tree_iter = widget.get_selected()
         if tree_iter:
-            product_name = model.get_value(tree_iter, self.subs_store['product_name'])
+            product_name = model.get_value(tree_iter,
+                    self.subs_store['product_name'])
             pool_id = model.get_value(tree_iter, self.subs_store['pool_id'])
             provided = self.pool_stash.lookup_provided_products(pool_id)
             self.sub_details.show(product_name, products=provided)
+        else:
+            self.sub_details.clear()
             
         self.subscribe_button.set_sensitive(tree_iter != None)
 

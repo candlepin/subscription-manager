@@ -110,8 +110,13 @@ class SubscriptionManagerTab(GladeWidget):
 
         if selection.is_valid():
             self.on_selection(selection)
+        else:
+            self.on_no_selection()
 
     def on_selection(self, selection):
+        pass
+
+    def on_no_selection(self):
         pass
 
 class SelectionWrapper(object):
@@ -214,7 +219,7 @@ class SubDetailsWidget(GladeWidget):
         Start and end should be formatted strings, not actual date objects.
         Products is a list of tuples in the format (name, id)
         """
-        self.subscription_text.get_buffer().set_text(name)
+        self._set(self.subscription_text, name)
 
         if self.show_contract:
             self._set(self.contract_number_text, contract)
@@ -230,12 +235,17 @@ class SubDetailsWidget(GladeWidget):
 
     def _set(self, text_view, text):
         """Set the buffer of the given TextView to contain the text"""
-        if text:
-            text_view.get_buffer().set_text(text)
+        text_view.get_buffer().set_text(text)
 
     def clear(self):
         """ No subscription to display. """
-        pass
+        self.bundled_products.clear()
+        self.subscription_text.get_buffer().set_text("")
+        if self.show_contract:
+            self._set(self.contract_number_text, "")
+            self._set(self.start_date_text, "")
+            self._set(self.expiration_date_text, "")
+            self._set(self.account_text, "")
 
     def get_widget(self):
         """ Returns the widget to be packed into a parent window. """
