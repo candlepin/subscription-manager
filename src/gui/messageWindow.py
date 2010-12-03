@@ -29,14 +29,6 @@ def wrap_text(txt):
     return '\n'.join(map(wrap_line, txt.split('\n')))
 
 
-def addFrame(dialog):
-    contents = dialog.get_children()[0]
-    dialog.remove(contents)
-    frame = gtk.Frame()
-    frame.set_shadow_type(gtk.SHADOW_OUT)
-    frame.add(contents)
-    dialog.add(frame)
-
 
 class MessageWindow:
 
@@ -52,7 +44,7 @@ class MessageWindow:
         
         self.dialog.set_default_response(0)
 
-        addFrame(self.dialog)
+        self.addFrame(self.dialog)
         self.dialog.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
         self.dialog.show_all()
         rc = self.dialog.run()
@@ -66,6 +58,15 @@ class MessageWindow:
         self.dialog.hide()
         self.dialog.destroy()
         gtk.main_iteration()
+
+    @staticmethod
+    def addFrame(dialog):
+        contents = dialog.get_children()[0]
+        dialog.remove(contents)
+        frame = gtk.Frame()
+        frame.set_shadow_type(gtk.SHADOW_OUT)
+        frame.add(contents)
+        dialog.add(frame)
 
 
 class ErrorDialog(MessageWindow):

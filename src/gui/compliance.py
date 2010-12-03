@@ -89,7 +89,6 @@ class ComplianceAssistant(object):
 
         self.product_dir = certlib.ProductDirectory()
         self.entitlement_dir = certlib.EntitlementDirectory()
-        self.cached_date = None
 
         self.compliance_xml = gtk.glade.XML(COMPLIANCE_GLADE)
         self.compliance_label = self.compliance_xml.get_widget(
@@ -100,7 +99,8 @@ class ComplianceAssistant(object):
                 'providing_subs_label')
 
         # Setup initial last compliant date:
-        self.last_compliant_date = find_last_compliant()
+        self.last_compliant_date = self._load_last_compliant_date()
+        self.cached_date = self.last_compliant_date
         self.noncompliant_date_radiobutton = self.compliance_xml.get_widget(
                 "noncompliant_date_radiobutton")
 
@@ -177,8 +177,8 @@ class ComplianceAssistant(object):
         self.date_picker.show_all()
 
         self.compliance_xml.signal_autoconnect({
+            # only watch one radiobutton in the group, it will signal for all
             "on_first_noncompliant_radiobutton_toggled": self._check_for_date_change,
-            "on_noncompliant_date_radiobutton_toggled": self._check_for_date_change,
         })
 
         self.pb = None
@@ -209,16 +209,15 @@ class ComplianceAssistant(object):
         self._display_uncompliant()
         self._display_subscriptions()
 
-    def _reload_screen(self, widget=None):
+    def _reload_screen(self):
         """
         Draws the entire screen, called when window is shown, or something
         changes and we need to refresh.
         """
         log.debug("reloading screen")
-        log.debug("   widget = %s" % widget)
         # end date of first subs to expire
 
-        self.last_compliant_date = find_last_compliant()
+        self.last_compliant_date = self._load_last_compliant_date()
 
         noncompliant_date = self._get_noncompliant_date()
         log.debug("using noncompliance date: %s" % noncompliant_date)
@@ -260,8 +259,13 @@ class ComplianceAssistant(object):
         Callback for the date selector to execute when the date has been chosen.
         """
         log.debug("Compliance date selected.")
+        was_active = self.noncompliant_date_radiobutton.get_active()
         self.noncompliant_date_radiobutton.set_active(True)
-        self._check_for_date_change(widget)
+
+        # otherwise the signal from the last compliant button will handle
+        # it for us
+        if was_active:
+            self._check_for_date_change(None)
 
     def _get_noncompliant_date(self):
         """
@@ -274,6 +278,14 @@ class ComplianceAssistant(object):
             # Need to convert to a datetime:
             d = self.date_picker.date
             return datetime(d.year, d.month, d.day, tzinfo=certificate.GMT())
+
+    def _load_last_compliant_date(self):
+        """
+        Return a datetime object representing the day, month, and year of
+        last compliance. Ignore the timestamp returned from certlib.
+        """
+        d = find_last_compliant()
+        return datetime(d.year, d.month, d.day, tzinfo=certificate.GMT())
 
     def _display_uncompliant(self):
         """

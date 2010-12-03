@@ -10,7 +10,7 @@ class Progress:
         self.xml = gtk.glade.XML(os.path.join(glade_prefix, "data/progress.glade"),
                 "progressWindow")
         self.progressWindow = self.xml.get_widget("progressWindow")
-        self.progressWindow.connect("delete-event", self.progressWindow.hide)
+        self.progressWindow.connect("delete-event", self._on_delete_event)
         cursor = gtk.gdk.Cursor(gtk.gdk.WATCH)
         self.progressWindow.window.set_cursor(cursor)
 
@@ -57,3 +57,6 @@ class Progress:
 
     def set_parent_window(self, window):
         self.progressWindow.set_transient_for(window)
+
+    def _on_delete_event(self, widget, event):
+        self.destroy()
