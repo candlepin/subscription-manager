@@ -19,9 +19,12 @@ from datetime import datetime, timedelta
 from certlib import EntitlementDirectory, ProductDirectory
 from certificate import GMT
 
+import constants
+import logutil
+import managergui
+import managerlib
 import widgets
 
-import logutil
 log = logutil.getLogger(__name__)
 
 import gettext
@@ -42,7 +45,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         Create a new 'My Subscriptions' tab.
         """
         super(MySubscriptionsTab, self).__init__('mysubs.glade')
-        
+        self.backend = backend
+        self.consumer = consumer
+        self.facts = facts
+
         self.sub_details = widgets.SubDetailsWidget()
 
         # Put the details widget in the middle
@@ -63,11 +69,24 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.update_subscriptions()
         
+        self.unsubscribe_button = self.glade.get_widget('unsubscribe_button')
+        self.glade.signal_autoconnect({'on_unsubscribe_button_clicked': self.unsubscribe_button_clicked})
+
         # Monitor entitlements/products for additions/deletions
         def on_cert_change(filemonitor, first_file, other_file, event_type):
             self.update_subscriptions()
 
         backend.monitor_certs(on_cert_change)
+
+    def unsubscribe_button_clicked(self, widget):
+        selection = widgets.SelectionWrapper(self.top_view.get_selection(), self.store)
+
+        serial = selection['serial']
+        try:
+            self.backend.uep.unbindBySerial(self.consumer.uuid, serial)
+        except Exception, e:
+            managergui.handle_gui_exception(e, constants.UNSUBSCRIBE_ERROR)
+        return 
 
     def update_subscriptions(self):
         """
@@ -101,6 +120,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         subscription.
         """
         # Load the entitlement certificate for the selected row:
+        print "on_selection", selection
         serial = selection['serial']
         cert = EntitlementDirectory().find(int(serial))
         order = cert.getOrder()
