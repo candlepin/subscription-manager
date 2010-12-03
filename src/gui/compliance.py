@@ -189,8 +189,8 @@ class ComplianceAssistant(object):
         Called by the main window when this page is to be displayed.
         """
         try:
-            self._reload_screen()
             self.window.show()
+            self._reload_screen()
         except RestlibException, e:
             handle_gui_exception(e, _("Error fetching subscriptions from server: %s"))
         except Exception, e:
@@ -237,6 +237,7 @@ class ComplianceAssistant(object):
         self.pb = progress.Progress(
                 _("Searching for subscriptions. Please wait."))
         self.timer = gobject.timeout_add(100, self.pb.pulse)
+        self.pb.set_parent_window(self.window)
 
     def _check_for_date_change(self, widget):
         """

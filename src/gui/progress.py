@@ -54,3 +54,6 @@ class Progress:
 
     def destroy(self):
         self.progressWindow.destroy()
+
+    def set_parent_window(self, window):
+        self.progressWindow.set_transient_for(window)
