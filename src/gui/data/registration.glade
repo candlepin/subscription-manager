@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy project-wide -->
@@ -6,16 +6,16 @@
     <property name="border_width">5</property>
     <property name="title" translatable="yes">System Registration</property>
     <property name="resizable">False</property>
-    <property name="window_position">center</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
-    <property name="has_separator">False</property>
     <accessibility>
       <atkproperty name="AtkObject::accessible-name">register_dialog</atkproperty>
     </accessibility>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox6">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <accessibility>
           <atkproperty name="AtkObject::accessible-name" translatable="yes">register_dialog_main_vbox</atkproperty>
@@ -24,7 +24,6 @@
           <widget class="GtkVBox" id="initialLoginWindowVbox1">
             <property name="visible">True</property>
             <property name="border_width">25</property>
-            <property name="orientation">vertical</property>
             <property name="spacing">7</property>
             <accessibility>
               <atkproperty name="AtkObject::accessible-name">initialLoginWindowVbox1</atkproperty>
@@ -122,7 +121,7 @@
                       <widget class="GtkEntry" id="account_login">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">&#x25CF;</property>
+                        <property name="invisible_char">●</property>
                         <accessibility>
                           <atkproperty name="AtkObject::accessible-name">account_login</atkproperty>
                         </accessibility>
@@ -138,7 +137,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="visibility">False</property>
-                        <property name="invisible_char">&#x25CF;</property>
+                        <property name="invisible_char">●</property>
                         <accessibility>
                           <atkproperty name="AtkObject::accessible-name">account_password</atkproperty>
                         </accessibility>
@@ -243,7 +242,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip" translatable="yes">A unique label for this system</property>
-                        <property name="invisible_char">&#x25CF;</property>
+                        <property name="invisible_char">●</property>
                         <accessibility>
                           <atkproperty name="AtkObject::accessible-name">consumer_name</atkproperty>
                         </accessibility>
@@ -309,7 +308,7 @@
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name">cancel_button</atkproperty>
                 </accessibility>
-                <signal name="clicked" handler="on_register_cancel_button_clicked"/>
+                <signal name="clicked" handler="on_register_cancel_button_clicked" swapped="no"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -328,7 +327,7 @@
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">register_button</atkproperty>
                   <atkproperty name="AtkObject::accessible-description">register_button</atkproperty>
                 </accessibility>
-                <signal name="clicked" handler="on_register_button_clicked"/>
+                <signal name="clicked" handler="on_register_button_clicked" swapped="no"/>
               </widget>
               <packing>
                 <property name="expand">False</property>

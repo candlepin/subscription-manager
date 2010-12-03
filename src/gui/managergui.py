@@ -215,6 +215,8 @@ class MainWindow(widgets.GladeWidget):
 
         self.registration_dialog = RegisterScreen(self.consumer, self.facts,
                 callbacks=[self.registration_changed])
+        self.registration_dialog.set_parent_window(self.main_window)
+        
         self.compliance_assistant = ComplianceAssistant(self.backend,
                 self.consumer, self.facts)
         self.compliance_assistant.set_parent_window(self.main_window)
@@ -881,6 +883,9 @@ class RegisterScreen:
             self.passwd.grab_focus()
             return False
         return True
+
+    def set_parent_window(self, window):
+        self.registerWin.set_transient_for(window)
 
     # TODO: I don't think this is necessary
     def _reload_cp_with_certs(self):
