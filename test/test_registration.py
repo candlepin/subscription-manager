@@ -28,6 +28,7 @@ class CliRegistrationTests(unittest.TestCase):
         class StubUEP:
             def __init__(self, username=None, password=None,
                          proxy_hostname=None, proxy_port=None,
+                         proxy_user=None, proxy_password=None,
                          cert_file=None, key_file=None):
                 pass
   
