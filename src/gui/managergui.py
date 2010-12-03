@@ -344,7 +344,8 @@ class MainWindow(widgets.GladeWidget):
 
     def _unregister_button_clicked(self, widget):
         log.info("Unregister button pressed, asking for confirmation.")
-        prompt = messageWindow.YesNoDialog(constants.CONFIRM_UNREGISTER)
+        prompt = messageWindow.YesNoDialog(constants.CONFIRM_UNREGISTER,
+                self.main_window)
         if not prompt.getrc():
             log.info("unregistrater not confirmed. cancelling")
             return
