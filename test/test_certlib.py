@@ -168,13 +168,14 @@ class CertSorterTests(unittest.TestCase):
                 end_date=datetime.now() - timedelta(days=2)),
             StubEntitlementCertificate(StubProduct('product4'))
         ])
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir)
 
     def test_unentitled_product_certs(self):
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir)
         self.assertEqual(1, len(self.sorter.unentitled_products.keys()))
         self.assertTrue(self.sorter.unentitled_products.has_key('product1'))
 
     def test_entitled_products(self):
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir)
         self.assertEqual(2, len(self.sorter.valid_products.keys()))
         self.assertTrue(self.sorter.valid_products.has_key('product2'))
         self.assertTrue(self.sorter.valid_products.has_key('product4'))
@@ -186,6 +187,7 @@ class CertSorterTests(unittest.TestCase):
             self.sorter.valid_entitlement_certs, 'product4'))
 
     def test_expired(self):
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir)
         self.assertEqual(1, len(self.sorter.expired_entitlement_certs))
         self.assertTrue(cert_list_has_product(
             self.sorter.expired_entitlement_certs, 'product3'))
@@ -213,6 +215,22 @@ class CertSorterTests(unittest.TestCase):
         self.assertTrue(self.sorter.valid_products.has_key('product1'))
         self.assertTrue(self.sorter.valid_products.has_key('product2'))
         self.assertTrue(self.sorter.valid_products.has_key('product3'))
+
+    def test_expired_but_provided_in_another_entitlement(self):
+        self.ent_dir = StubCertificateDirectory([
+            StubEntitlementCertificate(StubProduct('mktproduct'),
+                provided_products=[StubProduct('product3')]),
+            StubEntitlementCertificate(StubProduct('mktproduct'),
+                start_date=datetime.now() - timedelta(days=365),
+                end_date=datetime.now() - timedelta(days=2),
+                provided_products=[StubProduct('product3')]),
+            StubEntitlementCertificate(StubProduct('product4'))
+        ])
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir)
+        self.assertEquals(1, len(self.sorter.valid_products.keys()))
+        self.assertTrue(self.sorter.valid_products.has_key('product3'))
+        self.assertEquals(0, len(self.sorter.expired_products.keys()))
+        self.assertEquals(2, len(self.sorter.unentitled_products.keys()))
 
     def test_multi_product_entitlement_expired(self):
         # Setup one ent cert that provides everything we have installed (see setUp)

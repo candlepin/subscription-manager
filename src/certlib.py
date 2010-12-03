@@ -653,6 +653,8 @@ class CertSorter(object):
         self._scan_entitlement_certs()
 
         self._scan_for_unentitled_products()
+
+        self._remove_expired_if_valid_elsewhere()
         log.debug("valid entitled products: %s" % self.valid_products.keys())
         log.debug("expired entitled products: %s" % self.expired_products.keys())
 
@@ -697,7 +699,17 @@ class CertSorter(object):
                     self.unentitled_products[product_id] = \
                             self.all_products[product_id]
 
+    def _remove_expired_if_valid_elsewhere(self):
+        """
+        Scan the expired products, if any are showing up also in the valid dict,
+        remove them from expired.
 
+        This catches situations where an entitlement for a product expires, but
+        another still valid entitlement already provides the missing product.
+        """
+        for product_id in self.expired_products.keys():
+            if self.valid_products.has_key(product_id):
+                del self.expired_products[product_id]
 
 
 def find_last_compliant(ent_dir=None, product_dir=None):
