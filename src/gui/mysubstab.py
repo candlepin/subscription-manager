@@ -16,14 +16,14 @@
 import gtk
 
 from datetime import datetime, timedelta
-from certlib import EntitlementDirectory, ProductDirectory
+from certlib import EntitlementDirectory, ProductDirectory, CertLib
 from certificate import GMT
 
 import constants
 import logutil
 import managergui
-import managerlib
 import widgets
+from utils import handle_gui_exception
 
 log = logutil.getLogger(__name__)
 
@@ -48,6 +48,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
+        self.certlib = CertLib()
 
         self.sub_details = widgets.SubDetailsWidget()
 
@@ -81,12 +82,18 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
     def unsubscribe_button_clicked(self, widget):
         selection = widgets.SelectionWrapper(self.top_view.get_selection(), self.store)
 
+        # nothing selected
+        if not selection.is_valid():
+            return
+
         serial = selection['serial']
         try:
             self.backend.uep.unbindBySerial(self.consumer.uuid, serial)
         except Exception, e:
-            managergui.handle_gui_exception(e, constants.UNSUBSCRIBE_ERROR)
-        return 
+            handle_gui_exception(e, _("There was an error unsubsribing from %s with serial number %s" % (selection['subscription'],serial)))
+
+        self.certlib.update()
+        self.update_subscriptions()
 
     def update_subscriptions(self):
         """
@@ -120,7 +127,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         subscription.
         """
         # Load the entitlement certificate for the selected row:
-        print "on_selection", selection
         serial = selection['serial']
         cert = EntitlementDirectory().find(int(serial))
         order = cert.getOrder()
