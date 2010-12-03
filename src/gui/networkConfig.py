@@ -140,3 +140,6 @@ class NetworkConfigDialog:
             self.xml.get_widget("proxyPasswordEntry").set_sensitive(button.get_active())
             self.xml.get_widget("usernameLabel").set_sensitive(button.get_active())
             self.xml.get_widget("passwordLabel").set_sensitive(button.get_active())
+
+    def set_parent_window(self, window):
+        self.dlg.set_transient_for(window)

@@ -222,6 +222,7 @@ class MainWindow(widgets.GladeWidget):
         self.compliance_assistant.set_parent_window(self.main_window)
 
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
+        self.network_config_dialog.set_parent_window(self.main_window)
 
         self.installed_tab = InstalledProductsTab(self.backend, self.consumer,
                 self.facts)
