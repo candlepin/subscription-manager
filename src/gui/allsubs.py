@@ -184,6 +184,7 @@ class AllSubscriptionsTab(object):
             self.pb = progress.Progress(
                     _("Searching for subscriptions. Please wait."))
             self.timer = gobject.timeout_add(100, self.pb.pulse)
+            self.pb.set_parent_window(self.all_subs_vbox.get_parent_window().get_user_data())
         except Exception, e:
             handle_gui_exception(e, _("Error fetching subscriptions from server: %s"))
 
