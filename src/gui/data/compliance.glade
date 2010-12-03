@@ -3,8 +3,11 @@
   <!-- interface-requires gtk+ 2.20 -->
   <!-- interface-naming-policy project-wide -->
   <widget class="GtkWindow" id="compliance_assistant_window">
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
     <property name="default_width">1024</property>
     <property name="default_height">768</property>
+    <property name="destroy_with_parent">True</property>
     <child>
       <widget class="GtkVBox" id="subscriptions_vbox">
         <property name="visible">True</property>

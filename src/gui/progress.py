@@ -54,6 +54,3 @@ class Progress:
 
     def destroy(self):
         self.progressWindow.destroy()
-
-    def noop(self, win, event):
-        return True

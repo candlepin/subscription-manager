@@ -215,6 +215,7 @@ class MainWindow(widgets.GladeWidget):
                 callbacks=[self.registration_changed])
         self.compliance_assistant = ComplianceAssistant(self.backend,
                 self.consumer, self.facts)
+        self.compliance_assistant.set_parent_window(self.main_window)
 
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
 

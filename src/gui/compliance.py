@@ -196,6 +196,9 @@ class ComplianceAssistant(object):
         except Exception, e:
             handle_gui_exception(e, _("Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log for more information."))
 
+    def set_parent_window(self, window):
+        self.window.set_transient_for(window)
+
     def _reload_callback(self, compat, incompat, allsubs):
         if self.pb:
             self.pb.hide()
