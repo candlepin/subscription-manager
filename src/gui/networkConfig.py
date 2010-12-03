@@ -13,18 +13,23 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import config
 
 import os
+import gettext
+
 import gtk
 
-import gettext
+import config
+import managergui
+
 _ = gettext.gettext
 gettext.textdomain("subscription-manager")
 gtk.glade.bindtextdomain("subscription-manager")
 
 DIR = os.path.dirname(__file__)
 GLADE_XML = os.path.join(DIR, "data/networkConfig.glade")
+
+DEFAULT_PROXY_PORT="3128"
 
 class NetworkConfigDialog:
     """This is the dialog that allows setting http proxy settings.
@@ -67,8 +72,15 @@ class NetworkConfigDialog:
     
     def setInitialValues(self):
        
-        self.xml.get_widget("proxyEntry").set_text("%s:%s" % (self.cfg.get("server", "proxy_hostname"),
-                                                              self.cfg.get("server", "proxy_port")))
+        proxy_url = self.cfg.get("server", "proxy_hostname") or ""
+        # append port unless not specified, then append the default of 3128
+        if proxy_url:
+            proxy_url = proxy_url + ':' + (self.cfg.get("server", "proxy_port") or DEFAULT_PROXY_PORT)
+
+        self.xml.get_widget("proxyEntry").set_text("%s" % proxy_url)
+
+        # show proxy/proxy auth sections as being enabled if we have values set
+        # rhn actualy has a seperate for config flag for enabling, which seems overkill
         if self.cfg.get("server", "proxy_hostname"):
             self.xml.get_widget("enableProxyButton").set_active(True)
         if self.cfg.get("server", "proxy_user"):
@@ -76,26 +88,32 @@ class NetworkConfigDialog:
 
         self.enableAction(self.xml.get_widget("enableProxyAuthButton"))
         self.enableAction(self.xml.get_widget("enableProxyButton"))
-        self.xml.get_widget("proxyUserEntry").set_text(str(self.cfg.get("server", "proxy_user")))
-        self.xml.get_widget("proxyPasswordEntry").set_text(str(self.cfg.get("server", "proxy_password")))
+
+        # the extra or "" are to make sure we don't str None
+        self.xml.get_widget("proxyUserEntry").set_text(str(self.cfg.get("server", "proxy_user") or ""))
+        self.xml.get_widget("proxyPasswordEntry").set_text(str(self.cfg.get("server", "proxy_password") or ""))
     
     def writeValues(self, widget=None, dummy=None):
 
-        print "writeValues"
-        proxy = self.xml.get_widget("proxyEntry").get_text()
+        proxy = self.xml.get_widget("proxyEntry").get_text() or ""
 
         if proxy:
             # FIXME: this should probably be smarter
-            proxy_hostname, proxy_port = proxy.split(':')
-            self.cfg.set("server", "proxy_hostname", proxy_hostname)
-            self.cfg.set("server", "proxy_port", proxy_port)
+            try:
+                proxy_hostname, proxy_port = proxy.split(':')
+                self.cfg.set("server", "proxy_hostname", proxy_hostname)
+                self.cfg.set("server", "proxy_port", proxy_port)
+            except ValueError, e:
+                # no port? just write out the hostname and assume default
+                self.cfg.set("server", "proxy_hostname", proxy)
+                self.cfg.set("server", "proxy_port", DEFAULT_PROXY_PORT)
 
-        if self.xml.get_widget("proxyUserEntry").get_text():
+        if self.xml.get_widget("proxyUserEntry").get_text() is not None:
             self.cfg.set("server", "proxy_user",
                          str(self.xml.get_widget("proxyUserEntry").get_text()))
 
-        if self.xml.get_widget("proxyPasswordEntry").get_text():
-            self.cfg.set("server", "proxy_passwd",
+        if self.xml.get_widget("proxyPasswordEntry").get_text() is not None:
+            self.cfg.set("server", "proxy_password",
                          str(self.xml.get_widget("proxyPasswordEntry").get_text()))
         
         try:
@@ -107,6 +125,7 @@ class NetworkConfigDialog:
                                       self.dlg)
     
     def show(self):
+        self.setInitialValues()
         self.dlg.present()
 
     def close(self, button):
