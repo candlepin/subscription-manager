@@ -610,6 +610,10 @@ class CertSorter(object):
     Certs will be sorted into: installed, entitled, installed + entitled,
     installed + unentitled, expired.
 
+    When looking for the products we need, only installed products will be
+    considered. (i.e. we do not concern ourselves with products that are
+    entitled but not installed)
+
     The date can be used to examine the state this system will likely be in
     at some point in the future.
     """
@@ -618,75 +622,80 @@ class CertSorter(object):
         self.entitlement_dir = entitlement_dir
         if not on_date:
             on_date = datetime.now()
+        self.on_date = on_date
 
-        prod_certs = self.product_dir.list()
-        ent_certs = self.entitlement_dir.list()
+        self.expired_entitlement_certs = []
+        self.valid_entitlement_certs = []
 
-        # These are the sorted cert lists we'll be populating:
+        # All products installed on this machine, regardless of status. Maps
+        # product ID to certlib.Product object.
+        self.all_products = {}
 
-        # products installed but not entitled (at all, even expired)
-        self.unentitled = []
+        # the specific products that are not entitled in the above certs,
+        # dict maps product ID to product certificate.
+        self.unentitled_products = {}
 
-        # expired entitlements on the given date
-        self.expired = []
+        # specific products which are installed, we're entitled, but have expired
+        # on the date in question. this must watch out for possibility some other
+        # entitlement certificate provides this product. maps product ID
+        # to the expired entitlement certificate:
+        self.expired_products = {}
 
-        # valid entitlements on the given date, includes both installed
-        # products, and those that are not installed but we have an
-        # entitlement for anyhow.
-        self.valid = []
+        # specific products which are installed, and entitled on the given date.
+        # maps product ID to the valid entitlement certificate:
+        self.valid_products = {}
 
-        log.debug("Sorting product and entitlement cert status on: %s" %
+        log.debug("Sorting product and entitlement cert status for: %s" %
                 on_date)
 
-        entdict = {}
-        for cert in ent_certs:
-            eproducts = cert.getProducts()
-            for product in eproducts:
-                entdict[product.getHash()] = cert
-                #{
-                #        'valid': cert.valid(),
-                #        'expires': formatDate(cert.validRange().end().isoformat()),
-                #        'serial': cert.serialNumber(),
-                #        'contract': cert.getOrder().getContract(),
-                #        'account': cert.getOrder().getAccountNumber()
-                #}
+        self._populate_all_products()
 
-        # track a list of entitlement product IDs we encounter product certs for:
-        ent_product_ids_seen = []
-        for product in prod_certs :
-            product_id = product.getProduct().getHash()
-            ent_product_ids_seen.append(product_id)
-            if entdict.has_key(product_id):
-                ent_product_ids_seen.append(product_id)
-                if entdict[product_id].valid(on_date=on_date):
-                    log.debug("%s valid" % product_id)
-                    self.valid.append(entdict[product_id])
-                else:
-                    log.debug("%s expired" % product_id)
-                    self.expired.append(entdict[product_id])
+        self._scan_entitlement_certs()
+
+        self._scan_for_unentitled_products()
+        log.debug("valid entitled products: %s" % self.valid_products.keys())
+        log.debug("expired entitled products: %s" % self.expired_products.keys())
+
+    def _populate_all_products(self):
+        """ Build the dict of all installed products. """
+        prod_certs = self.product_dir.list()
+        for product_cert in prod_certs:
+            product = product_cert.getProduct()
+            self.all_products[product.getHash()] = product_cert
+        log.debug("Installed product IDs: %s" % self.all_products.keys())
+
+    def _scan_entitlement_certs(self):
+        ent_certs = self.entitlement_dir.list()
+
+        for ent_cert in ent_certs:
+
+            if ent_cert.valid(on_date=self.on_date):
+                self.valid_entitlement_certs.append(ent_cert)
+
+                self._scan_ent_cert_products(ent_cert, self.valid_products)
             else:
-                self.unentitled.append(product)
+                self.expired_entitlement_certs.append(ent_cert)
+                self._scan_ent_cert_products(ent_cert, self.expired_products)
 
-        for product_id in entdict:
-            if product_id not in ent_product_ids_seen:
-                if entdict[product_id].valid(on_date=on_date):
-                    log.debug("%s uninstalled but valid" % product_id)
-                    self.valid.append(entdict[product_id])
-                else:
-                    log.debug("%s uninstalled and expired" % product_id)
-                    self.expired.append(entdict[product_id])
+    def _scan_ent_cert_products(self, ent_cert, product_dict):
+        """
+        Scans this ent certs products, checks if they are installed, and
+        adds them to the provided dict (expired/valid) if so:
+        """
+        for product in ent_cert.getProducts():
+            product_id = product.getHash()
+            # Is this an installed product?
+            if self.all_products.has_key(product_id):
+                product_dict[product_id] = ent_cert
 
-        #for cert in EntitlementDirectory().list():
-        #    for product in cert.getProducts():
-        #        if product.getHash() not in psnames:
-        #            psname = product.getHash()
-        #            data = (psname, _('Not Installed'),
-        #                    str(entdict[psname]['expires']),
-        #                    entdict[psname]['serial'], entdict[psname]['contract'],
-        #                    entdict[psname]['account'])
-        #            product_status.append(data)
-        #return product_status
-
+    def _scan_for_unentitled_products(self):
+        # For all installed products, if not in valid or expired hash, it
+        # must be completely unentitled
+        for product_id in self.all_products.keys():
+            if (not self.valid_products.has_key(product_id)) and \
+                (not self.expired_products.has_key(product_id)):
+                    self.unentitled_products[product_id] = \
+                            self.all_products[product_id]
 
 
 

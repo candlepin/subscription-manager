@@ -288,29 +288,31 @@ class ComplianceAssistant(object):
 
         # installed but not entitled products:
         na = _("N/A")
-        for product in sorter.unentitled:
+        for product_cert in sorter.unentitled_products.values():
             self.uncompliant_store.add_map({
                 'active': False,
-                'product_name': product.getProduct().getName(),
+                'product_name': product_cert.getProduct().getName(),
                 'contract': na,
                 'end_date': na,
                 'entitlement_id': None,
                 'entitlement': None,
-                'product_id': product.getProduct().getHash(),
+                'product_id': product_cert.getProduct().getHash(),
                 'align': 0.0
             })
 
         # installed and out of compliance
-        for ent_cert in sorter.expired:
+        for product_id in sorter.expired_products.keys():
+            ent_cert = sorter.expired_products[product_id]
+            product = sorter.all_products[product_id].getProduct()
             self.uncompliant_store.add_map({
                 'active': False,
-                'product_name': ent_cert.getProduct().getName(),
+                'product_name': product.getName(),
                 'contract': ent_cert.getOrder().getNumber(),
                 # is end_date when the cert expires or the orders end date? is it differnt?
                 'end_date': '%s' % self.format_date(ent_cert.validRange().end()),
                 'entitlement_id': ent_cert.serialNumber(),
                 'entitlement': ent_cert,
-                'product_id': ent_cert.getProduct().getHash(),
+                'product_id': product.getHash(),
                 'align': 0.0
             })
 

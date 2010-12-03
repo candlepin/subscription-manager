@@ -19,6 +19,8 @@ from certlib import EntitlementDirectory
 from certificate import EntitlementCertificate, Product, GMT, DateRange, \
         ProductCertificate
 
+import random
+
 class StubProduct(Product):
 
     def __init__(self, product_id, name=None, variant=None, arch=None, version=None):
@@ -62,6 +64,7 @@ class StubProductCertificate(ProductCertificate):
         self.provided_products = provided_products
         if not provided_products:
             self.provided_products = []
+        self.serial = random.randint(1, 10000000)
 
     def getProduct(self):
         return self.product
@@ -69,7 +72,7 @@ class StubProductCertificate(ProductCertificate):
     def getProducts(self):
         prods = [self.product]
         if len(self.provided_products) > 0:
-            prods.extend(self.prods)
+            prods.extend(self.provided_products)
         return prods
 
 
@@ -97,7 +100,6 @@ class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate)
     # Need to override this implementation to avoid requirement on X509:
     def validRangeWithGracePeriod(self):
         return DateRange(self.start_date, self.end_date)
-
 
 
 class StubCertificateDirectory(EntitlementDirectory):
