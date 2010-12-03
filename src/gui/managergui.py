@@ -211,6 +211,8 @@ class MainWindow(widgets.GladeWidget):
 
         self.system_facts_dialog = factsgui.SystemFactsDialog(self.consumer,
                 self.facts)
+        self.system_facts_dialog.set_parent_window(self.main_window)
+
         self.registration_dialog = RegisterScreen(self.consumer, self.facts,
                 callbacks=[self.registration_changed])
         self.compliance_assistant = ComplianceAssistant(self.backend,

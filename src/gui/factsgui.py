@@ -128,3 +128,5 @@ class SystemFactsDialog:
         self.facts_view.append_column(column)
 
 
+    def set_parent_window(self, window):
+        self.dialog.set_transient_for(window)
