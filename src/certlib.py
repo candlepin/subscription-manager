@@ -712,7 +712,7 @@ class CertSorter(object):
                 del self.expired_products[product_id]
 
 
-def find_last_compliant(ent_dir=None, product_dir=None):
+def find_first_noncompliant_date(ent_dir=None, product_dir=None):
     """
     Find the first datetime where an entitlement will be uncompliant.
     If there are currently unentitled products, then return the current
@@ -740,7 +740,8 @@ def find_last_compliant(ent_dir=None, product_dir=None):
 
     # next cert to go noncompliant
     if valid_ents and not installed_not_entitled:
-        return valid_ents[0].validRange().end()
+        # Add a day, we don't want a date where we're still valid:
+        return valid_ents[0].validRange().end() + timedelta(days=1)
     else:
         return datetime.now(GMT())
 

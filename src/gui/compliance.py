@@ -29,7 +29,7 @@ log = getLogger(__name__)
 
 import certificate
 import certlib
-from certlib import find_last_compliant, CertSorter
+from certlib import find_first_noncompliant_date, CertSorter
 import managerlib
 import storage
 import widgets
@@ -230,6 +230,7 @@ class ComplianceAssistant(object):
             self.providing_subs_label.set_label(
                     _("The following subscriptions will cover the products selected on %s" % noncompliant_date.strftime("%x")))
 
+            
         self.pool_stash.async_refresh(noncompliant_date, self._reload_callback)
 
         # show pulsating progress bar while we wait for results
@@ -284,7 +285,7 @@ class ComplianceAssistant(object):
         Return a datetime object representing the day, month, and year of
         last compliance. Ignore the timestamp returned from certlib.
         """
-        d = find_last_compliant()
+        d = find_first_noncompliant_date()
         return datetime(d.year, d.month, d.day, tzinfo=certificate.GMT())
 
     def _display_uncompliant(self):

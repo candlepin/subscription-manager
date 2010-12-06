@@ -98,9 +98,10 @@ class FindLastCompliantTests(unittest.TestCase):
                     end_date=datetime(2060, 1, 1))
         ent_dir = StubCertificateDirectory([cert1, cert2])
         prod_dir = StubCertificateDirectory([])
-        last_compliant_date = find_last_compliant(ent_dir=ent_dir,
+        last_compliant_date = find_first_noncompliant_date(ent_dir=ent_dir,
                 product_dir=prod_dir)
         self.assertEqual(2050, last_compliant_date.year)
+        self.assertEqual(2, last_compliant_date.day)
 
     def test_unentitled_products(self):
         cert = StubProductCertificate(StubProduct('unentitledProduct'))
@@ -118,7 +119,7 @@ class FindLastCompliantTests(unittest.TestCase):
         # Because we have an unentitled product, we should get back the current
         # date as the last date of compliance:
         today = datetime.now(GMT())
-        last_compliant_date = find_last_compliant(ent_dir=ent_dir, product_dir=product_dir)
+        last_compliant_date = find_first_noncompliant_date(ent_dir=ent_dir, product_dir=product_dir)
         self.assertEqual(today.year, last_compliant_date.year)
         self.assertEqual(today.month, last_compliant_date.month)
         self.assertEqual(today.day, last_compliant_date.day)
@@ -139,7 +140,7 @@ class FindLastCompliantTests(unittest.TestCase):
         # Because we have an unentitled product, we should get back the current
         # date as the last date of compliance:
         today = datetime.now(GMT())
-        last_compliant_date = find_last_compliant(ent_dir=ent_dir, product_dir=product_dir)
+        last_compliant_date = find_first_noncompliant_date(ent_dir=ent_dir, product_dir=product_dir)
         self.assertEqual(2050, last_compliant_date.year)
 
     def test_all_expired_entitlements(self):
