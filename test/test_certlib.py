@@ -160,14 +160,15 @@ class CertSorterTests(unittest.TestCase):
             StubProductCertificate(StubProduct('product3')),
         ])
 
-        #self.ent_dir = StubCertificateDirectory([
-        #    StubEntitlementCertificate(
         self.ent_dir = StubCertificateDirectory([
             StubEntitlementCertificate(StubProduct('product2')),
             StubEntitlementCertificate(StubProduct('product3'),
                 start_date=datetime.now() - timedelta(days=365),
                 end_date=datetime.now() - timedelta(days=2)),
-            StubEntitlementCertificate(StubProduct('product4'))
+            StubEntitlementCertificate(StubProduct('product4'),
+                start_date=datetime.now() - timedelta(days=365),
+                end_date=datetime.now() + timedelta(days=365),
+                order_end_date=datetime.now() - timedelta(days=2)) # in warning period
         ])
 
     def test_unentitled_product_certs(self):
@@ -189,9 +190,16 @@ class CertSorterTests(unittest.TestCase):
 
     def test_expired(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir)
-        self.assertEqual(1, len(self.sorter.expired_entitlement_certs))
+        self.assertEqual(2, len(self.sorter.expired_entitlement_certs))
+
         self.assertTrue(cert_list_has_product(
             self.sorter.expired_entitlement_certs, 'product3'))
+        # Certificate in warning period should show up as expired, even though
+        # they can technically still be used. We use the CertSorter to warn
+        # customer of compliance issues.
+        self.assertTrue(cert_list_has_product(
+            self.sorter.expired_entitlement_certs, 'product4'))
+
         self.assertEqual(1, len(self.sorter.expired_products.keys()))
         self.assertTrue(self.sorter.expired_products.has_key('product3'))
 

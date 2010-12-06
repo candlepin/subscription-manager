@@ -637,7 +637,8 @@ class CertSorter(object):
 
         # specific products which are installed, we're entitled, but have expired
         # on the date in question. this must watch out for possibility some other
-        # entitlement certificate provides this product. maps product ID
+        # entitlement certificate provides this product. Certificates which are
+        # within their grace period will appear in this dict. maps product ID
         # to the expired entitlement certificate:
         self.expired_products = {}
 
@@ -677,6 +678,8 @@ class CertSorter(object):
                 self._scan_ent_cert_products(ent_cert, self.valid_products)
             else:
                 self.expired_entitlement_certs.append(ent_cert)
+                log.debug("expired:")
+                log.debug(ent_cert.getProduct().getHash())
                 self._scan_ent_cert_products(ent_cert, self.expired_products)
 
     def _scan_ent_cert_products(self, ent_cert, product_dict):
