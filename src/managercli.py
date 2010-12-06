@@ -110,6 +110,11 @@ class CliCommand(object):
         proxy_hostname = None
         proxy_port = None
 
+        self.proxy_hostname = cfg.get('server', 'proxy_hostname')
+        self.proxy_port = cfg.get('server', 'proxy_port')
+        self.proxy_user = cfg.get('server', 'proxy_user')
+        self.proxy_password = cfg.get('server', 'proxy_password')
+
         # support foo.example.com:3128 format
         if self.options.proxy_url:
             parts = self.options.proxy_url.split(':')
@@ -121,6 +126,11 @@ class CliCommand(object):
                 # if no port specified, use the one from the config, or fallback to the default
                 self.proxy_port = cfg.get('server', 'proxy_port') or config.DEFAULT_PROXY_PORT
 
+        if self.options.proxy_user:
+            self.proxy_user = self.options.proxy_user
+        if self.options.proxy_password:
+            self.proxy_password = self.options.proxy_password
+
         # Create a connection using the default configuration:
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
@@ -128,8 +138,8 @@ class CliCommand(object):
         self.cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
                                            proxy_hostname=self.proxy_hostname,
                                            proxy_port=self.proxy_port,
-                                           proxy_user=self.options.proxy_user,
-                                           proxy_password=self.options.proxy_password)
+                                           proxy_user=self.proxy_user,
+                                           proxy_password=self.proxy_password)
         
         # do the work, catch most common errors here:
         try:
@@ -313,7 +323,6 @@ class RegisterCommand(CliCommand):
             else:
                 consumer = admin_cp.registerConsumer(name=consumername,
                                                      type=self.options.consumertype,
-#                                                     facts={})
                                                      facts=self.facts.get_facts())
         except connection.RestlibException, re:
             log.exception(re)
