@@ -31,6 +31,7 @@ import certificate
 import certlib
 from certlib import find_first_noncompliant_date, CertSorter
 import managerlib
+import managergui
 import storage
 import widgets
 import progress
@@ -158,23 +159,27 @@ class ComplianceAssistant(object):
 
         vbox = self.compliance_xml.get_widget("subscriptions_vbox")
         vbox.pack_start(self.subscriptions_treeview)
+        vbox.reorder_child(self.subscriptions_treeview, 3)
         self.subscriptions_treeview.show()
 
         self.sub_details = widgets.SubDetailsWidget(show_contract=False)
         vbox.pack_start(self.sub_details.get_widget(), expand=False)
+        vbox.reorder_child(self.sub_details.get_widget(), 4)
 
         self.first_noncompliant_radiobutton = \
             self.compliance_xml.get_widget('first_noncompliant_radiobutton')
         self.first_noncompliant_radiobutton.set_active(True)
         self.noncompliant_date_radiobutton = \
             self.compliance_xml.get_widget('noncompliant_date_radiobutton')
-
         
         self.date_picker = widgets.DatePicker(date.today())
         self.date_picker.connect('date-picked', self._compliance_date_selected)
         date_picker_hbox = self.compliance_xml.get_widget("date_picker_hbox")
         date_picker_hbox.pack_start(self.date_picker, False, False)
         self.date_picker.show_all()
+        
+        self.subscribe_button = self.compliance_xml.get_widget('subscribe_button')
+        self.subscribe_button.connect('clicked', self.subscribe_button_clicked)
 
         self.compliance_xml.signal_autoconnect({
             # only watch one radiobutton in the group, it will signal for all
@@ -417,3 +422,18 @@ class ComplianceAssistant(object):
             pool_id = model.get_value(tree_iter, self.subscriptions_store['pool_id'])
             provided = self.pool_stash.lookup_provided_products(pool_id)
             self.sub_details.show(product_name, products=provided)
+
+    def subscribe_button_clicked(self, button):
+        model, tree_iter = self.subscriptions_treeview.get_selection().get_selected()
+        pool_id = model.get_value(tree_iter, self.subscriptions_store['pool_id'])
+        
+        pool = self.pool_stash.all_pools[pool_id]
+        try:
+            self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'])
+            managergui.fetch_certificates()
+        except Exception, e:
+            handle_gui_exception(e, _("Error getting subscription: %s"))
+            
+        # Just close the window?
+        self.window.hide()
+
