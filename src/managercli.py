@@ -525,6 +525,7 @@ class ListCommand(CliCommand):
         CliCommand.__init__(self, "list", usage, shortdesc, desc)
         self.available = None
         self.consumed = None
+        self.parser.add_option("--installed", action='store_true', help=_("installed"))
         self.parser.add_option("--available", action='store_true',
                                help=_("available"))
         self.parser.add_option("--consumed", action='store_true',
@@ -536,6 +537,8 @@ class ListCommand(CliCommand):
         if (self.options.all and not self.options.available):
             print _("Error: --all is only applicable with --available")
             sys.exit(-1)
+        if not (self.options.available or self.options.consumed):
+            self.options.installed = True
 
     def _do_command(self):
         """
@@ -545,7 +548,7 @@ class ListCommand(CliCommand):
         self._validate_options()
 
         consumer = check_registration()['uuid']
-        if not (self.options.available or self.options.consumed):
+        if self.options.installed:
             iproducts = managerlib.getInstalledProductStatus()
             if not len(iproducts):
                 print(_("No installed Products to list"))
