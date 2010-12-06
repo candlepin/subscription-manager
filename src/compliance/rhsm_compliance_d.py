@@ -30,6 +30,7 @@ import sys
 sys.path.append("/usr/share/rhsm")
 import managerlib
 import certificate
+import certlib
 
 enable_debug = False
 
@@ -39,36 +40,32 @@ def debug(msg):
         print msg
 
 
-def in_warning_period(products):
-    for product in products:
-        if product[1] not in ["Subscribed", "Not Installed"]:
-            continue
+def in_warning_period(sorter):
 
-        for entitlement in managerlib.getEntitlementsForProduct(product[0]):
-            warning_period = datetime.timedelta(
-                    days=int(entitlement.getOrder().getWarningPeriod()))
-            valid_range = entitlement.validRange()
-            warning_range = certificate.DateRange(
-                    valid_range.end() - warning_period, valid_range.end())
-            if warning_range.hasNow():
-                return True
+    for entitlement in sorter.expired_entitlement_certs:
+        warning_period = datetime.timedelta(
+                days=int(entitlement.getOrder().getWarningPeriod()))
+        valid_range = entitlement.validRange()
+        warning_range = certificate.DateRange(
+                valid_range.end() - warning_period, valid_range.end())
+        if warning_range.hasNow():
+            return True
+
     return False
 
 
 def check_compliance():
-    products = managerlib.getInstalledProductStatus()
 
-    # XXX we'll have to watch this with i18n
+    sorter = certlib.CertSorter(certlib.ProductDirectory(),
+            certlib.EntitlementDirectory())
 
-    not_compliant = [x for x in products \
-            if x[1] not in ["Subscribed", "Not Installed"]]
-
-    if len(not_compliant) > 0:
+    if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
         debug("System is not in compliance")
-        debug(not_compliant)
+        debug(sorter.unentitled_products.keys())
+        debug(sorter.expired_products.keys())
         return 0
     else:
-        if in_warning_period(products):
+        if in_warning_period(sorter):
             debug("System has one or more entitlements in their warning period")
             return 2
         else:
