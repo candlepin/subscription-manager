@@ -38,11 +38,6 @@ import progress
 from connection import RestlibException
 from utils import handle_gui_exception
 
-
-prefix = os.path.dirname(__file__)
-COMPLIANCE_GLADE = os.path.join(prefix, "data/compliance.glade")
-
-
 class MappedListTreeView(gtk.TreeView):
 
     def add_toggle_column(self, name, column_number, callback):
@@ -78,10 +73,23 @@ class MappedListTreeView(gtk.TreeView):
 
         self.append_column(column)
 
-class ComplianceAssistant(object):
+class ComplianceAssistant(widgets.GladeWidget):
 
     """ Compliance Assistant GUI window. """
     def __init__(self, backend, consumer, facts):
+        widget_names = ['compliance_label', 
+                        'compliance_today_label', 
+                        'providing_subs_label',
+                        'noncompliant_date_radiobutton',
+                        'window',
+                        'subscriptions_vbox',
+                        'uncompliant_vbox',
+                        'first_noncompliant_radiobutton',
+                        'noncompliant_date_radiobutton',
+                        'subscribe_button',
+                        'date_picker_hbox']
+        super(ComplianceAssistant, self).__init__('compliance.glade', widget_names)
+    
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
@@ -91,20 +99,9 @@ class ComplianceAssistant(object):
         self.product_dir = certlib.ProductDirectory()
         self.entitlement_dir = certlib.EntitlementDirectory()
 
-        self.compliance_xml = gtk.glade.XML(COMPLIANCE_GLADE)
-        self.compliance_label = self.compliance_xml.get_widget(
-                'compliance_label')
-        self.compliant_today_label = self.compliance_xml.get_widget(
-                'compliant_today_label')
-        self.providing_subs_label = self.compliance_xml.get_widget(
-                'providing_subs_label')
-
         # Setup initial last compliant date:
         self.last_compliant_date = self._load_last_compliant_date()
         self.cached_date = self.last_compliant_date
-        self.noncompliant_date_radiobutton = self.compliance_xml.get_widget(
-                "noncompliant_date_radiobutton")
-
 
         uncompliant_type_map = {'active':bool,
                                 'product_name':str,
@@ -115,7 +112,6 @@ class ComplianceAssistant(object):
                                 'entitlement':gobject.TYPE_PYOBJECT,
                                 'align':float}
 
-        self.window = self.compliance_xml.get_widget('compliance_assistant_window')
         self.window.connect('delete_event', self.hide)
         self.uncompliant_store = storage.MappedListStore(uncompliant_type_map)
         self.uncompliant_treeview = MappedListTreeView(self.uncompliant_store)
@@ -130,8 +126,7 @@ class ComplianceAssistant(object):
         self.uncompliant_treeview.add_date_column("Expiration",
                 self.uncompliant_store['end_date'], True)
         self.uncompliant_treeview.set_model(self.uncompliant_store)
-        vbox = self.compliance_xml.get_widget("uncompliant_vbox")
-        vbox.pack_end(self.uncompliant_treeview)
+        self.uncompliant_vbox.pack_end(self.uncompliant_treeview)
         self.uncompliant_treeview.show()
 
         subscriptions_type_map = {
@@ -157,31 +152,24 @@ class ComplianceAssistant(object):
         self.subscriptions_treeview.get_selection().connect('changed',
                 self._update_sub_details)
 
-        vbox = self.compliance_xml.get_widget("subscriptions_vbox")
-        vbox.pack_start(self.subscriptions_treeview)
-        vbox.reorder_child(self.subscriptions_treeview, 3)
+        self.subscriptions_vbox.pack_start(self.subscriptions_treeview)
+        self.subscriptions_vbox.reorder_child(self.subscriptions_treeview, 3)
         self.subscriptions_treeview.show()
 
         self.sub_details = widgets.SubDetailsWidget(show_contract=False)
-        vbox.pack_start(self.sub_details.get_widget(), expand=False)
-        vbox.reorder_child(self.sub_details.get_widget(), 4)
+        self.subscriptions_vbox.pack_start(self.sub_details.get_widget(), expand=False)
+        self.subscriptions_vbox.reorder_child(self.sub_details.get_widget(), 4)
 
-        self.first_noncompliant_radiobutton = \
-            self.compliance_xml.get_widget('first_noncompliant_radiobutton')
         self.first_noncompliant_radiobutton.set_active(True)
-        self.noncompliant_date_radiobutton = \
-            self.compliance_xml.get_widget('noncompliant_date_radiobutton')
         
         self.date_picker = widgets.DatePicker(date.today())
         self.date_picker.connect('date-picked', self._compliance_date_selected)
-        date_picker_hbox = self.compliance_xml.get_widget("date_picker_hbox")
-        date_picker_hbox.pack_start(self.date_picker, False, False)
+        self.date_picker_hbox.pack_start(self.date_picker, False, False)
         self.date_picker.show_all()
         
-        self.subscribe_button = self.compliance_xml.get_widget('subscribe_button')
         self.subscribe_button.connect('clicked', self.subscribe_button_clicked)
 
-        self.compliance_xml.signal_autoconnect({
+        self.glade.signal_autoconnect({
             # only watch one radiobutton in the group, it will signal for all
             "on_first_noncompliant_radiobutton_toggled": self._check_for_date_change,
         })
