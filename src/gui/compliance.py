@@ -35,6 +35,7 @@ import managergui
 import storage
 import widgets
 import progress
+import async
 from connection import RestlibException
 from utils import handle_gui_exception
 
@@ -192,7 +193,7 @@ class ComplianceAssistant(widgets.GladeWidget):
     def set_parent_window(self, window):
         self.window.set_transient_for(window)
 
-    def _reload_callback(self, compat, incompat, allsubs):
+    def _reload_callback(self):
         if self.pb:
             self.pb.hide()
             gobject.source_remove(self.timer)
@@ -224,7 +225,8 @@ class ComplianceAssistant(widgets.GladeWidget):
                     _("The following subscriptions will cover the products selected on %s" % noncompliant_date.strftime("%x")))
 
             
-        self.pool_stash.async_refresh(noncompliant_date, self._reload_callback)
+        async_stash = async.AsyncPool(self.pool_stash)
+        async_stash.refresh(noncompliant_date, self._reload_callback)
 
         # show pulsating progress bar while we wait for results
         self.pb = progress.Progress(

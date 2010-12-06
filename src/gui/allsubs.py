@@ -28,6 +28,7 @@ import managerlib
 
 import widgets
 import storage
+import async
 from utils import handle_gui_exception
 from contract_selection import ContractSelectionWindow
 
@@ -179,7 +180,8 @@ class AllSubscriptionsTab(object):
         is clicked.
         """
         try:
-            self.pool_stash.async_refresh(self.date_picker.date, self.update_display)
+            async_stash = async.AsyncPool(self.pool_stash)
+            async_stash.refresh(self.date_picker.date, self._update_display)
             # show pulsating progress bar while we wait for results
             self.pb = progress.Progress(
                     _("Searching for subscriptions. Please wait."))
@@ -188,7 +190,7 @@ class AllSubscriptionsTab(object):
         except Exception, e:
             handle_gui_exception(e, _("Error fetching subscriptions from server: %s"))
 
-    def update_display(self, compat, incompat, all):
+    def _update_display(self):
         # should probably use the params instead
         self.display_pools()
         if self.pb:
