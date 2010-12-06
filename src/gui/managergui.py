@@ -61,6 +61,8 @@ log = getLogger(__name__)
 prefix = os.path.dirname(__file__)
 subs_full = os.path.join(prefix, "data/icons/subsmgr-full.png")
 subs_empty = os.path.join(prefix, "data/icons/subsmgr-empty.png")
+COMPLIANT_IMG = os.path.join(prefix, "data/icons/compliant.svg")
+NON_COMPLIANT_IMG = os.path.join(prefix, "data/icons/non-compliant.svg")
 
 cfg = config.initConfig()
 cert_file = ConsumerIdentity.certpath()
@@ -386,7 +388,7 @@ class MainWindow(widgets.GladeWidget):
             if product[1] in ["Expired", "Not Subscribed"]:
                 warn_count += 1
         if warn_count > 0:
-            self.compliance_status_image.set_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_BUTTON)
+            self.compliance_status_image.set_from_file(NON_COMPLIANT_IMG)
             self.compliance_count_label.set_markup(
                     '<span size="large"><b>%s</b></span>' % str(warn_count))
             # Change wording slightly if just one product out of compliance:
@@ -399,7 +401,7 @@ class MainWindow(widgets.GladeWidget):
                         _("You have 1 product which is out of compliance.") )
 
         else:
-            self.compliance_status_image.set_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_BUTTON)
+            self.compliance_status_image.set_from_file(COMPLIANT_IMG)
             self.compliance_count_label.set_text("")
             self.compliance_status_label.set_text(
                     _("Your system is compliant.") )
