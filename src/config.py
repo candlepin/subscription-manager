@@ -20,6 +20,7 @@ import ConfigParser
 
 DEFAULT_CONFIG_DIR = "/etc/rhsm"
 DEFAULT_CONFIG_PATH = "%s/rhsm.conf" % DEFAULT_CONFIG_DIR
+DEFAULT_PROXY_PORT="3128"
 
 DEFAULTS = {
         'hostname': 'localhost',

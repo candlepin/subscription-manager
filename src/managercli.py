@@ -98,7 +98,6 @@ class CliCommand(object):
 
     def main(self, args=None):
 
-
         # In testing we sometimes specify args, otherwise use the default:
         if not args:
             args = sys.argv[1:]
@@ -110,9 +109,17 @@ class CliCommand(object):
 
         proxy_hostname = None
         proxy_port = None
+
         # support foo.example.com:3128 format
         if self.options.proxy_url:
-            self.proxy_hostname, self.proxy_port = self.options.proxy_url.split(':')
+            parts = self.options.proxy_url.split(':')
+            self.proxy_hostname = parts[0]
+            # no ':'
+            if len(parts) > 1:
+                self.proxy_port = parts[1]
+            else:
+                # if no port specified, use the one from the config, or fallback to the default
+                self.proxy_port = cfg.get('server', 'proxy_port') or config.DEFAULT_PROXY_PORT
 
         # Create a connection using the default configuration:
         cert_file = ConsumerIdentity.certpath()
@@ -305,8 +312,9 @@ class RegisterCommand(CliCommand):
                         self.options.username, self.options.password)
             else:
                 consumer = admin_cp.registerConsumer(name=consumername,
-                        type=self.options.consumertype,
-                        facts=self.facts.get_facts())
+                                                     type=self.options.consumertype,
+#                                                     facts={})
+                                                     facts=self.facts.get_facts())
         except connection.RestlibException, re:
             log.exception(re)
             systemExit(-1, re.msg)

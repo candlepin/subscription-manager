@@ -60,8 +60,10 @@ class RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
         if not self._proxy_auth:
             self._proxy_auth = self._encode_auth()
 
-        httpslib.HTTPSConnection.endheaders(self, body)
-
+        if body:
+            httpslib.HTTPSConnection.endheaders(self, body)
+        else:
+            httpslib.HTTPSConnection.endheaders(self)
         
 
 class Restlib(object):
