@@ -37,7 +37,8 @@ import connection
 import config
 import constants
 from facts import Facts
-from certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, CertLib, syslog
+from certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \
+        CertLib, syslog, CertSorter
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
 from socket import error as socket_error
 import xml.sax.saxutils
@@ -383,10 +384,11 @@ class MainWindow(widgets.GladeWidget):
     def _set_compliance_status(self):
         """ Updates the compliance status portion of the UI. """
         # Look for products which are out of compliance:
-        warn_count = 0
-        for product in managerlib.getInstalledProductStatus():
-            if product[1] in ["Expired", "Not Subscribed"]:
-                warn_count += 1
+        sorter = CertSorter(ProductDirectory(), EntitlementDirectory())
+
+        warn_count = len(sorter.expired_entitlement_certs) + \
+                len(sorter.unentitled_products)
+
         if warn_count > 0:
             self.compliance_status_image.set_from_file(NON_COMPLIANT_IMG)
             self.compliance_count_label.set_markup(
