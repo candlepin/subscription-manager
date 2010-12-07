@@ -87,7 +87,7 @@ class moduleClass(Module, managergui.RegisterScreen):
         self.register_dialog = managergui.registration_xml.get_widget("dialog-vbox6")
         self.register_dialog.reparent(self.vbox)
 
-        # Get ride of the 'register' and 'cancel' buttons, as we are going to
+        # Get rid of the 'register' and 'cancel' buttons, as we are going to
         # use the 'forward' and 'back' buttons provided by the firsboot module
         # to drive the same functionality
         self._destroy_widget('register_button')

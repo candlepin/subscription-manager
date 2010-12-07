@@ -446,7 +446,6 @@ class ManageSubscriptionPage:
 
         dic = {
                "on_add_button_clicked": self.addSubButtonAction,
-#               "on_update_button_clicked": self.updateSubButtonAction,
                "on_unsubscribe_button_clicked": self.onUnsubscribeAction,
             }
         rhsm_xml.signal_autoconnect(dic)
@@ -560,15 +559,6 @@ class ManageSubscriptionPage:
             self.show_add_subscription_screen()
         else:
             self.show_import_certificate_screen()
-
-    def updateSubButtonAction(self, button):
-        if self.pname_selected:
-            log.info("Product %s selected for update" % self.pname_selected)
-            if self.consumer.uuid:
-                UpdateSubscriptionScreen(self.pname_selected, self.mainWin,
-                        self.consumer, self.facts)
-            else:
-                self.show_import_certificate_screen()
 
     def setButtonState(self, state=False):
 #        self.button_update = rhsm_xml.get_widget("update_button")
@@ -1227,132 +1217,6 @@ class AddSubscriptionScreen:
     def _cell_data_toggle_func(self, tree_column, renderer, model, treeiter):
         renderer.set_property('visible', True)
 
-
-class UpdateSubscriptionScreen:
-
-    def __init__(self, product_selection, parentWindow, consumer, facts):
-        global UEP
-        self.consumer = consumer
-        self.facts = facts
-
-        self.product_select = product_selection
-        self.setHeadMsg()
-        self.updatesList = gtk.TreeStore(gobject.TYPE_BOOLEAN,
-                gobject.TYPE_STRING, gobject.TYPE_STRING,
-                gobject.TYPE_STRING, gobject.TYPE_STRING)
-        self.available_updates = 0
-        try:
-            products = managerlib.getAvailableEntitlements(UEP,
-                    self.consumer.uuid, self.facts)
-            for product in products:
-                if self.product_select in product.values():
-                    # Only list selected product's pools
-                    pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
-                    self.updatesList.append(None, [False] + pdata)
-                    self.available_updates += 1
-        except:
-            pass
-
-        #if no updates are available, just return. no point in creating update window.
-        if not self.available_updates:
-            infoWindow(constants.NO_UPDATES_WARNING, parentWindow)
-            return
-
-        self.populateUpdatesDialog()
-        dic = {"on_update_subscriptions_close_clicked": self.cancel,
-               "on_update_subscriptions_button_clicked": self.onSubscribeAction,
-            }
-        rhsm_xml.signal_autoconnect(dic)
-        self.updateWin = rhsm_xml.get_widget("update_subscriptions_dialog")
-        self.updateWin.connect("hide", self.cancel)
-        self.updateWin.connect("delete_event", self.delete_event)
-        self.updateWin.show_all()
-
-    def cancel(self, button=None):
-        self.updateWin.destroy()
-        gtk.main_iteration()
-        return True
-
-    def delete_event(self, event, data=None):
-        return self.cancel()
-
-    def setHeadMsg(self):
-        hlabel = rhsm_xml.get_widget("available_subscriptions_label")
-        hlabel.set_label(_("<b>Available Subscriptions for %s:</b>") % self.product_select)
-
-    def populateUpdatesDialog(self):
-        self.tv_products = rhsm_xml.get_widget("subscriptions_update_treeview")
-        self.tv_products.set_model(self.updatesList)
-
-        cell = gtk.CellRendererToggle()
-        cell.connect('toggled', self.col_update_selected, self.updatesList)
-
-        column = gtk.TreeViewColumn(_(' '), cell)
-        column.add_attribute(cell, "active", 0)
-        self.tv_products.append_column(column)
-
-        col = gtk.TreeViewColumn(_("Product"), gtk.CellRendererText(), text=1)
-        col.set_sort_column_id(1)
-        col.set_sort_order(gtk.SORT_ASCENDING)
-        self.tv_products.append_column(col)
-
-        col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
-        col.set_spacing(4)
-        col.set_sort_column_id(2)
-        self.tv_products.append_column(col)
-
-        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=3)
-        col.set_sort_column_id(3)
-        self.tv_products.append_column(col)
-
-        self.updatesList.set_sort_column_id(1, gtk.SORT_ASCENDING)
-
-    def col_update_selected(self, cell, path, model):
-        self.selected = {}
-        items, iter = self.tv_products.get_selection().get_selected()
-        #for col in range(model.get_n_columns()+1):
-        for col in range(self.available_updates):
-            if str(path) == str(col):
-                model[path][0] = not model[path][0]
-            else:
-                model[col][0] = False
-        self.model = model
-        self.selected[model.get_value(iter, 4)] = (model.get_value(iter, 0), model.get_value(iter, 1), iter)
-
-    def _cell_data_toggle_func(self, tree_column, renderer, model, treeiter):
-        renderer.set_property('visible', True)
-
-    def onSubscribeAction(self, button):
-        subscribed_count = 0
-        my_model = self.tv_products.get_model()
-        busted_subs = []
-        for pool, state in self.selected.items():
-            # state = (bool, iter)
-            if state[0]:
-                try:
-                    ent_ret = UEP.bindByEntitlementPool(self.consumer.uuid, pool)
-                    entitled_data = ent_ret[0]['pool']
-                    updated_count = str(int(entitled_data['quantity']) - int(entitled_data['consumed']))
-                    my_model.set_value(state[-1], 2, updated_count)
-                    subscribed_count += 1
-                except Exception, e:
-                    # Subscription failed, continue with rest
-                    log.error("Failed to subscribe to product %s Error: %s" % (state[1], e))
-                    busted_subs.append((state[1], e))
-                    continue
-
-        show_busted_subs(busted_subs)
-
-        # Force fetch all certs
-        if not fetch_certificates():
-            return
-        if subscribed_count:
-            slabel.set_label(constants.SUBSCRIBE_SUCCSSFUL % subscribed_count)
-            self.updateWin.hide()
-            # refresh main window
-        else:
-            slabel.set_label(constants.ATLEAST_ONE_SELECTION)
-        self.reload_gui()
 
 class ImportCertificate:
 
