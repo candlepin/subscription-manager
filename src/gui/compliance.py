@@ -412,6 +412,8 @@ class ComplianceAssistant(widgets.GladeWidget):
             pool_id = model.get_value(tree_iter, self.subscriptions_store['pool_id'])
             provided = self.pool_stash.lookup_provided_products(pool_id)
             self.sub_details.show(product_name, products=provided)
+        else:
+            self.sub_details.clear()
 
     def subscribe_button_clicked(self, button):
         model, tree_iter = self.subscriptions_treeview.get_selection().get_selected()
