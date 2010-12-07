@@ -321,7 +321,7 @@ class MainWindow(widgets.GladeWidget):
         """
         Adds the network config button to the button bar.
         """
-        button = gtk.Button(label=_("Advanced Network Config"))
+        button = gtk.Button(label=_("Proxy Configuration"))
         button.connect("clicked", self._network_config_button_clicked)
         self.button_bar.add(button)
 
