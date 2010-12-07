@@ -125,6 +125,7 @@
         <child>
           <widget class="GtkVBox" id="vbox1">
             <property name="visible">True</property>
+            <property name="spacing">10</property>
             <child>
               <widget class="GtkScrolledWindow" id="subscriptions_window">
                 <property name="visible">True</property>
@@ -147,6 +148,7 @@
                 </child>
               </widget>
               <packing>
+                <property name="expand">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
