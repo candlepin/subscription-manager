@@ -140,11 +140,8 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkScrolledWindow" id="details_window">
+              <widget class="GtkVBox" id="details_window">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hscrollbar_policy">automatic</property>
-                <property name="vscrollbar_policy">automatic</property>
                 <child>
                   <placeholder/>
                 </child>
