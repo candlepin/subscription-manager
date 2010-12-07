@@ -1215,13 +1215,6 @@ class AddSubscriptionScreen:
         renderer.set_property('visible', True)
 
 
-def unexpectedError(message, exc_info=None):
-    message = message + "\n" + constants.UNEXPECTED_ERROR
-    errorWindow(message)
-    if exc_info:
-        (etype, value, stack_trace) = exc_info
-
-
 def infoWindow(message, parent):
     messageWindow.InfoDialog(messageWindow.wrap_text(message), parent)
 
@@ -1232,12 +1225,3 @@ def setArrowCursor():
 
 def setBusyCursor():
     pass
-
-
-def reload():
-    global gui
-    gui.refresh()
-#    gtk.main_quit()
-#    gui = None
-    main()
-
