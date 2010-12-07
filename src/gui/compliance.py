@@ -83,8 +83,9 @@ class ComplianceAssistant(widgets.GladeWidget):
                         'providing_subs_label',
                         'noncompliant_date_radiobutton',
                         'window',
-                        'subscriptions_vbox',
-                        'uncompliant_vbox',
+                        'uncompliant_window',
+                        'subscriptions_window',
+                        'details_window',
                         'first_noncompliant_radiobutton',
                         'noncompliant_date_radiobutton',
                         'subscribe_button',
@@ -127,7 +128,7 @@ class ComplianceAssistant(widgets.GladeWidget):
         self.uncompliant_treeview.add_date_column("Expiration",
                 self.uncompliant_store['end_date'], True)
         self.uncompliant_treeview.set_model(self.uncompliant_store)
-        self.uncompliant_vbox.pack_end(self.uncompliant_treeview)
+        self.uncompliant_window.add(self.uncompliant_treeview)
         self.uncompliant_treeview.show()
 
         subscriptions_type_map = {
@@ -153,13 +154,11 @@ class ComplianceAssistant(widgets.GladeWidget):
         self.subscriptions_treeview.get_selection().connect('changed',
                 self._update_sub_details)
 
-        self.subscriptions_vbox.pack_start(self.subscriptions_treeview)
-        self.subscriptions_vbox.reorder_child(self.subscriptions_treeview, 3)
+        self.subscriptions_window.add(self.subscriptions_treeview)
         self.subscriptions_treeview.show()
 
         self.sub_details = widgets.SubDetailsWidget(show_contract=False)
-        self.subscriptions_vbox.pack_start(self.sub_details.get_widget(), expand=False)
-        self.subscriptions_vbox.reorder_child(self.sub_details.get_widget(), 4)
+        self.details_window.add(self.sub_details.get_widget())
 
         self.first_noncompliant_radiobutton.set_active(True)
         
