@@ -17,7 +17,6 @@
 
 
 import os
-import re
 import syslog
 from datetime import timedelta, datetime
 from config import initConfig

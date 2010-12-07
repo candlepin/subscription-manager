@@ -16,7 +16,6 @@
 import os
 import gtk
 
-import connection
 import managergui
 
 import logutil

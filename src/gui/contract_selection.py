@@ -22,7 +22,6 @@ _ = gettext.gettext
 
 from logutil import getLogger
 log = getLogger(__name__)
-import managerlib
 import widgets
 
 prefix = os.path.dirname(__file__)

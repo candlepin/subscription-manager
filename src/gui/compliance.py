@@ -14,13 +14,11 @@
 # in this software or its documentation.
 #
 
-import os
 import gtk
 import gobject
 import locale
-import logging
 import gettext
-from datetime import date, time, datetime
+from datetime import date, datetime
 
 _ = gettext.gettext
 

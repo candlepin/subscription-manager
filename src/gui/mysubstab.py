@@ -19,9 +19,7 @@ from datetime import datetime, timedelta
 from certlib import EntitlementDirectory, ProductDirectory, CertLib
 from certificate import GMT
 
-import constants
 import logutil
-import managergui
 import widgets
 from utils import handle_gui_exception
 

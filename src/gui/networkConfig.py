@@ -20,7 +20,6 @@ import gettext
 import gtk
 
 import config
-import managergui
 
 _ = gettext.gettext
 gettext.textdomain("subscription-manager")
