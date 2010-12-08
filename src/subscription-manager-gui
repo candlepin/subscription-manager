@@ -25,7 +25,7 @@ if __name__ != '__main__':
 import sys
 import os
 import dbus
-import dbus.service, dbus.glib
+import dbus.service, dbus.glib, dbus.exceptions
 import gtk
 
 gtk.gdk.threads_init()
@@ -89,9 +89,13 @@ class SubscriptionManagerService(dbus.service.Object):
         self.window.present()
 
 if __name__ == '__main__':
-    bus = dbus.SessionBus()
+    try:
+        bus = dbus.SessionBus()
+    except dbus.exceptions.DBusException:
+        # Just ignore it if for some reason we can't find the session bus
+        bus = None
 
-    if bus.request_name(BUS_NAME) != dbus.bus.REQUEST_NAME_REPLY_PRIMARY_OWNER:
+    if bus and bus.request_name(BUS_NAME) != dbus.bus.REQUEST_NAME_REPLY_PRIMARY_OWNER:
         show = bus.get_object(BUS_NAME, BUS_PATH).get_dbus_method('show_window')
         show()
     else:
