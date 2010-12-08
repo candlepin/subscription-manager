@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.93.2
+Version: 0.93.3
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management
 Group:   System Environment/Base
@@ -169,6 +169,9 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Wed Dec 08 2010 Devan Goodwin <dgoodwin@redhat.com> 0.93.3-1
+- Resolves: #661345,#660102,#634254
+- New Subscription Manager UI.
 * Tue Nov 23 2010 Devan Goodwin <dgoodwin@redhat.com> 0.93.2-1
 - Resolves: 654442,654435,654113,643931,645883,650965,654430,654429,648977,647891,649374
 - I18N strings update. (dgoodwin@redhat.com)
