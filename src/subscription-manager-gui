@@ -102,8 +102,9 @@ if __name__ == '__main__':
         try:
             main = managergui.MainWindow()
             
-            # Hook into dbus service
-            SubscriptionManagerService(main.main_window)
+            # Hook into dbus service - only if it is available
+            if bus:
+                SubscriptionManagerService(main.main_window)
 
             # Exit the gtk loop when the window is closed
             main.main_window.connect('hide', gtk.main_quit)
