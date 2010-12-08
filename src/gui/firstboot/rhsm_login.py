@@ -14,6 +14,7 @@ sys.path.append("/usr/share/rhsm")
 from gui import managergui
 from certlib import ConsumerIdentity
 from facts import Facts
+from gui import networkConfig
 
 
 class moduleClass(Module, managergui.RegisterScreen):
@@ -93,6 +94,15 @@ class moduleClass(Module, managergui.RegisterScreen):
         self._destroy_widget('register_button')
         self._destroy_widget('cancel_button')
 
+        # Add a button to launch network config for using a proxy
+        box = gtk.HButtonBox()
+        box.set_layout(gtk.BUTTONBOX_START)
+        config_button = gtk.Button(_("Proxy Configuration"))
+        config_button.connect("clicked", self._proxy_button_clicked)
+        box.pack_start(config_button)
+        self.register_dialog.pack_start(box, expand=False, fill=False)
+        self.network_config_dialog = networkConfig.NetworkConfigDialog()
+
     def initializeUI(self):
         self.initializeConsumerName()
 
@@ -156,3 +166,6 @@ class moduleClass(Module, managergui.RegisterScreen):
         """
         widget = managergui.registration_xml.get_widget(widget_name)
         return widget.get_text()
+
+    def _proxy_button_clicked(self, widget):
+        self.network_config_dialog.show()
