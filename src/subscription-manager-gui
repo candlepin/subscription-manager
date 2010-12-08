@@ -65,6 +65,7 @@ except locale.Error:
 for module in (gettext, gtk.glade):
     module.bindtextdomain(APP, DIR)
     module.textdomain(APP)
+_ = gettext.gettext
 
 # quick check to see if you are a super-user.
 if os.getuid() != 0:
@@ -96,6 +97,7 @@ if __name__ == '__main__':
         bus = None
 
     if bus and bus.request_name(BUS_NAME) != dbus.bus.REQUEST_NAME_REPLY_PRIMARY_OWNER:
+        print _("subscription-manager-gui is already running")
         show = bus.get_object(BUS_NAME, BUS_PATH).get_dbus_method('show_window')
         show()
     else:
