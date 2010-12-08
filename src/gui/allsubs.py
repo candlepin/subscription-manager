@@ -94,6 +94,8 @@ class AllSubscriptionsTab(object):
         self.sub_details = widgets.SubDetailsWidget(show_contract=False)
         self.all_subs_vbox.pack_start(self.sub_details.get_widget(), expand=False)
 
+        self.contract_selection = None
+
         self.active_on_checkbutton = self.all_subs_xml.get_widget('active_on_checkbutton')
 
         self.subscribe_button = self.all_subs_xml.get_widget('subscribe_button')
@@ -218,7 +220,8 @@ class AllSubscriptionsTab(object):
         self.search_button_clicked(None)
 
     def _contract_selection_cancelled(self):
-        self.contract_selection.destroy()
+        if self.contract_selection:
+            self.contract_selection.destroy()
         self.contract_selection = None
 
     def subscribe_button_clicked(self, button):
@@ -229,7 +232,8 @@ class AllSubscriptionsTab(object):
         # if there's just one pool, shortcut right to the callback that the
         # dialog would have run.
         if len(pools.pools) == 1:
-            self._contract_selected(pools.pools[1])
+            self._contract_selected(pools.pools[0])
+            return
 
         self.contract_selection = ContractSelectionWindow(
                 self._contract_selected, self._contract_selection_cancelled)
