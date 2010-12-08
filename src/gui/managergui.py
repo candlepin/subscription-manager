@@ -49,6 +49,7 @@ from installedtab import InstalledProductsTab
 from mysubstab import MySubscriptionsTab
 from allsubs import AllSubscriptionsTab
 from compliance import ComplianceAssistant
+from importsub import ImportSubDialog
 from utils import handle_gui_exception, errorWindow, linkify
 
 import gettext
@@ -94,7 +95,6 @@ regtoken_xml = GladeWrapper(os.path.join(prefix,
     "data/regtoken.glade"))
 
 certlib = CertLib()
-ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
 
 
 
@@ -219,6 +219,9 @@ class MainWindow(widgets.GladeWidget):
         self.registration_dialog = RegisterScreen(self.consumer, self.facts,
                 callbacks=[self.registration_changed])
         self.registration_dialog.set_parent_window(self.main_window)
+
+        self.import_sub_dialog = ImportSubDialog()
+        self.import_sub_dialog.set_parent_window(self.main_window)
         
         self.compliance_assistant = ComplianceAssistant(self.backend,
                 self.consumer, self.facts)
@@ -370,8 +373,7 @@ class MainWindow(widgets.GladeWidget):
         self.system_facts_dialog.show()
 
     def _add_sub_button_clicked(self, widget):
-        # TODO
-        pass
+        self.import_sub_dialog.show()
 
     def _compliant_button_clicked(self, widget):
         if self.registered():
@@ -547,12 +549,7 @@ class ManageSubscriptionPage:
         self.add_subscription_screen.show()
 
     def show_import_certificate_screen(self):
-        if not self.import_certificate_screen:
-            self.import_certificate_screen = ImportCertificate()
-            self.import_certificate_screen.importWin.connect('hide',
-                    self.reload_gui)
-
-        self.import_certificate_screen.show()
+        pass
 
     def addSubButtonAction(self, button):
         if self.consumer.uuid:
@@ -1216,62 +1213,6 @@ class AddSubscriptionScreen:
 
     def _cell_data_toggle_func(self, tree_column, renderer, model, treeiter):
         renderer.set_property('visible', True)
-
-
-class ImportCertificate:
-
-    """
-     Import an Entitlement Certificate Widget screen
-    """
-
-    def __init__(self):
-        self.add_vbox = rhsm_xml.get_widget("import_vbox")
-
-        dic = {"on_import_cancel_button_clicked": self.cancel,
-               "on_certificate_import_button_clicked": self.importCertificate,
-            }
-        rhsm_xml.signal_autoconnect(dic)
-        self.importWin = rhsm_xml.get_widget("entitlement_import_dialog")
-        self.importWin.connect("hide", self.cancel)
-        self.importWin.connect("delete_event", self.delete_event)
-        self.importWin.show_all()
-
-    def cancel(self, button=None):
-        self.importWin.hide()
-#        self.importWin.destroy()
-        gtk.main_iteration()
-        return True
-
-    def show(self):
-        self.importWin.present()
-
-    def delete_event(self, event, data=None):
-        return self.cancel()
-
-    def importCertificate(self, button):
-        fileChooser = rhsm_xml.get_widget("certificate_chooser_button")
-        src_cert_file = fileChooser.get_filename()
-        if src_cert_file is None:
-            errorWindow(_("You must select a certificate."))
-            return False
-
-        try:
-            data = open(src_cert_file).read()
-            x509 = load_certificate(FILETYPE_PEM, data)
-        except:
-            errorWindow(_("%s is not a valid certificate file. Please upload a valid certificate." %
-                          os.path.basename(src_cert_file)))
-            return False
-
-        if not os.access(ENT_CONFIG_DIR, os.R_OK):
-            os.mkdir(ENT_CONFIG_DIR)
-
-        dest_file_path = os.path.join(ENT_CONFIG_DIR, os.path.basename(src_cert_file))
-        #if not os.path.exists(dest_file_path):
-        shutil.copy(src_cert_file, dest_file_path)
- #       print dest_file_path
-        self.importWin.hide()
-#        reload()
 
 
 def unexpectedError(message, exc_info=None):
