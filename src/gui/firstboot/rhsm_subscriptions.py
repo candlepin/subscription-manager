@@ -35,10 +35,12 @@ class moduleClass(Module, managergui.MainWindow):
         self.vbox = gtk.VBox(spacing=10)
         self.main_window.get_child().reparent(self.vbox)
         self.main_window.destroy()
-        self.main_window = self
 
     def initializeUI(self):
         self.refresh()
 
     def shouldAppear(self):
         return True
+
+    def _get_window(self):
+        return self.vbox.get_parent_window().get_user_data()

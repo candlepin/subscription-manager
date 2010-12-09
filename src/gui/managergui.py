@@ -187,21 +187,16 @@ class MainWindow(widgets.GladeWidget):
 
         self.system_facts_dialog = factsgui.SystemFactsDialog(self.consumer,
                 self.facts)
-        self.system_facts_dialog.set_parent_window(self.main_window)
 
         self.registration_dialog = RegisterScreen(self.consumer, self.facts,
                 callbacks=[self.registration_changed])
-        self.registration_dialog.set_parent_window(self.main_window)
 
         self.import_sub_dialog = ImportSubDialog()
-        self.import_sub_dialog.set_parent_window(self.main_window)
         
         self.compliance_assistant = ComplianceAssistant(self.backend,
                 self.consumer, self.facts)
-        self.compliance_assistant.set_parent_window(self.main_window)
 
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
-        self.network_config_dialog.set_parent_window(self.main_window)
 
         self.installed_tab = InstalledProductsTab(self.backend, self.consumer,
                 self.facts)
@@ -260,6 +255,13 @@ class MainWindow(widgets.GladeWidget):
             self.notebook.remove_page(2)
 
         self._show_buttons()
+
+    def _get_window(self):
+        """
+        Return the window containing this widget (might be different for
+        firstboot).
+        """
+        return self.main_window
 
     def _show_buttons(self):
         """
@@ -326,12 +328,13 @@ class MainWindow(widgets.GladeWidget):
         self.button_bar.add(button)
 
     def _register_button_clicked(self, widget):
+        self.registration_dialog.set_parent_window(self._get_window())
         self.registration_dialog.show()
 
     def _unregister_button_clicked(self, widget):
         log.info("Unregister button pressed, asking for confirmation.")
         prompt = messageWindow.YesNoDialog(constants.CONFIRM_UNREGISTER,
-                self.main_window)
+                self._get_window())
         if not prompt.getrc():
             log.info("unregistrater not confirmed. cancelling")
             return
@@ -347,21 +350,25 @@ class MainWindow(widgets.GladeWidget):
         self.refresh()
 
     def _network_config_button_clicked(self, widget):
+        self.network_config_dialog.set_parent_window(self._get_window())
         self.network_config_dialog.show()
 
     def _facts_button_clicked(self, widget):
+        self.system_facts_dialog.set_parent_window(self._get_window())
         self.system_facts_dialog.show()
 
     def _add_sub_button_clicked(self, widget):
+        self.import_sub_dialog.set_parent_window(self._get_window())
         self.import_sub_dialog.show()
 
     def _compliant_button_clicked(self, widget):
         if self.registered():
+            self.compliance_assistant.set_parent_window(self._get_window())
             self.compliance_assistant.show()
         else:
             messageWindow.OkDialog(messageWindow.wrap_text(
                 _("You must register before using the compliance assistant.")),
-                self.main_window)
+                self._get_window())
 
     def _set_compliance_status(self):
         """ Updates the compliance status portion of the UI. """
