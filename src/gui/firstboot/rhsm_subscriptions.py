@@ -38,7 +38,7 @@ class moduleClass(Module, managergui.MainWindow):
         self.main_window = self
 
     def initializeUI(self):
-        pass
+        self.refresh()
 
     def shouldAppear(self):
         return True
