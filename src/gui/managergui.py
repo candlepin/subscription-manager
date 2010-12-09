@@ -73,11 +73,6 @@ cert_file = ConsumerIdentity.certpath()
 key_file = ConsumerIdentity.keypath()
 UEP = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
 
-CONSUMER_SIGNAL = "on_consumer_changed"
-
-# Register new signal emitted by various dialogs when entitlement data changes
-gobject.signal_new(CONSUMER_SIGNAL, gtk.Dialog, gobject.SIGNAL_ACTION, gobject.TYPE_NONE, ())
-gobject.signal_new(CONSUMER_SIGNAL, gtk.Window, gobject.SIGNAL_ACTION, gobject.TYPE_NONE, ())
 
 class GladeWrapper(gtk.glade.XML):
     def __init__(self, filename):
@@ -93,8 +88,6 @@ class GladeWrapper(gtk.glade.XML):
 rhsm_xml = GladeWrapper(os.path.join(prefix, "data/rhsm.glade"))
 registration_xml = GladeWrapper(os.path.join(prefix,
     "data/registration.glade"))
-regtoken_xml = GladeWrapper(os.path.join(prefix,
-    "data/regtoken.glade"))
 
 certlib = CertLib()
 
@@ -174,28 +167,6 @@ def fetch_certificates():
         log.exception(e)
         return False
     return True
-
-register_screen = None
-regtoken_screen = None
-
-
-def show_register_screen(consumer, facts):
-    global register_screen
-
-    if register_screen:
-        register_screen.show()
-    else:
-        register_screen = RegisterScreen(consumer, facts)
-        register_screen.show()
-
-
-def show_regtoken_screen(consumer, facts):
-    global regtoken_screen
-
-    if regtoken_screen:
-        regtoken_screen.show()
-    else:
-        regtoken_screen = RegistrationTokenScreen(consumer, facts)
 
 
 class MainWindow(widgets.GladeWidget):
@@ -538,16 +509,9 @@ class RegisterScreen:
 
             self.close_window()
 
-            self.emit_consumer_signal()
-
         except Exception, e:
            return handle_gui_exception(e, constants.REGISTER_ERROR)
         return True
-
-    def emit_consumer_signal(self):
-        for method in self.callbacks:
-            method()
-        self.registerWin.emit(CONSUMER_SIGNAL)
 
     def close_window(self):
         self.registerWin.hide()
@@ -589,71 +553,6 @@ class RegisterScreen:
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
         UEP = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
-
-
-class RegistrationTokenScreen:
-    """
-     This screen handles reregistration and registration token activation
-    """
-
-    def __init__(self, consumer, facts):
-        self.consumer = consumer
-        self.facts = facts
-        dic = {
-                "on_register_token_close_clicked" : self.finish,
-                "on_change_account_button" : self.reRegisterAction,
-                "on_facts_update_button_clicked" : self.factsUpdateAction,
-                "on_submit_button_clicked" : self.submitToken,
-                }
-        self.setAccountMsg()
-        regtoken_xml.signal_autoconnect(dic)
-        self.regtokenWin = regtoken_xml.get_widget("register_token_dialog")
-        self.regtokenWin.connect("hide", self.finish)
-        self.regtokenWin.connect("delete_event", self.delete_event)
-
-        self.regtokenWin.run()
-
-    def show(self):
-        self.regtokenWin.present()
-
-    def delete_event(self, event, data=None):
-        return self.finish()
-
-    def finish(self, button=None):
-        self.regtokenWin.hide()
-        return True
-
-    def reRegisterAction(self, button):
-        show_register_screen(self.consumer)
-        self.regtokenWin.hide()
-
-    def factsUpdateAction(self, button):
-        try:
-            UEP.updateConsumerFacts(self.consumer.uuid, self.facts.get_facts())
-        except Exception, e:
-            handle_gui_exception(e, _("Error updating facts. Please see /var/log/rhsm/rhsm.log for more information."))
-
-    def setAccountMsg(self):
-        alabel1 = regtoken_xml.get_widget("account_label1")
-        alabel1.set_label(_("\nThis system is registered with following consumer information"))
-        alabel = regtoken_xml.get_widget("account_label2")
-        alabel.set_label(_("<b>    ID:</b>       %s" % self.consumer.uuid))
-        alabel = regtoken_xml.get_widget("account_label3")
-        alabel.set_label(_("<b>  Name:</b>     %s" % self.consumer.name))
-
-    def submitToken(self, button):
-        rlabel = regtoken_xml.get_widget("regtoken_entry")
-        reg_token = rlabel.get_text()
-        elabel = regtoken_xml.get_widget("email_entry")
-        email = elabel.get_text()
-        if email == "":
-            email = None
-        try:
-            UEP.bindByRegNumber(self.consumer.uuid, reg_token, email)
-            infoWindow(constants.SUBSCRIBE_REGTOKEN_SUCCESS % reg_token, self.regtokenWin)
-        except Exception, e:
-            handle_gui_exception(e, constants.SUBSCRIBE_REGTOKEN_ERROR % reg_token,
-                "Could not subscribe registration token %s." % (reg_token))
 
 
 def show_busted_subs(busted_subs):
