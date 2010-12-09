@@ -17,6 +17,7 @@
 # Jeff Ortel (jortel@redhat.com)
 #
 
+import datetime
 import os
 import logging
 import string
@@ -25,6 +26,7 @@ import traceback
 from logging import Formatter
 from logging.handlers import RotatingFileHandler
 
+CERT_LOG = '/var/log/rhsm/rhsmcertd.log'
 
 def trace_me():
     x = traceback.extract_stack()
@@ -59,3 +61,22 @@ def getLogger(name):
     log.addHandler(handler)
     log.setLevel(logging.DEBUG)
     return log
+    
+def getLastCertUpdate():
+    log_file = None
+
+    try:
+        log_file = open(CERT_LOG)
+        for line in log_file:
+            last_line = line
+
+        # Note sure if this is too specific to the locale?    
+        date_string = ':'.join(last_line.split(':')[:3])
+        return datetime.datetime.strptime(date_string, '%a %b %d %H:%M:%S %Y')
+    except:
+        return None
+    finally:
+        if log_file:
+            log_file.close()
+    
+    

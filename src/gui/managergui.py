@@ -17,6 +17,7 @@
 # in this software or its documentation.
 #
 
+import datetime
 import os
 import sys
 import shutil
@@ -36,6 +37,7 @@ import managerlib
 import connection
 import config
 import constants
+import logutil
 from facts import Facts
 from certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \
         CertLib, syslog, CertSorter
@@ -204,7 +206,7 @@ class MainWindow(widgets.GladeWidget):
         super(MainWindow, self).__init__('mainwindow.glade',
               ['main_window', 'notebook', 'compliance_count_label',
                'compliance_status_label', 'compliance_status_image',
-               'button_bar', 'system_name_label'])
+               'button_bar', 'system_name_label', 'next_update_label'])
 
         self.backend = Backend(connection.UEPConnection(
             cert_file=ConsumerIdentity.certpath(),
@@ -250,9 +252,15 @@ class MainWindow(widgets.GladeWidget):
 
         def on_identity_change(filemonitor, first_file, other_file, event_type):
             self._set_system_name()
+            
+        def on_cert_update(filemonitor, first_file, other_file, event_type):
+            self._set_next_update()
 
         self.backend.monitor_certs(on_cert_change)
         self.backend.monitor_identity(on_identity_change)
+        
+        # For updating the 'Next Update' time
+        gio.File(logutil.CERT_LOG).monitor().connect('changed', on_cert_update)
 
         self.refresh()
 
@@ -270,6 +278,7 @@ class MainWindow(widgets.GladeWidget):
         """ Refresh the UI. """
         self._set_compliance_status()
         self._set_system_name()
+        self._set_next_update()
 
         # Show the All Subscriptions tab if registered, hide it otherwise:
         if self.registered() and self.notebook.get_n_pages() == 2:
@@ -416,6 +425,20 @@ class MainWindow(widgets.GladeWidget):
         # TODO:  Need to escape markup here
         name = self.consumer.name or _('Not registered')
         self.system_name_label.set_markup('<b>%s</b>' % name)
+        
+    def _set_next_update(self):
+        last_update = logutil.getLastCertUpdate()
+        
+        if last_update:
+            # TODO:  This assumes that rhsmcertd is running!
+            #        That is probably not a safe assumption...
+            freq = int(cfg.get('rhsmcertd', 'certFrequency'))
+            delta = datetime.timedelta(minutes=freq)
+            
+            new_time = last_update + delta
+            self.next_update_label.set_text(new_time.ctime())
+        else:
+            self.next_update_label.set_text(_('Unknown'))
 
 
 class RegisterScreen:
