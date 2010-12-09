@@ -13,15 +13,15 @@ _ = lambda x: gettext.ldgettext("firstboot", x)
 N_ = lambda x: x
 
 sys.path.append("/usr/share/rhsm")
-print sys.path
 from gui import managergui
 
 
-class moduleClass(Module, managergui.ManageSubscriptionPage):
+class moduleClass(Module, managergui.MainWindow):
 
     def __init__(self):
         Module.__init__(self)
-        managergui.ManageSubscriptionPage.__init__(self)
+        managergui.MainWindow.__init__(self)
+        self.main_window.hide()
         #this value is relative to when you want to load the screen
         # so check other modules before setting
         self.priority = 1.3
@@ -31,53 +31,14 @@ class moduleClass(Module, managergui.ManageSubscriptionPage):
     def apply(self, interface, testing=False):
         return RESULT_SUCCESS
 
-    def show(self):
-        # Override parent method to display separate window.
-        pass
-
-    def close_window(self):
-        pass
-
     def createScreen(self):
         self.vbox = gtk.VBox(spacing=10)
-        self._get_widget("main_vbox").reparent(self.vbox)
-
-        self.reload_gui()
-
-        # Clear out all the buttons on the bottom of the page
-        self._get_widget('action_area').hide()
-
-    def show_buttons(self):
-        """
-        Override parent method which displays the action buttons.
-
-        During firstboot, we don't want any of these to appear, so just
-        do nothing.
-        """
-        pass
+        self.main_window.get_child().reparent(self.vbox)
+        self.main_window.destroy()
+        self.main_window = self
 
     def initializeUI(self):
-        self.reload_gui()
+        pass
 
     def shouldAppear(self):
         return True
-
-    def _get_widget(self, widget_name):
-        """
-        Returns a widget by name.
-        """
-        return managergui.rhsm_xml.get_widget(widget_name)
-
-    def addSubButtonAction(self, button):
-        """
-        Override parent method to always reload the consumer identity when 
-        called.
-
-        This is a minimally slower but gets us past a problem with the core 
-        GUI classes which share a reference to the consumer object. In 
-        firstboot we do not control when these are created or even the order 
-        they are created, and thus cannot easily share a reference to the 
-        consumer.
-        """
-        self.consumer.reload()
-        managergui.ManageSubscriptionPage.addSubButtonAction(self, button)
