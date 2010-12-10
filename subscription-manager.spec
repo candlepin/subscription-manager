@@ -32,18 +32,6 @@ Subscription Manager package provides programs and libraries to allow users
 to manager subscriptions/yumrepos from Red Hat entitlement or deployment
 Platform.
 
-%package -n python-rhsm
-Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
-Group: Development/Libraries
-Requires: m2crypto
-Requires: python-simplejson
-BuildArch: noarch
-
-%description -n python-rhsm
-A small library for communicating with the REST interface of a Red Hat Unified
-Entitlement Platform. This interface is used for the management of system
-entitlements, certificates, and access to content.
-
 %package -n subscription-manager-gnome
 Summary: A GUI interface to manage Red Hat product subscriptions
 Group: System Environment/Base
@@ -91,9 +79,12 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 
+%config(noreplace) %attr(644,root,root) /etc/rhsm/rhsm.conf
+
 %dir %{_datadir}/rhsm
 %dir /etc/rhsm/facts
 %dir %{_datarootdir}/locale
+%dir %{_sysconfdir}/rhsm/ca
 
 %{_datadir}/rhsm/__init__.py*
 %{_datadir}/rhsm/managercli.py*
@@ -106,13 +97,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/certlib.py*
 %{_datadir}/rhsm/hwprobe.py*
 %{_datadir}/rhsm/constants.py*
+%{_datadir}/rhsm/certificate.py*
 %{_datadir}/rhsm/lock.py*
 %{_datadir}/rhsm/facts.py*
 %{_datadir}/rhsm/factlib.py*
 %{_datadir}/rhsm/productid.py*
 %{_datarootdir}/locale/*
 %attr(755,root,root) %{_sbindir}/subscription-manager
-%attr(755,root,root) %dir %{_var}/log/rhsm
 %attr(755,root,root) %dir %{_var}/lib/rhsm
 %attr(755,root,root) %dir %{_var}/lib/rhsm/facts
 %attr(755,root,root) %{_bindir}/rhsmcertd
@@ -123,6 +114,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(644,root,root) /etc/yum/pluginconf.d/subscription-manager.conf
 %attr(644,root,root) /etc/yum/pluginconf.d/product-id.conf
 
+%{_sysconfdir}/rhsm/ca
 %{_sysconfdir}/cron.daily/rhsm-complianced
 %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
 %{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
@@ -148,15 +140,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/xdg/autostart/rhsm-compliance-icon.desktop
 %{_sysconfdir}/pam.d/subscription-manager-gui
 %{_sysconfdir}/security/console.apps/subscription-manager-gui
-
-%files -n python-rhsm
-%{_datadir}/rhsm/connection.py*
-%{_datadir}/rhsm/logutil.py*
-%{_datadir}/rhsm/config.py*
-%{_datadir}/rhsm/certificate.py*
-%config(noreplace) %attr(644,root,root) /etc/rhsm/rhsm.conf
-%dir %{_sysconfdir}/rhsm/ca
-%{_sysconfdir}/rhsm/ca
 
 %post
 chkconfig --add rhsmcertd
