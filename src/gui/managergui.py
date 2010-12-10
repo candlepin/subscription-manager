@@ -516,9 +516,15 @@ class RegisterScreen:
 
             self.close_window()
 
+            self.emit_consumer_signal()
+
         except Exception, e:
            return handle_gui_exception(e, constants.REGISTER_ERROR)
         return True
+
+    def emit_consumer_signal(self):
+        for method in self.callbacks:
+            method()
 
     def close_window(self):
         self.registerWin.hide()
