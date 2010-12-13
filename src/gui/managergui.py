@@ -57,7 +57,6 @@ prefix = os.path.dirname(__file__)
 COMPLIANT_IMG = os.path.join(prefix, "data/icons/compliant.svg")
 NON_COMPLIANT_IMG = os.path.join(prefix, "data/icons/non-compliant.svg")
 
-cfg = config.initConfig()
 cert_file = ConsumerIdentity.certpath()
 key_file = ConsumerIdentity.keypath()
 UEP = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
@@ -399,7 +398,7 @@ class MainWindow(widgets.GladeWidget):
         if last_update:
             # TODO:  This assumes that rhsmcertd is running!
             #        That is probably not a safe assumption...
-            freq = int(cfg.get('rhsmcertd', 'certFrequency'))
+            freq = int(config.initConfig().get('rhsmcertd', 'certFrequency'))
             delta = datetime.timedelta(minutes=freq)
             
             new_time = last_update + delta
@@ -554,21 +553,6 @@ class RegisterScreen:
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
         UEP = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
-
-
-def show_busted_subs(busted_subs):
-    if len(busted_subs):
-        products = [x[0] for x in busted_subs]
-        reasons = [linkify(x[1].msg) for x in busted_subs \
-                if isinstance(x[1], connection.RestlibException)]
-        msg = constants.SUBSCRIBE_ERROR % ', '.join(products)
-        msg += "\n\n"
-        msg += "\n".join(reasons)
-        errorWindow(msg)
-
-
-def infoWindow(message, parent):
-    messageWindow.InfoDialog(messageWindow.wrap_text(message), parent)
 
 
 def setArrowCursor():
