@@ -184,6 +184,7 @@ class MainWindow(widgets.GladeWidget):
                 self.consumer, self.facts)
 
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
+        self.network_config_dialog.xml.get_widget("closeButton").connect("clicked", self._config_changed)
 
         self.installed_tab = InstalledProductsTab(self.backend, self.consumer,
                 self.facts)
@@ -356,6 +357,14 @@ class MainWindow(widgets.GladeWidget):
             messageWindow.OkDialog(messageWindow.wrap_text(
                 _("You must register before using the compliance assistant.")),
                 self._get_window())
+
+    def _config_changed(self, widget):
+        # update the backend's UEP in case we changed proxy
+        # config
+        self.backend.uep = connection.UEPConnection(
+            cert_file=ConsumerIdentity.certpath(),
+            key_file=ConsumerIdentity.keypath())
+
 
     def _set_compliance_status(self):
         """ Updates the compliance status portion of the UI. """
