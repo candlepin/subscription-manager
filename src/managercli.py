@@ -510,8 +510,11 @@ class FactsCommand(CliCommand):
                                help=_("update the system facts"))
 
     def _validate_options(self):
+        # Only require registration for updating facts
+        if self.options.update:
+            self.assert_should_be_registered()
+        
         # one or the other
-        self.assert_should_be_registered()
         if not (self.options.list or self.options.update):
             print _("Error: Need either --list or --update, Try facts --help")
             sys.exit(-1)
