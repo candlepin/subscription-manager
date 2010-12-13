@@ -1,5 +1,4 @@
-from connection import UEPConnection
-from connection import RestlibException
-from logutil import *
-from config import *
+from rhsm.connection import UEPConnection, RestlibException
+from rhsm.config import *
+from rhsm.logutil import *
 from certificate import *

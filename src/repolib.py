@@ -18,10 +18,10 @@
 import os
 import string
 from urllib import basejoin
-from config import initConfig
+from rhsm.config import initConfig
 from certlib import Path, EntitlementDirectory, ActionLock
 from iniparse import ConfigParser as Parser
-from logutil import getLogger
+from rhsm.logutil import getLogger
 
 log = getLogger(__name__)
 

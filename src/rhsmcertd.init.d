@@ -21,7 +21,7 @@ LOCK=/var/lock/subsys/$PROG
 INTERVAL=`python -c "\
 import sys
 sys.path.append('/usr/share/rhsm')
-from config import initConfig
+from rhsm.config import initConfig
 cfg = initConfig()
 print cfg.get('rhsmcertd', 'certFrequency')"`
 

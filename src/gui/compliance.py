@@ -22,7 +22,7 @@ from datetime import date, datetime
 
 _ = gettext.gettext
 
-from logutil import getLogger
+from rhsm.logutil import getLogger
 log = getLogger(__name__)
 
 import certificate

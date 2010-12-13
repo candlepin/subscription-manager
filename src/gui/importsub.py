@@ -19,15 +19,15 @@ import os
 import shutil
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
 
-from logutil import getLogger
+from rhsm.logutil import getLogger
 log = getLogger(__name__)
 _ = gettext.gettext
 
 import widgets
-import config
+import rhsm.config
 from utils import handle_gui_exception, errorWindow
 
-cfg = config.initConfig()
+cfg = rhsm.config.initConfig()
 ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
 
 class ImportSubDialog(widgets.GladeWidget):

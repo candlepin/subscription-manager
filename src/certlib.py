@@ -19,12 +19,11 @@
 import os
 import syslog
 from datetime import timedelta, datetime
-from config import initConfig
-from connection import UEPConnection
+from rhsm.connection import UEPConnection
 from certificate import *
 from lock import Lock
-from logutil import getLogger
-from config import initConfig
+from rhsm.logutil import getLogger
+from rhsm.config import initConfig
 
 
 log = getLogger(__name__)

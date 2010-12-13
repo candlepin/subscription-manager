@@ -22,7 +22,7 @@ _ = gettext.gettext
 
 import connection
 import messageWindow
-from logutil import getLogger
+from rhsm.logutil import getLogger
 log = getLogger(__name__)
 
 def handle_gui_exception(e, msg, logMsg=None):

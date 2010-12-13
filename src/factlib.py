@@ -19,7 +19,7 @@ import gettext
 _ = gettext.gettext
 
 from certlib import  ActionLock, UEP, Disconnected
-from logutil import getLogger
+from rhsm.logutil import getLogger
 from facts import Facts
 
 log = getLogger(__name__)

@@ -19,7 +19,7 @@ import gettext
 
 import gtk
 
-import config
+import rhsm.config
 
 _ = gettext.gettext
 gettext.textdomain("subscription-manager")
@@ -47,7 +47,7 @@ class NetworkConfigDialog:
         self.proxyUserEntry = self.xml.get_widget("proxyUserEntry")
         self.proxyPasswordEntry = self.xml.get_widget("proxyPasswordEntry")
 
-        self.cfg = config.initConfig()
+        self.cfg = rhsm.config.initConfig()
 #        try:
 #            self.cfg = config.initUp2dateConfig()
 #        except:
@@ -73,7 +73,7 @@ class NetworkConfigDialog:
         proxy_url = self.cfg.get("server", "proxy_hostname") or ""
         # append port unless not specified, then append the default of 3128
         if proxy_url:
-            proxy_url = proxy_url + ':' + (self.cfg.get("server", "proxy_port") or config.DEFAULT_PROXY_PORT)
+            proxy_url = proxy_url + ':' + (self.cfg.get("server", "proxy_port") or rhsm.config.DEFAULT_PROXY_PORT)
 
         self.xml.get_widget("proxyEntry").set_text("%s" % proxy_url)
 
@@ -104,7 +104,7 @@ class NetworkConfigDialog:
             except ValueError, e:
                 # no port? just write out the hostname and assume default
                 self.cfg.set("server", "proxy_hostname", proxy)
-                self.cfg.set("server", "proxy_port", config.DEFAULT_PROXY_PORT)
+                self.cfg.set("server", "proxy_port", rhsm.config.DEFAULT_PROXY_PORT)
 
         if self.xml.get_widget("proxyUserEntry").get_text() is not None:
             self.cfg.set("server", "proxy_user",

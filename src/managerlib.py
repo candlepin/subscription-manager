@@ -25,8 +25,8 @@ from datetime import datetime, date
 from certlib import CertLib, ConsumerIdentity, \
                     ProductDirectory, EntitlementDirectory
 from certlib import system_log as inner_system_log
-from logutil import getLogger
-from config import initConfig
+from rhsm.logutil import getLogger
+from rhsm.config import initConfig
 from xml.utils.iso8601 import parse
 from threading import Thread
 

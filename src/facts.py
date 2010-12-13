@@ -4,7 +4,7 @@ import simplejson as json
 import gettext
 _ = gettext.gettext
 
-import config
+import rhsm.config
 
 class Facts():
 
@@ -82,7 +82,7 @@ class Facts():
     def find_facts(self):
         # don't figure this out twice if we already did it for
         # delta()
-        facts_file_glob = "%s/facts/*.facts" % config.DEFAULT_CONFIG_DIR
+        facts_file_glob = "%s/facts/*.facts" % rhsm.config.DEFAULT_CONFIG_DIR
 
         file_facts = {}
         for file_path in glob.glob(facts_file_glob):

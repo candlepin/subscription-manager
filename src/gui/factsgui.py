@@ -18,8 +18,8 @@ import gtk
 
 import managergui
 
-import logutil
-log = logutil.getLogger(__name__)
+import rhsm.logutil
+log = rhsm.logutil.getLogger(__name__)
 
 import gettext
 _ = gettext.gettext

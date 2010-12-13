@@ -18,7 +18,7 @@
 
 import os
 import sys
-import config
+import rhsm.config
 import constants
 import connection
 import optparse
@@ -32,13 +32,13 @@ from M2Crypto import SSL
 import gettext
 _ = gettext.gettext
 
-from logutil import getLogger
+from rhsm.logutil import getLogger
 from httplib import socket
 from socket import error as socket_error
 
 log = getLogger(__name__)
 
-cfg = config.initConfig()
+cfg = rhsm.config.initConfig()
 
 def handle_exception(msg, ex):
     log.error(msg)
@@ -124,7 +124,7 @@ class CliCommand(object):
                 self.proxy_port = parts[1]
             else:
                 # if no port specified, use the one from the config, or fallback to the default
-                self.proxy_port = cfg.get('server', 'proxy_port') or config.DEFAULT_PROXY_PORT
+                self.proxy_port = cfg.get('server', 'proxy_port') or rhsm.config.DEFAULT_PROXY_PORT
 
         if self.options.proxy_user:
             self.proxy_user = self.options.proxy_user
