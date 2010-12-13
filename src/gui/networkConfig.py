@@ -139,6 +139,7 @@ class NetworkConfigDialog:
         self.dlg.present()
 
     def close(self, button):
+        self.writeValues()
         self.dlg.hide()
     
     def enableAction(self, button):
