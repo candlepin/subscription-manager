@@ -225,8 +225,8 @@ class IdentityCommand(CliCommand):
                                                        password=self.options.password,
                                                        proxy_hostname=self.proxy_hostname,
                                                        proxy_port=self.proxy_port,
-                                                       proxy_user=self.options.proxy_user,
-                                                       proxy_password=self.options.proxy_password)
+                                                       proxy_user=self.proxy_user,
+                                                       proxy_password=self.proxy_password)
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
 
@@ -297,8 +297,8 @@ class RegisterCommand(CliCommand):
                                             password=self.options.password,
                                             proxy_hostname=self.proxy_hostname,
                                             proxy_port=self.proxy_port,
-                                            proxy_user=self.options.proxy_user,
-                                            proxy_password=self.options.proxy_password)
+                                            proxy_user=self.proxy_user,
+                                            proxy_password=self.proxy_password)
         
         if ConsumerIdentity.exists() and self.options.force:
             # First let's try to un-register previous consumer. This may fail
