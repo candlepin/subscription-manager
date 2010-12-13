@@ -206,7 +206,7 @@ class MainWindow(widgets.GladeWidget):
             self._set_compliance_status()
 
         def on_identity_change(filemonitor, first_file, other_file, event_type):
-            self._set_system_name()
+            self.refresh()
             
         def on_cert_update(filemonitor, first_file, other_file, event_type):
             self._set_next_update()
