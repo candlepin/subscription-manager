@@ -54,8 +54,6 @@ from logutil import getLogger
 log = getLogger(__name__)
 
 prefix = os.path.dirname(__file__)
-subs_full = os.path.join(prefix, "data/icons/subsmgr-full.png")
-subs_empty = os.path.join(prefix, "data/icons/subsmgr-empty.png")
 COMPLIANT_IMG = os.path.join(prefix, "data/icons/compliant.svg")
 NON_COMPLIANT_IMG = os.path.join(prefix, "data/icons/non-compliant.svg")
 
@@ -456,7 +454,7 @@ class RegisterScreen:
         self.passwd = registration_xml.get_widget("account_password")
         self.consumer_name = registration_xml.get_widget("consumer_name")
 
-        global username, password, consumername, UEP
+        global UEP
         username = self.uname.get_text()
         password = self.passwd.get_text()
         consumername = self.consumer_name.get_text()
