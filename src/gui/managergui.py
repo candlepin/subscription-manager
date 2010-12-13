@@ -19,20 +19,14 @@
 
 import datetime
 import os
-import sys
-import shutil
 import socket
 
 import gio
 import gtk
 import gtk.glade
-import gobject
-import signal
-import pango
 
 import messageWindow
 import networkConfig
-import progress
 import managerlib
 import connection
 import config
@@ -40,10 +34,7 @@ import constants
 import logutil
 from facts import Facts
 from certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \
-        CertLib, syslog, CertSorter
-from OpenSSL.crypto import load_certificate, FILETYPE_PEM
-from socket import error as socket_error
-import xml.sax.saxutils
+        CertLib, CertSorter
 
 import factsgui
 import widgets
@@ -63,12 +54,9 @@ from logutil import getLogger
 log = getLogger(__name__)
 
 prefix = os.path.dirname(__file__)
-subs_full = os.path.join(prefix, "data/icons/subsmgr-full.png")
-subs_empty = os.path.join(prefix, "data/icons/subsmgr-empty.png")
 COMPLIANT_IMG = os.path.join(prefix, "data/icons/compliant.svg")
 NON_COMPLIANT_IMG = os.path.join(prefix, "data/icons/non-compliant.svg")
 
-cfg = config.initConfig()
 cert_file = ConsumerIdentity.certpath()
 key_file = ConsumerIdentity.keypath()
 UEP = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
@@ -217,7 +205,7 @@ class MainWindow(widgets.GladeWidget):
             self._set_compliance_status()
 
         def on_identity_change(filemonitor, first_file, other_file, event_type):
-            self._set_system_name()
+            self.refresh()
             
         def on_cert_update(filemonitor, first_file, other_file, event_type):
             self._set_next_update()
@@ -410,7 +398,7 @@ class MainWindow(widgets.GladeWidget):
         if last_update:
             # TODO:  This assumes that rhsmcertd is running!
             #        That is probably not a safe assumption...
-            freq = int(cfg.get('rhsmcertd', 'certFrequency'))
+            freq = int(config.initConfig().get('rhsmcertd', 'certFrequency'))
             delta = datetime.timedelta(minutes=freq)
             
             new_time = last_update + delta
@@ -465,7 +453,7 @@ class RegisterScreen:
         self.passwd = registration_xml.get_widget("account_password")
         self.consumer_name = registration_xml.get_widget("consumer_name")
 
-        global username, password, consumername, UEP
+        global UEP
         username = self.uname.get_text()
         password = self.passwd.get_text()
         consumername = self.consumer_name.get_text()
@@ -490,7 +478,6 @@ class RegisterScreen:
                 log.error("Unable to unregister with existing credentials.")
                 log.exception(e)
 
-        failed_msg = _("Unable to register your system. \n Error: %s")
         try:
             admin_cp = connection.UEPConnection(username=username,
                     password=password)
@@ -566,272 +553,6 @@ class RegisterScreen:
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
         UEP = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
-
-
-def show_busted_subs(busted_subs):
-    if len(busted_subs):
-        products = [x[0] for x in busted_subs]
-        reasons = [linkify(x[1].msg) for x in busted_subs \
-                if isinstance(x[1], connection.RestlibException)]
-        msg = constants.SUBSCRIBE_ERROR % ', '.join(products)
-        msg += "\n\n"
-        msg += "\n".join(reasons)
-        errorWindow(msg)
-
-
-class AddSubscriptionScreen:
-    """
-     Add subscriptions Widget screen
-    """
-
-    def __init__(self, consumer, facts):
-        global UEP
-        self.consumer = consumer
-        self.facts = facts
-
-        self.selected = {}
-        self.csstatus = rhsm_xml.get_widget("select_status")
-        self.total = 0
-        self.available_ent = 0
-        self.subs_changed = False
-        self.availableList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
-                                           gobject.TYPE_STRING, gobject.TYPE_STRING)
-        self.matchedList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
-                                           gobject.TYPE_STRING, gobject.TYPE_STRING)
-        self.compatList = gtk.TreeStore(gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, \
-                                           gobject.TYPE_STRING, gobject.TYPE_STRING)
-
-        self.populateSubscriptionLists()
-        # machine is talking to candlepin, invoke listing scheme
-        self.createMatchingSubscriptionsTreeview()
-        self.createCompatibleSubscriptionsTreeview()
-        if (cfg.get('rhsm', 'showIncompatiblePools') == '1'):
-            self.createOtherSubscriptionsTreeview()
-        else:
-            notebook = rhsm_xml.get_widget("add_subscription_notebook")
-            notebook.remove_page(1)
-
-        dic = {"on_add_subscribe_close_clicked": self.cancel,
-               "on_add_subscribe_button_clicked": self.onSubscribeAction,
-            }
-        rhsm_xml.signal_autoconnect(dic)
-        self.addWin = rhsm_xml.get_widget("add_subscription_dialog")
-        self.addWin.connect("delete_event", self.delete_event)
-        #self.addWin.connect("hide", self.cancel)
-        if not self.available_ent:
-            infoWindow(constants.NO_SUBSCRIPTIONS_WARNING, self.addWin)
-            self.addWin.hide()
-
-    def populateSubscriptionLists(self):
-
-
-        self.compat = []
-        self.matched = []
-        self.other = []
-        try:
-            compatible = managerlib.getAvailableEntitlements(UEP,
-                    self.consumer.uuid, self.facts)
-            pool_filter = managerlib.PoolFilter()
-            self.matched = pool_filter.filter_uninstalled(compatible)
-            matched_pids = []
-            for product in self.matched:
-                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
-                self.matchedList.append(None, [False] + pdata)
-                matched_pids.append(product['productId'])
-                self.available_ent += 1
-
-            for prod in compatible:
-                if prod['productId'] not in matched_pids:
-                    self.compat.append(prod)
-
-            compatible_pids = []
-            for product in self.compat:
-                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
-                self.compatList.append(None, [False] + pdata)
-                compatible_pids.append(product['productId'])
-                self.available_ent += 1
-
-            all_subs = managerlib.getAvailableEntitlements(UEP, self.consumer.uuid,
-                    self.facts, all=True)
-            self.other = []
-            for prod in all_subs:
-                if prod['productId'] not in compatible_pids + matched_pids:
-                    self.other.append(prod)
-
-            for product in self.other:
-                pdata = [product['productName'], product['quantity'], product['endDate'], product['id']]
-                self.availableList.append(None, [False] + pdata)
-                self.available_ent += 1
-        except socket.error, e:
-            handle_gui_exception(e, e.strerror)
-        except Exception, e:
-            log.error("Error populating available subscriptions from the server")
-            log.error("Exception: %s" % e)
-
-        # bz 646451: grey out apply button if there is nothing to subscribe to
-        apply_button = rhsm_xml.get_widget("add_subscribe_apply_button")
-        apply_button.set_sensitive(False)
-        if self.compat or self.matched or self.other:
-            apply_button.set_sensitive(True)
-
-    # hook to forward
-    def finish(self):
-        self.addWin.hide()
-        #self.addWin.destroy()
-        gtk.main_iteration()
-        return True
-
-    # back?
-    def cancel(self, button):
-        self.addWin.hide()
-
-    def delete_event(self, event, data=None):
-        return self.finish()
-
-    def show(self):
-        # Reload subscriptions every time this window is opened:
-        for item in [self.compatList, self.availableList, self.matchedList]:
-            item.clear()
-        self.populateSubscriptionLists()
-        self.subs_changed = False
-
-        self.addWin.present()
-
-    def onSubscribeAction(self, button):
-        slabel = rhsm_xml.get_widget("available_subscriptions_label")
-        subscribed_count = 0
-        pwin = progress.Progress()
-        pwin.setLabel(_("Performing Subscribe. Please wait."))
-        busted_subs = []
-        count = 0
-
-        pwin.setProgress(count, len(self.selected.items()))
-
-        for pool, state in self.selected.items():
-            # state = (bool, iter)
-            if state[0]:
-                try:
-                    ent_ret = UEP.bindByEntitlementPool(self.consumer.uuid, pool)
-                    my_model = state[3]
-
-                    # unselect the row
-                    my_model.set_value(state[2], 0, False)
-                    self.selected[pool] = (False, state[1], state[2])
-
-                    subscribed_count += 1
-                except Exception, e:
-                    # Subscription failed, continue with rest
-                    log.error("Failed to subscribe to product %s Error: %s" % (state[1], e))
-                    log.exception(e)
-                    busted_subs.append((state[1], e))
-                    continue
-            count += 1
-            pwin.setProgress(count, len(self.selected.items()))
-
-        show_busted_subs(busted_subs)
-
-        # Signal to refresh the Add Subscriptions page on next show:
-        self.subs_changed = True
-
-        # Force fetch all certs
-        if not fetch_certificates():
-            pwin.hide()
-            return
-
-        pwin.hide()
-        self.addWin.hide()
-
-    def createSubscriptionsTreeview(self, treeview, subscriptions, toggle_callback):
-        """
-        populate subscriptions compatible with your system facts
-        """
-        treeview.set_model(subscriptions)
-
-        cell = gtk.CellRendererToggle()
-        cell.set_property('activatable', True)
-        cell.connect('toggled', toggle_callback, subscriptions)
-
-        column = gtk.TreeViewColumn(_(''), cell)
-        column.add_attribute(cell, "active", 0)
-        treeview.append_column(column)
-
-        cell = gtk.CellRendererText()
-        col = gtk.TreeViewColumn(_("Product"), cell, text=1)
-        col.set_sort_column_id(1)
-        col.set_sort_order(gtk.SORT_ASCENDING)
-        cell.set_fixed_size(250, -1)
-        col.set_resizable(True)
-        cell.set_property("ellipsize", pango.ELLIPSIZE_END)
-        treeview.append_column(col)
-
-        col = gtk.TreeViewColumn(_("Available Slots"), gtk.CellRendererText(), text=2)
-        col.set_spacing(4)
-        col.set_sort_column_id(2)
-        col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-        col.set_fixed_width(100)
-        treeview.append_column(col)
-
-        col = gtk.TreeViewColumn(_("Expires"), gtk.CellRendererText(), text=3)
-        col.set_sort_column_id(3)
-        treeview.append_column(col)
-
-        subscriptions.set_sort_column_id(1, gtk.SORT_ASCENDING)
-
-
-    def createMatchingSubscriptionsTreeview(self):
-        self.match_tv = rhsm_xml.get_widget("treeview_matching")
-        self.createSubscriptionsTreeview(self.match_tv,
-                                           self.matchedList,
-                                           self.col_matched_selected)
-
-
-    def createCompatibleSubscriptionsTreeview(self):
-        self.compatible_tv = rhsm_xml.get_widget("treeview_compatible")
-        self.createSubscriptionsTreeview(self.compatible_tv,
-                                           self.compatList,
-                                           self.col_compat_selected)
-
-
-    def createOtherSubscriptionsTreeview(self):
-        self.other_tv = rhsm_xml.get_widget("treeview_not_compatible")
-        self.createSubscriptionsTreeview(self.other_tv,
-                                           self.availableList,
-                                           self.col_other_selected)
-
-
-    def _update_tree_model(self, model, path, iter):
-        model[path][0] = not model[path][0]
-        self.model = model
-        state = model.get_value(iter, 0)
-        self.selected[model.get_value(iter, 4)] = (state, model.get_value(iter, 1), iter, model)
-        if state:
-            self.total += 1
-        else:
-            self.total -= 1
-        if not self.total:
-            self.csstatus.hide()
-            return
-        self.csstatus.show()
-        self.csstatus.set_label(constants.SELECT_STATUS % self.total)
-
-    def col_other_selected(self, cell, path, model):
-        items, iter = self.other_tv.get_selection().get_selected()
-        self._update_tree_model(model, path, iter)
-
-    def col_matched_selected(self, cell, path, model):
-        items, iter = self.match_tv.get_selection().get_selected()
-        self._update_tree_model(model, path, iter)
-
-    def col_compat_selected(self, cell, path, model):
-        items, iter = self.compatible_tv.get_selection().get_selected()
-        self._update_tree_model(model, path, iter)
-
-    def _cell_data_toggle_func(self, tree_column, renderer, model, treeiter):
-        renderer.set_property('visible', True)
-
-
-def infoWindow(message, parent):
-    messageWindow.InfoDialog(messageWindow.wrap_text(message), parent)
 
 
 def setArrowCursor():

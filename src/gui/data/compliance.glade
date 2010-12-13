@@ -11,6 +11,7 @@
     <property name="default_width">1024</property>
     <property name="default_height">768</property>
     <property name="destroy_with_parent">True</property>
+    <property name="type_hint">dialog</property>
     <child>
       <widget class="GtkVBox" id="subscriptions_vbox">
         <property name="visible">True</property>

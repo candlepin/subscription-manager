@@ -225,8 +225,8 @@ class IdentityCommand(CliCommand):
                                                        password=self.options.password,
                                                        proxy_hostname=self.proxy_hostname,
                                                        proxy_port=self.proxy_port,
-                                                       proxy_user=self.options.proxy_user,
-                                                       proxy_password=self.options.proxy_password)
+                                                       proxy_user=self.proxy_user,
+                                                       proxy_password=self.proxy_password)
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
 
@@ -297,8 +297,8 @@ class RegisterCommand(CliCommand):
                                             password=self.options.password,
                                             proxy_hostname=self.proxy_hostname,
                                             proxy_port=self.proxy_port,
-                                            proxy_user=self.options.proxy_user,
-                                            proxy_password=self.options.proxy_password)
+                                            proxy_user=self.proxy_user,
+                                            proxy_password=self.proxy_password)
         
         if ConsumerIdentity.exists() and self.options.force:
             # First let's try to un-register previous consumer. This may fail
@@ -510,8 +510,11 @@ class FactsCommand(CliCommand):
                                help=_("update the system facts"))
 
     def _validate_options(self):
+        # Only require registration for updating facts
+        if self.options.update:
+            self.assert_should_be_registered()
+        
         # one or the other
-        self.assert_should_be_registered()
         if not (self.options.list or self.options.update):
             print _("Error: Need either --list or --update, Try facts --help")
             sys.exit(-1)
