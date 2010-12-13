@@ -73,7 +73,7 @@ if os.getuid() != 0:
     sys.exit(8)
 
 try:
-    from gui import managergui
+    from gui import managergui, messageWindow
 except ImportError, e:
     systemExit(2, "Unable to find Subscription Manager module.\n"
                   "Error: %s" % e)
@@ -98,6 +98,8 @@ if __name__ == '__main__':
 
     if bus and bus.request_name(BUS_NAME) != dbus.bus.REQUEST_NAME_REPLY_PRIMARY_OWNER:
         print _("subscription-manager-gui is already running")
+        messageWindow.InfoDialog(_('Subscription Manager is already running'))
+        
         show = bus.get_object(BUS_NAME, BUS_PATH).get_dbus_method('show_window')
         show()
     else:
