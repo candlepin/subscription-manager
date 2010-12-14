@@ -45,6 +45,8 @@ def handle_gui_exception(e, msg, logMsg=None):
         errorWindow(_('Unable to verify server\'s identity: %s' % str(e)))
     elif isinstance(e, connection.RestlibException):
         errorWindow(msg % linkify(e.msg))
+    elif isinstance(e, connection.BadCertificateException):
+        errorWindow(_("Bad CA certificate: %s" % e.cert_path))
     else:
         errorWindow(msg)
 

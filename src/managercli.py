@@ -52,6 +52,9 @@ def handle_exception(msg, ex):
     elif isinstance(ex, SSL.Checker.WrongHost):
         print str(ex)
         sys.exit(-1)
+    elif isinstance(ex, connection.BadCertificateException):
+        print _("Bad CA certificate: %s") % ex.cert_path
+        sys.exit(-1)
     else:
         systemExit(-1, ex)
 
