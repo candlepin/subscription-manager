@@ -21,7 +21,7 @@ from urllib import basejoin
 from rhsm.config import initConfig
 from certlib import Path, EntitlementDirectory, ActionLock
 from iniparse import ConfigParser as Parser
-from rhsm.logutil import getLogger
+from logutil import getLogger
 
 log = getLogger(__name__)
 

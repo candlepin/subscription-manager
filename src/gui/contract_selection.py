@@ -20,7 +20,7 @@ import gtk.glade
 import gettext
 _ = gettext.gettext
 
-from rhsm.logutil import getLogger
+from logutil import getLogger
 log = getLogger(__name__)
 import widgets
 

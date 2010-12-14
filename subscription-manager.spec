@@ -79,6 +79,8 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 
+%attr(755,root,root) %dir %{_var}/log/rhsm
+
 %config(noreplace) %attr(644,root,root) /etc/rhsm/rhsm.conf
 
 %dir %{_datadir}/rhsm
@@ -90,6 +92,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/managercli.py*
 %{_datadir}/rhsm/managerlib.py*
 %{_datadir}/rhsm/async.py*
+%{_datadir}/rhsm/logutil.py*
 %{_datadir}/rhsm/repolib.py*
 /usr/lib/yum-plugins/subscription-manager.py*
 /usr/lib/yum-plugins/product-id.py*

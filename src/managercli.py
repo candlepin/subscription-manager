@@ -32,7 +32,7 @@ from M2Crypto import SSL
 import gettext
 _ = gettext.gettext
 
-from rhsm.logutil import getLogger
+from logutil import getLogger
 from httplib import socket
 from socket import error as socket_error
 

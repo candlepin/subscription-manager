@@ -29,7 +29,7 @@ import base64
 from M2Crypto import X509
 from datetime import datetime as dt
 from datetime import tzinfo, timedelta
-from rhsm.logutil import getLogger
+from logutil import getLogger
 import gettext
 _ = gettext.gettext
 

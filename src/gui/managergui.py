@@ -31,7 +31,7 @@ import managerlib
 import rhsm.connection as connection
 import rhsm.config
 import constants
-import rhsm.logutil
+import logutil
 from facts import Facts
 from certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \
         CertLib, CertSorter
@@ -50,7 +50,7 @@ _ = gettext.gettext
 gettext.textdomain("subscription-manager")
 gtk.glade.bindtextdomain("subscription-manager")
 
-from rhsm.logutil import getLogger
+from logutil import getLogger
 log = getLogger(__name__)
 
 prefix = os.path.dirname(__file__)
@@ -213,7 +213,7 @@ class MainWindow(widgets.GladeWidget):
         self.backend.monitor_identity(on_identity_change)
         
         # For updating the 'Next Update' time
-        gio.File(rhsm.logutil.CERT_LOG).monitor().connect('changed', on_cert_update)
+        gio.File(logutil.CERT_LOG).monitor().connect('changed', on_cert_update)
 
         self.refresh()
 
@@ -392,7 +392,7 @@ class MainWindow(widgets.GladeWidget):
         self.system_name_label.set_markup('<b>%s</b>' % name)
         
     def _set_next_update(self):
-        last_update = rhsm.logutil.getLastCertUpdate()
+        last_update = logutil.getLastCertUpdate()
         
         if last_update:
             # TODO:  This assumes that rhsmcertd is running!

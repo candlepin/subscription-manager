@@ -19,7 +19,7 @@ import os
 import shutil
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
 
-from rhsm.logutil import getLogger
+from logutil import getLogger
 log = getLogger(__name__)
 _ = gettext.gettext
 

@@ -90,9 +90,9 @@ def main():
     print _('done')
 
 if __name__ == '__main__':
-    import rhsm.logutil
+    import logutil
     import sys
-    log = rhsm.logutil.getLogger(__name__)
+    log = logutil.getLogger(__name__)
     try:
         main()
     except Exception, e:

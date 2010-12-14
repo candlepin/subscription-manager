@@ -22,7 +22,7 @@ from datetime import timedelta, datetime
 from rhsm.connection import UEPConnection
 from certificate import *
 from lock import Lock
-from rhsm.logutil import getLogger
+from logutil import getLogger
 from rhsm.config import initConfig
 
 
