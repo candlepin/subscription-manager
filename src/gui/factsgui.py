@@ -35,9 +35,10 @@ class SystemFactsDialog:
     system facts.
     """
 
-    def __init__(self, consumer, facts):
+    def __init__(self, backend, consumer, facts):
         self.consumer = consumer
         self.facts = facts
+        self.backend = backend
         glade = gtk.glade.XML(GLADE_XML)
         glade.signal_autoconnect({
                 "on_system_facts_dialog_delete_event" : self._hide_callback,
@@ -96,7 +97,7 @@ class SystemFactsDialog:
         consumer_uuid = self.consumer.uuid
 
         try:
-            managergui.UEP.updateConsumerFacts(consumer_uuid, system_facts)
+            self.backend.uep.updateConsumerFacts(consumer_uuid, system_facts)
         except Exception, e:
             log.error("Could not update system facts \nError: %s" % e)
             managergui.errorWindow(managergui.linkify(str(e)))

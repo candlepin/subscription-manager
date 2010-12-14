@@ -421,7 +421,7 @@ class ComplianceAssistant(widgets.GladeWidget):
         pool = self.pool_stash.all_pools[pool_id]
         try:
             self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'])
-            managergui.fetch_certificates()
+            managergui.fetch_certificates(self.backend)
         except Exception, e:
             handle_gui_exception(e, _("Error getting subscription: %s"))
             

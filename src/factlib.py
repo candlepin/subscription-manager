@@ -18,7 +18,7 @@
 import gettext
 _ = gettext.gettext
 
-from certlib import  ActionLock, UEP, Disconnected
+from certlib import  ActionLock, Disconnected
 from logutil import getLogger
 from facts import Facts
 
@@ -27,14 +27,15 @@ log = getLogger(__name__)
 
 class FactLib:
 
-    def __init__(self, lock=ActionLock()):
+    def __init__(self, lock=ActionLock(), uep=None):
         self.lock = lock
+        self.uep = uep
 
     def update(self):
         lock = self.lock
         lock.acquire()
         try:
-            action = UpdateAction()
+            action = UpdateAction(uep=self.uep)
             return action.perform()
         finally:
             lock.release()
@@ -42,32 +43,27 @@ class FactLib:
 
 class Action:
 
-    def __init__(self):
+    def __init__(self, uep=None):
         self.factdir = "somewhere"
+        self.uep = uep
 
 
 class UpdateAction(Action):
 
     def perform(self):
-        try:
-            uep = UEP()
-        except Disconnected:
-            log.info('Disconnected, facts not updated')
-            return 0
-
         updates = 0
         facts = Facts()
         if facts.delta():
-            updates = self.updateFacts(uep, facts.get_facts())
+            updates = self.updateFacts(facts.get_facts())
         log.info("facts updated: %s" % updates)
         return updates
 
-    def updateFacts(self, uep, facts):
+    def updateFacts(self, facts):
         updates = len(facts)
         # figure out the diff between latest facts and
         # report that as updates
         # TODO: don't update if there is nothing to update
-        uep.updateConsumerFacts(uep.uuid, facts)
+        self.uep.updateConsumerFacts(uep.uuid, facts)
         return updates
 
 

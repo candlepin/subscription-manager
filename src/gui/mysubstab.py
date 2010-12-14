@@ -46,7 +46,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
-        self.certlib = CertLib()
 
         self.sub_details = widgets.SubDetailsWidget()
 
@@ -90,7 +89,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         except Exception, e:
             handle_gui_exception(e, _("There was an error unsubsribing from %s with serial number %s" % (selection['subscription'],serial)))
 
-        self.certlib.update()
+        self.backend.certlib.update()
         self.update_subscriptions()
 
     def update_subscriptions(self):

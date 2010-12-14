@@ -212,7 +212,7 @@ class AllSubscriptionsTab(object):
         self._contract_selection_cancelled()
         try:
             self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'])
-            managergui.fetch_certificates()
+            managergui.fetch_certificates(self.backend)
         except Exception, e:
             handle_gui_exception(e, _("Error getting subscription: %s"))
 

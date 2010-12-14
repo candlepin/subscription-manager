@@ -60,6 +60,7 @@ UPDATE_FILE = '/var/run/rhsm/update'
 cert_file = ConsumerIdentity.certpath()
 key_file = ConsumerIdentity.keypath()
 
+cfg = config.initConfig()
 
 class GladeWrapper(gtk.glade.XML):
     def __init__(self, filename):
@@ -75,10 +76,6 @@ class GladeWrapper(gtk.glade.XML):
 rhsm_xml = GladeWrapper(os.path.join(prefix, "data/rhsm.glade"))
 registration_xml = GladeWrapper(os.path.join(prefix,
     "data/registration.glade"))
-
-certlib = CertLib()
-
-
 
 class Backend(object):
     """
@@ -97,6 +94,7 @@ class Backend(object):
 
         self.product_dir = ProductDirectory()
         self.entitlement_dir = EntitlementDirectory()
+        self.certlib = CertLib(uep=self.uep)
 
         self.product_monitor = self._monitor(self.product_dir)
         self.entitlement_monitor = self._monitor(self.entitlement_dir)
@@ -135,12 +133,12 @@ class Consumer(object):
             self.uuid = consumer.getConsumerId()
 
 
-def fetch_certificates():
+def fetch_certificates(backend):
     def errToMsg(err):
         return ' '.join(str(err).split('-')[1:]).strip()
     # Force fetch all certs
     try:
-        result = certlib.update()
+        result = backend.certlib.update()
         if result[1]:
             msg = 'Entitlement Certificate(s) update failed due to the following reasons:\n' + \
             '\n'.join(map(errToMsg , result[1]))
@@ -172,7 +170,7 @@ class MainWindow(widgets.GladeWidget):
         self.consumer = Consumer()
         self.facts = Facts()
 
-        self.system_facts_dialog = factsgui.SystemFactsDialog(self.consumer,
+        self.system_facts_dialog = factsgui.SystemFactsDialog(self.backend, self.consumer,
                 self.facts)
 
         self.registration_dialog = RegisterScreen(self.backend, self.consumer,
@@ -362,8 +360,17 @@ class MainWindow(widgets.GladeWidget):
         # update the backend's UEP in case we changed proxy
         # config
         self.backend.uep = connection.UEPConnection(
+            host=cfg.get('server', 'hostname'),
+            ssl_port=int(cfg.get('server', 'port')),
+            handler=cfg.get('server', 'prefix'),
+            proxy_hostname=cfg.get('server', 'proxy_hostname'),
+            proxy_port=cfg.get('server', 'proxy_port'),
+            proxy_user=cfg.get('server', 'proxy_user'),
+            proxy_password=cfg.get('server', 'proxy_password'),
+            username=None, password=None,
             cert_file=ConsumerIdentity.certpath(),
             key_file=ConsumerIdentity.keypath())
+
 
 
     def _set_compliance_status(self):
@@ -494,7 +501,8 @@ class RegisterScreen:
                     log.exception(e)
                     log.warning("Warning: Unable to auto subscribe to %s" \
                             % ", ".join(products.keys()))
-                if not fetch_certificates():
+                # force update of certs
+                if not fetch_certificates(self.backend):
                     return False
 
             self.close_window()
