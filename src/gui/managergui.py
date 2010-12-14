@@ -59,7 +59,6 @@ NON_COMPLIANT_IMG = os.path.join(prefix, "data/icons/non-compliant.svg")
 
 cert_file = ConsumerIdentity.certpath()
 key_file = ConsumerIdentity.keypath()
-UEP = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
 
 
 class GladeWrapper(gtk.glade.XML):
@@ -176,8 +175,8 @@ class MainWindow(widgets.GladeWidget):
         self.system_facts_dialog = factsgui.SystemFactsDialog(self.consumer,
                 self.facts)
 
-        self.registration_dialog = RegisterScreen(self.consumer, self.facts,
-                callbacks=[self.registration_changed])
+        self.registration_dialog = RegisterScreen(self.backend, self.consumer,
+                self.facts, callbacks=[self.registration_changed])
 
         self.import_sub_dialog = ImportSubDialog()
         
@@ -412,10 +411,11 @@ class RegisterScreen:
       Registration Widget Screen
     """
 
-    def __init__(self, consumer, facts=None, callbacks=None):
+    def __init__(self, backend, consumer, facts=None, callbacks=None):
         """
         Callbacks will be executed when registration status changes.
         """
+        self.backend = backend
         self.consumer = consumer
         self.facts = facts
         self.callbacks = callbacks
@@ -429,6 +429,10 @@ class RegisterScreen:
         self.registerWin.connect("hide", self.cancel)
         self.registerWin.connect("delete_event", self.delete_event)
         self.initializeConsumerName()
+
+        self.uname = registration_xml.get_widget("account_login")
+        self.passwd = registration_xml.get_widget("account_password")
+        self.consumer_name = registration_xml.get_widget("consumer_name")
 
     def show(self):
         self.registerWin.present()
@@ -449,11 +453,6 @@ class RegisterScreen:
         self.register()
 
     def register(self, testing=None):
-        self.uname = registration_xml.get_widget("account_login")
-        self.passwd = registration_xml.get_widget("account_password")
-        self.consumer_name = registration_xml.get_widget("consumer_name")
-
-        global UEP
         username = self.uname.get_text()
         password = self.passwd.get_text()
         consumername = self.consumer_name.get_text()
@@ -468,16 +467,6 @@ class RegisterScreen:
         if testing:
             return True
 
-        # TODO: Can't really hit this block anymore.
-        # Unregister consumer if exists
-        if ConsumerIdentity.exists():
-            try:
-                cid = self.consumer.uuid
-                managerlib.unregisterConsumer(UEP, cid)
-            except Exception, e:
-                log.error("Unable to unregister with existing credentials.")
-                log.exception(e)
-
         try:
             admin_cp = connection.UEPConnection(username=username,
                     password=password)
@@ -486,12 +475,12 @@ class RegisterScreen:
             managerlib.persist_consumer_cert(newAccount)
             self.consumer.reload()
             # reload CP instance with new ssl certs
-            self._reload_cp_with_certs()
             if self.auto_subscribe():
                 # try to auomatically bind products
                 products = managerlib.getInstalledProductHashMap()
                 try:
-                    UEP.bindByProduct(self.consumer.uuid, products.values())
+                    self.backend.uep.bindByProduct(self.consumer.uuid,
+                            products.values())
                     log.info("Automatically subscribed to products: %s " \
                             % ", ".join(products.keys()))
                 except Exception, e:
@@ -546,13 +535,6 @@ class RegisterScreen:
 
     def set_parent_window(self, window):
         self.registerWin.set_transient_for(window)
-
-    # TODO: I don't think this is necessary
-    def _reload_cp_with_certs(self):
-        global UEP
-        cert_file = ConsumerIdentity.certpath()
-        key_file = ConsumerIdentity.keypath()
-        UEP = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
 
 
 def setArrowCursor():
