@@ -358,7 +358,9 @@ class MainWindow(widgets.GladeWidget):
 
     def _config_changed(self, widget):
         # update the backend's UEP in case we changed proxy
-        # config
+        # config. We specify all these settings since they
+        # are new and the default UEP init won't get them
+        # (it's default args are set at class init time)
         self.backend.uep = connection.UEPConnection(
             host=cfg.get('server', 'hostname'),
             ssl_port=int(cfg.get('server', 'port')),
