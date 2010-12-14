@@ -24,6 +24,7 @@
 
 #define LOGFILE "/var/log/rhsm/rhsmcertd.log"
 #define LOCKFILE "/var/lock/subsys/rhsmcertd"
+#define UPDATEFILE "/var/run/rhsm/update"
 #define INTERVAL 240 /*4 hours*/
 #define RETRY 10 /*10 min*/
 
@@ -51,11 +52,29 @@ char *ts()
     return ts;
 }
 
+void logUpdate(int interval)
+{
+    time_t update = time(NULL);
+    struct tm update_tm = *localtime(&update);
+    
+    update_tm.tm_min += interval;
+    update = mktime(&update_tm);
+    
+    FILE *updatefile = fopen(UPDATEFILE, "w");
+    // I'm not completely sure if this is safe to do cross platform...
+    fprintf(updatefile, "%llu", (unsigned long int)update);
+    fflush(updatefile);
+    fclose(updatefile);
+}
+
 int run(int interval)
 {
     int status = 0;
     fprintf(log, "%s: started: interval = %d minutes\n", ts(), interval);
     fflush(log);
+    
+    logUpdate(interval);
+    
     while(1)
     {
         int pid = fork();

@@ -17,7 +17,6 @@
 # in this software or its documentation.
 #
 
-import datetime
 import os
 import socket
 
@@ -31,7 +30,6 @@ import managerlib
 import connection
 import config
 import constants
-import logutil
 from facts import Facts
 from certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \
         CertLib, CertSorter
@@ -44,6 +42,7 @@ from allsubs import AllSubscriptionsTab
 from compliance import ComplianceAssistant
 from importsub import ImportSubDialog
 from utils import handle_gui_exception, errorWindow, linkify
+from datetime import datetime
 
 import gettext
 _ = gettext.gettext
@@ -56,6 +55,7 @@ log = getLogger(__name__)
 prefix = os.path.dirname(__file__)
 COMPLIANT_IMG = os.path.join(prefix, "data/icons/compliant.svg")
 NON_COMPLIANT_IMG = os.path.join(prefix, "data/icons/non-compliant.svg")
+UPDATE_FILE = '/var/run/rhsm/update'
 
 cert_file = ConsumerIdentity.certpath()
 key_file = ConsumerIdentity.keypath()
@@ -213,7 +213,7 @@ class MainWindow(widgets.GladeWidget):
         self.backend.monitor_identity(on_identity_change)
         
         # For updating the 'Next Update' time
-        gio.File(logutil.CERT_LOG).monitor().connect('changed', on_cert_update)
+        gio.File(UPDATE_FILE).monitor().connect('changed', on_cert_update)
 
         self.refresh()
 
@@ -392,16 +392,14 @@ class MainWindow(widgets.GladeWidget):
         self.system_name_label.set_markup('<b>%s</b>' % name)
         
     def _set_next_update(self):
-        last_update = logutil.getLastCertUpdate()
+        try:
+            next_update = long(file(UPDATE_FILE).read())
+        except:
+            next_update = None
         
-        if last_update:
-            # TODO:  This assumes that rhsmcertd is running!
-            #        That is probably not a safe assumption...
-            freq = int(config.initConfig().get('rhsmcertd', 'certFrequency'))
-            delta = datetime.timedelta(minutes=freq)
-            
-            new_time = last_update + delta
-            self.next_update_label.set_text(new_time.ctime())
+        if next_update:    
+            update_time = datetime.fromtimestamp(next_update)
+            self.next_update_label.set_text(update_time.ctime())
         else:
             self.next_update_label.set_text(_('Unknown'))
 
