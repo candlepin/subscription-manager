@@ -28,7 +28,7 @@ import gtk.glade
 import messageWindow
 import networkConfig
 import managerlib
-import connection
+import rhsm.connection as connection
 import rhsm.config
 import constants
 import rhsm.logutil

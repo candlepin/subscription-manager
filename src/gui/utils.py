@@ -20,7 +20,7 @@ from M2Crypto import SSL
 import gettext
 _ = gettext.gettext
 
-import connection
+import rhsm.connection as connection
 import messageWindow
 from rhsm.logutil import getLogger
 log = getLogger(__name__)

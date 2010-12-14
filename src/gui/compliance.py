@@ -34,7 +34,7 @@ import storage
 import widgets
 import progress
 import async
-from connection import RestlibException
+from rhsm.connection import RestlibException
 from utils import handle_gui_exception
 
 class MappedListTreeView(gtk.TreeView):

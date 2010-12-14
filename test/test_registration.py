@@ -12,7 +12,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import connection
+import rhsm.connection as connection
 from certlib import ConsumerIdentity
 from managercli import RegisterCommand
 from facts import Facts

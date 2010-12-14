@@ -20,7 +20,7 @@ import os
 import sys
 import rhsm.config
 import constants
-import connection
+import rhsm.connection as connection
 import optparse
 from optparse import OptionParser
 from certlib import CertLib, ConsumerIdentity, ProductDirectory, EntitlementDirectory
