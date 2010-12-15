@@ -32,11 +32,8 @@ class AsyncPool(object):
         """
         method run in the worker thread.
         """
-        try:
-            self.pool.refresh(active_on)
-            self.queue.put((callback, None))
-        except Exception, e:
-            self.queue.put((callback, e))
+        self.pool.refresh(active_on)
+        self.queue.put(callback)
 
     def _watch_thread(self):
         """
@@ -44,11 +41,8 @@ class AsyncPool(object):
         runs the provided callback method in the main thread.
         """
         try:
-            (callback, error) = self.queue.get(block=False)
-            if error:
-                callback(error=error)
-            else:
-                callback()
+            callback = self.queue.get(block=False)
+            callback()
             return False
         except Queue.Empty, e:
             return True
