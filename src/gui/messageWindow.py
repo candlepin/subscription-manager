@@ -41,13 +41,19 @@ class MessageWindow:
 
         # escape product strings see rh bz#633438
         self.dialog.set_markup(text)
-        
+
         self.dialog.set_default_response(0)
 
         self.addFrame(self.dialog)
         self.dialog.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
         self.dialog.show_all()
+
+        # protect this thing from threads for our threaded progress stuff.
+        # would be better to not use the dialog's recursive mainloop.
+        gtk.gdk.threads_enter()
         rc = self.dialog.run()
+        gtk.gdk.threads_leave()
+
         self.rc = rc in [gtk.RESPONSE_OK, gtk.RESPONSE_YES]
         self.dialog.destroy()
 
