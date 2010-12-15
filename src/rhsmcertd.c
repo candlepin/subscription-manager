@@ -52,14 +52,14 @@ char *ts()
     return ts;
 }
 
-void logUpdate(int interval)
+void logUpdate(int delay)
 {
     time_t update = time(NULL);
     struct tm update_tm = *localtime(&update);
-    
-    update_tm.tm_min += interval;
+
+    update_tm.tm_min += delay;
     update = mktime(&update_tm);
-    
+
     FILE *updatefile = fopen(UPDATEFILE, "w");
     // I'm not completely sure if this is safe to do cross platform...
     fprintf(updatefile, "%llu", (unsigned long int)update);
@@ -72,9 +72,7 @@ int run(int interval)
     int status = 0;
     fprintf(log, "%s: started: interval = %d minutes\n", ts(), interval);
     fflush(log);
-    
-    logUpdate(interval);
-    
+
     while(1)
     {
         int pid = fork();
@@ -102,6 +100,8 @@ int run(int interval)
             fprintf(log, "%s: update failed (%d), retry in %d minutes\n", ts(), status, delay);
             fflush(log);
         }
+
+        logUpdate(delay);
         sleep(delay*60);
     }
 
@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
     if(pid == 0)
     {
         daemon(0, 0);
-        
+
         if (get_lock() != 0) {
             fprintf(log, "%s: unable to get lock, exiting\n", ts());
             fflush(log);
@@ -157,3 +157,4 @@ int main(int argc, char *argv[])
     }
     fclose(log);
 }
+
