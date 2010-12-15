@@ -69,6 +69,9 @@
                     <property name="visible">True</property>
                     <property name="xpad">10</property>
                     <property name="use_markup">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">System Name</atkproperty>
+                    </accessibility>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -80,6 +83,9 @@
                     <property name="visible">True</property>
                     <property name="xpad">10</property>
                     <property name="use_markup">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Next Update</atkproperty>
+                    </accessibility>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>

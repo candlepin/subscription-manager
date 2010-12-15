@@ -46,7 +46,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="border_width">3</property>
-                        <property name="vadjustment">0 0 148 14.800000000000001 133.20000000000002 148</property>
+                        <property name="vadjustment">6.9000000000000004 0 81 6.9000000000000004 62.100000000000001 69</property>
                         <property name="hscrollbar_policy">automatic</property>
                         <property name="vscrollbar_policy">automatic</property>
                         <property name="shadow_type">in</property>
@@ -115,6 +115,9 @@
                                     <property name="editable">False</property>
                                     <property name="left_margin">10</property>
                                     <property name="cursor_visible">False</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Product</atkproperty>
+                                    </accessibility>
                                   </widget>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -130,6 +133,9 @@
                                     <property name="editable">False</property>
                                     <property name="left_margin">10</property>
                                     <property name="cursor_visible">False</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Status</atkproperty>
+                                    </accessibility>
                                   </widget>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -147,6 +153,9 @@
                                     <property name="editable">False</property>
                                     <property name="left_margin">10</property>
                                     <property name="cursor_visible">False</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Subscription</atkproperty>
+                                    </accessibility>
                                   </widget>
                                   <packing>
                                     <property name="left_attach">1</property>

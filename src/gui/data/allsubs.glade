@@ -160,6 +160,9 @@
                     <property name="invisible_char">●</property>
                     <property name="width_chars">15</property>
                     <property name="invisible_char_set">True</property>
+                    <accessibility>
+                      <atkaction action_name="activate" description="Text in Subscription"/>
+                    </accessibility>
                     <signal name="changed" handler="on_contain_text_entry_changed" swapped="no"/>
                   </widget>
                   <packing>
