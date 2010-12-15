@@ -28,7 +28,7 @@ import messageWindow
 import networkConfig
 import managerlib
 import rhsm.connection as connection
-import rhsm.config
+import rhsm.config as config
 import constants
 from facts import Facts
 from certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \

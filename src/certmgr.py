@@ -22,7 +22,7 @@ from certlib import ConsumerIdentity
 from repolib import RepoLib
 from factlib import FactLib
 
-import connection
+import rhsm.connection as connection
 
 import gettext
 _ = gettext.gettext
