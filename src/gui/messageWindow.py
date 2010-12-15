@@ -1,4 +1,5 @@
 
+import gobject
 import gtk
 import gettext
 _ = gettext.gettext
@@ -30,9 +31,15 @@ def wrap_text(txt):
 
 
 
-class MessageWindow:
+class MessageWindow(gobject.GObject):
+
+    __gsignals__ = {
+            'response': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
+                (gobject.TYPE_BOOLEAN,))
+    }
 
     def __init__(self, text, parent=None):
+        gobject.GObject.__init__(self) 
         self.rc = None
 
         # this seems to be wordwrapping text passed to
@@ -48,22 +55,18 @@ class MessageWindow:
         self.dialog.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
         self.dialog.show_all()
 
-        # protect this thing from threads for our threaded progress stuff.
-        # would be better to not use the dialog's recursive mainloop.
-        gtk.gdk.threads_enter()
-        rc = self.dialog.run()
-        gtk.gdk.threads_leave()
+        self.dialog.set_modal(True)
 
-        self.rc = rc in [gtk.RESPONSE_OK, gtk.RESPONSE_YES]
-        self.dialog.destroy()
+        self.dialog.connect("response", self._on_response_event)
 
-    def getrc(self):
-        return self.rc
+    def _on_response_event(self, dialog, response):
+        rc = response in [gtk.RESPONSE_OK, gtk.RESPONSE_YES]
+        self.emit('response', rc)
+        self.hide()
 
     def hide(self):
         self.dialog.hide()
         self.dialog.destroy()
-        gtk.main_iteration()
 
     @staticmethod
     def addFrame(dialog):
