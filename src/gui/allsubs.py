@@ -31,7 +31,6 @@ import storage
 import async
 from utils import handle_gui_exception
 from contract_selection import ContractSelectionWindow
-from rhsm.connection import RestlibException
 
 prefix = os.path.dirname(__file__)
 ALL_SUBS_GLADE = os.path.join(prefix, "data/allsubs.glade")
@@ -193,22 +192,13 @@ class AllSubscriptionsTab(object):
         except Exception, e:
             handle_gui_exception(e, _("Error fetching subscriptions from server: %s"))
 
-    def _update_display(self, error=None):
+    def _update_display(self):
+        # should probably use the params instead
+        self.display_pools()
         if self.pb:
             self.pb.hide()
             gobject.source_remove(self.timer)
             self.timer = 0
-            self.pb = None
-
-        if error:
-            if type(error) == RestlibException:
-                handle_gui_exception(error,
-                        _("Unable to search for subscriptions: %s"))
-            else:
-                handle_gui_exception(error,
-                        _("Unable to search for subscriptions"))
-        else:
-            self.display_pools()
 
     def filters_changed(self, widget):
         """
