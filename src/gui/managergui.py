@@ -73,7 +73,6 @@ class GladeWrapper(gtk.glade.XML):
             raise Exception ("Widget %s not found" % widget_name)
         return widget
 
-rhsm_xml = GladeWrapper(os.path.join(prefix, "data/rhsm.glade"))
 registration_xml = GladeWrapper(os.path.join(prefix,
     "data/registration.glade"))
 
