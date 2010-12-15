@@ -48,14 +48,15 @@ class ActionLock(Lock):
 
 class CertLib:
 
-    def __init__(self, lock=ActionLock()):
+    def __init__(self, lock=ActionLock(), uep=None):
         self.lock = lock
+        self.uep = uep
 
     def update(self):
         lock = self.lock
         lock.acquire()
         try:
-            action = UpdateAction()
+            action = UpdateAction(uep=self.uep)
             return action.perform()
         finally:
             lock.release()
@@ -81,8 +82,9 @@ class CertLib:
 
 class Action:
 
-    def __init__(self):
+    def __init__(self, uep=None):
         self.entdir = EntitlementDirectory()
+        self.uep = uep
 
     def build(self, bundle):
         keypem = bundle['key']
@@ -125,13 +127,12 @@ class DeleteAction(Action):
 class UpdateAction(Action):
 
     def perform(self):
-        uep = UEP()
         report = UpdateReport()
         local = self.getLocal(report)
-        expected = self.getExpected(uep, report)
+        expected = self.getExpected(report)
         missing, rogue = self.bashSerials(local, expected, report)
         self.delete(rogue, report)
-        exceptions = self.install(uep, missing, report)
+        exceptions = self.install(missing, report)
         self.purgeExpired(report)
         log.info('certs updated:\n%s', report)
         self.syslogResults(report)
@@ -159,8 +160,24 @@ class UpdateAction(Action):
             local[sn] = valid
         return local
 
-    def getExpected(self, uep, report):
-        exp = uep.getCertificateSerials()
+    def _getConsumerId(self):
+        try:
+            cid = ConsumerIdentity.read()
+            return cid.getConsumerId()
+        except Exception, e:
+            log.error(e)
+            raise Disconnected()
+
+    def getCertificateSerialsList(self):
+        results = []
+        reply = self.uep.getCertificateSerials(self._getConsumerId())
+        for d in reply:
+            sn = d['serial']
+            results.append(sn)
+        return results
+
+    def getExpected(self, report):
+        exp = self.getCertificateSerialsList()
         report.expected = exp
         return exp
 
@@ -181,10 +198,20 @@ class UpdateAction(Action):
             cert.delete()
             report.rogue.append(cert)
 
-    def install(self, uep, serials, report):
+    def getCertificatesBySerialList(self, snList):
+        result = []
+        if snList:
+            snList = [str(sn) for sn in snList]
+            reply = self.uep.getCertificates(self._getConsumerId(),
+                                              serials=snList)
+            for cert in reply:
+                result.append(cert)
+        return result
+
+    def install(self, serials, report):
         br = Writer()
         exceptions = []
-        for bundle in uep.getCertificatesBySerial(serials):
+        for bundle in self.getCertificatesBySerialList(serials):
             try:
                 key, cert = self.build(bundle)
                 br.write(key, cert)
@@ -226,42 +253,6 @@ class Writer:
 
     def __ufn(self, path, sn):
         return '%s.pem' % str(sn)
-
-
-class UEP(UEPConnection):
-
-    @classmethod
-    def consumerId(cls):
-        try:
-            cid = ConsumerIdentity.read()
-            return cid.getConsumerId()
-        except Exception, e:
-            log.error(e)
-            raise Disconnected()
-
-    def __init__(self):
-        cert = ConsumerIdentity.certpath()
-        key = ConsumerIdentity.keypath()
-        UEPConnection.__init__(self, cert_file=cert, key_file=key)
-        self.uuid = self.consumerId()
-
-    def getCertificateSerials(self):
-        result = []
-        reply = UEPConnection.getCertificateSerials(self, self.uuid)
-        for d in reply:
-            sn = d['serial']
-            result.append(sn)
-        return result
-
-    def getCertificatesBySerial(self, snList):
-        result = []
-        if snList:
-            snList = [str(sn) for sn in snList]
-            reply = UEPConnection.getCertificates(self, self.uuid,
-                                                  serials=snList)
-            for cert in reply:
-                result.append(cert)
-        return result
 
 
 class Disconnected(Exception):

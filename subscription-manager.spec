@@ -108,6 +108,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datarootdir}/locale/*
 %attr(755,root,root) %{_sbindir}/subscription-manager
 %attr(755,root,root) %dir %{_var}/lib/rhsm
+%attr(755,root,root) %dir %{_var}/run/rhsm
 %attr(755,root,root) %dir %{_var}/lib/rhsm/facts
 %attr(755,root,root) %{_bindir}/rhsmcertd
 %attr(755,root,root) %{_sysconfdir}/init.d/rhsmcertd

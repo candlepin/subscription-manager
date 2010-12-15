@@ -17,7 +17,6 @@
 # in this software or its documentation.
 #
 
-import datetime
 import os
 import socket
 
@@ -31,7 +30,6 @@ import managerlib
 import rhsm.connection as connection
 import rhsm.config
 import constants
-import logutil
 from facts import Facts
 from certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \
         CertLib, CertSorter
@@ -44,6 +42,7 @@ from allsubs import AllSubscriptionsTab
 from compliance import ComplianceAssistant
 from importsub import ImportSubDialog
 from utils import handle_gui_exception, errorWindow, linkify
+from datetime import datetime
 
 import gettext
 _ = gettext.gettext
@@ -56,10 +55,12 @@ log = getLogger(__name__)
 prefix = os.path.dirname(__file__)
 COMPLIANT_IMG = os.path.join(prefix, "data/icons/compliant.svg")
 NON_COMPLIANT_IMG = os.path.join(prefix, "data/icons/non-compliant.svg")
+UPDATE_FILE = '/var/run/rhsm/update'
 
 cert_file = ConsumerIdentity.certpath()
 key_file = ConsumerIdentity.keypath()
 
+cfg = config.initConfig()
 
 class GladeWrapper(gtk.glade.XML):
     def __init__(self, filename):
@@ -75,10 +76,6 @@ class GladeWrapper(gtk.glade.XML):
 rhsm_xml = GladeWrapper(os.path.join(prefix, "data/rhsm.glade"))
 registration_xml = GladeWrapper(os.path.join(prefix,
     "data/registration.glade"))
-
-certlib = CertLib()
-
-
 
 class Backend(object):
     """
@@ -97,6 +94,7 @@ class Backend(object):
 
         self.product_dir = ProductDirectory()
         self.entitlement_dir = EntitlementDirectory()
+        self.certlib = CertLib(uep=self.uep)
 
         self.product_monitor = self._monitor(self.product_dir)
         self.entitlement_monitor = self._monitor(self.entitlement_dir)
@@ -135,12 +133,12 @@ class Consumer(object):
             self.uuid = consumer.getConsumerId()
 
 
-def fetch_certificates():
+def fetch_certificates(backend):
     def errToMsg(err):
         return ' '.join(str(err).split('-')[1:]).strip()
     # Force fetch all certs
     try:
-        result = certlib.update()
+        result = backend.certlib.update()
         if result[1]:
             msg = 'Entitlement Certificate(s) update failed due to the following reasons:\n' + \
             '\n'.join(map(errToMsg , result[1]))
@@ -172,7 +170,7 @@ class MainWindow(widgets.GladeWidget):
         self.consumer = Consumer()
         self.facts = Facts()
 
-        self.system_facts_dialog = factsgui.SystemFactsDialog(self.consumer,
+        self.system_facts_dialog = factsgui.SystemFactsDialog(self.backend, self.consumer,
                 self.facts)
 
         self.registration_dialog = RegisterScreen(self.backend, self.consumer,
@@ -184,6 +182,7 @@ class MainWindow(widgets.GladeWidget):
                 self.consumer, self.facts)
 
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
+        self.network_config_dialog.xml.get_widget("closeButton").connect("clicked", self._config_changed)
 
         self.installed_tab = InstalledProductsTab(self.backend, self.consumer,
                 self.facts)
@@ -213,7 +212,7 @@ class MainWindow(widgets.GladeWidget):
         self.backend.monitor_identity(on_identity_change)
         
         # For updating the 'Next Update' time
-        gio.File(logutil.CERT_LOG).monitor().connect('changed', on_cert_update)
+        gio.File(UPDATE_FILE).monitor().connect('changed', on_cert_update)
 
         self.refresh()
 
@@ -357,6 +356,25 @@ class MainWindow(widgets.GladeWidget):
                 _("You must register before using the compliance assistant.")),
                 self._get_window())
 
+    def _config_changed(self, widget):
+        # update the backend's UEP in case we changed proxy
+        # config. We specify all these settings since they
+        # are new and the default UEP init won't get them
+        # (it's default args are set at class init time)
+        self.backend.uep = connection.UEPConnection(
+            host=cfg.get('server', 'hostname'),
+            ssl_port=int(cfg.get('server', 'port')),
+            handler=cfg.get('server', 'prefix'),
+            proxy_hostname=cfg.get('server', 'proxy_hostname'),
+            proxy_port=cfg.get('server', 'proxy_port'),
+            proxy_user=cfg.get('server', 'proxy_user'),
+            proxy_password=cfg.get('server', 'proxy_password'),
+            username=None, password=None,
+            cert_file=ConsumerIdentity.certpath(),
+            key_file=ConsumerIdentity.keypath())
+
+
+
     def _set_compliance_status(self):
         """ Updates the compliance status portion of the UI. """
         # Look for products which are out of compliance:
@@ -392,16 +410,14 @@ class MainWindow(widgets.GladeWidget):
         self.system_name_label.set_markup('<b>%s</b>' % name)
         
     def _set_next_update(self):
-        last_update = logutil.getLastCertUpdate()
+        try:
+            next_update = long(file(UPDATE_FILE).read())
+        except:
+            next_update = None
         
-        if last_update:
-            # TODO:  This assumes that rhsmcertd is running!
-            #        That is probably not a safe assumption...
-            freq = int(rhsm.config.initConfig().get('rhsmcertd', 'certFrequency'))
-            delta = datetime.timedelta(minutes=freq)
-            
-            new_time = last_update + delta
-            self.next_update_label.set_text(new_time.ctime())
+        if next_update:    
+            update_time = datetime.fromtimestamp(next_update)
+            self.next_update_label.set_text(update_time.ctime())
         else:
             self.next_update_label.set_text(_('Unknown'))
 
@@ -487,7 +503,8 @@ class RegisterScreen:
                     log.exception(e)
                     log.warning("Warning: Unable to auto subscribe to %s" \
                             % ", ".join(products.keys()))
-                if not fetch_certificates():
+                # force update of certs
+                if not fetch_certificates(self.backend):
                     return False
 
             self.close_window()

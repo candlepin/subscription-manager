@@ -22,6 +22,8 @@ from certlib import ConsumerIdentity
 from repolib import RepoLib
 from factlib import FactLib
 
+import connection
+
 import gettext
 _ = gettext.gettext
 
@@ -35,11 +37,12 @@ class CertManager:
     @type repolib: L{RepoLib}
     """
 
-    def __init__(self, lock=ActionLock()):
+    def __init__(self, lock=ActionLock(), uep=None):
         self.lock = lock
-        self.certlib = CertLib(self.lock)
-        self.repolib = RepoLib(self.lock)
-        self.factlib = FactLib(self.lock)
+        self.uep = uep
+        self.certlib = CertLib(self.lock, uep=self.uep)
+        self.repolib = RepoLib(self.lock, uep=self.uep)
+        self.factlib = FactLib(self.lock, uep=self.uep)
 
     def add(self, *bundles):
         """
@@ -84,7 +87,9 @@ def main():
                   ' are corrupted. Certificate update using daemon failed.')
         sys.exit(-1)
     print _('Updating Red Hat certificates & repositories')
-    mgr = CertManager()
+    uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
+                                   key_file=ConsumerIdentity.keypath())
+    mgr = CertManager(uep=uep)
     updates = mgr.update()
     print _('%d updates required') % updates
     print _('done')

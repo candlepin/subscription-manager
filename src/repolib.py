@@ -28,14 +28,15 @@ log = getLogger(__name__)
 
 class RepoLib:
 
-    def __init__(self, lock=ActionLock()):
+    def __init__(self, lock=ActionLock(), uep=None):
         self.lock = lock
+        self.uep = uep
 
     def update(self):
         lock = self.lock
         lock.acquire()
         try:
-            action = UpdateAction()
+            action = UpdateAction(uep=self.uep)
             return action.perform()
         finally:
             lock.release()
@@ -43,8 +44,9 @@ class RepoLib:
 
 class UpdateAction:
 
-    def __init__(self):
+    def __init__(self, uep=None):
         self.entdir = EntitlementDirectory()
+        self.uep = uep
 
     def perform(self):
         repod = RepoFile()

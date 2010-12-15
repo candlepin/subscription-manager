@@ -58,6 +58,7 @@ install-files: dbus-service-install compile-po
 	@mkdir -p ${PREFIX}/usr/share/man/man8/
 	@mkdir -p ${PREFIX}/usr/share/applications
 	@mkdir -p ${PREFIX}/var/log/rhsm
+	@mkdir -p ${PREFIX}/var/run/rhsm
 	@mkdir -p ${PREFIX}/var/lib/rhsm/facts
 	@mkdir -p ${PREFIX}/usr/bin
 	@mkdir -p ${PREFIX}/etc/init.d

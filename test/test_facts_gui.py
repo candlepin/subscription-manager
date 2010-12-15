@@ -4,6 +4,16 @@ import facts
 from gui import factsgui, managergui
 from mock import Mock
 
+
+class StubUEP:
+    def __init__(self, username=None, password=None,
+                 proxy_hostname=None, proxy_port=None,
+                 proxy_user=None, proxy_password=None,
+                 cert_file=None, key_file=None):
+        pass
+
+
+
 class FactDialogTests(unittest.TestCase):
 
     def setUp(self):
@@ -18,6 +28,8 @@ class FactDialogTests(unittest.TestCase):
 
         self.expected_facts = expected_facts
         self.stub_facts = StubFacts()
+        
+        self.uep = StubUEP()
 
         self.consumer = Mock()
         self.consumer.uuid = "MOCKUUID"
@@ -29,7 +41,7 @@ class FactDialogTests(unittest.TestCase):
         def check_facts(parent, facts):
             found_facts[facts[0]] = facts[1]
 
-        dialog = factsgui.SystemFactsDialog(self.consumer,
+        dialog = factsgui.SystemFactsDialog(self.uep, self.consumer,
                 self.stub_facts)
         dialog.facts_store.append = check_facts
         dialog.display_facts()
@@ -42,7 +54,7 @@ class FactDialogTests(unittest.TestCase):
         unregistered_consumer.uuid = None
         unregistered_consumer.name = None
 
-        dialog = factsgui.SystemFactsDialog(unregistered_consumer,
+        dialog = factsgui.SystemFactsDialog(self.uep, unregistered_consumer,
                 self.stub_facts)
         dialog.show()
 
@@ -54,7 +66,7 @@ class FactDialogTests(unittest.TestCase):
         managergui.consumer = { 'uuid': 'Random UUID',
                                 'consumer_name': 'system' }
 
-        dialog = factsgui.SystemFactsDialog(self.consumer,
+        dialog = factsgui.SystemFactsDialog(self.uep, self.consumer,
                 self.stub_facts)
         dialog.show()
 

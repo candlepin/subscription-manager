@@ -37,6 +37,7 @@ class NetworkConfigDialog:
     changed, the new setting will be saved.
     
     """
+
     def __init__(self):
         self.xml = gtk.glade.XML(GLADE_XML)
         # Get widgets we'll need to access
@@ -95,7 +96,8 @@ class NetworkConfigDialog:
 
         proxy = self.xml.get_widget("proxyEntry").get_text() or ""
 
-        if proxy:
+        # don't save these values if they are disabled in the gui
+        if proxy and self.xml.get_widget("enableProxyButton").get_active(): 
             # FIXME: this should probably be smarter
             try:
                 proxy_hostname, proxy_port = proxy.split(':')
@@ -105,15 +107,25 @@ class NetworkConfigDialog:
                 # no port? just write out the hostname and assume default
                 self.cfg.set("server", "proxy_hostname", proxy)
                 self.cfg.set("server", "proxy_port", rhsm.config.DEFAULT_PROXY_PORT)
+        else:
+            # delete config options if we disable it in the ui
+            self.cfg.set("server", "proxy_hostname", "")
+            self.cfg.set("server", "proxy_port", "")
 
-        if self.xml.get_widget("proxyUserEntry").get_text() is not None:
-            self.cfg.set("server", "proxy_user",
-                         str(self.xml.get_widget("proxyUserEntry").get_text()))
 
-        if self.xml.get_widget("proxyPasswordEntry").get_text() is not None:
-            self.cfg.set("server", "proxy_password",
-                         str(self.xml.get_widget("proxyPasswordEntry").get_text()))
         
+        if self.xml.get_widget("enableProxyAuthButton").get_active():
+            if self.xml.get_widget("proxyUserEntry").get_text() is not None:
+                self.cfg.set("server", "proxy_user",
+                             str(self.xml.get_widget("proxyUserEntry").get_text()))
+
+            if self.xml.get_widget("proxyPasswordEntry").get_text() is not None:
+                self.cfg.set("server", "proxy_password",
+                             str(self.xml.get_widget("proxyPasswordEntry").get_text()))
+        else:
+            self.cfg.set("server", "proxy_user", "")
+            self.cfg.set("server", "proxy_password", "")
+
         try:
             self.cfg.save()
         except:
@@ -127,6 +139,7 @@ class NetworkConfigDialog:
         self.dlg.present()
 
     def close(self, button):
+        self.writeValues()
         self.dlg.hide()
     
     def enableAction(self, button):
