@@ -1,4 +1,3 @@
-
 PREFIX ?= /
 SYSCONF ?= etc
 PYTHON ?= python
