@@ -16,7 +16,6 @@ sys.path.append("/usr/share/rhsm")
 from gui import managergui
 from certlib import ConsumerIdentity
 from facts import Facts
-from gui import networkConfig
 
 sys.path.append("/usr/share/rhn")
 from up2date_client import config
@@ -39,7 +38,7 @@ class moduleClass(Module, managergui.RegisterScreen):
 #        managergui.create_and_set_basic_connection()
         # this value is relative to when you want to load the screen
         # so check other modules before setting
-        self.priority = 1.2
+        self.priority = 200.1
         self.sidebarTitle = _("Entitlement Registration")
         self.title = _("Entitlement Platform Registration")
         self._cached_credentials = None
@@ -146,15 +145,6 @@ class moduleClass(Module, managergui.RegisterScreen):
         self._destroy_widget('register_button')
         self._destroy_widget('cancel_button')
 
-        # Add a button to launch network config for using a proxy
-        box = gtk.HButtonBox()
-        box.set_layout(gtk.BUTTONBOX_START)
-        config_button = gtk.Button(_("Proxy Configuration"))
-        config_button.connect("clicked", self._proxy_button_clicked)
-        box.pack_start(config_button)
-        self.register_dialog.pack_start(box, expand=False, fill=False)
-        self.network_config_dialog = networkConfig.NetworkConfigDialog()
-
     def initializeUI(self):
         self.initializeConsumerName()
 
@@ -182,14 +172,7 @@ class moduleClass(Module, managergui.RegisterScreen):
         but showing the screen and allowing the user to reregister if
         firstboot is run in reconfig mode.
         """
-        return self._is_mode(MODE_RECONFIG) or not ConsumerIdentity.exists()
-
-    def _is_mode(self, mode):
-        """
-        Is firstboot in the specified mode?
-        """
-        # config.mode is a bitmask off all current modes
-        return config.mode & mode == mode
+        return True
 
     def _destroy_widget(self, widget_name):
         """
@@ -219,5 +202,3 @@ class moduleClass(Module, managergui.RegisterScreen):
         widget = managergui.registration_xml.get_widget(widget_name)
         return widget.get_text()
 
-    def _proxy_button_clicked(self, widget):
-        self.network_config_dialog.show()
