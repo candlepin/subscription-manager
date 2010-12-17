@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.93.3
+Version: 0.93.4
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management
 Group:   System Environment/Base
@@ -156,6 +156,46 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Fri Dec 17 2010 Devan Goodwin <dgoodwin@redhat.com> 0.93.4-1
+- Resolves: #639436,#663669,#659735,#659735,#661517,#661517,#662232,#661876,#661329,#661419
+- Update I18N string bundles. (dgoodwin@redhat.com)
+- firstboot: initialize the registerscreen superclass (jbowes@redhat.com)
+- 639436: make --proxy help blurb more clear about format required
+  (alikins@redhat.com)
+- Adding in more accessibility labels (jharris@redhat.com)
+- 663669: add proxy_user and proxy_password to default config
+  (alikins@redhat.com)
+- Adding in accessibility names for automation (jharris@redhat.com)
+- Fixing update file to be in daemon loop (jharris@redhat.com)
+- 659735: fix up dialog display for all cases (jbowes@redhat.com)
+- 659735: display errors when the pulse bar is showing (jbowes@redhat.com)
+- 661517: make sure changes to proxy settings are respected
+  (alikins@redhat.com)
+- Set and write out config values on network config screen close.
+  (alikins@redhat.com)
+- 661517: make network config dialog respect disabling of proxy settings
+  (alikins@redhat.com)
+- Changing update label to use dropfile with unix timestamp
+  (jharris@redhat.com)
+- gui: stop using global UEP during register (jbowes@redhat.com)
+- 661542: update gui if registration state changes externally
+  (alikins@redhat.com)
+- 662232: remove "showIncompatiblePools" config option (alikins@redhat.com)
+- 661876: fix a bug with cli not using config file proxy auth info
+  (alikins@redhat.com)
+- 661329: Only requiring registration if updating facts. (jharris@redhat.com)
+- firstboot: fix display of compliance screen (jbowes@redhat.com)
+- 661419: Adding modal dialog when running second GUI instance.
+  (jharris@redhat.com)
+- Remove python-rhsm sub-package. (dgoodwin@redhat.com)
+- firstboot: get all but compliance to center on firstboot window
+  (jbowes@redhat.com)
+- Adding Next Update notification to main screen (jharris@redhat.com)
+- firstboot: let the MainWindow know the sytem is registered
+  (jbowes@redhat.com)
+- firstboot: start using the new gui in firstboot (jbowes@redhat.com)
+- firstboot: add proxy configuration button (jbowes@redhat.com)
+
 * Wed Dec 08 2010 Devan Goodwin <dgoodwin@redhat.com> 0.93.3-1
 - Resolves: #661345,#660102,#634254
 - New Subscription Manager UI.
