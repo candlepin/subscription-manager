@@ -190,15 +190,23 @@ class ComplianceAssistant(widgets.GladeWidget):
     def set_parent_window(self, window):
         self.window.set_transient_for(window)
 
-    def _reload_callback(self):
+    def _reload_callback(self, error=None):
         if self.pb:
             self.pb.hide()
             gobject.source_remove(self.timer)
             self.pb = None
             self.timer = None
 
-        self._display_uncompliant()
-        self._display_subscriptions()
+        if error:
+            if type(error) == RestlibException:
+                handle_gui_exception(error,
+                        _("Unable to search for subscriptions: %s"))
+            else:
+                handle_gui_exception(error,
+                        _("Unable to search for subscriptions"))
+        else:
+            self._display_uncompliant()
+            self._display_subscriptions()
 
     def _reload_screen(self):
         """

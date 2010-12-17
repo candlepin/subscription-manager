@@ -21,6 +21,9 @@
                 <property name="can_focus">True</property>
                 <property name="rules_hint">True</property>
                 <property name="enable_grid_lines">vertical</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">My Subscriptions View</atkproperty>
+                </accessibility>
               </widget>
             </child>
           </widget>
@@ -43,6 +46,9 @@
                 <property name="receives_default">True</property>
                 <property name="use_action_appearance">False</property>
                 <property name="yalign">0.46000000834465027</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Unsubscribe Button</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_unsubscribe_button_clicked" swapped="no"/>
               </widget>
               <packing>

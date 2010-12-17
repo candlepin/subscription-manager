@@ -45,6 +45,9 @@
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">Proxy Checkbox</atkproperty>
+                        </accessibility>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -114,6 +117,9 @@
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="tooltip" translatable="yes">Enter in the format hostname(:port)</property>
+                                <accessibility>
+                                  <atkproperty name="AtkObject::accessible-description" translatable="yes">Proxy Location Text</atkproperty>
+                                </accessibility>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -140,6 +146,9 @@
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">Authentication Checkbox</atkproperty>
+                        </accessibility>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -191,6 +200,9 @@
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
+                                <accessibility>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Username Text</atkproperty>
+                                </accessibility>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -205,6 +217,9 @@
                                 <property name="can_focus">True</property>
                                 <property name="visibility">False</property>
                                 <property name="invisible_char">•</property>
+                                <accessibility>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Password Text</atkproperty>
+                                </accessibility>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -245,6 +260,9 @@
                 <property name="can_focus">False</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Close Button</atkproperty>
+                </accessibility>
               </widget>
               <packing>
                 <property name="expand">False</property>

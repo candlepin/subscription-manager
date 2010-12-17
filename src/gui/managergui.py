@@ -73,7 +73,6 @@ class GladeWrapper(gtk.glade.XML):
             raise Exception ("Widget %s not found" % widget_name)
         return widget
 
-rhsm_xml = GladeWrapper(os.path.join(prefix, "data/rhsm.glade"))
 registration_xml = GladeWrapper(os.path.join(prefix,
     "data/registration.glade"))
 
@@ -317,11 +316,8 @@ class MainWindow(widgets.GladeWidget):
         self.registration_dialog.set_parent_window(self._get_window())
         self.registration_dialog.show()
 
-    def _unregister_button_clicked(self, widget):
-        log.info("Unregister button pressed, asking for confirmation.")
-        prompt = messageWindow.YesNoDialog(constants.CONFIRM_UNREGISTER,
-                self._get_window())
-        if not prompt.getrc():
+    def _on_unregister_prompt_response(self, dialog, response):
+        if not response:
             log.info("unregistrater not confirmed. cancelling")
             return
         log.info("Proceeding with un-registration: %s", self.consumer.uuid)
@@ -334,6 +330,12 @@ class MainWindow(widgets.GladeWidget):
                     self.consumer.uuid)
         self.consumer.reload()
         self.refresh()
+
+    def _unregister_button_clicked(self, widget):
+        log.info("Unregister button pressed, asking for confirmation.")
+        prompt = messageWindow.YesNoDialog(constants.CONFIRM_UNREGISTER,
+                self._get_window())
+        prompt.connect('response', self._on_unregister_prompt_response)
 
     def _network_config_button_clicked(self, widget):
         self.network_config_dialog.set_parent_window(self._get_window())
