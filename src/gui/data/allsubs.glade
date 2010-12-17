@@ -44,6 +44,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Search Button</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_search_button_clicked" swapped="no"/>
               </widget>
               <packing>
@@ -75,6 +78,9 @@
                 <property name="receives_default">False</property>
                 <property name="use_action_appearance">False</property>
                 <property name="draw_indicator">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Not Installed Checkbox</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_not_installed_checkbutton_clicked" swapped="no"/>
               </widget>
               <packing>
@@ -90,6 +96,9 @@
                 <property name="receives_default">False</property>
                 <property name="use_action_appearance">False</property>
                 <property name="draw_indicator">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Match Hardware Checkbox</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_compatible_checkbutton_clicked" swapped="no"/>
               </widget>
               <packing>
@@ -128,6 +137,9 @@
                 <property name="receives_default">False</property>
                 <property name="use_action_appearance">False</property>
                 <property name="draw_indicator">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Overlap Checkbox</atkproperty>
+                </accessibility>
                 <signal name="clicked" handler="on_overlap_checkbutton_clicked" swapped="no"/>
               </widget>
               <packing>
@@ -146,6 +158,9 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Contain Text Checkbox</atkproperty>
+                    </accessibility>
                     <signal name="clicked" handler="on_contains_text_checkbutton_clicked" swapped="no"/>
                   </widget>
                   <packing>
@@ -230,6 +245,9 @@
               <widget class="GtkTreeView" id="all_subs_treeview">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">All Subscriptions View</atkproperty>
+                </accessibility>
               </widget>
             </child>
           </widget>
