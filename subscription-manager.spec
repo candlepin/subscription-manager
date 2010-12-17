@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.93.4
+Version: 0.93.5
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management
 Group:   System Environment/Base
@@ -156,8 +156,8 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
-* Fri Dec 17 2010 Devan Goodwin <dgoodwin@redhat.com> 0.93.4-1
-- Resolves: #639436,#663669,#659735,#659735,#661517,#661517,#662232,#661876,#661329,#661419
+* Fri Dec 17 2010 Devan Goodwin <dgoodwin@redhat.com> 0.93.5-1
+- Resolves: #663669,#659735,#659735,#661517,#661517,#662232,#661876,#661329,#661419
 - Update I18N string bundles. (dgoodwin@redhat.com)
 - firstboot: initialize the registerscreen superclass (jbowes@redhat.com)
 - 639436: make --proxy help blurb more clear about format required
