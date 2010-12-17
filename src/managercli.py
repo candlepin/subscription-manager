@@ -84,7 +84,7 @@ class CliCommand(object):
         self.parser.add_option("--debug", dest="debug",
                                default=0, help=_("debug level"))
         self.parser.add_option("--proxy", dest="proxy_url",
-                               default=None, help=_("http proxy url"))
+                               default=None, help=_("proxy url in the form of proxy_hostname:proxy_port"))
         self.parser.add_option("--proxyuser", dest="proxy_user",
                                 default=None, help=_("user for http proxy with basic authentication"))
         self.parser.add_option("--proxypassword", dest="proxy_password",
