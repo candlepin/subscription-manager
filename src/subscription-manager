@@ -48,7 +48,7 @@ if os.getuid() != 0:
 try:
     # NOTE: importing
     import managercli
-    from rhsm.logutil import getLogger
+    from logutil import getLogger
     from managercli import handle_exception
     logger = getLogger(__name__)
 except KeyboardInterrupt:
