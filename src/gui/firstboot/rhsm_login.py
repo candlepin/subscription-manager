@@ -10,13 +10,16 @@ from firstboot.module import Module
 import gettext
 _ = lambda x: gettext.ldgettext("firstboot", x)
 
+import rhsm
+
 sys.path.append("/usr/share/rhsm")
-import rhsm.connection as connection
 from gui import managergui
 from certlib import ConsumerIdentity
 from facts import Facts
 from gui import networkConfig
 
+sys.path.append("/usr/share/rhn")
+from up2date_client import config
 
 class moduleClass(Module, managergui.RegisterScreen):
 
@@ -26,7 +29,7 @@ class moduleClass(Module, managergui.RegisterScreen):
         """
         Module.__init__(self)
 
-        backend = managergui.Backend(connection.UEPConnection(
+        backend = managergui.Backend(rhsm.connection.UEPConnection(
             cert_file=ConsumerIdentity.certpath(),
             key_file=ConsumerIdentity.keypath()))
 
@@ -41,12 +44,55 @@ class moduleClass(Module, managergui.RegisterScreen):
         self.title = _("Entitlement Platform Registration")
         self._cached_credentials = None
 
+    def _read_rhn_proxy_settings(self):
+        # Read and store rhn-setup's proxy settings, as they have been set
+        # on the prior screen (which is owned by rhn-setup)
+        up2date_cfg = config.initUp2dateConfig()
+        cfg = rhsm.config.initConfig()
+
+        if up2date_cfg['enableProxy']:
+            proxy = up2date_cfg['httpProxy']
+            if proxy:
+                try:
+                    host, port = proxy.split(':')
+                    cfg.set('server', 'proxy_hostname', host)
+                    cfg.set('server', 'proxy_port', port)
+                except ValueError:
+                    cfg.set('server', 'proxy_hostname', proxy)
+                    cfg.set('server', 'proxy_port',
+                            rhsm.config.DEFAULT_PROXY_PORT)
+            if up2date_cfg['enableProxyAuth']:
+                cfg.set('server', 'proxy_user', up2date_cfg['proxyUser'])
+                cfg.set('server', 'proxy_password',
+                        up2date_cfg['proxyPassword'])
+        else:
+            cfg.set('server', 'proxy_hostname', '')
+            cfg.set('server', 'proxy_port', '')
+            cfg.set('server', 'proxy_user', '')
+            cfg.set('server', 'proxy_password', '')
+
+        cfg.save()
+        self.backend.uep = rhsm.connection.UEPConnection(
+            host=cfg.get('server', 'hostname'),
+            ssl_port=int(cfg.get('server', 'port')),
+            handler=cfg.get('server', 'prefix'),
+            proxy_hostname=cfg.get('server', 'proxy_hostname'),
+            proxy_port=cfg.get('server', 'proxy_port'),
+            proxy_user=cfg.get('server', 'proxy_user'),
+            proxy_password=cfg.get('server', 'proxy_password'),
+            username=None, password=None,
+            cert_file=ConsumerIdentity.certpath(),
+            key_file=ConsumerIdentity.keypath())
+
     def apply(self, interface, testing=False):
         """
         'Next' button has been clicked - try to register with the
         provided user credentials and return the appropriate result
         value.
         """
+
+        self._read_rhn_proxy_settings()
+
         credentials = self._get_credentials_hash()
 
         if credentials == self._cached_credentials and \
