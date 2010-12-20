@@ -162,7 +162,8 @@ class MainWindow(widgets.GladeWidget):
         super(MainWindow, self).__init__('mainwindow.glade',
               ['main_window', 'notebook', 'compliance_count_label',
                'compliance_status_label', 'compliance_status_image',
-               'button_bar', 'system_name_label', 'next_update_label'])
+               'button_bar', 'system_name_label', 'next_update_label',
+               'next_update_title'])
 
         self.backend = Backend(connection.UEPConnection(
             cert_file=ConsumerIdentity.certpath(),
@@ -177,7 +178,7 @@ class MainWindow(widgets.GladeWidget):
                 self.facts, callbacks=[self.registration_changed])
 
         self.import_sub_dialog = ImportSubDialog()
-        
+
         self.compliance_assistant = ComplianceAssistant(self.backend,
                 self.consumer, self.facts)
 
@@ -204,13 +205,13 @@ class MainWindow(widgets.GladeWidget):
 
         def on_identity_change(filemonitor, first_file, other_file, event_type):
             self.refresh()
-            
+
         def on_cert_update(filemonitor, first_file, other_file, event_type):
             self._set_next_update()
 
         self.backend.monitor_certs(on_cert_change)
         self.backend.monitor_identity(on_identity_change)
-        
+
         # For updating the 'Next Update' time
         gio.File(UPDATE_FILE).monitor().connect('changed', on_cert_update)
 
@@ -411,18 +412,22 @@ class MainWindow(widgets.GladeWidget):
         # TODO:  Need to escape markup here
         name = self.consumer.name or _('Not registered')
         self.system_name_label.set_markup('<b>%s</b>' % name)
-        
+
     def _set_next_update(self):
         try:
             next_update = long(file(UPDATE_FILE).read())
         except:
             next_update = None
-        
-        if next_update:    
+
+        if next_update:
+            # TODO:  show/hide was not working here - this is a little hacky...
+            self.next_update_title.set_text(_('Next Update:'))
+
             update_time = datetime.fromtimestamp(next_update)
             self.next_update_label.set_text(update_time.ctime())
         else:
-            self.next_update_label.set_text(_('Unknown'))
+            self.next_update_title.set_text('')
+            self.next_update_label.set_text('')
 
 
 class RegisterScreen:
@@ -563,3 +568,4 @@ def setArrowCursor():
 
 def setBusyCursor():
     pass
+
