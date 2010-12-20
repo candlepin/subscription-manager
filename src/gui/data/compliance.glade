@@ -18,84 +18,107 @@
         <property name="border_width">12</property>
         <property name="spacing">12</property>
         <child>
-          <widget class="GtkLabel" id="compliance_label">
+          <widget class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
-            <property name="xalign">0</property>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkTable" id="table1">
-            <property name="visible">True</property>
-            <property name="n_rows">2</property>
-            <property name="n_columns">2</property>
-            <property name="column_spacing">5</property>
+            <property name="spacing">6</property>
             <child>
-              <widget class="GtkLabel" id="label3">
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">Show products that will be out of compliance as of:</property>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkRadioButton" id="first_noncompliant_radiobutton">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
-                <property name="xalign">0.46000000834465027</property>
-                <property name="active">True</property>
-                <property name="draw_indicator">True</property>
-                <property name="group">noncompliant_date_radiobutton</property>
-                <signal name="toggled" handler="on_first_noncompliant_radiobutton_toggled" swapped="no"/>
-              </widget>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkHBox" id="date_picker_hbox">
+              <widget class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
                 <child>
-                  <widget class="GtkRadioButton" id="noncompliant_date_radiobutton">
-                    <property name="label" translatable="yes">On a different date:</property>
+                  <widget class="GtkImage" id="image1">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="relief">none</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="xalign">0</property>
+                    <property name="pixbuf">icons/header.png</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <widget class="GtkLabel" id="compliance_label">
+                    <property name="visible">True</property>
+                    <property name="xalign">0.10000000149011612</property>
+                    <property name="use_markup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </widget>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <widget class="GtkVBox" id="vbox3">
+                <property name="visible">True</property>
+                <property name="spacing">3</property>
+                <child>
+                  <widget class="GtkLabel" id="label3">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Show products that will be out of compliance as of:</property>
+                  </widget>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkRadioButton" id="first_noncompliant_radiobutton">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="xalign">0.46000000834465027</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">noncompliant_date_radiobutton</property>
+                    <signal name="toggled" handler="on_first_noncompliant_radiobutton_toggled" swapped="no"/>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkHBox" id="date_picker_hbox">
+                    <property name="visible">True</property>
+                    <child>
+                      <widget class="GtkRadioButton" id="noncompliant_date_radiobutton">
+                        <property name="label" translatable="yes">On a different date:</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="relief">none</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
@@ -109,7 +132,7 @@
             </child>
           </widget>
           <packing>
-            <property name="position">2</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -120,8 +143,11 @@
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="position">3</property>
+            <property name="position">2</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <child>
           <widget class="GtkVBox" id="vbox1">

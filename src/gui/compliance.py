@@ -223,7 +223,7 @@ class ComplianceAssistant(widgets.GladeWidget):
         if self.last_compliant_date:
             formatted = self.format_date(self.last_compliant_date)
             self.compliance_label.set_label(
-                    _("All software is in compliance until %s.") % formatted)
+                    _("<b>All software is in compliance until %s</b>") % formatted)
             self.first_noncompliant_radiobutton.set_label(
                     _("%s (first date of non-compliance)") % formatted)
             self.providing_subs_label.set_label(
