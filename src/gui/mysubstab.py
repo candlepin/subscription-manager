@@ -42,7 +42,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         """
         Create a new 'My Subscriptions' tab.
         """
-        super(MySubscriptionsTab, self).__init__('mysubs.glade')
+        super(MySubscriptionsTab, self).__init__('mysubs.glade', ['details_box'])
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
@@ -51,8 +51,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         # Put the details widget in the middle
         details = self.sub_details.get_widget()
-        self.content.pack_start(details, expand=False)
-            
+        self.details_box.pack_start(details)
+
         # Set up columns on the view
         self.add_text_column(_("Subscription"), 'subscription', True)
         products_column = gtk.TreeViewColumn(_("Installed Products"),
@@ -66,7 +66,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.add_date_column(_("Expiration Date"), 'expiration_date')
 
         self.update_subscriptions()
-        
+
         self.unsubscribe_button = self.glade.get_widget('unsubscribe_button')
         self.glade.signal_autoconnect({'on_unsubscribe_button_clicked': self.unsubscribe_button_clicked})
 
@@ -99,12 +99,12 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.store.clear()
 
         for cert in EntitlementDirectory().list():
-            entry = self._create_entry_map(cert)   
+            entry = self._create_entry_map(cert)
             self.store.add_map(entry)
 
     def get_label(self):
         return _("My Subscriptions")
-        
+
     def get_type_map(self):
         return {
             'subscription': str,
@@ -130,17 +130,17 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         products = [(product.getName(), product.getHash())
                         for product in cert.getProducts()]
 
-        self.sub_details.show(order.getName(), 
-                              contract=order.getContract() or "", 
+        self.sub_details.show(order.getName(),
+                              contract=order.getContract() or "",
                               start=order.getStart(),
                               end=order.getEnd(),
                               account=order.getAccountNumber() or "",
                               products=products)
- 
+
     def on_no_selection(self):
         """
         Clears out the subscription details panel when no subscription is
-        selected. 
+        selected.
         """
         self.sub_details.clear()
 
@@ -160,7 +160,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         entry['serial'] = cert.serialNumber()
         entry['align'] = 0.5         # Center horizontally
         entry['background'] = self._get_background_color(cert)
-        
+
         return entry
 
     def _get_background_color(self, entitlement_cert):
@@ -187,3 +187,4 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                 installed_products.append(installed)
 
         return installed_products
+
