@@ -11,7 +11,7 @@ import gettext
 _ = lambda x: gettext.ldgettext("firstboot", x)
 
 sys.path.append("/usr/share/rhsm")
-import connection
+import rhsm.connection as connection
 from gui import managergui
 from certlib import ConsumerIdentity
 from facts import Facts

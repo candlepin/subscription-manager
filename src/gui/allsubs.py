@@ -31,7 +31,7 @@ import storage
 import async
 from utils import handle_gui_exception
 from contract_selection import ContractSelectionWindow
-from connection import RestlibException
+from rhsm.connection import RestlibException
 
 prefix = os.path.dirname(__file__)
 ALL_SUBS_GLADE = os.path.join(prefix, "data/allsubs.glade")
