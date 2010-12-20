@@ -17,7 +17,7 @@
             <child>
               <widget class="GtkImage" id="image1">
                 <property name="visible">True</property>
-                <property name="pixbuf">icons/subsmgr-full.png</property>
+                <property name="pixbuf">icons/header.png</property>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -25,17 +25,7 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkLabel" id="label3">
-                <property name="visible">True</property>
-                <property name="xalign">0.10000000149011612</property>
-                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Subscription Manager&lt;/b&gt;&lt;/big&gt;</property>
-                <property name="use_markup">True</property>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="padding">15</property>
-                <property name="position">1</property>
-              </packing>
+              <placeholder/>
             </child>
             <child>
               <widget class="GtkTable" id="table1">
