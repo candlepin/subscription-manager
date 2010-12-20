@@ -51,6 +51,8 @@ class AllSubscriptionsTab(object):
         self.all_subs_vbox = self.all_subs_xml.get_widget('all_subs_vbox')
         self.all_subs_vbox.unparent()
 
+        self.details_box = self.all_subs_xml.get_widget('details_box')
+
         today = datetime.date.today()
 
         self.date_picker = widgets.DatePicker(today)
@@ -93,7 +95,7 @@ class AllSubscriptionsTab(object):
         self.day_entry = self.all_subs_xml.get_widget("day_entry")
         self.year_entry = self.all_subs_xml.get_widget("year_entry")
         self.sub_details = widgets.SubDetailsWidget(show_contract=False)
-        self.all_subs_vbox.pack_start(self.sub_details.get_widget(), expand=False)
+        self.details_box.add(self.sub_details.get_widget())
 
         self.contract_selection = None
 
@@ -125,8 +127,8 @@ class AllSubscriptionsTab(object):
         return self.overlap_checkbutton.get_active()
 
     def show_uninstalled(self):
-        """ 
-        Return True if we're to include pools for products that are 
+        """
+        Return True if we're to include pools for products that are
         not installed.
         """
         return self.not_installed_checkbutton.get_active()
@@ -142,7 +144,7 @@ class AllSubscriptionsTab(object):
                 return contains_text
         return None
 
-        
+
     def display_pools(self):
         """
         Re-display the list of pools last queried, based on current filter options.
@@ -157,7 +159,7 @@ class AllSubscriptionsTab(object):
 
         for entry in merged_pools.values():
             self.subs_store.add_map({
-                'product_name': entry.product_name, 
+                'product_name': entry.product_name,
                 'bundled_count': entry.bundled_products,
                 'pool_count': len(entry.pools),
                 'quantity': entry.quantity,
@@ -237,7 +239,7 @@ class AllSubscriptionsTab(object):
     def subscribe_button_clicked(self, button):
         model, tree_iter = self.subs_treeview.get_selection().get_selected()
         pools = model.get_value(tree_iter, self.subs_store['merged_pools'])
-      
+
         # Decide if we need to show the contract selection dialog or not.
         # if there's just one pool, shortcut right to the callback that the
         # dialog would have run.
@@ -264,6 +266,6 @@ class AllSubscriptionsTab(object):
             self.sub_details.show(product_name, products=provided)
         else:
             self.sub_details.clear()
-            
+
         self.subscribe_button.set_sensitive(tree_iter != None)
 
