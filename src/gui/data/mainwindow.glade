@@ -47,6 +47,9 @@
                     <property name="visible">True</property>
                     <property name="xpad">10</property>
                     <property name="label" translatable="yes">Next Update:</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Next Update:</atkproperty>
+                    </accessibility>
                   </widget>
                   <packing>
                     <property name="top_attach">1</property>
@@ -209,7 +212,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <accessibility>
-                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliant Button</atkproperty>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Become Compliant</atkproperty>
                                 </accessibility>
                                 <signal name="clicked" handler="on_compliant_button_clicked" swapped="no"/>
                               </widget>

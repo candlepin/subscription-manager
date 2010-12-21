@@ -45,7 +45,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Search Button</atkproperty>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Search</atkproperty>
                 </accessibility>
                 <signal name="clicked" handler="on_search_button_clicked" swapped="no"/>
               </widget>
@@ -79,7 +79,7 @@
                 <property name="use_action_appearance">False</property>
                 <property name="draw_indicator">True</property>
                 <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Not Installed Checkbox</atkproperty>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Not Installed</atkproperty>
                 </accessibility>
                 <signal name="clicked" handler="on_not_installed_checkbutton_clicked" swapped="no"/>
               </widget>
@@ -97,7 +97,7 @@
                 <property name="use_action_appearance">False</property>
                 <property name="draw_indicator">True</property>
                 <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Match Hardware Checkbox</atkproperty>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Match Hardware</atkproperty>
                 </accessibility>
                 <signal name="clicked" handler="on_compatible_checkbutton_clicked" swapped="no"/>
               </widget>
@@ -138,7 +138,7 @@
                 <property name="use_action_appearance">False</property>
                 <property name="draw_indicator">True</property>
                 <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Overlap Checkbox</atkproperty>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Overlap</atkproperty>
                 </accessibility>
                 <signal name="clicked" handler="on_overlap_checkbutton_clicked" swapped="no"/>
               </widget>
@@ -159,7 +159,7 @@
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
                     <accessibility>
-                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Contain Text Checkbox</atkproperty>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Contain Text</atkproperty>
                     </accessibility>
                     <signal name="clicked" handler="on_contains_text_checkbutton_clicked" swapped="no"/>
                   </widget>
@@ -176,7 +176,7 @@
                     <property name="width_chars">15</property>
                     <property name="invisible_char_set">True</property>
                     <accessibility>
-                      <atkaction action_name="activate" description="Text in Subscription"/>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Text in Subscription</atkproperty>
                     </accessibility>
                     <signal name="changed" handler="on_contain_text_entry_changed" swapped="no"/>
                   </widget>
