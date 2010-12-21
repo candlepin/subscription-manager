@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.93.7
+Version: 0.93.8
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management
 Group:   System Environment/Base
@@ -155,6 +155,17 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Dec 21 2010 Devan Goodwin <dgoodwin@redhat.com> 0.93.8-1
+- Resolves: #663038
+- Remove certificate.py (moved to python-rhsm package) (dgoodwin@redhat.com)
+- Refactor top of compliance assistant. (dgoodwin@redhat.com)
+- Make accessible names more consistent (jharris@redhat.com)
+- 663038: No bundled products cases a divide by zero error
+  (bkearney@redhat.com)
+- Adding vertical pane to the all subs tab (jharris@redhat.com)
+- Adding pane to installed products tab (jharris@redhat.com)
+- Adding vertical pane to my subscriptions tab (jharris@redhat.com)
+
 * Mon Dec 20 2010 Devan Goodwin <dgoodwin@redhat.com> 0.93.7-1
 - Resolves: #664538 
 
