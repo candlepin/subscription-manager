@@ -1,4 +1,4 @@
 from rhsm.connection import UEPConnection, RestlibException
 from rhsm.config import *
 from logutil import *
-from certificate import *
+from rhsm.certificate import *

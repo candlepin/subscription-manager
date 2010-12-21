@@ -20,7 +20,7 @@ from repolib import RepoFile
 from productid import ProductDatabase
 from modelhelpers import *
 from stubs import *
-from certificate import GMT
+from rhsm.certificate import GMT
 
 
 def dummy_exists(filename):

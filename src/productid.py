@@ -23,7 +23,7 @@ _ = gettext.gettext
 
 from yum import YumBase
 from gzip import GzipFile
-from certificate import ProductCertificate
+from rhsm.certificate import ProductCertificate
 from certlib import Directory, ProductDirectory
 
 

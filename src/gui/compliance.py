@@ -25,7 +25,7 @@ _ = gettext.gettext
 from logutil import getLogger
 log = getLogger(__name__)
 
-import certificate
+import rhsm.certificate as certificate
 import certlib
 from certlib import find_first_noncompliant_date, CertSorter
 import managerlib

@@ -29,7 +29,7 @@ from optparse import OptionParser
 import sys
 sys.path.append("/usr/share/rhsm")
 import managerlib
-import certificate
+import rhsm.certificate as certificate
 import certlib
 
 enable_debug = False

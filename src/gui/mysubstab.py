@@ -17,7 +17,7 @@ import gtk
 
 from datetime import datetime, timedelta
 from certlib import EntitlementDirectory, ProductDirectory, CertLib
-from certificate import GMT
+from rhsm.certificate import GMT
 
 import logutil
 import widgets

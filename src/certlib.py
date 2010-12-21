@@ -20,7 +20,7 @@ import os
 import syslog
 from datetime import timedelta, datetime
 from rhsm.connection import UEPConnection
-from certificate import *
+from rhsm.certificate import *
 from lock import Lock
 from logutil import getLogger
 from rhsm.config import initConfig

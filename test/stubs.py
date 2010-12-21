@@ -16,7 +16,7 @@
 from datetime import datetime, timedelta
 
 from certlib import EntitlementDirectory
-from certificate import EntitlementCertificate, Product, GMT, DateRange, \
+from rhsm.certificate import EntitlementCertificate, Product, GMT, DateRange, \
         ProductCertificate
 
 import random

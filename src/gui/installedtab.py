@@ -19,7 +19,7 @@ from datetime import datetime
 
 import widgets
 from certlib import EntitlementDirectory, ProductDirectory
-from certificate import GMT
+from rhsm.certificate import GMT
 import managerlib
 
 import gettext

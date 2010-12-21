@@ -19,7 +19,7 @@ import unittest
 
 import M2Crypto
 
-import certificate
+# TODO: move to python-rhsm test suite?
 
 from stubs import *
 
