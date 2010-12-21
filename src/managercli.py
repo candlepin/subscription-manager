@@ -157,7 +157,7 @@ class CliCommand(object):
 class CleanCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog clean [OPTIONS]"
-        shortdesc = _("removes all local consumer data, does not effect the server.")
+        shortdesc = _("removes all local consumer data, does not effect the server")
         desc = shortdesc
 
         CliCommand.__init__(self, "clean", usage, shortdesc, desc)
@@ -193,7 +193,7 @@ class IdentityCommand(CliCommand):
 
     def __init__(self):
         usage = "usage: %prog identity [OPTIONS]"
-        shortdesc = _("request a new identity certficate for this machine.")
+        shortdesc = _("request a new identity certficate for this machine")
         desc = shortdesc
 
         CliCommand.__init__(self, "identity", usage, shortdesc, desc)
@@ -248,7 +248,7 @@ class RegisterCommand(CliCommand):
 
     def __init__(self):
         usage = "usage: %prog register [OPTIONS]"
-        shortdesc = _("register the client to a Unified Entitlement Platform.")
+        shortdesc = _("register the client to RHN")
         desc = "register"
 
         CliCommand.__init__(self, "register", usage, shortdesc, desc)
@@ -358,7 +358,7 @@ class UnRegisterCommand(CliCommand):
 
     def __init__(self):
         usage = "usage: %prog unregister [OPTIONS]"
-        shortdesc = _("unregister the client from a Unified Entitlement Platform.")
+        shortdesc = _("unregister the client from RHN")
         desc = "unregister"
 
         CliCommand.__init__(self, "unregister", usage, shortdesc, desc)
@@ -383,7 +383,7 @@ class SubscribeCommand(CliCommand):
 
     def __init__(self):
         usage = "usage: %prog subscribe [OPTIONS]"
-        shortdesc = _("subscribe the registered user to a specified product or regtoken.")
+        shortdesc = _("subscribe the registered user to a specified product or regtoken")
         desc = "subscribe"
         CliCommand.__init__(self, "subscribe", usage, shortdesc, desc)
 
@@ -460,7 +460,7 @@ class UnSubscribeCommand(CliCommand):
 
     def __init__(self):
         usage = "usage: %prog unsubscribe [OPTIONS]"
-        shortdesc = _("unsubscribe the registered user from all or specific subscriptions.")
+        shortdesc = _("unsubscribe the registered user from all or specific subscriptions")
         desc = "unsubscribe"
         CliCommand.__init__(self, "unsubscribe", usage, shortdesc, desc)
 
