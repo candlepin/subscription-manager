@@ -169,6 +169,9 @@
                                     <property name="visible">True</property>
                                     <property name="xalign">1</property>
                                     <property name="stock">gtk-no</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Status</atkproperty>
+                                    </accessibility>
                                   </widget>
                                   <packing>
                                     <property name="position">0</property>
