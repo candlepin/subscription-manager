@@ -174,7 +174,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             return YELLOW
 
     def _percentage(self, subset, full_set):
-        return (float(len(subset)) / len(full_set)) * 100
+        if (len(full_set) == 0):
+            return 100
+        else:
+            return (float(len(subset)) / len(full_set)) * 100
 
     def _get_installed(self, products):
         installed_dir = ProductDirectory()
