@@ -68,6 +68,7 @@ class NetworkConfigDialog:
         self.proxyUserEntry.connect("focus-out-event", self.writeValues)
         self.proxyPasswordEntry.connect("focus-out-event", self.writeValues)
         self.xml.get_widget("closeButton").connect("clicked", self.close)
+        self.dlg.connect("delete-event", self.deleted)
     
     def setInitialValues(self):
        
@@ -141,6 +142,11 @@ class NetworkConfigDialog:
     def close(self, button):
         self.writeValues()
         self.dlg.hide()
+ 
+    def deleted(self, event, data):
+        self.writeValues()
+        self.dlg.hide()
+        return True
     
     def enableAction(self, button):
         if button.get_name() == "enableProxyButton":
