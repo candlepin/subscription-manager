@@ -131,7 +131,7 @@ class ComplianceAssistant(widgets.GladeWidget):
             'product_name': str,
             'total_contracts': int,
             'total_subscriptions': int,
-            'available_subscriptions': int,
+            'available_subscriptions': str,
             'pool_id': str, # not displayed, just for lookup
         }
 
@@ -356,7 +356,8 @@ class ComplianceAssistant(widgets.GladeWidget):
                 'product_name': entry.product_name,
                 'total_contracts': len(entry.pools),
                 'total_subscriptions': entry.quantity,
-                'available_subscriptions': entry.quantity - entry.consumed,
+                'available_subscriptions': "%s of %s" % \
+                    (entry.quantity - entry.consumed, entry.quantity),
                 'pool_id': entry.pools[0]['id'],
             })
 
