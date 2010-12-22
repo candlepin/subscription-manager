@@ -33,7 +33,7 @@
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>
-                <property name="label" translatable="yes" context="yes">&lt;b&gt;Please enter your Red Hat Entitlement Platform account information:&lt;/b&gt;</property>
+                <property name="label" translatable="yes" context="yes">&lt;b&gt;Please enter your Red Hat Network account information:&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
                 <property name="single_line_mode">True</property>
                 <accessibility>
@@ -254,10 +254,11 @@
                     </child>
                     <child>
                       <widget class="GtkCheckButton" id="auto_bind">
-                        <property name="label" translatable="yes">Automatically subscribe this system to compatible subscriptions</property>
+                        <property name="label" translatable="yes">Select the most appropriate subscriptions for this system</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="draw_indicator">True</property>
                         <accessibility>
                           <atkproperty name="AtkObject::accessible-name">auto_bind</atkproperty>
