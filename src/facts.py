@@ -6,6 +6,8 @@ _ = gettext.gettext
 
 import rhsm.config
 
+from datetime import datetime
+
 class Facts():
 
     def __init__(self):
@@ -13,39 +15,48 @@ class Facts():
         self.fact_cache_dir = "/var/lib/rhsm/facts"
         self.fact_cache = self.fact_cache_dir + "/facts.json"
 
-        # see bz #627962  
+        # see bz #627962
         # we would like to have this info, but for now, since it
         # can change constantly on laptops, it makes for a lot of
         # fact churn, so we report it, but ignore it as an indicator
         # that we need to update
         self.graylist = ['cpu.cpu_mhz']
 
-    def write(self, facts, path="/var/lib/rhsm/facts/facts.json"):
+    def write(self, facts, force=False):
         if not os.access(self.fact_cache_dir, os.R_OK):
             os.makedirs(self.fact_cache_dir)
         try:
-            f = open(path, "w+")
-            json.dump(facts, f)
+            existing_facts = self.read()
+
+            if force or facts != existing_facts:
+                f = open(self.fact_cache, "w+")
+                json.dump(facts, f)
         except IOError, e:
             print e
 
-    def read(self, path="/var/lib/rhsm/facts/facts.json"):
+    def read(self):
         cached_facts = {}
         try:
-            f = open(path)
+            f = open(self.fact_cache)
             json_buffer = f.read()
             cached_facts = json.loads(json_buffer)
         except IOError, e:
-            print _("Unable to read %s") % path
+            print _("Unable to read %s") % self.fact_cache
 
         return cached_facts
+
+    def get_last_update(self):
+        try:
+            return datetime.fromtimestamp(os.stat(self.fact_cache).st_mtime)
+        except:
+            return None
 
     def delta(self):
         """
         return a dict of any key/values that have changed
         including new keys or deleted keys
         """
-        cached_facts = self.read(self.fact_cache)
+        cached_facts = self.read()
         diff = {}
         self.facts = self.get_facts()
         # compare the dicts to see if there is a diff
@@ -101,3 +112,4 @@ class Facts():
 
         self.write(facts)
         return facts
+

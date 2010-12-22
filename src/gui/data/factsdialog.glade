@@ -28,7 +28,7 @@
               <widget class="GtkHBox" id="hbox1">
                 <property name="visible">True</property>
                 <child>
-                  <widget class="GtkLabel" id="system_facts_label">
+                  <widget class="GtkLabel" id="facts_label">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;System Facts:&lt;/b&gt;</property>
@@ -36,6 +36,31 @@
                   </widget>
                   <packing>
                     <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="last_update_title">
+                    <property name="visible">True</property>
+                    <property name="xalign">1</property>
+                    <property name="xpad">14</property>
+                    <property name="ypad">4</property>
+                    <property name="label" translatable="yes">Last Update:</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="last_update_label">
+                    <property name="visible">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Update Time</atkproperty>
+                    </accessibility>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </widget>
@@ -52,7 +77,7 @@
                 <property name="vscrollbar_policy">automatic</property>
                 <property name="shadow_type">etched-in</property>
                 <child>
-                  <widget class="GtkTreeView" id="system_facts_view">
+                  <widget class="GtkTreeView" id="facts_view">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="headers_clickable">False</property>
@@ -78,7 +103,7 @@
             <property name="visible">True</property>
             <property name="layout_style">end</property>
             <child>
-              <widget class="GtkButton" id="update_facts_button">
+              <widget class="GtkButton" id="update_button">
                 <property name="label" translatable="yes">Update Facts</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>

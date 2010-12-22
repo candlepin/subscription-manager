@@ -17,38 +17,33 @@ import os
 import gtk
 
 import managergui
+import widgets
+
+import gettext
+_ = gettext.gettext
 
 import logutil
 log = logutil.getLogger(__name__)
 
-import gettext
-_ = gettext.gettext
-gettext.textdomain("subscription-manager")
-gtk.glade.bindtextdomain("subscription-manager")
-
-DIR = os.path.dirname(__file__)
-GLADE_XML = os.path.join(DIR, "data/factsdialog.glade")
-
-class SystemFactsDialog:
+class SystemFactsDialog(widgets.GladeWidget):
     """GTK dialog for displaying the current system facts, as well as
     providing functionality to update the UEP server with the current
     system facts.
     """
 
     def __init__(self, backend, consumer, facts):
+        widget_names = ['system_facts_dialog', 'facts_view', 'update_button',
+                        'last_update_label']
+        super(SystemFactsDialog, self).__init__('factsdialog.glade', widget_names)
+
         self.consumer = consumer
         self.facts = facts
         self.backend = backend
-        glade = gtk.glade.XML(GLADE_XML)
-        glade.signal_autoconnect({
+        self.glade.signal_autoconnect({
                 "on_system_facts_dialog_delete_event" : self._hide_callback,
                 "on_close_button_clicked" : self._hide_callback,
                 "on_facts_update_button_clicked" : self._update_facts_callback
                 })
-
-        self.dialog = glade.get_widget("system_facts_dialog")
-        self.facts_view = glade.get_widget("system_facts_view")
-        self.update_button = glade.get_widget("update_facts_button")
 
         # Set up the model
         self.facts_store = gtk.TreeStore(str, str)
@@ -69,15 +64,21 @@ class SystemFactsDialog:
         # Disable the 'Update' button if there is
         # no registered consumer to update
         self.update_button.set_sensitive(bool(self.consumer.uuid))
-        self.dialog.present()
+        self.system_facts_dialog.present()
 
     def hide(self):
         """Make this dialog invisible."""
-        self.dialog.hide()
+        self.system_facts_dialog.hide()
 
     def display_facts(self):
         """Updates the list store with the current system facts."""
         self.facts_store.clear()
+
+        last_update = self.facts.get_last_update()
+        if last_update:
+            self.last_update_label.set_text(last_update.ctime())
+        else:
+            self.last_update_label.set_text(_('No previous update'))
 
         system_facts = self.facts.get_facts().items()
         if self.consumer.uuid:
@@ -98,6 +99,7 @@ class SystemFactsDialog:
 
         try:
             self.backend.uep.updateConsumerFacts(consumer_uuid, system_facts)
+            self.facts.write(system_facts, True)
         except Exception, e:
             log.error("Could not update system facts \nError: %s" % e)
             managergui.errorWindow(managergui.linkify(str(e)))
@@ -129,4 +131,5 @@ class SystemFactsDialog:
 
 
     def set_parent_window(self, window):
-        self.dialog.set_transient_for(window)
+        self.system_facts_dialog.set_transient_for(window)
+
