@@ -1,4 +1,4 @@
-.TH subscription-manager 8 "November 12, 2010" "version 1.0" "Subscription Management"  Pradeep Kilambi 
+.TH subscription-manager 8 "December 10, 2010" "version 1.0" "Subscription Management"  Deon Lackey
 .SH NAME
 subscription-manager \- Register machines and manage subscriptions to products.
 
@@ -71,16 +71,19 @@ Sets the debug level to use for verbose output.
 
 .TP
 .B --proxy=PROXY
-Use an http proxy. Format of hostname:port
+Uses an HTTP proxy. The
+.I PROXY
+name has the format
+.I hostname:port.
 
 
 .TP
 .B --proxyuser=PROXYUSERNAME
-Use username to authenticate to an http proxy.
+Gives the username to use to authenticate to the HTTP proxy.
 
 .TP
 .B --proxypass=PROXYPASSWORD
-Use password to authenticate to an http proxy.
+Gives the password to use to authenticate to the HTTP proxy.
 
 .SS REGISTER OPTIONS
 The 
@@ -196,7 +199,7 @@ command removes a subscription allocation from the machine. (This does not unins
 .TP
 .B --serial=SERIALNUMBER
 Gives the serial number of the entitlement certificate for the specific product that is being unsubscribed. Entitlement certificates for subscribed products are in a certificate, in 
-.B /etc/pki/entitlement/product/<serial_number>.pem.
+.B /etc/pki/entitlement/<serial_number>.pem.
 
 .TP
 .B --all
@@ -480,7 +483,7 @@ Certificate:
 .IP
 * /etc/pki/consumer/*.pem
 .IP
-* /etc/pki/entitlement/product/<serial>.pem
+* /etc/pki/entitlement/<serial>.pem
 .IP
 * /etc/pki/product/*.pem
 .IP
@@ -489,5 +492,5 @@ Certificate:
 * /etc/rhsm/facts/*.facts
 
 .SH AUTHORS
-Pradeep Kilambi, <pkilambi@redhat.com>
+Deon Lackey, <dlackey@redhat.com>, and Pradeep Kilambi, <pkilambi@redhat.com>
 
