@@ -121,8 +121,6 @@ class ComplianceAssistant(widgets.GladeWidget):
                                                     self._on_uncompliant_active_toggled)
         self.uncompliant_treeview.add_column("Product",
                 self.uncompliant_store['product_name'], True)
-        self.uncompliant_treeview.add_column("Contract",
-                self.uncompliant_store['contract'], True)
         self.uncompliant_treeview.add_date_column("Expiration",
                 self.uncompliant_store['end_date'], True)
         self.uncompliant_treeview.set_model(self.uncompliant_store)
@@ -141,10 +139,6 @@ class ComplianceAssistant(widgets.GladeWidget):
         self.subscriptions_treeview = MappedListTreeView(self.subscriptions_store)
         self.subscriptions_treeview.add_column("Subscription Name",
                 self.subscriptions_store['product_name'], True)
-        self.subscriptions_treeview.add_column("Total Contracts",
-                self.subscriptions_store['total_contracts'], True)
-        self.subscriptions_treeview.add_column("Total Subscriptions",
-                self.subscriptions_store['total_subscriptions'], True)
         self.subscriptions_treeview.add_column("Available Subscriptions",
                 self.subscriptions_store['available_subscriptions'], True)
 
