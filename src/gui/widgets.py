@@ -322,18 +322,38 @@ class DatePicker(gtk.Button):
         self._calendar.select_month(self._date.month - 1, self._date.year)
         self._calendar.select_day(self._date.day)
 
-        self._calendar_window.add(self._calendar)
+        vbox = gtk.VBox(spacing=3)
+        vbox.set_border_width(2)
+        vbox.pack_start(self._calendar)
+
+        button_box = gtk.HButtonBox()
+        button_box.set_layout(gtk.BUTTONBOX_END)
+        vbox.pack_start(button_box)
+
+        button = gtk.Button(_("Today"))
+        button.connect("clicked", self._today_clicked)
+        button_box.pack_start(button)
+
+        frame = gtk.Frame()
+        frame.add(vbox)
+        self._calendar_window.add(frame)
         self._calendar_window.set_position(gtk.WIN_POS_MOUSE)
         self._calendar_window.show_all()
 
         self._calendar.connect("day-selected-double-click",
                 self._calendar_clicked)
 
-
-    def _calendar_clicked(self, calendar):
-        (year, month, day) = self._calendar.get_date()
-        self._date = datetime.date(year, month + 1, day)
+    def _destroy(self):
         self._label.set_label(self._date.strftime("%x"))
         self._calendar_window.destroy()
 
         self.emit('date-picked')
+
+    def _calendar_clicked(self, calendar):
+        (year, month, day) = self._calendar.get_date()
+        self._date = datetime.date(year, month + 1, day)
+        self._destroy()
+
+    def _today_clicked(self, button):
+        self._date = datetime.date.today()
+        self._destroy()
