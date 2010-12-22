@@ -69,7 +69,6 @@ install-files: dbus-service-install compile-po
 	cp -R src/*.py ${PREFIX}/usr/share/rhsm
 	cp -R src/gui/*.py ${PREFIX}/usr/share/rhsm/gui
 	cp -R src/gui/data/*.glade ${PREFIX}/usr/share/rhsm/gui/data/
-	cp -R src/gui/data/icons/*.png ${PREFIX}/usr/share/rhsm/gui/data/icons/
 	cp -R src/gui/data/icons/*.svg ${PREFIX}/usr/share/rhsm/gui/data/icons/
 	cp -R src/gui/data/icons/16x16/subsmgr.png ${PREFIX}/usr/share/icons/hicolor/16x16/apps/
 	cp -R src/plugin/*.py ${PREFIX}/usr/lib/yum-plugins/
