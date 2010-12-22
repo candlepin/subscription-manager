@@ -109,7 +109,7 @@ class AllSubscriptionsTab(object):
             "on_overlap_checkbutton_clicked": self.filters_changed,
             "on_not_installed_checkbutton_clicked": self.filters_changed,
             "on_contains_text_checkbutton_clicked": self.filters_changed,
-            "on_contain_text_entry_changed": self.filters_changed,
+            "on_contain_text_entry_changed": self.contain_text_entry_changed,
             "on_subscribe_button_clicked": self.subscribe_button_clicked,
         })
         self.subs_treeview.get_selection().connect('changed', self.update_sub_details)
@@ -211,6 +211,17 @@ class AllSubscriptionsTab(object):
                         _("Unable to search for subscriptions"))
         else:
             self.display_pools()
+
+    def contain_text_entry_changed(self, widget):
+        """
+        Redisplay the pools based on the new search string, and check the
+        matching check box or uncheck it, depending on if there is text in
+        the entry or not.
+        """
+        text = self.contains_text_entry.get_text()
+        self.contains_text_checkbutton.set_active(len(text) > 0)
+
+        self.display_pools()
 
     def filters_changed(self, widget):
         """
