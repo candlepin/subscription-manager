@@ -139,13 +139,13 @@ class CliCommand(object):
         # Create a connection using the default configuration:
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
- 
+
         self.cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
                                            proxy_hostname=self.proxy_hostname,
                                            proxy_port=self.proxy_port,
                                            proxy_user=self.proxy_user,
                                            proxy_password=self.proxy_password)
-        
+
         # do the work, catch most common errors here:
         try:
             self._do_command()
@@ -161,6 +161,12 @@ class CleanCommand(CliCommand):
         desc = shortdesc
 
         CliCommand.__init__(self, "clean", usage, shortdesc, desc)
+
+    def _add_common_options(self):
+        """ Override common options to remove proxy options. """
+
+        self.parser.add_option("--debug", dest="debug",
+                               default=0, help=_("debug level"))
 
     def _do_command(self):
         managerlib.delete_consumer_certs()
@@ -304,7 +310,7 @@ class RegisterCommand(CliCommand):
                                             proxy_port=self.proxy_port,
                                             proxy_user=self.proxy_user,
                                             proxy_password=self.proxy_password)
-        
+
         if ConsumerIdentity.exists() and self.options.force:
             # First let's try to un-register previous consumer. This may fail
             # if consumer has already been deleted so we will continue even if
@@ -518,7 +524,7 @@ class FactsCommand(CliCommand):
         # Only require registration for updating facts
         if self.options.update:
             self.assert_should_be_registered()
-        
+
         # one or the other
         if not (self.options.list or self.options.update):
             print _("Error: Need either --list or --update, Try facts --help")
@@ -642,7 +648,7 @@ class ListCommand(CliCommand):
 class CLI:
 
     def __init__(self):
-        
+
         self.cli_commands = {}
         for clazz in [RegisterCommand, UnRegisterCommand, ListCommand, SubscribeCommand,\
                        UnSubscribeCommand, FactsCommand, IdentityCommand, \
@@ -651,7 +657,7 @@ class CLI:
             # ignore the base class
             if cmd.name != "cli":
                 self.cli_commands[cmd.name] = cmd
-        
+
 
     def _add_command(self, cmd):
         self.cli_commands[cmd.name] = cmd
@@ -743,3 +749,4 @@ def check_registration():
 
 if __name__ == "__main__":
     CLI().main()
+
