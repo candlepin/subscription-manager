@@ -70,7 +70,7 @@ class ContractSelectionWindow(object):
         self.contract_selection_treeview.append_column(column)
 
         renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn(_("Contracts Used / Available"), renderer,
+        column = gtk.TreeViewColumn(_("Used / Available"), renderer,
                 text=1)
         self.contract_selection_treeview.append_column(column)
 
