@@ -61,7 +61,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                                              text=self.store['installed_text'])
         self.top_view.append_column(products_column)
 
-        self.add_text_column(_("Contract"), 'contract')
         self.add_date_column(_("Start Date"), 'start_date')
         self.add_date_column(_("Expiration Date"), 'expiration_date')
 
@@ -110,7 +109,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             'subscription': str,
             'installed_value': float,
             'installed_text': str,
-            'contract': str,
             'start_date': str,
             'expiration_date': str,
             'serial': str,
@@ -154,7 +152,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         entry['subscription'] = order.getName()
         entry['installed_value'] = self._percentage(installed, products)
         entry['installed_text'] = '%s / %s' % (len(installed), len(products))
-        entry['contract'] = order.getContract()
         entry['start_date'] = order.getStart()
         entry['expiration_date'] = order.getEnd()
         entry['serial'] = cert.serialNumber()
