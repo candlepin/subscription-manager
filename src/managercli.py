@@ -73,9 +73,6 @@ class CliCommand(object):
         self._add_common_options()
 
         self.name = name
-        self.uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
-                                   key_file=ConsumerIdentity.keypath())
-        self.certlib = CertLib(uep=self.uep)
 
         self.proxy_url = None
         self.proxy_hostname = None
@@ -145,6 +142,8 @@ class CliCommand(object):
                                            proxy_port=self.proxy_port,
                                            proxy_user=self.proxy_user,
                                            proxy_password=self.proxy_password)
+
+        self.certlib = CertLib(uep=self.cp)
 
         # do the work, catch most common errors here:
         try:
