@@ -393,12 +393,12 @@ class MainWindow(widgets.GladeWidget):
                     '<span size="large"><b>%s</b></span>' % str(warn_count))
             # Change wording slightly if just one product out of compliance:
             if warn_count > 1:
-                self.compliance_status_label.set_text(
-                        _("You have %s products which are out of compliance.")
+                self.compliance_status_label.set_markup(
+                        _("You have <b>%s</b> products out of compliance.")
                         % warn_count)
             else:
-                self.compliance_status_label.set_text(
-                        _("You have 1 product which is out of compliance.") )
+                self.compliance_status_label.set_markup(
+                        _("You have <b>1</b> product out of compliance.") )
 
         else:
             self.compliance_status_image.set_from_file(COMPLIANT_IMG)
