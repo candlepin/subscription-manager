@@ -33,13 +33,16 @@ from utils import handle_gui_exception
 from contract_selection import ContractSelectionWindow
 from rhsm.connection import RestlibException
 
-prefix = os.path.dirname(__file__)
-ALL_SUBS_GLADE = os.path.join(prefix, "data/allsubs.glade")
-
-
-class AllSubscriptionsTab(object):
+class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def __init__(self, backend, consumer, facts):
+        widget_names = ['details_box', 'date_picker_hbox',
+                        'compatible_checkbutton', 'overlap_checkbutton',
+                        'not_installed_checkbutton', 'contains_text_entry',
+                        'month_entry', 'day_entry', 'year_entry',
+                        'active_on_checkbutton', 'subscribe_button']
+        super(AllSubscriptionsTab, self).__init__('allsubs.glade', widget_names)
+
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
@@ -47,73 +50,42 @@ class AllSubscriptionsTab(object):
         self.pool_stash = managerlib.PoolStash(self.backend, self.consumer,
                 self.facts)
 
-        self.all_subs_xml = gtk.glade.XML(ALL_SUBS_GLADE)
-        self.all_subs_vbox = self.all_subs_xml.get_widget('all_subs_vbox')
-        self.all_subs_vbox.unparent()
-
-        self.details_box = self.all_subs_xml.get_widget('details_box')
-
         today = datetime.date.today()
-
         self.date_picker = widgets.DatePicker(today)
-        date_picker_hbox = self.all_subs_xml.get_widget("date_picker_hbox")
-        date_picker_hbox.pack_start(self.date_picker)
-        date_picker_hbox.show_all()
+        self.date_picker_hbox.add(self.date_picker)
 
-        self.subs_store = storage.MappedListStore({
-            'product_name': str,
-            'bundled_count': str,
-            'pool_count': str,
-            'quantity': str,
-            'available': str,
-            'product_id': str,
-            'pool_id': str,
-            'merged_pools': gobject.TYPE_PYOBJECT,
-        })
+        self.add_text_column(_('Subscription'), 'product_name', True)
+        self.add_text_column(_('Available Subscriptions'), 'available')
 
-        self.subs_treeview = self.all_subs_xml.get_widget('all_subs_treeview')
-        self.subs_treeview.set_model(self.subs_store)
-        self._add_column(_("Subscription"), self.subs_store['product_name'])
-        self._add_column(_("# Bundled Products"), self.subs_store['bundled_count'])
-        self._add_column(_("Total Contracts"), self.subs_store['pool_count'])
-        self._add_column(_("Total Subscriptions"), self.subs_store['quantity'])
-        self._add_column(_("Available Subscriptions"), self.subs_store['available'])
-
-        self.compatible_checkbutton = self.all_subs_xml.get_widget(
-                'compatible_checkbutton')
         # This option should be selected by default:
         self.compatible_checkbutton.set_active(True)
-        self.overlap_checkbutton = self.all_subs_xml.get_widget(
-                'overlap_checkbutton')
-        self.not_installed_checkbutton = self.all_subs_xml.get_widget(
-                'not_installed_checkbutton')
-        self.contains_text_checkbutton = self.all_subs_xml.get_widget(
-                'contains_text_checkbutton')
-        self.contains_text_entry = self.all_subs_xml.get_widget(
-                'contain_text_entry')
-        self.month_entry = self.all_subs_xml.get_widget("month_entry")
-        self.day_entry = self.all_subs_xml.get_widget("day_entry")
-        self.year_entry = self.all_subs_xml.get_widget("year_entry")
         self.sub_details = widgets.SubDetailsWidget(show_contract=False)
         self.details_box.add(self.sub_details.get_widget())
 
         self.contract_selection = None
 
-        self.active_on_checkbutton = self.all_subs_xml.get_widget('active_on_checkbutton')
-
-        self.subscribe_button = self.all_subs_xml.get_widget('subscribe_button')
-
-        self.all_subs_xml.signal_autoconnect({
+        self.glade.signal_autoconnect({
             "on_search_button_clicked": self.search_button_clicked,
             "on_compatible_checkbutton_clicked": self.filters_changed,
             "on_overlap_checkbutton_clicked": self.filters_changed,
             "on_not_installed_checkbutton_clicked": self.filters_changed,
-            "on_contains_text_checkbutton_clicked": self.filters_changed,
             "on_contain_text_entry_changed": self.contain_text_entry_changed,
             "on_subscribe_button_clicked": self.subscribe_button_clicked,
         })
-        self.subs_treeview.get_selection().connect('changed', self.update_sub_details)
 
+    def get_type_map(self):
+        return {
+            'product_name': str,
+            'available': str,
+            'product_id': str,
+            'pool_id': str,
+            'merged_pools': gobject.TYPE_PYOBJECT,
+
+            # TODO:  This is not needed here - i think maybe we should get
+            #        rid of the background color stuff altogether...
+            'background': str,
+            'align': float,
+        }
 
     def show_compatible(self):
         """ Return True if we're to include pools which failed a rule check. """
@@ -136,20 +108,19 @@ class AllSubscriptionsTab(object):
     def get_filter_text(self):
         """
         Returns the text to filter subscriptions based on. Will return None
-        if the text box is empty, or the filter checkbox is not enabled.
+        if the text box is empty.
         """
-        if self.contains_text_checkbutton.get_active():
-            contains_text = self.contains_text_entry.get_text()
-            if contains_text != "":
-                return contains_text
-        return None
+        contains_text = self.contains_text_entry.get_text()
+        if not contains_text:
+            contains_text = None
 
+        return contains_text
 
     def display_pools(self):
         """
         Re-display the list of pools last queried, based on current filter options.
         """
-        self.subs_store.clear()
+        self.store.clear()
 
         merged_pools = self.pool_stash.merge_pools(
                 compatible=self.show_compatible(),
@@ -158,23 +129,14 @@ class AllSubscriptionsTab(object):
                 text=self.get_filter_text())
 
         for entry in merged_pools.values():
-            self.subs_store.add_map({
+            self.store.add_map({
                 'product_name': entry.product_name,
-                'bundled_count': entry.bundled_products,
-                'pool_count': len(entry.pools),
-                'quantity': entry.quantity,
                 'available': entry.quantity - entry.consumed,
                 'product_id': entry.product_id,
                 'pool_id': entry.pools[0]['id'], # not displayed, just for lookup later
                 'merged_pools': entry, # likewise not displayed, for subscription
+                'align': 0.5
         })
-
-    def _add_column(self, name, order):
-        column = gtk.TreeViewColumn(name, gtk.CellRendererText(), text=order)
-        self.subs_treeview.append_column(column)
-
-    def get_content(self):
-        return self.all_subs_vbox
 
     def get_label(self):
         return _("All Available Subscriptions")
@@ -191,7 +153,7 @@ class AllSubscriptionsTab(object):
             self.pb = progress.Progress(
                     _("Searching for subscriptions. Please wait."))
             self.timer = gobject.timeout_add(100, self.pb.pulse)
-            self.pb.set_parent_window(self.all_subs_vbox.get_parent_window().get_user_data())
+            self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
         except Exception, e:
             handle_gui_exception(e, _("Error fetching subscriptions from server: %s"))
 
@@ -214,13 +176,8 @@ class AllSubscriptionsTab(object):
 
     def contain_text_entry_changed(self, widget):
         """
-        Redisplay the pools based on the new search string, and check the
-        matching check box or uncheck it, depending on if there is text in
-        the entry or not.
+        Redisplay the pools based on the new search string.
         """
-        text = self.contains_text_entry.get_text()
-        self.contains_text_checkbutton.set_active(len(text) > 0)
-
         self.display_pools()
 
     def filters_changed(self, widget):
@@ -248,8 +205,8 @@ class AllSubscriptionsTab(object):
         self.contract_selection = None
 
     def subscribe_button_clicked(self, button):
-        model, tree_iter = self.subs_treeview.get_selection().get_selected()
-        pools = model.get_value(tree_iter, self.subs_store['merged_pools'])
+        model, tree_iter = self.top_view.get_selection().get_selected()
+        pools = model.get_value(tree_iter, self.store['merged_pools'])
 
         # Decide if we need to show the contract selection dialog or not.
         # if there's just one pool, shortcut right to the callback that the
@@ -266,17 +223,15 @@ class AllSubscriptionsTab(object):
 
         self.contract_selection.show()
 
-    def update_sub_details(self, widget):
+    def on_selection(self, selection):
         """ Shows details for the current selected pool. """
-        model, tree_iter = widget.get_selected()
-        if tree_iter:
-            product_name = model.get_value(tree_iter,
-                    self.subs_store['product_name'])
-            pool_id = model.get_value(tree_iter, self.subs_store['pool_id'])
+        if selection.is_valid():
+            product_name = selection['product_name']
+            pool_id = selection['pool_id']
             provided = self.pool_stash.lookup_provided_products(pool_id)
             self.sub_details.show(product_name, products=provided)
         else:
             self.sub_details.clear()
 
-        self.subscribe_button.set_sensitive(tree_iter != None)
+        self.subscribe_button.set_sensitive(selection.is_valid())
 

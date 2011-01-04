@@ -314,7 +314,7 @@ class DatePicker(gtk.Button):
 
     def _button_clicked(self, button):
         self._calendar_window = gtk.Window(gtk.WINDOW_POPUP)
-        self._calendar_window.set_modal(True)  
+        self._calendar_window.set_modal(True)
         self._calendar_window.set_transient_for(
                 self.get_window().get_user_data())
 
@@ -357,3 +357,4 @@ class DatePicker(gtk.Button):
     def _today_clicked(self, button):
         self._date = datetime.date.today()
         self._destroy()
+

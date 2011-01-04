@@ -97,19 +97,19 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['status'] = _('Future Subscription')
                         entry['compliance_note'] = _("Never Subscribed")
                     elif now > date_range.end():
-                        entry['image'] = self._render_icon(gtk.STOCK_REMOVE)
+                        entry['image'] = self._render_icon(gtk.STOCK_NO)
                         entry['status'] = _('Out of Compliance')
                         entry['compliance_note'] = \
                             _('Subscription %s is expired' % order.getSubscription())
                     else:
-                        entry['image'] = self._render_icon(gtk.STOCK_APPLY)
+                        entry['image'] = self._render_icon(gtk.STOCK_YES)
                         entry['status'] = _('In Compliance')
                         entry['compliance_note'] = \
                             _('Covered by contract %s through %s' % \
                             (order.getContract(),
                                 entry['expiration_date'].strftime("%x")))
                 else:
-                    entry['image'] = self._render_icon(gtk.STOCK_REMOVE)
+                    entry['image'] = self._render_icon(gtk.STOCK_NO)
                     entry['status'] = _('Out of Compliance')
                     entry['compliance_note'] = _("Never Subscribed")
 
