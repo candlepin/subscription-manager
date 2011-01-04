@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.93.8
+Version: 0.93.9
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management
 Group:   System Environment/Base
@@ -163,6 +163,32 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Jan 04 2011 Devan Goodwin <dgoodwin@redhat.com> 0.93.9-1
+- Resolves: #664548,#664581
+- rely on rhn-client-tools to handle entitlement selection (jbowes@redhat.com)
+- firstboot: read up2date proxy settings (jbowes@redhat.com)
+- firstboot: split firstboot into a seperate rpm (jbowes@redhat.com)
+- 664548: Fix for some subcommands (refresh ) not using proxy info as well
+  (alikins@redhat.com)
+- 664581:  Removing proxy options for clean command (jharris@redhat.com)
+- Removing header image per Paul's feedback and cleaning out unused images.
+  (jharris@redhat.com)
+- Manpage updates. (dgoodwin@redhat.com)
+- Changing registration wording per Paul's input. (jharris@redhat.com)
+- Reworking facts dialog and updating to display last update time.
+  (jharris@redhat.com)
+- gui: add a 'today' button to the calendar (jbowes@redhat.com)
+- Show x of y available in compliance assistant. (dgoodwin@redhat.com)
+- Shrink the compliance assistant. (dgoodwin@redhat.com)
+- check the contains text box when text is entered (jbowes@redhat.com)
+- Adding in spacing to compliance selection (jharris@redhat.com)
+- Remove the references to Unified Entitlement Platform in the cli
+  (bkearney@redhat.com)
+- Allow the proxy window to be reopened after a close (jbowes@redhat.com)
+- Expanding subscription view in installed tab (jharris@redhat.com)
+- Getting rid of guidelines for facts dialog (jharris@redhat.com)
+- Adding in accessible name for compliance status image. (jharris@redhat.com)
+
 * Tue Dec 21 2010 Devan Goodwin <dgoodwin@redhat.com> 0.93.8-1
 - Resolves: #663038
 - Remove certificate.py (moved to python-rhsm package) (dgoodwin@redhat.com)
