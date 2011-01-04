@@ -161,11 +161,10 @@ class CleanCommand(CliCommand):
 
         CliCommand.__init__(self, "clean", usage, shortdesc, desc)
 
-    def _add_common_options(self):
-        """ Override common options to remove proxy options. """
-
-        self.parser.add_option("--debug", dest="debug",
-                               default=0, help=_("debug level"))
+        # remove these options as per bz #664581
+        self.parser.remove_option("--proxy")
+        self.parser.remove_option("--proxyuser")
+        self.parser.remove_option("--proxypassword")
 
     def _do_command(self):
         managerlib.delete_consumer_certs()
