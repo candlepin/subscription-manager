@@ -26,6 +26,9 @@ class FactDialogTests(unittest.TestCase):
             def get_facts(self):
                 return expected_facts
 
+            def get_last_update(self):
+                return None
+
         self.expected_facts = expected_facts
         self.stub_facts = StubFacts()
         
