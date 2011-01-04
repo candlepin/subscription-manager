@@ -199,12 +199,33 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="label5">
-                                <property name="width_request">200</property>
+                              <widget class="GtkHBox" id="hbox4">
+                                <property name="width_request">180</property>
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Why is compliance important?</property>
-                                <property name="wrap">True</property>
-                                <property name="wrap_mode">word-char</property>
+                                <child>
+                                  <widget class="GtkLabel" id="label5">
+                                    <property name="visible">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">Why is compliance important?</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkImage" id="image1">
+                                    <property name="visible">True</property>
+                                    <property name="has_tooltip">True</property>
+                                    <property name="tooltip" translatable="yes">By keeping your machine in compliance with a current subscription, you have immediate access to the latest software updates as well as a clear path for support from our Red Hat Global Support Services team.</property>
+                                    <property name="xalign">0</property>
+                                    <property name="stock">gtk-info</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
                               </widget>
                               <packing>
                                 <property name="position">3</property>
