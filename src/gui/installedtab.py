@@ -54,7 +54,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         self.add_text_column(_('Version'), 'version')
         self.add_text_column(_('Compliance Status'), 'status')
-        self.add_text_column(_('Contract'), 'contract')
         self.add_date_column(_('Start Date'), 'start_date')
         self.add_date_column(_('Expiration Date'), 'expiration_date')
 
@@ -83,7 +82,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 if entitlement_cert:
                     order = entitlement_cert.getOrder()
 
-                    entry['contract'] = order.getContract()
                     entry['subscription'] = order.getName()
                     entry['start_date'] = managerlib.formatDate(
                             order.getStart())
@@ -143,7 +141,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
             'version': str,
             'status': str,
             'compliance_note': str,
-            'contract': str,
             'subscription': str,
             'start_date': str,
             'expiration_date': str,
