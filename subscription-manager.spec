@@ -38,12 +38,20 @@ Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
 Requires: pygtk2 pygtk2-libglade gnome-python2 gnome-python2-canvas
 Requires: usermode-gtk
-Requires: subscription-manager
 
 %description -n subscription-manager-gnome
 This package contains a GTK+ graphical interface for configuring and
 registering a system with a Red Hat Entitlement platform and manage
 subscriptions.
+
+%package -n subscription-manager-firstboot
+Summary: Firstboot screens for subscription manager
+Group: System Environment/Base
+Requires: %{name}-gnome = %{version}-%{release}
+Requires: rhn-setup-gnome >= 1.0.0-39
+
+%description -n subscription-manager-firstboot
+This package contains the firstboot screens for subscription manager.
 
 
 %prep
@@ -129,13 +137,9 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/rhsm/gui
 %dir %{_datadir}/rhsm/gui/data
 %dir %{_datadir}/rhsm/gui/data/icons
-%dir %{_datadir}/firstboot/modules
 %defattr(-,root,root,-)
 %{_datadir}/rhsm/gui/*
 %{_datadir}/icons/hicolor/16x16/apps/subsmgr.png
-%{_datadir}/firstboot/modules/rhsm_entitlement_choose.py*
-%{_datadir}/firstboot/modules/rhsm_login.py*
-%{_datadir}/firstboot/modules/rhsm_subscriptions.py*
 %{_datadir}/applications/subscription-manager.desktop
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(755,root,root) %{_bindir}/subscription-manager-gui
@@ -143,6 +147,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/xdg/autostart/rhsm-compliance-icon.desktop
 %{_sysconfdir}/pam.d/subscription-manager-gui
 %{_sysconfdir}/security/console.apps/subscription-manager-gui
+
+%files -n subscription-manager-firstboot
+%{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
+%{_datadir}/rhn/up2date_client/firstboot/rhsm_subscriptions.py*
 
 %post
 chkconfig --add rhsmcertd

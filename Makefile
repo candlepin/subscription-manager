@@ -63,8 +63,7 @@ install-files: dbus-service-install compile-po
 	@mkdir -p ${PREFIX}/usr/bin
 	@mkdir -p ${PREFIX}/etc/init.d
 	@mkdir -p ${PREFIX}/usr/share/icons/hicolor/16x16/apps
-	@mkdir -p ${PREFIX}/usr/share/firstboot/
-	@mkdir -p ${PREFIX}/usr/share/firstboot/modules
+	@mkdir -p ${PREFIX}/usr/share/rhn/up2date_client/firstboot/
 	cp -R po/build/* ${PREFIX}/usr/share/locale/
 	cp -R src/*.py ${PREFIX}/usr/share/rhsm
 	cp -R src/gui/*.py ${PREFIX}/usr/share/rhsm/gui
@@ -77,7 +76,7 @@ install-files: dbus-service-install compile-po
 	cp bin/* ${PREFIX}/usr/bin
 	cp src/rhsmcertd.init.d ${PREFIX}/etc/init.d/rhsmcertd
 	cp man/* ${PREFIX}/usr/share/man/man8/
-	cp src/gui/firstboot/*.py ${PREFIX}/usr/share/firstboot/modules
+	cp src/gui/firstboot/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot
 	install -m 755 etc-conf/rhsm-compliance-icon.desktop \
 		${PREFIX}/etc/xdg/autostart
 	install -m 755 etc-conf/rhsm-complianced.cron \

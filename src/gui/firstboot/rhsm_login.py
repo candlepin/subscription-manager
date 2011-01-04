@@ -10,13 +10,15 @@ from firstboot.module import Module
 import gettext
 _ = lambda x: gettext.ldgettext("firstboot", x)
 
+import rhsm
+
 sys.path.append("/usr/share/rhsm")
-import rhsm.connection as connection
 from gui import managergui
 from certlib import ConsumerIdentity
 from facts import Facts
-from gui import networkConfig
 
+sys.path.append("/usr/share/rhn")
+from up2date_client import config
 
 class moduleClass(Module, managergui.RegisterScreen):
 
@@ -26,7 +28,7 @@ class moduleClass(Module, managergui.RegisterScreen):
         """
         Module.__init__(self)
 
-        backend = managergui.Backend(connection.UEPConnection(
+        backend = managergui.Backend(rhsm.connection.UEPConnection(
             cert_file=ConsumerIdentity.certpath(),
             key_file=ConsumerIdentity.keypath()))
 
@@ -36,10 +38,50 @@ class moduleClass(Module, managergui.RegisterScreen):
 #        managergui.create_and_set_basic_connection()
         # this value is relative to when you want to load the screen
         # so check other modules before setting
-        self.priority = 1.2
+        self.priority = 200.1
         self.sidebarTitle = _("Entitlement Registration")
         self.title = _("Entitlement Platform Registration")
         self._cached_credentials = None
+
+    def _read_rhn_proxy_settings(self):
+        # Read and store rhn-setup's proxy settings, as they have been set
+        # on the prior screen (which is owned by rhn-setup)
+        up2date_cfg = config.initUp2dateConfig()
+        cfg = rhsm.config.initConfig()
+
+        if up2date_cfg['enableProxy']:
+            proxy = up2date_cfg['httpProxy']
+            if proxy:
+                try:
+                    host, port = proxy.split(':')
+                    cfg.set('server', 'proxy_hostname', host)
+                    cfg.set('server', 'proxy_port', port)
+                except ValueError:
+                    cfg.set('server', 'proxy_hostname', proxy)
+                    cfg.set('server', 'proxy_port',
+                            rhsm.config.DEFAULT_PROXY_PORT)
+            if up2date_cfg['enableProxyAuth']:
+                cfg.set('server', 'proxy_user', up2date_cfg['proxyUser'])
+                cfg.set('server', 'proxy_password',
+                        up2date_cfg['proxyPassword'])
+        else:
+            cfg.set('server', 'proxy_hostname', '')
+            cfg.set('server', 'proxy_port', '')
+            cfg.set('server', 'proxy_user', '')
+            cfg.set('server', 'proxy_password', '')
+
+        cfg.save()
+        self.backend.uep = rhsm.connection.UEPConnection(
+            host=cfg.get('server', 'hostname'),
+            ssl_port=int(cfg.get('server', 'port')),
+            handler=cfg.get('server', 'prefix'),
+            proxy_hostname=cfg.get('server', 'proxy_hostname'),
+            proxy_port=cfg.get('server', 'proxy_port'),
+            proxy_user=cfg.get('server', 'proxy_user'),
+            proxy_password=cfg.get('server', 'proxy_password'),
+            username=None, password=None,
+            cert_file=ConsumerIdentity.certpath(),
+            key_file=ConsumerIdentity.keypath())
 
     def apply(self, interface, testing=False):
         """
@@ -47,6 +89,9 @@ class moduleClass(Module, managergui.RegisterScreen):
         provided user credentials and return the appropriate result
         value.
         """
+
+        self._read_rhn_proxy_settings()
+
         credentials = self._get_credentials_hash()
 
         if credentials == self._cached_credentials and \
@@ -100,15 +145,6 @@ class moduleClass(Module, managergui.RegisterScreen):
         self._destroy_widget('register_button')
         self._destroy_widget('cancel_button')
 
-        # Add a button to launch network config for using a proxy
-        box = gtk.HButtonBox()
-        box.set_layout(gtk.BUTTONBOX_START)
-        config_button = gtk.Button(_("Proxy Configuration"))
-        config_button.connect("clicked", self._proxy_button_clicked)
-        box.pack_start(config_button)
-        self.register_dialog.pack_start(box, expand=False, fill=False)
-        self.network_config_dialog = networkConfig.NetworkConfigDialog()
-
     def initializeUI(self):
         self.initializeConsumerName()
 
@@ -136,14 +172,7 @@ class moduleClass(Module, managergui.RegisterScreen):
         but showing the screen and allowing the user to reregister if
         firstboot is run in reconfig mode.
         """
-        return self._is_mode(MODE_RECONFIG) or not ConsumerIdentity.exists()
-
-    def _is_mode(self, mode):
-        """
-        Is firstboot in the specified mode?
-        """
-        # config.mode is a bitmask off all current modes
-        return config.mode & mode == mode
+        return True
 
     def _destroy_widget(self, widget_name):
         """
@@ -173,5 +202,3 @@ class moduleClass(Module, managergui.RegisterScreen):
         widget = managergui.registration_xml.get_widget(widget_name)
         return widget.get_text()
 
-    def _proxy_button_clicked(self, widget):
-        self.network_config_dialog.show()
