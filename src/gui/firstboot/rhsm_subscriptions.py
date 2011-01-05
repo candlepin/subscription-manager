@@ -28,8 +28,13 @@ class moduleClass(Module, managergui.MainWindow):
         self.sidebarTitle = _("RHSM Subscriptions Management")
         self.title = _("Subscription Manager")
 
-        #hide the subscribe/unsubscribe sidebar button
-        self.glade.get_widget("")
+    def _show_buttons(self):
+        """
+        Override the parent class behaviour to not display register/unregister
+        buttons during firstboot
+        """
+        self.register_button.hide()
+        self.unregister_button.hide()
 
     def apply(self, interface, testing=False):
         return RESULT_SUCCESS

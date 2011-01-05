@@ -274,6 +274,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="no_show_all">True</property>
                                 <property name="use_action_appearance">False</property>
                                 <signal name="clicked" handler="on_register_button_clicked" swapped="no"/>
                               </widget>
@@ -287,6 +288,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="no_show_all">True</property>
                                 <property name="use_action_appearance">False</property>
                                 <signal name="clicked" handler="on_unregister_button_clicked" swapped="no"/>
                               </widget>

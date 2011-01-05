@@ -293,7 +293,6 @@ class MainWindow(widgets.GladeWidget):
         """
         Renders the Tools buttons dynamically.
         """
-        # Clear all existing buttons:
 
         if self.registered():
             self.register_button.hide()
