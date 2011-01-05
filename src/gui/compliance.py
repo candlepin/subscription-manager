@@ -76,8 +76,8 @@ class ComplianceAssistant(widgets.GladeWidget):
 
     """ Compliance Assistant GUI window. """
     def __init__(self, backend, consumer, facts):
-        widget_names = ['compliance_label', 
-                        'compliance_today_label', 
+        widget_names = ['compliance_label',
+                        'compliance_today_label',
                         'providing_subs_label',
                         'noncompliant_date_radiobutton',
                         'window',
@@ -89,7 +89,7 @@ class ComplianceAssistant(widgets.GladeWidget):
                         'subscribe_button',
                         'date_picker_hbox']
         super(ComplianceAssistant, self).__init__('compliance.glade', widget_names)
-    
+
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
@@ -153,12 +153,12 @@ class ComplianceAssistant(widgets.GladeWidget):
         self.details_window.add(self.sub_details.get_widget())
 
         self.first_noncompliant_radiobutton.set_active(True)
-        
+
         self.date_picker = widgets.DatePicker(date.today())
         self.date_picker.connect('date-picked', self._compliance_date_selected)
         self.date_picker_hbox.pack_start(self.date_picker, False, False)
         self.date_picker.show_all()
-        
+
         self.subscribe_button.connect('clicked', self.subscribe_button_clicked)
 
         self.glade.signal_autoconnect({
@@ -217,13 +217,13 @@ class ComplianceAssistant(widgets.GladeWidget):
         if self.last_compliant_date:
             formatted = self.format_date(self.last_compliant_date)
             self.compliance_label.set_label(
-                    _("<b>All software is in compliance until %s</b>") % formatted)
+                    _("<big><b>All software is in compliance until %s</b></big>") % formatted)
             self.first_noncompliant_radiobutton.set_label(
                     _("%s (first date of non-compliance)") % formatted)
             self.providing_subs_label.set_label(
                     _("The following subscriptions will cover the products selected on %s" % noncompliant_date.strftime("%x")))
 
-            
+
         async_stash = async.AsyncPool(self.pool_stash)
         async_stash.refresh(noncompliant_date, self._reload_callback)
 
@@ -235,10 +235,10 @@ class ComplianceAssistant(widgets.GladeWidget):
 
     def _check_for_date_change(self, widget):
         """
-        Called when the compliance date selection *may* have changed. 
+        Called when the compliance date selection *may* have changed.
         Several signals must be sent out to cover all situations and thus
-        multiple may trigger at once. As such we need to store the 
-        non-compliant date last calculated, and compare it to see if 
+        multiple may trigger at once. As such we need to store the
+        non-compliant date last calculated, and compare it to see if
         anything has changed before we trigger an expensive refresh.
         """
         d = self._get_noncompliant_date()
@@ -420,14 +420,14 @@ class ComplianceAssistant(widgets.GladeWidget):
     def subscribe_button_clicked(self, button):
         model, tree_iter = self.subscriptions_treeview.get_selection().get_selected()
         pool_id = model.get_value(tree_iter, self.subscriptions_store['pool_id'])
-        
+
         pool = self.pool_stash.all_pools[pool_id]
         try:
             self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'])
             managergui.fetch_certificates(self.backend)
         except Exception, e:
             handle_gui_exception(e, _("Error getting subscription: %s"))
-            
+
         # Just close the window?
         self.window.hide()
 
