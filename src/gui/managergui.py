@@ -89,8 +89,13 @@ class Backend(object):
     to monitor those directories for changes.
     """
 
-    def __init__(self, uep):
-        self.uep = uep
+    def __init__(self):
+        self.create_uep(cert_file=ConsumerIdentity.certpath(),
+                        key_file=ConsumerIdentity.keypath())
+
+        # we don't know the user/pass yet, so no point in
+        # creating an admin uep till we need it 
+        self.admin_uep = None
 
         self.product_dir = ProductDirectory()
         self.entitlement_dir = EntitlementDirectory()
@@ -99,6 +104,36 @@ class Backend(object):
         self.product_monitor = self._monitor(self.product_dir)
         self.entitlement_monitor = self._monitor(self.entitlement_dir)
         self.identity_monitor = gio.File(ConsumerIdentity.PATH).monitor()
+
+    # make a create that does the init
+    # and a update() for a name
+
+    def update(self):
+        self.create_uep(cert_file=ConsumerIdentity.certpath(),
+                        key_file=ConsumerIdentity.keypath())
+
+    def create_uep(self, cert_file=None, key_file=None):
+        self.uep = self._create_uep(cert_file=cert_file,
+                                    key_file=key_file)
+
+    def _create_uep(self, username=None, password=None, cert_file=None, key_file=None):
+        return connection.UEPConnection(
+            host=cfg.get('server', 'hostname'),
+            ssl_port=int(cfg.get('server', 'port')),
+            handler=cfg.get('server', 'prefix'),
+            proxy_hostname=cfg.get('server', 'proxy_hostname'),
+            proxy_port=cfg.get('server', 'proxy_port'),
+            proxy_user=cfg.get('server', 'proxy_user'),
+            proxy_password=cfg.get('server', 'proxy_password'),
+            username=username, 
+            password=password,
+            cert_file=cert_file,
+            key_file=key_file)
+
+
+
+    def create_admin_uep(self, username=None, password=None):
+        self.admin_uep = self._create_uep(username=username, password=password)
 
     def _monitor(self, directory):
         return gio.File(directory.path).monitor()
@@ -165,9 +200,7 @@ class MainWindow(widgets.GladeWidget):
                'button_bar', 'system_name_label', 'next_update_label',
                'next_update_title'])
 
-        self.backend = Backend(connection.UEPConnection(
-            cert_file=ConsumerIdentity.certpath(),
-            key_file=ConsumerIdentity.keypath()))
+        self.backend = Backend()
         self.consumer = Consumer()
         self.facts = Facts()
 
@@ -365,18 +398,7 @@ class MainWindow(widgets.GladeWidget):
         # config. We specify all these settings since they
         # are new and the default UEP init won't get them
         # (it's default args are set at class init time)
-        self.backend.uep = connection.UEPConnection(
-            host=cfg.get('server', 'hostname'),
-            ssl_port=int(cfg.get('server', 'port')),
-            handler=cfg.get('server', 'prefix'),
-            proxy_hostname=cfg.get('server', 'proxy_hostname'),
-            proxy_port=cfg.get('server', 'proxy_port'),
-            proxy_user=cfg.get('server', 'proxy_user'),
-            proxy_password=cfg.get('server', 'proxy_password'),
-            username=None, password=None,
-            cert_file=ConsumerIdentity.certpath(),
-            key_file=ConsumerIdentity.keypath())
-
+        self.backend.update()
 
 
     def _set_compliance_status(self):
@@ -492,9 +514,9 @@ class RegisterScreen:
             return True
 
         try:
-            admin_cp = connection.UEPConnection(username=username,
-                    password=password)
-            newAccount = admin_cp.registerConsumer(name=consumername,
+            self.backend.create_admin_uep(username=username,
+                                          password=password)
+            newAccount = self.backend.admin_uep.registerConsumer(name=consumername,
                     facts=self.facts.get_facts())
             managerlib.persist_consumer_cert(newAccount)
             self.consumer.reload()
