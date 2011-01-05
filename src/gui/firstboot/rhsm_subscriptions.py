@@ -28,6 +28,9 @@ class moduleClass(Module, managergui.MainWindow):
         self.sidebarTitle = _("RHSM Subscriptions Management")
         self.title = _("Subscription Manager")
 
+        #hide the subscribe/unsubscribe sidebar button
+        self.glade.get_widget("")
+
     def apply(self, interface, testing=False):
         return RESULT_SUCCESS
 

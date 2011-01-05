@@ -197,8 +197,8 @@ class MainWindow(widgets.GladeWidget):
         super(MainWindow, self).__init__('mainwindow.glade',
               ['main_window', 'notebook', 'compliance_count_label',
                'compliance_status_label', 'compliance_status_image',
-               'button_bar', 'system_name_label', 'next_update_label',
-               'next_update_title'])
+               'system_name_label', 'next_update_label',
+               'next_update_title', 'register_button', 'unregister_button'])
 
         self.backend = Backend()
         self.consumer = Consumer()
@@ -230,6 +230,12 @@ class MainWindow(widgets.GladeWidget):
 
         self.glade.signal_autoconnect({
             "on_compliant_button_clicked": self._compliant_button_clicked,
+            "on_register_button_clicked": self._register_button_clicked,
+            "on_unregister_button_clicked": self._unregister_button_clicked,
+            "on_add_sub_button_clicked": self._add_sub_button_clicked,
+            "on_view_facts_button_clicked": self._facts_button_clicked,
+            "on_proxy_config_button_clicked":
+                self._network_config_button_clicked,
         })
 
         # Register callback for when product/entitlement certs are updated
@@ -248,9 +254,9 @@ class MainWindow(widgets.GladeWidget):
         # For updating the 'Next Update' time
         gio.File(UPDATE_FILE).monitor().connect('changed', on_cert_update)
 
+        self.main_window.show_all()
         self.refresh()
 
-        self.main_window.show_all()
 
     def registered(self):
         return ConsumerIdentity.existsAndValid()
@@ -287,65 +293,14 @@ class MainWindow(widgets.GladeWidget):
         """
         Renders the Tools buttons dynamically.
         """
-        log.debug("Showing buttons.")
         # Clear all existing buttons:
-        self.button_bar.foreach(lambda widget: self.button_bar.remove(widget))
 
-        registered = self.registered()
-        if not registered:
-            self._show_register_button()
+        if self.registered():
+            self.register_button.hide()
+            self.unregister_button.show()
         else:
-            self._show_unregister_button()
-
-        self._show_add_sub_button()
-
-
-        self._show_facts_button()
-
-        self._show_network_config_button()
-
-        self.button_bar.show_all()
-
-    def _show_register_button(self):
-        """
-        Adds the register button to the button bar.
-        """
-        button = gtk.Button(label=_("Register System"))
-        button.connect("clicked", self._register_button_clicked)
-        self.button_bar.add(button)
-
-    def _show_unregister_button(self):
-        """
-        Adds the unregister button to the button bar.
-        """
-        button = gtk.Button(label=_("Unregister System"))
-        button.connect("clicked", self._unregister_button_clicked)
-        self.button_bar.add(button)
-
-    def _show_network_config_button(self):
-        """
-        Adds the network config button to the button bar.
-        """
-        button = gtk.Button(label=_("Proxy Configuration"))
-        button.connect("clicked", self._network_config_button_clicked)
-        self.button_bar.add(button)
-
-    def _show_facts_button(self):
-        """
-        Adds the show facts button to the button bar.
-        """
-        button = gtk.Button(label=_("View My System Facts"))
-        button.connect("clicked", self._facts_button_clicked)
-        self.button_bar.add(button)
-
-    def _show_add_sub_button(self):
-        """
-        Adds the dialog for manually importing a subscription.
-        """
-        log.debug("Add subscription button pressed.")
-        button = gtk.Button(label=_("Add Subscription"))
-        button.connect("clicked", self._add_sub_button_clicked)
-        self.button_bar.add(button)
+            self.register_button.show()
+            self.unregister_button.hide()
 
     def _register_button_clicked(self, widget):
         self.registration_dialog.set_parent_window(self._get_window())
