@@ -28,9 +28,7 @@ class moduleClass(Module, managergui.RegisterScreen):
         """
         Module.__init__(self)
 
-        backend = managergui.Backend(rhsm.connection.UEPConnection(
-            cert_file=ConsumerIdentity.certpath(),
-            key_file=ConsumerIdentity.keypath()))
+        backend = managergui.Backend()
 
         managergui.RegisterScreen.__init__(self, backend, managergui.Consumer(),
                 Facts())
