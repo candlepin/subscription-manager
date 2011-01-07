@@ -83,7 +83,7 @@ class ContractSelectionWindow(object):
         self.contract_selection_treeview.append_column(column)
 
     def add_pool(self, pool):
-        self.total_contracts += int(pool['quantity'])
+        self.total_contracts += 1
         self.total_contracts_label.set_text(str(self.total_contracts))
         self.subscription_name_label.set_text(pool['productName'])
 
