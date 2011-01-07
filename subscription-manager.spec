@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.93.9
+Version: 0.93.10
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management
 Group:   System Environment/Base
@@ -163,6 +163,30 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Fri Jan 07 2011 Devan Goodwin <dgoodwin@redhat.com> 0.93.10-1
+- Resolves: #668006,#667953,#667788,#664779,#664775,#664581,#666942
+- 668006: Error handling fixes. (dgoodwin@redhat.com)
+- 667953: handle empty facts.json files (alikins@redhat.com)
+- 667788: Fix contract selector total contracts count. (dgoodwin@redhat.com)
+- 664779: hide the register/unregister buttons during firstboot
+  (jbowes@redhat.com)
+- 664779: move the tool button bar buttons to glade (jbowes@redhat.com)
+- 664775: potential fix for proxy being ignored in firstboot
+  (alikins@redhat.com)
+- Moving compliance header up and making larger. (jharris@redhat.com)
+- Overhauling the all subs tab per Paul's feedback. (jharris@redhat.com)
+- Changing search button to 'Update' (jharris@redhat.com)
+- Removing contract number from my subscriptions tab (jharris@redhat.com)
+- Adding compliance info icon and text (jharris@redhat.com)
+- More UXD tweaks to the compliance sidebar - primarily wording changes
+  (jharris@redhat.com)
+- Removing contract header from installed tab (jharris@redhat.com)
+- Clean up the text a bit in the contract selection screen
+  (bkearney@redhat.com)
+- 664581: remove proxy options from clean a different way (alikins@redhat.com)
+- 666942: Contract Selection page was using product id instead of the contract
+  number (bkearney@redhat.com)
+
 * Tue Jan 04 2011 Devan Goodwin <dgoodwin@redhat.com> 0.93.9-1
 - Resolves: #664548,#664581
 - rely on rhn-client-tools to handle entitlement selection (jbowes@redhat.com)
