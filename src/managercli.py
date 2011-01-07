@@ -46,6 +46,11 @@ def handle_exception(msg, ex):
     if isinstance(ex, socket_error):
         print _('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.')
         sys.exit(-1)
+    elif isinstance(ex, connection.NetworkException):
+        # NOTE: yes this looks a lot like the socket error, but I think these
+        # were actually intended to display slightly different messages:
+        print _("Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.")
+        sys.exit(-1)
     elif isinstance(ex, connection.RestlibException):
         print _(ex.msg)
         sys.exit(-1)
@@ -336,6 +341,8 @@ class RegisterCommand(CliCommand):
         except connection.RestlibException, re:
             log.exception(re)
             systemExit(-1, re.msg)
+        except Exception, e:
+            handle_exception(_("Error during registration.") % e, e)
 
         managerlib.persist_consumer_cert(consumer)
 

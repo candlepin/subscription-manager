@@ -43,6 +43,10 @@ def handle_gui_exception(e, msg, logMsg=None):
         errorWindow(_('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.'))
     elif isinstance(e, SSL.SSLError):
         errorWindow(_('Unable to verify server\'s identity: %s' % str(e)))
+    elif isinstance(e, connection.NetworkException):
+        # NOTE: yes this looks a lot like the socket error, but I think these
+        # were actually intended to display slightly different messages:
+        errorWindow(_("Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."))
     elif isinstance(e, connection.RestlibException):
         errorWindow(msg % linkify(e.msg))
     elif isinstance(e, connection.BadCertificateException):

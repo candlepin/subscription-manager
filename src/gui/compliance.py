@@ -34,7 +34,6 @@ import storage
 import widgets
 import progress
 import async
-from rhsm.connection import RestlibException
 from utils import handle_gui_exception
 
 class MappedListTreeView(gtk.TreeView):
@@ -176,8 +175,6 @@ class ComplianceAssistant(widgets.GladeWidget):
         try:
             self.window.show()
             self._reload_screen()
-        except RestlibException, e:
-            handle_gui_exception(e, _("Error fetching subscriptions from server: %s"))
         except Exception, e:
             handle_gui_exception(e, _("Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log for more information."))
 
@@ -192,12 +189,8 @@ class ComplianceAssistant(widgets.GladeWidget):
             self.timer = None
 
         if error:
-            if type(error) == RestlibException:
-                handle_gui_exception(error,
-                        _("Unable to search for subscriptions: %s"))
-            else:
-                handle_gui_exception(error,
-                        _("Unable to search for subscriptions"))
+            handle_gui_exception(error,
+                    _("Unable to search for subscriptions"))
         else:
             self._display_uncompliant()
             self._display_subscriptions()
