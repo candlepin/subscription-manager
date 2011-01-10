@@ -74,6 +74,7 @@ if os.getuid() != 0:
 
 try:
     from gui import managergui, messageWindow
+    import logutil
 except ImportError, e:
     systemExit(2, "Unable to find Subscription Manager module.\n"
                   "Error: %s" % e)
@@ -90,6 +91,7 @@ class SubscriptionManagerService(dbus.service.Object):
         self.window.present()
 
 if __name__ == '__main__':
+    logutil.init_logger()
     try:
         bus = dbus.SessionBus()
     except dbus.exceptions.DBusException:

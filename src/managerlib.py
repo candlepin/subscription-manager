@@ -21,16 +21,16 @@ import constants
 import shutil
 import syslog
 import xml.utils.iso8601
+import logging
 from datetime import datetime, date
 from certlib import CertLib, ConsumerIdentity, \
                     ProductDirectory, EntitlementDirectory
 from certlib import system_log as inner_system_log
-from logutil import getLogger
 from rhsm.config import initConfig
 from xml.utils.iso8601 import parse
 from threading import Thread
 
-log = getLogger(__name__)
+log = logging.getLogger('rhsm-app.' + __name__)
 
 import gettext
 _ = gettext.gettext

@@ -14,6 +14,7 @@
 #
 
 import os
+import logging
 import gtk
 
 import managergui
@@ -22,8 +23,7 @@ import widgets
 import gettext
 _ = gettext.gettext
 
-import logutil
-log = logutil.getLogger(__name__)
+log = logging.getLogger('rhsm-app.' + __name__)
 
 class SystemFactsDialog(widgets.GladeWidget):
     """GTK dialog for displaying the current system facts, as well as

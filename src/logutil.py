@@ -42,13 +42,11 @@ def trace_me_more():
     return stack
 
 
-def getLogger(name):
+def init_logger():
     path = '/var/log/rhsm/rhsm.log'
     if not os.path.isdir("/var/log/rhsm"):
         os.mkdir("/var/log/rhsm")
     fmt = '%(asctime)s [%(levelname)s] %(funcName)s() @%(filename)s:%(lineno)d - %(message)s'
-
-    log = logging.getLogger(name)
 
     # Try to write to /var/log, fallback on console logging:
     try:
@@ -57,8 +55,7 @@ def getLogger(name):
         handler = logging.StreamHandler()
 
     handler.setFormatter(Formatter(fmt))
-    log.addHandler(handler)
-    log.setLevel(logging.DEBUG)
-    return log
+    handler.setLevel(logging.DEBUG)
     
-    
+    logging.getLogger().setLevel(logging.DEBUG)
+    logging.getLogger().addHandler(handler)

@@ -15,14 +15,14 @@
 # in this software or its documentation.
 #
 
+import logging
 import gettext
 _ = gettext.gettext
 
 from certlib import  ActionLock, Disconnected
-from logutil import getLogger
 from facts import Facts
 
-log = getLogger(__name__)
+log = logging.getLogger('rhsm-app.' + __name__)
 
 
 class FactLib:

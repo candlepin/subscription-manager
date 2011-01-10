@@ -18,6 +18,7 @@
 
 import os
 import sys
+import logging
 import rhsm.config
 import constants
 import rhsm.connection as connection
@@ -32,11 +33,10 @@ from M2Crypto import SSL
 import gettext
 _ = gettext.gettext
 
-from logutil import getLogger
 from httplib import socket
 from socket import error as socket_error
 
-log = getLogger(__name__)
+log = logging.getLogger('rhsm-app.' + __name__)
 
 cfg = rhsm.config.initConfig()
 

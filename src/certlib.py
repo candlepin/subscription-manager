@@ -18,15 +18,15 @@
 
 import os
 import syslog
+import logging
 from datetime import timedelta, datetime
 from rhsm.connection import UEPConnection
 from rhsm.certificate import *
 from lock import Lock
-from logutil import getLogger
 from rhsm.config import initConfig
 
 
-log = getLogger(__name__)
+log = logging.getLogger('rhsm-app.' + __name__)
 
 import gettext
 _ = gettext.gettext

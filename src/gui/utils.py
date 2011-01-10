@@ -14,6 +14,7 @@
 #
 
 import re
+import logging
 from socket import error as socket_error
 from M2Crypto import SSL
 
@@ -22,8 +23,8 @@ _ = gettext.gettext
 
 import rhsm.connection as connection
 import messageWindow
-from logutil import getLogger
-log = getLogger(__name__)
+
+log = logging.getLogger('rhsm-app.' + __name__)
 
 def handle_gui_exception(e, msg, logMsg=None):
     """

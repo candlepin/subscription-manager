@@ -48,9 +48,7 @@ if os.getuid() != 0:
 try:
     # NOTE: importing
     import managercli
-    from logutil import getLogger
     from managercli import handle_exception
-    logger = getLogger(__name__)
 except KeyboardInterrupt:
     systemExit(0, "\nUser interrupted process.")
 except ImportError, e:
@@ -59,6 +57,9 @@ except ImportError, e:
 
 from managerlib import configure_i18n
 configure_i18n()
+
+import logutil
+logutil.init_logger()
 
 def main():
     # execute

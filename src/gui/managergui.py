@@ -19,6 +19,7 @@
 
 import os
 import socket
+import logging
 
 import gio
 import gtk
@@ -49,8 +50,7 @@ _ = gettext.gettext
 gettext.textdomain("subscription-manager")
 gtk.glade.bindtextdomain("subscription-manager")
 
-from logutil import getLogger
-log = getLogger(__name__)
+log = logging.getLogger('rhsm-app.' + __name__)
 
 prefix = os.path.dirname(__file__)
 COMPLIANT_IMG = os.path.join(prefix, "data/icons/compliant.svg")

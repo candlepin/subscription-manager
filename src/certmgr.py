@@ -95,9 +95,11 @@ def main():
     print _('done')
 
 if __name__ == '__main__':
-    import logutil
+    import logging
     import sys
-    log = logutil.getLogger(__name__)
+    import logutil
+    logutil.init_logger()
+    log = logging.getLogger('rhsm-app.' + __name__)
     try:
         main()
     except Exception, e:

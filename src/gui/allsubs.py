@@ -15,14 +15,14 @@
 
 import datetime
 import os
+import logging
 import gtk
 import gobject
 import progress
 import gettext
 _ = gettext.gettext
 
-from logutil import getLogger
-log = getLogger(__name__)
+log = logging.getLogger('rhsm-app.' + __name__)
 import managergui
 import managerlib
 

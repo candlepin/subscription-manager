@@ -19,8 +19,6 @@ import os
 import shutil
 from OpenSSL.crypto import load_certificate, FILETYPE_PEM
 
-from logutil import getLogger
-log = getLogger(__name__)
 _ = gettext.gettext
 
 import widgets

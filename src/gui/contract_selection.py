@@ -20,8 +20,6 @@ import gtk.glade
 import gettext
 _ = gettext.gettext
 
-from logutil import getLogger
-log = getLogger(__name__)
 import widgets
 
 prefix = os.path.dirname(__file__)

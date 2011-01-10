@@ -18,12 +18,12 @@ import gtk
 import gobject
 import locale
 import gettext
+import logging
 from datetime import date, datetime
 
 _ = gettext.gettext
 
-from logutil import getLogger
-log = getLogger(__name__)
+log = logging.getLogger('rhsm-app.' + __name__)
 
 import rhsm.certificate as certificate
 import certlib

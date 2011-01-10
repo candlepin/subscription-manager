@@ -17,13 +17,13 @@
 
 import os
 import string
+import logging
 from urllib import basejoin
 from rhsm.config import initConfig
 from certlib import Path, EntitlementDirectory, ActionLock
 from iniparse import ConfigParser as Parser
-from logutil import getLogger
 
-log = getLogger(__name__)
+log = logging.getLogger('rhsm-app.' + __name__)
 
 
 class RepoLib:

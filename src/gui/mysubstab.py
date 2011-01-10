@@ -19,11 +19,8 @@ from datetime import datetime, timedelta
 from certlib import EntitlementDirectory, ProductDirectory, CertLib
 from rhsm.certificate import GMT
 
-import logutil
 import widgets
 from utils import handle_gui_exception
-
-log = logutil.getLogger(__name__)
 
 import gettext
 _ = gettext.gettext
