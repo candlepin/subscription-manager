@@ -17,8 +17,10 @@
 
 import os
 import sys
-sys.path.append('/usr/share/rhsm')
 from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
+
+sys.path.append('/usr/share/rhsm')
+import logutil
 from repolib import RepoLib, EntitlementDirectory
 
 requires_api_version = '2.5'
@@ -64,6 +66,7 @@ def config_hook(conduit):
     """ update """
     # register rpm name for yum history recording"
     conduit.registerPackageName("subscription-manager")
+    logutil.init_logger_for_yum()
     try:
         update(conduit)
         warnExpired(conduit)

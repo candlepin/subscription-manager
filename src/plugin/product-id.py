@@ -17,8 +17,10 @@
 
 import os
 import sys
-sys.path.append('/usr/share/rhsm')
 from yum.plugins import TYPE_CORE
+
+sys.path.append('/usr/share/rhsm')
+import logutil
 from productid import ProductManager
 from certlib import Path
 
@@ -42,6 +44,7 @@ def postverifytrans_hook(conduit):
     """
     # register rpm name for yum history recording"
     conduit.registerPackageName("subscription-manager")
+    logutil.init_logger_for_yum()
     chroot()
     try:
         pm = ProductManager()
