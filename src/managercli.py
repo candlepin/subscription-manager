@@ -22,18 +22,19 @@ import logging
 import rhsm.config
 import constants
 import rhsm.connection as connection
-import optparse
+#import optparse
 from optparse import OptionParser
-from certlib import CertLib, ConsumerIdentity, ProductDirectory, EntitlementDirectory
+from certlib import CertLib, ConsumerIdentity
+#, ProductDirectory, EntitlementDirectory
 import managerlib
 import gettext
 from facts import Facts
 from M2Crypto import X509
 from M2Crypto import SSL
-import gettext
+#import gettext
 _ = gettext.gettext
 
-from httplib import socket
+#from httplib import socket
 from socket import error as socket_error
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -389,6 +390,43 @@ class UnRegisterCommand(CliCommand):
             handle_exception("Unregister failed", e)
         print(_("System has been un-registered."))
 
+class ActivateCommand(CliCommand):
+
+    def __init__(self):
+        usage = "usage: %prog activate [OPTIONS]"
+        shortdesc = _("activate the registered user to a specified product")
+        desc = "activate"
+        CliCommand.__init__(self, "activate", usage, shortdesc, desc)
+
+        self.parser.add_option("--email", dest="email", action='store',
+                               help=_("optional email address to notify when "
+                               "token activation is complete."))
+        self.parser.add_option("--locale", dest="locale", action='store',
+                               help=_("optional language to use for email "
+                               "notification when token activation is "
+                               "complete. Used with --email only. Examples: en-us, de-de"))
+
+    def _validate_options(self):
+        pass
+
+    def _do_command(self):
+        """
+        Executes the command.
+        """
+        self._validate_options()
+        consumer = check_registration()['uuid']
+
+        try:
+            # update facts first, if we need to
+            facts = Facts()
+
+            if facts.delta():
+                self.cp.updateConsumerFacts(consumer, facts.get_facts())
+
+            self.cp.activateMachine(consumer, self.options.email, self.options.locale)
+
+        except Exception, e:
+            handle_exception("Unable to activate: %s" % e, e)
 
 class SubscribeCommand(CliCommand):
 
@@ -657,7 +695,7 @@ class CLI:
         self.cli_commands = {}
         for clazz in [RegisterCommand, UnRegisterCommand, ListCommand, SubscribeCommand,\
                        UnSubscribeCommand, FactsCommand, IdentityCommand, \
-                       RefreshCommand, CleanCommand]:
+                       RefreshCommand, CleanCommand, ActivateCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":
