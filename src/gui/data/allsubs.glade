@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy project-wide -->
@@ -7,6 +7,7 @@
       <widget class="GtkVBox" id="content">
         <property name="visible">True</property>
         <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
           <widget class="GtkHBox" id="hbox3">
@@ -44,11 +45,10 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">Search</atkproperty>
                 </accessibility>
-                <signal name="clicked" handler="on_search_button_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_search_button_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -71,13 +71,13 @@
               <widget class="GtkEntry" id="contains_text_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">●</property>
+                <property name="invisible_char">&#x25CF;</property>
                 <property name="width_chars">15</property>
                 <property name="invisible_char_set">True</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">Text in Subscription</atkproperty>
                 </accessibility>
-                <signal name="changed" handler="on_contain_text_entry_changed" swapped="no"/>
+                <signal name="changed" handler="on_contain_text_entry_changed"/>
               </widget>
               <packing>
                 <property name="position">4</property>
@@ -104,12 +104,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="draw_indicator">True</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">Match Hardware</atkproperty>
                 </accessibility>
-                <signal name="clicked" handler="on_compatible_checkbutton_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_compatible_checkbutton_clicked"/>
               </widget>
               <packing>
                 <property name="top_attach">1</property>
@@ -130,12 +129,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="draw_indicator">True</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">Overlap</atkproperty>
                 </accessibility>
-                <signal name="clicked" handler="on_overlap_checkbutton_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_overlap_checkbutton_clicked"/>
               </widget>
               <packing>
                 <property name="left_attach">2</property>
@@ -150,12 +148,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="draw_indicator">True</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">Not Installed</atkproperty>
                 </accessibility>
-                <signal name="clicked" handler="on_not_installed_checkbutton_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_not_installed_checkbutton_clicked"/>
               </widget>
               <packing>
                 <property name="left_attach">1</property>
@@ -180,6 +177,7 @@
         <child>
           <widget class="GtkVPaned" id="vpaned1">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <property name="position">2</property>
             <child>
               <widget class="GtkScrolledWindow" id="scrolledwindow1">
@@ -208,6 +206,7 @@
               <widget class="GtkVBox" id="details_box">
                 <property name="height_request">150</property>
                 <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <placeholder/>
                 </child>
@@ -233,8 +232,7 @@
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
-                <signal name="clicked" handler="on_subscribe_button_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_subscribe_button_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
