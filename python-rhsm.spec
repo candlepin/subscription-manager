@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.94.13
+Version: 0.94.14
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -57,6 +57,10 @@ rm -rf %{buildroot}
 %{python_sitelib}/rhsm-*.egg-info
 
 %changelog
+* Wed Jan 12 2011 Devan Goodwin <dgoodwin@redhat.com> 0.94.14-1
+- Related: #667829
+- Initialized to use tito. (jbowes@redhat.com)
+
 * Wed Jan 12 2011 jesus m. rodriguez <jesusr@redhat.com> 0.94.13-1
 - 667829: handle proxy config options being absent from rhsm.conf (alikins@redhat.com)
 
