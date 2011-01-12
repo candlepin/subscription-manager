@@ -347,7 +347,7 @@ class RegisterCommand(CliCommand):
             log.exception(re)
             systemExit(-1, re.msg)
         except Exception, e:
-            handle_exception(_("Error during registration.") % e, e)
+            handle_exception(_("Error during registration: %s") % e, e)
 
         managerlib.persist_consumer_cert(consumer)
 
