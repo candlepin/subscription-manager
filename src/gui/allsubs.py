@@ -213,6 +213,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.contract_selection = ContractSelectionWindow(
                 self._contract_selected, self._contract_selection_cancelled)
 
+        self.contract_selection.set_parent_window(self.content.get_parent_window().get_user_data())
+
         for pool in pools.pools:
             self.contract_selection.add_pool(pool)
 

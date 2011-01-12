@@ -90,6 +90,9 @@ class ContractSelectionWindow(object):
                 pool['startDate'], pool['endDate'], pool['productName'], pool]
         self.model.append(row)
     
+    def set_parent_window(self, window):
+        self.contract_selection_win.set_transient_for(window)
+
     def _cancel_button_clicked(self, button):
         self._cancel_callback()
 
