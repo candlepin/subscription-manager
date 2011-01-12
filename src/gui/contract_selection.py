@@ -77,7 +77,7 @@ class ContractSelectionWindow(object):
         self.contract_selection_treeview.append_column(column)
 
         renderer = widgets.CellRendererDate()
-        column = gtk.TreeViewColumn(_("Expiration Date"), renderer, date=3)
+        column = gtk.TreeViewColumn(_("End Date"), renderer, date=3)
         self.contract_selection_treeview.append_column(column)
 
     def add_pool(self, pool):

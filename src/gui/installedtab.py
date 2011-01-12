@@ -55,7 +55,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.add_text_column(_('Version'), 'version')
         self.add_text_column(_('Compliance Status'), 'status')
         self.add_date_column(_('Start Date'), 'start_date')
-        self.add_date_column(_('Expiration Date'), 'expiration_date')
+        self.add_date_column(_('End Date'), 'expiration_date')
 
         self.update_products()
 
