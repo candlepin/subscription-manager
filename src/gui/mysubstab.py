@@ -58,7 +58,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                                              text=self.store['installed_text'])
         self.top_view.append_column(products_column)
 
-        self.add_date_column(_("Expiration Date"), 'expiration_date')
+        self.add_date_column(_("End Date"), 'expiration_date')
 
         self.update_subscriptions()
 

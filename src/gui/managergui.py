@@ -33,7 +33,7 @@ import rhsm.config as config
 import constants
 from facts import Facts
 from certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \
-        CertLib, CertSorter
+        CertLib, CertSorter, find_first_noncompliant_date
 
 import factsgui
 import widgets
@@ -195,10 +195,10 @@ class MainWindow(widgets.GladeWidget):
     """
     def __init__(self):
         super(MainWindow, self).__init__('mainwindow.glade',
-              ['main_window', 'notebook', 'compliance_count_label',
-               'compliance_status_label', 'compliance_status_image',
-               'system_name_label', 'next_update_label',
-               'next_update_title', 'register_button', 'unregister_button'])
+              ['main_window', 'notebook', 'compliance_status_label',
+               'compliance_status_image', 'system_name_label',
+               'next_update_label', 'next_update_title', 'register_button',
+               'unregister_button', 'compliant_button'])
 
         self.backend = Backend()
         self.consumer = Consumer()
@@ -256,7 +256,6 @@ class MainWindow(widgets.GladeWidget):
 
         self.main_window.show_all()
         self.refresh()
-
 
     def registered(self):
         return ConsumerIdentity.existsAndValid()
@@ -365,8 +364,7 @@ class MainWindow(widgets.GladeWidget):
 
         if warn_count > 0:
             self.compliance_status_image.set_from_file(NON_COMPLIANT_IMG)
-            self.compliance_count_label.set_markup(
-                    '<span size="large"><b>%s</b></span>' % str(warn_count))
+            self.compliant_button.show()
             # Change wording slightly if just one product out of compliance:
             if warn_count > 1:
                 self.compliance_status_label.set_markup(
@@ -377,10 +375,12 @@ class MainWindow(widgets.GladeWidget):
                         _("You have <b>1</b> product out of compliance.") )
 
         else:
+            first_noncompliant = find_first_noncompliant_date()
             self.compliance_status_image.set_from_file(COMPLIANT_IMG)
-            self.compliance_count_label.set_text("")
             self.compliance_status_label.set_text(
-                    _("Your system is compliant.") )
+                    _("All products are in compliance until %s") % \
+                            first_noncompliant.strftime("%x") )
+            self.compliant_button.hide()
 
     def _set_system_name(self):
         self.consumer.reload()

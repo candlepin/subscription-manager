@@ -69,7 +69,7 @@
                               <widget class="GtkLabel" id="expiration_date_label">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Expiration Date:&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;End Date:&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </widget>
                               <packing>
@@ -160,7 +160,7 @@
                                 <property name="left_margin">10</property>
                                 <property name="cursor_visible">False</property>
                                 <accessibility>
-                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Expiration Date</atkproperty>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">End Date</atkproperty>
                                 </accessibility>
                               </widget>
                               <packing>
