@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.93.11
+Version: 0.94.0
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
