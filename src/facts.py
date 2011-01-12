@@ -43,7 +43,10 @@ class Facts():
         except IOError, e:
             print _("Unable to read %s") % self.fact_cache
         except json.decoder.JSONDecodeError:
-            print _("Unable to parse json file %s") % self.fact_cache
+            # no need to show the user, they can't really do
+            # anything about it, and we ignore it otherwise
+            # see bz #667953
+            pass
 
         return cached_facts
 
