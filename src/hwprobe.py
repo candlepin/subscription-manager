@@ -27,7 +27,7 @@ import ethtool
 import socket
 import commands
 
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, CalledProcessError
 
 class Hardware:
 
@@ -168,9 +168,16 @@ class Hardware:
 
         self.allhw.update(virt_dict)
         return virt_dict
-        
+
     def _get_output(self, cmd):
-        return Popen([cmd], stdout=PIPE).communicate()[0].strip()
+        process = Popen([cmd], stdout=PIPE)
+        output = process.communicate()[0].strip()
+
+        returncode = process.poll()
+        if returncode:
+            raise CalledProcessError(returncode, cmd, output=output)
+
+        return output
 
     def getAll(self):
         self.getUnameInfo()
