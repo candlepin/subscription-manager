@@ -142,12 +142,21 @@ class UpdateAction(Action):
         for cert in report.added:
             system_log("Added subscription for '%s' contract '%s'" % \
                 (cert.getOrder().getName(), cert.getOrder().getContract()))
+            for product in cert.getProducts():
+                system_log("Added subscription for product '%s'" % \
+                    (product.getName()))
         for cert in report.rogue:
             system_log("Removed subscription for '%s' contract '%s'" % \
                 (cert.getOrder().getName(), cert.getOrder().getContract()))
+            for product in cert.getProducts():
+                system_log("Removed subscription for product '%s'" % \
+                    (product.getName()))
         for cert in report.expnd:
             system_log("Expired subscription for '%s' contract '%s'" % \
                 (cert.getOrder().getName(), cert.getOrder().getContract()))
+            for product in cert.getProducts():
+                system_log("Expired subscription for product '%s'" % \
+                    (product.getName()))
 
     def getLocal(self, report):
         local = {}
@@ -567,15 +576,16 @@ class UpdateReport:
         s.append(title)
         if certificates:
             for c in certificates:
-                p = c.getProduct()
-                if not p:
-                   p = c.getOrder()
-
-                s.append('%s[sn:%d (%s,) @ %s]' % \
-                    (indent,
-                     c.serialNumber(),
-                     p.getName(),
-                     c.path))
+                products = c.getProducts()
+                if not products:
+                   product = c.getOrder()
+                   
+                for product in products:
+                    s.append('%s[sn:%d (%s,) @ %s]' % \
+                        (indent,
+                         c.serialNumber(),
+                         product.getName(),
+                         c.path))
         else:
             s.append('%s<NONE>' % indent)
 
