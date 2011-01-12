@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.93.10
+Version: 0.93.11
 Release: 1%{?dist}
 Summary: Supported tools and libraries for subscription and repo Management
 Group:   System Environment/Base
@@ -163,6 +163,15 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Wed Jan 12 2011 Devan Goodwin <dgoodwin@redhat.com> 0.93.11-1
+- Resolves: #665122,#668058,#668051
+- Config update. (dgoodwin@redhat.com)
+- 665122: log to rhsm.log in the plugins with the new logger setup
+  (jbowes@redhat.com)
+- 665122: initialize logging once for the whole app (jbowes@redhat.com)
+- 668058: Remove the fuel gage from the title bar (bkearney@redhat.com)
+- 668051: Remove the start date column (bkearney@redhat.com)
+
 * Fri Jan 07 2011 Devan Goodwin <dgoodwin@redhat.com> 0.93.10-1
 - Resolves: #668006,#667953,#667788,#664779,#664775,#664581,#666942
 - 668006: Error handling fixes. (dgoodwin@redhat.com)
