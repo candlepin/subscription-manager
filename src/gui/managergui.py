@@ -35,6 +35,7 @@ from facts import Facts
 from certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \
         CertLib, CertSorter
 
+import activate
 import factsgui
 import widgets
 from installedtab import InstalledProductsTab
@@ -94,7 +95,7 @@ class Backend(object):
                         key_file=ConsumerIdentity.keypath())
 
         # we don't know the user/pass yet, so no point in
-        # creating an admin uep till we need it 
+        # creating an admin uep till we need it
         self.admin_uep = None
 
         self.product_dir = ProductDirectory()
@@ -125,7 +126,7 @@ class Backend(object):
             proxy_port=cfg.get('server', 'proxy_port'),
             proxy_user=cfg.get('server', 'proxy_user'),
             proxy_password=cfg.get('server', 'proxy_password'),
-            username=username, 
+            username=username,
             password=password,
             cert_file=cert_file,
             key_file=key_file)
@@ -198,7 +199,8 @@ class MainWindow(widgets.GladeWidget):
               ['main_window', 'notebook', 'compliance_count_label',
                'compliance_status_label', 'compliance_status_image',
                'system_name_label', 'next_update_label',
-               'next_update_title', 'register_button', 'unregister_button'])
+               'next_update_title', 'register_button', 'unregister_button',
+               'activate_button'])
 
         self.backend = Backend()
         self.consumer = Consumer()
@@ -218,6 +220,8 @@ class MainWindow(widgets.GladeWidget):
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
         self.network_config_dialog.xml.get_widget("closeButton").connect("clicked", self._config_changed)
 
+        self.activate_dialog = activate.ActivationDialog(self.backend, self.consumer)
+
         self.installed_tab = InstalledProductsTab(self.backend, self.consumer,
                 self.facts)
         self.my_subs_tab = MySubscriptionsTab(self.backend, self.consumer,
@@ -236,6 +240,7 @@ class MainWindow(widgets.GladeWidget):
             "on_view_facts_button_clicked": self._facts_button_clicked,
             "on_proxy_config_button_clicked":
                 self._network_config_button_clicked,
+            "on_activate_button_clicked": self._activate_button_clicked,
         })
 
         # Register callback for when product/entitlement certs are updated
@@ -301,6 +306,16 @@ class MainWindow(widgets.GladeWidget):
             self.register_button.show()
             self.unregister_button.hide()
 
+        # Check if consumer can activate a subscription - if an identity cert exists
+        can_activate = False
+
+        if self.consumer.uuid:
+            consumer = self.backend.uep.getConsumer(self.consumer.uuid, None, None)
+            can_activate = consumer['canActivate']
+
+        self.activate_button.set_sensitive(can_activate)
+
+
     def _register_button_clicked(self, widget):
         self.registration_dialog.set_parent_window(self._get_window())
         self.registration_dialog.show()
@@ -346,6 +361,10 @@ class MainWindow(widgets.GladeWidget):
             messageWindow.OkDialog(messageWindow.wrap_text(
                 _("You must register before using the compliance assistant.")),
                 self._get_window())
+
+    def _activate_button_clicked(self, widget):
+        self.activate_dialog.set_parent_window(self._get_window())
+        self.activate_dialog.show()
 
     def _config_changed(self, widget):
         # update the backend's UEP in case we changed proxy

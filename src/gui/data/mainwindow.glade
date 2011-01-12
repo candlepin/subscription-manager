@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy project-wide -->
@@ -11,6 +11,7 @@
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
         <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
           <widget class="GtkHBox" id="hbox3">
@@ -120,6 +121,7 @@
               <widget class="GtkVBox" id="vbox2">
                 <property name="width_request">200</property>
                 <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <widget class="GtkFrame" id="compliance_frame">
@@ -134,6 +136,7 @@
                         <child>
                           <widget class="GtkVBox" id="vbox3">
                             <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">12</property>
                             <child>
                               <widget class="GtkHBox" id="hbox2">
@@ -192,7 +195,7 @@
                                 <accessibility>
                                   <atkproperty name="AtkObject::accessible-name" translatable="yes">Become Compliant</atkproperty>
                                 </accessibility>
-                                <signal name="clicked" handler="on_compliant_button_clicked" swapped="no"/>
+                                <signal name="clicked" handler="on_compliant_button_clicked"/>
                               </widget>
                               <packing>
                                 <property name="position">2</property>
@@ -267,6 +270,7 @@
                         <child>
                           <widget class="GtkVBox" id="button_bar">
                             <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">12</property>
                             <child>
                               <widget class="GtkButton" id="register_button">
@@ -275,8 +279,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="no_show_all">True</property>
-                                <property name="use_action_appearance">False</property>
-                                <signal name="clicked" handler="on_register_button_clicked" swapped="no"/>
+                                <signal name="clicked" handler="on_register_button_clicked"/>
                               </widget>
                               <packing>
                                 <property name="position">0</property>
@@ -289,8 +292,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="no_show_all">True</property>
-                                <property name="use_action_appearance">False</property>
-                                <signal name="clicked" handler="on_unregister_button_clicked" swapped="no"/>
+                                <signal name="clicked" handler="on_unregister_button_clicked"/>
                               </widget>
                               <packing>
                                 <property name="position">1</property>
@@ -302,11 +304,22 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="use_action_appearance">False</property>
-                                <signal name="clicked" handler="on_add_sub_button_clicked" swapped="no"/>
+                                <signal name="clicked" handler="on_add_sub_button_clicked"/>
                               </widget>
                               <packing>
                                 <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkButton" id="activate_button">
+                                <property name="label" translatable="yes">Activate a Subscription</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_activate_button_clicked"/>
+                              </widget>
+                              <packing>
+                                <property name="position">3</property>
                               </packing>
                             </child>
                             <child>
@@ -315,11 +328,10 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="use_action_appearance">False</property>
-                                <signal name="clicked" handler="on_view_facts_button_clicked" swapped="no"/>
+                                <signal name="clicked" handler="on_view_facts_button_clicked"/>
                               </widget>
                               <packing>
-                                <property name="position">3</property>
+                                <property name="position">4</property>
                               </packing>
                             </child>
                             <child>
@@ -328,11 +340,10 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="use_action_appearance">False</property>
-                                <signal name="clicked" handler="on_proxy_config_button_clicked" swapped="no"/>
+                                <signal name="clicked" handler="on_proxy_config_button_clicked"/>
                               </widget>
                               <packing>
-                                <property name="position">4</property>
+                                <property name="position">5</property>
                               </packing>
                             </child>
                           </widget>
