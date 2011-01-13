@@ -88,7 +88,7 @@ class RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
             httpslib.HTTPSConnection.endheaders(self)
     #        httpslib.HTTPSConnection.endheaders(self, body)
 
-        
+
 
 class Restlib(object):
     """
@@ -157,14 +157,14 @@ class Restlib(object):
                                             username=self.proxy_user,
                                             password=self.proxy_password,
                                             ssl_context=context)
-            # this connection class wants the full url 
+            # this connection class wants the full url
             handler = "https://%s:%s%s" % (self.host, self.ssl_port, handler)
             log.info("handler: %s" % handler)
         else:
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
 
         conn.request(request_type, handler,
-                     body=json.dumps(info), 
+                     body=json.dumps(info),
                      headers=self.headers)
 
         response = conn.getresponse()
@@ -189,7 +189,7 @@ class Restlib(object):
                 if str(response['status']) in ["404", "500", "502", "503", "504"]:
                     log.error('remote server status code: ' + str(response['status']))
                     raise RemoteServerException(response['status'])
-                else: 
+                else:
                     raise NetworkException(response['status'])
 
             raise RestlibException(response['status'],
@@ -239,7 +239,7 @@ class UEPConnection:
         self.host = host
         self.ssl_port = ssl_port
         self.handler = handler
-        
+
         self.proxy_hostname = proxy_hostname
         self.proxy_port = proxy_port
         self.proxy_user = proxy_user
@@ -438,4 +438,16 @@ class UEPConnection:
         method = "/consumers/%s" % consumerId
         return self.conn.request_post(method)
 
+    def activateMachine(self, consumerId, email=None, lang=None):
+        """
+        Activate a subscription by machine, information is located in the
+        consumer facts
+        """
+        method = "/subscriptions?consumer_uuid=%s" % consumerId
+        if email:
+            method += "&email=%s" % email
+            if not lang:
+                lang = locale.getdefaultlocale()[0].lower().replace('_', '-')
+            method += "&email_locale=%s" % lang
+        return self.conn.request_post(method)
 
