@@ -308,6 +308,11 @@ class DatePicker(gtk.Button):
 
         self._calendar = None
 
+        # BZ 668048 - I have no idea why this is needed now...
+        self.show()
+        self._hbox.show()
+        self._label.show()
+
     @property
     def date(self):
         return self._date
