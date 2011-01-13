@@ -52,6 +52,10 @@ def handle_exception(msg, ex):
         # were actually intended to display slightly different messages:
         print _("Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.")
         sys.exit(-1)
+    elif isinstance(ex, connection.RemoteServerException):
+        # This is what happens when there's an issue with the server on the other side of the wire
+        print _("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.")
+        sys.exit(-1)
     elif isinstance(ex, connection.RestlibException):
         print _(ex.msg)
         sys.exit(-1)
