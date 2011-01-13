@@ -48,6 +48,9 @@ def handle_gui_exception(e, msg, logMsg=None):
         # NOTE: yes this looks a lot like the socket error, but I think these
         # were actually intended to display slightly different messages:
         errorWindow(_("Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."))
+    elif isinstance(e, connection.RemoteServerException):
+        # This is what happens when there's an issue with the server on the other side of the wire
+        errorWindow(_("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."))
     elif isinstance(e, connection.RestlibException):
         errorWindow(msg % linkify(e.msg))
     elif isinstance(e, connection.BadCertificateException):
