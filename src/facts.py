@@ -42,8 +42,11 @@ class Facts():
             cached_facts = json.loads(json_buffer)
         except IOError, e:
             print _("Unable to read %s") % self.fact_cache
-        except json.decoder.JSONDecodeError:
-            print _("Unable to parse json file %s") % self.fact_cache
+        except ValueError:
+            # see bz #669208, #667953
+            # ignore facts file parse errors, we are going to generate
+            # a new as if it didn't exist
+            pass
 
         return cached_facts
 
