@@ -331,6 +331,9 @@ class MainWindow(widgets.GladeWidget):
                     logMsg="Consumer may need to be manually cleaned up: %s" %
                     self.consumer.uuid)
         self.consumer.reload()
+        # we've unregistered, clear pools from all subscriptionst tab
+        # so it's correct if we reshow it
+        self.all_subs_tab.clear_pools()
         self.refresh()
 
     def _unregister_button_clicked(self, widget):

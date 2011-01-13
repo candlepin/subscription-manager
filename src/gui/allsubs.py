@@ -114,6 +114,13 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             contains_text = None
 
         return contains_text
+    
+    def clear_pools(self):
+        """
+        Clear pools list. 
+        """
+        self.store.clear()
+        
 
     def display_pools(self):
         """
