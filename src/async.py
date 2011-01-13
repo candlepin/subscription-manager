@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # Async wrapper module for managerlib methods, with glib integration
 #
