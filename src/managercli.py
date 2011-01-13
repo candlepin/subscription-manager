@@ -275,7 +275,7 @@ class RegisterCommand(CliCommand):
         self.parser.add_option("--type", dest="consumertype", default="system",
                                help=_("the type of consumer to register. Defaults to system"))
         self.parser.add_option("--name", dest="consumername",
-                               help=_("name of the consumer to register. Defaults to the username."))
+                               help=_("name of the consumer to register. Defaults to the hostname."))
         self.parser.add_option("--password", dest="password",
                                help=_("specify a password"))
         self.parser.add_option("--consumerid", dest="consumerid",
@@ -300,6 +300,9 @@ class RegisterCommand(CliCommand):
         elif ConsumerIdentity.exists() and not self.options.force:
             print(_("This system is already registered. Use --force to override"))
             sys.exit(1)
+        elif (self.options.consumername == ''):
+            print(_("Error: consumer name can not be empty."))
+            sys.exit(-1)
 
     def _do_command(self):
         """
@@ -310,7 +313,7 @@ class RegisterCommand(CliCommand):
         # Set consumer's name to username registered with by default:
         consumername = self.options.consumername
         if consumername == None:
-            consumername = self.options.username
+            consumername = socket.gethostname()
 
         admin_cp = connection.UEPConnection(username=self.options.username,
                                             password=self.options.password,
