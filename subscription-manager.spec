@@ -1,7 +1,7 @@
 Name: subscription-manager
 Version: 0.93.11
 Release: 1%{?dist}
-Summary: Supported tools and libraries for subscription and repo Management
+Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
 Source0: %{name}-%{version}.tar.gz
@@ -28,9 +28,10 @@ BuildRequires: desktop-file-utils
 
 
 %description
-Subscription Manager package provides programs and libraries to allow users
-to manager subscriptions/yumrepos from Red Hat entitlement or deployment
-Platform.
+The Subscription Manager package provides programs and libraries to allow users
+to manage subscriptions and yum repositories from the Red Hat entitlement
+platform.
+
 
 %package -n subscription-manager-gnome
 Summary: A GUI interface to manage Red Hat product subscriptions
@@ -93,7 +94,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %dir %{_datadir}/rhsm
 %dir /etc/rhsm/facts
-%dir %{_datarootdir}/locale
+%dir %{_datadir}/locale
 %dir %{_sysconfdir}/rhsm/ca
 
 %{_datadir}/rhsm/__init__.py*
@@ -102,9 +103,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/async.py*
 %{_datadir}/rhsm/logutil.py*
 %{_datadir}/rhsm/repolib.py*
-/usr/lib/yum-plugins/subscription-manager.py*
-/usr/lib/yum-plugins/product-id.py*
-%{_datadir}/rhsm/certmgr.py*
+%{_prefix}/lib/yum-plugins/subscription-manager.py*
+%{_prefix}/lib/yum-plugins/product-id.py*
 %{_datadir}/rhsm/certlib.py*
 %{_datadir}/rhsm/hwprobe.py*
 %{_datadir}/rhsm/constants.py*
@@ -112,7 +112,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/facts.py*
 %{_datadir}/rhsm/factlib.py*
 %{_datadir}/rhsm/productid.py*
-%{_datarootdir}/locale/*
+%{_datadir}/locale/*
+%attr(755,root,root) %{_datadir}/rhsm/certmgr.py*
 %attr(755,root,root) %{_sbindir}/subscription-manager
 %attr(755,root,root) %dir %{_var}/lib/rhsm
 %attr(755,root,root) %dir %{_var}/run/rhsm
@@ -122,22 +123,22 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libexecdir}/rhsm-complianced
 
 # config files
-%attr(644,root,root) /etc/yum/pluginconf.d/subscription-manager.conf
-%attr(644,root,root) /etc/yum/pluginconf.d/product-id.conf
+%config(noreplace) %attr(644,root,root) /etc/yum/pluginconf.d/subscription-manager.conf
+%config(noreplace) %attr(644,root,root) /etc/yum/pluginconf.d/product-id.conf
 
 %{_sysconfdir}/rhsm/ca
 %{_sysconfdir}/cron.daily/rhsm-complianced
-%{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
+%config %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
 %{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
 
 %doc
 %{_mandir}/man8/subscription-manager.8*
 
 %files -n subscription-manager-gnome
+%defattr(-,root,root,-)
 %dir %{_datadir}/rhsm/gui
 %dir %{_datadir}/rhsm/gui/data
 %dir %{_datadir}/rhsm/gui/data/icons
-%defattr(-,root,root,-)
 %{_datadir}/rhsm/gui/*
 %{_datadir}/icons/hicolor/16x16/apps/subsmgr.png
 %{_datadir}/applications/subscription-manager.desktop
@@ -149,6 +150,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/security/console.apps/subscription-manager-gui
 
 %files -n subscription-manager-firstboot
+%defattr(-,root,root,-)
 %{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
 %{_datadir}/rhn/up2date_client/firstboot/rhsm_subscriptions.py*
 
