@@ -69,6 +69,8 @@ desktop-file-validate \
         %{buildroot}/etc/xdg/autostart/rhsm-compliance-icon.desktop
 desktop-file-validate \
         %{buildroot}/usr/share/applications/subscription-manager.desktop
+%find_lang rhsm
+
 
 %post -n subscription-manager-gnome
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
@@ -85,7 +87,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files
+%files -f rhsm.lang
 %defattr(-,root,root,-)
 
 %attr(755,root,root) %dir %{_var}/log/rhsm
@@ -94,7 +96,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %dir %{_datadir}/rhsm
 %dir /etc/rhsm/facts
-%dir %{_datadir}/locale
 %dir %{_sysconfdir}/rhsm/ca
 
 %{_datadir}/rhsm/__init__.py*
@@ -112,7 +113,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/facts.py*
 %{_datadir}/rhsm/factlib.py*
 %{_datadir}/rhsm/productid.py*
-%{_datadir}/locale/*
 %attr(755,root,root) %{_datadir}/rhsm/certmgr.py*
 %attr(755,root,root) %{_sbindir}/subscription-manager
 %attr(755,root,root) %dir %{_var}/lib/rhsm
