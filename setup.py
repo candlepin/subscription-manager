@@ -18,7 +18,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="rhsm",
-    version='0.94.14',
+    version='0.94.15',
     description='A Python library to communicate with a Red Hat Unified Entitlement Platform',
     author='Devan Goodwin',
     author_email='dgoodwin@redhat.com',

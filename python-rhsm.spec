@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.94.14
+Version: 0.94.15
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -57,6 +57,11 @@ rm -rf %{buildroot}
 %{python_sitelib}/rhsm-*.egg-info
 
 %changelog
+* Thu Jan 13 2011 Devan Goodwin <dgoodwin@redhat.com> 0.94.15-1
+- Resolves: #668814
+- remove shebang from certificate.py for rpmlint (jbowes@redhat.com)
+- 668814: break out 404 and 500s into a different error (cduryee@redhat.com)
+
 * Wed Jan 12 2011 Devan Goodwin <dgoodwin@redhat.com> 0.94.14-1
 - Related: #667829
 - Initialized to use tito. (jbowes@redhat.com)
