@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.93.11
+Version: 0.93.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -165,6 +165,20 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Thu Jan 13 2011 Devan Goodwin <dgoodwin@redhat.com> 0.93.12-1
+- Resolves: #668796,#669395,#668814,#668054,#669208,#668032
+- 668796: Make the main window thinner (jbowes@redhat.com)
+- shebang fixes for rpmlint (jbowes@redhat.com)
+- Use rpm macros to find translation files (jbowes@redhat.com)
+- spec file fixes for rpmlint (jbowes@redhat.com)
+- 669395: default consumer name to hostname to match ui (alikins@redhat.com)
+- 668814: break out 404 and 500s into a different error (cduryee@redhat.com)
+- 668054: center contract selection dialog (alikins@redhat.com)
+- 669208: Fix for exception handler on register (alikins@redhat.com)
+- 669208: JSONDecodeError doesn't exist on simplejson 2.0.9 (aka, RHEL6)
+  (alikins@redhat.com)
+- 668032: Log all bundled products on subscription (alikins@redhat.com)
+
 * Wed Jan 12 2011 Devan Goodwin <dgoodwin@redhat.com> 0.93.11-1
 - Resolves: #665122,#668058,#668051
 - Config update. (dgoodwin@redhat.com)
