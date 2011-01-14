@@ -19,23 +19,20 @@
 import os
 import sys
 import logging
+import socket
 import rhsm.config
 import constants
 import rhsm.connection as connection
-#import optparse
 from optparse import OptionParser
 from certlib import CertLib, ConsumerIdentity
-#, ProductDirectory, EntitlementDirectory
 import managerlib
-import gettext
 from facts import Facts
 from M2Crypto import X509
 from M2Crypto import SSL
-#import gettext
+
+import gettext
 _ = gettext.gettext
 
-from httplib import socket
-from socket import error as socket_error
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -44,7 +41,7 @@ cfg = rhsm.config.initConfig()
 def handle_exception(msg, ex):
     log.error(msg)
     log.exception(ex)
-    if isinstance(ex, socket_error):
+    if isinstance(ex, socket.error):
         print _('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.')
         sys.exit(-1)
     elif isinstance(ex, connection.NetworkException):
