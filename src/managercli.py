@@ -34,7 +34,7 @@ from M2Crypto import SSL
 #import gettext
 _ = gettext.gettext
 
-#from httplib import socket
+from httplib import socket
 from socket import error as socket_error
 
 log = logging.getLogger('rhsm-app.' + __name__)
