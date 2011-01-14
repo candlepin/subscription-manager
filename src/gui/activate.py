@@ -52,7 +52,7 @@ class ActivationDialog(widgets.GladeWidget):
             self.hide()
         except Exception, e:
             handle_gui_exception(e,
-                _("Error activating subscription for consumer: %s"))
+                _("Error activating subscription: %s"))
 
     # Pulled from facts dialog - TODO:  Refactor!
     def show(self):
