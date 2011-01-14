@@ -80,11 +80,14 @@ class SystemFactsDialog(widgets.GladeWidget):
         else:
             self.last_update_label.set_text(_('No previous update'))
 
-        system_facts = self.facts.get_facts().items()
+        system_facts_dict = self.facts.get_facts()
+
         if self.consumer.uuid:
-            system_facts.append(["system.uuid", self.consumer.uuid])
+            system_facts_dict.update({'system.uuid':self.consumer.uuid})
         if self.consumer.name:
-            system_facts.append(["system.name", self.consumer.name])
+            system_facts_dict.update({"system.name":self.consumer.name})
+
+        system_facts = system_facts_dict.items()
 
         system_facts.sort()
         group = None

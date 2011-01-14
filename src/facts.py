@@ -5,6 +5,7 @@ import gettext
 _ = gettext.gettext
 
 import rhsm.config
+import certlib
 
 from datetime import datetime
 
@@ -113,7 +114,19 @@ class Facts():
 
         facts.update(hw_facts)
         facts.update(file_facts)
-#        pprint.pprint(facts)
+
+        # fact collection should probably become "pluggable" at some
+        # point
+
+        # figure out if we think we are compliant
+        sorter = certlib.CertSorter(certlib.ProductDirectory(),
+                                    certlib.EntitlementDirectory())
+
+        compliance_facts = {'system.compliant':True}
+        if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
+            compliance_facts['system.compliant'] = False
+
+        facts.update(compliance_facts)
 
         self.write(facts)
         return facts
