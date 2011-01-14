@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy project-wide -->
@@ -7,6 +7,7 @@
       <widget class="GtkVPaned" id="content">
         <property name="visible">True</property>
         <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
         <child>
           <widget class="GtkScrolledWindow" id="scrolledwindow1">
             <property name="height_request">150</property>
@@ -36,32 +37,53 @@
           <widget class="GtkVBox" id="details_box">
             <property name="height_request">250</property>
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
               <placeholder/>
             </child>
             <child>
-              <widget class="GtkHButtonBox" id="hbuttonbox1">
+              <widget class="GtkHBox" id="hbox1">
                 <property name="visible">True</property>
-                <property name="layout_style">end</property>
                 <child>
-                  <widget class="GtkButton" id="unsubscribe_button">
-                    <property name="label" translatable="yes">Unsubscribe</property>
+                  <widget class="GtkLabel" id="next_update_label">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="yalign">0.46000000834465027</property>
-                    <accessibility>
-                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Unsubscribe</atkproperty>
-                    </accessibility>
-                    <signal name="clicked" handler="on_unsubscribe_button_clicked" swapped="no"/>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Next Update:</property>
+                  </widget>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkHButtonBox" id="hbuttonbox1">
+                    <property name="visible">True</property>
+                    <property name="layout_style">end</property>
+                    <child>
+                      <widget class="GtkButton" id="unsubscribe_button">
+                        <property name="label" translatable="yes">Unsubscribe</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="yalign">0.46000000834465027</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">Unsubscribe</atkproperty>
+                        </accessibility>
+                        <signal name="clicked" handler="on_unsubscribe_button_clicked"/>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="padding">4</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="padding">4</property>
-                    <property name="position">0</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </widget>
@@ -69,7 +91,7 @@
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="pack_type">end</property>
-                <property name="position">2</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </widget>
