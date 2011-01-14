@@ -308,8 +308,11 @@ class MainWindow(widgets.GladeWidget):
         can_activate = False
 
         if self.consumer.uuid:
-            consumer = self.backend.uep.getConsumer(self.consumer.uuid, None, None)
-            can_activate = consumer['canActivate']
+            try:
+                consumer = self.backend.uep.getConsumer(self.consumer.uuid, None, None)
+                can_activate = consumer['canActivate']
+            except:
+                can_activate = False
 
         self.activate_button.set_sensitive(can_activate)
 
