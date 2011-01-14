@@ -55,7 +55,6 @@ log = logging.getLogger('rhsm-app.' + __name__)
 prefix = os.path.dirname(__file__)
 COMPLIANT_IMG = os.path.join(prefix, "data/icons/compliant.svg")
 NON_COMPLIANT_IMG = os.path.join(prefix, "data/icons/non-compliant.svg")
-UPDATE_FILE = '/var/run/rhsm/update'
 
 cert_file = ConsumerIdentity.certpath()
 key_file = ConsumerIdentity.keypath()
@@ -245,14 +244,8 @@ class MainWindow(widgets.GladeWidget):
         def on_identity_change(filemonitor, first_file, other_file, event_type):
             self.refresh()
 
-        def on_cert_update(filemonitor, first_file, other_file, event_type):
-            self._set_next_update()
-
         self.backend.monitor_certs(on_cert_change)
         self.backend.monitor_identity(on_identity_change)
-
-        # For updating the 'Next Update' time
-        gio.File(UPDATE_FILE).monitor().connect('changed', on_cert_update)
 
         self.main_window.show_all()
         self.refresh()
@@ -268,8 +261,6 @@ class MainWindow(widgets.GladeWidget):
     def refresh(self):
         """ Refresh the UI. """
         self._set_compliance_status()
-        self._set_system_name()
-        self._set_next_update()
 
         # Show the All Subscriptions tab if registered, hide it otherwise:
         if self.registered() and self.notebook.get_n_pages() == 2:
@@ -278,6 +269,10 @@ class MainWindow(widgets.GladeWidget):
         elif not self.registered() and self.notebook.get_n_pages() == 3:
             self.notebook.set_current_page(0)
             self.notebook.remove_page(2)
+
+        self.all_subs_tab.refresh()
+        self.installed_tab.refresh()
+        self.my_subs_tab.refresh()
 
         self._show_buttons()
 
@@ -366,7 +361,9 @@ class MainWindow(widgets.GladeWidget):
                 len(sorter.unentitled_products)
 
         if warn_count > 0:
-            self.compliance_status_image.set_from_file(NON_COMPLIANT_IMG)
+            buf = gtk.gdk.pixbuf_new_from_file_at_size(NON_COMPLIANT_IMG, 32,
+                    32)
+            self.compliance_status_image.set_from_pixbuf(buf)
             self.compliant_button.show()
             # Change wording slightly if just one product out of compliance:
             if warn_count > 1:
@@ -379,35 +376,12 @@ class MainWindow(widgets.GladeWidget):
 
         else:
             first_noncompliant = find_first_noncompliant_date()
-            self.compliance_status_image.set_from_file(COMPLIANT_IMG)
+            buf = gtk.gdk.pixbuf_new_from_file_at_size(COMPLIANT_IMG, 32, 32)
+            self.compliance_status_image.set_from_pixbuf(buf)
             self.compliance_status_label.set_text(
                     _("All products are in compliance until %s") % \
                             first_noncompliant.strftime("%x") )
             self.compliant_button.hide()
-
-    def _set_system_name(self):
-        self.consumer.reload()
-
-        # TODO:  Need to escape markup here
-        name = self.consumer.name or _('Not registered')
-        self.system_name_label.set_markup('<b>%s</b>' % name)
-
-    def _set_next_update(self):
-        try:
-            next_update = long(file(UPDATE_FILE).read())
-        except:
-            next_update = None
-
-        if next_update:
-            # TODO:  show/hide was not working here - this is a little hacky...
-            self.next_update_title.set_text(_('Next Update:'))
-
-            update_time = datetime.fromtimestamp(next_update)
-            self.next_update_label.set_text(update_time.ctime())
-        else:
-            self.next_update_title.set_text('')
-            self.next_update_label.set_text('')
-
 
 class RegisterScreen:
     """

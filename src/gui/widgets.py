@@ -17,6 +17,7 @@ import os
 import datetime
 import gobject
 import gtk
+import gio
 
 import gettext
 _ = gettext.gettext
@@ -28,6 +29,7 @@ import storage
 from certlib import ProductDirectory
 
 GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
+UPDATE_FILE = '/var/run/rhsm/update'
 
 class GladeWidget(object):
 
@@ -62,7 +64,8 @@ class SubscriptionManagerTab(GladeWidget):
         """
         # Mix the specified widgets with standard names in the
         # glade file by convention
-        widgets = ['top_view', 'content'] + initial_widget_names
+        widgets = ['top_view', 'content', 'next_update_label'] + \
+                initial_widget_names
         super(SubscriptionManagerTab, self).__init__(glade_file, widgets)
         self.content.unparent()
 
@@ -71,6 +74,12 @@ class SubscriptionManagerTab(GladeWidget):
 
         selection = self.top_view.get_selection()
         selection.connect('changed', self._selection_callback)
+
+        def on_cert_update(filemonitor, first_file, other_file, event_type):
+            self._set_next_update()
+
+        # For updating the 'Next Update' time
+        gio.File(UPDATE_FILE).monitor().connect('changed', on_cert_update)
 
     def add_text_column(self, name, store_key, expand=False):
         text_renderer = gtk.CellRendererText()
@@ -118,6 +127,24 @@ class SubscriptionManagerTab(GladeWidget):
 
     def on_no_selection(self):
         pass
+
+    def _set_next_update(self):
+        try:
+            next_update = long(file(UPDATE_FILE).read())
+        except:
+            next_update = None
+
+        if next_update:
+            update_time = datetime.datetime.fromtimestamp(next_update)
+            self.next_update_label.set_text(_('Next Update: %s') %
+                    update_time.ctime())
+            self.next_update_label.show()
+        else:
+            self.next_update_label.hide()
+
+    def refresh(self):
+        self._set_next_update()
+
 
 class SelectionWrapper(object):
 

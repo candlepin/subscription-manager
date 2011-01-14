@@ -83,6 +83,9 @@ class SystemFactsDialog(widgets.GladeWidget):
         system_facts = self.facts.get_facts().items()
         if self.consumer.uuid:
             system_facts.append(["system.uuid", self.consumer.uuid])
+        if self.consumer.name:
+            system_facts.append(["system.name", self.consumer.name])
+
         system_facts.sort()
         group = None
         for fact, value in system_facts:
