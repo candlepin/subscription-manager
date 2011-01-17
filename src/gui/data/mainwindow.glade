@@ -209,9 +209,9 @@
                         <child>
                           <widget class="GtkButton" id="activate_button">
                             <property name="label" translatable="yes">Activate a Subscription</property>
-                            <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <signal name="clicked" handler="on_activate_button_clicked"/>
                           </widget>
                           <packing>
                             <property name="left_attach">1</property>
@@ -220,9 +220,6 @@
                             <property name="bottom_attach">2</property>
                             <property name="y_options"></property>
                           </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
                         </child>
                         <child>
                           <widget class="GtkButton" id="view_facts_button">
@@ -237,6 +234,9 @@
                             <property name="right_attach">3</property>
                             <property name="y_options">GTK_EXPAND</property>
                           </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
                         </child>
                       </widget>
                     </child>

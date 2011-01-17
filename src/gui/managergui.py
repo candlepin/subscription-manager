@@ -309,7 +309,10 @@ class MainWindow(widgets.GladeWidget):
             except:
                 can_activate = False
 
-        self.activate_button.set_sensitive(can_activate)
+        if can_activate:
+            self.activate_button.show()
+        else:
+            self.activate_button.hide()
 
 
     def _register_button_clicked(self, widget):
