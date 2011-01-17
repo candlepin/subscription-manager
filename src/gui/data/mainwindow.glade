@@ -140,7 +140,6 @@
                         <property name="n_columns">3</property>
                         <property name="column_spacing">3</property>
                         <property name="row_spacing">3</property>
-                        <property name="homogeneous">True</property>
                         <child>
                           <widget class="GtkButton" id="proxy_config_button">
                             <property name="label" translatable="yes">Proxy Configuration</property>
@@ -214,10 +213,8 @@
                             <signal name="clicked" handler="on_activate_button_clicked"/>
                           </widget>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
                             <property name="y_options"></property>
                           </packing>
                         </child>
@@ -230,8 +227,10 @@
                             <signal name="clicked" handler="on_view_facts_button_clicked"/>
                           </widget>
                           <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
                             <property name="y_options">GTK_EXPAND</property>
                           </packing>
                         </child>
