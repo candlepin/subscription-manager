@@ -221,24 +221,27 @@ class SubDetailsWidget(GladeWidget):
 
         # Clean out contract and date widgets if not showing contract info
         if not show_contract:
-            def destroy(widget_name):
-                self.glade.get_widget(widget_name).destroy()
+            def destroy(widget_prefix):
+                self.glade.get_widget(widget_prefix + "_label").destroy()
+                self.glade.get_widget(widget_prefix + "_text").destroy()
 
-            destroy('contract_number_label')
-            destroy('contract_number_text')
-            destroy('start_date_label')
-            destroy('start_date_text')
-            destroy('expiration_date_label')
-            destroy('expiration_date_text')
-            destroy('account_label')
-            destroy('account_text')
+            destroy('contract_number')
+            destroy('start_date')
+            destroy('expiration_date')
+            destroy('account')
+            destroy('provides_management')
+            destroy('support_level')
+            destroy('support_type')
         else:
             self.pull_widgets(["contract_number_text", "start_date_text",
-                               "expiration_date_text", "account_text"])
+                               "expiration_date_text", "account_text",
+                               "provides_management_text", "support_level_text",
+                               "support_type_text"])
 
         self.bundled_products = ProductsTable(self.products_view)
 
     def show(self, name, contract=None, start=None, end=None, account=None,
+            management=None, support_level=None, support_type=None,
             products=[]):
         """
         Show subscription details.
@@ -255,6 +258,9 @@ class SubDetailsWidget(GladeWidget):
             self._set(self.expiration_date_text,
                     managerlib.formatDate(end).strftime("%x"))
             self._set(self.account_text, account)
+            self._set(self.provides_management_text, management)
+            self._set(self.support_level_text, support_level)
+            self._set(self.support_type_text, support_type)
 
         self.bundled_products.clear()
         for product in products:

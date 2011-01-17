@@ -124,11 +124,19 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         products = [(product.getName(), product.getHash())
                         for product in cert.getProducts()]
 
+        if order.getProvidesManagement() == 1:
+            management = _("yes")
+        else:
+            management = _("no")
+
         self.sub_details.show(order.getName(),
                               contract=order.getContract() or "",
                               start=order.getStart(),
                               end=order.getEnd(),
                               account=order.getAccountNumber() or "",
+                              management=management,
+                              support_level=order.getSupportLevel() or "",
+                              support_type=order.getSupportType() or "",
                               products=products)
 
     def on_no_selection(self):
