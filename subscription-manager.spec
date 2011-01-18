@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.93.12
+Version: 0.93.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -165,6 +165,16 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Jan 18 2011 Devan Goodwin <dgoodwin@redhat.com> 0.93.13-1
+- 669513: add a 'system.compliant' fact (alikins@redhat.com)
+- set default window size to 640x480 (jbowes@redhat.com)
+- 668581: more changes to shrink the ui (jbowes@redhat.com)
+- 668521: on unregistration, clear the list of available pools in the gui
+  (alikins@redhat.com)
+- 668048: Making calendar visible in all subs tab. (jharris@redhat.com)
+- 668936: Raising exception if virt-what return code is non-zero.
+  (jharris@redhat.com)
+
 * Thu Jan 13 2011 Devan Goodwin <dgoodwin@redhat.com> 0.93.12-1
 - Resolves: #668796,#669395,#668814,#668054,#669208,#668032
 - 668796: Make the main window thinner (jbowes@redhat.com)
