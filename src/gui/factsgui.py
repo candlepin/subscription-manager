@@ -53,16 +53,17 @@ class SystemFactsDialog(widgets.GladeWidget):
         self._add_column(_("Fact"), 0)
         self._add_column(_("Value"), 1)
 
+    def show(self):
+        """Make this dialog visible."""
+        # Disable the 'Update' button if there is
+        # no registered consumer to update
+
         # Update the displayed facts
         self.display_facts()
 
         # Set sorting by fact name
         self.facts_store.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
-    def show(self):
-        """Make this dialog visible."""
-        # Disable the 'Update' button if there is
-        # no registered consumer to update
         self.update_button.set_sensitive(bool(self.consumer.uuid))
         self.system_facts_dialog.present()
 
@@ -80,7 +81,8 @@ class SystemFactsDialog(widgets.GladeWidget):
         else:
             self.last_update_label.set_text(_('No previous update'))
 
-        system_facts_dict = self.facts.get_facts()
+        # make sure we get fresh facts, since compliance status could change
+        system_facts_dict = self.facts.find_facts()
 
         if self.consumer.uuid:
             system_facts_dict.update({'system.uuid':self.consumer.uuid})
@@ -100,7 +102,7 @@ class SystemFactsDialog(widgets.GladeWidget):
 
     def update_facts(self):
         """Sends the current system facts to the UEP server."""
-        system_facts = self.facts.get_facts()
+        system_facts = self.facts.find_facts()
         consumer_uuid = self.consumer.uuid
 
         try:
