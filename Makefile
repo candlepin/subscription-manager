@@ -13,10 +13,10 @@ CFLAGS = -Wall -g
 build:	rhsmcertd rhsm-compliance-icon
 
 bin:
-	@mkdir -p bin
+	mkdir bin
 
 rhsmcertd: src/rhsmcertd.c bin
-	cc src/rhsmcertd.c -o bin/rhsmcertd
+	${CC} ${CFLAGS} src/rhsmcertd.c -o bin/rhsmcertd
 
 COMPLIANCE_FLAGS=`pkg-config --cflags --libs gtk+-2.0 unique-1.0 libnotify`
 
@@ -25,9 +25,9 @@ rhsm-compliance-icon: src/compliance/rhsm_compliance_icon.c bin
 		src/compliance/rhsm_compliance_icon.c
 
 dbus-service-install:
-	@mkdir -p ${PREFIX}/etc/dbus-1/system.d
-	@mkdir -p ${PREFIX}/usr/share/dbus-1/system-services
-	@mkdir -p ${PREFIX}/usr/libexec
+	install -d ${PREFIX}/etc/dbus-1/system.d
+	install -d ${PREFIX}/usr/share/dbus-1/system-services
+	install -d ${PREFIX}/usr/libexec
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.conf \
 		${PREFIX}/etc/dbus-1/system.d
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.service \
@@ -36,47 +36,50 @@ dbus-service-install:
 		${PREFIX}/usr/libexec/rhsm-complianced
 
 install-conf:
-	cp etc-conf/rhsm.conf ${PREFIX}/etc/rhsm/
-	cp etc-conf/plugin/*.conf ${PREFIX}/etc/yum/pluginconf.d/
-	cp etc-conf/ca/*.pem ${PREFIX}/etc/rhsm/ca/
+	install etc-conf/rhsm.conf ${PREFIX}/etc/rhsm/
+	install etc-conf/plugin/*.conf ${PREFIX}/etc/yum/pluginconf.d/
+	install etc-conf/ca/*.pem ${PREFIX}/etc/rhsm/ca/
 
 install: install-files install-conf
 
 install-files: dbus-service-install compile-po
-	@mkdir -p ${PREFIX}/usr/share/rhsm/gui/data/icons/16x16
-	@mkdir -p ${PREFIX}/usr/share/locale/
-	@mkdir -p ${PREFIX}/usr/lib/yum-plugins/
-	@mkdir -p ${PREFIX}/usr/sbin
-	@mkdir -p ${PREFIX}/etc/rhsm
-	@mkdir -p ${PREFIX}/etc/rhsm/facts
-	@mkdir -p ${PREFIX}/etc/rhsm/ca
-	@mkdir -p ${PREFIX}/etc/xdg/autostart
-	@mkdir -p ${PREFIX}/etc/cron.daily
-	@mkdir -p ${PREFIX}/etc/pam.d
-	@mkdir -p ${PREFIX}/etc/security/console.apps
-	@mkdir -p ${PREFIX}/etc/yum/pluginconf.d/
-	@mkdir -p ${PREFIX}/usr/share/man/man8/
-	@mkdir -p ${PREFIX}/usr/share/applications
-	@mkdir -p ${PREFIX}/var/log/rhsm
-	@mkdir -p ${PREFIX}/var/run/rhsm
-	@mkdir -p ${PREFIX}/var/lib/rhsm/facts
-	@mkdir -p ${PREFIX}/usr/bin
-	@mkdir -p ${PREFIX}/etc/init.d
-	@mkdir -p ${PREFIX}/usr/share/icons/hicolor/16x16/apps
-	@mkdir -p ${PREFIX}/usr/share/rhn/up2date_client/firstboot/
+	install -d ${PREFIX}/usr/share/rhsm/gui/data/icons/16x16
+	install -d ${PREFIX}/usr/share/locale/
+	install -d ${PREFIX}/usr/lib/yum-plugins/
+	install -d ${PREFIX}/usr/sbin
+	install -d ${PREFIX}/etc/rhsm
+	install -d ${PREFIX}/etc/rhsm/facts
+	install -d ${PREFIX}/etc/rhsm/ca
+	install -d ${PREFIX}/etc/xdg/autostart
+	install -d ${PREFIX}/etc/cron.daily
+	install -d ${PREFIX}/etc/pam.d
+	install -d ${PREFIX}/etc/security/console.apps
+	install -d ${PREFIX}/etc/yum/pluginconf.d/
+	install -d ${PREFIX}/usr/share/man/man8/
+	install -d ${PREFIX}/usr/share/applications
+	install -d ${PREFIX}/var/log/rhsm
+	install -d ${PREFIX}/var/run/rhsm
+	install -d ${PREFIX}/var/lib/rhsm/facts
+	install -d ${PREFIX}/usr/bin
+	install -d ${PREFIX}/etc/init.d
+	install -d ${PREFIX}/usr/share/icons/hicolor/16x16/apps
+	install -d ${PREFIX}/usr/share/rhn/up2date_client/firstboot/
+	
 	cp -R po/build/* ${PREFIX}/usr/share/locale/
-	cp -R src/*.py ${PREFIX}/usr/share/rhsm
-	cp -R src/gui/*.py ${PREFIX}/usr/share/rhsm/gui
-	cp -R src/gui/data/*.glade ${PREFIX}/usr/share/rhsm/gui/data/
-	cp -R src/gui/data/icons/*.svg ${PREFIX}/usr/share/rhsm/gui/data/icons/
-	cp -R src/gui/data/icons/16x16/subsmgr.png ${PREFIX}/usr/share/icons/hicolor/16x16/apps/
-	cp -R src/plugin/*.py ${PREFIX}/usr/lib/yum-plugins/
-	cp src/subscription-manager ${PREFIX}/usr/sbin
-	cp src/subscription-manager-gui ${PREFIX}/usr/sbin
-	cp bin/* ${PREFIX}/usr/bin
-	cp src/rhsmcertd.init.d ${PREFIX}/etc/init.d/rhsmcertd
-	cp man/* ${PREFIX}/usr/share/man/man8/
-	cp src/gui/firstboot/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot
+	
+	install -p src/*.py ${PREFIX}/usr/share/rhsm
+	install -p src/gui/*.py ${PREFIX}/usr/share/rhsm/gui
+	install -p src/plugin/*.py ${PREFIX}/usr/lib/yum-plugins/
+	
+	install src/gui/data/*.glade ${PREFIX}/usr/share/rhsm/gui/data/
+	install src/gui/data/icons/*.svg ${PREFIX}/usr/share/rhsm/gui/data/icons/
+	install src/gui/data/icons/16x16/subsmgr.png ${PREFIX}/usr/share/icons/hicolor/16x16/apps/
+	install src/subscription-manager ${PREFIX}/usr/sbin
+	install src/subscription-manager-gui ${PREFIX}/usr/sbin
+	install bin/* ${PREFIX}/usr/bin
+	install src/rhsmcertd.init.d ${PREFIX}/etc/init.d/rhsmcertd
+	install man/* ${PREFIX}/usr/share/man/man8/
+	install src/gui/firstboot/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot
 	install -m 755 etc-conf/rhsm-compliance-icon.desktop \
 		${PREFIX}/etc/xdg/autostart
 	install -m 755 etc-conf/rhsm-complianced.cron \
