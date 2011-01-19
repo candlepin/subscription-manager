@@ -19,6 +19,7 @@ from datetime import datetime, timedelta
 from certlib import EntitlementDirectory, ProductDirectory, CertLib
 from rhsm.certificate import GMT
 
+import messageWindow
 import widgets
 from utils import handle_gui_exception
 
@@ -71,11 +72,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         backend.monitor_certs(on_cert_change)
 
-    def unsubscribe_button_clicked(self, widget):
-        selection = widgets.SelectionWrapper(self.top_view.get_selection(), self.store)
-
-        # nothing selected
-        if not selection.is_valid():
+    def _on_unsubscribe_prompt_response(self, dialog, response, selection):
+        if not response:
             return
 
         serial = selection['serial']
@@ -86,6 +84,17 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.backend.certlib.update()
         self.update_subscriptions()
+
+    def unsubscribe_button_clicked(self, widget):
+        selection = widgets.SelectionWrapper(self.top_view.get_selection(), self.store)
+
+        # nothing selected
+        if not selection.is_valid():
+            return
+
+        prompt = messageWindow.YesNoDialog(_("Are you sure you want to unsubscribe from %s?" % selection['subscription']),
+                self.content.get_toplevel())
+        prompt.connect('response', self._on_unsubscribe_prompt_response, selection)
 
     def update_subscriptions(self):
         """
