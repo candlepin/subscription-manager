@@ -154,7 +154,7 @@ class ComplianceAssistant(widgets.GladeWidget):
         self.first_noncompliant_radiobutton.set_active(True)
 
         self.date_picker = widgets.DatePicker(date.today())
-        self.date_picker.connect('date-picked', self._compliance_date_selected)
+        self.date_picker.connect('date-picked-cal', self._compliance_date_selected)
         self.date_picker_hbox.pack_start(self.date_picker, False, False)
         self.date_picker.show_all()
 

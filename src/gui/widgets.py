@@ -26,6 +26,8 @@ gtk.glade.bindtextdomain("subscription-manager")
 
 import managerlib
 import storage
+import messageWindow
+import locale
 from certlib import ProductDirectory
 
 GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
@@ -307,42 +309,74 @@ class CellRendererDate(gtk.CellRendererText):
         gtk.CellRendererText.set_property(self, 'text', date)
 
 
-class DatePicker(gtk.Button):
+class DatePicker(gtk.HBox):
 
     __gsignals__ = {
-            'date-picked': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, tuple())
+            'date-picked-cal': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, tuple()),
+            'date-picked-text': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, tuple())
     }
 
     def __init__(self, date):
         """
         Initialize the DatePicker. date is a python datetime.date object.
         """
-        gtk.Button.__init__(self)
-        self.set_label("BUTTTTON")
-        self.connect("clicked", self._button_clicked)
+        gtk.HBox.__init__(self)
+
+        image = gtk.image_new_from_icon_name('x-office-calendar', gtk.ICON_SIZE_MENU)
+        image.show()
 
         self._date = date
+        self._date_entry = gtk.Entry()
+        self._date_entry.set_width_chars(12)
+        self._date_entry.set_text(self._date.strftime("%x"))
+        self._cal_button = gtk.Button()
+        self._cal_button.set_image(image)
 
-        self._hbox = gtk.HBox(spacing = 3)
-        self.remove(self.get_child())
-        self.add(self._hbox)
 
-        self._label = gtk.Label(self._date.strftime("%x"))
+        self.pack_start(self._date_entry)
+        self.pack_start(self._cal_button)
+        self._cal_button.connect("clicked", self._button_clicked)
+        self.connect('date-picked-cal', self._date_update_cal)
+        self.connect('date-picked-text', self._date_update_text)
 
-        self._hbox.pack_start(self._label)
-        self._hbox.pack_start(gtk.VSeparator())
-        self._hbox.pack_start(gtk.Arrow(gtk.ARROW_DOWN, gtk.SHADOW_IN))
+        self._validator_sig_handler = self._date_entry.connect('focus-out-event', self._date_entry_validate)
 
-        self._calendar = None
+        self._calendar = gtk.Calendar()
 
-        # BZ 668048 - I have no idea why this is needed now...
         self.show()
-        self._hbox.show()
-        self._label.show()
+        self._date_entry.show()
+        self._cal_button.show()
 
     @property
     def date(self):
         return self._date
+
+    def _date_entry_validate(self, widget, dummy):
+        """
+        validate the date, pop up a box and then re-focus on date if not valid 
+        """
+        today = datetime.date.today()
+        try: 
+            self._date = datetime.datetime.strptime(self._date_entry.get_text(), '%x')
+            self.emit('date-picked-text')
+        except ValueError, e:
+            self._date_entry.handler_block(self._validator_sig_handler) #this sig handler gets unmuted in date_entry_box_grab_focus.
+            error_dialog = messageWindow.ErrorDialog(messageWindow.wrap_text(
+                                _("Invalid date format. Please re-enter a valid date. Example: " + today.strftime('%x'))))
+            error_dialog.connect('response', self._date_entry_box_grab_focus) 
+
+    def _date_entry_box_grab_focus(self, dummy2=None, dummy3=None):
+        self._date_entry.grab_focus()
+        self._date_entry.handler_unblock(self._validator_sig_handler)
+
+    def _date_update_cal(self, dummy=None):
+        #set the text box to the date from the calendar
+        self._date_entry.set_text(self._date.strftime("%x"))
+
+    def _date_update_text(self, dummy=None):
+        #set the cal to the date from the text box
+        self._calendar.select_month(self._date.month - 1, self._date.year)
+        self._calendar.select_day(self._date.day)
 
     def _button_clicked(self, button):
         self._calendar_window = gtk.Window(gtk.WINDOW_POPUP)
@@ -350,7 +384,6 @@ class DatePicker(gtk.Button):
         self._calendar_window.set_transient_for(
                 self.get_window().get_user_data())
 
-        self._calendar = gtk.Calendar()
         self._calendar.select_month(self._date.month - 1, self._date.year)
         self._calendar.select_day(self._date.day)
 
@@ -376,17 +409,16 @@ class DatePicker(gtk.Button):
                 self._calendar_clicked)
 
     def _destroy(self):
-        self._label.set_label(self._date.strftime("%x"))
         self._calendar_window.destroy()
-
-        self.emit('date-picked')
 
     def _calendar_clicked(self, calendar):
         (year, month, day) = self._calendar.get_date()
         self._date = datetime.date(year, month + 1, day)
+        self.emit('date-picked-cal')
         self._destroy()
 
     def _today_clicked(self, button):
         self._date = datetime.date.today()
+        self.emit('date-picked-cal')
         self._destroy()
 
