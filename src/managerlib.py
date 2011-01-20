@@ -345,15 +345,21 @@ class PoolFilter(object):
         not_overlapping = self.filter_out_overlapping(pools)
         return [pool for pool in pools if pool not in not_overlapping]
 
-    def filter_subscribed_pools(self, pools, pool_ids):
+    def filter_subscribed_pools(self, pools, subscribed_pool_ids,
+            compatible_pools):
         """
         Filter the given list of pools, removing those for which the system
-        already has a subscription.
+        already has a subscription, unless the pool can be subscribed to again
+        (ie has multi-entitle).
         """
+        resubscribeable_pool_ids = [pool['id'] for pool in \
+                compatible_pools.values()]
+
 
         filtered_pools = []
         for pool in pools:
-            if pool['id'] not in pool_ids:
+            if (pool['id'] not in subscribed_pool_ids) or \
+                    (pool['id'] in resubscribeable_pool_ids):
                 filtered_pools.append(pool)
         return filtered_pools
 
@@ -505,59 +511,70 @@ class PoolStash(object):
         log.debug("   %s incompatible" % len(self.incompatible_pools))
         log.debug("   %s already subscribed" % len(self.subscribed_pool_ids))
 
-    def filter_pools(self, compatible, overlapping, uninstalled, subscribed,
+    def filter_pools(self, incompatible, overlapping, uninstalled, subscribed,
             text):
         """
         Return a list of pool hashes, filtered according to the given options.
 
         This method does not actually hit the server, filtering is done in
         memory.
-
-        TODO: discrepancy here, we assume filtering in many cases when we may
-        need tri-state filtering like with the overlapping param. Inconsistent
-        with our use of filtering vs choosing one set over another.
         """
-        pools = self.incompatible_pools.values()
 
-        if compatible:
+        log.debug("Filtering %d total pools" % len(self.all_pools))
+        if not incompatible:
+            pools = self.all_pools.values()
+        else:
             pools = self.compatible_pools.values()
+            log.debug("\tRemoved %d incompatible pools" % \
+                    len(self.incompatible_pools))
 
         pool_filter = PoolFilter()
 
         # Filter out products that are not installed if necessary:
         if uninstalled:
-            pools = pool_filter.filter_out_installed(pools)
-        else:
+            prev_length = len(pools)
             pools = pool_filter.filter_out_uninstalled(pools)
+            log.debug("\tRemoved %d pools for not installed products" % \
+                    (prev_length - len(pools))) 
 
-        # Do nothing if set to None:
+
         if overlapping:
-            pools = pool_filter.filter_out_non_overlapping(pools)
-        elif overlapping == False:
+            prev_length = len(pools)
             pools = pool_filter.filter_out_overlapping(pools)
+            log.debug("\tRemoved %d pools overlapping existing entitlements" % \
+                    (prev_length - len(pools))) 
+
 
         # Filter by product name if necessary:
         if text:
+            prev_length = len(pools)
             pools = pool_filter.filter_product_name(pools, text)
+            log.debug("\tRemoved %d pools not matching the search string" % \
+                    (prev_length - len(pools))) 
 
-
-        if not subscribed:
+        if subscribed:
+            prev_length = len(pools)
             pools = pool_filter.filter_subscribed_pools(pools,
-                    self.subscribed_pool_ids)
+                    self.subscribed_pool_ids, self.compatible_pools)
+            log.debug("\tRemoved %d pools that we're already subscribed to" % \
+                    (prev_length - len(pools))) 
+
+
+        log.debug("\t%d pools to display, %d filtered out" % (len(pools),
+            len(self.all_pools) - len(pools)))
 
         return pools
 
-    def merge_pools(self, compatible=True, overlapping=None, uninstalled=False,
-            subscribed=False, text=None):
+    def merge_pools(self, incompatible=False, overlapping=False,
+            uninstalled=False, subscribed=False, text=None):
         """
         Return a merged view of pools filtered according to the given options.
         Pools for the same product will be merged into a MergedPool object.
 
-        Overlapping filter by default is None, meaning the pools will not be
-        filtered at all. Use True to filter out pools which do not overlap,
-        or False to filter out pools which do.
+        Arguments turn on filters, so setting one to True will reduce the
+        number of results.
         """
-        pools = self.filter_pools(compatible, overlapping, uninstalled,
+        pools = self.filter_pools(incompatible, overlapping, uninstalled,
                 subscribed, text)
         merged_pools = merge_pools(pools)
         return merged_pools

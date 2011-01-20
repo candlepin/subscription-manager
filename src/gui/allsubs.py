@@ -37,7 +37,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
     def __init__(self, backend, consumer, facts):
         widget_names = ['details_box', 'date_picker_hbox',
                         'compatible_checkbutton', 'overlap_checkbutton',
-                        'not_installed_checkbutton', 'contains_text_entry',
+                        'installed_checkbutton', 'contains_text_entry',
                         'month_entry', 'day_entry', 'year_entry',
                         'active_on_checkbutton', 'subscribe_button']
         super(AllSubscriptionsTab, self).__init__('allsubs.glade', widget_names)
@@ -67,7 +67,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             "on_search_button_clicked": self.search_button_clicked,
             "on_compatible_checkbutton_clicked": self.filters_changed,
             "on_overlap_checkbutton_clicked": self.filters_changed,
-            "on_not_installed_checkbutton_clicked": self.filters_changed,
+            "on_installed_checkbutton_clicked": self.filters_changed,
             "on_contain_text_entry_changed": self.contain_text_entry_changed,
             "on_subscribe_button_clicked": self.subscribe_button_clicked,
         })
@@ -86,23 +86,25 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             'align': float,
         }
 
-    def show_compatible(self):
-        """ Return True if we're to include pools which failed a rule check. """
+    def filter_incompatible(self):
+        """
+        Return True if we're not to include pools which failed a rule check.
+        """
         return self.compatible_checkbutton.get_active()
 
-    def show_overlapping(self):
+    def filter_overlapping(self):
         """
-        Return True if we're to include pools which provide products for
+        Return True if we're not to include pools which provide products for
         which we already have subscriptions.
         """
         return self.overlap_checkbutton.get_active()
 
-    def show_uninstalled(self):
+    def filter_uninstalled(self):
         """
-        Return True if we're to include pools for products that are
+        Return True if we're not to include pools for products that are
         not installed.
         """
-        return self.not_installed_checkbutton.get_active()
+        return self.installed_checkbutton.get_active()
 
     def get_filter_text(self):
         """
@@ -129,10 +131,10 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.store.clear()
 
         merged_pools = self.pool_stash.merge_pools(
-                compatible=self.show_compatible(),
-                overlapping=self.show_overlapping(),
-                uninstalled=self.show_uninstalled(),
-                subscribed=self.show_compatible(),
+                incompatible=self.filter_incompatible(),
+                overlapping=self.filter_overlapping(),
+                uninstalled=self.filter_uninstalled(),
+                subscribed=True,
                 text=self.get_filter_text())
 
         for entry in merged_pools.values():
