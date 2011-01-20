@@ -260,6 +260,7 @@ class MainWindow(widgets.GladeWidget):
 
     def refresh(self):
         """ Refresh the UI. """
+        self.consumer.reload()
         self._set_compliance_status()
 
         # Show the All Subscriptions tab if registered, hide it otherwise:
