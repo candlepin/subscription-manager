@@ -132,6 +132,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 compatible=self.show_compatible(),
                 overlapping=self.show_overlapping(),
                 uninstalled=self.show_uninstalled(),
+                subscribed=self.show_compatible(),
                 text=self.get_filter_text())
 
         for entry in merged_pools.values():

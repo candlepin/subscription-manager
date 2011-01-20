@@ -344,6 +344,18 @@ class PoolFilter(object):
         not_overlapping = self.filter_out_overlapping(pools)
         return [pool for pool in pools if pool not in not_overlapping]
 
+    def filter_subscribed_pools(self, pools, pool_ids):
+        """
+        Filter the given list of pools, removing those for which the system
+        already has a subscription.
+        """
+
+        filtered_pools = []
+        for pool in pools:
+            if pool['id'] not in pool_ids:
+                filtered_pools.append(pool)
+        return filtered_pools
+
 
 def list_pools(uep, consumer_uuid, facts, all=False, active_on=None):
     """
@@ -455,6 +467,9 @@ class PoolStash(object):
         # Pools which failed a rule check server side:
         self.incompatible_pools = {}
 
+        # Pools for which we already have an entitlement:
+        self.subscribed_pool_ids = []
+
         # All pools:
         self.all_pools = {}
 
@@ -479,20 +494,27 @@ class PoolStash(object):
                 self.incompatible_pools[pool['id']] = pool
                 self.all_pools[pool['id']] = pool
 
+
+        self.subscribed_pool_ids = []
+        for entitlement in self.backend.uep.getEntitlementList(self.consumer.uuid):
+            self.subscribed_pool_ids.append(entitlement['pool']['id'])
+
         log.debug("found %s pools:" % len(self.all_pools))
         log.debug("   %s compatible" % len(self.compatible_pools))
         log.debug("   %s incompatible" % len(self.incompatible_pools))
+        log.debug("   %s already subscribed" % len(self.subscribed_pool_ids))
 
-    def filter_pools(self, compatible, overlapping, uninstalled, text):
+    def filter_pools(self, compatible, overlapping, uninstalled, subscribed,
+            text):
         """
         Return a list of pool hashes, filtered according to the given options.
 
         This method does not actually hit the server, filtering is done in
         memory.
 
-        TODO: discrepancy here, we assume filtering in many cases when we may need tri-state
-        filtering like with the overlapping param. Inconsistent with our use of filtering
-        vs choosing one set over another.
+        TODO: discrepancy here, we assume filtering in many cases when we may
+        need tri-state filtering like with the overlapping param. Inconsistent
+        with our use of filtering vs choosing one set over another.
         """
         pools = self.incompatible_pools.values()
 
@@ -517,10 +539,15 @@ class PoolStash(object):
         if text:
             pools = pool_filter.filter_product_name(pools, text)
 
+
+        if not subscribed:
+            pools = pool_filter.filter_subscribed_pools(pools,
+                    self.subscribed_pool_ids)
+
         return pools
 
     def merge_pools(self, compatible=True, overlapping=None, uninstalled=False,
-            text=None):
+            subscribed=False, text=None):
         """
         Return a merged view of pools filtered according to the given options.
         Pools for the same product will be merged into a MergedPool object.
@@ -529,7 +556,8 @@ class PoolStash(object):
         filtered at all. Use True to filter out pools which do not overlap,
         or False to filter out pools which do.
         """
-        pools = self.filter_pools(compatible, overlapping, uninstalled, text)
+        pools = self.filter_pools(compatible, overlapping, uninstalled,
+                subscribed, text)
         merged_pools = merge_pools(pools)
         return merged_pools
 
