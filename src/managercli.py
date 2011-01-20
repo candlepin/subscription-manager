@@ -401,30 +401,18 @@ class SubscribeCommand(CliCommand):
 
     def __init__(self):
         usage = "usage: %prog subscribe [OPTIONS]"
-        shortdesc = _("subscribe the registered user to a specified product or regtoken")
+        shortdesc = _("subscribe the registered machine to a specified product")
         desc = "subscribe"
         CliCommand.__init__(self, "subscribe", usage, shortdesc, desc)
 
         self.product = None
-        self.regtoken = None
         self.substoken = None
-        self.parser.add_option("--regtoken", dest="regtoken", action='append',
-                               help=_("regtoken"))
         self.parser.add_option("--pool", dest="pool", action='append',
                                help=_("subscription pool id"))
-        self.parser.add_option("--email", dest="email", action='store',
-                               help=_("optional email address to notify when "
-                               "token activation is complete. Used with "
-                               "--regtoken only"))
-        self.parser.add_option("--locale", dest="locale", action='store',
-                               help=_("optional language to use for email "
-                               "notification when token activation is "
-                               "complete. Used with --regtoken and --email "
-                               "only. Examples: en-us, de-de"))
 
     def _validate_options(self):
-        if not (self.options.regtoken or self.options.pool):
-            print _("Error: Need either --pool or --regtoken, Try subscribe --help")
+        if not (self.options.pool):
+            print _("Error: Need to supply --pool, Try subscribe --help")
             sys.exit(-1)
 
     def _do_command(self):
@@ -439,13 +427,6 @@ class SubscribeCommand(CliCommand):
 
             if facts.delta():
                 self.cp.updateConsumerFacts(consumer, facts.get_facts())
-
-
-            if self.options.regtoken:
-                for regnum in self.options.regtoken:
-                    self.cp.bindByRegNumber(consumer, regnum,
-                            self.options.email, self.options.locale)
-                    log.info("Info: Successfully subscribed the machine to registration token %s" % regnum)
 
             if self.options.pool:
                 for pool in self.options.pool:
