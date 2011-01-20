@@ -128,6 +128,8 @@
                         <property name="shadow_type">etched-in</property>
                         <child>
                           <widget class="GtkTreeView" id="contract_selection_treeview">
+                            <property name="width_request">450</property>
+                            <property name="height_request">200</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="rules_hint">True</property>
