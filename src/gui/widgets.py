@@ -379,8 +379,10 @@ class DatePicker(gtk.HBox):
         self._calendar.select_day(self._date.day)
 
     def _button_clicked(self, button):
-        self._calendar_window = gtk.Window(gtk.WINDOW_POPUP)
+        self._calendar_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        self._calendar_window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
         self._calendar_window.set_modal(True)
+        self._calendar_window.set_title("")
         self._calendar_window.set_transient_for(
                 self.get_window().get_user_data())
 
