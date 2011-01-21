@@ -164,7 +164,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             self.timer = gobject.timeout_add(100, self.pb.pulse)
             self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
         except Exception, e:
-            handle_gui_exception(e, _("Error fetching subscriptions from server"))
+            handle_gui_exception(e, _("Error fetching subscriptions from server:  %s"))
 
     def _update_display(self, error=None):
         if self.pb:
@@ -174,8 +174,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             self.pb = None
 
         if error:
-            handle_gui_exception(error,
-                    _("Unable to search for subscriptions"))
+            handle_gui_exception(error, _("Unable to search for subscriptions:  %s"))
         else:
             self.display_pools()
 
