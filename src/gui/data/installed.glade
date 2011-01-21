@@ -10,7 +10,7 @@
         <property name="orientation">vertical</property>
         <child>
           <widget class="GtkScrolledWindow" id="scrolledwindow2">
-            <property name="height_request">250</property>
+            <property name="height_request">50</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hscrollbar_policy">automatic</property>
@@ -35,7 +35,7 @@
         </child>
         <child>
           <widget class="GtkVBox" id="details_vbox">
-            <property name="height_request">125</property>
+            <property name="height_request">50</property>
             <property name="visible">True</property>
             <child>
               <widget class="GtkVBox" id="vbox1">
@@ -55,7 +55,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="border_width">3</property>
-                            <property name="vadjustment">0 0 89 8.9000000000000004 80.100000000000009 89</property>
+                            <property name="vadjustment">0 0 74 7.4000000000000004 66.600000000000009 74</property>
                             <property name="hscrollbar_policy">automatic</property>
                             <property name="vscrollbar_policy">automatic</property>
                             <property name="shadow_type">in</property>
