@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.93.13
+Version: 0.93.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -165,6 +165,20 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Fri Jan 21 2011 Devan Goodwin <dgoodwin@redhat.com> 0.93.14-1
+- Fix "not yet installed" filter error. (dgoodwin@redhat.com)
+- 670823: Remove reg tokens from the cli (bkearney@redhat.com)
+- 668572: hide installed subscriptions from search results (jbowes@redhat.com)
+- 670597: reload consumer in mainwindow after registration. (jesusr@redhat.com)
+- Minor wording changes from UXD (bkearney@redhat.com)
+- 670885: Adding warning dialog on unsubscribe. (jharris@redhat.com)
+- 670212: add a text box in addition to calendar widget (cduryee@redhat.com)
+- Revert the change of making the icon be shadowman. It is now the guage
+  (bkearney@redhat.com)
+- 669753: use install -p to preserve py file timestamps (jbowes@redhat.com)
+- 669513: Make sure we get fresh facts when we show the facts dialog.
+  (alikins@redhat.com)
+
 * Tue Jan 18 2011 Devan Goodwin <dgoodwin@redhat.com> 0.93.13-1
 - 669513: add a 'system.compliant' fact (alikins@redhat.com)
 - set default window size to 640x480 (jbowes@redhat.com)
