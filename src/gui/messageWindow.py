@@ -51,7 +51,6 @@ class MessageWindow(gobject.GObject):
 
         self.dialog.set_default_response(0)
 
-        self.addFrame(self.dialog)
         self.dialog.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
         self.dialog.show_all()
 
@@ -68,14 +67,6 @@ class MessageWindow(gobject.GObject):
         self.dialog.hide()
         self.dialog.destroy()
 
-    @staticmethod
-    def addFrame(dialog):
-        contents = dialog.get_children()[0]
-        dialog.remove(contents)
-        frame = gtk.Frame()
-        frame.set_shadow_type(gtk.SHADOW_OUT)
-        frame.add(contents)
-        dialog.add(frame)
 
 
 class ErrorDialog(MessageWindow):
