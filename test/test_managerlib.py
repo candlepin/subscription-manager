@@ -132,6 +132,26 @@ class PoolFilterTests(unittest.TestCase):
         self.assertEquals(1, len(result))
         self.assertEquals(product1, result[0]['productId'])
 
+    def test_installed_filter_multi_match(self):
+        product1 = 'product1'
+        product2 = 'product2'
+        provided = 'providedProduct'
+        pd = StubCertificateDirectory([
+            StubProductCertificate(StubProduct(provided)),
+            StubProductCertificate(StubProduct(product2))])
+        filter = PoolFilter(product_dir=pd,
+                entitlement_dir=StubCertificateDirectory([]))
+
+
+        pools = [
+                create_pool(product1, product1),
+                create_pool(product2, product2, provided_products=[provided]),
+        ]
+        result = filter.filter_out_installed(pools)
+        self.assertEquals(1, len(result))
+        self.assertEquals(product1, result[0]['productId'])
+
+
     def test_filter_product_name(self):
         product1 = 'Foo Product'
         product2 = 'Bar Product'
