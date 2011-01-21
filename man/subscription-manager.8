@@ -1,4 +1,4 @@
-.TH subscription-manager 8 "December 10, 2010" "version 1.0" "Subscription Management"  Deon Lackey
+.TH subscription-manager 8 "December 10, 2010" "version 1.0" "Subscription Management"  Deon Lackey 
 .SH NAME
 subscription-manager \- Register machines and manage subscriptions to products.
 
@@ -71,9 +71,9 @@ Sets the debug level to use for verbose output.
 
 .TP
 .B --proxy=PROXY
-Uses an HTTP proxy. The
+Uses an HTTP proxy. The 
 .I PROXY
-name has the format
+name has the format 
 .I hostname:port.
 
 
@@ -162,34 +162,8 @@ The
 command allocates a specific subscription to the machine. 
 
 .TP
-.B --regtoken=TOKEN
-Gives the subscription number that identifies a specific product entitlement. Either the 
-.B --regtoken
-or the 
-.B --pool
-option is required.
-
-.TP
 .B --pool=POOLID
-Gives the ID for the entitlements pool (collection of products) to subscribe the machine to. Either the 
-.B --regtoken
-or the 
-.B --pool
-option is required.
-
-.TP
-.B --email=EMAIL
-Gives an optional email address to which to send a notification email when the activation is complete. This is only used with the 
-.B --regtoken
-option.
-
-.TP
-.B --locale=LOCALE
-Sets an optional language to use for for the email notification. This uses the four-letter locale codes like 
-.I en_us
-for English or
-.I de_de
-for German.
+Gives the ID for the entitlements pool (collection of products) to subscribe the machine to. This option is required.
 
 .SS UNSUBSCRIBE OPTIONS
 The 
@@ -376,14 +350,11 @@ to the entitlement pool that makes that product available. A machine releases th
 .I unsubscribing.
 
 .PP
-Subscribing a machine requires either the registration ID that was given when a product was purchased (the 
-.I --regtoken
-option) or the ID for the entitlement pool (the 
+Subscribing a machine requires the ID for the entitlement pool (the 
 .I --pool
 option). For example:
 .RS
 .nf
-subscription-manager subscribe --email="admin@example.com" --regtoken=XYZ01234567
 subscription-manager subscribe --pool=ff8080812bc382e3012bc3845da100d2
 .fi
 .RE
