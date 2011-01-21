@@ -304,6 +304,7 @@ class PoolFilter(object):
                 if str(productid) in provided_ids or \
                         str(productid) == d['productId']:
                     del matched_data_dict[d['id']]
+                    break
 
         return matched_data_dict.values()
 
