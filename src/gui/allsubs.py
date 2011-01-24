@@ -29,7 +29,7 @@ import managerlib
 import widgets
 import storage
 import async
-from utils import handle_gui_exception
+from utils import handle_gui_exception, apply_highlight
 from contract_selection import ContractSelectionWindow
 
 class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
@@ -53,7 +53,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.date_picker = widgets.DatePicker(today)
         self.date_picker_hbox.add(self.date_picker)
 
-        self.add_text_column(_('Subscription'), 'product_name', True)
+        self.add_text_column(_('Subscription'), 'product_name_formatted', True,
+                True)
         self.add_text_column(_('Available Subscriptions'), 'available')
 
         # This option should be selected by default:
@@ -79,6 +80,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             'product_id': str,
             'pool_id': str,
             'merged_pools': gobject.TYPE_PYOBJECT,
+            'product_name_formatted': str,
 
             # TODO:  This is not needed here - i think maybe we should get
             #        rid of the background color stuff altogether...
@@ -128,6 +130,12 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         """
         Re-display the list of pools last queried, based on current filter options.
         """
+        selection = self.top_view.get_selection()
+        selected_pool_id = None
+        itr = selection.get_selected()[1]
+        if itr:
+            selected_pool_id = self.store.get_value(itr, self.store['pool_id'])
+
         self.store.clear()
 
         merged_pools = self.pool_stash.merge_pools(
@@ -140,12 +148,30 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         for entry in merged_pools.values():
             self.store.add_map({
                 'product_name': entry.product_name,
+                'product_name_formatted': \
+                        apply_highlight(entry.product_name,
+                            self.get_filter_text()),
                 'available': entry.quantity - entry.consumed,
                 'product_id': entry.product_id,
                 'pool_id': entry.pools[0]['id'], # not displayed, just for lookup later
                 'merged_pools': entry, # likewise not displayed, for subscription
                 'align': 0.5
         })
+
+        # set the selection/details back to what they were, if possible
+        found = False
+        if selected_pool_id:
+            itr = self.store.get_iter_first()
+            while itr != None:
+                if self.store.get_value(itr,
+                        self.store['pool_id']) == selected_pool_id:
+                    self.top_view.set_cursor(self.store.get_path(itr))
+                    found = True
+                    break
+                else:
+                    itr = self.store.iter_next(itr)
+        if not found:
+            self.sub_details.clear()
 
     def get_label(self):
         return _("All Available Subscriptions")
@@ -235,7 +261,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             product_name = selection['product_name']
             pool_id = selection['pool_id']
             provided = self.pool_stash.lookup_provided_products(pool_id)
-            self.sub_details.show(product_name, products=provided)
+            self.sub_details.show(product_name, products=provided, highlight=self.get_filter_text())
         else:
             self.sub_details.clear()
 
