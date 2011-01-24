@@ -120,7 +120,7 @@ class ComplianceAssistant(widgets.GladeWidget):
                                                     self._on_uncompliant_active_toggled)
         self.uncompliant_treeview.add_column("Product",
                 self.uncompliant_store['product_name'], True)
-        self.uncompliant_treeview.add_date_column("End",
+        self.uncompliant_treeview.add_date_column("End Date",
                 self.uncompliant_store['end_date'], True)
         self.uncompliant_treeview.set_model(self.uncompliant_store)
         self.uncompliant_window.add(self.uncompliant_treeview)
