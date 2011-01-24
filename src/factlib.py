@@ -19,7 +19,7 @@ import logging
 import gettext
 _ = gettext.gettext
 
-from certlib import  ActionLock, Disconnected
+from certlib import  ActionLock, Disconnected, ConsumerIdentity
 from facts import Facts
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -63,7 +63,13 @@ class UpdateAction(Action):
         # figure out the diff between latest facts and
         # report that as updates
         # TODO: don't update if there is nothing to update
-        self.uep.updateConsumerFacts(uep.uuid, facts)
+
+        if not ConsumerIdentity.exists():
+            return updates
+        consumer = ConsumerIdentity.read()
+        consumer_uuid = consumer.getConsumerId()
+
+        self.uep.updateConsumerFacts(consumer_uuid, facts)
         return updates
 
 
