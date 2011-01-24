@@ -18,6 +18,7 @@ import datetime
 import gobject
 import gtk
 import gio
+import pango
 
 import gettext
 _ = gettext.gettext
@@ -28,6 +29,7 @@ import managerlib
 import storage
 import messageWindow
 import locale
+import utils
 from certlib import ProductDirectory
 
 GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
@@ -83,11 +85,17 @@ class SubscriptionManagerTab(GladeWidget):
         # For updating the 'Next Update' time
         gio.File(UPDATE_FILE).monitor().connect('changed', on_cert_update)
 
-    def add_text_column(self, name, store_key, expand=False):
+    def add_text_column(self, name, store_key, expand=False, markup=False):
         text_renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn(name,
-                                    text_renderer,
-                                    text=self.store[store_key])
+        if markup:
+            column = gtk.TreeViewColumn(name,
+                                        text_renderer,
+                                        markup=self.store[store_key])
+        else:
+            column = gtk.TreeViewColumn(name,
+                                        text_renderer,
+                                        text=self.store[store_key])
+
         if expand:
             column.set_expand(True)
         else:
@@ -182,7 +190,7 @@ class ProductsTable(object):
 
         name_column = gtk.TreeViewColumn(_("Product"),
                                          gtk.CellRendererText(),
-                                         text=0)
+                                         markup=0)
         name_column.set_expand(True)
         installed_column = gtk.TreeViewColumn(_("Installed"),
                                               gtk.CellRendererPixbuf(),
@@ -241,14 +249,22 @@ class SubDetailsWidget(GladeWidget):
         self.bundled_products = ProductsTable(self.products_view)
 
     def show(self, name, contract=None, start=None, end=None, account=None,
-            products=[]):
+            products=[], highlight=None):
         """
         Show subscription details.
 
         Start and end should be formatted strings, not actual date objects.
         Products is a list of tuples in the format (name, id)
         """
+        # set a new buffer to clear out all the old tag information
+        self.subscription_text.set_buffer(gtk.TextBuffer())
         self._set(self.subscription_text, name)
+        buf = self.subscription_text.get_buffer()
+        tag = buf.create_tag("highlight-tag", weight=pango.WEIGHT_BOLD)
+
+        for index in utils.find_text(name, highlight):
+            buf.apply_tag(tag, buf.get_iter_at_offset(index),
+                    buf.get_iter_at_offset(index + len(highlight)))
 
         if self.show_contract:
             self._set(self.contract_number_text, contract)
@@ -260,7 +276,8 @@ class SubDetailsWidget(GladeWidget):
 
         self.bundled_products.clear()
         for product in products:
-            self.bundled_products.add_product(product[0], product[1])
+            self.bundled_products.add_product(utils.apply_highlight(product[0],
+                highlight), product[1])
 
     def _set(self, text_view, text):
         """Set the buffer of the given TextView to contain the text"""

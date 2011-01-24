@@ -17,6 +17,7 @@ import re
 import logging
 from socket import error as socket_error
 from M2Crypto import SSL
+import glib
 
 import gettext
 _ = gettext.gettext
@@ -74,3 +75,51 @@ def linkify(msg):
         return '<a href="%s">%s</a>' % (url, url)
 
     return url_regex.sub(add_markup, msg)
+
+
+def apply_highlight(text, highlight):
+    """
+    Apply pango markup to highlight a search term in a string
+    """
+    if not highlight:
+        return glib.markup_escape_text(text)
+
+    parts = re.split("(" + highlight + ")", text, flags=re.I)
+    
+    escaped = []
+    # re.split makes every second result be our split term
+    on_search_term = False
+    for part in parts:
+        if on_search_term:
+            escaped += "<b>%s</b>" % glib.markup_escape_text(part)
+        else:
+            escaped += glib.markup_escape_text(part)
+        on_search_term = not on_search_term
+
+    return "".join(escaped)
+
+
+def find_text(haystack, needle):
+    """
+    Find all occurances of needle in haystack, case insensitvely.
+    Return a list of the offsets of all the occurances
+    """
+    if not needle:
+        return []
+
+    needle = needle.lower()
+    haystack = haystack.lower()
+
+    finds = []
+    offset = 0
+
+    while True:
+        index = haystack.find(needle, offset)
+        if (index == -1):
+            break
+        finds.append(index)
+        offset = index + 1
+        if (index + 1 == len(haystack)):
+            break
+
+    return finds
