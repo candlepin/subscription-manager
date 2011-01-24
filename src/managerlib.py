@@ -313,10 +313,16 @@ class PoolFilter(object):
         Filter the given list of pools, removing those whose product name
         does not contain the given text.
         """
+        lowered = contains_text.lower()
         filtered_pools = []
         for pool in pools:
-            if contains_text.lower() in pool['productName'].lower():
+            if lowered in pool['productName'].lower():
                 filtered_pools.append(pool)
+            else:
+                for provided in pool['providedProducts']:
+                    if lowered in provided['productName'].lower():
+                        filtered_pools.append(pool)
+                        break
         return filtered_pools
 
     def _get_entitled_product_ids(self):
@@ -511,7 +517,7 @@ class PoolStash(object):
         log.debug("   %s incompatible" % len(self.incompatible_pools))
         log.debug("   %s already subscribed" % len(self.subscribed_pool_ids))
 
-    def filter_pools(self, incompatible, overlapping, uninstalled, subscribed,
+    def _filter_pools(self, incompatible, overlapping, uninstalled, subscribed,
             text):
         """
         Return a list of pool hashes, filtered according to the given options.
@@ -574,7 +580,7 @@ class PoolStash(object):
         Arguments turn on filters, so setting one to True will reduce the
         number of results.
         """
-        pools = self.filter_pools(incompatible, overlapping, uninstalled,
+        pools = self._filter_pools(incompatible, overlapping, uninstalled,
                 subscribed, text)
         merged_pools = merge_pools(pools)
         return merged_pools

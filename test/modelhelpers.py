@@ -30,7 +30,10 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
     """
     provided = []
     for pid in provided_products:
-        provided.append({'productId': pid})
+        provided.append({
+            'productId': pid,
+            'productName': pid,
+        })
 
     id = hashlib.md5(product_id).hexdigest()
 

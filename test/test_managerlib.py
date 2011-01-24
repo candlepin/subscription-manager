@@ -151,7 +151,6 @@ class PoolFilterTests(unittest.TestCase):
         self.assertEquals(1, len(result))
         self.assertEquals(product1, result[0]['productId'])
 
-
     def test_filter_product_name(self):
         product1 = 'Foo Product'
         product2 = 'Bar Product'
@@ -164,5 +163,19 @@ class PoolFilterTests(unittest.TestCase):
                 create_pool(product2, product2),
         ]
         result = filter.filter_product_name(pools, "Foo")
+        self.assertEquals(1, len(result))
+        self.assertEquals(product1, result[0]['productId'])
+
+    def test_filter_product_name_matches_provided(self):
+        product1 = 'Foo Product'
+        product2 = 'Bar Product'
+        pd = StubCertificateDirectory([])
+        filter = PoolFilter(product_dir=pd,
+                entitlement_dir=StubCertificateDirectory([]))
+
+        pools = [
+                create_pool(product1, product1, provided_products=[product2]),
+        ]
+        result = filter.filter_product_name(pools, "Bar")
         self.assertEquals(1, len(result))
         self.assertEquals(product1, result[0]['productId'])
