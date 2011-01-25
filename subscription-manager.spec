@@ -71,6 +71,8 @@ desktop-file-validate \
         %{buildroot}/usr/share/applications/subscription-manager.desktop
 %find_lang rhsm
 
+# fix timestamps on our byte compiled files so them match across arches
+find $RPM_BUILD_ROOT -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 
 %post -n subscription-manager-gnome
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
