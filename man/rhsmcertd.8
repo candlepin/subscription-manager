@@ -1,0 +1,62 @@
+.TH rhsmcertd 8 "December 17, 2010" "version 1.0" "Subscription Management Certificate Daemon"  Deon Lackey 
+.SH NAME
+rhsmcertd \- Periodically scans and updates the entitlement certificates on a registered system.
+
+.SH SYNOPSIS
+rhsmcertd start|stop|status|restart
+
+.SH DESCRIPTION
+Red Hat provides content updates and support by issuing 
+.I subscriptions
+for its products. These subscriptions are allocated to systems (machines). Red Hat Subscription Manager is a tool which allows administrators to manage those subscriptions by registering systems and people, assigning subscriptions, and viewing subscriptions. 
+
+.PP
+When subscriptions are allocated to a system or when new subscriptions are available, the subscription management system issues that machine an X.509 certificate which contains all of the details of that subscription. The
+.B rhsmcertd
+process runs periodically to check for changes in the subscriptions available to a machine by updating the entitlement certificates installed on the machine and by installing new entitlement certificates as they're available.
+
+.PP
+The entitlements system also issues the system X.509 certificates that grant that system access to the appropriate content repositories for the system to be able to access its subscribed product downloads and updates.
+
+.PP
+.B rhsmcertd
+is started with the machine, by default, and is always running in the background. At the interval set in the 
+.B rhsm.conf
+file, the process checks with the Red Hat Entitlement System to see if any new subscriptions are available to the system and pulls down any new certificates. The frequency is configured in minutes in the 
+.B
+[rhsmcertd]
+section of the Red Hat Subscription Manager's configuration file.
+
+.RS
+.nf
+[rhsmcertd]
+certFrequency= 240
+.fi
+.RE
+
+.PP
+This process invokes the 
+.B
+certmgr.py
+script to perform the certificate add and update operations.
+
+
+.SH USAGE
+.B rhsmcertd restart
+
+
+.SH ASSOCIATED FILES
+.IP
+* /usr/share/rhsm/certmgr.py
+.IP
+* /etc/rhsm/rhsm.conf 
+
+.SH BUGS
+This process is part of the subscription management system at Red Hat. To file bugs against this process, go to https://bugzilla.redhat.com/ and select Red Hat > Red Hat Enterprise Linux 6 > subscription-manager.
+
+
+.SH AUTHORS
+Deon Lackey, <dlackey@redhat.com>, and Jeff Ortel, <jortel@redhat.com>. rhsmcertd was written by Jeff Ortel.
+
+.SH COPYRIGHT
+Copyright (c) 2010 Red Hat, Inc. This is licensed under the GNU General Public License, version 2 (GPLv2). A copy of this license is available at http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
