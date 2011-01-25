@@ -135,6 +135,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %doc
 %{_mandir}/man8/subscription-manager.8*
+%{_mandir}/man8/subscription-manager-gui.8*
+%{_mandir}/man8/rhsmcertd.8*
 
 %files -n subscription-manager-gnome
 %defattr(-,root,root,-)
