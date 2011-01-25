@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.93.14
+Version: 0.93.15
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -167,6 +167,21 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Jan 25 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 669753: set timestamps on .py files for multilib (jbowes@redhat.com)
+- Compliance Screen should be called End Date. (bkearney@redhat.com)
+- 670655: remove addFrame method. Fix traceback on sub error dialog
+  (alikins@redhat.com)
+- 672122: facts updating wasn't using consumer_uuid (alikins@redhat.com)
+- 671526: Fixing GUI exception messages (jharris@redhat.com)
+- 668796: Reducing the default size of most widgets to small screens.
+  (jharris@redhat.com)
+- 668572: Turn search filters into real filters (jbowes@redhat.com)
+- 663756 exit calendar widget when you click outside cal box
+  (cduryee@redhat.com)
+- 670823: New man page (bkearney@redhat.com)
+- 670899: make contract selection screen larger by default (alikins@redhat.com)
+
 * Fri Jan 21 2011 Devan Goodwin <dgoodwin@redhat.com> 0.93.14-1
 - Fix "not yet installed" filter error. (dgoodwin@redhat.com)
 - 670823: Remove reg tokens from the cli (bkearney@redhat.com)
