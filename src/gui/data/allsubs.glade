@@ -10,188 +10,221 @@
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
-          <widget class="GtkHBox" id="hbox3">
+          <widget class="GtkVBox" id="vbox3">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
-              <widget class="GtkLabel" id="label1">
+              <widget class="GtkHBox" id="hbox3">
                 <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">&lt;b&gt;Show subscriptions active on:&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkHBox" id="date_picker_hbox">
-                <property name="visible">True</property>
+                <property name="spacing">6</property>
                 <child>
-                  <placeholder/>
+                  <widget class="GtkLabel" id="label1">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Show subscriptions active on:&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkHBox" id="date_picker_hbox">
+                    <property name="visible">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkButton" id="search_button">
+                    <property name="label" translatable="yes">Update</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Search</atkproperty>
+                    </accessibility>
+                    <signal name="clicked" handler="on_search_button_clicked"/>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label3">
+                    <property name="visible">True</property>
+                    <property name="xalign">1</property>
+                    <property name="xpad">6</property>
+                    <property name="label" translatable="yes">Contains the text:</property>
+                  </widget>
+                  <packing>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="contains_text_entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="width_chars">15</property>
+                    <property name="invisible_char_set">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Text in Subscription</atkproperty>
+                    </accessibility>
+                    <signal name="changed" handler="on_contain_text_entry_changed"/>
+                  </widget>
+                  <packing>
+                    <property name="position">4</property>
+                  </packing>
                 </child>
               </widget>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkButton" id="search_button">
-                <property name="label" translatable="yes">Update</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Search</atkproperty>
-                </accessibility>
-                <signal name="clicked" handler="on_search_button_clicked"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkLabel" id="label3">
-                <property name="visible">True</property>
-                <property name="xalign">1</property>
-                <property name="xpad">6</property>
-                <property name="label" translatable="yes">Contains the text:</property>
-              </widget>
-              <packing>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkEntry" id="contains_text_entry">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="invisible_char">&#x25CF;</property>
-                <property name="width_chars">15</property>
-                <property name="invisible_char_set">True</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Text in Subscription</atkproperty>
-                </accessibility>
-                <signal name="changed" handler="on_contain_text_entry_changed"/>
-              </widget>
-              <packing>
-                <property name="position">4</property>
-              </packing>
-            </child>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">10</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkVBox" id="vbox1">
-            <property name="visible">True</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <widget class="GtkLabel" id="label2">
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">&lt;b&gt;Only show subscriptions that:&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkAlignment" id="alignment1">
+              <widget class="GtkExpander" id="expander1">
                 <property name="visible">True</property>
-                <property name="left_padding">12</property>
+                <property name="can_focus">True</property>
                 <child>
-                  <widget class="GtkVBox" id="vbox2">
+                  <widget class="GtkAlignment" id="alignment1">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
+                    <property name="left_padding">24</property>
                     <child>
-                      <widget class="GtkCheckButton" id="compatible_checkbutton">
-                        <property name="label" translatable="yes">match my system</property>
+                      <widget class="GtkVBox" id="vbox1">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <accessibility>
-                          <atkproperty name="AtkObject::accessible-name" translatable="yes">Match Hardware</atkproperty>
-                        </accessibility>
-                        <signal name="clicked" handler="on_compatible_checkbutton_clicked"/>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <widget class="GtkLabel" id="label2">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">Only show subscriptions that:</property>
+                            <property name="use_markup">True</property>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkAlignment" id="alignment2">
+                            <property name="visible">True</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <widget class="GtkVBox" id="vbox2">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <widget class="GtkCheckButton" id="compatible_checkbutton">
+                                    <property name="label" translatable="yes">match my system</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Match Hardware</atkproperty>
+                                    </accessibility>
+                                    <signal name="clicked" handler="on_compatible_checkbutton_clicked"/>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkCheckButton" id="installed_checkbutton">
+                                    <property name="label" translatable="yes">match my installed products</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Not Installed</atkproperty>
+                                    </accessibility>
+                                    <signal name="clicked" handler="on_installed_checkbutton_clicked"/>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkCheckButton" id="overlap_checkbutton">
+                                    <property name="label" translatable="yes">have no overlap with existing subscriptions</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Overlap</atkproperty>
+                                    </accessibility>
+                                    <signal name="clicked" handler="on_overlap_checkbutton_clicked"/>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                              </widget>
+                            </child>
+                          </widget>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkCheckButton" id="installed_checkbutton">
-                        <property name="label" translatable="yes">match my installed products</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <accessibility>
-                          <atkproperty name="AtkObject::accessible-name" translatable="yes">Not Installed</atkproperty>
-                        </accessibility>
-                        <signal name="clicked" handler="on_installed_checkbutton_clicked"/>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkCheckButton" id="overlap_checkbutton">
-                        <property name="label" translatable="yes">have no overlap with existing subscriptions</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <accessibility>
-                          <atkproperty name="AtkObject::accessible-name" translatable="yes">Overlap</atkproperty>
-                        </accessibility>
-                        <signal name="clicked" handler="on_overlap_checkbutton_clicked"/>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">2</property>
-                      </packing>
                     </child>
                   </widget>
                 </child>
+                <child>
+                  <widget class="GtkLabel" id="label4">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">&lt;b&gt;More search options&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="type">label_item</property>
+                  </packing>
+                </child>
               </widget>
               <packing>
+                <property name="expand">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
           <widget class="GtkVPaned" id="vpaned1">
             <property name="visible">True</property>
+            <property name="can_focus">True</property>
             <property name="orientation">vertical</property>
             <property name="position">2</property>
+            <property name="position_set">True</property>
             <child>
               <widget class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="height_request">50</property>
@@ -231,7 +264,7 @@
             </child>
           </widget>
           <packing>
-            <property name="position">2</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -278,7 +311,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">3</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </widget>
