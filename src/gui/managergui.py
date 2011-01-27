@@ -254,6 +254,9 @@ class MainWindow(widgets.GladeWidget):
         self.main_window.show_all()
         self.refresh()
 
+        # Check to see if already registered to old RHN - and show dialog
+        self._check_rhn_classic()
+
     def registered(self):
         return ConsumerIdentity.existsAndValid()
 
@@ -407,6 +410,17 @@ class MainWindow(widgets.GladeWidget):
                     _("All products are in compliance until %s") % \
                             first_noncompliant.strftime("%x") )
             self.compliant_button.hide()
+
+    def _check_rhn_classic(self):
+        if managerlib.is_registered_with_classic():
+            prompt = messageWindow.YesNoDialog(
+                    _('You are registered with RHN Classic, do you want to continue?'),
+                    self._get_window())
+            prompt.connect('response', self._on_rhn_classic_response)
+
+    def _on_rhn_classic_response(self, dialog, response):
+        if not response:
+            self.main_window.hide()
 
 class RegisterScreen:
     """
