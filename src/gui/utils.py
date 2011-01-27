@@ -84,7 +84,8 @@ def apply_highlight(text, highlight):
     if not highlight:
         return glib.markup_escape_text(text)
 
-    parts = re.split("(" + highlight + ")", text, flags=re.I)
+    regex = re.compile("(" + highlight + ")", re.I)
+    parts = regex.split(text)
     
     escaped = []
     # re.split makes every second result be our split term
