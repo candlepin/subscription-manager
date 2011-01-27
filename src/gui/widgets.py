@@ -147,7 +147,7 @@ class SubscriptionManagerTab(GladeWidget):
         if next_update:
             update_time = datetime.datetime.fromtimestamp(next_update)
             self.next_update_label.set_text(_('Next Update: %s') %
-                    update_time.ctime())
+                    datetime.datetime.strftime(update_time, '%c') )
             self.next_update_label.show()
         else:
             self.next_update_label.hide()
