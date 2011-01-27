@@ -740,6 +740,10 @@ class CLI:
     def main(self):
         managerlib.check_identity_cert_perms()
 
+        # Always warn the user if registered to old RHN 
+        if managerlib.is_registered_with_classic():
+            print _('Warning:  You are registered with RHN Classic.')
+
         if len(sys.argv) < 2 or not self._find_best_match(sys.argv):
             self._usage()
             sys.exit(0)
