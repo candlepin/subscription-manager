@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.94.2
+Version: 0.94.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -171,6 +171,9 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Fri Jan 28 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 673568 Use only svg for application icons. (jharris@redhat.com)
+
 * Fri Jan 28 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - Move the man pages (bkearney@redhat.com)
 - add a reload to the cert service (bkearney@redhat.com)
