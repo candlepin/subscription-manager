@@ -143,7 +143,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/rhsm/gui/data
 %dir %{_datadir}/rhsm/gui/data/icons
 %{_datadir}/rhsm/gui/*
-%{_datadir}/icons/hicolor/16x16/apps/subsmgr.png
+%{_datadir}/icons/hicolor/scalable/apps/subscription-manager.svg
 %{_datadir}/applications/subscription-manager.desktop
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(755,root,root) %{_bindir}/subscription-manager-gui

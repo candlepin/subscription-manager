@@ -43,7 +43,7 @@ install-conf:
 install: install-files install-conf
 
 install-files: dbus-service-install compile-po
-	install -d ${PREFIX}/usr/share/rhsm/gui/data/icons/16x16
+	install -d ${PREFIX}/usr/share/rhsm/gui/data/icons/scalable
 	install -d ${PREFIX}/usr/share/locale/
 	install -d ${PREFIX}/usr/lib/yum-plugins/
 	install -d ${PREFIX}/usr/sbin
@@ -62,7 +62,7 @@ install-files: dbus-service-install compile-po
 	install -d ${PREFIX}/var/lib/rhsm/facts
 	install -d ${PREFIX}/usr/bin
 	install -d ${PREFIX}/etc/init.d
-	install -d ${PREFIX}/usr/share/icons/hicolor/16x16/apps
+	install -d ${PREFIX}/usr/share/icons/hicolor/scalable/apps
 	install -d ${PREFIX}/usr/share/rhn/up2date_client/firstboot/
 	
 	cp -R po/build/* ${PREFIX}/usr/share/locale/
@@ -73,7 +73,8 @@ install-files: dbus-service-install compile-po
 	
 	install -m 644 src/gui/data/*.glade ${PREFIX}/usr/share/rhsm/gui/data/
 	install -m 644 src/gui/data/icons/*.svg ${PREFIX}/usr/share/rhsm/gui/data/icons/
-	install -m 644 src/gui/data/icons/16x16/subsmgr.png ${PREFIX}/usr/share/icons/hicolor/16x16/apps/
+	install -m 644 src/gui/data/icons/scalable/*.svg ${PREFIX}/usr/share/rhsm/gui/data/icons/scalable/
+	ln -sf /usr/share/rhsm/gui/data/icons/scalable/subscription-manager.svg ${PREFIX}/usr/share/icons/hicolor/scalable/apps/
 	install src/subscription-manager ${PREFIX}/usr/sbin
 	install src/subscription-manager-gui ${PREFIX}/usr/sbin
 	install bin/* ${PREFIX}/usr/bin
