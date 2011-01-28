@@ -71,9 +71,9 @@ install-files: dbus-service-install compile-po
 	install -m 644 -p src/gui/*.py ${PREFIX}/usr/share/rhsm/gui
 	install -m 644 -p src/plugin/*.py ${PREFIX}/usr/lib/yum-plugins/
 	
-	install src/gui/data/*.glade ${PREFIX}/usr/share/rhsm/gui/data/
-	install src/gui/data/icons/*.svg ${PREFIX}/usr/share/rhsm/gui/data/icons/
-	install src/gui/data/icons/16x16/subsmgr.png ${PREFIX}/usr/share/icons/hicolor/16x16/apps/
+	install -m 644 src/gui/data/*.glade ${PREFIX}/usr/share/rhsm/gui/data/
+	install -m 644 src/gui/data/icons/*.svg ${PREFIX}/usr/share/rhsm/gui/data/icons/
+	install -m 644 src/gui/data/icons/16x16/subsmgr.png ${PREFIX}/usr/share/icons/hicolor/16x16/apps/
 	install src/subscription-manager ${PREFIX}/usr/sbin
 	install src/subscription-manager-gui ${PREFIX}/usr/sbin
 	install bin/* ${PREFIX}/usr/bin
