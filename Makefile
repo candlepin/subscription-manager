@@ -38,7 +38,7 @@ dbus-service-install:
 install-conf:
 	install etc-conf/rhsm.conf ${PREFIX}/etc/rhsm/
 	install etc-conf/plugin/*.conf ${PREFIX}/etc/yum/pluginconf.d/
-	install etc-conf/ca/*.pem ${PREFIX}/etc/rhsm/ca/
+	install -m 644 etc-conf/ca/*.pem ${PREFIX}/etc/rhsm/ca/
 
 install: install-files install-conf
 
