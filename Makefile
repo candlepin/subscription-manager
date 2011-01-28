@@ -79,7 +79,7 @@ install-files: dbus-service-install compile-po
 	install bin/* ${PREFIX}/usr/bin
 	install src/rhsmcertd.init.d ${PREFIX}/etc/init.d/rhsmcertd
 	install man/* ${PREFIX}/usr/share/man/man8/
-	install src/gui/firstboot/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot
+	install -m644 src/gui/firstboot/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot
 	install -m 644 etc-conf/rhsm-compliance-icon.desktop \
 		${PREFIX}/etc/xdg/autostart
 	install -m 755 etc-conf/rhsm-complianced.cron \
