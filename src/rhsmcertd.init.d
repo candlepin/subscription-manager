@@ -54,6 +54,10 @@ restart() {
   start
 }
 
+reload() {
+    restart
+}
+
 case "$1" in
   start)
   start
@@ -64,11 +68,14 @@ case "$1" in
   restart)
   restart
   ;;
+  reload)
+  reload
+  ;;  
   status)
   status $PROG
   ;;
   *)
-  echo $"Usage: $0 {start|stop|status|restart|}"
+  echo $"Usage: $0 {start|stop|status|restart|reload|}"
   exit 1
 esac
 
