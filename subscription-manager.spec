@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.94.0
+Version: 0.94.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -169,6 +169,67 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Fri Jan 28 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- Updating the application icon. (jharris@redhat.com)
+- Adding CLI warning if registered to classic RHN. (jharris@redhat.com)
+- Adding warning dialog if already registered to RHN. (jharris@redhat.com)
+- 672965 next update time isn't localized (cduryee@redhat.com)
+- Adding RHN classic registration check. (jharris@redhat.com)
+- 672939: use re.compile for older pythons (jbowes@redhat.com)
+- 672969: put the checkbox filter options in an expander (jbowes@redhat.com)
+- 672939: Highlight search term in the main list and details
+  (jbowes@redhat.com)
+- 668572: search provided product names along with the main product
+  (jbowes@redhat.com)
+- I18N update. (dgoodwin@redhat.com)
+- 672649 Proxy location has no handler to be read by automation
+  (cduryee@redhat.com)
+- Add in the new manpages (bkearney@redhat.com)
+- 669753: set timestamps on .py files for multilib (jbowes@redhat.com)
+- Compliance Screen should be called End Date. (bkearney@redhat.com)
+- 672122: facts updating wasn't using consumer_uuid (alikins@redhat.com)
+- 670655: remove addFrame method. Fix traceback on sub error dialog
+  (alikins@redhat.com)
+- 671526: Fixing GUI exception messages (jharris@redhat.com)
+- 668796: Reducing the default size of most widgets to small screens.
+  (jharris@redhat.com)
+- 668572: Turn search filters into real filters (jbowes@redhat.com)
+- 663756 exit calendar widget when you click outside cal box
+  (cduryee@redhat.com)
+- 670899: make contract selection screen larger by default (alikins@redhat.com)
+- Fix "not yet installed" filter error. (dgoodwin@redhat.com)
+- 670823: Remove reg tokens from the cli (bkearney@redhat.com)
+- 668572: hide installed subscriptions from search results (jbowes@redhat.com)
+- 670597: reload consumer in mainwindow after registration. (jesusr@redhat.com)
+- 670885: Adding warning dialog on unsubscribe. (jharris@redhat.com)
+- 670212 add a text box in addition to calendar widget (cduryee@redhat.com)
+- 669753: use install -p to preserve py file timestamps (jbowes@redhat.com)
+- 669513: Make sure we get fresh facts when we show the facts dialog.
+  (alikins@redhat.com)
+- Show the contract support and management attributes (jbowes@redhat.com)
+- Making the tool buttons resize the parent container. (jharris@redhat.com)
+- 669513: add a 'system.compliant' fact (alikins@redhat.com)
+- Hiding activation button when not active and adding back click handler.
+  (jharris@redhat.com)
+- set default window size to 640x480 (jbowes@redhat.com)
+- 668581: more changes to shrink the ui (jbowes@redhat.com)
+- Ignoring network issues with activation button, defaulting to hide.
+  (jharris@redhat.com)
+- 668521: on unregistration, clear the list of available pools in the gui
+  (alikins@redhat.com)
+- 668048: Making calendar visible in all subs tab. (jharris@redhat.com)
+- 668936: Raising exception if virt-what return code is non-zero.
+  (jharris@redhat.com)
+- 668796: Make the main window thinner (jbowes@redhat.com)
+- 669395: default consumer name to hostname to match ui (alikins@redhat.com)
+- 668054: center contract selection dialog (alikins@redhat.com)
+- 669208: Fix for exception handler on register (alikins@redhat.com)
+- 669208: JSONDecodeError doesn't exist on simplejson 2.0.9 (aka, RHEL6)
+  (alikins@redhat.com)
+- 667953: remove warning here about empty facts.json (alikins@redhat.com)
+- 668032: Log all bundled products on subscription (alikins@redhat.com)
+- 668814: break out 404 and 500s into a different error (cduryee@redhat.com)
+
 * Wed Jan 12 2011 Devan Goodwin <dgoodwin@redhat.com> 0.93.11-1
 - Resolves: #665122,#668058,#668051
 - Config update. (dgoodwin@redhat.com)
