@@ -80,11 +80,11 @@ install-files: dbus-service-install compile-po
 	install src/rhsmcertd.init.d ${PREFIX}/etc/init.d/rhsmcertd
 	install man/* ${PREFIX}/usr/share/man/man8/
 	install src/gui/firstboot/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot
-	install -m 755 etc-conf/rhsm-compliance-icon.desktop \
+	install -m 644 etc-conf/rhsm-compliance-icon.desktop \
 		${PREFIX}/etc/xdg/autostart
 	install -m 755 etc-conf/rhsm-complianced.cron \
 		${PREFIX}/etc/cron.daily/rhsm-complianced
-	install -m 755 etc-conf/subscription-manager.desktop \
+	install -m 644 etc-conf/subscription-manager.desktop \
 		${PREFIX}/usr/share/applications	
 	ln -sf consolehelper ${PREFIX}/usr/bin/subscription-manager-gui
 	install -m 644 etc-conf/subscription-manager-gui.pam \
