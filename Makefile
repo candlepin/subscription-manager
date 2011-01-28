@@ -37,6 +37,7 @@ dbus-service-install:
 
 install-conf:
 	install etc-conf/rhsm.conf ${PREFIX}/etc/rhsm/
+	install -T etc-conf/logrotate.conf ${PREFIX}/etc/logrotate.d/subscription-manager
 	install etc-conf/plugin/*.conf ${PREFIX}/etc/yum/pluginconf.d/
 	install -m 644 etc-conf/ca/*.pem ${PREFIX}/etc/rhsm/ca/
 
@@ -53,6 +54,7 @@ install-files: dbus-service-install compile-po
 	install -d ${PREFIX}/etc/xdg/autostart
 	install -d ${PREFIX}/etc/cron.daily
 	install -d ${PREFIX}/etc/pam.d
+	install -d ${PREFIX}/etc/logrotate.d
 	install -d ${PREFIX}/etc/security/console.apps
 	install -d ${PREFIX}/etc/yum/pluginconf.d/
 	install -d ${PREFIX}/usr/share/man/man8/

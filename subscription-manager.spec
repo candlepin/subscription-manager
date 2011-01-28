@@ -128,6 +128,7 @@ rm -rf $RPM_BUILD_ROOT
 # config files
 %config(noreplace) %attr(644,root,root) /etc/yum/pluginconf.d/subscription-manager.conf
 %config(noreplace) %attr(644,root,root) /etc/yum/pluginconf.d/product-id.conf
+%config(noreplace) %attr(644,root,root) /etc/logrotate.d/subscription-manager
 
 %{_sysconfdir}/rhsm/ca
 %{_sysconfdir}/cron.daily/rhsm-complianced
