@@ -38,6 +38,7 @@ Summary: A GUI interface to manage Red Hat product subscriptions
 Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
 Requires: pygtk2 pygtk2-libglade gnome-python2 gnome-python2-canvas
+Requires: usermode
 Requires: usermode-gtk
 
 %description -n subscription-manager-gnome
