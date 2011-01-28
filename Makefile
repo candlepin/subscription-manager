@@ -67,9 +67,9 @@ install-files: dbus-service-install compile-po
 	
 	cp -R po/build/* ${PREFIX}/usr/share/locale/
 	
-	install -p src/*.py ${PREFIX}/usr/share/rhsm
-	install -p src/gui/*.py ${PREFIX}/usr/share/rhsm/gui
-	install -p src/plugin/*.py ${PREFIX}/usr/lib/yum-plugins/
+	install -m 644 -p src/*.py ${PREFIX}/usr/share/rhsm
+	install -m 644 -p src/gui/*.py ${PREFIX}/usr/share/rhsm/gui
+	install -m 644 -p src/plugin/*.py ${PREFIX}/usr/lib/yum-plugins/
 	
 	install src/gui/data/*.glade ${PREFIX}/usr/share/rhsm/gui/data/
 	install src/gui/data/icons/*.svg ${PREFIX}/usr/share/rhsm/gui/data/icons/
