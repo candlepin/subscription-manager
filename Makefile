@@ -87,7 +87,7 @@ install-files: dbus-service-install compile-po
 		${PREFIX}/etc/cron.daily/rhsm-complianced
 	install -m 644 etc-conf/subscription-manager.desktop \
 		${PREFIX}/usr/share/applications	
-	ln -sf consolehelper ${PREFIX}/usr/bin/subscription-manager-gui
+	ln -sf /usr/bin/consolehelper ${PREFIX}/usr/bin/subscription-manager-gui
 	install -m 644 etc-conf/subscription-manager-gui.pam \
 		${PREFIX}/etc/pam.d/subscription-manager-gui
 	install -m 644 etc-conf/subscription-manager-gui.console \
