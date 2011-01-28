@@ -58,7 +58,8 @@ typedef struct _Compliance {
 typedef enum _ComplianceType {
 	RHSM_COMPLIANT,
 	RHSM_WARNING,
-	RHSM_EXPIRED
+	RHSM_EXPIRED,
+	RHN_CLASSIC
 } ComplianceType;
 
 static void
@@ -225,6 +226,8 @@ check_compliance_over_dbus()
 			return RHSM_COMPLIANT;
 		case 2:
 			return RHSM_WARNING;
+		case 3:
+			return RHN_CLASSIC;
 		default:
 			// we don't know this one, better to play it safe
 			return RHSM_EXPIRED;
@@ -240,7 +243,7 @@ check_compliance(Compliance *compliance)
 	if (force_icon) {
 		g_debug("Forcing display of icon (simulated non-compliance)");
 		if (g_str_equal(force_icon, "expired")) {
-			compliance_type = RHSM_EXPIRED;
+             compliance_type = RHSM_EXPIRED;
 		} else if (g_str_equal(force_icon, "warning")) {
 			compliance_type = RHSM_WARNING;
 		} else {
@@ -252,8 +255,10 @@ check_compliance(Compliance *compliance)
 		compliance_type = check_compliance_over_dbus();
 	}
 
-	if (compliance_type != RHSM_COMPLIANT) {
-		display_icon(compliance, compliance_type);
+
+	if ((compliance_type != RHN_CLASSIC) && 
+        (compliance_type != RHSM_COMPLIANT)) {
+        display_icon(compliance, compliance_type);
 	} else {
         destroy_icon(compliance);
     }

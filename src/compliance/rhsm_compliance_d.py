@@ -34,6 +34,11 @@ import certlib
 
 enable_debug = False
 
+RHSM_EXPIRED   = 0
+RHSM_COMPLIANT = 1
+RHSM_WARNING   = 2
+RHN_CLASSIC    = 3
+
 
 def debug(msg):
     if enable_debug:
@@ -56,6 +61,11 @@ def in_warning_period(sorter):
 
 def check_compliance():
 
+
+    if managerlib.is_registered_with_classic():
+        debug("System is already registered with RHN Classic")
+        return RHN_CLASSIC
+
     sorter = certlib.CertSorter(certlib.ProductDirectory(),
             certlib.EntitlementDirectory())
 
@@ -63,14 +73,14 @@ def check_compliance():
         debug("System is not in compliance")
         debug(sorter.unentitled_products.keys())
         debug(sorter.expired_products.keys())
-        return 0
+        return RHSM_EXPIRED
     else:
         if in_warning_period(sorter):
             debug("System has one or more entitlements in their warning period")
-            return 2
+            return RHSM_WARNING
         else:
             debug("System appears compliant")
-            return 1
+            return RHSM_COMPLIANT
 
 
 def check_if_ran_once(compliance, loop):
@@ -117,17 +127,24 @@ def main():
     # short-circuit dbus initialization
     if options.syslog:
         compliant = check_compliance()
-        if compliant == 0:
+        if compliant == RHSM_COMPLIANT:
             syslog.openlog("rhsm-complianced")
             syslog.syslog(syslog.LOG_NOTICE,
                     "This system is non-compliant. " +
                     "Please run subscription-manager-cli for more information.")
-        elif compliant == 2:
+            return RHSM_COMPLIANT
+        elif compliant == RHSM_WARNING:
             syslog.openlog("rhsm-complianced")
             syslog.syslog(syslog.LOG_NOTICE,
                     "This system's entitlements are about to expire. " +
                     "Please run subscription-manager-cli for more information.")
-
+            return RHSM_WARNING
+        elif compliant == RHN_CLASSIC:
+            syslog.openlog("rhsm-complianced")
+            syslog.syslog(syslog.LOG_NOTICE,
+                          "This system is registered to RHN Classic")
+            return RHN_CLASSIC
+        
         return
 
 
