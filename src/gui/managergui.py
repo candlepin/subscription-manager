@@ -413,8 +413,8 @@ class MainWindow(widgets.GladeWidget):
 
     def _check_rhn_classic(self):
         if managerlib.is_registered_with_classic():
-            prompt = messageWindow.YesNoDialog(
-                    _('You are registered with RHN Classic, do you want to continue?'),
+            prompt = messageWindow.ContinueDialog(
+                    linkify(constants.RHN_CLASSIC_WARNING),
                     self._get_window())
             prompt.connect('response', self._on_rhn_classic_response)
 

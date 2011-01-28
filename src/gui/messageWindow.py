@@ -29,8 +29,6 @@ def wrap_line(line, max_line_size=100):
 def wrap_text(txt):
     return '\n'.join(map(wrap_line, txt.split('\n')))
 
-
-
 class MessageWindow(gobject.GObject):
 
     __gsignals__ = {
@@ -91,3 +89,9 @@ class YesNoDialog(MessageWindow):
 
     BUTTONS = gtk.BUTTONS_YES_NO
     STYLE = gtk.MESSAGE_QUESTION
+
+class ContinueDialog(MessageWindow):
+
+    BUTTONS = gtk.BUTTONS_OK_CANCEL
+    STYLE = gtk.MESSAGE_WARNING
+

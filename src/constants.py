@@ -126,3 +126,14 @@ CONFIRM_UNSUBSCRIBE = _("Are you sure you want to unsubscribe product %s")
 SELECT_STATUS = _("<b>Total of %s subscriptions selected for consumption.</b>")
 
 CONFIRM_UNREGISTER = _("<b>Are you sure you want to unregister?</b>")
+
+RHN_CLASSIC_WARNING = _("""WARNING
+
+You're about to register your system with the RHN Certificate Based Entitlement Platform.
+But, You're already registered with the RHN Classic Platform.
+
+Except for a few cases, Red Hat recommends customers only register with one Entitlement Platform.
+
+For more information, consult the Knowledge Base:
+https://access.redhat.com/kb/docs/DOC-45563
+""")
