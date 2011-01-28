@@ -135,7 +135,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %doc
 %{_mandir}/man8/subscription-manager.8*
-%{_mandir}/man8/subscription-manager-gui.8*
 %{_mandir}/man8/rhsmcertd.8*
 
 %files -n subscription-manager-gnome
@@ -152,6 +151,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/xdg/autostart/rhsm-compliance-icon.desktop
 %{_sysconfdir}/pam.d/subscription-manager-gui
 %{_sysconfdir}/security/console.apps/subscription-manager-gui
+
+%doc
+%{_mandir}/man8/subscription-manager-gui.8*
 
 %files -n subscription-manager-firstboot
 %defattr(-,root,root,-)
