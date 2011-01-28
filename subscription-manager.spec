@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.94.1
+Version: 0.94.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -171,6 +171,12 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Fri Jan 28 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- Move the man pages (bkearney@redhat.com)
+- add a reload to the cert service (bkearney@redhat.com)
+- Fix the permissions on the man pages (bkearney@redhat.com)
+- Clean up the icons in the makefile (bkearney@redhat.com)
+
 * Fri Jan 28 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - Updating the application icon. (jharris@redhat.com)
 - Adding CLI warning if registered to classic RHN. (jharris@redhat.com)
