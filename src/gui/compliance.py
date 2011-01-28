@@ -341,7 +341,7 @@ class ComplianceAssistant(widgets.GladeWidget):
         selected_products = self._get_selected_product_ids()
         pool_filter = managerlib.PoolFilter(self.product_dir, self.entitlement_dir)
         relevant_pools = pool_filter.filter_product_ids(
-                self.pool_stash.all_pools.values(), selected_products)
+                self.pool_stash.compatible_pools.values(), selected_products)
         merged_pools = managerlib.merge_pools(relevant_pools).values()
 
         for entry in merged_pools:
