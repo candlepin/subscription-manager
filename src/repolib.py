@@ -49,10 +49,14 @@ class UpdateAction:
         self.uep = uep
 
     def perform(self):
+        # Load the RepoFile from disk, this contains all our managed yum repo sections:
         repod = RepoFile()
         repod.read()
         valid = set()
         updates = 0
+
+        # Iterate content from entitlement certs, and update/create/delete each section
+        # in the RepoFile as appropriate:
         for cont in self.getUniqueContent():
             valid.add(cont.id)
             existing = repod.section(cont.id)
@@ -66,6 +70,8 @@ class UpdateAction:
             if section not in valid:
                 updates += 1
                 repod.delete(section)
+
+        # Write new RepoFile to disk:
         repod.write()
         log.info("repos updated: %s" % updates)
         return updates
@@ -97,6 +103,7 @@ class UpdateAction:
             repo['sslclientkey'] = EntitlementDirectory.keypath()
             repo['sslclientcert'] = product.path
             repo['sslcacert'] = ca_cert
+            repo['metadata_expire'] = ent.getMetadataExpire()
             lst.append(repo)
         return lst
 
@@ -124,10 +131,14 @@ class Repo(dict):
         ('sslcacert', 0, None),
         ('sslclientkey', 0, None),
         ('sslclientcert', 0, None),
+        ('metadata_expire', 1, None),
     )
 
     def __init__(self, id):
         self.id = self._clean_id(id)
+        # NOTE: This sets the above properties to the default values even if
+        # they are not defined on disk. i.e. these properties will always
+        # appear in this dict, but their values may be None.
         for k, m, d in self.PROPERTIES:
             self[k] = d
 
@@ -147,24 +158,36 @@ class Repo(dict):
         return new_id
 
     def items(self):
+        """
+        Called when we fetch the items for this yum repo to write to disk.
+        """
         lst = []
         for k, m, d in self.PROPERTIES:
             v = self[k]
-            lst.append((k, v))
+            # Skip anything set to 'None', as this is likely not intended for
+            # a yum repo file. None can result here if the default is None,
+            # or the entitlement certificate did not have the value set.
+            if v:
+                lst.append((k, v))
         return tuple(lst)
 
     def update(self, other):
-        count = 0
+        changes_made = 0
+
         for k, m, d in self.PROPERTIES:
             v = other.get(k)
-            if not m:
+            # If the property is mutable but not defined in the current repo
+            # file, set the incoming value. Otherwise, leave the current value
+            # alone.
+            if (not m) or (not self[k]):
                 if v is None:
                     continue
                 if self[k] == v:
                     continue
                 self[k] = v
-                count += 1
-        return count
+                changes_made += 1
+
+        return changes_made
 
     def __str__(self):
         s = []
