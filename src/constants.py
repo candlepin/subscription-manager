@@ -129,11 +129,9 @@ CONFIRM_UNREGISTER = _("<b>Are you sure you want to unregister?</b>")
 
 RHN_CLASSIC_WARNING = _("""WARNING
 
-You're about to register your system with the RHN Certificate Based Entitlement Platform.
-But, You're already registered with the RHN Classic Platform.
+You have already registered with RHN using RHN Classic technology. This tool requires registration using RHN Certificate-Based Entitlement technology.
 
-Except for a few cases, Red Hat recommends customers only register with one Entitlement Platform.
+Except for a few cases, Red Hat recommends customers only register with RHN once.
 
-For more information, consult the Knowledge Base:
-https://access.redhat.com/kb/docs/DOC-45563
+For more information, including alternate tools, consult this Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563
 """)
