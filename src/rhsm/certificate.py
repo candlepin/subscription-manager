@@ -28,6 +28,7 @@ import base64
 from M2Crypto import X509
 from datetime import datetime as dt
 from datetime import tzinfo, timedelta
+from time import strptime
 import logging
 
 log = logging.getLogger(__name__)
@@ -400,8 +401,8 @@ class EntitlementCertificate(ProductCertificate):
         fmt = "%Y-%m-%dT%H:%M:%SZ"
         order = self.getOrder()
 
-        begin = dt.strptime(order.getStart(), fmt)
-        end = dt.strptime(order.getEnd(), fmt)
+        begin = dt(*strptime(order.getStart(), fmt)[0:6])
+        end = dt(*strptime(order.getEnd(), fmt)[0:6])
 
         return DateRange(begin, end)
 
