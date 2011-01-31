@@ -336,7 +336,7 @@ class EntitlementCertificate(ProductCertificate):
 
     def getEntitlements(self):
         """
-        Get the B{all} entitlements defined in the certificate.
+        Get B{all} entitlements defined in the certificate.
         @return: A list of entitlement object.
         @rtype: [L{Entitlement},..]
         """
@@ -942,20 +942,24 @@ class Content(Entitlement):
     def getEnabled(self):
         return self.ext.get('8')
 
+    def getMetadataExpire(self):
+        return self.ext.get('9')
+
     def __eq__(self, rhs):
         return (self.getLabel() == rhs.getLabel())
 
     def __str__(self):
         s = []
         s.append('Entitlement (content) {')
-        s.append('\tName ........ = %s' % self.getName())
-        s.append('\tLabel ....... = %s' % self.getLabel())
-        s.append('\tQuantity .... = %s' % self.getQuantity())
-        s.append('\tFlex Quantity = %s' % self.getFlexQuantity())
-        s.append('\tVendor ...... = %s' % self.getVendor())
-        s.append('\tURL ......... = %s' % self.getUrl())
-        s.append('\tGPG Key ..... = %s' % self.getGpg())
-        s.append('\tEnabled ..... = %s' % self.getEnabled())
+        s.append('\tName .......... = %s' % self.getName())
+        s.append('\tLabel ......... = %s' % self.getLabel())
+        s.append('\tQuantity ...... = %s' % self.getQuantity())
+        s.append('\tFlex Quantity . = %s' % self.getFlexQuantity())
+        s.append('\tVendor ........ = %s' % self.getVendor())
+        s.append('\tURL ........... = %s' % self.getUrl())
+        s.append('\tGPG Key ....... = %s' % self.getGpg())
+        s.append('\tEnabled ....... = %s' % self.getEnabled())
+        s.append('\tMetadata Expire = %s' % self.getMetadataExpire())
         s.append('}')
         return '\n'.join(s)
 
