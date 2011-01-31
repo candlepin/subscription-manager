@@ -167,7 +167,7 @@ chkconfig --add rhsmcertd
 # /sbin/service rhsmcertd start
 
 %preun
-if [ $1 = 0 ] ; then
+if [ $1 -eq 0 ] ; then
    /sbin/service rhsmcertd stop >/dev/null 2>&1
    /sbin/chkconfig --del rhsmcertd
 fi
