@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.95.1
+Version: 0.95.2
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -57,6 +57,9 @@ rm -rf %{buildroot}
 %{python_sitelib}/rhsm-*.egg-info
 
 %changelog
+* Tue Feb 01 2011 Devan Goodwin <dgoodwin@redhat.com> 0.95.2-1
+- Add content metadata expire to certificate class. (dgoodwin@redhat.com)
+
 * Fri Jan 28 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - Add new extensions to order (jbowes@redhat.com)
 - remove shebang from certificate.py for rpmlint (jbowes@redhat.com)
