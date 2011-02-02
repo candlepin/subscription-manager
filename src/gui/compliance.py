@@ -263,9 +263,7 @@ class ComplianceAssistant(widgets.GladeWidget):
         if self.first_noncompliant_radiobutton.get_active():
             return self.last_compliant_date
         else:
-            # Need to convert to a datetime:
-            d = self.date_picker.date
-            return datetime(d.year, d.month, d.day, tzinfo=certificate.GMT())
+            return self.date_picker.date
 
     def _load_last_compliant_date(self):
         """
