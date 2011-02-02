@@ -19,6 +19,7 @@
 import sys
 import locale
 import httplib
+import urllib
 import simplejson as json
 import base64
 import os
@@ -413,7 +414,8 @@ class UEPConnection:
         if listAll:
             method = "%s&listall=true" % method
         if active_on:
-            method = "%s&activeon=%s" % (method, active_on.strftime("%Y%m%d"))
+            method = "%s&activeon=%s" % (method,
+                    urllib.quote_plus(active_on.isoformat()))
         results = self.conn.request_get(method)
         return results
 
