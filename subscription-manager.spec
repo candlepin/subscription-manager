@@ -156,6 +156,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %doc
 %{_mandir}/man8/subscription-manager-gui.8*
+%{_mandir}/man8/rhsm-compliance-icon.8*
 
 %files -n subscription-manager-firstboot
 %defattr(-,root,root,-)
