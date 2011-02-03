@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.20 -->
   <!-- interface-naming-policy project-wide -->
@@ -16,6 +16,7 @@
       <widget class="GtkVBox" id="subscriptions_vbox">
         <property name="visible">True</property>
         <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
           <widget class="GtkHBox" id="hbox1">
@@ -24,6 +25,7 @@
             <child>
               <widget class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <widget class="GtkLabel" id="compliance_label">
                     <property name="visible">True</property>
@@ -44,6 +46,7 @@
             <child>
               <widget class="GtkVBox" id="vbox3">
                 <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">3</property>
                 <child>
                   <widget class="GtkLabel" id="label3">
@@ -60,10 +63,9 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">noncompliant_date_radiobutton</property>
-                    <signal name="toggled" handler="on_first_noncompliant_radiobutton_toggled" swapped="no"/>
+                    <signal name="toggled" handler="on_first_noncompliant_radiobutton_toggled"/>
                   </widget>
                   <packing>
                     <property name="position">1</property>
@@ -78,7 +80,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="relief">none</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
@@ -111,66 +112,89 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkScrolledWindow" id="uncompliant_window">
+          <widget class="GtkVPaned" id="vpaned1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="hscrollbar_policy">automatic</property>
-            <property name="vscrollbar_policy">automatic</property>
+            <property name="orientation">vertical</property>
             <child>
-              <placeholder/>
-            </child>
-          </widget>
-          <packing>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkLabel" id="providing_subs_label">
-            <property name="visible">True</property>
-            <property name="xalign">0</property>
-            <property name="label" translatable="yes">The following subscriptions will cover the products selected above:</property>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <widget class="GtkVBox" id="vbox1">
-            <property name="visible">True</property>
-            <property name="spacing">10</property>
-            <child>
-              <widget class="GtkScrolledWindow" id="subscriptions_window">
+              <widget class="GtkScrolledWindow" id="uncompliant_window">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hscrollbar_policy">automatic</property>
                 <property name="vscrollbar_policy">automatic</property>
+                <property name="shadow_type">etched-in</property>
                 <child>
                   <placeholder/>
                 </child>
               </widget>
               <packing>
-                <property name="position">0</property>
+                <property name="resize">True</property>
+                <property name="shrink">False</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkVBox" id="details_window">
+              <widget class="GtkVBox" id="vbox4">
                 <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <placeholder/>
+                  <widget class="GtkLabel" id="providing_subs_label">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">The following subscriptions will cover the products selected above:</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkVPaned" id="vpaned2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <widget class="GtkScrolledWindow" id="subscriptions_window">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hscrollbar_policy">automatic</property>
+                        <property name="vscrollbar_policy">automatic</property>
+                        <property name="shadow_type">etched-in</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="resize">True</property>
+                        <property name="shrink">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkVBox" id="details_window">
+                        <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="resize">True</property>
+                        <property name="shrink">False</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </widget>
               <packing>
-                <property name="expand">False</property>
-                <property name="position">1</property>
+                <property name="resize">True</property>
+                <property name="shrink">False</property>
               </packing>
             </child>
           </widget>
           <packing>
-            <property name="position">4</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -184,7 +208,6 @@
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -195,7 +218,7 @@
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="position">5</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </widget>
