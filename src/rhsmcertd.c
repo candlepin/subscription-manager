@@ -62,7 +62,7 @@ void logUpdate(int delay)
 
     FILE *updatefile = fopen(UPDATEFILE, "w");
     // I'm not completely sure if this is safe to do cross platform...
-    fprintf(updatefile, "%llu", (unsigned long int)update);
+    fprintf(updatefile, "%d", (int)update);
     fflush(updatefile);
     fclose(updatefile);
 }
