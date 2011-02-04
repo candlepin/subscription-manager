@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.94.3
+Version: 0.95.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -174,6 +174,27 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Fri Feb 04 2011 Devan Goodwin <dgoodwin@redhat.com> 0.95.1-1
+- 674418: Changing accessibility handles to reflect check box functionality.
+  (jharris@redhat.com)
+- 674691: Add vertical panes to the compliance assistant (jbowes@redhat.com)
+- 674078: Send a timezone aware timestamp for activeOn pools query
+  (jbowes@redhat.com)
+- Update the man pages. (bkearney@redhat.com)
+- Write metadata expire attribute in yum repos. (dgoodwin@redhat.com)
+- Updating warning message. (jharris@redhat.com)
+- 671588: hide incompatible pools from the compliance assistant
+  (jbowes@redhat.com)
+- 673621: Fix the use of tests for return codes (bkearney@redhat.com)
+- Changing the RHN Classic warning and only displaying cli warning in register
+  command. (jharris@redhat.com)
+- Add a logrotate file. (bkearney@redhat.com)
+- Add a direct require on usermode. (bkearney@redhat.com)
+- Fix the dangling link for consolehelper. (bkearney@redhat.com)
+- Add support to compliance code for checking to see if we are RHN registered
+  (alikins@redhat.com)
+- Add the Encoding to the gui desktop file (bkearney@redhat.com)
+
 * Fri Jan 28 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 673568 Use only svg for application icons. (jharris@redhat.com)
 
