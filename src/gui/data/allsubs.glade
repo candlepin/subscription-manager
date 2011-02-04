@@ -137,7 +137,7 @@
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <accessibility>
-                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Match Hardware</atkproperty>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Match System</atkproperty>
                                     </accessibility>
                                     <signal name="clicked" handler="on_compatible_checkbutton_clicked"/>
                                   </widget>
@@ -156,7 +156,7 @@
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <accessibility>
-                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Not Installed</atkproperty>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Match Installed</atkproperty>
                                     </accessibility>
                                     <signal name="clicked" handler="on_installed_checkbutton_clicked"/>
                                   </widget>
@@ -175,7 +175,7 @@
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <accessibility>
-                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Overlap</atkproperty>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Do Not Overlap</atkproperty>
                                     </accessibility>
                                     <signal name="clicked" handler="on_overlap_checkbutton_clicked"/>
                                   </widget>
