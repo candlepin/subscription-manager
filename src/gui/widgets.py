@@ -351,7 +351,7 @@ class DatePicker(gtk.HBox):
 
         # set the timezone so we can sent it to the server
         self._date = datetime.datetime(date.year, date.month, date.day,
-                tzinfo=LocalTz())
+                tzinfo=utils.LocalTz())
         self._date_entry = gtk.Entry()
         self._date_entry.set_width_chars(12)
         self._date_entry.set_text(self._date.strftime("%x"))
@@ -378,12 +378,7 @@ class DatePicker(gtk.HBox):
         # if the selected date is today, set the time to be the current time.
         # then we can avoid any time zone issues that may occur for subs that
         # started or ended today.
-      
-        if self._date.date() == datetime.date.today():
-            now = datetime.datetime.today()
-            self._date = self._date.replace(hour=now.hour, minute=now.minute,
-                    second=now.second)
-        return self._date
+        return utils.make_today_now(self._date)
 
     def _date_entry_validate(self, widget, dummy):
         """
@@ -393,7 +388,7 @@ class DatePicker(gtk.HBox):
         try: 
             date = datetime.datetime.strptime(self._date_entry.get_text(), '%x')
             self._date = datetime.datetime(date.year, date.month, date.day,
-                    tzinfo=LocalTz())
+                    tzinfo=utils.LocalTz())
             self.emit('date-picked-text')
         except ValueError, e:
             self._date_entry.handler_block(self._validator_sig_handler) #this sig handler gets unmuted in date_entry_box_grab_focus.
@@ -451,26 +446,15 @@ class DatePicker(gtk.HBox):
 
     def _calendar_clicked(self, calendar):
         (year, month, day) = self._calendar.get_date()
-        self._date = datetime.datetime(year, month + 1, day, tzinfo=LocalTz())
+        self._date = datetime.datetime(year, month + 1, day,
+                tzinfo=utils.LocalTz())
         self.emit('date-picked-cal')
         self._destroy()
 
     def _today_clicked(self, button):
         day = datetime.date.today()
         self._date = datetime.datetime(day.year, day.month, day.day,
-                tzinfo=LocalTz())
+                tzinfo=utils.LocalTz())
         self.emit('date-picked-cal')
         self._destroy()
 
-
-class LocalTz(datetime.tzinfo):
-
-    """
-    tzinfo object representing whatever this systems tz offset is.
-    """
-
-    def utcoffset(self, dt):
-        return datetime.timedelta(seconds=time.timezone)
-
-    def dst(self, dt):
-        return None
