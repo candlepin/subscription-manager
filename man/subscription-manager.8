@@ -7,6 +7,12 @@ subscription-manager
 .I command [options]
 
 .SH DESCRIPTION
+.B subscription-manager 
+is a client program that registers a system with the Certificate-Based Red Hat Network. To register your system with RHN Classic or with an RHN Satellite 5.x system, then use the 
+.B rhn_registe
+tool.
+
+.PP
 Red Hat provides content updates and support by issuing 
 .I subscriptions
 for its products. These subscriptions are allocated to systems (machines); once a system is subscribed to content, it is 
@@ -129,9 +135,7 @@ Gives the user account password. This is required.
 .B --type=CONSUMERTYPE
 Sets the type of consumer to register. Most systems will use the default value of 
 .B system.
-For development or test systems, this can be 	 
-.B person
-, which indicates a personal (rather than organizational) entitlement subscription. Other systems can be
+Other systems can be
 .B candlepin
 for a local content service or 
 .B domain
