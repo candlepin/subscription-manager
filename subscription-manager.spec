@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.93.15
+Version: 0.93.16
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -169,6 +169,28 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Mon Feb 07 2011 Devan Goodwin <dgoodwin@redhat.com> 0.93.16-1
+- Final names for the external systems (bkearney@redhat.com)
+- 674078: send 'right now' for compliance today, too (jbowes@redhat.com)
+- Updated man page. (bkearney@redhat.com)
+- 674418: Changing accessibility handles to reflect check box functionality.
+  (jharris@redhat.com)
+- 674691: Add vertical panes to the compliance assistant (jbowes@redhat.com)
+- 674078: Send a timezone aware timestamp for activeOn pools query
+  (jbowes@redhat.com)
+- 671588: hide incompatible pools from the compliance assistant
+  (jbowes@redhat.com)
+- 672965: next update time isn't localized (cduryee@redhat.com)
+- 672939: use re.compile for older pythons (jbowes@redhat.com)
+- 672969: put the checkbox filter options in an expander (jbowes@redhat.com)
+- 672939: Highlight search term in the main list and details
+  (jbowes@redhat.com)
+- 668572: search provided product names along with the main product
+  (jbowes@redhat.com)
+- I18N update. (dgoodwin@redhat.com)
+- 672649: Proxy location has no handler to be read by automation
+  (cduryee@redhat.com)
+
 * Tue Jan 25 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 669753: set timestamps on .py files for multilib (jbowes@redhat.com)
 - Compliance Screen should be called End Date. (bkearney@redhat.com)
