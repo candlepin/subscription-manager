@@ -53,6 +53,8 @@ class MessageWindow(gobject.GObject):
         self.dialog.show_all()
 
         self.dialog.set_modal(True)
+        #this seems spurious, but without it, a ref to this obj gets "lost"
+        gobject.add_emission_hook(self, 'response', self.noop_hook)
 
         self.dialog.connect("response", self._on_response_event)
 
@@ -65,6 +67,8 @@ class MessageWindow(gobject.GObject):
         self.dialog.hide()
         self.dialog.destroy()
 
+    def noop_hook(self, dummy1=None, dummy2=None):
+        pass
 
 
 class ErrorDialog(MessageWindow):
