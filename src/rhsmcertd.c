@@ -27,6 +27,7 @@
 #define UPDATEFILE "/var/run/rhsm/update"
 #define INTERVAL 240 /*4 hours*/
 #define RETRY 10 /*10 min*/
+#define BUF_MAX 256
 
 static FILE *log = 0;
 
@@ -56,13 +57,13 @@ void logUpdate(int delay)
 {
     time_t update = time(NULL);
     struct tm update_tm = *localtime(&update);
+    char buf[BUF_MAX];
 
     update_tm.tm_min += delay;
-    update = mktime(&update_tm);
+    strftime(buf, BUF_MAX, "%s", &update_tm);
 
     FILE *updatefile = fopen(UPDATEFILE, "w");
-    // I'm not completely sure if this is safe to do cross platform...
-    fprintf(updatefile, "%llu", (unsigned long int)update);
+    fprintf(updatefile, "%s", buf);
     fflush(updatefile);
     fclose(updatefile);
 }
