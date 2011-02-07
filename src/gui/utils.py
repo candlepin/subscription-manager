@@ -18,6 +18,8 @@ import logging
 from socket import error as socket_error
 from M2Crypto import SSL
 import glib
+import datetime
+import time
 
 import gettext
 _ = gettext.gettext
@@ -124,3 +126,30 @@ def find_text(haystack, needle):
             break
 
     return finds
+
+
+def make_today_now(today):
+    """
+    Given a datetime, return either that datetime, or, if the value is today's
+    date, return the datetime representing 'right now'.
+
+    Useful for asking for subscriptions that are valid now.
+    """
+    if today.date() == datetime.date.today():
+        now = datetime.datetime.today()
+        today = today.replace(hour=now.hour, minute=now.minute,
+                second=now.second, tzinfo=LocalTz())
+    return today
+
+
+class LocalTz(datetime.tzinfo):
+
+    """
+    tzinfo object representing whatever this systems tz offset is.
+    """
+
+    def utcoffset(self, dt):
+        return datetime.timedelta(seconds=time.timezone)
+
+    def dst(self, dt):
+        return None

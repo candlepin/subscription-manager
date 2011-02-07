@@ -34,7 +34,7 @@ import storage
 import widgets
 import progress
 import async
-from utils import handle_gui_exception
+from utils import handle_gui_exception, make_today_now
 
 class MappedListTreeView(gtk.TreeView):
 
@@ -261,7 +261,7 @@ class ComplianceAssistant(widgets.GladeWidget):
         state of the GUI controls.
         """
         if self.first_noncompliant_radiobutton.get_active():
-            return self.last_compliant_date
+            return make_today_now(self.last_compliant_date)
         else:
             return self.date_picker.date
 
