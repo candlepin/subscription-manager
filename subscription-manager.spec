@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.93.16
+Version: 0.93.17
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -169,6 +169,9 @@ if [ $1 = 0 ] ; then
 fi
 
 %changelog
+* Tue Feb 08 2011 Bryan Kearney <bkearney@redhat.com> 0.93.17-1
+- 676017: Configure the tool to run against production (bkearney@redhat.com)
+
 * Mon Feb 07 2011 Devan Goodwin <dgoodwin@redhat.com> 0.93.16-1
 - Final names for the external systems (bkearney@redhat.com)
 - 674078: send 'right now' for compliance today, too (jbowes@redhat.com)
