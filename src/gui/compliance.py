@@ -211,6 +211,8 @@ class ComplianceAssistant(widgets.GladeWidget):
             formatted = self.format_date(self.last_compliant_date)
             self.compliance_label.set_label(
                     _("<big><b>All software is in compliance until %s</b></big>") % formatted)
+            self.compliance_label.set_line_wrap(True)
+            self.compliance_label.connect("size-allocate", self._label_allocate)
             self.first_noncompliant_radiobutton.set_label(
                     _("%s (first date of non-compliance)") % formatted)
             self.providing_subs_label.set_label(
@@ -225,6 +227,9 @@ class ComplianceAssistant(widgets.GladeWidget):
                 _("Searching for subscriptions. Please wait."))
         self.timer = gobject.timeout_add(100, self.pb.pulse)
         self.pb.set_parent_window(self.window)
+
+    def _label_allocate(self, label, allocation):
+        label.set_size_request(allocation.width-2, -1)
 
     def _check_for_date_change(self, widget):
         """
