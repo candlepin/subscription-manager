@@ -267,3 +267,5 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.subscribe_button.set_sensitive(selection.is_valid())
 
+    def on_no_selection(self):
+        self.subscribe_button.set_sensitive(False)
