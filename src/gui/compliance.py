@@ -154,15 +154,13 @@ class ComplianceAssistant(widgets.GladeWidget):
         self.first_noncompliant_radiobutton.set_active(True)
 
         self.date_picker = widgets.DatePicker(date.today())
-        self.date_picker.connect('date-picked-cal', self._compliance_date_selected)
         self.date_picker_hbox.pack_start(self.date_picker, False, False)
         self.date_picker.show_all()
 
         self.subscribe_button.connect('clicked', self.subscribe_button_clicked)
 
         self.glade.signal_autoconnect({
-            # only watch one radiobutton in the group, it will signal for all
-            "on_first_noncompliant_radiobutton_toggled": self._check_for_date_change,
+            "on_update_button_clicked": self._check_for_date_change,
         })
 
         self.pb = None
@@ -246,19 +244,6 @@ class ComplianceAssistant(widgets.GladeWidget):
             self._reload_screen()
         else:
             log.debug("No change in compliance date, skipping screen reload.")
-
-    def _compliance_date_selected(self, widget):
-        """
-        Callback for the date selector to execute when the date has been chosen.
-        """
-        log.debug("Compliance date selected.")
-        was_active = self.noncompliant_date_radiobutton.get_active()
-        self.noncompliant_date_radiobutton.set_active(True)
-
-        # otherwise the signal from the last compliant button will handle
-        # it for us
-        if was_active:
-            self._check_for_date_change(None)
 
     def _get_noncompliant_date(self):
         """
