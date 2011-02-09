@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.94.15
+Version: 0.94.16
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -57,6 +57,10 @@ rm -rf %{buildroot}
 %{python_sitelib}/rhsm-*.egg-info
 
 %changelog
+* Wed Feb 09 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 674078: send a full iso 8601 timestamp for activeOn pools query
+  (jbowes@repl.ca)
+
 * Thu Jan 13 2011 Devan Goodwin <dgoodwin@redhat.com> 0.94.15-1
 - Resolves: #668814
 - remove shebang from certificate.py for rpmlint (jbowes@redhat.com)
