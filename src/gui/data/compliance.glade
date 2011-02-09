@@ -232,6 +232,9 @@
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">subscribe button</atkproperty>
+                </accessibility>
               </widget>
               <packing>
                 <property name="expand">False</property>

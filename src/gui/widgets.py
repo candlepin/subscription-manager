@@ -20,6 +20,7 @@ import gobject
 import gtk
 import gio
 import pango
+import atk
 
 import gettext
 _ = gettext.gettext
@@ -355,6 +356,9 @@ class DatePicker(gtk.HBox):
         self._date_entry = gtk.Entry()
         self._date_entry.set_width_chars(12)
         self._date_entry.set_text(self._date.strftime("%x"))
+        atk_entry = self._date_entry.get_accessible()
+        atk_entry.set_name('date-entry')
+
         self._cal_button = gtk.Button()
         self._cal_button.set_image(image)
 
