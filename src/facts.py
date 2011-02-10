@@ -1,13 +1,15 @@
 import glob
 import os
 import simplejson as json
+import logging
 import gettext
 _ = gettext.gettext
 
 import rhsm.config
 import certlib
-
 from datetime import datetime
+
+log = logging.getLogger('rhsm-app.' + __name__)
 
 class Facts():
 
@@ -42,7 +44,7 @@ class Facts():
             json_buffer = f.read()
             cached_facts = json.loads(json_buffer)
         except IOError, e:
-            print _("Unable to read %s") % self.fact_cache
+            log.debug("Unable to read %s" % self.fact_cache)
         except ValueError:
             # see bz #669208, #667953
             # ignore facts file parse errors, we are going to generate
