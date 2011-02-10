@@ -93,14 +93,23 @@ rm -rf $RPM_BUILD_ROOT
 %files -f rhsm.lang
 %defattr(-,root,root,-)
 
-%attr(755,root,root) %dir %{_var}/log/rhsm
+%attr(750,root,root) %dir %{_var}/log/rhsm
+%attr(750,root,root) %dir %{_sysconfdir}/rhsm
+%attr(750,root,root) %dir %{_sysconfdir}/rhsm/facts
+%attr(750,root,root) %dir %{_sysconfdir}/rhsm/ca
 
-%config(noreplace) %attr(644,root,root) /etc/rhsm/rhsm.conf
+%attr(640,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
+%attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
+%config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
+
+%config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/subscription-manager.conf
+%config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/product-id.conf
+%config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/subscription-manager
+
+%{_sysconfdir}/cron.daily/rhsm-complianced
+%{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
 
 %dir %{_datadir}/rhsm
-%dir /etc/rhsm/facts
-%dir %{_sysconfdir}/rhsm/ca
-
 %{_datadir}/rhsm/__init__.py*
 %{_datadir}/rhsm/managercli.py*
 %{_datadir}/rhsm/managerlib.py*
@@ -118,26 +127,17 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/productid.py*
 %attr(755,root,root) %{_datadir}/rhsm/certmgr.py*
 %attr(755,root,root) %{_sbindir}/subscription-manager
-%attr(755,root,root) %dir %{_var}/lib/rhsm
-%attr(755,root,root) %dir %{_var}/run/rhsm
-%attr(755,root,root) %dir %{_var}/lib/rhsm/facts
 %attr(755,root,root) %{_bindir}/rhsmcertd
 %attr(755,root,root) %{_sysconfdir}/init.d/rhsmcertd
 %attr(755,root,root) %{_libexecdir}/rhsm-complianced
-
-# config files
-%config(noreplace) %attr(644,root,root) /etc/yum/pluginconf.d/subscription-manager.conf
-%config(noreplace) %attr(644,root,root) /etc/yum/pluginconf.d/product-id.conf
-%config(noreplace) %attr(644,root,root) /etc/logrotate.d/subscription-manager
-
-%{_sysconfdir}/rhsm/ca
-%{_sysconfdir}/cron.daily/rhsm-complianced
-%config %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
-%{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
+%attr(750,root,root) %dir %{_var}/run/rhsm
+%attr(750,root,root) %dir %{_var}/lib/rhsm
+%attr(750,root,root) %dir %{_var}/lib/rhsm/facts
 
 %doc
 %{_mandir}/man8/subscription-manager.8*
 %{_mandir}/man8/rhsmcertd.8*
+
 
 %files -n subscription-manager-gnome
 %defattr(-,root,root,-)
@@ -157,6 +157,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc
 %{_mandir}/man8/subscription-manager-gui.8*
 %{_mandir}/man8/rhsm-compliance-icon.8*
+
 
 %files -n subscription-manager-firstboot
 %defattr(-,root,root,-)
