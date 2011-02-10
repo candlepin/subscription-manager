@@ -409,6 +409,4 @@ class ComplianceAssistant(widgets.GladeWidget):
         except Exception, e:
             handle_gui_exception(e, _("Error getting subscription: %s"))
 
-        # Just close the window?
-        self.window.hide()
-
+        self._check_for_date_change(None)
