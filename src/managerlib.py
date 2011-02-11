@@ -384,7 +384,7 @@ def list_pools(uep, consumer_uuid, facts, all=False, active_on=None):
 # TODO: This method is morphing the actual pool json and returning a new 
 # dict which does not contain all the pool info. Not sure if this is really
 # necessary. Also some "view" specific things going on in here.
-def getAvailableEntitlements(cpserver, consumer_uuid, facts, all=False):
+def getAvailableEntitlements(cpserver, consumer_uuid, facts, all=False, active_on=None):
     """
     Returns a list of entitlement pools from the server.
 
@@ -396,8 +396,8 @@ def getAvailableEntitlements(cpserver, consumer_uuid, facts, all=False):
     """
     columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
             'providedProducts', 'productId']
-    
-    dlist = list_pools(cpserver, consumer_uuid, facts, all)
+   
+    dlist = list_pools(cpserver, consumer_uuid, facts, all, active_on)
 
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
