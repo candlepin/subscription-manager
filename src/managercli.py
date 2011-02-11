@@ -22,6 +22,8 @@ import logging
 import socket
 import rhsm.config
 import constants
+import datetime
+import xml.utils.iso8601
 import rhsm.connection as connection
 from optparse import OptionParser
 from certlib import CertLib, ConsumerIdentity
@@ -591,6 +593,9 @@ class ListCommand(CliCommand):
         self.parser.add_option("--installed", action='store_true', help=_("installed"))
         self.parser.add_option("--available", action='store_true',
                                help=_("available"))
+        self.parser.add_option("--ondate", dest="on_date",
+                                help=_("date to search on, defaults to today's date, only used with --available "+
+                                      "(example: " + datetime.date.today().isoformat() + " )"))
         self.parser.add_option("--consumed", action='store_true',
                                help=_("consumed"))
         self.parser.add_option("--all", action='store_true',
@@ -599,6 +604,9 @@ class ListCommand(CliCommand):
     def _validate_options(self):
         if (self.options.all and not self.options.available):
             print _("Error: --all is only applicable with --available")
+            sys.exit(-1)
+        if (self.options.on_date and not self.options.available):
+            print _("Error: --ondate is only applicable with --available")
             sys.exit(-1)
         if not (self.options.available or self.options.consumed):
             self.options.installed = True
@@ -623,9 +631,18 @@ class ListCommand(CliCommand):
                 print constants.installed_product_status % product
 
         if self.options.available:
+            on_date = None
+            if self.options.on_date:
+                try:
+                    tf = xml.utils.iso8601.parse(self.options.on_date)
+                    on_date = datetime.datetime.fromtimestamp(tf).date()
+                except Exception, e:
+                    print(_("Date entered is invalid. Date should be in ISO 8601 format (example: " + datetime.date.today().isoformat() + " )"))
+                    sys.exit(1)
+
             facts = Facts()
             epools = managerlib.getAvailableEntitlements(self.cp, consumer,
-                    facts, self.options.all)
+                    facts, self.options.all, on_date)
             if not len(epools):
                 print(_("No Available subscription pools to list"))
                 sys.exit(0)
