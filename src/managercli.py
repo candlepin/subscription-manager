@@ -595,7 +595,7 @@ class ListCommand(CliCommand):
                                help=_("available"))
         self.parser.add_option("--ondate", dest="on_date",
                                 help=_("date to search on, defaults to today's date, only used with --available "+
-                                      "(example: " + datetime.date.today().isoformat() + " )"))
+                                      "(example: ") + datetime.date.today().isoformat() + " )")
         self.parser.add_option("--consumed", action='store_true',
                                help=_("consumed"))
         self.parser.add_option("--all", action='store_true',
@@ -637,7 +637,7 @@ class ListCommand(CliCommand):
                     tf = xml.utils.iso8601.parse(self.options.on_date)
                     on_date = datetime.datetime.fromtimestamp(tf).date()
                 except Exception, e:
-                    print(_("Date entered is invalid. Date should be in ISO 8601 format (example: " + datetime.date.today().isoformat() + " )"))
+                    print(_("Date entered is invalid. Date should be in ISO 8601 format (example: ") + datetime.date.today().isoformat() + " )")
                     sys.exit(1)
 
             facts = Facts()
