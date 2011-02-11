@@ -148,7 +148,7 @@ display_icon(Compliance *compliance, ComplianceType compliance_type)
 			"subscription agreements.");
 	}
 
-	compliance->icon = gtk_status_icon_new_from_icon_name("subsmgr");
+	compliance->icon = gtk_status_icon_new_from_icon_name("subscription-manager");
 	gtk_status_icon_set_tooltip(compliance->icon, tooltip);
 	g_signal_connect(compliance->icon, "activate",
 			 G_CALLBACK(icon_clicked), compliance);
@@ -157,7 +157,7 @@ display_icon(Compliance *compliance, ComplianceType compliance_type)
 	compliance->is_visible = true;
 
 	compliance->notification = notify_notification_new_with_status_icon(
-		notification_title, notification_body, "subsmgr",
+		notification_title, notification_body, "subscription-manager",
 		compliance->icon);
 	
 	notify_notification_add_action(compliance->notification,
