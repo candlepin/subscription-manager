@@ -689,15 +689,15 @@ class CertSorter(object):
         for product in ent_cert.getProducts():
             product_id = product.getHash()
             # Is this an installed product?
-            if self.all_products.has_key(product_id):
+            if product_id in self.all_products:
                 product_dict[product_id] = ent_cert
 
     def _scan_for_unentitled_products(self):
         # For all installed products, if not in valid or expired hash, it
         # must be completely unentitled
         for product_id in self.all_products.keys():
-            if (not self.valid_products.has_key(product_id)) and \
-                (not self.expired_products.has_key(product_id)):
+            if (not product_id in self.valid_products) and \
+                (not product_id in self.expired_products):
                     self.unentitled_products[product_id] = \
                             self.all_products[product_id]
 
@@ -710,7 +710,7 @@ class CertSorter(object):
         another still valid entitlement already provides the missing product.
         """
         for product_id in self.expired_products.keys():
-            if self.valid_products.has_key(product_id):
+            if product_id in self.valid_products:
                 del self.expired_products[product_id]
 
 

@@ -742,18 +742,13 @@ class CLI:
             return None
 
         cmd = None
-        key = " ".join(possiblecmd)
-        if self.cli_commands.has_key(" ".join(possiblecmd)):
-            cmd = self.cli_commands[key]
-
-        i = -1
+        i = len(possiblecmd)
         while cmd == None:
             key = " ".join(possiblecmd[:i])
             if key is None or key == "":
                 break
 
-            if self.cli_commands.has_key(key):
-                cmd = self.cli_commands[key]
+            cmd = self.cli_commands.get(key)
             i -= 1
 
         return cmd
@@ -761,12 +756,8 @@ class CLI:
     def main(self):
         managerlib.check_identity_cert_perms()
 
-        if len(sys.argv) < 2 or not self._find_best_match(sys.argv):
-            self._usage()
-            sys.exit(0)
-
         cmd = self._find_best_match(sys.argv)
-        if not cmd:
+        if len(sys.argv) < 2 or not cmd:
             self._usage()
             sys.exit(0)
 

@@ -174,13 +174,13 @@ class CertSorterTests(unittest.TestCase):
     def test_unentitled_product_certs(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir)
         self.assertEqual(1, len(self.sorter.unentitled_products.keys()))
-        self.assertTrue(self.sorter.unentitled_products.has_key('product1'))
+        self.assertTrue('product1' in self.sorter.unentitled_products)
 
     def test_entitled_products(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir)
         self.assertEqual(2, len(self.sorter.valid_products.keys()))
-        self.assertTrue(self.sorter.valid_products.has_key('product2'))
-        self.assertTrue(self.sorter.valid_products.has_key('product4'))
+        self.assertTrue('product2' in self.sorter.valid_products)
+        self.assertTrue('product4' in self.sorter.valid_products)
 
         self.assertEqual(2, len(self.sorter.valid_entitlement_certs))
         self.assertTrue(cert_list_has_product(
@@ -201,16 +201,16 @@ class CertSorterTests(unittest.TestCase):
             self.sorter.expired_entitlement_certs, 'product4'))
 
         self.assertEqual(1, len(self.sorter.expired_products.keys()))
-        self.assertTrue(self.sorter.expired_products.has_key('product3'))
+        self.assertTrue('product3' in self.sorter.expired_products)
 
     def test_expired_in_future(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir,
                 on_date=datetime(2050, 1, 1))
         self.assertEqual(3, len(self.sorter.expired_entitlement_certs))
-        self.assertTrue(self.sorter.expired_products.has_key('product2'))
-        self.assertTrue(self.sorter.expired_products.has_key('product3'))
-        self.assertFalse(self.sorter.expired_products.has_key('product4')) # it's not installed
-        self.assertTrue(self.sorter.unentitled_products.has_key('product1'))
+        self.assertTrue('product2' in self.sorter.expired_products)
+        self.assertTrue('product3' in self.sorter.expired_products)
+        self.assertFalse('product4' in self.sorter.expired_products) # it's not installed
+        self.assertTrue('product1' in self.sorter.unentitled_products)
         self.assertEqual(0, len(self.sorter.valid_entitlement_certs))
 
     def test_entitled_products(self):
@@ -221,9 +221,9 @@ class CertSorterTests(unittest.TestCase):
                 provided_products=provided)])
         self.sorter = CertSorter(self.prod_dir, self.ent_dir)
         self.assertEquals(3, len(self.sorter.valid_products.keys()))
-        self.assertTrue(self.sorter.valid_products.has_key('product1'))
-        self.assertTrue(self.sorter.valid_products.has_key('product2'))
-        self.assertTrue(self.sorter.valid_products.has_key('product3'))
+        self.assertTrue('product1' in self.sorter.valid_products)
+        self.assertTrue('product2' in self.sorter.valid_products)
+        self.assertTrue('product3' in self.sorter.valid_products)
 
     def test_expired_but_provided_in_another_entitlement(self):
         self.ent_dir = StubCertificateDirectory([
@@ -237,7 +237,7 @@ class CertSorterTests(unittest.TestCase):
         ])
         self.sorter = CertSorter(self.prod_dir, self.ent_dir)
         self.assertEquals(1, len(self.sorter.valid_products.keys()))
-        self.assertTrue(self.sorter.valid_products.has_key('product3'))
+        self.assertTrue('product3' in self.sorter.valid_products)
         self.assertEquals(0, len(self.sorter.expired_products.keys()))
         self.assertEquals(2, len(self.sorter.unentitled_products.keys()))
 
@@ -252,11 +252,11 @@ class CertSorterTests(unittest.TestCase):
 
         self.assertEquals(1, len(self.sorter.expired_entitlement_certs))
         self.assertEquals(2, len(self.sorter.expired_products.keys()))
-        self.assertTrue(self.sorter.expired_products.has_key('product2'))
-        self.assertTrue(self.sorter.expired_products.has_key('product3'))
+        self.assertTrue('product2' in self.sorter.expired_products)
+        self.assertTrue('product3' in self.sorter.expired_products)
 
         self.assertEquals(1, len(self.sorter.unentitled_products.keys()))
-        self.assertTrue(self.sorter.unentitled_products.has_key('product1'))
+        self.assertTrue('product1' in self.sorter.unentitled_products)
 
 
 def cert_list_has_product(cert_list, product_id):

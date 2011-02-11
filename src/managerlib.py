@@ -106,7 +106,7 @@ def getInstalledProductStatus():
     product_status = []
     for product in products:
         pname = product.getProduct().getName()
-        if entdict.has_key(pname):
+        if pname in entdict:
             data = (pname, map_status(entdict[pname]['valid']),
                     str(entdict[pname]['expires']), entdict[pname]['serial'],
                     entdict[pname]['contract'], entdict[pname]['account'])
@@ -454,7 +454,7 @@ def merge_pools(pools):
     merged_pools = {}
 
     for pool in pools:
-        if not merged_pools.has_key(pool['productId']):
+        if not pool['productId'] in merged_pools:
             merged_pools[pool['productId']] = MergedPools(pool['productId'],
                     pool['productName'])
         merged_pools[pool['productId']].add_pool(pool)

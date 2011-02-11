@@ -44,8 +44,8 @@ class MergePoolsTests(unittest.TestCase):
         ]
         results = merge_pools(pools)
         self.assertEquals(2, len(results.values()))
-        self.assertTrue(results.has_key(product1))
-        self.assertTrue(results.has_key(product2))
+        self.assertTrue(product1 in results)
+        self.assertTrue(product2 in results)
 
         # Check product1:
         merged_pools = results[product1]
