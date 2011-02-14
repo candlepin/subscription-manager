@@ -133,10 +133,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         products = [(product.getName(), product.getHash())
                         for product in cert.getProducts()]
 
-        if order.getProvidesManagement() == 1:
-            management = _("yes")
+        if str(order.getProvidesManagement()) == "1":
+            management = _("Yes")
         else:
-            management = _("no")
+            management = _("No")
 
         self.sub_details.show(order.getName(),
                               contract=order.getContract() or "",
