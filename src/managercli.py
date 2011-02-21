@@ -361,12 +361,17 @@ class RegisterCommand(CliCommand):
             # try to auomatically bind products
             products = managerlib.getInstalledProductHashMap()
             try:
-                admin_cp.bindByProduct(consumer['uuid'], products.values())
+
+                ents = admin_cp.bindByProduct(consumer['uuid'], products.values())
+                self.certlib.update()
+
+                installed_status = managerlib.getInstalledProductStatus()
+
                 log.info("Automatically subscribed to products: %s " \
                         % ", ".join(products.keys()))
-                print _("Subscribed to Products:")
-                for pname in products.keys():
-                    print _("     %s(%s)") % (pname, products[pname])
+                print _("Installed Products:")
+                for prod_status in installed_status:
+                    print ("   %s - %s" % (prod_status[0], prod_status[1]))
             except Exception, e:
                 log.exception(e)
                 log.warning("Warning: Unable to auto subscribe to %s" \
