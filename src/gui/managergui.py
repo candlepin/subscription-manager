@@ -113,8 +113,11 @@ class Backend(object):
                         key_file=ConsumerIdentity.keypath())
 
     def create_uep(self, cert_file=None, key_file=None):
+        # Re-initialize our connection:
         self.uep = self._create_uep(cert_file=cert_file,
                                     key_file=key_file)
+        # Holds a reference to the old uep:
+        self.certlib = CertLib(uep=self.uep)
 
     def _create_uep(self, username=None, password=None, cert_file=None, key_file=None):
         return connection.UEPConnection(
