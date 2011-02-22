@@ -93,10 +93,10 @@ rm -rf $RPM_BUILD_ROOT
 %files -f rhsm.lang
 %defattr(-,root,root,-)
 
-%attr(750,root,root) %dir %{_var}/log/rhsm
-%attr(750,root,root) %dir %{_sysconfdir}/rhsm
-%attr(750,root,root) %dir %{_sysconfdir}/rhsm/facts
-%attr(750,root,root) %dir %{_sysconfdir}/rhsm/ca
+%attr(755,root,root) %dir %{_var}/log/rhsm
+%attr(755,root,root) %dir %{_sysconfdir}/rhsm
+%attr(755,root,root) %dir %{_sysconfdir}/rhsm/facts
+%attr(755,root,root) %dir %{_sysconfdir}/rhsm/ca
 
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
@@ -130,9 +130,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/rhsmcertd
 %attr(755,root,root) %{_sysconfdir}/init.d/rhsmcertd
 %attr(755,root,root) %{_libexecdir}/rhsm-complianced
-%attr(750,root,root) %dir %{_var}/run/rhsm
-%attr(750,root,root) %dir %{_var}/lib/rhsm
-%attr(750,root,root) %dir %{_var}/lib/rhsm/facts
+%attr(755,root,root) %dir %{_var}/run/rhsm
+%attr(755,root,root) %dir %{_var}/lib/rhsm
+%attr(755,root,root) %dir %{_var}/lib/rhsm/facts
 
 %doc
 %{_mandir}/man8/subscription-manager.8*
