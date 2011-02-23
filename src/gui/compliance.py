@@ -115,6 +115,8 @@ class ComplianceAssistant(widgets.GladeWidget):
         self.uncompliant_store = storage.MappedListStore(uncompliant_type_map)
         self.uncompliant_treeview = MappedListTreeView(self.uncompliant_store)
 
+        self.uncompliant_treeview.get_accessible().set_name(_("Uncompliant Product List"))
+
         self.uncompliant_treeview.add_toggle_column(None,
                                                     self.uncompliant_store['active'],
                                                     self._on_uncompliant_active_toggled)
@@ -136,6 +138,7 @@ class ComplianceAssistant(widgets.GladeWidget):
 
         self.subscriptions_store = storage.MappedListStore(subscriptions_type_map)
         self.subscriptions_treeview = MappedListTreeView(self.subscriptions_store)
+        self.subscriptions_treeview.get_accessible().set_name(_("Compliance Subscription List"))
         self.subscriptions_treeview.add_column("Subscription Name",
                 self.subscriptions_store['product_name'], True)
         self.subscriptions_treeview.add_column("Available Subscriptions",
