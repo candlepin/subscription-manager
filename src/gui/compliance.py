@@ -174,7 +174,8 @@ class ComplianceAssistant(widgets.GladeWidget):
             self.window.show()
             self._reload_screen()
         except Exception, e:
-            handle_gui_exception(e, _("Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log for more information."))
+            handle_gui_exception(e, _("Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log for more information."),
+                                 formatMsg=False)
 
     def set_parent_window(self, window):
         self.window.set_transient_for(window)
@@ -188,7 +189,8 @@ class ComplianceAssistant(widgets.GladeWidget):
 
         if error:
             handle_gui_exception(error,
-                    _("Unable to search for subscriptions"))
+                                 _("Unable to search for subscriptions"),
+                                 formatMsg=False)
         else:
             self._display_uncompliant()
             self._display_subscriptions()
