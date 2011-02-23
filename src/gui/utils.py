@@ -32,13 +32,14 @@ import messageWindow
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
-def handle_gui_exception(e, msg, logMsg=None):
+def handle_gui_exception(e, msg, formatMsg=True, logMsg=None):
     """
     Handles an exception for the gui by logging the stack trace and
     displaying a user-friendly internationalized message.
 
     msg = User friendly message to display in GUI.
     logMsg = Optional message to be logged in addition to stack trace.
+    formatMsg = if true, string sub the exception error in the msg
     """
 
     if logMsg:
@@ -58,7 +59,12 @@ def handle_gui_exception(e, msg, logMsg=None):
         # This is what happens when there's an issue with the server on the other side of the wire
         errorWindow(_("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."))
     elif isinstance(e, connection.RestlibException):
-        errorWindow(msg % linkify(e.msg))
+        if formatMsg:
+            message = linkify(msg % linkify(e.msg))
+        else:
+            message = linkify(e.msg)
+
+        errorWindow(message)
     elif isinstance(e, connection.BadCertificateException):
         errorWindow(_("Bad CA certificate: %s" % e.cert_path))
     else:
