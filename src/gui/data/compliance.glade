@@ -12,25 +12,40 @@
     <property name="default_height">600</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
+    <accessibility>
+      <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Assistant</atkproperty>
+    </accessibility>
     <child>
       <widget class="GtkVBox" id="subscriptions_vbox">
         <property name="visible">True</property>
         <property name="border_width">12</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
+        <accessibility>
+          <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Assistant Box</atkproperty>
+        </accessibility>
         <child>
           <widget class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
             <property name="spacing">6</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Assistant Status</atkproperty>
+            </accessibility>
             <child>
               <widget class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Label Box</atkproperty>
+                </accessibility>
                 <child>
                   <widget class="GtkLabel" id="compliance_label">
                     <property name="visible">True</property>
                     <property name="xalign">0.10000000149011612</property>
                     <property name="use_markup">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Label</atkproperty>
+                    </accessibility>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -48,11 +63,17 @@
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">3</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Date Box</atkproperty>
+                </accessibility>
                 <child>
                   <widget class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Show products that will be out of compliance as of:</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Date Label</atkproperty>
+                    </accessibility>
                   </widget>
                   <packing>
                     <property name="position">0</property>
@@ -74,6 +95,9 @@
                 <child>
                   <widget class="GtkHBox" id="date_picker_hbox">
                     <property name="visible">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Date Picker</atkproperty>
+                    </accessibility>
                     <child>
                       <widget class="GtkRadioButton" id="noncompliant_date_radiobutton">
                         <property name="label" translatable="yes">On a different date:</property>
@@ -102,6 +126,9 @@
                   <widget class="GtkHButtonBox" id="hbuttonbox2">
                     <property name="visible">True</property>
                     <property name="layout_style">end</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Update Box</atkproperty>
+                    </accessibility>
                     <child>
                       <widget class="GtkButton" id="update_button">
                         <property name="label" translatable="yes">Update</property>
@@ -140,6 +167,9 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="orientation">vertical</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Product List</atkproperty>
+            </accessibility>
             <child>
               <widget class="GtkScrolledWindow" id="uncompliant_window">
                 <property name="visible">True</property>
@@ -147,6 +177,9 @@
                 <property name="hscrollbar_policy">automatic</property>
                 <property name="vscrollbar_policy">automatic</property>
                 <property name="shadow_type">etched-in</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Uncompliant Product List</atkproperty>
+                </accessibility>
                 <child>
                   <placeholder/>
                 </child>
@@ -160,11 +193,17 @@
               <widget class="GtkVBox" id="vbox4">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Subscriptions Box</atkproperty>
+                </accessibility>
                 <child>
                   <widget class="GtkLabel" id="providing_subs_label">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">The following subscriptions will cover the products selected above:</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Subscriptions Label</atkproperty>
+                    </accessibility>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -176,6 +215,9 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="orientation">vertical</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Subscriptions Panel</atkproperty>
+                    </accessibility>
                     <child>
                       <widget class="GtkScrolledWindow" id="subscriptions_window">
                         <property name="visible">True</property>
@@ -183,6 +225,9 @@
                         <property name="hscrollbar_policy">automatic</property>
                         <property name="vscrollbar_policy">automatic</property>
                         <property name="shadow_type">etched-in</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Subscriptions List</atkproperty>
+                        </accessibility>
                         <child>
                           <placeholder/>
                         </child>
@@ -196,6 +241,9 @@
                       <widget class="GtkVBox" id="details_window">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Subscription Details</atkproperty>
+                        </accessibility>
                         <child>
                           <placeholder/>
                         </child>
@@ -225,6 +273,9 @@
           <widget class="GtkHButtonBox" id="hbuttonbox1">
             <property name="visible">True</property>
             <property name="layout_style">end</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Action Area</atkproperty>
+            </accessibility>
             <child>
               <widget class="GtkButton" id="subscribe_button">
                 <property name="label" translatable="yes">Subscribe</property>
