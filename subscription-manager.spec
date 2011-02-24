@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.1
+Version: 0.95.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -175,6 +175,32 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Thu Feb 24 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 573591: Fix the permissions on some directories (bkearney@redhat.com)
+- 678049: Fix status after CLI register with --autosubscribe.
+  (dgoodwin@redhat.com)
+- 676349: python deprecation fixups (jbowes@redhat.com)
+- 676363 - rhsm-compliance-icon has no icon image (cduryee@redhat.com)
+- 672562 - request for subscription-manager list --available --ondate option
+  (cduryee@redhat.com)
+- 672562 - request for subscription-manager list --available --ondate option
+  (cduryee@redhat.com)
+- 676371 - Compliance Assistant closes when you're not done
+  (cduryee@redhat.com)
+- 676348: make config file and runtime dirs/logs only readable by root
+  (jbowes@redhat.com)
+- 676534 - Got message “unable to read /var/lib/rhsm/facts/facts.json” at
+  first time register to stage (cduryee@redhat.com)
+- 675777 Date search field has no accessibility handler (cduryee@redhat.com)
+- 675817 - Compliance Assistant needs an Update button for the date
+  (cduryee@redhat.com)
+- 675812 - Some tracebacks while beating on subscription-manager-gui
+  (cduryee@redhat.com)
+- 675951 compliance asst doesn't word wrap label (cduryee@redhat.com)
+- 670655 can't dismiss error dialog when subscribing to personal subscriptions
+  (cduryee@redhat.com)
+- 673050: Using strftime to format update time. (jharris@redhat.com)
+- 674078: send 'right now' for compliance today, too (jbowes@redhat.com)
 * Fri Feb 04 2011 Devan Goodwin <dgoodwin@redhat.com> 0.95.1-1
 - 674418: Changing accessibility handles to reflect check box functionality.
   (jharris@redhat.com)
