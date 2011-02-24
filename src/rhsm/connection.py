@@ -142,7 +142,7 @@ class Restlib(object):
 
     def _request(self, request_type, method, info=None):
         handler = self.apihandler + method
-        context = SSL.Context("sslv3")
+        context = SSL.Context("tlsv1")
         if self.ca_dir != None:
             log.info('loading ca pem certificates from: %s', self.ca_dir)
             self._load_ca_certificates(context)
