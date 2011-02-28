@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.2
+Version: 0.95.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -175,6 +175,11 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Mon Feb 28 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 678003: Write proxy info for yum repositories we manage.
+  (dgoodwin@redhat.com)
+- 678003: Fix a certlib cached connection. (dgoodwin@redhat.com)
+
 * Thu Feb 24 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 573591: Fix the permissions on some directories (bkearney@redhat.com)
 - 678049: Fix status after CLI register with --autosubscribe.
