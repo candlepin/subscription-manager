@@ -50,8 +50,8 @@ class UpdateAction:
 
     def perform(self):
         # Load the RepoFile from disk, this contains all our managed yum repo sections:
-        repod = RepoFile()
-        repod.read()
+        repo_file = RepoFile()
+        repo_file.read()
         valid = set()
         updates = 0
 
@@ -59,20 +59,20 @@ class UpdateAction:
         # in the RepoFile as appropriate:
         for cont in self.getUniqueContent():
             valid.add(cont.id)
-            existing = repod.section(cont.id)
+            existing = repo_file.section(cont.id)
             if existing is None:
                 updates += 1
-                repod.add(cont)
+                repo_file.add(cont)
                 continue
             updates += existing.update(cont)
-            repod.update(existing)
-        for section in repod.sections():
+            repo_file.update(existing)
+        for section in repo_file.sections():
             if section not in valid:
                 updates += 1
-                repod.delete(section)
+                repo_file.delete(section)
 
         # Write new RepoFile to disk:
-        repod.write()
+        repo_file.write()
         log.info("repos updated: %s" % updates)
         return updates
 
@@ -93,6 +93,7 @@ class UpdateAction:
 
     def getContent(self, product, baseurl, ca_cert):
         lst = []
+        cfg = initConfig()
         for ent in product.getContentEntitlements():
             id = ent.getLabel()
             repo = Repo(id)
@@ -104,8 +105,26 @@ class UpdateAction:
             repo['sslclientcert'] = product.path
             repo['sslcacert'] = ca_cert
             repo['metadata_expire'] = ent.getMetadataExpire()
+
+            self._set_proxy_info(repo, cfg)
             lst.append(repo)
         return lst
+
+    def _set_proxy_info(self, repo, cfg):
+        proxy = ""
+
+        proxy_host = cfg.get('server', 'proxy_hostname')
+        proxy_port = cfg.get('server', 'proxy_port')
+        if proxy_host != "":
+            proxy = "http://%s" % proxy_host
+            if proxy_port != "":
+                proxy = "%s:%s" % (proxy, proxy_port)
+
+        # These could be empty string, in which case they will not be
+        # set in the yum repo file:
+        repo['proxy'] = proxy
+        repo['proxy_username'] = cfg.get('server', 'proxy_user')
+        repo['proxy_password'] = cfg.get('server', 'proxy_password')
 
     def join(self, base, url):
         if '://' in url:
@@ -132,6 +151,9 @@ class Repo(dict):
         ('sslclientkey', 0, None),
         ('sslclientcert', 0, None),
         ('metadata_expire', 1, None),
+        ('proxy', 0, None),
+        ('proxy_username', 0, None),
+        ('proxy_password', 0, None),
     )
 
     def __init__(self, id):
@@ -163,6 +185,8 @@ class Repo(dict):
         """
         lst = []
         for k, m, d in self.PROPERTIES:
+            if not k in self:
+                continue
             v = self[k]
             # Skip anything set to 'None', as this is likely not intended for
             # a yum repo file. None can result here if the default is None,
@@ -171,20 +195,42 @@ class Repo(dict):
                 lst.append((k, v))
         return tuple(lst)
 
-    def update(self, other):
+    def update(self, new_repo):
+        """
+        Checks an existing repo definition against a potentially updated
+        version created from most recent entitlement certificates and
+        configuration. Creates, updates, and removes properties as
+        appropriate and returns the number of changes made. (if any)
+        """
         changes_made = 0
 
-        for k, m, d in self.PROPERTIES:
-            v = other.get(k)
-            # If the property is mutable but not defined in the current repo
-            # file, set the incoming value. Otherwise, leave the current value
-            # alone.
-            if (not m) or (not self[k]):
-                if v is None:
+        for key, mutable, default in self.PROPERTIES:
+            new_val = new_repo.get(key)
+
+            # Mutable properties should be added if not currently defined,
+            # otherwise left alone.
+            if mutable:
+                if (new_val is not None) and (not self[key]):
+                    if self[key] == new_val:
+                        continue
+                    self[key] = new_val
+                    changes_made += 1
+
+            # Immutable properties should be always be added/updated,
+            # and removed if undefined in the new repo definition.
+            else:
+                if new_val is None or (new_val.strip() == ""):
+                    # Immutable property should be removed:
+                    if key in self.keys():
+                        del self[key]
+                        changes_made += 1
                     continue
-                if self[k] == v:
+
+                # Unchanged:
+                if self[key] == new_val:
                     continue
-                self[k] = v
+
+                self[key] = new_val
                 changes_made += 1
 
         return changes_made
@@ -233,6 +279,9 @@ class RepoFile(Parser):
         return self.remove_section(section)
 
     def update(self, repo):
+        # Need to clear out the old section to allow unsetting options:
+        self.remove_section(repo.id)
+        self.add_section(repo.id)
         for k, v in repo.items():
             Parser.set(self, repo.id, k, v)
 

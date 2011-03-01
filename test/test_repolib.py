@@ -67,3 +67,12 @@ class RepoTests(unittest.TestCase):
         incoming_repo = {'name': "woof"}
         existing_repo.update(incoming_repo)
         self.assertEqual("woof", existing_repo['name'])
+
+    # Test repo on disk has an immutable property set which has since been
+    # unset in the new repo definition. This property should be removed.
+    def test_set_immutable_property_now_empty(self):
+        existing_repo = Repo('testrepo')
+        existing_repo['proxy_username'] = "blah"
+        incoming_repo = {}
+        existing_repo.update(incoming_repo)
+        self.assertFalse("proxy_username" in existing_repo.keys())
