@@ -23,7 +23,7 @@ import socket
 import rhsm.config
 import constants
 import datetime
-import xml.utils.iso8601
+from time import strftime, localtime
 import rhsm.connection as connection
 from optparse import OptionParser
 from certlib import CertLib, ConsumerIdentity
@@ -600,7 +600,7 @@ class ListCommand(CliCommand):
                                help=_("available"))
         self.parser.add_option("--ondate", dest="on_date",
                                 help=_("date to search on, defaults to today's date, only used with --available "+
-                                      "(example: ") + datetime.date.today().isoformat() + " )")
+                                      "(example: ") + strftime("%Y-%m-%d", localtime()) + " )")
         self.parser.add_option("--consumed", action='store_true',
                                help=_("consumed"))
         self.parser.add_option("--all", action='store_true',
@@ -639,10 +639,9 @@ class ListCommand(CliCommand):
             on_date = None
             if self.options.on_date:
                 try:
-                    tf = xml.utils.iso8601.parse(self.options.on_date)
-                    on_date = datetime.datetime.fromtimestamp(tf).date()
+                    on_date = datetime.datetime.strptime(self.options.on_date, "%Y-%m-%d")
                 except Exception, e:
-                    print(_("Date entered is invalid. Date should be in ISO 8601 format (example: ") + datetime.date.today().isoformat() + " )")
+                    print(_("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
                     sys.exit(1)
 
             facts = Facts()
