@@ -61,7 +61,6 @@ def in_warning_period(sorter):
 
 def check_compliance():
 
-
     if managerlib.is_registered_with_classic():
         debug("System is already registered with RHN Classic")
         return RHN_CLASSIC
@@ -95,6 +94,12 @@ class ComplianceChecker(dbus.service.Object):
     def __init__(self, bus, path):
         dbus.service.Object.__init__(self, bus, path)
         self.has_run = False
+        #this will get set after first invocation
+        self.last_status = None
+
+    @dbus.service.signal(dbus_interface='com.redhat.SubscriptionManager.Compliance',  signature='i')
+    def compliancechanged(self, status_code):
+        debug("signal fired! code is " + str(status_code))
 
     @dbus.service.method(
         dbus_interface="com.redhat.SubscriptionManager.Compliance",
@@ -104,6 +109,11 @@ class ComplianceChecker(dbus.service.Object):
         returns: 0 if not compliant, 1 if compliant, 2 if close to expiry
         """
         ret = check_compliance()
+        if (ret != self.last_status):
+            debug("Compliance status changed, fire signal")
+            #we send the code out, but no one uses it at this time
+            self.compliancechanged(ret)
+        self.last_status = ret
         self.has_run = True
         return ret
 

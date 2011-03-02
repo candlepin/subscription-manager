@@ -22,6 +22,7 @@ import logging
 import socket
 import rhsm.config
 import constants
+import dbus
 import datetime
 from time import strftime, localtime
 import rhsm.connection as connection
@@ -86,6 +87,14 @@ class CliCommand(object):
         self.proxy_url = None
         self.proxy_hostname = None
         self.proxy_port = None
+
+    def _get_dbus_iface(self):
+        bus = dbus.SystemBus()
+        compliance_obj = bus.get_object('com.redhat.SubscriptionManager',
+                          '/Compliance')
+        compliance_iface = dbus.Interface(compliance_obj,
+                            dbus_interface='com.redhat.SubscriptionManager.Compliance')
+        return compliance_iface
 
     def _add_common_options(self):
         """ Add options that apply to all sub-commands. """
@@ -380,7 +389,6 @@ class RegisterCommand(CliCommand):
         if (self.options.autosubscribe or self.options.consumerid):
             self.certlib.update()
 
-
 class UnRegisterCommand(CliCommand):
 
     def __init__(self):
@@ -496,10 +504,11 @@ class SubscribeCommand(CliCommand):
                 print 'Entitlement Certificate(s) update failed due to the following reasons:'
                 for e in result[1]:
                     print '\t-', ' '.join(str(e).split('-')[1:]).strip()
+            dbus_proxy_iface = self._get_dbus_iface()
+            dbus_proxy_iface.check_compliance()
 
         except Exception, e:
             handle_exception("Unable to subscribe: %s" % e, e)
-
 
 class UnSubscribeCommand(CliCommand):
 
@@ -544,6 +553,9 @@ class UnSubscribeCommand(CliCommand):
             systemExit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Unable to perform unsubscribe due to the following exception \n Error: %s") % e, e)
+        #it is okay to call this no matter what happens above, it's just a notification to perform a check
+        dbus_proxy_iface = self._get_dbus_iface()
+        dbus_proxy_iface.check_compliance()
 
 
 class FactsCommand(CliCommand):

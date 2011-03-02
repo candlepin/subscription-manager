@@ -21,7 +21,7 @@ from rhsm.certificate import GMT
 
 import messageWindow
 import widgets
-from utils import handle_gui_exception
+from utils import handle_gui_exception,get_dbus_iface
 
 import gettext
 _ = gettext.gettext
@@ -101,10 +101,15 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         Pulls the entitlement certificates and updates the subscription model.
         """
         self.store.clear()
-
+        
         for cert in EntitlementDirectory().list():
             entry = self._create_entry_map(cert)
             self.store.add_map(entry)
+        dbus_iface = get_dbus_iface()
+        dbus_iface.check_compliance(reply_handler=self.noop_callback, error_handler=self.noop_callback)
+
+    def noop_callback(dummy=None,dummy2=None ):
+        pass
 
     def get_label(self):
         return _("My Subscriptions")
