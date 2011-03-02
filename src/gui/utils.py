@@ -17,9 +17,12 @@ import re
 import logging
 from socket import error as socket_error
 from M2Crypto import SSL
+from dbus.mainloop.glib import DBusGMainLoop
+import gobject
 import glib
 import datetime
 import time
+import dbus
 
 import gettext
 _ = gettext.gettext
@@ -146,6 +149,17 @@ def make_today_now(today):
         today = today.replace(hour=now.hour, minute=now.minute,
                 second=now.second, tzinfo=LocalTz())
     return today
+
+def get_dbus_iface():
+    """
+    Set up the dbus proxy for calling remote methods
+    """
+    bus = dbus.SystemBus()
+    compliance_obj = bus.get_object('com.redhat.SubscriptionManager',
+                      '/Compliance')
+    compliance_iface = dbus.Interface(compliance_obj,
+                        dbus_interface='com.redhat.SubscriptionManager.Compliance')
+    return compliance_iface
 
 
 class LocalTz(datetime.tzinfo):

@@ -62,6 +62,42 @@ typedef enum _ComplianceType {
 	RHN_CLASSIC
 } ComplianceType;
 
+/* prototypes */
+
+static void destroy_icon(Compliance*);
+static void display_icon(Compliance*, ComplianceType);
+static void alter_icon(Compliance*, ComplianceType);
+static void run_smg(Compliance*);
+static void icon_clicked(GtkStatusIcon*, Compliance*);
+static void icon_right_clicked(GtkStatusIcon*, guint, guint, Compliance*);
+static void remind_me_later_clicked(NotifyNotification*, gchar*, Compliance*);
+static void manage_subs_clicked(NotifyNotification*, gchar*, Compliance*);
+static void do_nothing_logger(const gchar*, GLogLevelFlags, const gchar*, gpointer);
+static void compliance_changed_cb(NotifyNotification*, gint, Compliance*);
+static bool check_compliance(Compliance*);
+static DBusGProxy* add_signal_listener(Compliance*);
+static ComplianceType check_compliance_over_dbus();
+static ComplianceType create_compliancetype(int);
+
+
+static ComplianceType
+create_compliancetype(int status)
+{
+	switch (status) {
+		case 0:
+			return RHSM_EXPIRED;
+		case 1:
+			return RHSM_COMPLIANT;
+		case 2:
+			return RHSM_WARNING;
+		case 3:
+			return RHN_CLASSIC;
+		default:
+			// we don't know this one, better to play it safe
+			return RHSM_EXPIRED;
+	}
+}
+
 static void
 destroy_icon(Compliance *compliance)
 {
@@ -99,7 +135,6 @@ icon_right_clicked(GtkStatusIcon *icon G_GNUC_UNUSED,
 	g_debug("icon right click detected");
 	run_smg(compliance);
 }
-
 
 static void
 remind_me_later_clicked(NotifyNotification *notification G_GNUC_UNUSED,
@@ -177,6 +212,17 @@ display_icon(Compliance *compliance, ComplianceType compliance_type)
 }
 
 static void
+alter_icon(Compliance *compliance, ComplianceType ct) {
+	if ((ct != RHN_CLASSIC) && 
+	(ct != RHSM_COMPLIANT)) {
+		display_icon(compliance, ct);
+	} else {
+		destroy_icon(compliance);
+	}
+}
+
+
+static void
 do_nothing_logger(const gchar *log_domain G_GNUC_UNUSED,
 		  GLogLevelFlags log_level G_GNUC_UNUSED,
 		  const gchar *message G_GNUC_UNUSED,
@@ -193,45 +239,32 @@ check_compliance_over_dbus()
 	DBusGProxy *proxy;
 	int is_compliant;
   
-  	error = NULL;
-  	connection = dbus_g_bus_get(DBUS_BUS_SYSTEM, &error);
+	error = NULL;
+	connection = dbus_g_bus_get(DBUS_BUS_SYSTEM, &error);
 	if (connection == NULL) {
-      		g_printerr(N_("Failed to open connection to bus: %s\n"),
+		g_printerr(N_("Failed to open connection to bus: %s\n"),
 			   error->message);
 		g_error_free(error);
 		exit(1);
 	}
 
-  	proxy = dbus_g_proxy_new_for_name(connection,
+	proxy = dbus_g_proxy_new_for_name(connection,
 					  "com.redhat.SubscriptionManager",
 					  "/Compliance",
 					  "com.redhat.SubscriptionManager.Compliance");
 
-  	error = NULL;
-  	if (!dbus_g_proxy_call(proxy, "check_compliance", &error,
+	error = NULL;
+	if (!dbus_g_proxy_call(proxy, "check_compliance", &error,
 			       G_TYPE_INVALID, G_TYPE_INT, &is_compliant,
 			       G_TYPE_INVALID)) {
-        	g_printerr("Error: %s\n", error->message);
-      		g_error_free(error);
-      		exit(1);
+		g_printerr("Error: %s\n", error->message);
+		g_error_free(error);
+		exit(1);
 	}
 
 	g_object_unref(proxy);
 	dbus_g_connection_unref(connection);
-
-	switch (is_compliant) {
-		case 0:
-			return RHSM_EXPIRED;
-		case 1:
-			return RHSM_COMPLIANT;
-		case 2:
-			return RHSM_WARNING;
-		case 3:
-			return RHN_CLASSIC;
-		default:
-			// we don't know this one, better to play it safe
-			return RHSM_EXPIRED;
-	}
+	return create_compliancetype(is_compliant);
 }
 
 static bool
@@ -243,7 +276,7 @@ check_compliance(Compliance *compliance)
 	if (force_icon) {
 		g_debug("Forcing display of icon (simulated non-compliance)");
 		if (g_str_equal(force_icon, "expired")) {
-             compliance_type = RHSM_EXPIRED;
+			compliance_type = RHSM_EXPIRED;
 		} else if (g_str_equal(force_icon, "warning")) {
 			compliance_type = RHSM_WARNING;
 		} else {
@@ -255,26 +288,57 @@ check_compliance(Compliance *compliance)
 		compliance_type = check_compliance_over_dbus();
 	}
 
-
-	if ((compliance_type != RHN_CLASSIC) && 
-        (compliance_type != RHSM_COMPLIANT)) {
-        display_icon(compliance, compliance_type);
-	} else {
-        destroy_icon(compliance);
-    }
+	alter_icon(compliance, compliance_type);
 
 	return true;
+}
+
+
+static void
+compliance_changed_cb(NotifyNotification *notification G_GNUC_UNUSED,
+	   gint status, Compliance* compliance)
+{
+	g_debug("in callback, received value: %i", status);
+	alter_icon(compliance, create_compliancetype(status));
+}
+
+static DBusGProxy* 
+add_signal_listener(Compliance *compliance)
+{
+	DBusGConnection *connection;
+	GError *error;
+	DBusGProxy *proxy;
+
+	error = NULL;
+	connection = dbus_g_bus_get(DBUS_BUS_SYSTEM, &error);
+	if (connection == NULL) {
+		g_printerr(N_("Failed to open connection to bus: %s\n"),
+		      error->message);
+		g_error_free(error);
+		exit(1);
+	}
+
+	proxy = dbus_g_proxy_new_for_name(connection,
+		     "com.redhat.SubscriptionManager",
+		     "/Compliance",
+		     "com.redhat.SubscriptionManager.Compliance");
+
+	dbus_g_proxy_add_signal(proxy, "compliancechanged", G_TYPE_INT, G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal(proxy, "compliancechanged", G_CALLBACK(compliance_changed_cb), compliance, NULL);
+	return proxy;
+
 }
 
 int
 main(int argc, char **argv)
 {
-    setlocale(LC_ALL, "");
-    bindtextdomain("rhsm", "/usr/share/locale");
-    textdomain("rhsm");
+	setlocale(LC_ALL, "");
+	bindtextdomain("rhsm", "/usr/share/locale");
+	textdomain("rhsm");
 	GError *error = NULL;
 	GOptionContext *context;
 	UniqueApp *app;
+	DBusGProxy *proxy;
 	Compliance compliance;
 	compliance.is_visible = false;
 
@@ -284,7 +348,7 @@ main(int argc, char **argv)
 	
 	if (!g_option_context_parse (context, &argc, &argv, &error)) {
 		g_print (N_("option parsing failed: %s\n"), error->message);
-      		return 1;
+		return 1;
 	}
 
 	g_option_context_free (context);
@@ -310,8 +374,12 @@ main(int argc, char **argv)
 	check_compliance(&compliance);
 	g_timeout_add_seconds(check_period, (GSourceFunc) check_compliance,
 			      &compliance);
+
+	proxy = add_signal_listener(&compliance);
 	gtk_main();
 
+	g_debug("past main");
+	g_object_unref(proxy);
 	g_object_unref(app);
 	return 0;
 }
