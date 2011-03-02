@@ -69,6 +69,26 @@ def handle_exception(msg, ex):
         systemExit(-1, ex)
 
 
+def autosubscribe(cp, consumer, certlib):
+    # try to auomatically bind products
+    products = managerlib.getInstalledProductHashMap()
+    try:
+        ents = cp.bindByProduct(consumer, products.values())
+        certlib.update()
+
+        installed_status = managerlib.getInstalledProductStatus()
+
+        log.info("Automatically subscribed to products: %s " \
+                % ", ".join(products.keys()))
+        print _("Installed Products:")
+        for prod_status in installed_status:
+            print ("   %s - %s" % (prod_status[0], prod_status[1]))
+    except Exception, e:
+        log.exception(e)
+        log.warning("Warning: Unable to auto subscribe to %s" \
+                % ", ".join(products.keys()))
+
+
 class CliCommand(object):
     """ Base class for all sub-commands. """
 
@@ -367,26 +387,8 @@ class RegisterCommand(CliCommand):
         managerlib.persist_consumer_cert(consumer)
 
         if self.options.autosubscribe:
-            # try to auomatically bind products
-            products = managerlib.getInstalledProductHashMap()
-            try:
-
-                ents = admin_cp.bindByProduct(consumer['uuid'], products.values())
-                self.certlib.update()
-
-                installed_status = managerlib.getInstalledProductStatus()
-
-                log.info("Automatically subscribed to products: %s " \
-                        % ", ".join(products.keys()))
-                print _("Installed Products:")
-                for prod_status in installed_status:
-                    print ("   %s - %s" % (prod_status[0], prod_status[1]))
-            except Exception, e:
-                log.exception(e)
-                log.warning("Warning: Unable to auto subscribe to %s" \
-                        % ", ".join(products.keys()))
-
-        if (self.options.autosubscribe or self.options.consumerid):
+            autosubscribe(admin_cp, consumer['uuid'], self.certlib)
+        if self.options.consumerid:
             self.certlib.update()
 
 class UnRegisterCommand(CliCommand):
@@ -463,10 +465,16 @@ class SubscribeCommand(CliCommand):
         self.substoken = None
         self.parser.add_option("--pool", dest="pool", action='append',
                                help=_("subscription pool id"))
+        self.parser.add_option("--auto", action='store_true',
+                               help=_("automatically subscribe this system to\
+                                     compatible subscriptions."))
 
     def _validate_options(self):
-        if not (self.options.pool):
-            print _("Error: Need to supply --pool, Try subscribe --help")
+        if not (self.options.pool or self.options.auto):
+            print _("Error: Need to supply --pool or --auto.")
+            sys.exit(-1)
+        if self.options.pool and self.options.auto:
+            print _("Error: Only one of --pool or --auto may be used.")
             sys.exit(-1)
 
     def _do_command(self):
@@ -498,6 +506,9 @@ class SubscribeCommand(CliCommand):
                             print re.msg #no such pool.
                         else:
                             systemExit(-1, re.msg) #some other error.. don't try again
+            # must be auto
+            else:
+                autosubscribe(self.cp, consumer, self.certlib)
 
             result = self.certlib.update()
             if result[1]:
