@@ -20,6 +20,7 @@ import os
 import sys
 import logging
 import socket
+import getpass
 import rhsm.config
 import constants
 import dbus
@@ -191,6 +192,59 @@ class CliCommand(object):
             print _('Consumer certificates corrupted. Please reregister.')
 
 
+class UserPassCommand(CliCommand):
+
+    """
+    Abstract class for commands that require a username and password
+    """
+
+    def __init__(self, name, usage=None, shortdesc=None,
+            description=None):
+        super(UserPassCommand, self).__init__(name, usage, shortdesc,
+                description)
+        self._username = None
+        self._password = None
+
+        self.parser.add_option("--username", dest="username",
+                               help=_("specify a username"))
+        self.parser.add_option("--password", dest="password",
+                               help=_("specify a password"))
+
+    @staticmethod
+    def _get_username_and_password(username, password):
+        """
+        Safely get a username and password from the tty, without echoing.
+        if either username or password are provided as arguments, they will
+        not be prompted for.
+        """
+
+        if not username:
+            while not username:
+                username = raw_input("Username: ")
+        if not password:
+            while not password:
+                password = getpass.getpass()
+
+        return (username, password)
+
+    # lazy load the username and password, prompting for them if they weren't
+    # given as options. this lets us not prompt if another option fails,
+    # or we don't need them.
+    @property
+    def username(self):
+        if not self._username:
+            (self._username, self._password) = self._get_username_and_password(
+                    self.options.username, self.options.password)
+        return self._username
+
+    @property 
+    def password(self):
+        if not self._password:
+            (self._username, self._password) = self._get_username_and_password(
+                    self.options.username, self.options.password)
+        return self._password
+    
+
 class CleanCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog clean [OPTIONS]"
@@ -231,29 +285,32 @@ class RefreshCommand(CliCommand):
             handle_exception(_("Unable to perform refresh due to the following exception \n Error: %s") % e, e)
 
 
-class IdentityCommand(CliCommand):
+class IdentityCommand(UserPassCommand):
 
     def __init__(self):
         usage = "usage: %prog identity [OPTIONS]"
         shortdesc = _("request a new identity certficate for this machine")
         desc = shortdesc
 
-        CliCommand.__init__(self, "identity", usage, shortdesc, desc)
+        super(IdentityCommand, self).__init__("identity", usage, shortdesc,
+                desc)
 
-        self.username = None
-        self.password = None
-
-        self.parser.add_option("--username", dest="username",
-                               help=_("specify a username"))
-        self.parser.add_option("--password", dest="password",
-                               help=_("specify a password"))
         self.parser.add_option("--regenerate", action='store_true',
                                help=_("request a new certificate be generated"))
+        self.parser.add_option("--force", action='store_true',
+                               help=_("force certificate regeneration (requires username and password)"))
 
     def _validate_options(self):
         self.assert_should_be_registered()
         if not ConsumerIdentity.existsAndValid():
             print (_("Consumer identity either does not exist or is corrupted. Try register --help"))
+            sys.exit(-1)
+        if self.options.force and not self.options.regenerate:
+            print(_("--force can only be used with --regenerate"))
+            sys.exit(-1)
+        if (self.options.username or self.options.password) and \
+                not self.options.force:
+            print(_("--username and --password can only be used with --force"))
             sys.exit(-1)
 
     def _do_command(self):
@@ -267,9 +324,9 @@ class IdentityCommand(CliCommand):
             if not self.options.regenerate:
                 print _('Current identity is: %s name: %s') % (consumerid, consumer_name)
             else:
-                if (self.options.username and self.options.password):
-                    self.cp = connection.UEPConnection(username=self.options.username,
-                                                       password=self.options.password,
+                if self.options.force:
+                    self.cp = connection.UEPConnection(username=self.username,
+                                                       password=self.password,
                                                        proxy_hostname=self.proxy_hostname,
                                                        proxy_port=self.proxy_port,
                                                        proxy_user=self.proxy_user,
@@ -286,26 +343,20 @@ class IdentityCommand(CliCommand):
             handle_exception(_("Error: Unable to generate a new identity for the system"), e)
 
 
-class RegisterCommand(CliCommand):
+class RegisterCommand(UserPassCommand):
 
     def __init__(self):
         usage = "usage: %prog register [OPTIONS]"
         shortdesc = _("register the client to RHN")
         desc = "register"
 
-        CliCommand.__init__(self, "register", usage, shortdesc, desc)
+        super(RegisterCommand, self).__init__("register", usage, shortdesc,
+                desc)
 
-        self.username = None
-        self.password = None
-
-        self.parser.add_option("--username", dest="username",
-                               help=_("specify a username"))
         self.parser.add_option("--type", dest="consumertype", default="system",
                                help=_("the type of consumer to register. Defaults to system"))
         self.parser.add_option("--name", dest="consumername",
                                help=_("name of the consumer to register. Defaults to the hostname."))
-        self.parser.add_option("--password", dest="password",
-                               help=_("specify a password"))
         self.parser.add_option("--consumerid", dest="consumerid",
                                help=_("register to an existing consumer"))
         self.parser.add_option("--autosubscribe", action='store_true',
@@ -316,16 +367,7 @@ class RegisterCommand(CliCommand):
         self.facts = Facts()
 
     def _validate_options(self):
-        if bool(self.options.username) ^ bool(self.options.password):
-            if not self.options.username:
-                print(_("Error: username not provided. Use --username <name>"))
-            else:
-                print(_("Error: password not provided. Use --password <value>"))
-            sys.exit(-1)
-        elif not (self.options.username and self.options.password):
-            print (_("Error: username and password are required to register, try register --help."))
-            sys.exit(-1)
-        elif ConsumerIdentity.exists() and not self.options.force:
+        if ConsumerIdentity.exists() and not self.options.force:
             print(_("This system is already registered. Use --force to override"))
             sys.exit(1)
         elif (self.options.consumername == ''):
@@ -342,13 +384,13 @@ class RegisterCommand(CliCommand):
 
         self._validate_options()
 
-        # Set consumer's name to username registered with by default:
+        # Set consumer's name to hostname by default:
         consumername = self.options.consumername
         if consumername == None:
             consumername = socket.gethostname()
 
-        admin_cp = connection.UEPConnection(username=self.options.username,
-                                            password=self.options.password,
+        admin_cp = connection.UEPConnection(username=self.username,
+                                            password=self.password,
                                             proxy_hostname=self.proxy_hostname,
                                             proxy_port=self.proxy_port,
                                             proxy_user=self.proxy_user,
@@ -373,7 +415,7 @@ class RegisterCommand(CliCommand):
             if self.options.consumerid:
             #TODO remove the username/password
                 consumer = admin_cp.getConsumer(self.options.consumerid,
-                        self.options.username, self.options.password)
+                        self.username, self.password)
             else:
                 consumer = admin_cp.registerConsumer(name=consumername,
                                                      type=self.options.consumertype,
