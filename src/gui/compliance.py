@@ -414,4 +414,4 @@ class ComplianceAssistant(widgets.GladeWidget):
         except Exception, e:
             handle_gui_exception(e, _("Error getting subscription: %s"))
 
-        self._check_for_date_change(None)
+        self._reload_screen()
