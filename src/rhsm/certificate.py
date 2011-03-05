@@ -32,6 +32,16 @@ import logging
 
 log = logging.getLogger(__name__)
 
+def parse_tags(tag_str):
+    """
+    Split a comma separated list of tags from a certificate into a list.
+    """
+    tags = []
+    if tag_str:
+        tags = tag_str.split(",")
+    return tags
+
+
 class Certificate(object):
     """
     Represents and x.509 certificate.
@@ -270,9 +280,9 @@ class ProductCertificate(RedhatCertificate):
             p = products[0]
             oid = p[0]
             root = oid.rtrim(1)
-            hash = oid[1]
+            product_id = oid[1]
             ext = rhns.branch(root)
-            return Product(hash, ext)
+            return Product(product_id, ext)
 
     def getProducts(self):
         """
@@ -285,9 +295,9 @@ class ProductCertificate(RedhatCertificate):
         for p in rhns.find('1.*.1'):
             oid = p[0]
             root = oid.rtrim(1)
-            hash = oid[1]
+            product_id = oid[1]
             ext = rhns.branch(root)
-            lst.append(Product(hash, ext))
+            lst.append(Product(product_id, ext))
         return lst
 
     def bogus(self):
@@ -343,6 +353,8 @@ class EntitlementCertificate(ProductCertificate):
         return self.getContentEntitlements() \
              + self.getRoleEntitlements()
 
+    # TODO: Not a great name, this is just getting content, self is
+    # the entitlement.
     def getContentEntitlements(self):
         """
         Get the B{content} entitlements defined in the certificate.
@@ -873,9 +885,9 @@ class Product:
         self.hash = hash
         self.ext = ext
         self.name = self.ext.get('1')
-        self.variant = self.ext.get('2')
+        self.version = self.ext.get('2')
         self.arch = self.ext.get('3')
-        self.version = self.ext.get('4')
+        self.provided_tags = parse_tags(self.ext.get('4'))
 
     def getHash(self):
         return self.hash
@@ -883,14 +895,14 @@ class Product:
     def getName(self):
         return self.name
 
-    def getVariant(self):
-        return self.variant
-
     def getArch(self):
         return self.arch
 
     def getVersion(self):
         return self.version
+
+    def getProvidedTags(self):
+        return self.provided_tags
 
     def __eq__(self, rhs):
         return (self.getHash() == rhs.getHash())
@@ -900,9 +912,9 @@ class Product:
         s.append('Product {')
         s.append('\tHash ......... = %s' % self.getHash())
         s.append('\tName ......... = %s' % self.getName())
-        s.append('\tVariant ...... = %s' % self.getVariant())
-        s.append('\tArchitecture . = %s' % self.getArch())
         s.append('\tVersion ...... = %s' % self.getVersion())
+        s.append('\tArchitecture . = %s' % self.getArch())
+        s.append('\tProvided Tags  = %s' % self.getProvidedTags())
         s.append('}')
         return '\n'.join(s)
 
@@ -918,32 +930,48 @@ class Entitlement:
 
 class Content(Entitlement):
 
+    def __init__(self, ext):
+        Entitlement.__init__(self, ext)
+        self.name = self.ext.get('1')
+        self.label = self.ext.get('2')
+        self.quantity = self.ext.get('3')
+        self.flex_quantity = self.ext.get('4')
+        self.vendor = self.ext.get('5')
+        self.url = self.ext.get('6')
+        self.gpg = self.ext.get('7')
+        self.enabled = self.ext.get('8')
+        self.metadata_expire = self.ext.get('9')
+        self.required_tags = parse_tags(self.ext.get('10'))
+
     def getName(self):
-        return self.ext.get('1')
+        return self.name
 
     def getLabel(self):
-        return self.ext.get('2')
+        return self.label
 
     def getQuantity(self):
-        return self.ext.get('3')
+        return self.quantity
 
     def getFlexQuantity(self):
-        return self.ext.get('4')
+        return self.flex_quantity
 
     def getVendor(self):
-        return self.ext.get('5')
+        return self.vendor
 
     def getUrl(self):
-        return self.ext.get('6')
+        return self.url
 
     def getGpg(self):
-        return self.ext.get('7')
+        return self.gpg
 
     def getEnabled(self):
-        return self.ext.get('8')
+        return self.enabled
 
     def getMetadataExpire(self):
-        return self.ext.get('9')
+        return self.metadata_expire
+
+    def getRequiredTags(self):
+        return self.required_tags
 
     def __eq__(self, rhs):
         return (self.getLabel() == rhs.getLabel())
@@ -960,6 +988,7 @@ class Content(Entitlement):
         s.append('\tGPG Key ....... = %s' % self.getGpg())
         s.append('\tEnabled ....... = %s' % self.getEnabled())
         s.append('\tMetadata Expire = %s' % self.getMetadataExpire())
+        s.append('\tRequired Tags . = %s' % self.getRequiredTags())
         s.append('}')
         return '\n'.join(s)
 
