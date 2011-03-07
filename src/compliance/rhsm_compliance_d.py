@@ -47,7 +47,7 @@ def debug(msg):
 
 def in_warning_period(sorter):
 
-    for entitlement in sorter.expired_entitlement_certs:
+    for entitlement in sorter.valid_entitlement_certs:
         warning_period = datetime.timedelta(
                 days=int(entitlement.getOrder().getWarningPeriod()))
         valid_range = entitlement.validRange()
