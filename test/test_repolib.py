@@ -14,7 +14,8 @@
 #
 
 import unittest
-from repolib import Repo
+from repolib import *
+from stubs import *
 
 
 class RepoTests(unittest.TestCase):
@@ -76,3 +77,31 @@ class RepoTests(unittest.TestCase):
         incoming_repo = {}
         existing_repo.update(incoming_repo)
         self.assertFalse("proxy_username" in existing_repo.keys())
+
+
+class UpdateActionTests(unittest.TestCase):
+
+    def setUp(self):
+        stub_prod = StubProduct("fauxprod", provided_tags="TAG1,TAG2")
+        stub_prod2 = StubProduct("fauxprovidedprod", provided_tags="TAG4")
+        stub_prod_cert = StubProductCertificate(stub_prod, provided_products=[stub_prod2])
+        stub_prod2 = StubProduct("fauxprod2", provided_tags="TAG5,TAG6")
+        stub_prod2_cert = StubProductCertificate(stub_prod2)
+        stub_prod_dir = StubProductDirectory([stub_prod_cert, stub_prod2_cert])
+
+        stub_content = [
+                StubContent("c1", required_tags=""), # no required tags
+                StubContent("c2", required_tags="TAG1"), 
+                StubContent("c3", required_tags="TAG1,TAG2,TAG3"), # should get skipped
+                StubContent("c4", required_tags="TAG1,TAG2,TAG4,TAG5,TAG6"),
+        ]
+        stub_ent_cert = StubEntitlementCertificate(stub_prod, content=stub_content)
+        stub_ent_dir = StubCertificateDirectory([stub_ent_cert])
+
+        self.update_action = UpdateAction(prod_dir=stub_prod_dir, 
+                ent_dir=stub_ent_dir)
+
+    def test_tags_found(self):
+        content = self.update_action.get_unique_content()
+        self.assertEquals(3, len(content))
+

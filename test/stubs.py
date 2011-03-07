@@ -15,27 +15,30 @@
 
 from datetime import datetime, timedelta
 
-from certlib import EntitlementDirectory
+from certlib import EntitlementDirectory, ProductDirectory
 from rhsm.certificate import EntitlementCertificate, Product, GMT, DateRange, \
-        ProductCertificate
+        ProductCertificate, parse_tags, Content
 
 import random
 
 class StubProduct(Product):
 
-    def __init__(self, product_id, name=None, variant=None, arch=None, version=None):
+    def __init__(self, product_id, name=None, version=None, arch=None, 
+            provided_tags=None):
+        """
+        provided_tags - Comma separated list of tags this product (cert) 
+            provides.
+        """
         self.hash = product_id
         self.name = name
         if not name:
             self.name = product_id
 
-        self.variant = variant
-        if not variant:
-            self.variant = "ALL" # ?
-
         self.arch = arch
         if not arch:
             self.arch = "x86_64"
+
+        self.provided_tags = parse_tags(provided_tags)
 
         self.version = version
         if not version:
@@ -56,14 +59,30 @@ class StubOrder(object):
         return self.end
 
 
+class StubContent(Content):
+
+    def __init__(self, label, name=None, quantity=1, flex_quantity=1, vendor="", 
+            url="", gpg="", enabled=1, metadata_expire=None, required_tags=""):
+        self.label = label
+        self.name = name if name else label
+        self.quantity = quantity
+        self.flex_quantity = flex_quantity
+        self.vendor = vendor
+        self.url = url
+        self.gpg = gpg
+        self.enabled = enabled
+        self.metadata_expire = metadata_expire
+        self.required_tags = parse_tags(required_tags)
+
+
 class StubProductCertificate(ProductCertificate):
 
-    def __init__(self, product, provided_products=None, start_date=None, end_date=None):
+    def __init__(self, product, provided_products=None, start_date=None, 
+            end_date=None, provided_tags=None):
         # TODO: product should be a StubProduct, check for strings coming in and error out
         self.product = product
-        self.provided_products = provided_products
-        if not provided_products:
-            self.provided_products = []
+        self.provided_products = provided_products if provided_products else []
+        self.provided_tags = set(provided_tags) if provided_tags else set()
         self.serial = random.randint(1, 10000000)
 
     def getProduct(self):
@@ -75,11 +94,14 @@ class StubProductCertificate(ProductCertificate):
             prods.extend(self.provided_products)
         return prods
 
+    def get_provided_tags(self):
+        return self.provided_tags
+
 
 class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate):
 
     def __init__(self, product, provided_products=None, start_date=None, end_date=None,
-            order_end_date=None):
+            order_end_date=None, content=None):
         StubProductCertificate.__init__(self, product, provided_products)
 
         self.start_date = start_date
@@ -96,10 +118,18 @@ class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate)
                 order_end_date.strftime(fmt))
 
         self.valid_range = DateRange(self.start_date, self.end_date)
+        self.content = content if content else []
+        self.path = "/tmp/fake_ent_cert.pem"
 
     # Need to override this implementation to avoid requirement on X509:
     def validRangeWithGracePeriod(self):
         return DateRange(self.start_date, self.end_date)
+
+    def getContentEntitlements(self):
+        return self.content
+
+    def getRoleEntitlements(self):
+        return []
 
 
 class StubCertificateDirectory(EntitlementDirectory):
@@ -113,3 +143,18 @@ class StubCertificateDirectory(EntitlementDirectory):
 
     def list(self):
         return self.certs
+
+    def listValid(self, grace_period=True):
+        return self.certs
+
+
+class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
+    """
+    Stub for mimicing behavior of an on-disk certificate directory.
+    Can be used for both entitlement and product directories as needed.
+    """
+
+    def __init__(self, certificates):
+        StubCertificateDirectory.__init__(self, certificates)
+
+

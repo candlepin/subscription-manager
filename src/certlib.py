@@ -452,6 +452,18 @@ class ProductDirectory(CertificateDirectory):
     def certClass(self):
         return ProductCertificate
 
+    def get_provided_tags(self):
+        """
+        Iterates all product certificates in the directory and extracts a master
+        set of all tags they provide.
+        """
+        tags = set()
+        for prod_cert in self.listValid():
+            for product in prod_cert.getProducts():
+                for tag in product.getProvidedTags():
+                    tags.add(tag)
+        return tags
+
 
 class EntitlementDirectory(CertificateDirectory):
 
