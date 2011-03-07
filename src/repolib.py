@@ -20,7 +20,8 @@ import string
 import logging
 from urllib import basejoin
 from rhsm.config import initConfig
-from certlib import Path, EntitlementDirectory, ActionLock
+from certlib import Path, EntitlementDirectory, \
+        ProductDirectory, ActionLock
 from iniparse import ConfigParser as Parser
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -44,8 +45,9 @@ class RepoLib:
 
 class UpdateAction:
 
-    def __init__(self, uep=None):
-        self.entdir = EntitlementDirectory()
+    def __init__(self, uep=None, ent_dir=None, prod_dir=None):
+        self.ent_dir = ent_dir if ent_dir else EntitlementDirectory()
+        self.prod_dir = prod_dir if prod_dir else ProductDirectory()
         self.uep = uep
 
     def perform(self):
@@ -57,7 +59,7 @@ class UpdateAction:
 
         # Iterate content from entitlement certs, and update/create/delete each section
         # in the RepoFile as appropriate:
-        for cont in self.getUniqueContent():
+        for cont in self.get_unique_content():
             valid.add(cont.id)
             existing = repo_file.section(cont.id)
             if existing is None:
@@ -76,35 +78,49 @@ class UpdateAction:
         log.info("repos updated: %s" % updates)
         return updates
 
-    def getUniqueContent(self):
+    def get_unique_content(self):
         unique = set()
         # Though they are expired, we keep repos around that are within their
         # grace period, as they will still allow access to the content.
-        products = self.entdir.listValid(grace_period=True)
-        products.sort()
-        products.reverse()
+        ent_certs = self.ent_dir.listValid(grace_period=True)
+        ent_certs.sort()
+        ent_certs.reverse()
         cfg = initConfig()
         baseurl = cfg.get('rhsm', 'baseurl')
         ca_cert = cfg.get('rhsm', 'repo_ca_cert')
-        for product in products:
-            for r in self.getContent(product, baseurl, ca_cert):
+        for ent_cert in ent_certs:
+            for r in self.get_content(ent_cert, baseurl, ca_cert):
                 unique.add(r)
         return unique
 
-    def getContent(self, product, baseurl, ca_cert):
+    def get_content(self, ent_cert, baseurl, ca_cert):
         lst = []
         cfg = initConfig()
-        for ent in product.getContentEntitlements():
-            id = ent.getLabel()
+
+        tags_we_have = self.prod_dir.get_provided_tags()
+
+        for content in ent_cert.getContentEntitlements():
+
+            all_tags_found = True
+            for tag in content.getRequiredTags():
+                if not tag in tags_we_have:
+                    log.debug("Missing required tag '%s', skipping content: %s" % (
+                        tag, content.getLabel()))
+                    all_tags_found = False
+            if not all_tags_found:
+                # Skip this content:
+                continue
+
+            id = content.getLabel()
             repo = Repo(id)
-            repo['name'] = ent.getName()
-            repo['enabled'] = ent.getEnabled()
-            repo['baseurl'] = self.join(baseurl, ent.getUrl())
-            repo['gpgkey'] = self.join(baseurl, ent.getGpg())
+            repo['name'] = content.getName()
+            repo['enabled'] = content.getEnabled()
+            repo['baseurl'] = self.join(baseurl, content.getUrl())
+            repo['gpgkey'] = self.join(baseurl, content.getGpg())
             repo['sslclientkey'] = EntitlementDirectory.keypath()
-            repo['sslclientcert'] = product.path
+            repo['sslclientcert'] = ent_cert.path
             repo['sslcacert'] = ca_cert
-            repo['metadata_expire'] = ent.getMetadataExpire()
+            repo['metadata_expire'] = content.getMetadataExpire()
 
             self._set_proxy_info(repo, cfg)
             lst.append(repo)
