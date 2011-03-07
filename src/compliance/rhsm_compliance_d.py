@@ -91,15 +91,23 @@ def check_if_ran_once(compliance, loop):
 
 class ComplianceChecker(dbus.service.Object):
 
-    def __init__(self, bus, path):
+    def __init__(self, bus, path, keep_alive, loop):
         dbus.service.Object.__init__(self, bus, path)
         self.has_run = False
         #this will get set after first invocation
         self.last_status = None
+        self.keep_alive = keep_alive
+        self.loop = loop
 
     @dbus.service.signal(dbus_interface='com.redhat.SubscriptionManager.Compliance',  signature='i')
     def compliancechanged(self, status_code):
         debug("signal fired! code is " + str(status_code))
+
+    #this is so we can guarantee exit after the dbus stuff is done, since
+    #certain parts of that are async
+    def watchdog(self):
+        if not self.keep_alive:
+            glib.idle_add(check_if_ran_once, self, self.loop)
 
     @dbus.service.method(
         dbus_interface="com.redhat.SubscriptionManager.Compliance",
@@ -115,6 +123,7 @@ class ComplianceChecker(dbus.service.Object):
             self.compliancechanged(ret)
         self.last_status = ret
         self.has_run = True
+        self.watchdog()
         return ret
 
 
@@ -162,12 +171,8 @@ def main():
 
     system_bus = dbus.SystemBus()
     name = dbus.service.BusName("com.redhat.SubscriptionManager", system_bus)
-    compliance = ComplianceChecker(system_bus, "/Compliance")
-
     loop = gobject.MainLoop()
-
-    if not options.keep_alive:
-        glib.idle_add(check_if_ran_once, compliance, loop)
+    compliance = ComplianceChecker(system_bus, "/Compliance", options.keep_alive, loop)
 
     loop.run()
 
