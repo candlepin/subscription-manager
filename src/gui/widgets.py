@@ -300,6 +300,9 @@ class SubDetailsWidget(GladeWidget):
             self._set(self.start_date_text, "")
             self._set(self.expiration_date_text, "")
             self._set(self.account_text, "")
+            self._set(self.provides_management_text, "")
+            self._set(self.support_level_text, "")
+            self._set(self.support_type_text, "")
 
     def get_widget(self):
         """ Returns the widget to be packed into a parent window. """
