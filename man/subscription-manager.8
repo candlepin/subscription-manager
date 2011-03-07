@@ -7,6 +7,12 @@ subscription-manager
 .I command [options]
 
 .SH DESCRIPTION
+.B subscription-manager 
+is a client program that registers a system with the Certificate-Based Red Hat Network. To register your system with RHN Classic or with an RHN Satellite 5.x system, then use the 
+.B rhn_register
+tool.
+
+.PP
 Red Hat provides content updates and support by issuing 
 .I subscriptions
 for its products. These subscriptions are allocated to systems (machines); once a system is subscribed to content, it is 
@@ -66,25 +72,22 @@ has specific options available for each command, depending on what operation is 
 3. identity
 
 .IP
-4. activate
+4. subscribe
 
 .IP
-5. subscribe
+5. unsubscribe
 
 .IP
-6. unsubscribe
+6. refresh
 
 .IP
-7. refresh
+7. list
 
 .IP
-8. list
+8. facts
 
 .IP
-9. facts
-
-.IP
-10. clean
+9. clean
 
 
 .SS COMMON OPTIONS
@@ -181,20 +184,6 @@ Gives the username for the account which is registering the system; this user ac
 .TP
 .B --password=PASSWORD
 Gives the user account password. Optional, for user-based authentication.
-
-
-.SS ACTIVATE OPTIONS
-The 
-.B activate 
-command is used for machines that are purchased from third-party vendors that include a subscription. The activation process essentially autosubscribes the machine to the pre-selected subscription that the vendor supplied. 
-
-.TP
-.B --email=EMAIL
-Gives the email account to send the activation notification message to.
-
-.TP
-.B --email_locale=LOCALE
-Sets the locale to use for the message. If none is given, then it defaults to the local system's locale.
 
 
 .SS SUBSCRIBE OPTIONS
