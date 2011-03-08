@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.3
+Version: 0.95.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -175,6 +175,30 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Mar 08 2011 Devan Goodwin <dgoodwin@redhat.com> 0.95.4-1
+- Add support for tags. (dgoodwin@redhat.com)
+- 682311: rhsm-compliance icon pegs the cpu at 100% (cduryee@redhat.com)
+- 672821: Latest man pages from deon (bkearney@redhat.com)
+- 679961:  Clearing out all fields in subscription details widget.
+  (jharris@redhat.com)
+- 629670: check for warning periods in valid certs, not expired ones
+  (jbowes@redhat.com)
+- 676017: Configure the release branch to use production (bkearney@redhat.com)
+- 676371: Better Compliance Assistant refreshing after bind.
+  (dgoodwin@redhat.com)
+- Move the translations to be language only, not language plus country
+  (bkearney@redhat.com)
+- 678151: prompt for credentials if not supplied as cli args
+  (jbowes@redhat.com)
+- 680399: add --auto to subscribe (jbowes@redhat.com)
+- 676377: rhsm-compliance-icon's status can be a day out of sync
+  (cduryee@redhat.com)
+- 672562: request for subscription-manager list --available --ondate option
+  (cduryee@redhat.com)
+- Add in the translated po files (bkearney@redhat.com)
+- 677756 add accesibility names to compliance assistant tables
+  (alikins@redhat.com)
+
 * Mon Feb 28 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 678003: Write proxy info for yum repositories we manage.
   (dgoodwin@redhat.com)
