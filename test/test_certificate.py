@@ -29,6 +29,30 @@ def yesterday():
     then = now - timedelta(days=1)
     return then
 
+
+class ProductTests(unittest.TestCase):
+
+    def test_no_provided_tags(self):
+        p = StubProduct('product')
+        self.assertEqual(0, len(p.provided_tags))
+        p = StubProduct('product', provided_tags=None)
+        self.assertEqual(0, len(p.provided_tags))
+        p = StubProduct('product', provided_tags="")
+        self.assertEqual(0, len(p.provided_tags))
+
+    def test_one_provided_tags(self):
+        p = StubProduct('product', provided_tags="TAG1")
+        self.assertEqual(1, len(p.provided_tags))
+        self.assertEqual("TAG1", p.provided_tags[0])
+
+    def test_multiple_provided_tags(self):
+        p = StubProduct('product', provided_tags="TAG1,TAG2,TAG3")
+        self.assertEqual(3, len(p.provided_tags))
+        self.assertEqual("TAG1", p.provided_tags[0])
+        self.assertEqual("TAG2", p.provided_tags[1])
+        self.assertEqual("TAG3", p.provided_tags[2])
+
+
 class EntitlementCertificateTests(unittest.TestCase):
 
     def test_valid_order_date_gives_valid_cert(self):

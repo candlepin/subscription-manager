@@ -172,66 +172,6 @@ def getConsumedProductEntitlements():
     return consumed_products
 
 
-def getProductDescription(qproduct):
-    """
-     Utility method to construct description info based on the state per product
-    """
-    entcerts = EntitlementDirectory().list()
-    products = ProductDirectory().list()
-    product_status = getInstalledProductStatus()
-    data = ""
-    for pst in product_status:
-        if qproduct == pst[0]:
-            if pst[1] == "Subscribed":
-                data = constants.subscribed_status % (pst[0], pst[2])
-            elif pst[1] == "Not Subscribed":
-                data = constants.unsubscribed_status % (pst[0], pst[0], pst[0])
-            elif pst[1] == "Expired":
-                data = constants.expired_status % (pst[0], pst[2], pst[0],
-                        pst[0])
-            else:
-                # Not Installed
-                data = constants.not_installed_status % (pst[0], pst[0], pst[0])
-
-            if pst[1] != "Not Subscribed":
-                data += "\n"
-                data += _("Account Number: \t%s") % pst[5]
-                data += "\n\n"
-
-    for product in products:
-        if qproduct == product.getProduct().getName():
-            product = product.getProduct()
-            data += constants.product_describe % (product.getName(),
-                                       product.getVariant(),
-                                       product.getArch(),
-                                       product.getVersion())
-    for cert in entcerts:
-        eproducts = cert.getProducts()
-        for product in eproducts:
-            if qproduct == product.getName():
-                ents = cert.getContentEntitlements()
-                if not len(ents):
-                    continue
-                data += """ CONTENT ENTITLEMENTS \n"""
-                data += """======================="""
-                for ent in ents:
-                    data += constants.content_entitlement_describe % (\
-                                                ent.getName(),
-                                                str(ent.getLabel()),
-                                                ent.getQuantity(),
-                                                ent.getFlexQuantity(),
-                                                ent.getVendor(),
-                                                str(ent.getUrl()),
-                                                ent.getEnabled())
-                ents = cert.getRoleEntitlements()
-                data += """ ROLE ENTITLEMENTS \n"""
-                data += """======================="""
-                for ent in ents:
-                    data += constants.role_entitlement_describe % (ent.getName(),
-                                                    ent.getDescription())
-    return data
-
-
 
 
 class PoolFilter(object):
