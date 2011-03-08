@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.95.3
+Version: 0.95.4
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -57,6 +57,9 @@ rm -rf %{buildroot}
 %{python_sitelib}/rhsm-*.egg-info
 
 %changelog
+* Tue Mar 08 2011 Devan Goodwin <dgoodwin@redhat.com> 0.95.4-1
+- Add support for content tagging. (dgoodwin@redhat.com)
+
 * Fri Feb 04 2011 Devan Goodwin <dgoodwin@redhat.com> 0.95.3-1
 - 674078: send a full iso 8601 timestamp for activeOn pools query
   (jbowes@repl.ca)
