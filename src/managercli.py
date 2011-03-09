@@ -433,6 +433,10 @@ class RegisterCommand(UserPassCommand):
         if self.options.consumerid:
             self.certlib.update()
 
+        #fire a check_compliance event
+        dbus_proxy_iface = self._get_dbus_iface()
+        dbus_proxy_iface.check_compliance()
+
 class UnRegisterCommand(CliCommand):
 
     def __init__(self):
@@ -455,6 +459,11 @@ class UnRegisterCommand(CliCommand):
             managerlib.unregister(self.cp, consumer, False)
         except Exception, e:
             handle_exception("Unregister failed", e)
+
+        #fire a check_compliance event
+        dbus_proxy_iface = self._get_dbus_iface()
+        dbus_proxy_iface.check_compliance()
+
         print(_("System has been un-registered."))
 
 class ActivateCommand(CliCommand):
