@@ -179,3 +179,69 @@ class PoolFilterTests(unittest.TestCase):
         result = filter.filter_product_name(pools, "Bar")
         self.assertEquals(1, len(result))
         self.assertEquals(product1, result[0]['productId'])
+
+class InstalledProductStatusTests(unittest.TestCase):
+
+    def test_entitlement_for_not_installed_product_shows_not_installed(self):
+        product_directory = StubCertificateDirectory([])
+        entitlement_directory = StubCertificateDirectory([
+            StubEntitlementCertificate(StubProduct("product1"))])
+        
+        product_status = getInstalledProductStatus(product_directory,
+                entitlement_directory)
+
+        self.assertEquals(1, len(product_status)) 
+        self.assertEquals("Not Installed", product_status[0][1]) 
+
+    def test_entitlement_for_installed_product_shows_subscribed(self):
+        product = StubProduct("product1")
+        product_directory = StubCertificateDirectory([
+            StubProductCertificate(product)])
+        entitlement_directory = StubCertificateDirectory([
+            StubEntitlementCertificate(product)])
+        
+        product_status = getInstalledProductStatus(product_directory,
+                entitlement_directory)
+
+        self.assertEquals(1, len(product_status)) 
+        self.assertEquals("Subscribed", product_status[0][1]) 
+
+    def test_expired_entitlement_for_installed_product_shows_expired(self):
+        product = StubProduct("product1")
+        product_directory = StubCertificateDirectory([
+            StubProductCertificate(product)])
+        entitlement_directory = StubCertificateDirectory([
+            StubEntitlementCertificate(product,
+                end_date=(datetime.now() - timedelta(days=2)))])
+        
+        product_status = getInstalledProductStatus(product_directory,
+                entitlement_directory)
+
+        self.assertEquals(1, len(product_status)) 
+        self.assertEquals("Expired", product_status[0][1]) 
+
+    def test_no_entitlement_for_installed_product_shows_no_subscribed(self):
+        product = StubProduct("product1")
+        product_directory = StubCertificateDirectory([
+            StubProductCertificate(product)])
+        entitlement_directory = StubCertificateDirectory([])
+        
+        product_status = getInstalledProductStatus(product_directory,
+                entitlement_directory)
+
+        self.assertEquals(1, len(product_status)) 
+        self.assertEquals("Not Subscribed", product_status[0][1])
+
+    def test_one_product_with_two_entitlements_lists_product_twice(self):
+        product = StubProduct("product1")
+        product_directory = StubCertificateDirectory([
+            StubProductCertificate(product)])
+        entitlement_directory = StubCertificateDirectory([
+            StubEntitlementCertificate(product),
+            StubEntitlementCertificate(product)
+        ])
+        
+        product_status = getInstalledProductStatus(product_directory,
+                entitlement_directory)
+
+        self.assertEquals(2, len(product_status)) 

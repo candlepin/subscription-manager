@@ -58,6 +58,12 @@ class StubOrder(object):
     def getEnd(self):
         return self.end
 
+    def getContract(self):
+        return None
+
+    def getAccountNumber(self):
+        return None
+
 
 class StubContent(Content):
 

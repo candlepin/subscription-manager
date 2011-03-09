@@ -84,47 +84,42 @@ def map_status(status):
     return smap[status]
 
 
-def getInstalledProductStatus():
+def getInstalledProductStatus(product_directory=None,
+        entitlement_directory=None):
     """
      Returns the Installed products and their subscription states
     """
-    products = ProductDirectory().list()
-    entcerts = EntitlementDirectory().list()
-    entdict = {}
-    for cert in entcerts:
+    # allow us to stub these out for testing
+    product_directory = product_directory or ProductDirectory()
+    entitlement_directory = entitlement_directory or EntitlementDirectory()
+
+    product_names = [product.getProduct().getName() for product in \
+            product_directory.list()]
+
+    product_status = []
+    entitled_names = set()
+    
+    for cert in entitlement_directory.list():
         ents = cert.getEntitlements()
         eproducts = cert.getProducts()
         for product in eproducts:
-            entdict[product.getName()] = {
-                    'Entitlements': ents,
-                    'valid': cert.valid(),
-                    'expires': formatDate(cert.validRange().end().isoformat()),
-                    'serial': cert.serialNumber(),
-                    'contract': cert.getOrder().getContract(),
-                    'account': cert.getOrder().getAccountNumber()
-            }
-    product_status = []
-    for product in products:
-        pname = product.getProduct().getName()
-        if pname in entdict:
-            data = (pname, map_status(entdict[pname]['valid']),
-                    str(entdict[pname]['expires']), entdict[pname]['serial'],
-                    entdict[pname]['contract'], entdict[pname]['account'])
+            status = _("Not Installed")
+            if product.getName() in product_names:
+                status = map_status(cert.valid())
+            data = (product.getName(), status,
+                    formatDate(cert.validRange().end().isoformat()),
+                    cert.serialNumber(),
+                    cert.getOrder().getContract(),
+                    cert.getOrder().getAccountNumber())
             product_status.append(data)
-        else:
-            product_status.append((pname, map_status(None), "", "", "", ""))
+            entitled_names.add(product.getName())
 
-    # Include entitled but not installed products
-    psnames = [prod[0] for prod in product_status]
-    for cert in EntitlementDirectory().list():
-        for product in cert.getProducts():
-            if product.getName() not in psnames:
-                psname = product.getName()
-                data = (psname, _('Not Installed'),
-                        str(entdict[psname]['expires']),
-                        entdict[psname]['serial'], entdict[psname]['contract'],
-                        entdict[psname]['account'])
-                product_status.append(data)
+    # add in any products that we have installed but don't have
+    # entitlements for
+    for name in product_names:
+        if name not in entitled_names:
+            product_status.append((name, map_status(None), "", "", "", ""))
+
     return product_status
 
 
