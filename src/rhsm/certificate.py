@@ -648,7 +648,12 @@ class Extensions(dict):
         start = text.find('extensions:')
         end = text.rfind('Signature Algorithm:')
         text = text[start:end]
-        text = text.replace('.\n', '..')
+        # catch cases where the value is .\n<something> instead of just
+        # .<something>
+        # but exclude empty values, which are ..\n
+        # XXX this will surely break again, we need to parse the extensions
+        # via some api.
+        text = re.sub("([^\.])\.\n", "\g<1>..", text, re.MULTILINE)
         return [s.strip() for s in text.split('\n')]
 
     def __parse(self, x509):
