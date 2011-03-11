@@ -1,3 +1,4 @@
+# translation of ml-IN.po to
 # Language ml-IN translations for l package.
 # Copyright (C) 2011 THE l'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the l package.
@@ -5,386 +6,395 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: l 10n\n"
+"Project-Id-Version: ml-IN\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-02-18 16:13-0400\n"
-"PO-Revision-Date: 2011-02-18 16:13-0400\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2011-02-28 03:18+0530\n"
+"Last-Translator: \n"
+"Language-Team:  <en@li.org>\n"
 "Language: ml-IN\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: src/managerlib.py:83
 msgid "Subscribed"
-msgstr ""
+msgstr "സബ്സ്ക്രൈബ് ചെയ്തിരിയ്ക്കുന്നു"
 
 #: src/managerlib.py:83
 msgid "Expired"
-msgstr ""
+msgstr "കാലാവധി കഴിഞ്ഞു"
 
 #: src/managerlib.py:83
 msgid "Not Subscribed"
-msgstr ""
+msgstr "അംഗമായിട്ടില്ല"
 
 #: src/managerlib.py:123
 msgid "Not Installed"
-msgstr ""
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ല"
 
 #: src/managerlib.py:198
 #, python-format
 msgid "Account Number: \t%s"
-msgstr ""
+msgstr "അക്കൌണ്ട് നമ്പര്‍: \t%s"
 
 #: src/certmgr.py:89
 msgid "Updating Red Hat certificates & repositories"
-msgstr ""
+msgstr "Red Hat സര്‍ട്ടിഫിക്കേറ്റുകളും റിപ്പോസിറ്ററികളും പരിഷ്കരിയ്ക്കുന്നു"
 
 #: src/certmgr.py:94 src/factlib.py:80 src/certlib.py:758
 #, python-format
 msgid "%d updates required"
-msgstr ""
+msgstr "%d പരിഷ്കരണങ്ങള്‍ ആവശ്യമുണ്ടു്"
 
 #: src/certmgr.py:95 src/factlib.py:81 src/certlib.py:759
 msgid "done"
-msgstr ""
+msgstr "കഴിഞ്ഞു"
 
 #: src/certmgr.py:107
 msgid "Unable to update Red Hat certificates & repositories"
-msgstr ""
+msgstr "Red Hat സര്‍ട്ടിഫിക്കേറ്റുകളും റിപ്പോസിറ്ററികളും പരിഷ്കരിയ്ക്കുവാന്‍ സാധ്യമല്ല"
 
 #: src/gui/mysubstab.py:55 src/gui/allsubs.py:56 tmp/installed.glade.h:9
 msgid "Subscription"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍"
 
 #: src/gui/mysubstab.py:56
 msgid "Installed Products"
-msgstr ""
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത പ്രൊഡക്ടുകള്‍"
 
 #: src/gui/mysubstab.py:62 src/gui/installedtab.py:58
 #: src/gui/contract_selection.py:80 tmp/subdetails.glade.h:13
 msgid "End Date"
-msgstr ""
+msgstr "അവസാന തീയതി"
 
 #: src/gui/mysubstab.py:83
 #, python-format
 msgid "There was an error unsubsribing from %s with serial number %s"
-msgstr ""
+msgstr "%s-ല്‍ നിന്നും അണ്‍സബ്സ്ക്രൈബ് ചെയ്യുന്നതില്‍ പിശക്, സീരിയല്‍ നമ്പര്‍ %s"
 
 #: src/gui/mysubstab.py:95
 #, python-format
 msgid "Are you sure you want to unsubscribe from %s?"
-msgstr ""
+msgstr "%s-ല്‍ നിന്നും അണ്‍സബ്സ്ക്രൈബ് ചെയ്യണമെന്നുറപ്പാണോ?"
 
 #: src/gui/mysubstab.py:110
 msgid "My Subscriptions"
-msgstr ""
+msgstr "എന്റെ സബ്സ്ക്രിപ്ഷനുകള്‍"
 
 #: src/gui/mysubstab.py:137
 msgid "yes"
-msgstr ""
+msgstr "ഉവ്വു്"
 
 #: src/gui/mysubstab.py:139
 msgid "no"
-msgstr ""
+msgstr "അല്ല"
 
 #: src/gui/utils.py:47 src/managercli.py:47
 msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
 msgstr ""
+"നെറ്റ്‌വര്‍ക്ക് പിശക്, സര്‍വറിലേക്കു് കണക്ട് ചെയ്യുവാന്‍ സാധ്യമല്ല. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി "
+"/var/log/rhsm/rhsm.log കാണുക."
 
 #: src/gui/utils.py:49
 #, python-format
 msgid "Unable to verify server's identity: %s"
-msgstr ""
+msgstr "സര്‍വറിനെ തിരിച്ചറിയുവാന്‍ സാധ്യമല്ല: %s"
 
 #: src/gui/utils.py:53 src/managercli.py:52
 msgid ""
 "Network error. Please check the connection details, or see /var/log/rhsm/"
 "rhsm.log for more information."
 msgstr ""
+"നെറ്റ്‌വര്‍ക്ക് പിശക്, കണക്ഷന്‍ വിവരങ്ങള്‍ ദയവായി പരിശോധിയ്ക്കുക, അല്ലാങ്കില്‍ കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി "
+"/var/log/rhsm/rhsm.log കാണുക."
 
 #: src/gui/utils.py:56 src/managercli.py:56
 msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
 msgstr ""
+"റിമോട്ട് സര്‍വര്‍ പിശക്്, കണക്ഷന്‍ വിവരങ്ങള്‍ ദയവായി പരിശോധിയ്ക്കുക, അല്ലാങ്കില്‍"
+" കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി"
+"/var/log/rhsm/rhsm.log കാണുക."
 
 #: src/gui/utils.py:60 src/managercli.py:65
 #, python-format
 msgid "Bad CA certificate: %s"
-msgstr ""
+msgstr "തെറ്റായ സിഎ സര്‍ട്ടിഫിക്കേറ്റ്: %s"
 
 #: src/gui/allsubs.py:58 src/managercli.py:649
 msgid "Available Subscriptions"
-msgstr ""
+msgstr "ലഭ്യമായ സബ്സ്ക്രിപ്ഷനുകള്‍"
 
 #: src/gui/allsubs.py:177
 msgid "All Available Subscriptions"
-msgstr ""
+msgstr "ലഭ്യമായ എല്ലാ സബ്സ്ക്രിപ്ഷനുകള്‍"
 
 #: src/gui/allsubs.py:189 src/gui/compliance.py:225
 msgid "Searching for subscriptions. Please wait."
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ക്കായി തെരയുന്നു. ദയവായി കാത്തിരിയ്ക്കുക."
 
 #: src/gui/allsubs.py:193
 #, python-format
 msgid "Error fetching subscriptions from server:  %s"
-msgstr ""
+msgstr "സര്‍വറുകളില്‍ നിന്നും സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമാക്കുന്നതില്‍ പിശക്:  %s"
 
 #: src/gui/allsubs.py:203
 #, python-format
 msgid "Unable to search for subscriptions:  %s"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ തെരയുവാന്‍ സാധ്യമല്ല:  %s"
 
 #: src/gui/allsubs.py:227 src/gui/compliance.py:410
 #, python-format
 msgid "Error getting subscription: %s"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
 #: src/gui/compliance.py:177
 msgid ""
 "Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log for "
 "more information."
 msgstr ""
+"കംപ്ലയന്‍സ് അസിസ്റ്റന്റ് കാണിയ്ക്കുന്നതില്‍ പിശക്. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി "
+"/var/log/rhsm/rhsm.log കാണുക."
 
 #: src/gui/compliance.py:191
 msgid "Unable to search for subscriptions"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ തെരയുവാന്‍ സാധ്യമല്ല"
 
 #: src/gui/compliance.py:211
 #, python-format
 msgid "<big><b>All software is in compliance until %s</b></big>"
-msgstr ""
+msgstr "<big><b>%s വരെ എല്ലാ സോഫ്റ്റ്‌വെയറുകളും പൊരുത്തമുള്ളതാകുന്നു</b></big>"
 
 #: src/gui/compliance.py:215
 #, python-format
 msgid "%s (first date of non-compliance)"
-msgstr ""
+msgstr "%s (പൊരുത്തക്കേടുണ്ടാകുന്ന ആദ്യത്തെ ദിവസം)"
 
 #: src/gui/compliance.py:217
 #, python-format
 msgid "The following subscriptions will cover the products selected on %s"
-msgstr ""
+msgstr "%s-ല്‍ തെരഞ്ഞെടുത്ത പ്രൊഡക്ടുകള്‍ ഈ സബ്സ്ക്രിപ്ഷനുകളില്‍ ലഭ്യമാകുന്നു"
 
 #: src/gui/compliance.py:278
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 #: src/gui/activate.py:55
 #, python-format
 msgid "Error activating subscription: %s"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ സജീവമാക്കുന്നതില്‍ പിശക്: %s"
 
 #: src/gui/installedtab.py:43 src/gui/widgets.py:193 tmp/installed.glade.h:8
 msgid "Product"
-msgstr ""
+msgstr "പ്രൊഡക്ട്"
 
 #: src/gui/installedtab.py:55
 msgid "Version"
-msgstr ""
+msgstr "ലക്കം"
 
 #: src/gui/installedtab.py:56 tmp/installed.glade.h:5 tmp/mainwindow.glade.h:5
 msgid "Compliance Status"
-msgstr ""
+msgstr "പൊരുത്തത്തിന്റെ സ്ഥിതി"
 
 #: src/gui/installedtab.py:57 src/gui/contract_selection.py:76
 #: tmp/subdetails.glade.h:14
 msgid "Start Date"
-msgstr ""
+msgstr "തുടക്ക തീയതി"
 
 #: src/gui/installedtab.py:97
 msgid "Future Subscription"
-msgstr ""
+msgstr "ഭാവി സബ്സ്ക്രിപ്ഷന്‍"
 
 #: src/gui/installedtab.py:98 src/gui/installedtab.py:114
 msgid "Never Subscribed"
-msgstr ""
+msgstr "ഒരിക്കലും സബ്സ്ക്രൈബ് ചെയ്തിട്ടില്ല"
 
 #: src/gui/installedtab.py:101 src/gui/installedtab.py:113
 msgid "Out of Compliance"
-msgstr ""
+msgstr "പൊരുത്തം ലഭ്യമല്ല"
 
 #: src/gui/installedtab.py:103
 #, python-format
 msgid "Subscription %s is expired"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ %s-ന്റെ കാലാവധി കഴിഞ്ഞിരിയ്ക്കുന്നു"
 
 #: src/gui/installedtab.py:106
 msgid "In Compliance"
-msgstr ""
+msgstr "പൊരുത്തം"
 
 #: src/gui/installedtab.py:108
 #, python-format
 msgid "Covered by contract %s through %s"
-msgstr ""
+msgstr "%s കോണ്‍ട്രാക്ടില്‍ ലഭ്യമാകുന്നു, %s വഴി"
 
 #: src/gui/installedtab.py:153
 msgid "My Installed Software"
-msgstr ""
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത സോഫ്റ്റ്‌വെയര്‍"
 
 #: src/gui/widgets.py:151
 #, python-format
 msgid "Next Update: %s"
-msgstr ""
+msgstr "അടുത്ത പരിഷ്കരണം: %s"
 
 #: src/gui/widgets.py:197
 msgid "Installed"
-msgstr ""
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്തിരിയ്ക്കുന്നു"
 
 #: src/gui/widgets.py:400
 msgid "Invalid date format. Please re-enter a valid date. Example: "
-msgstr ""
+msgstr "തെറ്റായ തീയതി, ശരിയായ തീയതി നല്‍കുക. ഉദാഹരണം: "
 
 #: src/gui/widgets.py:435
 msgid "Today"
-msgstr ""
+msgstr "ഇന്നു്"
 
 #: src/gui/factsgui.py:53
 msgid "Fact"
-msgstr ""
+msgstr "വിവരം"
 
 #: src/gui/factsgui.py:54
 msgid "Value"
-msgstr ""
+msgstr "മൂല്ല്യം"
 
 #: src/gui/factsgui.py:82
 msgid "No previous update"
-msgstr ""
+msgstr "മുമ്പുള്ള പരിഷ്കരണം ലഭ്യമല്ല"
 
 #: src/gui/networkConfig.py:134
 #, python-format
 msgid ""
 "There was an error saving your configuration. Make sure that\n"
 "you own %s."
-msgstr ""
+msgstr "ക്രമീകരണം സൂക്ഷിയ്ക്കുന്നതില്‍ പിശക്. %s ഉറപ്പു് വരുത്തുക."
 
 #: src/gui/managergui.py:368
 msgid "You must register before using the compliance assistant."
-msgstr ""
+msgstr "കംപ്ലയന്‍സ് അസിസ്റ്റന്റ് ഉപയോഗിയ്ക്കുന്നതിനു് മുമ്പ് രജിസ്ടര്‍ ചെയ്യുക."
 
 #: src/gui/managergui.py:399
 #, python-format
 msgid "You have <b>%s</b> products out of compliance."
-msgstr ""
+msgstr "പൊരുത്തമില്ലാത്ത <b>%s</b> പ്രൊഡക്ടുകളുണ്ടു്."
 
 #: src/gui/managergui.py:403
 msgid "You have <b>1</b> product out of compliance."
-msgstr ""
+msgstr "പൊരുത്തമില്ലാത്ത <b>1</b> പ്രൊഡക്ടുണ്ടു്."
 
 #: src/gui/managergui.py:410
 #, python-format
 msgid "All products are in compliance until %s"
-msgstr ""
+msgstr "%s വരെ എല്ലാ പ്രൊഡക്ടുകള്‍ക്കും പൊരുത്തമുണ്ടു്"
 
 #: src/gui/managergui.py:533
 msgid "You must enter a system name."
-msgstr ""
+msgstr "ഒരു സിസ്റ്റം പേരു് നല്‍കണം."
 
 #: src/gui/managergui.py:542
 msgid "You must enter a login."
-msgstr ""
+msgstr "ഒരു ലോഗിന്‍ നല്‍കുക."
 
 #: src/gui/managergui.py:548
 msgid "You must enter a password."
-msgstr ""
+msgstr "ഒരു രഹസ്യവാക്ക് നല്‍കുക."
 
 #: src/gui/firstboot/rhsm_subscriptions.py:28
 msgid "RHSM Subscriptions Management"
-msgstr ""
+msgstr "RHSM സബ്സ്ക്രിപ്ഷന്‍സ് മാനേജ്മെന്റ്"
 
 #: src/gui/firstboot/rhsm_subscriptions.py:29 tmp/mainwindow.glade.h:9
 #: tmp/subsgui.glade.h:3
 msgid "Subscription Manager"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ മാനേജര്‍"
 
 #: src/gui/firstboot/rhsm_login.py:40
 msgid "Entitlement Registration"
-msgstr ""
+msgstr "എന്റൈറ്റില്‍മെന്റ് രജിസ്ട്രേഷന്‍"
 
 #: src/gui/firstboot/rhsm_login.py:41
 msgid "Entitlement Platform Registration"
-msgstr ""
+msgstr "എന്റൈറ്റില്‍മെന്റ് പ്ലാറ്റ്ഫോം രജിസ്ട്രേഷന്‍"
 
 #: src/gui/contract_selection.py:67 tmp/subdetails.glade.h:12
 msgid "Contract Number"
-msgstr ""
+msgstr "കോണ്ട്രാക്ട് നമ്പര്‍"
 
 #: src/gui/contract_selection.py:71
 msgid "Used / Available"
-msgstr ""
+msgstr "ഉപയോഗിച്ചതു് / ലഭ്യമായതു്"
 
 #: src/gui/importsub.py:66
 msgid "You must select a certificate."
-msgstr ""
+msgstr "ഒരു സര്‍ട്ടിഫിക്കേറ്റ് തെരഞ്ഞെടുക്കണം."
 
 #: src/gui/importsub.py:73
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
-msgstr ""
+msgstr "%s ശരിയായൊരു സര്‍ട്ടിഫിക്കേറ്റ് ഫയലല്ല. ദയവായി ശരിയായൊന്നു് അപ്ലോഡ് ചെയ്യുക."
 
 #: src/hwprobe.py:76
 msgid "Error reading system memory information:"
-msgstr ""
+msgstr "സിസ്റ്റത്തില്‍ മെമ്മറി വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
 
 #: src/hwprobe.py:91
 msgid "Error reading system cpu information:"
-msgstr ""
+msgstr "സിസ്റ്റത്തിന്റെ സിപിയു വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
 
 #: src/hwprobe.py:111
 msgid "Error reading system DMI information:"
-msgstr ""
+msgstr "സിസ്റ്റത്തിന്റെ ഡിഎംഐ വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
 
 #: src/hwprobe.py:134
 msgid "Error reading networking information:"
-msgstr ""
+msgstr "നെറ്റ്‌വര്‍ക്കിങ് വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
 
 #: src/hwprobe.py:151
 msgid "Error reading net Interface information:"
-msgstr ""
+msgstr "നെറ്റ് ഇന്റര്‍ഫെയിസ് വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
 
 #: src/managercli.py:94
 msgid "debug level"
-msgstr ""
+msgstr "ഡീബഗ് ലവല്‍"
 
 #: src/managercli.py:96
 msgid "proxy url in the form of proxy_hostname:proxy_port"
-msgstr ""
+msgstr "proxy_hostname:proxy_port മാതൃകയിലുള്ള പ്രോക്സി യുആര്‍എല്‍"
 
 #: src/managercli.py:98
 msgid "user for http proxy with basic authentication"
-msgstr ""
+msgstr "അടിസ്ഥാന ആഝികാരികത ഉറപ്പാക്കലുള്ള http പ്രോക്സിയ്ക്കുള്ള ഉപയോക്താവു്"
 
 #: src/managercli.py:100
 msgid "password for http proxy with basic authentication"
-msgstr ""
+msgstr "അടിസ്ഥാന ആഝികാരികത ഉറപ്പാക്കലുള്ള http പ്രോക്സിയ്ക്കുള്ള രഹസ്യവാക്ക്"
 
 #: src/managercli.py:107
-msgid ""
-"Consumer not registered. Please register using --username and --password"
-msgstr ""
+msgid "Consumer not registered. Please register using --username and --password"
+msgstr "ഉപഭോക്താവു് രജിസ്ടര്‍ ചെയ്തിട്ടില്ല. ദയവായി  --username, --password രജിസ്ടര്‍ ചെയ്യുക"
 
 #: src/managercli.py:162
 msgid "Consumer certificates corrupted. Please reregister."
-msgstr ""
+msgstr "ഉപഭോക്താവിനുള്ള സര്‍ട്ടിഫിക്കേറ്റുകള്‍ക്കു് തകരാറും. ദയവായി വീണ്ടും രജിസ്ടര്‍ ചെയ്യുക."
 
 #: src/managercli.py:168
 msgid "removes all local consumer data, does not effect the server"
-msgstr ""
+msgstr "എല്ലാ പ്രാദേശിക ഉപഭോക്താവിനുള്ള ഡേറ്റാ നീക്കം ചെയ്യുന്നു, സര്‍വറിനു് ബാധകമല്ല"
 
 #: src/managercli.py:181
 msgid "All local data removed"
-msgstr ""
+msgstr "എല്ലാ ലോക്കല്‍ ഡേറ്റാ നീക്കം ചെയ്തിരിയ്ക്കുന്നു"
 
 #: src/managercli.py:187
 msgid "pulls the latest entitlement data from the server"
-msgstr ""
+msgstr "സര്‍വറില്‍ നിന്നും ഏറ്റവും പുതിയ എന്റൈറ്റില്‍മെന്റ് ഡേറ്റാ ലഭ്യമാക്കുന്നു"
 
 #: src/managercli.py:197
 msgid "All local data refreshed"
-msgstr ""
+msgstr "എല്ലാ ലോക്കല്‍ ഡേറ്റയും പുതുക്കിയിരിയ്ക്കുന്നു"
 
 #: src/managercli.py:202
 #, python-format
@@ -392,160 +402,164 @@ msgid ""
 "Unable to perform refresh due to the following exception \n"
 " Error: %s"
 msgstr ""
+"ഈ പിശക് കാരണം പുതുക്കുവാന്‍ സാധ്യമല്ല \n"
+" പിശക്: %s"
 
 #: src/managercli.py:209
 msgid "request a new identity certficate for this machine"
-msgstr ""
+msgstr "ഈ സിസ്റ്റത്തിനു് പുതിയ തിരിച്ചറിയല്‍ സര്‍ട്ടിഫിക്കേറ്റ് ആവശ്യപ്പെടുക"
 
 #: src/managercli.py:218 src/managercli.py:273
 msgid "specify a username"
-msgstr ""
+msgstr "ഒരു ഉപയോക്തൃനാമം വ്യക്തമാക്കുക"
 
 #: src/managercli.py:220 src/managercli.py:279
 msgid "specify a password"
-msgstr ""
+msgstr "ഒരു രഹസ്യവാക്ക് വ്യക്തമാക്കുക"
 
 #: src/managercli.py:222
 msgid "request a new certificate be generated"
-msgstr ""
+msgstr "ഒരു പുതിയ സര്‍ട്ടിഫിക്കേറ്റ് ലഭ്യമാക്കുവാന്‍ ആവശ്യപ്പെടുക"
 
 #: src/managercli.py:227
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr ""
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgstr "ഉപഭോക്താവിനെ തിരിച്ചറിയുവാനുള്ള വിവരം ലഭ്യമല്ല അല്ലെങ്കില്‍ അതില്‍ തകരാറുണ്ടു്. --help ശ്രമിയ്ക്കുക"
 
 #: src/managercli.py:239
 #, python-format
 msgid "Current identity is: %s name: %s"
-msgstr ""
+msgstr "തിരിച്ചറിയല്‍: %s പേരു്: %s"
 
 #: src/managercli.py:257
 msgid "Error: Unable to generate a new identity for the system"
-msgstr ""
+msgstr "പിശക്: സിസ്റ്റത്തിനുള്ള പുതിയ തിരിച്ചറിയല്‍ ലഭ്യമാക്കുവാന്‍ സാധിച്ചില്ല"
 
 #: src/managercli.py:264
 msgid "register the client to RHN"
-msgstr ""
+msgstr "ക്ലയന്റ് RHN-ലേക്കു് രജിസ്ടര്‍ ചെയ്യുക"
 
 #: src/managercli.py:275
 msgid "the type of consumer to register. Defaults to system"
-msgstr ""
+msgstr "രജിസ്ടര്‍ ചെയ്യുവാനുള്ള ഉപഭോക്താവിന്റെ രീതി. സിസ്റ്റത്തില്‍ സഹജമായതു്"
 
 #: src/managercli.py:277
 msgid "name of the consumer to register. Defaults to the hostname."
-msgstr ""
+msgstr "രജിസ്ടര്‍ ചെയ്യുവാനുള്ള ഉപഭോക്താവിന്റെ രീതി. ഹോസ്റ്റനെയിം സഹജമായതു്."
 
 #: src/managercli.py:281
 msgid "register to an existing consumer"
-msgstr ""
+msgstr "നിലവിലുള്ള ഉപഭോക്താവിലേക്കു് രജിസ്ടര്‍ ചെയ്യുക"
 
 #: src/managercli.py:283
 msgid ""
 "automatically subscribe this system to                                     "
 "compatible subscriptions."
 msgstr ""
+"ഓട്ടോമാറ്റിക്കായി സിസ്റ്റത്തിലേക്കു് സബ്സ്ക്രൈബ് ചെയ്യുക                                          "
+"ഉചിതമായ സബ്സ്ക്രിപ്ഷനുകള്‍."
 
 #: src/managercli.py:286
 msgid "register the system even if it is already registered"
-msgstr ""
+msgstr "രജിസ്ടര്‍ ചെയ്തിട്ടുണ്ടെങ്കിലും സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുക"
 
 #: src/managercli.py:292
 msgid "Error: username not provided. Use --username <name>"
-msgstr ""
+msgstr "പിശക്: ഉപയോക്തൃനാമം ലഭ്യമല്ല. --username <name> ഉപയോഗിയ്ക്കുക"
 
 #: src/managercli.py:294
 msgid "Error: password not provided. Use --password <value>"
-msgstr ""
+msgstr "പിശക്: രഹസ്യവാക്ക്  ലഭ്യമല്ല. -passworde <name> ഉപയോഗിയ്ക്കുക"
 
 #: src/managercli.py:297
-msgid ""
-"Error: username and password are required to register, try register --help."
-msgstr ""
+msgid "Error: username and password are required to register, try register --help."
+msgstr "പിശക്: രജിസ്ടര്‍ ചെയ്യുന്നതിനായി ഉപയോക്തൃനാമവും രഹസ്യവാക്കും ആവശ്യമുണ്ടു്, ദയവായി  -help ശ്രമിയ്ക്കുക."
 
 #: src/managercli.py:300
 msgid "This system is already registered. Use --force to override"
-msgstr ""
+msgstr "ഈ സിസ്റ്റം രജിസ്ടര്‍ ചെയ്തിട്ടുണ്ടു്. തിരുത്തി എഴുതുന്നതിനായി --force ഉപയോഗിയ്ക്കുക"
 
 #: src/managercli.py:303
 msgid "Error: consumer name can not be empty."
-msgstr ""
+msgstr "പിശക്: ഉപഭോക്താവിന്റെ നാമം നല്‍കുക."
 
 #: src/managercli.py:337
 #, python-format
 msgid "The system with UUID %s has been unregistered"
-msgstr ""
+msgstr "UUID %s എന്നുള്ള സിസ്റ്റം രജിസ്ടര്‍ ചെയ്തിട്ടില്ല"
 
 #: src/managercli.py:356
 #, python-format
 msgid "Error during registration: %s"
-msgstr ""
+msgstr "രജിസ്ടര്‍ സമയത്തു് പിശക്: %s"
 
 #: src/managercli.py:367
 msgid "Subscribed to Products:"
-msgstr ""
+msgstr "പ്രൊഡക്ടളുമായി സബ്സ്ക്രൈബ് ചെയ്തിരിയ്ക്കുന്നു:"
 
 #: src/managercli.py:369
 #, python-format
 msgid "     %s(%s)"
-msgstr ""
+msgstr "     %s(%s)"
 
 #: src/managercli.py:383
 msgid "unregister the client from RHN"
-msgstr ""
+msgstr "RHN-ല്‍ നിന്നും ക്ലയന്റ് അണ്‍രജിസ്ടര്‍ ചെയ്യുക"
 
 #: src/managercli.py:393
 msgid "This system is currently not registered."
-msgstr ""
+msgstr "ഈ സിസ്റ്റം നിലവില്‍ രജിസ്ടര്‍ ചെയ്തിട്ടില്ല."
 
 #: src/managercli.py:401
 msgid "System has been un-registered."
-msgstr ""
+msgstr "സിസ്റ്റം അണ്‌-രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്നു."
 
 #: src/managercli.py:407
 msgid "activate the registered user to a specified product"
-msgstr ""
+msgstr "ഒരു പ്രത്യേക പ്രൊഡക്ടിലേക്കു് രജിസ്ടര്‍ ചെയ്ത ഉപയോക്താവിനെ സജീവമാക്കുക"
 
 #: src/managercli.py:412
 msgid "optional email address to notify when token activation is complete."
-msgstr ""
+msgstr "ടോക്കന്‍ സജീവമാക്കുമ്പോള്‍ അറിയിയ്ക്കുന്നതിനുള്ള ഈമെയില്‍ വിലാസം."
 
 #: src/managercli.py:415
 msgid ""
 "optional language to use for email notification when token activation is "
 "complete. Used with --email only. Examples: en-us, de-de"
 msgstr ""
+"ടോക്കന്‍ സജീവമാക്കുമ്പോള്‍ അറിയിയ്ക്കുന്നതിനുള്ള ഈമെയില്‍ വിലാസത്തിനുള്ള ഭാഷ. "
+"--email-നു് മാത്രം ഉപയോഗിയ്ക്കുന്നു. ഉദാഹരണത്തിനു്: en-us, de-de"
 
 #: src/managercli.py:445
 msgid "subscribe the registered machine to a specified product"
-msgstr ""
+msgstr "ഒരോ പ്രൊഡക്ടിലേക്കു് രജിസ്ടര്‍ ചെയ്തിരിയ്ത്തുന്ന സിസ്റ്റം സബ്സ്ക്രൈബ് ചെയ്യുക"
 
 #: src/managercli.py:452
 msgid "subscription pool id"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ പൂള്‍ ഐഡി"
 
 #: src/managercli.py:456
 msgid "Error: Need to supply --pool, Try subscribe --help"
-msgstr ""
+msgstr "പിശക്: --pool നല്‍കേണ്ടതുണ്ടു്, --help സബ്സ്ക്രൈബ് ചെയ്യുവാന്‍ ശ്രമിയ്ക്കുക"
 
 #: src/managercli.py:477
 msgid "Please enter a valid numeric pool id."
-msgstr ""
+msgstr "ശരിയായ ന്യൂമെറിക് പൂള്‍ ഐഡി ദയവായി നല്‍കുക."
 
 #: src/managercli.py:503
 msgid "unsubscribe the registered user from all or specific subscriptions"
-msgstr ""
+msgstr "എല്ലാം അല്ലെങ്കില്‍ ചില സബ്സ്ക്രിപ്ഷനുകളില്‍ നിന്നും രജിസ്ടര്‍ ചെയ്ത ഉപയോക്താക്കളെ അണ്‍സബ്സ്ക്രൈബ് ചെയ്യുക"
 
 #: src/managercli.py:509
 msgid "Certificate serial to unsubscribe"
-msgstr ""
+msgstr "അണ്‍സബ്സ്ക്രൈബ് ചെയ്യുന്നതിനുള്ള സര്‍ട്ടിഫിക്കേറ്റ് സീരിയല്‍"
 
 #: src/managercli.py:511
 msgid "Unsubscribe from all subscriptions"
-msgstr ""
+msgstr "എല്ലാ സബ്സ്ക്രിപ്ഷനുകളില്‍ നിന്നും അണ്‍സബ്സ്ക്രൈബ് ചെയ്യുക"
 
 #: src/managercli.py:533
 msgid "One of --serial or --all must be provided"
-msgstr ""
+msgstr "--serial അല്ലെങ്കില്‍ --all നല്‍കേണ്ടതുണ്ടു്"
 
 #: src/managercli.py:541
 #, python-format
@@ -553,79 +567,80 @@ msgid ""
 "Unable to perform unsubscribe due to the following exception \n"
 " Error: %s"
 msgstr ""
+"ഈ പിശക് കാരണം പുതുക്കുവാന്‍ സാധ്യമല്ല \n"
+" പിശക്: %s"
 
 #: src/managercli.py:548
 msgid "show information for facts"
-msgstr ""
+msgstr "വിവരങ്ങള്‍ ലഭ്യമാക്കുക"
 
 #: src/managercli.py:553
 msgid "list known facts for this system"
-msgstr ""
+msgstr "ഈ സിസ്റ്റത്തിനു് പരിചിതമായ വിവരം അയയ്ക്കുക"
 
 #: src/managercli.py:555
 msgid "update the system facts"
-msgstr ""
+msgstr "സിസ്റ്റത്തിനുള്ള വിവരങ്ങള്‍ പരിഷ്കരിയ്ക്കുക"
 
 #: src/managercli.py:564
 msgid "Error: Need either --list or --update, Try facts --help"
-msgstr ""
+msgstr "പിശക്: --list അല്ലെങ്കില്‍ --update ആവശ്യമുണ്ടു്. --help ശ്രമിയ്ക്കുക"
 
 #: src/managercli.py:588
 msgid "list available or consumer subscriptions for registered user"
-msgstr ""
+msgstr "പട്ടിക ലഭ്യമാണു് അല്ലെങ്കില്‍ രജിസ്ടര്‍ ചെയ്തിട്ടുള്ള ഉപയോക്താക്കള്‍ക്കുള്ള ഉപഭോക്ത സബ്സ്ക്രിപ്ഷനുകള്‍"
 
 #: src/managercli.py:593
 msgid "installed"
-msgstr ""
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്തിരിയ്ക്കുന്നു"
 
 #: src/managercli.py:595
 msgid "available"
-msgstr ""
+msgstr "ലഭ്യമായവ"
 
 #: src/managercli.py:597
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
-msgstr ""
+msgid "date to search on, defaults to today's date, only used with --available "
+msgstr "തെരച്ചിലിനുള്ള തീയതി, ഇന്നത്തെ തീയതി സ്വതവേയുള്ളതാക്കുക, --available-നൊപ്പം മാത്രം ഉപയോഗിയ്ക്കുന്നു"
 
 #: src/managercli.py:600
 msgid "consumed"
-msgstr ""
+msgstr "ഉപയോഗിച്ചവ"
 
 #: src/managercli.py:602
 msgid "if supplied with --available then all subscriptions are returned"
-msgstr ""
+msgstr "--available-നൊപ്പം ലഭ്യമാക്കുന്നെങ്കില്‍, എല്ലാ സബ്സക്രിപ്ഷനുകള്‍ തിരികെ ലഭ്യമാകുന്നു"
 
 #: src/managercli.py:606
 msgid "Error: --all is only applicable with --available"
-msgstr ""
+msgstr "പിശക്: --available-നൊപ്പം മാത്രം --all ഉപയോഗിയ്ക്കാന്‍ സാധ്യമാകൂ"
 
 #: src/managercli.py:609
 msgid "Error: --ondate is only applicable with --available"
-msgstr ""
+msgstr "പിശക്: --available-നൊപ്പം മാത്രം --ondate ഉപയോഗിയ്ക്കാന്‍ സാധ്യമാകൂ"
 
 #: src/managercli.py:625
 msgid "No installed Products to list"
-msgstr ""
+msgstr "ലഭ്യമാക്കുവാന്‍ പ്രൊഡക്ടുകള്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ല"
 
 #: src/managercli.py:628
 msgid "    Installed Product Status"
-msgstr ""
+msgstr "    ഇന്‍സ്റ്റോള്‍ ചെയ്ത പ്രൊഡക്ടിന്റെ അവസ്ഥ"
 
 #: src/managercli.py:640
 msgid "Date entered is invalid. Date should be in ISO 8601 format (example: "
-msgstr ""
+msgstr "തെറ്റായ തീയതി. തീയതി ISO 8601 രീതിയിലായിരിയ്ക്കണം (ഉദാഹരണത്തിനു്: "
 
 #: src/managercli.py:647
 msgid "No Available subscription pools to list"
-msgstr ""
+msgstr "ലഭ്യമാക്കുവാന്‍ സബ്സ്ക്രിപ്ഷന്‍ പൂളുകള്‍ ലഭ്യമല്ല"
 
 #: src/managercli.py:663
 msgid "No Consumed subscription pools to list"
-msgstr ""
+msgstr "ലഭ്യമാക്കുവാന്‍ ഉപയോഗിയ്ക്കുന്ന സബ്സ്ക്രിപ്ഷന്‍ പൂളുകള്‍ ലഭ്യമല്ല"
 
 #: src/managercli.py:665
 msgid "Consumed Product Subscriptions"
-msgstr ""
+msgstr "ഉപയോഗിയ്ക്കുന്ന പ്രൊഡക്ടിനുള്ള സബ്സ്ക്രിപ്ഷനുകള്‍"
 
 #: src/managercli.py:715
 #, python-format
@@ -633,78 +648,82 @@ msgid ""
 "\n"
 "Usage: %s [options] MODULENAME --help\n"
 msgstr ""
+"\n"
+"Usage: %s [options] MODULENAME --help\n"
 
 #: src/managercli.py:716
 msgid "Supported modules:"
-msgstr ""
+msgstr "പിന്തുണയ്ക്കുന്ന ഘടകങ്ങള്‍:"
 
 #: src/managercli.py:781
 msgid ""
 "Error: You need to register this system by running `register` command before "
 "using this option."
 msgstr ""
+"പിശക്: ഈ ഐച്ഛികം ഉപയോഗിയ്ക്കുന്നതിനു് മുമ്പ് 'register' ഉപയോഗിച്ചു് ഈ സിസ്റ്റം "
+"രജിസ്ടര്‍ ചെയ്യേണ്ടതുണ്ടു്."
 
 #: src/productid.py:109
 #, python-format
 msgid "installing: %s"
-msgstr ""
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നു: %s"
 
 #: src/productid.py:123
 #, python-format
 msgid "deleting: %s"
-msgstr ""
+msgstr "വെട്ടി നീക്കുന്നു: %s"
 
 #: src/productid.py:140
 #, python-format
 msgid "duration: %d(ms)"
-msgstr ""
+msgstr "സമയപരിധി: %d(ms)"
 
 #: src/factlib.py:77
 msgid "Updating facts"
-msgstr ""
+msgstr "വിവരങ്ങള്‍ പരിഷ്കരിയ്ക്കുന്നു"
 
 #: src/certlib.py:96
 msgid "Reasons(s):"
-msgstr ""
+msgstr "കാരണം:"
 
 #: src/certlib.py:434
 msgid "Reason(s):"
-msgstr ""
+msgstr "കാരണം:"
 
 #: src/certlib.py:594
 #, python-format
 msgid "Total updates: %d"
-msgstr ""
+msgstr "മൊത്തം പരിഷ്കരണങ്ങള്‍: %d"
 
 #: src/certlib.py:595
 #, python-format
 msgid "Found (local) serial# %s"
-msgstr ""
+msgstr "(ലോക്കല്‍) serial# %s ലഭ്യമായി"
 
 #: src/certlib.py:596
 #, python-format
 msgid "Expected (UEP) serial# %s"
-msgstr ""
+msgstr "(UEP) serial# %s പ്രതീക്ഷിച്ചിരിയ്ക്കുന്നു"
 
 #: src/certlib.py:597
 msgid "Added (new)"
-msgstr ""
+msgstr "ചേര്‍ത്തിരിയ്ക്കുന്നു (പുതിയതു്)"
 
 #: src/certlib.py:598
 msgid "Deleted (rogue):"
-msgstr ""
+msgstr "വെട്ടിനീക്കിയിരിയ്ക്കുന്നു:"
 
 #: src/certlib.py:599
 msgid "Expired (not deleted):"
-msgstr ""
+msgstr "കാലാവധി കഴിഞ്ഞിരിയ്ക്കുന്നു (നീക്കം ചെയ്തിട്ടില്ല):"
 
 #: src/certlib.py:600
 msgid "Expired (deleted):"
-msgstr ""
+msgstr "കാലാവധി കഴിഞ്ഞിരിയ്ക്കുന്നു (നീക്കം ചെയ്തിരിയ്ക്കുന്നു):"
 
 #: src/certlib.py:755
 msgid "Updating Red Hat certificates"
-msgstr ""
+msgstr "Red Hat സര്‍ട്ടിഫിക്കേറ്റുകള്‍ പരിഷ്കരിയ്ക്കുന്നു"
 
 #: src/constants.py:24
 #, python-format
@@ -720,6 +739,16 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"\n"
+"PRODUCT INFO\n"
+"=========================\n"
+"\n"
+"Name               \t%-25s\n"
+"Variant            \t%-25s\n"
+"Architecture       \t%-25s\n"
+"Version            \t%-25s\n"
+"\n"
+"\n"
 
 #: src/constants.py:34
 #, python-format
@@ -735,6 +764,16 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"\n"
+"Name               \t%-25s\n"
+"Label              \t%-30s\n"
+"Quantity           \t%-25s\n"
+"Flex Quantity      \t%-25s\n"
+"Vendor             \t%-25s\n"
+"URL                \t%-30s\n"
+"Enabled            \t%-25s\n"
+"\n"
+"\n"
 
 #: src/constants.py:45
 #, python-format
@@ -743,6 +782,9 @@ msgid ""
 "Name               \t%-25s\n"
 "Description        \t%-25s\n"
 msgstr ""
+"\n"
+"Name               \t%-25s\n"
+"Description        \t%-25s\n"
 
 #: src/constants.py:50
 #, python-format
@@ -750,6 +792,8 @@ msgid ""
 "\n"
 "The subscription for %s is valid until %s.\n"
 msgstr ""
+"\n"
+"%s-നുള്ള സബ്സ്ക്രിപ്ഷനു് %s വരെ മാത്രമേ കാലാവധിയുള്ളൂ.\n"
 
 #: src/constants.py:54
 #, python-format
@@ -762,6 +806,13 @@ msgid ""
 "ContractNumber:     \t%-25s\n"
 "AccountNumber:      \t%-25s\n"
 msgstr ""
+"\n"
+"ProductName:        \t%-25s\n"
+"Status:             \t%-25s\n"
+"Expires:            \t%-25s\n"
+"Subscription:       \t%-25s\n"
+"ContractNumber:     \t%-25s\n"
+"AccountNumber:      \t%-25s\n"
 
 #: src/constants.py:63
 #, python-format
@@ -773,6 +824,12 @@ msgid ""
 "Quantity:          \t%-25s\n"
 "Expires:           \t%-25s\n"
 msgstr ""
+"\n"
+"ProductName:       \t%-25s\n"
+"ProductId:         \t%-25s\n"
+"PoolId:            \t%-25s\n"
+"Quantity:          \t%-25s\n"
+"Expires:           \t%-25s\n"
 
 #: src/constants.py:71
 #, python-format
@@ -786,6 +843,14 @@ msgid ""
 "Begins:             \t%-25s\n"
 "Expires:            \t%-25s\n"
 msgstr ""
+"\n"
+"ProductName:        \t%-25s\n"
+"ContractNumber:     \t%-25s\n"
+"AccountNumber:      \t%-25s\n"
+"SerialNumber:       \t%-25s\n"
+"Active:             \t%-25s\n"
+"Begins:             \t%-25s\n"
+"Expires:            \t%-25s\n"
 
 #: src/constants.py:81
 #, python-format
@@ -795,6 +860,10 @@ msgid ""
 "this system you should update the subscription. If you no longer wish to use "
 "%s on this machine, you should unsubscribe and remove it from this system.\n"
 msgstr ""
+"\n"
+"%s expired on %s. If you plan to continue using %s on "
+"this system you should update the subscription. If you no longer wish to use "
+"%s on this machine, you should unsubscribe and remove it from this system.\n"
 
 #: src/constants.py:85
 #, python-format
@@ -804,6 +873,11 @@ msgid ""
 "this system, you should add a subscription. If you do not plan to use %s on "
 "this system, you should remove it from this system.\n"
 msgstr ""
+"\n"
+"%s ഇന്‍സ്റ്റോള്‍ ചെയ്തിരിയ്ക്കുന്നു, പക്ഷേ നിങ്ങള്‍ അതിലേക്ക് സബ്സ്ക്രൈബ് ചെയ്തിട്ടില്ല."
+"സിസ്റ്റത്തില്‍ %s ഉപയോഗിയ്ക്കണമെങ്കില്‍, സബ്സ്ക്രിപ്ഷന്‍ ചേര്‍ക്കുക. %s "
+"ഉപയോഗിയ്ക്കേണ്ടെങ്കില്‍, അതു് സിസ്റ്റത്തില്‍ നിന്നും നീക്കം ചെയ്യുക.\n"
+"\n"
 
 #: src/constants.py:89
 #, python-format
@@ -815,6 +889,11 @@ msgid ""
 "install it.\n"
 "\n"
 msgstr ""
+"\n"
+"%s ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ല, പക്ഷേ നിങ്ങള്‍ അതിലേക്കു് സബ്സ്ക്രൈബ് ചെയ്തിരിയ്ക്കുന്നു. "
+"സിസ്റ്റത്തില്‍ %s ഉപയോഗിയ്ക്കേണ്ടെങ്കില്‍, അണ്‍സബ്സ്ക്രൈബ് ചെയ്യുക. %s "
+"ഉപയോഗിയ്ക്കണമെങ്കില്‍, അതു് ഇന്‍സ്റ്റോള്‍ ചെയ്യുക.\n"
+"\n"
 
 #: src/constants.py:93
 #, python-format
@@ -824,6 +903,10 @@ msgid ""
 "\n"
 "</b>Add or Update subscriptions for products you are using.\n"
 msgstr ""
+"<b>\n"
+" %s സബ്സ്ക്രിപ്ഷന്‍ ആവശ്യമുണഅടു്.\n"
+"\n"
+"</b>ഉപയോഗിയ്ക്കുന്ന പ്രൊഡക്ടുകള്‍ക്കുള്ള സബ്സ്ക്രിപ്ഷനുകള്‍ ചേര്‍ക്കുക അല്ലെങ്കില്‍ പരിഷ്കരിയ്ക്കുക.\n"
 
 #: src/constants.py:95
 #, python-format
@@ -833,6 +916,10 @@ msgid ""
 "\n"
 "</b>Add or Update subscriptions for products you are using.\n"
 msgstr ""
+"<b>\n"
+" %s സബ്സ്ക്രിപ്ഷന്‍ ആവശ്യമുണഅടു്.\n"
+"\n"
+"</b>ഉപയോഗിയ്ക്കുന്ന പ്രൊഡക്ടുകള്‍ക്കുള്ള സബ്സ്ക്രിപ്ഷനുകള്‍ ചേര്‍ക്കുക അല്ലെങ്കില്‍ പരിഷ്കരിയ്ക്കുക.\n"
 
 #: src/constants.py:97
 msgid ""
@@ -841,6 +928,10 @@ msgid ""
 "\n"
 "</b>Add or Update subscriptions for products you are using."
 msgstr ""
+"<b>\n"
+"എല്ലാ സബ്സ്ക്രിപ്ഷനുകള്‍ക്കും പൊരുത്തമുണ്ടു്.\n"
+"\n"
+"</b>ഉപയോഗിയ്ക്കുന്ന പ്രൊഡക്ടുകള്‍ക്കുള്ള സബ്സ്ക്രിപ്ഷനുകള്‍ ചേര്‍ക്കുക അല്ലെങ്കില്‍ പരിഷ്കരിയ്ക്കുക."
 
 #: src/constants.py:99
 #, python-format
@@ -849,6 +940,9 @@ msgid ""
 "%s\n"
 "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
+"<b>അണ്‍രജിസ്ടര്‍ ചെയ്യുമ്പോള്‍ പിശകുകളുണ്ടായിരിയ്ക്കുന്നു</b>\n"
+"%s\n"
+"കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/log/rhsm/rhsm.log കാണുക."
 
 #: src/constants.py:101
 msgid ""
@@ -856,6 +950,9 @@ msgid ""
 "\n"
 "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
+"<b>അണ്‍സബ്സ്ക്രൈബ് ചെയ്യുവാന്‍ സാധ്യമല്ല.</b>\n"
+"\n"
+"കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/log/rhsm/rhsm.log കാണുക."
 
 #: src/constants.py:103
 #, python-format
@@ -865,19 +962,23 @@ msgid ""
 "\n"
 "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
+"<b>\n"
+"ടോക്കന്‍ %s-ലേക്ക് സബ്സ്ക്രൈബ് ചെയ്യുവാന്‍ സാധ്യമല്ല</b>\n"
+"\n"
+"കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/log/rhsm/rhsm.log കാണുക."
 
 #: src/constants.py:105
 #, python-format
 msgid "Successfully subscribed your system to token %s"
-msgstr ""
+msgstr "ടോക്കന്‍ %s-ലേക്ക് സിസ്റ്റം സബ്സ്ക്രൈബ് ചെയ്തിരിയ്ക്കുന്നു."
 
 #: src/constants.py:107
 msgid "<b>No subscriptions available for this account</b>"
-msgstr ""
+msgstr "<b>ഈ അക്കൌണ്ടുകള്‍ക്കുള്ള സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമല്ല</b>"
 
 #: src/constants.py:109
 msgid "<b>No subscriptions updates available</b>"
-msgstr ""
+msgstr "<b>സബ്സ്ക്രിപ്ഷനുകള്‍ക്കുള്ള പരിഷ്കരണങ്ങള്‍ ലഭ്യമല്ല</b>"
 
 #: src/constants.py:111
 #, python-format
@@ -886,15 +987,18 @@ msgid ""
 "\n"
 "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
+"<b>പ്രൊഡക്ട് %s-ലേക്ക് സബ്സ്ക്രൈബ് ചെയ്യുവാന്‍ സാധ്യമല്ല</b>\n"
+"\n"
+"കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/log/rhsm/rhsm.log കാണുക."
 
 #: src/constants.py:113
 msgid "<i><b>Please select atleast one subscription to apply</b></i>"
-msgstr ""
+msgstr "<i><b>ഒരു സബ്സ്ക്രിപ്ഷന്‍ എങ്കിലും ദയവായി തെരഞ്ഞെടുക്കുക</b></i>"
 
 #: src/constants.py:115
 #, python-format
 msgid "<i><b>Successfully consumed %s subscription(s)</b></i>"
-msgstr ""
+msgstr "<i><b>%s സബ്സ്ക്രിപ്ഷനുകള്‍ വിജയകരമായി ഉപയോഗിച്ചിരിയ്ക്കുന്നു</b></i>"
 
 #: src/constants.py:117
 msgid ""
@@ -902,6 +1006,8 @@ msgid ""
 "program, please file a bug at bugzilla.redhat.com. Including the relevant "
 "parts of would be very helpful. Thanks!"
 msgstr ""
+"ഈ പിശക് സംഭവിയ്ക്കുവാന്‍ പാടില്ലാത്തതാണു്. ദയവായി bugzilla.redhat.com-ല്‍ "
+"ഒരു റിപോര്‍ട്ട് രേഖപ്പെടുത്തുക. പിശകിന്റെ എല്ലാ വിവരങ്ങളും ദയവായി നല്‍കുക!"
 
 #: src/constants.py:122
 #, python-format
@@ -912,20 +1018,25 @@ msgid ""
 "\n"
 "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
+"<b>സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുവാന്‍ സാധ്യമല്ല.</b>\n"
+"\n"
+" %s\n"
+"\n"
+"കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/log/rhsm/rhsm.log കാണുക."
 
 #: src/constants.py:124
 #, python-format
 msgid "Are you sure you want to unsubscribe product %s"
-msgstr ""
+msgstr "%s പ്രൊഡക്ട് അണ്‍സബ്സ്ക്രൈബ് ചെയ്യണമെന്നുറപ്പാണോ?"
 
 #: src/constants.py:126
 #, python-format
 msgid "<b>Total of %s subscriptions selected for consumption.</b>"
-msgstr ""
+msgstr "<b>ഉപയോഗിയ്ക്കുന്നതിനായി തെരഞ്ഞെടുത്ത %s സബ്സ്ക്രിപ്ഷനുകള്‍.</b>"
 
 #: src/constants.py:128
 msgid "<b>Are you sure you want to unregister?</b>"
-msgstr ""
+msgstr "<b>അണ്‍രജിസ്ടര്‍ ചെയ്യണമെന്നുറപ്പാണോ?</b>"
 
 #: src/constants.py:130
 msgid ""
@@ -940,10 +1051,20 @@ msgid ""
 "For more information, including alternate tools, consult this Knowledge Base "
 "Article: https://access.redhat.com/kb/docs/DOC-45563\n"
 msgstr ""
+"മുന്നറിയിപ്പു്\n"
+"\n"
+"RHN ക്ലാസിക് ടെക്നോളജി ഉപയോഗിച്ചു് നിങ്ങള്‍ RHN-ല്‍ രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്നു. "
+"ഈ പ്രയോഗത്തിനായി RHN സര്‍ട്ടിഫിക്കേറ്റ്-ബെയിസ്ജ് എന്റൈറ്റില്‍മെന്റ് ടെക്നോളജി "
+"ഉപയോഗിച്ചു് രജിസ്ടര്‍ ചെയ്യേണ്ടതുണ്ടു്\n"
+"\n"
+"ചിലതൊഴിച്ചു് ബാക്കിയെല്ലാത്തിനും, Red Hat RHN-മായി ഒരിക്കല്‍ രജിസ്ടര്‍ ചെയ്യുവാന്‍ "
+"ആവശ്യപ്പെടുന്നു.\n"
+"\n"
+"മറ്റു് പ്രയോഗങ്ങള്‍ സംബന്ധിച്ചുള്ള കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി ഈ ലേഖനം കാണുക: https://access.redhat.com/kb/docs/DOC-45563\n"
 
 #: tmp/activate.glade.h:1
 msgid "Activate"
-msgstr ""
+msgstr "സജീവമാക്കുക"
 
 #: tmp/activate.glade.h:2
 msgid ""
@@ -951,242 +1072,245 @@ msgid ""
 "Please provide an email address to receive notification\n"
 "when the activation is complete."
 msgstr ""
+"സിസ്റ്റം സജീവമാക്കുന്നതിനായി അല്‍പം സമയമെടുക്കുന്നു.\n"
+"സജീവമാക്കുന്നതു് പൂര്‍ത്തിയാകുമ്പോള്‍, അറിപ്പു് ലഭ്യമാകുന്നതിനായി ദയവായി ഒരു "
+"ഈമെയില്‍ വിലാസം നല്‍കുക."
 
 #: tmp/activate.glade.h:5 tmp/factsdialog.glade.h:2
 msgid "Close"
-msgstr ""
+msgstr "അടയ്ക്കുക"
 
 #: tmp/activate.glade.h:6
 msgid "Email Address:"
-msgstr ""
+msgstr "ഈമെയില്‍ വിലാസം:"
 
 #: tmp/activate.glade.h:7
 msgid "Subscription Activation"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ സജീവമാക്കല്‍"
 
 #: tmp/allsubs.glade.h:1
 msgid "<b>More search options</b>"
-msgstr ""
+msgstr "<b>കൂടുതല്‍ തെരച്ചില്‍ ഐച്ഛികങ്ങള്‍‍</b>"
 
 #: tmp/allsubs.glade.h:2
 msgid "<b>Show subscriptions active on:</b>"
-msgstr ""
+msgstr "<b>ഇവിടെ സജീവമായ സബ്സ്ക്രിപ്ഷനുകള്‍ കാണിയ്ക്കുക:</b>"
 
 #: tmp/allsubs.glade.h:3
 msgid "All Subscriptions View"
-msgstr ""
+msgstr "എല്ലാ സബ്സ്ക്രിപ്ഷനുകളും കാണുക"
 
 #: tmp/allsubs.glade.h:4
 msgid "Contains the text:"
-msgstr ""
+msgstr "ഈ വാചകം അടങ്ങുന്നു:"
 
 #: tmp/allsubs.glade.h:5
 msgid "Do Not Overlap"
-msgstr ""
+msgstr "തിരുത്തുന്നില്ല"
 
 #: tmp/allsubs.glade.h:6
 msgid "Match Installed"
-msgstr ""
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്തിരിയ്ക്കുന്ന പൊരുത്തമുള്ളവ"
 
 #: tmp/allsubs.glade.h:7
 msgid "Match System"
-msgstr ""
+msgstr "പൊരുത്തപ്പെടുന്ന സിസ്റ്റം"
 
 #: tmp/allsubs.glade.h:8 tmp/installed.glade.h:7 tmp/mysubs.glade.h:2
 msgid "Next Update:"
-msgstr ""
+msgstr "അടുത്ത പരിഷ്കരണം:"
 
 #: tmp/allsubs.glade.h:9
 msgid "Only show subscriptions that:"
-msgstr ""
+msgstr "ഇത്തരത്തിലുള്ള സബ്സ്ക്രിപ്ഷനുകള്‍ മാത്രം കാണിയ്ക്കുക:"
 
 #: tmp/allsubs.glade.h:10
 msgid "Search"
-msgstr ""
+msgstr "തെരച്ചില്‍"
 
 #: tmp/allsubs.glade.h:11 tmp/compliance.glade.h:3
 msgid "Subscribe"
-msgstr ""
+msgstr "അംഗമാകുക"
 
 #: tmp/allsubs.glade.h:12
 msgid "Text in Subscription"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷനിനുള്ള വാചകം"
 
 #: tmp/allsubs.glade.h:13 tmp/compliance.glade.h:6
 msgid "Update"
-msgstr ""
+msgstr "പരിഷ്കരിയ്ക്കുക"
 
 #: tmp/allsubs.glade.h:14
 msgid "have no overlap with existing subscriptions"
-msgstr ""
+msgstr "നിലവിലുള്ള സബ്സ്ക്രിപ്ഷനുകളുമായി തിരുത്തലില്ല"
 
 #: tmp/allsubs.glade.h:15
 msgid "match my installed products"
-msgstr ""
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത പ്രൊഡക്ടുകളുമായി പൊരുത്തപ്പെടുക"
 
 #: tmp/allsubs.glade.h:16
 msgid "match my system"
-msgstr ""
+msgstr "സിസ്റ്റവുമായി പൊരുത്തപ്പെടുക"
 
 #: tmp/compliance.glade.h:1
 msgid "On a different date:"
-msgstr ""
+msgstr "മറ്റൊരു തീയതിയില്‍:"
 
 #: tmp/compliance.glade.h:2
 msgid "Show products that will be out of compliance as of:"
-msgstr ""
+msgstr "പൊരുത്തമില്ലാത്ത പ്രൊഡക്ടുകള്‍ കാണിയ്ക്കുക:"
 
 #: tmp/compliance.glade.h:4
 msgid "Subscription Manager - Compliance Assistant"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ മാനേജര്‍ - കംപ്ലയന്‍സ് അസിസ്റ്റന്റ്"
 
 #: tmp/compliance.glade.h:5
 msgid "The following subscriptions will cover the products selected above:"
-msgstr ""
+msgstr "മുകളില്‍ തെരഞ്ഞെടുത്തിരിയ്ക്കുന്ന പ്രൊഡക്ടുകള്‍ ഈ സബ്സ്ക്രിപ്ഷനുകളില്‍ ലഭ്യമാകുന്നു:"
 
 #: tmp/compliance.glade.h:7
 msgid "subscribe button"
-msgstr ""
+msgstr "സബ്സ്ക്രൈബ് ബട്ടണ്‍"
 
 #: tmp/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
-msgstr ""
+msgstr "<b>സിസ്റ്റം വിവരങ്ങള്‍:</b>"
 
 #: tmp/factsdialog.glade.h:3
 msgid "Last Update:"
-msgstr ""
+msgstr "അവസാന പരിഷ്കരണം:"
 
 #: tmp/factsdialog.glade.h:4
 msgid "Subscription Manager - Facts"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ മാനേജര്‍ - വിവരങ്ങള്‍"
 
 #: tmp/factsdialog.glade.h:5
 msgid "Update Facts"
-msgstr ""
+msgstr "വിവരങ്ങള്‍ പരിഷ്കരിയ്ക്കുക"
 
 #: tmp/factsdialog.glade.h:6
 msgid "Update Time"
-msgstr ""
+msgstr "പരിഷ്കരണ സമയം"
 
 #: tmp/factsdialog.glade.h:7
 msgid "close_button"
-msgstr ""
+msgstr "close_button"
 
 #: tmp/factsdialog.glade.h:8
 msgid "facts_view"
-msgstr ""
+msgstr "facts_view"
 
 #: tmp/importsub.glade.h:1 tmp/mainwindow.glade.h:6 tmp/rhsm.glade.h:7
 msgid "Import Certificate"
-msgstr ""
+msgstr "സര്‍ട്ടിഫിക്കേറ്റ് സ്വീകരിയ്ക്കുക"
 
 #: tmp/importsub.glade.h:2 tmp/rhsm.glade.h:9
 msgid "Provide a Subscription Certificate"
-msgstr ""
+msgstr "ഒരു സബ്സ്ക്രിപ്ഷന്‍ സര്‍ട്ടിഫിക്കേറ്റ് ലഭ്യമാക്കുക"
 
 #: tmp/installed.glade.h:1
 msgid "<b>Compliance:</b>"
-msgstr ""
+msgstr "<b>പൊരുത്തം:</b>"
 
 #: tmp/installed.glade.h:2
 msgid "<b>Product's Subscription Details</b>"
-msgstr ""
+msgstr "<b>പ്രൊഡക്ടിന്റെ സബ്സ്ക്രിപ്ഷന്‍ വിശദാംശങ്ങള്‍</b>"
 
 #: tmp/installed.glade.h:3
 msgid "<b>Product:</b>"
-msgstr ""
+msgstr "<b>പ്രൊഡക്ട്:</b>"
 
 #: tmp/installed.glade.h:4 tmp/subdetails.glade.h:8
 msgid "<b>Subscription:</b>"
-msgstr ""
+msgstr "<b>സബ്സ്ക്രിപ്ഷന്‍:</b>"
 
 #: tmp/installed.glade.h:6
 msgid "Installed View"
-msgstr ""
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത കാഴ്ച"
 
 #: tmp/mainwindow.glade.h:1
 msgid "<b>Compliance Status</b>"
-msgstr ""
+msgstr "<b>പൊരുത്തപ്പെടലിന്റെ സ്ഥിതി</b>"
 
 #: tmp/mainwindow.glade.h:2
 msgid "<b>Tools</b>"
-msgstr ""
+msgstr "<b>ഉപകരണങ്ങള്‍</b>"
 
 #: tmp/mainwindow.glade.h:3
 msgid "Activate a Subscription"
-msgstr ""
+msgstr "ഒരു സബ്സ്ക്രിപ്ഷന്‍ സജീവമാക്കുക"
 
 #: tmp/mainwindow.glade.h:4
 msgid "Become Compliant"
-msgstr ""
+msgstr "പൊരുത്തപ്പെടുക"
 
 #: tmp/mainwindow.glade.h:7
 msgid "Proxy Configuration"
-msgstr ""
+msgstr "പ്രോക്സി ക്രമീകരണം"
 
 #: tmp/mainwindow.glade.h:8
 msgid "Register System"
-msgstr ""
+msgstr "സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുക"
 
 #: tmp/mainwindow.glade.h:10
 msgid "Unregister System"
-msgstr ""
+msgstr "സിസ്റ്റം അണ്‍രജിസ്ടര്‍ ചെയ്യുക"
 
 #: tmp/mainwindow.glade.h:11
 msgid "View System Facts"
-msgstr ""
+msgstr "സിസ്റ്റം വിവരങ്ങള്‍ കാണുക"
 
 #: tmp/mainwindow.glade.h:12
 msgid "You have one product which is out of compliance."
-msgstr ""
+msgstr "പൊരുത്തപ്പെടാത്ത ഒരു പ്രൊഡക്ടുണ്ടു്."
 
 #: tmp/mysubs.glade.h:1
 msgid "My Subscriptions View"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ കാഴ്ച"
 
 #: tmp/mysubs.glade.h:3
 msgid "Unsubscribe"
-msgstr ""
+msgstr "അണ്‍സബ്സ്ക്രൈബ്"
 
 #: tmp/networkConfig.glade.h:1
 msgid "Advanced Network Configuration"
-msgstr ""
+msgstr "നവീന നെറ്റ്‌വര്‍ക്ക് ക്രമീകരണം"
 
 #: tmp/networkConfig.glade.h:2
 msgid "Authentication Checkbox"
-msgstr ""
+msgstr "ആധികാരികത ഉറപ്പാക്കുന്നതിനുള്ള ചെക്ക്ബോക്സ്"
 
 #: tmp/networkConfig.glade.h:3
 msgid "Close Button"
-msgstr ""
+msgstr "അടയ്ക്കുന്നതിനുള്ള ബട്ടണ്‍"
 
 #: tmp/networkConfig.glade.h:4
 msgid "Enter in the format hostname(:port)"
-msgstr ""
+msgstr "hostname(:port) എന്ന ഫോര്‍മാറ്റില്‍ നല്‍കുക"
 
 #: tmp/networkConfig.glade.h:5
 msgid "Password Text"
-msgstr ""
+msgstr "രഹസ്യവാക്കിനുള്ള വാചകം"
 
 #: tmp/networkConfig.glade.h:6
 msgid "Proxy Checkbox"
-msgstr ""
+msgstr "പ്രോക്സിയ്ക്കുള്ള ചെക്ക്ബോക്സ്"
 
 #: tmp/networkConfig.glade.h:7
 msgid "Proxy Location Text"
-msgstr ""
+msgstr "പ്രോക്സി സ്ഥാനത്തിനുള്ള വാചകം"
 
 #: tmp/networkConfig.glade.h:8
 msgid "Username Text"
-msgstr ""
+msgstr "ഉപയോക്തൃനാമത്തിനുള്ള വാചകം"
 
 #: tmp/progress.glade.h:1
 msgid "Progress Dialog"
-msgstr ""
+msgstr "പുരോഗതി ഡയലോഗ്"
 
 #: tmp/registration.glade.h:1
 msgid "<b>Please enter the following for this system:</b>"
-msgstr ""
+msgstr "<b>ഈ സിസ്റ്റത്തിനുള്ള താഴെ പറയുന്ന വിവരങ്ങള്‍ ദയവായി നല്‍കുക:</b>"
 
 #: tmp/registration.glade.h:2
 msgid ""
@@ -1194,198 +1318,206 @@ msgid ""
 "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
 "www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
 msgstr ""
+"<small>സൂചന: ലോഗിന്‍ അല്ലെങ്കില്‍ രഹസ്യവാക്കു് ഓര്‍മ്മയില്ല? ഇതിനായി\n"
+"<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
+"www.redhat.com/wapps/sso/rhn/lostPassword.html</a> കാണുക</small> "
 
 #: tmp/registration.glade.h:4
 msgid "A unique label for this system"
-msgstr ""
+msgstr "ഈ സിസ്റ്റത്തിനുള്ള ലേബല്‍"
 
 #: tmp/registration.glade.h:5
 msgid "Select the most appropriate subscriptions for this system"
-msgstr ""
+msgstr "ഈ സിസ്റ്റത്തിനുള്ള ഏറ്റവും ഉചിതമായ സബ്സ്ക്രിപ്ഷനുകള്‍ തെരഞ്ഞെടുക്കുക"
 
 #: tmp/registration.glade.h:6
 msgid "System Name:"
-msgstr ""
+msgstr "സിസ്റ്റം നാമം:"
 
 #: tmp/registration.glade.h:7
 msgid "System Registration"
-msgstr ""
+msgstr "സിസ്റ്റം രജിസ്ട്രേഷന്‍"
 
 #: tmp/registration.glade.h:8
 msgid "register_button"
-msgstr ""
+msgstr "register_button"
 
 #: tmp/registration.glade.h:9
 msgid "register_dialog_main_vbox"
-msgstr ""
+msgstr "register_dialog_main_vbox"
 
 #: tmp/registration.glade.h:10
 msgid "registration_dialog_action_area\n"
-msgstr ""
+msgstr "registration_dialog_action_area\n"
 
 #: tmp/rhsm.glade.h:1
 msgid "<b>Other Available Subscriptions</b>"
-msgstr ""
+msgstr "<b>ലഭ്യമായ മറ്റു് സബ്സ്ക്രിപ്ഷനുകള്‍</b>"
 
 #: tmp/rhsm.glade.h:2
 msgid "<b>Select Subscriptions to add</b>"
-msgstr ""
+msgstr "<b>ചേര്‍ക്കേണ്ട സബ്സ്ക്രിപ്ഷനുകള്‍ തെരഞ്ഞെടുക്കുക</b>"
 
 #: tmp/rhsm.glade.h:3
 msgid "<b>Subscriptions compatible with your system</b>"
-msgstr ""
+msgstr "<b>നിങ്ങളുടെ സിസ്റ്റവുമായി പൊരുത്തപ്പെടുന്ന സബ്സ്ക്രിപ്ഷനുകള്‍</b>"
 
 #: tmp/rhsm.glade.h:4
 msgid "<b>Subscriptions matching your installed products</b>"
-msgstr ""
+msgstr "<b>ഇന്‍സ്റ്റോള്‍ ചെയ്ത പ്രൊഡക്ടുളുമായി പൊരുത്തപ്പെടുന്ന സബ്സ്ക്രിപ്ഷനുകള്‍</b>"
 
 #: tmp/rhsm.glade.h:5
 msgid "Add Subscriptions"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ ചേര്‍ക്കുക"
 
 #: tmp/rhsm.glade.h:6
 msgid "Do not register"
-msgstr ""
+msgstr "രജിസ്ടര്‍ ചെയ്യേണ്ട"
 
 #: tmp/rhsm.glade.h:8
 msgid "Not Compatible"
-msgstr ""
+msgstr "പൊരുത്തമല്ല"
 
 #: tmp/rhsm.glade.h:10
 msgid "Register with Red Hat Entitlement Service"
-msgstr ""
+msgstr "Red Hat എന്റൈറ്റില്‍മെന്റ് സര്‍വീസിനായി രജിസ്ടര്‍ ചെയ്യുക"
 
 #: tmp/rhsm.glade.h:11
 msgid "Register with Red Hat Network"
-msgstr ""
+msgstr "Red Hat നെറ്റ്‌വര്‍ക്കുമായി രജിസ്ടര്‍ ചെയ്യുക"
 
 #: tmp/rhsm.glade.h:12
 msgid "Register with Red Hat Network Satellite"
-msgstr ""
+msgstr "Red Hat നെറ്റ്‌വര്‍ക്ക് സാറ്റിലൈറ്റുമായി രജിസ്ടര്‍ ചെയ്യുക"
 
 #: tmp/rhsm.glade.h:13
 msgid "Suggested"
-msgstr ""
+msgstr "നിര്‍ദ്ദേശിച്ചതു്"
 
 #: tmp/rhsm.glade.h:14
 msgid "Update Subscriptions"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ പരിഷ്കരിയ്ക്കുക"
 
 #: tmp/rhsm.glade.h:15
 msgid "update_subscriptions_dialog\n"
-msgstr ""
+msgstr "update_subscriptions_dialog\n"
 
 #: tmp/subdetails.glade.h:1
 msgid "<b>Account Number:</b>"
-msgstr ""
+msgstr "<b>അക്കൌണ്ട് നമ്പര്‍:</b>"
 
 #: tmp/subdetails.glade.h:2
 msgid "<b>Bundled Products:</b>"
-msgstr ""
+msgstr "<b>കൂട്ടമായുള്ള പ്രൊഡക്ടുകള്‍:</b>"
 
 #: tmp/subdetails.glade.h:3
 msgid "<b>Contract Number:</b>"
-msgstr ""
+msgstr "<b>കോണ്ട്രാക്റ്റ് നമ്പര്‍:</b>"
 
 #: tmp/subdetails.glade.h:4
 msgid "<b>End Date:</b>"
-msgstr ""
+msgstr "<b>അവസാന തീയതി:</b>"
 
 #: tmp/subdetails.glade.h:5
 msgid "<b>Provides Management:</b>"
-msgstr ""
+msgstr "<b>മാനേജ്മെന്റ് ലഭ്യമാക്കുന്നു:</b>"
 
 #: tmp/subdetails.glade.h:6
 msgid "<b>Start Date:</b>"
-msgstr ""
+msgstr "<b>തുടക്ക തീയതി:</b>"
 
 #: tmp/subdetails.glade.h:7
 msgid "<b>Subscription Details</b>"
-msgstr ""
+msgstr "<b>സബ്സ്ക്രിപ്ഷന്‍ വിശദാംശങ്ങള്‍</b>"
 
 #: tmp/subdetails.glade.h:9
 msgid "<b>Support Level:</b>"
-msgstr ""
+msgstr "<b>പിന്തുണ ലവല്‍:</b>"
 
 #: tmp/subdetails.glade.h:10
 msgid "<b>Support Type:</b>"
-msgstr ""
+msgstr "<b>പിന്തുണയ്ക്കുന്ന രീതി:</b>"
 
 #: tmp/subdetails.glade.h:11
 msgid "Account"
-msgstr ""
+msgstr "അക്കൌണ്ട്"
 
 #: tmp/subdetails.glade.h:15
 msgid "Subscription Detail"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ വിവരം"
 
 #: tmp/subsgui.glade.h:1
 msgid "Enter your Subscription account information"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ അക്കൌണ്ട് വിവരം നല്‍കുക"
 
 #: tmp/subsgui.glade.h:2
 msgid "Manage Your Product Subscriptions"
-msgstr ""
+msgstr "പ്രൊഡക്ട് സബ്ക്രിപ്ഷനുകള്‍ കൈകാര്യം ചെയ്യുക"
 
 #: src/compliance/rhsm_compliance_icon.c:43
 msgid "How often to check for compliance (in seconds)"
-msgstr ""
+msgstr "പൊരുത്തത്തിനായി എപ്പോള്‍ പരിശോധിയ്ക്കണം (സെക്കന്‍ഡില്‍)"
 
 #: src/compliance/rhsm_compliance_icon.c:45
 msgid "Show debug messages"
-msgstr ""
+msgstr "ഡീബഗ് സന്ദേശങ്ങള്‍ കാണിയ്ക്കുക"
 
 #: src/compliance/rhsm_compliance_icon.c:47
 msgid "Force display of the compliance icon (expired or warning)"
-msgstr ""
+msgstr "പൊരുത്തത്തിന്റെ പ്രതിരൂപത്തിനുള്ള ചിഹ്നം (കാലാവധി കഴിഞ്ഞിരിയ്ക്കുന്നു അല്ലെങ്കില്‍ മുന്നറിയിപ്പു്)"
 
 #: src/compliance/rhsm_compliance_icon.c:135
 msgid "This system is non-compliant"
-msgstr ""
+msgstr "സിസ്റ്റത്തിനു് പൊരുത്തമില്ല"
 
 #: src/compliance/rhsm_compliance_icon.c:136
 msgid "This System is Non-Compliant"
-msgstr ""
+msgstr "ഈ സിസ്റ്റത്തിനു് പൊരുത്തക്കേടുണ്ടു്"
 
 #: src/compliance/rhsm_compliance_icon.c:137
 msgid ""
 "This system is missing one or more subscriptions required for compliance "
 "with your subscription agreements."
 msgstr ""
+"സബ്സ്ക്രിപ്ഷന്‍ എഗ്രിമെന്റുകള്‍ക്കു് വളരെ അത്യാവശ്യമുള്ള ഒന്നോ അധിലധികമോ "
+"സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമല്ല."
 
 #: src/compliance/rhsm_compliance_icon.c:142
 msgid "Some of the system's subscriptions are about to expire"
-msgstr ""
+msgstr "ചില സിസ്റ്റത്തിന്റെ സബ്സ്ക്രിപ്ഷനുകളുടെ കാലാവധി കഴിയാറായി"
 
 #: src/compliance/rhsm_compliance_icon.c:144
 msgid "This System's Subscriptions Are About to Expire"
-msgstr ""
+msgstr "സിസ്റ്റത്തിന്റെ സബ്സ്ക്രിപ്ഷനുകളുടെ കാലാവധി കഴിയാറായി"
 
 #: src/compliance/rhsm_compliance_icon.c:145
 msgid ""
 "One or more of this system's subscriptions are about to expire. These "
 "subscriptions are required for compliance with your subscription agreements."
 msgstr ""
+"ഈ സിസ്റ്റത്തിനുള്ള ഒന്നോ അതിലധികമോ സബ്സ്ക്രിപ്ഷനുകളുടെ കാലാവധി കഴിയാറായി. ഇവ "
+"സബ്സ്ക്രിപ്ഷന്‍ എഗ്രിമെന്റുകള്‍ക്കു് വളരെ അത്യാവശ്യമാണു്."
 
 #: src/compliance/rhsm_compliance_icon.c:165
 msgid "Remind Me Later"
-msgstr ""
+msgstr "പിന്നീടു് അറിയിയ്ക്കുക"
 
 #: src/compliance/rhsm_compliance_icon.c:171
 msgid "Manage My Subscriptions..."
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ കൈകാര്യം ചെയ്യുക..."
 
 #: src/compliance/rhsm_compliance_icon.c:199
 #, python-format
 msgid "Failed to open connection to bus: %s\n"
-msgstr ""
+msgstr "Failed to open connection to bus: %s\n"
 
 #: src/compliance/rhsm_compliance_icon.c:250
 #, python-format
 msgid "Unknown argument to force-icon: %s\n"
-msgstr ""
+msgstr "force-icon-നു് അപരിചിതമായ ആര്‍ഗ്യുമെന്റ്: %s\n"
 
 #: src/compliance/rhsm_compliance_icon.c:286
 #, python-format
 msgid "option parsing failed: %s\n"
-msgstr ""
+msgstr "ഐച്ഛികം പാഴ്സ് ചെയ്യുന്നതില്‍ പരാജയം: %s\n"
+
