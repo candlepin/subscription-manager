@@ -393,7 +393,9 @@ class DatePicker(gtk.HBox):
         """
         today = datetime.date.today()
         try: 
-            date = datetime.datetime.strptime(self._date_entry.get_text(), '%x')
+            # doing it this ugly way for pre python 2.5
+            date = datetime.datetime(
+                    *(time.strptime(self._date_entry.get_text(), '%x')[0:6]))
             self._date = datetime.datetime(date.year, date.month, date.day,
                     tzinfo=utils.LocalTz())
             self.emit('date-picked-text')

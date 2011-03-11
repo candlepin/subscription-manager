@@ -25,7 +25,7 @@ import rhsm.config
 import constants
 import dbus
 import datetime
-from time import strftime, localtime
+from time import strftime, strptime, localtime
 import rhsm.connection as connection
 from optparse import OptionParser
 from certlib import CertLib, ConsumerIdentity
@@ -713,7 +713,9 @@ class ListCommand(CliCommand):
             on_date = None
             if self.options.on_date:
                 try:
-                    on_date = datetime.datetime.strptime(self.options.on_date, "%Y-%m-%d")
+                    # doing it this ugly way for pre python 2.5
+                    on_date = datetime.datetime(
+                            *(strptime(self.options.on_date, '%Y-%m-%d')[0:6]))
                 except Exception, e:
                     print(_("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
                     sys.exit(1)
