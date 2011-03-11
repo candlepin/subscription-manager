@@ -372,7 +372,8 @@ main(int argc, char **argv)
 	notify_init("rhsm-compliance-icon");
 
 	check_compliance(&compliance);
-	g_timeout_add_seconds(check_period, (GSourceFunc) check_compliance,
+	//convert sec to msec before passing in
+	g_timeout_add(check_period * 1000, (GSourceFunc) check_compliance,
 			      &compliance);
 
 	proxy = add_signal_listener(&compliance);

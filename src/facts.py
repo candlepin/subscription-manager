@@ -11,7 +11,7 @@ from datetime import datetime
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
-class Facts():
+class Facts:
 
     def __init__(self):
         self.facts = {}
