@@ -74,6 +74,9 @@ def main():
 if __name__ == '__main__':
     try:
         sys.exit(abs(main() or 0))
+    except SystemExit:
+        #this is a non-exceptional exception thrown by Python 2.4, just pass
+        pass
     except KeyboardInterrupt:
         systemExit(0, "\nUser interrupted process.")
     except Exception, e:
