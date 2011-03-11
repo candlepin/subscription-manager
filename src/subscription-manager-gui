@@ -116,6 +116,10 @@ if __name__ == '__main__':
             main.main_window.connect('hide', gtk.main_quit)
 
             sys.exit(gtk.main() or 0)
+        except SystemExit, e:
+            #this is a non-exceptional exception thrown by Python 2.4, just
+            #re-raise, bypassing handle_exception
+            raise e
         except KeyboardInterrupt:
             systemExit(0, "\nUser interrupted process.")
         except Exception, e:
