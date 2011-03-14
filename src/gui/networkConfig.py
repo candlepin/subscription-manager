@@ -22,8 +22,6 @@ import gtk
 import rhsm.config
 
 _ = gettext.gettext
-gettext.textdomain("subscription-manager")
-gtk.glade.bindtextdomain("subscription-manager")
 
 DIR = os.path.dirname(__file__)
 GLADE_XML = os.path.join(DIR, "data/networkConfig.glade")

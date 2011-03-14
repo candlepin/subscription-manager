@@ -24,8 +24,6 @@ import managerlib
 
 import gettext
 _ = gettext.gettext
-gettext.textdomain('subscription-manager')
-gtk.glade.bindtextdomain('subscription-manager')
 
 class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
