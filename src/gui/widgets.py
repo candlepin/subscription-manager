@@ -24,8 +24,6 @@ import atk
 
 import gettext
 _ = gettext.gettext
-gettext.textdomain("subscription-manager")
-gtk.glade.bindtextdomain("subscription-manager")
 
 import managerlib
 import storage
@@ -89,6 +87,7 @@ class SubscriptionManagerTab(GladeWidget):
 
     def add_text_column(self, name, store_key, expand=False, markup=False):
         text_renderer = gtk.CellRendererText()
+
         if markup:
             column = gtk.TreeViewColumn(name,
                                         text_renderer,

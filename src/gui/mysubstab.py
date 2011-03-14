@@ -25,8 +25,6 @@ from utils import handle_gui_exception,get_dbus_iface
 
 import gettext
 _ = gettext.gettext
-gettext.textdomain("subscription-manager")
-gtk.glade.bindtextdomain("subscription-manager")
 
 # Color constants for background rendering
 YELLOW = '#FFFB82'

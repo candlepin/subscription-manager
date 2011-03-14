@@ -48,8 +48,8 @@ from datetime import datetime
 
 import gettext
 _ = gettext.gettext
-gettext.textdomain("subscription-manager")
-gtk.glade.bindtextdomain("subscription-manager")
+gettext.textdomain("rhsm")
+gtk.glade.bindtextdomain("rhsm")
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
