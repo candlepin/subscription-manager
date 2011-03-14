@@ -18,7 +18,6 @@ import datetime
 import time
 import gobject
 import gtk
-import gio
 import pango
 import atk
 
@@ -30,6 +29,7 @@ import storage
 import messageWindow
 import locale
 import utils
+import file_monitor
 from certlib import ProductDirectory
 
 GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
@@ -79,11 +79,11 @@ class SubscriptionManagerTab(GladeWidget):
         selection = self.top_view.get_selection()
         selection.connect('changed', self._selection_callback)
 
-        def on_cert_update(filemonitor, first_file, other_file, event_type):
+        def on_cert_update(filemonitor):
             self._set_next_update()
 
         # For updating the 'Next Update' time
-        gio.File(UPDATE_FILE).monitor().connect('changed', on_cert_update)
+        file_monitor.Monitor(UPDATE_FILE).connect('changed', on_cert_update)
 
     def add_text_column(self, name, store_key, expand=False, markup=False):
         text_renderer = gtk.CellRendererText()

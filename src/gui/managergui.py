@@ -21,13 +21,13 @@ import os
 import socket
 import logging
 
-import gio
 import gtk
 import gtk.glade
 
 import messageWindow
 import networkConfig
 import managerlib
+import file_monitor
 import rhsm.connection as connection
 import rhsm.config as config
 import constants
@@ -101,9 +101,10 @@ class Backend(object):
         self.entitlement_dir = EntitlementDirectory()
         self.certlib = CertLib(uep=self.uep)
 
-        self.product_monitor = self._monitor(self.product_dir)
-        self.entitlement_monitor = self._monitor(self.entitlement_dir)
-        self.identity_monitor = gio.File(ConsumerIdentity.PATH).monitor()
+        self.product_monitor = file_monitor.Monitor(self.product_dir.path)
+        self.entitlement_monitor = file_monitor.Monitor(
+                self.entitlement_dir.path)
+        self.identity_monitor = file_monitor.Monitor(ConsumerIdentity.PATH)
 
     # make a create that does the init
     # and a update() for a name
@@ -137,9 +138,6 @@ class Backend(object):
 
     def create_admin_uep(self, username=None, password=None):
         self.admin_uep = self._create_uep(username=username, password=password)
-
-    def _monitor(self, directory):
-        return gio.File(directory.path).monitor()
 
     def monitor_certs(self, callback):
         self.product_monitor.connect('changed', callback)
@@ -245,10 +243,10 @@ class MainWindow(widgets.GladeWidget):
         })
 
         # Register callback for when product/entitlement certs are updated
-        def on_cert_change(filemonitor, first_file, other_file, event_type):
+        def on_cert_change(filemonitor):
             self._set_compliance_status()
 
-        def on_identity_change(filemonitor, first_file, other_file, event_type):
+        def on_identity_change(filemonitor):
             self.refresh()
 
         self.backend.monitor_certs(on_cert_change)

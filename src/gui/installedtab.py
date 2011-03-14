@@ -58,7 +58,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.update_products()
 
         # Monitor entitlements/products for additions/deletions
-        def on_cert_change(filemonitor, first_file, other_file, event_type):
+        def on_cert_change(filemonitor):
             self.update_products()
 
         backend.monitor_certs(on_cert_change)

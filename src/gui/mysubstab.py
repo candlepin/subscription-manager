@@ -65,7 +65,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.glade.signal_autoconnect({'on_unsubscribe_button_clicked': self.unsubscribe_button_clicked})
 
         # Monitor entitlements/products for additions/deletions
-        def on_cert_change(filemonitor, first_file, other_file, event_type):
+        def on_cert_change(filemonitor):
             self.update_subscriptions()
 
         backend.monitor_certs(on_cert_change)
