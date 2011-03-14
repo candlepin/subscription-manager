@@ -45,7 +45,7 @@ if _use_gio:
 
 else:
 
-    import glib
+    import gobject
     import pyinotify
 
 
@@ -83,7 +83,7 @@ else:
                     pyinotify.IN_MOVE_SELF
             self._watch_manager.add_watch(path, mask, rec=True)
             # same timeout as gio monitor, at time of writing.
-            glib.timeout_add(800, self._run_check)
+            gobject.timeout_add(800, self._run_check)
 
         def _run_check(self):
             self._notifier.process_events()

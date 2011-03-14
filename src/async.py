@@ -18,7 +18,7 @@
 import threading
 import Queue
 
-import glib
+import gobject
 
 
 class AsyncPool(object):
@@ -56,6 +56,6 @@ class AsyncPool(object):
         """
         Run pool stash refresh asynchronously.
         """
-        glib.idle_add(self._watch_thread)
+        gobject.idle_add(self._watch_thread)
         threading.Thread(target=self._run_refresh,
                 args=(active_on, callback)).start()

@@ -19,7 +19,6 @@ from socket import error as socket_error
 from M2Crypto import SSL
 from dbus.mainloop.glib import DBusGMainLoop
 import gobject
-import glib
 import datetime
 import time
 import dbus
@@ -93,7 +92,7 @@ def apply_highlight(text, highlight):
     Apply pango markup to highlight a search term in a string
     """
     if not highlight:
-        return glib.markup_escape_text(text)
+        return gobject.markup_escape_text(text)
 
     regex = re.compile("(" + highlight + ")", re.I)
     parts = regex.split(text)
@@ -103,9 +102,9 @@ def apply_highlight(text, highlight):
     on_search_term = False
     for part in parts:
         if on_search_term:
-            escaped += "<b>%s</b>" % glib.markup_escape_text(part)
+            escaped += "<b>%s</b>" % gobject.markup_escape_text(part)
         else:
-            escaped += glib.markup_escape_text(part)
+            escaped += gobject.markup_escape_text(part)
         on_search_term = not on_search_term
 
     return "".join(escaped)

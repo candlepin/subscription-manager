@@ -18,7 +18,6 @@
 
 import datetime
 import syslog
-import glib
 import gobject
 import dbus
 import dbus.service
@@ -107,7 +106,7 @@ class ComplianceChecker(dbus.service.Object):
     #certain parts of that are async
     def watchdog(self):
         if not self.keep_alive:
-            glib.idle_add(check_if_ran_once, self, self.loop)
+            gobject.idle_add(check_if_ran_once, self, self.loop)
 
     @dbus.service.method(
         dbus_interface="com.redhat.SubscriptionManager.Compliance",
