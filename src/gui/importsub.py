@@ -17,7 +17,7 @@ import gtk
 import gettext
 import os
 import shutil
-from OpenSSL.crypto import load_certificate, FILETYPE_PEM
+import M2Crypto
 
 _ = gettext.gettext
 
@@ -67,8 +67,8 @@ class ImportSubDialog(widgets.GladeWidget):
             return False
 
         try:
-            data = open(src_cert_file).read()
-            x509 = load_certificate(FILETYPE_PEM, data)
+            x509 = M2Crypto.X509.load_cert(src_cert_file,
+                    M2Crypto.X509.FORMAT_PEM)
         except:
             errorWindow(_("%s is not a valid certificate file. Please upload a valid certificate.") %
                 os.path.basename(src_cert_file))
