@@ -72,7 +72,6 @@ class ImportSubDialog(widgets.GladeWidget):
         except Exception, e:
             errorWindow(_("%s is not a valid certificate file. Please upload a valid certificate." %
                 os.path.basename(src_cert_file)))
-            raise e
             return False
 
         if not os.access(ENT_CONFIG_DIR, os.R_OK):
