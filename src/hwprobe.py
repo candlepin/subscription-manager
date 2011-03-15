@@ -27,9 +27,33 @@ _ = gettext.gettext
 import ethtool
 import socket
 import commands
-import platform
+import glob
+import re
 
-from subprocess import Popen, PIPE, CalledProcessError
+from subprocess import Popen, PIPE
+
+try:
+    import platform
+except ImportError:
+    # doesn't exist till python 2.7
+    platform = None
+
+
+# Exception classes used by this module.
+# from later versions of subprocess, but not there on 2.4, so include our version
+class CalledProcessError(Exception):
+    """This exception is raised when a process run by check_call() or
+    check_output() returns a non-zero exit status.
+    The exit status will be stored in the returncode attribute;
+    check_output() will also store the output in the output attribute.
+    """
+    def __init__(self, returncode, cmd, output=None):
+        self.returncode = returncode
+        self.cmd = cmd
+        self.output = output
+    def __str__(self):
+        return "Command '%s' returned non-zero exit status %d" % (self.cmd, self.returncode)
+
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -86,12 +110,41 @@ class Hardware:
         return self.unameinfo
 
     def getReleaseInfo(self):
-        distro_data = platform.linux_distribution()
         distro_keys = ('distribution.name', 'distribution.version',
                        'distribution.id')
-        self.releaseinfo = dict(zip(distro_keys, distro_data))
+        self.releaseinfo = dict(zip(distro_keys, self.getDistribution()))
         self.allhw.update(self.releaseinfo)
         return self.releaseinfo
+
+    
+    def _open_release(self, filename):
+        return open(filename, 'r')
+
+    # this version os very RHEL/Fedora specific...
+    def getDistribution(self):
+
+        if platform:
+            return platform.linux_distribution()
+
+        # from platform.py from python2.
+        _lsb_release_version = re.compile(r'(.+)'
+                                          ' release '
+                                          '([\d.]+)'
+                                          '[^(]*(?:\((.+)\))?')
+        f = self._open_release('/etc/redhat-release')
+        firstline = f.readline()
+        f.close()
+
+        version = "unknown"
+        distname = "unknown"
+        id = "unknown"
+
+        m = _lsb_release_version.match(firstline)
+
+        if m is not None:
+            return tuple(m.groups())
+
+        return distname, version, id
 
     def getMemInfo(self):
         self.meminfo = {}
@@ -117,20 +170,66 @@ class Hardware:
         self.allhw.update(self.meminfo)
         return self.meminfo
 
+    def _getSocketIdForCpu(self, cpu):
+        physical_package_id = "%s/topology/physical_package_id" % cpu
+        f = open(physical_package_id)
+        socket_id = f.readline()
+        return socket_id
+
     def getCpuInfo(self):
         # TODO:(prad) Revisit this and see if theres a better way to parse /proc/cpuinfo
         # perhaps across all arches
         self.cpuinfo = {}
+        sys_cpu = "/sys/devices/system/cpu/"
+
+        # we also have cpufreq, etc in this dir, so match just the numbs
+        cpu_re = r'cpu([0-9]+$)'
+
+        cpu_files = []
+        sys_cpu_path = "/sys/devices/system/cpu/"
+        for cpu in os.listdir(sys_cpu_path):
+            if re.match(cpu_re, cpu):
+                cpu_files.append("%s/%s" % (sys_cpu_path,cpu))
+
+        cpu_count = 0
+        socket_count = 0
+        thread_count = 0
+        numa_count = 0
+
+        socket_dict = {}
+        numa_node_dict = {}
+        for cpu in cpu_files:
+            cpu_count = cpu_count + 1
+            socket_id = self._getSocketIdForCpu(cpu)
+            if socket_id not in socket_dict:
+                socket_dict[socket_id] = 1
+            else:
+                socket_dict[socket_id] = socket_dict[socket_id] + 1
+
+        self.cpuinfo['cpu.cpu_socket(s)'] = len(socket_dict)
+        self.cpuinfo['cpu.core(s)_per_socket'] = cpu_count/len(socket_dict)
+        self.cpuinfo["cpu.cpu(s)"] = cpu_count
+        self.allhw.update(self.cpuinfo)
+        return self.cpuinfo
+
+    def getLsCpuInfo(self):
+        # if we have `lscpu`, let's use it for facts as well, under
+        # the `lscpu` name space
+
+        if not os.access('/usr/bin/lscpu', os.R_OK):
+            return
+
+        self.lscpuinfo = {}
         try:
             cpudata = commands.getstatusoutput('LANG=en_US.UTF-8 /usr/bin/lscpu')[-1].split('\n')
             for info in cpudata:
                 key, value = info.split(":")
-                nkey = '.'.join(["cpu", key.lower().strip().replace(" ", "_")])
-                self.cpuinfo[nkey] = "%s" % value.strip()
+                nkey = '.'.join(["lscpu", key.lower().strip().replace(" ", "_")])
+                self.lscpuinfo[nkey] = "%s" % value.strip()
         except:
             print _("Error reading system cpu information:"), sys.exc_type
-        self.allhw.update(self.cpuinfo)
-        return self.cpuinfo
+        self.allhw.update(self.lscpuinfo)
+        return self.lscpuinfo
 
     def getNetworkInfo(self):
         self.netinfo = {}
@@ -213,6 +312,7 @@ class Hardware:
         self.getReleaseInfo()
         self.getMemInfo()
         self.getCpuInfo()
+        self.getLsCpuInfo()
         self.getNetworkInfo()
         self.getNetworkInterfaces()
         self.getVirtInfo()
