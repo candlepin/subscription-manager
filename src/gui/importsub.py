@@ -70,8 +70,8 @@ class ImportSubDialog(widgets.GladeWidget):
             data = open(src_cert_file).read()
             x509 = load_certificate(FILETYPE_PEM, data)
         except:
-            errorWindow(_("%s is not a valid certificate file. Please upload a valid certificate." %
-                os.path.basename(src_cert_file)))
+            errorWindow(_("%s is not a valid certificate file. Please upload a valid certificate.") %
+                os.path.basename(src_cert_file))
             return False
 
         if not os.access(ENT_CONFIG_DIR, os.R_OK):
