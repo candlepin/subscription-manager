@@ -70,7 +70,7 @@ class ImportSubDialog(widgets.GladeWidget):
             x509 = M2Crypto.X509.load_cert(src_cert_file,
                     M2Crypto.X509.FORMAT_PEM)
         except Exception, e:
-            errorWindow(_("%s is not a valid certificate file. Please upload a valid certificate." %
+            errorWindow(_("%s is not a valid certificate file. Please upload a valid certificate.") %
                 os.path.basename(src_cert_file)))
             return False
 
