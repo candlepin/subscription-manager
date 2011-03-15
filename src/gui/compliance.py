@@ -120,9 +120,9 @@ class ComplianceAssistant(widgets.GladeWidget):
         self.uncompliant_treeview.add_toggle_column(None,
                                                     self.uncompliant_store['active'],
                                                     self._on_uncompliant_active_toggled)
-        self.uncompliant_treeview.add_column("Product",
+        self.uncompliant_treeview.add_column(_("Product"),
                 self.uncompliant_store['product_name'], True)
-        self.uncompliant_treeview.add_date_column("End Date",
+        self.uncompliant_treeview.add_date_column(_("End Date"),
                 self.uncompliant_store['end_date'], True)
         self.uncompliant_treeview.set_model(self.uncompliant_store)
         self.uncompliant_window.add(self.uncompliant_treeview)
@@ -139,9 +139,9 @@ class ComplianceAssistant(widgets.GladeWidget):
         self.subscriptions_store = storage.MappedListStore(subscriptions_type_map)
         self.subscriptions_treeview = MappedListTreeView(self.subscriptions_store)
         self.subscriptions_treeview.get_accessible().set_name(_("Compliance Subscription List"))
-        self.subscriptions_treeview.add_column("Subscription Name",
+        self.subscriptions_treeview.add_column(_("Subscription"),
                 self.subscriptions_store['product_name'], True)
-        self.subscriptions_treeview.add_column("Available Subscriptions",
+        self.subscriptions_treeview.add_column(_("Available Subscriptions"),
                 self.subscriptions_store['available_subscriptions'], True)
 
         self.subscriptions_treeview.set_model(self.subscriptions_store)
@@ -217,7 +217,7 @@ class ComplianceAssistant(widgets.GladeWidget):
             self.first_noncompliant_radiobutton.set_label(
                     _("%s (first date of non-compliance)") % formatted)
             self.providing_subs_label.set_label(
-                    _("The following subscriptions will cover the products selected on %s" % noncompliant_date.strftime("%x")))
+                    _("The following subscriptions will cover the products selected on %s") % noncompliant_date.strftime("%x"))
 
 
         async_stash = async.AsyncPool(self.pool_stash)
