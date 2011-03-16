@@ -70,7 +70,9 @@ class StubContent(Content):
     def __init__(self, label, name=None, quantity=1, flex_quantity=1, vendor="", 
             url="", gpg="", enabled=1, metadata_expire=None, required_tags=""):
         self.label = label
-        self.name = name if name else label
+        self.name = label
+        if name:
+            self.name = name
         self.quantity = quantity
         self.flex_quantity = flex_quantity
         self.vendor = vendor
@@ -87,8 +89,13 @@ class StubProductCertificate(ProductCertificate):
             end_date=None, provided_tags=None):
         # TODO: product should be a StubProduct, check for strings coming in and error out
         self.product = product
-        self.provided_products = provided_products if provided_products else []
-        self.provided_tags = set(provided_tags) if provided_tags else set()
+        self.provided_products = []
+        if provided_products:
+            self.provided_products = provided_products
+
+        self.provided_tags = set()
+        if provided_tags:
+            self.provided_tags = set(provided_tags)
         self.serial = random.randint(1, 10000000)
 
     def getProduct(self):
@@ -124,7 +131,9 @@ class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate)
                 order_end_date.strftime(fmt))
 
         self.valid_range = DateRange(self.start_date, self.end_date)
-        self.content = content if content else []
+        self.content = []
+        if content:
+            self.content = content
         self.path = "/tmp/fake_ent_cert.pem"
 
     # Need to override this implementation to avoid requirement on X509:

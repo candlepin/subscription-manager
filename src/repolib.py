@@ -46,8 +46,16 @@ class RepoLib:
 class UpdateAction:
 
     def __init__(self, uep=None, ent_dir=None, prod_dir=None):
-        self.ent_dir = ent_dir if ent_dir else EntitlementDirectory()
-        self.prod_dir = prod_dir if prod_dir else ProductDirectory()
+        if ent_dir:
+            self.ent_dir = ent_dir
+        else:
+            self.ent_dir = EntitlementDirectory()
+            
+        if prod_dir:
+            self.prod_dir = prod_dir
+        else:
+            self.prod_dir = ProductDirectory()
+
         self.uep = uep
 
     def perform(self):
