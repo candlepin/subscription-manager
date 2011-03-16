@@ -64,7 +64,7 @@ class FactDialogTests(unittest.TestCase):
                 self.stub_facts)
         dialog.show()
 
-        enabled = dialog.update_button.get_sensitive()
+        enabled = dialog.update_button.get_property('sensitive')
 
         self.assertFalse(enabled)
 
@@ -76,6 +76,6 @@ class FactDialogTests(unittest.TestCase):
                 self.stub_facts)
         dialog.show()
 
-        enabled = dialog.update_button.get_sensitive()
+        enabled = dialog.update_button.get_property('sensitive')
 
         self.assertTrue(enabled)
