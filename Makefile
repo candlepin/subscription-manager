@@ -134,7 +134,7 @@ gettext:
 	# Extract strings from Python and glade.h:
 	# TODO: glade.h files are getting written out into source tree, 
 	# how should we deal with these?
-	xgettext --language=Python --keyword=_ --keyword=N_ -ktrc:1c,2 -ktrnc:1c,2,3 -ktr -kmarktr -ktrn:1,2 -o po/keys.pot $(shell find src/ -name "*.py") tmp/*.glade.h src/compliance/*.c
+	xgettext --language=Python --keyword=C_:1c,2 --keyword=_ --keyword=N_ -ktrc:1c,2 -ktrnc:1c,2,3 -ktr -kmarktr -ktrn:1,2 -o po/keys.pot $(shell find src/ -name "*.py") tmp/*.glade.h src/compliance/*.c
 
 	# Cleanup the tmp/ directory of glade.h files.
 	rm -rf tmp/
