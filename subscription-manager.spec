@@ -7,7 +7,6 @@ License: GPLv2
 Source0: %{name}-%{version}.tar.gz
 URL:     https://engineering.redhat.com/trac/subscription-manager
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-Requires:  python-dmidecode
 Requires:  python-ethtool
 Requires:  python-simplejson
 Requires:  python-iniparse
@@ -15,6 +14,12 @@ Requires:  PyXML
 Requires:  virt-what
 Requires:  python-rhsm
 Requires:  yum >= 3.2.19-15
+
+# There's no dmi to read on these arches, so don't pull in this dep.
+%ifnarch ppc ppc64 s390 s390x
+Requires:  python-dmidecode
+%endif
+
 Requires(post): chkconfig
 Requires(preun): chkconfig
 Requires(preun): initscripts
