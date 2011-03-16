@@ -17,7 +17,6 @@ import re
 import logging
 from socket import error as socket_error
 from M2Crypto import SSL
-from dbus.mainloop.glib import DBusGMainLoop
 import gobject
 import datetime
 import time
