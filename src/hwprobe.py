@@ -21,20 +21,60 @@ import os
 import sys
 import signal
 import re
+import logging
 import gettext
 _ = gettext.gettext
-import dmidecode
 import ethtool
 import socket
 import commands
+import platform
 
 from subprocess import Popen, PIPE, CalledProcessError
+
+log = logging.getLogger('rhsm-app.' + __name__)
+
+
+class DmiInfo(object):
+
+    def __init__(self):
+        self.info = self.getDmiInfo()
+
+    def getDmiInfo(self):
+        import dmidecode
+        try:
+            dmi_data = {
+                "dmi.bios.": dmidecode.bios(),
+                "dmi.processor.": dmidecode.processor(),
+                "dmi.baseboard.": dmidecode.baseboard(),
+                "dmi.chassis.": dmidecode.chassis(),
+                "dmi.slot.": dmidecode.slot(),
+                "dmi.system.": dmidecode.system(),
+                "dmi.memory.": dmidecode.memory(),
+                "dmi.connector.": dmidecode.connector(),
+            }
+
+            dmiinfo = {}
+            for tag, func in dmi_data.items():
+                dmiinfo = self._get_dmi_data(func, tag, dmiinfo)
+        except Exception, e:
+            log.warn(_("Error reading system DMI information: %s"), e)
+        return dmiinfo
+
+    def _get_dmi_data(self, func, tag, ddict):
+        for key, value in func.items():
+            for key1, value1 in value['data'].items():
+                if not isinstance(value1, str):
+                    continue
+                nkey = ''.join([tag, key1.lower()]).replace(" ", "_")
+                ddict[nkey] = str(value1)
+
+        return ddict
+
 
 class Hardware:
 
     def __init__(self):
         self.allhw = {}
-        self.dmiinfo = {}
 
     def getUnameInfo(self):
 
@@ -46,7 +86,6 @@ class Hardware:
         return self.unameinfo
 
     def getReleaseInfo(self):
-        import platform
         distro_data = platform.linux_distribution()
         distro_keys = ('distribution.name', 'distribution.version',
                        'distribution.id')
@@ -92,36 +131,6 @@ class Hardware:
             print _("Error reading system cpu information:"), sys.exc_type
         self.allhw.update(self.cpuinfo)
         return self.cpuinfo
-
-    def getDmiInfo(self):
-        try:
-            dmi_data = {
-                "dmi.bios.": dmidecode.bios(),
-                "dmi.processor.": dmidecode.processor(),
-                "dmi.baseboard.": dmidecode.baseboard(),
-                "dmi.chassis.": dmidecode.chassis(),
-                "dmi.slot.": dmidecode.slot(),
-                "dmi.system.": dmidecode.system(),
-                "dmi.memory.": dmidecode.memory(),
-                "dmi.connector.": dmidecode.connector(),
-            }
-
-            for tag, func in dmi_data.items():
-                self.dmiinfo = self._get_dmi_data(func, tag, self.dmiinfo)
-        except:
-            print _("Error reading system DMI information:"), sys.exc_type
-        self.allhw.update(self.dmiinfo)
-        return self.dmiinfo
-
-    def _get_dmi_data(self, func, tag, ddict):
-        for key, value in func.items():
-            for key1, value1 in value['data'].items():
-                if not isinstance(value1, str):
-                    continue
-                nkey = ''.join([tag, key1.lower()]).replace(" ", "_")
-                ddict[nkey] = str(value1)
-
-        return ddict
 
     def getNetworkInfo(self):
         self.netinfo = {}
@@ -184,16 +193,32 @@ class Hardware:
 
         return output
 
+    def getPlatformSpecificInfo(self):
+        """
+        Read and parse data that comes from platform specific interfaces.
+        This is only dmi/smbios data for now (which isn't on ppc/s390).
+        """
+
+        no_dmi_arches = ['ppc', 'ppc64', 's390', 's390x']
+        arch = platform.machine()
+        if arch in no_dmi_arches:
+            log.debug("not looking for dmi info due to system arch '%s'" % arch)
+            platform_specific_info = {}
+        else:
+            platform_specific_info = DmiInfo().info
+        self.allhw.update(platform_specific_info)
+
     def getAll(self):
         self.getUnameInfo()
         self.getReleaseInfo()
-        self.getDmiInfo()
         self.getMemInfo()
         self.getCpuInfo()
         self.getNetworkInfo()
         self.getNetworkInterfaces()
         self.getVirtInfo()
+        self.getPlatformSpecificInfo()
         return self.allhw
+
 
 if __name__ == '__main__':
     for hkey, hvalue in Hardware().getAll().items():
