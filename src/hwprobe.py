@@ -29,14 +29,10 @@ import socket
 import commands
 import glob
 import re
+import platform
 
 from subprocess import Popen, PIPE
 
-try:
-    import platform
-except ImportError:
-    # doesn't exist till python 2.7
-    platform = None
 
 
 # Exception classes used by this module.
@@ -123,7 +119,7 @@ class Hardware:
     # this version os very RHEL/Fedora specific...
     def getDistribution(self):
 
-        if platform:
+        if hasattr(platform, 'linux_distribution'):
             return platform.linux_distribution()
 
         # from platform.py from python2.
