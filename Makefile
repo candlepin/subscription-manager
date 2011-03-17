@@ -117,27 +117,15 @@ rpm: archive
 	rpmbuild -ta ${PKGNAME}-$(VERSION).tar.gz
 
 gettext:
-	# intltool-extract with --local option will place the generated glade.h 
-	# files into a local directory called tmp/. Just to make sure we never 
-	# trash something we shouldn't, if this directory already exists when we 
-	# start, error out.
-	if test -d tmp; then \
-		echo "tmp directory already exists, please clean it up before running gettext." ; \
-		exit 2; \
-	fi
-	
-	# Extract glade strings into .h files:
-	for f in $(shell find src/ -name "*.glade") ; do \
-		intltool-extract --local --type=gettext/glade $$f; \
-	done
-
-	# Extract strings from Python and glade.h:
-	# TODO: glade.h files are getting written out into source tree, 
-	# how should we deal with these?
-	xgettext --language=Python --keyword=C_:1c,2 --keyword=_ --keyword=N_ -ktrc:1c,2 -ktrnc:1c,2,3 -ktr -kmarktr -ktrn:1,2 -o po/keys.pot $(shell find src/ -name "*.py") tmp/*.glade.h src/compliance/*.c
-
-	# Cleanup the tmp/ directory of glade.h files.
-	rm -rf tmp/
+	# Extract strings from our source files. any comments on the line above
+	# the string marked for translation beginning with "translators" will be
+	# included in the pot file.
+	xgettext -ctranslators -s --language=Python -o po/keys.pot \
+		$(shell find src/ -name "*.py")
+	xgettext -ctranslators -s -k_ -kN_ --language=C -j -o po/keys.pot \
+		src/compliance/*.c
+	xgettext -ctranslators -s --language=Glade -j -o po/keys.pot \
+		src/gui/data/*.glade
 
 update-po:
 	for f in $(shell find po/ -name "*.po") ; do \
