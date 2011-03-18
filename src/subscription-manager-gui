@@ -27,6 +27,8 @@ import os
 import dbus
 import dbus.service, dbus.glib, dbus.exceptions
 import gtk
+import gettext
+_ = gettext.gettext
 
 gtk.gdk.threads_init()
 
@@ -48,24 +50,6 @@ _LIBPATH = "/usr/share/rhsm"
 if _LIBPATH not in sys.path:
     sys.path.append(_LIBPATH)
 
-# TODO: This works fine for CLI, but has no effect for GUI!? Have to
-# duplicate the i18n lines below for now:
-#from managerlib import configure_i18n
-#configure_i18n()
-APP = 'rhsm'
-DIR = '/usr/share/locale/'
-import locale
-import gettext
-import gtk.glade
-try:
-    locale.setlocale(locale.LC_ALL, '')
-except locale.Error:
-    locale.setlocale(locale.LC_ALL, 'en_US')
-
-for module in (gettext, gtk.glade):
-    module.bindtextdomain(APP, DIR)
-    module.textdomain(APP)
-_ = gettext.gettext
 
 # quick check to see if you are a super-user.
 if os.getuid() != 0:
@@ -73,6 +57,11 @@ if os.getuid() != 0:
     sys.exit(8)
 
 try:
+    # this has to be done first thing (due to module level translated vars,
+    # like in constants.py
+    from managerlib import configure_i18n
+    configure_i18n(with_glade=True)
+
     from gui import managergui, messageWindow
     import logutil
 except ImportError, e:

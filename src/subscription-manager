@@ -46,7 +46,11 @@ if os.getuid() != 0:
     sys.exit(8)
 
 try:
-    # NOTE: importing
+    # this has to be done first thing (due to module level translated vars,
+    # like in constants.py
+    from managerlib import configure_i18n
+    configure_i18n()
+
     import managercli
     from managercli import handle_exception
 except KeyboardInterrupt:
@@ -55,8 +59,6 @@ except ImportError, e:
     systemExit(2, "Unable to find Subscription Manager module.\n"
                   "Error: %s" % e)
 
-from managerlib import configure_i18n
-configure_i18n()
 
 import logutil
 logutil.init_logger()

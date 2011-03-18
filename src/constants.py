@@ -21,6 +21,7 @@
 import gettext
 _ = gettext.gettext
 
+
 installed_product_status = _("""
 ProductName:        \t%-25s
 Status:             \t%-25s
