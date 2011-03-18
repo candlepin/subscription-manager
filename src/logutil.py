@@ -71,9 +71,11 @@ def init_logger_for_yum():
     handle everything else (and don't let yum handle our log output.
     """
     handler = _get_handler()
-    
+
+    logging.getLogger('rhsm').propagate = False
     logging.getLogger('rhsm').setLevel(logging.DEBUG)
     logging.getLogger('rhsm').addHandler(handler)
 
+    logging.getLogger('rhsm-app').propagate = False
     logging.getLogger('rhsm-app').setLevel(logging.DEBUG)
     logging.getLogger('rhsm-app').addHandler(handler)
