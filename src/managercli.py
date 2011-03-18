@@ -27,7 +27,7 @@ import dbus
 import datetime
 from time import strftime, strptime, localtime
 import rhsm.connection as connection
-from optparse import OptionParser
+from i18n_optparse import OptionParser
 from certlib import CertLib, ConsumerIdentity
 import managerlib
 from facts import Facts
