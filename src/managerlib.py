@@ -17,7 +17,6 @@
 import os
 import stat
 import sys
-import constants
 import shutil
 import syslog
 import xml.utils.iso8601
