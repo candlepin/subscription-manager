@@ -48,48 +48,9 @@ Begins:             \t%-25s
 Expires:            \t%-25s
 """)
 
-expired_status = _("""
-The subscription for %s expired on %s. If you plan to continue using %s on this system you should update the subscription. If you no longer wish to use %s on this machine, you should unsubscribe and remove it from this system.
-""")
-
-not_installed_status = _("""
-%s is not installed but you are subscribed to it. If you do not plan to use %s on this system, you should unsubscribe in order to avoid unnecessarily consuming entitlements. If you plan to use %s on this system, you should install it.\n
-""")
-
-WARN_SUBSCRIPTIONS = _("<b>\n %s subscriptions need your attention.\n\n</b>Add or Update subscriptions for products you are using.\n")
-
-WARN_ONE_SUBSCRIPTION = _("<b>\n %s subscription needs your attention.\n\n</b>Add or Update subscriptions for products you are using.\n")
-
-COMPLIANT_STATUS = _("<b>\n All your subscriptions are in compliance.\n\n</b>Add or Update subscriptions for products you are using.")
-
 UNREGISTER_ERROR = _("<b>Errors were encountered during unregister.</b>\n%s\nPlease see /var/log/rhsm/rhsm.log for more information.")
 
-UNSUBSCRIBE_ERROR = _("<b>Unable to perform unsubscribe.</b>\n\nPlease see /var/log/rhsm/rhsm.log for more information.")
-
-SUBSCRIBE_REGTOKEN_ERROR = _("<b>\nCould not subscribe to token %s</b>\n\nPlease see /var/log/rhsm/rhsm.log for more information.")
-
-SUBSCRIBE_REGTOKEN_SUCCESS = _("Successfully subscribed your system to token %s")
-
-NO_SUBSCRIPTIONS_WARNING = _("<b>No subscriptions available for this account</b>")
-
-NO_UPDATES_WARNING = _("<b>No subscriptions updates available</b>")
-
-SUBSCRIBE_ERROR = _("<b>Unable to subscribe to product(s) %s</b>\n\nPlease see /var/log/rhsm/rhsm.log for more information.")
-
-ATLEAST_ONE_SELECTION = _("<i><b>Please select atleast one subscription to apply</b></i>")
-
-SUBSCRIBE_SUCCSSFUL = _("<i><b>Successfully consumed %s subscription(s)</b></i>")
-
-UNEXPECTED_ERROR = _("This error shouldn't have happened. If you'd "
-                                 "like to help us improve this program, please "
-                                 "file a bug at bugzilla.redhat.com. Including "
-                                 "the relevant parts of would be very "
-                                 "helpful. Thanks!")
 REGISTER_ERROR = _("<b>Unable to register the system.</b>\n\n %s\n\nPlease see /var/log/rhsm/rhsm.log for more information.")
-
-CONFIRM_UNSUBSCRIBE = _("Are you sure you want to unsubscribe product %s")
-
-SELECT_STATUS = _("<b>Total of %s subscriptions selected for consumption.</b>")
 
 CONFIRM_UNREGISTER = _("<b>Are you sure you want to unregister?</b>")
 
