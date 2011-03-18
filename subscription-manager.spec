@@ -113,6 +113,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %dir %{_datadir}/rhsm
 %{_datadir}/rhsm/__init__.py*
+%{_datadir}/rhsm/i18n_optparse.py*
 %{_datadir}/rhsm/managercli.py*
 %{_datadir}/rhsm/managerlib.py*
 %{_datadir}/rhsm/async.py*
