@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.4
+Version: 0.95.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -183,6 +183,29 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Mon Mar 21 2011 Bryan Kearney <bkearney@redhat.com> 0.95.5-1
+- Resolves: 688192,688469,683968,688550,685086,685099,685145,685108,684680,684285,676377,681925,614453,682331
+- 688192: don't look for dmi info on machines without dmi (jbowes@redhat.com)
+- 688469: workaround for optparse's lack of i18n/l10n (jbowes@redhat.com)
+- 683968: ensure yum plugins don't log to stdout (jbowes@redhat.com)
+- 688550: ensure i18n configuration is the first thing to happen
+  (jbowes@redhat.com)
+- 685086: Fact times were read from the file but not localized before putting
+  on the ui (bkearney@redhat.com)
+- 685099: Add in missed translations to the compliance assistant string
+  (bkearney@redhat.com)
+- 685145: Remove rogue use of pyOpenSSL (jbowes@redhat.com)
+- 685108: Translation missed for the import dialog (bkearney@redhat.com)
+- 684680: Remove unnecessary gettext text domain calls, and ensure only using
+  the rhsm domain (bkearney@redhat.com)
+- 684285: Add a svg library dependency (bkearney@redhat.com)
+- 676377: rhsm-compliance-icon's status can be a day out of sync
+  (cduryee@redhat.com)
+- 681925: subscription-manager masks SIGPIPE when running virt-what, resulting
+  in errors in shell commands (cduryee@redhat.com)
+- 614453: fix list cli command for multi entitled products (jbowes@redhat.com)
+- 682331: Latest man pages from Deon (bkearney@redhat.com)
+
 * Tue Mar 08 2011 Devan Goodwin <dgoodwin@redhat.com> 0.95.4-1
 - Add support for tags. (dgoodwin@redhat.com)
 - 682311: rhsm-compliance icon pegs the cpu at 100% (cduryee@redhat.com)
