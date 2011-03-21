@@ -220,10 +220,10 @@ class UserPassCommand(CliCommand):
 
         if not username:
             while not username:
-                username = raw_input("Username: ")
+                username = raw_input(_("Username: "))
         if not password:
             while not password:
-                password = getpass.getpass()
+                password = getpass.getpass(_("Password: "))
 
         return (username, password)
 
