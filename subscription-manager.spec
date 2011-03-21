@@ -184,7 +184,7 @@ fi
 
 %changelog
 * Mon Mar 21 2011 Bryan Kearney <bkearney@redhat.com> 0.95.5-1
-- Resolves: 688192,688469,683968,688550,685086,685099,685145,685108,684680,684285,676377,681925,614453,682331
+- Resolves: #688192,#688469,#683968,#688550,#685086,#685099,#685145,#685108,#684680,#684285,#676377,#681925,#614453,#682331
 - 688192: don't look for dmi info on machines without dmi (jbowes@redhat.com)
 - 688469: workaround for optparse's lack of i18n/l10n (jbowes@redhat.com)
 - 683968: ensure yum plugins don't log to stdout (jbowes@redhat.com)
