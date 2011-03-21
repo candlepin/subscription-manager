@@ -46,7 +46,7 @@ def _get_handler():
     path = '/var/log/rhsm/rhsm.log'
     if not os.path.isdir("/var/log/rhsm"):
         os.mkdir("/var/log/rhsm")
-    fmt = '%(asctime)s [%(levelname)s] %(funcName)s() @%(filename)s:%(lineno)d - %(message)s'
+    fmt = '%(asctime)s [%(levelname)s]  @%(filename)s:%(lineno)d - %(message)s'
 
     # Try to write to /var/log, fallback on console logging:
     try:
