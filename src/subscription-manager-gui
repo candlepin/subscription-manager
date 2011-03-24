@@ -26,9 +26,18 @@ import sys
 import os
 import dbus
 import dbus.service, dbus.glib, dbus.exceptions
+import dbus.dbus_bindings
 import gtk
 import gettext
 _ = gettext.gettext
+
+# these def's moved 
+try:
+    from dbus.bus import REQUEST_NAME_REPLY_PRIMARY_OWNER
+    from dbus.bus import REQUEST_NAME_REPLY_ALREADY_OWNER
+except ImportError:
+    from dbus.dbus_bindings import REQUEST_NAME_REPLY_PRIMARY_OWNER
+    from dbus.dbus_bindings import REQUEST_NAME_REPLY_ALREADY_OWNER
 
 gtk.gdk.threads_init()
 
@@ -87,7 +96,11 @@ if __name__ == '__main__':
         # Just ignore it if for some reason we can't find the session bus
         bus = None
 
-    if bus and bus.request_name(BUS_NAME) != dbus.bus.REQUEST_NAME_REPLY_PRIMARY_OWNER:
+    bus_name = dbus.service.BusName(BUS_NAME, bus = dbus.SessionBus())
+    request_name_res = dbus.dbus_bindings.bus_request_name(bus.get_connection(), bus_name.get_name())
+
+    if bus and ((request_name_res != REQUEST_NAME_REPLY_PRIMARY_OWNER) and \
+	(request_name_res != REQUEST_NAME_REPLY_ALREADY_OWNER)):
         print _("subscription-manager-gui is already running")
         messageWindow.InfoDialog(_('Subscription Manager is already running'))
         

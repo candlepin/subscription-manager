@@ -21,8 +21,8 @@ import syslog
 import gobject
 import dbus
 import dbus.service
+import dbus.glib
 
-from dbus.mainloop.glib import DBusGMainLoop
 from optparse import OptionParser
 
 import sys
@@ -91,7 +91,8 @@ def check_if_ran_once(compliance, loop):
 class ComplianceChecker(dbus.service.Object):
 
     def __init__(self, bus, path, keep_alive, loop):
-        dbus.service.Object.__init__(self, bus, path)
+        name = dbus.service.BusName("com.redhat.SubscriptionManager", bus)
+        dbus.service.Object.__init__(self, name, path)
         self.has_run = False
         #this will get set after first invocation
         self.last_status = None
@@ -166,10 +167,7 @@ def main():
         return
 
 
-    DBusGMainLoop(set_as_default=True)
-
     system_bus = dbus.SystemBus()
-    name = dbus.service.BusName("com.redhat.SubscriptionManager", system_bus)
     loop = gobject.MainLoop()
     compliance = ComplianceChecker(system_bus, "/Compliance", options.keep_alive, loop)
 

@@ -18,7 +18,7 @@ bin:
 rhsmcertd: src/rhsmcertd.c bin
 	${CC} ${CFLAGS} src/rhsmcertd.c -o bin/rhsmcertd
 
-COMPLIANCE_FLAGS=`pkg-config --cflags --libs gtk+-2.0 unique-1.0 libnotify`
+COMPLIANCE_FLAGS=`pkg-config --cflags --libs gtk+-2.0 libnotify`
 
 rhsm-compliance-icon: src/compliance/rhsm_compliance_icon.c bin
 	${CC} ${CFLAGS} ${COMPLIANCE_FLAGS} -o bin/rhsm-compliance-icon \
