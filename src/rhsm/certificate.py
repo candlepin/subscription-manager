@@ -26,6 +26,7 @@ import os
 import re
 import base64
 from M2Crypto import X509
+from M2Crypto import ASN1
 from datetime import datetime as dt
 from datetime import tzinfo, timedelta
 from time import strptime
@@ -41,6 +42,20 @@ def parse_tags(tag_str):
     if tag_str:
         tags = tag_str.split(",")
     return tags
+
+# from M2Crypto
+class UTC(tzinfo):
+    def tzname(self, dt):
+        return "UTC"
+
+    def dst(self, dt):
+        return timedelta(0)
+
+    def utcoffset(self, dt):
+        return timedelta(0)
+
+    def __repr__(self):
+        return "<Timezone: %s>" % self.tzname(None)
 
 
 class Certificate(object):
@@ -122,8 +137,32 @@ class Certificate(object):
         @return: The valid date range.
         @rtype: L{DateRange}
         """
-        return DateRange(self.x509.get_not_before().get_datetime(),
-                self.x509.get_not_after().get_datetime())
+        return DateRange(self._get_datetime(self.x509.get_not_before()),
+                self._get_datetime(self.x509.get_not_after()))
+
+    # m2Crypto available in 5.7 doesn't have the get_datetime, so
+    # include the funtionality here 
+    def _get_datetime(self, date):
+        date_str = str(date)
+
+        if ' ' not in date_str:
+            raise ValueError("Invalid date: %s" % date_str)
+        month, rest = date_str.split(' ', 1)
+        _ssl_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
+                       "Sep", "Oct", "Nov", "Dec"]
+
+        if month not in _ssl_months:
+            raise ValueError("Invalid date %s: Invalid month: %s" % (date_str, m))
+        if rest.endswith(' GMT'):
+            timezone = UTC()
+            rest = rest[:-4]
+
+        tm = list(strptime(rest, "%d %H:%M:%S %Y"))[:6]
+        tm[1] = _ssl_months.index(month) + 1
+        tm.append(0)
+        tm.append(timezone)
+        return dt(*tm)
+
 
 
     def valid(self, on_date=None):
