@@ -25,7 +25,6 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
-#include <unique/unique.h>
 #include <libnotify/notify.h>
 #include <dbus/dbus-glib.h>
 
@@ -36,6 +35,8 @@
 static int check_period = ONE_DAY;
 static bool debug = false;
 static char *force_icon = NULL;
+
+#define NAME_TO_CLAIM "com.redhat.subscription-manager.ComplianceIcon"
 
 static GOptionEntry entries[] =
 {
@@ -337,10 +338,11 @@ main(int argc, char **argv)
 	textdomain("rhsm");
 	GError *error = NULL;
 	GOptionContext *context;
-	UniqueApp *app;
 	DBusGProxy *proxy;
+	DBusGConnection *connection;
 	Compliance compliance;
 	compliance.is_visible = false;
+	guint32 result;
 
 	context = g_option_context_new ("rhsm compliance icon");
 	g_option_context_add_main_entries (context, entries, NULL);
@@ -360,14 +362,45 @@ main(int argc, char **argv)
 
 	gtk_init(&argc, &argv);
 
-	app = unique_app_new ("com.redhat.subscription-manager.ComplianceIcon",
-			      NULL);
 
-	if (unique_app_is_running(app)) {
+	connection = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
+	if (connection == NULL) {
+		g_printerr(N_("Failed to open connection to bus: %s\n"),
+			error->message);
+		g_error_free(error);
+		exit(1);
+	}
+
+	proxy = dbus_g_proxy_new_for_name(connection,
+			"org.freedesktop.DBus",
+			"/org/freedesktop/DBus",
+			"org.freedesktop.DBus");
+	error = NULL;
+	if (!dbus_g_proxy_call (proxy,
+		"RequestName",
+		&error,
+		G_TYPE_STRING, NAME_TO_CLAIM,
+		G_TYPE_UINT,  0,
+		G_TYPE_INVALID,
+		G_TYPE_UINT,   &result,
+		G_TYPE_INVALID)) {
+			g_printerr("Couldn't acquire name: %s\n", error->message);
+			exit(1);
+	}
+
+	if (result != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER) {
+		if (error != NULL) {
+			g_warning ("Failed to acquire %s: %s",
+				NAME_TO_CLAIM, error->message);
+				g_error_free (error);
+		}
+		else {
+			g_warning ("Failed to acquire %s", NAME_TO_CLAIM);
+		}
 		g_debug("rhsm-compliance-icon is already running. exiting.");
-		g_object_unref(app);
 		return 0;
 	}
+
 
 	notify_init("rhsm-compliance-icon");
 
@@ -381,7 +414,6 @@ main(int argc, char **argv)
 
 	g_debug("past main");
 	g_object_unref(proxy);
-	g_object_unref(app);
 	return 0;
 }
 

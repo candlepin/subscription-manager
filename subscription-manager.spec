@@ -26,7 +26,6 @@ Requires(preun): initscripts
 BuildRequires: python-devel
 BuildRequires: gettext
 BuildRequires: intltool
-BuildRequires: unique-devel
 BuildRequires: libnotify-devel
 BuildRequires: gtk2-devel
 BuildRequires: desktop-file-utils
@@ -57,7 +56,7 @@ subscriptions.
 Summary: Firstboot screens for subscription manager
 Group: System Environment/Base
 Requires: %{name}-gnome = %{version}-%{release}
-Requires: rhn-setup-gnome >= 1.0.0-39
+Requires: rhn-setup-gnome >= 0.4.20-49
 Requires: librsvg2
 
 %description -n subscription-manager-firstboot
