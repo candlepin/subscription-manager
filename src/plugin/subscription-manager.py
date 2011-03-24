@@ -65,7 +65,9 @@ def warnExpired(conduit):
 def config_hook(conduit):
     """ update """
     # register rpm name for yum history recording"
-    conduit.registerPackageName("subscription-manager")
+    # yum on 5.7 doesn't have this method, so check for it
+    if hasattr(conduit, 'registerPackageName'):
+        conduit.registerPackageName("subscription-manager")
     logutil.init_logger_for_yum()
     try:
         update(conduit)
