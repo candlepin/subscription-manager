@@ -1,4 +1,4 @@
-# translation of ja-JP.po to Japanese
+# translation of ja.po to Japanese
 # Language ja-JP translations for l package.
 # Copyright (C) 2011 THE l'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the l package.
@@ -7,10 +7,10 @@
 # Kiyoto Hashida <khashida@redhat.com>, 2011.
 msgid ""
 msgstr ""
-"Project-Id-Version: ja-JP\n"
+"Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-18 16:13-0400\n"
-"PO-Revision-Date: 2011-02-24 18:07+0900\n"
+"POT-Creation-Date: 2011-03-21 10:00-0400\n"
+"PO-Revision-Date: 2011-03-24 15:36+0900\n"
 "Last-Translator: Kiyoto Hashida <khashida@redhat.com>\n"
 "Language-Team: Japanese <jp@li.org>\n"
 "Language: ja-JP\n"
@@ -19,803 +19,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
-
-#: src/managerlib.py:83
-msgid "Subscribed"
-msgstr "サブスクライブしています"
-
-#: src/managerlib.py:83
-msgid "Expired"
-msgstr "期限切れです"
-
-#: src/managerlib.py:83
-msgid "Not Subscribed"
-msgstr "サブスクライブしていません"
-
-#: src/managerlib.py:123
-msgid "Not Installed"
-msgstr "インストールされていません"
-
-#: src/managerlib.py:198
-#, python-format
-msgid "Account Number: \t%s"
-msgstr "アカウント番号: \t%s"
-
-#: src/certmgr.py:89
-msgid "Updating Red Hat certificates & repositories"
-msgstr "Red Hat の証明書とレポジトリを更新"
-
-#: src/certmgr.py:94 src/factlib.py:80 src/certlib.py:758
-#, python-format
-msgid "%d updates required"
-msgstr "%d 個の更新が必要です"
-
-#: src/certmgr.py:95 src/factlib.py:81 src/certlib.py:759
-msgid "done"
-msgstr "終了"
-
-#: src/certmgr.py:107
-msgid "Unable to update Red Hat certificates & repositories"
-msgstr "Red Hat の証明書とレポジトリの更新ができません"
-
-#: src/gui/mysubstab.py:55 src/gui/allsubs.py:56 tmp/installed.glade.h:9
-msgid "Subscription"
-msgstr "サブスクリプション"
-
-#: src/gui/mysubstab.py:56
-msgid "Installed Products"
-msgstr "インストール済みの製品"
-
-#: src/gui/mysubstab.py:62 src/gui/installedtab.py:58
-#: src/gui/contract_selection.py:80 tmp/subdetails.glade.h:13
-msgid "End Date"
-msgstr "終了期日"
-
-#: src/gui/mysubstab.py:83
-#, python-format
-msgid "There was an error unsubsribing from %s with serial number %s"
-msgstr "シリアル番号 %s を持つ %s からのサブスクリプション解除でエラーです"
-
-#: src/gui/mysubstab.py:95
-#, python-format
-msgid "Are you sure you want to unsubscribe from %s?"
-msgstr "本当に %s からサブスクリプション解除をしますか？"
-
-#: src/gui/mysubstab.py:110
-msgid "My Subscriptions"
-msgstr "自分のサブスクリプション"
-
-#: src/gui/mysubstab.py:137
-msgid "yes"
-msgstr "はい"
-
-#: src/gui/mysubstab.py:139
-msgid "no"
-msgstr "いいえ"
-
-#: src/gui/utils.py:47 src/managercli.py:47
-msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
-msgstr ""
-"ネットワークエラーでサーバーに接続できません。詳細は /var/log/rhsm/rhsm."
-"log でご覧下さい"
-
-#: src/gui/utils.py:49
-#, python-format
-msgid "Unable to verify server's identity: %s"
-msgstr "サーバーの識別子を確認できません: %s"
-
-#: src/gui/utils.py:53 src/managercli.py:52
-msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
-msgstr ""
-"ネットワークエラーです。接続の詳細を確認するか、又は /var/log/rhsm/"
-"rhsm.log をご覧下さい。"
-
-#: src/gui/utils.py:56 src/managercli.py:56
-msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
-msgstr "リモートサーバーエラーです。接続詳細を確認するか、又は /var/log/rhsm/rhsm.log をご覧下さい"
-
-#: src/gui/utils.py:60 src/managercli.py:65
-#, python-format
-msgid "Bad CA certificate: %s"
-msgstr "不正な CA 証明書です: %s"
-
-#: src/gui/allsubs.py:58 src/managercli.py:649
-msgid "Available Subscriptions"
-msgstr "利用可能なサブスクリプション"
-
-#: src/gui/allsubs.py:177
-msgid "All Available Subscriptions"
-msgstr "全ての利用可能なサブスクリプション"
-
-#: src/gui/allsubs.py:189 src/gui/compliance.py:225
-msgid "Searching for subscriptions. Please wait."
-msgstr "サブスクリプションを検索中です。お待ち下さい"
-
-#: src/gui/allsubs.py:193
-#, python-format
-msgid "Error fetching subscriptions from server:  %s"
-msgstr "サーバーからサブスクリプションの取り出しでエラー:  %s"
-
-#: src/gui/allsubs.py:203
-#, python-format
-msgid "Unable to search for subscriptions:  %s"
-msgstr "サブスクリプションの検索ができません:  %s"
-
-#: src/gui/allsubs.py:227 src/gui/compliance.py:410
-#, python-format
-msgid "Error getting subscription: %s"
-msgstr "サブスクリプションの取得にエラー: %s"
-
-#: src/gui/compliance.py:177
-msgid ""
-"Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log for "
-"more information."
-msgstr ""
-"Compliance Assistant の表示でエラーです。詳細情報は  /var/log/rhsm/rhsm.log で "
-"ご覧下さい。"
-
-#: src/gui/compliance.py:191
-msgid "Unable to search for subscriptions"
-msgstr "サブスクリプションの検索ができません"
-
-#: src/gui/compliance.py:211
-#, python-format
-msgid "<big><b>All software is in compliance until %s</b></big>"
-msgstr "<big><b>全ソフトウェアのコンプライアンスは %s まで有効</b></big>"
-
-#: src/gui/compliance.py:215
-#, python-format
-msgid "%s (first date of non-compliance)"
-msgstr "%s (コンプライアンス離脱の最初の期日)"
-
-#: src/gui/compliance.py:217
-#, python-format
-msgid "The following subscriptions will cover the products selected on %s"
-msgstr "以下のサブスクリプションは %s に選択された製品に有効です"
-
-#: src/gui/compliance.py:278
-msgid "N/A"
-msgstr "該当無し"
-
-#: src/gui/activate.py:55
-#, python-format
-msgid "Error activating subscription: %s"
-msgstr "サブスクリプションのアクティベーションにエラー: %s"
-
-#: src/gui/installedtab.py:43 src/gui/widgets.py:193 tmp/installed.glade.h:8
-msgid "Product"
-msgstr "製品"
-
-#: src/gui/installedtab.py:55
-msgid "Version"
-msgstr "バージョン"
-
-#: src/gui/installedtab.py:56 tmp/installed.glade.h:5 tmp/mainwindow.glade.h:5
-msgid "Compliance Status"
-msgstr "コンプライアンスステータス"
-
-#: src/gui/installedtab.py:57 src/gui/contract_selection.py:76
-#: tmp/subdetails.glade.h:14
-msgid "Start Date"
-msgstr "開始期日"
-
-#: src/gui/installedtab.py:97
-msgid "Future Subscription"
-msgstr "将来のサブスクリプション"
-
-#: src/gui/installedtab.py:98 src/gui/installedtab.py:114
-msgid "Never Subscribed"
-msgstr "サブスクリプション履歴無し"
-
-#: src/gui/installedtab.py:101 src/gui/installedtab.py:113
-msgid "Out of Compliance"
-msgstr "コンプライアンスから離脱"
-
-#: src/gui/installedtab.py:103
-#, python-format
-msgid "Subscription %s is expired"
-msgstr "サブスクリプション %s は期限切れです"
-
-#: src/gui/installedtab.py:106
-msgid "In Compliance"
-msgstr "コンプライアンスは有効"
-
-#: src/gui/installedtab.py:108
-#, python-format
-msgid "Covered by contract %s through %s"
-msgstr "%s を通じて契約 %s により有効です"
-
-#: src/gui/installedtab.py:153
-msgid "My Installed Software"
-msgstr "自分のインストール済みソフトウェア"
-
-#: src/gui/widgets.py:151
-#, python-format
-msgid "Next Update: %s"
-msgstr "次の更新: %s"
-
-#: src/gui/widgets.py:197
-msgid "Installed"
-msgstr "インストール済み"
-
-#: src/gui/widgets.py:400
-msgid "Invalid date format. Please re-enter a valid date. Example: "
-msgstr "無効な日付形式です。有効な日付を再入力して下さい。例えば:"
-
-#: src/gui/widgets.py:435
-msgid "Today"
-msgstr "今日"
-
-#: src/gui/factsgui.py:53
-msgid "Fact"
-msgstr "事実情報"
-
-#: src/gui/factsgui.py:54
-msgid "Value"
-msgstr "値"
-
-#: src/gui/factsgui.py:82
-msgid "No previous update"
-msgstr "以前の更新はありません"
-
-#: src/gui/networkConfig.py:134
-#, python-format
-msgid ""
-"There was an error saving your configuration. Make sure that\n"
-"you own %s."
-msgstr ""
-"設定の保存に於いてエラーがありました。%s を所有していることを\n"
-"確認して下さい"
-
-#: src/gui/managergui.py:368
-msgid "You must register before using the compliance assistant."
-msgstr "compliance assistant を使用するには、先に登録が必要です"
-
-#: src/gui/managergui.py:399
-#, python-format
-msgid "You have <b>%s</b> products out of compliance."
-msgstr "<b>%s</b> 製品がコンプライアンスから外れています"
-
-#: src/gui/managergui.py:403
-msgid "You have <b>1</b> product out of compliance."
-msgstr "<b>1</b> 製品がコンプライアンスから外れています"
-
-#: src/gui/managergui.py:410
-#, python-format
-msgid "All products are in compliance until %s"
-msgstr "全製品のコンプライアンスが %s まで有効です"
-
-#: src/gui/managergui.py:533
-msgid "You must enter a system name."
-msgstr "システム名を入力して下さい"
-
-#: src/gui/managergui.py:542
-msgid "You must enter a login."
-msgstr "ログイン名を入力して下さい"
-
-#: src/gui/managergui.py:548
-msgid "You must enter a password."
-msgstr "パスワードを入力して下さい"
-
-#: src/gui/firstboot/rhsm_subscriptions.py:28
-msgid "RHSM Subscriptions Management"
-msgstr "RHSM サブスクリプション管理"
-
-#: src/gui/firstboot/rhsm_subscriptions.py:29 tmp/mainwindow.glade.h:9
-#: tmp/subsgui.glade.h:3
-msgid "Subscription Manager"
-msgstr "サブスクリプションマネージャ"
-
-#: src/gui/firstboot/rhsm_login.py:40
-msgid "Entitlement Registration"
-msgstr "エンタイトルメントの登録"
-
-#: src/gui/firstboot/rhsm_login.py:41
-msgid "Entitlement Platform Registration"
-msgstr "エンタイトルメントプラットフォームの登録"
-
-#: src/gui/contract_selection.py:67 tmp/subdetails.glade.h:12
-msgid "Contract Number"
-msgstr "契約番号"
-
-#: src/gui/contract_selection.py:71
-msgid "Used / Available"
-msgstr "使用中 / 利用可能"
-
-#: src/gui/importsub.py:66
-msgid "You must select a certificate."
-msgstr "証明書を選択して下さい"
-
-#: src/gui/importsub.py:73
-#, python-format
-msgid "%s is not a valid certificate file. Please upload a valid certificate."
-msgstr "%s は無効な証明書ファイルです。有効な証明書をアップロードして下さい"
-
-#: src/hwprobe.py:76
-msgid "Error reading system memory information:"
-msgstr "システムメモリー情報の読み込みでエラー:"
-
-#: src/hwprobe.py:91
-msgid "Error reading system cpu information:"
-msgstr "システム cpu 情報の読み込みでエラー:"
-
-#: src/hwprobe.py:111
-msgid "Error reading system DMI information:"
-msgstr "システム DMI 情報の読み込みでエラー:"
-
-#: src/hwprobe.py:134
-msgid "Error reading networking information:"
-msgstr "ネットワーク情報の読み込みでエラー:"
-
-#: src/hwprobe.py:151
-msgid "Error reading net Interface information:"
-msgstr "ネットインターフェイス情報の読み込みでエラー:"
-
-#: src/managercli.py:94
-msgid "debug level"
-msgstr "デバグレベル"
-
-#: src/managercli.py:96
-msgid "proxy url in the form of proxy_hostname:proxy_port"
-msgstr "proxy_hostname:proxy_port の形式のプロキシ url"
-
-#: src/managercli.py:98
-msgid "user for http proxy with basic authentication"
-msgstr "基本認証を持つ http proxy のユーザー"
-
-#: src/managercli.py:100
-msgid "password for http proxy with basic authentication"
-msgstr "基本認証を持つ http proxy のパスワード"
-
-#: src/managercli.py:107
-msgid "Consumer not registered. Please register using --username and --password"
-msgstr "消費者は未登録です。--username 及び --password を使用して登録して下さい"
-
-#: src/managercli.py:162
-msgid "Consumer certificates corrupted. Please reregister."
-msgstr "消費者の証明書が破損しています。再登録して下さい"
-
-#: src/managercli.py:168
-msgid "removes all local consumer data, does not effect the server"
-msgstr "全てのローカル消費者データを削除します。サーバーに影響しません"
-
-#: src/managercli.py:181
-msgid "All local data removed"
-msgstr "ローカルデータが全て削除されました"
-
-#: src/managercli.py:187
-msgid "pulls the latest entitlement data from the server"
-msgstr "サーバーから最新のエンタイトルメントデータを取り出します"
-
-#: src/managercli.py:197
-msgid "All local data refreshed"
-msgstr "ローカルデータは全てリフレッシュされました"
-
-#: src/managercli.py:202
-#, python-format
-msgid ""
-"Unable to perform refresh due to the following exception \n"
-" Error: %s"
-msgstr ""
-"以下の例外エラーの為にリフレッシュを実行できませんでした \n"
-": %s"
-
-#: src/managercli.py:209
-msgid "request a new identity certficate for this machine"
-msgstr "このマシン用の新規の識別証明書を要求します"
-
-#: src/managercli.py:218 src/managercli.py:273
-msgid "specify a username"
-msgstr "ユーザー名を設置します"
-
-#: src/managercli.py:220 src/managercli.py:279
-msgid "specify a password"
-msgstr "パスワードを設置します"
-
-#: src/managercli.py:222
-msgid "request a new certificate be generated"
-msgstr "新規証明書の生成を要求します"
-
-#: src/managercli.py:227
-msgid "Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr "消費者識別子は存在しないか、又は破損しています。register --help を試して下さい"
-
-#: src/managercli.py:239
-#, python-format
-msgid "Current identity is: %s name: %s"
-msgstr "現在の識別子は %s で名前は %s です"
-
-#: src/managercli.py:257
-msgid "Error: Unable to generate a new identity for the system"
-msgstr "エラー: システム用に新規の識別子を生成できません"
-
-#: src/managercli.py:264
-msgid "register the client to RHN"
-msgstr "クライアントを RHN に登録します"
-
-#: src/managercli.py:275
-msgid "the type of consumer to register. Defaults to system"
-msgstr "登録する消費者のタイプ。デフォルトはシステムです"
-
-#: src/managercli.py:277
-msgid "name of the consumer to register. Defaults to the hostname."
-msgstr "登録する消費者の名前。デフォルトはホスト名です"
-
-#: src/managercli.py:281
-msgid "register to an existing consumer"
-msgstr "既存の消費者に対して登録"
-
-#: src/managercli.py:283
-msgid ""
-"automatically subscribe this system to                                     "
-"compatible subscriptions."
-msgstr ""
-"このシステムを自動的に互換性のある                                     "
-"サブスクリプションに登録"
-
-#: src/managercli.py:286
-msgid "register the system even if it is already registered"
-msgstr "既に登録済みでもシステムを登録します"
-
-#: src/managercli.py:292
-msgid "Error: username not provided. Use --username <name>"
-msgstr "エラー: ユーザー名がありません。--username <name> を使用します"
-
-#: src/managercli.py:294
-msgid "Error: password not provided. Use --password <value>"
-msgstr "エラー: パスワードがありません。--password <value> を使用します"
-
-#: src/managercli.py:297
-msgid "Error: username and password are required to register, try register --help."
-msgstr "エラー: 登録するにはユーザー名とパスワードが必要です。register --help を試して下さい"
-
-#: src/managercli.py:300
-msgid "This system is already registered. Use --force to override"
-msgstr "このシステムは既に登録済みです。上書きするには  --force を使用します"
-
-#: src/managercli.py:303
-msgid "Error: consumer name can not be empty."
-msgstr "エラー: 消費者名は空白ではいけません"
-
-#: src/managercli.py:337
-#, python-format
-msgid "The system with UUID %s has been unregistered"
-msgstr "UUID %s を持つシステムは未登録です。"
-
-#: src/managercli.py:356
-#, python-format
-msgid "Error during registration: %s"
-msgstr "登録中にエラーです: %s"
-
-#: src/managercli.py:367
-msgid "Subscribed to Products:"
-msgstr "製品にサブスクライブ済み:"
-
-#: src/managercli.py:369
-#, python-format
-msgid "     %s(%s)"
-msgstr "     %s(%s)"
-
-#: src/managercli.py:383
-msgid "unregister the client from RHN"
-msgstr "RHN からクライアントを登録解除します"
-
-#: src/managercli.py:393
-msgid "This system is currently not registered."
-msgstr "このシステムは現在登録されていません"
-
-#: src/managercli.py:401
-msgid "System has been un-registered."
-msgstr "システムは未登録です"
-
-#: src/managercli.py:407
-msgid "activate the registered user to a specified product"
-msgstr "登録済みユーザーを指定製品に対してアクティベートします"
-
-#: src/managercli.py:412
-msgid "optional email address to notify when token activation is complete."
-msgstr "トークンアクティベーション終了時に通知するオプションの電子メールアドレス"
-
-#: src/managercli.py:415
-msgid ""
-"optional language to use for email notification when token activation is "
-"complete. Used with --email only. Examples: en-us, de-de"
-msgstr ""
-"トークンアクティベーション完了時に電子メール通知で使用するオプションの言語。 "
-"--email と併用でのみ使用されます。例えば: en-us, de-de"
-
-#: src/managercli.py:445
-msgid "subscribe the registered machine to a specified product"
-msgstr "登録済みマシンを指定製品に対してサブスクライブします"
-
-#: src/managercli.py:452
-msgid "subscription pool id"
-msgstr "サブスクリプションプール id"
-
-#: src/managercli.py:456
-msgid "Error: Need to supply --pool, Try subscribe --help"
-msgstr "エラー:  --pool を入れる必要があります。subscribe --help を試して下さい"
-
-#: src/managercli.py:477
-msgid "Please enter a valid numeric pool id."
-msgstr "有効な数値のプール id を入力して下さい"
-
-#: src/managercli.py:503
-msgid "unsubscribe the registered user from all or specific subscriptions"
-msgstr "登録済みのユーザーを全ての、又は特定のサブスクリプションから解除"
-
-#: src/managercli.py:509
-msgid "Certificate serial to unsubscribe"
-msgstr "サブスクリプション解除する証明書シリアル番号"
-
-#: src/managercli.py:511
-msgid "Unsubscribe from all subscriptions"
-msgstr "全てのサブスクリプションから解除"
-
-#: src/managercli.py:533
-msgid "One of --serial or --all must be provided"
-msgstr "--serial か --all のいずれかを入力します"
-
-#: src/managercli.py:541
-#, python-format
-msgid ""
-"Unable to perform unsubscribe due to the following exception \n"
-" Error: %s"
-msgstr ""
-"以下の例外エラーの為、サブスクリプション解除を実行できません\n"
-": %s"
-
-#: src/managercli.py:548
-msgid "show information for facts"
-msgstr "事実情報を表示"
-
-#: src/managercli.py:553
-msgid "list known facts for this system"
-msgstr "このシステムの既知の事実を一覧表示"
-
-#: src/managercli.py:555
-msgid "update the system facts"
-msgstr "システムの事実情報を更新"
-
-#: src/managercli.py:564
-msgid "Error: Need either --list or --update, Try facts --help"
-msgstr "エラー: --list 又は --update が必要です。facts --help を試して下さい"
-
-#: src/managercli.py:588
-msgid "list available or consumer subscriptions for registered user"
-msgstr "登録済みユーザーの利用可能な、又は消費者のサブスクリプションを一覧表示"
-
-#: src/managercli.py:593
-msgid "installed"
-msgstr "インストール済み"
-
-#: src/managercli.py:595
-msgid "available"
-msgstr "利用可能"
-
-#: src/managercli.py:597
-msgid "date to search on, defaults to today's date, only used with --available "
-msgstr "検索した日の日付。デフォルトは今日の日付です。--available との併用のみ"
-
-#: src/managercli.py:600
-msgid "consumed"
-msgstr "消費済み"
-
-#: src/managercli.py:602
-msgid "if supplied with --available then all subscriptions are returned"
-msgstr "--available との併用の場合、全てのサブスクリプションが返されます"
-
-#: src/managercli.py:606
-msgid "Error: --all is only applicable with --available"
-msgstr "エラー: --all は --available との併用でのみ適用可能"
-
-#: src/managercli.py:609
-msgid "Error: --ondate is only applicable with --available"
-msgstr "エラー: --ondate は  --available との併用でのみ適用可能"
-
-#: src/managercli.py:625
-msgid "No installed Products to list"
-msgstr "一覧表示するインストール済み製品はありません"
-
-#: src/managercli.py:628
-msgid "    Installed Product Status"
-msgstr "    インストール済み製品のステータス"
-
-#: src/managercli.py:640
-msgid "Date entered is invalid. Date should be in ISO 8601 format (example: "
-msgstr "入力された日付は無効です。日付は ISO 8601 形式にして下さい (例えば:"
-
-#: src/managercli.py:647
-msgid "No Available subscription pools to list"
-msgstr "一覧表示する利用可能なサブスクリプションプールはありません"
-
-#: src/managercli.py:663
-msgid "No Consumed subscription pools to list"
-msgstr "一覧表示する消費済みサブスクリプションプールはありません"
-
-#: src/managercli.py:665
-msgid "Consumed Product Subscriptions"
-msgstr "消費済み製品サブスクリプション"
-
-#: src/managercli.py:715
-#, python-format
-msgid ""
-"\n"
-"Usage: %s [options] MODULENAME --help\n"
-msgstr ""
-"\n"
-"使用法: %s [オプション] モジュール名 --help\n"
-
-#: src/managercli.py:716
-msgid "Supported modules:"
-msgstr "サポートのあるモジュール:"
-
-#: src/managercli.py:781
-msgid ""
-"Error: You need to register this system by running `register` command before "
-"using this option."
-msgstr ""
-"エラー: このシステムの登録には `register`コマンドの後にこのオプションを使用する "
-"必要があります"
-
-#: src/productid.py:109
-#, python-format
-msgid "installing: %s"
-msgstr "インストール中: %s"
-
-#: src/productid.py:123
-#, python-format
-msgid "deleting: %s"
-msgstr "削除中: %s"
-
-#: src/productid.py:140
-#, python-format
-msgid "duration: %d(ms)"
-msgstr "期間: %d(ms)"
-
-#: src/factlib.py:77
-msgid "Updating facts"
-msgstr "事実情報の更新中"
-
-#: src/certlib.py:96
-msgid "Reasons(s):"
-msgstr "理由:"
-
-#: src/certlib.py:434
-msgid "Reason(s):"
-msgstr "理由:"
-
-#: src/certlib.py:594
-#, python-format
-msgid "Total updates: %d"
-msgstr "全ての更新: %d"
-
-#: src/certlib.py:595
-#, python-format
-msgid "Found (local) serial# %s"
-msgstr "見付かった (ローカル) シリアル # %s"
-
-#: src/certlib.py:596
-#, python-format
-msgid "Expected (UEP) serial# %s"
-msgstr "予期される (UEP) シリアル# %s"
-
-#: src/certlib.py:597
-msgid "Added (new)"
-msgstr "追加 (新規)"
-
-#: src/certlib.py:598
-msgid "Deleted (rogue):"
-msgstr "削除済み (変異品):"
-
-#: src/certlib.py:599
-msgid "Expired (not deleted):"
-msgstr "期限切れ (未削除):"
-
-#: src/certlib.py:600
-msgid "Expired (deleted):"
-msgstr "期限切れ (削除済み):"
-
-#: src/certlib.py:755
-msgid "Updating Red Hat certificates"
-msgstr "Red Hat 証明書の更新中"
-
-#: src/constants.py:24
-#, python-format
-msgid ""
-"\n"
-"PRODUCT INFO\n"
-"=========================\n"
-"\n"
-"Name               \t%-25s\n"
-"Variant            \t%-25s\n"
-"Architecture       \t%-25s\n"
-"Version            \t%-25s\n"
-"\n"
-"\n"
-msgstr ""
-"\n"
-"製品情報\n"
-"=========================\n"
-"\n"
-"名前               \t%-25s\n"
-"拡張種            \t%-25s\n"
-"アーキテクチャ       \t%-25s\n"
-"バージョン            \t%-25s\n"
 "\n"
 "\n"
 
 #: src/constants.py:34
-#, python-format
-msgid ""
-"\n"
-"Name               \t%-25s\n"
-"Label              \t%-30s\n"
-"Quantity           \t%-25s\n"
-"Flex Quantity      \t%-25s\n"
-"Vendor             \t%-25s\n"
-"URL                \t%-30s\n"
-"Enabled            \t%-25s\n"
-"\n"
-"\n"
-msgstr ""
-"\n"
-"名前               \t%-25s\n"
-"ラベル              \t%-30s\n"
-"数量           \t%-25s\n"
-"Flex 数量      \t%-25s\n"
-"ベンダー             \t%-25s\n"
-"URL                \t%-30s\n"
-"有効           \t%-25s\n"
-"\n"
-"\n"
-
-#: src/constants.py:45
-#, python-format
-msgid ""
-"\n"
-"Name               \t%-25s\n"
-"Description        \t%-25s\n"
-msgstr ""
-"\n"
-"名前               \t%-25s\n"
-"説明        \t%-25s\n"
-
-#: src/constants.py:50
-#, python-format
-msgid ""
-"\n"
-"The subscription for %s is valid until %s.\n"
-msgstr ""
-"\n"
-"%s のサブスクリプションは %s まで有効です。\n"
-
-#: src/constants.py:54
-#, python-format
-msgid ""
-"\n"
-"ProductName:        \t%-25s\n"
-"Status:             \t%-25s\n"
-"Expires:            \t%-25s\n"
-"Subscription:       \t%-25s\n"
-"ContractNumber:     \t%-25s\n"
-"AccountNumber:      \t%-25s\n"
-msgstr ""
-"\n"
-"製品名:        \t%-25s\n"
-"ステータス:             \t%-25s\n"
-"期限:            \t%-25s\n"
-"サブスクリプション:       \t%-25s\n"
-"契約番号:     \t%-25s\n"
-"アカウント番号:      \t%-25s\n"
-
-#: src/constants.py:63
 #, python-format
 msgid ""
 "\n"
@@ -832,7 +39,7 @@ msgstr ""
 "数量:          \t%-25s\n"
 "期限:           \t%-25s\n"
 
-#: src/constants.py:71
+#: src/constants.py:42
 #, python-format
 msgid ""
 "\n"
@@ -853,88 +60,113 @@ msgstr ""
 "開始日:             \t%-25s\n"
 "期限日:            \t%-25s\n"
 
-#: src/constants.py:81
+#: src/constants.py:25
 #, python-format
 msgid ""
 "\n"
-"The subscription for %s expired on %s. If you plan to continue using %s on "
-"this system you should update the subscription. If you no longer wish to use "
-"%s on this machine, you should unsubscribe and remove it from this system.\n"
+"ProductName:        \t%-25s\n"
+"Status:             \t%-25s\n"
+"Expires:            \t%-25s\n"
+"Subscription:       \t%-25s\n"
+"ContractNumber:     \t%-25s\n"
+"AccountNumber:      \t%-25s\n"
 msgstr ""
 "\n"
-"%s のサブスクリプションは %s に期限が切れます。このシステムで %s の使用を "
-"継続される場合は、サブスクリプションを更新する必要があります。このマシン上で "
-"%s を使用されない場合は、システムのサブスクリプションを解除して削除して下さい\n"
+"製品名:        \t%-25s\n"
+"ステータス:             \t%-25s\n"
+"期限:            \t%-25s\n"
+"サブスクリプション:       \t%-25s\n"
+"契約番号:     \t%-25s\n"
+"アカウント番号:      \t%-25s\n"
 
-#: src/constants.py:85
+#: src/managercli.py:793
 #, python-format
 msgid ""
 "\n"
-"%s is installed but you are not subscribed to it. If you plan to use %s on "
-"this system, you should add a subscription. If you do not plan to use %s on "
-"this system, you should remove it from this system.\n"
+"Usage: %s [options] MODULENAME --help\n"
 msgstr ""
 "\n"
-"%s がインストールされていますが、そのサブスクリプションがありません。この "
-"システム上で %s を使用される場合は、サブスクリプションを追加する必要があります。 "
-"システムで %s を使用する計画が無い場合は、システムから削除して下さい。\n"
+"使用法: %s [オプション] モジュール名 --help\n"
 
-#: src/constants.py:89
+#: src/managercli.py:707
+msgid "    Installed Product Status"
+msgstr "    インストール済み製品のステータス"
+
+#: src/certlib.py:770 src/certmgr.py:94 src/factlib.py:80
 #, python-format
-msgid ""
-"\n"
-"%s is not installed but you are subscribed to it. If you do not plan to use "
-"%s on this system, you should unsubscribe in order to avoid unnecessarily "
-"consuming entitlements. If you plan to use %s on this system, you should "
-"install it.\n"
-"\n"
-msgstr ""
-"\n"
-"%s はインストールされていませんが、サブスクリプションがあります。この "
-"システムで %s を使用する計画が無い場合は、エンタイトルメントの無用な消費を "
-"避ける為にサブスクリプション解除をすべきです。システムで %s を使用する計画で "
-"あれば、インストールする必要があります\n"
-"\n"
+msgid "%d updates required"
+msgstr "%d 個の更新が必要です"
 
-#: src/constants.py:93
+#: src/i18n_optparse.py:43
+msgid "%prog [options]"
+msgstr "%prog [オプション]"
+
+#: src/gui/compliance.py:218
 #, python-format
-msgid ""
-"<b>\n"
-" %s subscriptions need your attention.\n"
-"\n"
-"</b>Add or Update subscriptions for products you are using.\n"
-msgstr ""
-"<b>\n"
-" %s のサブスクリプションにご注意下さい。\n"
-"\n"
-"</b>ご使用の製品にサブスクリプションを追加するか、更新して下さい。\n"
+msgid "%s (first date of non-compliance)"
+msgstr "%s (コンプライアンス離脱の最初の期日)"
 
-#: src/constants.py:95
+#: src/gui/importsub.py:73
 #, python-format
-msgid ""
-"<b>\n"
-" %s subscription needs your attention.\n"
-"\n"
-"</b>Add or Update subscriptions for products you are using.\n"
-msgstr ""
-"<b>\n"
-" %s のサブスクリプションにご注意下さい。\n"
-"\n"
-"</b>ご使用の製品にサブスクリプションを追加するか、更新して下さい。\n"
+msgid "%s is not a valid certificate file. Please upload a valid certificate."
+msgstr "%s は無効な証明書ファイルです。有効な証明書をアップロードして下さい"
 
-#: src/constants.py:97
-msgid ""
-"<b>\n"
-" All your subscriptions are in compliance.\n"
-"\n"
-"</b>Add or Update subscriptions for products you are using."
-msgstr ""
-"<b>\n"
-" 全てのサブスクリプションでコンプライアンスが有効です。\n"
-"\n"
-"</b>ご使用の製品にサブスクリプションを追加するか、更新して下さい。"
+#: src/i18n_optparse.py:51
+#, python-format
+msgid "%s option does not take a value"
+msgstr "%s オプションは値を取りません"
 
-#: src/constants.py:99
+#: src/i18n_optparse.py:50
+#, python-format
+msgid "%s option requires %d arguments"
+msgstr "%s オプションは %d 個の引数を必要とします"
+
+#: src/i18n_optparse.py:49
+#, python-format
+msgid "%s option requires an argument"
+msgstr "%s オプションは引数を必要とします"
+
+#: src/managercli.py:309
+msgid "--force can only be used with --regenerate"
+msgstr "--force は  --regenerate との併用でのみ使用できます"
+
+#: src/managercli.py:313
+msgid "--username and --password can only be used with --force"
+msgstr "--username と --password は --force との併用でのみ使用できます"
+
+#: src/gui/data/subdetails.glade:182
+msgid "<b>Account Number:</b>"
+msgstr "<b>アカウント番号:</b>"
+
+#: src/constants.py:56
+msgid "<b>Are you sure you want to unregister?</b>"
+msgstr "<b>本当に登録を解除しますか?</b>"
+
+#: src/gui/data/subdetails.glade:218
+msgid "<b>Bundled Products:</b>"
+msgstr "<b>同梱の製品:</b>"
+
+#: src/gui/data/contract_selection.glade:28
+msgid "<b>Choose the specific contract to use:</b>"
+msgstr "<b>使用する特定のコントラクトを選択:</b>"
+
+#: src/gui/data/mainwindow.glade:108
+msgid "<b>Compliance Status</b>"
+msgstr "<b>コンプライアンスステータス</b>"
+
+#: src/gui/data/installed.glade:91
+msgid "<b>Compliance:</b>"
+msgstr "<b>コンプライアンス:</b>"
+
+#: src/gui/data/subdetails.glade:88
+msgid "<b>Contract Number:</b>"
+msgstr "<b>契約番号:</b>"
+
+#: src/gui/data/subdetails.glade:72
+msgid "<b>End Date:</b>"
+msgstr "<b>終了期日:</b>"
+
+#: src/constants.py:52
 #, python-format
 msgid ""
 "<b>Errors were encountered during unregister.</b>\n"
@@ -945,73 +177,88 @@ msgstr ""
 "%s\n"
 "詳細は /var/log/rhsm/rhsm.log でご覧下さい。"
 
-#: src/constants.py:101
-msgid ""
-"<b>Unable to perform unsubscribe.</b>\n"
-"\n"
-"Please see /var/log/rhsm/rhsm.log for more information."
-msgstr ""
-"<b>サプスクリプション解除を実行できません。</b>\n"
-"\n"
-"詳細は /var/log/rhsm/rhsm.log でご覧下さい。"
+#: src/gui/data/networkConfig.glade:25
+msgid "<b>HTTP Proxy</b>"
+msgstr "<b>HTTP プロキシ</b>"
 
-#: src/constants.py:103
-#, python-format
-msgid ""
-"<b>\n"
-"Could not subscribe to token %s</b>\n"
-"\n"
-"Please see /var/log/rhsm/rhsm.log for more information."
-msgstr ""
-"<b>\n"
-"トークン %s にサブスクライブできません。</b>\n"
-"\n"
-"詳細は /var/log/rhsm/rhsm.log でご覧下さい。"
+#: src/gui/data/allsubs.glade:202
+msgid "<b>More search options</b>"
+msgstr "<b>その他の検索オプション</b>"
 
-#: src/constants.py:105
-#, python-format
-msgid "Successfully subscribed your system to token %s"
-msgstr "システムを正常にトークン %s にサブスクライブしました。"
+#: src/gui/data/rhsm.glade:517
+msgid "<b>Other Available Subscriptions</b>"
+msgstr "<b>他の利用可能なサブスクリプション</b>"
 
-#: src/constants.py:107
-msgid "<b>No subscriptions available for this account</b>"
-msgstr "<b>このアカウントで利用可能なサブスクリプションはありません</b>"
+#: src/gui/data/registration.glade:212
+msgid "<b>Please enter the following for this system:</b>"
+msgstr "<b>このシステムに関して以下を記入して下さい:</b>"
 
-#: src/constants.py:109
-msgid "<b>No subscriptions updates available</b>"
-msgstr "<b>サブスクリプションの更新はありません</b>"
+#: src/gui/data/registration.glade:36
+msgid "<b>Please enter your Red Hat Network account information:</b>"
+msgstr "<b>Red Hat Network アカウントの情報を記入して下さい:</b>"
 
-#: src/constants.py:111
-#, python-format
-msgid ""
-"<b>Unable to subscribe to product(s) %s</b>\n"
-"\n"
-"Please see /var/log/rhsm/rhsm.log for more information."
-msgstr ""
-"<b>製品 %s にサブスクライブできません</b>\n"
-"\n"
-"詳細は /var/log/rhsm/rhsm.log でご覧下さい。"
+#: src/gui/data/installed.glade:188
+msgid "<b>Product's Subscription Details</b>"
+msgstr "<b>製品サブスクリプションの詳細</b>"
 
-#: src/constants.py:113
-msgid "<i><b>Please select atleast one subscription to apply</b></i>"
-msgstr "<i><b>適用するサブスクリプションを最低でも１つ選択して下さい</b></i>"
+#: src/gui/data/installed.glade:77
+msgid "<b>Product:</b>"
+msgstr "<b>製品:</b>"
 
-#: src/constants.py:115
-#, python-format
-msgid "<i><b>Successfully consumed %s subscription(s)</b></i>"
-msgstr "<i><b>%s のサブスクリプションを正常に消費しました</b></i>"
+#: src/gui/data/subdetails.glade:250
+msgid "<b>Provides Management:</b>"
+msgstr "<b>管理の提供:</b>"
 
-#: src/constants.py:117
-msgid ""
-"This error shouldn't have happened. If you'd like to help us improve this "
-"program, please file a bug at bugzilla.redhat.com. Including the relevant "
-"parts of would be very helpful. Thanks!"
-msgstr ""
-"このエラーは発生するはずではありません。このプログラムの改善にご協力 "
-"頂ける場合、bugzilla.redhat.com でバグの提出をお願いします。関連事項を "
-"含めて頂くと調査が迅速になります。ご協力を感謝します。"
+#: src/gui/data/rhsm.glade:366
+msgid "<b>Select Subscriptions to add</b>"
+msgstr "<b>追加するサブスクリプションを選択</b>"
 
-#: src/constants.py:122
+#: src/gui/data/allsubs.glade:25
+msgid "<b>Show subscriptions active on:</b>"
+msgstr "<b>この日にアクティブなサブスクリプションを表示:</b>"
+
+#: src/gui/data/subdetails.glade:56
+msgid "<b>Start Date:</b>"
+msgstr "<b>開始期日:</b>"
+
+#: src/gui/data/subdetails.glade:365
+msgid "<b>Subscription Details</b>"
+msgstr "<b>サブスクリプションの詳細</b>"
+
+#: src/gui/data/contract_selection.glade:66 src/gui/data/installed.glade:108
+#: src/gui/data/subdetails.glade:42
+msgid "<b>Subscription:</b>"
+msgstr "<b>サブスクリプション:</b>"
+
+#: src/gui/data/rhsm.glade:453
+msgid "<b>Subscriptions compatible with your system</b>"
+msgstr "<b>使用システムに互換性のあるサブスクリプション</b>"
+
+#: src/gui/data/rhsm.glade:415
+msgid "<b>Subscriptions matching your installed products</b>"
+msgstr "<b>インストール済み製品にマッチするサブスクリプション</b>"
+
+#: src/gui/data/subdetails.glade:266
+msgid "<b>Support Level:</b>"
+msgstr "<b>サポートレベル:</b>"
+
+#: src/gui/data/subdetails.glade:282
+msgid "<b>Support Type:</b>"
+msgstr "<b>サポートタイプ:</b>"
+
+#: src/gui/data/factsdialog.glade:34
+msgid "<b>System Facts:</b>"
+msgstr "<b>システムの情報:</b>"
+
+#: src/gui/data/mainwindow.glade:247
+msgid "<b>Tools</b>"
+msgstr "<b>ツール</b>"
+
+#: src/gui/data/contract_selection.glade:80
+msgid "<b>Total Contracts:</b>"
+msgstr "<b>コントラクト合計数:</b>"
+
+#: src/constants.py:54
 #, python-format
 msgid ""
 "<b>Unable to register the system.</b>\n"
@@ -1026,21 +273,954 @@ msgstr ""
 "\n"
 "詳細は /var/log/rhsm/rhsm.log でご覧下さい。"
 
-#: src/constants.py:124
+#: src/gui/compliance.py:214
 #, python-format
-msgid "Are you sure you want to unsubscribe product %s"
-msgstr "本当に製品 %s のサブスクリプションを解除しますか？"
+msgid "<big><b>All software is in compliance until %s</b></big>"
+msgstr "<big><b>全ソフトウェアのコンプライアンスは %s まで有効</b></big>"
 
-#: src/constants.py:126
+#: src/gui/data/networkConfig.glade:89
+msgid "<small><b>Example:</b> squid.example.com:3128</small>"
+msgstr "<small><b>例:</b> squid.example.com:3128</small>"
+
+#: src/gui/data/registration.glade:95
+msgid ""
+"<small>Tip: Forgot your login or password? Look it up at\n"
+"<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
+"www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
+msgstr ""
+"<small>ヒント: ログイン名かパスワードを忘れましたか? このサイトで確認できま"
+"す\n"
+"<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
+"www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
+
+#: src/gui/data/registration.glade:244
+msgid "A unique label for this system"
+msgstr "このシステム用の独自のラベル"
+
+#: src/gui/data/subdetails.glade:203 src/gui/data/subdetails.glade:303
+#: src/gui/data/subdetails.glade:323 src/gui/data/subdetails.glade:343
+msgid "Account"
+msgstr "アカウント"
+
+#: src/gui/data/activate.glade:93
+msgid "Activate"
+msgstr "アクティベート"
+
+#: src/gui/data/mainwindow.glade:210
+msgid "Activate a Subscription"
+msgstr "サブスクリプションのアクティベート"
+
+#: src/gui/data/activate.glade:22
+msgid ""
+"Activating your machine may take a few minutes.\n"
+"Please provide an email address to receive notification\n"
+"when the activation is complete."
+msgstr ""
+"マシンのアクティベーションには数分かかるでしょう。\n"
+"アクティベーションが完了したら、通知を受信する為の\n"
+"電子メールアドレスを記入して下さい。"
+
+#: src/gui/data/rhsm.glade:335
+msgid "Add Subscriptions"
+msgstr "サブスクリプションの追加"
+
+#: src/certlib.py:609
+msgid "Added (new)"
+msgstr "追加 (新規)"
+
+#: src/gui/data/networkConfig.glade:6
+msgid "Advanced Network Configuration"
+msgstr "高度なネットワーク設定"
+
+#: src/gui/allsubs.py:177
+msgid "All Available Subscriptions"
+msgstr "全ての利用可能なサブスクリプション"
+
+#: src/gui/data/allsubs.glade:241
+msgid "All Subscriptions View"
+msgstr "全てのサブスクリプションの表示"
+
+#: src/managercli.py:280
+msgid "All local data refreshed"
+msgstr "ローカルデータは全てリフレッシュされました"
+
+#: src/managercli.py:264
+msgid "All local data removed"
+msgstr "ローカルデータが全て削除されました"
+
+#: src/gui/managergui.py:413
 #, python-format
-msgid "<b>Total of %s subscriptions selected for consumption.</b>"
-msgstr "<b>合計 %s 個のサブスクリプションが消費用に選択されました</b>"
+msgid "All products are in compliance until %s"
+msgstr "全製品のコンプライアンスが %s まで有効です"
 
-#: src/constants.py:128
-msgid "<b>Are you sure you want to unregister?</b>"
-msgstr "<b>本当に登録を解除しますか?</b>"
+#: src/gui/mysubstab.py:93
+#, python-format
+msgid "Are you sure you want to unsubscribe from %s?"
+msgstr "本当に %s からサブスクリプションを解除しますか？"
 
-#: src/constants.py:130
+#: src/gui/data/networkConfig.glade:153
+msgid "Authentication Checkbox"
+msgstr "認証のチェックボックス"
+
+#: src/managercli.py:727 src/gui/allsubs.py:58 src/gui/compliance.py:144
+msgid "Available Subscriptions"
+msgstr "利用可能なサブスクリプション"
+
+#: src/managercli.py:67 src/gui/utils.py:63
+#, python-format
+msgid "Bad CA certificate: %s"
+msgstr "不正な CA 証明書です: %s"
+
+#: src/gui/data/mainwindow.glade:78 src/gui/data/mainwindow.glade:84
+msgid "Become Compliant"
+msgstr "コンプライアンスを有効にする"
+
+#: src/gui/data/importsub.glade:80 src/gui/data/rhsm.glade:77
+msgid "Certificate _Location:"
+msgstr "証明書の場所(_L):"
+
+#: src/managercli.py:585
+msgid "Certificate serial to unsubscribe"
+msgstr "サブスクリプション解除する証明書シリアル番号"
+
+#: src/gui/data/importsub.glade:37
+msgid "Choose a certificate to import to your subscription certificate directory."
+msgstr "サブスクリプション証明書ディレクトリにインポートする証明書を選択"
+
+#: src/gui/data/activate.glade:79 src/gui/data/factsdialog.glade:122
+msgid "Close"
+msgstr "閉じる"
+
+#: src/gui/data/networkConfig.glade:267
+msgid "Close Button"
+msgstr "閉じるボタン"
+
+#: src/gui/data/compliance.glade:277
+msgid "Compliance Action Area"
+msgstr "コンプライアンス アクション エリア"
+
+#: src/gui/data/compliance.glade:16
+msgid "Compliance Assistant"
+msgstr "コンプライアンス アシスタント"
+
+#: src/gui/data/compliance.glade:25
+msgid "Compliance Assistant Box"
+msgstr "コンプライアンス アシスタント ボックス"
+
+#: src/gui/data/compliance.glade:32
+msgid "Compliance Assistant Status"
+msgstr "コンプライアンス アシスタント ステータス"
+
+#: src/gui/data/compliance.glade:67
+msgid "Compliance Date Box"
+msgstr "コンプライアンス 日付 ボックス"
+
+#: src/gui/data/compliance.glade:75
+msgid "Compliance Date Label"
+msgstr "コンプライアンス 日付 ラベル"
+
+#: src/gui/data/compliance.glade:99
+msgid "Compliance Date Picker"
+msgstr "コンプライアンス 日付 ピッカー"
+
+#: src/gui/data/compliance.glade:47
+msgid "Compliance Label"
+msgstr "コンプライアンス ラベル"
+
+#: src/gui/data/compliance.glade:39
+msgid "Compliance Label Box"
+msgstr "コンプライアンス ラベル ボックス"
+
+#: src/gui/data/compliance.glade:171
+msgid "Compliance Product List"
+msgstr "コンプライアンス 製品一覧"
+
+#: src/gui/installedtab.py:54 src/gui/data/installed.glade:147
+#: src/gui/data/mainwindow.glade:45
+msgid "Compliance Status"
+msgstr "コンプライアンス ステータス"
+
+#: src/gui/data/compliance.glade:245
+msgid "Compliance Subscription Details"
+msgstr "コンプライアンス サブスクリプション詳細"
+
+#: src/gui/compliance.py:141
+msgid "Compliance Subscription List"
+msgstr "コンプライアンス サブスクリプション一覧"
+
+#: src/gui/data/compliance.glade:197
+msgid "Compliance Subscriptions Box"
+msgstr "コンプライアンス サブスクリプション ボックス"
+
+#: src/gui/data/compliance.glade:205
+msgid "Compliance Subscriptions Label"
+msgstr "コンプライアンス サブスクリプション ラベル"
+
+#: src/gui/data/compliance.glade:229
+msgid "Compliance Subscriptions List"
+msgstr "コンプライアンス サブスクリプション 一覧"
+
+#: src/gui/data/compliance.glade:219
+msgid "Compliance Subscriptions Panel"
+msgstr "コンプライアンス サブスクリプション パネル"
+
+#: src/gui/data/compliance.glade:130
+msgid "Compliance Update Box"
+msgstr "コンプライアンス更新ボックス"
+
+#: src/managercli.py:743
+msgid "Consumed Product Subscriptions"
+msgstr "消費済み製品サブスクリプション"
+
+#: src/managercli.py:192
+msgid "Consumer certificates corrupted. Please reregister."
+msgstr "コンシューマの証明書が破損しています。再登録して下さい"
+
+#: src/managercli.py:306
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgstr ""
+"コンシューマ識別子は存在しないか、又は破損しています。register --help を試して下さ"
+"い"
+
+#: src/managercli.py:137
+msgid "Consumer not registered. Please register using --username and --password"
+msgstr "コンシューマは未登録です。--username 及び --password を使用して登録して下さい"
+
+#: src/gui/data/allsubs.glade:69
+msgid "Contains the text:"
+msgstr "テキストを収納:"
+
+#: src/gui/contract_selection.py:67 src/gui/data/subdetails.glade:167
+msgid "Contract Number"
+msgstr "契約番号"
+
+#: src/gui/data/contract_selection.glade:6
+msgid "Contract Selection"
+msgstr "コントラクトの選択"
+
+#: src/gui/installedtab.py:106
+#, python-format
+msgid "Covered by contract %s through %s"
+msgstr "%s を通じて契約 %s により有効です"
+
+#: src/managercli.py:325
+#, python-format
+msgid "Current identity is: %s name: %s"
+msgstr "現在の識別子は %s で名前は %s です"
+
+#: src/managercli.py:718
+msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgstr "入力した日付は無効です。日付は YYYY-MM-DD の形式にして下さい（例えば:"
+
+#: src/certlib.py:610
+msgid "Deleted (rogue):"
+msgstr "削除済み (変異品):"
+
+#: src/gui/data/allsubs.glade:178
+msgid "Do Not Overlap"
+msgstr "重複しない"
+
+#: src/gui/data/rhsm.glade:732
+msgid "Do not register"
+msgstr "登録しない"
+
+#: src/gui/data/activate.glade:37
+msgid "Email Address:"
+msgstr "電子メールアドレス:"
+
+#: src/gui/installedtab.py:56 src/gui/mysubstab.py:60
+#: src/gui/compliance.py:125 src/gui/contract_selection.py:80
+#: src/gui/data/subdetails.glade:147
+msgid "End Date"
+msgstr "終了期日"
+
+#: src/gui/data/networkConfig.glade:122
+msgid "Enter in the format hostname(:port)"
+msgstr "形式に合うホスト名の記入(:ポート)"
+
+#: src/gui/data/subsgui.glade:37
+msgid "Enter your Subscription account information"
+msgstr "サブスクリプションアカウントの詳細を記入"
+
+#: src/gui/firstboot/rhsm_login.py:41
+msgid "Entitlement Platform Registration"
+msgstr "エンタイトルメントプラットフォームの登録"
+
+#: src/gui/firstboot/rhsm_login.py:40
+msgid "Entitlement Registration"
+msgstr "エンタイトルメントの登録"
+
+#: src/gui/activate.py:55
+#, python-format
+msgid "Error activating subscription: %s"
+msgstr "サブスクリプションのアクティベーションにエラー: %s"
+
+#: src/gui/compliance.py:180
+msgid ""
+"Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log for "
+"more information."
+msgstr ""
+"Compliance Assistant の表示でエラーです。詳細情報は  /var/log/rhsm/rhsm.log "
+"で ご覧下さい。"
+
+#: src/managercli.py:427
+#, python-format
+msgid "Error during registration: %s"
+msgstr "登録中にエラーです: %s"
+
+#: src/gui/allsubs.py:193
+#, python-format
+msgid "Error fetching subscriptions from server:  %s"
+msgstr "サーバーからサブスクリプションの取り出しでエラー:  %s"
+
+#: src/gui/allsubs.py:227 src/gui/compliance.py:413
+#, python-format
+msgid "Error getting subscription: %s"
+msgstr "サブスクリプションの取得にエラー: %s"
+
+#: src/hwprobe.py:152
+msgid "Error reading net Interface information:"
+msgstr "ネットインターフェイス情報の読み込みでエラー:"
+
+#: src/hwprobe.py:135
+msgid "Error reading networking information:"
+msgstr "ネットワーク情報の読み込みでエラー:"
+
+#: src/hwprobe.py:112
+msgid "Error reading system DMI information:"
+msgstr "システム DMI 情報の読み込みでエラー:"
+
+#: src/hwprobe.py:92
+msgid "Error reading system cpu information:"
+msgstr "システム cpu 情報の読み込みでエラー:"
+
+#: src/hwprobe.py:77
+msgid "Error reading system memory information:"
+msgstr "システムメモリー情報の読み込みでエラー:"
+
+#: src/managercli.py:685
+msgid "Error: --all is only applicable with --available"
+msgstr "エラー: --all は --available との併用でのみ適用可能"
+
+#: src/managercli.py:688
+msgid "Error: --ondate is only applicable with --available"
+msgstr "エラー: --ondate は  --available との併用でのみ適用可能"
+
+#: src/managercli.py:643
+msgid "Error: Need either --list or --update, Try facts --help"
+msgstr "エラー: --list 又は --update が必要です。facts --help を試して下さい"
+
+#: src/managercli.py:525
+msgid "Error: Need to supply --pool or --auto."
+msgstr "エラー:  --pool か --auto の記入が必要です"
+
+#: src/managercli.py:528
+msgid "Error: Only one of --pool or --auto may be used."
+msgstr "エラー: --pool か --auto の一つのみが使用できます"
+
+#: src/managercli.py:343
+msgid "Error: Unable to generate a new identity for the system"
+msgstr "エラー: システム用に新規の識別子を生成できません"
+
+#: src/managercli.py:859
+msgid ""
+"Error: You need to register this system by running `register` command before "
+"using this option."
+msgstr ""
+"エラー: このシステムの登録には `register`コマンドの後にこのオプションを使用す"
+"る 必要があります"
+
+#: src/managercli.py:374
+msgid "Error: consumer name can not be empty."
+msgstr "エラー: コンシューマ名は空白ではいけません"
+
+#: src/certlib.py:608
+#, python-format
+msgid "Expected (UEP) serial# %s"
+msgstr "予期される (UEP) シリアル# %s"
+
+#: src/managerlib.py:87
+msgid "Expired"
+msgstr "期限切れです"
+
+#: src/certlib.py:612
+msgid "Expired (deleted):"
+msgstr "期限切れ (削除済み):"
+
+#: src/certlib.py:611
+msgid "Expired (not deleted):"
+msgstr "期限切れ (未削除):"
+
+#: src/gui/factsgui.py:54
+msgid "Fact"
+msgstr "情報"
+
+#: src/compliance/rhsm_compliance_icon.c:245
+#: src/compliance/rhsm_compliance_icon.c:315
+#, c-format
+msgid "Failed to open connection to bus: %s\n"
+msgstr "バスへの接続を開く際に失敗しました: %s\n"
+
+#: src/compliance/rhsm_compliance_icon.c:47
+msgid "Force display of the compliance icon (expired or warning)"
+msgstr "コンプライアンスアイコン (期限切れ、又は警告) の強制表示"
+
+#: src/certlib.py:607
+#, python-format
+msgid "Found (local) serial# %s"
+msgstr "見付かった (ローカル) シリアル # %s"
+
+#: src/gui/installedtab.py:95
+msgid "Future Subscription"
+msgstr "将来のサブスクリプション"
+
+#: src/compliance/rhsm_compliance_icon.c:43
+msgid "How often to check for compliance (in seconds)"
+msgstr "コンプライアンスをチェックする頻度（秒）"
+
+#: src/gui/data/networkConfig.glade:45
+msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
+msgstr "HTTP プロキシ経由で Red Hat Network への接続を望みます(_H)"
+
+#: src/gui/data/importsub.glade:158 src/gui/data/mainwindow.glade:159
+#: src/gui/data/rhsm.glade:155
+msgid "Import Certificate"
+msgstr "証明書のインポート"
+
+#: src/gui/installedtab.py:104
+msgid "In Compliance"
+msgstr "コンプライアンスは有効"
+
+#: src/gui/widgets.py:196
+msgid "Installed"
+msgstr "インストール済み"
+
+#: src/gui/mysubstab.py:54
+msgid "Installed Products"
+msgstr "インストール済みの製品"
+
+#: src/managercli.py:84
+msgid "Installed Products:"
+msgstr "インストール済み製品:"
+
+#: src/gui/data/installed.glade:26
+msgid "Installed View"
+msgstr "インストール済みの表示"
+
+#: src/gui/widgets.py:402
+msgid "Invalid date format. Please re-enter a valid date. Example: "
+msgstr "無効な日付形式です。有効な日付を再入力して下さい。例えば:"
+
+#: src/gui/data/factsdialog.glade:47
+msgid "Last Update:"
+msgstr "前回の更新:"
+
+#: src/compliance/rhsm_compliance_icon.c:206
+msgid "Manage My Subscriptions..."
+msgstr "自分のサブスクリプションを管理..."
+
+#: src/gui/data/subsgui.glade:62
+msgid "Manage Your Product Subscriptions"
+msgstr "使用製品のサブスクリプションの管理"
+
+#: src/gui/data/allsubs.glade:159
+msgid "Match Installed"
+msgstr "インストールしたマッチ"
+
+#: src/gui/data/allsubs.glade:140
+msgid "Match System"
+msgstr "システムのマッチ"
+
+#: src/gui/installedtab.py:151
+msgid "My Installed Software"
+msgstr "自分のインストール済みソフトウェア"
+
+#: src/gui/mysubstab.py:113
+msgid "My Subscriptions"
+msgstr "自分のサブスクリプション"
+
+#: src/gui/data/mysubs.glade:26
+msgid "My Subscriptions View"
+msgstr "自分のサブスクリプション表示"
+
+#: src/gui/compliance.py:281
+msgid "N/A"
+msgstr "該当無し"
+
+#: src/managercli.py:49 src/gui/utils.py:50
+msgid ""
+"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
+"log for more information."
+msgstr ""
+"ネットワークエラーでサーバーに接続できません。詳細は /var/log/rhsm/rhsm.log "
+"でご覧下さい"
+
+#: src/managercli.py:54 src/gui/utils.py:56
+msgid ""
+"Network error. Please check the connection details, or see /var/log/rhsm/"
+"rhsm.log for more information."
+msgstr ""
+"ネットワークエラーです。接続の詳細を確認するか、又は /var/log/rhsm/rhsm.log "
+"をご覧下さい。"
+
+#: src/gui/installedtab.py:96 src/gui/installedtab.py:112
+msgid "Never Subscribed"
+msgstr "サブスクリプション履歴無し"
+
+#: src/gui/data/allsubs.glade:277 src/gui/data/installed.glade:204
+#: src/gui/data/mysubs.glade:52
+msgid "Next Update:"
+msgstr "次の更新:"
+
+#: src/gui/widgets.py:150
+#, python-format
+msgid "Next Update: %s"
+msgstr "次の更新: %s"
+
+#: src/managercli.py:725
+msgid "No Available subscription pools to list"
+msgstr "一覧表示する利用可能なサブスクリプションプールはありません"
+
+#: src/managercli.py:741
+msgid "No Consumed subscription pools to list"
+msgstr "一覧表示する消費済みサブスクリプションプールはありません"
+
+#: src/managercli.py:704
+msgid "No installed Products to list"
+msgstr "一覧表示するインストール済み製品はありません"
+
+#: src/gui/factsgui.py:83
+msgid "No previous update"
+msgstr "以前の更新はありません"
+
+#: src/gui/data/rhsm.glade:561
+msgid "Not Compatible"
+msgstr "互換性無し"
+
+#: src/managerlib.py:110
+msgid "Not Installed"
+msgstr "インストールされていません"
+
+#: src/managerlib.py:87
+msgid "Not Subscribed"
+msgstr "サブスクライブしていません"
+
+#: src/gui/data/compliance.glade:103
+msgid "On a different date:"
+msgstr "異なる期日に:"
+
+#: src/managercli.py:609
+msgid "One of --serial or --all must be provided"
+msgstr "--serial か --all のいずれかを入力します"
+
+#: src/compliance/rhsm_compliance_icon.c:180
+msgid ""
+"One or more of this system's subscriptions are about to expire. These "
+"subscriptions are required for compliance with your subscription agreements."
+msgstr ""
+"このシステムの単数、又は複数のサブスクリプションがすぐに期限切れです。これら"
+"の サブスクリプションはサブスクリプション同意書に於けるコンプライアンスに必要"
+"です。"
+
+#: src/gui/data/allsubs.glade:114
+msgid "Only show subscriptions that:"
+msgstr "以下のようなサブスクリプションのみを表示:"
+
+#: src/i18n_optparse.py:44
+msgid "Options"
+msgstr "オプション"
+
+#: src/gui/installedtab.py:99 src/gui/installedtab.py:111
+msgid "Out of Compliance"
+msgstr "コンプライアンスから離脱"
+
+#: src/gui/data/networkConfig.glade:224
+msgid "Password Text"
+msgstr "パスワードテキスト"
+
+#: src/gui/data/registration.glade:157
+msgid "Password:"
+msgstr "パスワード:"
+
+#: src/managercli.py:226
+msgid "Password: "
+msgstr "パスワード: "
+
+#: src/managercli.py:549
+msgid "Please enter a valid numeric pool id."
+msgstr "有効な数値のプール id を入力して下さい"
+
+#: src/gui/installedtab.py:41 src/gui/compliance.py:123 src/gui/widgets.py:192
+#: src/gui/data/installed.glade:129
+msgid "Product"
+msgstr "製品"
+
+#: src/gui/data/progress.glade:7
+msgid "Progress Dialog"
+msgstr "進捗のダイアログ"
+
+#: src/gui/data/importsub.glade:7 src/gui/data/importsub.glade:13
+#: src/gui/data/rhsm.glade:7 src/gui/data/rhsm.glade:13
+msgid "Provide a Subscription Certificate"
+msgstr "サブスクリプション証明書の提供"
+
+#: src/gui/data/networkConfig.glade:52
+msgid "Proxy Checkbox"
+msgstr "プロキシのチェックボックス"
+
+#: src/gui/data/mainwindow.glade:145
+msgid "Proxy Configuration"
+msgstr "プロキシ設定"
+
+#: src/gui/data/networkConfig.glade:124
+msgid "Proxy Location Text"
+msgstr "プロキシの場所のテキスト"
+
+#: src/gui/data/networkConfig.glade:190
+msgid "Proxy P_assword:"
+msgstr "プロキシパスワード(_A):"
+
+#: src/gui/data/networkConfig.glade:177
+msgid "Proxy _Username:"
+msgstr "プロキシユーザー名(_U):"
+
+#: src/gui/firstboot/rhsm_subscriptions.py:28
+msgid "RHSM Subscriptions Management"
+msgstr "RHSM サブスクリプション管理"
+
+#: src/certlib.py:434
+msgid "Reason(s):"
+msgstr "理由:"
+
+#: src/certlib.py:96
+msgid "Reasons(s):"
+msgstr "理由:"
+
+#: src/gui/data/registration.glade:174
+msgid "Red Hat Login:"
+msgstr "Red Hat ログイン:"
+
+#: src/gui/data/registration.glade:322
+msgid "Register"
+msgstr "登録"
+
+#: src/gui/data/mainwindow.glade:177
+msgid "Register System"
+msgstr "システムの登録"
+
+#: src/gui/data/rhsm.glade:682
+msgid "Register with Red Hat Entitlement Service"
+msgstr "Red Hat エンタイトルメントサービスに登録"
+
+#: src/gui/data/rhsm.glade:699
+msgid "Register with Red Hat Network"
+msgstr "Red Hat Network に登録"
+
+#: src/gui/data/rhsm.glade:715
+msgid "Register with Red Hat Network Satellite"
+msgstr "Red Hat Network Satellite に登録"
+
+#: src/compliance/rhsm_compliance_icon.c:200
+msgid "Remind Me Later"
+msgstr "後で知らせる"
+
+#: src/managercli.py:58 src/gui/utils.py:59
+msgid ""
+"Remote server error. Please check the connection details, or see /var/log/"
+"rhsm/rhsm.log for more information."
+msgstr ""
+"リモートサーバーエラーです。接続詳細を確認するか、又は /var/log/rhsm/rhsm."
+"log をご覧下さい"
+
+#: src/gui/data/allsubs.glade:54
+msgid "Search"
+msgstr "検索"
+
+#: src/gui/allsubs.py:189 src/gui/compliance.py:228
+msgid "Searching for subscriptions. Please wait."
+msgstr "サブスクリプションを検索中です。お待ち下さい"
+
+#: src/gui/data/registration.glade:257
+msgid "Select the most appropriate subscriptions for this system"
+msgstr "このシステムに最適なサブスクリプションを選択してください"
+
+#: src/compliance/rhsm_compliance_icon.c:45
+msgid "Show debug messages"
+msgstr "デバグメッセージを表示"
+
+#: src/gui/data/compliance.glade:73
+msgid "Show products that will be out of compliance as of:"
+msgstr "以下の期日にコンプライアンスから離脱する製品を表示:"
+
+#: src/compliance/rhsm_compliance_icon.c:177
+msgid "Some of the system's subscriptions are about to expire"
+msgstr "システムの一部のサブスクリプションはすぐに期限が切れます"
+
+#: src/gui/installedtab.py:55 src/gui/contract_selection.py:76
+#: src/gui/data/subdetails.glade:127
+msgid "Start Date"
+msgstr "開始期日"
+
+#: src/gui/data/allsubs.glade:289 src/gui/data/compliance.glade:281
+#: src/gui/data/contract_selection.glade:179
+msgid "Subscribe"
+msgstr "サブスクライブ"
+
+#: src/managerlib.py:87
+msgid "Subscribed"
+msgstr "サブスクライブしています"
+
+#: src/gui/mysubstab.py:53 src/gui/allsubs.py:56 src/gui/compliance.py:142
+#: src/gui/data/installed.glade:167
+msgid "Subscription"
+msgstr "サブスクリプション"
+
+#: src/gui/installedtab.py:101
+#, python-format
+msgid "Subscription %s is expired"
+msgstr "サブスクリプション %s は期限切れです"
+
+#: src/gui/data/activate.glade:7
+msgid "Subscription Activation"
+msgstr "サブスクリプションアクティベーション"
+
+#: src/gui/data/subdetails.glade:109
+msgid "Subscription Detail"
+msgstr "サブスクリプションの詳細"
+
+#: src/gui/firstboot/rhsm_subscriptions.py:29 src/gui/data/mainwindow.glade:6
+#: src/gui/data/subsgui.glade:9
+msgid "Subscription Manager"
+msgstr "サブスクリプションマネージャ"
+
+#: src/gui/data/compliance.glade:8
+msgid "Subscription Manager - Compliance Assistant"
+msgstr "サブスクリプションマネージャ- Compliance Assistant"
+
+#: src/gui/data/factsdialog.glade:9
+msgid "Subscription Manager - Facts"
+msgstr "サブスクリプションマネージャ - 情報"
+
+#: src/gui/data/rhsm.glade:496
+msgid "Suggested"
+msgstr "提案"
+
+#: src/managercli.py:794
+msgid "Supported modules:"
+msgstr "サポートのあるモジュール:"
+
+#: src/gui/data/registration.glade:234
+msgid "System Name:"
+msgstr "システム名:"
+
+#: src/gui/data/registration.glade:7
+msgid "System Registration"
+msgstr "システム登録"
+
+#: src/managercli.py:467
+msgid "System has been un-registered."
+msgstr "システムの登録は解除されました"
+
+#: src/gui/data/allsubs.glade:83
+msgid "Text in Subscription"
+msgstr "サブスクリプション内のテキスト"
+
+#: src/gui/data/compliance.glade:203
+msgid "The following subscriptions will cover the products selected above:"
+msgstr "以下のサブスクリプションは上記で選択された製品に適用できます:"
+
+#: src/gui/compliance.py:220
+#, python-format
+msgid "The following subscriptions will cover the products selected on %s"
+msgstr "以下のサブスクリプションは %s に選択された製品に有効です"
+
+#: src/managercli.py:408
+#, python-format
+msgid "The system with UUID %s has been unregistered"
+msgstr "UUID %s を持つシステムの登録は解除されました"
+
+#: src/gui/networkConfig.py:132
+#, python-format
+msgid ""
+"There was an error saving your configuration. Make sure that\n"
+"you own %s."
+msgstr ""
+"設定の保存に於いてエラーがありました。%s を所有していることを\n"
+"確認して下さい"
+
+#: src/gui/mysubstab.py:81
+#, python-format
+msgid "There was an error unsubsribing from %s with serial number %s"
+msgstr "シリアル番号 %s を持つ %s からのサブスクリプション解除でエラーです"
+
+#: src/compliance/rhsm_compliance_icon.c:171
+msgid "This System is Non-Compliant"
+msgstr "このシステムはコンプライアンス無しです"
+
+#: src/compliance/rhsm_compliance_icon.c:179
+msgid "This System's Subscriptions Are About to Expire"
+msgstr "このシステムのサブスクリプションはすぐに期限が切れます"
+
+#: src/managercli.py:371
+msgid "This system is already registered. Use --force to override"
+msgstr "このシステムは既に登録済みです。上書きするには  --force を使用します"
+
+#: src/managercli.py:454
+msgid "This system is currently not registered."
+msgstr "このシステムは現在登録されていません"
+
+#: src/compliance/rhsm_compliance_icon.c:172
+msgid ""
+"This system is missing one or more subscriptions required for compliance "
+"with your subscription agreements."
+msgstr ""
+"このシステムには、サブスクリプション同意書に於けるコンプライアンスに必要な 単"
+"数、又は複数のサブスクリプションが足りません。"
+
+#: src/compliance/rhsm_compliance_icon.c:170
+msgid "This system is non-compliant"
+msgstr "このシステムはコンプライアンス無しです"
+
+#: src/gui/data/rhsm.glade:35
+msgid ""
+"To add a subscription, choose a certificate to import to your subscription "
+"certificate directory."
+msgstr ""
+"サブスクリプションを追加するには、サブスクリプション証明書ディレクトリに "
+"インポートする証明書を選択します"
+
+#: src/gui/widgets.py:437
+msgid "Today"
+msgstr "今日"
+
+#: src/certlib.py:606
+#, python-format
+msgid "Total updates: %d"
+msgstr "全ての更新: %d"
+
+#: src/managercli.py:285
+#, python-format
+msgid ""
+"Unable to perform refresh due to the following exception \n"
+" Error: %s"
+msgstr ""
+"以下の例外エラーの為にリフレッシュを実行できませんでした \n"
+": %s"
+
+#: src/managercli.py:617
+#, python-format
+msgid ""
+"Unable to perform unsubscribe due to the following exception \n"
+" Error: %s"
+msgstr ""
+"以下の例外エラーの為、サブスクリプション解除を実行できません\n"
+": %s"
+
+#: src/gui/compliance.py:194
+msgid "Unable to search for subscriptions"
+msgstr "サブスクリプションの検索ができません"
+
+#: src/gui/allsubs.py:203
+#, python-format
+msgid "Unable to search for subscriptions:  %s"
+msgstr "サブスクリプションの検索ができません:  %s"
+
+#: src/certmgr.py:107
+msgid "Unable to update Red Hat certificates & repositories"
+msgstr "Red Hat の証明書とレポジトリの更新ができません"
+
+#: src/gui/utils.py:52
+#, python-format
+msgid "Unable to verify server's identity: %s"
+msgstr "サーバーの識別子を確認できません: %s"
+
+#: src/gui/compliance.py:118 src/gui/data/compliance.glade:181
+msgid "Uncompliant Product List"
+msgstr "コンプライアンスの無い製品の一覧"
+
+#: src/compliance/rhsm_compliance_icon.c:283
+#, c-format
+msgid "Unknown argument to force-icon: %s\n"
+msgstr "force-icon への不明な引数: %s\n"
+
+#: src/gui/data/mainwindow.glade:191
+msgid "Unregister System"
+msgstr "システムの登録解除"
+
+#: src/gui/data/mysubs.glade:64 src/gui/data/mysubs.glade:70
+msgid "Unsubscribe"
+msgstr "サブスクリプション解除"
+
+#: src/managercli.py:587
+msgid "Unsubscribe from all subscriptions"
+msgstr "全てのサブスクリプションから解除"
+
+#: src/gui/data/allsubs.glade:49 src/gui/data/compliance.glade:134
+msgid "Update"
+msgstr "更新"
+
+#: src/gui/data/factsdialog.glade:107
+msgid "Update Facts"
+msgstr "情報の更新"
+
+#: src/gui/data/rhsm.glade:179
+msgid "Update Subscriptions"
+msgstr "サブスクリプションの更新"
+
+#: src/gui/data/factsdialog.glade:58
+msgid "Update Time"
+msgstr "更新時刻"
+
+#: src/certlib.py:767
+msgid "Updating Red Hat certificates"
+msgstr "Red Hat 証明書の更新中"
+
+#: src/certmgr.py:89
+msgid "Updating Red Hat certificates & repositories"
+msgstr "Red Hat の証明書とレポジトリを更新"
+
+#: src/factlib.py:77
+msgid "Updating facts"
+msgstr "情報の更新中"
+
+#: src/i18n_optparse.py:42
+msgid "Usage"
+msgstr "使用法"
+
+#: src/i18n_optparse.py:41
+#, python-format
+msgid "Usage: %s\n"
+msgstr "使用法: %s\n"
+
+#: src/gui/data/networkConfig.glade:146
+msgid "Use Au_thentication with HTTP Proxy:"
+msgstr "HTTP プロキシ経由で認証を使用(_T):"
+
+#: src/gui/contract_selection.py:71
+msgid "Used / Available"
+msgstr "使用中 / 利用可能"
+
+#: src/gui/data/networkConfig.glade:207
+msgid "Username Text"
+msgstr "ユーザー名テキスト"
+
+#: src/managercli.py:223
+msgid "Username: "
+msgstr "ユーザー名: "
+
+#: src/gui/factsgui.py:55
+msgid "Value"
+msgstr "値"
+
+#: src/gui/installedtab.py:53
+msgid "Version"
+msgstr "バージョン"
+
+#: src/gui/data/mainwindow.glade:223
+msgid "View System Facts"
+msgstr "システムの情報表示"
+
+#: src/constants.py:58
 msgid ""
 "WARNING\n"
 "\n"
@@ -1055,471 +1235,309 @@ msgid ""
 msgstr ""
 "警告\n"
 "\n"
-"RHN Classic の技術を使用してすでに RHN に登録してあります。このツールは"
-"RHN 証明書ベースエンタイトルメントの技術を使用した登録を必要とします。\n"
+"RHN Classic の技術を使用してすでに RHN に登録してあります。このツールはRHN 証"
+"明書ベースエンタイトルメントの技術を使用した登録を必要とします。\n"
 "\n"
-"特殊ケース以外は、Red Hat はお客様が RHN に１回だけ登録されることを "
-"推薦しています。\n"
+"特殊ケース以外は、Red Hat はお客様が RHN に１回だけ登録されることを 推薦して"
+"います。\n"
 "\n"
 "代替ツールやその他の詳細情報を得るには、このサイトのナレッジベース記事を参照 "
 "して下さい: https://access.redhat.com/kb/docs/DOC-45563\n"
 
-#: tmp/activate.glade.h:1
-msgid "Activate"
-msgstr "アクティベート"
+#: src/gui/managergui.py:402
+#, python-format
+msgid "You have <b>%s</b> products out of compliance."
+msgstr "<b>%s</b> 製品がコンプライアンスから外れています"
 
-#: tmp/activate.glade.h:2
-msgid ""
-"Activating your machine may take a few minutes.\n"
-"Please provide an email address to receive notification\n"
-"when the activation is complete."
-msgstr ""
-"マシンのアクティベーションには数分かかるでしょう。\n"
-"アクティベーションが完了したら、通知を受信する為の\n"
-"電子メールアドレスを記入して下さい。"
+#: src/gui/managergui.py:406
+msgid "You have <b>1</b> product out of compliance."
+msgstr "<b>1</b> 製品がコンプライアンスから外れています"
 
-#: tmp/activate.glade.h:5 tmp/factsdialog.glade.h:2
-msgid "Close"
-msgstr "閉じる"
-
-#: tmp/activate.glade.h:6
-msgid "Email Address:"
-msgstr "電子メールアドレス:"
-
-#: tmp/activate.glade.h:7
-msgid "Subscription Activation"
-msgstr "サブスクリプションアクティベーション"
-
-#: tmp/allsubs.glade.h:1
-msgid "<b>More search options</b>"
-msgstr "<b>その他の検索オプション</b>"
-
-#: tmp/allsubs.glade.h:2
-msgid "<b>Show subscriptions active on:</b>"
-msgstr "<b>この日にアクティブなサブスクリプションを表示:</b>"
-
-#: tmp/allsubs.glade.h:3
-msgid "All Subscriptions View"
-msgstr "全てのサブスクリプションの表示"
-
-#: tmp/allsubs.glade.h:4
-msgid "Contains the text:"
-msgstr "テキストを収納:"
-
-#: tmp/allsubs.glade.h:5
-msgid "Do Not Overlap"
-msgstr "重複しない"
-
-#: tmp/allsubs.glade.h:6
-msgid "Match Installed"
-msgstr "インストールしたマッチ"
-
-#: tmp/allsubs.glade.h:7
-msgid "Match System"
-msgstr "システムのマッチ"
-
-#: tmp/allsubs.glade.h:8 tmp/installed.glade.h:7 tmp/mysubs.glade.h:2
-msgid "Next Update:"
-msgstr "次の更新:"
-
-#: tmp/allsubs.glade.h:9
-msgid "Only show subscriptions that:"
-msgstr "以下のようなサブスクリプションのみを表示:"
-
-#: tmp/allsubs.glade.h:10
-msgid "Search"
-msgstr "検索"
-
-#: tmp/allsubs.glade.h:11 tmp/compliance.glade.h:3
-msgid "Subscribe"
-msgstr "サブスクライブ"
-
-#: tmp/allsubs.glade.h:12
-msgid "Text in Subscription"
-msgstr "サブスクリプション内のテキスト"
-
-#: tmp/allsubs.glade.h:13 tmp/compliance.glade.h:6
-msgid "Update"
-msgstr "更新"
-
-#: tmp/allsubs.glade.h:14
-msgid "have no overlap with existing subscriptions"
-msgstr "既存のサブスクリプションとの重複をしない"
-
-#: tmp/allsubs.glade.h:15
-msgid "match my installed products"
-msgstr "自分のインストール済み製品にマッチ"
-
-#: tmp/allsubs.glade.h:16
-msgid "match my system"
-msgstr "自分のシステムにマッチ"
-
-#: tmp/compliance.glade.h:1
-msgid "On a different date:"
-msgstr "異なる期日に:"
-
-#: tmp/compliance.glade.h:2
-msgid "Show products that will be out of compliance as of:"
-msgstr "以下の期日にコンプライアンスから離脱する製品を表示:"
-
-#: tmp/compliance.glade.h:4
-msgid "Subscription Manager - Compliance Assistant"
-msgstr "サブスクリプションマネージャ- Compliance Assistant"
-
-#: tmp/compliance.glade.h:5
-msgid "The following subscriptions will cover the products selected above:"
-msgstr "以下のサブスクリプションは上記で選択された製品に適用できます:"
-
-#: tmp/compliance.glade.h:7
-msgid "subscribe button"
-msgstr "サブスクライブのボタン"
-
-#: tmp/factsdialog.glade.h:1
-msgid "<b>System Facts:</b>"
-msgstr "<b>システムの事実情報:</b>"
-
-#: tmp/factsdialog.glade.h:3
-msgid "Last Update:"
-msgstr "前回の更新:"
-
-#: tmp/factsdialog.glade.h:4
-msgid "Subscription Manager - Facts"
-msgstr "サブスクリプションマネージャ - 事実情報"
-
-#: tmp/factsdialog.glade.h:5
-msgid "Update Facts"
-msgstr "事実情報の更新"
-
-#: tmp/factsdialog.glade.h:6
-msgid "Update Time"
-msgstr "更新時刻"
-
-#: tmp/factsdialog.glade.h:7
-msgid "close_button"
-msgstr "閉じる_ボタン"
-
-#: tmp/factsdialog.glade.h:8
-msgid "facts_view"
-msgstr "事実情報_表示"
-
-#: tmp/importsub.glade.h:1 tmp/mainwindow.glade.h:6 tmp/rhsm.glade.h:7
-msgid "Import Certificate"
-msgstr "証明書のインポート"
-
-#: tmp/importsub.glade.h:2 tmp/rhsm.glade.h:9
-msgid "Provide a Subscription Certificate"
-msgstr "サブスクリプション証明書の提供"
-
-#: tmp/installed.glade.h:1
-msgid "<b>Compliance:</b>"
-msgstr "<b>コンプライアンス:</b>"
-
-#: tmp/installed.glade.h:2
-msgid "<b>Product's Subscription Details</b>"
-msgstr "<b>製品サブスクリプションの詳細</b>"
-
-#: tmp/installed.glade.h:3
-msgid "<b>Product:</b>"
-msgstr "<b>製品:</b>"
-
-#: tmp/installed.glade.h:4 tmp/subdetails.glade.h:8
-msgid "<b>Subscription:</b>"
-msgstr "<b>サブスクリプション:</b>"
-
-#: tmp/installed.glade.h:6
-msgid "Installed View"
-msgstr "インストール済みの表示"
-
-#: tmp/mainwindow.glade.h:1
-msgid "<b>Compliance Status</b>"
-msgstr "<b>コンプライアンスステータス</b>"
-
-#: tmp/mainwindow.glade.h:2
-msgid "<b>Tools</b>"
-msgstr "<b>ツール</b>"
-
-#: tmp/mainwindow.glade.h:3
-msgid "Activate a Subscription"
-msgstr "サブスクリプションのアクティベート"
-
-#: tmp/mainwindow.glade.h:4
-msgid "Become Compliant"
-msgstr "コンプライアンスが有効になる"
-
-#: tmp/mainwindow.glade.h:7
-msgid "Proxy Configuration"
-msgstr "プロキシ設定"
-
-#: tmp/mainwindow.glade.h:8
-msgid "Register System"
-msgstr "システムの登録"
-
-#: tmp/mainwindow.glade.h:10
-msgid "Unregister System"
-msgstr "システムの登録解除"
-
-#: tmp/mainwindow.glade.h:11
-msgid "View System Facts"
-msgstr "システムの事実情報表示"
-
-#: tmp/mainwindow.glade.h:12
+#: src/gui/data/mainwindow.glade:59
 msgid "You have one product which is out of compliance."
 msgstr "お持ちの製品の１つがコンプライアンスから外れています"
 
-#: tmp/mysubs.glade.h:1
-msgid "My Subscriptions View"
-msgstr "自分のサブスクリプション表示"
+#: src/gui/managergui.py:545
+msgid "You must enter a login."
+msgstr "ログイン名を入力して下さい"
 
-#: tmp/mysubs.glade.h:3
-msgid "Unsubscribe"
-msgstr "サブスクリプション解除"
+#: src/gui/managergui.py:551
+msgid "You must enter a password."
+msgstr "パスワードを入力して下さい"
 
-#: tmp/networkConfig.glade.h:1
-msgid "Advanced Network Configuration"
-msgstr "高度なネットワーク設定"
+#: src/gui/managergui.py:536
+msgid "You must enter a system name."
+msgstr "システム名を入力して下さい"
 
-#: tmp/networkConfig.glade.h:2
-msgid "Authentication Checkbox"
-msgstr "認証のチェックボックス"
+#: src/gui/managergui.py:371
+msgid "You must register before using the compliance assistant."
+msgstr "compliance assistant を使用するには、先に登録が必要です"
 
-#: tmp/networkConfig.glade.h:3
-msgid "Close Button"
-msgstr "閉じるボタン"
+#: src/gui/importsub.py:66
+msgid "You must select a certificate."
+msgstr "証明書を選択して下さい"
 
-#: tmp/networkConfig.glade.h:4
-msgid "Enter in the format hostname(:port)"
-msgstr "形式に合うホスト名の記入(:ポート)"
+#: src/gui/data/networkConfig.glade:261
+msgid "_Close"
+msgstr "閉じる(_C)"
 
-#: tmp/networkConfig.glade.h:5
-msgid "Password Text"
-msgstr "パスワードテキスト"
+#: src/gui/data/networkConfig.glade:108
+msgid "_Proxy Location:"
+msgstr "プロキシの場所(_P):"
 
-#: tmp/networkConfig.glade.h:6
-msgid "Proxy Checkbox"
-msgstr "プロキシのチェックボックス"
+#: src/managercli.py:473
+msgid "activate the registered user to a specified product"
+msgstr "登録済みユーザーを指定製品に対してアクティベートします"
 
-#: tmp/networkConfig.glade.h:7
-msgid "Proxy Location Text"
-msgstr "プロキシの場所のテキスト"
-
-#: tmp/networkConfig.glade.h:8
-msgid "Username Text"
-msgstr "ユーザー名テキスト"
-
-#: tmp/progress.glade.h:1
-msgid "Progress Dialog"
-msgstr "進捗のダイアログ"
-
-#: tmp/registration.glade.h:1
-msgid "<b>Please enter the following for this system:</b>"
-msgstr "<b>このシステムに関して以下を記入して下さい:</b>"
-
-#: tmp/registration.glade.h:2
-msgid ""
-"<small>Tip: Forgot your login or password? Look it up at\n"
-"<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
-"www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
-msgstr ""
-"<small>ヒント: ログイン名かパスワードを忘れましたか? このサイトで確認できます\n"
-"<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
-"www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
-
-#: tmp/registration.glade.h:4
-msgid "A unique label for this system"
-msgstr "このシステム用の独自のラベル"
-
-#: tmp/registration.glade.h:5
-msgid "Select the most appropriate subscriptions for this system"
-msgstr "このシステムに最適なサブスクリプションを選択してください"
-
-#: tmp/registration.glade.h:6
-msgid "System Name:"
-msgstr "システム名:"
-
-#: tmp/registration.glade.h:7
-msgid "System Registration"
-msgstr "システム登録"
-
-#: tmp/registration.glade.h:8
-msgid "register_button"
-msgstr "登録_ボタン"
-
-#: tmp/registration.glade.h:9
-msgid "register_dialog_main_vbox"
-msgstr "登録_ダイアログ_メイン_vbox"
-
-#: tmp/registration.glade.h:10
-msgid "registration_dialog_action_area\n"
-msgstr "登録_ダイアログ_アクション_エリア\n"
-
-#: tmp/rhsm.glade.h:1
-msgid "<b>Other Available Subscriptions</b>"
-msgstr "<b>他の利用可能なサブスクリプション</b>"
-
-#: tmp/rhsm.glade.h:2
-msgid "<b>Select Subscriptions to add</b>"
-msgstr "<b>追加するサブスクリプションを選択</b>"
-
-#: tmp/rhsm.glade.h:3
-msgid "<b>Subscriptions compatible with your system</b>"
-msgstr "<b>使用システムに互換性のあるサブスクリプション</b>"
-
-#: tmp/rhsm.glade.h:4
-msgid "<b>Subscriptions matching your installed products</b>"
-msgstr "<b>インストール済み製品にマッチするサブスクリプション</b>"
-
-#: tmp/rhsm.glade.h:5
-msgid "Add Subscriptions"
-msgstr "サブスクリプションの追加"
-
-#: tmp/rhsm.glade.h:6
-msgid "Do not register"
-msgstr "登録しない"
-
-#: tmp/rhsm.glade.h:8
-msgid "Not Compatible"
-msgstr "互換性無し"
-
-#: tmp/rhsm.glade.h:10
-msgid "Register with Red Hat Entitlement Service"
-msgstr "Red Hat エンタイトルメントサービスに登録"
-
-#: tmp/rhsm.glade.h:11
-msgid "Register with Red Hat Network"
-msgstr "Red Hat Network に登録"
-
-#: tmp/rhsm.glade.h:12
-msgid "Register with Red Hat Network Satellite"
-msgstr "Red Hat Network Satellite に登録"
-
-#: tmp/rhsm.glade.h:13
-msgid "Suggested"
-msgstr "提案"
-
-#: tmp/rhsm.glade.h:14
-msgid "Update Subscriptions"
-msgstr "サブスクリプションの更新"
-
-#: tmp/rhsm.glade.h:15
-msgid "update_subscriptions_dialog\n"
-msgstr "サブスクリプション_更新_ダイアログ\n"
-
-#: tmp/subdetails.glade.h:1
-msgid "<b>Account Number:</b>"
-msgstr "<b>アカウント番号:</b>"
-
-#: tmp/subdetails.glade.h:2
-msgid "<b>Bundled Products:</b>"
-msgstr "<b>同梱の製品:</b>"
-
-#: tmp/subdetails.glade.h:3
-msgid "<b>Contract Number:</b>"
-msgstr "<b>契約番号:</b>"
-
-#: tmp/subdetails.glade.h:4
-msgid "<b>End Date:</b>"
-msgstr "<b>終了期日:</b>"
-
-#: tmp/subdetails.glade.h:5
-msgid "<b>Provides Management:</b>"
-msgstr "<b>管理の提供:</b>"
-
-#: tmp/subdetails.glade.h:6
-msgid "<b>Start Date:</b>"
-msgstr "<b>開始期日:</b>"
-
-#: tmp/subdetails.glade.h:7
-msgid "<b>Subscription Details</b>"
-msgstr "<b>サブスクリプションの詳細</b>"
-
-#: tmp/subdetails.glade.h:9
-msgid "<b>Support Level:</b>"
-msgstr "<b>サポートレベル:</b>"
-
-#: tmp/subdetails.glade.h:10
-msgid "<b>Support Type:</b>"
-msgstr "<b>サポートタイプ:</b>"
-
-#: tmp/subdetails.glade.h:11
-msgid "Account"
-msgstr "アカウント"
-
-#: tmp/subdetails.glade.h:15
-msgid "Subscription Detail"
-msgstr "サブスクリプションの詳細"
-
-#: tmp/subsgui.glade.h:1
-msgid "Enter your Subscription account information"
-msgstr "サブスクリプションアカウントの詳細を記入"
-
-#: tmp/subsgui.glade.h:2
-msgid "Manage Your Product Subscriptions"
-msgstr "使用製品のサブスクリプションの管理"
-
-#: src/compliance/rhsm_compliance_icon.c:43
-msgid "How often to check for compliance (in seconds)"
-msgstr "コンプライアンスをチェックする頻度（秒）"
-
-#: src/compliance/rhsm_compliance_icon.c:45
-msgid "Show debug messages"
-msgstr "デバグメッセージを表示"
-
-#: src/compliance/rhsm_compliance_icon.c:47
-msgid "Force display of the compliance icon (expired or warning)"
-msgstr "コンプライアンスアイコン (期限切れ、又は警告) の強制表示"
-
-#: src/compliance/rhsm_compliance_icon.c:135
-msgid "This system is non-compliant"
-msgstr "このシステムはコンプライアンス無しです"
-
-#: src/compliance/rhsm_compliance_icon.c:136
-msgid "This System is Non-Compliant"
-msgstr "このシステムはコンプライアンス無しです"
-
-#: src/compliance/rhsm_compliance_icon.c:137
-msgid ""
-"This system is missing one or more subscriptions required for compliance "
-"with your subscription agreements."
-msgstr ""
-"このシステムには、サブスクリプション同意書に於けるコンプライアンスに必要な "
-"単数、又は複数のサブスクリプションが足りません。"
-
-#: src/compliance/rhsm_compliance_icon.c:142
-msgid "Some of the system's subscriptions are about to expire"
-msgstr "システムの一部のサブスクリプションはすぐに期限が切れます"
-
-#: src/compliance/rhsm_compliance_icon.c:144
-msgid "This System's Subscriptions Are About to Expire"
-msgstr "このシステムのサブスクリプションはすぐに期限が切れます"
-
-#: src/compliance/rhsm_compliance_icon.c:145
-msgid ""
-"One or more of this system's subscriptions are about to expire. These "
-"subscriptions are required for compliance with your subscription agreements."
-msgstr ""
-"このシステムの単数、又は複数のサブスクリプションがすぐに期限切れです。これらの "
-"サブスクリプションはサブスクリプション同意書に於けるコンプライアンスに必要です。"
-
-#: src/compliance/rhsm_compliance_icon.c:165
-msgid "Remind Me Later"
-msgstr "後で知らせる"
-
-#: src/compliance/rhsm_compliance_icon.c:171
-msgid "Manage My Subscriptions..."
-msgstr "自分のサブスクリプションを管理..."
-
-#: src/compliance/rhsm_compliance_icon.c:199
+#: src/i18n_optparse.py:48
 #, python-format
-msgid "Failed to open connection to bus: %s\n"
-msgstr "バスへの接続を開く際に失敗しました: %s\n"
+msgid "ambiguous option: %s (%s?)"
+msgstr "曖昧なオプション: %s (%s?)"
 
-#: src/compliance/rhsm_compliance_icon.c:250
-#, python-format
-msgid "Unknown argument to force-icon: %s\n"
-msgstr "force-icon への不明な引数: %s\n"
+#: src/managercli.py:363 src/managercli.py:520
+msgid ""
+"automatically subscribe this system to                                     "
+"compatible subscriptions."
+msgstr ""
+"このシステムを自動的に互換性のある                                     サブス"
+"クリプションに登録"
 
-#: src/compliance/rhsm_compliance_icon.c:286
+#: src/managercli.py:674
+msgid "available"
+msgstr "利用可能"
+
+#: src/gui/data/factsdialog.glade:127
+msgid "close_button"
+msgstr "閉じるボタン(_B)"
+
+#: src/i18n_optparse.py:55
+msgid "complex"
+msgstr "複合"
+
+#: src/managercli.py:679
+msgid "consumed"
+msgstr "消費済み"
+
+#: src/managercli.py:676
+msgid "date to search on, defaults to today's date, only used with --available "
+msgstr "検索した日の日付。デフォルトは今日の日付です。--available との併用のみ"
+
+#: src/managercli.py:124
+msgid "debug level"
+msgstr "デバグレベル"
+
+#: src/productid.py:123
 #, python-format
+msgid "deleting: %s"
+msgstr "削除中: %s"
+
+#: src/certlib.py:771 src/certmgr.py:95 src/factlib.py:81
+msgid "done"
+msgstr "終了"
+
+#: src/productid.py:140
+#, python-format
+msgid "duration: %d(ms)"
+msgstr "期間: %d(ms)"
+
+#: src/gui/data/factsdialog.glade:86
+msgid "facts_view"
+msgstr "情報の表示(_V)"
+
+#: src/i18n_optparse.py:54
+msgid "floating-point"
+msgstr "浮動小数点"
+
+#: src/managercli.py:301
+msgid "force certificate regeneration (requires username and password)"
+msgstr "証明書の再生成を強制（ユーザー名とパスワードが必要）"
+
+#: src/gui/data/allsubs.glade:171
+msgid "have no overlap with existing subscriptions"
+msgstr "既存のサブスクリプションとの重複をしない"
+
+#: src/managercli.py:681
+msgid "if supplied with --available then all subscriptions are returned"
+msgstr "--available との併用の場合、全てのサブスクリプションが返されます"
+
+#: src/managercli.py:672
+msgid "installed"
+msgstr "インストール済み"
+
+#: src/productid.py:109
+#, python-format
+msgid "installing: %s"
+msgstr "インストール中: %s"
+
+#: src/i18n_optparse.py:52
+msgid "integer"
+msgstr "整数"
+
+#: src/managercli.py:667
+msgid "list available or consumer subscriptions for registered user"
+msgstr "登録済みユーザーの利用可能な、又はコンシューマのサブスクリプションを一覧表示"
+
+#: src/managercli.py:632
+msgid "list known facts for this system"
+msgstr "このシステムの既知の情報を一覧表示"
+
+#: src/i18n_optparse.py:53
+msgid "long integer"
+msgstr "長整数型"
+
+#: src/gui/data/allsubs.glade:152
+msgid "match my installed products"
+msgstr "自分のインストール済み製品にマッチ"
+
+#: src/gui/data/allsubs.glade:133
+msgid "match my system"
+msgstr "自分のシステムにマッチ"
+
+#: src/managercli.py:359
+msgid "name of the consumer to register. Defaults to the hostname."
+msgstr "登録するコンシューマの名前。デフォルトはホスト名です"
+
+#: src/gui/mysubstab.py:142
+msgid "no"
+msgstr "いいえ"
+
+#: src/i18n_optparse.py:47
+#, python-format
+msgid "no such option: %s"
+msgstr "そのオプションはありません: %s"
+
+#: src/i18n_optparse.py:56
+#, python-format
+msgid "option %s: invalid %s value: %r"
+msgstr "オプション%s: 無効な %s 値: %r"
+
+#: src/i18n_optparse.py:57
+#, python-format
+msgid "option %s: invalid choice: %r (choose from %s)"
+msgstr "オプション %s: 無効な選択: %r (%s から選択)"
+
+#: src/compliance/rhsm_compliance_icon.c:350
+#, c-format
 msgid "option parsing failed: %s\n"
 msgstr "オプションの構文解析失敗: %s\n"
+
+#: src/managercli.py:478
+msgid "optional email address to notify when token activation is complete."
+msgstr "トークンアクティベーション終了時に通知するオプションの電子メールアドレス"
+
+#: src/managercli.py:481
+msgid ""
+"optional language to use for email notification when token activation is "
+"complete. Used with --email only. Examples: en-us, de-de"
+msgstr ""
+"トークンアクティベーション完了時に電子メール通知で使用するオプションの言語。 "
+"--email と併用でのみ使用されます。例えば: en-us, de-de"
+
+#: src/managercli.py:130
+msgid "password for http proxy with basic authentication"
+msgstr "基本認証を持つ http proxy のパスワード"
+
+#: src/managercli.py:126
+msgid "proxy url in the form of proxy_hostname:proxy_port"
+msgstr "proxy_hostname:proxy_port の形式のプロキシ url"
+
+#: src/managercli.py:270
+msgid "pulls the latest entitlement data from the server"
+msgstr "サーバーから最新のエンタイトルメントデータを取り出します"
+
+#: src/managercli.py:350
+msgid "register the client to RHN"
+msgstr "クライアントを RHN に登録します"
+
+#: src/managercli.py:366
+msgid "register the system even if it is already registered"
+msgstr "既に登録済みでもシステムを登録します"
+
+#: src/managercli.py:361
+msgid "register to an existing consumer"
+msgstr "既存のコンシューマに対して登録"
+
+#: src/gui/data/registration.glade:328
+msgid "register_button"
+msgstr "登録ボタン(_B)"
+
+#: src/gui/data/registration.glade:21
+msgid "register_dialog_main_vbox"
+msgstr "register_dialog_main_vbox"
+
+#: src/gui/data/registration.glade:298
+msgid "registration_dialog_action_area\n"
+msgstr "registration_dialog_action_area\n"
+
+#: src/managercli.py:251
+msgid "removes all local consumer data, does not effect the server"
+msgstr "全てのローカルコンシューマデータを削除します。サーバーに影響しません"
+
+#: src/managercli.py:299
+msgid "request a new certificate be generated"
+msgstr "新規証明書の生成を要求します"
+
+#: src/managercli.py:292
+msgid "request a new identity certficate for this machine"
+msgstr "このマシン用の新規の識別証明書を要求します"
+
+#: src/managercli.py:627
+msgid "show information for facts"
+msgstr "事実の情報を表示"
+
+#: src/i18n_optparse.py:61
+msgid "show program's version number and exit"
+msgstr "プログラムのバージョン番号を表示して終了"
+
+#: src/i18n_optparse.py:60
+msgid "show this help message and exit"
+msgstr "このヘルプメッセージを表示して終了"
+
+#: src/managercli.py:211
+msgid "specify a password"
+msgstr "パスワードを設置します"
+
+#: src/managercli.py:209
+msgid "specify a username"
+msgstr "ユーザー名を設置します"
+
+#: src/gui/data/compliance.glade:287
+msgid "subscribe button"
+msgstr "サブスクライブのボタン"
+
+#: src/managercli.py:511
+msgid "subscribe the registered machine to a specified product"
+msgstr "登録済みマシンを指定製品に対してサブスクライブします"
+
+#: src/managercli.py:518
+msgid "subscription pool id"
+msgstr "サブスクリプションプール id"
+
+#: src/managercli.py:357
+msgid "the type of consumer to register. Defaults to system"
+msgstr "登録するコンシューマのタイプ。デフォルトはシステムです"
+
+#: src/managercli.py:444
+msgid "unregister the client from RHN"
+msgstr "RHN からクライアントを登録解除します"
+
+#: src/managercli.py:579
+msgid "unsubscribe the registered user from all or specific subscriptions"
+msgstr "登録済みのユーザーを全ての、又は特定のサブスクリプションから解除"
+
+#: src/managercli.py:634
+msgid "update the system facts"
+msgstr "システムの情報を更新"
+
+#: src/gui/data/rhsm.glade:184
+msgid "update_subscriptions_dialog\n"
+msgstr "update_subscriptions_dialog\n"
+
+#: src/managercli.py:128
+msgid "user for http proxy with basic authentication"
+msgstr "基本認証を持つ http proxy のユーザー"
+
+#: src/gui/mysubstab.py:140
+msgid "yes"
+msgstr "はい"
 
