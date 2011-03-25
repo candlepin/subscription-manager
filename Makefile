@@ -49,7 +49,7 @@ install-conf:
 
 install: install-files install-conf
 
-install-files: dbus-service-install compile-po
+install-files: dbus-service-install compile-po desktop-files
 	install -d ${PREFIX}/usr/share/rhsm/gui/data/icons/scalable
 	install -d ${PREFIX}/usr/share/locale/
 	install -d ${PREFIX}/usr/lib/yum-plugins/
@@ -125,16 +125,28 @@ archive: clean
 rpm: archive
 	rpmbuild -ta ${PKGNAME}-$(VERSION).tar.gz
 
-gettext:
+desktop-files: etc-conf/rhsm-compliance-icon.desktop \
+				etc-conf/subscription-manager.desktop
+
+%.desktop: %.desktop.in po
+	intltool-merge -d po $< $@
+
+po/POTFILES.in:
+	# generate the POTFILES.in file expected by intltool. it wants one
+	# file per line, but we're lazy.
+	find src/ -name "*.py" > po/POTFILES.in
+	find src/gui/data/ -name "*.glade" >> po/POTFILES.in
+	find src/ -name "*.c" >> po/POTFILES.in
+	find etc-conf/ -name "*.desktop.in" >> po/POTFILES.in
+
+.PHONY: po/POTFILES.in %.desktop
+
+gettext: po/POTFILES.in
 	# Extract strings from our source files. any comments on the line above
 	# the string marked for translation beginning with "translators" will be
 	# included in the pot file.
-	xgettext -ctranslators -s --language=Python -o po/keys.pot \
-		$(shell find src/ -name "*.py")
-	xgettext -ctranslators -s -k_ -kN_ --language=C -j -o po/keys.pot \
-		src/compliance/*.c
-	xgettext -ctranslators -s --language=Glade -j -o po/keys.pot \
-		src/gui/data/*.glade
+	cd po && \
+	intltool-update --pot -g keys
 
 update-po:
 	for f in $(shell find po/ -name "*.po") ; do \
