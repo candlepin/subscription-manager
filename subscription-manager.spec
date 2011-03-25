@@ -172,6 +172,8 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
 %{_datadir}/rhn/up2date_client/firstboot/rhsm_subscriptions.py*
+%{?el5: %{_prefix}/share/firstboot/modules/rhsm_login.py*}
+%{?el5: %{_prefix}/share/firstboot/modules/rhsm_subscriptions.py*}
 
 %post
 chkconfig --add rhsmcertd

@@ -72,6 +72,7 @@ install-files: dbus-service-install compile-po
 	install -d ${PREFIX}/etc/init.d
 	install -d ${PREFIX}/usr/share/icons/hicolor/scalable/apps
 	install -d ${PREFIX}/usr/share/rhn/up2date_client/firstboot/
+	if [ ${RHELVERSION} = 5 ]; then install -d ${PREFIX}/usr/share/firstboot/modules; fi
 	
 	cp -R po/build/* ${PREFIX}/usr/share/locale/
 	
@@ -89,6 +90,8 @@ install-files: dbus-service-install compile-po
 	install src/rhsmcertd.init.d ${PREFIX}/etc/init.d/rhsmcertd
 	install -m 644 man/* ${PREFIX}/usr/share/man/man8/
 	install -m644 src/gui/firstboot/${RHELVERSION}/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot
+	if [ ${RHELVERSION} = 5 ]; then ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_login.py ${PREFIX}/usr/share/firstboot/modules/; fi
+	if [ ${RHELVERSION} = 5 ]; then ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_subscriptions.py ${PREFIX}/usr/share/firstboot/modules/; fi
 	install -m 644 etc-conf/rhsm-compliance-icon.desktop \
 		${PREFIX}/etc/xdg/autostart
 	install -m 755 etc-conf/rhsm-complianced.cron \
