@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.95.4
+Version: 0.95.5
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -57,6 +57,10 @@ rm -rf %{buildroot}
 %{python_sitelib}/rhsm-*.egg-info
 
 %changelog
+* Fri Mar 25 2011 Bryan Kearney <bkearney@redhat.com> 0.95.5-1
+- Resolves: #683550
+- 683550: fix parsing empty cert extensions (jbowes@redhat.com)
+
 * Tue Mar 08 2011 Devan Goodwin <dgoodwin@redhat.com> 0.95.4-1
 - Add support for content tagging. (dgoodwin@redhat.com)
 
