@@ -4,6 +4,12 @@ PYTHON ?= python
 
 PKGNAME = subscription-manager
 VERSION = $(shell echo `grep ^Version: $(PKGNAME).spec | awk '{ print $$2 }'`)
+RHELVERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
+
+#this is the compat area for firstboot versions. If it's 6-compat, set to 6.
+ifeq (${RHELVERSION}, 14)
+	RHELVERSION = 6
+endif
 
 CFLAGS = -Wall -g
 
@@ -82,7 +88,7 @@ install-files: dbus-service-install compile-po
 	install bin/* ${PREFIX}/usr/bin
 	install src/rhsmcertd.init.d ${PREFIX}/etc/init.d/rhsmcertd
 	install -m 644 man/* ${PREFIX}/usr/share/man/man8/
-	install -m644 src/gui/firstboot/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot
+	install -m644 src/gui/firstboot/${RHELVERSION}/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot
 	install -m 644 etc-conf/rhsm-compliance-icon.desktop \
 		${PREFIX}/etc/xdg/autostart
 	install -m 755 etc-conf/rhsm-complianced.cron \
