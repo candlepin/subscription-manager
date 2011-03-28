@@ -29,6 +29,7 @@ BuildRequires: intltool
 BuildRequires: libnotify-devel
 BuildRequires: gtk2-devel
 BuildRequires: desktop-file-utils
+BuildRequires: redhat-release
 
 
 %description
