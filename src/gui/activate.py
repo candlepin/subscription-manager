@@ -17,8 +17,8 @@ import os
 import logging
 import gtk
 
-import widgets
-from utils import handle_gui_exception
+from subscription_manager.gui import widgets
+from subscription_manager.gui.utils import handle_gui_exception
 
 import gettext
 _ = gettext.gettext

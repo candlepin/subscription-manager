@@ -14,14 +14,14 @@
 #
 
 import gtk
-
 from datetime import datetime, timedelta
-from certlib import EntitlementDirectory, ProductDirectory, CertLib
+
 from rhsm.certificate import GMT
 
-import messageWindow
-import widgets
-from utils import handle_gui_exception,get_dbus_iface
+from subscription_manager.certlib import EntitlementDirectory, ProductDirectory, CertLib
+from subscription_manager.gui import messageWindow
+from subscription_manager.gui import widgets
+from subscription_manager.gui.utils import handle_gui_exception,get_dbus_iface
 
 import gettext
 _ = gettext.gettext

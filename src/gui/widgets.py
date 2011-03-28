@@ -20,17 +20,17 @@ import gobject
 import gtk
 import pango
 import atk
+import locale
 
 import gettext
 _ = gettext.gettext
 
-import managerlib
-import storage
-import messageWindow
-import locale
-import utils
-import file_monitor
-from certlib import ProductDirectory
+from subscription_manager import managerlib
+from subscription_manager.gui import storage
+from subscription_manager.gui import messageWindow
+from subscription_manager.gui import utils
+from subscription_manager.gui import file_monitor
+from subscription_manager.certlib import ProductDirectory
 
 GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
 UPDATE_FILE = '/var/run/rhsm/update'

@@ -22,12 +22,15 @@ import syslog
 import xml.utils.iso8601
 import logging
 from datetime import datetime, date
-from certlib import CertLib, ConsumerIdentity, \
-                    ProductDirectory, EntitlementDirectory
-from certlib import system_log as inner_system_log
-from rhsm.config import initConfig
 from xml.utils.iso8601 import parse
 from threading import Thread
+
+from rhsm.config import initConfig
+
+from subscription_manager.certlib import CertLib, ConsumerIdentity, \
+                    ProductDirectory, EntitlementDirectory
+from subscription_manager.certlib import system_log as inner_system_log
+from subscription_manager.gui.utils import handle_gui_exception, errorWindow
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -171,6 +174,25 @@ def getConsumedProductEntitlements():
     return consumed_products
 
 
+def fetch_certificates(backend):
+    def errToMsg(err):
+        return ' '.join(str(err).split('-')[1:]).strip()
+    # Force fetch all certs
+    try:
+        result = backend.certlib.update()
+        if result[1]:
+            msg = 'Entitlement Certificate(s) update failed due to the following reasons:\n' + \
+            '\n'.join(map(errToMsg , result[1]))
+            errorWindow(msg)
+    except socket.error, e:
+        log.error("Socket error: %s %s" %  (e, e.strerror))
+        handle_gui_exception(e, e.strerror)
+        return False
+    except Exception, e:
+        log.error("Certificate sync failed")
+        log.exception(e)
+        return False
+    return True
 
 
 class PoolFilter(object):

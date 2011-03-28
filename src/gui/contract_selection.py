@@ -20,7 +20,7 @@ import gtk.glade
 import gettext
 _ = gettext.gettext
 
-import widgets
+from subscription_manager.gui import widgets
 
 prefix = os.path.dirname(__file__)
 CONTRACT_SELECTION_GLADE = os.path.join(prefix, "data/contract_selection.glade")

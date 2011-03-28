@@ -27,9 +27,9 @@ from optparse import OptionParser
 
 import sys
 sys.path.append("/usr/share/rhsm")
-import managerlib
+from subscription_manager import managerlib
+from subscription_manager import certlib
 import rhsm.certificate as certificate
-import certlib
 
 enable_debug = False
 

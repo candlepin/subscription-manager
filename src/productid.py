@@ -24,7 +24,7 @@ _ = gettext.gettext
 from yum import YumBase
 from gzip import GzipFile
 from rhsm.certificate import ProductCertificate
-from certlib import Directory, ProductDirectory
+from subscription_manager.certlib import Directory, ProductDirectory
 
 
 class DatabaseDirectory(Directory):

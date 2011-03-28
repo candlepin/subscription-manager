@@ -21,22 +21,23 @@ import sys
 import logging
 import socket
 import getpass
-import rhsm.config
 import constants
 import dbus
 import datetime
 from time import strftime, strptime, localtime
-import rhsm.connection as connection
-from i18n_optparse import OptionParser
-from certlib import CertLib, ConsumerIdentity
-import managerlib
-from facts import Facts
 from M2Crypto import X509
 from M2Crypto import SSL
 
 import gettext
 _ = gettext.gettext
 
+import rhsm.config
+import rhsm.connection as connection
+
+from i18n_optparse import OptionParser
+from subscription_manager.certlib import CertLib, ConsumerIdentity
+from subscription_manager import managerlib
+from subscription_manager.facts import Facts
 
 log = logging.getLogger('rhsm-app.' + __name__)
 

@@ -14,7 +14,7 @@ import rhsm
 
 sys.path.append("/usr/share/rhsm/")
 try:
-    from subscriptionmanager.gui import managergui
+    from subscription_manager.gui import managergui
 except Exception, e:
     print e
     raise

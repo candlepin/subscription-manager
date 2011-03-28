@@ -24,26 +24,26 @@ import logging
 import gtk
 import gtk.glade
 
-import messageWindow
-import networkConfig
-import managerlib
-import file_monitor
+from subscription_manager.gui import messageWindow
+from subscription_manager.gui import networkConfig
+from subscription_manager import managerlib
+from subscription_manager.gui import file_monitor
 import rhsm.connection as connection
 import rhsm.config as config
-import constants
-from facts import Facts
-from certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \
+from subscription_manager import constants
+from subscription_manager.facts import Facts
+from subscription_manager.certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \
         CertLib, CertSorter, find_first_noncompliant_date
 
-import activate
-import factsgui
-import widgets
-from installedtab import InstalledProductsTab
-from mysubstab import MySubscriptionsTab
-from allsubs import AllSubscriptionsTab
-from compliance import ComplianceAssistant
-from importsub import ImportSubDialog
-from utils import handle_gui_exception, errorWindow, linkify
+from subscription_manager.gui import activate
+from subscription_manager.gui import factsgui
+from subscription_manager.gui import widgets
+from subscription_manager.gui.installedtab import InstalledProductsTab
+from subscription_manager.gui.mysubstab import MySubscriptionsTab
+from subscription_manager.gui.allsubs import AllSubscriptionsTab
+from subscription_manager.gui.compliance import ComplianceAssistant
+from subscription_manager.gui.importsub import ImportSubDialog
+from subscription_manager.gui.utils import handle_gui_exception, errorWindow, linkify
 from datetime import datetime
 
 import gettext
@@ -169,25 +169,6 @@ class Consumer(object):
             self.uuid = consumer.getConsumerId()
 
 
-def fetch_certificates(backend):
-    def errToMsg(err):
-        return ' '.join(str(err).split('-')[1:]).strip()
-    # Force fetch all certs
-    try:
-        result = backend.certlib.update()
-        if result[1]:
-            msg = 'Entitlement Certificate(s) update failed due to the following reasons:\n' + \
-            '\n'.join(map(errToMsg , result[1]))
-            errorWindow(msg)
-    except socket.error, e:
-        log.error("Socket error: %s %s" %  (e, e.strerror))
-        handle_gui_exception(e, e.strerror)
-        return False
-    except Exception, e:
-        log.error("Certificate sync failed")
-        log.exception(e)
-        return False
-    return True
 
 
 class MainWindow(widgets.GladeWidget):
@@ -505,7 +486,7 @@ class RegisterScreen:
                     log.warning("Warning: Unable to auto subscribe to %s" \
                             % ", ".join(products.keys()))
                 # force update of certs
-                if not fetch_certificates(self.backend):
+                if not managerlib.fetch_certificates(self.backend):
                     return False
 
             self.close_window()

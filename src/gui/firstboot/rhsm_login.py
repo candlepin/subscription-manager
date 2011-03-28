@@ -20,13 +20,13 @@ print "rhsm",rhsm, rhsm.__file__
 sys.path.append("/usr/share/rhsm/")
 print sys.path
 try:
-    from subscriptionmanager.gui import managergui
+    from subscription_manager.gui import managergui
 except Exception, e:
     print e
     raise
 
-from certlib import ConsumerIdentity
-from facts import Facts
+from subscription_manager.certlib import ConsumerIdentity
+from subscription_manager.facts import Facts
 
 sys.path.append("/usr/share/rhn")
 from up2date_client import config

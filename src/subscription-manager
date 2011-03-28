@@ -48,11 +48,11 @@ if os.getuid() != 0:
 try:
     # this has to be done first thing (due to module level translated vars,
     # like in constants.py
-    from managerlib import configure_i18n
+    from subscription_manager.managerlib import configure_i18n
     configure_i18n()
 
-    import managercli
-    from managercli import handle_exception
+    from subscription_manager import managercli
+    from subscription_manager.managercli import handle_exception
 except KeyboardInterrupt:
     systemExit(0, "\nUser interrupted process.")
 except ImportError, e:
@@ -60,7 +60,7 @@ except ImportError, e:
                   "Error: %s" % e)
 
 
-import logutil
+from subscription_manager import logutil
 logutil.init_logger()
 
 def main():

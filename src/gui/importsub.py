@@ -21,9 +21,10 @@ import M2Crypto
 
 _ = gettext.gettext
 
-import widgets
 import rhsm.config
-from utils import handle_gui_exception, errorWindow
+
+from subscription_manager.gui import widgets
+from subscription_manager.gui.utils import handle_gui_exception, errorWindow
 
 cfg = rhsm.config.initConfig()
 ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')

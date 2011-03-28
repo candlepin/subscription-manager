@@ -18,19 +18,19 @@ import os
 import logging
 import gtk
 import gobject
-import progress
+
 import gettext
 _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
-import managergui
-import managerlib
+from subscription_manager import managerlib
 
-import widgets
-import storage
-import async
-from utils import handle_gui_exception, apply_highlight
-from contract_selection import ContractSelectionWindow
+from subscription_manager.gui import widgets
+from subscription_manager.gui import storage
+from subscription_manager import async
+from subscription_manager.gui import progress
+from subscription_manager.gui.utils import handle_gui_exception, apply_highlight
+from subscription_manager.gui.contract_selection import ContractSelectionWindow
 
 class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
@@ -222,7 +222,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self._contract_selection_cancelled()
         try:
             self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'])
-            managergui.fetch_certificates(self.backend)
+            managerlib.fetch_certificates(self.backend)
         except Exception, e:
             handle_gui_exception(e, _("Error getting subscription: %s"))
 

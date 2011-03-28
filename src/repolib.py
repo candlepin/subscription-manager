@@ -19,10 +19,12 @@ import os
 import string
 import logging
 from urllib import basejoin
+from iniparse import ConfigParser as Parser
+
 from rhsm.config import initConfig
+
 from certlib import Path, EntitlementDirectory, \
         ProductDirectory, ActionLock
-from iniparse import ConfigParser as Parser
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
