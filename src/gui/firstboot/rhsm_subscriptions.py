@@ -2,31 +2,37 @@
 import sys
 import gtk
 
-from firstboot.config import *
-from firstboot.constants import *
-from firstboot.functions import *
-from firstboot.module import *
-from firstboot.module import Module
+from firstboot_module_window import FirstbootModuleWindow
 
-import gettext
-_ = lambda x: gettext.ldgettext("firstboot", x)
-N_ = lambda x: x
+from rhpl.translate import _, N_
+import rhpl.translate as translate
+translate.textdomain("firstboot")
+gtk.glade.bindtextdomain("firstboot", "/usr/share/locale")
+
+import rhsm
+
 
 sys.path.append("/usr/share/rhsm")
-from gui import managergui
+try:
+    from subscriptionmanager.gui import managergui
+except Exception, e:
+    print e
+    raise
 
 
-class moduleClass(Module, managergui.MainWindow):
+
+class moduleClass(FirstbootModuleWindow, managergui.MainWindow):
+    runPriority = 109.11
+    moduleName = "Subscription Manager"
+    windowTitle = moduleName
+    shortMessage = _("RHSM Subscriptions Managemen")
+    needsnetwork = 1
+    icon = None
 
     def __init__(self):
-        Module.__init__(self)
+        FirstbootModuleWindow.__init__(self)
         managergui.MainWindow.__init__(self)
         self.main_window.hide()
-        #this value is relative to when you want to load the screen
-        # so check other modules before setting
-        self.priority = 200.2
-        self.sidebarTitle = _("RHSM Subscriptions Management")
-        self.title = _("Subscription Manager")
 
     def _show_buttons(self):
         """
@@ -37,12 +43,18 @@ class moduleClass(Module, managergui.MainWindow):
         self.unregister_button.hide()
 
     def apply(self, interface, testing=False):
-        return RESULT_SUCCESS
+        return True
 
-    def createScreen(self):
+    def launch(self, doDebug=None):
+#    def createScreen(self):
         self.vbox = gtk.VBox(spacing=10)
         self.main_window.get_child().reparent(self.vbox)
         self.main_window.destroy()
+
+        toplevel = gtk.VBox(False, 10)
+        toplevel.pack_start(self.vbox, True)
+
+        return toplevel, self.icon, self.windowTitle
 
     def initializeUI(self):
         self.refresh()
@@ -52,3 +64,5 @@ class moduleClass(Module, managergui.MainWindow):
 
     def _get_window(self):
         return self.vbox.get_parent_window().get_user_data()
+
+childWindow = moduleClass

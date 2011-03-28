@@ -1,32 +1,58 @@
 import sys
 import gtk
 
-from firstboot.config import *
-from firstboot.constants import *
-from firstboot.functions import *
-from firstboot.module import *
-from firstboot.module import Module
 
-import gettext
-_ = lambda x: gettext.ldgettext("firstboot", x)
+import imp
+
+#from firstboot.config import *
+#from firstboot.constants import *
+#from firstboot.functions import *
+#from firstboot.module import *
+#from firstboot.module import Module
+
+from firstboot_module_window import FirstbootModuleWindow
+
+
+from rhpl.translate import _, N_
+import rhpl.translate as translate
+translate.textdomain("firstboot")
+gtk.glade.bindtextdomain("firstboot", "/usr/share/locale")
+
+#import rhsm as sys_rhsm
+#print "sys_rhsm", sys_rhsm.__file__
 
 import rhsm
+print "rhsm",rhsm, rhsm.__file__
 
-sys.path.append("/usr/share/rhsm")
-from gui import managergui
+
+sys.path.append("/usr/share/rhsm/")
+print sys.path
+try:
+    from subscriptionmanager.gui import managergui
+except Exception, e:
+    print e
+    raise
+
 from certlib import ConsumerIdentity
 from facts import Facts
 
 sys.path.append("/usr/share/rhn")
 from up2date_client import config
 
-class moduleClass(Module, managergui.RegisterScreen):
+class moduleClass(FirstbootModuleWindow, managergui.RegisterScreen):
+    
+    runPriority = 109.10
+    moduleName = "Entitlement Registration"
+    windowTitle = moduleName
+    shortMessage = _("Entitlement Platform Registration")
+    needsnetwork = 1
+    icon = None
 
     def __init__(self):
         """
         Create a new firstboot Module for the 'register' screen.
         """
-        Module.__init__(self)
+        FirstbootModuleWindow.__init__(self)
 
         backend = managergui.Backend()
 
@@ -97,15 +123,15 @@ class moduleClass(Module, managergui.RegisterScreen):
             # User has already successfully authenticaed with these
             # credentials, just go on to the next module without
             # reregistering the consumer
-            return RESULT_SUCCESS
+            return True
         else:
             valid_registration = self.register(testing=testing)
 
             if valid_registration:
                 self._cached_credentials = credentials
-                return RESULT_SUCCESS
+                return True
             else:
-                return RESULT_FAILURE
+                return False
 
     def close_window(self):
         """
@@ -128,7 +154,11 @@ class moduleClass(Module, managergui.RegisterScreen):
         """
         pass
 
-    def createScreen(self):
+    def launch(self, doDebug=None):
+        
+        # return top level window, icon and windowtitle
+
+#    def createScreen(self):
         """
         Create a new instance of gtk.VBox, pulling in child widgets from the
         glade file.
@@ -142,6 +172,11 @@ class moduleClass(Module, managergui.RegisterScreen):
         # to drive the same functionality
         self._destroy_widget('register_button')
         self._destroy_widget('cancel_button')
+
+        toplevel = gtk.VBox(False, 10)
+        toplevel.pack_start(self.vbox, True)
+
+        return toplevel, self.icon, self.windowTitle
 
     def initializeUI(self):
         self.initializeConsumerName()
@@ -200,3 +235,4 @@ class moduleClass(Module, managergui.RegisterScreen):
         widget = managergui.registration_xml.get_widget(widget_name)
         return widget.get_text()
 
+childWindow = moduleClass
