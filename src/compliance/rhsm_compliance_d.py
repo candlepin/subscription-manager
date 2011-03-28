@@ -34,8 +34,8 @@ import certlib
 
 enable_debug = False
 
-RHSM_EXPIRED   = 0
-RHSM_COMPLIANT = 1
+RHSM_COMPLIANT = 0
+RHSM_EXPIRED   = 1
 RHSM_WARNING   = 2
 RHN_CLASSIC    = 3
 
@@ -146,26 +146,25 @@ def main():
     # short-circuit dbus initialization
     if options.syslog:
         compliant = check_compliance()
-        if compliant == RHSM_COMPLIANT:
+        if compliant == RHSM_EXPIRED:
             syslog.openlog("rhsm-complianced")
             syslog.syslog(syslog.LOG_NOTICE,
                     "This system is missing one or more valid entitlement " +
                     "certificates. " +
                     "Please run subscription-manager for more information.")
-            return RHSM_COMPLIANT
         elif compliant == RHSM_WARNING:
             syslog.openlog("rhsm-complianced")
             syslog.syslog(syslog.LOG_NOTICE,
                     "This system's entitlements are about to expire. " +
                     "Please run subscription-manager for more information.")
-            return RHSM_WARNING
         elif compliant == RHN_CLASSIC:
             syslog.openlog("rhsm-complianced")
             syslog.syslog(syslog.LOG_NOTICE,
                           "This system is registered to RHN Classic")
-            return RHN_CLASSIC
-        
-        return
+       
+        # Return an exit code for the program. compliance is good, so it gets
+        # an exit status of 0.
+        return compliant
 
 
     DBusGMainLoop(set_as_default=True)
