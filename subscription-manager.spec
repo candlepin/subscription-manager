@@ -173,8 +173,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
 %{_datadir}/rhn/up2date_client/firstboot/rhsm_subscriptions.py*
 %if 0%{?rhel} < 6
+%if 0%{?fedora} > 12
+%else
 %{_prefix}/share/firstboot/modules/rhsm_login.py*
 %{_prefix}/share/firstboot/modules/rhsm_subscriptions.py*
+%endif
 %endif
 
 %post
