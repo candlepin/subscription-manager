@@ -2,7 +2,10 @@ PREFIX ?= /
 SYSCONF ?= etc
 PYTHON ?= python
 
-PKGNAME = subscription-manager
+INSTALL_DIR= /usr/share/
+INSTALL_MODULE = /rhsm/
+PKGNAME = subscriptionmanager
+CODE_DIR = ${PREFIX}/${INSTALL_DIR}/${INSTALL_MODULE}/${PKGNAME}/
 VERSION = $(shell echo `grep ^Version: $(PKGNAME).spec | awk '{ print $$2 }'`)
 
 CFLAGS = -Wall -g
@@ -26,12 +29,12 @@ rhsm-compliance-icon: src/compliance/rhsm_compliance_icon.c bin
 
 dbus-service-install:
 	install -d ${PREFIX}/etc/dbus-1/system.d
-	install -d ${PREFIX}/usr/share/dbus-1/system-services
+	install -d ${PREFIX}/${INSTALL_DIR}/dbus-1/system-services
 	install -d ${PREFIX}/usr/libexec
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.conf \
 		${PREFIX}/etc/dbus-1/system.d
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.service \
-		${PREFIX}/usr/share/dbus-1/system-services
+		${PREFIX}/${INSTALL_DIR}/dbus-1/system-services
 	install -m 744 src/compliance/rhsm_compliance_d.py \
 		${PREFIX}/usr/libexec/rhsm-complianced
 
@@ -44,8 +47,8 @@ install-conf:
 install: install-files install-conf
 
 install-files: dbus-service-install compile-po
-	install -d ${PREFIX}/usr/share/rhsm/gui/data/icons/scalable
-	install -d ${PREFIX}/usr/share/locale/
+	install -d ${CODE_DIR}/gui/data/icons/scalable
+	install -d ${PREFIX}/${INSTALL_DIR}/locale/
 	install -d ${PREFIX}/usr/lib/yum-plugins/
 	install -d ${PREFIX}/usr/sbin
 	install -d ${PREFIX}/etc/rhsm
@@ -57,38 +60,38 @@ install-files: dbus-service-install compile-po
 	install -d ${PREFIX}/etc/logrotate.d
 	install -d ${PREFIX}/etc/security/console.apps
 	install -d ${PREFIX}/etc/yum/pluginconf.d/
-	install -d ${PREFIX}/usr/share/man/man8/
-	install -d ${PREFIX}/usr/share/applications
+	install -d ${PREFIX}/${INSTALL_DIR}/man/man8/
+	install -d ${PREFIX}/${INSTALL_DIR}/applications
 	install -d ${PREFIX}/var/log/rhsm
 	install -d ${PREFIX}/var/run/rhsm
 	install -d ${PREFIX}/var/lib/rhsm/facts
 	install -d ${PREFIX}/usr/bin
 	install -d ${PREFIX}/etc/init.d
-	install -d ${PREFIX}/usr/share/icons/hicolor/scalable/apps
-	install -d ${PREFIX}/usr/share/rhn/up2date_client/firstboot/
-	
-	cp -R po/build/* ${PREFIX}/usr/share/locale/
-	
-	install -m 644 -p src/*.py ${PREFIX}/usr/share/rhsm
-	install -m 644 -p src/gui/*.py ${PREFIX}/usr/share/rhsm/gui
+	install -d ${PREFIX}/${INSTALL_DIR}/icons/hicolor/scalable/apps
+	install -d ${PREFIX}/${INSTALL_DIR}/firstboot/modules
+
+	cp -R po/build/* ${PREFIX}/${INSTALL_DIR}/locale/
+
+	install -m 644 -p src/*.py ${CODE_DIR}
+	install -m 644 -p src/gui/*.py ${CODE_DIR}/gui
 	install -m 644 -p src/plugin/*.py ${PREFIX}/usr/lib/yum-plugins/
-	
-	install -m 644 src/gui/data/*.glade ${PREFIX}/usr/share/rhsm/gui/data/
-	install -m 644 src/gui/data/icons/*.svg ${PREFIX}/usr/share/rhsm/gui/data/icons/
-	install -m 644 src/gui/data/icons/scalable/*.svg ${PREFIX}/usr/share/rhsm/gui/data/icons/scalable/
-	ln -sf /usr/share/rhsm/gui/data/icons/scalable/subscription-manager.svg ${PREFIX}/usr/share/icons/hicolor/scalable/apps/
+
+	install -m 644 src/gui/data/*.glade ${CODE_DIR}/gui/data/
+	install -m 644 src/gui/data/icons/*.svg ${CODE_DIR}/gui/data/icons/
+	install -m 644 src/gui/data/icons/scalable/*.svg ${CODE_DIR}/gui/data/icons/scalable/
+	ln -sf /${CODE_DIR}/gui/data/icons/scalable/subscription-manager.svg ${PREFIX}/${INSTALL_DIR}/icons/hicolor/scalable/apps/
 	install src/subscription-manager ${PREFIX}/usr/sbin
 	install src/subscription-manager-gui ${PREFIX}/usr/sbin
 	install bin/* ${PREFIX}/usr/bin
 	install src/rhsmcertd.init.d ${PREFIX}/etc/init.d/rhsmcertd
-	install -m 644 man/* ${PREFIX}/usr/share/man/man8/
-	install -m644 src/gui/firstboot/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot
+	install -m 644 man/* ${PREFIX}/${INSTALL_DIR}/man/man8/
+	install -m644 src/gui/firstboot/*.py ${PREFIX}/${INSTALL_DIR}/firstboot/modules
 	install -m 644 etc-conf/rhsm-compliance-icon.desktop \
 		${PREFIX}/etc/xdg/autostart
 	install -m 755 etc-conf/rhsm-complianced.cron \
 		${PREFIX}/etc/cron.daily/rhsm-complianced
 	install -m 644 etc-conf/subscription-manager.desktop \
-		${PREFIX}/usr/share/applications	
+		${PREFIX}/${INSTALL_DIR}/applications	
 	ln -sf /usr/bin/consolehelper ${PREFIX}/usr/bin/subscription-manager-gui
 	install -m 644 etc-conf/subscription-manager-gui.pam \
 		${PREFIX}/etc/pam.d/subscription-manager-gui
