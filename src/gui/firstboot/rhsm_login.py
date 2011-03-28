@@ -2,14 +2,6 @@ import sys
 import gtk
 
 
-import imp
-
-#from firstboot.config import *
-#from firstboot.constants import *
-#from firstboot.functions import *
-#from firstboot.module import *
-#from firstboot.module import Module
-
 from firstboot_module_window import FirstbootModuleWindow
 
 
@@ -60,11 +52,6 @@ class moduleClass(FirstbootModuleWindow, managergui.RegisterScreen):
                 Facts())
 
 #        managergui.create_and_set_basic_connection()
-        # this value is relative to when you want to load the screen
-        # so check other modules before setting
-        self.priority = 200.1
-        self.sidebarTitle = _("Entitlement Registration")
-        self.title = _("Entitlement Platform Registration")
         self._cached_credentials = None
 
     def _read_rhn_proxy_settings(self):

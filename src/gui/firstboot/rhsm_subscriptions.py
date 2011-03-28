@@ -12,7 +12,7 @@ gtk.glade.bindtextdomain("firstboot", "/usr/share/locale")
 import rhsm
 
 
-sys.path.append("/usr/share/rhsm")
+sys.path.append("/usr/share/rhsm/")
 try:
     from subscriptionmanager.gui import managergui
 except Exception, e:

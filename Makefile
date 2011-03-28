@@ -4,7 +4,7 @@ PYTHON ?= python
 
 INSTALL_DIR= /usr/share/
 INSTALL_MODULE = /rhsm/
-PKGNAME = subscriptionmanager
+PKGNAME = subscription_manager
 CODE_DIR = ${PREFIX}/${INSTALL_DIR}/${INSTALL_MODULE}/${PKGNAME}/
 VERSION = $(shell echo `grep ^Version: $(PKGNAME).spec | awk '{ print $$2 }'`)
 

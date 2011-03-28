@@ -117,24 +117,24 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
 
 %dir %{_datadir}/rhsm
-%dir %{_datadir}/rhsm/subscriptionmanager
-%{_datadir}/rhsm/subscriptionmanager/__init__.py*
-%{_datadir}/rhsm/subscriptionmanager/i18n_optparse.py*
-%{_datadir}/rhsm/subscriptionmanager/managercli.py*
-%{_datadir}/rhsm/subscriptionmanager/managerlib.py*
-%{_datadir}/rhsm/subscriptionmanager/async.py*
-%{_datadir}/rhsm/subscriptionmanager/logutil.py*
-%{_datadir}/rhsm/subscriptionmanager/repolib.py*
+%dir %{_datadir}/rhsm/subscription_manager
+%{_datadir}/rhsm/subscription_manager/__init__.py*
+%{_datadir}/rhsm/subscription_manager/i18n_optparse.py*
+%{_datadir}/rhsm/subscription_manager/managercli.py*
+%{_datadir}/rhsm/subscription_manager/managerlib.py*
+%{_datadir}/rhsm/subscription_manager/async.py*
+%{_datadir}/rhsm/subscription_manager/logutil.py*
+%{_datadir}/rhsm/subscription_manager/repolib.py*
 %{_prefix}/lib/yum-plugins/subscription-manager.py*
 %{_prefix}/lib/yum-plugins/product-id.py*
-%{_datadir}/rhsm/subscriptionmanager/certlib.py*
-%{_datadir}/rhsm/subscriptionmanager/hwprobe.py*
-%{_datadir}/rhsm/subscriptionmanager/constants.py*
-%{_datadir}/rhsm/subscriptionmanager/lock.py*
-%{_datadir}/rhsm/subscriptionmanager/facts.py*
-%{_datadir}/rhsm/subscriptionmanager/factlib.py*
-%{_datadir}/rhsm/subscriptionmanager/productid.py*
-%attr(755,root,root) %{_datadir}/rhsm/subscriptionmanager/certmgr.py*
+%{_datadir}/rhsm/subscription_manager/certlib.py*
+%{_datadir}/rhsm/subscription_manager/hwprobe.py*
+%{_datadir}/rhsm/subscription_manager/constants.py*
+%{_datadir}/rhsm/subscription_manager/lock.py*
+%{_datadir}/rhsm/subscription_manager/facts.py*
+%{_datadir}/rhsm/subscription_manager/factlib.py*
+%{_datadir}/rhsm/subscription_manager/productid.py*
+%attr(755,root,root) %{_datadir}/rhsm/subscription_manager/certmgr.py*
 %attr(755,root,root) %{_sbindir}/subscription-manager
 %attr(755,root,root) %{_bindir}/rhsmcertd
 %attr(755,root,root) %{_sysconfdir}/init.d/rhsmcertd
@@ -150,10 +150,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n subscription-manager-gnome
 %defattr(-,root,root,-)
-%dir %{_datadir}/rhsm/subscriptionmanager/gui
-%dir %{_datadir}/rhsm/subscriptionmanager/gui/data
-%dir %{_datadir}/rhsm/subscriptionmanager/gui/data/icons
-%{_datadir}/rhsm/subscriptionmanager/gui/*
+%dir %{_datadir}/rhsm/subscription_manager/gui
+%dir %{_datadir}/rhsm/subscription_manager/gui/data
+%dir %{_datadir}/rhsm/subscription_manager/gui/data/icons
+%{_datadir}/rhsm/subscription_manager/gui/*
 %{_datadir}/icons/hicolor/scalable/apps/subscription-manager.svg
 %{_datadir}/applications/subscription-manager.desktop
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
