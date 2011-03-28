@@ -58,8 +58,8 @@ typedef struct _Compliance {
 
 typedef enum _ComplianceType {
 	RHSM_COMPLIANT,
-	RHSM_WARNING,
 	RHSM_EXPIRED,
+	RHSM_WARNING,
 	RHN_CLASSIC
 } ComplianceType;
 
@@ -86,9 +86,9 @@ create_compliancetype(int status)
 {
 	switch (status) {
 		case 0:
-			return RHSM_EXPIRED;
-		case 1:
 			return RHSM_COMPLIANT;
+		case 1:
+			return RHSM_EXPIRED;
 		case 2:
 			return RHSM_WARNING;
 		case 3:
