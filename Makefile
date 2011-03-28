@@ -4,7 +4,7 @@ PYTHON ?= python
 
 PKGNAME = subscription-manager
 VERSION = $(shell echo `grep ^Version: $(PKGNAME).spec | awk '{ print $$2 }'`)
-RHELVERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
+RHELVERSION = $(shell rpm -q --whatprovides redhat-release --qf "%{version}\n" | sed s/Server//g | sed s/Client//g)
 
 #this is the compat area for firstboot versions. If it's 6-compat, set to 6.
 ifeq (${RHELVERSION}, 14)
