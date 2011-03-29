@@ -53,7 +53,7 @@ install-conf:
 
 install: install-files install-conf
 
-install-files: dbus-service-install compile-po
+install-files: dbus-service-install compile-po desktop-files
 	install -d ${CODE_DIR}/gui/data/icons/scalable
 	install -d ${PREFIX}/${INSTALL_DIR}/locale/
 	install -d ${PREFIX}/usr/lib/yum-plugins/
