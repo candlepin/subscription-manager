@@ -93,7 +93,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
                     if now < date_range.begin():
                         entry['status'] = _('Future Subscription')
-                        entry['compliance_note'] = _("Never Subscribed")
+                        entry['compliance_note'] = _("Missing")
                     elif now > date_range.end():
                         entry['image'] = self._render_icon(gtk.STOCK_NO)
                         entry['status'] = _('Invalid')
@@ -109,7 +109,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 else:
                     entry['image'] = self._render_icon(gtk.STOCK_NO)
                     entry['status'] = _('Missing')
-                    entry['compliance_note'] = _("Never Subscribed")
+                    entry['compliance_note'] = _("Missing")
 
                 self.store.add_map(entry)
 
