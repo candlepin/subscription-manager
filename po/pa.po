@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-21 10:00-0400\n"
+"POT-Creation-Date: 2011-03-29 18:47-0300\n"
 "PO-Revision-Date: 2011-03-17 16:56+0530\n"
 "Last-Translator: Jaswinder Singh <jsingh@redhat.com>\n"
 "Language-Team: Punjabi/Panjabi <kde-i18n-doc@kde.org>\n"
@@ -19,7 +19,537 @@ msgstr ""
 "X-Generator: Lokalize 1.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: src/constants.py:34
+#: ../src/certlib.py:96
+msgid "Reasons(s):"
+msgstr "ਕਾਰਨ:"
+
+#: ../src/certlib.py:434
+msgid "Reason(s):"
+msgstr "ਕਾਰਨ:"
+
+#: ../src/certlib.py:606
+#, python-format
+msgid "Total updates: %d"
+msgstr "ਕੁੱਲ ਅੱਪਡੇਟ: %d"
+
+#: ../src/certlib.py:607
+#, python-format
+msgid "Found (local) serial# %s"
+msgstr "ਲੱਭੇ (ਲੋਕਲ) ਸੀਰੀਅਲ# %s"
+
+#: ../src/certlib.py:608
+#, python-format
+msgid "Expected (UEP) serial# %s"
+msgstr "ਅਨੁਮਾਨਤ (UEP) ਸੀਰੀਅਲ# %s"
+
+#: ../src/certlib.py:609
+msgid "Added (new)"
+msgstr "ਸ਼ਾਮਿਲ ਕੀਤਾ (ਨਵਾਂ)"
+
+#: ../src/certlib.py:610
+msgid "Deleted (rogue):"
+msgstr "ਹਟਾਇਆ (ਖਰਾਬ):"
+
+#: ../src/certlib.py:611
+msgid "Expired (not deleted):"
+msgstr "ਮਿਆਦ-ਪੁੱਗਿਆ (ਨਾ ਹਟਾਇਆ):"
+
+#: ../src/certlib.py:612
+msgid "Expired (deleted):"
+msgstr "ਮਿਆਦ-ਪੁੱਗਿਆ (ਹਟਾਇਆ):"
+
+#: ../src/certlib.py:767
+msgid "Updating Red Hat certificates"
+msgstr "Red Hat ਸਾਰਟੀਫਿਕੇਟ ਅੱਪਡੇਟ ਕਰ ਰਿਹਾ ਹੈ"
+
+#: ../src/certlib.py:770 ../src/factlib.py:80 ../src/certmgr.py:94
+#, python-format
+msgid "%d updates required"
+msgstr "%d ਅੱਪਡੇਟਾਂ ਦੀ ਲੋੜ ਹੈ"
+
+#: ../src/certlib.py:771 ../src/factlib.py:81 ../src/certmgr.py:95
+msgid "done"
+msgstr "ਮੁਕੰਮਲ"
+
+#: ../src/managerlib.py:87
+msgid "Subscribed"
+msgstr "ਮੈਂਬਰੀ ਵਾਲਾ"
+
+#: ../src/managerlib.py:87
+msgid "Expired"
+msgstr "ਮਿਆਦ ਪੁੱਗਿਆ"
+
+#: ../src/managerlib.py:87
+msgid "Not Subscribed"
+msgstr "ਮੈਂਬਰੀ ਨਾ ਬਣਿਆ"
+
+#: ../src/managerlib.py:110
+msgid "Not Installed"
+msgstr "ਨਾ ਇੰਸਟਾਲ ਕੀਤਾ"
+
+#. These are a bunch of strings that are marked for translation in optparse,
+#. but not actually translated anywhere. Mark them for translation here,
+#. so we get it picked up. for local translation, and then optparse will
+#. use them.
+#: ../src/i18n_optparse.py:41
+#, python-format
+msgid "Usage: %s\n"
+msgstr ""
+
+#: ../src/i18n_optparse.py:42
+msgid "Usage"
+msgstr ""
+
+#: ../src/i18n_optparse.py:43
+msgid "%prog [options]"
+msgstr ""
+
+#: ../src/i18n_optparse.py:44
+msgid "Options"
+msgstr ""
+
+#. stuff for option value sanity checking
+#: ../src/i18n_optparse.py:47
+#, python-format
+msgid "no such option: %s"
+msgstr ""
+
+#: ../src/i18n_optparse.py:48
+#, python-format
+msgid "ambiguous option: %s (%s?)"
+msgstr ""
+
+#: ../src/i18n_optparse.py:49
+#, python-format
+msgid "%s option requires an argument"
+msgstr ""
+
+#: ../src/i18n_optparse.py:50
+#, python-format
+msgid "%s option requires %d arguments"
+msgstr ""
+
+#: ../src/i18n_optparse.py:51
+#, python-format
+msgid "%s option does not take a value"
+msgstr ""
+
+#: ../src/i18n_optparse.py:52
+msgid "integer"
+msgstr ""
+
+#: ../src/i18n_optparse.py:53
+msgid "long integer"
+msgstr ""
+
+#: ../src/i18n_optparse.py:54
+msgid "floating-point"
+msgstr ""
+
+#: ../src/i18n_optparse.py:55
+msgid "complex"
+msgstr ""
+
+#: ../src/i18n_optparse.py:56
+#, python-format
+msgid "option %s: invalid %s value: %r"
+msgstr ""
+
+#: ../src/i18n_optparse.py:57
+#, python-format
+msgid "option %s: invalid choice: %r (choose from %s)"
+msgstr ""
+
+#. default options
+#: ../src/i18n_optparse.py:60
+msgid "show this help message and exit"
+msgstr ""
+
+#: ../src/i18n_optparse.py:61
+msgid "show program's version number and exit"
+msgstr ""
+
+#: ../src/factlib.py:77
+msgid "Updating facts"
+msgstr "ਸਿਧਾਂਤ ਅੱਪਡੇਟ ਹੋ ਰਹੇ ਹਨ"
+
+#: ../src/managercli.py:49 ../src/gui/utils.py:50
+msgid ""
+"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
+"log for more information."
+msgstr ""
+"ਨੈੱਟਵਰਕ ਗਲਤੀ, ਸਰਵਰ ਨਾਲ ਜੁੜ ਨਹੀਂ ਸਕਿਆ। ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/"
+"rhsm.log ਵੇਖੋ।"
+
+#. NOTE: yes this looks a lot like the socket error, but I think these
+#. were actually intended to display slightly different messages:
+#: ../src/managercli.py:54 ../src/gui/utils.py:56
+msgid ""
+"Network error. Please check the connection details, or see /var/log/rhsm/"
+"rhsm.log for more information."
+msgstr ""
+"ਨੈੱਟਵਰਕ ਗਲਤੀ। ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ ਕੁਨੈਕਸ਼ਨ ਵੇਰਵਾ, ਜਾਂ /var/log/rhsm/rhsm.log "
+"ਵੇਖੋ।"
+
+#. This is what happens when there's an issue with the server on the other side of the wire
+#: ../src/managercli.py:58 ../src/gui/utils.py:59
+msgid ""
+"Remote server error. Please check the connection details, or see /var/log/"
+"rhsm/rhsm.log for more information."
+msgstr ""
+"ਰਿਮੋਟ ਸਰਵਰ ਗਲਤੀ। ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ ਕੁਨੈਕਸ਼ਨ ਵੇਰਵਾ, ਜਾਂ /var/log/rhsm/rhsm."
+"log ਵੇਖੋ।"
+
+#: ../src/managercli.py:67 ../src/gui/utils.py:63
+#, python-format
+msgid "Bad CA certificate: %s"
+msgstr "ਗਲਤ CA ਸਾਰਟੀਫਿਕੇਟ: %s"
+
+#: ../src/managercli.py:84
+msgid "Installed Products:"
+msgstr "ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦ:"
+
+#: ../src/managercli.py:124
+msgid "debug level"
+msgstr "ਡੀਬੱਗ ਲੈਵਲ"
+
+#: ../src/managercli.py:126
+msgid "proxy url in the form of proxy_hostname:proxy_port"
+msgstr "proxy_hostname:proxy_port ਦੇ ਰੂਪ ਵਿੱਚ ਪਰਾਕਸੀ url"
+
+#: ../src/managercli.py:128
+msgid "user for http proxy with basic authentication"
+msgstr "http ਪਰਾਕਸੀ ਲਈ ਯੂਜ਼ਰ ਮੁਢਲੀ ਪ੍ਰਮਾਣਿਕਤਾ ਸਮੇਤ"
+
+#: ../src/managercli.py:130
+msgid "password for http proxy with basic authentication"
+msgstr "http ਪਰਾਕਸੀ ਲਈ ਪਾਸਵਰਡ ਮੁਢਲੀ ਪ੍ਰਮਾਣਿਕਤਾ ਸਮੇਤ"
+
+#: ../src/managercli.py:137
+msgid ""
+"Consumer not registered. Please register using --username and --password"
+msgstr ""
+"ਖਪਤਕਾਰ ਰਜਿਸਟਰ ਨਹੀਂ ਕੀਤਾ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ --username ਅਤੇ --password ਵਰਤ ਕੇ ਰਜਿਸਟਰ ਕਰੋ"
+
+#: ../src/managercli.py:192
+msgid "Consumer certificates corrupted. Please reregister."
+msgstr "ਖਪਤਕਾਰ ਸਾਰਟੀਫਿਕੇਟ ਖਰਾਬ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ-ਰਜਿਸਟਰ ਕਰੋ।"
+
+#: ../src/managercli.py:209
+msgid "specify a username"
+msgstr "ਇੱਕ ਯੂਜ਼ਰ-ਨਾਂ ਦਿਓ"
+
+#: ../src/managercli.py:211
+msgid "specify a password"
+msgstr "ਇੱਕ ਪਾਸਵਰਡ ਦਿਓ"
+
+#: ../src/managercli.py:223
+#, fuzzy
+msgid "Username: "
+msgstr "ਯੂਜ਼ਰ-ਨਾਂ ਪਾਠ"
+
+#: ../src/managercli.py:226
+#, fuzzy
+msgid "Password: "
+msgstr "ਪਾਸਵਰਡ:"
+
+#: ../src/managercli.py:251
+msgid "removes all local consumer data, does not effect the server"
+msgstr "ਸਭ ਲੋਕਲ ਖਪਤਕਾਰ ਡਾਟਾ ਹਟਾਓ, ਸਰਵਰ ਤੇ ਕੋਈ ਅਸਰ ਨਹੀਂ ਹੁੰਦਾ"
+
+#: ../src/managercli.py:264
+msgid "All local data removed"
+msgstr "ਸਭ ਲੋਕਲ ਡਾਟਾ ਹਟਾਇਆ ਗਿਆ"
+
+#: ../src/managercli.py:270
+msgid "pulls the latest entitlement data from the server"
+msgstr "ਸਰਵਰ ਤੋਂ ਤਾਜ਼ਾ ਇੰਟਾਈਟਲਮੈਂਟ ਡਾਟਾ ਲਵੋ"
+
+#: ../src/managercli.py:280
+msgid "All local data refreshed"
+msgstr "ਸਭ ਲੋਕਲ ਡਾਟਾ ਮੁੜ-ਤਾਜ਼ਾ ਕੀਤਾ ਗਿਆ ਹੈ"
+
+#: ../src/managercli.py:285
+#, python-format
+msgid ""
+"Unable to perform refresh due to the following exception \n"
+" Error: %s"
+msgstr ""
+"ਹੇਠਲੀ ਅੱਪਵਾਰ ਗਲਤੀ ਕਰਕੇ ਮੁੜ-ਤਾਜ਼ਾ ਕਰਨ ਵਿੱਚ \n"
+" ਅਸਫਲ ਹੈ: %s"
+
+#: ../src/managercli.py:292
+msgid "request a new identity certficate for this machine"
+msgstr "ਇਸ ਮਸ਼ੀਨ ਲਈ ਨਵਾਂ ਸ਼ਨਾਖਤ ਸਾਰਟੀਫਿਕੇਟ ਮੰਗ ਕਰੋ"
+
+#: ../src/managercli.py:299
+msgid "request a new certificate be generated"
+msgstr "ਨਵਾਂ ਸਾਰਟੀਫਿਕੇਟ ਬਣਾਉਣ ਲਈ ਬੇਨਤੀ ਕਰੋ"
+
+#: ../src/managercli.py:301
+msgid "force certificate regeneration (requires username and password)"
+msgstr "ਸਾਰਟੀਫਿਕੇਸ਼ਨ ਜਨਰੇਸ਼ਨ ਮਜਬੂਰ ਕਰੋ (ਯੂਜ਼ਰ-ਨਾਂ ਅਤੇ ਪਾਸਵਰਡ ਦੀ ਲੋੜ ਹੈ)"
+
+#: ../src/managercli.py:306
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
+msgstr "ਖਪਤਕਾਰ ਪਛਾਣ ਮੌਜੂਦ ਨਹੀਂ ਜਾਂ ਖਰਾਬ ਹੈ। register --help ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ"
+
+#: ../src/managercli.py:309
+msgid "--force can only be used with --regenerate"
+msgstr "--force ਸਿਰਫ --regenerate ਨਾਲ ਹੀ ਵਰਤੀ ਜਾ ਸਕਦੀ ਹੈ"
+
+#: ../src/managercli.py:313
+msgid "--username and --password can only be used with --force"
+msgstr "--username ਅਤੇ --password ਸਿਰਫ --force ਨਾਲ ਵਰਤੇ ਜਾ ਸਕਦੇ ਹਨ"
+
+#: ../src/managercli.py:325
+#, python-format
+msgid "Current identity is: %s name: %s"
+msgstr "ਮੌਜੂਦਾ ਪਛਾਣ ਹੈ: %s ਨਾਂ: %s"
+
+#: ../src/managercli.py:343
+msgid "Error: Unable to generate a new identity for the system"
+msgstr "ਗਲਤੀ: ਸਿਸਟਮ ਲਈ ਨਵੀਂ ਪਛਾਣ ਬਣਾਉਣ ਵਿੱਚ ਅਸਫਲ"
+
+#: ../src/managercli.py:350
+msgid "register the client to RHN"
+msgstr "ਕਲਾਂਈਟ ਨੂੰ RHN ਤੇ ਰਜਿਸਟਰ ਕਰੋ"
+
+#: ../src/managercli.py:357
+msgid "the type of consumer to register. Defaults to system"
+msgstr "ਰਜਿਸਟਰ ਕਰਨ ਲਈ ਖਪਤਕਾਰ ਦੀ ਕਿਸਮ। ਸਿਸਟਮ ਲਈ ਮੂਲ ਹੁੰਦੀ ਹੈ"
+
+#: ../src/managercli.py:359
+msgid "name of the consumer to register. Defaults to the hostname."
+msgstr "ਰਜਿਸਟਰ ਕਰਨ ਲਈ ਖਪਤਕਾਰ ਦਾ ਨਾਂ। ਹੋਸਟ-ਨਾਂ ਲਈ ਮੂਲ ਹੁੰਦੀ ਹੈ"
+
+#: ../src/managercli.py:361
+msgid "register to an existing consumer"
+msgstr "ਇੱਕ ਮੌਜੂਦਾ ਖਪਤਕਾਰ ਤੇ ਰਜਿਸਟਰ ਕਰੋ"
+
+#: ../src/managercli.py:363 ../src/managercli.py:520
+msgid ""
+"automatically subscribe this system to                                     "
+"compatible subscriptions."
+msgstr ""
+"ਇਸ ਸਿਸਟਮ ਨੂੰ ਆਟੋਮੈਟਿਕ ਹੀ                                     ਅਨੁਕੂਲ ਮੈਂਬਰੀਆਂ ਤੇ ਮੈਂਬਰ "
+"ਬਣਾਓ।"
+
+#: ../src/managercli.py:366
+msgid "register the system even if it is already registered"
+msgstr "ਸਿਸਟਮ ਨੂੰ ਰਜਿਸਟਰ ਕਰੋ ਭਾਵਂ ਇਹ ਪਹਿਲਾਂ ਹੀ ਰਜਿਸਟਰ ਕੀਤਾ ਹੈ"
+
+#: ../src/managercli.py:371
+msgid "This system is already registered. Use --force to override"
+msgstr "ਇਹ ਸਿਸਟਮ ਪਹਿਲਾਂ ਹੀ ਰਜਿਸਟਰ ਕੀਤਾ ਹੈ। ਓਵਰਰਾਈਡ ਕਰਨ ਲਈ --force ਵਰਤੋ"
+
+#: ../src/managercli.py:374
+msgid "Error: consumer name can not be empty."
+msgstr "ਗਲਤੀ: ਖਪਤਕਾਰ ਨਾਂ ਖਾਲੀ ਨਹੀਂ ਹੋ ਸਕਦਾ।"
+
+#: ../src/managercli.py:408
+#, python-format
+msgid "The system with UUID %s has been unregistered"
+msgstr "UUID %s ਵਾਲਾ ਸਿਸਟਮ ਅਨ-ਰਜਿਸਟਰ ਕੀਤਾ ਗਿਆ ਹੈ"
+
+#: ../src/managercli.py:427
+#, python-format
+msgid "Error during registration: %s"
+msgstr "ਰਜਿਸਟਰੇਸ਼ਨ ਦੌਰਾਨ ਗਲਤੀ ਆਈ ਹੈ: %s"
+
+#: ../src/managercli.py:444
+msgid "unregister the client from RHN"
+msgstr "ਕਲਾਂਈਟ ਨੂੰ RHN ਤੋਂ ਅਨ-ਰਜਿਸਟਰ ਕਰੋ"
+
+#: ../src/managercli.py:454
+msgid "This system is currently not registered."
+msgstr "ਇਹ ਸਿਸਟਮ ਹੁਣ ਰਜਿਸਟਰ ਨਹੀਂ ਕੀਤਾ ਹੈ।"
+
+#: ../src/managercli.py:467
+msgid "System has been un-registered."
+msgstr "ਸਿਸਟਮ ਅਨ-ਰਜਿਸਟਰ ਕੀਤਾ ਗਿਆ ਹੈ।"
+
+#: ../src/managercli.py:473
+msgid "activate the registered user to a specified product"
+msgstr "ਰਜਿਸਟਰ ਕੀਤੇ ਸਿਸਟਮ ਨੂੰ ਨਿਰਧਾਰਤ ਉਤਪਾਦ ਉੱਪਰ ਸਰਗਰਮ ਕਰੋ"
+
+#: ../src/managercli.py:478
+msgid "optional email address to notify when token activation is complete."
+msgstr "ਸਰਗਰਮੀ ਮੁਕੰਮਲ ਹੋਣ ਤੇ ਸੂਚਨਾ ਦੇਣ ਲਈ ਚੋਣਵਾਂ ਈ-ਮੇਲ ਐਡਰੈੱਸ।"
+
+#: ../src/managercli.py:481
+msgid ""
+"optional language to use for email notification when token activation is "
+"complete. Used with --email only. Examples: en-us, de-de"
+msgstr ""
+"ਟੋਕਨ ਸਰਗਰਮੀ ਮੁਕੰਮਲ ਹੋਣ ਤੇ ਈ-ਮੇਲ ਸੂਚਨਾਂ ਵਿੱਚ ਵਰਤਣ ਲਈ ਚੋਣਵੀਂ ਭਾਸ਼ਾ। ਸਿਰਫ --email ਨਾਲ ਹੀ "
+"ਵਰਤੋ। ਉਦਾਹਰਨਾਂ: en-us, de-de"
+
+#: ../src/managercli.py:511
+msgid "subscribe the registered machine to a specified product"
+msgstr "ਰਜਿਸਟਰ ਕੀਤੀਆਂ ਮਸ਼ੀਨਾਂ ਨੂੰ ਨਿਰਧਾਰਤ ਉਤਪਾਦ ਤੇ ਮੈਂਬਰ ਬਣਾਓ"
+
+#: ../src/managercli.py:518
+msgid "subscription pool id"
+msgstr "ਮੈਂਬਰੀ ਪੂਲ id"
+
+#: ../src/managercli.py:525
+msgid "Error: Need to supply --pool or --auto."
+msgstr "ਗਲਤੀ: --pool ਜਾਂ --auto ਦੇਣ ਦੀ ਲੋੜ ਹੈ"
+
+#: ../src/managercli.py:528
+msgid "Error: Only one of --pool or --auto may be used."
+msgstr "ਗਲਤੀ: ਸਿਰਫ --pool ਜਾਂ --auto ਵਿੱਚੋਂ ਇੱਕ ਹੀ ਵਰਤਿਆ ਜਾ ਸਕਦਾ ਹੈ।"
+
+#: ../src/managercli.py:549
+msgid "Please enter a valid numeric pool id."
+msgstr "ਕਿਰਪਾ ਕਰਕੇ ਯੋਗ ਅੰਕੀ ਪੂਲ id ਦਿਓ।"
+
+#: ../src/managercli.py:579
+msgid "unsubscribe the registered user from all or specific subscriptions"
+msgstr "ਸਭ ਜਾਂ ਨਿਰਧਾਰਤ ਮੈਂਬਰੀਆਂ ਤੋਂ ਰਜਿਸਟਰ ਯੂਜ਼ਰਾਂ ਦੀ ਮੈਂਬਰੀ ਹਟਾਓ"
+
+#: ../src/managercli.py:585
+msgid "Certificate serial to unsubscribe"
+msgstr "ਮੈਂਬਰੀ ਹਟਾਉਣ ਲਈ ਸਾਰਟੀਫਿਕੇਟ ਸੀਰੀਅਲ"
+
+#: ../src/managercli.py:587
+msgid "Unsubscribe from all subscriptions"
+msgstr "ਸਭ ਮੈਂਬਰੀਆਂ ਹਟਾਓ"
+
+#: ../src/managercli.py:609
+msgid "One of --serial or --all must be provided"
+msgstr "--serial ਜਾਂ --all ਵਿੱਚੋਂ ਇੱਕ ਦੇਣਾ ਜਰੂਰੀ ਹੈ"
+
+#: ../src/managercli.py:617
+#, python-format
+msgid ""
+"Unable to perform unsubscribe due to the following exception \n"
+" Error: %s"
+msgstr ""
+"ਹੇਠਲੀ ਅੱਪਵਾਦ ਗਲਤੀ ਕਰਕੇ ਮੈਂਬਰੀ ਹਟਾਉਣ ਤੋਂ \n"
+" ਅਸਫਲ ਹੋਇਆ: %s"
+
+#: ../src/managercli.py:627
+msgid "show information for facts"
+msgstr "ਸਿਧਾਂਤਾ ਲਈ ਜਾਣਕਾਰੀ ਵੇਖਾਓ"
+
+#: ../src/managercli.py:632
+msgid "list known facts for this system"
+msgstr "ਇਸ ਸਿਸਟਮ ਲਈ ਜਾਣੇ-ਪਛਾਣ ਸਿਧਾਂਤ ਵੇਖਾਓ"
+
+#: ../src/managercli.py:634
+msgid "update the system facts"
+msgstr "ਸਿਸਟਮ ਸਿਧਾਂਤ ਅੱਪਡੇਟ ਕਰੋ"
+
+#: ../src/managercli.py:643
+msgid "Error: Need either --list or --update, Try facts --help"
+msgstr "ਗਲਤੀ: --list ਜਾਂ --update ਦੀ ਲੋੜ ਹੈ, facts --help ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ"
+
+#: ../src/managercli.py:667
+msgid "list available or consumer subscriptions for registered user"
+msgstr "ਰਜਿਸਟਰ ਕੀਤੇ ਯੂਜ਼ਰ ਲਈ ਉਪਲੱਬਧ ਜਾਂ ਖਪਤਕਾਰ ਮੈਂਬਰੀਆਂ ਵੇਖਾਓ"
+
+#: ../src/managercli.py:672
+msgid "installed"
+msgstr "ਇੰਸਟਾਲ ਕੀਤੇ"
+
+#: ../src/managercli.py:674
+msgid "available"
+msgstr "ਉਪਲੱਬਧ"
+
+#: ../src/managercli.py:676
+msgid ""
+"date to search on, defaults to today's date, only used with --available "
+msgstr "ਖੋਜ ਲਈ ਮਿਤੀ, ਅੱਜ ਦੀ ਮਿਤੀ ਲਈ ਮੂਲ, ਸਿਰਫ --available ਨਾਲ ਵਰਤਿਆ ਗਿਆ ਹੈ"
+
+#: ../src/managercli.py:679
+msgid "consumed"
+msgstr "ਵਰਤਿਆ ਗਿਆ"
+
+#: ../src/managercli.py:681
+msgid "if supplied with --available then all subscriptions are returned"
+msgstr "ਜੇ --available ਨਾਲ ਦਿੱਤਾ ਹੋਵੇ ਤਾਂ ਸਭ ਮੈਂਬਰੀਆਂ ਹਟਾਈਆਂ ਗਈਆਂ ਹਨ"
+
+#: ../src/managercli.py:685
+msgid "Error: --all is only applicable with --available"
+msgstr "ਗਲਤੀ: --all ਸਿਰਫ --available ਨਾਲ ਅਨੁਕੂਲ ਹੈ"
+
+#: ../src/managercli.py:688
+msgid "Error: --ondate is only applicable with --available"
+msgstr "ਗਲਤੀ: --ondate ਸਿਰਫ --available ਨਾਲ ਅਨੁਕੂਲ ਹੈ"
+
+#: ../src/managercli.py:704
+msgid "No installed Products to list"
+msgstr "ਵੇਖਾਉਣ ਲਈ ਇੰਸਟਾਲ ਕੀਤਾ ਉਤਪਾਦ ਨਹੀਂ ਹੈ"
+
+#: ../src/managercli.py:707
+msgid "    Installed Product Status"
+msgstr "    ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦ ਦੀ ਹਾਲਤ"
+
+#: ../src/managercli.py:718
+msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgstr "ਦਿੱਤੀ ਗਈ ਮਿਤੀ ਗਲਤ ਹੈ।  ਮਿਤੀ YYYY-MM-DD ਫਾਰਮੈਟ ਵਿੱਚ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ (ਉਦਾਹਰਨ: "
+
+#: ../src/managercli.py:725
+msgid "No Available subscription pools to list"
+msgstr "ਵੇਖਾਉਣ ਲਈ ਕੋਈ ਉਪਲੱਬਧ ਮੈਂਬਰੀ ਨਹੀਂ ਹੈ"
+
+#: ../src/managercli.py:727 ../src/gui/compliance.py:144
+#: ../src/gui/allsubs.py:58
+msgid "Available Subscriptions"
+msgstr "ਉਪਲੱਬਧ ਮੈਂਬਰੀਆਂ"
+
+#: ../src/managercli.py:741
+msgid "No Consumed subscription pools to list"
+msgstr "ਵੇਖਾਉਣ ਲਈ ਕੋਈ ਵਰਤੀ ਮੈਂਬਰੀ ਨਹੀਂ ਹੈ"
+
+#: ../src/managercli.py:743
+msgid "Consumed Product Subscriptions"
+msgstr "ਵਰਤੀਆਂ ਗਈਆਂ ਉਤਪਾਦ ਮੈਂਬਰੀਆਂ"
+
+#: ../src/managercli.py:793
+#, python-format
+msgid ""
+"\n"
+"Usage: %s [options] MODULENAME --help\n"
+msgstr ""
+"\n"
+"ਵਰਤੋਂ: %s [options] MODULENAME --help\n"
+
+#: ../src/managercli.py:794
+msgid "Supported modules:"
+msgstr "ਸਹਿਯੋਗੀ ਮੋਡੀਊਲ:"
+
+#: ../src/managercli.py:859
+msgid ""
+"Error: You need to register this system by running `register` command before "
+"using this option."
+msgstr ""
+"ਗਲਤੀ: ਤੁਹਾਨੂੰ ਇਹ ਚੋਣ ਵਰਤਣ ਤੋਂ ਪਹਿਲਾਂ `register` ਕਮਾਂਡ ਚਲਾ ਕੇ ਇਸ ਸਿਸਟਮ ਨੂੰ ਰਜਿਸਟਰ ਕਰਨਾ "
+"ਪਵੇਗਾ।"
+
+#: ../src/constants.py:25
+#, python-format
+msgid ""
+"\n"
+"ProductName:        \t%-25s\n"
+"Status:             \t%-25s\n"
+"Expires:            \t%-25s\n"
+"Subscription:       \t%-25s\n"
+"ContractNumber:     \t%-25s\n"
+"AccountNumber:      \t%-25s\n"
+msgstr ""
+"\n"
+"ਉਤਪਾਦ-ਨਾਂ:        \t%-25s\n"
+"ਹਾਲਤ:             \t%-25s\n"
+"ਮਿਆਦ:            \t%-25s\n"
+"ਮੈਂਬਰੀ:       \t%-25s\n"
+"ਕੰਟਰੈਕਟ-ਨੰਬਰ:     \t%-25s\n"
+"ਅਕਾਊਂਟ-ਨੰਬਰ:      \t%-25s\n"
+
+#: ../src/constants.py:34
 #, python-format
 msgid ""
 "\n"
@@ -36,7 +566,7 @@ msgstr ""
 "ਮਾਤਰਾ:          \t%-25s\n"
 "ਮਿਆਦ:           \t%-25s\n"
 
-#: src/constants.py:42
+#: ../src/constants.py:42
 #, python-format
 msgid ""
 "\n"
@@ -57,114 +587,7 @@ msgstr ""
 "ਸ਼ੁਰੂਆਤੀ:             \t%-25s\n"
 "ਮਿਆਦ:            \t%-25s\n"
 
-#: src/constants.py:25
-#, python-format
-msgid ""
-"\n"
-"ProductName:        \t%-25s\n"
-"Status:             \t%-25s\n"
-"Expires:            \t%-25s\n"
-"Subscription:       \t%-25s\n"
-"ContractNumber:     \t%-25s\n"
-"AccountNumber:      \t%-25s\n"
-msgstr ""
-"\n"
-"ਉਤਪਾਦ-ਨਾਂ:        \t%-25s\n"
-"ਹਾਲਤ:             \t%-25s\n"
-"ਮਿਆਦ:            \t%-25s\n"
-"ਮੈਂਬਰੀ:       \t%-25s\n"
-"ਕੰਟਰੈਕਟ-ਨੰਬਰ:     \t%-25s\n"
-"ਅਕਾਊਂਟ-ਨੰਬਰ:      \t%-25s\n"
-
-#: src/managercli.py:793
-#, python-format
-msgid ""
-"\n"
-"Usage: %s [options] MODULENAME --help\n"
-msgstr ""
-"\n"
-"ਵਰਤੋਂ: %s [options] MODULENAME --help\n"
-
-#: src/managercli.py:707
-msgid "    Installed Product Status"
-msgstr "    ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦ ਦੀ ਹਾਲਤ"
-
-#: src/certlib.py:770 src/certmgr.py:94 src/factlib.py:80
-#, python-format
-msgid "%d updates required"
-msgstr "%d ਅੱਪਡੇਟਾਂ ਦੀ ਲੋੜ ਹੈ"
-
-#: src/i18n_optparse.py:43
-msgid "%prog [options]"
-msgstr ""
-
-#: src/gui/compliance.py:218
-#, python-format
-msgid "%s (first date of non-compliance)"
-msgstr "%s (ਗੈਰ-ਮਨਜੂਰ ਦੀ ਪਹਿਲੀ ਮਿਤੀ)"
-
-#: src/gui/importsub.py:73
-#, python-format
-msgid "%s is not a valid certificate file. Please upload a valid certificate."
-msgstr "%s ਇੱਕ ਯੋਗ ਸਾਰਟੀਫਿਕੇਟ ਫਾਇਲ ਨਹੀਂ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਯੋਗ ਸਾਰਟੀਫਿਕੇਟ ਅੱਪਲੋਡ ਕਰੋ।"
-
-#: src/i18n_optparse.py:51
-#, python-format
-msgid "%s option does not take a value"
-msgstr ""
-
-#: src/i18n_optparse.py:50
-#, python-format
-msgid "%s option requires %d arguments"
-msgstr ""
-
-#: src/i18n_optparse.py:49
-#, python-format
-msgid "%s option requires an argument"
-msgstr ""
-
-#: src/managercli.py:309
-msgid "--force can only be used with --regenerate"
-msgstr "--force ਸਿਰਫ --regenerate ਨਾਲ ਹੀ ਵਰਤੀ ਜਾ ਸਕਦੀ ਹੈ"
-
-#: src/managercli.py:313
-msgid "--username and --password can only be used with --force"
-msgstr "--username ਅਤੇ --password ਸਿਰਫ --force ਨਾਲ ਵਰਤੇ ਜਾ ਸਕਦੇ ਹਨ"
-
-#: src/gui/data/subdetails.glade:182
-msgid "<b>Account Number:</b>"
-msgstr "<b>ਅਕਾਊਂਟ ਨੰਬਰ:</b>"
-
-#: src/constants.py:56
-msgid "<b>Are you sure you want to unregister?</b>"
-msgstr "<b>ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ ਅਨ-ਰਜਿਸਟਰ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?</b>"
-
-#: src/gui/data/subdetails.glade:218
-msgid "<b>Bundled Products:</b>"
-msgstr "<b>ਬੰਡਲ ਉਤਪਾਦ:</b>"
-
-#: src/gui/data/contract_selection.glade:28
-#, fuzzy
-msgid "<b>Choose the specific contract to use:</b>"
-msgstr "<b>ਵਰਤਣ ਲਈ ਖਾਸ ਕੰਟਰੈਕਟ ਚੁਣੋ:</b>"
-
-#: src/gui/data/mainwindow.glade:108
-msgid "<b>Compliance Status</b>"
-msgstr "<b>ਮਨਜੂਰੀ ਸਥਿਤੀ</b>"
-
-#: src/gui/data/installed.glade:91
-msgid "<b>Compliance:</b>"
-msgstr "<b>ਮਨਜੂਰੀ:</b>"
-
-#: src/gui/data/subdetails.glade:88
-msgid "<b>Contract Number:</b>"
-msgstr "<b>ਕੰਟਰੈਕਟ ਨੰਬਰ:</b>"
-
-#: src/gui/data/subdetails.glade:72
-msgid "<b>End Date:</b>"
-msgstr "<b>ਆਖਰੀ ਮਿਤੀ:</b>"
-
-#: src/constants.py:52
+#: ../src/constants.py:52
 #, python-format
 msgid ""
 "<b>Errors were encountered during unregister.</b>\n"
@@ -175,91 +598,7 @@ msgstr ""
 "%s\n"
 "ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/rhsm.log ਵੇਖੋ।"
 
-#: src/gui/data/networkConfig.glade:25
-#, fuzzy
-msgid "<b>HTTP Proxy</b>"
-msgstr "<b>HTTP ਪਰਾਕਸੀ</b>"
-
-#: src/gui/data/allsubs.glade:202
-msgid "<b>More search options</b>"
-msgstr "<b>ਹੋਰ ਖੋਜ ਚੋਣਾਂ</b>"
-
-#: src/gui/data/rhsm.glade:517
-msgid "<b>Other Available Subscriptions</b>"
-msgstr "<b>ਹੋਰ ਉਪਲੱਬਧ ਮੈਂਬਰੀਆਂ</b>"
-
-#: src/gui/data/registration.glade:212
-msgid "<b>Please enter the following for this system:</b>"
-msgstr "<b>ਇਸ ਸਿਸਟਮ ਲਈ ਕਿਰਪਾ ਕਰਕੇ ਇਹ ਦਿਓ:</b>"
-
-#: src/gui/data/registration.glade:36
-#, fuzzy
-msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr "<b>ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀ Red Hat ਨੈੱਟਵਰਕ ਅਕਾਊਂਟ ਜਾਣਕਾਰੀ ਦਿਓ:</b>"
-
-#: src/gui/data/installed.glade:188
-msgid "<b>Product's Subscription Details</b>"
-msgstr "<b>ਉਤਪਾਦ ਦਾ ਮੈਂਬਰੀ ਵੇਰਵਾ</b>"
-
-#: src/gui/data/installed.glade:77
-msgid "<b>Product:</b>"
-msgstr "<b>ਉਤਪਾਦ:</b>"
-
-#: src/gui/data/subdetails.glade:250
-msgid "<b>Provides Management:</b>"
-msgstr "<b>ਮੈਨੇਜਮੈਂਟ ਦਿੰਦਾ ਹੈ:</b>"
-
-#: src/gui/data/rhsm.glade:366
-msgid "<b>Select Subscriptions to add</b>"
-msgstr "<b>ਸ਼ਾਮਿਲ ਕਰਨ ਲਈ ਮੈਂਬਰੀ ਚੁਣੋ</b>"
-
-#: src/gui/data/allsubs.glade:25
-msgid "<b>Show subscriptions active on:</b>"
-msgstr "<b>ਇਸ ਸਮੇਂ ਸਰਗਰਮ ਮੈਂਬਰੀਆਂ ਵੇਖਾਓ:</b>"
-
-#: src/gui/data/subdetails.glade:56
-msgid "<b>Start Date:</b>"
-msgstr "<b>ਸ਼ੁਰੂਆਤੀ ਮਿਤੀ:</b>"
-
-#: src/gui/data/subdetails.glade:365
-msgid "<b>Subscription Details</b>"
-msgstr "<b>ਮੈਂਬਰੀ ਵੇਰਵਾ</b>"
-
-#: src/gui/data/contract_selection.glade:66 src/gui/data/installed.glade:108
-#: src/gui/data/subdetails.glade:42
-msgid "<b>Subscription:</b>"
-msgstr "<b>ਮੈਂਬਰੀ:</b>"
-
-#: src/gui/data/rhsm.glade:453
-msgid "<b>Subscriptions compatible with your system</b>"
-msgstr "<b>ਤੁਹਾਡੇ ਸਿਸਟਮ ਦੇ ਅਨੁਕੂਲ ਮੈਂਬਰੀਆਂ</b>"
-
-#: src/gui/data/rhsm.glade:415
-msgid "<b>Subscriptions matching your installed products</b>"
-msgstr "<b>ਮੈਂਬਰੀਆਂ ਜੋ ਤੁਹਾਡੇ ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦ ਨਾਲ ਮੇਲ ਖਾਂਦੀਆਂ ਹਨ</b>"
-
-#: src/gui/data/subdetails.glade:266
-msgid "<b>Support Level:</b>"
-msgstr "<b>ਸਹਿਯੋਗ ਪੱਧਰ:</b>"
-
-#: src/gui/data/subdetails.glade:282
-msgid "<b>Support Type:</b>"
-msgstr "<b>ਸਹਿਯੋਗ ਕਿਸਮ:</b>"
-
-#: src/gui/data/factsdialog.glade:34
-msgid "<b>System Facts:</b>"
-msgstr "<b>ਸਿਸਟਜ਼ ਸਿਧਾਂਤ:</b>"
-
-#: src/gui/data/mainwindow.glade:247
-msgid "<b>Tools</b>"
-msgstr "<b>ਟੂਲ</b>"
-
-#: src/gui/data/contract_selection.glade:80
-#, fuzzy
-msgid "<b>Total Contracts:</b>"
-msgstr "<b>ਕੁੱਲ ਕੰਟਰੈਕਟ:</b>"
-
-#: src/constants.py:54
+#: ../src/constants.py:54
 #, python-format
 msgid ""
 "<b>Unable to register the system.</b>\n"
@@ -274,965 +613,11 @@ msgstr ""
 "\n"
 "ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/rhsm.log ਵੇਖੋ।"
 
-#: src/gui/compliance.py:214
-#, python-format
-msgid "<big><b>All software is in compliance until %s</b></big>"
-msgstr "<big><b>ਸਭ ਸਾਫਟਵੇਅਰ ਮਨਜੂਰੀ ਵਿੱਚ ਹਨ ਜਦੋਂ ਤੱਕ %s</b></big>"
-
-#: src/gui/data/networkConfig.glade:89
-#, fuzzy
-msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-msgstr "<small><b>ਉਦਾਹਰਨ:</b> squid.example.com:3128</small>"
-
-#: src/gui/data/registration.glade:95
-msgid ""
-"<small>Tip: Forgot your login or password? Look it up at\n"
-"<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
-"www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
-msgstr ""
-"<small>ਟਿੱਪਣੀ: ਆਪਣਾ ਲਾਗਇਨ ਜਾਂ ਪਾਸਵਰਡ ਭੁੱਲ ਗਏ? ਇਸ ਬਾਰੇ\n"
-"<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
-"www.redhat.com/wapps/sso/rhn/lostPassword.html</a> ਤੇ ਵੇਖੋ</small>"
-
-#: src/gui/data/registration.glade:244
-msgid "A unique label for this system"
-msgstr "ਇਸ ਸਿਸਟਮ ਲਈ ਇੱਕ ਵੱਖਰਾ ਲੇਬਲ"
-
-#: src/gui/data/subdetails.glade:203 src/gui/data/subdetails.glade:303
-#: src/gui/data/subdetails.glade:323 src/gui/data/subdetails.glade:343
-msgid "Account"
-msgstr "ਅਕਾਊਂਟ"
-
-#: src/gui/data/activate.glade:93
-msgid "Activate"
-msgstr "ਸਰਗਰਮ"
-
-#: src/gui/data/mainwindow.glade:210
-msgid "Activate a Subscription"
-msgstr "ਇੱਕ ਮੈਂਬਰੀ ਸਰਗਰਮ ਕਰੋ"
-
-#: src/gui/data/activate.glade:22
-msgid ""
-"Activating your machine may take a few minutes.\n"
-"Please provide an email address to receive notification\n"
-"when the activation is complete."
-msgstr ""
-"ਤੁਹਾਡੀ ਮਸ਼ੀਨ ਸਰਗਰਮ ਹੋਣ ਤੇ ਕੁਝ ਮਿੰਟ ਲੱਗ ਸਕਦੇ ਹਨ\n"
-"ਕਿਰਪਾ ਕਰਕੇ ਸਰਗਰਮੀ ਮੁਕੰਮਲ ਹੋਣ ਤੇ ਸੂਚਨਾਂ ਲੈਣ ਲਈ\n"
-"ਇੱਕ ਈ-ਮੇਲ ਐਡਰੈੱਸ ਦਿਓ।"
-
-#: src/gui/data/rhsm.glade:335
-msgid "Add Subscriptions"
-msgstr "ਮੈਂਬਰੀ ਸ਼ਾਮਿਲ ਕਰੋ"
-
-#: src/certlib.py:609
-msgid "Added (new)"
-msgstr "ਸ਼ਾਮਿਲ ਕੀਤਾ (ਨਵਾਂ)"
-
-#: src/gui/data/networkConfig.glade:6
-msgid "Advanced Network Configuration"
-msgstr "ਤਕਨੀਕੀ ਨੈੱਟਵਰਕ ਸੰਰਚਨਾ"
-
-#: src/gui/allsubs.py:177
-msgid "All Available Subscriptions"
-msgstr "ਸਭ ਉਪਲੱਬਧ ਮੈਂਬਰੀਆਂ"
-
-#: src/gui/data/allsubs.glade:241
-msgid "All Subscriptions View"
-msgstr "ਸਭ ਮੈਂਬਰੀਆਂ ਵਾਲੀ ਝਲਕ"
-
-#: src/managercli.py:280
-msgid "All local data refreshed"
-msgstr "ਸਭ ਲੋਕਲ ਡਾਟਾ ਮੁੜ-ਤਾਜ਼ਾ ਕੀਤਾ ਗਿਆ ਹੈ"
-
-#: src/managercli.py:264
-msgid "All local data removed"
-msgstr "ਸਭ ਲੋਕਲ ਡਾਟਾ ਹਟਾਇਆ ਗਿਆ"
-
-#: src/gui/managergui.py:413
-#, python-format
-msgid "All products are in compliance until %s"
-msgstr "ਸਭ ਉਤਪਾਦ ਮਨਜੂਰੀ ਵਿੱਚ ਹਨ ਜਦੋਂ ਤੱਕ %s"
-
-#: src/gui/mysubstab.py:93
-#, python-format
-msgid "Are you sure you want to unsubscribe from %s?"
-msgstr "ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ %s ਤੋਂ ਮੈਂਬਰੀ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
-
-#: src/gui/data/networkConfig.glade:153
-msgid "Authentication Checkbox"
-msgstr "ਪ੍ਰਮਾਣਿਕਤਾ ਚੈੱਕਬਾਕਸ"
-
-#: src/managercli.py:727 src/gui/allsubs.py:58 src/gui/compliance.py:144
-msgid "Available Subscriptions"
-msgstr "ਉਪਲੱਬਧ ਮੈਂਬਰੀਆਂ"
-
-#: src/managercli.py:67 src/gui/utils.py:63
-#, python-format
-msgid "Bad CA certificate: %s"
-msgstr "ਗਲਤ CA ਸਾਰਟੀਫਿਕੇਟ: %s"
-
-#: src/gui/data/mainwindow.glade:78 src/gui/data/mainwindow.glade:84
-msgid "Become Compliant"
-msgstr "ਅਨੁਕੂਲ ਬਣੋ"
-
-#: src/gui/data/importsub.glade:80 src/gui/data/rhsm.glade:77
-#, fuzzy
-msgid "Certificate _Location:"
-msgstr "ਸਾਰਟੀਫਿਕੇਟ ਟਿਕਾਣਾ(_L):"
-
-#: src/managercli.py:585
-msgid "Certificate serial to unsubscribe"
-msgstr "ਮੈਂਬਰੀ ਹਟਾਉਣ ਲਈ ਸਾਰਟੀਫਿਕੇਟ ਸੀਰੀਅਲ"
-
-#: src/gui/data/importsub.glade:37
-#, fuzzy
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
-msgstr "ਆਪਣੀ ਮੈਂਬਰੀ ਸਾਰਟੀਫਿਕੇਟ ਡਾਇਰੈਕਟਰੀ ਇੰਪੋਰਟ ਕਰਨ ਲਈ ਸਾਰਟੀਫਿਕੇਟ ਚੁਣੋ।"
-
-#: src/gui/data/activate.glade:79 src/gui/data/factsdialog.glade:122
-msgid "Close"
-msgstr "ਬੰਦ"
-
-#: src/gui/data/networkConfig.glade:267
-msgid "Close Button"
-msgstr "ਬੰਦ ਬਟਨ"
-
-#: src/gui/data/compliance.glade:277
-msgid "Compliance Action Area"
-msgstr "ਸਹੀ ਕਾਰਵਾਈ ਖੇਤਰ"
-
-#: src/gui/data/compliance.glade:16
-msgid "Compliance Assistant"
-msgstr "ਸਹੀ ਸਹਾਇਕ"
-
-#: src/gui/data/compliance.glade:25
-msgid "Compliance Assistant Box"
-msgstr "ਸਹੀ ਸਹਾਇਕ ਬਾਕਸ"
-
-#: src/gui/data/compliance.glade:32
-msgid "Compliance Assistant Status"
-msgstr "ਸਹੀ ਸਹਾਇਕ ਹਾਲਤ"
-
-#: src/gui/data/compliance.glade:67
-msgid "Compliance Date Box"
-msgstr "ਸਹੀ ਮਿਤੀ ਬਾਕਸ"
-
-#: src/gui/data/compliance.glade:75
-msgid "Compliance Date Label"
-msgstr "ਸਹੀ ਮਿਤੀ ਲੇਬਲ"
-
-#: src/gui/data/compliance.glade:99
-msgid "Compliance Date Picker"
-msgstr "ਸਹੀ ਮਿਤੀ ਪਿੱਕਰ"
-
-#: src/gui/data/compliance.glade:47
-msgid "Compliance Label"
-msgstr "ਸਹੀ ਲੇਬਲ"
-
-#: src/gui/data/compliance.glade:39
-msgid "Compliance Label Box"
-msgstr "ਸਹੀ ਲੇਬਲ ਬਾਕਸ"
-
-#: src/gui/data/compliance.glade:171
-msgid "Compliance Product List"
-msgstr "ਸਹੀ ਉਤਪਾਦ ਸੂਚੀ"
-
-#: src/gui/installedtab.py:54 src/gui/data/installed.glade:147
-#: src/gui/data/mainwindow.glade:45
-msgid "Compliance Status"
-msgstr "ਮਨਜੂਰੀ ਹਾਲਤ"
-
-#: src/gui/data/compliance.glade:245
-msgid "Compliance Subscription Details"
-msgstr "ਸਹੀ ਮੈਂਬਰੀ ਵੇਰਵਾ"
-
-#: src/gui/compliance.py:141
-msgid "Compliance Subscription List"
-msgstr "ਸਹੀ ਮੈਂਬਰੀ ਸੂਚੀ"
-
-#: src/gui/data/compliance.glade:197
-msgid "Compliance Subscriptions Box"
-msgstr "ਸਹੀ ਮੈਂਬਰੀ ਬਾਕਸ"
-
-#: src/gui/data/compliance.glade:205
-msgid "Compliance Subscriptions Label"
-msgstr "ਸਹੀ ਮੈਂਬਰੀ ਲੇਬਲ"
-
-#: src/gui/data/compliance.glade:229
-msgid "Compliance Subscriptions List"
-msgstr "ਸਹੀ ਮੈਂਬਰੀ ਸੂਚੀ"
-
-#: src/gui/data/compliance.glade:219
-msgid "Compliance Subscriptions Panel"
-msgstr "ਸਹੀ ਮੈਂਬਰੀ ਪੈਨਲ"
-
-#: src/gui/data/compliance.glade:130
-msgid "Compliance Update Box"
-msgstr "ਸਹੀ ਅੱਪਡੇਟ ਬਾਕਸ"
-
-#: src/managercli.py:743
-msgid "Consumed Product Subscriptions"
-msgstr "ਵਰਤੀਆਂ ਗਈਆਂ ਉਤਪਾਦ ਮੈਂਬਰੀਆਂ"
-
-#: src/managercli.py:192
-msgid "Consumer certificates corrupted. Please reregister."
-msgstr "ਖਪਤਕਾਰ ਸਾਰਟੀਫਿਕੇਟ ਖਰਾਬ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ-ਰਜਿਸਟਰ ਕਰੋ।"
-
-#: src/managercli.py:306
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr "ਖਪਤਕਾਰ ਪਛਾਣ ਮੌਜੂਦ ਨਹੀਂ ਜਾਂ ਖਰਾਬ ਹੈ। register --help ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ"
-
-#: src/managercli.py:137
-msgid ""
-"Consumer not registered. Please register using --username and --password"
-msgstr ""
-"ਖਪਤਕਾਰ ਰਜਿਸਟਰ ਨਹੀਂ ਕੀਤਾ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ --username ਅਤੇ --password ਵਰਤ ਕੇ ਰਜਿਸਟਰ ਕਰੋ"
-
-#: src/gui/data/allsubs.glade:69
-msgid "Contains the text:"
-msgstr "ਇਸ ਵਿੱਚ ਪਾਠ ਸ਼ਾਮਿਲ ਹੈ:"
-
-#: src/gui/contract_selection.py:67 src/gui/data/subdetails.glade:167
-msgid "Contract Number"
-msgstr "ਕੰਟਰੈਕਟ ਨੰਬਰ"
-
-#: src/gui/data/contract_selection.glade:6
-#, fuzzy
-msgid "Contract Selection"
-msgstr "ਕੰਟਰੈਕਟ ਚੋਣ"
-
-#: src/gui/installedtab.py:106
-#, python-format
-msgid "Covered by contract %s through %s"
-msgstr "ਕੰਟਰੈਕਟ %s ਦੁਆਰਾ %s ਰਾਹੀਂ ਕਵਰ ਕੀਤਾ"
-
-#: src/managercli.py:325
-#, python-format
-msgid "Current identity is: %s name: %s"
-msgstr "ਮੌਜੂਦਾ ਪਛਾਣ ਹੈ: %s ਨਾਂ: %s"
-
-#: src/managercli.py:718
-msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-msgstr "ਦਿੱਤੀ ਗਈ ਮਿਤੀ ਗਲਤ ਹੈ।  ਮਿਤੀ YYYY-MM-DD ਫਾਰਮੈਟ ਵਿੱਚ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ (ਉਦਾਹਰਨ: "
-
-#: src/certlib.py:610
-msgid "Deleted (rogue):"
-msgstr "ਹਟਾਇਆ (ਖਰਾਬ):"
-
-#: src/gui/data/allsubs.glade:178
-msgid "Do Not Overlap"
-msgstr "ਓਵਰਲੈਪ ਨਾ ਕਰੋ"
-
-#: src/gui/data/rhsm.glade:732
-msgid "Do not register"
-msgstr "ਰਜਿਸਟਰ ਨਾ ਕਰੋ"
-
-#: src/gui/data/activate.glade:37
-msgid "Email Address:"
-msgstr "ਈ-ਮੇਲ ਐਡਰੈੱਸ:"
-
-#: src/gui/installedtab.py:56 src/gui/mysubstab.py:60
-#: src/gui/compliance.py:125 src/gui/contract_selection.py:80
-#: src/gui/data/subdetails.glade:147
-msgid "End Date"
-msgstr "ਆਖਰੀ ਮਿਤੀ"
-
-#: src/gui/data/networkConfig.glade:122
-msgid "Enter in the format hostname(:port)"
-msgstr "ਫਾਰਮੈਟ hostname(:port) ਵਿੱਚ ਦਿਓ"
-
-#: src/gui/data/subsgui.glade:37
-msgid "Enter your Subscription account information"
-msgstr "ਆਪਣੀ ਮੈਂਬਰੀ ਅਕਾਊਂਟ ਜਾਣਕਾਰੀ ਦਿਓ"
-
-#: src/gui/firstboot/rhsm_login.py:41
-msgid "Entitlement Platform Registration"
-msgstr "ਇੰਟਾਈਟਲਮੈਂਟ ਪਲੇਟਫਾਰਮ ਰਜਿਸਟਰੇਸ਼ਨ"
-
-#: src/gui/firstboot/rhsm_login.py:40
-msgid "Entitlement Registration"
-msgstr "ਇੰਟਾਈਟਲਮੈਂਟ ਰਜਿਸਟਰੇਸ਼ਨ"
-
-#: src/gui/activate.py:55
-#, python-format
-msgid "Error activating subscription: %s"
-msgstr "ਮੈਂਬਰੀ ਸਰਗਰਮੀ ਦੌਰਾਨ ਗਲਤੀ: %s"
-
-#: src/gui/compliance.py:180
-msgid ""
-"Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log for "
-"more information."
-msgstr ""
-"ਮਨਜੂਰੀ ਸਹਾਇਕ ਵੇਖਾਉਣ ਵਿੱਚ ਗਲਤੀ। ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/rhsm.log "
-"ਵੇਖੋ।"
-
-#: src/managercli.py:427
-#, python-format
-msgid "Error during registration: %s"
-msgstr "ਰਜਿਸਟਰੇਸ਼ਨ ਦੌਰਾਨ ਗਲਤੀ ਆਈ ਹੈ: %s"
-
-#: src/gui/allsubs.py:193
-#, python-format
-msgid "Error fetching subscriptions from server:  %s"
-msgstr "ਸਰਵਰ ਤੋਂ ਮੈਂਬਰੀਆਂ ਲੈਣ ਵਿੱਚ ਗਲਤੀ:  %s"
-
-#: src/gui/allsubs.py:227 src/gui/compliance.py:413
-#, python-format
-msgid "Error getting subscription: %s"
-msgstr "ਮੈਂਬਰੀ ਪਤਾ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %s"
-
-#: src/hwprobe.py:152
-msgid "Error reading net Interface information:"
-msgstr "ਨੈੱਟ ਇੰਟਰਫੇਸ ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ:"
-
-#: src/hwprobe.py:135
-msgid "Error reading networking information:"
-msgstr "ਨੈੱਟਵਰਕ ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ:"
-
-#: src/hwprobe.py:112
-msgid "Error reading system DMI information:"
-msgstr "ਸਿਸਟਮ DMI ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ:"
-
-#: src/hwprobe.py:92
-msgid "Error reading system cpu information:"
-msgstr "ਸਿਸਟਮ cpu ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ:"
-
-#: src/hwprobe.py:77
-msgid "Error reading system memory information:"
-msgstr "ਸਿਸਟਮ ਮੈਮੋਰੀ ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ:"
-
-#: src/managercli.py:685
-msgid "Error: --all is only applicable with --available"
-msgstr "ਗਲਤੀ: --all ਸਿਰਫ --available ਨਾਲ ਅਨੁਕੂਲ ਹੈ"
-
-#: src/managercli.py:688
-msgid "Error: --ondate is only applicable with --available"
-msgstr "ਗਲਤੀ: --ondate ਸਿਰਫ --available ਨਾਲ ਅਨੁਕੂਲ ਹੈ"
-
-#: src/managercli.py:643
-msgid "Error: Need either --list or --update, Try facts --help"
-msgstr "ਗਲਤੀ: --list ਜਾਂ --update ਦੀ ਲੋੜ ਹੈ, facts --help ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ"
-
-#: src/managercli.py:525
-msgid "Error: Need to supply --pool or --auto."
-msgstr "ਗਲਤੀ: --pool ਜਾਂ --auto ਦੇਣ ਦੀ ਲੋੜ ਹੈ"
-
-#: src/managercli.py:528
-msgid "Error: Only one of --pool or --auto may be used."
-msgstr "ਗਲਤੀ: ਸਿਰਫ --pool ਜਾਂ --auto ਵਿੱਚੋਂ ਇੱਕ ਹੀ ਵਰਤਿਆ ਜਾ ਸਕਦਾ ਹੈ।"
-
-#: src/managercli.py:343
-msgid "Error: Unable to generate a new identity for the system"
-msgstr "ਗਲਤੀ: ਸਿਸਟਮ ਲਈ ਨਵੀਂ ਪਛਾਣ ਬਣਾਉਣ ਵਿੱਚ ਅਸਫਲ"
-
-#: src/managercli.py:859
-msgid ""
-"Error: You need to register this system by running `register` command before "
-"using this option."
-msgstr ""
-"ਗਲਤੀ: ਤੁਹਾਨੂੰ ਇਹ ਚੋਣ ਵਰਤਣ ਤੋਂ ਪਹਿਲਾਂ `register` ਕਮਾਂਡ ਚਲਾ ਕੇ ਇਸ ਸਿਸਟਮ ਨੂੰ ਰਜਿਸਟਰ ਕਰਨਾ "
-"ਪਵੇਗਾ।"
-
-#: src/managercli.py:374
-msgid "Error: consumer name can not be empty."
-msgstr "ਗਲਤੀ: ਖਪਤਕਾਰ ਨਾਂ ਖਾਲੀ ਨਹੀਂ ਹੋ ਸਕਦਾ।"
-
-#: src/certlib.py:608
-#, python-format
-msgid "Expected (UEP) serial# %s"
-msgstr "ਅਨੁਮਾਨਤ (UEP) ਸੀਰੀਅਲ# %s"
-
-#: src/managerlib.py:87
-msgid "Expired"
-msgstr "ਮਿਆਦ ਪੁੱਗਿਆ"
-
-#: src/certlib.py:612
-msgid "Expired (deleted):"
-msgstr "ਮਿਆਦ-ਪੁੱਗਿਆ (ਹਟਾਇਆ):"
-
-#: src/certlib.py:611
-msgid "Expired (not deleted):"
-msgstr "ਮਿਆਦ-ਪੁੱਗਿਆ (ਨਾ ਹਟਾਇਆ):"
-
-#: src/gui/factsgui.py:54
-msgid "Fact"
-msgstr "ਸਿਧਾਂਤ"
-
-#: src/compliance/rhsm_compliance_icon.c:245
-#: src/compliance/rhsm_compliance_icon.c:315
-#, c-format
-msgid "Failed to open connection to bus: %s\n"
-msgstr "ਬੱਸ ਨਾਲ ਕੁਨੈਕਸ਼ਨ ਖੋਲਣ ਵਿੱਚ ਫੇਲ: %s\n"
-
-#: src/compliance/rhsm_compliance_icon.c:47
-msgid "Force display of the compliance icon (expired or warning)"
-msgstr "ਮਨਜੂਰੀ ਆਈਕਾਲ ਵੇਖਾਉਣ ਲਈ ਮਜਬੂਰ ਕਰੋ (ਮਿਆਦ-ਪੁੱਗਿਆ ਜਾਂ ਚੇਤਾਵਨੀ)"
-
-#: src/certlib.py:607
-#, python-format
-msgid "Found (local) serial# %s"
-msgstr "ਲੱਭੇ (ਲੋਕਲ) ਸੀਰੀਅਲ# %s"
-
-#: src/gui/installedtab.py:95
-msgid "Future Subscription"
-msgstr "ਭਵਿੱਖ ਦੀਆਂ ਮੈਂਬਰੀਆਂ"
-
-#: src/compliance/rhsm_compliance_icon.c:43
-msgid "How often to check for compliance (in seconds)"
-msgstr "ਮਨਜੂਰ ਜਾਂਚ ਲਈ ਕਿੰਨਾ ਸਮਾਂ ਲੱਗਦਾ ਹੈ (ਸਕਿੰਟਾਂ ਵਿੱਚ)"
-
-#: src/gui/data/networkConfig.glade:45
-#, fuzzy
-msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-msgstr "ਮੈਂ Red Hat ਨੈੱਟਵਰਕ ਨਾਲ ਇੱਕ _HTTP ਪਰਾਕਸੀ ਦੁਆਰਾ ਜੁੜਨਾ ਚਾਹੁੰਦਾ ਹੈ।"
-
-#: src/gui/data/importsub.glade:158 src/gui/data/mainwindow.glade:159
-#: src/gui/data/rhsm.glade:155
-msgid "Import Certificate"
-msgstr "ਸਾਰਟੀਫਿਕੇਟ ਇੰਪੋਰਟ ਕਰੋ"
-
-#: src/gui/installedtab.py:104
-msgid "In Compliance"
-msgstr "ਮਨਜੂਰੀ ਵਿੱਚ"
-
-#: src/gui/widgets.py:196
-msgid "Installed"
-msgstr "ਇੰਸਟਾਲ ਕੀਤੇ"
-
-#: src/gui/mysubstab.py:54
-msgid "Installed Products"
-msgstr "ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦ"
-
-#: src/managercli.py:84
-msgid "Installed Products:"
-msgstr "ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦ:"
-
-#: src/gui/data/installed.glade:26
-msgid "Installed View"
-msgstr "ਇੰਸਟਾਲ ਕੀਤੀ ਝਲਕ"
-
-#: src/gui/widgets.py:402
-msgid "Invalid date format. Please re-enter a valid date. Example: "
-msgstr "ਗਲਤ ਮਿਤੀ ਫਾਰਮੈਟ। ਕਿਰਪਾ ਕਰਕੇ ਯੋਗ ਮਿਤੀ ਦੁਬਾਰਾ ਦਿਓ। ਉਦਾਹਰਨ: "
-
-#: src/gui/data/factsdialog.glade:47
-msgid "Last Update:"
-msgstr "ਆਖਰੀ ਅੱਪਡੇਟ:"
-
-#: src/compliance/rhsm_compliance_icon.c:206
-msgid "Manage My Subscriptions..."
-msgstr "ਮੇਰੀਆਂ ਮੈਂਬਰੀਆਂ ਦਾ ਪਰਬੰਧਨ ਕਰੋ..."
-
-#: src/gui/data/subsgui.glade:62
-msgid "Manage Your Product Subscriptions"
-msgstr "ਆਪਣਾ ਉਤਪਾਦ ਮੈਂਬਰੀ ਪਰਬੰਧਨ ਕਰੋ"
-
-#: src/gui/data/allsubs.glade:159
-msgid "Match Installed"
-msgstr "ਮੈਚ ਇੰਸਟਾਲ ਹੋ ਗਿਆ ਹੈ"
-
-#: src/gui/data/allsubs.glade:140
-msgid "Match System"
-msgstr "ਮੈਚ ਸਿਸਟਮ"
-
-#: src/gui/installedtab.py:151
-msgid "My Installed Software"
-msgstr "ਮੇਰੇ ਇੰਸਟਾਲ ਕੀਤੇ ਸਾਫਟਵੇਅਰ"
-
-#: src/gui/mysubstab.py:113
-msgid "My Subscriptions"
-msgstr "ਮੇਰੀਆਂ ਮੈਂਬਰੀਆਂ"
-
-#: src/gui/data/mysubs.glade:26
-msgid "My Subscriptions View"
-msgstr "ਮੇਰੀ ਮੈਂਬਰੀ ਝਲਕ"
-
-#: src/gui/compliance.py:281
-msgid "N/A"
-msgstr "N/A"
-
-#: src/managercli.py:49 src/gui/utils.py:50
-msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
-msgstr ""
-"ਨੈੱਟਵਰਕ ਗਲਤੀ, ਸਰਵਰ ਨਾਲ ਜੁੜ ਨਹੀਂ ਸਕਿਆ। ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/"
-"rhsm.log ਵੇਖੋ।"
-
-#: src/managercli.py:54 src/gui/utils.py:56
-msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
-msgstr ""
-"ਨੈੱਟਵਰਕ ਗਲਤੀ। ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ ਕੁਨੈਕਸ਼ਨ ਵੇਰਵਾ, ਜਾਂ /var/log/rhsm/rhsm.log "
-"ਵੇਖੋ।"
-
-#: src/gui/installedtab.py:96 src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "ਕਦੇ ਮੈਂਬਰੀ ਨਹੀਂ"
-
-#: src/gui/data/allsubs.glade:277 src/gui/data/installed.glade:204
-#: src/gui/data/mysubs.glade:52
-msgid "Next Update:"
-msgstr "ਅਗਲਾ ਅੱਪਡੇਟ:"
-
-#: src/gui/widgets.py:150
-#, python-format
-msgid "Next Update: %s"
-msgstr "ਅਗਲਾ ਅੱਪਡੇਟ: %s"
-
-#: src/managercli.py:725
-msgid "No Available subscription pools to list"
-msgstr "ਵੇਖਾਉਣ ਲਈ ਕੋਈ ਉਪਲੱਬਧ ਮੈਂਬਰੀ ਨਹੀਂ ਹੈ"
-
-#: src/managercli.py:741
-msgid "No Consumed subscription pools to list"
-msgstr "ਵੇਖਾਉਣ ਲਈ ਕੋਈ ਵਰਤੀ ਮੈਂਬਰੀ ਨਹੀਂ ਹੈ"
-
-#: src/managercli.py:704
-msgid "No installed Products to list"
-msgstr "ਵੇਖਾਉਣ ਲਈ ਇੰਸਟਾਲ ਕੀਤਾ ਉਤਪਾਦ ਨਹੀਂ ਹੈ"
-
-#: src/gui/factsgui.py:83
-msgid "No previous update"
-msgstr "ਕੋਈ ਪਿਛਲਾ ਅੱਪਡੇਟ ਨਹੀਂ"
-
-#: src/gui/data/rhsm.glade:561
-msgid "Not Compatible"
-msgstr "ਕੋਈ ਅਨੁਕੂਲਤਾ ਨਹੀਂ"
-
-#: src/managerlib.py:110
-msgid "Not Installed"
-msgstr "ਨਾ ਇੰਸਟਾਲ ਕੀਤਾ"
-
-#: src/managerlib.py:87
-msgid "Not Subscribed"
-msgstr "ਮੈਂਬਰੀ ਨਾ ਬਣਿਆ"
-
-#: src/gui/data/compliance.glade:103
-msgid "On a different date:"
-msgstr "ਹੋਰ ਮਿਤੀ ਤੇ:"
-
-#: src/managercli.py:609
-msgid "One of --serial or --all must be provided"
-msgstr "--serial ਜਾਂ --all ਵਿੱਚੋਂ ਇੱਕ ਦੇਣਾ ਜਰੂਰੀ ਹੈ"
-
-#: src/compliance/rhsm_compliance_icon.c:180
-msgid ""
-"One or more of this system's subscriptions are about to expire. These "
-"subscriptions are required for compliance with your subscription agreements."
-msgstr ""
-"ਇਸ ਸਿਸਟਮ ਦੀਆਂ ਇੱਕ ਜਾਂ ਜਿਆਦਾ ਮੈਂਬਰੀਆਂ ਮਿਆਦ ਪੁੱਗ ਵਾਲੀਆਂ ਹਨ। ਇਹ ਮੈਂਬਰੀਆਂ ਤੁਹਾਡੇ ਮੈਂਬਰੀ ਇਕਰਾਰਨਾਮੇ "
-"ਦੀ ਸਹਿਮਤੀ ਲਈ ਜਰੂਰੀ ਹਨ।"
-
-#: src/gui/data/allsubs.glade:114
-msgid "Only show subscriptions that:"
-msgstr "ਸਿਰਫ ਉਹੀ ਮੈਂਬਰੀਆਂ ਵੇਖਾਓ ਜੋ:"
-
-#: src/i18n_optparse.py:44
-msgid "Options"
-msgstr ""
-
-#: src/gui/installedtab.py:99 src/gui/installedtab.py:111
-msgid "Out of Compliance"
-msgstr "ਮਨਜੂਰੀ ਤੋਂ ਬਾਹਰ"
-
-#: src/gui/data/networkConfig.glade:224
-msgid "Password Text"
-msgstr "ਪਾਸਵਰਡ ਪਾਠ"
-
-#: src/gui/data/registration.glade:157
-#, fuzzy
-msgid "Password:"
-msgstr "ਪਾਸਵਰਡ:"
-
-#: src/managercli.py:226
-#, fuzzy
-msgid "Password: "
-msgstr "ਪਾਸਵਰਡ:"
-
-#: src/managercli.py:549
-msgid "Please enter a valid numeric pool id."
-msgstr "ਕਿਰਪਾ ਕਰਕੇ ਯੋਗ ਅੰਕੀ ਪੂਲ id ਦਿਓ।"
-
-#: src/gui/installedtab.py:41 src/gui/compliance.py:123 src/gui/widgets.py:192
-#: src/gui/data/installed.glade:129
-msgid "Product"
-msgstr "ਉਤਪਾਦ"
-
-#: src/gui/data/progress.glade:7
-msgid "Progress Dialog"
-msgstr "ਤਰੱਕੀ ਵਾਰਤਾਲਾਪ"
-
-#: src/gui/data/importsub.glade:7 src/gui/data/importsub.glade:13
-#: src/gui/data/rhsm.glade:7 src/gui/data/rhsm.glade:13
-msgid "Provide a Subscription Certificate"
-msgstr "ਮੈਂਬਰੀ ਸਾਰਟੀਫਿਕੇਟ ਦਿਓ"
-
-#: src/gui/data/networkConfig.glade:52
-msgid "Proxy Checkbox"
-msgstr "ਪਰਾਕਸੀ ਚੈੱਕਬਾਕਸ"
-
-#: src/gui/data/mainwindow.glade:145
-msgid "Proxy Configuration"
-msgstr "ਪਰਾਕਸੀ ਸੰਰਚਨਾ"
-
-#: src/gui/data/networkConfig.glade:124
-msgid "Proxy Location Text"
-msgstr "ਪਰੋਕਸੀ ਟਿਕਾਣਾ ਪਾਠ"
-
-#: src/gui/data/networkConfig.glade:190
-#, fuzzy
-msgid "Proxy P_assword:"
-msgstr "ਪਰਾਕਸੀ ਗੁਪਤ-ਕੋਡ(_a):"
-
-#: src/gui/data/networkConfig.glade:177
-#, fuzzy
-msgid "Proxy _Username:"
-msgstr "ਪਰਾਕਸੀ ਯੂਜ਼ਰ-ਨਾਂ(_U):"
-
-#: src/gui/firstboot/rhsm_subscriptions.py:28
-msgid "RHSM Subscriptions Management"
-msgstr "RHSM ਮੈਂਬਰੀ ਪਰਬੰਧਨ"
-
-#: src/certlib.py:434
-msgid "Reason(s):"
-msgstr "ਕਾਰਨ:"
-
-#: src/certlib.py:96
-msgid "Reasons(s):"
-msgstr "ਕਾਰਨ:"
-
-#: src/gui/data/registration.glade:174
-#, fuzzy
-msgid "Red Hat Login:"
-msgstr "Red Hat ਲਾਗਇਨ:"
-
-#: src/gui/data/registration.glade:322
-#, fuzzy
-msgid "Register"
-msgstr "ਸਿਸਟਮ ਰਜਿਸਟਰ ਕਰੋ"
-
-#: src/gui/data/mainwindow.glade:177
-msgid "Register System"
-msgstr "ਸਿਸਟਮ ਰਜਿਸਟਰ ਕਰੋ"
-
-#: src/gui/data/rhsm.glade:682
-msgid "Register with Red Hat Entitlement Service"
-msgstr "Red Hat ਇੰਟਾਈਟਲਮੈਂਟ ਸਰਵਿਸ ਨਾਲ ਰਜਿਸਟਰ ਕਰੋ"
-
-#: src/gui/data/rhsm.glade:699
-msgid "Register with Red Hat Network"
-msgstr "Red Hat Network ਨਾਲ ਰਜਿਸਟਰ ਕਰੋ"
-
-#: src/gui/data/rhsm.glade:715
-msgid "Register with Red Hat Network Satellite"
-msgstr "Red Hat Network ਸੈਟੇਲਾਈਟ ਨਾਲ ਰਜਿਸਟਰ ਕਰੋ"
-
-#: src/compliance/rhsm_compliance_icon.c:200
-msgid "Remind Me Later"
-msgstr "ਮੈਨੂੰ ਬਾਅਦ ਵਿੱਚ ਯਾਦ ਕਰਾਓ"
-
-#: src/managercli.py:58 src/gui/utils.py:59
-msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
-msgstr ""
-"ਰਿਮੋਟ ਸਰਵਰ ਗਲਤੀ। ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ ਕੁਨੈਕਸ਼ਨ ਵੇਰਵਾ, ਜਾਂ /var/log/rhsm/rhsm."
-"log ਵੇਖੋ।"
-
-#: src/gui/data/allsubs.glade:54
-msgid "Search"
-msgstr "ਖੋਜ"
-
-#: src/gui/allsubs.py:189 src/gui/compliance.py:228
-msgid "Searching for subscriptions. Please wait."
-msgstr "ਮੈਂਬਰੀਆਂ ਲਈ ਖੋਜ ਰਿਹਾ ਹੈ। ਉਡੀਕ ਕਰੋ ਜੀ।"
-
-#: src/gui/data/registration.glade:257
-msgid "Select the most appropriate subscriptions for this system"
-msgstr "ਇਸ ਸਿਸਟਮ ਲਈ ਵਧੇਰੇ ਅਨੁਕੂਲ ਮੈਂਬਰੀ ਚੁਣੋ"
-
-#: src/compliance/rhsm_compliance_icon.c:45
-msgid "Show debug messages"
-msgstr "ਡੀਬੱਗ ਸੁਨੇਹੇ ਵੇਖਾਓ"
-
-#: src/gui/data/compliance.glade:73
-msgid "Show products that will be out of compliance as of:"
-msgstr "ਉਤਪਾਦ ਵੇਖਾਓ ਜੋ ਮਨਜੂਰੀ ਤੋਂ ਬਾਹਰ ਹਨ ਇਸ ਮੁਤਾਬਕ:"
-
-#: src/compliance/rhsm_compliance_icon.c:177
-msgid "Some of the system's subscriptions are about to expire"
-msgstr "ਸਿਸਟਮ ਦੀ ਕੁਝ ਮੈਂਬਰੀਆਂ ਮਿਆਦ ਪੁੱਗਣ ਵਾਲੀਆਂ ਹਨ"
-
-#: src/gui/installedtab.py:55 src/gui/contract_selection.py:76
-#: src/gui/data/subdetails.glade:127
-msgid "Start Date"
-msgstr "ਸ਼ੁਰੂਆਤੀ ਮਿਤੀ"
-
-#: src/gui/data/allsubs.glade:289 src/gui/data/compliance.glade:281
-#: src/gui/data/contract_selection.glade:179
-msgid "Subscribe"
-msgstr "ਮੈਂਬਰੀ ਬਣੋ"
-
-#: src/managerlib.py:87
-msgid "Subscribed"
-msgstr "ਮੈਂਬਰੀ ਵਾਲਾ"
-
-#: src/gui/mysubstab.py:53 src/gui/allsubs.py:56 src/gui/compliance.py:142
-#: src/gui/data/installed.glade:167
-msgid "Subscription"
-msgstr "ਮੈਂਬਰੀ"
-
-#: src/gui/installedtab.py:101
-#, python-format
-msgid "Subscription %s is expired"
-msgstr "ਮੈਂਬਰੀ %s ਦੀ ਮਿਆਦ ਪੁੱਗ ਗਈ ਹੈ"
-
-#: src/gui/data/activate.glade:7
-msgid "Subscription Activation"
-msgstr "ਮੈਂਬਰੀ ਸਰਗਰਮੀ"
-
-#: src/gui/data/subdetails.glade:109
-msgid "Subscription Detail"
-msgstr "ਮੈਂਬਰੀ ਵੇਰਵਾ"
-
-#: src/gui/firstboot/rhsm_subscriptions.py:29 src/gui/data/mainwindow.glade:6
-#: src/gui/data/subsgui.glade:9
-msgid "Subscription Manager"
-msgstr "ਮੈਂਬਰੀ ਮੈਨੇਜਰ"
-
-#: src/gui/data/compliance.glade:8
-msgid "Subscription Manager - Compliance Assistant"
-msgstr "ਮੈਂਬਰੀ ਮੈਨੇਜਰ - ਮਨਜੂਰੀ ਸਹਾਇਕ"
-
-#: src/gui/data/factsdialog.glade:9
-msgid "Subscription Manager - Facts"
-msgstr "ਮੈਂਬਰੀ ਮੈਨੇਜਰ - ਸਿਧਾਂਤ"
-
-#: src/gui/data/rhsm.glade:496
-msgid "Suggested"
-msgstr "ਸਿਫਾਰਸ਼ ਕੀਤੇ"
-
-#: src/managercli.py:794
-msgid "Supported modules:"
-msgstr "ਸਹਿਯੋਗੀ ਮੋਡੀਊਲ:"
-
-#: src/gui/data/registration.glade:234
-msgid "System Name:"
-msgstr "ਸਿਸਟਮ ਨਾਂ:"
-
-#: src/gui/data/registration.glade:7
-msgid "System Registration"
-msgstr "ਸਿਸਟਮ ਰਜਿਸਟਰੇਸ਼ਨ"
-
-#: src/managercli.py:467
-msgid "System has been un-registered."
-msgstr "ਸਿਸਟਮ ਅਨ-ਰਜਿਸਟਰ ਕੀਤਾ ਗਿਆ ਹੈ।"
-
-#: src/gui/data/allsubs.glade:83
-msgid "Text in Subscription"
-msgstr "ਮੈਂਬਰੀ ਵਿੱਚ ਪਾਠ"
-
-#: src/gui/data/compliance.glade:203
-msgid "The following subscriptions will cover the products selected above:"
-msgstr "ਹੇਠਲੀਆਂ ਮੈਂਬਰੀਆਂ ਅਧੀਨ ਉੱਪਰ ਚੁਣੇ ਉਤਪਾਦ ਆਉਣਗੇ:"
-
-#: src/gui/compliance.py:220
-#, python-format
-msgid "The following subscriptions will cover the products selected on %s"
-msgstr "ਹੇਠਲੀਆਂ ਮੈਂਬਰੀਆਂ ਅਧੀਨ %s ਉੱਪਰ ਚੁਣੇ ਉਤਪਾਦ ਆਉਣਗੇ"
-
-#: src/managercli.py:408
-#, python-format
-msgid "The system with UUID %s has been unregistered"
-msgstr "UUID %s ਵਾਲਾ ਸਿਸਟਮ ਅਨ-ਰਜਿਸਟਰ ਕੀਤਾ ਗਿਆ ਹੈ"
-
-#: src/gui/networkConfig.py:132
-#, python-format
-msgid ""
-"There was an error saving your configuration. Make sure that\n"
-"you own %s."
-msgstr ""
-"ਤੁਹਾਡੀ ਸੰਰਚਨਾ ਸੰਭਾਲਣ ਵਿੱਚ ਗਲਤੀ ਸੀ। ਜਾਂਚ ਕਰੋ ਕਿ\n"
-"ਤੁਸੀਂ %s ਦੇ ਮਾਲਕ ਹੋ।"
-
-#: src/gui/mysubstab.py:81
-#, python-format
-msgid "There was an error unsubsribing from %s with serial number %s"
-msgstr "%s ਤੋਂ ਸੀਰੀਅਲ ਨੰਬਰ %s ਨਾਲ ਮੈਂਬਰੀ ਹਟਾਉਣ ਸਮੇਂ ਗਲਤੀ"
-
-#: src/compliance/rhsm_compliance_icon.c:171
-msgid "This System is Non-Compliant"
-msgstr "ਇਹ ਸਿਸਟਮ ਗੈਰ-ਮਨਜੂਰ ਹੈ"
-
-#: src/compliance/rhsm_compliance_icon.c:179
-msgid "This System's Subscriptions Are About to Expire"
-msgstr "ਇਸ ਸਿਸਟਮ ਦੀ ਮੈਂਬਰੀ ਮਿਆਦ ਪੁੱਗਣ ਵਾਲੀ ਹੈ"
-
-#: src/managercli.py:371
-msgid "This system is already registered. Use --force to override"
-msgstr "ਇਹ ਸਿਸਟਮ ਪਹਿਲਾਂ ਹੀ ਰਜਿਸਟਰ ਕੀਤਾ ਹੈ। ਓਵਰਰਾਈਡ ਕਰਨ ਲਈ --force ਵਰਤੋ"
-
-#: src/managercli.py:454
-msgid "This system is currently not registered."
-msgstr "ਇਹ ਸਿਸਟਮ ਹੁਣ ਰਜਿਸਟਰ ਨਹੀਂ ਕੀਤਾ ਹੈ।"
-
-#: src/compliance/rhsm_compliance_icon.c:172
-msgid ""
-"This system is missing one or more subscriptions required for compliance "
-"with your subscription agreements."
-msgstr ""
-"ਤੁਹਾਡੇ ਮੈਂਬਰੀ ਇਕਰਾਰਨਾਮੇ ਨਾਲ ਸਹਿਮਤੀ ਲਈ ਇਸ ਸਿਸਟਮ ਵਿੱਚ ਇੱਕ ਜਾਂ ਜਿਆਦਾ ਮੈਂਬਰੀਆਂ ਦੀ ਕਮੀ ਹੈ।"
-
-#: src/compliance/rhsm_compliance_icon.c:170
-msgid "This system is non-compliant"
-msgstr "ਇਹ ਸਿਸਟਮ ਗੈਰ-ਮਨਜੂਰ ਹੈ"
-
-#: src/gui/data/rhsm.glade:35
-#, fuzzy
-msgid ""
-"To add a subscription, choose a certificate to import to your subscription "
-"certificate directory."
-msgstr "ਮੈਂਬਰੀ ਜੋੜਨ ਲਈ, ਆਪਣੀ ਮੈਂਬਰੀ ਸਾਰਟੀਫਿਕੇਟ ਡਾਇਰੈਕਟਰੀ ਇੰਪੋਰਟ ਕਰਨ ਲਈ ਸਾਰਟੀਫਿਕੇਟ ਚੁਣੋ।"
-
-#: src/gui/widgets.py:437
-msgid "Today"
-msgstr "ਅੱਜ"
-
-#: src/certlib.py:606
-#, python-format
-msgid "Total updates: %d"
-msgstr "ਕੁੱਲ ਅੱਪਡੇਟ: %d"
-
-#: src/managercli.py:285
-#, python-format
-msgid ""
-"Unable to perform refresh due to the following exception \n"
-" Error: %s"
-msgstr ""
-"ਹੇਠਲੀ ਅੱਪਵਾਰ ਗਲਤੀ ਕਰਕੇ ਮੁੜ-ਤਾਜ਼ਾ ਕਰਨ ਵਿੱਚ \n"
-" ਅਸਫਲ ਹੈ: %s"
-
-#: src/managercli.py:617
-#, python-format
-msgid ""
-"Unable to perform unsubscribe due to the following exception \n"
-" Error: %s"
-msgstr ""
-"ਹੇਠਲੀ ਅੱਪਵਾਦ ਗਲਤੀ ਕਰਕੇ ਮੈਂਬਰੀ ਹਟਾਉਣ ਤੋਂ \n"
-" ਅਸਫਲ ਹੋਇਆ: %s"
-
-#: src/gui/compliance.py:194
-msgid "Unable to search for subscriptions"
-msgstr "ਮੈਂਬਰੀਆਂ ਲਈ ਖੋਜਣ ਵਿੱਚ ਅਸਫਲ"
-
-#: src/gui/allsubs.py:203
-#, python-format
-msgid "Unable to search for subscriptions:  %s"
-msgstr "ਮੈਂਬਰੀਆਂ ਲਈ ਖੋਜਣ ਵਿੱਚ ਫੇਲ:  %s"
-
-#: src/certmgr.py:107
-msgid "Unable to update Red Hat certificates & repositories"
-msgstr "Red Hat ਸਾਰਟੀਫਿਕੇਟ & ਰਿਪੋਜ਼ਟਰੀਆਂ ਅੱਪਡੇਟ ਕਰਨ ਤੋਂ ਅਸਮਰਥ"
-
-#: src/gui/utils.py:52
-#, python-format
-msgid "Unable to verify server's identity: %s"
-msgstr "ਸਰਵਰ ਦਾ ਸ਼ਨਾਖਤ ਕਰਨ ਵਿੱਚ ਫੇਲ: %s"
-
-#: src/gui/compliance.py:118 src/gui/data/compliance.glade:181
-msgid "Uncompliant Product List"
-msgstr "ਸਲਾਮਤ ਉਤਪਾਦ ਸੂਚੀ"
-
-#: src/compliance/rhsm_compliance_icon.c:283
-#, c-format
-msgid "Unknown argument to force-icon: %s\n"
-msgstr "ਫੋਰਸ-ਆਈਕਾਨ ਲਈ ਅਣਜਾਣ ਆਰਗੂਮੈਂਟ: %s\n"
-
-#: src/gui/data/mainwindow.glade:191
-msgid "Unregister System"
-msgstr "ਸਿਸਟਮ ਅਨ-ਰਜਿਸਟਰ ਕਰੋ"
-
-#: src/gui/data/mysubs.glade:64 src/gui/data/mysubs.glade:70
-msgid "Unsubscribe"
-msgstr "ਮੈਂਬਰੀ-ਹਟਾਓ"
-
-#: src/managercli.py:587
-msgid "Unsubscribe from all subscriptions"
-msgstr "ਸਭ ਮੈਂਬਰੀਆਂ ਹਟਾਓ"
-
-#: src/gui/data/allsubs.glade:49 src/gui/data/compliance.glade:134
-msgid "Update"
-msgstr "ਅੱਪਡੇਟ"
-
-#: src/gui/data/factsdialog.glade:107
-msgid "Update Facts"
-msgstr "ਅੱਪਡੇਟ ਸਿਧਾਂਤ"
-
-#: src/gui/data/rhsm.glade:179
-msgid "Update Subscriptions"
-msgstr "ਮੈਂਬਰੀ ਅੱਪਡੇਟ"
-
-#: src/gui/data/factsdialog.glade:58
-msgid "Update Time"
-msgstr "ਅੱਪਡੇਟ ਸਮਾਂ"
-
-#: src/certlib.py:767
-msgid "Updating Red Hat certificates"
-msgstr "Red Hat ਸਾਰਟੀਫਿਕੇਟ ਅੱਪਡੇਟ ਕਰ ਰਿਹਾ ਹੈ"
-
-#: src/certmgr.py:89
-msgid "Updating Red Hat certificates & repositories"
-msgstr "Red Hat ਸਾਰਟੀਫਿਕੇਟ & ਰਿਪੋਜ਼ਟਰੀਆਂ ਅੱਪਡੇਟ ਹੋ ਰਹੇ ਹਨ"
-
-#: src/factlib.py:77
-msgid "Updating facts"
-msgstr "ਸਿਧਾਂਤ ਅੱਪਡੇਟ ਹੋ ਰਹੇ ਹਨ"
-
-#: src/i18n_optparse.py:42
-msgid "Usage"
-msgstr ""
-
-#: src/i18n_optparse.py:41
-#, python-format
-msgid "Usage: %s\n"
-msgstr ""
-
-#: src/gui/data/networkConfig.glade:146
-#, fuzzy
-msgid "Use Au_thentication with HTTP Proxy:"
-msgstr "HTTP ਪਰਾਕਸੀ ਨਾਲ ਪਰਮਾਣਿਕਤਾ ਵਰਤੋ(_t):"
-
-#: src/gui/contract_selection.py:71
-msgid "Used / Available"
-msgstr "ਵਰਤਿਆ / ਉਪਲੱਬਧ"
-
-#: src/gui/data/networkConfig.glade:207
-msgid "Username Text"
-msgstr "ਯੂਜ਼ਰ-ਨਾਂ ਪਾਠ"
-
-#: src/managercli.py:223
-#, fuzzy
-msgid "Username: "
-msgstr "ਯੂਜ਼ਰ-ਨਾਂ ਪਾਠ"
-
-#: src/gui/factsgui.py:55
-msgid "Value"
-msgstr "ਮੁੱਲ"
-
-#: src/gui/installedtab.py:53
-msgid "Version"
-msgstr "ਵਰਜਨ"
-
-#: src/gui/data/mainwindow.glade:223
-msgid "View System Facts"
-msgstr "ਸਿਸਟਮ ਸਿਧਾਂਤ ਵੇਖੋ"
-
-#: src/constants.py:58
+#: ../src/constants.py:56
+msgid "<b>Are you sure you want to unregister?</b>"
+msgstr "<b>ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ ਅਨ-ਰਜਿਸਟਰ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?</b>"
+
+#: ../src/constants.py:58
 msgid ""
 "WARNING\n"
 "\n"
@@ -1256,305 +641,1158 @@ msgstr ""
 "For more information, including alternate tools, consult this Knowledge Base "
 "Article: https://access.redhat.com/kb/docs/DOC-45563\n"
 
-#: src/gui/managergui.py:402
-#, python-format
-msgid "You have <b>%s</b> products out of compliance."
-msgstr "ਤੁਹਾਡਾ <b>%s</b> ਉਤਪਾਦ ਮਨਜੂਰੀ ਤੋਂ ਬਾਹਰ ਹੈ।"
-
-#: src/gui/managergui.py:406
-msgid "You have <b>1</b> product out of compliance."
-msgstr "ਤੁਹਾਡਾ <b>1</b> ਉਤਪਾਦ ਮਨਜੂਰੀ ਤੋਂ ਬਾਹਰ ਹੈ।"
-
-#: src/gui/data/mainwindow.glade:59
-msgid "You have one product which is out of compliance."
-msgstr "ਤੁਹਾਡਾ ਇੱਕ ਉਤਪਾਦ ਮਨਜੂਰੀ ਤੋਂ ਬਾਹਰ ਹੈ।"
-
-#: src/gui/managergui.py:545
-msgid "You must enter a login."
-msgstr "ਤੁਹਾਨੂੰ ਲਾਗਇਨ ਦੇਣਾ ਪਵੇਗਾ।"
-
-#: src/gui/managergui.py:551
-msgid "You must enter a password."
-msgstr "ਤੁਹਾਨੂੰ ਪਾਸਵਰਡ ਦੇਣਾ ਪਵੇਗਾ।"
-
-#: src/gui/managergui.py:536
-msgid "You must enter a system name."
-msgstr "ਤੁਹਾਨੂੰ ਇੱਕ ਸਿਸਟਮ ਨਾਂ ਦੇਣਾ ਜਰੂਰੀ ਹੈ।"
-
-#: src/gui/managergui.py:371
-msgid "You must register before using the compliance assistant."
-msgstr "ਮਨਜੂਰੀ ਸਹਾਇਕ ਵਰਤਣ ਤੋਂ ਪਹਿਲਾਂ ਤੁਹਾਨੂੰ ਰਜਿਸਟਰ ਕਰਨਾ ਜਰੂਰੀ ਹੈ।"
-
-#: src/gui/importsub.py:66
-msgid "You must select a certificate."
-msgstr "ਤੁਹਾਨੂੰ ਇੱਕ ਸਾਰਟੀਫਿਕੇਟ ਚੁਣਨਾ ਪਵੇਗਾ।"
-
-#: src/gui/data/networkConfig.glade:261
-#, fuzzy
-msgid "_Close"
-msgstr "ਬੰਦ(_C)"
-
-#: src/gui/data/networkConfig.glade:108
-#, fuzzy
-msgid "_Proxy Location:"
-msgstr "ਪਰਾਕਸੀ ਟਿਕਾਣਾ(_P):"
-
-#: src/managercli.py:473
-msgid "activate the registered user to a specified product"
-msgstr "ਰਜਿਸਟਰ ਕੀਤੇ ਸਿਸਟਮ ਨੂੰ ਨਿਰਧਾਰਤ ਉਤਪਾਦ ਉੱਪਰ ਸਰਗਰਮ ਕਰੋ"
-
-#: src/i18n_optparse.py:48
-#, python-format
-msgid "ambiguous option: %s (%s?)"
-msgstr ""
-
-#: src/managercli.py:363 src/managercli.py:520
-msgid ""
-"automatically subscribe this system to                                     "
-"compatible subscriptions."
-msgstr ""
-"ਇਸ ਸਿਸਟਮ ਨੂੰ ਆਟੋਮੈਟਿਕ ਹੀ                                     ਅਨੁਕੂਲ ਮੈਂਬਰੀਆਂ ਤੇ ਮੈਂਬਰ "
-"ਬਣਾਓ।"
-
-#: src/managercli.py:674
-msgid "available"
-msgstr "ਉਪਲੱਬਧ"
-
-#: src/gui/data/factsdialog.glade:127
-msgid "close_button"
-msgstr "close_button"
-
-#: src/i18n_optparse.py:55
-msgid "complex"
-msgstr ""
-
-#: src/managercli.py:679
-msgid "consumed"
-msgstr "ਵਰਤਿਆ ਗਿਆ"
-
-#: src/managercli.py:676
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
-msgstr "ਖੋਜ ਲਈ ਮਿਤੀ, ਅੱਜ ਦੀ ਮਿਤੀ ਲਈ ਮੂਲ, ਸਿਰਫ --available ਨਾਲ ਵਰਤਿਆ ਗਿਆ ਹੈ"
-
-#: src/managercli.py:124
-msgid "debug level"
-msgstr "ਡੀਬੱਗ ਲੈਵਲ"
-
-#: src/productid.py:123
-#, python-format
-msgid "deleting: %s"
-msgstr "ਹਟਾ ਰਿਹਾ ਹੈ: %s"
-
-#: src/certlib.py:771 src/certmgr.py:95 src/factlib.py:81
-msgid "done"
-msgstr "ਮੁਕੰਮਲ"
-
-#: src/productid.py:140
-#, python-format
-msgid "duration: %d(ms)"
-msgstr "ਅੰਤਰਾਲ: %d(ms)"
-
-#: src/gui/data/factsdialog.glade:86
-msgid "facts_view"
-msgstr "facts_view"
-
-#: src/i18n_optparse.py:54
-msgid "floating-point"
-msgstr ""
-
-#: src/managercli.py:301
-msgid "force certificate regeneration (requires username and password)"
-msgstr "ਸਾਰਟੀਫਿਕੇਸ਼ਨ ਜਨਰੇਸ਼ਨ ਮਜਬੂਰ ਕਰੋ (ਯੂਜ਼ਰ-ਨਾਂ ਅਤੇ ਪਾਸਵਰਡ ਦੀ ਲੋੜ ਹੈ)"
-
-#: src/gui/data/allsubs.glade:171
-msgid "have no overlap with existing subscriptions"
-msgstr "ਮੌਜੂਦਾ ਮੈਂਬਰੀਆਂ ਨਾਲ ਕੋਈ ਓਵਰਲੈਪ ਨਹੀਂ"
-
-#: src/managercli.py:681
-msgid "if supplied with --available then all subscriptions are returned"
-msgstr "ਜੇ --available ਨਾਲ ਦਿੱਤਾ ਹੋਵੇ ਤਾਂ ਸਭ ਮੈਂਬਰੀਆਂ ਹਟਾਈਆਂ ਗਈਆਂ ਹਨ"
-
-#: src/managercli.py:672
-msgid "installed"
-msgstr "ਇੰਸਟਾਲ ਕੀਤੇ"
-
-#: src/productid.py:109
+#: ../src/productid.py:109
 #, python-format
 msgid "installing: %s"
 msgstr "ਇੰਸਟਾਲ ਹੋ ਰਿਹਾ ਹੈ: %s"
 
-#: src/i18n_optparse.py:52
-msgid "integer"
+#: ../src/productid.py:123
+#, python-format
+msgid "deleting: %s"
+msgstr "ਹਟਾ ਰਿਹਾ ਹੈ: %s"
+
+#: ../src/productid.py:140
+#, python-format
+msgid "duration: %d(ms)"
+msgstr "ਅੰਤਰਾਲ: %d(ms)"
+
+#: ../src/hwprobe.py:60
+#, python-format
+msgid "Error reading system DMI information: %s"
 msgstr ""
 
-#: src/managercli.py:667
-msgid "list available or consumer subscriptions for registered user"
-msgstr "ਰਜਿਸਟਰ ਕੀਤੇ ਯੂਜ਼ਰ ਲਈ ਉਪਲੱਬਧ ਜਾਂ ਖਪਤਕਾਰ ਮੈਂਬਰੀਆਂ ਵੇਖਾਓ"
+#: ../src/hwprobe.py:116
+msgid "Error reading system memory information:"
+msgstr "ਸਿਸਟਮ ਮੈਮੋਰੀ ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ:"
 
-#: src/managercli.py:632
-msgid "list known facts for this system"
-msgstr "ਇਸ ਸਿਸਟਮ ਲਈ ਜਾਣੇ-ਪਛਾਣ ਸਿਧਾਂਤ ਵੇਖਾਓ"
+#: ../src/hwprobe.py:131
+msgid "Error reading system cpu information:"
+msgstr "ਸਿਸਟਮ cpu ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ:"
 
-#: src/i18n_optparse.py:53
-msgid "long integer"
+#: ../src/hwprobe.py:144
+msgid "Error reading networking information:"
+msgstr "ਨੈੱਟਵਰਕ ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ:"
+
+#: ../src/hwprobe.py:161
+msgid "Error reading net Interface information:"
+msgstr "ਨੈੱਟ ਇੰਟਰਫੇਸ ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ:"
+
+#: ../src/certmgr.py:89
+msgid "Updating Red Hat certificates & repositories"
+msgstr "Red Hat ਸਾਰਟੀਫਿਕੇਟ & ਰਿਪੋਜ਼ਟਰੀਆਂ ਅੱਪਡੇਟ ਹੋ ਰਹੇ ਹਨ"
+
+#: ../src/certmgr.py:107
+msgid "Unable to update Red Hat certificates & repositories"
+msgstr "Red Hat ਸਾਰਟੀਫਿਕੇਟ & ਰਿਪੋਜ਼ਟਰੀਆਂ ਅੱਪਡੇਟ ਕਰਨ ਤੋਂ ਅਸਮਰਥ"
+
+#: ../src/gui/firstboot/rhsm_login.py:40
+msgid "Entitlement Registration"
+msgstr "ਇੰਟਾਈਟਲਮੈਂਟ ਰਜਿਸਟਰੇਸ਼ਨ"
+
+#: ../src/gui/firstboot/rhsm_login.py:41
+msgid "Entitlement Platform Registration"
+msgstr "ਇੰਟਾਈਟਲਮੈਂਟ ਪਲੇਟਫਾਰਮ ਰਜਿਸਟਰੇਸ਼ਨ"
+
+#: ../src/gui/firstboot/rhsm_subscriptions.py:28
+msgid "RHSM Subscriptions Management"
+msgstr "RHSM ਮੈਂਬਰੀ ਪਰਬੰਧਨ"
+
+#: ../src/gui/firstboot/rhsm_subscriptions.py:29
+#: ../src/gui/data/mainwindow.glade.h:8 ../src/gui/data/subsgui.glade.h:3
+#: ../etc-conf/subscription-manager.desktop.in.h:2
+msgid "Subscription Manager"
+msgstr "ਮੈਂਬਰੀ ਮੈਨੇਜਰ"
+
+#: ../src/gui/activate.py:55
+#, python-format
+msgid "Error activating subscription: %s"
+msgstr "ਮੈਂਬਰੀ ਸਰਗਰਮੀ ਦੌਰਾਨ ਗਲਤੀ: %s"
+
+#: ../src/gui/importsub.py:66
+msgid "You must select a certificate."
+msgstr "ਤੁਹਾਨੂੰ ਇੱਕ ਸਾਰਟੀਫਿਕੇਟ ਚੁਣਨਾ ਪਵੇਗਾ।"
+
+#: ../src/gui/importsub.py:73
+#, python-format
+msgid "%s is not a valid certificate file. Please upload a valid certificate."
+msgstr "%s ਇੱਕ ਯੋਗ ਸਾਰਟੀਫਿਕੇਟ ਫਾਇਲ ਨਹੀਂ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਯੋਗ ਸਾਰਟੀਫਿਕੇਟ ਅੱਪਲੋਡ ਕਰੋ।"
+
+#: ../src/gui/widgets.py:150
+#, python-format
+msgid "Next Update: %s"
+msgstr "ਅਗਲਾ ਅੱਪਡੇਟ: %s"
+
+#: ../src/gui/widgets.py:192 ../src/gui/compliance.py:123
+#: ../src/gui/installedtab.py:41 ../src/gui/data/installed.glade.h:8
+msgid "Product"
+msgstr "ਉਤਪਾਦ"
+
+#: ../src/gui/widgets.py:196
+msgid "Installed"
+msgstr "ਇੰਸਟਾਲ ਕੀਤੇ"
+
+#: ../src/gui/widgets.py:402
+msgid "Invalid date format. Please re-enter a valid date. Example: "
+msgstr "ਗਲਤ ਮਿਤੀ ਫਾਰਮੈਟ। ਕਿਰਪਾ ਕਰਕੇ ਯੋਗ ਮਿਤੀ ਦੁਬਾਰਾ ਦਿਓ। ਉਦਾਹਰਨ: "
+
+#: ../src/gui/widgets.py:437
+msgid "Today"
+msgstr "ਅੱਜ"
+
+#: ../src/gui/managergui.py:371
+msgid "You must register before using the subscription assistant."
 msgstr ""
 
-#: src/gui/data/allsubs.glade:152
-msgid "match my installed products"
-msgstr "ਮੇਰੇ ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦ ਮੇਲ ਕਰੋ"
+#: ../src/gui/managergui.py:402
+#, python-format
+msgid "You have <b>%s</b> products with invalid entitlement certificates."
+msgstr ""
 
-#: src/gui/data/allsubs.glade:133
-msgid "match my system"
-msgstr "ਮੇਰੇ ਸਿਸਟਮ ਦਾ ਮੇਲ ਕਰੋ"
+#: ../src/gui/managergui.py:406
+msgid "You have <b>1</b> product without a valid entitlement certificate."
+msgstr ""
 
-#: src/managercli.py:359
-msgid "name of the consumer to register. Defaults to the hostname."
-msgstr "ਰਜਿਸਟਰ ਕਰਨ ਲਈ ਖਪਤਕਾਰ ਦਾ ਨਾਂ। ਹੋਸਟ-ਨਾਂ ਲਈ ਮੂਲ ਹੁੰਦੀ ਹੈ"
+#: ../src/gui/managergui.py:413
+#, python-format
+msgid "Product entitlement certificates valid through %s"
+msgstr ""
 
-#: src/gui/mysubstab.py:142
+#: ../src/gui/managergui.py:536
+msgid "You must enter a system name."
+msgstr "ਤੁਹਾਨੂੰ ਇੱਕ ਸਿਸਟਮ ਨਾਂ ਦੇਣਾ ਜਰੂਰੀ ਹੈ।"
+
+#: ../src/gui/managergui.py:545
+msgid "You must enter a login."
+msgstr "ਤੁਹਾਨੂੰ ਲਾਗਇਨ ਦੇਣਾ ਪਵੇਗਾ।"
+
+#: ../src/gui/managergui.py:551
+msgid "You must enter a password."
+msgstr "ਤੁਹਾਨੂੰ ਪਾਸਵਰਡ ਦੇਣਾ ਪਵੇਗਾ।"
+
+#: ../src/gui/compliance.py:118
+msgid "Uncompliant Product List"
+msgstr "ਸਲਾਮਤ ਉਤਪਾਦ ਸੂਚੀ"
+
+#: ../src/gui/compliance.py:125 ../src/gui/mysubstab.py:60
+#: ../src/gui/contract_selection.py:80 ../src/gui/installedtab.py:56
+#: ../src/gui/data/subdetails.glade.h:13
+msgid "End Date"
+msgstr "ਆਖਰੀ ਮਿਤੀ"
+
+#: ../src/gui/compliance.py:141
+msgid "Subscription List"
+msgstr ""
+
+#. Set up columns on the view
+#: ../src/gui/compliance.py:142 ../src/gui/allsubs.py:56
+#: ../src/gui/mysubstab.py:53 ../src/gui/data/installed.glade.h:9
+msgid "Subscription"
+msgstr "ਮੈਂਬਰੀ"
+
+#: ../src/gui/compliance.py:180
+msgid ""
+"Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
+"for more information."
+msgstr ""
+
+#: ../src/gui/compliance.py:194
+msgid "Unable to search for subscriptions"
+msgstr "ਮੈਂਬਰੀਆਂ ਲਈ ਖੋਜਣ ਵਿੱਚ ਅਸਫਲ"
+
+#: ../src/gui/compliance.py:214
+#, python-format
+msgid "Software entitlements valid through %s"
+msgstr ""
+
+#: ../src/gui/compliance.py:218
+#, python-format
+msgid "%s (first date of invalid entitlements)"
+msgstr ""
+
+#: ../src/gui/compliance.py:220
+#, python-format
+msgid "The following subscriptions will cover the products selected on %s"
+msgstr "ਹੇਠਲੀਆਂ ਮੈਂਬਰੀਆਂ ਅਧੀਨ %s ਉੱਪਰ ਚੁਣੇ ਉਤਪਾਦ ਆਉਣਗੇ"
+
+#: ../src/gui/compliance.py:228 ../src/gui/allsubs.py:189
+msgid "Searching for subscriptions. Please wait."
+msgstr "ਮੈਂਬਰੀਆਂ ਲਈ ਖੋਜ ਰਿਹਾ ਹੈ। ਉਡੀਕ ਕਰੋ ਜੀ।"
+
+#. installed but not entitled products:
+#: ../src/gui/compliance.py:281
+msgid "N/A"
+msgstr "N/A"
+
+#: ../src/gui/compliance.py:413 ../src/gui/allsubs.py:227
+#, python-format
+msgid "Error getting subscription: %s"
+msgstr "ਮੈਂਬਰੀ ਪਤਾ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %s"
+
+#: ../src/gui/allsubs.py:177
+msgid "All Available Subscriptions"
+msgstr "ਸਭ ਉਪਲੱਬਧ ਮੈਂਬਰੀਆਂ"
+
+#: ../src/gui/allsubs.py:193
+#, python-format
+msgid "Error fetching subscriptions from server:  %s"
+msgstr "ਸਰਵਰ ਤੋਂ ਮੈਂਬਰੀਆਂ ਲੈਣ ਵਿੱਚ ਗਲਤੀ:  %s"
+
+#: ../src/gui/allsubs.py:203
+#, python-format
+msgid "Unable to search for subscriptions:  %s"
+msgstr "ਮੈਂਬਰੀਆਂ ਲਈ ਖੋਜਣ ਵਿੱਚ ਫੇਲ:  %s"
+
+#: ../src/gui/utils.py:52
+#, python-format
+msgid "Unable to verify server's identity: %s"
+msgstr "ਸਰਵਰ ਦਾ ਸ਼ਨਾਖਤ ਕਰਨ ਵਿੱਚ ਫੇਲ: %s"
+
+#: ../src/gui/networkConfig.py:132
+#, python-format
+msgid ""
+"There was an error saving your configuration. Make sure that\n"
+"you own %s."
+msgstr ""
+"ਤੁਹਾਡੀ ਸੰਰਚਨਾ ਸੰਭਾਲਣ ਵਿੱਚ ਗਲਤੀ ਸੀ। ਜਾਂਚ ਕਰੋ ਕਿ\n"
+"ਤੁਸੀਂ %s ਦੇ ਮਾਲਕ ਹੋ।"
+
+#: ../src/gui/mysubstab.py:54
+msgid "Installed Products"
+msgstr "ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦ"
+
+#: ../src/gui/mysubstab.py:81
+#, python-format
+msgid "There was an error unsubsribing from %s with serial number %s"
+msgstr "%s ਤੋਂ ਸੀਰੀਅਲ ਨੰਬਰ %s ਨਾਲ ਮੈਂਬਰੀ ਹਟਾਉਣ ਸਮੇਂ ਗਲਤੀ"
+
+#: ../src/gui/mysubstab.py:93
+#, python-format
+msgid "Are you sure you want to unsubscribe from %s?"
+msgstr "ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ %s ਤੋਂ ਮੈਂਬਰੀ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
+
+#: ../src/gui/mysubstab.py:113
+msgid "My Subscriptions"
+msgstr "ਮੇਰੀਆਂ ਮੈਂਬਰੀਆਂ"
+
+#: ../src/gui/mysubstab.py:140
+msgid "yes"
+msgstr "ਹਾਂ"
+
+#: ../src/gui/mysubstab.py:142
 msgid "no"
 msgstr "ਨਹੀਂ"
 
-#: src/i18n_optparse.py:47
-#, python-format
-msgid "no such option: %s"
+#. Set up columns on the view
+#: ../src/gui/factsgui.py:54
+msgid "Fact"
+msgstr "ਸਿਧਾਂਤ"
+
+#: ../src/gui/factsgui.py:55
+msgid "Value"
+msgstr "ਮੁੱਲ"
+
+#: ../src/gui/factsgui.py:83
+msgid "No previous update"
+msgstr "ਕੋਈ ਪਿਛਲਾ ਅੱਪਡੇਟ ਨਹੀਂ"
+
+#: ../src/gui/contract_selection.py:67 ../src/gui/data/subdetails.glade.h:12
+msgid "Contract Number"
+msgstr "ਕੰਟਰੈਕਟ ਨੰਬਰ"
+
+#: ../src/gui/contract_selection.py:71
+msgid "Used / Available"
+msgstr "ਵਰਤਿਆ / ਉਪਲੱਬਧ"
+
+#: ../src/gui/contract_selection.py:76 ../src/gui/installedtab.py:55
+#: ../src/gui/data/subdetails.glade.h:14
+msgid "Start Date"
+msgstr "ਸ਼ੁਰੂਆਤੀ ਮਿਤੀ"
+
+#: ../src/gui/installedtab.py:53
+msgid "Version"
+msgstr "ਵਰਜਨ"
+
+#: ../src/gui/installedtab.py:54
+msgid "Certificate"
 msgstr ""
 
-#: src/i18n_optparse.py:56
-#, python-format
-msgid "option %s: invalid %s value: %r"
+#: ../src/gui/installedtab.py:95
+msgid "Future Subscription"
+msgstr "ਭਵਿੱਖ ਦੀਆਂ ਮੈਂਬਰੀਆਂ"
+
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
+msgid "Never Subscribed"
+msgstr "ਕਦੇ ਮੈਂਬਰੀ ਨਹੀਂ"
+
+#: ../src/gui/installedtab.py:99
+msgid "Invalid"
 msgstr ""
 
-#: src/i18n_optparse.py:57
+#: ../src/gui/installedtab.py:101
 #, python-format
-msgid "option %s: invalid choice: %r (choose from %s)"
+msgid "Subscription %s is expired"
+msgstr "ਮੈਂਬਰੀ %s ਦੀ ਮਿਆਦ ਪੁੱਗ ਗਈ ਹੈ"
+
+#: ../src/gui/installedtab.py:104
+msgid "Valid"
 msgstr ""
 
-#: src/compliance/rhsm_compliance_icon.c:350
+#: ../src/gui/installedtab.py:106
+#, python-format
+msgid "Covered by contract %s through %s"
+msgstr "ਕੰਟਰੈਕਟ %s ਦੁਆਰਾ %s ਰਾਹੀਂ ਕਵਰ ਕੀਤਾ"
+
+#: ../src/gui/installedtab.py:111
+msgid "Missing"
+msgstr ""
+
+#: ../src/gui/installedtab.py:151
+msgid "My Installed Software"
+msgstr "ਮੇਰੇ ਇੰਸਟਾਲ ਕੀਤੇ ਸਾਫਟਵੇਅਰ"
+
+#: ../src/gui/data/installed.glade.h:1
+msgid "<b>Certificate Status:</b>"
+msgstr ""
+
+#: ../src/gui/data/installed.glade.h:2
+msgid "<b>Product's Subscription Details</b>"
+msgstr "<b>ਉਤਪਾਦ ਦਾ ਮੈਂਬਰੀ ਵੇਰਵਾ</b>"
+
+#: ../src/gui/data/installed.glade.h:3
+msgid "<b>Product:</b>"
+msgstr "<b>ਉਤਪਾਦ:</b>"
+
+#: ../src/gui/data/installed.glade.h:4 ../src/gui/data/subdetails.glade.h:8
+msgid "<b>Subscription:</b>"
+msgstr "<b>ਮੈਂਬਰੀ:</b>"
+
+#: ../src/gui/data/installed.glade.h:5 ../src/gui/data/mainwindow.glade.h:4
+msgid "Certificate Status"
+msgstr ""
+
+#: ../src/gui/data/installed.glade.h:6
+msgid "Installed View"
+msgstr "ਇੰਸਟਾਲ ਕੀਤੀ ਝਲਕ"
+
+#: ../src/gui/data/installed.glade.h:7 ../src/gui/data/mysubs.glade.h:2
+#: ../src/gui/data/allsubs.glade.h:8
+msgid "Next Update:"
+msgstr "ਅਗਲਾ ਅੱਪਡੇਟ:"
+
+#: ../src/gui/data/networkConfig.glade.h:1
+msgid "Advanced Network Configuration"
+msgstr "ਤਕਨੀਕੀ ਨੈੱਟਵਰਕ ਸੰਰਚਨਾ"
+
+#: ../src/gui/data/networkConfig.glade.h:2
+msgid "Authentication Checkbox"
+msgstr "ਪ੍ਰਮਾਣਿਕਤਾ ਚੈੱਕਬਾਕਸ"
+
+#: ../src/gui/data/networkConfig.glade.h:3
+msgid "Close Button"
+msgstr "ਬੰਦ ਬਟਨ"
+
+#: ../src/gui/data/networkConfig.glade.h:4
+msgid "Enter in the format hostname(:port)"
+msgstr "ਫਾਰਮੈਟ hostname(:port) ਵਿੱਚ ਦਿਓ"
+
+#: ../src/gui/data/networkConfig.glade.h:5
+msgid "Password Text"
+msgstr "ਪਾਸਵਰਡ ਪਾਠ"
+
+#: ../src/gui/data/networkConfig.glade.h:6
+msgid "Proxy Checkbox"
+msgstr "ਪਰਾਕਸੀ ਚੈੱਕਬਾਕਸ"
+
+#: ../src/gui/data/networkConfig.glade.h:7
+msgid "Proxy Location Text"
+msgstr "ਪਰੋਕਸੀ ਟਿਕਾਣਾ ਪਾਠ"
+
+#: ../src/gui/data/networkConfig.glade.h:8
+msgid "Username Text"
+msgstr "ਯੂਜ਼ਰ-ਨਾਂ ਪਾਠ"
+
+#: ../src/gui/data/networkConfig.glade.h:9
+msgctxt "yes"
+msgid "<b>HTTP Proxy</b>"
+msgstr ""
+
+#: ../src/gui/data/networkConfig.glade.h:10
+msgctxt "yes"
+msgid "<small><b>Example:</b> squid.example.com:3128</small>"
+msgstr ""
+
+#: ../src/gui/data/networkConfig.glade.h:11
+msgctxt "yes"
+msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
+msgstr ""
+
+#: ../src/gui/data/networkConfig.glade.h:12
+msgctxt "yes"
+msgid "Proxy P_assword:"
+msgstr ""
+
+#: ../src/gui/data/networkConfig.glade.h:13
+msgctxt "yes"
+msgid "Proxy _Username:"
+msgstr ""
+
+#: ../src/gui/data/networkConfig.glade.h:14
+msgctxt "yes"
+msgid "Use Au_thentication with HTTP Proxy:"
+msgstr ""
+
+#: ../src/gui/data/networkConfig.glade.h:15
+msgctxt "yes"
+msgid "_Close"
+msgstr ""
+
+#: ../src/gui/data/networkConfig.glade.h:16
+msgctxt "yes"
+msgid "_Proxy Location:"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:1
+msgid "A different date:"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:2
+msgid "Invalid Product List"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:3
+msgid "Show products with invalid entitlement certificates as of:"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
+msgid "Subscribe"
+msgstr "ਮੈਂਬਰੀ ਬਣੋ"
+
+#: ../src/gui/data/compliance.glade.h:5
+msgid "Subscription Action Area"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:6
+msgid "Subscription Assistant"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:7
+msgid "Subscription Assistant Box"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:8
+msgid "Subscription Assistant Status"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:9
+msgid "Subscription Date Box"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:10
+msgid "Subscription Date Label"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:11
+msgid "Subscription Date Picker"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:12
+msgid "Subscription Details"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:13
+msgid "Subscription Label"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:14
+msgid "Subscription Label Box"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:15
+msgid "Subscription Manager - Subscription Assistant"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:16
+msgid "Subscription Product List"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:17
+msgid "Subscription Subscriptions Box"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:18
+msgid "Subscription Subscriptions Label"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:19
+msgid "Subscription Update Box"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:20
+msgid "Subscriptions List"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:21
+msgid "Subscriptions Panel"
+msgstr ""
+
+#: ../src/gui/data/compliance.glade.h:22
+msgid "The following subscriptions will cover the products selected above:"
+msgstr "ਹੇਠਲੀਆਂ ਮੈਂਬਰੀਆਂ ਅਧੀਨ ਉੱਪਰ ਚੁਣੇ ਉਤਪਾਦ ਆਉਣਗੇ:"
+
+#: ../src/gui/data/compliance.glade.h:23 ../src/gui/data/allsubs.glade.h:13
+msgid "Update"
+msgstr "ਅੱਪਡੇਟ"
+
+#: ../src/gui/data/compliance.glade.h:24
+msgid "subscribe button"
+msgstr "ਮੈਂਬਰੀ ਬਟਨ"
+
+#: ../src/gui/data/rhsm.glade.h:1
+msgid "<b>Other Available Subscriptions</b>"
+msgstr "<b>ਹੋਰ ਉਪਲੱਬਧ ਮੈਂਬਰੀਆਂ</b>"
+
+#: ../src/gui/data/rhsm.glade.h:2
+msgid "<b>Select Subscriptions to add</b>"
+msgstr "<b>ਸ਼ਾਮਿਲ ਕਰਨ ਲਈ ਮੈਂਬਰੀ ਚੁਣੋ</b>"
+
+#: ../src/gui/data/rhsm.glade.h:3
+msgid "<b>Subscriptions compatible with your system</b>"
+msgstr "<b>ਤੁਹਾਡੇ ਸਿਸਟਮ ਦੇ ਅਨੁਕੂਲ ਮੈਂਬਰੀਆਂ</b>"
+
+#: ../src/gui/data/rhsm.glade.h:4
+msgid "<b>Subscriptions matching your installed products</b>"
+msgstr "<b>ਮੈਂਬਰੀਆਂ ਜੋ ਤੁਹਾਡੇ ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦ ਨਾਲ ਮੇਲ ਖਾਂਦੀਆਂ ਹਨ</b>"
+
+#: ../src/gui/data/rhsm.glade.h:5
+msgid "Add Subscriptions"
+msgstr "ਮੈਂਬਰੀ ਸ਼ਾਮਿਲ ਕਰੋ"
+
+#: ../src/gui/data/rhsm.glade.h:6
+msgid "Do not register"
+msgstr "ਰਜਿਸਟਰ ਨਾ ਕਰੋ"
+
+#: ../src/gui/data/rhsm.glade.h:7 ../src/gui/data/mainwindow.glade.h:5
+#: ../src/gui/data/importsub.glade.h:1
+msgid "Import Certificate"
+msgstr "ਸਾਰਟੀਫਿਕੇਟ ਇੰਪੋਰਟ ਕਰੋ"
+
+#: ../src/gui/data/rhsm.glade.h:8
+msgid "Not Compatible"
+msgstr "ਕੋਈ ਅਨੁਕੂਲਤਾ ਨਹੀਂ"
+
+#: ../src/gui/data/rhsm.glade.h:9 ../src/gui/data/importsub.glade.h:2
+msgid "Provide a Subscription Certificate"
+msgstr "ਮੈਂਬਰੀ ਸਾਰਟੀਫਿਕੇਟ ਦਿਓ"
+
+#: ../src/gui/data/rhsm.glade.h:10
+msgid "Register with Red Hat Entitlement Service"
+msgstr "Red Hat ਇੰਟਾਈਟਲਮੈਂਟ ਸਰਵਿਸ ਨਾਲ ਰਜਿਸਟਰ ਕਰੋ"
+
+#: ../src/gui/data/rhsm.glade.h:11
+msgid "Register with Red Hat Network"
+msgstr "Red Hat Network ਨਾਲ ਰਜਿਸਟਰ ਕਰੋ"
+
+#: ../src/gui/data/rhsm.glade.h:12
+msgid "Register with Red Hat Network Satellite"
+msgstr "Red Hat Network ਸੈਟੇਲਾਈਟ ਨਾਲ ਰਜਿਸਟਰ ਕਰੋ"
+
+#: ../src/gui/data/rhsm.glade.h:13
+msgid "Suggested"
+msgstr "ਸਿਫਾਰਸ਼ ਕੀਤੇ"
+
+#: ../src/gui/data/rhsm.glade.h:14
+msgid "Update Subscriptions"
+msgstr "ਮੈਂਬਰੀ ਅੱਪਡੇਟ"
+
+#: ../src/gui/data/rhsm.glade.h:15
+msgid "update_subscriptions_dialog\n"
+msgstr "update_subscriptions_dialog\n"
+
+#: ../src/gui/data/rhsm.glade.h:17 ../src/gui/data/importsub.glade.h:3
+msgctxt "yes"
+msgid "Certificate _Location:"
+msgstr ""
+
+#: ../src/gui/data/rhsm.glade.h:18
+msgctxt "yes"
+msgid ""
+"To add a subscription, choose a certificate to import to your subscription "
+"certificate directory."
+msgstr ""
+
+#: ../src/gui/data/activate.glade.h:1
+msgid "Activate"
+msgstr "ਸਰਗਰਮ"
+
+#: ../src/gui/data/activate.glade.h:2
+msgid ""
+"Activating your machine may take a few minutes.\n"
+"Please provide an email address to receive notification\n"
+"when the activation is complete."
+msgstr ""
+"ਤੁਹਾਡੀ ਮਸ਼ੀਨ ਸਰਗਰਮ ਹੋਣ ਤੇ ਕੁਝ ਮਿੰਟ ਲੱਗ ਸਕਦੇ ਹਨ\n"
+"ਕਿਰਪਾ ਕਰਕੇ ਸਰਗਰਮੀ ਮੁਕੰਮਲ ਹੋਣ ਤੇ ਸੂਚਨਾਂ ਲੈਣ ਲਈ\n"
+"ਇੱਕ ਈ-ਮੇਲ ਐਡਰੈੱਸ ਦਿਓ।"
+
+#: ../src/gui/data/activate.glade.h:5 ../src/gui/data/factsdialog.glade.h:2
+msgid "Close"
+msgstr "ਬੰਦ"
+
+#: ../src/gui/data/activate.glade.h:6
+msgid "Email Address:"
+msgstr "ਈ-ਮੇਲ ਐਡਰੈੱਸ:"
+
+#: ../src/gui/data/activate.glade.h:7
+msgid "Subscription Activation"
+msgstr "ਮੈਂਬਰੀ ਸਰਗਰਮੀ"
+
+#: ../src/gui/data/mainwindow.glade.h:1
+msgid "<b>Certificate Status</b>"
+msgstr ""
+
+#: ../src/gui/data/mainwindow.glade.h:2
+msgid "<b>Tools</b>"
+msgstr "<b>ਟੂਲ</b>"
+
+#: ../src/gui/data/mainwindow.glade.h:3
+msgid "Activate a Subscription"
+msgstr "ਇੱਕ ਮੈਂਬਰੀ ਸਰਗਰਮ ਕਰੋ"
+
+#: ../src/gui/data/mainwindow.glade.h:6
+msgid "Proxy Configuration"
+msgstr "ਪਰਾਕਸੀ ਸੰਰਚਨਾ"
+
+#: ../src/gui/data/mainwindow.glade.h:7
+msgid "Register System"
+msgstr "ਸਿਸਟਮ ਰਜਿਸਟਰ ਕਰੋ"
+
+#: ../src/gui/data/mainwindow.glade.h:9
+msgid "Unregister System"
+msgstr "ਸਿਸਟਮ ਅਨ-ਰਜਿਸਟਰ ਕਰੋ"
+
+#: ../src/gui/data/mainwindow.glade.h:10
+msgid "Update Certificates"
+msgstr ""
+
+#: ../src/gui/data/mainwindow.glade.h:11
+msgid "View System Facts"
+msgstr "ਸਿਸਟਮ ਸਿਧਾਂਤ ਵੇਖੋ"
+
+#: ../src/gui/data/mainwindow.glade.h:12
+msgid "You have one product without a valid entitlement certificate."
+msgstr ""
+
+#: ../src/gui/data/factsdialog.glade.h:1
+msgid "<b>System Facts:</b>"
+msgstr "<b>ਸਿਸਟਜ਼ ਸਿਧਾਂਤ:</b>"
+
+#: ../src/gui/data/factsdialog.glade.h:3
+msgid "Last Update:"
+msgstr "ਆਖਰੀ ਅੱਪਡੇਟ:"
+
+#: ../src/gui/data/factsdialog.glade.h:4
+msgid "Subscription Manager - Facts"
+msgstr "ਮੈਂਬਰੀ ਮੈਨੇਜਰ - ਸਿਧਾਂਤ"
+
+#: ../src/gui/data/factsdialog.glade.h:5
+msgid "Update Facts"
+msgstr "ਅੱਪਡੇਟ ਸਿਧਾਂਤ"
+
+#: ../src/gui/data/factsdialog.glade.h:6
+msgid "Update Time"
+msgstr "ਅੱਪਡੇਟ ਸਮਾਂ"
+
+#: ../src/gui/data/factsdialog.glade.h:7
+msgid "close_button"
+msgstr "close_button"
+
+#: ../src/gui/data/factsdialog.glade.h:8
+msgid "facts_view"
+msgstr "facts_view"
+
+#: ../src/gui/data/subdetails.glade.h:1
+msgid "<b>Account Number:</b>"
+msgstr "<b>ਅਕਾਊਂਟ ਨੰਬਰ:</b>"
+
+#: ../src/gui/data/subdetails.glade.h:2
+msgid "<b>Bundled Products:</b>"
+msgstr "<b>ਬੰਡਲ ਉਤਪਾਦ:</b>"
+
+#: ../src/gui/data/subdetails.glade.h:3
+msgid "<b>Contract Number:</b>"
+msgstr "<b>ਕੰਟਰੈਕਟ ਨੰਬਰ:</b>"
+
+#: ../src/gui/data/subdetails.glade.h:4
+msgid "<b>End Date:</b>"
+msgstr "<b>ਆਖਰੀ ਮਿਤੀ:</b>"
+
+#: ../src/gui/data/subdetails.glade.h:5
+msgid "<b>Provides Management:</b>"
+msgstr "<b>ਮੈਨੇਜਮੈਂਟ ਦਿੰਦਾ ਹੈ:</b>"
+
+#: ../src/gui/data/subdetails.glade.h:6
+msgid "<b>Start Date:</b>"
+msgstr "<b>ਸ਼ੁਰੂਆਤੀ ਮਿਤੀ:</b>"
+
+#: ../src/gui/data/subdetails.glade.h:7
+msgid "<b>Subscription Details</b>"
+msgstr "<b>ਮੈਂਬਰੀ ਵੇਰਵਾ</b>"
+
+#: ../src/gui/data/subdetails.glade.h:9
+msgid "<b>Support Level:</b>"
+msgstr "<b>ਸਹਿਯੋਗ ਪੱਧਰ:</b>"
+
+#: ../src/gui/data/subdetails.glade.h:10
+msgid "<b>Support Type:</b>"
+msgstr "<b>ਸਹਿਯੋਗ ਕਿਸਮ:</b>"
+
+#: ../src/gui/data/subdetails.glade.h:11
+msgid "Account"
+msgstr "ਅਕਾਊਂਟ"
+
+#: ../src/gui/data/subdetails.glade.h:15
+msgid "Subscription Detail"
+msgstr "ਮੈਂਬਰੀ ਵੇਰਵਾ"
+
+#: ../src/gui/data/subsgui.glade.h:1
+msgid "Enter your Subscription account information"
+msgstr "ਆਪਣੀ ਮੈਂਬਰੀ ਅਕਾਊਂਟ ਜਾਣਕਾਰੀ ਦਿਓ"
+
+#: ../src/gui/data/subsgui.glade.h:2
+msgid "Manage Your Product Subscriptions"
+msgstr "ਆਪਣਾ ਉਤਪਾਦ ਮੈਂਬਰੀ ਪਰਬੰਧਨ ਕਰੋ"
+
+#: ../src/gui/data/importsub.glade.h:4
+msgctxt "yes"
+msgid ""
+"Choose a certificate to import to your subscription certificate directory."
+msgstr ""
+
+#: ../src/gui/data/mysubs.glade.h:1
+msgid "My Subscriptions View"
+msgstr "ਮੇਰੀ ਮੈਂਬਰੀ ਝਲਕ"
+
+#: ../src/gui/data/mysubs.glade.h:3
+msgid "Unsubscribe"
+msgstr "ਮੈਂਬਰੀ-ਹਟਾਓ"
+
+#: ../src/gui/data/allsubs.glade.h:1
+msgid "<b>More search options</b>"
+msgstr "<b>ਹੋਰ ਖੋਜ ਚੋਣਾਂ</b>"
+
+#: ../src/gui/data/allsubs.glade.h:2
+msgid "<b>Show subscriptions active on:</b>"
+msgstr "<b>ਇਸ ਸਮੇਂ ਸਰਗਰਮ ਮੈਂਬਰੀਆਂ ਵੇਖਾਓ:</b>"
+
+#: ../src/gui/data/allsubs.glade.h:3
+msgid "All Subscriptions View"
+msgstr "ਸਭ ਮੈਂਬਰੀਆਂ ਵਾਲੀ ਝਲਕ"
+
+#: ../src/gui/data/allsubs.glade.h:4
+msgid "Contains the text:"
+msgstr "ਇਸ ਵਿੱਚ ਪਾਠ ਸ਼ਾਮਿਲ ਹੈ:"
+
+#: ../src/gui/data/allsubs.glade.h:5
+msgid "Do Not Overlap"
+msgstr "ਓਵਰਲੈਪ ਨਾ ਕਰੋ"
+
+#: ../src/gui/data/allsubs.glade.h:6
+msgid "Match Installed"
+msgstr "ਮੈਚ ਇੰਸਟਾਲ ਹੋ ਗਿਆ ਹੈ"
+
+#: ../src/gui/data/allsubs.glade.h:7
+msgid "Match System"
+msgstr "ਮੈਚ ਸਿਸਟਮ"
+
+#: ../src/gui/data/allsubs.glade.h:9
+msgid "Only show subscriptions that:"
+msgstr "ਸਿਰਫ ਉਹੀ ਮੈਂਬਰੀਆਂ ਵੇਖਾਓ ਜੋ:"
+
+#: ../src/gui/data/allsubs.glade.h:10
+msgid "Search"
+msgstr "ਖੋਜ"
+
+#: ../src/gui/data/allsubs.glade.h:12
+msgid "Text in Subscription"
+msgstr "ਮੈਂਬਰੀ ਵਿੱਚ ਪਾਠ"
+
+#: ../src/gui/data/allsubs.glade.h:14
+msgid "have no overlap with existing subscriptions"
+msgstr "ਮੌਜੂਦਾ ਮੈਂਬਰੀਆਂ ਨਾਲ ਕੋਈ ਓਵਰਲੈਪ ਨਹੀਂ"
+
+#: ../src/gui/data/allsubs.glade.h:15
+msgid "match my installed products"
+msgstr "ਮੇਰੇ ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦ ਮੇਲ ਕਰੋ"
+
+#: ../src/gui/data/allsubs.glade.h:16
+msgid "match my system"
+msgstr "ਮੇਰੇ ਸਿਸਟਮ ਦਾ ਮੇਲ ਕਰੋ"
+
+#: ../src/gui/data/registration.glade.h:1
+msgid "<b>Please enter the following for this system:</b>"
+msgstr "<b>ਇਸ ਸਿਸਟਮ ਲਈ ਕਿਰਪਾ ਕਰਕੇ ਇਹ ਦਿਓ:</b>"
+
+#: ../src/gui/data/registration.glade.h:2
+msgid ""
+"<small>Tip: Forgot your login or password? Look it up at\n"
+"<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
+"www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
+msgstr ""
+"<small>ਟਿੱਪਣੀ: ਆਪਣਾ ਲਾਗਇਨ ਜਾਂ ਪਾਸਵਰਡ ਭੁੱਲ ਗਏ? ਇਸ ਬਾਰੇ\n"
+"<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
+"www.redhat.com/wapps/sso/rhn/lostPassword.html</a> ਤੇ ਵੇਖੋ</small>"
+
+#: ../src/gui/data/registration.glade.h:4
+msgid "A unique label for this system"
+msgstr "ਇਸ ਸਿਸਟਮ ਲਈ ਇੱਕ ਵੱਖਰਾ ਲੇਬਲ"
+
+#: ../src/gui/data/registration.glade.h:5
+#, fuzzy
+msgid "Register"
+msgstr "ਸਿਸਟਮ ਰਜਿਸਟਰ ਕਰੋ"
+
+#: ../src/gui/data/registration.glade.h:6
+msgid "Select the most appropriate subscriptions for this system"
+msgstr "ਇਸ ਸਿਸਟਮ ਲਈ ਵਧੇਰੇ ਅਨੁਕੂਲ ਮੈਂਬਰੀ ਚੁਣੋ"
+
+#: ../src/gui/data/registration.glade.h:7
+msgid "System Name:"
+msgstr "ਸਿਸਟਮ ਨਾਂ:"
+
+#: ../src/gui/data/registration.glade.h:8
+msgid "System Registration"
+msgstr "ਸਿਸਟਮ ਰਜਿਸਟਰੇਸ਼ਨ"
+
+#: ../src/gui/data/registration.glade.h:9
+msgid "register_button"
+msgstr "register_button"
+
+#: ../src/gui/data/registration.glade.h:10
+msgid "register_dialog_main_vbox"
+msgstr "register_dialog_main_vbox"
+
+#: ../src/gui/data/registration.glade.h:11
+msgid "registration_dialog_action_area\n"
+msgstr "registration_dialog_action_area\n"
+
+#: ../src/gui/data/registration.glade.h:13
+msgctxt "yes"
+msgid "<b>Please enter your Red Hat Network account information:</b>"
+msgstr ""
+
+#: ../src/gui/data/registration.glade.h:14
+msgctxt "yes"
+msgid "Password:"
+msgstr ""
+
+#: ../src/gui/data/registration.glade.h:15
+msgctxt "yes"
+msgid "Red Hat Login:"
+msgstr ""
+
+#: ../src/gui/data/progress.glade.h:1
+msgid "Progress Dialog"
+msgstr "ਤਰੱਕੀ ਵਾਰਤਾਲਾਪ"
+
+#: ../src/gui/data/contract_selection.glade.h:1
+msgctxt "yes"
+msgid "<b>Choose the specific contract to use:</b>"
+msgstr ""
+
+#: ../src/gui/data/contract_selection.glade.h:2
+msgctxt "yes"
+msgid "<b>Subscription:</b>"
+msgstr "<b>ਮੈਂਬਰੀ:</b>"
+
+#: ../src/gui/data/contract_selection.glade.h:3
+msgctxt "yes"
+msgid "<b>Total Contracts:</b>"
+msgstr ""
+
+#: ../src/gui/data/contract_selection.glade.h:4
+msgctxt "yes"
+msgid "Contract Selection"
+msgstr ""
+
+#: ../src/gui/data/contract_selection.glade.h:5
+msgctxt "yes"
+msgid "Subscribe"
+msgstr "ਮੈਂਬਰ ਬਣੋ"
+
+#: ../src/compliance/rhsm_compliance_icon.c:43
+msgid "How often to check for validity (in seconds)"
+msgstr ""
+
+#: ../src/compliance/rhsm_compliance_icon.c:45
+msgid "Show debug messages"
+msgstr "ਡੀਬੱਗ ਸੁਨੇਹੇ ਵੇਖਾਓ"
+
+#: ../src/compliance/rhsm_compliance_icon.c:47
+msgid "Force display of the icon (expired or warning)"
+msgstr ""
+
+#: ../src/compliance/rhsm_compliance_icon.c:170
+#: ../src/compliance/rhsm_compliance_icon.c:171
+msgid "Invalid or Missing Entitlement Certificates"
+msgstr ""
+
+#: ../src/compliance/rhsm_compliance_icon.c:172
+msgid "This system is missing one or more valid entitlement certificates."
+msgstr ""
+
+#: ../src/compliance/rhsm_compliance_icon.c:176
+msgid "Some of the system's subscriptions are about to expire"
+msgstr "ਸਿਸਟਮ ਦੀ ਕੁਝ ਮੈਂਬਰੀਆਂ ਮਿਆਦ ਪੁੱਗਣ ਵਾਲੀਆਂ ਹਨ"
+
+#: ../src/compliance/rhsm_compliance_icon.c:178
+msgid "This System's Subscriptions Are About to Expire"
+msgstr "ਇਸ ਸਿਸਟਮ ਦੀ ਮੈਂਬਰੀ ਮਿਆਦ ਪੁੱਗਣ ਵਾਲੀ ਹੈ"
+
+#: ../src/compliance/rhsm_compliance_icon.c:179
+msgid "One or more of this system's subscriptions are about to expire."
+msgstr ""
+
+#: ../src/compliance/rhsm_compliance_icon.c:197
+msgid "Remind Me Later"
+msgstr "ਮੈਨੂੰ ਬਾਅਦ ਵਿੱਚ ਯਾਦ ਕਰਾਓ"
+
+#: ../src/compliance/rhsm_compliance_icon.c:203
+msgid "Manage My Subscriptions..."
+msgstr "ਮੇਰੀਆਂ ਮੈਂਬਰੀਆਂ ਦਾ ਪਰਬੰਧਨ ਕਰੋ..."
+
+#: ../src/compliance/rhsm_compliance_icon.c:242
+#: ../src/compliance/rhsm_compliance_icon.c:312
+#, c-format
+msgid "Failed to open connection to bus: %s\n"
+msgstr "ਬੱਸ ਨਾਲ ਕੁਨੈਕਸ਼ਨ ਖੋਲਣ ਵਿੱਚ ਫੇਲ: %s\n"
+
+#: ../src/compliance/rhsm_compliance_icon.c:280
+#, c-format
+msgid "Unknown argument to force-icon: %s\n"
+msgstr "ਫੋਰਸ-ਆਈਕਾਨ ਲਈ ਅਣਜਾਣ ਆਰਗੂਮੈਂਟ: %s\n"
+
+#: ../src/compliance/rhsm_compliance_icon.c:347
 #, c-format
 msgid "option parsing failed: %s\n"
 msgstr "ਚੋਣ ਪਾਰਸਿੰਗ ਫੇਲ ਹੋਈ: %s\n"
 
-#: src/managercli.py:478
-msgid "optional email address to notify when token activation is complete."
-msgstr "ਸਰਗਰਮੀ ਮੁਕੰਮਲ ਹੋਣ ਤੇ ਸੂਚਨਾ ਦੇਣ ਲਈ ਚੋਣਵਾਂ ਈ-ਮੇਲ ਐਡਰੈੱਸ।"
-
-#: src/managercli.py:481
-msgid ""
-"optional language to use for email notification when token activation is "
-"complete. Used with --email only. Examples: en-us, de-de"
-msgstr ""
-"ਟੋਕਨ ਸਰਗਰਮੀ ਮੁਕੰਮਲ ਹੋਣ ਤੇ ਈ-ਮੇਲ ਸੂਚਨਾਂ ਵਿੱਚ ਵਰਤਣ ਲਈ ਚੋਣਵੀਂ ਭਾਸ਼ਾ। ਸਿਰਫ --email ਨਾਲ ਹੀ "
-"ਵਰਤੋ। ਉਦਾਹਰਨਾਂ: en-us, de-de"
-
-#: src/managercli.py:130
-msgid "password for http proxy with basic authentication"
-msgstr "http ਪਰਾਕਸੀ ਲਈ ਪਾਸਵਰਡ ਮੁਢਲੀ ਪ੍ਰਮਾਣਿਕਤਾ ਸਮੇਤ"
-
-#: src/managercli.py:126
-msgid "proxy url in the form of proxy_hostname:proxy_port"
-msgstr "proxy_hostname:proxy_port ਦੇ ਰੂਪ ਵਿੱਚ ਪਰਾਕਸੀ url"
-
-#: src/managercli.py:270
-msgid "pulls the latest entitlement data from the server"
-msgstr "ਸਰਵਰ ਤੋਂ ਤਾਜ਼ਾ ਇੰਟਾਈਟਲਮੈਂਟ ਡਾਟਾ ਲਵੋ"
-
-#: src/managercli.py:350
-msgid "register the client to RHN"
-msgstr "ਕਲਾਂਈਟ ਨੂੰ RHN ਤੇ ਰਜਿਸਟਰ ਕਰੋ"
-
-#: src/managercli.py:366
-msgid "register the system even if it is already registered"
-msgstr "ਸਿਸਟਮ ਨੂੰ ਰਜਿਸਟਰ ਕਰੋ ਭਾਵਂ ਇਹ ਪਹਿਲਾਂ ਹੀ ਰਜਿਸਟਰ ਕੀਤਾ ਹੈ"
-
-#: src/managercli.py:361
-msgid "register to an existing consumer"
-msgstr "ਇੱਕ ਮੌਜੂਦਾ ਖਪਤਕਾਰ ਤੇ ਰਜਿਸਟਰ ਕਰੋ"
-
-#: src/gui/data/registration.glade:328
-msgid "register_button"
-msgstr "register_button"
-
-#: src/gui/data/registration.glade:21
-msgid "register_dialog_main_vbox"
-msgstr "register_dialog_main_vbox"
-
-#: src/gui/data/registration.glade:298
-msgid "registration_dialog_action_area\n"
-msgstr "registration_dialog_action_area\n"
-
-#: src/managercli.py:251
-msgid "removes all local consumer data, does not effect the server"
-msgstr "ਸਭ ਲੋਕਲ ਖਪਤਕਾਰ ਡਾਟਾ ਹਟਾਓ, ਸਰਵਰ ਤੇ ਕੋਈ ਅਸਰ ਨਹੀਂ ਹੁੰਦਾ"
-
-#: src/managercli.py:299
-msgid "request a new certificate be generated"
-msgstr "ਨਵਾਂ ਸਾਰਟੀਫਿਕੇਟ ਬਣਾਉਣ ਲਈ ਬੇਨਤੀ ਕਰੋ"
-
-#: src/managercli.py:292
-msgid "request a new identity certficate for this machine"
-msgstr "ਇਸ ਮਸ਼ੀਨ ਲਈ ਨਵਾਂ ਸ਼ਨਾਖਤ ਸਾਰਟੀਫਿਕੇਟ ਮੰਗ ਕਰੋ"
-
-#: src/managercli.py:627
-msgid "show information for facts"
-msgstr "ਸਿਧਾਂਤਾ ਲਈ ਜਾਣਕਾਰੀ ਵੇਖਾਓ"
-
-#: src/i18n_optparse.py:61
-msgid "show program's version number and exit"
+#: ../etc-conf/subscription-manager.desktop.in.h:1
+msgid "Red Hat Subscription Manager"
 msgstr ""
 
-#: src/i18n_optparse.py:60
-msgid "show this help message and exit"
+#: ../etc-conf/rhsm-compliance-icon.desktop.in.h:1
+msgid "Red Hat Subscription Validity Applet"
 msgstr ""
 
-#: src/managercli.py:211
-msgid "specify a password"
-msgstr "ਇੱਕ ਪਾਸਵਰਡ ਦਿਓ"
+#: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
+msgid "Subscription Validity Applet"
+msgstr ""
 
-#: src/managercli.py:209
-msgid "specify a username"
-msgstr "ਇੱਕ ਯੂਜ਼ਰ-ਨਾਂ ਦਿਓ"
+#~ msgid "%s (first date of non-compliance)"
+#~ msgstr "%s (ਗੈਰ-ਮਨਜੂਰ ਦੀ ਪਹਿਲੀ ਮਿਤੀ)"
 
-#: src/gui/data/compliance.glade:287
-msgid "subscribe button"
-msgstr "ਮੈਂਬਰੀ ਬਟਨ"
+#, fuzzy
+#~ msgid "<b>Choose the specific contract to use:</b>"
+#~ msgstr "<b>ਵਰਤਣ ਲਈ ਖਾਸ ਕੰਟਰੈਕਟ ਚੁਣੋ:</b>"
 
-#: src/managercli.py:511
-msgid "subscribe the registered machine to a specified product"
-msgstr "ਰਜਿਸਟਰ ਕੀਤੀਆਂ ਮਸ਼ੀਨਾਂ ਨੂੰ ਨਿਰਧਾਰਤ ਉਤਪਾਦ ਤੇ ਮੈਂਬਰ ਬਣਾਓ"
+#~ msgid "<b>Compliance Status</b>"
+#~ msgstr "<b>ਮਨਜੂਰੀ ਸਥਿਤੀ</b>"
 
-#: src/managercli.py:518
-msgid "subscription pool id"
-msgstr "ਮੈਂਬਰੀ ਪੂਲ id"
+#~ msgid "<b>Compliance:</b>"
+#~ msgstr "<b>ਮਨਜੂਰੀ:</b>"
 
-#: src/managercli.py:357
-msgid "the type of consumer to register. Defaults to system"
-msgstr "ਰਜਿਸਟਰ ਕਰਨ ਲਈ ਖਪਤਕਾਰ ਦੀ ਕਿਸਮ। ਸਿਸਟਮ ਲਈ ਮੂਲ ਹੁੰਦੀ ਹੈ"
+#, fuzzy
+#~ msgid "<b>HTTP Proxy</b>"
+#~ msgstr "<b>HTTP ਪਰਾਕਸੀ</b>"
 
-#: src/managercli.py:444
-msgid "unregister the client from RHN"
-msgstr "ਕਲਾਂਈਟ ਨੂੰ RHN ਤੋਂ ਅਨ-ਰਜਿਸਟਰ ਕਰੋ"
+#, fuzzy
+#~ msgid "<b>Please enter your Red Hat Network account information:</b>"
+#~ msgstr "<b>ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀ Red Hat ਨੈੱਟਵਰਕ ਅਕਾਊਂਟ ਜਾਣਕਾਰੀ ਦਿਓ:</b>"
 
-#: src/managercli.py:579
-msgid "unsubscribe the registered user from all or specific subscriptions"
-msgstr "ਸਭ ਜਾਂ ਨਿਰਧਾਰਤ ਮੈਂਬਰੀਆਂ ਤੋਂ ਰਜਿਸਟਰ ਯੂਜ਼ਰਾਂ ਦੀ ਮੈਂਬਰੀ ਹਟਾਓ"
+#, fuzzy
+#~ msgid "<b>Total Contracts:</b>"
+#~ msgstr "<b>ਕੁੱਲ ਕੰਟਰੈਕਟ:</b>"
 
-#: src/managercli.py:634
-msgid "update the system facts"
-msgstr "ਸਿਸਟਮ ਸਿਧਾਂਤ ਅੱਪਡੇਟ ਕਰੋ"
+#~ msgid "<big><b>All software is in compliance until %s</b></big>"
+#~ msgstr "<big><b>ਸਭ ਸਾਫਟਵੇਅਰ ਮਨਜੂਰੀ ਵਿੱਚ ਹਨ ਜਦੋਂ ਤੱਕ %s</b></big>"
 
-#: src/gui/data/rhsm.glade:184
-msgid "update_subscriptions_dialog\n"
-msgstr "update_subscriptions_dialog\n"
+#, fuzzy
+#~ msgid "<small><b>Example:</b> squid.example.com:3128</small>"
+#~ msgstr "<small><b>ਉਦਾਹਰਨ:</b> squid.example.com:3128</small>"
 
-#: src/managercli.py:128
-msgid "user for http proxy with basic authentication"
-msgstr "http ਪਰਾਕਸੀ ਲਈ ਯੂਜ਼ਰ ਮੁਢਲੀ ਪ੍ਰਮਾਣਿਕਤਾ ਸਮੇਤ"
+#~ msgid "All products are in compliance until %s"
+#~ msgstr "ਸਭ ਉਤਪਾਦ ਮਨਜੂਰੀ ਵਿੱਚ ਹਨ ਜਦੋਂ ਤੱਕ %s"
 
-#: src/gui/mysubstab.py:140
-msgid "yes"
-msgstr "ਹਾਂ"
+#~ msgid "Become Compliant"
+#~ msgstr "ਅਨੁਕੂਲ ਬਣੋ"
+
+#, fuzzy
+#~ msgid "Certificate _Location:"
+#~ msgstr "ਸਾਰਟੀਫਿਕੇਟ ਟਿਕਾਣਾ(_L):"
+
+#, fuzzy
+#~ msgid ""
+#~ "Choose a certificate to import to your subscription certificate directory."
+#~ msgstr "ਆਪਣੀ ਮੈਂਬਰੀ ਸਾਰਟੀਫਿਕੇਟ ਡਾਇਰੈਕਟਰੀ ਇੰਪੋਰਟ ਕਰਨ ਲਈ ਸਾਰਟੀਫਿਕੇਟ ਚੁਣੋ।"
+
+#~ msgid "Compliance Action Area"
+#~ msgstr "ਸਹੀ ਕਾਰਵਾਈ ਖੇਤਰ"
+
+#~ msgid "Compliance Assistant"
+#~ msgstr "ਸਹੀ ਸਹਾਇਕ"
+
+#~ msgid "Compliance Assistant Box"
+#~ msgstr "ਸਹੀ ਸਹਾਇਕ ਬਾਕਸ"
+
+#~ msgid "Compliance Assistant Status"
+#~ msgstr "ਸਹੀ ਸਹਾਇਕ ਹਾਲਤ"
+
+#~ msgid "Compliance Date Box"
+#~ msgstr "ਸਹੀ ਮਿਤੀ ਬਾਕਸ"
+
+#~ msgid "Compliance Date Label"
+#~ msgstr "ਸਹੀ ਮਿਤੀ ਲੇਬਲ"
+
+#~ msgid "Compliance Date Picker"
+#~ msgstr "ਸਹੀ ਮਿਤੀ ਪਿੱਕਰ"
+
+#~ msgid "Compliance Label"
+#~ msgstr "ਸਹੀ ਲੇਬਲ"
+
+#~ msgid "Compliance Label Box"
+#~ msgstr "ਸਹੀ ਲੇਬਲ ਬਾਕਸ"
+
+#~ msgid "Compliance Product List"
+#~ msgstr "ਸਹੀ ਉਤਪਾਦ ਸੂਚੀ"
+
+#~ msgid "Compliance Status"
+#~ msgstr "ਮਨਜੂਰੀ ਹਾਲਤ"
+
+#~ msgid "Compliance Subscription Details"
+#~ msgstr "ਸਹੀ ਮੈਂਬਰੀ ਵੇਰਵਾ"
+
+#~ msgid "Compliance Subscription List"
+#~ msgstr "ਸਹੀ ਮੈਂਬਰੀ ਸੂਚੀ"
+
+#~ msgid "Compliance Subscriptions Box"
+#~ msgstr "ਸਹੀ ਮੈਂਬਰੀ ਬਾਕਸ"
+
+#~ msgid "Compliance Subscriptions Label"
+#~ msgstr "ਸਹੀ ਮੈਂਬਰੀ ਲੇਬਲ"
+
+#~ msgid "Compliance Subscriptions List"
+#~ msgstr "ਸਹੀ ਮੈਂਬਰੀ ਸੂਚੀ"
+
+#~ msgid "Compliance Subscriptions Panel"
+#~ msgstr "ਸਹੀ ਮੈਂਬਰੀ ਪੈਨਲ"
+
+#~ msgid "Compliance Update Box"
+#~ msgstr "ਸਹੀ ਅੱਪਡੇਟ ਬਾਕਸ"
+
+#, fuzzy
+#~ msgid "Contract Selection"
+#~ msgstr "ਕੰਟਰੈਕਟ ਚੋਣ"
+
+#~ msgid ""
+#~ "Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log "
+#~ "for more information."
+#~ msgstr ""
+#~ "ਮਨਜੂਰੀ ਸਹਾਇਕ ਵੇਖਾਉਣ ਵਿੱਚ ਗਲਤੀ। ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/rhsm."
+#~ "log ਵੇਖੋ।"
+
+#~ msgid "Error reading system DMI information:"
+#~ msgstr "ਸਿਸਟਮ DMI ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ:"
+
+#~ msgid "Force display of the compliance icon (expired or warning)"
+#~ msgstr "ਮਨਜੂਰੀ ਆਈਕਾਲ ਵੇਖਾਉਣ ਲਈ ਮਜਬੂਰ ਕਰੋ (ਮਿਆਦ-ਪੁੱਗਿਆ ਜਾਂ ਚੇਤਾਵਨੀ)"
+
+#~ msgid "How often to check for compliance (in seconds)"
+#~ msgstr "ਮਨਜੂਰ ਜਾਂਚ ਲਈ ਕਿੰਨਾ ਸਮਾਂ ਲੱਗਦਾ ਹੈ (ਸਕਿੰਟਾਂ ਵਿੱਚ)"
+
+#, fuzzy
+#~ msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
+#~ msgstr "ਮੈਂ Red Hat ਨੈੱਟਵਰਕ ਨਾਲ ਇੱਕ _HTTP ਪਰਾਕਸੀ ਦੁਆਰਾ ਜੁੜਨਾ ਚਾਹੁੰਦਾ ਹੈ।"
+
+#~ msgid "In Compliance"
+#~ msgstr "ਮਨਜੂਰੀ ਵਿੱਚ"
+
+#~ msgid "On a different date:"
+#~ msgstr "ਹੋਰ ਮਿਤੀ ਤੇ:"
+
+#~ msgid ""
+#~ "One or more of this system's subscriptions are about to expire. These "
+#~ "subscriptions are required for compliance with your subscription "
+#~ "agreements."
+#~ msgstr ""
+#~ "ਇਸ ਸਿਸਟਮ ਦੀਆਂ ਇੱਕ ਜਾਂ ਜਿਆਦਾ ਮੈਂਬਰੀਆਂ ਮਿਆਦ ਪੁੱਗ ਵਾਲੀਆਂ ਹਨ। ਇਹ ਮੈਂਬਰੀਆਂ ਤੁਹਾਡੇ ਮੈਂਬਰੀ "
+#~ "ਇਕਰਾਰਨਾਮੇ ਦੀ ਸਹਿਮਤੀ ਲਈ ਜਰੂਰੀ ਹਨ।"
+
+#~ msgid "Out of Compliance"
+#~ msgstr "ਮਨਜੂਰੀ ਤੋਂ ਬਾਹਰ"
+
+#, fuzzy
+#~ msgid "Password:"
+#~ msgstr "ਪਾਸਵਰਡ:"
+
+#, fuzzy
+#~ msgid "Proxy P_assword:"
+#~ msgstr "ਪਰਾਕਸੀ ਗੁਪਤ-ਕੋਡ(_a):"
+
+#, fuzzy
+#~ msgid "Proxy _Username:"
+#~ msgstr "ਪਰਾਕਸੀ ਯੂਜ਼ਰ-ਨਾਂ(_U):"
+
+#, fuzzy
+#~ msgid "Red Hat Login:"
+#~ msgstr "Red Hat ਲਾਗਇਨ:"
+
+#~ msgid "Show products that will be out of compliance as of:"
+#~ msgstr "ਉਤਪਾਦ ਵੇਖਾਓ ਜੋ ਮਨਜੂਰੀ ਤੋਂ ਬਾਹਰ ਹਨ ਇਸ ਮੁਤਾਬਕ:"
+
+#~ msgid "Subscription Manager - Compliance Assistant"
+#~ msgstr "ਮੈਂਬਰੀ ਮੈਨੇਜਰ - ਮਨਜੂਰੀ ਸਹਾਇਕ"
+
+#~ msgid "This System is Non-Compliant"
+#~ msgstr "ਇਹ ਸਿਸਟਮ ਗੈਰ-ਮਨਜੂਰ ਹੈ"
+
+#~ msgid ""
+#~ "This system is missing one or more subscriptions required for compliance "
+#~ "with your subscription agreements."
+#~ msgstr ""
+#~ "ਤੁਹਾਡੇ ਮੈਂਬਰੀ ਇਕਰਾਰਨਾਮੇ ਨਾਲ ਸਹਿਮਤੀ ਲਈ ਇਸ ਸਿਸਟਮ ਵਿੱਚ ਇੱਕ ਜਾਂ ਜਿਆਦਾ ਮੈਂਬਰੀਆਂ ਦੀ ਕਮੀ ਹੈ।"
+
+#~ msgid "This system is non-compliant"
+#~ msgstr "ਇਹ ਸਿਸਟਮ ਗੈਰ-ਮਨਜੂਰ ਹੈ"
+
+#, fuzzy
+#~ msgid ""
+#~ "To add a subscription, choose a certificate to import to your "
+#~ "subscription certificate directory."
+#~ msgstr "ਮੈਂਬਰੀ ਜੋੜਨ ਲਈ, ਆਪਣੀ ਮੈਂਬਰੀ ਸਾਰਟੀਫਿਕੇਟ ਡਾਇਰੈਕਟਰੀ ਇੰਪੋਰਟ ਕਰਨ ਲਈ ਸਾਰਟੀਫਿਕੇਟ ਚੁਣੋ।"
+
+#, fuzzy
+#~ msgid "Use Au_thentication with HTTP Proxy:"
+#~ msgstr "HTTP ਪਰਾਕਸੀ ਨਾਲ ਪਰਮਾਣਿਕਤਾ ਵਰਤੋ(_t):"
+
+#~ msgid "You have <b>%s</b> products out of compliance."
+#~ msgstr "ਤੁਹਾਡਾ <b>%s</b> ਉਤਪਾਦ ਮਨਜੂਰੀ ਤੋਂ ਬਾਹਰ ਹੈ।"
+
+#~ msgid "You have <b>1</b> product out of compliance."
+#~ msgstr "ਤੁਹਾਡਾ <b>1</b> ਉਤਪਾਦ ਮਨਜੂਰੀ ਤੋਂ ਬਾਹਰ ਹੈ।"
+
+#~ msgid "You have one product which is out of compliance."
+#~ msgstr "ਤੁਹਾਡਾ ਇੱਕ ਉਤਪਾਦ ਮਨਜੂਰੀ ਤੋਂ ਬਾਹਰ ਹੈ।"
+
+#~ msgid "You must register before using the compliance assistant."
+#~ msgstr "ਮਨਜੂਰੀ ਸਹਾਇਕ ਵਰਤਣ ਤੋਂ ਪਹਿਲਾਂ ਤੁਹਾਨੂੰ ਰਜਿਸਟਰ ਕਰਨਾ ਜਰੂਰੀ ਹੈ।"
+
+#, fuzzy
+#~ msgid "_Close"
+#~ msgstr "ਬੰਦ(_C)"
+
+#, fuzzy
+#~ msgid "_Proxy Location:"
+#~ msgstr "ਪਰਾਕਸੀ ਟਿਕਾਣਾ(_P):"
 
 #~ msgid ""
 #~ "\n"
@@ -1672,14 +1910,6 @@ msgstr "ਹਾਂ"
 
 #~ msgid "<b>Total of %s subscriptions selected for consumption.</b>"
 #~ msgstr "<b>ਕੁੱਲ %s ਮੈਂਬਰੀਆਂ ਵਰਤਣ ਲਈ ਚੁਣੀਆਂ ਗਈਆਂ ਹਨ।</b>"
-
-#~ msgctxt "yes"
-#~ msgid "<b>Subscription:</b>"
-#~ msgstr "<b>ਮੈਂਬਰੀ:</b>"
-
-#~ msgctxt "yes"
-#~ msgid "Subscribe"
-#~ msgstr "ਮੈਂਬਰ ਬਣੋ"
 
 #~ msgid "Account Number: \t%s"
 #~ msgstr "ਅਕਾਊਂਟ ਨੰਬਰ: \t%s"
