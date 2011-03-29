@@ -149,7 +149,7 @@ def main():
         if compliant == RHSM_EXPIRED:
             syslog.openlog("rhsm-complianced")
             syslog.syslog(syslog.LOG_NOTICE,
-                    "This system has one or more invalid entitlement " +
+                    "This system is missing one or more valid entitlement " +
                     "certificates. " +
                     "Please run subscription-manager-cli for more information.")
         elif compliant == RHSM_WARNING:

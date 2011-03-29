@@ -110,7 +110,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                                 entry['expiration_date'].strftime("%x")))
                 else:
                     entry['image'] = self._render_icon(gtk.STOCK_NO)
-                    entry['status'] = _('Invalid')
+                    entry['status'] = _('Missing')
                     entry['compliance_note'] = _("Never Subscribed")
 
                 self.store.add_map(entry)
