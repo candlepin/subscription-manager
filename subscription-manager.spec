@@ -118,23 +118,24 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
 
 %dir %{_datadir}/rhsm
-%{_datadir}/rhsm/__init__.py*
-%{_datadir}/rhsm/i18n_optparse.py*
-%{_datadir}/rhsm/managercli.py*
-%{_datadir}/rhsm/managerlib.py*
-%{_datadir}/rhsm/async.py*
-%{_datadir}/rhsm/logutil.py*
-%{_datadir}/rhsm/repolib.py*
+%dir %{_datadir}/rhsm/subscription_manager
+%{_datadir}/rhsm/subscription_manager/__init__.py*
+%{_datadir}/rhsm/subscription_manager/i18n_optparse.py*
+%{_datadir}/rhsm/subscription_manager/managercli.py*
+%{_datadir}/rhsm/subscription_manager/managerlib.py*
+%{_datadir}/rhsm/subscription_manager/async.py*
+%{_datadir}/rhsm/subscription_manager/logutil.py*
+%{_datadir}/rhsm/subscription_manager/repolib.py*
 %{_prefix}/lib/yum-plugins/subscription-manager.py*
 %{_prefix}/lib/yum-plugins/product-id.py*
-%{_datadir}/rhsm/certlib.py*
-%{_datadir}/rhsm/hwprobe.py*
-%{_datadir}/rhsm/constants.py*
-%{_datadir}/rhsm/lock.py*
-%{_datadir}/rhsm/facts.py*
-%{_datadir}/rhsm/factlib.py*
-%{_datadir}/rhsm/productid.py*
-%attr(755,root,root) %{_datadir}/rhsm/certmgr.py*
+%{_datadir}/rhsm/subscription_manager/certlib.py*
+%{_datadir}/rhsm/subscription_manager/hwprobe.py*
+%{_datadir}/rhsm/subscription_manager/constants.py*
+%{_datadir}/rhsm/subscription_manager/lock.py*
+%{_datadir}/rhsm/subscription_manager/facts.py*
+%{_datadir}/rhsm/subscription_manager/factlib.py*
+%{_datadir}/rhsm/subscription_manager/productid.py*
+%attr(755,root,root) %{_datadir}/rhsm/subscription_manager/certmgr.py*
 %attr(755,root,root) %{_sbindir}/subscription-manager
 %attr(755,root,root) %{_bindir}/rhsmcertd
 %attr(755,root,root) %{_sysconfdir}/init.d/rhsmcertd
@@ -150,10 +151,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n subscription-manager-gnome
 %defattr(-,root,root,-)
-%dir %{_datadir}/rhsm/gui
-%dir %{_datadir}/rhsm/gui/data
-%dir %{_datadir}/rhsm/gui/data/icons
-%{_datadir}/rhsm/gui/*
+%dir %{_datadir}/rhsm/subscription_manager/gui
+%dir %{_datadir}/rhsm/subscription_manager/gui/data
+%dir %{_datadir}/rhsm/subscription_manager/gui/data/icons
+%{_datadir}/rhsm/subscription_manager/gui/*
 %{_datadir}/icons/hicolor/scalable/apps/subscription-manager.svg
 %{_datadir}/applications/subscription-manager.desktop
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui

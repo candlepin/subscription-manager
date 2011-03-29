@@ -14,7 +14,7 @@
 #
 
 import unittest
-from repolib import *
+from subscription_manager.repolib import *
 from stubs import *
 
 

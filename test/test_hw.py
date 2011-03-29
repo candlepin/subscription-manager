@@ -16,7 +16,7 @@ import unittest
 from mock import patch
 from mock import Mock
 
-import hwprobe
+from subscription_manager import hwprobe
 import subprocess
 
 

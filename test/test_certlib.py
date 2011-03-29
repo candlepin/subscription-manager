@@ -15,9 +15,9 @@
 
 import unittest
 import os
-from certlib import *
-from repolib import RepoFile
-from productid import ProductDatabase
+from subscription_manager.certlib import *
+from subscription_manager.repolib import RepoFile
+from subscription_manager.productid import ProductDatabase
 from modelhelpers import *
 from stubs import *
 from rhsm.certificate import GMT

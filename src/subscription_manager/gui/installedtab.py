@@ -17,10 +17,12 @@ import gtk
 
 from datetime import datetime
 
-import widgets
-from certlib import EntitlementDirectory, ProductDirectory
 from rhsm.certificate import GMT
-import managerlib
+
+from subscription_manager.gui import widgets
+from subscription_manager.certlib import EntitlementDirectory, ProductDirectory
+
+from subscription_manager import managerlib
 
 import gettext
 _ = gettext.gettext

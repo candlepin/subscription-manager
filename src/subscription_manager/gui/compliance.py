@@ -26,15 +26,14 @@ _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
 
 import rhsm.certificate as certificate
-import certlib
-from certlib import find_first_noncompliant_date, CertSorter
-import managerlib
-import managergui
-import storage
-import widgets
-import progress
-import async
-from utils import handle_gui_exception, make_today_now
+from subscription_manager import certlib
+from subscription_manager.certlib import find_first_noncompliant_date, CertSorter
+from subscription_manager import managerlib
+from subscription_manager.gui import storage
+from subscription_manager.gui import widgets
+from subscription_manager.gui import progress
+from subscription_manager import async
+from subscription_manager.gui.utils import handle_gui_exception, make_today_now
 
 class MappedListTreeView(gtk.TreeView):
 
@@ -410,7 +409,7 @@ class ComplianceAssistant(widgets.GladeWidget):
         pool = self.pool_stash.all_pools[pool_id]
         try:
             self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'])
-            managergui.fetch_certificates(self.backend)
+            managerlib.fetch_certificates(self.backend)
         except Exception, e:
             handle_gui_exception(e, _("Error getting subscription: %s"))
 

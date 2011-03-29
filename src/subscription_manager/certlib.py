@@ -22,7 +22,7 @@ import logging
 from datetime import timedelta, datetime
 from rhsm.connection import UEPConnection
 from rhsm.certificate import *
-from lock import Lock
+from subscription_manager.lock import Lock
 from rhsm.config import initConfig
 
 
@@ -540,7 +540,7 @@ class ConsumerIdentity:
         return altName.replace("DirName:/CN=", "")
 
     def write(self):
-        import managerlib
+        from subscription_manager import managerlib
         self.__mkdir()
         f = open(self.keypath(), 'w')
         f.write(self.key)

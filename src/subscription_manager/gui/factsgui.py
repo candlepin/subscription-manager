@@ -18,8 +18,8 @@ import locale
 import logging
 import gtk
 
-import managergui
-import widgets
+from subscription_manager.gui.utils import errorWindow, linkify
+from subscription_manager.gui import widgets
 
 import gettext
 _ = gettext.gettext
@@ -111,7 +111,7 @@ class SystemFactsDialog(widgets.GladeWidget):
             self.facts.write(system_facts, True)
         except Exception, e:
             log.error("Could not update system facts \nError: %s" % e)
-            managergui.errorWindow(managergui.linkify(str(e)))
+            errorWindow(linkify(str(e)))
 
     # GTK callback function for hiding this dialog.
     def _hide_callback(self, button, event=None):

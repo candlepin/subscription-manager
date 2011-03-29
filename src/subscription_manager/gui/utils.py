@@ -26,7 +26,7 @@ import gettext
 _ = gettext.gettext
 
 import rhsm.connection as connection
-import messageWindow
+from subscription_manager.gui import messageWindow
 
 log = logging.getLogger('rhsm-app.' + __name__)
 

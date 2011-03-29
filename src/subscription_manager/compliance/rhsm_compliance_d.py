@@ -27,9 +27,9 @@ from optparse import OptionParser
 
 import sys
 sys.path.append("/usr/share/rhsm")
-import managerlib
+from subscription_manager import managerlib
+from subscription_manager import certlib
 import rhsm.certificate as certificate
-import certlib
 
 enable_debug = False
 
@@ -164,7 +164,6 @@ def main():
         # Return an exit code for the program. compliance is good, so it gets
         # an exit status of 0.
         return compliant
-
 
     system_bus = dbus.SystemBus()
     loop = gobject.MainLoop()
