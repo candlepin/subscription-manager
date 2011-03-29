@@ -347,7 +347,7 @@ class MainWindow(widgets.GladeWidget):
             self.compliance_assistant.show()
         else:
             messageWindow.OkDialog(messageWindow.wrap_text(
-                _("You must register before using the compliance assistant.")),
+                _("You must register before using the subscription assistant.")),
                 self._get_window())
 
     def _activate_button_clicked(self, widget):
@@ -378,18 +378,18 @@ class MainWindow(widgets.GladeWidget):
             # Change wording slightly if just one product out of compliance:
             if warn_count > 1:
                 self.compliance_status_label.set_markup(
-                        _("You have <b>%s</b> products out of compliance.")
+                        _("You have <b>%s</b> products with invalid entitlement certificates.")
                         % warn_count)
             else:
                 self.compliance_status_label.set_markup(
-                        _("You have <b>1</b> product out of compliance.") )
+                        _("You have <b>1</b> product without a valid entitlement certificate.") )
 
         else:
             first_noncompliant = find_first_noncompliant_date()
             buf = gtk.gdk.pixbuf_new_from_file_at_size(COMPLIANT_IMG, 32, 32)
             self.compliance_status_image.set_from_pixbuf(buf)
             self.compliance_status_label.set_text(
-                    _("All products are in compliance until %s") % \
+                    _("Product entitlement certificates valid through %s") % \
                             first_noncompliant.strftime("%x") )
             self.compliant_button.hide()
 

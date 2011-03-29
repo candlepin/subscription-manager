@@ -137,7 +137,7 @@ class ComplianceAssistant(widgets.GladeWidget):
 
         self.subscriptions_store = storage.MappedListStore(subscriptions_type_map)
         self.subscriptions_treeview = MappedListTreeView(self.subscriptions_store)
-        self.subscriptions_treeview.get_accessible().set_name(_("Compliance Subscription List"))
+        self.subscriptions_treeview.get_accessible().set_name(_("Subscription List"))
         self.subscriptions_treeview.add_column(_("Subscription"),
                 self.subscriptions_store['product_name'], True)
         self.subscriptions_treeview.add_column(_("Available Subscriptions"),
@@ -176,7 +176,7 @@ class ComplianceAssistant(widgets.GladeWidget):
             self.window.show()
             self._reload_screen()
         except Exception, e:
-            handle_gui_exception(e, _("Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log for more information."),
+            handle_gui_exception(e, _("Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log for more information."),
                                  formatMsg=False)
 
     def set_parent_window(self, window):
@@ -208,15 +208,15 @@ class ComplianceAssistant(widgets.GladeWidget):
         self.last_compliant_date = self._load_last_compliant_date()
 
         noncompliant_date = self._get_noncompliant_date()
-        log.debug("using noncompliance date: %s" % noncompliant_date)
+        log.debug("using invalid date: %s" % noncompliant_date)
         if self.last_compliant_date:
             formatted = self.format_date(self.last_compliant_date)
-            self.compliance_label.set_label(
-                    _("<big><b>All software is in compliance until %s</b></big>") % formatted)
+            self.compliance_label.set_label("<big><b>%s</b></big>" % \
+                    (_("Software entitlements valid through %s") % formatted))
             self.compliance_label.set_line_wrap(True)
             self.compliance_label.connect("size-allocate", self._label_allocate)
             self.first_noncompliant_radiobutton.set_label(
-                    _("%s (first date of non-compliance)") % formatted)
+                    _("%s (first date of invalid entitlements)") % formatted)
             self.providing_subs_label.set_label(
                     _("The following subscriptions will cover the products selected on %s") % noncompliant_date.strftime("%x"))
 
@@ -243,11 +243,11 @@ class ComplianceAssistant(widgets.GladeWidget):
         """
         d = self._get_noncompliant_date()
         if self.cached_date != d:
-            log.debug("New compliance date selected, reloading screen.")
+            log.debug("New invalid date selected, reloading screen.")
             self.cached_date = d
             self._reload_screen()
         else:
-            log.debug("No change in compliance date, skipping screen reload.")
+            log.debug("No change in invalid date, skipping screen reload.")
 
     def _get_noncompliant_date(self):
         """
