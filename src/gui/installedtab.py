@@ -51,7 +51,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.top_view.append_column(column)
 
         self.add_text_column(_('Version'), 'version')
-        self.add_text_column(_('Compliance Status'), 'status')
+        self.add_text_column(_('Certificate'), 'status')
         self.add_date_column(_('Start Date'), 'start_date')
         self.add_date_column(_('End Date'), 'expiration_date')
 
@@ -96,19 +96,19 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['compliance_note'] = _("Never Subscribed")
                     elif now > date_range.end():
                         entry['image'] = self._render_icon(gtk.STOCK_NO)
-                        entry['status'] = _('Out of Compliance')
+                        entry['status'] = _('Invalid')
                         entry['compliance_note'] = \
                             _('Subscription %s is expired' % order.getSubscription())
                     else:
                         entry['image'] = self._render_icon(gtk.STOCK_YES)
-                        entry['status'] = _('In Compliance')
+                        entry['status'] = _('Valid')
                         entry['compliance_note'] = \
                             _('Covered by contract %s through %s' % \
                             (order.getContract(),
                                 entry['expiration_date'].strftime("%x")))
                 else:
                     entry['image'] = self._render_icon(gtk.STOCK_NO)
-                    entry['status'] = _('Out of Compliance')
+                    entry['status'] = _('Invalid')
                     entry['compliance_note'] = _("Never Subscribed")
 
                 self.store.add_map(entry)

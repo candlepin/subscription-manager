@@ -40,11 +40,11 @@ static char *force_icon = NULL;
 static GOptionEntry entries[] =
 {
 	{"check-period", 'c', 0, G_OPTION_ARG_INT, &check_period,
-		N_("How often to check for compliance (in seconds)"), NULL},
+		N_("How often to check for validity (in seconds)"), NULL},
 	{"debug", 'd', 0, G_OPTION_ARG_NONE, &debug,
 		N_("Show debug messages"), NULL},
 	{"force-icon", 'f', 0, G_OPTION_ARG_STRING, &force_icon,
-		N_("Force display of the compliance icon (expired or warning)"),
+		N_("Force display of the icon (expired or warning)"),
 		"TYPE"},
 	{NULL}
 };
@@ -167,20 +167,17 @@ display_icon(Compliance *compliance, ComplianceType compliance_type)
 	}
 
 	if (compliance_type == RHSM_EXPIRED) {
-		tooltip = _("This system is non-compliant");
-		notification_title = _("This System is Non-Compliant");
+		tooltip = _("Invalid or Missing Entitlement Certificates");
+		notification_title = _("Invalid or Missing Entitlement Certificates");
 		notification_body = _("This system is missing one or more "
-			"subscriptions required for compliance with your "
-			"subscription agreements.");
+			"valid entitlement certificates.");
 
 	} else {
 		tooltip = _("Some of the system's subscriptions are about to expire");
 		notification_title =
 			_("This System's Subscriptions Are About to Expire");
 		notification_body = _("One or more of this system's "
-			"subscriptions are about to expire. These "
-			"subscriptions are required for compliance with your "
-			"subscription agreements.");
+			"subscriptions are about to expire.");
 	}
 
 	compliance->icon = gtk_status_icon_new_from_icon_name("subscription-manager");
@@ -274,7 +271,7 @@ check_compliance(Compliance *compliance)
 	g_debug("Running compliance check");
 
 	if (force_icon) {
-		g_debug("Forcing display of icon (simulated non-compliance)");
+		g_debug("Forcing display of icon (simulated invalidity)");
 		if (g_str_equal(force_icon, "expired")) {
 			compliance_type = RHSM_EXPIRED;
 		} else if (g_str_equal(force_icon, "warning")) {

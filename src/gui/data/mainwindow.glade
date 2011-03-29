@@ -42,7 +42,7 @@
                                 <property name="pixel_size">16</property>
                                 <property name="icon_name">emblem-default</property>
                                 <accessibility>
-                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Compliance Status</atkproperty>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Certificate Status</atkproperty>
                                 </accessibility>
                                 <property name="icon-size">6</property>
                               </widget>
@@ -56,7 +56,7 @@
                               <widget class="GtkLabel" id="compliance_status_label">
                                 <property name="width_request">200</property>
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">You have one product which is out of compliance.</property>
+                                <property name="label" translatable="yes">You have one product without a valid entitlement certificate.</property>
                                 <property name="wrap">True</property>
                                 <property name="wrap_mode">word-char</property>
                               </widget>
@@ -75,13 +75,13 @@
                             <property name="layout_style">end</property>
                             <child>
                               <widget class="GtkButton" id="compliant_button">
-                                <property name="label" translatable="yes">Become Compliant</property>
+                                <property name="label" translatable="yes">Update Certificates</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="no_show_all">True</property>
                                 <accessibility>
-                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Become Compliant</atkproperty>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Update Certificates</atkproperty>
                                 </accessibility>
                                 <signal name="clicked" handler="on_compliant_button_clicked"/>
                               </widget>
@@ -105,7 +105,7 @@
                 <child>
                   <widget class="GtkLabel" id="label1">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Compliance Status&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Certificate Status&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </widget>
                   <packing>

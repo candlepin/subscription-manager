@@ -69,7 +69,7 @@ def check_compliance():
             certlib.EntitlementDirectory())
 
     if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
-        debug("System is not in compliance")
+        debug("System has one or more certificates that are not valid")
         debug(sorter.unentitled_products.keys())
         debug(sorter.expired_products.keys())
         return RHSM_EXPIRED
@@ -78,7 +78,7 @@ def check_compliance():
             debug("System has one or more entitlements in their warning period")
             return RHSM_WARNING
         else:
-            debug("System appears compliant")
+            debug("System entitlements appear valid")
             return RHSM_COMPLIANT
 
 
@@ -118,7 +118,7 @@ class ComplianceChecker(dbus.service.Object):
         """
         ret = check_compliance()
         if (ret != self.last_status):
-            debug("Compliance status changed, fire signal")
+            debug("Validity status changed, fire signal")
             #we send the code out, but no one uses it at this time
             self.compliancechanged(ret)
         self.last_status = ret
@@ -149,7 +149,8 @@ def main():
         if compliant == RHSM_COMPLIANT:
             syslog.openlog("rhsm-complianced")
             syslog.syslog(syslog.LOG_NOTICE,
-                    "This system is non-compliant. " +
+                    "This system has one or more invalid entitlement " +
+                    "certificates. " +
                     "Please run subscription-manager-cli for more information.")
             return RHSM_COMPLIANT
         elif compliant == RHSM_WARNING:

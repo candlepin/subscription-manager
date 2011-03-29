@@ -120,13 +120,13 @@ class Facts():
         # fact collection should probably become "pluggable" at some
         # point
 
-        # figure out if we think we are compliant
+        # figure out if we think we have valid entitlements
         sorter = certlib.CertSorter(certlib.ProductDirectory(),
                                     certlib.EntitlementDirectory())
 
-        compliance_facts = {'system.compliant':True}
+        compliance_facts = {'system.entitlements_valid':True}
         if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
-            compliance_facts['system.compliant'] = False
+            compliance_facts['system.entitlements_valid'] = False
 
         facts.update(compliance_facts)
 
