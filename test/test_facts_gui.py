@@ -1,7 +1,7 @@
 import unittest
 
-import facts
-from gui import factsgui, managergui
+from subscription_manager import facts
+from subscription_manager.gui import factsgui, managergui
 from mock import Mock
 
 

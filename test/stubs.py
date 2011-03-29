@@ -15,7 +15,7 @@
 
 from datetime import datetime, timedelta
 
-from certlib import EntitlementDirectory, ProductDirectory
+from subscription_manager.certlib import EntitlementDirectory, ProductDirectory
 from rhsm.certificate import EntitlementCertificate, Product, GMT, DateRange, \
         ProductCertificate, parse_tags, Content
 

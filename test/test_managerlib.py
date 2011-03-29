@@ -16,7 +16,7 @@
 import unittest
 from mock import Mock
 
-from managerlib import *
+from subscription_manager.managerlib import *
 from modelhelpers import *
 from stubs import *
 

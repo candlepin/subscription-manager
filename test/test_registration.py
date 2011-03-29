@@ -13,10 +13,10 @@
 # in this software or its documentation.
 #
 import rhsm.connection as connection
-from certlib import ConsumerIdentity
-from managercli import RegisterCommand
-from facts import Facts
-import managerlib
+from subscription_manager.certlib import ConsumerIdentity
+from subscription_manager.managercli import RegisterCommand
+from subscription_manager.facts import Facts
+from subscription_manager import managerlib
 
 import os
 import unittest
