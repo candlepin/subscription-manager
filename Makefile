@@ -7,6 +7,7 @@ INSTALL_MODULE = /rhsm/
 PKGNAME = subscription_manager
 CODE_DIR = ${PREFIX}/${INSTALL_DIR}/${INSTALL_MODULE}/${PKGNAME}/
 VERSION = $(shell echo `grep ^Version: $(PKGNAME).spec | awk '{ print $$2 }'`)
+SRC_DIR = src/subscription_manager
 
 CFLAGS = -Wall -g
 
@@ -23,9 +24,9 @@ rhsmcertd: src/rhsmcertd.c bin
 
 COMPLIANCE_FLAGS=`pkg-config --cflags --libs gtk+-2.0 libnotify`
 
-rhsm-compliance-icon: src/compliance/rhsm_compliance_icon.c bin
+rhsm-compliance-icon: src/subscription_manager/compliance/rhsm_compliance_icon.c bin
 	${CC} ${CFLAGS} ${COMPLIANCE_FLAGS} -o bin/rhsm-compliance-icon \
-		src/compliance/rhsm_compliance_icon.c
+		src/subscription_manager/compliance/rhsm_compliance_icon.c
 
 dbus-service-install:
 	install -d ${PREFIX}/etc/dbus-1/system.d
@@ -35,7 +36,7 @@ dbus-service-install:
 		${PREFIX}/etc/dbus-1/system.d
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.service \
 		${PREFIX}/${INSTALL_DIR}/dbus-1/system-services
-	install -m 744 src/compliance/rhsm_compliance_d.py \
+	install -m 744 src/subscription_manager/compliance/rhsm_compliance_d.py \
 		${PREFIX}/usr/libexec/rhsm-complianced
 
 install-conf:
@@ -72,20 +73,20 @@ install-files: dbus-service-install compile-po
 
 	cp -R po/build/* ${PREFIX}/${INSTALL_DIR}/locale/
 
-	install -m 644 -p src/*.py ${CODE_DIR}
-	install -m 644 -p src/gui/*.py ${CODE_DIR}/gui
-	install -m 644 -p src/plugin/*.py ${PREFIX}/usr/lib/yum-plugins/
+	install -m 644 -p ${SRC_DIR}/*.py ${CODE_DIR}
+	install -m 644 -p ${SRC_DIR}/gui/*.py ${CODE_DIR}/gui
+	install -m 644 -p ${SRC_DIR}/plugin/*.py ${PREFIX}/usr/lib/yum-plugins/
 
-	install -m 644 src/gui/data/*.glade ${CODE_DIR}/gui/data/
-	install -m 644 src/gui/data/icons/*.svg ${CODE_DIR}/gui/data/icons/
-	install -m 644 src/gui/data/icons/scalable/*.svg ${CODE_DIR}/gui/data/icons/scalable/
+	install -m 644 ${SRC_DIR}/gui/data/*.glade ${CODE_DIR}/gui/data/
+	install -m 644 ${SRC_DIR}/gui/data/icons/*.svg ${CODE_DIR}/gui/data/icons/
+	install -m 644 ${SRC_DIR}/gui/data/icons/scalable/*.svg ${CODE_DIR}/gui/data/icons/scalable/
 	ln -sf /${CODE_DIR}/gui/data/icons/scalable/subscription-manager.svg ${PREFIX}/${INSTALL_DIR}/icons/hicolor/scalable/apps/
 	install src/subscription-manager ${PREFIX}/usr/sbin
 	install src/subscription-manager-gui ${PREFIX}/usr/sbin
 	install bin/* ${PREFIX}/usr/bin
 	install src/rhsmcertd.init.d ${PREFIX}/etc/init.d/rhsmcertd
 	install -m 644 man/* ${PREFIX}/${INSTALL_DIR}/man/man8/
-	install -m644 src/gui/firstboot/*.py ${PREFIX}/${INSTALL_DIR}/firstboot/modules
+	install -m644 ${SRC_DIR}/gui/firstboot/*.py ${PREFIX}/${INSTALL_DIR}/firstboot/modules
 	install -m 644 etc-conf/rhsm-compliance-icon.desktop \
 		${PREFIX}/etc/xdg/autostart
 	install -m 755 etc-conf/rhsm-complianced.cron \
@@ -124,11 +125,11 @@ gettext:
 	# the string marked for translation beginning with "translators" will be
 	# included in the pot file.
 	xgettext -ctranslators -s --language=Python -o po/keys.pot \
-		$(shell find src/ -name "*.py")
+		$(shell find ${SRC_DIR}/ -name "*.py")
 	xgettext -ctranslators -s -k_ -kN_ --language=C -j -o po/keys.pot \
-		src/compliance/*.c
+		${SRC_DIR}/compliance/*.c
 	xgettext -ctranslators -s --language=Glade -j -o po/keys.pot \
-		src/gui/data/*.glade
+		${SRC_DIR}/gui/data/*.glade
 
 update-po:
 	for f in $(shell find po/ -name "*.po") ; do \
