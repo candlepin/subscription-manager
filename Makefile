@@ -93,7 +93,7 @@ install-files: dbus-service-install compile-po desktop-files
 	install src/subscription-manager-gui ${PREFIX}/usr/sbin
 	install bin/* ${PREFIX}/usr/bin
 	install src/rhsmcertd.init.d ${PREFIX}/etc/init.d/rhsmcertd
-	install -m644 src/gui/firstboot/${RHELVERSION}/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot
+	install -m644 ${CODE_DIR}/gui/firstboot/${RHELVERSION}/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot
 	if [ ${RHELVERSION} = 5 ]; then ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_login.py ${PREFIX}/usr/share/firstboot/modules/; fi
 	if [ ${RHELVERSION} = 5 ]; then ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_subscriptions.py ${PREFIX}/usr/share/firstboot/modules/; fi
 	install -m 644 man/* ${PREFIX}/${INSTALL_DIR}/man/man8/
@@ -139,8 +139,8 @@ desktop-files: etc-conf/rhsm-compliance-icon.desktop \
 po/POTFILES.in:
 	# generate the POTFILES.in file expected by intltool. it wants one
 	# file per line, but we're lazy.
-	find src/ -name "*.py" > po/POTFILES.in
-	find src/gui/data/ -name "*.glade" >> po/POTFILES.in
+	find ${CODE_DIR}/ -name "*.py" > po/POTFILES.in
+	find ${CODE_DIR}/gui/data/ -name "*.glade" >> po/POTFILES.in
 	find src/ -name "*.c" >> po/POTFILES.in
 	find etc-conf/ -name "*.desktop.in" >> po/POTFILES.in
 
