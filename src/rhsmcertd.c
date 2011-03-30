@@ -15,12 +15,13 @@
 * in this software or its documentation.
 */
 
+#include <sys/file.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <time.h>
 #include <wait.h>
-#include <errno.h>
 
 #define LOGFILE "/var/log/rhsm/rhsmcertd.log"
 #define LOCKFILE "/var/lock/subsys/rhsmcertd"
@@ -81,11 +82,12 @@ int run(int interval)
         {
             fprintf(log, "%s: fork failed\n", ts());
             fflush(log);
-            return 1;
+            return EXIT_FAILURE;
         }
         if(pid == 0)
         {
-            execl("/usr/bin/python", "python", "/usr/share/rhsm/certmgr.py", 0);
+            execl("/usr/bin/python", "python", "/usr/share/rhsm/certmgr.py",
+		  NULL);
         }
         int delay = interval;
         waitpid(pid, &status, 0);
@@ -122,7 +124,7 @@ int get_lock()
     if((fdlock = open(LOCKFILE, O_WRONLY|O_CREAT, 0640)) == -1)
         return 1;
 
-    if(flock(fdlock, LOCK_EX|LOCK_NB, 0) == -1)
+    if(flock(fdlock, LOCK_EX|LOCK_NB) == -1)
         return 1;
 
     return 0;
@@ -131,11 +133,14 @@ int get_lock()
 int main(int argc, char *argv[])
 {
     log = fopen(LOGFILE, "a+");
-    if(log == 0) return 1;
+    if(log == 0)
+    {
+	    return EXIT_FAILURE;
+    }
     if(argc < 2)
     {
         printUsage();
-        return 1;
+        return EXIT_FAILURE;
     }
     int interval = atoi(argv[1]);
     if(interval < 1)
@@ -151,11 +156,13 @@ int main(int argc, char *argv[])
         if (get_lock() != 0) {
             fprintf(log, "%s: unable to get lock, exiting\n", ts());
             fflush(log);
-            return 1;
+            return EXIT_FAILURE;
         }
 
         run(interval);
     }
     fclose(log);
+
+    return EXIT_SUCCESS;
 }
 
