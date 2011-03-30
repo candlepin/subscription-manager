@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.96.2
+Version: 0.95.5.1
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
