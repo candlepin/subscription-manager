@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.95.5.1
+Version: 0.95.5.2
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -57,6 +57,8 @@ rm -rf %{buildroot}
 %{python_sitelib}/rhsm-*.egg-info
 
 %changelog
+* Wed Mar 30 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 668613: Add python-rhsm package
 * Mon Feb 14 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.2-1
 - Setup configuration for Fedora git builds. (dgoodwin@rm-rf.ca)
 
