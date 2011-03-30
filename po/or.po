@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 18:47-0300\n"
-"PO-Revision-Date: 2011-03-18 12:51+0530\n"
+"POT-Creation-Date: 2011-03-30 08:54-0300\n"
+"PO-Revision-Date: 2011-03-30 11:33+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "Language: or-IN\n"
@@ -94,80 +94,80 @@ msgstr "ସ୍ଥାପିତ ହୋଇନାହିଁ"
 #: ../src/i18n_optparse.py:41
 #, python-format
 msgid "Usage: %s\n"
-msgstr ""
+msgstr "ବ୍ଯବହାର ବିଧି: %s\n"
 
 #: ../src/i18n_optparse.py:42
 msgid "Usage"
-msgstr ""
+msgstr "ବ୍ଯବହାର ବିଧି"
 
 #: ../src/i18n_optparse.py:43
 msgid "%prog [options]"
-msgstr ""
+msgstr "%prog [options]"
 
 #: ../src/i18n_optparse.py:44
 msgid "Options"
-msgstr ""
+msgstr "ବିକଳ୍ପଗୁଡିକ"
 
 #. stuff for option value sanity checking
 #: ../src/i18n_optparse.py:47
 #, python-format
 msgid "no such option: %s"
-msgstr ""
+msgstr "ଏଭଳି କୌଣସି ବିକଳ୍ପ ନାହିଁ: %s"
 
 #: ../src/i18n_optparse.py:48
 #, python-format
 msgid "ambiguous option: %s (%s?)"
-msgstr ""
+msgstr "ସନ୍ଦେହଜନକ ବିକଳ୍ପ: %s (%s?)"
 
 #: ../src/i18n_optparse.py:49
 #, python-format
 msgid "%s option requires an argument"
-msgstr ""
+msgstr "%s ପସନ୍ଦ ଏକ ସ୍ବତନ୍ତ୍ରଚର ଆବଶ୍ଯକ କରୁଛି"
 
 #: ../src/i18n_optparse.py:50
 #, python-format
 msgid "%s option requires %d arguments"
-msgstr ""
+msgstr "%s ବିକଳ୍ପ %d ସ୍ୱତନ୍ତ୍ରଚର ଆବଶ୍ୟକ କରିଥାଏ"
 
 #: ../src/i18n_optparse.py:51
 #, python-format
 msgid "%s option does not take a value"
-msgstr ""
+msgstr "%s ବିକଳ୍ପ ମୂଲ୍ଯକୁ ଗ୍ରହଣ କରେନାହିଁ"
 
 #: ../src/i18n_optparse.py:52
 msgid "integer"
-msgstr ""
+msgstr "ପୂର୍ଣ୍ଣ ସଂଖ୍ୟା"
 
 #: ../src/i18n_optparse.py:53
 msgid "long integer"
-msgstr ""
+msgstr "ପୂର୍ଣ୍ଣ ସଂଖ୍ୟା"
 
 #: ../src/i18n_optparse.py:54
 msgid "floating-point"
-msgstr ""
+msgstr "ଚଳ ବିନ୍ଦୁ"
 
 #: ../src/i18n_optparse.py:55
 msgid "complex"
-msgstr ""
+msgstr "ଜଟିଳ"
 
 #: ../src/i18n_optparse.py:56
 #, python-format
 msgid "option %s: invalid %s value: %r"
-msgstr ""
+msgstr "ବିକଳ୍ପ %s: ଅବୈଧ %s ମୂଲ୍ୟ: %r"
 
 #: ../src/i18n_optparse.py:57
 #, python-format
 msgid "option %s: invalid choice: %r (choose from %s)"
-msgstr ""
+msgstr "ବିକଳ୍ପ %s: ଅବୈଧ ପସନ୍ଦ: %r (%s ରୁ ବାଛନ୍ତୁ)"
 
 #. default options
 #: ../src/i18n_optparse.py:60
 msgid "show this help message and exit"
-msgstr ""
+msgstr "ଏହି ସହାୟତା ସନ୍ଦେଶ ଦେଖାନ୍ତୁ ଏବଂ ପ୍ରସ୍ଥାନ କରନ୍ତୁ"
 
 #: ../src/i18n_optparse.py:61
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "ପ୍ରଗ୍ରାମ ସଂସ୍କରଣକୁ ଦର୍ଶାନ୍ତୁ ଏବଂ ପ୍ରସ୍ଥାନକରନ୍ତୁ"
 
 #: ../src/factlib.py:77
 msgid "Updating facts"
@@ -245,14 +245,12 @@ msgid "specify a password"
 msgstr "ଗୋଟିଏ ପ୍ରବେଶ ସଙ୍କେତ ନିର୍ଦ୍ଦିଷ୍ଟ କରନ୍ତୁ"
 
 #: ../src/managercli.py:223
-#, fuzzy
 msgid "Username: "
-msgstr "ଚାଳକ ନାମ ପାଠ୍ୟ"
+msgstr "ଚାଳକ ନାମ: "
 
 #: ../src/managercli.py:226
-#, fuzzy
 msgid "Password: "
-msgstr "ପ୍ରବେଶ ସଙ୍କେତ:"
+msgstr "ପ୍ରବେଶ ସଙ୍କେତ: "
 
 #: ../src/managercli.py:251
 msgid "removes all local consumer data, does not effect the server"
@@ -546,12 +544,12 @@ msgid ""
 "AccountNumber:      \t%-25s\n"
 msgstr ""
 "\n"
-"ProductName:        \t%-25s\n"
-"Status:             \t%-25s\n"
-"Expires:            \t%-25s\n"
-"Subscription:       \t%-25s\n"
-"ContractNumber:     \t%-25s\n"
-"AccountNumber:      \t%-25s\n"
+"ଉତ୍ପାଦନ ନାମ:        \t%-25s\n"
+"ସ୍ଥିତି:             \t%-25s\n"
+"ସମାପ୍ତି ସମୟ:            \t%-25s\n"
+"ସଦସ୍ୟତା:       \t%-25s\n"
+"ଯୋଗାଯୋଗ କ୍ରମ ସଂଖ୍ୟା:     \t%-25s\n"
+"ଖାତା କ୍ରମ ସଂଖ୍ୟା:      \t%-25s\n"
 
 #: ../src/constants.py:34
 #, python-format
@@ -564,11 +562,11 @@ msgid ""
 "Expires:           \t%-25s\n"
 msgstr ""
 "\n"
-"ProductName:       \t%-25s\n"
-"ProductId:         \t%-25s\n"
-"PoolId:            \t%-25s\n"
-"Quantity:          \t%-25s\n"
-"Expires:           \t%-25s\n"
+"ଉତ୍ପାଦନ ନାମ:       \t%-25s\n"
+"ଉତ୍ପାଦନ Id:         \t%-25s\n"
+"ସମୂହ Id:            \t%-25s\n"
+"ପରିମାଣ:          \t%-25s\n"
+"ସମାପ୍ତି ସମୟ:           \t%-25s\n"
 
 #: ../src/constants.py:42
 #, python-format
@@ -583,13 +581,13 @@ msgid ""
 "Expires:            \t%-25s\n"
 msgstr ""
 "\n"
-"ProductName:        \t%-25s\n"
-"ContractNumber:     \t%-25s\n"
-"AccountNumber:      \t%-25s\n"
-"SerialNumber:       \t%-25s\n"
-"Active:             \t%-25s\n"
-"Begins:             \t%-25s\n"
-"Expires:            \t%-25s\n"
+"ଉତ୍ପାଦନ ନାମ:        \t%-25s\n"
+"ଯୋଗାଯୋଗ କ୍ରମସଂଖ୍ୟା:     \t%-25s\n"
+"ଖାତା କ୍ରମ ସଂଖ୍ୟା:      \t%-25s\n"
+"କ୍ରମ ସଂଖ୍ୟା:       \t%-25s\n"
+"ସକ୍ରିୟ:             \t%-25s\n"
+"ଆରମ୍ଭ ସମୟ:             \t%-25s\n"
+"ସମାପ୍ତି ସମୟ:            \t%-25s\n"
 
 #: ../src/constants.py:52
 #, python-format
@@ -1450,9 +1448,8 @@ msgid "A unique label for this system"
 msgstr "ଏହି ତନ୍ତ୍ର ପାଇଁ ଗୋଟିଏ ଅନନ୍ୟ ନାମପଟି"
 
 #: ../src/gui/data/registration.glade.h:5
-#, fuzzy
 msgid "Register"
-msgstr "ତନ୍ତ୍ରକୁ ପଞ୍ଜିକରଣ କରନ୍ତୁ"
+msgstr "ରେଜିଷ୍ଟର "
 
 #: ../src/gui/data/registration.glade.h:6
 msgid "Select the most appropriate subscriptions for this system"
@@ -1594,7 +1591,6 @@ msgstr ""
 #~ msgid "%s (first date of non-compliance)"
 #~ msgstr "%s (ସ୍ୱୀକୃତି ପାଇନଥିବାର ପ୍ରଥମ ତାରିଖ)"
 
-#, fuzzy
 #~ msgid "<b>Choose the specific contract to use:</b>"
 #~ msgstr "<b>ବ୍ୟବହାର କରିବା ପାଇଁ ନିର୍ଦ୍ଦିଷ୍ଟ ରାଜିନାମାକୁ ବାଛନ୍ତୁ:</b>"
 
@@ -1604,22 +1600,18 @@ msgstr ""
 #~ msgid "<b>Compliance:</b>"
 #~ msgstr "<b>ସମ୍ମତି:</b>"
 
-#, fuzzy
 #~ msgid "<b>HTTP Proxy</b>"
 #~ msgstr "<b>HTTP ପ୍ରୋକ୍ସି</b>"
 
-#, fuzzy
 #~ msgid "<b>Please enter your Red Hat Network account information:</b>"
 #~ msgstr "<b>ଦୟାକରି ଆପଣଙ୍କର Red Hat ନେଟୱର୍କ ଖାତା ସୂଚନା ଭରଣ କରନ୍ତୁ:</b>"
 
-#, fuzzy
 #~ msgid "<b>Total Contracts:</b>"
 #~ msgstr "<b>ସର୍ବମୋଟ ରାଜିନାମା:</b>"
 
 #~ msgid "<big><b>All software is in compliance until %s</b></big>"
 #~ msgstr "<big><b>ସମସ୍ତ ସଫ୍ଟୱେରଗୁଡ଼ିକ %s ପର୍ଯ୍ୟନ୍ତ ସ୍ୱୀକୃତିପ୍ରାପ୍ତ</b></big>"
 
-#, fuzzy
 #~ msgid "<small><b>Example:</b> squid.example.com:3128</small>"
 #~ msgstr "<small><b>ଉଦାହରଣ:</b> squid.example.com:3128</small>"
 
@@ -1629,11 +1621,9 @@ msgstr ""
 #~ msgid "Become Compliant"
 #~ msgstr "ସ୍ୱୀକୃତି ପ୍ରାପ୍ତ ହୁଅନ୍ତୁ"
 
-#, fuzzy
 #~ msgid "Certificate _Location:"
 #~ msgstr "ପ୍ରମାଣପତ୍ର ଅବସ୍ଥାନ (_L):"
 
-#, fuzzy
 #~ msgid ""
 #~ "Choose a certificate to import to your subscription certificate directory."
 #~ msgstr "ସଦସ୍ୟତା ପ୍ରମାଣ ପତ୍ର ଡିରେକ୍ଟୋରୀକୁ ଆମଦାନୀ କରିବା ପାଇଁ ଗୋଟିଏ ପ୍ରମାଣ ପତ୍ର ବାଛନ୍ତୁ।"
@@ -1692,7 +1682,6 @@ msgstr ""
 #~ msgid "Compliance Update Box"
 #~ msgstr "ସ୍ୱୀକୃତି ପ୍ରାପ୍ତ ଅଦ୍ୟତନ ବାକ୍ସ"
 
-#, fuzzy
 #~ msgid "Contract Selection"
 #~ msgstr "ରାଜିନାମା ଚୟନ"
 
@@ -1713,7 +1702,6 @@ msgstr ""
 #~ msgid "How often to check for compliance (in seconds)"
 #~ msgstr "ସ୍ୱୀକୃତି ପାଇଁ କେତେ ଥର ଯାଞ୍ଚ କରିବା ଉଚିତ (ସେକଣ୍ଡରେ)"
 
-#, fuzzy
 #~ msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
 #~ msgstr "ମୁଁ ଗୋଟିଏ _HTTP ପ୍ରୋକ୍ସି ଜରିଆରେ Red Hat Network କୁ ସଂଯୋଗ କରିବା ପାଇଁ ଚାହିଁବି।"
 
@@ -1734,19 +1722,15 @@ msgstr ""
 #~ msgid "Out of Compliance"
 #~ msgstr "ସ୍ୱୀକୃତି ବାହାରେ"
 
-#, fuzzy
 #~ msgid "Password:"
 #~ msgstr "ପ୍ରବେଶ ସଙ୍କେତ:"
 
-#, fuzzy
 #~ msgid "Proxy P_assword:"
 #~ msgstr "ପ୍ରୋକ୍ସି ପ୍ରବେଶ ସଙ୍କେତ (_a):"
 
-#, fuzzy
 #~ msgid "Proxy _Username:"
 #~ msgstr "ପ୍ରୋକ୍ସି ଚାଳକ ନାମ (_U):"
 
-#, fuzzy
 #~ msgid "Red Hat Login:"
 #~ msgstr "Red Hat ଲଗଇନ ପରିଚୟ:"
 
@@ -1769,7 +1753,6 @@ msgstr ""
 #~ msgid "This system is non-compliant"
 #~ msgstr "ଏହି ତନ୍ତ୍ରଟି ସ୍ୱୀକୃତିପ୍ରାପ୍ତ ନୁହଁ"
 
-#, fuzzy
 #~ msgid ""
 #~ "To add a subscription, choose a certificate to import to your "
 #~ "subscription certificate directory."
@@ -1777,7 +1760,6 @@ msgstr ""
 #~ "ଗୋଟିଏ ସଦସ୍ୟତା ଯୋଗ କରିବା ପାଇଁ, ସଦସ୍ୟତା ପ୍ରମାଣ ପତ୍ର ଡିରେକ୍ଟୋରୀକୁ ଆମଦାନୀ କରିବା ପାଇଁ ଗୋଟିଏ "
 #~ "ପ୍ରମାଣ ପତ୍ର ବାଛନ୍ତୁ।"
 
-#, fuzzy
 #~ msgid "Use Au_thentication with HTTP Proxy:"
 #~ msgstr "HTTP ପ୍ରକ୍ସି ସହିତ ବୈଧିକରଣକୁ ବ୍ଯବହାର କରନ୍ତୁ (_t):"
 
@@ -1793,11 +1775,9 @@ msgstr ""
 #~ msgid "You must register before using the compliance assistant."
 #~ msgstr "ସ୍ୱୀକୃତି ସହାୟତା ବ୍ୟବହାର କରି ଆପଣ ନିଶ୍ଚିତ ଭାବରେ ପଞ୍ଜିକରଣ କରିବା ଉଚିତ।"
 
-#, fuzzy
 #~ msgid "_Close"
 #~ msgstr "ବନ୍ଦ କରନ୍ତୁ (_C)"
 
-#, fuzzy
 #~ msgid "_Proxy Location:"
 #~ msgstr "ପ୍ରୋକ୍ସି ଅବସ୍ଥାନ (_P):"
 
