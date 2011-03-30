@@ -328,13 +328,15 @@ class EntitlementCertificate(ProductCertificate):
         ProductCertificate._update(self, content)
 
         rhns = self.redhat()
-        self.order = rhns.find('4.1', 1)
-        if self.order:
-            p = self.order[0]
+        order = rhns.find('4.1', 1)
+        if order:
+            p = order[0]
             oid = p[0]
             root = oid.rtrim(1)
             ext = rhns.branch(root)
             self.order = Order(ext)
+        else:
+            self.order = None
 
     def getOrder(self):
         """
