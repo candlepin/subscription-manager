@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.2
+Version: 0.95.5.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -192,5 +192,8 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Mar 30 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- alter specfile to make sense in cvs (cduryee@redhat.com)
+
 * Wed Mar 30 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 668616: [RFE] Subscription Manager client (bkearney@redhat.com)
