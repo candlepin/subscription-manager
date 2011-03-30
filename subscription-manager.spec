@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.1
+Version: 0.95.5.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -192,6 +192,9 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Mar 30 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 691536: update strings replacing compliance with valid (jbowes@redhat.com)
+- make subscription-mgr work in el5
 * Fri Feb 04 2011 Devan Goodwin <dgoodwin@redhat.com> 0.96.1-1
 - 674418: Changing accessibility handles to reflect check box functionality.
   (jharris@redhat.com)
