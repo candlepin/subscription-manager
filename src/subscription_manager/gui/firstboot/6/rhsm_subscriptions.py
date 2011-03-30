@@ -13,7 +13,7 @@ _ = lambda x: gettext.ldgettext("firstboot", x)
 N_ = lambda x: x
 
 sys.path.append("/usr/share/rhsm")
-from gui import managergui
+from subscription_manager.gui import managergui
 
 
 class moduleClass(Module, managergui.MainWindow):
