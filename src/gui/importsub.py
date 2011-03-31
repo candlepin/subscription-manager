@@ -18,6 +18,7 @@ import gettext
 import os
 import shutil
 import M2Crypto
+import logging
 
 _ = gettext.gettext
 
@@ -25,8 +26,12 @@ import widgets
 import rhsm.config
 from utils import handle_gui_exception, errorWindow
 
+from rhsm.certificate import EntitlementCertificate
+
 cfg = rhsm.config.initConfig()
 ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
+
+log = logging.getLogger('rhsm-app.' + __name__)
 
 class ImportSubDialog(widgets.GladeWidget):
     """
@@ -67,9 +72,15 @@ class ImportSubDialog(widgets.GladeWidget):
             return False
 
         try:
-            x509 = M2Crypto.X509.load_cert(src_cert_file,
-                    M2Crypto.X509.FORMAT_PEM)
-        except:
+            # Check for a valid entitlement certificate:
+            ent_cert = EntitlementCertificate()
+            ent_cert.read(src_cert_file)
+            if ent_cert.bogus():
+                raise Exception("Invalid X509 entitlement certificate.")
+        except Exception, e:
+            log.error("Error parsing manually imported entitlement "
+                    "certificate: %s" % src_cert_file)
+            log.exception(e)
             errorWindow(_("%s is not a valid certificate file. Please upload a valid certificate.") %
                 os.path.basename(src_cert_file))
             return False
