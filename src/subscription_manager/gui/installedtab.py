@@ -53,6 +53,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.top_view.append_column(column)
 
         self.add_text_column(_('Version'), 'version')
+        self.add_text_column(_('Arch'), 'arch')
         self.add_text_column(_('Certificate'), 'status')
         self.add_date_column(_('Start Date'), 'start_date')
         self.add_date_column(_('End Date'), 'expiration_date')
@@ -76,6 +77,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 entry = {}
                 entry['product'] = product.getName()
                 entry['version'] = product.getVersion()
+                entry['arch'] = product.getArch()
                 # Common properties
                 entry['align'] = 0.5
 
@@ -139,6 +141,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
             'image': gtk.gdk.Pixbuf,
             'product': str,
             'version': str,
+            'arch': str,
             'status': str,
             'compliance_note': str,
             'subscription': str,
