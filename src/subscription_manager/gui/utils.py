@@ -153,11 +153,11 @@ def get_dbus_iface():
     Set up the dbus proxy for calling remote methods
     """
     bus = dbus.SystemBus()
-    compliance_obj = bus.get_object('com.redhat.SubscriptionManager',
+    validity_obj = bus.get_object('com.redhat.SubscriptionManager',
                       '/Compliance')
-    compliance_iface = dbus.Interface(compliance_obj,
+    validity_iface = dbus.Interface(validity_obj,
                         dbus_interface='com.redhat.SubscriptionManager.Compliance')
-    return compliance_iface
+    return validity_iface
 
 
 class LocalTz(datetime.tzinfo):

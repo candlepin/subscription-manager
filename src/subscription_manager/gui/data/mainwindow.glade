@@ -17,7 +17,7 @@
           <widget class="GtkHBox" id="hbox5">
             <property name="visible">True</property>
             <child>
-              <widget class="GtkFrame" id="compliance_frame">
+              <widget class="GtkFrame" id="subscription_status_frame">
                 <property name="visible">True</property>
                 <property name="label_xalign">0</property>
                 <child>
@@ -36,7 +36,7 @@
                             <property name="visible">True</property>
                             <property name="spacing">10</property>
                             <child>
-                              <widget class="GtkImage" id="compliance_status_image">
+                              <widget class="GtkImage" id="subscription_status_image">
                                 <property name="visible">True</property>
                                 <property name="xalign">1</property>
                                 <property name="pixel_size">16</property>
@@ -53,7 +53,7 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="compliance_status_label">
+                              <widget class="GtkLabel" id="subscription_status_label">
                                 <property name="width_request">200</property>
                                 <property name="visible">True</property>
                                 <property name="label" translatable="yes">You have one product without a valid entitlement certificate.</property>
@@ -74,7 +74,7 @@
                             <property name="visible">True</property>
                             <property name="layout_style">end</property>
                             <child>
-                              <widget class="GtkButton" id="compliant_button">
+                              <widget class="GtkButton" id="update_certificates_button">
                                 <property name="label" translatable="yes">Update Certificates</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -83,7 +83,7 @@
                                 <accessibility>
                                   <atkproperty name="AtkObject::accessible-name" translatable="yes">Update Certificates</atkproperty>
                                 </accessibility>
-                                <signal name="clicked" handler="on_compliant_button_clicked"/>
+                                <signal name="clicked" handler="on_update_certificates_button_clicked"/>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
