@@ -75,7 +75,7 @@ rm -rf $RPM_BUILD_ROOT
 make -f Makefile install VERSION=%{version}-%{release} PREFIX=$RPM_BUILD_ROOT MANPATH=%{_mandir}
 
 desktop-file-validate \
-        %{buildroot}/etc/xdg/autostart/rhsm-compliance-icon.desktop
+        %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
 desktop-file-validate \
         %{buildroot}/usr/share/applications/subscription-manager.desktop
 %find_lang rhsm
@@ -159,8 +159,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/applications/subscription-manager.desktop
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(755,root,root) %{_bindir}/subscription-manager-gui
-%{_bindir}/rhsm-compliance-icon
-%{_sysconfdir}/xdg/autostart/rhsm-compliance-icon.desktop
+%{_bindir}/rhsm-icon
+%{_sysconfdir}/xdg/autostart/rhsm-icon.desktop
 %{_sysconfdir}/pam.d/subscription-manager-gui
 %{_sysconfdir}/security/console.apps/subscription-manager-gui
 
