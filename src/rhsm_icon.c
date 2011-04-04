@@ -247,11 +247,11 @@ check_status_over_dbus()
 
 	proxy = dbus_g_proxy_new_for_name(connection,
 					  "com.redhat.SubscriptionManager",
-					  "/Compliance",
-					  "com.redhat.SubscriptionManager.Compliance");
+					  "/EntitlementStatus",
+					  "com.redhat.SubscriptionManager.EntitlementStatus");
 
 	error = NULL;
-	if (!dbus_g_proxy_call(proxy, "check_compliance", &error,
+	if (!dbus_g_proxy_call(proxy, "check_status", &error,
 			       G_TYPE_INVALID, G_TYPE_INT, &status,
 			       G_TYPE_INVALID)) {
 		g_printerr("Error: %s\n", error->message);
@@ -317,11 +317,14 @@ add_signal_listener(Context *context)
 
 	proxy = dbus_g_proxy_new_for_name(connection,
 		     "com.redhat.SubscriptionManager",
-		     "/Compliance",
-		     "com.redhat.SubscriptionManager.Compliance");
+		     "/EntitlementStatus",
+		     "com.redhat.SubscriptionManager.EntitlementStatus");
 
-	dbus_g_proxy_add_signal(proxy, "compliancechanged", G_TYPE_INT, G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal(proxy, "compliancechanged", G_CALLBACK(status_changed_cb), context, NULL);
+	dbus_g_proxy_add_signal(proxy, "status_changed", G_TYPE_INT,
+				G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal(proxy, "status_changed",
+				    G_CALLBACK(status_changed_cb), context,
+				    NULL);
 	return proxy;
 
 }

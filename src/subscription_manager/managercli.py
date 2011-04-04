@@ -113,11 +113,11 @@ class CliCommand(object):
     def _request_validity_check(self):
         bus = dbus.SystemBus()
         validity_obj = bus.get_object('com.redhat.SubscriptionManager',
-                          '/Compliance')
+                          '/EntitlementStatus')
         validity_iface = dbus.Interface(validity_obj,
-                            dbus_interface='com.redhat.SubscriptionManager.Compliance')
+                            dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
 
-        validity_iface.check_compliance()
+        validity_iface.check_status()
 
     def _add_common_options(self):
         """ Add options that apply to all sub-commands. """

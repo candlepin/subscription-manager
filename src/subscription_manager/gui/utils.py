@@ -154,9 +154,9 @@ def get_dbus_iface():
     """
     bus = dbus.SystemBus()
     validity_obj = bus.get_object('com.redhat.SubscriptionManager',
-                      '/Compliance')
+                      '/EntitlementStatus')
     validity_iface = dbus.Interface(validity_obj,
-                        dbus_interface='com.redhat.SubscriptionManager.Compliance')
+                        dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
     return validity_iface
 
 

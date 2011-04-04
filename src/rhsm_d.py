@@ -92,15 +92,17 @@ class StatusChecker(dbus.service.Object):
 
     def __init__(self, bus, keep_alive, loop):
         name = dbus.service.BusName("com.redhat.SubscriptionManager", bus)
-        dbus.service.Object.__init__(self, name, "/Compliance")
+        dbus.service.Object.__init__(self, name, "/EntitlementStatus")
         self.has_run = False
         #this will get set after first invocation
         self.last_status = None
         self.keep_alive = keep_alive
         self.loop = loop
 
-    @dbus.service.signal(dbus_interface='com.redhat.SubscriptionManager.Compliance',  signature='i')
-    def compliancechanged(self, status_code):
+    @dbus.service.signal(
+        dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus',
+        signature='i')
+    def status_changed(self, status_code):
         debug("signal fired! code is " + str(status_code))
 
     #this is so we can guarantee exit after the dbus stuff is done, since
@@ -110,9 +112,9 @@ class StatusChecker(dbus.service.Object):
             gobject.idle_add(check_if_ran_once, self, self.loop)
 
     @dbus.service.method(
-        dbus_interface="com.redhat.SubscriptionManager.Compliance",
+        dbus_interface="com.redhat.SubscriptionManager.EntitlementStatus",
         out_signature='i')
-    def check_compliance(self):
+    def check_status(self):
         """
         returns: 0 if entitlements are valid, 1 if not valid,
                  2 if close to expiry
@@ -121,7 +123,7 @@ class StatusChecker(dbus.service.Object):
         if (ret != self.last_status):
             debug("Validity status changed, fire signal")
             #we send the code out, but no one uses it at this time
-            self.compliancechanged(ret)
+            self.status_changed(ret)
         self.last_status = ret
         self.has_run = True
         self.watchdog()
