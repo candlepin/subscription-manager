@@ -42,8 +42,8 @@ dbus-service-install:
 		${PREFIX}/etc/dbus-1/system.d
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.service \
 		${PREFIX}/${INSTALL_DIR}/dbus-1/system-services
-	install -m 744 src/subscription_manager/compliance/rhsm_compliance_d.py \
-		${PREFIX}/usr/libexec/rhsm-complianced
+	install -m 744 src/subscription_manager/compliance/rhsm_d.py \
+		${PREFIX}/usr/libexec/rhsmd
 
 install-conf:
 	install etc-conf/rhsm.conf ${PREFIX}/etc/rhsm/
@@ -99,8 +99,8 @@ install-files: dbus-service-install compile-po desktop-files
 	install -m 644 man/* ${PREFIX}/${INSTALL_DIR}/man/man8/
 	install -m 644 etc-conf/rhsm-icon.desktop \
 		${PREFIX}/etc/xdg/autostart
-	install -m 755 etc-conf/rhsm-complianced.cron \
-		${PREFIX}/etc/cron.daily/rhsm-complianced
+	install -m 755 etc-conf/rhsmd.cron \
+		${PREFIX}/etc/cron.daily/rhsmd
 	install -m 644 etc-conf/subscription-manager.desktop \
 		${PREFIX}/${INSTALL_DIR}/applications	
 	ln -sf /usr/bin/consolehelper ${PREFIX}/usr/bin/subscription-manager-gui

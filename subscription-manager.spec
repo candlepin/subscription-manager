@@ -114,7 +114,7 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/product-id.conf
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/subscription-manager
 
-%{_sysconfdir}/cron.daily/rhsm-complianced
+%{_sysconfdir}/cron.daily/rhsmd
 %{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
 
 %dir %{_datadir}/rhsm
@@ -139,7 +139,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/subscription-manager
 %attr(755,root,root) %{_bindir}/rhsmcertd
 %attr(755,root,root) %{_sysconfdir}/init.d/rhsmcertd
-%attr(755,root,root) %{_libexecdir}/rhsm-complianced
+%attr(755,root,root) %{_libexecdir}/rhsmd
 %attr(755,root,root) %dir %{_var}/run/rhsm
 %attr(755,root,root) %dir %{_var}/lib/rhsm
 %attr(755,root,root) %dir %{_var}/lib/rhsm/facts

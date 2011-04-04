@@ -33,10 +33,10 @@ import rhsm.certificate as certificate
 
 enable_debug = False
 
-RHSM_COMPLIANT = 0
-RHSM_EXPIRED   = 1
-RHSM_WARNING   = 2
-RHN_CLASSIC    = 3
+RHSM_VALID   = 0
+RHSM_EXPIRED = 1
+RHSM_WARNING = 2
+RHN_CLASSIC  = 3
 
 
 def debug(msg):
@@ -58,7 +58,7 @@ def in_warning_period(sorter):
     return False
 
 
-def check_compliance():
+def check_status():
 
     if managerlib.is_registered_with_classic():
         debug("System is already registered with RHN Classic")
@@ -78,21 +78,21 @@ def check_compliance():
             return RHSM_WARNING
         else:
             debug("System entitlements appear valid")
-            return RHSM_COMPLIANT
+            return RHSM_VALID
 
 
-def check_if_ran_once(compliance, loop):
-    if compliance.has_run:
+def check_if_ran_once(checker, loop):
+    if checker.has_run:
         debug("dbus has been called once, quitting")
         loop.quit()
     return True
 
 
-class ComplianceChecker(dbus.service.Object):
+class StatusChecker(dbus.service.Object):
 
-    def __init__(self, bus, path, keep_alive, loop):
+    def __init__(self, bus, keep_alive, loop):
         name = dbus.service.BusName("com.redhat.SubscriptionManager", bus)
-        dbus.service.Object.__init__(self, name, path)
+        dbus.service.Object.__init__(self, name, "/Compliance")
         self.has_run = False
         #this will get set after first invocation
         self.last_status = None
@@ -114,9 +114,10 @@ class ComplianceChecker(dbus.service.Object):
         out_signature='i')
     def check_compliance(self):
         """
-        returns: 0 if not compliant, 1 if compliant, 2 if close to expiry
+        returns: 0 if entitlements are valid, 1 if not valid,
+                 2 if close to expiry
         """
-        ret = check_compliance()
+        ret = check_status()
         if (ret != self.last_status):
             debug("Validity status changed, fire signal")
             #we send the code out, but no one uses it at this time
@@ -145,30 +146,30 @@ def main():
 
     # short-circuit dbus initialization
     if options.syslog:
-        compliant = check_compliance()
-        if compliant == RHSM_EXPIRED:
-            syslog.openlog("rhsm-complianced")
+        status = check_status()
+        if status == RHSM_EXPIRED:
+            syslog.openlog("rhsmd")
             syslog.syslog(syslog.LOG_NOTICE,
                     "This system is missing one or more valid entitlement " +
                     "certificates. " +
                     "Please run subscription-manager-cli for more information.")
-        elif compliant == RHSM_WARNING:
-            syslog.openlog("rhsm-complianced")
+        elif status == RHSM_WARNING:
+            syslog.openlog("rhsmd")
             syslog.syslog(syslog.LOG_NOTICE,
                     "This system's entitlements are about to expire. " +
                     "Please run subscription-manager-cli for more information.")
-        elif compliant == RHN_CLASSIC:
-            syslog.openlog("rhsm-complianced")
+        elif status == RHN_CLASSIC:
+            syslog.openlog("rhsmd")
             syslog.syslog(syslog.LOG_NOTICE,
                           "This system is registered to RHN Classic")
        
-        # Return an exit code for the program. compliance is good, so it gets
-        # an exit status of 0.
-        return compliant
+        # Return an exit code for the program. having valid entitlements is
+        # good, so it gets an exit status of 0.
+        return status
 
     system_bus = dbus.SystemBus()
     loop = gobject.MainLoop()
-    compliance = ComplianceChecker(system_bus, "/Compliance", options.keep_alive, loop)
+    checker = StatusChecker(system_bus, options.keep_alive, loop)
 
     loop.run()
 
