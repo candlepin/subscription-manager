@@ -30,9 +30,8 @@ rhsmcertd: src/rhsmcertd.c bin
 
 ICON_FLAGS=`pkg-config --cflags --libs gtk+-2.0 libnotify`
 
-rhsm-icon: src/subscription_manager/compliance/rhsm_icon.c bin
-	${CC} ${CFLAGS} ${ICON_FLAGS} -o bin/rhsm-icon \
-		src/subscription_manager/compliance/rhsm_icon.c
+rhsm-icon: src/rhsm_icon.c bin
+	${CC} ${CFLAGS} ${ICON_FLAGS} -o bin/rhsm-icon src/rhsm_icon.c
 
 dbus-service-install:
 	install -d ${PREFIX}/etc/dbus-1/system.d
@@ -42,7 +41,7 @@ dbus-service-install:
 		${PREFIX}/etc/dbus-1/system.d
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.service \
 		${PREFIX}/${INSTALL_DIR}/dbus-1/system-services
-	install -m 744 src/subscription_manager/compliance/rhsm_d.py \
+	install -m 744 src/rhsm_d.py \
 		${PREFIX}/usr/libexec/rhsmd
 
 install-conf:
