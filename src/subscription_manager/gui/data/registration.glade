@@ -33,7 +33,7 @@
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>
-                <property name="label" translatable="yes" context="yes">&lt;b&gt;Please enter your Red Hat Network account information:&lt;/b&gt;</property>
+                <property name="label" translatable="yes">&lt;b&gt;Please enter your Red Hat Network account information:&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
                 <property name="single_line_mode">True</property>
                 <accessibility>
@@ -154,7 +154,7 @@
                       <widget class="GtkLabel" id="loginPasswordEntryLabel1">
                         <property name="visible">True</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes" context="yes">Password:</property>
+                        <property name="label" translatable="yes">Password:</property>
                         <property name="use_markup">True</property>
                         <accessibility>
                           <atkproperty name="AtkObject::accessible-name">loginPasswordEntryLabel1</atkproperty>
@@ -171,7 +171,7 @@
                       <widget class="GtkLabel" id="loginUserEntryLabel1">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes" context="yes">Red Hat Login:</property>
+                        <property name="label" translatable="yes">Red Hat Login:</property>
                         <property name="use_markup">True</property>
                         <accessibility>
                           <atkproperty name="AtkObject::accessible-name">loginUserEntryLabel1</atkproperty>

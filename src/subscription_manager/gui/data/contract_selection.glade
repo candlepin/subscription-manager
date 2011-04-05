@@ -3,7 +3,7 @@
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="contract_selection_window">
-    <property name="title" translatable="yes" context="yes">Contract Selection</property>
+    <property name="title" translatable="yes">Contract Selection</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
@@ -25,7 +25,7 @@
               <widget class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes" context="yes">&lt;b&gt;Choose the specific contract to use:&lt;/b&gt;</property>
+                <property name="label" translatable="yes">&lt;b&gt;Choose the specific contract to use:&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
               </widget>
               <packing>
@@ -63,7 +63,7 @@
                           <widget class="GtkLabel" id="label2">
                             <property name="visible">True</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes" context="yes">&lt;b&gt;Subscription:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Subscription:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
                           </widget>
                           <packing>
@@ -77,7 +77,7 @@
                           <widget class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes" context="yes">&lt;b&gt;Total Contracts:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Total Contracts:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
                           </widget>
                           <packing>
@@ -176,7 +176,7 @@
             </child>
             <child>
               <widget class="GtkButton" id="subscribe_button">
-                <property name="label" translatable="yes" context="yes">Subscribe</property>
+                <property name="label" translatable="yes">Subscribe</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">False</property>
