@@ -960,6 +960,7 @@ msgid "<b>Product:</b>"
 msgstr "<b>ਉਤਪਾਦ:</b>"
 
 #: ../src/gui/data/installed.glade.h:4 ../src/gui/data/subdetails.glade.h:8
+#: ../src/gui/data/contract_selection.glade.h:2
 msgid "<b>Subscription:</b>"
 msgstr "<b>ਮੈਂਬਰੀ:</b>"
 
@@ -1053,8 +1054,14 @@ msgid "Show products with invalid entitlement certificates as of:"
 msgstr "ਉਤਪਾਦ ਵੇਖਾਓ ਜੋ ਗਲਤ ਇੰਟਾਈਟਲਮੈਂਟ ਨਾਲ ਹਨ ਇਸ ਮੁਤਾਬਕ:"
 
 #: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
+#: ../src/gui/data/contract_selection.glade.h:5
+#, fuzzy
 msgid "Subscribe"
-msgstr "ਮੈਂਬਰੀ ਬਣੋ"
+msgstr ""
+"#-#-#-#-#  pa.po (l 10n)  #-#-#-#-#\n"
+"ਮੈਂਬਰੀ ਬਣੋ\n"
+"#-#-#-#-#  pa.po (l 10n)  #-#-#-#-#\n"
+"ਮੈਂਬਰ ਬਣੋ"
 
 #: ../src/gui/data/compliance.glade.h:5
 msgid "Subscription Action Area"
@@ -1480,10 +1487,6 @@ msgstr "ਤਰੱਕੀ ਵਾਰਤਾਲਾਪ"
 msgid "<b>Choose the specific contract to use:</b>"
 msgstr "<b>ਵਰਤਣ ਲਈ ਖਾਸ ਕੰਟਰੈਕਟ ਚੁਣੋ:</b>"
 
-#: ../src/gui/data/contract_selection.glade.h:2
-msgid "<b>Subscription:</b>"
-msgstr "<b>ਮੈਂਬਰੀ:</b>"
-
 #: ../src/gui/data/contract_selection.glade.h:3
 msgid "<b>Total Contracts:</b>"
 msgstr "<b>ਕੁੱਲ ਕੰਟਰੈਕਟ:</b>"
@@ -1491,10 +1494,6 @@ msgstr "<b>ਕੁੱਲ ਕੰਟਰੈਕਟ:</b>"
 #: ../src/gui/data/contract_selection.glade.h:4
 msgid "Contract Selection"
 msgstr "ਕੰਟਰੈਕਟ ਚੋਣ"
-
-#: ../src/gui/data/contract_selection.glade.h:5
-msgid "Subscribe"
-msgstr "ਮੈਂਬਰ ਬਣੋ"
 
 #: ../src/compliance/rhsm_compliance_icon.c:43
 msgid "How often to check for validity (in seconds)"

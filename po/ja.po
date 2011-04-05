@@ -970,8 +970,14 @@ msgid "<b>Product:</b>"
 msgstr "<b>製品:</b>"
 
 #: ../src/gui/data/installed.glade.h:4 ../src/gui/data/subdetails.glade.h:8
+#: ../src/gui/data/contract_selection.glade.h:2
+#, fuzzy
 msgid "<b>Subscription:</b>"
-msgstr "<b>サブスクリプション:</b>"
+msgstr ""
+"#-#-#-#-#  ja.po (ja)  #-#-#-#-#\n"
+"<b>サブスクリプション:</b>\n"
+"#-#-#-#-#  ja.po (ja)  #-#-#-#-#\n"
+"<b>サブスクリプション:</b> はい"
 
 #: ../src/gui/data/installed.glade.h:5 ../src/gui/data/mainwindow.glade.h:4
 msgid "Certificate Status"
@@ -1063,8 +1069,14 @@ msgid "Show products with invalid entitlement certificates as of:"
 msgstr "以下の期日にエンタイトルメント証明書が無効な製品を表示:"
 
 #: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
+#: ../src/gui/data/contract_selection.glade.h:5
+#, fuzzy
 msgid "Subscribe"
-msgstr "サブスクライブ"
+msgstr ""
+"#-#-#-#-#  ja.po (ja)  #-#-#-#-#\n"
+"サブスクライブ\n"
+"#-#-#-#-#  ja.po (ja)  #-#-#-#-#\n"
+"サブスクライブ はい"
 
 #: ../src/gui/data/compliance.glade.h:5
 msgid "Subscription Action Area"
@@ -1493,10 +1505,6 @@ msgstr "進捗のダイアログ"
 msgid "<b>Choose the specific contract to use:</b>"
 msgstr "<b>使用する特定コントラクトの選択:</b> はい"
 
-#: ../src/gui/data/contract_selection.glade.h:2
-msgid "<b>Subscription:</b>"
-msgstr "<b>サブスクリプション:</b> はい"
-
 #: ../src/gui/data/contract_selection.glade.h:3
 msgid "<b>Total Contracts:</b>"
 msgstr "<b>コントラクト合計:</b> はい"
@@ -1504,10 +1512,6 @@ msgstr "<b>コントラクト合計:</b> はい"
 #: ../src/gui/data/contract_selection.glade.h:4
 msgid "Contract Selection"
 msgstr "コントラクトの選択 はい"
-
-#: ../src/gui/data/contract_selection.glade.h:5
-msgid "Subscribe"
-msgstr "サブスクライブ はい"
 
 #: ../src/compliance/rhsm_compliance_icon.c:43
 msgid "How often to check for validity (in seconds)"
