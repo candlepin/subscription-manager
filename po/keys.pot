@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 09:31-0300\n"
+"POT-Creation-Date: 2011-04-05 13:00-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -927,6 +927,7 @@ msgstr ""
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:4
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:2
 msgid "<b>Subscription:</b>"
 msgstr ""
 
@@ -946,59 +947,59 @@ msgid "Next Update:"
 msgstr ""
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:1
-msgid "Advanced Network Configuration"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:2
-msgid "Authentication Checkbox"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:3
-msgid "Close Button"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:4
-msgid "Enter in the format hostname(:port)"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:5
-msgid "Password Text"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:6
-msgid "Proxy Checkbox"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:7
-msgid "Proxy Location Text"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:8
-msgid "Username Text"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:9
 msgid "<b>HTTP Proxy</b>"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:10
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:2
 msgid "<small><b>Example:</b> squid.example.com:3128</small>"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:11
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:3
+msgid "Advanced Network Configuration"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:4
+msgid "Authentication Checkbox"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:5
+msgid "Close Button"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:6
+msgid "Enter in the format hostname(:port)"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:7
 msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:12
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:8
+msgid "Password Text"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:9
+msgid "Proxy Checkbox"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:10
+msgid "Proxy Location Text"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:11
 msgid "Proxy P_assword:"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:13
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:12
 msgid "Proxy _Username:"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:14
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:13
 msgid "Use Au_thentication with HTTP Proxy:"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:14
+msgid "Username Text"
 msgstr ""
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:15
@@ -1023,6 +1024,7 @@ msgstr ""
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:4
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:11
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:5
 msgid "Subscribe"
 msgstr ""
 
@@ -1128,57 +1130,57 @@ msgid "Add Subscriptions"
 msgstr ""
 
 #: ../src/subscription_manager/gui/data/rhsm.glade.h:6
-msgid "Do not register"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:7
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:5
 #: ../src/subscription_manager/gui/data/importsub.glade.h:1
-msgid "Import Certificate"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:8
-msgid "Not Compatible"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:9
-#: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid "Provide a Subscription Certificate"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:10
-msgid "Register with Red Hat Entitlement Service"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:11
-msgid "Register with Red Hat Network"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:12
-msgid "Register with Red Hat Network Satellite"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:13
-msgid "Suggested"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:14
-msgid "Update Subscriptions"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:15
-msgid "update_subscriptions_dialog\n"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:17
-#: ../src/subscription_manager/gui/data/importsub.glade.h:3
 msgid "Certificate _Location:"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:18
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:7
+msgid "Do not register"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:8
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:5
+#: ../src/subscription_manager/gui/data/importsub.glade.h:3
+msgid "Import Certificate"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:9
+msgid "Not Compatible"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:10
+#: ../src/subscription_manager/gui/data/importsub.glade.h:4
+msgid "Provide a Subscription Certificate"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:11
+msgid "Register with Red Hat Entitlement Service"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:12
+msgid "Register with Red Hat Network"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:13
+msgid "Register with Red Hat Network Satellite"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:14
+msgid "Suggested"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:15
 msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:16
+msgid "Update Subscriptions"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:17
+msgid "update_subscriptions_dialog\n"
 msgstr ""
 
 #: ../src/subscription_manager/gui/data/activate.glade.h:1
@@ -1321,7 +1323,7 @@ msgstr ""
 msgid "Manage Your Product Subscriptions"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/importsub.glade.h:4
+#: ../src/subscription_manager/gui/data/importsub.glade.h:2
 msgid ""
 "Choose a certificate to import to your subscription certificate directory."
 msgstr ""
@@ -1391,54 +1393,54 @@ msgid "<b>Please enter the following for this system:</b>"
 msgstr ""
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:2
+msgid "<b>Please enter your Red Hat Network account information:</b>"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/registration.glade.h:3
 msgid ""
 "<small>Tip: Forgot your login or password? Look it up at\n"
 "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
 "www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/registration.glade.h:4
+#: ../src/subscription_manager/gui/data/registration.glade.h:5
 msgid "A unique label for this system"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/registration.glade.h:5
-msgid "Register"
-msgstr ""
-
 #: ../src/subscription_manager/gui/data/registration.glade.h:6
-msgid "Select the most appropriate subscriptions for this system"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/registration.glade.h:7
-msgid "System Name:"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/registration.glade.h:8
-msgid "System Registration"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/registration.glade.h:9
-msgid "register_button"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/registration.glade.h:10
-msgid "register_dialog_main_vbox"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/registration.glade.h:11
-msgid "registration_dialog_action_area\n"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/registration.glade.h:13
-msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/registration.glade.h:14
 msgid "Password:"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/registration.glade.h:15
+#: ../src/subscription_manager/gui/data/registration.glade.h:7
 msgid "Red Hat Login:"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/registration.glade.h:8
+msgid "Register"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/registration.glade.h:9
+msgid "Select the most appropriate subscriptions for this system"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/registration.glade.h:10
+msgid "System Name:"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/registration.glade.h:11
+msgid "System Registration"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/registration.glade.h:12
+msgid "register_button"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/registration.glade.h:13
+msgid "register_dialog_main_vbox"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/registration.glade.h:14
+msgid "registration_dialog_action_area\n"
 msgstr ""
 
 #: ../src/subscription_manager/gui/data/progress.glade.h:1
@@ -1449,20 +1451,12 @@ msgstr ""
 msgid "<b>Choose the specific contract to use:</b>"
 msgstr ""
 
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:2
-msgid "<b>Subscription:</b>"
-msgstr ""
-
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:3
 msgid "<b>Total Contracts:</b>"
 msgstr ""
 
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:4
 msgid "Contract Selection"
-msgstr ""
-
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:5
-msgid "Subscribe"
 msgstr ""
 
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:44

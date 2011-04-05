@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 09:31-0300\n"
+"POT-Creation-Date: 2011-04-05 13:00-0300\n"
 "PO-Revision-Date: 2011-04-01 12:50+1000\n"
 "Last-Translator: Eun-Ju Kim <eukim@redhat.com>\n"
 "Language-Team:  <ko@li.org>\n"
@@ -1019,60 +1019,60 @@ msgid "Next Update:"
 msgstr "다음 업데이트: "
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:1
-msgid "Advanced Network Configuration"
-msgstr "고급 네트워크 설정 "
-
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:2
-msgid "Authentication Checkbox"
-msgstr "인증 체크 박스 "
-
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:3
-msgid "Close Button"
-msgstr "종료 버튼 "
-
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:4
-msgid "Enter in the format hostname(:port)"
-msgstr "hostname(:port) 형식으로 입력 "
-
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:5
-msgid "Password Text"
-msgstr "암호 텍스트 "
-
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:6
-msgid "Proxy Checkbox"
-msgstr "Proxy 체크박스 "
-
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:7
-msgid "Proxy Location Text"
-msgstr "Proxy 위치 텍스트 "
-
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:8
-msgid "Username Text"
-msgstr "사용자 이름 텍스트 "
-
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:9
 msgid "<b>HTTP Proxy</b>"
 msgstr "<b>HTTP Proxy</b>  "
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:10
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:2
 msgid "<small><b>Example:</b> squid.example.com:3128</small>"
 msgstr "<small><b>예:</b> squid.example.com:3128</small>   "
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:11
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:3
+msgid "Advanced Network Configuration"
+msgstr "고급 네트워크 설정 "
+
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:4
+msgid "Authentication Checkbox"
+msgstr "인증 체크 박스 "
+
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:5
+msgid "Close Button"
+msgstr "종료 버튼 "
+
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:6
+msgid "Enter in the format hostname(:port)"
+msgstr "hostname(:port) 형식으로 입력 "
+
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:7
 msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
 msgstr "HTTP proxy를 통해 Red Hat Network에 연결하고자 합니다(_H).   "
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:12
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:8
+msgid "Password Text"
+msgstr "암호 텍스트 "
+
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:9
+msgid "Proxy Checkbox"
+msgstr "Proxy 체크박스 "
+
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:10
+msgid "Proxy Location Text"
+msgstr "Proxy 위치 텍스트 "
+
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:11
 msgid "Proxy P_assword:"
 msgstr "Proxy 암호(_a):  "
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:13
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:12
 msgid "Proxy _Username:"
 msgstr "Proxy 사용자 이름(_U):   "
 
-#: ../src/subscription_manager/gui/data/networkConfig.glade.h:14
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:13
 msgid "Use Au_thentication with HTTP Proxy:"
 msgstr "HTTP Proxy로 인증 사용(_t):   "
+
+#: ../src/subscription_manager/gui/data/networkConfig.glade.h:14
+msgid "Username Text"
+msgstr "사용자 이름 텍스트 "
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:15
 msgid "_Close"
@@ -1207,60 +1207,60 @@ msgid "Add Subscriptions"
 msgstr "서브스크립션 추가 "
 
 #: ../src/subscription_manager/gui/data/rhsm.glade.h:6
-msgid "Do not register"
-msgstr "등록하지 않음 "
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:7
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:5
 #: ../src/subscription_manager/gui/data/importsub.glade.h:1
-msgid "Import Certificate"
-msgstr "인증서 가져오기 "
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:8
-msgid "Not Compatible"
-msgstr "호환되지 않음 "
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:9
-#: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid "Provide a Subscription Certificate"
-msgstr "서브스크립션 인증서 제공 "
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:10
-msgid "Register with Red Hat Entitlement Service"
-msgstr "Red Hat Entitlement Service로 등록 "
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:11
-msgid "Register with Red Hat Network"
-msgstr "Red Hat Network로 등록 "
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:12
-msgid "Register with Red Hat Network Satellite"
-msgstr "Red Hat Network Satellite로 등록  "
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:13
-msgid "Suggested"
-msgstr "권고 "
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:14
-msgid "Update Subscriptions"
-msgstr "서브스크립션 업데이트 "
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:15
-msgid "update_subscriptions_dialog\n"
-msgstr "update_subscriptions_dialog\n"
-
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:17
-#: ../src/subscription_manager/gui/data/importsub.glade.h:3
 msgid "Certificate _Location:"
 msgstr "인증서 위치(_L):   "
 
-#: ../src/subscription_manager/gui/data/rhsm.glade.h:18
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:7
+msgid "Do not register"
+msgstr "등록하지 않음 "
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:8
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:5
+#: ../src/subscription_manager/gui/data/importsub.glade.h:3
+msgid "Import Certificate"
+msgstr "인증서 가져오기 "
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:9
+msgid "Not Compatible"
+msgstr "호환되지 않음 "
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:10
+#: ../src/subscription_manager/gui/data/importsub.glade.h:4
+msgid "Provide a Subscription Certificate"
+msgstr "서브스크립션 인증서 제공 "
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:11
+msgid "Register with Red Hat Entitlement Service"
+msgstr "Red Hat Entitlement Service로 등록 "
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:12
+msgid "Register with Red Hat Network"
+msgstr "Red Hat Network로 등록 "
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:13
+msgid "Register with Red Hat Network Satellite"
+msgstr "Red Hat Network Satellite로 등록  "
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:14
+msgid "Suggested"
+msgstr "권고 "
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:15
 msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
 msgstr ""
 "서브스크립션을 추가하려면, 서브스크립션 인증서 디렉토리로 가져올 인증서를 선"
 "택합니다.     "
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:16
+msgid "Update Subscriptions"
+msgstr "서브스크립션 업데이트 "
+
+#: ../src/subscription_manager/gui/data/rhsm.glade.h:17
+msgid "update_subscriptions_dialog\n"
+msgstr "update_subscriptions_dialog\n"
 
 #: ../src/subscription_manager/gui/data/activate.glade.h:1
 msgid "Activate"
@@ -1405,7 +1405,7 @@ msgstr "서브스크립션 계정 정보 입력 "
 msgid "Manage Your Product Subscriptions"
 msgstr "제품 서브스크립션 관리 "
 
-#: ../src/subscription_manager/gui/data/importsub.glade.h:4
+#: ../src/subscription_manager/gui/data/importsub.glade.h:2
 msgid ""
 "Choose a certificate to import to your subscription certificate directory."
 msgstr "서브스크립션 인증서 디렉토리로 가져올 인증서를 선택합니다.   "
@@ -1475,6 +1475,10 @@ msgid "<b>Please enter the following for this system:</b>"
 msgstr "<b>시스템에 다음과 같은 사항을 입력해 주십시오:</b> "
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:2
+msgid "<b>Please enter your Red Hat Network account information:</b>"
+msgstr "<b>Red Hat Network 계정 정보를 입력해 주십시오:</b>   "
+
+#: ../src/subscription_manager/gui/data/registration.glade.h:3
 msgid ""
 "<small>Tip: Forgot your login or password? Look it up at\n"
 "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
@@ -1484,49 +1488,45 @@ msgstr ""
 "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
 "www.redhat.com/wapps/sso/rhn/lostPassword.html</a>에서 찾아보십시오.</small>"
 
-#: ../src/subscription_manager/gui/data/registration.glade.h:4
+#: ../src/subscription_manager/gui/data/registration.glade.h:5
 msgid "A unique label for this system"
 msgstr "시스템의 고유한 레이블 "
 
-#: ../src/subscription_manager/gui/data/registration.glade.h:5
-msgid "Register"
-msgstr "시스템 등록  "
-
 #: ../src/subscription_manager/gui/data/registration.glade.h:6
-msgid "Select the most appropriate subscriptions for this system"
-msgstr "시스템에 가장 적합한 서브스크립션 선택 "
-
-#: ../src/subscription_manager/gui/data/registration.glade.h:7
-msgid "System Name:"
-msgstr "시스템명: "
-
-#: ../src/subscription_manager/gui/data/registration.glade.h:8
-msgid "System Registration"
-msgstr "시스템 등록 "
-
-#: ../src/subscription_manager/gui/data/registration.glade.h:9
-msgid "register_button"
-msgstr "등록 버튼(_b) "
-
-#: ../src/subscription_manager/gui/data/registration.glade.h:10
-msgid "register_dialog_main_vbox"
-msgstr "register_dialog_main_vbox"
-
-#: ../src/subscription_manager/gui/data/registration.glade.h:11
-msgid "registration_dialog_action_area\n"
-msgstr "registration_dialog_action_area\n"
-
-#: ../src/subscription_manager/gui/data/registration.glade.h:13
-msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr "<b>Red Hat Network 계정 정보를 입력해 주십시오:</b>   "
-
-#: ../src/subscription_manager/gui/data/registration.glade.h:14
 msgid "Password:"
 msgstr "암호:  "
 
-#: ../src/subscription_manager/gui/data/registration.glade.h:15
+#: ../src/subscription_manager/gui/data/registration.glade.h:7
 msgid "Red Hat Login:"
 msgstr "Red Hat 로그인:   "
+
+#: ../src/subscription_manager/gui/data/registration.glade.h:8
+msgid "Register"
+msgstr "시스템 등록  "
+
+#: ../src/subscription_manager/gui/data/registration.glade.h:9
+msgid "Select the most appropriate subscriptions for this system"
+msgstr "시스템에 가장 적합한 서브스크립션 선택 "
+
+#: ../src/subscription_manager/gui/data/registration.glade.h:10
+msgid "System Name:"
+msgstr "시스템명: "
+
+#: ../src/subscription_manager/gui/data/registration.glade.h:11
+msgid "System Registration"
+msgstr "시스템 등록 "
+
+#: ../src/subscription_manager/gui/data/registration.glade.h:12
+msgid "register_button"
+msgstr "등록 버튼(_b) "
+
+#: ../src/subscription_manager/gui/data/registration.glade.h:13
+msgid "register_dialog_main_vbox"
+msgstr "register_dialog_main_vbox"
+
+#: ../src/subscription_manager/gui/data/registration.glade.h:14
+msgid "registration_dialog_action_area\n"
+msgstr "registration_dialog_action_area\n"
 
 #: ../src/subscription_manager/gui/data/progress.glade.h:1
 msgid "Progress Dialog"
