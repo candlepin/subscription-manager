@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 08:57-0300\n"
+"POT-Creation-Date: 2011-04-05 09:29-0300\n"
 "PO-Revision-Date: 2011-03-22 15:59+1100\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -731,11 +731,11 @@ msgstr ""
 msgid "Error activating subscription: %s"
 msgstr "Erro ao ativar a subscrição: %s"
 
-#: ../src/subscription_manager/gui/importsub.py:67
+#: ../src/subscription_manager/gui/importsub.py:72
 msgid "You must select a certificate."
 msgstr "Selecione um certificado."
 
-#: ../src/subscription_manager/gui/importsub.py:74
+#: ../src/subscription_manager/gui/importsub.py:85
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
 msgstr ""
@@ -802,7 +802,7 @@ msgstr "Lista de Produtos Não-Compatíveis"
 #: ../src/subscription_manager/gui/compliance.py:124
 #: ../src/subscription_manager/gui/mysubstab.py:60
 #: ../src/subscription_manager/gui/contract_selection.py:80
-#: ../src/subscription_manager/gui/installedtab.py:58
+#: ../src/subscription_manager/gui/installedtab.py:59
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:13
 msgid "End Date"
 msgstr "Data Final"
@@ -937,7 +937,7 @@ msgid "Used / Available"
 msgstr "Usado / Disponível"
 
 #: ../src/subscription_manager/gui/contract_selection.py:76
-#: ../src/subscription_manager/gui/installedtab.py:57
+#: ../src/subscription_manager/gui/installedtab.py:58
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:14
 msgid "Start Date"
 msgstr "Data de Início"
@@ -947,38 +947,45 @@ msgid "Version"
 msgstr "Versão"
 
 #: ../src/subscription_manager/gui/installedtab.py:56
+msgid "Arch"
+msgstr ""
+
+#: ../src/subscription_manager/gui/installedtab.py:57
 msgid "Certificate"
 msgstr ""
 
-#: ../src/subscription_manager/gui/installedtab.py:97
+#: ../src/subscription_manager/gui/installedtab.py:99
 msgid "Future Subscription"
 msgstr "Subscrição Futura"
 
-#: ../src/subscription_manager/gui/installedtab.py:98
-#: ../src/subscription_manager/gui/installedtab.py:114
+#: ../src/subscription_manager/gui/installedtab.py:100
+#: ../src/subscription_manager/gui/installedtab.py:116
 msgid "Never Subscribed"
 msgstr "Nunca foi Subscrito"
 
-#: ../src/subscription_manager/gui/installedtab.py:101
-#: ../src/subscription_manager/gui/installedtab.py:113
+#: ../src/subscription_manager/gui/installedtab.py:103
 msgid "Invalid"
 msgstr ""
 
-#: ../src/subscription_manager/gui/installedtab.py:103
+#: ../src/subscription_manager/gui/installedtab.py:105
 #, python-format
 msgid "Subscription %s is expired"
 msgstr "Subscrição %s vencida"
 
-#: ../src/subscription_manager/gui/installedtab.py:106
+#: ../src/subscription_manager/gui/installedtab.py:108
 msgid "Valid"
 msgstr ""
 
-#: ../src/subscription_manager/gui/installedtab.py:108
+#: ../src/subscription_manager/gui/installedtab.py:110
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "Protegido por contrato %s dentro %s"
 
-#: ../src/subscription_manager/gui/installedtab.py:153
+#: ../src/subscription_manager/gui/installedtab.py:115
+msgid "Missing"
+msgstr ""
+
+#: ../src/subscription_manager/gui/installedtab.py:156
 msgid "My Installed Software"
 msgstr "Minha Instalação de Software"
 
@@ -1622,11 +1629,11 @@ msgid "Red Hat Subscription Manager"
 msgstr ""
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:1
-msgid "Red Hat Subscription Compliance Applet"
+msgid "Red Hat Subscription Validity Applet"
 msgstr ""
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
-msgid "Subscription Compliance Applet"
+msgid "Subscription Validity Applet"
 msgstr ""
 
 #~ msgid "%s (first date of non-compliance)"
