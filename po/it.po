@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 08:54-0300\n"
-"PO-Revision-Date: 2011-03-22 11:51+1000\n"
+"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"PO-Revision-Date: 2011-04-01 10:25+1000\n"
 "Last-Translator: \n"
 "Language-Team:  <it@li.org>\n"
 "Language: it-IT\n"
@@ -226,8 +226,7 @@ msgid "password for http proxy with basic authentication"
 msgstr "password per il proxy http con autenticazione di base"
 
 #: ../src/managercli.py:137
-msgid ""
-"Consumer not registered. Please register using --username and --password"
+msgid "Consumer not registered. Please register using --username and --password"
 msgstr ""
 "Utente non registrato. Si prega di eseguire una registrazione utilizzando --"
 "username e --password"
@@ -254,8 +253,7 @@ msgstr "Password:"
 
 #: ../src/managercli.py:251
 msgid "removes all local consumer data, does not effect the server"
-msgstr ""
-"rimuove tutti i dati relativi all'utente locale, non interessa il server"
+msgstr "rimuove tutti i dati relativi all'utente locale, non interessa il server"
 
 #: ../src/managercli.py:264
 msgid "All local data removed"
@@ -293,10 +291,8 @@ msgstr ""
 "password)"
 
 #: ../src/managercli.py:306
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr ""
-"L'identità dell'utente può essere corrotta o non è esistente. Provare --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgstr "L'identità dell'utente può essere corrotta o non è esistente. Provare --help"
 
 #: ../src/managercli.py:309
 msgid "--force can only be used with --regenerate"
@@ -456,8 +452,7 @@ msgstr "Errore: È necessario --list o --update, Prova facts --help"
 
 #: ../src/managercli.py:667
 msgid "list available or consumer subscriptions for registered user"
-msgstr ""
-"elenco disponibile o sottoscrizioni dell'utente per l'utente registrato"
+msgstr "elenco disponibile o sottoscrizioni dell'utente per l'utente registrato"
 
 #: ../src/managercli.py:672
 msgid "installed"
@@ -468,8 +463,7 @@ msgid "available"
 msgstr "disponibili"
 
 #: ../src/managercli.py:676
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
+msgid "date to search on, defaults to today's date, only used with --available "
 msgstr ""
 "data per la ricerca, esegue il default per la data odierna, usato solo con --"
 "available "
@@ -673,12 +667,11 @@ msgstr "durata: %d(ms)"
 #: ../src/hwprobe.py:60
 #, python-format
 msgid "Error reading system DMI information: %s"
-msgstr ""
+msgstr "Errore durante la lettura delle informazioni DMI del sistema: %s"
 
 #: ../src/hwprobe.py:116
 msgid "Error reading system memory information:"
-msgstr ""
-"Errore durante la lettura delle informazioni della memoria del sistema:"
+msgstr "Errore durante la lettura delle informazioni della memoria del sistema:"
 
 #: ../src/hwprobe.py:131
 msgid "Error reading system cpu information:"
@@ -730,8 +723,7 @@ msgstr "È necessario selezionare un certificato."
 #: ../src/gui/importsub.py:73
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
-msgstr ""
-"%s non è un file del certificato valido. Caricare un certificato valido."
+msgstr "%s non è un file del certificato valido. Caricare un certificato valido."
 
 #: ../src/gui/widgets.py:150
 #, python-format
@@ -757,21 +749,21 @@ msgstr "Oggi"
 
 #: ../src/gui/managergui.py:371
 msgid "You must register before using the subscription assistant."
-msgstr ""
+msgstr "È necessario eseguire la registrazione prima di poter usare l'assistente alla sottoscrizione."
 
 #: ../src/gui/managergui.py:402
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr ""
+msgstr "Sei in possesso di <b>%s</b> prodotti con certificati per l'entitlement invalidi."
 
 #: ../src/gui/managergui.py:406
 msgid "You have <b>1</b> product without a valid entitlement certificate."
-msgstr ""
+msgstr "Sei in possesso di <b>1</b> prodotto senza un certificato per l'entitlement valido."
 
 #: ../src/gui/managergui.py:413
 #, python-format
 msgid "Product entitlement certificates valid through %s"
-msgstr ""
+msgstr "Certificati per l'entitlement del prodotto validi fino a %s"
 
 #: ../src/gui/managergui.py:536
 msgid "You must enter a system name."
@@ -797,7 +789,7 @@ msgstr "Data di fine"
 
 #: ../src/gui/compliance.py:141
 msgid "Subscription List"
-msgstr ""
+msgstr "Elenco sottoscrizione"
 
 #. Set up columns on the view
 #: ../src/gui/compliance.py:142 ../src/gui/allsubs.py:56
@@ -809,7 +801,7 @@ msgstr "Sottoscrizione"
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
-msgstr ""
+msgstr "Errore durante la visualizzazione dell'Assistente alla sottoscrizione. Consultare /var/log/rhsm/rhsm.log per maggiori informazioni."
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -818,18 +810,17 @@ msgstr "Impossibile ricercare sottoscrizioni"
 #: ../src/gui/compliance.py:214
 #, python-format
 msgid "Software entitlements valid through %s"
-msgstr ""
+msgstr "Entitlement software validi fino a %s"
 
 #: ../src/gui/compliance.py:218
 #, python-format
 msgid "%s (first date of invalid entitlements)"
-msgstr ""
+msgstr "%s (prima data di entitlement non validi)"
 
 #: ../src/gui/compliance.py:220
 #, python-format
 msgid "The following subscriptions will cover the products selected on %s"
-msgstr ""
-"Le seguenti sottoscrizioni si riferiscono ai prodotti selezionati su %s"
+msgstr "Le seguenti sottoscrizioni si riferiscono ai prodotti selezionati su %s"
 
 #: ../src/gui/compliance.py:228 ../src/gui/allsubs.py:189
 msgid "Searching for subscriptions. Please wait."
@@ -934,7 +925,7 @@ msgstr "Versione"
 
 #: ../src/gui/installedtab.py:54
 msgid "Certificate"
-msgstr ""
+msgstr "Certificato"
 
 #: ../src/gui/installedtab.py:95
 msgid "Future Subscription"
@@ -946,7 +937,7 @@ msgstr "Mai sottoscritto"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
-msgstr ""
+msgstr "Invalido"
 
 #: ../src/gui/installedtab.py:101
 #, python-format
@@ -955,7 +946,7 @@ msgstr "La sottoscrizione %s è scaduta"
 
 #: ../src/gui/installedtab.py:104
 msgid "Valid"
-msgstr ""
+msgstr "Valido"
 
 #: ../src/gui/installedtab.py:106
 #, python-format
@@ -964,7 +955,7 @@ msgstr "Coperta dal contratto %s attraverso %s"
 
 #: ../src/gui/installedtab.py:111
 msgid "Missing"
-msgstr ""
+msgstr "Mancante"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -972,7 +963,7 @@ msgstr "Il mio software installato"
 
 #: ../src/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
-msgstr ""
+msgstr "<b>Stato del certificato</b>"
 
 #: ../src/gui/data/installed.glade.h:2
 msgid "<b>Product's Subscription Details</b>"
@@ -988,7 +979,7 @@ msgstr "<b>Sottoscrizione:</b>"
 
 #: ../src/gui/data/installed.glade.h:5 ../src/gui/data/mainwindow.glade.h:4
 msgid "Certificate Status"
-msgstr ""
+msgstr "Stato del certificato"
 
 #: ../src/gui/data/installed.glade.h:6
 msgid "Installed View"
@@ -1034,54 +1025,54 @@ msgstr "Testo nome utente"
 #: ../src/gui/data/networkConfig.glade.h:9
 msgctxt "yes"
 msgid "<b>HTTP Proxy</b>"
-msgstr ""
+msgstr "<b>Proxy HTTP</b>"
 
 #: ../src/gui/data/networkConfig.glade.h:10
 msgctxt "yes"
 msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-msgstr ""
+msgstr "<small><b>Esempio:</b> squid.example.com:3128</small>"
 
 #: ../src/gui/data/networkConfig.glade.h:11
 msgctxt "yes"
 msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-msgstr ""
+msgstr "Desidero collegarmi a Red Hat Network tramite un proxy _HTTP."
 
 #: ../src/gui/data/networkConfig.glade.h:12
 msgctxt "yes"
 msgid "Proxy P_assword:"
-msgstr ""
+msgstr "P_assword Proxy:"
 
 #: ../src/gui/data/networkConfig.glade.h:13
 msgctxt "yes"
 msgid "Proxy _Username:"
-msgstr ""
+msgstr "Nome _Utente Proxy:"
 
 #: ../src/gui/data/networkConfig.glade.h:14
 msgctxt "yes"
 msgid "Use Au_thentication with HTTP Proxy:"
-msgstr ""
+msgstr "Usa l'au_tenticazione con il proxy HTTP:"
 
 #: ../src/gui/data/networkConfig.glade.h:15
 msgctxt "yes"
 msgid "_Close"
-msgstr ""
+msgstr "_Chiudi"
 
 #: ../src/gui/data/networkConfig.glade.h:16
 msgctxt "yes"
 msgid "_Proxy Location:"
-msgstr ""
+msgstr "Posizione _Proxy:"
 
 #: ../src/gui/data/compliance.glade.h:1
 msgid "A different date:"
-msgstr ""
+msgstr "Una data diversa:"
 
 #: ../src/gui/data/compliance.glade.h:2
 msgid "Invalid Product List"
-msgstr ""
+msgstr "Elenco prodotti invalidi"
 
 #: ../src/gui/data/compliance.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
-msgstr ""
+msgstr "Mostra i prodotti con certificati per entitlement invalidi dal:"
 
 #: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
 msgid "Subscribe"
@@ -1089,71 +1080,71 @@ msgstr "Sottoscrivi"
 
 #: ../src/gui/data/compliance.glade.h:5
 msgid "Subscription Action Area"
-msgstr ""
+msgstr "Area azione della sottoscrizione"
 
 #: ../src/gui/data/compliance.glade.h:6
 msgid "Subscription Assistant"
-msgstr ""
+msgstr "Assistente della sottoscrizione"
 
 #: ../src/gui/data/compliance.glade.h:7
 msgid "Subscription Assistant Box"
-msgstr ""
+msgstr "Casella assistente della sottoscrizione"
 
 #: ../src/gui/data/compliance.glade.h:8
 msgid "Subscription Assistant Status"
-msgstr ""
+msgstr "Stato assistente della sottoscrizione"
 
 #: ../src/gui/data/compliance.glade.h:9
 msgid "Subscription Date Box"
-msgstr ""
+msgstr "Casella data della sottoscrizione"
 
 #: ../src/gui/data/compliance.glade.h:10
 msgid "Subscription Date Label"
-msgstr ""
+msgstr "Etichetta data della sottoscrizione"
 
 #: ../src/gui/data/compliance.glade.h:11
 msgid "Subscription Date Picker"
-msgstr ""
+msgstr "Selettore data di sottoscrizione"
 
 #: ../src/gui/data/compliance.glade.h:12
 msgid "Subscription Details"
-msgstr ""
+msgstr "Informazioni sulla sottoscrizione"
 
 #: ../src/gui/data/compliance.glade.h:13
 msgid "Subscription Label"
-msgstr ""
+msgstr "Etichetta della sottoscrizione"
 
 #: ../src/gui/data/compliance.glade.h:14
 msgid "Subscription Label Box"
-msgstr ""
+msgstr "Casella etichetta della sottoscrizione"
 
 #: ../src/gui/data/compliance.glade.h:15
 msgid "Subscription Manager - Subscription Assistant"
-msgstr ""
+msgstr "Gestore sottoscrizione - Assistente della sottoscrizione"
 
 #: ../src/gui/data/compliance.glade.h:16
 msgid "Subscription Product List"
-msgstr ""
+msgstr "Elenco prodotti della sottoscrizione"
 
 #: ../src/gui/data/compliance.glade.h:17
 msgid "Subscription Subscriptions Box"
-msgstr ""
+msgstr "Sottoscrizione - Casella sottoscrizioni"
 
 #: ../src/gui/data/compliance.glade.h:18
 msgid "Subscription Subscriptions Label"
-msgstr ""
+msgstr "Sottoscrizione - Etichetta sottoscrizioni"
 
 #: ../src/gui/data/compliance.glade.h:19
 msgid "Subscription Update Box"
-msgstr ""
+msgstr "Casella aggiornamento della sottoscrizione"
 
 #: ../src/gui/data/compliance.glade.h:20
 msgid "Subscriptions List"
-msgstr ""
+msgstr "Elenco sottoscrizioni"
 
 #: ../src/gui/data/compliance.glade.h:21
 msgid "Subscriptions Panel"
-msgstr ""
+msgstr "Pannello sottoscrizioni"
 
 #: ../src/gui/data/compliance.glade.h:22
 msgid "The following subscriptions will cover the products selected above:"
@@ -1233,7 +1224,7 @@ msgstr "update_subscriptions_dialog\n"
 #: ../src/gui/data/rhsm.glade.h:17 ../src/gui/data/importsub.glade.h:3
 msgctxt "yes"
 msgid "Certificate _Location:"
-msgstr ""
+msgstr "(_L)Posizione certificato:"
 
 #: ../src/gui/data/rhsm.glade.h:18
 msgctxt "yes"
@@ -1241,6 +1232,8 @@ msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
 msgstr ""
+"Per aggiungere una sottoscrizione selezionare un certificato da importare "
+"sulla directory del certificato di sottoscrizione."
 
 #: ../src/gui/data/activate.glade.h:1
 msgid "Activate"
@@ -1270,7 +1263,7 @@ msgstr "Attivazione sottoscrizione"
 
 #: ../src/gui/data/mainwindow.glade.h:1
 msgid "<b>Certificate Status</b>"
-msgstr ""
+msgstr "<b>Stato del certificato</b>"
 
 #: ../src/gui/data/mainwindow.glade.h:2
 msgid "<b>Tools</b>"
@@ -1294,7 +1287,7 @@ msgstr "Rimuovi registrazione del sistema"
 
 #: ../src/gui/data/mainwindow.glade.h:10
 msgid "Update Certificates"
-msgstr ""
+msgstr "Aggiorna certificati"
 
 #: ../src/gui/data/mainwindow.glade.h:11
 msgid "View System Facts"
@@ -1302,7 +1295,7 @@ msgstr "Visualizza Eventi del sistema"
 
 #: ../src/gui/data/mainwindow.glade.h:12
 msgid "You have one product without a valid entitlement certificate."
-msgstr ""
+msgstr "Sei in possesso di un prodotto senza certificato per l'entitlement valido."
 
 #: ../src/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
@@ -1386,9 +1379,10 @@ msgstr "Gestisci le sottoscrizioni del prodotto"
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr ""
+"Selezionare un certificato da importare sulla directory del certificato di "
+"sottoscrizione."
 
 #: ../src/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
@@ -1500,17 +1494,17 @@ msgstr "registration_dialog_action_area\n"
 #: ../src/gui/data/registration.glade.h:13
 msgctxt "yes"
 msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr ""
+msgstr "<b>Inserire le informazioni sul tuo account di Red Hat Network:</b>"
 
 #: ../src/gui/data/registration.glade.h:14
 msgctxt "yes"
 msgid "Password:"
-msgstr ""
+msgstr "Password:"
 
 #: ../src/gui/data/registration.glade.h:15
 msgctxt "yes"
 msgid "Red Hat Login:"
-msgstr ""
+msgstr "Login di Red Hat:"
 
 #: ../src/gui/data/progress.glade.h:1
 msgid "Progress Dialog"
@@ -1519,31 +1513,31 @@ msgstr "Dialogo del progresso"
 #: ../src/gui/data/contract_selection.glade.h:1
 msgctxt "yes"
 msgid "<b>Choose the specific contract to use:</b>"
-msgstr ""
+msgstr "<b>Selezionare il contratto specifico da usare:</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:2
 msgctxt "yes"
 msgid "<b>Subscription:</b>"
-msgstr ""
+msgstr "<b>Sottoscrizione:</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:3
 msgctxt "yes"
 msgid "<b>Total Contracts:</b>"
-msgstr ""
+msgstr "<b>Contratti totali:</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:4
 msgctxt "yes"
 msgid "Contract Selection"
-msgstr ""
+msgstr "Selezione contratto"
 
 #: ../src/gui/data/contract_selection.glade.h:5
 msgctxt "yes"
 msgid "Subscribe"
-msgstr ""
+msgstr "Sottoscrivi"
 
 #: ../src/compliance/rhsm_compliance_icon.c:43
 msgid "How often to check for validity (in seconds)"
-msgstr ""
+msgstr "Frequenza per il controllo della validità (in secondi)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:45
 msgid "Show debug messages"
@@ -1551,16 +1545,16 @@ msgstr "Mostra i messaggi di debug"
 
 #: ../src/compliance/rhsm_compliance_icon.c:47
 msgid "Force display of the icon (expired or warning)"
-msgstr ""
+msgstr "Forza visualizzazione dell'icona (scaduta o di avvertimento)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:170
 #: ../src/compliance/rhsm_compliance_icon.c:171
 msgid "Invalid or Missing Entitlement Certificates"
-msgstr ""
+msgstr "Certificati di entitlement mancanti o invalidi"
 
 #: ../src/compliance/rhsm_compliance_icon.c:172
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr ""
+msgstr "Questo sistema è sprovvisto di uno o più certificati per entitlement validi."
 
 #: ../src/compliance/rhsm_compliance_icon.c:176
 msgid "Some of the system's subscriptions are about to expire"
@@ -1572,7 +1566,7 @@ msgstr "Le sottoscrizioni di questo sistema sono quasi scadute"
 
 #: ../src/compliance/rhsm_compliance_icon.c:179
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr ""
+msgstr "Alcune delle sottoscrizioni del sistema stanno quasi per scadere."
 
 #: ../src/compliance/rhsm_compliance_icon.c:197
 msgid "Remind Me Later"
@@ -1600,211 +1594,13 @@ msgstr "opzione per l'analisi fallita: %s\n"
 
 #: ../etc-conf/subscription-manager.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
-msgstr ""
+msgstr "Red Hat Subscription Manager"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
-msgstr ""
+msgstr "Red Hat Subscription Validity Applet"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
-msgstr ""
+msgstr "Applet di convalida della sottoscrizione"
 
-#~ msgid "%s (first date of non-compliance)"
-#~ msgstr "%s (prima data di non-compatibilità)"
-
-#~ msgid "<b>Choose the specific contract to use:</b>"
-#~ msgstr "<b>Selezionare il contratto specifico da usare:</b>"
-
-#~ msgid "<b>Compliance Status</b>"
-#~ msgstr "<b>Stati Conformi</b>"
-
-#~ msgid "<b>Compliance:</b>"
-#~ msgstr "<b>Conforme:</b>"
-
-#~ msgid "<b>HTTP Proxy</b>"
-#~ msgstr "<b>Proxy HTTP</b>"
-
-#~ msgid "<b>Please enter your Red Hat Network account information:</b>"
-#~ msgstr "<b>Inserire le informazioni sul tuo account di Red Hat Network:</b>"
-
-#~ msgid "<b>Total Contracts:</b>"
-#~ msgstr "<b>Contratti totali:</b>"
-
-#~ msgid "<big><b>All software is in compliance until %s</b></big>"
-#~ msgstr "<big><b>Tutto il software è conforme fino a %s</b></big>"
-
-#~ msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-#~ msgstr "<small><b>Esempio:</b> squid.example.com:3128</small>"
-
-#~ msgid "All products are in compliance until %s"
-#~ msgstr "Tutti i prodotti sono conformi fino a %s"
-
-#~ msgid "Become Compliant"
-#~ msgstr "Diventa conforme"
-
-#~ msgid "Certificate _Location:"
-#~ msgstr "(_L)Posizione certificato:"
-
-#~ msgid ""
-#~ "Choose a certificate to import to your subscription certificate directory."
-#~ msgstr ""
-#~ "Selezionare un certificato da importare sulla directory del certificato "
-#~ "di sottoscrizione."
-
-#~ msgid "Compliance Action Area"
-#~ msgstr "Area d'azione conforme"
-
-#~ msgid "Compliance Assistant"
-#~ msgstr "Assistente conforme"
-
-#~ msgid "Compliance Assistant Box"
-#~ msgstr "Casella assistente conforme"
-
-#~ msgid "Compliance Assistant Status"
-#~ msgstr "Stato assistente conforme"
-
-#~ msgid "Compliance Date Box"
-#~ msgstr "Casella data conforme"
-
-#~ msgid "Compliance Date Label"
-#~ msgstr "Etichetta data conforme"
-
-#~ msgid "Compliance Date Picker"
-#~ msgstr "Selettore data conforme"
-
-#~ msgid "Compliance Label"
-#~ msgstr "Etichetta conforme"
-
-#~ msgid "Compliance Label Box"
-#~ msgstr "Casella etichetta conforme"
-
-#~ msgid "Compliance Product List"
-#~ msgstr "Elenco prodotti conformi"
-
-#~ msgid "Compliance Status"
-#~ msgstr "Stato conformità"
-
-#~ msgid "Compliance Subscription Details"
-#~ msgstr "Dettagli sottoscrizione conforme"
-
-#~ msgid "Compliance Subscription List"
-#~ msgstr "Elenco sottoscrizioni conformi"
-
-#~ msgid "Compliance Subscriptions Box"
-#~ msgstr "Casella sottoscrizioni conformi"
-
-#~ msgid "Compliance Subscriptions Label"
-#~ msgstr "Etichetta sottoscrizioni conformi"
-
-#~ msgid "Compliance Subscriptions List"
-#~ msgstr "Elenco sottoscrizioni conformi"
-
-#~ msgid "Compliance Subscriptions Panel"
-#~ msgstr "Pannello sottoscrizioni conformi"
-
-#~ msgid "Compliance Update Box"
-#~ msgstr "Casella aggiornamento conforme"
-
-#~ msgid "Contract Selection"
-#~ msgstr "Selezione contratto"
-
-#~ msgid ""
-#~ "Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log "
-#~ "for more information."
-#~ msgstr ""
-#~ "Errore durante la visualizzazione del Compliance Assistant. Consultare /"
-#~ "var/log/rhsm/rhsm.log per maggiori informazioni."
-
-#~ msgid "Error reading system DMI information:"
-#~ msgstr "Errore durante la lettura delle informazioni DMI del sistema:"
-
-#~ msgid "Force display of the compliance icon (expired or warning)"
-#~ msgstr ""
-#~ "Forza la visualizzazione dell'icona di conformità (scaduto o di "
-#~ "avvertimento)"
-
-#~ msgid "How often to check for compliance (in seconds)"
-#~ msgstr "Frequenza per il controllo della conformità (in secondi)"
-
-#~ msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-#~ msgstr "Desidero collegarmi a Red Hat Network tramite un proxy _HTTP."
-
-#~ msgid "In Compliance"
-#~ msgstr "Conforme"
-
-#~ msgid "On a different date:"
-#~ msgstr "In una data diversa:"
-
-#~ msgid ""
-#~ "One or more of this system's subscriptions are about to expire. These "
-#~ "subscriptions are required for compliance with your subscription "
-#~ "agreements."
-#~ msgstr ""
-#~ "Una o più sottoscrizioni del sistema sono quasi scadute. Le suddette "
-#~ "sottoscrizioni sono necessarie per una conformità con gli accordi di "
-#~ "sottoscrizione."
-
-#~ msgid "Out of Compliance"
-#~ msgstr "Non conforme"
-
-#~ msgid "Password:"
-#~ msgstr "Password:"
-
-#~ msgid "Proxy P_assword:"
-#~ msgstr "P_assword Proxy:"
-
-#~ msgid "Proxy _Username:"
-#~ msgstr "Nome _Utente Proxy:"
-
-#~ msgid "Red Hat Login:"
-#~ msgstr "Login di Red Hat:"
-
-#~ msgid "Show products that will be out of compliance as of:"
-#~ msgstr "Mostra i prodotti che non saranno conformi dal:"
-
-#~ msgid "Subscription Manager - Compliance Assistant"
-#~ msgstr "Gestore sottoscrizione - Compliance Assistant"
-
-#~ msgid "This System is Non-Compliant"
-#~ msgstr "Questo Sistema Non è Conforme"
-
-#~ msgid ""
-#~ "This system is missing one or more subscriptions required for compliance "
-#~ "with your subscription agreements."
-#~ msgstr ""
-#~ "Questo sistema è sprovvisto di una o più sottoscrizioni necessarie per "
-#~ "essere conforme con gli accordi di sottoscrizione."
-
-#~ msgid "This system is non-compliant"
-#~ msgstr "Questo sistema non è conforme"
-
-#~ msgid ""
-#~ "To add a subscription, choose a certificate to import to your "
-#~ "subscription certificate directory."
-#~ msgstr ""
-#~ "Per aggiungere una sottoscrizione selezionare un certificato da importare "
-#~ "sulla directory del certificato di sottoscrizione."
-
-#~ msgid "Use Au_thentication with HTTP Proxy:"
-#~ msgstr "Usa l'au_tenticazione con il proxy HTTP:"
-
-#~ msgid "You have <b>%s</b> products out of compliance."
-#~ msgstr "Sei in possesso di <b>%s</b> prodotti non conformi."
-
-#~ msgid "You have <b>1</b> product out of compliance."
-#~ msgstr "Sei in possesso di <b>1</b> prodotto non conforme."
-
-#~ msgid "You have one product which is out of compliance."
-#~ msgstr "Sei in possesso di un prodotto non conforme."
-
-#~ msgid "You must register before using the compliance assistant."
-#~ msgstr ""
-#~ "È necessario eseguire una registrazione prima di poter usare il "
-#~ "compliance assistant."
-
-#~ msgid "_Close"
-#~ msgstr "_Chiudi"
-
-#~ msgid "_Proxy Location:"
-#~ msgstr "Posizione _Proxy:"

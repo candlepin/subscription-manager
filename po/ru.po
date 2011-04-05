@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 08:54-0300\n"
-"PO-Revision-Date: 2011-03-22 12:54\n"
+"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"PO-Revision-Date: 2011-04-01 13:17\n"
 "Last-Translator: Yulia <ypoyarko@redhat.com>\n"
 "Language-Team: Russian\n"
 "Language: ru-RU\n"
@@ -18,8 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: ../src/certlib.py:96
 msgid "Reasons(s):"
@@ -46,19 +45,19 @@ msgstr "Ожидаемый (UEP) серийный N %s"
 
 #: ../src/certlib.py:609
 msgid "Added (new)"
-msgstr "Добавлено (новые)"
+msgstr "Добавлены (новые)"
 
 #: ../src/certlib.py:610
 msgid "Deleted (rogue):"
-msgstr "Удалено (посторонние):"
+msgstr "Удалены (посторонние):"
 
 #: ../src/certlib.py:611
 msgid "Expired (not deleted):"
-msgstr "Истекло (не удалено):"
+msgstr "Истекли (не удалены):"
 
 #: ../src/certlib.py:612
 msgid "Expired (deleted):"
-msgstr "Истекло (удалено):"
+msgstr "Истекли (удалено):"
 
 #: ../src/certlib.py:767
 msgid "Updating Red Hat certificates"
@@ -190,7 +189,7 @@ msgid ""
 "Network error. Please check the connection details, or see /var/log/rhsm/"
 "rhsm.log for more information."
 msgstr ""
-"Ошибка сети. Проверьте данные подключения или обратитесь к /var/log/rhsm/"
+"Ошибка сети. Проверьте настройки подключения или обратитесь к /var/log/rhsm/"
 "rhsm.log"
 
 #. This is what happens when there's an issue with the server on the other side of the wire
@@ -199,7 +198,7 @@ msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
 msgstr ""
-"Удалённая ошибка сервера. Проверьте данные подключения или обратитесь к /var/"
+"Удалённая ошибка сервера. Проверьте настройки подключения или обратитесь к /var/"
 "log/rhsm/rhsm.log"
 
 #: ../src/managercli.py:67 ../src/gui/utils.py:63
@@ -209,7 +208,7 @@ msgstr "Неверный сертификат CA: %s"
 
 #: ../src/managercli.py:84
 msgid "Installed Products:"
-msgstr "Установленные продукты:"
+msgstr "Установленные:"
 
 #: ../src/managercli.py:124
 msgid "debug level"
@@ -228,8 +227,7 @@ msgid "password for http proxy with basic authentication"
 msgstr "пароль для доступа к прокси HTTP с минимальной аутентификацией"
 
 #: ../src/managercli.py:137
-msgid ""
-"Consumer not registered. Please register using --username and --password"
+msgid "Consumer not registered. Please register using --username and --password"
 msgstr ""
 "Пользователь не зарегистрирован. Для регистрации добавьте аргументы -«-"
 "username» и «--password»"
@@ -256,8 +254,7 @@ msgstr "Пароль: "
 
 #: ../src/managercli.py:251
 msgid "removes all local consumer data, does not effect the server"
-msgstr ""
-"удаляет локальные данные пользователя без отражения изменений на сервере"
+msgstr "удаляет локальные данные пользователя без отражения изменений на сервере"
 
 #: ../src/managercli.py:264
 msgid "All local data removed"
@@ -295,8 +292,7 @@ msgstr ""
 "пароля)"
 
 #: ../src/managercli.py:306
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr "Пользователь не существует или повреждён. Выполните «register --help»."
 
 #: ../src/managercli.py:309
@@ -326,8 +322,7 @@ msgstr "тип регистрируемого пользователя. По у�
 
 #: ../src/managercli.py:359
 msgid "name of the consumer to register. Defaults to the hostname."
-msgstr ""
-"имя регистрируемого пользователя. По умолчанию используется имя компьютера."
+msgstr "имя регистрируемого пользователя. По умолчанию используется имя компьютера."
 
 #: ../src/managercli.py:361
 msgid "register to an existing consumer"
@@ -383,8 +378,7 @@ msgstr "активировать зарегистрированного поль
 
 #: ../src/managercli.py:478
 msgid "optional email address to notify when token activation is complete."
-msgstr ""
-"дополнительный адрес для отправки уведомлений об успешной активации ключа"
+msgstr "дополнительный адрес для отправки уведомлений об успешной активации ключа"
 
 #: ../src/managercli.py:481
 msgid ""
@@ -453,8 +447,7 @@ msgstr "обновить статистику"
 
 #: ../src/managercli.py:643
 msgid "Error: Need either --list or --update, Try facts --help"
-msgstr ""
-"Ошибка. Необходимо указать «--list» или «--update». Выполните «facts --help»"
+msgstr "Ошибка. Необходимо указать «--list» или «--update». Выполните «facts --help»"
 
 #: ../src/managercli.py:667
 msgid "list available or consumer subscriptions for registered user"
@@ -469,10 +462,8 @@ msgid "available"
 msgstr "доступно"
 
 #: ../src/managercli.py:676
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
-msgstr ""
-"поиск по дате (по умолчанию сегодня), используется вместе с «--available»"
+msgid "date to search on, defaults to today's date, only used with --available "
+msgstr "поиск по дате (по умолчанию сегодня), используется вместе с «--available»"
 
 #: ../src/managercli.py:679
 msgid "consumed"
@@ -667,7 +658,7 @@ msgstr "длительность: %d(мс)"
 #: ../src/hwprobe.py:60
 #, python-format
 msgid "Error reading system DMI information: %s"
-msgstr ""
+msgstr "Ошибка чтения информации DMI: %s"
 
 #: ../src/hwprobe.py:116
 msgid "Error reading system memory information:"
@@ -749,21 +740,21 @@ msgstr "Сегодня"
 
 #: ../src/gui/managergui.py:371
 msgid "You must register before using the subscription assistant."
-msgstr ""
+msgstr "Для доступа к помощнику по подписке необходимо зарегистрироваться."
 
 #: ../src/gui/managergui.py:402
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr ""
+msgstr "Всего продуктов с недействительными сертификатами полномочий: <b>%s</b>"
 
 #: ../src/gui/managergui.py:406
 msgid "You have <b>1</b> product without a valid entitlement certificate."
-msgstr ""
+msgstr "<b>1</b> продукт без действительного сертификата полномочий."
 
 #: ../src/gui/managergui.py:413
 #, python-format
 msgid "Product entitlement certificates valid through %s"
-msgstr ""
+msgstr "Сертификаты полномочий действительны до %s"
 
 #: ../src/gui/managergui.py:536
 msgid "You must enter a system name."
@@ -789,7 +780,7 @@ msgstr "Срок действия"
 
 #: ../src/gui/compliance.py:141
 msgid "Subscription List"
-msgstr ""
+msgstr "Список подписок"
 
 #. Set up columns on the view
 #: ../src/gui/compliance.py:142 ../src/gui/allsubs.py:56
@@ -801,7 +792,7 @@ msgstr "Подписка"
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
-msgstr ""
+msgstr "Ошибка отображения помощника. За информацией обратитесь к /var/log/rhsm/rhsm.log"
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -810,12 +801,12 @@ msgstr "Не удалось выполнить поиск подписок"
 #: ../src/gui/compliance.py:214
 #, python-format
 msgid "Software entitlements valid through %s"
-msgstr ""
+msgstr "Программные полномочия действительны до %s"
 
 #: ../src/gui/compliance.py:218
 #, python-format
 msgid "%s (first date of invalid entitlements)"
-msgstr ""
+msgstr "%s (день остановки поддержки)"
 
 #: ../src/gui/compliance.py:220
 #, python-format
@@ -922,7 +913,7 @@ msgstr "Версия"
 
 #: ../src/gui/installedtab.py:54
 msgid "Certificate"
-msgstr ""
+msgstr "Сертификат"
 
 #: ../src/gui/installedtab.py:95
 msgid "Future Subscription"
@@ -934,7 +925,7 @@ msgstr "Никогда не подписывалась"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
-msgstr ""
+msgstr "Недействительный"
 
 #: ../src/gui/installedtab.py:101
 #, python-format
@@ -943,7 +934,7 @@ msgstr "Подписка %s истекла"
 
 #: ../src/gui/installedtab.py:104
 msgid "Valid"
-msgstr ""
+msgstr "Действительный"
 
 #: ../src/gui/installedtab.py:106
 #, python-format
@@ -952,7 +943,7 @@ msgstr "Покрывается контрактом %s (%s)"
 
 #: ../src/gui/installedtab.py:111
 msgid "Missing"
-msgstr ""
+msgstr "Отсутствует"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -960,7 +951,7 @@ msgstr "Мои установленные программы"
 
 #: ../src/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
-msgstr ""
+msgstr "<b>Статус сертификата:</b>"
 
 #: ../src/gui/data/installed.glade.h:2
 msgid "<b>Product's Subscription Details</b>"
@@ -976,7 +967,7 @@ msgstr "<b>Подписка:</b>"
 
 #: ../src/gui/data/installed.glade.h:5 ../src/gui/data/mainwindow.glade.h:4
 msgid "Certificate Status"
-msgstr ""
+msgstr "Статус сертификата"
 
 #: ../src/gui/data/installed.glade.h:6
 msgid "Installed View"
@@ -1022,54 +1013,54 @@ msgstr "Поле имени пользователя"
 #: ../src/gui/data/networkConfig.glade.h:9
 msgctxt "yes"
 msgid "<b>HTTP Proxy</b>"
-msgstr ""
+msgstr "<b>Прокси HTTP</b>"
 
 #: ../src/gui/data/networkConfig.glade.h:10
 msgctxt "yes"
 msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-msgstr ""
+msgstr "<small><b>Пример:</b> squid.example.com:3128</small>"
 
 #: ../src/gui/data/networkConfig.glade.h:11
 msgctxt "yes"
 msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-msgstr ""
+msgstr "Подключаться к Red Hat Network через _прокси-сервер HTTP."
 
 #: ../src/gui/data/networkConfig.glade.h:12
 msgctxt "yes"
 msgid "Proxy P_assword:"
-msgstr ""
+msgstr "_Пароль доступа к прокси:"
 
 #: ../src/gui/data/networkConfig.glade.h:13
 msgctxt "yes"
 msgid "Proxy _Username:"
-msgstr ""
+msgstr "_Имя пользователя на прокси:"
 
 #: ../src/gui/data/networkConfig.glade.h:14
 msgctxt "yes"
 msgid "Use Au_thentication with HTTP Proxy:"
-msgstr ""
+msgstr "Включить _аутентификацию прокси:"
 
 #: ../src/gui/data/networkConfig.glade.h:15
 msgctxt "yes"
 msgid "_Close"
-msgstr ""
+msgstr "_Закрыть"
 
 #: ../src/gui/data/networkConfig.glade.h:16
 msgctxt "yes"
 msgid "_Proxy Location:"
-msgstr ""
+msgstr "Адрес _прокси:"
 
 #: ../src/gui/data/compliance.glade.h:1
 msgid "A different date:"
-msgstr ""
+msgstr "В другой день:"
 
 #: ../src/gui/data/compliance.glade.h:2
 msgid "Invalid Product List"
-msgstr ""
+msgstr "Список недействительных продуктов"
 
 #: ../src/gui/data/compliance.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
-msgstr ""
+msgstr "Показать продукты, поддержка которых прекращается:"
 
 #: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
 msgid "Subscribe"
@@ -1077,71 +1068,71 @@ msgstr "Подписать"
 
 #: ../src/gui/data/compliance.glade.h:5
 msgid "Subscription Action Area"
-msgstr ""
+msgstr "Область действий подписки"
 
 #: ../src/gui/data/compliance.glade.h:6
 msgid "Subscription Assistant"
-msgstr ""
+msgstr "Помощник по подписке"
 
 #: ../src/gui/data/compliance.glade.h:7
 msgid "Subscription Assistant Box"
-msgstr ""
+msgstr "Секция помощника по подписке"
 
 #: ../src/gui/data/compliance.glade.h:8
 msgid "Subscription Assistant Status"
-msgstr ""
+msgstr "Статус помощника по подписке"
 
 #: ../src/gui/data/compliance.glade.h:9
 msgid "Subscription Date Box"
-msgstr ""
+msgstr "Поле даты подписки"
 
 #: ../src/gui/data/compliance.glade.h:10
 msgid "Subscription Date Label"
-msgstr ""
+msgstr "Метка даты подписки"
 
 #: ../src/gui/data/compliance.glade.h:11
 msgid "Subscription Date Picker"
-msgstr ""
+msgstr "Выбор даты подписки"
 
 #: ../src/gui/data/compliance.glade.h:12
 msgid "Subscription Details"
-msgstr ""
+msgstr "Свойства подписки"
 
 #: ../src/gui/data/compliance.glade.h:13
 msgid "Subscription Label"
-msgstr ""
+msgstr "Метка подписки"
 
 #: ../src/gui/data/compliance.glade.h:14
 msgid "Subscription Label Box"
-msgstr ""
+msgstr "Поле метки подписки"
 
 #: ../src/gui/data/compliance.glade.h:15
 msgid "Subscription Manager - Subscription Assistant"
-msgstr ""
+msgstr "Управление подписками. Помощник по подписке"
 
 #: ../src/gui/data/compliance.glade.h:16
 msgid "Subscription Product List"
-msgstr ""
+msgstr "Список подписанных продуктов"
 
 #: ../src/gui/data/compliance.glade.h:17
 msgid "Subscription Subscriptions Box"
-msgstr ""
+msgstr "Область подписок"
 
 #: ../src/gui/data/compliance.glade.h:18
 msgid "Subscription Subscriptions Label"
-msgstr ""
+msgstr "Метка подписок"
 
 #: ../src/gui/data/compliance.glade.h:19
 msgid "Subscription Update Box"
-msgstr ""
+msgstr "Поле обновления подписок"
 
 #: ../src/gui/data/compliance.glade.h:20
 msgid "Subscriptions List"
-msgstr ""
+msgstr "Список подписок"
 
 #: ../src/gui/data/compliance.glade.h:21
 msgid "Subscriptions Panel"
-msgstr ""
+msgstr "Панель подписок"
 
 #: ../src/gui/data/compliance.glade.h:22
 msgid "The following subscriptions will cover the products selected above:"
@@ -1219,7 +1210,7 @@ msgstr "update_subscriptions_dialog\n"
 #: ../src/gui/data/rhsm.glade.h:17 ../src/gui/data/importsub.glade.h:3
 msgctxt "yes"
 msgid "Certificate _Location:"
-msgstr ""
+msgstr "_Сертификат:"
 
 #: ../src/gui/data/rhsm.glade.h:18
 msgctxt "yes"
@@ -1227,6 +1218,8 @@ msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
 msgstr ""
+"Чтобы добавить подписку, выберите сертификат для размещения в каталоге "
+"подписок."
 
 #: ../src/gui/data/activate.glade.h:1
 msgid "Activate"
@@ -1255,7 +1248,7 @@ msgstr "Активация подписки"
 
 #: ../src/gui/data/mainwindow.glade.h:1
 msgid "<b>Certificate Status</b>"
-msgstr ""
+msgstr "<b>Статус сертификата</b>"
 
 #: ../src/gui/data/mainwindow.glade.h:2
 msgid "<b>Tools</b>"
@@ -1279,7 +1272,7 @@ msgstr "Удалить регистрацию"
 
 #: ../src/gui/data/mainwindow.glade.h:10
 msgid "Update Certificates"
-msgstr ""
+msgstr "Обновить сертификаты"
 
 #: ../src/gui/data/mainwindow.glade.h:11
 msgid "View System Facts"
@@ -1287,7 +1280,7 @@ msgstr "Просмотр статистики"
 
 #: ../src/gui/data/mainwindow.glade.h:12
 msgid "You have one product without a valid entitlement certificate."
-msgstr ""
+msgstr "Один продукт с недействительным сертификатом."
 
 #: ../src/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
@@ -1371,9 +1364,8 @@ msgstr "Управление подписками продуктов"
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
-msgstr ""
+msgid "Choose a certificate to import to your subscription certificate directory."
+msgstr "Выберите сертификат для импортирования."
 
 #: ../src/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
@@ -1484,17 +1476,17 @@ msgstr "registration_dialog_action_area\n"
 #: ../src/gui/data/registration.glade.h:13
 msgctxt "yes"
 msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr ""
+msgstr "<b>Введите данные учётной записи Red Hat Network:</b>"
 
 #: ../src/gui/data/registration.glade.h:14
 msgctxt "yes"
 msgid "Password:"
-msgstr ""
+msgstr "Пароль:"
 
 #: ../src/gui/data/registration.glade.h:15
 msgctxt "yes"
 msgid "Red Hat Login:"
-msgstr ""
+msgstr "Имя входа Red Hat:"
 
 #: ../src/gui/data/progress.glade.h:1
 msgid "Progress Dialog"
@@ -1503,31 +1495,31 @@ msgstr "Прогресс"
 #: ../src/gui/data/contract_selection.glade.h:1
 msgctxt "yes"
 msgid "<b>Choose the specific contract to use:</b>"
-msgstr ""
+msgstr "<b>Выберите контракт:</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:2
 msgctxt "yes"
 msgid "<b>Subscription:</b>"
-msgstr ""
+msgstr "<b>Подписка:</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:3
 msgctxt "yes"
 msgid "<b>Total Contracts:</b>"
-msgstr ""
+msgstr "<b>Всего контрактов:</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:4
 msgctxt "yes"
 msgid "Contract Selection"
-msgstr ""
+msgstr "Выбор контракта"
 
 #: ../src/gui/data/contract_selection.glade.h:5
 msgctxt "yes"
 msgid "Subscribe"
-msgstr ""
+msgstr "Подписать"
 
 #: ../src/compliance/rhsm_compliance_icon.c:43
 msgid "How often to check for validity (in seconds)"
-msgstr ""
+msgstr "Частота проверки (в секундах)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:45
 msgid "Show debug messages"
@@ -1535,16 +1527,16 @@ msgstr "Показать сообщения отладки"
 
 #: ../src/compliance/rhsm_compliance_icon.c:47
 msgid "Force display of the icon (expired or warning)"
-msgstr ""
+msgstr "Всегда показывать значок (истёк или предупреждение)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:170
 #: ../src/compliance/rhsm_compliance_icon.c:171
 msgid "Invalid or Missing Entitlement Certificates"
-msgstr ""
+msgstr "Сертификат недействителен или отсутствует"
 
 #: ../src/compliance/rhsm_compliance_icon.c:172
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr ""
+msgstr "В системе нет действительных сертификатов."
 
 #: ../src/compliance/rhsm_compliance_icon.c:176
 msgid "Some of the system's subscriptions are about to expire"
@@ -1556,7 +1548,7 @@ msgstr "Подписки системы скоро истекут"
 
 #: ../src/compliance/rhsm_compliance_icon.c:179
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr ""
+msgstr "Срок действия подписок в системе подходит к концу. "
 
 #: ../src/compliance/rhsm_compliance_icon.c:197
 msgid "Remind Me Later"
@@ -1584,205 +1576,13 @@ msgstr "не удалось обработать параметр: %s\n"
 
 #: ../etc-conf/subscription-manager.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
-msgstr ""
+msgstr "Управление подписками Red Hat"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
-msgstr ""
+msgstr "Апплет проверки подписки Red Hat"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
-msgstr ""
+msgstr "Апплет проверки подписки"
 
-#~ msgid "%s (first date of non-compliance)"
-#~ msgstr "%s (день отмены согласования)"
-
-#~ msgid "<b>Choose the specific contract to use:</b>"
-#~ msgstr "<b>Выберите контракт:</b>"
-
-#~ msgid "<b>Compliance Status</b>"
-#~ msgstr "<b>Статус согласования</b>"
-
-#~ msgid "<b>Compliance:</b>"
-#~ msgstr "<b>Поддержка:</b>"
-
-#~ msgid "<b>HTTP Proxy</b>"
-#~ msgstr "<b>Прокси HTTP</b>"
-
-#~ msgid "<b>Please enter your Red Hat Network account information:</b>"
-#~ msgstr "<b>Введите данные учётной записи Red Hat Network:</b>"
-
-#~ msgid "<b>Total Contracts:</b>"
-#~ msgstr "<b>Всего контрактов:</b>"
-
-#~ msgid "<big><b>All software is in compliance until %s</b></big>"
-#~ msgstr "<big><b>Все программы согласованы до %s</b></big>"
-
-#~ msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-#~ msgstr "<small><b>Пример:</b> squid.example.com:3128</small>"
-
-#~ msgid "All products are in compliance until %s"
-#~ msgstr "Все продукты поддерживаются до %s"
-
-#~ msgid "Become Compliant"
-#~ msgstr "Согласовать"
-
-#~ msgid "Certificate _Location:"
-#~ msgstr "_Сертификат:"
-
-#~ msgid ""
-#~ "Choose a certificate to import to your subscription certificate directory."
-#~ msgstr "Выберите сертификат для импортирования."
-
-#~ msgid "Compliance Action Area"
-#~ msgstr "Область действий согласования"
-
-#~ msgid "Compliance Assistant"
-#~ msgstr "Помощник по согласованию"
-
-#~ msgid "Compliance Assistant Box"
-#~ msgstr "Область помощника согласования"
-
-#~ msgid "Compliance Assistant Status"
-#~ msgstr "Статус помощника согласования"
-
-#~ msgid "Compliance Date Box"
-#~ msgstr "Поле даты согласования"
-
-#~ msgid "Compliance Date Label"
-#~ msgstr "Метка даты согласования"
-
-#~ msgid "Compliance Date Picker"
-#~ msgstr "Выбор даты согласования"
-
-#~ msgid "Compliance Label"
-#~ msgstr "Метка согласования"
-
-#~ msgid "Compliance Label Box"
-#~ msgstr "Поле метки согласования"
-
-#~ msgid "Compliance Product List"
-#~ msgstr "Список продуктов согласования"
-
-#~ msgid "Compliance Status"
-#~ msgstr "Статус согласования"
-
-#~ msgid "Compliance Subscription Details"
-#~ msgstr "Свойства согласования подписок"
-
-#~ msgid "Compliance Subscription List"
-#~ msgstr "Список согласования подписок"
-
-#~ msgid "Compliance Subscriptions Box"
-#~ msgstr "Поле согласования подписок"
-
-#~ msgid "Compliance Subscriptions Label"
-#~ msgstr "Метка согласования подписок"
-
-#~ msgid "Compliance Subscriptions List"
-#~ msgstr "Список согласования подписок"
-
-#~ msgid "Compliance Subscriptions Panel"
-#~ msgstr "Панель согласования подписок"
-
-#~ msgid "Compliance Update Box"
-#~ msgstr "Поле согласования обновлений"
-
-#~ msgid "Contract Selection"
-#~ msgstr "Выбор контракта"
-
-#~ msgid ""
-#~ "Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log "
-#~ "for more information."
-#~ msgstr ""
-#~ "Ошибка отображения помощника. За информацией обратитесь к /var/log/rhsm/"
-#~ "rhsm.log"
-
-#~ msgid "Error reading system DMI information:"
-#~ msgstr "Ошибка чтения информации о DMI:"
-
-#~ msgid "Force display of the compliance icon (expired or warning)"
-#~ msgstr "Всегда показывать значок согласования (истекло или предупреждение)"
-
-#~ msgid "How often to check for compliance (in seconds)"
-#~ msgstr "Частота проверки согласования (в секундах)"
-
-#~ msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-#~ msgstr "Подключаться к Red Hat Network через _прокси-сервер HTTP."
-
-#~ msgid "In Compliance"
-#~ msgstr "Согласовано"
-
-#~ msgid "On a different date:"
-#~ msgstr "В другой день:"
-
-#~ msgid ""
-#~ "One or more of this system's subscriptions are about to expire. These "
-#~ "subscriptions are required for compliance with your subscription "
-#~ "agreements."
-#~ msgstr ""
-#~ "Подписки системы скоро истекут. Эти подписки необходимы для согласования "
-#~ "с требованиями подписки."
-
-#~ msgid "Out of Compliance"
-#~ msgstr "Не согласовано"
-
-#~ msgid "Password:"
-#~ msgstr "Пароль:"
-
-#~ msgid "Proxy P_assword:"
-#~ msgstr "_Пароль доступа к прокси:"
-
-#~ msgid "Proxy _Username:"
-#~ msgstr "_Имя пользователя на прокси:"
-
-#~ msgid "Red Hat Login:"
-#~ msgstr "Имя входа Red Hat:"
-
-#~ msgid "Show products that will be out of compliance as of:"
-#~ msgstr "Показать продукты, поддержка которых прекращается:"
-
-#~ msgid "Subscription Manager - Compliance Assistant"
-#~ msgstr "Управление подписками. Помощник по поддержке"
-
-#~ msgid "This System is Non-Compliant"
-#~ msgstr "Эта система не согласована"
-
-#~ msgid ""
-#~ "This system is missing one or more subscriptions required for compliance "
-#~ "with your subscription agreements."
-#~ msgstr ""
-#~ "В системе нет подписок, необходимых для согласования с требованиями "
-#~ "подписки."
-
-#~ msgid "This system is non-compliant"
-#~ msgstr "Система не согласована"
-
-#~ msgid ""
-#~ "To add a subscription, choose a certificate to import to your "
-#~ "subscription certificate directory."
-#~ msgstr ""
-#~ "Чтобы добавить подписку, выберите сертификат для размещения в каталоге "
-#~ "сертификатов подписок."
-
-#~ msgid "Use Au_thentication with HTTP Proxy:"
-#~ msgstr "Включить _аутентификацию прокси:"
-
-#~ msgid "You have <b>%s</b> products out of compliance."
-#~ msgstr "Число продуктов без поддержки: <b>%s</b>"
-
-#~ msgid "You have <b>1</b> product out of compliance."
-#~ msgstr "<b>1</b> продукт без поддержки."
-
-#~ msgid "You have one product which is out of compliance."
-#~ msgstr "Есть один неподдерживаемый продукт."
-
-#~ msgid "You must register before using the compliance assistant."
-#~ msgstr ""
-#~ "Для доступа к помощнику по согласованию необходимо зарегистрироваться."
-
-#~ msgid "_Close"
-#~ msgstr "_Закрыть"
-
-#~ msgid "_Proxy Location:"
-#~ msgstr "Адрес _прокси:"

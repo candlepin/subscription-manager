@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 08:54-0300\n"
-"PO-Revision-Date: 2011-03-22 12:14+0530\n"
+"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"PO-Revision-Date: 2011-03-31 18:07+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: kn_IN <kde-i18n-doc@kde.org>\n"
 "Language: kn-IN\n"
@@ -153,12 +153,12 @@ msgstr "ಸಂಕೀರ್ಣ"
 #: ../src/i18n_optparse.py:56
 #, python-format
 msgid "option %s: invalid %s value: %r"
-msgstr "%s ಆಯ್ಕೆ: ಅಮಾನ್ಯವಾದ %s ಮೌಲ್ಯ: %r"
+msgstr "%s ಆಯ್ಕೆ: ಅಸಿಂಧುವಾದ %s ಮೌಲ್ಯ: %r"
 
 #: ../src/i18n_optparse.py:57
 #, python-format
 msgid "option %s: invalid choice: %r (choose from %s)"
-msgstr "%s ಆಯ್ಕೆ: ಅಮಾನ್ಯವಾದ ಆಯ್ಕೆ: %r (%s ಇಂದ ಆರಿಸಿ)"
+msgstr "%s ಆಯ್ಕೆ: ಅಸಿಂಧುವಾದ ಆಯ್ಕೆ: %r (%s ಇಂದ ಆರಿಸಿ)"
 
 #. default options
 #: ../src/i18n_optparse.py:60
@@ -226,8 +226,7 @@ msgid "password for http proxy with basic authentication"
 msgstr "ಮೂಲಭೂತ ದೃಢೀಕರಣದೊಂದಿಗಿನ http ಪ್ರಾಕ್ಸಿಗಾಗಿನ ಬಳಕೆದಾರ"
 
 #: ../src/managercli.py:137
-msgid ""
-"Consumer not registered. Please register using --username and --password"
+msgid "Consumer not registered. Please register using --username and --password"
 msgstr ""
 "ಗ್ರಾಹಕನನ್ನು ನೋಂದಾಯಿಸಲಾಗಿಲ್ಲ. ದಯವಿಟ್ಟು --username ಹಾಗು --password ಅನ್ನು ಬಳಸಿಕೊಂಡು "
 "ನೋಂದಾಯಿಸಿ"
@@ -289,12 +288,10 @@ msgstr "ಒಂದು ಹೊಸ ಪ್ರಮಾಣಪತ್ರವನ್ನು ಉ
 
 #: ../src/managercli.py:301
 msgid "force certificate regeneration (requires username and password)"
-msgstr ""
-"ಪ್ರಮಾಣಪತ್ರ ಮರುಉತ್ಪಾದನೆಗಾಗಿ ಒತ್ತಾಯಿಸು (ಬಳಕೆದಾರ ಹೆಸರು ಹಾಗು ಗುಪ್ತಪದವನ್ನು ದಾಖಲಿಸು)"
+msgstr "ಪ್ರಮಾಣಪತ್ರ ಮರುಉತ್ಪಾದನೆಗಾಗಿ ಒತ್ತಾಯಿಸು (ಬಳಕೆದಾರ ಹೆಸರು ಹಾಗು ಗುಪ್ತಪದವನ್ನು ದಾಖಲಿಸು)"
 
 #: ../src/managercli.py:306
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 "ಗ್ರಾಹಕರ ಗುರುತು (ಐಡೆಂಟಿಟಿ) ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲ ಅಥವ ಹಾಳಾಗಿದೆ. register --help ಅನ್ನು "
 "ಬಳಸಿನೋಡಿ"
@@ -408,7 +405,7 @@ msgstr "ದೋಷ: --pool ಅಥವ --auto ದಲ್ಲಿ ಒಂದನ್ನು
 
 #: ../src/managercli.py:549
 msgid "Please enter a valid numeric pool id."
-msgstr "ದಯವಿಟ್ಟು ಒಂದು ಮಾನ್ಯವಾದ ಅಂಕೆ ರೂಪದ ಪೂಲ್ ಐಡಿಯನ್ನು ನಮೂದಿಸಿ."
+msgstr "ದಯವಿಟ್ಟು ಒಂದು ಸಿಂಧುವಾದ ಅಂಕೆ ರೂಪದ ಪೂಲ್ ಐಡಿಯನ್ನು ನಮೂದಿಸಿ."
 
 #: ../src/managercli.py:579
 msgid "unsubscribe the registered user from all or specific subscriptions"
@@ -464,8 +461,7 @@ msgid "available"
 msgstr "ಲಭ್ಯವಿದೆ"
 
 #: ../src/managercli.py:676
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
+msgid "date to search on, defaults to today's date, only used with --available "
 msgstr ""
 "ಹುಡುಕಬೇಕಿರುವ ದಿನಾಂಕ, ಇವತ್ತಿನ ದಿನಾಂಕವು ಪೂರ್ವನಿಯೋಜಿತವಾಗಿರುತ್ತದೆ, --available "
 "ನೊಂದಿಗೆ ಮಾತ್ರ ಬಳಸಬೇಕು"
@@ -497,7 +493,7 @@ msgstr "    ಅನುಸ್ಥಾಪಿಸಲಾದ ಉತ್ಪನ್ನದ ಸ
 #: ../src/managercli.py:718
 msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr ""
-"ನಮೂದಿಸಲಾದ ದಿನಾಂಕವು ಅಮಾನ್ಯವಾಗಿದೆ. ದಿನಾಂಕವು YYYY-MM-DD  ಶೈಲಿಯಲ್ಲಿ ಇರಬೇಕು "
+"ನಮೂದಿಸಲಾದ ದಿನಾಂಕವು ಅಸಿಂಧುವಾಗಿದೆ. ದಿನಾಂಕವು YYYY-MM-DD  ಶೈಲಿಯಲ್ಲಿ ಇರಬೇಕು "
 "(ಉದಾಹರಣೆಗೆ: "
 
 #: ../src/managercli.py:725
@@ -668,7 +664,7 @@ msgstr "ಕಾಲಾವಧಿ: %d(ms)"
 #: ../src/hwprobe.py:60
 #, python-format
 msgid "Error reading system DMI information: %s"
-msgstr ""
+msgstr "ವ್ಯವಸ್ಥೆಯ DMI ಮಾಹಿತಿಯನ್ನು ಓದುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ: %s"
 
 #: ../src/hwprobe.py:116
 msgid "Error reading system memory information:"
@@ -725,7 +721,7 @@ msgstr "ನೀವು ಒಂದು ಪ್ರಮಾಣಪತ್ರವನ್ನು 
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
 msgstr ""
-"%s ಒಂದು ಮಾನ್ಯವಾದ ಪ್ರಮಾಣಪತ್ರ ಕಡತವಾಗಿಲ್ಲ. ದಯವಿಟ್ಟು ಒಂದು ಮಾನ್ಯವಾದ ಪ್ರಮಾಣಪತ್ರವನ್ನು ಅಪ್‌ಲೋಡ್ "
+"%s ಒಂದು ಸಿಂಧುವಾದ ಪ್ರಮಾಣಪತ್ರ ಕಡತವಾಗಿಲ್ಲ. ದಯವಿಟ್ಟು ಒಂದು ಸಿಂಧುವಾದ ಪ್ರಮಾಣಪತ್ರವನ್ನು ಅಪ್‌ಲೋಡ್ "
 "ಮಾಡಿ."
 
 #: ../src/gui/widgets.py:150
@@ -745,7 +741,7 @@ msgstr "ಅನುಸ್ಥಾಪಿಸಲಾಗಿರುವ"
 #: ../src/gui/widgets.py:402
 msgid "Invalid date format. Please re-enter a valid date. Example: "
 msgstr ""
-"ಅಮಾನ್ಯವಾದ ದಿನಾಂಕದ ಶೈಲಿ. ದಯವಿಟ್ಟು ಒಂದು ಮಾನ್ಯವಾದ ದಿನಾಂಕವನ್ನು ಮರಳಿ ನಮೂದಿಸಿ. "
+"ಅಸಿಂಧುವಾದ ದಿನಾಂಕದ ಶೈಲಿ. ದಯವಿಟ್ಟು ಒಂದು ಸಿಂಧುವಾದ ದಿನಾಂಕವನ್ನು ಮರಳಿ ನಮೂದಿಸಿ. "
 "ಉದಾಹರಣೆ: "
 
 #: ../src/gui/widgets.py:437
@@ -754,21 +750,22 @@ msgstr "ಇಂದು"
 
 #: ../src/gui/managergui.py:371
 msgid "You must register before using the subscription assistant."
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆ ಸಹಾಯಕನನ್ನು ಬಳಸುವ ಮೊದಲು ನೀವು ನೋಂದಾಯಿಸಬೇಕು."
 
 #: ../src/gui/managergui.py:402
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
 msgstr ""
+"ನಿಮ್ಮಲ್ಲಿರುವ <b>%s</b> ಉತ್ಪನ್ನಗಳು ಅಸಿಂಧುವಾದ ಎಂಟೈಟಲ್ಮೆಂಟ್ ಪ್ರಮಾಣಪತ್ರಗಳನ್ನು ಹೊಂದಿವೆ."
 
 #: ../src/gui/managergui.py:406
 msgid "You have <b>1</b> product without a valid entitlement certificate."
-msgstr ""
+msgstr "ನಿಮ್ಮಲ್ಲಿನ <b>1</b> ಉತ್ಪನ್ನವು ಅಸಿಂಧುವಾದ ಎಂಟೈಟಲ್ಮೆಂಟ್ ಪ್ರಮಾಣಪತ್ರವನ್ನು ಹೊಂದಿದೆ."
 
 #: ../src/gui/managergui.py:413
 #, python-format
 msgid "Product entitlement certificates valid through %s"
-msgstr ""
+msgstr "ಉತ್ಪನ್ನ ಎಂಟೈಟಲ್ಮೆಂಟ್ ಪ್ರಮಾಣಪತ್ರಗಳು %s ವರೆಗೆ ಸಿಂಧುವಾಗಿರುತ್ತವೆ"
 
 #: ../src/gui/managergui.py:536
 msgid "You must enter a system name."
@@ -794,7 +791,7 @@ msgstr "ಮುಕ್ತಾಯದ ದಿನ"
 
 #: ../src/gui/compliance.py:141
 msgid "Subscription List"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆಯ ಪಟ್ಟಿ"
 
 #. Set up columns on the view
 #: ../src/gui/compliance.py:142 ../src/gui/allsubs.py:56
@@ -807,6 +804,8 @@ msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
 msgstr ""
+"ಚಂದಾದಾರಿಕೆ ಸಹಾಯಕನ್ನು ತೋರಿಸುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ. ದಯವಿಟ್ಟು ಹೆಚ್ಚಿನ "
+"ಮಾಹಿತಿಗಾಗಿ /var/log/rhsm/rhsm.log ಅನ್ನು ನೋಡಿ."
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -815,12 +814,12 @@ msgstr "ಚಂದಾದಾರಿಕೆಗಳಿಗಾಗಿ ಹುಡುಕಲ�
 #: ../src/gui/compliance.py:214
 #, python-format
 msgid "Software entitlements valid through %s"
-msgstr ""
+msgstr "ತಂತ್ರಾಂಶ ಎಂಟೈಟಲ್ಮೆಂಟ್‌ಗಳು %s ವರೆಗೆ ಸಿಂಧುವಾಗಿರುತ್ತವೆ"
 
 #: ../src/gui/compliance.py:218
 #, python-format
 msgid "%s (first date of invalid entitlements)"
-msgstr ""
+msgstr "%s (ಎಂಟೈಟಲ್ಮೆಂಟ್‌ಗಳು ಅಸಿಂಧುವಾದ ಮೊದಲ ದಿನಾಂಕ)"
 
 #: ../src/gui/compliance.py:220
 #, python-format
@@ -927,7 +926,7 @@ msgstr "ಆವೃತ್ತಿ"
 
 #: ../src/gui/installedtab.py:54
 msgid "Certificate"
-msgstr ""
+msgstr "ಪ್ರಮಾಣಪತ್ರ"
 
 #: ../src/gui/installedtab.py:95
 msgid "Future Subscription"
@@ -939,7 +938,7 @@ msgstr "ಎಂದೂ ಚಂದಾದಾರರಾಗಿರಲಿಲ್ಲ"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
-msgstr ""
+msgstr "ಅಸಿಂಧುವಾಗಿದೆ"
 
 #: ../src/gui/installedtab.py:101
 #, python-format
@@ -948,7 +947,7 @@ msgstr "%s ಎಂಬ ಚಂದಾದಾರಿಕೆಯ ವಾಯಿದೆ ಪೂ
 
 #: ../src/gui/installedtab.py:104
 msgid "Valid"
-msgstr ""
+msgstr "ಸಿಂಧುವಾಗಿದೆ"
 
 #: ../src/gui/installedtab.py:106
 #, python-format
@@ -957,7 +956,7 @@ msgstr "%s ಎಂಬ ಒಪ್ಪಂದದಕ್ಕೆ %s ಮೂಲಕ ಒಳಪ
 
 #: ../src/gui/installedtab.py:111
 msgid "Missing"
-msgstr ""
+msgstr "ಕಾಣೆಯಾಗಿದೆ"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -965,7 +964,7 @@ msgstr "ನನ್ನ ಅನುಸ್ಥಾಪಿಸಲಾದ ತಂತ್ರಾ�
 
 #: ../src/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
-msgstr ""
+msgstr "<b>ಪ್ರಮಾಣಪತ್ರದ ಸ್ಥಿತಿ:</b>"
 
 #: ../src/gui/data/installed.glade.h:2
 msgid "<b>Product's Subscription Details</b>"
@@ -981,7 +980,7 @@ msgstr "<b>ಚಂದಾದಾರಿಕೆ:</b>"
 
 #: ../src/gui/data/installed.glade.h:5 ../src/gui/data/mainwindow.glade.h:4
 msgid "Certificate Status"
-msgstr ""
+msgstr "ಪ್ರಮಾಣಪತ್ರದ ಸ್ಥಿತಿ"
 
 #: ../src/gui/data/installed.glade.h:6
 msgid "Installed View"
@@ -1027,54 +1026,55 @@ msgstr "ಬಳಕೆದಾರ ಪಠ್ಯ"
 #: ../src/gui/data/networkConfig.glade.h:9
 msgctxt "yes"
 msgid "<b>HTTP Proxy</b>"
-msgstr ""
+msgstr "<b>HTTP ಪ್ರಾಕ್ಸಿ</b>"
 
 #: ../src/gui/data/networkConfig.glade.h:10
 msgctxt "yes"
 msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-msgstr ""
+msgstr "<small><b>ಉದಾಹರಣೆ:</b> squid.example.com:3128</small>"
 
 #: ../src/gui/data/networkConfig.glade.h:11
 msgctxt "yes"
 msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-msgstr ""
+msgstr "ನಾನು ಒಂದು HTTP ಪ್ರಾಕ್ಸಿಯ ಮೂಲಕ Red Hat Networkಗೆ ಸಂಪರ್ಕ ಹೊಂದಲು ಬಯಸುತ್ತೇನೆ."
 
 #: ../src/gui/data/networkConfig.glade.h:12
 msgctxt "yes"
 msgid "Proxy P_assword:"
-msgstr ""
+msgstr "ಪ್ರಾಕ್ಸಿ ಗುಪ್ತಪದ (_a):"
 
 #: ../src/gui/data/networkConfig.glade.h:13
 msgctxt "yes"
 msgid "Proxy _Username:"
-msgstr ""
+msgstr "ಪ್ರಾಕ್ಸಿ ಬಳಕೆದಾರಹೆಸರು (_U):"
 
 #: ../src/gui/data/networkConfig.glade.h:14
 msgctxt "yes"
 msgid "Use Au_thentication with HTTP Proxy:"
-msgstr ""
+msgstr "HTTP ಪ್ರಾಕ್ಸಿಯೊಂದಿಗೆ ದೃಢೀಕರಣವನ್ನು ಬಳಸಿ (_t):"
 
 #: ../src/gui/data/networkConfig.glade.h:15
 msgctxt "yes"
 msgid "_Close"
-msgstr ""
+msgstr "ಮುಚ್ಚು (_C)"
 
 #: ../src/gui/data/networkConfig.glade.h:16
 msgctxt "yes"
 msgid "_Proxy Location:"
-msgstr ""
+msgstr "ಪ್ರಾಕ್ಸಿ ತಾಣ (_P):"
 
 #: ../src/gui/data/compliance.glade.h:1
 msgid "A different date:"
-msgstr ""
+msgstr "ಒಂದು ಪ್ರತ್ಯೇಕ ದಿನಾಂಕ:"
 
 #: ../src/gui/data/compliance.glade.h:2
 msgid "Invalid Product List"
-msgstr ""
+msgstr "ಅಸಿಂಧುವಾದ ಉತ್ಪನ್ನಗಳ ಪಟ್ಟಿ"
 
 #: ../src/gui/data/compliance.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
 msgstr ""
+"ಈ ದಿನಾಂಕಕ್ಕೆ ಅಸಿಂಧುವಾದ ಎಂಟೈಟಲ್ಮೆಂಟ್ ಪ್ರಮಾಣಪತ್ರಗಳನ್ನು ಹೊಂದಿರುವ ಉತ್ಪನ್ನಗಳನ್ನು ತೋರಿಸು:"
 
 #: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
 msgid "Subscribe"
@@ -1082,71 +1082,71 @@ msgstr "ಚಂದಾದಾರನಾಗಿಸು"
 
 #: ../src/gui/data/compliance.glade.h:5
 msgid "Subscription Action Area"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆ ಕಾರ್ಯ ಸ್ಥಳ"
 
 #: ../src/gui/data/compliance.glade.h:6
 msgid "Subscription Assistant"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆ ಸಹಾಯಕ"
 
 #: ../src/gui/data/compliance.glade.h:7
 msgid "Subscription Assistant Box"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆ ಸಹಾಯಕ ಚೌಕ"
 
 #: ../src/gui/data/compliance.glade.h:8
 msgid "Subscription Assistant Status"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆ ಸಹಾಯಕ ಸ್ಥಿತಿ"
 
 #: ../src/gui/data/compliance.glade.h:9
 msgid "Subscription Date Box"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆ ದಿನಾಂಕ ಚೌಕ"
 
 #: ../src/gui/data/compliance.glade.h:10
 msgid "Subscription Date Label"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆ ದಿನಾಂಕ ಲೇಬಲ್"
 
 #: ../src/gui/data/compliance.glade.h:11
 msgid "Subscription Date Picker"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆ ದಿನಾಂಕ ಆಯ್ಕೆಗಾರ"
 
 #: ../src/gui/data/compliance.glade.h:12
 msgid "Subscription Details"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆ ವಿವರಗಳು"
 
 #: ../src/gui/data/compliance.glade.h:13
 msgid "Subscription Label"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆ ಲೇಬಲ್"
 
 #: ../src/gui/data/compliance.glade.h:14
 msgid "Subscription Label Box"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆ ಲೇಬಲ್ ಚೌಕ"
 
 #: ../src/gui/data/compliance.glade.h:15
 msgid "Subscription Manager - Subscription Assistant"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪಕ - ಚಂದಾದಾರಿಕೆ ಸಹಾಯಕ"
 
 #: ../src/gui/data/compliance.glade.h:16
 msgid "Subscription Product List"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆ ಉತ್ಪನ್ನ ಪಟ್ಟಿ"
 
 #: ../src/gui/data/compliance.glade.h:17
 msgid "Subscription Subscriptions Box"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆ ಚಂದಾದಾರಿಕೆಗಳ ಚೌಕ"
 
 #: ../src/gui/data/compliance.glade.h:18
 msgid "Subscription Subscriptions Label"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆ ಚಂದಾದಾರಿಕೆಗಳ ಲೇಬಲ್"
 
 #: ../src/gui/data/compliance.glade.h:19
 msgid "Subscription Update Box"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆ ಅಪ್‌ಡೇಟ್ ಚೌಕ"
 
 #: ../src/gui/data/compliance.glade.h:20
 msgid "Subscriptions List"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆಗಳ ಪಟ್ಟಿ"
 
 #: ../src/gui/data/compliance.glade.h:21
 msgid "Subscriptions Panel"
-msgstr ""
+msgstr "ಚಂದಾದಾರಿಕೆಗಳ ಫಲಕ"
 
 #: ../src/gui/data/compliance.glade.h:22
 msgid "The following subscriptions will cover the products selected above:"
@@ -1224,7 +1224,7 @@ msgstr "update_subscriptions_dialog\n"
 #: ../src/gui/data/rhsm.glade.h:17 ../src/gui/data/importsub.glade.h:3
 msgctxt "yes"
 msgid "Certificate _Location:"
-msgstr ""
+msgstr "ಪ್ರಮಾಣಪತ್ರವಿರುವ ಸ್ಥಳ (_L):"
 
 #: ../src/gui/data/rhsm.glade.h:18
 msgctxt "yes"
@@ -1232,6 +1232,8 @@ msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
 msgstr ""
+"ಒಂದು ಚಂದಾದಾರಿಕೆಯನ್ನು ಸೇರಿಸಲು, ನಿಮ್ಮ ಚಂದಾದಾರಿಕೆ ಪ್ರಮಾಣಪತ್ರ ಕೋಶಕ್ಕೆ ಆಮದು ಮಾಡಿಕೊಳ್ಳಬೇಕಿರುವ "
+"ಒಂದು ಪ್ರಮಾಣಪತ್ರವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ."
 
 #: ../src/gui/data/activate.glade.h:1
 msgid "Activate"
@@ -1261,7 +1263,7 @@ msgstr "ಚಂದಾದಾರಿಕೆ ಸಕ್ರಿಯಗೊಳಿಕೆ"
 
 #: ../src/gui/data/mainwindow.glade.h:1
 msgid "<b>Certificate Status</b>"
-msgstr ""
+msgstr "<b>ಪ್ರಮಾಣಪತ್ರದ ಸ್ಥಿತಿ</b>"
 
 #: ../src/gui/data/mainwindow.glade.h:2
 msgid "<b>Tools</b>"
@@ -1285,7 +1287,7 @@ msgstr "ವ್ಯವಸ್ಥೆಯ ನೋಂದಣಿಯನ್ನು ರದ್�
 
 #: ../src/gui/data/mainwindow.glade.h:10
 msgid "Update Certificates"
-msgstr ""
+msgstr "ಪ್ರಮಾಣಪತ್ರಗಳನ್ನು ಅಪ್‌ಡೇಟ್ ಮಾಡು"
 
 #: ../src/gui/data/mainwindow.glade.h:11
 msgid "View System Facts"
@@ -1293,7 +1295,7 @@ msgstr "ವ್ಯವಸ್ಥೆಯ ವಸ್ತುಸ್ಥಿತಿಗಳ ನ�
 
 #: ../src/gui/data/mainwindow.glade.h:12
 msgid "You have one product without a valid entitlement certificate."
-msgstr ""
+msgstr "ನಿಮ್ಮಲ್ಲಿರುವ ಉತ್ಪನ್ನಗಳಲ್ಲಿ ಒಂದು ಅಸಿಂಧುವಾದ ಎಂಟೈಟಲ್ಮೆಂಟ್ ಪ್ರಮಾಣಪತ್ರವನ್ನು ಹೊಂದಿದೆ."
 
 #: ../src/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
@@ -1377,9 +1379,10 @@ msgstr "ನಿಮ್ಮ ಉತ್ಪನ್ನ ಚಂದಾದಾರಿಕೆಗ�
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr ""
+"ನಿಮ್ಮ ಚಂದಾದಾರಿಕೆ ಪ್ರಮಾಣಪತ್ರ ಕೋಶಕ್ಕೆ ಆಮದು ಮಾಡಿಕೊಳ್ಳಬೇಕಿರುವ ಒಂದು ಪ್ರಮಾಣಪತ್ರವನ್ನು ಆಯ್ಕೆ "
+"ಮಾಡಿ."
 
 #: ../src/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
@@ -1490,17 +1493,17 @@ msgstr "registration_dialog_action_area\n"
 #: ../src/gui/data/registration.glade.h:13
 msgctxt "yes"
 msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr ""
+msgstr "<b>ದಯವಿಟ್ಟು ನಿಮ್ಮ Red Hat Network ಖಾತೆಯ ಮಾಹಿತಿಯನ್ನು ದಾಖಲಿಸಿ:</b>"
 
 #: ../src/gui/data/registration.glade.h:14
 msgctxt "yes"
 msgid "Password:"
-msgstr ""
+msgstr "ಗುಪ್ತಪದ:"
 
 #: ../src/gui/data/registration.glade.h:15
 msgctxt "yes"
 msgid "Red Hat Login:"
-msgstr ""
+msgstr "Red Hat ಲಾಗಿನ್:"
 
 #: ../src/gui/data/progress.glade.h:1
 msgid "Progress Dialog"
@@ -1509,7 +1512,7 @@ msgstr "ಪ್ರಗತಿ ಸಂವಾದಚೌಕ"
 #: ../src/gui/data/contract_selection.glade.h:1
 msgctxt "yes"
 msgid "<b>Choose the specific contract to use:</b>"
-msgstr ""
+msgstr "<b>ಬಳಸಬೇಕಿರುವ ನಿಶ್ಚಿತ ಒಪ್ಪಂದವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ:</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:2
 msgctxt "yes"
@@ -1519,12 +1522,12 @@ msgstr "<b>ಚಂದಾದಾರಿಕೆ:</b>"
 #: ../src/gui/data/contract_selection.glade.h:3
 msgctxt "yes"
 msgid "<b>Total Contracts:</b>"
-msgstr ""
+msgstr "<b>ಒಟ್ಟು ಸಂಪರ್ಕಗಳು:</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:4
 msgctxt "yes"
 msgid "Contract Selection"
-msgstr ""
+msgstr "ಒಪ್ಪಂದದ ಆಯ್ಕೆ"
 
 #: ../src/gui/data/contract_selection.glade.h:5
 msgctxt "yes"
@@ -1533,7 +1536,7 @@ msgstr "ಚಂದಾದಾರನಾಗಿಸು"
 
 #: ../src/compliance/rhsm_compliance_icon.c:43
 msgid "How often to check for validity (in seconds)"
-msgstr ""
+msgstr "ಸಿಂಧುತ್ವವನ್ನು ಎಷ್ಟು ಕಾಲಾವಧಿಯಲ್ಲಿ ಪರೀಕ್ಷಿಸಬೇಕು (ಸೆಕೆಂಡುಗಳಲ್ಲಿ)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:45
 msgid "Show debug messages"
@@ -1541,16 +1544,17 @@ msgstr "ದೋಷನಿವಾರಣ ಮಾಹಿತಿಯನ್ನು ತೋರ�
 
 #: ../src/compliance/rhsm_compliance_icon.c:47
 msgid "Force display of the icon (expired or warning)"
-msgstr ""
+msgstr "ಚಿಹ್ನೆಯನ್ನು ಒತ್ತಾಯಪೂರ್ವಕವಾಗಿ ತೋರಿಸು (ವಾಯಿದೆ ಮುಗಿದ ಅಥವ ಎಚ್ಚರಿಕೆ)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:170
 #: ../src/compliance/rhsm_compliance_icon.c:171
 msgid "Invalid or Missing Entitlement Certificates"
-msgstr ""
+msgstr "ಅಸಿಂಧುವಾದ ಅಥವ ಕಾಣೆಯಾದ ಎಂಟೈಟಲ್ಮೆಂಟ್ ಪ್ರಮಾಣಪತ್ರಗಳು"
 
 #: ../src/compliance/rhsm_compliance_icon.c:172
 msgid "This system is missing one or more valid entitlement certificates."
 msgstr ""
+"ಈ ವ್ಯವಸ್ಥೆಯಲ್ಲಿ ಒಂದು ಅಥವ ಹೆಚ್ಚಿನ ಸಿಂಧುವಾದ ಎಂಟೈಟಲ್ಮೆಂಟ್ ಪ್ರಮಾಣಪತ್ರಗಳು ಕಾಣಿಸುತ್ತಿಲ್ಲ."
 
 #: ../src/compliance/rhsm_compliance_icon.c:176
 msgid "Some of the system's subscriptions are about to expire"
@@ -1562,7 +1566,7 @@ msgstr "ಈ ವ್ಯವಸ್ಥೆಯ ಚಂದಾದಾರಿಕೆಗಳ ವ
 
 #: ../src/compliance/rhsm_compliance_icon.c:179
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr ""
+msgstr "ವ್ಯವಸ್ಥೆಯ ಒಂದು ಅಥವ ಹೆಚ್ಚಿನ ಚಂದಾದಾರಿಕೆಗಳ ವಾಯಿದೆಯು ತೀರಿಹೋಗುವ ಸ್ಥಿತಿಯಲ್ಲಿವೆ."
 
 #: ../src/compliance/rhsm_compliance_icon.c:197
 msgid "Remind Me Later"
@@ -1590,58 +1594,28 @@ msgstr "ಆಯ್ಕೆ ಪಾರ್ಸ್ ಮಾಡುವಿಕೆಯು ವಿ
 
 #: ../etc-conf/subscription-manager.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
-msgstr ""
+msgstr "Red Hat ಚಂದಾದಾರ ವ್ಯವಸ್ಥಾಪಕ"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
-msgstr ""
+msgstr "Red Hat ಚಂದಾದಾರಿಕೆ ಸಿಂಧುತ್ವ ಆಪ್ಲೆಟ್"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
-msgstr ""
-
-#~ msgid "%s (first date of non-compliance)"
-#~ msgstr "%s (ಅನುವರ್ತನೆಯಾಗಿರದ (ನಾನ್-ಕಂಪ್ಲಯನ್ಸ್‍) ಮೊದಲ ದಿನಾಂಕ)"
-
-#~ msgid "<b>Choose the specific contract to use:</b>"
-#~ msgstr "<b>ಬಳಸಬೇಕಿರುವ ನಿಶ್ಚಿತ ಒಪ್ಪಂದವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ:</b>"
-
-#~ msgid "<b>Compliance Status</b>"
-#~ msgstr "<b>ಅನುವರ್ತನೆಯ ಸ್ಥಿತಿ</b>"
+msgstr "ಚಂದಾದಾರಿಕೆ ಸಿಂಧುತ್ವ ಆಪ್ಲೆಟ್"
 
 #~ msgid "<b>Compliance:</b>"
 #~ msgstr "<b>ಅನುವರ್ತನೆ:</b>"
 
-#~ msgid "<b>HTTP Proxy</b>"
-#~ msgstr "<b>HTTP ಪ್ರಾಕ್ಸಿ</b>"
-
-#~ msgid "<b>Please enter your Red Hat Network account information:</b>"
-#~ msgstr "<b>ದಯವಿಟ್ಟು ನಿಮ್ಮ Red Hat Network ಖಾತೆಯ ಮಾಹಿತಿಯನ್ನು ದಾಖಲಿಸಿ:</b>"
-
-#~ msgid "<b>Total Contracts:</b>"
-#~ msgstr "<b>ಒಟ್ಟು ಸಂಪರ್ಕಗಳು:</b>"
-
 #~ msgid "<big><b>All software is in compliance until %s</b></big>"
 #~ msgstr ""
 #~ "<big><b>ಎಲ್ಲಾ ತಂತ್ರಾಂಶಗಳೂ %s ವರೆಗೆ ಅನುವರ್ತನೆಯಲ್ಲಿರುತ್ತವೆ (ಕಂಪ್ಲಯನ್ಸ್‍) </b></big>"
-
-#~ msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-#~ msgstr "<small><b>ಉದಾಹರಣೆ:</b> squid.example.com:3128</small>"
 
 #~ msgid "All products are in compliance until %s"
 #~ msgstr "ಎಲ್ಲಾ ಉತ್ಪನ್ನಗಳೂ %s ವರೆಗೆ ಅನುವರ್ತನೆಯಲ್ಲಿವೆ"
 
 #~ msgid "Become Compliant"
 #~ msgstr "ಅನುವರ್ತನೆಯಲ್ಲಿರಿ"
-
-#~ msgid "Certificate _Location:"
-#~ msgstr "ಪ್ರಮಾಣಪತ್ರವಿರುವ ಸ್ಥಳ (_L):"
-
-#~ msgid ""
-#~ "Choose a certificate to import to your subscription certificate directory."
-#~ msgstr ""
-#~ "ನಿಮ್ಮ ಚಂದಾದಾರಿಕೆ ಪ್ರಮಾಣಪತ್ರ ಕೋಶಕ್ಕೆ ಆಮದು ಮಾಡಿಕೊಳ್ಳಬೇಕಿರುವ ಒಂದು ಪ್ರಮಾಣಪತ್ರವನ್ನು "
-#~ "ಆಯ್ಕೆ ಮಾಡಿ."
 
 #~ msgid "Compliance Action Area"
 #~ msgstr "Compliance Action Area"
@@ -1651,9 +1625,6 @@ msgstr ""
 
 #~ msgid "Compliance Assistant Box"
 #~ msgstr "Compliance Assistant Box"
-
-#~ msgid "Compliance Assistant Status"
-#~ msgstr "Compliance Assistant Status"
 
 #~ msgid "Compliance Date Box"
 #~ msgstr "Compliance Date Box"
@@ -1682,12 +1653,6 @@ msgstr ""
 #~ msgid "Compliance Subscription List"
 #~ msgstr "ಅನುವರ್ತನೆ ಚಂದಾದಾರಿಕೆಯ ಪಟ್ಟಿ"
 
-#~ msgid "Compliance Subscriptions Box"
-#~ msgstr "Compliance Subscriptions Box"
-
-#~ msgid "Compliance Subscriptions Label"
-#~ msgstr "Compliance Subscriptions Label"
-
 #~ msgid "Compliance Subscriptions List"
 #~ msgstr "Compliance Subscriptions List"
 
@@ -1697,35 +1662,8 @@ msgstr ""
 #~ msgid "Compliance Update Box"
 #~ msgstr "Compliance Update Box"
 
-#~ msgid "Contract Selection"
-#~ msgstr "ಒಪ್ಪಂದದ ಆಯ್ಕೆ"
-
-#~ msgid ""
-#~ "Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log "
-#~ "for more information."
-#~ msgstr ""
-#~ "ಅನುವರ್ತನೆ (ಕಂಪ್ಲಯನ್ಸ್‍) ಸಹಾಯಕನ್ನು ತೋರಿಸುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ. ದಯವಿಟ್ಟು ಹೆಚ್ಚಿನ "
-#~ "ಮಾಹಿತಿಗಾಗಿ /var/log/rhsm/rhsm.log ಅನ್ನು ನೋಡಿ."
-
-#~ msgid "Error reading system DMI information:"
-#~ msgstr "ವ್ಯವಸ್ಥೆಯ DMI ಮಾಹಿತಿಯನ್ನು ಓದುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ:"
-
-#~ msgid "Force display of the compliance icon (expired or warning)"
-#~ msgstr ""
-#~ "ಅನುವರ್ತನೆಯ ಚಿಹ್ನೆಯನ್ನು ಒತ್ತಾಯಪೂರ್ವಕವಾಗಿ ತೋರಿಸು (ವಾಯಿದೆ ಮುಗಿದ ಅಥವ ಎಚ್ಚರಿಕೆ)"
-
-#~ msgid "How often to check for compliance (in seconds)"
-#~ msgstr "ಅನುವರ್ತನೆಯನ್ನು ಎಷ್ಟು ಕಾಲಾವಧಿಯಲ್ಲಿ ಪರೀಕ್ಷಿಸಬೇಕು (ಸೆಕೆಂಡುಗಳಲ್ಲಿ)"
-
-#~ msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-#~ msgstr ""
-#~ "ನಾನು ಒಂದು HTTP ಪ್ರಾಕ್ಸಿಯ ಮೂಲಕ Red Hat Networkಗೆ ಸಂಪರ್ಕ ಹೊಂದಲು ಬಯಸುತ್ತೇನೆ."
-
 #~ msgid "In Compliance"
 #~ msgstr "ಅನುವರ್ತನೆಯಲ್ಲಿದೆ"
-
-#~ msgid "On a different date:"
-#~ msgstr "ಒಂದು ಪ್ರತ್ಯೇಕ ದಿನಾಂಕದಂದು:"
 
 #~ msgid ""
 #~ "One or more of this system's subscriptions are about to expire. These "
@@ -1738,64 +1676,11 @@ msgstr ""
 #~ msgid "Out of Compliance"
 #~ msgstr "ಅನುವರ್ತನೆ ಇಲ್ಲ"
 
-#~ msgid "Password:"
-#~ msgstr "ಗುಪ್ತಪದ:"
-
-#~ msgid "Proxy P_assword:"
-#~ msgstr "ಪ್ರಾಕ್ಸಿ ಗುಪ್ತಪದ (_a):"
-
-#~ msgid "Proxy _Username:"
-#~ msgstr "ಪ್ರಾಕ್ಸಿ ಬಳಕೆದಾರಹೆಸರು (_U):"
-
-#~ msgid "Red Hat Login:"
-#~ msgstr "Red Hat ಲಾಗಿನ್:"
-
-#~ msgid "Show products that will be out of compliance as of:"
-#~ msgstr "ಈ ದಿನಾಂಕಕ್ಕೆ ಅನುವರ್ತನೆಯಿಂದ ಹೊರತಾಗಲಿರುವ ಉತ್ಪನ್ನಗಳನ್ನು ತೋರಿಸು:"
-
-#~ msgid "Subscription Manager - Compliance Assistant"
-#~ msgstr "ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪಕ - ಅನುವರ್ತನೆ ಸಹಾಯಕ"
-
 #~ msgid "This System is Non-Compliant"
 #~ msgstr "ಈ ವ್ಯವಸ್ಥೆಯು ಅನುವರ್ತನೆಯಲ್ಲಿಲ್ಲ"
 
-#~ msgid ""
-#~ "This system is missing one or more subscriptions required for compliance "
-#~ "with your subscription agreements."
-#~ msgstr ""
-#~ "ಈ ವ್ಯವಸ್ಥೆಯಲ್ಲಿ ನಿಮ್ಮ ಚಂದಾದಾರಿಕೆ ಒಪ್ಪಂದದೊಂದಿಗಿನ ಅನುವರ್ತನೆಗಾಗಿ ಅಗತ್ಯವಿರುವ ಒಂದು "
-#~ "ಅಥವ ಹೆಚ್ಚಿನ ಚಂದಾದಾರಿಕೆಗಳು ಕಾಣಿಸುತ್ತಿಲ್ಲ."
-
 #~ msgid "This system is non-compliant"
 #~ msgstr "ಈ ವ್ಯವಸ್ಥೆಯು ಅನುವರ್ತನೆಯಲ್ಲಿಲ್ಲ"
-
-#~ msgid ""
-#~ "To add a subscription, choose a certificate to import to your "
-#~ "subscription certificate directory."
-#~ msgstr ""
-#~ "ಒಂದು ಚಂದಾದಾರಿಕೆಯನ್ನು ಸೇರಿಸಲು, ನಿಮ್ಮ ಚಂದಾದಾರಿಕೆ ಪ್ರಮಾಣಪತ್ರ ಕೋಶಕ್ಕೆ ಆಮದು "
-#~ "ಮಾಡಿಕೊಳ್ಳಬೇಕಿರುವ ಒಂದು ಪ್ರಮಾಣಪತ್ರವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ."
-
-#~ msgid "Use Au_thentication with HTTP Proxy:"
-#~ msgstr "HTTP ಪ್ರಾಕ್ಸಿಯೊಂದಿಗೆ ದೃಢೀಕರಣವನ್ನು ಬಳಸಿ (_t):"
-
-#~ msgid "You have <b>%s</b> products out of compliance."
-#~ msgstr "ನಿಮ್ಮಲ್ಲಿನ <b>%s</b> ಉತ್ಪನ್ನಗಳು ಅನುವರ್ತನೆಯಿಂದ ಹೊರತಾಗಿವೆ."
-
-#~ msgid "You have <b>1</b> product out of compliance."
-#~ msgstr "ನಿಮ್ಮಲ್ಲಿನ <b>1</b> ಉತ್ಪನ್ನವು ಅನುವರ್ತನೆಯಿಂದ ಹೊರತಾಗಿದೆ."
-
-#~ msgid "You have one product which is out of compliance."
-#~ msgstr "ನಿಮ್ಮಲ್ಲಿನ ಒಂದು ಉತ್ಪನ್ನವು ಅನುವರ್ತನೆಯಿಂದ ಹೊರತಾಗಿದೆ."
-
-#~ msgid "You must register before using the compliance assistant."
-#~ msgstr "ಅನುಸರಣ (ಕಂಪ್ಲಯನ್ಸ್‍) ಸಹಾಯಕನನ್ನು ಬಳಸುವ ಮೊದಲು ನೀವು ನೋಂದಾಯಿಸಬೇಕು."
-
-#~ msgid "_Close"
-#~ msgstr "ಮುಚ್ಚು (_C)"
-
-#~ msgid "_Proxy Location:"
-#~ msgstr "ಪ್ರಾಕ್ಸಿ ತಾಣ (_P):"
 
 #~ msgid ""
 #~ "\n"
@@ -1933,9 +1818,6 @@ msgstr ""
 #~ "ದೋಷ: ನೋಂದಾಯಿಸಲು ಬಳಕೆದಾರಹೆಸರು ಹಾಗು ಗುಪ್ತಪದದ ಅಗತ್ಯವಿದೆ, register --help ಅನ್ನು "
 #~ "ಬಳಸಿ ನೋಡಿ."
 
-#~ msgid "Subscribed to Products:"
-#~ msgstr "ಈ ಉತ್ಪನ್ನಗಳಿಗೆ ಚಂದಾದಾರಿಕೆ ನೀಡಲಾಗಿದೆ:"
-
 #~ msgid "     %s(%s)"
 #~ msgstr "     %s(%s)"
 
@@ -1945,7 +1827,7 @@ msgstr ""
 #~ msgid ""
 #~ "Date entered is invalid. Date should be in ISO 8601 format (example: "
 #~ msgstr ""
-#~ "ನಮೂದಿಸಲಾದ ದಿನಾಂಕವು ಅಮಾನ್ಯವಾಗಿದೆ. ದಿನಾಂಕವು ISO 8601 ಶೈಲಿಯಲ್ಲಿ ಇರಬೇಕು "
+#~ "ನಮೂದಿಸಲಾದ ದಿನಾಂಕವು ಅಸಿಂಧುವಾಗಿದೆ. ದಿನಾಂಕವು ISO 8601 ಶೈಲಿಯಲ್ಲಿ ಇರಬೇಕು "
 #~ "(ಉದಾಹರಣೆಗೆ: "
 
 #~ msgid ""
@@ -2008,7 +1890,7 @@ msgstr ""
 #~ "The subscription for %s is valid until %s.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "%s ಗಾಗಿನ ಚಂದಾದಾರಿಕೆಯು %s ವರೆಗೆ ಮಾನ್ಯವಾಗಿರುತ್ತದೆ.\n"
+#~ "%s ಗಾಗಿನ ಚಂದಾದಾರಿಕೆಯು %s ವರೆಗೆ ಸಿಂಧುವಾಗಿರುತ್ತದೆ.\n"
 
 #~ msgid ""
 #~ "\n"

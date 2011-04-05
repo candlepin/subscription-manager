@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 08:54-0300\n"
-"PO-Revision-Date: 2011-03-25 14:40+0900\n"
+"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"PO-Revision-Date: 2011-04-01 15:33+0900\n"
 "Last-Translator: Kiyoto Hashida <khashida@redhat.com>\n"
 "Language-Team: Japanese <jp@li.org>\n"
 "Language: ja-JP\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
 "\n"
 "\n"
 "\n"
@@ -183,7 +183,7 @@ msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
 msgstr ""
-"ネットワークエラーでサーバーに接続できません。詳細は /var/log/rhsm/rhsm.log "
+"ネットワークエラーでサーバーに接続できません。詳細には /var/log/rhsm/rhsm.log "
 "をご覧下さい"
 
 #. NOTE: yes this looks a lot like the socket error, but I think these
@@ -224,17 +224,15 @@ msgstr "proxy_hostname:proxy_port の形式のプロキシ url"
 
 #: ../src/managercli.py:128
 msgid "user for http proxy with basic authentication"
-msgstr "基本認証を持つ http proxy のユーザー"
+msgstr "基本認証を持つ http プロキシのユーザー"
 
 #: ../src/managercli.py:130
 msgid "password for http proxy with basic authentication"
-msgstr "基本認証を持つ http proxy のパスワード"
+msgstr "基本認証を持つ http プロキシのパスワード"
 
 #: ../src/managercli.py:137
-msgid ""
-"Consumer not registered. Please register using --username and --password"
-msgstr ""
-"コンシューマは未登録です。--username 及び --password を使用して登録して下さい"
+msgid "Consumer not registered. Please register using --username and --password"
+msgstr "コンシューマは未登録です。--username 及び --password を使用して登録して下さい"
 
 #: ../src/managercli.py:192
 msgid "Consumer certificates corrupted. Please reregister."
@@ -294,8 +292,7 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "証明書の再生成を強制（ユーザー名とパスワードが必要）"
 
 #: ../src/managercli.py:306
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 "コンシューマ識別子は存在しないか、又は破損しています。register --help を試し"
 "て下さい"
@@ -338,8 +335,8 @@ msgid ""
 "automatically subscribe this system to                                     "
 "compatible subscriptions."
 msgstr ""
-"このシステムを自動的に互換性のある                                     サブス"
-"クリプションに登録"
+"このシステムを自動的に互換性のある                                     "
+"サブスクリプションに登録"
 
 #: ../src/managercli.py:366
 msgid "register the system even if it is already registered"
@@ -381,8 +378,7 @@ msgstr "登録済みユーザーを指定製品に対してアクティベート
 
 #: ../src/managercli.py:478
 msgid "optional email address to notify when token activation is complete."
-msgstr ""
-"トークンアクティベーション終了時に通知するオプションの電子メールアドレス"
+msgstr "トークンアクティベーション終了時に通知するオプションの電子メールアドレス"
 
 #: ../src/managercli.py:481
 msgid ""
@@ -422,7 +418,7 @@ msgstr "サブスクリプション解除する証明書シリアル番号"
 
 #: ../src/managercli.py:587
 msgid "Unsubscribe from all subscriptions"
-msgstr "全てのサブスクリプションから解除"
+msgstr "全てのサブスクリプションを解除"
 
 #: ../src/managercli.py:609
 msgid "One of --serial or --all must be provided"
@@ -439,7 +435,7 @@ msgstr ""
 
 #: ../src/managercli.py:627
 msgid "show information for facts"
-msgstr "事実の情報を表示"
+msgstr "情報を表示"
 
 #: ../src/managercli.py:632
 msgid "list known facts for this system"
@@ -455,8 +451,7 @@ msgstr "エラー: --list 又は --update が必要です。facts --help を試�
 
 #: ../src/managercli.py:667
 msgid "list available or consumer subscriptions for registered user"
-msgstr ""
-"登録済みユーザーの利用可能な、又はコンシューマのサブスクリプションを一覧表示"
+msgstr "登録済みユーザーの利用可能な、又はコンシューマのサブスクリプションを一覧表示"
 
 #: ../src/managercli.py:672
 msgid "installed"
@@ -467,8 +462,7 @@ msgid "available"
 msgstr "利用可能"
 
 #: ../src/managercli.py:676
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
+msgid "date to search on, defaults to today's date, only used with --available "
 msgstr "検索した日の日付。デフォルトは今日の日付です。--available との併用のみ"
 
 #: ../src/managercli.py:679
@@ -553,7 +547,7 @@ msgstr ""
 "ステータス:             \t%-25s\n"
 "期限:            \t%-25s\n"
 "サブスクリプション:       \t%-25s\n"
-"契約番号:     \t%-25s\n"
+"コントラクト番号:     \t%-25s\n"
 "アカウント番号:      \t%-25s\n"
 
 #: ../src/constants.py:34
@@ -587,7 +581,7 @@ msgid ""
 msgstr ""
 "\n"
 "製品名:        \t%-25s\n"
-"契約番号:     \t%-25s\n"
+"コントラクト番号:     \t%-25s\n"
 "アカウント番号:      \t%-25s\n"
 "シリアル番号:       \t%-25s\n"
 "アクティブ:             \t%-25s\n"
@@ -601,9 +595,9 @@ msgid ""
 "%s\n"
 "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
-"<b>登録解除中にエラーに遭遇しました。</b>\n"
+"<b>登録解除中にエラーが発生しました。</b>\n"
 "%s\n"
-"詳細は /var/log/rhsm/rhsm.log をご覧下さい。"
+"詳細には /var/log/rhsm/rhsm.log をご覧下さい。"
 
 #: ../src/constants.py:54
 #, python-format
@@ -618,7 +612,7 @@ msgstr ""
 "\n"
 " %s\n"
 "\n"
-"詳細は /var/log/rhsm/rhsm.log をご覧下さい。"
+"詳細には /var/log/rhsm/rhsm.log をご覧下さい。"
 
 #: ../src/constants.py:56
 msgid "<b>Are you sure you want to unregister?</b>"
@@ -666,7 +660,7 @@ msgstr "期間: %d(ms)"
 #: ../src/hwprobe.py:60
 #, python-format
 msgid "Error reading system DMI information: %s"
-msgstr ""
+msgstr "システムの DMI 情報の読み込みでエラー: %s"
 
 #: ../src/hwprobe.py:116
 msgid "Error reading system memory information:"
@@ -748,21 +742,21 @@ msgstr "今日"
 
 #: ../src/gui/managergui.py:371
 msgid "You must register before using the subscription assistant."
-msgstr ""
+msgstr "登録後にサブスクリプションアシスタントを使用できます。"
 
 #: ../src/gui/managergui.py:402
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr ""
+msgstr "<b>%s</b> 製品のエンタイトルメント証明書が無効になっています。"
 
 #: ../src/gui/managergui.py:406
 msgid "You have <b>1</b> product without a valid entitlement certificate."
-msgstr ""
+msgstr "<b>1</b> 製品に有効なエンタイトルメント証明書がありません。"
 
 #: ../src/gui/managergui.py:413
 #, python-format
 msgid "Product entitlement certificates valid through %s"
-msgstr ""
+msgstr "製品エンタイトルメント証明書は %s まで有効です"
 
 #: ../src/gui/managergui.py:536
 msgid "You must enter a system name."
@@ -788,7 +782,7 @@ msgstr "終了期日"
 
 #: ../src/gui/compliance.py:141
 msgid "Subscription List"
-msgstr ""
+msgstr "サブスクリプション一覧"
 
 #. Set up columns on the view
 #: ../src/gui/compliance.py:142 ../src/gui/allsubs.py:56
@@ -801,6 +795,8 @@ msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
 msgstr ""
+"サブスクリプションアシスタントの表示でエラーです。詳細情報には "
+"/var/log/rhsm/rhsm.log をご覧下さい。"
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -809,12 +805,12 @@ msgstr "サブスクリプションの検索ができません"
 #: ../src/gui/compliance.py:214
 #, python-format
 msgid "Software entitlements valid through %s"
-msgstr ""
+msgstr "ソフトウェアエンタイトルメントは %s まで有効です"
 
 #: ../src/gui/compliance.py:218
 #, python-format
 msgid "%s (first date of invalid entitlements)"
-msgstr ""
+msgstr "%s (エンタイトルメントが無効になる期日)"
 
 #: ../src/gui/compliance.py:220
 #, python-format
@@ -904,7 +900,7 @@ msgstr "以前の更新はありません"
 
 #: ../src/gui/contract_selection.py:67 ../src/gui/data/subdetails.glade.h:12
 msgid "Contract Number"
-msgstr "契約番号"
+msgstr "コントラクト番号"
 
 #: ../src/gui/contract_selection.py:71
 msgid "Used / Available"
@@ -921,7 +917,7 @@ msgstr "バージョン"
 
 #: ../src/gui/installedtab.py:54
 msgid "Certificate"
-msgstr ""
+msgstr "証明書"
 
 #: ../src/gui/installedtab.py:95
 msgid "Future Subscription"
@@ -933,7 +929,7 @@ msgstr "サブスクリプション履歴無し"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
-msgstr ""
+msgstr "無効"
 
 #: ../src/gui/installedtab.py:101
 #, python-format
@@ -942,16 +938,16 @@ msgstr "サブスクリプション %s は期限切れです"
 
 #: ../src/gui/installedtab.py:104
 msgid "Valid"
-msgstr ""
+msgstr "有効"
 
 #: ../src/gui/installedtab.py:106
 #, python-format
 msgid "Covered by contract %s through %s"
-msgstr "%s を通じて契約 %s により有効です"
+msgstr "コントラクト %s により %s まで有効です"
 
 #: ../src/gui/installedtab.py:111
 msgid "Missing"
-msgstr ""
+msgstr "ありません"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -959,7 +955,7 @@ msgstr "自分のインストール済みソフトウェア"
 
 #: ../src/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
-msgstr ""
+msgstr "<b>証明書のステータス:</b>"
 
 #: ../src/gui/data/installed.glade.h:2
 msgid "<b>Product's Subscription Details</b>"
@@ -975,7 +971,7 @@ msgstr "<b>サブスクリプション:</b>"
 
 #: ../src/gui/data/installed.glade.h:5 ../src/gui/data/mainwindow.glade.h:4
 msgid "Certificate Status"
-msgstr ""
+msgstr "証明書のステータス"
 
 #: ../src/gui/data/installed.glade.h:6
 msgid "Installed View"
@@ -1022,53 +1018,69 @@ msgstr "ユーザー名テキスト"
 msgctxt "yes"
 msgid "<b>HTTP Proxy</b>"
 msgstr ""
+"<b>HTTP プロキシ</b> "
+"はい"
 
 #: ../src/gui/data/networkConfig.glade.h:10
 msgctxt "yes"
 msgid "<small><b>Example:</b> squid.example.com:3128</small>"
 msgstr ""
+"<small><b>例:</b> squid.example.com:3128</small> "
+"はい"
 
 #: ../src/gui/data/networkConfig.glade.h:11
 msgctxt "yes"
 msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
 msgstr ""
+"Red Hat Network に HTTP プロキシ経由で接続したいです。 "
+"はい"
 
 #: ../src/gui/data/networkConfig.glade.h:12
 msgctxt "yes"
 msgid "Proxy P_assword:"
 msgstr ""
+"プロキシ パスワード(_A): "
+"はい"
 
 #: ../src/gui/data/networkConfig.glade.h:13
 msgctxt "yes"
 msgid "Proxy _Username:"
 msgstr ""
+"プロキシ ユーザー名(_U): "
+"はい"
 
 #: ../src/gui/data/networkConfig.glade.h:14
 msgctxt "yes"
 msgid "Use Au_thentication with HTTP Proxy:"
 msgstr ""
+"HTTP プロキシで認証を使用(_T) "
+"はい"
 
 #: ../src/gui/data/networkConfig.glade.h:15
 msgctxt "yes"
 msgid "_Close"
 msgstr ""
+"閉じる(_C) "
+"はい"
 
 #: ../src/gui/data/networkConfig.glade.h:16
 msgctxt "yes"
 msgid "_Proxy Location:"
 msgstr ""
+"プロキシの場所(_P) :"
+"はい"
 
 #: ../src/gui/data/compliance.glade.h:1
 msgid "A different date:"
-msgstr ""
+msgstr "別の期日:"
 
 #: ../src/gui/data/compliance.glade.h:2
 msgid "Invalid Product List"
-msgstr ""
+msgstr "無効な製品の一覧"
 
 #: ../src/gui/data/compliance.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
-msgstr ""
+msgstr "以下の期日にエンタイトルメント証明書が無効な製品を表示:"
 
 #: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
 msgid "Subscribe"
@@ -1076,71 +1088,71 @@ msgstr "サブスクライブ"
 
 #: ../src/gui/data/compliance.glade.h:5
 msgid "Subscription Action Area"
-msgstr ""
+msgstr "サブスクリプションのアクションエリア"
 
 #: ../src/gui/data/compliance.glade.h:6
 msgid "Subscription Assistant"
-msgstr ""
+msgstr "サブスクリプションアシスタント"
 
 #: ../src/gui/data/compliance.glade.h:7
 msgid "Subscription Assistant Box"
-msgstr ""
+msgstr "サブスクリプションアシスタントのボックス"
 
 #: ../src/gui/data/compliance.glade.h:8
 msgid "Subscription Assistant Status"
-msgstr ""
+msgstr "サブスクリプションアシスタントのステータス"
 
 #: ../src/gui/data/compliance.glade.h:9
 msgid "Subscription Date Box"
-msgstr ""
+msgstr "サブスクリプション日付ボックス"
 
 #: ../src/gui/data/compliance.glade.h:10
 msgid "Subscription Date Label"
-msgstr ""
+msgstr "サブスクリプション日付ラベル"
 
 #: ../src/gui/data/compliance.glade.h:11
 msgid "Subscription Date Picker"
-msgstr ""
+msgstr "サブスクリプション日付ピッカー"
 
 #: ../src/gui/data/compliance.glade.h:12
 msgid "Subscription Details"
-msgstr ""
+msgstr "サブスクリプションの詳細"
 
 #: ../src/gui/data/compliance.glade.h:13
 msgid "Subscription Label"
-msgstr ""
+msgstr "サブスクリプションラベル"
 
 #: ../src/gui/data/compliance.glade.h:14
 msgid "Subscription Label Box"
-msgstr ""
+msgstr "サブスクリプションラベルのボックス"
 
 #: ../src/gui/data/compliance.glade.h:15
 msgid "Subscription Manager - Subscription Assistant"
-msgstr ""
+msgstr "サブスクリプションマネージャ - サブスクリプションアシスタント"
 
 #: ../src/gui/data/compliance.glade.h:16
 msgid "Subscription Product List"
-msgstr ""
+msgstr "サブスクリプション製品一覧"
 
 #: ../src/gui/data/compliance.glade.h:17
 msgid "Subscription Subscriptions Box"
-msgstr ""
+msgstr "サブスクリプション - サブスクリプションボックス"
 
 #: ../src/gui/data/compliance.glade.h:18
 msgid "Subscription Subscriptions Label"
-msgstr ""
+msgstr "サブスクリプション - サブスクリプションラベル"
 
 #: ../src/gui/data/compliance.glade.h:19
 msgid "Subscription Update Box"
-msgstr ""
+msgstr "サブスクリプション更新ボックス"
 
 #: ../src/gui/data/compliance.glade.h:20
 msgid "Subscriptions List"
-msgstr ""
+msgstr "サブスクリプション一覧"
 
 #: ../src/gui/data/compliance.glade.h:21
 msgid "Subscriptions Panel"
-msgstr ""
+msgstr "サブスクリプションパネル"
 
 #: ../src/gui/data/compliance.glade.h:22
 msgid "The following subscriptions will cover the products selected above:"
@@ -1219,6 +1231,8 @@ msgstr "update_subscriptions_dialog\n"
 msgctxt "yes"
 msgid "Certificate _Location:"
 msgstr ""
+"証明書の場所(_L) : "
+"はい"
 
 #: ../src/gui/data/rhsm.glade.h:18
 msgctxt "yes"
@@ -1226,6 +1240,9 @@ msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
 msgstr ""
+"サブスクリプションを追加するには、サブスクリプション証明書ディレクトリにインポートする "
+"証明書を選択します。 "
+"はい"
 
 #: ../src/gui/data/activate.glade.h:1
 msgid "Activate"
@@ -1251,11 +1268,11 @@ msgstr "電子メールアドレス:"
 
 #: ../src/gui/data/activate.glade.h:7
 msgid "Subscription Activation"
-msgstr "サブスクリプションアクティベーション"
+msgstr "サブスクリプションのアクティベーション"
 
 #: ../src/gui/data/mainwindow.glade.h:1
 msgid "<b>Certificate Status</b>"
-msgstr ""
+msgstr "<b>証明書のステータス</b>"
 
 #: ../src/gui/data/mainwindow.glade.h:2
 msgid "<b>Tools</b>"
@@ -1279,7 +1296,7 @@ msgstr "システムの登録解除"
 
 #: ../src/gui/data/mainwindow.glade.h:10
 msgid "Update Certificates"
-msgstr ""
+msgstr "証明書の更新"
 
 #: ../src/gui/data/mainwindow.glade.h:11
 msgid "View System Facts"
@@ -1287,7 +1304,7 @@ msgstr "システムの情報表示"
 
 #: ../src/gui/data/mainwindow.glade.h:12
 msgid "You have one product without a valid entitlement certificate."
-msgstr ""
+msgstr "１つの製品に有効なエンタイトルメント証明書がありません。"
 
 #: ../src/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
@@ -1327,7 +1344,7 @@ msgstr "<b>同梱の製品:</b>"
 
 #: ../src/gui/data/subdetails.glade.h:3
 msgid "<b>Contract Number:</b>"
-msgstr "<b>契約番号:</b>"
+msgstr "<b>コントラクト番号:</b>"
 
 #: ../src/gui/data/subdetails.glade.h:4
 msgid "<b>End Date:</b>"
@@ -1371,9 +1388,10 @@ msgstr "使用製品のサブスクリプションの管理"
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr ""
+"サブスクリプション証明書ディレクトリにインポートする証明書の選択 "
+"はい"
 
 #: ../src/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
@@ -1397,7 +1415,7 @@ msgstr "全てのサブスクリプションの表示"
 
 #: ../src/gui/data/allsubs.glade.h:4
 msgid "Contains the text:"
-msgstr "テキストを収納:"
+msgstr "テキストを含む:"
 
 #: ../src/gui/data/allsubs.glade.h:5
 msgid "Do Not Overlap"
@@ -1486,16 +1504,22 @@ msgstr "registration_dialog_action_area\n"
 msgctxt "yes"
 msgid "<b>Please enter your Red Hat Network account information:</b>"
 msgstr ""
+"<b>Red Hat Network アカウントの情報を記入して下さい:</b> "
+"はい"
 
 #: ../src/gui/data/registration.glade.h:14
 msgctxt "yes"
 msgid "Password:"
 msgstr ""
+"パスワード: "
+"はい"
 
 #: ../src/gui/data/registration.glade.h:15
 msgctxt "yes"
 msgid "Red Hat Login:"
 msgstr ""
+"Red Hat ログイン: "
+"はい"
 
 #: ../src/gui/data/progress.glade.h:1
 msgid "Progress Dialog"
@@ -1505,30 +1529,40 @@ msgstr "進捗のダイアログ"
 msgctxt "yes"
 msgid "<b>Choose the specific contract to use:</b>"
 msgstr ""
+"<b>使用する特定コントラクトの選択:</b> "
+"はい"
 
 #: ../src/gui/data/contract_selection.glade.h:2
 msgctxt "yes"
 msgid "<b>Subscription:</b>"
 msgstr ""
+"<b>サブスクリプション:</b> "
+"はい"
 
 #: ../src/gui/data/contract_selection.glade.h:3
 msgctxt "yes"
 msgid "<b>Total Contracts:</b>"
 msgstr ""
+"<b>コントラクト合計:</b> "
+"はい"
 
 #: ../src/gui/data/contract_selection.glade.h:4
 msgctxt "yes"
 msgid "Contract Selection"
 msgstr ""
+"コントラクトの選択 "
+"はい"
 
 #: ../src/gui/data/contract_selection.glade.h:5
 msgctxt "yes"
 msgid "Subscribe"
 msgstr ""
+"サブスクライブ "
+"はい"
 
 #: ../src/compliance/rhsm_compliance_icon.c:43
 msgid "How often to check for validity (in seconds)"
-msgstr ""
+msgstr "有効性チェックの頻度（間隔を秒表示）"
 
 #: ../src/compliance/rhsm_compliance_icon.c:45
 msgid "Show debug messages"
@@ -1536,16 +1570,16 @@ msgstr "デバグメッセージを表示"
 
 #: ../src/compliance/rhsm_compliance_icon.c:47
 msgid "Force display of the icon (expired or warning)"
-msgstr ""
+msgstr "強制的にアイコンを表示（期限切れ、又は警告）"
 
 #: ../src/compliance/rhsm_compliance_icon.c:170
 #: ../src/compliance/rhsm_compliance_icon.c:171
 msgid "Invalid or Missing Entitlement Certificates"
-msgstr ""
+msgstr "無効の、又は存在しないエンタイトルメント証明書"
 
 #: ../src/compliance/rhsm_compliance_icon.c:172
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr ""
+msgstr "このシステムには１つ以上の有効なエンタイトルメント証明書が欠如しています。"
 
 #: ../src/compliance/rhsm_compliance_icon.c:176
 msgid "Some of the system's subscriptions are about to expire"
@@ -1557,7 +1591,7 @@ msgstr "このシステムのサブスクリプションはすぐに期限が切
 
 #: ../src/compliance/rhsm_compliance_icon.c:179
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr ""
+msgstr "このシステムのサブスクリプションの１つ以上がすぐに期限切れです"
 
 #: ../src/compliance/rhsm_compliance_icon.c:197
 msgid "Remind Me Later"
@@ -1585,205 +1619,13 @@ msgstr "オプションの構文解析失敗: %s\n"
 
 #: ../etc-conf/subscription-manager.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
-msgstr ""
+msgstr "Red Hat サブスクリプションマネージャ"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
-msgstr ""
+msgstr "Red Hat サブスクリプション有効性アプレット"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
-msgstr ""
+msgstr "サブスクリプション有効性アプレット"
 
-#~ msgid "%s (first date of non-compliance)"
-#~ msgstr "%s (コンプライアンス離脱の最初の期日)"
-
-#~ msgid "<b>Choose the specific contract to use:</b>"
-#~ msgstr "<b>使用する特定のコントラクトを選択:</b>"
-
-#~ msgid "<b>Compliance Status</b>"
-#~ msgstr "<b>コンプライアンスステータス</b>"
-
-#~ msgid "<b>Compliance:</b>"
-#~ msgstr "<b>コンプライアンス:</b>"
-
-#~ msgid "<b>HTTP Proxy</b>"
-#~ msgstr "<b>HTTP プロキシ</b>"
-
-#~ msgid "<b>Please enter your Red Hat Network account information:</b>"
-#~ msgstr "<b>Red Hat Network アカウントの情報を記入して下さい:</b>"
-
-#~ msgid "<b>Total Contracts:</b>"
-#~ msgstr "<b>コントラクト合計数:</b>"
-
-#~ msgid "<big><b>All software is in compliance until %s</b></big>"
-#~ msgstr "<big><b>全ソフトウェアのコンプライアンスは %s まで有効</b></big>"
-
-#~ msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-#~ msgstr "<small><b>例:</b> squid.example.com:3128</small>"
-
-#~ msgid "All products are in compliance until %s"
-#~ msgstr "全製品のコンプライアンスが %s まで有効です"
-
-#~ msgid "Become Compliant"
-#~ msgstr "コンプライアンスを有効にする"
-
-#~ msgid "Certificate _Location:"
-#~ msgstr "証明書の場所(_L):"
-
-#~ msgid ""
-#~ "Choose a certificate to import to your subscription certificate directory."
-#~ msgstr "サブスクリプション証明書ディレクトリにインポートする証明書を選択"
-
-#~ msgid "Compliance Action Area"
-#~ msgstr "コンプライアンス アクション エリア"
-
-#~ msgid "Compliance Assistant"
-#~ msgstr "コンプライアンス アシスタント"
-
-#~ msgid "Compliance Assistant Box"
-#~ msgstr "コンプライアンス アシスタント ボックス"
-
-#~ msgid "Compliance Assistant Status"
-#~ msgstr "コンプライアンス アシスタント ステータス"
-
-#~ msgid "Compliance Date Box"
-#~ msgstr "コンプライアンス 日付 ボックス"
-
-#~ msgid "Compliance Date Label"
-#~ msgstr "コンプライアンス 日付 ラベル"
-
-#~ msgid "Compliance Date Picker"
-#~ msgstr "コンプライアンス 日付 ピッカー"
-
-#~ msgid "Compliance Label"
-#~ msgstr "コンプライアンス ラベル"
-
-#~ msgid "Compliance Label Box"
-#~ msgstr "コンプライアンス ラベル ボックス"
-
-#~ msgid "Compliance Product List"
-#~ msgstr "コンプライアンス 製品一覧"
-
-#~ msgid "Compliance Status"
-#~ msgstr "コンプライアンス ステータス"
-
-#~ msgid "Compliance Subscription Details"
-#~ msgstr "コンプライアンス サブスクリプション詳細"
-
-#~ msgid "Compliance Subscription List"
-#~ msgstr "コンプライアンス サブスクリプション一覧"
-
-#~ msgid "Compliance Subscriptions Box"
-#~ msgstr "コンプライアンス サブスクリプション ボックス"
-
-#~ msgid "Compliance Subscriptions Label"
-#~ msgstr "コンプライアンス サブスクリプション ラベル"
-
-#~ msgid "Compliance Subscriptions List"
-#~ msgstr "コンプライアンス サブスクリプション 一覧"
-
-#~ msgid "Compliance Subscriptions Panel"
-#~ msgstr "コンプライアンス サブスクリプション パネル"
-
-#~ msgid "Compliance Update Box"
-#~ msgstr "コンプライアンス更新ボックス"
-
-#~ msgid "Contract Selection"
-#~ msgstr "コントラクトの選択"
-
-#~ msgid ""
-#~ "Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log "
-#~ "for more information."
-#~ msgstr ""
-#~ "Compliance Assistant の表示でエラーです。詳細情報は  /var/log/rhsm/rhsm."
-#~ "log をご覧下さい。"
-
-#~ msgid "Error reading system DMI information:"
-#~ msgstr "システム DMI 情報の読み込みでエラー:"
-
-#~ msgid "Force display of the compliance icon (expired or warning)"
-#~ msgstr "コンプライアンスアイコン (期限切れ、又は警告) の強制表示"
-
-#~ msgid "How often to check for compliance (in seconds)"
-#~ msgstr "コンプライアンスをチェックする頻度（秒）"
-
-#~ msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-#~ msgstr "HTTP プロキシ経由で Red Hat Network への接続を望みます(_H)"
-
-#~ msgid "In Compliance"
-#~ msgstr "コンプライアンスは有効"
-
-#~ msgid "On a different date:"
-#~ msgstr "異なる期日に:"
-
-#~ msgid ""
-#~ "One or more of this system's subscriptions are about to expire. These "
-#~ "subscriptions are required for compliance with your subscription "
-#~ "agreements."
-#~ msgstr ""
-#~ "このシステムの単数、又は複数のサブスクリプションがすぐに期限切れです。これ"
-#~ "らの サブスクリプションはサブスクリプション同意書に於けるコンプライアンス"
-#~ "に必要です。"
-
-#~ msgid "Out of Compliance"
-#~ msgstr "コンプライアンスから離脱"
-
-#~ msgid "Password:"
-#~ msgstr "パスワード:"
-
-#~ msgid "Proxy P_assword:"
-#~ msgstr "プロキシパスワード(_A):"
-
-#~ msgid "Proxy _Username:"
-#~ msgstr "プロキシユーザー名(_U):"
-
-#~ msgid "Red Hat Login:"
-#~ msgstr "Red Hat ログイン:"
-
-#~ msgid "Show products that will be out of compliance as of:"
-#~ msgstr "以下の期日にコンプライアンスから離脱する製品を表示:"
-
-#~ msgid "Subscription Manager - Compliance Assistant"
-#~ msgstr "サブスクリプションマネージャ- Compliance Assistant"
-
-#~ msgid "This System is Non-Compliant"
-#~ msgstr "このシステムはコンプライアンス無しです"
-
-#~ msgid ""
-#~ "This system is missing one or more subscriptions required for compliance "
-#~ "with your subscription agreements."
-#~ msgstr ""
-#~ "このシステムには、サブスクリプション同意書に於けるコンプライアンスに必要"
-#~ "な 単数、又は複数のサブスクリプションが足りません。"
-
-#~ msgid "This system is non-compliant"
-#~ msgstr "このシステムはコンプライアンス無しです"
-
-#~ msgid ""
-#~ "To add a subscription, choose a certificate to import to your "
-#~ "subscription certificate directory."
-#~ msgstr ""
-#~ "サブスクリプションを追加するには、サブスクリプション証明書ディレクトリに "
-#~ "インポートする証明書を選択します"
-
-#~ msgid "Use Au_thentication with HTTP Proxy:"
-#~ msgstr "HTTP プロキシ経由で認証を使用(_T):"
-
-#~ msgid "You have <b>%s</b> products out of compliance."
-#~ msgstr "<b>%s</b> 製品がコンプライアンスから外れています"
-
-#~ msgid "You have <b>1</b> product out of compliance."
-#~ msgstr "<b>1</b> 製品がコンプライアンスから外れています"
-
-#~ msgid "You have one product which is out of compliance."
-#~ msgstr "お持ちの製品の１つがコンプライアンスから外れています"
-
-#~ msgid "You must register before using the compliance assistant."
-#~ msgstr "compliance assistant を使用するには、先に登録が必要です"
-
-#~ msgid "_Close"
-#~ msgstr "閉じる(_C)"
-
-#~ msgid "_Proxy Location:"
-#~ msgstr "プロキシの場所(_P):"

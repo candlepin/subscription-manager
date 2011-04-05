@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 08:54-0300\n"
+"POT-Creation-Date: 2011-03-29 18:47-0300\n"
 "PO-Revision-Date: 2010-09-15 16:18-0300\n"
 "Last-Translator:  <dgoodwin@redhat.com>\n"
 "Language-Team: English\n"
@@ -614,9 +614,9 @@ msgid "duration: %d(ms)"
 msgstr "duration: %d(ms)"
 
 #: ../src/hwprobe.py:60
-#, python-format
+#, fuzzy, python-format
 msgid "Error reading system DMI information: %s"
-msgstr ""
+msgstr "Error reading system DMI information:"
 
 #: ../src/hwprobe.py:116
 msgid "Error reading system memory information:"
@@ -737,8 +737,9 @@ msgid "End Date"
 msgstr ""
 
 #: ../src/gui/compliance.py:141
+#, fuzzy
 msgid "Subscription List"
-msgstr ""
+msgstr "Add Subscriptions"
 
 #. Set up columns on the view
 #: ../src/gui/compliance.py:142 ../src/gui/allsubs.py:56
@@ -747,10 +748,15 @@ msgid "Subscription"
 msgstr ""
 
 #: ../src/gui/compliance.py:180
+#, fuzzy
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
 msgstr ""
+"<b>\n"
+"Could not subscribe to token %s</b>\n"
+"\n"
+"Please see /var/log/rhsm/rhsm.log for more information."
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -868,8 +874,9 @@ msgid "Version"
 msgstr ""
 
 #: ../src/gui/installedtab.py:54
+#, fuzzy
 msgid "Certificate"
-msgstr ""
+msgstr "Import Certificate"
 
 #: ../src/gui/installedtab.py:95
 msgid "Future Subscription"
@@ -906,8 +913,9 @@ msgid "My Installed Software"
 msgstr ""
 
 #: ../src/gui/data/installed.glade.h:1
+#, fuzzy
 msgid "<b>Certificate Status:</b>"
-msgstr ""
+msgstr "Certificate not found."
 
 #: ../src/gui/data/installed.glade.h:2
 msgid "<b>Product's Subscription Details</b>"
@@ -922,8 +930,9 @@ msgid "<b>Subscription:</b>"
 msgstr ""
 
 #: ../src/gui/data/installed.glade.h:5 ../src/gui/data/mainwindow.glade.h:4
+#, fuzzy
 msgid "Certificate Status"
-msgstr ""
+msgstr "Certificate not found."
 
 #: ../src/gui/data/installed.glade.h:6
 msgid "Installed View"
@@ -1011,8 +1020,9 @@ msgid "A different date:"
 msgstr ""
 
 #: ../src/gui/data/compliance.glade.h:2
+#, fuzzy
 msgid "Invalid Product List"
-msgstr ""
+msgstr "Bind Product "
 
 #: ../src/gui/data/compliance.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
@@ -1023,72 +1033,89 @@ msgid "Subscribe"
 msgstr ""
 
 #: ../src/gui/data/compliance.glade.h:5
+#, fuzzy
 msgid "Subscription Action Area"
-msgstr ""
+msgstr "Subscription Token:"
 
 #: ../src/gui/data/compliance.glade.h:6
+#, fuzzy
 msgid "Subscription Assistant"
-msgstr ""
+msgstr "Subscription Manager"
 
 #: ../src/gui/data/compliance.glade.h:7
+#, fuzzy
 msgid "Subscription Assistant Box"
-msgstr ""
+msgstr "Subscription Manager"
 
 #: ../src/gui/data/compliance.glade.h:8
+#, fuzzy
 msgid "Subscription Assistant Status"
-msgstr ""
+msgstr "Subscription Manager"
 
 #: ../src/gui/data/compliance.glade.h:9
+#, fuzzy
 msgid "Subscription Date Box"
-msgstr ""
+msgstr "Subscription Manager"
 
 #: ../src/gui/data/compliance.glade.h:10
+#, fuzzy
 msgid "Subscription Date Label"
-msgstr ""
+msgstr "Subscription Manager"
 
 #: ../src/gui/data/compliance.glade.h:11
+#, fuzzy
 msgid "Subscription Date Picker"
-msgstr ""
+msgstr "Subscription Manager"
 
 #: ../src/gui/data/compliance.glade.h:12
+#, fuzzy
 msgid "Subscription Details"
-msgstr ""
+msgstr "Subscription Token:"
 
 #: ../src/gui/data/compliance.glade.h:13
+#, fuzzy
 msgid "Subscription Label"
-msgstr ""
+msgstr "Subscription Manager"
 
 #: ../src/gui/data/compliance.glade.h:14
+#, fuzzy
 msgid "Subscription Label Box"
-msgstr ""
+msgstr "Subscription Manager"
 
 #: ../src/gui/data/compliance.glade.h:15
+#, fuzzy
 msgid "Subscription Manager - Subscription Assistant"
-msgstr ""
+msgstr "Subscription Manager Screen"
 
 #: ../src/gui/data/compliance.glade.h:16
+#, fuzzy
 msgid "Subscription Product List"
-msgstr ""
+msgstr "subscription pool id"
 
 #: ../src/gui/data/compliance.glade.h:17
+#, fuzzy
 msgid "Subscription Subscriptions Box"
-msgstr ""
+msgstr "Update Subscriptions"
 
 #: ../src/gui/data/compliance.glade.h:18
+#, fuzzy
 msgid "Subscription Subscriptions Label"
-msgstr ""
+msgstr "Update Subscriptions"
 
 #: ../src/gui/data/compliance.glade.h:19
+#, fuzzy
 msgid "Subscription Update Box"
-msgstr ""
+msgstr "Subscription Manager"
 
 #: ../src/gui/data/compliance.glade.h:20
+#, fuzzy
 msgid "Subscriptions List"
-msgstr ""
+msgstr "Add Subscriptions"
 
 #: ../src/gui/data/compliance.glade.h:21
+#, fuzzy
 msgid "Subscriptions Panel"
-msgstr ""
+msgstr "Subscription Manager"
 
 #: ../src/gui/data/compliance.glade.h:22
 msgid "The following subscriptions will cover the products selected above:"
@@ -1164,9 +1191,10 @@ msgid "update_subscriptions_dialog\n"
 msgstr ""
 
 #: ../src/gui/data/rhsm.glade.h:17 ../src/gui/data/importsub.glade.h:3
+#, fuzzy
 msgctxt "yes"
 msgid "Certificate _Location:"
-msgstr ""
+msgstr "Certificate not found."
 
 #: ../src/gui/data/rhsm.glade.h:18
 msgctxt "yes"
@@ -1223,8 +1251,9 @@ msgid "Unregister System"
 msgstr ""
 
 #: ../src/gui/data/mainwindow.glade.h:10
+#, fuzzy
 msgid "Update Certificates"
-msgstr ""
+msgstr "Import Certificate"
 
 #: ../src/gui/data/mainwindow.glade.h:11
 msgid "View System Facts"
@@ -1425,9 +1454,10 @@ msgid "registration_dialog_action_area\n"
 msgstr ""
 
 #: ../src/gui/data/registration.glade.h:13
+#, fuzzy
 msgctxt "yes"
 msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr ""
+msgstr "Enter your Subscription account information"
 
 #: ../src/gui/data/registration.glade.h:14
 msgctxt "yes"
@@ -1449,36 +1479,42 @@ msgid "<b>Choose the specific contract to use:</b>"
 msgstr ""
 
 #: ../src/gui/data/contract_selection.glade.h:2
+#, fuzzy
 msgctxt "yes"
 msgid "<b>Subscription:</b>"
-msgstr ""
+msgstr "<b>Select Subscriptions to add</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:3
+#, fuzzy
 msgctxt "yes"
 msgid "<b>Total Contracts:</b>"
-msgstr ""
+msgstr "<b>System Facts</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:4
+#, fuzzy
 msgctxt "yes"
 msgid "Contract Selection"
-msgstr ""
+msgstr "Contract"
 
 #: ../src/gui/data/contract_selection.glade.h:5
+#, fuzzy
 msgctxt "yes"
 msgid "Subscribe"
-msgstr ""
+msgstr "Subscribed"
 
 #: ../src/compliance/rhsm_compliance_icon.c:43
+#, fuzzy
 msgid "How often to check for validity (in seconds)"
-msgstr ""
+msgstr "How often to check for compliance (in seconds)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:45
 msgid "Show debug messages"
 msgstr "Show debug messages"
 
 #: ../src/compliance/rhsm_compliance_icon.c:47
+#, fuzzy
 msgid "Force display of the icon (expired or warning)"
-msgstr ""
+msgstr "Force display of the compliance icon (expired or warning)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:170
 #: ../src/compliance/rhsm_compliance_icon.c:171
@@ -1486,8 +1522,11 @@ msgid "Invalid or Missing Entitlement Certificates"
 msgstr ""
 
 #: ../src/compliance/rhsm_compliance_icon.c:172
+#, fuzzy
 msgid "This system is missing one or more valid entitlement certificates."
 msgstr ""
+"This system is missing one or more subscriptions required for compliance "
+"with your subscription agreements."
 
 #: ../src/compliance/rhsm_compliance_icon.c:176
 msgid "Some of the system's subscriptions are about to expire"
@@ -1498,8 +1537,9 @@ msgid "This System's Subscriptions Are About to Expire"
 msgstr "This System's Subscriptions Are About to Expire"
 
 #: ../src/compliance/rhsm_compliance_icon.c:179
+#, fuzzy
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr ""
+msgstr "This system's subscriptions are about to expire"
 
 #: ../src/compliance/rhsm_compliance_icon.c:197
 msgid "Remind Me Later"
@@ -1526,41 +1566,19 @@ msgid "option parsing failed: %s\n"
 msgstr "option parsing failed: %s\n"
 
 #: ../etc-conf/subscription-manager.desktop.in.h:1
+#, fuzzy
 msgid "Red Hat Subscription Manager"
-msgstr ""
+msgstr "Subscription Manager"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:1
+#, fuzzy
 msgid "Red Hat Subscription Validity Applet"
-msgstr ""
+msgstr "Provide a Subscription Certificate"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
+#, fuzzy
 msgid "Subscription Validity Applet"
-msgstr ""
-
-#, fuzzy
-#~ msgid "<b>Please enter your Red Hat Network account information:</b>"
-#~ msgstr "Enter your Subscription account information"
-
-#, fuzzy
-#~ msgid "<b>Total Contracts:</b>"
-#~ msgstr "<b>System Facts</b>"
-
-#, fuzzy
-#~ msgid "Certificate _Location:"
-#~ msgstr "Certificate not found."
-
-#, fuzzy
-#~ msgid "Contract Selection"
-#~ msgstr "Contract"
-
-#~ msgid "Error reading system DMI information:"
-#~ msgstr "Error reading system DMI information:"
-
-#~ msgid "Force display of the compliance icon (expired or warning)"
-#~ msgstr "Force display of the compliance icon (expired or warning)"
-
-#~ msgid "How often to check for compliance (in seconds)"
-#~ msgstr "How often to check for compliance (in seconds)"
+msgstr "Subscription Manager"
 
 #~ msgid ""
 #~ "One or more of this system's subscriptions are about to expire. These "
@@ -1573,13 +1591,6 @@ msgstr ""
 
 #~ msgid "This System is Non-Compliant"
 #~ msgstr "This System is Non-Compliant"
-
-#~ msgid ""
-#~ "This system is missing one or more subscriptions required for compliance "
-#~ "with your subscription agreements."
-#~ msgstr ""
-#~ "This system is missing one or more subscriptions required for compliance "
-#~ "with your subscription agreements."
 
 #~ msgid "This system is non-compliant"
 #~ msgstr "This system is non-compliant"
@@ -1636,17 +1647,6 @@ msgstr ""
 #~ "Please see /var/log/rhsm/rhsm.log for more information."
 #~ msgstr ""
 #~ "<b>Unable to perform unsubscribe.</b>\n"
-#~ "\n"
-#~ "Please see /var/log/rhsm/rhsm.log for more information."
-
-#~ msgid ""
-#~ "<b>\n"
-#~ "Could not subscribe to token %s</b>\n"
-#~ "\n"
-#~ "Please see /var/log/rhsm/rhsm.log for more information."
-#~ msgstr ""
-#~ "<b>\n"
-#~ "Could not subscribe to token %s</b>\n"
 #~ "\n"
 #~ "Please see /var/log/rhsm/rhsm.log for more information."
 
@@ -1919,9 +1919,6 @@ msgstr ""
 #~ msgid "Submit"
 #~ msgstr "Submit"
 
-#~ msgid "Subscription Token:"
-#~ msgstr "Subscription Token:"
-
 #~ msgid "network error, unable to connect to server"
 #~ msgstr "network error, unable to connect to server"
 
@@ -1963,12 +1960,6 @@ msgstr ""
 #~ "Active:             \t%-25s\n"
 #~ "Begins:             \t%-25s\n"
 #~ "Expires:            \t%-25s\n"
-
-#~ msgid "This system's subscriptions are about to expire"
-#~ msgstr "This system's subscriptions are about to expire"
-
-#~ msgid "Bind Product "
-#~ msgstr "Bind Product "
 
 #~ msgid "\tName .......... = %s"
 #~ msgstr "\tName .......... = %s"
@@ -2118,9 +2109,6 @@ msgstr ""
 
 #~ msgid "RHSM Subscriptions Management Screen"
 #~ msgstr "RHSM Subscriptions Management Screen"
-
-#~ msgid "Subscription Manager Screen"
-#~ msgstr "Subscription Manager Screen"
 
 #~ msgid "Consumer certificates corrupted. Please re-register"
 #~ msgstr "Consumer certificates corrupted. Please re-register"

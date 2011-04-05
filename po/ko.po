@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 08:54-0300\n"
-"PO-Revision-Date: 2011-03-22 14:02+1000\n"
+"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"PO-Revision-Date: 2011-04-01 12:50+1000\n"
 "Last-Translator: Eun-Ju Kim <eukim@redhat.com>\n"
 "Language-Team:  <ko@li.org>\n"
 "Language: ko-KR\n"
@@ -223,8 +223,7 @@ msgid "password for http proxy with basic authentication"
 msgstr "기본 인증을 갖는 http proxy 암호 "
 
 #: ../src/managercli.py:137
-msgid ""
-"Consumer not registered. Please register using --username and --password"
+msgid "Consumer not registered. Please register using --username and --password"
 msgstr ""
 "사용자가 등록되어 있지 않습니다. --username 및 --password를 사용하여 등록하십"
 "시오.   "
@@ -287,8 +286,7 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "인증서 재 생성을 강제합니다 (사용자 이름 및 암호 필요) "
 
 #: ../src/managercli.py:306
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 "사용자 id는 존재하지 않거나 손상되었습니다. register --help를 실행해 보십시"
 "오  "
@@ -330,8 +328,7 @@ msgstr "기존 사용자에 대한 등록 "
 msgid ""
 "automatically subscribe this system to                                     "
 "compatible subscriptions."
-msgstr ""
-"이 시스템을 자동으로 호환                             서브스크립션에 등록.  "
+msgstr "이 시스템을 자동으로 호환                             서브스크립션에 등록.  "
 
 #: ../src/managercli.py:366
 msgid "register the system even if it is already registered"
@@ -442,8 +439,7 @@ msgstr "시스템 정보 업데이트 "
 
 #: ../src/managercli.py:643
 msgid "Error: Need either --list or --update, Try facts --help"
-msgstr ""
-"오류: --list 또는 --update가 필요합니다. facts --help를 시도해 보십시오 "
+msgstr "오류: --list 또는 --update가 필요합니다. facts --help를 시도해 보십시오 "
 
 #: ../src/managercli.py:667
 msgid "list available or consumer subscriptions for registered user"
@@ -458,10 +454,8 @@ msgid "available"
 msgstr "사용 가능 "
 
 #: ../src/managercli.py:676
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
-msgstr ""
-"검색할 날짜입니다. 오늘 날짜가 기본값입니다. --available과만 함께 사용됨   "
+msgid "date to search on, defaults to today's date, only used with --available "
+msgstr "검색할 날짜입니다. 오늘 날짜가 기본값입니다. --available과만 함께 사용됨   "
 
 #: ../src/managercli.py:679
 msgid "consumed"
@@ -659,7 +653,7 @@ msgstr "기간: %d(ms)"
 #: ../src/hwprobe.py:60
 #, python-format
 msgid "Error reading system DMI information: %s"
-msgstr ""
+msgstr "시스템 DMI 정보를 읽는 도중 오류 발생: %s"
 
 #: ../src/hwprobe.py:116
 msgid "Error reading system memory information:"
@@ -715,8 +709,7 @@ msgstr "인증서를 선택하셔야 합니다. "
 #: ../src/gui/importsub.py:73
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
-msgstr ""
-"%s 은(는) 유효한 인증서 파일이 아닙니다. 유효한 인증서를 업로드하십시오. "
+msgstr "%s 은(는) 유효한 인증서 파일이 아닙니다. 유효한 인증서를 업로드하십시오. "
 
 #: ../src/gui/widgets.py:150
 #, python-format
@@ -742,21 +735,21 @@ msgstr "오늘 "
 
 #: ../src/gui/managergui.py:371
 msgid "You must register before using the subscription assistant."
-msgstr ""
+msgstr "서브스크립션 어시스턴트를 사용하기전 등록해야 합니다.   "
 
 #: ../src/gui/managergui.py:402
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr ""
+msgstr "유효하지 않은 인타이틀먼트 인증서가 있는 <b>%s</b> 제품이 있습니다.   "
 
 #: ../src/gui/managergui.py:406
 msgid "You have <b>1</b> product without a valid entitlement certificate."
-msgstr ""
+msgstr "유효한 인타이틀먼트 인증서가 없는 <b>1</b> 제품이 있습니다.   "
 
 #: ../src/gui/managergui.py:413
 #, python-format
 msgid "Product entitlement certificates valid through %s"
-msgstr ""
+msgstr "%s 동안 제품 인타이틀먼트 인증서가 유효함 "
 
 #: ../src/gui/managergui.py:536
 msgid "You must enter a system name."
@@ -782,7 +775,7 @@ msgstr "종료 날짜  "
 
 #: ../src/gui/compliance.py:141
 msgid "Subscription List"
-msgstr ""
+msgstr "서브스크립션 목록 "
 
 #. Set up columns on the view
 #: ../src/gui/compliance.py:142 ../src/gui/allsubs.py:56
@@ -795,6 +788,8 @@ msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
 msgstr ""
+"서브스크립션 어시스턴트 표시 오류. 자세한 정보는 /var/log/rhsm/rhsm.log에서 "
+"확인하십시오. "
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -803,12 +798,12 @@ msgstr "서브스크립션을 검색할 수 없음 "
 #: ../src/gui/compliance.py:214
 #, python-format
 msgid "Software entitlements valid through %s"
-msgstr ""
+msgstr "%s 동안 소프트웨어 인타이틀먼트가 유효합니다 "
 
 #: ../src/gui/compliance.py:218
 #, python-format
 msgid "%s (first date of invalid entitlements)"
-msgstr ""
+msgstr "%s (유효하지 않은 인타이틀먼트의 첫 번째 날짜)   "
 
 #: ../src/gui/compliance.py:220
 #, python-format
@@ -915,7 +910,7 @@ msgstr "버전 "
 
 #: ../src/gui/installedtab.py:54
 msgid "Certificate"
-msgstr ""
+msgstr "인증서  "
 
 #: ../src/gui/installedtab.py:95
 msgid "Future Subscription"
@@ -927,7 +922,7 @@ msgstr "전혀 등록되지 않음 "
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
-msgstr ""
+msgstr "유효하지 않음 "
 
 #: ../src/gui/installedtab.py:101
 #, python-format
@@ -936,7 +931,7 @@ msgstr "%s 서브스크립션은 만료됨 "
 
 #: ../src/gui/installedtab.py:104
 msgid "Valid"
-msgstr ""
+msgstr "유효함"
 
 #: ../src/gui/installedtab.py:106
 #, python-format
@@ -945,7 +940,7 @@ msgstr "%s 통한 계약 %s의 범위 안에 있음 "
 
 #: ../src/gui/installedtab.py:111
 msgid "Missing"
-msgstr ""
+msgstr "누락됨 "
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -953,7 +948,7 @@ msgstr "내 설치된 소프트웨어 "
 
 #: ../src/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
-msgstr ""
+msgstr "<b>인증서 상태:</b>  "
 
 #: ../src/gui/data/installed.glade.h:2
 msgid "<b>Product's Subscription Details</b>"
@@ -969,7 +964,7 @@ msgstr "<b>서브스크립션:</b>"
 
 #: ../src/gui/data/installed.glade.h:5 ../src/gui/data/mainwindow.glade.h:4
 msgid "Certificate Status"
-msgstr ""
+msgstr "인증서 상태 "
 
 #: ../src/gui/data/installed.glade.h:6
 msgid "Installed View"
@@ -1015,54 +1010,54 @@ msgstr "사용자 이름 텍스트 "
 #: ../src/gui/data/networkConfig.glade.h:9
 msgctxt "yes"
 msgid "<b>HTTP Proxy</b>"
-msgstr ""
+msgstr "<b>HTTP Proxy</b>  "
 
 #: ../src/gui/data/networkConfig.glade.h:10
 msgctxt "yes"
 msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-msgstr ""
+msgstr "<small><b>예:</b> squid.example.com:3128</small>   "
 
 #: ../src/gui/data/networkConfig.glade.h:11
 msgctxt "yes"
 msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-msgstr ""
+msgstr "HTTP proxy를 통해 Red Hat Network에 연결하고자 합니다(_H).   "
 
 #: ../src/gui/data/networkConfig.glade.h:12
 msgctxt "yes"
 msgid "Proxy P_assword:"
-msgstr ""
+msgstr "Proxy 암호(_a):  "
 
 #: ../src/gui/data/networkConfig.glade.h:13
 msgctxt "yes"
 msgid "Proxy _Username:"
-msgstr ""
+msgstr "Proxy 사용자 이름(_U):   "
 
 #: ../src/gui/data/networkConfig.glade.h:14
 msgctxt "yes"
 msgid "Use Au_thentication with HTTP Proxy:"
-msgstr ""
+msgstr "HTTP Proxy로 인증 사용(_t):   "
 
 #: ../src/gui/data/networkConfig.glade.h:15
 msgctxt "yes"
 msgid "_Close"
-msgstr ""
+msgstr "종료(_C)  "
 
 #: ../src/gui/data/networkConfig.glade.h:16
 msgctxt "yes"
 msgid "_Proxy Location:"
-msgstr ""
+msgstr "Proxy 위치(_P):   "
 
 #: ../src/gui/data/compliance.glade.h:1
 msgid "A different date:"
-msgstr ""
+msgstr "다른 날짜: "
 
 #: ../src/gui/data/compliance.glade.h:2
 msgid "Invalid Product List"
-msgstr ""
+msgstr "유효하지 않는 제품 목록 "
 
 #: ../src/gui/data/compliance.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
-msgstr ""
+msgstr "유효하지 않은 인타이틀먼트 인증서를 갖는 제품 보기:     "
 
 #: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
 msgid "Subscribe"
@@ -1070,71 +1065,71 @@ msgstr "등록 "
 
 #: ../src/gui/data/compliance.glade.h:5
 msgid "Subscription Action Area"
-msgstr ""
+msgstr "서브스크립션 작업 영역 "
 
 #: ../src/gui/data/compliance.glade.h:6
 msgid "Subscription Assistant"
-msgstr ""
+msgstr "서브스크립션 어시스턴트 "
 
 #: ../src/gui/data/compliance.glade.h:7
 msgid "Subscription Assistant Box"
-msgstr ""
+msgstr "서브스크립션 어시스턴트 상자 "
 
 #: ../src/gui/data/compliance.glade.h:8
 msgid "Subscription Assistant Status"
-msgstr ""
+msgstr "서브스크립션 어시스턴트 상태 "
 
 #: ../src/gui/data/compliance.glade.h:9
 msgid "Subscription Date Box"
-msgstr ""
+msgstr "서브스크립션 날짜 상자 "
 
 #: ../src/gui/data/compliance.glade.h:10
 msgid "Subscription Date Label"
-msgstr ""
+msgstr "서브스크립션 날짜 레이블 "
 
 #: ../src/gui/data/compliance.glade.h:11
 msgid "Subscription Date Picker"
-msgstr ""
+msgstr "서브스크립션 날짜 선택자 "
 
 #: ../src/gui/data/compliance.glade.h:12
 msgid "Subscription Details"
-msgstr ""
+msgstr "서브스크립션 정보  "
 
 #: ../src/gui/data/compliance.glade.h:13
 msgid "Subscription Label"
-msgstr ""
+msgstr "서브스크립션 레이블 "
 
 #: ../src/gui/data/compliance.glade.h:14
 msgid "Subscription Label Box"
-msgstr ""
+msgstr "서브스크립션 레이블 상자 "
 
 #: ../src/gui/data/compliance.glade.h:15
 msgid "Subscription Manager - Subscription Assistant"
-msgstr ""
+msgstr "서브스크립션 관리자 - 서브스크립션 어시스턴트 "
 
 #: ../src/gui/data/compliance.glade.h:16
 msgid "Subscription Product List"
-msgstr ""
+msgstr "서브스크립션 제품 목록 "
 
 #: ../src/gui/data/compliance.glade.h:17
 msgid "Subscription Subscriptions Box"
-msgstr ""
+msgstr "서브스크립션 상자 "
 
 #: ../src/gui/data/compliance.glade.h:18
 msgid "Subscription Subscriptions Label"
-msgstr ""
+msgstr "서브스크립션 레이블 "
 
 #: ../src/gui/data/compliance.glade.h:19
 msgid "Subscription Update Box"
-msgstr ""
+msgstr "서브스크립션 업데이트 상자 "
 
 #: ../src/gui/data/compliance.glade.h:20
 msgid "Subscriptions List"
-msgstr ""
+msgstr "서브스크립션 목록 "
 
 #: ../src/gui/data/compliance.glade.h:21
 msgid "Subscriptions Panel"
-msgstr ""
+msgstr "서브스크립션 패널 "
 
 #: ../src/gui/data/compliance.glade.h:22
 msgid "The following subscriptions will cover the products selected above:"
@@ -1212,14 +1207,14 @@ msgstr "update_subscriptions_dialog\n"
 #: ../src/gui/data/rhsm.glade.h:17 ../src/gui/data/importsub.glade.h:3
 msgctxt "yes"
 msgid "Certificate _Location:"
-msgstr ""
+msgstr "인증서 위치(_L):   "
 
 #: ../src/gui/data/rhsm.glade.h:18
 msgctxt "yes"
 msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
-msgstr ""
+msgstr "서브스크립션을 추가하려면, 서브스크립션 인증서 디렉토리로 가져올 인증서를 선택합니다.     "
 
 #: ../src/gui/data/activate.glade.h:1
 msgid "Activate"
@@ -1249,7 +1244,7 @@ msgstr "서브스크립션 활성화 "
 
 #: ../src/gui/data/mainwindow.glade.h:1
 msgid "<b>Certificate Status</b>"
-msgstr ""
+msgstr "<b>인증서 상태</b>"
 
 #: ../src/gui/data/mainwindow.glade.h:2
 msgid "<b>Tools</b>"
@@ -1273,7 +1268,7 @@ msgstr "시스템 등록 취소 "
 
 #: ../src/gui/data/mainwindow.glade.h:10
 msgid "Update Certificates"
-msgstr ""
+msgstr "인증서 업데이트 "
 
 #: ../src/gui/data/mainwindow.glade.h:11
 msgid "View System Facts"
@@ -1281,7 +1276,7 @@ msgstr "시스템 정보 보기 "
 
 #: ../src/gui/data/mainwindow.glade.h:12
 msgid "You have one product without a valid entitlement certificate."
-msgstr ""
+msgstr "유효한 인타이틀먼트 인증서가 없는 제품이 하나 있습니다.  "
 
 #: ../src/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
@@ -1365,9 +1360,8 @@ msgstr "제품 서브스크립션 관리 "
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
-msgstr ""
+msgid "Choose a certificate to import to your subscription certificate directory."
+msgstr "서브스크립션 인증서 디렉토리로 가져올 인증서를 선택합니다.   "
 
 #: ../src/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
@@ -1478,17 +1472,17 @@ msgstr "registration_dialog_action_area\n"
 #: ../src/gui/data/registration.glade.h:13
 msgctxt "yes"
 msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr ""
+msgstr "<b>Red Hat Network 계정 정보를 입력해 주십시오:</b>   "
 
 #: ../src/gui/data/registration.glade.h:14
 msgctxt "yes"
 msgid "Password:"
-msgstr ""
+msgstr "암호:  "
 
 #: ../src/gui/data/registration.glade.h:15
 msgctxt "yes"
 msgid "Red Hat Login:"
-msgstr ""
+msgstr "Red Hat 로그인:   "
 
 #: ../src/gui/data/progress.glade.h:1
 msgid "Progress Dialog"
@@ -1497,31 +1491,31 @@ msgstr "진행 상태 대화창 "
 #: ../src/gui/data/contract_selection.glade.h:1
 msgctxt "yes"
 msgid "<b>Choose the specific contract to use:</b>"
-msgstr ""
+msgstr "<b>사용할 특정 계약 선택:</b>  "
 
 #: ../src/gui/data/contract_selection.glade.h:2
 msgctxt "yes"
 msgid "<b>Subscription:</b>"
-msgstr ""
+msgstr "<b>서브스크립션:</b> "
 
 #: ../src/gui/data/contract_selection.glade.h:3
 msgctxt "yes"
 msgid "<b>Total Contracts:</b>"
-msgstr ""
+msgstr "<b>총 계약 수:</b>  "
 
 #: ../src/gui/data/contract_selection.glade.h:4
 msgctxt "yes"
 msgid "Contract Selection"
-msgstr ""
+msgstr "계약 선택   "
 
 #: ../src/gui/data/contract_selection.glade.h:5
 msgctxt "yes"
 msgid "Subscribe"
-msgstr ""
+msgstr "등록  "
 
 #: ../src/compliance/rhsm_compliance_icon.c:43
 msgid "How often to check for validity (in seconds)"
-msgstr ""
+msgstr "유효성 확인 빈도 (초 단위)  "
 
 #: ../src/compliance/rhsm_compliance_icon.c:45
 msgid "Show debug messages"
@@ -1529,16 +1523,16 @@ msgstr "디버그 메세지 보기 "
 
 #: ../src/compliance/rhsm_compliance_icon.c:47
 msgid "Force display of the icon (expired or warning)"
-msgstr ""
+msgstr "아이콘 (만료 또는 경고) 강제 표시 "
 
 #: ../src/compliance/rhsm_compliance_icon.c:170
 #: ../src/compliance/rhsm_compliance_icon.c:171
 msgid "Invalid or Missing Entitlement Certificates"
-msgstr ""
+msgstr "유효한 또는 누락된 인타이틀먼트 인증서 "
 
 #: ../src/compliance/rhsm_compliance_icon.c:172
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr ""
+msgstr "시스템에는 하나 이상의 유요한 인타이틀먼트 인증서가 누락되어 있습니다.  "
 
 #: ../src/compliance/rhsm_compliance_icon.c:176
 msgid "Some of the system's subscriptions are about to expire"
@@ -1550,7 +1544,7 @@ msgstr "이 시스템의 서브스크립션은 곧 만료됩니다 "
 
 #: ../src/compliance/rhsm_compliance_icon.c:179
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr ""
+msgstr "일부 시스템의 서브스크립션은 곧 만료됩니다. "
 
 #: ../src/compliance/rhsm_compliance_icon.c:197
 msgid "Remind Me Later"
@@ -1578,204 +1572,13 @@ msgstr "옵션 구문 분석 실패: %s\n"
 
 #: ../etc-conf/subscription-manager.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
-msgstr ""
+msgstr "Red Hat 서브스크립션 관리자 "
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
-msgstr ""
+msgstr "Red Hat 서브스크립션 유효 애플릿 "
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
-msgstr ""
+msgstr "서브스크립션 유효 애플릿 "
 
-#~ msgid "%s (first date of non-compliance)"
-#~ msgstr "%s (컴플라이언스 상태에 있지 않은 첫 번째 날짜)  "
-
-#~ msgid "<b>Choose the specific contract to use:</b>"
-#~ msgstr "<b>사용할 특정 계약 선택:</b> "
-
-#~ msgid "<b>Compliance Status</b>"
-#~ msgstr "<b>컴플라이언스 상태</b>"
-
-#~ msgid "<b>Compliance:</b>"
-#~ msgstr "<b>컴플라이언스:</b>"
-
-#~ msgid "<b>HTTP Proxy</b>"
-#~ msgstr "<b>HTTP Proxy</b> "
-
-#~ msgid "<b>Please enter your Red Hat Network account information:</b>"
-#~ msgstr "<b>Red Hat Network 계정 정보를 입력해 주십시오:</b>  "
-
-#~ msgid "<b>Total Contracts:</b>"
-#~ msgstr "<b>총 계약 수:</b> "
-
-#~ msgid "<big><b>All software is in compliance until %s</b></big>"
-#~ msgstr "<big><b>모든 소프트웨어는 %s 까지 컴플라이언스 상태</b></big>"
-
-#~ msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-#~ msgstr "<small><b>예:</b> squid.example.com:3128</small>  "
-
-#~ msgid "All products are in compliance until %s"
-#~ msgstr "모든 제품은 %s 까지 컴플라이언스 상태에 있습니다  "
-
-#~ msgid "Become Compliant"
-#~ msgstr "시스템 준수   "
-
-#~ msgid "Certificate _Location:"
-#~ msgstr "인증서 위치(_L):  "
-
-#~ msgid ""
-#~ "Choose a certificate to import to your subscription certificate directory."
-#~ msgstr "서브스크립션 인증서 디렉토리로 가져올 인증서를 선택합니다.  "
-
-#~ msgid "Compliance Action Area"
-#~ msgstr "컴플라이언스 작동 영역 "
-
-#~ msgid "Compliance Assistant"
-#~ msgstr "컴플라이언스 어시스턴트 "
-
-#~ msgid "Compliance Assistant Box"
-#~ msgstr "컴플라이언스 어시스턴트 상자 "
-
-#~ msgid "Compliance Assistant Status"
-#~ msgstr "컴플라이언스 어시스턴트 상태 "
-
-#~ msgid "Compliance Date Box"
-#~ msgstr "컴플라이언스 날짜 상자 "
-
-#~ msgid "Compliance Date Label"
-#~ msgstr "컴플라이언스 날짜 레이블 "
-
-#~ msgid "Compliance Date Picker"
-#~ msgstr "컴플라이언스 날짜 선택 "
-
-#~ msgid "Compliance Label"
-#~ msgstr "컴플라이언스 레이블 "
-
-#~ msgid "Compliance Label Box"
-#~ msgstr "컴플라이언스 레이블 상자 "
-
-#~ msgid "Compliance Product List"
-#~ msgstr "컴플라이언스 제품 목록 "
-
-#~ msgid "Compliance Status"
-#~ msgstr "컴플라이언스 상태 "
-
-#~ msgid "Compliance Subscription Details"
-#~ msgstr "컴플라이언스 서브스크립션 정보 "
-
-#~ msgid "Compliance Subscription List"
-#~ msgstr "컴플라이언스 서브스크립션 목록 "
-
-#~ msgid "Compliance Subscriptions Box"
-#~ msgstr "컴플라이언스 서브스크립션 상자 "
-
-#~ msgid "Compliance Subscriptions Label"
-#~ msgstr "컴플라이언스 서브스크립션 레이블 "
-
-#~ msgid "Compliance Subscriptions List"
-#~ msgstr "컴플라이언스 서브스크립션 목록 "
-
-#~ msgid "Compliance Subscriptions Panel"
-#~ msgstr "컴플라이언스 서브스크립션 패널 "
-
-#~ msgid "Compliance Update Box"
-#~ msgstr "컴플라이언스 업데이트 상자 "
-
-#~ msgid "Contract Selection"
-#~ msgstr "계약 선택  "
-
-#~ msgid ""
-#~ "Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log "
-#~ "for more information."
-#~ msgstr ""
-#~ "컴플라이언스 어시스턴트 표시 오류. 자세한 정보는 /var/log/rhsm/rhsm.log에"
-#~ "서 참조하십시오. "
-
-#~ msgid "Error reading system DMI information:"
-#~ msgstr "시스템 DMI 정보를 읽는 도중 오류 발생:  "
-
-#~ msgid "Force display of the compliance icon (expired or warning)"
-#~ msgstr "컴플라이언스 아이콘 (만료 또는 경고) 강제 표시 "
-
-#~ msgid "How often to check for compliance (in seconds)"
-#~ msgstr "시스템 컴플라이언스 확인 빈도 (초 단위)  "
-
-#~ msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-#~ msgstr "HTTP proxy를 통해 Red Hat Network에 연결하고자 합니다(_H).  "
-
-#~ msgid "In Compliance"
-#~ msgstr "컴플라이언스"
-
-#~ msgid "On a different date:"
-#~ msgstr "다른 날짜에: "
-
-#~ msgid ""
-#~ "One or more of this system's subscriptions are about to expire. These "
-#~ "subscriptions are required for compliance with your subscription "
-#~ "agreements."
-#~ msgstr ""
-#~ "하나 이상의 시스템 서브스크립션이 곧 만료됩니다. 이러한 서브스크립션은 서"
-#~ "브스크립션 계약에 준수하여야 합니다.  "
-
-#~ msgid "Out of Compliance"
-#~ msgstr "컴플라이언스 상태에서 벗어남 "
-
-#~ msgid "Password:"
-#~ msgstr "암호: "
-
-#~ msgid "Proxy P_assword:"
-#~ msgstr "Proxy 암호(_a): "
-
-#~ msgid "Proxy _Username:"
-#~ msgstr "Proxy 사용자 이름(_U):  "
-
-#~ msgid "Red Hat Login:"
-#~ msgstr "Red Hat 로그인:  "
-
-#~ msgid "Show products that will be out of compliance as of:"
-#~ msgstr "다음의 컴플라이언스 상태에서 벗어난 제품 보기: "
-
-#~ msgid "Subscription Manager - Compliance Assistant"
-#~ msgstr "서브스크립션 관리자 - 컴플라이언스 어시스턴트 "
-
-#~ msgid "This System is Non-Compliant"
-#~ msgstr "시스템은 규제에 준수하지 않음  "
-
-#~ msgid ""
-#~ "This system is missing one or more subscriptions required for compliance "
-#~ "with your subscription agreements."
-#~ msgstr ""
-#~ "서브스크립션 계약에 준수하는 하나 이상의 시스템 서브스크립션이 누락되었습"
-#~ "니다.   "
-
-#~ msgid "This system is non-compliant"
-#~ msgstr "시스템은 규제에 준수하지 않음 "
-
-#~ msgid ""
-#~ "To add a subscription, choose a certificate to import to your "
-#~ "subscription certificate directory."
-#~ msgstr ""
-#~ "서브스크립션을 추가하려면, 서브스크립션 인증서 디렉토리로 가져올 인증서를 "
-#~ "선택합니다.  "
-
-#~ msgid "Use Au_thentication with HTTP Proxy:"
-#~ msgstr "HTTP Proxy로 인증 사용(_t):  "
-
-#~ msgid "You have <b>%s</b> products out of compliance."
-#~ msgstr "컴플라이언스 상태에서 벗어난 <b>%s</b> 제품이 있습니다.  "
-
-#~ msgid "You have <b>1</b> product out of compliance."
-#~ msgstr "컴플라이언스 상태에서 벗어난 <b>1</b> 제품이 있습니다.  "
-
-#~ msgid "You have one product which is out of compliance."
-#~ msgstr "컴플라이언스 상태에서 제외된 제품이 하나 있습니다.  "
-
-#~ msgid "You must register before using the compliance assistant."
-#~ msgstr "컴플라이언스 어시스턴트를 사용하려면 먼저 등록해야 합니다.  "
-
-#~ msgid "_Close"
-#~ msgstr "종료(_C) "
-
-#~ msgid "_Proxy Location:"
-#~ msgstr "Proxy 위치(_P):  "
