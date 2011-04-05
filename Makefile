@@ -158,6 +158,11 @@ update-po:
 		msgmerge -N --backup=none -U $$f po/keys.pot ; \
 	done
 
+uniq-po:
+	for f in $(shell find po/ -name "*.po") ; do \
+		msguniq $$f -o $$f ; \
+	done
+
 # Compile translations
 compile-po:
 	for lang in $(basename $(notdir $(wildcard po/*.po))) ; do \
