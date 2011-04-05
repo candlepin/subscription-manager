@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"POT-Creation-Date: 2011-04-05 09:30-0300\n"
 "PO-Revision-Date: 2011-04-01 13:17\n"
 "Last-Translator: Yulia <ypoyarko@redhat.com>\n"
 "Language-Team: Russian\n"
@@ -18,7 +18,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: ../src/certlib.py:96
 msgid "Reasons(s):"
@@ -198,8 +199,8 @@ msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
 msgstr ""
-"Удалённая ошибка сервера. Проверьте настройки подключения или обратитесь к /var/"
-"log/rhsm/rhsm.log"
+"Удалённая ошибка сервера. Проверьте настройки подключения или обратитесь к /"
+"var/log/rhsm/rhsm.log"
 
 #: ../src/managercli.py:67 ../src/gui/utils.py:63
 #, python-format
@@ -227,7 +228,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "пароль для доступа к прокси HTTP с минимальной аутентификацией"
 
 #: ../src/managercli.py:137
-msgid "Consumer not registered. Please register using --username and --password"
+msgid ""
+"Consumer not registered. Please register using --username and --password"
 msgstr ""
 "Пользователь не зарегистрирован. Для регистрации добавьте аргументы -«-"
 "username» и «--password»"
@@ -254,7 +256,8 @@ msgstr "Пароль: "
 
 #: ../src/managercli.py:251
 msgid "removes all local consumer data, does not effect the server"
-msgstr "удаляет локальные данные пользователя без отражения изменений на сервере"
+msgstr ""
+"удаляет локальные данные пользователя без отражения изменений на сервере"
 
 #: ../src/managercli.py:264
 msgid "All local data removed"
@@ -292,7 +295,8 @@ msgstr ""
 "пароля)"
 
 #: ../src/managercli.py:306
-msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr "Пользователь не существует или повреждён. Выполните «register --help»."
 
 #: ../src/managercli.py:309
@@ -322,7 +326,8 @@ msgstr "тип регистрируемого пользователя. По у�
 
 #: ../src/managercli.py:359
 msgid "name of the consumer to register. Defaults to the hostname."
-msgstr "имя регистрируемого пользователя. По умолчанию используется имя компьютера."
+msgstr ""
+"имя регистрируемого пользователя. По умолчанию используется имя компьютера."
 
 #: ../src/managercli.py:361
 msgid "register to an existing consumer"
@@ -378,7 +383,8 @@ msgstr "активировать зарегистрированного поль
 
 #: ../src/managercli.py:478
 msgid "optional email address to notify when token activation is complete."
-msgstr "дополнительный адрес для отправки уведомлений об успешной активации ключа"
+msgstr ""
+"дополнительный адрес для отправки уведомлений об успешной активации ключа"
 
 #: ../src/managercli.py:481
 msgid ""
@@ -447,7 +453,8 @@ msgstr "обновить статистику"
 
 #: ../src/managercli.py:643
 msgid "Error: Need either --list or --update, Try facts --help"
-msgstr "Ошибка. Необходимо указать «--list» или «--update». Выполните «facts --help»"
+msgstr ""
+"Ошибка. Необходимо указать «--list» или «--update». Выполните «facts --help»"
 
 #: ../src/managercli.py:667
 msgid "list available or consumer subscriptions for registered user"
@@ -462,8 +469,10 @@ msgid "available"
 msgstr "доступно"
 
 #: ../src/managercli.py:676
-msgid "date to search on, defaults to today's date, only used with --available "
-msgstr "поиск по дате (по умолчанию сегодня), используется вместе с «--available»"
+msgid ""
+"date to search on, defaults to today's date, only used with --available "
+msgstr ""
+"поиск по дате (по умолчанию сегодня), используется вместе с «--available»"
 
 #: ../src/managercli.py:679
 msgid "consumed"
@@ -745,7 +754,8 @@ msgstr "Для доступа к помощнику по подписке нео
 #: ../src/gui/managergui.py:402
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr "Всего продуктов с недействительными сертификатами полномочий: <b>%s</b>"
+msgstr ""
+"Всего продуктов с недействительными сертификатами полномочий: <b>%s</b>"
 
 #: ../src/gui/managergui.py:406
 msgid "You have <b>1</b> product without a valid entitlement certificate."
@@ -792,7 +802,9 @@ msgstr "Подписка"
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
-msgstr "Ошибка отображения помощника. За информацией обратитесь к /var/log/rhsm/rhsm.log"
+msgstr ""
+"Ошибка отображения помощника. За информацией обратитесь к /var/log/rhsm/rhsm."
+"log"
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -919,9 +931,10 @@ msgstr "Сертификат"
 msgid "Future Subscription"
 msgstr "Будущая подписка"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "Никогда не подписывалась"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "Отсутствует"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
@@ -940,10 +953,6 @@ msgstr "Действительный"
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "Покрывается контрактом %s (%s)"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr "Отсутствует"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -1364,7 +1373,8 @@ msgstr "Управление подписками продуктов"
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid "Choose a certificate to import to your subscription certificate directory."
+msgid ""
+"Choose a certificate to import to your subscription certificate directory."
 msgstr "Выберите сертификат для импортирования."
 
 #: ../src/gui/data/mysubs.glade.h:1
@@ -1586,3 +1596,5 @@ msgstr "Апплет проверки подписки Red Hat"
 msgid "Subscription Validity Applet"
 msgstr "Апплет проверки подписки"
 
+#~ msgid "Never Subscribed"
+#~ msgstr "Никогда не подписывалась"

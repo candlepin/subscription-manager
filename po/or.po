@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"POT-Creation-Date: 2011-04-05 09:30-0300\n"
 "PO-Revision-Date: 2011-03-31 18:24+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
@@ -226,7 +226,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "ମୌଳିକ ବୈଧିକରଣ ସହିତ http ପ୍ରକ୍ସି ପାଇଁ ପ୍ରବେଶ ସଂକେତ"
 
 #: ../src/managercli.py:137
-msgid "Consumer not registered. Please register using --username and --password"
+msgid ""
+"Consumer not registered. Please register using --username and --password"
 msgstr ""
 "ପଞ୍ଜିକରଣ କରିନଥିବା ଗ୍ରାହକମାନେ। ଦୟାକରି --username ଏବଂ --password ବ୍ୟବହାର କରି ପଞ୍ଜିକରଣ "
 "କରନ୍ତୁ"
@@ -289,7 +290,8 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "ପ୍ରମାଣପତ୍ର ପୁନଃନିର୍ମାଣ ପାଇଁ ବାଧ୍ଯ କରନ୍ତୁ (ଚାଳକନାମ ଏବଂ ପ୍ରବେଶ ସଂକେତ ଆବଶ୍ୟକ)"
 
 #: ../src/managercli.py:306
-msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr "ଗ୍ରାହକ ପରିଚୟ ଉପସ୍ଥିତ ନାହିଁ ଅଥବା ତ୍ରୁଟିଯୁକ୍ତ ହୋଇଛି। register --help କୁ ଚେଷ୍ଟାକରନ୍ତୁ"
 
 #: ../src/managercli.py:309
@@ -457,7 +459,8 @@ msgid "available"
 msgstr "ଉପଲବ୍ଧ"
 
 #: ../src/managercli.py:676
-msgid "date to search on, defaults to today's date, only used with --available "
+msgid ""
+"date to search on, defaults to today's date, only used with --available "
 msgstr ""
 "ସନ୍ଧାନ କରିବା ପାଇଁ ତାରିଖ, ଆଜିର ତାରିଖକୁ ପୂର୍ବନିର୍ଦ୍ଧାରିତ କରି, କେବଳ --available ସହିତ ବ୍ୟବହାର "
 "କରାଯାଇଥାଏ"
@@ -488,7 +491,8 @@ msgstr "    ସ୍ଥାପିତ ବସ୍ତୁ ସ୍ଥିତି"
 
 #: ../src/managercli.py:718
 msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-msgstr "ଭରଣ କରାଯାଇଥିବା ତାରିଖଟି ଅବୈଧ ଅଟେ। ତାରିଖଟି YYYY-MM-DD ଶୈଳୀରେ ରହିବା ଉଚିତ (ଉଦାହରଣ: "
+msgstr ""
+"ଭରଣ କରାଯାଇଥିବା ତାରିଖଟି ଅବୈଧ ଅଟେ। ତାରିଖଟି YYYY-MM-DD ଶୈଳୀରେ ରହିବା ଉଚିତ (ଉଦାହରଣ: "
 
 #: ../src/managercli.py:725
 msgid "No Available subscription pools to list"
@@ -791,8 +795,8 @@ msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
 msgstr ""
-"ସଦସ୍ୟତା ସହାୟତା ଦର୍ଶାଇବାରେ ତ୍ରୁଟି। ଅଧିକ ସୂଚନା ପାଇବା ପାଇଁ ଦୟାକରି /var/log/rhsm/rhsm.logକୁ "
-"ଦେଖନ୍ତୁ।"
+"ସଦସ୍ୟତା ସହାୟତା ଦର୍ଶାଇବାରେ ତ୍ରୁଟି। ଅଧିକ ସୂଚନା ପାଇବା ପାଇଁ ଦୟାକରି /var/log/rhsm/rhsm."
+"logକୁ ଦେଖନ୍ତୁ।"
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -919,9 +923,10 @@ msgstr "ପ୍ରମାଣପତ୍ର"
 msgid "Future Subscription"
 msgstr "ଭବିଷ୍ଯତ ସଦସ୍ୟତା"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "ସଦସ୍ୟତା ଗ୍ରହଣ କରିନାହିଁ"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "ଅନୁପସ୍ଥିତ"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
@@ -940,10 +945,6 @@ msgstr "ବୈଧ"
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "%s ମାଧ୍ଯମରେ ରାଜିନାମା %s ଦ୍ୱାରା କାର୍ଯ୍ୟକାରୀ ହୋଇଛି"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr "ଅନୁପସ୍ଥିତ"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -1218,8 +1219,8 @@ msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
 msgstr ""
-"ଗୋଟିଏ ସଦସ୍ୟତା ଯୋଗ କରିବା ପାଇଁ, ସଦସ୍ୟତା ପ୍ରମାଣ ପତ୍ର ଡିରେକ୍ଟୋରୀକୁ ଆମଦାନୀ କରିବା ପାଇଁ "
-"ଗୋଟିଏ ପ୍ରମାଣ ପତ୍ର ବାଛନ୍ତୁ।"
+"ଗୋଟିଏ ସଦସ୍ୟତା ଯୋଗ କରିବା ପାଇଁ, ସଦସ୍ୟତା ପ୍ରମାଣ ପତ୍ର ଡିରେକ୍ଟୋରୀକୁ ଆମଦାନୀ କରିବା ପାଇଁ ଗୋଟିଏ "
+"ପ୍ରମାଣ ପତ୍ର ବାଛନ୍ତୁ।"
 
 #: ../src/gui/data/activate.glade.h:1
 msgid "Activate"
@@ -1365,7 +1366,8 @@ msgstr "ଆପଣଙ୍କର ଉତ୍ପାଦନ ସଦସ୍ୟତାଗୁ�
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid "Choose a certificate to import to your subscription certificate directory."
+msgid ""
+"Choose a certificate to import to your subscription certificate directory."
 msgstr "ସଦସ୍ୟତା ପ୍ରମାଣ ପତ୍ର ଡିରେକ୍ଟୋରୀକୁ ଆମଦାନୀ କରିବା ପାଇଁ ଗୋଟିଏ ପ୍ରମାଣ ପତ୍ର ବାଛନ୍ତୁ।"
 
 #: ../src/gui/data/mysubs.glade.h:1
@@ -1528,7 +1530,8 @@ msgstr "ତ୍ରୁଟିନିବାରଣ ସନ୍ଦେଶଗୁଡ଼ି�
 
 #: ../src/compliance/rhsm_compliance_icon.c:47
 msgid "Force display of the icon (expired or warning)"
-msgstr "ସ୍ୱୀକୃତି ଚିତ୍ରସଂକେତର ପ୍ରଦର୍ଶନୀକୁ ବାଧ୍ୟତାମୂଳକ ଭାବରେ ଦର୍ଶାନ୍ତୁ (ସମୟ ସମାପ୍ତି ଅଥବା ଚେତାବନୀ)"
+msgstr ""
+"ସ୍ୱୀକୃତି ଚିତ୍ରସଂକେତର ପ୍ରଦର୍ଶନୀକୁ ବାଧ୍ୟତାମୂଳକ ଭାବରେ ଦର୍ଶାନ୍ତୁ (ସମୟ ସମାପ୍ତି ଅଥବା ଚେତାବନୀ)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:170
 #: ../src/compliance/rhsm_compliance_icon.c:171
@@ -1586,6 +1589,9 @@ msgstr "Red Hat ସଦସ୍ୟତା ବୈଧତା ଆପଲେଟ"
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
 msgstr "Red Hat ସଦସ୍ୟତା ବୈଧତା ଆପଲେଟ"
+
+#~ msgid "Never Subscribed"
+#~ msgstr "ସଦସ୍ୟତା ଗ୍ରହଣ କରିନାହିଁ"
 
 #~ msgid "<b>Compliance:</b>"
 #~ msgstr "<b>ସମ୍ମତି:</b>"

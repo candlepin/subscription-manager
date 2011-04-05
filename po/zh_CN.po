@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"POT-Creation-Date: 2011-04-05 09:30-0300\n"
 "PO-Revision-Date: 2011-04-01 10:21+1000\n"
 "Last-Translator: Leah Liu <lliu@redhat.com>\n"
 "Language-Team: Wei Liu\n"
@@ -220,7 +220,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "使用基本验证的 http proxy 密码"
 
 #: ../src/managercli.py:137
-msgid "Consumer not registered. Please register using --username and --password"
+msgid ""
+"Consumer not registered. Please register using --username and --password"
 msgstr "用户没有注册。请使用 --username 和 --password 注册"
 
 #: ../src/managercli.py:192
@@ -281,7 +282,8 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "强制重新生成证书（需要用户名和密码）"
 
 #: ../src/managercli.py:306
-msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr "用户身份不存在或者被破坏。尝试 register --help 命令"
 
 #: ../src/managercli.py:309
@@ -447,7 +449,8 @@ msgid "available"
 msgstr "可用"
 
 #: ../src/managercli.py:676
-msgid "date to search on, defaults to today's date, only used with --available "
+msgid ""
+"date to search on, defaults to today's date, only used with --available "
 msgstr "要搜索的日期，默认为今天，只可与 --available 合用"
 
 #: ../src/managercli.py:679
@@ -903,9 +906,10 @@ msgstr "证书"
 msgid "Future Subscription"
 msgstr "未来订阅"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "从未订阅的"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "缺失"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
@@ -924,10 +928,6 @@ msgstr "有效"
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "合同 %s 到 %s 涵盖的"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr "缺失"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -1347,7 +1347,8 @@ msgstr "管理您的产品订阅"
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid "Choose a certificate to import to your subscription certificate directory."
+msgid ""
+"Choose a certificate to import to your subscription certificate directory."
 msgstr "选择一个证书将其导入您的订阅证书目录。"
 
 #: ../src/gui/data/mysubs.glade.h:1
@@ -1569,3 +1570,5 @@ msgstr "红帽订阅有效性程序"
 msgid "Subscription Validity Applet"
 msgstr "订阅有效性程序"
 
+#~ msgid "Never Subscribed"
+#~ msgstr "从未订阅的"

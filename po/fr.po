@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"POT-Creation-Date: 2011-04-05 09:30-0300\n"
 "PO-Revision-Date: 2011-04-01 10:55+1000\n"
 "Last-Translator: Sam Friedmann <sam.friedmann@redhat.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -227,7 +227,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "mot de passe pour proxy http avec authentification de base"
 
 #: ../src/managercli.py:137
-msgid "Consumer not registered. Please register using --username and --password"
+msgid ""
+"Consumer not registered. Please register using --username and --password"
 msgstr ""
 "Consommateur non enregistré. Veuillez vous enregistrer à l'aide --username "
 "et --password"
@@ -254,7 +255,8 @@ msgstr "Mot de passe : "
 
 #: ../src/managercli.py:251
 msgid "removes all local consumer data, does not effect the server"
-msgstr "supprime toutes les données locales du consommateur, n'affecte pas le serveur"
+msgstr ""
+"supprime toutes les données locales du consommateur, n'affecte pas le serveur"
 
 #: ../src/managercli.py:264
 msgid "All local data removed"
@@ -292,7 +294,8 @@ msgstr ""
 "mot de passe)"
 
 #: ../src/managercli.py:306
-msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 "L'identité du consommateur n'existe pas ou est corrompue. Essayez register --"
 "help"
@@ -473,7 +476,8 @@ msgid "available"
 msgstr "disponible"
 
 #: ../src/managercli.py:676
-msgid "date to search on, defaults to today's date, only used with --available "
+msgid ""
+"date to search on, defaults to today's date, only used with --available "
 msgstr ""
 "date à rechercher, date actuelle par défaut, uniquement utilisé avec --"
 "available "
@@ -693,7 +697,8 @@ msgstr "Erreur lors de la lecture des informations réseau du système :"
 
 #: ../src/hwprobe.py:161
 msgid "Error reading net Interface information:"
-msgstr "Erreur lors de la lecture des informations de l'interface net du système :"
+msgstr ""
+"Erreur lors de la lecture des informations de l'interface net du système :"
 
 #: ../src/certmgr.py:89
 msgid "Updating Red Hat certificates & repositories"
@@ -766,11 +771,14 @@ msgstr "Vous devez vous enregistrer avant d'utiliser l'Assistant Abonnement"
 #: ../src/gui/managergui.py:402
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr "Vous possédez <b>%s</b> produits avec des certificats de droits d'accès invalides."
+msgstr ""
+"Vous possédez <b>%s</b> produits avec des certificats de droits d'accès "
+"invalides."
 
 #: ../src/gui/managergui.py:406
 msgid "You have <b>1</b> product without a valid entitlement certificate."
-msgstr "Vous possédez <b>1</b> produit sans certificat de droit d'accès valide."
+msgstr ""
+"Vous possédez <b>1</b> produit sans certificat de droit d'accès valide."
 
 #: ../src/gui/managergui.py:413
 #, python-format
@@ -813,7 +821,9 @@ msgstr "Abonnement"
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
-msgstr "Erreur lors de l'affichage de l'Assistant Abonnement. Veuillez voir /var/log/rhsm/rhsm.log pour plus d'informations."
+msgstr ""
+"Erreur lors de l'affichage de l'Assistant Abonnement. Veuillez voir /var/log/"
+"rhsm/rhsm.log pour plus d'informations."
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -943,9 +953,10 @@ msgstr "Certificat"
 msgid "Future Subscription"
 msgstr "Futur abonnement"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "Jamais abonné"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "Manquant"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
@@ -964,10 +975,6 @@ msgstr "Valide"
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "Couvert par le contrat %s à %s"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr "Manquant"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -1084,7 +1091,9 @@ msgstr "Liste des produits invalides"
 
 #: ../src/gui/data/compliance.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
-msgstr "Afficher les produits avec des certificats de droits d'accès invalides à partir de :"
+msgstr ""
+"Afficher les produits avec des certificats de droits d'accès invalides à "
+"partir de :"
 
 #: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
 msgid "Subscribe"
@@ -1160,7 +1169,8 @@ msgstr "Panneau des abonnements"
 
 #: ../src/gui/data/compliance.glade.h:22
 msgid "The following subscriptions will cover the products selected above:"
-msgstr "Les abonnements suivant couvriront les produits sélectionnés ci-dessus :"
+msgstr ""
+"Les abonnements suivant couvriront les produits sélectionnés ci-dessus :"
 
 #: ../src/gui/data/compliance.glade.h:23 ../src/gui/data/allsubs.glade.h:13
 msgid "Update"
@@ -1305,7 +1315,8 @@ msgstr "Voir les faits du système"
 
 #: ../src/gui/data/mainwindow.glade.h:12
 msgid "You have one product without a valid entitlement certificate."
-msgstr "Un de vos produits ne possède pas de certificat de droit d'accès valide."
+msgstr ""
+"Un de vos produits ne possède pas de certificat de droit d'accès valide."
 
 #: ../src/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
@@ -1389,8 +1400,11 @@ msgstr "Gérez vos abonnements produit"
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid "Choose a certificate to import to your subscription certificate directory."
-msgstr "Choisissez un certificat à importer vers votre répertoire de certificats d'abonnement."
+msgid ""
+"Choose a certificate to import to your subscription certificate directory."
+msgstr ""
+"Choisissez un certificat à importer vers votre répertoire de certificats "
+"d'abonnement."
 
 #: ../src/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
@@ -1502,7 +1516,8 @@ msgstr "registration_dialog_action_area\n"
 #: ../src/gui/data/registration.glade.h:13
 msgctxt "yes"
 msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr "<b>Veuillez saisir les informations de votre compte Red Hat Network :</b>"
+msgstr ""
+"<b>Veuillez saisir les informations de votre compte Red Hat Network :</b>"
 
 #: ../src/gui/data/registration.glade.h:14
 msgctxt "yes"
@@ -1562,7 +1577,8 @@ msgstr "Certificats de droits d'accès invalides ou manquants"
 
 #: ../src/compliance/rhsm_compliance_icon.c:172
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr "Il manque un ou plusieurs certificats de droits d'accès valides à ce système."
+msgstr ""
+"Il manque un ou plusieurs certificats de droits d'accès valides à ce système."
 
 #: ../src/compliance/rhsm_compliance_icon.c:176
 msgid "Some of the system's subscriptions are about to expire"
@@ -1612,3 +1628,5 @@ msgstr "Applet de validité des abonnements Red Hat"
 msgid "Subscription Validity Applet"
 msgstr "Applet de validité d'abonnements"
 
+#~ msgid "Never Subscribed"
+#~ msgstr "Jamais abonné"

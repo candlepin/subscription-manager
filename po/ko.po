@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"POT-Creation-Date: 2011-04-05 09:30-0300\n"
 "PO-Revision-Date: 2011-04-01 12:50+1000\n"
 "Last-Translator: Eun-Ju Kim <eukim@redhat.com>\n"
 "Language-Team:  <ko@li.org>\n"
@@ -223,7 +223,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "기본 인증을 갖는 http proxy 암호 "
 
 #: ../src/managercli.py:137
-msgid "Consumer not registered. Please register using --username and --password"
+msgid ""
+"Consumer not registered. Please register using --username and --password"
 msgstr ""
 "사용자가 등록되어 있지 않습니다. --username 및 --password를 사용하여 등록하십"
 "시오.   "
@@ -286,7 +287,8 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "인증서 재 생성을 강제합니다 (사용자 이름 및 암호 필요) "
 
 #: ../src/managercli.py:306
-msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 "사용자 id는 존재하지 않거나 손상되었습니다. register --help를 실행해 보십시"
 "오  "
@@ -328,7 +330,8 @@ msgstr "기존 사용자에 대한 등록 "
 msgid ""
 "automatically subscribe this system to                                     "
 "compatible subscriptions."
-msgstr "이 시스템을 자동으로 호환                             서브스크립션에 등록.  "
+msgstr ""
+"이 시스템을 자동으로 호환                             서브스크립션에 등록.  "
 
 #: ../src/managercli.py:366
 msgid "register the system even if it is already registered"
@@ -439,7 +442,8 @@ msgstr "시스템 정보 업데이트 "
 
 #: ../src/managercli.py:643
 msgid "Error: Need either --list or --update, Try facts --help"
-msgstr "오류: --list 또는 --update가 필요합니다. facts --help를 시도해 보십시오 "
+msgstr ""
+"오류: --list 또는 --update가 필요합니다. facts --help를 시도해 보십시오 "
 
 #: ../src/managercli.py:667
 msgid "list available or consumer subscriptions for registered user"
@@ -454,8 +458,10 @@ msgid "available"
 msgstr "사용 가능 "
 
 #: ../src/managercli.py:676
-msgid "date to search on, defaults to today's date, only used with --available "
-msgstr "검색할 날짜입니다. 오늘 날짜가 기본값입니다. --available과만 함께 사용됨   "
+msgid ""
+"date to search on, defaults to today's date, only used with --available "
+msgstr ""
+"검색할 날짜입니다. 오늘 날짜가 기본값입니다. --available과만 함께 사용됨   "
 
 #: ../src/managercli.py:679
 msgid "consumed"
@@ -709,7 +715,8 @@ msgstr "인증서를 선택하셔야 합니다. "
 #: ../src/gui/importsub.py:73
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
-msgstr "%s 은(는) 유효한 인증서 파일이 아닙니다. 유효한 인증서를 업로드하십시오. "
+msgstr ""
+"%s 은(는) 유효한 인증서 파일이 아닙니다. 유효한 인증서를 업로드하십시오. "
 
 #: ../src/gui/widgets.py:150
 #, python-format
@@ -916,9 +923,10 @@ msgstr "인증서  "
 msgid "Future Subscription"
 msgstr "차후 서브스크립션 "
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "전혀 등록되지 않음 "
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "누락됨 "
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
@@ -937,10 +945,6 @@ msgstr "유효함"
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "%s 통한 계약 %s의 범위 안에 있음 "
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr "누락됨 "
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -1214,7 +1218,9 @@ msgctxt "yes"
 msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
-msgstr "서브스크립션을 추가하려면, 서브스크립션 인증서 디렉토리로 가져올 인증서를 선택합니다.     "
+msgstr ""
+"서브스크립션을 추가하려면, 서브스크립션 인증서 디렉토리로 가져올 인증서를 선"
+"택합니다.     "
 
 #: ../src/gui/data/activate.glade.h:1
 msgid "Activate"
@@ -1360,7 +1366,8 @@ msgstr "제품 서브스크립션 관리 "
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid "Choose a certificate to import to your subscription certificate directory."
+msgid ""
+"Choose a certificate to import to your subscription certificate directory."
 msgstr "서브스크립션 인증서 디렉토리로 가져올 인증서를 선택합니다.   "
 
 #: ../src/gui/data/mysubs.glade.h:1
@@ -1532,7 +1539,8 @@ msgstr "유효한 또는 누락된 인타이틀먼트 인증서 "
 
 #: ../src/compliance/rhsm_compliance_icon.c:172
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr "시스템에는 하나 이상의 유요한 인타이틀먼트 인증서가 누락되어 있습니다.  "
+msgstr ""
+"시스템에는 하나 이상의 유요한 인타이틀먼트 인증서가 누락되어 있습니다.  "
 
 #: ../src/compliance/rhsm_compliance_icon.c:176
 msgid "Some of the system's subscriptions are about to expire"
@@ -1582,3 +1590,5 @@ msgstr "Red Hat 서브스크립션 유효 애플릿 "
 msgid "Subscription Validity Applet"
 msgstr "서브스크립션 유효 애플릿 "
 
+#~ msgid "Never Subscribed"
+#~ msgstr "전혀 등록되지 않음 "

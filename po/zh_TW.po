@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_TW\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"POT-Creation-Date: 2011-04-05 09:30-0300\n"
 "PO-Revision-Date: 2011-04-01 11:00+1000\n"
 "Last-Translator: Terry Chuang <tchuang@redhat.com>\n"
 "Language-Team: Traditional Chinese <zh@li.org>\n"
@@ -177,7 +177,8 @@ msgstr "更新詳情"
 msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
-msgstr "發生網路錯誤，無法連至伺服器。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+msgstr ""
+"發生網路錯誤，無法連至伺服器。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
 #. NOTE: yes this looks a lot like the socket error, but I think these
 #. were actually intended to display slightly different messages:
@@ -185,7 +186,8 @@ msgstr "發生網路錯誤，無法連至伺服器。請查看 /var/log/rhsm/rhs
 msgid ""
 "Network error. Please check the connection details, or see /var/log/rhsm/"
 "rhsm.log for more information."
-msgstr "發生網路錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+msgstr ""
+"發生網路錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
 #. This is what happens when there's an issue with the server on the other side of the wire
 #: ../src/managercli.py:58 ../src/gui/utils.py:59
@@ -222,7 +224,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "含有基本驗證的 http 代理伺服器的密碼"
 
 #: ../src/managercli.py:137
-msgid "Consumer not registered. Please register using --username and --password"
+msgid ""
+"Consumer not registered. Please register using --username and --password"
 msgstr "使用者尚未註冊。請使用 --username 和 --password 進行註冊"
 
 #: ../src/managercli.py:192
@@ -283,7 +286,8 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "強制產生認證（需要使用者名稱與密碼）"
 
 #: ../src/managercli.py:306
-msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr "使用者身份不存在，或是已損毀。請嘗試註冊 --help"
 
 #: ../src/managercli.py:309
@@ -449,7 +453,8 @@ msgid "available"
 msgstr "可使用"
 
 #: ../src/managercli.py:676
-msgid "date to search on, defaults to today's date, only used with --available "
+msgid ""
+"date to search on, defaults to today's date, only used with --available "
 msgstr "欲搜尋的日期，預設為今天的日期，僅搭配 --available 使用"
 
 #: ../src/managercli.py:679
@@ -778,7 +783,8 @@ msgstr "訂閱"
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
-msgstr "顯示規範協助時發生了錯誤。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+msgstr ""
+"顯示規範協助時發生了錯誤。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -905,9 +911,10 @@ msgstr "認證"
 msgid "Future Subscription"
 msgstr "未來的訂閱"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "從未訂閱"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "遺失"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
@@ -926,10 +933,6 @@ msgstr "有效"
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "由合約 %s 到 %s 所涵蓋"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr "遺失"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -1349,7 +1352,8 @@ msgstr "管理您的產品訂閱"
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid "Choose a certificate to import to your subscription certificate directory."
+msgid ""
+"Choose a certificate to import to your subscription certificate directory."
 msgstr "選擇欲匯入您訂閱認證目錄中的認證。"
 
 #: ../src/gui/data/mysubs.glade.h:1
@@ -1571,3 +1575,5 @@ msgstr "Red Hat 訂閱認證驗證程式"
 msgid "Subscription Validity Applet"
 msgstr "訂閱認證驗證程式"
 
+#~ msgid "Never Subscribed"
+#~ msgstr "從未訂閱"

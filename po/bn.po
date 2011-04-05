@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"POT-Creation-Date: 2011-04-05 09:30-0300\n"
 "PO-Revision-Date: 2011-04-01 16:49+0530\n"
 "Last-Translator: Runa Bhattacharjee <runab@redhat.com>\n"
 "Language-Team: Bengali (India) <anubad@lists.ankur.org.in>\n"
@@ -226,7 +226,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "মৌলিক অনুমোদন ব্যবস্থা সহ http প্রক্সির পাসওয়ার্ড"
 
 #: ../src/managercli.py:137
-msgid "Consumer not registered. Please register using --username and --password"
+msgid ""
+"Consumer not registered. Please register using --username and --password"
 msgstr "গ্রাহক নিবন্ধিত নন। অনুগ্রহ করে --username ও --password সহ নিবন্ধন করুন"
 
 #: ../src/managercli.py:192
@@ -288,7 +289,8 @@ msgstr ""
 "সার্টিফিকেট পুনরায় নির্মাণ করতে বাধ্য করা হবে (ব্যবহারকারীর নাম ও পাসওয়ার্ড আবশ্যক)"
 
 #: ../src/managercli.py:306
-msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 "গ্রাহকের পরিচয়ের তথ্য সম্ভবত উপস্থিত নয় অথবা ক্ষতিগ্রস্ত হয়েছে। register --help "
 "প্রয়োগ করুন"
@@ -321,7 +323,8 @@ msgstr "নিবন্ধনের উদ্দেশ্যে চিহ্ন�
 
 #: ../src/managercli.py:359
 msgid "name of the consumer to register. Defaults to the hostname."
-msgstr "নিবন্ধনের উদ্দেশ্যে চিহ্নিত গ্রাহকের নাম। ডিফল্ট হিসাবে হোস্ট-নেম ধার্য করা হয়।"
+msgstr ""
+"নিবন্ধনের উদ্দেশ্যে চিহ্নিত গ্রাহকের নাম। ডিফল্ট হিসাবে হোস্ট-নেম ধার্য করা হয়।"
 
 #: ../src/managercli.py:361
 msgid "register to an existing consumer"
@@ -465,7 +468,8 @@ msgid "available"
 msgstr "উপলব্ধ"
 
 #: ../src/managercli.py:676
-msgid "date to search on, defaults to today's date, only used with --available "
+msgid ""
+"date to search on, defaults to today's date, only used with --available "
 msgstr ""
 "অসন্ধান সঞ্চচালনার তারিখ, ডিফল্ট হিসাবে আজকের তারিখ প্রদর্শন করা হয়, শুধুমাত্র --"
 "available-র সাথে ব্যবহার করা হয়"
@@ -823,7 +827,8 @@ msgstr "%s (অবৈধ এনটাইটেলমেন্টের প্র
 #: ../src/gui/compliance.py:220
 #, python-format
 msgid "The following subscriptions will cover the products selected on %s"
-msgstr "%s-এ নির্বাচিত উৎপাদনগুলির ক্ষেত্রে নিম্নলিখিত সাবস্ক্রিপশনগুলি ব্যবহার করা যাবে"
+msgstr ""
+"%s-এ নির্বাচিত উৎপাদনগুলির ক্ষেত্রে নিম্নলিখিত সাবস্ক্রিপশনগুলি ব্যবহার করা যাবে"
 
 #: ../src/gui/compliance.py:228 ../src/gui/allsubs.py:189
 msgid "Searching for subscriptions. Please wait."
@@ -931,9 +936,10 @@ msgstr "সার্টিফিকেট"
 msgid "Future Subscription"
 msgstr "ভবিষ্যতের সাবস্ক্রিপশন"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "কখনো সাবস্ক্রাইব করা হয়নি"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "অনুপস্থিত"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
@@ -952,10 +958,6 @@ msgstr "বৈধ"
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "%s চুক্তির মাধ্যমে %s অবধি ব্যবহারযোগ্য"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr "অনুপস্থিত"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -1073,7 +1075,8 @@ msgstr "উৎপাদনের তালিকা বৈধ নয়"
 #: ../src/gui/data/compliance.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
 msgstr ""
-"চিহ্নিত তারিখতে যে সকল উৎপাদনের ক্ষেত্রে অবৈধ এনটাইটেলমেন্ট সার্টিফিকেট উপস্থিত রয়েছে:"
+"চিহ্নিত তারিখতে যে সকল উৎপাদনের ক্ষেত্রে অবৈধ এনটাইটেলমেন্ট সার্টিফিকেট উপস্থিত "
+"রয়েছে:"
 
 #: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
 msgid "Subscribe"
@@ -1232,8 +1235,7 @@ msgid ""
 "certificate directory."
 msgstr ""
 "সাবস্ক্রিপশন যোগ করার জন্য, সাবস্ক্রিপশন সার্টিফিকেট ডিরেক্টরির মধ্যে ইম্পোর্ট করার "
-"জন্য একটি "
-"সার্টিফিকেট নির্বাচন করুন।"
+"জন্য একটি সার্টিফিকেট নির্বাচন করুন।"
 
 #: ../src/gui/data/activate.glade.h:1
 msgid "Activate"
@@ -1379,7 +1381,8 @@ msgstr "উৎপাদনের সাবস্ক্রিপশন পরি�
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid "Choose a certificate to import to your subscription certificate directory."
+msgid ""
+"Choose a certificate to import to your subscription certificate directory."
 msgstr ""
 "সাবস্ক্রিপশন সার্টিফিকেট ডিরেক্টরির মধ্যে ইম্পোর্ট করার উদ্দেশ্যে একটি সার্টিফিকেট "
 "নির্বাচন করুন।"
@@ -1604,6 +1607,9 @@ msgstr "Red Hat Subscription Validity Applet"
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
 msgstr "Subscription Validity Applet"
+
+#~ msgid "Never Subscribed"
+#~ msgstr "কখনো সাবস্ক্রাইব করা হয়নি"
 
 #~ msgid "<b>Compliance:</b>"
 #~ msgstr "<b>সুসংগতি:</b>"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"POT-Creation-Date: 2011-04-05 09:30-0300\n"
 "PO-Revision-Date: 2011-04-01 19:46+0530\n"
 "Last-Translator: Krishnababu Krothapalli <kkrothap@redhat.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -226,7 +226,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "ప్రాధమిక ధృవీకరణతో http ప్రోక్సీ కొరకు సంకేతపదము"
 
 #: ../src/managercli.py:137
-msgid "Consumer not registered. Please register using --username and --password"
+msgid ""
+"Consumer not registered. Please register using --username and --password"
 msgstr "వినియోగదారి నమోదుకాలేదు. దయచేసి --username మరియు --password వుపయోగించి నమోదుచేయి"
 
 #: ../src/managercli.py:192
@@ -287,7 +288,8 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "ధృవీకరణపత్రం పునరుత్పాదనను బలవంతంచేయి (వాడుకరిపేరు మరియు సంకేతపదం అవసరం)"
 
 #: ../src/managercli.py:306
-msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr "వినియోగదారి గుర్తింపు లేదు లేదా పాడైంది. నమోదుచేయుటకు ప్రయత్నించు --help"
 
 #: ../src/managercli.py:309
@@ -455,7 +457,8 @@ msgid "available"
 msgstr "అందుబాటులోని"
 
 #: ../src/managercli.py:676
-msgid "date to search on, defaults to today's date, only used with --available "
+msgid ""
+"date to search on, defaults to today's date, only used with --available "
 msgstr "అన్వేషణకు తేది, ఈరోజు తేదీకు అప్రమేయం, --available తో మాత్రమే వుపయోంచు "
 
 #: ../src/managercli.py:679
@@ -709,7 +712,8 @@ msgstr "మీరు తప్పక వొక ధృవీకరణపత్ర
 #: ../src/gui/importsub.py:73
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
-msgstr "%s చెల్లునటువంటి ధృవీకరణపత్ర ఫైలు కాదు. దయచేసి చెల్లునటువంటి ధృవీకరణపత్రం అప్‌లోడ్ చేయుము."
+msgstr ""
+"%s చెల్లునటువంటి ధృవీకరణపత్ర ఫైలు కాదు. దయచేసి చెల్లునటువంటి ధృవీకరణపత్రం అప్‌లోడ్ చేయుము."
 
 #: ../src/gui/widgets.py:150
 #, python-format
@@ -740,7 +744,8 @@ msgstr "సబ్‌స్క్రిప్షన్ సహాయకిని �
 #: ../src/gui/managergui.py:402
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr "కంప్లయెన్స్ బయట మీరు <b>%s</b> వుత్పత్తులు చెల్లని యెన్‌టైటిల్‌మెంట్ ధృవీకరణపత్రములతో కలిగివున్నారు."
+msgstr ""
+"కంప్లయెన్స్ బయట మీరు <b>%s</b> వుత్పత్తులు చెల్లని యెన్‌టైటిల్‌మెంట్ ధృవీకరణపత్రములతో కలిగివున్నారు."
 
 #: ../src/gui/managergui.py:406
 msgid "You have <b>1</b> product without a valid entitlement certificate."
@@ -916,9 +921,10 @@ msgstr "ధృవీకరణపత్రం"
 msgid "Future Subscription"
 msgstr "భవిష్య సబ్‌స్క్రిప్షన్"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "ఎప్పుడు సబ్‌స్క్రైబ్ కాలేదు"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "జాడలేని"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
@@ -937,10 +943,6 @@ msgstr "చెల్లునటువంటి"
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "కాంట్రాక్ట్ %s %s గుండా లోబడివుంది"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr "జాడలేని"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -1362,7 +1364,8 @@ msgstr "మీ వుత్పత్తి సబ్‌స్క్రిప్�
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid "Choose a certificate to import to your subscription certificate directory."
+msgid ""
+"Choose a certificate to import to your subscription certificate directory."
 msgstr "మీ సబ్‌స్క్రిప్షన్ ధృవీకరణపత్రం డైరెక్టరీకు దిగుమతిచేయుటకు వొక ధృవీకరణపత్రంను యెంచుకొనుము."
 
 #: ../src/gui/data/mysubs.glade.h:1
@@ -1583,6 +1586,9 @@ msgstr "Red Hat సబ్‌స్క్రిప్షన్ చెల్లు
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
 msgstr "సబ్‌స్క్రిప్షన్ చెల్లుబాటు ఆప్లెట్"
+
+#~ msgid "Never Subscribed"
+#~ msgstr "ఎప్పుడు సబ్‌స్క్రైబ్ కాలేదు"
 
 #~ msgid "<b>Compliance:</b>"
 #~ msgstr "<b>కంప్లయన్స్:</b>"

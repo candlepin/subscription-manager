@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"POT-Creation-Date: 2011-04-05 09:30-0300\n"
 "PO-Revision-Date: 2011-03-31 17:19+0530\n"
 "Last-Translator: Sweta Kothari <swkothar@redhat.com>\n"
 "Language-Team: Gujarati\n"
@@ -227,8 +227,10 @@ msgid "password for http proxy with basic authentication"
 msgstr "મૂળ સત્તાધિકરમ સાથે http પ્રોક્સી માટે પાસવર્ડ"
 
 #: ../src/managercli.py:137
-msgid "Consumer not registered. Please register using --username and --password"
-msgstr "ગ્રાહક રજીસ્ટર થયેલ નથી. મહેરબાની કરીને --username અને --password મદદથી રજીસ્ટર કરો"
+msgid ""
+"Consumer not registered. Please register using --username and --password"
+msgstr ""
+"ગ્રાહક રજીસ્ટર થયેલ નથી. મહેરબાની કરીને --username અને --password મદદથી રજીસ્ટર કરો"
 
 #: ../src/managercli.py:192
 msgid "Consumer certificates corrupted. Please reregister."
@@ -288,8 +290,10 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "દબાણપૂર્વક પ્રમાણપત્રનું પુન:નિર્માણ (વપરાશકર્તાનામ અને પાસવર્ડની જરૂર છે)"
 
 #: ../src/managercli.py:306
-msgid "Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr "ગ્રાહક ઓળખાણ ક્યાંતો અસ્તિત્વ ધરાવતો નથી અથવા ભાંગેલ છે. રજીસ્ટ --help પ્રયત્ન કરો"
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
+msgstr ""
+"ગ્રાહક ઓળખાણ ક્યાંતો અસ્તિત્વ ધરાવતો નથી અથવા ભાંગેલ છે. રજીસ્ટ --help પ્રયત્ન કરો"
 
 #: ../src/managercli.py:309
 msgid "--force can only be used with --regenerate"
@@ -456,7 +460,8 @@ msgid "available"
 msgstr "ઉપલબ્ધ"
 
 #: ../src/managercli.py:676
-msgid "date to search on, defaults to today's date, only used with --available "
+msgid ""
+"date to search on, defaults to today's date, only used with --available "
 msgstr "તારીખને શોધવાનું ચાલુ છે, આજની તારીખ માટે મૂળભૂતો, ફક્ત --available સાથે વાપરેલ"
 
 #: ../src/managercli.py:679
@@ -788,7 +793,9 @@ msgstr "ઉમેદવારી"
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
-msgstr "ઉમેદવારી સહાયકને દર્શાવતી વખતે ભૂલ. મહેરબાની કરીને વધારે જાણકારી માટે /var/log/rhsm/rhsm.log જુઓ."
+msgstr ""
+"ઉમેદવારી સહાયકને દર્શાવતી વખતે ભૂલ. મહેરબાની કરીને વધારે જાણકારી માટે /var/log/rhsm/"
+"rhsm.log જુઓ."
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -913,9 +920,10 @@ msgstr "પ્રમાણપત્ર"
 msgid "Future Subscription"
 msgstr "ભવિષ્યની ઉમેદવારી"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "કદી ઉમેદવારી થયેલ નથી"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "ગેરહાજર"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
@@ -934,10 +942,6 @@ msgstr "માન્ય"
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "%s મારફતે કોન્ટ્રાક્ટ %s દ્દારા આવરેલ છે"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr "ગેરહાજર"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -1359,7 +1363,8 @@ msgstr "તમારી પ્રોડક્ટ ઉમેદવારીઓન�
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid "Choose a certificate to import to your subscription certificate directory."
+msgid ""
+"Choose a certificate to import to your subscription certificate directory."
 msgstr "તમારી ઉમેદવારી પ્રમાણપત્ર ડિરેક્ટરીમાં આયાત કરવા માટે પ્રમાણપત્રને પસંદ કરો."
 
 #: ../src/gui/data/mysubs.glade.h:1
@@ -1581,3 +1586,5 @@ msgstr "Red Hat ઉમેદવારી માન્યતા એપલેટ"
 msgid "Subscription Validity Applet"
 msgstr "ઉમેદવારી માન્યતા એપલેટ"
 
+#~ msgid "Never Subscribed"
+#~ msgstr "કદી ઉમેદવારી થયેલ નથી"

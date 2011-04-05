@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"POT-Creation-Date: 2011-04-05 09:30-0300\n"
 "PO-Revision-Date: 2011-03-31 17:56+0000\n"
 "Last-Translator: Nilamdyuti Goswami <ngoswami@redhat.com>\n"
 "Language-Team: Assamese <kde-i18n-doc@kde.org>\n"
@@ -226,7 +226,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "http প্ৰক্সিৰ বাবে পাছওয়াৰ্ড সাধাৰন প্ৰমানীকৰণৰ হৈতে"
 
 #: ../src/managercli.py:137
-msgid "Consumer not registered. Please register using --username and --password"
+msgid ""
+"Consumer not registered. Please register using --username and --password"
 msgstr ""
 "উপভোক্তা ৰেজিস্টাৰ্ড নহয়। অনুগ্ৰহ কৰি --username আৰু --password -ৰ হৈতে ৰেজিস্টাৰ "
 "কৰক"
@@ -289,8 +290,10 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "প্ৰমাণপত্ৰৰ পূনৰ সৃজন বাধ্য কৰক (ব্যৱহাৰকাৰীৰ নাম আৰু পাছওৱাৰ্ডৰ প্ৰয়োজন)"
 
 #: ../src/managercli.py:306
-msgid "Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr "ব্যৱহাৰকাৰীৰ পৰিচয় হয়তো নাই অথবা ক্ষতিগ্ৰস্থ। চেষ্টা কৰি চাওক ৰেজিস্টাৰ --help"
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
+msgstr ""
+"ব্যৱহাৰকাৰীৰ পৰিচয় হয়তো নাই অথবা ক্ষতিগ্ৰস্থ। চেষ্টা কৰি চাওক ৰেজিস্টাৰ --help"
 
 #: ../src/managercli.py:309
 msgid "--force can only be used with --regenerate"
@@ -459,7 +462,8 @@ msgid "available"
 msgstr "উপলব্ধ"
 
 #: ../src/managercli.py:676
-msgid "date to search on, defaults to today's date, only used with --available "
+msgid ""
+"date to search on, defaults to today's date, only used with --available "
 msgstr "বিচািৰবলে তাৰিখ, অবিকল্পিত আজিৰ তাৰিখলে, কেবল --available -ৰ লগত ব্যৱহৃত"
 
 #: ../src/managercli.py:679
@@ -468,7 +472,8 @@ msgstr "উপভোগক্ত"
 
 #: ../src/managercli.py:681
 msgid "if supplied with --available then all subscriptions are returned"
-msgstr "যদি --available -ৰ লগত যোগান দিয়া হয় তেনেহলে সকলো স্বাক্ষৰণসমূহ ঘুৰাই দিয়া হ'ব"
+msgstr ""
+"যদি --available -ৰ লগত যোগান দিয়া হয় তেনেহলে সকলো স্বাক্ষৰণসমূহ ঘুৰাই দিয়া হ'ব"
 
 #: ../src/managercli.py:685
 msgid "Error: --all is only applicable with --available"
@@ -793,8 +798,8 @@ msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
 msgstr ""
-"স্বাক্ষৰণ সহায়ক প্ৰদৰ্শন কৰোতে ত্ৰুটি। অধিক জানিবলে অনুগ্ৰহ কৰি /var/log/rhsm/rhsm.log "
-"চাওক।"
+"স্বাক্ষৰণ সহায়ক প্ৰদৰ্শন কৰোতে ত্ৰুটি। অধিক জানিবলে অনুগ্ৰহ কৰি /var/log/rhsm/rhsm."
+"log চাওক।"
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -921,9 +926,10 @@ msgstr "প্ৰমাণপত্ৰ"
 msgid "Future Subscription"
 msgstr "ভৱিষ্যৎ স্বাক্ষৰণ"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "কেতিয়াও স্বাক্ষৰীত কৰা হোৱা নাই"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "সন্ধানহীন"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
@@ -942,10 +948,6 @@ msgstr "বৈধ"
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "%s হৈ %s চুক্তিৰে অধিভূক্ত"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr "সন্ধানহীন"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -1367,7 +1369,8 @@ msgstr "আপোনাৰ উৎপাদন স্বাক্ষৰণসম�
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid "Choose a certificate to import to your subscription certificate directory."
+msgid ""
+"Choose a certificate to import to your subscription certificate directory."
 msgstr "আপোনাৰ স্বাক্ষৰণ প্ৰমাণপত্ৰ ডাইৰেকটৰিলে ইমপোৰ্ট কৰিবলে এটা প্ৰমাণপত্ৰ বাচক।"
 
 #: ../src/gui/data/mysubs.glade.h:1
@@ -1588,6 +1591,9 @@ msgstr "Red Hat স্বাক্ষৰণ বৈধতা এপ্লেট"
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
 msgstr "স্বাক্ষৰণ বৈধতা এপ্লেট"
+
+#~ msgid "Never Subscribed"
+#~ msgstr "কেতিয়াও স্বাক্ষৰীত কৰা হোৱা নাই"
 
 #~ msgid "<b>Compliance:</b>"
 #~ msgstr "<b>সংগতি:</b>"

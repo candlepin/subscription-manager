@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"POT-Creation-Date: 2011-04-05 09:30-0300\n"
 "PO-Revision-Date: 2011-04-01 16:28+0530\n"
 "Last-Translator: Rajesh Ranjan <rranjan@redhat.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -225,7 +225,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "http प्रॉक्सी के लिए मूल सत्यापन के साथ कूटशब्द"
 
 #: ../src/managercli.py:137
-msgid "Consumer not registered. Please register using --username and --password"
+msgid ""
+"Consumer not registered. Please register using --username and --password"
 msgstr "ग्राहक पंजीकृत नहीं. इसके उपयोग से पंजीकृत करें --username और --password"
 
 #: ../src/managercli.py:192
@@ -284,7 +285,8 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "बलपूर्वक प्रमाणपत्र पुनर्जनन (उपयोक्तानाम और कूटशब्द जरूरी)"
 
 #: ../src/managercli.py:306
-msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr "ग्राहक पहचान या तो मौजूद नहीं है या खराब है. पंजीकरण की कोशिश करें --help"
 
 #: ../src/managercli.py:309
@@ -448,7 +450,8 @@ msgid "available"
 msgstr "उपलब्ध"
 
 #: ../src/managercli.py:676
-msgid "date to search on, defaults to today's date, only used with --available "
+msgid ""
+"date to search on, defaults to today's date, only used with --available "
 msgstr "तिथि जिसपर खोजना है, आज की तिथि में तयशुदा, केवल --available के साथ प्रयुक्त"
 
 #: ../src/managercli.py:679
@@ -459,7 +462,8 @@ msgstr ""
 
 #: ../src/managercli.py:681
 msgid "if supplied with --available then all subscriptions are returned"
-msgstr "यदि --available के साथ आपूर्ति की जाती है फिर सभी सदस्यता को वापस किया जाता है"
+msgstr ""
+"यदि --available के साथ आपूर्ति की जाती है फिर सभी सदस्यता को वापस किया जाता है"
 
 #: ../src/managercli.py:685
 msgid "Error: --all is only applicable with --available"
@@ -783,8 +787,7 @@ msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
 msgstr ""
-"सदस्यता मदद दिखाने में त्रुटि. कृपया /var/log/rhsm/rhsm.log को अधिक सूचना के "
-"लिए देखें."
+"सदस्यता मदद दिखाने में त्रुटि. कृपया /var/log/rhsm/rhsm.log को अधिक सूचना के लिए देखें."
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -909,9 +912,10 @@ msgstr "प्रमाणपत्र"
 msgid "Future Subscription"
 msgstr "भविष्य की सदस्यता"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "कभी सदस्यता नहीं लिया"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "अनुपस्थित"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
@@ -930,10 +934,6 @@ msgstr "वैध"
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "%s संविदा के द्वारा %s से कवर किया हुआ"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr "अनुपस्थित"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -1013,9 +1013,7 @@ msgstr "<small><b>उदाहरण:</b> squid.example.com:3128</small>"
 #: ../src/gui/data/networkConfig.glade.h:11
 msgctxt "yes"
 msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-msgstr ""
-"मैं Red Hat Network से किसी HTTP प्रॉक्सी के द्वारा कनेक्ट होना चाहूँगा. "
-"(_H)"
+msgstr "मैं Red Hat Network से किसी HTTP प्रॉक्सी के द्वारा कनेक्ट होना चाहूँगा. (_H)"
 
 #: ../src/gui/data/networkConfig.glade.h:12
 msgctxt "yes"
@@ -1210,8 +1208,8 @@ msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
 msgstr ""
-"कोई सदस्यता जोड़ने के लिए, अपनी सदस्यता प्रमाणपत्र निर्देशिका में लाने के "
-"लिए किसी प्रमाणपत्र को चुनें."
+"कोई सदस्यता जोड़ने के लिए, अपनी सदस्यता प्रमाणपत्र निर्देशिका में लाने के लिए किसी "
+"प्रमाणपत्र को चुनें."
 
 #: ../src/gui/data/activate.glade.h:1
 msgid "Activate"
@@ -1356,7 +1354,8 @@ msgstr "अपना उत्पाद सदस्यता का प्र�
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid "Choose a certificate to import to your subscription certificate directory."
+msgid ""
+"Choose a certificate to import to your subscription certificate directory."
 msgstr "अपने सदस्यता प्रमाणपत्र निर्देशिका में आयात करने के लिए एक प्रमाणपत्र चुनें."
 
 #: ../src/gui/data/mysubs.glade.h:1
@@ -1577,6 +1576,9 @@ msgstr "Red Hat सदस्यता वैधता एप्लेट"
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
 msgstr "सदस्यता वैधता एप्लेट"
+
+#~ msgid "Never Subscribed"
+#~ msgstr "कभी सदस्यता नहीं लिया"
 
 #~ msgid "<b>Compliance:</b>"
 #~ msgstr "<b>अनुकूलन:</b>"

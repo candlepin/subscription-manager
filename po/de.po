@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"POT-Creation-Date: 2011-04-05 09:30-0300\n"
 "PO-Revision-Date: 2011-04-01 09:40+1000\n"
 "Last-Translator: Hedda Peters <hpeters@redhat.com>\n"
 "Language-Team: de_DE <kde-i18n-doc@kde.org>\n"
@@ -951,9 +951,10 @@ msgstr "Zertifikat"
 msgid "Future Subscription"
 msgstr "Zukünftige Subskription"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "Niemals subskribiert"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "Fehlend"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
@@ -972,10 +973,6 @@ msgstr "Gültig"
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "Durch Vertrag %s bis %s abgedeckt"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr "Fehlend"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -1624,6 +1621,9 @@ msgstr "Red Hat Subskriptions-Gültigkeits-Applet"
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
 msgstr "Subskriptions-Gültigkeits-Applet"
+
+#~ msgid "Never Subscribed"
+#~ msgstr "Niemals subskribiert"
 
 #~ msgid "<b>Compliance:</b>"
 #~ msgstr "<b>Vertragskonformität:</b>"

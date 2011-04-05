@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"POT-Creation-Date: 2011-04-05 09:30-0300\n"
 "PO-Revision-Date: 2011-04-01 07:57+0530\n"
 "Last-Translator: Sandeep Shedmake <sshedmak@redhat.com>\n"
 "Language-Team: Marathi <fedora-trans-mr@redhat.com>\n"
@@ -227,8 +227,10 @@ msgid "password for http proxy with basic authentication"
 msgstr "पूर्वनिर्धारीत ओळखसह http प्रॉक्सीकरीता पासवर्ड"
 
 #: ../src/managercli.py:137
-msgid "Consumer not registered. Please register using --username and --password"
-msgstr "ग्राहकाची नोंदणी झाली नाही.  --username व --password चा वापर करून कृपया नोंदणी करा"
+msgid ""
+"Consumer not registered. Please register using --username and --password"
+msgstr ""
+"ग्राहकाची नोंदणी झाली नाही.  --username व --password चा वापर करून कृपया नोंदणी करा"
 
 #: ../src/managercli.py:192
 msgid "Consumer certificates corrupted. Please reregister."
@@ -288,8 +290,10 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "प्रमाणपत्र पुनःनिर्माण जबरनरित्या करा (वापरकर्तानाव व पासवर्ड आवश्यक)"
 
 #: ../src/managercli.py:306
-msgid "Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr "ग्राहकाची ओळख कदाचित अस्तित्वात नाही किंवा दोषीत आहे. register --help वापरून पहा"
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
+msgstr ""
+"ग्राहकाची ओळख कदाचित अस्तित्वात नाही किंवा दोषीत आहे. register --help वापरून पहा"
 
 #: ../src/managercli.py:309
 msgid "--force can only be used with --regenerate"
@@ -338,7 +342,8 @@ msgstr "आधिपासूनच नोंदणी झाल्यावर�
 
 #: ../src/managercli.py:371
 msgid "This system is already registered. Use --force to override"
-msgstr "या प्रणालीची आधिपासूनच नोंदणी झाली आहे. खोडूनपुनः लिहण्यासाठी --force याचा वापर करा"
+msgstr ""
+"या प्रणालीची आधिपासूनच नोंदणी झाली आहे. खोडूनपुनः लिहण्यासाठी --force याचा वापर करा"
 
 #: ../src/managercli.py:374
 msgid "Error: consumer name can not be empty."
@@ -404,7 +409,8 @@ msgstr "कृपया वैध संख्यायीक पूल आय�
 
 #: ../src/managercli.py:579
 msgid "unsubscribe the registered user from all or specific subscriptions"
-msgstr "नोंदणी झालेल्या वापरकर्त्यांची सर्व किंवा ठराविक सबस्क्रिप्शन्स् पासून नोंदणी अशक्य करा"
+msgstr ""
+"नोंदणी झालेल्या वापरकर्त्यांची सर्व किंवा ठराविक सबस्क्रिप्शन्स् पासून नोंदणी अशक्य करा"
 
 #: ../src/managercli.py:585
 msgid "Certificate serial to unsubscribe"
@@ -456,7 +462,8 @@ msgid "available"
 msgstr "उपलब्ध"
 
 #: ../src/managercli.py:676
-msgid "date to search on, defaults to today's date, only used with --available "
+msgid ""
+"date to search on, defaults to today's date, only used with --available "
 msgstr ""
 "शोधण्याजोगी दिनांक, आजच्या दिनांककरीता पूर्वनिर्धारीत होते, फक्त --available सह वापरले "
 "जाते"
@@ -790,7 +797,9 @@ msgstr "सबस्क्रिप्शन"
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
-msgstr "सबस्क्रिप्शन सहाय्यक दाखवतेवेळी त्रुटी. कृपया अधिक माहितीकरीता /var/log/rhsm/rhsm.log पहा."
+msgstr ""
+"सबस्क्रिप्शन सहाय्यक दाखवतेवेळी त्रुटी. कृपया अधिक माहितीकरीता /var/log/rhsm/rhsm.log "
+"पहा."
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -917,9 +926,10 @@ msgstr "प्रमाणपत्र"
 msgid "Future Subscription"
 msgstr "भविष्यातील सबस्क्रिप्शन"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "कधिहि सबस्क्राइब्ड् नाही"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "आढळले नाही"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
@@ -938,10 +948,6 @@ msgstr "वैध"
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "सौदा %s, %s द्वारे झाकले आहे"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr "आढळले नाही"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -1215,7 +1221,9 @@ msgctxt "yes"
 msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
-msgstr "सबस्क्रिप्शन समाविष्ट करण्यासाठी, सबस्क्रिप्शन प्रमाणपत्र डिरेक्ट्रीमध्ये आयात करण्याजोगी प्रमाणपत्र नीवडा."
+msgstr ""
+"सबस्क्रिप्शन समाविष्ट करण्यासाठी, सबस्क्रिप्शन प्रमाणपत्र डिरेक्ट्रीमध्ये आयात करण्याजोगी "
+"प्रमाणपत्र नीवडा."
 
 #: ../src/gui/data/activate.glade.h:1
 msgid "Activate"
@@ -1361,7 +1369,8 @@ msgstr "उत्पादन सबस्क्रिप्शन्स् व�
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid "Choose a certificate to import to your subscription certificate directory."
+msgid ""
+"Choose a certificate to import to your subscription certificate directory."
 msgstr "सबस्क्रिप्शन प्रमाणपत्र डिरेक्ट्रीमध्ये आयात करण्याजोगी प्रमाणपत्र नीवडा."
 
 #: ../src/gui/data/mysubs.glade.h:1
@@ -1583,3 +1592,5 @@ msgstr "Red Hat सबस्क्रिप्शन वैधता ॲप्�
 msgid "Subscription Validity Applet"
 msgstr "सबस्क्रिप्शन वैधता ॲप्लेट"
 
+#~ msgid "Never Subscribed"
+#~ msgstr "कधिहि सबस्क्राइब्ड् नाही"

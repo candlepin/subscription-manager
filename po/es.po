@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"POT-Creation-Date: 2011-04-05 09:30-0300\n"
 "PO-Revision-Date: 2011-04-01 13:50+1000\n"
 "Last-Translator: Gladys Guerrero <gguerrer@redhat.com>\n"
 "Language-Team: Spanish <en@li.org>\n"
@@ -226,8 +226,10 @@ msgid "password for http proxy with basic authentication"
 msgstr "Contraseña para http proxy con autenticación básica"
 
 #: ../src/managercli.py:137
-msgid "Consumer not registered. Please register using --username and --password"
-msgstr "Usuario no registrado. Por favor regístrese mediante --username y --password"
+msgid ""
+"Consumer not registered. Please register using --username and --password"
+msgstr ""
+"Usuario no registrado. Por favor regístrese mediante --username y --password"
 
 #: ../src/managercli.py:192
 msgid "Consumer certificates corrupted. Please reregister."
@@ -284,10 +286,13 @@ msgstr "Solicitar la generación de un nuevo certificado"
 
 #: ../src/managercli.py:301
 msgid "force certificate regeneration (requires username and password)"
-msgstr "Forzar la regeneración de certificado (requiere nombre de usuario y contraseña)"
+msgstr ""
+"Forzar la regeneración de certificado (requiere nombre de usuario y "
+"contraseña)"
 
 #: ../src/managercli.py:306
-msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 "La identidad de usuario puede no existir o estar corrupta. Intente register "
 "--help"
@@ -462,7 +467,8 @@ msgid "available"
 msgstr "Disponible"
 
 #: ../src/managercli.py:676
-msgid "date to search on, defaults to today's date, only used with --available "
+msgid ""
+"date to search on, defaults to today's date, only used with --available "
 msgstr ""
 "Fecha de búsqueda, predeterminada a la fecha de hoy, únicamente se utiliza "
 "con --available "
@@ -473,7 +479,8 @@ msgstr "Consumido"
 
 #: ../src/managercli.py:681
 msgid "if supplied with --available then all subscriptions are returned"
-msgstr "Si se proporciona con --available, todas las suscripciones se retornarán"
+msgstr ""
+"Si se proporciona con --available, todas las suscripciones se retornarán"
 
 #: ../src/managercli.py:685
 msgid "Error: --all is only applicable with --available"
@@ -742,7 +749,8 @@ msgstr "Instalado"
 
 #: ../src/gui/widgets.py:402
 msgid "Invalid date format. Please re-enter a valid date. Example: "
-msgstr "Formato de fecha inválido. Por favor reingrese una fecha válida. Ejemplo:"
+msgstr ""
+"Formato de fecha inválido. Por favor reingrese una fecha válida. Ejemplo:"
 
 #: ../src/gui/widgets.py:437
 msgid "Today"
@@ -823,7 +831,8 @@ msgstr "%s (primera fecha de derechos no válidos)"
 #: ../src/gui/compliance.py:220
 #, python-format
 msgid "The following subscriptions will cover the products selected on %s"
-msgstr "Las siguientes suscripciones cubrirán los productos seleccionados en %s"
+msgstr ""
+"Las siguientes suscripciones cubrirán los productos seleccionados en %s"
 
 #: ../src/gui/compliance.py:228 ../src/gui/allsubs.py:189
 msgid "Searching for subscriptions. Please wait."
@@ -933,9 +942,10 @@ msgstr "Certificado"
 msgid "Future Subscription"
 msgstr "Próxima suscripción"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "Nunca suscrito"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "Faltante"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
@@ -954,10 +964,6 @@ msgstr "Válida"
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "Cubierta por contrato %s hasta %s"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr "Faltante"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -1074,7 +1080,9 @@ msgstr "Lista de productos inválidos"
 
 #: ../src/gui/data/compliance.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
-msgstr "Mostrar productos que no tienen certificados de derechos válidos a partir de: "
+msgstr ""
+"Mostrar productos que no tienen certificados de derechos válidos a partir "
+"de: "
 
 #: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
 msgid "Subscribe"
@@ -1381,7 +1389,8 @@ msgstr "Administre sus suscripciones de productos"
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid "Choose a certificate to import to your subscription certificate directory."
+msgid ""
+"Choose a certificate to import to your subscription certificate directory."
 msgstr ""
 "Elija un certificado a importar a su directorio de certificados de "
 "suscripción."
@@ -1546,7 +1555,8 @@ msgstr "Mostrar mensaje de depuración"
 
 #: ../src/compliance/rhsm_compliance_icon.c:47
 msgid "Force display of the icon (expired or warning)"
-msgstr "Forzar el despliegue del icono de cumplimiento (expirado o advertencia)"
+msgstr ""
+"Forzar el despliegue del icono de cumplimiento (expirado o advertencia)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:170
 #: ../src/compliance/rhsm_compliance_icon.c:171
@@ -1555,7 +1565,8 @@ msgstr "Certificados de derechos faltantes o inválidos"
 
 #: ../src/compliance/rhsm_compliance_icon.c:172
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr "A este sistema le faltan uno o varios certificados de derechos válidos."
+msgstr ""
+"A este sistema le faltan uno o varios certificados de derechos válidos."
 
 #: ../src/compliance/rhsm_compliance_icon.c:176
 msgid "Some of the system's subscriptions are about to expire"
@@ -1567,7 +1578,8 @@ msgstr "Las suscripciones de este sistema están a punto de expirar"
 
 #: ../src/compliance/rhsm_compliance_icon.c:179
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr "Una o varias de las suscripciones de este sistema están a punto de expirar."
+msgstr ""
+"Una o varias de las suscripciones de este sistema están a punto de expirar."
 
 #: ../src/compliance/rhsm_compliance_icon.c:197
 msgid "Remind Me Later"
@@ -1605,3 +1617,5 @@ msgstr "Miniaplicación de validez de suscripción de Red Hat"
 msgid "Subscription Validity Applet"
 msgstr "Miniaplicación de validez de suscripción"
 
+#~ msgid "Never Subscribed"
+#~ msgstr "Nunca suscrito"

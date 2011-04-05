@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"POT-Creation-Date: 2011-04-05 09:30-0300\n"
 "PO-Revision-Date: 2011-04-01 10:25+1000\n"
 "Last-Translator: \n"
 "Language-Team:  <it@li.org>\n"
@@ -226,7 +226,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "password per il proxy http con autenticazione di base"
 
 #: ../src/managercli.py:137
-msgid "Consumer not registered. Please register using --username and --password"
+msgid ""
+"Consumer not registered. Please register using --username and --password"
 msgstr ""
 "Utente non registrato. Si prega di eseguire una registrazione utilizzando --"
 "username e --password"
@@ -253,7 +254,8 @@ msgstr "Password:"
 
 #: ../src/managercli.py:251
 msgid "removes all local consumer data, does not effect the server"
-msgstr "rimuove tutti i dati relativi all'utente locale, non interessa il server"
+msgstr ""
+"rimuove tutti i dati relativi all'utente locale, non interessa il server"
 
 #: ../src/managercli.py:264
 msgid "All local data removed"
@@ -291,8 +293,10 @@ msgstr ""
 "password)"
 
 #: ../src/managercli.py:306
-msgid "Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr "L'identità dell'utente può essere corrotta o non è esistente. Provare --help"
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
+msgstr ""
+"L'identità dell'utente può essere corrotta o non è esistente. Provare --help"
 
 #: ../src/managercli.py:309
 msgid "--force can only be used with --regenerate"
@@ -452,7 +456,8 @@ msgstr "Errore: È necessario --list o --update, Prova facts --help"
 
 #: ../src/managercli.py:667
 msgid "list available or consumer subscriptions for registered user"
-msgstr "elenco disponibile o sottoscrizioni dell'utente per l'utente registrato"
+msgstr ""
+"elenco disponibile o sottoscrizioni dell'utente per l'utente registrato"
 
 #: ../src/managercli.py:672
 msgid "installed"
@@ -463,7 +468,8 @@ msgid "available"
 msgstr "disponibili"
 
 #: ../src/managercli.py:676
-msgid "date to search on, defaults to today's date, only used with --available "
+msgid ""
+"date to search on, defaults to today's date, only used with --available "
 msgstr ""
 "data per la ricerca, esegue il default per la data odierna, usato solo con --"
 "available "
@@ -671,7 +677,8 @@ msgstr "Errore durante la lettura delle informazioni DMI del sistema: %s"
 
 #: ../src/hwprobe.py:116
 msgid "Error reading system memory information:"
-msgstr "Errore durante la lettura delle informazioni della memoria del sistema:"
+msgstr ""
+"Errore durante la lettura delle informazioni della memoria del sistema:"
 
 #: ../src/hwprobe.py:131
 msgid "Error reading system cpu information:"
@@ -723,7 +730,8 @@ msgstr "È necessario selezionare un certificato."
 #: ../src/gui/importsub.py:73
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
-msgstr "%s non è un file del certificato valido. Caricare un certificato valido."
+msgstr ""
+"%s non è un file del certificato valido. Caricare un certificato valido."
 
 #: ../src/gui/widgets.py:150
 #, python-format
@@ -749,16 +757,22 @@ msgstr "Oggi"
 
 #: ../src/gui/managergui.py:371
 msgid "You must register before using the subscription assistant."
-msgstr "È necessario eseguire la registrazione prima di poter usare l'assistente alla sottoscrizione."
+msgstr ""
+"È necessario eseguire la registrazione prima di poter usare l'assistente "
+"alla sottoscrizione."
 
 #: ../src/gui/managergui.py:402
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr "Sei in possesso di <b>%s</b> prodotti con certificati per l'entitlement invalidi."
+msgstr ""
+"Sei in possesso di <b>%s</b> prodotti con certificati per l'entitlement "
+"invalidi."
 
 #: ../src/gui/managergui.py:406
 msgid "You have <b>1</b> product without a valid entitlement certificate."
-msgstr "Sei in possesso di <b>1</b> prodotto senza un certificato per l'entitlement valido."
+msgstr ""
+"Sei in possesso di <b>1</b> prodotto senza un certificato per l'entitlement "
+"valido."
 
 #: ../src/gui/managergui.py:413
 #, python-format
@@ -801,7 +815,9 @@ msgstr "Sottoscrizione"
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
-msgstr "Errore durante la visualizzazione dell'Assistente alla sottoscrizione. Consultare /var/log/rhsm/rhsm.log per maggiori informazioni."
+msgstr ""
+"Errore durante la visualizzazione dell'Assistente alla sottoscrizione. "
+"Consultare /var/log/rhsm/rhsm.log per maggiori informazioni."
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -820,7 +836,8 @@ msgstr "%s (prima data di entitlement non validi)"
 #: ../src/gui/compliance.py:220
 #, python-format
 msgid "The following subscriptions will cover the products selected on %s"
-msgstr "Le seguenti sottoscrizioni si riferiscono ai prodotti selezionati su %s"
+msgstr ""
+"Le seguenti sottoscrizioni si riferiscono ai prodotti selezionati su %s"
 
 #: ../src/gui/compliance.py:228 ../src/gui/allsubs.py:189
 msgid "Searching for subscriptions. Please wait."
@@ -931,9 +948,10 @@ msgstr "Certificato"
 msgid "Future Subscription"
 msgstr "Sottoscrizioni future"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "Mai sottoscritto"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "Mancante"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
@@ -952,10 +970,6 @@ msgstr "Valido"
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "Coperta dal contratto %s attraverso %s"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr "Mancante"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -1295,7 +1309,8 @@ msgstr "Visualizza Eventi del sistema"
 
 #: ../src/gui/data/mainwindow.glade.h:12
 msgid "You have one product without a valid entitlement certificate."
-msgstr "Sei in possesso di un prodotto senza certificato per l'entitlement valido."
+msgstr ""
+"Sei in possesso di un prodotto senza certificato per l'entitlement valido."
 
 #: ../src/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
@@ -1379,7 +1394,8 @@ msgstr "Gestisci le sottoscrizioni del prodotto"
 
 #: ../src/gui/data/importsub.glade.h:4
 msgctxt "yes"
-msgid "Choose a certificate to import to your subscription certificate directory."
+msgid ""
+"Choose a certificate to import to your subscription certificate directory."
 msgstr ""
 "Selezionare un certificato da importare sulla directory del certificato di "
 "sottoscrizione."
@@ -1554,7 +1570,8 @@ msgstr "Certificati di entitlement mancanti o invalidi"
 
 #: ../src/compliance/rhsm_compliance_icon.c:172
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr "Questo sistema è sprovvisto di uno o più certificati per entitlement validi."
+msgstr ""
+"Questo sistema è sprovvisto di uno o più certificati per entitlement validi."
 
 #: ../src/compliance/rhsm_compliance_icon.c:176
 msgid "Some of the system's subscriptions are about to expire"
@@ -1604,3 +1621,5 @@ msgstr "Red Hat Subscription Validity Applet"
 msgid "Subscription Validity Applet"
 msgstr "Applet di convalida della sottoscrizione"
 
+#~ msgid "Never Subscribed"
+#~ msgstr "Mai sottoscritto"
