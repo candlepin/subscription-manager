@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.3
+Version: 0.95.5.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -192,6 +192,15 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Apr 05 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 693834: remove $PREFIX from svg icon symlink (alikins@redhat.com)
+- re-extract i18n keys (jbowes@redhat.com)
+- remove duplicate l10n from context removal (jbowes@redhat.com)
+- remove msg context from glade files (jbowes@redhat.com)
+- Add "arch" info to the product info displayed on installed products screen
+  (alikins@redhat.com)
+- extract latest i18n keys (jbowes@redhat.com)
+- Add the latest l10n strings (jbowes@redhat.com)
 * Wed Mar 30 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - alter specfile to make sense in cvs (cduryee@redhat.com)
 
