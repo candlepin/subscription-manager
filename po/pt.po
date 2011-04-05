@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 08:57-0300\n"
+"POT-Creation-Date: 2011-04-05 09:31-0300\n"
 "PO-Revision-Date: 2011-03-22 15:59+1100\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -731,11 +731,11 @@ msgstr ""
 msgid "Error activating subscription: %s"
 msgstr "Erro ao ativar a subscrição: %s"
 
-#: ../src/subscription_manager/gui/importsub.py:67
+#: ../src/subscription_manager/gui/importsub.py:72
 msgid "You must select a certificate."
 msgstr "Selecione um certificado."
 
-#: ../src/subscription_manager/gui/importsub.py:74
+#: ../src/subscription_manager/gui/importsub.py:85
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
 msgstr ""
@@ -960,7 +960,6 @@ msgid "Never Subscribed"
 msgstr "Nunca foi Subscrito"
 
 #: ../src/subscription_manager/gui/installedtab.py:101
-#: ../src/subscription_manager/gui/installedtab.py:113
 msgid "Invalid"
 msgstr ""
 
@@ -977,6 +976,10 @@ msgstr ""
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "Protegido por contrato %s dentro %s"
+
+#: ../src/subscription_manager/gui/installedtab.py:113
+msgid "Missing"
+msgstr ""
 
 #: ../src/subscription_manager/gui/installedtab.py:153
 msgid "My Installed Software"
@@ -1622,11 +1625,11 @@ msgid "Red Hat Subscription Manager"
 msgstr ""
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:1
-msgid "Red Hat Subscription Compliance Applet"
+msgid "Red Hat Subscription Validity Applet"
 msgstr ""
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
-msgid "Subscription Compliance Applet"
+msgid "Subscription Validity Applet"
 msgstr ""
 
 #~ msgid "%s (first date of non-compliance)"
