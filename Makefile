@@ -1,11 +1,11 @@
-PREFIX ?= /
+PREFIX ?= 
 SYSCONF ?= etc
 PYTHON ?= python
 
-INSTALL_DIR= /usr/share/
-INSTALL_MODULE = /rhsm/
+INSTALL_DIR= usr/share
+INSTALL_MODULE = rhsm
 PKGNAME = subscription_manager
-CODE_DIR = ${PREFIX}/${INSTALL_DIR}/${INSTALL_MODULE}/${PKGNAME}/
+CODE_DIR = ${PREFIX}/${INSTALL_DIR}/${INSTALL_MODULE}/${PKGNAME}
 VERSION = $(shell echo `grep ^Version: $(PKGNAME).spec | awk '{ print $$2 }'`)
 RHELVERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
 
