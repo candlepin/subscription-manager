@@ -183,12 +183,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 chkconfig --add rhsmcertd
+dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig > /dev/null 2>&1 || :
 # /sbin/service rhsmcertd start
 
 %preun
 if [ $1 -eq 0 ] ; then
    /sbin/service rhsmcertd stop >/dev/null 2>&1
    /sbin/chkconfig --del rhsmcertd
+   dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig > /dev/null 2>&1 || :
 fi
 
 %changelog
