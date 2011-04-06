@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.4
+Version: 0.95.5.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -194,6 +194,11 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Apr 06 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 694154: remove extraneous slashes in symlink (cduryee@redhat.com)
+- 693896: subscription manager does not always reload dbus scripts
+  automatically (cduryee@redhat.com)
+
 * Tue Apr 05 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 693834: remove $PREFIX from svg icon symlink (alikins@redhat.com)
 - re-extract i18n keys (jbowes@redhat.com)
