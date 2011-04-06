@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 08:54-0300\n"
-"PO-Revision-Date: 2011-03-22 12:25+1000\n"
+"POT-Creation-Date: 2011-04-05 12:59-0300\n"
+"PO-Revision-Date: 2011-04-01 10:21+1000\n"
 "Last-Translator: Leah Liu <lliu@redhat.com>\n"
 "Language-Team: Wei Liu\n"
 "Language: zh-CN\n"
@@ -645,7 +645,7 @@ msgstr "过程：%d(ms)"
 #: ../src/hwprobe.py:60
 #, python-format
 msgid "Error reading system DMI information: %s"
-msgstr ""
+msgstr "读取系统 DMI 信息出错：%s"
 
 #: ../src/hwprobe.py:116
 msgid "Error reading system memory information:"
@@ -727,21 +727,21 @@ msgstr "今天"
 
 #: ../src/gui/managergui.py:371
 msgid "You must register before using the subscription assistant."
-msgstr ""
+msgstr "在使用订阅助手前您必须注册。"
 
 #: ../src/gui/managergui.py:402
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr ""
+msgstr "您有 <b>%s</b> 产品没有有效授权证书。"
 
 #: ../src/gui/managergui.py:406
 msgid "You have <b>1</b> product without a valid entitlement certificate."
-msgstr ""
+msgstr "您有 <b>1</b> 产品没有有效授权证书。"
 
 #: ../src/gui/managergui.py:413
 #, python-format
 msgid "Product entitlement certificates valid through %s"
-msgstr ""
+msgstr "%s 产品授权证书有效"
 
 #: ../src/gui/managergui.py:536
 msgid "You must enter a system name."
@@ -767,7 +767,7 @@ msgstr "终止日期"
 
 #: ../src/gui/compliance.py:141
 msgid "Subscription List"
-msgstr ""
+msgstr "订阅列表"
 
 #. Set up columns on the view
 #: ../src/gui/compliance.py:142 ../src/gui/allsubs.py:56
@@ -779,7 +779,7 @@ msgstr "订阅"
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
-msgstr ""
+msgstr "显示订阅助手时出错。详情请查看 /var/log/rhsm/rhsm.log。"
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -788,12 +788,12 @@ msgstr "无法搜索订阅"
 #: ../src/gui/compliance.py:214
 #, python-format
 msgid "Software entitlements valid through %s"
-msgstr ""
+msgstr "%s 软件授权有效"
 
 #: ../src/gui/compliance.py:218
 #, python-format
 msgid "%s (first date of invalid entitlements)"
-msgstr ""
+msgstr "%s（无效授权的第一个天）"
 
 #: ../src/gui/compliance.py:220
 #, python-format
@@ -900,19 +900,20 @@ msgstr "版本"
 
 #: ../src/gui/installedtab.py:54
 msgid "Certificate"
-msgstr ""
+msgstr "证书"
 
 #: ../src/gui/installedtab.py:95
 msgid "Future Subscription"
 msgstr "未来订阅"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "从未订阅的"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "缺失"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
-msgstr ""
+msgstr "无效"
 
 #: ../src/gui/installedtab.py:101
 #, python-format
@@ -921,16 +922,12 @@ msgstr "订阅 %s 已过期"
 
 #: ../src/gui/installedtab.py:104
 msgid "Valid"
-msgstr ""
+msgstr "有效"
 
 #: ../src/gui/installedtab.py:106
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "合同 %s 到 %s 涵盖的"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr ""
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -938,7 +935,7 @@ msgstr "我安装的软件"
 
 #: ../src/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
-msgstr ""
+msgstr "<b>证书状态：</b>"
 
 #: ../src/gui/data/installed.glade.h:2
 msgid "<b>Product's Subscription Details</b>"
@@ -949,12 +946,13 @@ msgid "<b>Product:</b>"
 msgstr "<b>产品：</b>"
 
 #: ../src/gui/data/installed.glade.h:4 ../src/gui/data/subdetails.glade.h:8
+#: ../src/gui/data/contract_selection.glade.h:2
 msgid "<b>Subscription:</b>"
 msgstr "<b>订阅：</b>"
 
 #: ../src/gui/data/installed.glade.h:5 ../src/gui/data/mainwindow.glade.h:4
 msgid "Certificate Status"
-msgstr ""
+msgstr "证书状态"
 
 #: ../src/gui/data/installed.glade.h:6
 msgid "Installed View"
@@ -966,160 +964,153 @@ msgid "Next Update:"
 msgstr "下一个更新："
 
 #: ../src/gui/data/networkConfig.glade.h:1
+msgid "<b>HTTP Proxy</b>"
+msgstr "<b>HTTP 代理服务器</b>"
+
+#: ../src/gui/data/networkConfig.glade.h:2
+msgid "<small><b>Example:</b> squid.example.com:3128</small>"
+msgstr "<small><b>例如：</b> squid.example.com:3128</small>"
+
+#: ../src/gui/data/networkConfig.glade.h:3
 msgid "Advanced Network Configuration"
 msgstr "高级网络配置"
 
-#: ../src/gui/data/networkConfig.glade.h:2
+#: ../src/gui/data/networkConfig.glade.h:4
 msgid "Authentication Checkbox"
 msgstr "认证复选框"
 
-#: ../src/gui/data/networkConfig.glade.h:3
+#: ../src/gui/data/networkConfig.glade.h:5
 msgid "Close Button"
 msgstr "关闭按钮"
 
-#: ../src/gui/data/networkConfig.glade.h:4
+#: ../src/gui/data/networkConfig.glade.h:6
 msgid "Enter in the format hostname(:port)"
 msgstr "输入格式 hostname(:port)"
 
-#: ../src/gui/data/networkConfig.glade.h:5
+#: ../src/gui/data/networkConfig.glade.h:7
+msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
+msgstr "我希望使用 HTTP（_H）代理服务器连接到红帽网络。"
+
+#: ../src/gui/data/networkConfig.glade.h:8
 msgid "Password Text"
 msgstr "密码文本"
 
-#: ../src/gui/data/networkConfig.glade.h:6
+#: ../src/gui/data/networkConfig.glade.h:9
 msgid "Proxy Checkbox"
 msgstr "Proxy 复选框"
 
-#: ../src/gui/data/networkConfig.glade.h:7
+#: ../src/gui/data/networkConfig.glade.h:10
 msgid "Proxy Location Text"
 msgstr "Proxy 位置文本"
 
-#: ../src/gui/data/networkConfig.glade.h:8
+#: ../src/gui/data/networkConfig.glade.h:11
+msgid "Proxy P_assword:"
+msgstr "代理服务器密码（_a）："
+
+#: ../src/gui/data/networkConfig.glade.h:12
+msgid "Proxy _Username:"
+msgstr "代理服务器用户名（_U）："
+
+#: ../src/gui/data/networkConfig.glade.h:13
+msgid "Use Au_thentication with HTTP Proxy:"
+msgstr "使用 HTTP 代理服务器验证（_t）："
+
+#: ../src/gui/data/networkConfig.glade.h:14
 msgid "Username Text"
 msgstr "用户名文本"
 
-#: ../src/gui/data/networkConfig.glade.h:9
-msgctxt "yes"
-msgid "<b>HTTP Proxy</b>"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:10
-msgctxt "yes"
-msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:11
-msgctxt "yes"
-msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:12
-msgctxt "yes"
-msgid "Proxy P_assword:"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:13
-msgctxt "yes"
-msgid "Proxy _Username:"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:14
-msgctxt "yes"
-msgid "Use Au_thentication with HTTP Proxy:"
-msgstr ""
-
 #: ../src/gui/data/networkConfig.glade.h:15
-msgctxt "yes"
 msgid "_Close"
-msgstr ""
+msgstr "关闭（_C）"
 
 #: ../src/gui/data/networkConfig.glade.h:16
-msgctxt "yes"
 msgid "_Proxy Location:"
-msgstr ""
+msgstr "代理服务器位置（_P）："
 
 #: ../src/gui/data/compliance.glade.h:1
 msgid "A different date:"
-msgstr ""
+msgstr "不同的日期："
 
 #: ../src/gui/data/compliance.glade.h:2
 msgid "Invalid Product List"
-msgstr ""
+msgstr "无效产品列表"
 
 #: ../src/gui/data/compliance.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
-msgstr ""
+msgstr "显示此后没有有效授权证书的产品："
 
 #: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
+#: ../src/gui/data/contract_selection.glade.h:5
 msgid "Subscribe"
 msgstr "订阅"
 
 #: ../src/gui/data/compliance.glade.h:5
 msgid "Subscription Action Area"
-msgstr ""
+msgstr "订阅动作区"
 
 #: ../src/gui/data/compliance.glade.h:6
 msgid "Subscription Assistant"
-msgstr ""
+msgstr "订阅助手"
 
 #: ../src/gui/data/compliance.glade.h:7
 msgid "Subscription Assistant Box"
-msgstr ""
+msgstr "订阅助手框"
 
 #: ../src/gui/data/compliance.glade.h:8
 msgid "Subscription Assistant Status"
-msgstr ""
+msgstr "订阅助手状态"
 
 #: ../src/gui/data/compliance.glade.h:9
 msgid "Subscription Date Box"
-msgstr ""
+msgstr "订阅日期框"
 
 #: ../src/gui/data/compliance.glade.h:10
 msgid "Subscription Date Label"
-msgstr ""
+msgstr "订阅日期标签"
 
 #: ../src/gui/data/compliance.glade.h:11
 msgid "Subscription Date Picker"
-msgstr ""
+msgstr "订阅日期选择程序"
 
 #: ../src/gui/data/compliance.glade.h:12
 msgid "Subscription Details"
-msgstr ""
+msgstr "订阅详情"
 
 #: ../src/gui/data/compliance.glade.h:13
 msgid "Subscription Label"
-msgstr ""
+msgstr "订阅标签"
 
 #: ../src/gui/data/compliance.glade.h:14
 msgid "Subscription Label Box"
-msgstr ""
+msgstr "订阅标签框"
 
 #: ../src/gui/data/compliance.glade.h:15
 msgid "Subscription Manager - Subscription Assistant"
-msgstr ""
+msgstr "订阅管理器 -- 订阅助手"
 
 #: ../src/gui/data/compliance.glade.h:16
 msgid "Subscription Product List"
-msgstr ""
+msgstr "订阅产品列表"
 
 #: ../src/gui/data/compliance.glade.h:17
 msgid "Subscription Subscriptions Box"
-msgstr ""
+msgstr "订阅，订阅框"
 
 #: ../src/gui/data/compliance.glade.h:18
 msgid "Subscription Subscriptions Label"
-msgstr ""
+msgstr "订阅，订阅标签"
 
 #: ../src/gui/data/compliance.glade.h:19
 msgid "Subscription Update Box"
-msgstr ""
+msgstr "订阅更新框"
 
 #: ../src/gui/data/compliance.glade.h:20
 msgid "Subscriptions List"
-msgstr ""
+msgstr "订阅列表"
 
 #: ../src/gui/data/compliance.glade.h:21
 msgid "Subscriptions Panel"
-msgstr ""
+msgstr "订阅面板"
 
 #: ../src/gui/data/compliance.glade.h:22
 msgid "The following subscriptions will cover the products selected above:"
@@ -1153,58 +1144,56 @@ msgstr "<b>与您安装的产品匹配的订阅</b>"
 msgid "Add Subscriptions"
 msgstr "添加订阅"
 
-#: ../src/gui/data/rhsm.glade.h:6
+#: ../src/gui/data/rhsm.glade.h:6 ../src/gui/data/importsub.glade.h:1
+msgid "Certificate _Location:"
+msgstr "证书位置（_L）："
+
+#: ../src/gui/data/rhsm.glade.h:7
 msgid "Do not register"
 msgstr "不注册"
 
-#: ../src/gui/data/rhsm.glade.h:7 ../src/gui/data/mainwindow.glade.h:5
-#: ../src/gui/data/importsub.glade.h:1
+#: ../src/gui/data/rhsm.glade.h:8 ../src/gui/data/mainwindow.glade.h:5
+#: ../src/gui/data/importsub.glade.h:3
 msgid "Import Certificate"
 msgstr "导入证书"
 
-#: ../src/gui/data/rhsm.glade.h:8
+#: ../src/gui/data/rhsm.glade.h:9
 msgid "Not Compatible"
 msgstr "不兼容"
 
-#: ../src/gui/data/rhsm.glade.h:9 ../src/gui/data/importsub.glade.h:2
+#: ../src/gui/data/rhsm.glade.h:10 ../src/gui/data/importsub.glade.h:4
 msgid "Provide a Subscription Certificate"
 msgstr "提供订阅证书"
 
-#: ../src/gui/data/rhsm.glade.h:10
+#: ../src/gui/data/rhsm.glade.h:11
 msgid "Register with Red Hat Entitlement Service"
 msgstr "使用红帽授权服务注册"
 
-#: ../src/gui/data/rhsm.glade.h:11
+#: ../src/gui/data/rhsm.glade.h:12
 msgid "Register with Red Hat Network"
 msgstr "使用红帽网络注册"
 
-#: ../src/gui/data/rhsm.glade.h:12
+#: ../src/gui/data/rhsm.glade.h:13
 msgid "Register with Red Hat Network Satellite"
 msgstr "使用红帽网络 Satellite 注册"
 
-#: ../src/gui/data/rhsm.glade.h:13
+#: ../src/gui/data/rhsm.glade.h:14
 msgid "Suggested"
 msgstr "推荐的"
 
-#: ../src/gui/data/rhsm.glade.h:14
-msgid "Update Subscriptions"
-msgstr "更新订阅"
-
 #: ../src/gui/data/rhsm.glade.h:15
-msgid "update_subscriptions_dialog\n"
-msgstr "update_subscriptions_dialog\n"
-
-#: ../src/gui/data/rhsm.glade.h:17 ../src/gui/data/importsub.glade.h:3
-msgctxt "yes"
-msgid "Certificate _Location:"
-msgstr ""
-
-#: ../src/gui/data/rhsm.glade.h:18
-msgctxt "yes"
 msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
-msgstr ""
+msgstr "要添加订阅，请选择一个证书将其导入您的订阅证书目录。"
+
+#: ../src/gui/data/rhsm.glade.h:16
+msgid "Update Subscriptions"
+msgstr "更新订阅"
+
+#: ../src/gui/data/rhsm.glade.h:17
+msgid "update_subscriptions_dialog\n"
+msgstr "update_subscriptions_dialog\n"
 
 #: ../src/gui/data/activate.glade.h:1
 msgid "Activate"
@@ -1234,7 +1223,7 @@ msgstr "订阅激活"
 
 #: ../src/gui/data/mainwindow.glade.h:1
 msgid "<b>Certificate Status</b>"
-msgstr ""
+msgstr "<b>证书状态</b>"
 
 #: ../src/gui/data/mainwindow.glade.h:2
 msgid "<b>Tools</b>"
@@ -1258,7 +1247,7 @@ msgstr "取消注册系统"
 
 #: ../src/gui/data/mainwindow.glade.h:10
 msgid "Update Certificates"
-msgstr ""
+msgstr "更新证书"
 
 #: ../src/gui/data/mainwindow.glade.h:11
 msgid "View System Facts"
@@ -1266,7 +1255,7 @@ msgstr "查看系统详情"
 
 #: ../src/gui/data/mainwindow.glade.h:12
 msgid "You have one product without a valid entitlement certificate."
-msgstr ""
+msgstr "您有一个没有有效授权证书的产品。"
 
 #: ../src/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
@@ -1348,11 +1337,10 @@ msgstr "输入您的订阅帐户信息"
 msgid "Manage Your Product Subscriptions"
 msgstr "管理您的产品订阅"
 
-#: ../src/gui/data/importsub.glade.h:4
-msgctxt "yes"
+#: ../src/gui/data/importsub.glade.h:2
 msgid ""
 "Choose a certificate to import to your subscription certificate directory."
-msgstr ""
+msgstr "选择一个证书将其导入您的订阅证书目录。"
 
 #: ../src/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
@@ -1419,6 +1407,10 @@ msgid "<b>Please enter the following for this system:</b>"
 msgstr "<b>请为这个系统输入以下内容：</b>"
 
 #: ../src/gui/data/registration.glade.h:2
+msgid "<b>Please enter your Red Hat Network account information:</b>"
+msgstr "<b>请输入您的红帽网络帐户信息：</b>"
+
+#: ../src/gui/data/registration.glade.h:3
 msgid ""
 "<small>Tip: Forgot your login or password? Look it up at\n"
 "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
@@ -1428,85 +1420,65 @@ msgstr ""
 "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
 "www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
 
-#: ../src/gui/data/registration.glade.h:4
+#: ../src/gui/data/registration.glade.h:5
 msgid "A unique label for this system"
 msgstr "这个系统的唯一标签"
 
-#: ../src/gui/data/registration.glade.h:5
+#: ../src/gui/data/registration.glade.h:6
+msgid "Password:"
+msgstr "密码："
+
+#: ../src/gui/data/registration.glade.h:7
+msgid "Red Hat Login:"
+msgstr "红帽登录："
+
+#: ../src/gui/data/registration.glade.h:8
 msgid "Register"
 msgstr "注册"
 
-#: ../src/gui/data/registration.glade.h:6
+#: ../src/gui/data/registration.glade.h:9
 msgid "Select the most appropriate subscriptions for this system"
 msgstr "为这个系统选择最合适的订阅"
 
-#: ../src/gui/data/registration.glade.h:7
+#: ../src/gui/data/registration.glade.h:10
 msgid "System Name:"
 msgstr "系统名称："
 
-#: ../src/gui/data/registration.glade.h:8
+#: ../src/gui/data/registration.glade.h:11
 msgid "System Registration"
 msgstr "系统注册"
 
-#: ../src/gui/data/registration.glade.h:9
+#: ../src/gui/data/registration.glade.h:12
 msgid "register_button"
 msgstr "register_button"
 
-#: ../src/gui/data/registration.glade.h:10
+#: ../src/gui/data/registration.glade.h:13
 msgid "register_dialog_main_vbox"
 msgstr "register_dialog_main_vbox"
 
-#: ../src/gui/data/registration.glade.h:11
+#: ../src/gui/data/registration.glade.h:14
 msgid "registration_dialog_action_area\n"
 msgstr "registration_dialog_action_area\n"
-
-#: ../src/gui/data/registration.glade.h:13
-msgctxt "yes"
-msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr ""
-
-#: ../src/gui/data/registration.glade.h:14
-msgctxt "yes"
-msgid "Password:"
-msgstr ""
-
-#: ../src/gui/data/registration.glade.h:15
-msgctxt "yes"
-msgid "Red Hat Login:"
-msgstr ""
 
 #: ../src/gui/data/progress.glade.h:1
 msgid "Progress Dialog"
 msgstr "进程条"
 
 #: ../src/gui/data/contract_selection.glade.h:1
-msgctxt "yes"
 msgid "<b>Choose the specific contract to use:</b>"
-msgstr ""
-
-#: ../src/gui/data/contract_selection.glade.h:2
-msgctxt "yes"
-msgid "<b>Subscription:</b>"
-msgstr ""
+msgstr "<b>选择要使用的具体合同：</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:3
-msgctxt "yes"
 msgid "<b>Total Contracts:</b>"
-msgstr ""
+msgstr "<b>合同总数：</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:4
-msgctxt "yes"
 msgid "Contract Selection"
-msgstr ""
-
-#: ../src/gui/data/contract_selection.glade.h:5
-msgctxt "yes"
-msgid "Subscribe"
-msgstr ""
+msgstr "合同选择"
 
 #: ../src/compliance/rhsm_compliance_icon.c:43
 msgid "How often to check for validity (in seconds)"
-msgstr ""
+msgstr "您检查有效性的频率（以秒为单位）"
 
 #: ../src/compliance/rhsm_compliance_icon.c:45
 msgid "Show debug messages"
@@ -1514,16 +1486,16 @@ msgstr "显示调试信息"
 
 #: ../src/compliance/rhsm_compliance_icon.c:47
 msgid "Force display of the icon (expired or warning)"
-msgstr ""
+msgstr "强制显示图标（过期的或者警告）"
 
 #: ../src/compliance/rhsm_compliance_icon.c:170
 #: ../src/compliance/rhsm_compliance_icon.c:171
 msgid "Invalid or Missing Entitlement Certificates"
-msgstr ""
+msgstr "无效或者缺失授权证书"
 
 #: ../src/compliance/rhsm_compliance_icon.c:172
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr ""
+msgstr "这个系统缺少一个或者多个有效授权证书。"
 
 #: ../src/compliance/rhsm_compliance_icon.c:176
 msgid "Some of the system's subscriptions are about to expire"
@@ -1535,7 +1507,7 @@ msgstr "这个系统的订阅即将过期"
 
 #: ../src/compliance/rhsm_compliance_icon.c:179
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr ""
+msgstr "这个系统的一个或者多个订阅即将过期。"
 
 #: ../src/compliance/rhsm_compliance_icon.c:197
 msgid "Remind Me Later"
@@ -1563,196 +1535,15 @@ msgstr "选项解析失败：%s\n"
 
 #: ../etc-conf/subscription-manager.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
-msgstr ""
+msgstr "红帽订阅管理器"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
-msgstr ""
+msgstr "红帽订阅有效性程序"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
-msgstr ""
+msgstr "订阅有效性程序"
 
-#~ msgid "%s (first date of non-compliance)"
-#~ msgstr "%s（这个日期以后为不合规）"
-
-#~ msgid "<b>Choose the specific contract to use:</b>"
-#~ msgstr "<b>选择要使用的具体合同：</b>"
-
-#~ msgid "<b>Compliance Status</b>"
-#~ msgstr "<b>合规状态</b>"
-
-#~ msgid "<b>Compliance:</b>"
-#~ msgstr "<b>合规：</b>"
-
-#~ msgid "<b>HTTP Proxy</b>"
-#~ msgstr "<b>HTTP Proxy</b>"
-
-#~ msgid "<b>Please enter your Red Hat Network account information:</b>"
-#~ msgstr "<b>请输入您的红帽网络帐户信息：</b>"
-
-#~ msgid "<b>Total Contracts:</b>"
-#~ msgstr "<b>总合同数：</b>"
-
-#~ msgid "<big><b>All software is in compliance until %s</b></big>"
-#~ msgstr "<big><b>%s 前的所有软件都合规</b></big>"
-
-#~ msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-#~ msgstr "<small><b>Example:</b> squid.example.com:3128</small>"
-
-#~ msgid "All products are in compliance until %s"
-#~ msgstr "到 %s 前所有产品都合规"
-
-#~ msgid "Become Compliant"
-#~ msgstr "成为合规订阅"
-
-#~ msgid "Certificate _Location:"
-#~ msgstr "证书位置（_L）："
-
-#~ msgid ""
-#~ "Choose a certificate to import to your subscription certificate directory."
-#~ msgstr "选择一个证书将其导入您的订阅证书目录。"
-
-#~ msgid "Compliance Action Area"
-#~ msgstr "合规动作范围"
-
-#~ msgid "Compliance Assistant"
-#~ msgstr "合规助理"
-
-#~ msgid "Compliance Assistant Box"
-#~ msgstr "合规助理框"
-
-#~ msgid "Compliance Assistant Status"
-#~ msgstr "合规助理状态"
-
-#~ msgid "Compliance Date Box"
-#~ msgstr "合规数据框"
-
-#~ msgid "Compliance Date Label"
-#~ msgstr "合规数据标签"
-
-#~ msgid "Compliance Date Picker"
-#~ msgstr "合规数据选择程序"
-
-#~ msgid "Compliance Label"
-#~ msgstr "合规标签"
-
-#~ msgid "Compliance Label Box"
-#~ msgstr "合规标签框"
-
-#~ msgid "Compliance Product List"
-#~ msgstr "合规产品列表"
-
-#~ msgid "Compliance Status"
-#~ msgstr "合规状态"
-
-#~ msgid "Compliance Subscription Details"
-#~ msgstr "合规订阅详情"
-
-#~ msgid "Compliance Subscription List"
-#~ msgstr "合规订阅列表"
-
-#~ msgid "Compliance Subscriptions Box"
-#~ msgstr "合规订阅框"
-
-#~ msgid "Compliance Subscriptions Label"
-#~ msgstr "合规订阅标签"
-
-#~ msgid "Compliance Subscriptions List"
-#~ msgstr "合规订阅列表"
-
-#~ msgid "Compliance Subscriptions Panel"
-#~ msgstr "合规订阅面板"
-
-#~ msgid "Compliance Update Box"
-#~ msgstr "合规更新框"
-
-#~ msgid "Contract Selection"
-#~ msgstr "合同选择"
-
-#~ msgid ""
-#~ "Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log "
-#~ "for more information."
-#~ msgstr "显示合规助理时出错。详情请查看 /var/log/rhsm/rhsm.log。"
-
-#~ msgid "Error reading system DMI information:"
-#~ msgstr "读取系统 DMI 信息出错："
-
-#~ msgid "Force display of the compliance icon (expired or warning)"
-#~ msgstr "强制显示合规图标（过期的或者警告）"
-
-#~ msgid "How often to check for compliance (in seconds)"
-#~ msgstr "您检查合规状态的频率（以秒为单位）"
-
-#~ msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-#~ msgstr "我希望使用 HTTP（_H）代理服务器连接到红帽网络。"
-
-#~ msgid "In Compliance"
-#~ msgstr "合规"
-
-#~ msgid "On a different date:"
-#~ msgstr "在不同的日期："
-
-#~ msgid ""
-#~ "One or more of this system's subscriptions are about to expire. These "
-#~ "subscriptions are required for compliance with your subscription "
-#~ "agreements."
-#~ msgstr "这个系统的一个或者多个订阅即将过期。要求这些订阅符合您的订阅协议。"
-
-#~ msgid "Out of Compliance"
-#~ msgstr "不合规"
-
-#~ msgid "Password:"
-#~ msgstr "密码："
-
-#~ msgid "Proxy P_assword:"
-#~ msgstr "代理服务器密码（_a）："
-
-#~ msgid "Proxy _Username:"
-#~ msgstr "代理服务器用户名（_U）："
-
-#~ msgid "Red Hat Login:"
-#~ msgstr "红帽登录："
-
-#~ msgid "Show products that will be out of compliance as of:"
-#~ msgstr "显示将要不合规的产品："
-
-#~ msgid "Subscription Manager - Compliance Assistant"
-#~ msgstr "订阅管理器 -- 合规助理"
-
-#~ msgid "This System is Non-Compliant"
-#~ msgstr "这个系统不合规"
-
-#~ msgid ""
-#~ "This system is missing one or more subscriptions required for compliance "
-#~ "with your subscription agreements."
-#~ msgstr "这个系统缺少一个或者多个您订阅协议要求的订阅。"
-
-#~ msgid "This system is non-compliant"
-#~ msgstr "这个系统不合规"
-
-#~ msgid ""
-#~ "To add a subscription, choose a certificate to import to your "
-#~ "subscription certificate directory."
-#~ msgstr "要添加订阅，请选择一个证书将其导入您的订阅证书目录。"
-
-#~ msgid "Use Au_thentication with HTTP Proxy:"
-#~ msgstr "使用 HTTP 代理服务器验证（_t）："
-
-#~ msgid "You have <b>%s</b> products out of compliance."
-#~ msgstr "您有 <b>%s</b> 产品不合规。"
-
-#~ msgid "You have <b>1</b> product out of compliance."
-#~ msgstr "您有 <b>1</b> 产品不合规。"
-
-#~ msgid "You have one product which is out of compliance."
-#~ msgstr "您有一个不合规的产品。"
-
-#~ msgid "You must register before using the compliance assistant."
-#~ msgstr "在使用 compliance assistant 前您必须注册。"
-
-#~ msgid "_Close"
-#~ msgstr "关闭（_C）"
-
-#~ msgid "_Proxy Location:"
-#~ msgstr "代理服务器位置（_P）："
+#~ msgid "Never Subscribed"
+#~ msgstr "从未订阅的"

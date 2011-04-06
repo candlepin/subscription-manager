@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5
+Version: 0.95.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -183,6 +183,16 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Apr 05 2011 Bryan Kearney <bkearney@redhat.com> 0.95.6-1
+- Resolves: #691137,#691536,#684647,#688592
+- Add the latest l10n strings (jbowes@redhat.com)
+- 691137: set return code from main() for rhsmcertd (jbowes@redhat.com)
+- latest l10n strings (jbowes@redhat.com)
+- 691536: More string updates (jbowes@redhat.com)
+- 691536: update strings replacing compliance with valid (jbowes@redhat.com)
+- 684647: i18n/l10n our .desktop files (jbowes@redhat.com)
+- 688592: Latest strings from the i18n team (bkearney@redhat.com)
+
 * Mon Mar 21 2011 Bryan Kearney <bkearney@redhat.com> 0.95.5-1
 - Resolves: #688192,#688469,#683968,#688550,#685086,#685099,#685145,#685108,#684680,#684285,#676377,#681925,#614453,#682331
 - 688192: don't look for dmi info on machines without dmi (jbowes@redhat.com)

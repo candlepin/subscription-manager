@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 08:54-0300\n"
-"PO-Revision-Date: 2011-03-30 11:46+0530\n"
+"POT-Creation-Date: 2011-04-05 12:59-0300\n"
+"PO-Revision-Date: 2011-04-01 13:05+0530\n"
 "Last-Translator: I Felix <ifelix@redhat.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta-IN\n"
@@ -672,7 +672,7 @@ msgstr "கால அளவு: %d(ms)"
 #: ../src/hwprobe.py:60
 #, python-format
 msgid "Error reading system DMI information: %s"
-msgstr ""
+msgstr "பிழை வாசிக்கும் கணினி DMI நினைவக தகவல்: %s"
 
 #: ../src/hwprobe.py:116
 msgid "Error reading system memory information:"
@@ -754,21 +754,21 @@ msgstr "இன்று"
 
 #: ../src/gui/managergui.py:371
 msgid "You must register before using the subscription assistant."
-msgstr ""
+msgstr "உடன்பாட்டு துணையை பயன்படுத்துவதற்கு முன் நீங்கள் பதிவுசெய்ய வேண்டும்."
 
 #: ../src/gui/managergui.py:402
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr ""
+msgstr "<b>%s</b> உடன்பாட்டை மீறிய தயாரிப்புகளை கொண்டுள்ளீர்கள்."
 
 #: ../src/gui/managergui.py:406
 msgid "You have <b>1</b> product without a valid entitlement certificate."
-msgstr ""
+msgstr "சரியான உரிம சான்றிதழ் இல்லாமல் <b>1</b> தயாரிப்பை கொண்டுள்ளீர்கள்."
 
 #: ../src/gui/managergui.py:413
 #, python-format
 msgid "Product entitlement certificates valid through %s"
-msgstr ""
+msgstr "%s வழியாக தயாரிப்பு உரிம சான்றிதழ் செல்லுபடியாகும்"
 
 #: ../src/gui/managergui.py:536
 msgid "You must enter a system name."
@@ -794,7 +794,7 @@ msgstr "முடிவு தேதி"
 
 #: ../src/gui/compliance.py:141
 msgid "Subscription List"
-msgstr ""
+msgstr "சந்தா பட்டியல்"
 
 #. Set up columns on the view
 #: ../src/gui/compliance.py:142 ../src/gui/allsubs.py:56
@@ -807,6 +807,8 @@ msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
 msgstr ""
+"சந்தா உதவியாளரை காட்டுவதில் பிழை. மேலும் தகவலுக்கு /var/log/rhsm/rhsm.logஐ "
+"பார்க்கவும்."
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -815,12 +817,12 @@ msgstr "சந்தாபடுத்தல்களுக்காக தே�
 #: ../src/gui/compliance.py:214
 #, python-format
 msgid "Software entitlements valid through %s"
-msgstr ""
+msgstr "%s வழியாக மென்பொருள் உரிமங்கள் சரி செய்யப்படுகிறது"
 
 #: ../src/gui/compliance.py:218
 #, python-format
 msgid "%s (first date of invalid entitlements)"
-msgstr ""
+msgstr "%s (தவறான உரிமங்களின் முதல் தேதி)"
 
 #: ../src/gui/compliance.py:220
 #, python-format
@@ -927,19 +929,20 @@ msgstr "பதிப்பு"
 
 #: ../src/gui/installedtab.py:54
 msgid "Certificate"
-msgstr ""
+msgstr "சான்றிதழ்"
 
 #: ../src/gui/installedtab.py:95
 msgid "Future Subscription"
 msgstr "வருங்கால சந்தாபடுத்தல்"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "சந்தாபடுத்தப்படவில்லை"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "விடுபட்டவை"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
-msgstr ""
+msgstr "தவறான"
 
 #: ../src/gui/installedtab.py:101
 #, python-format
@@ -948,16 +951,12 @@ msgstr "சந்தா %s கலாவதியானது"
 
 #: ../src/gui/installedtab.py:104
 msgid "Valid"
-msgstr ""
+msgstr "சரியான"
 
 #: ../src/gui/installedtab.py:106
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "%s வழியாக %sஇன் உடன்பாடு சேர்க்கப்பட்டுள்ளது "
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr ""
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -965,7 +964,7 @@ msgstr "எனது நிறுவப்பட்ட மென்பொரு�
 
 #: ../src/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
-msgstr ""
+msgstr "<b>சான்றிதழ் நிலை</b>"
 
 #: ../src/gui/data/installed.glade.h:2
 msgid "<b>Product's Subscription Details</b>"
@@ -976,12 +975,18 @@ msgid "<b>Product:</b>"
 msgstr "<b>தயாரிப்பு:</b>"
 
 #: ../src/gui/data/installed.glade.h:4 ../src/gui/data/subdetails.glade.h:8
+#: ../src/gui/data/contract_selection.glade.h:2
+#, fuzzy
 msgid "<b>Subscription:</b>"
-msgstr "<b>சந்தாபடுத்தல்:</b>"
+msgstr ""
+"#-#-#-#-#  ta.po (l 10n)  #-#-#-#-#\n"
+"<b>சந்தாபடுத்தல்:</b>\n"
+"#-#-#-#-#  ta.po (l 10n)  #-#-#-#-#\n"
+"<b>சந்தா:</b>"
 
 #: ../src/gui/data/installed.glade.h:5 ../src/gui/data/mainwindow.glade.h:4
 msgid "Certificate Status"
-msgstr ""
+msgstr "சான்றிதழ் நிலை"
 
 #: ../src/gui/data/installed.glade.h:6
 msgid "Installed View"
@@ -993,160 +998,158 @@ msgid "Next Update:"
 msgstr "அடுத்த புதுத்தல்:"
 
 #: ../src/gui/data/networkConfig.glade.h:1
+msgid "<b>HTTP Proxy</b>"
+msgstr "<b>HTTP பதிலாள்</b>"
+
+#: ../src/gui/data/networkConfig.glade.h:2
+msgid "<small><b>Example:</b> squid.example.com:3128</small>"
+msgstr "<small><b>எடுத்துக்காட்டு:</b> squid.example.com:3128</small>"
+
+#: ../src/gui/data/networkConfig.glade.h:3
 msgid "Advanced Network Configuration"
 msgstr "கூடுதல் பிணைய கட்டமைப்பு"
 
-#: ../src/gui/data/networkConfig.glade.h:2
+#: ../src/gui/data/networkConfig.glade.h:4
 msgid "Authentication Checkbox"
 msgstr "அங்கீகார சரிபார்க்கும்பெட்டி"
 
-#: ../src/gui/data/networkConfig.glade.h:3
+#: ../src/gui/data/networkConfig.glade.h:5
 msgid "Close Button"
 msgstr "பொத்தானை மூடவும்"
 
-#: ../src/gui/data/networkConfig.glade.h:4
+#: ../src/gui/data/networkConfig.glade.h:6
 msgid "Enter in the format hostname(:port)"
 msgstr "வடிவ புரவலபெயரில் உள்ளிடவும்(:துறை)"
 
-#: ../src/gui/data/networkConfig.glade.h:5
+#: ../src/gui/data/networkConfig.glade.h:7
+msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
+msgstr "ஒரு _HTTP பதிலாள் வழியாக Red Hat Network உடன் இணைக்க விரும்புகிறேன்."
+
+#: ../src/gui/data/networkConfig.glade.h:8
 msgid "Password Text"
 msgstr "கடவுச்சொல் உரை"
 
-#: ../src/gui/data/networkConfig.glade.h:6
+#: ../src/gui/data/networkConfig.glade.h:9
 msgid "Proxy Checkbox"
 msgstr "ப்ராக்ஸி சரிபார்க்கும்பெட்டி"
 
-#: ../src/gui/data/networkConfig.glade.h:7
+#: ../src/gui/data/networkConfig.glade.h:10
 msgid "Proxy Location Text"
 msgstr "ப்ராக்ஸி இட உரை"
 
-#: ../src/gui/data/networkConfig.glade.h:8
+#: ../src/gui/data/networkConfig.glade.h:11
+msgid "Proxy P_assword:"
+msgstr "பதிலாள் கடவுச்சொல் (_a):"
+
+#: ../src/gui/data/networkConfig.glade.h:12
+msgid "Proxy _Username:"
+msgstr "பதிலாள் பயனர்பெயர் (_U):"
+
+#: ../src/gui/data/networkConfig.glade.h:13
+msgid "Use Au_thentication with HTTP Proxy:"
+msgstr "HTTP பதிலாளுடன் அங்கீகாரத்தைப் பயன்படுத்தவும் (_t):"
+
+#: ../src/gui/data/networkConfig.glade.h:14
 msgid "Username Text"
 msgstr "பயனர்பெயர் உரை"
 
-#: ../src/gui/data/networkConfig.glade.h:9
-msgctxt "yes"
-msgid "<b>HTTP Proxy</b>"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:10
-msgctxt "yes"
-msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:11
-msgctxt "yes"
-msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:12
-msgctxt "yes"
-msgid "Proxy P_assword:"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:13
-msgctxt "yes"
-msgid "Proxy _Username:"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:14
-msgctxt "yes"
-msgid "Use Au_thentication with HTTP Proxy:"
-msgstr ""
-
 #: ../src/gui/data/networkConfig.glade.h:15
-msgctxt "yes"
 msgid "_Close"
-msgstr ""
+msgstr "மூடவும் (_C)"
 
 #: ../src/gui/data/networkConfig.glade.h:16
-msgctxt "yes"
 msgid "_Proxy Location:"
-msgstr ""
+msgstr "பதிலாள் இடம் (_P):"
 
 #: ../src/gui/data/compliance.glade.h:1
 msgid "A different date:"
-msgstr ""
+msgstr "ஒரு வித்தியாசமான தேதியில்:"
 
 #: ../src/gui/data/compliance.glade.h:2
 msgid "Invalid Product List"
-msgstr ""
+msgstr "தவறான தயாரிப்பு பட்டியல்"
 
 #: ../src/gui/data/compliance.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
-msgstr ""
+msgstr "தவறான உரிம சான்றிதழ்களுடன் தயாரிப்புகளை காட்டு:"
 
 #: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
+#: ../src/gui/data/contract_selection.glade.h:5
+#, fuzzy
 msgid "Subscribe"
-msgstr "சந்தாபடுத்து"
+msgstr ""
+"#-#-#-#-#  ta.po (l 10n)  #-#-#-#-#\n"
+"சந்தாபடுத்து\n"
+"#-#-#-#-#  ta.po (l 10n)  #-#-#-#-#\n"
+"சந்தாப்படுத்து"
 
 #: ../src/gui/data/compliance.glade.h:5
 msgid "Subscription Action Area"
-msgstr ""
+msgstr "சந்தாபடுத்தலை செயல் பகுதி"
 
 #: ../src/gui/data/compliance.glade.h:6
 msgid "Subscription Assistant"
-msgstr ""
+msgstr "சந்தா உதவியாளர்"
 
 #: ../src/gui/data/compliance.glade.h:7
 msgid "Subscription Assistant Box"
-msgstr ""
+msgstr "சந்தா உதவி பெட்டி"
 
 #: ../src/gui/data/compliance.glade.h:8
 msgid "Subscription Assistant Status"
-msgstr ""
+msgstr "சந்தா உதவி நிலை"
 
 #: ../src/gui/data/compliance.glade.h:9
 msgid "Subscription Date Box"
-msgstr ""
+msgstr "சந்தா தேதி பெட்டி"
 
 #: ../src/gui/data/compliance.glade.h:10
 msgid "Subscription Date Label"
-msgstr ""
+msgstr "சந்தா தேதி லேபிள்"
 
 #: ../src/gui/data/compliance.glade.h:11
 msgid "Subscription Date Picker"
-msgstr ""
+msgstr "சந்தா தேதி எடுப்பான்"
 
 #: ../src/gui/data/compliance.glade.h:12
 msgid "Subscription Details"
-msgstr ""
+msgstr "சந்தாபடுத்தல் விவரம்"
 
 #: ../src/gui/data/compliance.glade.h:13
 msgid "Subscription Label"
-msgstr ""
+msgstr "சந்தாபடுத்தல் லேபிள்"
 
 #: ../src/gui/data/compliance.glade.h:14
 msgid "Subscription Label Box"
-msgstr ""
+msgstr "சந்தாபடுத்தல் லேபிள் பெட்டி"
 
 #: ../src/gui/data/compliance.glade.h:15
 msgid "Subscription Manager - Subscription Assistant"
-msgstr ""
+msgstr "சந்தாபடுத்தல் மேலாளர் - சந்தாப்படுத்தல் துணை"
 
 #: ../src/gui/data/compliance.glade.h:16
 msgid "Subscription Product List"
-msgstr ""
+msgstr "சந்தா தயாரிப்பு பட்டியல்"
 
 #: ../src/gui/data/compliance.glade.h:17
 msgid "Subscription Subscriptions Box"
-msgstr ""
+msgstr "சந்தா சந்தாக்கள் பெட்டி"
 
 #: ../src/gui/data/compliance.glade.h:18
 msgid "Subscription Subscriptions Label"
-msgstr ""
+msgstr "சந்தா சந்தாக்கள் பெயர்"
 
 #: ../src/gui/data/compliance.glade.h:19
 msgid "Subscription Update Box"
-msgstr ""
+msgstr "சந்தா புதுப்பித்தல் பெட்டி"
 
 #: ../src/gui/data/compliance.glade.h:20
 msgid "Subscriptions List"
-msgstr ""
+msgstr "சந்தாக்கள் பட்டியல்"
 
 #: ../src/gui/data/compliance.glade.h:21
 msgid "Subscriptions Panel"
-msgstr ""
+msgstr "சந்தாபடுத்தல் பலகம்"
 
 #: ../src/gui/data/compliance.glade.h:22
 msgid "The following subscriptions will cover the products selected above:"
@@ -1180,58 +1183,57 @@ msgstr "<b>உங்கள் நிறுவப்பட்ட தயாரி�
 msgid "Add Subscriptions"
 msgstr "சந்த"
 
-#: ../src/gui/data/rhsm.glade.h:6
+#: ../src/gui/data/rhsm.glade.h:6 ../src/gui/data/importsub.glade.h:1
+msgid "Certificate _Location:"
+msgstr "சான்றிதழ் இடம் (_L):"
+
+#: ../src/gui/data/rhsm.glade.h:7
 msgid "Do not register"
 msgstr "பதிவுசெய்ய வேண்டாம்"
 
-#: ../src/gui/data/rhsm.glade.h:7 ../src/gui/data/mainwindow.glade.h:5
-#: ../src/gui/data/importsub.glade.h:1
+#: ../src/gui/data/rhsm.glade.h:8 ../src/gui/data/mainwindow.glade.h:5
+#: ../src/gui/data/importsub.glade.h:3
 msgid "Import Certificate"
 msgstr "சான்றிதழை இறக்கவும்"
 
-#: ../src/gui/data/rhsm.glade.h:8
+#: ../src/gui/data/rhsm.glade.h:9
 msgid "Not Compatible"
 msgstr "ஒத்தியல்பில்லா"
 
-#: ../src/gui/data/rhsm.glade.h:9 ../src/gui/data/importsub.glade.h:2
+#: ../src/gui/data/rhsm.glade.h:10 ../src/gui/data/importsub.glade.h:4
 msgid "Provide a Subscription Certificate"
 msgstr "ஒரு சந்தாபடுத்தல் சான்றிதழை வழங்கவும்"
 
-#: ../src/gui/data/rhsm.glade.h:10
+#: ../src/gui/data/rhsm.glade.h:11
 msgid "Register with Red Hat Entitlement Service"
 msgstr "Red Hat உரிம சேவையுடன் பதிவுசெய்யவும்"
 
-#: ../src/gui/data/rhsm.glade.h:11
+#: ../src/gui/data/rhsm.glade.h:12
 msgid "Register with Red Hat Network"
 msgstr "Red Hat இணையத்துடன் பதிவுசெய்யவும்"
 
-#: ../src/gui/data/rhsm.glade.h:12
+#: ../src/gui/data/rhsm.glade.h:13
 msgid "Register with Red Hat Network Satellite"
 msgstr "Red Hat பிணைய சேட்டிலைட்டுடன் பதிவுசெய்யவும்"
 
-#: ../src/gui/data/rhsm.glade.h:13
+#: ../src/gui/data/rhsm.glade.h:14
 msgid "Suggested"
 msgstr "ஆலோசனை தரப்பட்டது"
 
-#: ../src/gui/data/rhsm.glade.h:14
-msgid "Update Subscriptions"
-msgstr "சந்தாபடுத்தல்களை புதிப்பிக்கவும்"
-
 #: ../src/gui/data/rhsm.glade.h:15
-msgid "update_subscriptions_dialog\n"
-msgstr "update_subscriptions_dialog\n"
-
-#: ../src/gui/data/rhsm.glade.h:17 ../src/gui/data/importsub.glade.h:3
-msgctxt "yes"
-msgid "Certificate _Location:"
-msgstr ""
-
-#: ../src/gui/data/rhsm.glade.h:18
-msgctxt "yes"
 msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
 msgstr ""
+"ஒரு சந்தா சேர்க்க, உங்கள் சந்தா சான்றிதழ் அடைவை இறக்க ஒரு சான்றிதழை தேர்வு செய்யவும்."
+
+#: ../src/gui/data/rhsm.glade.h:16
+msgid "Update Subscriptions"
+msgstr "சந்தாபடுத்தல்களை புதிப்பிக்கவும்"
+
+#: ../src/gui/data/rhsm.glade.h:17
+msgid "update_subscriptions_dialog\n"
+msgstr "update_subscriptions_dialog\n"
 
 #: ../src/gui/data/activate.glade.h:1
 msgid "Activate"
@@ -1261,7 +1263,7 @@ msgstr "சந்தாபடுத்தலை செயல்படுத்�
 
 #: ../src/gui/data/mainwindow.glade.h:1
 msgid "<b>Certificate Status</b>"
-msgstr ""
+msgstr "<b>சான்றிதழ் நிலை</b>"
 
 #: ../src/gui/data/mainwindow.glade.h:2
 msgid "<b>Tools</b>"
@@ -1285,7 +1287,7 @@ msgstr "பதிவுசெய்யப்படாத கணினி"
 
 #: ../src/gui/data/mainwindow.glade.h:10
 msgid "Update Certificates"
-msgstr ""
+msgstr "சான்றிதழை புதுப்பி"
 
 #: ../src/gui/data/mainwindow.glade.h:11
 msgid "View System Facts"
@@ -1293,7 +1295,7 @@ msgstr "கணினி செயல்களை பார்க்கவும�
 
 #: ../src/gui/data/mainwindow.glade.h:12
 msgid "You have one product without a valid entitlement certificate."
-msgstr ""
+msgstr "சரியான உரிம சான்றிதழ் இல்லாமல் தயாரிப்பை கொண்டுள்ளீர்கள்."
 
 #: ../src/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
@@ -1375,11 +1377,11 @@ msgstr "உங்கள் சந்தா கணக்குத் தகவல
 msgid "Manage Your Product Subscriptions"
 msgstr "உங்கள் தயாரிப்பு சந்தாபடுத்தல்களை பராமரிக்கவும்"
 
-#: ../src/gui/data/importsub.glade.h:4
-msgctxt "yes"
+#: ../src/gui/data/importsub.glade.h:2
 msgid ""
 "Choose a certificate to import to your subscription certificate directory."
 msgstr ""
+"ஒரு சந்தா சேர்க்க, உங்கள் சந்தா சான்றிதழ் அடைவை இறக்க ஒரு சான்றிதழை தேர்வு செய்யவும்."
 
 #: ../src/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
@@ -1446,6 +1448,10 @@ msgid "<b>Please enter the following for this system:</b>"
 msgstr "<b>இந்த கணினிக்காக பின்வருவனவற்றை உள்ளிடவும்:</b>"
 
 #: ../src/gui/data/registration.glade.h:2
+msgid "<b>Please enter your Red Hat Network account information:</b>"
+msgstr "<b>உங்கள் Red Hat Network கணக்கு தகவலை உள்ளிடவும்:</b>"
+
+#: ../src/gui/data/registration.glade.h:3
 msgid ""
 "<small>Tip: Forgot your login or password? Look it up at\n"
 "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
@@ -1455,85 +1461,65 @@ msgstr ""
 "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
 "www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>இல் பார்க்கவும்"
 
-#: ../src/gui/data/registration.glade.h:4
+#: ../src/gui/data/registration.glade.h:5
 msgid "A unique label for this system"
 msgstr "இந்த கணிறிக்கான ஒரு ஒப்பற்ற லேபில்"
 
-#: ../src/gui/data/registration.glade.h:5
+#: ../src/gui/data/registration.glade.h:6
+msgid "Password:"
+msgstr "கடவுச்சொல்:"
+
+#: ../src/gui/data/registration.glade.h:7
+msgid "Red Hat Login:"
+msgstr "Red Hat புகுபதிவு:"
+
+#: ../src/gui/data/registration.glade.h:8
 msgid "Register"
 msgstr "பதிவுசெய்யவும்"
 
-#: ../src/gui/data/registration.glade.h:6
+#: ../src/gui/data/registration.glade.h:9
 msgid "Select the most appropriate subscriptions for this system"
 msgstr "இந்த கணினிக்கான மிகச் சரியான சந்தாப்படுத்தல்களை தேர்ந்தெடுக்கவும்"
 
-#: ../src/gui/data/registration.glade.h:7
+#: ../src/gui/data/registration.glade.h:10
 msgid "System Name:"
 msgstr "கணினி பெயர்:"
 
-#: ../src/gui/data/registration.glade.h:8
+#: ../src/gui/data/registration.glade.h:11
 msgid "System Registration"
 msgstr "கணினி பதிவுசெய்தல்"
 
-#: ../src/gui/data/registration.glade.h:9
+#: ../src/gui/data/registration.glade.h:12
 msgid "register_button"
 msgstr "பொத்தானை பதிவுசெய்யவும்(_b)"
 
-#: ../src/gui/data/registration.glade.h:10
+#: ../src/gui/data/registration.glade.h:13
 msgid "register_dialog_main_vbox"
 msgstr "register_dialog_main_vbox"
 
-#: ../src/gui/data/registration.glade.h:11
+#: ../src/gui/data/registration.glade.h:14
 msgid "registration_dialog_action_area\n"
 msgstr "registration_dialog_action_area\n"
-
-#: ../src/gui/data/registration.glade.h:13
-msgctxt "yes"
-msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr ""
-
-#: ../src/gui/data/registration.glade.h:14
-msgctxt "yes"
-msgid "Password:"
-msgstr ""
-
-#: ../src/gui/data/registration.glade.h:15
-msgctxt "yes"
-msgid "Red Hat Login:"
-msgstr ""
 
 #: ../src/gui/data/progress.glade.h:1
 msgid "Progress Dialog"
 msgstr "முன்னேற்ற உரையாடல்"
 
 #: ../src/gui/data/contract_selection.glade.h:1
-msgctxt "yes"
 msgid "<b>Choose the specific contract to use:</b>"
-msgstr ""
-
-#: ../src/gui/data/contract_selection.glade.h:2
-msgctxt "yes"
-msgid "<b>Subscription:</b>"
-msgstr "<b>சந்தா:</b>"
+msgstr "<b>பயன்படுத்த வேண்டிய குறிப்பிட்ட ஒப்பந்தத்தைத் தேர்வு செய்யவும்:</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:3
-msgctxt "yes"
 msgid "<b>Total Contracts:</b>"
-msgstr ""
+msgstr "<b>மொத்த ஒப்பந்தங்கள்:</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:4
-msgctxt "yes"
 msgid "Contract Selection"
-msgstr ""
-
-#: ../src/gui/data/contract_selection.glade.h:5
-msgctxt "yes"
-msgid "Subscribe"
-msgstr "சந்தாப்படுத்து"
+msgstr "ஒப்பந்த தேர்வு"
 
 #: ../src/compliance/rhsm_compliance_icon.c:43
 msgid "How often to check for validity (in seconds)"
-msgstr ""
+msgstr "செல்லுபடியை எத்தனை முறை சரிபார்க்க வேண்டும் (விநாடிகளில்)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:45
 msgid "Show debug messages"
@@ -1541,16 +1527,16 @@ msgstr "பிழைதிருத்த செய்திகளை காட�
 
 #: ../src/compliance/rhsm_compliance_icon.c:47
 msgid "Force display of the icon (expired or warning)"
-msgstr ""
+msgstr "சின்னத்தின் வலிமையான காட்சி (காலாவதியனது அல்லது எச்சரிக்கிறது)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:170
 #: ../src/compliance/rhsm_compliance_icon.c:171
 msgid "Invalid or Missing Entitlement Certificates"
-msgstr ""
+msgstr "தவறான அல்லது விடுபட்ட உரிம சான்றிதழ்கள்"
 
 #: ../src/compliance/rhsm_compliance_icon.c:172
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr ""
+msgstr "இந்த கணினி ஒன்று அல்லது அதற்கு மேற்பட்ட சரியான உரிம சான்றிதழ்களை கொண்டுள்ளன."
 
 #: ../src/compliance/rhsm_compliance_icon.c:176
 msgid "Some of the system's subscriptions are about to expire"
@@ -1562,7 +1548,7 @@ msgstr "இந்த கணினிகளுக்கு சந்தாபட�
 
 #: ../src/compliance/rhsm_compliance_icon.c:179
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr ""
+msgstr "ஒன்று அல்லது பல கணினிகள் சந்தாபடுத்தல்கள் காலாவதியாகும் நிலையில் உள்ளன"
 
 #: ../src/compliance/rhsm_compliance_icon.c:197
 msgid "Remind Me Later"
@@ -1590,56 +1576,30 @@ msgstr "விருப்ப பிணைத்தல் தோல்விய�
 
 #: ../etc-conf/subscription-manager.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
-msgstr ""
+msgstr "Red Hat சந்தாபடுத்தல் மேலாளர்"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
-msgstr ""
+msgstr "Red Hat சந்தாபடுத்தல் சரிபார்த்தல் ஆப்லெட்"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
-msgstr ""
+msgstr "சந்தாபடுத்தல் சரிபார்த்தல் ஆப்லெட்"
 
-#~ msgid "%s (first date of non-compliance)"
-#~ msgstr "%s (உடன்பாடற்ற முதல் தேதியில்)"
-
-#~ msgid "<b>Choose the specific contract to use:</b>"
-#~ msgstr "<b>பயன்படுத்த வேண்டிய குறிப்பிட்ட ஒப்பந்தத்தைத் தேர்வு செய்யவும்:</b>"
-
-#~ msgid "<b>Compliance Status</b>"
-#~ msgstr "<b>உடன்பாட்டின் நிலை</b>"
+#~ msgid "Never Subscribed"
+#~ msgstr "சந்தாபடுத்தப்படவில்லை"
 
 #~ msgid "<b>Compliance:</b>"
 #~ msgstr "<b>உடன்பாடு:</b>"
 
-#~ msgid "<b>HTTP Proxy</b>"
-#~ msgstr "<b>HTTP பதிலாள்</b>"
-
-#~ msgid "<b>Please enter your Red Hat Network account information:</b>"
-#~ msgstr "<b>உங்கள் Red Hat Network கணக்கு தகவலை உள்ளிடவும்:</b>"
-
-#~ msgid "<b>Total Contracts:</b>"
-#~ msgstr "<b>மொத்த ஒப்பந்தங்கள்:</b>"
-
 #~ msgid "<big><b>All software is in compliance until %s</b></big>"
 #~ msgstr "<big><b>உடன்பாடு %sவரை அனைத்து மென்பொருளும் உள்ளன</b></big>"
-
-#~ msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-#~ msgstr "<small><b>எடுத்துக்காட்டு:</b> squid.example.com:3128</small>"
 
 #~ msgid "All products are in compliance until %s"
 #~ msgstr "%s வரை உடன்பாட்டிலுள்ள அனைத்து தயாரிப்புகள்யுள்"
 
 #~ msgid "Become Compliant"
 #~ msgstr "உடன்பாடாக ஆனது"
-
-#~ msgid "Certificate _Location:"
-#~ msgstr "சான்றிதழ் இடம் (_L):"
-
-#~ msgid ""
-#~ "Choose a certificate to import to your subscription certificate directory."
-#~ msgstr ""
-#~ "ஒரு சந்தா சேர்க்க, உங்கள் சந்தா சான்றிதழ் அடைவை இறக்க ஒரு சான்றிதழை தேர்வு செய்யவும்."
 
 #~ msgid "Compliance Action Area"
 #~ msgstr "உடன்பாடு செயல் பகுதி"
@@ -1649,9 +1609,6 @@ msgstr ""
 
 #~ msgid "Compliance Assistant Box"
 #~ msgstr "உடன்பாடு உதவி பெட்டி"
-
-#~ msgid "Compliance Assistant Status"
-#~ msgstr "உடன்பாடு உதவி நிலை"
 
 #~ msgid "Compliance Date Box"
 #~ msgstr "உடன்பாடு தேதி பெட்டி"
@@ -1680,12 +1637,6 @@ msgstr ""
 #~ msgid "Compliance Subscription List"
 #~ msgstr "உடன்பாடு சந்தா பட்டியல்"
 
-#~ msgid "Compliance Subscriptions Box"
-#~ msgstr "உடன்பாடு சந்தாக்கள் பெட்டி"
-
-#~ msgid "Compliance Subscriptions Label"
-#~ msgstr "உடன்பாடு சந்தாக்கள் பெயர்"
-
 #~ msgid "Compliance Subscriptions List"
 #~ msgstr "உடன்பாடு சந்தாக்கள் பட்டியல்"
 
@@ -1695,33 +1646,8 @@ msgstr ""
 #~ msgid "Compliance Update Box"
 #~ msgstr "உடன்பாடு புதுப்பித்தல் பெட்டி"
 
-#~ msgid "Contract Selection"
-#~ msgstr "ஒப்பந்த தேர்வு"
-
-#~ msgid ""
-#~ "Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log "
-#~ "for more information."
-#~ msgstr ""
-#~ "உடன்பாட்டு உதவியாளரை காட்டுவதில் பிழை. மேலும் தகவலுக்கு /var/log/rhsm/rhsm.logஐ "
-#~ "பார்க்கவும்."
-
-#~ msgid "Error reading system DMI information:"
-#~ msgstr "பிழை வாசிக்கும் கணினி DMI நினைவக தகவல்:"
-
-#~ msgid "Force display of the compliance icon (expired or warning)"
-#~ msgstr "உடன்பாடு சின்னத்தின் வலிமையான காட்சி (காலாவதியனது அல்லது எச்சரிக்கிறது)"
-
-#~ msgid "How often to check for compliance (in seconds)"
-#~ msgstr "உடன்பாட்டை எத்தனை முறை சரிபார்க்க வேண்டும் (விநாடிகளில்)"
-
-#~ msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-#~ msgstr "ஒரு _HTTP பதிலாள் வழியாக Red Hat Network உடன் இணைக்க விரும்புகிறேன்."
-
 #~ msgid "In Compliance"
 #~ msgstr "உடன்பாட்டில்"
-
-#~ msgid "On a different date:"
-#~ msgstr "ஒரு வித்தியாசமான தேதியில்:"
 
 #~ msgid ""
 #~ "One or more of this system's subscriptions are about to expire. These "
@@ -1734,65 +1660,11 @@ msgstr ""
 #~ msgid "Out of Compliance"
 #~ msgstr "உடன்பாட்டிற்கு வெளியே உள்ளது"
 
-#~ msgid "Password:"
-#~ msgstr "கடவுச்சொல்:"
-
-#~ msgid "Proxy P_assword:"
-#~ msgstr "பதிலாள் கடவுச்சொல் (_a):"
-
-#~ msgid "Proxy _Username:"
-#~ msgstr "பதிலாள் பயனர்பெயர் (_U):"
-
-#~ msgid "Red Hat Login:"
-#~ msgstr "Red Hat புகுபதிவு:"
-
-#~ msgid "Show products that will be out of compliance as of:"
-#~ msgstr "உடன்பாட்டிற்கு வெளியையுள்ள தயாரிப்புகளை காட்டு:"
-
-#~ msgid "Subscription Manager - Compliance Assistant"
-#~ msgstr "சந்தாபடுத்தல் மேலாளர் - உடன்பாடு துணை"
-
 #~ msgid "This System is Non-Compliant"
 #~ msgstr "இந்த கணினி ஒரு உடன்பாடற்றது"
 
-#~ msgid ""
-#~ "This system is missing one or more subscriptions required for compliance "
-#~ "with your subscription agreements."
-#~ msgstr ""
-#~ "இந்த விடுபட்ட கணினியில் ஒன்று அல்லது மேலும் சந்தாபடுத்தல்கள் காலாவதியாகும் நிலையில் "
-#~ "உள்ளன. இந்த சந்தாபடுதல்கள் உங்கள் சந்தா ஒப்பந்தகளுடன் உடன்பாடு தேவைப்படுகிறது."
-
 #~ msgid "This system is non-compliant"
 #~ msgstr "இந்த கணினி ஒரு உடன்பாடற்றது"
-
-#~ msgid ""
-#~ "To add a subscription, choose a certificate to import to your "
-#~ "subscription certificate directory."
-#~ msgstr ""
-#~ "ஒரு சந்தா சேர்க்க, உங்கள் சந்தா சான்றிதழ் அடைவை இறக்க ஒரு சான்றிதழை தேர்வு செய்யவும்."
-
-#~ msgid "Use Au_thentication with HTTP Proxy:"
-#~ msgstr "HTTP பதிலாளுடன் அங்கீகாரத்தைப் பயன்படுத்தவும் (_t):"
-
-#~ msgid "You have <b>%s</b> products out of compliance."
-#~ msgstr "<b>%s</b> உடன்பாட்டை மீறிய தயாரிப்புகளை கொண்டுள்ளீர்கள்."
-
-#~ msgid "You have <b>1</b> product out of compliance."
-#~ msgstr "<b>1</b> உடன்பாட்டை மீறிய தயாரிப்புகளை கொண்டுள்ளீர்கள்."
-
-#~ msgid "You have one product which is out of compliance."
-#~ msgstr "உடன்பாடற்ற ஒரு தயாரிப்பை நீங்கள் கொண்டுள்ளீர்கள்."
-
-#~ msgid "You must register before using the compliance assistant."
-#~ msgstr ""
-#~ "உடன்பாட்டு துணையை பயன்படுத்துவதற்கு முன் நீங்கள் பதிவுசெய்ய வேண்டும்.உடன்பாட்டு துணையை "
-#~ "பயன்படுத்துவதறனஉடன்பாட்டை"
-
-#~ msgid "_Close"
-#~ msgstr "மூடவும் (_C)"
-
-#~ msgid "_Proxy Location:"
-#~ msgstr "பதிலாள் இடம் (_P):"
 
 #~ msgid ""
 #~ "\n"
@@ -1932,9 +1804,6 @@ msgstr ""
 #~ msgstr ""
 #~ "பிழை: பதிவுசெய்வதற்கு பயனர்பெயர் மற்றும் கடவுச்சொல் தேவைப்படுகிறது, --helpஐ "
 #~ "பதிவுசெய்ய முயற்சிக்கவும்."
-
-#~ msgid "Subscribed to Products:"
-#~ msgstr "தயாரிப்புகளுக்கு சந்தாபடுத்தவும்:"
 
 #~ msgid "     %s(%s)"
 #~ msgstr "     %s(%s)"

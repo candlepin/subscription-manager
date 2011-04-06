@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 08:54-0300\n"
-"PO-Revision-Date: 2011-03-30 14:00+0530\n"
+"POT-Creation-Date: 2011-04-05 12:59-0300\n"
+"PO-Revision-Date: 2011-04-05 13:02+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
 "Language: ml-IN\n"
@@ -664,7 +664,7 @@ msgstr "സമയപരിധി: %d(ms)"
 #: ../src/hwprobe.py:60
 #, python-format
 msgid "Error reading system DMI information: %s"
-msgstr ""
+msgstr "സിസ്റ്റത്തിന്റെ ഡിഎംഐ വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../src/hwprobe.py:116
 msgid "Error reading system memory information:"
@@ -746,21 +746,21 @@ msgstr "ഇന്നു്"
 
 #: ../src/gui/managergui.py:371
 msgid "You must register before using the subscription assistant."
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ അസിസ്റ്റന്റ് ഉപയോഗിയ്ക്കുന്നതിനു് മുമ്പ് രജിസ്ടര്‍ ചെയ്യുക."
 
 #: ../src/gui/managergui.py:402
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr ""
+msgstr "തെറ്റായ എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റുകളുള്ള <b>%s</b> പ്രൊഡക്ടുകളുണ്ടു്."
 
 #: ../src/gui/managergui.py:406
 msgid "You have <b>1</b> product without a valid entitlement certificate."
-msgstr ""
+msgstr "തെറ്റായ എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റുള്ള <b>1</b> പ്രൊഡക്ടുണ്ടു്."
 
 #: ../src/gui/managergui.py:413
 #, python-format
 msgid "Product entitlement certificates valid through %s"
-msgstr ""
+msgstr "പ്രൊഡക്ട് എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റുകളുടെ കാലാവധി %s ആകുന്നു"
 
 #: ../src/gui/managergui.py:536
 msgid "You must enter a system name."
@@ -786,7 +786,7 @@ msgstr "അവസാന തീയതി"
 
 #: ../src/gui/compliance.py:141
 msgid "Subscription List"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ പട്ടിക"
 
 #. Set up columns on the view
 #: ../src/gui/compliance.py:142 ../src/gui/allsubs.py:56
@@ -799,6 +799,8 @@ msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
 msgstr ""
+"സബ്സ്ക്രിപ്ഷന്‍ അസിസ്റ്റന്റ് കാണിയ്ക്കുന്നതില്‍ പിശക്. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/log/rhsm/rhsm."
+"log കാണുക."
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -807,12 +809,12 @@ msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ തെരയു�
 #: ../src/gui/compliance.py:214
 #, python-format
 msgid "Software entitlements valid through %s"
-msgstr ""
+msgstr "സോഫ്റ്റ്‌വെയര്‍ എന്റൈറ്റില്‍മെന്റുകളുടെ കാലാവധി %s ആകുന്നു"
 
 #: ../src/gui/compliance.py:218
 #, python-format
 msgid "%s (first date of invalid entitlements)"
-msgstr ""
+msgstr "%s (തെറ്റായ എന്റൈറ്റില്‍മെന്റിന്റെ ആദ്യത്തെ ദിവസം)"
 
 #: ../src/gui/compliance.py:220
 #, python-format
@@ -917,19 +919,20 @@ msgstr "ലക്കം"
 
 #: ../src/gui/installedtab.py:54
 msgid "Certificate"
-msgstr ""
+msgstr "സര്‍ട്ടിഫിക്കേറ്റ്"
 
 #: ../src/gui/installedtab.py:95
 msgid "Future Subscription"
 msgstr "ഭാവി സബ്സ്ക്രിപ്ഷന്‍"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "ഒരിക്കലും സബ്സ്ക്രൈബ് ചെയ്തിട്ടില്ല"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "ലഭ്യമല്ല"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
-msgstr ""
+msgstr "തെറ്റായതു്"
 
 #: ../src/gui/installedtab.py:101
 #, python-format
@@ -938,16 +941,12 @@ msgstr "സബ്സ്ക്രിപ്ഷന്‍ %s-ന്റെ കാല�
 
 #: ../src/gui/installedtab.py:104
 msgid "Valid"
-msgstr ""
+msgstr "ശരിയായതു്"
 
 #: ../src/gui/installedtab.py:106
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "%s കോണ്‍ട്രാക്ടില്‍ ലഭ്യമാകുന്നു, %s വഴി"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr ""
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -955,7 +954,7 @@ msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത സോഫ്റ�
 
 #: ../src/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
-msgstr ""
+msgstr "<b>സര്‍ട്ടിഫിക്കേറ്റിന്റെ സ്ഥിതി:</b>"
 
 #: ../src/gui/data/installed.glade.h:2
 msgid "<b>Product's Subscription Details</b>"
@@ -966,12 +965,13 @@ msgid "<b>Product:</b>"
 msgstr "<b>പ്രൊഡക്ട്:</b>"
 
 #: ../src/gui/data/installed.glade.h:4 ../src/gui/data/subdetails.glade.h:8
+#: ../src/gui/data/contract_selection.glade.h:2
 msgid "<b>Subscription:</b>"
 msgstr "<b>സബ്സ്ക്രിപ്ഷന്‍:</b>"
 
 #: ../src/gui/data/installed.glade.h:5 ../src/gui/data/mainwindow.glade.h:4
 msgid "Certificate Status"
-msgstr ""
+msgstr "സര്‍ട്ടിഫിക്കേറ്റിന്റെ സ്ഥിതി"
 
 #: ../src/gui/data/installed.glade.h:6
 msgid "Installed View"
@@ -983,160 +983,153 @@ msgid "Next Update:"
 msgstr "അടുത്ത പരിഷ്കരണം:"
 
 #: ../src/gui/data/networkConfig.glade.h:1
+msgid "<b>HTTP Proxy</b>"
+msgstr "<b>HTTP പ്രോക്സി:</b>"
+
+#: ../src/gui/data/networkConfig.glade.h:2
+msgid "<small><b>Example:</b> squid.example.com:3128</small>"
+msgstr "<small><b>ഉദാഹരണം:</b> squid.example.com:3128</small>"
+
+#: ../src/gui/data/networkConfig.glade.h:3
 msgid "Advanced Network Configuration"
 msgstr "നവീന നെറ്റ്‌വര്‍ക്ക് ക്രമീകരണം"
 
-#: ../src/gui/data/networkConfig.glade.h:2
+#: ../src/gui/data/networkConfig.glade.h:4
 msgid "Authentication Checkbox"
 msgstr "ആധികാരികത ഉറപ്പാക്കുന്നതിനുള്ള ചെക്ക്ബോക്സ്"
 
-#: ../src/gui/data/networkConfig.glade.h:3
+#: ../src/gui/data/networkConfig.glade.h:5
 msgid "Close Button"
 msgstr "അടയ്ക്കുന്നതിനുള്ള ബട്ടണ്‍"
 
-#: ../src/gui/data/networkConfig.glade.h:4
+#: ../src/gui/data/networkConfig.glade.h:6
 msgid "Enter in the format hostname(:port)"
 msgstr "hostname(:port) എന്ന ഫോര്‍മാറ്റില്‍ നല്‍കുക"
 
-#: ../src/gui/data/networkConfig.glade.h:5
+#: ../src/gui/data/networkConfig.glade.h:7
+msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
+msgstr "_HTTP പ്രോക്സി വഴി Red Hat നെറ്റ്‌വര്‍ക്കിലേക്ക് കണക്ട് ചെയ്യുവാന്‍ ആഗ്രഹിയ്ക്കുന്നു."
+
+#: ../src/gui/data/networkConfig.glade.h:8
 msgid "Password Text"
 msgstr "രഹസ്യവാക്കിനുള്ള വാചകം"
 
-#: ../src/gui/data/networkConfig.glade.h:6
+#: ../src/gui/data/networkConfig.glade.h:9
 msgid "Proxy Checkbox"
 msgstr "പ്രോക്സിയ്ക്കുള്ള ചെക്ക്ബോക്സ്"
 
-#: ../src/gui/data/networkConfig.glade.h:7
+#: ../src/gui/data/networkConfig.glade.h:10
 msgid "Proxy Location Text"
 msgstr "പ്രോക്സി സ്ഥാനത്തിനുള്ള വാചകം"
 
-#: ../src/gui/data/networkConfig.glade.h:8
+#: ../src/gui/data/networkConfig.glade.h:11
+msgid "Proxy P_assword:"
+msgstr "പ്രോക്സി ര_ഹസ്യവാക്ക്:"
+
+#: ../src/gui/data/networkConfig.glade.h:12
+msgid "Proxy _Username:"
+msgstr "പ്രോക്സി _ഉപയോക്തൃനാമം:"
+
+#: ../src/gui/data/networkConfig.glade.h:13
+msgid "Use Au_thentication with HTTP Proxy:"
+msgstr "HTTP പ്രോക്സി ഉപയോഗിച്ചുള്ള _ആധികാരികത ഉറപ്പാക്കല്‍ സംവിധാനം ഉപയോഗിയ്ക്കുക:"
+
+#: ../src/gui/data/networkConfig.glade.h:14
 msgid "Username Text"
 msgstr "ഉപയോക്തൃനാമത്തിനുള്ള വാചകം"
 
-#: ../src/gui/data/networkConfig.glade.h:9
-msgctxt "yes"
-msgid "<b>HTTP Proxy</b>"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:10
-msgctxt "yes"
-msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:11
-msgctxt "yes"
-msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:12
-msgctxt "yes"
-msgid "Proxy P_assword:"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:13
-msgctxt "yes"
-msgid "Proxy _Username:"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:14
-msgctxt "yes"
-msgid "Use Au_thentication with HTTP Proxy:"
-msgstr ""
-
 #: ../src/gui/data/networkConfig.glade.h:15
-msgctxt "yes"
 msgid "_Close"
-msgstr ""
+msgstr "_അടയ്ക്കുക"
 
 #: ../src/gui/data/networkConfig.glade.h:16
-msgctxt "yes"
 msgid "_Proxy Location:"
-msgstr ""
+msgstr "_പ്രോക്സിയുടെ സ്ഥാനം:"
 
 #: ../src/gui/data/compliance.glade.h:1
 msgid "A different date:"
-msgstr ""
+msgstr "മറ്റൊരു തീയതിയില്‍:"
 
 #: ../src/gui/data/compliance.glade.h:2
 msgid "Invalid Product List"
-msgstr ""
+msgstr "തെറ്റായ പ്രൊഡക്ട് പട്ടിക"
 
 #: ../src/gui/data/compliance.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
-msgstr ""
+msgstr "തെറ്റായ എന്റൈറ്റില്‍മെന്റ് പ്രൊഡക്ടുകള്‍ കാണിയ്ക്കുക:"
 
 #: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
+#: ../src/gui/data/contract_selection.glade.h:5
 msgid "Subscribe"
 msgstr "അംഗമാകുക"
 
 #: ../src/gui/data/compliance.glade.h:5
 msgid "Subscription Action Area"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ ആക്ഷന്‍ ഏരിയാ"
 
 #: ../src/gui/data/compliance.glade.h:6
 msgid "Subscription Assistant"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ അസിസ്റ്റന്റ്"
 
 #: ../src/gui/data/compliance.glade.h:7
 msgid "Subscription Assistant Box"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ അസിസ്റ്റന്റ് ബോക്സ്"
 
 #: ../src/gui/data/compliance.glade.h:8
 msgid "Subscription Assistant Status"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ അസിസ്റ്റന്റ് അവസ്ഥ"
 
 #: ../src/gui/data/compliance.glade.h:9
 msgid "Subscription Date Box"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ തീയതി ബോക്സ്"
 
 #: ../src/gui/data/compliance.glade.h:10
 msgid "Subscription Date Label"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ തീയതി ലേബല്‍"
 
 #: ../src/gui/data/compliance.glade.h:11
 msgid "Subscription Date Picker"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ തീയതി തെരഞ്ഞെടുക്കല്‍"
 
 #: ../src/gui/data/compliance.glade.h:12
 msgid "Subscription Details"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ വിവരങ്ങള്‍"
 
 #: ../src/gui/data/compliance.glade.h:13
 msgid "Subscription Label"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ ലേബല്‍"
 
 #: ../src/gui/data/compliance.glade.h:14
 msgid "Subscription Label Box"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ ലേബല്‍ ബോക്സ്"
 
 #: ../src/gui/data/compliance.glade.h:15
 msgid "Subscription Manager - Subscription Assistant"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ മാനേജര്‍ - സബ്സ്ക്രിപ്ഷന്‍ അസിസ്റ്റന്റ്"
 
 #: ../src/gui/data/compliance.glade.h:16
 msgid "Subscription Product List"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ പ്രൊഡക്ട് പട്ടിക"
 
 #: ../src/gui/data/compliance.glade.h:17
 msgid "Subscription Subscriptions Box"
-msgstr ""
+msgstr "Subscription Subscriptions Box"
 
 #: ../src/gui/data/compliance.glade.h:18
 msgid "Subscription Subscriptions Label"
-msgstr ""
+msgstr "Subscription Subscriptions Label"
 
 #: ../src/gui/data/compliance.glade.h:19
 msgid "Subscription Update Box"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ പരിഷ്കരണ ബോക്സ്"
 
 #: ../src/gui/data/compliance.glade.h:20
 msgid "Subscriptions List"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ പട്ടിക"
 
 #: ../src/gui/data/compliance.glade.h:21
 msgid "Subscriptions Panel"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ പാനല്‍"
 
 #: ../src/gui/data/compliance.glade.h:22
 msgid "The following subscriptions will cover the products selected above:"
@@ -1170,58 +1163,58 @@ msgstr "<b>ഇന്‍സ്റ്റോള്‍ ചെയ്ത പ്രൊ�
 msgid "Add Subscriptions"
 msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ ചേര്‍ക്കുക"
 
-#: ../src/gui/data/rhsm.glade.h:6
+#: ../src/gui/data/rhsm.glade.h:6 ../src/gui/data/importsub.glade.h:1
+msgid "Certificate _Location:"
+msgstr "സര്‍ട്ടിഫിക്കേറ്റിന്റെ _സ്ഥാനം:"
+
+#: ../src/gui/data/rhsm.glade.h:7
 msgid "Do not register"
 msgstr "രജിസ്ടര്‍ ചെയ്യേണ്ട"
 
-#: ../src/gui/data/rhsm.glade.h:7 ../src/gui/data/mainwindow.glade.h:5
-#: ../src/gui/data/importsub.glade.h:1
+#: ../src/gui/data/rhsm.glade.h:8 ../src/gui/data/mainwindow.glade.h:5
+#: ../src/gui/data/importsub.glade.h:3
 msgid "Import Certificate"
 msgstr "സര്‍ട്ടിഫിക്കേറ്റ് സ്വീകരിയ്ക്കുക"
 
-#: ../src/gui/data/rhsm.glade.h:8
+#: ../src/gui/data/rhsm.glade.h:9
 msgid "Not Compatible"
 msgstr "പൊരുത്തമല്ല"
 
-#: ../src/gui/data/rhsm.glade.h:9 ../src/gui/data/importsub.glade.h:2
+#: ../src/gui/data/rhsm.glade.h:10 ../src/gui/data/importsub.glade.h:4
 msgid "Provide a Subscription Certificate"
 msgstr "ഒരു സബ്സ്ക്രിപ്ഷന്‍ സര്‍ട്ടിഫിക്കേറ്റ് ലഭ്യമാക്കുക"
 
-#: ../src/gui/data/rhsm.glade.h:10
+#: ../src/gui/data/rhsm.glade.h:11
 msgid "Register with Red Hat Entitlement Service"
 msgstr "Red Hat എന്റൈറ്റില്‍മെന്റ് സര്‍വീസിനായി രജിസ്ടര്‍ ചെയ്യുക"
 
-#: ../src/gui/data/rhsm.glade.h:11
+#: ../src/gui/data/rhsm.glade.h:12
 msgid "Register with Red Hat Network"
 msgstr "Red Hat നെറ്റ്‌വര്‍ക്കുമായി രജിസ്ടര്‍ ചെയ്യുക"
 
-#: ../src/gui/data/rhsm.glade.h:12
+#: ../src/gui/data/rhsm.glade.h:13
 msgid "Register with Red Hat Network Satellite"
 msgstr "Red Hat നെറ്റ്‌വര്‍ക്ക് സാറ്റിലൈറ്റുമായി രജിസ്ടര്‍ ചെയ്യുക"
 
-#: ../src/gui/data/rhsm.glade.h:13
+#: ../src/gui/data/rhsm.glade.h:14
 msgid "Suggested"
 msgstr "നിര്‍ദ്ദേശിച്ചതു്"
 
-#: ../src/gui/data/rhsm.glade.h:14
-msgid "Update Subscriptions"
-msgstr "സബ്സ്ക്രിപ്ഷന്‍ പരിഷ്കരിയ്ക്കുക"
-
 #: ../src/gui/data/rhsm.glade.h:15
-msgid "update_subscriptions_dialog\n"
-msgstr "update_subscriptions_dialog\n"
-
-#: ../src/gui/data/rhsm.glade.h:17 ../src/gui/data/importsub.glade.h:3
-msgctxt "yes"
-msgid "Certificate _Location:"
-msgstr ""
-
-#: ../src/gui/data/rhsm.glade.h:18
-msgctxt "yes"
 msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
 msgstr ""
+"സബ്സ്ക്രിപ്ഷന്‍ ചേര്‍ക്കുന്നതിനായി, നിങ്ങളുടെ സബ്സ്ക്രിപ്ഷന്‍ സര്‍ട്ടിഫിക്കേറ്റ് ഡയറക്ടറിയിലേക്കു് ഒരു "
+"സര്‍ട്ടിഫിക്കേറ്റ് ഇംപോര്‍ട്ട് ചെയ്യുക."
+
+#: ../src/gui/data/rhsm.glade.h:16
+msgid "Update Subscriptions"
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ പരിഷ്കരിയ്ക്കുക"
+
+#: ../src/gui/data/rhsm.glade.h:17
+msgid "update_subscriptions_dialog\n"
+msgstr "update_subscriptions_dialog\n"
 
 #: ../src/gui/data/activate.glade.h:1
 msgid "Activate"
@@ -1250,7 +1243,7 @@ msgstr "സബ്സ്ക്രിപ്ഷന്‍ സജീവമാക്�
 
 #: ../src/gui/data/mainwindow.glade.h:1
 msgid "<b>Certificate Status</b>"
-msgstr ""
+msgstr "<b>സര്‍ട്ടിഫിക്കേറ്റിന്റെ സ്ഥിതി</b>"
 
 #: ../src/gui/data/mainwindow.glade.h:2
 msgid "<b>Tools</b>"
@@ -1274,7 +1267,7 @@ msgstr "സിസ്റ്റം അണ്‍രജിസ്ടര്‍ ചെ�
 
 #: ../src/gui/data/mainwindow.glade.h:10
 msgid "Update Certificates"
-msgstr ""
+msgstr "പരിഷ്കരണ സര്‍ട്ടിഫിക്കേറ്റുകള്‍"
 
 #: ../src/gui/data/mainwindow.glade.h:11
 msgid "View System Facts"
@@ -1282,7 +1275,7 @@ msgstr "സിസ്റ്റം വിവരങ്ങള്‍ കാണുക"
 
 #: ../src/gui/data/mainwindow.glade.h:12
 msgid "You have one product without a valid entitlement certificate."
-msgstr ""
+msgstr "ശരിയായൊരു എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റില്ലാത്തൊരു പ്രൊഡക്ടുണ്ടു്."
 
 #: ../src/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
@@ -1364,11 +1357,12 @@ msgstr "സബ്സ്ക്രിപ്ഷന്‍ അക്കൌണ്ട�
 msgid "Manage Your Product Subscriptions"
 msgstr "പ്രൊഡക്ട് സബ്ക്രിപ്ഷനുകള്‍ കൈകാര്യം ചെയ്യുക"
 
-#: ../src/gui/data/importsub.glade.h:4
-msgctxt "yes"
+#: ../src/gui/data/importsub.glade.h:2
 msgid ""
 "Choose a certificate to import to your subscription certificate directory."
 msgstr ""
+"നിങ്ങളുടെ സബ്സ്ക്രിപ്ഷന്‍ സര്‍ട്ടിഫിക്കേറ്റ് ഡയറക്ടറി ഇംപോര്‍ട്ട് ചെയ്യുന്നതിനുള്ളൊരു സര്‍ട്ടിഫിക്കേറ്റ് "
+"തെരഞ്ഞെടുക്കുക."
 
 #: ../src/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
@@ -1435,6 +1429,10 @@ msgid "<b>Please enter the following for this system:</b>"
 msgstr "<b>ഈ സിസ്റ്റത്തിനുള്ള താഴെ പറയുന്ന വിവരങ്ങള്‍ ദയവായി നല്‍കുക:</b>"
 
 #: ../src/gui/data/registration.glade.h:2
+msgid "<b>Please enter your Red Hat Network account information:</b>"
+msgstr "<b>ദയവായി നിങ്ങളുടെ Red Hat നെറ്റ്‌വര്‍ക്ക് അക്കൌണ്ട് വിവരം നല്‍കുക:</b>"
+
+#: ../src/gui/data/registration.glade.h:3
 msgid ""
 "<small>Tip: Forgot your login or password? Look it up at\n"
 "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
@@ -1444,85 +1442,65 @@ msgstr ""
 "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
 "www.redhat.com/wapps/sso/rhn/lostPassword.html</a> കാണുക</small> "
 
-#: ../src/gui/data/registration.glade.h:4
+#: ../src/gui/data/registration.glade.h:5
 msgid "A unique label for this system"
 msgstr "ഈ സിസ്റ്റത്തിനുള്ള ലേബല്‍"
 
-#: ../src/gui/data/registration.glade.h:5
+#: ../src/gui/data/registration.glade.h:6
+msgid "Password:"
+msgstr "രഹസ്യവാക്ക്:"
+
+#: ../src/gui/data/registration.glade.h:7
+msgid "Red Hat Login:"
+msgstr "Red Hat പ്രവേശനം:"
+
+#: ../src/gui/data/registration.glade.h:8
 msgid "Register"
 msgstr "രജിസ്ടര്‍ ചെയ്യുക"
 
-#: ../src/gui/data/registration.glade.h:6
+#: ../src/gui/data/registration.glade.h:9
 msgid "Select the most appropriate subscriptions for this system"
 msgstr "ഈ സിസ്റ്റത്തിനുള്ള ഏറ്റവും ഉചിതമായ സബ്സ്ക്രിപ്ഷനുകള്‍ തെരഞ്ഞെടുക്കുക"
 
-#: ../src/gui/data/registration.glade.h:7
+#: ../src/gui/data/registration.glade.h:10
 msgid "System Name:"
 msgstr "സിസ്റ്റം നാമം:"
 
-#: ../src/gui/data/registration.glade.h:8
+#: ../src/gui/data/registration.glade.h:11
 msgid "System Registration"
 msgstr "സിസ്റ്റം രജിസ്ട്രേഷന്‍"
 
-#: ../src/gui/data/registration.glade.h:9
+#: ../src/gui/data/registration.glade.h:12
 msgid "register_button"
 msgstr "register_button"
 
-#: ../src/gui/data/registration.glade.h:10
+#: ../src/gui/data/registration.glade.h:13
 msgid "register_dialog_main_vbox"
 msgstr "register_dialog_main_vbox"
 
-#: ../src/gui/data/registration.glade.h:11
+#: ../src/gui/data/registration.glade.h:14
 msgid "registration_dialog_action_area\n"
 msgstr "registration_dialog_action_area\n"
-
-#: ../src/gui/data/registration.glade.h:13
-msgctxt "yes"
-msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr ""
-
-#: ../src/gui/data/registration.glade.h:14
-msgctxt "yes"
-msgid "Password:"
-msgstr ""
-
-#: ../src/gui/data/registration.glade.h:15
-msgctxt "yes"
-msgid "Red Hat Login:"
-msgstr ""
 
 #: ../src/gui/data/progress.glade.h:1
 msgid "Progress Dialog"
 msgstr "പുരോഗതി ഡയലോഗ്"
 
 #: ../src/gui/data/contract_selection.glade.h:1
-msgctxt "yes"
 msgid "<b>Choose the specific contract to use:</b>"
-msgstr ""
-
-#: ../src/gui/data/contract_selection.glade.h:2
-msgctxt "yes"
-msgid "<b>Subscription:</b>"
-msgstr ""
+msgstr "<b>ഉപയോഗിയ്ക്കുന്നതിനുള്ള ഒരു പ്രത്യേക കോണ്‍ട്രാക്ട് തെരഞ്ഞെടുക്കൂ:</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:3
-msgctxt "yes"
 msgid "<b>Total Contracts:</b>"
-msgstr ""
+msgstr "<b>മൊത്തം കോണ്‍ട്രാക്ടുകള്‍:</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:4
-msgctxt "yes"
 msgid "Contract Selection"
-msgstr ""
-
-#: ../src/gui/data/contract_selection.glade.h:5
-msgctxt "yes"
-msgid "Subscribe"
-msgstr ""
+msgstr "കോണ്ട്രാക്ട് തെരഞ്ഞെടുക്കല്‍"
 
 #: ../src/compliance/rhsm_compliance_icon.c:43
 msgid "How often to check for validity (in seconds)"
-msgstr ""
+msgstr "പൊരുത്തത്തിനായി എപ്പോള്‍ പരിശോധിയ്ക്കണം (സെക്കന്‍ഡില്‍)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:45
 msgid "Show debug messages"
@@ -1531,15 +1509,16 @@ msgstr "ഡീബഗ് സന്ദേശങ്ങള്‍ കാണിയ്�
 #: ../src/compliance/rhsm_compliance_icon.c:47
 msgid "Force display of the icon (expired or warning)"
 msgstr ""
+"പ്രതിരൂപത്തിന്റെ നിര്‍ബന്ധിച്ചുള്ള കാഴ്ച (കാലാവധി കഴിഞ്ഞിരിയ്ക്കുന്നു അല്ലെങ്കില്‍ മുന്നറിയിപ്പു്)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:170
 #: ../src/compliance/rhsm_compliance_icon.c:171
 msgid "Invalid or Missing Entitlement Certificates"
-msgstr ""
+msgstr "തെറ്റായ അല്ലെങ്കില്‍ ലഭ്യമല്ലാത്ത എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റുകള്‍"
 
 #: ../src/compliance/rhsm_compliance_icon.c:172
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr ""
+msgstr "ഈ സിസ്റ്റത്തില്‍ ഒന്നോ അതിലധികമോ ശരിയായ എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റുകള്‍ ലഭ്യമല്ല."
 
 #: ../src/compliance/rhsm_compliance_icon.c:176
 msgid "Some of the system's subscriptions are about to expire"
@@ -1551,7 +1530,7 @@ msgstr "സിസ്റ്റത്തിന്റെ സബ്സ്ക്ര�
 
 #: ../src/compliance/rhsm_compliance_icon.c:179
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr ""
+msgstr "ഒന്നോ അതില്‍ കൂടുതല്‍ സിസ്റ്റത്തിന്റെ സബ്സ്ക്രിപ്ഷനുകളുടെ കാലാവധി കഴിയാറായി."
 
 #: ../src/compliance/rhsm_compliance_icon.c:197
 msgid "Remind Me Later"
@@ -1579,206 +1558,15 @@ msgstr "ഐച്ഛികം പാഴ്സ് ചെയ്യുന്നത�
 
 #: ../etc-conf/subscription-manager.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
-msgstr ""
+msgstr "Red Hat സബ്സ്ക്രിപ്ഷന്‍ മാനേജര്‍"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
-msgstr ""
+msgstr "Red Hat സബ്സ്ക്രിപ്ഷന്‍ വാലിഡിറ്റി ആപ്ലെറ്റ്"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
-msgstr ""
+msgstr "സബ്സ്ക്രിപ്ഷന്‍ വാലിഡിറ്റി ആപ്ലെറ്റ്"
 
-#~ msgid "%s (first date of non-compliance)"
-#~ msgstr "%s (പൊരുത്തക്കേടുണ്ടാകുന്ന ആദ്യത്തെ ദിവസം)"
-
-#~ msgid "<b>Choose the specific contract to use:</b>"
-#~ msgstr "<b>ഉപയോഗിയ്ക്കുന്നതിനുള്ള ഒരു പ്രത്യേക കോണ്‍ട്രാക്ട് തെരഞ്ഞെടുക്കൂ:</b>"
-
-#~ msgid "<b>Compliance Status</b>"
-#~ msgstr "<b>പൊരുത്തപ്പെടലിന്റെ സ്ഥിതി</b>"
-
-#~ msgid "<b>Compliance:</b>"
-#~ msgstr "<b>പൊരുത്തം:</b>"
-
-#~ msgid "<b>HTTP Proxy</b>"
-#~ msgstr "<b>HTTP പ്രോക്സി:</b>"
-
-#~ msgid "<b>Please enter your Red Hat Network account information:</b>"
-#~ msgstr "<b>ദയവായി നിങ്ങളുടെ Red Hat നെറ്റ്‌വര്‍ക്ക് അക്കൌണ്ട് വിവരം നല്‍കുക:</b>"
-
-#~ msgid "<b>Total Contracts:</b>"
-#~ msgstr "<b>മൊത്തം കോണ്‍ട്രാക്ടുകള്‍:</b>"
-
-#~ msgid "<big><b>All software is in compliance until %s</b></big>"
-#~ msgstr "<big><b>%s വരെ എല്ലാ സോഫ്റ്റ്‌വെയറുകളും പൊരുത്തമുള്ളതാകുന്നു</b></big>"
-
-#~ msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-#~ msgstr "<small><b>ഉദാഹരണം:</b> squid.example.com:3128</small>"
-
-#~ msgid "All products are in compliance until %s"
-#~ msgstr "%s വരെ എല്ലാ പ്രൊഡക്ടുകള്‍ക്കും പൊരുത്തമുണ്ടു്"
-
-#~ msgid "Become Compliant"
-#~ msgstr "പൊരുത്തപ്പെടുക"
-
-#~ msgid "Certificate _Location:"
-#~ msgstr "സര്‍ട്ടിഫിക്കേറ്റിന്റെ _സ്ഥാനം:"
-
-#~ msgid ""
-#~ "Choose a certificate to import to your subscription certificate directory."
-#~ msgstr ""
-#~ "നിങ്ങളുടെ സബ്സ്ക്രിപ്ഷന്‍ സര്‍ട്ടിഫിക്കേറ്റ് ഡയറക്ടറി ഇംപോര്‍ട്ട് ചെയ്യുന്നതിനുള്ളൊരു സര്‍ട്ടിഫിക്കേറ്റ് "
-#~ "തെരഞ്ഞെടുക്കുക."
-
-#~ msgid "Compliance Action Area"
-#~ msgstr "കംപ്ലയന്‍സ് ആക്ഷന്‍ ഏരിയാ"
-
-#~ msgid "Compliance Assistant"
-#~ msgstr "കംപ്ലയന്‍സ് അസിസ്റ്റന്റ്"
-
-#~ msgid "Compliance Assistant Box"
-#~ msgstr "കംപ്ലയന്‍സ് അസിസ്റ്റന്റ് ബോക്സ്"
-
-#~ msgid "Compliance Assistant Status"
-#~ msgstr "കംപ്ലയന്‍സ് അസിസ്റ്റന്റ് അവസ്ഥ"
-
-#~ msgid "Compliance Date Box"
-#~ msgstr "കംപ്ലയന്‍സ് തീയതി ബോക്സ്"
-
-#~ msgid "Compliance Date Label"
-#~ msgstr "കംപ്ലയന്‍സ് തീയതി ലേബല്‍"
-
-#~ msgid "Compliance Date Picker"
-#~ msgstr "കംപ്ലയന്‍സ് ഡേറ്റ് പിക്കര്‍"
-
-#~ msgid "Compliance Label"
-#~ msgstr "കംപ്ലയന്‍സ് ലേബല്‍"
-
-#~ msgid "Compliance Label Box"
-#~ msgstr "കംപ്ലയന്‍സ് ലേബല്‍ ബോക്സ്"
-
-#~ msgid "Compliance Product List"
-#~ msgstr "കംപ്ലയന്‍സ് പ്രൊഡക്ട് ലിസ്റ്റ്"
-
-#~ msgid "Compliance Status"
-#~ msgstr "പൊരുത്തത്തിന്റെ സ്ഥിതി"
-
-#~ msgid "Compliance Subscription Details"
-#~ msgstr "കംപ്ലയന്‍സ് സബ്സ്ക്രിപ്ഷനുകളുടെ വിശദാംശങ്ങള്‍"
-
-#~ msgid "Compliance Subscription List"
-#~ msgstr "കംപ്ലയന്‍സ് സബ്സ്ക്രിപ്ഷനുകളുടെ പട്ടിക"
-
-#~ msgid "Compliance Subscriptions Box"
-#~ msgstr "കംപ്ലയന്‍സ് സബ്സ്ക്രിപ്ഷനുകളുടെ ബോക്സ്"
-
-#~ msgid "Compliance Subscriptions Label"
-#~ msgstr "കംപ്ലയന്‍സ് സബ്സ്ക്രിപ്ഷനുകളുടെ ലേബല്‍"
-
-#~ msgid "Compliance Subscriptions List"
-#~ msgstr "കംപ്ലയന്‍സ് സബ്സ്ക്രിപ്ഷനുകളുടെ പട്ടിക"
-
-#~ msgid "Compliance Subscriptions Panel"
-#~ msgstr "കംപ്ലയന്‍സ് സബ്സ്ക്രിപ്ഷനുകളുടെ പാനല്‍"
-
-#~ msgid "Compliance Update Box"
-#~ msgstr "കംപ്ലയന്‍സ് അപ്ഡേറ്റ് ബോക്സ്"
-
-#~ msgid "Contract Selection"
-#~ msgstr "കോണ്ട്രാ"
-
-#~ msgid ""
-#~ "Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log "
-#~ "for more information."
-#~ msgstr ""
-#~ "കംപ്ലയന്‍സ് അസിസ്റ്റന്റ് കാണിയ്ക്കുന്നതില്‍ പിശക്. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/log/rhsm/rhsm."
-#~ "log കാണുക."
-
-#~ msgid "Error reading system DMI information:"
-#~ msgstr "സിസ്റ്റത്തിന്റെ ഡിഎംഐ വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്:"
-
-#~ msgid "Force display of the compliance icon (expired or warning)"
-#~ msgstr ""
-#~ "പൊരുത്തത്തിന്റെ പ്രതിരൂപത്തിനുള്ള ചിഹ്നം (കാലാവധി കഴിഞ്ഞിരിയ്ക്കുന്നു അല്ലെങ്കില്‍ മുന്നറിയിപ്പു്)"
-
-#~ msgid "How often to check for compliance (in seconds)"
-#~ msgstr "പൊരുത്തത്തിനായി എപ്പോള്‍ പരിശോധിയ്ക്കണം (സെക്കന്‍ഡില്‍)"
-
-#~ msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-#~ msgstr "_HTTP പ്രോക്സി വഴി Red Hat നെറ്റ്‌വര്‍ക്കിലേക്ക് കണക്ട് ചെയ്യുവാന്‍ ആഗ്രഹിയ്ക്കുന്നു."
-
-#~ msgid "In Compliance"
-#~ msgstr "പൊരുത്തം"
-
-#~ msgid "On a different date:"
-#~ msgstr "മറ്റൊരു തീയതിയില്‍:"
-
-#~ msgid ""
-#~ "One or more of this system's subscriptions are about to expire. These "
-#~ "subscriptions are required for compliance with your subscription "
-#~ "agreements."
-#~ msgstr ""
-#~ "ഈ സിസ്റ്റത്തിനുള്ള ഒന്നോ അതിലധികമോ സബ്സ്ക്രിപ്ഷനുകളുടെ കാലാവധി കഴിയാറായി. ഇവ "
-#~ "സബ്സ്ക്രിപ്ഷന്‍ എഗ്രിമെന്റുകള്‍ക്കു് വളരെ അത്യാവശ്യമാണു്."
-
-#~ msgid "Out of Compliance"
-#~ msgstr "പൊരുത്തം ലഭ്യമല്ല"
-
-#~ msgid "Password:"
-#~ msgstr "രഹസ്യവാക്ക്"
-
-#~ msgid "Proxy P_assword:"
-#~ msgstr "പ്രോക്സി ര_ഹസ്യവാക്ക്:"
-
-#~ msgid "Proxy _Username:"
-#~ msgstr "പ്രോക്സി _ഉപയോക്തൃനാമം:"
-
-#~ msgid "Red Hat Login:"
-#~ msgstr "Red Hat പ്രവേശനം:"
-
-#~ msgid "Show products that will be out of compliance as of:"
-#~ msgstr "പൊരുത്തമില്ലാത്ത പ്രൊഡക്ടുകള്‍ കാണിയ്ക്കുക:"
-
-#~ msgid "Subscription Manager - Compliance Assistant"
-#~ msgstr "സബ്സ്ക്രിപ്ഷന്‍ മാനേജര്‍ - കംപ്ലയന്‍സ് അസിസ്റ്റന്റ്"
-
-#~ msgid "This System is Non-Compliant"
-#~ msgstr "ഈ സിസ്റ്റത്തിനു് പൊരുത്തക്കേടുണ്ടു്"
-
-#~ msgid ""
-#~ "This system is missing one or more subscriptions required for compliance "
-#~ "with your subscription agreements."
-#~ msgstr ""
-#~ "സബ്സ്ക്രിപ്ഷന്‍ എഗ്രിമെന്റുകള്‍ക്കു് വളരെ അത്യാവശ്യമുള്ള ഒന്നോ അധിലധികമോ സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമല്ല."
-
-#~ msgid "This system is non-compliant"
-#~ msgstr "സിസ്റ്റത്തിനു് പൊരുത്തമില്ല"
-
-#~ msgid ""
-#~ "To add a subscription, choose a certificate to import to your "
-#~ "subscription certificate directory."
-#~ msgstr ""
-#~ "സബ്സ്ക്രിപ്ഷന്‍ ചേര്‍ക്കുന്നതിനായി, നിങ്ങളുടെ സബ്സ്ക്രിപ്ഷന്‍ സര്‍ട്ടിഫിക്കേറ്റ് ഡയറക്ടറിയിലേക്കു് ഒരു "
-#~ "സര്‍ട്ടിഫിക്കേറ്റ് ഇംപോര്‍ട്ട് ചെയ്യുക."
-
-#~ msgid "Use Au_thentication with HTTP Proxy:"
-#~ msgstr "HTTP പ്രോക്സി ഉപയോഗിച്ചുള്ള ആധികാരികത ഉറപ്പാക്കല്‍ സംവിധാനം ഉപയോഗിയ്ക്കുക:"
-
-#~ msgid "You have <b>%s</b> products out of compliance."
-#~ msgstr "പൊരുത്തമില്ലാത്ത <b>%s</b> പ്രൊഡക്ടുകളുണ്ടു്."
-
-#~ msgid "You have <b>1</b> product out of compliance."
-#~ msgstr "പൊരുത്തമില്ലാത്ത <b>1</b> പ്രൊഡക്ടുണ്ടു്."
-
-#~ msgid "You have one product which is out of compliance."
-#~ msgstr "പൊരുത്തപ്പെടാത്ത ഒരു പ്രൊഡക്ടുണ്ടു്."
-
-#~ msgid "You must register before using the compliance assistant."
-#~ msgstr "കംപ്ലയന്‍സ് അസിസ്റ്റന്റ് ഉപയോഗിയ്ക്കുന്നതിനു് മുമ്പ് രജിസ്ടര്‍ ചെയ്യുക."
-
-#~ msgid "_Close"
-#~ msgstr "_അടയ്ക്കുക"
-
-#~ msgid "_Proxy Location:"
-#~ msgstr "_പ്രോക്സിയുടെ സ്ഥാനം:"
+#~ msgid "Never Subscribed"
+#~ msgstr "ഒരിക്കലും സബ്സ്ക്രൈബ് ചെയ്തിട്ടില്ല"

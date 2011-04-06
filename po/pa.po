@@ -8,15 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 08:54-0300\n"
-"PO-Revision-Date: 2011-03-30 11:53+0530\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2011-04-05 12:59-0300\n"
+"PO-Revision-Date: 2011-04-01 15:02+0530\n"
+"Last-Translator: Jaswinder Singh <jsingh@redhat.com>\n"
 "Language-Team: Punjabi/Panjabi <kde-i18n-doc@kde.org>\n"
 "Language: pa-IN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.1\n"
+"X-Generator: Lokalize 1.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: ../src/certlib.py:96
@@ -657,7 +657,7 @@ msgstr "ਅੰਤਰਾਲ: %d(ms)"
 #: ../src/hwprobe.py:60
 #, python-format
 msgid "Error reading system DMI information: %s"
-msgstr ""
+msgstr "ਸਿਸਟਮ DMI ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ: %s"
 
 #: ../src/hwprobe.py:116
 msgid "Error reading system memory information:"
@@ -739,21 +739,21 @@ msgstr "ਅੱਜ"
 
 #: ../src/gui/managergui.py:371
 msgid "You must register before using the subscription assistant."
-msgstr ""
+msgstr "ਮਨਜੂਰੀ ਸਹਾਇਕ ਵਰਤਣ ਤੋਂ ਪਹਿਲਾਂ ਤੁਹਾਨੂੰ ਰਜਿਸਟਰ ਕਰਨਾ ਜਰੂਰੀ ਹੈ।"
 
 #: ../src/gui/managergui.py:402
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr ""
+msgstr "ਤੁਹਾਡਾ <b>%s</b> ਉਤਪਾਦ ਦਾ ਇੰਟਾਈਟਲਮੈਂਟ ਸਾਰਟੀਫਿਕੇਟ ਗਲਤ ਹੈ।"
 
 #: ../src/gui/managergui.py:406
 msgid "You have <b>1</b> product without a valid entitlement certificate."
-msgstr ""
+msgstr "ਤੁਹਾਡਾ <b>1</b> ਉਤਪਾਦ ਯੋਗ ਇੰਟਾਈਟਲਮੈਂਟ ਸਾਰਟੀਫਿਕੇਟ ਤੋਂ ਬਿਨਾਂ ਹੈ।"
 
 #: ../src/gui/managergui.py:413
 #, python-format
 msgid "Product entitlement certificates valid through %s"
-msgstr ""
+msgstr "ਉਤਪਾਦ ਇੰਟਾਈਟਲਮੈਂਟ ਸਾਰਟੀਫਿਕੇਟ %s ਤੱਕ ਯੋਗ ਹੈ"
 
 #: ../src/gui/managergui.py:536
 msgid "You must enter a system name."
@@ -779,7 +779,7 @@ msgstr "ਆਖਰੀ ਮਿਤੀ"
 
 #: ../src/gui/compliance.py:141
 msgid "Subscription List"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਲਿਸਟ"
 
 #. Set up columns on the view
 #: ../src/gui/compliance.py:142 ../src/gui/allsubs.py:56
@@ -792,6 +792,8 @@ msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
 msgstr ""
+"ਮਨਜੂਰੀ ਸਹਾਇਕ ਵੇਖਾਉਣ ਵਿੱਚ ਗਲਤੀ। ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/rhsm.log "
+"ਵੇਖੋ।"
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -800,12 +802,12 @@ msgstr "ਮੈਂਬਰੀਆਂ ਲਈ ਖੋਜਣ ਵਿੱਚ ਅਸਫਲ"
 #: ../src/gui/compliance.py:214
 #, python-format
 msgid "Software entitlements valid through %s"
-msgstr ""
+msgstr "ਸਾਫਟਵੇਅਰ ਇੰਟਾਈਟਲਮੈਂਟ %s ਤੱਕ ਯੋਗ ਹੈ"
 
 #: ../src/gui/compliance.py:218
 #, python-format
 msgid "%s (first date of invalid entitlements)"
-msgstr ""
+msgstr "%s (ਗੈਰ-ਮਨਜੂਰ ਇੰਟਾਈਟਲਮੈਂਟ ਦੀ ਪਹਿਲੀ ਮਿਤੀ)"
 
 #: ../src/gui/compliance.py:220
 #, python-format
@@ -912,19 +914,20 @@ msgstr "ਵਰਜਨ"
 
 #: ../src/gui/installedtab.py:54
 msgid "Certificate"
-msgstr ""
+msgstr "ਸਾਰਟੀਫਿਕੇਟ"
 
 #: ../src/gui/installedtab.py:95
 msgid "Future Subscription"
 msgstr "ਭਵਿੱਖ ਦੀਆਂ ਮੈਂਬਰੀਆਂ"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "ਕਦੇ ਮੈਂਬਰੀ ਨਹੀਂ"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "ਗੈਰ-ਮੌਜੂਦਾ"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
-msgstr ""
+msgstr "ਅਯੋਗ"
 
 #: ../src/gui/installedtab.py:101
 #, python-format
@@ -933,16 +936,12 @@ msgstr "ਮੈਂਬਰੀ %s ਦੀ ਮਿਆਦ ਪੁੱਗ ਗਈ ਹੈ"
 
 #: ../src/gui/installedtab.py:104
 msgid "Valid"
-msgstr ""
+msgstr "ਯੋਗ"
 
 #: ../src/gui/installedtab.py:106
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "ਕੰਟਰੈਕਟ %s ਦੁਆਰਾ %s ਰਾਹੀਂ ਕਵਰ ਕੀਤਾ"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr ""
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -950,7 +949,7 @@ msgstr "ਮੇਰੇ ਇੰਸਟਾਲ ਕੀਤੇ ਸਾਫਟਵੇਅਰ"
 
 #: ../src/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
-msgstr ""
+msgstr "<b>ਸਾਰਟੀਫਿਕੇਟ ਸਥਿਤੀ</b>"
 
 #: ../src/gui/data/installed.glade.h:2
 msgid "<b>Product's Subscription Details</b>"
@@ -961,12 +960,13 @@ msgid "<b>Product:</b>"
 msgstr "<b>ਉਤਪਾਦ:</b>"
 
 #: ../src/gui/data/installed.glade.h:4 ../src/gui/data/subdetails.glade.h:8
+#: ../src/gui/data/contract_selection.glade.h:2
 msgid "<b>Subscription:</b>"
 msgstr "<b>ਮੈਂਬਰੀ:</b>"
 
 #: ../src/gui/data/installed.glade.h:5 ../src/gui/data/mainwindow.glade.h:4
 msgid "Certificate Status"
-msgstr ""
+msgstr "ਸਾਰਟੀਫਿਕੇਟ ਸਥਿਤੀ"
 
 #: ../src/gui/data/installed.glade.h:6
 msgid "Installed View"
@@ -978,160 +978,158 @@ msgid "Next Update:"
 msgstr "ਅਗਲਾ ਅੱਪਡੇਟ:"
 
 #: ../src/gui/data/networkConfig.glade.h:1
+msgid "<b>HTTP Proxy</b>"
+msgstr "<b>HTTP ਪਰਾਕਸੀ</b>"
+
+#: ../src/gui/data/networkConfig.glade.h:2
+msgid "<small><b>Example:</b> squid.example.com:3128</small>"
+msgstr "<small><b>ਉਦਾਹਰਨ:</b> squid.example.com:3128</small>"
+
+#: ../src/gui/data/networkConfig.glade.h:3
 msgid "Advanced Network Configuration"
 msgstr "ਤਕਨੀਕੀ ਨੈੱਟਵਰਕ ਸੰਰਚਨਾ"
 
-#: ../src/gui/data/networkConfig.glade.h:2
+#: ../src/gui/data/networkConfig.glade.h:4
 msgid "Authentication Checkbox"
 msgstr "ਪ੍ਰਮਾਣਿਕਤਾ ਚੈੱਕਬਾਕਸ"
 
-#: ../src/gui/data/networkConfig.glade.h:3
+#: ../src/gui/data/networkConfig.glade.h:5
 msgid "Close Button"
 msgstr "ਬੰਦ ਬਟਨ"
 
-#: ../src/gui/data/networkConfig.glade.h:4
+#: ../src/gui/data/networkConfig.glade.h:6
 msgid "Enter in the format hostname(:port)"
 msgstr "ਫਾਰਮੈਟ hostname(:port) ਵਿੱਚ ਦਿਓ"
 
-#: ../src/gui/data/networkConfig.glade.h:5
+#: ../src/gui/data/networkConfig.glade.h:7
+msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
+msgstr "ਮੈਂ Red Hat ਨੈੱਟਵਰਕ ਨਾਲ ਇੱਕ _HTTP ਪਰਾਕਸੀ ਦੁਆਰਾ ਜੁੜਨਾ ਚਾਹੁੰਦਾ ਹੈ।"
+
+#: ../src/gui/data/networkConfig.glade.h:8
 msgid "Password Text"
 msgstr "ਪਾਸਵਰਡ ਪਾਠ"
 
-#: ../src/gui/data/networkConfig.glade.h:6
+#: ../src/gui/data/networkConfig.glade.h:9
 msgid "Proxy Checkbox"
 msgstr "ਪਰਾਕਸੀ ਚੈੱਕਬਾਕਸ"
 
-#: ../src/gui/data/networkConfig.glade.h:7
+#: ../src/gui/data/networkConfig.glade.h:10
 msgid "Proxy Location Text"
 msgstr "ਪਰੋਕਸੀ ਟਿਕਾਣਾ ਪਾਠ"
 
-#: ../src/gui/data/networkConfig.glade.h:8
+#: ../src/gui/data/networkConfig.glade.h:11
+msgid "Proxy P_assword:"
+msgstr "ਪਰਾਕਸੀ ਪਾਸਵਰਡ(_a):"
+
+#: ../src/gui/data/networkConfig.glade.h:12
+msgid "Proxy _Username:"
+msgstr "ਪਰਾਕਸੀ ਯੂਜ਼ਰ-ਨਾਂ(_U):"
+
+#: ../src/gui/data/networkConfig.glade.h:13
+msgid "Use Au_thentication with HTTP Proxy:"
+msgstr "HTTP ਪਰਾਕਸੀ ਨਾਲ ਪਰਮਾਣਿਕਤਾ ਵਰਤੋ(_t):"
+
+#: ../src/gui/data/networkConfig.glade.h:14
 msgid "Username Text"
 msgstr "ਯੂਜ਼ਰ-ਨਾਂ ਪਾਠ"
 
-#: ../src/gui/data/networkConfig.glade.h:9
-msgctxt "yes"
-msgid "<b>HTTP Proxy</b>"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:10
-msgctxt "yes"
-msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:11
-msgctxt "yes"
-msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:12
-msgctxt "yes"
-msgid "Proxy P_assword:"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:13
-msgctxt "yes"
-msgid "Proxy _Username:"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:14
-msgctxt "yes"
-msgid "Use Au_thentication with HTTP Proxy:"
-msgstr ""
-
 #: ../src/gui/data/networkConfig.glade.h:15
-msgctxt "yes"
 msgid "_Close"
-msgstr ""
+msgstr "ਬੰਦ(_C)"
 
 #: ../src/gui/data/networkConfig.glade.h:16
-msgctxt "yes"
 msgid "_Proxy Location:"
-msgstr ""
+msgstr "ਪਰਾਕਸੀ ਟਿਕਾਣਾ(_P):"
 
 #: ../src/gui/data/compliance.glade.h:1
 msgid "A different date:"
-msgstr ""
+msgstr "ਹੋਰ ਮਿਤੀ ਤੇ:"
 
 #: ../src/gui/data/compliance.glade.h:2
 msgid "Invalid Product List"
-msgstr ""
+msgstr "ਗਲਤ ਉਤਪਾਦ ਸੂਚੀ"
 
 #: ../src/gui/data/compliance.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
-msgstr ""
+msgstr "ਉਤਪਾਦ ਵੇਖਾਓ ਜੋ ਗਲਤ ਇੰਟਾਈਟਲਮੈਂਟ ਨਾਲ ਹਨ ਇਸ ਮੁਤਾਬਕ:"
 
 #: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
+#: ../src/gui/data/contract_selection.glade.h:5
+#, fuzzy
 msgid "Subscribe"
-msgstr "ਮੈਂਬਰੀ ਬਣੋ"
+msgstr ""
+"#-#-#-#-#  pa.po (l 10n)  #-#-#-#-#\n"
+"ਮੈਂਬਰੀ ਬਣੋ\n"
+"#-#-#-#-#  pa.po (l 10n)  #-#-#-#-#\n"
+"ਮੈਂਬਰ ਬਣੋ"
 
 #: ../src/gui/data/compliance.glade.h:5
 msgid "Subscription Action Area"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਕਾਰਵਾਈ ਖੇਤਰ"
 
 #: ../src/gui/data/compliance.glade.h:6
 msgid "Subscription Assistant"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਸਹਾਇਕ"
 
 #: ../src/gui/data/compliance.glade.h:7
 msgid "Subscription Assistant Box"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਸਹਾਇਤ ਬਕਸਾ"
 
 #: ../src/gui/data/compliance.glade.h:8
 msgid "Subscription Assistant Status"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਸਹਾਇਕ ਸਥਿਤੀ"
 
 #: ../src/gui/data/compliance.glade.h:9
 msgid "Subscription Date Box"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਮਿਈਤ ਬਕਸਾ"
 
 #: ../src/gui/data/compliance.glade.h:10
 msgid "Subscription Date Label"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਮਿਤੀ ਲੇਬਲ"
 
 #: ../src/gui/data/compliance.glade.h:11
 msgid "Subscription Date Picker"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਮਿਤੀ ਪਿੱਕਰ"
 
 #: ../src/gui/data/compliance.glade.h:12
 msgid "Subscription Details"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਵੇਰਵਾ"
 
 #: ../src/gui/data/compliance.glade.h:13
 msgid "Subscription Label"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਲੇਬਲ"
 
 #: ../src/gui/data/compliance.glade.h:14
 msgid "Subscription Label Box"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਲੇਬਲ ਬਾਕਸ"
 
 #: ../src/gui/data/compliance.glade.h:15
 msgid "Subscription Manager - Subscription Assistant"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਮੈਨੇਜਰ - ਮੈਂਬਰੀ ਸਹਾਇਕ"
 
 #: ../src/gui/data/compliance.glade.h:16
 msgid "Subscription Product List"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਉਤਪਾਦ ਸੂਚੀ"
 
 #: ../src/gui/data/compliance.glade.h:17
 msgid "Subscription Subscriptions Box"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਮੈਂਬਰੀ ਬਕਸਾ"
 
 #: ../src/gui/data/compliance.glade.h:18
 msgid "Subscription Subscriptions Label"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਮੈਂਬਰੀ ਲੇਬਲ"
 
 #: ../src/gui/data/compliance.glade.h:19
 msgid "Subscription Update Box"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਅੱਪਡੇਟ ਬਕਸਾ"
 
 #: ../src/gui/data/compliance.glade.h:20
 msgid "Subscriptions List"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਸੂਚੀ"
 
 #: ../src/gui/data/compliance.glade.h:21
 msgid "Subscriptions Panel"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਪੈਨਲ"
 
 #: ../src/gui/data/compliance.glade.h:22
 msgid "The following subscriptions will cover the products selected above:"
@@ -1165,58 +1163,56 @@ msgstr "<b>ਮੈਂਬਰੀਆਂ ਜੋ ਤੁਹਾਡੇ ਇੰਸਟਾਲ
 msgid "Add Subscriptions"
 msgstr "ਮੈਂਬਰੀ ਸ਼ਾਮਿਲ ਕਰੋ"
 
-#: ../src/gui/data/rhsm.glade.h:6
+#: ../src/gui/data/rhsm.glade.h:6 ../src/gui/data/importsub.glade.h:1
+msgid "Certificate _Location:"
+msgstr "ਸਾਰਟੀਫਿਕੇਟ ਟਿਕਾਣਾ(_L):"
+
+#: ../src/gui/data/rhsm.glade.h:7
 msgid "Do not register"
 msgstr "ਰਜਿਸਟਰ ਨਾ ਕਰੋ"
 
-#: ../src/gui/data/rhsm.glade.h:7 ../src/gui/data/mainwindow.glade.h:5
-#: ../src/gui/data/importsub.glade.h:1
+#: ../src/gui/data/rhsm.glade.h:8 ../src/gui/data/mainwindow.glade.h:5
+#: ../src/gui/data/importsub.glade.h:3
 msgid "Import Certificate"
 msgstr "ਸਾਰਟੀਫਿਕੇਟ ਇੰਪੋਰਟ ਕਰੋ"
 
-#: ../src/gui/data/rhsm.glade.h:8
+#: ../src/gui/data/rhsm.glade.h:9
 msgid "Not Compatible"
 msgstr "ਕੋਈ ਅਨੁਕੂਲਤਾ ਨਹੀਂ"
 
-#: ../src/gui/data/rhsm.glade.h:9 ../src/gui/data/importsub.glade.h:2
+#: ../src/gui/data/rhsm.glade.h:10 ../src/gui/data/importsub.glade.h:4
 msgid "Provide a Subscription Certificate"
 msgstr "ਮੈਂਬਰੀ ਸਾਰਟੀਫਿਕੇਟ ਦਿਓ"
 
-#: ../src/gui/data/rhsm.glade.h:10
+#: ../src/gui/data/rhsm.glade.h:11
 msgid "Register with Red Hat Entitlement Service"
 msgstr "Red Hat ਇੰਟਾਈਟਲਮੈਂਟ ਸਰਵਿਸ ਨਾਲ ਰਜਿਸਟਰ ਕਰੋ"
 
-#: ../src/gui/data/rhsm.glade.h:11
+#: ../src/gui/data/rhsm.glade.h:12
 msgid "Register with Red Hat Network"
 msgstr "Red Hat Network ਨਾਲ ਰਜਿਸਟਰ ਕਰੋ"
 
-#: ../src/gui/data/rhsm.glade.h:12
+#: ../src/gui/data/rhsm.glade.h:13
 msgid "Register with Red Hat Network Satellite"
 msgstr "Red Hat Network ਸੈਟੇਲਾਈਟ ਨਾਲ ਰਜਿਸਟਰ ਕਰੋ"
 
-#: ../src/gui/data/rhsm.glade.h:13
+#: ../src/gui/data/rhsm.glade.h:14
 msgid "Suggested"
 msgstr "ਸਿਫਾਰਸ਼ ਕੀਤੇ"
 
-#: ../src/gui/data/rhsm.glade.h:14
-msgid "Update Subscriptions"
-msgstr "ਮੈਂਬਰੀ ਅੱਪਡੇਟ"
-
 #: ../src/gui/data/rhsm.glade.h:15
-msgid "update_subscriptions_dialog\n"
-msgstr "update_subscriptions_dialog\n"
-
-#: ../src/gui/data/rhsm.glade.h:17 ../src/gui/data/importsub.glade.h:3
-msgctxt "yes"
-msgid "Certificate _Location:"
-msgstr ""
-
-#: ../src/gui/data/rhsm.glade.h:18
-msgctxt "yes"
 msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਜੋੜਨ ਲਈ, ਆਪਣੀ ਮੈਂਬਰੀ ਸਾਰਟੀਫਿਕੇਟ ਡਾਇਰੈਕਟਰੀ ਇੰਪੋਰਟ ਕਰਨ ਲਈ ਸਾਰਟੀਫਿਕੇਟ ਚੁਣੋ।"
+
+#: ../src/gui/data/rhsm.glade.h:16
+msgid "Update Subscriptions"
+msgstr "ਮੈਂਬਰੀ ਅੱਪਡੇਟ"
+
+#: ../src/gui/data/rhsm.glade.h:17
+msgid "update_subscriptions_dialog\n"
+msgstr "update_subscriptions_dialog\n"
 
 #: ../src/gui/data/activate.glade.h:1
 msgid "Activate"
@@ -1246,7 +1242,7 @@ msgstr "ਮੈਂਬਰੀ ਸਰਗਰਮੀ"
 
 #: ../src/gui/data/mainwindow.glade.h:1
 msgid "<b>Certificate Status</b>"
-msgstr ""
+msgstr "<b>ਸਾਰਟੀਫਿਕੇਟ ਸਥਿਤੀ</b>"
 
 #: ../src/gui/data/mainwindow.glade.h:2
 msgid "<b>Tools</b>"
@@ -1270,7 +1266,7 @@ msgstr "ਸਿਸਟਮ ਅਨ-ਰਜਿਸਟਰ ਕਰੋ"
 
 #: ../src/gui/data/mainwindow.glade.h:10
 msgid "Update Certificates"
-msgstr ""
+msgstr "ਸਾਰਟੀਫਿਕੇਟ ਅੱਪਡੇਟ ਕਰੋ"
 
 #: ../src/gui/data/mainwindow.glade.h:11
 msgid "View System Facts"
@@ -1278,7 +1274,7 @@ msgstr "ਸਿਸਟਮ ਸਿਧਾਂਤ ਵੇਖੋ"
 
 #: ../src/gui/data/mainwindow.glade.h:12
 msgid "You have one product without a valid entitlement certificate."
-msgstr ""
+msgstr "ਤੁਹਾਡਾ ਇੱਕ ਉਤਪਾਦ ਯੋਗ ਇੰਟਾਈਟਲਮੈਂਟ ਸਾਰਟੀਫਿਕੇਟ ਤੋਂ ਬਿਨਾਂ ਹੈ।"
 
 #: ../src/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
@@ -1360,11 +1356,10 @@ msgstr "ਆਪਣੀ ਮੈਂਬਰੀ ਅਕਾਊਂਟ ਜਾਣਕਾਰੀ
 msgid "Manage Your Product Subscriptions"
 msgstr "ਆਪਣਾ ਉਤਪਾਦ ਮੈਂਬਰੀ ਪਰਬੰਧਨ ਕਰੋ"
 
-#: ../src/gui/data/importsub.glade.h:4
-msgctxt "yes"
+#: ../src/gui/data/importsub.glade.h:2
 msgid ""
 "Choose a certificate to import to your subscription certificate directory."
-msgstr ""
+msgstr "ਆਪਣੀ ਮੈਂਬਰੀ ਸਾਰਟੀਫਿਕੇਟ ਡਾਇਰੈਕਟਰੀ ਇੰਪੋਰਟ ਕਰਨ ਲਈ ਸਾਰਟੀਫਿਕੇਟ ਚੁਣੋ।"
 
 #: ../src/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
@@ -1431,6 +1426,10 @@ msgid "<b>Please enter the following for this system:</b>"
 msgstr "<b>ਇਸ ਸਿਸਟਮ ਲਈ ਕਿਰਪਾ ਕਰਕੇ ਇਹ ਦਿਓ:</b>"
 
 #: ../src/gui/data/registration.glade.h:2
+msgid "<b>Please enter your Red Hat Network account information:</b>"
+msgstr "<b>ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀ Red Hat ਨੈੱਟਵਰਕ ਅਕਾਊਂਟ ਜਾਣਕਾਰੀ ਦਿਓ:</b>"
+
+#: ../src/gui/data/registration.glade.h:3
 msgid ""
 "<small>Tip: Forgot your login or password? Look it up at\n"
 "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
@@ -1440,85 +1439,65 @@ msgstr ""
 "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
 "www.redhat.com/wapps/sso/rhn/lostPassword.html</a> ਤੇ ਵੇਖੋ</small>"
 
-#: ../src/gui/data/registration.glade.h:4
+#: ../src/gui/data/registration.glade.h:5
 msgid "A unique label for this system"
 msgstr "ਇਸ ਸਿਸਟਮ ਲਈ ਇੱਕ ਵੱਖਰਾ ਲੇਬਲ"
 
-#: ../src/gui/data/registration.glade.h:5
+#: ../src/gui/data/registration.glade.h:6
+msgid "Password:"
+msgstr "ਪਾਸਵਰਡ:"
+
+#: ../src/gui/data/registration.glade.h:7
+msgid "Red Hat Login:"
+msgstr "Red Hat ਲਾਗਇਨ:"
+
+#: ../src/gui/data/registration.glade.h:8
 msgid "Register"
 msgstr "ਰਜਿਸਟਰ ਕਰੋ"
 
-#: ../src/gui/data/registration.glade.h:6
+#: ../src/gui/data/registration.glade.h:9
 msgid "Select the most appropriate subscriptions for this system"
 msgstr "ਇਸ ਸਿਸਟਮ ਲਈ ਵਧੇਰੇ ਅਨੁਕੂਲ ਮੈਂਬਰੀ ਚੁਣੋ"
 
-#: ../src/gui/data/registration.glade.h:7
+#: ../src/gui/data/registration.glade.h:10
 msgid "System Name:"
 msgstr "ਸਿਸਟਮ ਨਾਂ:"
 
-#: ../src/gui/data/registration.glade.h:8
+#: ../src/gui/data/registration.glade.h:11
 msgid "System Registration"
 msgstr "ਸਿਸਟਮ ਰਜਿਸਟਰੇਸ਼ਨ"
 
-#: ../src/gui/data/registration.glade.h:9
+#: ../src/gui/data/registration.glade.h:12
 msgid "register_button"
 msgstr "register_button"
 
-#: ../src/gui/data/registration.glade.h:10
+#: ../src/gui/data/registration.glade.h:13
 msgid "register_dialog_main_vbox"
 msgstr "register_dialog_main_vbox"
 
-#: ../src/gui/data/registration.glade.h:11
+#: ../src/gui/data/registration.glade.h:14
 msgid "registration_dialog_action_area\n"
 msgstr "registration_dialog_action_area\n"
-
-#: ../src/gui/data/registration.glade.h:13
-msgctxt "yes"
-msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr ""
-
-#: ../src/gui/data/registration.glade.h:14
-msgctxt "yes"
-msgid "Password:"
-msgstr ""
-
-#: ../src/gui/data/registration.glade.h:15
-msgctxt "yes"
-msgid "Red Hat Login:"
-msgstr ""
 
 #: ../src/gui/data/progress.glade.h:1
 msgid "Progress Dialog"
 msgstr "ਤਰੱਕੀ ਵਾਰਤਾਲਾਪ"
 
 #: ../src/gui/data/contract_selection.glade.h:1
-msgctxt "yes"
 msgid "<b>Choose the specific contract to use:</b>"
-msgstr ""
-
-#: ../src/gui/data/contract_selection.glade.h:2
-msgctxt "yes"
-msgid "<b>Subscription:</b>"
-msgstr "<b>ਮੈਂਬਰੀ:</b>"
+msgstr "<b>ਵਰਤਣ ਲਈ ਖਾਸ ਕੰਟਰੈਕਟ ਚੁਣੋ:</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:3
-msgctxt "yes"
 msgid "<b>Total Contracts:</b>"
-msgstr ""
+msgstr "<b>ਕੁੱਲ ਕੰਟਰੈਕਟ:</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:4
-msgctxt "yes"
 msgid "Contract Selection"
-msgstr ""
-
-#: ../src/gui/data/contract_selection.glade.h:5
-msgctxt "yes"
-msgid "Subscribe"
-msgstr "ਮੈਂਬਰ ਬਣੋ"
+msgstr "ਕੰਟਰੈਕਟ ਚੋਣ"
 
 #: ../src/compliance/rhsm_compliance_icon.c:43
 msgid "How often to check for validity (in seconds)"
-msgstr ""
+msgstr "ਮਨਜੂਰ ਜਾਂਚ ਲਈ ਕਿੰਨਾ ਸਮਾਂ ਲੱਗਦਾ ਹੈ (ਸਕਿੰਟਾਂ ਵਿੱਚ)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:45
 msgid "Show debug messages"
@@ -1526,16 +1505,17 @@ msgstr "ਡੀਬੱਗ ਸੁਨੇਹੇ ਵੇਖਾਓ"
 
 #: ../src/compliance/rhsm_compliance_icon.c:47
 msgid "Force display of the icon (expired or warning)"
-msgstr ""
+msgstr "ਮਨਜੂਰੀ ਆਈਕਾਲ ਵੇਖਾਉਣ ਲਈ ਮਜਬੂਰ ਕਰੋ (ਮਿਆਦ-ਪੁੱਗਿਆ ਜਾਂ ਚੇਤਾਵਨੀ)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:170
 #: ../src/compliance/rhsm_compliance_icon.c:171
 msgid "Invalid or Missing Entitlement Certificates"
-msgstr ""
+msgstr "ਗਲਤ ਜਾਂ ਗੌਰ-ਮੌਜੂਦ ਇੰਟਾਈਲਮੈਂਟ ਸਾਰਟੀਫਿਕੇਟ"
 
 #: ../src/compliance/rhsm_compliance_icon.c:172
 msgid "This system is missing one or more valid entitlement certificates."
 msgstr ""
+"ਤੁਹਾਡੇ ਮੈਂਬਰੀ ਇਕਰਾਰਨਾਮੇ ਨਾਲ ਸਹਿਮਤੀ ਲਈ ਇਸ ਸਿਸਟਮ ਵਿੱਚ ਇੱਕ ਜਾਂ ਜਿਆਦਾ ਮੈਂਬਰੀਆਂ ਦੀ ਕਮੀ ਹੈ।"
 
 #: ../src/compliance/rhsm_compliance_icon.c:176
 msgid "Some of the system's subscriptions are about to expire"
@@ -1547,7 +1527,7 @@ msgstr "ਇਸ ਸਿਸਟਮ ਦੀ ਮੈਂਬਰੀ ਮਿਆਦ ਪੁੱ�
 
 #: ../src/compliance/rhsm_compliance_icon.c:179
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr ""
+msgstr "ਸਿਸਟਮ ਦੀ ਕੁਝ ਮੈਂਬਰੀਆਂ ਮਿਆਦ ਪੁੱਗਣ ਵਾਲੀਆਂ ਹਨ"
 
 #: ../src/compliance/rhsm_compliance_icon.c:197
 msgid "Remind Me Later"
@@ -1575,55 +1555,30 @@ msgstr "ਚੋਣ ਪਾਰਸਿੰਗ ਫੇਲ ਹੋਈ: %s\n"
 
 #: ../etc-conf/subscription-manager.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
-msgstr ""
+msgstr "Red Hat ਮੈਂਬਰੀ ਮੈਨੇਜਰ"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
-msgstr ""
+msgstr "Red Hat ਮੈਂਬਰੀ ਯੋਗਤਾ ਐਪਲਿਟ"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
-msgstr ""
+msgstr "ਮੈਂਬਰੀ ਯੋਗਤਾ ਐਪਲਿਟ"
 
-#~ msgid "%s (first date of non-compliance)"
-#~ msgstr "%s (ਗੈਰ-ਮਨਜੂਰ ਦੀ ਪਹਿਲੀ ਮਿਤੀ)"
-
-#~ msgid "<b>Choose the specific contract to use:</b>"
-#~ msgstr "<b>ਵਰਤਣ ਲਈ ਖਾਸ ਕੰਟਰੈਕਟ ਚੁਣੋ:</b>"
-
-#~ msgid "<b>Compliance Status</b>"
-#~ msgstr "<b>ਮਨਜੂਰੀ ਸਥਿਤੀ</b>"
+#~ msgid "Never Subscribed"
+#~ msgstr "ਕਦੇ ਮੈਂਬਰੀ ਨਹੀਂ"
 
 #~ msgid "<b>Compliance:</b>"
 #~ msgstr "<b>ਮਨਜੂਰੀ:</b>"
 
-#~ msgid "<b>HTTP Proxy</b>"
-#~ msgstr "<b>HTTP ਪਰਾਕਸੀ</b>"
-
-#~ msgid "<b>Please enter your Red Hat Network account information:</b>"
-#~ msgstr "<b>ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀ Red Hat ਨੈੱਟਵਰਕ ਅਕਾਊਂਟ ਜਾਣਕਾਰੀ ਦਿਓ:</b>"
-
-#~ msgid "<b>Total Contracts:</b>"
-#~ msgstr "<b> ਕੁੱਲ ਕੰਟਰੈਕਟ:</b>"
-
 #~ msgid "<big><b>All software is in compliance until %s</b></big>"
 #~ msgstr "<big><b>ਸਭ ਸਾਫਟਵੇਅਰ ਮਨਜੂਰੀ ਵਿੱਚ ਹਨ ਜਦੋਂ ਤੱਕ %s</b></big>"
-
-#~ msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-#~ msgstr "<small><b>ਉਦਾਹਰਨ:</b> squid.example.com:3128</small>"
 
 #~ msgid "All products are in compliance until %s"
 #~ msgstr "ਸਭ ਉਤਪਾਦ ਮਨਜੂਰੀ ਵਿੱਚ ਹਨ ਜਦੋਂ ਤੱਕ %s"
 
 #~ msgid "Become Compliant"
 #~ msgstr "ਅਨੁਕੂਲ ਬਣੋ"
-
-#~ msgid "Certificate _Location:"
-#~ msgstr "ਸਾਰਟੀਫਿਕੇਟ ਟਿਕਾਣਾ(_L):"
-
-#~ msgid ""
-#~ "Choose a certificate to import to your subscription certificate directory."
-#~ msgstr "ਆਪਣੀ ਮੈਂਬਰੀ ਸਾਰਟੀਫਿਕੇਟ ਡਾਇਰੈਕਟਰੀ ਇੰਪੋਰਟ ਕਰਨ ਲਈ ਸਾਰਟੀਫਿਕੇਟ ਚੁਣੋ।"
 
 #~ msgid "Compliance Action Area"
 #~ msgstr "ਸਹੀ ਕਾਰਵਾਈ ਖੇਤਰ"
@@ -1633,9 +1588,6 @@ msgstr ""
 
 #~ msgid "Compliance Assistant Box"
 #~ msgstr "ਸਹੀ ਸਹਾਇਕ ਬਾਕਸ"
-
-#~ msgid "Compliance Assistant Status"
-#~ msgstr "ਸਹੀ ਸਹਾਇਕ ਹਾਲਤ"
 
 #~ msgid "Compliance Date Box"
 #~ msgstr "ਸਹੀ ਮਿਤੀ ਬਾਕਸ"
@@ -1664,12 +1616,6 @@ msgstr ""
 #~ msgid "Compliance Subscription List"
 #~ msgstr "ਸਹੀ ਮੈਂਬਰੀ ਸੂਚੀ"
 
-#~ msgid "Compliance Subscriptions Box"
-#~ msgstr "ਸਹੀ ਮੈਂਬਰੀ ਬਾਕਸ"
-
-#~ msgid "Compliance Subscriptions Label"
-#~ msgstr "ਸਹੀ ਮੈਂਬਰੀ ਲੇਬਲ"
-
 #~ msgid "Compliance Subscriptions List"
 #~ msgstr "ਸਹੀ ਮੈਂਬਰੀ ਸੂਚੀ"
 
@@ -1679,33 +1625,8 @@ msgstr ""
 #~ msgid "Compliance Update Box"
 #~ msgstr "ਸਹੀ ਅੱਪਡੇਟ ਬਾਕਸ"
 
-#~ msgid "Contract Selection"
-#~ msgstr "ਕੰਟਰੈਕਟ ਚੋਣ"
-
-#~ msgid ""
-#~ "Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log "
-#~ "for more information."
-#~ msgstr ""
-#~ "ਮਨਜੂਰੀ ਸਹਾਇਕ ਵੇਖਾਉਣ ਵਿੱਚ ਗਲਤੀ। ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/rhsm."
-#~ "log ਵੇਖੋ।"
-
-#~ msgid "Error reading system DMI information:"
-#~ msgstr "ਸਿਸਟਮ DMI ਜਾਣਕਾਰੀ ਪੜ੍ਹਨ ਦੌਰਾਨ ਗਲਤੀ:"
-
-#~ msgid "Force display of the compliance icon (expired or warning)"
-#~ msgstr "ਮਨਜੂਰੀ ਆਈਕਾਲ ਵੇਖਾਉਣ ਲਈ ਮਜਬੂਰ ਕਰੋ (ਮਿਆਦ-ਪੁੱਗਿਆ ਜਾਂ ਚੇਤਾਵਨੀ)"
-
-#~ msgid "How often to check for compliance (in seconds)"
-#~ msgstr "ਮਨਜੂਰ ਜਾਂਚ ਲਈ ਕਿੰਨਾ ਸਮਾਂ ਲੱਗਦਾ ਹੈ (ਸਕਿੰਟਾਂ ਵਿੱਚ)"
-
-#~ msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-#~ msgstr "ਮੈਂ Red Hat ਨੈੱਟਵਰਕ ਨਾਲ ਇੱਕ _HTTP ਪਰਾਕਸੀ ਦੁਆਰਾ ਜੁੜਨਾ ਚਾਹੁੰਦਾ ਹੈ।"
-
 #~ msgid "In Compliance"
 #~ msgstr "ਮਨਜੂਰੀ ਵਿੱਚ"
-
-#~ msgid "On a different date:"
-#~ msgstr "ਹੋਰ ਮਿਤੀ ਤੇ:"
 
 #~ msgid ""
 #~ "One or more of this system's subscriptions are about to expire. These "
@@ -1718,61 +1639,11 @@ msgstr ""
 #~ msgid "Out of Compliance"
 #~ msgstr "ਮਨਜੂਰੀ ਤੋਂ ਬਾਹਰ"
 
-#~ msgid "Password:"
-#~ msgstr "ਪਾਸਵਰਡ:"
-
-#~ msgid "Proxy P_assword:"
-#~ msgstr "ਪਰਾਕਸੀ ਗੁਪਤ-ਕੋਡ(_a):"
-
-#~ msgid "Proxy _Username:"
-#~ msgstr "ਪਰਾਕਸੀ ਯੂਜ਼ਰ-ਨਾਂ(_U):"
-
-#~ msgid "Red Hat Login:"
-#~ msgstr "Red Hat ਲਾਗਇਨ:"
-
-#~ msgid "Show products that will be out of compliance as of:"
-#~ msgstr "ਉਤਪਾਦ ਵੇਖਾਓ ਜੋ ਮਨਜੂਰੀ ਤੋਂ ਬਾਹਰ ਹਨ ਇਸ ਮੁਤਾਬਕ:"
-
-#~ msgid "Subscription Manager - Compliance Assistant"
-#~ msgstr "ਮੈਂਬਰੀ ਮੈਨੇਜਰ - ਮਨਜੂਰੀ ਸਹਾਇਕ"
-
 #~ msgid "This System is Non-Compliant"
 #~ msgstr "ਇਹ ਸਿਸਟਮ ਗੈਰ-ਮਨਜੂਰ ਹੈ"
 
-#~ msgid ""
-#~ "This system is missing one or more subscriptions required for compliance "
-#~ "with your subscription agreements."
-#~ msgstr ""
-#~ "ਤੁਹਾਡੇ ਮੈਂਬਰੀ ਇਕਰਾਰਨਾਮੇ ਨਾਲ ਸਹਿਮਤੀ ਲਈ ਇਸ ਸਿਸਟਮ ਵਿੱਚ ਇੱਕ ਜਾਂ ਜਿਆਦਾ ਮੈਂਬਰੀਆਂ ਦੀ ਕਮੀ ਹੈ।"
-
 #~ msgid "This system is non-compliant"
 #~ msgstr "ਇਹ ਸਿਸਟਮ ਗੈਰ-ਮਨਜੂਰ ਹੈ"
-
-#~ msgid ""
-#~ "To add a subscription, choose a certificate to import to your "
-#~ "subscription certificate directory."
-#~ msgstr "ਮੈਂਬਰੀ ਜੋੜਨ ਲਈ, ਆਪਣੀ ਮੈਂਬਰੀ ਸਾਰਟੀਫਿਕੇਟ ਡਾਇਰੈਕਟਰੀ ਇੰਪੋਰਟ ਕਰਨ ਲਈ ਸਾਰਟੀਫਿਕੇਟ ਚੁਣੋ।"
-
-#~ msgid "Use Au_thentication with HTTP Proxy:"
-#~ msgstr "HTTP ਪਰਾਕਸੀ ਨਾਲ ਪਰਮਾਣਿਕਤਾ ਵਰਤੋ(_t):"
-
-#~ msgid "You have <b>%s</b> products out of compliance."
-#~ msgstr "ਤੁਹਾਡਾ <b>%s</b> ਉਤਪਾਦ ਮਨਜੂਰੀ ਤੋਂ ਬਾਹਰ ਹੈ।"
-
-#~ msgid "You have <b>1</b> product out of compliance."
-#~ msgstr "ਤੁਹਾਡਾ <b>1</b> ਉਤਪਾਦ ਮਨਜੂਰੀ ਤੋਂ ਬਾਹਰ ਹੈ।"
-
-#~ msgid "You have one product which is out of compliance."
-#~ msgstr "ਤੁਹਾਡਾ ਇੱਕ ਉਤਪਾਦ ਮਨਜੂਰੀ ਤੋਂ ਬਾਹਰ ਹੈ।"
-
-#~ msgid "You must register before using the compliance assistant."
-#~ msgstr "ਮਨਜੂਰੀ ਸਹਾਇਕ ਵਰਤਣ ਤੋਂ ਪਹਿਲਾਂ ਤੁਹਾਨੂੰ ਰਜਿਸਟਰ ਕਰਨਾ ਜਰੂਰੀ ਹੈ।"
-
-#~ msgid "_Close"
-#~ msgstr "ਬੰਦ(_C)"
-
-#~ msgid "_Proxy Location:"
-#~ msgstr "ਪਰਾਕਸੀ ਟਿਕਾਣਾ(_P):"
 
 #~ msgid ""
 #~ "\n"
@@ -1905,9 +1776,6 @@ msgstr ""
 #~ "help."
 #~ msgstr ""
 #~ "ਗਲਤੀ: ਰਜਿਸਟਰ ਕਰਨ ਲਈ ਯੂਜ਼ਰ-ਨਾਂ ਅਤੇ ਪਾਸਵਰਡ ਲੋੜੀਂਦੇ ਹਨ, register --help ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ।"
-
-#~ msgid "Subscribed to Products:"
-#~ msgstr "ਇਹਨਾਂ ਉਤਪਾਦਾਂ ਤੇ ਮੈਂਬਰ ਬਣ ਗਿਆ ਹੈ:"
 
 #~ msgid "     %s(%s)"
 #~ msgstr "     %s(%s)"

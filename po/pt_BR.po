@@ -1,19 +1,19 @@
-# translation of zh_TW.po to Traditional Chinese
-# Language zh-TW translations for l package.
+# translation of pt_BR.po to
+# translation of pt-BR.po to
+# Language pt-BR translations for l package.
 # Copyright (C) 2011 THE l'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the l package.
-#
 # Automatically generated, 2011.
-# Terry Chuang <tchuang@redhat.com>, 2011.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: zh_TW\n"
+"Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-05 12:59-0300\n"
-"PO-Revision-Date: 2011-04-01 11:00+1000\n"
-"Last-Translator: Terry Chuang <tchuang@redhat.com>\n"
-"Language-Team: Traditional Chinese <zh@li.org>\n"
-"Language: zh-TW\n"
+"PO-Revision-Date: 2011-04-01 16:12+1100\n"
+"Last-Translator: \n"
+"Language-Team:  <en@li.org>\n"
+"Language: pt-BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,71 +21,71 @@ msgstr ""
 
 #: ../src/certlib.py:96
 msgid "Reasons(s):"
-msgstr "原因："
+msgstr "Razão(ões):"
 
 #: ../src/certlib.py:434
 msgid "Reason(s):"
-msgstr "原因："
+msgstr "Razão(ões):"
 
 #: ../src/certlib.py:606
 #, python-format
 msgid "Total updates: %d"
-msgstr "總更新數量：%d"
+msgstr "Total de atualizações: %d"
 
 #: ../src/certlib.py:607
 #, python-format
 msgid "Found (local) serial# %s"
-msgstr "發現（本機）的序號 # %s"
+msgstr "Série (local) encontrada# %s"
 
 #: ../src/certlib.py:608
 #, python-format
 msgid "Expected (UEP) serial# %s"
-msgstr "預期的（UEP）序號 # %s"
+msgstr "Série (UEP) esperada# %s"
 
 #: ../src/certlib.py:609
 msgid "Added (new)"
-msgstr "已新增（新增）"
+msgstr "Adicionado (novo)"
 
 #: ../src/certlib.py:610
 msgid "Deleted (rogue):"
-msgstr "已刪除（rogue）"
+msgstr "Removido (rogue):"
 
 #: ../src/certlib.py:611
 msgid "Expired (not deleted):"
-msgstr "已過期（未刪除）："
+msgstr "Vencido (não removido):"
 
 #: ../src/certlib.py:612
 msgid "Expired (deleted):"
-msgstr "已過期（已刪除）："
+msgstr "Vencido (removido):"
 
 #: ../src/certlib.py:767
 msgid "Updating Red Hat certificates"
-msgstr "更新 Red Hat 認證"
+msgstr "Atualização de certificados da Red Hat"
 
 #: ../src/certlib.py:770 ../src/factlib.py:80 ../src/certmgr.py:94
 #, python-format
 msgid "%d updates required"
-msgstr "需要 %d 項更新"
+msgstr "%d atualizações solicitadas"
 
 #: ../src/certlib.py:771 ../src/factlib.py:81 ../src/certmgr.py:95
 msgid "done"
-msgstr "完成"
+msgstr "finalizado"
 
 #: ../src/managerlib.py:87
 msgid "Subscribed"
-msgstr "已訂閱"
+msgstr "Subscrito"
 
 #: ../src/managerlib.py:87
 msgid "Expired"
-msgstr "已過期"
+msgstr "Vencido"
 
 #: ../src/managerlib.py:87
 msgid "Not Subscribed"
-msgstr "未訂閱"
+msgstr "Não está subscrito"
 
 #: ../src/managerlib.py:110
 msgid "Not Installed"
-msgstr "未安裝"
+msgstr "Não está instalado"
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
@@ -94,11 +94,11 @@ msgstr "未安裝"
 #: ../src/i18n_optparse.py:41
 #, python-format
 msgid "Usage: %s\n"
-msgstr "使用方法：%s\n"
+msgstr "Uso: %s\n"
 
 #: ../src/i18n_optparse.py:42
 msgid "Usage"
-msgstr "使用方法"
+msgstr "Uso"
 
 #: ../src/i18n_optparse.py:43
 msgid "%prog [options]"
@@ -106,79 +106,80 @@ msgstr "%prog [options]"
 
 #: ../src/i18n_optparse.py:44
 msgid "Options"
-msgstr "選項"
+msgstr "Opções"
 
 #. stuff for option value sanity checking
 #: ../src/i18n_optparse.py:47
 #, python-format
 msgid "no such option: %s"
-msgstr "無此選項：%s"
+msgstr "não existe esta opção: %s"
 
 #: ../src/i18n_optparse.py:48
 #, python-format
 msgid "ambiguous option: %s (%s?)"
-msgstr "含糊不清的選項：%s（%s?）"
+msgstr "opção ambígua: %s (%s?)"
 
 #: ../src/i18n_optparse.py:49
 #, python-format
 msgid "%s option requires an argument"
-msgstr "%s 選項需要一個引數"
+msgstr "%s opção requer um argumento"
 
 #: ../src/i18n_optparse.py:50
 #, python-format
 msgid "%s option requires %d arguments"
-msgstr "%s 選項需要 %d 引數"
+msgstr "%s opção requer %d argumentos"
 
 #: ../src/i18n_optparse.py:51
 #, python-format
 msgid "%s option does not take a value"
-msgstr "%s 選項不接受值"
+msgstr "%s opção não leva valor"
 
 #: ../src/i18n_optparse.py:52
 msgid "integer"
-msgstr "整數"
+msgstr "número inteiro"
 
 #: ../src/i18n_optparse.py:53
 msgid "long integer"
-msgstr "長整數"
+msgstr "número inteiro longo"
 
 #: ../src/i18n_optparse.py:54
 msgid "floating-point"
-msgstr "浮點數"
+msgstr "ponto flutuante"
 
 #: ../src/i18n_optparse.py:55
 msgid "complex"
-msgstr "複雜"
+msgstr "complexo"
 
 #: ../src/i18n_optparse.py:56
 #, python-format
 msgid "option %s: invalid %s value: %r"
-msgstr "選項 %s：無效的 %s 值：%r"
+msgstr "opção %s: inválida %s valor: %r"
 
 #: ../src/i18n_optparse.py:57
 #, python-format
 msgid "option %s: invalid choice: %r (choose from %s)"
-msgstr "選項 %s：無效的選擇：%r（由 %s 選擇）"
+msgstr "opção %s: escolha errada: %r (escolha a partir do %s)"
 
 #. default options
 #: ../src/i18n_optparse.py:60
 msgid "show this help message and exit"
-msgstr "顯示此協助訊息並退出"
+msgstr "apresenta esta mensagem de ajuda e encerramento"
 
 #: ../src/i18n_optparse.py:61
 msgid "show program's version number and exit"
-msgstr "顯示程式的版本號碼並退出"
+msgstr "o número de versão do programa apresentado e encerramento"
 
 #: ../src/factlib.py:77
 msgid "Updating facts"
-msgstr "更新詳情"
+msgstr "Atualização de dados"
 
 #: ../src/managercli.py:49 ../src/gui/utils.py:50
 msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
 msgstr ""
-"發生網路錯誤，無法連至伺服器。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+"Erro na rede, não foi possível conectar ao servidor. Por favor consulte /var/"
+"log/rhsm/rhsm.log para maiores informações."
 
 #. NOTE: yes this looks a lot like the socket error, but I think these
 #. were actually intended to display slightly different messages:
@@ -187,7 +188,8 @@ msgid ""
 "Network error. Please check the connection details, or see /var/log/rhsm/"
 "rhsm.log for more information."
 msgstr ""
-"發生網路錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+"Erro na rede. Por favor verifique os detalhes de conexão ou consulte /var/"
+"log/rhsm/rhsm.log para maiores informações."
 
 #. This is what happens when there's an issue with the server on the other side of the wire
 #: ../src/managercli.py:58 ../src/gui/utils.py:59
@@ -195,74 +197,75 @@ msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
 msgstr ""
-"遠端伺服器錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資"
-"訊。"
+"Erro no servidor remoto. Por favor verifique os detalhes da conexão ou "
+"consulte /var/log/rhsm/rhsm.log para maiores informações."
 
 #: ../src/managercli.py:67 ../src/gui/utils.py:63
 #, python-format
 msgid "Bad CA certificate: %s"
-msgstr "錯誤的 CA 認證：%s"
+msgstr "Certificado CA inválido: %s"
 
 #: ../src/managercli.py:84
 msgid "Installed Products:"
-msgstr "已安裝的產品："
+msgstr "Produtos Instalados:"
 
 #: ../src/managercli.py:124
 msgid "debug level"
-msgstr "除錯層級"
+msgstr "nível de depuração"
 
 #: ../src/managercli.py:126
 msgid "proxy url in the form of proxy_hostname:proxy_port"
-msgstr "代理伺服器 url 的格式會是 proxy_hostname:proxy_port"
+msgstr "proxy url na forma de proxy_hostname:proxy_port"
 
 #: ../src/managercli.py:128
 msgid "user for http proxy with basic authentication"
-msgstr "含有基本驗證的 http 代理伺服器的使用者"
+msgstr "usuário para http proxy com autenticação básica"
 
 #: ../src/managercli.py:130
 msgid "password for http proxy with basic authentication"
-msgstr "含有基本驗證的 http 代理伺服器的密碼"
+msgstr "senha para http proxy com autenticação básica"
 
 #: ../src/managercli.py:137
 msgid ""
 "Consumer not registered. Please register using --username and --password"
-msgstr "使用者尚未註冊。請使用 --username 和 --password 進行註冊"
+msgstr ""
+"Cliente não registrado. Por favor registre-o usando --username e --password"
 
 #: ../src/managercli.py:192
 msgid "Consumer certificates corrupted. Please reregister."
-msgstr "使用者認證已損毀。請進行註冊。"
+msgstr "Certificados corrompidos de cliente. Por favor registre-o novamente."
 
 #: ../src/managercli.py:209
 msgid "specify a username"
-msgstr "指定使用者名稱"
+msgstr "especifique um nome de usuário"
 
 #: ../src/managercli.py:211
 msgid "specify a password"
-msgstr "指定密碼"
+msgstr "especifique uma senha"
 
 #: ../src/managercli.py:223
 msgid "Username: "
-msgstr "使用者名稱："
+msgstr "Nome do Usuário:"
 
 #: ../src/managercli.py:226
 msgid "Password: "
-msgstr "密碼："
+msgstr "Senha: "
 
 #: ../src/managercli.py:251
 msgid "removes all local consumer data, does not effect the server"
-msgstr "移除所有本機使用者資料，不影響伺服器"
+msgstr "remove todos os dados do cliente local, não atinge o servidor"
 
 #: ../src/managercli.py:264
 msgid "All local data removed"
-msgstr "所有本機資料皆已移除"
+msgstr "Todos os dados removidos"
 
 #: ../src/managercli.py:270
 msgid "pulls the latest entitlement data from the server"
-msgstr "由伺服器取出最新的權利資料"
+msgstr "recebe os últimos dados de entitlement do servidor"
 
 #: ../src/managercli.py:280
 msgid "All local data refreshed"
-msgstr "所有本機資料皆已更新"
+msgstr "Todos os dados locais atualizados"
 
 #: ../src/managercli.py:285
 #, python-format
@@ -270,150 +273,156 @@ msgid ""
 "Unable to perform refresh due to the following exception \n"
 " Error: %s"
 msgstr ""
-"基於下列例外狀況錯誤，無法\n"
-"執行更新：%s"
+"Não foi possível executar a atualização devido à seguinte exceção \n"
+" Erro: %s"
 
 #: ../src/managercli.py:292
 msgid "request a new identity certficate for this machine"
-msgstr "為此機器請求新的身份認證"
+msgstr "solicitação de uma nova identidade para esta máquina"
 
 #: ../src/managercli.py:299
 msgid "request a new certificate be generated"
-msgstr "請求產生一組新的認證"
+msgstr "solicita um novo certificado a ser gerado"
 
 #: ../src/managercli.py:301
 msgid "force certificate regeneration (requires username and password)"
-msgstr "強制產生認證（需要使用者名稱與密碼）"
+msgstr ""
+"força a geração novamente do certificado (requer nome do usuário e senha)"
 
 #: ../src/managercli.py:306
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr "使用者身份不存在，或是已損毀。請嘗試註冊 --help"
+msgstr ""
+"A identidade do cliente não existe ou está corrompida. Tente registrar --help"
 
 #: ../src/managercli.py:309
 msgid "--force can only be used with --regenerate"
-msgstr "--force 只可與 --regenerate 搭配使用"
+msgstr "--force pode apenas ser usado com --regenerate"
 
 #: ../src/managercli.py:313
 msgid "--username and --password can only be used with --force"
-msgstr "--username 與 --password 只可與 --force 搭配使用"
+msgstr "--username e --password podem apenas ser usados com --force"
 
 #: ../src/managercli.py:325
 #, python-format
 msgid "Current identity is: %s name: %s"
-msgstr "目前的身份為：%s 名稱：%s "
+msgstr "A identidade atual é: %s nome: %s "
 
 #: ../src/managercli.py:343
 msgid "Error: Unable to generate a new identity for the system"
-msgstr "錯誤：無法為系統產生新的身份"
+msgstr "Erro: Não foi possível gerar uma nova identidade para o sistema"
 
 #: ../src/managercli.py:350
 msgid "register the client to RHN"
-msgstr "向 RHN 註冊客戶端"
+msgstr "registra o cliente ao RHN"
 
 #: ../src/managercli.py:357
 msgid "the type of consumer to register. Defaults to system"
-msgstr "欲註冊的使用者類型。預設值為系統"
+msgstr "o tipo de cliente a ser registrado. Padroniza ao sistema"
 
 #: ../src/managercli.py:359
 msgid "name of the consumer to register. Defaults to the hostname."
-msgstr "欲註冊的使用者名稱。預設為主機名稱。"
+msgstr "nome do cliente a ser registrado. Padroniza ao hostname."
 
 #: ../src/managercli.py:361
 msgid "register to an existing consumer"
-msgstr "註冊至既有的使用者"
+msgstr "registra a um cliente existente"
 
 #: ../src/managercli.py:363 ../src/managercli.py:520
 msgid ""
 "automatically subscribe this system to                                     "
 "compatible subscriptions."
-msgstr "自動將此系統註冊至                                     相容的訂閱。"
+msgstr ""
+"subscreve automaticamente este sistema "
+"para                                     subscrições compatíveis."
 
 #: ../src/managercli.py:366
 msgid "register the system even if it is already registered"
-msgstr "註冊系統，儘管此系統已註冊"
+msgstr "registra o sistema mesmo que ele já tenha sido registrado"
 
 #: ../src/managercli.py:371
 msgid "This system is already registered. Use --force to override"
-msgstr "這部系統已註冊。請使用 --force 來覆寫"
+msgstr "Este sistema já foi registrado. Use --force para substituição"
 
 #: ../src/managercli.py:374
 msgid "Error: consumer name can not be empty."
-msgstr "錯誤：使用者名稱不能是空白的。"
+msgstr "Erro: o nome do cliente não pode aparecer vazio."
 
 #: ../src/managercli.py:408
 #, python-format
 msgid "The system with UUID %s has been unregistered"
-msgstr "UUID 為 %s 的系統已被取消註冊"
+msgstr "O sistema com UUID %s foi cancelado"
 
 #: ../src/managercli.py:427
 #, python-format
 msgid "Error during registration: %s"
-msgstr "進行註冊時發生了錯誤：%s"
+msgstr "Erro durante o registro: %s"
 
 #: ../src/managercli.py:444
 msgid "unregister the client from RHN"
-msgstr "將客戶端由 RHN 取消註冊"
+msgstr "Cancela o registro do cliente do RHN"
 
 #: ../src/managercli.py:454
 msgid "This system is currently not registered."
-msgstr "這部系統目前尚未註冊。"
+msgstr "Este sistema não está registrado."
 
 #: ../src/managercli.py:467
 msgid "System has been un-registered."
-msgstr "系統已取消註冊。"
+msgstr "O sistema foi cancelado."
 
 #: ../src/managercli.py:473
 msgid "activate the registered user to a specified product"
-msgstr "為已註冊的使用者啟用於某項特定產品"
+msgstr "ativa o usuário registrado a um produto específico"
 
 #: ../src/managercli.py:478
 msgid "optional email address to notify when token activation is complete."
-msgstr "選用性電子郵件地址，以在 token 啟用程序完成時進行通知。"
+msgstr "endereço de e-mail opcional para notificação da ativação do token."
 
 #: ../src/managercli.py:481
 msgid ""
 "optional language to use for email notification when token activation is "
 "complete. Used with --email only. Examples: en-us, de-de"
 msgstr ""
-"當 token 啟用程序完成時，所使用來作為電子郵件通知的選用性語言。僅與 --email "
-"搭配使用。範例：en-us、de-de"
+"idioma opcional de uso para a notificação por e-mail quando a ativação do "
+"token for completada. Usado com --email apenas. Exemplos: en-us, de-de"
 
 #: ../src/managercli.py:511
 msgid "subscribe the registered machine to a specified product"
-msgstr "將已註冊的機器訂閱至特定產品"
+msgstr "subscreve a máquina registrada a um produto específico"
 
 #: ../src/managercli.py:518
 msgid "subscription pool id"
-msgstr "訂閱集區 id"
+msgstr "subscrição da id do pool"
 
 #: ../src/managercli.py:525
 msgid "Error: Need to supply --pool or --auto."
-msgstr "錯誤：需要提供 --pool 或是 --auto。"
+msgstr "Erro: Necessita fornecer --pool ou --auto."
 
 #: ../src/managercli.py:528
 msgid "Error: Only one of --pool or --auto may be used."
-msgstr "錯誤：只可使用 --pool 或 --auto 其中之一。"
+msgstr "Erro: Apenas um dos --pool ou --auto pode ser usado."
 
 #: ../src/managercli.py:549
 msgid "Please enter a valid numeric pool id."
-msgstr "請輸入一組有效的數字集區 id。"
+msgstr "Por favor insira uma id de pool de número válido."
 
 #: ../src/managercli.py:579
 msgid "unsubscribe the registered user from all or specific subscriptions"
-msgstr "將已註冊的使用者由所有或特定訂閱中取消"
+msgstr ""
+"cancela a subscrição do usuário registrado de todas subscrições ou "
+"específicas"
 
 #: ../src/managercli.py:585
 msgid "Certificate serial to unsubscribe"
-msgstr "取消訂閱的認證序號"
+msgstr "Certificado serial para cancelamento da subscrição"
 
 #: ../src/managercli.py:587
 msgid "Unsubscribe from all subscriptions"
-msgstr "取消所有訂閱"
+msgstr "Cancela a subscrição de todas as subscrições"
 
 #: ../src/managercli.py:609
 msgid "One of --serial or --all must be provided"
-msgstr "必須提供 --serial 或 --all 其中之一"
+msgstr "Um dos --serial ou --all devem ser fornecidos"
 
 #: ../src/managercli.py:617
 #, python-format
@@ -421,86 +430,89 @@ msgid ""
 "Unable to perform unsubscribe due to the following exception \n"
 " Error: %s"
 msgstr ""
-"基於下列例外錯誤，無法執行\n"
-"訂閱取消：%s"
+"Não foi possível executar o cancelamento devido a seguinte exceção \n"
+" Error: %s"
 
 #: ../src/managercli.py:627
 msgid "show information for facts"
-msgstr "顯示詳情資訊"
+msgstr "apresenta descrição dos dados"
 
 #: ../src/managercli.py:632
 msgid "list known facts for this system"
-msgstr "列出此系統的已知詳情"
+msgstr "lista dados conhecidos para este sistema"
 
 #: ../src/managercli.py:634
 msgid "update the system facts"
-msgstr "更新系統詳情"
+msgstr "atualiza dados no sistema"
 
 #: ../src/managercli.py:643
 msgid "Error: Need either --list or --update, Try facts --help"
-msgstr "錯誤：需要 --list 或 --update，請嘗試詳情 --help"
+msgstr "Erro: É necessário --list ou --update, Experimente dados --help"
 
 #: ../src/managercli.py:667
 msgid "list available or consumer subscriptions for registered user"
-msgstr "列出已註冊使用者的可用或是已消耗的訂閱"
+msgstr "lista subscrições do cliente ou disponível para usuário registrado"
 
 #: ../src/managercli.py:672
 msgid "installed"
-msgstr "已安裝"
+msgstr "instalado"
 
 #: ../src/managercli.py:674
 msgid "available"
-msgstr "可使用"
+msgstr "disponível"
 
 #: ../src/managercli.py:676
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
-msgstr "欲搜尋的日期，預設為今天的日期，僅搭配 --available 使用"
+msgstr ""
+"data de busca, o padrão é a data de hoje, apenas usado com --available "
 
 #: ../src/managercli.py:679
 msgid "consumed"
-msgstr "已消耗"
+msgstr "utilizado"
 
 #: ../src/managercli.py:681
 msgid "if supplied with --available then all subscriptions are returned"
-msgstr "若搭配 --available，那麼所有的訂閱皆會被回傳"
+msgstr "caso fornecido com --available, todas as subscrições serão retornadas"
 
 #: ../src/managercli.py:685
 msgid "Error: --all is only applicable with --available"
-msgstr "錯誤：--all 僅適用於 --available"
+msgstr "Erro: --all é apenas aplicável com --available"
 
 #: ../src/managercli.py:688
 msgid "Error: --ondate is only applicable with --available"
-msgstr "錯誤：--ondate 僅適用於 --available"
+msgstr "Error: --ondate é apenas aplicável com --available"
 
 #: ../src/managercli.py:704
 msgid "No installed Products to list"
-msgstr "沒有已安裝的產品可列出"
+msgstr "Não há Produtos instalados à lista"
 
 #: ../src/managercli.py:707
 msgid "    Installed Product Status"
-msgstr "...已安裝之產品的狀態"
+msgstr "    Status de Produtos Instalados"
 
 #: ../src/managercli.py:718
 msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-msgstr "輸入的日期無效。日期格式應為 YYYY-MM-DD（例如："
+msgstr ""
+"A data inserida está inválida. A data deve aparecer no formato AAAA-MM-DD "
+"(exemplo:"
 
 #: ../src/managercli.py:725
 msgid "No Available subscription pools to list"
-msgstr "沒有可列出的可用訂閱集區"
+msgstr "Não há pools de subscrição disponíveis à lista"
 
 #: ../src/managercli.py:727 ../src/gui/compliance.py:144
 #: ../src/gui/allsubs.py:58
 msgid "Available Subscriptions"
-msgstr "可用的訂閱"
+msgstr "Subscrições Disponíveis"
 
 #: ../src/managercli.py:741
 msgid "No Consumed subscription pools to list"
-msgstr "沒有可列出的已使用訂閱集區"
+msgstr "Não há pools utilizados de subscrição à lista"
 
 #: ../src/managercli.py:743
 msgid "Consumed Product Subscriptions"
-msgstr "已使用的產品訂閱"
+msgstr "Subscrições Utilizadas de Produto "
 
 #: ../src/managercli.py:793
 #, python-format
@@ -509,17 +521,19 @@ msgid ""
 "Usage: %s [options] MODULENAME --help\n"
 msgstr ""
 "\n"
-"使用方法：%s [options] MODULENAME --help\n"
+"Uso: %s [options] MODULENAME --help\n"
 
 #: ../src/managercli.py:794
 msgid "Supported modules:"
-msgstr "受支援的模組："
+msgstr "Módulos suportados:"
 
 #: ../src/managercli.py:859
 msgid ""
 "Error: You need to register this system by running `register` command before "
 "using this option."
-msgstr "錯誤：您需要在使用此選項前執行 `register` 指令，以註冊此系統。"
+msgstr ""
+"Erro: Você precisa registrar este sistema pela execução do comando "
+"`registrar` antes de usar esta opção."
 
 #: ../src/constants.py:25
 #, python-format
@@ -533,12 +547,12 @@ msgid ""
 "AccountNumber:      \t%-25s\n"
 msgstr ""
 "\n"
-"產品名稱：        \t%-25s\n"
-"狀態：             \t%-25s\n"
-"過期日期：            \t%-25s\n"
-"訂閱：       \t%-25s\n"
-"聯絡號碼：     \t%-25s\n"
-"帳號號碼：      \t%-25s\n"
+"Nome do Produto:      \t%-25s\n"
+"Status:               \t%-25s\n"
+"Vencimento:           \t%-25s\n"
+"Subscrição:           \t%-25s\n"
+"Número do Contrato:   \t%-25s\n"
+"Número da Conta:      \t%-25s\n"
 
 #: ../src/constants.py:34
 #, python-format
@@ -551,11 +565,11 @@ msgid ""
 "Expires:           \t%-25s\n"
 msgstr ""
 "\n"
-"產品名稱：       \t%-25s\n"
-"產品 ID：         \t%-25s\n"
-"集區 ID：            \t%-25s\n"
-"數量：          \t%-25s\n"
-"過期日期：           \t%-25s\n"
+"Nome do Produto:     \t%-25s\n"
+"Id do Produto:       \t%-25s\n"
+"Id do Pool:          \t%-25s\n"
+"Quantidade:          \t%-25s\n"
+"Vencimento:          \t%-25s\n"
 
 #: ../src/constants.py:42
 #, python-format
@@ -570,13 +584,13 @@ msgid ""
 "Expires:            \t%-25s\n"
 msgstr ""
 "\n"
-"產品名稱：        \t%-25s\n"
-"聯絡號碼：     \t%-25s\n"
-"帳號號碼：      \t%-25s\n"
-"序號：       \t%-25s\n"
-"啟用：             \t%-25s\n"
-"啟用日期：             \t%-25s\n"
-"過期日期：            \t%-25s\n"
+"Nome do Produto:        \t%-25s\n"
+"Número do Contrato:     \t%-25s\n"
+"Número da Conta:        \t%-25s\n"
+"Número de Série:        \t%-25s\n"
+"Ativo:                  \t%-25s\n"
+"Início:                 \t%-25s\n"
+"Vencimento:             \t%-25s\n"
 
 #: ../src/constants.py:52
 #, python-format
@@ -585,9 +599,9 @@ msgid ""
 "%s\n"
 "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
-"<b>在取消註冊時，發生了錯誤</b>\n"
+"<b>Foram encontrados erros no cancelamento da subscrição.</b>\n"
 "%s\n"
-"請查看 /var/log/rhsm/rhsm.log 以取得更多資訊"
+"Por favor consulte /var/log/rhsm/rhsm.log para maiores informações."
 
 #: ../src/constants.py:54
 #, python-format
@@ -598,15 +612,15 @@ msgid ""
 "\n"
 "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
-"<b>無法註冊系統。</b>\n"
+"<b>Não foi possível registrar o sistema.</b>\n"
 "\n"
 " %s\n"
 "\n"
-"請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+"Por favor consulte /var/log/rhsm/rhsm.log para maiores informações."
 
 #: ../src/constants.py:56
 msgid "<b>Are you sure you want to unregister?</b>"
-msgstr "<b>您是否確認要取消註冊？</b>"
+msgstr "<b>Você tem certeza de que deseja cancelar?</b>"
 
 #: ../src/constants.py:58
 msgid ""
@@ -621,222 +635,229 @@ msgid ""
 "For more information, including alternate tools, consult this Knowledge Base "
 "Article: https://access.redhat.com/kb/docs/DOC-45563\n"
 msgstr ""
-"警告\n"
+"AVISO\n"
 "\n"
-"您已使用 RHN Classic 技術向 RHN 註冊了。這項工具需使用 RHN Certificate-Based "
-"Entitlement 技術來進行註冊。\n"
+"Você já registrou o RHN usando a tecnologia do RHN Clássico. Esta ferramenta "
+"requer o registro usando a tecnologia do Entitlement baseado no Certificado "
+"do RHN.\n"
 "\n"
-"除了某些例外情況，否則 Red Hat 建議使用者只向 RHN 註冊一遍。\n"
+"A Red Hat recomenda que clientes registrem-se no RHN apenas uma vez, com "
+"exceção de alguns casos.\n"
 "\n"
-"欲取得更多相關資訊（包括額外工具），請參閱此知識庫文件：https://access."
-"redhat.com/kb/docs/DOC-45563\n"
+"Para maiores informações, incluindo as ferramentas alternativas, consulte "
+"este Artigo de Conhecimento Básico: https://access.redhat.com/kb/docs/"
+"DOC-45563\n"
 
 #: ../src/productid.py:109
 #, python-format
 msgid "installing: %s"
-msgstr "安裝中：%s"
+msgstr "instalação: %s"
 
 #: ../src/productid.py:123
 #, python-format
 msgid "deleting: %s"
-msgstr "刪除中：%s"
+msgstr "exclusão: %s"
 
 #: ../src/productid.py:140
 #, python-format
 msgid "duration: %d(ms)"
-msgstr "期間：%d(ms)"
+msgstr "duração: %d(ms)"
 
 #: ../src/hwprobe.py:60
 #, python-format
 msgid "Error reading system DMI information: %s"
-msgstr "讀取系統 DMI 資訊時發生了錯誤：%s"
+msgstr "Erro na leitura de informação DMI do sistema: %s"
 
 #: ../src/hwprobe.py:116
 msgid "Error reading system memory information:"
-msgstr "讀取系統記憶體資訊時發生了錯誤："
+msgstr "Erro na leitura de informação da memória do sistema:"
 
 #: ../src/hwprobe.py:131
 msgid "Error reading system cpu information:"
-msgstr "讀取系統 cpu 資訊時發生了錯誤："
+msgstr "Erro na leitura de informação da cpu do sistema:"
 
 #: ../src/hwprobe.py:144
 msgid "Error reading networking information:"
-msgstr "讀取網路作業資訊時發生了錯誤："
+msgstr "Erro na leitura de informação da rede:"
 
 #: ../src/hwprobe.py:161
 msgid "Error reading net Interface information:"
-msgstr "讀取網路介面資訊時發生了錯誤："
+msgstr "Erro na leitura de informação da Interface net:"
 
 #: ../src/certmgr.py:89
 msgid "Updating Red Hat certificates & repositories"
-msgstr "更新 Red Hat 認證和軟體庫"
+msgstr "Atualização dos repositórios e certificados da Red Hat"
 
 #: ../src/certmgr.py:107
 msgid "Unable to update Red Hat certificates & repositories"
-msgstr "無法更新 Red Hat 認證和軟體庫"
+msgstr "Não foi possível atualizar os certificados e repositórios"
 
 #: ../src/gui/firstboot/rhsm_login.py:40
 msgid "Entitlement Registration"
-msgstr "權利註冊"
+msgstr "Registro de Entitlement"
 
 #: ../src/gui/firstboot/rhsm_login.py:41
 msgid "Entitlement Platform Registration"
-msgstr "權利平台註冊"
+msgstr "Registro da Plataforma de Entitlement"
 
 #: ../src/gui/firstboot/rhsm_subscriptions.py:28
 msgid "RHSM Subscriptions Management"
-msgstr "RHSM 訂閱管理"
+msgstr "Gerenciamento de Subscrições RHMS"
 
 #: ../src/gui/firstboot/rhsm_subscriptions.py:29
 #: ../src/gui/data/mainwindow.glade.h:8 ../src/gui/data/subsgui.glade.h:3
 #: ../etc-conf/subscription-manager.desktop.in.h:2
 msgid "Subscription Manager"
-msgstr "訂閱管理程式"
+msgstr "Gerenciamento da Subscrição"
 
 #: ../src/gui/activate.py:55
 #, python-format
 msgid "Error activating subscription: %s"
-msgstr "啟用訂閱時發生了錯誤：%s"
+msgstr "Erro ao ativar a subscrição: %s"
 
 #: ../src/gui/importsub.py:66
 msgid "You must select a certificate."
-msgstr "您必須選擇一項認證。"
+msgstr "Selecione um certificado."
 
 #: ../src/gui/importsub.py:73
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
-msgstr "%s 不是個有效的認證檔案。請上傳有效的認證。"
+msgstr ""
+"%s não é um certificado válido. Por favor insira um certificado válido."
 
 #: ../src/gui/widgets.py:150
 #, python-format
 msgid "Next Update: %s"
-msgstr "下個更新：%s"
+msgstr "Próxima Atualização: %s"
 
 #: ../src/gui/widgets.py:192 ../src/gui/compliance.py:123
 #: ../src/gui/installedtab.py:41 ../src/gui/data/installed.glade.h:8
 msgid "Product"
-msgstr "產品"
+msgstr "Produto"
 
 #: ../src/gui/widgets.py:196
 msgid "Installed"
-msgstr "已安裝"
+msgstr "Instalado"
 
 #: ../src/gui/widgets.py:402
 msgid "Invalid date format. Please re-enter a valid date. Example: "
-msgstr "無效的日期格式。請重新輸入一組有效的日期。例如："
+msgstr "Formato de data inválido. Por favor insira uma data válida. Exemplo:"
 
 #: ../src/gui/widgets.py:437
 msgid "Today"
-msgstr "今天"
+msgstr "Hoje"
 
 #: ../src/gui/managergui.py:371
 msgid "You must register before using the subscription assistant."
-msgstr "在使用規範協助之前，您必須先進行註冊。"
+msgstr ""
+"Você deve realizar o registro antes de usar a assistência da subscrição."
 
 #: ../src/gui/managergui.py:402
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr "您有 <b>%s</b> 項產品沒有有效的權利認證。"
+msgstr ""
+"Você possui <b>%s</b> produtos com certificados de entitlement inválidos."
 
 #: ../src/gui/managergui.py:406
 msgid "You have <b>1</b> product without a valid entitlement certificate."
-msgstr "您有 <b>1</b> 項產品沒有有效的權利認證。"
+msgstr "Você possui <b>1</b> produto sem um certificado válido de entitlement."
 
 #: ../src/gui/managergui.py:413
 #, python-format
 msgid "Product entitlement certificates valid through %s"
-msgstr "透過 %s 驗證產品權利認證"
+msgstr "Certificados válidos de entitlement do produto até %s"
 
 #: ../src/gui/managergui.py:536
 msgid "You must enter a system name."
-msgstr "您必須輸入一組系統名稱。"
+msgstr "Insira o nome no sistema."
 
 #: ../src/gui/managergui.py:545
 msgid "You must enter a login."
-msgstr "您必須輸入一組登錄名稱。"
+msgstr "Adicione um logon. "
 
 #: ../src/gui/managergui.py:551
 msgid "You must enter a password."
-msgstr "您必須輸入一組密碼。"
+msgstr "Insira uma senha."
 
 #: ../src/gui/compliance.py:118
 msgid "Uncompliant Product List"
-msgstr "不符合標準的產品清單"
+msgstr "Lista de Produtos Não-Compatíveis"
 
 #: ../src/gui/compliance.py:125 ../src/gui/mysubstab.py:60
 #: ../src/gui/contract_selection.py:80 ../src/gui/installedtab.py:56
 #: ../src/gui/data/subdetails.glade.h:13
 msgid "End Date"
-msgstr "結束日期"
+msgstr "Data Final"
 
 #: ../src/gui/compliance.py:141
 msgid "Subscription List"
-msgstr "訂閱清單"
+msgstr "Lista da Subscrição"
 
 #. Set up columns on the view
 #: ../src/gui/compliance.py:142 ../src/gui/allsubs.py:56
 #: ../src/gui/mysubstab.py:53 ../src/gui/data/installed.glade.h:9
 msgid "Subscription"
-msgstr "訂閱"
+msgstr "Subscrição"
 
 #: ../src/gui/compliance.py:180
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
 msgstr ""
-"顯示規範協助時發生了錯誤。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+"Erro ao exibir a Assistência da Subscrição. Por favor consulte /var/log/rhsm/"
+"rhsm.log para maiores informações."
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
-msgstr "無法搜尋訂閱"
+msgstr "Não foi possível realizar a busca de subscrições"
 
 #: ../src/gui/compliance.py:214
 #, python-format
 msgid "Software entitlements valid through %s"
-msgstr "透過 %s 驗證軟體權利"
+msgstr "Entitlements de software válidos até %s"
 
 #: ../src/gui/compliance.py:218
 #, python-format
 msgid "%s (first date of invalid entitlements)"
-msgstr "%s（權利無效的第一個日期）"
+msgstr "%s (primeira data de entitlements inválidos)"
 
 #: ../src/gui/compliance.py:220
 #, python-format
 msgid "The following subscriptions will cover the products selected on %s"
-msgstr "下列訂閱將涵蓋在 %s 上所選擇的產品"
+msgstr "As seguintes subscrições irão cobrir os produtos selecionados no %s"
 
 #: ../src/gui/compliance.py:228 ../src/gui/allsubs.py:189
 msgid "Searching for subscriptions. Please wait."
-msgstr "正在搜尋訂閱。請稍等。"
+msgstr "Buscando por subscrições. Por favor aguarde."
 
 #. installed but not entitled products:
 #: ../src/gui/compliance.py:281
 msgid "N/A"
-msgstr "N/A"
+msgstr "Não está disponível"
 
 #: ../src/gui/compliance.py:413 ../src/gui/allsubs.py:227
 #, python-format
 msgid "Error getting subscription: %s"
-msgstr "嘗試取得訂閱時發生了錯誤：%s"
+msgstr "Erro ao obter subscrições: %s"
 
 #: ../src/gui/allsubs.py:177
 msgid "All Available Subscriptions"
-msgstr "所有可用訂閱"
+msgstr "Todas as Subscrições Disponíveis"
 
 #: ../src/gui/allsubs.py:193
 #, python-format
 msgid "Error fetching subscriptions from server:  %s"
-msgstr "從伺服器搜尋訂閱時發生了錯誤：%s"
+msgstr "Erro na busca por subscrições no servidor:  %s"
 
 #: ../src/gui/allsubs.py:203
 #, python-format
 msgid "Unable to search for subscriptions:  %s"
-msgstr "無法搜尋訂閱：%s"
+msgstr "Não foi possível buscar subscrições:  %s"
 
 #: ../src/gui/utils.py:52
 #, python-format
 msgid "Unable to verify server's identity: %s"
-msgstr "無法驗證伺服器的身份：%s"
+msgstr "Não foi possível verificar a identidade do servidor: %s"
 
 #: ../src/gui/networkConfig.py:132
 #, python-format
@@ -844,357 +865,381 @@ msgid ""
 "There was an error saving your configuration. Make sure that\n"
 "you own %s."
 msgstr ""
-"儲存您的配置時發生了錯誤。請確認\n"
-"您擁有 %s。"
+"Ocorreu um erro ao salvar sua configuração. Certifique-se de que\n"
+"você possui %s."
 
 #: ../src/gui/mysubstab.py:54
 msgid "Installed Products"
-msgstr "已安裝的產品"
+msgstr "Produtos Instalados"
 
 #: ../src/gui/mysubstab.py:81
 #, python-format
 msgid "There was an error unsubsribing from %s with serial number %s"
-msgstr "由 %s 取消訂閱發生了錯誤，序號為 %s"
+msgstr "Erro ao cancelar %s com número de série %s"
 
 #: ../src/gui/mysubstab.py:93
 #, python-format
 msgid "Are you sure you want to unsubscribe from %s?"
-msgstr "您是否確認希望由 %s 取消訂閱？"
+msgstr "Você tem certeza de que deseja cancelar %s?"
 
 #: ../src/gui/mysubstab.py:113
 msgid "My Subscriptions"
-msgstr "我的訂閱"
+msgstr "Minhas subscrições"
 
 #: ../src/gui/mysubstab.py:140
 msgid "yes"
-msgstr "是"
+msgstr "sim"
 
 #: ../src/gui/mysubstab.py:142
 msgid "no"
-msgstr "否"
+msgstr "não"
 
 #. Set up columns on the view
 #: ../src/gui/factsgui.py:54
 msgid "Fact"
-msgstr "詳情"
+msgstr "Dado"
 
 #: ../src/gui/factsgui.py:55
 msgid "Value"
-msgstr "值"
+msgstr "Valor"
 
 #: ../src/gui/factsgui.py:83
 msgid "No previous update"
-msgstr "先前沒有更新"
+msgstr "Nenhuma atualização anterior"
 
 #: ../src/gui/contract_selection.py:67 ../src/gui/data/subdetails.glade.h:12
 msgid "Contract Number"
-msgstr "聯絡號碼"
+msgstr "Número de Contrato"
 
 #: ../src/gui/contract_selection.py:71
 msgid "Used / Available"
-msgstr "已使用/可使用"
+msgstr "Usado / Disponível"
 
 #: ../src/gui/contract_selection.py:76 ../src/gui/installedtab.py:55
 #: ../src/gui/data/subdetails.glade.h:14
 msgid "Start Date"
-msgstr "起始日期"
+msgstr "Data de Início"
 
 #: ../src/gui/installedtab.py:53
 msgid "Version"
-msgstr "版本"
+msgstr "Versão"
 
 #: ../src/gui/installedtab.py:54
 msgid "Certificate"
-msgstr "認證"
+msgstr "Certificado"
 
 #: ../src/gui/installedtab.py:95
 msgid "Future Subscription"
-msgstr "未來的訂閱"
+msgstr "Subscrição Futura"
 
 #: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
 #: ../src/gui/installedtab.py:112
 msgid "Missing"
-msgstr "遺失"
+msgstr "Ausente"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
-msgstr "無效"
+msgstr "Inválido"
 
 #: ../src/gui/installedtab.py:101
 #, python-format
 msgid "Subscription %s is expired"
-msgstr "訂閱 %s 已過期"
+msgstr "Subscrição %s vencida"
 
 #: ../src/gui/installedtab.py:104
 msgid "Valid"
-msgstr "有效"
+msgstr "Válido"
 
 #: ../src/gui/installedtab.py:106
 #, python-format
 msgid "Covered by contract %s through %s"
-msgstr "由合約 %s 到 %s 所涵蓋"
+msgstr "Protegido por contrato %s dentro %s"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
-msgstr "我已安裝的軟體"
+msgstr "Minha Instalação de Software"
 
 #: ../src/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
-msgstr "<b>認證狀態：</b>"
+msgstr "<b>Status de Certificado:</b>"
 
 #: ../src/gui/data/installed.glade.h:2
 msgid "<b>Product's Subscription Details</b>"
-msgstr "<b>產品的訂閱詳細資料</b>"
+msgstr "<b>Detalhes da Subscrição do Produto</b>"
 
 #: ../src/gui/data/installed.glade.h:3
 msgid "<b>Product:</b>"
-msgstr "<b>產品：</b>"
+msgstr "<b>Produto:</b>"
 
 #: ../src/gui/data/installed.glade.h:4 ../src/gui/data/subdetails.glade.h:8
 #: ../src/gui/data/contract_selection.glade.h:2
+#, fuzzy
 msgid "<b>Subscription:</b>"
-msgstr "<b>訂閱：</b>"
+msgstr ""
+"#-#-#-#-#  pt_BR.po (pt_BR)  #-#-#-#-#\n"
+"<b>Subscrição:</b>\n"
+"#-#-#-#-#  pt_BR.po (pt_BR)  #-#-#-#-#\n"
+"<b>Subscrição:</b> >>>>> Contexto inserido pelo KBabel, não traduza:yes"
 
 #: ../src/gui/data/installed.glade.h:5 ../src/gui/data/mainwindow.glade.h:4
 msgid "Certificate Status"
-msgstr "認證狀態"
+msgstr "Status de Certificado:"
 
 #: ../src/gui/data/installed.glade.h:6
 msgid "Installed View"
-msgstr "已安裝"
+msgstr "Visualização Instalada"
 
 #: ../src/gui/data/installed.glade.h:7 ../src/gui/data/mysubs.glade.h:2
 #: ../src/gui/data/allsubs.glade.h:8
 msgid "Next Update:"
-msgstr "下個更新："
+msgstr "Próxima Atualização:"
 
 #: ../src/gui/data/networkConfig.glade.h:1
 msgid "<b>HTTP Proxy</b>"
-msgstr "<b>HTTP 代理伺服器</b>"
+msgstr "<b>HTTP Proxy</b> >>>>> Contexto inserido pelo KBabel, não traduza:yes"
 
 #: ../src/gui/data/networkConfig.glade.h:2
 msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-msgstr "<small><b>範例：</b> squid.example.com:3128</small>"
+msgstr ""
+"<small><b>Exemplo:</b> squid.example.com:3128</small> >>>>> Contexto "
+"inserido pelo KBabel, não traduza:yes"
 
 #: ../src/gui/data/networkConfig.glade.h:3
 msgid "Advanced Network Configuration"
-msgstr "進階網路配置"
+msgstr "Configuração de Rede Avançada"
 
 #: ../src/gui/data/networkConfig.glade.h:4
 msgid "Authentication Checkbox"
-msgstr "驗證核取方塊"
+msgstr "Assinalar Autenticação"
 
 #: ../src/gui/data/networkConfig.glade.h:5
 msgid "Close Button"
-msgstr "關閉按鈕"
+msgstr "Botão Fechar"
 
 #: ../src/gui/data/networkConfig.glade.h:6
 msgid "Enter in the format hostname(:port)"
-msgstr "以 hostname(:port) 格式輸入"
+msgstr "Insira no formato hostname(:port)"
 
 #: ../src/gui/data/networkConfig.glade.h:7
 msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-msgstr "我希望透過 HTTP 代理伺服器連至 Red Hat Network(_H)。"
+msgstr ""
+"Eu quero conectar-me ao Red Hat Network através de um _HTTP proxy. >>>>> "
+"Contexto inserido pelo KBabel, não traduza:yes"
 
 #: ../src/gui/data/networkConfig.glade.h:8
 msgid "Password Text"
-msgstr "密碼文字"
+msgstr "Texto de Senha"
 
 #: ../src/gui/data/networkConfig.glade.h:9
 msgid "Proxy Checkbox"
-msgstr "代理伺服器核取方塊"
+msgstr "Assinalar Proxy"
 
 #: ../src/gui/data/networkConfig.glade.h:10
 msgid "Proxy Location Text"
-msgstr "代理伺服器位置文字"
+msgstr "Texto de Localização do Proxy"
 
 #: ../src/gui/data/networkConfig.glade.h:11
 msgid "Proxy P_assword:"
-msgstr "代理伺服器密碼(_A)："
+msgstr "S_enha Proxy: >>>>> Contexto inserido pelo KBabel, não traduza:yes"
 
 #: ../src/gui/data/networkConfig.glade.h:12
 msgid "Proxy _Username:"
-msgstr "代理伺服器使用者名稱(_U)："
+msgstr ""
+"_Nome do Usuário Proxy: >>>>> Contexto inserido pelo KBabel, não traduza:yes"
 
 #: ../src/gui/data/networkConfig.glade.h:13
 msgid "Use Au_thentication with HTTP Proxy:"
-msgstr "搭配 HTTP 代理伺服器進行驗證(_T)："
+msgstr ""
+"Usa uma Au_tenticação com o HTTP Proxy: >>>>> Contexto inserido pelo KBabel, "
+"não traduza:yes"
 
 #: ../src/gui/data/networkConfig.glade.h:14
 msgid "Username Text"
-msgstr "使用者名稱文字"
+msgstr "Texto do Nome do Usuário"
 
 #: ../src/gui/data/networkConfig.glade.h:15
 msgid "_Close"
-msgstr "關閉(_C)"
+msgstr "_Encerra >>>>> Contexto inserido pelo KBabel, não traduza:yes"
 
 #: ../src/gui/data/networkConfig.glade.h:16
 msgid "_Proxy Location:"
-msgstr "代理伺服器位置(_P)："
+msgstr ""
+"Localização do _Proxy: >>>>> Contexto inserido pelo KBabel, não traduza:yes"
 
 #: ../src/gui/data/compliance.glade.h:1
 msgid "A different date:"
-msgstr "不同的日期："
+msgstr "Numa data diferente: "
 
 #: ../src/gui/data/compliance.glade.h:2
 msgid "Invalid Product List"
-msgstr "無效的產品清單"
+msgstr "Lista de Produtos Instalados"
 
 #: ../src/gui/data/compliance.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
-msgstr "顯示認證將於此日期無效的各項產品："
+msgstr ""
+"Apresentar produtos com certificados de entitlement inválidos a partir de:"
 
 #: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
 #: ../src/gui/data/contract_selection.glade.h:5
+#, fuzzy
 msgid "Subscribe"
-msgstr "訂閱"
+msgstr ""
+"#-#-#-#-#  pt_BR.po (pt_BR)  #-#-#-#-#\n"
+"Subscrever\n"
+"#-#-#-#-#  pt_BR.po (pt_BR)  #-#-#-#-#\n"
+"Subscrever >>>>> Contexto inserido pelo KBabel, não traduza:yes"
 
 #: ../src/gui/data/compliance.glade.h:5
 msgid "Subscription Action Area"
-msgstr "訂閱動作區域"
+msgstr "Área de Ação da Subscrição"
 
 #: ../src/gui/data/compliance.glade.h:6
 msgid "Subscription Assistant"
-msgstr "訂閱協助"
+msgstr "Assistência da Subscrição"
 
 #: ../src/gui/data/compliance.glade.h:7
 msgid "Subscription Assistant Box"
-msgstr "訂閱協助方塊"
+msgstr "Caixa de Assistência da Subscrição"
 
 #: ../src/gui/data/compliance.glade.h:8
 msgid "Subscription Assistant Status"
-msgstr "訂閱協助狀態"
+msgstr "Status da Assistência da Subscrição"
 
 #: ../src/gui/data/compliance.glade.h:9
 msgid "Subscription Date Box"
-msgstr "訂閱日期方塊"
+msgstr "Caixa de Data da Subscrição"
 
 #: ../src/gui/data/compliance.glade.h:10
 msgid "Subscription Date Label"
-msgstr "訂閱日期標籤"
+msgstr "Etiqueta da Data da Subscrição"
 
 #: ../src/gui/data/compliance.glade.h:11
 msgid "Subscription Date Picker"
-msgstr "訂閱日期選擇"
+msgstr "Selecionador de Data da Subscrição"
 
 #: ../src/gui/data/compliance.glade.h:12
 msgid "Subscription Details"
-msgstr "訂閱詳細資料"
+msgstr "Detalhes da Subscrição"
 
 #: ../src/gui/data/compliance.glade.h:13
 msgid "Subscription Label"
-msgstr "訂閱標籤"
+msgstr "Etiqueta da Subscrição"
 
 #: ../src/gui/data/compliance.glade.h:14
 msgid "Subscription Label Box"
-msgstr "訂閱標籤方塊"
+msgstr "Caixa da Etiqueta da Subscrição"
 
 #: ../src/gui/data/compliance.glade.h:15
 msgid "Subscription Manager - Subscription Assistant"
-msgstr "訂閱管理程式 - 訂閱協助（Subscription Assistant）"
+msgstr "Gerenciador da Subscrição - Assistência da Subscrição"
 
 #: ../src/gui/data/compliance.glade.h:16
 msgid "Subscription Product List"
-msgstr "訂閱產品清單"
+msgstr "Lista do Produto da Subscrição"
 
 #: ../src/gui/data/compliance.glade.h:17
 msgid "Subscription Subscriptions Box"
-msgstr "訂閱方塊"
+msgstr "Caixa de Subscrições da Subscrição"
 
 #: ../src/gui/data/compliance.glade.h:18
 msgid "Subscription Subscriptions Label"
-msgstr "訂閱標籤"
+msgstr "Etiqueta de Subscrições da Subscrição"
 
 #: ../src/gui/data/compliance.glade.h:19
 msgid "Subscription Update Box"
-msgstr "訂閱更新方塊"
+msgstr "Caixa de Atualização da Subscrição"
 
 #: ../src/gui/data/compliance.glade.h:20
 msgid "Subscriptions List"
-msgstr "訂閱清單"
+msgstr "Lista de Subscrições"
 
 #: ../src/gui/data/compliance.glade.h:21
 msgid "Subscriptions Panel"
-msgstr "訂閱面板"
+msgstr "Painel de Subscrições"
 
 #: ../src/gui/data/compliance.glade.h:22
 msgid "The following subscriptions will cover the products selected above:"
-msgstr "下列訂閱將會涵蓋以上所選擇的產品："
+msgstr "As seguintes subscrições irão cobrir os produtos selecionados acima:"
 
 #: ../src/gui/data/compliance.glade.h:23 ../src/gui/data/allsubs.glade.h:13
 msgid "Update"
-msgstr "更新"
+msgstr "Atualizar"
 
 #: ../src/gui/data/compliance.glade.h:24
 msgid "subscribe button"
-msgstr "訂閱按鈕"
+msgstr "botão da subscrição"
 
 #: ../src/gui/data/rhsm.glade.h:1
 msgid "<b>Other Available Subscriptions</b>"
-msgstr "<b>其它可用訂閱</b>"
+msgstr "<b>Outras Subscrições Disponíveis</b>"
 
 #: ../src/gui/data/rhsm.glade.h:2
 msgid "<b>Select Subscriptions to add</b>"
-msgstr "<b>選擇欲新增的訂閱</b>"
+msgstr "<b>Selecionar Subscrições para adição</b>"
 
 #: ../src/gui/data/rhsm.glade.h:3
 msgid "<b>Subscriptions compatible with your system</b>"
-msgstr "<b>與您系統相容的訂閱</b>"
+msgstr "<b>Subscrições compatíveis com seu sistema</b>"
 
 #: ../src/gui/data/rhsm.glade.h:4
 msgid "<b>Subscriptions matching your installed products</b>"
-msgstr "<b>與您所安裝的產品相符的訂閱</b>"
+msgstr "<b>Subscrições que combinam com seus produtos instalados</b>"
 
 #: ../src/gui/data/rhsm.glade.h:5
 msgid "Add Subscriptions"
-msgstr "新增訂閱"
+msgstr "Adição de Subscrições"
 
 #: ../src/gui/data/rhsm.glade.h:6 ../src/gui/data/importsub.glade.h:1
 msgid "Certificate _Location:"
-msgstr "認證位置(_L)："
+msgstr ""
+"_Localização de Certificado: >>>>> Contexto inserido pelo KBabel, não "
+"traduza:yes"
 
 #: ../src/gui/data/rhsm.glade.h:7
 msgid "Do not register"
-msgstr "不註冊"
+msgstr "Não registra"
 
 #: ../src/gui/data/rhsm.glade.h:8 ../src/gui/data/mainwindow.glade.h:5
 #: ../src/gui/data/importsub.glade.h:3
 msgid "Import Certificate"
-msgstr "匯入認證"
+msgstr "Importar Certificado"
 
 #: ../src/gui/data/rhsm.glade.h:9
 msgid "Not Compatible"
-msgstr "不相容"
+msgstr "Não é compatível"
 
 #: ../src/gui/data/rhsm.glade.h:10 ../src/gui/data/importsub.glade.h:4
 msgid "Provide a Subscription Certificate"
-msgstr "提供訂閱認證"
+msgstr "Fornecer um Certificado da Subscrição"
 
 #: ../src/gui/data/rhsm.glade.h:11
 msgid "Register with Red Hat Entitlement Service"
-msgstr "向 Red Hat Entitlement Service 進行註冊"
+msgstr "Registrar com o Serviço de Entitlement da Red Hat"
 
 #: ../src/gui/data/rhsm.glade.h:12
 msgid "Register with Red Hat Network"
-msgstr "向 Red Hat Network 進行註冊"
+msgstr "Registrar com o Red Hat Network"
 
 #: ../src/gui/data/rhsm.glade.h:13
 msgid "Register with Red Hat Network Satellite"
-msgstr "向 Red Hat Network Satellite 進行註冊"
+msgstr "Registrar com o Red Hat Network Satellite"
 
 #: ../src/gui/data/rhsm.glade.h:14
 msgid "Suggested"
-msgstr "建議"
+msgstr "Sugerido"
 
 #: ../src/gui/data/rhsm.glade.h:15
 msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
-msgstr "若要新增訂閱，請選擇欲匯入您訂閱認證目錄中的認證。"
+msgstr ""
+"Para adicionar uma subscrição, escolha um certificado para importar o seu "
+"diretório de certificado da subscrição. >>>>> Contexto inserido pelo KBabel, "
+"não traduza:yes"
 
 #: ../src/gui/data/rhsm.glade.h:16
 msgid "Update Subscriptions"
-msgstr "更新訂閱"
+msgstr "Atualizar Subscrições"
 
 #: ../src/gui/data/rhsm.glade.h:17
 msgid "update_subscriptions_dialog\n"
@@ -1202,7 +1247,7 @@ msgstr "update_subscriptions_dialog\n"
 
 #: ../src/gui/data/activate.glade.h:1
 msgid "Activate"
-msgstr "啟用"
+msgstr "Ativação"
 
 #: ../src/gui/data/activate.glade.h:2
 msgid ""
@@ -1210,210 +1255,214 @@ msgid ""
 "Please provide an email address to receive notification\n"
 "when the activation is complete."
 msgstr ""
-"啟用您的機器可能會花上幾分鐘。\n"
-"請提供一組電子郵件地址，以在啟用程序完成\n"
-"時，取得通知。"
+"A ativação de sua máquina pode levar alguns minutos.\n"
+"Por favor forneça um endereço de e-mail para o recebimento de notificação\n"
+"quando a ativação for completada."
 
 #: ../src/gui/data/activate.glade.h:5 ../src/gui/data/factsdialog.glade.h:2
 msgid "Close"
-msgstr "關閉"
+msgstr "Fechar"
 
 #: ../src/gui/data/activate.glade.h:6
 msgid "Email Address:"
-msgstr "電子郵件地址："
+msgstr "Endereço de E-mail:"
 
 #: ../src/gui/data/activate.glade.h:7
 msgid "Subscription Activation"
-msgstr "訂閱啟用"
+msgstr "Ativação da Subscrição"
 
 #: ../src/gui/data/mainwindow.glade.h:1
 msgid "<b>Certificate Status</b>"
-msgstr "<b>認證狀態</b>"
+msgstr "<b>Status do Certificado</b>"
 
 #: ../src/gui/data/mainwindow.glade.h:2
 msgid "<b>Tools</b>"
-msgstr "<b>工具</b>"
+msgstr "<b>Ferramentas</b>"
 
 #: ../src/gui/data/mainwindow.glade.h:3
 msgid "Activate a Subscription"
-msgstr "啟用訂閱"
+msgstr "Ativar a Subscrição"
 
 #: ../src/gui/data/mainwindow.glade.h:6
 msgid "Proxy Configuration"
-msgstr "代理伺服器配置"
+msgstr "Configuração Proxy"
 
 #: ../src/gui/data/mainwindow.glade.h:7
 msgid "Register System"
-msgstr "註冊系統"
+msgstr "Registar Sistema"
 
 #: ../src/gui/data/mainwindow.glade.h:9
 msgid "Unregister System"
-msgstr "取消註冊系統"
+msgstr "Cancelar Sistema"
 
 #: ../src/gui/data/mainwindow.glade.h:10
 msgid "Update Certificates"
-msgstr "更新認證"
+msgstr "Atualizar Certificados"
 
 #: ../src/gui/data/mainwindow.glade.h:11
 msgid "View System Facts"
-msgstr "檢視系統詳情"
+msgstr "Visualizar Dados do Sistema"
 
 #: ../src/gui/data/mainwindow.glade.h:12
 msgid "You have one product without a valid entitlement certificate."
-msgstr "您有一項沒有有效認證的產品。"
+msgstr "Você possui um produto sem um certificado válido de entitlement."
 
 #: ../src/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
-msgstr "<b>系統詳情：</b>"
+msgstr "<b>Dados de Sistema:</b>"
 
 #: ../src/gui/data/factsdialog.glade.h:3
 msgid "Last Update:"
-msgstr "最後更新："
+msgstr "Última Atualização:"
 
 #: ../src/gui/data/factsdialog.glade.h:4
 msgid "Subscription Manager - Facts"
-msgstr "訂閱管理程式 - 詳情"
+msgstr "Gerenciador da Subscrição - Dados"
 
 #: ../src/gui/data/factsdialog.glade.h:5
 msgid "Update Facts"
-msgstr "更新詳情"
+msgstr "Atualizar Dados"
 
 #: ../src/gui/data/factsdialog.glade.h:6
 msgid "Update Time"
-msgstr "更新時間"
+msgstr "Atualizar a Hora"
 
 #: ../src/gui/data/factsdialog.glade.h:7
 msgid "close_button"
-msgstr "關閉按鈕(_B)"
+msgstr "close_button"
 
 #: ../src/gui/data/factsdialog.glade.h:8
 msgid "facts_view"
-msgstr "檢視詳情(_V)"
+msgstr "facts_view"
 
 #: ../src/gui/data/subdetails.glade.h:1
 msgid "<b>Account Number:</b>"
-msgstr "<b>帳號號碼：</b>"
+msgstr "<b>Número de Conta:</b>"
 
 #: ../src/gui/data/subdetails.glade.h:2
 msgid "<b>Bundled Products:</b>"
-msgstr "<b>搭售產品：</b>"
+msgstr "<b>Produtos Agrupados:</b>"
 
 #: ../src/gui/data/subdetails.glade.h:3
 msgid "<b>Contract Number:</b>"
-msgstr "<b>聯絡號碼：</b>"
+msgstr "<b>Número de Contrato:</b>"
 
 #: ../src/gui/data/subdetails.glade.h:4
 msgid "<b>End Date:</b>"
-msgstr "<b>結束日期：</b>"
+msgstr "<b>Data Final:</b>"
 
 #: ../src/gui/data/subdetails.glade.h:5
 msgid "<b>Provides Management:</b>"
-msgstr "<b>提供管理：</b>"
+msgstr "<b>Fornece Gerenciamento:</b>"
 
 #: ../src/gui/data/subdetails.glade.h:6
 msgid "<b>Start Date:</b>"
-msgstr "<b>起始日期：</b>"
+msgstr "<b>Data de Inicialização:</b>"
 
 #: ../src/gui/data/subdetails.glade.h:7
 msgid "<b>Subscription Details</b>"
-msgstr "<b>訂閱詳細資料</b>"
+msgstr "<b>Detalhes da Subscrição</b>"
 
 #: ../src/gui/data/subdetails.glade.h:9
 msgid "<b>Support Level:</b>"
-msgstr "<b>支援層級：</b>"
+msgstr "<b>Nível de Suporte:</b>"
 
 #: ../src/gui/data/subdetails.glade.h:10
 msgid "<b>Support Type:</b>"
-msgstr "<b>支援類型：</b>"
+msgstr "<b>Tipo de Suporte:</b>"
 
 #: ../src/gui/data/subdetails.glade.h:11
 msgid "Account"
-msgstr "帳號"
+msgstr "Conta"
 
 #: ../src/gui/data/subdetails.glade.h:15
 msgid "Subscription Detail"
-msgstr "訂閱詳細資料"
+msgstr "Detalhe da Subscrição"
 
 #: ../src/gui/data/subsgui.glade.h:1
 msgid "Enter your Subscription account information"
-msgstr "輸入您的訂閱帳號資訊"
+msgstr "Insira a informação de sua conta da Subscrição"
 
 #: ../src/gui/data/subsgui.glade.h:2
 msgid "Manage Your Product Subscriptions"
-msgstr "管理您的產品訂閱"
+msgstr "Gerencie suas Subscrições de Produto"
 
 #: ../src/gui/data/importsub.glade.h:2
 msgid ""
 "Choose a certificate to import to your subscription certificate directory."
-msgstr "選擇欲匯入您訂閱認證目錄中的認證。"
+msgstr ""
+"Escolha um certificado para importar seu diretório de certificado da "
+"subscrição. >>>>> Contexto inserido pelo KBabel, não traduza:yes"
 
 #: ../src/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
-msgstr "我的訂閱"
+msgstr "Visualização das minhas Subscrições"
 
 #: ../src/gui/data/mysubs.glade.h:3
 msgid "Unsubscribe"
-msgstr "取消訂閱"
+msgstr "Cancelar subscrição"
 
 #: ../src/gui/data/allsubs.glade.h:1
 msgid "<b>More search options</b>"
-msgstr "<b>更多搜尋選項</b>"
+msgstr "<b>Maiores opções de busca</b>"
 
 #: ../src/gui/data/allsubs.glade.h:2
 msgid "<b>Show subscriptions active on:</b>"
-msgstr "<b>顯示訂閱啟用於：</b>"
+msgstr "<b>Apresenta as subscrições ativas em:</b>"
 
 #: ../src/gui/data/allsubs.glade.h:3
 msgid "All Subscriptions View"
-msgstr "所有訂閱"
+msgstr "Visualização de Todas as Subscrições"
 
 #: ../src/gui/data/allsubs.glade.h:4
 msgid "Contains the text:"
-msgstr "包含了文字："
+msgstr "Contém o texto:"
 
 #: ../src/gui/data/allsubs.glade.h:5
 msgid "Do Not Overlap"
-msgstr "不重疊"
+msgstr "Não se sobrepõe"
 
 #: ../src/gui/data/allsubs.glade.h:6
 msgid "Match Installed"
-msgstr "比對已安裝的"
+msgstr "Combinação Instalada"
 
 #: ../src/gui/data/allsubs.glade.h:7
 msgid "Match System"
-msgstr "比對系統"
+msgstr "Sistema de Combinação"
 
 #: ../src/gui/data/allsubs.glade.h:9
 msgid "Only show subscriptions that:"
-msgstr "只顯示訂閱："
+msgstr "Apenas apresenta subscrições que:"
 
 #: ../src/gui/data/allsubs.glade.h:10
 msgid "Search"
-msgstr "搜尋"
+msgstr "Buscar"
 
 #: ../src/gui/data/allsubs.glade.h:12
 msgid "Text in Subscription"
-msgstr "訂閱中的文字"
+msgstr "Texto na Subscrição"
 
 #: ../src/gui/data/allsubs.glade.h:14
 msgid "have no overlap with existing subscriptions"
-msgstr "與既有訂閱不重疊"
+msgstr "não há sobreposição com as subscrições existentes"
 
 #: ../src/gui/data/allsubs.glade.h:15
 msgid "match my installed products"
-msgstr "比對我所安裝的產品"
+msgstr "combinar meus produtos instalados"
 
 #: ../src/gui/data/allsubs.glade.h:16
 msgid "match my system"
-msgstr "比對我的系統"
+msgstr "combinar meu sistema"
 
 #: ../src/gui/data/registration.glade.h:1
 msgid "<b>Please enter the following for this system:</b>"
-msgstr "<b>請為這部系統輸入下列內容：</b>"
+msgstr "<b>Por favor insira os dados abaixo para este sistema:</b>"
 
 #: ../src/gui/data/registration.glade.h:2
 msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr "<b>請輸入您的 Red Hat Network 帳號資訊：</b>"
+msgstr ""
+"<b>Por favor insira a informação de sua conta do Red hat Network:</b> >>>>> "
+"Contexto inserido pelo KBabel, não traduza:yes"
 
 #: ../src/gui/data/registration.glade.h:3
 msgid ""
@@ -1421,41 +1470,43 @@ msgid ""
 "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
 "www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
 msgstr ""
-"<small>提示：忘記您的登錄名稱或密碼？請至\n"
+"<small>Dica: Você esqueceu de seu nome do usuário ou sua senha? Verifique "
+"em\n"
 "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
 "www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
 
 #: ../src/gui/data/registration.glade.h:5
 msgid "A unique label for this system"
-msgstr "此系統的獨特標籤"
+msgstr "Uma etiqueta exclusiva para este sistema"
 
 #: ../src/gui/data/registration.glade.h:6
 msgid "Password:"
-msgstr "密碼："
+msgstr "Senha: >>>>> Contexto inserido pelo KBabel, não traduza:yes"
 
 #: ../src/gui/data/registration.glade.h:7
 msgid "Red Hat Login:"
-msgstr "Red Hat 登錄名稱："
+msgstr ""
+"Autenticação da Red Hat: >>>>> Contexto inserido pelo KBabel, não traduza:yes"
 
 #: ../src/gui/data/registration.glade.h:8
 msgid "Register"
-msgstr "註冊"
+msgstr "Registrar"
 
 #: ../src/gui/data/registration.glade.h:9
 msgid "Select the most appropriate subscriptions for this system"
-msgstr "為此系統選擇最適當的訂閱"
+msgstr "Seleciona as subscrições mais apropriadas para este sistema"
 
 #: ../src/gui/data/registration.glade.h:10
 msgid "System Name:"
-msgstr "系統名稱："
+msgstr "Nome do Sistema:"
 
 #: ../src/gui/data/registration.glade.h:11
 msgid "System Registration"
-msgstr "系統註冊"
+msgstr "Registro do Sistema"
 
 #: ../src/gui/data/registration.glade.h:12
 msgid "register_button"
-msgstr "註冊按鈕(_B)"
+msgstr "register_button"
 
 #: ../src/gui/data/registration.glade.h:13
 msgid "register_dialog_main_vbox"
@@ -1467,88 +1518,93 @@ msgstr "registration_dialog_action_area\n"
 
 #: ../src/gui/data/progress.glade.h:1
 msgid "Progress Dialog"
-msgstr "進度對話方塊"
+msgstr "Diálogo em Andamento"
 
 #: ../src/gui/data/contract_selection.glade.h:1
 msgid "<b>Choose the specific contract to use:</b>"
-msgstr "<b>選擇欲使用的特定合約：</b>"
+msgstr ""
+"<b>Escolha o contrato específico para uso:</b> >>>>> Contexto inserido pelo "
+"KBabel, não traduza:yes"
 
 #: ../src/gui/data/contract_selection.glade.h:3
 msgid "<b>Total Contracts:</b>"
-msgstr "<b>合約總數：</b>"
+msgstr ""
+"<b>Total de Contratos:</b> >>>>> Contexto inserido pelo KBabel, não traduza:"
+"yes"
 
 #: ../src/gui/data/contract_selection.glade.h:4
 msgid "Contract Selection"
-msgstr "合約選擇"
+msgstr ""
+"Seleção de Contrato >>>>> Contexto inserido pelo KBabel, não traduza:yes"
 
 #: ../src/compliance/rhsm_compliance_icon.c:43
 msgid "How often to check for validity (in seconds)"
-msgstr "檢查認證的頻繁度（以秒為單位）"
+msgstr "Qual a frequência de checagem da validade (em segundos)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:45
 msgid "Show debug messages"
-msgstr "顯示除錯訊息"
+msgstr "Apresenta mensagens de depuração"
 
 #: ../src/compliance/rhsm_compliance_icon.c:47
 msgid "Force display of the icon (expired or warning)"
-msgstr "強制顯示圖示（已過期或警告）"
+msgstr "Força a exibição do ícone (vencido ou de aviso)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:170
 #: ../src/compliance/rhsm_compliance_icon.c:171
 msgid "Invalid or Missing Entitlement Certificates"
-msgstr "權利認證無效或遺失"
+msgstr "Inválido ou Certificados de Entitlement Ausentes"
 
 #: ../src/compliance/rhsm_compliance_icon.c:172
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr "這部系統缺少了一個或更多個有效的權利認證。"
+msgstr "Falta um ou mais certificados de entitlement válidos neste sistema."
 
 #: ../src/compliance/rhsm_compliance_icon.c:176
 msgid "Some of the system's subscriptions are about to expire"
-msgstr "系統有些訂閱的有效期限即將過期"
+msgstr "Algumas das subscrições do sistema estão prestes à vencer."
 
 #: ../src/compliance/rhsm_compliance_icon.c:178
 msgid "This System's Subscriptions Are About to Expire"
-msgstr "這部系統的訂閱即將過期"
+msgstr "As Subscrições do Sistema estão prestes à Vencer"
 
 #: ../src/compliance/rhsm_compliance_icon.c:179
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr "此系統有一或更多個訂閱的有效期限即將到期。"
+msgstr "Uma ou mais subscrições do sistema estão prestes à vencer."
 
 #: ../src/compliance/rhsm_compliance_icon.c:197
 msgid "Remind Me Later"
-msgstr "稍後提醒我"
+msgstr "Lembrar mais tarde"
 
 #: ../src/compliance/rhsm_compliance_icon.c:203
 msgid "Manage My Subscriptions..."
-msgstr "管理我的訂閱..."
+msgstr "Gerencie minhas Subscrições..."
 
 #: ../src/compliance/rhsm_compliance_icon.c:242
 #: ../src/compliance/rhsm_compliance_icon.c:312
 #, c-format
 msgid "Failed to open connection to bus: %s\n"
-msgstr "無法開啟至 bus 的連線：%s\n"
+msgstr "Falha ao abrir uma conexão para o bus %s\n"
 
 #: ../src/compliance/rhsm_compliance_icon.c:280
 #, c-format
 msgid "Unknown argument to force-icon: %s\n"
-msgstr "不明的 force-icon 引數：%s\n"
+msgstr "Argumento desconhecido para forçar o ícone: %s\n"
 
 #: ../src/compliance/rhsm_compliance_icon.c:347
 #, c-format
 msgid "option parsing failed: %s\n"
-msgstr "選項剖析失敗：%s\n"
+msgstr "a opção de busca falhou: %s\n"
 
 #: ../etc-conf/subscription-manager.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
-msgstr "Red Hat 訂閱管理程式"
+msgstr "Gerenciamento de Subscrição da Red Hat"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
-msgstr "Red Hat 訂閱認證驗證程式"
+msgstr "Applet de Validade da Subscrição da Red Hat"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
-msgstr "訂閱認證驗證程式"
+msgstr "Applet de Validade da Subscrição"
 
 #~ msgid "Never Subscribed"
-#~ msgstr "從未訂閱"
+#~ msgstr "Nunca foi Subscrito"

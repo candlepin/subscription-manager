@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the l package.
 #
 # Automatically generated, 2011.
+# Runa Bhattacharjee <runab@redhat.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 08:54-0300\n"
-"PO-Revision-Date: 2011-03-22 12:34+0530\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2011-04-05 12:59-0300\n"
+"PO-Revision-Date: 2011-04-01 16:49+0530\n"
+"Last-Translator: Runa Bhattacharjee <runab@redhat.com>\n"
 "Language-Team: Bengali (India) <anubad@lists.ankur.org.in>\n"
 "Language: bn-IN\n"
 "MIME-Version: 1.0\n"
@@ -671,7 +672,7 @@ msgstr "অবকাল: %d(ms)"
 #: ../src/hwprobe.py:60
 #, python-format
 msgid "Error reading system DMI information: %s"
-msgstr ""
+msgstr "সিস্টেম DMI-র তথ্য পড়তে সমস্যা: %s"
 
 #: ../src/hwprobe.py:116
 msgid "Error reading system memory information:"
@@ -753,21 +754,21 @@ msgstr "আজ"
 
 #: ../src/gui/managergui.py:371
 msgid "You must register before using the subscription assistant."
-msgstr ""
+msgstr "subscription assistant ব্যবহারের পূর্বে নিবন্ধন করা আবশ্যক।"
 
 #: ../src/gui/managergui.py:402
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr ""
+msgstr "<b>%s</b>-টি উৎপাদনের ক্ষেত্রে উপস্থিত সার্টিফিকেট বৈধ নয়।"
 
 #: ../src/gui/managergui.py:406
 msgid "You have <b>1</b> product without a valid entitlement certificate."
-msgstr ""
+msgstr "<b>১</b>-টি উৎপাদনের ক্ষেত্রে বৈধ এনটাইটেলমেন্ট সার্টিফিকেট উপস্থিত নেই।"
 
 #: ../src/gui/managergui.py:413
 #, python-format
 msgid "Product entitlement certificates valid through %s"
-msgstr ""
+msgstr "উৎপাদনের এনটাইটেলমেন্ট সার্টিফিকেট %s অবধি বৈধ"
 
 #: ../src/gui/managergui.py:536
 msgid "You must enter a system name."
@@ -793,7 +794,7 @@ msgstr "সমাপ্তির তারিখ"
 
 #: ../src/gui/compliance.py:141
 msgid "Subscription List"
-msgstr ""
+msgstr "সাবস্ক্রিপশনের তালিকা"
 
 #. Set up columns on the view
 #: ../src/gui/compliance.py:142 ../src/gui/allsubs.py:56
@@ -806,6 +807,8 @@ msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
 msgstr ""
+"Subscription Assistant প্রদর্শন করতে ত্রুটি। অধিক বিবরণের জন্য /var/log/rhsm/rhsm."
+"log পড়ুন।"
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -814,12 +817,12 @@ msgstr "সাবস্ক্রিপশন অনুসন্ধান কর�
 #: ../src/gui/compliance.py:214
 #, python-format
 msgid "Software entitlements valid through %s"
-msgstr ""
+msgstr "সফ্টওয়্যার এনটাইটেলমেন্টগুলি %s অবধি বৈধ"
 
 #: ../src/gui/compliance.py:218
 #, python-format
 msgid "%s (first date of invalid entitlements)"
-msgstr ""
+msgstr "%s (অবৈধ এনটাইটেলমেন্টের প্রথম তারিখ)"
 
 #: ../src/gui/compliance.py:220
 #, python-format
@@ -927,19 +930,20 @@ msgstr "সংস্করণ"
 
 #: ../src/gui/installedtab.py:54
 msgid "Certificate"
-msgstr ""
+msgstr "সার্টিফিকেট"
 
 #: ../src/gui/installedtab.py:95
 msgid "Future Subscription"
 msgstr "ভবিষ্যতের সাবস্ক্রিপশন"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
-msgid "Never Subscribed"
-msgstr "কখনো সাবস্ক্রাইব করা হয়নি"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
+#: ../src/gui/installedtab.py:112
+msgid "Missing"
+msgstr "অনুপস্থিত"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
-msgstr ""
+msgstr "অবৈধ"
 
 #: ../src/gui/installedtab.py:101
 #, python-format
@@ -948,16 +952,12 @@ msgstr "%s সাবস্ক্রিপশনের মেয়াদ পূর�
 
 #: ../src/gui/installedtab.py:104
 msgid "Valid"
-msgstr ""
+msgstr "বৈধ"
 
 #: ../src/gui/installedtab.py:106
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "%s চুক্তির মাধ্যমে %s অবধি ব্যবহারযোগ্য"
-
-#: ../src/gui/installedtab.py:111
-msgid "Missing"
-msgstr ""
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
@@ -965,7 +965,7 @@ msgstr "আমার ইনস্টল করা সফ্টওয়্যার
 
 #: ../src/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
-msgstr ""
+msgstr "<b>সার্টিফিকেটের অবস্থা</b>"
 
 #: ../src/gui/data/installed.glade.h:2
 msgid "<b>Product's Subscription Details</b>"
@@ -976,12 +976,13 @@ msgid "<b>Product:</b>"
 msgstr "<b>উৎপাদন:</b>"
 
 #: ../src/gui/data/installed.glade.h:4 ../src/gui/data/subdetails.glade.h:8
+#: ../src/gui/data/contract_selection.glade.h:2
 msgid "<b>Subscription:</b>"
 msgstr "<b>সাবস্ক্রিপশন:</b>"
 
 #: ../src/gui/data/installed.glade.h:5 ../src/gui/data/mainwindow.glade.h:4
 msgid "Certificate Status"
-msgstr ""
+msgstr "সার্টিফিকেটের অবস্থা"
 
 #: ../src/gui/data/installed.glade.h:6
 msgid "Installed View"
@@ -993,160 +994,155 @@ msgid "Next Update:"
 msgstr "পরবর্তী আপডেট:"
 
 #: ../src/gui/data/networkConfig.glade.h:1
+msgid "<b>HTTP Proxy</b>"
+msgstr "<b>HTTP প্রক্সি</b>"
+
+#: ../src/gui/data/networkConfig.glade.h:2
+msgid "<small><b>Example:</b> squid.example.com:3128</small>"
+msgstr "<small><b>উদাহরণস্বরূপ:</b> squid.example.com:3128</small>"
+
+#: ../src/gui/data/networkConfig.glade.h:3
 msgid "Advanced Network Configuration"
 msgstr "নেটওয়ার্কের উন্নত কনফিগারেশন"
 
-#: ../src/gui/data/networkConfig.glade.h:2
+#: ../src/gui/data/networkConfig.glade.h:4
 msgid "Authentication Checkbox"
 msgstr "অনুমোদনের চেকবক্স"
 
-#: ../src/gui/data/networkConfig.glade.h:3
+#: ../src/gui/data/networkConfig.glade.h:5
 msgid "Close Button"
 msgstr "বন্ধ করার বাটন"
 
-#: ../src/gui/data/networkConfig.glade.h:4
+#: ../src/gui/data/networkConfig.glade.h:6
 msgid "Enter in the format hostname(:port)"
 msgstr "hostname(:port) বিন্যাসে লিখুন"
 
-#: ../src/gui/data/networkConfig.glade.h:5
+#: ../src/gui/data/networkConfig.glade.h:7
+msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
+msgstr "HTTP প্রক্সির মাধ্যমে Red Hat Network-র সাথে সংযোগ করতে ইচ্ছুক। (_H)"
+
+#: ../src/gui/data/networkConfig.glade.h:8
 msgid "Password Text"
 msgstr "পাসওয়ার্ডের লেখা"
 
-#: ../src/gui/data/networkConfig.glade.h:6
+#: ../src/gui/data/networkConfig.glade.h:9
 msgid "Proxy Checkbox"
 msgstr "প্রক্সি চেক-বক্স"
 
-#: ../src/gui/data/networkConfig.glade.h:7
+#: ../src/gui/data/networkConfig.glade.h:10
 msgid "Proxy Location Text"
 msgstr "প্রক্সি অবস্থানের লেখা"
 
-#: ../src/gui/data/networkConfig.glade.h:8
+#: ../src/gui/data/networkConfig.glade.h:11
+msgid "Proxy P_assword:"
+msgstr "প্রক্সি পাসওয়ার্ড: (_a)"
+
+#: ../src/gui/data/networkConfig.glade.h:12
+msgid "Proxy _Username:"
+msgstr "প্রক্সি ব্যবহারকারী: (_U)"
+
+#: ../src/gui/data/networkConfig.glade.h:13
+msgid "Use Au_thentication with HTTP Proxy:"
+msgstr "HTTP প্রক্সির জন্য অনুমোদন ব্যবহার করা হবে: (_t)"
+
+#: ../src/gui/data/networkConfig.glade.h:14
 msgid "Username Text"
 msgstr "ব্যবহারকারী নামের লেখা"
 
-#: ../src/gui/data/networkConfig.glade.h:9
-msgctxt "yes"
-msgid "<b>HTTP Proxy</b>"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:10
-msgctxt "yes"
-msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:11
-msgctxt "yes"
-msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:12
-msgctxt "yes"
-msgid "Proxy P_assword:"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:13
-msgctxt "yes"
-msgid "Proxy _Username:"
-msgstr ""
-
-#: ../src/gui/data/networkConfig.glade.h:14
-msgctxt "yes"
-msgid "Use Au_thentication with HTTP Proxy:"
-msgstr ""
-
 #: ../src/gui/data/networkConfig.glade.h:15
-msgctxt "yes"
 msgid "_Close"
-msgstr ""
+msgstr "বন্ধ করুন (_C)"
 
 #: ../src/gui/data/networkConfig.glade.h:16
-msgctxt "yes"
 msgid "_Proxy Location:"
-msgstr ""
+msgstr "প্রক্সির অবস্থান: (_P)"
 
 #: ../src/gui/data/compliance.glade.h:1
 msgid "A different date:"
-msgstr ""
+msgstr "ভিন্ন তারিখ:"
 
 #: ../src/gui/data/compliance.glade.h:2
 msgid "Invalid Product List"
-msgstr ""
+msgstr "উৎপাদনের তালিকা বৈধ নয়"
 
 #: ../src/gui/data/compliance.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
 msgstr ""
+"চিহ্নিত তারিখতে যে সকল উৎপাদনের ক্ষেত্রে অবৈধ এনটাইটেলমেন্ট সার্টিফিকেট উপস্থিত "
+"রয়েছে:"
 
 #: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
+#: ../src/gui/data/contract_selection.glade.h:5
 msgid "Subscribe"
 msgstr "সাবস্ক্রাইব করুন"
 
 #: ../src/gui/data/compliance.glade.h:5
 msgid "Subscription Action Area"
-msgstr ""
+msgstr "সাবস্ক্রিপশন সক্রিয়করণের অঞ্চল"
 
 #: ../src/gui/data/compliance.glade.h:6
 msgid "Subscription Assistant"
-msgstr ""
+msgstr "সাবস্ক্রিপশন সহায়তা ব্যবস্থা"
 
 #: ../src/gui/data/compliance.glade.h:7
 msgid "Subscription Assistant Box"
-msgstr ""
+msgstr "সাবস্ক্রিপশন সহায়তার বক্স"
 
 #: ../src/gui/data/compliance.glade.h:8
 msgid "Subscription Assistant Status"
-msgstr ""
+msgstr "সাবস্ক্রিপশন সহায়ক ব্যবস্থার অবস্থা"
 
 #: ../src/gui/data/compliance.glade.h:9
 msgid "Subscription Date Box"
-msgstr ""
+msgstr "সাবস্ক্রিপশন তারিখের বক্স"
 
 #: ../src/gui/data/compliance.glade.h:10
 msgid "Subscription Date Label"
-msgstr ""
+msgstr "সাবস্ক্রিপশন তারিখের লেবেল"
 
 #: ../src/gui/data/compliance.glade.h:11
 msgid "Subscription Date Picker"
-msgstr ""
+msgstr "সাবস্ক্রিপশন তারিখ নির্বাচক"
 
 #: ../src/gui/data/compliance.glade.h:12
 msgid "Subscription Details"
-msgstr ""
+msgstr "সাবস্ক্রিপশনের বিবরণ"
 
 #: ../src/gui/data/compliance.glade.h:13
 msgid "Subscription Label"
-msgstr ""
+msgstr "সাবস্ক্রিপশনের লেবেল"
 
 #: ../src/gui/data/compliance.glade.h:14
 msgid "Subscription Label Box"
-msgstr ""
+msgstr "সাবস্ক্রিপশন লেবেলের বক্স"
 
 #: ../src/gui/data/compliance.glade.h:15
 msgid "Subscription Manager - Subscription Assistant"
-msgstr ""
+msgstr "Subscription Manager - Subscription Assistant"
 
 #: ../src/gui/data/compliance.glade.h:16
 msgid "Subscription Product List"
-msgstr ""
+msgstr "সাবস্ক্রিপশন উৎপাদনের তালিকা"
 
 #: ../src/gui/data/compliance.glade.h:17
 msgid "Subscription Subscriptions Box"
-msgstr ""
+msgstr "সাবস্ক্রিপশন সাবস্ক্রিপশনের বক্স"
 
 #: ../src/gui/data/compliance.glade.h:18
 msgid "Subscription Subscriptions Label"
-msgstr ""
+msgstr "সাবস্ক্রিপশন সাবস্ক্রিপশনের লেবেল"
 
 #: ../src/gui/data/compliance.glade.h:19
 msgid "Subscription Update Box"
-msgstr ""
+msgstr "সাবস্ক্রিপশন আপডেট বক্স"
 
 #: ../src/gui/data/compliance.glade.h:20
 msgid "Subscriptions List"
-msgstr ""
+msgstr "সাবস্ক্রিপশনের তালিকা"
 
 #: ../src/gui/data/compliance.glade.h:21
 msgid "Subscriptions Panel"
-msgstr ""
+msgstr "সাবস্ক্রিপশনের প্যানেল"
 
 #: ../src/gui/data/compliance.glade.h:22
 msgid "The following subscriptions will cover the products selected above:"
@@ -1180,58 +1176,58 @@ msgstr "<b>ইনস্টল করা উৎপাদনের সাথে �
 msgid "Add Subscriptions"
 msgstr "সাবস্ক্রিপশন যোগ করুন"
 
-#: ../src/gui/data/rhsm.glade.h:6
+#: ../src/gui/data/rhsm.glade.h:6 ../src/gui/data/importsub.glade.h:1
+msgid "Certificate _Location:"
+msgstr "সার্টিফিকেটের অবস্থান: (_L)"
+
+#: ../src/gui/data/rhsm.glade.h:7
 msgid "Do not register"
 msgstr "নিবন্ধন করা হবে না"
 
-#: ../src/gui/data/rhsm.glade.h:7 ../src/gui/data/mainwindow.glade.h:5
-#: ../src/gui/data/importsub.glade.h:1
+#: ../src/gui/data/rhsm.glade.h:8 ../src/gui/data/mainwindow.glade.h:5
+#: ../src/gui/data/importsub.glade.h:3
 msgid "Import Certificate"
 msgstr "সার্টিফিকেট ইম্পোর্ট করুন"
 
-#: ../src/gui/data/rhsm.glade.h:8
+#: ../src/gui/data/rhsm.glade.h:9
 msgid "Not Compatible"
 msgstr "সুসংগত নয়"
 
-#: ../src/gui/data/rhsm.glade.h:9 ../src/gui/data/importsub.glade.h:2
+#: ../src/gui/data/rhsm.glade.h:10 ../src/gui/data/importsub.glade.h:4
 msgid "Provide a Subscription Certificate"
 msgstr "একটি সাবস্ক্রিপশন সার্টিফিকেট উপলব্ধ করুন"
 
-#: ../src/gui/data/rhsm.glade.h:10
+#: ../src/gui/data/rhsm.glade.h:11
 msgid "Register with Red Hat Entitlement Service"
 msgstr "Red Hat Entitlement Service সহযোগে নিবন্ধন করুন"
 
-#: ../src/gui/data/rhsm.glade.h:11
+#: ../src/gui/data/rhsm.glade.h:12
 msgid "Register with Red Hat Network"
 msgstr "Red Hat Network-এ নিবন্ধন করুন"
 
-#: ../src/gui/data/rhsm.glade.h:12
+#: ../src/gui/data/rhsm.glade.h:13
 msgid "Register with Red Hat Network Satellite"
 msgstr "Red Hat Network Satellite-এ নিবন্ধন করুন"
 
-#: ../src/gui/data/rhsm.glade.h:13
+#: ../src/gui/data/rhsm.glade.h:14
 msgid "Suggested"
 msgstr "প্রস্তাবিত"
 
-#: ../src/gui/data/rhsm.glade.h:14
-msgid "Update Subscriptions"
-msgstr "সাবস্ক্রিপশন আপডেট করুন"
-
 #: ../src/gui/data/rhsm.glade.h:15
-msgid "update_subscriptions_dialog\n"
-msgstr "update_subscriptions_dialog\n"
-
-#: ../src/gui/data/rhsm.glade.h:17 ../src/gui/data/importsub.glade.h:3
-msgctxt "yes"
-msgid "Certificate _Location:"
-msgstr ""
-
-#: ../src/gui/data/rhsm.glade.h:18
-msgctxt "yes"
 msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
 msgstr ""
+"সাবস্ক্রিপশন যোগ করার জন্য, সাবস্ক্রিপশন সার্টিফিকেট ডিরেক্টরির মধ্যে ইম্পোর্ট করার "
+"জন্য একটি সার্টিফিকেট নির্বাচন করুন।"
+
+#: ../src/gui/data/rhsm.glade.h:16
+msgid "Update Subscriptions"
+msgstr "সাবস্ক্রিপশন আপডেট করুন"
+
+#: ../src/gui/data/rhsm.glade.h:17
+msgid "update_subscriptions_dialog\n"
+msgstr "update_subscriptions_dialog\n"
 
 #: ../src/gui/data/activate.glade.h:1
 msgid "Activate"
@@ -1261,7 +1257,7 @@ msgstr "সাবস্ক্রিপশন সক্রিয়করণ"
 
 #: ../src/gui/data/mainwindow.glade.h:1
 msgid "<b>Certificate Status</b>"
-msgstr ""
+msgstr "<b>সার্টিফিকেটের অবস্থা</b>"
 
 #: ../src/gui/data/mainwindow.glade.h:2
 msgid "<b>Tools</b>"
@@ -1285,7 +1281,7 @@ msgstr "সিস্টেমের নিবন্ধন বাতিল কর
 
 #: ../src/gui/data/mainwindow.glade.h:10
 msgid "Update Certificates"
-msgstr ""
+msgstr "সার্টিফিকেট আপডেট করুন"
 
 #: ../src/gui/data/mainwindow.glade.h:11
 msgid "View System Facts"
@@ -1293,7 +1289,7 @@ msgstr "সিস্টেম সংক্রান্ত সংবাদ দে
 
 #: ../src/gui/data/mainwindow.glade.h:12
 msgid "You have one product without a valid entitlement certificate."
-msgstr ""
+msgstr "শুধুমাত্র একটি উৎপাদনের ক্ষেত্রে বৈধ এনটাইটেলমেন্ট সার্টিফিকেট উপস্থিত নেই।"
 
 #: ../src/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
@@ -1375,11 +1371,12 @@ msgstr "সাবস্ক্রিপশনের অ্যাকাউন্�
 msgid "Manage Your Product Subscriptions"
 msgstr "উৎপাদনের সাবস্ক্রিপশন পরিচালনা করুন"
 
-#: ../src/gui/data/importsub.glade.h:4
-msgctxt "yes"
+#: ../src/gui/data/importsub.glade.h:2
 msgid ""
 "Choose a certificate to import to your subscription certificate directory."
 msgstr ""
+"সাবস্ক্রিপশন সার্টিফিকেট ডিরেক্টরির মধ্যে ইম্পোর্ট করার উদ্দেশ্যে একটি সার্টিফিকেট "
+"নির্বাচন করুন।"
 
 #: ../src/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
@@ -1446,6 +1443,10 @@ msgid "<b>Please enter the following for this system:</b>"
 msgstr "<b>এই সিস্টেমের জন্য অনুগ্রহ করে নিম্নলিখিত তথ্য লিখুন:</b>"
 
 #: ../src/gui/data/registration.glade.h:2
+msgid "<b>Please enter your Red Hat Network account information:</b>"
+msgstr "<b>অনুগ্রহ করে Red Hat Network অ্যাকাউন্টের তথ্য লিখুন:</b>"
+
+#: ../src/gui/data/registration.glade.h:3
 msgid ""
 "<small>Tip: Forgot your login or password? Look it up at\n"
 "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
@@ -1456,85 +1457,65 @@ msgstr ""
 "www.redhat.com/wapps/sso/rhn/lostPassword.html</a> থেকে তা পুনরায় প্রাপ্র করুন</"
 "small>"
 
-#: ../src/gui/data/registration.glade.h:4
+#: ../src/gui/data/registration.glade.h:5
 msgid "A unique label for this system"
 msgstr "এই সিস্টেমের জন্য একটি স্বতন্ত্র লেবেল"
 
-#: ../src/gui/data/registration.glade.h:5
+#: ../src/gui/data/registration.glade.h:6
+msgid "Password:"
+msgstr "পাসওয়ার্ড:"
+
+#: ../src/gui/data/registration.glade.h:7
+msgid "Red Hat Login:"
+msgstr "Red Hat লগ-ইন:"
+
+#: ../src/gui/data/registration.glade.h:8
 msgid "Register"
 msgstr "নিবন্ধন"
 
-#: ../src/gui/data/registration.glade.h:6
+#: ../src/gui/data/registration.glade.h:9
 msgid "Select the most appropriate subscriptions for this system"
 msgstr "এই সিস্টেমের জন্য সবচেয়ে যথাযত সাবস্ক্রিপশন নির্বাচন করুন"
 
-#: ../src/gui/data/registration.glade.h:7
+#: ../src/gui/data/registration.glade.h:10
 msgid "System Name:"
 msgstr "সিস্টেমের নাম:"
 
-#: ../src/gui/data/registration.glade.h:8
+#: ../src/gui/data/registration.glade.h:11
 msgid "System Registration"
 msgstr "সিস্টেমের নিবন্ধন"
 
-#: ../src/gui/data/registration.glade.h:9
+#: ../src/gui/data/registration.glade.h:12
 msgid "register_button"
 msgstr "register_button"
 
-#: ../src/gui/data/registration.glade.h:10
+#: ../src/gui/data/registration.glade.h:13
 msgid "register_dialog_main_vbox"
 msgstr "register_dialog_main_vbox"
 
-#: ../src/gui/data/registration.glade.h:11
+#: ../src/gui/data/registration.glade.h:14
 msgid "registration_dialog_action_area\n"
 msgstr "registration_dialog_action_area\n"
-
-#: ../src/gui/data/registration.glade.h:13
-msgctxt "yes"
-msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr ""
-
-#: ../src/gui/data/registration.glade.h:14
-msgctxt "yes"
-msgid "Password:"
-msgstr ""
-
-#: ../src/gui/data/registration.glade.h:15
-msgctxt "yes"
-msgid "Red Hat Login:"
-msgstr ""
 
 #: ../src/gui/data/progress.glade.h:1
 msgid "Progress Dialog"
 msgstr "প্রগতিসূচক ডায়লগ"
 
 #: ../src/gui/data/contract_selection.glade.h:1
-msgctxt "yes"
 msgid "<b>Choose the specific contract to use:</b>"
-msgstr ""
-
-#: ../src/gui/data/contract_selection.glade.h:2
-msgctxt "yes"
-msgid "<b>Subscription:</b>"
-msgstr "<b>সাবস্ক্রিপশন:</b>"
+msgstr "<b>ব্যবহারের উদ্দেশ্যে সুনির্দিষ্ট চুক্তি নির্বাচন করুন:</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:3
-msgctxt "yes"
 msgid "<b>Total Contracts:</b>"
-msgstr ""
+msgstr "<b>সর্বমোট চুক্তি:</b>"
 
 #: ../src/gui/data/contract_selection.glade.h:4
-msgctxt "yes"
 msgid "Contract Selection"
-msgstr ""
-
-#: ../src/gui/data/contract_selection.glade.h:5
-msgctxt "yes"
-msgid "Subscribe"
-msgstr "সাবস্ক্রাইব করুন"
+msgstr "চুক্তি নির্বাচন"
 
 #: ../src/compliance/rhsm_compliance_icon.c:43
 msgid "How often to check for validity (in seconds)"
-msgstr ""
+msgstr "কত সময়ের বিরতির পরে (সেকেন্ড অনুযায়ী) বৈধতা পরীক্ষা করা হবে"
 
 #: ../src/compliance/rhsm_compliance_icon.c:45
 msgid "Show debug messages"
@@ -1542,16 +1523,17 @@ msgstr "ডিবাগ বার্তা প্রদর্শন করা �
 
 #: ../src/compliance/rhsm_compliance_icon.c:47
 msgid "Force display of the icon (expired or warning)"
-msgstr ""
+msgstr "আইকন বাধ্যতামূলকভাবে প্রদর্শন করা হবে (মেয়াদপূর্ত অথবা সতর্কতামূলক)"
 
 #: ../src/compliance/rhsm_compliance_icon.c:170
 #: ../src/compliance/rhsm_compliance_icon.c:171
 msgid "Invalid or Missing Entitlement Certificates"
-msgstr ""
+msgstr "অবৈধ অথবা অনুপস্থিত এনটাইটেলমেন্ট সার্টিফিকেট"
 
 #: ../src/compliance/rhsm_compliance_icon.c:172
 msgid "This system is missing one or more valid entitlement certificates."
 msgstr ""
+"এই সিস্টেমের ক্ষেত্রে আবশ্যক এক অথবা অধিক সংখ্যক সাবস্ক্রিপশন বর্তমানে উপলব্ধ নেই।"
 
 #: ../src/compliance/rhsm_compliance_icon.c:176
 msgid "Some of the system's subscriptions are about to expire"
@@ -1563,7 +1545,7 @@ msgstr "এই সিস্টেমের সাবস্ক্রিপশন�
 
 #: ../src/compliance/rhsm_compliance_icon.c:179
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr ""
+msgstr "সিস্টেমের কয়েকটি সাবস্ক্রিপশনের মেয়াদ পূর্ণ হতে চলেছে"
 
 #: ../src/compliance/rhsm_compliance_icon.c:197
 msgid "Remind Me Later"
@@ -1591,57 +1573,30 @@ msgstr "বিকল্প পার্স করতে বিফল: %s\n"
 
 #: ../etc-conf/subscription-manager.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
-msgstr ""
+msgstr "Red Hat Subscription Manager"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
-msgstr ""
+msgstr "Red Hat Subscription Validity Applet"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
-msgstr ""
+msgstr "Subscription Validity Applet"
 
-#~ msgid "%s (first date of non-compliance)"
-#~ msgstr "%s (বিসংগতির প্রথম তারিখ)"
-
-#~ msgid "<b>Choose the specific contract to use:</b>"
-#~ msgstr "<b>ব্যবহারের উদ্দেশ্যে সুনির্দিষ্ট চুক্তি নির্বাচন করুন:</b>"
-
-#~ msgid "<b>Compliance Status</b>"
-#~ msgstr "<b>সুসংগতির অবস্থা</b>"
+#~ msgid "Never Subscribed"
+#~ msgstr "কখনো সাবস্ক্রাইব করা হয়নি"
 
 #~ msgid "<b>Compliance:</b>"
 #~ msgstr "<b>সুসংগতি:</b>"
 
-#~ msgid "<b>HTTP Proxy</b>"
-#~ msgstr "<b>HTTP প্রক্সি</b>"
-
-#~ msgid "<b>Please enter your Red Hat Network account information:</b>"
-#~ msgstr "<b>অনুগ্রহ করে Red Hat Network অ্যাকাউন্টের তথ্য লিখুন:</b>"
-
-#~ msgid "<b>Total Contracts:</b>"
-#~ msgstr "<b>সম্পূর্ণ চুক্তি:</b>"
-
 #~ msgid "<big><b>All software is in compliance until %s</b></big>"
 #~ msgstr "<big><b>%s অবধিক সকল সফ্টওয়্যার সুসংগত অবস্থায় থাকবে</b></big>"
-
-#~ msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-#~ msgstr "<small><b>উদাহরণস্বরূপ:</b> squid.example.com:3128</small>"
 
 #~ msgid "All products are in compliance until %s"
 #~ msgstr "%s অবধি সকল উৎপাদন সুসংগত রয়েছে"
 
 #~ msgid "Become Compliant"
 #~ msgstr "সুসংগত অবস্থায় স্থাপন করুন"
-
-#~ msgid "Certificate _Location:"
-#~ msgstr "সার্টিফিকেটের অবস্থান (_L)"
-
-#~ msgid ""
-#~ "Choose a certificate to import to your subscription certificate directory."
-#~ msgstr ""
-#~ "সাবস্ক্রিপশন সার্টিফিকেট ডিরেক্টরির মধ্যে ইম্পোর্ট করার উদ্দেশ্যে একটি সার্টিফিকেট "
-#~ "নির্বাচন করুন।"
 
 #~ msgid "Compliance Action Area"
 #~ msgstr "সুসংগতির কাজের অঞ্চল"
@@ -1651,9 +1606,6 @@ msgstr ""
 
 #~ msgid "Compliance Assistant Box"
 #~ msgstr "সুসংগতির সহায়ক ব্যবস্থার বক্স"
-
-#~ msgid "Compliance Assistant Status"
-#~ msgstr "সুসংগতির সহায়ক ব্যবস্থার অবস্থা"
 
 #~ msgid "Compliance Date Box"
 #~ msgstr "সুসংগতির তারিখের বক্স"
@@ -1682,12 +1634,6 @@ msgstr ""
 #~ msgid "Compliance Subscription List"
 #~ msgstr "সুসংগত সাবস্ক্রিপশন তালিকা"
 
-#~ msgid "Compliance Subscriptions Box"
-#~ msgstr "সুসংগতির সাবস্ক্রিপশনের বক্স"
-
-#~ msgid "Compliance Subscriptions Label"
-#~ msgstr "সুসংগতির সাবস্ক্রিপশনের লেবেল"
-
 #~ msgid "Compliance Subscriptions List"
 #~ msgstr "সুসংগতির সাবস্ক্রিপশনের তালিকা"
 
@@ -1697,34 +1643,8 @@ msgstr ""
 #~ msgid "Compliance Update Box"
 #~ msgstr "সুসংগতির আপডেটের বক্স"
 
-#~ msgid "Contract Selection"
-#~ msgstr "চুক্তি নির্বাচন"
-
-#~ msgid ""
-#~ "Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log "
-#~ "for more information."
-#~ msgstr ""
-#~ "Compliance Assistant প্রদর্শন করতে ত্রুটি। অধিক বিবরণের জন্য /var/log/rhsm/"
-#~ "rhsm.log পড়ুন।"
-
-#~ msgid "Error reading system DMI information:"
-#~ msgstr "সিস্টেম DMI-র তথ্য পড়তে সমস্যা:"
-
-#~ msgid "Force display of the compliance icon (expired or warning)"
-#~ msgstr ""
-#~ "সুসংগতি সীচক আইকন বাধ্যতামূলকভাবে প্রদর্শন করা হবে (মেয়াদপূর্ত অথবা সতর্কতামূলক)"
-
-#~ msgid "How often to check for compliance (in seconds)"
-#~ msgstr "কত সময়ের বিরতির পরে (সেকেন্ড অনুযায়ী) সুসংগতি পরীক্ষা করা হবে"
-
-#~ msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-#~ msgstr "HTTP প্রক্সির মাধ্যমে Red Hat Network-র সাথে সংযোগ করতে ইচ্ছুক। (_H)"
-
 #~ msgid "In Compliance"
 #~ msgstr "সুসংগত"
-
-#~ msgid "On a different date:"
-#~ msgstr "ভিন্ন তারিখে:"
 
 #~ msgid ""
 #~ "One or more of this system's subscriptions are about to expire. These "
@@ -1737,64 +1657,11 @@ msgstr ""
 #~ msgid "Out of Compliance"
 #~ msgstr "সুসংগতি বহির্ভুত"
 
-#~ msgid "Password:"
-#~ msgstr "পাসওয়ার্ড:"
-
-#~ msgid "Proxy P_assword:"
-#~ msgstr "প্রক্সি পাসওয়ার্ড: (_a)"
-
-#~ msgid "Proxy _Username:"
-#~ msgstr "প্রক্সি ব্যবহারকারী: (_U)"
-
-#~ msgid "Red Hat Login:"
-#~ msgstr "Red Hat লগ-ইন:"
-
-#~ msgid "Show products that will be out of compliance as of:"
-#~ msgstr "চিহ্নিত তারিখতে যে সকল উৎপাদন সুসংগত অবস্থা বহির্ভূত ধার্য হবে:"
-
-#~ msgid "Subscription Manager - Compliance Assistant"
-#~ msgstr "Subscription Manager - Compliance Assistant"
-
 #~ msgid "This System is Non-Compliant"
 #~ msgstr "এই সিস্টেমটি সুসংগত অবস্থায় নেই"
 
-#~ msgid ""
-#~ "This system is missing one or more subscriptions required for compliance "
-#~ "with your subscription agreements."
-#~ msgstr ""
-#~ "আপনার সাবস্ক্রিপশন চুক্ত অনুসারে এই সিস্টেমের ক্ষেত্রে আবশ্যক এক অথবা অধিক সংখ্যক "
-#~ "সাবস্ক্রিপশন বর্তমানে উপলব্ধ নেই।"
-
 #~ msgid "This system is non-compliant"
 #~ msgstr "সিস্টেমটি সুসংগত অবস্থায় নেই"
-
-#~ msgid ""
-#~ "To add a subscription, choose a certificate to import to your "
-#~ "subscription certificate directory."
-#~ msgstr ""
-#~ "সাবস্ক্রিপশন যোগ করার জন্য, সাবস্ক্রিপশন ডিরেক্টরির মধ্যে ইম্পোর্ট করার জন্য একটি "
-#~ "সার্টিফিকেট নির্বাচন করুন।"
-
-#~ msgid "Use Au_thentication with HTTP Proxy:"
-#~ msgstr "HTTP প্রক্সির জন্য অনুমোদন ব্যবহার করা হবে: (_t)"
-
-#~ msgid "You have <b>%s</b> products out of compliance."
-#~ msgstr "<b>%s</b>-টি উৎপাদন সুসংগতি বহির্ভূত রয়েছে।"
-
-#~ msgid "You have <b>1</b> product out of compliance."
-#~ msgstr "<b>১</b>-টি উৎপাদন সুসংগতি বহির্ভূত রয়েছে।"
-
-#~ msgid "You have one product which is out of compliance."
-#~ msgstr "শুধুমাত্র একটি উৎপাদন সুসংগত নয়।"
-
-#~ msgid "You must register before using the compliance assistant."
-#~ msgstr "compliance assistant ব্যবহারের পূর্বে নিবন্ধন করা আবশ্যক।"
-
-#~ msgid "_Close"
-#~ msgstr "বন্ধ করুন (_C)"
-
-#~ msgid "_Proxy Location:"
-#~ msgstr "প্রক্সির অবস্থান: (_P)"
 
 #~ msgid ""
 #~ "\n"
@@ -1931,9 +1798,6 @@ msgstr ""
 #~ msgstr ""
 #~ "ত্রুটি: নিবন্ধনের জন্য ব্যবহারকারী অ্যাকাউন্টের নাম ও পাসওয়ার্ড প্রয়োজন। register "
 #~ "--help ব্যবহার করুন।"
-
-#~ msgid "Subscribed to Products:"
-#~ msgstr "চিহ্নিত উৎপাদনে সাবস্ক্রাইব করা হয়েছে:"
 
 #~ msgid "     %s(%s)"
 #~ msgstr "     %s(%s)"
