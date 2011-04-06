@@ -422,7 +422,7 @@ class MainWindow(widgets.GladeWidget):
         if managerlib.is_registered_with_classic():
             prompt = messageWindow.ContinueDialog(
                     linkify(constants.RHN_CLASSIC_WARNING),
-                    self._get_window())
+                    self.main_window)
             prompt.connect('response', self._on_rhn_classic_response)
 
     def _on_rhn_classic_response(self, dialog, response):
