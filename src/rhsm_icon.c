@@ -320,9 +320,9 @@ add_signal_listener(Context *context)
 		     "/EntitlementStatus",
 		     "com.redhat.SubscriptionManager.EntitlementStatus");
 
-	dbus_g_proxy_add_signal(proxy, "status_changed", G_TYPE_INT,
+	dbus_g_proxy_add_signal(proxy, "entitlement_status_changed", G_TYPE_INT,
 				G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal(proxy, "status_changed",
+	dbus_g_proxy_connect_signal(proxy, "entitlement_status_changed",
 				    G_CALLBACK(status_changed_cb), context,
 				    NULL);
 	return proxy;

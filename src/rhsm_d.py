@@ -102,7 +102,7 @@ class StatusChecker(dbus.service.Object):
     @dbus.service.signal(
         dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus',
         signature='i')
-    def status_changed(self, status_code):
+    def entitlement_status_changed(self, status_code):
         debug("signal fired! code is " + str(status_code))
 
     #this is so we can guarantee exit after the dbus stuff is done, since
@@ -123,7 +123,7 @@ class StatusChecker(dbus.service.Object):
         if (ret != self.last_status):
             debug("Validity status changed, fire signal")
             #we send the code out, but no one uses it at this time
-            self.status_changed(ret)
+            self.entitlement_status_changed(ret)
         self.last_status = ret
         self.has_run = True
         self.watchdog()
