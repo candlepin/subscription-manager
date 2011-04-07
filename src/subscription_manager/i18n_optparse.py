@@ -62,3 +62,13 @@ class OptionParser(_OptionParser):
 
     def print_help(self):
         sys.stdout.write(self.format_help())
+
+    def error(self, msg):
+        """
+        Override default error handler to localize
+
+        prints command usage, then the error string, and exits.
+        """
+        self.print_usage(sys.stderr)
+        #translators: arg 1 is the program name, arg 2 is the error message
+        self.exit(2, _("%s: error: %s\n") % (self.get_prog_name(), msg))
