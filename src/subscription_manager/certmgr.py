@@ -44,21 +44,6 @@ class CertManager:
         self.repolib = RepoLib(self.lock, uep=self.uep)
         self.factlib = FactLib(self.lock, uep=self.uep)
 
-    def add(self, *bundles):
-        """
-        Add I{entitlement} certificate bundles.
-        Each I{bundle} is a dict {cert='',key=''}
-        @param bundles: A certificate bundle.
-        @type bundles: dict
-        """
-        lock = self.lock
-        try:
-            lock.acquire()
-            self.certlib.add(*bundles)
-            self.repolib.update()
-        finally:
-            lock.release()
-
     def update(self):
         """
         Update I{entitlement} certificates and corresponding
