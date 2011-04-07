@@ -104,7 +104,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             entry = self._create_entry_map(cert)
             self.store.add_map(entry)
         dbus_iface = get_dbus_iface()
-        dbus_iface.check_compliance(reply_handler=self.noop_callback, error_handler=self.noop_callback)
+        dbus_iface.check_status(reply_handler=self.noop_callback, error_handler=self.noop_callback)
 
     def noop_callback(dummy=None,dummy2=None ):
         pass

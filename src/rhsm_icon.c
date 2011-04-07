@@ -14,8 +14,8 @@
 * granted to use or replicate Red Hat trademarks that are incorporated
 * in this software or its documentation.
 *
-* rhsm-compliance-icon - display an icon in the systray if the system is
-*                        non-compliant.
+* rhsm-icon - display an icon in the systray if the system has invalid
+* 	      entitlements
 */
 
 #include <stdbool.h>
@@ -36,7 +36,7 @@ static int check_period = ONE_DAY;
 static bool debug = false;
 static char *force_icon = NULL;
 
-#define NAME_TO_CLAIM "com.redhat.subscription-manager.ComplianceIcon"
+#define NAME_TO_CLAIM "com.redhat.subscription-manager.Icon"
 
 static GOptionEntry entries[] =
 {
@@ -50,43 +50,43 @@ static GOptionEntry entries[] =
 	{NULL}
 };
 
-typedef struct _Compliance {
+typedef struct _Context {
 	bool is_visible;
 	GtkStatusIcon *icon;
 	NotifyNotification *notification;
-} Compliance;
+} Context;
 
-typedef enum _ComplianceType {
-	RHSM_COMPLIANT,
+typedef enum _StatusType {
+	RHSM_VALID,
 	RHSM_EXPIRED,
 	RHSM_WARNING,
 	RHN_CLASSIC
-} ComplianceType;
+} StatusType;
 
 /* prototypes */
 
-static void destroy_icon(Compliance*);
-static void display_icon(Compliance*, ComplianceType);
-static void alter_icon(Compliance*, ComplianceType);
-static void run_smg(Compliance*);
-static void icon_clicked(GtkStatusIcon*, Compliance*);
-static void icon_right_clicked(GtkStatusIcon*, guint, guint, Compliance*);
-static void remind_me_later_clicked(NotifyNotification*, gchar*, Compliance*);
-static void manage_subs_clicked(NotifyNotification*, gchar*, Compliance*);
+static void destroy_icon(Context*);
+static void display_icon(Context*, StatusType);
+static void alter_icon(Context*, StatusType);
+static void run_smg(Context*);
+static void icon_clicked(GtkStatusIcon*, Context*);
+static void icon_right_clicked(GtkStatusIcon*, guint, guint, Context*);
+static void remind_me_later_clicked(NotifyNotification*, gchar*, Context*);
+static void manage_subs_clicked(NotifyNotification*, gchar*, Context*);
 static void do_nothing_logger(const gchar*, GLogLevelFlags, const gchar*, gpointer);
-static void compliance_changed_cb(NotifyNotification*, gint, Compliance*);
-static bool check_compliance(Compliance*);
-static DBusGProxy* add_signal_listener(Compliance*);
-static ComplianceType check_compliance_over_dbus();
-static ComplianceType create_compliancetype(int);
+static void status_changed_cb(NotifyNotification*, gint, Context*);
+static bool check_status(Context*);
+static DBusGProxy* add_signal_listener(Context*);
+static StatusType check_status_over_dbus();
+static StatusType create_status_type(int);
 
 
-static ComplianceType
-create_compliancetype(int status)
+static StatusType
+create_status_type(int status)
 {
 	switch (status) {
 		case 0:
-			return RHSM_COMPLIANT;
+			return RHSM_VALID;
 		case 1:
 			return RHSM_EXPIRED;
 		case 2:
@@ -100,74 +100,74 @@ create_compliancetype(int status)
 }
 
 static void
-destroy_icon(Compliance *compliance)
+destroy_icon(Context *context)
 {
-	if (!compliance->is_visible) {
+	if (!context->is_visible) {
 		return;
 	}
-	gtk_status_icon_set_visible(compliance->icon, false);
-	g_object_unref(compliance->icon);
-	compliance->is_visible = false;
+	gtk_status_icon_set_visible(context->icon, false);
+	g_object_unref(context->icon);
+	context->is_visible = false;
 
-	notify_notification_close(compliance->notification, NULL);
-	g_object_unref(compliance->notification);
+	notify_notification_close(context->notification, NULL);
+	g_object_unref(context->notification);
 }
 
 static void
-run_smg(Compliance *compliance)
+run_smg(Context *context)
 {
 	g_spawn_command_line_async("subscription-manager-gui", NULL);
-	destroy_icon(compliance);
+	destroy_icon(context);
 }
 
 static void
-icon_clicked(GtkStatusIcon *icon G_GNUC_UNUSED, Compliance *compliance)
+icon_clicked(GtkStatusIcon *icon G_GNUC_UNUSED, Context *context)
 {
 	g_debug("icon click detected");
-	run_smg(compliance);
+	run_smg(context);
 }
 
 static void
 icon_right_clicked(GtkStatusIcon *icon G_GNUC_UNUSED,
 		   guint button G_GNUC_UNUSED,
 		   guint activate_time G_GNUC_UNUSED,
-		   Compliance *compliance)
+		   Context *context)
 {
 	g_debug("icon right click detected");
-	run_smg(compliance);
+	run_smg(context);
 }
 
 static void
 remind_me_later_clicked(NotifyNotification *notification G_GNUC_UNUSED,
 			gchar *action G_GNUC_UNUSED,
-			Compliance *compliance)
+			Context *context)
 {
 	g_debug("Remind me later clicked");
-	destroy_icon(compliance);
+	destroy_icon(context);
 }
 
 static void
 manage_subs_clicked(NotifyNotification *notification G_GNUC_UNUSED,
 		    gchar *action G_GNUC_UNUSED,
-		    Compliance *compliance)
+		    Context *context)
 {
 	g_debug("Manage my subscriptions clicked");
-	run_smg(compliance);
+	run_smg(context);
 }
 
 static void
-display_icon(Compliance *compliance, ComplianceType compliance_type)
+display_icon(Context *context, StatusType status_type)
 {
 	static char *tooltip;
 	static char *notification_title;
 	static char *notification_body;
 
-	if (compliance->is_visible) {
+	if (context->is_visible) {
 		g_debug("Icon already visible");
 		return;
 	}
 
-	if (compliance_type == RHSM_EXPIRED) {
+	if (status_type == RHSM_EXPIRED) {
 		tooltip = _("Invalid or Missing Entitlement Certificates");
 		notification_title = _("Invalid or Missing Entitlement Certificates");
 		notification_body = _("This system is missing one or more "
@@ -181,41 +181,40 @@ display_icon(Compliance *compliance, ComplianceType compliance_type)
 			"subscriptions are about to expire.");
 	}
 
-	compliance->icon = gtk_status_icon_new_from_icon_name("subscription-manager");
-	gtk_status_icon_set_tooltip(compliance->icon, tooltip);
-	g_signal_connect(compliance->icon, "activate",
-			 G_CALLBACK(icon_clicked), compliance);
-	g_signal_connect(compliance->icon, "popup-menu",
-			 G_CALLBACK(icon_right_clicked), compliance);
-	compliance->is_visible = true;
+	context->icon = gtk_status_icon_new_from_icon_name("subscription-manager");
+	gtk_status_icon_set_tooltip(context->icon, tooltip);
+	g_signal_connect(context->icon, "activate",
+			 G_CALLBACK(icon_clicked), context);
+	g_signal_connect(context->icon, "popup-menu",
+			 G_CALLBACK(icon_right_clicked), context);
+	context->is_visible = true;
 
-	compliance->notification = notify_notification_new_with_status_icon(
+	context->notification = notify_notification_new_with_status_icon(
 		notification_title, notification_body, "subscription-manager",
-		compliance->icon);
+		context->icon);
 	
-	notify_notification_add_action(compliance->notification,
+	notify_notification_add_action(context->notification,
 				       "remind-me-later",
 				       _("Remind Me Later"),
 				       (NotifyActionCallback)
 				       remind_me_later_clicked,
-				       compliance, NULL);
-	notify_notification_add_action(compliance->notification,
+				       context, NULL);
+	notify_notification_add_action(context->notification,
 				       "manage-subscriptions",
 				       _("Manage My Subscriptions..."),
 				       (NotifyActionCallback)
 				       manage_subs_clicked,
-				       compliance, NULL);
+				       context, NULL);
 
-	notify_notification_show(compliance->notification, NULL);
+	notify_notification_show(context->notification, NULL);
 }
 
 static void
-alter_icon(Compliance *compliance, ComplianceType ct) {
-	if ((ct != RHN_CLASSIC) && 
-	(ct != RHSM_COMPLIANT)) {
-		display_icon(compliance, ct);
+alter_icon(Context *context, StatusType status_type) {
+	if ((status_type != RHN_CLASSIC) && (status_type != RHSM_VALID)) {
+		display_icon(context, status_type);
 	} else {
-		destroy_icon(compliance);
+		destroy_icon(context);
 	}
 }
 
@@ -229,13 +228,13 @@ do_nothing_logger(const gchar *log_domain G_GNUC_UNUSED,
 	/* really, do nothing */
 }
 
-static ComplianceType
-check_compliance_over_dbus()
+static StatusType
+check_status_over_dbus()
 {
 	DBusGConnection *connection;
 	GError *error;
 	DBusGProxy *proxy;
-	int is_compliant;
+	int status;
   
 	error = NULL;
 	connection = dbus_g_bus_get(DBUS_BUS_SYSTEM, &error);
@@ -248,12 +247,12 @@ check_compliance_over_dbus()
 
 	proxy = dbus_g_proxy_new_for_name(connection,
 					  "com.redhat.SubscriptionManager",
-					  "/Compliance",
-					  "com.redhat.SubscriptionManager.Compliance");
+					  "/EntitlementStatus",
+					  "com.redhat.SubscriptionManager.EntitlementStatus");
 
 	error = NULL;
-	if (!dbus_g_proxy_call(proxy, "check_compliance", &error,
-			       G_TYPE_INVALID, G_TYPE_INT, &is_compliant,
+	if (!dbus_g_proxy_call(proxy, "check_status", &error,
+			       G_TYPE_INVALID, G_TYPE_INT, &status,
 			       G_TYPE_INVALID)) {
 		g_printerr("Error: %s\n", error->message);
 		g_error_free(error);
@@ -262,46 +261,46 @@ check_compliance_over_dbus()
 
 	g_object_unref(proxy);
 	dbus_g_connection_unref(connection);
-	return create_compliancetype(is_compliant);
+	return create_status_type(status);
 }
 
 static bool
-check_compliance(Compliance *compliance)
+check_status(Context *context)
 {
-	ComplianceType compliance_type;
-	g_debug("Running compliance check");
+	StatusType status_type;
+	g_debug("Running entitlement status check");
 
 	if (force_icon) {
 		g_debug("Forcing display of icon (simulated invalidity)");
 		if (g_str_equal(force_icon, "expired")) {
-			compliance_type = RHSM_EXPIRED;
+			status_type = RHSM_EXPIRED;
 		} else if (g_str_equal(force_icon, "warning")) {
-			compliance_type = RHSM_WARNING;
+			status_type = RHSM_WARNING;
 		} else {
 			g_print(N_("Unknown argument to force-icon: %s\n"),
 				force_icon);
 			exit(1);
 		}
 	} else {
-		compliance_type = check_compliance_over_dbus();
+		status_type = check_status_over_dbus();
 	}
 
-	alter_icon(compliance, compliance_type);
+	alter_icon(context, status_type);
 
 	return true;
 }
 
 
 static void
-compliance_changed_cb(NotifyNotification *notification G_GNUC_UNUSED,
-	   gint status, Compliance* compliance)
+status_changed_cb(NotifyNotification *notification G_GNUC_UNUSED,
+	   gint status, Context *context)
 {
 	g_debug("in callback, received value: %i", status);
-	alter_icon(compliance, create_compliancetype(status));
+	alter_icon(context, create_status_type(status));
 }
 
 static DBusGProxy* 
-add_signal_listener(Compliance *compliance)
+add_signal_listener(Context *context)
 {
 	DBusGConnection *connection;
 	GError *error;
@@ -318,11 +317,14 @@ add_signal_listener(Compliance *compliance)
 
 	proxy = dbus_g_proxy_new_for_name(connection,
 		     "com.redhat.SubscriptionManager",
-		     "/Compliance",
-		     "com.redhat.SubscriptionManager.Compliance");
+		     "/EntitlementStatus",
+		     "com.redhat.SubscriptionManager.EntitlementStatus");
 
-	dbus_g_proxy_add_signal(proxy, "compliancechanged", G_TYPE_INT, G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal(proxy, "compliancechanged", G_CALLBACK(compliance_changed_cb), compliance, NULL);
+	dbus_g_proxy_add_signal(proxy, "entitlement_status_changed", G_TYPE_INT,
+				G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal(proxy, "entitlement_status_changed",
+				    G_CALLBACK(status_changed_cb), context,
+				    NULL);
 	return proxy;
 
 }
@@ -334,23 +336,24 @@ main(int argc, char **argv)
 	bindtextdomain("rhsm", "/usr/share/locale");
 	textdomain("rhsm");
 	GError *error = NULL;
-	GOptionContext *context;
+	GOptionContext *option_context;
 	DBusGProxy *proxy;
 	DBusGConnection *connection;
-	Compliance compliance;
-	compliance.is_visible = false;
+	Context context;
+	context.is_visible = false;
 	guint32 result;
 
-	context = g_option_context_new ("rhsm compliance icon");
-	g_option_context_add_main_entries (context, entries, NULL);
-	g_option_context_add_group (context, gtk_get_option_group (TRUE));
+	option_context = g_option_context_new ("rhsm icon");
+	g_option_context_add_main_entries (option_context, entries, NULL);
+	g_option_context_add_group (option_context,
+				    gtk_get_option_group (TRUE));
 	
-	if (!g_option_context_parse (context, &argc, &argv, &error)) {
+	if (!g_option_context_parse (option_context, &argc, &argv, &error)) {
 		g_print (N_("option parsing failed: %s\n"), error->message);
 		return 1;
 	}
 
-	g_option_context_free (context);
+	g_option_context_free (option_context);
 
 	if (!debug) {
 		g_log_set_handler(NULL, G_LOG_LEVEL_DEBUG, do_nothing_logger,
@@ -394,19 +397,19 @@ main(int argc, char **argv)
 		else {
 			g_warning ("Failed to acquire %s", NAME_TO_CLAIM);
 		}
-		g_debug("rhsm-compliance-icon is already running. exiting.");
+		g_debug("rhsm-icon is already running. exiting.");
 		return 0;
 	}
 
 
-	notify_init("rhsm-compliance-icon");
+	notify_init("rhsm-icon");
 
-	check_compliance(&compliance);
+	check_status(&context);
 	//convert sec to msec before passing in
-	g_timeout_add(check_period * 1000, (GSourceFunc) check_compliance,
-			      &compliance);
+	g_timeout_add(check_period * 1000, (GSourceFunc) check_status,
+			      &context);
 
-	proxy = add_signal_listener(&compliance);
+	proxy = add_signal_listener(&context);
 	gtk_main();
 
 	g_debug("past main");

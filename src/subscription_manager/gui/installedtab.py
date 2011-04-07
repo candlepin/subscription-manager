@@ -31,7 +31,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def __init__(self, backend, consumer, facts):
 
-        widgets = ['product_text', 'compliance_text', 'subscription_text']
+        widgets = ['product_text', 'validity_text', 'subscription_text']
         super(InstalledProductsTab, self).__init__('installed.glade', widgets)
 
         self.product_dir = ProductDirectory()
@@ -97,23 +97,23 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
                     if now < date_range.begin():
                         entry['status'] = _('Future Subscription')
-                        entry['compliance_note'] = _("Never Subscribed")
+                        entry['validity_note'] = _("Never Subscribed")
                     elif now > date_range.end():
                         entry['image'] = self._render_icon(gtk.STOCK_NO)
                         entry['status'] = _('Invalid')
-                        entry['compliance_note'] = \
+                        entry['validity_note'] = \
                             _('Subscription %s is expired' % order.getSubscription())
                     else:
                         entry['image'] = self._render_icon(gtk.STOCK_YES)
                         entry['status'] = _('Valid')
-                        entry['compliance_note'] = \
+                        entry['validity_note'] = \
                             _('Covered by contract %s through %s' % \
                             (order.getContract(),
                                 entry['expiration_date'].strftime("%x")))
                 else:
                     entry['image'] = self._render_icon(gtk.STOCK_NO)
                     entry['status'] = _('Missing')
-                    entry['compliance_note'] = _("Never Subscribed")
+                    entry['validity_note'] = _("Never Subscribed")
 
                 self.store.add_map(entry)
 
@@ -125,15 +125,15 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         product = selection['product']
         self.product_text.get_buffer().set_text(product)
 
-        compliance = selection['compliance_note']
-        self.compliance_text.get_buffer().set_text(compliance)
+        validity = selection['validity_note']
+        self.validity_text.get_buffer().set_text(validity)
 
         subscription = selection['subscription'] or ''
         self.subscription_text.get_buffer().set_text(subscription)
 
     def on_no_selection(self):
         self.product_text.get_buffer().set_text("")
-        self.compliance_text.get_buffer().set_text("")
+        self.validity_text.get_buffer().set_text("")
         self.subscription_text.get_buffer().set_text("")
 
     def get_type_map(self):
@@ -143,7 +143,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
             'version': str,
             'arch': str,
             'status': str,
-            'compliance_note': str,
+            'validity_note': str,
             'subscription': str,
             'start_date': str,
             'expiration_date': str,

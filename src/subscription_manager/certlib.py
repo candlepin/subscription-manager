@@ -726,13 +726,13 @@ class CertSorter(object):
                 del self.expired_products[product_id]
 
 
-def find_first_noncompliant_date(ent_dir=None, product_dir=None):
+def find_first_invalid_date(ent_dir=None, product_dir=None):
     """
-    Find the first datetime where an entitlement will be uncompliant.
+    Find the first datetime where an entitlement will be invalid.
     If there are currently unentitled products, then return the current
     datetime.
     """
-    # TODO: should we be listing valid? does this work if everything is already out of compliance?
+    # TODO: should we be listing valid? does this work if everything is already invalid?
     # TODO: setting a member variable here that isn't used anywhere else, should keep this local unless needed
     # TODO: needs unit testing imo, probably could be moved to a standalone method for that purpose
     if not ent_dir:
@@ -752,7 +752,7 @@ def find_first_noncompliant_date(ent_dir=None, product_dir=None):
 
     valid_ents.sort(key=get_date)
 
-    # next cert to go noncompliant
+    # next cert to go invalid
     if valid_ents and not installed_not_entitled:
         # Add a day, we don't want a date where we're still valid:
         return valid_ents[0].validRange().end() + timedelta(days=1)

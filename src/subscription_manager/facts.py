@@ -124,11 +124,11 @@ class Facts:
         sorter = certlib.CertSorter(certlib.ProductDirectory(),
                                     certlib.EntitlementDirectory())
 
-        compliance_facts = {'system.entitlements_valid':True}
+        validity_facts = {'system.entitlements_valid':True}
         if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
-            compliance_facts['system.entitlements_valid'] = False
+            validity_facts['system.entitlements_valid'] = False
 
-        facts.update(compliance_facts)
+        facts.update(validity_facts)
 
         self.write(facts)
         return facts

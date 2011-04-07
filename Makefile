@@ -20,7 +20,7 @@ CFLAGS = -Wall -g
 %.pyc: %.py
 	python -c "import py_compile; py_compile.compile('$<')"
 
-build:	rhsmcertd rhsm-compliance-icon
+build:	rhsmcertd rhsm-icon
 
 bin:
 	mkdir bin
@@ -28,11 +28,10 @@ bin:
 rhsmcertd: src/rhsmcertd.c bin
 	${CC} ${CFLAGS} src/rhsmcertd.c -o bin/rhsmcertd
 
-COMPLIANCE_FLAGS=`pkg-config --cflags --libs gtk+-2.0 libnotify`
+ICON_FLAGS=`pkg-config --cflags --libs gtk+-2.0 libnotify`
 
-rhsm-compliance-icon: src/subscription_manager/compliance/rhsm_compliance_icon.c bin
-	${CC} ${CFLAGS} ${COMPLIANCE_FLAGS} -o bin/rhsm-compliance-icon \
-		src/subscription_manager/compliance/rhsm_compliance_icon.c
+rhsm-icon: src/rhsm_icon.c bin
+	${CC} ${CFLAGS} ${ICON_FLAGS} -o bin/rhsm-icon src/rhsm_icon.c
 
 dbus-service-install:
 	install -d ${PREFIX}/etc/dbus-1/system.d
@@ -42,8 +41,8 @@ dbus-service-install:
 		${PREFIX}/etc/dbus-1/system.d
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.service \
 		${PREFIX}/${INSTALL_DIR}/dbus-1/system-services
-	install -m 744 src/subscription_manager/compliance/rhsm_compliance_d.py \
-		${PREFIX}/usr/libexec/rhsm-complianced
+	install -m 744 src/rhsm_d.py \
+		${PREFIX}/usr/libexec/rhsmd
 
 install-conf:
 	install etc-conf/rhsm.conf ${PREFIX}/etc/rhsm/
@@ -97,10 +96,10 @@ install-files: dbus-service-install compile-po desktop-files
 	if [ ${RHELVERSION} = 5 ]; then ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_login.py ${PREFIX}/usr/share/firstboot/modules/; fi
 	if [ ${RHELVERSION} = 5 ]; then ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_subscriptions.py ${PREFIX}/usr/share/firstboot/modules/; fi
 	install -m 644 man/* ${PREFIX}/${INSTALL_DIR}/man/man8/
-	install -m 644 etc-conf/rhsm-compliance-icon.desktop \
+	install -m 644 etc-conf/rhsm-icon.desktop \
 		${PREFIX}/etc/xdg/autostart
-	install -m 755 etc-conf/rhsm-complianced.cron \
-		${PREFIX}/etc/cron.daily/rhsm-complianced
+	install -m 755 etc-conf/rhsmd.cron \
+		${PREFIX}/etc/cron.daily/rhsmd
 	install -m 644 etc-conf/subscription-manager.desktop \
 		${PREFIX}/${INSTALL_DIR}/applications	
 	ln -sf /usr/bin/consolehelper ${PREFIX}/usr/bin/subscription-manager-gui
@@ -130,7 +129,7 @@ archive: clean
 rpm: archive
 	rpmbuild -ta ${PKGNAME}-$(VERSION).tar.gz
 
-desktop-files: etc-conf/rhsm-compliance-icon.desktop \
+desktop-files: etc-conf/rhsm-icon.desktop \
 				etc-conf/subscription-manager.desktop
 
 %.desktop: %.desktop.in po

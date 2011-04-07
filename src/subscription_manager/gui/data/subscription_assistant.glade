@@ -39,7 +39,7 @@
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">Subscription Label Box</atkproperty>
                 </accessibility>
                 <child>
-                  <widget class="GtkLabel" id="compliance_label">
+                  <widget class="GtkLabel" id="subscription_label">
                     <property name="visible">True</property>
                     <property name="xalign">0.10000000149011612</property>
                     <property name="use_markup">True</property>
@@ -80,13 +80,13 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkRadioButton" id="first_noncompliant_radiobutton">
+                  <widget class="GtkRadioButton" id="first_invalid_radiobutton">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">noncompliant_date_radiobutton</property>
-                    <signal name="toggled" handler="on_first_noncompliant_radiobutton_toggled"/>
+                    <property name="group">invalid_date_radiobutton</property>
+                    <signal name="toggled" handler="on_first_invalid_radiobutton_toggled"/>
                   </widget>
                   <packing>
                     <property name="position">1</property>
@@ -99,7 +99,7 @@
                       <atkproperty name="AtkObject::accessible-name" translatable="yes">Subscription Date Picker</atkproperty>
                     </accessibility>
                     <child>
-                      <widget class="GtkRadioButton" id="noncompliant_date_radiobutton">
+                      <widget class="GtkRadioButton" id="invalid_date_radiobutton">
                         <property name="label" translatable="yes">A different date:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -171,7 +171,7 @@
               <atkproperty name="AtkObject::accessible-name" translatable="yes">Subscription Product List</atkproperty>
             </accessibility>
             <child>
-              <widget class="GtkScrolledWindow" id="uncompliant_window">
+              <widget class="GtkScrolledWindow" id="invalid_window">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hscrollbar_policy">automatic</property>
