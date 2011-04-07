@@ -33,7 +33,7 @@ import rhsm.config as config
 from subscription_manager import constants
 from subscription_manager.facts import Facts
 from subscription_manager.certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \
-        CertLib, CertSorter, find_first_noncompliant_date
+        CertLib, CertSorter, find_first_invalid_date
 
 from subscription_manager.gui import activate
 from subscription_manager.gui import factsgui
@@ -41,7 +41,8 @@ from subscription_manager.gui import widgets
 from subscription_manager.gui.installedtab import InstalledProductsTab
 from subscription_manager.gui.mysubstab import MySubscriptionsTab
 from subscription_manager.gui.allsubs import AllSubscriptionsTab
-from subscription_manager.gui.compliance import ComplianceAssistant
+from subscription_manager.gui.subscription_assistant import \
+        SubscriptionAssistant
 from subscription_manager.gui.importsub import ImportSubDialog
 from subscription_manager.gui.utils import handle_gui_exception, errorWindow, linkify
 from datetime import datetime
@@ -54,8 +55,8 @@ gtk.glade.bindtextdomain("rhsm")
 log = logging.getLogger('rhsm-app.' + __name__)
 
 prefix = os.path.dirname(__file__)
-COMPLIANT_IMG = os.path.join(prefix, "data/icons/compliant.svg")
-NON_COMPLIANT_IMG = os.path.join(prefix, "data/icons/non-compliant.svg")
+VALID_IMG = os.path.join(prefix, "data/icons/valid.svg")
+INVALID_IMG = os.path.join(prefix, "data/icons/invalid.svg")
 
 cert_file = ConsumerIdentity.certpath()
 key_file = ConsumerIdentity.keypath()
@@ -177,10 +178,10 @@ class MainWindow(widgets.GladeWidget):
     """
     def __init__(self):
         super(MainWindow, self).__init__('mainwindow.glade',
-              ['main_window', 'notebook', 'compliance_status_label',
-               'compliance_status_image', 'system_name_label',
+              ['main_window', 'notebook', 'subscription_status_label',
+               'subscription_status_image', 'system_name_label',
                'next_update_label', 'next_update_title', 'register_button',
-               'unregister_button', 'compliant_button', 'activate_button'])
+               'unregister_button', 'update_certificates_button', 'activate_button'])
 
         self.backend = Backend()
         self.consumer = Consumer()
@@ -194,7 +195,7 @@ class MainWindow(widgets.GladeWidget):
 
         self.import_sub_dialog = ImportSubDialog()
 
-        self.compliance_assistant = ComplianceAssistant(self.backend,
+        self.subscription_assistant = SubscriptionAssistant(self.backend,
                 self.consumer, self.facts)
 
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
@@ -213,7 +214,7 @@ class MainWindow(widgets.GladeWidget):
             self.notebook.append_page(tab.get_content(), gtk.Label(tab.get_label()))
 
         self.glade.signal_autoconnect({
-            "on_compliant_button_clicked": self._compliant_button_clicked,
+            "on_update_certificates_button_clicked": self._update_certificates_button_clicked,
             "on_register_button_clicked": self._register_button_clicked,
             "on_unregister_button_clicked": self._unregister_button_clicked,
             "on_add_sub_button_clicked": self._add_sub_button_clicked,
@@ -225,7 +226,7 @@ class MainWindow(widgets.GladeWidget):
 
         # Register callback for when product/entitlement certs are updated
         def on_cert_change(filemonitor):
-            self._set_compliance_status()
+            self._set_validity_status()
 
         def on_identity_change(filemonitor):
             self.refresh()
@@ -250,7 +251,7 @@ class MainWindow(widgets.GladeWidget):
     def refresh(self):
         """ Refresh the UI. """
         self.consumer.reload()
-        self._set_compliance_status()
+        self._set_validity_status()
 
         # Show the All Subscriptions tab if registered, hide it otherwise:
         if self.registered() and self.notebook.get_n_pages() == 2:
@@ -341,10 +342,10 @@ class MainWindow(widgets.GladeWidget):
         self.import_sub_dialog.set_parent_window(self._get_window())
         self.import_sub_dialog.show()
 
-    def _compliant_button_clicked(self, widget):
+    def _update_certificates_button_clicked(self, widget):
         if self.registered():
-            self.compliance_assistant.set_parent_window(self._get_window())
-            self.compliance_assistant.show()
+            self.subscription_assistant.set_parent_window(self._get_window())
+            self.subscription_assistant.show()
         else:
             messageWindow.OkDialog(messageWindow.wrap_text(
                 _("You must register before using the subscription assistant.")),
@@ -362,36 +363,35 @@ class MainWindow(widgets.GladeWidget):
         self.backend.update()
 
 
-    def _set_compliance_status(self):
-        """ Updates the compliance status portion of the UI. """
-        # Look for products which are out of compliance:
+    def _set_validity_status(self):
+        """ Updates the entitlement validity status portion of the UI. """
+        # Look for products which have invalid entitlements
         sorter = CertSorter(ProductDirectory(), EntitlementDirectory())
 
         warn_count = len(sorter.expired_entitlement_certs) + \
                 len(sorter.unentitled_products)
 
         if warn_count > 0:
-            buf = gtk.gdk.pixbuf_new_from_file_at_size(NON_COMPLIANT_IMG, 32,
-                    32)
-            self.compliance_status_image.set_from_pixbuf(buf)
-            self.compliant_button.show()
-            # Change wording slightly if just one product out of compliance:
+            buf = gtk.gdk.pixbuf_new_from_file_at_size(INVALID_IMG, 32, 32)
+            self.subscription_status_image.set_from_pixbuf(buf)
+            self.update_certificates_button.show()
+            # Change wording slightly for just one product
             if warn_count > 1:
-                self.compliance_status_label.set_markup(
+                self.subscription_status_label.set_markup(
                         _("You have <b>%s</b> products with invalid entitlement certificates.")
                         % warn_count)
             else:
-                self.compliance_status_label.set_markup(
+                self.subscription_status_label.set_markup(
                         _("You have <b>1</b> product without a valid entitlement certificate.") )
 
         else:
-            first_noncompliant = find_first_noncompliant_date()
-            buf = gtk.gdk.pixbuf_new_from_file_at_size(COMPLIANT_IMG, 32, 32)
-            self.compliance_status_image.set_from_pixbuf(buf)
-            self.compliance_status_label.set_text(
+            first_invalid = find_first_invalid_date()
+            buf = gtk.gdk.pixbuf_new_from_file_at_size(VALID_IMG, 32, 32)
+            self.subscription_status_image.set_from_pixbuf(buf)
+            self.subscription_status_label.set_text(
                     _("Product entitlement certificates valid through %s") % \
-                            first_noncompliant.strftime("%x") )
-            self.compliant_button.hide()
+                            first_invalid.strftime("%x") )
+            self.update_certificates_button.hide()
 
     def _check_rhn_classic(self):
         if managerlib.is_registered_with_classic():

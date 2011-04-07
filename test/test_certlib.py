@@ -86,7 +86,7 @@ class PathTests(unittest.TestCase):
         self.assertEquals('/etc/pki/entitlement/key.pem', ed.keypath())
 
 
-class FindLastCompliantTests(unittest.TestCase):
+class FindLastValidTests(unittest.TestCase):
 
     def test_just_entitlements(self):
         cert1 = StubEntitlementCertificate(
@@ -98,10 +98,10 @@ class FindLastCompliantTests(unittest.TestCase):
                     end_date=datetime(2060, 1, 1))
         ent_dir = StubCertificateDirectory([cert1, cert2])
         prod_dir = StubCertificateDirectory([])
-        last_compliant_date = find_first_noncompliant_date(ent_dir=ent_dir,
+        last_valid_date = find_first_invalid_date(ent_dir=ent_dir,
                 product_dir=prod_dir)
-        self.assertEqual(2050, last_compliant_date.year)
-        self.assertEqual(2, last_compliant_date.day)
+        self.assertEqual(2050, last_valid_date.year)
+        self.assertEqual(2, last_valid_date.day)
 
     def test_unentitled_products(self):
         cert = StubProductCertificate(StubProduct('unentitledProduct'))
@@ -117,12 +117,12 @@ class FindLastCompliantTests(unittest.TestCase):
         ent_dir = StubCertificateDirectory([cert1, cert2])
 
         # Because we have an unentitled product, we should get back the current
-        # date as the last date of compliance:
+        # date as the last date of valid entitlements:
         today = datetime.now(GMT())
-        last_compliant_date = find_first_noncompliant_date(ent_dir=ent_dir, product_dir=product_dir)
-        self.assertEqual(today.year, last_compliant_date.year)
-        self.assertEqual(today.month, last_compliant_date.month)
-        self.assertEqual(today.day, last_compliant_date.day)
+        last_valid_date = find_first_invalid_date(ent_dir=ent_dir, product_dir=product_dir)
+        self.assertEqual(today.year, last_valid_date.year)
+        self.assertEqual(today.month, last_valid_date.month)
+        self.assertEqual(today.day, last_valid_date.day)
 
     def test_entitled_products(self):
         cert = StubProductCertificate(StubProduct('product1'))
@@ -138,10 +138,10 @@ class FindLastCompliantTests(unittest.TestCase):
         ent_dir = StubCertificateDirectory([cert1, cert2])
 
         # Because we have an unentitled product, we should get back the current
-        # date as the last date of compliance:
+        # date as the last date of valid entitlements:
         today = datetime.now(GMT())
-        last_compliant_date = find_first_noncompliant_date(ent_dir=ent_dir, product_dir=product_dir)
-        self.assertEqual(2050, last_compliant_date.year)
+        last_valid_date = find_first_invalid_date(ent_dir=ent_dir, product_dir=product_dir)
+        self.assertEqual(2050, last_valid_date.year)
 
     def test_all_expired_entitlements(self):
         pass
@@ -196,7 +196,7 @@ class CertSorterTests(unittest.TestCase):
             self.sorter.expired_entitlement_certs, 'product3'))
         # Certificate in warning period should show up as expired, even though
         # they can technically still be used. We use the CertSorter to warn
-        # customer of compliance issues.
+        # customer of invalid entitlement issues.
         self.assertTrue(cert_list_has_product(
             self.sorter.expired_entitlement_certs, 'product4'))
 

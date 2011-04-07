@@ -82,7 +82,7 @@ class SystemFactsDialog(widgets.GladeWidget):
         else:
             self.last_update_label.set_text(_('No previous update'))
 
-        # make sure we get fresh facts, since compliance status could change
+        # make sure we get fresh facts, since entitlement validity status could         # change
         system_facts_dict = self.facts.find_facts()
 
         if self.consumer.uuid:

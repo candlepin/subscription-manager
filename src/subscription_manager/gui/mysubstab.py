@@ -78,7 +78,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         try:
             self.backend.uep.unbindBySerial(self.consumer.uuid, serial)
         except Exception, e:
-            handle_gui_exception(e, _("There was an error unsubsribing from %s with serial number %s" % (selection['subscription'],serial)))
+            handle_gui_exception(e, _("There was an error unsubsribing from %s with serial number %s" % (selection['subscription'],serial)), formatMsg=False)
 
         self.backend.certlib.update()
         self.update_subscriptions()
@@ -104,7 +104,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             entry = self._create_entry_map(cert)
             self.store.add_map(entry)
         dbus_iface = get_dbus_iface()
-        dbus_iface.check_compliance(reply_handler=self.noop_callback, error_handler=self.noop_callback)
+        dbus_iface.check_status(reply_handler=self.noop_callback, error_handler=self.noop_callback)
 
     def noop_callback(dummy=None,dummy2=None ):
         pass

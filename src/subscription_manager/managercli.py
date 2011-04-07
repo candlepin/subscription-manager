@@ -110,13 +110,14 @@ class CliCommand(object):
         self.proxy_hostname = None
         self.proxy_port = None
 
-    def _get_dbus_iface(self):
+    def _request_validity_check(self):
         bus = dbus.SystemBus()
-        compliance_obj = bus.get_object('com.redhat.SubscriptionManager',
-                          '/Compliance')
-        compliance_iface = dbus.Interface(compliance_obj,
-                            dbus_interface='com.redhat.SubscriptionManager.Compliance')
-        return compliance_iface
+        validity_obj = bus.get_object('com.redhat.SubscriptionManager',
+                          '/EntitlementStatus')
+        validity_iface = dbus.Interface(validity_obj,
+                            dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
+
+        validity_iface.check_status()
 
     def _add_common_options(self):
         """ Add options that apply to all sub-commands. """
@@ -434,9 +435,7 @@ class RegisterCommand(UserPassCommand):
         if self.options.consumerid:
             self.certlib.update()
 
-        #fire a check_compliance event
-        dbus_proxy_iface = self._get_dbus_iface()
-        dbus_proxy_iface.check_compliance()
+        self._request_validity_check()
 
 class UnRegisterCommand(CliCommand):
 
@@ -461,9 +460,7 @@ class UnRegisterCommand(CliCommand):
         except Exception, e:
             handle_exception("Unregister failed", e)
 
-        #fire a check_compliance event
-        dbus_proxy_iface = self._get_dbus_iface()
-        dbus_proxy_iface.check_compliance()
+        self._request_validity_check()
 
         print(_("System has been un-registered."))
 
@@ -567,8 +564,7 @@ class SubscribeCommand(CliCommand):
                 print 'Entitlement Certificate(s) update failed due to the following reasons:'
                 for e in result[1]:
                     print '\t-', ' '.join(str(e).split('-')[1:]).strip()
-            dbus_proxy_iface = self._get_dbus_iface()
-            dbus_proxy_iface.check_compliance()
+            self._request_validity_check()
 
         except Exception, e:
             handle_exception("Unable to subscribe: %s" % e, e)
@@ -616,9 +612,10 @@ class UnSubscribeCommand(CliCommand):
             systemExit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Unable to perform unsubscribe due to the following exception \n Error: %s") % e, e)
-        #it is okay to call this no matter what happens above, it's just a notification to perform a check
-        dbus_proxy_iface = self._get_dbus_iface()
-        dbus_proxy_iface.check_compliance()
+        
+        # it is okay to call this no matter what happens above, 
+        # it's just a notification to perform a check
+        self._request_validity_check()
 
 
 class FactsCommand(CliCommand):
