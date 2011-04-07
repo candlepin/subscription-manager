@@ -17,7 +17,7 @@ Red Hat provides content updates and support by issuing
 .I subscriptions
 for its products. These subscriptions are allocated to systems (machines); once a system is subscribed to content, it is 
 .I entitled
-to install and update that software product. IT administrators need to track these subscriptions and how they are assigned. This entitlement and subscription management is a compliance feature available for Red Hat platforms version 6.1 and later. 
+to install and update that software product. IT administrators need to track these subscriptions and how they are assigned. This entitlement and subscription management is a feature available for Red Hat platforms version 5.7 (and later) and version 6.1 (and later). 
 
 .PP
 For RHEL systems, content is delivered through the Red Hat Customer Portal. Subscriptions and systems are managed globally through the Red Hat entitlement service, which is integrated with the Customer Portal. Subscriptions are managed for the local system by using the Red Hat Subscription Manager tool. Subscription Manager is a local client which connects a system with the entitlement service. 
@@ -54,7 +54,7 @@ There is also a Subscription Manager GUI, which can be invoked simply by running
 from the command line.
 
 .PP
-Entitlement and subscription management is only available for RHEL 6.1 and later systems. Older systems should register to Red Hat Network Classic using the 
+Entitlement and subscription management is only available for RHEL 5.7/6.1 and later systems. Older systems should register to Red Hat Network Classic using the 
 .B rhn_register
 command.
 
@@ -315,7 +315,7 @@ cpu.vendor_id: GenuineIntel
 cpu.virtualization_type: full
 distribution.id: Santiago
 distribution.name: Red Hat Enterprise Linux Workstation
-distribution.version: 6.0
+distribution.version: 6.1
 ----
 
 .fi
@@ -350,14 +350,14 @@ has two major tasks:
 
 .PP
 .B subscription-manager 
-makes it easier for network administrators to maintain compliance with software subscriptions and updates by tracking and managing what machines are subscribed to and when those subscriptions expire or are exceeded.
+makes it easier for network administrators to maintain parity between software subscriptions and updates and their installed products by tracking and managing what machines are subscribed to and when those subscriptions expire or are exceeded.
 
 
 
 .SS REGISTERING AND UNREGISTERING MACHINES
 A machine is either 
 .I registered 
-to an entitlement and content service -- which makes all of the subscriptions available to the machine -- or it is not registered. Unregistered machines are necessarily out of compliance with software entitlements because there is no way to record that the subscriptions have been used or to renew them.
+to an entitlement and content service -- which makes all of the subscriptions available to the machine -- or it is not registered. Unregistered machines necessarily lack valid software entitlements because there is no way to record that the subscriptions have been used or to renew them.
 
 .PP
 Machines are usually registered to an entitlement service as part of their initial configuration, such as the firstboot or kickstart process. However, machines can be registered manually after they are configured, can be removed from a content service, or reregistered.
