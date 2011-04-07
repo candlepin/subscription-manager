@@ -133,8 +133,11 @@ class Backend(object):
             cert_file=cert_file,
             key_file=key_file)
 
-
-
+    def is_registered(self):
+        if self.admin_uep:
+            return True
+        return False
+    
     def create_admin_uep(self, username=None, password=None):
         self.admin_uep = self._create_uep(username=username, password=password)
 

@@ -16,7 +16,7 @@
 import gtk
 
 from datetime import datetime, timedelta
-from certlib import EntitlementDirectory, ProductDirectory, CertLib
+from certlib import EntitlementDirectory, ProductDirectory, CertLib, Disconnected
 from rhsm.certificate import GMT
 
 import messageWindow
@@ -75,12 +75,22 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             return
 
         serial = selection['serial']
-        try:
-            self.backend.uep.unbindBySerial(self.consumer.uuid, serial)
-        except Exception, e:
-            handle_gui_exception(e, _("There was an error unsubsribing from %s with serial number %s" % (selection['subscription'],serial)))
 
-        self.backend.certlib.update()
+        if self.backend.is_registered():
+            try:
+                self.backend.uep.unbindBySerial(self.consumer.uuid, serial)
+            except Exception, e:
+                handle_gui_exception(e, _("There was an error unsubsribing from %s with serial number %s" % (selection['subscription'],serial)), formatMsg=False)
+
+            try:
+                self.backend.certlib.update()
+            except Disconnected, e:
+                pass
+
+        else:
+            # unregistered, just delete the certs directly
+            self.backend.certlib.delete([serial])
+
         self.update_subscriptions()
 
     def unsubscribe_button_clicked(self, widget):
@@ -119,7 +129,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             'installed_text': str,
             'start_date': str,
             'expiration_date': str,
-            'serial': str,
+            'serial': long,
             'align': float,
             'background': str
         }
@@ -131,7 +141,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         """
         # Load the entitlement certificate for the selected row:
         serial = selection['serial']
-        cert = EntitlementDirectory().find(int(serial))
+        cert = EntitlementDirectory().find(long(serial))
         order = cert.getOrder()
         products = [(product.getName(), product.getHash())
                         for product in cert.getProducts()]

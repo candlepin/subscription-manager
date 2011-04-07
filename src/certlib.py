@@ -61,16 +61,7 @@ class CertLib:
         finally:
             lock.release()
 
-    def add(self, *bundles):
-        lock = self.lock
-        lock.acquire()
-        try:
-            action = AddAction()
-            return action.perform(bundles)
-        finally:
-            lock.release()
-
-    def delete(self, *serialNumbers):
+    def delete(self, serialNumbers):
         lock = self.lock
         lock.acquire()
         try:
@@ -90,32 +81,13 @@ class Action:
         keypem = bundle['key']
         crtpem = bundle['cert']
         key = Key(keypem)
-        cert = EntitlementCertificate(crtpem)
-        bogus = cert.bogus()
-        if bogus:
-            bogus.insert(0, _('Reasons(s):'))
-            raise Exception('\n - '.join(bogus))
-        return (key, cert)
 
-
-class AddAction(Action):
-
-    def perform(self, *bundles):
-        for bundle in bundles:
-            try:
-                key, cert = self.build(bundle)
-            except Exception, e:
-                log.exception(e)
-                log.error(
-                    'Bundle not loaded:\n%s\n%s',
-                    bundle,
-                    e)
         return self
 
 
 class DeleteAction(Action):
 
-    def perform(self, *serialNumbers):
+    def perform(self, serialNumbers):
         for sn in serialNumbers:
             cert = self.entdir.find(sn)
             if cert is None:
