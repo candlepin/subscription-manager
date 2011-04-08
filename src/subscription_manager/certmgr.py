@@ -16,11 +16,12 @@
 # in this software or its documentation.
 #
 
-from certlib import CertLib
-from certlib import ActionLock
-from certlib import ConsumerIdentity
-from repolib import RepoLib
-from factlib import FactLib
+import sys
+sys.path.append("/usr/share/rhsm")
+
+from subscription_manager.certlib import CertLib, ActionLock, ConsumerIdentity
+from subscription_manager.repolib import RepoLib
+from subscription_manager.factlib import FactLib
 
 import rhsm.connection as connection
 
