@@ -18,7 +18,7 @@ from datetime import datetime, timedelta
 
 from rhsm.certificate import GMT
 
-from subscription_manager.certlib import EntitlementDirectory, ProductDirectory, CertLib
+from subscription_manager.certlib import EntitlementDirectory, ProductDirectory, CertLib, Disconnected
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception,get_dbus_iface
@@ -75,12 +75,22 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             return
 
         serial = selection['serial']
-        try:
-            self.backend.uep.unbindBySerial(self.consumer.uuid, serial)
-        except Exception, e:
-            handle_gui_exception(e, _("There was an error unsubsribing from %s with serial number %s" % (selection['subscription'],serial)), formatMsg=False)
 
-        self.backend.certlib.update()
+        if self.backend.is_registered():
+            try:
+                self.backend.uep.unbindBySerial(self.consumer.uuid, serial)
+            except Exception, e:
+                handle_gui_exception(e, _("There was an error unsubsribing from %s with serial number %s" % (selection['subscription'],serial)), formatMsg=False)
+
+            try:
+                self.backend.certlib.update()
+            except Disconnected, e:
+                pass
+
+        else:
+            # unregistered, just delete the certs directly
+            self.backend.certlib.delete([serial])
+
         self.update_subscriptions()
 
     def unsubscribe_button_clicked(self, widget):
@@ -119,7 +129,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             'installed_text': str,
             'start_date': str,
             'expiration_date': str,
-            'serial': str,
+            'serial': long,
             'align': float,
             'background': str
         }
@@ -131,7 +141,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         """
         # Load the entitlement certificate for the selected row:
         serial = selection['serial']
-        cert = EntitlementDirectory().find(int(serial))
+        cert = EntitlementDirectory().find(long(serial))
         order = cert.getOrder()
         products = [(product.getName(), product.getHash())
                         for product in cert.getProducts()]
