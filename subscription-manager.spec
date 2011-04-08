@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.5
+Version: 0.95.5.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -194,6 +194,9 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Fri Apr 08 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 694877: Fix wrong module imports in yum plugins and wrong path for certmgr.py
+  (alikins@redhat.com)
 * Wed Apr 06 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 694154: remove extraneous slashes in symlink (cduryee@redhat.com)
 - 693896: subscription manager does not always reload dbus scripts
