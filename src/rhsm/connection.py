@@ -104,6 +104,18 @@ class RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
         else:
             httpslib.HTTPSConnection.endheaders(self)
 
+    def _get_connect_msg(self):
+        """ Return an HTTP CONNECT request to send to the proxy. """
+        port = int(self._real_port)
+        msg = "CONNECT %s:%d HTTP/1.1\r\n" % (self._real_host, port)
+        msg = msg + "Host: %s:%d\r\n" % (self._real_host, port)
+        if self._proxy_UA:
+            msg = msg + "%s: %s\r\n" % (self._UA_HEADER, self._proxy_UA)
+        if self._proxy_auth:
+            msg = msg + "%s: %s\r\n" % (self._AUTH_HEADER, self._proxy_auth)
+        msg = msg + "\r\n"
+        return msg
+
 
 def _get_locale():
     l = None
