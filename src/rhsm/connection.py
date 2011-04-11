@@ -89,6 +89,18 @@ class RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
             httpslib.HTTPSConnection.endheaders(self)
     #        httpslib.HTTPSConnection.endheaders(self, body)
 
+    def _get_connect_msg(self):
+        """ Return an HTTP CONNECT request to send to the proxy. """
+        port = int(self._real_port)
+        msg = "CONNECT %s:%d HTTP/1.1\r\n" % (self._real_host, port)
+        msg = msg + "Host: %s:%d\r\n" % (self._real_host, port)
+        if self._proxy_UA:
+            msg = msg + "%s: %s\r\n" % (self._UA_HEADER, self._proxy_UA)
+        if self._proxy_auth:
+            msg = msg + "%s: %s\r\n" % (self._AUTH_HEADER, self._proxy_auth)
+        msg = msg + "\r\n"
+        return msg
+
 
 
 class Restlib(object):
@@ -296,7 +308,6 @@ class UEPConnection:
                     "ca = %s, insecure = %s" %
                     (self.key_file, self.cert_file, self.ca_cert_dir,
                         self.insecure))
-
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
 
