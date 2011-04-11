@@ -82,7 +82,14 @@ class Action:
         crtpem = bundle['cert']
         key = Key(keypem)
 
-        return self
+        cert = EntitlementCertificate(crtpem)
+        bogus = cert.bogus()
+        if bogus:
+            bogus.insert(0, _('Reasons(s):'))
+            raise Exception('\n - '.join(bogus))
+        return (key, cert)
+
+
 
 
 class DeleteAction(Action):
