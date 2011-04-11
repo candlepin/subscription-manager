@@ -13,6 +13,7 @@ Requires:  python-iniparse
 Requires:  PyXML
 Requires:  virt-what
 Requires:  python-rhsm
+Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 
 # There's no dmi to read on these arches, so don't pull in this dep.
@@ -21,8 +22,10 @@ Requires:  python-dmidecode
 %endif
 
 Requires(post): chkconfig
+Requires(post): dbus
 Requires(preun): chkconfig
 Requires(preun): initscripts
+Requires(preun): dbus
 BuildRequires: python-devel
 BuildRequires: gettext
 BuildRequires: intltool
