@@ -72,7 +72,7 @@ install-files: dbus-service-install compile-po desktop-files
 	install -d ${PREFIX}/var/run/rhsm
 	install -d ${PREFIX}/var/lib/rhsm/facts
 	install -d ${PREFIX}/usr/bin
-	install -d ${PREFIX}/etc/init.d
+	install -d ${PREFIX}/etc/rc.d/init.d
 	install -d ${PREFIX}/usr/share/icons/hicolor/scalable/apps
 	install -d ${PREFIX}/usr/share/rhn/up2date_client/firstboot/
 	if [ ${RHELVERSION} = 5 ]; then install -d ${PREFIX}/usr/share/firstboot/modules; fi
@@ -91,7 +91,7 @@ install-files: dbus-service-install compile-po desktop-files
 	install src/subscription-manager ${PREFIX}/usr/sbin
 	install src/subscription-manager-gui ${PREFIX}/usr/sbin
 	install bin/* ${PREFIX}/usr/bin
-	install src/rhsmcertd.init.d ${PREFIX}/etc/init.d/rhsmcertd
+	install src/rhsmcertd.init.d ${PREFIX}/etc/rc.d/init.d/rhsmcertd
 	install -m644 ${SRC_DIR}/gui/firstboot/${RHELVERSION}/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot
 	if [ ${RHELVERSION} = 5 ]; then ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_login.py ${PREFIX}/usr/share/firstboot/modules/; fi
 	if [ ${RHELVERSION} = 5 ]; then ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_subscriptions.py ${PREFIX}/usr/share/firstboot/modules/; fi
