@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.6
+Version: 0.95.5.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -197,6 +197,11 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Mon Apr 11 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 695367: call to dbus-send fails during upgrades on selinux-enabled machines
+  (cduryee@redhat.com)
+- 670798: put initscript in /etc/rc.d/init.d (jbowes@redhat.com)
+
 * Fri Apr 08 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 694877: Fix wrong module imports in yum plugins and wrong path for certmgr.py
   (alikins@redhat.com)
