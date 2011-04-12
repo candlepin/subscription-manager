@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.6
+Version: 0.95.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -183,6 +183,22 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Apr 12 2011 Bryan Kearney <bkearney@redhat.com> 0.95.7-1
+- Resolves: #691784, #688419, #691480, #691536, #691788
+- 691784: fix entitlement failure that throws sequence error
+  (alikins@redhat.com)
+- 688419: Latest japanese strings (bkearney@redhat.com)
+- 691784: Fix a bug when bare strings were passed to handle_gui_exception
+  (alikins@redhat.com)
+- 691784: Fix handling of unsubscribing imported certs while unregistered
+  (alikins@redhat.com)
+- 691480: syslog non-compliance on the proper status code (jbowes@redhat.com)
+- 691480: update syslog message for proper cli command name (jbowes@redhat.com)
+- 691536: remove 'compliance' from a11y string, and remove useless glade string
+  (jbowes@redhat.com)
+- 691788: Check if entitlement cert is valid before allowing manual import.
+  (dgoodwin@redhat.com)
+
 * Tue Apr 05 2011 Bryan Kearney <bkearney@redhat.com> 0.95.6-1
 - Resolves: #691137,#691536,#684647,#688592
 - Add the latest l10n strings (jbowes@redhat.com)
