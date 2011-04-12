@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-05 12:59-0300\n"
-"PO-Revision-Date: 2011-04-01 15:33+0900\n"
+"POT-Creation-Date: 2011-03-29 18:47-0300\n"
+"PO-Revision-Date: 2011-04-11 10:38+0900\n"
 "Last-Translator: Kiyoto Hashida <khashida@redhat.com>\n"
 "Language-Team: Japanese <jp@li.org>\n"
 "Language: ja-JP\n"
@@ -18,7 +18,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -184,8 +186,8 @@ msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
 msgstr ""
-"ネットワークエラーでサーバーに接続できません。詳細には /var/log/rhsm/rhsm."
-"log をご覧下さい"
+"ネットワークエラーでサーバーに接続できません。詳細には /var/log/rhsm/rhsm.log "
+"をご覧下さい"
 
 #. NOTE: yes this looks a lot like the socket error, but I think these
 #. were actually intended to display slightly different messages:
@@ -232,10 +234,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "基本認証を持つ http プロキシのパスワード"
 
 #: ../src/managercli.py:137
-msgid ""
-"Consumer not registered. Please register using --username and --password"
-msgstr ""
-"コンシューマは未登録です。--username 及び --password を使用して登録して下さい"
+msgid "Consumer not registered. Please register using --username and --password"
+msgstr "コンシューマは未登録です。--username 及び --password を使用して登録して下さい"
 
 #: ../src/managercli.py:192
 msgid "Consumer certificates corrupted. Please reregister."
@@ -295,8 +295,7 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "証明書の再生成を強制（ユーザー名とパスワードが必要）"
 
 #: ../src/managercli.py:306
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 "コンシューマ識別子は存在しないか、又は破損しています。register --help を試し"
 "て下さい"
@@ -338,9 +337,7 @@ msgstr "既存のコンシューマに対して登録"
 msgid ""
 "automatically subscribe this system to                                     "
 "compatible subscriptions."
-msgstr ""
-"このシステムを自動的に互換性のある                                     サブス"
-"クリプションに登録"
+msgstr "このシステムを自動的に互換性のあるサブスクリプションに登録"
 
 #: ../src/managercli.py:366
 msgid "register the system even if it is already registered"
@@ -382,8 +379,7 @@ msgstr "登録済みユーザーを指定製品に対してアクティベート
 
 #: ../src/managercli.py:478
 msgid "optional email address to notify when token activation is complete."
-msgstr ""
-"トークンアクティベーション終了時に通知するオプションの電子メールアドレス"
+msgstr "トークンアクティベーション終了時に通知するオプションの電子メールアドレス"
 
 #: ../src/managercli.py:481
 msgid ""
@@ -456,8 +452,7 @@ msgstr "エラー: --list 又は --update が必要です。facts --help を試�
 
 #: ../src/managercli.py:667
 msgid "list available or consumer subscriptions for registered user"
-msgstr ""
-"登録済みユーザーの利用可能な、又はコンシューマのサブスクリプションを一覧表示"
+msgstr "登録済みユーザーの利用可能な、又はコンシューマのサブスクリプションを一覧表示"
 
 #: ../src/managercli.py:672
 msgid "installed"
@@ -468,8 +463,7 @@ msgid "available"
 msgstr "利用可能"
 
 #: ../src/managercli.py:676
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
+msgid "date to search on, defaults to today's date, only used with --available "
 msgstr "検索した日の日付。デフォルトは今日の日付です。--available との併用のみ"
 
 #: ../src/managercli.py:679
@@ -802,8 +796,8 @@ msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
 msgstr ""
-"サブスクリプションアシスタントの表示でエラーです。詳細情報には /var/log/rhsm/"
-"rhsm.log をご覧下さい。"
+"サブスクリプションアシスタントの表示でエラーです。詳細情報には "
+"/var/log/rhsm/rhsm.log をご覧下さい。"
 
 #: ../src/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -930,10 +924,9 @@ msgstr "証明書"
 msgid "Future Subscription"
 msgstr "将来のサブスクリプション"
 
-#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:111
-#: ../src/gui/installedtab.py:112
-msgid "Missing"
-msgstr "ありません"
+#: ../src/gui/installedtab.py:96 ../src/gui/installedtab.py:112
+msgid "Never Subscribed"
+msgstr "サブスクリプション履歴無し"
 
 #: ../src/gui/installedtab.py:99
 msgid "Invalid"
@@ -953,6 +946,10 @@ msgstr "有効"
 msgid "Covered by contract %s through %s"
 msgstr "コントラクト %s により %s まで有効です"
 
+#: ../src/gui/installedtab.py:111
+msgid "Missing"
+msgstr "ありません"
+
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
 msgstr "自分のインストール済みソフトウェア"
@@ -969,16 +966,6 @@ msgstr "<b>製品サブスクリプションの詳細</b>"
 msgid "<b>Product:</b>"
 msgstr "<b>製品:</b>"
 
-#: ../src/gui/data/installed.glade.h:4 ../src/gui/data/subdetails.glade.h:8
-#: ../src/gui/data/contract_selection.glade.h:2
-#, fuzzy
-msgid "<b>Subscription:</b>"
-msgstr ""
-"#-#-#-#-#  ja.po (ja)  #-#-#-#-#\n"
-"<b>サブスクリプション:</b>\n"
-"#-#-#-#-#  ja.po (ja)  #-#-#-#-#\n"
-"<b>サブスクリプション:</b> はい"
-
 #: ../src/gui/data/installed.glade.h:5 ../src/gui/data/mainwindow.glade.h:4
 msgid "Certificate Status"
 msgstr "証明書のステータス"
@@ -993,68 +980,68 @@ msgid "Next Update:"
 msgstr "次の更新:"
 
 #: ../src/gui/data/networkConfig.glade.h:1
-msgid "<b>HTTP Proxy</b>"
-msgstr "<b>HTTP プロキシ</b> はい"
-
-#: ../src/gui/data/networkConfig.glade.h:2
-msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-msgstr "<small><b>例:</b> squid.example.com:3128</small> はい"
-
-#: ../src/gui/data/networkConfig.glade.h:3
 msgid "Advanced Network Configuration"
 msgstr "高度なネットワーク設定"
 
-#: ../src/gui/data/networkConfig.glade.h:4
+#: ../src/gui/data/networkConfig.glade.h:2
 msgid "Authentication Checkbox"
 msgstr "認証のチェックボックス"
 
-#: ../src/gui/data/networkConfig.glade.h:5
+#: ../src/gui/data/networkConfig.glade.h:3
 msgid "Close Button"
 msgstr "閉じるボタン"
 
-#: ../src/gui/data/networkConfig.glade.h:6
+#: ../src/gui/data/networkConfig.glade.h:4
 msgid "Enter in the format hostname(:port)"
 msgstr "形式に合うホスト名の記入(:ポート)"
 
-#: ../src/gui/data/networkConfig.glade.h:7
-msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-msgstr "Red Hat Network に HTTP プロキシ経由で接続したいです。 はい"
-
-#: ../src/gui/data/networkConfig.glade.h:8
+#: ../src/gui/data/networkConfig.glade.h:5
 msgid "Password Text"
 msgstr "パスワードテキスト"
 
-#: ../src/gui/data/networkConfig.glade.h:9
+#: ../src/gui/data/networkConfig.glade.h:6
 msgid "Proxy Checkbox"
 msgstr "プロキシのチェックボックス"
 
-#: ../src/gui/data/networkConfig.glade.h:10
+#: ../src/gui/data/networkConfig.glade.h:7
 msgid "Proxy Location Text"
 msgstr "プロキシの場所のテキスト"
 
-#: ../src/gui/data/networkConfig.glade.h:11
-msgid "Proxy P_assword:"
-msgstr "プロキシ パスワード(_A): はい"
-
-#: ../src/gui/data/networkConfig.glade.h:12
-msgid "Proxy _Username:"
-msgstr "プロキシ ユーザー名(_U): はい"
-
-#: ../src/gui/data/networkConfig.glade.h:13
-msgid "Use Au_thentication with HTTP Proxy:"
-msgstr "HTTP プロキシで認証を使用(_T) はい"
-
-#: ../src/gui/data/networkConfig.glade.h:14
+#: ../src/gui/data/networkConfig.glade.h:8
 msgid "Username Text"
 msgstr "ユーザー名テキスト"
 
+#: ../src/gui/data/networkConfig.glade.h:9
+msgid "<b>HTTP Proxy</b>"
+msgstr "<b>HTTP プロキシ</b> "
+
+#: ../src/gui/data/networkConfig.glade.h:10
+msgid "<small><b>Example:</b> squid.example.com:3128</small>"
+msgstr "<small><b>例:</b> squid.example.com:3128</small> "
+
+#: ../src/gui/data/networkConfig.glade.h:11
+msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
+msgstr "Red Hat Network に HTTP プロキシ経由で接続したいです。 "
+
+#: ../src/gui/data/networkConfig.glade.h:12
+msgid "Proxy P_assword:"
+msgstr "プロキシ パスワード(_A): "
+
+#: ../src/gui/data/networkConfig.glade.h:13
+msgid "Proxy _Username:"
+msgstr "プロキシ ユーザー名(_U): "
+
+#: ../src/gui/data/networkConfig.glade.h:14
+msgid "Use Au_thentication with HTTP Proxy:"
+msgstr "HTTP プロキシで認証を使用(_T) "
+
 #: ../src/gui/data/networkConfig.glade.h:15
 msgid "_Close"
-msgstr "閉じる(_C) はい"
+msgstr "閉じる(_C) "
 
 #: ../src/gui/data/networkConfig.glade.h:16
 msgid "_Proxy Location:"
-msgstr "プロキシの場所(_P) :はい"
+msgstr "プロキシの場所(_P) :"
 
 #: ../src/gui/data/compliance.glade.h:1
 msgid "A different date:"
@@ -1067,16 +1054,6 @@ msgstr "無効な製品の一覧"
 #: ../src/gui/data/compliance.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
 msgstr "以下の期日にエンタイトルメント証明書が無効な製品を表示:"
-
-#: ../src/gui/data/compliance.glade.h:4 ../src/gui/data/allsubs.glade.h:11
-#: ../src/gui/data/contract_selection.glade.h:5
-#, fuzzy
-msgid "Subscribe"
-msgstr ""
-"#-#-#-#-#  ja.po (ja)  #-#-#-#-#\n"
-"サブスクライブ\n"
-"#-#-#-#-#  ja.po (ja)  #-#-#-#-#\n"
-"サブスクライブ はい"
 
 #: ../src/gui/data/compliance.glade.h:5
 msgid "Subscription Action Area"
@@ -1178,58 +1155,58 @@ msgstr "<b>インストール済み製品にマッチするサブスクリプシ
 msgid "Add Subscriptions"
 msgstr "サブスクリプションの追加"
 
-#: ../src/gui/data/rhsm.glade.h:6 ../src/gui/data/importsub.glade.h:1
-msgid "Certificate _Location:"
-msgstr "証明書の場所(_L) : はい"
-
-#: ../src/gui/data/rhsm.glade.h:7
+#: ../src/gui/data/rhsm.glade.h:6
 msgid "Do not register"
 msgstr "登録しない"
 
-#: ../src/gui/data/rhsm.glade.h:8 ../src/gui/data/mainwindow.glade.h:5
-#: ../src/gui/data/importsub.glade.h:3
+#: ../src/gui/data/rhsm.glade.h:7 ../src/gui/data/mainwindow.glade.h:5
+#: ../src/gui/data/importsub.glade.h:1
 msgid "Import Certificate"
 msgstr "証明書のインポート"
 
-#: ../src/gui/data/rhsm.glade.h:9
+#: ../src/gui/data/rhsm.glade.h:8
 msgid "Not Compatible"
 msgstr "互換性無し"
 
-#: ../src/gui/data/rhsm.glade.h:10 ../src/gui/data/importsub.glade.h:4
+#: ../src/gui/data/rhsm.glade.h:9 ../src/gui/data/importsub.glade.h:2
 msgid "Provide a Subscription Certificate"
 msgstr "サブスクリプション証明書の提供"
 
-#: ../src/gui/data/rhsm.glade.h:11
+#: ../src/gui/data/rhsm.glade.h:10
 msgid "Register with Red Hat Entitlement Service"
 msgstr "Red Hat エンタイトルメントサービスに登録"
 
-#: ../src/gui/data/rhsm.glade.h:12
+#: ../src/gui/data/rhsm.glade.h:11
 msgid "Register with Red Hat Network"
 msgstr "Red Hat Network に登録"
 
-#: ../src/gui/data/rhsm.glade.h:13
+#: ../src/gui/data/rhsm.glade.h:12
 msgid "Register with Red Hat Network Satellite"
 msgstr "Red Hat Network Satellite に登録"
 
-#: ../src/gui/data/rhsm.glade.h:14
+#: ../src/gui/data/rhsm.glade.h:13
 msgid "Suggested"
 msgstr "提案"
 
+#: ../src/gui/data/rhsm.glade.h:14
+msgid "Update Subscriptions"
+msgstr "サブスクリプションの更新"
+
 #: ../src/gui/data/rhsm.glade.h:15
+msgid "update_subscriptions_dialog\n"
+msgstr "update_subscriptions_dialog\n"
+
+#: ../src/gui/data/rhsm.glade.h:17 ../src/gui/data/importsub.glade.h:3
+msgid "Certificate _Location:"
+msgstr "証明書の場所(_L) : "
+
+#: ../src/gui/data/rhsm.glade.h:18
 msgid ""
 "To add a subscription, choose a certificate to import to your subscription "
 "certificate directory."
 msgstr ""
-"サブスクリプションを追加するには、サブスクリプション証明書ディレクトリにイン"
-"ポートする 証明書を選択します。 はい"
-
-#: ../src/gui/data/rhsm.glade.h:16
-msgid "Update Subscriptions"
-msgstr "サブスクリプションの更新"
-
-#: ../src/gui/data/rhsm.glade.h:17
-msgid "update_subscriptions_dialog\n"
-msgstr "update_subscriptions_dialog\n"
+"サブスクリプションを追加するには、サブスクリプション証明書ディレクトリにインポートする "
+"証明書を選択します。 "
 
 #: ../src/gui/data/activate.glade.h:1
 msgid "Activate"
@@ -1373,10 +1350,9 @@ msgstr "サブスクリプションアカウントの詳細を記入"
 msgid "Manage Your Product Subscriptions"
 msgstr "使用製品のサブスクリプションの管理"
 
-#: ../src/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
-msgstr "サブスクリプション証明書ディレクトリにインポートする証明書の選択 はい"
+#: ../src/gui/data/importsub.glade.h:4
+msgid "Choose a certificate to import to your subscription certificate directory."
+msgstr "サブスクリプション証明書ディレクトリにインポートする証明書の選択 "
 
 #: ../src/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
@@ -1443,10 +1419,6 @@ msgid "<b>Please enter the following for this system:</b>"
 msgstr "<b>このシステムに関して以下を記入して下さい:</b>"
 
 #: ../src/gui/data/registration.glade.h:2
-msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr "<b>Red Hat Network アカウントの情報を記入して下さい:</b> はい"
-
-#: ../src/gui/data/registration.glade.h:3
 msgid ""
 "<small>Tip: Forgot your login or password? Look it up at\n"
 "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
@@ -1457,45 +1429,49 @@ msgstr ""
 "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
 "www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
 
-#: ../src/gui/data/registration.glade.h:5
+#: ../src/gui/data/registration.glade.h:4
 msgid "A unique label for this system"
 msgstr "このシステム用の独自のラベル"
 
-#: ../src/gui/data/registration.glade.h:6
-msgid "Password:"
-msgstr "パスワード: はい"
-
-#: ../src/gui/data/registration.glade.h:7
-msgid "Red Hat Login:"
-msgstr "Red Hat ログイン: はい"
-
-#: ../src/gui/data/registration.glade.h:8
+#: ../src/gui/data/registration.glade.h:5
 msgid "Register"
 msgstr "登録"
 
-#: ../src/gui/data/registration.glade.h:9
+#: ../src/gui/data/registration.glade.h:6
 msgid "Select the most appropriate subscriptions for this system"
 msgstr "このシステムに最適なサブスクリプションを選択してください"
 
-#: ../src/gui/data/registration.glade.h:10
+#: ../src/gui/data/registration.glade.h:7
 msgid "System Name:"
 msgstr "システム名:"
 
-#: ../src/gui/data/registration.glade.h:11
+#: ../src/gui/data/registration.glade.h:8
 msgid "System Registration"
 msgstr "システム登録"
 
-#: ../src/gui/data/registration.glade.h:12
+#: ../src/gui/data/registration.glade.h:9
 msgid "register_button"
 msgstr "登録ボタン(_B)"
 
-#: ../src/gui/data/registration.glade.h:13
+#: ../src/gui/data/registration.glade.h:10
 msgid "register_dialog_main_vbox"
 msgstr "register_dialog_main_vbox"
 
-#: ../src/gui/data/registration.glade.h:14
+#: ../src/gui/data/registration.glade.h:11
 msgid "registration_dialog_action_area\n"
 msgstr "registration_dialog_action_area\n"
+
+#: ../src/gui/data/registration.glade.h:13
+msgid "<b>Please enter your Red Hat Network account information:</b>"
+msgstr "<b>Red Hat Network アカウントの情報を記入して下さい:</b> "
+
+#: ../src/gui/data/registration.glade.h:14
+msgid "Password:"
+msgstr "パスワード: "
+
+#: ../src/gui/data/registration.glade.h:15
+msgid "Red Hat Login:"
+msgstr "Red Hat ログイン: "
 
 #: ../src/gui/data/progress.glade.h:1
 msgid "Progress Dialog"
@@ -1503,15 +1479,23 @@ msgstr "進捗のダイアログ"
 
 #: ../src/gui/data/contract_selection.glade.h:1
 msgid "<b>Choose the specific contract to use:</b>"
-msgstr "<b>使用する特定コントラクトの選択:</b> はい"
+msgstr "<b>使用する特定コントラクトの選択:</b> "
+
+#: ../src/gui/data/contract_selection.glade.h:2
+msgid "<b>Subscription:</b>"
+msgstr "<b>サブスクリプション:</b> "
 
 #: ../src/gui/data/contract_selection.glade.h:3
 msgid "<b>Total Contracts:</b>"
-msgstr "<b>コントラクト合計:</b> はい"
+msgstr "<b>コントラクト合計:</b> "
 
 #: ../src/gui/data/contract_selection.glade.h:4
 msgid "Contract Selection"
-msgstr "コントラクトの選択 はい"
+msgstr "コントラクトの選択 "
+
+#: ../src/gui/data/contract_selection.glade.h:5
+msgid "Subscribe"
+msgstr "サブスクライブ "
 
 #: ../src/compliance/rhsm_compliance_icon.c:43
 msgid "How often to check for validity (in seconds)"
@@ -1532,8 +1516,7 @@ msgstr "無効の、又は存在しないエンタイトルメント証明書"
 
 #: ../src/compliance/rhsm_compliance_icon.c:172
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr ""
-"このシステムには１つ以上の有効なエンタイトルメント証明書が欠如しています。"
+msgstr "このシステムには１つ以上の有効なエンタイトルメント証明書が欠如しています。"
 
 #: ../src/compliance/rhsm_compliance_icon.c:176
 msgid "Some of the system's subscriptions are about to expire"
@@ -1583,5 +1566,3 @@ msgstr "Red Hat サブスクリプション有効性アプレット"
 msgid "Subscription Validity Applet"
 msgstr "サブスクリプション有効性アプレット"
 
-#~ msgid "Never Subscribed"
-#~ msgstr "サブスクリプション履歴無し"
