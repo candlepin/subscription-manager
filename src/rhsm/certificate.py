@@ -342,8 +342,6 @@ class ProductCertificate(RedhatCertificate):
 
     def bogus(self):
         bogus = RedhatCertificate.bogus(self)
-        if self.getProduct() is None:
-            log.warn('No product information in certificate: %s' % self.serialNumber())
         return bogus
 
     def __str__(self):
