@@ -63,9 +63,9 @@ def handle_gui_exception(e, msg, formatMsg=True, logMsg=None):
             else:
                 message = linkify(e.msg)
         except:
-     
-       message = msg
-       errorWindow(message)
+            message = msg
+
+        errorWindow(message)
     elif isinstance(e, connection.BadCertificateException):
         errorWindow(_("Bad CA certificate: %s" % e.cert_path))
     else:
