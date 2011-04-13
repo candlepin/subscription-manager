@@ -57,12 +57,15 @@ def handle_gui_exception(e, msg, formatMsg=True, logMsg=None):
         # This is what happens when there's an issue with the server on the other side of the wire
         errorWindow(_("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."))
     elif isinstance(e, connection.RestlibException):
-        if formatMsg:
-            message = msg % linkify(e.msg)
-        else:
-            message = linkify(e.msg)
-
-        errorWindow(message)
+        try:
+            if formatMsg:
+                message = msg % linkify(e.msg)
+            else:
+                message = linkify(e.msg)
+        except:
+     
+       message = msg
+       errorWindow(message)
     elif isinstance(e, connection.BadCertificateException):
         errorWindow(_("Bad CA certificate: %s" % e.cert_path))
     else:
@@ -88,6 +91,7 @@ def linkify(msg):
         url = mo.group(0)
         return '<a href="%s">%s</a>' % (url, url)
 
+    
     return url_regex.sub(add_markup, msg)
 
 
