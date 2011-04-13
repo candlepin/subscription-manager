@@ -146,12 +146,17 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 text=self.get_filter_text())
 
         for entry in merged_pools.values():
+            if entry.quantity < 0:
+                available = _('unlimited')
+            else:
+                available = entry.quantity - entry.consumed
+
             self.store.add_map({
                 'product_name': entry.product_name,
                 'product_name_formatted': \
                         apply_highlight(entry.product_name,
                             self.get_filter_text()),
-                'available': entry.quantity - entry.consumed,
+                'available': available,
                 'product_id': entry.product_id,
                 'pool_id': entry.pools[0]['id'], # not displayed, just for lookup later
                 'merged_pools': entry, # likewise not displayed, for subscription
