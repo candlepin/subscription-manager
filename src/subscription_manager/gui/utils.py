@@ -21,6 +21,7 @@ import gobject
 import datetime
 import time
 import dbus
+import gtk
 
 import gettext
 _ = gettext.gettext
@@ -29,6 +30,13 @@ import rhsm.connection as connection
 from subscription_manager.gui import messageWindow
 
 log = logging.getLogger('rhsm-app.' + __name__)
+
+MIN_GTK_MAJOR=2
+# we need gtk 2.18+ to do the right markup in likify
+MIN_GTK_MINOR=18
+MIN_GTK_MICRO=0
+
+
 
 def handle_gui_exception(e, msg, formatMsg=True, logMsg=None):
     """
@@ -87,6 +95,11 @@ def linkify(msg):
                               # http (non whitespace or . or 
                               #  ? or () or - or / or ;
     url_regex = re.compile("""https?://[\w\.\?\(\)\-\/]*""")
+  
+    if gtk.check_version(MIN_GTK_MAJOR, MIN_GTK_MINOR, MIN_GTK_MICRO):
+    	return msg
+    # lazy regex; should be good enough.
+    url_regex = re.compile("https?://\S*")
 
     def add_markup(mo):
         url = mo.group(0)
