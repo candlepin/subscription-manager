@@ -66,7 +66,12 @@ def handle_gui_exception(e, msg, formatMsg=True, logMsg=None):
     elif isinstance(e, connection.BadCertificateException):
         errorWindow(_("Bad CA certificate: %s" % e.cert_path))
     else:
-        errorWindow(msg)
+        #catch-all, try to interpolate and if it doesn't work out, just display the message
+        try:
+            interpolatedStr = msg % e
+            errorWindow(interpolatedStr)
+        except:
+            errorWindow(msg)
 
 def errorWindow(message):
     messageWindow.ErrorDialog(messageWindow.wrap_text(message))
