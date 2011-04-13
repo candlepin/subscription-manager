@@ -60,7 +60,7 @@ def handle_gui_exception(e, msg, formatMsg=True, logMsg=None):
         errorWindow(_("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."))
     elif isinstance(e, connection.RestlibException):
         if formatMsg:
-            message = linkify(msg % linkify(e.msg))
+            message = msg % linkify(e.msg)
         else:
             message = linkify(e.msg)
 
