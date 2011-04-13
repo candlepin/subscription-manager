@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.7
+Version: 0.95.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -183,6 +183,9 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Apr 13 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 696021: fix regression in error message formatting (jbowes@redhat.com)
+
 * Tue Apr 12 2011 Bryan Kearney <bkearney@redhat.com> 0.95.7-1
 - Resolves: #691784, #688419, #691480, #691536, #691788
 - 691784: fix entitlement failure that throws sequence error
