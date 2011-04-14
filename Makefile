@@ -76,7 +76,6 @@ install-files: dbus-service-install compile-po desktop-files
 	install -d ${PREFIX}/usr/share/icons/hicolor/scalable/apps
 	install -d ${PREFIX}/usr/share/rhn/up2date_client/firstboot/
 	if [ ${RHELVERSION} = 5 ]; then install -d ${PREFIX}/usr/share/firstboot/modules; fi
-	
 
 	cp -R po/build/* ${PREFIX}/${INSTALL_DIR}/locale/
 
@@ -102,11 +101,21 @@ install-files: dbus-service-install compile-po desktop-files
 		${PREFIX}/etc/cron.daily/rhsmd
 	install -m 644 etc-conf/subscription-manager.desktop \
 		${PREFIX}/${INSTALL_DIR}/applications	
+
 	ln -sf /usr/bin/consolehelper ${PREFIX}/usr/bin/subscription-manager-gui
+	ln -sf /usr/bin/consolehelper ${PREFIX}/usr/bin/subscription-manager
+
 	install -m 644 etc-conf/subscription-manager-gui.pam \
 		${PREFIX}/etc/pam.d/subscription-manager-gui
 	install -m 644 etc-conf/subscription-manager-gui.console \
 		${PREFIX}/etc/security/console.apps/subscription-manager-gui
+
+	install -m 644 etc-conf/subscription-manager.pam \
+		${PREFIX}/etc/pam.d/subscription-manager
+	install -m 644 etc-conf/subscription-manager.console \
+		${PREFIX}/etc/security/console.apps/subscription-manager
+
+
 
 check:
 	nosetests
