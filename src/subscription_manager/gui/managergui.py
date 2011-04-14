@@ -435,6 +435,11 @@ class RegisterScreen:
         self.passwd = registration_xml.get_widget("account_password")
         self.consumer_name = registration_xml.get_widget("consumer_name")
 
+        register_tip_label = registration_xml.get_widget("forgotInfoHosted1")
+        tip_label = register_tip_label.get_label()
+        new_tip_label = linkify(tip_label)
+        register_tip_label.set_label(new_tip_label)
+
     def show(self):
         self.registerWin.present()
 

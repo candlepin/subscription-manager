@@ -81,8 +81,9 @@ def linkify(msg):
     Parse a string for any urls and wrap them in a hrefs, for use in a
     gtklabel.
     """
-    # lazy regex; should be good enough.
-    url_regex = re.compile("https?://\S*")
+                              # http (non whitespace or . or 
+                              #  ? or () or - or / or ;
+    url_regex = re.compile("""https?://[\w\.\?\(\)\-\/]*""")
 
     def add_markup(mo):
         url = mo.group(0)
