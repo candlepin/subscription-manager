@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy project-wide -->
@@ -92,8 +92,10 @@
                             <property name="yalign">0</property>
                             <property name="xpad">1</property>
                             <property name="ypad">2</property>
-                            <property name="label" translatable="yes">&lt;small&gt;Tip: Forgot your login or password? Look it up at
-&lt;a href="https://www.redhat.com/wapps/sso/rhn/lostPassword.html"&gt;https://www.redhat.com/wapps/sso/rhn/lostPassword.html&lt;/a&gt;&lt;/small&gt;</property>
+                            <property name="label" translatable="yes">&lt;small&gt;
+Tip: Forgot your login or password? Look it up at
+https://www.redhat.com/wapps/sso/rhn/lostPassword.html
+&lt;/small&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="wrap">True</property>
                             <accessibility>
@@ -121,7 +123,7 @@
                       <widget class="GtkEntry" id="account_login">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
+                        <property name="invisible_char">&#x25CF;</property>
                         <accessibility>
                           <atkproperty name="AtkObject::accessible-name">account_login</atkproperty>
                         </accessibility>
@@ -137,7 +139,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="visibility">False</property>
-                        <property name="invisible_char">●</property>
+                        <property name="invisible_char">&#x25CF;</property>
                         <accessibility>
                           <atkproperty name="AtkObject::accessible-name">account_password</atkproperty>
                         </accessibility>
@@ -242,7 +244,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip" translatable="yes">A unique label for this system</property>
-                        <property name="invisible_char">●</property>
+                        <property name="invisible_char">&#x25CF;</property>
                         <accessibility>
                           <atkproperty name="AtkObject::accessible-name">consumer_name</atkproperty>
                         </accessibility>
@@ -308,7 +310,7 @@
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name">cancel_button</atkproperty>
                 </accessibility>
-                <signal name="clicked" handler="on_register_cancel_button_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_register_cancel_button_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -327,7 +329,7 @@
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">register_button</atkproperty>
                   <atkproperty name="AtkObject::accessible-description">register_button</atkproperty>
                 </accessibility>
-                <signal name="clicked" handler="on_register_button_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_register_button_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
