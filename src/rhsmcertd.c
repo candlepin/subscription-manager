@@ -86,7 +86,7 @@ int run(int interval)
         }
         if(pid == 0)
         {
-            execl("/usr/bin/python", "python", "/usr/share/rhsm/certmgr.py",
+            execl("/usr/bin/python", "python", "/usr/share/rhsm/subscription_manager/certmgr.py",
 		  NULL);
         }
         int delay = interval;
