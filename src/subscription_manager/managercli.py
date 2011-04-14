@@ -36,6 +36,7 @@ import rhsm.connection as connection
 
 from i18n_optparse import OptionParser
 from subscription_manager.certlib import CertLib, ConsumerIdentity
+from subscription_manager.certmgr import CertManager
 from subscription_manager import managerlib
 from subscription_manager.facts import Facts
 
@@ -460,6 +461,11 @@ class UnRegisterCommand(CliCommand):
             managerlib.unregister(self.cp, consumer, False)
         except Exception, e:
             handle_exception("Unregister failed", e)
+
+        uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
+                                   key_file=ConsumerIdentity.keypath())
+        certmgr = CertManager(uep=uep)
+        certmgr.update()
 
         self._request_validity_check()
 
