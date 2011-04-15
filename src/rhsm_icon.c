@@ -54,6 +54,7 @@ typedef struct _Context {
 	bool is_visible;
 	GtkStatusIcon *icon;
 	NotifyNotification *notification;
+	DBusGProxy *entitlement_status_proxy;
 } Context;
 
 typedef enum _StatusType {
@@ -76,7 +77,6 @@ static void manage_subs_clicked(NotifyNotification*, gchar*, Context*);
 static void do_nothing_logger(const gchar*, GLogLevelFlags, const gchar*, gpointer);
 static void status_changed_cb(NotifyNotification*, gint, Context*);
 static bool check_status(Context*);
-static DBusGProxy* add_signal_listener(Context*);
 static StatusType check_status_over_dbus();
 static StatusType create_status_type(int);
 
@@ -229,38 +229,20 @@ do_nothing_logger(const gchar *log_domain G_GNUC_UNUSED,
 }
 
 static StatusType
-check_status_over_dbus()
+check_status_over_dbus(Context *context)
 {
-	DBusGConnection *connection;
 	GError *error;
-	DBusGProxy *proxy;
 	int status;
-  
-	error = NULL;
-	connection = dbus_g_bus_get(DBUS_BUS_SYSTEM, &error);
-	if (connection == NULL) {
-		g_printerr("Failed to open connection to bus: %s\n",
-			   error->message);
-		g_error_free(error);
-		exit(1);
-	}
-
-	proxy = dbus_g_proxy_new_for_name(connection,
-					  "com.redhat.SubscriptionManager",
-					  "/EntitlementStatus",
-					  "com.redhat.SubscriptionManager.EntitlementStatus");
 
 	error = NULL;
-	if (!dbus_g_proxy_call(proxy, "check_status", &error,
-			       G_TYPE_INVALID, G_TYPE_INT, &status,
-			       G_TYPE_INVALID)) {
+	if (!dbus_g_proxy_call(context->entitlement_status_proxy,
+			       "check_status", &error, G_TYPE_INVALID,
+			       G_TYPE_INT, &status, G_TYPE_INVALID)) {
 		g_printerr("Error: %s\n", error->message);
 		g_error_free(error);
 		exit(1);
 	}
 
-	g_object_unref(proxy);
-	dbus_g_connection_unref(connection);
 	return create_status_type(status);
 }
 
@@ -282,7 +264,7 @@ check_status(Context *context)
 			exit(1);
 		}
 	} else {
-		status_type = check_status_over_dbus();
+		status_type = check_status_over_dbus(context);
 	}
 
 	alter_icon(context, status_type);
@@ -300,7 +282,7 @@ status_changed_cb(NotifyNotification *notification G_GNUC_UNUSED,
 }
 
 static DBusGProxy* 
-add_signal_listener(Context *context)
+get_entitlement_status_proxy(void)
 {
 	DBusGConnection *connection;
 	GError *error;
@@ -320,28 +302,36 @@ add_signal_listener(Context *context)
 		     "/EntitlementStatus",
 		     "com.redhat.SubscriptionManager.EntitlementStatus");
 
-	dbus_g_proxy_add_signal(proxy, "entitlement_status_changed", G_TYPE_INT,
+	dbus_g_connection_unref(connection);
+	return proxy;
+}
+
+static void
+add_signal_listener(Context *context)
+{
+	dbus_g_proxy_add_signal(context->entitlement_status_proxy,
+				"entitlement_status_changed", G_TYPE_INT,
 				G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal(proxy, "entitlement_status_changed",
+	dbus_g_proxy_connect_signal(context->entitlement_status_proxy,
+				    "entitlement_status_changed",
 				    G_CALLBACK(status_changed_cb), context,
 				    NULL);
-	return proxy;
-
 }
 
 int
 main(int argc, char **argv)
 {
-	setlocale(LC_ALL, "");
-	bindtextdomain("rhsm", "/usr/share/locale");
-	textdomain("rhsm");
 	GError *error = NULL;
 	GOptionContext *option_context;
 	DBusGProxy *proxy;
 	DBusGConnection *connection;
+	guint32 result;
 	Context context;
 	context.is_visible = false;
-	guint32 result;
+
+	setlocale(LC_ALL, "");
+	bindtextdomain("rhsm", "/usr/share/locale");
+	textdomain("rhsm");
 
 	option_context = g_option_context_new ("rhsm icon");
 	g_option_context_add_main_entries (option_context, entries, NULL);
@@ -368,13 +358,13 @@ main(int argc, char **argv)
 		g_printerr(N_("Failed to open connection to bus: %s\n"),
 			error->message);
 		g_error_free(error);
-		exit(1);
+		return 1;
 	}
 
 	proxy = dbus_g_proxy_new_for_name(connection,
-			"org.freedesktop.DBus",
-			"/org/freedesktop/DBus",
-			"org.freedesktop.DBus");
+					  "org.freedesktop.DBus",
+					  "/org/freedesktop/DBus",
+					  "org.freedesktop.DBus");
 	error = NULL;
 	if (!dbus_g_proxy_call (proxy,
 		"RequestName",
@@ -384,8 +374,9 @@ main(int argc, char **argv)
 		G_TYPE_INVALID,
 		G_TYPE_UINT,   &result,
 		G_TYPE_INVALID)) {
-			g_printerr("Couldn't acquire name: %s\n", error->message);
-			exit(1);
+			g_printerr("Couldn't acquire name: %s\n",
+				   error->message);
+			return 1;
 	}
 
 	if (result != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER) {
@@ -401,19 +392,21 @@ main(int argc, char **argv)
 		return 0;
 	}
 
-
 	notify_init("rhsm-icon");
 
+	context.entitlement_status_proxy = get_entitlement_status_proxy();
 	check_status(&context);
 	//convert sec to msec before passing in
 	g_timeout_add(check_period * 1000, (GSourceFunc) check_status,
 			      &context);
 
-	proxy = add_signal_listener(&context);
+	add_signal_listener(&context);
 	gtk_main();
 
 	g_debug("past main");
+	g_object_unref(context.entitlement_status_proxy);
 	g_object_unref(proxy);
+	dbus_g_connection_unref(connection);
 	return 0;
 }
 
