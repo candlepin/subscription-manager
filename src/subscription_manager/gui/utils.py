@@ -95,8 +95,6 @@ def linkify(msg):
   
     if gtk.check_version(MIN_GTK_MAJOR, MIN_GTK_MINOR, MIN_GTK_MICRO):
     	return msg
-    # lazy regex; should be good enough.
-    url_regex = re.compile("https?://\S*")
 
     def add_markup(mo):
         url = mo.group(0)
