@@ -291,7 +291,8 @@ class IdentityCommand(UserPassCommand):
 
     def __init__(self):
         usage = "usage: %prog identity [OPTIONS]"
-        shortdesc = _("request a new identity certficate for this machine")
+        shortdesc = _("Display the identity certficate for this machine or " \
+                      "request a new one")
         desc = shortdesc
 
         super(IdentityCommand, self).__init__("identity", usage, shortdesc,
