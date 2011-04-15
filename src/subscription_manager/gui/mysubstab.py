@@ -74,7 +74,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         if not response:
             return
 
-        serial = selection['serial']
+        serial = long(selection['serial'])
 
         if self.backend.is_registered():
             try:
@@ -86,7 +86,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                 self.backend.certlib.update()
             except Disconnected, e:
                 pass
-
         else:
             # unregistered, just delete the certs directly
             self.backend.certlib.delete([serial])
@@ -129,7 +128,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             'installed_text': str,
             'start_date': str,
             'expiration_date': str,
-            'serial': long,
+            'serial': str,
             'align': float,
             'background': str
         }
