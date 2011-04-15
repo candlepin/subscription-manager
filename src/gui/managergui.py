@@ -134,7 +134,7 @@ class Backend(object):
             key_file=key_file)
 
     def is_registered(self):
-        if self.admin_uep:
+        if ConsumerIdentity.existsAndValid():
             return True
         return False
     
