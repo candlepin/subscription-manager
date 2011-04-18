@@ -14,6 +14,7 @@
 #
 
 import gtk
+import gobject
 from datetime import datetime, timedelta
 
 from rhsm.certificate import GMT
@@ -126,9 +127,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             'subscription': str,
             'installed_value': float,
             'installed_text': str,
-            'start_date': str,
-            'expiration_date': str,
-            'serial': str,
+            'start_date': gobject.TYPE_PYOBJECT,
+            'expiration_date': gobject.TYPE_PYOBJECT,
+            'serial': long,
             'align': float,
             'background': str
         }
@@ -152,8 +153,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.sub_details.show(order.getName(),
                               contract=order.getContract() or "",
-                              start=order.getStart(),
-                              end=order.getEnd(),
+                              start=cert.validRange().begin(),
+                              end=cert.validRange().end(),
                               account=order.getAccountNumber() or "",
                               management=management,
                               support_level=order.getSupportLevel() or "",
@@ -177,8 +178,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         entry['subscription'] = order.getName()
         entry['installed_value'] = self._percentage(installed, products)
         entry['installed_text'] = '%s / %s' % (len(installed), len(products))
-        entry['start_date'] = order.getStart()
-        entry['expiration_date'] = order.getEnd()
+        entry['start_date'] = cert.validRange().begin()
+        entry['expiration_date'] = cert.validRange().end()
         entry['serial'] = cert.serialNumber()
         entry['align'] = 0.5         # Center horizontally
         entry['background'] = self._get_background_color(cert)

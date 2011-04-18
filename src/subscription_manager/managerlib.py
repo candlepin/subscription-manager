@@ -19,9 +19,11 @@ import stat
 import sys
 import shutil
 import syslog
+import time
 import xml.utils.iso8601
 import logging
-from datetime import datetime, date
+from datetime import datetime, date, tzinfo, timedelta
+
 from xml.utils.iso8601 import parse
 from threading import Thread
 
@@ -112,8 +114,9 @@ def getInstalledProductStatus(product_directory=None,
             status = _("Not Installed")
             if product.getName() in product_names:
                 status = map_status(cert.valid())
+
             data = (product.getName(), status,
-                    formatDate(cert.validRange().end().isoformat()),
+                    formatDate(cert.validRange().end()),
                     cert.serialNumber(),
                     cert.getOrder().getContract(),
                     cert.getOrder().getAccountNumber())
@@ -156,8 +159,8 @@ def getConsumedProductEntitlements():
         consumed_products.append((product.getName(), cert.getOrder().getContract(),
                                   cert.getOrder().getAccountNumber(), cert.serialNumber(),
                                   cert.valid(),
-                                  formatDate(cert.validRange().begin().isoformat()),
-                                  formatDate(cert.validRange().end().isoformat()))
+                                  formatDate(cert.validRange().begin()),
+                                  formatDate(cert.validRange().end()))
                                  )
 
     entdir = EntitlementDirectory()
@@ -365,7 +368,7 @@ def getAvailableEntitlements(cpserver, consumer_uuid, facts, all=False, active_o
         else:
             d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
 
-        d['endDate'] = formatDate(d['endDate'])
+        d['endDate'] = formatDate(parseDate(d['endDate']))
         del d['consumed']
     return data
 
@@ -563,10 +566,66 @@ class PoolStash(object):
 def _sub_dict(datadict, subkeys, default=None):
     return dict([(k, datadict.get(k, default)) for k in subkeys])
 
+def parseDate(date):
+    # so this get's a little ugly. We want to know the
+    # tz/utc offset of the time, so we can make the datetime
+    # object be not "naive". In theory, we will always get
+    # these timestamps in UTC, but if we can figure it out,
+    # might as well
+    matches = xml.utils.iso8601.__datetime_rx.match(date)
 
-def formatDate(date):
-    tf = xml.utils.iso8601.parse(date)
-    return datetime.fromtimestamp(tf).date()
+    # parse out the timezone offset
+    offset = xml.utils.iso8601.__extract_tzd(matches)
+
+    # create a new tzinfo using that offset
+    server_tz = ServerTz(offset)
+
+    # create a new datetime this time using the timezone
+    # so we aren't "naive"
+    posix_time = xml.utils.iso8601.parse(date)
+    dt = datetime.fromtimestamp(posix_time, tz=server_tz)
+    return dt
+
+
+def formatDate(dt):
+    return dt.astimezone(LocalTz()).strftime("%x")
+
+class ServerTz(tzinfo):
+    """
+    tzinfo object for the tz offset of the entitlement server
+    """
+
+    def __init__(self, offset):
+        self.__offset = timedelta(seconds = offset)
+
+    def utcoffset(self, dt):
+        return self.__offset
+
+    def dst(self, dt):
+        return timedelta(seconds=0)
+
+
+class LocalTz(tzinfo):
+
+    """
+    tzinfo object representing whatever this systems tz offset is.
+    """
+
+    def utcoffset(self, dt):
+        if time.daylight:
+            return timedelta(seconds = -time.altzone) 
+        return timedelta(seconds = -time.timezone)
+
+    def dst(self, dt):
+        if time.daylight:
+            return timedelta(seconds = (time.timezone - time.altzone))
+        return timedelta(seconds=0)
+
+    def tzname(self, dt):
+        if time.daylight:
+            return time.tzname[1]
+
+        return time.tzname[0]
 
 def delete_consumer_certs():
     shutil.rmtree(cfg.get('rhsm', 'consumerCertDir'), ignore_errors=True)

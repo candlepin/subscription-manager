@@ -734,7 +734,9 @@ def find_first_invalid_date(ent_dir=None, product_dir=None):
     # next cert to go invalid
     if valid_ents and not installed_not_entitled:
         # Add a day, we don't want a date where we're still valid:
-        return valid_ents[0].validRange().end() + timedelta(days=1)
+        last_cert = valid_ents[0].validRange().end()
+        td = timedelta(days=1)
+        return last_cert + td
     else:
         return datetime.now(GMT())
 
