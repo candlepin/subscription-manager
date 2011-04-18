@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.7
+Version: 0.95.5.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -200,6 +200,33 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Mon Apr 18 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 694851: only open one dbus proxy connection (jbowes@redhat.com)
+- 696679: add pam/consolehelper links for subscription-manager
+  (alikins@redhat.com)
+- 696947: wrong webqa url is present in rhsm.conf for rhel5.7
+  (cduryee@redhat.com)
+- 696947: wrong webqa url is present in rhsm.conf for rhel5.7
+  (cduryee@redhat.com)
+- 674652: Subscription Manager Leaves Broken Yum Repos After Unregister
+  (cduryee@redhat.com)
+- 694839: clean a merge error (old regex was not removed) (alikins@redhat.com)
+- 696210: fix display of error messages with urls (alikins@redhat.com)
+- 694839: Remove some pango markup and instead linkify links ourselves
+  (alikins@redhat.com)
+- 696674: rhsmcertd was using the wrong path for certmgr.py
+  (alikins@redhat.com)
+- 683553: subscription-manager-gui is displaying unlimited pools as -1
+  (cduryee@redhat.com)
+- 696171: fix regression in error message formatting (jbowes@redhat.com)
+- 694842: error messages do not get populated during firstboot
+  (cduryee@redhat.com)
+- 695788: fix bug showing the "you are registered to rhn" dialog
+  (alikins@redhat.com)
+- 694837: fix entitlement failure that throws sequence error
+  (alikins@redhat.com)
+- Latest japanese strings (bkearney@redhat.com)
+
 * Mon Apr 11 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 695367: call to dbus-send fails during upgrades on selinux-enabled machines
   (cduryee@redhat.com)
