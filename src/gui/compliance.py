@@ -383,7 +383,7 @@ class ComplianceAssistant(widgets.GladeWidget):
         self._display_subscriptions()
 
     def format_date(self, date):
-        return date.strftime(locale.nl_langinfo(locale.D_FMT))
+        return managerlib.formatDate(date)
 
     def hide(self, widget, event, data=None):
         self.window.hide()

@@ -148,7 +148,7 @@ class SubscriptionManagerTab(GladeWidget):
         if next_update:
             update_time = datetime.datetime.fromtimestamp(next_update)
             self.next_update_label.set_text(_('Next Update: %s') %
-                    datetime.datetime.strftime(update_time, '%c') )
+                                            update_time.strftime("%c"))
             self.next_update_label.show()
         else:
             self.next_update_label.hide()
@@ -273,9 +273,9 @@ class SubDetailsWidget(GladeWidget):
         if self.show_contract:
             self._set(self.contract_number_text, contract)
             self._set(self.start_date_text,
-                    managerlib.formatDate(start).strftime("%x"))
+                      managerlib.formatDate(start))
             self._set(self.expiration_date_text,
-                    managerlib.formatDate(end).strftime("%x"))
+                      managerlib.formatDate(end))
             self._set(self.account_text, account)
             self._set(self.provides_management_text, management)
             self._set(self.support_level_text, support_level)
@@ -315,7 +315,7 @@ class CellRendererDate(gtk.CellRendererText):
     """
 
     __gproperties__ = {
-            'date' : (gobject.TYPE_STRING, 'date', 'date displayed', '',
+            'date' : (gobject.TYPE_PYOBJECT, 'date', 'date displayed',
                 gobject.PARAM_READWRITE)
     }
 
@@ -330,9 +330,10 @@ class CellRendererDate(gtk.CellRendererText):
         """
 
         if value:
-            date = managerlib.formatDate(value).strftime("%x")
+            date = managerlib.formatDate(value)
         else:
             date = value
+
         gtk.CellRendererText.set_property(self, 'text', date)
 
 
@@ -354,9 +355,11 @@ class DatePicker(gtk.HBox):
 
         # set the timezone so we can sent it to the server
         self._date = datetime.datetime(date.year, date.month, date.day,
-                tzinfo=utils.LocalTz())
+                tzinfo=managerlib.LocalTz())
         self._date_entry = gtk.Entry()
         self._date_entry.set_width_chars(12)
+        # we could use managerlib.formatDate here, but since we are parsing
+        # this, leave it alone 
         self._date_entry.set_text(self._date.strftime("%x"))
         atk_entry = self._date_entry.get_accessible()
         atk_entry.set_name('date-entry')
@@ -394,7 +397,7 @@ class DatePicker(gtk.HBox):
         try: 
             date = datetime.datetime.strptime(self._date_entry.get_text(), '%x')
             self._date = datetime.datetime(date.year, date.month, date.day,
-                    tzinfo=utils.LocalTz())
+                    tzinfo=managerlib.LocalTz())
             self.emit('date-picked-text')
         except ValueError, e:
             self._date_entry.handler_block(self._validator_sig_handler) #this sig handler gets unmuted in date_entry_box_grab_focus.
@@ -453,14 +456,14 @@ class DatePicker(gtk.HBox):
     def _calendar_clicked(self, calendar):
         (year, month, day) = self._calendar.get_date()
         self._date = datetime.datetime(year, month + 1, day,
-                tzinfo=utils.LocalTz())
+                tzinfo=managerlib.LocalTz())
         self.emit('date-picked-cal')
         self._destroy()
 
     def _today_clicked(self, button):
         day = datetime.date.today()
         self._date = datetime.datetime(day.year, day.month, day.day,
-                tzinfo=utils.LocalTz())
+                tzinfo=managerlib.LocalTz())
         self.emit('date-picked-cal')
         self._destroy()
 

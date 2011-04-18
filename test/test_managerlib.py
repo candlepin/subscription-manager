@@ -245,3 +245,34 @@ class InstalledProductStatusTests(unittest.TestCase):
                 entitlement_directory)
 
         self.assertEquals(2, len(product_status)) 
+
+class TestParseDate(unittest.TestCase):
+    def test_now_local_tz(self):
+        tz = LocalTz()
+        epoch = time.time()
+        dt_no_tz = datetime.fromtimestamp(epoch)
+        dt = datetime.fromtimestamp(epoch,tz=tz)
+        parsed_date = parseDate(dt.isoformat())
+        # last member is is_dst, which is -1, if there is no tzinfo, which
+        # we expect for dt_no_tz
+        #
+        # see if we get the same times
+        self.assertEquals(dt.timetuple()[:7], dt_no_tz.timetuple()[:7])
+#        self.assertEquals(dt.isoformat(), dt_no_tz.isoformat())
+
+
+    def test_server_date_utc_timezone(self):
+        # sample date from json response from server
+        server_date = "2012-04-10T00:00:00.000+0000"
+        dt = parseDate(server_date)
+#        print "test_server_date", dt, dt.tzinfo, dt.tzinfo.dst(dt), dt.tzinfo.utcoffset(dt)
+        # no dst
+        self.assertEquals(timedelta(seconds=0), dt.tzinfo.dst(dt))
+        # it's a utc date, no offset
+        self.assertEquals(timedelta(seconds=0), dt.tzinfo.utcoffset(dt))
+
+
+    def test_server_date_est_timezone(self):
+        est_date = "2012-04-10T00:00:00.000-04:00"
+        dt = parseDate(est_date)
+        self.assertEquals(timedelta(hours=4), dt.tzinfo.utcoffset(dt))

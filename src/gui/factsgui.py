@@ -78,7 +78,7 @@ class SystemFactsDialog(widgets.GladeWidget):
 
         last_update = self.facts.get_last_update()
         if last_update:
-            self.last_update_label.set_text(last_update.strftime(locale.nl_langinfo(locale.D_T_FMT)))
+            self.last_update_label.set_text(last_update.strftime("%c"))
         else:
             self.last_update_label.set_text(_('No previous update'))
 

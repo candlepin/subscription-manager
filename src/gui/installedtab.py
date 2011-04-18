@@ -14,6 +14,7 @@
 #
 
 import gtk
+import gobject
 
 from datetime import datetime
 
@@ -81,10 +82,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                     order = entitlement_cert.getOrder()
 
                     entry['subscription'] = order.getName()
-                    entry['start_date'] = managerlib.formatDate(
-                            order.getStart())
-                    entry['expiration_date'] = managerlib.formatDate(
-                            order.getEnd())
+                    entry['start_date'] = entitlement_cert.validRange().begin()
+                    entry['expiration_date'] = entitlement_cert.validRange().end()
 
                     # TODO:  Pull this date logic out into a separate lib!
                     #        This is also used in mysubstab...
@@ -105,7 +104,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['compliance_note'] = \
                             _('Covered by contract %s through %s' % \
                             (order.getContract(),
-                                entry['expiration_date'].strftime("%x")))
+                             managerlib.formatDate(entry['expiration_date'])))
                 else:
                     entry['image'] = self._render_icon(gtk.STOCK_NO)
                     entry['status'] = _('Missing')
@@ -140,8 +139,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
             'status': str,
             'compliance_note': str,
             'subscription': str,
-            'start_date': str,
-            'expiration_date': str,
+            'start_date': gobject.TYPE_PYOBJECT,
+            'expiration_date': gobject.TYPE_PYOBJECT,
             'serial': str,
             'align': float,
             'background': str
