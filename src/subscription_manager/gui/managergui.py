@@ -391,9 +391,10 @@ class MainWindow(widgets.GladeWidget):
             first_invalid = find_first_invalid_date()
             buf = gtk.gdk.pixbuf_new_from_file_at_size(VALID_IMG, 32, 32)
             self.subscription_status_image.set_from_pixbuf(buf)
+#            tz_date = first_invalid.astimezone(managerlib.LocalTz())
             self.subscription_status_label.set_text(
                     _("Product entitlement certificates valid through %s") % \
-                            first_invalid.strftime("%x") )
+                        managerlib.formatDate(first_invalid))
             self.update_certificates_button.hide()
 
     def _check_rhn_classic(self):

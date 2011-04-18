@@ -28,6 +28,7 @@ _ = gettext.gettext
 
 import rhsm.connection as connection
 from subscription_manager.gui import messageWindow
+from subscription_manager import managerlib
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -162,7 +163,7 @@ def make_today_now(today):
     if today.date() == datetime.date.today():
         now = datetime.datetime.today()
         today = today.replace(hour=now.hour, minute=now.minute,
-                second=now.second, tzinfo=LocalTz())
+                second=now.second, tzinfo=managerlib.LocalTz())
     return today
 
 def get_dbus_iface():
@@ -177,14 +178,3 @@ def get_dbus_iface():
     return validity_iface
 
 
-class LocalTz(datetime.tzinfo):
-
-    """
-    tzinfo object representing whatever this systems tz offset is.
-    """
-
-    def utcoffset(self, dt):
-        return datetime.timedelta(seconds=time.timezone)
-
-    def dst(self, dt):
-        return None
