@@ -461,10 +461,16 @@ class UnRegisterCommand(CliCommand):
         except Exception, e:
             handle_exception("Unregister failed", e)
 
-        uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
-                                   key_file=ConsumerIdentity.keypath())
-        certmgr = CertManager(uep=uep)
-        certmgr.update()
+        #this block is simply to ensure that the yum repos got updated. If it fails,
+        #there is no issue since it will most likely be cleaned up elsewhere (most
+        #likely by the yum plugin)
+        try:
+            uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
+            key_file=ConsumerIdentity.keypath())
+            certmgr = CertManager(uep=uep)
+            certmgr.update()
+        except Exception, e:
+            pass
 
         self._request_validity_check()
 
