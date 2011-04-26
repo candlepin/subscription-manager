@@ -20,7 +20,6 @@ from subscription_manager import hwprobe
 import subprocess
 
 
-
 class HardwareProbeTests(unittest.TestCase):
 
     x86_64_uname = {'uname.machine':'x86_64'}
@@ -37,7 +36,7 @@ class HardwareProbeTests(unittest.TestCase):
         self.assertRaises(hwprobe.CalledProcessError, hw._get_output, 'test')
 
     @patch('subprocess.Popen')
-    def test_commond_valid(self, MockPopen):
+    def test_command_valid(self, MockPopen):
         MockPopen.return_value.communicate.return_value = ['this is valid', None]
         MockPopen.return_value.poll.return_value = 0
 
@@ -107,6 +106,38 @@ class HardwareProbeTests(unittest.TestCase):
         MockOpen.return_value.readline.return_value = "Awesome OS release 42 (Go4It)\n\n"
         self.assertEquals(hw.getReleaseInfo(), {'distribution.version': '42', 'distribution.name': 'Awesome OS', 'distribution.id': 'Go4It'})
 
+    def test_meminfo(self):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        mem = hw.getMemInfo()
+        # not great tests, but alas
+        self.assertEquals(len(mem), 2)
+        for key in mem:
+            assert key in ['memory.memtotal', 'memory.swaptotal']
+
+    # this test will probably fail on a machine with
+    # no network.
+    def test_networkinfo(self):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        net = hw.getNetworkInfo()
+        self.assertEquals(len(net), 2)
+        for key in net:
+            assert key in ['network.hostname', 'network.ipaddr']
+
+    def test_network_interfaces(self):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        net_int = hw.getNetworkInterfaces()
+        self.assertEquals(net_int['net.interface.lo.ipaddr'], '127.0.0.1')
+
+# FIXME: not real useful as non-root, plus noisy
+#    def test_platform_specific_info(self):
+#        reload(hwprobe)
+#        hw = hwprobe.Hardware()
+#        platform_info = hw.getPlatformSpecificInfo()
+#        # this is going to be empty as non root
+#        print platform_info
 
     @patch("os.listdir")
     def test_cpu_info(self, MockListdir):
