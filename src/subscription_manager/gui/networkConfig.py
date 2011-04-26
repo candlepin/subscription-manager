@@ -16,10 +16,12 @@
 
 import os
 import gettext
-
 import gtk
+import gtk.glade
 
 import rhsm.config
+
+from subscription_manager.gui.utils import errorWindow
 
 _ = gettext.gettext
 
@@ -47,13 +49,7 @@ class NetworkConfigDialog:
         self.proxyPasswordEntry = self.xml.get_widget("proxyPasswordEntry")
 
         self.cfg = rhsm.config.initConfig()
-#        try:
-#            self.cfg = config.initUp2dateConfig()
-#        except:
-#            gnome.ui.GnomeErrorDialog(_("There was an error loading your "
-#                                        "configuration.  Make sure that\nyou "
-#                                        "have read access to /etc/sysconfig/rhn."),
-#                                      self.dlg)
+
         # Need to load values before connecting signals because when the dialog 
         # starts up it seems to trigger the signals which overwrites the config 
         # with the blank values.
@@ -128,10 +124,9 @@ class NetworkConfigDialog:
         try:
             self.cfg.save()
         except:
-            gnome.ui.GnomeErrorDialog(_(
+            errorWindow(_(
                     "There was an error saving your configuration. "\
-                    "Make sure that\nyou own %s.") % self.cfg.fileName,
-                                      self.dlg)
+                    "Make sure that\nyou own %s.") % self.cfg.fileName)
     
     def show(self):
         self.setInitialValues()
