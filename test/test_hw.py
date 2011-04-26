@@ -23,6 +23,9 @@ import subprocess
 
 class HardwareProbeTests(unittest.TestCase):
 
+    x86_64_uname = {'uname.machine':'x86_64'}
+    s390x_uname = {'uname.machine':'s390x'}
+
     @patch('subprocess.Popen')
     def test_command_error(self, MockPopen):
         MockPopen.return_value.communicate.return_value = ['', None]
@@ -109,6 +112,7 @@ class HardwareProbeTests(unittest.TestCase):
     def test_cpu_info(self, MockListdir):
         reload(hwprobe)
         hw = hwprobe.Hardware()
+        hw.unameinfo = self.x86_64_uname
 
         MockSocketId = Mock()
         MockListdir.return_value = ["cpu0", "cpu1"]
@@ -121,6 +125,7 @@ class HardwareProbeTests(unittest.TestCase):
     def test_cpu_info_lots_cpu(self, MockListdir):
         reload(hwprobe)
         hw = hwprobe.Hardware()
+        hw.unameinfo = self.x86_64_uname
 
         MockSocketId = Mock()
         MockListdir.return_value = ["cpu%s" % i for i in range(0,2000)]
@@ -132,6 +137,7 @@ class HardwareProbeTests(unittest.TestCase):
     def test_cpu_info_other_files(self, MockListdir):
         reload(hwprobe)
         hw = hwprobe.Hardware()
+        hw.unameinfo = self.x86_64_uname
 
         MockSocketId = Mock()
         MockListdir.return_value = ["cpu0", "cpu1",  # normal cpu ids (valid)
@@ -145,3 +151,25 @@ class HardwareProbeTests(unittest.TestCase):
         MockSocketId.return_value = "0"
         hw._getSocketIdForCpu = MockSocketId
         self.assertEquals(hw.getCpuInfo(), {'cpu.cpu(s)': 4, 'cpu.core(s)_per_socket': 4, 'cpu.cpu_socket(s)': 1})
+
+    @patch("os.listdir")
+    def test_cpu_s390x(self, MockListDir):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        hw.unameinfo = self.s390x_uname
+        MockCpuOnlineStatus = Mock()
+        MockCpuOnlineStatus.return_value = "1"
+        hw._getCpuOnlineStatus = MockCpuOnlineStatus
+        MockListDir.return_value = ["cpu0", "cpu1"]
+        print hw.getCpuInfo()
+
+    @patch("os.listdir")
+    def test_cpu_s390x_all_offline(self, MockListDir):
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        hw.unameinfo = self.s390x_uname
+        MockCpuOnlineStatus = Mock()
+        MockCpuOnlineStatus.return_value = "0"
+        hw._getCpuOnlineStatus = MockCpuOnlineStatus
+        MockListDir.return_value = ["cpu0", "cpu1"]
+        print hw.getCpuInfo()
