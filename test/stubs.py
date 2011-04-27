@@ -173,3 +173,12 @@ class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
         StubCertificateDirectory.__init__(self, certificates)
 
 
+
+class StubConsumerIdentity:
+    def __init__(self, keystring, certstring):
+        self.key = keystring
+        self.cert = certstring
+
+    @classmethod
+    def existsAndValid(cls):
+        return True
