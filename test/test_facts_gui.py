@@ -1,8 +1,11 @@
+import sys
 import unittest
 
 from subscription_manager import facts
 from subscription_manager.gui import factsgui, managergui
 from mock import Mock
+
+from stubs import MockStderr, MockStdout
 
 
 class StubUEP:
@@ -40,6 +43,13 @@ class FactDialogTests(unittest.TestCase):
         self.consumer = Mock()
         self.consumer.uuid = "MOCKUUID"
         self.consumer.name = "MOCK CONSUMER"
+
+        sys.stderr = MockStderr
+        sys.stdout = MockStdout
+
+    def tearDown(self):
+        sys.stderr = sys.__stderr__
+        sys.stdout = sys.__stdout__
 
     def test_facts_are_displayed(self):
         found_facts = {}

@@ -2,13 +2,7 @@ import unittest
 import sys
 
 from subscription_manager import managercli
-
-
-class MockStdout:
-    def __init__(self):
-        self.buffer = ""
-    def write(self, buffer):
-        self.buffer = self.buffer + buffer
+from stubs import MockStdout, MockStderr
 
 class TestCliCommand(unittest.TestCase):
     command_class = managercli.CliCommand
@@ -18,6 +12,12 @@ class TestCliCommand(unittest.TestCase):
         # neuter the _do_command, since this is mostly
         # for testing arg parsing
         self.cc._do_command = self._do_command
+        sys.stdout = MockStdout()
+        sys.stderr = MockStderr()
+
+    def tearDown(self):
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
 
     def _do_command(self):
         pass

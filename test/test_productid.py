@@ -1,12 +1,14 @@
 import unittest
-import tempfile
 import datetime
+import sys
+import tempfile
 
 from subscription_manager import productid
 from subscription_manager import certlib
 from yum import YumBase
 
 import stubs
+
 
 class TestProductManager(unittest.TestCase):
 
@@ -25,6 +27,10 @@ class TestProductManager(unittest.TestCase):
             start_date=datetime.datetime(2010, 1, 1),
             end_date=datetime.datetime(2060, 1, 1))
         self.pm.pdir = stubs.StubProductDirectory([cert1, cert2])
+        sys.stdout = stubs.MockStdout()
+
+    def tearDown(self):
+        sys.stdout = sys.__stdout__
 
 
     def test_get_active(self):

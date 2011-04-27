@@ -1,6 +1,8 @@
 import unittest
 import tempfile
 
+import stubs
+
 from subscription_manager import factlib
 from subscription_manager import certlib
 
@@ -16,6 +18,7 @@ class MockActionLock(certlib.ActionLock):
 class TestFactlib(unittest.TestCase):
 
     def setUp(self):
+        factlib.ConsumerIdentity = stubs.StubConsumerIdentity
         self.fl = factlib.FactLib(lock=MockActionLock())
         
 

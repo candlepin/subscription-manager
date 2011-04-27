@@ -13,17 +13,26 @@
 # in this software or its documentation.
 
 import unittest
+import sys
+
 from mock import patch
 from mock import Mock
 
 from subscription_manager import hwprobe
 import subprocess
-
+from stubs import MockStdout
 
 class HardwareProbeTests(unittest.TestCase):
 
     x86_64_uname = {'uname.machine':'x86_64'}
     s390x_uname = {'uname.machine':'s390x'}
+
+    def setUp(self):
+        sys.stderr = MockStdout()
+
+    def tearDown(self):
+        sys.stderr = sys.__stderr__
+        
 
     @patch('subprocess.Popen')
     def test_command_error(self, MockPopen):
@@ -192,7 +201,6 @@ class HardwareProbeTests(unittest.TestCase):
         MockCpuOnlineStatus.return_value = "1"
         hw._getCpuOnlineStatus = MockCpuOnlineStatus
         MockListDir.return_value = ["cpu0", "cpu1"]
-        print hw.getCpuInfo()
 
     @patch("os.listdir")
     def test_cpu_s390x_all_offline(self, MockListDir):
@@ -203,4 +211,3 @@ class HardwareProbeTests(unittest.TestCase):
         MockCpuOnlineStatus.return_value = "0"
         hw._getCpuOnlineStatus = MockCpuOnlineStatus
         MockListDir.return_value = ["cpu0", "cpu1"]
-        print hw.getCpuInfo()

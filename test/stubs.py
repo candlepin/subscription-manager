@@ -21,6 +21,14 @@ from rhsm.certificate import EntitlementCertificate, Product, GMT, DateRange, \
 
 import random
 
+class MockStdout:
+    def __init__(self):
+        self.buffer = ""
+    def write(self, buffer):
+        self.buffer = self.buffer + buffer
+MockStderr = MockStdout
+
+
 class StubProduct(Product):
 
     def __init__(self, product_id, name=None, version=None, arch=None, 
@@ -182,3 +190,7 @@ class StubConsumerIdentity:
     @classmethod
     def existsAndValid(cls):
         return True
+
+    @classmethod
+    def exists(cls):
+        return False

@@ -6,25 +6,24 @@ from subscription_manager.gui import utils
 import rhsm.connection as connection
 
 class FakeLogger:
+    def __init__(self):
+        self.expected_msg = ""
+    
     def debug(self, buf):
         self.msg = buf
-        print self.msg
 
     def error(self, buf):
         self.msg = buf
-        print self.msg
 
     def exception(self, e):
         self.logged_exception = e
-        print self.logged_exception
 
-    def expected_msg(self, msg):
+    def set_expected_msg(self, msg):
         self.expected_msg = msg
 
 class FakeErrorWindow:
     def __init__(self, msg):
         self.msg = msg
-        print msg
 
 class FakeException(Exception):
     def __init__(self, msg=None, cert_path=None):
@@ -47,52 +46,61 @@ class HandleGuiExceptionTests(unittest.TestCase):
 
     def test_hge(self):
         e = FakeException()
-        utils.log.expected_msg(self.msg)
+        utils.log.set_expected_msg(self.msg)
         res = utils.handle_gui_exception(e, self.msg)
-        assert(utils.log.expected_msg, self.msg)
+        self.assertEqual(utils.log.expected_msg, self.msg)
 
     def test_hge_log_msg_none(self):
         e = FakeException()
+        utils.log.set_expected_msg(self.msg)
         res = utils.handle_gui_exception(e, self.msg, logMsg=None)
-        assert(utils.log.expected_msg, self.msg)
+        self.assertEqual(utils.log.expected_msg, self.msg)
 
     def test_hge_socket_error(self):
+        utils.log.set_expected_msg(self.msg)
         res = utils.handle_gui_exception(socket.error(), self.msg)
-        assert(utils.log.expected_msg, self.msg)
+        self.assertEqual(utils.log.expected_msg, self.msg)
 
     def test_hge_ssl_error(self):
+        utils.log.set_expected_msg(self.msg)
         res = utils.handle_gui_exception(SSL.SSLError(), self.msg)
-        assert(utils.log.expected_msg, self.msg)
+        self.assertEqual(utils.log.expected_msg, self.msg)
 
     def test_hge_network_exception(self):
+        utils.log.set_expected_msg(self.msg)
         res = utils.handle_gui_exception(connection.NetworkException(1337), 
                                          self.msg)
-        assert(utils.log.expected_msg, self.msg)
+        self.assertEqual(utils.log.expected_msg, self.msg)
 
     def test_hge_remote_server_exception(self):
+        utils.log.set_expected_msg(self.msg)
         res = utils.handle_gui_exception(connection.RemoteServerException(1984),
                                          self.msg)
-        assert(utils.log.expected_msg, self.msg)
+        self.assertEqual(utils.log.expected_msg, self.msg)
 
     def test_hge_restlib_exception_unformatted_msg(self):
+        utils.log.set_expected_msg(self.msg)
         res = utils.handle_gui_exception(connection.RestlibException(421, "whatever"),
                                          self.msg)
-        assert(utils.log.expected_msg, self.msg)
+        self.assertEqual(utils.log.expected_msg, self.msg)
 
     def test_hge_restlib_exception_unformatted_msg_formatMsg_false(self):
+        utils.log.set_expected_msg(self.msg)
         res = utils.handle_gui_exception(connection.RestlibException(421, "whatever"),
                                          self.msg,
                                          formatMsg=False)
-        assert(utils.log.expected_msg, self.msg)
+
 
     def test_hge_restlib_exception_formated_msg(self):
+        utils.log.set_expected_msg(self.msg)
         res = utils.handle_gui_exception(connection.RestlibException(409, "very clean"),
                                          self.formatted_msg)
+        self.assertEqual(utils.log.expected_msg, self.msg)
 
     def test_hge_restlib_exception_url_msg(self):
         res = utils.handle_gui_exception(connection.RestlibException(404, "page not found"),
                                          self.msg_with_url)
-#        assert(utils.log.expected_msg, self.msg)
+        self.assertEqual(utils.log.expected_msg, self.msg)
 
     # if we handle this okay, we can probably remove the formatMsg tests
     def test_hge_restlib_exception_url_msg_with_formatting_formatMsg_false(self):
