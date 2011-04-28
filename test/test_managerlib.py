@@ -14,7 +14,8 @@
 #
 
 import unittest
-from mock import Mock
+from mock import Mock, patch
+import tempfile
 
 from subscription_manager.managerlib import *
 from modelhelpers import *
@@ -276,3 +277,35 @@ class TestParseDate(unittest.TestCase):
         est_date = "2012-04-10T00:00:00.000-04:00"
         dt = parseDate(est_date)
         self.assertEquals(timedelta(hours=4), dt.tzinfo.utcoffset(dt))
+
+class TestI18N(unittest.TestCase):
+    def test_configure_i18n_without_glade(self):
+        configure_i18n()
+
+    def test_configure_i18n_with_glade(self):
+        configure_i18n(with_glade=True)
+    
+
+class MockLog:
+    def info(self):
+        pass
+
+def MockSystemLog(self, message, priority):
+    pass
+
+# class NotPersistConsumerCert(unittest.TestCase):
+#     def test_persist_consumer_cert(self):
+#         tmpdir = tempfile.mkdtemp()
+#         Mockcfg = Mock()
+#         Mockcfg.return_value.get = tmpdir
+#         print Mockcfg.get("foo")
+#         cfg = Mockcfg
+#         ConsumerIdentity = StubConsumerIdentity
+#         log = MockLog()
+#         system_log = MockSystemLog
+
+#         consumer_info = {'idCert': {'key':'somekey',
+#                                     'cert':'somecert'}},
+
+#         consumer_info = persist_consumer_cert(consumer_info)
+        
