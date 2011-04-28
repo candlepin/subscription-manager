@@ -25,7 +25,7 @@ class moduleClass(FirstbootModuleWindow, managergui.MainWindow):
     runPriority = 109.11
     moduleName = "Subscription Manager"
     windowTitle = moduleName
-    shortMessage = _("RHSM Subscriptions Managemen")
+    shortMessage = _("RHSM Subscriptions Management")
     needsnetwork = 1
     icon = None
 
