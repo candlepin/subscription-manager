@@ -269,6 +269,7 @@ class MainWindow(widgets.GladeWidget):
         self.my_subs_tab.refresh()
 
         self._show_buttons()
+        self._show_activation_buttons()
 
     def _get_window(self):
         """
@@ -281,7 +282,6 @@ class MainWindow(widgets.GladeWidget):
         """
         Renders the Tools buttons dynamically.
         """
-
         if self.registered():
             self.register_button.hide()
             self.unregister_button.show()
@@ -289,6 +289,7 @@ class MainWindow(widgets.GladeWidget):
             self.register_button.show()
             self.unregister_button.hide()
 
+    def _show_activation_buttons(self):
         # Check if consumer can activate a subscription - if an identity cert exists
         can_activate = False
 
