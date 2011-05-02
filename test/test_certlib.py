@@ -22,6 +22,7 @@ from modelhelpers import *
 from stubs import *
 from rhsm.certificate import GMT
 
+import cert_data
 
 def dummy_exists(filename):
     return True
@@ -88,73 +89,15 @@ class PathTests(unittest.TestCase):
                 Path.join(ed.productpath(), "1-key.pem"))
 
 class ActionTests(unittest.TestCase):
-    key_content = """-----BEGIN RSA PRIVATE KEY-----
-MIIEpAIBAAKCAQEA0JJ/rk1HjrQR2y6yys8IASwznu40Weh5li3Mdaj1GQBfOxnE
-F1vWqUKXVTaBRSMkC3jRC+n7HMVIorIcxhmgk8+DP66Ac5yGIDFGYhUJ87knH8Gi
-8/0CBqpLQ91okP/bucsEmWy3P+Xn6BFbVJ2JfNCz2FjYk1/rxnC9vJXV4fi50mSH
-GN8HloSZrJagY3V6F7prT5t7CSbyKpg94eCJiCzXHB0AoAX7FBzeWrtnmWVcuej8
-Gj4dPkD3cozhLi3ztEGDGTrqjbxM7MhkcqvcosqIMQPKgvuNGjQO4URfy+f2lk7X
-8dRueYSDifUSevppU42DDR3LDrL8zaSplB/UoQIDAQABAoIBAG6zUtFQcwpqyI9s
-2biK6dS1gTB5fY+6s83hwQMyCeSbLfBQXKOJOwXbMjcoFrR7UkZEea+5IG7ExyiT
-IHKEZ5YMLb0/AS5bhVTQ0mp8gCu7uehA/hxBzTF8cTYz7awIILcb6fUEnr5raArk
-K3Vdp/t3Sf0qKskNwDYy4IGXhU3Jn0hYfvOk8EFnGb80iRHAop1A7CAaQL6vOPDL
-vJBSi430dKKS53gTvLIX7mSH3OY/HjEIdYf82yItCgbqiL6+FjUKeRXDAjq1YCpu
-FKQwQfJarEwDq670JA8kqak3NsHW/Wwr2CctEzCr59IAmWWwZJY4XAGvBfJYXud/
-K15RPYECgYEA/8sg/TzOCEZS8m2LZi5g/CaAjp5yPIBLpoPiJnuzW69bIgJGIqt9
-BLPsCI0ehn47SalT7POcTjIPLjFLiun31GCX0JSd6vzQixI++wcYvYUqkCu4iytX
-3FW/8mB1gU0CRP2fuhaV4nylpqsRcRW8p+ejX0V1cXjYzotAlSvtFYsCgYEA0L2c
-CWrB1kmpzKVixsLJNtVo5SmyEdbtuhsE452lUeBa/bRHXf39n23vH8ePriHJt82l
-97bdXrdZu68WW9m12bXdpCZwEyFZx0WW171/DtilKPUpZR9aitN2SK1QKiVNUuXd
-AmWvoiRxZ9ZZTUWcWuz/M5pbwLqas48uet9kPAMCgYEAumC/gMU1OkJDXfEDiUhx
-0kgbk89PXVX9yS5/MZsgbMWwmW8eu1RIm4ydhv2MKGMBwAJo7FX0peVDulygtm8T
-7OMUux4OkpHzQeHhkfbxx+WnxbSVmpHSSvEQEwLFm5kI9kv2fhjGzWgVKwOqicNU
-2uKk31403KE5GAXO4OJItVECgYA1gMQj7cctQ8hP+fwtcfPdKCowwtUvmWVplE9W
-gCvFprnr2W+JefauDKGEBcSgH2zyvbVSnv5yrpBDeQdEF7Ny0Bi1YFzNqni2iPG2
-7o1IouMCcoRftP+iIb1pt3KauuDs5JoXaTTxXGHs+ZX+Jl+DNsfa1C+8YJgSehqx
-x9yLPQKBgQCp03t8hrH4CxYA4jHhQnj6wJqHiEP4ewxlGI479+wph9Qb8A9K8bes
-xbSoovHHp6e9v55d93YYWMpwgtHLLgqfQyjvOAxz75zbx3BhSHqCt5VHCfgC6dlr
-GfcgLc+FXtHMbf+VTvGgeJsDwtSr0WRWojyyvJBMV736CI+04I1TCg==
------END RSA PRIVATE KEY-----
-"""
-    cert_content = """-----BEGIN CERTIFICATE-----
-MIIEtTCCBB6gAwIBAgIIDe68HxGYKq8wDQYJKoZIhvcNAQEFBQAwRDEjMCEGA1UE
-AwwaYWxpa2lucy51c2Vyc3lzLnJlZGhhdC5jb20xCzAJBgNVBAYTAlVTMRAwDgYD
-VQQHDAdSYWxlaWdoMB4XDTExMDQwNDAwMDAwMFoXDTEyMDQwMzAwMDAwMFowKzEp
-MCcGA1UEAxMgOGE4YjY3OWMyZjIxYzY5MjAxMmY0NjJlMWJhMzAyOTYwggEiMA0G
-CSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCuk+G+bFKwGOPTQvTmG55/vf5AZOaX
-xz3bt/gMAbBzVCwkrRXzYyFu2IcMr6MhtE7UzdA/3Li8NC1J6T8bpvuLJvnA6jKM
-3vpHBI3L9YE2vYgnXdu0aLB/DpKNqElkmSw3fRwpZhTeHkI6DmEJZZ4aRjGg/524
-mcmfeVgSkJWS4aYIIUHUdKbrWmZjLn3dSbx+UGfcrafCZnBk8EXGG25vh5KBc7uK
-m9ZNy6serrkxIV6FicagObT/J8PNICKvzmzHxOGld4D6xw3g0XO+VNt94gD+1rZn
-1+mywro6ZNGxeoMDYmt7S81OkrBHkenWWnPBSBBBDdZG+k0z9ZxzQd2hAgMBAAGj
-ggJDMIICPzARBglghkgBhvhCAQEEBAMCBaAwCwYDVR0PBAQDAgSwMHQGA1UdIwRt
-MGuAFJkH4LRF+Fhr73thg1s3IpAXxdr1oUikRjBEMSMwIQYDVQQDDBphbGlraW5z
-LnVzZXJzeXMucmVkaGF0LmNvbTELMAkGA1UEBhMCVVMxEDAOBgNVBAcMB1JhbGVp
-Z2iCCQCe/CAbegkH5DAdBgNVHQ4EFgQUJOO6190WrguRM6/z7f1BgYtCQi4wEwYD
-VR0lBAwwCgYIKwYBBQUHAwIwIQYKKwYBBAGSCAkEAQQTDBFNYW5hZ2VtZW50IEFk
-ZC1PbjAwBgorBgEEAZIICQQCBCIMIDhhOGI2NzljMmYyMWM2OTIwMTJmMjFjNzE1
-ZWYwMTFmMB4GCisGAQQBkggJBAMEEAwObWFuYWdlbWVudC0xMDAwEQYKKwYBBAGS
-CAkEBQQDDAE1MCQGCisGAQQBkggJBAYEFgwUMjAxMS0wNC0wNFQwMDowMDowMFow
-JAYKKwYBBAGSCAkEBwQWDBQyMDEyLTA0LTAzVDAwOjAwOjAwWjASBgorBgEEAZII
-CQQMBAQMAjkwMBIGCisGAQQBkggJBAoEBAwCNDUwGwYKKwYBBAGSCAkEDQQNDAsx
-MjMzMTEzMTIzMTARBgorBgEEAZIICQQOBAMMATEwEQYKKwYBBAGSCAkECwQDDAEx
-MDQGCisGAQQBkggJBQEEJgwkZmJmNmI4MzgtMWM3Ny00OTBlLWE2YTktY2UxMjZh
-YjZiODgyMA0GCSqGSIb3DQEBBQUAA4GBAA5DRvx5BD2pgsC4GOwjtmYJgxpXKHEK
-EF5Awg/Ct+UyPCSP3ttsvW3DlT6eGVpLh09+EmR+6UEka2VywQsOm/2WHaNomk/o
-hu0hZhU+U78AoV3eFtIGhNUpHZ66bXsqPnQ0u1G/XHL1cb38LFUkFBVjCvzvQCyi
-vHkM1ggwdhJ5
------END CERTIFICATE-----
-"""
-
     def test_action(self):
         action = Action()
 
     def test_action_build(self):
         action = Action()
-        bundle = {'key': self.key_content,
-                   'cert': self.cert_content}
+        bundle = {'key': cert_data.key_content,
+                   'cert': cert_data.cert_content}
         key, cert = action.build(bundle)
-        assert(key.content == self.key_content)
+        assert(key.content == cert_data.key_content)
         print cert.serialNumber()
 
 
