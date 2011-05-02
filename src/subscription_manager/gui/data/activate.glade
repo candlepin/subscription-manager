@@ -5,7 +5,10 @@
   <widget class="GtkDialog" id="activate_dialog">
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Subscription Activation</property>
-    <property name="type_hint">normal</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">dialog</property>
     <signal name="delete_event" handler="on_activate_dialog_delete_event"/>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox1">
