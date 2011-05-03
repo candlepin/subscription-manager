@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: zh_TW\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-05 13:00-0300\n"
-"PO-Revision-Date: 2011-04-01 11:00+1000\n"
+"PO-Revision-Date: 2011-04-21 11:12+1000\n"
 "Last-Translator: Terry Chuang <tchuang@redhat.com>\n"
 "Language-Team: Traditional Chinese <zh@li.org>\n"
 "Language: zh-TW\n"
@@ -182,8 +182,7 @@ msgstr "更新詳情"
 msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
-msgstr ""
-"發生網路錯誤，無法連至伺服器。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+msgstr "發生網路錯誤，無法連至伺服器。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
 #. NOTE: yes this looks a lot like the socket error, but I think these
 #. were actually intended to display slightly different messages:
@@ -192,8 +191,7 @@ msgstr ""
 msgid ""
 "Network error. Please check the connection details, or see /var/log/rhsm/"
 "rhsm.log for more information."
-msgstr ""
-"發生網路錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+msgstr "發生網路錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
 #. This is what happens when there's an issue with the server on the other side of the wire
 #: ../src/subscription_manager/managercli.py:59
@@ -232,8 +230,7 @@ msgid "password for http proxy with basic authentication"
 msgstr "含有基本驗證的 http 代理伺服器的密碼"
 
 #: ../src/subscription_manager/managercli.py:138
-msgid ""
-"Consumer not registered. Please register using --username and --password"
+msgid "Consumer not registered. Please register using --username and --password"
 msgstr "使用者尚未註冊。請使用 --username 和 --password 進行註冊"
 
 #: ../src/subscription_manager/managercli.py:193
@@ -294,8 +291,7 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "強制產生認證（需要使用者名稱與密碼）"
 
 #: ../src/subscription_manager/managercli.py:307
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr "使用者身份不存在，或是已損毀。請嘗試註冊 --help"
 
 #: ../src/subscription_manager/managercli.py:310
@@ -462,8 +458,7 @@ msgid "available"
 msgstr "可使用"
 
 #: ../src/subscription_manager/managercli.py:677
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
+msgid "date to search on, defaults to today's date, only used with --available "
 msgstr "欲搜尋的日期，預設為今天的日期，僅搭配 --available 使用"
 
 #: ../src/subscription_manager/managercli.py:680
@@ -707,7 +702,7 @@ msgstr "訂閱管理程式"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_subscriptions.py:28
 msgid "RHSM Subscriptions Managemen"
-msgstr ""
+msgstr "RHSM 訂閱管理"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -805,8 +800,7 @@ msgstr "訂閱"
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
-msgstr ""
-"顯示規範協助時發生了錯誤。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+msgstr "顯示規範協助時發生了錯誤。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
 #: ../src/subscription_manager/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -891,11 +885,11 @@ msgstr "我的訂閱"
 
 #: ../src/subscription_manager/gui/mysubstab.py:140
 msgid "Yes"
-msgstr ""
+msgstr "是"
 
 #: ../src/subscription_manager/gui/mysubstab.py:142
 msgid "No"
-msgstr ""
+msgstr "否"
 
 #. Set up columns on the view
 #: ../src/subscription_manager/gui/factsgui.py:54
@@ -1382,8 +1376,7 @@ msgid "Manage Your Product Subscriptions"
 msgstr "管理您的產品訂閱"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr "選擇欲匯入您訂閱認證目錄中的認證。"
 
 #: ../src/subscription_manager/gui/data/mysubs.glade.h:1
@@ -1589,8 +1582,3 @@ msgstr "Red Hat 訂閱認證驗證程式"
 msgid "Subscription Validity Applet"
 msgstr "訂閱認證驗證程式"
 
-#~ msgid "yes"
-#~ msgstr "是"
-
-#~ msgid "no"
-#~ msgstr "否"

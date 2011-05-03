@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-29 18:47-0300\n"
-"PO-Revision-Date: 2011-04-11 10:38+0900\n"
+"PO-Revision-Date: 2011-04-21 14:10+0900\n"
 "Last-Translator: Kiyoto Hashida <khashida@redhat.com>\n"
 "Language-Team: Japanese <jp@li.org>\n"
 "Language: ja-JP\n"
@@ -19,6 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -743,7 +744,7 @@ msgstr "今日"
 
 #: ../src/gui/managergui.py:371
 msgid "You must register before using the subscription assistant."
-msgstr "登録後にサブスクリプションアシスタントを使用できます。"
+msgstr "システムの登録後にサブスクリプションアシスタントを使用できます。"
 
 #: ../src/gui/managergui.py:402
 #, python-format
@@ -779,7 +780,7 @@ msgstr "コンプライアンスの無い製品の一覧"
 #: ../src/gui/contract_selection.py:80 ../src/gui/installedtab.py:56
 #: ../src/gui/data/subdetails.glade.h:13
 msgid "End Date"
-msgstr "終了期日"
+msgstr "終了日"
 
 #: ../src/gui/compliance.py:141
 msgid "Subscription List"
@@ -876,7 +877,7 @@ msgstr "本当に %s からサブスクリプションを解除しますか？"
 
 #: ../src/gui/mysubstab.py:113
 msgid "My Subscriptions"
-msgstr "自分のサブスクリプション"
+msgstr "利用中のサブスクリプション"
 
 #: ../src/gui/mysubstab.py:140
 msgid "yes"
@@ -910,7 +911,7 @@ msgstr "使用中 / 利用可能"
 #: ../src/gui/contract_selection.py:76 ../src/gui/installedtab.py:55
 #: ../src/gui/data/subdetails.glade.h:14
 msgid "Start Date"
-msgstr "開始期日"
+msgstr "開始日"
 
 #: ../src/gui/installedtab.py:53
 msgid "Version"
@@ -952,7 +953,7 @@ msgstr "ありません"
 
 #: ../src/gui/installedtab.py:151
 msgid "My Installed Software"
-msgstr "自分のインストール済みソフトウェア"
+msgstr "インストール済みソフトウェア"
 
 #: ../src/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
@@ -1021,7 +1022,7 @@ msgstr "<small><b>例:</b> squid.example.com:3128</small> "
 
 #: ../src/gui/data/networkConfig.glade.h:11
 msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-msgstr "Red Hat Network に HTTP プロキシ経由で接続したいです。 "
+msgstr "Red Hat Network に HTTP プロキシ経由で接続する。 "
 
 #: ../src/gui/data/networkConfig.glade.h:12
 msgid "Proxy P_assword:"
@@ -1220,7 +1221,7 @@ msgid ""
 msgstr ""
 "マシンのアクティベーションには数分かかるでしょう。\n"
 "アクティベーションが完了したら、通知を受信する為の\n"
-"電子メールアドレスを記入して下さい。"
+"電子メールアドレスを入力して下さい。"
 
 #: ../src/gui/data/activate.glade.h:5 ../src/gui/data/factsdialog.glade.h:2
 msgid "Close"
@@ -1312,7 +1313,7 @@ msgstr "<b>コントラクト番号:</b>"
 
 #: ../src/gui/data/subdetails.glade.h:4
 msgid "<b>End Date:</b>"
-msgstr "<b>終了期日:</b>"
+msgstr "<b>終了日:</b>"
 
 #: ../src/gui/data/subdetails.glade.h:5
 msgid "<b>Provides Management:</b>"
@@ -1416,7 +1417,7 @@ msgstr "自分のシステムにマッチ"
 
 #: ../src/gui/data/registration.glade.h:1
 msgid "<b>Please enter the following for this system:</b>"
-msgstr "<b>このシステムに関して以下を記入して下さい:</b>"
+msgstr "<b>このシステムの以下の情報を入力して下さい:</b>"
 
 #: ../src/gui/data/registration.glade.h:2
 msgid ""
@@ -1439,7 +1440,7 @@ msgstr "登録"
 
 #: ../src/gui/data/registration.glade.h:6
 msgid "Select the most appropriate subscriptions for this system"
-msgstr "このシステムに最適なサブスクリプションを選択してください"
+msgstr "このシステムに最適なサブスクリプションを選択する"
 
 #: ../src/gui/data/registration.glade.h:7
 msgid "System Name:"
@@ -1463,7 +1464,7 @@ msgstr "registration_dialog_action_area\n"
 
 #: ../src/gui/data/registration.glade.h:13
 msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr "<b>Red Hat Network アカウントの情報を記入して下さい:</b> "
+msgstr "<b>Red Hat Network アカウントの情報を入力して下さい:</b> "
 
 #: ../src/gui/data/registration.glade.h:14
 msgid "Password:"

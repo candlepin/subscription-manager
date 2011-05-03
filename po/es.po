@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-05 13:00-0300\n"
-"PO-Revision-Date: 2011-04-01 13:50+1000\n"
+"PO-Revision-Date: 2011-04-21 09:30+1000\n"
 "Last-Translator: Gladys Guerrero <gguerrer@redhat.com>\n"
 "Language-Team: Spanish <en@li.org>\n"
 "Language: es-ES\n"
@@ -234,10 +234,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "Contraseña para http proxy con autenticación básica"
 
 #: ../src/subscription_manager/managercli.py:138
-msgid ""
-"Consumer not registered. Please register using --username and --password"
-msgstr ""
-"Usuario no registrado. Por favor regístrese mediante --username y --password"
+msgid "Consumer not registered. Please register using --username and --password"
+msgstr "Usuario no registrado. Por favor regístrese mediante --username y --password"
 
 #: ../src/subscription_manager/managercli.py:193
 msgid "Consumer certificates corrupted. Please reregister."
@@ -299,8 +297,7 @@ msgstr ""
 "contraseña)"
 
 #: ../src/subscription_manager/managercli.py:307
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 "La identidad de usuario puede no existir o estar corrupta. Intente register "
 "--help"
@@ -476,8 +473,7 @@ msgid "available"
 msgstr "Disponible"
 
 #: ../src/subscription_manager/managercli.py:677
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
+msgid "date to search on, defaults to today's date, only used with --available "
 msgstr ""
 "Fecha de búsqueda, predeterminada a la fecha de hoy, únicamente se utiliza "
 "con --available "
@@ -488,8 +484,7 @@ msgstr "Consumido"
 
 #: ../src/subscription_manager/managercli.py:682
 msgid "if supplied with --available then all subscriptions are returned"
-msgstr ""
-"Si se proporciona con --available, todas las suscripciones se retornarán"
+msgstr "Si se proporciona con --available, todas las suscripciones se retornarán"
 
 #: ../src/subscription_manager/managercli.py:686
 msgid "Error: --all is only applicable with --available"
@@ -731,7 +726,7 @@ msgstr "Gestor de suscripción"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_subscriptions.py:28
 msgid "RHSM Subscriptions Managemen"
-msgstr ""
+msgstr "Administración de suscripciones de RHSM"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -767,8 +762,7 @@ msgstr "Instalado"
 
 #: ../src/subscription_manager/gui/widgets.py:404
 msgid "Invalid date format. Please re-enter a valid date. Example: "
-msgstr ""
-"Formato de fecha inválido. Por favor reingrese una fecha válida. Ejemplo:"
+msgstr "Formato de fecha inválido. Por favor reingrese una fecha válida. Ejemplo:"
 
 #: ../src/subscription_manager/gui/widgets.py:439
 msgid "Today"
@@ -853,8 +847,7 @@ msgstr "%s (primera fecha de derechos no válidos)"
 #: ../src/subscription_manager/gui/compliance.py:221
 #, python-format
 msgid "The following subscriptions will cover the products selected on %s"
-msgstr ""
-"Las siguientes suscripciones cubrirán los productos seleccionados en %s"
+msgstr "Las siguientes suscripciones cubrirán los productos seleccionados en %s"
 
 #: ../src/subscription_manager/gui/compliance.py:229
 #: ../src/subscription_manager/gui/allsubs.py:189
@@ -922,11 +915,11 @@ msgstr "Mis suscripciones"
 
 #: ../src/subscription_manager/gui/mysubstab.py:140
 msgid "Yes"
-msgstr ""
+msgstr "Sí"
 
 #: ../src/subscription_manager/gui/mysubstab.py:142
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #. Set up columns on the view
 #: ../src/subscription_manager/gui/factsgui.py:54
@@ -1419,8 +1412,7 @@ msgid "Manage Your Product Subscriptions"
 msgstr "Administre sus suscripciones de productos"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr ""
 "Elija un certificado a importar a su directorio de certificados de "
 "suscripción."
@@ -1569,8 +1561,7 @@ msgstr "Mostrar mensaje de depuración"
 
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:48
 msgid "Force display of the icon (expired or warning)"
-msgstr ""
-"Forzar el despliegue del icono de cumplimiento (expirado o advertencia)"
+msgstr "Forzar el despliegue del icono de cumplimiento (expirado o advertencia)"
 
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:171
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:172
@@ -1579,8 +1570,7 @@ msgstr "Certificados de derechos faltantes o inválidos"
 
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:173
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr ""
-"A este sistema le faltan uno o varios certificados de derechos válidos."
+msgstr "A este sistema le faltan uno o varios certificados de derechos válidos."
 
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:177
 msgid "Some of the system's subscriptions are about to expire"
@@ -1592,8 +1582,7 @@ msgstr "Las suscripciones de este sistema están a punto de expirar"
 
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:180
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr ""
-"Una o varias de las suscripciones de este sistema están a punto de expirar."
+msgstr "Una o varias de las suscripciones de este sistema están a punto de expirar."
 
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:198
 msgid "Remind Me Later"
@@ -1631,8 +1620,3 @@ msgstr "Miniaplicación de validez de suscripción de Red Hat"
 msgid "Subscription Validity Applet"
 msgstr "Miniaplicación de validez de suscripción"
 
-#~ msgid "yes"
-#~ msgstr "Sí"
-
-#~ msgid "no"
-#~ msgstr "No"

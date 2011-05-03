@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ml\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-05 13:00-0300\n"
-"PO-Revision-Date: 2011-04-05 13:02+0530\n"
+"PO-Revision-Date: 2011-04-25 17:42+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
 "Language: ml-IN\n"
@@ -234,10 +234,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "അടിസ്ഥാന ആഝികാരികത ഉറപ്പാക്കലുള്ള http പ്രോക്സിയ്ക്കുള്ള രഹസ്യവാക്ക്"
 
 #: ../src/subscription_manager/managercli.py:138
-msgid ""
-"Consumer not registered. Please register using --username and --password"
-msgstr ""
-"ഉപഭോക്താവു് രജിസ്ടര്‍ ചെയ്തിട്ടില്ല. ദയവായി  --username, --password രജിസ്ടര്‍ ചെയ്യുക"
+msgid "Consumer not registered. Please register using --username and --password"
+msgstr "ഉപഭോക്താവു് രജിസ്ടര്‍ ചെയ്തിട്ടില്ല. ദയവായി  --username, --password രജിസ്ടര്‍ ചെയ്യുക"
 
 #: ../src/subscription_manager/managercli.py:193
 msgid "Consumer certificates corrupted. Please reregister."
@@ -297,8 +295,7 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "സര്‍ട്ടിഫിക്കേറ്റ് വീണ്ടും ലഭ്യമാക്കല്‍ നിര്‍ബന്ധമാക്കുക (ഉപയോക്തൃനാമവും രഹസ്യവാക്കും)"
 
 #: ../src/subscription_manager/managercli.py:307
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 "ഉപഭോക്താവിനെ തിരിച്ചറിയുവാനുള്ള വിവരം ലഭ്യമല്ല അല്ലെങ്കില്‍ അതില്‍ തകരാറുണ്ടു്. --help "
 "ശ്രമിയ്ക്കുക"
@@ -460,8 +457,7 @@ msgstr "പിശക്: --list അല്ലെങ്കില്‍ --update �
 
 #: ../src/subscription_manager/managercli.py:668
 msgid "list available or consumer subscriptions for registered user"
-msgstr ""
-"പട്ടിക ലഭ്യമാണു് അല്ലെങ്കില്‍ രജിസ്ടര്‍ ചെയ്തിട്ടുള്ള ഉപയോക്താക്കള്‍ക്കുള്ള ഉപഭോക്ത സബ്സ്ക്രിപ്ഷനുകള്‍"
+msgstr "പട്ടിക ലഭ്യമാണു് അല്ലെങ്കില്‍ രജിസ്ടര്‍ ചെയ്തിട്ടുള്ള ഉപയോക്താക്കള്‍ക്കുള്ള ഉപഭോക്ത സബ്സ്ക്രിപ്ഷനുകള്‍"
 
 #: ../src/subscription_manager/managercli.py:673
 msgid "installed"
@@ -472,8 +468,7 @@ msgid "available"
 msgstr "ലഭ്യമായവ"
 
 #: ../src/subscription_manager/managercli.py:677
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
+msgid "date to search on, defaults to today's date, only used with --available "
 msgstr ""
 "തെരച്ചിലിനുള്ള തീയതി, ഇന്നത്തെ തീയതി സ്വതവേയുള്ളതാക്കുക, --available-നൊപ്പം മാത്രം "
 "ഉപയോഗിയ്ക്കുന്നു"
@@ -722,7 +717,7 @@ msgstr "സബ്സ്ക്രിപ്ഷന്‍ മാനേജര്‍"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_subscriptions.py:28
 msgid "RHSM Subscriptions Managemen"
-msgstr ""
+msgstr "ആര്‍എച്എസ്എം സബ്സ്ക്രിപ്ഷന്‍സ് മാനേജ്മെന്റ്"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -905,11 +900,11 @@ msgstr "എന്റെ സബ്സ്ക്രിപ്ഷനുകള്‍"
 
 #: ../src/subscription_manager/gui/mysubstab.py:140
 msgid "Yes"
-msgstr ""
+msgstr "ഉവ്വു്"
 
 #: ../src/subscription_manager/gui/mysubstab.py:142
 msgid "No"
-msgstr ""
+msgstr "അല്ല"
 
 #. Set up columns on the view
 #: ../src/subscription_manager/gui/factsgui.py:54
@@ -1397,8 +1392,7 @@ msgid "Manage Your Product Subscriptions"
 msgstr "പ്രൊഡക്ട് സബ്ക്രിപ്ഷനുകള്‍ കൈകാര്യം ചെയ്യുക"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr ""
 "നിങ്ങളുടെ സബ്സ്ക്രിപ്ഷന്‍ സര്‍ട്ടിഫിക്കേറ്റ് ഡയറക്ടറി ഇംപോര്‍ട്ട് ചെയ്യുന്നതിനുള്ളൊരു സര്‍ട്ടിഫിക്കേറ്റ് "
 "തെരഞ്ഞെടുക്കുക."
@@ -1547,8 +1541,7 @@ msgstr "ഡീബഗ് സന്ദേശങ്ങള്‍ കാണിയ്�
 
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:48
 msgid "Force display of the icon (expired or warning)"
-msgstr ""
-"പ്രതിരൂപത്തിന്റെ നിര്‍ബന്ധിച്ചുള്ള കാഴ്ച (കാലാവധി കഴിഞ്ഞിരിയ്ക്കുന്നു അല്ലെങ്കില്‍ മുന്നറിയിപ്പു്)"
+msgstr "പ്രതിരൂപത്തിന്റെ നിര്‍ബന്ധിച്ചുള്ള കാഴ്ച (കാലാവധി കഴിഞ്ഞിരിയ്ക്കുന്നു അല്ലെങ്കില്‍ മുന്നറിയിപ്പു്)"
 
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:171
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:172
@@ -1607,8 +1600,3 @@ msgstr "Red Hat സബ്സ്ക്രിപ്ഷന്‍ വാലിഡി
 msgid "Subscription Validity Applet"
 msgstr "സബ്സ്ക്രിപ്ഷന്‍ വാലിഡിറ്റി ആപ്ലെറ്റ്"
 
-#~ msgid "yes"
-#~ msgstr "ഉവ്വു്"
-
-#~ msgid "no"
-#~ msgstr "അല്ല"

@@ -10,16 +10,15 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-05 13:00-0300\n"
-"PO-Revision-Date: 2011-04-01 13:17\n"
-"Last-Translator: Yulia <ypoyarko@redhat.com>\n"
+"PO-Revision-Date: 2011-04-21 10:10+1000\n"
+"Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru-RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: ../src/subscription_manager/certlib.py:96
 msgid "Reasons(s):"
@@ -236,8 +235,7 @@ msgid "password for http proxy with basic authentication"
 msgstr "пароль для доступа к прокси HTTP с минимальной аутентификацией"
 
 #: ../src/subscription_manager/managercli.py:138
-msgid ""
-"Consumer not registered. Please register using --username and --password"
+msgid "Consumer not registered. Please register using --username and --password"
 msgstr ""
 "Пользователь не зарегистрирован. Для регистрации добавьте аргументы -«-"
 "username» и «--password»"
@@ -264,8 +262,7 @@ msgstr "Пароль: "
 
 #: ../src/subscription_manager/managercli.py:252
 msgid "removes all local consumer data, does not effect the server"
-msgstr ""
-"удаляет локальные данные пользователя без отражения изменений на сервере"
+msgstr "удаляет локальные данные пользователя без отражения изменений на сервере"
 
 #: ../src/subscription_manager/managercli.py:265
 msgid "All local data removed"
@@ -303,8 +300,7 @@ msgstr ""
 "пароля)"
 
 #: ../src/subscription_manager/managercli.py:307
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr "Пользователь не существует или повреждён. Выполните «register --help»."
 
 #: ../src/subscription_manager/managercli.py:310
@@ -334,8 +330,7 @@ msgstr "тип регистрируемого пользователя. По у�
 
 #: ../src/subscription_manager/managercli.py:360
 msgid "name of the consumer to register. Defaults to the hostname."
-msgstr ""
-"имя регистрируемого пользователя. По умолчанию используется имя компьютера."
+msgstr "имя регистрируемого пользователя. По умолчанию используется имя компьютера."
 
 #: ../src/subscription_manager/managercli.py:362
 msgid "register to an existing consumer"
@@ -392,8 +387,7 @@ msgstr "активировать зарегистрированного поль
 
 #: ../src/subscription_manager/managercli.py:479
 msgid "optional email address to notify when token activation is complete."
-msgstr ""
-"дополнительный адрес для отправки уведомлений об успешной активации ключа"
+msgstr "дополнительный адрес для отправки уведомлений об успешной активации ключа"
 
 #: ../src/subscription_manager/managercli.py:482
 msgid ""
@@ -429,11 +423,11 @@ msgstr "отменить подписки для зарегистрирован�
 
 #: ../src/subscription_manager/managercli.py:586
 msgid "Certificate serial to unsubscribe"
-msgstr "Серийный номер отписываемого сертификата"
+msgstr "серийный номер отписываемого сертификата"
 
 #: ../src/subscription_manager/managercli.py:588
 msgid "Unsubscribe from all subscriptions"
-msgstr "Отписаться ото всех"
+msgstr "отменить все подписки"
 
 #: ../src/subscription_manager/managercli.py:610
 msgid "One of --serial or --all must be provided"
@@ -450,7 +444,7 @@ msgstr ""
 
 #: ../src/subscription_manager/managercli.py:628
 msgid "show information for facts"
-msgstr "показать сведения о фактах"
+msgstr "показать системную статистику"
 
 #: ../src/subscription_manager/managercli.py:633
 msgid "list known facts for this system"
@@ -462,8 +456,7 @@ msgstr "обновить статистику"
 
 #: ../src/subscription_manager/managercli.py:644
 msgid "Error: Need either --list or --update, Try facts --help"
-msgstr ""
-"Ошибка. Необходимо указать «--list» или «--update». Выполните «facts --help»"
+msgstr "Ошибка. Необходимо указать «--list» или «--update». Выполните «facts --help»"
 
 #: ../src/subscription_manager/managercli.py:668
 msgid "list available or consumer subscriptions for registered user"
@@ -478,10 +471,8 @@ msgid "available"
 msgstr "доступно"
 
 #: ../src/subscription_manager/managercli.py:677
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
-msgstr ""
-"поиск по дате (по умолчанию сегодня), используется вместе с «--available»"
+msgid "date to search on, defaults to today's date, only used with --available "
+msgstr "поиск по дате (по умолчанию сегодня), используется вместе с «--available»"
 
 #: ../src/subscription_manager/managercli.py:680
 msgid "consumed"
@@ -563,7 +554,7 @@ msgid ""
 msgstr ""
 "\n"
 "Имя:        \t%-25s\n"
-"Статус:             \t%-25s\n"
+"Статус:          \t%-25s\n"
 "Истекает:            \t%-25s\n"
 "Подписка:       \t%-25s\n"
 "Номер контракта:     \t%-25s\n"
@@ -652,11 +643,11 @@ msgid ""
 msgstr ""
 "ПРЕДУПРЕЖДЕНИЕ\n"
 "\n"
-"Вы уже зарегистрированы в RHN с использованием RHN Classic. Эта утилита "
+"Вы уже зарегистрированы в RHN с использованием RHN Classic. Эта программа "
 "требует, чтобы регистрация была выполнена на основе сертификата.\n"
 "\n"
-"За редкими исключения Red Hat рекомендует регистрироваться всего один раз.\n"
-"За дальнейшей информацией обратитесь к статье https://access.redhat.com/kb/"
+"За редкими исключениями Red Hat рекомендует регистрироваться всего один раз.\n"
+"За дальнейшей информацией обратитесь к https://access.redhat.com/kb/"
 "docs/DOC-45563\n"
 
 #: ../src/subscription_manager/productid.py:109
@@ -721,11 +712,11 @@ msgstr "Управление подписками RHSM"
 #: ../src/subscription_manager/gui/data/subsgui.glade.h:3
 #: ../etc-conf/subscription-manager.desktop.in.h:2
 msgid "Subscription Manager"
-msgstr "Менеджер подписок"
+msgstr "Управление подписками"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_subscriptions.py:28
 msgid "RHSM Subscriptions Managemen"
-msgstr ""
+msgstr "Управление подписками Red Hat"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -734,12 +725,12 @@ msgstr "Ошибка активации подписки: %s"
 
 #: ../src/subscription_manager/gui/importsub.py:72
 msgid "You must select a certificate."
-msgstr "Необходимо выбрать сертификат."
+msgstr "Выберите сертификат"
 
 #: ../src/subscription_manager/gui/importsub.py:85
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
-msgstr "Недопустимый файл сертификата (%s). Предоставьте верный сертификат."
+msgstr "Недопустимый файл сертификата (%s). Выберите другой файл."
 
 #: ../src/subscription_manager/gui/widgets.py:150
 #, python-format
@@ -755,7 +746,7 @@ msgstr "Компонент"
 
 #: ../src/subscription_manager/gui/widgets.py:196
 msgid "Installed"
-msgstr "Установлено"
+msgstr "Установлен"
 
 #: ../src/subscription_manager/gui/widgets.py:404
 msgid "Invalid date format. Please re-enter a valid date. Example: "
@@ -772,8 +763,7 @@ msgstr "Для доступа к помощнику по подписке нео
 #: ../src/subscription_manager/gui/managergui.py:381
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr ""
-"Всего продуктов с недействительными сертификатами полномочий: <b>%s</b>"
+msgstr "Всего продуктов с недействительными сертификатами полномочий: <b>%s</b>"
 
 #: ../src/subscription_manager/gui/managergui.py:385
 msgid "You have <b>1</b> product without a valid entitlement certificate."
@@ -786,15 +776,15 @@ msgstr "Сертификаты полномочий действительны �
 
 #: ../src/subscription_manager/gui/managergui.py:515
 msgid "You must enter a system name."
-msgstr "Необходимо ввести имя системы."
+msgstr "Укажите имя системы"
 
 #: ../src/subscription_manager/gui/managergui.py:524
 msgid "You must enter a login."
-msgstr "Необходимо авторизоваться."
+msgstr "Требуется авторизация"
 
 #: ../src/subscription_manager/gui/managergui.py:530
 msgid "You must enter a password."
-msgstr "Необходимо ввести пароль."
+msgstr "Укажите пароль"
 
 #: ../src/subscription_manager/gui/compliance.py:117
 msgid "Uncompliant Product List"
@@ -824,9 +814,7 @@ msgstr "Подписка"
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
-msgstr ""
-"Ошибка отображения помощника. За информацией обратитесь к /var/log/rhsm/rhsm."
-"log"
+msgstr "Ошибка отображения помощника. За информацией обратитесь к /var/log/rhsm/rhsm.log"
 
 #: ../src/subscription_manager/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -845,7 +833,7 @@ msgstr "%s (день остановки поддержки)"
 #: ../src/subscription_manager/gui/compliance.py:221
 #, python-format
 msgid "The following subscriptions will cover the products selected on %s"
-msgstr "Следующие подписки охватывают компоненты, выбранные на %s"
+msgstr "Следующие подписки охватывают компоненты, выбранные %s"
 
 #: ../src/subscription_manager/gui/compliance.py:229
 #: ../src/subscription_manager/gui/allsubs.py:189
@@ -911,11 +899,11 @@ msgstr "Мои подписки"
 
 #: ../src/subscription_manager/gui/mysubstab.py:140
 msgid "Yes"
-msgstr ""
+msgstr "Да"
 
 #: ../src/subscription_manager/gui/mysubstab.py:142
 msgid "No"
-msgstr ""
+msgstr "Нет"
 
 #. Set up columns on the view
 #: ../src/subscription_manager/gui/factsgui.py:54
@@ -986,11 +974,11 @@ msgstr "Отсутствует"
 
 #: ../src/subscription_manager/gui/installedtab.py:153
 msgid "My Installed Software"
-msgstr "Мои установленные программы"
+msgstr "Мои программы"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
-msgstr "<b>Статус сертификата:</b>"
+msgstr "<b>Сертификат:</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:2
 msgid "<b>Product's Subscription Details</b>"
@@ -1087,7 +1075,7 @@ msgstr "Адрес _прокси:"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:1
 msgid "A different date:"
-msgstr "В другой день:"
+msgstr "в другой день:"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:2
 msgid "Invalid Product List"
@@ -1226,7 +1214,7 @@ msgstr "Несовместимо"
 #: ../src/subscription_manager/gui/data/rhsm.glade.h:10
 #: ../src/subscription_manager/gui/data/importsub.glade.h:4
 msgid "Provide a Subscription Certificate"
-msgstr "Предоставить сертификат подписки"
+msgstr "Выбор сертификата подписки"
 
 #: ../src/subscription_manager/gui/data/rhsm.glade.h:11
 msgid "Register with Red Hat Entitlement Service"
@@ -1403,9 +1391,8 @@ msgid "Manage Your Product Subscriptions"
 msgstr "Управление подписками продуктов"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
-msgstr "Выберите сертификат для импортирования."
+msgid "Choose a certificate to import to your subscription certificate directory."
+msgstr "Выберите сертификат:"
 
 #: ../src/subscription_manager/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
@@ -1445,7 +1432,7 @@ msgstr "Совпадение по системе"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:9
 msgid "Only show subscriptions that:"
-msgstr "Показать подписки, которые:"
+msgstr "Показать подписки с учётом следующих условий:"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:10
 msgid "Search"
@@ -1469,11 +1456,11 @@ msgstr "совпадение по системе"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:1
 msgid "<b>Please enter the following for this system:</b>"
-msgstr "<b>Введите следующие данные для системы:</b>"
+msgstr "<b>Введите данные системы:</b>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:2
 msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr "<b>Введите данные учётной записи Red Hat Network:</b>"
+msgstr "<b>Авторизация в Red Hat Network:</b>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:3
 msgid ""
@@ -1487,7 +1474,7 @@ msgstr ""
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:5
 msgid "A unique label for this system"
-msgstr "Уникальная метка системы"
+msgstr "Уникальное имя системы"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:6
 msgid "Password:"
@@ -1610,8 +1597,3 @@ msgstr "Апплет проверки подписки Red Hat"
 msgid "Subscription Validity Applet"
 msgstr "Апплет проверки подписки"
 
-#~ msgid "yes"
-#~ msgstr "да"
-
-#~ msgid "no"
-#~ msgstr "нет"

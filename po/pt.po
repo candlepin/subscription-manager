@@ -1,18 +1,20 @@
+# translation of pt.po to Brazilian Portuguese
 # translation of pt_BR.po to
 # translation of pt-BR.po to
 # Language pt-BR translations for l package.
 # Copyright (C) 2011 THE l'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the l package.
-# Automatically generated, 2011.
 #
+# Automatically generated, 2011.
+# Ricardo Gyorfy <rgyorfy@redhat.com>, 2011.
 msgid ""
 msgstr ""
-"Project-Id-Version: pt_BR\n"
+"Project-Id-Version: pt\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-05 13:00-0300\n"
-"PO-Revision-Date: 2011-03-22 15:59+1100\n"
-"Last-Translator: \n"
-"Language-Team:  <en@li.org>\n"
+"PO-Revision-Date: 2011-04-27 09:57+1000\n"
+"Last-Translator: Ricardo Gyorfy <rgyorfy@redhat.com>\n"
+"Language-Team: Brazilian Portuguese <pt@li.org>\n"
 "Language: pt-BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -234,10 +236,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "senha para http proxy com autenticação básica"
 
 #: ../src/subscription_manager/managercli.py:138
-msgid ""
-"Consumer not registered. Please register using --username and --password"
-msgstr ""
-"Cliente não registrado. Por favor registre-o usando --username e --password"
+msgid "Consumer not registered. Please register using --username and --password"
+msgstr "Cliente não registrado. Por favor registre-o usando --username e --password"
 
 #: ../src/subscription_manager/managercli.py:193
 msgid "Consumer certificates corrupted. Please reregister."
@@ -294,14 +294,11 @@ msgstr "solicita um novo certificado a ser gerado"
 
 #: ../src/subscription_manager/managercli.py:302
 msgid "force certificate regeneration (requires username and password)"
-msgstr ""
-"força a geração novamente do certificado (requer nome do usuário e senha)"
+msgstr "força a geração novamente do certificado (requer nome do usuário e senha)"
 
 #: ../src/subscription_manager/managercli.py:307
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr ""
-"A identidade do cliente não existe ou está corrompida. Tente registrar --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgstr "A identidade do cliente não existe ou está corrompida. Tente registrar --help"
 
 #: ../src/subscription_manager/managercli.py:310
 msgid "--force can only be used with --regenerate"
@@ -471,10 +468,8 @@ msgid "available"
 msgstr "disponível"
 
 #: ../src/subscription_manager/managercli.py:677
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
-msgstr ""
-"data de busca, o padrão é a data de hoje, apenas usado com --available "
+msgid "date to search on, defaults to today's date, only used with --available "
+msgstr "data de busca, o padrão é a data de hoje, apenas usado com --available "
 
 #: ../src/subscription_manager/managercli.py:680
 msgid "consumed"
@@ -676,7 +671,7 @@ msgstr "duração: %d(ms)"
 #: ../src/subscription_manager/hwprobe.py:80
 #, python-format
 msgid "Error reading system DMI information: %s"
-msgstr ""
+msgstr "Erro na leitura de informação DMI do sistema: %s"
 
 #: ../src/subscription_manager/hwprobe.py:165
 msgid "Error reading system memory information:"
@@ -724,7 +719,7 @@ msgstr "Gerenciamento de Subscrição"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_subscriptions.py:28
 msgid "RHSM Subscriptions Managemen"
-msgstr ""
+msgstr "Gerenciamento de Subscrições RHSM"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -738,8 +733,7 @@ msgstr "Selecione um certificado."
 #: ../src/subscription_manager/gui/importsub.py:85
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
-msgstr ""
-"%s não é um certificado válido. Por favor insira um certificado válido."
+msgstr "%s não é um certificado válido. Por favor insira um certificado válido."
 
 #: ../src/subscription_manager/gui/widgets.py:150
 #, python-format
@@ -767,21 +761,21 @@ msgstr "Hoje"
 
 #: ../src/subscription_manager/gui/managergui.py:350
 msgid "You must register before using the subscription assistant."
-msgstr ""
+msgstr "Você deve registrar-se antes de usar o assistente de subcrição."
 
 #: ../src/subscription_manager/gui/managergui.py:381
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr ""
+msgstr "Você possui <b>%s</b> produtos com direitos de certificados inválidos."
 
 #: ../src/subscription_manager/gui/managergui.py:385
 msgid "You have <b>1</b> product without a valid entitlement certificate."
-msgstr ""
+msgstr "Você possui <b>1</b> produto sem um certificado de direito válido."
 
 #: ../src/subscription_manager/gui/managergui.py:392
 #, python-format
 msgid "Product entitlement certificates valid through %s"
-msgstr ""
+msgstr "Certificados de direitos do produto válidos até %s"
 
 #: ../src/subscription_manager/gui/managergui.py:515
 msgid "You must enter a system name."
@@ -809,7 +803,7 @@ msgstr "Data Final"
 
 #: ../src/subscription_manager/gui/compliance.py:140
 msgid "Subscription List"
-msgstr ""
+msgstr "Lista de Subscrição"
 
 #. Set up columns on the view
 #: ../src/subscription_manager/gui/compliance.py:141
@@ -823,7 +817,7 @@ msgstr "Subscrição"
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
-msgstr ""
+msgstr "Erro ao exibir o Assistente de Subscrição. Por favor veja /var/log/rhsm/rhsm.log para mais informações."
 
 #: ../src/subscription_manager/gui/compliance.py:194
 msgid "Unable to search for subscriptions"
@@ -832,12 +826,12 @@ msgstr "Não foi possível realizar a busca de subscrições"
 #: ../src/subscription_manager/gui/compliance.py:215
 #, python-format
 msgid "Software entitlements valid through %s"
-msgstr ""
+msgstr "Direitos do Software válidos até %s"
 
 #: ../src/subscription_manager/gui/compliance.py:219
 #, python-format
 msgid "%s (first date of invalid entitlements)"
-msgstr ""
+msgstr "%s (primeira data de direito inválido)"
 
 #: ../src/subscription_manager/gui/compliance.py:221
 #, python-format
@@ -908,11 +902,11 @@ msgstr "Minhas subscrições"
 
 #: ../src/subscription_manager/gui/mysubstab.py:140
 msgid "Yes"
-msgstr ""
+msgstr "Sim"
 
 #: ../src/subscription_manager/gui/mysubstab.py:142
 msgid "No"
-msgstr ""
+msgstr "Não"
 
 #. Set up columns on the view
 #: ../src/subscription_manager/gui/factsgui.py:54
@@ -948,7 +942,7 @@ msgstr "Versão"
 
 #: ../src/subscription_manager/gui/installedtab.py:56
 msgid "Certificate"
-msgstr ""
+msgstr "Certificado"
 
 #: ../src/subscription_manager/gui/installedtab.py:97
 msgid "Future Subscription"
@@ -961,7 +955,7 @@ msgstr "Nunca foi Subscrito"
 
 #: ../src/subscription_manager/gui/installedtab.py:101
 msgid "Invalid"
-msgstr ""
+msgstr "Inválido"
 
 #: ../src/subscription_manager/gui/installedtab.py:103
 #, python-format
@@ -970,7 +964,7 @@ msgstr "Subscrição %s vencida"
 
 #: ../src/subscription_manager/gui/installedtab.py:106
 msgid "Valid"
-msgstr ""
+msgstr "Válido"
 
 #: ../src/subscription_manager/gui/installedtab.py:108
 #, python-format
@@ -979,7 +973,7 @@ msgstr "Protegido por contrato %s dentro %s"
 
 #: ../src/subscription_manager/gui/installedtab.py:113
 msgid "Missing"
-msgstr ""
+msgstr "Ausente"
 
 #: ../src/subscription_manager/gui/installedtab.py:153
 msgid "My Installed Software"
@@ -987,7 +981,7 @@ msgstr "Minha Instalação de Software"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
-msgstr ""
+msgstr "<b>Status do Certificado:</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:2
 msgid "<b>Product's Subscription Details</b>"
@@ -1006,7 +1000,7 @@ msgstr "<b>Subscrição:</b>"
 #: ../src/subscription_manager/gui/data/installed.glade.h:5
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:4
 msgid "Certificate Status"
-msgstr ""
+msgstr "Status do Certificado"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:6
 msgid "Installed View"
@@ -1084,15 +1078,15 @@ msgstr "Localização do _Proxy: "
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:1
 msgid "A different date:"
-msgstr ""
+msgstr "Uma data diferente:"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:2
 msgid "Invalid Product List"
-msgstr ""
+msgstr "Lista de Produto Inválida"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
-msgstr ""
+msgstr "Exibir produtos com certificados de direitos inválidos a partir de:"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:4
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:11
@@ -1102,71 +1096,71 @@ msgstr "Subscrever"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:5
 msgid "Subscription Action Area"
-msgstr ""
+msgstr "Área de Ação de Subscrição"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:6
 msgid "Subscription Assistant"
-msgstr ""
+msgstr "Assistente de Subscrição"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:7
 msgid "Subscription Assistant Box"
-msgstr ""
+msgstr "Caixa de Assistente de Subscrição"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:8
 msgid "Subscription Assistant Status"
-msgstr ""
+msgstr "Status do Assistente de Subscrição"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:9
 msgid "Subscription Date Box"
-msgstr ""
+msgstr "Caixa de Data de Subscrição"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:10
 msgid "Subscription Date Label"
-msgstr ""
+msgstr "Rótulo de Data da Subscrição"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:11
 msgid "Subscription Date Picker"
-msgstr ""
+msgstr "Selecionador de Data de Subscrição"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:12
 msgid "Subscription Details"
-msgstr ""
+msgstr "Detalhes da Subscrição"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:13
 msgid "Subscription Label"
-msgstr ""
+msgstr "Rótulo da Subscrição"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:14
 msgid "Subscription Label Box"
-msgstr ""
+msgstr "Caixa de Rótulo da Subscrição"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:15
 msgid "Subscription Manager - Subscription Assistant"
-msgstr ""
+msgstr "Gerenciador de Subscrição - Assistente de Subscrição"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:16
 msgid "Subscription Product List"
-msgstr ""
+msgstr "Lista de Produtos de Subscrição"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:17
 msgid "Subscription Subscriptions Box"
-msgstr ""
+msgstr "Caixa de Subscrição de Subscrições"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:18
 msgid "Subscription Subscriptions Label"
-msgstr ""
+msgstr "Rótulo de Subscrição de Subscrições"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:19
 msgid "Subscription Update Box"
-msgstr ""
+msgstr "Caixa de Atualização de Subscrição"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:20
 msgid "Subscriptions List"
-msgstr ""
+msgstr "Lista de Subscrição"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:21
 msgid "Subscriptions Panel"
-msgstr ""
+msgstr "Painel de Subscrições"
 
 #: ../src/subscription_manager/gui/data/compliance.glade.h:22
 msgid "The following subscriptions will cover the products selected above:"
@@ -1286,7 +1280,7 @@ msgstr "Ativação da Subscrição"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:1
 msgid "<b>Certificate Status</b>"
-msgstr ""
+msgstr "<b>Status do Certificado</b>"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:2
 msgid "<b>Tools</b>"
@@ -1310,7 +1304,7 @@ msgstr "Cancelar Sistema"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:10
 msgid "Update Certificates"
-msgstr ""
+msgstr "Atualizar Certificados"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:11
 msgid "View System Facts"
@@ -1318,7 +1312,7 @@ msgstr "Visualizar Dados do Sistema"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:12
 msgid "You have one product without a valid entitlement certificate."
-msgstr ""
+msgstr "Você possui um produto sem um certificado de direito válido."
 
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
@@ -1401,10 +1395,9 @@ msgid "Manage Your Product Subscriptions"
 msgstr "Gerencie suas Subscrições de Produto"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr ""
-"Escolha um certificado para importar seu diretório de certificado da "
+"Escolha um certificado para importar seu diretório de certificado de "
 "subscrição."
 
 #: ../src/subscription_manager/gui/data/mysubs.glade.h:1
@@ -1544,7 +1537,7 @@ msgstr "Seleção de Contrato"
 
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:44
 msgid "How often to check for validity (in seconds)"
-msgstr ""
+msgstr "Com qual freqüencia checar pela validade (em segundos)"
 
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:46
 msgid "Show debug messages"
@@ -1552,16 +1545,16 @@ msgstr "Apresenta mensagens de depuração"
 
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:48
 msgid "Force display of the icon (expired or warning)"
-msgstr ""
+msgstr "Forçar exibição do ícone (expirado ou aviso)"
 
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:171
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:172
 msgid "Invalid or Missing Entitlement Certificates"
-msgstr ""
+msgstr "Certificados de Direitos Inválidos ou Ausentes"
 
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:173
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr ""
+msgstr "Este sistema requer um ou mais certificados de direitos válidos."
 
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:177
 msgid "Some of the system's subscriptions are about to expire"
@@ -1573,7 +1566,7 @@ msgstr "As Subscrições do Sistema estão prestes à Vencer"
 
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:180
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr ""
+msgstr "Uma ou mais subscrições deste sistema estão prestes à vencer."
 
 #: ../src/subscription_manager/compliance/rhsm_compliance_icon.c:198
 msgid "Remind Me Later"
@@ -1601,157 +1594,13 @@ msgstr "a opção de busca falhou: %s\n"
 
 #: ../etc-conf/subscription-manager.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
-msgstr ""
+msgstr "Gerenciador de Subscrição Red Hat"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
-msgstr ""
+msgstr "Applet de Subscrição de Validade Red Hat"
 
 #: ../etc-conf/rhsm-compliance-icon.desktop.in.h:2
 msgid "Subscription Validity Applet"
-msgstr ""
+msgstr "Applet de Subscrição de Validade"
 
-#~ msgid "%s (first date of non-compliance)"
-#~ msgstr "%s (primeira data sem compatibilidade) "
-
-#~ msgid "<b>Compliance Status</b>"
-#~ msgstr "<b>Status de Compatibilidade</b>"
-
-#~ msgid "<b>Compliance:</b>"
-#~ msgstr "<b>Compatibilidade:</b>"
-
-#~ msgid "<big><b>All software is in compliance until %s</b></big>"
-#~ msgstr "<big><b>Todo software é compatível até %s</b></big>"
-
-#~ msgid "All products are in compliance until %s"
-#~ msgstr "Todos os produtos são compatíveis até %s"
-
-#~ msgid "Become Compliant"
-#~ msgstr "Tornar-se Compatível"
-
-#~ msgid "Compliance Action Area"
-#~ msgstr "Área de Ação Compatível"
-
-#~ msgid "Compliance Assistant"
-#~ msgstr "Assistente Compatível"
-
-#~ msgid "Compliance Assistant Box"
-#~ msgstr "Caixa de Assistente Compatível"
-
-#~ msgid "Compliance Assistant Status"
-#~ msgstr "Status de Assistente Compatível"
-
-#~ msgid "Compliance Date Box"
-#~ msgstr "Caixa de Data Compatível"
-
-#~ msgid "Compliance Date Label"
-#~ msgstr "Etiqueta de Data Compatível"
-
-#~ msgid "Compliance Date Picker"
-#~ msgstr "Selecionador de Data Compatível"
-
-#~ msgid "Compliance Label"
-#~ msgstr "Etiqueta Compatível"
-
-#~ msgid "Compliance Label Box"
-#~ msgstr "Caixa de Etiqueta Compatível"
-
-#~ msgid "Compliance Product List"
-#~ msgstr "Lista de Produto Compatível"
-
-#~ msgid "Compliance Status"
-#~ msgstr "Status de Compatibilidade"
-
-#~ msgid "Compliance Subscription Details"
-#~ msgstr "Detalhes de Subscrição Compatível"
-
-#~ msgid "Compliance Subscription List"
-#~ msgstr "Lista de Subscrição Compatível"
-
-#~ msgid "Compliance Subscriptions Box"
-#~ msgstr "Caixa de Subscrições Compatíveis"
-
-#~ msgid "Compliance Subscriptions Label"
-#~ msgstr "Etiqueta de Subscrições Compatíveis"
-
-#~ msgid "Compliance Subscriptions List"
-#~ msgstr "Lista de Subscrições Compatíveis"
-
-#~ msgid "Compliance Subscriptions Panel"
-#~ msgstr "Painel de Subscrições Compatíveis"
-
-#~ msgid "Compliance Update Box"
-#~ msgstr "Caixa de Atualização Compatível"
-
-#~ msgid ""
-#~ "Error displaying Compliance Assistant. Please see /var/log/rhsm/rhsm.log "
-#~ "for more information."
-#~ msgstr ""
-#~ "Erro ao exibir Assistência de Compatibilidade. Por favor consulte /var/"
-#~ "log/rhsm/rhsm.log para maiores informações."
-
-#~ msgid "Error reading system DMI information:"
-#~ msgstr "Erro na leitura de informação DMI do sistema:"
-
-#~ msgid "Force display of the compliance icon (expired or warning)"
-#~ msgstr "Força a exibição do ícone de compatibilidade (vencido ou aviso)"
-
-#~ msgid "How often to check for compliance (in seconds)"
-#~ msgstr "Qual a frequência de checagem da compatibilidade (em segundos)"
-
-#~ msgid "In Compliance"
-#~ msgstr "Em Compatibilidade"
-
-#~ msgid "On a different date:"
-#~ msgstr "Numa data diferente:"
-
-#~ msgid ""
-#~ "One or more of this system's subscriptions are about to expire. These "
-#~ "subscriptions are required for compliance with your subscription "
-#~ "agreements."
-#~ msgstr ""
-#~ "Uma ou mais subscrições do sistema estão prestes à vencer. Estas "
-#~ "subscrições são solicitadas para compatibilidade com seu acordo de "
-#~ "subscrição."
-
-#~ msgid "Out of Compliance"
-#~ msgstr "Não é Compatível"
-
-#~ msgid "Show products that will be out of compliance as of:"
-#~ msgstr "Apresentar produtos que não serão mais compatíveis a partir de:"
-
-#~ msgid "Subscription Manager - Compliance Assistant"
-#~ msgstr "Gerenciador de Subscrição - Assistente de Compatibilidade"
-
-#~ msgid "This System is Non-Compliant"
-#~ msgstr "Este Sistema não é Compatível"
-
-#~ msgid ""
-#~ "This system is missing one or more subscriptions required for compliance "
-#~ "with your subscription agreements."
-#~ msgstr ""
-#~ "Falta uma ou mais subscrições neste sistema para compatibilidade com seu "
-#~ "acordo de subscrição."
-
-#~ msgid "This system is non-compliant"
-#~ msgstr "Este sistema não é compatível "
-
-#~ msgid "You have <b>%s</b> products out of compliance."
-#~ msgstr "Você possui <b>%s</b> produtos não compatíveis."
-
-#~ msgid "You have <b>1</b> product out of compliance."
-#~ msgstr "Você possui <b>1</b> produto que não é compatível."
-
-#~ msgid "You have one product which is out of compliance."
-#~ msgstr "Você pode possuir um produto que não é compatível. "
-
-#~ msgid "You must register before using the compliance assistant."
-#~ msgstr ""
-#~ "Você deve realizar o registro antes de usar a assistência de "
-#~ "compatibilidade."
-
-#~ msgid "no"
-#~ msgstr "não"
-
-#~ msgid "yes"
-#~ msgstr "sim"
