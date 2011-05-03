@@ -52,7 +52,10 @@ def configure_i18n(with_glade=False):
     """
     import locale
     import gettext
-    locale.setlocale(locale.LC_ALL, '')
+    try:
+        locale.setlocale(locale.LC_ALL, '')
+    except locale.Error:
+        locale.setlocale(locale.LC_ALL, 'C')
     gettext.bindtextdomain(APP, DIR)
     gettext.textdomain(APP)
 
