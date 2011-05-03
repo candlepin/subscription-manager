@@ -76,14 +76,16 @@ class PathTests(unittest.TestCase):
         self.assertEquals('/mnt/sysimage/var/lib/rhsm/productid.js',
                 prod_db.dir.abspath('productid.js'))
 
-    def test_sysimage_keypath(self):
-        ed = EntitlementDirectory()
+    def test_sysimage_pathjoin(self):
         Path.ROOT = '/mnt/sysimage'
-        self.assertEquals('/mnt/sysimage/etc/pki/entitlement/key.pem', ed.keypath())
-
-    def test_keypath(self):
         ed = EntitlementDirectory()
-        self.assertEquals('/etc/pki/entitlement/key.pem', ed.keypath())
+        self.assertEquals('/mnt/sysimage/etc/pki/entitlement/1-key.pem', 
+                Path.join(ed.productpath(), '1-key.pem'))
+
+    def test_normal_pathjoin(self):
+        ed = EntitlementDirectory()
+        self.assertEquals('/etc/pki/entitlement/1-key.pem', 
+                Path.join(ed.productpath(), "1-key.pem"))
 
 
 class FindLastCompliantTests(unittest.TestCase):

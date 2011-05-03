@@ -231,16 +231,16 @@ class Writer:
         self.entdir = EntitlementDirectory()
 
     def write(self, key, cert):
-        path = self.entdir.keypath()
-        key.write(path)
-        sn = cert.serialNumber()
-        path = self.entdir.productpath()
-        fn = self.__ufn(path, sn)
-        path = Path.join(path, fn)
-        cert.write(path)
+        serial = cert.serialNumber()
+        ent_dir_path = self.entdir.productpath()
 
-    def __ufn(self, path, sn):
-        return '%s.pem' % str(sn)
+        key_filename = '%s-key.pem' % str(serial)
+        key_path = Path.join(ent_dir_path, key_filename)
+        key.write(key_path)
+
+        cert_filename = '%s.pem' % str(serial)
+        cert_path = Path.join(ent_dir_path, cert_filename)
+        cert.write(cert_path)
 
 
 class Disconnected(Exception):
@@ -342,7 +342,7 @@ class CertificateDirectory(Directory):
         listing = []
         factory = self.Factory(self.certClass())
         for p, fn in Directory.list(self):
-            if not fn.endswith('.pem') or fn == self.KEY:
+            if not fn.endswith('.pem') or fn.endswith(self.KEY):
                 continue
             path = self.abspath(fn)
             factory.append(path, listing)
@@ -448,10 +448,6 @@ class EntitlementDirectory(CertificateDirectory):
 
     PATH = cfg.get('rhsm', 'entitlementCertDir')
     PRODUCT = 'product'
-
-    @classmethod
-    def keypath(cls):
-        return Path.join(cls.PATH, cls.KEY)
 
     @classmethod
     def productpath(cls):
