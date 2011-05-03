@@ -31,6 +31,9 @@ class NullHandler(logging.Handler):
     def emit(self, record):
         pass
 
+
+import locale
+
 h = NullHandler()
 logging.getLogger("rhsm").addHandler(h)
 
@@ -90,6 +93,24 @@ class RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
     #        httpslib.HTTPSConnection.endheaders(self, body)
 
 
+def _get_locale():
+    l = None
+    try:
+        l = locale.getlocale()
+    except locale.Error:
+        pass
+
+    try:
+        l = locale.getdefaultlocale()
+    except locale.Error:
+        pass
+    except ValueError:
+        pass
+
+    if l and l != (None, None):
+        return l[0]
+
+    return None
 
 class Restlib(object):
     """
@@ -105,9 +126,12 @@ class Restlib(object):
         self.host = host
         self.ssl_port = ssl_port
         self.apihandler = apihandler
+        lc = _get_locale()
         self.headers = {"Content-type": "application/json",
-                        "Accept": "application/json",
-                        "Accept-Language": locale.getdefaultlocale()[0].lower().replace('_', '-')}
+                        "Accept": "application/json"}
+        if lc:
+            self.headers["Accept-Language"] =  lc.lower().replace('_', '-')
+
         self.cert_file = cert_file
         self.key_file = key_file
         self.ca_dir = ca_dir
@@ -125,6 +149,8 @@ class Restlib(object):
             encoded = base64.b64encode(':'.join((username, password)))
             basic = 'Basic %s' % encoded
             self.headers['Authorization'] = basic
+
+
 
     def _load_ca_certificates(self, context):
         try:
