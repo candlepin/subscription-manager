@@ -101,6 +101,15 @@ class UpdateAction:
                 unique.add(r)
         return unique
 
+    def get_key_path(self, ent_cert):
+        """
+        Returns the full path to the cert's key.pem.
+        """
+        dir_path, cert_filename = os.path.split(ent_cert.path)
+        key_filename = "%s-key.%s" % tuple(cert_filename.split("."))
+        key_path = os.path.join(dir_path, key_filename)
+        return key_path
+
     def get_content(self, ent_cert, baseurl, ca_cert):
         lst = []
         cfg = initConfig()
@@ -125,7 +134,7 @@ class UpdateAction:
             repo['enabled'] = content.getEnabled()
             repo['baseurl'] = self.join(baseurl, content.getUrl())
             repo['gpgkey'] = self.join(baseurl, content.getGpg())
-            repo['sslclientkey'] = EntitlementDirectory.keypath()
+            repo['sslclientkey'] = self.get_key_path(ent_cert)
             repo['sslclientcert'] = ent_cert.path
             repo['sslcacert'] = ca_cert
             repo['metadata_expire'] = content.getMetadataExpire()
