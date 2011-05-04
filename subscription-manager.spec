@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.8
+Version: 0.95.5.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -200,6 +200,29 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed May 04 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 700058: Displaying previous imported cert in cert browser option
+  (cduryee@redhat.com)
+- 700838: we need to import glade from gtk (alikins@redhat.com)
+- 700547: ensure the notification attaches to rhsm-icon (jbowes@redhat.com)
+- Write unique key.pem for each entitlement. (dgoodwin@redhat.com)
+- regenerate PO files for translation (3 new strings, and one fuzzy)
+  (cduryee@redhat.com)
+- Apply initial cut of 5.7 translations (cduryee@redhat.com)
+- Revert "regenerate PO files for translation" (cduryee@redhat.com)
+- regenerate PO files for translation (cduryee@redhat.com)
+- 700313: We were skipping the code that hides the activation button
+  (alikins@redhat.com)
+- 700313: Tweaking activate dialog properties to show in firstboot.
+  (jharris@redhat.com)
+- fix typo per l10n team (cduryee@redhat.com)
+- fix typo per l10n team (cduryee@redhat.com)
+- 700073: Background is click able while handling Import certificate dialog box
+  (cduryee@redhat.com)
+- 695234: dates are being displayed incorrectly everywhere (alikins@redhat.com)
+- 697908: regression in subscription-manager unregister (cduryee@redhat.com)
+- 697965: on x86, serial numbers do not like to be long's (alikins@redhat.com)
+
 * Mon Apr 18 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 694851: only open one dbus proxy connection (jbowes@redhat.com)
 - 696679: add pam/consolehelper links for subscription-manager
