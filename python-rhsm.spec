@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.95.5.3
+Version: 0.95.5.4
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -57,6 +57,13 @@ rm -rf %{buildroot}
 %{python_sitelib}/rhsm-*.egg-info
 
 %changelog
+* Wed May 04 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 702078: firstboot fails after initial install on HP DL360 Gen8
+  (cduryee@redhat.com)
+- 694870: workaround a bug in httpslib.ProxyHttpsConnection
+  (alikins@redhat.com)
+- 691788: Fix bad check for missing order info. (dgoodwin@redhat.com)
+
 * Wed Mar 30 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 668613: Add python-rhsm package
 
