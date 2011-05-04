@@ -55,6 +55,7 @@ typedef struct _Context {
 	GtkStatusIcon *icon;
 	NotifyNotification *notification;
 	DBusGProxy *entitlement_status_proxy;
+	gulong handler_id;
 } Context;
 
 typedef enum _StatusType {
@@ -155,6 +156,23 @@ manage_subs_clicked(NotifyNotification *notification G_GNUC_UNUSED,
 	run_smg(context);
 }
 
+/*
+ * This signal handler waits for the status icon to first appear in the status
+ * bar after we set its visibility to true. We have to do this for el5 era
+ * notification display, which needs a fully initialized status icon to attach
+ * to, in order to display in the correct location. We disconnect the signal
+ * handler afterwards, because we don't care about the location once we display
+ * the icon (and trying to reshow the notification could mess things up).
+ */
+static void
+on_icon_size_changed(GtkStatusIcon *icon,
+		     gint size G_GNUC_UNUSED,
+		     Context *context)
+{
+	notify_notification_show(context->notification, NULL);
+	g_signal_handler_disconnect(icon, context->handler_id);
+}
+
 static void
 display_icon(Context *context, StatusType status_type)
 {
@@ -181,7 +199,6 @@ display_icon(Context *context, StatusType status_type)
 			"subscriptions are about to expire.");
 	}
 
-	context->icon = gtk_status_icon_new_from_icon_name("subscription-manager");
 	gtk_status_icon_set_tooltip(context->icon, tooltip);
 	g_signal_connect(context->icon, "activate",
 			 G_CALLBACK(icon_clicked), context);
@@ -192,7 +209,7 @@ display_icon(Context *context, StatusType status_type)
 	context->notification = notify_notification_new_with_status_icon(
 		notification_title, notification_body, "subscription-manager",
 		context->icon);
-	
+
 	notify_notification_add_action(context->notification,
 				       "remind-me-later",
 				       _("Remind Me Later"),
@@ -206,7 +223,10 @@ display_icon(Context *context, StatusType status_type)
 				       manage_subs_clicked,
 				       context, NULL);
 
-	notify_notification_show(context->notification, NULL);
+	gtk_status_icon_set_visible(context->icon, true);
+	context->handler_id = g_signal_connect(context->icon, "size-changed",
+					       (GCallback) on_icon_size_changed,
+					       context);
 }
 
 static void
@@ -393,6 +413,10 @@ main(int argc, char **argv)
 	}
 
 	notify_init("rhsm-icon");
+
+	context.icon =
+		gtk_status_icon_new_from_icon_name("subscription-manager");
+	gtk_status_icon_set_visible(context.icon, false);
 
 	context.entitlement_status_proxy = get_entitlement_status_proxy();
 	check_status(&context);
