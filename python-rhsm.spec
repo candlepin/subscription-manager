@@ -62,7 +62,7 @@ rm -rf %{buildroot}
   (cduryee@redhat.com)
 - 694870: workaround a bug in httpslib.ProxyHttpsConnection
   (alikins@redhat.com)
-- 691788: Fix bad check for missing order info. (dgoodwin@redhat.com)
+- 702075: subscription manager installs broken certs (dgoodwin@redhat.com)
 
 * Wed Mar 30 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 668613: Add python-rhsm package
