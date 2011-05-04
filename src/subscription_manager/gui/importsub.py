@@ -91,6 +91,7 @@ class ImportSubDialog(widgets.GladeWidget):
 
         dest_file_path = os.path.join(ENT_CONFIG_DIR, os.path.basename(src_cert_file))
         shutil.copy(src_cert_file, dest_file_path)
+        self.certificate_chooser_button.unselect_all()
         self.main_dialog.hide()
 
     def set_parent_window(self, window):
