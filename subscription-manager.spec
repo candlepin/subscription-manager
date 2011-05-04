@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.10
+Version: 0.95.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -183,6 +183,9 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed May 04 2011 Adrian Likins <alikins@redhat.com> 0.95.11-1
+- rev for new build 
+
 * Wed May 04 2011 Adrian Likins <alikins@redhat.com> 0.95.10-1
 - 696020: on x86, serial numbers do not like to be long's (alikins@redhat.com)
 
