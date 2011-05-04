@@ -211,9 +211,9 @@ fi
 - Apply initial cut of 5.7 translations (cduryee@redhat.com)
 - Revert "regenerate PO files for translation" (cduryee@redhat.com)
 - regenerate PO files for translation (cduryee@redhat.com)
-- 700313: We were skipping the code that hides the activation button
+- 702072: We were skipping the code that hides the activation button
   (alikins@redhat.com)
-- 700313: Tweaking activate dialog properties to show in firstboot.
+- 702072: Tweaking activate dialog properties to show in firstboot.
   (jharris@redhat.com)
 - fix typo per l10n team (cduryee@redhat.com)
 - fix typo per l10n team (cduryee@redhat.com)
