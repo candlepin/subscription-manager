@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.9
+Version: 0.95.5.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -200,6 +200,9 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed May 04 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- fix BZ # in spec to reference el5 cloned bug (cduryee@redhat.com)
+
 * Wed May 04 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 700058: Displaying previous imported cert in cert browser option
   (cduryee@redhat.com)
