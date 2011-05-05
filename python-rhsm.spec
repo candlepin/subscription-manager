@@ -63,7 +63,6 @@ rm -rf %{buildroot}
 - add resolves line to spec (alikins@redhat.com)
 
 * Thu May 05 2011 Adrian Likins <alikins@redhat.com> 0.95.7-1
-- Resolves: #700601
 - Resolves: #702403
 - 700601: Don't set the Accept-Language if we don't have a valid locale
   (alikins@redhat.com)
