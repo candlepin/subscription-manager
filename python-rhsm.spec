@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.95.7
+Version: 0.95.8
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -57,6 +57,9 @@ rm -rf %{buildroot}
 %{python_sitelib}/rhsm-*.egg-info
 
 %changelog
+* Thu May 05 2011 Adrian Likins <alikins@redhat.com> 0.95.8-1
+- add resolves line to spec (alikins@redhat.com)
+
 * Thu May 05 2011 Adrian Likins <alikins@redhat.com> 0.95.7-1
 - Resolves: #700601
 - 700601: Don't set the Accept-Language if we don't have a valid locale
