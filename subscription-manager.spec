@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.12
+Version: 0.95.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -183,6 +183,21 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Thu May 05 2011 Adrian Likins <alikins@redhat.com> 0.95.13-1
+- Resolves: #702403
+- 702403: rev the version to get ahead (alikins@redhat.com)
+- use z branch now (cduryee@redhat.com)
+- 700601: try really hard to set a meaningful locale (alikins@redhat.com)
+- 683553: subscription-manager-gui is displaying unlimited pools as -1
+  (cduryee@redhat.com)
+- Write unique key.pem for each entitlement. (dgoodwin@redhat.com)
+- 700313: We were skipping the code that hides the activation button
+  (alikins@redhat.com)
+- 700313: Tweaking activate dialog properties to show in firstboot.
+  (jharris@redhat.com)
+- 699442: dates are being displayed incorrectly everywhere (alikins@redhat.com)
+- 696020: on x86, serial numbers do not like to be long's (alikins@redhat.com)
+
 * Thu May 05 2011 Adrian Likins <alikins@redhat.com>
 - Resolves: #702403
 - use z branch now (cduryee@redhat.com)
