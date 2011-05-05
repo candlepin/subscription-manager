@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.95.12
+Version: 0.95.13
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -59,7 +59,7 @@ rm -rf %{buildroot}
 %changelog
 
 
-* Thu May 05 2011 Adrian Likins <alikins@redhat.com> 0.95.12-1
+* Thu May 05 2011 Adrian Likins <alikins@redhat.com> 0.95.13-1
 - add resolves line to spec (alikins@redhat.com)
 
 * Thu May 05 2011 Adrian Likins <alikins@redhat.com> 0.95.7-1
