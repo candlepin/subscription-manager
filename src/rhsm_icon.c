@@ -406,9 +406,9 @@ main(int argc, char **argv)
 				g_error_free (error);
 		}
 		else {
-			g_warning ("Failed to acquire %s", NAME_TO_CLAIM);
+			g_debug("Failed to acquire %s", NAME_TO_CLAIM);
 		}
-		g_debug("rhsm-icon is already running. exiting.");
+		g_critical("rhsm-icon is already running. exiting.");
 		return 0;
 	}
 
