@@ -61,24 +61,32 @@ class DmiInfo(object):
 
     def getDmiInfo(self):
         import dmidecode
-        try:
-            dmi_data = {
-                "dmi.bios.": dmidecode.bios(),
-                "dmi.processor.": dmidecode.processor(),
-                "dmi.baseboard.": dmidecode.baseboard(),
-                "dmi.chassis.": dmidecode.chassis(),
-                "dmi.slot.": dmidecode.slot(),
-                "dmi.system.": dmidecode.system(),
-                "dmi.memory.": dmidecode.memory(),
-                "dmi.connector.": dmidecode.connector(),
-            }
+        dmiinfo = {}
 
-            dmiinfo = {}
+        dmi_data = {
+            "dmi.bios.": self._read_dmi(dmidecode.bios),
+            "dmi.processor.": self._read_dmi(dmidecode.processor),
+            "dmi.baseboard.": self._read_dmi(dmidecode.baseboard),
+            "dmi.chassis.": self._read_dmi(dmidecode.chassis),
+            "dmi.slot.": self._read_dmi(dmidecode.slot),
+            "dmi.system.": self._read_dmi(dmidecode.system),
+            "dmi.memory.": self._read_dmi(dmidecode.memory),
+            "dmi.connector.": self._read_dmi(dmidecode.connector),
+        }
+
+        try:
             for tag, func in dmi_data.items():
                 dmiinfo = self._get_dmi_data(func, tag, dmiinfo)
         except Exception, e:
             log.warn(_("Error reading system DMI information: %s"), e)
         return dmiinfo
+
+    def _read_dmi(self, func):
+        try:
+            return func()
+        except Exception, e:
+            log.warn(_("Error reading system DMI information with %s: %s"), func, e)
+            return None
 
     def _get_dmi_data(self, func, tag, ddict):
         for key, value in func.items():
