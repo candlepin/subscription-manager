@@ -88,6 +88,10 @@ if __name__ == '__main__':
     log = logging.getLogger('rhsm-app.' + __name__)
     try:
         main()
+    except SystemExit:
+        # sys.exit triggers an exception in older Python versions, which in this case
+        # we can safely ignore as we do not want to log the stack trace.
+        pass
     except Exception, e:
         log.error("Error while updating certificates using daemon")
         print _('Unable to update Red Hat certificates & repositories')
