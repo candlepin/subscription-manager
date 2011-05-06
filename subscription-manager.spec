@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.13
+Version: 0.95.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -183,6 +183,10 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Fri May 06 2011 Adrian Likins <alikins@redhat.com> 0.95.14-1
+- Resolves: #702030
+- 702030: fix an unintional revert of a fix for i386 (alikins@redhat.com)
+
 * Thu May 05 2011 Adrian Likins <alikins@redhat.com> 0.95.13-1
 - Resolves: #702403
 - 702403: rev the version to get ahead (alikins@redhat.com)
