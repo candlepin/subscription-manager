@@ -38,6 +38,8 @@ class OptionParser(_OptionParser):
     # so we get it picked up. for local translation, and then optparse will
     # use them.
 
+    #translators: this should have the same translation as "Usage: %s\n"
+    _("usage: %s\n")   # For older versions of optparse
     _("Usage: %s\n")
     _("Usage")
     _("%prog [options]")
