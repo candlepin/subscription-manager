@@ -118,7 +118,13 @@ class CliCommand(object):
         validity_iface = dbus.Interface(validity_obj,
                             dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
 
-        validity_iface.check_status()
+        try:
+            validity_iface.check_status()
+        except dbus.DBusException:
+            # the call timed out, or something similar. we don't really care
+            # about a timely reply or what the result might be, we just want
+            # the method to run. So we can safely ignore this.
+            pass
 
     def _add_common_options(self):
         """ Add options that apply to all sub-commands. """
