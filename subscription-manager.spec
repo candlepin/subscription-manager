@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.10
+Version: 0.95.5.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -200,6 +200,20 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Mon May 09 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 670973: check for yum conduit api we need, it's missing on 5.7
+  (alikins@redhat.com)
+- 702092: fit 'activate a subscription' button in 800x600 (jbowes@redhat.com)
+- 700952: Fix SystemExit traceback logging on older Python versions.
+  (dgoodwin@redhat.com)
+- 693527: Adding 'usage: ' id for older versions of optparse.
+  (jharris@redhat.com)
+- 701263: Moving dmiinfo declaration and allowing for failures in dmi function
+  calls. (jharris@redhat.com)
+- 702026: confusing warning message when rhsm-icon runs twice
+  (cduryee@redhat.com)
+- 702078: try really hard to set a meaningful locale (alikins@redhat.com)
+
 * Wed May 04 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - fix BZ # in spec to reference el5 cloned bug (cduryee@redhat.com)
 
