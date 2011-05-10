@@ -38,7 +38,7 @@ def chroot():
         Path.ROOT = sysimage
 
 
-def postverifytrans_hook(conduit):
+def posttrans_hook(conduit):
     """
     Update product ID certificates.
     """

@@ -128,10 +128,9 @@ class ProductManager:
     def getActive(self, yb):
         active = set()
         start = time.time()
-        packages = yb.rpmdb.returnPackages()
+        packages = yb.pkgSack.returnPackages()
         for p in packages:
-            info = p.yumdb_info
-            repo = info.get(self.REPO)
+	    repo = p.repoid
             if repo in (None, 'installed'):
                 continue
             active.add(repo)
