@@ -110,15 +110,15 @@ class moduleClass(FirstbootModuleWindow, managergui.RegisterScreen):
             # User has already successfully authenticaed with these
             # credentials, just go on to the next module without
             # reregistering the consumer
-            return True
+            return 0
         else:
             valid_registration = self.register(testing=testing)
 
             if valid_registration:
                 self._cached_credentials = credentials
-                return True
+                return 0
             else:
-                return False
+                return None
 
     def close_window(self):
         """
