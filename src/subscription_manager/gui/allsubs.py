@@ -228,6 +228,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         try:
             self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'])
             managerlib.fetch_certificates(self.backend)
+
         except Exception, e:
             handle_gui_exception(e, _("Error getting subscription: %s"))
 

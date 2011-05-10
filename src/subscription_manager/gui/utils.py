@@ -66,15 +66,24 @@ def handle_gui_exception(e, msg, formatMsg=True, logMsg=None):
         # This is what happens when there's an issue with the server on the other side of the wire
         errorWindow(_("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."))
     elif isinstance(e, connection.RestlibException):
-        try:
-            if formatMsg:
-                message = msg % linkify(e.msg)
-            else:
-                message = linkify(e.msg)
-        except:
-            message = msg
+        # If this exception's code is in the 200 range (such as 202 ACCEPTED)
+        # we're going to ignore the message we were given and just display
+        # the message from the server as an info dialog. (not an error)
+        if 200 < int(e.code) < 300:
+            message = linkify(e.msg)
+            messageWindow.InfoDialog(messageWindow.wrap_text(message))
 
-        errorWindow(message)
+        else:
+            try:
+                if formatMsg:
+                    message = msg % linkify(e.msg)
+                else:
+                    message = linkify(e.msg)
+            except:
+                message = msg
+
+            errorWindow(message)
+
     elif isinstance(e, connection.BadCertificateException):
         errorWindow(_("Bad CA certificate: %s" % e.cert_path))
     else:
