@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.11
+Version: 0.95.5.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -200,6 +200,11 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue May 10 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 700958: fire check_status dbus calls in a non-blocking manner
+  (jbowes@redhat.com)
+- 701458: Do not display activation messages as errors. (dgoodwin@redhat.com)
+
 * Mon May 09 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 670973: check for yum conduit api we need, it's missing on 5.7
   (alikins@redhat.com)
