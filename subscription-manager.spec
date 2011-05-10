@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.12
+Version: 0.95.5.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -200,6 +200,12 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue May 10 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 703626: product-id yum plugin was using too new of yum api
+  (alikins@redhat.com)
+- 703491: firstboot would continue to next screen on auth failure
+  (alikins@redhat.com)
+
 * Tue May 10 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 700958: fire check_status dbus calls in a non-blocking manner
   (jbowes@redhat.com)
