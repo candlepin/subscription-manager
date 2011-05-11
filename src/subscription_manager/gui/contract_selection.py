@@ -85,8 +85,13 @@ class ContractSelectionWindow(object):
         self.total_contracts_label.set_text(str(self.total_contracts))
         self.subscription_name_label.set_text(pool['productName'])
 
+        # Use unlimited for -1 quanities
+        quantity = pool['quantity']
+        if quantity < 0:
+            quantity = _('unlimited')
+
         row = [pool['contractNumber'],
-                "%s / %s" % (pool['consumed'], pool['quantity']),
+                "%s / %s" % (pool['consumed'], quantity),
                 pool['startDate'], pool['endDate'], pool['productName'], pool]
         self.model.append(row)
     
