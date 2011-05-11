@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.96.2
+Version: 0.96.3
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -57,6 +57,19 @@ rm -rf %{buildroot}
 %{python_sitelib}/rhsm-*.egg-info
 
 %changelog
+* Wed May 11 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.3-1
+- 700601: Don't set the Accept-Language if we don't have a valid locale
+  (alikins@redhat.com)
+- 692210: remove a non critical warning message that is spamming the logs
+  (alikins@redhat.com)
+- 691788: Fix bad check for missing order info. (dgoodwin@redhat.com)
+- Add a version of get_datetime from M2Crypto since it isnt avail on RHEL 5.7
+  (alikins@redhat.com)
+- Use older strptime call format (cduryee@redhat.com)
+- 683550: fix parsing empty cert extensions (jbowes@redhat.com)
+- Add support for content tagging. (dgoodwin@redhat.com)
+- Use tlsv1 instead of sslv3, for fips compliance (cduryee@redhat.com)
+
 * Mon Feb 14 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.2-1
 - Setup configuration for Fedora git builds. (dgoodwin@rm-rf.ca)
 
