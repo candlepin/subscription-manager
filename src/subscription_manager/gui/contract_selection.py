@@ -21,6 +21,7 @@ import gettext
 _ = gettext.gettext
 
 from subscription_manager.gui import widgets
+from subscription_manager import managerlib
 
 prefix = os.path.dirname(__file__)
 CONTRACT_SELECTION_GLADE = os.path.join(prefix, "data/contract_selection.glade")
@@ -51,8 +52,11 @@ class ContractSelectionWindow(object):
             "on_subscribe_button_clicked": self._subscribe_button_clicked,
         })
 
-        self.model = gtk.ListStore(str, str, str, str, str,
-                gobject.TYPE_PYOBJECT)
+        self.model = gtk.ListStore(str, str,
+                                   gobject.TYPE_PYOBJECT,
+                                   gobject.TYPE_PYOBJECT,
+                                   str,
+                                   gobject.TYPE_PYOBJECT)
         self.contract_selection_treeview.set_model(self.model)
 
     def show(self):
@@ -92,7 +96,9 @@ class ContractSelectionWindow(object):
 
         row = [pool['contractNumber'],
                 "%s / %s" % (pool['consumed'], quantity),
-                pool['startDate'], pool['endDate'], pool['productName'], pool]
+               managerlib.parseDate(pool['startDate']),
+               managerlib.parseDate(pool['endDate']),
+               pool['productName'], pool]
         self.model.append(row)
     
     def set_parent_window(self, window):
