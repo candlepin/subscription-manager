@@ -336,12 +336,17 @@ class SubscriptionAssistant(widgets.GladeWidget):
         merged_pools = managerlib.merge_pools(relevant_pools).values()
 
         for entry in merged_pools:
+            quantity = entry.quantity
+            if quantity < 0:
+                 available = _('unlimited')
+            else:
+                available = "%s of %s" % \
+                    (available, quantity),
             self.subscriptions_store.add_map({
                 'product_name': entry.product_name,
                 'total_contracts': len(entry.pools),
                 'total_subscriptions': entry.quantity,
-                'available_subscriptions': "%s of %s" % \
-                    (entry.quantity - entry.consumed, entry.quantity),
+                'available_subscriptions': available,
                 'pool_id': entry.pools[0]['id'],
             })
 
