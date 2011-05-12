@@ -130,7 +130,7 @@ class ProductManager:
         start = time.time()
         packages = yb.pkgSack.returnPackages()
         for p in packages:
-	    repo = p.repoid
+            repo = p.repoid
             if repo in (None, 'installed'):
                 continue
             active.add(repo)
