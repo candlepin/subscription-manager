@@ -332,7 +332,11 @@ class IdentityCommand(UserPassCommand):
             consumerid = consumer['uuid']
             consumer_name = consumer['consumer_name']
             if not self.options.regenerate:
-                print _('Current identity is: %s name: %s') % (consumerid, consumer_name)
+                owner = self.cp.getOwner(consumerid)
+                ownername = owner['displayName']
+                ownerid = owner['id']
+                print _('Current identity is: %s \nname: %s \nowner name: %s \nowner id: %s') \
+                         % (consumerid, consumer_name, ownername, ownerid)
             else:
                 if self.options.force:
                     self.cp = connection.UEPConnection(username=self.username,
