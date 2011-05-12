@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-03 01:03-0400\n"
+"POT-Creation-Date: 2011-05-12 13:52-0400\n"
 "PO-Revision-Date: 2011-04-21 15:44+0530\n"
 "Last-Translator: I Felix <ifelix@redhat.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -23,86 +23,93 @@ msgstr ""
 #. but not actually translated anywhere. Mark them for translation here,
 #. so we get it picked up. for local translation, and then optparse will
 #. use them.
-#: ../src/subscription_manager/i18n_optparse.py:41
+#. translators: this should have the same translation as "Usage: %s\n"
+#: ../src/subscription_manager/i18n_optparse.py:42
+#, python-format
+msgid "usage: %s\n"
+msgstr ""
+
+#. For older versions of optparse
+#: ../src/subscription_manager/i18n_optparse.py:43
 #, python-format
 msgid "Usage: %s\n"
 msgstr "பயன்பாடு: %s\n"
 
-#: ../src/subscription_manager/i18n_optparse.py:42
+#: ../src/subscription_manager/i18n_optparse.py:44
 msgid "Usage"
 msgstr "பயன்பாடு"
 
-#: ../src/subscription_manager/i18n_optparse.py:43
+#: ../src/subscription_manager/i18n_optparse.py:45
 msgid "%prog [options]"
 msgstr "%prog [options]"
 
-#: ../src/subscription_manager/i18n_optparse.py:44
+#: ../src/subscription_manager/i18n_optparse.py:46
 msgid "Options"
 msgstr "விருப்பங்கள் "
 
 #. stuff for option value sanity checking
-#: ../src/subscription_manager/i18n_optparse.py:47
+#: ../src/subscription_manager/i18n_optparse.py:49
 #, python-format
 msgid "no such option: %s"
 msgstr "இதுபோல விருப்பம் இல்லை: %s"
 
-#: ../src/subscription_manager/i18n_optparse.py:48
+#: ../src/subscription_manager/i18n_optparse.py:50
 #, python-format
 msgid "ambiguous option: %s (%s?)"
 msgstr "உறுதியற்ற விருப்பம்: %s (%s?)"
 
-#: ../src/subscription_manager/i18n_optparse.py:49
+#: ../src/subscription_manager/i18n_optparse.py:51
 #, python-format
 msgid "%s option requires an argument"
 msgstr "%s விருப்பத்திற்கு ஒரு அளவுரு தேவைப்படுகிறது"
 
-#: ../src/subscription_manager/i18n_optparse.py:50
+#: ../src/subscription_manager/i18n_optparse.py:52
 #, python-format
 msgid "%s option requires %d arguments"
 msgstr "%s விருப்பத்திற்கு %d அளவுருக்கள் தேவை"
 
-#: ../src/subscription_manager/i18n_optparse.py:51
+#: ../src/subscription_manager/i18n_optparse.py:53
 #, python-format
 msgid "%s option does not take a value"
 msgstr "%s விருப்பம் ஒரு மதிப்பை எடுக்கவில்லை"
 
-#: ../src/subscription_manager/i18n_optparse.py:52
+#: ../src/subscription_manager/i18n_optparse.py:54
 msgid "integer"
 msgstr "முழு எண்"
 
-#: ../src/subscription_manager/i18n_optparse.py:53
+#: ../src/subscription_manager/i18n_optparse.py:55
 msgid "long integer"
 msgstr "நீண்ட முழு எண்"
 
-#: ../src/subscription_manager/i18n_optparse.py:54
+#: ../src/subscription_manager/i18n_optparse.py:56
 msgid "floating-point"
 msgstr "மிதவை-புள்ளி"
 
-#: ../src/subscription_manager/i18n_optparse.py:55
+#: ../src/subscription_manager/i18n_optparse.py:57
 msgid "complex"
 msgstr "சிக்கல்"
 
-#: ../src/subscription_manager/i18n_optparse.py:56
+#: ../src/subscription_manager/i18n_optparse.py:58
 #, python-format
 msgid "option %s: invalid %s value: %r"
 msgstr "விருப்பம் %s: தவறான %s மதிப்பு: %r"
 
-#: ../src/subscription_manager/i18n_optparse.py:57
+#: ../src/subscription_manager/i18n_optparse.py:59
 #, python-format
 msgid "option %s: invalid choice: %r (choose from %s)"
 msgstr "விருப்பம் %s: தவறான தேர்வு: %r (%s-இலிருந்து தேர்ந்தெடு)"
 
 #. default options
-#: ../src/subscription_manager/i18n_optparse.py:60
+#: ../src/subscription_manager/i18n_optparse.py:62
 msgid "show this help message and exit"
 msgstr "இந்த உதவி செய்தியை காட்டி வெளியேறு"
 
-#: ../src/subscription_manager/i18n_optparse.py:61
+#: ../src/subscription_manager/i18n_optparse.py:63
 msgid "show program's version number and exit"
 msgstr "நிரலின் பதிப்பு எண்ணை காட்டி வெளியேறு"
 
 #. translators: arg 1 is the program name, arg 2 is the error message
-#: ../src/subscription_manager/i18n_optparse.py:74
+#: ../src/subscription_manager/i18n_optparse.py:76
 #, python-format
 msgid "%s: error: %s\n"
 msgstr ""
@@ -135,11 +142,13 @@ msgstr "சந்தாபடுத்தல்"
 
 #: ../src/subscription_manager/gui/allsubs.py:58
 #: ../src/subscription_manager/gui/subscription_assistant.py:142
-#: ../src/subscription_manager/managercli.py:739
+#: ../src/subscription_manager/managercli.py:745
 msgid "Available Subscriptions"
 msgstr "கிடைக்கும் சந்தாக்கள்"
 
 #: ../src/subscription_manager/gui/allsubs.py:150
+#: ../src/subscription_manager/gui/subscription_assistant.py:341
+#: ../src/subscription_manager/gui/contract_selection.py:95
 msgid "unlimited"
 msgstr ""
 
@@ -162,8 +171,8 @@ msgstr "சேவையகத்திலிருந்து சந்தா�
 msgid "Unable to search for subscriptions:  %s"
 msgstr "சந்தாக்களுக்காக தேட முடியவில்லை:  %s"
 
-#: ../src/subscription_manager/gui/allsubs.py:232
-#: ../src/subscription_manager/gui/subscription_assistant.py:413
+#: ../src/subscription_manager/gui/allsubs.py:233
+#: ../src/subscription_manager/gui/subscription_assistant.py:418
 #, python-format
 msgid "Error getting subscription: %s"
 msgstr "பிழை பெறும் சந்தாபடுத்தல்: %s"
@@ -199,7 +208,7 @@ msgstr "ஒரு உட்புகுவை நீங்கள் உள்ள
 msgid "You must enter a password."
 msgstr "ஒரு கடவுச்சொல்லை நீங்கள் உள்ளிட வேண்டும்."
 
-#: ../src/subscription_manager/gui/firstboot/5/rhsm_subscriptions.py:28
+#: ../src/subscription_manager/gui/firstboot/5/rhsm_subscriptions.py:29
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_subscriptions.py:28
 msgid "RHSM Subscriptions Management"
 msgstr "RHSM சந்தாபடுத்தல்கள் மேலாண்மை"
@@ -251,7 +260,7 @@ msgstr "நிறுவப்பட்ட தயாரிப்புகள்"
 #: ../src/subscription_manager/gui/mysubstab.py:61
 #: ../src/subscription_manager/gui/subscription_assistant.py:123
 #: ../src/subscription_manager/gui/installedtab.py:60
-#: ../src/subscription_manager/gui/contract_selection.py:80
+#: ../src/subscription_manager/gui/contract_selection.py:84
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:13
 msgid "End Date"
 msgstr "முடிவு தேதி"
@@ -266,15 +275,15 @@ msgstr "%s லிருந்து வரிசை எண் %sஉடன் ச
 msgid "Are you sure you want to unsubscribe from %s?"
 msgstr "%sலிருந்து சந்தாநீக்க வேண்டுமா?"
 
-#: ../src/subscription_manager/gui/mysubstab.py:123
+#: ../src/subscription_manager/gui/mysubstab.py:120
 msgid "My Subscriptions"
 msgstr "எனது சந்தபடுத்தல்கள்"
 
-#: ../src/subscription_manager/gui/mysubstab.py:150
+#: ../src/subscription_manager/gui/mysubstab.py:147
 msgid "Yes"
 msgstr "ஆம்"
 
-#: ../src/subscription_manager/gui/mysubstab.py:152
+#: ../src/subscription_manager/gui/mysubstab.py:149
 msgid "No"
 msgstr "இல்லை"
 
@@ -313,7 +322,7 @@ msgstr ""
 "தொலை சேவையக பிழை. இணைப்பு விவரங்களை சரிபார்க்கவும், அல்லது மேலும் தகவலுக்கு /var/log/"
 "rhsm/rhsm.log ஐ பார்க்கவும்."
 
-#: ../src/subscription_manager/gui/utils.py:76
+#: ../src/subscription_manager/gui/utils.py:88
 #: ../src/subscription_manager/managercli.py:69
 #, python-format
 msgid "Bad CA certificate: %s"
@@ -382,7 +391,7 @@ msgid "Certificate"
 msgstr "சான்றிதழ்"
 
 #: ../src/subscription_manager/gui/installedtab.py:59
-#: ../src/subscription_manager/gui/contract_selection.py:76
+#: ../src/subscription_manager/gui/contract_selection.py:80
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:14
 msgid "Start Date"
 msgstr "துவக்க தேதி"
@@ -422,12 +431,12 @@ msgstr "விடுபட்டவை"
 msgid "My Installed Software"
 msgstr "எனது நிறுவப்பட்ட மென்பொருள்"
 
-#: ../src/subscription_manager/gui/contract_selection.py:67
+#: ../src/subscription_manager/gui/contract_selection.py:71
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:12
 msgid "Contract Number"
 msgstr "ஒப்பந்த எண்"
 
-#: ../src/subscription_manager/gui/contract_selection.py:71
+#: ../src/subscription_manager/gui/contract_selection.py:75
 msgid "Used / Available"
 msgstr "பயன்படுத்தப்பட்டது / கிடைக்கக்கூடியது"
 
@@ -440,40 +449,45 @@ msgstr ""
 "உங்கள் கட்டமைப்பை சேமிப்பதில் ஒரு பிழை. அது\n"
 "உங்கள் சொந்த %s உடையதா என உறுதிபடுத்தவும்."
 
-#: ../src/subscription_manager/hwprobe.py:80
+#: ../src/subscription_manager/hwprobe.py:81
 #, python-format
 msgid "Error reading system DMI information: %s"
 msgstr "பிழை வாசிக்கும் கணினி DMI நினைவக தகவல்: %s"
 
-#: ../src/subscription_manager/hwprobe.py:165
+#: ../src/subscription_manager/hwprobe.py:88
+#, python-format
+msgid "Error reading system DMI information with %s: %s"
+msgstr ""
+
+#: ../src/subscription_manager/hwprobe.py:173
 msgid "Error reading system memory information:"
 msgstr "பிழை வாசிக்கும் கணினி நினைவக தகவல்:"
 
-#: ../src/subscription_manager/hwprobe.py:226
+#: ../src/subscription_manager/hwprobe.py:234
 msgid "Error reading system cpu information:"
 msgstr "பிழை வாசிக்கும் கணினி cpu நினைவக தகவல்:"
 
-#: ../src/subscription_manager/hwprobe.py:239
+#: ../src/subscription_manager/hwprobe.py:247
 msgid "Error reading networking information:"
 msgstr "பிழை வாசிக்கும் பிணையத் தகவல்:"
 
-#: ../src/subscription_manager/hwprobe.py:256
+#: ../src/subscription_manager/hwprobe.py:264
 msgid "Error reading net Interface information:"
 msgstr "பிழை வாசிக்கும் வலை இடைமுக தகவல்:"
 
-#: ../src/subscription_manager/managerlib.py:91
+#: ../src/subscription_manager/managerlib.py:94
 msgid "Subscribed"
 msgstr "சந்தாபடுத்தப்பட்டது"
 
-#: ../src/subscription_manager/managerlib.py:91
+#: ../src/subscription_manager/managerlib.py:94
 msgid "Expired"
 msgstr "காலாவதியானது"
 
-#: ../src/subscription_manager/managerlib.py:91
+#: ../src/subscription_manager/managerlib.py:94
 msgid "Not Subscribed"
 msgstr "சந்தாபடுத்தப்படவில்லை"
 
-#: ../src/subscription_manager/managerlib.py:114
+#: ../src/subscription_manager/managerlib.py:117
 msgid "Not Installed"
 msgstr "நிறுவப்படவில்லை"
 
@@ -483,18 +497,18 @@ msgstr "Red Hat சான்றிதழ்கள் & பணியகங்க�
 
 #: ../src/subscription_manager/certmgr.py:80
 #: ../src/subscription_manager/factlib.py:80
-#: ../src/subscription_manager/certlib.py:751
+#: ../src/subscription_manager/certlib.py:747
 #, python-format
 msgid "%d updates required"
 msgstr "%d புதுப்பித்தல்கள் தேவைப்படுகிறது"
 
 #: ../src/subscription_manager/certmgr.py:81
 #: ../src/subscription_manager/factlib.py:81
-#: ../src/subscription_manager/certlib.py:752
+#: ../src/subscription_manager/certlib.py:748
 msgid "done"
 msgstr "முடிந்தது"
 
-#: ../src/subscription_manager/certmgr.py:93
+#: ../src/subscription_manager/certmgr.py:97
 msgid "Unable to update Red Hat certificates & repositories"
 msgstr "Red Hat சான்றிதழ்கள் & பணியகங்களை புதுப்பிக்க முடியவில்லை"
 
@@ -502,66 +516,66 @@ msgstr "Red Hat சான்றிதழ்கள் & பணியகங்க�
 msgid "Installed Products:"
 msgstr "நிறுவப்பட்ட தயாரிப்புகள்:"
 
-#: ../src/subscription_manager/managercli.py:127
+#: ../src/subscription_manager/managercli.py:133
 msgid "debug level"
 msgstr "பிழைதிருத்த நிலை"
 
-#: ../src/subscription_manager/managercli.py:129
+#: ../src/subscription_manager/managercli.py:135
 msgid "proxy url in the form of proxy_hostname:proxy_port"
 msgstr "proxy url ஆனது proxy_hostname வடிவில் உள்ளது:proxy_port"
 
-#: ../src/subscription_manager/managercli.py:131
+#: ../src/subscription_manager/managercli.py:137
 msgid "user for http proxy with basic authentication"
 msgstr "http ப்ராக்ஸியுடன் அடிப்படை அங்கீகாரத்திற்கான பயனர்"
 
-#: ../src/subscription_manager/managercli.py:133
+#: ../src/subscription_manager/managercli.py:139
 msgid "password for http proxy with basic authentication"
 msgstr "அடிப்படை அங்கீகாரத்துடன்  http ப்ராகிஸிக்கான கடவுச்சொல்"
 
-#: ../src/subscription_manager/managercli.py:140
+#: ../src/subscription_manager/managercli.py:146
 msgid ""
 "Consumer not registered. Please register using --username and --password"
 msgstr ""
 "நுகர்வோர் பதிவுசெய்யப்படவில்லை. --username மற்றும் --passwordஐ பயன்படுத்தி "
 "பதிவுசெய்யவும்"
 
-#: ../src/subscription_manager/managercli.py:195
+#: ../src/subscription_manager/managercli.py:201
 msgid "Consumer certificates corrupted. Please reregister."
 msgstr "வாடிக்கையாளர் சான்றிதழ்கள்  பிழையாகிவிட்டது. மீண்டும் பதிவுசெய்யவும்."
 
-#: ../src/subscription_manager/managercli.py:212
+#: ../src/subscription_manager/managercli.py:218
 msgid "specify a username"
 msgstr "ஒரு பயனர்பெயரை குறிப்பிடவும்"
 
-#: ../src/subscription_manager/managercli.py:214
+#: ../src/subscription_manager/managercli.py:220
 msgid "specify a password"
 msgstr "ஒரு கடவுச்சொல்லை குறிப்பிடவும்"
 
-#: ../src/subscription_manager/managercli.py:226
+#: ../src/subscription_manager/managercli.py:232
 msgid "Username: "
 msgstr "பயனர்பெயர்:"
 
-#: ../src/subscription_manager/managercli.py:229
+#: ../src/subscription_manager/managercli.py:235
 msgid "Password: "
 msgstr "கடவுச்சொல்:"
 
-#: ../src/subscription_manager/managercli.py:254
+#: ../src/subscription_manager/managercli.py:260
 msgid "removes all local consumer data, does not effect the server"
 msgstr "அனைத்து உள்ளமை வாடிக்கையாளர் தரவை நீக்குகிறது, இது சேவையகத்தை பாதிக்கவில்லை"
 
-#: ../src/subscription_manager/managercli.py:267
+#: ../src/subscription_manager/managercli.py:273
 msgid "All local data removed"
 msgstr "அனைத்து உள்ளமை தரவும் நீக்கப்பட்டது"
 
-#: ../src/subscription_manager/managercli.py:273
+#: ../src/subscription_manager/managercli.py:279
 msgid "pulls the latest entitlement data from the server"
 msgstr "சேவையகத்திலிருந்து சமீபத்திய உரிம தரவை தள்ளுகிறதுசேவையகத்திலுர்"
 
-#: ../src/subscription_manager/managercli.py:283
+#: ../src/subscription_manager/managercli.py:289
 msgid "All local data refreshed"
 msgstr "அனைத்து உள்ளமை தரவு புதுப்பிக்கப்பட்டது"
 
-#: ../src/subscription_manager/managercli.py:288
+#: ../src/subscription_manager/managercli.py:294
 #, python-format
 msgid ""
 "Unable to perform refresh due to the following exception \n"
@@ -570,114 +584,114 @@ msgstr ""
 "பின்வரும் மறைகுறியாக்கத்தினால் புதுப்பித்தலை செயற்படுத்த முடியவில்லை \n"
 "பிழை: %s"
 
-#: ../src/subscription_manager/managercli.py:295
+#: ../src/subscription_manager/managercli.py:301
 msgid "request a new identity certficate for this machine"
 msgstr ""
 "இந்த கணினிக்கான ஒரு புதிய அடையாள சான்றிதழை கோருகிறதுஇந்த கணினிக்கான ஒரு புதிய "
 "அடையாள சான்றிதழ் "
 
-#: ../src/subscription_manager/managercli.py:302
+#: ../src/subscription_manager/managercli.py:308
 msgid "request a new certificate be generated"
 msgstr "ஒரு புதிய சான்றிதழ் உருவாக்கப்படுவதை கோரவும்"
 
-#: ../src/subscription_manager/managercli.py:304
+#: ../src/subscription_manager/managercli.py:310
 msgid "force certificate regeneration (requires username and password)"
 msgstr ""
 "சான்றிதழ் மறுஉருவாக்கத்தை வலியுறுத்து (பயனர்பெயர் மற்றும் கடவுச்சொல் தேவைப்படுகிறது)"
 
-#: ../src/subscription_manager/managercli.py:309
+#: ../src/subscription_manager/managercli.py:315
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 "நுகர்வோர் அடையாளம் இல்லை அல்லது அழிக்கப்பட்டது. --help-ஐ பதிவு செய்ய "
 "முயற்சிக்கவும்நுகர்வோர் அடையாளம் இல்லை அல்லது அழிக்கப்பட்டது. --help-ஐ பதிவு செய்ய முய"
 
-#: ../src/subscription_manager/managercli.py:312
+#: ../src/subscription_manager/managercli.py:318
 msgid "--force can only be used with --regenerate"
 msgstr "--force ஆனது --regenerate-உடன் மட்டுமே பயன்படுத்த முடியும்"
 
-#: ../src/subscription_manager/managercli.py:316
+#: ../src/subscription_manager/managercli.py:322
 msgid "--username and --password can only be used with --force"
 msgstr "--username மற்றும் --password மட்டுமே --force-உடன் பயன்படுத்த முடியும்"
 
-#: ../src/subscription_manager/managercli.py:328
+#: ../src/subscription_manager/managercli.py:334
 #, python-format
 msgid "Current identity is: %s name: %s"
 msgstr "நடப்பு அடையாளமானது: %s பெயர்: %s"
 
-#: ../src/subscription_manager/managercli.py:346
+#: ../src/subscription_manager/managercli.py:352
 msgid "Error: Unable to generate a new identity for the system"
 msgstr "பிழை: கணினிக்காக ஒரு புதிய அடையாளத்தை துவக்க முடியவில்லை"
 
-#: ../src/subscription_manager/managercli.py:353
+#: ../src/subscription_manager/managercli.py:359
 msgid "register the client to RHN"
 msgstr "RHNக்கு வாடிக்கையாளரை பதிவுசெய்கிறது"
 
-#: ../src/subscription_manager/managercli.py:360
+#: ../src/subscription_manager/managercli.py:366
 msgid "the type of consumer to register. Defaults to system"
 msgstr "இந்த வகையான நுகர்வோரை பதிவுசெய்யவும். கணினியின் முன்னிருப்பின்படி"
 
-#: ../src/subscription_manager/managercli.py:362
+#: ../src/subscription_manager/managercli.py:368
 msgid "name of the consumer to register. Defaults to the hostname."
 msgstr ""
 "நுகர்வோரின் பெயரை பதிவுசெய்யவும். புரவலப்பெயருக்கான முன்னிருப்புகள்.நுகர்வோரின் பெயரை "
 "பதிவுசெய்யவும். புரவலப்பெயருக்காநுகர்வோரின் பெயரை பதிவுசெய்யவும். பநுகர்வோரின் பெயரை "
 "பதிவுசெய்யவும். ப"
 
-#: ../src/subscription_manager/managercli.py:364
+#: ../src/subscription_manager/managercli.py:370
 msgid "register to an existing consumer"
 msgstr "இருக்கும் ஒரு நுகர்வோரை பதிவுசெய்யவும்"
 
-#: ../src/subscription_manager/managercli.py:366
-#: ../src/subscription_manager/managercli.py:530
+#: ../src/subscription_manager/managercli.py:372
+#: ../src/subscription_manager/managercli.py:536
 msgid ""
 "automatically subscribe this system to                                     "
 "compatible subscriptions."
 msgstr "தானாகவே இந்த கணினிக்கு சந்தாபடுத்ததானாகவே இந்த க"
 
-#: ../src/subscription_manager/managercli.py:369
+#: ../src/subscription_manager/managercli.py:375
 msgid "register the system even if it is already registered"
 msgstr "கணினி ஏற்கனவே பதிவுசெய்யப்பட்டிருந்தாலும் பதிவுசெய்யவும்"
 
-#: ../src/subscription_manager/managercli.py:374
+#: ../src/subscription_manager/managercli.py:380
 msgid "This system is already registered. Use --force to override"
 msgstr "இந்த கணினி ஏற்கனவே பதிவுசெய்யப்பட்டுள்ளது. மேலெழுத --force என்பதை பயன்படுத்தவும்"
 
-#: ../src/subscription_manager/managercli.py:377
+#: ../src/subscription_manager/managercli.py:383
 msgid "Error: consumer name can not be empty."
 msgstr "பிழை: நுகர்வோர் பெயர் காலியாக இருக்க முடியாது."
 
-#: ../src/subscription_manager/managercli.py:411
+#: ../src/subscription_manager/managercli.py:417
 #, python-format
 msgid "The system with UUID %s has been unregistered"
 msgstr "இந்த கணினி UUID %s உடன் பதிவுசெய்யப்படாது"
 
-#: ../src/subscription_manager/managercli.py:430
+#: ../src/subscription_manager/managercli.py:436
 #, python-format
 msgid "Error during registration: %s"
 msgstr "பதிவுசெய்யும் போது பிழை: %s"
 
-#: ../src/subscription_manager/managercli.py:445
+#: ../src/subscription_manager/managercli.py:451
 msgid "unregister the client from RHN"
 msgstr "RHNலிருந்து வாடிக்கையாளரை பதிவுநீக்குகிறது"
 
-#: ../src/subscription_manager/managercli.py:455
+#: ../src/subscription_manager/managercli.py:461
 msgid "This system is currently not registered."
 msgstr "இந்த கணினி தற்போது பதிவுசெய்யப்படவில்லை."
 
-#: ../src/subscription_manager/managercli.py:477
+#: ../src/subscription_manager/managercli.py:483
 msgid "System has been un-registered."
 msgstr "கணினி  பதிவுசெய்யப்பட்டிருக்கவில்லை."
 
-#: ../src/subscription_manager/managercli.py:483
+#: ../src/subscription_manager/managercli.py:489
 msgid "activate the registered user to a specified product"
 msgstr "ஒரு குறிப்பிட்ட தயாரிப்பில் பதிவுசெய்யப்பட்ட பயனரை செயல்படுத்தவும்"
 
-#: ../src/subscription_manager/managercli.py:488
+#: ../src/subscription_manager/managercli.py:494
 msgid "optional email address to notify when token activation is complete."
 msgstr "டோகன் செயல்பாடு முடிவடைந்ததும் விருப்பமான மின்னஞ்சல் முகவரி அறிக்கையிடும்."
 
-#: ../src/subscription_manager/managercli.py:491
+#: ../src/subscription_manager/managercli.py:497
 msgid ""
 "optional language to use for email notification when token activation is "
 "complete. Used with --email only. Examples: en-us, de-de"
@@ -685,43 +699,43 @@ msgstr ""
 "டோகன் முடிவடைந்ததும் மின்னஞ்சல் அறிக்கைக்கு விருப்ப மொழியை பயன்படுத்தவும். --emailஉடன் "
 "மட்டும் பயன்படுத்தப்படும். எடுத்துக்காட்டுகள்: en-us, de-de"
 
-#: ../src/subscription_manager/managercli.py:521
+#: ../src/subscription_manager/managercli.py:527
 msgid "subscribe the registered machine to a specified product"
 msgstr "ஒரு குறிப்பிட்ட தயாரிப்பில் பதிவுசெய்யப்பட்ட கணினியை சந்தாபடுத்தவும்"
 
-#: ../src/subscription_manager/managercli.py:528
+#: ../src/subscription_manager/managercli.py:534
 msgid "subscription pool id"
 msgstr "சந்தாபடுத்தல் பூல் id"
 
-#: ../src/subscription_manager/managercli.py:535
+#: ../src/subscription_manager/managercli.py:541
 msgid "Error: Need to supply --pool or --auto."
 msgstr "பிழை: --pool அல்லது  --auto வழங்கப்பட வேண்டும்."
 
-#: ../src/subscription_manager/managercli.py:538
+#: ../src/subscription_manager/managercli.py:544
 msgid "Error: Only one of --pool or --auto may be used."
 msgstr "பிழை: --pool அல்லது --auto மட்டுமே பயன்படுத்தப்படலாம்."
 
-#: ../src/subscription_manager/managercli.py:559
+#: ../src/subscription_manager/managercli.py:565
 msgid "Please enter a valid numeric pool id."
 msgstr "ஒரு சரியான தசம பூல் idஐ உள்ளிடவும்."
 
-#: ../src/subscription_manager/managercli.py:588
+#: ../src/subscription_manager/managercli.py:594
 msgid "unsubscribe the registered user from all or specific subscriptions"
 msgstr "அனைத்து அல்லது குறிப்பிட்ட சந்தாக்களிலிருந்து பதிவுசெய்யப்பட்ட பயனரை சந்தாநீக்கவும்"
 
-#: ../src/subscription_manager/managercli.py:594
+#: ../src/subscription_manager/managercli.py:600
 msgid "Certificate serial to unsubscribe"
 msgstr "சந்தாநீக்குவதற்கான சான்றிதழ் வரிசை"
 
-#: ../src/subscription_manager/managercli.py:596
+#: ../src/subscription_manager/managercli.py:602
 msgid "Unsubscribe from all subscriptions"
 msgstr "அனைத்து சந்தாக்களிலிருந்து சந்தாநீக்கு"
 
-#: ../src/subscription_manager/managercli.py:618
+#: ../src/subscription_manager/managercli.py:624
 msgid "One of --serial or --all must be provided"
 msgstr "--serial அல்லது --all-இல் ஒன்று கொடுக்கப்படவேண்டும்இ--serial அல்லது --all"
 
-#: ../src/subscription_manager/managercli.py:626
+#: ../src/subscription_manager/managercli.py:632
 #, python-format
 msgid ""
 "Unable to perform unsubscribe due to the following exception \n"
@@ -730,88 +744,88 @@ msgstr ""
 "பின்வரும் மறைகுறியாக்கத்தினால் சந்தாபடுத்தலை செயற்படுத்த முடியவில்லை \n"
 "பிழை: %s"
 
-#: ../src/subscription_manager/managercli.py:637
+#: ../src/subscription_manager/managercli.py:643
 msgid "show information for facts"
 msgstr "செயல்களுக்கான தகவலைக் காட்டுசெயல்பகள"
 
-#: ../src/subscription_manager/managercli.py:642
+#: ../src/subscription_manager/managercli.py:648
 msgid "list known facts for this system"
 msgstr "இந்த கணினிக்கான தெரிந்த செயல்களின் பட்டியல்இந்த கணினிக்குஇந்த கணஇந்த கண்டின"
 
-#: ../src/subscription_manager/managercli.py:644
+#: ../src/subscription_manager/managercli.py:650
 msgid "update the system facts"
 msgstr ""
 "கணினி செயல்களை புதுப்பிக்கவும்கணினி செயல்களை புதுப்பிக்கககணினி செயல்களை புதுக்ககணினி "
 "செய்லக"
 
-#: ../src/subscription_manager/managercli.py:653
+#: ../src/subscription_manager/managercli.py:659
 msgid "Error: Need either --list or --update, Try facts --help"
 msgstr ""
 "பிழை: --list அல்லது --update தேவை, --help-ஐ முயற்சிக்கவும்பிழை: --list அல்லது --"
 "update தேவை, --help-ஐ "
 
-#: ../src/subscription_manager/managercli.py:677
+#: ../src/subscription_manager/managercli.py:683
 msgid "list available or consumer subscriptions for registered user"
 msgstr "பதிவுசெய்யப்பட்ட பயனருக்காக வாடிக்கையாளர் சந்தாக்கள் அல்லது பட்டில் உள்ளது"
 
-#: ../src/subscription_manager/managercli.py:682
+#: ../src/subscription_manager/managercli.py:688
 msgid "installed"
 msgstr "நிறுவப்பட்டது"
 
-#: ../src/subscription_manager/managercli.py:684
+#: ../src/subscription_manager/managercli.py:690
 msgid "available"
 msgstr "கிடைக்கக்கூடியது"
 
-#: ../src/subscription_manager/managercli.py:686
+#: ../src/subscription_manager/managercli.py:692
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
 msgstr ""
 "தேதி தேடுவதற்கு, இன்று தேதி முன்னிருப்புகள், --availableஉடன் மட்டும் பயன்படுத்தப்படும் "
 
-#: ../src/subscription_manager/managercli.py:689
+#: ../src/subscription_manager/managercli.py:695
 msgid "consumed"
 msgstr "உபயோகப்படுத்தப்பட்டது"
 
-#: ../src/subscription_manager/managercli.py:691
+#: ../src/subscription_manager/managercli.py:697
 msgid "if supplied with --available then all subscriptions are returned"
 msgstr "--available-உடன் வழங்கப்பட்டால் அனைத்து சந்தாக்களும் திரும்பி அனுப்பப்படும்"
 
-#: ../src/subscription_manager/managercli.py:695
+#: ../src/subscription_manager/managercli.py:701
 msgid "Error: --all is only applicable with --available"
 msgstr "பிழை: --all என்பது --available-உடன் மட்டுமே பொருந்தக்கூடியது"
 
-#: ../src/subscription_manager/managercli.py:698
+#: ../src/subscription_manager/managercli.py:704
 msgid "Error: --ondate is only applicable with --available"
 msgstr ": --ondate is only applicable with --available"
 
-#: ../src/subscription_manager/managercli.py:714
+#: ../src/subscription_manager/managercli.py:720
 msgid "No installed Products to list"
 msgstr ""
 "பட்டியலிடுவதற்கு நிறுவப்பட்ட தயாரிப்புகள் எதுவும் இல்லைபட்டியலிடுவதற்கு நிறுவப்பட்ட தயாரு"
 
-#: ../src/subscription_manager/managercli.py:717
+#: ../src/subscription_manager/managercli.py:723
 msgid "    Installed Product Status"
 msgstr "    நிறுவப்பட்ட தயாரிப்பு நிலை"
 
-#: ../src/subscription_manager/managercli.py:730
+#: ../src/subscription_manager/managercli.py:736
 msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr ""
 "உள்ளிடப்பட்ட தேதி தவறானது. தேதியானது YYYY-MM-DD  வடிவில் இருக்க வேண்டும் "
 "(எடுத்துக்காட்டு: "
 
-#: ../src/subscription_manager/managercli.py:737
+#: ../src/subscription_manager/managercli.py:743
 msgid "No Available subscription pools to list"
 msgstr "பட்டியலிடுவதற்கு சந்தாபடுத்தல் பூல்கள் எதுவும் இல்லை"
 
-#: ../src/subscription_manager/managercli.py:753
+#: ../src/subscription_manager/managercli.py:759
 msgid "No Consumed subscription pools to list"
 msgstr "பட்டியலில் உடயோகமான சந்தாபடுத்தல் பூல்கள் எதுவும் "
 
-#: ../src/subscription_manager/managercli.py:755
+#: ../src/subscription_manager/managercli.py:761
 msgid "Consumed Product Subscriptions"
 msgstr "உபயோகமான தயாரிப்பு சந்தாபடுத்தல்கள்"
 
-#: ../src/subscription_manager/managercli.py:805
+#: ../src/subscription_manager/managercli.py:811
 #, python-format
 msgid ""
 "\n"
@@ -820,11 +834,11 @@ msgstr ""
 "\n"
 "பயன்பாடு: %s [விருப்பங்கள்] MODULENAME --help\n"
 
-#: ../src/subscription_manager/managercli.py:806
+#: ../src/subscription_manager/managercli.py:812
 msgid "Supported modules:"
 msgstr "துணைபுரியப்பட்ட தொகுதிகள்:"
 
-#: ../src/subscription_manager/managercli.py:871
+#: ../src/subscription_manager/managercli.py:877
 msgid ""
 "Error: You need to register this system by running `register` command before "
 "using this option."
@@ -846,7 +860,7 @@ msgstr "நிறுவுகிறது: %s"
 msgid "deleting: %s"
 msgstr "அழிக்கிறது: %s"
 
-#: ../src/subscription_manager/productid.py:140
+#: ../src/subscription_manager/productid.py:139
 #, python-format
 msgid "duration: %d(ms)"
 msgstr "கால அளவு: %d(ms)"
@@ -971,38 +985,38 @@ msgstr "காரணங்(கள்):"
 msgid "Reason(s):"
 msgstr "காரணம்(கள்):"
 
-#: ../src/subscription_manager/certlib.py:585
+#: ../src/subscription_manager/certlib.py:581
 #, python-format
 msgid "Total updates: %d"
 msgstr "மொத்த புதுப்பித்தல்கள்: %d"
 
-#: ../src/subscription_manager/certlib.py:586
+#: ../src/subscription_manager/certlib.py:582
 #, python-format
 msgid "Found (local) serial# %s"
 msgstr "(உள்ளமை) வரிசை# %s காணப்பட்டது"
 
-#: ../src/subscription_manager/certlib.py:587
+#: ../src/subscription_manager/certlib.py:583
 #, python-format
 msgid "Expected (UEP) serial# %s"
 msgstr "எதிர்பார்க்கப்பட்ட (UEP) வரிசை# %s"
 
-#: ../src/subscription_manager/certlib.py:588
+#: ../src/subscription_manager/certlib.py:584
 msgid "Added (new)"
 msgstr "சேர்க்கப்பட்டது (புதிய)"
 
-#: ../src/subscription_manager/certlib.py:589
+#: ../src/subscription_manager/certlib.py:585
 msgid "Deleted (rogue):"
 msgstr "அழிக்கப்பட்டது (rogue):"
 
-#: ../src/subscription_manager/certlib.py:590
+#: ../src/subscription_manager/certlib.py:586
 msgid "Expired (not deleted):"
 msgstr "கலாவதியானது (அழிக்கப்படவில்லை):கலாவதியானத"
 
-#: ../src/subscription_manager/certlib.py:591
+#: ../src/subscription_manager/certlib.py:587
 msgid "Expired (deleted):"
 msgstr "கலாவதியானது (அழிக்கப்பட்டது):"
 
-#: ../src/subscription_manager/certlib.py:748
+#: ../src/subscription_manager/certlib.py:744
 msgid "Updating Red Hat certificates"
 msgstr "Red Hat சான்றிதழ்களை புதுப்பிக்கிறது"
 
@@ -1562,45 +1576,45 @@ msgstr "பிழைதிருத்த செய்திகளை காட�
 msgid "Force display of the icon (expired or warning)"
 msgstr "சின்னத்தின் வலிமையான காட்சி (காலாவதியனது அல்லது எச்சரிக்கிறது)"
 
-#: ../src/rhsm_icon.c:171 ../src/rhsm_icon.c:172
+#: ../src/rhsm_icon.c:189 ../src/rhsm_icon.c:190
 msgid "Invalid or Missing Entitlement Certificates"
 msgstr "தவறான அல்லது விடுபட்ட உரிம சான்றிதழ்கள்"
 
-#: ../src/rhsm_icon.c:173
+#: ../src/rhsm_icon.c:191
 msgid "This system is missing one or more valid entitlement certificates."
 msgstr "இந்த கணினி ஒன்று அல்லது அதற்கு மேற்பட்ட சரியான உரிம சான்றிதழ்களை கொண்டுள்ளன."
 
-#: ../src/rhsm_icon.c:177
+#: ../src/rhsm_icon.c:195
 msgid "Some of the system's subscriptions are about to expire"
 msgstr "சில கணினிகள் சந்தாபடுத்தல்கள் காலாவதியாகும் நிலையில் உள்ளன"
 
-#: ../src/rhsm_icon.c:179
+#: ../src/rhsm_icon.c:197
 msgid "This System's Subscriptions Are About to Expire"
 msgstr "இந்த கணினிகளுக்கு சந்தாபடுத்தல்கள் காலாவதியாகும் நிலையில் உள்ளன"
 
-#: ../src/rhsm_icon.c:180
+#: ../src/rhsm_icon.c:198
 msgid "One or more of this system's subscriptions are about to expire."
 msgstr "ஒன்று அல்லது பல கணினிகள் சந்தாபடுத்தல்கள் காலாவதியாகும் நிலையில் உள்ளன"
 
-#: ../src/rhsm_icon.c:198
+#: ../src/rhsm_icon.c:215
 msgid "Remind Me Later"
 msgstr "பின்னர் எனக்கு நினைவூட்டவும்"
 
-#: ../src/rhsm_icon.c:204
+#: ../src/rhsm_icon.c:221
 msgid "Manage My Subscriptions..."
 msgstr "எனது சந்தாக்களை பராமரிக்கவும்..."
 
-#: ../src/rhsm_icon.c:262
+#: ../src/rhsm_icon.c:282
 #, c-format
 msgid "Unknown argument to force-icon: %s\n"
 msgstr "force-iconக்கு தெரியாத விவாதம்: %s\n"
 
-#: ../src/rhsm_icon.c:294 ../src/rhsm_icon.c:358
+#: ../src/rhsm_icon.c:314 ../src/rhsm_icon.c:378
 #, c-format
 msgid "Failed to open connection to bus: %s\n"
 msgstr "பஸ் இணைப்பை திறக்க முடியவில்லை: %s\n"
 
-#: ../src/rhsm_icon.c:342
+#: ../src/rhsm_icon.c:362
 #, c-format
 msgid "option parsing failed: %s\n"
 msgstr "விருப்ப பிணைத்தல் தோல்வியுற்றது: %s\n"
