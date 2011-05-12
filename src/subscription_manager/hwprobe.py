@@ -312,15 +312,23 @@ class Hardware:
         self.allhw.update(platform_specific_info)
 
     def getAll(self):
-        self.getUnameInfo()
-        self.getReleaseInfo()
-        self.getMemInfo()
-        self.getCpuInfo()
-        self.getLsCpuInfo()
-        self.getNetworkInfo()
-        self.getNetworkInterfaces()
-        self.getVirtInfo()
-        self.getPlatformSpecificInfo()
+        hardware_methods  = [self.getUnameInfo,
+                             self.getReleaseInfo,
+                             self.getMemInfo,
+                             self.getCpuInfo,
+                             self.getLsCpuInfo,
+                             self.getNetworkInfo,
+                             self.getNetworkInterfaces,
+                             self.getVirtInfo,
+                             self.getPlatformSpecificInfo]
+        # try each hardware method, and try/except around, since
+        # these tend to be fragile
+        for hardware_method in hardware_methods:
+            try:
+                hardware_method()
+            except Exception, e:
+                log.warn("Hardware detection failed: %s" % e)
+
         return self.allhw
 
 
