@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.13
+Version: 0.95.5.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -200,6 +200,11 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Thu May 12 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 703920: contract selection was not showing dates for pools
+  (alikins@redhat.com)
+- 683553: Make -1 show as unlimited (bkearney@redhat.com)
+
 * Tue May 10 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 703626: product-id yum plugin was using too new of yum api
   (alikins@redhat.com)
