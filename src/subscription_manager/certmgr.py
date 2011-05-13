@@ -72,7 +72,7 @@ def main():
         log.error('Either the consumer is not registered or the certificates' +
                   ' are corrupted. Certificate update using daemon failed.')
         sys.exit(-1)
-    print _('Updating Red Hat certificates & repositories')
+    print _('Updating entitlement certificates & repositories')
     uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
                                    key_file=ConsumerIdentity.keypath())
     mgr = CertManager(uep=uep)
@@ -94,6 +94,6 @@ if __name__ == '__main__':
         pass
     except Exception, e:
         log.error("Error while updating certificates using daemon")
-        print _('Unable to update Red Hat certificates & repositories')
+        print _('Unable to update entitlement certificates & repositories')
         log.exception(e)
         sys.exit(-1)

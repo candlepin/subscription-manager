@@ -331,7 +331,7 @@ class RepoFile(Parser):
         f = open(self.path, 'w')
         s = []
         s.append('#')
-        s.append('# Red Hat Repositories')
+        s.append('# Certificate-Based Repositories')
         s.append('# Managed by (rhsm) subscription-manager')
         s.append('#')
         f.write('\n'.join(s))
@@ -368,7 +368,7 @@ class Reader:
 
 
 def main():
-    print 'Updating Red Hat repository'
+    print 'Updating Certificate based repositories'
     repolib = RepoLib()
     updates = repolib.update()
     print '%d updates required' % updates

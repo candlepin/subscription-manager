@@ -61,7 +61,7 @@ def in_warning_period(sorter):
 def check_status():
 
     if managerlib.is_registered_with_classic():
-        debug("System is already registered with RHN Classic")
+        debug("System is already registered to another entitlement system")
         return RHN_CLASSIC
 
     sorter = certlib.CertSorter(certlib.ProductDirectory(),

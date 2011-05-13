@@ -42,9 +42,9 @@ and other critical updates.
 def update(conduit):
     """ update entitlement certificates """
     if os.getuid() != 0:
-        conduit.info(2, 'Not root, Red Hat repositories not updated')
+        conduit.info(2, 'Not root, certificate-based repositories not updated')
         return
-    conduit.info(2, 'Updating Red Hat repositories.')
+    conduit.info(2, 'Updating certificate-based repositories.')
     rl = RepoLib()
     rl.update()
 

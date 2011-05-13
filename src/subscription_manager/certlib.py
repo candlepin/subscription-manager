@@ -741,7 +741,7 @@ def find_first_invalid_date(ent_dir=None, product_dir=None):
 
 
 def main():
-    print _('Updating Red Hat certificates')
+    print _('Updating entitlement certificates')
     certlib = CertLib()
     updates = certlib.update()
     print _('%d updates required') % updates
