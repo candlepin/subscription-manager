@@ -54,6 +54,7 @@ install: install-files install-conf
 
 install-files: dbus-service-install compile-po desktop-files
 	install -d ${CODE_DIR}/gui/data/icons/scalable
+	install -d ${CODE_DIR}/branding
 	install -d ${PREFIX}/${INSTALL_DIR}/locale/
 	install -d ${PREFIX}/usr/lib/yum-plugins/
 	install -d ${PREFIX}/usr/sbin
@@ -81,6 +82,7 @@ install-files: dbus-service-install compile-po desktop-files
 
 	install -m 644 -p ${SRC_DIR}/*.py ${CODE_DIR}
 	install -m 644 -p ${SRC_DIR}/gui/*.py ${CODE_DIR}/gui
+	install -m 644 -p ${SRC_DIR}/branding/*.py ${CODE_DIR}/branding
 	install -m 644 -p ${SRC_DIR}/plugin/*.py ${PREFIX}/usr/lib/yum-plugins/
 
 	install -m 644 ${SRC_DIR}/gui/data/*.glade ${CODE_DIR}/gui/data/

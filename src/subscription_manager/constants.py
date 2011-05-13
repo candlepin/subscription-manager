@@ -54,12 +54,3 @@ UNREGISTER_ERROR = _("<b>Errors were encountered during unregister.</b>\n%s\nPle
 REGISTER_ERROR = _("<b>Unable to register the system.</b>\n\n %s\n\nPlease see /var/log/rhsm/rhsm.log for more information.")
 
 CONFIRM_UNREGISTER = _("<b>Are you sure you want to unregister?</b>")
-
-RHN_CLASSIC_WARNING = _("""WARNING
-
-You have already registered with RHN using RHN Classic technology. This tool requires registration using RHN Certificate-Based Entitlement technology.
-
-Except for a few cases, Red Hat recommends customers only register with RHN once.
-
-For more information, including alternate tools, consult this Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563
-""")

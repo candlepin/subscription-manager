@@ -27,6 +27,7 @@ from optparse import OptionParser
 
 import sys
 sys.path.append("/usr/share/rhsm")
+from subscription_manager.branding import get_branding
 from subscription_manager import managerlib
 from subscription_manager import certlib
 import rhsm.certificate as certificate
@@ -163,7 +164,7 @@ def main():
         elif status == RHN_CLASSIC:
             syslog.openlog("rhsmd")
             syslog.syslog(syslog.LOG_NOTICE,
-                          "This system is registered to RHN Classic")
+                    get_branding().RHSMD_REGISTERED_TO_OTHER)
        
         # Return an exit code for the program. having valid entitlements is
         # good, so it gets an exit status of 0.

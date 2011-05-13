@@ -35,6 +35,7 @@ import rhsm.config
 import rhsm.connection as connection
 
 from i18n_optparse import OptionParser
+from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib, ConsumerIdentity
 from subscription_manager.certmgr import CertManager
 from subscription_manager import managerlib
@@ -361,7 +362,7 @@ class RegisterCommand(UserPassCommand):
 
     def __init__(self):
         usage = "usage: %prog register [OPTIONS]"
-        shortdesc = _("register the client to RHN")
+        shortdesc = get_branding().CLI_REGISTER
         desc = "register"
 
         super(RegisterCommand, self).__init__("register", usage, shortdesc,
@@ -394,9 +395,9 @@ class RegisterCommand(UserPassCommand):
         """
         Executes the command.
         """
-        # Always warn the user if registered to old RHN 
+        # Always warn the user if registered to old RHN/Spacewalk
         if managerlib.is_registered_with_classic():
-            print constants.RHN_CLASSIC_WARNING
+            print(get_branding().REGISTERED_TO_OTHER_WARNING)
 
         self._validate_options()
 
@@ -457,7 +458,7 @@ class UnRegisterCommand(CliCommand):
 
     def __init__(self):
         usage = "usage: %prog unregister [OPTIONS]"
-        shortdesc = _("unregister the client from RHN")
+        shortdesc = get_branding().CLI_UNREGISTER
         desc = "unregister"
 
         CliCommand.__init__(self, "unregister", usage, shortdesc, desc)

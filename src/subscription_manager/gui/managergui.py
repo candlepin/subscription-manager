@@ -34,6 +34,7 @@ from subscription_manager import constants
 from subscription_manager.facts import Facts
 from subscription_manager.certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \
         CertLib, CertSorter, find_first_invalid_date
+from subscription_manager.branding import get_branding
 
 from subscription_manager.gui import activate
 from subscription_manager.gui import factsgui
@@ -239,7 +240,8 @@ class MainWindow(widgets.GladeWidget):
         self.main_window.show_all()
         self.refresh()
 
-        # Check to see if already registered to old RHN - and show dialog
+        # Check to see if already registered to old RHN/Spacewalk
+        # and show dialog if so
         self._check_rhn_classic()
 
     def registered(self):
@@ -400,7 +402,7 @@ class MainWindow(widgets.GladeWidget):
     def _check_rhn_classic(self):
         if managerlib.is_registered_with_classic():
             prompt = messageWindow.ContinueDialog(
-                    linkify(constants.RHN_CLASSIC_WARNING),
+                    linkify(get_branding().REGISTERED_TO_OTHER_WARNING),
                     self.main_window)
             prompt.connect('response', self._on_rhn_classic_response)
 
@@ -436,10 +438,14 @@ class RegisterScreen:
         self.passwd = registration_xml.get_widget("account_password")
         self.consumer_name = registration_xml.get_widget("consumer_name")
 
-        register_tip_label = registration_xml.get_widget("forgotInfoHosted1")
-        tip_label = register_tip_label.get_label()
-        new_tip_label = linkify(tip_label)
-        register_tip_label.set_label(new_tip_label)
+        register_tip_label = registration_xml.get_widget("registrationTip")
+        register_tip_label.set_label("<small>%s</small>" % \
+                linkify(get_branding().GUI_FORGOT_LOGIN_TIP))
+
+        register_header_label = \
+                registration_xml.get_widget("registrationHeader")
+        register_header_label.set_label("<b>%s</b>" % \
+                get_branding().GUI_REGISTRATION_HEADER)
 
     def show(self):
         self.registerWin.present()
