@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.14
+Version: 0.95.5.15
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -200,6 +200,12 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Fri May 13 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- a tab snuck in here (cduryee@redhat.com)
+- regen strings for string freeze (two new strings) (cduryee@redhat.com)
+- 696791: Handle exceptions thrown in hardware detection modules.
+  (alikins@redhat.com)
+
 * Thu May 12 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 703920: contract selection was not showing dates for pools
   (alikins@redhat.com)
