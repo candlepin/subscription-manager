@@ -90,7 +90,9 @@ class ProductManager:
         self.db = ProductDatabase()
         self.db.read()
 
-    def update(self, yb=YumBase()):
+    def update(self, yb):
+        if yb is None:
+            yb = YumBase()
         enabled = self.getEnabled(yb)
         active = self.getActive(yb)
         self.updateRemoved(active)
