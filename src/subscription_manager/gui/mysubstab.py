@@ -126,7 +126,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             'installed_text': str,
             'start_date': gobject.TYPE_PYOBJECT,
             'expiration_date': gobject.TYPE_PYOBJECT,
-            'serial': long,
+            'serial': str,
             'align': float,
             'background': str
         }
