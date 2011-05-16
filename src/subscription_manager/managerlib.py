@@ -343,8 +343,10 @@ def list_pools(uep, consumer_uuid, facts, all=False, active_on=None):
     consumer possible.
     """
     if facts.delta():
-        uep.updateConsumerFacts(consumer_uuid, facts.get_facts())
-    return uep.getPoolsList(consumer_uuid, all, active_on)
+        uep.updateConsumerFacts(consumer_uuid, facts.get_facts())            
+    owner = uep.getOwner(consumer_uuid)
+    ownerid = owner['key']
+    return uep.getPoolsList(ownerid, consumer_uuid, all, active_on)
 
 # TODO: This method is morphing the actual pool json and returning a new 
 # dict which does not contain all the pool info. Not sure if this is really
