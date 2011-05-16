@@ -373,6 +373,8 @@ class RegisterCommand(UserPassCommand):
                                help=_("name of the consumer to register. Defaults to the hostname."))
         self.parser.add_option("--consumerid", dest="consumerid",
                                help=_("register to an existing consumer"))
+        self.parser.add_option("--owner", dest="owner",
+                               help=_("register to one of multiple owners for the user"))
         self.parser.add_option("--autosubscribe", action='store_true',
                                help=_("automatically subscribe this system to\
                                      compatible subscriptions."))
@@ -431,9 +433,11 @@ class RegisterCommand(UserPassCommand):
                 consumer = admin_cp.getConsumer(self.options.consumerid,
                         self.username, self.password)
             else:
+                print self.options.owner
                 consumer = admin_cp.registerConsumer(name=consumername,
                                                      type=self.options.consumertype,
-                                                     facts=self.facts.get_facts())
+                                                     facts=self.facts.get_facts(),
+                                                     owner=self.options.owner)
         except connection.RestlibException, re:
             log.exception(re)
             systemExit(-1, re.msg)
