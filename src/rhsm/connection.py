@@ -442,8 +442,8 @@ class UEPConnection:
         method = "/consumers/%s/entitlements" % consumerId
         return self.conn.request_delete(method)
 
-    def getPoolsList(self, consumerId, listAll=False, active_on=None):
-        method = "/pools?consumer=%s" % consumerId
+    def getPoolsList(self, ownerid, consumerid, listAll=False, active_on=None):
+        method = "/owners/%s/pools?consumer=%s" % (ownerid, consumerid)
         if listAll:
             method = "%s&listall=true" % method
         if active_on:
