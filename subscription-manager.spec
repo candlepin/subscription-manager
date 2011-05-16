@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.15
+Version: 0.95.5.16
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -200,6 +200,10 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Mon May 16 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 697965: use str type for serial id's to fix issues on i386
+  (alikins@redhat.com)
+
 * Fri May 13 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - a tab snuck in here (cduryee@redhat.com)
 - regen strings for string freeze (two new strings) (cduryee@redhat.com)
