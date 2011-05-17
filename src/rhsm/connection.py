@@ -373,6 +373,13 @@ class UEPConnection:
         method = '/consumers/%s/owner' % uuid
         return self.conn.request_get(method)
 
+    def getOwnerList(self):
+        """
+        Returns an owner objects with pem/key for existing consumers
+        """
+        method = '/owners'
+        return self.conn.request_get(method)
+
     def unregisterConsumer(self, consumerId):
         """
          Deletes a consumer from candlepin server
