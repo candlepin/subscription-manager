@@ -704,6 +704,8 @@ class ListCommand(CliCommand):
                                help=_("consumed"))
         self.parser.add_option("--all", action='store_true',
                                help=_("if supplied with --available then all subscriptions are returned"))
+        self.parser.add_option("--owners", action='store_true',
+                               help=_("list of owners for user"))
 
     def _validate_options(self):
         if (self.options.all and not self.options.available):
@@ -712,7 +714,7 @@ class ListCommand(CliCommand):
         if (self.options.on_date and not self.options.available):
             print _("Error: --ondate is only applicable with --available")
             sys.exit(-1)
-        if not (self.options.available or self.options.consumed):
+        if not (self.options.available or self.options.consumed or self.options.owners):
             self.options.installed = True
 
     def _do_command(self):
@@ -770,6 +772,13 @@ class ListCommand(CliCommand):
             print """+-------------------------------------------+\n    %s\n+-------------------------------------------+\n""" % _("Consumed Product Subscriptions")
             for product in cpents:
                 print constants.consumed_subs_list % product
+
+        if self.options.owners:
+            owners = self.cp.getOwnerList()
+            if len(owners):
+                print "owners:"
+                for owner in owners:
+                    print owner['key']
 
     def _format_name(self, name, indent, max_length):
         """
