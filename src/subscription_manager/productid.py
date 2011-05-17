@@ -129,12 +129,16 @@ class ProductManager:
 
     def getActive(self, yb):
         active = set()
+        start = time.time()
         packages = yb.pkgSack.returnPackages()
         for p in packages:
             repo = p.repoid
             if repo in (None, 'installed'):
                 continue
             active.add(repo)
+        end = time.time()
+        ms = (end - start) * 1000
+        print _('duration: %d(ms)') % ms
         return active
 
     def getEnabled(self, yb):
