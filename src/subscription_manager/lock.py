@@ -91,30 +91,42 @@ class Lock:
     def __init__(self, path):
         self.depth = 0
         self.path = path
+        self.lockdir = None
         dir, fn = os.path.split(self.path)
-        if not os.path.exists(dir):
-            os.makedirs(dir)
+        try:
+            if not os.path.exists(dir):
+                os.makedirs(dir)
+            self.lockdir = dir
+        except:
+            self.lockdir = None
 
     def acquire(self):
+        if self.lockdir is None:
+            return
         f = LockFile(self.path)
         try:
-            while True:
-                f.open()
-                pid = f.getpid()
-                if f.mypid():
-                    self.P()
-                    return
-                if f.valid():
-                    f.close()
-                    time.sleep(0.5)
-                else:
-                    break
-            self.P()
-            f.setpid()
+            try:
+                while True:
+                    f.open()
+                    pid = f.getpid()
+                    if f.mypid():
+                        self.P()
+                        return
+                    if f.valid():
+                        f.close()
+                        time.sleep(0.5)
+                    else:
+                        break
+                self.P()
+                f.setpid()
+            except OSError:
+                print "could not create lock"
         finally:
             f.close()
 
     def release(self):
+        if self.lockdir is None:
+            return
         if not self.acquired():
             return
         self.V()
@@ -128,6 +140,8 @@ class Lock:
             f.close()
 
     def acquired(self):
+        if self.lockdir is None:
+            return
         mutex = self.mutex
         mutex.acquire()
         try:

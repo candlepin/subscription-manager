@@ -44,14 +44,19 @@ def trace_me_more():
 
 def _get_handler():
     path = '/var/log/rhsm/rhsm.log'
-    if not os.path.isdir("/var/log/rhsm"):
-        os.mkdir("/var/log/rhsm")
+    try:
+        if not os.path.isdir("/var/log/rhsm"):
+            os.mkdir("/var/log/rhsm")
+    except:
+        pass
     fmt = '%(asctime)s [%(levelname)s]  @%(filename)s:%(lineno)d - %(message)s'
 
     # Try to write to /var/log, fallback on console logging:
     try:
         handler = RotatingFileHandler(path, maxBytes=0x100000, backupCount=5)
     except IOError, e:
+        handler = logging.StreamHandler()
+    except:
         handler = logging.StreamHandler()
 
     handler.setFormatter(Formatter(fmt))
