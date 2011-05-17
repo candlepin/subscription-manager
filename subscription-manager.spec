@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.17
+Version: 0.95.5.18
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -200,6 +200,9 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue May 17 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 670973: try to handle /var/log and /var/run being readonly
+  (alikins@redhat.com)
 * Mon May 16 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 670973: remove YumBase() in method default args (alikins@redhat.com)
 
