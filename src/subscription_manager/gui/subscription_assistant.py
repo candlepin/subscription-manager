@@ -341,7 +341,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
                  available = _('unlimited')
             else:
                 available = "%s of %s" % \
-                    (available, quantity),
+                    (entry.quantity - entry.consumed, quantity),
             self.subscriptions_store.add_map({
                 'product_name': entry.product_name,
                 'total_contracts': len(entry.pools),
