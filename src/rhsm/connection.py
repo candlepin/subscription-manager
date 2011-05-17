@@ -339,7 +339,7 @@ class UEPConnection:
     def ping(self, username=None, password=None):
         return self.conn.request_get("/status/")
 
-    def registerConsumer(self, name="unknown", owner="default", type="system", facts={}):
+    def registerConsumer(self, name="unknown", type="system", facts={}, owner="default"):
         """
         Creates a consumer on candlepin server
         """
