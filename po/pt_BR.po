@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-12 13:52-0400\n"
-"PO-Revision-Date: 2011-04-28 09:36+1000\n"
+"PO-Revision-Date: 2011-05-13 15:35+1000\n"
 "Last-Translator: Ricardo Gyorfy <rgyorfy@redhat.com>\n"
 "Language-Team: Brazilian Portuguese <pt@li.org>\n"
 "Language: pt-BR\n"
@@ -29,7 +29,7 @@ msgstr ""
 #: ../src/subscription_manager/i18n_optparse.py:42
 #, python-format
 msgid "usage: %s\n"
-msgstr ""
+msgstr "uso: %s\n"
 
 #. For older versions of optparse
 #: ../src/subscription_manager/i18n_optparse.py:43
@@ -43,7 +43,7 @@ msgstr "Uso"
 
 #: ../src/subscription_manager/i18n_optparse.py:45
 msgid "%prog [options]"
-msgstr "%prog [options]"
+msgstr "%prog [opções]"
 
 #: ../src/subscription_manager/i18n_optparse.py:46
 msgid "Options"
@@ -104,17 +104,17 @@ msgstr "opção %s: escolha errada: %r (escolha a partir do %s)"
 #. default options
 #: ../src/subscription_manager/i18n_optparse.py:62
 msgid "show this help message and exit"
-msgstr "apresenta esta mensagem de ajuda e encerramento"
+msgstr "mostra esta mensagem de ajuda e sai"
 
 #: ../src/subscription_manager/i18n_optparse.py:63
 msgid "show program's version number and exit"
-msgstr "o número de versão do programa apresentado e encerramento"
+msgstr "mostra o número da versão do programa e sai"
 
 #. translators: arg 1 is the program name, arg 2 is the error message
 #: ../src/subscription_manager/i18n_optparse.py:76
 #, python-format
 msgid "%s: error: %s\n"
-msgstr ""
+msgstr "%s: erro: %s\n"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -152,7 +152,7 @@ msgstr "Subscrições Disponíveis"
 #: ../src/subscription_manager/gui/subscription_assistant.py:341
 #: ../src/subscription_manager/gui/contract_selection.py:95
 msgid "unlimited"
-msgstr ""
+msgstr "ilimitado"
 
 #: ../src/subscription_manager/gui/allsubs.py:182
 msgid "All Available Subscriptions"
@@ -181,14 +181,12 @@ msgstr "Erro ao obter subscrições: %s"
 
 #: ../src/subscription_manager/gui/managergui.py:355
 msgid "You must register before using the subscription assistant."
-msgstr ""
-"Você deve realizar o registro antes de usar a assistência da subscrição."
+msgstr "Você deve realizar o registro antes de usar a assistência da subscrição."
 
 #: ../src/subscription_manager/gui/managergui.py:385
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr ""
-"Você possui <b>%s</b> produtos com certificados de entitlement inválidos."
+msgstr "Você possui <b>%s</b> produtos com certificados de entitlement inválidos."
 
 #: ../src/subscription_manager/gui/managergui.py:389
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:12
@@ -206,7 +204,7 @@ msgstr "Insira o nome no sistema."
 
 #: ../src/subscription_manager/gui/managergui.py:534
 msgid "You must enter a login."
-msgstr "Adicione um logon. "
+msgstr "Adicione um logon."
 
 #: ../src/subscription_manager/gui/managergui.py:540
 msgid "You must enter a password."
@@ -339,8 +337,7 @@ msgstr "Selecione um certificado."
 #: ../src/subscription_manager/gui/importsub.py:85
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
-msgstr ""
-"%s não é um certificado válido. Por favor insira um certificado válido."
+msgstr "%s não é um certificado válido. Por favor insira um certificado válido."
 
 #: ../src/subscription_manager/gui/subscription_assistant.py:116
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:2
@@ -389,7 +386,7 @@ msgstr "Versão"
 
 #: ../src/subscription_manager/gui/installedtab.py:57
 msgid "Arch"
-msgstr ""
+msgstr "Arch"
 
 #: ../src/subscription_manager/gui/installedtab.py:58
 msgid "Certificate"
@@ -462,7 +459,7 @@ msgstr "Erro na leitura de informação DMI do sistema: %s"
 #: ../src/subscription_manager/hwprobe.py:88
 #, python-format
 msgid "Error reading system DMI information with %s: %s"
-msgstr ""
+msgstr "Erro na leitura de informação DMI do sistema com %s: %s"
 
 #: ../src/subscription_manager/hwprobe.py:173
 msgid "Error reading system memory information:"
@@ -486,7 +483,7 @@ msgstr "Subscrito"
 
 #: ../src/subscription_manager/managerlib.py:94
 msgid "Expired"
-msgstr "Vencido"
+msgstr "Expirado"
 
 #: ../src/subscription_manager/managerlib.py:94
 msgid "Not Subscribed"
@@ -538,10 +535,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "senha para http proxy com autenticação básica"
 
 #: ../src/subscription_manager/managercli.py:146
-msgid ""
-"Consumer not registered. Please register using --username and --password"
-msgstr ""
-"Cliente não registrado. Por favor registre-o usando --username e --password"
+msgid "Consumer not registered. Please register using --username and --password"
+msgstr "Cliente não registrado. Por favor registre-o usando --username e --password"
 
 #: ../src/subscription_manager/managercli.py:201
 msgid "Consumer certificates corrupted. Please reregister."
@@ -598,14 +593,11 @@ msgstr "solicita um novo certificado a ser gerado"
 
 #: ../src/subscription_manager/managercli.py:310
 msgid "force certificate regeneration (requires username and password)"
-msgstr ""
-"força a geração novamente do certificado (requer nome do usuário e senha)"
+msgstr "força a geração novamente do certificado (requer nome do usuário e senha)"
 
 #: ../src/subscription_manager/managercli.py:315
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr ""
-"A identidade do cliente não existe ou está corrompida. Tente registrar --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgstr "A identidade do cliente não existe ou está corrompida. Tente registrar --help"
 
 #: ../src/subscription_manager/managercli.py:318
 msgid "--force can only be used with --regenerate"
@@ -775,10 +767,8 @@ msgid "available"
 msgstr "disponível"
 
 #: ../src/subscription_manager/managercli.py:692
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
-msgstr ""
-"data de busca, o padrão é a data de hoje, apenas usado com --available "
+msgid "date to search on, defaults to today's date, only used with --available "
+msgstr "data de busca, o padrão é a data de hoje, apenas usado com --available "
 
 #: ../src/subscription_manager/managercli.py:695
 msgid "consumed"
@@ -1008,11 +998,11 @@ msgstr "Removido (rogue):"
 
 #: ../src/subscription_manager/certlib.py:586
 msgid "Expired (not deleted):"
-msgstr "Vencido (não removido):"
+msgstr "Expirado (não removido):"
 
 #: ../src/subscription_manager/certlib.py:587
 msgid "Expired (deleted):"
-msgstr "Vencido (removido):"
+msgstr "Expirado (removido):"
 
 #: ../src/subscription_manager/certlib.py:744
 msgid "Updating Red Hat certificates"
@@ -1068,9 +1058,7 @@ msgstr "Adição de Subscrições"
 #: ../src/subscription_manager/gui/data/rhsm.glade.h:6
 #: ../src/subscription_manager/gui/data/importsub.glade.h:1
 msgid "Certificate _Location:"
-msgstr ""
-"_Localização de Certificado: >>>>> Contexto inserido pelo KBabel, não "
-"traduza:yes"
+msgstr "_Localização de Certificado:"
 
 #: ../src/subscription_manager/gui/data/rhsm.glade.h:7
 msgid "Do not register"
@@ -1113,8 +1101,7 @@ msgid ""
 "certificate directory."
 msgstr ""
 "Para adicionar uma subscrição, escolha um certificado para importar o seu "
-"diretório de certificado da subscrição. >>>>> Contexto inserido pelo KBabel, "
-"não traduza:yes"
+"diretório de certificado da subscrição."
 
 #: ../src/subscription_manager/gui/data/rhsm.glade.h:16
 msgid "Update Subscriptions"
@@ -1154,40 +1141,27 @@ msgstr "facts_view"
 
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:1
 msgid "<b>Choose the specific contract to use:</b>"
-msgstr ""
-"<b>Escolha o contrato específico para uso:</b> >>>>> Contexto inserido pelo "
-"KBabel, não traduza:yes"
+msgstr "<b>Escolha o contrato específico para uso:</b>"
 
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:2
 #: ../src/subscription_manager/gui/data/installed.glade.h:4
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 msgid "<b>Subscription:</b>"
-msgstr ""
-"#-#-#-#-#  pt_BR.po (pt_BR)  #-#-#-#-#\n"
-"<b>Subscrição:</b>\n"
-"#-#-#-#-#  pt_BR.po (pt_BR)  #-#-#-#-#\n"
-"<b>Subscrição:</b> >>>>> Contexto inserido pelo KBabel, não traduza:yes"
+msgstr "<b>Subscrição:</b>"
 
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:3
 msgid "<b>Total Contracts:</b>"
-msgstr ""
-"<b>Total de Contratos:</b> >>>>> Contexto inserido pelo KBabel, não traduza:"
-"yes"
+msgstr "<b>Total de Contratos:</b>"
 
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:4
 msgid "Contract Selection"
-msgstr ""
-"Seleção de Contrato >>>>> Contexto inserido pelo KBabel, não traduza:yes"
+msgstr "Seleção de Contrato"
 
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:5
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:11
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:4
 msgid "Subscribe"
-msgstr ""
-"#-#-#-#-#  pt_BR.po (pt_BR)  #-#-#-#-#\n"
-"Subscrever\n"
-"#-#-#-#-#  pt_BR.po (pt_BR)  #-#-#-#-#\n"
-"Subscrever >>>>> Contexto inserido pelo KBabel, não traduza:yes"
+msgstr "Subscrever"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:1
 msgid "<b>More search options</b>"
@@ -1258,9 +1232,7 @@ msgstr "<b>Por favor insira os dados abaixo para este sistema:</b>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:2
 msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr ""
-"<b>Por favor insira a informação de sua conta do Red hat Network:</b> >>>>> "
-"Contexto inserido pelo KBabel, não traduza:yes"
+msgstr "<b>Por favor insira a informação de sua conta do Red hat Network:</b>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:3
 msgid ""
@@ -1269,6 +1241,10 @@ msgid ""
 "https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
 "</small>"
 msgstr ""
+"<small>\n"
+"Dica: Esqueceu o login ou senha? De uma olhada no\n"
+"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
+"</small>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:7
 msgid "A unique label for this system"
@@ -1276,12 +1252,11 @@ msgstr "Uma etiqueta exclusiva para este sistema"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:8
 msgid "Password:"
-msgstr "Senha: >>>>> Contexto inserido pelo KBabel, não traduza:yes"
+msgstr "Senha:"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:9
 msgid "Red Hat Login:"
-msgstr ""
-"Autenticação da Red Hat: >>>>> Contexto inserido pelo KBabel, não traduza:yes"
+msgstr "Autenticação da Red Hat:"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:10
 msgid "Register"
@@ -1321,8 +1296,7 @@ msgstr "Numa data diferente: "
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:3
 msgid "Show products with invalid entitlement certificates as of:"
-msgstr ""
-"Apresentar produtos com certificados de entitlement inválidos a partir de:"
+msgstr "Apresentar produtos com certificados de entitlement inválidos a partir de:"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:5
 msgid "Subscription Action Area"
@@ -1455,13 +1429,11 @@ msgstr "Cancelar subscrição"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:1
 msgid "<b>HTTP Proxy</b>"
-msgstr "<b>HTTP Proxy</b> >>>>> Contexto inserido pelo KBabel, não traduza:yes"
+msgstr "<b>HTTP Proxy</b>"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:2
 msgid "<small><b>Example:</b> squid.example.com:3128</small>"
-msgstr ""
-"<small><b>Exemplo:</b> squid.example.com:3128</small> >>>>> Contexto "
-"inserido pelo KBabel, não traduza:yes"
+msgstr "<small><b>Exemplo:</b> squid.example.com:3128</small>"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:3
 msgid "Advanced Network Configuration"
@@ -1481,9 +1453,7 @@ msgstr "Insira no formato hostname(:port)"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:7
 msgid "I would like to connect to Red Hat Network via an _HTTP proxy."
-msgstr ""
-"Eu quero conectar-me ao Red Hat Network através de um _HTTP proxy. >>>>> "
-"Contexto inserido pelo KBabel, não traduza:yes"
+msgstr "Eu quero conectar-me ao Red Hat Network através de um _HTTP proxy."
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:8
 msgid "Password Text"
@@ -1499,18 +1469,15 @@ msgstr "Texto de Localização do Proxy"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:11
 msgid "Proxy P_assword:"
-msgstr "S_enha Proxy: >>>>> Contexto inserido pelo KBabel, não traduza:yes"
+msgstr "S_enha Proxy:"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:12
 msgid "Proxy _Username:"
-msgstr ""
-"_Nome do Usuário Proxy: >>>>> Contexto inserido pelo KBabel, não traduza:yes"
+msgstr "_Nome do Usuário Proxy:"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:13
 msgid "Use Au_thentication with HTTP Proxy:"
-msgstr ""
-"Usa uma Au_tenticação com o HTTP Proxy: >>>>> Contexto inserido pelo KBabel, "
-"não traduza:yes"
+msgstr "Usa uma Au_tenticação com o HTTP Proxy:"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:14
 msgid "Username Text"
@@ -1518,12 +1485,11 @@ msgstr "Texto do Nome do Usuário"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:15
 msgid "_Close"
-msgstr "_Encerra >>>>> Contexto inserido pelo KBabel, não traduza:yes"
+msgstr "_Encerra"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:16
 msgid "_Proxy Location:"
-msgstr ""
-"Localização do _Proxy: >>>>> Contexto inserido pelo KBabel, não traduza:yes"
+msgstr "Localização do _Proxy:"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
@@ -1586,11 +1552,10 @@ msgid "Subscription Detail"
 msgstr "Detalhe da Subscrição"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr ""
 "Escolha um certificado para importar seu diretório de certificado da "
-"subscrição. >>>>> Contexto inserido pelo KBabel, não traduza:yes"
+"subscrição."
 
 #: ../src/rhsm_icon.c:44
 msgid "How often to check for validity (in seconds)"
@@ -1614,7 +1579,7 @@ msgstr "Falta um ou mais certificados de entitlement válidos neste sistema."
 
 #: ../src/rhsm_icon.c:195
 msgid "Some of the system's subscriptions are about to expire"
-msgstr "Algumas das subscrições do sistema estão prestes à vencer."
+msgstr "Algumas das subscrições do sistema estão prestes à expirar"
 
 #: ../src/rhsm_icon.c:197
 msgid "This System's Subscriptions Are About to Expire"
@@ -1659,21 +1624,3 @@ msgstr "Applet de Validade da Subscrição da Red Hat"
 msgid "Subscription Validity Applet"
 msgstr "Applet de Validade da Subscrição"
 
-#~ msgid "RHSM Subscriptions Managemen"
-#~ msgstr "Gerenciador de Subscrições RHSM"
-
-#~ msgid "Uncompliant Product List"
-#~ msgstr "Lista de Produtos Não-Compatíveis"
-
-#~ msgid "You have one product without a valid entitlement certificate."
-#~ msgstr "Você possui um produto sem um certificado válido de entitlement."
-
-#~ msgid ""
-#~ "<small>Tip: Forgot your login or password? Look it up at\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
-#~ msgstr ""
-#~ "<small>Dica: Você esqueceu de seu nome do usuário ou sua senha? Verifique "
-#~ "em\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: ko\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-12 13:52-0400\n"
-"PO-Revision-Date: 2011-04-21 10:53+1000\n"
+"PO-Revision-Date: 2011-05-13 15:14+1000\n"
 "Last-Translator: Eun-Ju Kim <eukim@redhat.com>\n"
 "Language-Team:  <ko@li.org>\n"
 "Language: ko-KR\n"
@@ -28,7 +28,7 @@ msgstr ""
 #: ../src/subscription_manager/i18n_optparse.py:42
 #, python-format
 msgid "usage: %s\n"
-msgstr ""
+msgstr "사용법: %s\n"
 
 #. For older versions of optparse
 #: ../src/subscription_manager/i18n_optparse.py:43
@@ -113,7 +113,7 @@ msgstr "프로그램의 버전 번호 보기 및 종료 "
 #: ../src/subscription_manager/i18n_optparse.py:76
 #, python-format
 msgid "%s: error: %s\n"
-msgstr ""
+msgstr "%s: 오류: %s\n"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -151,7 +151,7 @@ msgstr "사용 가능한 서브스크립션 "
 #: ../src/subscription_manager/gui/subscription_assistant.py:341
 #: ../src/subscription_manager/gui/contract_selection.py:95
 msgid "unlimited"
-msgstr ""
+msgstr "제한 없음 "
 
 #: ../src/subscription_manager/gui/allsubs.py:182
 msgid "All Available Subscriptions"
@@ -185,8 +185,7 @@ msgstr "서브스크립션 어시스턴트를 사용하기전 등록해야 합�
 #: ../src/subscription_manager/gui/managergui.py:385
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr ""
-"유효하지 않은 인타이틀먼트 인증서가 있는 <b>%s</b> 개의 제품이 있습니다.   "
+msgstr "유효하지 않은 인타이틀먼트 인증서가 있는 <b>%s</b> 개의 제품이 있습니다.   "
 
 #: ../src/subscription_manager/gui/managergui.py:389
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:12
@@ -333,8 +332,7 @@ msgstr "인증서를 선택하셔야 합니다. "
 #: ../src/subscription_manager/gui/importsub.py:85
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
-msgstr ""
-"%s 은(는) 유효한 인증서 파일이 아닙니다. 유효한 인증서를 업로드하십시오. "
+msgstr "%s 은(는) 유효한 인증서 파일이 아닙니다. 유효한 인증서를 업로드하십시오. "
 
 #: ../src/subscription_manager/gui/subscription_assistant.py:116
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:2
@@ -383,7 +381,7 @@ msgstr "버전 "
 
 #: ../src/subscription_manager/gui/installedtab.py:57
 msgid "Arch"
-msgstr ""
+msgstr "아키텍처 "
 
 #: ../src/subscription_manager/gui/installedtab.py:58
 msgid "Certificate"
@@ -456,7 +454,7 @@ msgstr "시스템 DMI 정보를 읽는 도중 오류 발생: %s"
 #: ../src/subscription_manager/hwprobe.py:88
 #, python-format
 msgid "Error reading system DMI information with %s: %s"
-msgstr ""
+msgstr "%s로 시스템 DMI 정보를 읽는 도중 오류 발생: %s"
 
 #: ../src/subscription_manager/hwprobe.py:173
 msgid "Error reading system memory information:"
@@ -532,8 +530,7 @@ msgid "password for http proxy with basic authentication"
 msgstr "기본 인증을 사용하는 http 프록시 암호  "
 
 #: ../src/subscription_manager/managercli.py:146
-msgid ""
-"Consumer not registered. Please register using --username and --password"
+msgid "Consumer not registered. Please register using --username and --password"
 msgstr ""
 "사용자가 등록되어 있지 않습니다. --username 및 --password를 사용하여 등록하십"
 "시오.   "
@@ -596,8 +593,7 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "인증서 재생성을 강제합니다 (사용자 이름 및 암호 필요) "
 
 #: ../src/subscription_manager/managercli.py:315
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 "사용자 id는 존재하지 않거나 손상되었습니다. register --help를 실행해 보십시"
 "오  "
@@ -640,8 +636,7 @@ msgstr "기존 사용자에 대한 등록 "
 msgid ""
 "automatically subscribe this system to                                     "
 "compatible subscriptions."
-msgstr ""
-"이 시스템을 자동으로 호환                             서브스크립션에 등록.  "
+msgstr "이 시스템을 자동으로 호환                             서브스크립션에 등록.  "
 
 #: ../src/subscription_manager/managercli.py:375
 msgid "register the system even if it is already registered"
@@ -752,8 +747,7 @@ msgstr "시스템 정보 업데이트 "
 
 #: ../src/subscription_manager/managercli.py:659
 msgid "Error: Need either --list or --update, Try facts --help"
-msgstr ""
-"오류: --list 또는 --update가 필요합니다. facts --help를 시도해 보십시오 "
+msgstr "오류: --list 또는 --update가 필요합니다. facts --help를 시도해 보십시오 "
 
 #: ../src/subscription_manager/managercli.py:683
 msgid "list available or consumer subscriptions for registered user"
@@ -768,10 +762,8 @@ msgid "available"
 msgstr "사용 가능 "
 
 #: ../src/subscription_manager/managercli.py:692
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
-msgstr ""
-"검색할 날짜입니다. 오늘 날짜가 기본값입니다. --available과만 함께 사용됨   "
+msgid "date to search on, defaults to today's date, only used with --available "
+msgstr "검색할 날짜입니다. 오늘 날짜가 기본값입니다. --available과만 함께 사용됨   "
 
 #: ../src/subscription_manager/managercli.py:695
 msgid "consumed"
@@ -1241,6 +1233,11 @@ msgid ""
 "https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
 "</small>"
 msgstr ""
+"<small>\n"
+"정보: 로그인 또는 암호를 잊어버리셨습니까?\n"
+"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
+"에서 찾아보십시오.\n"
+"</small>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:7
 msgid "A unique label for this system"
@@ -1548,8 +1545,7 @@ msgid "Subscription Detail"
 msgstr "서브스크립션 정보 "
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr "서브스크립션 인증서 디렉토리로 가져올 인증서를 선택합니다.   "
 
 #: ../src/rhsm_icon.c:44
@@ -1570,8 +1566,7 @@ msgstr "유효한 또는 누락된 인타이틀먼트 인증서 "
 
 #: ../src/rhsm_icon.c:191
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr ""
-"시스템에는 하나 이상의 유요한 인타이틀먼트 인증서가 누락되어 있습니다.  "
+msgstr "시스템에는 하나 이상의 유요한 인타이틀먼트 인증서가 누락되어 있습니다.  "
 
 #: ../src/rhsm_icon.c:195
 msgid "Some of the system's subscriptions are about to expire"
@@ -1620,21 +1615,3 @@ msgstr "Red Hat 서브스크립션 유효 애플릿 "
 msgid "Subscription Validity Applet"
 msgstr "서브스크립션 유효 애플릿  "
 
-#~ msgid "RHSM Subscriptions Managemen"
-#~ msgstr "RHSM 서브스크립션 관리 "
-
-#~ msgid "Uncompliant Product List"
-#~ msgstr "준수하지 않는 제품 목록 "
-
-#~ msgid "You have one product without a valid entitlement certificate."
-#~ msgstr "유효한 인타이틀먼트 인증서가 없는 제품이 하나 있습니다.  "
-
-#~ msgid ""
-#~ "<small>Tip: Forgot your login or password? Look it up at\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
-#~ msgstr ""
-#~ "<small>정보: 로그인 또는 암호를 잊어버리셨습니까?\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a>에서 찾아보십"
-#~ "시오.</small>"

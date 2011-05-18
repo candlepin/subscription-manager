@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: pt\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-12 13:52-0400\n"
-"PO-Revision-Date: 2011-04-27 09:57+1000\n"
+"PO-Revision-Date: 2011-05-04 16:11+1000\n"
 "Last-Translator: Ricardo Gyorfy <rgyorfy@redhat.com>\n"
 "Language-Team: Brazilian Portuguese <pt@li.org>\n"
 "Language: pt-BR\n"
@@ -27,9 +27,9 @@ msgstr ""
 #. use them.
 #. translators: this should have the same translation as "Usage: %s\n"
 #: ../src/subscription_manager/i18n_optparse.py:42
-#, python-format
+#, fuzzy, python-format
 msgid "usage: %s\n"
-msgstr ""
+msgstr "Uso: %s\n"
 
 #. For older versions of optparse
 #: ../src/subscription_manager/i18n_optparse.py:43
@@ -114,7 +114,7 @@ msgstr "o número de versão do programa apresentado e encerramento"
 #: ../src/subscription_manager/i18n_optparse.py:76
 #, python-format
 msgid "%s: error: %s\n"
-msgstr ""
+msgstr "%s: erro: %s\n"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -152,7 +152,7 @@ msgstr "Subscrições Disponíveis"
 #: ../src/subscription_manager/gui/subscription_assistant.py:341
 #: ../src/subscription_manager/gui/contract_selection.py:95
 msgid "unlimited"
-msgstr ""
+msgstr "ilimitado"
 
 #: ../src/subscription_manager/gui/allsubs.py:182
 msgid "All Available Subscriptions"
@@ -337,8 +337,7 @@ msgstr "Selecione um certificado."
 #: ../src/subscription_manager/gui/importsub.py:85
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
-msgstr ""
-"%s não é um certificado válido. Por favor insira um certificado válido."
+msgstr "%s não é um certificado válido. Por favor insira um certificado válido."
 
 #: ../src/subscription_manager/gui/subscription_assistant.py:116
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:2
@@ -387,7 +386,7 @@ msgstr "Versão"
 
 #: ../src/subscription_manager/gui/installedtab.py:57
 msgid "Arch"
-msgstr ""
+msgstr "Arch"
 
 #: ../src/subscription_manager/gui/installedtab.py:58
 msgid "Certificate"
@@ -458,9 +457,9 @@ msgid "Error reading system DMI information: %s"
 msgstr "Erro na leitura de informação DMI do sistema: %s"
 
 #: ../src/subscription_manager/hwprobe.py:88
-#, python-format
+#, fuzzy, python-format
 msgid "Error reading system DMI information with %s: %s"
-msgstr ""
+msgstr "Erro na leitura de informação DMI do sistema: %s"
 
 #: ../src/subscription_manager/hwprobe.py:173
 msgid "Error reading system memory information:"
@@ -536,10 +535,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "senha para http proxy com autenticação básica"
 
 #: ../src/subscription_manager/managercli.py:146
-msgid ""
-"Consumer not registered. Please register using --username and --password"
-msgstr ""
-"Cliente não registrado. Por favor registre-o usando --username e --password"
+msgid "Consumer not registered. Please register using --username and --password"
+msgstr "Cliente não registrado. Por favor registre-o usando --username e --password"
 
 #: ../src/subscription_manager/managercli.py:201
 msgid "Consumer certificates corrupted. Please reregister."
@@ -596,14 +593,11 @@ msgstr "solicita um novo certificado a ser gerado"
 
 #: ../src/subscription_manager/managercli.py:310
 msgid "force certificate regeneration (requires username and password)"
-msgstr ""
-"força a geração novamente do certificado (requer nome do usuário e senha)"
+msgstr "força a geração novamente do certificado (requer nome do usuário e senha)"
 
 #: ../src/subscription_manager/managercli.py:315
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr ""
-"A identidade do cliente não existe ou está corrompida. Tente registrar --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgstr "A identidade do cliente não existe ou está corrompida. Tente registrar --help"
 
 #: ../src/subscription_manager/managercli.py:318
 msgid "--force can only be used with --regenerate"
@@ -773,10 +767,8 @@ msgid "available"
 msgstr "disponível"
 
 #: ../src/subscription_manager/managercli.py:692
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
-msgstr ""
-"data de busca, o padrão é a data de hoje, apenas usado com --available "
+msgid "date to search on, defaults to today's date, only used with --available "
+msgstr "data de busca, o padrão é a data de hoje, apenas usado com --available "
 
 #: ../src/subscription_manager/managercli.py:695
 msgid "consumed"
@@ -1243,12 +1235,17 @@ msgid "<b>Please enter your Red Hat Network account information:</b>"
 msgstr "<b>Por favor insira a informação de sua conta do Red hat Network:</b>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:3
+#, fuzzy
 msgid ""
 "<small>\n"
 "Tip: Forgot your login or password? Look it up at\n"
 "https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
 "</small>"
 msgstr ""
+"<small>Dica: Você esqueceu de seu nome do usuário ou sua senha? Verifique "
+"em\n"
+"<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
+"www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:7
 msgid "A unique label for this system"
@@ -1556,8 +1553,7 @@ msgid "Subscription Detail"
 msgstr "Detalhe de Subscrição"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr ""
 "Escolha um certificado para importar seu diretório de certificado de "
 "subscrição."
@@ -1629,21 +1625,3 @@ msgstr "Applet de Subscrição de Validade Red Hat"
 msgid "Subscription Validity Applet"
 msgstr "Applet de Subscrição de Validade"
 
-#~ msgid "RHSM Subscriptions Managemen"
-#~ msgstr "Gerenciamento de Subscrições RHSM"
-
-#~ msgid "Uncompliant Product List"
-#~ msgstr "Lista de Produtos Não-Compatíveis"
-
-#~ msgid "You have one product without a valid entitlement certificate."
-#~ msgstr "Você possui um produto sem um certificado de direito válido."
-
-#~ msgid ""
-#~ "<small>Tip: Forgot your login or password? Look it up at\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
-#~ msgstr ""
-#~ "<small>Dica: Você esqueceu de seu nome do usuário ou sua senha? Verifique "
-#~ "em\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"

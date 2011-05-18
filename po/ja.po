@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-12 13:52-0400\n"
-"PO-Revision-Date: 2011-04-21 14:10+0900\n"
+"PO-Revision-Date: 2011-05-13 15:53+0900\n"
 "Last-Translator: Kiyoto Hashida <khashida@redhat.com>\n"
 "Language-Team: Japanese <jp@li.org>\n"
 "Language: ja-JP\n"
@@ -18,7 +18,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -37,7 +38,7 @@ msgstr ""
 #: ../src/subscription_manager/i18n_optparse.py:42
 #, python-format
 msgid "usage: %s\n"
-msgstr ""
+msgstr "使用法: %s\n"
 
 #. For older versions of optparse
 #: ../src/subscription_manager/i18n_optparse.py:43
@@ -122,7 +123,7 @@ msgstr "プログラムのバージョン番号を表示して終了"
 #: ../src/subscription_manager/i18n_optparse.py:76
 #, python-format
 msgid "%s: error: %s\n"
-msgstr ""
+msgstr "%s: エラー: %s\n"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -160,7 +161,7 @@ msgstr "利用可能なサブスクリプション"
 #: ../src/subscription_manager/gui/subscription_assistant.py:341
 #: ../src/subscription_manager/gui/contract_selection.py:95
 msgid "unlimited"
-msgstr ""
+msgstr "無制限"
 
 #: ../src/subscription_manager/gui/allsubs.py:182
 msgid "All Available Subscriptions"
@@ -291,11 +292,11 @@ msgstr "利用中のサブスクリプション"
 
 #: ../src/subscription_manager/gui/mysubstab.py:147
 msgid "Yes"
-msgstr ""
+msgstr "はい"
 
 #: ../src/subscription_manager/gui/mysubstab.py:149
 msgid "No"
-msgstr ""
+msgstr "いいえ"
 
 #: ../src/subscription_manager/gui/utils.py:58
 #: ../src/subscription_manager/managercli.py:51
@@ -394,7 +395,7 @@ msgstr "バージョン"
 
 #: ../src/subscription_manager/gui/installedtab.py:57
 msgid "Arch"
-msgstr ""
+msgstr "アーキテクチャ"
 
 #: ../src/subscription_manager/gui/installedtab.py:58
 msgid "Certificate"
@@ -462,12 +463,12 @@ msgstr ""
 #: ../src/subscription_manager/hwprobe.py:81
 #, python-format
 msgid "Error reading system DMI information: %s"
-msgstr "システムの DMI 情報の読み込みでエラー: %s"
+msgstr "システム DMI 情報の読み込みでエラー: %s"
 
 #: ../src/subscription_manager/hwprobe.py:88
 #, python-format
 msgid "Error reading system DMI information with %s: %s"
-msgstr ""
+msgstr "%s に於いてシステム DMI 情報の読み込みでエラー: %s"
 
 #: ../src/subscription_manager/hwprobe.py:173
 msgid "Error reading system memory information:"
@@ -543,10 +544,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "基本認証を持つ http プロキシのパスワード"
 
 #: ../src/subscription_manager/managercli.py:146
-msgid ""
-"Consumer not registered. Please register using --username and --password"
-msgstr ""
-"コンシューマは未登録です。--username 及び --password を使用して登録して下さい"
+msgid "Consumer not registered. Please register using --username and --password"
+msgstr "コンシューマは未登録です。--username 及び --password を使用して登録して下さい"
 
 #: ../src/subscription_manager/managercli.py:201
 msgid "Consumer certificates corrupted. Please reregister."
@@ -606,8 +605,7 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "証明書の再生成を強制（ユーザー名とパスワードが必要）"
 
 #: ../src/subscription_manager/managercli.py:315
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 "コンシューマ識別子は存在しないか、又は破損しています。register --help を試し"
 "て下さい"
@@ -692,8 +690,7 @@ msgstr "登録済みユーザーを指定製品に対してアクティベート
 
 #: ../src/subscription_manager/managercli.py:494
 msgid "optional email address to notify when token activation is complete."
-msgstr ""
-"トークンアクティベーション終了時に通知するオプションの電子メールアドレス"
+msgstr "トークンアクティベーション終了時に通知するオプションの電子メールアドレス"
 
 #: ../src/subscription_manager/managercli.py:497
 msgid ""
@@ -766,8 +763,7 @@ msgstr "エラー: --list 又は --update が必要です。facts --help を試�
 
 #: ../src/subscription_manager/managercli.py:683
 msgid "list available or consumer subscriptions for registered user"
-msgstr ""
-"登録済みユーザーの利用可能な、又はコンシューマのサブスクリプションを一覧表示"
+msgstr "登録済みユーザーの利用可能な、又はコンシューマのサブスクリプションを一覧表示"
 
 #: ../src/subscription_manager/managercli.py:688
 msgid "installed"
@@ -778,8 +774,7 @@ msgid "available"
 msgstr "利用可能"
 
 #: ../src/subscription_manager/managercli.py:692
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
+msgid "date to search on, defaults to today's date, only used with --available "
 msgstr "検索した日の日付。デフォルトは今日の日付です。--available との併用のみ"
 
 #: ../src/subscription_manager/managercli.py:695
@@ -1249,6 +1244,10 @@ msgid ""
 "https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
 "</small>"
 msgstr ""
+"<small>\n"
+"ヒント: ログイン名かパスワードを忘れましたか? このサイトで確認できます。\n"
+"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
+"</small>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:7
 msgid "A unique label for this system"
@@ -1556,8 +1555,7 @@ msgid "Subscription Detail"
 msgstr "サブスクリプションの詳細"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr "サブスクリプション証明書ディレクトリにインポートする証明書の選択 "
 
 #: ../src/rhsm_icon.c:44
@@ -1578,8 +1576,7 @@ msgstr "無効の、又は存在しないエンタイトルメント証明書"
 
 #: ../src/rhsm_icon.c:191
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr ""
-"このシステムには１つ以上の有効なエンタイトルメント証明書が欠如しています。"
+msgstr "このシステムには１つ以上の有効なエンタイトルメント証明書が欠如しています。"
 
 #: ../src/rhsm_icon.c:195
 msgid "Some of the system's subscriptions are about to expire"
@@ -1628,24 +1625,3 @@ msgstr "Red Hat サブスクリプション有効性アプレット"
 msgid "Subscription Validity Applet"
 msgstr "サブスクリプション有効性アプレット"
 
-#~ msgid "Uncompliant Product List"
-#~ msgstr "コンプライアンスの無い製品の一覧"
-
-#~ msgid "yes"
-#~ msgstr "はい"
-
-#~ msgid "no"
-#~ msgstr "いいえ"
-
-#~ msgid "You have one product without a valid entitlement certificate."
-#~ msgstr "１つの製品に有効なエンタイトルメント証明書がありません。"
-
-#~ msgid ""
-#~ "<small>Tip: Forgot your login or password? Look it up at\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
-#~ msgstr ""
-#~ "<small>ヒント: ログイン名かパスワードを忘れましたか? このサイトで確認でき"
-#~ "ます\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"

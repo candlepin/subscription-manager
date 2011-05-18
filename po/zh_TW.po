@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: zh_TW\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-12 13:52-0400\n"
-"PO-Revision-Date: 2011-04-21 11:12+1000\n"
+"PO-Revision-Date: 2011-05-18 16:39+1000\n"
 "Last-Translator: Terry Chuang <tchuang@redhat.com>\n"
 "Language-Team: Traditional Chinese <zh@li.org>\n"
 "Language: zh-TW\n"
@@ -27,7 +27,7 @@ msgstr ""
 #: ../src/subscription_manager/i18n_optparse.py:42
 #, python-format
 msgid "usage: %s\n"
-msgstr ""
+msgstr "使用方法：%s\n"
 
 #. For older versions of optparse
 #: ../src/subscription_manager/i18n_optparse.py:43
@@ -112,7 +112,7 @@ msgstr "顯示程式的版本號碼並退出"
 #: ../src/subscription_manager/i18n_optparse.py:76
 #, python-format
 msgid "%s: error: %s\n"
-msgstr ""
+msgstr "%s: 錯誤: %s\n"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -150,7 +150,7 @@ msgstr "可用的訂閱"
 #: ../src/subscription_manager/gui/subscription_assistant.py:341
 #: ../src/subscription_manager/gui/contract_selection.py:95
 msgid "unlimited"
-msgstr ""
+msgstr "無限"
 
 #: ../src/subscription_manager/gui/allsubs.py:182
 msgid "All Available Subscriptions"
@@ -292,8 +292,7 @@ msgstr "否"
 msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
-msgstr ""
-"發生網路錯誤，無法連至伺服器。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+msgstr "發生網路錯誤，無法連至伺服器。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
 #: ../src/subscription_manager/gui/utils.py:60
 #, python-format
@@ -307,8 +306,7 @@ msgstr "無法驗證伺服器的身份：%s"
 msgid ""
 "Network error. Please check the connection details, or see /var/log/rhsm/"
 "rhsm.log for more information."
-msgstr ""
-"發生網路錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+msgstr "發生網路錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
 #. This is what happens when there's an issue with the server on the other side of the wire
 #: ../src/subscription_manager/gui/utils.py:67
@@ -348,8 +346,7 @@ msgstr "訂閱清單"
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
-msgstr ""
-"顯示規範協助時發生了錯誤。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+msgstr "顯示規範協助時發生了錯誤。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
 #: ../src/subscription_manager/gui/subscription_assistant.py:193
 msgid "Unable to search for subscriptions"
@@ -381,7 +378,7 @@ msgstr "版本"
 
 #: ../src/subscription_manager/gui/installedtab.py:57
 msgid "Arch"
-msgstr ""
+msgstr "架構"
 
 #: ../src/subscription_manager/gui/installedtab.py:58
 msgid "Certificate"
@@ -454,7 +451,7 @@ msgstr "讀取系統 DMI 資訊時發生了錯誤：%s"
 #: ../src/subscription_manager/hwprobe.py:88
 #, python-format
 msgid "Error reading system DMI information with %s: %s"
-msgstr ""
+msgstr "以 %s 讀取系統 DMI 資訊時發生了錯誤：%s"
 
 #: ../src/subscription_manager/hwprobe.py:173
 msgid "Error reading system memory information:"
@@ -530,8 +527,7 @@ msgid "password for http proxy with basic authentication"
 msgstr "含有基本驗證的 http 代理伺服器的密碼"
 
 #: ../src/subscription_manager/managercli.py:146
-msgid ""
-"Consumer not registered. Please register using --username and --password"
+msgid "Consumer not registered. Please register using --username and --password"
 msgstr "使用者尚未註冊。請使用 --username 和 --password 進行註冊"
 
 #: ../src/subscription_manager/managercli.py:201
@@ -592,8 +588,7 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "強制產生認證（需要使用者名稱與密碼）"
 
 #: ../src/subscription_manager/managercli.py:315
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr "使用者身份不存在，或是已損毀。請嘗試註冊 --help"
 
 #: ../src/subscription_manager/managercli.py:318
@@ -760,8 +755,7 @@ msgid "available"
 msgstr "可使用"
 
 #: ../src/subscription_manager/managercli.py:692
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
+msgid "date to search on, defaults to today's date, only used with --available "
 msgstr "欲搜尋的日期，預設為今天的日期，僅搭配 --available 使用"
 
 #: ../src/subscription_manager/managercli.py:695
@@ -1226,6 +1220,10 @@ msgid ""
 "https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
 "</small>"
 msgstr ""
+"<small>\n"
+"提示：忘記您的登錄名稱或密碼？請至\n"
+"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
+"</small>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:7
 msgid "A unique label for this system"
@@ -1533,8 +1531,7 @@ msgid "Subscription Detail"
 msgstr "訂閱詳細資料"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr "選擇欲匯入您訂閱認證目錄中的認證。"
 
 #: ../src/rhsm_icon.c:44
@@ -1604,20 +1601,3 @@ msgstr "Red Hat 訂閱認證驗證程式"
 msgid "Subscription Validity Applet"
 msgstr "訂閱認證驗證程式"
 
-#~ msgid "RHSM Subscriptions Managemen"
-#~ msgstr "RHSM 訂閱管理"
-
-#~ msgid "Uncompliant Product List"
-#~ msgstr "不符合標準的產品清單"
-
-#~ msgid "You have one product without a valid entitlement certificate."
-#~ msgstr "您有一項沒有有效認證的產品。"
-
-#~ msgid ""
-#~ "<small>Tip: Forgot your login or password? Look it up at\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
-#~ msgstr ""
-#~ "<small>提示：忘記您的登錄名稱或密碼？請至\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"

@@ -451,9 +451,9 @@ msgid "Error reading system DMI information: %s"
 msgstr "Error reading system DMI information:"
 
 #: ../src/subscription_manager/hwprobe.py:88
-#, python-format
+#, fuzzy, python-format
 msgid "Error reading system DMI information with %s: %s"
-msgstr ""
+msgstr "Error reading system DMI information:"
 
 #: ../src/subscription_manager/hwprobe.py:173
 msgid "Error reading system memory information:"
@@ -1201,12 +1201,15 @@ msgid "<b>Please enter your Red Hat Network account information:</b>"
 msgstr "Enter your Subscription account information"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:3
+#, fuzzy
 msgid ""
 "<small>\n"
 "Tip: Forgot your login or password? Look it up at\n"
 "https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
 "</small>"
 msgstr ""
+"<small>Tip: Forgot your login or password? Look it up at \n"
+"https://www.redhat.com/wapps/sso/rhn/lostPassword.html</small>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:7
 msgid "A unique label for this system"
@@ -2116,13 +2119,6 @@ msgstr "Subscription Manager"
 
 #~ msgid "This system's subscriptions are <b>locally-managed.</b>"
 #~ msgstr "This system's subscriptions are <b>locally-managed.</b>"
-
-#~ msgid ""
-#~ "<small>Tip: Forgot your login or password? Look it up at \n"
-#~ "https://www.redhat.com/wapps/sso/rhn/lostPassword.html</small>"
-#~ msgstr ""
-#~ "<small>Tip: Forgot your login or password? Look it up at \n"
-#~ "https://www.redhat.com/wapps/sso/rhn/lostPassword.html</small>"
 
 #~ msgid "Account Registration"
 #~ msgstr "Account Registration"

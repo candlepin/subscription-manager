@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-12 13:52-0400\n"
-"PO-Revision-Date: 2011-04-20 17:49+0000\n"
+"PO-Revision-Date: 2011-05-13 11:54+0000\n"
 "Last-Translator: Nilamdyuti Goswami <ngoswami@redhat.com>\n"
 "Language-Team: as_IN <kde-i18n-doc@kde.org>\n"
 "Language: as-IN\n"
@@ -27,7 +27,7 @@ msgstr ""
 #: ../src/subscription_manager/i18n_optparse.py:42
 #, python-format
 msgid "usage: %s\n"
-msgstr ""
+msgstr "ব্যৱহাৰ: %s\n"
 
 #. For older versions of optparse
 #: ../src/subscription_manager/i18n_optparse.py:43
@@ -112,7 +112,7 @@ msgstr "প্ৰগ্ৰামৰ সংস্কৰণ নম্বৰ দে
 #: ../src/subscription_manager/i18n_optparse.py:76
 #, python-format
 msgid "%s: error: %s\n"
-msgstr ""
+msgstr "%s: ত্ৰুটি: %s\n"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -150,7 +150,7 @@ msgstr "উপলব্ধ স্বাক্ষৰণসমূহ"
 #: ../src/subscription_manager/gui/subscription_assistant.py:341
 #: ../src/subscription_manager/gui/contract_selection.py:95
 msgid "unlimited"
-msgstr ""
+msgstr "অসীমিত"
 
 #: ../src/subscription_manager/gui/allsubs.py:182
 msgid "All Available Subscriptions"
@@ -385,7 +385,7 @@ msgstr "ভাৰ্চন"
 
 #: ../src/subscription_manager/gui/installedtab.py:57
 msgid "Arch"
-msgstr ""
+msgstr "স্থাপত্য"
 
 #: ../src/subscription_manager/gui/installedtab.py:58
 msgid "Certificate"
@@ -458,7 +458,7 @@ msgstr "চিস্টেম DMI-ৰ তথ্য পঢোতে ত্ৰু�
 #: ../src/subscription_manager/hwprobe.py:88
 #, python-format
 msgid "Error reading system DMI information with %s: %s"
-msgstr ""
+msgstr "%s -ৰ সৈতে চিস্টেম DMI-ৰ তথ্য পঢোতে ত্ৰুটি: %s"
 
 #: ../src/subscription_manager/hwprobe.py:173
 msgid "Error reading system memory information:"
@@ -534,8 +534,7 @@ msgid "password for http proxy with basic authentication"
 msgstr "http প্ৰক্সিৰ বাবে পাছওয়াৰ্ড সাধাৰন প্ৰমানীকৰণৰ হৈতে"
 
 #: ../src/subscription_manager/managercli.py:146
-msgid ""
-"Consumer not registered. Please register using --username and --password"
+msgid "Consumer not registered. Please register using --username and --password"
 msgstr ""
 "উপভোক্তা ৰেজিস্টাৰ্ড নহয়। অনুগ্ৰহ কৰি --username আৰু --password -ৰ হৈতে ৰেজিস্টাৰ "
 "কৰক"
@@ -598,10 +597,8 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "প্ৰমাণপত্ৰৰ পূনৰ সৃজন বাধ্য কৰক (ব্যৱহাৰকাৰীৰ নাম আৰু পাছওৱাৰ্ডৰ প্ৰয়োজন)"
 
 #: ../src/subscription_manager/managercli.py:315
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr ""
-"ব্যৱহাৰকাৰীৰ পৰিচয় হয়তো নাই অথবা ক্ষতিগ্ৰস্থ। চেষ্টা কৰি চাওক ৰেজিস্টাৰ --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgstr "ব্যৱহাৰকাৰীৰ পৰিচয় হয়তো নাই অথবা ক্ষতিগ্ৰস্থ। চেষ্টা কৰি চাওক ৰেজিস্টাৰ --help"
 
 #: ../src/subscription_manager/managercli.py:318
 msgid "--force can only be used with --regenerate"
@@ -771,8 +768,7 @@ msgid "available"
 msgstr "উপলব্ধ"
 
 #: ../src/subscription_manager/managercli.py:692
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
+msgid "date to search on, defaults to today's date, only used with --available "
 msgstr "বিচািৰবলে তাৰিখ, অবিকল্পিত আজিৰ তাৰিখলে, কেবল --available -ৰ লগত ব্যৱহৃত"
 
 #: ../src/subscription_manager/managercli.py:695
@@ -781,8 +777,7 @@ msgstr "উপভোগক্ত"
 
 #: ../src/subscription_manager/managercli.py:697
 msgid "if supplied with --available then all subscriptions are returned"
-msgstr ""
-"যদি --available -ৰ লগত যোগান দিয়া হয় তেনেহলে সকলো স্বাক্ষৰণসমূহ ঘুৰাই দিয়া হ'ব"
+msgstr "যদি --available -ৰ লগত যোগান দিয়া হয় তেনেহলে সকলো স্বাক্ষৰণসমূহ ঘুৰাই দিয়া হ'ব"
 
 #: ../src/subscription_manager/managercli.py:701
 msgid "Error: --all is only applicable with --available"
@@ -1243,6 +1238,10 @@ msgid ""
 "https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
 "</small>"
 msgstr ""
+"<small>\n"
+" সহায়: আপোনাৰ লগিন অথবা পাছওৱাৰ্ড পাহৰিছে? ইয়াত চাওক\n"
+"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
+"</small>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:7
 msgid "A unique label for this system"
@@ -1550,8 +1549,7 @@ msgid "Subscription Detail"
 msgstr "স্বাক্ষৰণ বিৱৰণ"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr "আপোনাৰ স্বাক্ষৰণ প্ৰমাণপত্ৰ ডাইৰেকটৰিলে ইমপোৰ্ট কৰিবলে এটা প্ৰমাণপত্ৰ বাচক।"
 
 #: ../src/rhsm_icon.c:44
@@ -1629,15 +1627,6 @@ msgstr "স্বাক্ষৰণ বৈধতা এপ্লেট"
 
 #~ msgid "You have one product without a valid entitlement certificate."
 #~ msgstr "আপোনাৰ ওচৰত এটা উৎপাদন আছে যাৰ এটা বৈধ এনটাইটেলমেন্ট প্ৰমাণপত্ৰ নাই।"
-
-#~ msgid ""
-#~ "<small>Tip: Forgot your login or password? Look it up at\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
-#~ msgstr ""
-#~ "<small>সহায়: আপোনাৰ লগিন অথবা পাছওৱাৰ্ড পাহৰিছে? ইয়াত চাওক\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
 
 #~ msgid "yes"
 #~ msgstr "হয়"

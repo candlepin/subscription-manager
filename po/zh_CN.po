@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-12 13:52-0400\n"
-"PO-Revision-Date: 2011-04-20 22:10+1000\n"
+"PO-Revision-Date: 2011-05-15 00:12+1000\n"
 "Last-Translator: Leah Liu <lliu@redhat.com>\n"
 "Language-Team: Wei Liu\n"
 "Language: zh-CN\n"
@@ -27,7 +27,7 @@ msgstr ""
 #: ../src/subscription_manager/i18n_optparse.py:42
 #, python-format
 msgid "usage: %s\n"
-msgstr ""
+msgstr "使用：%s\n"
 
 #. For older versions of optparse
 #: ../src/subscription_manager/i18n_optparse.py:43
@@ -112,7 +112,7 @@ msgstr "显示程序版本数并退出"
 #: ../src/subscription_manager/i18n_optparse.py:76
 #, python-format
 msgid "%s: error: %s\n"
-msgstr ""
+msgstr "%s: 错误：%s\n"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -150,7 +150,7 @@ msgstr "可用订阅"
 #: ../src/subscription_manager/gui/subscription_assistant.py:341
 #: ../src/subscription_manager/gui/contract_selection.py:95
 msgid "unlimited"
-msgstr ""
+msgstr "无限制"
 
 #: ../src/subscription_manager/gui/allsubs.py:182
 msgid "All Available Subscriptions"
@@ -376,7 +376,7 @@ msgstr "版本"
 
 #: ../src/subscription_manager/gui/installedtab.py:57
 msgid "Arch"
-msgstr ""
+msgstr "构架"
 
 #: ../src/subscription_manager/gui/installedtab.py:58
 msgid "Certificate"
@@ -449,7 +449,7 @@ msgstr "读取系统 DMI 信息出错：%s"
 #: ../src/subscription_manager/hwprobe.py:88
 #, python-format
 msgid "Error reading system DMI information with %s: %s"
-msgstr ""
+msgstr "使用 %s 读取系统 DMI 信息出错：%s"
 
 #: ../src/subscription_manager/hwprobe.py:173
 msgid "Error reading system memory information:"
@@ -525,8 +525,7 @@ msgid "password for http proxy with basic authentication"
 msgstr "使用基本验证的 http proxy 密码"
 
 #: ../src/subscription_manager/managercli.py:146
-msgid ""
-"Consumer not registered. Please register using --username and --password"
+msgid "Consumer not registered. Please register using --username and --password"
 msgstr "用户没有注册。请使用 --username 和 --password 注册"
 
 #: ../src/subscription_manager/managercli.py:201
@@ -587,8 +586,7 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "强制重新生成证书（需要用户名和密码）"
 
 #: ../src/subscription_manager/managercli.py:315
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr "用户身份不存在或者被破坏。尝试 register --help 命令"
 
 #: ../src/subscription_manager/managercli.py:318
@@ -755,8 +753,7 @@ msgid "available"
 msgstr "可用"
 
 #: ../src/subscription_manager/managercli.py:692
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
+msgid "date to search on, defaults to today's date, only used with --available "
 msgstr "要搜索的日期，默认为今天，只可与 --available 合用"
 
 #: ../src/subscription_manager/managercli.py:695
@@ -1221,6 +1218,9 @@ msgid ""
 "https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
 "</small>"
 msgstr ""
+"<small>\n"
+"提示：忘记您的登录或者密码了吗？请查看\n"
+"https://www.redhat.com/wapps/sso/rhn/lostPassword.html</small>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:7
 msgid "A unique label for this system"
@@ -1528,8 +1528,7 @@ msgid "Subscription Detail"
 msgstr "订阅详情"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr "选择一个证书将其导入您的订阅证书目录。"
 
 #: ../src/rhsm_icon.c:44
@@ -1599,20 +1598,3 @@ msgstr "红帽订阅有效性程序"
 msgid "Subscription Validity Applet"
 msgstr "订阅有效性程序"
 
-#~ msgid "RHSM Subscriptions Managemen"
-#~ msgstr "RHSM 订阅管理"
-
-#~ msgid "Uncompliant Product List"
-#~ msgstr "不合规产品列表"
-
-#~ msgid "You have one product without a valid entitlement certificate."
-#~ msgstr "您有一个没有有效授权证书的产品。"
-
-#~ msgid ""
-#~ "<small>Tip: Forgot your login or password? Look it up at\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
-#~ msgstr ""
-#~ "<small>提示：忘记您的登录或者密码了吗？请查看\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"

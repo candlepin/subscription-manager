@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-12 13:52-0400\n"
-"PO-Revision-Date: 2011-04-21 09:07+1000\n"
+"PO-Revision-Date: 2011-05-17 15:34+1000\n"
 "Last-Translator: Hedda Peters <hpeters@redhat.com>\n"
 "Language-Team: de_DE <kde-i18n-doc@kde.org>\n"
 "Language: de-DE\n"
@@ -27,7 +27,7 @@ msgstr ""
 #: ../src/subscription_manager/i18n_optparse.py:42
 #, python-format
 msgid "usage: %s\n"
-msgstr ""
+msgstr "Verbrauch: %s\n"
 
 #. For older versions of optparse
 #: ../src/subscription_manager/i18n_optparse.py:43
@@ -112,7 +112,7 @@ msgstr "Zeige die Versionsnummer des Programms und beende"
 #: ../src/subscription_manager/i18n_optparse.py:76
 #, python-format
 msgid "%s: error: %s\n"
-msgstr ""
+msgstr "%s: Fehler: %s\n"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -150,7 +150,7 @@ msgstr "Verfügbare Subskriptionen"
 #: ../src/subscription_manager/gui/subscription_assistant.py:341
 #: ../src/subscription_manager/gui/contract_selection.py:95
 msgid "unlimited"
-msgstr ""
+msgstr "unbegrenzt"
 
 #: ../src/subscription_manager/gui/allsubs.py:182
 msgid "All Available Subscriptions"
@@ -388,7 +388,7 @@ msgstr "Version"
 
 #: ../src/subscription_manager/gui/installedtab.py:57
 msgid "Arch"
-msgstr ""
+msgstr "Arch"
 
 #: ../src/subscription_manager/gui/installedtab.py:58
 msgid "Certificate"
@@ -461,7 +461,7 @@ msgstr "Fehler beim Lesen der System-DMI-Informationen: %s"
 #: ../src/subscription_manager/hwprobe.py:88
 #, python-format
 msgid "Error reading system DMI information with %s: %s"
-msgstr ""
+msgstr "Fehler beim Lesen der System-DMI-Informationen mit %s: %s"
 
 #: ../src/subscription_manager/hwprobe.py:173
 msgid "Error reading system memory information:"
@@ -1269,6 +1269,10 @@ msgid ""
 "https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
 "</small>"
 msgstr ""
+"<small>\n"
+"Tipp: Haben Sie Ihr Login oder Passwort vergessen? Finden Sie es unter\n"
+"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
+"</small>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:7
 msgid "A unique label for this system"
@@ -1658,16 +1662,6 @@ msgstr "Subskriptions-Gültigkeits-Applet"
 
 #~ msgid "You have one product without a valid entitlement certificate."
 #~ msgstr "Sie haben ein Produkt ohne gültiges Berechtigungszertifikat."
-
-#~ msgid ""
-#~ "<small>Tip: Forgot your login or password? Look it up at\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
-#~ msgstr ""
-#~ "<small>Tipp: Haben Sie Ihr Login oder Passwort vergessen? Finden Sie es "
-#~ "unter\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
 
 #~ msgid "yes"
 #~ msgstr "ja"

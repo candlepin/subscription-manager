@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-12 13:52-0400\n"
-"PO-Revision-Date: 2011-04-21 09:30+1000\n"
+"PO-Revision-Date: 2011-05-16 08:58+1000\n"
 "Last-Translator: Gladys Guerrero <gguerrer@redhat.com>\n"
 "Language-Team: Spanish <en@li.org>\n"
 "Language: es-ES\n"
@@ -27,7 +27,7 @@ msgstr ""
 #: ../src/subscription_manager/i18n_optparse.py:42
 #, python-format
 msgid "usage: %s\n"
-msgstr ""
+msgstr "uso: %s\n"
 
 #. For older versions of optparse
 #: ../src/subscription_manager/i18n_optparse.py:43
@@ -112,7 +112,7 @@ msgstr "mostrar el número de versión de programa y salir"
 #: ../src/subscription_manager/i18n_optparse.py:76
 #, python-format
 msgid "%s: error: %s\n"
-msgstr ""
+msgstr "%s: error: %s\n"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -150,7 +150,7 @@ msgstr "Suscripciones disponibles"
 #: ../src/subscription_manager/gui/subscription_assistant.py:341
 #: ../src/subscription_manager/gui/contract_selection.py:95
 msgid "unlimited"
-msgstr ""
+msgstr "Ilimitado"
 
 #: ../src/subscription_manager/gui/allsubs.py:182
 msgid "All Available Subscriptions"
@@ -247,8 +247,7 @@ msgstr "Instalado"
 
 #: ../src/subscription_manager/gui/widgets.py:408
 msgid "Invalid date format. Please re-enter a valid date. Example: "
-msgstr ""
-"Formato de fecha inválido. Por favor reingrese una fecha válida. Ejemplo:"
+msgstr "Formato de fecha inválido. Por favor reingrese una fecha válida. Ejemplo:"
 
 #: ../src/subscription_manager/gui/widgets.py:443
 msgid "Today"
@@ -376,8 +375,7 @@ msgstr "%s (primera fecha de derechos no válidos)"
 #: ../src/subscription_manager/gui/subscription_assistant.py:220
 #, python-format
 msgid "The following subscriptions will cover the products selected on %s"
-msgstr ""
-"Las siguientes suscripciones cubrirán los productos seleccionados en %s"
+msgstr "Las siguientes suscripciones cubrirán los productos seleccionados en %s"
 
 #. installed but not entitled products:
 #: ../src/subscription_manager/gui/subscription_assistant.py:281
@@ -390,7 +388,7 @@ msgstr "Versión"
 
 #: ../src/subscription_manager/gui/installedtab.py:57
 msgid "Arch"
-msgstr ""
+msgstr "Arquitectura"
 
 #: ../src/subscription_manager/gui/installedtab.py:58
 msgid "Certificate"
@@ -463,7 +461,7 @@ msgstr "Error en la lectura de información de DMI del sistema:%s"
 #: ../src/subscription_manager/hwprobe.py:88
 #, python-format
 msgid "Error reading system DMI information with %s: %s"
-msgstr ""
+msgstr "Error en la lectura de información DMI del sistema con %s: %s"
 
 #: ../src/subscription_manager/hwprobe.py:173
 msgid "Error reading system memory information:"
@@ -539,10 +537,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "Contraseña para http proxy con autenticación básica"
 
 #: ../src/subscription_manager/managercli.py:146
-msgid ""
-"Consumer not registered. Please register using --username and --password"
-msgstr ""
-"Usuario no registrado. Por favor regístrese mediante --username y --password"
+msgid "Consumer not registered. Please register using --username and --password"
+msgstr "Usuario no registrado. Por favor regístrese mediante --username y --password"
 
 #: ../src/subscription_manager/managercli.py:201
 msgid "Consumer certificates corrupted. Please reregister."
@@ -604,8 +600,7 @@ msgstr ""
 "contraseña)"
 
 #: ../src/subscription_manager/managercli.py:315
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 "La identidad de usuario puede no existir o estar corrupta. Intente register "
 "--help"
@@ -781,8 +776,7 @@ msgid "available"
 msgstr "Disponible"
 
 #: ../src/subscription_manager/managercli.py:692
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
+msgid "date to search on, defaults to today's date, only used with --available "
 msgstr ""
 "Fecha de búsqueda, predeterminada a la fecha de hoy, únicamente se utiliza "
 "con --available "
@@ -793,8 +787,7 @@ msgstr "Consumido"
 
 #: ../src/subscription_manager/managercli.py:697
 msgid "if supplied with --available then all subscriptions are returned"
-msgstr ""
-"Si se proporciona con --available, todas las suscripciones se retornarán"
+msgstr "Si se proporciona con --available, todas las suscripciones se retornarán"
 
 #: ../src/subscription_manager/managercli.py:701
 msgid "Error: --all is only applicable with --available"
@@ -973,8 +966,7 @@ msgstr ""
 "ADVERTENCIA\n"
 "\n"
 "Ya está registrado a RHN mediante la tecnología de RHN Classic. Esta "
-"herramienta requiere registro con tecnología RHN Certificate-Based "
-"Entitlement.\n"
+"herramienta requiere registro con tecnología RHN basada en certificado.\n"
 "\n"
 "A excepción de unos pocos casos, Red Hat recomienda a los usuarios "
 "registrarse en RHN solamente una vez.\n"
@@ -1099,7 +1091,7 @@ msgstr "Proporcionar un certificado de suscripción"
 
 #: ../src/subscription_manager/gui/data/rhsm.glade.h:11
 msgid "Register with Red Hat Entitlement Service"
-msgstr "Registrar en Red Hat Entitlement Service"
+msgstr "Registrar en Servicio de derechos de Red Hat"
 
 #: ../src/subscription_manager/gui/data/rhsm.glade.h:12
 msgid "Register with Red Hat Network"
@@ -1259,6 +1251,10 @@ msgid ""
 "https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
 "</small>"
 msgstr ""
+"<small>\n"
+"Consejo: ¿Olvidó su nombre de usuario o contraseña? Búsquelo en\n"
+"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
+"</small>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:7
 msgid "A unique label for this system"
@@ -1570,8 +1566,7 @@ msgid "Subscription Detail"
 msgstr "Información de suscripción"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr ""
 "Elija un certificado a importar a su directorio de certificados de "
 "suscripción."
@@ -1586,8 +1581,7 @@ msgstr "Mostrar mensaje de depuración"
 
 #: ../src/rhsm_icon.c:48
 msgid "Force display of the icon (expired or warning)"
-msgstr ""
-"Forzar el despliegue del icono de cumplimiento (expirado o advertencia)"
+msgstr "Forzar el despliegue del icono de cumplimiento (expirado o advertencia)"
 
 #: ../src/rhsm_icon.c:189 ../src/rhsm_icon.c:190
 msgid "Invalid or Missing Entitlement Certificates"
@@ -1595,8 +1589,7 @@ msgstr "Certificados de derechos faltantes o inválidos"
 
 #: ../src/rhsm_icon.c:191
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr ""
-"A este sistema le faltan uno o varios certificados de derechos válidos."
+msgstr "A este sistema le faltan uno o varios certificados de derechos válidos."
 
 #: ../src/rhsm_icon.c:195
 msgid "Some of the system's subscriptions are about to expire"
@@ -1608,8 +1601,7 @@ msgstr "Las suscripciones de este sistema están a punto de expirar"
 
 #: ../src/rhsm_icon.c:198
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr ""
-"Una o varias de las suscripciones de este sistema están a punto de expirar."
+msgstr "Una o varias de las suscripciones de este sistema están a punto de expirar."
 
 #: ../src/rhsm_icon.c:215
 msgid "Remind Me Later"
@@ -1646,20 +1638,3 @@ msgstr "Miniaplicación de validez de suscripción de Red Hat"
 msgid "Subscription Validity Applet"
 msgstr "Miniaplicación de validez de suscripción"
 
-#~ msgid "RHSM Subscriptions Managemen"
-#~ msgstr "Administración de suscripciones de RHSM"
-
-#~ msgid "Uncompliant Product List"
-#~ msgstr "Lista de productos que no cumplen"
-
-#~ msgid "You have one product without a valid entitlement certificate."
-#~ msgstr "Tiene un producto sin un certificado de derechos válido."
-
-#~ msgid ""
-#~ "<small>Tip: Forgot your login or password? Look it up at\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
-#~ msgstr ""
-#~ "<small>Consejo: ¿Olvidó su nombre de usuario o contraseña? Búsquelo en\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"

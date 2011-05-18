@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-12 13:52-0400\n"
-"PO-Revision-Date: 2011-04-28 11:36+1000\n"
+"PO-Revision-Date: 2011-05-16 15:48+1000\n"
 "Last-Translator: Sam Friedmann <sam.friedmann@redhat.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr-FR\n"
@@ -28,7 +28,7 @@ msgstr ""
 #: ../src/subscription_manager/i18n_optparse.py:42
 #, python-format
 msgid "usage: %s\n"
-msgstr ""
+msgstr "utilisation : %s\n"
 
 #. For older versions of optparse
 #: ../src/subscription_manager/i18n_optparse.py:43
@@ -113,7 +113,7 @@ msgstr "afficher le numéro de version du programme et quitter"
 #: ../src/subscription_manager/i18n_optparse.py:76
 #, python-format
 msgid "%s: error: %s\n"
-msgstr ""
+msgstr "%s: erreur : %s\n"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -151,7 +151,7 @@ msgstr "Abonnements disponibles"
 #: ../src/subscription_manager/gui/subscription_assistant.py:341
 #: ../src/subscription_manager/gui/contract_selection.py:95
 msgid "unlimited"
-msgstr ""
+msgstr "illimité(s)"
 
 #: ../src/subscription_manager/gui/allsubs.py:182
 msgid "All Available Subscriptions"
@@ -192,8 +192,7 @@ msgstr ""
 #: ../src/subscription_manager/gui/managergui.py:389
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:12
 msgid "You have <b>1</b> product without a valid entitlement certificate."
-msgstr ""
-"Vous possédez <b>1</b> produit sans certificat de droit d'accès valide."
+msgstr "Vous possédez <b>1</b> produit sans certificat de droit d'accès valide."
 
 #: ../src/subscription_manager/gui/managergui.py:397
 #, python-format
@@ -392,7 +391,7 @@ msgstr "Version"
 
 #: ../src/subscription_manager/gui/installedtab.py:57
 msgid "Arch"
-msgstr ""
+msgstr "Architecture"
 
 #: ../src/subscription_manager/gui/installedtab.py:58
 msgid "Certificate"
@@ -466,7 +465,7 @@ msgstr "Erreur lors de la lecture des informations DMI du système : %s"
 #: ../src/subscription_manager/hwprobe.py:88
 #, python-format
 msgid "Error reading system DMI information with %s: %s"
-msgstr ""
+msgstr "Erreur lors de la lecture des informations DMI du systèmeavec %s : %s"
 
 #: ../src/subscription_manager/hwprobe.py:173
 msgid "Error reading system memory information:"
@@ -482,8 +481,7 @@ msgstr "Erreur lors de la lecture des informations réseau du système :"
 
 #: ../src/subscription_manager/hwprobe.py:264
 msgid "Error reading net Interface information:"
-msgstr ""
-"Erreur lors de la lecture des informations de l'interface net du système :"
+msgstr "Erreur lors de la lecture des informations de l'interface net du système :"
 
 #: ../src/subscription_manager/managerlib.py:94
 msgid "Subscribed"
@@ -543,8 +541,7 @@ msgid "password for http proxy with basic authentication"
 msgstr "mot de passe pour proxy http avec authentification de base"
 
 #: ../src/subscription_manager/managercli.py:146
-msgid ""
-"Consumer not registered. Please register using --username and --password"
+msgid "Consumer not registered. Please register using --username and --password"
 msgstr ""
 "Consommateur non enregistré. Veuillez vous enregistrer à l'aide --username "
 "et --password"
@@ -571,8 +568,7 @@ msgstr "Mot de passe : "
 
 #: ../src/subscription_manager/managercli.py:260
 msgid "removes all local consumer data, does not effect the server"
-msgstr ""
-"supprime toutes les données locales du consommateur, n'affecte pas le serveur"
+msgstr "supprime toutes les données locales du consommateur, n'affecte pas le serveur"
 
 #: ../src/subscription_manager/managercli.py:273
 msgid "All local data removed"
@@ -610,8 +606,7 @@ msgstr ""
 "mot de passe)"
 
 #: ../src/subscription_manager/managercli.py:315
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 "L'identité du consommateur n'existe pas ou est corrompue. Essayez register --"
 "help"
@@ -793,8 +788,7 @@ msgid "available"
 msgstr "disponible"
 
 #: ../src/subscription_manager/managercli.py:692
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
+msgid "date to search on, defaults to today's date, only used with --available "
 msgstr ""
 "date à rechercher, date actuelle par défaut, uniquement utilisé avec --"
 "available "
@@ -1261,8 +1255,7 @@ msgstr "<b>Veuillez saisir ce qui suit pour ce système :</b>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:2
 msgid "<b>Please enter your Red Hat Network account information:</b>"
-msgstr ""
-"<b>Veuillez saisir les informations de votre compte Red Hat Network :</b>"
+msgstr "<b>Veuillez saisir les informations de votre compte Red Hat Network :</b>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:3
 msgid ""
@@ -1271,6 +1264,11 @@ msgid ""
 "https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
 "</small>"
 msgstr ""
+"<small>\n"
+"Astuce : Vous avez oublié votre identifiant ou mot de passe ? Trouvez-le "
+"sur \n"
+"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
+"</small>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:7
 msgid "A unique label for this system"
@@ -1396,8 +1394,7 @@ msgstr "Panneau des abonnements"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:22
 msgid "The following subscriptions will cover the products selected above:"
-msgstr ""
-"Les abonnements suivant couvriront les produits sélectionnés ci-dessus :"
+msgstr "Les abonnements suivant couvriront les produits sélectionnés ci-dessus :"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:24
 msgid "subscribe button"
@@ -1581,8 +1578,7 @@ msgid "Subscription Detail"
 msgstr "Détail de l'abonnement"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr ""
 "Choisissez un certificat à importer vers votre répertoire de certificats "
 "d'abonnement."
@@ -1605,8 +1601,7 @@ msgstr "Certificats de droits d'accès invalides ou manquants"
 
 #: ../src/rhsm_icon.c:191
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr ""
-"Il manque un ou plusieurs certificats de droits d'accès valides à ce système."
+msgstr "Il manque un ou plusieurs certificats de droits d'accès valides à ce système."
 
 #: ../src/rhsm_icon.c:195
 msgid "Some of the system's subscriptions are about to expire"
@@ -1655,22 +1650,3 @@ msgstr "Applet de validité des abonnements Red Hat"
 msgid "Subscription Validity Applet"
 msgstr "Applet de validité d'abonnements"
 
-#~ msgid "RHSM Subscriptions Managemen"
-#~ msgstr "Gestion des abonnements RHSM"
-
-#~ msgid "Uncompliant Product List"
-#~ msgstr "Liste des produits non-conformes"
-
-#~ msgid "You have one product without a valid entitlement certificate."
-#~ msgstr ""
-#~ "Un de vos produits ne possède pas de certificat de droit d'accès valide."
-
-#~ msgid ""
-#~ "<small>Tip: Forgot your login or password? Look it up at\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
-#~ msgstr ""
-#~ "<small>Astuce : Vous avez oublié votre identifiant ou mot de passe ? "
-#~ "Trouvez-le sur \n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"

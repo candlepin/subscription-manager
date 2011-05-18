@@ -10,16 +10,15 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-12 13:52-0400\n"
-"PO-Revision-Date: 2011-04-21 10:10+1000\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2011-05-16 11:27\n"
+"Last-Translator: Yulia <ypoyarko@redhat.com>\n"
 "Language-Team: Russian\n"
 "Language: ru-RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
@@ -29,7 +28,7 @@ msgstr ""
 #: ../src/subscription_manager/i18n_optparse.py:42
 #, python-format
 msgid "usage: %s\n"
-msgstr ""
+msgstr "формат: %s\n"
 
 #. For older versions of optparse
 #: ../src/subscription_manager/i18n_optparse.py:43
@@ -114,7 +113,7 @@ msgstr "показать версию программы и выйти"
 #: ../src/subscription_manager/i18n_optparse.py:76
 #, python-format
 msgid "%s: error: %s\n"
-msgstr ""
+msgstr "%s: ошибка: %s\n"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -152,7 +151,7 @@ msgstr "Доступные подписки"
 #: ../src/subscription_manager/gui/subscription_assistant.py:341
 #: ../src/subscription_manager/gui/contract_selection.py:95
 msgid "unlimited"
-msgstr ""
+msgstr "неограничено"
 
 #: ../src/subscription_manager/gui/allsubs.py:182
 msgid "All Available Subscriptions"
@@ -186,8 +185,7 @@ msgstr "Для доступа к помощнику по подписке нео
 #: ../src/subscription_manager/gui/managergui.py:385
 #, python-format
 msgid "You have <b>%s</b> products with invalid entitlement certificates."
-msgstr ""
-"Всего продуктов с недействительными сертификатами полномочий: <b>%s</b>"
+msgstr "Всего продуктов с недействительными сертификатами полномочий: <b>%s</b>"
 
 #: ../src/subscription_manager/gui/managergui.py:389
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:12
@@ -387,7 +385,7 @@ msgstr "Версия"
 
 #: ../src/subscription_manager/gui/installedtab.py:57
 msgid "Arch"
-msgstr ""
+msgstr "Арх."
 
 #: ../src/subscription_manager/gui/installedtab.py:58
 msgid "Certificate"
@@ -460,7 +458,7 @@ msgstr "Ошибка чтения информации DMI: %s"
 #: ../src/subscription_manager/hwprobe.py:88
 #, python-format
 msgid "Error reading system DMI information with %s: %s"
-msgstr ""
+msgstr "Ошибка чтения информации DMI с помощью %s: %s"
 
 #: ../src/subscription_manager/hwprobe.py:173
 msgid "Error reading system memory information:"
@@ -536,8 +534,7 @@ msgid "password for http proxy with basic authentication"
 msgstr "пароль для доступа к прокси HTTP с минимальной аутентификацией"
 
 #: ../src/subscription_manager/managercli.py:146
-msgid ""
-"Consumer not registered. Please register using --username and --password"
+msgid "Consumer not registered. Please register using --username and --password"
 msgstr ""
 "Пользователь не зарегистрирован. Для регистрации добавьте аргументы -«-"
 "username» и «--password»"
@@ -564,8 +561,7 @@ msgstr "Пароль: "
 
 #: ../src/subscription_manager/managercli.py:260
 msgid "removes all local consumer data, does not effect the server"
-msgstr ""
-"удаляет локальные данные пользователя без отражения изменений на сервере"
+msgstr "удаляет локальные данные пользователя без отражения изменений на сервере"
 
 #: ../src/subscription_manager/managercli.py:273
 msgid "All local data removed"
@@ -603,8 +599,7 @@ msgstr ""
 "пароля)"
 
 #: ../src/subscription_manager/managercli.py:315
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr "Пользователь не существует или повреждён. Выполните «register --help»."
 
 #: ../src/subscription_manager/managercli.py:318
@@ -634,8 +629,7 @@ msgstr "тип регистрируемого пользователя. По у�
 
 #: ../src/subscription_manager/managercli.py:368
 msgid "name of the consumer to register. Defaults to the hostname."
-msgstr ""
-"имя регистрируемого пользователя. По умолчанию используется имя компьютера."
+msgstr "имя регистрируемого пользователя. По умолчанию используется имя компьютера."
 
 #: ../src/subscription_manager/managercli.py:370
 msgid "register to an existing consumer"
@@ -692,8 +686,7 @@ msgstr "активировать зарегистрированного поль
 
 #: ../src/subscription_manager/managercli.py:494
 msgid "optional email address to notify when token activation is complete."
-msgstr ""
-"дополнительный адрес для отправки уведомлений об успешной активации ключа"
+msgstr "дополнительный адрес для отправки уведомлений об успешной активации ключа"
 
 #: ../src/subscription_manager/managercli.py:497
 msgid ""
@@ -762,8 +755,7 @@ msgstr "обновить статистику"
 
 #: ../src/subscription_manager/managercli.py:659
 msgid "Error: Need either --list or --update, Try facts --help"
-msgstr ""
-"Ошибка. Необходимо указать «--list» или «--update». Выполните «facts --help»"
+msgstr "Ошибка. Необходимо указать «--list» или «--update». Выполните «facts --help»"
 
 #: ../src/subscription_manager/managercli.py:683
 msgid "list available or consumer subscriptions for registered user"
@@ -778,10 +770,8 @@ msgid "available"
 msgstr "доступно"
 
 #: ../src/subscription_manager/managercli.py:692
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
-msgstr ""
-"поиск по дате (по умолчанию сегодня), используется вместе с «--available»"
+msgid "date to search on, defaults to today's date, only used with --available "
+msgstr "поиск по дате (по умолчанию сегодня), используется вместе с «--available»"
 
 #: ../src/subscription_manager/managercli.py:695
 msgid "consumed"
@@ -1248,6 +1238,10 @@ msgid ""
 "https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
 "</small>"
 msgstr ""
+"<small>\n"
+"Забыли имя входа или пароль?\n"
+"Перейдите на https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
+"</small>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:7
 msgid "A unique label for this system"
@@ -1555,8 +1549,7 @@ msgid "Subscription Detail"
 msgstr "Данные подписки"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr "Выберите сертификат:"
 
 #: ../src/rhsm_icon.c:44
@@ -1626,20 +1619,3 @@ msgstr "Апплет проверки подписки Red Hat"
 msgid "Subscription Validity Applet"
 msgstr "Апплет проверки подписки"
 
-#~ msgid "RHSM Subscriptions Managemen"
-#~ msgstr "Управление подписками Red Hat"
-
-#~ msgid "Uncompliant Product List"
-#~ msgstr "Список несогласованных продуктов"
-
-#~ msgid "You have one product without a valid entitlement certificate."
-#~ msgstr "Один продукт с недействительным сертификатом."
-
-#~ msgid ""
-#~ "<small>Tip: Forgot your login or password? Look it up at\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
-#~ msgstr ""
-#~ "<small>Забыли имя входа или пароль?\n"
-#~ "Перейдите на <a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword."
-#~ "html\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"

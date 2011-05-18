@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-12 13:52-0400\n"
-"PO-Revision-Date: 2011-04-27 12:10+0530\n"
+"PO-Revision-Date: 2011-05-16 17:26+0530\n"
 "Last-Translator: Runa Bhattacharjee <runab@redhat.com>\n"
 "Language-Team: Bengali (India) <anubad@lists.ankur.org.in>\n"
 "Language: bn-IN\n"
@@ -27,7 +27,7 @@ msgstr ""
 #: ../src/subscription_manager/i18n_optparse.py:42
 #, python-format
 msgid "usage: %s\n"
-msgstr ""
+msgstr "ব্যবহারপ্রণালী: %s\n"
 
 #. For older versions of optparse
 #: ../src/subscription_manager/i18n_optparse.py:43
@@ -112,7 +112,7 @@ msgstr "প্রোগ্রামের সংস্করণ সংখ্য�
 #: ../src/subscription_manager/i18n_optparse.py:76
 #, python-format
 msgid "%s: error: %s\n"
-msgstr ""
+msgstr "%s: ত্রুটি: %s\n"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -150,7 +150,7 @@ msgstr "উপলব্ধ সাবস্ক্রিপশন"
 #: ../src/subscription_manager/gui/subscription_assistant.py:341
 #: ../src/subscription_manager/gui/contract_selection.py:95
 msgid "unlimited"
-msgstr ""
+msgstr "সীমাহীন"
 
 #: ../src/subscription_manager/gui/allsubs.py:182
 msgid "All Available Subscriptions"
@@ -371,8 +371,7 @@ msgstr "%s (অবৈধ এনটাইটেলমেন্টের প্র
 #: ../src/subscription_manager/gui/subscription_assistant.py:220
 #, python-format
 msgid "The following subscriptions will cover the products selected on %s"
-msgstr ""
-"%s-এ নির্বাচিত উৎপাদনগুলির ক্ষেত্রে নিম্নলিখিত সাবস্ক্রিপশনগুলি ব্যবহার করা যাবে"
+msgstr "%s-এ নির্বাচিত উৎপাদনগুলির ক্ষেত্রে নিম্নলিখিত সাবস্ক্রিপশনগুলি ব্যবহার করা যাবে"
 
 #. installed but not entitled products:
 #: ../src/subscription_manager/gui/subscription_assistant.py:281
@@ -385,7 +384,7 @@ msgstr "সংস্করণ"
 
 #: ../src/subscription_manager/gui/installedtab.py:57
 msgid "Arch"
-msgstr ""
+msgstr "আর্কিটেকচার"
 
 #: ../src/subscription_manager/gui/installedtab.py:58
 msgid "Certificate"
@@ -458,7 +457,7 @@ msgstr "সিস্টেম DMI-র তথ্য পড়তে সমস্য�
 #: ../src/subscription_manager/hwprobe.py:88
 #, python-format
 msgid "Error reading system DMI information with %s: %s"
-msgstr ""
+msgstr "%s সহযোগে সিস্টেম DMI-র তথ্য পড়তে সমস্যা: %s"
 
 #: ../src/subscription_manager/hwprobe.py:173
 msgid "Error reading system memory information:"
@@ -534,8 +533,7 @@ msgid "password for http proxy with basic authentication"
 msgstr "মৌলিক অনুমোদন ব্যবস্থা সহ http প্রক্সির পাসওয়ার্ড"
 
 #: ../src/subscription_manager/managercli.py:146
-msgid ""
-"Consumer not registered. Please register using --username and --password"
+msgid "Consumer not registered. Please register using --username and --password"
 msgstr "গ্রাহক নিবন্ধিত নন। অনুগ্রহ করে --username ও --password সহ নিবন্ধন করুন"
 
 #: ../src/subscription_manager/managercli.py:201
@@ -597,8 +595,7 @@ msgstr ""
 "সার্টিফিকেট পুনরায় নির্মাণ করতে বাধ্য করা হবে (ব্যবহারকারীর নাম ও পাসওয়ার্ড আবশ্যক)"
 
 #: ../src/subscription_manager/managercli.py:315
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 "গ্রাহকের পরিচয়ের তথ্য সম্ভবত উপস্থিত নয় অথবা ক্ষতিগ্রস্ত হয়েছে। register --help "
 "প্রয়োগ করুন"
@@ -631,8 +628,7 @@ msgstr "নিবন্ধনের উদ্দেশ্যে চিহ্ন�
 
 #: ../src/subscription_manager/managercli.py:368
 msgid "name of the consumer to register. Defaults to the hostname."
-msgstr ""
-"নিবন্ধনের উদ্দেশ্যে চিহ্নিত গ্রাহকের নাম। ডিফল্ট হিসাবে হোস্ট-নেম ধার্য করা হয়।"
+msgstr "নিবন্ধনের উদ্দেশ্যে চিহ্নিত গ্রাহকের নাম। ডিফল্ট হিসাবে হোস্ট-নেম ধার্য করা হয়।"
 
 #: ../src/subscription_manager/managercli.py:370
 msgid "register to an existing consumer"
@@ -777,8 +773,7 @@ msgid "available"
 msgstr "উপলব্ধ"
 
 #: ../src/subscription_manager/managercli.py:692
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
+msgid "date to search on, defaults to today's date, only used with --available "
 msgstr ""
 "অসন্ধান সঞ্চচালনার তারিখ, ডিফল্ট হিসাবে আজকের তারিখ প্রদর্শন করা হয়, শুধুমাত্র --"
 "available-র সাথে ব্যবহার করা হয়"
@@ -1253,6 +1248,11 @@ msgid ""
 "https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
 "</small>"
 msgstr ""
+"<small>\n"
+"সুত্র: লগ-ইন অথবা পাসওয়ার্ড হারিয়ে ফেলেছেন কি? \n"
+"<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html\">https://"
+"www.redhat.com/wapps/sso/rhn/lostPassword.html</a> থেকে তা পুনরায় প্রাপ্র করুন \n"
+"</small>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:7
 msgid "A unique label for this system"
@@ -1562,8 +1562,7 @@ msgid "Subscription Detail"
 msgstr "সাবস্ক্রিপশনের বিবরণ"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr ""
 "সাবস্ক্রিপশন সার্টিফিকেট ডিরেক্টরির মধ্যে ইম্পোর্ট করার উদ্দেশ্যে একটি সার্টিফিকেট "
 "নির্বাচন করুন।"
@@ -1644,16 +1643,6 @@ msgstr "Subscription Validity Applet"
 
 #~ msgid "You have one product without a valid entitlement certificate."
 #~ msgstr "শুধুমাত্র একটি উৎপাদনের ক্ষেত্রে বৈধ এনটাইটেলমেন্ট সার্টিফিকেট উপস্থিত নেই।"
-
-#~ msgid ""
-#~ "<small>Tip: Forgot your login or password? Look it up at\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
-#~ msgstr ""
-#~ "<small>সুত্র: লগ-ইন অথবা পাসওয়ার্ড হারিয়ে ফেলেছেন কি? \n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a> থেকে তা "
-#~ "পুনরায় প্রাপ্র করুন</small>"
 
 #~ msgid "yes"
 #~ msgstr "হ্যাঁ"

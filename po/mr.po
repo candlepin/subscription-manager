@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-12 13:52-0400\n"
-"PO-Revision-Date: 2011-04-25 12:30+0530\n"
+"PO-Revision-Date: 2011-05-17 14:12+0530\n"
 "Last-Translator: Sandeep Shedmake <sshedmak@redhat.com>\n"
-"Language-Team: Marathi <fedora-trans-mr@redhat.com>\n"
+"Language-Team: Marathi <maajhe-sanganak@freelists.org>\n"
 "Language: mr-IN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Plural-Forms: nplurals=2; plural=(n!=1)\n"
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
@@ -28,13 +28,13 @@ msgstr ""
 #: ../src/subscription_manager/i18n_optparse.py:42
 #, python-format
 msgid "usage: %s\n"
-msgstr ""
+msgstr "वापर: %s\n"
 
 #. For older versions of optparse
 #: ../src/subscription_manager/i18n_optparse.py:43
 #, python-format
 msgid "Usage: %s\n"
-msgstr "वपार: %s\n"
+msgstr "वापर: %s\n"
 
 #: ../src/subscription_manager/i18n_optparse.py:44
 msgid "Usage"
@@ -113,7 +113,7 @@ msgstr "कार्यक्रमाचे आवृत्ती क्रम�
 #: ../src/subscription_manager/i18n_optparse.py:76
 #, python-format
 msgid "%s: error: %s\n"
-msgstr ""
+msgstr "%s: त्रुटी: %s\n"
 
 #: ../src/subscription_manager/gui/activate.py:55
 #, python-format
@@ -151,7 +151,7 @@ msgstr "उपलब्ध सबस्क्रिप्शन्स्"
 #: ../src/subscription_manager/gui/subscription_assistant.py:341
 #: ../src/subscription_manager/gui/contract_selection.py:95
 msgid "unlimited"
-msgstr ""
+msgstr "अमर्यादित"
 
 #: ../src/subscription_manager/gui/allsubs.py:182
 msgid "All Available Subscriptions"
@@ -385,7 +385,7 @@ msgstr "आवृत्ती"
 
 #: ../src/subscription_manager/gui/installedtab.py:57
 msgid "Arch"
-msgstr ""
+msgstr "आर्क"
 
 #: ../src/subscription_manager/gui/installedtab.py:58
 msgid "Certificate"
@@ -458,7 +458,7 @@ msgstr "प्रणलीची DMI माहिती वाचतेवेळ
 #: ../src/subscription_manager/hwprobe.py:88
 #, python-format
 msgid "Error reading system DMI information with %s: %s"
-msgstr ""
+msgstr "%s: %s सह DMI माहिती वाचतेवेळी त्रुटी"
 
 #: ../src/subscription_manager/hwprobe.py:173
 msgid "Error reading system memory information:"
@@ -534,10 +534,8 @@ msgid "password for http proxy with basic authentication"
 msgstr "पूर्वनिर्धारीत ओळखसह http प्रॉक्सीकरीता पासवर्ड"
 
 #: ../src/subscription_manager/managercli.py:146
-msgid ""
-"Consumer not registered. Please register using --username and --password"
-msgstr ""
-"ग्राहकाची नोंदणी झाली नाही.  --username व --password चा वापर करून कृपया नोंदणी करा"
+msgid "Consumer not registered. Please register using --username and --password"
+msgstr "ग्राहकाची नोंदणी झाली नाही.  --username व --password चा वापर करून कृपया नोंदणी करा"
 
 #: ../src/subscription_manager/managercli.py:201
 msgid "Consumer certificates corrupted. Please reregister."
@@ -597,10 +595,8 @@ msgid "force certificate regeneration (requires username and password)"
 msgstr "प्रमाणपत्र पुनःनिर्माण जबरनरित्या करा (वापरकर्तानाव व पासवर्ड आवश्यक)"
 
 #: ../src/subscription_manager/managercli.py:315
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr ""
-"ग्राहकाची ओळख कदाचित अस्तित्वात नाही किंवा दोषीत आहे. register --help वापरून पहा"
+msgid "Consumer identity either does not exist or is corrupted. Try register --help"
+msgstr "ग्राहकाची ओळख कदाचित अस्तित्वात नाही किंवा दोषीत आहे. register --help वापरून पहा"
 
 #: ../src/subscription_manager/managercli.py:318
 msgid "--force can only be used with --regenerate"
@@ -650,8 +646,7 @@ msgstr "आधिपासूनच नोंदणी झाल्यावर�
 
 #: ../src/subscription_manager/managercli.py:380
 msgid "This system is already registered. Use --force to override"
-msgstr ""
-"या प्रणालीची आधिपासूनच नोंदणी झाली आहे. खोडूनपुनः लिहण्यासाठी --force याचा वापर करा"
+msgstr "या प्रणालीची आधिपासूनच नोंदणी झाली आहे. खोडूनपुनः लिहण्यासाठी --force याचा वापर करा"
 
 #: ../src/subscription_manager/managercli.py:383
 msgid "Error: consumer name can not be empty."
@@ -717,8 +712,7 @@ msgstr "कृपया वैध संख्यायीक पूल आय�
 
 #: ../src/subscription_manager/managercli.py:594
 msgid "unsubscribe the registered user from all or specific subscriptions"
-msgstr ""
-"नोंदणी झालेल्या वापरकर्त्यांची सर्व किंवा ठराविक सबस्क्रिप्शन्स् पासून नोंदणी अशक्य करा"
+msgstr "नोंदणी झालेल्या वापरकर्त्यांची सर्व किंवा ठराविक सबस्क्रिप्शन्स् पासून नोंदणी अशक्य करा"
 
 #: ../src/subscription_manager/managercli.py:600
 msgid "Certificate serial to unsubscribe"
@@ -770,8 +764,7 @@ msgid "available"
 msgstr "उपलब्ध"
 
 #: ../src/subscription_manager/managercli.py:692
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
+msgid "date to search on, defaults to today's date, only used with --available "
 msgstr ""
 "शोधण्याजोगी दिनांक, आजच्या दिनांककरीता पूर्वनिर्धारीत होते, फक्त --available सह वापरले "
 "जाते"
@@ -1243,6 +1236,8 @@ msgid ""
 "https://www.redhat.com/wapps/sso/rhn/lostPassword.html\n"
 "</small>"
 msgstr ""
+"<small>टिप: प्रवेश किंवा पासवर्ड विसरलात? \n"
+"https://www.redhat.com/wapps/sso/rhn/lostPassword.html येथे भेट द्या</small>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:7
 msgid "A unique label for this system"
@@ -1550,8 +1545,7 @@ msgid "Subscription Detail"
 msgstr "सबस्क्रिप्शन तपशील"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid ""
-"Choose a certificate to import to your subscription certificate directory."
+msgid "Choose a certificate to import to your subscription certificate directory."
 msgstr "सबस्क्रिप्शन प्रमाणपत्र डिरेक्ट्रीमध्ये आयात करण्याजोगी प्रमाणपत्र नीवडा."
 
 #: ../src/rhsm_icon.c:44
@@ -1621,21 +1615,3 @@ msgstr "Red Hat सबस्क्रिप्शन वैधता ॲप्�
 msgid "Subscription Validity Applet"
 msgstr "सबस्क्रिप्शन वैधता ॲप्लेट"
 
-#~ msgid "RHSM Subscriptions Managemen"
-#~ msgstr "RHSM सबस्क्रिप्शन्स् मॅनेजमेंट"
-
-#~ msgid "Uncompliant Product List"
-#~ msgstr "असहत्व उत्पादन सूची"
-
-#~ msgid "You have one product without a valid entitlement certificate."
-#~ msgstr "तुमच्याकडे अवैध एंटाइटमेंट प्रमाणपत्रसह उत्पादन आहे."
-
-#~ msgid ""
-#~ "<small>Tip: Forgot your login or password? Look it up at\n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a></small>"
-#~ msgstr ""
-#~ "<small>टिप: प्रवेश किंवा पासवर्ड विसरलात? प्राप्तिकरीता \n"
-#~ "<a href=\"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
-#~ "\">https://www.redhat.com/wapps/sso/rhn/lostPassword.html</a> येथे जा</"
-#~ "small>"
