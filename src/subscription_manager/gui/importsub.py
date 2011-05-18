@@ -57,6 +57,7 @@ class ImportSubDialog(widgets.GladeWidget):
         self.main_dialog.connect("delete_event", self._delete_event)
 
     def _cancel_button_clicked(self, button=None):
+        self.certificate_chooser_button.unselect_all()
         self.main_dialog.hide()
         return True
 
