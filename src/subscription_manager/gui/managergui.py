@@ -28,6 +28,7 @@ from subscription_manager.gui import messageWindow
 from subscription_manager.gui import networkConfig
 from subscription_manager import managerlib
 from subscription_manager.gui import file_monitor
+from subscription_manager.gui import registergui
 import rhsm.connection as connection
 import rhsm.config as config
 from subscription_manager import constants
@@ -64,19 +65,6 @@ key_file = ConsumerIdentity.keypath()
 
 cfg = config.initConfig()
 
-class GladeWrapper(gtk.glade.XML):
-    def __init__(self, filename):
-        gtk.glade.XML.__init__(self, filename)
-
-    def get_widget(self, widget_name):
-        widget = gtk.glade.XML.get_widget(self, widget_name)
-        if widget is None:
-            print "ERROR: widget %s was not found" % widget_name
-            raise Exception ("Widget %s not found" % widget_name)
-        return widget
-
-registration_xml = GladeWrapper(os.path.join(prefix,
-    "data/registration.glade"))
 
 class Backend(object):
     """
@@ -173,8 +161,6 @@ class Consumer(object):
             self.uuid = consumer.getConsumerId()
 
 
-
-
 class MainWindow(widgets.GladeWidget):
     """
     The new RHSM main window.
@@ -193,8 +179,9 @@ class MainWindow(widgets.GladeWidget):
         self.system_facts_dialog = factsgui.SystemFactsDialog(self.backend, self.consumer,
                 self.facts)
 
-        self.registration_dialog = RegisterScreen(self.backend, self.consumer,
-                self.facts, callbacks=[self.registration_changed])
+        self.registration_dialog = registergui.RegisterScreen(self.backend,
+                self.consumer, self.facts,
+                callbacks=[self.registration_changed])
 
         self.import_sub_dialog = ImportSubDialog()
 
@@ -409,152 +396,3 @@ class MainWindow(widgets.GladeWidget):
     def _on_rhn_classic_response(self, dialog, response):
         if not response:
             self.main_window.hide()
-
-class RegisterScreen:
-    """
-      Registration Widget Screen
-    """
-
-    def __init__(self, backend, consumer, facts=None, callbacks=None):
-        """
-        Callbacks will be executed when registration status changes.
-        """
-        self.backend = backend
-        self.consumer = consumer
-        self.facts = facts
-        self.callbacks = callbacks
-
-        dic = {"on_register_cancel_button_clicked": self.cancel,
-               "on_register_button_clicked": self.onRegisterAction,
-            }
-
-        registration_xml.signal_autoconnect(dic)
-        self.registerWin = registration_xml.get_widget("register_dialog")
-        self.registerWin.connect("hide", self.cancel)
-        self.registerWin.connect("delete_event", self.delete_event)
-        self.initializeConsumerName()
-
-        self.uname = registration_xml.get_widget("account_login")
-        self.passwd = registration_xml.get_widget("account_password")
-        self.consumer_name = registration_xml.get_widget("consumer_name")
-
-        register_tip_label = registration_xml.get_widget("registrationTip")
-        register_tip_label.set_label("<small>%s</small>" % \
-                linkify(get_branding().GUI_FORGOT_LOGIN_TIP))
-
-        register_header_label = \
-                registration_xml.get_widget("registrationHeader")
-        register_header_label.set_label("<b>%s</b>" % \
-                get_branding().GUI_REGISTRATION_HEADER)
-
-    def show(self):
-        self.registerWin.present()
-
-    def delete_event(self, event, data=None):
-        return self.close_window()
-
-    def cancel(self, button):
-        self.close_window()
-
-    def initializeConsumerName(self):
-        consumername = registration_xml.get_widget("consumer_name")
-        if not consumername.get_text():
-            consumername.set_text(socket.gethostname())
-
-    # callback needs the extra arg, so just a wrapper here
-    def onRegisterAction(self, button):
-        self.register()
-
-    def register(self, testing=None):
-        username = self.uname.get_text()
-        password = self.passwd.get_text()
-        consumername = self.consumer_name.get_text()
-
-        if not self.validate_consumername(consumername):
-            return False
-
-        if not self.validate_account():
-            return False
-
-        # for firstboot -t
-        if testing:
-            return True
-
-        try:
-            self.backend.create_admin_uep(username=username,
-                                          password=password)
-            newAccount = self.backend.admin_uep.registerConsumer(name=consumername,
-                    facts=self.facts.get_facts())
-            managerlib.persist_consumer_cert(newAccount)
-            self.consumer.reload()
-            # reload CP instance with new ssl certs
-            if self.auto_subscribe():
-                # try to auomatically bind products
-                products = managerlib.getInstalledProductHashMap()
-                try:
-                    self.backend.uep.bindByProduct(self.consumer.uuid,
-                            products.values())
-                    log.info("Automatically subscribed to products: %s " \
-                            % ", ".join(products.keys()))
-                except Exception, e:
-                    log.exception(e)
-                    log.warning("Warning: Unable to auto subscribe to %s" \
-                            % ", ".join(products.keys()))
-                # force update of certs
-                if not managerlib.fetch_certificates(self.backend):
-                    return False
-
-            self.close_window()
-
-            self.emit_consumer_signal()
-
-        except Exception, e:
-           return handle_gui_exception(e, constants.REGISTER_ERROR)
-        return True
-
-    def emit_consumer_signal(self):
-        for method in self.callbacks:
-            method()
-
-    def close_window(self):
-        self.registerWin.hide()
-        return True
-
-    def auto_subscribe(self):
-        self.autobind = registration_xml.get_widget("auto_bind")
-        return self.autobind.get_active()
-
-    def validate_consumername(self, consumername):
-        if not consumername:
-            setArrowCursor()
-            errorWindow(_("You must enter a system name."))
-            self.consumer_name.grab_focus()
-            return False
-        return True
-
-    def validate_account(self):
-        # validate / check user name
-        if self.uname.get_text().strip() == "":
-            setArrowCursor()
-            errorWindow(_("You must enter a login."))
-            self.uname.grab_focus()
-            return False
-
-        if self.passwd.get_text().strip() == "":
-            setArrowCursor()
-            errorWindow(_("You must enter a password."))
-            self.passwd.grab_focus()
-            return False
-        return True
-
-    def set_parent_window(self, window):
-        self.registerWin.set_transient_for(window)
-
-
-def setArrowCursor():
-    pass
-
-
-def setBusyCursor():
-    pass
-
