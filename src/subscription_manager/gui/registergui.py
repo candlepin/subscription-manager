@@ -62,6 +62,12 @@ key_file = ConsumerIdentity.keypath()
 
 cfg = config.initConfig()
 
+import threading
+import Queue
+
+import gobject
+
+
 class GladeWrapper(gtk.glade.XML):
     def __init__(self, filename):
         gtk.glade.XML.__init__(self, filename)
@@ -103,6 +109,14 @@ class RegisterScreen:
         self.uname = registration_xml.get_widget("account_login")
         self.passwd = registration_xml.get_widget("account_password")
         self.consumer_name = registration_xml.get_widget("consumer_name")
+        
+        self.register_notebook = \
+                registration_xml.get_widget("register_notebook")
+        self.register_progressbar = \
+                registration_xml.get_widget("register_progressbar")
+
+        self.cancel_button = registration_xml.get_widget("cancel_button")
+        self.register_button = registration_xml.get_widget("register_button")
 
         register_tip_label = registration_xml.get_widget("registrationTip")
         register_tip_label.set_label("<small>%s</small>" % \
@@ -146,12 +160,34 @@ class RegisterScreen:
         if testing:
             return True
 
+        self.backend.create_admin_uep(username=username,
+                                      password=password)
+        async = AsyncBackend(self.backend)
+        async.register_consumer(consumername, self.facts.get_facts(),
+                self.on_registration_finished_cb)
+
+        self.timer = gobject.timeout_add(100, self._timeout_callback)
+        self.register_notebook.set_page(1)
+
+        self.cancel_button.set_sensitive(False)
+        self.register_button.set_sensitive(False)
+
+    def _timeout_callback(self):
+        self.register_progressbar.pulse()
+        # return true to keep it pulsing
+        return True
+
+    def on_registration_finished_cb(self, new_account, error=None):
+        gobject.source_remove(self.timer)
+        self.cancel_button.set_sensitive(True)
+        self.register_button.set_sensitive(True)
+        self.register_notebook.set_page(0)
+
         try:
-            self.backend.create_admin_uep(username=username,
-                                          password=password)
-            newAccount = self.backend.admin_uep.registerConsumer(name=consumername,
-                    facts=self.facts.get_facts())
-            managerlib.persist_consumer_cert(newAccount)
+            if error != None:
+                raise error
+
+            managerlib.persist_consumer_cert(new_account)
             self.consumer.reload()
             # reload CP instance with new ssl certs
             if self.auto_subscribe():
@@ -212,3 +248,44 @@ class RegisterScreen:
 
     def set_parent_window(self, window):
         self.registerWin.set_transient_for(window)
+
+
+class AsyncBackend(object):
+
+    def __init__(self, backend):
+        self.backend = backend
+        self.queue = Queue.Queue()
+
+    def _register_consumer(self, name, facts, callback):
+        """
+        method run in the worker thread.
+        """
+        try:
+            retval = self.backend.admin_uep.registerConsumer(name=name,
+                    facts=facts)
+            self.queue.put((callback, retval, None))
+        except Exception, e:
+            self.queue.put((callback, None, e))
+
+    def _watch_thread(self):
+        """
+        glib idle method to watch for thread completion.
+        runs the provided callback method in the main thread.
+        """
+        try:
+            (callback, retval, error) = self.queue.get(block=False)
+            if error:
+                callback(None, error=error)
+            else:
+                callback(retval)
+            return False
+        except Queue.Empty, e:
+            return True
+
+    def register_consumer(self, name, facts, callback):
+        """
+        Run consumer registration asyncronously
+        """
+        gobject.idle_add(self._watch_thread)
+        threading.Thread(target=self._register_consumer,
+                args=(name, facts, callback)).start()
