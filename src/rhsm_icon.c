@@ -29,12 +29,14 @@
 #include <dbus/dbus-glib.h>
 
 #define ONE_DAY 86400
+#define INITIAL_DELAY 240
 #define _(STRING)   gettext(STRING)
 #define N_(x)   x
 
 static int check_period = ONE_DAY;
 static bool debug = false;
 static char *force_icon = NULL;
+static bool check_immediately = false;
 
 #define NAME_TO_CLAIM "com.redhat.subscription-manager.Icon"
 
@@ -47,6 +49,8 @@ static GOptionEntry entries[] =
 	{"force-icon", 'f', 0, G_OPTION_ARG_STRING, &force_icon,
 		N_("Force display of the icon (expired or warning)"),
 		"TYPE"},
+	{"check-immediately", 'i', 0, G_OPTION_ARG_NONE, &check_immediately,
+		N_("Run the first status check right away"), NULL},
 	{NULL}
 };
 
@@ -292,6 +296,16 @@ check_status(Context *context)
 	return true;
 }
 
+/* 
+ * initial status check, 4 mins after launch (so the panel can load).
+ * return false so it won't run again.
+ */
+static bool
+initial_check_status(Context *context)
+{
+	check_status(context);
+	return false;
+}
 
 static void
 status_changed_cb(NotifyNotification *notification G_GNUC_UNUSED,
@@ -419,7 +433,12 @@ main(int argc, char **argv)
 	gtk_status_icon_set_visible(context.icon, false);
 
 	context.entitlement_status_proxy = get_entitlement_status_proxy();
-	check_status(&context);
+	if (check_immediately) {
+		check_status(&context);
+	} else {
+		g_timeout_add(INITIAL_DELAY * 1000,
+			      (GSourceFunc) initial_check_status, &context);
+	}
 	//convert sec to msec before passing in
 	g_timeout_add(check_period * 1000, (GSourceFunc) check_status,
 			      &context);
