@@ -96,6 +96,8 @@ class RegisterScreen:
         self.facts = facts
         self.callbacks = callbacks
 
+        self.async = AsyncBackend(self.backend)
+
         dic = {"on_register_cancel_button_clicked": self.cancel,
                "on_register_button_clicked": self.onRegisterAction,
             }
@@ -114,6 +116,8 @@ class RegisterScreen:
                 registration_xml.get_widget("register_notebook")
         self.register_progressbar = \
                 registration_xml.get_widget("register_progressbar")
+        self.register_details_label = \
+                registration_xml.get_widget("register_details_label")
 
         self.cancel_button = registration_xml.get_widget("cancel_button")
         self.register_button = registration_xml.get_widget("register_button")
@@ -162,12 +166,12 @@ class RegisterScreen:
 
         self.backend.create_admin_uep(username=username,
                                       password=password)
-        async = AsyncBackend(self.backend)
-        async.register_consumer(consumername, self.facts.get_facts(),
+        self.async.register_consumer(consumername, self.facts.get_facts(),
                 self.on_registration_finished_cb)
 
         self.timer = gobject.timeout_add(100, self._timeout_callback)
         self.register_notebook.set_page(1)
+        self._set_register_details_label(_("Registering your system"))
 
         self.cancel_button.set_sensitive(False)
         self.register_button.set_sensitive(False)
@@ -178,10 +182,6 @@ class RegisterScreen:
         return True
 
     def on_registration_finished_cb(self, new_account, error=None):
-        gobject.source_remove(self.timer)
-        self.cancel_button.set_sensitive(True)
-        self.register_button.set_sensitive(True)
-        self.register_notebook.set_page(0)
 
         try:
             if error != None:
@@ -191,28 +191,43 @@ class RegisterScreen:
             self.consumer.reload()
             # reload CP instance with new ssl certs
             if self.auto_subscribe():
+                self._set_register_details_label(_("Autosubscribing"))
                 # try to auomatically bind products
                 products = managerlib.getInstalledProductHashMap()
-                try:
-                    self.backend.uep.bindByProduct(self.consumer.uuid,
-                            products.values())
-                    log.info("Automatically subscribed to products: %s " \
-                            % ", ".join(products.keys()))
-                except Exception, e:
-                    log.exception(e)
-                    log.warning("Warning: Unable to auto subscribe to %s" \
-                            % ", ".join(products.keys()))
-                # force update of certs
-                if not managerlib.fetch_certificates(self.backend):
-                    return False
-
-            self.close_window()
-
-            self.emit_consumer_signal()
+                self.async.bind_by_products(self.consumer.uuid, products,
+                        self._on_bind_by_products_cb)
+            else:
+                self._finish_registration()
 
         except Exception, e:
-           return handle_gui_exception(e, constants.REGISTER_ERROR)
-        return True
+           handle_gui_exception(e, constants.REGISTER_ERROR)
+           self._finish_registration()
+
+    def _on_bind_by_products_cb(self, products, error=None):
+        if error:
+            log.exception(error)
+            log.warning("Warning: Unable to auto subscribe to %s" \
+                    % ", ".join(products.keys()))
+        else:
+            log.info("Automatically subscribed to products: %s " \
+                    % ", ".join(products.keys()))
+
+        self._set_register_details_label("Fetching certificates")
+        self.async.fetch_certificates(self._on_fetch_certificates_cb)
+
+    def _on_fetch_certificates_cb(self, error=None):
+        if error:
+            handle_gui_exception(error)
+        self._finish_registration()
+
+    def _finish_registration(self):
+        self.close_window()
+        self.emit_consumer_signal()
+
+        gobject.source_remove(self.timer)
+        self.cancel_button.set_sensitive(True)
+        self.register_button.set_sensitive(True)
+        self.register_notebook.set_page(0)
 
     def emit_consumer_signal(self):
         for method in self.callbacks:
@@ -249,6 +264,9 @@ class RegisterScreen:
     def set_parent_window(self, window):
         self.registerWin.set_transient_for(window)
 
+    def _set_register_details_label(self, details):
+        self.register_details_label.set_label("<small>%s</small>" % details)
+
 
 class AsyncBackend(object):
 
@@ -267,6 +285,26 @@ class AsyncBackend(object):
         except Exception, e:
             self.queue.put((callback, None, e))
 
+    def _bind_by_products(self, uuid, products, callback):
+        """
+        method run in the worker thread.
+        """
+        try:
+            self.backend.uep.bindByProduct(uuid, products.values())
+            self.queue.put((callback, products, None))
+        except Exception, e:
+            self.queue.put((callback, products, e))
+
+    def _fetch_certificates(self, callback):
+        """
+        method run in the worker thread.
+        """
+        try:
+            managerlib.fetch_certificates(self.backend)
+            self.queue.put((callback, None, None))
+        except Exception, e:
+            self.queue.put((callback, None, e))
+
     def _watch_thread(self):
         """
         glib idle method to watch for thread completion.
@@ -275,7 +313,7 @@ class AsyncBackend(object):
         try:
             (callback, retval, error) = self.queue.get(block=False)
             if error:
-                callback(None, error=error)
+                callback(retval, error=error)
             else:
                 callback(retval)
             return False
@@ -289,3 +327,13 @@ class AsyncBackend(object):
         gobject.idle_add(self._watch_thread)
         threading.Thread(target=self._register_consumer,
                 args=(name, facts, callback)).start()
+
+    def bind_by_products(self, uuid, products, callback):
+        gobject.idle_add(self._watch_thread)
+        threading.Thread(target=self._bind_by_products,
+                args=(uuid, products, callback)).start()
+
+    def fetch_certificates(self, callback):
+        gobject.idle_add(self._watch_thread)
+        threading.Thread(target=self._fetch_certificates,
+                args=(callback,)).start()
