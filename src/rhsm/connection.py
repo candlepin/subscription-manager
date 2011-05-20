@@ -373,11 +373,11 @@ class UEPConnection:
         method = '/consumers/%s/owner' % uuid
         return self.conn.request_get(method)
 
-    def getOwnerList(self):
+    def getOwnerList(self, username):
         """
         Returns an owner objects with pem/key for existing consumers
         """
-        method = '/owners'
+        method = '/users/%s/owners' % username
         return self.conn.request_get(method)
 
     def unregisterConsumer(self, consumerId):
