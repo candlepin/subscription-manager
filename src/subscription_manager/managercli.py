@@ -358,6 +358,40 @@ class IdentityCommand(UserPassCommand):
             handle_exception(_("Error: Unable to generate a new identity for the system"), e)
 
 
+class OwnersCommand(UserPassCommand):
+
+    def __init__(self):
+        usage = "usage: %prog identity [OPTIONS]"
+        shortdesc = _("Display the owners available for this user")
+        desc = shortdesc
+
+        super(OwnersCommand, self).__init__("owners", usage, shortdesc,
+                desc)
+
+    def _do_command(self):
+
+        try:
+            self.cp = connection.UEPConnection(username=self.username,
+                                               password=self.password,
+                                               proxy_hostname=self.proxy_hostname,
+                                               proxy_port=self.proxy_port,
+                                               proxy_user=self.proxy_user,
+                                               proxy_password=self.proxy_password)
+            owners = self.cp.getOwnerList(self.username)
+            if len(owners):
+                print "owners:"
+                for owner in owners:
+                    print owner['key']
+
+            log.info("Successfully retrieved owner list from Entitlement Platform.")
+        except connection.RestlibException, re:
+            log.exception(re)
+            log.error("Error: Unable to retrieve owner list from Entitlement Platform: %s" % re)
+            systemExit(-1, re.msg)
+        except Exception, e:
+            handle_exception(_("Error: Unable to retrieve owner list from Entitlement Platform"), e)
+
+
 class RegisterCommand(UserPassCommand):
 
     def __init__(self):
@@ -705,8 +739,6 @@ class ListCommand(CliCommand):
                                help=_("consumed"))
         self.parser.add_option("--all", action='store_true',
                                help=_("if supplied with --available then all subscriptions are returned"))
-        self.parser.add_option("--owners", action='store_true',
-                               help=_("list of owners for user"))
 
     def _validate_options(self):
         if (self.options.all and not self.options.available):
@@ -715,7 +747,7 @@ class ListCommand(CliCommand):
         if (self.options.on_date and not self.options.available):
             print _("Error: --ondate is only applicable with --available")
             sys.exit(-1)
-        if not (self.options.available or self.options.consumed or self.options.owners):
+        if not (self.options.available or self.options.consumed):
             self.options.installed = True
 
     def _do_command(self):
@@ -774,12 +806,6 @@ class ListCommand(CliCommand):
             for product in cpents:
                 print constants.consumed_subs_list % product
 
-        if self.options.owners:
-            owners = self.cp.getOwnerList()
-            if len(owners):
-                print "owners:"
-                for owner in owners:
-                    print owner['key']
 
     def _format_name(self, name, indent, max_length):
         """
@@ -815,7 +841,7 @@ class CLI:
 
         self.cli_commands = {}
         for clazz in [RegisterCommand, UnRegisterCommand, ListCommand, SubscribeCommand,\
-                       UnSubscribeCommand, FactsCommand, IdentityCommand, \
+                       UnSubscribeCommand, FactsCommand, IdentityCommand, OwnersCommand, \
                        RefreshCommand, CleanCommand, ActivateCommand]:
             cmd = clazz()
             # ignore the base class
