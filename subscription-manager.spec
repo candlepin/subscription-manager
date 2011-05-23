@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.18
+Version: 0.95.5.19
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -200,6 +200,20 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Mon May 23 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 707041: date picker in subscription-manager-gui does not work
+  (cduryee@redhat.com)
+- 706265: Try to detect when removed pkgs make a repo not "active"
+  (alikins@redhat.com)
+- 706127: Subscription Assistant too large for firstboot (cduryee@redhat.com)
+- 700058: Displaying previous imported cert in cert browser option
+  (cduryee@redhat.com)
+- 704305: fix translated string for "Invalid date format..."
+  (alikins@redhat.com)
+- 705445: Fix for calculation of "available" susbcriptions label
+  (alikins@redhat.com)
+- add in translations (cduryee@redhat.com)
+
 * Tue May 17 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 670973: try to handle /var/log and /var/run being readonly
   (alikins@redhat.com)
