@@ -427,7 +427,7 @@ class DatePicker(gtk.HBox):
         self._calendar_window.set_modal(True)
         self._calendar_window.set_title("")
         self._calendar_window.set_transient_for(
-                self.get_window().get_user_data())
+                self.get_parent_window().get_user_data())
 
         self._calendar.select_month(self._date.month - 1, self._date.year)
         self._calendar.select_day(self._date.day)
