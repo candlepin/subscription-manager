@@ -133,9 +133,20 @@ class ProductManager:
         packages = yb.pkgSack.returnPackages()
         for p in packages:
             repo = p.repoid
-            if repo in (None, 'installed'):
+
+	    # if a pkg is in multiple repo's, this will consider
+	    # all the repo's with the pkg "active".
+	    db_pkg = yb.rpmdb.searchNevra(name=p.name, arch=p.arch)
+
+	    # that pkg is not actually installed
+	    if not db_pkg:
+		continue
+
+	    if repo in (None, "installed"):
                 continue
+
             active.add(repo)
+
         end = time.time()
         ms = (end - start) * 1000
         print _('duration: %d(ms)') % ms
