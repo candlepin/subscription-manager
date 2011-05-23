@@ -33,7 +33,7 @@ from subscription_manager.certlib import CertLib, ConsumerIdentity, \
                     ProductDirectory, EntitlementDirectory
 from subscription_manager.certlib import system_log as inner_system_log
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger('rhsm-app.' + __name__).setLevel(logging.DEBUG)
 
 import gettext
 _ = gettext.gettext
