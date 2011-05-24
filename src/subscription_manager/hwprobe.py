@@ -176,7 +176,15 @@ class Hardware:
 
     def _getSocketIdForCpu(self, cpu):
         physical_package_id = "%s/topology/physical_package_id" % cpu
-        f = open(physical_package_id)
+
+        # this can happen for a couple of cases. xen hosts/guests don't
+        # seem to populate this at all. cross arch kvm guests only seem
+        # to populate it for cpu0.
+        try:
+            f = open(physical_package_id)
+        except IOError,e:
+            log.warn("no physical_package_id found for cpu: %s" % cpu)
+            return None
         socket_id = f.readline()
         return socket_id
 
@@ -205,13 +213,23 @@ class Hardware:
         for cpu in cpu_files:
             cpu_count = cpu_count + 1
             socket_id = self._getSocketIdForCpu(cpu)
+
+            if socket_id is None:
+                continue
+
             if socket_id not in socket_dict:
                 socket_dict[socket_id] = 1
             else:
                 socket_dict[socket_id] = socket_dict[socket_id] + 1
 
-        self.cpuinfo['cpu.cpu_socket(s)'] = len(socket_dict)
-        self.cpuinfo['cpu.core(s)_per_socket'] = cpu_count/len(socket_dict)
+        # we didn't detect any cpu socket info, for example
+        # xen hosts that do not export any cpu  topology info
+        # assume one socket
+        num_sockets = len(socket_dict)
+        if num_sockets == 0:
+            num_sockets = 1
+        self.cpuinfo['cpu.cpu_socket(s)'] = num_sockets
+        self.cpuinfo['cpu.core(s)_per_socket'] = cpu_count/num_sockets
         self.cpuinfo["cpu.cpu(s)"] = cpu_count
         self.allhw.update(self.cpuinfo)
         return self.cpuinfo
