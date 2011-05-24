@@ -19,9 +19,9 @@ import os
 import time
 import simplejson as json
 import gettext
+import yum
 _ = gettext.gettext
 
-from yum import YumBase
 from gzip import GzipFile
 from rhsm.certificate import ProductCertificate
 from subscription_manager.certlib import Directory, ProductDirectory
@@ -92,10 +92,13 @@ class ProductManager:
 
     def update(self, yb):
         if yb is None:
-            yb = YumBase()
+            yb = yum.YumBase()
         enabled = self.getEnabled(yb)
         active = self.getActive(yb)
-        self.updateRemoved(active)
+        #only execute this on versions of yum that track
+        #which repo a package came from
+        if yum.__version_info__[2] >= 28:
+            self.updateRemoved(active)
         self.updateInstalled(enabled, active)
 
     def updateInstalled(self, enabled, active):
