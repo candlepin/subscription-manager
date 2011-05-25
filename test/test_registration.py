@@ -32,7 +32,7 @@ class CliRegistrationTests(unittest.TestCase):
                          cert_file=None, key_file=None):
                 pass
   
-            def registerConsumer(self, name, type, facts):
+            def registerConsumer(self, name, type, facts, owner):
                 return 'Dummy Consumer'
 
         self.persisted_consumer = None
