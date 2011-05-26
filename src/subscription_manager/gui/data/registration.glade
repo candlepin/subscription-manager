@@ -10,6 +10,7 @@
     <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
+    <property name="deletable">False</property>
     <accessibility>
       <atkproperty name="AtkObject::accessible-name">register_dialog</atkproperty>
     </accessibility>
@@ -300,7 +301,7 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkVBox" id="vbox1">
+              <widget class="GtkVBox" id="progressVbox">
                 <property name="visible">True</property>
                 <property name="border_width">25</property>
                 <property name="orientation">vertical</property>
@@ -365,7 +366,46 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <widget class="GtkVBox" id="ownerSelectVbox">
+                <property name="visible">True</property>
+                <property name="border_width">25</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">7</property>
+                <child>
+                  <widget class="GtkLabel" id="label5">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Owner Selection&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkScrolledWindow" id="scrolledwindow1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="border_width">8</property>
+                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vscrollbar_policy">automatic</property>
+                    <property name="shadow_type">etched-in</property>
+                    <child>
+                      <widget class="GtkTreeView" id="owner_treeview">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="position">2</property>
+              </packing>
             </child>
             <child>
               <widget class="GtkLabel" id="label3">
