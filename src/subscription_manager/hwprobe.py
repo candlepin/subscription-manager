@@ -347,6 +347,11 @@ class Hardware:
             except Exception, e:
                 log.warn("Hardware detection failed: %s" % e)
 
+        import dmidecode
+        dmiwarnings = dmidecode.get_warnings()
+        if dmiwarnings:
+            log.warn(_("Error reading system DMI information: %s"), dmiwarnings)
+            dmidecode.clear_warnings() 
         return self.allhw
 
 
