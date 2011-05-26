@@ -67,6 +67,9 @@ import Queue
 
 import gobject
 
+CREDENTIALS_PAGE = 0
+PROGRESS_PAGE = 1
+OWNER_SELECT_PAGE = 2
 
 class GladeWrapper(gtk.glade.XML):
     def __init__(self, filename):
@@ -99,7 +102,7 @@ class RegisterScreen:
         self.async = AsyncBackend(self.backend)
 
         dic = {"on_register_cancel_button_clicked": self.cancel,
-               "on_register_button_clicked": self.onRegisterAction,
+               "on_register_button_clicked": self.on_register_button_clicked,
             }
 
         registration_xml.signal_autoconnect(dic)
@@ -118,6 +121,13 @@ class RegisterScreen:
                 registration_xml.get_widget("register_progressbar")
         self.register_details_label = \
                 registration_xml.get_widget("register_details_label")
+
+        self.owner_treeview = registration_xml.get_widget("owner_treeview")
+        renderer = gtk.CellRendererText()
+        column = gtk.TreeViewColumn(_("Owner"), renderer, text=1)
+        self.owner_treeview.set_property("headers-visible", False)
+        self.owner_treeview.append_column(column)
+
 
         self.cancel_button = registration_xml.get_widget("cancel_button")
         self.register_button = registration_xml.get_widget("register_button")
@@ -146,8 +156,13 @@ class RegisterScreen:
             consumername.set_text(socket.gethostname())
 
     # callback needs the extra arg, so just a wrapper here
-    def onRegisterAction(self, button):
-        self.register()
+    def on_register_button_clicked(self, button):
+        if self.register_notebook.get_current_page() == 0:
+            self.register()
+        else:
+            # we're on the owner select page
+            self._register_with_owner()
+
 
     def register(self, testing=None):
         username = self.uname.get_text()
@@ -166,12 +181,12 @@ class RegisterScreen:
 
         self.backend.create_admin_uep(username=username,
                                       password=password)
-        self.async.register_consumer(consumername, self.facts.get_facts(),
-                self.on_registration_finished_cb)
+
+        self.async.get_owner_list(username, self._on_get_owner_list_cb)
 
         self.timer = gobject.timeout_add(100, self._timeout_callback)
-        self.register_notebook.set_page(1)
-        self._set_register_details_label(_("Registering your system"))
+        self.register_notebook.set_page(PROGRESS_PAGE)
+        self._set_register_details_label(_("Fetching list of possible owners"))
 
         self.cancel_button.set_sensitive(False)
         self.register_button.set_sensitive(False)
@@ -181,7 +196,47 @@ class RegisterScreen:
         # return true to keep it pulsing
         return True
 
-    def on_registration_finished_cb(self, new_account, error=None):
+    def _on_get_owner_list_cb(self, owners, error=None):
+        if error != None:
+            handle_gui_exception(error, constants.REGISTER_ERROR)
+            self._finish_registration()
+
+        owners = [(owner['key'], owner['displayName']) for owner in owners]
+        if len(owners) == 1:
+            self._run_register_step(owners[0])
+        else:
+            owner_model = gtk.ListStore(str, str)
+            for owner in owners:
+                owner_model.append(owner)
+
+            self.owner_treeview.set_model(owner_model)
+            
+            self.owner_treeview.get_selection().select_iter(
+                    owner_model.get_iter_first())
+
+            self.cancel_button.set_sensitive(True)
+            self.register_button.set_sensitive(True)
+            self.register_notebook.set_page(OWNER_SELECT_PAGE)
+
+    def _register_with_owner(self):
+        self.cancel_button.set_sensitive(False)
+        self.register_button.set_sensitive(False)
+        self.register_notebook.set_page(PROGRESS_PAGE)
+
+        model, tree_iter = self.owner_treeview.get_selection().get_selected()
+        owner = model.get_value(tree_iter, 0)
+
+        self._run_register_step(owner)
+
+    def _run_register_step(self, owner):
+        self.async.register_consumer(self.consumer_name.get_text(),
+                self.facts.get_facts(), owner,
+                self._on_registration_finished_cb)
+
+        self._set_register_details_label(_("Registering your system"))
+
+
+    def _on_registration_finished_cb(self, new_account, error=None):
 
         try:
             if error != None:
@@ -217,7 +272,7 @@ class RegisterScreen:
 
     def _on_fetch_certificates_cb(self, error=None):
         if error:
-            handle_gui_exception(error)
+            handle_gui_exception(error, constants.REGISTER_ERROR)
         self._finish_registration()
 
     def _finish_registration(self):
@@ -227,7 +282,7 @@ class RegisterScreen:
         gobject.source_remove(self.timer)
         self.cancel_button.set_sensitive(True)
         self.register_button.set_sensitive(True)
-        self.register_notebook.set_page(0)
+        self.register_notebook.set_page(CREDENTIALS_PAGE)
 
     def emit_consumer_signal(self):
         for method in self.callbacks:
@@ -274,13 +329,23 @@ class AsyncBackend(object):
         self.backend = backend
         self.queue = Queue.Queue()
 
-    def _register_consumer(self, name, facts, callback):
+    def _get_owner_list(self, username, callback):
+        """
+        method run in the worker thread.
+        """
+        try:
+            retval = self.backend.admin_uep.getOwnerList(username)
+            self.queue.put((callback, retval, None))
+        except Exception, e:
+            self.queue.put((callback, None, e))
+
+    def _register_consumer(self, name, facts, owner, callback):
         """
         method run in the worker thread.
         """
         try:
             retval = self.backend.admin_uep.registerConsumer(name=name,
-                    facts=facts)
+                    facts=facts, owner=owner)
             self.queue.put((callback, retval, None))
         except Exception, e:
             self.queue.put((callback, None, e))
@@ -320,13 +385,18 @@ class AsyncBackend(object):
         except Queue.Empty, e:
             return True
 
-    def register_consumer(self, name, facts, callback):
+    def get_owner_list(self, username, callback):
+        gobject.idle_add(self._watch_thread)
+        threading.Thread(target=self._get_owner_list,
+                args=(username, callback)).start()
+
+    def register_consumer(self, name, facts, owner, callback):
         """
         Run consumer registration asyncronously
         """
         gobject.idle_add(self._watch_thread)
         threading.Thread(target=self._register_consumer,
-                args=(name, facts, callback)).start()
+                args=(name, facts, owner, callback)).start()
 
     def bind_by_products(self, uuid, products, callback):
         gobject.idle_add(self._watch_thread)
