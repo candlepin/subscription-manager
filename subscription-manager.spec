@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.19
+Version: 0.95.5.20
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -200,6 +200,13 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Fri May 27 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 706552: check for, log, and clear dmi warnings to prevent them being printed
+  to stdout (cduryee@redhat.com)
+- 707292: Better counting of cpu sockets (alikins@redhat.com)
+- 707313: rhel5 product id is being deleted upon first package install after
+  subscribing to rhel5 subscription (cduryee@redhat.com)
+
 * Mon May 23 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 707041: date picker in subscription-manager-gui does not work
   (cduryee@redhat.com)
