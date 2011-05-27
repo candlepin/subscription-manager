@@ -157,14 +157,14 @@ class RegisterScreen:
 
     # callback needs the extra arg, so just a wrapper here
     def on_register_button_clicked(self, button):
-        if self.register_notebook.get_current_page() == 0:
-            self.register()
-        else:
-            # we're on the owner select page
-            self._register_with_owner()
-
+        self.register()
 
     def register(self, testing=None):
+        if self.register_notebook.get_current_page() != CREDENTIALS_PAGE:
+            # we're on the owner select page
+            self._register_with_owner()
+            return
+
         username = self.uname.get_text()
         password = self.passwd.get_text()
         consumername = self.consumer_name.get_text()
@@ -199,11 +199,13 @@ class RegisterScreen:
     def _on_get_owner_list_cb(self, owners, error=None):
         if error != None:
             handle_gui_exception(error, constants.REGISTER_ERROR)
-            self._finish_registration()
+            self._finish_registration(failed=True)
+            return
 
         owners = [(owner['key'], owner['displayName']) for owner in owners]
+        owners.append(('zippy', 'mr zipps'))
         if len(owners) == 1:
-            self._run_register_step(owners[0])
+            self._run_register_step(owners[0][0])
         else:
             owner_model = gtk.ListStore(str, str)
             for owner in owners:
@@ -256,7 +258,7 @@ class RegisterScreen:
 
         except Exception, e:
            handle_gui_exception(e, constants.REGISTER_ERROR)
-           self._finish_registration()
+           self._finish_registration(failed=True)
 
     def _on_bind_by_products_cb(self, products, error=None):
         if error:
@@ -271,11 +273,15 @@ class RegisterScreen:
         self.async.fetch_certificates(self._on_fetch_certificates_cb)
 
     def _on_fetch_certificates_cb(self, error=None):
+        failed = False
         if error:
             handle_gui_exception(error, constants.REGISTER_ERROR)
-        self._finish_registration()
+            failed = True
+        self._finish_registration(failed=failed)
 
-    def _finish_registration(self):
+    def _finish_registration(self, failed=False):
+        # failed is used by the firstboot subclasses to decide if they should
+        # advance the screen or not.
         self.close_window()
         self.emit_consumer_signal()
 
