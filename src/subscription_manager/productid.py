@@ -101,12 +101,45 @@ class ProductManager:
             self.updateRemoved(active)
         self.updateInstalled(enabled, active)
 
+    def _isWorkstation(self, product):
+        if product.getName() == "Red Hat Enterprise Linux Workstation" and \
+                "rhel-5-client-workstation" in product.getProvidedTags() and \
+                product.getVersion()[0] == '5':
+            return True
+        return False
+
+    def _isDesktop(self, product):
+        if product.getName() == "Red Hat Enterprise Linux Desktop" and \
+                "rhel-5-client" in product.getProvidedTags() and \
+                product.getVersion()[0] == '5':
+            return True
+        return False
+
     def updateInstalled(self, enabled, active):
         for cert, repo in enabled:
             if repo not in active:
                 continue
             p = cert.getProduct()
             hash = p.getHash()
+
+            # Are we installing Workstation cert?
+            if self._isWorkstation(p):
+                # is the Desktop product cert installed?
+                for pc in self.pdir.list():
+                    if self._isDesktop(pc.getProduct()):
+                        # Desktop product cert is installed,
+                        # delete the Desktop product cert
+                        pc.delete()
+                        self.db.delete(hash)
+                        self.db.write()
+
+            # no point installing desktop only to delete it
+            if self._isDesktop(p):
+                for pc in self.pdir.list():
+                    if self._isWorkstation(pc.getProduct()):
+                        # we are installing Desktop, but we already have workstation
+                        return
+
             if self.pdir.findByProduct(hash):
                 continue
             fn = '%s.pem' % hash
@@ -135,7 +168,16 @@ class ProductManager:
         packages = yb.pkgSack.returnPackages()
         for p in packages:
             repo = p.repoid
-            if repo in (None, 'installed'):
+
+            # if a pkg is in multiple repo's, this will consider
+            # all the repo's with the pkg "active".
+            db_pkg = yb.rpmdb.searchNevra(name=p.name, arch=p.arch)
+
+            # that pkg is not actually installed
+            if not db_pkg:
+                continue
+
+            if repo in (None, "installed"):
                 continue
             active.add(repo)
         return active
