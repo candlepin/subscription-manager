@@ -40,7 +40,7 @@ def system_log(message, priority=syslog.LOG_NOTICE):
 
 class ActionLock(Lock):
 
-    PATH = '/var/run/subsys/rhsm/cert.pid'
+    PATH = '/var/run/rhsm/cert.pid'
 
     def __init__(self):
         Lock.__init__(self, self.PATH)
