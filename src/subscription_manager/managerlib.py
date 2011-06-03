@@ -69,7 +69,7 @@ def configure_i18n(with_glade=False):
 
 
 def system_log(message, priority=syslog.LOG_NOTICE):
-	inner_system_log(message, priority)
+    inner_system_log(message, priority)
 
 
 def persist_consumer_cert(consumerinfo):
@@ -107,15 +107,19 @@ def getInstalledProductStatus(product_directory=None,
     product_names = [product.getProduct().getName() for product in \
             product_directory.list()]
 
+    product_hashes = [product.getProduct().getHash() for product in \
+            product_directory.list()]
+
     product_status = []
     entitled_names = set()
-    
+    entitled_hashes = set()
+
     for cert in entitlement_directory.list():
         ents = cert.getEntitlements()
         eproducts = cert.getProducts()
         for product in eproducts:
             status = _("Not Installed")
-            if product.getName() in product_names:
+            if product.getHash() in product_hashes:
                 status = map_status(cert.valid())
 
             data = (product.getName(), status,
@@ -125,12 +129,14 @@ def getInstalledProductStatus(product_directory=None,
                     cert.getOrder().getAccountNumber())
             product_status.append(data)
             entitled_names.add(product.getName())
+            entitled_hashes.add(product.getHash())
 
     # add in any products that we have installed but don't have
     # entitlements for
-    for name in product_names:
-        if name not in entitled_names:
-            product_status.append((name, map_status(None), "", "", "", ""))
+    for product_cert in product_directory.list():
+        product = product_cert.getProduct()
+        if product.getHash() not in entitled_hashes:
+            product_status.append((product.getName(), map_status(None), "", "", "", ""))
 
     return product_status
 
@@ -195,7 +201,7 @@ def fetch_certificates(backend):
     result = backend.certlib.update()
     if result[1]:
         raise CertificateFetchError(result[1])
-            
+
     return True
 
 
