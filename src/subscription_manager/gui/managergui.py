@@ -20,6 +20,7 @@
 import os
 import socket
 import logging
+import locale
 
 import gtk
 import gtk.glade
@@ -58,6 +59,10 @@ log = logging.getLogger('rhsm-app.' + __name__)
 prefix = os.path.dirname(__file__)
 VALID_IMG = os.path.join(prefix, "data/icons/valid.svg")
 INVALID_IMG = os.path.join(prefix, "data/icons/invalid.svg")
+
+#workaround for or_IN issue in python
+if (locale.getlocale(locale.LC_TIME)[0] == 'or_IN'):
+    locale.setlocale(locale.LC_TIME, 'en_GB')
 
 cert_file = ConsumerIdentity.certpath()
 key_file = ConsumerIdentity.keypath()
