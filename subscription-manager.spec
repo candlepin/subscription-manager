@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.5.20
+Version: 0.95.5.21
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -200,6 +200,11 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Mon Jun 06 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 708095: workaround for or_IN dates (cduryee@redhat.com)
+- 705236: use correct path for pid lockfiles (cduryee@redhat.com)
+- 709754: Workaround for the way Desktop/Workstation repo's and productids
+  work. (alikins@redhat.com)
 * Fri May 27 2011 Chris Duryee (beav) <cduryee@redhat.com>
 - 706552: check for, log, and clear dmi warnings to prevent them being printed
   to stdout (cduryee@redhat.com)
