@@ -460,6 +460,25 @@ class EntitlementDirectory(CertificateDirectory):
         return EntitlementCertificate
 
 
+    def listValid(self, grace_period=False):
+        valid = []
+        for c in self.list():
+            # if the key file doesn't exist, we are not valid
+            # this also handles the case of updates from early
+            # rhsm versions that just wrote "key.pem"
+            # see bz #711133
+            key_path =  "%s/%s-key.pem" % (self.path, c.serialNumber())
+            if not os.access(key_path, os.F_OK):
+                continue
+            if grace_period:
+                if c.validWithGracePeriod():
+                    valid.append(c)
+            elif c.valid():
+                valid.append(c)
+        return valid
+
+
+
 class ConsumerIdentity:
 
     PATH = cfg.get('rhsm', 'consumerCertDir')
