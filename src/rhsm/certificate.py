@@ -902,6 +902,9 @@ class Order:
     def getSupportType(self):
         return self.ext.get('16')
 
+    def getStackingId(self):
+        return self.ext.get('17')
+
     def __str__(self):
         s = []
         s.append('Order {')
@@ -920,6 +923,7 @@ class Order:
         s.append('\tProvides Management = %s' % self.getProvidesManagement())
         s.append('\tSupport Level ..... = %s' % self.getSupportLevel())
         s.append('\tSupport Type ...... = %s' % self.getSupportType())
+        s.append('\tStacking Id ....... = %s' % self.getStackingId())
         s.append('}')
         return '\n'.join(s)
 
