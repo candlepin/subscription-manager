@@ -27,7 +27,7 @@ BuildArch: noarch
 
 BuildRequires: python2-devel
 BuildRequires: python-setuptools
-
+BuildRequires:  rpm-python
 
 %description 
 A small library for communicating with the REST interface of a Red Hat Unified
