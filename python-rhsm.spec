@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.96.3
+Version: 0.96.4
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -57,6 +57,19 @@ rm -rf %{buildroot}
 %{python_sitelib}/rhsm-*.egg-info
 
 %changelog
+* Wed Jun 08 2011 Bryan Kearney <bkearney@redhat.com> 0.96.4-1
+- Adding profile module and updating spec (pkilambi@redhat.com)
+- Added stacking Id to the certificate (wottop@dhcp231-152.rdu.redhat.com)
+- Changed call to CP for owner list (wottop@dhcp231-152.rdu.redhat.com)
+- added getOwners function for use with 'list --owners'
+  (wottop@dhcp231-152.rdu.redhat.com)
+- change (wottop@dhcp231-152.rdu.redhat.com)
+- Added the owner entered in the cli to the post for register
+  (wottop@dhcp231-152.rdu.redhat.com)
+- altered pool query to use both owner and consumer
+  (wottop@dhcp231-152.rdu.redhat.com)
+- Added getOwner(consumerid) function (wottop@dhcp231-152.rdu.redhat.com)
+
 * Wed May 11 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.3-1
 - 700601: Don't set the Accept-Language if we don't have a valid locale
   (alikins@redhat.com)
