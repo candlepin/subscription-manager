@@ -19,30 +19,30 @@ class InvalidProfileType(Exception):
 class RPMProfile(object):
 
     def collect(self):
-        """ 
-	 Initialize rpm transaction and invoke the accumulation call 
-	 @return : list of package info dicts
-         @rtype: list
-	"""
+        """
+        Initialize rpm transaction and invoke the accumulation call
+        @return : list of package info dicts
+        @rtype: list
+        """
         ts = rpm.TransactionSet()
         ts.setVSFlags(-1)
         installed = ts.dbMatch()
         return self.__accumulateProfile(installed)
 
     def __accumulateProfile(self, rpm_header_list):
-        """ 
-         Accumulates list of installed rpm info 
-         @param rpm_header_list: list of rpm headers
-         @type rpm_header_list: list
-         @return: list of package info dicts
-         @rtype: list
+        """
+        Accumulates list of installed rpm info
+        @param rpm_header_list: list of rpm headers
+        @type rpm_header_list: list
+        @return: list of package info dicts
+        @rtype: list
         """
 
         pkg_list = []
         for h in rpm_header_list:
             if h['name'] == "gpg-pubkey":
                 #dbMatch includes imported gpg keys as well
-                # skip these for now as there isnt compelling 
+                # skip these for now as there isnt compelling
                 # reason for server to know this info
                 continue
             info = {
@@ -61,12 +61,12 @@ class GemProfile(object):
     pass
 
 def get_profile(type):
-    '''
+    """
     Returns an instance of a Profile object
     @param type: profile type
     @type type: string
     Returns an instance of a Profile object
-    '''
+    """
     if type not in PROFILE_MAP:
         raise InvalidProfileType('Could not find profile for type [%s]', type)
     profile = PROFILE_MAP[type]()
