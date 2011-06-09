@@ -35,7 +35,8 @@ DEFAULTS = {
         'proxy_hostname': '',
         'proxy_port': '',
         'proxy_user': '',
-        'proxy_password': ''
+        'proxy_password': '',
+        'insecure':'0'
         }
 
 class RhsmConfigParser(SafeConfigParser):
