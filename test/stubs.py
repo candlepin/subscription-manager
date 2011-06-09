@@ -235,7 +235,7 @@ class StubConfig(config.RhsmConfigParser):
         self.fileName = "/this/isnt/a/real/config/file"
 
     def set(self, section, key, value):
-        print self.sections()
+#        print self.sections()
         pass
 
     def save(self, config_file=None):
