@@ -120,7 +120,7 @@ class Hardware:
         self.allhw.update(self.releaseinfo)
         return self.releaseinfo
 
-
+    
     def _open_release(self, filename):
         return open(filename, 'r')
 
@@ -188,42 +188,21 @@ class Hardware:
         socket_id = f.readline()
         return socket_id
 
-    def _getCpuOnlineStatus(self, cpu):
-        online_file = "%s/online" % cpu
-        try:
-            f = open(online_file)
-        except IOError:
-            return None
-        online = f.readline().strip()
-        return online
+    def getCpuInfo(self):
+        # TODO:(prad) Revisit this and see if theres a better way to parse /proc/cpuinfo
+        # perhaps across all arches
+        self.cpuinfo = {}
+        sys_cpu = "/sys/devices/system/cpu/"
 
-    def _getCpuId(self, cpu):
-        re_cpu = re.compile(r".*\/cpu(?P<cpu_id>[0-9]+)$")
-        m = re_cpu.search(cpu)
-        if m:
-            return m.group("cpu_id")
-        return None
+        # we also have cpufreq, etc in this dir, so match just the numbs
+        cpu_re = r'cpu([0-9]+$)'
 
-    def _getS390xCpuInfo(self, cpu_files):
+        cpu_files = []
+        sys_cpu_path = "/sys/devices/system/cpu/"
+        for cpu in os.listdir(sys_cpu_path):
+            if re.match(cpu_re, cpu):
+                cpu_files.append("%s/%s" % (sys_cpu_path,cpu))
 
-        cpu_count = 0
-        cpu_dict = {}
-
-        for cpu in cpu_files:
-            cpu_count = cpu_count + 1
-            cpu_id =  self._getCpuId(cpu)
-            online_status = self._getCpuOnlineStatus(cpu)
-
-            if cpu_id:
-                cpu_dict[cpu_id] = online_status
-
-        online_cpu_count = len([i for i in cpu_dict if cpu_dict[i] == '1'])
-        self.cpuinfo['cpu.cpu_socket(s)'] = cpu_count
-        self.cpuinfo["cpu.cpu(s)"] = online_cpu_count
-        self.allhw.update(self.cpuinfo)
-        return self.cpuinfo
-
-    def _getCpuInfo(self, cpu_files):
         cpu_count = 0
         socket_count = 0
         thread_count = 0
@@ -231,10 +210,8 @@ class Hardware:
 
         socket_dict = {}
         numa_node_dict = {}
-        cpu_dict = {} #
         for cpu in cpu_files:
             cpu_count = cpu_count + 1
-            cpu_id =  self._getCpuId(cpu)
             socket_id = self._getSocketIdForCpu(cpu)
 
             if socket_id is None:
@@ -256,28 +233,6 @@ class Hardware:
         self.cpuinfo["cpu.cpu(s)"] = cpu_count
         self.allhw.update(self.cpuinfo)
         return self.cpuinfo
-
-
-    def getCpuInfo(self):
-        # TODO:(prad) Revisit this and see if theres a better way to parse /proc/cpuinfo
-        # perhaps across all arches
-
-        self.cpuinfo = {}
-        sys_cpu = "/sys/devices/system/cpu/"
-
-        # we also have cpufreq, etc in this dir, so match just the numbs
-        cpu_re = r'cpu([0-9]+$)'
-
-        cpu_files = []
-        sys_cpu_path = "/sys/devices/system/cpu/"
-        for cpu in os.listdir(sys_cpu_path):
-            if re.match(cpu_re, cpu):
-                cpu_files.append("%s/%s" % (sys_cpu_path,cpu))
-
-        if self.unameinfo['uname.machine'] == 's390x':
-            return self._getS390xCpuInfo(cpu_files)
-        return self._getCpuInfo(cpu_files)
-
 
     def getLsCpuInfo(self):
         # if we have `lscpu`, let's use it for facts as well, under
@@ -403,3 +358,4 @@ class Hardware:
 if __name__ == '__main__':
     for hkey, hvalue in Hardware().getAll().items():
         print "'%s' : '%s'" % (hkey, hvalue)
+
