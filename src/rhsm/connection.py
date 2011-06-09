@@ -347,15 +347,19 @@ class UEPConnection:
     def ping(self, username=None, password=None):
         return self.conn.request_get("/status/")
 
-    def registerConsumer(self, name="unknown", type="system", facts={}, owner="default"):
+    def registerConsumer(self, name="unknown", type="system", facts={}, owner=None):
         """
         Creates a consumer on candlepin server
         """
         params = {"type": type,
                   "name": name,
-                  "owner": owner,
                   "facts": facts}
-        return self.conn.request_post('/consumers/', params)
+                  
+        url = "/consumers"
+        if owner:
+            url = "%s?owner=%s" % (url, owner)
+
+        return self.conn.request_post(url, params)
         
     def registerConsumerWithKeys(self, name="unknown", type="system", facts={}, keys=[]):
         """
