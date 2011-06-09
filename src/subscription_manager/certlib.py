@@ -35,8 +35,8 @@ cfg = initConfig()
 
 
 def system_log(message, priority=syslog.LOG_NOTICE):
-	syslog.openlog("subscription-manager")
-	syslog.syslog(priority, message)
+    syslog.openlog("subscription-manager")
+    syslog.syslog(priority, message)
 
 class ActionLock(Lock):
 
@@ -44,7 +44,6 @@ class ActionLock(Lock):
 
     def __init__(self):
         Lock.__init__(self, self.PATH)
-
 
 class CertLib:
 
@@ -469,7 +468,17 @@ class EntitlementDirectory(CertificateDirectory):
             # see bz #711133
             key_path =  "%s/%s-key.pem" % (self.path, c.serialNumber())
             if not os.access(key_path, os.F_OK):
-                continue
+                # read key from old key path
+                old_key_path = "%s/key.pem" % self.path
+
+                # if we don't have a new style or old style key, consider the cert invalid
+                if not os.access(old_key_path, os.R_OK):
+                    continue
+
+                # write the key/cert out again in new style format
+                key = Key.read(old_key_path)
+                cert_writer = Writer()
+                cert_writer.write(key, c)
             if grace_period:
                 if c.validWithGracePeriod():
                     valid.append(c)
