@@ -125,7 +125,7 @@ class TestFacts(unittest.TestCase):
     def setUp(self):
         fact_cache_dir = tempfile.mkdtemp()
         fact_cache = fact_cache_dir + "/facts.json"
-        print fact_cache
+        #print fact_cache
         fd = open(fact_cache, "w")
         fd.write(facts_buf)
         fd.close()
