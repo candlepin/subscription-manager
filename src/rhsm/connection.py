@@ -298,9 +298,9 @@ class UEPConnection:
         if using_basic_auth and using_id_cert_auth:
             raise Exception("Cannot specify both username/password and "
                     "cert_file/key_file")
-        if not (using_basic_auth or using_id_cert_auth):
-            raise Exception("Must specify either username/password or "
-                    "cert_file/key_file")
+        #if not (using_basic_auth or using_id_cert_auth):
+        #    raise Exception("Must specify either username/password or "
+        #            "cert_file/key_file")
 
         # initialize connection
         if using_basic_auth:
@@ -310,18 +310,26 @@ class UEPConnection:
                     proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                     ca_dir=self.ca_cert_dir, insecure=self.insecure,
                     ssl_verify_depth=self.ssl_verify_depth)
-            log.info("Using basic authentication as: %s" % username)
+            log.info("Using basic authentication as: %s" % username)            
+        elif using_id_cert_auth:
+                self.conn = Restlib(self.host, self.ssl_port, self.handler,
+                        cert_file=self.cert_file, key_file=self.key_file,
+                        proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
+                        proxy_user=self.proxy_user, proxy_password=self.proxy_password,
+                        ca_dir=self.ca_cert_dir, insecure=self.insecure,
+                        ssl_verify_depth=self.ssl_verify_depth)
+                log.info("Using certificate authentication: key = %s, cert = %s, "
+                        "ca = %s, insecure = %s" %
+                        (self.key_file, self.cert_file, self.ca_cert_dir,
+                            self.insecure))
         else:
             self.conn = Restlib(self.host, self.ssl_port, self.handler,
-                    cert_file=self.cert_file, key_file=self.key_file,
                     proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                     ca_dir=self.ca_cert_dir, insecure=self.insecure,
                     ssl_verify_depth=self.ssl_verify_depth)
-            log.info("Using certificate authentication: key = %s, cert = %s, "
-                    "ca = %s, insecure = %s" %
-                    (self.key_file, self.cert_file, self.ca_cert_dir,
-                        self.insecure))
+            log.info("Using no auth")              
+        
 
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
@@ -348,6 +356,22 @@ class UEPConnection:
                   "owner": owner,
                   "facts": facts}
         return self.conn.request_post('/consumers/', params)
+        
+    def registerConsumerWithKeys(self, name="unknown", type="system", facts={}, keys=[]):
+        """
+        Creates a consumer on candlepin server
+        """
+        params = {"type": type,
+                  "name": name,
+                  "facts": facts}
+        url = "/activate"
+        prepend = "?"
+        for key in keys:
+            url = url + prepend
+            url = url + "activation_key=" + key
+            prepend = "&"
+        print url
+        return self.conn.request_post(url, params)        
 
     def updateConsumerFacts(self, consumer_uuid, facts={}):
         """
@@ -404,18 +428,6 @@ class UEPConnection:
         """
         method = '/consumers/%s/certificates/serials' % consumerId
         return self.conn.request_get(method)
-
-    def bindByRegNumber(self, consumerId, regnum, email=None, lang=None):
-        """
-        Subscribe consumer to a subscription token
-        """
-        method = "/consumers/%s/entitlements?token=%s" % (consumerId, regnum)
-        if email:
-            method += "&email=%s" % email
-            if not lang:
-                lang = locale.getdefaultlocale()[0].lower().replace('_', '-')
-            method += "&email_locale=%s" % lang
-        return self.conn.request_post(method)
 
     def bindByEntitlementPool(self, consumerId, poolId, quantity=None):
         """
