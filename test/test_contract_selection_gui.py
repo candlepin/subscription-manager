@@ -1,20 +1,23 @@
 import unittest
+import datetime
 
 from subscription_manager.gui import contract_selection
+from subscription_manager import managerlib
 
 def stubSelectedCallback(self, pool):
-    print pool
+    #print pool
+    pass
 
 def stubCancelCallback(self):
-    print "canceled"
-
+    #print "canceled"
+    pass
 
 class ContractSelection(unittest.TestCase):
     pool = {'productName':'SomeProduct',
             'consumed':"consumed",
             'quantity':'quantity',
-            'startDate':'stateDate',
-            'endDate':'endDate',
+            'startDate': datetime.datetime.now(tz=managerlib.ServerTz(0)).isoformat(),
+            'endDate': datetime.datetime.now(tz=managerlib.ServerTz(0)).isoformat(),
             'contractNumber':'contractNumber'}
 
     def test_contract_selection(self):
