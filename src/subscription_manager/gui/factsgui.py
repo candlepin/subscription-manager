@@ -34,7 +34,7 @@ class SystemFactsDialog(widgets.GladeWidget):
 
     def __init__(self, backend, consumer, facts):
         widget_names = ['system_facts_dialog', 'facts_view', 'update_button',
-                        'last_update_label']
+                        'last_update_label', 'owner_label']
         super(SystemFactsDialog, self).__init__('factsdialog.glade', widget_names)
 
         self.consumer = consumer
@@ -100,6 +100,13 @@ class SystemFactsDialog(widgets.GladeWidget):
                 group = new_group
                 parent = self.facts_store.append(None, [group, ""])
             self.facts_store.append(parent, [fact, value])
+        try:
+            owner = self.backend.uep.getOwner(self.consumer.uuid)['displayName']
+        except Exception, e:
+            log.error("Could not get owner name \nError: %s" % e)
+            owner = 'unknown'
+        self.owner_label.set_text(owner)
+         
 
     def update_facts(self):
         """Sends the current system facts to the UEP server."""
