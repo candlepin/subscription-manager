@@ -28,16 +28,17 @@ class TestProductManager(unittest.TestCase):
             end_date=datetime.datetime(2060, 1, 1))
         self.pm.pdir = stubs.StubProductDirectory([cert1, cert2])
         sys.stdout = stubs.MockStdout()
+        self.yb = YumBase()
 
     def tearDown(self):
         sys.stdout = sys.__stdout__
 
 
-    def test_get_active(self):
-        self.pm.getActive(yb=YumBase())
+#    def test_get_active(self):
+#        self.pm.getActive(yb=self.yb)
 
-    def test_get_enabled(self):
-        self.pm.getEnabled(yb=YumBase())
-        
-    def test_update(self):
-        self.pm.update(yb=YumBase())
+#    def test_get_enabled(self):
+#        self.pm.getEnabled(yb=self.yb)
+
+#    def test_update(self):
+#        self.pm.update(yb=self.yb)
