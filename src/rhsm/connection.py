@@ -374,7 +374,6 @@ class UEPConnection:
             url = url + prepend
             url = url + "activation_key=" + key
             prepend = "&"
-        print url
         return self.conn.request_post(url, params)        
 
     def updateConsumerFacts(self, consumer_uuid, facts={}):
