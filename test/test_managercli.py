@@ -12,6 +12,10 @@ class TestCliCommand(unittest.TestCase):
         # neuter the _do_command, since this is mostly
         # for testing arg parsing
         self.cc._do_command = self._do_command
+        self.cc.assert_should_be_registered = self._asert_should_be_registered
+
+        # stub out uep
+        managercli.connection.UEPConnection = self._uep_connection
         sys.stdout = MockStdout()
         sys.stderr = MockStderr()
 
@@ -19,8 +23,14 @@ class TestCliCommand(unittest.TestCase):
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
 
+    def _uep_connection(self, *args, **kwargs):
+        pass
+
     def _do_command(self):
         pass
+
+    def _asert_should_be_registered(self):
+        pass 
 
     def test_main_no_args(self):
         try:
@@ -72,7 +82,7 @@ class TestCliProxyCommand(TestCliCommand):
         self.assertEquals(type(proxy_url), type(self.cc.options.proxy_url))
         self.assertEquals(proxy_host, self.cc.proxy_hostname)
         self.assertEquals(proxy_port, self.cc.proxy_port)
-        
+
 
     def test_main_proxy_user(self):
         proxy_user = "buster"
@@ -95,7 +105,6 @@ class TestIdentityCommand(TestCliProxyCommand):
     command_class = managercli.IdentityCommand
     def test_regenerate_no_force(self):
         ret = self.cc.main(["--regenerate"])
-        print "ret", ret
 
 class TestRegisterCommand(TestCliProxyCommand):
     command_class = managercli.RegisterCommand
