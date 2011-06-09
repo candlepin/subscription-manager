@@ -247,13 +247,13 @@ class UserPassCommand(CliCommand):
                     self.options.username, self.options.password)
         return self._username
 
-    @property 
+    @property
     def password(self):
         if not self._password:
             (self._username, self._password) = self._get_username_and_password(
                     self.options.username, self.options.password)
         return self._password
-    
+
 
 class CleanCommand(CliCommand):
     def __init__(self):
@@ -415,6 +415,8 @@ class RegisterCommand(UserPassCommand):
                                      compatible subscriptions."))
         self.parser.add_option("--force", action='store_true',
                                help=_("register the system even if it is already registered"))
+        self.parser.add_option("--activationkey", action='append', dest="activation_keys",
+                               help=_("One or more activation keys to use for registration"))
         self.facts = Facts()
 
     def _validate_options(self):
@@ -423,6 +425,9 @@ class RegisterCommand(UserPassCommand):
             sys.exit(1)
         elif (self.options.consumername == ''):
             print(_("Error: consumer name can not be empty."))
+            sys.exit(-1)
+        elif (self.options.username and self.options.activation_keys):
+            print(_("Error: Activation keys do not require user credentials"))
             sys.exit(-1)
 
     def _do_command(self):
@@ -439,13 +444,6 @@ class RegisterCommand(UserPassCommand):
         consumername = self.options.consumername
         if consumername == None:
             consumername = socket.gethostname()
-
-        admin_cp = connection.UEPConnection(username=self.username,
-                                            password=self.password,
-                                            proxy_hostname=self.proxy_hostname,
-                                            proxy_port=self.proxy_port,
-                                            proxy_user=self.proxy_user,
-                                            proxy_password=self.proxy_password)
 
         if ConsumerIdentity.exists() and self.options.force:
             # First let's try to un-register previous consumer. This may fail
@@ -469,10 +467,31 @@ class RegisterCommand(UserPassCommand):
                         self.username, self.password)
             else:
                 print self.options.owner
-                consumer = admin_cp.registerConsumer(name=consumername,
-                                                     type=self.options.consumertype,
-                                                     facts=self.facts.get_facts(),
-                                                     owner=self.options.owner)
+
+                if self.options.activation_keys:
+                    admin_cp = connection.UEPConnection(proxy_hostname=self.proxy_hostname,
+                                                        proxy_port=self.proxy_port,
+                                                        proxy_user=self.proxy_user,
+                                                        proxy_password=self.proxy_password)
+
+                    consumer = admin_cp.registerConsumerWithKeys(
+                        name=consumername,
+                        type=self.options.consumertype,
+                        facts=self.facts.get_facts(),
+                        keys=self.options.activation_keys)
+                else:
+
+                    admin_cp = connection.UEPConnection(username=self.username,
+                                                        password=self.password,
+                                                        proxy_hostname=self.proxy_hostname,
+                                                        proxy_port=self.proxy_port,
+                                                        proxy_user=self.proxy_user,
+                                                        proxy_password=self.proxy_password)
+
+                    consumer = admin_cp.registerConsumer(name=consumername,
+                                                         type=self.options.consumertype,
+                                                         facts=self.facts.get_facts(),
+                                                         owner=self.options.owner)
         except connection.RestlibException, re:
             log.exception(re)
             systemExit(-1, re.msg)
@@ -676,8 +695,8 @@ class UnSubscribeCommand(CliCommand):
             systemExit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Unable to perform unsubscribe due to the following exception \n Error: %s") % e, e)
-        
-        # it is okay to call this no matter what happens above, 
+
+        # it is okay to call this no matter what happens above,
         # it's just a notification to perform a check
         self._request_validity_check()
 
