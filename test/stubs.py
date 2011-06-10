@@ -13,15 +13,81 @@
 # in this software or its documentation.
 #
 
+import StringIO
+from rhsm import config
+import StringIO
+import random
+
+# config file is root only, so just fill in a stringbuffer
+cfg_buf = """
+[foo]
+bar = 
+[server]
+hostname = server.example.conf
+prefix = /candlepin
+port = 8443
+insecure = 1
+ssl_verify_depth = 3
+ca_cert_dir = /etc/rhsm/ca/
+proxy_hostname =
+proxy_port =
+proxy_user =
+proxy_password =
+
+[rhsm]
+baseurl= https://content.example.com
+repo_ca_cert = %(ca_cert_dir)sredhat-uep.pem
+productCertDir = /etc/pki/product
+entitlementCertDir = /etc/pki/entitlement
+consumerCertDir = /etc/pki/consumer
+
+[rhsmcertd]
+certFrequency = 240
+"""
+
+test_config = StringIO.StringIO(cfg_buf)
+
+
+class StubConfig(config.RhsmConfigParser):
+    def __init__(self, config_file=None, defaults=config.DEFAULTS):
+        config.RhsmConfigParser.__init__(self, config_file=config_file, defaults=defaults)
+        self.raise_io = None
+        self.fileName = config_file
+
+    # isntead of reading a file, let's use the stringio
+    def read(self, filename):
+        print "StubConfig.read", filename, test_config, test_config.readline
+        self.readfp(test_config, "foo.conf")
+
+    def set(self, section, key, value):
+#        print self.sections()
+        pass
+
+    def save(self, config_file=None):
+        if self.raise_io:
+            raise IOError
+        return None
+
+    # replce read with readfp on stringio
+
+
+def stubInitConfig():
+    return StubConfig()
+
+# create a global CFG object,then replace it with out own that candlepin
+# read from a stringio
+config.initConfig(config_file="test/rhsm.conf")
+config.CFG = StubConfig()
+
+# we are not actually reading test/rhsm.conf, it's just a placeholder
+config.CFG.read("test/rhsm.conf")
+
 from datetime import datetime, timedelta
 
 from subscription_manager.certlib import EntitlementDirectory, ProductDirectory
 from rhsm.certificate import EntitlementCertificate, Product, GMT, DateRange, \
         ProductCertificate, parse_tags, Content
 
-import random
-import StringIO
-from rhsm import config
 
 class MockStdout:
     def __init__(self):
@@ -196,49 +262,9 @@ class StubConsumerIdentity:
     @classmethod
     def exists(cls):
         return False
-    
+
     def getConsumerName(self):
         return "John Q Consumer"
 
     def getConsumerId(self):
         return "211211381984"
-
-# config file is root only, so just fill in a stringbuffer 
-cfg_buf = """
-[server]
-hostname = server.example.conf
-prefix = /candlepin
-port = 8443
-insecure = 1
-ssl_verify_depth = 3
-ca_cert_dir = /etc/rhsm/ca/
-proxy_hostname =
-proxy_port =
-proxy_user =
-proxy_password =
-[rhsm]
-baseurl= https://content.example.com
-repo_ca_cert = %(ca_cert_dir)sredhat-uep.pem
-productCertDir = /etc/pki/product
-entitlementCertDir = /etc/pki/entitlement
-consumerCertDir = /etc/pki/consumer
-[rhsmcertd]
-certFrequency = 240
-"""
-
-test_config = StringIO.StringIO(cfg_buf)
-
-class StubConfig(config.RhsmConfigParser):
-    def __init__(self, config_file, defaults=config.DEFAULTS):
-        config.RhsmConfigParser.__init__(self, config_file=test_config, defaults=defaults)
-        self.raise_io = None
-        self.fileName = "/this/isnt/a/real/config/file"
-
-    def set(self, section, key, value):
-#        print self.sections()
-        pass
-
-    def save(self, config_file=None):
-        if self.raise_io:
-            raise IOError
-        return None

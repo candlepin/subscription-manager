@@ -15,6 +15,7 @@
 
 import os
 import unittest
+import stubs
 
 from subscription_manager.branding import get_branding, Branding
 from subscription_manager.managerlib import configure_i18n
