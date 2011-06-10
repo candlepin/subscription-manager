@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.15
+Version: 0.95.16
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -183,6 +183,20 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Fri Jun 10 2011 Adrian Likins <alikins@redhat.com> 0.95.16-1
+- Automatic commit of package [subscription-manager] release [0.95.15-1].
+  (alikins@redhat.com)
+- 712409: new fix for old style to new style key format migrations
+  (alikins@redhat.com)
+- 701374: Don't show -1 for unlimited in contact_selection (alikins@redhat.com)
+- 712130: cli was using product names for ent cert-> product cert matching
+  (alikins@redhat.com)
+- 712408: contract selection was not showing dates for pools
+  (alikins@redhat.com)
+- 712128: fix bug showing the "you are registered to rhn" dialog
+  (alikins@redhat.com)
+- 712409: Handle updates from old style key.pem certs (alikins@redhat.com)
+
 * Thu Jun 09 2011 Adrian Likins <alikins@redhat.com> 0.95.15-1
 - 711133: new fix for old style to new style key format migrations
   (alikins@redhat.com)
