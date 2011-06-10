@@ -120,7 +120,7 @@ class Hardware:
         self.allhw.update(self.releaseinfo)
         return self.releaseinfo
 
-    
+
     def _open_release(self, filename):
         return open(filename, 'r')
 
@@ -358,4 +358,3 @@ class Hardware:
 if __name__ == '__main__':
     for hkey, hvalue in Hardware().getAll().items():
         print "'%s' : '%s'" % (hkey, hvalue)
-
