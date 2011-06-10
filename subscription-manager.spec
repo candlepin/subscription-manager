@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.95.16
+Version: 0.95.17
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -183,6 +183,15 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Fri Jun 10 2011 Adrian Likins <alikins@redhat.com> 0.95.17-1
+- Automatic commit of package [subscription-manager] release [0.95.16-1].
+  (alikins@redhat.com)
+- Automatic commit of package [subscription-manager] release [0.95.15-1].
+  (alikins@redhat.com)
+- 712409: new fix for old style to new style key format migrations
+  (alikins@redhat.com)
+- 712408: Don't show -1 for unlimited in contact_selection (alikins@redhat.com)
+
 * Fri Jun 10 2011 Adrian Likins <alikins@redhat.com> 0.95.16-1
 - Automatic commit of package [subscription-manager] release [0.95.15-1].
   (alikins@redhat.com)
