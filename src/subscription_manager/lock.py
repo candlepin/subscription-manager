@@ -58,7 +58,7 @@ class LockFile:
         try:
             os.kill(self.getpid(), 0)
             status = True
-        except Exception, e:
+        except Exception:
             pass
         return status
 
@@ -108,7 +108,7 @@ class Lock:
             try:
                 while True:
                     f.open()
-                    pid = f.getpid()
+                    f.getpid()
                     if f.mypid():
                         self.P()
                         return

@@ -1,4 +1,17 @@
-
+#
+# Copyright (c) 2010 Red Hat, Inc.
+#
+# This software is licensed to you under the GNU General Public License,
+# version 2 (GPLv2). There is NO WARRANTY for this software, express or
+# implied, including the implied warranties of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2
+# along with this software; if not, see
+# http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
+#
+# Red Hat trademarks are not licensed under GPLv2. No permission is
+# granted to use or replicate Red Hat trademarks that are incorporated
+# in this software or its documentation.
+#
 import gobject
 import gtk
 import gettext
@@ -29,6 +42,7 @@ def wrap_line(line, max_line_size=100):
 def wrap_text(txt):
     return '\n'.join(map(wrap_line, txt.split('\n')))
 
+
 class MessageWindow(gobject.GObject):
 
     __gsignals__ = {
@@ -37,7 +51,7 @@ class MessageWindow(gobject.GObject):
     }
 
     def __init__(self, text, parent=None):
-        gobject.GObject.__init__(self) 
+        gobject.GObject.__init__(self)
         self.rc = None
 
         # this seems to be wordwrapping text passed to
@@ -94,8 +108,8 @@ class YesNoDialog(MessageWindow):
     BUTTONS = gtk.BUTTONS_YES_NO
     STYLE = gtk.MESSAGE_QUESTION
 
+
 class ContinueDialog(MessageWindow):
 
     BUTTONS = gtk.BUTTONS_OK_CANCEL
     STYLE = gtk.MESSAGE_WARNING
-

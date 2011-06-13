@@ -45,6 +45,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 cfg = rhsm.config.initConfig()
 
+
 def handle_exception(msg, ex):
     log.error(msg)
     log.exception(ex)
@@ -77,7 +78,7 @@ def autosubscribe(cp, consumer, certlib):
     # try to auomatically bind products
     products = managerlib.getInstalledProductHashMap()
     try:
-        ents = cp.bindByProduct(consumer, products.values())
+        cp.bindByProduct(consumer, products.values())
         certlib.update()
 
         installed_status = managerlib.getInstalledProductStatus()
@@ -157,9 +158,6 @@ class CliCommand(object):
 
         # we dont need argv[0] in this list...
         self.args = self.args[1:]
-
-        proxy_hostname = None
-        proxy_port = None
 
         self.proxy_hostname = cfg.get('server', 'proxy_hostname')
         self.proxy_port = cfg.get('server', 'proxy_port')
@@ -247,13 +245,13 @@ class UserPassCommand(CliCommand):
                     self.options.username, self.options.password)
         return self._username
 
-    @property 
+    @property
     def password(self):
         if not self._password:
             (self._username, self._password) = self._get_username_and_password(
                     self.options.username, self.options.password)
         return self._password
-    
+
 
 class CleanCommand(CliCommand):
     def __init__(self):
@@ -329,7 +327,7 @@ class IdentityCommand(UserPassCommand):
         self._validate_options()
 
         try:
-            consumer =  check_registration()
+            consumer = check_registration()
             consumerid = consumer['uuid']
             consumer_name = consumer['consumer_name']
             if not self.options.regenerate:
@@ -488,6 +486,7 @@ class RegisterCommand(UserPassCommand):
 
         self._request_validity_check()
 
+
 class UnRegisterCommand(CliCommand):
 
     def __init__(self):
@@ -526,6 +525,7 @@ class UnRegisterCommand(CliCommand):
 
         print(_("System has been un-registered."))
 
+
 class ActivateCommand(CliCommand):
 
     def __init__(self):
@@ -563,6 +563,7 @@ class ActivateCommand(CliCommand):
 
         except Exception, e:
             handle_exception("Unable to activate: %s" % e, e)
+
 
 class SubscribeCommand(CliCommand):
 
@@ -612,11 +613,11 @@ class SubscribeCommand(CliCommand):
                     except connection.RestlibException, re:
                         log.exception(re)
                         if re.code == 403:
-                            print re.msg  #already subscribed.
+                            print re.msg  # already subscribed.
                         elif re.code == 400:
-                            print re.msg #no such pool.
+                            print re.msg  # no such pool.
                         else:
-                            systemExit(-1, re.msg) #some other error.. don't try again
+                            systemExit(-1, re.msg)  # some other error.. don't try again
             # must be auto
             else:
                 autosubscribe(self.cp, consumer, self.certlib)
@@ -631,6 +632,7 @@ class SubscribeCommand(CliCommand):
         except Exception, e:
             handle_exception("Unable to subscribe: %s" % e, e)
 
+
 class UnSubscribeCommand(CliCommand):
 
     def __init__(self):
@@ -644,7 +646,6 @@ class UnSubscribeCommand(CliCommand):
                                help=_("Certificate serial to unsubscribe"))
         self.parser.add_option("--all", dest="all", action="store_true",
                                help=_("Unsubscribe from all subscriptions"))
-
 
     def _validate_options(self):
         CliCommand._validate_options(self)
@@ -674,8 +675,7 @@ class UnSubscribeCommand(CliCommand):
             systemExit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Unable to perform unsubscribe due to the following exception \n Error: %s") % e, e)
-        
-        # it is okay to call this no matter what happens above, 
+        # it is okay to call this no matter what happens above,
         # it's just a notification to perform a check
         self._request_validity_check()
 
@@ -733,7 +733,7 @@ class ListCommand(CliCommand):
         self.parser.add_option("--available", action='store_true',
                                help=_("available"))
         self.parser.add_option("--ondate", dest="on_date",
-                                help=_("date to search on, defaults to today's date, only used with --available "+
+                                help=_("date to search on, defaults to today's date, only used with --available " +
                                       "(example: ") + strftime("%Y-%m-%d", localtime()) + " )")
         self.parser.add_option("--consumed", action='store_true',
                                help=_("consumed"))
@@ -776,7 +776,7 @@ class ListCommand(CliCommand):
                     # doing it this ugly way for pre python 2.5
                     on_date = datetime.datetime(
                             *(strptime(self.options.on_date, '%Y-%m-%d')[0:6]))
-                except Exception, e:
+                except Exception:
                     print(_("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
                     sys.exit(1)
 
@@ -805,7 +805,6 @@ class ListCommand(CliCommand):
             print """+-------------------------------------------+\n    %s\n+-------------------------------------------+\n""" % _("Consumed Product Subscriptions")
             for product in cpents:
                 print constants.consumed_subs_list % product
-
 
     def _format_name(self, name, indent, max_length):
         """
@@ -847,7 +846,6 @@ class CLI:
             # ignore the base class
             if cmd.name != "cli":
                 self.cli_commands[cmd.name] = cmd
-
 
     def _add_command(self, cmd):
         self.cli_commands[cmd.name] = cmd
@@ -930,4 +928,3 @@ def check_registration():
 
 if __name__ == "__main__":
     CLI().main()
-

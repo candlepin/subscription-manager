@@ -34,10 +34,10 @@ import rhsm.certificate as certificate
 
 enable_debug = False
 
-RHSM_VALID   = 0
+RHSM_VALID = 0
 RHSM_EXPIRED = 1
 RHSM_WARNING = 2
-RHN_CLASSIC  = 3
+RHN_CLASSIC = 3
 
 
 def debug(msg):
@@ -165,14 +165,14 @@ def main():
             syslog.openlog("rhsmd")
             syslog.syslog(syslog.LOG_NOTICE,
                     get_branding().RHSMD_REGISTERED_TO_OTHER)
-       
+
         # Return an exit code for the program. having valid entitlements is
         # good, so it gets an exit status of 0.
         return status
 
     system_bus = dbus.SystemBus()
     loop = gobject.MainLoop()
-    checker = StatusChecker(system_bus, options.keep_alive, loop)
+    StatusChecker(system_bus, options.keep_alive, loop)
 
     loop.run()
 

@@ -28,8 +28,8 @@ from subscription_manager import managerlib
 import gettext
 _ = gettext.gettext
 
-class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
+class InstalledProductsTab(widgets.SubscriptionManagerTab):
     def __init__(self, backend, consumer, facts):
 
         widgets = ['product_text', 'validity_text', 'subscription_text']
@@ -153,4 +153,3 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def get_label(self):
         return _('My Installed Software')
-

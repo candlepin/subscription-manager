@@ -20,7 +20,6 @@ import os
 import syslog
 import logging
 from datetime import timedelta, datetime
-from rhsm.connection import UEPConnection
 from rhsm.certificate import *
 from subscription_manager.lock import Lock
 from rhsm.config import initConfig
@@ -38,12 +37,14 @@ def system_log(message, priority=syslog.LOG_NOTICE):
     syslog.openlog("subscription-manager")
     syslog.syslog(priority, message)
 
+
 class ActionLock(Lock):
 
     PATH = '/var/run/rhsm/cert.pid'
 
     def __init__(self):
         Lock.__init__(self, self.PATH)
+
 
 class CertLib:
 
@@ -87,8 +88,6 @@ class Action:
             bogus.insert(0, _('Reasons(s):'))
             raise Exception('\n - '.join(bogus))
         return (key, cert)
-
-
 
 
 class DeleteAction(Action):
@@ -360,10 +359,10 @@ class CertificateDirectory(Directory):
     # date is datetime.datetime object
     def listExpiredOnDate(self, date):
         expired = []
-	for c in self.list():
+        for c in self.list():
             if not c.validRange().hasDate(date):
                 expired.append(c)
-	return expired
+        return expired
 
     def listExpired(self):
         expired = []
@@ -393,7 +392,6 @@ class CertificateDirectory(Directory):
                 if p.getHash() == hash:
                     return c
         return None
-
 
     def certClass(self):
         return Certificate
@@ -450,14 +448,13 @@ class EntitlementDirectory(CertificateDirectory):
 
     @classmethod
     def productpath(cls):
-         return cls.PATH
+        return cls.PATH
 
     def __init__(self):
         CertificateDirectory.__init__(self, self.productpath())
 
     def certClass(self):
         return EntitlementCertificate
-
 
     def listValid(self, grace_period=False):
         valid = []
@@ -466,7 +463,7 @@ class EntitlementDirectory(CertificateDirectory):
             # this also handles the case of updates from early
             # rhsm versions that just wrote "key.pem"
             # see bz #711133
-            key_path =  "%s/%s-key.pem" % (self.path, c.serialNumber())
+            key_path = "%s/%s-key.pem" % (self.path, c.serialNumber())
             if not os.access(key_path, os.F_OK):
                 # read key from old key path
                 old_key_path = "%s/key.pem" % self.path
@@ -485,7 +482,6 @@ class EntitlementDirectory(CertificateDirectory):
             elif c.valid():
                 valid.append(c)
         return valid
-
 
 
 class ConsumerIdentity:
@@ -593,8 +589,7 @@ class UpdateReport:
             for c in certificates:
                 products = c.getProducts()
                 if not products:
-                   product = c.getOrder()
-                   
+                    product = c.getOrder()
                 for product in products:
                     s.append('%s[sn:%d (%s,) @ %s]' % \
                         (indent,
@@ -765,9 +760,6 @@ def find_first_invalid_date(ent_dir=None, product_dir=None):
         return datetime.now(GMT())
 
 
-
-
-
 def main():
     print _('Updating entitlement certificates')
     certlib = CertLib()
@@ -777,4 +769,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

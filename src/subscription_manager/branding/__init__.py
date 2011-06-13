@@ -33,6 +33,7 @@ __all__ = ["get_branding"]
 
 _branding = None
 
+
 def find_custom_branding():
     mod_path = os.path.dirname(__file__)
     mods = glob.glob(mod_path + "/*_branding.py")
@@ -42,6 +43,7 @@ def find_custom_branding():
     branding_module = os.path.basename(mods[0])[:-3]
     mod = __import__(__name__ + "." + branding_module, fromlist=[''])
     return mod.Branding()
+
 
 def get_branding():
     global _branding
@@ -53,7 +55,7 @@ def get_branding():
 
 class Branding(object):
 
-    def __init__(self, custom_branding = None):
+    def __init__(self, custom_branding=None):
         self._default = DefaultBranding()
         if custom_branding == None:
             custom_branding = EmptyBranding()

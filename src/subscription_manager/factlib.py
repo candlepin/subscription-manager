@@ -19,7 +19,7 @@ import logging
 import gettext
 _ = gettext.gettext
 
-from certlib import  ActionLock, Disconnected, ConsumerIdentity
+from certlib import  ActionLock, ConsumerIdentity
 from subscription_manager.facts import Facts
 
 log = logging.getLogger('rhsm-app.' + __name__)

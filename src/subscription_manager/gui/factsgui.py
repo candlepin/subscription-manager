@@ -13,8 +13,6 @@
 # in this software or its documentation.
 #
 
-import os
-import locale
 import logging
 import gtk
 
@@ -25,6 +23,7 @@ import gettext
 _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
+
 
 class SystemFactsDialog(widgets.GladeWidget):
     """GTK dialog for displaying the current system facts, as well as
@@ -41,9 +40,9 @@ class SystemFactsDialog(widgets.GladeWidget):
         self.facts = facts
         self.backend = backend
         self.glade.signal_autoconnect({
-                "on_system_facts_dialog_delete_event" : self._hide_callback,
-                "on_close_button_clicked" : self._hide_callback,
-                "on_facts_update_button_clicked" : self._update_facts_callback
+                "on_system_facts_dialog_delete_event": self._hide_callback,
+                "on_close_button_clicked": self._hide_callback,
+                "on_facts_update_button_clicked": self._update_facts_callback
                 })
 
         # Set up the model
@@ -86,9 +85,9 @@ class SystemFactsDialog(widgets.GladeWidget):
         system_facts_dict = self.facts.find_facts()
 
         if self.consumer.uuid:
-            system_facts_dict.update({'system.uuid':self.consumer.uuid})
+            system_facts_dict.update({'system.uuid': self.consumer.uuid})
         if self.consumer.name:
-            system_facts_dict.update({"system.name":self.consumer.name})
+            system_facts_dict.update({"system.name": self.consumer.name})
 
         system_facts = system_facts_dict.items()
 
@@ -106,7 +105,6 @@ class SystemFactsDialog(widgets.GladeWidget):
             log.error("Could not get owner name \nError: %s" % e)
             owner = 'unknown'
         self.owner_label.set_text(owner)
-         
 
     def update_facts(self):
         """Sends the current system facts to the UEP server."""
@@ -145,7 +143,5 @@ class SystemFactsDialog(widgets.GladeWidget):
         column = gtk.TreeViewColumn(name, gtk.CellRendererText(), text=order)
         self.facts_view.append_column(column)
 
-
     def set_parent_window(self, window):
         self.system_facts_dialog.set_transient_for(window)
-

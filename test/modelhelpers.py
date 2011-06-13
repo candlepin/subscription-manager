@@ -22,8 +22,7 @@ Helper methods for mocking up JSON model objects, certificates, etc.
 import md5
 
 from datetime import timedelta, datetime
-from mock import Mock
-from random import randint
+
 
 def create_pool(product_id, product_name, quantity=10, consumed=0, provided_products=[]):
     """
@@ -63,4 +62,3 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
                 'id': '402881062bc9a379012bc9a393fe0005'},
             'attributes': [],
         }
-

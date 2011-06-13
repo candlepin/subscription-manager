@@ -52,7 +52,7 @@ class UpdateAction:
             self.ent_dir = ent_dir
         else:
             self.ent_dir = EntitlementDirectory()
-            
+
         if prod_dir:
             self.prod_dir = prod_dir
         else:

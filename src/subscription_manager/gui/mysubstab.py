@@ -19,10 +19,10 @@ from datetime import datetime, timedelta
 
 from rhsm.certificate import GMT
 
-from subscription_manager.certlib import EntitlementDirectory, ProductDirectory, CertLib, Disconnected
+from subscription_manager.certlib import EntitlementDirectory, ProductDirectory, Disconnected
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import widgets
-from subscription_manager.gui.utils import handle_gui_exception,get_dbus_iface
+from subscription_manager.gui.utils import handle_gui_exception, get_dbus_iface
 
 import gettext
 _ = gettext.gettext
@@ -32,6 +32,7 @@ YELLOW = '#FFFB82'
 RED = '#FFAF99'
 
 WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
+
 
 class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
@@ -81,7 +82,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             try:
                 self.backend.uep.unbindBySerial(self.consumer.uuid, serial)
             except Exception, e:
-                handle_gui_exception(e, _("There was an error unsubsribing from %s with serial number %s" % (selection['subscription'],serial)), formatMsg=False)
+                handle_gui_exception(e, _("There was an error unsubsribing from %s with serial number %s" % (selection['subscription'], serial)), formatMsg=False)
 
             try:
                 self.backend.certlib.update()
@@ -109,7 +110,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         Pulls the entitlement certificates and updates the subscription model.
         """
         self.store.clear()
-        
+
         for cert in EntitlementDirectory().list():
             entry = self._create_entry_map(cert)
             self.store.add_map(entry)
@@ -210,4 +211,3 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                 installed_products.append(installed)
 
         return installed_products
-

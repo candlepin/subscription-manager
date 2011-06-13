@@ -16,7 +16,6 @@
 
 import gtk
 import gobject
-import locale
 import gettext
 import logging
 from datetime import date, datetime
@@ -34,6 +33,7 @@ from subscription_manager.gui import widgets
 from subscription_manager.gui import progress
 from subscription_manager import async
 from subscription_manager.gui.utils import handle_gui_exception, make_today_now
+
 
 class MappedListTreeView(gtk.TreeView):
 
@@ -54,9 +54,6 @@ class MappedListTreeView(gtk.TreeView):
         else:
             column.add_attribute(text_renderer, 'xalign', self.store['align'])
 
-#        column.add_attribute(text_renderer, 'cell-background',
-#                             self.store['background'])
-
         self.append_column(column)
 
     def add_date_column(self, name, column_number, expand=False):
@@ -69,6 +66,7 @@ class MappedListTreeView(gtk.TreeView):
             column.add_attribute(date_renderer, 'xalign', self.store['align'])
 
         self.append_column(column)
+
 
 class SubscriptionAssistant(widgets.GladeWidget):
 
@@ -100,14 +98,14 @@ class SubscriptionAssistant(widgets.GladeWidget):
         self.last_valid_date = self._load_last_valid_date()
         self.cached_date = self.last_valid_date
 
-        invalid_type_map = {'active':bool,
-                            'product_name':str,
-                            'contract':str,
-                            'end_date':str,
-                            'entitlement_id':str,
-                            'product_id':str,
-                            'entitlement':gobject.TYPE_PYOBJECT,
-                            'align':float}
+        invalid_type_map = {'active': bool,
+                            'product_name': str,
+                            'contract': str,
+                            'end_date': str,
+                            'entitlement_id': str,
+                            'product_id': str,
+                            'entitlement': gobject.TYPE_PYOBJECT,
+                            'align': float}
 
         self.window.connect('delete_event', self.hide)
         self.invalid_store = storage.MappedListStore(invalid_type_map)
@@ -131,7 +129,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
             'total_contracts': int,
             'total_subscriptions': int,
             'available_subscriptions': str,
-            'pool_id': str, # not displayed, just for lookup
+            'pool_id': str,  # not displayed, just for lookup
         }
 
         self.subscriptions_store = storage.MappedListStore(subscriptions_type_map)
@@ -219,7 +217,6 @@ class SubscriptionAssistant(widgets.GladeWidget):
             self.providing_subs_label.set_label(
                     _("The following subscriptions will cover the products selected on %s") % invalid_date.strftime("%x"))
 
-
         async_stash = async.AsyncPool(self.pool_stash)
         async_stash.refresh(invalid_date, self._reload_callback)
 
@@ -230,7 +227,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
         self.pb.set_parent_window(self.window)
 
     def _label_allocate(self, label, allocation):
-        label.set_size_request(allocation.width-2, -1)
+        label.set_size_request(allocation.width - 2, -1)
 
     def _check_for_date_change(self, widget):
         """
@@ -307,7 +304,6 @@ class SubscriptionAssistant(widgets.GladeWidget):
                 'align': 0.0
             })
 
-
     def _display_subscriptions(self):
         """
         Displays the list of subscriptions that will replace the selected
@@ -323,7 +319,6 @@ class SubscriptionAssistant(widgets.GladeWidget):
         """
         self.subscriptions_store.clear()
 
-        subscriptions_map = {}
         # this should be roughly correct for locally manager certs, needs
         # remote subs/pools as well
 
@@ -338,7 +333,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
         for entry in merged_pools:
             quantity = entry.quantity
             if quantity < 0:
-                 available = _('unlimited')
+                available = _('unlimited')
             else:
                 available = "%s of %s" % \
                     (entry.quantity - entry.consumed, quantity),
@@ -349,7 +344,6 @@ class SubscriptionAssistant(widgets.GladeWidget):
                 'available_subscriptions': available,
                 'pool_id': entry.pools[0]['id'],
             })
-
 
     def _get_selected_product_ids(self):
         """

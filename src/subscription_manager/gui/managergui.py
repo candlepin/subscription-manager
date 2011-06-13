@@ -47,7 +47,6 @@ from subscription_manager.gui.subscription_assistant import \
         SubscriptionAssistant
 from subscription_manager.gui.importsub import ImportSubDialog
 from subscription_manager.gui.utils import handle_gui_exception, errorWindow, linkify
-from datetime import datetime
 
 import gettext
 _ = gettext.gettext
@@ -69,6 +68,7 @@ key_file = ConsumerIdentity.keypath()
 
 cfg = config.initConfig()
 
+
 class GladeWrapper(gtk.glade.XML):
     def __init__(self, filename):
         gtk.glade.XML.__init__(self, filename)
@@ -77,11 +77,12 @@ class GladeWrapper(gtk.glade.XML):
         widget = gtk.glade.XML.get_widget(self, widget_name)
         if widget is None:
             print "ERROR: widget %s was not found" % widget_name
-            raise Exception ("Widget %s not found" % widget_name)
+            raise Exception("Widget %s not found" % widget_name)
         return widget
 
 registration_xml = GladeWrapper(os.path.join(prefix,
     "data/registration.glade"))
+
 
 class Backend(object):
     """
@@ -144,7 +145,7 @@ class Backend(object):
         if ConsumerIdentity.existsAndValid():
             return True
         return False
-    
+
     def create_admin_uep(self, username=None, password=None):
         self.admin_uep = self._create_uep(username=username, password=password)
 
@@ -176,8 +177,6 @@ class Consumer(object):
             consumer = ConsumerIdentity.read()
             self.name = consumer.getConsumerName()
             self.uuid = consumer.getConsumerId()
-
-
 
 
 class MainWindow(widgets.GladeWidget):
@@ -311,7 +310,6 @@ class MainWindow(widgets.GladeWidget):
         else:
             self.activate_button.hide()
 
-
     def _register_button_clicked(self, widget):
         self.registration_dialog.set_parent_window(self._get_window())
         self.registration_dialog.show()
@@ -372,7 +370,6 @@ class MainWindow(widgets.GladeWidget):
         # (it's default args are set at class init time)
         self.backend.update()
 
-
     def _set_validity_status(self):
         """ Updates the entitlement validity status portion of the UI. """
         # Look for products which have invalid entitlements
@@ -392,13 +389,12 @@ class MainWindow(widgets.GladeWidget):
                         % warn_count)
             else:
                 self.subscription_status_label.set_markup(
-                        _("You have <b>1</b> product without a valid entitlement certificate.") )
+                        _("You have <b>1</b> product without a valid entitlement certificate."))
 
         else:
             first_invalid = find_first_invalid_date()
             buf = gtk.gdk.pixbuf_new_from_file_at_size(VALID_IMG, 32, 32)
             self.subscription_status_image.set_from_pixbuf(buf)
-#            tz_date = first_invalid.astimezone(managerlib.LocalTz())
             self.subscription_status_label.set_text(
                     _("Product entitlement certificates valid through %s") % \
                         managerlib.formatDate(first_invalid))
@@ -414,6 +410,7 @@ class MainWindow(widgets.GladeWidget):
     def _on_rhn_classic_response(self, dialog, response):
         if not response:
             self.main_window.hide()
+
 
 class RegisterScreen:
     """
@@ -514,7 +511,7 @@ class RegisterScreen:
             self.emit_consumer_signal()
 
         except Exception, e:
-           return handle_gui_exception(e, constants.REGISTER_ERROR)
+            return handle_gui_exception(e, constants.REGISTER_ERROR)
         return True
 
     def emit_consumer_signal(self):
@@ -562,4 +559,3 @@ def setArrowCursor():
 
 def setBusyCursor():
     pass
-

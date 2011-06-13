@@ -20,6 +20,7 @@ from subscription_manager.facts import Facts
 sys.path.append("/usr/share/rhn")
 from up2date_client import config
 
+
 class moduleClass(Module, managergui.RegisterScreen):
 
     def __init__(self):
@@ -33,7 +34,6 @@ class moduleClass(Module, managergui.RegisterScreen):
         managergui.RegisterScreen.__init__(self, backend, managergui.Consumer(),
                 Facts())
 
-#        managergui.create_and_set_basic_connection()
         # this value is relative to when you want to load the screen
         # so check other modules before setting
         self.priority = 200.1
@@ -199,4 +199,3 @@ class moduleClass(Module, managergui.RegisterScreen):
         """
         widget = managergui.registration_xml.get_widget(widget_name)
         return widget.get_text()
-

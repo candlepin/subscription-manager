@@ -13,11 +13,9 @@
 # in this software or its documentation.
 #
 
-import gtk
 import gettext
 import os
 import shutil
-import M2Crypto
 import logging
 
 _ = gettext.gettext
@@ -25,7 +23,7 @@ _ = gettext.gettext
 import rhsm.config
 
 from subscription_manager.gui import widgets
-from subscription_manager.gui.utils import handle_gui_exception, errorWindow
+from subscription_manager.gui.utils import errorWindow
 
 from rhsm.certificate import EntitlementCertificate
 
@@ -33,6 +31,7 @@ cfg = rhsm.config.initConfig()
 ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
 
 log = logging.getLogger('rhsm-app.' + __name__)
+
 
 class ImportSubDialog(widgets.GladeWidget):
     """

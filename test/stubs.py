@@ -15,13 +15,12 @@
 
 import StringIO
 from rhsm import config
-import StringIO
 import random
 
 # config file is root only, so just fill in a stringbuffer
 cfg_buf = """
 [foo]
-bar = 
+bar =
 [server]
 hostname = server.example.conf
 prefix = /candlepin
@@ -85,13 +84,14 @@ config.CFG.read("test/rhsm.conf")
 from datetime import datetime, timedelta
 
 from subscription_manager.certlib import EntitlementDirectory, ProductDirectory
-from rhsm.certificate import EntitlementCertificate, Product, GMT, DateRange, \
+from rhsm.certificate import EntitlementCertificate, Product, DateRange, \
         ProductCertificate, parse_tags, Content
 
 
 class MockStdout:
     def __init__(self):
         self.buffer = ""
+
     def write(self, buffer):
         self.buffer = self.buffer + buffer
 MockStderr = MockStdout
@@ -99,10 +99,10 @@ MockStderr = MockStdout
 
 class StubProduct(Product):
 
-    def __init__(self, product_id, name=None, version=None, arch=None, 
+    def __init__(self, product_id, name=None, version=None, arch=None,
             provided_tags=None):
         """
-        provided_tags - Comma separated list of tags this product (cert) 
+        provided_tags - Comma separated list of tags this product (cert)
             provides.
         """
         self.hash = product_id
@@ -143,7 +143,7 @@ class StubOrder(object):
 
 class StubContent(Content):
 
-    def __init__(self, label, name=None, quantity=1, flex_quantity=1, vendor="", 
+    def __init__(self, label, name=None, quantity=1, flex_quantity=1, vendor="",
             url="", gpg="", enabled=1, metadata_expire=None, required_tags=""):
         self.label = label
         self.name = label
@@ -161,7 +161,7 @@ class StubContent(Content):
 
 class StubProductCertificate(ProductCertificate):
 
-    def __init__(self, product, provided_products=None, start_date=None, 
+    def __init__(self, product, provided_products=None, start_date=None,
             end_date=None, provided_tags=None):
         # TODO: product should be a StubProduct, check for strings coming in and error out
         self.product = product
@@ -247,7 +247,6 @@ class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
 
     def __init__(self, certificates):
         StubCertificateDirectory.__init__(self, certificates)
-
 
 
 class StubConsumerIdentity:

@@ -27,11 +27,12 @@ from logging.handlers import RotatingFileHandler
 
 CERT_LOG = '/var/log/rhsm/rhsmcertd.log'
 
+
 def trace_me():
     x = traceback.extract_stack()
     bar = string.join(traceback.format_list(x))
     return bar
-    
+
 
 def trace_me_more():
     frames = traceback.extract_stack()
@@ -54,7 +55,7 @@ def _get_handler():
     # Try to write to /var/log, fallback on console logging:
     try:
         handler = RotatingFileHandler(path, maxBytes=0x100000, backupCount=5)
-    except IOError, e:
+    except IOError:
         handler = logging.StreamHandler()
     except:
         handler = logging.StreamHandler()
@@ -68,6 +69,7 @@ def _get_handler():
 def init_logger():
     logging.getLogger().setLevel(logging.DEBUG)
     logging.getLogger().addHandler(_get_handler())
+
 
 def init_logger_for_yum():
     """

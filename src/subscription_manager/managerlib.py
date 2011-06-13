@@ -22,14 +22,11 @@ import syslog
 import time
 import xml.utils.iso8601
 import logging
-from datetime import datetime, date, tzinfo, timedelta
-
-from xml.utils.iso8601 import parse
-from threading import Thread
+from datetime import datetime, tzinfo, timedelta
 
 from rhsm.config import initConfig
 
-from subscription_manager.certlib import CertLib, ConsumerIdentity, \
+from subscription_manager.certlib import ConsumerIdentity, \
                     ProductDirectory, EntitlementDirectory
 from subscription_manager.certlib import system_log as inner_system_log
 
@@ -47,6 +44,7 @@ DIR = '/usr/share/locale/'
 
 # Expected permissions for identity certificates:
 ID_CERT_PERMS = stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP
+
 
 def configure_i18n(with_glade=False):
     """
@@ -104,9 +102,6 @@ def getInstalledProductStatus(product_directory=None,
     product_directory = product_directory or ProductDirectory()
     entitlement_directory = entitlement_directory or EntitlementDirectory()
 
-    product_names = [product.getProduct().getName() for product in \
-            product_directory.list()]
-
     product_hashes = [product.getProduct().getHash() for product in \
             product_directory.list()]
 
@@ -115,7 +110,6 @@ def getInstalledProductStatus(product_directory=None,
     entitled_hashes = set()
 
     for cert in entitlement_directory.list():
-        ents = cert.getEntitlements()
         eproducts = cert.getProducts()
         for product in eproducts:
             status = _("Not Installed")
@@ -164,6 +158,7 @@ def getConsumedProductEntitlements():
       its subscription cert
     """
     consumed_products = []
+
     def append_consumed_product(cert, product):
         consumed_products.append((product.getName(), cert.getOrder().getContract(),
                                   cert.getOrder().getAccountNumber(), cert.serialNumber(),
@@ -189,12 +184,14 @@ class CertificateFetchError(Exception):
     def __init__(self, errors):
         self.errors = errors
 
-    def errToMsg(self,err):
+    def errToMsg(self, err):
         return ' '.join(str(err).split('-')[1:]).strip()
 
     def __str__(self, reason=""):
         msg = 'Entitlement Certificate(s) update failed due to the following reasons:\n' + \
-        '\n'.join(map(self.errToMsg , self.errors))
+        '\n'.join(map(self.errToMsg, self.errors))
+        return msg
+
 
 def fetch_certificates(backend):
     # Force fetch all certs
@@ -300,7 +297,7 @@ class PoolFilter(object):
         entitled_products = []
         for cert in self.entitlement_directory.list():
             for product in cert.getProducts():
-                entitled_products.append(product.getHash()) 
+                entitled_products.append(product.getHash())
         return entitled_products
 
     def filter_out_overlapping(self, pools):
@@ -332,7 +329,6 @@ class PoolFilter(object):
         resubscribeable_pool_ids = [pool['id'] for pool in \
                 compatible_pools.values()]
 
-
         filtered_pools = []
         for pool in pools:
             if (pool['id'] not in subscribed_pool_ids) or \
@@ -349,12 +345,13 @@ def list_pools(uep, consumer_uuid, facts, all=False, active_on=None):
     consumer possible.
     """
     if facts.delta():
-        uep.updateConsumerFacts(consumer_uuid, facts.get_facts())            
+        uep.updateConsumerFacts(consumer_uuid, facts.get_facts())
     owner = uep.getOwner(consumer_uuid)
     ownerid = owner['key']
     return uep.getPoolsList(ownerid, consumer_uuid, all, active_on)
 
-# TODO: This method is morphing the actual pool json and returning a new 
+
+# TODO: This method is morphing the actual pool json and returning a new
 # dict which does not contain all the pool info. Not sure if this is really
 # necessary. Also some "view" specific things going on in here.
 def getAvailableEntitlements(cpserver, consumer_uuid, facts, all=False, active_on=None):
@@ -369,7 +366,7 @@ def getAvailableEntitlements(cpserver, consumer_uuid, facts, all=False, active_o
     """
     columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
             'providedProducts', 'productId']
-   
+
     dlist = list_pools(cpserver, consumer_uuid, facts, all, active_on)
 
     data = [_sub_dict(pool, columns) for pool in dlist]
@@ -394,8 +391,8 @@ class MergedPools(object):
         self.product_id = product_id
         self.product_name = product_name
         self.bundled_products = 0
-        self.quantity = 0 # how many entitlements were purchased
-        self.consumed = 0 # how many are in use
+        self.quantity = 0  # how many entitlements were purchased
+        self.consumed = 0  # how many are in use
         self.pools = []
 
     def add_pool(self, pool):
@@ -480,7 +477,6 @@ class PoolStash(object):
                 self.incompatible_pools[pool['id']] = pool
                 self.all_pools[pool['id']] = pool
 
-
         self.subscribed_pool_ids = []
         for entitlement in self.backend.uep.getEntitlementList(self.consumer.uuid):
             self.subscribed_pool_ids.append(entitlement['pool']['id'])
@@ -514,30 +510,27 @@ class PoolStash(object):
             prev_length = len(pools)
             pools = pool_filter.filter_out_uninstalled(pools)
             log.debug("\tRemoved %d pools for not installed products" % \
-                    (prev_length - len(pools))) 
-
+                    (prev_length - len(pools)))
 
         if overlapping:
             prev_length = len(pools)
             pools = pool_filter.filter_out_overlapping(pools)
             log.debug("\tRemoved %d pools overlapping existing entitlements" % \
-                    (prev_length - len(pools))) 
-
+                    (prev_length - len(pools)))
 
         # Filter by product name if necessary:
         if text:
             prev_length = len(pools)
             pools = pool_filter.filter_product_name(pools, text)
             log.debug("\tRemoved %d pools not matching the search string" % \
-                    (prev_length - len(pools))) 
+                    (prev_length - len(pools)))
 
         if subscribed:
             prev_length = len(pools)
             pools = pool_filter.filter_subscribed_pools(pools,
                     self.subscribed_pool_ids, self.compatible_pools)
             log.debug("\tRemoved %d pools that we're already subscribed to" % \
-                    (prev_length - len(pools))) 
-
+                    (prev_length - len(pools)))
 
         log.debug("\t%d pools to display, %d filtered out" % (len(pools),
             len(self.all_pools) - len(pools)))
@@ -577,6 +570,7 @@ class PoolStash(object):
 def _sub_dict(datadict, subkeys, default=None):
     return dict([(k, datadict.get(k, default)) for k in subkeys])
 
+
 def parseDate(date):
     # so this get's a little ugly. We want to know the
     # tz/utc offset of the time, so we can make the datetime
@@ -601,13 +595,14 @@ def parseDate(date):
 def formatDate(dt):
     return dt.astimezone(LocalTz()).strftime("%x")
 
+
 class ServerTz(tzinfo):
     """
     tzinfo object for the tz offset of the entitlement server
     """
 
     def __init__(self, offset):
-        self.__offset = timedelta(seconds = offset)
+        self.__offset = timedelta(seconds=offset)
 
     def utcoffset(self, dt):
         return self.__offset
@@ -624,12 +619,12 @@ class LocalTz(tzinfo):
 
     def utcoffset(self, dt):
         if time.daylight:
-            return timedelta(seconds = -time.altzone) 
-        return timedelta(seconds = -time.timezone)
+            return timedelta(seconds=-time.altzone)
+        return timedelta(seconds=-time.timezone)
 
     def dst(self, dt):
         if time.daylight:
-            return timedelta(seconds = (time.timezone - time.altzone))
+            return timedelta(seconds=(time.timezone - time.altzone))
         return timedelta(seconds=0)
 
     def tzname(self, dt):
@@ -638,27 +633,29 @@ class LocalTz(tzinfo):
 
         return time.tzname[0]
 
+
 def delete_consumer_certs():
     shutil.rmtree(cfg.get('rhsm', 'consumerCertDir'), ignore_errors=True)
     shutil.rmtree(cfg.get('rhsm', 'entitlementCertDir'), ignore_errors=True)
 
 
 def unregister(uep, consumer_uuid, force=True):
-    """ 
-    Shared logic for un-registration. 
-    
-    If an unregistration fails, we always clean up locally, but allow the 
+    """
+    Shared logic for un-registration.
+
+    If an unregistration fails, we always clean up locally, but allow the
     exception to be thrown so the caller can decide how to handle it.
     """
     try:
         uep.unregisterConsumer(consumer_uuid)
         log.info("Successfully un-registered.")
         system_log("Unregistered machine with identity: %s" % consumer_uuid)
-        force=True
+        force = True
     finally:
         if force:
             # Clean up certificates, these are no longer valid:
             delete_consumer_certs()
+
 
 def check_identity_cert_perms():
     """
@@ -679,6 +676,7 @@ def check_identity_cert_perms():
         if mode != ID_CERT_PERMS:
             os.chmod(cert, ID_CERT_PERMS)
             log.warn("Corrected incorrect permissions on %s." % cert)
+
 
 def is_registered_with_classic():
     try:
