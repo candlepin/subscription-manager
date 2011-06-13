@@ -13,12 +13,12 @@
 # in this software or its documentation.
 #
 
-import os
-import unittest
-import stubs
 
-from subscription_manager.branding import get_branding, Branding
-from subscription_manager.managerlib import configure_i18n
+import unittest
+
+from subscription_manager.branding import Branding
+#from subscription_manager.managerlib import configure_i18n
+
 
 class TestBranding(object):
 
