@@ -10,7 +10,7 @@ class TestLock(unittest.TestCase):
         self.tmp_dir = tempfile.mkdtemp()
 
     def test_lock(self):
-        lf = lock.Lock("%s/lock.file" % self.tmp_dir)
+        lock.Lock("%s/lock.file" % self.tmp_dir)
 
     def test_lock_acquire(self):
         lf = lock.Lock("%s/lock.file" % self.tmp_dir)
@@ -20,5 +20,3 @@ class TestLock(unittest.TestCase):
         lf = lock.Lock("%s/lock.file" % self.tmp_dir)
         lf.acquire()
         lf.release()
-
-        

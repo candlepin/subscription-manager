@@ -1,11 +1,9 @@
 import sys
 import unittest
 
-from subscription_manager import facts
+from stubs import MockStderr, MockStdout
 from subscription_manager.gui import factsgui, managergui
 from mock import Mock
-
-from stubs import MockStderr, MockStdout
 
 
 class StubUEP:
@@ -16,15 +14,15 @@ class StubUEP:
         pass
 
 
-
 class FactDialogTests(unittest.TestCase):
 
     def setUp(self):
 
-        expected_facts = { 'fact1': 'one',
-                           'fact2': 'two',
-                           'system': '',
-                           'system.uuid': 'MOCKUUID'}
+        expected_facts = {'fact1': 'one',
+                          'fact2': 'two',
+                          'system': '',
+                          'system.uuid': 'MOCKUUID'}
+
         class StubFacts:
             def get_facts(self):
                 return expected_facts
@@ -37,7 +35,7 @@ class FactDialogTests(unittest.TestCase):
 
         self.expected_facts = expected_facts
         self.stub_facts = StubFacts()
-        
+
         self.uep = StubUEP()
 
         self.consumer = Mock()
@@ -79,8 +77,8 @@ class FactDialogTests(unittest.TestCase):
         self.assertFalse(enabled)
 
     def test_update_button_enabled(self):
-        managergui.consumer = { 'uuid': 'Random UUID',
-                                'consumer_name': 'system' }
+        managergui.consumer = {'uuid': 'Random UUID',
+                               'consumer_name': 'system'}
 
         dialog = factsgui.SystemFactsDialog(self.uep, self.consumer,
                 self.stub_facts)

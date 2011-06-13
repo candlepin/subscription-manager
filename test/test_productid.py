@@ -3,11 +3,10 @@ import datetime
 import sys
 import tempfile
 
+import stubs
 from subscription_manager import productid
 from subscription_manager import certlib
 from yum import YumBase
-
-import stubs
 
 
 class TestProductManager(unittest.TestCase):
@@ -17,7 +16,7 @@ class TestProductManager(unittest.TestCase):
         productid.DatabaseDirectory.PATH = self.db_dir
         self.pm = productid.ProductManager()
         entDir = certlib.EntitlementDirectory()
-        stubCertDir = stubs.StubCertificateDirectory(entDir)
+#        stubCertDir = stubs.StubCertificateDirectory(entDir)
         cert1 = stubs.StubEntitlementCertificate(
             stubs.StubProduct('product1'),
             start_date=datetime.datetime(2010, 1, 1),
@@ -32,7 +31,6 @@ class TestProductManager(unittest.TestCase):
 
     def tearDown(self):
         sys.stdout = sys.__stdout__
-
 
 #    def test_get_active(self):
 #        self.pm.getActive(yb=self.yb)

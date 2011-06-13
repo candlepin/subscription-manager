@@ -13,14 +13,12 @@
 # in this software or its documentation.
 
 import unittest
-import sys
 
 from mock import patch
 from mock import Mock
 
 from subscription_manager import hwprobe
-import subprocess
-from stubs import MockStdout
+
 
 class HardwareProbeTests(unittest.TestCase):
 
@@ -77,18 +75,17 @@ class HardwareProbeTests(unittest.TestCase):
     @patch("__builtin__.open")
     def test_distro_no_release(self, MockOpen):
         reload(hwprobe)
-        hw=hwprobe.Hardware()
+        hw = hwprobe.Hardware()
         MockOpen.side_effect = IOError()
         self.assertRaises(IOError, hw.getReleaseInfo)
 
     @patch("__builtin__.open")
     def test_distro_bogus_content_no_platform_module(self, MockOpen):
         reload(hwprobe)
-        hw=hwprobe.Hardware()
+        hw = hwprobe.Hardware()
         hwprobe.platform = None
         MockOpen.return_value.readline.return_value = "this is not really a release file of any sort"
         self.assertEquals(hw.getReleaseInfo(), {'distribution.version': 'unknown', 'distribution.name': 'unknown', 'distribution.id': 'unknown'})
-
 
     @patch("__builtin__.open")
     def test_distro(self, MockOpen):
@@ -96,7 +93,6 @@ class HardwareProbeTests(unittest.TestCase):
         hw = hwprobe.Hardware()
         MockOpen.return_value.readline.return_value = "Awesome OS release 42 (Go4It)"
         self.assertEquals(hw.getReleaseInfo(), {'distribution.version': '42', 'distribution.name': 'Awesome OS', 'distribution.id': 'Go4It'})
-
 
     @patch("__builtin__.open")
     def test_distro_newline_in_release(self, MockOpen):
@@ -149,14 +145,13 @@ class HardwareProbeTests(unittest.TestCase):
         hw._getSocketIdForCpu = MockSocketId
         self.assertEquals(hw.getCpuInfo(), {'cpu.cpu(s)': 2, 'cpu.core(s)_per_socket': 2, 'cpu.cpu_socket(s)': 1})
 
-
     @patch("os.listdir")
     def test_cpu_info_lots_cpu(self, MockListdir):
         reload(hwprobe)
         hw = hwprobe.Hardware()
 
         MockSocketId = Mock()
-        MockListdir.return_value = ["cpu%s" % i for i in range(0,2000)]
+        MockListdir.return_value = ["cpu%s" % i for i in range(0, 2000)]
         MockSocketId.return_value = "0"
         hw._getSocketIdForCpu = MockSocketId
         self.assertEquals(hw.getCpuInfo(), {'cpu.cpu(s)': 2000, 'cpu.core(s)_per_socket': 2000, 'cpu.cpu_socket(s)': 1})

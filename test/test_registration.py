@@ -12,15 +12,15 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import unittest
+from mock import Mock
+
+import stubs
 import rhsm.connection as connection
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.managercli import RegisterCommand
-from subscription_manager.facts import Facts
 from subscription_manager import managerlib
 
-import os
-import unittest
-from mock import Mock
 
 class CliRegistrationTests(unittest.TestCase):
 
@@ -31,7 +31,7 @@ class CliRegistrationTests(unittest.TestCase):
                          proxy_user=None, proxy_password=None,
                          cert_file=None, key_file=None):
                 pass
-  
+
             def registerConsumer(self, name, type, facts, owner):
                 return 'Dummy Consumer'
 
@@ -56,4 +56,3 @@ class CliRegistrationTests(unittest.TestCase):
 
         # Then
         self.assertEqual('Dummy Consumer', self.persisted_consumer)
-

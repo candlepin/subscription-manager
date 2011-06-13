@@ -14,8 +14,10 @@
 #
 
 import unittest
-from subscription_manager.repolib import *
-from stubs import *
+
+from stubs import StubCertificateDirectory, StubProductCertificate, StubProduct, \
+    StubEntitlementCertificate, StubContent, StubProductDirectory
+from subscription_manager.repolib import Repo, UpdateAction
 
 
 class RepoTests(unittest.TestCase):
@@ -24,13 +26,13 @@ class RepoTests(unittest.TestCase):
     """
 
     def test_valid_label_for_id(self):
-        id = 'valid-label'
-        repo = Repo(id)
-        self.assertEquals(id, repo.id)
+        repo_id = 'valid-label'
+        repo = Repo(repo_id)
+        self.assertEquals(repo_id, repo.id)
 
     def test_invalid_label_with_spaces(self):
-        id = 'label with spaces'
-        repo = Repo(id)
+        repo_id = 'label with spaces'
+        repo = Repo(repo_id)
         self.assertEquals('label-with-spaces', repo.id)
 
     def test_mutable_property(self):
@@ -90,18 +92,17 @@ class UpdateActionTests(unittest.TestCase):
         stub_prod_dir = StubProductDirectory([stub_prod_cert, stub_prod2_cert])
 
         stub_content = [
-                StubContent("c1", required_tags=""), # no required tags
-                StubContent("c2", required_tags="TAG1"), 
-                StubContent("c3", required_tags="TAG1,TAG2,TAG3"), # should get skipped
+                StubContent("c1", required_tags=""),  # no required tags
+                StubContent("c2", required_tags="TAG1"),
+                StubContent("c3", required_tags="TAG1,TAG2,TAG3"),   # should get skipped
                 StubContent("c4", required_tags="TAG1,TAG2,TAG4,TAG5,TAG6"),
         ]
         stub_ent_cert = StubEntitlementCertificate(stub_prod, content=stub_content)
         stub_ent_dir = StubCertificateDirectory([stub_ent_cert])
 
-        self.update_action = UpdateAction(prod_dir=stub_prod_dir, 
+        self.update_action = UpdateAction(prod_dir=stub_prod_dir,
                 ent_dir=stub_ent_dir)
 
     def test_tags_found(self):
         content = self.update_action.get_unique_content()
         self.assertEquals(3, len(content))
-

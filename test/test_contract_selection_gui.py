@@ -1,28 +1,26 @@
 import unittest
 import datetime
 
+import stubs
 from subscription_manager.gui import contract_selection
 from subscription_manager import managerlib
 
+
 def stubSelectedCallback(self, pool):
-    #print pool
     pass
+
 
 def stubCancelCallback(self):
-    #print "canceled"
     pass
 
+
 class ContractSelection(unittest.TestCase):
-    pool = {'productName':'SomeProduct',
-            'consumed':"consumed",
-            'quantity':'quantity',
+    pool = {'productName': 'SomeProduct',
+            'consumed': "consumed",
+            'quantity': 'quantity',
             'startDate': datetime.datetime.now(tz=managerlib.ServerTz(0)).isoformat(),
             'endDate': datetime.datetime.now(tz=managerlib.ServerTz(0)).isoformat(),
-            'contractNumber':'contractNumber'}
-
-    def test_contract_selection(self):
-        cs = contract_selection.ContractSelectionWindow(selected_callback=stubSelectedCallback,
-                                                        cancel_callback=stubCancelCallback)
+            'contractNumber': 'contractNumber'}
 
     def test_contract_selection_show(self):
         cs = contract_selection.ContractSelectionWindow(selected_callback=stubSelectedCallback,

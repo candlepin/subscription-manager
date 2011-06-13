@@ -4,7 +4,6 @@ import unittest
 from subscription_manager.gui import utils
 
 
-
 class TestLinkify(unittest.TestCase):
     no_url = "this does not have a url"
     https_url = "https://www.redhat.com"
@@ -15,29 +14,27 @@ class TestLinkify(unittest.TestCase):
     http_url_dash = "http://example.com/something-foo/blah_something/"
     expected_http_url_dash = """<a href="%s">%s</a>""" % (http_url_dash, http_url_dash)
 
-    
     nested_space = """<small>http://www.redhat.com </small>"""
     nested = """<small>http://www.redhat.com</small>"""
     expected_nested = """<small><a href="%s">%s</a></small>""" % (http_url, http_url)
-    expected_nested_space = """<small><a href="%s">%s</a> </small>"""  %  (http_url, http_url)
+    expected_nested_space = """<small><a href="%s">%s</a> </small>""" % (http_url, http_url)
 
     example_1 = """https://access.redhat.com/kb/docs/DOC-45563"""
     example_2 = """https://www.redhat.com/wapps/sso/rhn/lostPassword.html"""
-    expected_example_1 =  """<a href="%s">%s</a>""" % (example_1, example_1)
-    expected_example_2 =  """<a href="%s">%s</a>""" % (example_2, example_2)
-
+    expected_example_1 = """<a href="%s">%s</a>""" % (example_1, example_1)
+    expected_example_2 = """<a href="%s">%s</a>""" % (example_2, example_2)
 
     def test_no_url(self):
         ret = utils.linkify(self.no_url)
-        self.assertEquals(ret,self.no_url)
+        self.assertEquals(ret, self.no_url)
 
     def test_https_url(self):
         ret = utils.linkify(self.https_url)
-        self.assertEquals(ret,self.expected_https_url)
+        self.assertEquals(ret, self.expected_https_url)
 
     def test_http_url(self):
         ret = utils.linkify(self.http_url)
-        self.assertEquals(ret,self.expected_http_url)
+        self.assertEquals(ret, self.expected_http_url)
 
     def test_http_nested_space(self):
         ret = utils.linkify(self.nested_space)
@@ -49,7 +46,7 @@ class TestLinkify(unittest.TestCase):
 
     def test_dash(self):
         ret = utils.linkify(self.http_url_dash)
-        self.assertEquals(ret,self.expected_http_url_dash)
+        self.assertEquals(ret, self.expected_http_url_dash)
 
     def test_example_1(self):
         ret = utils.linkify(self.example_1)

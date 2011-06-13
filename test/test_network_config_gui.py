@@ -1,17 +1,10 @@
 import unittest
-import StringIO
 
 import stubs
 from subscription_manager.gui import networkConfig
-import rhsm.config
-
-
-
 
 
 class NetworkConfigDialog(unittest.TestCase):
-    def test_network_config(self):
-        nc = networkConfig.NetworkConfigDialog()
 
     def test_network_config_write_values(self):
         nc = networkConfig.NetworkConfigDialog()

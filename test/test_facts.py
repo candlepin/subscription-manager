@@ -5,7 +5,6 @@ import json
 from subscription_manager import facts
 
 
-
 facts_buf = """
 {
     "another": "blargh",
@@ -118,14 +117,15 @@ facts_buf = """
 
 """
 
+
 def stub_get_facts():
-    return {'newstuff':True}
+    return {'newstuff': True}
+
 
 class TestFacts(unittest.TestCase):
     def setUp(self):
         fact_cache_dir = tempfile.mkdtemp()
         fact_cache = fact_cache_dir + "/facts.json"
-        #print fact_cache
         fd = open(fact_cache, "w")
         fd.write(facts_buf)
         fd.close()
@@ -134,11 +134,12 @@ class TestFacts(unittest.TestCase):
         self.f.fact_cache = fact_cache
 
     def test_facts_read(self):
-        facts = self.f.read()
-        self.assertEquals(facts["test.attr"], "blippy2")
+        test_facts = self.f.read()
+        self.assertEquals(test_facts["test.attr"], "blippy2")
 
     def test_facts_last_update(self):
-        la = self.f.get_last_update()
+        #FIXME: verify the date is correct
+        self.f.get_last_update()
 
     def test_facts_delta(self):
         self.f.get_facts = stub_get_facts
@@ -157,7 +158,7 @@ class TestFacts(unittest.TestCase):
         self.f.fact_cache_dir = fact_cache_dir
         self.f.fact_cache = fact_cache
 
-        self.f.write({'empty.facts':1, 'otherthing':True})
+        self.f.write({'empty.facts': 1, 'otherthing': True})
 
         new_facts_buf = open(fact_cache).read()
         new_facts = json.loads(new_facts_buf)

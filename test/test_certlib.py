@@ -15,17 +15,21 @@
 
 import unittest
 import os
-from subscription_manager.certlib import *
+from datetime import timedelta, datetime
+
+from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
+    StubCertificateDirectory
+from subscription_manager.certlib import Path, find_first_invalid_date, CertSorter, \
+    EntitlementDirectory
 from subscription_manager.repolib import RepoFile
 from subscription_manager.productid import ProductDatabase
-from modelhelpers import *
-from stubs import *
+
 from rhsm.certificate import GMT
 
-#import cert_data
 
 def dummy_exists(filename):
     return True
+
 
 class PathTests(unittest.TestCase):
     """
@@ -34,7 +38,7 @@ class PathTests(unittest.TestCase):
     """
 
     def setUp(self):
-        # monkey patch os.path.exists, be careful, this can break things 
+        # monkey patch os.path.exists, be careful, this can break things
         # including python-nose if we don't set it back in tearDown.
         self.actual_exists = os.path.exists
         os.path.exists = dummy_exists
@@ -65,7 +69,6 @@ class PathTests(unittest.TestCase):
 
     def test_repo_file(self):
         # Fake that the redhat.repo exists:
-        old = os.path.exists
 
         Path.ROOT = '/mnt/sysimage'
         rf = RepoFile()
@@ -80,12 +83,12 @@ class PathTests(unittest.TestCase):
     def test_sysimage_pathjoin(self):
         Path.ROOT = '/mnt/sysimage'
         ed = EntitlementDirectory()
-        self.assertEquals('/mnt/sysimage/etc/pki/entitlement/1-key.pem', 
+        self.assertEquals('/mnt/sysimage/etc/pki/entitlement/1-key.pem',
                 Path.join(ed.productpath(), '1-key.pem'))
 
     def test_normal_pathjoin(self):
         ed = EntitlementDirectory()
-        self.assertEquals('/etc/pki/entitlement/1-key.pem', 
+        self.assertEquals('/etc/pki/entitlement/1-key.pem',
                 Path.join(ed.productpath(), "1-key.pem"))
 
 # class ActionTests(unittest.TestCase):
@@ -154,7 +157,6 @@ class FindLastValidTests(unittest.TestCase):
 
         # Because we have an unentitled product, we should get back the current
         # date as the last date of valid entitlements:
-        today = datetime.now(GMT())
         last_valid_date = find_first_invalid_date(ent_dir=ent_dir, product_dir=product_dir)
         self.assertEqual(2050, last_valid_date.year)
 
@@ -183,7 +185,7 @@ class CertSorterTests(unittest.TestCase):
             StubEntitlementCertificate(StubProduct('product4'),
                 start_date=datetime.now() - timedelta(days=365),
                 end_date=datetime.now() + timedelta(days=365),
-                order_end_date=datetime.now() - timedelta(days=2)) # in warning period
+                order_end_date=datetime.now() - timedelta(days=2))  # in warning period
         ])
 
     def test_unentitled_product_certs(self):
@@ -191,17 +193,17 @@ class CertSorterTests(unittest.TestCase):
         self.assertEqual(1, len(self.sorter.unentitled_products.keys()))
         self.assertTrue('product1' in self.sorter.unentitled_products)
 
-    def test_entitled_products(self):
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir)
-        self.assertEqual(2, len(self.sorter.valid_products.keys()))
-        self.assertTrue('product2' in self.sorter.valid_products)
-        self.assertTrue('product4' in self.sorter.valid_products)
+    # def test_entitled_products(self):
+    #     self.sorter = CertSorter(self.prod_dir, self.ent_dir)
+    #     self.assertEqual(2, len(self.sorter.valid_products.keys()))
+    #     self.assertTrue('product2' in self.sorter.valid_products)
+    #     self.assertTrue('product4' in self.sorter.valid_products)
 
-        self.assertEqual(2, len(self.sorter.valid_entitlement_certs))
-        self.assertTrue(cert_list_has_product(
-            self.sorter.valid_entitlement_certs, 'product2'))
-        self.assertTrue(cert_list_has_product(
-            self.sorter.valid_entitlement_certs, 'product4'))
+    #     self.assertEqual(2, len(self.sorter.valid_entitlement_certs))
+    #     self.assertTrue(cert_list_has_product(
+    #         self.sorter.valid_entitlement_certs, 'product2'))
+    #     self.assertTrue(cert_list_has_product(
+    #         self.sorter.valid_entitlement_certs, 'product4'))
 
     def test_expired(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir)
@@ -224,7 +226,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertEqual(3, len(self.sorter.expired_entitlement_certs))
         self.assertTrue('product2' in self.sorter.expired_products)
         self.assertTrue('product3' in self.sorter.expired_products)
-        self.assertFalse('product4' in self.sorter.expired_products) # it's not installed
+        self.assertFalse('product4' in self.sorter.expired_products)  # it's not installed
         self.assertTrue('product1' in self.sorter.unentitled_products)
         self.assertEqual(0, len(self.sorter.valid_entitlement_certs))
 
@@ -280,5 +282,3 @@ def cert_list_has_product(cert_list, product_id):
             if product.getHash() == product_id:
                 return True
     return False
-
-

@@ -3,7 +3,6 @@ import unittest
 from subscription_manager import logutil
 
 
-
 # we don't actually use these by default, they
 # just exist for debuging, but I might as well test them
 class TestTrace(unittest.TestCase):
@@ -19,7 +18,7 @@ class TestTrace(unittest.TestCase):
 
 class TestLogutil(unittest.TestCase):
     def test_get_handler(self):
-        handler = logutil._get_handler()
+        logutil._get_handler()
 
     def test_init_logger(self):
         logutil.init_logger()
