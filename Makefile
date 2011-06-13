@@ -1,4 +1,4 @@
-PREFIX ?= 
+PREFIX ?=
 SYSCONF ?= etc
 PYTHON ?= python
 
@@ -114,7 +114,7 @@ install-files: dbus-service-install compile-po desktop-files
 	install -m 755 etc-conf/rhsmd.cron \
 		${PREFIX}/etc/cron.daily/rhsmd
 	install -m 644 etc-conf/subscription-manager.desktop \
-		${PREFIX}/${INSTALL_DIR}/applications	
+		${PREFIX}/${INSTALL_DIR}/applications
 
 	ln -sf /usr/bin/consolehelper ${PREFIX}/usr/bin/subscription-manager-gui
 	ln -sf /usr/bin/consolehelper ${PREFIX}/usr/bin/subscription-manager
@@ -146,7 +146,7 @@ archive: clean
 	@rm -f /tmp/${PKGNAME}/${PKGNAME}-daily.spec
 	@mv /tmp/${PKGNAME} /tmp/${PKGNAME}-$(VERSION)
 	@dir=$$PWD; cd /tmp; tar cvzf $$dir/${PKGNAME}-$(VERSION).tar.gz --exclude \.svn ${PKGNAME}-$(VERSION)
-	@rm -rf /tmp/${PKGNAME}-$(VERSION)	
+	@rm -rf /tmp/${PKGNAME}-$(VERSION)
 	@echo "The archive is in ${PKGNAME}-$(VERSION).tar.gz"
 
 rpm: archive
@@ -208,8 +208,8 @@ whitespacelint: tablint trailinglint
 
 pep8:
 	@TMPFILE=`mktemp` || exit 1; \
-	pep8 --repeat src | tee $$TMPFILE; \
+	pep8 --ignore E501 --exclude ".#*" --repeat src | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 
-stylish: pyflakes whitespacelint pep8 
+stylish: pyflakes whitespacelint pep8
