@@ -441,7 +441,7 @@ class UEPConnection:
             method = "%s&quantity=%s" % (method, quantity)
         return self.conn.request_post(method)
 
-    def bindByProduct(self, consumerId, products):
+    def bindByProduct(self, consumerId, products, quantity=None):
         """
         Subscribe consumer directly to one or more products by their ID.
         This will cause the UEP to look for one or more pools which provide
@@ -450,6 +450,8 @@ class UEPConnection:
         args = "&".join(["product=" + product.replace(" ", "%20") \
                 for product in products])
         method = "/consumers/%s/entitlements?%s" % (str(consumerId), args)
+        if quantity:
+            method = "%s&quantity=%s" % (method, quantity)
         return self.conn.request_post(method)
 
     def unbindBySerial(self, consumerId, serial):
