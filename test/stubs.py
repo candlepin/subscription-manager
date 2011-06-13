@@ -92,8 +92,9 @@ class MockStdout:
     def __init__(self):
         self.buffer = ""
 
-    def write(self, buffer):
-        self.buffer = self.buffer + buffer
+    def write(self, buf):
+        self.buffer = self.buffer + buf
+
 MockStderr = MockStdout
 
 
