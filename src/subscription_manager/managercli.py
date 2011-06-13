@@ -576,6 +576,8 @@ class SubscribeCommand(CliCommand):
         self.substoken = None
         self.parser.add_option("--pool", dest="pool", action='append',
                                help=_("subscription pool id"))
+        self.parser.add_option("--quantity", dest="quantity",
+                               help=_("number of subscriptions to consume"))
         self.parser.add_option("--auto", action='store_true',
                                help=_("automatically subscribe this system to\
                                      compatible subscriptions."))
@@ -607,7 +609,7 @@ class SubscribeCommand(CliCommand):
                         # odd html strings will cause issues, reject them here.
                         if (pool.find("#") >= 0):
                             systemExit(-1, _("Please enter a valid numeric pool id."))
-                        self.cp.bindByEntitlementPool(consumer, pool)
+                        self.cp.bindByEntitlementPool(consumer, pool, self.options.quantity)
                         log.info("Info: Successfully subscribed the machine the Entitlement Pool %s" % pool)
                     except connection.RestlibException, re:
                         log.exception(re)
