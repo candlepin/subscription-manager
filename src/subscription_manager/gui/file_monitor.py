@@ -47,13 +47,11 @@ else:
 
     import os
 
-
     class Monitor(gobject.GObject):
 
         __gsignals__ = {
             'changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, tuple())
         }
-
 
         def __init__(self, path):
             self.__gobject_init__()

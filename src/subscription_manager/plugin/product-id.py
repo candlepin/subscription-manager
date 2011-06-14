@@ -42,11 +42,11 @@ def posttrans_hook(conduit):
     """
     Update product ID certificates.
     """
-    # register rpm name for yum history recording"
-    
+    # register rpm name for yum history recording
     # yum on 5.7 doesn't have this method, so check for it
     if hasattr(conduit, 'registerPackageName'):
         conduit.registerPackageName("subscription-manager")
+
     logutil.init_logger_for_yum()
     chroot()
     try:

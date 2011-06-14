@@ -13,18 +13,16 @@
 # in this software or its documentation.
 #
 
-import time
 from datetime import datetime, timedelta
 import unittest
 
-import M2Crypto
 
 # TODO: move to python-rhsm test suite?
 
-from stubs import *
+from stubs import StubProduct, StubEntitlementCertificate
+
 
 def yesterday():
-    fmt = "%Y-%m-%dT%H:%M:%SZ"
     now = datetime.now()
     then = now - timedelta(days=1)
     return then
@@ -56,10 +54,6 @@ class ProductTests(unittest.TestCase):
 class EntitlementCertificateTests(unittest.TestCase):
 
     def test_valid_order_date_gives_valid_cert(self):
-        def getStubOrder():
-            return StubOrder("2010-07-27T16:06:52Z",
-                    "2011-07-26T20:00:00Z")
-
         cert = StubEntitlementCertificate(StubProduct('product'),
                 start_date=datetime(2010, 7, 27),
                 end_date=datetime(2050, 7, 26))
@@ -67,10 +61,6 @@ class EntitlementCertificateTests(unittest.TestCase):
         self.assertTrue(cert.valid())
 
     def test_expired_order_date_gives_invalid_cert(self):
-        def getStubOrder():
-            return StubOrder("2010-07-27T16:06:52Z",
-                    yesterday())
-
         cert = StubEntitlementCertificate(StubProduct('product'),
                 start_date=datetime(2010, 7, 27),
                 end_date=yesterday())
@@ -78,10 +68,6 @@ class EntitlementCertificateTests(unittest.TestCase):
         self.assertFalse(cert.valid())
 
     def test_invalid_order_date_gives_valid_cert_with_grace(self):
-        def getStubOrder():
-            return StubOrder("2010-07-27T16:06:52Z",
-                    yesterday())
-
         # order ends yesterday, but cert expires tomorrow
         cert = StubEntitlementCertificate(StubProduct('product'),
                 start_date=datetime(2010, 7, 27),
@@ -91,10 +77,6 @@ class EntitlementCertificateTests(unittest.TestCase):
         self.assertTrue(cert.validWithGracePeriod())
 
     def test_invalid_x509_date_gives_invalid_cert_with_grace(self):
-        def getStubOrder():
-            return StubOrder("2010-07-27T16:06:52Z",
-                    yesterday())
-
         # order ends yesterday, cert expires 5 minutes ago
         cert = StubEntitlementCertificate(StubProduct('product'),
                 start_date=datetime(2010, 7, 27),

@@ -16,10 +16,12 @@
 
 import os
 import gettext
-
 import gtk
+import gtk.glade
 
 import rhsm.config
+
+from subscription_manager.gui.utils import errorWindow
 
 _ = gettext.gettext
 
@@ -29,11 +31,11 @@ GLADE_XML = os.path.join(DIR, "data/networkConfig.glade")
 
 class NetworkConfigDialog:
     """This is the dialog that allows setting http proxy settings.
-    
-    It uses the instant apply paradigm or whatever you wanna call it that the 
-    gnome HIG recommends. Whenever a toggle button is flipped or a text entry 
+
+    It uses the instant apply paradigm or whatever you wanna call it that the
+    gnome HIG recommends. Whenever a toggle button is flipped or a text entry
     changed, the new setting will be saved.
-    
+
     """
 
     def __init__(self):
@@ -47,15 +49,9 @@ class NetworkConfigDialog:
         self.proxyPasswordEntry = self.xml.get_widget("proxyPasswordEntry")
 
         self.cfg = rhsm.config.initConfig()
-#        try:
-#            self.cfg = config.initUp2dateConfig()
-#        except:
-#            gnome.ui.GnomeErrorDialog(_("There was an error loading your "
-#                                        "configuration.  Make sure that\nyou "
-#                                        "have read access to /etc/sysconfig/rhn."),
-#                                      self.dlg)
-        # Need to load values before connecting signals because when the dialog 
-        # starts up it seems to trigger the signals which overwrites the config 
+
+        # Need to load values before connecting signals because when the dialog
+        # starts up it seems to trigger the signals which overwrites the config
         # with the blank values.
         self.setInitialValues()
         self.enableProxyButton.connect("toggled", self.enableAction)
@@ -67,9 +63,8 @@ class NetworkConfigDialog:
         self.proxyPasswordEntry.connect("focus-out-event", self.writeValues)
         self.xml.get_widget("closeButton").connect("clicked", self.close)
         self.dlg.connect("delete-event", self.deleted)
-    
+
     def setInitialValues(self):
-       
         proxy_url = self.cfg.get("server", "proxy_hostname") or ""
         # append port unless not specified, then append the default of 3128
         if proxy_url:
@@ -90,19 +85,19 @@ class NetworkConfigDialog:
         # the extra or "" are to make sure we don't str None
         self.xml.get_widget("proxyUserEntry").set_text(str(self.cfg.get("server", "proxy_user") or ""))
         self.xml.get_widget("proxyPasswordEntry").set_text(str(self.cfg.get("server", "proxy_password") or ""))
-    
+
     def writeValues(self, widget=None, dummy=None):
 
         proxy = self.xml.get_widget("proxyEntry").get_text() or ""
 
         # don't save these values if they are disabled in the gui
-        if proxy and self.xml.get_widget("enableProxyButton").get_active(): 
+        if proxy and self.xml.get_widget("enableProxyButton").get_active():
             # FIXME: this should probably be smarter
             try:
                 proxy_hostname, proxy_port = proxy.split(':')
                 self.cfg.set("server", "proxy_hostname", proxy_hostname)
                 self.cfg.set("server", "proxy_port", proxy_port)
-            except ValueError, e:
+            except ValueError:
                 # no port? just write out the hostname and assume default
                 self.cfg.set("server", "proxy_hostname", proxy)
                 self.cfg.set("server", "proxy_port", rhsm.config.DEFAULT_PROXY_PORT)
@@ -111,8 +106,6 @@ class NetworkConfigDialog:
             self.cfg.set("server", "proxy_hostname", "")
             self.cfg.set("server", "proxy_port", "")
 
-
-        
         if self.xml.get_widget("enableProxyAuthButton").get_active():
             if self.xml.get_widget("proxyUserEntry").get_text() is not None:
                 self.cfg.set("server", "proxy_user",
@@ -128,11 +121,10 @@ class NetworkConfigDialog:
         try:
             self.cfg.save()
         except:
-            gnome.ui.GnomeErrorDialog(_(
+            errorWindow(_(
                     "There was an error saving your configuration. "\
-                    "Make sure that\nyou own %s.") % self.cfg.fileName,
-                                      self.dlg)
-    
+                    "Make sure that\nyou own %s.") % self.cfg.fileName)
+
     def show(self):
         self.setInitialValues()
         self.dlg.present()
@@ -140,12 +132,12 @@ class NetworkConfigDialog:
     def close(self, button):
         self.writeValues()
         self.dlg.hide()
- 
+
     def deleted(self, event, data):
         self.writeValues()
         self.dlg.hide()
         return True
-    
+
     def enableAction(self, button):
         if button.get_name() == "enableProxyButton":
             self.xml.get_widget("proxyEntry").set_sensitive(button.get_active())

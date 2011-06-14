@@ -19,8 +19,6 @@ import time
 import gobject
 import gtk
 import pango
-import atk
-import locale
 
 import gettext
 _ = gettext.gettext
@@ -35,6 +33,7 @@ from subscription_manager.certlib import ProductDirectory
 
 GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
 UPDATE_FILE = '/var/run/rhsm/update'
+
 
 class GladeWidget(object):
 
@@ -59,6 +58,7 @@ class GladeWidget(object):
 
         for name in names:
             setattr(self, name, self.glade.get_widget(name))
+
 
 class SubscriptionManagerTab(GladeWidget):
 
@@ -222,6 +222,7 @@ class ProductsTable(object):
         else:
             return self.no_icon
 
+
 class SubDetailsWidget(GladeWidget):
 
     def __init__(self, show_contract=True):
@@ -316,7 +317,7 @@ class CellRendererDate(gtk.CellRendererText):
     """
 
     __gproperties__ = {
-            'date' : (gobject.TYPE_PYOBJECT, 'date', 'date displayed',
+            'date': (gobject.TYPE_PYOBJECT, 'date', 'date displayed',
                 gobject.PARAM_READWRITE)
     }
 
@@ -360,14 +361,13 @@ class DatePicker(gtk.HBox):
         self._date_entry = gtk.Entry()
         self._date_entry.set_width_chars(12)
         # we could use managerlib.formatDate here, but since we are parsing
-        # this, leave it alone 
+        # this, leave it alone
         self._date_entry.set_text(self._date.strftime("%x"))
         atk_entry = self._date_entry.get_accessible()
         atk_entry.set_name('date-entry')
 
         self._cal_button = gtk.Button()
         self._cal_button.set_image(image)
-
 
         self.pack_start(self._date_entry)
         self.pack_start(self._cal_button)
@@ -392,21 +392,21 @@ class DatePicker(gtk.HBox):
 
     def _date_entry_validate(self, widget, dummy):
         """
-        validate the date, pop up a box and then re-focus on date if not valid 
+        validate the date, pop up a box and then re-focus on date if not valid
         """
         today = datetime.date.today()
-        try: 
+        try:
             # doing it this ugly way for pre python 2.5
             date = datetime.datetime(
                     *(time.strptime(self._date_entry.get_text(), '%x')[0:6]))
             self._date = datetime.datetime(date.year, date.month, date.day,
                     tzinfo=managerlib.LocalTz())
             self.emit('date-picked-text')
-        except ValueError, e:
-            self._date_entry.handler_block(self._validator_sig_handler) #this sig handler gets unmuted in date_entry_box_grab_focus.
+        except ValueError:
+            self._date_entry.handler_block(self._validator_sig_handler)  # this sig handler gets unmuted in date_entry_box_grab_focus.
             error_dialog = messageWindow.ErrorDialog(messageWindow.wrap_text(
                                 "%s %s" % (_("Invalid date format. Please re-enter a valid date. Example: "), today.strftime('%x'))))
-            error_dialog.connect('response', self._date_entry_box_grab_focus) 
+            error_dialog.connect('response', self._date_entry_box_grab_focus)
 
     def _date_entry_box_grab_focus(self, dummy2=None, dummy3=None):
         self._date_entry.grab_focus()
@@ -427,7 +427,7 @@ class DatePicker(gtk.HBox):
         self._calendar_window.set_modal(True)
         self._calendar_window.set_title("")
         self._calendar_window.set_transient_for(
-                self.get_window().get_user_data())
+                self.get_parent_window().get_user_data())
 
         self._calendar.select_month(self._date.month - 1, self._date.year)
         self._calendar.select_day(self._date.day)
@@ -469,4 +469,3 @@ class DatePicker(gtk.HBox):
                 tzinfo=managerlib.LocalTz())
         self.emit('date-picked-cal')
         self._destroy()
-

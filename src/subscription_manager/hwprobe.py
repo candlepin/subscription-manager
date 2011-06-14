@@ -27,12 +27,9 @@ _ = gettext.gettext
 import ethtool
 import socket
 import commands
-import glob
-import re
 import platform
 
 from subprocess import Popen, PIPE
-
 
 
 # Exception classes used by this module.
@@ -47,6 +44,7 @@ class CalledProcessError(Exception):
         self.returncode = returncode
         self.cmd = cmd
         self.output = output
+
     def __str__(self):
         return "Command '%s' returned non-zero exit status %d" % (self.cmd, self.returncode)
 
@@ -62,7 +60,6 @@ class DmiInfo(object):
     def getDmiInfo(self):
         import dmidecode
         dmiinfo = {}
-
         dmi_data = {
             "dmi.bios.": self._read_dmi(dmidecode.bios),
             "dmi.processor.": self._read_dmi(dmidecode.processor),
@@ -120,7 +117,6 @@ class Hardware:
         self.allhw.update(self.releaseinfo)
         return self.releaseinfo
 
-    
     def _open_release(self, filename):
         return open(filename, 'r')
 
@@ -182,7 +178,7 @@ class Hardware:
         # to populate it for cpu0.
         try:
             f = open(physical_package_id)
-        except IOError,e:
+        except IOError:
             log.warn("no physical_package_id found for cpu: %s" % cpu)
             return None
         socket_id = f.readline()
@@ -192,7 +188,6 @@ class Hardware:
         # TODO:(prad) Revisit this and see if theres a better way to parse /proc/cpuinfo
         # perhaps across all arches
         self.cpuinfo = {}
-        sys_cpu = "/sys/devices/system/cpu/"
 
         # we also have cpufreq, etc in this dir, so match just the numbs
         cpu_re = r'cpu([0-9]+$)'
@@ -201,15 +196,11 @@ class Hardware:
         sys_cpu_path = "/sys/devices/system/cpu/"
         for cpu in os.listdir(sys_cpu_path):
             if re.match(cpu_re, cpu):
-                cpu_files.append("%s/%s" % (sys_cpu_path,cpu))
+                cpu_files.append("%s/%s" % (sys_cpu_path, cpu))
 
         cpu_count = 0
-        socket_count = 0
-        thread_count = 0
-        numa_count = 0
-
         socket_dict = {}
-        numa_node_dict = {}
+
         for cpu in cpu_files:
             cpu_count = cpu_count + 1
             socket_id = self._getSocketIdForCpu(cpu)
@@ -229,7 +220,7 @@ class Hardware:
         if num_sockets == 0:
             num_sockets = 1
         self.cpuinfo['cpu.cpu_socket(s)'] = num_sockets
-        self.cpuinfo['cpu.core(s)_per_socket'] = cpu_count/num_sockets
+        self.cpuinfo['cpu.core(s)_per_socket'] = cpu_count / num_sockets
         self.cpuinfo["cpu.cpu(s)"] = cpu_count
         self.allhw.update(self.cpuinfo)
         return self.cpuinfo
@@ -330,15 +321,15 @@ class Hardware:
         self.allhw.update(platform_specific_info)
 
     def getAll(self):
-        hardware_methods  = [self.getUnameInfo,
-                             self.getReleaseInfo,
-                             self.getMemInfo,
-                             self.getCpuInfo,
-                             self.getLsCpuInfo,
-                             self.getNetworkInfo,
-                             self.getNetworkInterfaces,
-                             self.getVirtInfo,
-                             self.getPlatformSpecificInfo]
+        hardware_methods = [self.getUnameInfo,
+                            self.getReleaseInfo,
+                            self.getMemInfo,
+                            self.getCpuInfo,
+                            self.getLsCpuInfo,
+                            self.getNetworkInfo,
+                            self.getNetworkInterfaces,
+                            self.getVirtInfo,
+                            self.getPlatformSpecificInfo]
         # try each hardware method, and try/except around, since
         # these tend to be fragile
         for hardware_method in hardware_methods:
@@ -351,11 +342,10 @@ class Hardware:
         dmiwarnings = dmidecode.get_warnings()
         if dmiwarnings:
             log.warn(_("Error reading system DMI information: %s"), dmiwarnings)
-            dmidecode.clear_warnings() 
+            dmidecode.clear_warnings()
         return self.allhw
 
 
 if __name__ == '__main__':
     for hkey, hvalue in Hardware().getAll().items():
         print "'%s' : '%s'" % (hkey, hvalue)
-

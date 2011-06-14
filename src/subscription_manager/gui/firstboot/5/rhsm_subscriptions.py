@@ -5,13 +5,10 @@ from gtk import glade
 
 from firstboot_module_window import FirstbootModuleWindow
 
-from rhpl.translate import _, N_
+from rhpl.translate import _
 import rhpl.translate as translate
 translate.textdomain("firstboot")
 gtk.glade.bindtextdomain("firstboot", "/usr/share/locale")
-
-import rhsm
-
 
 sys.path.append("/usr/share/rhsm/")
 try:
@@ -19,7 +16,6 @@ try:
 except Exception, e:
     print e
     raise
-
 
 
 class moduleClass(FirstbootModuleWindow, managergui.MainWindow):
@@ -58,7 +54,6 @@ class moduleClass(FirstbootModuleWindow, managergui.MainWindow):
         return True
 
     def launch(self, doDebug=None):
-#    def createScreen(self):
         self.vbox = gtk.VBox(spacing=10)
         self.main_window.get_child().reparent(self.vbox)
         self.main_window.destroy()

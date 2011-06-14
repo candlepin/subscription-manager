@@ -13,8 +13,6 @@
 # in this software or its documentation.
 #
 
-import os
-import locale
 import logging
 import gtk
 
@@ -26,6 +24,7 @@ _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
+
 class SystemFactsDialog(widgets.GladeWidget):
     """GTK dialog for displaying the current system facts, as well as
     providing functionality to update the UEP server with the current
@@ -34,16 +33,16 @@ class SystemFactsDialog(widgets.GladeWidget):
 
     def __init__(self, backend, consumer, facts):
         widget_names = ['system_facts_dialog', 'facts_view', 'update_button',
-                        'last_update_label']
+                        'last_update_label', 'owner_label']
         super(SystemFactsDialog, self).__init__('factsdialog.glade', widget_names)
 
         self.consumer = consumer
         self.facts = facts
         self.backend = backend
         self.glade.signal_autoconnect({
-                "on_system_facts_dialog_delete_event" : self._hide_callback,
-                "on_close_button_clicked" : self._hide_callback,
-                "on_facts_update_button_clicked" : self._update_facts_callback
+                "on_system_facts_dialog_delete_event": self._hide_callback,
+                "on_close_button_clicked": self._hide_callback,
+                "on_facts_update_button_clicked": self._update_facts_callback
                 })
 
         # Set up the model
@@ -86,9 +85,9 @@ class SystemFactsDialog(widgets.GladeWidget):
         system_facts_dict = self.facts.find_facts()
 
         if self.consumer.uuid:
-            system_facts_dict.update({'system.uuid':self.consumer.uuid})
+            system_facts_dict.update({'system.uuid': self.consumer.uuid})
         if self.consumer.name:
-            system_facts_dict.update({"system.name":self.consumer.name})
+            system_facts_dict.update({"system.name": self.consumer.name})
 
         system_facts = system_facts_dict.items()
 
@@ -100,6 +99,12 @@ class SystemFactsDialog(widgets.GladeWidget):
                 group = new_group
                 parent = self.facts_store.append(None, [group, ""])
             self.facts_store.append(parent, [fact, value])
+        try:
+            owner = self.backend.uep.getOwner(self.consumer.uuid)['displayName']
+        except Exception, e:
+            log.error("Could not get owner name \nError: %s" % e)
+            owner = 'unknown'
+        self.owner_label.set_text(owner)
 
     def update_facts(self):
         """Sends the current system facts to the UEP server."""
@@ -138,7 +143,5 @@ class SystemFactsDialog(widgets.GladeWidget):
         column = gtk.TreeViewColumn(name, gtk.CellRendererText(), text=order)
         self.facts_view.append_column(column)
 
-
     def set_parent_window(self, window):
         self.system_facts_dialog.set_transient_for(window)
-

@@ -14,9 +14,7 @@
 #
 
 import datetime
-import os
 import logging
-import gtk
 import gobject
 
 import gettext
@@ -26,11 +24,11 @@ log = logging.getLogger('rhsm-app.' + __name__)
 from subscription_manager import managerlib
 
 from subscription_manager.gui import widgets
-from subscription_manager.gui import storage
 from subscription_manager import async
 from subscription_manager.gui import progress
 from subscription_manager.gui.utils import handle_gui_exception, apply_highlight
 from subscription_manager.gui.contract_selection import ContractSelectionWindow
+
 
 class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
@@ -118,13 +116,12 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             contains_text = None
 
         return contains_text
-    
+
     def clear_pools(self):
         """
-        Clear pools list. 
+        Clear pools list.
         """
         self.store.clear()
-        
 
     def display_pools(self):
         """
@@ -158,8 +155,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                             self.get_filter_text()),
                 'available': available,
                 'product_id': entry.product_id,
-                'pool_id': entry.pools[0]['id'], # not displayed, just for lookup later
-                'merged_pools': entry, # likewise not displayed, for subscription
+                'pool_id': entry.pools[0]['id'],  # not displayed, just for lookup later
+                'merged_pools': entry,  # likewise not displayed, for subscription
                 'align': 0.5
         })
 

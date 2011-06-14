@@ -19,7 +19,6 @@ from socket import error as socket_error
 from M2Crypto import SSL
 import gobject
 import datetime
-import time
 import dbus
 import gtk
 
@@ -32,11 +31,10 @@ from subscription_manager import managerlib
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
-MIN_GTK_MAJOR=2
 # we need gtk 2.18+ to do the right markup in likify
-MIN_GTK_MINOR=18
-MIN_GTK_MICRO=0
-
+MIN_GTK_MAJOR = 2
+MIN_GTK_MINOR = 18
+MIN_GTK_MICRO = 0
 
 
 def handle_gui_exception(e, msg, formatMsg=True, logMsg=None):
@@ -94,26 +92,27 @@ def handle_gui_exception(e, msg, formatMsg=True, logMsg=None):
         except:
             errorWindow(msg)
 
+
 def errorWindow(message):
     messageWindow.ErrorDialog(messageWindow.wrap_text(message))
+
 
 def linkify(msg):
     """
     Parse a string for any urls and wrap them in a hrefs, for use in a
     gtklabel.
     """
-                              # http (non whitespace or . or 
-                              #  ? or () or - or / or ;
+    # http (non whitespace or . or
+    #  ? or () or - or / or ;
     url_regex = re.compile("""https?://[\w\.\?\(\)\-\/]*""")
-  
+
     if gtk.check_version(MIN_GTK_MAJOR, MIN_GTK_MINOR, MIN_GTK_MICRO):
-    	return msg
+        return msg
 
     def add_markup(mo):
         url = mo.group(0)
         return '<a href="%s">%s</a>' % (url, url)
 
-    
     return url_regex.sub(add_markup, msg)
 
 
@@ -126,7 +125,7 @@ def apply_highlight(text, highlight):
 
     regex = re.compile("(" + highlight + ")", re.I)
     parts = regex.split(text)
-    
+
     escaped = []
     # re.split makes every second result be our split term
     on_search_term = False
@@ -179,6 +178,7 @@ def make_today_now(today):
                 second=now.second, tzinfo=managerlib.LocalTz())
     return today
 
+
 def get_dbus_iface():
     """
     Set up the dbus proxy for calling remote methods
@@ -189,5 +189,3 @@ def get_dbus_iface():
     validity_iface = dbus.Interface(validity_obj,
                         dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
     return validity_iface
-
-

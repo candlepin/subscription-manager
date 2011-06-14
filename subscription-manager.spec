@@ -77,8 +77,10 @@ make -f Makefile
 rm -rf $RPM_BUILD_ROOT
 make -f Makefile install VERSION=%{version}-%{release} PREFIX=$RPM_BUILD_ROOT MANPATH=%{_mandir}
 
+%if 0%{?fedora} < 15
 desktop-file-validate \
         %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
+%endif
 desktop-file-validate \
         %{buildroot}/usr/share/applications/subscription-manager.desktop
 %find_lang rhsm
@@ -166,8 +168,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/applications/subscription-manager.desktop
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(755,root,root) %{_bindir}/subscription-manager-gui
+
+%if 0%{?fedora} < 15
 %{_bindir}/rhsm-icon
 %{_sysconfdir}/xdg/autostart/rhsm-icon.desktop
+%endif
+
 %{_sysconfdir}/pam.d/subscription-manager-gui
 %{_sysconfdir}/security/console.apps/subscription-manager-gui
 

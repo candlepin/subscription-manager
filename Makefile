@@ -1,4 +1,4 @@
-PREFIX ?= 
+PREFIX ?=
 SYSCONF ?= etc
 PYTHON ?= python
 
@@ -9,10 +9,8 @@ CODE_DIR = ${PREFIX}/${INSTALL_DIR}/${INSTALL_MODULE}/${PKGNAME}
 VERSION = $(shell echo `grep ^Version: $(PKGNAME).spec | awk '{ print $$2 }'`)
 RHELVERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
 
+
 #this is the compat area for firstboot versions. If it's 6-compat, set to 6.
-ifeq (${RHELVERSION}, 14)
-	RHELVERSION = 6
-endif
 SRC_DIR = src/subscription_manager
 
 CFLAGS = -Wall -g
@@ -31,7 +29,10 @@ rhsmcertd: src/rhsmcertd.c bin
 ICON_FLAGS=`pkg-config --cflags --libs gtk+-2.0 libnotify`
 
 rhsm-icon: src/rhsm_icon.c bin
-	${CC} ${CFLAGS} ${ICON_FLAGS} -o bin/rhsm-icon src/rhsm_icon.c
+	# RHSM Status icon needs to be skipped in Fedora 15 and beyond:
+	if [ ${RHELVERSION} -lt 15 ]; then \
+		${CC} ${CFLAGS} ${ICON_FLAGS} -o bin/rhsm-icon src/rhsm_icon.c;\
+	fi;\
 
 dbus-service-install:
 	install -d ${PREFIX}/etc/dbus-1/system.d
@@ -93,16 +94,27 @@ install-files: dbus-service-install compile-po desktop-files
 	install src/subscription-manager-gui ${PREFIX}/usr/sbin
 	install bin/* ${PREFIX}/usr/bin
 	install src/rhsmcertd.init.d ${PREFIX}/etc/rc.d/init.d/rhsmcertd
-	install -m644 ${SRC_DIR}/gui/firstboot/${RHELVERSION}/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot
-	if [ ${RHELVERSION} = 5 ]; then ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_login.py ${PREFIX}/usr/share/firstboot/modules/; fi
-	if [ ${RHELVERSION} = 5 ]; then ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_subscriptions.py ${PREFIX}/usr/share/firstboot/modules/; fi
+
+	# RHEL 5 Customizations:
+	if [ ${RHELVERSION} = 5 ]; then \
+		install -m644 ${SRC_DIR}/gui/firstboot/${RHELVERSION}/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot;\
+		ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_login.py ${PREFIX}/usr/share/firstboot/modules/;\
+		ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_subscriptions.py ${PREFIX}/usr/share/firstboot/modules/;\
+	else \
+		install -m644 ${SRC_DIR}/gui/firstboot/6/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot;\
+	fi;\
+
 	install -m 644 man/* ${PREFIX}/${INSTALL_DIR}/man/man8/
-	install -m 644 etc-conf/rhsm-icon.desktop \
-		${PREFIX}/etc/xdg/autostart
+
+	# RHSM Status icon needs to be skipped in Fedora 15 and beyond:
+	if [ ${RHELVERSION} -lt 15 ]; then \
+		install -m 644 etc-conf/rhsm-icon.desktop \
+			${PREFIX}/etc/xdg/autostart;\
+	fi;\
 	install -m 755 etc-conf/rhsmd.cron \
 		${PREFIX}/etc/cron.daily/rhsmd
 	install -m 644 etc-conf/subscription-manager.desktop \
-		${PREFIX}/${INSTALL_DIR}/applications	
+		${PREFIX}/${INSTALL_DIR}/applications
 
 	ln -sf /usr/bin/consolehelper ${PREFIX}/usr/bin/subscription-manager-gui
 	ln -sf /usr/bin/consolehelper ${PREFIX}/usr/bin/subscription-manager
@@ -124,7 +136,7 @@ check:
 
 
 clean:
-	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
+	m -f *.pyc *.pyo *~ *.bak *.tar.gz
 
 archive: clean
 	@rm -rf ${PKGNAME}-%{VERSION}.tar.gz
@@ -134,7 +146,7 @@ archive: clean
 	@rm -f /tmp/${PKGNAME}/${PKGNAME}-daily.spec
 	@mv /tmp/${PKGNAME} /tmp/${PKGNAME}-$(VERSION)
 	@dir=$$PWD; cd /tmp; tar cvzf $$dir/${PKGNAME}-$(VERSION).tar.gz --exclude \.svn ${PKGNAME}-$(VERSION)
-	@rm -rf /tmp/${PKGNAME}-$(VERSION)	
+	@rm -rf /tmp/${PKGNAME}-$(VERSION)
 	@echo "The archive is in ${PKGNAME}-$(VERSION).tar.gz"
 
 rpm: archive
@@ -196,8 +208,8 @@ whitespacelint: tablint trailinglint
 
 pep8:
 	@TMPFILE=`mktemp` || exit 1; \
-	pep8 --repeat src | tee $$TMPFILE; \
+	pep8 --ignore E501 --exclude ".#*" --repeat src | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 
-stylish: pyflakes whitespacelint pep8 
+stylish: pyflakes whitespacelint pep8

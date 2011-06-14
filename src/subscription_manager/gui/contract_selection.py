@@ -100,7 +100,7 @@ class ContractSelectionWindow(object):
                managerlib.parseDate(pool['endDate']),
                pool['productName'], pool]
         self.model.append(row)
-    
+
     def set_parent_window(self, window):
         self.contract_selection_win.set_transient_for(window)
 

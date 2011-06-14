@@ -11,6 +11,7 @@ from datetime import datetime
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
+
 class Facts:
 
     def __init__(self):
@@ -43,7 +44,7 @@ class Facts:
             f = open(self.fact_cache)
             json_buffer = f.read()
             cached_facts = json.loads(json_buffer)
-        except IOError, e:
+        except IOError:
             log.debug("Unable to read %s" % self.fact_cache)
         except ValueError:
             # see bz #669208, #667953
@@ -124,7 +125,7 @@ class Facts:
         sorter = certlib.CertSorter(certlib.ProductDirectory(),
                                     certlib.EntitlementDirectory())
 
-        validity_facts = {'system.entitlements_valid':True}
+        validity_facts = {'system.entitlements_valid': True}
         if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
             validity_facts['system.entitlements_valid'] = False
 
@@ -132,4 +133,3 @@ class Facts:
 
         self.write(facts)
         return facts
-

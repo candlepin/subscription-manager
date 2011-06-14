@@ -13,9 +13,7 @@
 # in this software or its documentation.
 #
 
-import os
 import logging
-import gtk
 
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception
@@ -24,6 +22,7 @@ import gettext
 _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
+
 
 class ActivationDialog(widgets.GladeWidget):
     """GTK dialog for allowing the user to activate any subscriptions
@@ -35,9 +34,9 @@ class ActivationDialog(widgets.GladeWidget):
         super(ActivationDialog, self).__init__('activate.glade', widget_names)
 
         self.glade.signal_autoconnect({
-            "on_activate_dialog_delete_event" : self._hide_callback,
-            "on_close_button_clicked" : self._hide_callback,
-            "on_activate_button_clicked" : self._activate,
+            "on_activate_dialog_delete_event": self._hide_callback,
+            "on_close_button_clicked": self._hide_callback,
+            "on_activate_button_clicked": self._activate,
         })
 
         self.backend = backend
@@ -72,4 +71,3 @@ class ActivationDialog(widgets.GladeWidget):
 
         # Stop the gtk signal from propogating
         return True
-

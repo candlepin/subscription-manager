@@ -49,7 +49,7 @@ class AsyncPool(object):
             else:
                 callback()
             return False
-        except Queue.Empty, e:
+        except Queue.Empty:
             return True
 
     def refresh(self, active_on, callback):

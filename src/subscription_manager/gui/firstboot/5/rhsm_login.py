@@ -5,17 +5,12 @@ from gtk import glade
 from firstboot_module_window import FirstbootModuleWindow
 
 
-from rhpl.translate import _, N_
+from rhpl.translate import _
 import rhpl.translate as translate
 translate.textdomain("firstboot")
 gtk.glade.bindtextdomain("firstboot", "/usr/share/locale")
 
-#import rhsm as sys_rhsm
-#print "sys_rhsm", sys_rhsm.__file__
-
 import rhsm
-print "rhsm",rhsm, rhsm.__file__
-
 
 sys.path.append("/usr/share/rhsm/")
 print sys.path
@@ -31,8 +26,8 @@ from subscription_manager.facts import Facts
 sys.path.append("/usr/share/rhn")
 from up2date_client import config
 
+
 class moduleClass(FirstbootModuleWindow, managergui.RegisterScreen):
-    
     runPriority = 109.10
     moduleName = "Entitlement Registration"
     windowTitle = moduleName
@@ -142,10 +137,6 @@ class moduleClass(FirstbootModuleWindow, managergui.RegisterScreen):
         pass
 
     def launch(self, doDebug=None):
-        
-        # return top level window, icon and windowtitle
-
-#    def createScreen(self):
         """
         Create a new instance of gtk.VBox, pulling in child widgets from the
         glade file.

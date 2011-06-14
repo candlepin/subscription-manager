@@ -13,17 +13,20 @@
 # in this software or its documentation.
 #
 
+import datetime
+import time
 import unittest
-from mock import Mock
 
-from subscription_manager.managerlib import *
+from stubs import StubCertificateDirectory, StubProductCertificate, StubProduct, \
+    StubEntitlementCertificate
+from managerlib import merge_pools, PoolFilter, getInstalledProductStatus, \
+    LocalTz, parseDate, configure_i18n
 from modelhelpers import *
-from stubs import *
+
 
 class MergePoolsTests(unittest.TestCase):
 
     def test_single_pool(self):
-        facts = Mock()
         product = 'product1'
         pools = [
                 create_pool(product, product, quantity=10, consumed=5)
@@ -34,7 +37,6 @@ class MergePoolsTests(unittest.TestCase):
         self.assertEquals(product, result.product_id)
 
     def test_multiple_pools(self):
-        facts = Mock()
         product1 = 'product1'
         product2 = 'product2'
         pools = [
@@ -68,7 +70,7 @@ class PoolFilterTests(unittest.TestCase):
 
         pd = StubCertificateDirectory([
             StubProductCertificate(StubProduct(product2))])
-        filter = PoolFilter(product_dir=pd,
+        pool_filter = PoolFilter(product_dir=pd,
                 entitlement_dir=StubCertificateDirectory([]))
 
         pools = [
@@ -76,7 +78,7 @@ class PoolFilterTests(unittest.TestCase):
                 create_pool(product1, product1),
                 create_pool(product2, product2),
         ]
-        result = filter.filter_out_uninstalled(pools)
+        result = pool_filter.filter_out_uninstalled(pools)
         self.assertEquals(1, len(result))
         self.assertEquals(product2, result[0]['productId'])
 
@@ -86,14 +88,14 @@ class PoolFilterTests(unittest.TestCase):
         provided = 'providedProduct'
         pd = StubCertificateDirectory([
             StubProductCertificate(StubProduct(provided))])
-        filter = PoolFilter(product_dir=pd,
+        pool_filter = PoolFilter(product_dir=pd,
                 entitlement_dir=StubCertificateDirectory([]))
 
         pools = [
                 create_pool(product1, product1),
                 create_pool(product2, product2, provided_products=[provided]),
         ]
-        result = filter.filter_out_uninstalled(pools)
+        result = pool_filter.filter_out_uninstalled(pools)
         self.assertEquals(1, len(result))
         self.assertEquals(product2, result[0]['productId'])
 
@@ -102,7 +104,7 @@ class PoolFilterTests(unittest.TestCase):
         product2 = 'product2'
         pd = StubCertificateDirectory([
             StubProductCertificate(StubProduct(product2))])
-        filter = PoolFilter(product_dir=pd,
+        pool_filter = PoolFilter(product_dir=pd,
                 entitlement_dir=StubCertificateDirectory([]))
 
         pools = [
@@ -110,7 +112,7 @@ class PoolFilterTests(unittest.TestCase):
                 create_pool(product1, product1),
                 create_pool(product2, product2),
         ]
-        result = filter.filter_out_installed(pools)
+        result = pool_filter.filter_out_installed(pools)
         self.assertEquals(1, len(result))
         self.assertEquals(product1, result[0]['productId'])
 
@@ -120,15 +122,14 @@ class PoolFilterTests(unittest.TestCase):
         provided = 'providedProduct'
         pd = StubCertificateDirectory([
             StubProductCertificate(StubProduct(provided))])
-        filter = PoolFilter(product_dir=pd,
+        pool_filter = PoolFilter(product_dir=pd,
                 entitlement_dir=StubCertificateDirectory([]))
-
 
         pools = [
                 create_pool(product1, product1),
                 create_pool(product2, product2, provided_products=[provided]),
         ]
-        result = filter.filter_out_installed(pools)
+        result = pool_filter.filter_out_installed(pools)
         self.assertEquals(1, len(result))
         self.assertEquals(product1, result[0]['productId'])
 
@@ -139,7 +140,7 @@ class PoolFilterTests(unittest.TestCase):
         pd = StubCertificateDirectory([
             StubProductCertificate(StubProduct(provided)),
             StubProductCertificate(StubProduct(product2))])
-        filter = PoolFilter(product_dir=pd,
+        pool_filter = PoolFilter(product_dir=pd,
                 entitlement_dir=StubCertificateDirectory([]))
 
 
@@ -147,7 +148,7 @@ class PoolFilterTests(unittest.TestCase):
                 create_pool(product1, product1),
                 create_pool(product2, product2, provided_products=[provided]),
         ]
-        result = filter.filter_out_installed(pools)
+        result = pool_filter.filter_out_installed(pools)
         self.assertEquals(1, len(result))
         self.assertEquals(product1, result[0]['productId'])
 
@@ -155,14 +156,14 @@ class PoolFilterTests(unittest.TestCase):
         product1 = 'Foo Product'
         product2 = 'Bar Product'
         pd = StubCertificateDirectory([])
-        filter = PoolFilter(product_dir=pd,
+        pool_filter = PoolFilter(product_dir=pd,
                 entitlement_dir=StubCertificateDirectory([]))
 
         pools = [
                 create_pool(product1, product1),
                 create_pool(product2, product2),
         ]
-        result = filter.filter_product_name(pools, "Foo")
+        result = pool_filter.filter_product_name(pools, "Foo")
         self.assertEquals(1, len(result))
         self.assertEquals(product1, result[0]['productId'])
 
@@ -170,15 +171,16 @@ class PoolFilterTests(unittest.TestCase):
         product1 = 'Foo Product'
         product2 = 'Bar Product'
         pd = StubCertificateDirectory([])
-        filter = PoolFilter(product_dir=pd,
+        pool_filter = PoolFilter(product_dir=pd,
                 entitlement_dir=StubCertificateDirectory([]))
 
         pools = [
                 create_pool(product1, product1, provided_products=[product2]),
         ]
-        result = filter.filter_product_name(pools, "Bar")
+        result = pool_filter.filter_product_name(pools, "Bar")
         self.assertEquals(1, len(result))
         self.assertEquals(product1, result[0]['productId'])
+
 
 class InstalledProductStatusTests(unittest.TestCase):
 
@@ -186,12 +188,12 @@ class InstalledProductStatusTests(unittest.TestCase):
         product_directory = StubCertificateDirectory([])
         entitlement_directory = StubCertificateDirectory([
             StubEntitlementCertificate(StubProduct("product1"))])
-        
+
         product_status = getInstalledProductStatus(product_directory,
                 entitlement_directory)
 
-        self.assertEquals(1, len(product_status)) 
-        self.assertEquals("Not Installed", product_status[0][1]) 
+        self.assertEquals(1, len(product_status))
+        self.assertEquals("Not Installed", product_status[0][1])
 
     def test_entitlement_for_installed_product_shows_subscribed(self):
         product = StubProduct("product1")
@@ -199,12 +201,12 @@ class InstalledProductStatusTests(unittest.TestCase):
             StubProductCertificate(product)])
         entitlement_directory = StubCertificateDirectory([
             StubEntitlementCertificate(product)])
-        
+
         product_status = getInstalledProductStatus(product_directory,
                 entitlement_directory)
 
-        self.assertEquals(1, len(product_status)) 
-        self.assertEquals("Subscribed", product_status[0][1]) 
+        self.assertEquals(1, len(product_status))
+        self.assertEquals("Subscribed", product_status[0][1])
 
     def test_expired_entitlement_for_installed_product_shows_expired(self):
         product = StubProduct("product1")
@@ -213,23 +215,23 @@ class InstalledProductStatusTests(unittest.TestCase):
         entitlement_directory = StubCertificateDirectory([
             StubEntitlementCertificate(product,
                 end_date=(datetime.now() - timedelta(days=2)))])
-        
+
         product_status = getInstalledProductStatus(product_directory,
                 entitlement_directory)
 
-        self.assertEquals(1, len(product_status)) 
-        self.assertEquals("Expired", product_status[0][1]) 
+        self.assertEquals(1, len(product_status))
+        self.assertEquals("Expired", product_status[0][1])
 
     def test_no_entitlement_for_installed_product_shows_no_subscribed(self):
         product = StubProduct("product1")
         product_directory = StubCertificateDirectory([
             StubProductCertificate(product)])
         entitlement_directory = StubCertificateDirectory([])
-        
+
         product_status = getInstalledProductStatus(product_directory,
                 entitlement_directory)
 
-        self.assertEquals(1, len(product_status)) 
+        self.assertEquals(1, len(product_status))
         self.assertEquals("Not Subscribed", product_status[0][1])
 
     def test_one_product_with_two_entitlements_lists_product_twice(self):
@@ -240,19 +242,20 @@ class InstalledProductStatusTests(unittest.TestCase):
             StubEntitlementCertificate(product),
             StubEntitlementCertificate(product)
         ])
-        
+
         product_status = getInstalledProductStatus(product_directory,
                 entitlement_directory)
 
-        self.assertEquals(2, len(product_status)) 
+        self.assertEquals(2, len(product_status))
+
 
 class TestParseDate(unittest.TestCase):
     def test_now_local_tz(self):
         tz = LocalTz()
         epoch = time.time()
         dt_no_tz = datetime.fromtimestamp(epoch)
-        dt = datetime.fromtimestamp(epoch,tz=tz)
-        parsed_date = parseDate(dt.isoformat())
+        dt = datetime.fromtimestamp(epoch, tz=tz)
+        parseDate(dt.isoformat())
         # last member is is_dst, which is -1, if there is no tzinfo, which
         # we expect for dt_no_tz
         #
@@ -260,19 +263,33 @@ class TestParseDate(unittest.TestCase):
         self.assertEquals(dt.timetuple()[:7], dt_no_tz.timetuple()[:7])
 #        self.assertEquals(dt.isoformat(), dt_no_tz.isoformat())
 
-
     def test_server_date_utc_timezone(self):
         # sample date from json response from server
         server_date = "2012-04-10T00:00:00.000+0000"
         dt = parseDate(server_date)
-#        print "test_server_date", dt, dt.tzinfo, dt.tzinfo.dst(dt), dt.tzinfo.utcoffset(dt)
         # no dst
         self.assertEquals(timedelta(seconds=0), dt.tzinfo.dst(dt))
         # it's a utc date, no offset
         self.assertEquals(timedelta(seconds=0), dt.tzinfo.utcoffset(dt))
 
-
     def test_server_date_est_timezone(self):
         est_date = "2012-04-10T00:00:00.000-04:00"
         dt = parseDate(est_date)
         self.assertEquals(timedelta(hours=4), dt.tzinfo.utcoffset(dt))
+
+
+class TestI18N(unittest.TestCase):
+    def test_configure_i18n_without_glade(self):
+        configure_i18n()
+
+    def test_configure_i18n_with_glade(self):
+        configure_i18n(with_glade=True)
+
+
+class MockLog:
+    def info(self):
+        pass
+
+
+def MockSystemLog(self, message, priority):
+    pass
