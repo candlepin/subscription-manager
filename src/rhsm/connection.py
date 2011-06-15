@@ -16,9 +16,7 @@
 # in this software or its documentation.
 #
 
-import sys
 import locale
-import httplib
 import urllib
 import simplejson as json
 import base64
@@ -27,12 +25,10 @@ from M2Crypto import SSL, httpslib
 import logging
 from config import initConfig
 
+
 class NullHandler(logging.Handler):
     def emit(self, record):
         pass
-
-
-import locale
 
 h = NullHandler()
 logging.getLogger("rhsm").addHandler(h)
@@ -73,10 +69,12 @@ class NetworkException(ConnectionException):
     def __init__(self, code):
         self.code = code
 
+
 class RemoteServerException(ConnectionException):
 
     def __init__(self, code):
         self.code = code
+
 
 class RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
     # 2.7 httplib expects to be able to pass a body argument to
@@ -90,7 +88,6 @@ class RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
             httpslib.HTTPSConnection.endheaders(self, body)
         else:
             httpslib.HTTPSConnection.endheaders(self)
-    #        httpslib.HTTPSConnection.endheaders(self, body)
 
 
 def _get_locale():
@@ -112,6 +109,7 @@ def _get_locale():
 
     return None
 
+
 class Restlib(object):
     """
      A wrapper around httplib to make rest calls easier
@@ -130,7 +128,7 @@ class Restlib(object):
         self.headers = {"Content-type": "application/json",
                         "Accept": "application/json"}
         if lc:
-            self.headers["Accept-Language"] =  lc.lower().replace('_', '-')
+            self.headers["Accept-Language"] = lc.lower().replace('_', '-')
 
         self.cert_file = cert_file
         self.key_file = key_file
@@ -150,8 +148,6 @@ class Restlib(object):
             basic = 'Basic %s' % encoded
             self.headers['Authorization'] = basic
 
-
-
     def _load_ca_certificates(self, context):
         try:
             for cert_file in os.listdir(self.ca_dir):
@@ -165,7 +161,6 @@ class Restlib(object):
         except OSError, e:
             raise ConnectionSetupException(e.strerror)
 
-
     def _request(self, request_type, method, info=None):
         handler = self.apihandler + method
         context = SSL.Context("tlsv1")
@@ -173,7 +168,7 @@ class Restlib(object):
             log.info('loading ca pem certificates from: %s', self.ca_dir)
             self._load_ca_certificates(context)
         log.info('work in insecure mode ?:%s', self.insecure)
-        if not self.insecure: #allow clients to work insecure mode if required..
+        if not self.insecure:  #allow clients to work insecure mode if required..
             context.set_verify(SSL.verify_fail_if_no_peer_cert, self.ssl_verify_depth)
         if self.cert_file:
             context.load_cert(self.cert_file, keyfile=self.key_file)
@@ -310,26 +305,25 @@ class UEPConnection:
                     proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                     ca_dir=self.ca_cert_dir, insecure=self.insecure,
                     ssl_verify_depth=self.ssl_verify_depth)
-            log.info("Using basic authentication as: %s" % username)            
+            log.info("Using basic authentication as: %s" % username)
         elif using_id_cert_auth:
-                self.conn = Restlib(self.host, self.ssl_port, self.handler,
-                        cert_file=self.cert_file, key_file=self.key_file,
-                        proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
-                        proxy_user=self.proxy_user, proxy_password=self.proxy_password,
-                        ca_dir=self.ca_cert_dir, insecure=self.insecure,
-                        ssl_verify_depth=self.ssl_verify_depth)
-                log.info("Using certificate authentication: key = %s, cert = %s, "
-                        "ca = %s, insecure = %s" %
-                        (self.key_file, self.cert_file, self.ca_cert_dir,
-                            self.insecure))
+            self.conn = Restlib(self.host, self.ssl_port, self.handler,
+                                cert_file=self.cert_file, key_file=self.key_file,
+                                proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
+                                proxy_user=self.proxy_user, proxy_password=self.proxy_password,
+                                ca_dir=self.ca_cert_dir, insecure=self.insecure,
+                                ssl_verify_depth=self.ssl_verify_depth)
+            log.info("Using certificate authentication: key = %s, cert = %s, "
+                     "ca = %s, insecure = %s" %
+                     (self.key_file, self.cert_file, self.ca_cert_dir,
+                      self.insecure))
         else:
             self.conn = Restlib(self.host, self.ssl_port, self.handler,
                     proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                     ca_dir=self.ca_cert_dir, insecure=self.insecure,
                     ssl_verify_depth=self.ssl_verify_depth)
-            log.info("Using no auth")              
-        
+            log.info("Using no auth")
 
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
@@ -354,13 +348,12 @@ class UEPConnection:
         params = {"type": type,
                   "name": name,
                   "facts": facts}
-                  
         url = "/consumers"
         if owner:
             url = "%s?owner=%s" % (url, owner)
 
         return self.conn.request_post(url, params)
-        
+
     def registerConsumerWithKeys(self, name="unknown", type="system", facts={}, keys=[]):
         """
         Creates a consumer on candlepin server
@@ -374,7 +367,7 @@ class UEPConnection:
             url = url + prepend
             url = url + "activation_key=" + key
             prepend = "&"
-        return self.conn.request_post(url, params)        
+        return self.conn.request_post(url, params)
 
     def updateConsumerFacts(self, consumer_uuid, facts={}):
         """
@@ -510,4 +503,3 @@ class UEPConnection:
                 lang = locale.getdefaultlocale()[0].lower().replace('_', '-')
             method += "&email_locale=%s" % lang
         return self.conn.request_post(method)
-

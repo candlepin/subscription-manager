@@ -20,9 +20,9 @@ from iniparse import SafeConfigParser
 
 DEFAULT_CONFIG_DIR = "/etc/rhsm"
 DEFAULT_CONFIG_PATH = "%s/rhsm.conf" % DEFAULT_CONFIG_DIR
-DEFAULT_PROXY_PORT="3128"
+DEFAULT_PROXY_PORT = "3128"
 
-# TODO: I don't think these defaults are getting used, code requests section 
+# TODO: I don't think these defaults are getting used, code requests section
 # + property, but these are going in as sectionless defaults and the code still
 # errors on missing section.
 DEFAULTS = {
@@ -36,8 +36,9 @@ DEFAULTS = {
         'proxy_port': '',
         'proxy_user': '',
         'proxy_password': '',
-        'insecure':'0'
+        'insecure': '0'
         }
+
 
 class RhsmConfigParser(SafeConfigParser):
     def __init__(self, config_file=None, defaults=None):
@@ -53,6 +54,7 @@ class RhsmConfigParser(SafeConfigParser):
         if not self.has_section(section):
             self.add_section(section)
         return SafeConfigParser.get(self, section, prop)
+
 
 def initConfig(config_file=None):
 

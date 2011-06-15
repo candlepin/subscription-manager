@@ -24,9 +24,7 @@ replacement of full wrapper but instead an extension.
 
 import os
 import re
-import base64
 from M2Crypto import X509
-from M2Crypto import ASN1
 from datetime import datetime as dt
 from datetime import tzinfo, timedelta
 from time import strptime
@@ -34,9 +32,10 @@ import logging
 
 log = logging.getLogger(__name__)
 
+
 def parse_tags(tag_str):
-    """ 
-    Split a comma separated list of tags from a certificate into a list. 
+    """
+    Split a comma separated list of tags from a certificate into a list.
     """
     tags = []
     if tag_str:
@@ -45,13 +44,13 @@ def parse_tags(tag_str):
 
 # from M2Crypto
 class UTC(tzinfo):
-    def tzname(self, dt):
+    def tzname(self, date_time):
         return "UTC"
 
-    def dst(self, dt):
+    def dst(self, date_time):
         return timedelta(0)
 
-    def utcoffset(self, dt):
+    def utcoffset(self, date_time):
         return timedelta(0)
 
     def __repr__(self):
@@ -141,7 +140,7 @@ class Certificate(object):
                 self._get_datetime(self.x509.get_not_after()))
 
     # m2Crypto available in 5.7 doesn't have the get_datetime, so
-    # include the funtionality here 
+    # include the funtionality here
     def _get_datetime(self, date):
         date_str = str(date)
 
@@ -152,7 +151,7 @@ class Certificate(object):
                        "Sep", "Oct", "Nov", "Dec"]
 
         if month not in _ssl_months:
-            raise ValueError("Invalid date %s: Invalid month: %s" % (date_str, m))
+            raise ValueError("Invalid date %s: Invalid month: %s" % (date_str, month))
         if rest.endswith(' GMT'):
             timezone = UTC()
             rest = rest[:-4]
@@ -163,20 +162,18 @@ class Certificate(object):
         tm.append(timezone)
         return dt(*tm)
 
-
-
     def valid(self, on_date=None):
         """
         Get whether the certificate is valid based on date.
         @return: True if valid.
         @rtype: boolean
         """
-        range = self.validRange()
+        valid_range = self.validRange()
         gmt = dt.utcnow()
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())
-        return range.end() >= gmt
+        return valid_range.end() >= gmt
 
     def bogus(self):
         """
@@ -197,32 +194,32 @@ class Certificate(object):
         return self.__ext
 
     # TODO: This looks like it should be in the c-tor:
-    def read(self, path):
+    def read(self, pem_path):
         """
         Read a certificate file.
-        @param path: The path to a .pem file.
-        @type path: str
+        @param pem_path: The path to a .pem file.
+        @type pem_path: str
         @return: A certificate
         @rtype: L{Certificate}
         """
-        f = open(path)
+        f = open(pem_path)
         content = f.read()
         try:
             self._update(content)
         finally:
             f.close()
-        self.path = path
+        self.path = pem_path
 
-    def write(self, path):
+    def write(self, pem_path):
         """
         Write the certificate.
-        @param path: The path to the .pem file.
-        @type path: str
+        @param pem_path: The path to the .pem file.
+        @type pem_path: str
         @return: self
         """
-        f = open(path, 'w')
+        f = open(pem_path, 'w')
         f.write(self.toPEM())
-        self.path = path
+        self.path = pem_path
         f.close()
         return self
 
@@ -248,16 +245,16 @@ class Certificate(object):
 
     def __repr__(self):
         sn = self.serialNumber()
-        path = None
+        cert_path = None
         if hasattr(self, 'path'):
-            path = self.path
-        return '[sn: %d, path: "%s"]' % (sn, path)
+            cert_path = self.path
+        return '[sn: %d, path: "%s"]' % (sn, cert_path)
 
     def __cmp__(self, other):
-        range = self.validRange()
-        exp1 = range.end()
-        range = other.validRange()
-        exp2 = range.end()
+        valid_range = self.validRange()
+        exp1 = valid_range.end()
+        other_valid_range = other.validRange()
+        exp2 = other_valid_range.end()
         if exp1 < exp2:
             return -1
         if exp1 > exp2:
@@ -393,7 +390,7 @@ class EntitlementCertificate(ProductCertificate):
         return self.getContentEntitlements() \
              + self.getRoleEntitlements()
 
-    # TODO: Not a great name, this is just getting content, self is 
+    # TODO: Not a great name, this is just getting content, self is
     # the entitlement.
     def getContentEntitlements(self):
         """
@@ -475,17 +472,17 @@ class Key(object):
     """
 
     @classmethod
-    def read(cls, path):
+    def read(cls, pem_path):
         """
         Read the key.
-        @param path: The path to the .pem file.
+        @param pem_path: The path to the .pem file.
         @type path: str
         """
-        f = open(path)
+        f = open(pem_path)
         content = f.read()
         f.close()
         key = Key(content)
-        key.path = path
+        key.path = pem_path
         return key
 
     def __init__(self, content):
@@ -495,16 +492,16 @@ class Key(object):
         """
         self.content = content
 
-    def write(self, path):
+    def write(self, pem_path):
         """
         Write the key.
         @param path: The path to the .pem file.
         @type path: str
         @return: self
         """
-        f = open(path, 'w')
+        f = open(pem_path, 'w')
         f.write(self.content)
-        self.path = path
+        self.path = pem_path
         f.close()
         return self
 
@@ -584,13 +581,13 @@ class DateRange:
 class GMT(tzinfo):
     """GMT"""
 
-    def utcoffset(self, dt):
+    def utcoffset(self, date_time):
         return timedelta(seconds=0)
 
-    def tzname(self, dt):
+    def tzname(self, date_time):
         return 'GMT'
 
-    def dst(self, dt):
+    def dst(self, date_time):
         return timedelta(seconds=0)
 
 
@@ -676,7 +673,7 @@ class Extensions(dict):
             root = OID(root)
         if root[-1]:
             root = root.append('')
-        ln = len(root)-1
+        ln = len(root) - 1
         for oid, v in self.find(root):
             trimmed = oid.ltrim(ln)
             d[trimmed] = v
@@ -1005,7 +1002,7 @@ class Content(Entitlement):
         return self.flex_quantity
 
     def getVendor(self):
-        return self.vendor 
+        return self.vendor
 
     def getUrl(self):
         return self.url
@@ -1014,7 +1011,7 @@ class Content(Entitlement):
         return self.gpg
 
     def getEnabled(self):
-        return self.enabled 
+        return self.enabled
 
     def getMetadataExpire(self):
         return self.metadata_expire

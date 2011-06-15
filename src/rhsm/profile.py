@@ -13,8 +13,10 @@
 #
 import rpm
 
+
 class InvalidProfileType(Exception):
     pass
+
 
 class RPMProfile(object):
 
@@ -46,12 +48,12 @@ class RPMProfile(object):
                 # reason for server to know this info
                 continue
             info = {
-                'name'          : h['name'],
-                'version'       : h['version'],
-                'release'       : h['release'],
-                'epoch'         : h['epoch'] or 0,
-                'arch'          : h['arch'],
-                'vendor'        : h['vendor'] or None,
+                'name': h['name'],
+                'version': h['version'],
+                'release': h['release'],
+                'epoch': h['epoch'] or 0,
+                'arch': h['arch'],
+                'vendor': h['vendor'] or None,
             }
             pkg_list.append(info)
         return pkg_list
@@ -60,20 +62,21 @@ class RPMProfile(object):
 class GemProfile(object):
     pass
 
-def get_profile(type):
+
+def get_profile(profile_type):
     """
     Returns an instance of a Profile object
     @param type: profile type
     @type type: string
     Returns an instance of a Profile object
     """
-    if type not in PROFILE_MAP:
-        raise InvalidProfileType('Could not find profile for type [%s]', type)
-    profile = PROFILE_MAP[type]()
+    if profile_type not in PROFILE_MAP:
+        raise InvalidProfileType('Could not find profile for type [%s]', profile_type)
+    profile = PROFILE_MAP[profile_type]()
     return profile
 
 PROFILE_MAP = {
-    "rpm" : RPMProfile,
+    "rpm": RPMProfile,
 }
 
 if __name__ == '__main__':
