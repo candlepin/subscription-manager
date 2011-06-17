@@ -20,6 +20,7 @@ except Exception, e:
     print e
     raise
 
+from subscription_manager.gui import registergui
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.facts import Facts
 
@@ -27,7 +28,7 @@ sys.path.append("/usr/share/rhn")
 from up2date_client import config
 
 
-class moduleClass(FirstbootModuleWindow, managergui.RegisterScreen):
+class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
     runPriority = 109.10
     moduleName = "Entitlement Registration"
     windowTitle = moduleName
@@ -43,8 +44,8 @@ class moduleClass(FirstbootModuleWindow, managergui.RegisterScreen):
 
         backend = managergui.Backend()
 
-        managergui.RegisterScreen.__init__(self, backend, managergui.Consumer(),
-                Facts())
+        registergui.RegisterScreen.__init__(self, backend,
+                managergui.Consumer(), Facts())
 
 #        managergui.create_and_set_basic_connection()
         self._cached_credentials = None
@@ -107,6 +108,7 @@ class moduleClass(FirstbootModuleWindow, managergui.RegisterScreen):
             # reregistering the consumer
             return 0
         else:
+            self.interface = interface
             valid_registration = self.register(testing=testing)
 
             if valid_registration:
@@ -142,7 +144,7 @@ class moduleClass(FirstbootModuleWindow, managergui.RegisterScreen):
         glade file.
         """
         self.vbox = gtk.VBox(spacing=10)
-        self.register_dialog = managergui.registration_xml.get_widget("dialog-vbox6")
+        self.register_dialog = registergui.registration_xml.get_widget("dialog-vbox6")
         self.register_dialog.reparent(self.vbox)
 
         # Get rid of the 'register' and 'cancel' buttons, as we are going to
@@ -172,7 +174,7 @@ class moduleClass(FirstbootModuleWindow, managergui.RegisterScreen):
         login name field.
         """
         # FIXME:  This is currently broken
-        login_text = managergui.registration_xml.get_widget("account_login")
+        login_text = registergui.registration_xml.get_widget("account_login")
         login_text.grab_focus()
 
     def shouldAppear(self):
@@ -191,7 +193,7 @@ class moduleClass(FirstbootModuleWindow, managergui.RegisterScreen):
 
         See gtk.Widget.destroy()
         """
-        widget = managergui.registration_xml.get_widget(widget_name)
+        widget = registergui.registration_xml.get_widget(widget_name)
         widget.destroy()
 
     def _get_credentials_hash(self):
@@ -210,7 +212,12 @@ class moduleClass(FirstbootModuleWindow, managergui.RegisterScreen):
         Return the text value of an input widget referenced
         by name.
         """
-        widget = managergui.registration_xml.get_widget(widget_name)
+        widget = registergui.registration_xml.get_widget(widget_name)
         return widget.get_text()
+
+    def _finish_registration(self, failed=False):
+        registergui.RegisterScreen._finish_registration(self, failed=failed)
+        if not failed:
+            self.interface.moveToPage(moduleTitle=(_("Subscription Manager")))
 
 childWindow = moduleClass
