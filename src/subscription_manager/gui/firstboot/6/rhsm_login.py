@@ -22,7 +22,7 @@ sys.path.append("/usr/share/rhn")
 from up2date_client import config
 
 
-class moduleClass(Module, registergui.RegisterScreen)
+class moduleClass(Module, registergui.RegisterScreen):
 
     def __init__(self):
         """
