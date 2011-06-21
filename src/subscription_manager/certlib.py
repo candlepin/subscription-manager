@@ -22,6 +22,7 @@ import logging
 from datetime import timedelta, datetime
 from rhsm.certificate import *
 from subscription_manager.lock import Lock
+from subscription_manager.facts import Facts
 from rhsm.config import initConfig
 
 
@@ -651,9 +652,17 @@ class CertSorter(object):
         # to the expired entitlement certificate:
         self.expired_products = {}
 
+        # products that may require one or more entitlements to
+        # be valid
+#        self.stackable_products = {}
+
         # specific products which are installed, and entitled on the given date.
         # maps product ID to the valid entitlement certificate:
         self.valid_products = {}
+
+
+        # we need to know the client facts now to check sockets/etc
+        self.facts = Facts()
 
         log.debug("Sorting product and entitlement cert status for: %s" %
                 on_date)
@@ -661,6 +670,8 @@ class CertSorter(object):
         self._populate_all_products()
 
         self._scan_entitlement_certs()
+
+        self._scan_ent_cert_stackable_products()
 
         self._scan_for_unentitled_products()
 
@@ -674,6 +685,10 @@ class CertSorter(object):
         for product_cert in prod_certs:
             product = product_cert.getProduct()
             self.all_products[product.getHash()] = product_cert
+
+#            if product.hasAttribute("stacking_id"):
+#                self.stackable_products[product.getHash()] = product_cert
+
         log.debug("Installed product IDs: %s" % self.all_products.keys())
 
     def _scan_entitlement_certs(self):
@@ -698,9 +713,50 @@ class CertSorter(object):
         """
         for product in ent_cert.getProducts():
             product_id = product.getHash()
+
             # Is this an installed product?
             if product_id in self.all_products:
-                product_dict[product_id] = ent_cert
+                 product_dict[product_id] = ent_cert
+
+    def _scan_ent_cert_stackable_products(self):
+        print "gh1"
+        ent_certs = self.entitlement_dir.list()
+        print "ent_certs", ent_certs
+        stackable_ents = {}
+        for ent_cert in ent_certs:
+            for product in ent_cert.getProducts():
+                product_id = product.getHash()
+                order = ent_cert.getOrder()
+                stacking_id = order.getStackingId()
+                print "stacking_id", stacking_id, product_id
+                if stacking_id:
+                    if stacking_id not in stackable_ents:
+                        stackable_ents[stacking_id] = []
+                    stackable_ents[stacking_id].append({'ent_cert': ent_cert, 
+                                                        'product_id':product_id,
+                                                        'valid':None})
+
+        for stackable_id in stackable_ents.keys():
+            print stackable_id, stackable_ents[stackable_id]
+            socket_total = 0
+            system_sockets = self.facts.get_facts()['cpu.cpu_socket(s)']
+            for stackable_ent in stackable_ents[stackable_id]:
+                socket_count = stackable_ent['ent_cert'].getOrder().getStackingId()
+                print "socket_count", socket_count
+                socket_total = socket_total + int(socket_count)
+            print "socket_total", socket_total, "system_sockets", system_sockets
+            print stackable_ents[stackable_id]
+            if socket_total >= system_sockets:
+                for i in stackable_ents[stackable_id]:
+                    i['valid'] = True
+
+        for stackable_id in stackable_ents.keys():
+            for stack_prod_info in stackable_ents[stackable_id]:
+                if not stack_prod_info['valid']:
+                    product_id = stack_prod_info['product_id']
+                    self.unentitled_products[product_id] = self.all_products[product_id]
+#            if socket_total >= system_sockets:
+
 
     def _scan_for_unentitled_products(self):
         # For all installed products, if not in valid or expired hash, it
