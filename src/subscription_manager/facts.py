@@ -122,14 +122,14 @@ class Facts:
         # point
 
         # figure out if we think we have valid entitlements
-        sorter = certlib.CertSorter(certlib.ProductDirectory(),
-                                    certlib.EntitlementDirectory())
+#        sorter = certlib.CertSorter(certlib.ProductDirectory(),
+#                                    certlib.EntitlementDirectory())
 
-        validity_facts = {'system.entitlements_valid': True}
-        if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
-            validity_facts['system.entitlements_valid'] = False
+#        validity_facts = {'system.entitlements_valid': True}
+#        if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
+#            validity_facts['system.entitlements_valid'] = False
 
-        facts.update(validity_facts)
+#        facts.update(validity_facts)
 
         self.write(facts)
         return facts
