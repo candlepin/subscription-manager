@@ -746,8 +746,8 @@ class FactsCommand(CliCommand):
         if self.options.update:
             facts = Facts()
             consumer = check_registration()['uuid']
-            print consumer
             self.cp.updateConsumerFacts(consumer, facts.get_facts())
+            print "Facts sucessfully updated."
 
 
 class ListCommand(CliCommand):
