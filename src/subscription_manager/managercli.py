@@ -485,11 +485,12 @@ class RegisterCommand(UserPassCommand):
                                                         proxy_port=self.proxy_port,
                                                         proxy_user=self.proxy_user,
                                                         proxy_password=self.proxy_password)
+                    owner_key = self._determine_owner_key(admin_cp)
 
                     consumer = admin_cp.registerConsumer(name=consumername,
                                                          type=self.options.consumertype,
                                                          facts=self.facts.get_facts(),
-                                                         owner=self.options.owner)
+                                                         owner=owner_key)
         except connection.RestlibException, re:
             log.exception(re)
             systemExit(-1, re.msg)
@@ -504,6 +505,24 @@ class RegisterCommand(UserPassCommand):
             self.certlib.update()
 
         self._request_validity_check()
+
+    def _determine_owner_key(self, cp):
+        """
+        If given an owner in the options, use it. Otherwise ask the server
+        for all the owners this user has access too. If there is just one,
+        use it's key. If multiple, return None and let the server error out.
+        """
+        if self.options.owner:
+            return self.options.owner
+
+        owners = cp.getOwnerList(self.username)
+        print owners
+        if len(owners) == 1:
+            return owners[0]['key']
+        # TODO: should we let the None key go, or just assume the server will
+        # reject it (it will today, but maybe it would try to guess in the
+        # future?)
+        return None
 
 
 class UnRegisterCommand(CliCommand):
