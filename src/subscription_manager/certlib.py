@@ -719,16 +719,13 @@ class CertSorter(object):
                  product_dict[product_id] = ent_cert
 
     def _scan_ent_cert_stackable_products(self):
-        print "gh1"
         ent_certs = self.entitlement_dir.list()
-        print "ent_certs", ent_certs
         stackable_ents = {}
         for ent_cert in ent_certs:
             for product in ent_cert.getProducts():
                 product_id = product.getHash()
                 order = ent_cert.getOrder()
                 stacking_id = order.getStackingId()
-                print "stacking_id", stacking_id, product_id
                 if stacking_id:
                     if stacking_id not in stackable_ents:
                         stackable_ents[stacking_id] = []
@@ -737,15 +734,13 @@ class CertSorter(object):
                                                         'valid':None})
 
         for stackable_id in stackable_ents.keys():
-            print stackable_id, stackable_ents[stackable_id]
             socket_total = 0
-            system_sockets = self.facts.get_facts()['cpu.cpu_socket(s)']
+            system_sockets = int(self.facts.get_facts()['cpu.cpu_socket(s)'])
             for stackable_ent in stackable_ents[stackable_id]:
-                socket_count = stackable_ent['ent_cert'].getOrder().getStackingId()
-                print "socket_count", socket_count
-                socket_total = socket_total + int(socket_count)
+                socket_count = stackable_ent['ent_cert'].getOrder().getSocketLimit()
+                if socket_count:
+                    socket_total = socket_total + int(socket_count)
             print "socket_total", socket_total, "system_sockets", system_sockets
-            print stackable_ents[stackable_id]
             if socket_total >= system_sockets:
                 for i in stackable_ents[stackable_id]:
                     i['valid'] = True
@@ -755,7 +750,6 @@ class CertSorter(object):
                 if not stack_prod_info['valid']:
                     product_id = stack_prod_info['product_id']
                     self.unentitled_products[product_id] = self.all_products[product_id]
-#            if socket_total >= system_sockets:
 
 
     def _scan_for_unentitled_products(self):

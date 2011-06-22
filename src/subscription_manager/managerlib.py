@@ -371,7 +371,6 @@ def getAvailableEntitlements(cpserver, consumer_uuid, facts, all=False, active_o
             'providedProducts', 'productId']
 
     dlist = list_pools(cpserver, consumer_uuid, facts, all, active_on)
-
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
         if int(d['quantity']) < 0:
@@ -381,6 +380,7 @@ def getAvailableEntitlements(cpserver, consumer_uuid, facts, all=False, active_o
 
         d['endDate'] = formatDate(parseDate(d['endDate']))
         del d['consumed']
+
     return data
 
 

@@ -155,6 +155,7 @@ class CliCommand(object):
         if not args:
             args = sys.argv[1:]
 
+
         (self.options, self.args) = self.parser.parse_args(args)
 
         # we dont need argv[0] in this list...
