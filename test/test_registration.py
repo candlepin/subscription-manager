@@ -35,6 +35,9 @@ class CliRegistrationTests(unittest.TestCase):
             def registerConsumer(self, name, type, facts, owner):
                 return 'Dummy Consumer'
 
+            def getOwnerList(self, username):
+                return [{'key': 'dummyowner'}]
+
         self.persisted_consumer = None
 
         def stub_persist(consumer):
