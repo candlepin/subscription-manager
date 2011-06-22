@@ -19,7 +19,7 @@ import unittest
 
 from stubs import StubCertificateDirectory, StubProductCertificate, StubProduct, \
     StubEntitlementCertificate
-from managerlib import merge_pools, PoolFilter, getInstalledProductStatus, \
+from subscription_manager.managerlib import merge_pools, PoolFilter, getInstalledProductStatus, \
     LocalTz, parseDate, configure_i18n
 from modelhelpers import *
 
