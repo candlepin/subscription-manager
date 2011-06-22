@@ -1,6 +1,6 @@
 import unittest
 
-from subscription_manager.gui import managergui
+from subscription_manager.gui import managergui, registergui
 import stubs
 
 
@@ -33,8 +33,8 @@ class TestManagerGuiMainWindow(unittest.TestCase):
 
 class TestRegisterScreen(unittest.TestCase):
     def test_register_screen(self):
-        managergui.RegisterScreen(StubBackend(), StubConsumer())
+        registergui.RegisterScreen(StubBackend(), StubConsumer())
 
     def test_register_screen_register(self):
-        rs = managergui.RegisterScreen(StubBackend(), StubConsumer())
+        rs = registergui.RegisterScreen(StubBackend(), StubConsumer())
         rs.register(testing=True)
