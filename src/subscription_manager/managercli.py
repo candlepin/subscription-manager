@@ -739,7 +739,7 @@ class FactsCommand(CliCommand):
             facts = Facts()
             consumer = check_registration()['uuid']
             self.cp.updateConsumerFacts(consumer, facts.get_facts())
-            print "Facts sucessfully updated."
+            print _("Facts sucessfully updated.")
 
 
 class ListCommand(CliCommand):
