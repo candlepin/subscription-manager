@@ -499,7 +499,15 @@ class RegisterCommand(UserPassCommand):
         managerlib.persist_consumer_cert(consumer)
 
         if self.options.autosubscribe:
-            autosubscribe(admin_cp, consumer['uuid'], self.certlib)
+            cert_file = ConsumerIdentity.certpath()
+	    key_file = ConsumerIdentity.keypath()
+
+	    self.cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
+		                               proxy_hostname=self.proxy_hostname,
+		                               proxy_port=self.proxy_port,
+		                               proxy_user=self.proxy_user,
+		                               proxy_password=self.proxy_password)
+            autosubscribe(self.cp, consumer['uuid'], self.certlib)
         if self.options.consumerid:
             self.certlib.update()
 
