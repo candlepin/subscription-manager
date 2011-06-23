@@ -460,8 +460,28 @@ class UEPConnection:
         method = "/consumers/%s/entitlements" % consumerId
         return self.conn.request_delete(method)
 
-    def getPoolsList(self, ownerid, consumerid, listAll=False, active_on=None):
-        method = "/owners/%s/pools?consumer=%s" % (ownerid, consumerid)
+    def getPoolsList(self, consumer=None, listAll=False, active_on=None, owner=None):
+        """
+        List pools for a given consumer or owner.
+
+        Ideally, try to always pass the owner key argument. The old method is deprecated
+        and may eventually be removed.
+        """
+
+        if owner:
+            # Use the new preferred URL structure if possible:
+            method = "/owners/%s/pools?" % owner
+            if consumer:
+                method = "%sconsumer=%s" % (method, consumer)
+
+        elif consumer:
+            # Just consumer specified, this URL is deprecated and may go away someday:
+            method = "/pools?consumer=%s" % consumer
+
+        else:
+            raise Exception("Must specify an owner or a consumer to list pools.")
+
+
         if listAll:
             method = "%s&listall=true" % method
         if active_on:
