@@ -340,7 +340,7 @@ class PoolFilter(object):
         return filtered_pools
 
 
-def list_pools(uep, consumer_uuid, facts, all=False, active_on=None):
+def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None):
     """
     Wrapper around the UEP call to fetch pools, which forces a facts update
     if anything has changed before making the request. This ensures the
@@ -351,13 +351,13 @@ def list_pools(uep, consumer_uuid, facts, all=False, active_on=None):
         uep.updateConsumerFacts(consumer_uuid, facts.get_facts())
     owner = uep.getOwner(consumer_uuid)
     ownerid = owner['key']
-    return uep.getPoolsList(ownerid, consumer_uuid, all, active_on)
+    return uep.getPoolsList(ownerid, consumer_uuid, list_all, active_on)
 
 
 # TODO: This method is morphing the actual pool json and returning a new
 # dict which does not contain all the pool info. Not sure if this is really
 # necessary. Also some "view" specific things going on in here.
-def getAvailableEntitlements(cpserver, consumer_uuid, facts, all=False, active_on=None):
+def getAvailableEntitlements(cpserver, consumer_uuid, facts, get_all=False, active_on=None):
     """
     Returns a list of entitlement pools from the server.
 
@@ -370,7 +370,7 @@ def getAvailableEntitlements(cpserver, consumer_uuid, facts, all=False, active_o
     columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
             'providedProducts', 'productId']
 
-    dlist = list_pools(cpserver, consumer_uuid, facts, all, active_on)
+    dlist = list_pools(cpserver, consumer_uuid, facts, get_all, active_on)
 
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
@@ -475,7 +475,7 @@ class PoolStash(object):
         # Sadly this currently requires a second query to the server.
         self.incompatible_pools = {}
         for pool in list_pools(self.backend.uep,
-                self.consumer.uuid, self.facts, all=True, active_on=active_on):
+                self.consumer.uuid, self.facts, list_all=True, active_on=active_on):
             if not pool['id'] in self.compatible_pools:
                 self.incompatible_pools[pool['id']] = pool
                 self.all_pools[pool['id']] = pool

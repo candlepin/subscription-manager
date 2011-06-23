@@ -92,11 +92,11 @@ class Lock:
         self.depth = 0
         self.path = path
         self.lockdir = None
-        dir, fn = os.path.split(self.path)
+        lock_dir, fn = os.path.split(self.path)
         try:
-            if not os.path.exists(dir):
-                os.makedirs(dir)
-            self.lockdir = dir
+            if not os.path.exists(lock_dir):
+                os.makedirs(lock_dir)
+            self.lockdir = lock_dir
         except:
             self.lockdir = None
 

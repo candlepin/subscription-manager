@@ -137,14 +137,14 @@ class Hardware:
 
         version = "unknown"
         distname = "unknown"
-        id = "unknown"
+        dist_id = "unknown"
 
         m = _lsb_release_version.match(firstline)
 
         if m is not None:
             return tuple(m.groups())
 
-        return distname, version, id
+        return distname, version, dist_id
 
     def getMemInfo(self):
         self.meminfo = {}

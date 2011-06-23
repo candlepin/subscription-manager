@@ -275,11 +275,11 @@ class Directory:
         self.path = Path.abs(path)
 
     def listAll(self):
-        all = []
+        all_items = []
         for fn in os.listdir(self.path):
             p = (self.path, fn)
-            all.append(p)
-        return all
+            all_items.append(p)
+        return all_items
 
     def list(self):
         files = []
@@ -292,12 +292,12 @@ class Directory:
         return files
 
     def listdirs(self):
-        dir = []
+        dirs = []
         for p, fn in self.listAll():
             path = self.abspath(fn)
             if Path.isdir(path):
-                dir.append(Directory(path))
-        return dir
+                dirs.append(Directory(path))
+        return dirs
 
     def create(self):
         if not os.path.exists(self.path):
@@ -378,18 +378,18 @@ class CertificateDirectory(Directory):
                 return c
         return None
 
-    def findAllByProduct(self, hash):
+    def findAllByProduct(self, p_hash):
         certs = []
         for c in self.list():
             for p in c.getProducts():
-                if p.getHash() == hash:
+                if p.getHash() == p_hash:
                     certs.append(c)
         return certs
 
-    def findByProduct(self, hash):
+    def findByProduct(self, p_hash):
         for c in self.list():
             for p in c.getProducts():
-                if p.getHash() == hash:
+                if p.getHash() == p_hash:
                     return c
         return None
 

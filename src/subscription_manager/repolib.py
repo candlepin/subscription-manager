@@ -128,8 +128,8 @@ class UpdateAction:
                 # Skip this content:
                 continue
 
-            id = content.getLabel()
-            repo = Repo(id)
+            content_id = content.getLabel()
+            repo = Repo(content_id)
             repo['name'] = content.getName()
             repo['enabled'] = content.getEnabled()
             repo['baseurl'] = self.join(baseurl, content.getUrl())
@@ -189,22 +189,22 @@ class Repo(dict):
         ('proxy_password', 0, None),
     )
 
-    def __init__(self, id):
-        self.id = self._clean_id(id)
+    def __init__(self, repo_id):
+        self.id = self._clean_id(repo_id)
         # NOTE: This sets the above properties to the default values even if
         # they are not defined on disk. i.e. these properties will always
         # appear in this dict, but their values may be None.
         for k, m, d in self.PROPERTIES:
             self[k] = d
 
-    def _clean_id(self, id):
+    def _clean_id(self, repo_id):
         """
         Format the config file id to contain only characters that yum expects
         (we'll just replace 'bad' chars with -)
         """
         new_id = ""
         valid_chars = string.ascii_letters + string.digits + "-_.:"
-        for byte in id:
+        for byte in repo_id:
             if byte not in valid_chars:
                 new_id += '-'
             else:

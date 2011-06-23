@@ -119,7 +119,7 @@ class ProductManager:
             if repo not in active:
                 continue
             p = cert.getProduct()
-            hash = p.getHash()
+            prod_hash = p.getHash()
 
             # Are we installing Workstation cert?
             if self._isWorkstation(p):
@@ -129,7 +129,7 @@ class ProductManager:
                         # Desktop product cert is installed,
                         # delete the Desktop product cert
                         pc.delete()
-                        self.db.delete(hash)
+                        self.db.delete(prod_hash)
                         self.db.write()
 
             # no point installing desktop only to delete it
@@ -139,27 +139,27 @@ class ProductManager:
                         # we are installing Desktop, but we already have workstation
                         return
 
-            if self.pdir.findByProduct(hash):
+            if self.pdir.findByProduct(prod_hash):
                 continue
-            fn = '%s.pem' % hash
+            fn = '%s.pem' % prod_hash
             path = self.pdir.abspath(fn)
             print _('installing: %s') % fn
             cert.write(path)
-            self.db.add(hash, repo)
+            self.db.add(prod_hash, repo)
             self.db.write()
 
     def updateRemoved(self, active):
         for cert in self.pdir.list():
             p = cert.getProduct()
-            hash = p.getHash()
-            repo = self.db.findRepo(hash)
+            prod_hash = p.getHash()
+            repo = self.db.findRepo(prod_hash)
             if repo is None:
                 continue
             if repo in active:
                 continue
             print _('deleting: %s') % cert.path
             cert.delete()
-            self.db.delete(hash)
+            self.db.delete(prod_hash)
             self.db.write()
 
     def getActive(self, yb):

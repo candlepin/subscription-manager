@@ -324,7 +324,7 @@ class CellRendererDate(gtk.CellRendererText):
     def __init__(self):
         self.__gobject_init__()
 
-    def do_set_property(self, property, value):
+    def do_set_property(self, prop, value):
         """
         called to set the date property for rendering in a cell.
         we convert to display in the user's locale, then pass on to the cell
