@@ -565,20 +565,20 @@ class UnRegisterCommand(CliCommand):
         print(_("System has been un-registered."))
 
 
-class ActivateCommand(CliCommand):
+class RedeemCommand(CliCommand):
 
     def __init__(self):
-        usage = "usage: %prog activate [OPTIONS]"
-        shortdesc = _("attempt to activate a preconfigured machine")
-        desc = "activate"
-        CliCommand.__init__(self, "activate", usage, shortdesc, desc)
+        usage = "usage: %prog redeem [OPTIONS]"
+        shortdesc = _("attempt to redeem a subscription for a preconfigured machine")
+        desc = "redeem"
+        CliCommand.__init__(self, "redeem", usage, shortdesc, desc)
 
         self.parser.add_option("--email", dest="email", action='store',
                                help=_("optional email address to notify when "
-                               "token activation is complete."))
+                               "subscription activation is complete."))
         self.parser.add_option("--locale", dest="locale", action='store',
                                help=_("optional language to use for email "
-                               "notification when token activation is "
+                               "notification when subscription activation is "
                                "complete. Used with --email only. Examples: en-us, de-de"))
 
     def _validate_options(self):
@@ -601,7 +601,7 @@ class ActivateCommand(CliCommand):
             self.cp.activateMachine(consumer, self.options.email, self.options.locale)
 
         except Exception, e:
-            handle_exception("Unable to activate: %s" % e, e)
+            handle_exception("Unable to redeem: %s" % e, e)
 
 
 class SubscribeCommand(CliCommand):
@@ -883,7 +883,7 @@ class CLI:
         self.cli_commands = {}
         for clazz in [RegisterCommand, UnRegisterCommand, ListCommand, SubscribeCommand,\
                        UnSubscribeCommand, FactsCommand, IdentityCommand, OwnersCommand, \
-                       RefreshCommand, CleanCommand, ActivateCommand]:
+                       RefreshCommand, CleanCommand, RedeemCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":
