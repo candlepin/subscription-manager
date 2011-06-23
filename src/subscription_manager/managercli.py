@@ -902,7 +902,7 @@ class CLI:
 
     def _usage(self):
         print _("\nUsage: %s [options] MODULENAME --help\n") % os.path.basename(sys.argv[0])
-        print _("Primary Lifecycle Modules:")
+        print _("Primary Modules:")
         print "\r"
 
         items = self.cli_commands.items()
