@@ -927,8 +927,8 @@ class Order:
 
 class Product:
 
-    def __init__(self, hash, ext):
-        self.hash = hash
+    def __init__(self, p_hash, ext):
+        self.hash = p_hash
         self.ext = ext
         self.name = self.ext.get('1')
         self.version = self.ext.get('2')
