@@ -98,7 +98,7 @@ class CliCommand(object):
     """ Base class for all sub-commands. """
 
     def __init__(self, name="cli", usage=None, shortdesc=None,
-            description=None):
+            description=None, primary=False):
         self.shortdesc = shortdesc
         if shortdesc is not None and description is None:
             description = shortdesc
@@ -108,6 +108,7 @@ class CliCommand(object):
         self._add_common_options()
 
         self.name = name
+        self.primary = primary
 
         self.proxy_url = None
         self.proxy_hostname = None
@@ -207,9 +208,9 @@ class UserPassCommand(CliCommand):
     """
 
     def __init__(self, name, usage=None, shortdesc=None,
-            description=None):
+            description=None, primary=False):
         super(UserPassCommand, self).__init__(name, usage, shortdesc,
-                description)
+                description,primary)
         self._username = None
         self._password = None
 
@@ -278,7 +279,7 @@ class RefreshCommand(CliCommand):
         shortdesc = _("pulls the latest entitlement data from the server")
         desc = shortdesc
 
-        CliCommand.__init__(self, "refresh", usage, shortdesc, desc)
+        CliCommand.__init__(self, "refresh", usage, shortdesc, desc, True)
 
     def _do_command(self):
         check_registration()
@@ -398,7 +399,7 @@ class RegisterCommand(UserPassCommand):
         desc = "register"
 
         super(RegisterCommand, self).__init__("register", usage, shortdesc,
-                desc)
+                desc, True)
 
         self.parser.add_option("--type", dest="consumertype", default="system",
                                help=_("the type of consumer to register. Defaults to system"))
@@ -532,7 +533,7 @@ class UnRegisterCommand(CliCommand):
         shortdesc = get_branding().CLI_UNREGISTER
         desc = "unregister"
 
-        CliCommand.__init__(self, "unregister", usage, shortdesc, desc)
+        CliCommand.__init__(self, "unregister", usage, shortdesc, desc, True)
 
     def _validate_options(self):
         pass
@@ -609,7 +610,7 @@ class SubscribeCommand(CliCommand):
         usage = "usage: %prog subscribe [OPTIONS]"
         shortdesc = _("subscribe the registered machine to a specified product")
         desc = "subscribe"
-        CliCommand.__init__(self, "subscribe", usage, shortdesc, desc)
+        CliCommand.__init__(self, "subscribe", usage, shortdesc, desc, True)
 
         self.product = None
         self.substoken = None
@@ -679,7 +680,7 @@ class UnSubscribeCommand(CliCommand):
         usage = "usage: %prog unsubscribe [OPTIONS]"
         shortdesc = _("unsubscribe the registered user from all or specific subscriptions")
         desc = "unsubscribe"
-        CliCommand.__init__(self, "unsubscribe", usage, shortdesc, desc)
+        CliCommand.__init__(self, "unsubscribe", usage, shortdesc, desc, True)
 
         self.serial_numbers = None
         self.parser.add_option("--serial", dest="serial",
@@ -767,7 +768,7 @@ class ListCommand(CliCommand):
         usage = "usage: %prog list [OPTIONS]"
         shortdesc = _("list available or consumer subscriptions for registered user")
         desc = "list available or consumed Entitlement Pools for this system."
-        CliCommand.__init__(self, "list", usage, shortdesc, desc)
+        CliCommand.__init__(self, "list", usage, shortdesc, desc, True)
         self.available = None
         self.consumed = None
         self.parser.add_option("--installed", action='store_true', help=_("installed"))
@@ -893,15 +894,22 @@ class CLI:
 
     def _usage(self):
         print _("\nUsage: %s [options] MODULENAME --help\n") % os.path.basename(sys.argv[0])
-        print _("Supported modules:")
-        print "\n"
+        print _("Primary Lifecycle Modules:")
+        print "\r"
 
-        # want the output sorted
         items = self.cli_commands.items()
         items.sort()
         for (name, cmd) in items:
-            print("\t%-14s %-25s" % (name, cmd.shortdesc))
+            if (cmd.primary):
+                print("\t%-14s %-25s" % (name, cmd.shortdesc))
         print("")
+        print _("Other Modules (Please consult documentation):")
+        print "\r"
+        for (name, cmd) in items:
+            if (not cmd.primary):
+                print("\t%-14s %-25s" % (name, cmd.shortdesc))
+        print("")
+
 
     def _find_best_match(self, args):
         """
