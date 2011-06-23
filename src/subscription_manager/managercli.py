@@ -257,7 +257,7 @@ class UserPassCommand(CliCommand):
 class CleanCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog clean [OPTIONS]"
-        shortdesc = _("removes all local consumer data, does not effect the server")
+        shortdesc = _("remove all local consumer and subscription data without effecting the server")
         desc = shortdesc
 
         CliCommand.__init__(self, "clean", usage, shortdesc, desc)
@@ -276,7 +276,7 @@ class CleanCommand(CliCommand):
 class RefreshCommand(CliCommand):
     def __init__(self):
         usage = "usage: %prog refresh [OPTIONS]"
-        shortdesc = _("pulls the latest entitlement data from the server")
+        shortdesc = _("pull the latest subscription data from the server")
         desc = shortdesc
 
         CliCommand.__init__(self, "refresh", usage, shortdesc, desc, True)
@@ -298,7 +298,7 @@ class IdentityCommand(UserPassCommand):
 
     def __init__(self):
         usage = "usage: %prog identity [OPTIONS]"
-        shortdesc = _("Display the identity certficate for this machine or " \
+        shortdesc = _("display the identity certficate for this machine or " \
                       "request a new one")
         desc = shortdesc
 
@@ -361,10 +361,10 @@ class OwnersCommand(UserPassCommand):
 
     def __init__(self):
         usage = "usage: %prog identity [OPTIONS]"
-        shortdesc = _("Display the owners available for this user")
+        shortdesc = _("display the orgs available for a user")
         desc = shortdesc
 
-        super(OwnersCommand, self).__init__("owners", usage, shortdesc,
+        super(OwnersCommand, self).__init__("orgs", usage, shortdesc,
                 desc)
 
     def _do_command(self):
@@ -569,7 +569,7 @@ class ActivateCommand(CliCommand):
 
     def __init__(self):
         usage = "usage: %prog activate [OPTIONS]"
-        shortdesc = _("activate the registered user to a specified product")
+        shortdesc = _("attempt to activate a preconfigured machine")
         desc = "activate"
         CliCommand.__init__(self, "activate", usage, shortdesc, desc)
 
@@ -678,7 +678,7 @@ class UnSubscribeCommand(CliCommand):
 
     def __init__(self):
         usage = "usage: %prog unsubscribe [OPTIONS]"
-        shortdesc = _("unsubscribe the registered user from all or specific subscriptions")
+        shortdesc = _("unsubscribe the machine from all or specific subscriptions")
         desc = "unsubscribe"
         CliCommand.__init__(self, "unsubscribe", usage, shortdesc, desc, True)
 
@@ -726,7 +726,7 @@ class FactsCommand(CliCommand):
 
     def __init__(self):
         usage = "usage: %prog facts [OPTIONS]"
-        shortdesc = _("show information for facts")
+        shortdesc = _("show the current facts for this machine")
         desc = "facts"
         CliCommand.__init__(self, "facts", usage, shortdesc, desc)
 
@@ -766,8 +766,8 @@ class ListCommand(CliCommand):
 
     def __init__(self):
         usage = "usage: %prog list [OPTIONS]"
-        shortdesc = _("list available or consumer subscriptions for registered user")
-        desc = "list available or consumed Entitlement Pools for this system."
+        shortdesc = _("list subscription and product information for this machine")
+        desc = "list subscription and product information for this machine"
         CliCommand.__init__(self, "list", usage, shortdesc, desc, True)
         self.available = None
         self.consumed = None
