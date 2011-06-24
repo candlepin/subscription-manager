@@ -19,26 +19,20 @@ import logging
 import gettext
 _ = gettext.gettext
 
-from certlib import  ActionLock, ConsumerIdentity
+from certlib import  ActionLock, ConsumerIdentity, DataLib
 from subscription_manager.facts import Facts
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-class FactLib:
+class FactLib(DataLib):
 
     def __init__(self, lock=ActionLock(), uep=None):
-        self.lock = lock
-        self.uep = uep
-
-    def update(self):
-        lock = self.lock
-        lock.acquire()
-        try:
-            action = UpdateAction(uep=self.uep)
-            return action.perform()
-        finally:
-            lock.release()
+        DataLib.__init__(self, lock, uep)
+        
+    def do_update(self):
+        action = UpdateAction(uep=self.uep)
+        return action.perform()
 
 
 class Action:

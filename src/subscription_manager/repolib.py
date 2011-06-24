@@ -24,25 +24,20 @@ from iniparse import ConfigParser as Parser
 from rhsm.config import initConfig
 
 from certlib import Path, EntitlementDirectory, \
-        ProductDirectory, ActionLock
+        ProductDirectory, ActionLock, DataLib
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-class RepoLib:
+class RepoLib(DataLib):
 
     def __init__(self, lock=ActionLock(), uep=None):
-        self.lock = lock
-        self.uep = uep
+        DataLib.__init__(self, lock, uep)
 
-    def update(self):
-        lock = self.lock
-        lock.acquire()
-        try:
-            action = UpdateAction(uep=self.uep)
-            return action.perform()
-        finally:
-            lock.release()
+    def _do_update(self):
+        action = UpdateAction(uep=self.uep)
+        return action.perform()
+
 
 
 class UpdateAction:

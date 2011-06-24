@@ -45,8 +45,7 @@ class ActionLock(Lock):
     def __init__(self):
         Lock.__init__(self, self.PATH)
 
-
-class CertLib:
+class DataLib:
 
     def __init__(self, lock=ActionLock(), uep=None):
         self.lock = lock
@@ -56,19 +55,40 @@ class CertLib:
         lock = self.lock
         lock.acquire()
         try:
-            action = UpdateAction(uep=self.uep)
-            return action.perform()
+            return self._do_update()
         finally:
             lock.release()
-
+            
     def delete(self, serialNumbers):
         lock = self.lock
         lock.acquire()
         try:
-            action = DeleteAction()
-            return action.perform(serialNumbers)
+            return self._do_delete()
         finally:
-            lock.release()
+            lock.release()   
+            
+    def _do_update(self):
+        print "HHHH"
+        return
+        
+    def _do_delete(self):
+        print "YYYY"
+        return
+
+class CertLib(DataLib):
+
+    def __init__(self, lock=ActionLock(), uep=None):
+        DataLib.__init__(self, lock, uep)
+
+    def _do_update(self):
+        action = UpdateAction(uep=self.uep)
+        return action.perform()
+
+
+    def _do_delete(self, serialNumbers):
+        action = DeleteAction()
+        return action.perform(serialNumbers)
+
 
 
 class Action:
