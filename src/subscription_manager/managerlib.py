@@ -351,7 +351,8 @@ def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None):
         uep.updateConsumerFacts(consumer_uuid, facts.get_facts())
     owner = uep.getOwner(consumer_uuid)
     ownerid = owner['key']
-    return uep.getPoolsList(ownerid, consumer_uuid, list_all, active_on)
+    return uep.getPoolsList(consumer=consumer_uuid, listAll=list_all,
+            active_on=active_on, owner=ownerid)
 
 
 # TODO: This method is morphing the actual pool json and returning a new
