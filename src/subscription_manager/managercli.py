@@ -493,7 +493,9 @@ class RegisterCommand(UserPassCommand):
         except Exception, e:
             handle_exception(_("Error during registration: %s") % e, e)
 
-        managerlib.persist_consumer_cert(consumer)
+        consumer_info = managerlib.persist_consumer_cert(consumer)
+
+        print (_("The system has been registered with id: %s ")) % (consumer_info["uuid"])
 
         if self.options.autosubscribe:
             autosubscribe(admin_cp, consumer['uuid'], self.certlib)
