@@ -375,7 +375,7 @@ class OwnersCommand(UserPassCommand):
                                                proxy_password=self.proxy_password)
             owners = self.cp.getOwnerList(self.username)
             if len(owners):
-                print "owners:"
+                print "orgs:"
                 for owner in owners:
                     print owner['key']
 
@@ -647,7 +647,8 @@ class SubscribeCommand(CliCommand):
                         if (pool.find("#") >= 0):
                             systemExit(-1, _("Please enter a valid numeric pool id."))
                         self.cp.bindByEntitlementPool(consumer, pool, self.options.quantity)
-                        log.info("Info: Successfully subscribed the machine the Entitlement Pool %s" % pool)
+                        print _("Successfully subscribed the system to Pool %s") % pool
+                        log.info("Info: Successfully subscribed the system to the Entitlement Pool %s" % pool)
                     except connection.RestlibException, re:
                         log.exception(re)
                         if re.code == 403:
