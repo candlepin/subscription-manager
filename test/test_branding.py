@@ -31,7 +31,7 @@ class BrandingTests(unittest.TestCase):
     def test_default_branding(self):
         branding = Branding()
 
-        self.assertEquals("register the client to candlepin",
+        self.assertEquals("Register the machine to the server",
                 branding.CLI_REGISTER)
 
     # XXX this test requires the mo files installed
@@ -56,5 +56,5 @@ class BrandingTests(unittest.TestCase):
         custom_branding = TestBranding()
         branding = Branding(custom_branding)
 
-        self.assertEquals("unregister the client from candlepin",
+        self.assertEquals("Unregister the machine from the server",
                 branding.CLI_UNREGISTER)
