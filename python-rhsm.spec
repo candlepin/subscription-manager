@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.96.4
+Version: 0.96.5
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -57,6 +57,18 @@ rm -rf %{buildroot}
 %{python_sitelib}/rhsm-*.egg-info
 
 %changelog
+* Fri Jun 24 2011 Devan Goodwin <dgoodwin@redhat.com> 0.96.5-1
+- Fix backward compatability with old use of getPoolsList.
+  (dgoodwin@redhat.com)
+- Remove one built in type issue. (bkearney@redhat.com)
+- Removed unused Bundle class (alikins@redhat.com)
+- quantity for subscription (wottop@dhcp231-152.rdu.redhat.com)
+- Add the activation key call, and remove subscription tokens
+  (bkearney@redhat.com)
+- Improve the doco, referencing the candlepin site. (bkearney@redhat.com)
+- Improve the defualt values for the config (bkearney@redhat.com)
+- Fix bug with owner specification during registration. (dgoodwin@redhat.com)
+
 * Wed Jun 08 2011 Bryan Kearney <bkearney@redhat.com> 0.96.4-1
 - Adding profile module and updating spec (pkilambi@redhat.com)
 - Added stacking Id to the certificate (wottop@dhcp231-152.rdu.redhat.com)
