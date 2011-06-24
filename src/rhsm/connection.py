@@ -164,12 +164,13 @@ class Restlib(object):
     def _request(self, request_type, method, info=None):
         handler = self.apihandler + method
         context = SSL.Context("tlsv1")
-        if self.ca_dir != None:
-            log.info('loading ca pem certificates from: %s', self.ca_dir)
-            self._load_ca_certificates(context)
+
         log.info('work in insecure mode ?:%s', self.insecure)
         if not self.insecure:  #allow clients to work insecure mode if required..
             context.set_verify(SSL.verify_fail_if_no_peer_cert, self.ssl_verify_depth)
+            if self.ca_dir != None:
+                log.info('loading ca pem certificates from: %s', self.ca_dir)
+                self._load_ca_certificates(context)
         if self.cert_file:
             context.load_cert(self.cert_file, keyfile=self.key_file)
 
