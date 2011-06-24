@@ -40,18 +40,6 @@ class TestCliCommand(unittest.TestCase):
             # 2 == no args given
             self.assertEquals(e.code, 2)
 
-    def test_main_debug_no_args(self):
-        try:
-            self.cc.main(["--debug"])
-        except SystemExit, e:
-            # 2 == no args given
-            self.assertEquals(e.code, 2)
-
-    def test_main_debug_10(self):
-        self.cc.main(["--debug", "10"])
-        self.assertEquals('10', self.cc.options.debug)
-        self.assertEquals(type('10'), type(self.cc.options.debug))
-
     def _main_help(self, args):
         mstdout = MockStdout()
         sys.stdout = mstdout
