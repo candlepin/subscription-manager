@@ -119,8 +119,8 @@ class TestUnRegisterCommand(TestCliProxyCommand):
     command_class = managercli.UnRegisterCommand
 
 
-class TestActivateCommand(TestCliProxyCommand):
-    command_class = managercli.ActivateCommand
+class TestRedeemCommand(TestCliProxyCommand):
+    command_class = managercli.RedeemCommand
 
 
 class TestSubscribeCommand(TestCliProxyCommand):
