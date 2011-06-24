@@ -11,6 +11,3 @@ class ConnectionTests(unittest.TestCase):
         self.assertTrue(self.cp.supports_resource('admin'))
         self.assertFalse(self.cp.supports_resource('boogity'))
 
-    def test_resources_fetched(self):
-        self.assertTrue(len(self.cp.resources.keys()) > 0)
-
