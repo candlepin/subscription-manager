@@ -462,8 +462,6 @@ class RegisterCommand(UserPassCommand):
                 consumer = admin_cp.getConsumer(self.options.consumerid,
                         self.username, self.password)
             else:
-                print self.options.owner
-
                 if self.options.activation_keys:
                     admin_cp = connection.UEPConnection(proxy_hostname=self.proxy_hostname,
                                                         proxy_port=self.proxy_port,
