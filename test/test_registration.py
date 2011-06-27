@@ -25,6 +25,9 @@ from subscription_manager import managerlib
 class CliRegistrationTests(unittest.TestCase):
 
     def test_register_persists_consumer_cert(self):
+
+        expected_consumer_uuid = 'dummy-consumer-uuid'
+        
         class StubUEP:
             def __init__(self, username=None, password=None,
                          proxy_hostname=None, proxy_port=None,
@@ -33,15 +36,16 @@ class CliRegistrationTests(unittest.TestCase):
                 pass
 
             def registerConsumer(self, name, type, facts, owner):
-                return 'Dummy Consumer'
+                return {"uuid": expected_consumer_uuid,}
 
             def getOwnerList(self, username):
                 return [{'key': 'dummyowner'}]
 
-        self.persisted_consumer = None
+        self.persisted_consumer = Mock()
 
         def stub_persist(consumer):
             self.persisted_consumer = consumer
+            return self.persisted_consumer
 
         # Given
         connection.UEPConnection = StubUEP
@@ -58,4 +62,5 @@ class CliRegistrationTests(unittest.TestCase):
         cmd.main(['register', '--username=testuser1', '--password=password'])
 
         # Then
-        self.assertEqual('Dummy Consumer', self.persisted_consumer)
+        self.assertEqual(expected_consumer_uuid, self.persisted_consumer["uuid"])
+        
