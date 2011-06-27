@@ -36,7 +36,8 @@ WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
 
 class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
-    def __init__(self, backend, consumer, facts):
+    # Are facts required here? [mstead]
+    def __init__(self, backend, consumer, facts, entitlement_dir=EntitlementDirectory()):
         """
         Create a new 'My Subscriptions' tab.
         """
@@ -44,6 +45,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
+        self.entitlement_dir = entitlement_dir
 
         self.sub_details = widgets.SubDetailsWidget()
 
@@ -61,6 +63,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.add_date_column(_("End Date"), 'expiration_date')
 
+        self.add_text_column(_("Quantity"), 'quantity');
+
         self.update_subscriptions()
 
         self.unsubscribe_button = self.glade.get_widget('unsubscribe_button')
@@ -70,7 +74,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         def on_cert_change(filemonitor):
             self.update_subscriptions()
 
-        backend.monitor_certs(on_cert_change)
+        self.backend.monitor_certs(on_cert_change)
 
     def _on_unsubscribe_prompt_response(self, dialog, response, selection):
         if not response:
@@ -111,7 +115,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         """
         self.store.clear()
 
-        for cert in EntitlementDirectory().list():
+        for cert in self.entitlement_dir.list():
             entry = self._create_entry_map(cert)
             self.store.add_map(entry)
         dbus_iface = get_dbus_iface()
@@ -127,6 +131,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             'installed_text': str,
             'start_date': gobject.TYPE_PYOBJECT,
             'expiration_date': gobject.TYPE_PYOBJECT,
+            'quantity': str,
             'serial': str,
             'align': float,
             'background': str
@@ -139,7 +144,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         """
         # Load the entitlement certificate for the selected row:
         serial = selection['serial']
-        cert = EntitlementDirectory().find(long(serial))
+        cert = self.entitlement_dir.find(long(serial))
         order = cert.getOrder()
         products = [(product.getName(), product.getHash())
                         for product in cert.getProducts()]
@@ -178,6 +183,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         entry['installed_text'] = '%s / %s' % (len(installed), len(products))
         entry['start_date'] = cert.validRange().begin()
         entry['expiration_date'] = cert.validRange().end()
+        entry['quantity'] = order.getQuantity()
         entry['serial'] = cert.serialNumber()
         entry['align'] = 0.5         # Center horizontally
         entry['background'] = self._get_background_color(cert)
