@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.1
+Version: 0.96.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -207,6 +207,357 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Mon Jun 27 2011 Devan Goodwin <dgoodwin@redhat.com> 0.96.2-1
+- 656968: Add in a super class to cut down on the code duplication
+  (bkearney@redhat.com)
+- Update pool list request to match python-rhsm changes. (dgoodwin@redhat.com)
+- 656975: Ran pylint on all code. No builtins were found (bkearney@redhat.com)
+- 699442: Change the wording on the validty string to make it work
+  (bkearney@redhat.com)
+- 708226: Remove the parens in the subscription assistant (bkearney@redhat.com)
+- Bit more cleanup of the help text (bkearney@redhat.com)
+- Move activate to redeem (bkearney@redhat.com)
+- Simple typo (bkearney@redhat.com)
+- Remove the term lifecycle (bkearney@redhat.com)
+- Clean up the main help text (bkearney@redhat.com)
+- Add in primary versus secondary modules to try and focus the user on which
+  ones to pick (bkearney@redhat.com)
+- Find and send owner key during CLI registration if possible.
+  (dgoodwin@redhat.com)
+- 707525 - Facts update command displays success (mstead@redhat.com)
+- 707525 - Facts update command displays success (mstead@redhat.com)
+- 713164: fixes some strange phrases on pt_BR translation (mmello@redhat.com)
+- pep8/pyflake/pylint cleanup: (alikins@redhat.com)
+- pylint: remove unused imports (alikins@redhat.com)
+- pylint: shadowed builtin id remove unused lines (alikins@redhat.com)
+- pylint: shadowing builtin buffer (alikins@redhat.com)
+- ignore "line too long" errors, we are no where close to that
+  (alikins@redhat.com)
+- add license blurb (alikins@redhat.com)
+- Can add activation keys (bkearney@redhat.com)
+- pep8 and pyflakes clean ups (alikins@redhat.com)
+- added quantity to subscribe (wottop@dhcp231-152.rdu.redhat.com)
+- revert (wottop@dhcp231-152.rdu.redhat.com)
+- List subscribe (wottop@dhcp231-152.rdu.redhat.com)
+- lies and magic to get the global CFG config class replaces with a stub
+  (alikins@redhat.com)
+- more whitespace cleanup (alikins@redhat.com)
+- revert (alikins@redhat.com)
+- Revert "696791: Change the way we detect cpu sockets on s390x"
+  (alikins@redhat.com)
+- cleanup some weird whitespace issues in hwprobe.py (alikins@redhat.com)
+- 711133: new fix for old style to new style key format migrations
+  (alikins@redhat.com)
+- quite debug spew in stubs.py (alikins@redhat.com)
+  certs (alikins@redhat.com)
+- pass a real ISO8601 date in for start/end date (alikins@redhat.com)
+  and subscription_assistant (alikins@redhat.com)
+- import gtk.glade directly (alikins@redhat.com)
+- 696791: Change the way we detect cpu sockets on s390x (alikins@redhat.com)
+- Added the zanata.xml file for master (bkearney@redhat.com)
+- show owner in gui (cduryee@redhat.com)
+- Update the string files (bkearney@redhat.com)
+- 709412: cli was using product names for ent cert-> product cert matching
+  (alikins@redhat.com)
+- 711133: Handle updates from old style key.pem certs (alikins@redhat.com)
+- 706127: Subscription Assistant too large for firstboot (cduryee@redhat.com)
+- 707041: date picker in subscription-manager-gui does not work
+  (cduryee@redhat.com)
+- 709754: Workaround for the way Desktop/Workstation repo's and productids
+  work. (alikins@redhat.com)
+- 708095: workaround for or_IN dates (cduryee@redhat.com)
+- 705236: use correct path for pid lockfiles (cduryee@redhat.com)
+- 706552: check for, log, and clear dmi warnings to prevent them being printed
+  to stdout (cduryee@redhat.com)
+- 707292: Better counting of cpu sockets (alikins@redhat.com)
+- 709754: Workaround for the way Desktop/Workstation repo's and productids
+  work. (alikins@redhat.com)
+- 707292: Better counting of cpu sockets (alikins@redhat.com)
+- 709412: cli was using product names for ent cert-> product cert matching
+  (alikins@redhat.com)
+  manager (alikins@redhat.com)
+- 708095: workaround for or_IN dates (cduryee@redhat.com)
+- 705236: use correct path for pid lockfiles (cduryee@redhat.com)
+  manager (alikins@redhat.com)
+- Disable RHSM status icon for F15. (dgoodwin@redhat.com)
+- Get owner select working with firstboot (jbowes@redhat.com)
+- 706552: check for, log, and clear dmi warnings to prevent them being printed
+  to stdout (cduryee@redhat.com)
+- Revert "Add redhat branding back for internal repo" (jbowes@redhat.com)
+- Hook up owner selection during registration (jbowes@redhat.com)
+- Make autosubscribe its own async step during register (jbowes@redhat.com)
+- Add redhat branding back for internal repo (jbowes@redhat.com)
+- remove redhat branding (jbowes@redhat.com)
+- 700547: delay running the first icon status check (jbowes@redhat.com)
+- 707313: rhel5 product id is being deleted upon first package install after
+  subscribing to rhel5 subscription (cduryee@redhat.com)
+- Change for owner list call (wottop@dhcp231-152.rdu.redhat.com)
+- make the initial registration call async, and pulse a progress bar
+  (jbowes@redhat.com)
+- 670973: try to handle /var/log and /var/run being readonly
+  (alikins@redhat.com)
+- Move register screen to its own module (jbowes@redhat.com)
+- 704305: fix translated string for "Invalid date format..."
+  (alikins@redhat.com)
+- 705445: Fix for calculation of "available" susbcriptions label
+  (alikins@redhat.com)
+- Introduce branding module (jbowes@redhat.com)
+- Remove uses of Red Hat and RHN where it makes sense (jbowes@redhat.com)
+- Remove unused rhsm.glade (jbowes@redhat.com)
+- added hooks for 'list --owners' (wottop@dhcp231-152.rdu.redhat.com)
+- 705068: product-id plugin displays duration (cduryee@redhat.com)
+- Added the owner from the cli to the registration REST request
+  (wottop@dhcp231-152.rdu.redhat.com)
+- 670973: remove YumBase() in method default args (alikins@redhat.com)
+- 697965: use str type for serial id's to fix issues on i386
+  (alikins@redhat.com)
+- changed the pool query to use both owner and consumer information
+  (wottop@dhcp231-152.rdu.redhat.com)
+- added owner information for cli command 'identity' (cduryee@redhat.com)
+- a tab snuck in here (cduryee@redhat.com)
+- 696791: Handle exceptions thrown in hardware detection modules.
+  (alikins@redhat.com)
+- 703920: contract selection was not showing dates for pools
+  (alikins@redhat.com)
+- 683553: Make -1 show as unlimited (bkearney@redhat.com)
+- 703626: product-id yum plugin was using too new of yum api
+  (alikins@redhat.com)
+- 702026: confusing warning message when rhsm-icon runs twice
+  (cduryee@redhat.com)
+- 700838: we need to import glade from gtk (alikins@redhat.com)
+- 670973: check for yum conduit api we need, it's missing on 5.7
+  (alikins@redhat.com)
+- 703491: firstboot would continue to next screen on auth failure
+  (alikins@redhat.com)
+- 700958: fire check_status dbus calls in a non-blocking manner
+  (jbowes@redhat.com)
+- 710458: Do not display activation messages as errors. (dgoodwin@redhat.com)
+- 693527: Adding 'usage: ' id for older versions of optparse.
+  (jharris@redhat.com)
+- Remove unused firstboot dir (jbowes@redhat.com)
+- 702092: fit 'activate a subscription' button in 800x600 (jbowes@redhat.com)
+- 700952: Fix SystemExit traceback logging on older Python versions.
+  (dgoodwin@redhat.com)
+- 701263: Moving dmiinfo declaration and allowing for failures in dmi function
+  calls. (jharris@redhat.com)
+- 700601: try really hard to set a meaningful locale (alikins@redhat.com)
+- remove debug raise (alikins@redhat.com)
+- 700058: Displaying previous imported cert in cert browser option
+  (cduryee@redhat.com)
+- 700547: ensure the notification attaches to rhsm-icon (jbowes@redhat.com)
+- Write unique key.pem for each entitlement. (dgoodwin@redhat.com)
+- 700313: We were skipping the code that hides the activation button
+  (alikins@redhat.com)
+- 700313: Tweaking activate dialog properties to show in firstboot.
+  (jharris@redhat.com)
+- 700073: Background is click able while handling Import certificate dialog box
+  (cduryee@redhat.com)
+- 695234: dates are being displayed incorrectly everywhere (alikins@redhat.com)
+- 697908: regression in subscription-manager unregister (cduryee@redhat.com)
+- 696020: on x86, serial numbers do not like to be long's (alikins@redhat.com)
+- 694851: only open one dbus proxy connection (jbowes@redhat.com)
+- 695367: call to dbus-send fails during upgrades on selinux-enabled machines
+  (cduryee@redhat.com)
+- 696679: add pam/consolehelper links for subscription-manager
+  (alikins@redhat.com)
+- 674652: Subscription Manager Leaves Broken Yum Repos After Unregister
+  (cduryee@redhat.com)
+- update help text for identity command (jbowes@redhat.com)
+- 696674: rhsmcertd was using the wrong path for certmgr.py
+  (alikins@redhat.com)
+- 696210: fix display of error messages with urls (alikins@redhat.com)
+- 694839: Remove some pango markup and instead linkify links ourselves
+  (alikins@redhat.com)
+- indention fix (alikins@redhat.com)
+- 683553: subscription-manager-gui is displaying unlimited pools as -1
+  (cduryee@redhat.com)
+- 696021: fix regression in error message formatting (jbowes@redhat.com)
+- 694842: error messages do not get populated during firstboot
+  (cduryee@redhat.com)
+- 691784: fix entitlement failure that throws sequence error
+  (alikins@redhat.com)
+- Latest japanese strings (bkearney@redhat.com)
+- 670798: put initscript in /etc/rc.d/init.d (jbowes@redhat.com)
+- 694877: Fix wrong module imports in yum plugins and wrong path for certmgr.py
+  (alikins@redhat.com)
+- 693709: fix bug showing the "you are registered to rhn" dialog
+  (alikins@redhat.com)
+- 691784: Fix handling of unsubscribing imported certs while unregistered
+  (alikins@redhat.com)
+- 694662: New man page (bkearney@redhat.com)
+- 691480: update syslog message for proper cli command name (jbowes@redhat.com)
+- remove unused glade string (jbowes@redhat.com)
+- 688508: override more of optparse for i18n (jbowes@redhat.com)
+- 693549: New man pages (bkearney@redhat.com)
+- change status_changed signal to entitlement_status_changed
+  (jbowes@redhat.com)
+- 693896: subscription manager does not always reload dbus scripts
+  automatically (cduryee@redhat.com)
+- 694154: remove extraneous slashes in symlink (cduryee@redhat.com)
+- 693834: remove $PREFIX from svg icon symlink (alikins@redhat.com)
+- re-extract i18n keys (jbowes@redhat.com)
+- remove duplicate l10n from context removal (jbowes@redhat.com)
+- remove msg context from glade files (jbowes@redhat.com)
+- extract latest i18n keys (jbowes@redhat.com)
+- Add the latest l10n strings (jbowes@redhat.com)
+- throw a bugzilla script into rel-eng (cduryee@redhat.com)
+- rename dbus interface (to get rid of compliance) (jbowes@redhat.com)
+- get rid of 'compliance' subdir (jbowes@redhat.com)
+- rename rhsm-complianced to rhsmd (jbowes@redhat.com)
+- rename rhsm-compliance-icon to rhsm-icon (jbowes@redhat.com)
+- Remove 'compliance' from the code (except for complianced and related)
+  (jbowes@redhat.com)
+- Add "arch" info to the product info displayed on installed products screen
+  (alikins@redhat.com)
+- 691788: Check if entitlement cert is valid before allowing manual import.
+  (dgoodwin@redhat.com)
+- 691137: set return code from main() for rhsmcertd (jbowes@redhat.com)
+- 691784: unsubscribing a imported cert was causing an uncaught exception
+  (alikins@redhat.com)
+- fix imports for rhel6 firstboot modules (alikins@redhat.com)
+- latest l10n strings (jbowes@redhat.com)
+- 691536: More string updates (jbowes@redhat.com)
+- 691536: update strings replacing compliance with valid (jbowes@redhat.com)
+- unroll some deps on gui stuff from managerlib (alikins@redhat.com)
+- SRC_DIR not CODE_DIR. CODE_DIR is where we install to (alikins@redhat.com)
+- add new CODE_DIR to firstboot makefile rules (alikins@redhat.com)
+- update test cases to import from subscription_manager (alikins@redhat.com)
+- move the src from /src/ to /src/subscription_manager (alikins@redhat.com)
+- 684647: i18n/l10n our .desktop files (jbowes@redhat.com)
+- 691480: syslog non-compliance on the proper status code (jbowes@redhat.com)
+- add logic to handle fedora (cduryee@redhat.com)
+- Refactor to use "from susbcription_manager" style imports
+  (alikins@redhat.com)
+- s/subscriptionmanager/subscription_manager (alikins@redhat.com)
+- backport firstboot modules to rhel5 firstboot module api (alikins@redhat.com)
+- "use_action_appearance" nde property ot supported on rhel5, remove
+  (alikins@redhat.com)
+- move subscription-manager code from /usr/share/rhsm to
+  /usr/share/rhsn/subscriptionmanager (alikins@redhat.com)
+- we don't/can't install firstboot modules to up2date's dir on rhel5, so don't
+  (alikins@redhat.com)
+- alter conditional to work inside install manifest (cduryee@redhat.com)
+- use lsb-release again to get around mock issue (cduryee@redhat.com)
+- add dep for redhat-release (cduryee@redhat.com)
+- remove dep on lsb_release (cduryee@redhat.com)
+- Use polling instead of inotify on el5 (jbowes@redhat.com)
+- On el5, create symlinks for firstboot code (cduryee@redhat.com)
+- Fork firstboot files for rhel5 and 6. (cduryee@redhat.com)
+- 688592: latest strings from the i18n team. (bkearney@redhat.com)
+- Missed one translation (bkearney@redhat.com)
+- support older yum plugin conduit api (alikins@redhat.com)
+- RHEL 5.7 changes (partial) (cduryee@redhat.com)
+- RHEL 5.7 changes (partial) (cduryee@redhat.com)
+- remove use of "funcName" log formatting option (alikins@redhat.com)
+- check for linux_distribution in platform module (alikins@redhat.com)
+- replace use of platform module with our own code for RHEL5
+  (alikins@redhat.com)
+- remove unused import of dbus.mainloop (alikins@redhat.com)
+- remove use of hashlib (not there on python2.4) and use md5
+  (alikins@redhat.com)
+- replace "a = b if b else c" construct since it's not allowed in python2.4
+  (alikins@redhat.com)
+- use button.get_property('sensitive') since gtk 2.10 lacks
+  button.get_sensitive (alikins@redhat.com)
+- 688192: don't look for dmi info on machines without dmi (jbowes@redhat.com)
+- 688469: workaround for optparse's lack of i18n/l10n (jbowes@redhat.com)
+- Ensure that username and password are translated (bkearney@redhat.com)
+- 683968: ensure yum plugins don't log to stdout (jbowes@redhat.com)
+- 688550: ensure i18n configuration is the first thing to happen
+  (jbowes@redhat.com)
+- Remove a bunch of unused values from constants.py (jbowes@redhat.com)
+- Use xgettext's native glade file handling (jbowes@redhat.com)
+- Make the register button translatable (bkearney@redhat.com)
+- Regen the keys file (bkearney@redhat.com)
+- Add Context extract to gettext (bkearney@redhat.com)
+- 685086: Fact times were read from the file but not localized before putting
+  on the ui (bkearney@redhat.com)
+- 685099: Add in missed translations to the compliance assistant string
+  (bkearney@redhat.com)
+- 685108: Translation missed for the import dialog (bkearney@redhat.com)
+- Remove stray 'raise e' (jbowes@redhat.com)
+- 685145: Remove rogue use of pyOpenSSL (jbowes@redhat.com)
+- use gobject instead of glib for el5 (jbowes@redhat.com)
+- Add conditional support for python-inotify instead of gio (jbowes@redhat.com)
+- 684680: Remove unnecessary gettext text domain calls, and ensure only using
+  the rhsm domain (bkearney@redhat.com)
+- compliant.svg was corrupt under librsvg 2.16. This version works in both 5
+  and 6 (cduryee@redhat.com)
+- 684285: Add a svg library dependency (bkearney@redhat.com)
+- two small fixes for rhel5. Change a class def syntax, and use g_timeout_add
+  instead of g_timeout_add_seconds (cduryee@redhat.com)
+- Bring in the latest translations from the i18n team (bkearney@redhat.com)
+- send up return codes and bypass handle_exception on SystemExit for sm-gui
+  (cduryee@redhat.com)
+- send up return codes and bypass handle_exception on SystemExit
+  (cduryee@redhat.com)
+- catch non-exceptional exception thrown by 2.4 (cduryee@redhat.com)
+- Support date string parsing in python 2.4 (jbowes@redhat.com)
+- 676377: rhsm-compliance-icon's status can be a day out of sync
+  (cduryee@redhat.com)
+- 681925: subscription-manager masks SIGPIPE when running virt-what, resulting
+  in errors in shell commands (cduryee@redhat.com)
+- 614453: fix list cli command for multi entitled products (jbowes@redhat.com)
+- 682331: Latest man pages from Deon (bkearney@redhat.com)
+- 682311: rhsm-compliance icon pegs the cpu at 100% (cduryee@redhat.com)
+- Drop unnecessary sort and reverse of entitlement certs. (dgoodwin@redhat.com)
+- 672821: Latest man pages from deon (bkearney@redhat.com)
+- Add support for tags. (dgoodwin@redhat.com)
+- 679961:  Clearing out all fields in subscription details widget.
+  (jharris@redhat.com)
+- 629670: check for warning periods in valid certs, not expired ones
+  (jbowes@redhat.com)
+- Remove unused getProductDescription code. (dgoodwin@redhat.com)
+- 676371: Better Compliance Assistant refreshing after bind.
+  (dgoodwin@redhat.com)
+- Move the translations to be language only, not language plus country
+  (bkearney@redhat.com)
+- 678151: prompt for credentials if not supplied as cli args
+  (jbowes@redhat.com)
+- 680399: add --auto to subscribe (jbowes@redhat.com)
+- 676377: rhsm-compliance-icon's status can be a day out of sync
+  (cduryee@redhat.com)
+- 672562 request for subscription-manager list --available --ondate option
+  (cduryee@redhat.com)
+- Add in the latest po files (bkearney@redhat.com)
+- Rename the files correctly (bkearney@redhat.com)
+- Add in the translated po files (bkearney@redhat.com)
+- 678003: Write proxy info for yum repositories we manage.
+  (dgoodwin@redhat.com)
+- 678003: Fix a certlib cached connection. (dgoodwin@redhat.com)
+- 677756 add accesibility names to compliance assistant tables
+  (alikins@redhat.com)
+- Fix a bug when bare strings were passed to handle_gui_exception
+  (alikins@redhat.com)
+- 573591: Fix the permissions on some directories (bkearney@redhat.com)
+- 678049: Fix status after CLI register with --autosubscribe.
+  (dgoodwin@redhat.com)
+- The gui was looking for numerics for provides management, but it is returned
+  as a string (bkearney@redhat.com)
+- 676349: python deprecation fixups (jbowes@redhat.com)
+- 676363 - rhsm-compliance-icon has no icon image (cduryee@redhat.com)
+- 672562 - request for subscription-manager list --available --ondate option
+  (cduryee@redhat.com)
+- 672562 - request for subscription-manager list --available --ondate option
+  (cduryee@redhat.com)
+- 676371 - Compliance Assistant closes when you're not done
+  (cduryee@redhat.com)
+- 676348: make config file and runtime dirs/logs only readable by root
+  (jbowes@redhat.com)
+- 676534 - Got message “unable to read /var/lib/rhsm/facts/facts.json” at
+  first time register to stage (cduryee@redhat.com)
+- 675777 Date search field has no accessibility handler (cduryee@redhat.com)
+- 675817 - Compliance Assistant needs an Update button for the date
+  (cduryee@redhat.com)
+- 675812 - Some tracebacks while beating on subscription-manager-gui
+  (cduryee@redhat.com)
+- 675951 compliance asst doesn't word wrap label (cduryee@redhat.com)
+- 670655 can't dismiss error dialog when subscribing to personal subscriptions
+  (cduryee@redhat.com)
+- 673050: Using strftime to format update time. (jharris@redhat.com)
+- 674078: send 'right now' for compliance today, too (jbowes@redhat.com)
+- 673050: Treating time_t as int to work on i686. (jharris@redhat.com)
+
 * Fri Feb 04 2011 Devan Goodwin <dgoodwin@redhat.com> 0.96.1-1
 - 674418: Changing accessibility handles to reflect check box functionality.
   (jharris@redhat.com)
