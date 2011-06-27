@@ -15,7 +15,7 @@
 import unittest
 from mock import Mock
 
-import stubs
+from stubs import StubUEP
 import rhsm.connection as connection
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.managercli import RegisterCommand
@@ -25,23 +25,12 @@ from subscription_manager import managerlib
 class CliRegistrationTests(unittest.TestCase):
 
     def test_register_persists_consumer_cert(self):
-        class StubUEP:
-            def __init__(self, username=None, password=None,
-                         proxy_hostname=None, proxy_port=None,
-                         proxy_user=None, proxy_password=None,
-                         cert_file=None, key_file=None):
-                pass
 
-            def registerConsumer(self, name, type, facts, owner):
-                return 'Dummy Consumer'
-
-            def getOwnerList(self, username):
-                return [{'key': 'dummyowner'}]
-
-        self.persisted_consumer = None
+        self.persisted_consumer = Mock()
 
         def stub_persist(consumer):
             self.persisted_consumer = consumer
+            return self.persisted_consumer
 
         # Given
         connection.UEPConnection = StubUEP
@@ -58,4 +47,5 @@ class CliRegistrationTests(unittest.TestCase):
         cmd.main(['register', '--username=testuser1', '--password=password'])
 
         # Then
-        self.assertEqual('Dummy Consumer', self.persisted_consumer)
+        self.assertEqual('dummy-consumer-uuid', self.persisted_consumer["uuid"])
+        
