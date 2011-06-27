@@ -514,7 +514,6 @@ class RegisterCommand(UserPassCommand):
             return self.options.owner
 
         owners = cp.getOwnerList(self.username)
-        print owners
         if len(owners) == 1:
             return owners[0]['key']
         # TODO: should we let the None key go, or just assume the server will
