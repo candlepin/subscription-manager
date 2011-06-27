@@ -1,17 +1,9 @@
 import sys
 import unittest
 
-from stubs import MockStderr, MockStdout
+from stubs import MockStderr, MockStdout, StubUEP
 from subscription_manager.gui import factsgui, managergui
 from mock import Mock
-
-
-class StubUEP:
-    def __init__(self, username=None, password=None,
-                 proxy_hostname=None, proxy_port=None,
-                 proxy_user=None, proxy_password=None,
-                 cert_file=None, key_file=None):
-        pass
 
 
 class FactDialogTests(unittest.TestCase):

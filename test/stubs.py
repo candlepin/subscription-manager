@@ -125,9 +125,11 @@ class StubProduct(Product):
 class StubOrder(object):
 
     # Start/end are formatted strings, not actual datetimes.
-    def __init__(self, start, end):
+    def __init__(self, start, end, name="STUB NAME", quantity=None):
+        self.name = name
         self.start = start
         self.end = end
+        self.quantity = quantity
 
     def getStart(self):
         return self.start
@@ -141,6 +143,11 @@ class StubOrder(object):
     def getAccountNumber(self):
         return None
 
+    def getName(self):
+        return self.name
+
+    def getQuantity(self):
+        return self.quantity
 
 class StubContent(Content):
 
@@ -191,7 +198,7 @@ class StubProductCertificate(ProductCertificate):
 class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate):
 
     def __init__(self, product, provided_products=None, start_date=None, end_date=None,
-            order_end_date=None, content=None):
+            order_end_date=None, content=None, quantity=None):
         StubProductCertificate.__init__(self, product, provided_products)
 
         self.start_date = start_date
@@ -205,7 +212,7 @@ class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate)
             order_end_date = self.end_date
         fmt = "%Y-%m-%dT%H:%M:%SZ"
         self.order = StubOrder(self.start_date.strftime(fmt),
-                order_end_date.strftime(fmt))
+                order_end_date.strftime(fmt), quantity=quantity)
 
         self.valid_range = DateRange(self.start_date, self.end_date)
         self.content = []
@@ -268,3 +275,28 @@ class StubConsumerIdentity:
 
     def getConsumerId(self):
         return "211211381984"
+
+class StubUEP:
+    def __init__(self, username=None, password=None,
+        proxy_hostname=None, proxy_port=None,
+        proxy_user=None, proxy_password=None,
+        cert_file=None, key_file=None):
+            self.registered_consumer_info = {"uuid": 'dummy-consumer-uuid',}
+            pass
+
+    def registerConsumer(self, name, type, facts, owner):
+        return self.registered_consumer_info
+
+    def getOwnerList(self, username):
+        return [{'key': 'dummyowner'}]
+
+
+class StubBackend:
+    def __init__(self):
+        pass
+
+    def monitor_certs(self, callback):
+        pass
+
+    def monitor_identity(self, callback):
+        pass
