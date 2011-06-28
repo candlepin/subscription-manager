@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # Copyright (c) 2011 Red Hat, Inc.
 #
@@ -79,7 +78,3 @@ PROFILE_MAP = {
     "rpm": RPMProfile,
 }
 
-if __name__ == '__main__':
-    p = get_profile("rpm")
-    import pprint
-    pprint.pprint(p.collect())
