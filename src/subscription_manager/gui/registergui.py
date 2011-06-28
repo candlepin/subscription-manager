@@ -281,6 +281,7 @@ class RegisterScreen:
         self._run_register_step(self.owner_key, env)
 
     def _run_register_step(self, owner, env):
+        log.info("Registering to owner: %s environment: %s" % (owner, env))
         self.async.register_consumer(self.consumer_name.get_text(),
                 self.facts.get_facts(), owner, env,
                 self._on_registration_finished_cb)
@@ -403,6 +404,8 @@ class AsyncBackend(object):
             retval = None
             # If environments aren't supported, don't bother trying to list:
             if self.backend.admin_uep.supports_resource('environments'):
+                log.info("Server supports environments, checking for environment to " 
+                        "register to.")
                 retval = self.backend.admin_uep.getEnvironmentList(owner_key)
             self.queue.put((callback, retval, None))
         except Exception, e:
