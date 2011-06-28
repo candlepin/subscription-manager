@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010 Red Hat, Inc.
+# Copyright (c) 2011 Red Hat, Inc.
 #
 # Authors: Devan Goodwin <dgoodwin@redhat.com>
 #

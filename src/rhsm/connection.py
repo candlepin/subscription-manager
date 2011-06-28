@@ -341,6 +341,8 @@ class UEPConnection:
         resource. For our use cases this is generally the plural form
         of the resource.
         """
+        if resource_name == 'environments':
+            return True
         resources_list = self.conn.request_get("/")
         resources = {}
         for resource in resources_list:
@@ -354,7 +356,7 @@ class UEPConnection:
     def ping(self, username=None, password=None):
         return self.conn.request_get("/status/")
 
-    def registerConsumer(self, name="unknown", type="system", facts={}, owner=None):
+    def registerConsumer(self, name="unknown", type="system", facts={}, owner=None, environment=None):
         """
         Creates a consumer on candlepin server
         """
@@ -362,6 +364,8 @@ class UEPConnection:
                   "name": name,
                   "facts": facts}
         url = "/consumers"
+        if environment:
+            url = "/environments/%s/consumers" % environment
         if owner:
             url = "%s?owner=%s" % (url, owner)
 
@@ -515,6 +519,24 @@ class UEPConnection:
         method = "/consumers/%s/entitlements" % consumerId
         results = self.conn.request_get(method)
         return results
+
+    def getEnvironmentList(self, owner_key):
+        """
+        List the environments for a particular owner.
+
+        Some servers may not support this and will error out. The caller
+        can always check with supports_resource("environments").
+        """
+        results = [
+                {"id": 1, "name": "Env 1"},
+                {"id": 2, "name": "Env 2"},
+                {"id": 3, "name": "Env 3"}]
+        return results
+
+
+        #method = "/owners/%s/environments" % owner_key
+        #results = self.conn.request_get(method)
+        #return results
 
     def getEntitlement(self, entId):
         method = "/entitlements/%s" % entId
