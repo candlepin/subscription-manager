@@ -346,8 +346,7 @@ def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None):
     rule checks server side will have the most up to date info about the
     consumer possible.
     """
-    if facts.delta():
-        uep.updateConsumerFacts(consumer_uuid, facts.get_facts())
+    facts.update_check(uep, consumer_uuid)
     owner = uep.getOwner(consumer_uuid)
     ownerid = owner['key']
     return uep.getPoolsList(consumer=consumer_uuid, listAll=list_all,

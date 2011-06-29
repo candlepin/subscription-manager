@@ -13,6 +13,13 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 
 class Facts:
+    """
+    Manages the facts for this system, maintains a cache of the most 
+    recent set sent to server, and checks for changes.
+    
+    Includes both those hard coded in the app itself, as well as custom 
+    facts to be loaded from /etc/rhsm/facts/.
+    """
 
     def __init__(self):
         self.facts = {}
@@ -100,10 +107,8 @@ class Facts:
         return self.facts
 
     def find_facts(self):
-        # don't figure this out twice if we already did it for
-        # delta()
+        # Load custom facts from /etc/rhsm/facts:
         facts_file_glob = "%s/facts/*.facts" % rhsm.config.DEFAULT_CONFIG_DIR
-
         file_facts = {}
         for file_path in glob.glob(facts_file_glob):
             if os.access(file_path, os.R_OK):
@@ -133,3 +138,14 @@ class Facts:
 
         self.write(facts)
         return facts
+
+    def update_check(self, uep, consumer_uuid, force=False):
+        """
+        Check if facts have changed, and push an update if so.
+
+        force option will skip the delta check and just push up the current
+        facts regardless.
+        """
+        if self.delta() or force:
+            log.info("Updating facts.")
+            uep.updateConsumerFacts(consumer_uuid, self.get_facts())

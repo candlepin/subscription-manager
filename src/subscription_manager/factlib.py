@@ -52,24 +52,19 @@ class UpdateAction(Action):
 
     def perform(self):
         updates = 0
-        facts = Facts()
-        if facts.delta():
-            updates = self.updateFacts(facts.get_facts())
-        log.info("facts updated: %s" % updates)
-        return updates
 
-    def updateFacts(self, facts):
-        updates = len(facts)
         # figure out the diff between latest facts and
         # report that as updates
-        # TODO: don't update if there is nothing to update
 
         if not ConsumerIdentity.exists():
             return updates
         consumer = ConsumerIdentity.read()
         consumer_uuid = consumer.getConsumerId()
 
-        self.uep.updateConsumerFacts(consumer_uuid, facts)
+        facts = Facts()
+        if facts.delta():
+            updates = len(facts.get_facts())
+            facts.update_check(self.uep, consumer_uuid)
         return updates
 
 

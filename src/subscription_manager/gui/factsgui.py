@@ -112,7 +112,7 @@ class SystemFactsDialog(widgets.GladeWidget):
         consumer_uuid = self.consumer.uuid
 
         try:
-            self.backend.uep.updateConsumerFacts(consumer_uuid, system_facts)
+            self.facts.update_check(self.backend.uep, consumer_uuid, force=True)
             self.facts.write(system_facts, True)
         except Exception, e:
             log.error("Could not update system facts \nError: %s" % e)

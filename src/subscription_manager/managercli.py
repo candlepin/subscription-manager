@@ -591,8 +591,7 @@ class RedeemCommand(CliCommand):
             # update facts first, if we need to
             facts = Facts()
 
-            if facts.delta():
-                self.cp.updateConsumerFacts(consumer, facts.get_facts())
+            facts.update_check(self.cp, consumer)
 
             self.cp.activateMachine(consumer, self.options.email, self.options.locale)
 
@@ -636,8 +635,7 @@ class SubscribeCommand(CliCommand):
             # update facts first, if we need to
             facts = Facts()
 
-            if facts.delta():
-                self.cp.updateConsumerFacts(consumer, facts.get_facts())
+            facts.update_check(self.cp, consumer)
 
             if self.options.pool:
                 for pool in self.options.pool:
@@ -754,7 +752,7 @@ class FactsCommand(CliCommand):
         if self.options.update:
             facts = Facts()
             consumer = check_registration()['uuid']
-            self.cp.updateConsumerFacts(consumer, facts.get_facts())
+            facts.update_check(self.cp, consumer)
             print _("Facts sucessfully updated.")
 
 
