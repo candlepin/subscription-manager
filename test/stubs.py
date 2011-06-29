@@ -146,7 +146,7 @@ class StubOrder(object):
     def getName(self):
         return self.name
 
-    def getQuantity(self):
+    def getQuantityUsed(self):
         return self.quantity
 
 class StubContent(Content):
