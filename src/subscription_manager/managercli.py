@@ -457,16 +457,17 @@ class RegisterCommand(UserPassCommand):
 
         # Proceed with new registration:
         try:
+            admin_cp = connection.UEPConnection(proxy_hostname=self.proxy_hostname,
+                                                proxy_port=self.proxy_port,
+                                                proxy_user=self.proxy_user,
+                                                proxy_password=self.proxy_password)
+                                                                    
             if self.options.consumerid:
             #TODO remove the username/password
                 consumer = admin_cp.getConsumer(self.options.consumerid,
                         self.username, self.password)
             else:
                 if self.options.activation_keys:
-                    admin_cp = connection.UEPConnection(proxy_hostname=self.proxy_hostname,
-                                                        proxy_port=self.proxy_port,
-                                                        proxy_user=self.proxy_user,
-                                                        proxy_password=self.proxy_password)
 
                     consumer = admin_cp.registerConsumerWithKeys(
                         name=consumername,
