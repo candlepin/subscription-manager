@@ -26,6 +26,12 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 
 class FactLib(DataLib):
+    """
+    Used by CertManager to update a system's facts with the server, used 
+    primarily by the cron job but in a couple other places as well.
+
+    Makes use of the facts module as well.
+    """
 
     def __init__(self, lock=ActionLock(), uep=None):
         DataLib.__init__(self, lock, uep)

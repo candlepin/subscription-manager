@@ -354,6 +354,7 @@ def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None):
             active_on=active_on, owner=ownerid)
 
 
+
 # TODO: This method is morphing the actual pool json and returning a new
 # dict which does not contain all the pool info. Not sure if this is really
 # necessary. Also some "view" specific things going on in here.
