@@ -21,6 +21,7 @@ import gettext
 _ = gettext.gettext
 
 from subscription_manager.gui import widgets
+from subscription_manager.gui.utils import allows_multi_entitlement
 from subscription_manager import managerlib
 
 prefix = os.path.dirname(__file__)
@@ -40,6 +41,8 @@ class ContractSelectionWindow(object):
         self.contract_selection_treeview = \
                 self.contract_selection_xml.get_widget(
                         "contract_selection_treeview")
+        self.contract_selection_treeview.get_selection().connect("changed",
+            self._on_contract_selection)
 
         self.subscription_name_label = self.contract_selection_xml.get_widget(
             "subscription_name_label")
@@ -52,9 +55,16 @@ class ContractSelectionWindow(object):
             "on_subscribe_button_clicked": self._subscribe_button_clicked,
         })
 
+        self.quantity_renderer = gtk.CellRendererSpin()
+        self.quantity_renderer.set_property("adjustment",
+            gtk.Adjustment(lower=1, upper=100, step_incr=1))
+        self.quantity_renderer.set_property("editable", True)
+        self.quantity_renderer.connect("edited", self._on_quantity_change)
+
         self.model = gtk.ListStore(str, str,
                                    gobject.TYPE_PYOBJECT,
                                    gobject.TYPE_PYOBJECT,
+                                   int,
                                    str,
                                    gobject.TYPE_PYOBJECT)
         self.contract_selection_treeview.set_model(self.model)
@@ -84,6 +94,10 @@ class ContractSelectionWindow(object):
         column = gtk.TreeViewColumn(_("End Date"), renderer, date=3)
         self.contract_selection_treeview.append_column(column)
 
+        column = gtk.TreeViewColumn(_("Quantity"), self.quantity_renderer, text=4)
+        self.contract_selection_treeview.append_column(column)
+
+
     def add_pool(self, pool):
         self.total_contracts += 1
         self.total_contracts_label.set_text(str(self.total_contracts))
@@ -94,10 +108,12 @@ class ContractSelectionWindow(object):
         if quantity < 0:
             quantity = _('unlimited')
 
+        quantity_to_consume = 1
         row = [pool['contractNumber'],
                 "%s / %s" % (pool['consumed'], quantity),
                managerlib.parseDate(pool['startDate']),
                managerlib.parseDate(pool['endDate']),
+               quantity_to_consume,
                pool['productName'], pool]
         self.model.append(row)
 
@@ -108,5 +124,30 @@ class ContractSelectionWindow(object):
         self._cancel_callback()
 
     def _subscribe_button_clicked(self, button):
-        self._selected_callback(
-                self.model[self.contract_selection_treeview.get_cursor()[0][0]][5])
+        row = self.model[self.contract_selection_treeview.get_cursor()[0][0]]
+        pool = row[6]
+        quantity = row[4]
+        self._selected_callback(pool, quantity)
+
+    def _on_quantity_change(self, renderer, path, new_text):
+        """ Handles when a quantity is changed in the cell """
+        try:
+            new_quantity = int(new_text)
+            iter = self.model.get_iter(path)
+            self.model.set_value(iter, 4, new_quantity)
+        except ValueError, e:
+            # Do nothing... The value entered in the grid will be reset.
+            pass
+
+    def _on_contract_selection(self, widget):
+        model, tree_iter = widget.get_selected()
+
+        # Handle no selection in table.
+        if not tree_iter:
+            return
+
+        row = model[tree_iter]
+        pool = row[6]
+
+        # Only enable quantity if subscription is multi-entitlement capable
+        self.quantity_renderer.set_property("editable", allows_multi_entitlement(pool))

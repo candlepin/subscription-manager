@@ -441,7 +441,6 @@ def merge_pools(pools):
     # key hashing:
     return merged_pools
 
-
 class PoolStash(object):
     """
     Object used to fetch pools from the server, sort them into compatible,
@@ -468,6 +467,7 @@ class PoolStash(object):
         """
         Refresh the list of pools from the server, active on the given date.
         """
+
         self.all_pools = {}
         self.compatible_pools = {}
         log.debug("Refreshing pools from server...")
@@ -573,7 +573,6 @@ class PoolStash(object):
         for product in pool['providedProducts']:
             provided_products.append((product['productName'], product['productId']))
         return provided_products
-
 
 def _sub_dict(datadict, subkeys, default=None):
     return dict([(k, datadict.get(k, default)) for k in subkeys])

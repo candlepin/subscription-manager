@@ -220,10 +220,10 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         log.debug("filters changed")
         self.display_pools()
 
-    def _contract_selected(self, pool):
+    def _contract_selected(self, pool, quantity=None):
         self._contract_selection_cancelled()
         try:
-            self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'])
+            self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'], quantity)
             managerlib.fetch_certificates(self.backend)
 
         except Exception, e:

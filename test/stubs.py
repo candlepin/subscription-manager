@@ -304,9 +304,12 @@ class StubUEP:
     def updatePackageProfile(self, uuid, pkg_dicts):
         pass
 
+    def getProduct(self):
+        return {}
 
 class StubBackend:
-    def __init__(self):
+    def __init__(self, uep=StubUEP()):
+        self.uep = uep
         pass
 
     def monitor_certs(self, callback):

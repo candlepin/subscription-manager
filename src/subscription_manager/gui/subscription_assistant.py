@@ -32,7 +32,7 @@ from subscription_manager.gui import storage
 from subscription_manager.gui import widgets
 from subscription_manager.gui import progress
 from subscription_manager import async
-from subscription_manager.gui.utils import handle_gui_exception, make_today_now
+from subscription_manager.gui.utils import handle_gui_exception, make_today_now, allows_multi_entitlement
 
 
 class MappedListTreeView(gtk.TreeView):
@@ -44,6 +44,7 @@ class MappedListTreeView(gtk.TreeView):
         toggle_renderer.connect("toggled", callback)
         column = gtk.TreeViewColumn(name, toggle_renderer, active=column_number)
         self.append_column(column)
+        return column
 
     def add_column(self, name, column_number, expand=False):
         text_renderer = gtk.CellRendererText()
@@ -55,6 +56,7 @@ class MappedListTreeView(gtk.TreeView):
             column.add_attribute(text_renderer, 'xalign', self.store['align'])
 
         self.append_column(column)
+        return column
 
     def add_date_column(self, name, column_number, expand=False):
         date_renderer = widgets.CellRendererDate()
@@ -65,6 +67,14 @@ class MappedListTreeView(gtk.TreeView):
         else:
             column.add_attribute(date_renderer, 'xalign', self.store['align'])
 
+        self.append_column(column)
+        return column
+
+    def add_editable_column(self, name, column_number, renderer, edit_callback):
+        renderer.set_property("editable", True)
+        renderer.connect("edited", edit_callback)
+        column = gtk.TreeViewColumn(name, renderer, text=column_number)
+        self.store = self.get_model()
         self.append_column(column)
 
 
@@ -129,7 +139,9 @@ class SubscriptionAssistant(widgets.GladeWidget):
             'total_contracts': int,
             'total_subscriptions': int,
             'available_subscriptions': str,
-            'pool_id': str,  # not displayed, just for lookup
+            'quantity_to_consume': int,
+            'pool_id': str,
+            'multi-entitlement': bool,
         }
 
         self.subscriptions_store = storage.MappedListStore(subscriptions_type_map)
@@ -140,9 +152,17 @@ class SubscriptionAssistant(widgets.GladeWidget):
         self.subscriptions_treeview.add_column(_("Available Subscriptions"),
                 self.subscriptions_store['available_subscriptions'], True)
 
+        # Set up editable quantity column.
+        self.quantity_renderer = gtk.CellRendererSpin()
+        self.quantity_renderer.set_property("adjustment",
+            gtk.Adjustment(lower=1, upper=100, step_incr=1))
+        self.subscriptions_treeview.add_editable_column(_("Quantity"),
+                self.subscriptions_store['quantity_to_consume'], self.quantity_renderer,
+                self._quantity_changed)
+
         self.subscriptions_treeview.set_model(self.subscriptions_store)
         self.subscriptions_treeview.get_selection().connect('changed',
-                self._update_sub_details)
+                self._on_subscription_selection)
 
         self.subscriptions_window.add(self.subscriptions_treeview)
         self.subscriptions_treeview.show()
@@ -164,6 +184,16 @@ class SubscriptionAssistant(widgets.GladeWidget):
 
         self.pb = None
         self.timer = None
+
+    def _quantity_changed(self, renderer, path, new_text):
+        """ Handles when a quantity is changed in the cell """
+        try:
+            new_quantity = int(new_text)
+            iter = self.subscriptions_store.get_iter(path)
+            self.subscriptions_store.set_value(iter, self.subscriptions_store['quantity_to_consume'], new_quantity)
+        except ValueError, e:
+            # Do nothing... The value entered in the grid will be reset.
+            pass
 
     def show(self):
         """
@@ -337,12 +367,23 @@ class SubscriptionAssistant(widgets.GladeWidget):
             else:
                 available = _('%s of %s') % \
                     (entry.quantity - entry.consumed, quantity)
+
+            # TODO [mstead] Not sure that we should be defaulting to the first pool here.
+            pool = entry.pools[0]
+            # check if the pool supports multi-entitlement
+            is_multi_entitlement = allows_multi_entitlement(pool)
+
+
+            # TODO [mstead] Should determine the default value based on machine reqs.
+            quantity_to_consume = 1
             self.subscriptions_store.add_map({
                 'product_name': entry.product_name,
                 'total_contracts': len(entry.pools),
                 'total_subscriptions': entry.quantity,
                 'available_subscriptions': available,
-                'pool_id': entry.pools[0]['id'],
+                'quantity_to_consume': quantity_to_consume,
+                'pool_id': pool['id'],
+                'multi-entitlement': is_multi_entitlement,
             })
 
     def _get_selected_product_ids(self):
@@ -387,12 +428,27 @@ class SubscriptionAssistant(widgets.GladeWidget):
         self.window.hide()
         return True
 
-    def _update_sub_details(self, widget):
-        """ Shows details for the current selected pool. """
+    def _on_subscription_selection(self, widget):
+        """ Handles the selection change in the subscription table. """
         model, tree_iter = widget.get_selected()
-        if tree_iter:
-            product_name = model.get_value(tree_iter, self.subscriptions_store['product_name'])
-            pool_id = model.get_value(tree_iter, self.subscriptions_store['pool_id'])
+
+        # Handle no selection in table.
+        if not tree_iter:
+            return
+
+        should_set_editable = model.get_value(tree_iter,
+                                    self.subscriptions_store['multi-entitlement'])
+        # Only enable quantity if subscription is multi-entitlement capable
+        self.quantity_renderer.set_property("editable", should_set_editable)
+
+        self._update_sub_details(model, tree_iter)
+
+    def _update_sub_details(self, model, selected_tree_iter):
+        """ Shows details for the current selected pool. """
+
+        if selected_tree_iter:
+            product_name = model.get_value(selected_tree_iter, self.subscriptions_store['product_name'])
+            pool_id = model.get_value(selected_tree_iter, self.subscriptions_store['pool_id'])
             provided = self.pool_stash.lookup_provided_products(pool_id)
             self.sub_details.show(product_name, products=provided)
             self.subscribe_button.set_sensitive(True)
@@ -403,10 +459,13 @@ class SubscriptionAssistant(widgets.GladeWidget):
     def subscribe_button_clicked(self, button):
         model, tree_iter = self.subscriptions_treeview.get_selection().get_selected()
         pool_id = model.get_value(tree_iter, self.subscriptions_store['pool_id'])
+        quantity_to_consume = model.get_value(tree_iter,
+            self.subscriptions_store['quantity_to_consume'])
 
         pool = self.pool_stash.all_pools[pool_id]
         try:
-            self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'])
+            self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'],
+                                                   quantity_to_consume)
             managerlib.fetch_certificates(self.backend)
         except Exception, e:
             handle_gui_exception(e, _("Error getting subscription: %s"))

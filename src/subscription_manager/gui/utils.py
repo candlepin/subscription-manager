@@ -189,3 +189,14 @@ def get_dbus_iface():
     validity_iface = dbus.Interface(validity_obj,
                         dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
     return validity_iface
+
+def allows_multi_entitlement(pool):
+    """
+    Determine if this pool allows multi-entitlement based on the pool's
+    top-level product's multi-entitlement attribute.
+    """
+    for attribute in pool['productAttributes']:
+        if attribute['name'] == "multi-entitlement" and \
+            (attribute['value'].lower() == "yes" or attribute['value'] == "1"):
+            return True
+    return False

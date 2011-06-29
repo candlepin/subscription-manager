@@ -22,6 +22,8 @@ from stubs import StubCertificateDirectory, StubProductCertificate, StubProduct,
 from subscription_manager.managerlib import merge_pools, PoolFilter, getInstalledProductStatus, \
     LocalTz, parseDate, configure_i18n
 from modelhelpers import *
+from subscription_manager import managerlib
+import stubs
 
 
 class MergePoolsTests(unittest.TestCase):
@@ -276,7 +278,6 @@ class TestParseDate(unittest.TestCase):
         est_date = "2012-04-10T00:00:00.000-04:00"
         dt = parseDate(est_date)
         self.assertEquals(timedelta(hours=4), dt.tzinfo.utcoffset(dt))
-
 
 class TestI18N(unittest.TestCase):
     def test_configure_i18n_without_glade(self):
