@@ -99,11 +99,13 @@ class SystemFactsDialog(widgets.GladeWidget):
                 group = new_group
                 parent = self.facts_store.append(None, [group, ""])
             self.facts_store.append(parent, [fact, value])
+
+        # TODO: could stand to check if registered before trying to do this:
+        owner = 'unknown'
         try:
             owner = self.backend.uep.getOwner(self.consumer.uuid)['displayName']
         except Exception, e:
             log.error("Could not get owner name \nError: %s" % e)
-            owner = 'unknown'
         self.owner_label.set_text(owner)
 
     def update_facts(self):
