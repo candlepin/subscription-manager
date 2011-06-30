@@ -20,18 +20,37 @@ class InvalidProfileType(Exception):
     pass
 
 
+class Package(object):
+    """
+    Represents a package installed on the system.
+    """
+    def __init__(self, name, version, release, arch, epoch=0, vendor=None):
+        self.name = name
+        self.version = version
+        self.release = release
+        self.arch = arch
+        self.epoch = epoch
+        self.vendor = vendor
+
+    def to_dict(self):
+        """ Returns a dict representation of this packages info. """
+        return {
+                'name': self.name,
+                'version': self.version,
+                'release': self.release,
+                'arch': self.arch,
+                'epoch': self.epoch,
+                'vendor': self.vendor,
+        }
+
+
 class RPMProfile(object):
 
-    def collect(self):
-        """
-        Initialize rpm transaction and invoke the accumulation call
-        @return : list of package info dicts
-        @rtype: list
-        """
+    def __init__(self):
         ts = rpm.TransactionSet()
         ts.setVSFlags(-1)
         installed = ts.dbMatch()
-        return self.__accumulateProfile(installed)
+        self.packages = self.__accumulateProfile(installed)
 
     def __accumulateProfile(self, rpm_header_list):
         """
@@ -57,8 +76,29 @@ class RPMProfile(object):
                 'arch': h['arch'],
                 'vendor': h['vendor'] or None,
             }
-            pkg_list.append(info)
+            pkg_list.append(Package(
+                name=h['name'],
+                version=h['version'],
+                release=h['release'],
+                arch=h['arch'],
+                epoch=h['epoch'] or 0,
+                vendor=h['vendor'] or None
+            ))
         return pkg_list
+
+    def collect(self):
+        """
+        Returns a list of dicts containing the package info.
+
+        See 'packages' member on this object for a list of actual objects.
+
+        @return : list of package info dicts
+        @rtype: list
+        """
+        pkg_dicts = []
+        for pkg in self.packages:
+            pkg_dicts.append(pkg.to_dict())
+        return pkg_dicts
 
 
 def get_profile(profile_type):

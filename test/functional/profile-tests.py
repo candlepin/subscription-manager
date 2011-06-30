@@ -19,12 +19,14 @@ class ProfileTests(unittest.TestCase):
 
     def test_get_rpm_profile(self):
         # This will fail if you're running tests on non-rpm based distros:
-        profile = get_profile("rpm").collect()
+        profile = get_profile("rpm")
+        pkg_dicts = profile.collect()
+        self.assertEquals(len(profile.packages), len(pkg_dicts))
 
         # Everybody's gotta have at least 10 packages right?
-        self.assertTrue(len(profile) > 10)
+        self.assertTrue(len(pkg_dicts) > 10)
 
-        for pkg in profile:
+        for pkg in pkg_dicts:
             self.assertTrue(pkg.has_key('name'))
             self.assertTrue(pkg.has_key('version'))
             self.assertTrue(pkg.has_key('version'))
@@ -32,6 +34,11 @@ class ProfileTests(unittest.TestCase):
             self.assertTrue(pkg.has_key('epoch'))
             self.assertTrue(pkg.has_key('arch'))
             self.assertTrue(pkg.has_key('vendor'))
+
+    def test_package_objects(self):
+        profile = get_profile("rpm")
+        for pkg in profile.packages:
+            self.assertTrue(isinstance(pkg, Package))
 
     def test_get_profile_bad_type(self):
         self.assertRaises(InvalidProfileType, get_profile, "notreal")
