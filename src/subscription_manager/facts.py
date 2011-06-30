@@ -56,7 +56,7 @@ class Facts:
                 f = open(self.fact_cache, "w+")
                 json.dump(facts, f)
         except IOError, e:
-            print e
+            log.exception(e)
 
     def read(self):
         cached_facts = {}
@@ -65,7 +65,7 @@ class Facts:
             json_buffer = f.read()
             cached_facts = json.loads(json_buffer)
         except IOError:
-            log.debug("Unable to read %s" % self.fact_cache)
+            log.exception("Unable to read %s" % self.fact_cache)
         except ValueError:
             # see bz #669208, #667953
             # ignore facts file parse errors, we are going to generate
