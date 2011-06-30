@@ -406,6 +406,8 @@ class RegisterCommand(UserPassCommand):
                                help=_("if supplied, the existing consumer data is pulled from the server"))
         self.parser.add_option("--owner", dest="owner",
                                help=_("register to one of multiple owners for the user"))
+        self.parser.add_option("--environment", dest="environment",
+                               help=_("register to one of multiple environments in the destination owner"))
         self.parser.add_option("--autosubscribe", action='store_true',
                                help=_("automatically subscribe this system to\
                                      compatible subscriptions."))
@@ -424,6 +426,9 @@ class RegisterCommand(UserPassCommand):
             sys.exit(-1)
         elif (self.options.username and self.options.activation_keys):
             print(_("Error: Activation keys do not require user credentials"))
+            sys.exit(-1)
+        elif (self.options.environment and self.options.owner):
+            print(_("Error: No need for --owner if environment is specified."))
             sys.exit(-1)
 
     def _do_command(self):
@@ -484,9 +489,9 @@ class RegisterCommand(UserPassCommand):
                     owner_key = self._determine_owner_key(admin_cp)
 
                     consumer = admin_cp.registerConsumer(name=consumername,
-                                                         type=self.options.consumertype,
-                                                         facts=self.facts.get_facts(),
-                                                         owner=owner_key)
+                         type=self.options.consumertype, facts=self.facts.get_facts(),
+                         owner=owner_key, environment=self.options.environment)
+
         except connection.RestlibException, re:
             log.exception(re)
             systemExit(-1, re.msg)
