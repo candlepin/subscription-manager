@@ -393,6 +393,16 @@ class UEPConnection:
         ret = self.conn.request_put(method, params)
         return ret
 
+    def updatePackageProfile(self, consumer_uuid, pkg_dicts):
+        """
+        Updates the consumer's package profile on the server.
+
+        pkg_dicts expected to be a list of dicts, each containing the
+        package headers we're interested in. See profile.py.
+        """
+        method = "/consumers/%s/packages" % consumer_uuid
+        # TODO
+
     # TODO: username and password not used here
     def getConsumer(self, uuid, username, password):
         """
