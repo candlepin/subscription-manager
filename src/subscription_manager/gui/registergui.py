@@ -124,7 +124,7 @@ class RegisterScreen:
 
         self.owner_treeview = registration_xml.get_widget("owner_treeview")
         renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn(_("Owner"), renderer, text=1)
+        column = gtk.TreeViewColumn(_("Organization"), renderer, text=1)
         self.owner_treeview.set_property("headers-visible", False)
         self.owner_treeview.append_column(column)
 

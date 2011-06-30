@@ -332,7 +332,7 @@ class IdentityCommand(UserPassCommand):
                 owner = self.cp.getOwner(consumerid)
                 ownername = owner['displayName']
                 ownerid = owner['id']
-                print _('Current identity is: %s \nname: %s \nowner name: %s \nowner id: %s') \
+                print _('Current identity is: %s \nname: %s \norg name: %s \norg id: %s') \
                          % (consumerid, consumer_name, ownername, ownerid)
             else:
                 if self.options.force:
@@ -379,13 +379,13 @@ class OwnersCommand(UserPassCommand):
                 for owner in owners:
                     print owner['key']
 
-            log.info("Successfully retrieved owner list from Entitlement Platform.")
+            log.info("Successfully retrieved org list from Entitlement Platform.")
         except connection.RestlibException, re:
             log.exception(re)
-            log.error("Error: Unable to retrieve owner list from Entitlement Platform: %s" % re)
+            log.error("Error: Unable to retrieve org list from Entitlement Platform: %s" % re)
             systemExit(-1, re.msg)
         except Exception, e:
-            handle_exception(_("Error: Unable to retrieve owner list from Entitlement Platform"), e)
+            handle_exception(_("Error: Unable to retrieve org list from Entitlement Platform"), e)
 
 
 class RegisterCommand(UserPassCommand):
@@ -404,8 +404,8 @@ class RegisterCommand(UserPassCommand):
                                help=_("name of the consumer to register, defaults to the hostname"))
         self.parser.add_option("--consumerid", dest="consumerid",
                                help=_("if supplied, the existing consumer data is pulled from the server"))
-        self.parser.add_option("--owner", dest="owner",
-                               help=_("register to one of multiple owners for the user"))
+        self.parser.add_option("--org", dest="org",
+                               help=_("register to one of multiple organizations for the user"))
         self.parser.add_option("--autosubscribe", action='store_true',
                                help=_("automatically subscribe this system to\
                                      compatible subscriptions."))
@@ -512,8 +512,8 @@ class RegisterCommand(UserPassCommand):
         for all the owners this user has access too. If there is just one,
         use it's key. If multiple, return None and let the server error out.
         """
-        if self.options.owner:
-            return self.options.owner
+        if self.options.org:
+            return self.options.org
 
         owners = cp.getOwnerList(self.username)
         if len(owners) == 1:
