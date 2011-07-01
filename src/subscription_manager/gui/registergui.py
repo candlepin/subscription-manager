@@ -186,7 +186,7 @@ class RegisterScreen:
 
         self.timer = gobject.timeout_add(100, self._timeout_callback)
         self.register_notebook.set_page(PROGRESS_PAGE)
-        self._set_register_details_label(_("Fetching list of possible owners"))
+        self._set_register_details_label(_("Fetching list of possible organizations"))
 
         self.cancel_button.set_sensitive(False)
         self.register_button.set_sensitive(False)
