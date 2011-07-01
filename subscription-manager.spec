@@ -134,6 +134,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_prefix}/lib/yum-plugins/subscription-manager.py*
 %{_prefix}/lib/yum-plugins/product-id.py*
 %{_datadir}/rhsm/subscription_manager/certlib.py*
+%{_datadir}/rhsm/subscription_manager/cert_sorter.py*
 %{_datadir}/rhsm/subscription_manager/hwprobe.py*
 %{_datadir}/rhsm/subscription_manager/constants.py*
 %{_datadir}/rhsm/subscription_manager/lock.py*
@@ -207,6 +208,9 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Fri Jul 01 2011 Adrian Likins <alikins@redhat.com> 0.96.1-1
+- add cert_sorter.py
+
 * Fri Feb 04 2011 Devan Goodwin <dgoodwin@redhat.com> 0.96.1-1
 - 674418: Changing accessibility handles to reflect check box functionality.
   (jharris@redhat.com)
