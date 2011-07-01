@@ -622,10 +622,10 @@ class SubscribeCommand(CliCommand):
 
     def _validate_options(self):
         if not (self.options.pool or self.options.auto):
-            print _("Error: Need to supply --pool or --auto.")
+            print _("Error: This command requires that you specify a pool with --pool or use --auto.")
             sys.exit(-1)
         if self.options.pool and self.options.auto:
-            print _("Error: Only one of --pool or --auto may be used.")
+            print _("Error: Only one of --pool or --auto may be used with this command.")
             sys.exit(-1)
 
     def _do_command(self):
