@@ -37,6 +37,7 @@ import rhsm.connection as connection
 from i18n_optparse import OptionParser
 from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib, ConsumerIdentity
+from subscription_manager.repolib import RepoLib
 from subscription_manager.certmgr import CertManager
 from subscription_manager import managerlib
 from subscription_manager.facts import Facts
@@ -760,6 +761,40 @@ class FactsCommand(CliCommand):
             self.cp.updateConsumerFacts(consumer, facts.get_facts())
             print _("Facts sucessfully updated.")
 
+class ReposCommand(CliCommand):
+
+    def __init__(self):
+        usage = "usage: %prog repos [OPTIONS]"
+        shortdesc = _("List the repos which this machine is entitled to use")
+        desc = shortdesc
+        CliCommand.__init__(self, "repos", usage, shortdesc, desc)
+
+        self.parser.add_option("--list", action="store_true",
+                               help=_("list the entitled repositories for this system"))
+
+    def _validate_options(self):
+        self.assert_should_be_registered()
+
+        # one or the other
+        if not (self.options.list):
+            print _("Error: No options provided. Please see the help comand.")
+            sys.exit(-1)
+
+    def _do_command(self):
+        self._validate_options()
+        if self.options.list:
+            rl = RepoLib()
+            repos = rl.get_repos()
+            if len(repos) > 0:
+                print _("The system is entitled to the following repositories.")
+                print _("These can be managed at in the repo file %s.") % rl.get_repo_file()
+
+                for repo in repos:
+                    print constants.repos_list % (repo["name"],
+                        repo["baseurl"],
+                        repo["enabled"])
+            else:
+                print _("The system is not entitled to use any repositories")
 
 class ListCommand(CliCommand):
 
@@ -882,7 +917,7 @@ class CLI:
         self.cli_commands = {}
         for clazz in [RegisterCommand, UnRegisterCommand, ListCommand, SubscribeCommand,\
                        UnSubscribeCommand, FactsCommand, IdentityCommand, OwnersCommand, \
-                       RefreshCommand, CleanCommand, RedeemCommand]:
+                       RefreshCommand, CleanCommand, RedeemCommand, ReposCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":
