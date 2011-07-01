@@ -357,7 +357,7 @@ class IdentityCommand(UserPassCommand):
 class OwnersCommand(UserPassCommand):
 
     def __init__(self):
-        usage = "usage: %prog identity [OPTIONS]"
+        usage = "usage: %prog orgs [OPTIONS]"
         shortdesc = _("Display the orgs available for a user")
         desc = shortdesc
 
