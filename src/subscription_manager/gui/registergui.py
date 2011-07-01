@@ -31,7 +31,7 @@ import rhsm.config as config
 from subscription_manager import constants
 from subscription_manager.facts import Facts
 from subscription_manager.certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \
-        CertLib, CertSorter, find_first_invalid_date
+        CertLib, find_first_invalid_date
 from subscription_manager.branding import get_branding
 
 from subscription_manager.gui import activate
@@ -114,7 +114,7 @@ class RegisterScreen:
         self.uname = registration_xml.get_widget("account_login")
         self.passwd = registration_xml.get_widget("account_password")
         self.consumer_name = registration_xml.get_widget("consumer_name")
-        
+
         self.register_notebook = \
                 registration_xml.get_widget("register_notebook")
         self.register_progressbar = \
@@ -127,7 +127,6 @@ class RegisterScreen:
         column = gtk.TreeViewColumn(_("Owner"), renderer, text=1)
         self.owner_treeview.set_property("headers-visible", False)
         self.owner_treeview.append_column(column)
-
 
         self.cancel_button = registration_xml.get_widget("cancel_button")
         self.register_button = registration_xml.get_widget("register_button")

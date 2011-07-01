@@ -6,7 +6,9 @@ import gettext
 _ = gettext.gettext
 
 import rhsm.config
-import certlib
+from subscription_manager import certlib
+#from subscription_manager.certlib import EntitlementDirectory, ProductDirectory, entitlement_valid
+from subscription_manager import cert_sorter
 from datetime import datetime
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -25,6 +27,8 @@ class Facts:
         # fact churn, so we report it, but ignore it as an indicator
         # that we need to update
         self.graylist = ['cpu.cpu_mhz']
+
+
 
     def write(self, facts, force=False):
         if not os.access(self.fact_cache_dir, os.R_OK):
@@ -88,7 +92,7 @@ class Facts:
 
         return diff
 
-    def get_facts(self):
+    def get_facts(self, check_entitlements=True):
         if self.facts:
             # see bz #627707
             # there is a little bit of a race between when we load the facts, and when
@@ -96,10 +100,10 @@ class Facts:
             # it wasn't detecting it missing in that case and not writing a new one
             self.write(self.facts)
             return self.facts
-        self.facts = self.find_facts()
+        self.facts = self.find_facts(check_entitlements=check_entitlements)
         return self.facts
 
-    def find_facts(self):
+    def find_facts(self, check_entitlements=True):
         # don't figure this out twice if we already did it for
         # delta()
         facts_file_glob = "%s/facts/*.facts" % rhsm.config.DEFAULT_CONFIG_DIR
@@ -122,14 +126,16 @@ class Facts:
         # point
 
         # figure out if we think we have valid entitlements
-#        sorter = certlib.CertSorter(certlib.ProductDirectory(),
-#                                    certlib.EntitlementDirectory())
+        # NOTE: we don't need 
+        if check_entitlements:
+            sorter = cert_sorter.CertSorter(certlib.ProductDirectory(),
+                                            certlib.EntitlementDirectory(),
+                                            facts_dict=facts)
+            validity_facts = {'system.entitlements_valid': True}
+            if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
+                validity_facts['system.entitlements_valid'] = False
 
-#        validity_facts = {'system.entitlements_valid': True}
-#        if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
-#            validity_facts['system.entitlements_valid'] = False
-
-#        facts.update(validity_facts)
+            facts.update(validity_facts)
 
         self.write(facts)
         return facts

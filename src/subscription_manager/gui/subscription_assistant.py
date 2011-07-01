@@ -26,7 +26,8 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 import rhsm.certificate as certificate
 from subscription_manager import certlib
-from subscription_manager.certlib import find_first_invalid_date, CertSorter
+from subscription_manager.certlib import find_first_invalid_date
+from subscription_manager.cert_sorter import CertSorter
 from subscription_manager import managerlib
 from subscription_manager.gui import storage
 from subscription_manager.gui import widgets
@@ -269,7 +270,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
         the selected date.
         """
         sorter = CertSorter(self.product_dir, self.entitlement_dir,
-                on_date=self._get_invalid_date())
+                            on_date=self._get_invalid_date(), facts=self.facts)
 
         # These display the list of products invalid on the selected date:
         self.invalid_store.clear()
