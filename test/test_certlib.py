@@ -19,13 +19,13 @@ from datetime import timedelta, datetime
 
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
     StubCertificateDirectory
-from subscription_manager.certlib import Path, find_first_invalid_date, CertSorter, \
+from subscription_manager.certlib import Path, find_first_invalid_date, \
     EntitlementDirectory
+from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.repolib import RepoFile
 from subscription_manager.productid import ProductDatabase
 
 from rhsm.certificate import GMT
-
 
 def dummy_exists(filename):
     return True

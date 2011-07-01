@@ -65,8 +65,7 @@ class CertSorter(object):
         # maps product ID to the valid entitlement certificate:
         self.valid_products = {}
 
-        if facts_dict:
-            self.facts_dict = facts_dict
+        self.facts_dict = facts_dict
 
         log.debug("Sorting product and entitlement cert status for: %s" %
                 on_date)
@@ -123,16 +122,13 @@ class CertSorter(object):
                  product_dict[product_id] = ent_cert
 
     def _scan_ent_cert_stackable_products(self):
-#        print "gh1"
         ent_certs = self.entitlement_dir.list()
-#        print "ent_certs", ent_certs
         stackable_ents = {}
         for ent_cert in ent_certs:
             for product in ent_cert.getProducts():
                 product_id = product.getHash()
                 order = ent_cert.getOrder()
                 stacking_id = order.getStackingId()
-                print "stacking_id", stacking_id, product_id
                 if stacking_id:
                     if stacking_id not in stackable_ents:
                         stackable_ents[stacking_id] = []
@@ -141,18 +137,15 @@ class CertSorter(object):
                                                         'valid': None})
 
         for stackable_id in stackable_ents.keys():
-#            print stackable_id, stackable_ents[stackable_id]
             socket_total = 0
-            system_sockets = self.facts_dict['cpu.cpu_socket(s)']
+            system_sockets = 1
+            if self.facts_dict:
+                system_sockets = self.facts_dict['cpu.cpu_socket(s)'] 
 
             for stackable_ent in stackable_ents[stackable_id]:
                 socket_count = stackable_ent['ent_cert'].getOrder().getSocketLimit()
-                print "socket_count", socket_count
- #               print "se", stackable_ent, "stackable_id", stackable_id
                 if socket_count:
                     socket_total = socket_total + int(socket_count)
-            print "socket_total", socket_total, "system_sockets", system_sockets
-#            print stackable_ents[stackable_id]
             if socket_total >= system_sockets:
                 for i in stackable_ents[stackable_id]:
                     i['valid'] = True
