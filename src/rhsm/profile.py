@@ -64,6 +64,9 @@ class Package(object):
 
         return False
 
+    def __str__(self):
+        return "<Package: %s %s %s>" % (self.name, self.version, self.release)
+
 
 class RPMProfile(object):
 

@@ -115,7 +115,7 @@ class ProfileTests(unittest.TestCase):
         other = self._mock_pkg_profile(dummy_pkgs) 
         self.assertFalse(profile == other)
 
-    def test_euqality_packages_replaced(self):
+    def test_equality_packages_replaced(self):
         dummy_pkgs = [
                 Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
                 Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
