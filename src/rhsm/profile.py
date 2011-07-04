@@ -47,6 +47,23 @@ class Package(object):
                 'vendor': self.vendor,
         }
 
+    def __eq__(self, other):
+        """
+        Compare one profile to another to determine if anything has changed.
+        """
+        if type(self) != type(other):
+            return False
+
+        if self.name == other.name and \
+            self.version == other.version and \
+            self.release == other.release and \
+            self.arch == other.arch and \
+            self.epoch == other.epoch and \
+            self.vendor == other.vendor:
+                return True
+
+        return False
+
 
 class RPMProfile(object):
 
@@ -124,6 +141,24 @@ class RPMProfile(object):
         for pkg in self.packages:
             pkg_dicts.append(pkg.to_dict())
         return pkg_dicts
+
+    def __eq__(self, other):
+        """
+        Compare one profile to another to determine if anything has changed.
+        """
+        if type(self) != type(other):
+            return False
+
+        # Quickly check if we have a different number of packages for an
+        # easy answer before we start checking everything:
+        if len(self.packages) != len(other.packages):
+            return False
+
+        for pkg in self.packages:
+            if not pkg in other.packages:
+                return False
+
+        return True
 
 
 def get_profile(profile_type):

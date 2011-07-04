@@ -49,15 +49,82 @@ class ProfileTests(unittest.TestCase):
         dummy_pkgs = [
                 Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
                 Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
-        dummy_profile_json = self._packages_to_json(dummy_pkgs)
-        mock_file = Mock()
-        mock_file.read = Mock(return_value=dummy_profile_json)
-
-        profile = RPMProfile(from_file=mock_file)
+        profile = self._mock_pkg_profile(dummy_pkgs) 
         self.assertEquals(2, len(profile.packages))
 
-    def _packages_to_json(self, package_list):
-        new_list = []
-        for pkg in package_list:
-            new_list.append(pkg.to_dict())
-        return json.dumps(new_list)
+    def _mock_pkg_profile(self, packages):
+        """
+        Turn a list of package objects into an RPMProfile object.
+        """
+
+        dict_list = []
+        for pkg in packages:
+            dict_list.append(pkg.to_dict())
+
+        mock_file = Mock()
+        mock_file.read = Mock(return_value=json.dumps(dict_list))
+
+        mock_profile = RPMProfile(from_file=mock_file)
+        return mock_profile
+
+    def test_equality_different_object_type(self):
+        dummy_pkgs = [
+                Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
+                Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
+        profile = self._mock_pkg_profile(dummy_pkgs) 
+        self.assertFalse(profile == "hello")
+
+    def test_equality_no_change(self):
+        dummy_pkgs = [
+                Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
+                Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
+        profile = self._mock_pkg_profile(dummy_pkgs) 
+
+        other = self._mock_pkg_profile(dummy_pkgs) 
+        self.assertTrue(profile == other)
+
+    def test_equality_packages_added(self):
+        dummy_pkgs = [
+                Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
+                Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
+        profile = self._mock_pkg_profile(dummy_pkgs) 
+
+        dummy_pkgs.append(Package(name="package3", version="3.0.0", release=2, 
+            arch="x86_64"))
+        other = self._mock_pkg_profile(dummy_pkgs) 
+        self.assertFalse(profile == other)
+
+    def test_equality_packages_removed(self):
+        dummy_pkgs = [
+                Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
+                Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
+        profile = self._mock_pkg_profile(dummy_pkgs) 
+
+        dummy_pkgs.pop()
+        other = self._mock_pkg_profile(dummy_pkgs) 
+        self.assertFalse(profile == other)
+
+    def test_equality_packages_updated(self):
+        dummy_pkgs = [
+                Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
+                Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
+        profile = self._mock_pkg_profile(dummy_pkgs) 
+
+        # "Upgrade" package2:
+        dummy_pkgs[1].version = "3.1.5"
+        other = self._mock_pkg_profile(dummy_pkgs) 
+        self.assertFalse(profile == other)
+
+    def test_euqality_packages_replaced(self):
+        dummy_pkgs = [
+                Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
+                Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
+        profile = self._mock_pkg_profile(dummy_pkgs) 
+
+        # Remove package2, add package3:
+        dummy_pkgs.pop()
+        dummy_pkgs.append(Package(name="package3", version="3.0.0", release=2, 
+            arch="x86_64"))
+        other = self._mock_pkg_profile(dummy_pkgs) 
+        self.assertFalse(profile == other)
+
