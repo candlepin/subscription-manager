@@ -11,7 +11,10 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 import rpm
+import logging
+import simplejson as json
 
+log = logging.getLogger(__name__)
 
 class InvalidProfileType(Exception):
     """
@@ -24,7 +27,8 @@ class Package(object):
     """
     Represents a package installed on the system.
     """
-    def __init__(self, name, version, release, arch, epoch=0, vendor=None):
+    def __init__(self, name, version, release, arch, epoch=0, vendor=None,
+            from_dict=None):
         self.name = name
         self.version = version
         self.release = release
@@ -46,11 +50,32 @@ class Package(object):
 
 class RPMProfile(object):
 
-    def __init__(self):
-        ts = rpm.TransactionSet()
-        ts.setVSFlags(-1)
-        installed = ts.dbMatch()
-        self.packages = self.__accumulateProfile(installed)
+    def __init__(self, from_file=None):
+        """
+        Load the RPM package profile from a given file, or from rpm itself.
+
+        NOTE: from_file is a file descriptor, not a file name.
+        """
+        self.packages = []
+        if from_file:
+            log.debug("Loading RPM profile from file.")
+            json_buffer = from_file.read()
+            pkg_dicts = json.loads(json_buffer)
+            for pkg_dict in pkg_dicts:
+                self.packages.append(Package(
+                    name=pkg_dict['name'],
+                    version=pkg_dict['version'],
+                    release=pkg_dict['release'],
+                    arch=pkg_dict['arch'],
+                    epoch=pkg_dict['epoch'],
+                    vendor=pkg_dict['vendor']
+                ))
+        else:
+            log.debug("Loading current RPM profile.")
+            ts = rpm.TransactionSet()
+            ts.setVSFlags(-1)
+            installed = ts.dbMatch()
+            self.packages = self.__accumulateProfile(installed)
 
     def __accumulateProfile(self, rpm_header_list):
         """

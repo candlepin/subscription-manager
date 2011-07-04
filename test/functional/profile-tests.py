@@ -14,6 +14,8 @@
 import unittest
 
 from rhsm.profile import *
+from mock import Mock
+import simplejson as json
 
 class ProfileTests(unittest.TestCase):
 
@@ -42,3 +44,20 @@ class ProfileTests(unittest.TestCase):
 
     def test_get_profile_bad_type(self):
         self.assertRaises(InvalidProfileType, get_profile, "notreal")
+
+    def test_load_profile_from_file(self):
+        dummy_pkgs = [
+                Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
+                Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
+        dummy_profile_json = self._packages_to_json(dummy_pkgs)
+        mock_file = Mock()
+        mock_file.read = Mock(return_value=dummy_profile_json)
+
+        profile = RPMProfile(from_file=mock_file)
+        self.assertEquals(2, len(profile.packages))
+
+    def _packages_to_json(self, package_list):
+        new_list = []
+        for pkg in package_list:
+            new_list.append(pkg.to_dict())
+        return json.dumps(new_list)
