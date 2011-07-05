@@ -552,7 +552,10 @@ class UEPConnection:
         query_param = urlencode({"name": name})
         url = "/owners/%s/environments?%s" % (owner_key, query_param)
         print "Getting environment: %s" % url
-        return self.conn.request_get(url)
+        results = self.conn.request_get(url)
+        if len(results) == 0:
+            raise Exception("No such environment: %s" % name)
+        return results[0]
 
     def getEntitlement(self, entId):
         method = "/entitlements/%s" % entId
