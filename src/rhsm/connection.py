@@ -368,7 +368,7 @@ class UEPConnection:
         url = "/consumers"
         if environment:
             url = "/environments/%s/consumers" % environment
-        if owner:
+        elif owner:
             url = "%s?owner=%s" % (url, owner)
 
         return self.conn.request_post(url, params)
