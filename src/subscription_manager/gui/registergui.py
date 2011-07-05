@@ -413,7 +413,7 @@ class AsyncBackend(object):
                 for env in self.backend.admin_uep.getEnvironmentList(owner_key):
                     # We need to ignore the "locker" environment, you can't 
                     # register to it:
-                    if env['name'] != LOCKER_ENV_NAME:
+                    if env['name'].lower() != LOCKER_ENV_NAME.lower():
                         retval.append(env)
 
             self.queue.put((callback, retval, None))
