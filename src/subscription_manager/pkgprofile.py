@@ -14,6 +14,7 @@
 """ Module for managing the package profile for a system. """
 
 import logging
+import os
 import gettext
 _ = gettext.gettext
 
@@ -21,20 +22,49 @@ from rhsm.profile import get_profile
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
+CACHE_FILE = "/var/lib/rhsm/packages/packages.json"
 
-class PackageProfile(object):
+
+class ProfileManager(object):
     """
     Manages the profile of packages installed on this system. 
     """
 
-    def __init__(self):
-        self.profile = get_profile('rpm')
-        self.pkg_dicts = self.profile.collect()
+    def __init__(self, current_profile=None, cached_profile=None):
+
+        # If we weren't given a profile, load the current systems packages:
+        self.current_profile = current_profile
+        if not current_profile:
+            self.current_profile = get_profile('rpm')
+
+    def _load_cached_profile(self):
+        """
+        Load the last package profile we sent to the server.
+        Returns none if no cache file exists.
+        """
+        pass
+
+    def _cache_exists(self):
+        return os.path.exists(CACHE_FILE)
 
     def update_check(self, uep, consumer_uuid):
         """
         Check if packages have changed, and push an update if so.
         """
-        log.info("Updating facts.")
-        uep.updatePackageProfile(consumer_uuid, self.pkg_dicts)
+        if self.has_changed():
+            log.info("Updating facts.")
+            uep.updatePackageProfile(consumer_uuid, self.current_profile.collect())
+        else: 
+            log.info("Package profile has not changed, skipping upload.")
+
+    def has_changed(self):
+        """
+        Check if the current system profile has changed since the last time we
+        updated.
+        """
+        if not self._cache_exists():
+            log.info( "Cache exists")
+            return True
+        cached_profile = self._load_cached_profile()
+        return not cached_profile == self.current_profile
 
