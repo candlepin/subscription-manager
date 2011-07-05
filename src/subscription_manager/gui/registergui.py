@@ -57,6 +57,9 @@ prefix = os.path.dirname(__file__)
 VALID_IMG = os.path.join(prefix, "data/icons/valid.svg")
 INVALID_IMG = os.path.join(prefix, "data/icons/invalid.svg")
 
+# An implied Katello environment which we can't actual register to.
+LOCKER_ENV_NAME = "locker"
+
 cert_file = ConsumerIdentity.certpath()
 key_file = ConsumerIdentity.keypath()
 
@@ -406,7 +409,13 @@ class AsyncBackend(object):
             if self.backend.admin_uep.supports_resource('environments'):
                 log.info("Server supports environments, checking for environment to " 
                         "register to.")
-                retval = self.backend.admin_uep.getEnvironmentList(owner_key)
+                retval = []
+                for env in self.backend.admin_uep.getEnvironmentList(owner_key):
+                    # We need to ignore the "locker" environment, you can't 
+                    # register to it:
+                    if env['name'] != LOCKER_ENV_NAME:
+                        retval.append(env)
+
             self.queue.put((callback, retval, None))
         except Exception, e:
             log.error("Error listing environments:")
