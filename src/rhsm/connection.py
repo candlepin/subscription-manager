@@ -190,9 +190,11 @@ class Restlib(object):
         else:
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
 
-        conn.request(request_type, handler,
-                     body=json.dumps(info),
-                     headers=self.headers)
+        if info:
+            body = json.dumps(info)
+        else:
+            body = None
+        conn.request(request_type, handler, body=body, headers=self.headers)
 
         response = conn.getresponse()
         result = {

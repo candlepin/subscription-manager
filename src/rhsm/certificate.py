@@ -882,6 +882,14 @@ class Order:
         return self.ext.get('10')
 
     def getQuantityUsed(self):
+        """
+        Returns the quantity of the subscription that *this* entitlement is 
+        using.
+
+        WARNING: a little misleading as it (a) is part of the order namespace 
+        and (b) sounds suspiciously like the total consumed quantity of the
+        subscription.
+        """
         return self.ext.get('11')
 
     def getWarningPeriod(self):
