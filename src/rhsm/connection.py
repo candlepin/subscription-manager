@@ -554,7 +554,7 @@ class UEPConnection:
         print "Getting environment: %s" % url
         results = self.conn.request_get(url)
         if len(results) == 0:
-            raise Exception("No such environment: %s" % name)
+            return None
         return results[0]
 
     def getEntitlement(self, entId):
