@@ -407,6 +407,8 @@ class RegisterCommand(UserPassCommand):
                                help=_("if supplied, the existing consumer data is pulled from the server"))
         self.parser.add_option("--org", dest="org",
                                help=_("register to one of multiple organizations for the user"))
+        self.parser.add_option("--environment", dest="environment",
+                               help=_("register to a specific environment in the destination org"))
         self.parser.add_option("--autosubscribe", action='store_true',
                                help=_("automatically subscribe this system to\
                                      compatible subscriptions."))
@@ -425,6 +427,9 @@ class RegisterCommand(UserPassCommand):
             sys.exit(-1)
         elif (self.options.username and self.options.activation_keys):
             print(_("Error: Activation keys do not require user credentials"))
+            sys.exit(-1)
+        elif (self.options.environment and not self.options.org):
+            print(_("Error: Must specify --org to register to an environment."))
             sys.exit(-1)
 
     def _do_command(self):
@@ -486,10 +491,12 @@ class RegisterCommand(UserPassCommand):
                 else:
                     owner_key = self._determine_owner_key(admin_cp)
 
+                    environment_id = self._get_environment_id(admin_cp, owner_key, 
+                            self.options.environment)
                     consumer = admin_cp.registerConsumer(name=consumername,
-                                                         type=self.options.consumertype,
-                                                         facts=self.facts.get_facts(),
-                                                         owner=owner_key)
+                         type=self.options.consumertype, facts=self.facts.get_facts(),
+                         owner=owner_key, environment=environment_id)
+
         except connection.RestlibException, re:
             log.exception(re)
             systemExit(-1, re.msg)
@@ -506,6 +513,18 @@ class RegisterCommand(UserPassCommand):
             self.certlib.update()
 
         self._request_validity_check()
+
+    def _get_environment_id(self, cp, owner_key, environment_name):
+        # If none specified on CLI, return None, the registration method 
+        # will skip environment specification.
+        if not environment_name:
+            return environment_name
+
+        if not cp.supports_resource('environments'):
+            systemExit(_("ERROR: Server does not support environments."))
+
+        env = cp.getEnvironment(owner_key=owner_key, name=environment_name)
+        return env['id']
 
     def _determine_owner_key(self, cp):
         """
