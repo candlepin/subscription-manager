@@ -29,10 +29,10 @@ class FactLib(DataLib):
 
     def __init__(self, lock=ActionLock(), uep=None):
         DataLib.__init__(self, lock, uep)
-        
-    def do_update(self):
-        action = UpdateAction(uep=self.uep)
-        return action.perform()
+        self.action = UpdateAction(uep=self.uep)
+
+    def _do_update(self):
+        return self.action.perform()
 
 
 class Action:
@@ -46,7 +46,7 @@ class UpdateAction(Action):
 
     def perform(self):
         updates = 0
-        facts = Facts()
+        facts = self._get_facts()
         if facts.delta():
             updates = self.updateFacts(facts.get_facts())
         log.info("facts updated: %s" % updates)
@@ -65,6 +65,9 @@ class UpdateAction(Action):
 
         self.uep.updateConsumerFacts(consumer_uuid, facts)
         return updates
+
+    def _get_facts(self):
+        return Facts()
 
 
 def main():

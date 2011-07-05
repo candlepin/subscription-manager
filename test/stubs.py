@@ -258,6 +258,9 @@ class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
 
 
 class StubConsumerIdentity:
+    CONSUMER_NAME = "John Q Consumer"
+    CONSUMER_ID = "211211381984"
+
     def __init__(self, keystring, certstring):
         self.key = keystring
         self.cert = certstring
@@ -271,10 +274,14 @@ class StubConsumerIdentity:
         return False
 
     def getConsumerName(self):
-        return "John Q Consumer"
+        return StubConsumerIdentity.CONSUMER_NAME
 
     def getConsumerId(self):
-        return "211211381984"
+        return StubConsumerIdentity.CONSUMER_ID
+
+    @classmethod
+    def read(cls):
+        return StubConsumerIdentity("", "")
 
 class StubUEP:
     def __init__(self, username=None, password=None,
@@ -290,7 +297,6 @@ class StubUEP:
     def getOwnerList(self, username):
         return [{'key': 'dummyowner'}]
 
-
 class StubBackend:
     def __init__(self):
         pass
@@ -300,3 +306,18 @@ class StubBackend:
 
     def monitor_identity(self, callback):
         pass
+
+class StubFacts(object):
+    def __init__(self, fact_dict, facts_changed=True):
+        self.facts = fact_dict
+
+        self.delta_values = {}
+        # Simulate the delta as being the new set of facts provided.
+        if facts_changed:
+            self.delta_values = self.facts
+
+    def get_facts(self):
+        return self.facts
+
+    def delta(self):
+        return self.delta
