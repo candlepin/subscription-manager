@@ -552,7 +552,7 @@ class UEPConnection:
         query_param = urlencode({"name": name})
         url = "/owners/%s/environments?%s" % (owner_key, query_param)
         print "Getting environment: %s" % url
-        results = self.conn.request_get(url)
+        return self.conn.request_get(url)
 
     def getEntitlement(self, entId):
         method = "/entitlements/%s" % entId
