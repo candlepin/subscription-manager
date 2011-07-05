@@ -37,7 +37,14 @@ class ProfileManager(object):
         if not current_profile:
             self.current_profile = get_profile('rpm')
 
-    def _load_cached_profile(self):
+    def _write_cached_profile(self):
+        """ 
+        Write the current profile to disk. Should only be done after
+        successfully pushing the profile to the server.
+        """
+        pass
+
+    def _read_cached_profile(self):
         """
         Load the last package profile we sent to the server.
         Returns none if no cache file exists.
@@ -52,8 +59,9 @@ class ProfileManager(object):
         Check if packages have changed, and push an update if so.
         """
         if self.has_changed():
-            log.info("Updating facts.")
+            log.info("Updating package profile.")
             uep.updatePackageProfile(consumer_uuid, self.current_profile.collect())
+            self._write_cached_profile()
         else: 
             log.info("Package profile has not changed, skipping upload.")
 
@@ -65,6 +73,6 @@ class ProfileManager(object):
         if not self._cache_exists():
             log.info( "Cache exists")
             return True
-        cached_profile = self._load_cached_profile()
+        cached_profile = self._read_cached_profile()
         return not cached_profile == self.current_profile
 

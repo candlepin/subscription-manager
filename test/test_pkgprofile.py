@@ -34,26 +34,30 @@ class TestProfileManager(unittest.TestCase):
     def setUp(self):
         self.pkg_profile = ProfileManager()
 
-    def test_factlib_updates_no_change(self):
+    def test_update_check_no_change(self):
         uuid = 'FAKEUUID'
         uep = Mock()
         uep.updatePackageProfile = Mock()
 
         self.pkg_profile.has_changed = Mock(return_value=False)
+        self.pkg_profile._write_cached_profile = Mock()
         self.pkg_profile.update_check(uep, uuid)
 
         self.assertEquals(0, uep.updatePackageProfile.call_count)
+        self.assertEquals(0, self.pkg_profile._write_cached_profile.call_count)
 
-    def test_factlib_updates_has_changed(self):
+    def test_update_check_has_changed(self):
         uuid = 'FAKEUUID'
         uep = Mock()
         uep.updatePackageProfile = Mock()
 
         self.pkg_profile.has_changed = Mock(return_value=True)
+        self.pkg_profile._write_cached_profile = Mock()
         self.pkg_profile.update_check(uep, uuid)
 
         uep.updatePackageProfile.assert_called_with(uuid, 
                 FACT_MATCHER)
+        self.assertEquals(1, self.pkg_profile._write_cached_profile.call_count)
 
     def test_has_changed_no_cache(self):
         self.pkg_profile._cache_exists = Mock(return_value=False)
@@ -72,10 +76,10 @@ class TestProfileManager(unittest.TestCase):
         cached_profile = self._mock_pkg_profile(cached_pkgs)
 
         manager._cache_exists = Mock(return_value=True)
-        manager._load_cached_profile = Mock(return_value=cached_profile)
+        manager._read_cached_profile = Mock(return_value=cached_profile)
 
         self.assertFalse(manager.has_changed())
-        manager._load_cached_profile.assert_called_with()
+        manager._read_cached_profile.assert_called_with()
 
     def test_has_changed(self):
         current_pkgs = [
@@ -90,10 +94,10 @@ class TestProfileManager(unittest.TestCase):
         cached_profile = self._mock_pkg_profile(cached_pkgs)
 
         manager._cache_exists = Mock(return_value=True)
-        manager._load_cached_profile = Mock(return_value=cached_profile)
+        manager._read_cached_profile = Mock(return_value=cached_profile)
 
         self.assertTrue(manager.has_changed())
-        manager._load_cached_profile.assert_called_with()
+        manager._read_cached_profile.assert_called_with()
 
     def _mock_pkg_profile(self, packages):
         """
