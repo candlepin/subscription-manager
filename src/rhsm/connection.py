@@ -21,14 +21,18 @@ import urllib
 import simplejson as json
 import base64
 import os
-from M2Crypto import SSL, httpslib
 import logging
+
+from M2Crypto import SSL, httpslib
+from urllib import urlencode
+
 from config import initConfig
 
 
 class NullHandler(logging.Handler):
     def emit(self, record):
         pass
+
 
 h = NullHandler()
 logging.getLogger("rhsm").addHandler(h)
@@ -528,6 +532,25 @@ class UEPConnection:
         method = "/owners/%s/environments" % owner_key
         results = self.conn.request_get(method)
         return results
+
+    def getEnvironment(self, owner_key=None, name=None):
+        """
+        Fetch an environment for an owner.
+
+        If querying by name, owner is required as environment names are only 
+        unique within the context of an owner.
+
+        TODO: Add support for querying by ID, this will likely hit an entirely
+        different URL.
+        """
+        if name and not owner_key:
+            raise Exception("Must specify owner key to query environment " 
+                    "by name")
+
+        query_param = urlencode({"name": name})
+        url = "/owners/%s/environments?%s" % (owner_key, query_param)
+        print "Getting environment: %s" % url
+        results = self.conn.request_get(url)
 
     def getEntitlement(self, entId):
         method = "/entitlements/%s" % entId
