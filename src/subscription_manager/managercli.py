@@ -524,6 +524,8 @@ class RegisterCommand(UserPassCommand):
             systemExit(_("ERROR: Server does not support environments."))
 
         env = cp.getEnvironment(owner_key=owner_key, name=environment_name)
+        if not env:
+            systemExit(-1, _("No such environment: %s") % environment_name)
         return env['id']
 
     def _determine_owner_key(self, cp):
