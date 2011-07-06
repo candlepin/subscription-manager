@@ -215,6 +215,7 @@ class Restlib(object):
                 parsed = json.loads(response['content'])
             except Exception, e:
                 log.exception(e)
+                log.error("Response: %s" % response)
                 if str(response['status']) in ["404", "500", "502", "503", "504"]:
                     log.error('remote server status code: ' + str(response['status']))
                     raise RemoteServerException(response['status'])
