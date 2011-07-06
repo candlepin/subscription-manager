@@ -222,8 +222,19 @@ class Restlib(object):
                 else:
                     raise NetworkException(response['status'])
 
-            raise RestlibException(response['status'],
-                    parsed['displayMessage'])
+            error_msg = self._parse_msg_from_error_response_body(parsed)
+            raise RestlibException(response['status'], error_msg)
+
+    def _parse_msg_from_error_response_body(self, body):
+
+        # Old style with a single displayMessage:
+        if 'displayMessage' in body:
+            return body['displayMessage']
+
+        # New style list of error messages:
+        if 'errors' in body:
+            return " ".join("%s" % errmsg for errmsg in body['errors'])
+
 
     def request_get(self, method):
         return self._request("GET", method)
