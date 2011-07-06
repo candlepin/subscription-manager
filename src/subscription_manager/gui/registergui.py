@@ -415,6 +415,9 @@ class AsyncBackend(object):
                     # register to it:
                     if env['name'].lower() != LOCKER_ENV_NAME.lower():
                         retval.append(env)
+                if len(retval) == 0:
+                    raise Exception(_("Server supports environments, but "
+                        "none are available."))
 
             self.queue.put((callback, retval, None))
         except Exception, e:
