@@ -291,7 +291,7 @@ class StubUEP:
             self.registered_consumer_info = {"uuid": 'dummy-consumer-uuid',}
             pass
 
-    def registerConsumer(self, name, type, facts, owner):
+    def registerConsumer(self, name, type, facts, owner, environment):
         return self.registered_consumer_info
 
     def getOwnerList(self, username):
