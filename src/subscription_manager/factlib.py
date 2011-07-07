@@ -70,6 +70,8 @@ class UpdateAction(Action):
             consumer_uuid = consumer.getConsumerId()
 
             facts.update_check(self.uep, consumer_uuid)
+        else:
+            log.info("Facts have not changed, skipping upload.")
         return updates
 
     def _get_facts(self):
