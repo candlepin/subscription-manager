@@ -15,14 +15,25 @@
 
 import logging
 import os
+import simplejson as json
 import gettext
 _ = gettext.gettext
 
-from rhsm.profile import get_profile
+from rhsm.profile import get_profile, RPMProfile
+from subscription_manager.certlib import DataLib, ConsumerIdentity
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
 CACHE_FILE = "/var/lib/rhsm/packages/packages.json"
+
+
+class ProfileLib(DataLib):
+
+    def _do_update(self):
+        profile_mgr = ProfileManager()
+        consumer = ConsumerIdentity.read()
+        consumer_uuid = consumer.getConsumerId()
+        return profile_mgr.update_check(self.uep, consumer_uuid)
 
 
 class ProfileManager(object):
@@ -30,7 +41,7 @@ class ProfileManager(object):
     Manages the profile of packages installed on this system. 
     """
 
-    def __init__(self, current_profile=None, cached_profile=None):
+    def __init__(self, current_profile=None):
 
         # If we weren't given a profile, load the current systems packages:
         self.current_profile = current_profile
@@ -42,14 +53,33 @@ class ProfileManager(object):
         Write the current profile to disk. Should only be done after
         successfully pushing the profile to the server.
         """
-        pass
+        if not os.access(os.path.dirname(CACHE_FILE), os.R_OK):
+            os.makedirs(os.path.dirname(CACHE_FILE))
+        try:
+            f = open(CACHE_FILE, "w+")
+            json.dump(self.current_profile.collect(), f)
+            f.close()
+        except IOError, e:
+            log.error("Unable to write package profile cache to: %s" % 
+                    CACHE_FILE)
+            log.exception(e)
 
     def _read_cached_profile(self):
         """
         Load the last package profile we sent to the server.
         Returns none if no cache file exists.
         """
-        pass
+        try:
+            f = open(CACHE_FILE)
+            profile = RPMProfile(from_file=f)
+            f.close()
+            return profile
+        except IOError:
+            log.error("Unable to read package profile: %s" % CACHE_FILE)
+        except ValueError:
+            # ignore json file parse errors, we are going to generate
+            # a new as if it didn't exist
+            pass
 
     def _cache_exists(self):
         return os.path.exists(CACHE_FILE)
@@ -62,8 +92,12 @@ class ProfileManager(object):
             log.info("Updating package profile.")
             uep.updatePackageProfile(consumer_uuid, self.current_profile.collect())
             self._write_cached_profile()
+            # Return the number of 'updates' we did, assuming updating all 
+            # packages at once is one update.
+            return 1
         else: 
             log.info("Package profile has not changed, skipping upload.")
+            return 0 # No updates performed.
 
     def has_changed(self):
         """
@@ -71,8 +105,10 @@ class ProfileManager(object):
         updated.
         """
         if not self._cache_exists():
-            log.info( "Cache exists")
+            log.info( "Cache does not exist")
             return True
+
+        log.info("Reading cache.")
         cached_profile = self._read_cached_profile()
         return not cached_profile == self.current_profile
 

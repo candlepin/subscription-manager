@@ -59,6 +59,9 @@ class DataLib:
         finally:
             lock.release()
             
+    # A serial number related delete method here, which appears to be irrelevant
+    # to all the classes which inherit but one...
+    # TODO: move this to just the CertLib class...
     def delete(self, serialNumbers):
         lock = self.lock
         lock.acquire()
@@ -131,6 +134,8 @@ class UpdateAction(Action):
         self.purgeExpired(report)
         log.info('certs updated:\n%s', report)
         self.syslogResults(report)
+        # WARNING: TODO: XXX: this is returning a tuple, the parent class and 
+        # all other sub-classes return an int, which somewhat defeats the purpose...
         return (report.updates(), exceptions)
 
     def syslogResults(self, report):

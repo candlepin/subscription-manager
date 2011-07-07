@@ -140,6 +140,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/subscription_manager/facts.py*
 %{_datadir}/rhsm/subscription_manager/factlib.py*
 %{_datadir}/rhsm/subscription_manager/productid.py*
+%{_datadir}/rhsm/subscription_manager/pkgprofile.py*
 %{_datadir}/rhsm/subscription_manager/branding
 %attr(755,root,root) %{_datadir}/rhsm/subscription_manager/certmgr.py*
 %attr(755,root,root) %{_sbindir}/subscription-manager
@@ -150,6 +151,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %dir %{_var}/run/rhsm
 %attr(755,root,root) %dir %{_var}/lib/rhsm
 %attr(755,root,root) %dir %{_var}/lib/rhsm/facts
+%attr(755,root,root) %dir %{_var}/lib/rhsm/packages
 %{_sysconfdir}/pam.d/subscription-manager
 %{_sysconfdir}/security/console.apps/subscription-manager
 

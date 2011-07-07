@@ -22,6 +22,7 @@ sys.path.append("/usr/share/rhsm")
 from subscription_manager.certlib import CertLib, ActionLock, ConsumerIdentity
 from subscription_manager.repolib import RepoLib
 from subscription_manager.factlib import FactLib
+from subscription_manager.pkgprofile import ProfileLib
 
 import rhsm.connection as connection
 
@@ -46,6 +47,7 @@ class CertManager:
         self.certlib = CertLib(self.lock, uep=self.uep)
         self.repolib = RepoLib(self.lock, uep=self.uep)
         self.factlib = FactLib(self.lock, uep=self.uep)
+        self.profilelib = ProfileLib(self.lock, uep=self.uep)
 
     def update(self):
         """
@@ -58,8 +60,13 @@ class CertManager:
         lock = self.lock
         try:
             lock.acquire()
-            for lib in (self.repolib, self.factlib):
+            for lib in (self.repolib, self.factlib, self.profilelib):
                 updates += lib.update()
+            
+            # WARNING
+            # Certlib inherits DataLib as well as the above 'lib' objects, 
+            # but for some reason it's update method returns a tuple instead
+            # of an int:
             ret = self.certlib.update()
             updates += ret[0]
             for e in ret[1]:

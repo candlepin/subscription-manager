@@ -67,7 +67,7 @@ class Facts:
             cached_facts = json.loads(json_buffer)
             f.close()
         except IOError:
-            log.exception("Unable to read %s" % self.fact_cache)
+            log.error("Unable to read %s" % self.fact_cache)
         except ValueError:
             # see bz #669208, #667953
             # ignore facts file parse errors, we are going to generate

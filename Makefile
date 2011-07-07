@@ -73,6 +73,7 @@ install-files: dbus-service-install compile-po desktop-files
 	install -d ${PREFIX}/var/log/rhsm
 	install -d ${PREFIX}/var/run/rhsm
 	install -d ${PREFIX}/var/lib/rhsm/facts
+	install -d ${PREFIX}/var/lib/rhsm/packages
 	install -d ${PREFIX}/usr/bin
 	install -d ${PREFIX}/etc/rc.d/init.d
 	install -d ${PREFIX}/usr/share/icons/hicolor/scalable/apps
