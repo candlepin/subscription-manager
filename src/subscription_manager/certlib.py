@@ -59,9 +59,15 @@ class DataLib:
         finally:
             lock.release()
             
-    # A serial number related delete method here, which appears to be irrelevant
-    # to all the classes which inherit but one...
-    # TODO: move this to just the CertLib class...
+    def _do_update(self):
+        return
+        
+
+class CertLib(DataLib):
+
+    def __init__(self, lock=ActionLock(), uep=None):
+        DataLib.__init__(self, lock, uep)
+
     def delete(self, serialNumbers):
         lock = self.lock
         lock.acquire()
@@ -71,25 +77,12 @@ class DataLib:
             lock.release()   
             
     def _do_update(self):
-        return
-        
-    def _do_delete(self):
-        return
-
-class CertLib(DataLib):
-
-    def __init__(self, lock=ActionLock(), uep=None):
-        DataLib.__init__(self, lock, uep)
-
-    def _do_update(self):
         action = UpdateAction(uep=self.uep)
         return action.perform()
-
 
     def _do_delete(self, serialNumbers):
         action = DeleteAction()
         return action.perform(serialNumbers)
-
 
 
 class Action:
