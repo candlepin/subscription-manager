@@ -55,6 +55,7 @@ class Facts:
             if force or facts != existing_facts:
                 f = open(self.fact_cache, "w+")
                 json.dump(facts, f)
+                f.close()
         except IOError, e:
             log.exception(e)
 
@@ -64,6 +65,7 @@ class Facts:
             f = open(self.fact_cache)
             json_buffer = f.read()
             cached_facts = json.loads(json_buffer)
+            f.close()
         except IOError:
             log.exception("Unable to read %s" % self.fact_cache)
         except ValueError:
