@@ -56,12 +56,3 @@ class FactLib(DataLib):
         return Facts()
 
 
-def main():
-    print _('Updating facts')
-    factlib = FactLib()
-    updates = factlib.update()
-    print _('%d updates required') % updates
-    print _('done')
-
-if __name__ == '__main__':
-    main()
