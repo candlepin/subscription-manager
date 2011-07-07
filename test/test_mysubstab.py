@@ -24,8 +24,6 @@ class MySubscriptionsTabTest(unittest.TestCase):
         self.uep = StubUEP
         self.backend = StubBackend()
         self.consumer = Mock()
-        self.consumer.uuid = "1234"
-        self.consumer.name = "Test Consumer"
 
         self.cert1 = StubEntitlementCertificate(
             StubProduct('product2'),
@@ -59,5 +57,5 @@ class MySubscriptionsTabTest(unittest.TestCase):
         self.assertEquals(self.cert1.validRange().end(), column['expiration_date'])
         self.assertEquals("0 / 1", column['installed_text'])
         self.assertEquals(0, column['installed_value'])
-        self.assertEquals(self.cert1.getOrder().getQuantity(), column['quantity'])
+        self.assertEquals(self.cert1.getOrder().getQuantityUsed(), column['quantity'])
         self.assertEquals(self.cert1.serialNumber(), column['serial']);

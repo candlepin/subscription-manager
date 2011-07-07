@@ -57,6 +57,9 @@ prefix = os.path.dirname(__file__)
 VALID_IMG = os.path.join(prefix, "data/icons/valid.svg")
 INVALID_IMG = os.path.join(prefix, "data/icons/invalid.svg")
 
+# An implied Katello environment which we can't actual register to.
+LOCKER_ENV_NAME = "locker"
+
 cert_file = ConsumerIdentity.certpath()
 key_file = ConsumerIdentity.keypath()
 
@@ -70,6 +73,7 @@ import gobject
 CREDENTIALS_PAGE = 0
 PROGRESS_PAGE = 1
 OWNER_SELECT_PAGE = 2
+ENVIRONMENT_SELECT_PAGE = 3
 
 class GladeWrapper(gtk.glade.XML):
     def __init__(self, filename):
@@ -124,9 +128,15 @@ class RegisterScreen:
 
         self.owner_treeview = registration_xml.get_widget("owner_treeview")
         renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn(_("Owner"), renderer, text=1)
+        column = gtk.TreeViewColumn(_("Organization"), renderer, text=1)
         self.owner_treeview.set_property("headers-visible", False)
         self.owner_treeview.append_column(column)
+
+        self.environment_treeview = registration_xml.get_widget("environment_treeview")
+        renderer = gtk.CellRendererText()
+        column = gtk.TreeViewColumn(_("Environment"), renderer, text=1)
+        self.environment_treeview.set_property("headers-visible", False)
+        self.environment_treeview.append_column(column)
 
 
         self.cancel_button = registration_xml.get_widget("cancel_button")
@@ -160,9 +170,12 @@ class RegisterScreen:
         self.register()
 
     def register(self, testing=None):
-        if self.register_notebook.get_current_page() != CREDENTIALS_PAGE:
+        if self.register_notebook.get_current_page() == OWNER_SELECT_PAGE:
             # we're on the owner select page
-            self._register_with_owner()
+            self._owner_selected()
+            return
+        elif self.register_notebook.get_current_page() == ENVIRONMENT_SELECT_PAGE:
+            self._environment_selected()
             return
 
         username = self.uname.get_text()
@@ -186,7 +199,7 @@ class RegisterScreen:
 
         self.timer = gobject.timeout_add(100, self._timeout_callback)
         self.register_notebook.set_page(PROGRESS_PAGE)
-        self._set_register_details_label(_("Fetching list of possible owners"))
+        self._set_register_details_label(_("Fetching list of possible organizations"))
 
         self.cancel_button.set_sensitive(False)
         self.register_button.set_sensitive(False)
@@ -204,7 +217,9 @@ class RegisterScreen:
 
         owners = [(owner['key'], owner['displayName']) for owner in owners]
         if len(owners) == 1:
-            self._run_register_step(owners[0][0])
+            self.owner_key = owners[0][0]
+            self.async.get_environment_list(self.owner_key, self._on_get_environment_list_cb)
+
         else:
             owner_model = gtk.ListStore(str, str)
             for owner in owners:
@@ -219,19 +234,59 @@ class RegisterScreen:
             self.register_button.set_sensitive(True)
             self.register_notebook.set_page(OWNER_SELECT_PAGE)
 
-    def _register_with_owner(self):
+    def _on_get_environment_list_cb(self, result_tuple, error=None):
+        environments = result_tuple
+        if error != None:
+            handle_gui_exception(error, constants.REGISTER_ERROR)
+            self._finish_registration(failed=True)
+            return
+
+        if not environments:
+            self._run_register_step(self.owner_key, None)
+            return
+
+        envs = [(env['id'], env['name']) for env in environments]
+        if len(envs) == 1:
+            self._run_register_step(self.owner_key, envs[0][0])
+        else:
+            environment_model = gtk.ListStore(str, str)
+            for env in envs:
+                environment_model.append(env)
+
+            self.environment_treeview.set_model(environment_model)
+
+            self.environment_treeview.get_selection().select_iter(
+                    environment_model.get_iter_first())
+
+            self.cancel_button.set_sensitive(True)
+            self.register_button.set_sensitive(True)
+            self.register_notebook.set_page(ENVIRONMENT_SELECT_PAGE)
+
+    # Callback used by the owner selection screen:
+    def _owner_selected(self):
         self.cancel_button.set_sensitive(False)
         self.register_button.set_sensitive(False)
         self.register_notebook.set_page(PROGRESS_PAGE)
 
         model, tree_iter = self.owner_treeview.get_selection().get_selected()
-        owner = model.get_value(tree_iter, 0)
+        self.owner_key = model.get_value(tree_iter, 0)
 
-        self._run_register_step(owner)
+        self.async.get_environment_list(self.owner_key, self._on_get_environment_list_cb)
 
-    def _run_register_step(self, owner):
+    def _environment_selected(self):
+        self.cancel_button.set_sensitive(False)
+        self.register_button.set_sensitive(False)
+        self.register_notebook.set_page(PROGRESS_PAGE)
+
+        model, tree_iter = self.environment_treeview.get_selection().get_selected()
+        env = model.get_value(tree_iter, 0)
+
+        self._run_register_step(self.owner_key, env)
+
+    def _run_register_step(self, owner, env):
+        log.info("Registering to owner: %s environment: %s" % (owner, env))
         self.async.register_consumer(self.consumer_name.get_text(),
-                self.facts.get_facts(), owner,
+                self.facts.get_facts(), owner, env,
                 self._on_registration_finished_cb)
 
         self._set_register_details_label(_("Registering your system"))
@@ -344,13 +399,39 @@ class AsyncBackend(object):
         except Exception, e:
             self.queue.put((callback, None, e))
 
-    def _register_consumer(self, name, facts, owner, callback):
+    def _get_environment_list(self, owner_key, callback):
+        """
+        method run in the worker thread.
+        """
+        try:
+            retval = None
+            # If environments aren't supported, don't bother trying to list:
+            if self.backend.admin_uep.supports_resource('environments'):
+                log.info("Server supports environments, checking for environment to " 
+                        "register to.")
+                retval = []
+                for env in self.backend.admin_uep.getEnvironmentList(owner_key):
+                    # We need to ignore the "locker" environment, you can't 
+                    # register to it:
+                    if env['name'].lower() != LOCKER_ENV_NAME.lower():
+                        retval.append(env)
+                if len(retval) == 0:
+                    raise Exception(_("Server supports environments, but "
+                        "none are available."))
+
+            self.queue.put((callback, retval, None))
+        except Exception, e:
+            log.error("Error listing environments:")
+            log.exception(e)
+            self.queue.put((callback, None, e))
+
+    def _register_consumer(self, name, facts, owner, env, callback):
         """
         method run in the worker thread.
         """
         try:
             retval = self.backend.admin_uep.registerConsumer(name=name,
-                    facts=facts, owner=owner)
+                    facts=facts, owner=owner, environment=env)
             self.queue.put((callback, retval, None))
         except Exception, e:
             self.queue.put((callback, None, e))
@@ -395,13 +476,18 @@ class AsyncBackend(object):
         threading.Thread(target=self._get_owner_list,
                 args=(username, callback)).start()
 
-    def register_consumer(self, name, facts, owner, callback):
+    def get_environment_list(self, owner_key, callback):
+        gobject.idle_add(self._watch_thread)
+        threading.Thread(target=self._get_environment_list,
+                args=(owner_key, callback)).start()
+
+    def register_consumer(self, name, facts, owner, env, callback):
         """
         Run consumer registration asyncronously
         """
         gobject.idle_add(self._watch_thread)
         threading.Thread(target=self._register_consumer,
-                args=(name, facts, owner, callback)).start()
+                args=(name, facts, owner, env, callback)).start()
 
     def bind_by_products(self, uuid, products, callback):
         gobject.idle_add(self._watch_thread)

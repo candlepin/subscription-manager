@@ -42,7 +42,7 @@ if _LIBPATH not in sys.path:
 
 # quick check to see if you are a super-user.
 if os.getuid() != 0:
-    sys.stderr.write('ERROR: must be root to execute\n')
+    sys.stderr.write('ERROR: this command requires root access to execute\n')
     sys.exit(8)
 
 try:

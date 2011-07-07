@@ -37,6 +37,7 @@ import rhsm.connection as connection
 from i18n_optparse import OptionParser
 from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib, ConsumerIdentity
+from subscription_manager.repolib import RepoLib
 from subscription_manager.certmgr import CertManager
 from subscription_manager import managerlib
 from subscription_manager.facts import Facts
@@ -332,7 +333,7 @@ class IdentityCommand(UserPassCommand):
                 owner = self.cp.getOwner(consumerid)
                 ownername = owner['displayName']
                 ownerid = owner['id']
-                print _('Current identity is: %s \nname: %s \nowner name: %s \nowner id: %s') \
+                print _('Current identity is: %s \nname: %s \norg name: %s \norg id: %s') \
                          % (consumerid, consumer_name, ownername, ownerid)
             else:
                 if self.options.force:
@@ -357,7 +358,7 @@ class IdentityCommand(UserPassCommand):
 class OwnersCommand(UserPassCommand):
 
     def __init__(self):
-        usage = "usage: %prog identity [OPTIONS]"
+        usage = "usage: %prog orgs [OPTIONS]"
         shortdesc = _("Display the orgs available for a user")
         desc = shortdesc
 
@@ -375,17 +376,17 @@ class OwnersCommand(UserPassCommand):
                                                proxy_password=self.proxy_password)
             owners = self.cp.getOwnerList(self.username)
             if len(owners):
-                print "owners:"
+                print "orgs:"
                 for owner in owners:
                     print owner['key']
 
-            log.info("Successfully retrieved owner list from Entitlement Platform.")
+            log.info("Successfully retrieved org list from Entitlement Platform.")
         except connection.RestlibException, re:
             log.exception(re)
-            log.error("Error: Unable to retrieve owner list from Entitlement Platform: %s" % re)
+            log.error("Error: Unable to retrieve org list from Entitlement Platform: %s" % re)
             systemExit(-1, re.msg)
         except Exception, e:
-            handle_exception(_("Error: Unable to retrieve owner list from Entitlement Platform"), e)
+            handle_exception(_("Error: Unable to retrieve org list from Entitlement Platform"), e)
 
 
 class RegisterCommand(UserPassCommand):
@@ -404,8 +405,10 @@ class RegisterCommand(UserPassCommand):
                                help=_("name of the consumer to register, defaults to the hostname"))
         self.parser.add_option("--consumerid", dest="consumerid",
                                help=_("if supplied, the existing consumer data is pulled from the server"))
-        self.parser.add_option("--owner", dest="owner",
-                               help=_("register to one of multiple owners for the user"))
+        self.parser.add_option("--org", dest="org",
+                               help=_("register to one of multiple organizations for the user"))
+        self.parser.add_option("--environment", dest="environment",
+                               help=_("register to a specific environment in the destination org"))
         self.parser.add_option("--autosubscribe", action='store_true',
                                help=_("automatically subscribe this system to\
                                      compatible subscriptions."))
@@ -424,6 +427,9 @@ class RegisterCommand(UserPassCommand):
             sys.exit(-1)
         elif (self.options.username and self.options.activation_keys):
             print(_("Error: Activation keys do not require user credentials"))
+            sys.exit(-1)
+        elif (self.options.environment and not self.options.org):
+            print(_("Error: Must specify --org to register to an environment."))
             sys.exit(-1)
 
     def _do_command(self):
@@ -457,16 +463,25 @@ class RegisterCommand(UserPassCommand):
 
         # Proceed with new registration:
         try:
+
+            admin_cp = connection.UEPConnection(username=self.username,
+                                        password=self.password,
+                                        proxy_hostname=self.proxy_hostname,
+                                        proxy_port=self.proxy_port,
+                                        proxy_user=self.proxy_user,
+                                        proxy_password=self.proxy_password)
+
             if self.options.consumerid:
             #TODO remove the username/password
                 consumer = admin_cp.getConsumer(self.options.consumerid,
                         self.username, self.password)
             else:
                 if self.options.activation_keys:
+
                     admin_cp = connection.UEPConnection(proxy_hostname=self.proxy_hostname,
-                                                        proxy_port=self.proxy_port,
-                                                        proxy_user=self.proxy_user,
-                                                        proxy_password=self.proxy_password)
+                                    proxy_port=self.proxy_port,
+                                    proxy_user=self.proxy_user,
+                                    proxy_password=self.proxy_password)
 
                     consumer = admin_cp.registerConsumerWithKeys(
                         name=consumername,
@@ -474,19 +489,14 @@ class RegisterCommand(UserPassCommand):
                         facts=self.facts.get_facts(),
                         keys=self.options.activation_keys)
                 else:
-
-                    admin_cp = connection.UEPConnection(username=self.username,
-                                                        password=self.password,
-                                                        proxy_hostname=self.proxy_hostname,
-                                                        proxy_port=self.proxy_port,
-                                                        proxy_user=self.proxy_user,
-                                                        proxy_password=self.proxy_password)
                     owner_key = self._determine_owner_key(admin_cp)
 
+                    environment_id = self._get_environment_id(admin_cp, owner_key, 
+                            self.options.environment)
                     consumer = admin_cp.registerConsumer(name=consumername,
-                                                         type=self.options.consumertype,
-                                                         facts=self.facts.get_facts(),
-                                                         owner=owner_key)
+                         type=self.options.consumertype, facts=self.facts.get_facts(),
+                         owner=owner_key, environment=environment_id)
+
         except connection.RestlibException, re:
             log.exception(re)
             systemExit(-1, re.msg)
@@ -504,14 +514,28 @@ class RegisterCommand(UserPassCommand):
 
         self._request_validity_check()
 
+    def _get_environment_id(self, cp, owner_key, environment_name):
+        # If none specified on CLI, return None, the registration method 
+        # will skip environment specification.
+        if not environment_name:
+            return environment_name
+
+        if not cp.supports_resource('environments'):
+            systemExit(_("ERROR: Server does not support environments."))
+
+        env = cp.getEnvironment(owner_key=owner_key, name=environment_name)
+        if not env:
+            systemExit(-1, _("No such environment: %s") % environment_name)
+        return env['id']
+
     def _determine_owner_key(self, cp):
         """
         If given an owner in the options, use it. Otherwise ask the server
         for all the owners this user has access too. If there is just one,
         use it's key. If multiple, return None and let the server error out.
         """
-        if self.options.owner:
-            return self.options.owner
+        if self.options.org:
+            return self.options.org
 
         owners = cp.getOwnerList(self.username)
         if len(owners) == 1:
@@ -619,10 +643,10 @@ class SubscribeCommand(CliCommand):
 
     def _validate_options(self):
         if not (self.options.pool or self.options.auto):
-            print _("Error: Need to supply --pool or --auto.")
+            print _("Error: This command requires that you specify a pool with --pool or use --auto.")
             sys.exit(-1)
         if self.options.pool and self.options.auto:
-            print _("Error: Only one of --pool or --auto may be used.")
+            print _("Error: Only one of --pool or --auto may be used with this command.")
             sys.exit(-1)
 
     def _do_command(self):
@@ -644,7 +668,8 @@ class SubscribeCommand(CliCommand):
                         if (pool.find("#") >= 0):
                             systemExit(-1, _("Please enter a valid numeric pool id."))
                         self.cp.bindByEntitlementPool(consumer, pool, self.options.quantity)
-                        log.info("Info: Successfully subscribed the machine the Entitlement Pool %s" % pool)
+                        print _("Successfully subscribed the system to Pool %s") % pool
+                        log.info("Info: Successfully subscribed the system to the Entitlement Pool %s" % pool)
                     except connection.RestlibException, re:
                         log.exception(re)
                         if re.code == 403:
@@ -755,6 +780,40 @@ class FactsCommand(CliCommand):
             facts.update_check(self.cp, consumer)
             print _("Facts sucessfully updated.")
 
+class ReposCommand(CliCommand):
+
+    def __init__(self):
+        usage = "usage: %prog repos [OPTIONS]"
+        shortdesc = _("List the repos which this machine is entitled to use")
+        desc = shortdesc
+        CliCommand.__init__(self, "repos", usage, shortdesc, desc)
+
+        self.parser.add_option("--list", action="store_true",
+                               help=_("list the entitled repositories for this system"))
+
+    def _validate_options(self):
+        self.assert_should_be_registered()
+
+        # one or the other
+        if not (self.options.list):
+            print _("Error: No options provided. Please see the help comand.")
+            sys.exit(-1)
+
+    def _do_command(self):
+        self._validate_options()
+        if self.options.list:
+            rl = RepoLib()
+            repos = rl.get_repos()
+            if len(repos) > 0:
+                print _("The system is entitled to the following repositories.")
+                print _("These can be managed at in the repo file %s.") % rl.get_repo_file()
+
+                for repo in repos:
+                    print constants.repos_list % (repo["name"],
+                        repo["baseurl"],
+                        repo["enabled"])
+            else:
+                print _("The system is not entitled to use any repositories")
 
 class ListCommand(CliCommand):
 
@@ -877,7 +936,7 @@ class CLI:
         self.cli_commands = {}
         for clazz in [RegisterCommand, UnRegisterCommand, ListCommand, SubscribeCommand,\
                        UnSubscribeCommand, FactsCommand, IdentityCommand, OwnersCommand, \
-                       RefreshCommand, CleanCommand, RedeemCommand]:
+                       RefreshCommand, CleanCommand, RedeemCommand, ReposCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":

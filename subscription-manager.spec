@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.2
+Version: 0.96.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -207,6 +207,18 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Jul 06 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.3-1
+- Support registration to Katello environments. (dgoodwin@redhat.com)
+- Fix facts auto-update. (mstead@redhat.com)
+- Add a repos command. (bkearney@redhat.com)
+- 718217: Fixed the command name in the org usage (bkearney@redhat.com)
+- Improve a few error messages (bkearney@redhat.com)
+- 718052: Rebrand owner as org (bkearney@redhat.com)
+- Updated My Subs quantity to display quantity used. (mstead@redhat.com)
+- Added 'Quantity' column to 'My Subscriptions' tab. (mstead@redhat.com)
+- Improve the output of subscribing to a single pool (bkearney@redhat.com)
+- Improve the output from registering (bkearney@redhat.com)
+
 * Mon Jun 27 2011 Devan Goodwin <dgoodwin@redhat.com> 0.96.2-1
 - 656968: Add in a super class to cut down on the code duplication
   (bkearney@redhat.com)

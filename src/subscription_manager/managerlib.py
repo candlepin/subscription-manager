@@ -83,7 +83,7 @@ def persist_consumer_cert(consumerinfo):
     consumer_info = {"consumer_name": consumer.getConsumerName(),
                      "uuid": consumer.getConsumerId()}
     log.info("Consumer created: %s" % consumer_info)
-    system_log("Registered machine with identity: %s" % consumer.getConsumerId())
+    system_log("Registered system with identity: %s" % consumer.getConsumerId())
     return consumer_info
 
 

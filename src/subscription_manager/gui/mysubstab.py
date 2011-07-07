@@ -183,7 +183,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         entry['installed_text'] = '%s / %s' % (len(installed), len(products))
         entry['start_date'] = cert.validRange().begin()
         entry['expiration_date'] = cert.validRange().end()
-        entry['quantity'] = order.getQuantity()
+        entry['quantity'] = order.getQuantityUsed()
         entry['serial'] = cert.serialNumber()
         entry['align'] = 0.5         # Center horizontally
         entry['background'] = self._get_background_color(cert)

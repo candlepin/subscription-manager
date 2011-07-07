@@ -38,6 +38,27 @@ class RepoLib(DataLib):
         action = UpdateAction(uep=self.uep)
         return action.perform()
 
+    def get_repos(self):
+        current = set()
+        action = UpdateAction(uep=self.uep)
+        repos = action.get_unique_content()
+        # Add the current repo data
+        repo_file = RepoFile()
+        repo_file.read()
+        for repo in repos:
+            existing = repo_file.section(repo.id)
+            if existing is None:
+                current.add(repo)
+            else:
+                existing.update(repo)
+                current.add(existing)
+
+        return current
+
+    def get_repo_file(self):
+        repo_file = RepoFile()
+        return repo_file.path
+
 
 
 class UpdateAction:

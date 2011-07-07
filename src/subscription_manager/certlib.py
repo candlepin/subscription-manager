@@ -68,11 +68,9 @@ class DataLib:
             lock.release()   
             
     def _do_update(self):
-        print "HHHH"
         return
         
     def _do_delete(self):
-        print "YYYY"
         return
 
 class CertLib(DataLib):
