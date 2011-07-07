@@ -321,3 +321,6 @@ class StubFacts(object):
 
     def delta(self):
         return self.delta
+
+    def update_check(self, uep, consumer_uuid, force=False):
+        pass
