@@ -33,29 +33,7 @@ class FactLib(DataLib):
     Makes use of the facts module as well.
     """
 
-    def __init__(self, lock=ActionLock(), uep=None):
-        DataLib.__init__(self, lock, uep)
-        self.action = UpdateAction(uep=self.uep)
-
     def _do_update(self):
-        return self.action.perform()
-
-
-# TODO: This Action class looks like a disjoint copy paste from the one in 
-# Certlib and as far as I can tell, serves no purpose. The DataLib subclasses
-# and their update() method are the abstraction we're really interested in,
-# so I'm pretty sure this single-use parent class and it's sub-class can go away.
-# Just fold it into FactLib which does basically nothing otherwise.
-class Action:
-
-    def __init__(self, uep=None):
-        self.factdir = "somewhere"
-        self.uep = uep
-
-
-class UpdateAction(Action):
-
-    def perform(self):
         updates = 0
 
         # figure out the diff between latest facts and

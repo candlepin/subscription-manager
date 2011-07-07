@@ -37,7 +37,7 @@ class TestFactlib(unittest.TestCase):
 
         def init_facts():
             return stubs.StubFacts(self.expected_facts)
-        self.fl.action._get_facts = init_facts
+        self.fl._get_facts = init_facts
 
     def test_factlib_updates_when_identity_does_not_exist(self):
         factlib.ConsumerIdentity = stubs.StubConsumerIdentity
