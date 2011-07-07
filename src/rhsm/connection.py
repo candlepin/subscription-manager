@@ -21,14 +21,18 @@ import urllib
 import simplejson as json
 import base64
 import os
-from M2Crypto import SSL, httpslib
 import logging
+
+from M2Crypto import SSL, httpslib
+from urllib import urlencode
+
 from config import initConfig
 
 
 class NullHandler(logging.Handler):
     def emit(self, record):
         pass
+
 
 h = NullHandler()
 logging.getLogger("rhsm").addHandler(h)
@@ -186,9 +190,11 @@ class Restlib(object):
         else:
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
 
-        conn.request(request_type, handler,
-                     body=json.dumps(info),
-                     headers=self.headers)
+        if info:
+            body = json.dumps(info)
+        else:
+            body = None
+        conn.request(request_type, handler, body=body, headers=self.headers)
 
         response = conn.getresponse()
         result = {
@@ -209,14 +215,26 @@ class Restlib(object):
                 parsed = json.loads(response['content'])
             except Exception, e:
                 log.exception(e)
+                log.error("Response: %s" % response)
                 if str(response['status']) in ["404", "500", "502", "503", "504"]:
                     log.error('remote server status code: ' + str(response['status']))
                     raise RemoteServerException(response['status'])
                 else:
                     raise NetworkException(response['status'])
 
-            raise RestlibException(response['status'],
-                    parsed['displayMessage'])
+            error_msg = self._parse_msg_from_error_response_body(parsed)
+            raise RestlibException(response['status'], error_msg)
+
+    def _parse_msg_from_error_response_body(self, body):
+
+        # Old style with a single displayMessage:
+        if 'displayMessage' in body:
+            return body['displayMessage']
+
+        # New style list of error messages:
+        if 'errors' in body:
+            return " ".join("%s" % errmsg for errmsg in body['errors'])
+
 
     def request_get(self, method):
         return self._request("GET", method)
@@ -365,7 +383,7 @@ class UEPConnection:
         url = "/consumers"
         if environment:
             url = "/environments/%s/consumers" % environment
-        if owner:
+        elif owner:
             url = "%s?owner=%s" % (url, owner)
 
         return self.conn.request_post(url, params)
@@ -539,6 +557,27 @@ class UEPConnection:
         method = "/owners/%s/environments" % owner_key
         results = self.conn.request_get(method)
         return results
+
+    def getEnvironment(self, owner_key=None, name=None):
+        """
+        Fetch an environment for an owner.
+
+        If querying by name, owner is required as environment names are only 
+        unique within the context of an owner.
+
+        TODO: Add support for querying by ID, this will likely hit an entirely
+        different URL.
+        """
+        if name and not owner_key:
+            raise Exception("Must specify owner key to query environment " 
+                    "by name")
+
+        query_param = urlencode({"name": name})
+        url = "/owners/%s/environments?%s" % (owner_key, query_param)
+        results = self.conn.request_get(url)
+        if len(results) == 0:
+            return None
+        return results[0]
 
     def getEntitlement(self, entId):
         method = "/entitlements/%s" % entId

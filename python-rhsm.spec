@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.96.5
+Version: 0.96.6
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -57,6 +57,17 @@ rm -rf %{buildroot}
 %{python_sitelib}/rhsm-*.egg-info
 
 %changelog
+* Wed Jul 06 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.6-1
+- Add support for new Katello error responses. (dgoodwin@redhat.com)
+- Log the response when there's an issue parsing error JSON.
+  (dgoodwin@redhat.com)
+- Add support for registration to Katello environments. (dgoodwin@redhat.com)
+- Don't send an http body if we don't have one. (jbowes@redhat.com)
+- Add call to list environments. (dgoodwin@redhat.com)
+- Do not load CA certs if in insecure mode. (dgoodwin@redhat.com)
+- Cache supported resources after establishing connection.
+  (dgoodwin@redhat.com)
+
 * Fri Jun 24 2011 Devan Goodwin <dgoodwin@redhat.com> 0.96.5-1
 - Fix backward compatability with old use of getPoolsList.
   (dgoodwin@redhat.com)
