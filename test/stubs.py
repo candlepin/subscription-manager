@@ -323,4 +323,4 @@ class StubFacts(object):
         return self.delta
 
     def update_check(self, uep, consumer_uuid, force=False):
-        pass
+        uep.updateConsumerFacts(consumer_uuid, self.facts)

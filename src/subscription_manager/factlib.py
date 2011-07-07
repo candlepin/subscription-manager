@@ -56,14 +56,14 @@ class UpdateAction(Action):
         # figure out the diff between latest facts and
         # report that as updates
 
-        if not ConsumerIdentity.exists():
-            return updates
-        consumer = ConsumerIdentity.read()
-        consumer_uuid = consumer.getConsumerId()
-
         facts = self._get_facts()
         if facts.delta():
             updates = len(facts.get_facts())
+            if not ConsumerIdentity.exists():
+                return updates
+            consumer = ConsumerIdentity.read()
+            consumer_uuid = consumer.getConsumerId()
+
             facts.update_check(self.uep, consumer_uuid)
         return updates
 
