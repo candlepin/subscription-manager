@@ -24,10 +24,19 @@ from subscription_manager.certlib import DataLib, ConsumerIdentity
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
-CACHE_FILE = "/var/lib/rhsm/packages/packages.json"
+PROFILE_CACHE_FILE = "/var/lib/rhsm/packages/packages.json"
+
+
+def delete_profile_cache():
+    if os.path.exists(PROFILE_CACHE_FILE):
+        os.remove(PROFILE_CACHE_FILE)
 
 
 class ProfileLib(DataLib):
+    """
+    Another "Lib" object, used by rhsmcertd to update the profile 
+    periodically.
+    """
 
     def _do_update(self):
         profile_mgr = ProfileManager()
@@ -53,15 +62,15 @@ class ProfileManager(object):
         Write the current profile to disk. Should only be done after
         successfully pushing the profile to the server.
         """
-        if not os.access(os.path.dirname(CACHE_FILE), os.R_OK):
-            os.makedirs(os.path.dirname(CACHE_FILE))
+        if not os.access(os.path.dirname(PROFILE_CACHE_FILE), os.R_OK):
+            os.makedirs(os.path.dirname(PROFILE_CACHE_FILE))
         try:
-            f = open(CACHE_FILE, "w+")
+            f = open(PROFILE_CACHE_FILE, "w+")
             json.dump(self.current_profile.collect(), f)
             f.close()
         except IOError, e:
             log.error("Unable to write package profile cache to: %s" % 
-                    CACHE_FILE)
+                    PROFILE_CACHE_FILE)
             log.exception(e)
 
     def _read_cached_profile(self):
@@ -70,19 +79,19 @@ class ProfileManager(object):
         Returns none if no cache file exists.
         """
         try:
-            f = open(CACHE_FILE)
+            f = open(PROFILE_CACHE_FILE)
             profile = RPMProfile(from_file=f)
             f.close()
             return profile
         except IOError:
-            log.error("Unable to read package profile: %s" % CACHE_FILE)
+            log.error("Unable to read package profile: %s" % PROFILE_CACHE_FILE)
         except ValueError:
             # ignore json file parse errors, we are going to generate
             # a new as if it didn't exist
             pass
 
     def _cache_exists(self):
-        return os.path.exists(CACHE_FILE)
+        return os.path.exists(PROFILE_CACHE_FILE)
 
     def update_check(self, uep, consumer_uuid):
         """

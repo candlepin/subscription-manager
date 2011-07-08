@@ -29,7 +29,8 @@ from rhsm.config import initConfig
 from subscription_manager.certlib import ConsumerIdentity, \
                     ProductDirectory, EntitlementDirectory
 from subscription_manager.certlib import system_log as inner_system_log
-from subscription_manager.pkgprofile import ProfileManager
+from subscription_manager.pkgprofile import ProfileManager, delete_profile_cache
+from subscription_manager.facts import Facts
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -662,6 +663,8 @@ def unregister(uep, consumer_uuid, force=True):
         if force:
             # Clean up certificates, these are no longer valid:
             delete_consumer_certs()
+            delete_profile_cache()
+            Facts().delete_cache()
 
 
 def check_identity_cert_perms():

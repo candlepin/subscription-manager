@@ -46,6 +46,10 @@ class Facts:
         # that we need to update
         self.graylist = ['cpu.cpu_mhz']
 
+    def delete_cache(self):
+        if os.path.exists(self.fact_cache):
+            os.remove(self.fact_cache)
+
     def write(self, facts, force=False):
         if not os.access(self.fact_cache_dir, os.R_OK):
             os.makedirs(self.fact_cache_dir)
