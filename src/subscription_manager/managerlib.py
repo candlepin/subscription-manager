@@ -29,6 +29,7 @@ from rhsm.config import initConfig
 from subscription_manager.certlib import ConsumerIdentity, \
                     ProductDirectory, EntitlementDirectory
 from subscription_manager.certlib import system_log as inner_system_log
+from subscription_manager.pkgprofile import ProfileManager
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -347,11 +348,14 @@ def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None):
     consumer possible.
     """
     facts.update_check(uep, consumer_uuid)
+
+    profile_mgr = ProfileManager()
+    profile_mgr.update_check(uep, consumer_uuid)
+
     owner = uep.getOwner(consumer_uuid)
     ownerid = owner['key']
     return uep.getPoolsList(consumer=consumer_uuid, listAll=list_all,
             active_on=active_on, owner=ownerid)
-
 
 
 # TODO: This method is morphing the actual pool json and returning a new

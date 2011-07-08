@@ -39,6 +39,7 @@ from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib, ConsumerIdentity
 from subscription_manager.repolib import RepoLib
 from subscription_manager.certmgr import CertManager
+from subscription_manager.pkgprofile import ProfileManager
 from subscription_manager import managerlib
 from subscription_manager.facts import Facts
 
@@ -609,15 +610,17 @@ class RedeemCommand(CliCommand):
         Executes the command.
         """
         self._validate_options()
-        consumer = check_registration()['uuid']
+        consumer_uuid = check_registration()['uuid']
 
         try:
             # update facts first, if we need to
             facts = Facts()
+            facts.update_check(self.cp, consumer_uuid)
 
-            facts.update_check(self.cp, consumer)
+            profile_mgr = ProfileManager()
+            profile_mgr.update_check(self.cp, consumer_uuid)
 
-            self.cp.activateMachine(consumer, self.options.email, self.options.locale)
+            self.cp.activateMachine(consumer_uuid, self.options.email, self.options.locale)
 
         except Exception, e:
             handle_exception("Unable to redeem: %s" % e, e)
@@ -654,12 +657,14 @@ class SubscribeCommand(CliCommand):
         Executes the command.
         """
         self._validate_options()
-        consumer = check_registration()['uuid']
+        consumer_uuid = check_registration()['uuid']
         try:
             # update facts first, if we need to
             facts = Facts()
+            facts.update_check(self.cp, consumer_uuid)
 
-            facts.update_check(self.cp, consumer)
+            profile_mgr = ProfileManager()
+            profile_mgr.update_check(self.cp, consumer_uuid)
 
             if self.options.pool:
                 for pool in self.options.pool:
@@ -667,7 +672,7 @@ class SubscribeCommand(CliCommand):
                         # odd html strings will cause issues, reject them here.
                         if (pool.find("#") >= 0):
                             systemExit(-1, _("Please enter a valid numeric pool id."))
-                        self.cp.bindByEntitlementPool(consumer, pool, self.options.quantity)
+                        self.cp.bindByEntitlementPool(consumer_uuid, pool, self.options.quantity)
                         print _("Successfully subscribed the system to Pool %s") % pool
                         log.info("Info: Successfully subscribed the system to the Entitlement Pool %s" % pool)
                     except connection.RestlibException, re:
@@ -680,7 +685,7 @@ class SubscribeCommand(CliCommand):
                             systemExit(-1, re.msg)  # some other error.. don't try again
             # must be auto
             else:
-                autosubscribe(self.cp, consumer, self.certlib)
+                autosubscribe(self.cp, consumer_uuid, self.certlib)
 
             result = self.certlib.update()
             if result[1]:
