@@ -82,7 +82,7 @@ class SystemFactsDialog(widgets.GladeWidget):
             self.last_update_label.set_text(_('No previous update'))
 
         # make sure we get fresh facts, since entitlement validity status could         # change
-        system_facts_dict = self.facts.find_facts()
+        system_facts_dict = self.facts.get_facts()
 
         if self.consumer.uuid:
             system_facts_dict.update({'system.uuid': self.consumer.uuid})
@@ -110,12 +110,10 @@ class SystemFactsDialog(widgets.GladeWidget):
 
     def update_facts(self):
         """Sends the current system facts to the UEP server."""
-        system_facts = self.facts.find_facts()
         consumer_uuid = self.consumer.uuid
 
         try:
             self.facts.update_check(self.backend.uep, consumer_uuid, force=True)
-            self.facts.write(system_facts, True)
         except Exception, e:
             log.error("Could not update system facts \nError: %s" % e)
             errorWindow(linkify(str(e)))

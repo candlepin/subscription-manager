@@ -287,7 +287,7 @@ class RegisterScreen:
     def _run_register_step(self, owner, env):
         log.info("Registering to owner: %s environment: %s" % (owner, env))
         self.async.register_consumer(self.consumer_name.get_text(),
-                self.facts.get_facts(), owner, env,
+                self.facts, owner, env,
                 self._on_registration_finished_cb)
 
         self._set_register_details_label(_("Registering your system"))
@@ -432,7 +432,11 @@ class AsyncBackend(object):
         """
         try:
             retval = self.backend.admin_uep.registerConsumer(name=name,
-                    facts=facts, owner=owner, environment=env)
+                    facts=facts.get_facts(), owner=owner, environment=env)
+
+            # Facts went out with the registration request, write cache to disk:
+            facts.write_cache()
+
             ProfileManager().update_check(self.backend.admin_uep, retval['uuid'])
             self.queue.put((callback, retval, None))
         except Exception, e:

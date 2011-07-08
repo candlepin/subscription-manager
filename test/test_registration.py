@@ -43,6 +43,7 @@ class CliRegistrationTests(unittest.TestCase):
         # Mock out facts:
         cmd.facts.get_facts = Mock()
         cmd.facts.get_facts.return_value = {'fact1': 'val1', 'fact2': 'val2'}
+        cmd.facts.write_cache = Mock()
 
         cmd.main(['register', '--username=testuser1', '--password=password'])
 

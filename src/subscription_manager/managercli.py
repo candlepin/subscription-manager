@@ -507,6 +507,10 @@ class RegisterCommand(UserPassCommand):
             handle_exception(_("Error during registration: %s") % e, e)
 
         consumer_info = managerlib.persist_consumer_cert(consumer)
+
+        # Facts went out with the registration request, write cache to disk:
+        self.facts.write_cache()
+
         profile_mgr = ProfileManager()
         profile_mgr.update_check(admin_cp, consumer['uuid'])
 

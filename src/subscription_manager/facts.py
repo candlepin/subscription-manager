@@ -51,17 +51,14 @@ class Facts:
             log.info("Deleting facts cache: %s" % self.fact_cache)
             os.remove(self.fact_cache)
 
-    def write(self, facts, force=False):
+    def write_cache(self):
         if not os.access(self.fact_cache_dir, os.R_OK):
             os.makedirs(self.fact_cache_dir)
         try:
-            existing_facts = self.read()
-
-            if force or facts != existing_facts:
-                log.info("Writing facts cache: %s" % self.fact_cache)
-                f = open(self.fact_cache, "w+")
-                json.dump(facts, f)
-                f.close()
+            log.info("Writing facts cache: %s" % self.fact_cache)
+            f = open(self.fact_cache, "w+")
+            json.dump(self.facts, f)
+            f.close()
         except IOError, e:
             log.exception(e)
 
@@ -122,12 +119,11 @@ class Facts:
             # there is a little bit of a race between when we load the facts, and when
             # we decide to save them, so delete facts out from under a Fact object means
             # it wasn't detecting it missing in that case and not writing a new one
-            self.write(self.facts)
             return self.facts
-        self.facts = self.find_facts()
+        self.facts = self._find_facts()
         return self.facts
 
-    def find_facts(self):
+    def _find_facts(self):
         # Load custom facts from /etc/rhsm/facts:
         facts_file_glob = "%s/facts/*.facts" % rhsm.config.DEFAULT_CONFIG_DIR
         file_facts = {}
@@ -157,7 +153,6 @@ class Facts:
 
         facts.update(validity_facts)
 
-        self.write(facts)
         return facts
 
     def update_check(self, uep, consumer_uuid, force=False):
@@ -169,4 +164,6 @@ class Facts:
         """
         if self.delta() or force:
             log.info("Updating facts.")
-            uep.updateConsumerFacts(consumer_uuid, self.get_facts())
+            facts = self.get_facts()
+            uep.updateConsumerFacts(consumer_uuid, facts)
+            self.write_cache()
