@@ -48,6 +48,7 @@ class Facts:
 
     def delete_cache(self):
         if os.path.exists(self.fact_cache):
+            log.info("Deleting facts cache: %s" % self.fact_cache)
             os.remove(self.fact_cache)
 
     def write(self, facts, force=False):

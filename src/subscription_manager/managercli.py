@@ -39,7 +39,7 @@ from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib, ConsumerIdentity
 from subscription_manager.repolib import RepoLib
 from subscription_manager.certmgr import CertManager
-from subscription_manager.pkgprofile import ProfileManager
+from subscription_manager.pkgprofile import ProfileManager, delete_profile_cache
 from subscription_manager import managerlib
 from subscription_manager.facts import Facts
 
@@ -268,6 +268,8 @@ class CleanCommand(CliCommand):
 
     def _do_command(self):
         managerlib.delete_consumer_certs()
+        delete_profile_cache()
+        Facts().delete_cache()
         log.info("Cleaned local data")
         print (_("All local data removed"))
 

@@ -29,6 +29,7 @@ PROFILE_CACHE_FILE = "/var/lib/rhsm/packages/packages.json"
 
 def delete_profile_cache():
     if os.path.exists(PROFILE_CACHE_FILE):
+        log.info("Deleting profile cache: %s" % PROFILE_CACHE_FILE)
         os.remove(PROFILE_CACHE_FILE)
 
 
