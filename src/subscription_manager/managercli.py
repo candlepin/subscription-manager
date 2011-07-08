@@ -790,7 +790,7 @@ class FactsCommand(CliCommand):
         if self.options.update:
             facts = Facts()
             consumer = check_registration()['uuid']
-            facts.update_check(self.cp, consumer)
+            facts.update_check(self.cp, consumer, force=True)
             print _("Facts sucessfully updated.")
 
 class ReposCommand(CliCommand):

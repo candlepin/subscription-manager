@@ -283,6 +283,7 @@ class StubConsumerIdentity:
     def read(cls):
         return StubConsumerIdentity("", "")
 
+
 class StubUEP:
     def __init__(self, username=None, password=None,
         proxy_hostname=None, proxy_port=None,
@@ -296,6 +297,10 @@ class StubUEP:
 
     def getOwnerList(self, username):
         return [{'key': 'dummyowner'}]
+
+    def updatePackageProfile(self, uuid, pkg_dicts):
+        pass
+
 
 class StubBackend:
     def __init__(self):
