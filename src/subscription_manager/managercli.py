@@ -507,6 +507,8 @@ class RegisterCommand(UserPassCommand):
             handle_exception(_("Error during registration: %s") % e, e)
 
         consumer_info = managerlib.persist_consumer_cert(consumer)
+        profile_mgr = ProfileManager()
+        profile_mgr.update_check(admin_cp, consumer['uuid'])
 
         print (_("The system has been registered with id: %s ")) % (consumer_info["uuid"])
 

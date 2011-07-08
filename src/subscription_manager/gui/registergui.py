@@ -33,6 +33,7 @@ from subscription_manager.facts import Facts
 from subscription_manager.certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \
         CertLib, CertSorter, find_first_invalid_date
 from subscription_manager.branding import get_branding
+from subscription_manager.pkgprofile import ProfileManager
 
 from subscription_manager.gui import activate
 from subscription_manager.gui import factsgui
@@ -432,6 +433,7 @@ class AsyncBackend(object):
         try:
             retval = self.backend.admin_uep.registerConsumer(name=name,
                     facts=facts, owner=owner, environment=env)
+            ProfileManager().update_check(self.backend.admin_uep, retval['uuid'])
             self.queue.put((callback, retval, None))
         except Exception, e:
             self.queue.put((callback, None, e))

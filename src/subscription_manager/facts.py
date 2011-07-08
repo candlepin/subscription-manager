@@ -58,6 +58,7 @@ class Facts:
             existing_facts = self.read()
 
             if force or facts != existing_facts:
+                log.info("Writing facts cache: %s" % self.fact_cache)
                 f = open(self.fact_cache, "w+")
                 json.dump(facts, f)
                 f.close()
