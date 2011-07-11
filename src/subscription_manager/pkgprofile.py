@@ -51,13 +51,22 @@ class ProfileManager(object):
     """
     Manages the profile of packages installed on this system. 
     """
-
     def __init__(self, current_profile=None):
 
+        # Could be None, we'll read the system's current profile later once
+        # we're sure we actually need the data.
+        self._current_profile = current_profile
+
+    def _get_current_profile(self):
         # If we weren't given a profile, load the current systems packages:
-        self.current_profile = current_profile
-        if not current_profile:
-            self.current_profile = get_profile('rpm')
+        if not self._current_profile:
+            self._current_profile = get_profile('rpm')
+        return self._current_profile
+
+    def _set_current_profile(self, value):
+        self._current_profile = value
+
+    current_profile = property(_get_current_profile, _set_current_profile)
 
     def _write_cached_profile(self):
         """ 
