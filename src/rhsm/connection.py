@@ -348,13 +348,6 @@ class UEPConnection:
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
 
-    # TODO: This doesn't seem to be used?
-    def add_ssl_certs(self, cert_file=None, key_file=None):
-        self.cert_file = cert_file
-        self.key_file = key_file
-        self.conn = Restlib(self.host, self.ssl_port, self.handler,
-                self.cert_file, self.key_file, self.ca_cert_dir, self.insecure)
-
     def _load_supported_resources(self):
         """
         Load the list of supported resources by doing a GET on the root
