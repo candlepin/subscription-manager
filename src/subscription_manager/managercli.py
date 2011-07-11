@@ -165,7 +165,8 @@ class CliCommand(object):
         self.proxy_password = cfg.get('server', 'proxy_password')
 
         # support foo.example.com:3128 format
-        if self.options.proxy_url:
+        print self.options.__class__
+        if hasattr(self.options, "proxy_url") and self.options.proxy_url:
             parts = self.options.proxy_url.split(':')
             self.proxy_hostname = parts[0]
             # no ':'
@@ -175,9 +176,9 @@ class CliCommand(object):
                 # if no port specified, use the one from the config, or fallback to the default
                 self.proxy_port = cfg.get('server', 'proxy_port') or rhsm.config.DEFAULT_PROXY_PORT
 
-        if self.options.proxy_user:
+        if hasattr(self.options, "proxy_user") and self.options.proxy_user:
             self.proxy_user = self.options.proxy_user
-        if self.options.proxy_password:
+        if hasattr(self.options, "proxy_upassword") and self.options.proxy_password:
             self.proxy_password = self.options.proxy_password
 
         # Create a connection using the default configuration:
@@ -802,6 +803,7 @@ class ReposCommand(CliCommand):
         desc = shortdesc
         CliCommand.__init__(self, "repos", usage, shortdesc, desc)
 
+    def _add_common_options(self):
         self.parser.add_option("--list", action="store_true",
                                help=_("list the entitled repositories for this system"))
 
