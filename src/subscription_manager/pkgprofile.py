@@ -25,6 +25,7 @@ from subscription_manager.certlib import DataLib, ConsumerIdentity
 log = logging.getLogger('rhsm-app.' + __name__)
 
 PROFILE_CACHE_FILE = "/var/lib/rhsm/packages/packages.json"
+PACKAGES_RESOURCE = "packages"
 
 
 def delete_profile_cache():
@@ -98,6 +99,12 @@ class ProfileManager(object):
         """
         Check if packages have changed, and push an update if so.
         """
+
+        # If the server doesn't support packages, don't try to send the profile:
+        if not uep.supports_resource(PACKAGES_RESOURCE):
+            log.info("Server does not support packages, skipping profile upload.")
+            return 0
+
         if self.has_changed():
             log.info("Updating package profile.")
             try:
