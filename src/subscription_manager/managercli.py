@@ -177,7 +177,7 @@ class CliCommand(object):
 
         if hasattr(self.options, "proxy_user") and self.options.proxy_user:
             self.proxy_user = self.options.proxy_user
-        if hasattr(self.options, "proxy_upassword") and self.options.proxy_password:
+        if hasattr(self.options, "proxy_password") and self.options.proxy_password:
             self.proxy_password = self.options.proxy_password
 
         # Create a connection using the default configuration:
