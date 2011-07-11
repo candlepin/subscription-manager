@@ -157,7 +157,7 @@ class Restlib(object):
             for cert_file in os.listdir(self.ca_dir):
                 if cert_file.endswith(".pem"):
                     cert_path = os.path.join(self.ca_dir, cert_file)
-                    log.info("loading ca certificate '%s'" % cert_path)
+                    log.debug("Loading CA certificate: '%s'" % cert_path)
                     res = context.load_verify_info(cert_path)
 
                     if res == 0:
@@ -169,24 +169,22 @@ class Restlib(object):
         handler = self.apihandler + method
         context = SSL.Context("tlsv1")
 
-        log.info('work in insecure mode ?:%s', self.insecure)
         if not self.insecure:  #allow clients to work insecure mode if required..
             context.set_verify(SSL.verify_fail_if_no_peer_cert, self.ssl_verify_depth)
             if self.ca_dir != None:
-                log.info('loading ca pem certificates from: %s', self.ca_dir)
+                log.debug('Loading CA PEM certificates from: %s', self.ca_dir)
                 self._load_ca_certificates(context)
         if self.cert_file:
             context.load_cert(self.cert_file, keyfile=self.key_file)
 
         if self.proxy_hostname and self.proxy_port:
-            log.info("using proxy %s:%s" % (self.proxy_hostname, self.proxy_port))
+            log.debug("Using proxy: %s:%s" % (self.proxy_hostname, self.proxy_port))
             conn = RhsmProxyHTTPSConnection(self.proxy_hostname, self.proxy_port,
                                             username=self.proxy_user,
                                             password=self.proxy_password,
                                             ssl_context=context)
             # this connection class wants the full url
             handler = "https://%s:%s%s" % (self.host, self.ssl_port, handler)
-            log.info("handler: %s" % handler)
         else:
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
 
@@ -194,15 +192,15 @@ class Restlib(object):
             body = json.dumps(info)
         else:
             body = None
+
+        log.debug("Making request: %s %s" % (request_type, handler))
         conn.request(request_type, handler, body=body, headers=self.headers)
 
         response = conn.getresponse()
         result = {
             "content": response.read(),
             "status": response.status}
-        #TODO: change logging to debug.
-       # log.info('response:' + str(result['content']))
-        log.info('status code: ' + str(result['status']))
+        log.debug('Response status: ' + str(result['status']))
         self.validateResponse(result)
         if not len(result['content']):
             return None
