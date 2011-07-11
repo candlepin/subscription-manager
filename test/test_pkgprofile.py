@@ -32,86 +32,78 @@ FACT_MATCHER = _FACT_MATCHER()
 class TestProfileManager(unittest.TestCase):
 
     def setUp(self):
-        self.pkg_profile = ProfileManager()
+        current_pkgs = [
+                Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
+                Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
+        self.current_profile = self._mock_pkg_profile(current_pkgs)
+        self.profile_mgr = ProfileManager(current_profile=self.current_profile)
 
     def test_update_check_no_change(self):
         uuid = 'FAKEUUID'
         uep = Mock()
         uep.updatePackageProfile = Mock()
 
-        self.pkg_profile.has_changed = Mock(return_value=False)
-        self.pkg_profile._write_cached_profile = Mock()
-        self.pkg_profile.update_check(uep, uuid)
+        self.profile_mgr.has_changed = Mock(return_value=False)
+        self.profile_mgr._write_cached_profile = Mock()
+        self.profile_mgr.update_check(uep, uuid)
 
         self.assertEquals(0, uep.updatePackageProfile.call_count)
-        self.assertEquals(0, self.pkg_profile._write_cached_profile.call_count)
+        self.assertEquals(0, self.profile_mgr._write_cached_profile.call_count)
 
     def test_update_check_has_changed(self):
         uuid = 'FAKEUUID'
         uep = Mock()
         uep.updatePackageProfile = Mock()
 
-        self.pkg_profile.has_changed = Mock(return_value=True)
-        self.pkg_profile._write_cached_profile = Mock()
-        self.pkg_profile.update_check(uep, uuid)
+        self.profile_mgr.has_changed = Mock(return_value=True)
+        self.profile_mgr._write_cached_profile = Mock()
+        self.profile_mgr.update_check(uep, uuid)
 
         uep.updatePackageProfile.assert_called_with(uuid, 
                 FACT_MATCHER)
-        self.assertEquals(1, self.pkg_profile._write_cached_profile.call_count)
+        self.assertEquals(1, self.profile_mgr._write_cached_profile.call_count)
 
     def test_update_check_error_uploading(self):
         uuid = 'FAKEUUID'
         uep = Mock()
 
-        self.pkg_profile.has_changed = Mock(return_value=True)
-        self.pkg_profile._write_cached_profile = Mock()
+        self.profile_mgr.has_changed = Mock(return_value=True)
+        self.profile_mgr._write_cached_profile = Mock()
         # Throw an exception when trying to upload:
         uep.updatePackageProfile = Mock(side_effect=Exception('BOOM!'))
 
-        self.assertRaises(Exception, self.pkg_profile.update_check, uep, uuid)
+        self.assertRaises(Exception, self.profile_mgr.update_check, uep, uuid)
         uep.updatePackageProfile.assert_called_with(uuid, 
                 FACT_MATCHER)
-        self.assertEquals(0, self.pkg_profile._write_cached_profile.call_count)
+        self.assertEquals(0, self.profile_mgr._write_cached_profile.call_count)
 
     def test_has_changed_no_cache(self):
-        self.pkg_profile._cache_exists = Mock(return_value=False)
-        self.assertTrue(self.pkg_profile.has_changed())
+        self.profile_mgr._cache_exists = Mock(return_value=False)
+        self.assertTrue(self.profile_mgr.has_changed())
 
     def test_has_changed_no_changes(self):
-        current_pkgs = [
-                Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
-                Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
-        current_profile = self._mock_pkg_profile(current_pkgs)
-        manager = ProfileManager(current_profile=current_profile)
-
         cached_pkgs = [
                 Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
                 Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
         cached_profile = self._mock_pkg_profile(cached_pkgs)
 
-        manager._cache_exists = Mock(return_value=True)
-        manager._read_cached_profile = Mock(return_value=cached_profile)
+        self.profile_mgr._cache_exists = Mock(return_value=True)
+        self.profile_mgr._read_cached_profile = Mock(return_value=cached_profile)
 
-        self.assertFalse(manager.has_changed())
-        manager._read_cached_profile.assert_called_with()
+        self.assertFalse(self.profile_mgr.has_changed())
+        self.profile_mgr._read_cached_profile.assert_called_with()
 
     def test_has_changed(self):
-        current_pkgs = [
-                Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
-                Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
-        current_profile = self._mock_pkg_profile(current_pkgs)
-        manager = ProfileManager(current_profile=current_profile)
-
         cached_pkgs = [
                 Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
                 Package(name="package3", version="3.0.0", release=3, arch="x86_64")]
         cached_profile = self._mock_pkg_profile(cached_pkgs)
 
-        manager._cache_exists = Mock(return_value=True)
-        manager._read_cached_profile = Mock(return_value=cached_profile)
+        self.profile_mgr._cache_exists = Mock(return_value=True)
+        self.profile_mgr._read_cached_profile = Mock(return_value=cached_profile)
 
-        self.assertTrue(manager.has_changed())
-        manager._read_cached_profile.assert_called_with()
+        self.assertTrue(self.profile_mgr.has_changed())
+        self.profile_mgr._read_cached_profile.assert_called_with()
 
     def _mock_pkg_profile(self, packages):
         """
