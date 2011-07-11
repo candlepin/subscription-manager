@@ -824,6 +824,7 @@ class ReposCommand(CliCommand):
 
                 for repo in repos:
                     print constants.repos_list % (repo["name"],
+                        repo.id,
                         repo["baseurl"],
                         repo["enabled"])
             else:

@@ -51,6 +51,7 @@ Expires:            \t%-25s
 
 repos_list = _("""
 RepoName:            \t%-25s
+RepoId:              \t%-25s
 RepoUrl:             \t%-25s
 Enabled:             \t%-25s
 """)
