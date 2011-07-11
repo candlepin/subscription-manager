@@ -34,6 +34,7 @@ class ConnectionTests(unittest.TestCase):
 
     def test_get_environment_urlencoding(self):
         self.cp.conn = Mock()
+        self.cp.conn.request_get = Mock(return_value=[])
         self.cp.getEnvironment(owner_key="myorg", name="env name__++=*&")
         self.cp.conn.request_get.assert_called_with(
                 "/owners/myorg/environments?name=env+name__%2B%2B%3D%2A%26")
