@@ -59,6 +59,20 @@ class TestProfileManager(unittest.TestCase):
                 FACT_MATCHER)
         self.assertEquals(1, self.pkg_profile._write_cached_profile.call_count)
 
+    def test_update_check_error_uploading(self):
+        uuid = 'FAKEUUID'
+        uep = Mock()
+
+        self.pkg_profile.has_changed = Mock(return_value=True)
+        self.pkg_profile._write_cached_profile = Mock()
+        # Throw an exception when trying to upload:
+        uep.updatePackageProfile = Mock(side_effect=Exception('BOOM!'))
+
+        self.assertRaises(Exception, self.pkg_profile.update_check, uep, uuid)
+        uep.updatePackageProfile.assert_called_with(uuid, 
+                FACT_MATCHER)
+        self.assertEquals(0, self.pkg_profile._write_cached_profile.call_count)
+
     def test_has_changed_no_cache(self):
         self.pkg_profile._cache_exists = Mock(return_value=False)
         self.assertTrue(self.pkg_profile.has_changed())

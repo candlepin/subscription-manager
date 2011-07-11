@@ -100,11 +100,18 @@ class ProfileManager(object):
         """
         if self.has_changed():
             log.info("Updating package profile.")
-            uep.updatePackageProfile(consumer_uuid, self.current_profile.collect())
-            self._write_cached_profile()
+            try:
+                uep.updatePackageProfile(consumer_uuid, self.current_profile.collect())
+                self._write_cached_profile()
+                return 1
+            except Exception, e:
+                log.error("Error updating package profile:")
+                log.exception(e)
+                raise Exception(_("Error updating package profile, see /var/log/rhsm/rhsm.log "
+                        "for more details."))
+
             # Return the number of 'updates' we did, assuming updating all 
             # packages at once is one update.
-            return 1
         else: 
             log.info("Package profile has not changed, skipping upload.")
             return 0 # No updates performed.

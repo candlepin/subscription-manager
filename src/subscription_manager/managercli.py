@@ -508,13 +508,14 @@ class RegisterCommand(UserPassCommand):
 
         consumer_info = managerlib.persist_consumer_cert(consumer)
 
+        print (_("The system has been registered with id: %s ")) % (consumer_info["uuid"])
+
         # Facts went out with the registration request, write cache to disk:
         self.facts.write_cache()
 
         profile_mgr = ProfileManager()
         profile_mgr.update_check(admin_cp, consumer['uuid'])
 
-        print (_("The system has been registered with id: %s ")) % (consumer_info["uuid"])
 
         if self.options.autosubscribe:
             autosubscribe(admin_cp, consumer['uuid'], self.certlib)
