@@ -11,7 +11,10 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 import rpm
+import logging
+import simplejson as json
 
+log = logging.getLogger(__name__)
 
 class InvalidProfileType(Exception):
     """
@@ -20,18 +23,79 @@ class InvalidProfileType(Exception):
     pass
 
 
+class Package(object):
+    """
+    Represents a package installed on the system.
+    """
+    def __init__(self, name, version, release, arch, epoch=0, vendor=None,
+            from_dict=None):
+        self.name = name
+        self.version = version
+        self.release = release
+        self.arch = arch
+        self.epoch = epoch
+        self.vendor = vendor
+
+    def to_dict(self):
+        """ Returns a dict representation of this packages info. """
+        return {
+                'name': self.name,
+                'version': self.version,
+                'release': self.release,
+                'arch': self.arch,
+                'epoch': self.epoch,
+                'vendor': self.vendor,
+        }
+
+    def __eq__(self, other):
+        """
+        Compare one profile to another to determine if anything has changed.
+        """
+        if type(self) != type(other):
+            return False
+
+        if self.name == other.name and \
+            self.version == other.version and \
+            self.release == other.release and \
+            self.arch == other.arch and \
+            self.epoch == other.epoch and \
+            self.vendor == other.vendor:
+                return True
+
+        return False
+
+    def __str__(self):
+        return "<Package: %s %s %s>" % (self.name, self.version, self.release)
+
+
 class RPMProfile(object):
 
-    def collect(self):
+    def __init__(self, from_file=None):
         """
-        Initialize rpm transaction and invoke the accumulation call
-        @return : list of package info dicts
-        @rtype: list
+        Load the RPM package profile from a given file, or from rpm itself.
+
+        NOTE: from_file is a file descriptor, not a file name.
         """
-        ts = rpm.TransactionSet()
-        ts.setVSFlags(-1)
-        installed = ts.dbMatch()
-        return self.__accumulateProfile(installed)
+        self.packages = []
+        if from_file:
+            log.debug("Loading RPM profile from file.")
+            json_buffer = from_file.read()
+            pkg_dicts = json.loads(json_buffer)
+            for pkg_dict in pkg_dicts:
+                self.packages.append(Package(
+                    name=pkg_dict['name'],
+                    version=pkg_dict['version'],
+                    release=pkg_dict['release'],
+                    arch=pkg_dict['arch'],
+                    epoch=pkg_dict['epoch'],
+                    vendor=pkg_dict['vendor']
+                ))
+        else:
+            log.debug("Loading current RPM profile.")
+            ts = rpm.TransactionSet()
+            ts.setVSFlags(-1)
+            installed = ts.dbMatch()
+            self.packages = self.__accumulateProfile(installed)
 
     def __accumulateProfile(self, rpm_header_list):
         """
@@ -57,8 +121,47 @@ class RPMProfile(object):
                 'arch': h['arch'],
                 'vendor': h['vendor'] or None,
             }
-            pkg_list.append(info)
+            pkg_list.append(Package(
+                name=h['name'],
+                version=h['version'],
+                release=h['release'],
+                arch=h['arch'],
+                epoch=h['epoch'] or 0,
+                vendor=h['vendor'] or None
+            ))
         return pkg_list
+
+    def collect(self):
+        """
+        Returns a list of dicts containing the package info.
+
+        See 'packages' member on this object for a list of actual objects.
+
+        @return : list of package info dicts
+        @rtype: list
+        """
+        pkg_dicts = []
+        for pkg in self.packages:
+            pkg_dicts.append(pkg.to_dict())
+        return pkg_dicts
+
+    def __eq__(self, other):
+        """
+        Compare one profile to another to determine if anything has changed.
+        """
+        if type(self) != type(other):
+            return False
+
+        # Quickly check if we have a different number of packages for an
+        # easy answer before we start checking everything:
+        if len(self.packages) != len(other.packages):
+            return False
+
+        for pkg in self.packages:
+            if not pkg in other.packages:
+                return False
+
+        return True
 
 
 def get_profile(profile_type):

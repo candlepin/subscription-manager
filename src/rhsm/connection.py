@@ -157,7 +157,7 @@ class Restlib(object):
             for cert_file in os.listdir(self.ca_dir):
                 if cert_file.endswith(".pem"):
                     cert_path = os.path.join(self.ca_dir, cert_file)
-                    log.info("loading ca certificate '%s'" % cert_path)
+                    log.debug("Loading CA certificate: '%s'" % cert_path)
                     res = context.load_verify_info(cert_path)
 
                     if res == 0:
@@ -169,24 +169,22 @@ class Restlib(object):
         handler = self.apihandler + method
         context = SSL.Context("tlsv1")
 
-        log.info('work in insecure mode ?:%s', self.insecure)
         if not self.insecure:  #allow clients to work insecure mode if required..
             context.set_verify(SSL.verify_fail_if_no_peer_cert, self.ssl_verify_depth)
             if self.ca_dir != None:
-                log.info('loading ca pem certificates from: %s', self.ca_dir)
+                log.debug('Loading CA PEM certificates from: %s', self.ca_dir)
                 self._load_ca_certificates(context)
         if self.cert_file:
             context.load_cert(self.cert_file, keyfile=self.key_file)
 
         if self.proxy_hostname and self.proxy_port:
-            log.info("using proxy %s:%s" % (self.proxy_hostname, self.proxy_port))
+            log.debug("Using proxy: %s:%s" % (self.proxy_hostname, self.proxy_port))
             conn = RhsmProxyHTTPSConnection(self.proxy_hostname, self.proxy_port,
                                             username=self.proxy_user,
                                             password=self.proxy_password,
                                             ssl_context=context)
             # this connection class wants the full url
             handler = "https://%s:%s%s" % (self.host, self.ssl_port, handler)
-            log.info("handler: %s" % handler)
         else:
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
 
@@ -194,15 +192,15 @@ class Restlib(object):
             body = json.dumps(info)
         else:
             body = None
+
+        log.debug("Making request: %s %s" % (request_type, handler))
         conn.request(request_type, handler, body=body, headers=self.headers)
 
         response = conn.getresponse()
         result = {
             "content": response.read(),
             "status": response.status}
-        #TODO: change logging to debug.
-       # log.info('response:' + str(result['content']))
-        log.info('status code: ' + str(result['status']))
+        log.debug('Response status: ' + str(result['status']))
         self.validateResponse(result)
         if not len(result['content']):
             return None
@@ -234,7 +232,6 @@ class Restlib(object):
         # New style list of error messages:
         if 'errors' in body:
             return " ".join("%s" % errmsg for errmsg in body['errors'])
-
 
     def request_get(self, method):
         return self._request("GET", method)
@@ -344,14 +341,33 @@ class UEPConnection:
                     ssl_verify_depth=self.ssl_verify_depth)
             log.info("Using no auth")
 
+        self._load_supported_resources()
+
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
 
-    def add_ssl_certs(self, cert_file=None, key_file=None):
-        self.cert_file = cert_file
-        self.key_file = key_file
-        self.conn = Restlib(self.host, self.ssl_port, self.handler,
-                self.cert_file, self.key_file, self.ca_cert_dir, self.insecure)
+    def _load_supported_resources(self):
+        """
+        Load the list of supported resources by doing a GET on the root
+        of the web application we're configured to use.
+
+        Need to handle exceptions here because sometimes UEPConnections are
+        created in a state where they can't actually be used. (they get 
+        replaced later) If something goes wrong making this request, just 
+        leave the list of supported resources empty.
+        """
+        self.resources = {}
+        try:
+            resources_list = self.conn.request_get("/")
+            for r in resources_list:
+                self.resources[r['rel']] = r['href']
+            log.debug("Server supports the following resources:")
+            log.debug(self.resources)
+        # Handle situations where the UEPConnection isn't actually usable:
+        except Exception, e:
+            log.warn("Error fetching supported resources, this "
+                    "UEPConnection is likely not usable:")
+            log.exception(e)
 
     def supports_resource(self, resource_name):
         """
@@ -359,11 +375,7 @@ class UEPConnection:
         resource. For our use cases this is generally the plural form
         of the resource.
         """
-        resources_list = self.conn.request_get("/")
-        resources = {}
-        for resource in resources_list:
-            resources[resource['rel']] = resource['href']
-        return resource_name in resources
+        return resource_name in self.resources
 
     def shutDown(self):
         self.conn.close()
@@ -372,7 +384,8 @@ class UEPConnection:
     def ping(self, username=None, password=None):
         return self.conn.request_get("/status/")
 
-    def registerConsumer(self, name="unknown", type="system", facts={}, owner=None, environment=None):
+    def registerConsumer(self, name="unknown", type="system", facts={}, 
+            owner=None, environment=None):
         """
         Creates a consumer on candlepin server
         """
@@ -409,6 +422,17 @@ class UEPConnection:
         params = {"facts": facts}
         method = "/consumers/%s" % consumer_uuid
         ret = self.conn.request_put(method, params)
+        return ret
+
+    def updatePackageProfile(self, consumer_uuid, pkg_dicts):
+        """
+        Updates the consumer's package profile on the server.
+
+        pkg_dicts expected to be a list of dicts, each containing the
+        package headers we're interested in. See profile.py.
+        """
+        method = "/consumers/%s/profile" % consumer_uuid
+        ret = self.conn.request_put(method, pkg_dicts)
         return ret
 
     # FIXME: username and password not used here
