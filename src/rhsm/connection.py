@@ -21,14 +21,18 @@ import urllib
 import simplejson as json
 import base64
 import os
-from M2Crypto import SSL, httpslib
 import logging
+
+from M2Crypto import SSL, httpslib
+from urllib import urlencode
+
 from config import initConfig
 
 
 class NullHandler(logging.Handler):
     def emit(self, record):
         pass
+
 
 h = NullHandler()
 logging.getLogger("rhsm").addHandler(h)
@@ -164,12 +168,13 @@ class Restlib(object):
     def _request(self, request_type, method, info=None):
         handler = self.apihandler + method
         context = SSL.Context("tlsv1")
-        if self.ca_dir != None:
-            log.info('loading ca pem certificates from: %s', self.ca_dir)
-            self._load_ca_certificates(context)
+
         log.info('work in insecure mode ?:%s', self.insecure)
         if not self.insecure:  #allow clients to work insecure mode if required..
             context.set_verify(SSL.verify_fail_if_no_peer_cert, self.ssl_verify_depth)
+            if self.ca_dir != None:
+                log.info('loading ca pem certificates from: %s', self.ca_dir)
+                self._load_ca_certificates(context)
         if self.cert_file:
             context.load_cert(self.cert_file, keyfile=self.key_file)
 
@@ -185,9 +190,11 @@ class Restlib(object):
         else:
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
 
-        conn.request(request_type, handler,
-                     body=json.dumps(info),
-                     headers=self.headers)
+        if info:
+            body = json.dumps(info)
+        else:
+            body = None
+        conn.request(request_type, handler, body=body, headers=self.headers)
 
         response = conn.getresponse()
         result = {
@@ -208,14 +215,26 @@ class Restlib(object):
                 parsed = json.loads(response['content'])
             except Exception, e:
                 log.exception(e)
+                log.error("Response: %s" % response)
                 if str(response['status']) in ["404", "500", "502", "503", "504"]:
                     log.error('remote server status code: ' + str(response['status']))
                     raise RemoteServerException(response['status'])
                 else:
                     raise NetworkException(response['status'])
 
-            raise RestlibException(response['status'],
-                    parsed['displayMessage'])
+            error_msg = self._parse_msg_from_error_response_body(parsed)
+            raise RestlibException(response['status'], error_msg)
+
+    def _parse_msg_from_error_response_body(self, body):
+
+        # Old style with a single displayMessage:
+        if 'displayMessage' in body:
+            return body['displayMessage']
+
+        # New style list of error messages:
+        if 'errors' in body:
+            return " ".join("%s" % errmsg for errmsg in body['errors'])
+
 
     def request_get(self, method):
         return self._request("GET", method)
@@ -334,6 +353,18 @@ class UEPConnection:
         self.conn = Restlib(self.host, self.ssl_port, self.handler,
                 self.cert_file, self.key_file, self.ca_cert_dir, self.insecure)
 
+    def supports_resource(self, resource_name):
+        """
+        Check if the server we're connecting too supports a particular 
+        resource. For our use cases this is generally the plural form
+        of the resource.
+        """
+        resources_list = self.conn.request_get("/")
+        resources = {}
+        for resource in resources_list:
+            resources[resource['rel']] = resource['href']
+        return resource_name in resources
+
     def shutDown(self):
         self.conn.close()
         log.info("remote connection closed")
@@ -341,7 +372,7 @@ class UEPConnection:
     def ping(self, username=None, password=None):
         return self.conn.request_get("/status/")
 
-    def registerConsumer(self, name="unknown", type="system", facts={}, owner=None):
+    def registerConsumer(self, name="unknown", type="system", facts={}, owner=None, environment=None):
         """
         Creates a consumer on candlepin server
         """
@@ -349,7 +380,9 @@ class UEPConnection:
                   "name": name,
                   "facts": facts}
         url = "/consumers"
-        if owner:
+        if environment:
+            url = "/environments/%s/consumers" % environment
+        elif owner:
             url = "%s?owner=%s" % (url, owner)
 
         return self.conn.request_post(url, params)
@@ -502,6 +535,38 @@ class UEPConnection:
         method = "/consumers/%s/entitlements" % consumerId
         results = self.conn.request_get(method)
         return results
+
+    def getEnvironmentList(self, owner_key):
+        """
+        List the environments for a particular owner.
+
+        Some servers may not support this and will error out. The caller
+        can always check with supports_resource("environments").
+        """
+        method = "/owners/%s/environments" % owner_key
+        results = self.conn.request_get(method)
+        return results
+
+    def getEnvironment(self, owner_key=None, name=None):
+        """
+        Fetch an environment for an owner.
+
+        If querying by name, owner is required as environment names are only 
+        unique within the context of an owner.
+
+        TODO: Add support for querying by ID, this will likely hit an entirely
+        different URL.
+        """
+        if name and not owner_key:
+            raise Exception("Must specify owner key to query environment " 
+                    "by name")
+
+        query_param = urlencode({"name": name})
+        url = "/owners/%s/environments?%s" % (owner_key, query_param)
+        results = self.conn.request_get(url)
+        if len(results) == 0:
+            return None
+        return results[0]
 
     def getEntitlement(self, entId):
         method = "/entitlements/%s" % entId

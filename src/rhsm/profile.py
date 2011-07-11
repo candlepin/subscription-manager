@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # Copyright (c) 2011 Red Hat, Inc.
 #
@@ -15,6 +14,9 @@ import rpm
 
 
 class InvalidProfileType(Exception):
+    """
+    Thrown when attempting to get a profile of an unsupported type.
+    """
     pass
 
 
@@ -59,10 +61,6 @@ class RPMProfile(object):
         return pkg_list
 
 
-class GemProfile(object):
-    pass
-
-
 def get_profile(profile_type):
     """
     Returns an instance of a Profile object
@@ -75,11 +73,9 @@ def get_profile(profile_type):
     profile = PROFILE_MAP[profile_type]()
     return profile
 
+
+# Profile types we support:
 PROFILE_MAP = {
     "rpm": RPMProfile,
 }
 
-if __name__ == '__main__':
-    p = get_profile("rpm")
-    import pprint
-    pprint.pprint(p.collect())
