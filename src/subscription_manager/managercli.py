@@ -165,7 +165,6 @@ class CliCommand(object):
         self.proxy_password = cfg.get('server', 'proxy_password')
 
         # support foo.example.com:3128 format
-        print self.options.__class__
         if hasattr(self.options, "proxy_url") and self.options.proxy_url:
             parts = self.options.proxy_url.split(':')
             self.proxy_hostname = parts[0]
@@ -262,11 +261,10 @@ class CleanCommand(CliCommand):
 
         CliCommand.__init__(self, "clean", usage, shortdesc, desc)
 
+    def _add_common_options(self):
         # remove these options as per bz #664581
-        self.parser.remove_option("--proxy")
-        self.parser.remove_option("--proxyuser")
-        self.parser.remove_option("--proxypassword")
-
+        return
+        
     def _do_command(self):
         managerlib.delete_consumer_certs()
         delete_profile_cache()
