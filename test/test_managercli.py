@@ -111,6 +111,10 @@ class TestRedeemCommand(TestCliProxyCommand):
     command_class = managercli.RedeemCommand
 
 
+class TestReposCommand(TestCliCommand):
+    command_class = managercli.ReposCommand
+
+
 class TestSubscribeCommand(TestCliProxyCommand):
     command_class = managercli.SubscribeCommand
 
