@@ -292,6 +292,9 @@ class StubUEP:
             self.registered_consumer_info = {"uuid": 'dummy-consumer-uuid',}
             pass
 
+    def supports_resource(self, resource):
+        return False
+
     def registerConsumer(self, name, type, facts, owner, environment):
         return self.registered_consumer_info
 
