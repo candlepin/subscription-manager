@@ -235,7 +235,6 @@ class Restlib(object):
         if 'errors' in body:
             return " ".join("%s" % errmsg for errmsg in body['errors'])
 
-
     def request_get(self, method):
         return self._request("GET", method)
 
@@ -419,8 +418,9 @@ class UEPConnection:
         pkg_dicts expected to be a list of dicts, each containing the
         package headers we're interested in. See profile.py.
         """
-        method = "/consumers/%s/packages" % consumer_uuid
-        # TODO
+        method = "/consumers/%s/profile" % consumer_uuid
+        ret = self.conn.request_put(method, pkg_dicts)
+        return ret
 
     # TODO: username and password not used here
     def getConsumer(self, uuid, username, password):
