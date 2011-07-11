@@ -343,14 +343,40 @@ class UEPConnection:
                     ssl_verify_depth=self.ssl_verify_depth)
             log.info("Using no auth")
 
+        self._load_supported_resources()
+
         log.info("Connection Established: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
 
+    # TODO: This doesn't seem to be used?
     def add_ssl_certs(self, cert_file=None, key_file=None):
         self.cert_file = cert_file
         self.key_file = key_file
         self.conn = Restlib(self.host, self.ssl_port, self.handler,
                 self.cert_file, self.key_file, self.ca_cert_dir, self.insecure)
+
+    def _load_supported_resources(self):
+        """
+        Load the list of supported resources by doing a GET on the root
+        of the web application we're configured to use.
+
+        Need to handle exceptions here because sometimes UEPConnections are
+        created in a state where they can't actually be used. (they get 
+        replaced later) If something goes wrong making this request, just 
+        leave the list of supported resources empty.
+        """
+        self.resources = {}
+        try:
+            resources_list = self.conn.request_get("/")
+            for r in resources_list:
+                self.resources[r['rel']] = r['href']
+            log.debug("Server supports the following resources:")
+            log.debug(self.resources)
+        # Handle situations where the UEPConnection isn't actually usable:
+        except Exception, e:
+            log.warn("Error fetching supported resources, this "
+                    "UEPConnection is likely not usable:")
+            log.exception(e)
 
     def supports_resource(self, resource_name):
         """
@@ -358,11 +384,7 @@ class UEPConnection:
         resource. For our use cases this is generally the plural form
         of the resource.
         """
-        resources_list = self.conn.request_get("/")
-        resources = {}
-        for resource in resources_list:
-            resources[resource['rel']] = resource['href']
-        return resource_name in resources
+        return resource_name in self.resources
 
     def shutDown(self):
         self.conn.close()
