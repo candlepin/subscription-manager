@@ -55,3 +55,43 @@ class TestLinkify(unittest.TestCase):
     def test_example_2(self):
         ret = utils.linkify(self.example_2)
         self.assertEquals(ret, self.expected_example_2)
+
+class TestAllowsMutliEntitlement(unittest.TestCase):
+
+    def test_allows_when_yes(self):
+        pool = self._create_pool_data_with_multi_entitlement_attribute("yes")
+        self.assertTrue(utils.allows_multi_entitlement(pool))
+
+    def test_allows_when_1(self):
+        pool = self._create_pool_data_with_multi_entitlement_attribute("1")
+        self.assertTrue(utils.allows_multi_entitlement(pool))
+
+    def test_does_not_allow_when_no(self):
+        pool = self._create_pool_data_with_multi_entitlement_attribute("no")
+        self.assertFalse(utils.allows_multi_entitlement(pool))
+
+    def test_does_not_allow_when_0(self):
+        pool = self._create_pool_data_with_multi_entitlement_attribute("0")
+        self.assertFalse(utils.allows_multi_entitlement(pool))
+
+    def test_does_not_allow_when_not_set(self):
+        pool = {"productAttributes": []}
+        self.assertFalse(utils.allows_multi_entitlement(pool))
+
+    def test_does_not_allow_when_empty_string(self):
+        pool = self._create_pool_data_with_multi_entitlement_attribute("")
+        self.assertFalse(utils.allows_multi_entitlement(pool))
+
+    def test_does_not_allow_when_any_other_value(self):
+        pool = self._create_pool_data_with_multi_entitlement_attribute("not_a_good_value")
+        self.assertFalse(utils.allows_multi_entitlement(pool))
+
+    def test_is_case_insensitive(self):
+        pool = self._create_pool_data_with_multi_entitlement_attribute("YeS")
+        self.assertTrue(utils.allows_multi_entitlement(pool))
+
+        pool = self._create_pool_data_with_multi_entitlement_attribute("nO")
+        self.assertFalse(utils.allows_multi_entitlement(pool))
+
+    def _create_pool_data_with_multi_entitlement_attribute(self, value):
+        return {"productAttributes": [{"name": "multi-entitlement", "value": value}]}
