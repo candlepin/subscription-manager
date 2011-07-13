@@ -74,7 +74,6 @@ try:
     from subscription_manager.gui import managergui, messageWindow
     from subscription_manager import logutil
 except ImportError, e:
-    raise
     systemExit(2, "Unable to find Subscription Manager module.\n"
                   "Error: %s" % e)
 
