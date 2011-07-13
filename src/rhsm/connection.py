@@ -431,7 +431,7 @@ class UEPConnection:
         pkg_dicts expected to be a list of dicts, each containing the
         package headers we're interested in. See profile.py.
         """
-        method = "/consumers/%s/profile" % consumer_uuid
+        method = "/consumers/%s/packages" % consumer_uuid
         ret = self.conn.request_put(method, pkg_dicts)
         return ret
 
