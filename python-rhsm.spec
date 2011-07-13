@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.96.6
+Version: 0.96.7
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -57,6 +57,19 @@ rm -rf %{buildroot}
 %{python_sitelib}/rhsm-*.egg-info
 
 %changelog
+* Wed Jul 13 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.7-1
+- Logging cleanup. (dgoodwin@redhat.com)
+- Remove unused add_ssl_certs method. (dgoodwin@redhat.com)
+- Load supported resources when UEPConnection is instantiated.
+  (dgoodwin@redhat.com)
+- Send package profile. (dgoodwin@redhat.com)
+- Allow testing if package profiles equal one another. (dgoodwin@redhat.com)
+- Support creating package profile from a file descriptor.
+  (dgoodwin@redhat.com)
+- Allow the attributes to be None for username and password in consumer
+  selction. (bkearney@redhat.com)
+- Add a Package object. (dgoodwin@redhat.com)
+
 * Wed Jul 06 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.6-1
 - Add support for new Katello error responses. (dgoodwin@redhat.com)
 - Log the response when there's an issue parsing error JSON.
