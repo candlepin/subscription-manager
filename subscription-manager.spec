@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.3
+Version: 0.96.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -209,6 +209,21 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Jul 13 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.4-1
+- Add ability to select larger quantity on subscribe (mstead@redhat.com)
+- 717734: Allow double clicking on fact dialog rows to support exanding and
+  collapsing (bkearney@redhat.com)
+- Improve how clean removes the proxy commands (bkearney@redhat.com)
+- 720049: remove the proxy libraries from the repos command
+  (bkearney@redhat.com)
+- Upload package profiles if the server supports them. (dgoodwin@redhat.com)
+- If updating facts on CLI, force the push. (dgoodwin@redhat.com)
+- Refactor Facts to only write cache after uploading. (dgoodwin@redhat.com)
+- Clean fact/profile caches in CLI clean command. (dgoodwin@redhat.com)
+- Delete fact and profile caches on unregister. (dgoodwin@redhat.com)
+- Log when facts haven't changed and we skip update. (dgoodwin@redhat.com)
+- Close file descriptors when reading/writing facts. (dgoodwin@redhat.com)
+
 * Wed Jul 06 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.3-1
 - Support registration to Katello environments. (dgoodwin@redhat.com)
 - Fix facts auto-update. (mstead@redhat.com)
