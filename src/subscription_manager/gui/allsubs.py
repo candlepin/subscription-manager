@@ -26,7 +26,7 @@ from subscription_manager import managerlib
 from subscription_manager.gui import widgets
 from subscription_manager import async
 from subscription_manager.gui import progress
-from subscription_manager.gui.utils import handle_gui_exception, apply_highlight
+from subscription_manager.gui.utils import handle_gui_exception, apply_highlight, allows_multi_entitlement
 from subscription_manager.gui.contract_selection import ContractSelectionWindow
 
 
@@ -242,9 +242,9 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         pools = model.get_value(tree_iter, self.store['merged_pools'])
 
         # Decide if we need to show the contract selection dialog or not.
-        # if there's just one pool, shortcut right to the callback that the
-        # dialog would have run.
-        if len(pools.pools) == 1:
+        # If there's just one pool and does not allow multi-entitlement,
+        # shortcut right to the callback that the dialog would have run.
+        if len(pools.pools) == 1 and not allows_multi_entitlement(pools.pools[0]):
             self._contract_selected(pools.pools[0])
             return
 
