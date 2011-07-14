@@ -25,8 +25,7 @@ from subscription_manager import managerlib
 class CliRegistrationTests(unittest.TestCase):
 
     def test_register_persists_consumer_cert(self):
-
-        self.persisted_consumer = Mock()
+        self.persisted_consumer = None
 
         def stub_persist(consumer):
             self.persisted_consumer = consumer

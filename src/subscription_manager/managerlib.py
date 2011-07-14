@@ -26,8 +26,7 @@ from datetime import datetime, tzinfo, timedelta
 
 from rhsm.config import initConfig
 
-from subscription_manager.certlib import ConsumerIdentity, \
-                    ProductDirectory, EntitlementDirectory
+from subscription_manager import certlib
 from subscription_manager.certlib import system_log as inner_system_log
 from subscription_manager.pkgprofile import ProfileManager, delete_profile_cache
 from subscription_manager.facts import Facts
@@ -79,7 +78,7 @@ def persist_consumer_cert(consumerinfo):
     cert_dir = cfg.get('rhsm', 'consumerCertDir')
     if not os.path.isdir(cert_dir):
         os.mkdir(cert_dir)
-    consumer = ConsumerIdentity(consumerinfo['idCert']['key'], \
+    consumer = certlib.ConsumerIdentity(consumerinfo['idCert']['key'], \
                                   consumerinfo['idCert']['cert'])
     consumer.write()
     consumer_info = {"consumer_name": consumer.getConsumerName(),
@@ -100,8 +99,8 @@ def getInstalledProductStatus(product_directory=None,
      Returns the Installed products and their subscription states
     """
     # allow us to stub these out for testing
-    product_directory = product_directory or ProductDirectory()
-    entitlement_directory = entitlement_directory or EntitlementDirectory()
+    product_directory = product_directory or certlib.ProductDirectory()
+    entitlement_directory = entitlement_directory or certlib.EntitlementDirectory()
 
     product_hashes = [product.getProduct().getHash() for product in \
             product_directory.list()]
@@ -141,7 +140,7 @@ def getInstalledProductStatus(product_directory=None,
 
 def getEntitlementsForProduct(product_name):
     entitlements = []
-    for cert in EntitlementDirectory().list():
+    for cert in certlib.EntitlementDirectory().list():
         for cert_product in cert.getProducts():
             if product_name == cert_product.getName():
                 entitlements.append(cert)
@@ -149,7 +148,7 @@ def getEntitlementsForProduct(product_name):
 
 
 def getInstalledProductHashMap():
-    products = ProductDirectory().list()
+    products = certlib.ProductDirectory().list()
     phash = {}
     for product in products:
         phash[product.getProduct().getName()] = product.getProduct().getHash()
@@ -386,6 +385,7 @@ def getAvailableEntitlements(cpserver, consumer_uuid, facts, get_all=False, acti
 
         d['endDate'] = formatDate(parseDate(d['endDate']))
         del d['consumed']
+
     return data
 
 
@@ -671,7 +671,7 @@ def check_identity_cert_perms():
     Ensure the identity certs on this system have the correct permissions, and
     fix them if not.
     """
-    certs = [ConsumerIdentity.keypath(), ConsumerIdentity.certpath()]
+    certs = [certlib.ConsumerIdentity.keypath(), certlib.ConsumerIdentity.certpath()]
     for cert in certs:
         if not os.path.exists(cert):
             # Only relevant if these files exist.

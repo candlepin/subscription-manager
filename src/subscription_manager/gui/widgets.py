@@ -245,16 +245,18 @@ class SubDetailsWidget(GladeWidget):
             destroy('provides_management')
             destroy('support_level')
             destroy('support_type')
+            destroy("stacking_id")
         else:
             self.pull_widgets(["contract_number_text", "start_date_text",
                                "expiration_date_text", "account_text",
-                               "provides_management_text", "support_level_text",
+                               "provides_management_text", "stacking_id_text",
+                               "support_level_text",
                                "support_type_text"])
 
         self.bundled_products = ProductsTable(self.products_view)
 
     def show(self, name, contract=None, start=None, end=None, account=None,
-            management=None, support_level=None, support_type=None,
+            management=None, support_level=None, stacking_id=None, support_type=None,
             products=[], highlight=None):
         """
         Show subscription details.
@@ -280,6 +282,7 @@ class SubDetailsWidget(GladeWidget):
                       managerlib.formatDate(end))
             self._set(self.account_text, account)
             self._set(self.provides_management_text, management)
+            self._set(self.stacking_id_text, stacking_id)
             self._set(self.support_level_text, support_level)
             self._set(self.support_type_text, support_type)
 
@@ -302,6 +305,7 @@ class SubDetailsWidget(GladeWidget):
             self._set(self.expiration_date_text, "")
             self._set(self.account_text, "")
             self._set(self.provides_management_text, "")
+            self._set(self.stacking_id_text, "")
             self._set(self.support_level_text, "")
             self._set(self.support_type_text, "")
 

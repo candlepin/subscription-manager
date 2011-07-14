@@ -19,7 +19,9 @@ import gettext
 _ = gettext.gettext
 
 import rhsm.config
-import certlib
+from subscription_manager import certlib
+#from subscription_manager.certlib import EntitlementDirectory, ProductDirectory, entitlement_valid
+from subscription_manager import cert_sorter
 from datetime import datetime
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -113,17 +115,17 @@ class Facts:
 
         return diff
 
-    def get_facts(self):
+    def get_facts(self, check_entitlements=True):
         if self.facts:
             # see bz #627707
             # there is a little bit of a race between when we load the facts, and when
             # we decide to save them, so delete facts out from under a Fact object means
             # it wasn't detecting it missing in that case and not writing a new one
             return self.facts
-        self.facts = self._find_facts()
+        self.facts = self._find_facts(check_entitlements=check_entitlements)
         return self.facts
 
-    def _find_facts(self):
+    def _find_facts(self, check_entitlements):
         # Load custom facts from /etc/rhsm/facts:
         facts_file_glob = "%s/facts/*.facts" % rhsm.config.DEFAULT_CONFIG_DIR
         file_facts = {}
@@ -144,14 +146,16 @@ class Facts:
         # point
 
         # figure out if we think we have valid entitlements
-        sorter = certlib.CertSorter(certlib.ProductDirectory(),
-                                    certlib.EntitlementDirectory())
+        # NOTE: we don't need 
+        if check_entitlements:
+            sorter = cert_sorter.CertSorter(certlib.ProductDirectory(),
+                                            certlib.EntitlementDirectory(),
+                                            facts_dict=facts)
+            validity_facts = {'system.entitlements_valid': True}
+            if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
+                validity_facts['system.entitlements_valid'] = False
 
-        validity_facts = {'system.entitlements_valid': True}
-        if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
-            validity_facts['system.entitlements_valid'] = False
-
-        facts.update(validity_facts)
+            facts.update(validity_facts)
 
         return facts
 

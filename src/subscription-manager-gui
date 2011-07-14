@@ -31,7 +31,7 @@ import gtk
 import gettext
 _ = gettext.gettext
 
-# these def's moved 
+# these def's moved
 try:
     from dbus.bus import REQUEST_NAME_REPLY_PRIMARY_OWNER
     from dbus.bus import REQUEST_NAME_REPLY_ALREADY_OWNER
@@ -74,17 +74,16 @@ try:
     from subscription_manager.gui import managergui, messageWindow
     from subscription_manager import logutil
 except ImportError, e:
-    raise
     systemExit(2, "Unable to find Subscription Manager module.\n"
                   "Error: %s" % e)
-                  
+
 class SubscriptionManagerService(dbus.service.Object):
 
     def __init__(self, window):
         self.window = window
         bus_name = dbus.service.BusName(BUS_NAME, bus = dbus.SessionBus())
         dbus.service.Object.__init__(self, bus_name, BUS_PATH)
-        
+
     @dbus.service.method(dbus_interface=BUS_NAME)
     def show_window(self):
         self.window.present()
@@ -104,13 +103,13 @@ if __name__ == '__main__':
 	(request_name_res != REQUEST_NAME_REPLY_ALREADY_OWNER)):
         print _("subscription-manager-gui is already running")
         messageWindow.InfoDialog(_('Subscription Manager is already running'))
-        
+
         show = bus.get_object(BUS_NAME, BUS_PATH).get_dbus_method('show_window')
         show()
     else:
         try:
             main = managergui.MainWindow()
-            
+
             # Hook into dbus service - only if it is available
             if bus:
                 SubscriptionManagerService(main.main_window)

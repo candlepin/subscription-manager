@@ -148,6 +148,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         order = cert.getOrder()
         products = [(product.getName(), product.getHash())
                         for product in cert.getProducts()]
+        stacking_id = order.getStackingId()
 
         if str(order.getProvidesManagement()) == "1":
             management = _("Yes")
@@ -160,6 +161,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                               end=cert.validRange().end(),
                               account=order.getAccountNumber() or "",
                               management=management,
+                              stacking_id=stacking_id or "",
                               support_level=order.getSupportLevel() or "",
                               support_type=order.getSupportType() or "",
                               products=products)

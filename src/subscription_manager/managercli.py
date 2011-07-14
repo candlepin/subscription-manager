@@ -154,6 +154,7 @@ class CliCommand(object):
         if not args:
             args = sys.argv[1:]
 
+
         (self.options, self.args) = self.parser.parse_args(args)
 
         # we dont need argv[0] in this list...
@@ -977,6 +978,7 @@ class CLI:
             if (not cmd.primary):
                 print("\t%-14s %-25s" % (name, cmd.shortdesc))
         print("")
+
 
 
     def _find_best_match(self, args):

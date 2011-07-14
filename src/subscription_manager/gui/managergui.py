@@ -35,7 +35,8 @@ import rhsm.config as config
 from subscription_manager import constants
 from subscription_manager.facts import Facts
 from subscription_manager.certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \
-        CertLib, CertSorter, find_first_invalid_date
+    CertLib, find_first_invalid_date
+from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.branding import get_branding
 
 from subscription_manager.gui import activate
@@ -47,7 +48,7 @@ from subscription_manager.gui.allsubs import AllSubscriptionsTab
 from subscription_manager.gui.subscription_assistant import \
         SubscriptionAssistant
 from subscription_manager.gui.importsub import ImportSubDialog
-from subscription_manager.gui.utils import handle_gui_exception, errorWindow, linkify
+from subscription_manager.gui.utils import handle_gui_exception, linkify
 
 import gettext
 _ = gettext.gettext
@@ -361,8 +362,8 @@ class MainWindow(widgets.GladeWidget):
 
     def _set_validity_status(self):
         """ Updates the entitlement validity status portion of the UI. """
-        # Look for products which have invalid entitlements
-        sorter = CertSorter(ProductDirectory(), EntitlementDirectory())
+        # Look for productswhich have invalid entitlements
+        sorter = CertSorter(ProductDirectory(), EntitlementDirectory(), facts_dict=self.facts.get_facts())
 
         warn_count = len(sorter.expired_entitlement_certs) + \
                 len(sorter.unentitled_products)
