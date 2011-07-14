@@ -140,7 +140,7 @@ class CertSorter(object):
             socket_total = 0
             system_sockets = 1
             if self.facts_dict:
-                system_sockets = self.facts_dict['cpu.cpu_socket(s)'] 
+                system_sockets = int(self.facts_dict['cpu.cpu_socket(s)']) 
 
             for stackable_ent in stackable_ents[stackable_id]:
                 socket_count = stackable_ent['ent_cert'].getOrder().getSocketLimit()
