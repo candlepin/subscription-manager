@@ -169,7 +169,7 @@ def getConsumedProductEntitlements():
             formatDate(cert.validRange().begin()),
             formatDate(cert.validRange().end())))
 
-    entdir = EntitlementDirectory()
+    entdir = certlib.EntitlementDirectory()
     for cert in entdir.listValid():
         eproducts = cert.getProducts()
         #for entitlement certificates with no product data,
@@ -212,11 +212,11 @@ class PoolFilter(object):
 
         self.product_directory = product_dir
         if not product_dir:
-            self.product_directory = ProductDirectory()
+            self.product_directory = certlib.ProductDirectory()
 
         self.entitlement_directory = entitlement_dir
         if not entitlement_dir:
-            self.entitlement_directory = EntitlementDirectory()
+            self.entitlement_directory = certlib.EntitlementDirectory()
 
     def filter_product_ids(self, pools, product_ids):
         """
