@@ -45,6 +45,7 @@ ContractNumber:     \t%-25s
 AccountNumber:      \t%-25s
 SerialNumber:       \t%-25s
 Active:             \t%-25s
+QuantityUsed:       \t%-25s
 Begins:             \t%-25s
 Expires:            \t%-25s
 """)

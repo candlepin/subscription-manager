@@ -847,7 +847,7 @@ class ListCommand(CliCommand):
                                 help=_("date to search on, defaults to today's date, only used with --available " +
                                       "(example: ") + strftime("%Y-%m-%d", localtime()) + " )")
         self.parser.add_option("--consumed", action='store_true',
-                               help=_("if supplied then list shows those subscriptions are consumed by this machine."))
+                               help=_("shows the subscriptions being consumed by this system."))
         self.parser.add_option("--all", action='store_true',
                                help=_("if supplied with --available then all subscriptions are returned"))
 

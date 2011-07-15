@@ -164,11 +164,10 @@ def getConsumedProductEntitlements():
 
     def append_consumed_product(cert, product):
         consumed_products.append((product.getName(), cert.getOrder().getContract(),
-                                  cert.getOrder().getAccountNumber(), cert.serialNumber(),
-                                  cert.valid(),
-                                  formatDate(cert.validRange().begin()),
-                                  formatDate(cert.validRange().end()))
-                                 )
+            cert.getOrder().getAccountNumber(), cert.serialNumber(),
+            cert.valid(), cert.getOrder().getQuantityUsed(),
+            formatDate(cert.validRange().begin()),
+            formatDate(cert.validRange().end())))
 
     entdir = EntitlementDirectory()
     for cert in entdir.listValid():
