@@ -26,7 +26,7 @@ installed_product_status = _("""
 ProductName:        \t%-25s
 Status:             \t%-25s
 Expires:            \t%-25s
-Subscription:       \t%-25s
+SerialNumber:       \t%-25s
 ContractNumber:     \t%-25s
 AccountNumber:      \t%-25s
 """)
