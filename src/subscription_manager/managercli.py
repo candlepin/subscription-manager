@@ -391,6 +391,52 @@ class OwnersCommand(UserPassCommand):
         except Exception, e:
             handle_exception(_("Error: Unable to retrieve org list from Entitlement Platform"), e)
 
+class EnvironmentsCommand(UserPassCommand):
+
+    def __init__(self):
+        usage = "usage: %prog orgs [OPTIONS]"
+        shortdesc = _("Display the environments available for a user")
+        desc = shortdesc
+
+        super(EnvironmentsCommand, self).__init__("environments", usage, shortdesc,
+                desc)
+
+        self.parser.add_option("--org", dest="org",
+                               help=_("specify org for environment list"))
+
+    def _validate_options(self):
+        if not self.options.org:
+            print(_("you must specify an --org"))
+            sys.exit(-1)
+
+    def _do_command(self):
+        self._validate_options()
+        try:
+            self.cp = connection.UEPConnection(username=self.username,
+                                               password=self.password,
+                                               proxy_hostname=self.proxy_hostname,
+                                               proxy_port=self.proxy_port,
+                                               proxy_user=self.proxy_user,
+                                               proxy_password=self.proxy_password)
+            if self.cp.supports_resource('environments'):
+                environments = self.cp.getEnvironmentList(self.options.org)
+                if len(environments):
+                    print "environments:"
+                    for env in environments:
+                        print env['name']
+                else:
+                    print "This org does not have environments."
+            else:
+                print "This system does not support environments."
+
+            log.info("Successfully retrieved environment list from Entitlement Platform.")
+        except connection.RestlibException, re:
+            log.exception(re)
+            log.error("Error: Unable to retrieve environment list from Entitlement Platform: %s" % re)
+            systemExit(-1, re.msg)
+        except Exception, e:
+            handle_exception(_("Error: Unable to retrieve environment list from Entitlement Platform"), e)
+
 
 class RegisterCommand(UserPassCommand):
 
@@ -952,7 +998,7 @@ class CLI:
         self.cli_commands = {}
         for clazz in [RegisterCommand, UnRegisterCommand, ListCommand, SubscribeCommand,\
                        UnSubscribeCommand, FactsCommand, IdentityCommand, OwnersCommand, \
-                       RefreshCommand, CleanCommand, RedeemCommand, ReposCommand]:
+                       RefreshCommand, CleanCommand, RedeemCommand, ReposCommand, EnvironmentsCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":
