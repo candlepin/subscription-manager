@@ -87,9 +87,9 @@ def autosubscribe(cp, consumer, certlib):
 
         log.info("Automatically subscribed to products: %s " \
                 % ", ".join(products.keys()))
-        print _("Installed Products:")
+        print _("Installed Product Current Status:")
         for prod_status in installed_status:
-            print ("   %s - %s" % (prod_status[0], prod_status[1]))
+            print (constants.product_status % (prod_status[0], prod_status[1]))
     except Exception, e:
         log.exception(e)
         log.warning("Warning: Unable to auto subscribe to %s" \

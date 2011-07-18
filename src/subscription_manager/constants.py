@@ -57,6 +57,11 @@ RepoUrl:             \t%-25s
 Enabled:             \t%-25s
 """)
 
+product_status = _("""
+ProductName:         \t%-25s
+Status:               \t%-25s
+""")
+
 UNREGISTER_ERROR = _("<b>Errors were encountered during unregister.</b>\n%s\nPlease see /var/log/rhsm/rhsm.log for more information.")
 
 REGISTER_ERROR = _("<b>Unable to register the system.</b>\n\n %s\n\nPlease see /var/log/rhsm/rhsm.log for more information.")
