@@ -866,9 +866,9 @@ class ReposCommand(CliCommand):
             rl = RepoLib()
             repos = rl.get_repos()
             if len(repos) > 0:
-                print _("The system is entitled to the following repositories.")
-                print _("These can be managed at in the repo file %s.") % rl.get_repo_file()
-
+                print("+----------------------------------------------------------+")
+                print _("    Entitled Repositories in %s") % rl.get_repo_file()
+                print("+----------------------------------------------------------+")
                 for repo in repos:
                     print constants.repos_list % (repo["name"],
                         repo.id,
