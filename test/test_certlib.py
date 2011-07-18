@@ -18,7 +18,7 @@ import os
 from datetime import timedelta, datetime
 
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
-    StubCertificateDirectory
+    StubCertificateDirectory, StubFacts
 from subscription_manager.certlib import Path, find_first_invalid_date, \
     EntitlementDirectory
 from subscription_manager.cert_sorter import CertSorter
@@ -168,6 +168,15 @@ class CertSorterTests(unittest.TestCase):
 
     def setUp(self):
         # Setup mock product and entitlement certs:
+        self.stackable_product1 = StubProduct('stackable_product1',
+                                              attributes={'stacking_id':13,
+                                                          'multi-entitlement':'yes',
+                                                          'sockets':1})
+        self.stackable_product2 = StubProduct('stackable_product2',
+                                              attributes={'stacking_id':13,
+                                                          'multi-entitlement':'yes',
+                                                          'sockets':1})
+
         self.prod_dir = StubCertificateDirectory([
             # Will be unentitled:
             StubProductCertificate(StubProduct('product1')),
@@ -175,6 +184,8 @@ class CertSorterTests(unittest.TestCase):
             StubProductCertificate(StubProduct('product2')),
             # Will be entitled but expired:
             StubProductCertificate(StubProduct('product3')),
+            StubProductCertificate(self.stackable_product1),
+            StubProductCertificate(self.stackable_product2)
         ])
 
         self.ent_dir = StubCertificateDirectory([
@@ -185,8 +196,13 @@ class CertSorterTests(unittest.TestCase):
             StubEntitlementCertificate(StubProduct('product4'),
                 start_date=datetime.now() - timedelta(days=365),
                 end_date=datetime.now() + timedelta(days=365),
-                order_end_date=datetime.now() - timedelta(days=2))  # in warning period
-        ])
+                order_end_date=datetime.now() - timedelta(days=2)),  # in warning period
+            StubEntitlementCertificate(StubProduct('mktproduct',
+                                                   attributes={'stacking_id':13, 
+                                                               'multi-entitlement':'yes',
+                                                               'sockets':1} )),
+            StubEntitlementCertificate(self.stackable_product1),
+            StubEntitlementCertificate(self.stackable_product2)])
 
     def test_unentitled_product_certs(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir)
@@ -223,7 +239,7 @@ class CertSorterTests(unittest.TestCase):
     def test_expired_in_future(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir,
                 on_date=datetime(2050, 1, 1))
-        self.assertEqual(3, len(self.sorter.expired_entitlement_certs))
+        self.assertEqual(6, len(self.sorter.expired_entitlement_certs))
         self.assertTrue('product2' in self.sorter.expired_products)
         self.assertTrue('product3' in self.sorter.expired_products)
         self.assertFalse('product4' in self.sorter.expired_products)  # it's not installed
@@ -256,11 +272,12 @@ class CertSorterTests(unittest.TestCase):
         self.assertEquals(1, len(self.sorter.valid_products.keys()))
         self.assertTrue('product3' in self.sorter.valid_products)
         self.assertEquals(0, len(self.sorter.expired_products.keys()))
-        self.assertEquals(2, len(self.sorter.unentitled_products.keys()))
+        self.assertEquals(4, len(self.sorter.unentitled_products.keys()))
 
     def test_multi_product_entitlement_expired(self):
         # Setup one ent cert that provides everything we have installed (see setUp)
-        provided = [StubProduct('product2'), StubProduct('product3')]
+        provided = [StubProduct('product2'), StubProduct('product3'),
+                    self.stackable_product1, self.stackable_product2]
         self.ent_dir = StubCertificateDirectory([
             StubEntitlementCertificate(StubProduct('mktproduct'),
                 provided_products=provided)])
@@ -268,12 +285,53 @@ class CertSorterTests(unittest.TestCase):
                 on_date=datetime(2050, 1, 1))
 
         self.assertEquals(1, len(self.sorter.expired_entitlement_certs))
-        self.assertEquals(2, len(self.sorter.expired_products.keys()))
+        self.assertEquals(4, len(self.sorter.expired_products.keys()))
         self.assertTrue('product2' in self.sorter.expired_products)
         self.assertTrue('product3' in self.sorter.expired_products)
 
         self.assertEquals(1, len(self.sorter.unentitled_products.keys()))
         self.assertTrue('product1' in self.sorter.unentitled_products)
+
+    def test_stacking_product(self):
+        provided = [self.stackable_product1, self.stackable_product2]
+        self.ent_dir = StubCertificateDirectory([
+                StubEntitlementCertificate(StubProduct('mktproduct',
+                                                       attributes={'stacking_id':13,
+                                                                   'multi-entitlement':'yes',
+                                                                   'sockets':1}),
+                                           provided_products=provided)])
+        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 1})
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, facts_dict=stub_facts.get_facts())
+        self.assertFalse('stackable_product1' in self.sorter.unentitled_products)
+
+    def test_stacking_product_needs_more_sockets(self):
+        provided = [self.stackable_product1, self.stackable_product2]
+        mkt_product = StubProduct('mktproduct',
+                                 attributes={'stacking_id': 13,
+                                             'multi-entitlement': 'yes',
+                                             'sockets': 1})
+        mkt_product_cert = StubProductCertificate(mkt_product)
+        self.prod_dir.certs.append(mkt_product_cert)
+        self.ent_dir = StubCertificateDirectory([
+                StubEntitlementCertificate(mkt_product, provided_products=provided)])
+        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 42})
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, facts_dict=stub_facts.get_facts())
+        self.assertTrue('stackable_product1' in self.sorter.unentitled_products)
+
+    def test_stacking_product_two_pools_needed(self):
+        provided = [self.stackable_product1, self.stackable_product2]
+        mkt_product = StubProduct('mktproduct',
+                                 attributes={'stacking_id': 13,
+                                             'multi-entitlement': 'yes',
+                                             'sockets': 1})
+        mkt_product_cert = StubProductCertificate(mkt_product)
+        self.prod_dir.certs.append(mkt_product_cert)
+        self.ent_dir = StubCertificateDirectory([
+                StubEntitlementCertificate(mkt_product, provided_products=provided)])
+        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 2})
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, facts_dict=stub_facts.get_facts())
+        self.assertFalse('stackable_product1' in self.sorter.unentitled_products)
+        self.assertFalse('stackable_product2' in self.sorter.unentitled_products)
 
 
 def cert_list_has_product(cert_list, product_id):

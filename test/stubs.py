@@ -55,7 +55,6 @@ class StubConfig(config.RhsmConfigParser):
 
     # isntead of reading a file, let's use the stringio
     def read(self, filename):
-        print "StubConfig.read", filename, test_config, test_config.readline
         self.readfp(test_config, "foo.conf")
 
     def set(self, section, key, value):
@@ -101,7 +100,7 @@ MockStderr = MockStdout
 class StubProduct(Product):
 
     def __init__(self, product_id, name=None, version=None, arch=None,
-            provided_tags=None):
+            provided_tags=None, attributes=None):
         """
         provided_tags - Comma separated list of tags this product (cert)
             provides.
@@ -121,11 +120,16 @@ class StubProduct(Product):
         if not version:
             self.version = "1.0"
 
+        self.provided_atts = attributes
+
+    def getHash(self):
+        return self.hash
+
 
 class StubOrder(object):
 
     # Start/end are formatted strings, not actual datetimes.
-    def __init__(self, start, end, name="STUB NAME", quantity=None, 
+    def __init__(self, start, end, name="STUB NAME", quantity=None,
                  stacking_id=None, socket_limit=1):
         self.name = name
         self.start = start
@@ -157,6 +161,7 @@ class StubOrder(object):
 
     def getSocketLimit(self):
         return self.socket_limit
+
 
 class StubContent(Content):
 
@@ -202,6 +207,14 @@ class StubProductCertificate(ProductCertificate):
 
     def get_provided_tags(self):
         return self.provided_tags
+
+    def __str__(self):
+        s = []
+        s.append('StubCertificate:')
+        s.append('===================================')
+        for p in self.getProducts():
+            s.append(str(p))
+        return '\n'.join(s)
 
 
 class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate):
@@ -299,7 +312,7 @@ class StubUEP:
         proxy_hostname=None, proxy_port=None,
         proxy_user=None, proxy_password=None,
         cert_file=None, key_file=None):
-            self.registered_consumer_info = {"uuid": 'dummy-consumer-uuid',}
+            self.registered_consumer_info = {"uuid": 'dummy-consumer-uuid'}
             pass
 
     def supports_resource(self, resource):
@@ -317,6 +330,7 @@ class StubUEP:
     def getProduct(self):
         return {}
 
+
 class StubBackend:
     def __init__(self, uep=StubUEP()):
         self.uep = uep
@@ -327,6 +341,7 @@ class StubBackend:
 
     def monitor_identity(self, callback):
         pass
+
 
 class StubFacts(object):
     def __init__(self, fact_dict, facts_changed=True):
