@@ -875,7 +875,7 @@ class ReposCommand(CliCommand):
                         repo["baseurl"],
                         repo["enabled"])
             else:
-                print _("The system is not entitled to use any repositories")
+                print _("The system is not entitled to use any repositories.")
 
 class ListCommand(CliCommand):
 
