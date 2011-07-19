@@ -73,7 +73,7 @@ class CertLib(DataLib):
         lock = self.lock
         lock.acquire()
         try:
-            return self._do_delete()
+            return self._do_delete(serialNumbers)
         finally:
             lock.release()   
             
