@@ -480,6 +480,9 @@ class RegisterCommand(UserPassCommand):
         elif (self.options.environment and not self.options.org):
             print(_("Error: Must specify --org to register to an environment."))
             sys.exit(-1)
+        elif (self.options.activation_keys and not self.options.org):
+            print(_("Error: Must specify --org to register with activation keys."))
+            sys.exit(-1)
 
     def _do_command(self):
         """
@@ -512,39 +515,33 @@ class RegisterCommand(UserPassCommand):
 
         # Proceed with new registration:
         try:
-
-            admin_cp = connection.UEPConnection(username=self.username,
+            if not self.options.activation_keys:
+                admin_cp = connection.UEPConnection(username=self.username,
                                         password=self.password,
                                         proxy_hostname=self.proxy_hostname,
                                         proxy_port=self.proxy_port,
                                         proxy_user=self.proxy_user,
                                         proxy_password=self.proxy_password)
 
+            else: 
+                admin_cp = connection.UEPConnection(proxy_hostname=self.proxy_hostname,
+                                    proxy_port=self.proxy_port,
+                                    proxy_user=self.proxy_user,
+                                    proxy_password=self.proxy_password)
+
+
             if self.options.consumerid:
             #TODO remove the username/password
                 consumer = admin_cp.getConsumer(self.options.consumerid,
                         self.username, self.password)
             else:
-                if self.options.activation_keys:
+                owner_key = self._determine_owner_key(admin_cp)
 
-                    admin_cp = connection.UEPConnection(proxy_hostname=self.proxy_hostname,
-                                    proxy_port=self.proxy_port,
-                                    proxy_user=self.proxy_user,
-                                    proxy_password=self.proxy_password)
-
-                    consumer = admin_cp.registerConsumerWithKeys(
-                        name=consumername,
-                        type=self.options.consumertype,
-                        facts=self.facts.get_facts(),
-                        keys=self.options.activation_keys)
-                else:
-                    owner_key = self._determine_owner_key(admin_cp)
-
-                    environment_id = self._get_environment_id(admin_cp, owner_key, 
-                            self.options.environment)
-                    consumer = admin_cp.registerConsumer(name=consumername,
-                         type=self.options.consumertype, facts=self.facts.get_facts(),
-                         owner=owner_key, environment=environment_id)
+                environment_id = self._get_environment_id(admin_cp, owner_key, 
+                        self.options.environment)
+                consumer = admin_cp.registerConsumer(name=consumername,
+                     type=self.options.consumertype, facts=self.facts.get_facts(),
+                     owner=owner_key, environment=environment_id, keys=self.options.activation_keys)
 
         except connection.RestlibException, re:
             log.exception(re)
