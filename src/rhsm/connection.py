@@ -385,7 +385,7 @@ class UEPConnection:
         return self.conn.request_get("/status/")
 
     def registerConsumer(self, name="unknown", type="system", facts={}, 
-            owner=None, environment=None):
+            owner=None, environment=None, keys=None):
         """
         Creates a consumer on candlepin server
         """
@@ -397,22 +397,13 @@ class UEPConnection:
             url = "/environments/%s/consumers" % environment
         elif owner:
             url = "%s?owner=%s" % (url, owner)
+            prepend = ""
+            if keys:
+                url = url + "&activation_keys="
+                for key in keys:
+                    url = url + prepend + key
+                    prepend = ","
 
-        return self.conn.request_post(url, params)
-
-    def registerConsumerWithKeys(self, name="unknown", type="system", facts={}, keys=[]):
-        """
-        Creates a consumer on candlepin server
-        """
-        params = {"type": type,
-                  "name": name,
-                  "facts": facts}
-        url = "/activate"
-        prepend = "?"
-        for key in keys:
-            url = url + prepend
-            url = url + "activation_key=" + key
-            prepend = "&"
         return self.conn.request_post(url, params)
 
     def updateConsumerFacts(self, consumer_uuid, facts={}):
