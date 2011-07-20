@@ -318,7 +318,7 @@ class StubUEP:
     def supports_resource(self, resource):
         return False
 
-    def registerConsumer(self, name, type, facts, owner, environment):
+    def registerConsumer(self, name, type, facts, owner, environment, keys):
         return self.registered_consumer_info
 
     def getOwnerList(self, username):
