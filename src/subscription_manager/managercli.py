@@ -378,12 +378,19 @@ class OwnersCommand(UserPassCommand):
                                                proxy_user=self.proxy_user,
                                                proxy_password=self.proxy_password)
             owners = self.cp.getOwnerList(self.username)
-            if len(owners):
-                print "orgs:"
-                for owner in owners:
-                    print owner['key']
-
             log.info("Successfully retrieved org list from Entitlement Platform.")
+            if len(owners):
+                print("+-------------------------------------------+")
+                print("          %s %s" % (self.username, _("Organizations")))
+                print("+-------------------------------------------+")
+                print("")
+                for owner in owners:
+                    print("%s: \t%-25s" % (_("OrgName"), owner['displayName']))
+                    print("%s: \t%-25s" % (_("OrgKey"), owner['key']))
+                    print("")
+            else:
+                print(_("%s cannot register to any organizations.") % self.username)
+
         except connection.RestlibException, re:
             log.exception(re)
             log.error("Error: Unable to retrieve org list from Entitlement Platform: %s" % re)
