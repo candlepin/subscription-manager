@@ -30,4 +30,4 @@ class ContractSelection(unittest.TestCase):
     def test_contract_selection_add_pool(self):
         cs = contract_selection.ContractSelectionWindow(selected_callback=stubSelectedCallback,
                                                          cancel_callback=stubCancelCallback)
-        cs.add_pool(self.pool)
+        cs.add_pool(self.pool, 4)

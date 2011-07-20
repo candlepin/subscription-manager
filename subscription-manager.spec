@@ -143,6 +143,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/subscription_manager/productid.py*
 %{_datadir}/rhsm/subscription_manager/pkgprofile.py*
 %{_datadir}/rhsm/subscription_manager/branding
+%{_datadir}/rhsm/subscription_manager/quantity.py*
 %attr(755,root,root) %{_datadir}/rhsm/subscription_manager/certmgr.py*
 %attr(755,root,root) %{_sbindir}/subscription-manager
 %attr(755,root,root) %{_bindir}/subscription-manager

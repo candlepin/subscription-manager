@@ -26,14 +26,16 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 import rhsm.certificate as certificate
 from subscription_manager import certlib
+from subscription_manager import managerlib
+from subscription_manager import async
 from subscription_manager.certlib import find_first_invalid_date
 from subscription_manager.cert_sorter import CertSorter
-from subscription_manager import managerlib
 from subscription_manager.gui import storage
 from subscription_manager.gui import widgets
 from subscription_manager.gui import progress
-from subscription_manager import async
 from subscription_manager.gui.utils import handle_gui_exception, make_today_now, allows_multi_entitlement
+from subscription_manager.quantity import QuantityDefaultValueCalculator
+
 
 
 class MappedListTreeView(gtk.TreeView):
@@ -369,22 +371,18 @@ class SubscriptionAssistant(widgets.GladeWidget):
                 available = _('%s of %s') % \
                     (entry.quantity - entry.consumed, quantity)
 
-            # TODO [mstead] Not sure that we should be defaulting to the first pool here.
             pool = entry.pools[0]
-            # check if the pool supports multi-entitlement
-            is_multi_entitlement = allows_multi_entitlement(pool)
+            default_quantity_calculator = \
+                QuantityDefaultValueCalculator(self.facts, self.entitlement_dir.list())
 
-
-            # TODO [mstead] Should determine the default value based on machine reqs.
-            quantity_to_consume = 1
             self.subscriptions_store.add_map({
                 'product_name': entry.product_name,
                 'total_contracts': len(entry.pools),
                 'total_subscriptions': entry.quantity,
                 'available_subscriptions': available,
-                'quantity_to_consume': quantity_to_consume,
+                'quantity_to_consume': default_quantity_calculator.calculate(pool),
                 'pool_id': pool['id'],
-                'multi-entitlement': is_multi_entitlement,
+                'multi-entitlement': allows_multi_entitlement(pool),
             })
 
     def _get_selected_product_ids(self):

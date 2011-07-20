@@ -98,7 +98,7 @@ class ContractSelectionWindow(object):
         self.contract_selection_treeview.append_column(column)
 
 
-    def add_pool(self, pool):
+    def add_pool(self, pool, default_quantity_value):
         self.total_contracts += 1
         self.total_contracts_label.set_text(str(self.total_contracts))
         self.subscription_name_label.set_text(pool['productName'])
@@ -108,12 +108,11 @@ class ContractSelectionWindow(object):
         if quantity < 0:
             quantity = _('unlimited')
 
-        quantity_to_consume = 1
         row = [pool['contractNumber'],
                 "%s / %s" % (pool['consumed'], quantity),
                managerlib.parseDate(pool['startDate']),
                managerlib.parseDate(pool['endDate']),
-               quantity_to_consume,
+               default_quantity_value,
                pool['productName'], pool]
         self.model.append(row)
 

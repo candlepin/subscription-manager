@@ -18,6 +18,7 @@ import logging
 import gobject
 
 import gettext
+from subscription_manager.certlib import EntitlementDirectory
 _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -28,6 +29,7 @@ from subscription_manager import async
 from subscription_manager.gui import progress
 from subscription_manager.gui.utils import handle_gui_exception, apply_highlight, allows_multi_entitlement
 from subscription_manager.gui.contract_selection import ContractSelectionWindow
+from subscription_manager.quantity import QuantityDefaultValueCalculator
 
 
 class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
@@ -253,8 +255,10 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.contract_selection.set_parent_window(self.content.get_parent_window().get_user_data())
 
+        quantity_defaults_calculator = QuantityDefaultValueCalculator(self.facts,
+                                                            EntitlementDirectory().list())
         for pool in pools.pools:
-            self.contract_selection.add_pool(pool)
+            self.contract_selection.add_pool(pool, quantity_defaults_calculator.calculate(pool))
 
         self.contract_selection.show()
 

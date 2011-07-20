@@ -130,13 +130,14 @@ class StubOrder(object):
 
     # Start/end are formatted strings, not actual datetimes.
     def __init__(self, start, end, name="STUB NAME", quantity=None,
-                 stacking_id=None, socket_limit=1):
+                 stacking_id=None, socket_limit=1, sku=""):
         self.name = name
         self.start = start
         self.end = end
         self.quantity = quantity
         self.stacking_id = stacking_id
         self.socket_limit = socket_limit
+        self.sku = sku
 
     def getStart(self):
         return self.start
@@ -161,6 +162,9 @@ class StubOrder(object):
 
     def getSocketLimit(self):
         return self.socket_limit
+
+    def getSku(self):
+        return self.sku
 
 
 class StubContent(Content):
@@ -235,7 +239,7 @@ class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate)
         fmt = "%Y-%m-%dT%H:%M:%SZ"
         self.order = StubOrder(self.start_date.strftime(fmt),
                                order_end_date.strftime(fmt), quantity=quantity,
-                               stacking_id=1, socket_limit=2)
+                               stacking_id=1, socket_limit=2, sku=product.hash)
 
         self.valid_range = DateRange(self.start_date, self.end_date)
         self.content = []

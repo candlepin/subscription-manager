@@ -200,3 +200,13 @@ def allows_multi_entitlement(pool):
             (attribute['value'].lower() == "yes" or attribute['value'] == "1"):
             return True
     return False
+
+def flatten_attributes(pool_json, attribute_list_name):
+    """
+    Flatten the attributes in a pool's JSON data by attribute list name.
+    """
+    flattened = {}
+    for attribute in pool_json[attribute_list_name]:
+        flattened[attribute['name']] = attribute['value']
+
+    return flattened

@@ -22,7 +22,8 @@ import md5
 from datetime import timedelta, datetime
 
 
-def create_pool(product_id, product_name, quantity=10, consumed=0, provided_products=[]):
+def create_pool(product_id, product_name, quantity=10, consumed=0, provided_products=[],
+                productAttributes=[]):
     """
     Returns a hash representing a pool. Used to simulate the JSON returned
     from Candlepin.
@@ -58,4 +59,5 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
                 'href': '/owners/admin',
                 'id': '402881062bc9a379012bc9a393fe0005'},
             'attributes': [],
+            'productAttributes': productAttributes,
         }

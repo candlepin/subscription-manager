@@ -150,7 +150,7 @@ class FindLastValidTests(unittest.TestCase):
                 StubProduct('product1'), start_date=datetime(2010, 1, 1),
                 end_date=datetime(2050, 1, 1))
         cert2 = StubEntitlementCertificate(
-                StubProductCertificate(StubProduct('product2')),
+                StubProduct('product2'),
                 start_date=datetime(2010, 1, 1),
                 end_date=datetime(2060, 1, 1))
         ent_dir = StubCertificateDirectory([cert1, cert2])
