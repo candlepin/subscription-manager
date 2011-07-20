@@ -20,68 +20,43 @@ Perfers to use gio as the backend, but can fallback to polling.
 """
 
 import gobject
+import os
 
-try:
-    import gio
-    _use_gio = True
-except ImportError, e:
-    _use_gio = False
+class Monitor(gobject.GObject):
 
-if _use_gio:
+    __gsignals__ = {
+        'changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, tuple())
+    }
 
-    class Monitor(gobject.GObject):
+    def __init__(self, path):
+        self.__gobject_init__()
 
-        __gsignals__ = {
-            'changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, tuple())
-        }
+        self._path = path
 
-        def __init__(self, path):
-            self.__gobject_init__()
-            gio.File(path).monitor().connect('changed', self.on_file_change)
+        (mtime, exists) = self._check_mtime()
+        self._last_mtime = mtime
+        self._exists = exists
 
-        def on_file_change(self, filemonitor, first_file, other_file,
-                event_type):
-            self.emit('changed')
+        # poll every 2 seconds for changes
+        gobject.timeout_add(2000, self._run_check)
 
-else:
+    def _check_mtime(self):
+        mtime = 0
+        try:
+            mtime = os.path.getmtime(self._path)
+            exists = True
+        except OSError:
+            exists = False
 
-    import os
+        return (mtime, exists)
 
-    class Monitor(gobject.GObject):
+    def _run_check(self):
+        (mtime, exists) = self._check_mtime()
 
-        __gsignals__ = {
-            'changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, tuple())
-        }
+        if (mtime != self._last_mtime) or (exists != self._exists):
+            self.emit("changed")
 
-        def __init__(self, path):
-            self.__gobject_init__()
+        self._last_mtime = mtime
+        self._exists = exists
 
-            self._path = path
-
-            (mtime, exists) = self._check_mtime()
-            self._last_mtime = mtime
-            self._exists = exists
-
-            # poll every 2 seconds for changes
-            gobject.timeout_add(2000, self._run_check)
-
-        def _check_mtime(self):
-            mtime = 0
-            try:
-                mtime = os.path.getmtime(self._path)
-                exists = True
-            except OSError:
-                exists = False
-
-            return (mtime, exists)
-
-        def _run_check(self):
-            (mtime, exists) = self._check_mtime()
-
-            if (mtime != self._last_mtime) or (exists != self._exists):
-                self.emit("changed")
-
-            self._last_mtime = mtime
-            self._exists = exists
-
-            return True
+        return True
