@@ -356,8 +356,9 @@ class IdentityCommand(UserPassCommand):
                                                        proxy_password=self.proxy_password)
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
-
-            log.info("Successfully generated a new identity from Entitlement Platform.")
+                print _("Identity certificate has been regenerated.")
+                        
+                log.info("Successfully generated a new identity from Entitlement Platform.")
         except connection.RestlibException, re:
             log.exception(re)
             log.error("Error: Unable to generate a new identity for the system: %s" % re)
