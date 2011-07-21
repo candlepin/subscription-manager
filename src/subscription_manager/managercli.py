@@ -49,6 +49,14 @@ cfg = rhsm.config.initConfig()
 
 
 def handle_exception(msg, ex):
+
+    # On Python 2.4 and earlier, sys.exit triggers a SystemExit exception,
+    # which can land us into this block of code. We do not want to handle
+    # this or print any messages as the caller would already have done so,
+    # so just re-throw and let Python have at it.
+    if isinstance(ex, SystemExit):
+        raise ex
+
     log.error(msg)
     log.exception(ex)
     if isinstance(ex, socket.error):
