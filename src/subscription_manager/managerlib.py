@@ -695,6 +695,12 @@ def is_registered_with_classic():
 
     return up2dateAuth.getSystemId() is not None
 
+def enhance_facts(facts, consumer):
+    if consumer.getConsumerId():
+        facts.update({'system.uuid': consumer.getConsumerId()})
+    if consumer.getConsumerName():
+        facts.update({"system.name": consumer.getConsumerName()})
+
 if __name__ == '__main__':
     print("\nInstalled Product Status:\n")
     print getInstalledProductStatus()

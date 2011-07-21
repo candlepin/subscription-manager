@@ -167,6 +167,11 @@ class Consumer(object):
             self.name = consumer.getConsumerName()
             self.uuid = consumer.getConsumerId()
 
+    def getConsumerName(self):
+        return self.name
+
+    def getConsumerId(self):
+        return self.uuid
 
 class MainWindow(widgets.GladeWidget):
     """

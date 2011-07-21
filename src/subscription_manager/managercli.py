@@ -273,7 +273,7 @@ class CleanCommand(CliCommand):
     def _add_common_options(self):
         # remove these options as per bz #664581
         return
-        
+
     def _do_command(self):
         managerlib.delete_consumer_certs()
         delete_profile_cache()
@@ -357,7 +357,7 @@ class IdentityCommand(UserPassCommand):
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
                 print _("Identity certificate has been regenerated.")
-                        
+
                 log.info("Successfully generated a new identity from Entitlement Platform.")
         except connection.RestlibException, re:
             log.exception(re)
@@ -539,7 +539,7 @@ class RegisterCommand(UserPassCommand):
                                         proxy_user=self.proxy_user,
                                         proxy_password=self.proxy_password)
 
-            else: 
+            else:
                 admin_cp = connection.UEPConnection(proxy_hostname=self.proxy_hostname,
                                     proxy_port=self.proxy_port,
                                     proxy_user=self.proxy_user,
@@ -553,7 +553,7 @@ class RegisterCommand(UserPassCommand):
             else:
                 owner_key = self._determine_owner_key(admin_cp)
 
-                environment_id = self._get_environment_id(admin_cp, owner_key, 
+                environment_id = self._get_environment_id(admin_cp, owner_key,
                         self.options.environment)
                 consumer = admin_cp.registerConsumer(name=consumername,
                      type=self.options.consumertype, facts=self.facts.get_facts(),
@@ -584,7 +584,7 @@ class RegisterCommand(UserPassCommand):
         self._request_validity_check()
 
     def _get_environment_id(self, cp, owner_key, environment_name):
-        # If none specified on CLI, return None, the registration method 
+        # If none specified on CLI, return None, the registration method
         # will skip environment specification.
         if not environment_name:
             return environment_name
@@ -842,6 +842,8 @@ class FactsCommand(CliCommand):
         if self.options.list:
             facts = Facts()
             fact_dict = facts.get_facts()
+            if ConsumerIdentity.exists():
+                managerlib.enhance_facts(fact_dict, ConsumerIdentity.read())
             fact_keys = fact_dict.keys()
             fact_keys.sort()
             for key in fact_keys:

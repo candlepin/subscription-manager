@@ -18,6 +18,7 @@ import gtk
 
 from subscription_manager.gui.utils import errorWindow, linkify
 from subscription_manager.gui import widgets
+from subscription_manager.managerlib import enhance_facts
 
 import gettext
 _ = gettext.gettext
@@ -87,11 +88,7 @@ class SystemFactsDialog(widgets.GladeWidget):
         # make sure we get fresh facts, since entitlement validity status could         # change
         system_facts_dict = self.facts.get_facts()
 
-        if self.consumer.uuid:
-            system_facts_dict.update({'system.uuid': self.consumer.uuid})
-        if self.consumer.name:
-            system_facts_dict.update({"system.name": self.consumer.name})
-
+        enhance_facts(system_facts_dict, self.consumer)
         system_facts = system_facts_dict.items()
 
         system_facts.sort()
