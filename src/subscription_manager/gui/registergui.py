@@ -180,8 +180,8 @@ class RegisterScreen:
             self._environment_selected()
             return
 
-        username = self.uname.get_text()
-        password = self.passwd.get_text()
+        username = self.uname.get_text().strip()
+        password = self.passwd.get_text().strip()
         consumername = self.consumer_name.get_text()
 
         if not self.validate_consumername(consumername):
