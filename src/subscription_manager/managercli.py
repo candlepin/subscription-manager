@@ -868,9 +868,6 @@ class ReposCommand(CliCommand):
                                help=_("list the entitled repositories for this system"))
 
     def _validate_options(self):
-        self.assert_should_be_registered()
-
-        # one or the other
         if not (self.options.list):
             print _("Error: No options provided. Please see the help comand.")
             sys.exit(-1)
