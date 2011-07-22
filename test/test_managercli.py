@@ -118,6 +118,28 @@ class TestReposCommand(TestCliCommand):
 class TestSubscribeCommand(TestCliProxyCommand):
     command_class = managercli.SubscribeCommand
 
+    def _test_quantity_exception(self, arg):
+        try:
+            self.cc.main(["--auto", "--quantity", arg])
+            self.cc._validate_options()
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+        else:
+            self.fail("No Exception Raised")
+
+    def test_zero_quantity(self):
+        self._test_quantity_exception("0")
+
+    def test_negative_quantity(self):
+        self._test_quantity_exception("-1")
+
+    def test_text_quantity(self):
+        self._test_quantity_exception("JarJarBinks")
+
+    def test_positive_quantity(self):
+        self.cc.main(["--auto", "--quantity", "1"])
+        self.cc._validate_options()
+
 
 class TestUnSubscribeCommand(TestCliProxyCommand):
     command_class = managercli.UnSubscribeCommand

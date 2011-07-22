@@ -720,6 +720,13 @@ class SubscribeCommand(CliCommand):
             print _("Error: Only one of --pool or --auto may be used with this command.")
             sys.exit(-1)
 
+        # Quantity must be a positive integer
+        quantity = self.options.quantity
+        if self.options.quantity:
+            if not (quantity.isdigit() and int(quantity) > 0):
+                print _("Error: Quantity must be a positive number.")
+                sys.exit(-1)
+
     def _do_command(self):
         """
         Executes the command.
