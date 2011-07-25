@@ -342,6 +342,9 @@ class StubBackend:
     def monitor_identity(self, callback):
         pass
 
+    def create_admin_uep(self, username, password):
+        return StubUEP(username, password)
+
 
 class StubFacts(object):
     def __init__(self, fact_dict, facts_changed=True):
