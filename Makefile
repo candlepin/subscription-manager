@@ -135,6 +135,11 @@ install-files: dbus-service-install compile-po desktop-files
 check:
 	nosetests
 
+coverage:
+	nosetests --with-cover --cover-package subscription_manager
+
+coverage-html:
+	nosetests --with-cover --cover-package subscription_manager --cover-html --cover-html-dir test/html --cover-erase
 
 clean:
 	m -f *.pyc *.pyo *~ *.bak *.tar.gz
