@@ -990,6 +990,9 @@ class ListCommand(CliCommand):
         words = name.split()
         current = indent
         lines = []
+        # handle emtpty names
+        if not words:
+            return name
         line = [words.pop(0)]
 
         def add_line():
