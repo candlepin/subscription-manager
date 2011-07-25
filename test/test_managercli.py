@@ -1,8 +1,10 @@
 import unittest
 import sys
+import socket
 
 from subscription_manager import managercli
 from stubs import MockStdout, MockStderr
+from test_handle_gui_exception import FakeException, FakeLogger
 
 
 class TestCliCommand(unittest.TestCase):
@@ -98,10 +100,35 @@ class TestIdentityCommand(TestCliProxyCommand):
     def test_regenerate_no_force(self):
         self.cc.main(["--regenerate"])
 
+# re, orgs
+class TestOwnersCommand(TestCliProxyCommand):
+    command_class = managercli.OwnersCommand
+
+class TestEnvironmentsCommand(TestCliProxyCommand):
+    command_class = managercli.EnvironmentsCommand
 
 class TestRegisterCommand(TestCliProxyCommand):
     command_class = managercli.RegisterCommand
 
+class TestListCommand(TestCliProxyCommand):
+    command_class = managercli.ListCommand
+
+    def setUp(self):
+        self.indent = 1
+        self.max_length = 40
+        TestCliProxyCommand.setUp(self)
+
+    def test_format_name_long(self):
+        name = "This is a Really Long Name For A Product That We Do Not Want To See But Should Be Able To Deal With"
+        formatted_name = self.cc._format_name(name, self.indent, self.max_length)
+
+    def test_format_name_short(self):
+        name = "a"
+        formatted_name = self.cc._format_name(name, self.indent, self.max_length)
+
+    def test_format_name_empty(self):
+        name = 'e'
+        formatted_name = self.cc._format_name(name, self.indent, self.max_length)
 
 class TestUnRegisterCommand(TestCliProxyCommand):
     command_class = managercli.UnRegisterCommand
@@ -147,3 +174,28 @@ class TestUnSubscribeCommand(TestCliProxyCommand):
 
 class TestFactsCommand(TestCliProxyCommand):
     command_class = managercli.FactsCommand
+
+
+class HandleExceptionTests(unittest.TestCase):
+    def setUp(self):
+        self.msg = "some thing to log home about"
+        self.formatted_msg = "some thing else like: %s"
+        managercli.log = FakeLogger()
+
+    def test_he(self):
+        e = FakeException()
+        try:
+            managercli.handle_exception(self.msg, e)
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+
+    def test_he_socket_error(self):
+        # these error messages are bare strings, so we need to update the tests
+        # if those messages change
+        expected_msg = 'Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.'
+        managercli.log.set_expected_msg(expected_msg)
+        try:
+            managercli.handle_exception(self.msg, socket.error())
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+        self.assertEqual(managercli.log.expected_msg, expected_msg)
