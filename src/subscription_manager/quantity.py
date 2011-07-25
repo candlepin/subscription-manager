@@ -90,3 +90,9 @@ class QuantityDefaultValueCalculator(object):
         if target_dict.has_key(name) and target_dict[name]:
             value = target_dict[name]
         return float(value)
+
+def valid_quantity(quantity):
+    try:
+        return int(quantity) > 0
+    except ValueError:
+        return False

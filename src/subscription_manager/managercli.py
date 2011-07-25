@@ -29,6 +29,7 @@ from M2Crypto import X509
 from M2Crypto import SSL
 
 import gettext
+from _xmlplus.schema.trex import validate
 _ = gettext.gettext
 
 import rhsm.config
@@ -42,6 +43,7 @@ from subscription_manager.certmgr import CertManager
 from subscription_manager.pkgprofile import ProfileManager, delete_profile_cache
 from subscription_manager import managerlib
 from subscription_manager.facts import Facts
+from subscription_manager.quantity import valid_quantity
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -723,7 +725,7 @@ class SubscribeCommand(CliCommand):
         # Quantity must be a positive integer
         quantity = self.options.quantity
         if self.options.quantity:
-            if not (quantity.isdigit() and int(quantity) > 0):
+            if not valid_quantity(quantity):
                 print _("Error: Quantity must be a positive number.")
                 sys.exit(-1)
 

@@ -33,9 +33,8 @@ from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.gui import storage
 from subscription_manager.gui import widgets
 from subscription_manager.gui import progress
-from subscription_manager.gui.utils import handle_gui_exception, make_today_now, allows_multi_entitlement
-from subscription_manager.quantity import QuantityDefaultValueCalculator
-
+from subscription_manager.gui.utils import handle_gui_exception, make_today_now, allows_multi_entitlement, errorWindow
+from subscription_manager.quantity import QuantityDefaultValueCalculator, valid_quantity
 
 
 class MappedListTreeView(gtk.TreeView):
@@ -460,6 +459,10 @@ class SubscriptionAssistant(widgets.GladeWidget):
         pool_id = model.get_value(tree_iter, self.subscriptions_store['pool_id'])
         quantity_to_consume = model.get_value(tree_iter,
             self.subscriptions_store['quantity_to_consume'])
+
+        if not valid_quantity(quantity_to_consume):
+            errorWindow(_("Quantity must be a positive number."))
+            return
 
         pool = self.pool_stash.all_pools[pool_id]
         try:
