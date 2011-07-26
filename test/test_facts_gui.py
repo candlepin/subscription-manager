@@ -12,7 +12,7 @@ class FactDialogTests(unittest.TestCase):
 
         expected_facts = {'fact1': 'one',
                           'fact2': 'two',
-                          'system': '',
+                          'system': 'Unknown',
                           'system.uuid': 'MOCKUUID'}
 
         class StubFacts:

@@ -856,7 +856,10 @@ class FactsCommand(CliCommand):
             fact_keys = fact_dict.keys()
             fact_keys.sort()
             for key in fact_keys:
-                print "%s: %s" % (key, fact_dict[key])
+                value = fact_dict[key]
+                if value == "":
+                    value = _("Unknown")
+                print "%s: %s" % (key, value)
 
         if self.options.update:
             facts = Facts()

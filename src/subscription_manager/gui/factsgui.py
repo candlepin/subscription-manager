@@ -98,6 +98,8 @@ class SystemFactsDialog(widgets.GladeWidget):
             if new_group != group:
                 group = new_group
                 parent = self.facts_store.append(None, [group, ""])
+            if value == "":
+                value = _("Unknown")                
             self.facts_store.append(parent, [fact, value])
 
         # TODO: could stand to check if registered before trying to do this:
