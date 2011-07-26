@@ -37,6 +37,7 @@ ProductId:         \t%-25s
 PoolId:            \t%-25s
 Quantity:          \t%-25s
 Expires:           \t%-25s
+MachineType:       \t%-25s
 """)
 
 consumed_subs_list = _("""

@@ -30,6 +30,7 @@ from M2Crypto import SSL
 
 import gettext
 from _xmlplus.schema.trex import validate
+from subscription_manager.jsonwrapper import PoolWrapper
 _ = gettext.gettext
 
 import rhsm.config
@@ -972,11 +973,17 @@ class ListCommand(CliCommand):
                 # TODO:  Something about these magic numbers!
                 product_name = self._format_name(data['productName'], 24, 80)
 
+                if PoolWrapper(data).is_virt_only():
+                    machine_type =  machine_type = _("virtual")
+                else:
+                    machine_type = _("physical")
+
                 print constants.available_subs_list % (product_name,
                                                        data['productId'],
                                                        data['id'],
                                                        data['quantity'],
-                                                       data['endDate'])
+                                                       data['endDate'],
+                                                       machine_type)
 
         if self.options.consumed:
             cpents = managerlib.getConsumedProductEntitlements()
