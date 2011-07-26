@@ -27,9 +27,10 @@ from subscription_manager import managerlib
 from subscription_manager.gui import widgets
 from subscription_manager import async
 from subscription_manager.gui import progress
-from subscription_manager.gui.utils import handle_gui_exception, apply_highlight, allows_multi_entitlement, errorWindow
+from subscription_manager.gui.utils import handle_gui_exception, apply_highlight, errorWindow
 from subscription_manager.gui.contract_selection import ContractSelectionWindow
-from subscription_manager.quantity import QuantityDefaultValueCalculator, valid_quantity
+from subscription_manager.quantity import QuantityDefaultValueCalculator, valid_quantity, \
+                                          allows_multi_entitlement
 
 
 class AllSubscriptionsTab(widgets.SubscriptionManagerTab):

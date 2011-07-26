@@ -21,7 +21,7 @@ import gettext
 _ = gettext.gettext
 
 from subscription_manager.gui import widgets
-from subscription_manager.gui.utils import allows_multi_entitlement
+from subscription_manager.quantity import allows_multi_entitlement
 from subscription_manager import managerlib
 
 prefix = os.path.dirname(__file__)

@@ -14,7 +14,6 @@
 #
 
 from math import ceil
-from subscription_manager.gui.utils import flatten_attributes, allows_multi_entitlement
 
 """
 A class that calculates the default quantity value for a subscription.
@@ -33,7 +32,7 @@ class QuantityDefaultValueCalculator(object):
         self.current_entitlements = current_entitlements
 
     def calculate(self, pool):
-        product_attrs = flatten_attributes(pool, 'productAttributes')
+        product_attrs = self._flatten_attributes(pool, 'productAttributes')
 
         if not allows_multi_entitlement(pool):
             return 1
@@ -90,9 +89,30 @@ class QuantityDefaultValueCalculator(object):
         if target_dict.has_key(name) and target_dict[name]:
             value = target_dict[name]
         return float(value)
+    
+    def _flatten_attributes(self, pool_json, attribute_list_name):
+        """
+        Flatten the attributes in a pool's JSON data by attribute list name.
+        """
+        flattened = {}
+        for attribute in pool_json[attribute_list_name]:
+            flattened[attribute['name']] = attribute['value']
+    
+        return flattened
 
 def valid_quantity(quantity):
     try:
         return int(quantity) > 0
     except ValueError:
         return False
+
+def allows_multi_entitlement(pool):
+    """
+    Determine if this pool allows multi-entitlement based on the pool's
+    top-level product's multi-entitlement attribute.
+    """
+    for attribute in pool['productAttributes']:
+        if attribute['name'] == "multi-entitlement" and \
+            (attribute['value'].lower() == "yes" or attribute['value'] == "1"):
+            return True
+    return False

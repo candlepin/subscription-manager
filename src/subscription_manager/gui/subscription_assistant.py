@@ -33,8 +33,9 @@ from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.gui import storage
 from subscription_manager.gui import widgets
 from subscription_manager.gui import progress
-from subscription_manager.gui.utils import handle_gui_exception, make_today_now, allows_multi_entitlement, errorWindow
-from subscription_manager.quantity import QuantityDefaultValueCalculator, valid_quantity
+from subscription_manager.gui.utils import handle_gui_exception, make_today_now, errorWindow
+from subscription_manager.quantity import QuantityDefaultValueCalculator, valid_quantity, \
+                                            allows_multi_entitlement
 
 
 class MappedListTreeView(gtk.TreeView):
