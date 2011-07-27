@@ -36,7 +36,7 @@ from subscription_manager.gui import progress
 from subscription_manager.gui.utils import handle_gui_exception, make_today_now, errorWindow
 from subscription_manager.quantity import QuantityDefaultValueCalculator, valid_quantity, \
                                             allows_multi_entitlement
-
+from subscription_manager.jsonwrapper import PoolWrapper
 
 class MappedListTreeView(gtk.TreeView):
 
@@ -145,13 +145,18 @@ class SubscriptionAssistant(widgets.GladeWidget):
             'quantity_to_consume': int,
             'pool_id': str,
             'multi-entitlement': bool,
+            'virt_only': bool
         }
 
         self.subscriptions_store = storage.MappedListStore(subscriptions_type_map)
         self.subscriptions_treeview = MappedListTreeView(self.subscriptions_store)
         self.subscriptions_treeview.get_accessible().set_name(_("Subscription List"))
-        self.subscriptions_treeview.add_column(_("Subscription"),
-                self.subscriptions_store['product_name'], True)
+
+        # Set up the subscription column
+        column = widgets.MachineTypeColumn(_('Subscription'), self.subscriptions_store['virt_only'],
+                                           self.subscriptions_store['product_name'])
+        self.subscriptions_treeview.append_column(column)
+
         self.subscriptions_treeview.add_column(_("Available Subscriptions"),
                 self.subscriptions_store['available_subscriptions'], True)
 
@@ -383,6 +388,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
                 'quantity_to_consume': default_quantity_calculator.calculate(pool),
                 'pool_id': pool['id'],
                 'multi-entitlement': allows_multi_entitlement(pool),
+                'virt_only': PoolWrapper(pool).is_virt_only(),
             })
 
     def _get_selected_product_ids(self):

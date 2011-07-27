@@ -19,6 +19,8 @@ import gobject
 
 import gettext
 from subscription_manager.certlib import EntitlementDirectory
+from subscription_manager.gui.widgets import MachineTypeColumn
+from subscription_manager.jsonwrapper import PoolWrapper
 _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -54,8 +56,12 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.date_picker = widgets.DatePicker(today)
         self.date_picker_hbox.add(self.date_picker)
 
-        self.add_text_column(_('Subscription'), 'product_name_formatted', True,
-                True)
+        subs_col = MachineTypeColumn(_('Subscription'),
+                                     self.store['virt_only'],
+                                     self.store['product_name_formatted'],
+                                     markup=True)
+        self.top_view.append_column(subs_col)
+
         self.add_text_column(_('Available Subscriptions'), 'available')
 
         # This option should be selected by default:
@@ -76,6 +82,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def get_type_map(self):
         return {
+            'virt_only': bool,
             'product_name': str,
             'available': str,
             'product_id': str,
@@ -152,6 +159,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 available = entry.quantity - entry.consumed
 
             self.store.add_map({
+                'virt_only': PoolWrapper(entry.pools[0]).is_virt_only(),
                 'product_name': entry.product_name,
                 'product_name_formatted': \
                         apply_highlight(entry.product_name,

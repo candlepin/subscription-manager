@@ -473,3 +473,46 @@ class DatePicker(gtk.HBox):
                 tzinfo=managerlib.LocalTz())
         self.emit('date-picked-cal')
         self._destroy()
+
+
+class MachineTypeColumn(gtk.TreeViewColumn):
+    prefix = os.path.dirname(__file__)
+    PHYSICAL_MACHINE_IMG_PATH = os.path.join(prefix, "data/icons/system-physical-symbolic.svg")
+    VIRT_MACHINE_IMG_PATH = os.path.join(prefix, "data/icons/system-virtual-symbolic.svg")
+    PHYSICAL_MACHINE_PIXBUF = gtk.gdk.pixbuf_new_from_file_at_size(PHYSICAL_MACHINE_IMG_PATH, 16, 16)
+    VIRTUAL_MACHINE_PIXBUF = gtk.gdk.pixbuf_new_from_file_at_size(VIRT_MACHINE_IMG_PATH, 16, 16)
+
+    def __init__(self, column_display_value, virt_only_model_idx, text_model_index, markup=False):
+        """
+        A table colum that renders virtual/physical machine icons along side a text value.
+
+        @param column_display_value: the title placed on the column.
+        @param virt_only_model_idx: the model index containing a bool value used to
+                                    determine which icon to show.
+        @param text_model_index: the model index containing the text value to display
+                                 next to the icon.
+        """
+        self.text_renderer = gtk.CellRendererText()
+        self.image_renderer = gtk.CellRendererPixbuf()
+        self.image_renderer.set_property('xalign', 0.2)
+        gtk.TreeViewColumn.__init__(self, column_display_value, self.image_renderer)
+        self.set_expand(True)
+        self.pack_end(self.text_renderer, True)
+        self._setup_text_renderer(markup, text_model_index)
+        self.set_cell_data_func(self.image_renderer, self.render_machine_type_icon)
+
+        self.virt_only_idx = virt_only_model_idx
+
+    def render_machine_type_icon(self, column, cell_renderer, tree_model, iter):
+        virt_only = tree_model.get_value(iter, self.virt_only_idx)
+
+        if virt_only:
+            cell_renderer.set_property("pixbuf", self.VIRTUAL_MACHINE_PIXBUF)
+        else:
+            cell_renderer.set_property("pixbuf", self.PHYSICAL_MACHINE_PIXBUF)
+
+    def _setup_text_renderer(self, markup, text_model_idx):
+        if markup:
+            self.add_attribute(self.text_renderer, 'markup', text_model_idx)
+        else:
+            self.add_attribute(self.text_renderer, 'text', text_model_idx)

@@ -18,6 +18,8 @@ import gobject
 import gtk
 import gtk.glade
 import gettext
+from subscription_manager.jsonwrapper import PoolWrapper
+from subscription_manager.gui.widgets import MachineTypeColumn
 _ = gettext.gettext
 
 from subscription_manager.gui import widgets
@@ -66,7 +68,8 @@ class ContractSelectionWindow(object):
                                    gobject.TYPE_PYOBJECT,
                                    int,
                                    str,
-                                   gobject.TYPE_PYOBJECT)
+                                   gobject.TYPE_PYOBJECT,
+                                   bool)
         self.contract_selection_treeview.set_model(self.model)
 
     def show(self):
@@ -77,8 +80,8 @@ class ContractSelectionWindow(object):
         self.contract_selection_win.destroy()
 
     def populate_treeview(self):
-        renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn(_("Contract Number"), renderer, text=0)
+
+        column = MachineTypeColumn(_("Contract Number"), 7, 0)
         self.contract_selection_treeview.append_column(column)
 
         renderer = gtk.CellRendererText()
@@ -97,7 +100,6 @@ class ContractSelectionWindow(object):
         column = gtk.TreeViewColumn(_("Quantity"), self.quantity_renderer, text=4)
         self.contract_selection_treeview.append_column(column)
 
-
     def add_pool(self, pool, default_quantity_value):
         self.total_contracts += 1
         self.total_contracts_label.set_text(str(self.total_contracts))
@@ -113,7 +115,8 @@ class ContractSelectionWindow(object):
                managerlib.parseDate(pool['startDate']),
                managerlib.parseDate(pool['endDate']),
                default_quantity_value,
-               pool['productName'], pool]
+               pool['productName'], pool,
+               PoolWrapper(pool).is_virt_only()]
         self.model.append(row)
 
     def set_parent_window(self, window):
