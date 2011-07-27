@@ -320,6 +320,39 @@ class Hardware:
             platform_specific_info = DmiInfo().info
         self.allhw.update(platform_specific_info)
 
+    def _getVirtUUID(self):
+        """
+        Given a populated fact list, add on a virt.uuid fact if appropriate.
+        Partially adapted from Spacewalk's rhnreg.py, example hardware reporting
+        found in virt-what tests
+        """
+        no_uuid_platforms = ['powervm_lx86', 'xen-dom0', 'ibm_systemz']
+
+        self.allhw['virt.uuid'] = 'Unknown'
+
+        try:
+            for v in no_uuid_platforms:
+                if self.allhw['virt.host_type'].find(v) > -1:
+                    raise Exception(_("Virtualization platform does not support UUIDs"))
+        except Exception, e:
+            log.warn(_("Error finding UUID: %s"), e)
+            return #nothing more to do
+
+        #most virt platforms record UUID via DMI/SMBIOS info 
+        self.allhw['virt.uuid'] = self.allhw['dmi.system.uuid']
+
+        #potentially override DMI-determined UUID with
+        #what is on the file system (xen para-virt)
+        try:
+            uuid_file = open('/system/hypervisor/uuid', 'r')
+            uuid = uuid_file.read()
+            uuid_file.close()
+            self.allhw['virt.uuid'] = uuid.rstrip("\r\n")
+        except IOError:
+            pass
+
+        self.allhw['virt.uuid'] = self.allhw['virt.uuid'].lower()
+
     def getAll(self):
         hardware_methods = [self.getUnameInfo,
                             self.getReleaseInfo,
@@ -337,6 +370,11 @@ class Hardware:
                 hardware_method()
             except Exception, e:
                 log.warn("Hardware detection failed: %s" % e)
+
+        #we need to know the DMI info and VirtInfo before determining UUID.
+        #Thus, we can't figure it out within the main data collection loop.
+        if self.allhw['virt.is_guest']: 
+            self._getVirtUUID()
 
         import dmidecode
         dmiwarnings = dmidecode.get_warnings()
