@@ -22,12 +22,20 @@ class StubConsumer:
     def reload(self):
         pass
 
+class StubFacts:
+    def __init__(self):
+        pass
+
+    def get_facts(self):
+        return {}
+
 
 class TestManagerGuiMainWindow(unittest.TestCase):
     def test_main_window(self):
         managergui.ConsumerIdentity = stubs.StubConsumerIdentity
         managergui.Backend = StubBackend
         managergui.Consumer = StubConsumer
+        managergui.Facts = StubFacts
         managergui.MainWindow()
 
 
