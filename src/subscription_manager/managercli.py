@@ -857,7 +857,7 @@ class FactsCommand(CliCommand):
             fact_keys.sort()
             for key in fact_keys:
                 value = fact_dict[key]
-                if value == "":
+                if str(value).strip() == "":
                     value = _("Unknown")
                 print "%s: %s" % (key, value)
 
