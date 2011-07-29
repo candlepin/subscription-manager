@@ -279,10 +279,15 @@ class Hardware:
 
         try:
             host_type = self._get_output('virt-what')
-            virt_dict['virt.host_type'] = host_type
 
             # If this is blank, then not a guest
             virt_dict['virt.is_guest'] = bool(host_type)
+            if bool(host_type):
+                virt_dict['virt.is_guest'] = True
+                virt_dict['virt.host_type'] = host_type
+            else:
+                virt_dict['virt.is_guest'] = False
+                virt_dict['virt.host_type'] = "Not Applicable"
         # TODO:  Should this only catch OSErrors?
         except:
             # Otherwise there was an error running virt-what - who knows
@@ -338,7 +343,7 @@ class Hardware:
             log.warn(_("Error finding UUID: %s"), e)
             return #nothing more to do
 
-        #most virt platforms record UUID via DMI/SMBIOS info 
+        #most virt platforms record UUID via DMI/SMBIOS info
         self.allhw['virt.uuid'] = self.allhw['dmi.system.uuid']
 
         #potentially override DMI-determined UUID with
@@ -373,7 +378,7 @@ class Hardware:
 
         #we need to know the DMI info and VirtInfo before determining UUID.
         #Thus, we can't figure it out within the main data collection loop.
-        if self.allhw['virt.is_guest']: 
+        if self.allhw['virt.is_guest']:
             self._getVirtUUID()
 
         import dmidecode

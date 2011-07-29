@@ -59,7 +59,7 @@ class HardwareProbeTests(unittest.TestCase):
 
         reload(hwprobe)
         hw = hwprobe.Hardware()
-        expected = {'virt.is_guest': False, 'virt.host_type': ''}
+        expected = {'virt.is_guest': False, 'virt.host_type': 'Not Applicable'}
         self.assertEquals(expected, hw.getVirtInfo())
 
     @patch('subprocess.Popen')
