@@ -88,6 +88,10 @@ desktop-file-validate \
 # fix timestamps on our byte compiled files so them match across arches
 find $RPM_BUILD_ROOT -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 
+# fake out the redhat.repo file
+mkdir %{buildroot}%{_sysconfdir}/yum.repos.d
+touch %{buildroot}%{_sysconfdir}/yum.repos.d/redhat.repo
+
 %post -n subscription-manager-gnome
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 
@@ -114,6 +118,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
+
+#remove the repo file when we are deleted
+%ghost %{_sysconfdir}/yum.repos.d/redhat.repo
 
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/subscription-manager.conf
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/product-id.conf
@@ -751,7 +758,7 @@ fi
 - Adding vertical pane to my subscriptions tab (jharris@redhat.com)
 
 * Mon Dec 20 2010 Devan Goodwin <dgoodwin@redhat.com> 0.93.7-1
-- Resolves: #664538 
+- Resolves: #664538
 
 * Mon Dec 20 2010 Devan Goodwin <dgoodwin@redhat.com> 0.93.6-1
 - More import fixes. (dgoodwin@redhat.com)
