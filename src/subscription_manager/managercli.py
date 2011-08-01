@@ -580,7 +580,7 @@ class RegisterCommand(UserPassCommand):
 
         if self.options.autosubscribe:
             autosubscribe(admin_cp, consumer['uuid'], self.certlib)
-        if self.options.consumerid:
+        if (self.options.consumerid or self.options.activation_keys):
             self.certlib.update()
 
         self._request_validity_check()
