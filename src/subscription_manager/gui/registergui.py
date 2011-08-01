@@ -36,7 +36,7 @@ from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.branding import get_branding
 from subscription_manager.pkgprofile import ProfileManager
 
-from subscription_manager.gui import activate
+from subscription_manager.gui import redeem
 from subscription_manager.gui import factsgui
 from subscription_manager.gui import widgets
 from subscription_manager.gui.installedtab import InstalledProductsTab

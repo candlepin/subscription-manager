@@ -24,25 +24,25 @@ _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-class ActivationDialog(widgets.GladeWidget):
-    """GTK dialog for allowing the user to activate any subscriptions
+class RedeemDialog(widgets.GladeWidget):
+    """GTK dialog for allowing the user to redeem any subscriptions
     associated with this machine.
     """
 
     def __init__(self, backend, consumer):
-        widget_names = ['activate_dialog', 'email_entry']
-        super(ActivationDialog, self).__init__('activate.glade', widget_names)
+        widget_names = ['redeem_dialog', 'email_entry']
+        super(RedeemDialog, self).__init__('redeem.glade', widget_names)
 
         self.glade.signal_autoconnect({
-            "on_activate_dialog_delete_event": self._hide_callback,
+            "on_reeem_dialog_delete_event": self._hide_callback,
             "on_close_button_clicked": self._hide_callback,
-            "on_activate_button_clicked": self._activate,
+            "on_redeem_button_clicked": self._redeem,
         })
 
         self.backend = backend
         self.consumer = consumer
 
-    def _activate(self, button):
+    def _redeem(self, button):
         email = self.email_entry.get_text()
 
         # TODO:  Validate email address?
@@ -51,19 +51,19 @@ class ActivationDialog(widgets.GladeWidget):
             self.hide()
         except Exception, e:
             handle_gui_exception(e,
-                _("Error activating subscription: %s"))
+                _("Error redeeming subscription: %s"))
 
     # Pulled from facts dialog - TODO:  Refactor!
     def show(self):
         """Make this dialog visible."""
-        self.activate_dialog.present()
+        self.redeem_dialog.present()
 
     def hide(self):
         """Make this dialog invisible."""
-        self.activate_dialog.hide()
+        self.redeem_dialog.hide()
 
     def set_parent_window(self, window):
-        self.activate_dialog.set_transient_for(window)
+        self.redeem_dialog.set_transient_for(window)
 
     # GTK callback function for hiding this dialog.
     def _hide_callback(self, button, event=None):

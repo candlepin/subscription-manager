@@ -2,14 +2,14 @@
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy project-wide -->
-  <widget class="GtkDialog" id="activate_dialog">
+  <widget class="GtkDialog" id="redeem_dialog">
     <property name="border_width">5</property>
-    <property name="title" translatable="yes">Subscription Activation</property>
+    <property name="title" translatable="yes">Subscription Redemption</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
-    <signal name="delete_event" handler="on_activate_dialog_delete_event"/>
+    <signal name="delete_event" handler="on_redeem_dialog_delete_event"/>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -22,9 +22,9 @@
             <child>
               <widget class="GtkLabel" id="label2">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Activating your machine may take a few minutes.
+                <property name="label" translatable="yes">Redeeming the subscription may take a few minutes.
 Please provide an email address to receive notification
-when the activation is complete.</property>
+when the redemption is complete.</property>
               </widget>
               <packing>
                 <property name="position">0</property>
@@ -92,12 +92,12 @@ when the activation is complete.</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="activate_button">
-                <property name="label" translatable="yes">Activate</property>
+              <widget class="GtkButton" id="redeem_button">
+                <property name="label" translatable="yes">Redeem</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_activate_button_clicked"/>
+                <signal name="clicked" handler="on_redeem_button_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>

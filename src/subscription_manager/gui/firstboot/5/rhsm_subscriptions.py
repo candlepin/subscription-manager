@@ -39,7 +39,7 @@ class moduleClass(FirstbootModuleWindow, managergui.MainWindow):
         self.register_button.hide()
         self.unregister_button.hide()
 
-    def _show_activation_buttons(self):
+    def _show_redemption_buttons(self):
         """
         Override the parent class to first put the button where the
         register/unregister button would be (so we take up less horizontal
@@ -47,8 +47,8 @@ class moduleClass(FirstbootModuleWindow, managergui.MainWindow):
         be shown.
         """
         parent = self.register_button.get_parent()
-        self.activate_button.reparent(parent)
-        managergui.MainWindow._show_activation_buttons(self)
+        self.redeem_button.reparent(parent)
+        managergui.MainWindow._show_redemption_buttons(self)
 
     def apply(self, interface, testing=False):
         return True

@@ -206,12 +206,12 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkButton" id="activate_button">
-                            <property name="label" translatable="yes">Activate a Subscription</property>
+                          <widget class="GtkButton" id="redeem_button">
+                            <property name="label" translatable="yes">Redeem a Subscription</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="no_show_all">True</property>
-                            <signal name="clicked" handler="on_activate_button_clicked"/>
+                            <signal name="clicked" handler="on_redeem_button_clicked"/>
                           </widget>
                           <packing>
                             <property name="left_attach">2</property>

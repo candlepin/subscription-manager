@@ -39,7 +39,7 @@ from subscription_manager.certlib import ProductDirectory, EntitlementDirectory,
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.branding import get_branding
 
-from subscription_manager.gui import activate
+from subscription_manager.gui import redeem
 from subscription_manager.gui import factsgui
 from subscription_manager.gui import widgets
 from subscription_manager.gui.installedtab import InstalledProductsTab
@@ -182,7 +182,7 @@ class MainWindow(widgets.GladeWidget):
               ['main_window', 'notebook', 'subscription_status_label',
                'subscription_status_image', 'system_name_label',
                'next_update_label', 'next_update_title', 'register_button',
-               'unregister_button', 'update_certificates_button', 'activate_button'])
+               'unregister_button', 'update_certificates_button', 'redeem_button'])
 
         self.backend = Backend()
         self.consumer = Consumer()
@@ -203,7 +203,7 @@ class MainWindow(widgets.GladeWidget):
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
         self.network_config_dialog.xml.get_widget("closeButton").connect("clicked", self._config_changed)
 
-        self.activate_dialog = activate.ActivationDialog(self.backend, self.consumer)
+        self.redeem_dialog = redeem.RedeemDialog(self.backend, self.consumer)
 
         self.installed_tab = InstalledProductsTab(self.backend, self.consumer,
                 self.facts)
@@ -223,7 +223,7 @@ class MainWindow(widgets.GladeWidget):
             "on_view_facts_button_clicked": self._facts_button_clicked,
             "on_proxy_config_button_clicked":
                 self._network_config_button_clicked,
-            "on_activate_button_clicked": self._activate_button_clicked,
+            "on_redeem_button_clicked": self._redeem_button_clicked,
         })
 
         # Register callback for when product/entitlement certs are updated
@@ -269,7 +269,7 @@ class MainWindow(widgets.GladeWidget):
         self.my_subs_tab.refresh()
 
         self._show_buttons()
-        self._show_activation_buttons()
+        self._show_redemption_buttons()
 
     def _get_window(self):
         """
@@ -289,21 +289,21 @@ class MainWindow(widgets.GladeWidget):
             self.register_button.show()
             self.unregister_button.hide()
 
-    def _show_activation_buttons(self):
-        # Check if consumer can activate a subscription - if an identity cert exists
-        can_activate = False
+    def _show_redemption_buttons(self):
+        # Check if consumer can redeem a subscription - if an identity cert exists
+        can_redeem= False
 
         if self.consumer.uuid:
             try:
                 consumer = self.backend.uep.getConsumer(self.consumer.uuid, None, None)
-                can_activate = consumer['canActivate']
+                can_redeem = consumer['canActivate']
             except:
-                can_activate = False
+                can_redeem = False
 
-        if can_activate:
-            self.activate_button.show()
+        if can_redeem:
+            self.redeem_button.show()
         else:
-            self.activate_button.hide()
+            self.redeem_button.hide()
 
     def _register_button_clicked(self, widget):
         self.registration_dialog.set_parent_window(self._get_window())
@@ -354,9 +354,9 @@ class MainWindow(widgets.GladeWidget):
                 _("You must register before using the subscription assistant.")),
                 self._get_window())
 
-    def _activate_button_clicked(self, widget):
-        self.activate_dialog.set_parent_window(self._get_window())
-        self.activate_dialog.show()
+    def _redeem_button_clicked(self, widget):
+        self.redeem_dialog.set_parent_window(self._get_window())
+        self.redeem_dialog.show()
 
     def _config_changed(self, widget):
         # update the backend's UEP in case we changed proxy
