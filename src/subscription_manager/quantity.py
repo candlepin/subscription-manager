@@ -23,7 +23,7 @@ class QuantityDefaultValueCalculator(object):
     _SOCKETS_PROD_ATTR_NAME = 'sockets'
 
     _CPUS_FACT_NAME = 'cpu.cpu(s)'
-    _CPUS_PROD_ATTR_NAME = 'cpus'
+    _CPUS_PROD_ATTR_NAME = 'vcpu'
 
     _VIRT_IS_GUEST_FACT_NAME = "virt.is_guest"
 
@@ -68,7 +68,7 @@ class QuantityDefaultValueCalculator(object):
 
     def _get_allowed_quantity_for_virtual_machine(self, product_attrs):
         # Default for physical machine is calculated as:
-        # machine cpus / product cpus
+        # machine cpus / product vcpu
         machine_cpus = self._get_float_from_dict(self.fact_dict, self._CPUS_FACT_NAME)
         product_cpus = self._get_float_from_dict(product_attrs, self._CPUS_PROD_ATTR_NAME)
         return ceil(machine_cpus / product_cpus)
