@@ -666,12 +666,12 @@ class RedeemCommand(CliCommand):
         CliCommand.__init__(self, "redeem", usage, shortdesc, desc)
 
         self.parser.add_option("--email", dest="email", action='store',
-                               help=_("optional email address to notify when "
-                               "subscription activation is complete."))
+                               help=_("Email address to notify when "
+                               "subscription redemption is complete."))
         self.parser.add_option("--locale", dest="locale", action='store',
-                               help=_("optional language to use for email "
-                               "notification when subscription activation is "
-                               "complete. Used with --email only. Examples: en-us, de-de"))
+                               help=_("Optional language to use for email "
+                               "notification when subscription redemption is "
+                               "complete. Examples: en-us, de-de"))
 
     def _validate_options(self):
         pass
