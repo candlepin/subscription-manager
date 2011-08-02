@@ -939,7 +939,6 @@ class ListCommand(CliCommand):
 
         self._validate_options()
 
-        consumer = check_registration()['uuid']
         if self.options.installed:
             iproducts = managerlib.getInstalledProductStatus()
             if not len(iproducts):
@@ -952,6 +951,7 @@ class ListCommand(CliCommand):
                 print constants.installed_product_status % product
 
         if self.options.available:
+            consumer = check_registration()['uuid']
             on_date = None
             if self.options.on_date:
                 try:
