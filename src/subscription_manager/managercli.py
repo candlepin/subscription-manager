@@ -374,7 +374,7 @@ class OwnersCommand(UserPassCommand):
 
     def __init__(self):
         usage = "usage: %prog orgs [OPTIONS]"
-        shortdesc = _("Display the orgs available for a user")
+        shortdesc = _("Display the orgs against which a user can register a system")
         desc = shortdesc
 
         super(OwnersCommand, self).__init__("orgs", usage, shortdesc,
