@@ -558,6 +558,7 @@ class RegisterCommand(UserPassCommand):
 
                 environment_id = self._get_environment_id(admin_cp, owner_key,
                         self.options.environment)
+
                 consumer = admin_cp.registerConsumer(name=consumername,
                      type=self.options.consumertype, facts=self.facts.get_facts(),
                      owner=owner_key, environment=environment_id, keys=self.options.activation_keys)
@@ -610,6 +611,9 @@ class RegisterCommand(UserPassCommand):
             return self.options.org
 
         owners = cp.getOwnerList(self.username)
+
+        if len(owners) == 0:
+            systemExit(-1, _("%s cannot register to any organizations.") % self.username)
         if len(owners) == 1:
             return owners[0]['key']
         # TODO: should we let the None key go, or just assume the server will

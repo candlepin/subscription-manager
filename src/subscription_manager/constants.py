@@ -68,3 +68,5 @@ UNREGISTER_ERROR = _("<b>Errors were encountered during unregister.</b>\n%s\nPle
 REGISTER_ERROR = _("<b>Unable to register the system.</b>\n\n %s\n\nPlease see /var/log/rhsm/rhsm.log for more information.")
 
 CONFIRM_UNREGISTER = _("<b>Are you sure you want to unregister?</b>")
+
+NO_ORG_ERROR = _("<b>User %s is not able to register with any orgs.</b>")

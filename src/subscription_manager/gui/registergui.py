@@ -120,7 +120,7 @@ class RegisterScreen:
         self.uname = registration_xml.get_widget("account_login")
         self.passwd = registration_xml.get_widget("account_password")
         self.consumer_name = registration_xml.get_widget("consumer_name")
-        
+
         self.register_notebook = \
                 registration_xml.get_widget("register_notebook")
         self.register_progressbar = \
@@ -218,6 +218,12 @@ class RegisterScreen:
             return
 
         owners = [(owner['key'], owner['displayName']) for owner in owners]
+
+        if len(owners) == 0:
+            handle_gui_exception(None, (constants.NO_ORG_ERROR % (self.uname.get_text().strip())))
+            self._finish_registration(failed=True)
+            return
+
         if len(owners) == 1:
             self.owner_key = owners[0][0]
             self.async.get_environment_list(self.owner_key, self._on_get_environment_list_cb)
@@ -228,7 +234,7 @@ class RegisterScreen:
                 owner_model.append(owner)
 
             self.owner_treeview.set_model(owner_model)
-            
+
             self.owner_treeview.get_selection().select_iter(
                     owner_model.get_iter_first())
 
@@ -409,11 +415,11 @@ class AsyncBackend(object):
             retval = None
             # If environments aren't supported, don't bother trying to list:
             if self.backend.admin_uep.supports_resource('environments'):
-                log.info("Server supports environments, checking for environment to " 
+                log.info("Server supports environments, checking for environment to "
                         "register to.")
                 retval = []
                 for env in self.backend.admin_uep.getEnvironmentList(owner_key):
-                    # We need to ignore the "locker" environment, you can't 
+                    # We need to ignore the "locker" environment, you can't
                     # register to it:
                     if env['name'].lower() != LOCKER_ENV_NAME.lower():
                         retval.append(env)
