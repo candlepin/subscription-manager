@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.4
+Version: 0.96.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -220,6 +220,85 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Aug 03 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.5-1
+- I18N update. (dgoodwin@redhat.com)
+- check that dmi info was populated before attempting to query it
+  (cduryee@redhat.com)
+- 718205: Block read only users from registering via the command line and gui
+  (bkearney@redhat.com)
+- 727600: Ensure that the help messages for the new redeem action are
+  consistent (bkearney@redhat.com)
+- 725870: Do not require registration for some list commands.
+  (dgoodwin@redhat.com)
+- Updated default quantity calc to use product's vcpu for virt machine
+  (mstead@redhat.com)
+- Added MachineType to CLI list --available to indicate  whether pool is for
+  physical/virtual machine. (mstead@redhat.com)
+- Added icons to tables to identify whether a pool is for physical/virtual
+  machine. (mstead@redhat.com)
+- 726791: Rename subscriptoin activation to redemption (bkearney@redhat.com)
+- Refresh the entitlements after activation key registration
+- 717052: Removing the rpm should remove the redhat repo file
+  (bkearney@redhat.com)
+- 726440: Make host type 'Not Applicable' when guest is false
+  (bkearney@redhat.com)
+- Add virt.uuid reporting to facts (cduryee@redhat.com)
+- 703997: fix a11y handler clash in subscription assistant (jbowes@redhat.com)
+- 722248: Modify all blank facts to be 'Unknown' (bkearney@redhat.com)
+- 725609: Refactored code so that GTK module is not loaded when running CLI.
+  (mstead@redhat.com)
+- 723248: Correctly update quantity when Subscribe button is
+  clicked and quantity still in edit mode. (mstead@redhat.com)
+- 723248: Validate quantity is greater than 0 before subscribe
+  (mstead@redhat.com)
+- Set defaults for quantity values in subscription assistant and contract
+  selector (mstead@redhat.com)
+- handle empty product names in list command (alikins@redhat.com)
+- 719378: remove leading and trailing spaces in the username
+  (bkearney@redhat.com)
+- 722554: Improve error checking on the subscription quantity
+  (bkearney@redhat.com)
+- 723336: Cert deaemon was not using the refactored CertSorter class
+  (bkearney@redhat.com)
+- 724809: Support the repos call without logging in. (bkearney@redhat.com)
+- 722239: CLI and GUI should show the same facts (bkearney@redhat.com)
+- 719109: Added feedback for identity regeneration (bkearney@redhat.com)
+- 706889: Fix -1 printed from CLI when exiting with Python 2.4.
+  (dgoodwin@redhat.com)
+- 719739: Make CLI orgs command more informative. (dgoodwin@redhat.com)
+- Use polling file monitor impl instead of GIO. (mstead@redhat.com)
+- 723363: Fixed unsubscribe when system is not registered. (mstead@redhat.com)
+- 720045: Add a period at the end of the output (bkearney@redhat.com)
+- 712980: Support importing single file containing key/certificate
+  (mstead@redhat.com)
+- 712415: Make the names consistent between list --installed and list
+  --consumed (bkearney@redhat.com)
+- 717664: Improve the usability of subscribes (bkearney@redhat.com)
+- 720045: Fixed the header files in yum repolist (bkearney@redhat.com)
+- 722281: Fixed type in output for facts being updated (bkearney@redhat.com)
+- 722334: Display quantity used in list --consumed. (dgoodwin@redhat.com)
+- Show contract selection dialog when there is only one pool and is multi-
+  entitled (mstead@redhat.com)
+- Check for socket counts in entitlement checks (alikins@redhat.com)
+- 714306: Make subscription details accessability unique (bkearney@redhat.com)
+- 717395: Add accessability strings to the owner and environment selection
+  dialogs (bkearney@redhat.com)
+- show stacking id in subscriptions detail pane (alikins@redhat.com)
+- try to find pools that "stack" and validate that we have enough sockets to
+  make them valid. (alikins@redhat.com)
+- Add in primary versus secondary modules to try and focus the user on which
+  ones to pick (bkearney@redhat.com)
+- Find and send owner key during CLI registration if possible.
+  (dgoodwin@redhat.com)
+- 707525 - Facts update command displays success (mstead@redhat.com)
+- 713164: fixes some strange phrases on pt_BR translation (mmello@redhat.com)
+- Get owner select working with firstboot (jbowes@redhat.com)
+- Hook up owner selection during registration (jbowes@redhat.com)
+- Make autosubscribe its own async step during register (jbowes@redhat.com)
+- make the initial registration call async, and pulse a progress bar
+  (jbowes@redhat.com)
+- Move register screen to its own module (jbowes@redhat.com)
+
 * Wed Jul 13 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.4-1
 - Add ability to select larger quantity on subscribe (mstead@redhat.com)
 - 717734: Allow double clicking on fact dialog rows to support exanding and
