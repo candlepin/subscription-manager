@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.96.7
+Version: 0.96.8
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -57,6 +57,10 @@ rm -rf %{buildroot}
 %{python_sitelib}/rhsm-*.egg-info
 
 %changelog
+* Wed Aug 03 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.8-1
+- 719378: Encode whitespace in urls (bkearney@redhat.com)
+- Change package profile upload url. (dgoodwin@redhat.com)
+
 * Wed Jul 13 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.7-1
 - Logging cleanup. (dgoodwin@redhat.com)
 - Remove unused add_ssl_certs method. (dgoodwin@redhat.com)
