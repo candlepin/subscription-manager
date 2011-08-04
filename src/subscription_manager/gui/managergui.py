@@ -71,8 +71,6 @@ key_file = ConsumerIdentity.keypath()
 cfg = config.initConfig()
 
 
-
-
 class Backend(object):
     """
     Wrapper for sharing UEP connections to Candlepin.
@@ -172,6 +170,7 @@ class Consumer(object):
 
     def getConsumerId(self):
         return self.uuid
+
 
 class MainWindow(widgets.GladeWidget):
     """
@@ -291,7 +290,7 @@ class MainWindow(widgets.GladeWidget):
 
     def _show_redemption_buttons(self):
         # Check if consumer can redeem a subscription - if an identity cert exists
-        can_redeem= False
+        can_redeem = False
 
         if self.consumer.uuid:
             try:
@@ -403,4 +402,3 @@ class MainWindow(widgets.GladeWidget):
     def _on_rhn_classic_response(self, dialog, response):
         if not response:
             self.main_window.hide()
-
