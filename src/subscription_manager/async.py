@@ -27,15 +27,15 @@ class AsyncPool(object):
         self.pool = pool
         self.queue = Queue.Queue()
 
-    def _run_refresh(self, active_on, callback):
+    def _run_refresh(self, active_on, callback, data):
         """
         method run in the worker thread.
         """
         try:
             self.pool.refresh(active_on)
-            self.queue.put((callback, None))
+            self.queue.put((callback, data, None))
         except Exception, e:
-            self.queue.put((callback, e))
+            self.queue.put((callback, data, e))
 
     def _watch_thread(self):
         """
@@ -43,19 +43,16 @@ class AsyncPool(object):
         runs the provided callback method in the main thread.
         """
         try:
-            (callback, error) = self.queue.get(block=False)
-            if error:
-                callback(error=error)
-            else:
-                callback()
+            (callback, data, error) = self.queue.get(block=False)
+            callback(data, error)
             return False
         except Queue.Empty:
             return True
 
-    def refresh(self, active_on, callback):
+    def refresh(self, active_on, callback, data=None):
         """
         Run pool stash refresh asynchronously.
         """
         gobject.idle_add(self._watch_thread)
         threading.Thread(target=self._run_refresh,
-                args=(active_on, callback)).start()
+                args=(active_on, callback, data)).start()

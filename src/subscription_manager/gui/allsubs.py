@@ -205,7 +205,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         except Exception, e:
             handle_gui_exception(e, _("Error fetching subscriptions from server:  %s"))
 
-    def _update_display(self, error=None):
+    def _update_display(self, data, error):
         if self.pb:
             self.pb.hide()
             gobject.source_remove(self.timer)

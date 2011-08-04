@@ -217,7 +217,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
     def set_parent_window(self, window):
         self.window.set_transient_for(window)
 
-    def _reload_callback(self, error=None):
+    def _reload_callback(self, product_ids, error):
         if self.pb:
             self.pb.hide()
             gobject.source_remove(self.timer)
@@ -229,7 +229,10 @@ class SubscriptionAssistant(widgets.GladeWidget):
                                  _("Unable to search for subscriptions"),
                                  formatMsg=False)
         else:
+            # order here is important, to show subs that match the
+            # reselected products.
             self._display_invalid()
+            self._reselect_products(product_ids)
             self._display_subscriptions()
 
     def _reload_screen(self):
@@ -255,14 +258,29 @@ class SubscriptionAssistant(widgets.GladeWidget):
             self.providing_subs_label.set_label(
                     _("The following subscriptions will cover the products selected on %s") % invalid_date.strftime("%x"))
 
+
+        # grab a list of the highlighted products, so we can reselect them
+        # after we refresh the screen (less any ones that are covered by a
+        # subscription)
+        product_ids = self._get_selected_product_ids()
+
         async_stash = async.AsyncPool(self.pool_stash)
-        async_stash.refresh(invalid_date, self._reload_callback)
+        async_stash.refresh(invalid_date, self._reload_callback, product_ids)
 
         # show pulsating progress bar while we wait for results
         self.pb = progress.Progress(
                 _("Searching for subscriptions. Please wait."))
         self.timer = gobject.timeout_add(100, self.pb.pulse)
         self.pb.set_parent_window(self.window)
+
+    def _reselect_products(self, product_ids):
+        """
+        Reselect previously selected invalid products.
+        Used after a screen reload.
+        """
+        for row in self.invalid_store:
+            if row[self.invalid_store['product_id']] in product_ids:
+                row[self.invalid_store['active']] = True
 
     def _label_allocate(self, label, allocation):
         label.set_size_request(allocation.width - 2, -1)
