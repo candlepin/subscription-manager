@@ -63,7 +63,8 @@ def handle_exception(msg, ex):
     log.error(msg)
     log.exception(ex)
     if isinstance(ex, socket.error):
-        print _('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.')
+        print _("""Network error, unable to connect to server.
+ Please see /var/log/rhsm/rhsm.log for more information.""")
         sys.exit(-1)
     elif isinstance(ex, connection.NetworkException):
         # NOTE: yes this looks a lot like the socket error, but I think these
