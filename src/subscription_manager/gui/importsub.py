@@ -98,6 +98,7 @@ class ImportSubDialog(widgets.GladeWidget):
     def set_parent_window(self, window):
         self.main_dialog.set_transient_for(window)
 
+
 class ImportFileExtractor(object):
     """
     Responsible for checking an import file and pulling cert and key from it.
@@ -141,9 +142,9 @@ class ImportFileExtractor(object):
             self.parts = self._process_content(content)
 
     def _read(self, file_path):
-        file = open(file_path, "r")
-        file_content = file.read()
-        file.close()
+        fd = open(file_path, "r")
+        file_content = fd.read()
+        fd.close()
         return file_content
 
     def _process_content(self, content):
@@ -167,17 +168,17 @@ class ImportFileExtractor(object):
         return part_dict
 
     def contains_key_content(self):
-        return self.parts.has_key(self._KEY_DICT_TAG)
+        return self._KEY_DICT_TAG in self.parts
 
     def get_key_content(self):
         key_content = None
-        if self.parts.has_key(self._KEY_DICT_TAG):
+        if self._KEY_DICT_TAG in self.parts:
             key_content = self.parts[self._KEY_DICT_TAG]
         return key_content
 
     def get_cert_content(self):
         cert_content = None
-        if self.parts.has_key(self._CERT_DICT_TAG):
+        if self._CERT_DICT_TAG in self.parts:
             cert_content = self.parts[self._CERT_DICT_TAG]
         return cert_content
 
