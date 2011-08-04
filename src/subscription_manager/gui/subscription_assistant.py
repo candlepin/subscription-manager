@@ -38,6 +38,7 @@ from subscription_manager.quantity import QuantityDefaultValueCalculator, valid_
                                             allows_multi_entitlement
 from subscription_manager.jsonwrapper import PoolWrapper
 
+
 class MappedListTreeView(gtk.TreeView):
 
     def add_toggle_column(self, name, column_number, callback):
@@ -197,9 +198,10 @@ class SubscriptionAssistant(widgets.GladeWidget):
         """ Handles when a quantity is changed in the cell """
         try:
             new_quantity = int(new_text)
-            iter = self.subscriptions_store.get_iter(path)
-            self.subscriptions_store.set_value(iter, self.subscriptions_store['quantity_to_consume'], new_quantity)
-        except ValueError, e:
+            # iter_ref is a terrible name, but iter is a keyword
+            iter_ref = self.subscriptions_store.get_iter(path)
+            self.subscriptions_store.set_value(iter_ref, self.subscriptions_store['quantity_to_consume'], new_quantity)
+        except ValueError:
             # Do nothing... The value entered in the grid will be reset.
             pass
 
