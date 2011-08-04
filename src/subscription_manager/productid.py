@@ -143,7 +143,6 @@ class ProductManager:
                 continue
             fn = '%s.pem' % prod_hash
             path = self.pdir.abspath(fn)
-            print _('installing: %s') % fn
             cert.write(path)
             self.db.add(prod_hash, repo)
             self.db.write()
@@ -157,7 +156,6 @@ class ProductManager:
                 continue
             if repo in active:
                 continue
-            print _('deleting: %s') % cert.path
             cert.delete()
             self.db.delete(prod_hash)
             self.db.write()
