@@ -29,10 +29,10 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 class Facts:
     """
-    Manages the facts for this system, maintains a cache of the most 
+    Manages the facts for this system, maintains a cache of the most
     recent set sent to server, and checks for changes.
-    
-    Includes both those hard coded in the app itself, as well as custom 
+
+    Includes both those hard coded in the app itself, as well as custom
     facts to be loaded from /etc/rhsm/facts/.
     """
 
@@ -146,7 +146,7 @@ class Facts:
         # point
 
         # figure out if we think we have valid entitlements
-        # NOTE: we don't need 
+        # NOTE: we don't need
         if check_entitlements:
             sorter = cert_sorter.CertSorter(certlib.ProductDirectory(),
                                             certlib.EntitlementDirectory(),

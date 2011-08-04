@@ -158,7 +158,7 @@ class TestFacts(unittest.TestCase):
         self.f.fact_cache_dir = fact_cache_dir
         self.f.fact_cache = fact_cache
 
-        self.f.facts = {'empty.facts': 1, 'otherthing': True} 
+        self.f.facts = {'empty.facts': 1, 'otherthing': True}
         self.f.write_cache()
 
         new_facts_buf = open(fact_cache).read()

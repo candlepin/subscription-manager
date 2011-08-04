@@ -46,6 +46,7 @@ class ActionLock(Lock):
     def __init__(self):
         Lock.__init__(self, self.PATH)
 
+
 class DataLib:
 
     def __init__(self, lock=ActionLock(), uep=None):
@@ -59,10 +60,10 @@ class DataLib:
             return self._do_update()
         finally:
             lock.release()
-            
+
     def _do_update(self):
         return
-        
+
 
 class CertLib(DataLib):
 
@@ -75,8 +76,8 @@ class CertLib(DataLib):
         try:
             return self._do_delete(serialNumbers)
         finally:
-            lock.release()   
-            
+            lock.release()
+
     def _do_update(self):
         action = UpdateAction(uep=self.uep)
         return action.perform()
@@ -128,7 +129,7 @@ class UpdateAction(Action):
         self.purgeExpired(report)
         log.info('certs updated:\n%s', report)
         self.syslogResults(report)
-        # WARNING: TODO: XXX: this is returning a tuple, the parent class and 
+        # WARNING: TODO: XXX: this is returning a tuple, the parent class and
         # all other sub-classes return an int, which somewhat defeats the purpose...
         return (report.updates(), exceptions)
 
@@ -626,8 +627,6 @@ class UpdateReport:
         self.write(s, _('Expired (not deleted):'), self.expnd)
         self.write(s, _('Expired (deleted):'), self.expd)
         return '\n'.join(s)
-
-
 
 
 def find_first_invalid_date(ent_dir=None, product_dir=None):

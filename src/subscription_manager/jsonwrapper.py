@@ -14,6 +14,7 @@
 
 # This module contains wrappers for JSON returned from the CP server.
 
+
 class PoolWrapper(object):
 
     def __init__(self, pool_json):

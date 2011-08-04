@@ -12,9 +12,10 @@
 #
 
 import unittest
-from mock import Mock 
+from mock import Mock
 import simplejson as json
 
+# used to get a user readable cfg class for test cases
 import stubs
 
 from subscription_manager.pkgprofile import *
@@ -59,7 +60,7 @@ class TestProfileManager(unittest.TestCase):
 
         self.profile_mgr.update_check(uep, uuid)
 
-        uep.updatePackageProfile.assert_called_with(uuid, 
+        uep.updatePackageProfile.assert_called_with(uuid,
                 FACT_MATCHER)
         self.assertEquals(1, self.profile_mgr._write_cached_profile.call_count)
 
@@ -87,7 +88,7 @@ class TestProfileManager(unittest.TestCase):
         uep.updatePackageProfile = Mock(side_effect=Exception('BOOM!'))
 
         self.assertRaises(Exception, self.profile_mgr.update_check, uep, uuid)
-        uep.updatePackageProfile.assert_called_with(uuid, 
+        uep.updatePackageProfile.assert_called_with(uuid,
                 FACT_MATCHER)
         self.assertEquals(0, self.profile_mgr._write_cached_profile.call_count)
 
@@ -133,5 +134,3 @@ class TestProfileManager(unittest.TestCase):
 
         mock_profile = RPMProfile(from_file=mock_file)
         return mock_profile
-
-

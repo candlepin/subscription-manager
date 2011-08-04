@@ -22,6 +22,7 @@ Perfers to use gio as the backend, but can fallback to polling.
 import gobject
 import os
 
+
 class Monitor(gobject.GObject):
 
     __gsignals__ = {

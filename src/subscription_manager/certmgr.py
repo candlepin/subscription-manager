@@ -32,7 +32,7 @@ _ = gettext.gettext
 
 class CertManager:
     """
-    An object used to update the certficates, yum repos, and facts for 
+    An object used to update the certficates, yum repos, and facts for
     the system.
 
     @ivar certlib: The RHSM I{entitlement} certificate management lib.
@@ -62,9 +62,9 @@ class CertManager:
             lock.acquire()
             for lib in (self.repolib, self.factlib, self.profilelib):
                 updates += lib.update()
-            
+
             # WARNING
-            # Certlib inherits DataLib as well as the above 'lib' objects, 
+            # Certlib inherits DataLib as well as the above 'lib' objects,
             # but for some reason it's update method returns a tuple instead
             # of an int:
             ret = self.certlib.update()
@@ -89,12 +89,11 @@ def main():
     print _('%d updates required') % updates
     print _('done')
 
-# WARNING: This is not a block of code used to test, this module is 
+# WARNING: This is not a block of code used to test, this module is
 # actually run as a script via cron to periodically update the system's
 # certificates, yum repos, and facts.
 if __name__ == '__main__':
     import logging
-    import sys
     import logutil
     logutil.init_logger()
     log = logging.getLogger('rhsm-app.' + __name__)

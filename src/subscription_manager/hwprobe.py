@@ -341,7 +341,7 @@ class Hardware:
                     raise Exception(_("Virtualization platform does not support UUIDs"))
         except Exception, e:
             log.warn(_("Error finding UUID: %s"), e)
-            return #nothing more to do
+            return  #nothing more to do
 
         #most virt platforms record UUID via DMI/SMBIOS info. 
         if 'dmi.system.uuid' in self.allhw:

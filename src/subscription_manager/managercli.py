@@ -29,7 +29,6 @@ from M2Crypto import X509
 from M2Crypto import SSL
 
 import gettext
-from _xmlplus.schema.trex import validate
 from subscription_manager.jsonwrapper import PoolWrapper
 _ = gettext.gettext
 
@@ -411,6 +410,7 @@ class OwnersCommand(UserPassCommand):
         except Exception, e:
             handle_exception(_("Error: Unable to retrieve org list from Entitlement Platform"), e)
 
+
 class EnvironmentsCommand(UserPassCommand):
 
     def __init__(self):
@@ -549,7 +549,6 @@ class RegisterCommand(UserPassCommand):
                                     proxy_user=self.proxy_user,
                                     proxy_password=self.proxy_password)
 
-
             if self.options.consumerid:
             #TODO remove the username/password
                 consumer = admin_cp.getConsumer(self.options.consumerid,
@@ -579,7 +578,6 @@ class RegisterCommand(UserPassCommand):
 
         profile_mgr = ProfileManager()
         profile_mgr.update_check(admin_cp, consumer['uuid'])
-
 
         if self.options.autosubscribe:
             autosubscribe(admin_cp, consumer['uuid'], self.certlib)
@@ -795,9 +793,6 @@ class UnSubscribeCommand(CliCommand):
         self.parser.add_option("--all", dest="all", action="store_true",
                                help=_("Unsubscribe from all subscriptions"))
 
-    def _validate_options(self):
-        CliCommand._validate_options(self)
-
     def _do_command(self):
         """
         Executes the command.
@@ -873,6 +868,7 @@ class FactsCommand(CliCommand):
             facts.update_check(self.cp, consumer, force=True)
             print _("Successfully updated the system facts.")
 
+
 class ReposCommand(CliCommand):
 
     def __init__(self):
@@ -906,6 +902,7 @@ class ReposCommand(CliCommand):
                         repo["enabled"])
             else:
                 print _("The system is not entitled to use any repositories.")
+
 
 class ListCommand(CliCommand):
 
@@ -979,7 +976,7 @@ class ListCommand(CliCommand):
                 product_name = self._format_name(data['productName'], 24, 80)
 
                 if PoolWrapper(data).is_virt_only():
-                    machine_type =  machine_type = _("virtual")
+                    machine_type = machine_type = _("virtual")
                 else:
                     machine_type = _("physical")
 
@@ -1064,8 +1061,6 @@ class CLI:
             if (not cmd.primary):
                 print("\t%-14s %-25s" % (name, cmd.shortdesc))
         print("")
-
-
 
     def _find_best_match(self, args):
         """

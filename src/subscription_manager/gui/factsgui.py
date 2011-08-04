@@ -55,7 +55,7 @@ class SystemFactsDialog(widgets.GladeWidget):
         self._add_column(_("Value"), 1)
 
         # set up the signals from the view
-        self.facts_view.connect("row_activated",self._row_activated_callback)
+        self.facts_view.connect("row_activated", self._row_activated_callback)
 
     def show(self):
         """Make this dialog visible."""
@@ -99,7 +99,7 @@ class SystemFactsDialog(widgets.GladeWidget):
                 group = new_group
                 parent = self.facts_store.append(None, [group, ""])
             if str(value).strip() == "":
-                value = _("Unknown")                
+                value = _("Unknown")
             self.facts_store.append(parent, [fact, value])
 
         # TODO: could stand to check if registered before trying to do this:
