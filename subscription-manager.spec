@@ -49,6 +49,7 @@ Requires: pygtk2 pygtk2-libglade gnome-python2 gnome-python2-canvas
 Requires: usermode
 Requires: usermode-gtk
 Requires: librsvg2
+Requires: dbus-x11
 
 %description -n subscription-manager-gnome
 This package contains a GTK+ graphical interface for configuring and
