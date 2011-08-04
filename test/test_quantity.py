@@ -15,7 +15,8 @@
 import unittest
 from stubs import StubFacts, StubEntitlementCertificate, StubProduct
 from modelhelpers import create_pool
-from subscription_manager.quantity import QuantityDefaultValueCalculator, allows_multi_entitlement
+from subscription_manager.quantity import QuantityDefaultValueCalculator, allows_multi_entitlement,\
+                                            valid_quantity
 
 class TestQuantityDefaultValueCalculator(unittest.TestCase):
 
@@ -206,3 +207,16 @@ class TestAllowsMutliEntitlement(unittest.TestCase):
 
     def _create_pool_data_with_multi_entitlement_attribute(self, value):
         return {"productAttributes": [{"name": "multi-entitlement", "value": value}]}
+
+class TestValidQuantity(unittest.TestCase):
+    def test_nonetype_not_valid(self):
+        self.assertFalse(valid_quantity(None))
+    
+    def test_neg_quantity_value_is_invalid(self):
+        self.assertFalse(valid_quantity(-1))
+
+    def test_positive_quantity_value_is_valid(self):
+        self.assertTrue(valid_quantity(3))
+
+    def test_string_quantity_not_valid(self):
+        self.assertFalse(valid_quantity("12dfg2"))

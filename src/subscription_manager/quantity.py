@@ -101,6 +101,9 @@ class QuantityDefaultValueCalculator(object):
         return flattened
 
 def valid_quantity(quantity):
+    if not quantity:
+        return False
+    
     try:
         return int(quantity) > 0
     except ValueError:

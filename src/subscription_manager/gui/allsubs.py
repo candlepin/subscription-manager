@@ -231,7 +231,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         log.debug("filters changed")
         self.display_pools()
 
-    def _contract_selected(self, pool, quantity=None):
+    def _contract_selected(self, pool, quantity=1):
         if not valid_quantity(quantity):
             errorWindow(_("Quantity must be a positive number."))
             return
