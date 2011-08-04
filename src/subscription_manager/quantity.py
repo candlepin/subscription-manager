@@ -69,10 +69,19 @@ class QuantityDefaultValueCalculator(object):
 
     def _get_allowed_quantity_for_virtual_machine(self, product_attrs):
         # Default for physical machine is calculated as:
-        # machine cpus / product vcpu
-        machine_cpus = self._get_float_from_dict(self.fact_dict, self._CPUS_FACT_NAME)
-        product_cpus = self._get_float_from_dict(product_attrs, self._CPUS_PROD_ATTR_NAME)
-        return ceil(machine_cpus / product_cpus)
+        # - if product vcpu attribute is set then, machine cpus / product vcpu
+        # - if no vcpu, then, machine_sockets / product_sockets
+        # - if no sockets and vcpu, then, 1
+        if product_attrs.has_key(self._CPUS_PROD_ATTR_NAME):
+            machine_val = self._get_float_from_dict(self.fact_dict, self._CPUS_FACT_NAME)
+            product_val = self._get_float_from_dict(product_attrs, self._CPUS_PROD_ATTR_NAME)
+        elif product_attrs.has_key(self._SOCKETS_PROD_ATTR_NAME):
+            machine_val = self._get_float_from_dict(self.fact_dict, self._SOCKET_FACT_NAME)
+            product_val = self._get_float_from_dict(product_attrs, self._SOCKETS_PROD_ATTR_NAME)
+        else:
+            return 1
+
+        return ceil(machine_val / product_val)
 
     def _get_allowed_quantity_for_physical_machine(self, product_attrs):
         # Default for physical machine is calculated as:
@@ -105,7 +114,7 @@ class QuantityDefaultValueCalculator(object):
 def valid_quantity(quantity):
     if not quantity:
         return False
-    
+
     try:
         return int(quantity) > 0
     except ValueError:
