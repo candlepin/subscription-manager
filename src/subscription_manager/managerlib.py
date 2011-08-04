@@ -447,6 +447,7 @@ def merge_pools(pools):
     # key hashing:
     return merged_pools
 
+
 class PoolStash(object):
     """
     Object used to fetch pools from the server, sort them into compatible,
@@ -580,6 +581,7 @@ class PoolStash(object):
             provided_products.append((product['productName'], product['productId']))
         return provided_products
 
+
 def _sub_dict(datadict, subkeys, default=None):
     return dict([(k, datadict.get(k, default)) for k in subkeys])
 
@@ -701,6 +703,7 @@ def is_registered_with_classic():
         return False
 
     return up2dateAuth.getSystemId() is not None
+
 
 def enhance_facts(facts, consumer):
     if consumer.getConsumerId():

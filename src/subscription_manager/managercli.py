@@ -165,7 +165,6 @@ class CliCommand(object):
         if not args:
             args = sys.argv[1:]
 
-
         (self.options, self.args) = self.parser.parse_args(args)
 
         # we dont need argv[0] in this list...
@@ -221,7 +220,7 @@ class UserPassCommand(CliCommand):
     def __init__(self, name, usage=None, shortdesc=None,
             description=None, primary=False):
         super(UserPassCommand, self).__init__(name, usage, shortdesc,
-                description,primary)
+                description, primary)
         self._username = None
         self._password = None
 

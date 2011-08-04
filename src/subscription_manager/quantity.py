@@ -16,10 +16,10 @@
 from math import ceil
 
 
-"""
-A class that calculates the default quantity value for a subscription.
-"""
 class QuantityDefaultValueCalculator(object):
+    """
+    A class that calculates the default quantity value for a subscription.
+    """
     _SOCKET_FACT_NAME = 'cpu.cpu_socket(s)'
     _SOCKETS_PROD_ATTR_NAME = 'sockets'
 
