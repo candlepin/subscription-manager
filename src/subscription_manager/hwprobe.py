@@ -333,7 +333,7 @@ class Hardware:
         """
         no_uuid_platforms = ['powervm_lx86', 'xen-dom0', 'ibm_systemz']
 
-        self.allhw['virt.uuid'] = 'Unknown'
+        self.allhw['virt.uuid'] = 'unknown'
 
         try:
             for v in no_uuid_platforms:
@@ -341,10 +341,11 @@ class Hardware:
                     raise Exception(_("Virtualization platform does not support UUIDs"))
         except Exception, e:
             log.warn(_("Error finding UUID: %s"), e)
-            return #nothing more to do
+            return  # nothing more to do
 
-        #most virt platforms record UUID via DMI/SMBIOS info
-        self.allhw['virt.uuid'] = self.allhw['dmi.system.uuid']
+        #most virt platforms record UUID via DMI/SMBIOS info. 
+        if 'dmi.system.uuid' in self.allhw:
+            self.allhw['virt.uuid'] = self.allhw['dmi.system.uuid']
 
         #potentially override DMI-determined UUID with
         #what is on the file system (xen para-virt)

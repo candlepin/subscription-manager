@@ -22,31 +22,14 @@ import logging
 import gtk
 import gtk.glade
 
-from subscription_manager.gui import messageWindow
-from subscription_manager.gui import networkConfig
 from subscription_manager import managerlib
-from subscription_manager.gui import file_monitor
-import rhsm.connection as connection
 import rhsm.config as config
 from subscription_manager import constants
-from subscription_manager.facts import Facts
-from subscription_manager.certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \
-        CertLib, find_first_invalid_date
-from subscription_manager.cert_sorter import CertSorter
+from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
 from subscription_manager.pkgprofile import ProfileManager
 
-from subscription_manager.gui import redeem
-from subscription_manager.gui import factsgui
-from subscription_manager.gui import widgets
-from subscription_manager.gui.installedtab import InstalledProductsTab
-from subscription_manager.gui.mysubstab import MySubscriptionsTab
-from subscription_manager.gui.allsubs import AllSubscriptionsTab
-from subscription_manager.gui.subscription_assistant import \
-        SubscriptionAssistant
-from subscription_manager.gui.importsub import ImportSubDialog
 from subscription_manager.gui.utils import handle_gui_exception, errorWindow, linkify
-from datetime import datetime
 
 import gettext
 _ = gettext.gettext
@@ -77,6 +60,7 @@ PROGRESS_PAGE = 1
 OWNER_SELECT_PAGE = 2
 ENVIRONMENT_SELECT_PAGE = 3
 
+
 class GladeWrapper(gtk.glade.XML):
     def __init__(self, filename):
         gtk.glade.XML.__init__(self, filename)
@@ -85,11 +69,12 @@ class GladeWrapper(gtk.glade.XML):
         widget = gtk.glade.XML.get_widget(self, widget_name)
         if widget is None:
             print "ERROR: widget %s was not found" % widget_name
-            raise Exception ("Widget %s not found" % widget_name)
+            raise Exception("Widget %s not found" % widget_name)
         return widget
 
 registration_xml = GladeWrapper(os.path.join(prefix,
     "data/registration.glade"))
+
 
 class RegisterScreen:
     """
@@ -139,7 +124,6 @@ class RegisterScreen:
         column = gtk.TreeViewColumn(_("Environment"), renderer, text=1)
         self.environment_treeview.set_property("headers-visible", False)
         self.environment_treeview.append_column(column)
-
 
         self.cancel_button = registration_xml.get_widget("cancel_button")
         self.register_button = registration_xml.get_widget("register_button")
@@ -299,7 +283,6 @@ class RegisterScreen:
 
         self._set_register_details_label(_("Registering your system"))
 
-
     def _on_registration_finished_cb(self, new_account, error=None):
 
         try:
@@ -319,8 +302,8 @@ class RegisterScreen:
                 self._finish_registration()
 
         except Exception, e:
-           handle_gui_exception(e, constants.REGISTER_ERROR)
-           self._finish_registration(failed=True)
+            handle_gui_exception(e, constants.REGISTER_ERROR)
+            self._finish_registration(failed=True)
 
     def _on_bind_by_products_cb(self, products, error=None):
         if error:
@@ -481,7 +464,7 @@ class AsyncBackend(object):
             else:
                 callback(retval)
             return False
-        except Queue.Empty, e:
+        except Queue.Empty:
             return True
 
     def get_owner_list(self, username, callback):

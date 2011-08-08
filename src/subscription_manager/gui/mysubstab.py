@@ -63,7 +63,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.add_date_column(_("End Date"), 'expiration_date')
 
-        self.add_text_column(_("Quantity"), 'quantity');
+        self.add_text_column(_("Quantity"), 'quantity')
 
         self.update_subscriptions()
 

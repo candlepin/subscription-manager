@@ -15,10 +15,11 @@
 
 from math import ceil
 
-"""
-A class that calculates the default quantity value for a subscription.
-"""
+
 class QuantityDefaultValueCalculator(object):
+    """
+    A class that calculates the default quantity value for a subscription.
+    """
     _SOCKET_FACT_NAME = 'cpu.cpu_socket(s)'
     _SOCKETS_PROD_ATTR_NAME = 'sockets'
 
@@ -51,7 +52,7 @@ class QuantityDefaultValueCalculator(object):
         return default_value
 
     def _is_virtual_machine(self):
-        return self.fact_dict.has_key(self._VIRT_IS_GUEST_FACT_NAME) and \
+        return self._VIRT_IS_GUEST_FACT_NAME in self.fact_dict and \
             self.fact_dict[self._VIRT_IS_GUEST_FACT_NAME]
 
     def _get_total_consumed(self, product_id):
@@ -86,10 +87,10 @@ class QuantityDefaultValueCalculator(object):
         does not define the specified property, returns 1.0
         """
         value = 1
-        if target_dict.has_key(name) and target_dict[name]:
+        if name in target_dict and target_dict[name]:
             value = target_dict[name]
         return float(value)
-    
+
     def _flatten_attributes(self, pool_json, attribute_list_name):
         """
         Flatten the attributes in a pool's JSON data by attribute list name.
@@ -97,14 +98,19 @@ class QuantityDefaultValueCalculator(object):
         flattened = {}
         for attribute in pool_json[attribute_list_name]:
             flattened[attribute['name']] = attribute['value']
-    
+
         return flattened
 
+
 def valid_quantity(quantity):
+    if not quantity:
+        return False
+    
     try:
         return int(quantity) > 0
     except ValueError:
         return False
+
 
 def allows_multi_entitlement(pool):
     """

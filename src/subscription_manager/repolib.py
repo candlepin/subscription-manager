@@ -60,10 +60,9 @@ class RepoLib(DataLib):
         return repo_file.path
 
 
-
 # WARNING: exact same name as another action in factlib and certlib.
 # TODO: This is the third disjoint "Action" class hierarchy, this one inherits nothing
-# but exposes similar methods, all of which are already abstracted behind the 
+# but exposes similar methods, all of which are already abstracted behind the
 # Datalib.update() method anyhow. Pretty sure these can go away.
 class UpdateAction:
 

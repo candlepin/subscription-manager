@@ -30,6 +30,7 @@ from subscription_manager import certlib
 from subscription_manager.certlib import system_log as inner_system_log
 from subscription_manager.pkgprofile import ProfileManager, delete_profile_cache
 from subscription_manager.facts import Facts
+from subscription_manager.quantity import allows_multi_entitlement
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -371,9 +372,15 @@ def getAvailableEntitlements(cpserver, consumer_uuid, facts, get_all=False, acti
     not pass. (i.e. show pools that are incompatible for your hardware)
     """
     columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
-            'providedProducts', 'productId', 'attributes']
+            'providedProducts', 'productId', 'attributes', 'multi-entitlement']
 
     dlist = list_pools(cpserver, consumer_uuid, facts, get_all, active_on)
+
+    for pool in dlist:
+        if allows_multi_entitlement(pool):
+            pool['multi-entitlement'] = "Yes"
+        else:
+            pool['multi-entitlement'] = "No"
 
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
@@ -439,6 +446,7 @@ def merge_pools(pools):
     # Just return a list of the MergedPools objects, without the product ID
     # key hashing:
     return merged_pools
+
 
 class PoolStash(object):
     """
@@ -573,6 +581,7 @@ class PoolStash(object):
             provided_products.append((product['productName'], product['productId']))
         return provided_products
 
+
 def _sub_dict(datadict, subkeys, default=None):
     return dict([(k, datadict.get(k, default)) for k in subkeys])
 
@@ -694,6 +703,7 @@ def is_registered_with_classic():
         return False
 
     return up2dateAuth.getSystemId() is not None
+
 
 def enhance_facts(facts, consumer):
     if consumer.getConsumerId():

@@ -27,6 +27,7 @@ from subscription_manager.productid import ProductDatabase
 
 from rhsm.certificate import GMT
 
+
 def dummy_exists(filename):
     return True
 
@@ -169,13 +170,13 @@ class CertSorterTests(unittest.TestCase):
     def setUp(self):
         # Setup mock product and entitlement certs:
         self.stackable_product1 = StubProduct('stackable_product1',
-                                              attributes={'stacking_id':13,
-                                                          'multi-entitlement':'yes',
-                                                          'sockets':1})
+                                              attributes={'stacking_id': 13,
+                                                          'multi-entitlement': 'yes',
+                                                          'sockets': 1})
         self.stackable_product2 = StubProduct('stackable_product2',
-                                              attributes={'stacking_id':13,
-                                                          'multi-entitlement':'yes',
-                                                          'sockets':1})
+                                              attributes={'stacking_id': 13,
+                                                          'multi-entitlement': 'yes',
+                                                          'sockets': 1})
 
         self.prod_dir = StubCertificateDirectory([
             # Will be unentitled:
@@ -198,9 +199,9 @@ class CertSorterTests(unittest.TestCase):
                 end_date=datetime.now() + timedelta(days=365),
                 order_end_date=datetime.now() - timedelta(days=2)),  # in warning period
             StubEntitlementCertificate(StubProduct('mktproduct',
-                                                   attributes={'stacking_id':13, 
-                                                               'multi-entitlement':'yes',
-                                                               'sockets':1} )),
+                                                   attributes={'stacking_id': 13, 
+                                                               'multi-entitlement': 'yes',
+                                                               'sockets': 1} )),
             StubEntitlementCertificate(self.stackable_product1),
             StubEntitlementCertificate(self.stackable_product2)])
 

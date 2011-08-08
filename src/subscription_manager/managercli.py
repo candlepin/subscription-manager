@@ -29,7 +29,6 @@ from M2Crypto import X509
 from M2Crypto import SSL
 
 import gettext
-from _xmlplus.schema.trex import validate
 from subscription_manager.jsonwrapper import PoolWrapper
 _ = gettext.gettext
 
@@ -63,7 +62,8 @@ def handle_exception(msg, ex):
     log.error(msg)
     log.exception(ex)
     if isinstance(ex, socket.error):
-        print _('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.')
+        print _("""Network error, unable to connect to server.
+ Please see /var/log/rhsm/rhsm.log for more information.""")
         sys.exit(-1)
     elif isinstance(ex, connection.NetworkException):
         # NOTE: yes this looks a lot like the socket error, but I think these
@@ -165,7 +165,6 @@ class CliCommand(object):
         if not args:
             args = sys.argv[1:]
 
-
         (self.options, self.args) = self.parser.parse_args(args)
 
         # we dont need argv[0] in this list...
@@ -221,7 +220,7 @@ class UserPassCommand(CliCommand):
     def __init__(self, name, usage=None, shortdesc=None,
             description=None, primary=False):
         super(UserPassCommand, self).__init__(name, usage, shortdesc,
-                description,primary)
+                description, primary)
         self._username = None
         self._password = None
 
@@ -410,6 +409,7 @@ class OwnersCommand(UserPassCommand):
         except Exception, e:
             handle_exception(_("Error: Unable to retrieve org list from Entitlement Platform"), e)
 
+
 class EnvironmentsCommand(UserPassCommand):
 
     def __init__(self):
@@ -548,7 +548,6 @@ class RegisterCommand(UserPassCommand):
                                     proxy_user=self.proxy_user,
                                     proxy_password=self.proxy_password)
 
-
             if self.options.consumerid:
             #TODO remove the username/password
                 consumer = admin_cp.getConsumer(self.options.consumerid,
@@ -578,7 +577,6 @@ class RegisterCommand(UserPassCommand):
 
         profile_mgr = ProfileManager()
         profile_mgr.update_check(admin_cp, consumer['uuid'])
-
 
         if self.options.autosubscribe:
             autosubscribe(admin_cp, consumer['uuid'], self.certlib)
@@ -794,9 +792,6 @@ class UnSubscribeCommand(CliCommand):
         self.parser.add_option("--all", dest="all", action="store_true",
                                help=_("Unsubscribe from all subscriptions"))
 
-    def _validate_options(self):
-        CliCommand._validate_options(self)
-
     def _do_command(self):
         """
         Executes the command.
@@ -872,6 +867,7 @@ class FactsCommand(CliCommand):
             facts.update_check(self.cp, consumer, force=True)
             print _("Successfully updated the system facts.")
 
+
 class ReposCommand(CliCommand):
 
     def __init__(self):
@@ -905,6 +901,7 @@ class ReposCommand(CliCommand):
                         repo["enabled"])
             else:
                 print _("The system is not entitled to use any repositories.")
+
 
 class ListCommand(CliCommand):
 
@@ -978,7 +975,7 @@ class ListCommand(CliCommand):
                 product_name = self._format_name(data['productName'], 24, 80)
 
                 if PoolWrapper(data).is_virt_only():
-                    machine_type =  machine_type = _("virtual")
+                    machine_type = machine_type = _("virtual")
                 else:
                     machine_type = _("physical")
 
@@ -986,6 +983,7 @@ class ListCommand(CliCommand):
                                                        data['productId'],
                                                        data['id'],
                                                        data['quantity'],
+                                                       data['multi-entitlement'],                                                       
                                                        data['endDate'],
                                                        machine_type)
 
@@ -1062,8 +1060,6 @@ class CLI:
             if (not cmd.primary):
                 print("\t%-14s %-25s" % (name, cmd.shortdesc))
         print("")
-
-
 
     def _find_best_match(self, args):
         """

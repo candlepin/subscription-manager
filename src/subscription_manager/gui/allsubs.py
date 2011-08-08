@@ -205,7 +205,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         except Exception, e:
             handle_gui_exception(e, _("Error fetching subscriptions from server:  %s"))
 
-    def _update_display(self, error=None):
+    def _update_display(self, data, error):
         if self.pb:
             self.pb.hide()
             gobject.source_remove(self.timer)
@@ -231,7 +231,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         log.debug("filters changed")
         self.display_pools()
 
-    def _contract_selected(self, pool, quantity=None):
+    def _contract_selected(self, pool, quantity=1):
         if not valid_quantity(quantity):
             errorWindow(_("Quantity must be a positive number."))
             return

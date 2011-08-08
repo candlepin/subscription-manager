@@ -36,7 +36,7 @@ def delete_profile_cache():
 
 class ProfileLib(DataLib):
     """
-    Another "Lib" object, used by rhsmcertd to update the profile 
+    Another "Lib" object, used by rhsmcertd to update the profile
     periodically.
     """
 
@@ -49,7 +49,7 @@ class ProfileLib(DataLib):
 
 class ProfileManager(object):
     """
-    Manages the profile of packages installed on this system. 
+    Manages the profile of packages installed on this system.
     """
     def __init__(self, current_profile=None):
 
@@ -69,7 +69,7 @@ class ProfileManager(object):
     current_profile = property(_get_current_profile, _set_current_profile)
 
     def _write_cached_profile(self):
-        """ 
+        """
         Write the current profile to disk. Should only be done after
         successfully pushing the profile to the server.
         """
@@ -80,7 +80,7 @@ class ProfileManager(object):
             json.dump(self.current_profile.collect(), f)
             f.close()
         except IOError, e:
-            log.error("Unable to write package profile cache to: %s" % 
+            log.error("Unable to write package profile cache to: %s" %
                     PROFILE_CACHE_FILE)
             log.exception(e)
 
@@ -126,11 +126,11 @@ class ProfileManager(object):
                 raise Exception(_("Error updating package profile, see /var/log/rhsm/rhsm.log "
                         "for more details."))
 
-            # Return the number of 'updates' we did, assuming updating all 
+            # Return the number of 'updates' we did, assuming updating all
             # packages at once is one update.
-        else: 
+        else:
             log.info("Package profile has not changed, skipping upload.")
-            return 0 # No updates performed.
+            return 0  # No updates performed.
 
     def has_changed(self):
         """
@@ -138,10 +138,9 @@ class ProfileManager(object):
         updated.
         """
         if not self._cache_exists():
-            log.info( "Cache does not exist")
+            log.info("Cache does not exist")
             return True
 
         log.info("Reading cache.")
         cached_profile = self._read_cached_profile()
         return not cached_profile == self.current_profile
-
