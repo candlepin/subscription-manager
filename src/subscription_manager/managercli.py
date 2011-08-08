@@ -413,7 +413,7 @@ class OwnersCommand(UserPassCommand):
 class EnvironmentsCommand(UserPassCommand):
 
     def __init__(self):
-        usage = "usage: %prog orgs [OPTIONS]"
+        usage = "usage: %prog environments [OPTIONS]"
         shortdesc = _("Display the environments available for a user")
         desc = shortdesc
 
