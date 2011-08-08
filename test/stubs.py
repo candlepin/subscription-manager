@@ -233,7 +233,7 @@ class StubProductCertificate(ProductCertificate):
 class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate):
 
     def __init__(self, product, provided_products=None, start_date=None, end_date=None,
-            order_end_date=None, content=None, quantity=None):
+            order_end_date=None, content=None, quantity=1):
         StubProductCertificate.__init__(self, product, provided_products)
 
         self.start_date = start_date

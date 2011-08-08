@@ -12,7 +12,7 @@
 # in this software or its documentation.
 #
 
-from datetime import timedelta, datetime
+from datetime import datetime
 import logging
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -57,9 +57,8 @@ class CertSorter(object):
         # to the expired entitlement certificate:
         self.expired_products = {}
 
-        # products that may require one or more entitlements to
-        # be valid
-#        self.stackable_products = {}
+        # products that are only partially entitled (aka, "yellow"
+        self.partially_valid_products = {}
 
         # specific products which are installed, and entitled on the given date.
         # maps product ID to the valid entitlement certificate:
@@ -88,9 +87,6 @@ class CertSorter(object):
         for product_cert in prod_certs:
             product = product_cert.getProduct()
             self.all_products[product.getHash()] = product_cert
-
-#            if product.hasAttribute("stacking_id"):
-#                self.stackable_products[product.getHash()] = product_cert
 
         log.debug("Installed product IDs: %s" % self.all_products.keys())
 
@@ -124,16 +120,20 @@ class CertSorter(object):
     def _scan_ent_cert_stackable_products(self):
         ent_certs = self.entitlement_dir.list()
         stackable_ents = {}
+
         for ent_cert in ent_certs:
-            for product in ent_cert.getProducts():
+            for product in [ent_cert.getProduct()]:
                 product_id = product.getHash()
                 order = ent_cert.getOrder()
                 stacking_id = order.getStackingId()
+                quantity = order.getQuantityUsed()
                 if stacking_id:
                     if stacking_id not in stackable_ents:
                         stackable_ents[stacking_id] = []
                     stackable_ents[stacking_id].append({'ent_cert': ent_cert,
                                                         'product_id': product_id,
+                                                        'quantity': quantity,
+                                                        'sockets_provided': None,
                                                         'valid': None})
 
         for stackable_id in stackable_ents.keys():
@@ -144,11 +144,16 @@ class CertSorter(object):
 
             for stackable_ent in stackable_ents[stackable_id]:
                 socket_count = stackable_ent['ent_cert'].getOrder().getSocketLimit()
+                quantity = stackable_ent['quantity']
                 if socket_count:
-                    socket_total = socket_total + int(socket_count)
-            if socket_total >= system_sockets:
-                for i in stackable_ents[stackable_id]:
+                    socket_total = socket_total + (int(socket_count) * int(quantity))
+
+            for i in stackable_ents[stackable_id]:
+                i['sockets_provided'] = socket_total
+                if socket_total >= system_sockets:
                     i['valid'] = True
+                else:
+                    self.partially_valid_products[product_id] = self.all_products[product_id]
 
         for stackable_id in stackable_ents.keys():
             for stack_prod_info in stackable_ents[stackable_id]:
