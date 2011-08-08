@@ -95,7 +95,8 @@ class SubscriptionAssistant(widgets.GladeWidget):
                         'first_invalid_radiobutton',
                         'invalid_date_radiobutton',
                         'subscribe_button',
-                        'date_picker_hbox']
+                        'date_picker_hbox',
+                        'invalid_checkbutton']
         super(SubscriptionAssistant,
                 self).__init__('subscription_assistant.glade', widget_names)
 
@@ -190,7 +191,12 @@ class SubscriptionAssistant(widgets.GladeWidget):
 
         self.glade.signal_autoconnect({
             "on_update_button_clicked": self._check_for_date_change,
+            "on_invalid_checkbutton_toggled":
+                    self._on_invalid_checkbutton_toggled,
         })
+
+        # used for automatically setting the check all toggle
+        self.programatic_invalid_toggle = False
 
         self.pb = None
         self.timer = None
@@ -446,6 +452,34 @@ class SubscriptionAssistant(widgets.GladeWidget):
 
         # refresh subscriptions
         self._display_subscriptions()
+
+        # check the state of all rows, to see if we should turn on/off
+        # the check all button
+        all_active = True
+        for row in self.invalid_store:
+            if row[self.invalid_store['active']]:
+                continue
+            else:
+                all_active = False
+                break
+        self.programatic_invalid_toggle = True
+        self.invalid_checkbutton.set_property("active", all_active)
+        self.programatic_invalid_toggle = False
+
+    def _on_invalid_checkbutton_toggled(self, button):
+        """
+        Triggered when the user presses the check all toggle button,
+        to select or unselect all invalid products
+        """
+        # skip execution if this is from the user selecting all rows by hand
+        if self.programatic_invalid_toggle:
+            return
+
+        active = button.get_active()
+        for row in self.invalid_store:
+            row[self.invalid_store['active']] = active
+        self._display_subscriptions()
+
 
     def format_date(self, date):
         return managerlib.formatDate(date)

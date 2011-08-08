@@ -171,17 +171,52 @@
               <atkproperty name="AtkObject::accessible-name" translatable="yes">Subscription Product List</atkproperty>
             </accessibility>
             <child>
-              <widget class="GtkScrolledWindow" id="invalid_window">
+              <widget class="GtkVBox" id="vbox1">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hscrollbar_policy">automatic</property>
-                <property name="vscrollbar_policy">automatic</property>
-                <property name="shadow_type">etched-in</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Invalid Product List ScrolledWindow</atkproperty>
-                </accessibility>
+                <property name="orientation">vertical</property>
                 <child>
-                  <placeholder/>
+                  <widget class="GtkScrolledWindow" id="invalid_window">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vscrollbar_policy">automatic</property>
+                    <property name="shadow_type">etched-in</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Invalid Product List ScrolledWindow</atkproperty>
+                    </accessibility>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkAlignment" id="alignment1">
+                    <property name="visible">True</property>
+                    <property name="bottom_padding">4</property>
+                    <property name="left_padding">6</property>
+                    <child>
+                      <widget class="GtkCheckButton" id="invalid_checkbutton">
+                        <property name="label" translatable="yes">_Check all</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">Check/uncheck all products</atkproperty>
+                        </accessibility>
+                        <signal name="toggled" handler="on_invalid_checkbutton_toggled"/>
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </widget>
               <packing>
