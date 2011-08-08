@@ -142,6 +142,14 @@ class TestReposCommand(TestCliCommand):
     command_class = managercli.ReposCommand
 
 
+class TestConfigCommand(TestCliCommand):
+    command_class = managercli.ConfigCommand
+
+    def test_list(self):
+        self.cc.main(["--list"])
+        self.cc._validate_options()
+
+
 class TestSubscribeCommand(TestCliProxyCommand):
     command_class = managercli.SubscribeCommand
 
