@@ -494,12 +494,7 @@ class UEPConnection:
         return self.conn.request_post(method)
 
     def unbindBySerial(self, consumerId, serial):
-        method = "/consumers/%s/certificates/%s" % (urllib.quote(consumerId), urllib.quote(serial))
-        return self.conn.request_delete(method)
-
-    # TODO: not actually used...
-    def unbindByEntitlementId(self, consumerId, entId):
-        method = "/consumers/%s/entitlements/%s" % (urllib.quote(consumerId), urllib.quote(serial))
+        method = "/consumers/%s/certificates/%s" % (urllib.quote(consumerId), urllib.quote(str(serial)))
         return self.conn.request_delete(method)
 
     def unbindAll(self, consumerId):
