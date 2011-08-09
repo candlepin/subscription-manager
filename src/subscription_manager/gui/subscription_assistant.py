@@ -155,7 +155,8 @@ class SubscriptionAssistant(widgets.GladeWidget):
 
         # Set up the subscription column
         column = widgets.MachineTypeColumn(_('Subscription'), self.subscriptions_store['virt_only'],
-                                           self.subscriptions_store['product_name'])
+                                           self.subscriptions_store['product_name'],
+                                           self.subscriptions_store['multi-entitlement'])
         self.subscriptions_treeview.append_column(column)
 
         self.subscriptions_treeview.add_column(_("Available Subscriptions"),

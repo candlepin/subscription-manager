@@ -59,6 +59,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         subs_col = MachineTypeColumn(_('Subscription'),
                                      self.store['virt_only'],
                                      self.store['product_name_formatted'],
+                                     self.store['multi_entitlement'],
                                      markup=True)
         self.top_view.append_column(subs_col)
 
@@ -94,6 +95,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             #        rid of the background color stuff altogether...
             'background': str,
             'align': float,
+            'multi_entitlement': bool,
         }
 
     def filter_incompatible(self):
@@ -168,7 +170,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 'product_id': entry.product_id,
                 'pool_id': entry.pools[0]['id'],  # not displayed, just for lookup later
                 'merged_pools': entry,  # likewise not displayed, for subscription
-                'align': 0.5
+                'align': 0.5,
+                'multi_entitlement': allows_multi_entitlement(entry.pools[0]),
         })
 
         # set the selection/details back to what they were, if possible

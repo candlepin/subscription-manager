@@ -21,7 +21,8 @@ class ContractSelection(unittest.TestCase):
             'startDate': datetime.datetime.now(tz=managerlib.ServerTz(0)).isoformat(),
             'endDate': datetime.datetime.now(tz=managerlib.ServerTz(0)).isoformat(),
             'contractNumber': 'contractNumber',
-            'attributes': []}
+            'attributes': [],
+            'productAttributes': []}
 
     def test_contract_selection_show(self):
         cs = contract_selection.ContractSelectionWindow(selected_callback=stubSelectedCallback,

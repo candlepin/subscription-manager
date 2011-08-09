@@ -69,6 +69,7 @@ class ContractSelectionWindow(object):
                                    int,
                                    str,
                                    gobject.TYPE_PYOBJECT,
+                                   bool,
                                    bool)
         self.contract_selection_treeview.set_model(self.model)
 
@@ -81,7 +82,7 @@ class ContractSelectionWindow(object):
 
     def populate_treeview(self):
 
-        column = MachineTypeColumn(_("Contract Number"), 7, 0)
+        column = MachineTypeColumn(_("Contract Number"), 7, 0, 8)
         self.contract_selection_treeview.append_column(column)
 
         renderer = gtk.CellRendererText()
@@ -116,7 +117,8 @@ class ContractSelectionWindow(object):
                managerlib.parseDate(pool['endDate']),
                default_quantity_value,
                pool['productName'], pool,
-               PoolWrapper(pool).is_virt_only()]
+               PoolWrapper(pool).is_virt_only(),
+               allows_multi_entitlement(pool)]
         self.model.append(row)
 
     def set_parent_window(self, window):
