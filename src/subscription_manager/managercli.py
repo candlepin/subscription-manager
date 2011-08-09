@@ -914,50 +914,55 @@ class ConfigCommand(CliCommand):
     def _add_common_options(self):
         self.parser.add_option("--list", action="store_true",
                                help=_("list the configuration for this system"))
-        self.parser.add_option("--hostname", dest="hostname",
-                               help=_("Host Name for entitlement system"))
-        self.parser.add_option("--prefix", dest="prefix",
-                               help=_("Prefix for entitlement system host"))
-        self.parser.add_option("--port", dest="port",
-                               help=_("Port for entitlement system host"))
-        self.parser.add_option("--proxy_hostname", dest="proxy_hostname",
-                               help=_("Hostname for entitlement system proxy"))
-        self.parser.add_option("--proxy_port", dest="proxy_port",
-                               help=_("Port for entitlement system proxy"))
-        self.parser.add_option("--proxy_user", dest="proxy_user",
-                               help=_("Username for entitlement system proxy"))
-        self.parser.add_option("--proxy_password", dest="proxy_password",
-                               help=_("Password for entitlement system proxy"))
+        self.parser.add_option("--remove", dest="remove",
+                               help = ("remove configuration entry by section.name"))  
+        for section in cfg.sections():
+            for name,value in cfg.items(section):
+                self.parser.add_option("--" + section + "." + name , dest=(section + "." + name),
+                    help=_("Section: " + section + ", Name: " + name))
 
     def _validate_options(self):
-        if not (self.options.list or self.options.hostname or self.options.prefix
-                or self.options.port or self.options.proxy_hostname or self.options.proxy_port
-                or self.options.proxy_user or self.options.proxy_password):
-            print _("Error: No options provided. Please see the help comand.")
+        if not (self.options.list or self.options.remove):
+            has = False
+            for section in cfg.sections():
+                for name,value in cfg.items(section):
+                    test = "%s" % getattr(self.options,section + "." + name)
+                    has = has or (test != 'None')
+            if not has:
+                self.parser.print_help()
+                sys.exit(-1)
+        if (self.options.remove and not "." in self.options.remove):
+            print _("Error: configuration entry designation for removal must be of format [section.name]")
             sys.exit(-1)
 
     def _do_command(self):
         self._validate_options()
 
         if self.options.list:
-            for name, value in cfg.items('server'):
-                print '%s = %s' % (name, value)
-            print
+            for section in cfg.sections():
+                print '[%s]' % (section)
+                for name, value in cfg.items(section):
+                    print '   %s = %s' % (name,value)
+                print
+        elif self.options.remove:
+            section = self.options.remove.split('.')[0]
+            name = self.options.remove.split('.')[1]
+            try:
+                if not hasattr(cfg.defaults, name):
+                    cfg.set(section, name, '')
+                else:
+                    cfg.remove_option(section, name)
+                print _("You have removed the value for section %s and name %s.") % (section, name)
+            except Exception, e:
+                print _("Section %s and name %s do not exist.") % (section, name)
+            cfg.save()
         else:
-            if self.options.hostname:
-                cfg.set('server', 'hostname', self.options.hostname)
-            if self.options.prefix:
-                cfg.set('server', 'prefix', self.options.prefix)
-            if self.options.port:
-                cfg.set('server', 'port', self.options.port)
-            if self.options.proxy_hostname:
-                cfg.set('server', 'proxy_hostname', self.options.proxy_hostname)
-            if self.options.proxy_port:
-                cfg.set('server', 'proxy_port', self.options.proxy_port)
-            if self.options.proxy_user:
-                cfg.set('server', 'proxy_user', self.options.proxy_user)
-            if self.options.proxy_password:
-                cfg.set('server', 'proxy_password', self.options.proxy_password)
+            for section in cfg.sections():
+                for name,value in cfg.items(section):
+                    value = "%s" % getattr(self.options,section + "." + name) 
+                    if not value == 'None':
+                        cfg.set(section, name, value)
+ 
             cfg.save()
 
 
