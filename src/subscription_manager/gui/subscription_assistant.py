@@ -325,6 +325,11 @@ class SubscriptionAssistant(widgets.GladeWidget):
         last validity. Ignore the timestamp returned from certlib.
         """
         d = find_first_invalid_date()
+        # If we can't calculate a first invalid date, just use current date.
+        # The GUI shouldn't let the subscription assistant be called
+        # in this case, this just lets the screen be instantiated.
+        if not d:
+            d = datetime.now()
         return datetime(d.year, d.month, d.day, tzinfo=certificate.GMT())
 
     def _display_invalid(self):

@@ -372,6 +372,7 @@ class MainWindow(widgets.GladeWidget):
         warn_count = len(sorter.expired_entitlement_certs) + \
                 len(sorter.unentitled_products)
 
+        self.update_certificates_button.show()
         if warn_count > 0:
             buf = gtk.gdk.pixbuf_new_from_file_at_size(INVALID_IMG, 32, 32)
             self.subscription_status_image.set_from_pixbuf(buf)
@@ -388,9 +389,17 @@ class MainWindow(widgets.GladeWidget):
             first_invalid = find_first_invalid_date()
             buf = gtk.gdk.pixbuf_new_from_file_at_size(VALID_IMG, 32, 32)
             self.subscription_status_image.set_from_pixbuf(buf)
-            self.subscription_status_label.set_text(
-                    _("Product entitlement certificates valid until %s") % \
-                        managerlib.formatDate(first_invalid))
+            if first_invalid:
+                self.subscription_status_label.set_text(
+                        _("Product entitlement certificates valid until %s") % \
+                            managerlib.formatDate(first_invalid))
+            else:
+                # No product certs installed, no first incompliant date, and
+                # the subscription assistant can't do anything, so we'll disable
+                # the button to launch it:
+                self.subscription_status_label.set_text(
+                        _("No product certificates installed."))
+                self.update_certificates_button.hide()
 
     def _check_rhn_classic(self):
         if managerlib.is_registered_with_classic():

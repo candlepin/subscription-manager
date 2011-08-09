@@ -199,6 +199,12 @@ class StubProductCertificate(ProductCertificate):
         if provided_tags:
             self.provided_tags = set(provided_tags)
         self.serial = random.randint(1, 10000000)
+        self.start_date = start_date
+        if not start_date:
+            self.start_date = datetime.now() - timedelta(days=100)
+        self.end_date = end_date
+        if not end_date:
+            self.end_date = datetime.now() + timedelta(days=365)
 
     def getProduct(self):
         return self.product
@@ -211,6 +217,9 @@ class StubProductCertificate(ProductCertificate):
 
     def get_provided_tags(self):
         return self.provided_tags
+
+    def validRange(self):
+        return DateRange(self.start_date, self.end_date)
 
     def __str__(self):
         s = []
@@ -234,11 +243,12 @@ class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate)
         if not end_date:
             self.end_date = self.start_date + timedelta(days=365)
 
+        self.order_end_date = order_end_date
         if not order_end_date:
-            order_end_date = self.end_date
+            self.order_end_date = self.end_date
         fmt = "%Y-%m-%dT%H:%M:%SZ"
         self.order = StubOrder(self.start_date.strftime(fmt),
-                               order_end_date.strftime(fmt), quantity=quantity,
+                               self.order_end_date.strftime(fmt), quantity=quantity,
                                stacking_id=1, socket_limit=2, sku=product.hash)
 
         self.valid_range = DateRange(self.start_date, self.end_date)
@@ -250,6 +260,9 @@ class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate)
     # Need to override this implementation to avoid requirement on X509:
     def validRangeWithGracePeriod(self):
         return DateRange(self.start_date, self.end_date)
+
+    def validRange(self):
+        return DateRange(self.start_date, self.order_end_date)
 
     def getContentEntitlements(self):
         return self.content
@@ -270,8 +283,11 @@ class StubCertificateDirectory(EntitlementDirectory):
     def list(self):
         return self.certs
 
-    def listValid(self, grace_period=True):
-        return self.certs
+    def _check_key(self, cert):
+        """
+        Fake filesystem access here so we don't try to read real keys.
+        """
+        return True
 
 
 class StubProductDirectory(StubCertificateDirectory, ProductDirectory):

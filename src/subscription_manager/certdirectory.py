@@ -219,31 +219,46 @@ class EntitlementDirectory(CertificateDirectory):
     def certClass(self):
         return EntitlementCertificate
 
+    def _check_key(self, cert):
+        """
+        If the new key file (SERIAL-key.pem) does not exist, check for
+        the old style (key.pem), and if found write it out as the new style.
+
+        Return false if neither is found, indicating we have no key for this
+        certificate.
+
+        See bz #711133.
+        """
+        key_path = "%s/%s-key.pem" % (self.path, cert.serialNumber())
+        if not os.access(key_path, os.R_OK):
+            # read key from old key path
+            old_key_path = "%s/key.pem" % self.path
+
+            # if we don't have a new style or old style key, consider the
+            # cert invalid
+            if not os.access(old_key_path, os.R_OK):
+                return False
+
+            # write the key/cert out again in new style format
+            key = Key.read(old_key_path)
+            cert_writer = Writer()
+            cert_writer.write(key, cert)
+
     def listValid(self, grace_period=False):
         valid = []
         for c in self.list():
-            # if the key file doesn't exist, we are not valid
-            # this also handles the case of updates from early
-            # rhsm versions that just wrote "key.pem"
-            # see bz #711133
-            key_path = "%s/%s-key.pem" % (self.path, c.serialNumber())
-            if not os.access(key_path, os.F_OK):
-                # read key from old key path
-                old_key_path = "%s/key.pem" % self.path
 
-                # if we don't have a new style or old style key, consider the cert invalid
-                if not os.access(old_key_path, os.R_OK):
-                    continue
+            # If something is amiss with the key for this certificate, consider
+            # it invalid:
+            if not self._check_key(c):
+                continue
 
-                # write the key/cert out again in new style format
-                key = Key.read(old_key_path)
-                cert_writer = Writer()
-                cert_writer.write(key, c)
             if grace_period:
                 if c.validWithGracePeriod():
                     valid.append(c)
             elif c.valid():
                 valid.append(c)
+
         return valid
 
 

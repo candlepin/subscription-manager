@@ -378,35 +378,57 @@ def find_first_invalid_date(ent_dir=None, product_dir=None):
     Find the first datetime where an entitlement will be invalid.
     If there are currently unentitled products, then return the current
     datetime.
+
+    If there are no products installed, return None, as there technically
+    is no first invalid date.
     """
-    # TODO: should we be listing valid? does this work if everything is already invalid?
-    # TODO: setting a member variable here that isn't used anywhere else, should keep this local unless needed
-    # TODO: needs unit testing imo, probably could be moved to a standalone method for that purpose
     if not ent_dir:
         ent_dir = EntitlementDirectory()
     if not product_dir:
         product_dir = ProductDirectory()
 
-    valid_ents = ent_dir.listValid()
+    current_date = datetime.now(GMT())
 
-    installed_not_entitled = []
-    for product_cert in product_dir.list():
-        if not ent_dir.findByProduct(product_cert.getProduct().getHash()):
-            installed_not_entitled.append(product_cert)
+    if not product_dir.list():
+        # If there are no products installed, return None, there is no
+        # invalid date:
+        log.debug("Unable to determine first invalid date, no products "
+                "installed.")
+        return None
+
+    # First check if we have anything installed but not entitled *today*:
+    cs = cert_sorter.CertSorter(product_dir, ent_dir, on_date=current_date)
+    if cs.unentitled_products or cs.expired_products:
+        log.debug("Found installed but not entitled products.")
+        return current_date
+
+    # Sort all the ent certs by end date. (ascending)
+    all_ent_certs = ent_dir.list()
 
     def get_date(ent_cert):
         return ent_cert.validRange().end()
 
-    valid_ents.sort(key=get_date)
+    all_ent_certs.sort(key=get_date)
 
-    # next cert to go invalid
-    if valid_ents and not installed_not_entitled:
-        # Add a day, we don't want a date where we're still valid:
-        last_cert = valid_ents[0].validRange().end()
-        td = timedelta(days=1)
-        return last_cert + td
-    else:
-        return datetime.now(GMT())
+    # Loop through all current and future entitlement certs, check compliance
+    # status on their end date, and return the first date where we're not
+    # compliant.
+    for ent_cert in all_ent_certs:
+        end_date = ent_cert.validRange().end() + timedelta(days=1)
+        if end_date < current_date:
+            # This cert is expired, ignore it:
+            continue
+        log.debug("Checking cert: %s, end date: %s" % (ent_cert.serialNumber(),
+            end_date))
+        cs = cert_sorter.CertSorter(product_dir, ent_dir, on_date=end_date)
+        if cs.expired_products:
+            log.debug("Found non-compliant status on %s" % end_date)
+            return end_date
+        else:
+            log.debug("Compliant on %s" % end_date)
+
+    # Should never hit this:
+    raise Exception("Unable to determine first invalid date.")
 
 
 def entitlement_valid():

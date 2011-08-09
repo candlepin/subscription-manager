@@ -23,8 +23,9 @@ from subscription_manager.cert_sorter import CertSorter
 
 from rhsm.certificate import GMT
 
-class FindLastValidTests(unittest.TestCase):
+class FindFirstInvalidDateTests(unittest.TestCase):
 
+    # No product certs installed, but we manually got entitlements:
     def test_just_entitlements(self):
         cert1 = StubEntitlementCertificate(
                     StubProduct('product1'), start_date=datetime(2010, 1, 1),
@@ -35,12 +36,12 @@ class FindLastValidTests(unittest.TestCase):
                     end_date=datetime(2060, 1, 1))
         ent_dir = StubCertificateDirectory([cert1, cert2])
         prod_dir = StubCertificateDirectory([])
+
         last_valid_date = find_first_invalid_date(ent_dir=ent_dir,
                 product_dir=prod_dir)
-        self.assertEqual(2050, last_valid_date.year)
-        self.assertEqual(2, last_valid_date.day)
+        self.assertIsNone(last_valid_date)
 
-    def test_unentitled_products(self):
+    def test_currently_unentitled_products(self):
         cert = StubProductCertificate(StubProduct('unentitledProduct'))
         product_dir = StubCertificateDirectory([cert])
 
@@ -74,13 +75,50 @@ class FindLastValidTests(unittest.TestCase):
                 end_date=datetime(2060, 1, 1))
         ent_dir = StubCertificateDirectory([cert1, cert2])
 
-        # Because we have an unentitled product, we should get back the current
-        # date as the last date of valid entitlements:
-        last_valid_date = find_first_invalid_date(ent_dir=ent_dir, product_dir=product_dir)
+        last_valid_date = find_first_invalid_date(ent_dir=ent_dir,
+                product_dir=product_dir)
         self.assertEqual(2050, last_valid_date.year)
 
+    # Checking scenario when we have an entitlement to cover us now, and another
+    # for when the first expires:
+    def test_future_entitled_products(self):
+        cert = StubProductCertificate(StubProduct('product1'))
+        product_dir = StubCertificateDirectory([cert])
+
+        cert1 = StubEntitlementCertificate(
+                StubProduct('product1'), start_date=datetime(2010, 1, 1),
+                end_date=datetime(2050, 1, 1))
+        cert2 = StubEntitlementCertificate(
+                StubProduct('product1'),
+                start_date=datetime(2049, 1, 1),
+                end_date=datetime(2070, 1, 1))
+        ent_dir = StubCertificateDirectory([cert1, cert2])
+
+        last_valid_date = find_first_invalid_date(ent_dir=ent_dir, product_dir=product_dir)
+        self.assertEqual(2070, last_valid_date.year)
+        self.assertEqual(1, last_valid_date.month)
+        self.assertEqual(2, last_valid_date.day)
+
     def test_all_expired_entitlements(self):
-        pass
+        cert = StubProductCertificate(StubProduct('product1'))
+        product_dir = StubCertificateDirectory([cert])
+
+        cert1 = StubEntitlementCertificate(
+                StubProduct('product1'), start_date=datetime(2000, 1, 1),
+                end_date=datetime(2001, 1, 1))
+        cert2 = StubEntitlementCertificate(
+                StubProduct('product1'),
+                start_date=datetime(2000, 12, 1),
+                end_date=datetime(2005, 1, 1))
+        ent_dir = StubCertificateDirectory([cert1, cert2])
+
+        # Because all entitlements have expired, we should get back the current
+        # date as the last date of valid entitlements:
+        today = datetime.now(GMT())
+        last_valid_date = find_first_invalid_date(ent_dir=ent_dir, product_dir=product_dir)
+        self.assertEqual(today.year, last_valid_date.year)
+        self.assertEqual(today.month, last_valid_date.month)
+        self.assertEqual(today.day, last_valid_date.day)
 
 
 class CertSorterTests(unittest.TestCase):
