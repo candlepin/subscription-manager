@@ -28,6 +28,7 @@ import dbus
 import dbus.service, dbus.glib, dbus.exceptions
 import dbus.dbus_bindings
 import gtk
+import logging
 import gettext
 _ = gettext.gettext
 
@@ -90,6 +91,7 @@ class SubscriptionManagerService(dbus.service.Object):
 
 if __name__ == '__main__':
     logutil.init_logger()
+    log = logging.getLogger('subscription-manager-gui')
     try:
         bus = dbus.SessionBus()
     except dbus.exceptions.DBusException:
@@ -125,5 +127,6 @@ if __name__ == '__main__':
         except KeyboardInterrupt:
             systemExit(0, "\nUser interrupted process.")
         except Exception, e:
+            log.exception(e)
             systemExit(1, e)
 
