@@ -34,8 +34,8 @@ import rhsm.connection as connection
 import rhsm.config as config
 from subscription_manager import constants
 from subscription_manager.facts import Facts
-from subscription_manager.certlib import ProductDirectory, EntitlementDirectory, ConsumerIdentity, \
-    CertLib, find_first_invalid_date
+from subscription_manager.certdirectory import ProductDirectory, EntitlementDirectory
+from subscription_manager.certlib import ConsumerIdentity, CertLib, find_first_invalid_date
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.branding import get_branding
 

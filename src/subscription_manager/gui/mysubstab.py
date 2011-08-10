@@ -19,7 +19,8 @@ from datetime import datetime, timedelta
 
 from rhsm.certificate import GMT
 
-from subscription_manager.certlib import EntitlementDirectory, ProductDirectory, Disconnected
+from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
+from subscription_manager.certlib import Disconnected
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception, get_dbus_iface

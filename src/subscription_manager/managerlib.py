@@ -26,7 +26,7 @@ from datetime import datetime, tzinfo, timedelta
 
 from rhsm.config import initConfig
 
-from subscription_manager import certlib
+from subscription_manager import certlib, certdirectory
 from subscription_manager.certlib import system_log as inner_system_log
 from subscription_manager.pkgprofile import ProfileManager, delete_profile_cache
 from subscription_manager.facts import Facts

@@ -29,7 +29,7 @@ from subscription_manager.gui import storage
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import utils
 from subscription_manager.gui import file_monitor
-from subscription_manager.certlib import ProductDirectory
+from subscription_manager.certdirectory import ProductDirectory
 
 GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
 UPDATE_FILE = '/var/run/rhsm/update'

@@ -18,7 +18,7 @@ import logging
 import gobject
 
 import gettext
-from subscription_manager.certlib import EntitlementDirectory
+from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.gui.widgets import MachineTypeColumn
 from subscription_manager.jsonwrapper import PoolWrapper
 _ = gettext.gettext

@@ -21,7 +21,7 @@ from datetime import datetime
 from rhsm.certificate import GMT
 
 from subscription_manager.gui import widgets
-from subscription_manager.certlib import EntitlementDirectory, ProductDirectory
+from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 
 from subscription_manager import managerlib
 

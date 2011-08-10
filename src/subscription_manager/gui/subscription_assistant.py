@@ -26,6 +26,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 import rhsm.certificate as certificate
 from subscription_manager import certlib
+from subscription_manager import certdirectory
 from subscription_manager import managerlib
 from subscription_manager import async
 from subscription_manager.certlib import find_first_invalid_date
@@ -106,8 +107,8 @@ class SubscriptionAssistant(widgets.GladeWidget):
         self.pool_stash = managerlib.PoolStash(self.backend, self.consumer,
                 self.facts)
 
-        self.product_dir = certlib.ProductDirectory()
-        self.entitlement_dir = certlib.EntitlementDirectory()
+        self.product_dir = certdirectory.ProductDirectory()
+        self.entitlement_dir = certdirectory.EntitlementDirectory()
 
         # Setup initial last valid date:
         self.last_valid_date = self._load_last_valid_date()

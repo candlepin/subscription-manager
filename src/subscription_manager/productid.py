@@ -23,7 +23,7 @@ _ = gettext.gettext
 
 from gzip import GzipFile
 from rhsm.certificate import ProductCertificate
-from subscription_manager.certlib import Directory, ProductDirectory
+from subscription_manager.certdirectory import Directory, ProductDirectory
 
 
 class DatabaseDirectory(Directory):

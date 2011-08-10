@@ -343,7 +343,7 @@ class Hardware:
             log.warn(_("Error finding UUID: %s"), e)
             return  # nothing more to do
 
-        #most virt platforms record UUID via DMI/SMBIOS info. 
+        #most virt platforms record UUID via DMI/SMBIOS info.
         if 'dmi.system.uuid' in self.allhw:
             self.allhw['virt.uuid'] = self.allhw['dmi.system.uuid']
 

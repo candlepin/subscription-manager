@@ -1041,7 +1041,7 @@ class ListCommand(CliCommand):
                                                        data['productId'],
                                                        data['id'],
                                                        data['quantity'],
-                                                       data['multi-entitlement'],                                                       
+                                                       data['multi-entitlement'],
                                                        data['endDate'],
                                                        machine_type)
 
