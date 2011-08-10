@@ -159,7 +159,7 @@ class UpdateAction(Action):
         #certificates in grace period were being renamed everytime.
         #this makes sure we don't try to re-write certificates in
         #grace period
-        for valid in self.entdir.listValid(grace_period=True):
+        for valid in self.entdir.list():
             sn = valid.serialNumber()
             report.valid.append(sn)
             local[sn] = valid
