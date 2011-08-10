@@ -22,7 +22,8 @@ import logging
 from datetime import timedelta, datetime
 from subscription_manager.lock import Lock
 from subscription_manager import cert_sorter
-from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory, Path
+from subscription_manager.certdirectory import EntitlementDirectory, \
+    ProductDirectory, Path, Writer
 from rhsm.config import initConfig
 from rhsm.certificate import *
 
@@ -241,25 +242,6 @@ class UpdateAction(Action):
 
     def mayLinger(self, cert):
         return cert.validWithGracePeriod()
-
-
-class Writer:
-
-    def __init__(self):
-        self.entdir = EntitlementDirectory()
-
-    def write(self, key, cert):
-        serial = cert.serialNumber()
-        ent_dir_path = self.entdir.productpath()
-
-        key_filename = '%s-key.pem' % str(serial)
-        key_path = Path.join(ent_dir_path, key_filename)
-        key.write(key_path)
-
-        cert_filename = '%s.pem' % str(serial)
-        cert_path = Path.join(ent_dir_path, cert_filename)
-        cert.write(cert_path)
-
 
 class Disconnected(Exception):
     pass

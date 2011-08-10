@@ -274,3 +274,20 @@ class Path:
     @classmethod
     def isdir(cls, path):
         return os.path.isdir(path)
+
+class Writer:
+
+    def __init__(self):
+        self.entdir = EntitlementDirectory()
+
+    def write(self, key, cert):
+        serial = cert.serialNumber()
+        ent_dir_path = self.entdir.productpath()
+
+        key_filename = '%s-key.pem' % str(serial)
+        key_path = Path.join(ent_dir_path, key_filename)
+        key.write(key_path)
+
+        cert_filename = '%s.pem' % str(serial)
+        cert_path = Path.join(ent_dir_path, cert_filename)
+        cert.write(cert_path)
