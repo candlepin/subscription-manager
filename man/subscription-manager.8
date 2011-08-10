@@ -1,4 +1,4 @@
-.TH subscription-manager 8 "December 10, 2010" "version 1.0" "Subscription Management"  Deon Lackey 
+.TH subscription-manager 8 "August 10, 2011" "version 2.0" "Subscription Management"  Deon Lackey 
 .SH NAME
 subscription-manager \- Register machines and manage subscriptions to products.
 
@@ -69,38 +69,43 @@ has specific options available for each command, depending on what operation is 
 2. unregister
 
 .IP
-3. identity
+3. subscribe
 
 .IP
-4. activate
+4. unsubscribe
 
 .IP
-5. subscribe
+5. redeem
 
 .IP
-6. unsubscribe
+6. list
 
 .IP
 7. refresh
 
 .IP
-8. list
+8. environments
 
 .IP
-9. facts
+9. repos
 
 .IP
-10. clean
+10. orgs
+
+.IP
+11. identity
+
+.IP
+12. facts
+
+.IP
+13. clean
 
 
 .SS COMMON OPTIONS
 .TP
 .B -h, --help
 Prints the specific help information for the given command.
-
-.TP
-.B --debug=DEBUG
-Sets the debug level to use for verbose output.
 
 .TP
 .B --proxy=PROXY
@@ -152,6 +157,9 @@ Sets the name of the consumer (machine) to register. This defaults to be the sam
 .B --consumerid=CONSUMERID
 References an existing consumer ID to reregister a system. The consumer ID is used as an inventory number for the system in the entitlements service database. If the entitlements data are lost or corrupted, reregistering the system restores it.
 
+.TP
+.B --activationkey=KEYS
+Gives a comma-separated list of product keys to use to redeem or apply specific subscriptions to the machine. This is used generally for preconfigured machines, which may already have products installed and subscriptions allocated for that consumer.
 
 .TP
 .B --autosubscribe
@@ -163,6 +171,17 @@ Registers the system even if it is already registered. Normally, any register op
 .B --force, 
 the existing consumer entry is unregistered first, all of its subscriptions are returned to the pool, and then the consumer is registered as a new consumer.
 
+.TP
+.B --org=ORG
+Assigns the consumer to an organization. Infrastructures which are managed on-site may be 
+.I multi-tenant,
+meaning that there are multiple organizations within one customer unit. A consumer may be assigned manually to one of these suborganizations. If there is only one organization configured (which is the case with infrastructures using the hosted service), then this is not used. With multi-tenant environments, this is required.
+
+.TP
+.B --environment=ENV
+Registers the consumer to an environment within an organization.
+
+
 .SS UNREGISTER OPTIONS
 The 
 .B unregister 
@@ -170,49 +189,6 @@ command unregisters a machine, which strips its subscriptions and removes the ma
 
 .PP
 This command has no options.
-
-.SS IDENTITY OPTIONS
-The 
-.B identity 
-command handles the UUID of a system, which identifies the system to the entitlement service after registration. This command can simply return the UUID or it can be used to restore the registration of a previously-registered system to the entitlement service.
-
-.TP
-.B --regenerate
-Requests that the entitlement service issue a new identity certificate for the system, using an existing UUID in the original identity certificate. If this is used alone, then the
-.B identity 
-command also uses the original identity certificate to bind to the entitlement server, using certificate-based authentication.
-
-.TP
-.B --username=USERNAME
-Gives the username for the account which is registering the system; this user account is usually tied to the user account for the content delivery system which supplies the content. Optional, for user-based authentication.
-
-.TP
-.B --password=PASSWORD
-Gives the user account password. Optional, for user-based authentication.
-
-.TP
-.B --force
-Regenerates the identity certificate for the system using username/password authentication. This is used with the 
-.B --regenerate
-option. 
-.B --regenerate
-alone will use an existing identity certificate to authenticate to the entitlement service. If the certificate is missing or corrupted or in other circumstances, then it may be better to use user authentication rather than certificate-based authentication. In that case, the 
-.B --force
-option requires the username or password to be given either as an argument or in response to a prompt.
-
-.SS ACTIVATE OPTIONS
-The 
-.B activate 
-command is used for machines that are purchased from third-party vendors that include a subscription. The activation process essentially autosubscribes the machine to the pre-selected subscription that the vendor supplied. 
-
-.TP
-.B --email=EMAIL
-Gives the email account to send the activation notification message to.
-
-.TP
-.B --email_locale=LOCALE
-Sets the locale to use for the message. If none is given, then it defaults to the local system's locale.
-
 
 .SS SUBSCRIBE OPTIONS
 The 
@@ -224,6 +200,12 @@ command allocates a specific subscription to the machine.
 Gives the ID for the entitlements pool (collection of products) to subscribe the machine to. This option is required, unless 
 .B --auto
 is used.
+
+.TP
+.B --quantity=NUMBER
+Subscribes the system to a specified number of subscriptions. Subscriptions may have certain limits on them, like the number of sockets on the machine or the number of allowed virtual guests. It is possible to assign multiple subscriptions (or 
+.I stacking
+subscriptions) to cover the number of sockets, guests, or other characteristic.
 
 .TP
 .B --auto
@@ -245,15 +227,22 @@ Unsubscribes the system from
 .I all 
 of the products it's subscribed to.
 
-.SS REFRESH OPTIONS
+.SS REDEEM OPTIONS
 The 
-.B refresh
-command pulls the latest entitlement data from the server. Normally, the system polls the entitlement server at a set interval (4 hours by default) to check for any changes in the available subscriptions. The 
-.B refresh
-command checks with the entitlement server right then, outside the normal interval.
+.B redeem 
+command is used for machines that are purchased from third-party vendors that include a subscription. The activation process essentially autosubscribes the machine to the pre-selected subscription that the vendor supplied. 
 
-.PP
-This command has no options.
+.TP
+.B --email=EMAIL
+Gives the email account to send the activation notification message to.
+
+.TP
+.B --locale=LOCALE
+Sets the locale to use for the message. If none is given, then it defaults to the local system's locale.
+
+.TP
+.B --org=ORG
+Identifies the organization which issued the activation key.
 
 
 .SS LIST OPTIONS
@@ -285,6 +274,90 @@ Lists all possible subscriptions that have been purchased by the organization, e
 .B --available 
 option. 
 
+
+.SS REFRESH OPTIONS
+The 
+.B refresh
+command pulls the latest entitlement data from the server. Normally, the system polls the entitlement server at a set interval (4 hours by default) to check for any changes in the available subscriptions. The 
+.B refresh
+command checks with the entitlement server right then, outside the normal interval.
+
+.PP
+This command has no options.
+
+
+.SS ENVIRONMENTS OPTIONS
+The 
+.B environments
+command lists all of the environments that have been configured for an organization. This command is only used for organizations which have a locally-hosted subscriptions or content service of some kind, like Katello and Subscription Asset Manager. The concept of environments -- and therefore this command -- have no meaning in a hosted subscription/content structure.
+
+.TP
+.B --username=USERNAME
+Gives the username for the account to use to connect to the organization account.
+
+.TP
+.B --password=PASSWORD
+Gives the user account password. This is required.
+
+.TP
+.B --org=ORG
+Identifies the organization for which to list the configured environments.
+
+
+.SS REPOS OPTIONS
+The 
+.B repos
+command lists all of the repositories that are available to a consumer. This command is only used for organizations which have a locally-hosted content service of some kind, like Katello. With Red Hat's hosted content service, there is only one central repository.
+
+.TP
+.B --list
+Lists all of the repositories that are provided by the content service used by the consumer.
+
+
+.SS ORGS OPTIONS
+The 
+.B orgs
+command lists all of the organizations which are available to the specified user accounts. A multi-tenant infrastructure may have multiple organizations within a single customer, and users may be restricted to access only a subset of the total number of organizations.
+
+.TP
+.B --username=USERNAME
+Gives the username for the account to use to connect to the organization account.
+
+.TP
+.B --password=PASSWORD
+Gives the user account password. This is required.
+
+
+.SS IDENTITY OPTIONS
+The 
+.B identity 
+command handles the UUID of a system, which identifies the system to the entitlement service after registration. This command can simply return the UUID or it can be used to restore the registration of a previously-registered system to the entitlement service.
+
+.TP
+.B --regenerate
+Requests that the entitlement service issue a new identity certificate for the system, using an existing UUID in the original identity certificate. If this is used alone, then the
+.B identity 
+command also uses the original identity certificate to bind to the entitlement server, using certificate-based authentication.
+
+.TP
+.B --username=USERNAME
+Gives the username for the account which is registering the system; this user account is usually tied to the user account for the content delivery system which supplies the content. Optional, for user-based authentication.
+
+.TP
+.B --password=PASSWORD
+Gives the user account password. Optional, for user-based authentication.
+
+.TP
+.B --force
+Regenerates the identity certificate for the system using username/password authentication. This is used with the 
+.B --regenerate
+option. 
+.B --regenerate
+alone will use an existing identity certificate to authenticate to the entitlement service. If the certificate is missing or corrupted or in other circumstances, then it may be better to use user authentication rather than certificate-based authentication. In that case, the 
+.B --force
+option requires the username or password to be given either as an argument or in response to a prompt.
+
+
 .SS FACTS OPTIONS
 The
 .B facts 
@@ -296,7 +369,7 @@ Lists the system information. These are simple
 .I attribute: value
 pairs that reflect much of the information in the 
 .B /etc/sysconfig
-directory.
+directory
 .nf
 cpu.architecture: x86_64
 cpu.core(s)_per_socket: 1
@@ -372,29 +445,43 @@ file. This command requires, at a minimum, the username and password for an acco
 prompts for the username and password interactively.
 
 .PP
-For example:
-.RS
+For an environment with a single organization -- such as a hosted system -- all that is required is the username/password set. For example:
+
 .nf
 subscription-manager register --username=admin --password=secret
 .fi
 
-
-.RE
 .PP
-Some information is assigned automatically. Subscription Manager automatically generates a unique consumer ID for the system which is used by the entitlement service and it assigns a consumer type, which indicates what kinds of software are available for the machine. The name for the consumer entry can be manually assigned (for use within a local inventory system, for instance). A handful of subscriptions (such as specialized servers for content or identity management) have their own specific consumer type. For example:
+For a multi-tenant environment, then it is also necessary to specify the organization to which to register the system. For example:
+
 .nf
-subscription-manager register --username=admin --password=secret --type=system --name=server1
+subscription-manager register --username=admin --password=secret
+--org="IT Dept"
 .fi
 
+.PP
+Some information is assigned automatically. Subscription Manager automatically generates a unique consumer ID for the system which is used by the entitlement service and it assigns a consumer type, which indicates what kinds of software are available for the machine. The name for the consumer entry can be manually assigned (for use within a local inventory system, for instance). A handful of subscriptions (such as specialized servers for content or identity management) have their own specific consumer type. For example:
+
+.nf
+subscription-manager register --username=admin 
+--password=secret --type=system --name=server1
+--org="IT Dept"
+.fi
+
+.PP 
+If a system is in a multi-tenant environment and the organization is 
+.I not
+provided with the registration request, registration fails with a remote server error. In the
+.B rhsm.log,
+there will be errors about being unable to load the owners interface.
 
 .PP
 If a system is registered and then somehow its entitlement information is lost -- a drive crashes or the certificates are deleted or corrupted -- the system can be reregistered, with all of its subscriptions restored, by registering with the existing consumer ID.
 
-.RS
 .nf
-subscription-manager register --username=admin --password=secret --consumerid=1234abcd
+subscription-manager register --username=admin 
+--password=secret --consumerid=1234abcd
 .fi
-.RE
 
 .PP
 A consumer uses an SSL client certificate (its identity certificate) to authenticate to the entitlements system to check for updates or changes to subscriptions. If the identity certificate is lost or corrupted, it can be regenerated using the 
@@ -410,14 +497,13 @@ subscription-manager identity --regenerate
 Using the 
 .B --force
 option will prompt for the username and password for the account, if one isn't given, and then return the new consumer ID and the hostname of the registered system.
-.RS
+
 .nf
 subscription-manager identity --force
 Username: jsmith
 Password: 
 eff9a4c9-3579-49e5-a52f-83f2db29ab52 server.example.com
 .fi
-.RE
 
 
 .PP
@@ -496,7 +582,8 @@ Subscribing a machine requires the ID for the entitlement pool (the
 option). For example:
 .RS
 .nf
-subscription-manager subscribe --pool=ff8080812bc382e3012bc3845da100d2
+subscription-manager subscribe 
+--pool=ff8080812bc382e3012bc3845da100d2
 .fi
 .RE
 
@@ -509,6 +596,21 @@ option:
 .RS
 .nf
 subscription-manager subscribe --auto
+.fi
+.RE
+
+.PP
+Some subscriptions define a count on the consumer, like the number of sockets on the machine or the number of virtual guests on a host. You can 
+.I stack
+multiple subscriptions together to cover the count. For example, if there is a four socket server, you can use two subscriptions for "RHEL Server for Two Sockets" to cover the socket count. To specify the number of subscriptions to use, 
+use the 
+.B --quantity
+option. For example:
+.RS
+.nf
+subscription-manager subscribe 
+--pool=ff8080812bc382e3012bc3845da100d2
+--quantity=2
 .fi
 .RE
 
@@ -533,7 +635,57 @@ An option with registration,
 , will automatically subscribe the newly-registered system to the entitlements pool which best matches the system architecture and configuration. This option allows the system to be subscribed as part of the registration process, rather than separately managing subscriptions.
 .RS
 .nf
-subscription-manager register --username=admin --password=secret --autosubscribe
+subscription-manager register --username=admin --password=secret 
+--autosubscribe
+.fi
+.RE
+
+.SS REDEEMING EXISTING SUBSCRIPTIONS
+Sometimes, a machine may come pre-configured with products and subscriptions. Rather than subscribing to a pool and claiming a subscription, this system simply needs to 
+.I redeem
+its existing subscriptions. 
+
+.PP 
+Redeeming an existing subscription can be done at registration by using the subscription's 
+.I activation key
+and specifying the organization which issued the key.
+For example:
+.RS
+.nf
+subscription-manager register --username=admin --password=secret 
+--org="IT Dept" --activationkey=1234abcd
+.fi
+.RE
+
+.PP
+Giving the org name is not necessary in hosted environments or infrastructures which have only a single organization.
+
+.PP
+After registration, subscriptions on pre-configured machines can be claimed using the 
+.B redeem
+command, which essentially autosubscribes the system to its pre-existing subscriptions.
+.RS
+.nf
+subscription-manager redeem --email=admin@example.com --org="IT Dept"
+.fi
+.RE
+
+.SS VIEWING LOCAL SUBSCRIPTION & CONTENT PROVIDER INFORMATION
+Red Hat has a hosted environment, through the Customer Portal, that provides centralized access to subscription management and content repositories. However, organizations can use other tools -- like Katello -- for content hosting  and subscription management. With a local content provider, the organization, environments, repositories, and other structural configuration is performed in the content provider. Red Hat Subscription Manager can be used to display this information, using the 
+.B environments, orgs,
+and
+.B repos
+commands.
+
+.RS
+.nf
+subscription-manager repos --list
+
+subscription-manager environments --username=jsmith
+--password=secret --org=prod
+
+subscription-manager orgs --username=jsmith
+--password=secret 
 .fi
 .RE
 
@@ -577,7 +729,7 @@ tool can be run as a post-install script as part of the kickstart installation p
 .RS
 .nf
 %post --log=/root/ks-post.log
-/usr/sbin/subscription-manager register --username admin --password secret --autosubscribe --force
+/usr/sbin/subscription-manager register --username admin --password secret --org 'east colo' --autosubscribe --force
 .fi
 .RE
 
