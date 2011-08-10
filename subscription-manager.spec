@@ -142,6 +142,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_prefix}/lib/yum-plugins/subscription-manager.py*
 %{_prefix}/lib/yum-plugins/product-id.py*
 %{_datadir}/rhsm/subscription_manager/certlib.py*
+%{_datadir}/rhsm/subscription_manager/certdirectory.py*
 %{_datadir}/rhsm/subscription_manager/cert_sorter.py*
 %{_datadir}/rhsm/subscription_manager/hwprobe.py*
 %{_datadir}/rhsm/subscription_manager/constants.py*
