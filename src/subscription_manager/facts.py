@@ -19,8 +19,7 @@ import gettext
 _ = gettext.gettext
 
 import rhsm.config
-from subscription_manager import certlib
-#from subscription_manager.certlib import EntitlementDirectory, ProductDirectory, entitlement_valid
+from subscription_manager import certdirectory
 from subscription_manager import cert_sorter
 from datetime import datetime
 
@@ -148,8 +147,8 @@ class Facts:
         # figure out if we think we have valid entitlements
         # NOTE: we don't need
         if check_entitlements:
-            sorter = cert_sorter.CertSorter(certlib.ProductDirectory(),
-                                            certlib.EntitlementDirectory(),
+            sorter = cert_sorter.CertSorter(certdirectory.ProductDirectory(),
+                                            certdirectory.EntitlementDirectory(),
                                             facts_dict=facts)
             validity_facts = {'system.entitlements_valid': True}
             if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:

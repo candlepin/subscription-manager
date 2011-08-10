@@ -5,7 +5,7 @@ import tempfile
 
 import stubs
 from subscription_manager import productid
-from subscription_manager import certlib
+from subscription_manager import certdirectory
 from yum import YumBase
 
 
@@ -15,7 +15,7 @@ class TestProductManager(unittest.TestCase):
         self.db_dir = tempfile.mkdtemp()
         productid.DatabaseDirectory.PATH = self.db_dir
         self.pm = productid.ProductManager()
-        entDir = certlib.EntitlementDirectory()
+        entDir = certdirectory.EntitlementDirectory()
 #        stubCertDir = stubs.StubCertificateDirectory(entDir)
         cert1 = stubs.StubEntitlementCertificate(
             stubs.StubProduct('product1'),

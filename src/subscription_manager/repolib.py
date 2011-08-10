@@ -23,8 +23,8 @@ from iniparse import ConfigParser as Parser
 
 from rhsm.config import initConfig
 
-from certlib import Path, ActionLock, DataLib
-from certdirectory import EntitlementDirectory, ProductDirectory
+from certlib import ActionLock, DataLib
+from certdirectory import Path, EntitlementDirectory, ProductDirectory
 
 log = logging.getLogger('rhsm-app.' + __name__)
 

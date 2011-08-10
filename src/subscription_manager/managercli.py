@@ -941,7 +941,7 @@ class ConfigCommand(CliCommand):
 
         if self.options.list:
             for name, value in cfg.items('server'):
-                print '%s = %s' % (name,value)
+                print '%s = %s' % (name, value)
             print
         else:
             if self.options.hostname:

@@ -29,7 +29,7 @@ import sys
 sys.path.append("/usr/share/rhsm")
 from subscription_manager.branding import get_branding
 from subscription_manager import managerlib
-from subscription_manager import certlib
+from subscription_manager import certdirectory
 from subscription_manager.cert_sorter import CertSorter
 import rhsm.certificate as certificate
 
@@ -66,8 +66,8 @@ def check_status():
         debug("System is already registered to another entitlement system")
         return RHN_CLASSIC
 
-    sorter = CertSorter(certlib.ProductDirectory(),
-            certlib.EntitlementDirectory())
+    sorter = CertSorter(certdirectory.ProductDirectory(),
+            certdirectory.EntitlementDirectory())
 
     if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
         debug("System has one or more certificates that are not valid")

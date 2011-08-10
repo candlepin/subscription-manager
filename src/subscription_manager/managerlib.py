@@ -100,8 +100,8 @@ def getInstalledProductStatus(product_directory=None,
      Returns the Installed products and their subscription states
     """
     # allow us to stub these out for testing
-    product_directory = product_directory or certlib.ProductDirectory()
-    entitlement_directory = entitlement_directory or certlib.EntitlementDirectory()
+    product_directory = product_directory or certdirectory.ProductDirectory()
+    entitlement_directory = entitlement_directory or certdirectory.EntitlementDirectory()
 
     product_hashes = [product.getProduct().getHash() for product in \
             product_directory.list()]
@@ -141,7 +141,7 @@ def getInstalledProductStatus(product_directory=None,
 
 def getEntitlementsForProduct(product_name):
     entitlements = []
-    for cert in certlib.EntitlementDirectory().list():
+    for cert in certdirectory.EntitlementDirectory().list():
         for cert_product in cert.getProducts():
             if product_name == cert_product.getName():
                 entitlements.append(cert)
@@ -149,7 +149,7 @@ def getEntitlementsForProduct(product_name):
 
 
 def getInstalledProductHashMap():
-    products = certlib.ProductDirectory().list()
+    products = certdirectory.ProductDirectory().list()
     phash = {}
     for product in products:
         phash[product.getProduct().getName()] = product.getProduct().getHash()
@@ -170,7 +170,7 @@ def getConsumedProductEntitlements():
             formatDate(cert.validRange().begin()),
             formatDate(cert.validRange().end())))
 
-    entdir = certlib.EntitlementDirectory()
+    entdir = certdirectory.EntitlementDirectory()
     for cert in entdir.listValid():
         eproducts = cert.getProducts()
         #for entitlement certificates with no product data,
@@ -213,11 +213,11 @@ class PoolFilter(object):
 
         self.product_directory = product_dir
         if not product_dir:
-            self.product_directory = certlib.ProductDirectory()
+            self.product_directory = certdirectory.ProductDirectory()
 
         self.entitlement_directory = entitlement_dir
         if not entitlement_dir:
-            self.entitlement_directory = certlib.EntitlementDirectory()
+            self.entitlement_directory = certdirectory.EntitlementDirectory()
 
     def filter_product_ids(self, pools, product_ids):
         """

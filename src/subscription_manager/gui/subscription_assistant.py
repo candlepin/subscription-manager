@@ -25,7 +25,6 @@ _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
 
 import rhsm.certificate as certificate
-from subscription_manager import certlib
 from subscription_manager import certdirectory
 from subscription_manager import managerlib
 from subscription_manager import async
@@ -267,7 +266,6 @@ class SubscriptionAssistant(widgets.GladeWidget):
                     _("%s (first date of invalid entitlements)") % formatted)
             self.providing_subs_label.set_label(
                     _("The following subscriptions will cover the products selected on %s") % invalid_date.strftime("%x"))
-
 
         # grab a list of the highlighted products, so we can reselect them
         # after we refresh the screen (less any ones that are covered by a

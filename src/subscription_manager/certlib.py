@@ -27,8 +27,6 @@ from subscription_manager.certdirectory import EntitlementDirectory, \
 from rhsm.config import initConfig
 from rhsm.certificate import *
 
-
-
 log = logging.getLogger('rhsm-app.' + __name__)
 
 import gettext
@@ -243,8 +241,10 @@ class UpdateAction(Action):
     def mayLinger(self, cert):
         return cert.validWithGracePeriod()
 
+
 class Disconnected(Exception):
     pass
+
 
 class ConsumerIdentity:
 

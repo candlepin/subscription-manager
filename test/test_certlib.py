@@ -14,96 +14,14 @@
 #
 
 import unittest
-import os
 from datetime import timedelta, datetime
 
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
     StubCertificateDirectory, StubFacts
-from subscription_manager.certlib import Path, find_first_invalid_date, \
-    EntitlementDirectory
+from subscription_manager.certlib import find_first_invalid_date
 from subscription_manager.cert_sorter import CertSorter
-from subscription_manager.repolib import RepoFile
-from subscription_manager.productid import ProductDatabase
 
 from rhsm.certificate import GMT
-
-
-def dummy_exists(filename):
-    return True
-
-
-class PathTests(unittest.TestCase):
-    """
-    Tests for the certlib Path class, changes to it's ROOT setting can affect
-    a variety of things that only surface in anaconda.
-    """
-
-    def setUp(self):
-        # monkey patch os.path.exists, be careful, this can break things
-        # including python-nose if we don't set it back in tearDown.
-        self.actual_exists = os.path.exists
-        os.path.exists = dummy_exists
-
-    def tearDown(self):
-        Path.ROOT = "/"
-        os.path.exists = self.actual_exists
-
-    def test_normal_root(self):
-        # this is the default, but have to set it as other tests can modify
-        # it if they run first.
-        self.assertEquals('/etc/pki/consumer/', Path.abs('/etc/pki/consumer/'))
-        self.assertEquals('/etc/pki/consumer/', Path.abs('etc/pki/consumer/'))
-
-    def test_modified_root(self):
-        Path.ROOT = '/mnt/sysimage/'
-        self.assertEquals('/mnt/sysimage/etc/pki/consumer/',
-                Path.abs('/etc/pki/consumer/'))
-        self.assertEquals('/mnt/sysimage/etc/pki/consumer/',
-                Path.abs('etc/pki/consumer/'))
-
-    def test_modified_root_no_trailing_slash(self):
-        Path.ROOT = '/mnt/sysimage'
-        self.assertEquals('/mnt/sysimage/etc/pki/consumer/',
-                Path.abs('/etc/pki/consumer/'))
-        self.assertEquals('/mnt/sysimage/etc/pki/consumer/',
-                Path.abs('etc/pki/consumer/'))
-
-    def test_repo_file(self):
-        # Fake that the redhat.repo exists:
-
-        Path.ROOT = '/mnt/sysimage'
-        rf = RepoFile()
-        self.assertEquals("/mnt/sysimage/etc/yum.repos.d/redhat.repo", rf.path)
-
-    def test_product_database(self):
-        Path.ROOT = '/mnt/sysimage'
-        prod_db = ProductDatabase()
-        self.assertEquals('/mnt/sysimage/var/lib/rhsm/productid.js',
-                prod_db.dir.abspath('productid.js'))
-
-    def test_sysimage_pathjoin(self):
-        Path.ROOT = '/mnt/sysimage'
-        ed = EntitlementDirectory()
-        self.assertEquals('/mnt/sysimage/etc/pki/entitlement/1-key.pem',
-                Path.join(ed.productpath(), '1-key.pem'))
-
-    def test_normal_pathjoin(self):
-        ed = EntitlementDirectory()
-        self.assertEquals('/etc/pki/entitlement/1-key.pem',
-                Path.join(ed.productpath(), "1-key.pem"))
-
-# class ActionTests(unittest.TestCase):
-#     def test_action(self):
-#         action = Action()
-
-#     def test_action_build(self):
-#         action = Action()
-#         bundle = {'key': cert_data.key_content,
-#                    'cert': cert_data.cert_content}
-#         key, cert = action.build(bundle)
-#         assert(key.content == cert_data.key_content)
-#         print cert.serialNumber()
-
 
 class FindLastValidTests(unittest.TestCase):
 

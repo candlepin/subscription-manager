@@ -22,7 +22,7 @@ from yum.plugins import TYPE_CORE
 sys.path.append('/usr/share/rhsm')
 from subscription_manager import logutil
 from subscription_manager.productid import ProductManager
-from subscription_manager.certlib import Path
+from subscription_manager.certdirectory import Path
 
 requires_api_version = '2.6'
 plugin_type = (TYPE_CORE,)

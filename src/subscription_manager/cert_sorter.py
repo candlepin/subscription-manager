@@ -15,8 +15,8 @@
 from datetime import timedelta, datetime
 import logging
 
-
 log = logging.getLogger('rhsm-app.' + __name__)
+
 
 class CertSorter(object):
     """
@@ -119,7 +119,7 @@ class CertSorter(object):
 
             # Is this an installed product?
             if product_id in self.all_products:
-                 product_dict[product_id] = ent_cert
+                product_dict[product_id] = ent_cert
 
     def _scan_ent_cert_stackable_products(self):
         ent_certs = self.entitlement_dir.list()

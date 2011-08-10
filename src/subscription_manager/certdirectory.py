@@ -17,13 +17,9 @@
 
 
 import os
-import syslog
 import logging
 
-from datetime import timedelta, datetime
 from rhsm.certificate import *
-from subscription_manager.lock import Lock
-from subscription_manager import cert_sorter
 
 from rhsm.config import initConfig
 
@@ -35,10 +31,6 @@ _ = gettext.gettext
 
 cfg = initConfig()
 
-
-def system_log(message, priority=syslog.LOG_NOTICE):
-    syslog.openlog("subscription-manager")
-    syslog.syslog(priority, message)
 
 class Directory:
 
@@ -97,6 +89,7 @@ class Directory:
 
     def __str__(self):
         return self.path
+
 
 class CertificateDirectory(Directory):
 
@@ -187,6 +180,7 @@ class CertificateDirectory(Directory):
                     path,
                     e)
 
+
 class ProductDirectory(CertificateDirectory):
 
     PATH = cfg.get('rhsm', 'productCertDir')
@@ -252,6 +246,7 @@ class EntitlementDirectory(CertificateDirectory):
                 valid.append(c)
         return valid
 
+
 class Path:
 
     # Used during Anaconda install by the yum pidplugin to ensure we operate
@@ -274,6 +269,7 @@ class Path:
     @classmethod
     def isdir(cls, path):
         return os.path.isdir(path)
+
 
 class Writer:
 
