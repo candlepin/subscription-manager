@@ -135,9 +135,9 @@ class Hardware:
         firstline = f.readline()
         f.close()
 
-        version = "unknown"
-        distname = "unknown"
-        dist_id = "unknown"
+        version = "Unknown"
+        distname = "Unknown"
+        dist_id = "Unknown"
 
         m = _lsb_release_version.match(firstline)
 
@@ -268,7 +268,7 @@ class Hardware:
                         netinfdict[key] = getattr(
                                             ethtool, 'get_' + mkey)(interface)
                     except:
-                        netinfdict[key] = "unknown"
+                        netinfdict[key] = "Unknown"
         except:
             print _("Error reading net Interface information:"), sys.exc_type
         self.allhw.update(netinfdict)
@@ -333,7 +333,7 @@ class Hardware:
         """
         no_uuid_platforms = ['powervm_lx86', 'xen-dom0', 'ibm_systemz']
 
-        self.allhw['virt.uuid'] = 'unknown'
+        self.allhw['virt.uuid'] = 'Unknown'
 
         try:
             for v in no_uuid_platforms:
@@ -356,8 +356,6 @@ class Hardware:
             self.allhw['virt.uuid'] = uuid.rstrip("\r\n")
         except IOError:
             pass
-
-        self.allhw['virt.uuid'] = self.allhw['virt.uuid'].lower()
 
     def getAll(self):
         hardware_methods = [self.getUnameInfo,

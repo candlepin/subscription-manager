@@ -85,7 +85,7 @@ class HardwareProbeTests(unittest.TestCase):
         hw = hwprobe.Hardware()
         hwprobe.platform = None
         MockOpen.return_value.readline.return_value = "this is not really a release file of any sort"
-        self.assertEquals(hw.getReleaseInfo(), {'distribution.version': 'unknown', 'distribution.name': 'unknown', 'distribution.id': 'unknown'})
+        self.assertEquals(hw.getReleaseInfo(), {'distribution.version': 'Unknown', 'distribution.name': 'Unknown', 'distribution.id': 'Unknown'})
 
     @patch("__builtin__.open")
     def test_distro(self, MockOpen):

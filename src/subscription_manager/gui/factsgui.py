@@ -103,7 +103,7 @@ class SystemFactsDialog(widgets.GladeWidget):
             self.facts_store.append(parent, [fact, value])
 
         # TODO: could stand to check if registered before trying to do this:
-        owner = 'unknown'
+        owner = 'Unknown'
         try:
             owner = self.backend.uep.getOwner(self.consumer.uuid)['displayName']
         except Exception, e:
