@@ -39,7 +39,7 @@ class FindFirstInvalidDateTests(unittest.TestCase):
 
         last_valid_date = find_first_invalid_date(ent_dir=ent_dir,
                 product_dir=prod_dir)
-        self.assertIsNone(last_valid_date)
+        self.assertTrue(last_valid_date is None)
 
     def test_currently_unentitled_products(self):
         cert = StubProductCertificate(StubProduct('unentitledProduct'))
