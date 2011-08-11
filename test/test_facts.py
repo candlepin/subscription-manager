@@ -1,6 +1,7 @@
 import unittest
 import tempfile
 import json
+import shutil
 
 from subscription_manager import facts
 
@@ -124,14 +125,17 @@ def stub_get_facts():
 
 class TestFacts(unittest.TestCase):
     def setUp(self):
-        fact_cache_dir = tempfile.mkdtemp()
-        fact_cache = fact_cache_dir + "/facts.json"
+        self.fact_cache_dir = tempfile.mkdtemp()
+        fact_cache = self.fact_cache_dir + "/facts.json"
         fd = open(fact_cache, "w")
         fd.write(facts_buf)
         fd.close()
         self.f = facts.Facts()
-        self.f.fact_cache_dir = fact_cache_dir
+        self.f.fact_cache_dir = self.fact_cache_dir
         self.f.fact_cache = fact_cache
+
+    def tearDown(self):
+        shutil.rmtree(self.fact_cache_dir)
 
     def test_facts_read(self):
         test_facts = self.f.read()
