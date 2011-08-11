@@ -80,6 +80,17 @@ class RemoteServerException(ConnectionException):
         self.code = code
 
 
+class NoOpChecker:
+
+    def __init__(self, host=None, peerCertHash=None, peerCertDigest='sha1'):
+        self.host = host
+        self.fingerprint = peerCertHash
+        self.digest = peerCertDigest
+
+    def __call__(self, peerCert, host=None):
+        return True
+
+
 class RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
     # 2.7 httplib expects to be able to pass a body argument to
     # endheaders, which the m2crypto.httpslib.ProxyHTTPSConnect does
@@ -169,7 +180,9 @@ class Restlib(object):
         handler = self.apihandler + method
         context = SSL.Context("tlsv1")
 
-        if not self.insecure:  #allow clients to work insecure mode if required..
+        if self.insecure:  #allow clients to work insecure mode if required..
+            context.post_connection_check = NoOpChecker()
+        else:
             context.set_verify(SSL.verify_fail_if_no_peer_cert, self.ssl_verify_depth)
             if self.ca_dir != None:
                 log.debug('Loading CA PEM certificates from: %s', self.ca_dir)
@@ -352,8 +365,8 @@ class UEPConnection:
         of the web application we're configured to use.
 
         Need to handle exceptions here because sometimes UEPConnections are
-        created in a state where they can't actually be used. (they get 
-        replaced later) If something goes wrong making this request, just 
+        created in a state where they can't actually be used. (they get
+        replaced later) If something goes wrong making this request, just
         leave the list of supported resources empty.
         """
         self.resources = {}
@@ -371,7 +384,7 @@ class UEPConnection:
 
     def supports_resource(self, resource_name):
         """
-        Check if the server we're connecting too supports a particular 
+        Check if the server we're connecting too supports a particular
         resource. For our use cases this is generally the plural form
         of the resource.
         """
@@ -384,7 +397,7 @@ class UEPConnection:
     def ping(self, username=None, password=None):
         return self.conn.request_get("/status/")
 
-    def registerConsumer(self, name="unknown", type="system", facts={}, 
+    def registerConsumer(self, name="unknown", type="system", facts={},
             owner=None, environment=None, keys=None):
         """
         Creates a consumer on candlepin server
@@ -559,14 +572,14 @@ class UEPConnection:
         """
         Fetch an environment for an owner.
 
-        If querying by name, owner is required as environment names are only 
+        If querying by name, owner is required as environment names are only
         unique within the context of an owner.
 
         TODO: Add support for querying by ID, this will likely hit an entirely
         different URL.
         """
         if name and not owner_key:
-            raise Exception("Must specify owner key to query environment " 
+            raise Exception("Must specify owner key to query environment "
                     "by name")
 
         query_param = urlencode({"name": name})
