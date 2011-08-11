@@ -114,17 +114,17 @@ class Facts:
 
         return diff
 
-    def get_facts(self, check_entitlements=True):
+    def get_facts(self):
         if self.facts:
             # see bz #627707
             # there is a little bit of a race between when we load the facts, and when
             # we decide to save them, so delete facts out from under a Fact object means
             # it wasn't detecting it missing in that case and not writing a new one
             return self.facts
-        self.facts = self._find_facts(check_entitlements=check_entitlements)
+        self.facts = self._find_facts()
         return self.facts
 
-    def _find_facts(self, check_entitlements):
+    def _find_facts(self):
         # Load custom facts from /etc/rhsm/facts:
         facts_file_glob = "%s/facts/*.facts" % rhsm.config.DEFAULT_CONFIG_DIR
         file_facts = {}
@@ -146,15 +146,14 @@ class Facts:
 
         # figure out if we think we have valid entitlements
         # NOTE: we don't need
-        if check_entitlements:
-            sorter = cert_sorter.CertSorter(certdirectory.ProductDirectory(),
-                                            certdirectory.EntitlementDirectory(),
-                                            facts_dict=facts)
-            validity_facts = {'system.entitlements_valid': True}
-            if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
-                validity_facts['system.entitlements_valid'] = False
+        sorter = cert_sorter.CertSorter(certdirectory.ProductDirectory(),
+                                        certdirectory.EntitlementDirectory(),
+                                        facts_dict=facts)
+        validity_facts = {'system.entitlements_valid': True}
+        if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
+            validity_facts['system.entitlements_valid'] = False
 
-            facts.update(validity_facts)
+        facts.update(validity_facts)
 
         return facts
 
