@@ -15,6 +15,7 @@
 # in this software or its documentation.
 #
 import os
+import re
 import stat
 import sys
 import shutil
@@ -25,6 +26,7 @@ import logging
 from datetime import datetime, tzinfo, timedelta
 
 from rhsm.config import initConfig
+from rhsm.certificate import EntitlementCertificate
 
 from subscription_manager import certlib, certdirectory
 from subscription_manager.certlib import system_log as inner_system_log
@@ -34,10 +36,12 @@ from subscription_manager.quantity import allows_multi_entitlement
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
+
 import gettext
 _ = gettext.gettext
 
 cfg = initConfig()
+ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
 
 # Localization domain:
 APP = 'rhsm'
@@ -581,6 +585,128 @@ class PoolStash(object):
             provided_products.append((product['productName'], product['productId']))
         return provided_products
 
+class ImportFileExtractor(object):
+    """
+    Responsible for checking an import file and pulling cert and key from it.
+    An import file may include only the certificate, but may also include its
+    key.
+
+    An import file is processed looking for:
+
+    -----BEGIN <TAG>-----
+    <CONTENT>
+    ..
+    -----END <TAG>-----
+
+    and will only process if it finds CERTIFICATE or KEY in the <TAG> text.
+
+    For example the following would locate a key and cert.
+
+    -----BEGIN CERTIFICATE-----
+    <CERT_CONTENT>
+    -----END CERTIFICATE-----
+    -----BEGIN PUBLIC KEY-----
+    <KEY_CONTENT>
+    -----END PUBLIC KEY-----
+
+    """
+    _REGEX_START_GROUP = "start"
+    _REGEX_CONTENT_GROUP = "content"
+    _REGEX_END_GROUP = "end"
+    _REGEX = "(?P<%s>[-]*BEGIN[\w\ ]*[-]*)(?P<%s>[^-]*)(?P<%s>[-]*END[\w\ ]*[-]*)" % \
+                (_REGEX_START_GROUP, _REGEX_CONTENT_GROUP, _REGEX_END_GROUP)
+    _PATTERN = re.compile(_REGEX)
+
+    _CERT_DICT_TAG = "CERTIFICATE"
+    _KEY_DICT_TAG = "KEY"
+
+    def __init__(self, cert_file_path):
+            self.path = cert_file_path
+            self.file_name = os.path.basename(cert_file_path)
+
+            content = self._read(cert_file_path)
+            self.parts = self._process_content(content)
+
+    def _read(self, file_path):
+        fd = open(file_path, "r")
+        file_content = fd.read()
+        fd.close()
+        return file_content
+
+    def _process_content(self, content):
+        part_dict = {}
+        matches = self._PATTERN.finditer(content)
+        for match in matches:
+            start = match.group(self._REGEX_START_GROUP)
+            meat = match.group(self._REGEX_CONTENT_GROUP)
+            end = match.group(self._REGEX_END_GROUP)
+
+            dict_key = None
+            if not start.find(self._KEY_DICT_TAG) < 0:
+                dict_key = self._KEY_DICT_TAG
+            elif not start.find(self._CERT_DICT_TAG) < 0:
+                dict_key = self._CERT_DICT_TAG
+
+            if dict_key is None:
+                continue
+
+            part_dict[dict_key] = start + meat + end
+        return part_dict
+
+    def contains_key_content(self):
+        return self._KEY_DICT_TAG in self.parts
+
+    def get_key_content(self):
+        key_content = None
+        if self._KEY_DICT_TAG in self.parts:
+            key_content = self.parts[self._KEY_DICT_TAG]
+        return key_content
+
+    def get_cert_content(self):
+        cert_content = None
+        if self._CERT_DICT_TAG in self.parts:
+            cert_content = self.parts[self._CERT_DICT_TAG]
+        return cert_content
+
+    def verify_valid_entitlement(self):
+        """
+        Verify that a valid entitlement was processed.
+
+        @return: True if valid, False otherwise.
+        """
+        ent_cert = EntitlementCertificate(self.get_cert_content())
+        if ent_cert.bogus():
+            return False
+        return True
+
+    def write_to_disk(self):
+        """
+        Write/copy cert to the entitlement cert dir.
+        """
+        if not os.access(ENT_CONFIG_DIR, os.R_OK):
+            os.mkdir(ENT_CONFIG_DIR)
+
+        dest_file_path = os.path.join(ENT_CONFIG_DIR, os.path.basename(self.path))
+
+        # Write the key/cert content to new files
+        log.debug("Writing certificate file: %s" % (dest_file_path))
+        self._write_file(dest_file_path, self.get_cert_content())
+
+        if self.contains_key_content():
+            dest_key_file_path = self._get_key_path_from_dest_cert_path(dest_file_path)
+            log.debug("Writing key file: %s" % (dest_key_file_path))
+            self._write_file(dest_key_file_path, self.get_key_content())
+
+    def _write_file(self, target_path, content):
+        new_file = open(target_path, "w")
+        try:
+            new_file.write(content)
+        finally:
+            new_file.close()
+
+    def _get_key_path_from_dest_cert_path(self, dest_cert_path):
+        file_parts = os.path.splitext(dest_cert_path)
+        return file_parts[0] + "-key" + file_parts[1]
 
 def _sub_dict(datadict, subkeys, default=None):
     return dict([(k, datadict.get(k, default)) for k in subkeys])
