@@ -407,7 +407,7 @@ class UEPConnection:
                   "facts": facts}
         url = "/consumers"
         if environment:
-            url = "/environments/%s/consumers" % sanitize(environment)
+            url = "/environments/%s/consumers" % self.sanitize(environment)
         elif owner:
             url = "%s?owner=%s" % (url, owner)
             prepend = ""
@@ -424,7 +424,7 @@ class UEPConnection:
         Update a consumers facts on candlepin server
         """
         params = {"facts": facts}
-        method = "/consumers/%s" % sanitize(consumer_uuid)
+        method = "/consumers/%s" % self.sanitize(consumer_uuid)
         ret = self.conn.request_put(method, params)
         return ret
 
@@ -435,7 +435,7 @@ class UEPConnection:
         pkg_dicts expected to be a list of dicts, each containing the
         package headers we're interested in. See profile.py.
         """
-        method = "/consumers/%s/packages" % sanitize(consumer_uuid)
+        method = "/consumers/%s/packages" % self.sanitize(consumer_uuid)
         ret = self.conn.request_put(method, pkg_dicts)
         return ret
 
@@ -444,28 +444,28 @@ class UEPConnection:
         """
         Returns a consumer object with pem/key for existing consumers
         """
-        method = '/consumers/%s' % sanitize(uuid)
+        method = '/consumers/%s' % self.sanitize(uuid)
         return self.conn.request_get(method)
 
     def getOwner(self, uuid):
         """
         Returns an owner object with pem/key for existing consumers
         """
-        method = '/consumers/%s/owner' % sanitize(uuid)
+        method = '/consumers/%s/owner' % self.sanitize(uuid)
         return self.conn.request_get(method)
 
     def getOwnerList(self, username):
         """
         Returns an owner objects with pem/key for existing consumers
         """
-        method = '/users/%s/owners' % sanitize(username)
+        method = '/users/%s/owners' % self.sanitize(username)
         return self.conn.request_get(method)
 
     def unregisterConsumer(self, consumerId):
         """
          Deletes a consumer from candlepin server
         """
-        method = '/consumers/%s' % sanitize(consumerId)
+        method = '/consumers/%s' % self.sanitize(consumerId)
         return self.conn.request_delete(method)
 
     def getCertificates(self, consumer_uuid, serials=[]):
@@ -473,7 +473,7 @@ class UEPConnection:
         Fetch all entitlement certificates for this consumer.
         Specify a list of serial numbers to filter if desired.
         """
-        method = '/consumers/%s/certificates' % (sanitize(consumer_uuid))
+        method = '/consumers/%s/certificates' % (self.sanitize(consumer_uuid))
         if len(serials) > 0:
             serials_str = ','.join(serials)
             method = "%s?serials=%s" % (method, serials_str)
@@ -483,14 +483,14 @@ class UEPConnection:
         """
         Get serial numbers for certs for a given consumer
         """
-        method = '/consumers/%s/certificates/serials' % sanitize(consumerId)
+        method = '/consumers/%s/certificates/serials' % self.sanitize(consumerId)
         return self.conn.request_get(method)
 
     def bindByEntitlementPool(self, consumerId, poolId, quantity=None):
         """
          Subscribe consumer to a subscription by pool ID.
         """
-        method = "/consumers/%s/entitlements?pool=%s" % (sanitize(consumerId), sanitize(poolId))
+        method = "/consumers/%s/entitlements?pool=%s" % (self.sanitize(consumerId), self.sanitize(poolId))
         if quantity:
             method = "%s&quantity=%s" % (method, quantity)
         return self.conn.request_post(method)
@@ -507,11 +507,11 @@ class UEPConnection:
         return self.conn.request_post(method)
 
     def unbindBySerial(self, consumerId, serial):
-        method = "/consumers/%s/certificates/%s" % (sanitize(consumerId), sanitize(str(serial)))
+        method = "/consumers/%s/certificates/%s" % (self.sanitize(consumerId), self.sanitize(str(serial)))
         return self.conn.request_delete(method)
 
     def unbindAll(self, consumerId):
-        method = "/consumers/%s/entitlements" % sanitize(consumerId)
+        method = "/consumers/%s/entitlements" % self.sanitize(consumerId)
         return self.conn.request_delete(method)
 
     def getPoolsList(self, consumer=None, listAll=False, active_on=None, owner=None):
@@ -524,7 +524,7 @@ class UEPConnection:
 
         if owner:
             # Use the new preferred URL structure if possible:
-            method = "/owners/%s/pools?" % sanitize(owner)
+            method = "/owners/%s/pools?" % self.sanitize(owner)
             if consumer:
                 method = "%sconsumer=%s" % (method, consumer)
 
@@ -540,20 +540,20 @@ class UEPConnection:
             method = "%s&listall=true" % method
         if active_on:
             method = "%s&activeon=%s" % (method,
-                    sanitize_plus(active_on.isoformat()))
+                    self.sanitize(active_on.isoformat(), plus=True))
         results = self.conn.request_get(method)
         return results
 
     def getPool(self, poolId):
-        method = "/pools/%s" % sanitize(poolId)
+        method = "/pools/%s" % self.sanitize(poolId)
         return self.conn.request_get(method)
 
     def getProduct(self, product_id):
-        method = "/products/%s" % sanitize(product_id)
+        method = "/products/%s" % self.sanitize(product_id)
         return self.conn.request_get(method)
 
     def getEntitlementList(self, consumerId):
-        method = "/consumers/%s/entitlements" % sanitize(consumerId)
+        method = "/consumers/%s/entitlements" % self.sanitize(consumerId)
         results = self.conn.request_get(method)
         return results
 
@@ -564,7 +564,7 @@ class UEPConnection:
         Some servers may not support this and will error out. The caller
         can always check with supports_resource("environments").
         """
-        method = "/owners/%s/environments" % sanitize(owner_key)
+        method = "/owners/%s/environments" % self.sanitize(owner_key)
         results = self.conn.request_get(method)
         return results
 
@@ -583,18 +583,18 @@ class UEPConnection:
                     "by name")
 
         query_param = urlencode({"name": name})
-        url = "/owners/%s/environments?%s" % (sanitize(owner_key), query_param)
+        url = "/owners/%s/environments?%s" % (self.sanitize(owner_key), query_param)
         results = self.conn.request_get(url)
         if len(results) == 0:
             return None
         return results[0]
 
     def getEntitlement(self, entId):
-        method = "/entitlements/%s" % sanitize(entId)
+        method = "/entitlements/%s" % self.sanitize(entId)
         return self.conn.request_get(method)
 
     def regenIdCertificate(self, consumerId):
-        method = "/consumers/%s" % sanitize(consumerId)
+        method = "/consumers/%s" % self.sanitize(consumerId)
         return self.conn.request_post(method)
 
     def activateMachine(self, consumerId, email=None, lang=None):
@@ -610,8 +610,11 @@ class UEPConnection:
             method += "&email_locale=%s" % lang
         return self.conn.request_post(method)
 
-    def sanitize(self, urlParam):
+    def sanitize(self, urlParam, plus=False):
          #This is a wrapper around urllib.quote to avoid issues like the one
          #discussed in http://bugs.python.org/issue9301
-         return urllib.quote(str(urlParam))
-
+         if plus:
+             retStr = urllib.quote_plus(str(urlParam))
+         else:
+             retStr = urllib.quote(str(urlParam))
+         return retStr
