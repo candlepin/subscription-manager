@@ -107,6 +107,7 @@ class SubscriptionManagerTab(GladeWidget):
                              self.store['background'])
 
         self.top_view.append_column(column)
+        return column
 
     def add_date_column(self, name, store_key, expand=False):
         date_renderer = CellRendererDate()
@@ -484,20 +485,16 @@ class MachineTypeColumn(gtk.TreeViewColumn):
     MULTI_ENTITLEMENT_STRING = "*"
     NOT_MULTI_ENTITLEMENT_STRING = ""
 
-    def __init__(self, column_display_value, virt_only_model_idx, text_model_index,
-                 multi_entitle_model_idx, markup=False):
+    def __init__(self, virt_only_model_idx, multi_entitle_model_idx):
         """
         A table colum that renders virtual/physical machine icons along side a text value.
 
-        @param column_display_value: the title placed on the column.
         @param virt_only_model_idx: the model index containing a bool value used to
                                     determine which icon to show.
         @param multi_entitle_model_idx: the model index containing a bool value used to
                                         mark the row with an *.
-        @param text_model_index: the model index containing the text value to display
-                                 next to the icon.
         """
-        gtk.TreeViewColumn.__init__(self, column_display_value)
+        gtk.TreeViewColumn.__init__(self, "")
 
         # Add the machine type image.
         self.image_renderer = gtk.CellRendererPixbuf()
@@ -512,10 +509,6 @@ class MachineTypeColumn(gtk.TreeViewColumn):
         self.pack_start(self.asterisk_renderer, False)
         self.set_cell_data_func(self.asterisk_renderer, self.render_as_multi_entitlement)
 
-        # Add the title.
-        self.title_text_renderer = self._setup_title_text_renderer(markup, text_model_index)
-
-        self.set_expand(True)
         self.virt_only_idx = virt_only_model_idx
         self.multi_entitlement_idx = multi_entitle_model_idx
 
@@ -526,17 +519,6 @@ class MachineTypeColumn(gtk.TreeViewColumn):
             cell_renderer.set_property("pixbuf", self.VIRTUAL_MACHINE_PIXBUF)
         else:
             cell_renderer.set_property("pixbuf", self.PHYSICAL_MACHINE_PIXBUF)
-
-    def _setup_title_text_renderer(self, markup, text_model_idx):
-        title_text_renderer = gtk.CellRendererText()
-        title_text_renderer.set_property('xalign', 0.0)
-        self.pack_start(title_text_renderer, True)
-
-        renderer_attr = "text"
-        if markup:
-            renderer_attr = "markup"
-        self.add_attribute(title_text_renderer, renderer_attr, text_model_idx)
-        return title_text_renderer
 
     def render_as_multi_entitlement(self, column, cell_renderer, tree_model, iter):
         multi_entitlement = tree_model.get_value(iter, self.multi_entitlement_idx)

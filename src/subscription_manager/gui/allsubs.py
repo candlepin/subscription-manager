@@ -21,6 +21,7 @@ import gettext
 from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.gui.widgets import MachineTypeColumn
 from subscription_manager.jsonwrapper import PoolWrapper
+import gtk
 _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -56,12 +57,18 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.date_picker = widgets.DatePicker(today)
         self.date_picker_hbox.add(self.date_picker)
 
-        subs_col = MachineTypeColumn(_('Subscription'),
-                                     self.store['virt_only'],
-                                     self.store['product_name_formatted'],
-                                     self.store['multi_entitlement'],
-                                     markup=True)
-        self.top_view.append_column(subs_col)
+        machine_type_col = MachineTypeColumn(self.store['virt_only'],
+                                             self.store['multi_entitlement'])
+        self.top_view.append_column(machine_type_col)
+
+        # Custom build of the subscription column.
+        title_text_renderer = gtk.CellRendererText()
+        title_text_renderer.set_property('xalign', 0.0)
+        subscription_column = gtk.TreeViewColumn(_('Subscription'),
+                                        title_text_renderer,
+                                        markup=self.store['product_name_formatted'])
+        subscription_column.set_expand(True)
+        self.top_view.append_column(subscription_column)
 
         self.add_text_column(_('Available Subscriptions'), 'available')
 
@@ -80,6 +87,17 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             "on_contain_text_entry_changed": self.contain_text_entry_changed,
             "on_subscribe_button_clicked": self.subscribe_button_clicked,
         })
+
+    def _setup_title_text_renderer(self, column, markup, text_model_idx):
+        title_text_renderer = gtk.CellRendererText()
+        title_text_renderer.set_property('xalign', 0.0)
+        self.pack_start(title_text_renderer, True)
+
+        renderer_attr = "text"
+        if markup:
+            renderer_attr = "markup"
+        self.add_attribute(title_text_renderer, renderer_attr, text_model_idx)
+        return title_text_renderer
 
     def get_type_map(self):
         return {

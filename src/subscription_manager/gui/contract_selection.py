@@ -82,7 +82,14 @@ class ContractSelectionWindow(object):
 
     def populate_treeview(self):
 
-        column = MachineTypeColumn(_("Contract Number"), 7, 0, 8)
+        column = MachineTypeColumn(7, 8)
+        self.contract_selection_treeview.append_column(column)
+
+        renderer = gtk.CellRendererText()
+        column = gtk.TreeViewColumn(_("Contract Number"), renderer,
+                text=0)
+        column.set_expand(True)
+
         self.contract_selection_treeview.append_column(column)
 
         renderer = gtk.CellRendererText()

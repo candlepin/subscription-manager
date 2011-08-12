@@ -36,7 +36,7 @@ class TestMachineTypeColumn(unittest.TestCase):
         model = gtk.ListStore(bool)
         model.append([is_virtual])
 
-        column = MachineTypeColumn("Test Column", 0, 1, 2)
+        column = MachineTypeColumn(0, 2)
         column.render_machine_type_icon(None, column.image_renderer, model,
                                         model.get_iter_first())
         self.assertEquals(expected_pix_buf, column.image_renderer.get_property("pixbuf"))
@@ -45,7 +45,7 @@ class TestMachineTypeColumn(unittest.TestCase):
         model = gtk.ListStore(bool)
         model.append([is_multi_entitlement])
 
-        column = MachineTypeColumn("Test Column", 1, 2, 0)
+        column = MachineTypeColumn(1, 0)
         column.render_as_multi_entitlement(None, column.asterisk_renderer, model,
                                         model.get_iter_first())
         self.assertEquals(expected_rendered_text, column.asterisk_renderer.get_property("text"))
