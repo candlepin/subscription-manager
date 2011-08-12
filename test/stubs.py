@@ -210,6 +210,8 @@ class StubProductCertificate(ProductCertificate):
         return self.product
 
     def getProducts(self):
+        if self.product is None:
+            return []
         prods = [self.product]
         if len(self.provided_products) > 0:
             prods.extend(self.provided_products)
@@ -247,9 +249,14 @@ class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate)
         if not order_end_date:
             self.order_end_date = self.end_date
         fmt = "%Y-%m-%dT%H:%M:%SZ"
+
+        # to simulate a cert with no product
+        sku = None
+        if product:
+            sku = product.hash
         self.order = StubOrder(self.start_date.strftime(fmt),
                                self.order_end_date.strftime(fmt), quantity=quantity,
-                               stacking_id=1, socket_limit=2, sku=product.hash)
+                               stacking_id=1, socket_limit=2, sku=sku)
 
         self.valid_range = DateRange(self.start_date, self.end_date)
         self.content = []

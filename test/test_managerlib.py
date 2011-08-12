@@ -251,6 +251,46 @@ class InstalledProductStatusTests(unittest.TestCase):
         self.assertEquals(2, len(product_status))
 
 
+class TestGetConsumedProductEntitlement(unittest.TestCase):
+    def test_emtpy_ent_dir(self):
+        entitlement_directory = StubCertificateDirectory([])
+        def get_ent_dir():
+            return StubCertificateDirectory([])
+
+        managerlib.certdirectory.EntitlementDirectory = get_ent_dir
+        a = managerlib.getConsumedProductEntitlements()
+        print a
+
+    def test_one_product(self):
+        def get_ent_dir():
+            product = StubProduct("product1")
+            return StubCertificateDirectory([StubEntitlementCertificate(product)])
+
+        managerlib.certdirectory.EntitlementDirectory = get_ent_dir
+        a = managerlib.getConsumedProductEntitlements()
+        self.assertEquals(len(a), 1)
+
+    def test_one_stacking_product(self):
+        def get_ent_dir():
+            product = StubProduct("product1", attributes={'stacking_id': 13,
+                                                          'multi-entitlement': 'yes',
+                                                          'sockets': 1})
+            return StubCertificateDirectory([StubEntitlementCertificate(product)])
+
+        managerlib.certdirectory.EntitlementDirectory = get_ent_dir
+        a = managerlib.getConsumedProductEntitlements()
+        self.assertEquals(len(a), 1)
+
+    def test_ent_cert_no_product(self):
+        def get_ent_dir():
+            return StubCertificateDirectory([StubEntitlementCertificate(product=None)])
+
+        managerlib.certdirectory.EntitlementDirectory = get_ent_dir
+        a = managerlib.getConsumedProductEntitlements()
+        print a
+        self.assertEquals(len(a), 1)
+
+
 class TestParseDate(unittest.TestCase):
     def test_now_local_tz(self):
         tz = LocalTz()
