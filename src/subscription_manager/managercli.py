@@ -867,6 +867,44 @@ class FactsCommand(CliCommand):
             facts.update_check(self.cp, consumer, force=True)
             print _("Successfully updated the system facts.")
 
+class ImportCertCommand(CliCommand):
+
+    def __init__(self):
+        usage = "usage: %prog import [OPTIONS]"
+        shortdesc = _("Import certificates which were provided outside of the tool")
+        desc = shortdesc
+        CliCommand.__init__(self, "import", usage, shortdesc, desc)
+
+        self.parser.add_option("--certificate", action="append",  dest="certificate_files",
+                               help=_("certificate file to import"))
+
+    def _do_command(self):
+        for src_cert_file in self.options.certificate_files:
+            if os.path.exists(src_cert_file):
+                try:
+                    extractor = managerlib.ImportFileExtractor(src_cert_file)
+
+                    #Verify the entitlement data.
+                    if extractor.verify_valid_entitlement():
+                        extractor.write_to_disk()
+                        print(_("Successfully imported certificate %s") %
+                                    os.path.basename(src_cert_file))
+                    else:
+                        log.error("Error parsing manually imported entitlement "
+                            "certificate: %s" % src_cert_file)
+
+                        print(_("%s is not a valid certificate file. Please use a valid certificate.") %
+                                    os.path.basename(src_cert_file))
+
+                except Exception, e:
+                    # Should not get here unless something really bad happened.
+                    log.exception(e)
+                    print(_("An error occurred while importing the certificate. " +
+                                  "Please check log file for more information."))
+            else:
+                log.error("Supplied certificate file does not exist: %s" % src_cert_file)
+                print(_("%s is not a valid certificate file. Please use a valid certificate.") %
+                    os.path.basename(src_cert_file))
 
 class ReposCommand(CliCommand):
 
@@ -915,7 +953,7 @@ class ConfigCommand(CliCommand):
         self.parser.add_option("--list", action="store_true",
                                help=_("list the configuration for this system"))
         self.parser.add_option("--remove", dest="remove",
-                               help = ("remove configuration entry by section.name"))  
+                               help = ("remove configuration entry by section.name"))
         for section in cfg.sections():
             for name,value in cfg.items(section):
                 self.parser.add_option("--" + section + "." + name , dest=(section + "." + name),
@@ -959,10 +997,10 @@ class ConfigCommand(CliCommand):
         else:
             for section in cfg.sections():
                 for name,value in cfg.items(section):
-                    value = "%s" % getattr(self.options,section + "." + name) 
+                    value = "%s" % getattr(self.options,section + "." + name)
                     if not value == 'None':
                         cfg.set(section, name, value)
- 
+
             cfg.save()
 
 
@@ -1097,7 +1135,8 @@ class CLI:
         self.cli_commands = {}
         for clazz in [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand, SubscribeCommand,\
                        UnSubscribeCommand, FactsCommand, IdentityCommand, OwnersCommand, \
-                       RefreshCommand, CleanCommand, RedeemCommand, ReposCommand, EnvironmentsCommand]:
+                       RefreshCommand, CleanCommand, RedeemCommand, ReposCommand, \
+                       EnvironmentsCommand, ImportCertCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":
