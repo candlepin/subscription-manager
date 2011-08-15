@@ -188,9 +188,6 @@ class StackingGroupSorter(object):
         stacking_groups = {}
 
         for ent_cert in entitlement_dir.list():
-            print "CERT"
-            product = ent_cert.getProduct()
-            product_id = product.getHash()
             order = ent_cert.getOrder()
             stacking_id = order.getStackingId()
             if stacking_id:

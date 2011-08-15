@@ -74,7 +74,7 @@ class SubscriptionManagerTab(GladeWidget):
         super(SubscriptionManagerTab, self).__init__(glade_file, widgets)
         self.content.unparent()
 
-        self.store = storage.MappedListStore(self.get_type_map())
+        self.store = self.get_store()
         self.top_view.set_model(self.store)
 
         selection = self.top_view.get_selection()
@@ -85,6 +85,9 @@ class SubscriptionManagerTab(GladeWidget):
 
         # For updating the 'Next Update' time
         file_monitor.Monitor(UPDATE_FILE).connect('changed', on_cert_update)
+
+    def get_store(self):
+        return storage.MappedListStore(self.get_type_map())
 
     def add_text_column(self, name, store_key, expand=False, markup=False):
         text_renderer = gtk.CellRendererText()

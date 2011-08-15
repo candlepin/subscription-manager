@@ -15,8 +15,27 @@
 
 import gtk
 
+class MappedStore(object):
+    def __init__(self, type_map):
+        self.type_index = {}
 
-class MappedListStore(gtk.ListStore):
+        # Enumerate the keys and store the int index
+        for i, type_key in enumerate(type_map.iterkeys()):
+            self.type_index[type_key] = i
+
+    def _create_initial_entry(self, item_map):
+        """
+        Initialize the entry - this way the map does not have to
+        specify all keys, and a 'None' value is inserted by default into
+        positions that are omitted
+        """
+        entry = [None for i in range(self.get_n_columns())]
+
+        for key, value in item_map.iteritems():
+            entry[self[key]] = value
+        return entry
+
+class MappedListStore(MappedStore, gtk.ListStore):
 
     def __init__(self, type_map):
         """
@@ -27,14 +46,9 @@ class MappedListStore(gtk.ListStore):
 
         See contructor for gtk.ListStore.
         """
-        self.type_index = {}
-
-        # Enumerate the keys and store the int index
-        for i, type_key in enumerate(type_map.iterkeys()):
-            self.type_index[type_key] = i
-
+        MappedStore.__init__(self, type_map)
         # Use the types from the map to call the parent constructor
-        super(MappedListStore, self).__init__(*type_map.values())
+        gtk.ListStore.__init__(self, *type_map.values())
 
     def __getitem__(self, key):
         return self.type_index[key]
@@ -48,12 +62,16 @@ class MappedListStore(gtk.ListStore):
         This method essentially repackages the data into an appropriately ordered
         list to append to the list store.
         """
-        # Initialize the entry - this way the map does not have to
-        # specify all keys, and a 'None' value is inserted by default into
-        # positions that are omitted
-        entry = [None for i in range(self.get_n_columns())]
+        self.append(self._create_initial_entry(item_map))
 
-        for key, value in item_map.iteritems():
-            entry[self[key]] = value
+class MappedTreeStore(MappedStore, gtk.TreeStore):
+    def __init__(self, type_map):
+        MappedStore.__init__(self, type_map)
+        # Use the types from the map to call the parent constructor
+        gtk.TreeStore.__init__(self, *type_map.values())
 
-        self.append(entry)
+    def __getitem__(self, key):
+        return self.type_index[key]
+
+    def add_map(self, iter, item_map):
+        return self.append(iter, self._create_initial_entry(item_map))
