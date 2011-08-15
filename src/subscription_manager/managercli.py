@@ -696,7 +696,13 @@ class RedeemCommand(CliCommand):
             self.cp.activateMachine(consumer_uuid, self.options.email, self.options.locale)
 
         except Exception, e:
-            handle_exception("Unable to redeem: %s" % e, e)
+            #candlepin throws an exception during activateMachine, even for
+            #200's. We need to look at the code in the RestlibException and proceed
+            #accordingly
+            if  200 <= e.code <= 210:
+                systemExit(0, e)
+            else:
+                handle_exception("Unable to redeem: %s" % e, e)
 
 
 class SubscribeCommand(CliCommand):
