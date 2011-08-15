@@ -4,8 +4,6 @@ import json
 import shutil
 
 from subscription_manager import facts
-from subscription_manager.cert_sorter import CertSorter
-from stubs import *
 
 
 facts_buf = """
@@ -125,10 +123,6 @@ def stub_get_facts():
     return {'newstuff': True}
 
 
-def fake_cert(product_id):
-    return StubProductCertificate(StubProduct(product_id))
-
-
 class TestFacts(unittest.TestCase):
     def setUp(self):
         self.fact_cache_dir = tempfile.mkdtemp()
@@ -174,32 +168,3 @@ class TestFacts(unittest.TestCase):
         new_facts_buf = open(fact_cache).read()
         new_facts = json.loads(new_facts_buf)
         self.assertEquals(new_facts['empty.facts'], True)
-
-    def test_installed_products_fact(self):
-        product_dir = StubCertificateDirectory([
-            fake_cert("z-product")
-        ])
-        ent_dir = StubCertificateDirectory([])
-        sorter = CertSorter(product_dir, ent_dir)
-        installed = self.f._get_installed_products_fact(sorter)
-        self.assertEquals("z-product", installed['system.installed_products'])
-
-    def test_multiple_installed_products_fact(self):
-        product_dir = StubCertificateDirectory([
-            fake_cert("z-product"),
-            fake_cert("a-product"),
-            fake_cert("c-product"),
-            fake_cert("g-product"),
-        ])
-        ent_dir = StubCertificateDirectory([])
-        sorter = CertSorter(product_dir, ent_dir)
-        installed = self.f._get_installed_products_fact(sorter)
-        self.assertEquals("a-product,c-product,g-product,z-product",
-                installed['system.installed_products'])
-
-    def test_no_installed_products_fact(self):
-        product_dir = StubCertificateDirectory([])
-        ent_dir = StubCertificateDirectory([])
-        sorter = CertSorter(product_dir, ent_dir)
-        installed = self.f._get_installed_products_fact(sorter)
-        self.assertEquals("", installed['system.installed_products'])

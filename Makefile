@@ -136,10 +136,16 @@ check:
 	nosetests
 
 coverage:
-	nosetests --with-cover --cover-package subscription_manager
+	nosetests --with-cover --cover-package subscription_manager --cover-erase
 
-coverage-html:
+coverage-html: coverage
+	coverage html --include "${SRC_DIR}/*"
+
+coverage-html-old:
 	nosetests --with-cover --cover-package subscription_manager --cover-html --cover-html-dir test/html --cover-erase
+
+coverage-xml: coverage
+	coverage xml --include "${SRC_DIR}/*"
 
 clean:
 	m -f *.pyc *.pyo *~ *.bak *.tar.gz

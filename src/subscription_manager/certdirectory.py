@@ -243,6 +243,7 @@ class EntitlementDirectory(CertificateDirectory):
             key = Key.read(old_key_path)
             cert_writer = Writer()
             cert_writer.write(key, cert)
+        return True
 
     def listValid(self, grace_period=False):
         valid = []

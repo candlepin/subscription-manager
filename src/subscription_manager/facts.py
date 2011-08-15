@@ -153,19 +153,9 @@ class Facts:
         if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
             validity_facts['system.entitlements_valid'] = False
 
-        installed_products_fact = self._get_installed_products_fact(sorter)
-
         facts.update(validity_facts)
-        facts.update(installed_products_fact)
 
         return facts
-
-    def _get_installed_products_fact(self, sorter):
-        """ Create a fact containing the installed product IDs. """
-        product_ids = sorter.all_products.keys()
-        product_ids.sort()
-        ids_fact = ",".join(product_ids)
-        return {'system.installed_products': ids_fact}
 
     def update_check(self, uep, consumer_uuid, force=False):
         """

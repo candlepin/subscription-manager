@@ -16,7 +16,10 @@
 import unittest
 import os
 
-from stubs import StubConfig
+from mock import Mock
+from mock import patch
+
+from stubs import StubConfig, StubProduct, StubEntitlementCertificate
 from subscription_manager.certdirectory import Path, EntitlementDirectory
 from subscription_manager.repolib import RepoFile
 from subscription_manager.productid import ProductDatabase
@@ -85,3 +88,24 @@ class PathTests(unittest.TestCase):
         ed = EntitlementDirectory()
         self.assertEquals('/etc/pki/entitlement/1-key.pem',
                 Path.join(ed.productpath(), "1-key.pem"))
+
+
+# make sure _check_key returns the right value
+class TestEntitlementDirectoryCheckKey(unittest.TestCase):
+    @patch('os.access')
+    def test_check_key(self, MockAccess):
+        ent_dir = EntitlementDirectory()
+        MockAccess.return_value = True
+        product = StubProduct("product1")
+        ent_cert = StubEntitlementCertificate(product)
+        ret = ent_dir._check_key(ent_cert)
+        self.assertTrue(ret)
+
+    @patch('os.access')
+    def test_check_key_false(self, MockAccess):
+        ent_dir = EntitlementDirectory()
+        MockAccess.return_value = False
+        product = StubProduct("product1")
+        ent_cert = StubEntitlementCertificate(product)
+        ret = ent_dir._check_key(ent_cert)
+        self.assertFalse(ret)
