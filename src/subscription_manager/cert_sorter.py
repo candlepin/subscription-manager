@@ -181,3 +181,34 @@ class CertSorter(object):
         for product_id in self.expired_products.keys():
             if product_id in self.valid_products:
                 del self.expired_products[product_id]
+
+class StackingGroupSorter(object):
+    def __init__(self, entitlement_dir):
+        self.groups = []
+        stacking_groups = {}
+
+        for ent_cert in entitlement_dir.list():
+            print "CERT"
+            product = ent_cert.getProduct()
+            product_id = product.getHash()
+            order = ent_cert.getOrder()
+            stacking_id = order.getStackingId()
+            if stacking_id:
+                if stacking_id not in stacking_groups:
+                    group = EntitlementGroup(ent_cert, str(stacking_id))
+                    self.groups.append(group)
+                    stacking_groups[stacking_id] = group
+                else:
+                    group = stacking_groups[stacking_id]
+                    group.add_entitlement_cert(ent_cert)
+            else:
+                self.groups.append(EntitlementGroup(ent_cert))
+
+class EntitlementGroup(object):
+    def __init__(self, entitlement_cert, name=''):
+        self.name = name
+        self.certs = []
+        self.add_entitlement_cert(entitlement_cert)
+
+    def add_entitlement_cert(self, entitlement_cert):
+        self.certs.append(entitlement_cert)

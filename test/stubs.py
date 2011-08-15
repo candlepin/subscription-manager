@@ -235,7 +235,7 @@ class StubProductCertificate(ProductCertificate):
 class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate):
 
     def __init__(self, product, provided_products=None, start_date=None, end_date=None,
-            order_end_date=None, content=None, quantity=1):
+            order_end_date=None, content=None, quantity=1, stacking_id=1):
         StubProductCertificate.__init__(self, product, provided_products)
 
         self.start_date = start_date
@@ -256,7 +256,7 @@ class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate)
             sku = product.hash
         self.order = StubOrder(self.start_date.strftime(fmt),
                                self.order_end_date.strftime(fmt), quantity=quantity,
-                               stacking_id=1, socket_limit=2, sku=sku)
+                               stacking_id=stacking_id, socket_limit=2, sku=sku)
 
         self.valid_range = DateRange(self.start_date, self.end_date)
         self.content = []
