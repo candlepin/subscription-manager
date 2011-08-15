@@ -423,8 +423,22 @@ class UEPConnection:
         """
         Update a consumers facts on candlepin server
         """
-        params = {"facts": facts}
-        method = "/consumers/%s" % self.sanitize(consumer_uuid)
+        return self.updateConsumer(consumer_uuid, facts=facts)
+
+    def updateConsumer(self, uuid, facts=None, installed_products=None):
+        """
+        Update a consumer on the server.
+
+        Rather than requiring a full representation of the consumer, only some
+        information is passed depending on what we wish to update.
+        """
+        params = {}
+        if installed_products:
+            params['installedProducts'] = installed_products
+        if facts:
+            params['facts'] = facts
+
+        method = "/consumers/%s" % self.sanitize(uuid)
         ret = self.conn.request_put(method, params)
         return ret
 
