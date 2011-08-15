@@ -183,6 +183,21 @@ class TestUnSubscribeCommand(TestCliProxyCommand):
 class TestFactsCommand(TestCliProxyCommand):
     command_class = managercli.FactsCommand
 
+class TestImportCertCommand(TestCliCommand):
+    command_class = managercli.ImportCertCommand
+
+    def test_certificates(self):
+        self.cc.main(["--certificate", "one", "--certificate", "two"])
+        self.cc._validate_options()
+
+    def test_no_certificates(self):
+        self.cc.main([])
+        try:
+            self.cc._validate_options()
+            self.fail("No exception raised")
+        except Exception, e:
+            return True
+
 
 class HandleExceptionTests(unittest.TestCase):
     def setUp(self):
