@@ -64,6 +64,9 @@ class CertSorter(object):
         # maps product ID to the valid entitlement certificate:
         self.valid_products = {}
 
+        # products that we have entitlements for but no product cert for.
+        self.not_installed_products = {}
+
         self.facts_dict = facts_dict
 
         log.debug("Sorting product and entitlement cert status for: %s" %
@@ -80,6 +83,8 @@ class CertSorter(object):
         self._remove_expired_if_valid_elsewhere()
         log.debug("valid entitled products: %s" % self.valid_products.keys())
         log.debug("expired entitled products: %s" % self.expired_products.keys())
+	log.debug("partially entitled products: %s" % self.partially_valid_products.keys())
+	log.debug("unentitled products: %s" % self.unentitled_products.keys())
 
     def _populate_all_products(self):
         """ Build the dict of all installed products. """
@@ -98,14 +103,15 @@ class CertSorter(object):
             if ent_cert.valid(on_date=self.on_date):
                 self.valid_entitlement_certs.append(ent_cert)
 
-                self._scan_ent_cert_products(ent_cert, self.valid_products)
+                self._scan_ent_cert_products(ent_cert, self.valid_products,
+                                             self.not_installed_products)
             else:
                 self.expired_entitlement_certs.append(ent_cert)
                 log.debug("expired:")
                 log.debug(ent_cert.getProduct().getHash())
                 self._scan_ent_cert_products(ent_cert, self.expired_products)
 
-    def _scan_ent_cert_products(self, ent_cert, product_dict):
+    def _scan_ent_cert_products(self, ent_cert, product_dict, uninstalled_dict=None):
         """
         Scans this ent certs products, checks if they are installed, and
         adds them to the provided dict (expired/valid) if so:
@@ -115,7 +121,13 @@ class CertSorter(object):
 
             # Is this an installed product?
             if product_id in self.all_products:
-                product_dict[product_id] = ent_cert
+                if product_id not in product_dict:
+                    product_dict[product_id] = []
+                product_dict[product_id].append(ent_cert)
+            elif uninstalled_dict != None:
+                if product_id not in uninstalled_dict:
+                    uninstalled_dict[product_id] = []
+                uninstalled_dict[product_id].append(ent_cert)
 
     def _scan_ent_cert_stackable_products(self):
         ent_certs = self.entitlement_dir.list()
@@ -152,23 +164,18 @@ class CertSorter(object):
                 i['sockets_provided'] = socket_total
                 if socket_total >= system_sockets:
                     i['valid'] = True
-                else:
+                elif self.all_products.has_key(product_id):
+                    # for cases where we have an ent but no prod cert
                     self.partially_valid_products[product_id] = self.all_products[product_id]
-
-        for stackable_id in stackable_ents.keys():
-            for stack_prod_info in stackable_ents[stackable_id]:
-                if not stack_prod_info['valid']:
-                    product_id = stack_prod_info['product_id']
-                    self.unentitled_products[product_id] = self.all_products[product_id]
 
     def _scan_for_unentitled_products(self):
         # For all installed products, if not in valid or expired hash, it
         # must be completely unentitled
         for product_id in self.all_products.keys():
-            if (not product_id in self.valid_products) and \
-                    (not product_id in self.expired_products):
-                self.unentitled_products[product_id] = \
-                    self.all_products[product_id]
+            if (product_id in self.valid_products) or (product_id in self.expired_products) \
+               or (product_id in self.partially_valid_products):
+                   continue
+            self.unentitled_products[product_id] = self.all_products[product_id]
 
     def _remove_expired_if_valid_elsewhere(self):
         """

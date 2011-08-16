@@ -295,7 +295,7 @@ class CertSorterTests(unittest.TestCase):
         # we are partially valid
         self.assertTrue('mktproduct' in self.sorter.partially_valid_products)
         # but we are also entitled enough to get content
-        self.assertTrue('mktproduct' in self.sorter.unentitled_products)
+        self.assertTrue('mktproduct' in self.sorter.valid_products)
 
     def test_stacking_product_two_pools_needed(self):
         provided = [self.stackable_product1, self.stackable_product2]

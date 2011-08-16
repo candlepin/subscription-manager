@@ -35,6 +35,7 @@ from subscription_manager.facts import Facts
 from subscription_manager.quantity import allows_multi_entitlement
 from subscription_manager.cert_sorter import StackingGroupSorter
 from subscription_manager.jsonwrapper import PoolWrapper
+from subscription_manager.cert_sorter import CertSorter
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -101,7 +102,7 @@ def map_status(status):
 
 
 def getInstalledProductStatus(product_directory=None,
-        entitlement_directory=None):
+        entitlement_directory=None, facts=None):
     """
      Returns the Installed products and their subscription states
     """
@@ -109,38 +110,79 @@ def getInstalledProductStatus(product_directory=None,
     product_directory = product_directory or certdirectory.ProductDirectory()
     entitlement_directory = entitlement_directory or certdirectory.EntitlementDirectory()
 
-    product_hashes = [product.getProduct().getHash() for product in \
-            product_directory.list()]
-
-    product_hashes = [product.getProduct().getHash() for product in \
-            product_directory.list()]
-
     product_status = []
-    entitled_names = set()
-    entitled_hashes = set()
 
-    for cert in entitlement_directory.list():
-        eproducts = cert.getProducts()
-        for product in eproducts:
-            status = _("Not Installed")
-            if product.getHash() in product_hashes:
-                status = map_status(cert.valid())
+    sorter = CertSorter(product_directory, entitlement_directory, facts_dict=facts)
 
-            data = (product.getName(), status,
-                    formatDate(cert.validRange().end()),
-                    cert.serialNumber(),
-                    cert.getOrder().getContract(),
-                    cert.getOrder().getAccountNumber())
-            product_status.append(data)
-            entitled_names.add(product.getName())
-            entitled_hashes.add(product.getHash())
+    #
+    # deal with products we have entitlement certs but no product cert
+    #
+    for certs in sorter.not_installed_products.itervalues():
+        for cert in certs:
+            for product in cert.getProducts():
+                data = (product.getName(),
+                        _("Not Installed"),
+                        formatDate(cert.validRange().end()),
+                        cert.serialNumber(),
+                        cert.getOrder().getContract(),
+                        cert.getOrder().getAccountNumber())
+                product_status.append(data)
 
+    #
+    # add in any partially entitled products
+    #
+    for product_id in sorter.partially_valid_products.iterkeys():
+        certs = sorter.valid_products[product_id]
+        for cert in certs:
+            for product in cert.getProducts():
+                data = (product.getName(),
+                        _("Partially Subscribed"),
+                        formatDate(cert.validRange().end()),
+                        cert.serialNumber(),
+                        cert.getOrder().getContract(),
+                        cert.getOrder().getAccountNumber())
+                product_status.append(data)
+
+    #
+    # add the valid products, excluding the partially valid ones
+    #
+    for certs in sorter.valid_products.itervalues():
+        for cert in certs:
+            eproducts = cert.getProducts()
+            for product in eproducts:
+                if product.getHash() not in sorter.partially_valid_products:
+                    status = map_status(cert.valid())
+
+                    data = (product.getName(), status,
+                            formatDate(cert.validRange().end()),
+                            cert.serialNumber(),
+                            cert.getOrder().getContract(),
+                            cert.getOrder().getAccountNumber())
+                    product_status.append(data)
+
+    #
     # add in any products that we have installed but don't have
     # entitlements for
-    for product_cert in product_directory.list():
+    #
+    for product_cert in sorter.unentitled_products.itervalues():
         product = product_cert.getProduct()
-        if product.getHash() not in entitled_hashes:
-            product_status.append((product.getName(), map_status(None), "", "", "", ""))
+        product_status.append((product.getName(), map_status(None), "", "", "", ""))
+
+    #
+    # expired products
+    #
+    for certs in sorter.expired_products.itervalues():
+        for cert in certs:
+            eproducts = cert.getProducts()
+            for product in eproducts:
+                status = map_status(cert.valid())
+
+                data = (product.getName(), status,
+                        formatDate(cert.validRange().end()),
+                        cert.serialNumber(),
+                        cert.getOrder().getContract(),
+                        cert.getOrder().getAccountNumber())
+                product_status.append(data)
 
     return product_status
 

@@ -1058,6 +1058,7 @@ class ListCommand(CliCommand):
                                help=_("shows the subscriptions being consumed by this system."))
         self.parser.add_option("--all", action='store_true',
                                help=_("if supplied with --available then all subscriptions are returned"))
+        self.facts = Facts()
 
     def _validate_options(self):
         if (self.options.all and not self.options.available):
@@ -1077,7 +1078,7 @@ class ListCommand(CliCommand):
         self._validate_options()
 
         if self.options.installed:
-            iproducts = managerlib.getInstalledProductStatus()
+            iproducts = managerlib.getInstalledProductStatus(facts=self.facts.get_facts())
             if not len(iproducts):
                 print(_("No installed Products to list"))
                 sys.exit(0)
@@ -1099,9 +1100,8 @@ class ListCommand(CliCommand):
                     print(_("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
                     sys.exit(1)
 
-            facts = Facts()
             epools = managerlib.getAvailableEntitlements(self.cp, consumer,
-                    facts, self.options.all, on_date)
+                    self.facts, self.options.all, on_date)
             if not len(epools):
                 print(_("No Available subscription pools to list"))
                 sys.exit(0)
