@@ -135,19 +135,23 @@ class CertSorter(object):
         stackable_ents = {}
 
         for ent_cert in ent_certs:
-            for product in [ent_cert.getProduct()]:
-                product_id = product.getHash()
-                order = ent_cert.getOrder()
-                stacking_id = order.getStackingId()
-                quantity = order.getQuantityUsed()
-                if stacking_id:
-                    if stacking_id not in stackable_ents:
-                        stackable_ents[stacking_id] = []
-                    stackable_ents[stacking_id].append({'ent_cert': ent_cert,
-                                                        'product_id': product_id,
-                                                        'quantity': quantity,
-                                                        'sockets_provided': None,
-                                                        'valid': None})
+            product = ent_cert.getProduct()
+            # handle a cert with no products
+            if product is None:
+                continue
+
+            product_id = product.getHash()
+            order = ent_cert.getOrder()
+            stacking_id = order.getStackingId()
+            quantity = order.getQuantityUsed()
+            if stacking_id:
+                if stacking_id not in stackable_ents:
+                    stackable_ents[stacking_id] = []
+                stackable_ents[stacking_id].append({'ent_cert': ent_cert,
+                                                    'product_id': product_id,
+                                                    'quantity': quantity,
+                                                    'sockets_provided': None,
+                                                    'valid': None})
 
         for stackable_id in stackable_ents.keys():
             socket_total = 0
