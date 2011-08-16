@@ -24,13 +24,12 @@ from subscription_manager.certlib import Disconnected
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception, get_dbus_iface
+from subscription_manager.gui.colors import WARNING, EXPIRED, ODD_ROW
 
 import gettext
+from subscription_manager.cert_sorter import StackingGroupSorter
+from subscription_manager.gui.storage import MappedTreeStore
 _ = gettext.gettext
-
-# Color constants for background rendering
-YELLOW = '#FFFB82'
-RED = '#FFAF99'
 
 WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
 
@@ -42,7 +41,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         """
         Create a new 'My Subscriptions' tab.
         """
-        super(MySubscriptionsTab, self).__init__('mysubs.glade', ['details_box'])
+        super(MySubscriptionsTab, self).__init__('mysubs.glade', ['details_box',
+                                                                  'unsubscribe_button'])
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
@@ -56,19 +56,27 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         # Set up columns on the view
         self.add_text_column(_("Subscription"), 'subscription', True)
+
+        progress_renderer = gtk.CellRendererProgress()
         products_column = gtk.TreeViewColumn(_("Installed Products"),
-                                             gtk.CellRendererProgress(),
+                                             progress_renderer,
                                              value=self.store['installed_value'],
                                              text=self.store['installed_text'])
+        self.empty_progress_renderer = gtk.CellRendererText()
+        products_column.pack_end(self.empty_progress_renderer, True)
+        products_column.set_cell_data_func(progress_renderer, self._update_progress_renderer)
         self.top_view.append_column(products_column)
 
         self.add_date_column(_("End Date"), 'expiration_date')
+
+        # Disable row striping on the tree view as we are overriding the behavior
+        # to display stacking groups as one color.
+        self.top_view.set_rules_hint(False)
 
         self.add_text_column(_("Quantity"), 'quantity')
 
         self.update_subscriptions()
 
-        self.unsubscribe_button = self.glade.get_widget('unsubscribe_button')
         self.glade.signal_autoconnect({'on_unsubscribe_button_clicked': self.unsubscribe_button_clicked})
 
         # Monitor entitlements/products for additions/deletions
@@ -76,6 +84,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             self.update_subscriptions()
 
         self.backend.monitor_certs(on_cert_change)
+
+    def get_store(self):
+        return MappedTreeStore(self.get_type_map())
 
     def _on_unsubscribe_prompt_response(self, dialog, response, selection):
         if not response:
@@ -115,12 +126,37 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         Pulls the entitlement certificates and updates the subscription model.
         """
         self.store.clear()
-
-        for cert in self.entitlement_dir.list():
-            entry = self._create_entry_map(cert)
-            self.store.add_map(entry)
+        sorter = StackingGroupSorter(self.entitlement_dir)
+        for idx, group in enumerate(sorter.groups):
+            self._add_group(idx, group)
+        self.top_view.expand_all()
         dbus_iface = get_dbus_iface()
         dbus_iface.check_status(ignore_reply=True)
+
+    def _add_group(self, group_idx, group):
+        iter = None
+        if group.name:
+            bg_color = self._get_background_color(group_idx)
+            iter = self.store.add_map(iter, self._create_stacking_header_entry(group.name,
+                                                                               bg_color))
+        change_parent_color = False
+        new_parent_color = None
+        for i, cert in enumerate(group.certs):
+            bg_color = self._get_background_color(group_idx, cert)
+            self.store.add_map(iter, self._create_entry_map(cert, bg_color))
+
+            # Determine if we need to change the parent's color. We
+            # will match the parent's color with the childrent if all
+            # children are the same color.
+            if i == 0:
+                new_parent_color = bg_color
+            else:
+                change_parent_color = new_parent_color == bg_color
+
+        # Update the parent color if required.
+        if change_parent_color and iter:
+            self.store.set_value(iter, self.store['background'], new_parent_color)
+
 
     def get_label(self):
         return _("My Subscriptions")
@@ -135,7 +171,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             'quantity': str,
             'serial': str,
             'align': float,
-            'background': str
+            'background': str,
+            'is_group_row': bool
         }
 
     def on_selection(self, selection):
@@ -143,6 +180,13 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         Updates the 'Subscription Details' panel with the currently selected
         subscription.
         """
+
+        if selection['is_group_row']:
+            self.sub_details.clear()
+            self.unsubscribe_button.set_property('sensitive', False)
+            return
+
+        self.unsubscribe_button.set_property('sensitive', True)
         # Load the entitlement certificate for the selected row:
         serial = selection['serial']
         cert = self.entitlement_dir.find(long(serial))
@@ -174,7 +218,17 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         """
         self.sub_details.clear()
 
-    def _create_entry_map(self, cert):
+    def _create_stacking_header_entry(self, title, background_color):
+        entry = {}
+        entry['subscription'] = title
+        entry['installed_value'] = 0.0
+        entry['align'] = 0.5         # Center horizontally
+        entry['background'] = background_color
+        entry['is_group_row'] = True
+
+        return entry
+
+    def _create_entry_map(self, cert, background_color):
         order = cert.getOrder()
         products = cert.getProducts()
         installed = self._get_installed(products)
@@ -189,19 +243,24 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         entry['quantity'] = order.getQuantityUsed()
         entry['serial'] = cert.serialNumber()
         entry['align'] = 0.5         # Center horizontally
-        entry['background'] = self._get_background_color(cert)
+        entry['background'] = background_color
+        entry['is_group_row'] = False
 
         return entry
 
-    def _get_background_color(self, entitlement_cert):
-        date_range = entitlement_cert.validRange()
-        now = datetime.now(GMT())
+    def _get_background_color(self, idx, entitlement_cert=None):
+        if entitlement_cert:
+            date_range = entitlement_cert.validRange()
+            now = datetime.now(GMT())
 
-        if date_range.end() < now:
-            return RED
+            if date_range.end() < now:
+                return EXPIRED
 
-        if date_range.end() - timedelta(days=WARNING_DAYS) < now:
-            return YELLOW
+            if date_range.end() - timedelta(days=WARNING_DAYS) < now:
+                return WARNING
+
+        if idx % 2 != 0:
+            return ODD_ROW
 
     def _percentage(self, subset, full_set):
         if (len(full_set) == 0):
@@ -220,3 +279,12 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                 installed_products.append(installed)
 
         return installed_products
+
+    def _update_progress_renderer(self, column, cell_renderer, tree_model, iter):
+        hide_progress = tree_model.get_value(iter, self.store['is_group_row'])
+        background_color = tree_model.get_value(iter, self.store['background'])
+
+        cell_renderer.set_property('visible', not hide_progress)
+
+        self.empty_progress_renderer.set_property('visible', hide_progress)
+        self.empty_progress_renderer.set_property('cell-background', background_color)

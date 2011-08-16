@@ -36,7 +36,6 @@ MIN_GTK_MAJOR = 2
 MIN_GTK_MINOR = 18
 MIN_GTK_MICRO = 0
 
-
 def handle_gui_exception(e, msg, formatMsg=True, logMsg=None):
     """
     Handles an exception for the gui by logging the stack trace and

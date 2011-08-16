@@ -29,7 +29,7 @@ class MySubscriptionsTabTest(unittest.TestCase):
             StubProduct('product2'),
             start_date=datetime.datetime(2010, 1, 1),
             end_date=datetime.datetime(2060, 1, 1),
-            quantity="10")
+            quantity="10", stacking_id=None)
 
         self.cert_dir = StubCertificateDirectory([self.cert1]);
 
@@ -38,24 +38,52 @@ class MySubscriptionsTabTest(unittest.TestCase):
         pass
 
     def test_correct_cert_data_inserted_into_store(self):
+        self.cert1.order.stacking_id = None
+        column_entries = self._get_entries_for_test()
+
+        self.assertEquals(1, len(column_entries))
+
+        entry = column_entries[0]
+
+        self._assert_entry(entry)
+
+    def test_stacking_entry_inserted_when_stacking_id_exists(self):
+        self.cert1.order.stacking_id = 1234
+        column_entries = self._get_entries_for_test()
+
+        self.assertEquals(2, len(column_entries))
+
+        self._assert_group_entry(column_entries[0])
+        self._assert_entry(column_entries[1])
+
+    def _get_entries_for_test(self):
         column_entries = []
 
-        def collect_entries(entry):
+        def collect_entries(iter, entry):
             column_entries.append(entry);
 
         # Test that the data from a subscription is loaded into the store.
         my_subs_tab = MySubscriptionsTab(self.backend, self.consumer, {}, self.cert_dir)
         my_subs_tab.store.add_map = collect_entries
         my_subs_tab.update_subscriptions();
+        return column_entries
 
-        self.assertEquals(1, len(column_entries))
+    def _assert_entry(self, entry):
+        self.assertEquals(self.cert1.getOrder().getName(), entry['subscription'])
+        self.assertEquals(self.cert1.validRange().begin(), entry['start_date'])
+        self.assertEquals(self.cert1.validRange().end(), entry['expiration_date'])
+        self.assertEquals("0 / 1", entry['installed_text'])
+        self.assertEquals(0, entry['installed_value'])
+        self.assertEquals(self.cert1.getOrder().getQuantityUsed(), entry['quantity'])
+        self.assertEquals(self.cert1.serialNumber(), entry['serial']);
+        self.assertFalse(entry['is_group_row']);
 
-        column = column_entries[0]
-
-        self.assertEquals(self.cert1.getOrder().getName(), column['subscription'])
-        self.assertEquals(self.cert1.validRange().begin(), column['start_date'])
-        self.assertEquals(self.cert1.validRange().end(), column['expiration_date'])
-        self.assertEquals("0 / 1", column['installed_text'])
-        self.assertEquals(0, column['installed_value'])
-        self.assertEquals(self.cert1.getOrder().getQuantityUsed(), column['quantity'])
-        self.assertEquals(self.cert1.serialNumber(), column['serial']);
+    def _assert_group_entry(self, entry):
+        self.assertEquals(str(self.cert1.getOrder().getStackingId()), entry['subscription'])
+        self.assertFalse(entry.has_key('start_date'))
+        self.assertFalse(entry.has_key('expiration_date'))
+        self.assertFalse(entry.has_key('installed_text'))
+        self.assertEquals(0.0, entry['installed_value'])
+        self.assertFalse(entry.has_key('quantity'))
+        self.assertFalse(entry.has_key('serial'));
+        self.assertTrue(entry['is_group_row']);
