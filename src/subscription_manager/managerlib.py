@@ -30,7 +30,7 @@ from rhsm.certificate import EntitlementCertificate
 
 from subscription_manager import certlib, certdirectory
 from subscription_manager.certlib import system_log as inner_system_log
-from subscription_manager.pkgprofile import ProfileManager, delete_profile_cache
+from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager.facts import Facts
 from subscription_manager.quantity import allows_multi_entitlement
 
@@ -796,8 +796,9 @@ def unregister(uep, consumer_uuid, force=True):
         if force:
             # Clean up certificates, these are no longer valid:
             delete_consumer_certs()
-            delete_profile_cache()
+            ProfileManager.delete_cache()
             Facts().delete_cache()
+            InstalledProductsManager.delete_cache()
 
 
 def check_identity_cert_perms():

@@ -40,7 +40,7 @@ from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib, ConsumerIdentity
 from subscription_manager.repolib import RepoLib
 from subscription_manager.certmgr import CertManager
-from subscription_manager.pkgprofile import ProfileManager, delete_profile_cache
+from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager import managerlib
 from subscription_manager.facts import Facts
 from subscription_manager.quantity import valid_quantity
@@ -285,7 +285,8 @@ class CleanCommand(CliCommand):
 
     def _do_command(self):
         managerlib.delete_consumer_certs()
-        delete_profile_cache()
+        ProfileManager.delete_cache()
+        InstalledProductsManager.delete_cache()
         Facts().delete_cache()
         log.info("Cleaned local data")
         print (_("All local data removed"))
@@ -495,6 +496,7 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_option("--activationkey", action='append', dest="activation_keys",
                                help=_("one or more activation keys to use for registration"))
         self.facts = Facts()
+        self.installed_mgr = InstalledProductsManager()
 
     def _validate_options(self):
         if ConsumerIdentity.exists() and not self.options.force:
@@ -570,7 +572,9 @@ class RegisterCommand(UserPassCommand):
 
                 consumer = admin_cp.registerConsumer(name=consumername,
                      type=self.options.consumertype, facts=self.facts.get_facts(),
-                     owner=owner_key, environment=environment_id, keys=self.options.activation_keys)
+                     owner=owner_key, environment=environment_id,
+                     keys=self.options.activation_keys,
+                     installed_products=self.installed_mgr.format_for_server())
 
         except connection.RestlibException, re:
             log.exception(re)
@@ -578,12 +582,14 @@ class RegisterCommand(UserPassCommand):
         except Exception, e:
             handle_exception(_("Error during registration: %s") % e, e)
 
-        consumer_info = managerlib.persist_consumer_cert(consumer)
+        consumer_info = self._persist_identity_cert(consumer)
 
         print (_("The system has been registered with id: %s ")) % (consumer_info["uuid"])
 
-        # Facts went out with the registration request, write cache to disk:
+        # Facts and installed products went out with the registration request,
+        # manually write caches to disk:
         self.facts.write_cache()
+        self.installed_mgr.write_cache()
 
         profile_mgr = ProfileManager()
         profile_mgr.update_check(admin_cp, consumer['uuid'])
@@ -594,6 +600,13 @@ class RegisterCommand(UserPassCommand):
             self.certlib.update()
 
         self._request_validity_check()
+
+    def _persist_identity_cert(self, consumer):
+        """
+        Parses the consumer dict returned from the cert, pulls out the identity
+        certificate, and writes to disk.
+        """
+        return managerlib.persist_consumer_cert(consumer)
 
     def _get_environment_id(self, cp, owner_key, environment_name):
         # If none specified on CLI, return None, the registration method

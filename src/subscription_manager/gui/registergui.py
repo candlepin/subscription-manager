@@ -27,7 +27,7 @@ import rhsm.config as config
 from subscription_manager import constants
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
-from subscription_manager.pkgprofile import ProfileManager
+from subscription_manager.cache import ProfileManager, InstalledProductsManager
 
 from subscription_manager.gui.utils import handle_gui_exception, errorWindow, linkify
 
@@ -421,11 +421,15 @@ class AsyncBackend(object):
         method run in the worker thread.
         """
         try:
+            installed_mgr = InstalledProductsManager()
             retval = self.backend.admin_uep.registerConsumer(name=name,
-                    facts=facts.get_facts(), owner=owner, environment=env)
+                    facts=facts.get_facts(), owner=owner, environment=env,
+                    installed_products=installed_mgr.format_for_server())
 
-            # Facts went out with the registration request, write cache to disk:
+            # Facts and installed products went out with the registration request,
+            # manually write caches to disk:
             facts.write_cache()
+            installed_mgr.write_cache()
 
             ProfileManager().update_check(self.backend.admin_uep, retval['uuid'])
             self.queue.put((callback, retval, None))

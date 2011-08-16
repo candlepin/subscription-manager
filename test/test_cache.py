@@ -16,9 +16,9 @@ from mock import Mock
 import simplejson as json
 
 # used to get a user readable cfg class for test cases
-import stubs
+from stubs import *
 
-from subscription_manager.pkgprofile import *
+from subscription_manager.cache import *
 from rhsm.profile import *
 
 
@@ -45,24 +45,24 @@ class TestProfileManager(unittest.TestCase):
         uep.updatePackageProfile = Mock()
 
         self.profile_mgr.has_changed = Mock(return_value=False)
-        self.profile_mgr._write_cached_profile = Mock()
+        self.profile_mgr.write_cache = Mock()
         self.profile_mgr.update_check(uep, uuid)
 
         self.assertEquals(0, uep.updatePackageProfile.call_count)
-        self.assertEquals(0, self.profile_mgr._write_cached_profile.call_count)
+        self.assertEquals(0, self.profile_mgr.write_cache.call_count)
 
     def test_update_check_has_changed(self):
         uuid = 'FAKEUUID'
         uep = Mock()
         uep.updatePackageProfile = Mock()
         self.profile_mgr.has_changed = Mock(return_value=True)
-        self.profile_mgr._write_cached_profile = Mock()
+        self.profile_mgr.write_cache = Mock()
 
         self.profile_mgr.update_check(uep, uuid)
 
         uep.updatePackageProfile.assert_called_with(uuid,
                 FACT_MATCHER)
-        self.assertEquals(1, self.profile_mgr._write_cached_profile.call_count)
+        self.assertEquals(1, self.profile_mgr.write_cache.call_count)
 
     def test_update_check_packages_not_supported(self):
         uuid = 'FAKEUUID'
@@ -70,27 +70,27 @@ class TestProfileManager(unittest.TestCase):
         uep.supports_resource = Mock(return_value=False)
         uep.updatePackageProfile = Mock()
         self.profile_mgr.has_changed = Mock(return_value=True)
-        self.profile_mgr._write_cached_profile = Mock()
+        self.profile_mgr.write_cache = Mock()
 
         self.profile_mgr.update_check(uep, uuid)
 
         self.assertEquals(0, uep.updatePackageProfile.call_count)
         uep.supports_resource.assert_called_with('packages')
-        self.assertEquals(0, self.profile_mgr._write_cached_profile.call_count)
+        self.assertEquals(0, self.profile_mgr.write_cache.call_count)
 
     def test_update_check_error_uploading(self):
         uuid = 'FAKEUUID'
         uep = Mock()
 
         self.profile_mgr.has_changed = Mock(return_value=True)
-        self.profile_mgr._write_cached_profile = Mock()
+        self.profile_mgr.write_cache = Mock()
         # Throw an exception when trying to upload:
         uep.updatePackageProfile = Mock(side_effect=Exception('BOOM!'))
 
         self.assertRaises(Exception, self.profile_mgr.update_check, uep, uuid)
         uep.updatePackageProfile.assert_called_with(uuid,
                 FACT_MATCHER)
-        self.assertEquals(0, self.profile_mgr._write_cached_profile.call_count)
+        self.assertEquals(0, self.profile_mgr.write_cache.call_count)
 
     def test_has_changed_no_cache(self):
         self.profile_mgr._cache_exists = Mock(return_value=False)
@@ -103,10 +103,10 @@ class TestProfileManager(unittest.TestCase):
         cached_profile = self._mock_pkg_profile(cached_pkgs)
 
         self.profile_mgr._cache_exists = Mock(return_value=True)
-        self.profile_mgr._read_cached_profile = Mock(return_value=cached_profile)
+        self.profile_mgr._read_cache = Mock(return_value=cached_profile)
 
         self.assertFalse(self.profile_mgr.has_changed())
-        self.profile_mgr._read_cached_profile.assert_called_with()
+        self.profile_mgr._read_cache.assert_called_with()
 
     def test_has_changed(self):
         cached_pkgs = [
@@ -115,10 +115,10 @@ class TestProfileManager(unittest.TestCase):
         cached_profile = self._mock_pkg_profile(cached_pkgs)
 
         self.profile_mgr._cache_exists = Mock(return_value=True)
-        self.profile_mgr._read_cached_profile = Mock(return_value=cached_profile)
+        self.profile_mgr._read_cache = Mock(return_value=cached_profile)
 
         self.assertTrue(self.profile_mgr.has_changed())
-        self.profile_mgr._read_cached_profile.assert_called_with()
+        self.profile_mgr._read_cache.assert_called_with()
 
     def _mock_pkg_profile(self, packages):
         """
@@ -134,3 +134,95 @@ class TestProfileManager(unittest.TestCase):
 
         mock_profile = RPMProfile(from_file=mock_file)
         return mock_profile
+
+
+class TestInstalledProductsCache(unittest.TestCase):
+
+    def setUp(self):
+        self.prod_dir = StubCertificateDirectory([
+            StubProductCertificate(StubProduct('a-product', name="Product A")),
+            StubProductCertificate(StubProduct('b-product', name="Product B")),
+            StubProductCertificate(StubProduct('c-product', name="Product C")),
+        ])
+
+        self.mgr = InstalledProductsManager(self.prod_dir)
+
+    def test_cert_parsing(self):
+        self.assertEqual(3, len(self.mgr.installed.keys()))
+        self.assertTrue('a-product' in self.mgr.installed)
+        self.assertTrue('b-product' in self.mgr.installed)
+        self.assertTrue('c-product' in self.mgr.installed)
+        self.assertEquals("Product A", self.mgr.installed['a-product'])
+
+    def test_load_data(self):
+        cached = {
+                'prod1': 'Product 1',
+                'prod2': 'Product 2'
+        }
+        mock_file = Mock()
+        mock_file.read = Mock(return_value=json.dumps(cached))
+
+        data = self.mgr._load_data(mock_file)
+        self.assertEquals(data, cached)
+
+    def test_has_changed(self):
+        cached = {
+                'prod1': 'Product 1',
+                'prod2': 'Product 2'
+        }
+
+        self.mgr._read_cache = Mock(return_value=cached)
+        self.mgr._cache_exists = Mock(return_value=True)
+
+        self.assertTrue(self.mgr.has_changed())
+
+    def test_has_not_changed(self):
+        cached = {
+                'a-product': 'Product A',
+                'b-product': 'Product B',
+                'c-product': 'Product C',
+        }
+
+        self.mgr._read_cache = Mock(return_value=cached)
+        self.mgr._cache_exists = Mock(return_value=True)
+
+        self.assertFalse(self.mgr.has_changed())
+
+    def test_update_check_no_change(self):
+        uuid = 'FAKEUUID'
+        uep = Mock()
+        uep.updateConsumer = Mock()
+
+        self.mgr.has_changed = Mock(return_value=False)
+        self.mgr.write_cache = Mock()
+        self.mgr.update_check(uep, uuid)
+
+        self.assertEquals(0, uep.updateConsumer.call_count)
+        self.assertEquals(0, self.mgr.write_cache.call_count)
+
+    def test_update_check_has_changed(self):
+        uuid = 'FAKEUUID'
+        uep = Mock()
+        uep.updateConsumer = Mock()
+        self.mgr.has_changed = Mock(return_value=True)
+        self.mgr.write_cache = Mock()
+
+        self.mgr.update_check(uep, uuid)
+
+        uep.updateConsumer.assert_called_with(uuid,
+                installed_products=self.mgr.format_for_server())
+        self.assertEquals(1, self.mgr.write_cache.call_count)
+
+    def test_update_check_error_uploading(self):
+        uuid = 'FAKEUUID'
+        uep = Mock()
+
+        self.mgr.has_changed = Mock(return_value=True)
+        self.mgr.write_cache = Mock()
+        # Throw an exception when trying to upload:
+        uep.updateConsumer = Mock(side_effect=Exception('BOOM!'))
+
+        self.assertRaises(Exception, self.mgr.update_check, uep, uuid)
+        uep.updateConsumer.assert_called_with(uuid,
+                installed_products=self.mgr.format_for_server())
+        self.assertEquals(0, self.mgr.write_cache.call_count)

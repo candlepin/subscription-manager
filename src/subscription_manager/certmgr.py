@@ -22,7 +22,7 @@ sys.path.append("/usr/share/rhsm")
 from subscription_manager.certlib import CertLib, ActionLock, ConsumerIdentity
 from subscription_manager.repolib import RepoLib
 from subscription_manager.factlib import FactLib
-from subscription_manager.pkgprofile import ProfileLib
+from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
 
 import rhsm.connection as connection
 
@@ -47,7 +47,8 @@ class CertManager:
         self.certlib = CertLib(self.lock, uep=self.uep)
         self.repolib = RepoLib(self.lock, uep=self.uep)
         self.factlib = FactLib(self.lock, uep=self.uep)
-        self.profilelib = ProfileLib(self.lock, uep=self.uep)
+        self.profilelib = PackageProfileLib(self.lock, uep=self.uep)
+        self.installedprodlib = InstalledProductsLib(self.lock, uep=self.uep)
 
     def update(self):
         """
@@ -60,7 +61,8 @@ class CertManager:
         lock = self.lock
         try:
             lock.acquire()
-            for lib in (self.repolib, self.factlib, self.profilelib):
+            for lib in (self.repolib, self.factlib, self.profilelib,
+                    self.installedprodlib):
                 updates += lib.update()
 
             # WARNING

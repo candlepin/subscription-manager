@@ -24,28 +24,39 @@ from subscription_manager import managerlib
 
 class CliRegistrationTests(unittest.TestCase):
 
+    def stub_persist(self, consumer):
+        self.persisted_consumer = consumer
+        return self.persisted_consumer
+
     def test_register_persists_consumer_cert(self):
-        self.persisted_consumer = None
-
-        def stub_persist(consumer):
-            self.persisted_consumer = consumer
-            return self.persisted_consumer
-
-        # Given
         connection.UEPConnection = StubUEP
-        managerlib.persist_consumer_cert = stub_persist
-        ConsumerIdentity.exists = classmethod(lambda cls: False)
 
-        # When
         cmd = RegisterCommand()
 
-        # Mock out facts:
-        cmd.facts.get_facts = Mock()
-        cmd.facts.get_facts.return_value = {'fact1': 'val1', 'fact2': 'val2'}
+        ConsumerIdentity.exists = classmethod(lambda cls: False)
+        cmd._persist_identity_cert = self.stub_persist
+        cmd.facts.get_facts = Mock(return_value={'fact1': 'val1', 'fact2': 'val2'})
         cmd.facts.write_cache = Mock()
+        cmd.installed_mgr.write_cache = Mock()
 
         cmd.main(['register', '--username=testuser1', '--password=password'])
 
         # Then
         self.assertEqual('dummy-consumer-uuid', self.persisted_consumer["uuid"])
+        
+    def test_installed_products_cache_written(self):
+        connection.UEPConnection = StubUEP
+
+        cmd = RegisterCommand()
+        cmd._persist_identity_cert = self.stub_persist
+        ConsumerIdentity.exists = classmethod(lambda cls: False)
+
+        # Mock out facts and installed products:
+        cmd.facts.get_facts = Mock(return_value={'fact1': 'val1', 'fact2': 'val2'})
+        cmd.facts.write_cache = Mock()
+        cmd.installed_mgr.write_cache = Mock()
+
+        cmd.main(['register', '--username=testuser1', '--password=password'])
+
+        self.assertEquals(1, cmd.installed_mgr.write_cache.call_count)
         

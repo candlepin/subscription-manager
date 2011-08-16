@@ -150,7 +150,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/subscription_manager/facts.py*
 %{_datadir}/rhsm/subscription_manager/factlib.py*
 %{_datadir}/rhsm/subscription_manager/productid.py*
-%{_datadir}/rhsm/subscription_manager/pkgprofile.py*
+%{_datadir}/rhsm/subscription_manager/cache.py*
 %{_datadir}/rhsm/subscription_manager/branding
 %{_datadir}/rhsm/subscription_manager/quantity.py*
 %{_datadir}/rhsm/subscription_manager/jsonwrapper.py*
@@ -165,6 +165,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %dir %{_var}/lib/rhsm
 %attr(755,root,root) %dir %{_var}/lib/rhsm/facts
 %attr(755,root,root) %dir %{_var}/lib/rhsm/packages
+%attr(755,root,root) %dir %{_var}/lib/rhsm/cache
 %{_sysconfdir}/pam.d/subscription-manager
 %{_sysconfdir}/security/console.apps/subscription-manager
 
