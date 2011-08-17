@@ -177,16 +177,20 @@ class MainWindow(widgets.GladeWidget):
     """
     The new RHSM main window.
     """
-    def __init__(self):
+    def __init__(self, backend=None, consumer=None, 
+                 facts=None, ent_dir=None, prod_dir=None):
         super(MainWindow, self).__init__('mainwindow.glade',
               ['main_window', 'notebook', 'subscription_status_label',
                'subscription_status_image', 'system_name_label',
                'next_update_label', 'next_update_title', 'register_button',
                'unregister_button', 'update_certificates_button', 'redeem_button'])
 
-        self.backend = Backend()
-        self.consumer = Consumer()
-        self.facts = Facts()
+        self.backend = backend or Backend()
+        self.consumer = consumer or Consumer()
+        self.facts = facts or Facts()
+
+        self.product_dir = prod_dir or ProductDirectory()
+        self.entitlement_dir = ent_dir or EntitlementDirectory()
 
         self.system_facts_dialog = factsgui.SystemFactsDialog(self.backend, self.consumer,
                 self.facts)
@@ -198,7 +202,11 @@ class MainWindow(widgets.GladeWidget):
         self.import_sub_dialog = ImportSubDialog()
 
         self.subscription_assistant = SubscriptionAssistant(self.backend,
-                self.consumer, self.facts)
+                                                            self.consumer,
+                                                            self.facts,
+                                                            ent_dir=self.entitlement_dir,
+                                                            prod_dir=self.product_dir)
+
 
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
         self.network_config_dialog.xml.get_widget("closeButton").connect("clicked", self._config_changed)
@@ -206,9 +214,14 @@ class MainWindow(widgets.GladeWidget):
         self.redeem_dialog = redeem.RedeemDialog(self.backend, self.consumer)
 
         self.installed_tab = InstalledProductsTab(self.backend, self.consumer,
-                self.facts)
+                                                  self.facts,
+                                                  ent_dir=self.entitlement_dir,
+                                                  prod_dir=self.product_dir)
         self.my_subs_tab = MySubscriptionsTab(self.backend, self.consumer,
-                self.facts)
+                                              self.facts,
+                                              ent_dir=self.entitlement_dir,
+                                              prod_dir=self.product_dir)
+
         self.all_subs_tab = AllSubscriptionsTab(self.backend, self.consumer,
                 self.facts)
 
@@ -368,7 +381,7 @@ class MainWindow(widgets.GladeWidget):
     def _set_validity_status(self):
         """ Updates the entitlement validity status portion of the UI. """
         # Look for productswhich have invalid entitlements
-        sorter = CertSorter(ProductDirectory(), EntitlementDirectory(), facts_dict=self.facts.get_facts())
+        sorter = CertSorter(self.product_dir, self.entitlement_dir, facts_dict=self.facts.get_facts())
 
         warn_count = len(sorter.expired_entitlement_certs) + \
                 len(sorter.unentitled_products)
@@ -401,7 +414,8 @@ class MainWindow(widgets.GladeWidget):
                         _("You have <b>1</b> product in need of additional entitlement certificates."))
 
         else:
-            first_invalid = find_first_invalid_date()
+            first_invalid = find_first_invalid_date(self.entitlement_dir,
+                                                    self.product_dir)
             buf = gtk.gdk.pixbuf_new_from_file_at_size(VALID_IMG, 32, 32)
             self.subscription_status_image.set_from_pixbuf(buf)
             if first_invalid:

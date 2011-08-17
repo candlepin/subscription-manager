@@ -30,13 +30,14 @@ _ = gettext.gettext
 
 
 class InstalledProductsTab(widgets.SubscriptionManagerTab):
-    def __init__(self, backend, consumer, facts):
+    def __init__(self, backend, consumer, facts,
+                 ent_dir=None, prod_dir=None):
 
         widgets = ['product_text', 'validity_text', 'subscription_text']
         super(InstalledProductsTab, self).__init__('installed.glade', widgets)
 
-        self.product_dir = ProductDirectory()
-        self.entitlement_dir = EntitlementDirectory()
+        self.product_dir = prod_dir or ProductDirectory()
+        self.entitlement_dir = ent_dir or EntitlementDirectory()
 
         # Product column
         text_renderer = gtk.CellRendererText()

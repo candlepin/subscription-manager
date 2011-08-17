@@ -87,7 +87,7 @@ class MappedListTreeView(gtk.TreeView):
 class SubscriptionAssistant(widgets.GladeWidget):
 
     """ Subscription Assistant GUI window. """
-    def __init__(self, backend, consumer, facts):
+    def __init__(self, backend, consumer, facts, ent_dir=None, prod_dir=None):
         widget_names = ['subscription_label',
                         'providing_subs_label',
                         'window',
@@ -108,8 +108,8 @@ class SubscriptionAssistant(widgets.GladeWidget):
         self.pool_stash = managerlib.PoolStash(self.backend, self.consumer,
                 self.facts)
 
-        self.product_dir = certdirectory.ProductDirectory()
-        self.entitlement_dir = certdirectory.EntitlementDirectory()
+        self.product_dir = prod_dir or certdirectory.ProductDirectory()
+        self.entitlement_dir = ent_dir or certdirectory.EntitlementDirectory()
 
         # Setup initial last valid date:
         self.last_valid_date = self._load_last_valid_date()
@@ -338,7 +338,8 @@ class SubscriptionAssistant(widgets.GladeWidget):
         Return a datetime object representing the day, month, and year of
         last validity. Ignore the timestamp returned from certlib.
         """
-        d = find_first_invalid_date()
+        d = find_first_invalid_date(ent_dir=self.entitlement_dir,
+                                    product_dir=self.product_dir)
         # If we can't calculate a first invalid date, just use current date.
         # The GUI shouldn't let the subscription assistant be called
         # in this case, this just lets the screen be instantiated.

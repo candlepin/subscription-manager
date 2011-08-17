@@ -44,6 +44,7 @@ from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager import managerlib
 from subscription_manager.facts import Facts
 from subscription_manager.quantity import valid_quantity
+from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -118,7 +119,8 @@ class CliCommand(object):
     """ Base class for all sub-commands. """
 
     def __init__(self, name="cli", usage=None, shortdesc=None,
-            description=None, primary=False):
+                 description=None, primary=False, ent_dir=None,
+                 prod_dir=None):
         self.shortdesc = shortdesc
         if shortdesc is not None and description is None:
             description = shortdesc
@@ -132,6 +134,9 @@ class CliCommand(object):
         self.proxy_url = None
         self.proxy_hostname = None
         self.proxy_port = None
+
+        self.entitlement_dir = ent_dir or EntitlementDirectory()
+        self.product_dir = prod_dir or ProductDirectory()
 
     def _request_validity_check(self):
         bus = dbus.SystemBus()
@@ -225,9 +230,11 @@ class UserPassCommand(CliCommand):
     """
 
     def __init__(self, name, usage=None, shortdesc=None,
-            description=None, primary=False):
+                 description=None, primary=False,
+                 ent_dir=None, prod_dir=None):
         super(UserPassCommand, self).__init__(name, usage, shortdesc,
-                description, primary)
+                                              description, primary,
+                                              ent_dir=ent_dir, prod_dir=prod_dir)
         self._username = None
         self._password = None
 
@@ -272,7 +279,7 @@ class UserPassCommand(CliCommand):
 
 
 class CleanCommand(CliCommand):
-    def __init__(self):
+    def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog clean [OPTIONS]"
         shortdesc = _("Remove all local consumer and subscription data without effecting the server")
         desc = shortdesc
@@ -293,12 +300,14 @@ class CleanCommand(CliCommand):
 
 
 class RefreshCommand(CliCommand):
-    def __init__(self):
+    def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog refresh [OPTIONS]"
         shortdesc = _("Pull the latest subscription data from the server")
         desc = shortdesc
 
-        CliCommand.__init__(self, "refresh", usage, shortdesc, desc, True)
+        CliCommand.__init__(self, "refresh", usage,
+                            shortdesc, desc, True,
+                            ent_dir=ent_dir, prod_dir=prod_dir)
 
     def _do_command(self):
         check_registration()
@@ -315,14 +324,15 @@ class RefreshCommand(CliCommand):
 
 class IdentityCommand(UserPassCommand):
 
-    def __init__(self):
+    def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog identity [OPTIONS]"
         shortdesc = _("Display the identity certificate for this machine or " \
                       "request a new one")
         desc = shortdesc
 
         super(IdentityCommand, self).__init__("identity", usage, shortdesc,
-                desc)
+                                              desc, ent_dir=ent_dir, 
+                                              prod_dir=prod_dir)
 
         self.parser.add_option("--regenerate", action='store_true',
                                help=_("request a new certificate be generated"))
@@ -379,13 +389,14 @@ class IdentityCommand(UserPassCommand):
 
 class OwnersCommand(UserPassCommand):
 
-    def __init__(self):
+    def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog orgs [OPTIONS]"
         shortdesc = _("Display the orgs against which a user can register a system")
         desc = shortdesc
 
         super(OwnersCommand, self).__init__("orgs", usage, shortdesc,
-                desc)
+                                            desc, ent_dir=ent_dir,
+                                            prod_dir=prod_dir)
 
     def _do_command(self):
 
@@ -420,13 +431,14 @@ class OwnersCommand(UserPassCommand):
 
 class EnvironmentsCommand(UserPassCommand):
 
-    def __init__(self):
+    def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog environments [OPTIONS]"
         shortdesc = _("Display the environments available for a user")
         desc = shortdesc
 
         super(EnvironmentsCommand, self).__init__("environments", usage, shortdesc,
-                desc)
+                                                  desc, ent_dir=ent_dir,
+                                                  prod_dir=prod_dir)
 
         self.parser.add_option("--org", dest="org",
                                help=_("specify org for environment list"))
@@ -470,13 +482,14 @@ class EnvironmentsCommand(UserPassCommand):
 
 class RegisterCommand(UserPassCommand):
 
-    def __init__(self):
+    def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog register [OPTIONS]"
         shortdesc = get_branding().CLI_REGISTER
         desc = shortdesc
 
         super(RegisterCommand, self).__init__("register", usage, shortdesc,
-                desc, True)
+                                              desc, True, ent_dir=ent_dir,
+                                              prod_dir=prod_dir)
 
         self.parser.add_option("--type", dest="consumertype", default="system",
                                help=_("the type of consumer to register, defaults to system"))
@@ -495,7 +508,8 @@ class RegisterCommand(UserPassCommand):
                                help=_("register the system even if it is already registered"))
         self.parser.add_option("--activationkey", action='append', dest="activation_keys",
                                help=_("one or more activation keys to use for registration"))
-        self.facts = Facts()
+        self.facts = Facts(ent_dir=self.entitlement_dir,
+			   prod_dir=self.product_dir)
         self.installed_mgr = InstalledProductsManager()
 
     def _validate_options(self):
@@ -645,12 +659,14 @@ class RegisterCommand(UserPassCommand):
 
 class UnRegisterCommand(CliCommand):
 
-    def __init__(self):
+    def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog unregister [OPTIONS]"
         shortdesc = get_branding().CLI_UNREGISTER
         desc = shortdesc
 
-        CliCommand.__init__(self, "unregister", usage, shortdesc, desc, True)
+        CliCommand.__init__(self, "unregister", usage, shortdesc,
+                            desc, True, ent_dir=ent_dir,
+                            prod_dir=prod_dir)
 
     def _validate_options(self):
         pass
@@ -684,11 +700,12 @@ class UnRegisterCommand(CliCommand):
 
 class RedeemCommand(CliCommand):
 
-    def __init__(self):
+    def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog redeem [OPTIONS]"
         shortdesc = _("Attempt to redeem a subscription for a preconfigured machine")
         desc = shortdesc
-        CliCommand.__init__(self, "redeem", usage, shortdesc, desc)
+        CliCommand.__init__(self, "redeem", usage, shortdesc, desc,
+                            ent_dir=ent_dir, prod_dir=prod_dir)
 
         self.parser.add_option("--email", dest="email", action='store',
                                help=_("Email address to notify when "
@@ -710,7 +727,8 @@ class RedeemCommand(CliCommand):
 
         try:
             # update facts first, if we need to
-            facts = Facts()
+            facts = Facts(ent_dir=self.entitlement_dir,
+                          prod_dir=self.product_dir)
             facts.update_check(self.cp, consumer_uuid)
 
             profile_mgr = ProfileManager()
@@ -732,11 +750,12 @@ class RedeemCommand(CliCommand):
 
 class SubscribeCommand(CliCommand):
 
-    def __init__(self):
+    def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog subscribe [OPTIONS]"
         shortdesc = _("Subscribe the registered machine to a specified product")
         desc = shortdesc
-        CliCommand.__init__(self, "subscribe", usage, shortdesc, desc, True)
+        CliCommand.__init__(self, "subscribe", usage, shortdesc, desc, True,
+                            ent_dir=ent_dir, prod_dir=prod_dir)
 
         self.product = None
         self.substoken = None
@@ -771,7 +790,8 @@ class SubscribeCommand(CliCommand):
         consumer_uuid = check_registration()['uuid']
         try:
             # update facts first, if we need to
-            facts = Facts()
+            facts = Facts(ent_dir=self.entitlement_dir,
+                          prod_dir=self.product_dir)
             facts.update_check(self.cp, consumer_uuid)
 
             profile_mgr = ProfileManager()
@@ -811,11 +831,12 @@ class SubscribeCommand(CliCommand):
 
 class UnSubscribeCommand(CliCommand):
 
-    def __init__(self):
+    def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog unsubscribe [OPTIONS]"
         shortdesc = _("Unsubscribe the machine from all or specific subscriptions")
         desc = shortdesc
-        CliCommand.__init__(self, "unsubscribe", usage, shortdesc, desc, True)
+        CliCommand.__init__(self, "unsubscribe", usage, shortdesc, desc, True,
+                            ent_dir=ent_dir, prod_dir=prod_dir)
 
         self.serial_numbers = None
         self.parser.add_option("--serial", dest="serial",
@@ -856,11 +877,12 @@ class UnSubscribeCommand(CliCommand):
 
 class FactsCommand(CliCommand):
 
-    def __init__(self):
+    def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog facts [OPTIONS]"
         shortdesc = _("Work with the current facts for this machine")
         desc = shortdesc
-        CliCommand.__init__(self, "facts", usage, shortdesc, desc)
+        CliCommand.__init__(self, "facts", usage, shortdesc, desc,
+                            ent_dir=ent_dir, prod_dir=prod_dir)
 
         self.parser.add_option("--list", action="store_true",
                                help=_("list known facts for this system"))
@@ -880,7 +902,8 @@ class FactsCommand(CliCommand):
     def _do_command(self):
         self._validate_options()
         if self.options.list:
-            facts = Facts()
+            facts = Facts(ent_dir=self.entitlement_dir,
+                          prod_dir=self.product_dir)
             fact_dict = facts.get_facts()
             if ConsumerIdentity.exists():
                 managerlib.enhance_facts(fact_dict, ConsumerIdentity.read())
@@ -893,18 +916,20 @@ class FactsCommand(CliCommand):
                 print "%s: %s" % (key, value)
 
         if self.options.update:
-            facts = Facts()
+            facts = Facts(ent_dir=self.entitlement_dir,
+                          prod_dir=self.product_dir)
             consumer = check_registration()['uuid']
             facts.update_check(self.cp, consumer, force=True)
             print _("Successfully updated the system facts.")
 
 class ImportCertCommand(CliCommand):
 
-    def __init__(self):
+    def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog import [OPTIONS]"
         shortdesc = _("Import certificates which were provided outside of the tool")
         desc = shortdesc
-        CliCommand.__init__(self, "import", usage, shortdesc, desc)
+        CliCommand.__init__(self, "import", usage, shortdesc, desc,
+                            ent_dir=ent_dir, prod_dir=prod_dir)
 
         self.parser.add_option("--certificate", action="append",  dest="certificate_files",
                                help=_("certificate file to import"))
@@ -945,11 +970,12 @@ class ImportCertCommand(CliCommand):
 
 class ReposCommand(CliCommand):
 
-    def __init__(self):
+    def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog repos [OPTIONS]"
         shortdesc = _("List the repos which this machine is entitled to use")
         desc = shortdesc
-        CliCommand.__init__(self, "repos", usage, shortdesc, desc)
+        CliCommand.__init__(self, "repos", usage, shortdesc, desc,
+                            ent_dir=ent_dir, prod_dir=prod_dir)
 
     def _add_common_options(self):
         self.parser.add_option("--list", action="store_true",
@@ -980,11 +1006,12 @@ class ReposCommand(CliCommand):
 
 class ConfigCommand(CliCommand):
 
-    def __init__(self):
+    def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog config [OPTIONS]"
         shortdesc = _("List the configuration which this machine is using")
         desc = shortdesc
-        CliCommand.__init__(self, "config", usage, shortdesc, desc)
+        CliCommand.__init__(self, "config", usage, shortdesc, desc,
+                            ent_dir=ent_dir, prod_dir=prod_dir)
 
     def _add_common_options(self):
         self.parser.add_option("--list", action="store_true",
@@ -1043,11 +1070,12 @@ class ConfigCommand(CliCommand):
 
 class ListCommand(CliCommand):
 
-    def __init__(self):
+    def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog list [OPTIONS]"
         shortdesc = _("List subscription and product information for this machine")
         desc = shortdesc
-        CliCommand.__init__(self, "list", usage, shortdesc, desc, True)
+        CliCommand.__init__(self, "list", usage, shortdesc, desc, True,
+                            ent_dir=ent_dir, prod_dir=prod_dir)
         self.available = None
         self.consumed = None
         self.parser.add_option("--installed", action='store_true', help=_("if supplied then list shows those products which are installed (default)"))
@@ -1060,7 +1088,8 @@ class ListCommand(CliCommand):
                                help=_("shows the subscriptions being consumed by this system."))
         self.parser.add_option("--all", action='store_true',
                                help=_("if supplied with --available then all subscriptions are returned"))
-        self.facts = Facts()
+        self.facts = Facts(ent_dir=self.entitlement_dir,
+                          prod_dir=self.product_dir)
 
     def _validate_options(self):
         if (self.options.all and not self.options.available):

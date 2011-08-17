@@ -3,6 +3,7 @@ import tempfile
 import json
 import shutil
 
+from stubs import StubEntitlementDirectory, StubProductDirectory
 from subscription_manager import facts
 
 
@@ -130,7 +131,8 @@ class TestFacts(unittest.TestCase):
         fd = open(fact_cache, "w")
         fd.write(facts_buf)
         fd.close()
-        self.f = facts.Facts()
+        self.f = facts.Facts(ent_dir=StubEntitlementDirectory([]),
+                             prod_dir=StubProductDirectory([]))
         self.f.CACHE_FILE = fact_cache
 
     def tearDown(self):

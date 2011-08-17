@@ -37,9 +37,11 @@ class Facts(CacheManager):
     """
     CACHE_FILE = "/var/lib/rhsm/facts/facts.json"
 
-    def __init__(self):
+    def __init__(self, ent_dir=None, prod_dir=None):
         self.facts = {}
 
+        self.entitlement_dir = ent_dir or certdirectory.EntitlementDirectory()
+        self.product_dir = prod_dir or certdirectory.ProductDirectory()
         # see bz #627962
         # we would like to have this info, but for now, since it
         # can change constantly on laptops, it makes for a lot of
@@ -118,8 +120,8 @@ class Facts(CacheManager):
 
         # figure out if we think we have valid entitlements
         # NOTE: we don't need
-        sorter = cert_sorter.CertSorter(certdirectory.ProductDirectory(),
-                                        certdirectory.EntitlementDirectory(),
+        sorter = cert_sorter.CertSorter(self.product_dir,
+                                        self.entitlement_dir,
                                         facts_dict=facts)
         validity_facts = {'system.entitlements_valid': True}
         if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:

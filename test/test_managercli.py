@@ -6,7 +6,7 @@ import socket
 import stubs
 
 from subscription_manager import managercli
-from stubs import MockStdout, MockStderr
+from stubs import MockStdout, MockStderr, StubProductDirectory, StubEntitlementDirectory
 from test_handle_gui_exception import FakeException, FakeLogger
 
 
@@ -14,7 +14,8 @@ class TestCliCommand(unittest.TestCase):
     command_class = managercli.CliCommand
 
     def setUp(self):
-        self.cc = self.command_class()
+        self.cc = self.command_class(ent_dir=StubEntitlementDirectory([]),
+                                     prod_dir=StubProductDirectory([]))
         # neuter the _do_command, since this is mostly
         # for testing arg parsing
         self.cc._do_command = self._do_command

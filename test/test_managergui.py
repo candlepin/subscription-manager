@@ -1,7 +1,8 @@
 import unittest
 
-from subscription_manager.gui import managergui, registergui
 import stubs
+from subscription_manager.gui import managergui, registergui
+from subscription_manager import certdirectory
 
 
 class StubBackend:
@@ -33,16 +34,20 @@ class StubFacts:
 class TestManagerGuiMainWindow(unittest.TestCase):
     def test_main_window(self):
         managergui.ConsumerIdentity = stubs.StubConsumerIdentity
-        managergui.Backend = StubBackend
+        managergui.Backend = stubs.StubBackend
         managergui.Consumer = StubConsumer
         managergui.Facts = StubFacts
-        managergui.MainWindow()
+
+        managergui.MainWindow(backend=stubs.StubBackend(), consumer=StubConsumer(),
+                              facts=StubFacts(),
+                              ent_dir=stubs.StubCertificateDirectory([]),
+                              prod_dir=stubs.StubProductDirectory([]))
 
 
 class TestRegisterScreen(unittest.TestCase):
     def test_register_screen(self):
-        registergui.RegisterScreen(StubBackend(), StubConsumer())
+        registergui.RegisterScreen(stubs.StubBackend(), StubConsumer())
 
     def test_register_screen_register(self):
-        rs = registergui.RegisterScreen(StubBackend(), StubConsumer())
+        rs = registergui.RegisterScreen(stubs.StubBackend(), StubConsumer())
         rs.register(testing=True)

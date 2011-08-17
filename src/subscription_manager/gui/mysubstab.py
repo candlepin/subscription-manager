@@ -39,7 +39,9 @@ EXPIRED_COLOR = '#FFAF99'
 class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
     # Are facts required here? [mstead]
-    def __init__(self, backend, consumer, facts, entitlement_dir=EntitlementDirectory()):
+    def __init__(self, backend, consumer, facts, 
+                 ent_dir=None,
+                 prod_dir=None):
         """
         Create a new 'My Subscriptions' tab.
         """
@@ -48,7 +50,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
-        self.entitlement_dir = entitlement_dir
+        self.entitlement_dir = ent_dir or EntitlementDirectory()
+        self.product_dir = prod_dir or ProductDirectory()
 
         self.sub_details = widgets.SubDetailsWidget()
 
@@ -270,7 +273,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             return (float(len(subset)) / len(full_set)) * 100
 
     def _get_installed(self, products):
-        installed_dir = ProductDirectory()
+        installed_dir = self.product_dir
         installed_products = []
 
         for product in products:

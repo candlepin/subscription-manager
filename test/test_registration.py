@@ -15,7 +15,7 @@
 import unittest
 from mock import Mock
 
-from stubs import StubUEP
+from stubs import StubUEP, StubEntitlementDirectory, StubProductDirectory
 import rhsm.connection as connection
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.managercli import RegisterCommand
@@ -31,7 +31,9 @@ class CliRegistrationTests(unittest.TestCase):
     def test_register_persists_consumer_cert(self):
         connection.UEPConnection = StubUEP
 
-        cmd = RegisterCommand()
+        # When
+        cmd = RegisterCommand(ent_dir=StubEntitlementDirectory([]),
+                              prod_dir=StubProductDirectory([]))
 
         ConsumerIdentity.exists = classmethod(lambda cls: False)
         cmd._persist_identity_cert = self.stub_persist

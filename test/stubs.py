@@ -284,6 +284,7 @@ class StubCertificateDirectory(EntitlementDirectory):
     Can be used for both entitlement and product directories as needed.
     """
 
+    path = "this/is/a/stub/cert/dir"
     def __init__(self, certificates):
         self.certs = certificates
 
@@ -296,6 +297,8 @@ class StubCertificateDirectory(EntitlementDirectory):
         """
         return True
 
+# so we can use a less confusing name when we use this stub
+StubEntitlementDirectory = StubCertificateDirectory
 
 class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
     """
@@ -303,6 +306,7 @@ class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
     Can be used for both entitlement and product directories as needed.
     """
 
+    path = "this/is/a/stub"
     def __init__(self, certificates):
         StubCertificateDirectory.__init__(self, certificates)
 
