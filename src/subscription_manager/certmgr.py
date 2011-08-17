@@ -76,7 +76,7 @@ class CertManager:
         return updates
 
 
-def main():
+def main(autoheal_enabled):
     if not ConsumerIdentity.existsAndValid():
         log.error('Either the consumer is not registered or the certificates' +
                   ' are corrupted. Certificate update using daemon failed.')
@@ -88,20 +88,45 @@ def main():
     updates = mgr.update()
     print _('%d updates required') % updates
     print _('done')
+    if autoheal_enabled:
+        log.info("performing autoheal check")
+        try:
+            sub_cmd = managercli.SubscribeCommand()
+            sub_cmd.main(['--auto'])
+        except Exception, e:
+            # most errors are caught/logged inside SubscribeCommand, this
+            # is only for certain edge cases
+            log.exception(e)
+            log.error("Error while running autoheal check")
+        else:
+            log.info("autoheal check complete")
 
 # WARNING: This is not a block of code used to test, this module is
 # actually run as a script via cron to periodically update the system's
 # certificates, yum repos, and facts.
 if __name__ == '__main__':
+    from subscription_manager import managercli
     import logging
     import logutil
+    import rhsm
+    from ConfigParser import NoOptionError
+
+    cfg = rhsm.config.initConfig()
+    autoheal_enabled = False
+    try:
+        autoheal_enabled = cfg.getboolean('rhsm', 'autoheal')
+    except NoOptionError:
+        # if we can't read the autoheal directive, assume False
+        pass
+
     logutil.init_logger()
     log = logging.getLogger('rhsm-app.' + __name__)
     try:
-        main()
+        main(autoheal_enabled)
     except SystemExit:
-        # sys.exit triggers an exception in older Python versions, which in this case
-        # we can safely ignore as we do not want to log the stack trace.
+        # sys.exit triggers an exception in older Python versions, which
+        # in this case  we can safely ignore as we do not want to log the
+        # stack trace.
         pass
     except Exception, e:
         log.error("Error while updating certificates using daemon")

@@ -87,11 +87,18 @@ def handle_exception(msg, ex):
         systemExit(-1, ex)
 
 
-def autosubscribe(cp, consumer, certlib):
+def autosubscribe(cp, consumer, certlib, disable_product_upload=False):
+    """
+    This is a wrapper for bind/bindByProduct. Eventually, we will exclusively
+    use bind, but for now, we support both.
+    """
     # try to auomatically bind products
     products = managerlib.getInstalledProductHashMap()
     try:
-        cp.bindByProduct(consumer, products.values())
+        if disable_product_upload:
+            cp.bind(consumer) # new style
+        else:
+            cp.bindByProduct(consumer, products.values())
         certlib.update()
 
         installed_status = managerlib.getInstalledProductStatus()
@@ -771,7 +778,7 @@ class SubscribeCommand(CliCommand):
                             systemExit(-1, re.msg)  # some other error.. don't try again
             # must be auto
             else:
-                autosubscribe(self.cp, consumer_uuid, self.certlib)
+                autosubscribe(self.cp, consumer_uuid, self.certlib, disable_product_upload=True)
 
             result = self.certlib.update()
             if result[1]:
