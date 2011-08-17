@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.5
+Version: 0.96.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -222,6 +222,55 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Aug 17 2011 James Bowes <jbowes@repl.ca> 0.96.6-1
+- 729688: expected "Network Error" message is not getting displayed in the GUI
+  (cduryee@redhat.com)
+- 727978: returning wrong exit code from subscription-manager redeem
+  (cduryee@redhat.com)
+- EntitlementDirectory._check_key was not returning for True case
+  (alikins@redhat.com)
+- Move the ImportFileExtractor for managerlib. (bkearney@redhat.com)
+- 730114: Placed machine type icon and asterisk in seperate column
+  (mstead@redhat.com)
+- Remove unused check entitlements flag. (dgoodwin@redhat.com)
+- Cleanup facts.json created during tests. (dgoodwin@redhat.com)
+- Change all instances of "unknown" to "Unknown". (cduryee@redhat.com)
+- 727970: delete future dated entitlements (cduryee@redhat.com)
+- Fix a test assertion that isn't in RHEL 6 Python. (dgoodwin@redhat.com)
+- add certdirectory.py to the files section (jesusr@redhat.com)
+- Change to the CLI config manipulation includes updates for defaulted values
+  and update for ACK (wpoteat@redhat.com)
+- Add the latest man page from deon (bkearney@redhat.com)
+- Track partially valid entitlements (alikins@redhat.com)
+- Log uncaught GUI exception stacktraces. (dgoodwin@redhat.com)
+- 727967: Fix first non-compliant date calculation past first expiry.
+  (dgoodwin@redhat.com)
+- Move Writer class over to certdirectory (cduryee@redhat.com)
+- Break certlib into two files. (cduryee@redhat.com)
+- 679822: add a check all button for invalid product selection
+  (jbowes@redhat.com)
+- Show asterisk in GUI when subscription allows multi-entitlement
+  (mstead@redhat.com)
+- Calculate default quantity for virtual machines using prod attributes vcpu,
+  sockets or 1 (mstead@redhat.com)
+- Command line ability to change config settings of the server
+  (wpoteat@redhat.com)
+- 728349: Environments help command should reference the correct command name.
+  (bkearney@redhat.com)
+- pep8 cleanups (alikins@redhat.com)
+- Multiline error message was not parseable. Triple quote it.
+  (alikins@redhat.com)
+- 707752: may need a dbus-x11 package dependency for subscription-manager-gnome
+  (cduryee@redhat.com)
+- Multi-entitle yes/no for list (wottop@redhat.com)
+- 712047: yum prints non-error messages when running in quiet mode
+  (cduryee@redhat.com)
+- 679822: Reselect products in subscription assistant (jbowes@redhat.com)
+- Default quanity value to 1 when contract selection not required
+  (mstead@redhat.com)
+- 710149: Always show the compliance assistant button. (dgoodwin@redhat.com)
+- 725046: Make the help text more explicit as to what the command does
+  (bkearney@redhat.com)
 * Wed Aug 03 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.5-1
 - I18N update. (dgoodwin@redhat.com)
 - check that dmi info was populated before attempting to query it
