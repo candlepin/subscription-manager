@@ -506,6 +506,16 @@ class UEPConnection:
         method = "/consumers/%s/entitlements?%s" % (str(consumerId), args)
         return self.conn.request_post(method)
 
+    def bind(self, consumerId):
+        """
+        Same as bindByProduct, but assume the server has a list of the
+        system's products. This is useful for autosubscribe. Note that this is
+        done on a best-effort basis, and there are cases when the server will
+        not be able to fulfill the client's product certs with entitlements.
+        """
+        method = "/consumers/%s/entitlements" % (self.sanitize(consumerId))
+        return self.conn.request_post(method)
+
     def unbindBySerial(self, consumerId, serial):
         method = "/consumers/%s/certificates/%s" % (self.sanitize(consumerId), self.sanitize(str(serial)))
         return self.conn.request_delete(method)
