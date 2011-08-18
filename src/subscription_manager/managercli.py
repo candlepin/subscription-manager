@@ -908,11 +908,12 @@ class ImportCertCommand(CliCommand):
                                help=_("certificate file to import"))
 
     def _validate_options(self):
-        if len(self.options.certificate_files) <= 0:
+        if not self.options.certificate_files:
             print _("Error: At least one certificate is required")
             sys.exit(-1)
 
     def _do_command(self):
+        self._validate_options()
         for src_cert_file in self.options.certificate_files:
             if os.path.exists(src_cert_file):
                 try:

@@ -2,6 +2,9 @@ import unittest
 import sys
 import socket
 
+# to override config
+import stubs
+
 from subscription_manager import managercli
 from stubs import MockStdout, MockStderr
 from test_handle_gui_exception import FakeException, FakeLogger
@@ -191,12 +194,23 @@ class TestImportCertCommand(TestCliCommand):
         self.cc._validate_options()
 
     def test_no_certificates(self):
-        self.cc.main([])
+        try:
+            self.cc.main([])
+        except SystemExit, e:
+            self.assertEquals(e.code, 2)
+
         try:
             self.cc._validate_options()
             self.fail("No exception raised")
         except Exception, e:
-            return True
+            pass
+        except SystemExit, e:
+            # there seems to be an optparse issue
+            # here that depends on version, on f14
+            # we get sysexit with return code 2  from main, on f15, we
+            # get a -1 from validate_options
+            # i18n_optparse returns 2 on no args
+            self.assertEquals(e.code, -1)
 
 
 class HandleExceptionTests(unittest.TestCase):
