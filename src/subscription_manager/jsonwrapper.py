@@ -20,7 +20,6 @@ class PoolWrapper(object):
     def __init__(self, pool_json):
         self.data = pool_json
 
-    # TODO [mstead] Add tests for this method.
     def is_virt_only(self):
         attributes = self.data['attributes']
         virt_only = False
@@ -33,3 +32,12 @@ class PoolWrapper(object):
                 break
 
         return virt_only
+
+    def get_stacking_id(self):
+        product_attrs = self.data['productAttributes']
+        for attribute in product_attrs:
+            name = attribute['name']
+            value = attribute['value']
+            if name == "stacking_id" and value:
+                return value
+        return None

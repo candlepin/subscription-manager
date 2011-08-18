@@ -22,7 +22,7 @@ from os import linesep as NEW_LINE
 from stubs import StubCertificateDirectory, StubProductCertificate, StubProduct, \
     StubEntitlementCertificate
 from subscription_manager.managerlib import merge_pools, PoolFilter, getInstalledProductStatus, \
-    LocalTz, parseDate, configure_i18n
+    LocalTz, parseDate, configure_i18n, merge_pools, MergedPoolsStackingGroupSorter
 from modelhelpers import *
 from subscription_manager import managerlib
 import stubs
@@ -522,3 +522,101 @@ class TestImportFileExtractor(unittest.TestCase):
         write_one = writes[0]
         self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
         self.assertEquals(EXPECTED_CERT_CONTENT, write_one[1])
+
+class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
+
+    def test_sorter_adds_group_for_non_stackable_entitlement(self):
+        pool = self._create_pool("test-prod-1", "Test Prod 1")
+        merged = merge_pools([pool])
+        pools = merged.values()
+        sorter = MergedPoolsStackingGroupSorter(pools)
+
+        self.assertEquals(1, len(sorter.groups))
+        group = sorter.groups[0]
+        self.assertEquals("", group.name)
+        self.assertEquals(1, len(group.entitlements))
+        self.assertEquals(pools[0], group.entitlements[0])
+
+    def test_sorter_adds_group_for_stackable_entitlement(self):
+        expected_stacking_id = 1234
+        pool = self._create_pool("test-prod-1", "Test Prod 1", expected_stacking_id)
+        merged = merge_pools([pool])
+        pools = merged.values()
+        sorter = MergedPoolsStackingGroupSorter(pools)
+
+        self.assertEquals(1, len(sorter.groups))
+        group = sorter.groups[0]
+        self.assertEquals(str(expected_stacking_id), group.name)
+        self.assertEquals(1, len(group.entitlements))
+        self.assertEquals(pools[0], group.entitlements[0])
+
+    def test_sorter_adds_multiple_entitlements_to_group_when_same_stacking_id(self):
+        expected_stacking_id = 1234
+        pool1 = self._create_pool("test-prod-1", "Test Prod 1", expected_stacking_id)
+        pool2 = self._create_pool("test-prod-2", "Test Prod 2", expected_stacking_id)
+
+        merged = merge_pools([pool1, pool2])
+
+        pools = merged.values()
+        sorter = MergedPoolsStackingGroupSorter(pools)
+
+        self.assertEquals(1, len(sorter.groups))
+        group = sorter.groups[0]
+
+        self.assertEquals(str(expected_stacking_id), group.name)
+        self.assertEquals(2, len(group.entitlements))
+
+        self.assertEquals(pools[0], group.entitlements[0])
+        self.assertEquals(pools[1], group.entitlements[1])
+
+    def test_sorter_adds_multiple_groups_for_non_stacking_entitlements(self):
+        pool1 = self._create_pool("test-prod-1", "Test Prod 1")
+        pool2 = self._create_pool("test-prod-2", "Test Prod 2")
+
+        merged = merge_pools([pool1, pool2])
+        pools = merged.values()
+        sorter = MergedPoolsStackingGroupSorter(pools)
+
+        self.assertEquals(2, len(sorter.groups))
+        group1 = sorter.groups[0]
+        group2 = sorter.groups[1]
+
+        self.assertEquals("", group1.name)
+        self.assertEquals(1, len(group1.entitlements))
+        self.assertEquals(pools[0], group1.entitlements[0])
+
+        self.assertEquals("", group2.name)
+        self.assertEquals(1, len(group2.entitlements))
+        self.assertEquals(pools[1], group2.entitlements[0])
+
+    def test_stacking_and_non_stacking_groups_created(self):
+        pool1 = self._create_pool("test-prod-1", "Test Prod 1")
+
+        expected_stacking_id = 1234
+        pool2 = self._create_pool("test-prod-2", "Test Prod 2", expected_stacking_id)
+
+        merged = merge_pools([pool1, pool2])
+        pools = merged.values()
+        sorter = MergedPoolsStackingGroupSorter(pools)
+
+        self.assertEquals(2, len(sorter.groups))
+        group1 = sorter.groups[0]
+        group2 = sorter.groups[1]
+
+        self.assertEquals(str(expected_stacking_id), group1.name)
+        self.assertEquals(1, len(group1.entitlements))
+        self.assertEquals(pools[0], group1.entitlements[0])
+
+        self.assertEquals("", group2.name)
+        self.assertEquals(1, len(group2.entitlements))
+        self.assertEquals(pools[1], group2.entitlements[0])
+
+    def _create_pool(self, product_id, product_name, stacking_id=None):
+        prod_attrs = []
+        if stacking_id:
+            stacking_id_attribute = {
+                "name": "stacking_id",
+                "value": stacking_id
+            }
+            prod_attrs.append(stacking_id_attribute)
+        return create_pool(product_id, product_name, productAttributes=prod_attrs)

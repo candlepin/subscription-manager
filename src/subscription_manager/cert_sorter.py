@@ -183,29 +183,33 @@ class CertSorter(object):
                 del self.expired_products[product_id]
 
 class StackingGroupSorter(object):
-    def __init__(self, entitlement_dir):
+    def __init__(self, entitlements, get_stacking_id_from_entitlement_funct):
         self.groups = []
         stacking_groups = {}
 
-        for ent_cert in entitlement_dir.list():
-            order = ent_cert.getOrder()
-            stacking_id = order.getStackingId()
+        for entitlement in entitlements:
+            stacking_id = get_stacking_id_from_entitlement_funct(entitlement)
             if stacking_id:
                 if stacking_id not in stacking_groups:
-                    group = EntitlementGroup(ent_cert, str(stacking_id))
+                    group = EntitlementGroup(entitlement, str(stacking_id))
                     self.groups.append(group)
                     stacking_groups[stacking_id] = group
                 else:
                     group = stacking_groups[stacking_id]
-                    group.add_entitlement_cert(ent_cert)
+                    group.add_entitlement_cert(entitlement)
             else:
-                self.groups.append(EntitlementGroup(ent_cert))
+                self.groups.append(EntitlementGroup(entitlement))
 
 class EntitlementGroup(object):
-    def __init__(self, entitlement_cert, name=''):
+    def __init__(self, entitlement, name=''):
         self.name = name
-        self.certs = []
-        self.add_entitlement_cert(entitlement_cert)
+        self.entitlements = []
+        self.add_entitlement_cert(entitlement)
 
-    def add_entitlement_cert(self, entitlement_cert):
-        self.certs.append(entitlement_cert)
+    def add_entitlement_cert(self, entitlement):
+        self.entitlements.append(entitlement)
+
+class EntitlementCertStackingGroupSorter(StackingGroupSorter):
+    def __init__(self, certs):
+        get_stacking_id = lambda cert: cert.getOrder().getStackingId()
+        StackingGroupSorter.__init__(self, certs, get_stacking_id)

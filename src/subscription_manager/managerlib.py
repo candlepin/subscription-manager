@@ -33,6 +33,8 @@ from subscription_manager.certlib import system_log as inner_system_log
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager.facts import Facts
 from subscription_manager.quantity import allows_multi_entitlement
+from subscription_manager.cert_sorter import StackingGroupSorter
+from subscription_manager.jsonwrapper import PoolWrapper
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -450,6 +452,16 @@ def merge_pools(pools):
     # Just return a list of the MergedPools objects, without the product ID
     # key hashing:
     return merged_pools
+
+
+class MergedPoolsStackingGroupSorter(StackingGroupSorter):
+    """
+    Sorts a list of MergedPool objects by stacking_id.
+    """
+    def __init__(self, merged_pools):
+        get_stacking_id = \
+            lambda merged_pool: PoolWrapper(merged_pool.pools[0]).get_stacking_id()
+        StackingGroupSorter.__init__(self, merged_pools, get_stacking_id)
 
 
 class PoolStash(object):

@@ -27,7 +27,7 @@ from subscription_manager.gui.utils import handle_gui_exception, get_dbus_iface
 from subscription_manager.gui.colors import WARNING, EXPIRED, ODD_ROW
 
 import gettext
-from subscription_manager.cert_sorter import StackingGroupSorter
+from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter
 from subscription_manager.gui.storage import MappedTreeStore
 _ = gettext.gettext
 
@@ -126,7 +126,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         Pulls the entitlement certificates and updates the subscription model.
         """
         self.store.clear()
-        sorter = StackingGroupSorter(self.entitlement_dir)
+        sorter = EntitlementCertStackingGroupSorter(self.entitlement_dir.list())
         for idx, group in enumerate(sorter.groups):
             self._add_group(idx, group)
         self.top_view.expand_all()
@@ -141,7 +141,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                                                                                bg_color))
         change_parent_color = False
         new_parent_color = None
-        for i, cert in enumerate(group.certs):
+        for i, cert in enumerate(group.entitlements):
             bg_color = self._get_background_color(group_idx, cert)
             self.store.add_map(iter, self._create_entry_map(cert, bg_color))
 
