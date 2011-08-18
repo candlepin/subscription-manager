@@ -64,6 +64,11 @@ ProductName:         \t%-25s
 Status:               \t%-25s
 """)
 
+environment_list = _("""
+Name:                \t%-25s
+Description:         \t%-25s
+""")
+
 UNREGISTER_ERROR = _("<b>Errors were encountered during unregister.</b>\n%s\nPlease see /var/log/rhsm/rhsm.log for more information.")
 
 REGISTER_ERROR = _("<b>Unable to register the system.</b>\n\n %s\n\nPlease see /var/log/rhsm/rhsm.log for more information.")

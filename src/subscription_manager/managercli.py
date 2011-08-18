@@ -447,9 +447,12 @@ class EnvironmentsCommand(UserPassCommand):
             if self.cp.supports_resource('environments'):
                 environments = self.cp.getEnvironmentList(self.options.org)
                 if len(environments):
-                    print "environments:"
+                    print("+-------------------------------------------+")
+                    print("          %s" % (_("Environments")))
+                    print("+-------------------------------------------+")
                     for env in environments:
-                        print env['name']
+                        print constants.environment_list % (env['name'],
+                            env['description'])
                 else:
                     print "This org does not have environments."
             else:
