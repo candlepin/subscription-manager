@@ -36,6 +36,8 @@ MIN_GTK_MAJOR = 2
 MIN_GTK_MINOR = 18
 MIN_GTK_MICRO = 0
 
+EVEN_ROW_COLOR = '#eeeeee'
+
 def handle_gui_exception(e, msg, formatMsg=True, logMsg=None):
     """
     Handles an exception for the gui by logging the stack trace and
@@ -188,3 +190,26 @@ def get_dbus_iface():
     validity_iface = dbus.Interface(validity_obj,
                         dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
     return validity_iface
+
+
+def get_cell_background_color(item_idx):
+    """
+    Determines the BG color for a cell based on entry index of the model.
+    """
+    # NOTE: Even indexes are actually displayed as an odd row.
+    if item_idx % 2 != 0:
+        return EVEN_ROW_COLOR
+
+
+def set_background_model_index(tree_view, model_idx):
+    """
+    Sets the model index containing the background color for all cells.
+    This should be called after all columns and renderes have been added
+    to the treeview.
+
+    @param tree_view: the tree view to set the background model index on.
+    @param model_idx: the model index containing the background color.
+    """
+    for col in tree_view.get_columns():
+        for renderer in col.get_cell_renderers():
+            col.add_attribute(renderer, 'cell-background', model_idx)

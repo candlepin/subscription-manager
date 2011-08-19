@@ -23,8 +23,8 @@ from subscription_manager.certdirectory import EntitlementDirectory, ProductDire
 from subscription_manager.certlib import Disconnected
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import widgets
-from subscription_manager.gui.utils import handle_gui_exception, get_dbus_iface
-from subscription_manager.gui.colors import WARNING, EXPIRED, ODD_ROW
+from subscription_manager.gui.utils import handle_gui_exception, get_dbus_iface,\
+    get_cell_background_color
 
 import gettext
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter
@@ -33,6 +33,8 @@ _ = gettext.gettext
 
 WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
 
+WARNING_COLOR = '#FFFB82'
+EXPIRED_COLOR = '#FFAF99'
 
 class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
@@ -254,13 +256,12 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             now = datetime.now(GMT())
 
             if date_range.end() < now:
-                return EXPIRED
+                return EXPIRED_COLOR
 
             if date_range.end() - timedelta(days=WARNING_DAYS) < now:
-                return WARNING
+                return WARNING_COLOR
 
-        if idx % 2 != 0:
-            return ODD_ROW
+        return get_cell_background_color(idx)
 
     def _percentage(self, subset, full_set):
         if (len(full_set) == 0):

@@ -459,10 +459,10 @@ class MergedPoolsStackingGroupSorter(StackingGroupSorter):
     Sorts a list of MergedPool objects by stacking_id.
     """
     def __init__(self, merged_pools):
-        get_stacking_id = \
-            lambda merged_pool: PoolWrapper(merged_pool.pools[0]).get_stacking_id()
-        StackingGroupSorter.__init__(self, merged_pools, get_stacking_id)
+        StackingGroupSorter.__init__(self, merged_pools)
 
+    def _get_stacking_id(self, merged_pool):
+        return PoolWrapper(merged_pool.pools[0]).get_stacking_id()
 
 class PoolStash(object):
     """

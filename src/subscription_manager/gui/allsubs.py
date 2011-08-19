@@ -22,6 +22,7 @@ from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.gui.widgets import MachineTypeColumn
 from subscription_manager.jsonwrapper import PoolWrapper
 import gtk
+from subscription_manager.managerlib import MergedPoolsStackingGroupSorter
 _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -30,7 +31,8 @@ from subscription_manager import managerlib
 from subscription_manager.gui import widgets
 from subscription_manager import async
 from subscription_manager.gui import progress
-from subscription_manager.gui.utils import handle_gui_exception, apply_highlight, errorWindow
+from subscription_manager.gui.utils import handle_gui_exception, apply_highlight, errorWindow,\
+    get_cell_background_color, set_background_model_index
 from subscription_manager.gui.contract_selection import ContractSelectionWindow
 from subscription_manager.quantity import QuantityDefaultValueCalculator, valid_quantity, \
                                           allows_multi_entitlement
@@ -70,7 +72,12 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         subscription_column.set_expand(True)
         self.top_view.append_column(subscription_column)
 
+        self.add_text_column(_("Stacking ID"), 'stacking_id')
+
         self.add_text_column(_('Available Subscriptions'), 'available')
+
+        # Ensure all cells are colored according the the store.
+        set_background_model_index(self.top_view, self.store['background'])
 
         # This option should be selected by default:
         self.compatible_checkbutton.set_active(True)
@@ -106,12 +113,12 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             'available': str,
             'product_id': str,
             'pool_id': str,
+            'stacking_id': str,
             'merged_pools': gobject.TYPE_PYOBJECT,
             'product_name_formatted': str,
-
-            # TODO:  This is not needed here - i think maybe we should get
-            #        rid of the background color stuff altogether...
             'background': str,
+
+            # TODO:  This is not needed here.
             'align': float,
             'multi_entitlement': bool,
         }
@@ -171,26 +178,30 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 uninstalled=self.filter_uninstalled(),
                 subscribed=True,
                 text=self.get_filter_text())
+        sorter = MergedPoolsStackingGroupSorter(merged_pools.values())
+        for group_idx, group in enumerate(sorter.groups):
+            bg_color = get_cell_background_color(group_idx)
+            for entry in group.entitlements:
+                if entry.quantity < 0:
+                    available = _('unlimited')
+                else:
+                    available = entry.quantity - entry.consumed
 
-        for entry in merged_pools.values():
-            if entry.quantity < 0:
-                available = _('unlimited')
-            else:
-                available = entry.quantity - entry.consumed
-
-            self.store.add_map({
-                'virt_only': PoolWrapper(entry.pools[0]).is_virt_only(),
-                'product_name': entry.product_name,
-                'product_name_formatted': \
-                        apply_highlight(entry.product_name,
-                            self.get_filter_text()),
-                'available': available,
-                'product_id': entry.product_id,
-                'pool_id': entry.pools[0]['id'],  # not displayed, just for lookup later
-                'merged_pools': entry,  # likewise not displayed, for subscription
-                'align': 0.5,
-                'multi_entitlement': allows_multi_entitlement(entry.pools[0]),
-        })
+                self.store.add_map({
+                    'virt_only': PoolWrapper(entry.pools[0]).is_virt_only(),
+                    'product_name': entry.product_name,
+                    'product_name_formatted': \
+                            apply_highlight(entry.product_name,
+                                self.get_filter_text()),
+                    'available': available,
+                    'product_id': entry.product_id,
+                    'pool_id': entry.pools[0]['id'],  # not displayed, just for lookup later
+                    'merged_pools': entry,  # likewise not displayed, for subscription
+                    'align': 0.5,
+                    'multi_entitlement': allows_multi_entitlement(entry.pools[0]),
+                    'background': bg_color,
+                    'stacking_id': group.name,
+                })
 
         # set the selection/details back to what they were, if possible
         found = False

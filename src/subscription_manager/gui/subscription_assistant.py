@@ -20,7 +20,6 @@ import gettext
 import logging
 from datetime import date, datetime
 from subscription_manager.managerlib import MergedPoolsStackingGroupSorter
-from subscription_manager.gui.colors import ODD_ROW
 
 _ = gettext.gettext
 
@@ -35,7 +34,8 @@ from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.gui import storage
 from subscription_manager.gui import widgets
 from subscription_manager.gui import progress
-from subscription_manager.gui.utils import handle_gui_exception, make_today_now, errorWindow
+from subscription_manager.gui.utils import handle_gui_exception, make_today_now, errorWindow,\
+    get_cell_background_color, set_background_model_index
 from subscription_manager.quantity import QuantityDefaultValueCalculator, valid_quantity, \
                                             allows_multi_entitlement
 from subscription_manager.jsonwrapper import PoolWrapper
@@ -82,16 +82,6 @@ class MappedListTreeView(gtk.TreeView):
         self.store = self.get_model()
         self.append_column(column)
         return column
-
-    def set_background_model_index(self, model_idx):
-        """
-        Sets the model index containing the background color for all cells.
-        This should be called after all columns and renderes have been added
-        to the treeview.
-        """
-        for col in self.get_columns():
-            for renderer in col.get_cell_renderers():
-                col.add_attribute(renderer, 'cell-background', model_idx)
 
 
 class SubscriptionAssistant(widgets.GladeWidget):
@@ -196,7 +186,8 @@ class SubscriptionAssistant(widgets.GladeWidget):
         self.subscriptions_treeview.set_model(self.subscriptions_store)
         self.subscriptions_treeview.get_selection().connect('changed',
                 self._on_subscription_selection)
-        self.subscriptions_treeview.set_background_model_index(self.subscriptions_store['background'])
+        set_background_model_index(self.subscriptions_treeview,
+                                   self.subscriptions_store['background'])
 
         self.subscriptions_window.add(self.subscriptions_treeview)
         self.subscriptions_treeview.show()
@@ -423,7 +414,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
         merged_pools = managerlib.merge_pools(relevant_pools).values()
         sorter = MergedPoolsStackingGroupSorter(merged_pools)
         for group_idx, group in enumerate(sorter.groups):
-            bg_color = self._get_cell_background_color(group_idx)
+            bg_color = get_cell_background_color(group_idx)
             for entry in group.entitlements:
                 quantity = entry.quantity
                 if quantity < 0:
@@ -448,10 +439,6 @@ class SubscriptionAssistant(widgets.GladeWidget):
                     'background': bg_color,
                     'stacking_id': group.name
                 })
-
-    def _get_cell_background_color(self, group_idx):
-        if group_idx % 2 != 0:
-            return ODD_ROW
 
     def _get_selected_product_ids(self):
         """

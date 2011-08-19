@@ -183,12 +183,12 @@ class CertSorter(object):
                 del self.expired_products[product_id]
 
 class StackingGroupSorter(object):
-    def __init__(self, entitlements, get_stacking_id_from_entitlement_funct):
+    def __init__(self, entitlements):
         self.groups = []
         stacking_groups = {}
 
         for entitlement in entitlements:
-            stacking_id = get_stacking_id_from_entitlement_funct(entitlement)
+            stacking_id = self._get_stacking_id(entitlement)
             if stacking_id:
                 if stacking_id not in stacking_groups:
                     group = EntitlementGroup(entitlement, str(stacking_id))
@@ -199,6 +199,9 @@ class StackingGroupSorter(object):
                     group.add_entitlement_cert(entitlement)
             else:
                 self.groups.append(EntitlementGroup(entitlement))
+
+    def _get_stacking_id(self, entitlement):
+        raise NotImplementedError("Subclasses must implement: _get_stacking_id")
 
 class EntitlementGroup(object):
     def __init__(self, entitlement, name=''):
@@ -211,5 +214,7 @@ class EntitlementGroup(object):
 
 class EntitlementCertStackingGroupSorter(StackingGroupSorter):
     def __init__(self, certs):
-        get_stacking_id = lambda cert: cert.getOrder().getStackingId()
-        StackingGroupSorter.__init__(self, certs, get_stacking_id)
+        StackingGroupSorter.__init__(self, certs)
+
+    def _get_stacking_id(self, cert):
+        return cert.getOrder().getStackingId()
