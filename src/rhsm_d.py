@@ -39,6 +39,7 @@ RHSM_VALID = 0
 RHSM_EXPIRED = 1
 RHSM_WARNING = 2
 RHN_CLASSIC = 3
+RHSM_PARTIALLY_VALID = 4
 
 
 def debug(msg):
@@ -78,13 +79,15 @@ def check_status(force_signal):
         debug(sorter.unentitled_products.keys())
         debug(sorter.expired_products.keys())
         return RHSM_EXPIRED
+    elif len(sorter.partially_valid_products) > 0:
+        debug("System has one or more partially entitled products")
+        return RHSM_PARTIALLY_VALID
+    elif in_warning_period(sorter):
+        debug("System has one or more entitlements in their warning period")
+        return RHSM_WARNING
     else:
-        if in_warning_period(sorter):
-            debug("System has one or more entitlements in their warning period")
-            return RHSM_WARNING
-        else:
-            debug("System entitlements appear valid")
-            return RHSM_VALID
+        debug("System entitlements appear valid")
+        return RHSM_VALID
 
 
 def check_if_ran_once(checker, loop):
@@ -148,6 +151,8 @@ def parse_force_signal(cli_arg):
         return RHSM_EXPIRED
     elif cli_arg == "warning":
         return RHSM_WARNING
+    elif cli_arg == "partial":
+        return RHSM_PARTIALLY_VALID
     elif cli_arg == "classic":
         return RHN_CLASSIC
     else:
@@ -166,7 +171,8 @@ def main():
             help="Run standalone and log result to syslog",
             action="store_true", default=False)
     parser.add_option("-f", "--force-signal", dest="force_signal",
-            help="Force firing of a signal (valid, expired, warning or classic)")
+            help="Force firing of a signal " +
+            "(valid, expired, warning, partial or classic)")
 
     options, args = parser.parse_args()
 
@@ -183,6 +189,12 @@ def main():
             syslog.syslog(syslog.LOG_NOTICE,
                     "This system is missing one or more valid entitlement " +
                     "certificates. " +
+                    "Please run subscription-manager for more information.")
+        elif status == RHSM_PARTIALLY_VALID:
+            syslog.openlog("rhsmd")
+            syslog.syslog(syslog.LOG_NOTICE,
+                    "This system is missing one or more valid entitlement " +
+                    "certificates to full cover its products. " +
                     "Please run subscription-manager for more information.")
         elif status == RHSM_WARNING:
             syslog.openlog("rhsmd")

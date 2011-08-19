@@ -47,7 +47,7 @@ static GOptionEntry entries[] =
 	{"debug", 'd', 0, G_OPTION_ARG_NONE, &debug,
 		N_("Show debug messages"), NULL},
 	{"force-icon", 'f', 0, G_OPTION_ARG_STRING, &force_icon,
-		N_("Force display of the icon (expired or warning)"),
+		N_("Force display of the icon (expired, partial or warning)"),
 		"TYPE"},
 	{"check-immediately", 'i', 0, G_OPTION_ARG_NONE, &check_immediately,
 		N_("Run the first status check right away"), NULL},
@@ -66,7 +66,8 @@ typedef enum _StatusType {
 	RHSM_VALID,
 	RHSM_EXPIRED,
 	RHSM_WARNING,
-	RHN_CLASSIC
+	RHN_CLASSIC,
+	RHSM_PARTIALLY_VALID
 } StatusType;
 
 /* prototypes */
@@ -98,6 +99,8 @@ create_status_type(int status)
 			return RHSM_WARNING;
 		case 3:
 			return RHN_CLASSIC;
+		case 4:
+			return RHSM_PARTIALLY_VALID;
 		default:
 			// we don't know this one, better to play it safe
 			return RHSM_EXPIRED;
@@ -194,7 +197,12 @@ display_icon(Context *context, StatusType status_type)
 		notification_title = _("Invalid or Missing Entitlement Certificates");
 		notification_body = _("This system is missing one or more "
 			"valid entitlement certificates.");
-
+	} else if (status_type == RHSM_PARTIALLY_VALID) {
+		tooltip = _("Partially Entitled Products");
+		notification_title = _("Partially Entitled Products");
+		notification_body = _("This system is missing one or more "
+			"valid entitlement certificates to fully cover its "
+			"products");
 	} else {
 		tooltip = _("Some of the system's subscriptions are about to expire");
 		notification_title =
@@ -280,6 +288,8 @@ check_status(Context *context)
 		g_debug("Forcing display of icon (simulated invalidity)");
 		if (g_str_equal(force_icon, "expired")) {
 			status_type = RHSM_EXPIRED;
+		} else if (g_str_equal(force_icon, "partial")) {
+			status_type = RHSM_PARTIALLY_VALID;
 		} else if (g_str_equal(force_icon, "warning")) {
 			status_type = RHSM_WARNING;
 		} else {
