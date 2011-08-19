@@ -59,6 +59,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 prefix = os.path.dirname(__file__)
 VALID_IMG = os.path.join(prefix, "data/icons/valid.svg")
+PARTIAL_IMG = os.path.join(prefix, "data/icons/partial.svg")
 INVALID_IMG = os.path.join(prefix, "data/icons/invalid.svg")
 
 #workaround for or_IN issue in python
@@ -372,6 +373,8 @@ class MainWindow(widgets.GladeWidget):
         warn_count = len(sorter.expired_entitlement_certs) + \
                 len(sorter.unentitled_products)
 
+        partial_count = len(sorter.partially_valid_products)
+
         self.update_certificates_button.show()
         if warn_count > 0:
             buf = gtk.gdk.pixbuf_new_from_file_at_size(INVALID_IMG, 32, 32)
@@ -384,6 +387,18 @@ class MainWindow(widgets.GladeWidget):
             else:
                 self.subscription_status_label.set_markup(
                         _("You have <b>1</b> product without a valid entitlement certificate."))
+
+        elif partial_count > 0:
+            buf = gtk.gdk.pixbuf_new_from_file_at_size(PARTIAL_IMG, 32, 32)
+            self.subscription_status_image.set_from_pixbuf(buf)
+            # Change wording slightly for just one product
+            if partial_count > 1:
+                self.subscription_status_label.set_markup(
+                        _("You have <b>%s</b> products in need of additional entitlement certificates.")
+                        % partial_count)
+            else:
+                self.subscription_status_label.set_markup(
+                        _("You have <b>1</b> product in need of additional entitlement certificates."))
 
         else:
             first_invalid = find_first_invalid_date()
