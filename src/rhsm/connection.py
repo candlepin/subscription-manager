@@ -207,7 +207,9 @@ class Restlib(object):
             body = None
 
         log.debug("Making request: %s %s" % (request_type, handler))
-        conn.request(request_type, handler, body=body, headers=self.headers)
+        headers = dict(self.headers.items() + {"Content-Length":"0"}.items()) \
+                if body is None else self.headers
+        conn.request(request_type, handler, body=body, headers=headers)
 
         response = conn.getresponse()
         result = {
