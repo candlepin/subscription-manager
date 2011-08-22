@@ -386,8 +386,8 @@ class StubFacts(object):
     def get_facts(self):
         return self.facts
 
-    def delta(self):
-        return self.delta
+    def has_changed(self):
+        return self.delta_values
 
     def update_check(self, uep, consumer_uuid, force=False):
         uep.updateConsumerFacts(consumer_uuid, self.facts)

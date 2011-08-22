@@ -131,15 +131,14 @@ class TestFacts(unittest.TestCase):
         fd.write(facts_buf)
         fd.close()
         self.f = facts.Facts()
-        self.f.fact_cache_dir = self.fact_cache_dir
-        self.f.fact_cache = fact_cache
+        self.f.CACHE_FILE = fact_cache
 
     def tearDown(self):
         shutil.rmtree(self.fact_cache_dir)
 
     def test_facts_read(self):
-        test_facts = self.f.read()
-        self.assertEquals(test_facts["test.attr"], "blippy2")
+        cached_facts = self.f._read_cache()
+        self.assertEquals(cached_facts["test.attr"], "blippy2")
 
     def test_facts_last_update(self):
         #FIXME: verify the date is correct
@@ -147,8 +146,7 @@ class TestFacts(unittest.TestCase):
 
     def test_facts_delta(self):
         self.f.get_facts = stub_get_facts
-        delta = self.f.delta()
-        self.assertEquals(delta["test.attr"], "blippy2")
+        self.assertTrue(self.f.has_changed())
 
     def test_get_facts(self):
         f = self.f.get_facts()
@@ -160,7 +158,7 @@ class TestFacts(unittest.TestCase):
 
         # write to a new file
         self.f.fact_cache_dir = fact_cache_dir
-        self.f.fact_cache = fact_cache
+        self.f.CACHE_FILE = fact_cache
 
         self.f.facts = {'empty.facts': 1, 'otherthing': True}
         self.f.write_cache()

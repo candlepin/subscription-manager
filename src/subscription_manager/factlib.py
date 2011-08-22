@@ -40,7 +40,7 @@ class FactLib(DataLib):
         # report that as updates
 
         facts = self._get_facts()
-        if facts.delta():
+        if facts.has_changed():
             updates = len(facts.get_facts())
             if not ConsumerIdentity.exists():
                 return updates

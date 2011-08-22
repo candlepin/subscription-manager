@@ -147,12 +147,12 @@ class CacheManager(object):
             # a new as if it didn't exist
             pass
 
-    def update_check(self, uep, consumer_uuid):
+    def update_check(self, uep, consumer_uuid, force=False):
         """
         Check if data has changed, and push an update if so.
         """
         log.info("Checking current system info against cache: %s" % self.CACHE_FILE)
-        if self.has_changed():
+        if self.has_changed() or force:
             log.info("System data has changed, updating server.")
             try:
                 self._update_server(uep, consumer_uuid)

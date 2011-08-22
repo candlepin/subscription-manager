@@ -21,12 +21,13 @@ _ = gettext.gettext
 import rhsm.config
 from subscription_manager import certdirectory
 from subscription_manager import cert_sorter
+from subscription_manager.cache import CacheManager
 from datetime import datetime
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-class Facts:
+class Facts(CacheManager):
     """
     Manages the facts for this system, maintains a cache of the most
     recent set sent to server, and checks for changes.
@@ -34,11 +35,10 @@ class Facts:
     Includes both those hard coded in the app itself, as well as custom
     facts to be loaded from /etc/rhsm/facts/.
     """
+    CACHE_FILE = "/var/lib/rhsm/facts/facts.json"
 
     def __init__(self):
         self.facts = {}
-        self.fact_cache_dir = "/var/lib/rhsm/facts"
-        self.fact_cache = self.fact_cache_dir + "/facts.json"
 
         # see bz #627962
         # we would like to have this info, but for now, since it
@@ -47,51 +47,18 @@ class Facts:
         # that we need to update
         self.graylist = ['cpu.cpu_mhz']
 
-    def delete_cache(self):
-        if os.path.exists(self.fact_cache):
-            log.info("Deleting facts cache: %s" % self.fact_cache)
-            os.remove(self.fact_cache)
-
-    def write_cache(self):
-        if not os.access(self.fact_cache_dir, os.R_OK):
-            os.makedirs(self.fact_cache_dir)
-        try:
-            log.info("Writing facts cache: %s" % self.fact_cache)
-            f = open(self.fact_cache, "w+")
-            json.dump(self.facts, f)
-            f.close()
-        except IOError, e:
-            log.exception(e)
-
-    def read(self):
-        cached_facts = {}
-        try:
-            f = open(self.fact_cache)
-            json_buffer = f.read()
-            cached_facts = json.loads(json_buffer)
-            f.close()
-        except IOError:
-            log.error("Unable to read %s" % self.fact_cache)
-        except ValueError:
-            # see bz #669208, #667953
-            # ignore facts file parse errors, we are going to generate
-            # a new as if it didn't exist
-            pass
-
-        return cached_facts
-
     def get_last_update(self):
         try:
-            return datetime.fromtimestamp(os.stat(self.fact_cache).st_mtime)
+            return datetime.fromtimestamp(os.stat(self.CACHE_FILE).st_mtime)
         except:
             return None
 
-    def delta(self):
+    def has_changed(self):
         """
         return a dict of any key/values that have changed
         including new keys or deleted keys
         """
-        cached_facts = self.read()
+        cached_facts = self._read_cache()
         diff = {}
         self.facts = self.get_facts()
         # compare the dicts to see if there is a diff
@@ -112,7 +79,7 @@ class Facts:
                 #update with new value, though it doesnt matter
                 diff[key] = cached_facts[key]
 
-        return diff
+        return len(diff) > 0
 
     def get_facts(self):
         if self.facts:
@@ -121,11 +88,16 @@ class Facts:
             # we decide to save them, so delete facts out from under a Fact object means
             # it wasn't detecting it missing in that case and not writing a new one
             return self.facts
-        self.facts = self._find_facts()
+        self.facts = self._load_custom_facts()
         return self.facts
 
-    def _find_facts(self):
-        # Load custom facts from /etc/rhsm/facts:
+    def to_dict(self):
+        return self.get_facts()
+
+    def _load_custom_facts(self):
+        """
+        Load custom facts from .facts files in /etc/rhsm/facts.
+        """
         facts_file_glob = "%s/facts/*.facts" % rhsm.config.DEFAULT_CONFIG_DIR
         file_facts = {}
         for file_path in glob.glob(facts_file_glob):
@@ -157,15 +129,10 @@ class Facts:
 
         return facts
 
-    def update_check(self, uep, consumer_uuid, force=False):
-        """
-        Check if facts have changed, and push an update if so.
+    def _update_server(self, uep, consumer_uuid):
+        uep.updateConsumer(consumer_uuid, facts=self.get_facts())
 
-        force option will skip the delta check and just push up the current
-        facts regardless.
-        """
-        if self.delta() or force:
-            log.info("Updating facts.")
-            facts = self.get_facts()
-            uep.updateConsumerFacts(consumer_uuid, facts)
-            self.write_cache()
+    def _load_data(self, open_file):
+        json_str = open_file.read()
+        return json.loads(json_str)
+

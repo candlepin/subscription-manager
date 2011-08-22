@@ -797,7 +797,7 @@ def unregister(uep, consumer_uuid, force=True):
             # Clean up certificates, these are no longer valid:
             delete_consumer_certs()
             ProfileManager.delete_cache()
-            Facts().delete_cache()
+            Facts.delete_cache()
             InstalledProductsManager.delete_cache()
 
 

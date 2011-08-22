@@ -287,7 +287,7 @@ class CleanCommand(CliCommand):
         managerlib.delete_consumer_certs()
         ProfileManager.delete_cache()
         InstalledProductsManager.delete_cache()
-        Facts().delete_cache()
+        Facts.delete_cache()
         log.info("Cleaned local data")
         print (_("All local data removed"))
 
