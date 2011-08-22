@@ -60,7 +60,11 @@ def in_warning_period(sorter):
     return False
 
 
-def check_status():
+def check_status(force_signal):
+
+    if force_signal is not None:
+        debug("forcing status signal from cli arg")
+        return force_signal
 
     if managerlib.is_registered_with_classic():
         debug("System is already registered to another entitlement system")
@@ -92,13 +96,14 @@ def check_if_ran_once(checker, loop):
 
 class StatusChecker(dbus.service.Object):
 
-    def __init__(self, bus, keep_alive, loop):
+    def __init__(self, bus, keep_alive, force_signal, loop):
         name = dbus.service.BusName("com.redhat.SubscriptionManager", bus)
         dbus.service.Object.__init__(self, name, "/EntitlementStatus")
         self.has_run = False
         #this will get set after first invocation
         self.last_status = None
         self.keep_alive = keep_alive
+        self.force_signal = force_signal
         self.loop = loop
 
     @dbus.service.signal(
@@ -121,7 +126,7 @@ class StatusChecker(dbus.service.Object):
         returns: 0 if entitlements are valid, 1 if not valid,
                  2 if close to expiry
         """
-        ret = check_status()
+        ret = check_status(self.force_signal)
         if (ret != self.last_status):
             debug("Validity status changed, fire signal")
             #we send the code out, but no one uses it at this time
@@ -130,6 +135,24 @@ class StatusChecker(dbus.service.Object):
         self.has_run = True
         self.watchdog()
         return ret
+
+def parse_force_signal(cli_arg):
+    if cli_arg is None:
+        return None
+
+    cli_arg = cli_arg.lower().strip()
+
+    if cli_arg == "valid":
+        return RHSM_VALID
+    elif cli_arg == "expired":
+        return RHSM_EXPIRED
+    elif cli_arg == "warning":
+        return RHSM_WARNING
+    elif cli_arg == "classic":
+        return RHN_CLASSIC
+    else:
+        sys.stderr.write("Invalid force option: %s\n" % cli_arg)
+        sys.exit(-1)
 
 
 def main():
@@ -142,15 +165,19 @@ def main():
     parser.add_option("-s", "--syslog", dest="syslog",
             help="Run standalone and log result to syslog",
             action="store_true", default=False)
+    parser.add_option("-f", "--force-signal", dest="force_signal",
+            help="Force firing of a signal (valid, expired, warning or classic)")
 
     options, args = parser.parse_args()
+
+    force_signal = parse_force_signal(options.force_signal)
 
     global enable_debug
     enable_debug = options.debug
 
     # short-circuit dbus initialization
     if options.syslog:
-        status = check_status()
+        status = check_status(force_signal)
         if status == RHSM_EXPIRED:
             syslog.openlog("rhsmd")
             syslog.syslog(syslog.LOG_NOTICE,
@@ -173,7 +200,7 @@ def main():
 
     system_bus = dbus.SystemBus()
     loop = gobject.MainLoop()
-    StatusChecker(system_bus, options.keep_alive, loop)
+    StatusChecker(system_bus, options.keep_alive, force_signal, loop)
 
     loop.run()
 
