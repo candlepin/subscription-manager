@@ -149,6 +149,7 @@ class CertSorter(object):
                     stackable_ents[stacking_id] = []
                 stackable_ents[stacking_id].append({'ent_cert': ent_cert,
                                                     'product_id': product_id,
+                                                    'product': product,
                                                     'quantity': quantity,
                                                     'sockets_provided': None,
                                                     'valid': None})
@@ -165,13 +166,18 @@ class CertSorter(object):
                 if socket_count:
                     socket_total = socket_total + (int(socket_count) * int(quantity))
 
-            for i in stackable_ents[stackable_id]:
-                i['sockets_provided'] = socket_total
+            for stackable_product_info in stackable_ents[stackable_id]:
+                stackable_product_info['sockets_provided'] = socket_total
                 if socket_total >= system_sockets:
-                    i['valid'] = True
-                elif self.all_products.has_key(product_id):
-                    # for cases where we have an ent but no prod cert
-                    self.partially_valid_products[product_id] = self.all_products[product_id]
+                    stackable_product_info['valid'] = True
+                else:
+                    self.partially_valid_products[product_id] = stackable_product_info['product']
+
+        for stackable_id in stackable_ents.keys():
+            for stackable_product_info in stackable_ents[stackable_id]:
+                if not stackable_product_info['valid']:
+                    product_id = stackable_product_info['product_id']
+                    self.unentitled_products[product_id] = stackable_product_info['product']
 
     def _scan_for_unentitled_products(self):
         # For all installed products, if not in valid or expired hash, it
