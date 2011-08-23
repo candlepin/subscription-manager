@@ -81,10 +81,11 @@ class CertSorter(object):
         self._scan_for_unentitled_products()
 
         self._remove_expired_if_valid_elsewhere()
+
         log.debug("valid entitled products: %s" % self.valid_products.keys())
         log.debug("expired entitled products: %s" % self.expired_products.keys())
-	log.debug("partially entitled products: %s" % self.partially_valid_products.keys())
-	log.debug("unentitled products: %s" % self.unentitled_products.keys())
+        log.debug("partially entitled products: %s" % self.partially_valid_products.keys())
+        log.debug("unentitled products: %s" % self.unentitled_products.keys())
 
     def _populate_all_products(self):
         """ Build the dict of all installed products. """
