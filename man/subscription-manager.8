@@ -101,6 +101,9 @@ has specific options available for each command, depending on what operation is 
 .IP
 13. clean
 
+.IP
+14. config
+
 
 .SS COMMON OPTIONS
 .TP
@@ -410,6 +413,49 @@ command.
 
 .PP
 This command has no options.
+
+.SS CONFIG OPTIONS
+The 
+.B config
+command changes the 
+.B rhsm.conf
+configuration file used by Subscription Manager. Almost all of the connection information used by Subscription Manager to access the subscription server, content server, and any proxies is set in the configuration file, as well as general configuration parameters like the frequency Subscription Manager checks for entitlements updates. There are major divisions in the 
+.B rhsm.conf
+file, such as 
+.B [server]
+which is used to configure the subscription server. When changing the Subscription Manager configuration, the settings are identified with the format 
+.I section.parameter
+and then the new value. For example:
+.nf
+server.hostname=newsubscription.example.com
+.fi
+
+.TP
+.B --list
+Prints the current configuration for Subscription Manager.
+
+.TP
+.B --remove=section.name
+Deletes the current value for the parameter without supplying a new parameter. A blank value tells Subscription Manager to use any default values that are set for that parameter rather than a user-defined value.
+
+.TP
+.B --section.name=VALUE
+Sets a parameter to a new, specified value. This is commonly used for connection settings:
+.IP
+* server.hostname (subscription server)
+.IP
+* server.proxy
+.IP
+* server.proxy_port
+.IP
+* server.proxy_user
+.IP
+* server.proxy_password
+.IP
+* rhsm.baseurl (content server)
+.IP
+* rhsm.certFrequency
+
 
 .SH USAGE
 .B subscription-manager 
