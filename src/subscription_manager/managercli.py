@@ -1043,20 +1043,28 @@ class ConfigCommand(CliCommand):
         if self.options.list:
             for section in cfg.sections():
                 print '[%s]' % (section)
-                for name, value in cfg.items(section):
-                    print '   %s = %s' % (name,value)
+                for (name,value) in self.sortKeys(cfg.items(section)):
+                    indicator1 = ''
+                    indicator2 = ''
+                    if (value == cfg.defaults().get(name)):
+                        indicator1 = '['
+                        indicator2 = ']'
+                    print '   %s = %s%s%s' % (name,indicator1,value,indicator2)
                 print
+            print _("[] - Default value in use\n")
         elif self.options.remove:
             section = self.options.remove.split('.')[0]
             name = self.options.remove.split('.')[1]
             try:
-                if not hasattr(cfg.defaults, name):
+                if not name in cfg.defaults().keys():
                     cfg.set(section, name, '')
+                    print _("You have removed the value for section %s and name %s.") % (section, name)
                 else:
                     cfg.remove_option(section, name)
-                print _("You have removed the value for section %s and name %s.") % (section, name)
+                    print _("You have removed the value for section %s and name %s.") % (section, name)
+                    print _("The default value for %s will now be used.") % (name)
             except Exception, e:
-                print _("Section %s and name %s do not exist.") % (section, name)
+                print _("Section %s and name %s cannot be removed.") % (section, name)
             cfg.save()
         else:
             for section in cfg.sections():
@@ -1067,6 +1075,16 @@ class ConfigCommand(CliCommand):
 
             cfg.save()
 
+    def sortKeys (self, sourceList):
+        if(len(sourceList) == 1):
+            return sourceList
+        for z in range(len(sourceList)):
+            for ix in range(len(sourceList)-1):
+                if (sourceList[ix][0] >= sourceList[ix+1][0]): 
+                    temp = sourceList[ix+1]
+                    sourceList[ix+1] = sourceList[ix]
+                    sourceList[ix] = temp
+        return sourceList
 
 class ListCommand(CliCommand):
 
