@@ -331,7 +331,7 @@ class IdentityCommand(UserPassCommand):
         desc = shortdesc
 
         super(IdentityCommand, self).__init__("identity", usage, shortdesc,
-                                              desc, ent_dir=ent_dir, 
+                                              desc, ent_dir=ent_dir,
                                               prod_dir=prod_dir)
 
         self.parser.add_option("--regenerate", action='store_true',

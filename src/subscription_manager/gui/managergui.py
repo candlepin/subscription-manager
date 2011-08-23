@@ -177,7 +177,7 @@ class MainWindow(widgets.GladeWidget):
     """
     The new RHSM main window.
     """
-    def __init__(self, backend=None, consumer=None, 
+    def __init__(self, backend=None, consumer=None,
                  facts=None, ent_dir=None, prod_dir=None):
         super(MainWindow, self).__init__('mainwindow.glade',
               ['main_window', 'notebook', 'subscription_status_label',

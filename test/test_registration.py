@@ -61,4 +61,4 @@ class CliRegistrationTests(unittest.TestCase):
         cmd.main(['register', '--username=testuser1', '--password=password'])
 
         self.assertEquals(1, cmd.installed_mgr.write_cache.call_count)
-        
+

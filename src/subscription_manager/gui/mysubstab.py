@@ -39,7 +39,7 @@ EXPIRED_COLOR = '#FFAF99'
 class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
     # Are facts required here? [mstead]
-    def __init__(self, backend, consumer, facts, 
+    def __init__(self, backend, consumer, facts,
                  ent_dir=None,
                  prod_dir=None):
         """

@@ -22,6 +22,6 @@ class TestSubscriptionAssistant(unittest.TestCase):
 
 
     def test_subscription_assistant(self):
-        subscription_assistant.SubscriptionAssistant(self.backend, self.consumer, 
+        subscription_assistant.SubscriptionAssistant(self.backend, self.consumer,
                                                      self.facts, self.ent_dir,
                                                      self.prod_dir)
