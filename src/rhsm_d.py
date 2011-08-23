@@ -194,7 +194,7 @@ def main():
             syslog.openlog("rhsmd")
             syslog.syslog(syslog.LOG_NOTICE,
                     "This system is missing one or more valid entitlement " +
-                    "certificates to full cover its products. " +
+                    "certificates to fully cover its products. " +
                     "Please run subscription-manager for more information.")
         elif status == RHSM_WARNING:
             syslog.openlog("rhsmd")
