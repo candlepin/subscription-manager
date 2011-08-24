@@ -178,18 +178,6 @@ class CertSorterTests(unittest.TestCase):
 
         self.assertEqual(0, len(self.sorter.partially_valid_products))
 
-    # def test_entitled_products(self):
-    #     self.sorter = CertSorter(self.prod_dir, self.ent_dir)
-    #     self.assertEqual(2, len(self.sorter.valid_products.keys()))
-    #     self.assertTrue('product2' in self.sorter.valid_products)
-    #     self.assertTrue('product4' in self.sorter.valid_products)
-
-    #     self.assertEqual(2, len(self.sorter.valid_entitlement_certs))
-    #     self.assertTrue(cert_list_has_product(
-    #         self.sorter.valid_entitlement_certs, 'product2'))
-    #     self.assertTrue(cert_list_has_product(
-    #         self.sorter.valid_entitlement_certs, 'product4'))
-
     def test_expired(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir)
         self.assertEqual(2, len(self.sorter.expired_entitlement_certs))
