@@ -144,6 +144,8 @@ class RegisterScreen:
         return self.close_window()
 
     def cancel(self, button):
+        # On cancellation, reset back to the credentials page.
+        self.register_notebook.set_page(CREDENTIALS_PAGE)
         self.close_window()
 
     def initializeConsumerName(self):
