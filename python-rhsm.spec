@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.96.9
+Version: 0.96.10
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -57,6 +57,13 @@ rm -rf %{buildroot}
 %{python_sitelib}/rhsm-*.egg-info
 
 %changelog
+* Wed Aug 24 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.10-1
+- Submit a Content-Length when body of request is empty. (dgoodwin@redhat.com)
+- Support installed products when registering. (dgoodwin@redhat.com)
+- Add ability to update a consumer's installed products list.
+  (dgoodwin@redhat.com)
+- Support for new bind method (cduryee@redhat.com)
+
 * Wed Aug 17 2011 James Bowes <jbowes@redhat.com> 0.96.9-1
 - self.sanitize, and add support for quote_plus. (cduryee@redhat.com)
 - Enhance the insecure mode to not do peer checks. (bkearney@redhat.com)
