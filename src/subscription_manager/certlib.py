@@ -430,16 +430,6 @@ def find_first_invalid_date(ent_dir=None, product_dir=None):
     # Should never hit this:
     raise Exception("Unable to determine first invalid date.")
 
-
-def entitlement_valid():
-    sorter = cert_sorter.CertSorter(ProductDirectory(),
-                                    EntitlementDirectory())
-
-    if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
-        return False
-    return True
-
-
 def main():
     print _('Updating entitlement certificates')
     certlib = CertLib()
