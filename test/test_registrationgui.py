@@ -33,3 +33,16 @@ class RegisterScreenTests(unittest.TestCase):
         self.assertNotEquals(CREDENTIALS_PAGE, self.rs.register_notebook.get_current_page())
         self.rs.cancel(self.rs.cancel_button)
         self.assertEquals(CREDENTIALS_PAGE, self.rs.register_notebook.get_current_page())
+
+    def test_clear_credentials_dialog(self):
+        # Pull initial value here since it will be different per machine.
+        default_consumer_name_value = self.rs.consumer_name.get_text()
+        self.rs.uname.set_text("foo")
+        self.rs.passwd.set_text("bar")
+        self.rs.autobind.set_active(True)
+        self.rs.consumer_name.set_text("CONSUMER")
+        self.rs.cancel(self.rs.cancel_button)
+        self.assertEquals("", self.rs.uname.get_text())
+        self.assertEquals("", self.rs.passwd.get_text())
+        self.assertFalse(self.rs.autobind.get_active())
+        self.assertEquals(default_consumer_name_value, self.rs.consumer_name.get_text())

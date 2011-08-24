@@ -105,6 +105,7 @@ class RegisterScreen:
         self.uname = registration_xml.get_widget("account_login")
         self.passwd = registration_xml.get_widget("account_password")
         self.consumer_name = registration_xml.get_widget("consumer_name")
+        self.autobind = registration_xml.get_widget("auto_bind")
 
         self.register_notebook = \
                 registration_xml.get_widget("register_notebook")
@@ -146,6 +147,7 @@ class RegisterScreen:
     def cancel(self, button):
         # On cancellation, reset back to the credentials page.
         self.register_notebook.set_page(CREDENTIALS_PAGE)
+        self._clear_registration_widgets()
         self.close_window()
 
     def initializeConsumerName(self):
@@ -346,7 +348,6 @@ class RegisterScreen:
         return True
 
     def auto_subscribe(self):
-        self.autobind = registration_xml.get_widget("auto_bind")
         return self.autobind.get_active()
 
     def validate_consumername(self, consumername):
@@ -375,6 +376,12 @@ class RegisterScreen:
     def _set_register_details_label(self, details):
         self.register_details_label.set_label("<small>%s</small>" % details)
 
+    def _clear_registration_widgets(self):
+        self.uname.set_text("")
+        self.passwd.set_text("")
+        self.consumer_name.set_text("")
+        self.initializeConsumerName()
+        self.autobind.set_active(False)
 
 class AsyncBackend(object):
 
