@@ -167,6 +167,17 @@ class CertSorterTests(unittest.TestCase):
         self.assertEqual(1, len(self.sorter.unentitled_products.keys()))
         self.assertTrue('product1' in self.sorter.unentitled_products)
 
+    def test_ent_cert_no_product(self):
+        self.ent_dir = StubCertificateDirectory(
+            [StubEntitlementCertificate(None, provided_products=[],
+                                        quantity=2)])
+
+        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 42})
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir,
+                                 facts_dict=stub_facts.get_facts())
+
+        self.assertEqual(0, len(self.sorter.partially_valid_products))
+
     # def test_entitled_products(self):
     #     self.sorter = CertSorter(self.prod_dir, self.ent_dir)
     #     self.assertEqual(2, len(self.sorter.valid_products.keys()))
