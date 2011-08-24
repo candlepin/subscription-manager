@@ -1088,7 +1088,7 @@ class ListCommand(CliCommand):
                                help=_("shows the subscriptions being consumed by this system."))
         self.parser.add_option("--all", action='store_true',
                                help=_("if supplied with --available then all subscriptions are returned"))
-<<<<<<< HEAD
+
         self.facts = Facts(ent_dir=self.entitlement_dir,
                           prod_dir=self.product_dir)
 
