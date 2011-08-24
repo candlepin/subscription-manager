@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.6
+Version: 0.96.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -223,6 +223,37 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Aug 24 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.7-1
+- I18N update. (dgoodwin@redhat.com)
+- Add test case for entitlement certs with no products (alikins@redhat.com)
+- Fix problem with subscribing to products with no product certs
+  (alikins@redhat.com)
+- Remove unneeded for loop around getProduct (alikins@redhat.com)
+- Fix typo in partially valid syslog message (jbowes@redhat.com)
+- 733042: Update default rhsm.conf values for production. (dgoodwin@redhat.com)
+- 732499: Fix redeem command error handling. (dgoodwin@redhat.com)
+- Move the project to the public zanata server (bkearney@redhat.com)
+- implement red/yellow/green for the cli (jesusr@redhat.com)
+- Add 'partially valid' status to syslog and nag icon (jbowes@redhat.com)
+- Add a debugging cli arg to rhsmd to force a signal (jbowes@redhat.com)
+- Group All Available subscriptions by stack id (mstead@redhat.com)
+- Add stacking_id grouping to Subscription Assistant (mstead@redhat.com)
+- Update man page. (bkearney@redhat.com)
+- Refactor facts to use the cache manager logic. (dgoodwin@redhat.com)
+- Fix "import" cli with no certs (alikins@redhat.com)
+- Upload info about the installed products on the system. (dgoodwin@redhat.com)
+- Add "partially valid entitlement coverage" status to top-left sm-gui icon.
+  (cduryee@redhat.com)
+- Aligned stacking id up with other subscription properties.
+  (mstead@redhat.com)
+- Display My Subscriptions as a tree grouped by stacking_id.
+  (mstead@redhat.com)
+- Created a MappedTreeStore implementation. (mstead@redhat.com)
+- Created StackingGroupSorter class to sort entitlements into groups based on
+  stacking_id (mstead@redhat.com)
+- Make the environemnt output look like all the others (bkearney@redhat.com)
+- Client-side changes for healing (cduryee@redhat.com)
+
 * Wed Aug 17 2011 James Bowes <jbowes@repl.ca> 0.96.6-1
 - 729688: expected "Network Error" message is not getting displayed in the GUI
   (cduryee@redhat.com)
