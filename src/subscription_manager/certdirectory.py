@@ -39,6 +39,9 @@ class Directory:
 
     def listAll(self):
         all_items = []
+        if not os.path.exists(self.path):
+            return all_items
+
         for fn in os.listdir(self.path):
             p = (self.path, fn)
             all_items.append(p)
@@ -71,6 +74,9 @@ class Directory:
         os.rmdir(self.path)
 
     def clean(self):
+        if not os.path.exists(self.path):
+            return
+
         for x in os.listdir(self.path):
             path = self.abspath(x)
             if Path.isdir(path):
