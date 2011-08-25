@@ -172,12 +172,8 @@ class CertSorter(object):
                     stackable_product_info['valid'] = True
                 else:
                     self.partially_valid_products[product_id] = stackable_product_info['product']
+                    del self.valid_products[product_id]
 
-        for stackable_id in stackable_ents.keys():
-            for stackable_product_info in stackable_ents[stackable_id]:
-                if not stackable_product_info['valid']:
-                    product_id = stackable_product_info['product_id']
-                    self.unentitled_products[product_id] = stackable_product_info['product']
 
     def _scan_for_unentitled_products(self):
         # For all installed products, if not in valid or expired hash, it

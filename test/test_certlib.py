@@ -291,10 +291,15 @@ class CertSorterTests(unittest.TestCase):
                                            quantity=2)])
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 42})
         self.sorter = CertSorter(self.prod_dir, self.ent_dir, facts_dict=stub_facts.get_facts())
+
         # we are partially valid
         self.assertTrue('mktproduct' in self.sorter.partially_valid_products)
-        # but we are also entitled enough to get content
-        self.assertTrue('mktproduct' in self.sorter.valid_products)
+
+        # partially entitled is not entitled, so we shouldn't be in both
+        self.assertTrue('mktproduct' not in self.sorter.valid_products)
+
+        # and also, we shouldn't be in unentitled_products
+        self.assertTrue('mktproduct' not in self.sorter.unentitled_products)
 
     def test_stacking_product_two_pools_needed(self):
         provided = [self.stackable_product1, self.stackable_product2]
