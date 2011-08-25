@@ -50,13 +50,16 @@ class MessageWindow(gobject.GObject):
                 (gobject.TYPE_BOOLEAN,))
     }
 
-    def __init__(self, text, parent=None):
+    def __init__(self, text, parent=None, title=None):
         gobject.GObject.__init__(self)
         self.rc = None
 
         # this seems to be wordwrapping text passed to
         # it, which is making for ugly error messages
         self.dialog = gtk.MessageDialog(parent, 0, self.STYLE, self.BUTTONS)
+
+        if title:
+            self.dialog.set_title(title)
 
         # escape product strings see rh bz#633438
         self.dialog.set_markup(text)
