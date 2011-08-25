@@ -737,9 +737,7 @@ class ImportFileExtractor(object):
         """
         Write/copy cert to the entitlement cert dir.
         """
-        if not os.access(ENT_CONFIG_DIR, os.R_OK):
-            os.mkdir(ENT_CONFIG_DIR)
-
+        self._ensure_entitlement_dir_exists()
         dest_file_path = os.path.join(ENT_CONFIG_DIR, os.path.basename(self.path))
 
         # Write the key/cert content to new files
@@ -757,6 +755,10 @@ class ImportFileExtractor(object):
             new_file.write(content)
         finally:
             new_file.close()
+
+    def _ensure_entitlement_dir_exists(self):
+        if not os.access(ENT_CONFIG_DIR, os.R_OK):
+            os.mkdir(ENT_CONFIG_DIR)
 
     def _get_key_path_from_dest_cert_path(self, dest_cert_path):
         file_parts = os.path.splitext(dest_cert_path)

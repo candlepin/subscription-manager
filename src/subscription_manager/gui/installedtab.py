@@ -26,7 +26,6 @@ from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.certdirectory import ProductDirectory
 
 from subscription_manager import managerlib, cert_sorter
-from subscription_manager.facts import Facts
 
 import gettext
 _ = gettext.gettext
@@ -42,7 +41,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.product_dir = prod_dir or ProductDirectory()
         self.entitlement_dir = ent_dir or EntitlementDirectory()
 
-        self.facts = Facts()
+        self.facts = facts
         self.cs = cert_sorter.CertSorter(prod_dir, ent_dir,
                                  facts_dict=self.facts.get_facts())
 

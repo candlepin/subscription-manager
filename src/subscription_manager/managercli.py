@@ -284,7 +284,8 @@ class CleanCommand(CliCommand):
         shortdesc = _("Remove all local consumer and subscription data without effecting the server")
         desc = shortdesc
 
-        CliCommand.__init__(self, "clean", usage, shortdesc, desc)
+        CliCommand.__init__(self, "clean", usage, shortdesc, desc,
+                            ent_dir=ent_dir, prod_dir=prod_dir)
 
     def _add_common_options(self):
         # remove these options as per bz #664581

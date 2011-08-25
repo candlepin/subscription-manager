@@ -92,19 +92,23 @@ class PathTests(unittest.TestCase):
 
 # make sure _check_key returns the right value
 class TestEntitlementDirectoryCheckKey(unittest.TestCase):
+    @patch('os.path.exists')
     @patch('os.access')
-    def test_check_key(self, MockAccess):
+    def test_check_key(self, MockAccess, MockExists):
         ent_dir = EntitlementDirectory()
         MockAccess.return_value = True
+        MockExists.return_value = True
         product = StubProduct("product1")
         ent_cert = StubEntitlementCertificate(product)
         ret = ent_dir._check_key(ent_cert)
         self.assertTrue(ret)
 
+    @patch('os.path.exists')
     @patch('os.access')
-    def test_check_key_false(self, MockAccess):
+    def test_check_key_false(self, MockAccess, MockExists):
         ent_dir = EntitlementDirectory()
         MockAccess.return_value = False
+        MockExists.return_value = True
         product = StubProduct("product1")
         ent_cert = StubEntitlementCertificate(product)
         ret = ent_dir._check_key(ent_cert)

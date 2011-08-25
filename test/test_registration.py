@@ -49,7 +49,8 @@ class CliRegistrationTests(unittest.TestCase):
     def test_installed_products_cache_written(self):
         connection.UEPConnection = StubUEP
 
-        cmd = RegisterCommand()
+        cmd = RegisterCommand(ent_dir=StubEntitlementDirectory([]),
+                              prod_dir=StubProductDirectory([]))
         cmd._persist_identity_cert = self.stub_persist
         ConsumerIdentity.exists = classmethod(lambda cls: False)
 
