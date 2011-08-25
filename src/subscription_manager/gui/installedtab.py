@@ -15,15 +15,18 @@
 
 import gtk
 import gobject
+import os
 
 from datetime import datetime
 
 from rhsm.certificate import GMT
 
 from subscription_manager.gui import widgets
-from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
+from subscription_manager.certdirectory import EntitlementDirectory
+from subscription_manager.certdirectory import ProductDirectory
 
-from subscription_manager import managerlib
+from subscription_manager import managerlib, cert_sorter
+from subscription_manager.facts import Facts
 
 import gettext
 _ = gettext.gettext
@@ -38,6 +41,20 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         self.product_dir = prod_dir or ProductDirectory()
         self.entitlement_dir = ent_dir or EntitlementDirectory()
+
+        self.facts = Facts()
+        self.cs = cert_sorter.CertSorter(prod_dir, ent_dir,
+                                 facts_dict=self.facts.get_facts())
+
+        #set up the iconset
+        PARTIAL_IMG = os.path.join(os.path.dirname(__file__),
+                                     "data/icons/partial.svg")
+        self.iconset = {
+            'green': self.content.render_icon(gtk.STOCK_YES,
+                                              gtk.ICON_SIZE_MENU),
+            'red': self.content.render_icon(gtk.STOCK_NO, gtk.ICON_SIZE_MENU),
+            'yellow': gtk.gdk.pixbuf_new_from_file_at_size(PARTIAL_IMG, 13, 13)
+        }
 
         # Product column
         text_renderer = gtk.CellRendererText()
@@ -74,7 +91,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         for product_cert in self.product_dir.list():
             for product in product_cert.getProducts():
                 product_hash = product.getHash()
-                entitlement_cert = self.entitlement_dir.findByProduct(product_hash)
+                entitlement_cert = self.entitlement_dir. \
+                                        findByProduct(product_hash)
 
                 entry = {}
                 entry['product'] = product.getName()
@@ -88,7 +106,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
                     entry['subscription'] = order.getName()
                     entry['start_date'] = entitlement_cert.validRange().begin()
-                    entry['expiration_date'] = entitlement_cert.validRange().end()
+                    entry['expiration_date'] = entitlement_cert.validRange(). \
+                                                                        end()
 
                     # TODO:  Pull this date logic out into a separate lib!
                     #        This is also used in mysubstab...
@@ -99,26 +118,34 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['status'] = _('Future Subscription')
                         entry['validity_note'] = _("Never Subscribed")
                     elif now > date_range.end():
-                        entry['image'] = self._render_icon(gtk.STOCK_NO)
+                        entry['image'] = self._render_icon('red')
                         entry['status'] = _('Invalid')
                         entry['validity_note'] = \
                             _('Subscription %s is expired' % order.getSubscription())
+                    elif product.getHash() in self.cs.partially_valid_products:
+                        entry['image'] = self._render_icon('yellow')
+                        entry['status'] = _('Valid')
+                        entry['validity_note'] = _("Partially entitled")
                     else:
-                        entry['image'] = self._render_icon(gtk.STOCK_YES)
+                        entry['image'] = self._render_icon('green')
                         entry['status'] = _('Valid')
                         entry['validity_note'] = \
                             _('Covered by contract %s through %s' % \
                             (order.getContract(),
                              managerlib.formatDate(entry['expiration_date'])))
                 else:
-                    entry['image'] = self._render_icon(gtk.STOCK_NO)
+                    entry['image'] = self._render_icon('red')
                     entry['status'] = _('Missing')
                     entry['validity_note'] = _("Never Subscribed")
 
                 self.store.add_map(entry)
 
     def _render_icon(self, icon_id):
-        return self.content.render_icon(icon_id, gtk.ICON_SIZE_MENU)
+        try:
+            return self.iconset[icon_id]
+        except KeyError:
+            print("Iconset does not contain icon for string '%s'" % icon_id)
+            raise
 
     def on_selection(self, selection):
         # Load the entitlement certificate for the selected row:
