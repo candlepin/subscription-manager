@@ -506,6 +506,10 @@ class MergedPoolsStackingGroupSorter(StackingGroupSorter):
     def _get_stacking_id(self, merged_pool):
         return PoolWrapper(merged_pool.pools[0]).get_stacking_id()
 
+    def _get_product_name(self, merged_pool):
+        return merged_pool.pools[0]['productName']
+
+
 class PoolStash(object):
     """
     Object used to fetch pools from the server, sort them into compatible,

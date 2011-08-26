@@ -540,7 +540,7 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
 
         self.assertEquals(1, len(sorter.groups))
         group = sorter.groups[0]
-        self.assertEquals(str(expected_stacking_id), group.name)
+        self.assertEquals("Test Prod 1", group.name)
         self.assertEquals(1, len(group.entitlements))
         self.assertEquals(pools[0], group.entitlements[0])
 
@@ -557,7 +557,7 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
         self.assertEquals(1, len(sorter.groups))
         group = sorter.groups[0]
 
-        self.assertEquals(str(expected_stacking_id), group.name)
+        self.assertEquals("Test Prod 2", group.name)
         self.assertEquals(2, len(group.entitlements))
 
         self.assertEquals(pools[0], group.entitlements[0])
@@ -597,7 +597,7 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
         group1 = sorter.groups[0]
         group2 = sorter.groups[1]
 
-        self.assertEquals(str(expected_stacking_id), group1.name)
+        self.assertEquals("Test Prod 2", group1.name)
         self.assertEquals(1, len(group1.entitlements))
         self.assertEquals(pools[0], group1.entitlements[0])
 

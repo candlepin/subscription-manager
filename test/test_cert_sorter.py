@@ -24,7 +24,8 @@ class TestEntitlementCertStackingGroupSorter(unittest.TestCase):
         entitlements = [ent1]
 
         sorter = EntitlementCertStackingGroupSorter(entitlements)
-        self._assert_1_group_with_1_entitlement('', ent1, sorter)
+        # With no stacking id, we expect an empty group name
+        self._assert_1_group_with_1_entitlement("", ent1, sorter)
 
     def test_sorter_adds_group_for_stackable_entitlement(self):
         ent1_prod = StubProduct("Product 1")
@@ -32,7 +33,7 @@ class TestEntitlementCertStackingGroupSorter(unittest.TestCase):
         entitlements = [ent1]
 
         sorter = EntitlementCertStackingGroupSorter(entitlements)
-        self._assert_1_group_with_1_entitlement('3', ent1, sorter)
+        self._assert_1_group_with_1_entitlement('Product 1', ent1, sorter)
 
     def test_sorter_adds_multiple_entitlements_to_group_when_same_stacking_id(self):
         expected_stacking_id = 5
@@ -46,7 +47,7 @@ class TestEntitlementCertStackingGroupSorter(unittest.TestCase):
 
         sorter = EntitlementCertStackingGroupSorter(entitlements)
         self.assertEquals(1, len(sorter.groups))
-        self.assertEquals(str(expected_stacking_id), sorter.groups[0].name)
+        self.assertEquals("Product 1", sorter.groups[0].name)
         self.assertEquals(2, len(sorter.groups[0].entitlements))
         self.assertEquals(ent1, sorter.groups[0].entitlements[0])
         self.assertEquals(ent2, sorter.groups[0].entitlements[1])
