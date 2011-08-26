@@ -479,53 +479,65 @@ class DatePicker(gtk.HBox):
         self._destroy()
 
 
-class MachineTypeColumn(gtk.TreeViewColumn):
-    prefix = os.path.dirname(__file__)
-    PHYSICAL_MACHINE_IMG_PATH = os.path.join(prefix, "data/icons/system-physical-symbolic.svg")
-    VIRT_MACHINE_IMG_PATH = os.path.join(prefix, "data/icons/system-virtual-symbolic.svg")
-    PHYSICAL_MACHINE_PIXBUF = gtk.gdk.pixbuf_new_from_file_at_size(PHYSICAL_MACHINE_IMG_PATH, 16, 16)
-    VIRTUAL_MACHINE_PIXBUF = gtk.gdk.pixbuf_new_from_file_at_size(VIRT_MACHINE_IMG_PATH, 16, 16)
+class ToggleTextColumn(gtk.TreeViewColumn):
+    """
+    A gtk.TreeViewColumn that toggles between two text values based on a boolean
+    value in the store.
+    """
+    def __init__(self, column_title, model_idx):
+        gtk.TreeViewColumn.__init__(self, column_title)
+        self.model_idx = model_idx
+        self.renderer = gtk.CellRendererText()
+        self.renderer.set_property('xalign', 0.5)
+        self.pack_start(self.renderer, False)
+        self.set_cell_data_func(self.renderer, self._render_cell)
+
+    def _render_cell(self, column, cell_renderer, tree_model, iter):
+        bool_val = tree_model.get_value(iter, self.model_idx)
+        text = self._get_false_text()
+        if bool_val:
+            text = self._get_true_text()
+        cell_renderer.set_property("text", text)
+
+    def _get_true_text(self):
+        raise NotImplementedError("Subclasses must implement _get_true_text(self).")
+
+    def _get_false_text(self):
+        raise NotImplementedError("Subclasses must implement _get_false_text(self).")
+
+class MultiEntitlementColumn(ToggleTextColumn):
     MULTI_ENTITLEMENT_STRING = "*"
     NOT_MULTI_ENTITLEMENT_STRING = ""
 
-    def __init__(self, virt_only_model_idx, multi_entitle_model_idx):
+    def __init__(self, multi_entitle_model_idx):
         """
-        A table colum that renders virtual/physical machine icons along side a text value.
+        A table column that renders an * character if model specifies a
+        multi-entitled attribute to be True
 
-        @param virt_only_model_idx: the model index containing a bool value used to
-                                    determine which icon to show.
         @param multi_entitle_model_idx: the model index containing a bool value used to
                                         mark the row with an *.
         """
-        gtk.TreeViewColumn.__init__(self, "")
+        ToggleTextColumn.__init__(self, "", multi_entitle_model_idx)
+        self.renderer.set_property('xpad', 2)
+        self.renderer.set_property('weight', 800)
 
-        # Add the machine type image.
-        self.image_renderer = gtk.CellRendererPixbuf()
-        self.image_renderer.set_property('xalign', 0.0)
-        self.pack_start(self.image_renderer, False)
-        self.set_cell_data_func(self.image_renderer, self.render_machine_type_icon)
+    def _get_true_text(self):
+        return self.MULTI_ENTITLEMENT_STRING
 
-        # Add the asterisk denoting multi-entitlement
-        self.asterisk_renderer = gtk.CellRendererText()
-        self.asterisk_renderer.set_property('xalign', 0.0)
-        self.asterisk_renderer.set_property('weight', 800)
-        self.pack_start(self.asterisk_renderer, False)
-        self.set_cell_data_func(self.asterisk_renderer, self.render_as_multi_entitlement)
+    def _get_false_text(self):
+        return self.NOT_MULTI_ENTITLEMENT_STRING
 
-        self.virt_only_idx = virt_only_model_idx
-        self.multi_entitlement_idx = multi_entitle_model_idx
 
-    def render_machine_type_icon(self, column, cell_renderer, tree_model, iter):
-        virt_only = tree_model.get_value(iter, self.virt_only_idx)
+class MachineTypeColumn(ToggleTextColumn):
 
-        if virt_only:
-            cell_renderer.set_property("pixbuf", self.VIRTUAL_MACHINE_PIXBUF)
-        else:
-            cell_renderer.set_property("pixbuf", self.PHYSICAL_MACHINE_PIXBUF)
+    PHYSICAL_MACHINE = _("Physical")
+    VIRTUAL_MACHINE = _("Virtual")
 
-    def render_as_multi_entitlement(self, column, cell_renderer, tree_model, iter):
-        multi_entitlement = tree_model.get_value(iter, self.multi_entitlement_idx)
-        text = self.NOT_MULTI_ENTITLEMENT_STRING
-        if multi_entitlement:
-            text = self.MULTI_ENTITLEMENT_STRING
-        cell_renderer.set_property("text", text)
+    def __init__(self, virt_only_model_idx):
+        ToggleTextColumn.__init__(self, "Type", virt_only_model_idx)
+
+    def _get_true_text(self):
+        return self.VIRTUAL_MACHINE
+
+    def _get_false_text(self):
+        return self.PHYSICAL_MACHINE

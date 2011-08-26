@@ -161,12 +161,15 @@ class SubscriptionAssistant(widgets.GladeWidget):
         # same color for stacking groups.
         self.subscriptions_treeview.set_rules_hint(False)
 
-        column = widgets.MachineTypeColumn(self.subscriptions_store['virt_only'],
-                                           self.subscriptions_store['multi-entitlement'])
+        column = widgets.MultiEntitlementColumn(
+                self.subscriptions_store['multi-entitlement'])
         self.subscriptions_treeview.append_column(column)
 
         self.subscriptions_treeview.add_column(_('Subscription'),
                 self.subscriptions_store['product_name'], expand=True)
+
+        column = widgets.MachineTypeColumn(self.subscriptions_store['virt_only'])
+        self.subscriptions_treeview.append_column(column)
 
         self.subscriptions_treeview.add_column(_("Stacking ID"),
                                                self.subscriptions_store['stacking_id'],

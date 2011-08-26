@@ -19,7 +19,7 @@ import gtk
 import gtk.glade
 import gettext
 from subscription_manager.jsonwrapper import PoolWrapper
-from subscription_manager.gui.widgets import MachineTypeColumn
+from subscription_manager.gui.widgets import MachineTypeColumn, MultiEntitlementColumn
 _ = gettext.gettext
 
 from subscription_manager.gui import widgets
@@ -82,14 +82,16 @@ class ContractSelectionWindow(object):
 
     def populate_treeview(self):
 
-        column = MachineTypeColumn(7, 8)
+        column = widgets.MultiEntitlementColumn(8)
         self.contract_selection_treeview.append_column(column)
 
         renderer = gtk.CellRendererText()
         column = gtk.TreeViewColumn(_("Contract Number"), renderer,
                 text=0)
         column.set_expand(True)
+        self.contract_selection_treeview.append_column(column)
 
+        column = widgets.MachineTypeColumn(7)
         self.contract_selection_treeview.append_column(column)
 
         renderer = gtk.CellRendererText()

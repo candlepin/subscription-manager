@@ -19,7 +19,7 @@ import gobject
 
 import gettext
 from subscription_manager.certdirectory import EntitlementDirectory
-from subscription_manager.gui.widgets import MachineTypeColumn
+from subscription_manager.gui.widgets import MachineTypeColumn, MultiEntitlementColumn
 from subscription_manager.jsonwrapper import PoolWrapper
 import gtk
 from subscription_manager.managerlib import MergedPoolsStackingGroupSorter
@@ -59,9 +59,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.date_picker = widgets.DatePicker(today)
         self.date_picker_hbox.add(self.date_picker)
 
-        machine_type_col = MachineTypeColumn(self.store['virt_only'],
-                                             self.store['multi_entitlement'])
-        self.top_view.append_column(machine_type_col)
+        multi_entitle_col = MultiEntitlementColumn(self.store['multi-entitlement'])
+        self.top_view.append_column(multi_entitle_col)
 
         # Custom build of the subscription column.
         title_text_renderer = gtk.CellRendererText()
@@ -71,6 +70,9 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                                         markup=self.store['product_name_formatted'])
         subscription_column.set_expand(True)
         self.top_view.append_column(subscription_column)
+
+        machine_type_col = MachineTypeColumn(self.store['virt_only'])
+        self.top_view.append_column(machine_type_col)
 
         self.add_text_column(_("Stacking ID"), 'stacking_id')
 
@@ -120,7 +122,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
             # TODO:  This is not needed here.
             'align': float,
-            'multi_entitlement': bool,
+            'multi-entitlement': bool,
         }
 
     def filter_incompatible(self):
@@ -198,7 +200,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     'pool_id': entry.pools[0]['id'],  # not displayed, just for lookup later
                     'merged_pools': entry,  # likewise not displayed, for subscription
                     'align': 0.5,
-                    'multi_entitlement': allows_multi_entitlement(entry.pools[0]),
+                    'multi-entitlement': allows_multi_entitlement(entry.pools[0]),
                     'background': bg_color,
                     'stacking_id': group.name,
                 })
