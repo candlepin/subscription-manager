@@ -1043,7 +1043,9 @@ class ConfigCommand(CliCommand):
         if self.options.list:
             for section in cfg.sections():
                 print '[%s]' % (section)
-                for (name,value) in self.sortKeys(cfg.items(section)):
+                sourceList = cfg.items(section)
+                sourceList.sort()
+                for (name,value) in sourceList:
                     indicator1 = ''
                     indicator2 = ''
                     if (value == cfg.defaults().get(name)):
@@ -1074,17 +1076,6 @@ class ConfigCommand(CliCommand):
                         cfg.set(section, name, value)
 
             cfg.save()
-
-    def sortKeys (self, sourceList):
-        if(len(sourceList) == 1):
-            return sourceList
-        for z in range(len(sourceList)):
-            for ix in range(len(sourceList)-1):
-                if (sourceList[ix][0] >= sourceList[ix+1][0]): 
-                    temp = sourceList[ix+1]
-                    sourceList[ix+1] = sourceList[ix]
-                    sourceList[ix] = temp
-        return sourceList
 
 class ListCommand(CliCommand):
 
