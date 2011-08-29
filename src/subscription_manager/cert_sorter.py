@@ -109,7 +109,8 @@ class CertSorter(object):
             else:
                 self.expired_entitlement_certs.append(ent_cert)
                 log.debug("expired:")
-                log.debug(ent_cert.getProduct().getHash())
+                if ent_cert.getProduct():
+                    log.debug(ent_cert.getProduct().getHash())
                 self._scan_ent_cert_products(ent_cert, self.expired_products)
 
     def _scan_ent_cert_products(self, ent_cert, product_dict, uninstalled_dict=None):
@@ -171,8 +172,11 @@ class CertSorter(object):
                 if socket_total >= system_sockets:
                     stackable_product_info['valid'] = True
                 else:
-                    self.partially_valid_products[product_id] = stackable_product_info['product']
-                    del self.valid_products[product_id]
+                    if product_id not in self.partially_valid_products:
+                        self.partially_valid_products[product_id] = []
+                    self.partially_valid_products[product_id].append(stackable_product_info['ent_cert'])
+                    if product_id in self.valid_products:
+                        del self.valid_products[product_id]
 
 
     def _scan_for_unentitled_products(self):
@@ -180,8 +184,8 @@ class CertSorter(object):
         # must be completely unentitled
         for product_id in self.all_products.keys():
             if (product_id in self.valid_products) or (product_id in self.expired_products) \
-               or (product_id in self.partially_valid_products):
-                   continue
+                    or (product_id in self.partially_valid_products):
+                continue
             self.unentitled_products[product_id] = self.all_products[product_id]
 
     def _remove_expired_if_valid_elsewhere(self):

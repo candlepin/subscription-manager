@@ -17,7 +17,7 @@ import unittest
 from datetime import timedelta, datetime
 
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
-    StubCertificateDirectory, StubFacts
+    StubCertificateDirectory, StubEntitlementDirectory, StubFacts
 from subscription_manager.certlib import find_first_invalid_date
 from subscription_manager.cert_sorter import CertSorter
 
@@ -133,6 +133,10 @@ class CertSorterTests(unittest.TestCase):
                                               attributes={'stacking_id': 13,
                                                           'multi-entitlement': 'yes',
                                                           'sockets': 1})
+        self.stackable_product_not_inst =  StubProduct('stackable_product_not_inst',
+                                                       attributes={'stacking_id': 13,
+                                                                   'multi-entitlement': 'yes',
+                                                                   'sockets': 1})
 
         self.prod_dir = StubCertificateDirectory([
             # Will be unentitled:
@@ -145,7 +149,7 @@ class CertSorterTests(unittest.TestCase):
             StubProductCertificate(self.stackable_product2),
         ])
 
-        self.ent_dir = StubCertificateDirectory([
+        self.ent_dir = StubEntitlementDirectory([
             StubEntitlementCertificate(StubProduct('product2')),
             StubEntitlementCertificate(StubProduct('product3'),
                 start_date=datetime.now() - timedelta(days=365),
@@ -160,12 +164,20 @@ class CertSorterTests(unittest.TestCase):
                                                                'sockets': 1})),
             StubEntitlementCertificate(self.stackable_product1),
             StubEntitlementCertificate(self.stackable_product2),
+            # entitled, but not installed
+            StubEntitlementCertificate(StubProduct('not_installed_product')),
+            # entitled, stackable, but not installed
+            StubEntitlementCertificate(self.stackable_product_not_inst),
             ])
 
     def test_unentitled_product_certs(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir)
         self.assertEqual(1, len(self.sorter.unentitled_products.keys()))
         self.assertTrue('product1' in self.sorter.unentitled_products)
+
+    def test_ent_cert_no_installed_product(self):
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir)
+        print self.prod_dir.list()
 
     def test_ent_cert_no_product(self):
         self.ent_dir = StubCertificateDirectory(
@@ -177,6 +189,7 @@ class CertSorterTests(unittest.TestCase):
                                  facts_dict=stub_facts.get_facts())
 
         self.assertEqual(0, len(self.sorter.partially_valid_products))
+
 
     def test_expired(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir)
@@ -196,7 +209,7 @@ class CertSorterTests(unittest.TestCase):
     def test_expired_in_future(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir,
                 on_date=datetime(2050, 1, 1))
-        self.assertEqual(6, len(self.sorter.expired_entitlement_certs))
+        self.assertEqual(8, len(self.sorter.expired_entitlement_certs))
         self.assertTrue('product2' in self.sorter.expired_products)
         self.assertTrue('product3' in self.sorter.expired_products)
         self.assertFalse('product4' in self.sorter.expired_products)  # it's not installed
@@ -277,6 +290,8 @@ class CertSorterTests(unittest.TestCase):
     # product with more sockets than we need (valid)
     # product without enouch sockets (partail)
     # product with no sockets
+    # entitled product, no product cert
+
 
     def test_stacking_product_needs_more_sockets(self):
         provided = [self.stackable_product1]

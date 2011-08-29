@@ -131,16 +131,16 @@ def getInstalledProductStatus(product_directory=None,
     #
     # add in any partially entitled products
     #
-    for product_id in sorter.partially_valid_products.iterkeys():
-        certs = sorter.valid_products[product_id]
-        for cert in certs:
-            for product in cert.getProducts():
+    for product_id in sorter.partially_valid_products:
+        for ent_cert in sorter.partially_valid_products[product_id]:
+            products =  ent_cert.getProducts()
+            for product in products:
                 data = (product.getName(),
                         _("Partially Subscribed"),
-                        formatDate(cert.validRange().end()),
-                        cert.serialNumber(),
-                        cert.getOrder().getContract(),
-                        cert.getOrder().getAccountNumber())
+                        formatDate(ent_cert.validRange().end()),
+                        ent_cert.serialNumber(),
+                        ent_cert.getOrder().getContract(),
+                        ent_cert.getOrder().getAccountNumber())
                 product_status.append(data)
 
     #
