@@ -39,6 +39,7 @@ class ContractSelectionWindow(object):
         self.contract_selection_xml = gtk.glade.XML(CONTRACT_SELECTION_GLADE)
         self.contract_selection_win = self.contract_selection_xml.get_widget(
             "contract_selection_window")
+        self.subscribe_button = self.contract_selection_xml.get_widget('subscribe_button')
 
         self.contract_selection_treeview = \
                 self.contract_selection_xml.get_widget(
@@ -56,12 +57,6 @@ class ContractSelectionWindow(object):
             "on_cancel_button_clicked": self._cancel_button_clicked,
             "on_subscribe_button_clicked": self._subscribe_button_clicked,
         })
-
-        self.quantity_renderer = gtk.CellRendererSpin()
-        self.quantity_renderer.set_property("adjustment",
-            gtk.Adjustment(lower=1, upper=100, step_incr=1))
-        self.quantity_renderer.set_property("editable", True)
-        self.quantity_renderer.connect("edited", self._on_quantity_change)
 
         self.model = gtk.ListStore(str, str,
                                    gobject.TYPE_PYOBJECT,
@@ -82,7 +77,7 @@ class ContractSelectionWindow(object):
 
     def populate_treeview(self):
 
-        column = widgets.MultiEntitlementColumn(8)
+        column = MultiEntitlementColumn(8)
         self.contract_selection_treeview.append_column(column)
 
         renderer = gtk.CellRendererText()
@@ -91,7 +86,7 @@ class ContractSelectionWindow(object):
         column.set_expand(True)
         self.contract_selection_treeview.append_column(column)
 
-        column = widgets.MachineTypeColumn(7)
+        column = MachineTypeColumn(7)
         self.contract_selection_treeview.append_column(column)
 
         renderer = gtk.CellRendererText()
@@ -107,7 +102,7 @@ class ContractSelectionWindow(object):
         column = gtk.TreeViewColumn(_("End Date"), renderer, date=3)
         self.contract_selection_treeview.append_column(column)
 
-        column = gtk.TreeViewColumn(_("Quantity"), self.quantity_renderer, text=4)
+        column = widgets.QuantitySelectionColumn(_("Quantity"), 4, 8)
         self.contract_selection_treeview.append_column(column)
 
     def add_pool(self, pool, default_quantity_value):
@@ -142,25 +137,11 @@ class ContractSelectionWindow(object):
         quantity = row[4]
         self._selected_callback(pool, quantity)
 
-    def _on_quantity_change(self, renderer, path, new_text):
-        """ Handles when a quantity is changed in the cell """
-        try:
-            new_quantity = int(new_text)
-            iter = self.model.get_iter(path)
-            self.model.set_value(iter, 4, new_quantity)
-        except ValueError, e:
-            # Do nothing... The value entered in the grid will be reset.
-            pass
-
     def _on_contract_selection(self, widget):
         model, tree_iter = widget.get_selected()
 
-        # Handle no selection in table.
+        enabled = True
         if not tree_iter:
-            return
+            enabled = False
 
-        row = model[tree_iter]
-        pool = row[6]
-
-        # Only enable quantity if subscription is multi-entitlement capable
-        self.quantity_renderer.set_property("editable", allows_multi_entitlement(pool))
+        self.subscribe_button.set_sensitive(enabled)

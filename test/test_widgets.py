@@ -17,7 +17,9 @@ import gtk
 from datetime import datetime
 from subscription_manager.managerlib import LocalTz
 
-from subscription_manager.gui.widgets import MachineTypeColumn, MultiEntitlementColumn, SubDetailsWidget
+from subscription_manager.gui.storage import MappedTreeStore
+from subscription_manager.gui.widgets import MachineTypeColumn, MultiEntitlementColumn, \
+                                             QuantitySelectionColumn, SubDetailsWidget
 
 class TestSubDetailsWidget(unittest.TestCase):
 
@@ -38,6 +40,7 @@ class TestSubDetailsWidget(unittest.TestCase):
         s_iter = details.virt_only_text.get_buffer().get_start_iter()
         e_iter = details.virt_only_text.get_buffer().get_end_iter()
         self.assertEquals(details.virt_only_text.get_buffer().get_text(s_iter, e_iter), 'v_o')
+
 
 class BaseColumnTest(unittest.TestCase):
 
@@ -69,3 +72,60 @@ class TestMultiEntitlementColumn(BaseColumnTest):
     def test_render_empty_string_when_not_multi_entitled(self):
         self._assert_column_value(MultiEntitlementColumn, False,
                                   MultiEntitlementColumn.NOT_MULTI_ENTITLEMENT_STRING)
+
+class TestQuantitySelectionColumnTests(unittest.TestCase):
+
+    def test__update_cell_based_on_data_clears_cell_when_row_has_children(self):
+        column, tree_model, iter = self._setup_column(1, False)
+        tree_model.add_map(iter, self._create_store_map(1, False))
+
+        column.quantity_renderer.set_property("text", "22")
+        column._update_cell_based_on_data(None, column.quantity_renderer, tree_model, iter)
+
+        self.assertEquals("", column.quantity_renderer.get_property("text"))
+
+    def test_update_cell_based_on_data_does_not_clear_cell_when_row_has_no_children(self):
+        column, tree_model, iter = self._setup_column(1, False)
+
+        # Manually set the text value here to make sure that the value is not reset.
+        column.quantity_renderer.set_property("text", "12")
+        column._update_cell_based_on_data(None, column.quantity_renderer, tree_model, iter)
+
+        self.assertNotEquals("", column.quantity_renderer.get_property("text"))
+
+    def test_editor_is_disabled_when_not_multi_entitlement(self):
+        is_multi_entitled = False
+        column, tree_model, iter = self._setup_column(1, is_multi_entitled)
+        column._update_cell_based_on_data(None, column.quantity_renderer, tree_model, iter)
+        self.assertEquals(is_multi_entitled, column.quantity_renderer.get_property("editable"))
+
+    def test_editor_is_enabled_when_multi_entitlement(self):
+        is_multi_entitled = True
+        column, tree_model, iter = self._setup_column(1, is_multi_entitled)
+        column._update_cell_based_on_data(None, column.quantity_renderer, tree_model, iter)
+        self.assertEquals(is_multi_entitled, column.quantity_renderer.get_property("editable"))
+
+    def test_value_not_changed_when_editor_has_invalid_text(self):
+        expected_initial_value = 12
+        column, tree_model, iter = self._setup_column(expected_initial_value, False)
+        column._get_model = lambda: tree_model
+        column._on_edit(column.quantity_renderer, tree_model.get_path(iter), "aaa")
+        self.assertEquals(expected_initial_value,
+                          tree_model.get_value(iter, column.quantity_store_idx))
+
+    def test_value_changed_when_editor_has_valid_text(self):
+        column, tree_model, iter = self._setup_column(1, False)
+        column._get_model = lambda: tree_model
+        column._on_edit(column.quantity_renderer, tree_model.get_path(iter), "20")
+        self.assertEquals(20, tree_model.get_value(iter, column.quantity_store_idx))
+
+    def _create_store_map(self, quantity, multi_entitlement):
+        return {"quantity": quantity, "multi-entitlement": multi_entitlement}
+
+    def _setup_column(self, initial_quantity, inital_multi_entitlement):
+        tree_model = MappedTreeStore(self._create_store_map(int, bool))
+        column = QuantitySelectionColumn("test-col", tree_model['quantity'],
+                                         tree_model['multi-entitlement'])
+        iter = tree_model.add_map(None, self._create_store_map(initial_quantity,
+                                                               inital_multi_entitlement))
+        return (column, tree_model, iter)

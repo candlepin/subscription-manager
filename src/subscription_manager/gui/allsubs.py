@@ -19,7 +19,8 @@ import gobject
 
 import gettext
 from subscription_manager.certdirectory import EntitlementDirectory
-from subscription_manager.gui.widgets import MachineTypeColumn, MultiEntitlementColumn
+from subscription_manager.gui.widgets import MachineTypeColumn, MultiEntitlementColumn, \
+                                             QuantitySelectionColumn
 from subscription_manager.jsonwrapper import PoolWrapper
 import gtk
 from subscription_manager.managerlib import MergedPoolsStackingGroupSorter
@@ -36,6 +37,7 @@ from subscription_manager.gui.utils import handle_gui_exception, apply_highlight
 from subscription_manager.gui.contract_selection import ContractSelectionWindow
 from subscription_manager.quantity import QuantityDefaultValueCalculator, valid_quantity, \
                                           allows_multi_entitlement
+from subscription_manager.gui.storage import MappedTreeStore
 
 
 class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
@@ -59,9 +61,6 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.date_picker = widgets.DatePicker(today)
         self.date_picker_hbox.add(self.date_picker)
 
-        multi_entitle_col = MultiEntitlementColumn(self.store['multi-entitlement'])
-        self.top_view.append_column(multi_entitle_col)
-
         # Custom build of the subscription column.
         title_text_renderer = gtk.CellRendererText()
         title_text_renderer.set_property('xalign', 0.0)
@@ -74,7 +73,14 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         machine_type_col = MachineTypeColumn(self.store['virt_only'])
         self.top_view.append_column(machine_type_col)
 
-        self.add_text_column(_("Stacking ID"), 'stacking_id')
+        multi_entitle_col = MultiEntitlementColumn(self.store['multi-entitlement'])
+        self.top_view.append_column(multi_entitle_col)
+
+        # Set up the quantity column.
+        quantity_column = QuantitySelectionColumn(_("Quantity"),
+                                                  self.store['quantity_to_consume'],
+                                                  self.store['multi-entitlement'])
+        self.top_view.append_column(quantity_column)
 
         self.add_text_column(_('Available Subscriptions'), 'available')
 
@@ -97,6 +103,10 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             "on_subscribe_button_clicked": self.subscribe_button_clicked,
         })
 
+    # Override so that we can use a tree store.
+    def get_store(self):
+        return MappedTreeStore(self.get_type_map())
+
     def _setup_title_text_renderer(self, column, markup, text_model_idx):
         title_text_renderer = gtk.CellRendererText()
         title_text_renderer.set_property('xalign', 0.0)
@@ -115,9 +125,9 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             'available': str,
             'product_id': str,
             'pool_id': str,
-            'stacking_id': str,
             'merged_pools': gobject.TYPE_PYOBJECT,
             'product_name_formatted': str,
+            'quantity_to_consume': int,
             'background': str,
 
             # TODO:  This is not needed here.
@@ -174,6 +184,9 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.store.clear()
 
+        quantity_defaults_calculator = QuantityDefaultValueCalculator(self.facts,
+                                                            EntitlementDirectory().list())
+
         merged_pools = self.pool_stash.merge_pools(
                 incompatible=self.filter_incompatible(),
                 overlapping=self.filter_overlapping(),
@@ -183,27 +196,36 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         sorter = MergedPoolsStackingGroupSorter(merged_pools.values())
         for group_idx, group in enumerate(sorter.groups):
             bg_color = get_cell_background_color(group_idx)
+            iter = None
+            if group.name:
+                iter = self.store.add_map(iter, self._create_parent_map(group.name, bg_color))
+
             for entry in group.entitlements:
                 if entry.quantity < 0:
                     available = _('unlimited')
                 else:
                     available = entry.quantity - entry.consumed
 
-                self.store.add_map({
+                pool = entry.pools[0]
+                self.store.add_map(iter, {
                     'virt_only': PoolWrapper(entry.pools[0]).is_virt_only(),
                     'product_name': entry.product_name,
                     'product_name_formatted': \
                             apply_highlight(entry.product_name,
                                 self.get_filter_text()),
+                    'quantity_to_consume': \
+                        quantity_defaults_calculator.calculate(pool),
                     'available': available,
                     'product_id': entry.product_id,
                     'pool_id': entry.pools[0]['id'],  # not displayed, just for lookup later
                     'merged_pools': entry,  # likewise not displayed, for subscription
                     'align': 0.5,
-                    'multi-entitlement': allows_multi_entitlement(entry.pools[0]),
+                    'multi-entitlement': allows_multi_entitlement(pool),
                     'background': bg_color,
-                    'stacking_id': group.name,
                 })
+
+        # Ensure that all nodes are expanded in the tree view.
+        self.top_view.expand_all()
 
         # set the selection/details back to what they were, if possible
         found = False
@@ -219,6 +241,23 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     itr = self.store.iter_next(itr)
         if not found:
             self.sub_details.clear()
+
+    def _create_parent_map(self, title, bg_color):
+        return {
+                    'virt_only': False,
+                    'product_name': title,
+                    'product_name_formatted': \
+                            apply_highlight(title,
+                                self.get_filter_text()),
+                    'quantity_to_consume': 0,
+                    'available': "",
+                    'product_id': "",
+                    'pool_id':"",  # not displayed, just for lookup later
+                    'merged_pools': None,  # likewise not displayed, for subscription
+                    'align': 0.5,
+                    'multi-entitlement': False,
+                    'background': bg_color,
+                }
 
     def get_label(self):
         return _("All Available Subscriptions")
@@ -289,12 +328,13 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
     def subscribe_button_clicked(self, button):
         model, tree_iter = self.top_view.get_selection().get_selected()
         pools = model.get_value(tree_iter, self.store['merged_pools'])
+        quantity_to_consume = model.get_value(tree_iter, self.store['quantity_to_consume'])
 
         # Decide if we need to show the contract selection dialog or not.
         # If there's just one pool and does not allow multi-entitlement,
         # shortcut right to the callback that the dialog would have run.
-        if len(pools.pools) == 1 and not allows_multi_entitlement(pools.pools[0]):
-            self._contract_selected(pools.pools[0])
+        if len(pools.pools) == 1:
+            self._contract_selected(pools.pools[0], quantity_to_consume)
             return
 
         self.contract_selection = ContractSelectionWindow(
@@ -302,12 +342,18 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.contract_selection.set_parent_window(self.content.get_parent_window().get_user_data())
 
-        quantity_defaults_calculator = QuantityDefaultValueCalculator(self.facts,
-                                                            EntitlementDirectory().list())
         for pool in pools.pools:
-            self.contract_selection.add_pool(pool, quantity_defaults_calculator.calculate(pool))
+            self.contract_selection.add_pool(pool, quantity_to_consume)
 
         self.contract_selection.show()
+
+    def _selection_callback(self, treeselection):
+        model, tree_iter = treeselection.get_selected()
+        if model.iter_n_children(tree_iter) > 0:
+            self.sub_details.clear()
+            self.on_no_selection()
+        else:
+            widgets.SubscriptionManagerTab._selection_callback(self, treeselection)
 
     def on_selection(self, selection):
         """ Shows details for the current selected pool. """

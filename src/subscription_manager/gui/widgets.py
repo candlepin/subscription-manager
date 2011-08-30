@@ -553,3 +553,59 @@ class MachineTypeColumn(ToggleTextColumn):
 
     def _get_false_text(self):
         return self.PHYSICAL_MACHINE
+
+
+class QuantitySelectionColumn(gtk.TreeViewColumn):
+    def __init__(self, column_title, quantity_store_idx, is_multi_entitled_store_idx,
+                 editable=True):
+        self.quantity_store_idx = quantity_store_idx
+        self.is_multi_entitled_store_idx = is_multi_entitled_store_idx
+
+        self.quantity_renderer = gtk.CellRendererSpin()
+        self.quantity_renderer.set_property("adjustment",
+            gtk.Adjustment(lower=1, upper=100, step_incr=1))
+        self.quantity_renderer.set_property("editable", editable)
+        self.quantity_renderer.connect("edited", self._on_edit)
+
+        gtk.TreeViewColumn.__init__(self, column_title, self.quantity_renderer,
+                                    text=self.quantity_store_idx)
+        self.set_cell_data_func(self.quantity_renderer, self._update_cell_based_on_data)
+
+    def _on_edit(self, renderer, path, new_text):
+        """
+        Handles when a quantity is changed in the cell. Stores new value in
+        model.
+        """
+        try:
+            model = self._get_model()
+            new_quantity = int(new_text)
+            iter = model.get_iter(path)
+            model.set_value(iter, self.quantity_store_idx, new_quantity)
+        except ValueError:
+            # Do nothing... The value entered in the grid will be reset.
+            pass
+
+    def _update_cell_based_on_data(self, column, cell_renderer, tree_model, iter):
+        # Clear the cell if we are a parent row.
+        if tree_model.iter_n_children(iter) > 0:
+            cell_renderer.set_property("text", "")
+
+        # Disable editor if not multi-entitled.
+        is_multi_entitled = tree_model.get_value(iter, self.is_multi_entitled_store_idx)
+        cell_renderer.set_property("editable", is_multi_entitled)
+
+    def _get_model(self):
+        return self.get_tree_view().get_model()
+
+
+def expand_collapse_on_row_activated_callback(treeview, path, view_column):
+    """
+    A gtk.TreeView callback allowing row expand/collapse on double-click or key
+    press (space, return, enter).
+    """
+    if treeview.row_expanded(path):
+        treeview.collapse_row(path)
+    else:
+        treeview.expand_row(path, True)
+
+    return True

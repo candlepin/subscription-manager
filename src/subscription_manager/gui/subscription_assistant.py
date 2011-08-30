@@ -174,13 +174,10 @@ class SubscriptionAssistant(widgets.GladeWidget):
         self.subscriptions_treeview.append_column(column)
 
         # Set up editable quantity column.
-        self.quantity_renderer = gtk.CellRendererSpin()
-        self.quantity_renderer.set_property("adjustment",
-            gtk.Adjustment(lower=1, upper=100, step_incr=1))
-        column = self.subscriptions_treeview.add_editable_column(_("Quantity"),
-                                self.subscriptions_store['quantity_to_consume'],
-                                self.quantity_renderer, self._quantity_changed)
-        column.set_cell_data_func(self.quantity_renderer, self._clear_quantity_if_required)
+        quantity_col = widgets.QuantitySelectionColumn(_("Quantity"),
+                                        self.subscriptions_store['quantity_to_consume'],
+                                        self.subscriptions_store['multi-entitlement'])
+        self.subscriptions_treeview.append_column(quantity_col)
 
         self.subscriptions_treeview.set_model(self.subscriptions_store)
         self.subscriptions_treeview.get_selection().connect('changed',
@@ -213,22 +210,6 @@ class SubscriptionAssistant(widgets.GladeWidget):
 
         self.pb = None
         self.timer = None
-
-    def _quantity_changed(self, renderer, path, new_text):
-        """ Handles when a quantity is changed in the cell """
-        try:
-            new_quantity = int(new_text)
-            # iter_ref is a terrible name, but iter is a keyword
-            iter_ref = self.subscriptions_store.get_iter(path)
-            self.subscriptions_store.set_value(iter_ref, self.subscriptions_store['quantity_to_consume'], new_quantity)
-        except ValueError:
-            # Do nothing... The value entered in the grid will be reset.
-            pass
-
-    def _clear_quantity_if_required(self, column, cell_renderer, tree_model, iter):
-        # Clear the cell if we are a parent row.
-        if tree_model.iter_n_children(iter) > 0:
-            cell_renderer.set_property("text", "")
 
     def show(self):
         """
@@ -449,6 +430,8 @@ class SubscriptionAssistant(widgets.GladeWidget):
                     'virt_only': PoolWrapper(pool).is_virt_only(),
                     'background': bg_color,
                 })
+        # Ensure that the tree is fully expanded
+        self.subscriptions_treeview.expand_all()
 
     def _get_parent_entry(self, name, bg_color):
         return {
@@ -540,11 +523,6 @@ class SubscriptionAssistant(widgets.GladeWidget):
         # Handle no selection in table.
         if not tree_iter:
             return
-
-        should_set_editable = model.get_value(tree_iter,
-                                    self.subscriptions_store['multi-entitlement'])
-        # Only enable quantity if subscription is multi-entitlement capable
-        self.quantity_renderer.set_property("editable", should_set_editable)
 
         self._update_sub_details(model, tree_iter)
 
