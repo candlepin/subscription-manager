@@ -98,7 +98,8 @@ class SubscriptionAssistant(widgets.GladeWidget):
                         'invalid_date_radiobutton',
                         'subscribe_button',
                         'date_picker_hbox',
-                        'invalid_checkbutton']
+                        'invalid_checkbutton',
+                        'edit_quantity_label']
         super(SubscriptionAssistant,
                 self).__init__('subscription_assistant.glade', widget_names)
 
@@ -178,6 +179,8 @@ class SubscriptionAssistant(widgets.GladeWidget):
                                         self.subscriptions_store['quantity_to_consume'],
                                         self.subscriptions_store['multi-entitlement'])
         self.subscriptions_treeview.append_column(quantity_col)
+
+        self.edit_quantity_label.set_label(quantity_col.get_column_legend_text())
 
         self.subscriptions_treeview.set_model(self.subscriptions_store)
         self.subscriptions_treeview.get_selection().connect('changed',

@@ -232,16 +232,44 @@
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">Subscription Subscriptions Box</atkproperty>
                 </accessibility>
                 <child>
-                  <widget class="GtkLabel" id="providing_subs_label">
+                  <widget class="GtkHBox" id="hbox2">
                     <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">The following subscriptions will cover the products selected above:</property>
-                    <accessibility>
-                      <atkproperty name="AtkObject::accessible-name" translatable="yes">Subscription Subscriptions Label</atkproperty>
-                    </accessibility>
+                    <child>
+                      <widget class="GtkLabel" id="providing_subs_label">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="yalign">1</property>
+                        <property name="ypad">2</property>
+                        <property name="label" translatable="yes">The following subscriptions will cover the products selected on MM/DD/YYYY</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">Subscription Subscriptions Label</atkproperty>
+                        </accessibility>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="edit_quantity_label">
+                        <property name="visible">True</property>
+                        <property name="xalign">1</property>
+                        <property name="yalign">1</property>
+                        <property name="ypad">2</property>
+                        <property name="label" translatable="yes">* Click to Adjust Quantity</property>
+                        <property name="use_markup">True</property>
+                      </widget>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="fill">False</property>
                     <property name="position">0</property>
                   </packing>
                 </child>

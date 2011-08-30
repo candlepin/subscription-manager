@@ -47,7 +47,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                         'compatible_checkbutton', 'overlap_checkbutton',
                         'installed_checkbutton', 'contains_text_entry',
                         'month_entry', 'day_entry', 'year_entry',
-                        'active_on_checkbutton', 'subscribe_button']
+                        'active_on_checkbutton', 'subscribe_button',
+                        'edit_quantity_label']
         super(AllSubscriptionsTab, self).__init__('allsubs.glade', widget_names)
 
         self.backend = backend
@@ -81,6 +82,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                                                   self.store['quantity_to_consume'],
                                                   self.store['multi-entitlement'])
         self.top_view.append_column(quantity_column)
+
+        self.edit_quantity_label.set_label(quantity_column.get_column_legend_text())
 
         self.add_text_column(_('Available Subscriptions'), 'available')
 

@@ -40,6 +40,7 @@ class ContractSelectionWindow(object):
         self.contract_selection_win = self.contract_selection_xml.get_widget(
             "contract_selection_window")
         self.subscribe_button = self.contract_selection_xml.get_widget('subscribe_button')
+        self.edit_quantity_label = self.contract_selection_xml.get_widget('edit_quantity_label')
 
         self.contract_selection_treeview = \
                 self.contract_selection_xml.get_widget(
@@ -104,6 +105,8 @@ class ContractSelectionWindow(object):
 
         column = widgets.QuantitySelectionColumn(_("Quantity"), 4, 8)
         self.contract_selection_treeview.append_column(column)
+
+        self.edit_quantity_label.set_label(column.get_column_legend_text())
 
     def add_pool(self, pool, default_quantity_value):
         self.total_contracts += 1

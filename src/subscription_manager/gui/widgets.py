@@ -571,6 +571,9 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
                                     text=self.quantity_store_idx)
         self.set_cell_data_func(self.quantity_renderer, self._update_cell_based_on_data)
 
+    def get_column_legend_text(self):
+        return "<b><small>* %s</small></b>" % (_("Click to Adjust Quantity"))
+
     def _on_edit(self, renderer, path, new_text):
         """
         Handles when a quantity is changed in the cell. Stores new value in
@@ -596,7 +599,6 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
 
     def _get_model(self):
         return self.get_tree_view().get_model()
-
 
 
 def expand_collapse_on_row_activated_callback(treeview, path, view_column):
