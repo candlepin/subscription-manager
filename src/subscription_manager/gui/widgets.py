@@ -562,6 +562,7 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
         self.is_multi_entitled_store_idx = is_multi_entitled_store_idx
 
         self.quantity_renderer = gtk.CellRendererSpin()
+        self.quantity_renderer.set_property("xalign", 0.5)
         self.quantity_renderer.set_property("adjustment",
             gtk.Adjustment(lower=1, upper=100, step_incr=1))
         self.quantity_renderer.set_property("editable", editable)

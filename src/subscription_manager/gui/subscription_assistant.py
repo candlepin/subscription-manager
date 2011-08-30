@@ -52,13 +52,13 @@ class MappedListTreeView(gtk.TreeView):
         self.append_column(column)
         return column
 
-    def add_column(self, name, column_number, expand=False, align=False):
+    def add_column(self, name, column_number, expand=False, xalign=None):
         text_renderer = gtk.CellRendererText()
         column = gtk.TreeViewColumn(name, text_renderer, text=column_number)
         self.store = self.get_model()
         column.set_expand(expand)
-        if align:
-            column.add_attribute(text_renderer, 'xalign', self.store['align'])
+        if xalign:
+            text_renderer.set_property("xalign", xalign)
 
         self.append_column(column)
         return column
@@ -167,8 +167,9 @@ class SubscriptionAssistant(widgets.GladeWidget):
         column = widgets.MachineTypeColumn(self.subscriptions_store['virt_only'])
         self.subscriptions_treeview.append_column(column)
 
-        self.subscriptions_treeview.add_column(_("Available Subscriptions"),
-                self.subscriptions_store['available_subscriptions'], expand=False)
+        column = self.subscriptions_treeview.add_column(_("Available Subscriptions"),
+                        self.subscriptions_store['available_subscriptions'], expand=False,
+                        xalign=0.5)
 
         column = widgets.MultiEntitlementColumn(
                 self.subscriptions_store['multi-entitlement'])
