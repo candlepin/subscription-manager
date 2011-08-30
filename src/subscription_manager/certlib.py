@@ -24,6 +24,7 @@ from subscription_manager.lock import Lock
 from subscription_manager import cert_sorter
 from subscription_manager.certdirectory import EntitlementDirectory, \
     ProductDirectory, Path, Writer
+from subscription_manager import constants
 from rhsm.config import initConfig
 from rhsm.certificate import *
 
@@ -86,6 +87,42 @@ class CertLib(DataLib):
     def _do_delete(self, serialNumbers):
         action = DeleteAction()
         return action.perform(serialNumbers)
+
+
+class HealingLib(DataLib):
+    """
+    An object used to run healing nightly. Checks compliance for today, 
+    heals if necessary, then checks for 24 hours from now, so we theoretically
+    will never go out of compliance if subscriptions are available.
+    """
+    def _do_update(self):
+        uuid = ConsumerIdentity.read().getConsumerId()
+        consumer = self.uep.getConsumer(uuid)
+        from subscription_manager import managerlib
+        if 'autoheal' in consumer and consumer['autoheal']:
+            try:
+                log.info("Attempting to auto-heal the system.")
+                # TODO: repeat this routine for both today's date, and tomorrow's,
+                # so if subs are available we'll never be out of compliance.
+
+                # TODO: check compliance status here, and don't proceed if we're 
+                # already compliant.
+                self.uep.bind(uuid)
+            except Exception, e:
+                log.error("Error attempting to auto-heal:")
+                log.exception(e)
+                return 0
+            else:
+                log.info("Auto-heal check complete.")
+                installed_status = managerlib.getInstalledProductStatus()
+                log.info("Current installed product status:")
+                for prod_status in installed_status:
+                    log.info(constants.product_status % (prod_status[0], 
+                        prod_status[1]))
+                return 1
+        else:
+            log.info("Auto-heal disabled on server, skipping.")
+            return 0
 
 
 class Action:

@@ -450,6 +450,7 @@ class AsyncBackend(object):
         method run in the worker thread.
         """
         try:
+            # TODO: should use same code as CLI autosubscribe/heal
             self.backend.uep.bindByProduct(uuid, products.values())
             self.queue.put((callback, products, None))
         except Exception, e:

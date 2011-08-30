@@ -21,7 +21,6 @@ import sys
 import logging
 import socket
 import getpass
-import constants
 import dbus
 import datetime
 from time import strftime, strptime, localtime
@@ -30,6 +29,7 @@ from M2Crypto import SSL
 
 import gettext
 from subscription_manager.jsonwrapper import PoolWrapper
+from subscription_manager import constants
 _ = gettext.gettext
 
 import rhsm.config
@@ -88,31 +88,27 @@ def handle_exception(msg, ex):
         systemExit(-1, ex)
 
 
-def autosubscribe(cp, consumer, certlib, disable_product_upload=False):
+def autosubscribe(cp, consumer, disable_product_upload=False):
     """
     This is a wrapper for bind/bindByProduct. Eventually, we will exclusively
     use bind, but for now, we support both.
     """
-    # try to auomatically bind products
-    products = managerlib.getInstalledProductHashMap()
     try:
         if disable_product_upload:
             cp.bind(consumer) # new style
         else:
+            products = managerlib.getInstalledProductHashMap()
             cp.bindByProduct(consumer, products.values())
-        certlib.update()
 
         installed_status = managerlib.getInstalledProductStatus()
 
-        log.info("Automatically subscribed to products: %s " \
-                % ", ".join(products.keys()))
+        log.info("Attempted to auto-subscribe/heal the system.")
         print _("Installed Product Current Status:")
         for prod_status in installed_status:
             print (constants.product_status % (prod_status[0], prod_status[1]))
     except Exception, e:
+        log.warning("Error during auto-subscribe.")
         log.exception(e)
-        log.warning("Warning: Unable to auto subscribe to %s" \
-                % ", ".join(products.keys()))
 
 
 class CliCommand(object):
@@ -611,7 +607,8 @@ class RegisterCommand(UserPassCommand):
 
         if self.options.autosubscribe:
             autosubscribe(admin_cp, consumer['uuid'], self.certlib)
-        if (self.options.consumerid or self.options.activation_keys):
+        if (self.options.consumerid or self.options.activation_keys or 
+                self.options.autosubscribe):
             self.certlib.update()
 
         self._request_validity_check()
@@ -817,7 +814,7 @@ class SubscribeCommand(CliCommand):
                             systemExit(-1, re.msg)  # some other error.. don't try again
             # must be auto
             else:
-                autosubscribe(self.cp, consumer_uuid, self.certlib, disable_product_upload=True)
+                autosubscribe(self.cp, consumer_uuid, disable_product_upload=True)
 
             result = self.certlib.update()
             if result[1]:

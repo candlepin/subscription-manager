@@ -19,7 +19,8 @@
 import sys
 sys.path.append("/usr/share/rhsm")
 
-from subscription_manager.certlib import CertLib, ActionLock, ConsumerIdentity
+from subscription_manager.certlib import CertLib, ActionLock, ConsumerIdentity,\
+        HealingLib
 from subscription_manager.repolib import RepoLib
 from subscription_manager.factlib import FactLib
 from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
@@ -49,6 +50,7 @@ class CertManager:
         self.factlib = FactLib(self.lock, uep=self.uep)
         self.profilelib = PackageProfileLib(self.lock, uep=self.uep)
         self.installedprodlib = InstalledProductsLib(self.lock, uep=self.uep)
+        self.healinglib = HealingLib(self.lock, uep=self.uep)
 
     def update(self):
         """
@@ -61,8 +63,12 @@ class CertManager:
         lock = self.lock
         try:
             lock.acquire()
+
+            # WARNING: order is important here, we need to update a number
+            # of things before attempting to autoheal, and we need to autoheal
+            # before attempting to fetch our certificates:
             for lib in (self.repolib, self.factlib, self.profilelib,
-                    self.installedprodlib):
+                    self.installedprodlib, self.healinglib):
                 updates += lib.update()
 
             # WARNING
@@ -78,7 +84,7 @@ class CertManager:
         return updates
 
 
-def main(autoheal_enabled):
+def main():
     if not ConsumerIdentity.existsAndValid():
         log.error('Either the consumer is not registered or the certificates' +
                   ' are corrupted. Certificate update using daemon failed.')
@@ -90,41 +96,19 @@ def main(autoheal_enabled):
     updates = mgr.update()
     print _('%d updates required') % updates
     print _('done')
-    if autoheal_enabled:
-        log.info("performing autoheal check")
-        try:
-            sub_cmd = managercli.SubscribeCommand()
-            sub_cmd.main(['--auto'])
-        except Exception, e:
-            # most errors are caught/logged inside SubscribeCommand, this
-            # is only for certain edge cases
-            log.exception(e)
-            log.error("Error while running autoheal check")
-        else:
-            log.info("autoheal check complete")
+
 
 # WARNING: This is not a block of code used to test, this module is
 # actually run as a script via cron to periodically update the system's
 # certificates, yum repos, and facts.
 if __name__ == '__main__':
-    from subscription_manager import managercli
     import logging
     import logutil
-    import rhsm
-    from ConfigParser import NoOptionError
-
-    cfg = rhsm.config.initConfig()
-    autoheal_enabled = False
-    try:
-        autoheal_enabled = cfg.getboolean('rhsm', 'autoheal')
-    except NoOptionError:
-        # if we can't read the autoheal directive, assume False
-        pass
 
     logutil.init_logger()
     log = logging.getLogger('rhsm-app.' + __name__)
     try:
-        main(autoheal_enabled)
+        main()
     except SystemExit:
         # sys.exit triggers an exception in older Python versions, which
         # in this case  we can safely ignore as we do not want to log the
