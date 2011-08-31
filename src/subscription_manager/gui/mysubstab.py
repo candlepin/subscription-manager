@@ -200,6 +200,11 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                         for product in cert.getProducts()]
         stacking_id = order.getStackingId()
 
+        if str(order.getVirtOnly()) == "1":
+            virt_only = _("Yes")
+        else:
+            virt_only = _("No")
+
         if str(order.getProvidesManagement()) == "1":
             management = _("Yes")
         else:
@@ -212,6 +217,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                               account=order.getAccountNumber() or "",
                               management=management,
                               stacking_id=stacking_id or "",
+                              virt_only=virt_only or "",
                               support_level=order.getSupportLevel() or "",
                               support_type=order.getSupportType() or "",
                               products=products)

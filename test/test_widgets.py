@@ -14,8 +14,30 @@
 
 import unittest
 import gtk
+from datetime import datetime
+from subscription_manager.managerlib import LocalTz
 
-from subscription_manager.gui.widgets import MachineTypeColumn, MultiEntitlementColumn
+from subscription_manager.gui.widgets import MachineTypeColumn, MultiEntitlementColumn, SubDetailsWidget
+
+class TestSubDetailsWidget(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def testVirtOnly(self):
+        d = datetime.now()
+        start_date = datetime(d.year, d.month, d.day, tzinfo=LocalTz())
+        end_date = datetime(d.year+1, d.month, d.day, tzinfo=LocalTz())
+        details = SubDetailsWidget(show_contract=True)
+        details.show('noname', contract='c', start=start_date, end=end_date, account='a',
+                     management='m', support_level='s_l', stacking_id='s_i',
+                     support_type='s_t', virt_only='v_o')
+        s_iter = details.virt_only_text.get_buffer().get_start_iter()
+        e_iter = details.virt_only_text.get_buffer().get_end_iter()
+        self.assertEquals(details.virt_only_text.get_buffer().get_text(s_iter, e_iter), 'v_o')
 
 class BaseColumnTest(unittest.TestCase):
 
