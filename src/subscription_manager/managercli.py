@@ -167,6 +167,9 @@ class CliCommand(object):
             print (_("Consumer not registered. Please register using --username and --password"))
             sys.exit(-1)
 
+    def require_connection(self):
+        return True
+
     def main(self, args=None):
 
         # In testing we sometimes specify args, otherwise use the default:
@@ -203,13 +206,16 @@ class CliCommand(object):
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
 
-        self.cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
-                                           proxy_hostname=self.proxy_hostname,
-                                           proxy_port=self.proxy_port,
-                                           proxy_user=self.proxy_user,
-                                           proxy_password=self.proxy_password)
+        if self.require_connection():
+            self.cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
+                                               proxy_hostname=self.proxy_hostname,
+                                               proxy_port=self.proxy_port,
+                                               proxy_user=self.proxy_user,
+                                               proxy_password=self.proxy_password)
 
-        self.certlib = CertLib(uep=self.cp)
+            self.certlib = CertLib(uep=self.cp)
+        else:
+            self.cp = None
 
         # do the work, catch most common errors here:
         try:
@@ -607,7 +613,7 @@ class RegisterCommand(UserPassCommand):
 
         if self.options.autosubscribe:
             autosubscribe(admin_cp, consumer['uuid'], self.certlib)
-        if (self.options.consumerid or self.options.activation_keys or 
+        if (self.options.consumerid or self.options.activation_keys or
                 self.options.autosubscribe):
             self.certlib.update()
 
@@ -975,6 +981,9 @@ class ReposCommand(CliCommand):
         CliCommand.__init__(self, "repos", usage, shortdesc, desc,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
+    def require_connection(self):
+        return False
+
     def _add_common_options(self):
         self.parser.add_option("--list", action="store_true",
                                help=_("list the entitled repositories for this system"))
@@ -1078,7 +1087,7 @@ class ConfigCommand(CliCommand):
             return sourceList
         for z in range(len(sourceList)):
             for ix in range(len(sourceList)-1):
-                if (sourceList[ix][0] >= sourceList[ix+1][0]): 
+                if (sourceList[ix][0] >= sourceList[ix+1][0]):
                     temp = sourceList[ix+1]
                     sourceList[ix+1] = sourceList[ix]
                     sourceList[ix] = temp
