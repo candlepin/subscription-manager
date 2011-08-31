@@ -55,7 +55,8 @@ class SystemFactsDialog(widgets.GladeWidget):
         self._add_column(_("Value"), 1)
 
         # set up the signals from the view
-        self.facts_view.connect("row_activated", self._row_activated_callback)
+        self.facts_view.connect("row_activated",
+                        widgets.expand_collapse_on_row_activated_callback)
 
     def show(self):
         """Make this dialog visible."""
@@ -125,14 +126,6 @@ class SystemFactsDialog(widgets.GladeWidget):
         self.hide()
 
         # Stop the gtk signal from propogating
-        return True
-
-    def _row_activated_callback(self, treeview, path, view_column):
-        if self.facts_view.row_expanded(path):
-            self.facts_view.collapse_row(path)
-        else:
-            self.facts_view.expand_row(path, True)
-
         return True
 
     # GTK callback function for sending system facts to the server

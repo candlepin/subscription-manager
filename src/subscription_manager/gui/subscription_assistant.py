@@ -185,6 +185,10 @@ class SubscriptionAssistant(widgets.GladeWidget):
         set_background_model_index(self.subscriptions_treeview,
                                    self.subscriptions_store['background'])
 
+        # Connect row expansion/collapse callback
+        self.subscriptions_treeview.connect("row_activated",
+                                widgets.expand_collapse_on_row_activated_callback)
+
         self.subscriptions_window.add(self.subscriptions_treeview)
         self.subscriptions_treeview.show()
 

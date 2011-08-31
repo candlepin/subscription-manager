@@ -87,6 +87,9 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         # Ensure all cells are colored according the the store.
         set_background_model_index(self.top_view, self.store['background'])
 
+        self.top_view.connect("row_activated",
+                              widgets.expand_collapse_on_row_activated_callback)
+
         # This option should be selected by default:
         self.compatible_checkbutton.set_active(True)
         self.sub_details = widgets.SubDetailsWidget(show_contract=False)

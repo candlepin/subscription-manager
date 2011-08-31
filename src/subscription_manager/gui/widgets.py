@@ -598,6 +598,7 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
         return self.get_tree_view().get_model()
 
 
+
 def expand_collapse_on_row_activated_callback(treeview, path, view_column):
     """
     A gtk.TreeView callback allowing row expand/collapse on double-click or key

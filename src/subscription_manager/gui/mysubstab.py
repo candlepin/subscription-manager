@@ -80,6 +80,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.add_text_column(_("Quantity"), 'quantity')
 
+        self.top_view.connect("row_activated",
+                              widgets.expand_collapse_on_row_activated_callback)
+
         self.update_subscriptions()
 
         self.glade.signal_autoconnect({'on_unsubscribe_button_clicked': self.unsubscribe_button_clicked})
