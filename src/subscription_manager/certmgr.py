@@ -23,6 +23,7 @@ from subscription_manager.certlib import CertLib, ActionLock, ConsumerIdentity,\
         HealingLib
 from subscription_manager.repolib import RepoLib
 from subscription_manager.factlib import FactLib
+from subscription_manager.facts import Facts
 from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
 
 import rhsm.connection as connection
@@ -50,7 +51,9 @@ class CertManager:
         self.factlib = FactLib(self.lock, uep=self.uep)
         self.profilelib = PackageProfileLib(self.lock, uep=self.uep)
         self.installedprodlib = InstalledProductsLib(self.lock, uep=self.uep)
-        self.healinglib = HealingLib(self.lock, uep=self.uep)
+        #healinglib requires a fact set in order to get socket count
+        facts = Facts()
+        self.healinglib = HealingLib(self.lock, uep=self.uep, facts_dict=facts.to_dict())
 
     def update(self):
         """

@@ -91,22 +91,34 @@ class CertLib(DataLib):
 
 class HealingLib(DataLib):
     """
-    An object used to run healing nightly. Checks compliance for today, 
-    heals if necessary, then checks for 24 hours from now, so we theoretically
-    will never go out of compliance if subscriptions are available.
+    An object used to run healing nightly. Checks compliance for today, heals
+    if necessary, then checks for 24 hours from now, so we theoretically will
+    never go out of compliance if subscriptions are available.
     """
+
+    def __init__(self, lock=ActionLock(), uep=None, facts_dict=None):
+        self.facts_dict = facts_dict
+        DataLib.__init__(self, lock, uep)
+
     def _do_update(self):
         uuid = ConsumerIdentity.read().getConsumerId()
         consumer = self.uep.getConsumer(uuid)
         from subscription_manager import managerlib
-        if 'autoheal' in consumer and consumer['autoheal']:
+        cs = cert_sorter.CertSorter(ProductDirectory(), EntitlementDirectory(),
+                                        facts_dict=self.facts_dict)
+        if (len(cs.partially_valid_products) + len(cs.unentitled_products)
+            + len(cs.expired_products)) == 0:
+            log.debug("System does not require healing")
+            return 0
+        elif 'autoheal' in consumer and consumer['autoheal']:
             try:
                 log.info("Attempting to auto-heal the system.")
-                # TODO: repeat this routine for both today's date, and tomorrow's,
-                # so if subs are available we'll never be out of compliance.
+                # TODO: repeat this routine for both today's date, and
+                # tomorrow's, so if subs are available we'll never be out of
+                # compliance.
 
-                # TODO: check compliance status here, and don't proceed if we're 
-                # already compliant.
+                # TODO: check compliance status here, and don't proceed if
+                # we're already compliant.
                 self.uep.bind(uuid)
             except Exception, e:
                 log.error("Error attempting to auto-heal:")
@@ -117,7 +129,7 @@ class HealingLib(DataLib):
                 installed_status = managerlib.getInstalledProductStatus()
                 log.info("Current installed product status:")
                 for prod_status in installed_status:
-                    log.info(constants.product_status % (prod_status[0], 
+                    log.info(constants.product_status % (prod_status[0],
                         prod_status[1]))
                 return 1
         else:
@@ -168,7 +180,8 @@ class UpdateAction(Action):
         log.info('certs updated:\n%s', report)
         self.syslogResults(report)
         # WARNING: TODO: XXX: this is returning a tuple, the parent class and
-        # all other sub-classes return an int, which somewhat defeats the purpose...
+        # all other sub-classes return an int, which somewhat defeats
+        # the purpose...
         return (report.updates(), exceptions)
 
     def syslogResults(self, report):
@@ -466,6 +479,7 @@ def find_first_invalid_date(ent_dir=None, product_dir=None):
 
     # Should never hit this:
     raise Exception("Unable to determine first invalid date.")
+
 
 def main():
     print _('Updating entitlement certificates')
