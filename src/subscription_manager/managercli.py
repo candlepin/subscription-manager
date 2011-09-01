@@ -1006,7 +1006,7 @@ class ConfigCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog config [OPTIONS]"
-        shortdesc = _("List the configuration which this machine is using")
+        shortdesc = _("List or set the configuration which this machine is using")
         desc = shortdesc
         CliCommand.__init__(self, "config", usage, shortdesc, desc,
                             ent_dir=ent_dir, prod_dir=prod_dir)
