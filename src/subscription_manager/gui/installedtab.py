@@ -89,6 +89,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def update_products(self):
         self.store.clear()
+        self.cs.refresh()
 
         for product_cert in self.product_dir.list():
             for product in product_cert.getProducts():

@@ -72,20 +72,30 @@ class CertSorter(object):
         log.debug("Sorting product and entitlement cert status for: %s" %
                 on_date)
 
-        self._populate_all_products()
-
-        self._scan_entitlement_certs()
-
-        self._scan_ent_cert_stackable_products()
-
-        self._scan_for_unentitled_products()
-
-        self._remove_expired_if_valid_elsewhere()
+        self.refresh()
 
         log.debug("valid entitled products: %s" % self.valid_products.keys())
         log.debug("expired entitled products: %s" % self.expired_products.keys())
         log.debug("partially entitled products: %s" % self.partially_valid_products.keys())
         log.debug("unentitled products: %s" % self.unentitled_products.keys())
+
+
+    def refresh(self):
+        refresh_dicts = [self.all_products,
+                         self.unentitled_products,
+                         self.expired_products,
+                         self.partially_valid_products,
+                         self.valid_products,
+                         self.not_installed_products]
+
+        for d in refresh_dicts:
+            d.clear()
+
+        self._populate_all_products()
+        self._scan_entitlement_certs()
+        self._scan_ent_cert_stackable_products()
+        self._scan_for_unentitled_products()
+        self._remove_expired_if_valid_elsewhere()
 
     def _populate_all_products(self):
         """ Build the dict of all installed products. """
