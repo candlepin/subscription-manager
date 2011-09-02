@@ -24,7 +24,7 @@ replacement of full wrapper but instead an extension.
 
 import os
 import re
-from M2Crypto import X509
+from M2Crypto import X509, RSA
 from datetime import datetime as dt
 from datetime import tzinfo, timedelta
 from time import strptime
@@ -492,6 +492,18 @@ class Key(object):
         """
         self.content = content
 
+    def bogus(self):
+        bogus = []
+        if self.content:
+            try:
+                rsa = RSA.load_key_string(self.content)
+            except:
+                bogus.append("Invalid key data")
+        else:
+            bogus.append("No key data provided")
+
+        return bogus
+
     def write(self, pem_path):
         """
         Write the key.
@@ -883,10 +895,10 @@ class Order:
 
     def getQuantityUsed(self):
         """
-        Returns the quantity of the subscription that *this* entitlement is 
+        Returns the quantity of the subscription that *this* entitlement is
         using.
 
-        WARNING: a little misleading as it (a) is part of the order namespace 
+        WARNING: a little misleading as it (a) is part of the order namespace
         and (b) sounds suspiciously like the total consumed quantity of the
         subscription.
         """
