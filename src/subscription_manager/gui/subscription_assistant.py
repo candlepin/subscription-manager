@@ -363,19 +363,20 @@ class SubscriptionAssistant(widgets.GladeWidget):
 
         # installed and invalid
         for product_id in sorter.expired_products.keys():
-            ent_cert = sorter.expired_products[product_id]
-            product = sorter.all_products[product_id].getProduct()
-            self.invalid_store.add_map({
-                'active': False,
-                'product_name': product.getName(),
-                'contract': ent_cert.getOrder().getNumber(),
-                # is end_date when the cert expires or the orders end date? is it differnt?
-                'end_date': '%s' % self.format_date(ent_cert.validRange().end()),
-                'entitlement_id': ent_cert.serialNumber(),
-                'entitlement': ent_cert,
-                'product_id': product.getHash(),
-                'align': 0.0
-            })
+            ent_certs = sorter.expired_products[product_id]
+            for ent_cert in ent_certs:
+                product = sorter.all_products[product_id].getProduct()
+                self.invalid_store.add_map({
+                        'active': False,
+                        'product_name': product.getName(),
+                        'contract': ent_cert.getOrder().getNumber(),
+                        # is end_date when the cert expires or the orders end date? is it differnt?
+                        'end_date': '%s' % self.format_date(ent_cert.validRange().end()),
+                        'entitlement_id': ent_cert.serialNumber(),
+                        'entitlement': ent_cert,
+                        'product_id': product.getHash(),
+                        'align': 0.0
+                        })
 
     def _display_subscriptions(self):
         """
