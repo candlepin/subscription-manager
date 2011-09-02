@@ -74,6 +74,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         machine_type_col = MachineTypeColumn(self.store['virt_only'])
         self.top_view.append_column(machine_type_col)
 
+        self.add_text_column(_('Available Subscriptions'), 'available')
+
         multi_entitle_col = MultiEntitlementColumn(self.store['multi-entitlement'])
         self.top_view.append_column(multi_entitle_col)
 
@@ -84,8 +86,6 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.top_view.append_column(quantity_column)
 
         self.edit_quantity_label.set_label(quantity_column.get_column_legend_text())
-
-        self.add_text_column(_('Available Subscriptions'), 'available')
 
         # Ensure all cells are colored according the the store.
         set_background_model_index(self.top_view, self.store['background'])
