@@ -117,16 +117,20 @@ def getInstalledProductStatus(product_directory=None,
     #
     # deal with products we have entitlement certs but no product cert
     #
-    for certs in sorter.not_installed_products.itervalues():
+    for productHash, certs in sorter.not_installed_products.iteritems():
         for cert in certs:
             for product in cert.getProducts():
-                data = (product.getName(),
-                        _("Not Installed"),
-                        formatDate(cert.validRange().end()),
-                        cert.serialNumber(),
-                        cert.getOrder().getContract(),
-                        cert.getOrder().getAccountNumber())
-                product_status.append(data)
+                if product.getHash() == productHash:
+                    # These certs may be bundles which contain both installed
+                    # and not installed products. Only show not installed
+                    data = (product.getName(),
+                            _("Not Installed"),
+                            formatDate(cert.validRange().end()),
+                            cert.serialNumber(),
+                            cert.getOrder().getContract(),
+                            cert.getOrder().getAccountNumber())
+                    product_status.append(data)
+                    break
 
     #
     # add in any partially entitled products
@@ -146,19 +150,19 @@ def getInstalledProductStatus(product_directory=None,
     #
     # add the valid products, excluding the partially valid ones
     #
-    for certs in sorter.valid_products.itervalues():
+    for productHash, certs in sorter.valid_products.iteritems():
         for cert in certs:
-            eproducts = cert.getProducts()
-            for product in eproducts:
-                if product.getHash() not in sorter.partially_valid_products:
-                    status = map_status(cert.valid())
+            for product in cert.getProducts():
+                if product.getHash() == productHash:
+                    if product.getHash() not in sorter.partially_valid_products:
+                        status = map_status(cert.valid())
 
-                    data = (product.getName(), status,
-                            formatDate(cert.validRange().end()),
-                            cert.serialNumber(),
-                            cert.getOrder().getContract(),
-                            cert.getOrder().getAccountNumber())
-                    product_status.append(data)
+                        data = (product.getName(), status,
+                                formatDate(cert.validRange().end()),
+                                cert.serialNumber(),
+                                cert.getOrder().getContract(),
+                                cert.getOrder().getAccountNumber())
+                        product_status.append(data)
 
     #
     # add in any products that we have installed but don't have

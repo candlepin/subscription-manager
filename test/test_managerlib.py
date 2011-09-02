@@ -344,6 +344,48 @@ class InstalledProductStatusTests(unittest.TestCase):
 
         self.assertEquals(2, len(product_status))
 
+    def test_one_subscription_with_bundled_products_lists_once(self):
+        product1 = StubProduct("product1")
+        product2 = StubProduct("product2")
+        product3 = StubProduct("product3")
+        product_directory = StubCertificateDirectory([
+            StubProductCertificate(product1)])
+        entitlement_directory = StubCertificateDirectory([
+            StubEntitlementCertificate(product1, [product2, product3])
+        ])
+
+        product_status = getInstalledProductStatus(product_directory,
+                entitlement_directory)
+
+        self.assertEquals(3, len(product_status))
+        self.assertEquals("product3", product_status[0][0])
+        self.assertEquals("Not Installed", product_status[0][1])
+        self.assertEquals("product2", product_status[1][0])
+        self.assertEquals("Not Installed", product_status[1][1])
+        self.assertEquals("product1", product_status[2][0])
+        self.assertEquals("Subscribed", product_status[2][1])
+
+    def test_one_subscription_with_bundled_products_lists_once_part_two(self):
+        product1 = StubProduct("product1")
+        product2 = StubProduct("product2")
+        product3 = StubProduct("product3")
+        product_directory = StubCertificateDirectory([
+            StubProductCertificate(product1), StubProductCertificate(product2)])
+        entitlement_directory = StubCertificateDirectory([
+            StubEntitlementCertificate(product1, [product2, product3])
+        ])
+
+        product_status = getInstalledProductStatus(product_directory,
+                entitlement_directory)
+
+        self.assertEquals(3, len(product_status))
+        self.assertEquals("product3", product_status[0][0])
+        self.assertEquals("Not Installed", product_status[0][1])
+        self.assertEquals("product2", product_status[1][0])
+        self.assertEquals("Subscribed", product_status[1][1])
+        self.assertEquals("product1", product_status[2][0])
+        self.assertEquals("Subscribed", product_status[2][1])
+
 
 class TestGetConsumedProductEntitlement(unittest.TestCase):
     def test_emtpy_ent_dir(self):
