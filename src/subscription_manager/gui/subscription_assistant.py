@@ -148,46 +148,46 @@ class SubscriptionAssistant(widgets.GladeWidget):
             'available_subscriptions': str,
             'quantity_to_consume': int,
             'pool_id': str,
-            'stacking_id': str,
             'multi-entitlement': bool,
             'virt_only': bool,
             'background': str
         }
 
-        self.subscriptions_store = storage.MappedListStore(subscriptions_type_map)
+        self.subscriptions_store = storage.MappedTreeStore(subscriptions_type_map)
         self.subscriptions_treeview = MappedListTreeView(self.subscriptions_store)
         self.subscriptions_treeview.get_accessible().set_name(_("Subscription List"))
         # Disable automatic striping. This is to allow consecutive rows of the
         # same color for stacking groups.
         self.subscriptions_treeview.set_rules_hint(False)
 
-        column = widgets.MachineTypeColumn(self.subscriptions_store['virt_only'],
-                                           self.subscriptions_store['multi-entitlement'])
-        self.subscriptions_treeview.append_column(column)
-
         self.subscriptions_treeview.add_column(_('Subscription'),
                 self.subscriptions_store['product_name'], expand=True)
 
-        self.subscriptions_treeview.add_column(_("Stacking ID"),
-                                               self.subscriptions_store['stacking_id'],
-                                               expand=False)
+        column = widgets.MachineTypeColumn(self.subscriptions_store['virt_only'])
+        self.subscriptions_treeview.append_column(column)
 
         self.subscriptions_treeview.add_column(_("Available Subscriptions"),
                 self.subscriptions_store['available_subscriptions'], expand=False)
 
+        column = widgets.MultiEntitlementColumn(
+                self.subscriptions_store['multi-entitlement'])
+        self.subscriptions_treeview.append_column(column)
+
         # Set up editable quantity column.
-        self.quantity_renderer = gtk.CellRendererSpin()
-        self.quantity_renderer.set_property("adjustment",
-            gtk.Adjustment(lower=1, upper=100, step_incr=1))
-        self.subscriptions_treeview.add_editable_column(_("Quantity"),
-                self.subscriptions_store['quantity_to_consume'], self.quantity_renderer,
-                self._quantity_changed)
+        quantity_col = widgets.QuantitySelectionColumn(_("Quantity"),
+                                        self.subscriptions_store['quantity_to_consume'],
+                                        self.subscriptions_store['multi-entitlement'])
+        self.subscriptions_treeview.append_column(quantity_col)
 
         self.subscriptions_treeview.set_model(self.subscriptions_store)
         self.subscriptions_treeview.get_selection().connect('changed',
                 self._on_subscription_selection)
         set_background_model_index(self.subscriptions_treeview,
                                    self.subscriptions_store['background'])
+
+        # Connect row expansion/collapse callback
+        self.subscriptions_treeview.connect("row_activated",
+                                widgets.expand_collapse_on_row_activated_callback)
 
         self.subscriptions_window.add(self.subscriptions_treeview)
         self.subscriptions_treeview.show()
@@ -214,17 +214,6 @@ class SubscriptionAssistant(widgets.GladeWidget):
 
         self.pb = None
         self.timer = None
-
-    def _quantity_changed(self, renderer, path, new_text):
-        """ Handles when a quantity is changed in the cell """
-        try:
-            new_quantity = int(new_text)
-            # iter_ref is a terrible name, but iter is a keyword
-            iter_ref = self.subscriptions_store.get_iter(path)
-            self.subscriptions_store.set_value(iter_ref, self.subscriptions_store['quantity_to_consume'], new_quantity)
-        except ValueError:
-            # Do nothing... The value entered in the grid will be reset.
-            pass
 
     def show(self):
         """
@@ -374,19 +363,20 @@ class SubscriptionAssistant(widgets.GladeWidget):
 
         # installed and invalid
         for product_id in sorter.expired_products.keys():
-            ent_cert = sorter.expired_products[product_id]
-            product = sorter.all_products[product_id].getProduct()
-            self.invalid_store.add_map({
-                'active': False,
-                'product_name': product.getName(),
-                'contract': ent_cert.getOrder().getNumber(),
-                # is end_date when the cert expires or the orders end date? is it differnt?
-                'end_date': '%s' % self.format_date(ent_cert.validRange().end()),
-                'entitlement_id': ent_cert.serialNumber(),
-                'entitlement': ent_cert,
-                'product_id': product.getHash(),
-                'align': 0.0
-            })
+            ent_certs = sorter.expired_products[product_id]
+            for ent_cert in ent_certs:
+                product = sorter.all_products[product_id].getProduct()
+                self.invalid_store.add_map({
+                        'active': False,
+                        'product_name': product.getName(),
+                        'contract': ent_cert.getOrder().getNumber(),
+                        # is end_date when the cert expires or the orders end date? is it differnt?
+                        'end_date': '%s' % self.format_date(ent_cert.validRange().end()),
+                        'entitlement_id': ent_cert.serialNumber(),
+                        'entitlement': ent_cert,
+                        'product_id': product.getHash(),
+                        'align': 0.0
+                        })
 
     def _display_subscriptions(self):
         """
@@ -416,6 +406,12 @@ class SubscriptionAssistant(widgets.GladeWidget):
         sorter = MergedPoolsStackingGroupSorter(merged_pools)
         for group_idx, group in enumerate(sorter.groups):
             bg_color = get_cell_background_color(group_idx)
+            iter = None
+            if group.name:
+                iter = self.subscriptions_store.add_map(None,
+                                                        self._get_parent_entry(group.name,
+                                                                               bg_color))
+
             for entry in group.entitlements:
                 quantity = entry.quantity
                 if quantity < 0:
@@ -428,7 +424,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
                 default_quantity_calculator = \
                     QuantityDefaultValueCalculator(self.facts, self.entitlement_dir.list())
 
-                self.subscriptions_store.add_map({
+                self.subscriptions_store.add_map(iter, {
                     'product_name': entry.product_name,
                     'total_contracts': len(entry.pools),
                     'total_subscriptions': entry.quantity,
@@ -438,8 +434,22 @@ class SubscriptionAssistant(widgets.GladeWidget):
                     'multi-entitlement': allows_multi_entitlement(pool),
                     'virt_only': PoolWrapper(pool).is_virt_only(),
                     'background': bg_color,
-                    'stacking_id': group.name
                 })
+        # Ensure that the tree is fully expanded
+        self.subscriptions_treeview.expand_all()
+
+    def _get_parent_entry(self, name, bg_color):
+        return {
+            'product_name': name,
+            'total_contracts': 0,
+            'total_subscriptions': 0,
+            'available_subscriptions': '',
+            'quantity_to_consume': 0,
+            'pool_id': '',
+            'multi-entitlement': False,
+            'virt_only': False,
+            'background': bg_color,
+        }
 
     def _get_selected_product_ids(self):
         """
@@ -519,17 +529,12 @@ class SubscriptionAssistant(widgets.GladeWidget):
         if not tree_iter:
             return
 
-        should_set_editable = model.get_value(tree_iter,
-                                    self.subscriptions_store['multi-entitlement'])
-        # Only enable quantity if subscription is multi-entitlement capable
-        self.quantity_renderer.set_property("editable", should_set_editable)
-
         self._update_sub_details(model, tree_iter)
 
     def _update_sub_details(self, model, selected_tree_iter):
         """ Shows details for the current selected pool. """
-
-        if selected_tree_iter:
+        has_children = model.iter_n_children(selected_tree_iter) > 0
+        if not has_children and selected_tree_iter:
             product_name = model.get_value(selected_tree_iter, self.subscriptions_store['product_name'])
             pool_id = model.get_value(selected_tree_iter, self.subscriptions_store['pool_id'])
             provided = self.pool_stash.lookup_provided_products(pool_id)

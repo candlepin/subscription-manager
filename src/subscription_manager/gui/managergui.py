@@ -434,7 +434,7 @@ class MainWindow(widgets.GladeWidget):
         if managerlib.is_registered_with_classic():
             prompt = messageWindow.ContinueDialog(
                     linkify(get_branding().REGISTERED_TO_OTHER_WARNING),
-                    self.main_window)
+                    self.main_window, _("System Already Registered"))
             prompt.connect('response', self._on_rhn_classic_response)
 
     def _on_rhn_classic_response(self, dialog, response):

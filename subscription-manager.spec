@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.7
+Version: 0.96.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -223,6 +223,26 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Aug 30 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.8-1
+- Fix issues with list --installed/consumed with deletion of certs
+  (alikins@redhat.com)
+- Display a dialog box when subscription import was successful.
+  (cduryee@redhat.com)
+- In the mysubs tab, title stacked groups by product name (jbowes@redhat.com)
+- Removed icons for virt/phys machines and replaced with text column
+  (mstead@redhat.com)
+- 730018: Update for new registered with rhn classic msg (jbowes@redhat.com)
+- 717629: Clear user credentials on registration dialog after register/cancel
+  (mstead@redhat.com)
+- 717405: Return to credentials dialog after cancelled registration.
+  (mstead@redhat.com)
+- 733658: Check if directory exists before listing files. (mstead@redhat.com)
+- Correction to config command remove logic. Changes for List Formatting and
+  Messages. (wpoteat@redhat.com)
+- Support "yellow" icon for partially covered products (cduryee@redhat.com)
+- Make cert_sorter show valid/partially_valid/unentitled mutually exclusive
+  (alikins@redhat.com)
+
 * Wed Aug 24 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.7-1
 - I18N update. (dgoodwin@redhat.com)
 - Add test case for entitlement certs with no products (alikins@redhat.com)

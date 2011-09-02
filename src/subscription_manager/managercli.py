@@ -21,7 +21,6 @@ import sys
 import logging
 import socket
 import getpass
-import constants
 import dbus
 import datetime
 from time import strftime, strptime, localtime
@@ -30,6 +29,7 @@ from M2Crypto import SSL
 
 import gettext
 from subscription_manager.jsonwrapper import PoolWrapper
+from subscription_manager import constants
 _ = gettext.gettext
 
 import rhsm.config
@@ -88,31 +88,27 @@ def handle_exception(msg, ex):
         systemExit(-1, ex)
 
 
-def autosubscribe(cp, consumer, certlib, disable_product_upload=False):
+def autosubscribe(cp, consumer, disable_product_upload=False):
     """
     This is a wrapper for bind/bindByProduct. Eventually, we will exclusively
     use bind, but for now, we support both.
     """
-    # try to auomatically bind products
-    products = managerlib.getInstalledProductHashMap()
     try:
         if disable_product_upload:
             cp.bind(consumer) # new style
         else:
+            products = managerlib.getInstalledProductHashMap()
             cp.bindByProduct(consumer, products.values())
-        certlib.update()
 
         installed_status = managerlib.getInstalledProductStatus()
 
-        log.info("Automatically subscribed to products: %s " \
-                % ", ".join(products.keys()))
+        log.info("Attempted to auto-subscribe/heal the system.")
         print _("Installed Product Current Status:")
         for prod_status in installed_status:
             print (constants.product_status % (prod_status[0], prod_status[1]))
     except Exception, e:
+        log.warning("Error during auto-subscribe.")
         log.exception(e)
-        log.warning("Warning: Unable to auto subscribe to %s" \
-                % ", ".join(products.keys()))
 
 
 class CliCommand(object):
@@ -171,6 +167,9 @@ class CliCommand(object):
             print (_("Consumer not registered. Please register using --username and --password"))
             sys.exit(-1)
 
+    def require_connection(self):
+        return True
+
     def main(self, args=None):
 
         # In testing we sometimes specify args, otherwise use the default:
@@ -207,13 +206,16 @@ class CliCommand(object):
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
 
-        self.cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
-                                           proxy_hostname=self.proxy_hostname,
-                                           proxy_port=self.proxy_port,
-                                           proxy_user=self.proxy_user,
-                                           proxy_password=self.proxy_password)
+        if self.require_connection():
+            self.cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
+                                               proxy_hostname=self.proxy_hostname,
+                                               proxy_port=self.proxy_port,
+                                               proxy_user=self.proxy_user,
+                                               proxy_password=self.proxy_password)
 
-        self.certlib = CertLib(uep=self.cp)
+            self.certlib = CertLib(uep=self.cp)
+        else:
+            self.cp = None
 
         # do the work, catch most common errors here:
         try:
@@ -284,7 +286,8 @@ class CleanCommand(CliCommand):
         shortdesc = _("Remove all local consumer and subscription data without effecting the server")
         desc = shortdesc
 
-        CliCommand.__init__(self, "clean", usage, shortdesc, desc)
+        CliCommand.__init__(self, "clean", usage, shortdesc, desc,
+                            ent_dir=ent_dir, prod_dir=prod_dir)
 
     def _add_common_options(self):
         # remove these options as per bz #664581
@@ -610,7 +613,8 @@ class RegisterCommand(UserPassCommand):
 
         if self.options.autosubscribe:
             autosubscribe(admin_cp, consumer['uuid'], self.certlib)
-        if (self.options.consumerid or self.options.activation_keys):
+        if (self.options.consumerid or self.options.activation_keys or
+                self.options.autosubscribe):
             self.certlib.update()
 
         self._request_validity_check()
@@ -816,7 +820,7 @@ class SubscribeCommand(CliCommand):
                             systemExit(-1, re.msg)  # some other error.. don't try again
             # must be auto
             else:
-                autosubscribe(self.cp, consumer_uuid, self.certlib, disable_product_upload=True)
+                autosubscribe(self.cp, consumer_uuid, disable_product_upload=True)
 
             result = self.certlib.update()
             if result[1]:
@@ -977,6 +981,9 @@ class ReposCommand(CliCommand):
         CliCommand.__init__(self, "repos", usage, shortdesc, desc,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
+    def require_connection(self):
+        return False
+
     def _add_common_options(self):
         self.parser.add_option("--list", action="store_true",
                                help=_("list the entitled repositories for this system"))
@@ -1008,7 +1015,7 @@ class ConfigCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog config [OPTIONS]"
-        shortdesc = _("List the configuration which this machine is using")
+        shortdesc = _("List or set the configuration which this machine is using")
         desc = shortdesc
         CliCommand.__init__(self, "config", usage, shortdesc, desc,
                             ent_dir=ent_dir, prod_dir=prod_dir)

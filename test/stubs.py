@@ -130,12 +130,13 @@ class StubOrder(object):
 
     # Start/end are formatted strings, not actual datetimes.
     def __init__(self, start, end, name="STUB NAME", quantity=None,
-                 stacking_id=None, socket_limit=1, sku=""):
+                 stacking_id=None, virt_only=None, socket_limit=1, sku=""):
         self.name = name
         self.start = start
         self.end = end
         self.quantity = quantity
         self.stacking_id = stacking_id
+        self.virt_only = virt_only
         self.socket_limit = socket_limit
         self.sku = sku
 
@@ -166,6 +167,8 @@ class StubOrder(object):
     def getSku(self):
         return self.sku
 
+    def getVirtOnly(self):
+        return self.virt_only
 
 class StubContent(Content):
 

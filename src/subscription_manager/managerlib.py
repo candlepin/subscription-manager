@@ -26,7 +26,7 @@ import logging
 from datetime import datetime, tzinfo, timedelta
 
 from rhsm.config import initConfig
-from rhsm.certificate import EntitlementCertificate
+from rhsm.certificate import EntitlementCertificate, Key
 
 from subscription_manager import certlib, certdirectory
 from subscription_manager.certlib import system_log as inner_system_log
@@ -131,16 +131,16 @@ def getInstalledProductStatus(product_directory=None,
     #
     # add in any partially entitled products
     #
-    for product_id in sorter.partially_valid_products.iterkeys():
-        certs = sorter.valid_products[product_id]
-        for cert in certs:
-            for product in cert.getProducts():
+    for product_id in sorter.partially_valid_products:
+        for ent_cert in sorter.partially_valid_products[product_id]:
+            products =  ent_cert.getProducts()
+            for product in products:
                 data = (product.getName(),
                         _("Partially Subscribed"),
-                        formatDate(cert.validRange().end()),
-                        cert.serialNumber(),
-                        cert.getOrder().getContract(),
-                        cert.getOrder().getAccountNumber())
+                        formatDate(ent_cert.validRange().end()),
+                        ent_cert.serialNumber(),
+                        ent_cert.getOrder().getContract(),
+                        ent_cert.getOrder().getAccountNumber())
                 product_status.append(data)
 
     #
@@ -506,6 +506,10 @@ class MergedPoolsStackingGroupSorter(StackingGroupSorter):
     def _get_stacking_id(self, merged_pool):
         return PoolWrapper(merged_pool.pools[0]).get_stacking_id()
 
+    def _get_product_name(self, merged_pool):
+        return merged_pool.pools[0]['productName']
+
+
 class PoolStash(object):
     """
     Object used to fetch pools from the server, sort them into compatible,
@@ -729,7 +733,8 @@ class ImportFileExtractor(object):
         @return: True if valid, False otherwise.
         """
         ent_cert = EntitlementCertificate(self.get_cert_content())
-        if ent_cert.bogus():
+        ent_key = Key(self.get_key_content())
+        if ent_cert.bogus() or ent_key.bogus():
             return False
         return True
 
@@ -737,9 +742,7 @@ class ImportFileExtractor(object):
         """
         Write/copy cert to the entitlement cert dir.
         """
-        if not os.access(ENT_CONFIG_DIR, os.R_OK):
-            os.mkdir(ENT_CONFIG_DIR)
-
+        self._ensure_entitlement_dir_exists()
         dest_file_path = os.path.join(ENT_CONFIG_DIR, os.path.basename(self.path))
 
         # Write the key/cert content to new files
@@ -757,6 +760,10 @@ class ImportFileExtractor(object):
             new_file.write(content)
         finally:
             new_file.close()
+
+    def _ensure_entitlement_dir_exists(self):
+        if not os.access(ENT_CONFIG_DIR, os.R_OK):
+            os.mkdir(ENT_CONFIG_DIR)
 
     def _get_key_path_from_dest_cert_path(self, dest_cert_path):
         file_parts = os.path.splitext(dest_cert_path)

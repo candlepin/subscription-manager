@@ -22,7 +22,7 @@ _ = gettext.gettext
 import rhsm.config
 
 from subscription_manager.managerlib import ImportFileExtractor
-from subscription_manager.gui import widgets
+from subscription_manager.gui import widgets, messageWindow
 from subscription_manager.gui.utils import errorWindow
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -87,6 +87,8 @@ class ImportSubDialog(widgets.GladeWidget):
                           "Please check log file for more information."))
             return False
 
+        #if we get to this point, the import was successful
+        messageWindow.InfoDialog(_("Certificate import was successful."))
         self.certificate_chooser_button.unselect_all()
         self.main_dialog.hide()
 

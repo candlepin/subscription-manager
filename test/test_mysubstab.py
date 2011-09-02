@@ -79,7 +79,8 @@ class MySubscriptionsTabTest(unittest.TestCase):
         self.assertFalse(entry['is_group_row']);
 
     def _assert_group_entry(self, entry):
-        self.assertEquals(str(self.cert1.getOrder().getStackingId()), entry['subscription'])
+        self.assertEquals(self.cert1.getProduct().getName(),
+                          entry['subscription'])
         self.assertFalse(entry.has_key('start_date'))
         self.assertFalse(entry.has_key('expiration_date'))
         self.assertFalse(entry.has_key('installed_text'))

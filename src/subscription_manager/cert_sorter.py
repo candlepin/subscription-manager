@@ -72,20 +72,30 @@ class CertSorter(object):
         log.debug("Sorting product and entitlement cert status for: %s" %
                 on_date)
 
-        self._populate_all_products()
-
-        self._scan_entitlement_certs()
-
-        self._scan_ent_cert_stackable_products()
-
-        self._scan_for_unentitled_products()
-
-        self._remove_expired_if_valid_elsewhere()
+        self.refresh()
 
         log.debug("valid entitled products: %s" % self.valid_products.keys())
         log.debug("expired entitled products: %s" % self.expired_products.keys())
         log.debug("partially entitled products: %s" % self.partially_valid_products.keys())
         log.debug("unentitled products: %s" % self.unentitled_products.keys())
+
+
+    def refresh(self):
+        refresh_dicts = [self.all_products,
+                         self.unentitled_products,
+                         self.expired_products,
+                         self.partially_valid_products,
+                         self.valid_products,
+                         self.not_installed_products]
+
+        for d in refresh_dicts:
+            d.clear()
+
+        self._populate_all_products()
+        self._scan_entitlement_certs()
+        self._scan_ent_cert_stackable_products()
+        self._scan_for_unentitled_products()
+        self._remove_expired_if_valid_elsewhere()
 
     def _populate_all_products(self):
         """ Build the dict of all installed products. """
@@ -109,7 +119,8 @@ class CertSorter(object):
             else:
                 self.expired_entitlement_certs.append(ent_cert)
                 log.debug("expired:")
-                log.debug(ent_cert.getProduct().getHash())
+                if ent_cert.getProduct():
+                    log.debug(ent_cert.getProduct().getHash())
                 self._scan_ent_cert_products(ent_cert, self.expired_products)
 
     def _scan_ent_cert_products(self, ent_cert, product_dict, uninstalled_dict=None):
@@ -171,8 +182,11 @@ class CertSorter(object):
                 if socket_total >= system_sockets:
                     stackable_product_info['valid'] = True
                 else:
-                    self.partially_valid_products[product_id] = stackable_product_info['product']
-                    del self.valid_products[product_id]
+                    if product_id not in self.partially_valid_products:
+                        self.partially_valid_products[product_id] = []
+                    self.partially_valid_products[product_id].append(stackable_product_info['ent_cert'])
+                    if product_id in self.valid_products:
+                        del self.valid_products[product_id]
 
 
     def _scan_for_unentitled_products(self):
@@ -180,8 +194,8 @@ class CertSorter(object):
         # must be completely unentitled
         for product_id in self.all_products.keys():
             if (product_id in self.valid_products) or (product_id in self.expired_products) \
-               or (product_id in self.partially_valid_products):
-                   continue
+                    or (product_id in self.partially_valid_products):
+                continue
             self.unentitled_products[product_id] = self.all_products[product_id]
 
     def _remove_expired_if_valid_elsewhere(self):
@@ -205,7 +219,8 @@ class StackingGroupSorter(object):
             stacking_id = self._get_stacking_id(entitlement)
             if stacking_id:
                 if stacking_id not in stacking_groups:
-                    group = EntitlementGroup(entitlement, str(stacking_id))
+                    group = EntitlementGroup(entitlement,
+                            self._get_product_name(entitlement))
                     self.groups.append(group)
                     stacking_groups[stacking_id] = group
                 else:
@@ -216,6 +231,11 @@ class StackingGroupSorter(object):
 
     def _get_stacking_id(self, entitlement):
         raise NotImplementedError("Subclasses must implement: _get_stacking_id")
+
+    def _get_product_name(self, entitlement):
+        raise NotImplementedError(
+                "Subclasses must implement: _get_product_name")
+
 
 class EntitlementGroup(object):
     def __init__(self, entitlement, name=''):
@@ -232,3 +252,6 @@ class EntitlementCertStackingGroupSorter(StackingGroupSorter):
 
     def _get_stacking_id(self, cert):
         return cert.getOrder().getStackingId()
+
+    def _get_product_name(self, cert):
+        return cert.getProduct().getName()

@@ -435,11 +435,19 @@ class ExtractorStub(managerlib.ImportFileExtractor):
 
     def __init__(self, content, file_path="test/file/path"):
         self.content = content
+        self.writes = []
         managerlib.ImportFileExtractor.__init__(self, file_path)
 
     # Stub out any file system access
     def _read(self, file_path):
         return self.content
+
+    def _write_file(self, target, content):
+        self.writes.append((target, content))
+
+    def _ensure_entitlement_dir_exists(self):
+        # Do nothing but stub out the dir check to avoid file system access.
+        pass
 
 class TestImportFileExtractor(unittest.TestCase):
 
@@ -477,49 +485,39 @@ class TestImportFileExtractor(unittest.TestCase):
         extractor = ExtractorStub(EXPECTED_KEY_CONTENT, file_path="12345.pem")
         self.assertFalse(extractor.verify_valid_entitlement())
 
+    def test_verify_valid_entitlement_for_no_key(self):
+        extractor = ExtractorStub(EXPECTED_CERT_CONTENT, file_path="12345.pem")
+        self.assertFalse(extractor.verify_valid_entitlement())
+
     def test_verify_valid_entitlement_for_no_cert_content(self):
         extractor = ExtractorStub("", file_path="12345.pem")
         self.assertFalse(extractor.verify_valid_entitlement())
 
     def test_write_key_and_cert(self):
-        writes = []
-
-        def write_file_override(target, content):
-            writes.append((target, content))
-
         expected_file_prefix = "12345"
         expected_cert_file = expected_file_prefix + ".pem"
         expected_key_file = expected_file_prefix + "-key.pem"
         extractor = ExtractorStub(EXPECTED_CONTENT, file_path=expected_cert_file)
-        extractor._write_file = write_file_override
-
         extractor.write_to_disk()
 
-        self.assertEquals(2, len(writes))
+        self.assertEquals(2, len(extractor.writes))
 
-        write_one = writes[0]
+        write_one = extractor.writes[0]
         self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
         self.assertEquals(EXPECTED_CERT_CONTENT, write_one[1])
 
-        write_one = writes[1]
+        write_one = extractor.writes[1]
         self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_key_file), write_one[0])
         self.assertEquals(EXPECTED_KEY_CONTENT, write_one[1])
 
     def test_write_cert_only(self):
-        writes = []
-
-        def write_file_override(target, content):
-            writes.append((target, content))
-
         expected_cert_file = "12345.pem"
         extractor = ExtractorStub(EXPECTED_CERT_CONTENT, file_path=expected_cert_file)
-        extractor._write_file = write_file_override
-
         extractor.write_to_disk()
 
-        self.assertEquals(1, len(writes))
+        self.assertEquals(1, len(extractor.writes))
 
-        write_one = writes[0]
+        write_one = extractor.writes[0]
         self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
         self.assertEquals(EXPECTED_CERT_CONTENT, write_one[1])
 
@@ -546,7 +544,7 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
 
         self.assertEquals(1, len(sorter.groups))
         group = sorter.groups[0]
-        self.assertEquals(str(expected_stacking_id), group.name)
+        self.assertEquals("Test Prod 1", group.name)
         self.assertEquals(1, len(group.entitlements))
         self.assertEquals(pools[0], group.entitlements[0])
 
@@ -563,7 +561,7 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
         self.assertEquals(1, len(sorter.groups))
         group = sorter.groups[0]
 
-        self.assertEquals(str(expected_stacking_id), group.name)
+        self.assertEquals("Test Prod 2", group.name)
         self.assertEquals(2, len(group.entitlements))
 
         self.assertEquals(pools[0], group.entitlements[0])
@@ -603,7 +601,7 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
         group1 = sorter.groups[0]
         group2 = sorter.groups[1]
 
-        self.assertEquals(str(expected_stacking_id), group1.name)
+        self.assertEquals("Test Prod 2", group1.name)
         self.assertEquals(1, len(group1.entitlements))
         self.assertEquals(pools[0], group1.entitlements[0])
 

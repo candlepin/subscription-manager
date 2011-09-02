@@ -239,8 +239,12 @@ class SubDetailsWidget(GladeWidget):
         # Clean out contract and date widgets if not showing contract info
         if not show_contract:
             def destroy(widget_prefix):
-                self.glade.get_widget(widget_prefix + "_label").destroy()
-                self.glade.get_widget(widget_prefix + "_text").destroy()
+                try:
+                    self.glade.get_widget(widget_prefix + "_label").destroy()
+                    self.glade.get_widget(widget_prefix + "_text").destroy()
+                except AttributeError:
+                    raise Exception('Could not find widgets %s_label or %s_text \
+                                     to destroy' % (widget_prefix, widget_prefix))
 
             destroy('contract_number')
             destroy('start_date')
@@ -249,19 +253,20 @@ class SubDetailsWidget(GladeWidget):
             destroy('provides_management')
             destroy('support_level')
             destroy('support_type')
+            destroy('virt_only')
             destroy("stacking_id")
         else:
             self.pull_widgets(["contract_number_text", "start_date_text",
                                "expiration_date_text", "account_text",
                                "provides_management_text", "stacking_id_text",
                                "support_level_text",
-                               "support_type_text"])
+                               "support_type_text", "virt_only_text"])
 
         self.bundled_products = ProductsTable(self.products_view)
 
     def show(self, name, contract=None, start=None, end=None, account=None,
             management=None, support_level=None, stacking_id=None, support_type=None,
-            products=[], highlight=None):
+            virt_only=None, products=[], highlight=None):
         """
         Show subscription details.
 
@@ -289,6 +294,7 @@ class SubDetailsWidget(GladeWidget):
             self._set(self.stacking_id_text, stacking_id)
             self._set(self.support_level_text, support_level)
             self._set(self.support_type_text, support_type)
+            self._set(self.virt_only_text, virt_only)
 
         self.bundled_products.clear()
         for product in products:
@@ -312,6 +318,7 @@ class SubDetailsWidget(GladeWidget):
             self._set(self.stacking_id_text, "")
             self._set(self.support_level_text, "")
             self._set(self.support_type_text, "")
+            self._set(self.virt_only_text, "")
 
     def get_widget(self):
         """ Returns the widget to be packed into a parent window. """
@@ -479,53 +486,127 @@ class DatePicker(gtk.HBox):
         self._destroy()
 
 
-class MachineTypeColumn(gtk.TreeViewColumn):
-    prefix = os.path.dirname(__file__)
-    PHYSICAL_MACHINE_IMG_PATH = os.path.join(prefix, "data/icons/system-physical-symbolic.svg")
-    VIRT_MACHINE_IMG_PATH = os.path.join(prefix, "data/icons/system-virtual-symbolic.svg")
-    PHYSICAL_MACHINE_PIXBUF = gtk.gdk.pixbuf_new_from_file_at_size(PHYSICAL_MACHINE_IMG_PATH, 16, 16)
-    VIRTUAL_MACHINE_PIXBUF = gtk.gdk.pixbuf_new_from_file_at_size(VIRT_MACHINE_IMG_PATH, 16, 16)
+class ToggleTextColumn(gtk.TreeViewColumn):
+    """
+    A gtk.TreeViewColumn that toggles between two text values based on a boolean
+    value in the store.
+    """
+    def __init__(self, column_title, model_idx):
+        gtk.TreeViewColumn.__init__(self, column_title)
+        self.model_idx = model_idx
+        self.renderer = gtk.CellRendererText()
+        self.renderer.set_property('xalign', 0.5)
+        self.pack_start(self.renderer, False)
+        self.set_cell_data_func(self.renderer, self._render_cell)
+
+    def _render_cell(self, column, cell_renderer, tree_model, iter):
+        # Clear the cell if we are a parent row.
+        if tree_model.iter_n_children(iter) > 0:
+            cell_renderer.set_property("text", "")
+            return
+
+        bool_val = tree_model.get_value(iter, self.model_idx)
+        text = self._get_false_text()
+        if bool_val:
+            text = self._get_true_text()
+        cell_renderer.set_property("text", text)
+
+    def _get_true_text(self):
+        raise NotImplementedError("Subclasses must implement _get_true_text(self).")
+
+    def _get_false_text(self):
+        raise NotImplementedError("Subclasses must implement _get_false_text(self).")
+
+class MultiEntitlementColumn(ToggleTextColumn):
     MULTI_ENTITLEMENT_STRING = "*"
     NOT_MULTI_ENTITLEMENT_STRING = ""
 
-    def __init__(self, virt_only_model_idx, multi_entitle_model_idx):
+    def __init__(self, multi_entitle_model_idx):
         """
-        A table colum that renders virtual/physical machine icons along side a text value.
+        A table column that renders an * character if model specifies a
+        multi-entitled attribute to be True
 
-        @param virt_only_model_idx: the model index containing a bool value used to
-                                    determine which icon to show.
         @param multi_entitle_model_idx: the model index containing a bool value used to
                                         mark the row with an *.
         """
-        gtk.TreeViewColumn.__init__(self, "")
+        ToggleTextColumn.__init__(self, "", multi_entitle_model_idx)
+        self.renderer.set_property('xpad', 2)
+        self.renderer.set_property('weight', 800)
 
-        # Add the machine type image.
-        self.image_renderer = gtk.CellRendererPixbuf()
-        self.image_renderer.set_property('xalign', 0.0)
-        self.pack_start(self.image_renderer, False)
-        self.set_cell_data_func(self.image_renderer, self.render_machine_type_icon)
+    def _get_true_text(self):
+        return self.MULTI_ENTITLEMENT_STRING
 
-        # Add the asterisk denoting multi-entitlement
-        self.asterisk_renderer = gtk.CellRendererText()
-        self.asterisk_renderer.set_property('xalign', 0.0)
-        self.asterisk_renderer.set_property('weight', 800)
-        self.pack_start(self.asterisk_renderer, False)
-        self.set_cell_data_func(self.asterisk_renderer, self.render_as_multi_entitlement)
+    def _get_false_text(self):
+        return self.NOT_MULTI_ENTITLEMENT_STRING
 
-        self.virt_only_idx = virt_only_model_idx
-        self.multi_entitlement_idx = multi_entitle_model_idx
 
-    def render_machine_type_icon(self, column, cell_renderer, tree_model, iter):
-        virt_only = tree_model.get_value(iter, self.virt_only_idx)
+class MachineTypeColumn(ToggleTextColumn):
 
-        if virt_only:
-            cell_renderer.set_property("pixbuf", self.VIRTUAL_MACHINE_PIXBUF)
-        else:
-            cell_renderer.set_property("pixbuf", self.PHYSICAL_MACHINE_PIXBUF)
+    PHYSICAL_MACHINE = _("Physical")
+    VIRTUAL_MACHINE = _("Virtual")
 
-    def render_as_multi_entitlement(self, column, cell_renderer, tree_model, iter):
-        multi_entitlement = tree_model.get_value(iter, self.multi_entitlement_idx)
-        text = self.NOT_MULTI_ENTITLEMENT_STRING
-        if multi_entitlement:
-            text = self.MULTI_ENTITLEMENT_STRING
-        cell_renderer.set_property("text", text)
+    def __init__(self, virt_only_model_idx):
+        ToggleTextColumn.__init__(self, "Type", virt_only_model_idx)
+
+    def _get_true_text(self):
+        return self.VIRTUAL_MACHINE
+
+    def _get_false_text(self):
+        return self.PHYSICAL_MACHINE
+
+
+class QuantitySelectionColumn(gtk.TreeViewColumn):
+    def __init__(self, column_title, quantity_store_idx, is_multi_entitled_store_idx,
+                 editable=True):
+        self.quantity_store_idx = quantity_store_idx
+        self.is_multi_entitled_store_idx = is_multi_entitled_store_idx
+
+        self.quantity_renderer = gtk.CellRendererSpin()
+        self.quantity_renderer.set_property("adjustment",
+            gtk.Adjustment(lower=1, upper=100, step_incr=1))
+        self.quantity_renderer.set_property("editable", editable)
+        self.quantity_renderer.connect("edited", self._on_edit)
+
+        gtk.TreeViewColumn.__init__(self, column_title, self.quantity_renderer,
+                                    text=self.quantity_store_idx)
+        self.set_cell_data_func(self.quantity_renderer, self._update_cell_based_on_data)
+
+    def _on_edit(self, renderer, path, new_text):
+        """
+        Handles when a quantity is changed in the cell. Stores new value in
+        model.
+        """
+        try:
+            model = self._get_model()
+            new_quantity = int(new_text)
+            iter = model.get_iter(path)
+            model.set_value(iter, self.quantity_store_idx, new_quantity)
+        except ValueError:
+            # Do nothing... The value entered in the grid will be reset.
+            pass
+
+    def _update_cell_based_on_data(self, column, cell_renderer, tree_model, iter):
+        # Clear the cell if we are a parent row.
+        if tree_model.iter_n_children(iter) > 0:
+            cell_renderer.set_property("text", "")
+
+        # Disable editor if not multi-entitled.
+        is_multi_entitled = tree_model.get_value(iter, self.is_multi_entitled_store_idx)
+        cell_renderer.set_property("editable", is_multi_entitled)
+
+    def _get_model(self):
+        return self.get_tree_view().get_model()
+
+
+
+def expand_collapse_on_row_activated_callback(treeview, path, view_column):
+    """
+    A gtk.TreeView callback allowing row expand/collapse on double-click or key
+    press (space, return, enter).
+    """
+    if treeview.row_expanded(path):
+        treeview.collapse_row(path)
+    else:
+        treeview.expand_row(path, True)
+
+    return True
