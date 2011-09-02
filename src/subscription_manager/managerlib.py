@@ -26,7 +26,7 @@ import logging
 from datetime import datetime, tzinfo, timedelta
 
 from rhsm.config import initConfig
-from rhsm.certificate import EntitlementCertificate
+from rhsm.certificate import EntitlementCertificate, Key
 
 from subscription_manager import certlib, certdirectory
 from subscription_manager.certlib import system_log as inner_system_log
@@ -733,7 +733,8 @@ class ImportFileExtractor(object):
         @return: True if valid, False otherwise.
         """
         ent_cert = EntitlementCertificate(self.get_cert_content())
-        if ent_cert.bogus():
+        ent_key = Key(self.get_key_content())
+        if ent_cert.bogus() or ent_key.bogus():
             return False
         return True
 

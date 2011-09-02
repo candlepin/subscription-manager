@@ -485,6 +485,10 @@ class TestImportFileExtractor(unittest.TestCase):
         extractor = ExtractorStub(EXPECTED_KEY_CONTENT, file_path="12345.pem")
         self.assertFalse(extractor.verify_valid_entitlement())
 
+    def test_verify_valid_entitlement_for_no_key(self):
+        extractor = ExtractorStub(EXPECTED_CERT_CONTENT, file_path="12345.pem")
+        self.assertFalse(extractor.verify_valid_entitlement())
+
     def test_verify_valid_entitlement_for_no_cert_content(self):
         extractor = ExtractorStub("", file_path="12345.pem")
         self.assertFalse(extractor.verify_valid_entitlement())
