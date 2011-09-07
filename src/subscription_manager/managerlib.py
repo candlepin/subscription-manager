@@ -747,7 +747,8 @@ class ImportFileExtractor(object):
         Write/copy cert to the entitlement cert dir.
         """
         self._ensure_entitlement_dir_exists()
-        dest_file_path = os.path.join(ENT_CONFIG_DIR, os.path.basename(self.path))
+        dest_file_path = os.path.join(ENT_CONFIG_DIR,
+                                      self._create_filename_from_cert_serial_number())
 
         # Write the key/cert content to new files
         log.debug("Writing certificate file: %s" % (dest_file_path))
@@ -772,6 +773,11 @@ class ImportFileExtractor(object):
     def _get_key_path_from_dest_cert_path(self, dest_cert_path):
         file_parts = os.path.splitext(dest_cert_path)
         return file_parts[0] + "-key" + file_parts[1]
+
+    def _create_filename_from_cert_serial_number(self):
+        ent_cert = EntitlementCertificate(self.get_cert_content())
+        return "%s.pem" % (ent_cert.serialNumber())
+
 
 def _sub_dict(datadict, subkeys, default=None):
     return dict([(k, datadict.get(k, default)) for k in subkeys])

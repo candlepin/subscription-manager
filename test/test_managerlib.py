@@ -27,6 +27,7 @@ from modelhelpers import *
 from subscription_manager import managerlib
 import stubs
 import rhsm
+from rhsm.certificate import EntitlementCertificate
 
 cfg = rhsm.config.initConfig()
 ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
@@ -119,6 +120,7 @@ IEYRTwKBgQCXpMJ2P0bomDQMeIou2CSGCuEMcx8NuTA9x4t6xrf6Hyv7O9K7+fr1
 ufxBTlg4v0B3xS1GgvATMY4hyk53o5PffmlRO03dbfpGK/rkTIPwFg==
 -----END RSA PRIVATE KEY-----"""
 
+EXPECTED_CERT = EntitlementCertificate(EXPECTED_CERT_CONTENT)
 
 class MergePoolsTests(unittest.TestCase):
 
@@ -535,25 +537,8 @@ class TestImportFileExtractor(unittest.TestCase):
         extractor = ExtractorStub("", file_path="12345.pem")
         self.assertFalse(extractor.verify_valid_entitlement())
 
-    def test_write_key_and_cert(self):
-        expected_file_prefix = "12345"
-        expected_cert_file = expected_file_prefix + ".pem"
-        expected_key_file = expected_file_prefix + "-key.pem"
-        extractor = ExtractorStub(EXPECTED_CONTENT, file_path=expected_cert_file)
-        extractor.write_to_disk()
-
-        self.assertEquals(2, len(extractor.writes))
-
-        write_one = extractor.writes[0]
-        self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
-        self.assertEquals(EXPECTED_CERT_CONTENT, write_one[1])
-
-        write_one = extractor.writes[1]
-        self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_key_file), write_one[0])
-        self.assertEquals(EXPECTED_KEY_CONTENT, write_one[1])
-
     def test_write_cert_only(self):
-        expected_cert_file = "12345.pem"
+        expected_cert_file = "%d.pem" % (EXPECTED_CERT.serialNumber())
         extractor = ExtractorStub(EXPECTED_CERT_CONTENT, file_path=expected_cert_file)
         extractor.write_to_disk()
 
@@ -562,6 +547,44 @@ class TestImportFileExtractor(unittest.TestCase):
         write_one = extractor.writes[0]
         self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
         self.assertEquals(EXPECTED_CERT_CONTENT, write_one[1])
+
+    def test_write_key_and_cert(self):
+        filename = "%d.pem" % (EXPECTED_CERT.serialNumber())
+        self._assert_correct_cert_and_key_files_generated_with_filename(filename)
+
+    def test_file_renamed_when_imported_with_serial_no_and_custom_extension(self):
+        filename = "%d.cert" % (EXPECTED_CERT.serialNumber())
+        self._assert_correct_cert_and_key_files_generated_with_filename(filename)
+
+    def test_file_renamed_when_imported_with_serial_no_and_no_extension(self):
+        filename = str(EXPECTED_CERT.serialNumber())
+        self._assert_correct_cert_and_key_files_generated_with_filename(filename)
+
+    def test_file_renamed_when_imported_with_custom_name_and_pem_extension(self):
+        filename = "entitlement.pem"
+        self._assert_correct_cert_and_key_files_generated_with_filename(filename)
+
+    def test_file_renamed_when_imported_with_custom_name_no_extension(self):
+        filename = "entitlement"
+        self._assert_correct_cert_and_key_files_generated_with_filename(filename)
+
+    def _assert_correct_cert_and_key_files_generated_with_filename(self, filename):
+        expected_file_prefix = "%d" % (EXPECTED_CERT.serialNumber())
+        expected_cert_file = expected_file_prefix + ".pem"
+        expected_key_file = expected_file_prefix + "-key.pem"
+
+        extractor = ExtractorStub(EXPECTED_CONTENT, file_path=filename)
+        extractor.write_to_disk()
+
+        self.assertEquals(2, len(extractor.writes))
+
+        write_one = extractor.writes[0]
+        self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
+        self.assertEquals(EXPECTED_CERT_CONTENT, write_one[1])
+
+        write_two = extractor.writes[1]
+        self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_key_file), write_two[0])
+        self.assertEquals(EXPECTED_KEY_CONTENT, write_two[1])
 
 class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
 
