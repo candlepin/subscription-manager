@@ -43,6 +43,8 @@ entitlements, certificates, and access to content.
 %install
 rm -rf %{buildroot}
 %{__python} setup.py install -O1 --skip-build --root %{buildroot}
+mkdir -p %{buildroot}%{_sysconfdir}/rhsm/ca
+install etc-conf/ca/*.pem %{buildroot}%{_sysconfdir}/rhsm/ca
 
 %clean
 rm -rf %{buildroot}
@@ -52,9 +54,12 @@ rm -rf %{buildroot}
 %doc README
 
 %dir %{python_sitelib}/rhsm
+%attr(755,root,root) %dir %{_sysconfdir}/rhsm
+%attr(755,root,root) %dir %{_sysconfdir}/rhsm/ca
 
 %{python_sitelib}/rhsm/*
 %{python_sitelib}/rhsm-*.egg-info
+%attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
 * Wed Sep 07 2011 James Bowes <jbowes@redhat.com> 0.96.11-1
