@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.8
+Version: 0.96.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -223,6 +223,34 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Sep 07 2011 James Bowes <jbowes@redhat.com> 0.96.9-1
+- 734880: Handle bundled certs in the installed produict status.
+  (bkearney@redhat.com)
+- Center the machine type column header. (mstead@redhat.com)
+- Move quantity column to the end. (mstead@redhat.com)
+- Center the Arch column header (mstead@redhat.com)
+- Center tree view table properties. (mstead@redhat.com)
+- Add '* Click to Adjust Quantity' label to places allowing editable
+  subscription quantity. (mstead@redhat.com)
+- managerlib was expecting a single ent_cert, but we return a list
+  (alikins@redhat.com)
+- Add the coverage tool detritus to .gitignore (alikins@redhat.com)
+- Only autoheal when required (cduryee@redhat.com)
+- 735226: Importing should fail without a valid key and cert
+  (bkearney@redhat.com)
+- Add a "refresh" method to cert_sorter (cduryee@redhat.com)
+- Double click or button press (enter, return, space) on row will
+  expand/collapse row. (mstead@redhat.com)
+- Update to All Available Subscriptions tab to put stacked subscriptions under
+  parent node. (mstead@redhat.com)
+- Display subscription assistant's subscriptions as a tree. (mstead@redhat.com)
+- Add a require_connection callback to commands (bkearney@redhat.com)
+- 730020: Change the help text to show that config can list or set changes
+  (bkearney@redhat.com)
+- New icons for red/green (cduryee@redhat.com)
+- Add virt_only attribute to subscription detail pane (cduryee@redhat.com)
+- Use server side consumer autoheal flag. (dgoodwin@redhat.com)
+
 * Tue Aug 30 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.8-1
 - Fix issues with list --installed/consumed with deletion of certs
   (alikins@redhat.com)
