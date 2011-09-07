@@ -61,6 +61,7 @@ rm -rf %{buildroot}
 - add future date bind (jesusr@redhat.com)
 - 735226: allow Keys to validate themselves (bkearney@redhat.com)
 - Add getVirtOnly() (cduryee@redhat.com)
+
 * Wed Aug 24 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.10-1
 - Submit a Content-Length when body of request is empty. (dgoodwin@redhat.com)
 - Support installed products when registering. (dgoodwin@redhat.com)
