@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.96.10
+Version: 0.96.11
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -57,6 +57,10 @@ rm -rf %{buildroot}
 %{python_sitelib}/rhsm-*.egg-info
 
 %changelog
+* Wed Sep 07 2011 James Bowes <jbowes@redhat.com> 0.96.11-1
+- add future date bind (jesusr@redhat.com)
+- 735226: allow Keys to validate themselves (bkearney@redhat.com)
+- Add getVirtOnly() (cduryee@redhat.com)
 * Wed Aug 24 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.10-1
 - Submit a Content-Length when body of request is empty. (dgoodwin@redhat.com)
 - Support installed products when registering. (dgoodwin@redhat.com)
