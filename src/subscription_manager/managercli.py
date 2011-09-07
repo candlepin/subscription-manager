@@ -848,31 +848,51 @@ class UnSubscribeCommand(CliCommand):
         self.parser.add_option("--all", dest="all", action="store_true",
                                help=_("Unsubscribe from all subscriptions"))
 
+    def _validate_options(self):
+        if self.options.serial:
+            if not self.options.serial.isdigit():
+                systemExit(-1, _("'%s' is not a valid serial number") % self.options.serial)
+        elif not self.options.all:
+            print _("One of --serial or --all must be provided")
+            self.parser.print_help()
+            systemExit(-1)
+
     def _do_command(self):
         """
         Executes the command.
         """
-        consumer = check_registration()['uuid']
-        try:
-            if self.options.all:
-                self.cp.unbindAll(consumer)
-                log.info("Warning: This machine has been unsubscribed from all its subscriptions as per user request.")
-            elif self.options.serial:
-                if not self.options.serial.isdigit():
-                    systemExit(-1, "'%s' is not a valid serial number" % self.options.serial)
+        self._validate_options()
+        if ConsumerIdentity.exists():
+            consumer = ConsumerIdentity.read().getConsumerId()
+            try:
+                if self.options.all:
+                    self.cp.unbindAll(consumer)
+                    log.info("Warning: This machine has been unsubscribed from " +
+                                "all subscriptions.")
                 else:
                     self.cp.unbindBySerial(consumer, self.options.serial)
-                    log.info("This machine has been Unsubscribed from subcription with Serial number %s" % (self.options.serial))
-            else:
-                print _("One of --serial or --all must be provided")
-                self.parser.print_help()
-                return
-            self.certlib.update()
-        except connection.RestlibException, re:
-            log.error(re)
-            systemExit(-1, re.msg)
-        except Exception, e:
-            handle_exception(_("Unable to perform unsubscribe due to the following exception \n Error: %s") % e, e)
+                    log.info("This machine has been unsubscribed from subscription with serial number %s" % (self.options.serial))
+                self.certlib.update()
+            except connection.RestlibException, re:
+                log.error(re)
+                systemExit(-1, re.msg)
+            except Exception, e:
+                handle_exception(_("Unable to perform unsubscribe due to the following exception \n Error: %s") % e, e)
+        else:
+            # We never got registered, just remove the cert
+            try:
+                if self.options.all:
+                    for ent in self.entitlement_dir.list():
+                        ent.delete()
+                    print _("This machine has been unsubscribed from all subscriptions")
+                else:
+                    for ent in self.entitlement_dir.list():
+                        if str(ent.serialNumber()) == self.options.serial:
+                            ent.delete()
+                            print _("This machine has been unsubscribed from subscription " +
+                                       "with serial number %s" % (self.options.serial))
+            except Exception, e:
+                handle_exception(_("Unable to perform unsubscribe due to the following exception \n Error: %s") % e, e)
 
         # it is okay to call this no matter what happens above,
         # it's just a notification to perform a check
@@ -935,17 +955,18 @@ class ImportCertCommand(CliCommand):
         CliCommand.__init__(self, "import", usage, shortdesc, desc,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
-        self.parser.add_option("--certificate", action="append",  dest="certificate_files",
-                               help=_("certificate file to import"))
+        self.parser.add_option("--certificate", action="append",  dest="certificate_file",
+                               help=_("certificate file to import (for multiple imports," +
+                                      " specify this option more than once)"))
 
     def _validate_options(self):
-        if not self.options.certificate_files:
+        if not self.options.certificate_file:
             print _("Error: At least one certificate is required")
             sys.exit(-1)
 
     def _do_command(self):
         self._validate_options()
-        for src_cert_file in self.options.certificate_files:
+        for src_cert_file in self.options.certificate_file:
             if os.path.exists(src_cert_file):
                 try:
                     extractor = managerlib.ImportFileExtractor(src_cert_file)
