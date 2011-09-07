@@ -78,9 +78,6 @@ class ContractSelectionWindow(object):
 
     def populate_treeview(self):
 
-        column = MultiEntitlementColumn(8)
-        self.contract_selection_treeview.append_column(column)
-
         renderer = gtk.CellRendererText()
         column = gtk.TreeViewColumn(_("Contract Number"), renderer,
                 text=0)
@@ -102,6 +99,9 @@ class ContractSelectionWindow(object):
 
         renderer = widgets.CellRendererDate()
         column = gtk.TreeViewColumn(_("End Date"), renderer, date=3)
+        self.contract_selection_treeview.append_column(column)
+
+        column = MultiEntitlementColumn(8)
         self.contract_selection_treeview.append_column(column)
 
         column = widgets.QuantitySelectionColumn(_("Quantity"), 4, 8)
