@@ -49,7 +49,6 @@ install-conf:
 	install etc-conf/rhsm.conf ${PREFIX}/etc/rhsm/
 	install -T etc-conf/logrotate.conf ${PREFIX}/etc/logrotate.d/subscription-manager
 	install etc-conf/plugin/*.conf ${PREFIX}/etc/yum/pluginconf.d/
-	install -m 644 etc-conf/ca/*.pem ${PREFIX}/etc/rhsm/ca/
 
 install: install-files install-conf
 
@@ -61,7 +60,6 @@ install-files: dbus-service-install compile-po desktop-files
 	install -d ${PREFIX}/usr/sbin
 	install -d ${PREFIX}/etc/rhsm
 	install -d ${PREFIX}/etc/rhsm/facts
-	install -d ${PREFIX}/etc/rhsm/ca
 	install -d ${PREFIX}/etc/xdg/autostart
 	install -d ${PREFIX}/etc/cron.daily
 	install -d ${PREFIX}/etc/pam.d

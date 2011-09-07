@@ -12,7 +12,7 @@ Requires:  python-simplejson
 Requires:  python-iniparse
 Requires:  PyXML
 Requires:  virt-what
-Requires:  python-rhsm
+Requires:  python-rhsm >= 0.96.11
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 
@@ -114,10 +114,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %dir %{_var}/log/rhsm
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/facts
-%attr(755,root,root) %dir %{_sysconfdir}/rhsm/ca
 
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
-%attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
 
 #remove the repo file when we are deleted
