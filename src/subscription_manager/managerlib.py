@@ -118,79 +118,16 @@ def getInstalledProductStatus(product_directory=None,
 
     sorter = CertSorter(product_directory, entitlement_directory, facts_dict=facts)
 
-    #
-    # deal with products we have entitlement certs but no product cert
-    #
-    for productHash, certs in sorter.not_installed_products.iteritems():
-        for cert in certs:
-            for product in cert.getProducts():
-                if product.getHash() == productHash:
-                    # These certs may be bundles which contain both installed
-                    # and not installed products. Only show not installed
-                    data = (product.getName(),
-                            _("Not Installed"),
-                            formatDate(cert.validRange().end()),
-                            cert.serialNumber(),
-                            cert.getOrder().getContract(),
-                            cert.getOrder().getAccountNumber())
-                    product_status.append(data)
-                    break
-
-    #
-    # add in any partially entitled products
-    #
-    for product_id in sorter.partially_valid_products:
-        for ent_cert in sorter.partially_valid_products[product_id]:
-            products =  ent_cert.getProducts()
-            for product in products:
-                data = (product.getName(),
-                        _("Partially Subscribed"),
-                        formatDate(ent_cert.validRange().end()),
-                        ent_cert.serialNumber(),
-                        ent_cert.getOrder().getContract(),
-                        ent_cert.getOrder().getAccountNumber())
-                product_status.append(data)
-
-    #
-    # add the valid products, excluding the partially valid ones
-    #
-    for productHash, certs in sorter.valid_products.iteritems():
-        for cert in certs:
-            for product in cert.getProducts():
-                if product.getHash() == productHash:
-                    if product.getHash() not in sorter.partially_valid_products:
-                        status = map_status(cert.valid())
-
-                        data = (product.getName(), status,
-                                formatDate(cert.validRange().end()),
-                                cert.serialNumber(),
-                                cert.getOrder().getContract(),
-                                cert.getOrder().getAccountNumber())
-                        product_status.append(data)
-
-    #
-    # add in any products that we have installed but don't have
-    # entitlements for
-    #
-    for product_cert in sorter.unentitled_products.itervalues():
-        product = product_cert.getProduct()
-        product_status.append((product.getName(), map_status(None), "", "", "", ""))
-
-    #
-    # expired products
-    #
-    for certs in sorter.expired_products.itervalues():
-        for cert in certs:
-            eproducts = cert.getProducts()
-            for product in eproducts:
-                status = map_status(cert.valid())
-
-                data = (product.getName(), status,
-                        formatDate(cert.validRange().end()),
-                        cert.serialNumber(),
-                        cert.getOrder().getContract(),
-                        cert.getOrder().getAccountNumber())
-                product_status.append(data)
+    for installed_product in sorter.installed_products:
+        product_cert = sorter.installed_products[installed_product]
+        for product in product_cert.getProducts():
+            data = (product.getName(),
+                    product.getVersion(),
+                    product.getArch(),
+                    sorter.get_status(product.getHash()),
+                    formatDate(sorter.get_begin_date(product.getHash())),
+                    formatDate(sorter.get_end_date(product.getHash())))
+            product_status.append(data)
 
     return product_status
 
@@ -781,6 +718,7 @@ class ImportFileExtractor(object):
     def _create_filename_from_cert_serial_number(self):
         ent_cert = EntitlementCertificate(self.get_cert_content())
         return "%s.pem" % (ent_cert.serialNumber())
+
 
 
 def _sub_dict(datadict, subkeys, default=None):

@@ -292,8 +292,8 @@ class InstalledProductStatusTests(unittest.TestCase):
         product_status = getInstalledProductStatus(product_directory,
                 entitlement_directory)
 
-        self.assertEquals(1, len(product_status))
-        self.assertEquals("Not Installed", product_status[0][1])
+        # no product certs installed...
+        self.assertEquals(0, len(product_status))
 
     def test_entitlement_for_installed_product_shows_subscribed(self):
         product = StubProduct("product1")
@@ -306,7 +306,7 @@ class InstalledProductStatusTests(unittest.TestCase):
                 entitlement_directory)
 
         self.assertEquals(1, len(product_status))
-        self.assertEquals("Subscribed", product_status[0][1])
+        self.assertEquals("Subscribed", product_status[0][3])
 
     def test_expired_entitlement_for_installed_product_shows_expired(self):
         product = StubProduct("product1")
@@ -320,7 +320,7 @@ class InstalledProductStatusTests(unittest.TestCase):
                 entitlement_directory)
 
         self.assertEquals(1, len(product_status))
-        self.assertEquals("Expired", product_status[0][1])
+        self.assertEquals("Expired", product_status[0][3])
 
     def test_no_entitlement_for_installed_product_shows_no_subscribed(self):
         product = StubProduct("product1")
@@ -332,7 +332,7 @@ class InstalledProductStatusTests(unittest.TestCase):
                 entitlement_directory)
 
         self.assertEquals(1, len(product_status))
-        self.assertEquals("Not Subscribed", product_status[0][1])
+        self.assertEquals("Not Subscribed", product_status[0][3])
 
     def test_one_product_with_two_entitlements_lists_product_twice(self):
         product = StubProduct("product1")
@@ -346,7 +346,8 @@ class InstalledProductStatusTests(unittest.TestCase):
         product_status = getInstalledProductStatus(product_directory,
                 entitlement_directory)
 
-        self.assertEquals(2, len(product_status))
+        # only "product" is installed
+        self.assertEquals(1, len(product_status))
 
     def test_one_subscription_with_bundled_products_lists_once(self):
         product1 = StubProduct("product1")
@@ -361,13 +362,14 @@ class InstalledProductStatusTests(unittest.TestCase):
         product_status = getInstalledProductStatus(product_directory,
                 entitlement_directory)
 
-        self.assertEquals(3, len(product_status))
-        self.assertEquals("product3", product_status[0][0])
-        self.assertEquals("Not Installed", product_status[0][1])
-        self.assertEquals("product2", product_status[1][0])
-        self.assertEquals("Not Installed", product_status[1][1])
-        self.assertEquals("product1", product_status[2][0])
-        self.assertEquals("Subscribed", product_status[2][1])
+        # neither product3 or product 2 are installed
+        self.assertEquals(1, len(product_status))
+#        self.assertEquals("product3", product_status[0][0])
+#        self.assertEquals("Not Installed", product_status[0][3])
+ #       self.assertEquals("product2", product_status[1][0])
+ #       self.assertEquals("Not Installed", product_status[1][3])
+        self.assertEquals("product1", product_status[0][0])
+        self.assertEquals("Subscribed", product_status[0][3])
 
     def test_one_subscription_with_bundled_products_lists_once_part_two(self):
         product1 = StubProduct("product1")
@@ -382,13 +384,14 @@ class InstalledProductStatusTests(unittest.TestCase):
         product_status = getInstalledProductStatus(product_directory,
                 entitlement_directory)
 
-        self.assertEquals(3, len(product_status))
-        self.assertEquals("product3", product_status[0][0])
-        self.assertEquals("Not Installed", product_status[0][1])
-        self.assertEquals("product2", product_status[1][0])
-        self.assertEquals("Subscribed", product_status[1][1])
-        self.assertEquals("product1", product_status[2][0])
-        self.assertEquals("Subscribed", product_status[2][1])
+        # product3 isn't installed
+        self.assertEquals(2, len(product_status))
+        #self.assertEquals("product3", product_status[0][0])
+        #self.assertEquals("Not Installed", product_status[0][3])
+        self.assertEquals("product2", product_status[0][0])
+        self.assertEquals("Subscribed", product_status[0][3])
+        self.assertEquals("product1", product_status[1][0])
+        self.assertEquals("Subscribed", product_status[1][3])
 
 
 class TestGetConsumedProductEntitlement(unittest.TestCase):
@@ -399,7 +402,6 @@ class TestGetConsumedProductEntitlement(unittest.TestCase):
 
         managerlib.certdirectory.EntitlementDirectory = get_ent_dir
         a = managerlib.getConsumedProductEntitlements()
-        print a
 
     def test_one_product(self):
         def get_ent_dir():

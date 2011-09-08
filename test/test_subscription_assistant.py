@@ -25,3 +25,5 @@ class TestSubscriptionAssistant(unittest.TestCase):
         subscription_assistant.SubscriptionAssistant(self.backend, self.consumer,
                                                      self.facts, self.ent_dir,
                                                      self.prod_dir)
+    def foobar(self):
+        print self.back
