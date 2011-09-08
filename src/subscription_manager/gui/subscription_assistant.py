@@ -369,7 +369,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
         for product_id in sorter.expired_products.keys():
             ent_certs = sorter.expired_products[product_id]
             for ent_cert in ent_certs:
-                product = sorter.all_products[product_id].getProduct()
+                product = sorter.installed_products[product_id].getProduct()
                 self.invalid_store.add_map({
                         'active': False,
                         'product_name': product.getName(),
