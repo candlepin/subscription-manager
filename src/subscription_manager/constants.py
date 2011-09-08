@@ -24,11 +24,11 @@ _ = gettext.gettext
 
 installed_product_status = _("""
 ProductName:        \t%-25s
+Version:            \t%-25s
+Arch:               \t%-25s
 Status:             \t%-25s
+Starts:             \t%-25s
 Expires:            \t%-25s
-SerialNumber:       \t%-25s
-ContractNumber:     \t%-25s
-AccountNumber:      \t%-25s
 """)
 
 available_subs_list = _("""
