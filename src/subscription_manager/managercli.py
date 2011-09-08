@@ -1023,7 +1023,7 @@ class ConfigCommand(CliCommand):
     def _add_common_options(self):
         self.parser.add_option("--list", action="store_true",
                                help=_("list the configuration for this system"))
-        self.parser.add_option("--remove", dest="remove",
+        self.parser.add_option("--remove", dest="remove", action="append",
                                help = ("remove configuration entry by section.name"))
         for section in cfg.sections():
             for name,value in cfg.items(section):
@@ -1040,9 +1040,11 @@ class ConfigCommand(CliCommand):
             if not has:
                 self.parser.print_help()
                 sys.exit(-1)
-        if (self.options.remove and not "." in self.options.remove):
-            print _("Error: configuration entry designation for removal must be of format [section.name]")
-            sys.exit(-1)
+        if self.options.remove:
+            for r in self.options.remove:
+                if not "." in r:
+                    print _("Error: configuration entry designation for removal must be of format [section.name]")
+                    sys.exit(-1)
 
     def _do_command(self):
         self._validate_options()
@@ -1062,18 +1064,19 @@ class ConfigCommand(CliCommand):
                 print
             print _("[] - Default value in use\n")
         elif self.options.remove:
-            section = self.options.remove.split('.')[0]
-            name = self.options.remove.split('.')[1]
-            try:
-                if not name in cfg.defaults().keys():
-                    cfg.set(section, name, '')
-                    print _("You have removed the value for section %s and name %s.") % (section, name)
-                else:
-                    cfg.remove_option(section, name)
-                    print _("You have removed the value for section %s and name %s.") % (section, name)
-                    print _("The default value for %s will now be used.") % (name)
-            except Exception, e:
-                print _("Section %s and name %s cannot be removed.") % (section, name)
+            for r in self.options.remove:
+                section = r.split('.')[0]
+                name = r.split('.')[1]
+                try:
+                    if not name in cfg.defaults().keys():
+                        cfg.set(section, name, '')
+                        print _("You have removed the value for section %s and name %s.") % (section, name)
+                    else:
+                        cfg.remove_option(section, name)
+                        print _("You have removed the value for section %s and name %s.") % (section, name)
+                        print _("The default value for %s will now be used.") % (name)
+                except Exception, e:
+                    print _("Section %s and name %s cannot be removed.") % (section, name)
             cfg.save()
         else:
             for section in cfg.sections():
@@ -1081,7 +1084,6 @@ class ConfigCommand(CliCommand):
                     value = "%s" % getattr(self.options,section + "." + name)
                     if not value == 'None':
                         cfg.set(section, name, value)
-
             cfg.save()
 
 class ListCommand(CliCommand):

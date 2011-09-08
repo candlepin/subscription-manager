@@ -153,6 +153,9 @@ class TestConfigCommand(TestCliCommand):
         self.cc.main(["--list"])
         self.cc._validate_options()
 
+    def test_remove(self):
+        self.cc.main(["--remove", "server.hostname", "--remove", "server.port"])
+        self.cc._validate_options()
 
 class TestSubscribeCommand(TestCliProxyCommand):
     command_class = managercli.SubscribeCommand
