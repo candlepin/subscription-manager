@@ -1066,6 +1066,14 @@ class ConfigCommand(CliCommand):
                 if not "." in r:
                     print _("Error: configuration entry designation for removal must be of format [section.name]")
                     sys.exit(-1)
+                section = r.split('.')[0]
+                name = r.split('.')[1]
+                found = False
+                for key,value in cfg.items(section):
+                    if name == key:
+                        found = True
+                if not found:
+                    sys.exit(-1, _("Error: Section %s and name %s does not exist.") % (section,name))
 
     def _do_command(self):
         self._validate_options()
