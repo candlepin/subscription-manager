@@ -123,6 +123,7 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/subscription-manager.conf
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/product-id.conf
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/subscription-manager
+%{_sysconfdir}/bash_completion.d/subscription-manager
 
 %{_sysconfdir}/cron.daily/rhsmd
 %{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service

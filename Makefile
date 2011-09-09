@@ -40,6 +40,7 @@ dbus-service-install:
 	install -d ${PREFIX}/etc/dbus-1/system.d
 	install -d ${PREFIX}/${INSTALL_DIR}/dbus-1/system-services
 	install -d ${PREFIX}/usr/libexec
+	install -d ${PREFIX}/etc/bash_completion.d
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.conf \
 		${PREFIX}/etc/dbus-1/system.d
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.service \
@@ -51,6 +52,7 @@ install-conf:
 	install etc-conf/rhsm.conf ${PREFIX}/etc/rhsm/
 	install -T etc-conf/logrotate.conf ${PREFIX}/etc/logrotate.d/subscription-manager
 	install etc-conf/plugin/*.conf ${PREFIX}/etc/yum/pluginconf.d/
+	install -m 644 etc-conf/subscription-manager.completion.sh ${PREFIX}/etc/bash_completion.d/subscription-manager
 
 install: install-files install-conf
 
