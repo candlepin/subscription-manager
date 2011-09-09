@@ -205,20 +205,21 @@ compile-po:
 	done
 
 pyflakes:
-	@TMPFILE=`mktemp` || exit 1; \
+	-@TMPFILE=`mktemp` || exit 1; \
 	find -name \*.py | xargs pyflakes | tee $$TMPFILE; \
 	! test -s $$TMPFILE
+	exit 0
 
 tablint:
-	@! find -name \*py | xargs grep -nP "^\W*\t"
+	-@! find -name \*py | GREP_COLOR='7;31' xargs grep --color -nP "^\W*\t"
 
 trailinglint:
-	@! find -name \*py | xargs grep -nP "[ \t]$$"
+	-@! find -name \*py | GREP_COLOR='7;31' xargs grep --color -nP "[ \t]$$"
 
 whitespacelint: tablint trailinglint
 
 pep8:
-	@TMPFILE=`mktemp` || exit 1; \
+	-@TMPFILE=`mktemp` || exit 1; \
 	pep8 --ignore E501 --exclude ".#*" --repeat src | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
