@@ -55,7 +55,7 @@ class CertManager:
         facts = Facts()
         self.healinglib = HealingLib(self.lock, uep=self.uep, facts_dict=facts.to_dict())
 
-    def update(self):
+    def update(self, autoheal=False):
         """
         Update I{entitlement} certificates and corresponding
         yum repositiories.
@@ -70,8 +70,12 @@ class CertManager:
             # WARNING: order is important here, we need to update a number
             # of things before attempting to autoheal, and we need to autoheal
             # before attempting to fetch our certificates:
-            for lib in (self.repolib, self.factlib, self.profilelib,
-                    self.installedprodlib, self.healinglib):
+            if autoheal:
+                libset = [self.healinglib]
+            else:
+                libset = [self.repolib, self.factlib, self.profilelib, self.installedprodlib]
+
+            for lib in libset:
                 updates += lib.update()
 
             # WARNING
@@ -87,7 +91,7 @@ class CertManager:
         return updates
 
 
-def main():
+def main(options):
     if not ConsumerIdentity.existsAndValid():
         log.error('Either the consumer is not registered or the certificates' +
                   ' are corrupted. Certificate update using daemon failed.')
@@ -96,7 +100,7 @@ def main():
     uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
                                    key_file=ConsumerIdentity.keypath())
     mgr = CertManager(uep=uep)
-    updates = mgr.update()
+    updates = mgr.update(options.autoheal)
     print _('%d updates required') % updates
     print _('done')
 
@@ -107,11 +111,17 @@ def main():
 if __name__ == '__main__':
     import logging
     import logutil
+    from i18n_optparse import OptionParser
 
     logutil.init_logger()
     log = logging.getLogger('rhsm-app.' + __name__)
+ 
+    parser = OptionParser()
+    parser.add_option("--autoheal", dest="autoheal", action="store_true", default=False,
+                  help="perform an autoheal check")
+    (options, args) = parser.parse_args()
     try:
-        main()
+        main(options)
     except SystemExit:
         # sys.exit triggers an exception in older Python versions, which
         # in this case  we can safely ignore as we do not want to log the
