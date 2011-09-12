@@ -611,8 +611,15 @@ class RegisterCommand(UserPassCommand):
         profile_mgr = ProfileManager()
         profile_mgr.update_check(admin_cp, consumer['uuid'])
 
+        cert_file = ConsumerIdentity.certpath()
+        key_file = ConsumerIdentity.keypath()
+        self.cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
+                                           proxy_hostname=self.proxy_hostname,
+                                           proxy_port=self.proxy_port,
+                                           proxy_user=self.proxy_user,
+                                           proxy_password=self.proxy_password)
         if self.options.autosubscribe:
-            autosubscribe(admin_cp, consumer['uuid'], self.certlib)
+            autosubscribe(self.cp, consumer['uuid'], self.certlib)
         if (self.options.consumerid or self.options.activation_keys or
                 self.options.autosubscribe):
             self.certlib.update()
@@ -1036,7 +1043,7 @@ class ConfigCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog config [OPTIONS]"
-        shortdesc = _("List or set the configuration which this machine is using")
+        shortdesc = _("List, set, or remove the configuration parameters in use by this machine.")
         desc = shortdesc
         CliCommand.__init__(self, "config", usage, shortdesc, desc,
                             ent_dir=ent_dir, prod_dir=prod_dir)
@@ -1052,6 +1059,20 @@ class ConfigCommand(CliCommand):
                     help=_("Section: " + section + ", Name: " + name))
 
     def _validate_options(self):
+        if self.options.list:
+            too_many = False
+            if self.options.remove:
+                too_many = True
+            else:
+                for section in cfg.sections():
+                    for name,value in cfg.items(section):
+                        if getattr(self.options,section + "." + name):
+                            too_many = True
+                            break
+            if too_many:
+                print _("Error: --list should not be used with any other options for setting or removing configurations.")
+                sys.exit(-1)
+
         if not (self.options.list or self.options.remove):
             has = False
             for section in cfg.sections():
