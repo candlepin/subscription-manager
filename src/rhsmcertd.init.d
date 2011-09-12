@@ -18,19 +18,27 @@ BINDIR=/usr/bin
 PROG=rhsmcertd
 LOCK=/var/lock/subsys/$PROG
 
-INTERVAL=`python -c "\
+CERT_INTERVAL=`python -c "\
 import sys
 sys.path.append('/usr/share/rhsm')
 from rhsm.config import initConfig
 cfg = initConfig()
 print cfg.get('rhsmcertd', 'certFrequency')"`
 
+
+HEAL_INTERVAL=`python -c "\
+import sys
+sys.path.append('/usr/share/rhsm')
+from rhsm.config import initConfig
+cfg = initConfig()
+print cfg.get('rhsmcertd', 'healFrequency')"`
+
 RETVAL=0
 
 start() {
   if [ ! -f $LOCK ]; then
-    echo -n "Starting rhsmcertd $INTERVAL"
-    daemon $BINDIR/$PROG $INTERVAL
+    echo -n "Starting rhsmcertd $CERT_INTERVAL $HEAL_INTERVAL"
+    daemon $BINDIR/$PROG $CERT_INTERVAL $HEAL_INTERVAL
     RETVAL=$?
     [ $RETVAL -eq 0 ] && touch $LOCK
   else

@@ -22,11 +22,13 @@
 #include <fcntl.h>
 #include <time.h>
 #include <wait.h>
+#include <stdbool.h>
 
 #define LOGFILE "/var/log/rhsm/rhsmcertd.log"
 #define LOCKFILE "/var/lock/subsys/rhsmcertd"
 #define UPDATEFILE "/var/run/rhsm/update"
-#define INTERVAL 240 /*4 hours*/
+#define CERT_INTERVAL 240 /*4 hours*/
+#define HEAL_INTERVAL 1440 /*24 hours*/
 #define RETRY 10 /*10 min*/
 #define BUF_MAX 256
 
@@ -69,7 +71,7 @@ void logUpdate(int delay)
     fclose(updatefile);
 }
 
-int run(int interval)
+int run(int interval, bool heal)
 {
     int status = 0;
     fprintf(log, "%s: started: interval = %d minutes\n", ts(), interval);
@@ -86,8 +88,16 @@ int run(int interval)
         }
         if(pid == 0)
         {
+          if(heal) {
+            execl("/usr/bin/python", "python", "/usr/share/rhsm/subscription_manager/certmgr.py", "--autoheal",
+              NULL);
+          }
+          else
+          {
             execl("/usr/bin/python", "python", "/usr/share/rhsm/subscription_manager/certmgr.py",
-		  NULL);
+              NULL);
+          }
+
         }
         int delay = interval;
         waitpid(pid, &status, 0);
@@ -130,6 +140,28 @@ int get_lock()
     return 0;
 }
 
+void run_parts(int cert_interval, int heal_interval)
+{
+    // TODO: This will become a more robust event loop. I need to verify that
+    // it's OK for sub-mgr to depend on glib
+    int pid = fork();
+    if(pid < 0)
+    {
+        fprintf(log, "%s: fork failed\n", ts());
+        fflush(log);
+        return EXIT_FAILURE;
+    }
+    if(pid == 0)
+    {
+       run(cert_interval, false); //cert
+    }
+    else
+    {
+       run(heal_interval, true);  //heal
+    }
+}
+
+
 int main(int argc, char *argv[])
 {
     log = fopen(LOGFILE, "a+");
@@ -137,15 +169,22 @@ int main(int argc, char *argv[])
     {
 	    return EXIT_FAILURE;
     }
-    if(argc < 2)
+    if(argc < 3)
     {
         printUsage();
         return EXIT_FAILURE;
     }
-    int interval = atoi(argv[1]);
-    if(interval < 1)
+
+    int cert_interval = atoi(argv[1]);
+    int heal_interval = atoi(argv[2]);
+
+    if(cert_interval < 1)
     {
-        interval = INTERVAL;
+        cert_interval = CERT_INTERVAL;
+    }
+    if(heal_interval < 1)
+    {
+        heal_interval = HEAL_INTERVAL;
     }
 
     int pid = fork();
@@ -153,13 +192,14 @@ int main(int argc, char *argv[])
     {
         daemon(0, 0);
 
-        if (get_lock() != 0) {
+        if (get_lock() != 0)
+        {
             fprintf(log, "%s: unable to get lock, exiting\n", ts());
             fflush(log);
             return EXIT_FAILURE;
         }
 
-        run(interval);
+        run_parts(cert_interval, heal_interval);
     }
     fclose(log);
 
