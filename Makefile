@@ -28,6 +28,10 @@ RHSMCERTD_FLAGS=`pkg-config --cflags --libs glib-2.0`
 rhsmcertd: src/rhsmcertd.c bin
 	${CC} ${CFLAGS} ${RHSMCERTD_FLAGS} src/rhsmcertd.c -o bin/rhsmcertd
 
+check-syntax:
+	${CC} ${CFLAGS} ${ICON_FLAGS} -o nul -S $(CHK_SOURCES)
+
+
 ICON_FLAGS=`pkg-config --cflags --libs gtk+-2.0 libnotify`
 
 rhsm-icon: src/rhsm_icon.c bin
