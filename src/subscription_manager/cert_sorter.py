@@ -71,6 +71,7 @@ class CertSorter(object):
 
         # do we need a future entitled list? we seem to use that
         # in the gui TODO
+        self.future_products = {}
 
         self.facts_dict = facts_dict
 
@@ -83,7 +84,7 @@ class CertSorter(object):
         log.debug("expired entitled products: %s" % self.expired_products.keys())
         log.debug("partially entitled products: %s" % self.partially_valid_products.keys())
         log.debug("unentitled products: %s" % self.unentitled_products.keys())
-
+        log.debug("future products: %s" % self.future_products.keys())
 
     def refresh(self):
         refresh_dicts = [self.installed_products,
@@ -112,6 +113,8 @@ class CertSorter(object):
             return "Expired"
         if product_id in self.partially_valid_products:
             return "Partially Subscribed"
+        if product_id in self.future_products:
+            return "Future Subscription"
 
     def get_product_cert(self, product_id):
         for product_dict in [self.valid_products,
@@ -167,11 +170,16 @@ class CertSorter(object):
 
         for ent_cert in ent_certs:
 
+            now = datetime.now(GMT())
             if ent_cert.valid(on_date=self.on_date):
                 self.valid_entitlement_certs.append(ent_cert)
 
                 self._scan_ent_cert_products(ent_cert, self.valid_products,
                                              self.not_installed_products)
+            elif ent_cert.validRange().start() > now:
+                self.future_entitlement_certs.append(ent_cert)
+                self._scan_ent_cert_products(ent_cert, self.future_products)
+
             else:
                 self.expired_entitlement_certs.append(ent_cert)
                 log.debug("expired:")
