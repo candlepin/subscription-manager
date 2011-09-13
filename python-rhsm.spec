@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.96.11
+Version: 0.96.12
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,13 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Tue Sep 13 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.96.12-1
+- Add makefile and targets for coverage and "stylish" checks
+  (alikins@redhat.com)
+- Add tests for config parsing (cduryee@redhat.com)
+- 736166: move certs from subscription-manager to python-rhsm
+  (cduryee@redhat.com)
+
 * Wed Sep 07 2011 James Bowes <jbowes@redhat.com> 0.96.11-1
 - add future date bind (jesusr@redhat.com)
 - 735226: allow Keys to validate themselves (bkearney@redhat.com)
