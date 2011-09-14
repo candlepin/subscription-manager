@@ -383,6 +383,9 @@ class RegisterScreen:
         self.initializeConsumerName()
         self.autobind.set_active(False)
 
+    def _show_credentials_page(self):
+        self.register_notebook.set_page(CREDENTIALS_PAGE)
+
 class AsyncBackend(object):
 
     def __init__(self, backend):

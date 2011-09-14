@@ -146,6 +146,10 @@ class moduleClass(Module, registergui.RegisterScreen):
         self._destroy_widget('cancel_button')
 
     def initializeUI(self):
+        # Need to make sure that each time the UI is initialized we reset back to the
+        # main register screen.
+        self._show_credentials_page()
+        self._clear_registration_widgets()
         self.initializeConsumerName()
 
     def needsNetwork(self):
