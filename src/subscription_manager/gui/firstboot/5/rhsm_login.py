@@ -159,6 +159,10 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
         return toplevel, self.icon, self.windowTitle
 
     def initializeUI(self):
+        # Need to make sure that each time the UI is initialized we reset back to the
+        # main register screen.
+        self._show_credentials_page()
+        self._clear_registration_widgets()
         self.initializeConsumerName()
 
     def needsNetwork(self):
