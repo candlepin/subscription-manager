@@ -28,6 +28,8 @@ from subscription_manager import managerlib
 import stubs
 import rhsm
 from rhsm.certificate import EntitlementCertificate
+from mock import Mock
+import xml
 
 cfg = rhsm.config.initConfig()
 ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
@@ -683,3 +685,19 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
             }
             prod_attrs.append(stacking_id_attribute)
         return create_pool(product_id, product_name, productAttributes=prod_attrs)
+
+class ParseDateTests(unittest.TestCase):
+
+    def test_2038_bug(self):
+        # About to monkey patch, store a reference to function so we can
+        # restore it.
+        function = xml.utils.iso8601.parse
+        xml.utils.iso8601.parse = Mock(side_effect=OverflowError())
+        parsed = parseDate("9999-09-06T00:00:00.000+0000")
+        xml.utils.iso8601.parse = function
+
+        # Simulated a 32-bit date overflow, date should have been
+        # replaced by one that does not overflow:
+        self.assertEquals(2038, parsed.year)
+        self.assertEquals(1, parsed.month)
+        self.assertEquals(1, parsed.day)
