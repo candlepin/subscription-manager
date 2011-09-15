@@ -55,8 +55,16 @@ class moduleClass(Module, managergui.MainWindow):
         self.main_window.get_child().reparent(self.vbox)
         self.main_window.destroy()
 
+    def renderModule(self, interface):
+        Module.renderModule(self, interface)
+        # This is not a really good way to get a reference to the interface,
+        # but it is the only way that we can get access to the back button.
+        self.interface = interface
+
     def initializeUI(self):
         self.refresh()
+        # Always disable the back button when this screen is shown.
+        self.interface.backButton.set_sensitive(False)
 
     def shouldAppear(self):
         return True
