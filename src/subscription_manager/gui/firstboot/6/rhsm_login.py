@@ -172,11 +172,9 @@ class moduleClass(Module, registergui.RegisterScreen):
         """
         Indicates to firstboot whether to show this screen.  In this case
         we want to skip over this screen if there is already an identity
-        certificate on the machine (most likely laid down in a kickstart),
-        but showing the screen and allowing the user to reregister if
-        firstboot is run in reconfig mode.
+        certificate on the machine (most likely laid down in a kickstart).
         """
-        return True
+        return not ConsumerIdentity.existsAndValid()
 
     def _destroy_widget(self, widget_name):
         """
