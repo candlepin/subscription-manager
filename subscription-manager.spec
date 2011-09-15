@@ -22,10 +22,8 @@ Requires:  python-dmidecode
 %endif
 
 Requires(post): chkconfig
-Requires(post): dbus
 Requires(preun): chkconfig
 Requires(preun): initscripts
-Requires(preun): dbus
 BuildRequires: python-devel
 BuildRequires: gettext
 BuildRequires: intltool
@@ -210,14 +208,18 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 chkconfig --add rhsmcertd
-dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig > /dev/null 2>&1 || :
+if [ -x /bin/dbus-send ] ; then
+  dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig > /dev/null 2>&1 || :
+fi
 # /sbin/service rhsmcertd start
 
 %preun
 if [ $1 -eq 0 ] ; then
    /sbin/service rhsmcertd stop >/dev/null 2>&1
    /sbin/chkconfig --del rhsmcertd
-   dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig > /dev/null 2>&1 || :
+   if [ -x /bin/dbus-send ] ; then
+     dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig > /dev/null 2>&1 || :
+   fi
 fi
 
 %changelog
