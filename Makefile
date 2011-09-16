@@ -23,8 +23,10 @@ build:	rhsmcertd rhsm-icon
 bin:
 	mkdir bin
 
+RHSMCERTD_FLAGS=`pkg-config --cflags --libs glib-2.0`
+
 rhsmcertd: src/rhsmcertd.c bin
-	${CC} ${CFLAGS} src/rhsmcertd.c -o bin/rhsmcertd
+	${CC} ${CFLAGS} ${RHSMCERTD_FLAGS} src/rhsmcertd.c -o bin/rhsmcertd
 
 ICON_FLAGS=`pkg-config --cflags --libs gtk+-2.0 libnotify`
 
@@ -147,7 +149,7 @@ coverage-xml: coverage
 	coverage xml --include "${SRC_DIR}/*"
 
 clean:
-	m -f *.pyc *.pyo *~ *.bak *.tar.gz
+	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
 
 archive: clean
 	@rm -rf ${PKGNAME}-%{VERSION}.tar.gz

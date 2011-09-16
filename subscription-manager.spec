@@ -11,6 +11,7 @@ Requires:  python-ethtool
 Requires:  python-simplejson
 Requires:  python-iniparse
 Requires:  PyXML
+Requires:  glib2
 Requires:  virt-what
 Requires:  python-rhsm >= 0.96.11
 Requires:  dbus-python

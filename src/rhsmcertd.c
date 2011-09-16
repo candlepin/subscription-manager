@@ -22,22 +22,35 @@
 #include <fcntl.h>
 #include <time.h>
 #include <wait.h>
-#include <stdbool.h>
+#include <glib.h>
+#include <errno.h>
 
 #define LOGFILE "/var/log/rhsm/rhsmcertd.log"
 #define LOCKFILE "/var/lock/subsys/rhsmcertd"
 #define UPDATEFILE "/var/run/rhsm/update"
-#define CERT_INTERVAL 240	/*4 hours */
-#define HEAL_INTERVAL 1440	/*24 hours */
-#define RETRY 10		/*10 min */
+#define CERT_INTERVAL 14400	/* 4 hours */
+#define HEAL_INTERVAL 86400	/* 24 hours */
 #define BUF_MAX 256
 
-static FILE *log = 0;
+//TODO: we should be using glib's logging facilities
+static FILE *log = NULL;
+GMainLoop *main_loop = NULL;
 
 void
 printUsage ()
 {
-	printf ("usage: rhsmcertd <interval>");
+	printf ("usage: rhsmcertd <certinterval> <healinterval>");
+}
+
+FILE *
+get_log ()
+{
+	FILE *log = fopen (LOGFILE, "at");
+	if (log == NULL) {
+		printf ("Could not open %s, exiting", LOGFILE);
+		exit (EXIT_FAILURE);
+	}
+	return log;
 }
 
 char *
@@ -65,58 +78,15 @@ logUpdate (int delay)
 	update_tm.tm_min += delay;
 	strftime (buf, BUF_MAX, "%s", &update_tm);
 
-	FILE *updatefile = fopen (UPDATEFILE, "w");
+	FILE *updatefile = fopen (UPDATEFILE, "we");
+    if (updatefile == NULL) {
+		printf ("unable to open %s, exiting", UPDATEFILE);
+        exit(-1);
+    }
+
 	fprintf (updatefile, "%s", buf);
 	fflush (updatefile);
 	fclose (updatefile);
-}
-
-int
-run (int interval, bool heal)
-{
-	int status = 0;
-	fprintf (log, "%s: started: interval = %d minutes\n", ts (), interval);
-	fflush (log);
-
-	while (1) {
-		int pid = fork ();
-		if (pid < 0) {
-			fprintf (log, "%s: fork failed\n", ts ());
-			fflush (log);
-			return EXIT_FAILURE;
-		}
-		if (pid == 0) {
-			if (heal) {
-				execl ("/usr/bin/python", "python",
-				       "/usr/share/rhsm/subscription_manager/certmgr.py",
-				       "--autoheal", NULL);
-			} else {
-				execl ("/usr/bin/python", "python",
-				       "/usr/share/rhsm/subscription_manager/certmgr.py",
-				       NULL);
-			}
-
-		}
-		int delay = interval;
-		waitpid (pid, &status, 0);
-		status = WEXITSTATUS (status);
-		if (status == 0) {
-			fprintf (log, "%s: certificates updated\n", ts ());
-			fflush (log);
-		} else {
-			if (delay > RETRY)
-				delay = RETRY;
-			fprintf (log,
-				 "%s: update failed (%d), retry in %d minutes\n",
-				 ts (), status, delay);
-			fflush (log);
-		}
-
-		logUpdate (delay);
-		sleep (delay * 60);
-	}
-
-	return status;
 }
 
 int
@@ -139,38 +109,75 @@ get_lock ()
 	return 0;
 }
 
-void
-run_parts (int cert_interval, int heal_interval)
+static gboolean
+cert_check (gboolean heal)
 {
-	// TODO: This will become a more robust event loop. I need to verify that
-	// it's OK for sub-mgr to depend on glib
+	int status = 0;
+
 	int pid = fork ();
 	if (pid < 0) {
+		log = get_log ();
 		fprintf (log, "%s: fork failed\n", ts ());
 		fflush (log);
+		fclose (log);
 		return EXIT_FAILURE;
 	}
 	if (pid == 0) {
-		run (cert_interval, false);	//cert
-	} else {
-		run (heal_interval, true);	//heal
+		if (heal) {
+			execl ("/usr/bin/python", "python",
+			       "/usr/share/rhsm/subscription_manager/certmgr.py",
+			       "--autoheal", NULL);
+			_exit (errno);
+		} else {
+			execl ("/usr/bin/python", "python",
+			       "/usr/share/rhsm/subscription_manager/certmgr.py",
+			       NULL);
+			_exit (errno);
+		}
+
 	}
+	waitpid (pid, &status, 0);
+	status = WEXITSTATUS (status);
+	log = get_log ();
+	if (status == 0) {
+		fprintf (log, "%s: certificates updated\n", ts ());
+		fflush (log);
+	} else {
+		fprintf (log,
+			 "%s: update failed (%d), retry will occur on next run\n",
+			 ts (), status);
+		fflush (log);
+	}
+	fclose (log);
+	//returning FALSE will unregister the timer, always return TRUE
+	return TRUE;
 }
 
 int
 main (int argc, char *argv[])
 {
-	log = fopen (LOGFILE, "a+");
-	if (log == 0) {
-		return EXIT_FAILURE;
-	}
+	//we open and immediately close the log on startup, in order to check that
+	//it's accessible before we daemonize
+	log = get_log ();
+	fclose (log);
+
 	if (argc < 3) {
 		printUsage ();
 		return EXIT_FAILURE;
 	}
 
-	int cert_interval = atoi (argv[1]);
-	int heal_interval = atoi (argv[2]);
+	int cert_interval = atoi (argv[1]) * 60;
+	int heal_interval = atoi (argv[2]) * 60;
+
+	//daemon (0, 0);
+	log = get_log ();
+	if (get_lock () != 0) {
+		fprintf (log, "%s: unable to get lock, exiting\n", ts ());
+		fflush (log);
+		fclose (log);	//need to close FD before we return out of main()
+		return EXIT_FAILURE;
+	}
+	fclose (log);
 
 	if (cert_interval < 1) {
 		cert_interval = CERT_INTERVAL;
@@ -179,20 +186,25 @@ main (int argc, char *argv[])
 		heal_interval = HEAL_INTERVAL;
 	}
 
-	int pid = fork ();
-	if (pid == 0) {
-		daemon (0, 0);
+    //note that we call the function directly first, before assigning a timer
+    //to it. Otherwise, it would only get executed when the timer went off, and
+    //not at startup.
 
-		if (get_lock () != 0) {
-			fprintf (log, "%s: unable to get lock, exiting\n",
-				 ts ());
-			fflush (log);
-			return EXIT_FAILURE;
-		}
+	gboolean heal = TRUE;
+	cert_check (heal);
+	g_timeout_add_seconds (heal_interval, (GSourceFunc) cert_check, heal);
 
-		run_parts (cert_interval, heal_interval);
-	}
-	fclose (log);
+	heal = FALSE;
+	cert_check (heal);
+	g_timeout_add_seconds (cert_interval, (GSourceFunc) cert_check, heal);
+
+	logUpdate (cert_interval);
+	g_timeout_add_seconds (cert_interval, (GSourceFunc) logUpdate,
+			       cert_interval);
+
+	main_loop = g_main_loop_new (NULL, FALSE);
+	g_main_loop_run (main_loop);
+	//we will never get past here
 
 	return EXIT_SUCCESS;
 }
