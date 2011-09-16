@@ -86,12 +86,12 @@ class FindFirstInvalidDateTests(unittest.TestCase):
         product_dir = StubCertificateDirectory([cert])
 
         cert1 = StubEntitlementCertificate(
-                StubProduct('product1'), start_date=datetime(2010, 1, 1),
-                end_date=datetime(2050, 1, 1))
+                StubProduct('product1'), start_date=datetime(2010, 1, 1, tzinfo=GMT()),
+                end_date=datetime(2050, 1, 1, tzinfo=GMT()))
         cert2 = StubEntitlementCertificate(
                 StubProduct('product1'),
-                start_date=datetime(2049, 1, 1),
-                end_date=datetime(2070, 1, 1))
+                start_date=datetime(2049, 1, 1, tzinfo=GMT()),
+                end_date=datetime(2070, 1, 1, tzinfo=GMT()))
         ent_dir = StubCertificateDirectory([cert1, cert2])
 
         last_valid_date = find_first_invalid_date(ent_dir=ent_dir, product_dir=product_dir)
@@ -104,12 +104,12 @@ class FindFirstInvalidDateTests(unittest.TestCase):
         product_dir = StubCertificateDirectory([cert])
 
         cert1 = StubEntitlementCertificate(
-                StubProduct('product1'), start_date=datetime(2000, 1, 1),
-                end_date=datetime(2001, 1, 1))
+                StubProduct('product1'), start_date=datetime(2000, 1, 1, tzinfo=GMT()),
+                end_date=datetime(2001, 1, 1, tzinfo=GMT()))
         cert2 = StubEntitlementCertificate(
                 StubProduct('product1'),
-                start_date=datetime(2000, 12, 1),
-                end_date=datetime(2005, 1, 1))
+                start_date=datetime(2000, 12, 1,tzinfo=GMT()),
+                end_date=datetime(2005, 1, 1, tzinfo=GMT()))
         ent_dir = StubCertificateDirectory([cert1, cert2])
 
         # Because all entitlements have expired, we should get back the current
@@ -208,7 +208,7 @@ class CertSorterTests(unittest.TestCase):
 
     def test_expired_in_future(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir,
-                on_date=datetime(2050, 1, 1))
+                on_date=datetime(2050, 1, 1,tzinfo=GMT()))
         self.assertEqual(8, len(self.sorter.expired_entitlement_certs))
         self.assertTrue('product2' in self.sorter.expired_products)
         self.assertTrue('product3' in self.sorter.expired_products)
@@ -253,7 +253,7 @@ class CertSorterTests(unittest.TestCase):
             StubEntitlementCertificate(StubProduct('mktproduct'),
                 provided_products=provided)])
         self.sorter = CertSorter(self.prod_dir, self.ent_dir,
-                on_date=datetime(2050, 1, 1))
+                on_date=datetime(2050, 1, 1, tzinfo=GMT()))
 
         self.assertEquals(1, len(self.sorter.expired_entitlement_certs))
         self.assertEquals(4, len(self.sorter.expired_products.keys()))

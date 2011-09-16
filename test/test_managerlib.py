@@ -23,6 +23,7 @@ from stubs import StubCertificateDirectory, StubProductCertificate, StubProduct,
     StubEntitlementCertificate
 from subscription_manager.managerlib import merge_pools, PoolFilter, getInstalledProductStatus, \
     LocalTz, parseDate, configure_i18n, merge_pools, MergedPoolsStackingGroupSorter
+from subscription_manager.cert_sorter import status_map
 from modelhelpers import *
 from subscription_manager import managerlib
 import stubs
@@ -243,7 +244,6 @@ class PoolFilterTests(unittest.TestCase):
         pool_filter = PoolFilter(product_dir=pd,
                 entitlement_dir=StubCertificateDirectory([]))
 
-
         pools = [
                 create_pool(product1, product1),
                 create_pool(product2, product2, provided_products=[provided]),
@@ -306,7 +306,7 @@ class InstalledProductStatusTests(unittest.TestCase):
                 entitlement_directory)
 
         self.assertEquals(1, len(product_status))
-        self.assertEquals("Subscribed", product_status[0][3])
+        self.assertEquals("subscribed", product_status[0][3])
 
     def test_expired_entitlement_for_installed_product_shows_expired(self):
         product = StubProduct("product1")
@@ -320,7 +320,7 @@ class InstalledProductStatusTests(unittest.TestCase):
                 entitlement_directory)
 
         self.assertEquals(1, len(product_status))
-        self.assertEquals("Expired", product_status[0][3])
+        self.assertEquals("expired", product_status[0][3])
 
     def test_no_entitlement_for_installed_product_shows_no_subscribed(self):
         product = StubProduct("product1")
@@ -332,7 +332,19 @@ class InstalledProductStatusTests(unittest.TestCase):
                 entitlement_directory)
 
         self.assertEquals(1, len(product_status))
-        self.assertEquals("Not Subscribed", product_status[0][3])
+        self.assertEquals("not_subscribed", product_status[0][3])
+
+    def test_future_dated_entitlement(self):
+        product = StubProduct("product1")
+        product_directory = StubCertificateDirectory([
+                StubProductCertificate(product)])
+        entitlement_directory = StubCertificateDirectory([
+                StubEntitlementCertificate(product,
+                                           start_date=(datetime.now() + timedelta(days=1365)))])
+
+        product_status = getInstalledProductStatus(product_directory,
+                                                   entitlement_directory)
+        print product_status
 
     def test_one_product_with_two_entitlements_lists_product_twice(self):
         product = StubProduct("product1")
@@ -369,7 +381,7 @@ class InstalledProductStatusTests(unittest.TestCase):
  #       self.assertEquals("product2", product_status[1][0])
  #       self.assertEquals("Not Installed", product_status[1][3])
         self.assertEquals("product1", product_status[0][0])
-        self.assertEquals("Subscribed", product_status[0][3])
+        self.assertEquals("subscribed", product_status[0][3])
 
     def test_one_subscription_with_bundled_products_lists_once_part_two(self):
         product1 = StubProduct("product1")
@@ -389,14 +401,15 @@ class InstalledProductStatusTests(unittest.TestCase):
         #self.assertEquals("product3", product_status[0][0])
         #self.assertEquals("Not Installed", product_status[0][3])
         self.assertEquals("product2", product_status[0][0])
-        self.assertEquals("Subscribed", product_status[0][3])
+        self.assertEquals("subscribed", product_status[0][3])
         self.assertEquals("product1", product_status[1][0])
-        self.assertEquals("Subscribed", product_status[1][3])
+        self.assertEquals("subscribed", product_status[1][3])
 
 
 class TestGetConsumedProductEntitlement(unittest.TestCase):
     def test_emtpy_ent_dir(self):
         entitlement_directory = StubCertificateDirectory([])
+
         def get_ent_dir():
             return StubCertificateDirectory([])
 
@@ -461,6 +474,7 @@ class TestParseDate(unittest.TestCase):
         dt = parseDate(est_date)
         self.assertEquals(timedelta(hours=4), dt.tzinfo.utcoffset(dt))
 
+
 class TestI18N(unittest.TestCase):
     def test_configure_i18n_without_glade(self):
         configure_i18n()
@@ -468,11 +482,9 @@ class TestI18N(unittest.TestCase):
     def test_configure_i18n_with_glade(self):
         configure_i18n(with_glade=True)
 
-
 class MockLog:
     def info(self):
         pass
-
 
 def MockSystemLog(self, message, priority):
     pass
@@ -496,6 +508,7 @@ class ExtractorStub(managerlib.ImportFileExtractor):
     def _ensure_entitlement_dir_exists(self):
         # Do nothing but stub out the dir check to avoid file system access.
         pass
+
 
 class TestImportFileExtractor(unittest.TestCase):
 
@@ -589,6 +602,7 @@ class TestImportFileExtractor(unittest.TestCase):
         write_two = extractor.writes[1]
         self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_key_file), write_two[0])
         self.assertEquals(EXPECTED_KEY_CONTENT, write_two[1])
+
 
 class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
 

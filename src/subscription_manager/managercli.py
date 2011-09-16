@@ -45,6 +45,7 @@ from subscription_manager import managerlib
 from subscription_manager.facts import Facts
 from subscription_manager.quantity import valid_quantity
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
+from subscription_manager.cert_sorter import status_map
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -512,7 +513,7 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_option("--activationkey", action='append', dest="activation_keys",
                                help=_("one or more activation keys to use for registration"))
         self.facts = Facts(ent_dir=self.entitlement_dir,
-			   prod_dir=self.product_dir)
+                           prod_dir=self.product_dir)
         self.installed_mgr = InstalledProductsManager()
 
     def _validate_options(self):
@@ -953,6 +954,7 @@ class FactsCommand(CliCommand):
             facts.update_check(self.cp, consumer, force=True)
             print _("Successfully updated the system facts.")
 
+
 class ImportCertCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
@@ -962,7 +964,7 @@ class ImportCertCommand(CliCommand):
         CliCommand.__init__(self, "import", usage, shortdesc, desc,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
-        self.parser.add_option("--certificate", action="append",  dest="certificate_file",
+        self.parser.add_option("--certificate", action="append", dest="certificate_file",
                                help=_("certificate file to import (for multiple imports," +
                                       " specify this option more than once)"))
 
@@ -999,6 +1001,7 @@ class ImportCertCommand(CliCommand):
                 log.error("Supplied certificate file does not exist: %s" % src_cert_file)
                 print(_("%s is not a valid certificate file. Please use a valid certificate.") %
                     os.path.basename(src_cert_file))
+
 
 class ReposCommand(CliCommand):
 
@@ -1052,10 +1055,10 @@ class ConfigCommand(CliCommand):
         self.parser.add_option("--list", action="store_true",
                                help=_("list the configuration for this system"))
         self.parser.add_option("--remove", dest="remove", action="append",
-                               help = ("remove configuration entry by section.name"))
+                               help=("remove configuration entry by section.name"))
         for section in cfg.sections():
-            for name,value in cfg.items(section):
-                self.parser.add_option("--" + section + "." + name , dest=(section + "." + name),
+            for name, value in cfg.items(section):
+                self.parser.add_option("--" + section + "." + name, dest=(section + "." + name),
                     help=_("Section: " + section + ", Name: " + name))
 
     def _validate_options(self):
@@ -1065,8 +1068,8 @@ class ConfigCommand(CliCommand):
                 too_many = True
             else:
                 for section in cfg.sections():
-                    for name,value in cfg.items(section):
-                        if getattr(self.options,section + "." + name):
+                    for name, value in cfg.items(section):
+                        if getattr(self.options, section + "." + name):
                             too_many = True
                             break
             if too_many:
@@ -1076,8 +1079,8 @@ class ConfigCommand(CliCommand):
         if not (self.options.list or self.options.remove):
             has = False
             for section in cfg.sections():
-                for name,value in cfg.items(section):
-                    test = "%s" % getattr(self.options,section + "." + name)
+                for name, value in cfg.items(section):
+                    test = "%s" % getattr(self.options, section + "." + name)
                     has = has or (test != 'None')
             if not has:
                 self.parser.print_help()
@@ -1090,7 +1093,7 @@ class ConfigCommand(CliCommand):
                 section = r.split('.')[0]
                 name = r.split('.')[1]
                 found = False
-                for key,value in cfg.items(section):
+                for key, value in cfg.items(section):
                     if name == key:
                         found = True
                 if not found:
@@ -1135,6 +1138,7 @@ class ConfigCommand(CliCommand):
                     if not value == 'None':
                         cfg.set(section, name, value)
             cfg.save()
+
 
 class ListCommand(CliCommand):
 
@@ -1186,7 +1190,11 @@ class ListCommand(CliCommand):
             print _("    Installed Product Status")
             print "+-------------------------------------------+"
             for product in iproducts:
-                print constants.installed_product_status % product
+                status = status_map[product[3]]
+                # this should probably really be a dict, and a template string
+                print constants.installed_product_status % (product[0], product[1],
+                                                            product[2], status,
+                                                            product[4], product[5])
 
         if self.options.available:
             consumer = check_registration()['uuid']
