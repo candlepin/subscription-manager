@@ -30,8 +30,11 @@ HEAL_INTERVAL=`python -c "\
 import sys
 sys.path.append('/usr/share/rhsm')
 from rhsm.config import initConfig
-cfg = initConfig()
-print cfg.get('rhsmcertd', 'healFrequency')"`
+try:
+  cfg = initConfig()
+  print cfg.get('rhsmcertd', 'healFrequency')
+except:
+  print 1440"`
 
 RETVAL=0
 
