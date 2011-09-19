@@ -284,7 +284,7 @@ class UserPassCommand(CliCommand):
 class CleanCommand(CliCommand):
     def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog clean [OPTIONS]"
-        shortdesc = _("Remove all local consumer and subscription data without effecting the server")
+        shortdesc = _("Remove all local consumer and subscription data without affecting the server")
         desc = shortdesc
 
         CliCommand.__init__(self, "clean", usage, shortdesc, desc,
