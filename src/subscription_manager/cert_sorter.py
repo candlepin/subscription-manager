@@ -15,8 +15,18 @@
 from datetime import datetime
 import logging
 
+from rhsm.certificate import GMT
 log = logging.getLogger('rhsm-app.' + __name__)
 
+import gettext
+_ = gettext.gettext
+
+status_map = {"future_subscribed": _("Future Subscription"),
+              "subscribed": _("Subscribed"),
+              "not_subscribed": _("Not Subscribed"),
+              "expired": _("Expired"),
+              "partially_subscribed": _("Partially Subscribed")
+}
 
 class CertSorter(object):
     """
@@ -36,15 +46,16 @@ class CertSorter(object):
         self.product_dir = product_dir
         self.entitlement_dir = entitlement_dir
         if not on_date:
-            on_date = datetime.now()
+            on_date = datetime.now(GMT())
         self.on_date = on_date
 
         self.expired_entitlement_certs = []
         self.valid_entitlement_certs = []
+        self.future_entitlement_certs = []
 
         # All products installed on this machine, regardless of status. Maps
         # product ID to certlib.Product object.
-        self.all_products = {}
+        self.installed_products = {}
 
         # the specific products that are not entitled in the above certs,
         # dict maps product ID to product certificate.
@@ -67,6 +78,11 @@ class CertSorter(object):
         # products that we have entitlements for but no product cert for.
         self.not_installed_products = {}
 
+
+        # do we need a future entitled list? we seem to use that
+        # in the gui TODO
+        self.future_products = {}
+
         self.facts_dict = facts_dict
 
         log.debug("Sorting product and entitlement cert status for: %s" %
@@ -78,10 +94,10 @@ class CertSorter(object):
         log.debug("expired entitled products: %s" % self.expired_products.keys())
         log.debug("partially entitled products: %s" % self.partially_valid_products.keys())
         log.debug("unentitled products: %s" % self.unentitled_products.keys())
-
+        log.debug("future products: %s" % self.future_products.keys())
 
     def refresh(self):
-        refresh_dicts = [self.all_products,
+        refresh_dicts = [self.installed_products,
                          self.unentitled_products,
                          self.expired_products,
                          self.partially_valid_products,
@@ -91,29 +107,87 @@ class CertSorter(object):
         for d in refresh_dicts:
             d.clear()
 
-        self._populate_all_products()
+        self._populate_installed_products()
         self._scan_entitlement_certs()
         self._scan_ent_cert_stackable_products()
         self._scan_for_unentitled_products()
         self._remove_expired_if_valid_elsewhere()
 
-    def _populate_all_products(self):
+    def get_status(self, product_id):
+        """Return the status of a given product"""
+        if product_id in self.future_products:
+            return "future_subscribed"
+        if product_id in self.valid_products:
+            return "subscribed"
+        if product_id in self.unentitled_products:
+            return "not_subscribed"
+        if product_id in self.expired_products:
+            return "expired"
+        if product_id in self.partially_valid_products:
+            return "partially_subscribed"
+
+    def get_product_cert(self, product_id):
+        for product_dict in [self.valid_products,
+                             self.unentitled_products,
+                             self.expired_products,
+                             self.partially_valid_products]:
+
+            if product_id in product_dict:
+                return product_dict[product_id]
+
+    # find the display start date for this product id
+    def get_begin_date(self, product_id):
+        begin_dates = []
+        ent_certs = self.get_product_cert(product_id)
+        for ent_cert in ent_certs:
+            begin_date = ent_cert.validRange().begin()
+            begin_dates.append(begin_date)
+        begin_dates.sort()
+        return begin_dates[0]
+
+    # find the display end date for this product id
+    def get_end_date(self, product_id):
+        end_dates = []
+        if product_id in self.unentitled_products:
+            return self.on_date
+#            return datetime.now(GMT())
+
+        if product_id not in self.valid_products:
+            return self.on_date
+#            return datetime.now(GMT())
+
+        ent_certs = self.valid_products[product_id]
+        for ent_cert in ent_certs:
+            end_date = ent_cert.validRange().end()
+            end_dates.append(end_date)
+                # return last end date
+        end_dates.sort()
+        return end_dates[0]
+
+    def _populate_installed_products(self):
         """ Build the dict of all installed products. """
         prod_certs = self.product_dir.list()
         for product_cert in prod_certs:
             product = product_cert.getProduct()
-            self.all_products[product.getHash()] = product_cert
+            self.installed_products[product.getHash()] = product_cert
 
-        log.debug("Installed product IDs: %s" % self.all_products.keys())
+        log.debug("Installed product IDs: %s" % self.installed_products.keys())
 
+    # pass in list to update, like installed_products
+    # keep duplicate lists for future dates, to find first_invalid
+    # see certlib.find_first_invalid_date
     def _scan_entitlement_certs(self):
         ent_certs = self.entitlement_dir.list()
 
         for ent_cert in ent_certs:
 
-            if ent_cert.valid(on_date=self.on_date):
+ #           now = datetime.now(GMT())
+            now = self.on_date
+            if ent_cert.validRange().begin() > now:
+                self.future_entitlement_certs.append(ent_cert)
+                self._scan_ent_cert_products(ent_cert, self.future_products)
+            elif ent_cert.valid(on_date=self.on_date):
                 self.valid_entitlement_certs.append(ent_cert)
-
                 self._scan_ent_cert_products(ent_cert, self.valid_products,
                                              self.not_installed_products)
             else:
@@ -132,7 +206,7 @@ class CertSorter(object):
             product_id = product.getHash()
 
             # Is this an installed product?
-            if product_id in self.all_products:
+            if product_id in self.installed_products:
                 if product_id not in product_dict:
                     product_dict[product_id] = []
                 product_dict[product_id].append(ent_cert)
@@ -192,11 +266,11 @@ class CertSorter(object):
     def _scan_for_unentitled_products(self):
         # For all installed products, if not in valid or expired hash, it
         # must be completely unentitled
-        for product_id in self.all_products.keys():
+        for product_id in self.installed_products.keys():
             if (product_id in self.valid_products) or (product_id in self.expired_products) \
                     or (product_id in self.partially_valid_products):
                 continue
-            self.unentitled_products[product_id] = self.all_products[product_id]
+            self.unentitled_products[product_id] = [self.installed_products[product_id]]
 
     def _remove_expired_if_valid_elsewhere(self):
         """

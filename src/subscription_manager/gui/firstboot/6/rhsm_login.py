@@ -146,6 +146,10 @@ class moduleClass(Module, registergui.RegisterScreen):
         self._destroy_widget('cancel_button')
 
     def initializeUI(self):
+        # Need to make sure that each time the UI is initialized we reset back to the
+        # main register screen.
+        self._show_credentials_page()
+        self._clear_registration_widgets()
         self.initializeConsumerName()
 
     def needsNetwork(self):
@@ -168,11 +172,9 @@ class moduleClass(Module, registergui.RegisterScreen):
         """
         Indicates to firstboot whether to show this screen.  In this case
         we want to skip over this screen if there is already an identity
-        certificate on the machine (most likely laid down in a kickstart),
-        but showing the screen and allowing the user to reregister if
-        firstboot is run in reconfig mode.
+        certificate on the machine (most likely laid down in a kickstart).
         """
-        return True
+        return not ConsumerIdentity.existsAndValid()
 
     def _destroy_widget(self, widget_name):
         """

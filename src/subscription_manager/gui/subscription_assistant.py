@@ -353,23 +353,24 @@ class SubscriptionAssistant(widgets.GladeWidget):
 
         # installed but not entitled products:
         na = _("N/A")
-        for product_cert in sorter.unentitled_products.values():
-            self.invalid_store.add_map({
-                'active': False,
-                'product_name': product_cert.getProduct().getName(),
-                'contract': na,
-                'end_date': na,
-                'entitlement_id': None,
-                'entitlement': None,
-                'product_id': product_cert.getProduct().getHash(),
-                'align': 0.0
-            })
+        for product_certs in sorter.unentitled_products.values():
+            for product_cert in product_certs:
+                self.invalid_store.add_map({
+                        'active': False,
+                        'product_name': product_cert.getProduct().getName(),
+                        'contract': na,
+                        'end_date': na,
+                        'entitlement_id': None,
+                        'entitlement': None,
+                        'product_id': product_cert.getProduct().getHash(),
+                        'align': 0.0
+                        })
 
         # installed and invalid
         for product_id in sorter.expired_products.keys():
             ent_certs = sorter.expired_products[product_id]
             for ent_cert in ent_certs:
-                product = sorter.all_products[product_id].getProduct()
+                product = sorter.installed_products[product_id].getProduct()
                 self.invalid_store.add_map({
                         'active': False,
                         'product_name': product.getName(),

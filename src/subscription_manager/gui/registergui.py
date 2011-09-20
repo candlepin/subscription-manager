@@ -331,7 +331,9 @@ class RegisterScreen:
     def _finish_registration(self, failed=False):
         # failed is used by the firstboot subclasses to decide if they should
         # advance the screen or not.
-        self.close_window()
+        if not failed:
+            self.close_window()
+
         self.emit_consumer_signal()
 
         gobject.source_remove(self.timer)
@@ -382,6 +384,9 @@ class RegisterScreen:
         self.consumer_name.set_text("")
         self.initializeConsumerName()
         self.autobind.set_active(False)
+
+    def _show_credentials_page(self):
+        self.register_notebook.set_page(CREDENTIALS_PAGE)
 
 class AsyncBackend(object):
 

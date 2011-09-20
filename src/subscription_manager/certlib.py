@@ -126,6 +126,8 @@ class HealingLib(DataLib):
                 return 0
             else:
                 log.info("Auto-heal check complete.")
+                #FIXME: this may need to be changed with getInstalledProductStatus
+                # changes
                 installed_status = managerlib.getInstalledProductStatus()
                 log.info("Current installed product status:")
                 for prod_status in installed_status:
@@ -446,6 +448,8 @@ def find_first_invalid_date(ent_dir=None, product_dir=None):
                 "installed.")
         return None
 
+    # change _scan_entitlement_certs to take product lists,
+    # run it for the future to figure this out
     # First check if we have anything installed but not entitled *today*:
     cs = cert_sorter.CertSorter(product_dir, ent_dir, on_date=current_date)
     if cs.unentitled_products or cs.expired_products:
@@ -470,6 +474,9 @@ def find_first_invalid_date(ent_dir=None, product_dir=None):
             continue
         log.debug("Checking cert: %s, end date: %s" % (ent_cert.serialNumber(),
             end_date))
+
+        # new cert_sort stuff, use _scan_for_entitled_products, since
+        # we just need to know if stuff is expired
         cs = cert_sorter.CertSorter(product_dir, ent_dir, on_date=end_date)
         if cs.expired_products:
             log.debug("Found non-compliant status on %s" % end_date)

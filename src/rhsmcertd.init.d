@@ -25,13 +25,16 @@ from rhsm.config import initConfig
 cfg = initConfig()
 print cfg.get('rhsmcertd', 'certFrequency')"`
 
-
+# if we cannot read the config value, assume 1440 minutes (24 hours)
 HEAL_INTERVAL=`python -c "\
 import sys
 sys.path.append('/usr/share/rhsm')
 from rhsm.config import initConfig
-cfg = initConfig()
-print cfg.get('rhsmcertd', 'healFrequency')"`
+try:
+  cfg = initConfig()
+  print cfg.get('rhsmcertd', 'healFrequency')
+except:
+  print 1440"`
 
 RETVAL=0
 
