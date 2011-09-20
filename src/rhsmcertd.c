@@ -37,7 +37,7 @@ static FILE *log = 0;
 void
 printUsage ()
 {
-	printf ("usage: rhsmcertd <interval>");
+	printf ("usage: rhsmcertd <certinterval> <healinterval>");
 }
 
 char *
