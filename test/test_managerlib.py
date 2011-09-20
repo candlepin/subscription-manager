@@ -427,9 +427,7 @@ class TestGetConsumedProductEntitlement(unittest.TestCase):
 
     def test_one_stacking_product(self):
         def get_ent_dir():
-            product = StubProduct("product1", attributes={'stacking_id': 13,
-                                                          'multi-entitlement': 'yes',
-                                                          'sockets': 1})
+            product = StubProduct("product1")
             return StubCertificateDirectory([StubEntitlementCertificate(product)])
 
         managerlib.certdirectory.EntitlementDirectory = get_ent_dir
@@ -701,6 +699,7 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
             }
             prod_attrs.append(stacking_id_attribute)
         return create_pool(product_id, product_name, productAttributes=prod_attrs)
+
 
 class ParseDateTests(unittest.TestCase):
 
