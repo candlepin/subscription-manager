@@ -76,7 +76,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.add_text_column(_('Version'), 'version')
         arch_col = self.add_text_column(_('Arch'), 'arch')
         arch_col.set_alignment(0.5)
-        self.add_text_column(_('Certificate'), 'status')
+        self.add_text_column(_('Status'), 'status')
         self.add_date_column(_('Start Date'), 'start_date')
         self.add_date_column(_('End Date'), 'expiration_date')
 
@@ -123,24 +123,24 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['validity_note'] = _("Never Subscribed")
                     elif now > date_range.end():
                         entry['image'] = self._render_icon('red')
-                        entry['status'] = _('Invalid')
+                        entry['status'] = _('Expired')
                         entry['validity_note'] = \
                             _('Subscription %s is expired' % order.getSubscription())
                     elif product.getHash() in self.cs.partially_valid_products:
                         entry['image'] = self._render_icon('yellow')
-                        entry['status'] = _('Valid')
-                        entry['validity_note'] = _("Partially entitled")
+                        entry['status'] = _('Partially Subscribed')
+                        entry['validity_note'] = _("Partially Subscribed")
                     else:
                         entry['image'] = self._render_icon('green')
-                        entry['status'] = _('Valid')
+                        entry['status'] = _('Subscribed')
                         entry['validity_note'] = \
                             _('Covered by contract %s through %s' % \
                             (order.getContract(),
                              managerlib.formatDate(entry['expiration_date'])))
                 else:
                     entry['image'] = self._render_icon('red')
-                    entry['status'] = _('Missing')
-                    entry['validity_note'] = _("Never Subscribed")
+                    entry['status'] = _('Not Subscribed')
+                    entry['validity_note'] = _("Not Subscribed")
 
                 self.store.add_map(entry)
 
