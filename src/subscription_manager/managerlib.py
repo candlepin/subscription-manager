@@ -54,10 +54,6 @@ DIR = '/usr/share/locale/'
 # Expected permissions for identity certificates:
 ID_CERT_PERMS = stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP
 
-# 2038-01-01, used as the default when we hit an date overflow on
-# 32-bit systems:
-OVERFLOW_DATE = 2145916800.0
-
 
 def configure_i18n(with_glade=False):
     """
@@ -741,16 +737,7 @@ def parseDate(date):
 
     # create a new datetime this time using the timezone
     # so we aren't "naive"
-    try:
-        posix_time = xml.utils.iso8601.parse(date)
-    except OverflowError,e :
-        # Handle dates above 2038 on 32-bit systems by swapping it out with
-        # 2038-01-01. (which should be ok) Such a system is quite clearly
-        # in big trouble come that date, we just want to make sure they
-        # can still list such subscription now.
-        log.warning("Date overflow: %s, using Jan 1 2038 instead." %  date)
-        posix_time = OVERFLOW_DATE
-
+    posix_time = xml.utils.iso8601.parse(date)
     dt = datetime.fromtimestamp(posix_time, tz=server_tz)
     return dt
 
