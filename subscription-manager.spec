@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.10
+Version: 0.96.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -223,6 +223,10 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Sep 20 2011 James Bowes <jbowes@redhat.com> 0.96.11-1
+- Revert "737841: Handle dates beyond 2038 on 32-bit systems."
+  (jbowes@redhat.com)
+
 * Tue Sep 20 2011 James Bowes <jbowes@redhat.com> 0.96.10-1
 - 706853: Do not perform local cleanup if unregister server call fails
   (mstead@redhat.com)
