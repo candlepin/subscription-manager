@@ -198,7 +198,7 @@ class Repo(dict):
         ('enabled', 1, '1'),
         ('gpgcheck', 0, '1'),
         ('gpgkey', 0, None),
-        ('sslverify', 0, '1'),
+        ('sslverify', 1, '1'),
         ('sslcacert', 0, None),
         ('sslclientkey', 0, None),
         ('sslclientcert', 0, None),
