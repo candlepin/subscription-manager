@@ -695,7 +695,7 @@ class UnRegisterCommand(CliCommand):
 
         try:
             consumer = check_registration()['uuid']
-            managerlib.unregister(self.cp, consumer, False)
+            managerlib.unregister(self.cp, consumer)
         except Exception, e:
             handle_exception("Unregister failed", e)
 
