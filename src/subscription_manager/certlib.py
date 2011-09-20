@@ -106,20 +106,44 @@ class HealingLib(DataLib):
         from subscription_manager import managerlib
         cs = cert_sorter.CertSorter(ProductDirectory(), EntitlementDirectory(),
                                         facts_dict=self.facts_dict)
-        if (len(cs.partially_valid_products) + len(cs.unentitled_products)
-            + len(cs.expired_products)) == 0:
-            log.debug("System does not require healing")
-            return 0
-        elif 'autoheal' in consumer and consumer['autoheal']:
-            try:
-                log.info("Attempting to auto-heal the system.")
-                # TODO: repeat this routine for both today's date, and
-                # tomorrow's, so if subs are available we'll never be out of
-                # compliance.
 
-                # TODO: check compliance status here, and don't proceed if
-                # we're already compliant.
-                self.uep.bind(uuid)
+
+        if 'autoheal' in consumer and consumer['autoheal']:
+            try:
+
+                today = datetime.now(GMT())
+                tomorrow = today + timedelta(days=1)
+
+                #
+                # find_first_invalid_date returns today or some date in the
+                # future. If the date is beyond tomorrow, we're good for a
+                # little while longer, nothing to do. Otherwise, we either are
+                # or will be unentitled soon, in which case we should heal
+                # ourselves.
+                #
+                expiring_date = find_first_invalid_date()
+
+                log.debug("Expiring date: %s, Today: %s, Tomorrow: %s" % (
+                    str(expiring_date), str(today), str(tomorrow)))
+
+                if expiring_date is None or expiring_date >= tomorrow:
+                    log.debug("System does not require healing")
+                    return 0
+
+                #
+                # Otherwise, expiring_date <= tomorrow we should
+                # try to heal.
+                #
+
+                log.info("Attempting to auto-heal the system.")
+
+                #
+                # we're already unentitled, better heal ourselves
+                #
+                if expiring_date <= today:
+                    self.uep.bind(uuid, today)
+                else:
+                    self.uep.bind(uuid, tomorrow)
             except Exception, e:
                 log.error("Error attempting to auto-heal:")
                 log.exception(e)
