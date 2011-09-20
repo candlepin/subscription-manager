@@ -421,6 +421,7 @@ class DatePicker(gtk.HBox):
             self._date_entry.handler_block(self._validator_sig_handler)  # this sig handler gets unmuted in date_entry_box_grab_focus.
             error_dialog = messageWindow.ErrorDialog(messageWindow.wrap_text(
                                 "%s %s" % (_("Invalid date format. Please re-enter a valid date. Example: "), today.strftime('%x'))))
+            self._date_entry.set_text(self._date.strftime('%x'))
             error_dialog.connect('response', self._date_entry_box_grab_focus)
 
     def _date_entry_box_grab_focus(self, dummy2=None, dummy3=None):
