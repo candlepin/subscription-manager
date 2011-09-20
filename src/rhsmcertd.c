@@ -169,7 +169,7 @@ main (int argc, char *argv[])
 	int cert_interval = atoi (argv[1]) * 60;
 	int heal_interval = atoi (argv[2]) * 60;
 
-	//daemon (0, 0);
+	daemon (0, 0);
 	log = get_log ();
 	if (get_lock () != 0) {
 		fprintf (log, "%s: unable to get lock, exiting\n", ts ());
