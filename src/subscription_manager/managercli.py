@@ -1102,7 +1102,8 @@ class ConfigCommand(CliCommand):
                     if name == key:
                         found = True
                 if not found:
-                    sys.exit(-1, _("Error: Section %s and name %s does not exist.") % (section,name))
+                    print _("Error: Section %s and name %s does not exist.") % (section,name)
+                    sys.exit(-1)
 
     def _do_command(self):
         self._validate_options()
