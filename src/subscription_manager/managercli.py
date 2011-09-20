@@ -136,11 +136,16 @@ class CliCommand(object):
         self.product_dir = prod_dir or ProductDirectory()
 
     def _request_validity_check(self):
-        bus = dbus.SystemBus()
-        validity_obj = bus.get_object('com.redhat.SubscriptionManager',
-                          '/EntitlementStatus')
-        validity_iface = dbus.Interface(validity_obj,
-                            dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
+        try:
+            bus = dbus.SystemBus()
+            validity_obj = bus.get_object('com.redhat.SubscriptionManager',
+                              '/EntitlementStatus')
+            validity_iface = dbus.Interface(validity_obj,
+                                dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
+        except dbus.DBusException:
+            # we can't connect to dbus. it's not running, likely from a minimal
+            # install. we can't do anything here, so just ignore it.
+            return
 
         try:
             validity_iface.check_status()
