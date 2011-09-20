@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.9
+Version: 0.96.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -223,6 +223,42 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Sep 20 2011 James Bowes <jbowes@redhat.com> 0.96.10-1
+- 706853: Do not perform local cleanup if unregister server call fails
+  (mstead@redhat.com)
+- 737684: replace through with until in sub assistant (jbowes@redhat.com)
+- 739796: replace certificate column with status (jbowes@redhat.com)
+- 736784: Incorrect use of sys.exit in option checking (wpoteat@redhat.com)
+- 738549: Allow subscription-manager to run without dbus (jbowes@redhat.com)
+- 739714: Fix typo in the clean help text (bkearney@redhat.com)
+- 736424: list --installed only shows installed products (alikins@redhat.com)
+- 718045: Registration dialog remains open on invalid credentials.
+  (mstead@redhat.com)
+- 642660: [First Boot] Disable 'Back' button once registered and on
+  subscription-manager screen (RHEL6) (mstead@redhat.com)
+- 739595: [Fistboot] Ensure the credentials screen is reset on FB module
+  initialization. (mstead@redhat.com)
+- 739227: make healFrequency non-mandatory (cduryee@redhat.com)
+- Applying "indent -linux -pcs -psl -ci8 -cs -cli8 -cp0" to codebase.
+  (cduryee@redhat.com)
+- 738549: remove dbus dependency in post/postun steps (cduryee@redhat.com)
+- 737841: Handle dates beyond 2038 on 32-bit systems. (dgoodwin@redhat.com)
+- 707641: CLI auto-subscribe tries to re-use basic auth credentials.
+  (wpoteat@redhat.com)
+- 712047: yum prints non-error messages when running in quiet mode
+  (cduryee@redhat.com)
+- 736784: Subscription-manager config --remove add config property to rhsm.conf
+  if it doesn't exist. (wpoteat@redhat.com)
+- Update translations (bkearney@redhat.com)
+- 735338: Subscription Manager CLI tool does not allow unsubscribe when not
+  registered. (wpoteat@redhat.com)
+- 735695: add support for multiple config "--remove" options via cli
+  (cduryee@redhat.com)
+- 734606: ImportFileExtractor now creates cert/key files based on serial number
+  of the cert. (mstead@redhat.com)
+- 736166: move certs from subscription-manager to python-rhsm
+  (cduryee@redhat.com)
+
 * Wed Sep 07 2011 James Bowes <jbowes@redhat.com> 0.96.9-1
 - 734880: Handle bundled certs in the installed produict status.
   (bkearney@redhat.com)
