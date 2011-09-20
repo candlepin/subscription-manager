@@ -266,7 +266,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
         if self.last_valid_date:
             formatted = self.format_date(self.last_valid_date)
             self.subscription_label.set_label("<big><b>%s</b></big>" % \
-                    (_("Software entitlements valid through %s") % formatted))
+                    (_("Software entitlements valid until %s") % formatted))
             self.subscription_label.set_line_wrap(True)
             self.subscription_label.connect("size-allocate", self._label_allocate)
             self.first_invalid_radiobutton.set_label(
