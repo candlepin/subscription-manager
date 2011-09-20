@@ -328,7 +328,7 @@ class MainWindow(widgets.GladeWidget):
             return
         log.info("Proceeding with un-registration: %s", self.consumer.uuid)
         try:
-            managerlib.unregister(self.backend.uep, self.consumer.uuid, True)
+            managerlib.unregister(self.backend.uep, self.consumer.uuid)
         except Exception, e:
             log.error("Error unregistering system with entitlement platform.")
             handle_gui_exception(e, constants.UNREGISTER_ERROR,

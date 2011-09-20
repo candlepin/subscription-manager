@@ -802,25 +802,19 @@ def delete_consumer_certs():
     shutil.rmtree(cfg.get('rhsm', 'entitlementCertDir'), ignore_errors=True)
 
 
-def unregister(uep, consumer_uuid, force=True):
+def unregister(uep, consumer_uuid):
     """
     Shared logic for un-registration.
-
-    If an unregistration fails, we always clean up locally, but allow the
-    exception to be thrown so the caller can decide how to handle it.
     """
-    try:
-        uep.unregisterConsumer(consumer_uuid)
-        log.info("Successfully un-registered.")
-        system_log("Unregistered machine with identity: %s" % consumer_uuid)
-        force = True
-    finally:
-        if force:
-            # Clean up certificates, these are no longer valid:
-            delete_consumer_certs()
-            ProfileManager.delete_cache()
-            Facts.delete_cache()
-            InstalledProductsManager.delete_cache()
+    uep.unregisterConsumer(consumer_uuid)
+    log.info("Successfully un-registered.")
+    system_log("Unregistered machine with identity: %s" % consumer_uuid)
+
+    # Clean up certificates, these are no longer valid:
+    delete_consumer_certs()
+    ProfileManager.delete_cache()
+    Facts.delete_cache()
+    InstalledProductsManager.delete_cache()
 
 
 def check_identity_cert_perms():
