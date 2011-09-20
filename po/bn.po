@@ -4,7 +4,6 @@
 # 
 # Automatically generated, 2011.
 # Runa Bhattacharjee <runab@redhat.com>, 2011.
-# runab <runab@redhat.com>, 2011. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
@@ -20,28 +19,31 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 1.1\n"
 
-#: ../src/subscription_manager/managerlib.py:104
-#: ../src/subscription_manager/gui/installedtab.py:135
-#: ../src/subscription_manager/cert_sorter.py:25
+#: ../src/subscription_manager/managerlib.py:100
 msgid "Subscribed"
 msgstr "সাবস্ক্রাইব করা"
 
-#: ../src/subscription_manager/managerlib.py:104
-#: ../src/subscription_manager/gui/installedtab.py:126
-#: ../src/subscription_manager/cert_sorter.py:27
+#: ../src/subscription_manager/managerlib.py:100
 msgid "Expired"
 msgstr "মেয়াদ উত্তীর্ণ"
 
-#: ../src/subscription_manager/managerlib.py:104
-#: ../src/subscription_manager/gui/installedtab.py:142
-#: ../src/subscription_manager/gui/installedtab.py:143
-#: ../src/subscription_manager/cert_sorter.py:26
+#: ../src/subscription_manager/managerlib.py:100
 msgid "Not Subscribed"
 msgstr "সাবস্ক্রাইব করা নয়"
 
+#: ../src/subscription_manager/managerlib.py:127
+msgid "Not Installed"
+msgstr "ইনস্টল করা নয়"
+
+#: ../src/subscription_manager/managerlib.py:143
+#, 
+msgid "Partially Subscribed"
+msgstr ""
+
 #: ../src/subscription_manager/cache.py:166
+#, 
 msgid "Error updating system data, see /var/log/rhsm/rhsm.log for more details."
-msgstr "অধিক বিবরণের জন্য /var/log/rhsm/rhsm.log দেখুন।"
+msgstr ""
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
@@ -51,7 +53,7 @@ msgstr "অধিক বিবরণের জন্য /var/log/rhsm/rhsm.log �
 #: ../src/subscription_manager/i18n_optparse.py:42
 #, python-format
 msgid "usage: %s\n"
-msgstr "ব্যবহারপ্রণালী: %s\n"
+msgstr ""
 
 #. For older versions of optparse
 #: ../src/subscription_manager/i18n_optparse.py:43
@@ -136,94 +138,97 @@ msgstr "প্রোগ্রামের সংস্করণ সংখ্য�
 #: ../src/subscription_manager/i18n_optparse.py:76
 #, python-format
 msgid "%s: error: %s\n"
-msgstr "%s: ত্রুটি: %s\n"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:67
+#: ../src/subscription_manager/managercli.py:66
+#, 
 msgid ""
 "Network error, unable to connect to server.\n"
 " Please see /var/log/rhsm/rhsm.log for more information."
 msgstr ""
-"নেটওয়ার্ক সংক্রান্ত ত্রুটি, সার্ভারের সাথে সংযোগ স্থাপন করতে ব্যর্থ।\n"
-" অধিক বিবরণের জন্য /var/log/rhsm/rhsm.log দেখুন।"
 
 #. NOTE: yes this looks a lot like the socket error, but I think these
 #. were actually intended to display slightly different messages:
-#: ../src/subscription_manager/managercli.py:73
+#: ../src/subscription_manager/managercli.py:72
 #: ../src/subscription_manager/gui/utils.py:63
 msgid "Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."
 msgstr "নেটওয়ার্কের সমস্যা। অনুগ্রহ করে সংযোগের বিবরণ পরীক্ষা করুন অথবা অধিক বিবরণের জন্য /var/log/rhsm/rhsm.log দেখুন।"
 
 #. This is what happens when there's an issue with the server on the other
 #. side of the wire
-#: ../src/subscription_manager/managercli.py:77
+#: ../src/subscription_manager/managercli.py:76
 #: ../src/subscription_manager/gui/utils.py:66
 msgid "Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."
 msgstr "দূরবর্তী সার্ভারে সমস্যা। অনুগ্রহ করে সংযোগের বিবরণ পরীক্ষা করুন অথবা অধিক বিবরণের জন্য /var/log/rhsm/rhsm.log দেখুন।"
 
-#: ../src/subscription_manager/managercli.py:86
+#: ../src/subscription_manager/managercli.py:85
 #: ../src/subscription_manager/gui/utils.py:87
 #, python-format
 msgid "Bad CA certificate: %s"
 msgstr "ত্রুটিপূর্ণ CA সার্টিফিকেট: %s"
 
-#: ../src/subscription_manager/managercli.py:107
+#: ../src/subscription_manager/managercli.py:106
+#, 
 msgid "Installed Product Current Status:"
-msgstr "ইনস্টল করা উৎপাদনগুলির বর্তমান অবস্থা:"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:162
+#: ../src/subscription_manager/managercli.py:156
 msgid "proxy url in the form of proxy_hostname:proxy_port"
 msgstr "proxy_hostname:proxy_port বিন্যাসে লেখা প্রক্সি url"
 
-#: ../src/subscription_manager/managercli.py:164
+#: ../src/subscription_manager/managercli.py:158
 msgid "user for http proxy with basic authentication"
 msgstr "মৌলিক অনুমোদন ব্যবস্থা সহ http প্রক্সির ব্যবহারকারী"
 
-#: ../src/subscription_manager/managercli.py:166
+#: ../src/subscription_manager/managercli.py:160
 msgid "password for http proxy with basic authentication"
 msgstr "মৌলিক অনুমোদন ব্যবস্থা সহ http প্রক্সির পাসওয়ার্ড"
 
-#: ../src/subscription_manager/managercli.py:173
+#: ../src/subscription_manager/managercli.py:167
 msgid "Consumer not registered. Please register using --username and --password"
 msgstr "গ্রাহক নিবন্ধিত নন। অনুগ্রহ করে --username ও --password সহ নিবন্ধন করুন"
 
-#: ../src/subscription_manager/managercli.py:231
+#: ../src/subscription_manager/managercli.py:225
 msgid "Consumer certificates corrupted. Please reregister."
 msgstr "গ্রাহকদের সার্টিফিকেট ক্ষতিগ্রস্ত হয়েছে। অনুগ্রহ করে পুনরায় নিবন্ধন করুন।"
 
-#: ../src/subscription_manager/managercli.py:250
+#: ../src/subscription_manager/managercli.py:244
+#, 
 msgid "username to use when authorizing against the server"
-msgstr "সার্ভারে অনুমোদন করার সময় ব্যবহৃত ব্যবহারকারীর নাম"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:252
+#: ../src/subscription_manager/managercli.py:246
+#, 
 msgid "password to use when authorizing against the server"
-msgstr "সার্ভারে অনুমোদন করার সময় ব্যবহৃত পাসওয়ার্ড"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:264
+#: ../src/subscription_manager/managercli.py:258
 msgid "Username: "
 msgstr "ব্যবহারকারীর নাম: "
 
-#: ../src/subscription_manager/managercli.py:267
+#: ../src/subscription_manager/managercli.py:261
 msgid "Password: "
 msgstr "পাসওয়ার্ড: "
 
-#: ../src/subscription_manager/managercli.py:292
+#: ../src/subscription_manager/managercli.py:286
 #, 
-msgid "Remove all local consumer and subscription data without affecting the server"
+msgid "Remove all local consumer and subscription data without effecting the server"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:308
+#: ../src/subscription_manager/managercli.py:302
 msgid "All local data removed"
 msgstr "স্থানীয় সকল তথ্য মুছে ফেলা হয়"
 
-#: ../src/subscription_manager/managercli.py:314
+#: ../src/subscription_manager/managercli.py:308
+#, 
 msgid "Pull the latest subscription data from the server"
-msgstr "সাবস্ক্রিপশন সংক্রান্ত সর্বশেষ তথ্যগুলি সার্ভার থেকে প্রাপ্ত করুন"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:326
+#: ../src/subscription_manager/managercli.py:320
 msgid "All local data refreshed"
 msgstr "সকল স্থানীয় তথ্য নবায়িত হয়"
 
-#: ../src/subscription_manager/managercli.py:331
+#: ../src/subscription_manager/managercli.py:325
 #, python-format
 msgid ""
 "Unable to perform refresh due to the following exception \n"
@@ -232,31 +237,32 @@ msgstr ""
 "নিম্নলিখিত এক্সেপশনের কারণে নবায়িত করা যায়নি \n"
 " ত্রুটি: %s"
 
-#: ../src/subscription_manager/managercli.py:338
+#: ../src/subscription_manager/managercli.py:332
+#, 
 msgid "Display the identity certificate for this machine or request a new one"
-msgstr "এই মেশিনের পরিচয় নির্ধারণ করতে ব্যবহৃত সার্টিফিকেট প্রদর্শন করুন অথবা একটি নতুন সার্টিফিকেট নির্মাণের অনুরোধ জানান"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:347
+#: ../src/subscription_manager/managercli.py:341
 msgid "request a new certificate be generated"
 msgstr "নতুন সার্টিফিকেট প্রস্তুতির অনুরোধ করুন"
 
-#: ../src/subscription_manager/managercli.py:349
+#: ../src/subscription_manager/managercli.py:343
 msgid "force certificate regeneration (requires username and password)"
 msgstr "সার্টিফিকেট পুনরায় নির্মাণ করতে বাধ্য করা হবে (ব্যবহারকারীর নাম ও পাসওয়ার্ড আবশ্যক)"
 
-#: ../src/subscription_manager/managercli.py:354
+#: ../src/subscription_manager/managercli.py:348
 msgid "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr "গ্রাহকের পরিচয়ের তথ্য সম্ভবত উপস্থিত নয় অথবা ক্ষতিগ্রস্ত হয়েছে। register --help প্রয়োগ করুন"
 
-#: ../src/subscription_manager/managercli.py:357
+#: ../src/subscription_manager/managercli.py:351
 msgid "--force can only be used with --regenerate"
 msgstr "--force বিকল্পটি শুধুমাত্র --regenerate বিকল্পের সাথে ব্যবহার করা যাবে"
 
-#: ../src/subscription_manager/managercli.py:361
+#: ../src/subscription_manager/managercli.py:355
 msgid "--username and --password can only be used with --force"
 msgstr "--username ও --password বিকল্পগুলি শুধুমাত্র --force বিকল্পের সাথে ব্যবহার করা যাবে"
 
-#: ../src/subscription_manager/managercli.py:376
+#: ../src/subscription_manager/managercli.py:370
 #, python-format
 msgid ""
 "Current identity is: %s \n"
@@ -264,218 +270,245 @@ msgid ""
 "org name: %s \n"
 "org id: %s"
 msgstr ""
-"বর্তমান পরিচয়: %s \n"
-"নাম: %s \n"
-"org-র নাম: %s \n"
-"org-র id: %s"
 
-#: ../src/subscription_manager/managercli.py:388
+#: ../src/subscription_manager/managercli.py:382
+#, 
 msgid "Identity certificate has been regenerated."
-msgstr "পরিচিতির সার্টিফিকেট পুনরায় প্রস্তুত করা হয়েছে।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:396
+#: ../src/subscription_manager/managercli.py:390
 msgid "Error: Unable to generate a new identity for the system"
 msgstr "ত্রুটি: সিস্টেমের ক্ষেত্রে নতুন পরিচয় প্রস্তুত করতে ব্যর্থ"
 
-#: ../src/subscription_manager/managercli.py:403
+#: ../src/subscription_manager/managercli.py:397
+#, 
 msgid "Display the orgs against which a user can register a system"
-msgstr "যে সমস্ত প্রতিষ্ঠানের (org) জন্য ব্যবহারকারীরা সিস্টেম নিবন্ধন করতে পারবেন তা প্রদর্শন করা হবে"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:423
+#: ../src/subscription_manager/managercli.py:417
+#, 
 msgid "Organizations"
-msgstr "প্রতিষ্ঠান"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:427
+#: ../src/subscription_manager/managercli.py:421
+#, 
 msgid "OrgName"
-msgstr "OrgName"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:428
+#: ../src/subscription_manager/managercli.py:422
+#, 
 msgid "OrgKey"
-msgstr "OrgKey"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:431
-#: ../src/subscription_manager/managercli.py:668
+#: ../src/subscription_manager/managercli.py:425
+#: ../src/subscription_manager/managercli.py:662
 #, python-format
 msgid "%s cannot register to any organizations."
-msgstr "%s দ্বারা কোনো প্রতিষ্ঠানের জন্য নিবন্ধন করা সম্ভব নয়।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:438
+#: ../src/subscription_manager/managercli.py:432
+#, 
 msgid "Error: Unable to retrieve org list from Entitlement Platform"
-msgstr "ত্রুটি: Entitlement Platform থেকে org তালিকা প্রাপ্ত করতে ব্যর্থ"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:445
+#: ../src/subscription_manager/managercli.py:439
+#, 
 msgid "Display the environments available for a user"
-msgstr "ব্যবহারকারীর জন্য উপলব্ধ এনভায়রনমেন্টগুলি প্রদর্শন করা হবে"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:453
+#: ../src/subscription_manager/managercli.py:447
+#, 
 msgid "specify org for environment list"
-msgstr "পরিবেশের তালিকা নির্ধারণের জন্য org নির্ধারণ করুন"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:457
+#: ../src/subscription_manager/managercli.py:451
+#, 
 msgid "you must specify an --org"
-msgstr "একটি --org উল্লেখ করা আবশ্যক"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:473
+#: ../src/subscription_manager/managercli.py:467
+#, 
 msgid "Environments"
-msgstr "পরিবেশ"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:489
+#: ../src/subscription_manager/managercli.py:483
+#, 
 msgid "Error: Unable to retrieve environment list from Entitlement Platform"
-msgstr "ত্রুটি: Entitlement Platform থেকে পরিবেশের তালিকা প্রাপ্ত করতে ব্যর্থ"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:498
+#, 
+msgid "the type of consumer to register, defaults to system"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:500
+#, 
+msgid "name of the consumer to register, defaults to the hostname"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:502
+#, 
+msgid "if supplied, the existing consumer data is pulled from the server"
+msgstr ""
 
 #: ../src/subscription_manager/managercli.py:504
-msgid "the type of consumer to register, defaults to system"
-msgstr "নিবন্ধনযোগ্য গ্রাহকের ধরন, ডিফল্ট অবস্থায় সিস্টেম অনুযায়ী নির্ধারণ করা হয়"
+#, 
+msgid "register to one of multiple organizations for the user"
+msgstr ""
 
 #: ../src/subscription_manager/managercli.py:506
-msgid "name of the consumer to register, defaults to the hostname"
-msgstr "নিবন্ধনযোগ্য গ্রাহকের নাম, ডিফল্ট অবস্থায় হোস্ট-নেম অনুযায়ী নির্ধারণ করা হয়"
+#, 
+msgid "register to a specific environment in the destination org"
+msgstr ""
 
 #: ../src/subscription_manager/managercli.py:508
-msgid "if supplied, the existing consumer data is pulled from the server"
-msgstr "উল্লেখ করা হলে, গ্রাহকদের উপস্থিত তথ্য সার্ভার থেকে প্রাপ্ত করা হয়"
-
-#: ../src/subscription_manager/managercli.py:510
-msgid "register to one of multiple organizations for the user"
-msgstr "ব্যবহারকারীর জন্য নির্ধারিত এক অথবা অধিক প্রতিষ্ঠানে নিবন্ধন করা হবে"
-
-#: ../src/subscription_manager/managercli.py:512
-msgid "register to a specific environment in the destination org"
-msgstr "উদ্দিষ্ট প্রতিষ্ঠানের মধ্যে কোনো সুনির্দিষ্ট পরিবেশে নিবন্ধন করা হবে"
-
-#: ../src/subscription_manager/managercli.py:514
-#: ../src/subscription_manager/managercli.py:784
+#: ../src/subscription_manager/managercli.py:778
 msgid "automatically subscribe this system to                                     compatible subscriptions."
-msgstr "সিস্টেমটিকে স্বয়ংক্রিয়ভাবে সুসংগত সাবস্ক্রিপশনের সাথে সাবস্ক্রাইব করা হবে।"
+msgstr "সিস্টেমটিকে স্বয়ংক্রিয়ভাবে                                     সুসংগত সাবস্ক্রিপশনের সাথে সাবস্ক্রাইব করা হবে।"
 
-#: ../src/subscription_manager/managercli.py:517
+#: ../src/subscription_manager/managercli.py:511
 msgid "register the system even if it is already registered"
 msgstr "পূর্বে নিবন্ধিত হলেও সিস্টেমটি পুনরায় নিবন্ধন করুন"
 
-#: ../src/subscription_manager/managercli.py:519
+#: ../src/subscription_manager/managercli.py:513
+#, 
 msgid "one or more activation keys to use for registration"
-msgstr "নিবন্ধনের জন্য ব্যবহারযোগ্য এক অথবা অধিক সংখ্যক অ্যাক্টিভেশন-কি"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:526
+#: ../src/subscription_manager/managercli.py:520
 msgid "This system is already registered. Use --force to override"
 msgstr "এই সিস্টেমটি পূর্বে নিবন্ধিত হয়েছে। বলপূর্বক পুনরায় নিবন্ধনের জন্য --force ব্যবহার করুন"
 
-#: ../src/subscription_manager/managercli.py:529
+#: ../src/subscription_manager/managercli.py:523
 msgid "Error: consumer name can not be empty."
 msgstr "ত্রুটি: গ্রাহকের নাম ফাঁকা রাখা চলবে না।"
 
-#: ../src/subscription_manager/managercli.py:532
+#: ../src/subscription_manager/managercli.py:526
+#, 
 msgid "Error: Activation keys do not require user credentials"
-msgstr "ত্রুটি: অ্যাক্টিভেশন-কির ক্ষেত্রে ব্যবহারকারীর পরিচয় উল্লেখ করা আবশ্যক নয়"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:535
+#: ../src/subscription_manager/managercli.py:529
+#, 
 msgid "Error: Must specify --org to register to an environment."
-msgstr "ত্রুটি: একটি পরিবেশে নিবন্ধন করার জন্য --org প্রয়োগ করা আবশ্যক।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:538
+#: ../src/subscription_manager/managercli.py:532
+#, 
 msgid "Error: Must specify --org to register with activation keys."
-msgstr "ত্রুটি: অ্যাক্টিভেশন-কি সহযোগে নিবন্ধন করার জন্য --org প্রয়োগ করা আবশ্যক।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:565
+#: ../src/subscription_manager/managercli.py:559
 #, python-format
 msgid "The system with UUID %s has been unregistered"
 msgstr "UUID %s সহ সিস্টেমটির নিবন্ধন বাতিল করা হয়েছে"
 
-#: ../src/subscription_manager/managercli.py:606
+#: ../src/subscription_manager/managercli.py:600
 #, python-format
 msgid "Error during registration: %s"
 msgstr "নিবন্ধনের সময় ত্রুটি হয়েছে: %s"
 
-#: ../src/subscription_manager/managercli.py:610
+#: ../src/subscription_manager/managercli.py:604
 #, python-format
 msgid "The system has been registered with id: %s "
-msgstr "id সহযোগে এই সিস্টেমটি নিবন্ধন করা হয়েছে: %s "
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:649
+#: ../src/subscription_manager/managercli.py:643
+#, 
 msgid "ERROR: Server does not support environments."
-msgstr "ত্রুটি: সার্ভার দ্বারা এই পরিবেশগুলি সমর্থন করা হয় না।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:653
+#: ../src/subscription_manager/managercli.py:647
 #, python-format
 msgid "No such environment: %s"
-msgstr "এই ধরনের কোনো পরিবেশ উপস্থিত নেই: %s"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:693
+#: ../src/subscription_manager/managercli.py:687
 msgid "This system is currently not registered."
 msgstr "সিস্টেমটি বর্তমানে নিবন্ধিত নয়।"
 
-#: ../src/subscription_manager/managercli.py:715
+#: ../src/subscription_manager/managercli.py:709
 msgid "System has been un-registered."
 msgstr "সিস্টেমটির নিবন্ধন বাতিল করা হয়েছে।"
 
-#: ../src/subscription_manager/managercli.py:722
+#: ../src/subscription_manager/managercli.py:716
+#, 
 msgid "Attempt to redeem a subscription for a preconfigured machine"
-msgstr "পূর্বে কনফিগার করা একটি মেশিনের জন্য সাবস্ক্রিপশন ব্যবহার করা প্রচেষ্টা করা হয়েছে"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:728
+#: ../src/subscription_manager/managercli.py:722
+#, 
 msgid "Email address to notify when subscription redemption is complete."
-msgstr "সাবস্ক্রিপশনের প্রয়োগ সম্পূর্ণ হলে যে ই-মেইল ঠিকানায় সূচনা পাঠানো হবে।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:731
+#: ../src/subscription_manager/managercli.py:725
+#, 
 msgid "Optional language to use for email notification when subscription redemption is complete. Examples: en-us, de-de"
-msgstr "সাবস্ক্রিপশনের ব্যবহার সম্পূর্ণ হলে ই-মেইল দ্বারা সূচনা প্রদানের জন্য ঐচ্ছিক ভাষা নির্বাচন। যেমন: en-us, de-de"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:772
+#: ../src/subscription_manager/managercli.py:766
+#, 
 msgid "Subscribe the registered machine to a specified product"
-msgstr "নিবন্ধনিত মেশিনটিকে কোনো সুনির্দিষ্ট উৎপাদনের সাথে সাবস্ক্রাইব করুন"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:780
+#: ../src/subscription_manager/managercli.py:774
+#, 
 msgid "the id of the pool to subscribe to"
-msgstr "সাবস্ক্রাইব করার জন্য চিহ্নিত পুলের id"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:782
+#: ../src/subscription_manager/managercli.py:776
+#, 
 msgid "number of subscriptions to consume"
-msgstr "ব্যবহার করার জন্য চিহ্নিত সাবস্ক্রিপশনের সংখ্যা"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:789
+#: ../src/subscription_manager/managercli.py:783
+#, 
 msgid "Error: This command requires that you specify a pool with --pool or use --auto."
-msgstr "ত্রুটি: এই কমান্ডের ক্ষেত্রে -pool সহযোগে একটি পুল উল্লেখ করা অথবা --auto ব্যবহার করা আবশ্যক।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:792
+#: ../src/subscription_manager/managercli.py:786
+#, 
 msgid "Error: Only one of --pool or --auto may be used with this command."
-msgstr "ত্রুটি: এই কমান্ডের সাথে--pool অথবা --auto-র মধ্যে শুধুমাত্র একটি বিকল্প ব্যবহার করা যাবে।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:799
+#: ../src/subscription_manager/managercli.py:793
+#, 
 msgid "Error: Quantity must be a positive number."
-msgstr "ত্রুটি: পরিমাণের ক্ষেত্রে শূণ্যের বেশি সংখ্যা চিহ্নিত করা আবশ্যক।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:822
+#: ../src/subscription_manager/managercli.py:816
 msgid "Please enter a valid numeric pool id."
 msgstr "অনুগ্রহ করে বৈধ সংখ্যার পুল id লিখুন।"
 
-#: ../src/subscription_manager/managercli.py:824
+#: ../src/subscription_manager/managercli.py:818
 #, python-format
 msgid "Successfully subscribed the system to Pool %s"
-msgstr "সাফল্যের সাথে পুল %s-এ সিস্টেমটি সাবস্ক্রাইব করা হয়েছে"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:853
+#: ../src/subscription_manager/managercli.py:847
+#, 
 msgid "Unsubscribe the machine from all or specific subscriptions"
-msgstr "সকল অথবা সুনির্দিষ্ট সাবস্ক্রিপশন থেকে মেশিনটিকে আন-সাবস্ক্রাইব করা হবে"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:860
+#: ../src/subscription_manager/managercli.py:854
 msgid "Certificate serial to unsubscribe"
 msgstr "আন-সাবস্ক্রাইব করার উদ্দেশ্যে সার্টিফিকেটের ক্রমিক"
 
-#: ../src/subscription_manager/managercli.py:862
+#: ../src/subscription_manager/managercli.py:856
 msgid "Unsubscribe from all subscriptions"
 msgstr "সকল সাবস্ক্রিপশন থেকে আন-সাবস্ক্রাইব করা হবে"
 
-#: ../src/subscription_manager/managercli.py:867
+#: ../src/subscription_manager/managercli.py:861
 #, python-format
 msgid "'%s' is not a valid serial number"
-msgstr "'%s' ক্রমিক সংখ্যাটি বৈধ নয়"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:869
+#: ../src/subscription_manager/managercli.py:863
 msgid "One of --serial or --all must be provided"
 msgstr "--serial ও --all বিকল্পগুলির মধ্যে শুধুমাত্র একটি ব্যবহার করা যাবে"
 
-#: ../src/subscription_manager/managercli.py:893
-#: ../src/subscription_manager/managercli.py:908
+#: ../src/subscription_manager/managercli.py:887
+#: ../src/subscription_manager/managercli.py:902
 #, python-format
 msgid ""
 "Unable to perform unsubscribe due to the following exception \n"
@@ -484,204 +517,229 @@ msgstr ""
 "নিম্নলিখিত এক্সেপশনের কারণে আন-সাবস্ক্রাইব করতে ব্যর্থ \n"
 " ত্রুটি: %s"
 
-#: ../src/subscription_manager/managercli.py:900
+#: ../src/subscription_manager/managercli.py:894
+#, 
 msgid "This machine has been unsubscribed from all subscriptions"
-msgstr "এই মেশিনটির সকল সাবস্ক্রিপশন থেকে আন-সাবস্ক্রাইব করা হয়েছে"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:905
+#: ../src/subscription_manager/managercli.py:899
+#, 
 msgid "This machine has been unsubscribed from subscription "
-msgstr "এই মেশিনটির সাবস্ক্রিপশন থেকে আন-সাবস্ক্রাইব করা হয়েছে"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:913
+#, 
+msgid "Work with the current facts for this machine"
+msgstr ""
 
 #: ../src/subscription_manager/managercli.py:919
-msgid "Work with the current facts for this machine"
-msgstr "এই মেশিন সংক্রান্ত বর্তমান উপলব্ধ সংবাদ সহযোগে কর্ম সঞ্চালিত হবে"
-
-#: ../src/subscription_manager/managercli.py:925
 msgid "list known facts for this system"
 msgstr "এই সিস্টেম সংক্রান্ত জ্ঞাত সংবাদের তালিকা প্রদর্শন করা হবে"
 
-#: ../src/subscription_manager/managercli.py:927
+#: ../src/subscription_manager/managercli.py:921
 msgid "update the system facts"
 msgstr "সিস্টেম সংক্রান্ত সংবাদ আপডেট করা হবে"
 
-#: ../src/subscription_manager/managercli.py:936
+#: ../src/subscription_manager/managercli.py:930
 msgid "Error: Need either --list or --update, Try facts --help"
 msgstr "ত্রুটি: --list ও --update বিকল্প দুটির মধ্যে একটি প্রয়োজন। facts --help সহযোগে প্রয়াস করুন"
 
-#: ../src/subscription_manager/managercli.py:952
+#: ../src/subscription_manager/managercli.py:946
 #: ../src/subscription_manager/gui/factsgui.py:103
+#, 
 msgid "Unknown"
-msgstr "অজানা"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:954
+#, 
+msgid "Successfully updated the system facts."
+msgstr ""
 
 #: ../src/subscription_manager/managercli.py:960
-msgid "Successfully updated the system facts."
-msgstr "সিস্টেম সংক্রান্ত সংবাদ সাফল্যের সাথে আপডেট করা হয়েছে।"
-
-#: ../src/subscription_manager/managercli.py:967
+#, 
 msgid "Import certificates which were provided outside of the tool"
-msgstr "এই ব্যবস্থার বাইরে উপলব্ধ করা ইম্পোর্ট সার্টিফিকেট"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:973
+#: ../src/subscription_manager/managercli.py:966
+#, 
 msgid "certificate file to import (for multiple imports,"
-msgstr "ইম্পোর্ট করার জন্য চিহ্নিত সার্টিফিকেট ফাইল (একাধিক ইম্পোর্টের জন্য,"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:978
+#: ../src/subscription_manager/managercli.py:971
+#, 
 msgid "Error: At least one certificate is required"
-msgstr "ত্রুটি: অন্তত একটি সার্টিফিকেটের উপস্থিতি আবশ্যক"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:991
+#: ../src/subscription_manager/managercli.py:984
 #, python-format
 msgid "Successfully imported certificate %s"
-msgstr "সাফল্যের সাথে %s সার্টিফিকেটটি ইম্পোর্ট করা হয়েছে"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:997
-#: ../src/subscription_manager/managercli.py:1007
+#: ../src/subscription_manager/managercli.py:990
+#: ../src/subscription_manager/managercli.py:1000
 #, python-format
 msgid "%s is not a valid certificate file. Please use a valid certificate."
-msgstr "%s বৈধ সার্টিফিকেট ফাইল নয়। অনুগ্রহ করে একটি বৈধ সার্টিফিকেট ব্যবহার করুন।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1003
+#: ../src/subscription_manager/managercli.py:996
 #: ../src/subscription_manager/gui/importsub.py:86
+#, 
 msgid "An error occurred while importing the certificate. "
-msgstr "সার্টিফিকেটটি ইম্পোর্ট করতে সমস্যা দেখা দিয়েছে।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1015
+#: ../src/subscription_manager/managercli.py:1007
+#, 
 msgid "List the repos which this machine is entitled to use"
-msgstr "এই মেশিনটি যে সমস্ত সংগ্রহস্তল ব্যবহার করতে সক্ষম সেগুলির তালিকা প্রস্তুত করুন"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1025
+#: ../src/subscription_manager/managercli.py:1017
+#, 
 msgid "list the entitled repositories for this system"
-msgstr "এই সিস্টেমটির এনটাইটেলমেন্ট অনুযায়ী প্রযোজ্য সংগ্রহস্থলের তালিকা প্রস্তুত করুন"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1029
+#: ../src/subscription_manager/managercli.py:1021
+#, 
 msgid "Error: No options provided. Please see the help comand."
-msgstr "ত্রুটি: কোনো বিকল্প উপলব্ধ করা হয়নি। অনুগ্রহ করে help কমান্ডটি দেখুন।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1039
+#: ../src/subscription_manager/managercli.py:1031
 #, python-format
 msgid "    Entitled Repositories in %s"
-msgstr "%s-এ এনটাইটেলমেন্ট সহ সংগ্রহস্থল"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1047
+#: ../src/subscription_manager/managercli.py:1039
+#, 
 msgid "The system is not entitled to use any repositories."
-msgstr "কোনো সংগ্রহস্থল ব্যবহারের জন্য এই সিস্টেমটিকে কোনো এনটাইটেলমেন্টের সাথে যুক্ত করা হয়নি।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1054
+#: ../src/subscription_manager/managercli.py:1046
+#, 
 msgid "List, set, or remove the configuration parameters in use by this machine."
-msgstr "এই মেশিন দ্বারা ব্যবহৃত কনফিগারেশন পরামিতিগুলির তালিকা প্রদর্শন, মান নির্ধারণ অথবা বর্জন করা হবে।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1061
+#: ../src/subscription_manager/managercli.py:1053
+#, 
 msgid "list the configuration for this system"
-msgstr "সিস্টেমের কনফিগারেশনের তালিকা প্রস্তুত করুন"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1067
+#: ../src/subscription_manager/managercli.py:1059
+#, 
 msgid "Section: "
-msgstr "বিভাগ:"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1081
+#: ../src/subscription_manager/managercli.py:1073
+#, 
 msgid "Error: --list should not be used with any other options for setting or removing configurations."
-msgstr "ত্রুটি: কনফিগারেশনের মান নির্ধারণ অথবা অপসারণের জন্য --list-র সাথে অন্য কোনো বিকল্প নির্ধারণ করা উচিত নয়।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1096
+#: ../src/subscription_manager/managercli.py:1088
+#, 
 msgid "Error: configuration entry designation for removal must be of format [section.name]"
-msgstr "ত্রুটি: অপসারণের উদ্দেশ্যে কনফিগারেশন এনট্রি নির্ধারণের জন্য চিহ্নিত বিন্যাস ব্যবহার করা আবশ্যক [section.name]"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1105
+#: ../src/subscription_manager/managercli.py:1097
 #, python-format
 msgid "Error: Section %s and name %s does not exist."
-msgstr "ত্রুটি: %s বিভাগ ও  %s নাম উপস্থিত নেই।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1124
+#: ../src/subscription_manager/managercli.py:1115
+#, 
 msgid "[] - Default value in use\n"
-msgstr "[] - ব্যবহৃত ডিফল্ট মান"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1132
-#: ../src/subscription_manager/managercli.py:1135
+#: ../src/subscription_manager/managercli.py:1123
+#: ../src/subscription_manager/managercli.py:1126
 #, python-format
 msgid "You have removed the value for section %s and name %s."
-msgstr "বিভাগ %s ও %s নামের মান আপনি মুছে ফেলেছেন।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1136
+#: ../src/subscription_manager/managercli.py:1127
 #, python-format
 msgid "The default value for %s will now be used."
-msgstr "এখন %s-র ডিফল্ট মান বর্তমানে ব্যবহৃত হবে।"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1138
+#: ../src/subscription_manager/managercli.py:1129
 #, python-format
 msgid "Section %s and name %s cannot be removed."
-msgstr "বিভাগ %s ও নাম %s মুছে ফেলা যাবে না।"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:1143
+#, 
+msgid "List subscription and product information for this machine"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:1149
+#, 
+msgid "if supplied then list shows those products which are installed (default)"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:1151
+#, 
+msgid "if supplied then list shows those subscriptions which are available"
+msgstr ""
 
 #: ../src/subscription_manager/managercli.py:1153
-msgid "List subscription and product information for this machine"
-msgstr "এই মেশিনের জন্য প্রযোজ্য সাবস্ক্রিপশন ও উৎপাদন সম্পর্কিত তথ্যের তালিকা প্রদর্শন করা হবে"
-
-#: ../src/subscription_manager/managercli.py:1159
-msgid "if supplied then list shows those products which are installed (default)"
-msgstr "উল্লেখ করা হলে, ইনস্টল করা উৎপাদনগুলির তালিকা প্রদর্শন করা হবে (ডিফল্ট)"
-
-#: ../src/subscription_manager/managercli.py:1161
-msgid "if supplied then list shows those subscriptions which are available"
-msgstr "উল্লেখ করা হলে, উপলব্ধ সাবস্ক্রিপশনগুলি প্রদর্শন করা হবে"
-
-#: ../src/subscription_manager/managercli.py:1163
 msgid "date to search on, defaults to today's date, only used with --available "
 msgstr "অসন্ধান সঞ্চচালনার তারিখ, ডিফল্ট হিসাবে আজকের তারিখ প্রদর্শন করা হয়, শুধুমাত্র --available-র সাথে ব্যবহার করা হয়"
 
-#: ../src/subscription_manager/managercli.py:1166
+#: ../src/subscription_manager/managercli.py:1156
+#, 
 msgid "shows the subscriptions being consumed by this system."
-msgstr "সিস্টেম দ্বারা ব্যবহৃত সাবস্ক্রিপশন প্রদর্শন করা হয়"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1168
+#: ../src/subscription_manager/managercli.py:1158
 msgid "if supplied with --available then all subscriptions are returned"
 msgstr "--available সহ উল্লিখিত হলে সকল সাবস্ক্রিপশন প্রাপ্ত হয়"
 
-#: ../src/subscription_manager/managercli.py:1175
+#: ../src/subscription_manager/managercli.py:1165
 msgid "Error: --all is only applicable with --available"
 msgstr "ত্রুটি: --all শুধুমাত্র --available বিকল্পের সাথে ব্যবহার করা যাবে"
 
-#: ../src/subscription_manager/managercli.py:1178
+#: ../src/subscription_manager/managercli.py:1168
 msgid "Error: --ondate is only applicable with --available"
 msgstr "ত্রুটি: --ondate শুধুমাত্র --available বিকল্পের সাথে ব্যবহার করা যাবে"
 
-#: ../src/subscription_manager/managercli.py:1193
+#: ../src/subscription_manager/managercli.py:1183
 msgid "No installed Products to list"
 msgstr "প্রদর্শনযোগ্য কোনো উৎপাদন ইনস্টল করা নেই"
 
-#: ../src/subscription_manager/managercli.py:1196
+#: ../src/subscription_manager/managercli.py:1186
 msgid "    Installed Product Status"
 msgstr "    ইনস্টল করা উৎপাদনের অবস্থা"
 
-#: ../src/subscription_manager/managercli.py:1214
+#: ../src/subscription_manager/managercli.py:1200
 msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr "অবৈধ বিন্যাসে তারিখ উল্লিখিত হয়েছে। YYYY-MM-DD বিন্যাসে তারিখ লেখা আবশ্যক (উদাহরণস্বরূপ: "
 
-#: ../src/subscription_manager/managercli.py:1220
+#: ../src/subscription_manager/managercli.py:1206
 msgid "No Available subscription pools to list"
 msgstr "প্রদর্শনযোগ্য কোনো উপলব্ধ সাবস্ক্রিপশন পুল নেই"
 
-#: ../src/subscription_manager/managercli.py:1222
+#: ../src/subscription_manager/managercli.py:1208
 #: ../src/subscription_manager/gui/allsubs.py:77
 #: ../src/subscription_manager/gui/subscription_assistant.py:170
 msgid "Available Subscriptions"
 msgstr "উপলব্ধ সাবস্ক্রিপশন"
 
-#: ../src/subscription_manager/managercli.py:1228
+#: ../src/subscription_manager/managercli.py:1214
+#, 
 msgid "virtual"
-msgstr "ভার্চুয়াল"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1230
+#: ../src/subscription_manager/managercli.py:1216
+#, 
 msgid "physical"
-msgstr "প্রকৃত"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1243
+#: ../src/subscription_manager/managercli.py:1229
 msgid "No Consumed subscription pools to list"
 msgstr "প্রদর্শনযোগ্য কোনো ব্যবহৃত সাবস্ক্রিপশন পুল নেই"
 
-#: ../src/subscription_manager/managercli.py:1245
+#: ../src/subscription_manager/managercli.py:1231
 msgid "Consumed Product Subscriptions"
 msgstr "ব্যবহৃত উৎপাদনের সাবস্ক্রিপশন"
 
-#: ../src/subscription_manager/managercli.py:1298
+#: ../src/subscription_manager/managercli.py:1284
 #, python-format
 msgid ""
 "\n"
@@ -690,61 +748,70 @@ msgstr ""
 "\n"
 "ব্যবহারপ্রণালী: %s [options] MODULENAME --help\n"
 
-#: ../src/subscription_manager/managercli.py:1299
+#: ../src/subscription_manager/managercli.py:1285
+#, 
 msgid "Primary Modules:"
-msgstr "প্রধান মডিউল:"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1308
+#: ../src/subscription_manager/managercli.py:1294
+#, 
 msgid "Other Modules (Please consult documentation):"
-msgstr "অন্যান্য মডিউল (অনুগ্রহ করে প্রাসঙ্গিক নতিপত্র পড়ুন):"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1370
+#: ../src/subscription_manager/managercli.py:1356
 msgid "Error: You need to register this system by running `register` command before using this option."
 msgstr "ত্রুটি: এই বিকল্পটি ব্যবহার করার পূর্বে `register` কমান্ড সহযোগে সিস্টেমটি নিবন্ধন করা আবশ্যক।"
 
 #: ../src/subscription_manager/branding/__init__.py:79
+#, 
 msgid "Register the machine to the server"
-msgstr "সার্ভারে মেশিনটিকে নিবন্ধন করুন"
+msgstr ""
 
 #: ../src/subscription_manager/branding/__init__.py:80
+#, 
 msgid "Unregister the machine from the server"
-msgstr "সার্ভার থেকে মেশিনটির নিবন্ধন বাতিল করুন"
+msgstr ""
 
 #: ../src/subscription_manager/branding/__init__.py:82
+#, 
 msgid "This system is registered to spacewalk"
-msgstr "সিস্টেমটি spacewalk-এ নিবন্ধিত"
+msgstr ""
 
 #: ../src/subscription_manager/branding/__init__.py:83
+#, 
 msgid ""
 "WARNING\n"
 "\n"
 "You have already registered with spacewalk.\n"
 msgstr ""
-"সতর্কবার্তা\n"
-"\n"
-"পূর্বেই spacewalk-এ নিবন্ধিত হয়েছে।\n"
 
 #: ../src/subscription_manager/branding/__init__.py:89
+#, 
 msgid "Please enter your account information:"
-msgstr "অনুগ্রহ করে অ্যাকাউন্ট সংক্রান্ত তথ্য লিখুন:"
+msgstr ""
 
 #: ../src/subscription_manager/branding/__init__.py:91
+#, 
 msgid "Contact your system adminsitrator if you've forgot your login or password"
-msgstr "লগ-ইন অথবা পাসওয়ার্ড হারিয়ে গেলে, সিস্টেম অ্যাডমিনিস্ট্রেটরের সাথে যোগাযোগ করুন"
+msgstr ""
 
 #: ../src/subscription_manager/branding/redhat_branding.py:6
+#, 
 msgid "register the client to RHN"
-msgstr "ক্লায়েন্ট সিস্টেমকে RHN-এনিবন্ধন করুন"
+msgstr ""
 
 #: ../src/subscription_manager/branding/redhat_branding.py:7
+#, 
 msgid "unregister the client from RHN"
-msgstr "RHN থেকে সিস্টেমের নিবন্ধন বাতিল করা হবে"
+msgstr ""
 
 #: ../src/subscription_manager/branding/redhat_branding.py:9
+#, 
 msgid "This system is registered to RHN Classic"
-msgstr "সিস্টেমটি RHN Classic-এ নিবন্ধিত"
+msgstr ""
 
 #: ../src/subscription_manager/branding/redhat_branding.py:10
+#, 
 msgid ""
 "WARNING\n"
 "\n"
@@ -754,25 +821,18 @@ msgid ""
 "\n"
 "To learn more about RHN registration and technologies please consult this Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563\n"
 msgstr ""
-"সতর্কবার্তা\n"
-"\n"
-"RHN Classic প্রযুক্তি সহযোগে এই সিস্টেমটি পূর্বেই RHN- এ নিবন্ধিত হয়েছে।\n"
-"\n"
-"এই ব্যবস্থাটি RHN Certificate-Based প্রযুক্তি সহযোগে পুনরায় নিবন্ধনের প্রচেষ্টা করছে। Red Hat recommends (বিশেষ পরিস্থিতি ব্যতীত) Red Hat-র পক্ষ থেকে গ্রাহকদের কে RHN-এ শুধুমাত্র একবার নিবন্ধন করার প্রস্তাব দেওয়া হয়।\n"
-"\n"
-"RHN-র নিবন্ধন ও প্রযুক্তি সম্পর্কে অধিক বিবণের জন্য নিম্নলিখিত Knowledge Base প্রবন্ধটি পড়ুন: https://access.redhat.com/kb/docs/DOC-45563\n"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:20
+#, 
 msgid "Please enter your Red Hat Network account information:"
-msgstr "অনুগ্রহ করে আপনার Red Hat Network অ্যাকাউন্টের তথ্য লিখুন:"
+msgstr ""
 
 #: ../src/subscription_manager/branding/redhat_branding.py:22
+#, 
 msgid ""
 "Tip: Forgot your login or password? Look it up at\n"
 "https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
 msgstr ""
-"উপদেশ: লগ-ইন অথবা পাসওয়ার্ড হারিয়ে গেছে কি? \n"
-"https://www.redhat.com/wapps/sso/rhn/lostPassword.html -এ তা পুনরায় প্রাপ্ত করুন"
 
 #: ../src/subscription_manager/gui/importsub.py:66
 msgid "You must select a certificate."
@@ -785,8 +845,9 @@ msgstr "%s বৈধ সার্টিফিকেট ফাইল নয়। �
 
 #. if we get to this point, the import was successful
 #: ../src/subscription_manager/gui/importsub.py:91
+#, 
 msgid "Certificate import was successful."
-msgstr "সাফল্যের সাথে সার্টিফিকেট ইম্পোর্ট করা হয়েছে।"
+msgstr ""
 
 #: ../src/subscription_manager/gui/installedtab.py:64
 #: ../src/subscription_manager/gui/subscription_assistant.py:137
@@ -800,13 +861,13 @@ msgid "Version"
 msgstr "সংস্করণ"
 
 #: ../src/subscription_manager/gui/installedtab.py:77
+#, 
 msgid "Arch"
-msgstr "আর্কিটেকচার"
+msgstr ""
 
 #: ../src/subscription_manager/gui/installedtab.py:79
-#, 
-msgid "Status"
-msgstr ""
+msgid "Certificate"
+msgstr "সার্টিফিকেট"
 
 #: ../src/subscription_manager/gui/installedtab.py:80
 #: ../src/subscription_manager/gui/contract_selection.py:97
@@ -823,13 +884,17 @@ msgid "End Date"
 msgstr "সমাপ্তির তারিখ"
 
 #: ../src/subscription_manager/gui/installedtab.py:122
-#: ../src/subscription_manager/cert_sorter.py:24
 msgid "Future Subscription"
 msgstr "ভবিষ্যতের সাবস্ক্রিপশন"
 
 #: ../src/subscription_manager/gui/installedtab.py:123
+#: ../src/subscription_manager/gui/installedtab.py:143
 msgid "Never Subscribed"
 msgstr "কখনো সাবস্ক্রাইব করা হয়নি"
+
+#: ../src/subscription_manager/gui/installedtab.py:126
+msgid "Invalid"
+msgstr "অবৈধ"
 
 #: ../src/subscription_manager/gui/installedtab.py:128
 #, python-format
@@ -837,55 +902,69 @@ msgid "Subscription %s is expired"
 msgstr "%s সাবস্ক্রিপশনের মেয়াদ পূর্ণ হয়েছে"
 
 #: ../src/subscription_manager/gui/installedtab.py:131
+#: ../src/subscription_manager/gui/installedtab.py:135
+msgid "Valid"
+msgstr "বৈধ"
+
 #: ../src/subscription_manager/gui/installedtab.py:132
-#: ../src/subscription_manager/cert_sorter.py:28
-msgid "Partially Subscribed"
-msgstr "আংশিক সাবস্ক্রিপশন উপস্থিত"
+#, 
+msgid "Partially entitled"
+msgstr ""
 
 #: ../src/subscription_manager/gui/installedtab.py:137
 #, python-format
 msgid "Covered by contract %s through %s"
 msgstr "%s চুক্তির মাধ্যমে %s অবধি ব্যবহারযোগ্য"
 
+#: ../src/subscription_manager/gui/installedtab.py:142
+msgid "Missing"
+msgstr "অনুপস্থিত"
+
 #: ../src/subscription_manager/gui/installedtab.py:187
 msgid "My Installed Software"
 msgstr "আমার ইনস্টল করা সফ্টওয়্যার"
 
 #: ../src/subscription_manager/gui/registergui.py:119
+#, 
 msgid "Organization"
-msgstr "প্রতিষ্ঠান"
+msgstr ""
 
 #: ../src/subscription_manager/gui/registergui.py:125
+#, 
 msgid "Environment"
-msgstr "পরিবেশ"
+msgstr ""
 
 #: ../src/subscription_manager/gui/registergui.py:192
+#, 
 msgid "Fetching list of possible organizations"
-msgstr "সম্ভাব্য প্রতিষ্ঠানের তালিকা প্রাপ্ত করা হচ্ছে"
+msgstr ""
 
 #: ../src/subscription_manager/gui/registergui.py:288
+#, 
 msgid "Registering your system"
-msgstr "সিস্টেম নিবন্ধন করা হচ্ছে"
+msgstr ""
 
 #: ../src/subscription_manager/gui/registergui.py:300
+#, 
 msgid "Autosubscribing"
-msgstr "স্বয়ংক্রিয় সাবস্ক্রিপশন"
+msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:357
+#: ../src/subscription_manager/gui/registergui.py:355
 msgid "You must enter a system name."
 msgstr "সিস্টেমের নাম এখানে লেখা আবশ্যক।"
 
-#: ../src/subscription_manager/gui/registergui.py:365
+#: ../src/subscription_manager/gui/registergui.py:363
 msgid "You must enter a login."
 msgstr "লগ-ইন লেখা আবশ্যক।"
 
-#: ../src/subscription_manager/gui/registergui.py:370
+#: ../src/subscription_manager/gui/registergui.py:368
 msgid "You must enter a password."
 msgstr "পাসওয়ার্ড লেখা আবশ্যক।"
 
-#: ../src/subscription_manager/gui/registergui.py:424
+#: ../src/subscription_manager/gui/registergui.py:419
+#, 
 msgid "Server supports environments, but none are available."
-msgstr "সার্ভার দ্বারা পরিবেশ সমর্থন করা হয় কিন্তু বর্তমানে কোনো পরিবেশ উপলব্ধ নেই।"
+msgstr ""
 
 #. Set up columns on the view
 #: ../src/subscription_manager/gui/mysubstab.py:63
@@ -905,8 +984,9 @@ msgstr "ইনস্টল করা উৎপাদন"
 #: ../src/subscription_manager/gui/allsubs.py:83
 #: ../src/subscription_manager/gui/subscription_assistant.py:179
 #: ../src/subscription_manager/gui/contract_selection.py:107
+#, 
 msgid "Quantity"
-msgstr "পরিমান"
+msgstr ""
 
 #: ../src/subscription_manager/gui/mysubstab.py:109
 #, python-format
@@ -924,24 +1004,27 @@ msgstr "আমার সাবস্ক্রিপশন"
 
 #: ../src/subscription_manager/gui/mysubstab.py:207
 #: ../src/subscription_manager/gui/mysubstab.py:212
+#, 
 msgid "Yes"
-msgstr "হ্যাঁ"
+msgstr ""
 
 #: ../src/subscription_manager/gui/mysubstab.py:209
 #: ../src/subscription_manager/gui/mysubstab.py:214
+#, 
 msgid "No"
-msgstr "না"
+msgstr ""
 
 #: ../src/subscription_manager/gui/redeem.py:54
 #, python-format
 msgid "Error redeeming subscription: %s"
-msgstr "সাবস্ক্রিপশন ব্যবহার করতে ত্রুটি: %s"
+msgstr ""
 
 #: ../src/subscription_manager/gui/allsubs.py:211
-#: ../src/subscription_manager/gui/subscription_assistant.py:423
+#: ../src/subscription_manager/gui/subscription_assistant.py:422
 #: ../src/subscription_manager/gui/contract_selection.py:120
+#, 
 msgid "unlimited"
-msgstr "সীমাহীন"
+msgstr ""
 
 #: ../src/subscription_manager/gui/allsubs.py:269
 msgid "All Available Subscriptions"
@@ -963,12 +1046,13 @@ msgid "Unable to search for subscriptions:  %s"
 msgstr "সাবস্ক্রিপশন অনুসন্ধান করতে ব্যর্থ:  %s"
 
 #: ../src/subscription_manager/gui/allsubs.py:315
-#: ../src/subscription_manager/gui/subscription_assistant.py:559
+#: ../src/subscription_manager/gui/subscription_assistant.py:558
+#, 
 msgid "Quantity must be a positive number."
-msgstr "পরিমাণ শূণ্যের থেকে বেশি হওয়া আবশ্যক।"
+msgstr ""
 
 #: ../src/subscription_manager/gui/allsubs.py:324
-#: ../src/subscription_manager/gui/subscription_assistant.py:568
+#: ../src/subscription_manager/gui/subscription_assistant.py:567
 #, python-format
 msgid "Error getting subscription: %s"
 msgstr "সাবস্ক্রিপশন প্রাপ্ত করতে সমস্যা: %s"
@@ -995,9 +1079,9 @@ msgstr "এনটাইটেলমেন্ট নিবন্ধীকরণ"
 msgid "Entitlement Platform Registration"
 msgstr "Entitlement Platform নিবন্ধন"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:210
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:208
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_subscriptions.py:29
-#: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:225
+#: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:221
 #: ../src/subscription_manager/gui/data/subsgui.glade.h:3
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:8
 #: ../etc-conf/subscription-manager.desktop.in.h:2
@@ -1009,8 +1093,9 @@ msgid "RHSM Subscriptions Management"
 msgstr "RHSM সাবস্ক্রিপশন পরিচালনা"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_subscriptions.py:25
+#, 
 msgid "RHSM Subscriptions Managemen"
-msgstr "RHSM সাবস্ক্রিপশন পরিচালনা"
+msgstr ""
 
 #: ../src/subscription_manager/gui/subscription_assistant.py:132
 msgid "Invalid Product List"
@@ -1030,8 +1115,8 @@ msgstr "সাবস্ক্রিপশন অনুসন্ধান কর�
 
 #: ../src/subscription_manager/gui/subscription_assistant.py:269
 #, python-format
-msgid "Software entitlements valid until %s"
-msgstr ""
+msgid "Software entitlements valid through %s"
+msgstr "সফ্টওয়্যার এনটাইটেলমেন্টগুলি %s অবধি বৈধ"
 
 #: ../src/subscription_manager/gui/subscription_assistant.py:273
 #, python-format
@@ -1048,10 +1133,10 @@ msgstr "%s-এ নির্বাচিত উৎপাদনগুলির ক
 msgid "N/A"
 msgstr "উপলব্ধ নয়"
 
-#: ../src/subscription_manager/gui/subscription_assistant.py:425
+#: ../src/subscription_manager/gui/subscription_assistant.py:424
 #, python-format
 msgid "%s of %s"
-msgstr "%s, সর্বমোট %s"
+msgstr ""
 
 #: ../src/subscription_manager/gui/networkConfig.py:125
 #, python-format
@@ -1089,16 +1174,19 @@ msgid "Today"
 msgstr "আজ"
 
 #: ../src/subscription_manager/gui/widgets.py:545
+#, 
 msgid "Physical"
-msgstr "প্রকৃত"
+msgstr ""
 
 #: ../src/subscription_manager/gui/widgets.py:546
+#, 
 msgid "Virtual"
-msgstr "ভার্চুয়াল"
+msgstr ""
 
 #: ../src/subscription_manager/gui/widgets.py:578
+#, 
 msgid "Click to Adjust Quantity"
-msgstr "পরিমান পরিবর্তনের জন্য ক্লিক করুন"
+msgstr ""
 
 #: ../src/subscription_manager/gui/contract_selection.py:82
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:14
@@ -1126,82 +1214,88 @@ msgstr "<b>১</b>-টি উৎপাদনের ক্ষেত্রে ব�
 #: ../src/subscription_manager/gui/managergui.py:410
 #, python-format
 msgid "You have <b>%s</b> products in need of additional entitlement certificates."
-msgstr "<b>%s</b>-টি উৎপাদনের জন্য অতিরিক্ত এনটাইটেলমেন্ট সার্টিফিকেট প্রয়োজন।"
+msgstr ""
 
 #: ../src/subscription_manager/gui/managergui.py:414
+#, 
 msgid "You have <b>1</b> product in need of additional entitlement certificates."
-msgstr "<b>১</b>-টি উৎপাদনের জন্য অতিরিক্ত এনটাইটেলমেন্ট সার্টিফিকেট প্রয়োজন।"
+msgstr ""
 
 #: ../src/subscription_manager/gui/managergui.py:423
 #, python-format
 msgid "Product entitlement certificates valid until %s"
-msgstr "উৎপাদনের সার্টিফিকেটগুলি %s অবধ বৈধ রয়েছে"
+msgstr ""
 
 #: ../src/subscription_manager/gui/managergui.py:430
+#, 
 msgid "No product certificates installed."
-msgstr "কোনো উৎপাদন সার্টিফিকেট ইনস্টল করা হয়নি।"
+msgstr ""
 
 #: ../src/subscription_manager/gui/managergui.py:437
+#, 
 msgid "System Already Registered"
-msgstr "সিস্টেমটি পূর্বেই নিবন্ধিত হয়েছে"
+msgstr ""
 
-#: ../src/subscription_manager/certlib.py:156
+#: ../src/subscription_manager/certlib.py:154
 msgid "Reasons(s):"
 msgstr "কারণ:"
 
-#: ../src/subscription_manager/certlib.py:418
+#: ../src/subscription_manager/certlib.py:416
 #, python-format
 msgid "Total updates: %d"
 msgstr "সর্বমোট আপডেট: %d"
 
-#: ../src/subscription_manager/certlib.py:419
+#: ../src/subscription_manager/certlib.py:417
 #, python-format
 msgid "Found (local) serial# %s"
 msgstr "প্রাপ্ত (স্থানীয়) ক্রমিক# %s"
 
-#: ../src/subscription_manager/certlib.py:420
+#: ../src/subscription_manager/certlib.py:418
 #, python-format
 msgid "Expected (UEP) serial# %s"
 msgstr "প্রত্যাশিত (UEP) সিরিয়াল# %s"
 
-#: ../src/subscription_manager/certlib.py:421
+#: ../src/subscription_manager/certlib.py:419
 msgid "Added (new)"
 msgstr "যোগ করা (নতুন)"
 
-#: ../src/subscription_manager/certlib.py:422
+#: ../src/subscription_manager/certlib.py:420
 msgid "Deleted (rogue):"
 msgstr "মুছে ফেলা (অবাঞ্ছিত):"
 
-#: ../src/subscription_manager/certlib.py:423
+#: ../src/subscription_manager/certlib.py:421
 msgid "Expired (not deleted):"
 msgstr "মেয়াদ উত্তীর্ণ (মুছে ফেলা হয়নি):"
 
-#: ../src/subscription_manager/certlib.py:424
+#: ../src/subscription_manager/certlib.py:422
 msgid "Expired (deleted):"
 msgstr "মেয়াদ উত্তীর্ণ (মুছে ফেলা হয়েছে):"
 
-#: ../src/subscription_manager/certlib.py:492
+#: ../src/subscription_manager/certlib.py:485
+#, 
 msgid "Updating entitlement certificates"
-msgstr "এনটাইটেলমেন্ট সার্টিফিকেট আপডেট করা হচ্ছে"
+msgstr ""
 
-#: ../src/subscription_manager/certlib.py:495
+#: ../src/subscription_manager/certlib.py:488
 #: ../src/subscription_manager/certmgr.py:104
 #, python-format
 msgid "%d updates required"
 msgstr "%d-টি আপডেট আবশ্যক"
 
-#: ../src/subscription_manager/certlib.py:496
+#: ../src/subscription_manager/certlib.py:489
 #: ../src/subscription_manager/certmgr.py:105
 msgid "done"
 msgstr "সম্পন্ন"
 
 #: ../src/subscription_manager/certmgr.py:99
+#, 
 msgid "Updating entitlement certificates & repositories"
-msgstr "এনটাইটেলমেন্ট সার্টিফিকেট ও সংগ্রহস্থল আপডেট করা হচ্ছে"
+msgstr ""
 
 #: ../src/subscription_manager/certmgr.py:132
+#, 
 msgid "Unable to update entitlement certificates & repositories"
-msgstr "এনটাইটেলমেন্ট সার্টিফিকেট ও সংগ্রহস্থল আপডেট করা সম্ভব হয়নি"
+msgstr ""
 
 #: ../src/subscription_manager/certdirectory.py:179
 msgid "Reason(s):"
@@ -1212,11 +1306,11 @@ msgstr "কারণ:"
 msgid ""
 "\n"
 "ProductName:        \t%-25s\n"
-"Version:            \t%-25s\n"
-"Arch:               \t%-25s\n"
 "Status:             \t%-25s\n"
-"Starts:             \t%-25s\n"
 "Expires:            \t%-25s\n"
+"SerialNumber:       \t%-25s\n"
+"ContractNumber:     \t%-25s\n"
+"AccountNumber:      \t%-25s\n"
 msgstr ""
 
 #: ../src/subscription_manager/constants.py:34
@@ -1231,14 +1325,6 @@ msgid ""
 "Expires:           \t%-25s\n"
 "MachineType:       \t%-25s\n"
 msgstr ""
-"\n"
-"ProductName:       \t%-25s\n"
-"ProductId:         \t%-25s\n"
-"PoolId:            \t%-25s\n"
-"Quantity:          \t%-25s\n"
-"Multi-Entitlement: \t%-25s\n"
-"Expires:           \t%-25s\n"
-"MachineType:       \t%-25s\n"
 
 #: ../src/subscription_manager/constants.py:44
 #, python-format
@@ -1253,15 +1339,6 @@ msgid ""
 "Begins:             \t%-25s\n"
 "Expires:            \t%-25s\n"
 msgstr ""
-"\n"
-"ProductName:        \t%-25s\n"
-"ContractNumber:     \t%-25s\n"
-"AccountNumber:      \t%-25s\n"
-"SerialNumber:       \t%-25s\n"
-"Active:             \t%-25s\n"
-"QuantityUsed:       \t%-25s\n"
-"Begins:             \t%-25s\n"
-"Expires:            \t%-25s\n"
 
 #: ../src/subscription_manager/constants.py:55
 #, python-format
@@ -1272,11 +1349,6 @@ msgid ""
 "RepoUrl:             \t%-25s\n"
 "Enabled:             \t%-25s\n"
 msgstr ""
-"\n"
-"RepoName:            \t%-25s\n"
-"RepoId:              \t%-25s\n"
-"RepoUrl:             \t%-25s\n"
-"Enabled:             \t%-25s\n"
 
 #: ../src/subscription_manager/constants.py:62
 #, python-format
@@ -1285,9 +1357,6 @@ msgid ""
 "ProductName:         \t%-25s\n"
 "Status:               \t%-25s\n"
 msgstr ""
-"\n"
-"ProductName:         \t%-25s\n"
-"Status:               \t%-25s\n"
 
 #: ../src/subscription_manager/constants.py:67
 #, python-format
@@ -1296,9 +1365,6 @@ msgid ""
 "Name:                \t%-25s\n"
 "Description:         \t%-25s\n"
 msgstr ""
-"\n"
-"Name:                \t%-25s\n"
-"Description:         \t%-25s\n"
 
 #: ../src/subscription_manager/constants.py:72
 #, python-format
@@ -1333,7 +1399,7 @@ msgstr "<b>আপনি কি নিশ্চিতরূপে নিবন্
 #: ../src/subscription_manager/constants.py:78
 #, python-format
 msgid "<b>User %s is not able to register with any orgs.</b>"
-msgstr "<b>%s ব্যবহারকারীকে কোনো প্রতিষ্ঠানের সাথে নিবন্ধন করা সম্ভব হয়নি।</b>"
+msgstr ""
 
 #: ../src/subscription_manager/hwprobe.py:78
 #: ../src/subscription_manager/hwprobe.py:386
@@ -1344,7 +1410,7 @@ msgstr "সিস্টেম DMI-র তথ্য পড়তে সমস্য�
 #: ../src/subscription_manager/hwprobe.py:85
 #, python-format
 msgid "Error reading system DMI information with %s: %s"
-msgstr "%s সহযোগে সিস্টেম DMI-র তথ্য পড়তে সমস্যা: %s"
+msgstr ""
 
 #: ../src/subscription_manager/hwprobe.py:169
 msgid "Error reading system memory information:"
@@ -1363,17 +1429,19 @@ msgid "Error reading net Interface information:"
 msgstr "নেট ইন্টারফেস সংক্রান্ত তথ্য পড়তে সমস্যা:"
 
 #: ../src/subscription_manager/hwprobe.py:341
+#, 
 msgid "Virtualization platform does not support UUIDs"
-msgstr "ভার্চুয়ালাইজেশন প্ল্যাটফর্ম দ্বারা UUID সমর্থন করা হয় না"
+msgstr ""
 
 #: ../src/subscription_manager/hwprobe.py:343
 #, python-format
 msgid "Error finding UUID: %s"
-msgstr "UUID সন্ধান করতে ব্যর্থ: %s"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:1
+#, 
 msgid "* Click to Change Quantity"
-msgstr "* পরিমান পরিবর্তন করতে ক্লিক করুন"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:2
 msgid "<b>Choose the specific contract to use:</b>"
@@ -1427,28 +1495,32 @@ msgid "Next Update:"
 msgstr "পরবর্তী আপডেট:"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:1
+#, 
 msgid "<b>Environment Selection</b>"
-msgstr "<b>পরিবেশ নির্বাচন</b>"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:2
+#, 
 msgid "<b>Organization Selection</b>"
-msgstr "<b>প্রতিষ্ঠান নির্বাচন</b>"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:3
 msgid "<b>Please enter the following for this system:</b>"
 msgstr "<b>এই সিস্টেমের জন্য অনুগ্রহ করে নিম্নলিখিত তথ্য লিখুন:</b>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:4
+#, 
 msgid "<b>Registering</b>"
-msgstr "<b>নিবন্ধন প্রণালী</b>"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:5
 msgid "A unique label for this system"
 msgstr "এই সিস্টেমের জন্য একটি স্বতন্ত্র লেবেল"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:6
+#, 
 msgid "Login:"
-msgstr "লগ-ইন:"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:7
 msgid "Password:"
@@ -1471,20 +1543,24 @@ msgid "System Registration"
 msgstr "সিস্টেমের নিবন্ধন"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:12
+#, 
 msgid "page 1"
-msgstr "পৃষ্ঠা ১"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:13
+#, 
 msgid "page 2"
-msgstr "পৃষ্ঠা ২"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:14
+#, 
 msgid "page 3"
-msgstr "পৃষ্ঠা ৩"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:15
+#, 
 msgid "page 4"
-msgstr "পৃষ্ঠা ৪"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:16
 msgid "register_button"
@@ -1529,8 +1605,9 @@ msgid "Last Update:"
 msgstr "সর্বশেষ আপডেট:"
 
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:4
+#, 
 msgid "Organization:"
-msgstr "প্রতিষ্ঠান:"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:5
 msgid "Subscription Manager - Facts"
@@ -1565,38 +1642,42 @@ msgid "Email Address:"
 msgstr "ই-মেইল ঠিকানা:"
 
 #: ../src/subscription_manager/gui/data/redeem.glade.h:3
+#, 
 msgid "Redeem"
-msgstr "ব্যবহার করুন"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/redeem.glade.h:4
+#, 
 msgid ""
 "Redeeming the subscription may take a few minutes.\n"
 "Please provide an email address to receive notification\n"
 "when the redemption is complete."
 msgstr ""
-"সাবস্ক্রিপশন ব্যবহার করতে কয়েক মিনিট ব্যয় হতে পারে।\n"
-"প্রয়োগ সম্পূর্ণ হওয়ার পরে সূচনা প্রদানের উদ্দেশ্যে অনুগ্রহ করে একটি ই-মেইল ঠিকানা উল্লেখ করুন।"
 
 #: ../src/subscription_manager/gui/data/redeem.glade.h:7
+#, 
 msgid "Subscription Redemption"
-msgstr "সাবস্ক্রিপশনের ব্যবহার"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:1
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:1
+#, 
 msgid "* Click to Adjust Quantity"
-msgstr "* পরিমান পরিবর্তন করার জন্য ক্লিক করুন"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:2
 msgid "A different date:"
 msgstr "ভিন্ন তারিখ:"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:3
+#, 
 msgid "Check/uncheck all products"
-msgstr "সকল উৎপাদন নির্বাচন/অনির্বাচন করুন"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:4
+#, 
 msgid "Invalid Product List ScrolledWindow"
-msgstr "উৎপাদনের অবৈধ তালিকা ScrolledWindow"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:5
 msgid "Show products with invalid entitlement certificates as of:"
@@ -1671,8 +1752,9 @@ msgid "Subscriptions Panel"
 msgstr "সাবস্ক্রিপশনের প্যানেল"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:24
+#, 
 msgid "The following subscriptions will cover the products selected on MM/DD/YYYY"
-msgstr "MM/DD/YYYY-এ নির্বাচিত উৎপাদনগুলির জন্য নিম্নলিখিত সাবস্ক্রিপশনগুলি প্রযোজ্য হবে"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:25
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:14
@@ -1680,8 +1762,9 @@ msgid "Update"
 msgstr "আপডেট করুন"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:26
+#, 
 msgid "_Check all"
-msgstr "সমস্ত নির্বাচন করুন (_C)"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:27
 msgid "subscribe button"
@@ -1708,8 +1791,9 @@ msgid "<b>Provides Management:</b>"
 msgstr "<b>পরিচালনার ক্ষমতা উপলব্ধ করা হয়:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:6
+#, 
 msgid "<b>Stacking ID:</b>"
-msgstr "<b>স্ট্যাকিং ID:</b>"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
 msgid "<b>Start Date:</b>"
@@ -1728,28 +1812,34 @@ msgid "<b>Support Type:</b>"
 msgstr "<b>সহায়তার ধরন:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:12
+#, 
 msgid "<b>Virtual Only:</b>"
-msgstr "<b>শুধুমাত্র ভার্চুয়াল:</b>"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:13
+#, 
 msgid "Account Text"
-msgstr "অ্যাকাউন্টের টেক্সট"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:16
+#, 
 msgid "Provides Management Text"
-msgstr "পরিচালনা সংক্রান্ত লেখা উপলব্ধ করা হয়"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:18
+#, 
 msgid "Subscription Text"
-msgstr "সাবস্ক্রিপশনের টেক্সট"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:19
+#, 
 msgid "Support Level Text"
-msgstr "সমর্থনের স্তর সংক্রান্ত টেক্সট"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:20
+#, 
 msgid "Support Type Text"
-msgstr "সমর্থনের ধরন সংক্রান্ত টেক্সট"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:1
 msgid "<b>HTTP Proxy</b>"
@@ -1776,12 +1866,13 @@ msgid "Enter in the format hostname(:port)"
 msgstr "hostname(:port) বিন্যাসে লিখুন"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:7
+#, 
 msgid "I would like to connect via an _HTTP proxy."
-msgstr "একটি HTTP প্রক্সির মাধ্যমে সংযোগ স্থাপন করা হবে (_H)"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:8
 msgid "Password Text"
-msgstr "পাসওয়ার্ডের টেক্সট"
+msgstr "পাসওয়ার্ডের লেখা"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:9
 msgid "Proxy Checkbox"
@@ -1892,8 +1983,9 @@ msgid "Proxy Configuration"
 msgstr "প্রক্সি কনফিগারেশন"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:6
+#, 
 msgid "Redeem a Subscription"
-msgstr "একটি সাবস্ক্রিপশন ব্যবহার করুন"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:7
 msgid "Register System"
@@ -1911,43 +2003,47 @@ msgstr "সার্টিফিকেট আপডেট করুন"
 msgid "View System Facts"
 msgstr "সিস্টেম সংক্রান্ত সংবাদ দেখুন"
 
-#: ../src/rhsm_icon.c:45
+#: ../src/rhsm_icon.c:46
 msgid "How often to check for validity (in seconds)"
 msgstr "কত সময়ের বিরতির পরে (সেকেন্ড অনুযায়ী) বৈধতা পরীক্ষা করা হবে"
 
-#: ../src/rhsm_icon.c:47
+#: ../src/rhsm_icon.c:48
 msgid "Show debug messages"
 msgstr "ডিবাগ বার্তা প্রদর্শন করা হবে"
 
-#: ../src/rhsm_icon.c:49
+#: ../src/rhsm_icon.c:50
+#, 
 msgid "Force display of the icon (expired, partial or warning)"
-msgstr "বাধ্যতামূলকভাবে আইকন প্রদর্শন করা হবে (মেয়াদ উত্তীর্ণ, আংশিক অথবা সতর্কতামূলক)"
+msgstr ""
 
-#: ../src/rhsm_icon.c:52
+#: ../src/rhsm_icon.c:53
+#, 
 msgid "Run the first status check right away"
-msgstr "অবস্থা যাচাইয়ের প্রথম পরীক্ষা অবিলম্বে সঞ্চালিত হবে"
+msgstr ""
 
-#: ../src/rhsm_icon.c:191 ../src/rhsm_icon.c:193
+#: ../src/rhsm_icon.c:196 ../src/rhsm_icon.c:197
 msgid "Invalid or Missing Entitlement Certificates"
 msgstr "অবৈধ অথবা অনুপস্থিত এনটাইটেলমেন্ট সার্টিফিকেট"
 
-#: ../src/rhsm_icon.c:195
+#: ../src/rhsm_icon.c:198
 msgid "This system is missing one or more valid entitlement certificates."
 msgstr "এই সিস্টেমের ক্ষেত্রে আবশ্যক এক অথবা অধিক সংখ্যক সাবস্ক্রিপশন বর্তমানে উপলব্ধ নেই।"
 
-#: ../src/rhsm_icon.c:198 ../src/rhsm_icon.c:199
+#: ../src/rhsm_icon.c:201 ../src/rhsm_icon.c:202
+#, 
 msgid "Partially Entitled Products"
-msgstr "আংশিক এনটাইটেলমেন্ট সহ উৎপাদন"
+msgstr ""
 
-#: ../src/rhsm_icon.c:200
+#: ../src/rhsm_icon.c:203
+#, 
 msgid "This system is missing one or more valid entitlement certificates to fully cover its products"
-msgstr "সকল উৎপাদনের জন্য ব্যবহাররের উদ্দেশ্যে এক অথবা একাধিক এনটাইটেলমেন্ট সার্টিফিকেট উপস্থিত নেই"
+msgstr ""
 
-#: ../src/rhsm_icon.c:206
+#: ../src/rhsm_icon.c:207
 msgid "Some of the system's subscriptions are about to expire"
 msgstr "সিস্টেমের কয়েকটি সাবস্ক্রিপশনের মেয়াদ পূর্ণ হতে চলেছে"
 
-#: ../src/rhsm_icon.c:208
+#: ../src/rhsm_icon.c:209
 msgid "This System's Subscriptions Are About to Expire"
 msgstr "এই সিস্টেমের সাবস্ক্রিপশনের মেয়াদ পূর্ণ হতে চলেছে"
 
@@ -1955,11 +2051,11 @@ msgstr "এই সিস্টেমের সাবস্ক্রিপশন�
 msgid "One or more of this system's subscriptions are about to expire."
 msgstr "সিস্টেমের কয়েকটি সাবস্ক্রিপশনের মেয়াদ পূর্ণ হতে চলেছে"
 
-#: ../src/rhsm_icon.c:229
+#: ../src/rhsm_icon.c:227
 msgid "Remind Me Later"
 msgstr "পরে মনে করানো হবে"
 
-#: ../src/rhsm_icon.c:234
+#: ../src/rhsm_icon.c:233
 msgid "Manage My Subscriptions..."
 msgstr "আমার সাবস্ক্রিপশন পরিচালনা..."
 
@@ -1968,7 +2064,7 @@ msgstr "আমার সাবস্ক্রিপশন পরিচালন�
 msgid "Unknown argument to force-icon: %s\n"
 msgstr "force-icon-র ক্ষেত্রে অজানা আর্গুমেন্ট ব্যবহার করা হয়েছে: %s\n"
 
-#: ../src/rhsm_icon.c:338 ../src/rhsm_icon.c:401
+#: ../src/rhsm_icon.c:338 ../src/rhsm_icon.c:402
 #, c-format
 msgid "Failed to open connection to bus: %s\n"
 msgstr "বাসের সাথে সংযোগ স্থাপন করতে ব্যর্থ: %s\n"
