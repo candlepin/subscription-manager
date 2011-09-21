@@ -978,6 +978,10 @@ class ImportCertCommand(CliCommand):
             print _("Error: At least one certificate is required")
             sys.exit(-1)
 
+    def _add_common_options(self):
+        # remove these options as per bz #733873
+        return
+
     def _do_command(self):
         self._validate_options()
         for src_cert_file in self.options.certificate_file:
