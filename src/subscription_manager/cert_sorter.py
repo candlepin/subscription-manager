@@ -149,14 +149,9 @@ class CertSorter(object):
     def get_end_date(self, product_id):
         end_dates = []
         if product_id in self.unentitled_products:
-            return self.on_date
-#            return datetime.now(GMT())
+            return ""
 
-        if product_id not in self.valid_products:
-            return self.on_date
-#            return datetime.now(GMT())
-
-        ent_certs = self.valid_products[product_id]
+        ent_certs = self.get_product_cert(product_id)
         for ent_cert in ent_certs:
             end_date = ent_cert.validRange().end()
             end_dates.append(end_date)

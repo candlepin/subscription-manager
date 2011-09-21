@@ -109,9 +109,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                     order = entitlement_cert.getOrder()
 
                     entry['subscription'] = order.getName()
-                    entry['start_date'] = entitlement_cert.validRange().begin()
-                    entry['expiration_date'] = entitlement_cert.validRange(). \
-                                                                        end()
+                    entry['start_date'] = self.cs.get_begin_date(product.getHash())
+                    entry['expiration_date'] = self.cs.get_end_date(product.getHash())
 
                     # TODO:  Pull this date logic out into a separate lib!
                     #        This is also used in mysubstab...

@@ -121,12 +121,17 @@ def getInstalledProductStatus(product_directory=None,
     for installed_product in sorter.installed_products:
         product_cert = sorter.installed_products[installed_product]
         for product in product_cert.getProducts():
+            begin = "";
+            end = "";
+            if getEntitlementsForProduct(product.getName()):
+                begin = formatDate(sorter.get_begin_date(product.getHash()))
+                end = formatDate(sorter.get_end_date(product.getHash()))
             data = (product.getName(),
                     product.getVersion(),
                     product.getArch(),
                     sorter.get_status(product.getHash()),
-                    formatDate(sorter.get_begin_date(product.getHash())),
-                    formatDate(sorter.get_end_date(product.getHash())))
+                    begin,
+                    end)
             product_status.append(data)
 
     return product_status
