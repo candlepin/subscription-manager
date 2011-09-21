@@ -168,7 +168,7 @@ class UpdateAction:
         proxy_host = cfg.get('server', 'proxy_hostname')
         proxy_port = cfg.get('server', 'proxy_port')
         if proxy_host != "":
-            proxy = "http://%s" % proxy_host
+            proxy = "https://%s" % proxy_host
             if proxy_port != "":
                 proxy = "%s:%s" % (proxy, proxy_port)
 
