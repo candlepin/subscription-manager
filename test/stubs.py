@@ -210,6 +210,10 @@ class StubProductCertificate(ProductCertificate):
     def getProduct(self):
         return self.product
 
+    # TODO: a little confusing here, we pass in a product and a list of
+    # provided products, but this concept doesn't really exist, getProduct()
+    # just returns the first one in the list. (and there is no concept of a
+    # 'parent' product in these certificates)
     def getProducts(self):
         if self.product is None:
             return []

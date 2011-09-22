@@ -68,14 +68,16 @@ class CertSorter(object):
         # to the expired entitlement certificate:
         self.expired_products = {}
 
-        # products that are only partially entitled (aka, "yellow"
+        # products that are only partially entitled (aka, "yellow")
+        # WARNING: this is broken currently, see the TODO below where items are
+        # added to this hash.
         self.partially_valid_products = {}
 
         # specific products which are installed, and entitled on the given date.
-        # maps product ID to the valid entitlement certificate:
+        # maps product ID to a list of all valid entitlement certificates:
         self.valid_products = {}
 
-        # products that we have entitlements for but no product cert for.
+        # products that we have entitlements for but no product cert for:
         self.not_installed_products = {}
 
 
@@ -115,6 +117,7 @@ class CertSorter(object):
 
     def get_status(self, product_id):
         """Return the status of a given product"""
+        # TODO: magic strings below:
         if product_id in self.future_products:
             return "future_subscribed"
         if product_id in self.valid_products:
@@ -211,13 +214,16 @@ class CertSorter(object):
                 uninstalled_dict[product_id].append(ent_cert)
 
     def _scan_ent_cert_stackable_products(self):
+        log.debug("Scanning stacked entitlements.")
         ent_certs = self.entitlement_dir.list()
         stackable_ents = {}
 
         for ent_cert in ent_certs:
             product = ent_cert.getProduct()
+            log.debug("Checking certificate: %s" % ent_cert.serial)
             # handle a cert with no products
             if product is None:
+                log.warn("  cert has no products")
                 continue
 
             product_id = product.getHash()
@@ -225,6 +231,7 @@ class CertSorter(object):
             stacking_id = order.getStackingId()
             quantity = order.getQuantityUsed()
             if stacking_id:
+                log.debug("  cert is stacked: %s" % stacking_id)
                 if stacking_id not in stackable_ents:
                     stackable_ents[stacking_id] = []
                 stackable_ents[stacking_id].append({'ent_cert': ent_cert,
@@ -234,8 +241,12 @@ class CertSorter(object):
                                                     'sockets_provided': None,
                                                     'valid': None})
 
+        # Now iterate all stacks and check compliance for each:
+        log.debug("Checking stack compliance:")
         for stackable_id in stackable_ents.keys():
-            socket_total = 0
+            log.debug("Stack ID: %s" % stackable_id)
+            log.debug("  entitlements: %s" % len(stackable_ents[stackable_id]))
+            socket_total = 0 # sockets covered by entitlements
             system_sockets = 1
             if self.facts_dict:
                 system_sockets = int(self.facts_dict['cpu.cpu_socket(s)'])
@@ -248,9 +259,30 @@ class CertSorter(object):
 
             for stackable_product_info in stackable_ents[stackable_id]:
                 stackable_product_info['sockets_provided'] = socket_total
+                log.debug("  sockets: %s" % system_sockets)
+                log.debug("  sockets covered: %s" % socket_total)
                 if socket_total >= system_sockets:
                     stackable_product_info['valid'] = True
                 else:
+                    # TODO: this is broken, we're storing a product ID that came from
+                    # the *first* product in the *last* entitlement certificate we looked
+                    # at in the stack. The first product in the cert may or may not be
+                    # the one that was actually installed, or we may have multiple
+                    # installed that this cert provides, all of which need to show up
+                    # as partially valid.
+                    #
+                    # Only using the last entitlement cert in the stack is also a bug,
+                    # a stack could be composed of many certs which may have different
+                    # provided products.
+                    #
+                    # This should be changed to map installed product ID to the entitlements
+                    # which make up it's partial stack. All installed products involved
+                    # should go into the dict.
+                    #
+                    # We should also track a hash of partial_stacks (stack_id mapping
+                    # to list of entitlements in the stack)
+                    #
+                    # See bug #740377
                     if product_id not in self.partially_valid_products:
                         self.partially_valid_products[product_id] = []
                     self.partially_valid_products[product_id].append(stackable_product_info['ent_cert'])

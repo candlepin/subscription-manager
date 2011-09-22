@@ -95,6 +95,13 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         for product_cert in self.product_dir.list():
             for product in product_cert.getProducts():
                 product_hash = product.getHash()
+
+                # TODO: assumptions are being made here that could display
+                # inaccurate data for stacking subscriptions. We look up only one
+                # entitlement cert for the installed product, and display things
+                # from it like dates and order numbers. In a stacking scenario there
+                # could be many such entitlements, with different dates and order
+                # numbers. Will be tricky to represent this here to say the least.
                 entitlement_cert = self.entitlement_dir. \
                                         findByProduct(product_hash)
 
@@ -114,6 +121,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
                     # TODO:  Pull this date logic out into a separate lib!
                     #        This is also used in mysubstab...
+                    # TODO: we already have a cert sorter, we do not need to do all this
+                    # manual checking of expirations, the sorter should tell us:
                     date_range = entitlement_cert.validRange()
                     now = datetime.now(GMT())
 
