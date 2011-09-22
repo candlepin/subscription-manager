@@ -40,14 +40,14 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn.request_get.assert_called_with(
                 "/owners/myorg/environments?name=env+name__%2B%2B%3D%2A%26")
 
-    def test_future_date(self):
+    def test_entitle_date(self):
         self.cp.conn = Mock()
         self.cp.conn.request_post = Mock(return_value=[])
         self.cp.bind("abcd", date(2011, 9, 2))
         self.cp.conn.request_post.assert_called_with(
-                "/consumers/abcd/entitlements?futuredate=2011-09-02")
+                "/consumers/abcd/entitlements?entitle_date=2011-09-02")
 
-    def test_no_future_date(self):
+    def test_no_entitle_date(self):
         self.cp.conn = Mock()
         self.cp.conn.request_post = Mock(return_value=[])
         self.cp.bind("abcd")

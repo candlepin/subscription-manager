@@ -526,7 +526,7 @@ class UEPConnection:
         method = "/consumers/%s/entitlements?%s" % (str(consumerId), args)
         return self.conn.request_post(method)
 
-    def bind(self, consumerId, future_date=None):
+    def bind(self, consumerId, entitle_date=None):
         """
         Same as bindByProduct, but assume the server has a list of the
         system's products. This is useful for autosubscribe. Note that this is
@@ -536,9 +536,9 @@ class UEPConnection:
         method = "/consumers/%s/entitlements" % (self.sanitize(consumerId))
 
         # add the optional date to the url
-        if future_date:
-            method = "%s?futuredate=%s" % (method,
-                    self.sanitize(future_date.isoformat(), plus=True))
+        if entitle_date:
+            method = "%s?entitle_date=%s" % (method,
+                    self.sanitize(entitle_date.isoformat(), plus=True))
 
         return self.conn.request_post(method)
 
