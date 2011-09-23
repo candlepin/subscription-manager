@@ -532,6 +532,8 @@ class SubscriptionAssistant(widgets.GladeWidget):
 
         # Handle no selection in table.
         if not tree_iter:
+            # nothing selected, gray out subscribe button
+            self.subscribe_button.set_sensitive(False)
             return
 
         self._update_sub_details(model, tree_iter)
