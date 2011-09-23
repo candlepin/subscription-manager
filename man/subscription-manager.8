@@ -75,34 +75,37 @@ has specific options available for each command, depending on what operation is 
 4. unsubscribe
 
 .IP
-5. redeem
+5. import 
 
 .IP
-6. list
+6. redeem
 
 .IP
-7. refresh
+7. list
 
 .IP
-8. environments
+8. refresh
 
 .IP
-9. repos
+9. environments
 
 .IP
-10. orgs
+10. repos
 
 .IP
-11. identity
+11. orgs
 
 .IP
-12. facts
+12. identity
 
 .IP
-13. clean
+13. facts
 
 .IP
-14. config
+14. clean
+
+.IP
+15. config
 
 
 .SS COMMON OPTIONS
@@ -163,6 +166,18 @@ References an existing consumer ID to reregister a system. The consumer ID is us
 .TP
 .B --activationkey=KEYS
 Gives a comma-separated list of product keys to use to redeem or apply specific subscriptions to the machine. This is used generally for preconfigured machines, which may already have products installed and subscriptions allocated for that consumer.
+For example:
+.RS
+.nf
+subscription-manager register --username=admin --password=secret 
+--org="IT Dept" --activationkey=1234abcd
+.fi
+.RE
+
+.PP
+Giving the org name is not necessary in hosted environments or infrastructures which have only a single organization.
+
+
 
 .TP
 .B --autosubscribe
@@ -230,14 +245,23 @@ Unsubscribes the system from
 .I all 
 of the products it's subscribed to.
 
+.SS IMPORT OPTIONS
+The 
+.B import
+command imports and applies an entitlement certificate for the consumer which was generated externally, such as in the Customer Portal, and then copied over to the machine. Importing can be necessary if a machine is pre-configured in the subscription service or if it is offline or unable to access the subscription service but it must be properly subscribed to relevant entitlements.
+
+.TP
+.B --certificate=CERTIFICATE_FILE
+Points to a certificate PEM file which contains the entitlement certificate. This can be mused multiple times to import multiple entitlement certificates.
+
 .SS REDEEM OPTIONS
 The 
 .B redeem 
-command is used for machines that are purchased from third-party vendors that include a subscription. The activation process essentially autosubscribes the machine to the pre-selected subscription that the vendor supplied. 
+command is used for machines that are purchased from third-party vendors that include a subscription. The redemption process essentially autosubscribes the machine to the pre-selected subscription that the vendor supplied. 
 
 .TP
 .B --email=EMAIL
-Gives the email account to send the activation notification message to.
+Gives the email account to send the redemption notification message to.
 
 .TP
 .B --locale=LOCALE
@@ -245,7 +269,7 @@ Sets the locale to use for the message. If none is given, then it defaults to th
 
 .TP
 .B --org=ORG
-Identifies the organization which issued the activation key.
+Identifies the organization which issued the entitlement being redeemed.
 
 
 .SS LIST OPTIONS
@@ -424,7 +448,7 @@ configuration file used by Subscription Manager. Almost all of the connection in
 file, such as 
 .B [server]
 which is used to configure the subscription server. When changing the Subscription Manager configuration, the settings are identified with the format 
-.I section.parameter
+.I section.name
 and then the new value. For example:
 .nf
 server.hostname=newsubscription.example.com
@@ -436,7 +460,7 @@ Prints the current configuration for Subscription Manager.
 
 .TP
 .B --remove=section.name
-Deletes the current value for the parameter without supplying a new parameter. A blank value tells Subscription Manager to use any default values that are set for that parameter rather than a user-defined value.
+Deletes the current value for the parameter without supplying a new parameter. A blank value tells Subscription Manager to use service default values for that parameter. If there no defaults, then the feature is ignored.
 
 .TP
 .B --section.name=VALUE
@@ -690,21 +714,6 @@ subscription-manager register --username=admin --password=secret
 Sometimes, a machine may come pre-configured with products and subscriptions. Rather than subscribing to a pool and claiming a subscription, this system simply needs to 
 .I redeem
 its existing subscriptions. 
-
-.PP 
-Redeeming an existing subscription can be done at registration by using the subscription's 
-.I activation key
-and specifying the organization which issued the key.
-For example:
-.RS
-.nf
-subscription-manager register --username=admin --password=secret 
---org="IT Dept" --activationkey=1234abcd
-.fi
-.RE
-
-.PP
-Giving the org name is not necessary in hosted environments or infrastructures which have only a single organization.
 
 .PP
 After registration, subscriptions on pre-configured machines can be claimed using the 
