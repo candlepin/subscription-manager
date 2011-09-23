@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.11
+Version: 0.96.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -223,6 +223,10 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Fri Sep 23 2011 Chris Duryee (beav) <cduryee@redhat.com>
+- 740831: set subscribe button insensitive if nothing is selected
+  (alikins@redhat.com)
+
 * Tue Sep 20 2011 James Bowes <jbowes@redhat.com> 0.96.11-1
 - Revert "737841: Handle dates beyond 2038 on 32-bit systems."
   (jbowes@redhat.com)
