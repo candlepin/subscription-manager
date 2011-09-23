@@ -71,7 +71,7 @@ typedef enum _StatusType {
 
 /* prototypes */
 
-static void destroy_icon (Context *);
+static void hide_icon (Context *);
 static void display_icon (Context *, StatusType);
 static void alter_icon (Context *, StatusType);
 static void run_smg (Context *);
@@ -107,24 +107,22 @@ create_status_type (int status)
 }
 
 static void
-destroy_icon (Context * context)
+hide_icon (Context * context)
 {
 	if (!context->is_visible) {
 		return;
 	}
 	gtk_status_icon_set_visible (context->icon, false);
-	g_object_unref (context->icon);
 	context->is_visible = false;
 
 	notify_notification_close (context->notification, NULL);
-	g_object_unref (context->notification);
 }
 
 static void
 run_smg (Context * context)
 {
 	g_spawn_command_line_async ("subscription-manager-gui", NULL);
-	destroy_icon (context);
+	hide_icon (context);
 }
 
 static void
@@ -148,7 +146,7 @@ remind_me_later_clicked (NotifyNotification * notification G_GNUC_UNUSED,
 			 gchar * action G_GNUC_UNUSED, Context * context)
 {
 	g_debug ("Remind me later clicked");
-	destroy_icon (context);
+	hide_icon (context);
 }
 
 static void
@@ -247,7 +245,7 @@ alter_icon (Context * context, StatusType status_type)
 	if ((status_type != RHN_CLASSIC) && (status_type != RHSM_VALID)) {
 		display_icon (context, status_type);
 	} else {
-		destroy_icon (context);
+		hide_icon (context);
 	}
 }
 
@@ -454,6 +452,8 @@ main (int argc, char **argv)
 
 	g_debug ("past main");
 	g_object_unref (context.entitlement_status_proxy);
+	g_object_unref (context.icon);
+	g_object_unref (context.notification);
 	g_object_unref (proxy);
 	dbus_g_connection_unref (connection);
 	return 0;
