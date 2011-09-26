@@ -106,7 +106,8 @@ def autosubscribe(cp, consumer, disable_product_upload=False):
         log.info("Attempted to auto-subscribe/heal the system.")
         print _("Installed Product Current Status:")
         for prod_status in installed_status:
-            print (constants.product_status % (prod_status[0], prod_status[1]))
+            status = status_map[prod_status[3]]
+            print (constants.product_status % (prod_status[0], status))
     except Exception, e:
         log.warning("Error during auto-subscribe.")
         log.exception(e)
