@@ -82,6 +82,9 @@ case "$1" in
   reload)
   reload
   ;;  
+  condrestart)
+  [ -e $LOCK ] && restart || :
+  ;;
   status)
   status $PROG
   ;;
