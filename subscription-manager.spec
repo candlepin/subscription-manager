@@ -213,7 +213,9 @@ chkconfig --add rhsmcertd
 if [ -x /bin/dbus-send ] ; then
   dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig > /dev/null 2>&1 || :
 fi
-# /sbin/service rhsmcertd start
+if [ "$1" -eq "2" ] ; then
+    /sbin/service rhsmcertd condrestart >/dev/null 2>&1 || :
+fi
 
 %preun
 if [ $1 -eq 0 ] ; then
