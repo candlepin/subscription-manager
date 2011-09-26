@@ -1082,7 +1082,8 @@ class ConfigCommand(CliCommand):
                             too_many = True
                             break
             if too_many:
-                print _("Error: --list should not be used with any other options for setting or removing configurations.")
+                sys.stderr.write(_("Error: --list should not be used with any other options for "\
+                                    "setting or removing configurations.\n"))
                 sys.exit(-1)
 
         if not (self.options.list or self.options.remove):
@@ -1097,7 +1098,8 @@ class ConfigCommand(CliCommand):
         if self.options.remove:
             for r in self.options.remove:
                 if not "." in r:
-                    print _("Error: configuration entry designation for removal must be of format [section.name]")
+                    sys.stderr.write(_("Error: configuration entry designation for removal must be "\
+                                        "of format [section.name]\n"))
                     sys.exit(-1)
                 section = r.split('.')[0]
                 name = r.split('.')[1]
@@ -1106,7 +1108,7 @@ class ConfigCommand(CliCommand):
                     if name == key:
                         found = True
                 if not found:
-                    print _("Error: Section %s and name %s does not exist.") % (section,name)
+                    sys.stderr.write(_("Error: Section %s and name %s does not exist.") % (section,name))
                     sys.exit(-1)
 
     def _do_command(self):
