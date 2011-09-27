@@ -23,6 +23,8 @@
 #include <time.h>
 #include <wait.h>
 #include <stdbool.h>
+#include <string.h>
+#include <errno.h>
 
 #define LOGFILE "/var/log/rhsm/rhsmcertd.log"
 #define LOCKFILE "/var/lock/subsys/rhsmcertd"
@@ -66,9 +68,14 @@ logUpdate (int delay)
 	strftime (buf, BUF_MAX, "%s", &update_tm);
 
 	FILE *updatefile = fopen (UPDATEFILE, "w");
-	fprintf (updatefile, "%s", buf);
-	fflush (updatefile);
-	fclose (updatefile);
+	if (updatefile == NULL) {
+		fprintf (log, "%s: error opening %s to write timestamp: %s\n",
+			 ts (), UPDATEFILE, strerror (errno));
+		fflush (log);
+	} else {
+		fprintf (updatefile, "%s", buf);
+		fclose (updatefile);
+	}
 }
 
 int
@@ -148,7 +155,7 @@ run_parts (int cert_interval, int heal_interval)
 	if (pid < 0) {
 		fprintf (log, "%s: fork failed\n", ts ());
 		fflush (log);
-		return EXIT_FAILURE;
+		exit (EXIT_FAILURE);
 	}
 	if (pid == 0) {
 		run (cert_interval, false);	//cert
