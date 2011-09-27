@@ -118,10 +118,10 @@ class CertSorter(object):
     def get_status(self, product_id):
         """Return the status of a given product"""
         # TODO: magic strings below:
-        if product_id in self.future_products:
-            return "future_subscribed"
         if product_id in self.valid_products:
             return "subscribed"
+        if product_id in self.future_products:
+            return "future_subscribed"
         if product_id in self.unentitled_products:
             return "not_subscribed"
         if product_id in self.expired_products:
@@ -129,19 +129,10 @@ class CertSorter(object):
         if product_id in self.partially_valid_products:
             return "partially_subscribed"
 
-    def get_product_cert(self, product_id):
-        for product_dict in [self.valid_products,
-                             self.unentitled_products,
-                             self.expired_products,
-                             self.partially_valid_products]:
-
-            if product_id in product_dict:
-                return product_dict[product_id]
-
     # find the display start date for this product id
-    def get_begin_date(self, product_id):
+    def get_begin_date(self, product_hash):
         begin_dates = []
-        ent_certs = self.get_product_cert(product_id)
+        ent_certs = self.get_entitlements_for_product(product_hash)
         for ent_cert in ent_certs:
             begin_date = ent_cert.validRange().begin()
             begin_dates.append(begin_date)
@@ -149,18 +140,22 @@ class CertSorter(object):
         return begin_dates[0]
 
     # find the display end date for this product id
-    def get_end_date(self, product_id):
+    def get_end_date(self, product_hash):
         end_dates = []
-        if product_id in self.unentitled_products:
-            return ""
-
-        ent_certs = self.get_product_cert(product_id)
+        ent_certs = self.get_entitlements_for_product(product_hash)
         for ent_cert in ent_certs:
             end_date = ent_cert.validRange().end()
             end_dates.append(end_date)
-                # return last end date
         end_dates.sort()
         return end_dates[0]
+
+    def get_entitlements_for_product(self, product_hash):
+	entitlements = []
+	for cert in self.entitlement_dir.list():
+	    for cert_product in cert.getProducts():
+		if product_hash == cert_product.getHash():
+		    entitlements.append(cert)
+	return entitlements
 
     def _populate_installed_products(self):
         """ Build the dict of all installed products. """

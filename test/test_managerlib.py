@@ -21,6 +21,7 @@ from os import linesep as NEW_LINE
 
 from stubs import StubCertificateDirectory, StubProductCertificate, StubProduct, \
     StubEntitlementCertificate
+from subscription_manager.facts import Facts
 from subscription_manager.managerlib import merge_pools, PoolFilter, getInstalledProductStatus, \
     LocalTz, parseDate, configure_i18n, merge_pools, MergedPoolsStackingGroupSorter
 from subscription_manager.cert_sorter import status_map
@@ -334,7 +335,7 @@ class InstalledProductStatusTests(unittest.TestCase):
         self.assertEquals(1, len(product_status))
         self.assertEquals("not_subscribed", product_status[0][3])
 
-    def test_future_dated_entitlement(self):
+    def test_future_dated_entitlement_shows_future_subscribed(self):
         product = StubProduct("product1")
         product_directory = StubCertificateDirectory([
                 StubProductCertificate(product)])
@@ -344,7 +345,8 @@ class InstalledProductStatusTests(unittest.TestCase):
 
         product_status = getInstalledProductStatus(product_directory,
                                                    entitlement_directory)
-        print product_status
+        self.assertEquals(1, len(product_status))
+        self.assertEquals("future_subscribed", product_status[0][3])
 
     def test_one_product_with_two_entitlements_lists_product_twice(self):
         product = StubProduct("product1")

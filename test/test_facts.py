@@ -2,10 +2,15 @@ import unittest
 import tempfile
 import json
 import shutil
+import datetime
+import time
 
-from stubs import StubEntitlementDirectory, StubProductDirectory
+from stubs import StubEntitlementDirectory, StubProductDirectory, StubProduct,\
+                  StubCertificateDirectory, StubProductCertificate, StubEntitlementCertificate
 from subscription_manager import facts
-
+from subscription_manager.managerlib import getInstalledProductStatus
+from subscription_manager.facts import Facts
+from modelhelpers import *
 
 facts_buf = """
 {
@@ -168,3 +173,58 @@ class TestFacts(unittest.TestCase):
         new_facts_buf = open(fact_cache).read()
         new_facts = json.loads(new_facts_buf)
         self.assertEquals(new_facts['empty.facts'], True)
+
+class InstalledProductStatusTests(unittest.TestCase):
+
+    def test_entitlement_for_installed_product_shows_valid(self):
+        product = StubProduct("product1")
+        product_directory = StubCertificateDirectory([
+            StubProductCertificate(product)])
+        entitlement_directory = StubCertificateDirectory([
+            StubEntitlementCertificate(product)])
+
+        facts = Facts(None)
+        facts.product_dir = product_directory
+        facts.entitlement_dir = entitlement_directory
+        facts_dict = facts.get_facts()
+        self.assertEquals(True, facts_dict['system.entitlements_valid'])
+
+    def test_expired_entitlement_for_installed_product_shows_invalid(self):
+        product = StubProduct("product1")
+        product_directory = StubCertificateDirectory([
+            StubProductCertificate(product)])
+        entitlement_directory = StubCertificateDirectory([
+            StubEntitlementCertificate(product,
+                end_date=(datetime.now() - timedelta(days=2)))])
+
+        facts = Facts(None)
+        facts.product_dir = product_directory
+        facts.entitlement_dir = entitlement_directory
+        facts_dict = facts.get_facts()
+        self.assertEquals(False, facts_dict['system.entitlements_valid'])
+
+    def test_no_entitlement_for_installed_product_shows_invalid(self):
+        product = StubProduct("product1")
+        product_directory = StubCertificateDirectory([
+            StubProductCertificate(product)])
+        entitlement_directory = StubCertificateDirectory([])
+
+        facts = Facts(None)
+        facts.product_dir = product_directory
+        facts.entitlement_dir = entitlement_directory
+        facts_dict = facts.get_facts()
+        self.assertEquals(False, facts_dict['system.entitlements_valid'])
+
+    def test_future_dated_entitlement_shows_invalid(self):
+        product = StubProduct("product1")
+        product_directory = StubCertificateDirectory([
+                StubProductCertificate(product)])
+        entitlement_directory = StubCertificateDirectory([
+                StubEntitlementCertificate(product,
+                                           start_date=(datetime.now() + timedelta(days=1365)))])
+
+        facts = Facts(None)
+        facts.product_dir = product_directory
+        facts.entitlement_dir = entitlement_directory
+        facts_dict = facts.get_facts()
+        self.assertEquals(False, facts_dict['system.entitlements_valid'])
