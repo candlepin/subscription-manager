@@ -111,8 +111,6 @@ class HealingLib(DataLib):
         if 'autoheal' in consumer and consumer['autoheal']:
             try:
 
-                today = datetime.now(GMT())
-                tomorrow = today + timedelta(days=1)
 
                 #
                 # find_first_invalid_date returns today or some date in the
@@ -122,6 +120,9 @@ class HealingLib(DataLib):
                 # ourselves.
                 #
                 expiring_date = find_first_invalid_date()
+
+                today = datetime.now(GMT())
+                tomorrow = today + timedelta(days=1)
 
                 log.debug("Expiring date: %s, Today: %s, Tomorrow: %s" % (
                     str(expiring_date), str(today), str(tomorrow)))
