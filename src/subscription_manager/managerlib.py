@@ -119,7 +119,7 @@ def getInstalledProductStatus(product_directory=None,
         for product in product_cert.getProducts():
             begin = "";
             end = "";
-            if getEntitlementsForProduct(product.getHash()):
+            if sorter.get_entitlements_for_product(product.getHash()):
                 begin = formatDate(sorter.get_begin_date(product.getHash()))
                 end = formatDate(sorter.get_end_date(product.getHash()))
             data = (product.getName(),
@@ -131,15 +131,6 @@ def getInstalledProductStatus(product_directory=None,
             product_status.append(data)
 
     return product_status
-
-
-def getEntitlementsForProduct(product_hash):
-    entitlements = []
-    for cert in certdirectory.EntitlementDirectory().list():
-        for cert_product in cert.getProducts():
-            if product_hash == cert_product.getHash():
-                entitlements.append(cert)
-    return entitlements
 
 
 def getInstalledProductHashMap():
@@ -748,8 +739,10 @@ def parseDate(date):
 
 
 def formatDate(dt):
-    return dt.astimezone(LocalTz()).strftime("%x")
-
+    if dt:
+        return dt.astimezone(LocalTz()).strftime("%x")
+    else:
+        return ""
 
 class ServerTz(tzinfo):
     """

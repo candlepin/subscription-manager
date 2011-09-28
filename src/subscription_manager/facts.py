@@ -124,9 +124,9 @@ class Facts(CacheManager):
                                         self.entitlement_dir,
                                         facts_dict=facts)
         validity_facts = {'system.entitlements_valid': True}
-        if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
-            validity_facts['system.entitlements_valid'] = False
-
+        for product in sorter.installed_products:
+            if sorter.get_status(product) != "subscribed":
+                validity_facts['system.entitlements_valid'] = False
         facts.update(validity_facts)
 
         return facts
