@@ -374,7 +374,7 @@ class DatePicker(gtk.HBox):
         self._date = datetime.datetime(date.year, date.month, date.day,
                 tzinfo=managerlib.LocalTz())
         self._date_entry = gtk.Entry()
-        self._date_entry.set_width_chars(12)
+        self._date_entry.set_width_chars(14)
         # we could use managerlib.formatDate here, but since we are parsing
         # this, leave it alone
         self._date_entry.set_text(self._date.strftime("%x"))
