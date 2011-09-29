@@ -106,3 +106,25 @@ class UpdateActionTests(unittest.TestCase):
     def test_tags_found(self):
         content = self.update_action.get_unique_content()
         self.assertEquals(3, len(content))
+
+    def test_join(self):
+        base="http://foo/bar"
+        # File urls should be preserved
+        self.assertEquals("file://this/is/a/file",
+            self.update_action.join(base, "file://this/is/a/file"))
+        # Http locations should be preserved
+        self.assertEquals("http://this/is/a/url",
+            self.update_action.join(base, "http://this/is/a/url"))
+        # Blank should remain blank
+        self.assertEquals("",
+            self.update_action.join(base, ""))
+        # Url Fragments should work
+        self.assertEquals("http://foo/bar/baz",
+            self.update_action.join(base, "baz"))
+        self.assertEquals("http://foo/bar/baz",
+            self.update_action.join(base, "/baz"))
+        base = base + "/"
+        self.assertEquals("http://foo/bar/baz",
+            self.update_action.join(base, "baz"))
+        self.assertEquals("http://foo/bar/baz",
+            self.update_action.join(base, "/baz"))
