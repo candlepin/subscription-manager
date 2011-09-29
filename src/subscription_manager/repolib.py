@@ -179,7 +179,9 @@ class UpdateAction:
         repo['proxy_password'] = cfg.get('server', 'proxy_password')
 
     def join(self, base, url):
-        if '://' in url:
+        if len(url) == 0:
+            return url
+        elif '://' in url:
             return url
         else:
             if (base and (not base.endswith('/'))):
