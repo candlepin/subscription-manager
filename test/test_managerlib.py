@@ -23,7 +23,7 @@ from stubs import StubCertificateDirectory, StubProductCertificate, StubProduct,
     StubEntitlementCertificate
 from subscription_manager.facts import Facts
 from subscription_manager.managerlib import merge_pools, PoolFilter, getInstalledProductStatus, \
-    LocalTz, parseDate, configure_i18n, merge_pools, MergedPoolsStackingGroupSorter
+    LocalTz, parseDate, merge_pools, MergedPoolsStackingGroupSorter
 from subscription_manager.cert_sorter import status_map
 from modelhelpers import *
 from subscription_manager import managerlib
@@ -475,16 +475,10 @@ class TestParseDate(unittest.TestCase):
         self.assertEquals(timedelta(hours=4), dt.tzinfo.utcoffset(dt))
 
 
-class TestI18N(unittest.TestCase):
-    def test_configure_i18n_without_glade(self):
-        configure_i18n()
-
-    def test_configure_i18n_with_glade(self):
-        configure_i18n(with_glade=True)
-
 class MockLog:
     def info(self):
         pass
+
 
 def MockSystemLog(self, message, priority):
     pass

@@ -46,37 +46,12 @@ _ = gettext.gettext
 cfg = initConfig()
 ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
 
-# Localization domain:
-APP = 'rhsm'
-# Directory where translations are deployed:
-DIR = '/usr/share/locale/'
-
 # Expected permissions for identity certificates:
 ID_CERT_PERMS = stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP
 
 # 2038-01-01, used as the default when we hit an date overflow on
 # 32-bit systems:
 OVERFLOW_DATE = 2145916800.0
-
-
-def configure_i18n(with_glade=False):
-    """
-    Configure internationalization for the application. Should only be
-    called once per invocation. (once for CLI, once for GUI)
-    """
-    import locale
-    import gettext
-    try:
-        locale.setlocale(locale.LC_ALL, '')
-    except locale.Error:
-        locale.setlocale(locale.LC_ALL, 'C')
-    gettext.bindtextdomain(APP, DIR)
-    gettext.textdomain(APP)
-
-    if (with_glade):
-        import gtk.glade
-        gtk.glade.bindtextdomain(APP, DIR)
-        gtk.glade.textdomain(APP)
 
 
 def system_log(message, priority=syslog.LOG_NOTICE):
