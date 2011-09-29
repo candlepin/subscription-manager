@@ -125,7 +125,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         if not selection.is_valid():
             return
 
-        prompt = messageWindow.YesNoDialog(_("Are you sure you want to unsubscribe from %s?" % selection['subscription']),
+        prompt = messageWindow.YesNoDialog(_("Are you sure you want to unsubscribe from %s?") % selection['subscription'],
                 self.content.get_toplevel())
         prompt.connect('response', self._on_unsubscribe_prompt_response, selection)
 
