@@ -69,7 +69,7 @@ if os.getuid() != 0:
 try:
     # this has to be done first thing (due to module level translated vars,
     # like in constants.py
-    from subscription_manager.managerlib import configure_i18n
+    from subscription_manager.i18n import configure_i18n
     configure_i18n(with_glade=True)
 
     from subscription_manager.gui import managergui, messageWindow
@@ -102,7 +102,7 @@ if __name__ == '__main__':
     request_name_res = dbus.dbus_bindings.bus_request_name(bus.get_connection(), bus_name.get_name())
 
     if bus and ((request_name_res != REQUEST_NAME_REPLY_PRIMARY_OWNER) and \
-	(request_name_res != REQUEST_NAME_REPLY_ALREADY_OWNER)):
+       (request_name_res != REQUEST_NAME_REPLY_ALREADY_OWNER)):
         print _("subscription-manager-gui is already running")
         messageWindow.InfoDialog(_('Subscription Manager is already running'))
 

@@ -129,6 +129,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/rhsm
 %dir %{_datadir}/rhsm/subscription_manager
 %{_datadir}/rhsm/subscription_manager/__init__.py*
+%{_datadir}/rhsm/subscription_manager/i18n.py*
 %{_datadir}/rhsm/subscription_manager/i18n_optparse.py*
 %{_datadir}/rhsm/subscription_manager/managercli.py*
 %{_datadir}/rhsm/subscription_manager/managerlib.py*
