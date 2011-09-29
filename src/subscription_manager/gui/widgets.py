@@ -547,7 +547,7 @@ class MachineTypeColumn(ToggleTextColumn):
     VIRTUAL_MACHINE = _("Virtual")
 
     def __init__(self, virt_only_model_idx):
-        ToggleTextColumn.__init__(self, "Type", virt_only_model_idx)
+        ToggleTextColumn.__init__(self, _("Type"), virt_only_model_idx)
         # Center the column header text.
         self.set_alignment(0.5)
 
