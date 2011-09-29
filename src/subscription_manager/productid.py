@@ -16,6 +16,7 @@
 #
 
 import os
+import logging
 import simplejson as json
 import gettext
 import yum
@@ -25,6 +26,7 @@ from gzip import GzipFile
 from rhsm.certificate import ProductCertificate
 from subscription_manager.certdirectory import Directory, ProductDirectory
 
+log = logging.getLogger('rhsm-app.' + __name__)
 
 class DatabaseDirectory(Directory):
 
@@ -88,16 +90,22 @@ class ProductManager:
         self.pdir = ProductDirectory()
         self.db = ProductDatabase()
         self.db.read()
+        self.meta_data_error = None
 
     def update(self, yb):
         if yb is None:
             yb = yum.YumBase()
         enabled = self.getEnabled(yb)
         active = self.getActive(yb)
+
         #only execute this on versions of yum that track
         #which repo a package came from
         if yum.__version_info__[2] >= 28:
-            self.updateRemoved(active)
+            # if we had errors with the repo or productid metadata
+            # we could be very confused here, so do not
+            # delete anything. see bz #736424
+            if not self.meta_data_error:
+                self.updateRemoved(active)
         self.updateInstalled(enabled, active)
 
     def _isWorkstation(self, product):
@@ -116,8 +124,10 @@ class ProductManager:
 
     def updateInstalled(self, enabled, active):
         for cert, repo in enabled:
+            #nothing from this repo is installed
             if repo not in active:
                 continue
+
             p = cert.getProduct()
             prod_hash = p.getHash()
 
@@ -141,27 +151,40 @@ class ProductManager:
 
             if self.pdir.findByProduct(prod_hash):
                 continue
+
             fn = '%s.pem' % prod_hash
             path = self.pdir.abspath(fn)
             cert.write(path)
             self.db.add(prod_hash, repo)
             self.db.write()
 
+    # We should only delete productcerts if there are no
+    # packages from that repo installed (not "active")
+    # and we have the product cert installed. 
     def updateRemoved(self, active):
         for cert in self.pdir.list():
             p = cert.getProduct()
             prod_hash = p.getHash()
             repo = self.db.findRepo(prod_hash)
+
+            # FIXME: not entirely sure why we do this
+            #  to avoid a none on cert.delete surely
+            # but is there another reason?
             if repo is None:
                 continue
             if repo in active:
                 continue
+
             cert.delete()
+
             self.db.delete(prod_hash)
             self.db.write()
 
+    # find the list of repo's that provide packages that
+    # are actually installed.
     def getActive(self, yb):
         active = set()
+
         packages = yb.pkgSack.returnPackages()
         for p in packages:
             repo = p.repoid
@@ -174,6 +197,8 @@ class ProductManager:
             if not db_pkg:
                 continue
 
+            # yum on 5.7 list everything as "installed" instead
+            # of the repo it came from
             if repo in (None, "installed"):
                 continue
             active.add(repo)
@@ -182,6 +207,7 @@ class ProductManager:
     def getEnabled(self, yb):
         lst = []
         enabled = yb.repos.listEnabled()
+
         for repo in enabled:
             try:
                 fn = repo.retrieveMD(self.PRODUCTID)
@@ -189,8 +215,10 @@ class ProductManager:
                 if cert is None:
                     continue
                 lst.append((cert, repo.id))
-            except:
-                pass
+            except Exception, e:
+                log.warn("Error loading productid metadata")
+                log.exception(e)
+                self.meta_data_error = e
         return lst
 
     def __getCert(self, fn):
