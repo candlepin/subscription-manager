@@ -52,6 +52,18 @@ class CalledProcessError(Exception):
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
+class ClassicCheck:
+
+    def is_registered_with_classic(self):
+        try:
+            sys.path.append('/usr/share/rhn')
+            from up2date_client import up2dateAuth
+        except ImportError:
+            return False
+
+        return up2dateAuth.getSystemId() is not None
+
+
 class DmiInfo(object):
 
     def __init__(self):

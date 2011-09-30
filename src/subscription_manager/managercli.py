@@ -40,6 +40,7 @@ from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib, ConsumerIdentity
 from subscription_manager.repolib import RepoLib
 from subscription_manager.certmgr import CertManager
+from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager import managerlib
 from subscription_manager.facts import Facts
@@ -544,7 +545,7 @@ class RegisterCommand(UserPassCommand):
         Executes the command.
         """
         # Always warn the user if registered to old RHN/Spacewalk
-        if managerlib.is_registered_with_classic():
+        if ClassicCheck().is_registered_with_classic():
             print(get_branding().REGISTERED_TO_OTHER_WARNING)
 
         self._validate_options()

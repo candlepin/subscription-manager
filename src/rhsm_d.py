@@ -31,6 +31,7 @@ from subscription_manager.branding import get_branding
 from subscription_manager import managerlib
 from subscription_manager import certdirectory
 from subscription_manager.cert_sorter import CertSorter
+from subscription_manager.hwprobe import ClassicCheck
 import rhsm.certificate as certificate
 
 enable_debug = False
@@ -67,7 +68,7 @@ def check_status(force_signal):
         debug("forcing status signal from cli arg")
         return force_signal
 
-    if managerlib.is_registered_with_classic():
+    if ClassicCheck().is_registered_with_classic():
         debug("System is already registered to another entitlement system")
         return RHN_CLASSIC
 

@@ -33,6 +33,7 @@ from subscription_manager.gui import registergui
 import rhsm.connection as connection
 import rhsm.config as config
 from subscription_manager import constants
+from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.facts import Facts
 from subscription_manager.certdirectory import ProductDirectory, EntitlementDirectory
 from subscription_manager.certlib import ConsumerIdentity, CertLib, find_first_invalid_date
@@ -380,6 +381,14 @@ class MainWindow(widgets.GladeWidget):
 
     def _set_validity_status(self):
         """ Updates the entitlement validity status portion of the UI. """
+
+        if ClassicCheck().is_registered_with_classic():
+		buf = gtk.gdk.pixbuf_new_from_file_at_size(VALID_IMG, 32, 32)
+		self.subscription_status_image.set_from_pixbuf(buf)
+		self.subscription_status_label.set_text(
+                        _("This system is registered to RHN Classic"))
+                return
+
         # Look for productswhich have invalid entitlements
         sorter = CertSorter(self.product_dir, self.entitlement_dir, facts_dict=self.facts.get_facts())
 
@@ -431,7 +440,7 @@ class MainWindow(widgets.GladeWidget):
                 self.update_certificates_button.hide()
 
     def _check_rhn_classic(self):
-        if managerlib.is_registered_with_classic():
+        if ClassicCheck().is_registered_with_classic():
             prompt = messageWindow.ContinueDialog(
                     linkify(get_branding().REGISTERED_TO_OTHER_WARNING),
                     self.main_window, _("System Already Registered"))
