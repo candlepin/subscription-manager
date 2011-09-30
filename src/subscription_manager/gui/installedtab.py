@@ -124,7 +124,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['image'] = self._render_icon('red')
                         entry['status'] = _('Expired')
                         entry['validity_note'] = \
-                            _('Subscription %s is expired' % order.getSubscription())
+                            _('Subscription %s is expired') % order.getSubscription()
                     elif product.getHash() in self.cs.partially_valid_products:
                         entry['image'] = self._render_icon('yellow')
                         entry['status'] = _('Partially Subscribed')
@@ -133,9 +133,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['image'] = self._render_icon('green')
                         entry['status'] = _('Subscribed')
                         entry['validity_note'] = \
-                            _('Covered by contract %s through %s' % \
+                            _('Covered by contract %s through %s') % \
                             (order.getContract(),
-                             managerlib.formatDate(entry['expiration_date'])))
+                             managerlib.formatDate(entry['expiration_date']))
                 else:
                     entry['image'] = self._render_icon('red')
                     entry['status'] = _('Not Subscribed')

@@ -56,7 +56,7 @@ def handle_gui_exception(e, msg, formatMsg=True, logMsg=None):
     if isinstance(e, socket_error):
         errorWindow(_('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.'))
     elif isinstance(e, SSL.SSLError):
-        errorWindow(_('Unable to verify server\'s identity: %s' % str(e)))
+        errorWindow(_('Unable to verify server\'s identity: %s') % str(e))
     elif isinstance(e, connection.NetworkException):
         # NOTE: yes this looks a lot like the socket error, but I think these
         # were actually intended to display slightly different messages:
@@ -84,7 +84,7 @@ def handle_gui_exception(e, msg, formatMsg=True, logMsg=None):
             errorWindow(message)
 
     elif isinstance(e, connection.BadCertificateException):
-        errorWindow(_("Bad CA certificate: %s" % e.cert_path))
+        errorWindow(_("Bad CA certificate: %s") % e.cert_path)
     else:
         #catch-all, try to interpolate and if it doesn't work out, just display the message
         try:
