@@ -106,7 +106,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             try:
                 self.backend.uep.unbindBySerial(self.consumer.uuid, serial)
             except Exception, e:
-                handle_gui_exception(e, _("There was an error unsubsribing from %s with serial number %s" % (selection['subscription'], serial)), formatMsg=False)
+                handle_gui_exception(e, _("There was an error unsubscribing from %s with serial number %s") % (selection['subscription'], serial), formatMsg=False)
 
             try:
                 self.backend.certlib.update()
