@@ -22,6 +22,7 @@ import rhsm.config
 from subscription_manager import certdirectory
 from subscription_manager import cert_sorter
 from subscription_manager.cache import CacheManager
+from subscription_manager.hwprobe import ClassicCheck
 from datetime import datetime
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -119,14 +120,16 @@ class Facts(CacheManager):
         # point
 
         # figure out if we think we have valid entitlements
-        # NOTE: we don't need
-        sorter = cert_sorter.CertSorter(self.product_dir,
-                                        self.entitlement_dir,
-                                        facts_dict=facts)
+
         validity_facts = {'system.entitlements_valid': True}
-        for product in sorter.installed_products:
-            if sorter.get_status(product) != "subscribed":
-                validity_facts['system.entitlements_valid'] = False
+        if not ClassicCheck().is_registered_with_classic():
+            sorter = cert_sorter.CertSorter(self.product_dir,
+                                            self.entitlement_dir,
+                                            facts_dict=facts)
+            for product in sorter.installed_products:
+                if sorter.get_status(product) != "subscribed":
+                    validity_facts['system.entitlements_valid'] = False
+
         facts.update(validity_facts)
 
         return facts

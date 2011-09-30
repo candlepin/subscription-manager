@@ -798,14 +798,6 @@ def check_identity_cert_perms():
             log.warn("Corrected incorrect permissions on %s." % cert)
 
 
-def is_registered_with_classic():
-    try:
-        sys.path.append('/usr/share/rhn')
-        from up2date_client import up2dateAuth
-    except ImportError:
-        return False
-
-    return up2dateAuth.getSystemId() is not None
 
 
 def enhance_facts(facts, consumer):
