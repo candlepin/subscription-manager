@@ -35,6 +35,7 @@ import gettext
 _ = gettext.gettext
 gettext.textdomain("rhsm")
 gtk.glade.bindtextdomain("rhsm")
+gtk.glade.textdomain("rhsm")
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
