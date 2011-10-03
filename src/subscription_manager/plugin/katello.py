@@ -15,12 +15,11 @@
 #
 
 import sys
+import ConfigParser
 from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
-
 
 sys.path.append('/usr/share/rhsm')
 from rhsm import connection
-
 
 # we have a problem in that default setup's, only root
 # can make connections to the entitlement server, which
@@ -31,7 +30,6 @@ from rhsm import connection
 
 # this fails as non root
 # FIXME: this fais as non root
-import ConfigParser
 try:
     from subscription_manager.certlib import ConsumerIdentity
 except ImportError:
@@ -48,7 +46,7 @@ def populate_yumvars(conduit, env, org):
         repo.yumvar['env'] = env
         repo.yumvar['org'] = org
 
-def init_hook(conduit):
+def _init_hook(conduit):
     # FIXME: we can only run this plugin as root,
     # we do need to handle that
 
@@ -62,8 +60,15 @@ def init_hook(conduit):
         populate_yumvars(conduit, env, org)
         return
 
+
     cert_file = ConsumerIdentity.certpath()
     key_file = ConsumerIdentity.keypath()
+
+    try:
+        ConsumerIdentity.read().getConsumerId()
+    except Exception, e:
+        conduit.error(2, "Unable to read consumer identity")
+        return
 
     has_env = None
 
@@ -97,3 +102,12 @@ def init_hook(conduit):
         return
 
     populate_yumvars(conduit, env, org)
+
+def init_hook(conduit):
+    try:
+        _init_hook(conduit)
+    except Exception, e:
+        #ugh, but we really don't want to break yum for
+        # a rhsm related problem...
+        conduit.info(2, "Error running katello plugin: %s" % e)
+        return
