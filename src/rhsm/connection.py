@@ -431,16 +431,22 @@ class UEPConnection:
         """
         return self.updateConsumer(consumer_uuid, facts=facts)
 
-    def updateConsumer(self, uuid, facts=None, installed_products=None):
+    def updateConsumer(self, uuid, facts=None, installed_products=None,
+                                                      guest_uuids=None):
         """
         Update a consumer on the server.
 
         Rather than requiring a full representation of the consumer, only some
         information is passed depending on what we wish to update.
+
+        Note that installed_products and guest_uuids expects a certain format,
+        example parsing is in subscription-manager's format_for_server() method.
         """
         params = {}
         if installed_products:
             params['installedProducts'] = installed_products
+        if guest_uuids:
+            params['guestIds'] = guest_uuids
         if facts:
             params['facts'] = facts
 
