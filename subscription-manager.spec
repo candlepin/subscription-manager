@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.12
+Version: 0.96.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -226,6 +226,47 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Oct 04 2011 James Bowes <jbowes@redhat.com> 0.96.13-1
+- 743082: don't show stale subscriptions after autosub (jbowes@redhat.com)
+- 740773: Do not delete certs if we have repo metadata errors
+  (alikins@redhat.com)
+- 742416: Remove the close button from our progress dialog (jbowes@redhat.com)
+- 742013: sub-mgr translations not showing up in firstboot (cduryee@redhat.com)
+- 742425: Extra strings are in the translation files (bkearney@redhat.com)
+- 742473: Extra strings are in the Korean translations (bkearney@redhat.com)
+- 742027: Certificate status does not account for rhn classic
+  (cduryee@redhat.com)
+- 741563: Wrapped Type column name in gettext (mstead@redhat.com)
+- 741863: Made the date box larger. (mstead@redhat.com)
+- 741850: Properly wrapped with gettext. (mstead@redhat.com)
+- 741293: Ensure that blank gpg urls do not have the baseurl prepended to them
+  (bkearney@redhat.com)
+- 741857,741820: Fixed issue where i18n was not being loaded before constants,
+  causing untranslated text (mstead@redhat.com)
+- 737553: Change criteria for system.entitlements_valid comsumer fact
+  (wpoteat@redhat.com)
+- 725535: check that fopen was successful before writing to timestamp
+  (cduryee@redhat.com)
+- 740675: do a condrestart on rhsmcertd when we upgrade subscription-manager
+  (cduryee@redhat.com)
+- 741335: Fix a date comparison bug for healing. (dgoodwin@redhat.com)
+- 740877: autosubscribe output was showing ver instead of status
+  (alikins@redhat.com)
+- 741335: heal for today and future (jesusr@redhat.com)
+- 740046: Change entitlement match to product hash for date detection
+  (wpoteat@redhat.com)
+- 730020: Change if error logging to stderr (wpoteat@redhat.com)
+- 740831: set subscribe button insensitive if nothing is selected
+  (alikins@redhat.com)
+- 692242: rhsm_icon disappears and will not return (cduryee@redhat.com)
+- Pull in the latest translations from zanata (bkearney@redhat.com)
+- 720022: Update man page for new command line options (bkearney@redhat.com)
+- 740046: Ensure common behavior on dates between CLI and GUI
+  (wpoteat@redhat.com)
+- 688454: On error, set DatePicker's date to the previously accepted date.
+  (mstead@redhat.com)
+- 733873: disable proxy options for cert import command (cduryee@redhat.com)
+
 * Tue Sep 20 2011 James Bowes <jbowes@redhat.com> 0.96.11-1
 - Revert "737841: Handle dates beyond 2038 on 32-bit systems."
   (jbowes@redhat.com)
