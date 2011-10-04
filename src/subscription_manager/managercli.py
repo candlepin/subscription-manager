@@ -102,16 +102,19 @@ def autosubscribe(cp, consumer, disable_product_upload=False):
             products = managerlib.getInstalledProductHashMap()
             cp.bindByProduct(consumer, products.values())
 
-        installed_status = managerlib.getInstalledProductStatus()
-
-        log.info("Attempted to auto-subscribe/heal the system.")
-        print _("Installed Product Current Status:")
-        for prod_status in installed_status:
-            status = status_map[prod_status[3]]
-            print (constants.product_status % (prod_status[0], status))
     except Exception, e:
         log.warning("Error during auto-subscribe.")
         log.exception(e)
+
+def show_autosubscribe_output():
+    installed_status = managerlib.getInstalledProductStatus()
+
+    log.info("Attempted to auto-subscribe/heal the system.")
+    print _("Installed Product Current Status:")
+    for prod_status in installed_status:
+        status = status_map[prod_status[3]]
+        print (constants.product_status % (prod_status[0], status))
+
 
 
 class CliCommand(object):
@@ -632,6 +635,10 @@ class RegisterCommand(UserPassCommand):
                 self.options.autosubscribe):
             self.certlib.update()
 
+        # run this after certlib update, so we have the new entitlements
+        if self.options.autosubscribe:
+            show_autosubscribe_output()
+
         self._request_validity_check()
 
     def _persist_identity_cert(self, consumer):
@@ -842,7 +849,9 @@ class SubscribeCommand(CliCommand):
                 print 'Entitlement Certificate(s) update failed due to the following reasons:'
                 for e in result[1]:
                     print '\t-', ' '.join(str(e).split('-')[1:]).strip()
-            self._request_validity_check()
+            elif self.options.auto:
+                # run this after certlib update, so we have the new entitlements
+                show_autosubscribe_output()
 
         except Exception, e:
             handle_exception("Unable to subscribe: %s" % e, e)
