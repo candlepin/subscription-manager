@@ -19,7 +19,7 @@ import os
 import string
 import logging
 from urllib import basejoin
-from iniparse import ConfigParser as Parser
+from iniparse import ConfigParser, tidy
 
 from rhsm.config import initConfig
 
@@ -307,22 +307,24 @@ class Repo(dict):
         return hash(self.id)
 
 
-class RepoFile(Parser):
+class RepoFile(ConfigParser):
 
     PATH = 'etc/yum.repos.d/'
 
     def __init__(self, name='redhat.repo'):
-        Parser.__init__(self)
+        ConfigParser.__init__(self)
         self.path = Path.join(self.PATH, name)
         self.create()
 
     def read(self):
-        r = Reader(self.path)
-        Parser.readfp(self, r)
+        ConfigParser.read(self, self.path)
 
     def write(self):
         f = open(self.path, 'w')
-        Parser.write(self, f)
+        # tidy up to remove double newlines from removed sections,
+        # and add a trailing newline at EOF
+        tidy(self)
+        ConfigParser.write(self, f)
         f.close()
 
     def add(self, repo):
@@ -334,10 +336,14 @@ class RepoFile(Parser):
 
     def update(self, repo):
         # Need to clear out the old section to allow unsetting options:
-        self.remove_section(repo.id)
-        self.add_section(repo.id)
+        # don't use remove section though, as that will reorder sections,
+        # and move whitespace around (resulting in more and more whitespace
+        # as time progresses).
+        for (k, v) in self.items(repo.id):
+            self.remove_option(repo.id, k)
+
         for k, v in repo.items():
-            Parser.set(self, repo.id, k, v)
+            ConfigParser.set(self, repo.id, k, v)
 
     def section(self, section):
         if self.has_section(section):
@@ -357,35 +363,6 @@ class RepoFile(Parser):
         s.append('#')
         f.write('\n'.join(s))
         f.close()
-
-
-class Reader:
-
-    def __init__(self, path):
-        f = open(path)
-        bfr = f.read()
-        self.idx = 0
-        self.lines = bfr.split('\n')
-        f.close()
-
-    def readline(self):
-        nl = 0
-        i = self.idx
-        eof = len(self.lines)
-        while 1:
-            if i == eof:
-                return
-            ln = self.lines[i]
-            i += 1
-            if not ln:
-                nl += 1
-            else:
-                break
-        if nl:
-            i -= 1
-            ln = '\n'
-        self.idx = i
-        return ln
 
 
 def main():
