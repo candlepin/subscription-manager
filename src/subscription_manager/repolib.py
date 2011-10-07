@@ -19,7 +19,7 @@ import os
 import string
 import logging
 from urllib import basejoin
-from iniparse import ConfigParser, tidy
+from iniparse import ConfigParser
 
 from rhsm.config import initConfig
 
@@ -321,9 +321,6 @@ class RepoFile(ConfigParser):
 
     def write(self):
         f = open(self.path, 'w')
-        # tidy up to remove double newlines from removed sections,
-        # and add a trailing newline at EOF
-        tidy(self)
         ConfigParser.write(self, f)
         f.close()
 
