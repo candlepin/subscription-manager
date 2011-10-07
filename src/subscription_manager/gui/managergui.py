@@ -19,6 +19,8 @@
 
 import os
 import socket
+import datetime
+import time
 import logging
 import locale
 
@@ -63,8 +65,19 @@ VALID_IMG = os.path.join(prefix, "data/icons/valid.svg")
 PARTIAL_IMG = os.path.join(prefix, "data/icons/partial.svg")
 INVALID_IMG = os.path.join(prefix, "data/icons/invalid.svg")
 
-#workaround for or_IN issue in python
-if (locale.getlocale(locale.LC_TIME)[0] == 'or_IN'):
+
+# this is a fairly terrible work around for
+# bz #744136 and #704069. Basically, we don't
+# seem to be able to parse dates with time.strptime()
+# in some locales, even if the date is exactly the
+# string created by today.strftime("%x"). So we
+# just set LC_TIME to en_GB which we can parse
+try:
+    today = datetime.date.today()
+    dt = time.strptime(today.strftime("%x"), "%x")
+except ValueError:
+    # we can't parse our own "preferred" date format
+    # for whatever reason, so let's use en_GB
     locale.setlocale(locale.LC_TIME, 'en_GB')
 
 cert_file = ConsumerIdentity.certpath()
