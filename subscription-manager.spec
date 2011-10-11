@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.13
+Version: 0.96.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -226,6 +226,18 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Oct 11 2011 James Bowes <jbowes@redhat.com> 0.96.14-1
+- 743732: French and Chinese Usage strings were incomplete
+  (bkearney@redhat.com)
+- 743732: typo in the as.po file caused the entire language to be dropped
+  (bkearney@redhat.com)
+- 744110: Fuzzy strings from translation tool are visibile in the UI
+  (bkearney@redhat.com)
+- 742128: Newlines in strings cause the Usage line in help to not be
+  translated. (bkearney@redhat.com)
+- 737145: prevent whitespace from building up in redhat.repo
+  (jbowes@redhat.com)
+
 * Tue Oct 04 2011 James Bowes <jbowes@redhat.com> 0.96.13-1
 - 743082: don't show stale subscriptions after autosub (jbowes@redhat.com)
 - 740773: Do not delete certs if we have repo metadata errors
