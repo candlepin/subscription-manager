@@ -87,7 +87,7 @@ def handle_exception(msg, ex):
         print _("Bad CA certificate: %s") % ex.cert_path
         sys.exit(-1)
     else:
-        systemExit(-1, ex)
+        systemExit(-1, msg)
 
 
 def autosubscribe(cp, consumer, disable_product_upload=False):
@@ -875,7 +875,8 @@ class UnSubscribeCommand(CliCommand):
     def _validate_options(self):
         if self.options.serial:
             if not self.options.serial.isdigit():
-                systemExit(-1, _("'%s' is not a valid serial number") % self.options.serial)
+                msg = _("'%s' is not a valid serial number") % self.options.serial
+                systemExit(-1, msg)
         elif not self.options.all:
             print _("One of --serial or --all must be provided")
             self.parser.print_help()
@@ -1369,6 +1370,12 @@ class CLI:
 
         cmd.main()
 
+# from http://farmdev.com/talks/unicode/
+def to_unicode_or_bust(obj, encoding='utf-8'):
+    if isinstance(obj, basestring):
+        if not isinstance(obj, unicode):
+            obj = unicode(obj, encoding)
+    return obj
 
 def systemExit(code, msgs=None):
     "Exit with a code and optional message(s). Saved a few lines of code."
@@ -1377,7 +1384,13 @@ def systemExit(code, msgs=None):
         if type(msgs) not in [type([]), type(())]:
             msgs = (msgs, )
         for msg in msgs:
-            sys.stderr.write(unicode(msg).encode("utf-8") + '\n')
+            # see bz #590094 and #744536
+            # most of our errors are just str types, but error's returned
+            # from rhsm.connection are unicode type. This method didn't
+            # really expect that, so make sure msg is unicode, then
+            # try to encode it as utf-8.
+            msg = to_unicode_or_bust(msg)
+            sys.stderr.write("%s\n" % msg.encode("utf-8"))
     sys.exit(code)
 
 
