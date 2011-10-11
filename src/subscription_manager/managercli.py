@@ -982,8 +982,7 @@ class ImportCertCommand(CliCommand):
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
         self.parser.add_option("--certificate", action="append", dest="certificate_file",
-                               help=_("certificate file to import (for multiple imports," +
-                                      " specify this option more than once)"))
+                               help=_("certificate file to import (for multiple imports, specify this option more than once)"))
 
     def _validate_options(self):
         if not self.options.certificate_file:
@@ -1076,11 +1075,11 @@ class ConfigCommand(CliCommand):
         self.parser.add_option("--list", action="store_true",
                                help=_("list the configuration for this system"))
         self.parser.add_option("--remove", dest="remove", action="append",
-                               help=("remove configuration entry by section.name"))
+                               help=_("remove configuration entry by section.name"))
         for section in cfg.sections():
             for name, value in cfg.items(section):
                 self.parser.add_option("--" + section + "." + name, dest=(section + "." + name),
-                    help=_("Section: " + section + ", Name: " + name))
+                    help=_("Section: %s, Name: %s") % (section, name))
 
     def _validate_options(self):
         if self.options.list:
@@ -1178,8 +1177,8 @@ class ListCommand(CliCommand):
         self.parser.add_option("--available", action='store_true',
                                help=_("if supplied then list shows those subscriptions which are available"))
         self.parser.add_option("--ondate", dest="on_date",
-                                help=_("date to search on, defaults to today's date, only used with --available " +
-                                      "(example: ") + strftime("%Y-%m-%d", localtime()) + " )")
+                                help=(_("date to search on, defaults to today's date, only used with --available (example: %s)")
+                                      % strftime("%Y-%m-%d", localtime())))
         self.parser.add_option("--consumed", action='store_true',
                                help=_("shows the subscriptions being consumed by this system."))
         self.parser.add_option("--all", action='store_true',
