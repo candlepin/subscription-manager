@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.14
+Version: 0.96.15
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -226,6 +226,11 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Oct 12 2011 James Bowes <jbowes@redhat.com> 0.96.15-1
+- 744536: handle unicode and plain str types passed to systemExit
+  (alikins@redhat.com)
+- 744136: workaround date parsing problems in some locales (alikins@redhat.com)
+
 * Tue Oct 11 2011 James Bowes <jbowes@redhat.com> 0.96.14-1
 - 743732: French and Chinese Usage strings were incomplete
   (bkearney@redhat.com)
