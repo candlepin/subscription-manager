@@ -50,7 +50,22 @@ install-conf:
 	install -T etc-conf/logrotate.conf ${PREFIX}/etc/logrotate.d/subscription-manager
 	install etc-conf/plugin/*.conf ${PREFIX}/etc/yum/pluginconf.d/
 
-install: install-files install-conf
+install-help-files:
+	install -d ${PREFIX}/${INSTALL_DIR}/gnome/help/subscription-manager
+	install -d ${PREFIX}/${INSTALL_DIR}/gnome/help/subscription-manager/C
+	install -d \
+		${PREFIX}/${INSTALL_DIR}/gnome/help/subscription-manager/C/figures
+	install -d ${PREFIX}/${INSTALL_DIR}/omf/subscription-manager
+	install docs/subscription-manager.xml \
+		${PREFIX}/${INSTALL_DIR}/gnome/help/subscription-manager/C
+	install docs/legal.xml \
+		${PREFIX}/${INSTALL_DIR}/gnome/help/subscription-manager/C
+	install docs/figures/rhsm-subscribe-prod.png \
+		${PREFIX}/${INSTALL_DIR}/gnome/help/subscription-manager/C/figures
+	install docs/subscription-manager-C.omf \
+		${PREFIX}/${INSTALL_DIR}/omf/subscription-manager
+
+install: install-files install-conf install-help-files
 
 install-files: dbus-service-install compile-po desktop-files
 	install -d ${CODE_DIR}/gui/data/icons/scalable

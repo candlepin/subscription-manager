@@ -31,6 +31,7 @@ BuildRequires: libnotify-devel
 BuildRequires: gtk2-devel
 BuildRequires: desktop-file-utils
 BuildRequires: redhat-lsb
+BuildRequires: scrollkeeper
 
 
 %description
@@ -48,6 +49,8 @@ Requires: usermode
 Requires: usermode-gtk
 Requires: librsvg2
 Requires: dbus-x11
+Requires(post): scrollkeeper
+Requires(postun): scrollkeeper
 
 %description -n subscription-manager-gnome
 This package contains a GTK+ graphical interface for configuring and
@@ -93,11 +96,13 @@ touch %{buildroot}%{_sysconfdir}/yum.repos.d/redhat.repo
 
 %post -n subscription-manager-gnome
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+scrollkeeper-update -q -o %{_datadir}/omf/%{name} || :
 
 %postun -n subscription-manager-gnome
 if [ $1 -eq 0 ] ; then
     touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+    scrollkeeper-update -q || :
 fi
 
 %posttrans -n subscription-manager-gnome
@@ -193,7 +198,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc
 %{_mandir}/man8/subscription-manager-gui.8*
 %{_mandir}/man8/rhsm-compliance-icon.8*
-
+%{_datadir}/omf/subscription-manager
+%{_datadir}/gnome/help/subscription-manager
 
 %files -n subscription-manager-firstboot
 %defattr(-,root,root,-)

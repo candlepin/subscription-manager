@@ -1,0 +1,781 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+  <!ENTITY legal SYSTEM "legal.xml">
+  <!ENTITY version "0.96.12-1">
+  <!ENTITY manrevision "1.0">
+  <!ENTITY date "October 2011">
+  <!ENTITY app "Subscription Manager">
+]>
+<!-- 
+      (Do not remove this comment block.)
+  Maintained by the GNOME Documentation Project
+  http://developer.gnome.org/projects/gdp
+  Template version: 2.0 beta
+  Template last modified Feb 11, 2002
+  
+-->
+<!-- =============Document Header ============================= -->
+<article id="index" lang="en">
+<!-- please do not change the id; for translations, change lang to -->
+<!-- appropriate code -->
+  <articleinfo> 
+	 <title>&app; Manual</title> 
+	 <copyright> 
+		<year>2011</year> 
+		<holder>Red Hat, Inc.</holder> 
+	 </copyright>
+<!-- translators: uncomment this:
+
+  <copyright>
+   <year>2002</year>
+   <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
+  </copyright>
+
+   -->
+<!-- An address can be added to the publisher information.  If a role is 
+     not specified, the publisher/author is the same for all versions of the 
+     document.  -->
+	 <publisher role="maintainer"> 
+		<publishername> Red Hat, Inc. </publishername> 
+	 </publisher> 
+
+&legal;
+<!-- This file  contains link to license for the documentation (GNU FDL), and 
+     other legal stuff such as "NO WARRANTY" statement. Please do not change 
+     any of this. -->
+
+	 <authorgroup> 
+		<author> 
+		  <firstname>Ella Deon</firstname> 
+		  <surname> Lackey</surname> 
+		  <affiliation> 
+			 <orgname>Red Hat Content Services</orgname> 
+			 <address> <email>dlackey@redhat.com</email> </address> 
+		  </affiliation> 
+		</author> 
+      <!-- This is appropriate place for other contributors: translators,
+           maintainers,  etc. Commented out by default.
+           <othercredit role="translator">
+	     <firstname>Latin</firstname> 
+	     <surname>Translator 1</surname> 
+	     <affiliation> 
+	       <orgname>Latin Translation Team</orgname> 
+	       <address> <email>translator@gnome.org</email> </address> 
+	     </affiliation>
+	     <contrib>Latin translation</contrib>
+           </othercredit>
+-->
+	 </authorgroup>
+	 
+	 <releaseinfo revision="1.0" role="review">
+	 </releaseinfo>
+  
+	 <revhistory>
+
+		<revision> 
+		  <revnumber>&app; Manual</revnumber> 
+		  <date>October 2011</date> 
+		  <revdescription> 
+			 <para role="author">Ella Deon Lackey
+				<email>dlackey@redhat.com</email></para> 
+			 <para role="publisher">Red Hat Content Services</para> 
+		  </revdescription> 
+		</revision> 
+	 </revhistory> 
+	 <releaseinfo> This manual describes version &version; of &app;.
+		</releaseinfo> 
+	 <legalnotice> 
+		<title>Feedback</title> 
+		<para> To report a bug or make a suggestion regarding &app; or this manual, enter a bug through <ulink url="http://bugzilla.redhat.com/">Bugzilla</ulink>. </para>
+		
+	 </legalnotice> 
+	 <abstract role="description">
+	 	<para>The <application>Subscription Manager</application> is a systems administration tool.  The <application>&app;</application> can be customized to show seconds or a 12 or 24 hour clock.</para>
+	 </abstract>
+  </articleinfo> 
+  <indexterm> 
+	 <primary>Clock</primary> 
+  </indexterm>  
+<!-- ============= Document Body ============================= -->
+
+<!-- ============= Introduction ============================== -->
+
+  <sect1 id="subscription-manager-introduction"> 
+	 <title>Introduction</title> 
+	<indexterm>
+		<primary>subscriptions</primary>
+	</indexterm>
+	<indexterm>
+		<primary>entitlements</primary>
+	</indexterm>
+	<indexterm>
+		<primary>systems</primary>
+		<secondary>subscription management</secondary>
+	</indexterm>
+	<para>
+		Effective asset management requires a mechanism to handle the software inventory &mdash; both the type of products and the number of systems that the software is installed on. The subscription service provides that mechanism and gives transparency into both global allocations of subscriptions for an entire organization and the specific subscriptions assigned to a single system.
+	</para>
+
+			<para>
+				The basis of software management is a <emphasis>subscription</emphasis>. A subscription contains both the <emphasis>products</emphasis> that are available, the support levels, and the <emphasis>quantities</emphasis>, or number of servers, that the product can be installed on.
+			</para>
+			<para>
+				Subscriptions are managed though the Certificate-Based Red Hat Network service, which ties into the Subscription and Content Delivery Network (CDN).
+			</para>
+			<para>
+				The subscription service maintains a complete list of subscriptions for an organization, identified by a unique ID (called a <emphasis>pool ID</emphasis>). A system is <emphasis>registered</emphasis>, or added, to the subscription service to allow it to manage the subscriptions for that system. Like the subscription, the system is also added to the subscription service inventory and is assigned a unique ID within the service. The subscriptions and system entries, together, comprise the <emphasis>inventory</emphasis>.
+			</para>
+			<para>
+				A system allocates one of the quantities of a product in a subscription to itself. When a subscription is consumed, it is an <emphasis>entitlement</emphasis>. (An entitlement is roughly analogous to a user license, in that it grants all of the rights to that product to that system. Unlike a user license, an entitlement does not grant the right to <emphasis>use</emphasis> the software; with the subscription model, an entitlement grants the ability to download the packages and receive updates.) Because the available quantity in a subscription lowers once a system subscribes to it, the system <emphasis>consumes</emphasis> the subscription.
+			</para>
+			<para>
+				The repository where the product software is located is organized according to the <emphasis>product</emphasis>. Each product group within
+				the repository may contain the primary software packages and then any required dependencies or associated packages. Altogether, the product and its
+				associated packages are called a <emphasis>content set</emphasis>. (A content set for a product even includes other versions of the product.)
+				When a subscription grants access to a product, it includes access to all of the associated packages in that content set.
+			</para>
+			<para>
+				A single subscription can have multiple products, and each system can have multiple different subscriptions, depending on how many entitlement certificates are loaded on the machine.
+			</para>
+	<indexterm>
+		<primary>subscriptions</primary>
+		<secondary>hardware compatibility</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>entitlements</primary>
+		<secondary>hardware compatibility</secondary>
+	</indexterm>
+			<para>
+				Any number of products, for any number of different architectures, can be contained in a single subscription. The subscription options that are visible to a consumer are filtered, by default, according to whether the architecture for the product matches the architecture of the system. This is <emphasis>compatibility</emphasis>. Depending on compatible subscriptions makes sure that subscriptions are allocated efficiently, only to systems which can actually use the products.
+			</para>
+			<para>
+				Some subscriptions define some element count on the consumer, like the number of sockets on the machine, the number of virtual guests on a host, or the number of clients in a domain. Multiple subscriptions can be combined together to cover the counts on the consumer. For example, if there is a four socket server, two subscriptions for "RHEL Server for Two Sockets" can be consumed by the system to cover the socket count. Combining multiple subscriptions to cover the system count is called <emphasis>stacking</emphasis>.
+			</para>
+			<para>
+				The subscription tools can display even incompatible entitlements. Alternatively, the architecture definition for the system can be overridden by defining custom system facts for the subscription tools to use.
+			</para>
+			<para>
+				It is important to distinguish between subscribing to a product and installing a product. A subscription is essentially a statement of whatever products an organization has purchased. The act of subscribing to a subscription means that a system is allowed to install the product with a valid certificate, but subscribing does not actually perform any installation or updates. In the reverse, a product can also be installed apart from any entitlements for the system; the system is just does not have a valid product certificate. Certificate-Based Red Hat Network and the Content Delivery Network harmonize with content delivery and installation by using <command>yum</command> plug-ins that come with the Subscription Manager tools.
+			</para>
+			<para>
+				The Red Hat Subscription Manager UI has a single window with tabbed sections that offer quick views into the current state of the system, showing installed products, subscriptions for the system, and available subscriptions the system has access to. These tabs also allow administrators to manage subscriptions by subscribing and unsubscribing the system.
+			</para>
+			<para>
+				The Red Hat Subscription Manager has three main areas to manage products and subscriptions:
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para>
+						The <guibutton>My Subscriptions</guibutton> area shows all of the current entitlements that the system is subscribed to.
+					</para>
+
+				</listitem>
+				<listitem>
+					<para>
+						The <guibutton>Available Subscriptions</guibutton> area shows all of the subscriptions that are available to the system. The default displays only entitlements that are compatible with the hardware, but these can be filtered to show entitlements corresponding to other installed programs, only subscriptions that have not been installed, and subscriptions based on date.
+					</para>
+
+				</listitem>
+				<listitem>
+					<para>
+						The <guibutton>My Installed Software</guibutton> area shows the currently installed products on the system, along with their subscription status. This does not allow administrators to install software, only to view installed software.
+					</para>
+
+				</listitem>
+
+			</itemizedlist>
+			<para>
+				The top right box contains the tools required to perform maintenance tasks like changing the registration connection information and viewing system facts.
+			</para>
+			
+			<figure id="fig.rhsm-gui-overview">
+				<title>Red Hat Subscription Manager Main Screen</title>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="figures/rhsm-subscribe-prod.png" />
+					</imageobject>
+					<textobject>
+						<phrase>
+							The Subscription Manager Main Window, annotated.
+						</phrase>
+					</textobject>
+
+				</mediaobject>
+
+			</figure>
+
+		</sect1>
+
+
+		<sect1 id="launching-rhsm">
+			<title>Launching Red Hat Subscription Manager</title>
+	<indexterm>
+		<primary>entitlements</primary>
+		<secondary>client tools</secondary>
+		<tertiary>launching Red Hat Subscription Manager</tertiary>
+	</indexterm>
+	<indexterm>
+		<primary>subscriptions</primary>
+		<secondary>client tools</secondary>
+		<tertiary>launching Red Hat Subscription Manager</tertiary>
+	</indexterm>
+			<para>
+				Red Hat Subscription Manager is listed as one of the administrative tools in the <guimenu>System =&gt; Administration</guimenu> menu in the top management bar.
+			</para>
+			<para>
+				Alternatively, the Red Hat Subscription Manager GUI can be opened from the command line with a single command:
+			</para>
+
+<programlisting language="Bash">[root@server1 ~]# subscription-manager-gui</programlisting>
+
+		</sect1>
+
+	<sect1 id="registering-machine-ui">
+		<title>Registering, Unregistering, and Reregistering a System</title>
+	<indexterm>
+		<primary>systems</primary>
+		<secondary>registering</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>systems</primary>
+		<secondary>unregistering</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>systems</primary>
+		<secondary>reregistering</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>entitlements</primary>
+		<secondary>reregistering</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>subscriptions</primary>
+		<secondary>reregistering</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>entitlements</primary>
+		<secondary>unregistering</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>subscriptions</primary>
+		<secondary>unregistering</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>entitlements</primary>
+		<secondary>registering</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>subscriptions</primary>
+		<secondary>registering</secondary>
+	</indexterm>
+		<para>
+			Entitlements are managed by organizing and maintaining the systems which use entitlement subscriptions. The entitlements and subscriptions are managed by Red Hat through the subscription service. A system is recognized to the subscription service by being <emphasis>registered</emphasis> with the service. The subscription service assigns the system (called a <emphasis>consumer</emphasis>) a unique ID (essentially as an inventory number) and issues that system an identifying certificate (with the UUID in its subject CN) to identify that system.
+		</para>
+		<para>
+			Whenever a subscription is purchased by an organization, the consumer can <emphasis>subscribe</emphasis> to that subscription. This means that a portion of the subscription is allocated to that consumer ID; when the consumer contacts the content delivery network and downloads the software, the licenses have been already assigned to the system. The system has valid certificates for its subscriptions.
+		</para>
+		<para>
+			Systems can be registered with an subscription service during the firstboot process or as part of the kickstart setup (both described in the <citetitle>Installation Guide</citetitle>). Systems can also be registered after they have been configured or removed from the subscription service inventory (unregistered) if they will no longer be managed within that entitlement system.
+		</para>
+
+		<sect2 id="registering-ui">
+			<title>Registering Consumers in Hosted Environment</title>
+	<indexterm>
+		<primary>entitlements</primary>
+		<secondary>registering</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>systems</primary>
+		<secondary>registering</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>subscriptions</primary>
+		<secondary>registering</secondary>
+	</indexterm>
+		<para>
+			For infrastructures which use Red Hat's hosted subscription and content delivery network, all that is required to register the system is the username and password of the Red Hat Network account.
+		</para>
+			<orderedlist>
+				<listitem>
+					<para>
+						If the system is not already registered, then there will be a <guibutton>Register</guibutton> button at the top of the window in the <guilabel>Tools</guilabel> area.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Enter the username and password of the user account on the subscription service; this is the account used to access the Customer Portal.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Optionally, select the <guilabel>Automatically subscribe...</guilabel> checkbox, so that the system is subscribed to the best matched subscription when it is registered. Otherwise, the system must be subscribed manually.
+					</para>
+
+				</listitem>
+
+			</orderedlist>
+		</sect2>
+
+		<sect2 id="registering-multiorg"><title>Registering Consumers to a Local Organization</title>
+			<para>
+				Infrastructures which manage their own local content repository and subscription service must have a defined 
+				<emphasis>organization</emphasis>. This organization is essentially a group definition, and systems must be 
+				assigned to that group as part of the registration process. This allows there to be multiple, discrete organizations or 
+				tenants within the infrastructure.
+			</para>
+			<para>
+				When a system is registered using the Subscription Manager GUI, Subscription Manager automatically scans the local subscription and content service 
+				to see what organizations are configured.
+			</para>
+			<orderedlist>
+				<listitem>
+					<para>
+						Click the <guibutton>Register</guibutton> button at the top of the window in the <guilabel>Tools</guilabel> area.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Enter the username and password of the user account on the subscription service; this is the account used to access the Customer Portal.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Subscription Manager scans the network for available organizations.
+					</para>
+					<para>
+						When the configured organizations are detected, Subscription Manager prompts for the organization for the system to join.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Optionally, select the <guilabel>Automatically subscribe...</guilabel> checkbox, so that the system is subscribed to the best matched subscription when it is registered. Otherwise, the system must be subscribed manually.
+					</para>
+
+				</listitem>
+
+			</orderedlist>
+		</sect2>
+
+		<sect2 id="un-registering">
+			<title>Unregistering</title>
+	<indexterm>
+		<primary>entitlements</primary>
+		<secondary>unregistering</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>systems</primary>
+		<secondary>unregistering</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>subscriptions</primary>
+		<secondary>unregistering</secondary>
+	</indexterm>
+			<para>
+				The only thing required to unregister a machine is to run the <command>unregister</command> command. This removes the system's entry from the subscription service, unsubscribes it from any subscriptions, and, locally, deletes its identity and entitlement certificates.
+			</para>
+			<para>
+				In the Red Hat Subscription Manager GUI, there is an <guibutton>Unregister</guibutton> button at the top of the window in the <guilabel>Tools</guilabel> area.
+			</para>
+		</sect2>
+
+	</sect1>
+
+		<sect1 id="sub-ui">
+			<title>Subscribing and Unsubscribing</title>
+			<sect2 id="subscribing-product-ui">
+				<title>Subscribing to a Product</title>
+	<indexterm>
+		<primary>entitlements</primary>
+		<secondary>subscribing</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>systems</primary>
+		<secondary>subscribing</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>subscriptions</primary>
+		<secondary>subscribing</secondary>
+	</indexterm>
+ 	<orderedlist>
+					<listitem>
+						<para>
+							Open the <guilabel>All Available Subscriptions</guilabel> tab.
+						</para>
+
+					</listitem>
+					<listitem>
+						<para>
+							Set the filters to use to search for available entitlements. Subscriptions can be filtered by their active date and by their name. The checkboxes provide more fine-grained filtering:
+						</para>
+						<itemizedlist>
+							<listitem>
+								<para>
+									<emphasis>match my system</emphasis> shows only subscriptions which match the system architecture.
+								</para>
+
+							</listitem>
+							<listitem>
+								<para>
+									<emphasis>match my installed products</emphasis> shows subscriptions which work with currently installed products on the system.
+								</para>
+
+							</listitem>
+							<listitem>
+								<para>
+									<emphasis>have no overlap with existing subscriptions</emphasis> excludes subscriptions with duplicate products. If a system is already subscribed to an entitlement for a specific product or if multiple entitlements supply the same product, then the subscription service filters those subscriptions and shows only the best fit.
+								</para>
+
+							</listitem>
+
+						</itemizedlist>
+					</listitem>
+					<listitem>
+						<para>
+							Select the available entitlements. To select multiple subscriptions, use the <keycap>Ctrl</keycap> key.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Click the <guibutton>Subscribe</guibutton> button.
+						</para>
+
+					</listitem>
+
+				</orderedlist>
+
+			</sect2>
+
+			<sect2 id="unsubscribing-product-ui">
+				<title>Unsubscribing</title>
+	<indexterm>
+		<primary>entitlements</primary>
+		<secondary>unsubscribing</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>systems</primary>
+		<secondary>unsubscribing</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>subscriptions</primary>
+		<secondary>unsubscribing</secondary>
+	</indexterm>
+				<orderedlist>
+					<listitem>
+						<para>
+							Open the <guilabel>My Subscriptions</guilabel> tab.
+						</para>
+						<para>
+							All of the active subscriptions to which the system is currently subscribed are listed. (The products available through the subscription may or may not be installed.)
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Select the entitlements to unsubscribe. To select multiple subscriptions, use the <keycap>Ctrl</keycap> key.
+						</para>
+
+					</listitem>
+					<listitem>
+						<para>
+							Click the <guibutton>Unsubscribe</guibutton> button in the bottom right of the window.
+						</para>
+
+					</listitem>
+
+				</orderedlist>
+
+		</sect2>
+
+		<sect2 id="stacking"><title>Stacking Subscriptions</title>
+			<para>
+				Some subscriptions define a <emphasis>count</emphasis> which works as a restriction on the subscription. For example, counts can be set on the number of sockets or CPUs on a machine, 
+				the number of virtual guests on a host, or the number of clients in a domain.  
+			</para>
+			<para>
+				The entire count must be covered for the system to be fully entitled. If there are four sockets on a machine, then 
+				the server subscriptions must cover four sockets, or if there are eight guests, then there must be enough to cover all eight guests.
+			</para>
+			<para>
+				Many subscriptions can be combined together to cover the count on the system. Two subscriptions for <emphasis>RHEL Server for 2-Sockets</emphasis> can be combined together to 
+				cover a four-socket machine. These subscriptions can be <emphasis>stacked</emphasis>. 
+			</para>
+			<para>
+				There are some rules on what subscriptions can be stacked:
+			</para>
+			<itemizedlist>
+				
+				<listitem>
+					<para>
+						Subscriptions can be stacked by using multiple quantities from the same subscription set.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Subscriptions from different contracts can be stacked together.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Only the same product subscription can be stacked. <emphasis>RHEL Server for 2-Sockets</emphasis> can be stacked with another <emphasis>RHEL Server for 2-Sockets</emphasis> subscription, 
+						but not with <emphasis>RHEL Server for Virtualization</emphasis>, even if they both cover the socket count.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Stackable entitlements are indicated in the Subscription Manager UI with an asterisk (*). In the UI, available subscriptions are grouped first by what subscriptions are compatible for stacking, and then by other available subscriptions.
+					</para>
+				</listitem>
+			</itemizedlist>
+			<para>
+				To stack subscriptions in the Subscription Manager UI, simply set the <guilabel>Quantity</guilabel> field to the required quantity to cover the count.
+			</para>
+		</sect2>
+
+			<sect2 id="ADDING-SUB">
+				<title>Manually Adding a New Subscription</title>
+	<indexterm>
+		<primary>entitlements</primary>
+		<secondary>subscribing</secondary>
+		<tertiary>uploading product certs</tertiary>
+	</indexterm>
+	<indexterm>
+		<primary>systems</primary>
+		<secondary>subscribing</secondary>
+		<tertiary>uploading product certs</tertiary>
+	</indexterm>
+	<indexterm>
+		<primary>subscriptions</primary>
+		<secondary>subscribing</secondary>
+		<tertiary>uploading product certs</tertiary>
+	</indexterm>
+				<para>
+					In certain situations, new product subscriptions can be added by uploading the X.509 entitlements certificate directly rather than polling the subscription service. For example, consumers which are offline must have subscriptions manually added because they cannot connect to the subscription service directly.
+				</para>
+				<orderedlist>
+			<listitem>
+				<para>
+						Retrieve the certificate information for the consumer from the Customer Portal. 
+				</para>
+				<orderedlist>
+			<listitem>
+				<para>
+					Open the <guilabel>Subscriptions</guilabel> tab in the Customer Portal, and select the <guilabel>Overview</guilabel> item under the <guilabel>Certificate-Based Management</guilabel> area.
+				</para>
+
+			</listitem>
+			<listitem>
+				<para>
+					In the summary of consumers, click the name of the offline consumer. 
+				</para>
+			</listitem>
+					<listitem>
+						<para>
+							If necessary, assign the subscriptions to the consumer.
+						</para>
+					</listitem>
+			<listitem>
+				<para>
+					Open the <guibutton>My Subscriptions</guibutton> tab.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Click the <guibutton>Download All Certificates</guibutton> button. This exports all of the entitlements certificates, for each product, to a single <filename>.zip</filename> file. Save the file to some kind of portable media, like a flash drive.
+				</para>
+				<para>
+					To download individual entitlement certificates, click the <guilabel>Download</guilabel> link on the row for the subscription.
+				</para>
+			</listitem>
+				</orderedlist>
+			</listitem>
+				<listitem>
+					<para>
+						Copy the certificates over to the consumer machine, and unzip the archive.
+					</para>
+				</listitem>
+					<listitem>
+						<para>
+							Launch the Red Hat Subscription Manager GUI. For example:
+						</para>
+
+<screen>subscription-manager-gui</screen>
+
+					</listitem>
+					<listitem>
+						<para>
+							In the <guilabel>Tools</guilabel> area, click the <guibutton>Import Certificate</guibutton> button.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Click the file folder icon at the right of the field to navigate to the <filename>.pem</filename> file of the product certificate.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Click the <guibutton>Import Certificate</guibutton> button.
+						</para>
+
+					</listitem>
+
+				</orderedlist>
+				<para>
+					The consumer is then entitled for all of the subscription that were uploaded.
+				</para>
+
+			</sect2>
+
+	</sect1>
+
+
+	<sect1 id="activating-machine"><title>Redeeming Subscriptions on a Machine</title>
+		<para>
+			Systems can be set up with pre-existing subscriptions already available to that system. For some systems which were purchased through third-party vendors, a subscription to Red Hat products is included with the purchase of the machine. Companies using the Subscription Asset Manager can allocate subscriptions to their own systems by creating <emphasis>activation keys</emphasis> which are used to claim those assigned subscriptions.
+		</para>
+		<para>
+			Red Hat Subscription Manager pulls information about the system hardware and the BIOS into the system facts to recognize the hardware vendor. If the vendor and BIOS information matches a certain configuration, then the subscription can be <emphasis>redeemed</emphasis>, which will allow the system to be automatically subscribed to the entitlements purchased with the machine.
+		</para>
+
+				<para>
+					If the machine does not have any subscriptions to be redeemed, then the <guibutton>Redeem Subscription</guibutton> button is not there.
+				</para>
+				<orderedlist>
+					<listitem>
+						<para>
+							At the top of the main window, click the <guibutton>Activate Subscription</guibutton> button.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							In the pop-up window, enter the email address to send the notification to when the redemption is complete.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Click the <guibutton>Actiavte</guibutton> button.
+						</para>
+					</listitem>
+				</orderedlist>
+				<para>
+					It can take up to ten minutes for the confirmation email to arrive.
+				</para>
+	</sect1>
+
+
+	<sect1 id="viewing-ents">
+		<title>Viewing Available and Used Subscriptions</title>
+		<para>
+			To manage subscriptions, administrators need to know both what subscriptions a system is currently consuming and what subscriptions are available to the system.
+		</para>
+	<indexterm>
+		<primary>entitlements</primary>
+		<secondary>viewing</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>systems</primary>
+		<secondary>viewing</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>subscriptions</primary>
+		<secondary>viewing</secondary>
+	</indexterm>
+			<para>
+				The Red Hat Subscription Manager tools give a more detailed view of subscriptions and entitlements than is available through the global tools of the Customer Portal. Three tabs summarize each of the subscriptions and products for the specific machine: installed products (with subscriptions), subscribed entitlements, and available subscriptions.
+			</para>
+			<para>
+				These summaries are always displayed in the Red Hat Subscription Manager UI.
+			</para>
+			<formalpara>
+				<title>Subscribed Entitlements</title>
+				<para>
+					The <guibutton>My Subscriptions</guibutton> area shows all of the current entitlements that the system is subscribed to.
+				</para>
+
+			</formalpara>
+			<formalpara>
+				<title>Available Subscriptions</title>
+				<para>
+					The <guibutton>Available Subscriptions</guibutton> area shows all of the subscriptions that are available to the system. The default displays only entitlements that are compatible with the hardware, but these can be filtered to show entitlements corresponding to other installed programs, only subscriptions that have not been installed, and subscriptions based on date.
+				</para>
+
+			</formalpara>
+	<indexterm>
+		<primary>entitlements</primary>
+		<secondary>viewing</secondary>
+		<tertiary>filters</tertiary>
+	</indexterm>
+	<indexterm>
+		<primary>systems</primary>
+		<secondary>viewing</secondary>
+		<tertiary>filters</tertiary>
+	</indexterm>
+	<indexterm>
+		<primary>subscriptions</primary>
+		<secondary>viewing</secondary>
+		<tertiary>filters</tertiary>
+	</indexterm>
+			<para>
+				The filters dynamically search for available entitlements. Subscriptions can be filtered by their active date and by their name. The checkboxes provide more fine-grained filtering:
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para>
+						<emphasis>match my system</emphasis> shows only subscriptions which match the system architecture.
+					</para>
+
+				</listitem>
+				<listitem>
+					<para>
+						<emphasis>match my installed products</emphasis> shows subscriptions which work with currently installed products on the system.
+					</para>
+
+				</listitem>
+				<listitem>
+					<para>
+						<emphasis>have no overlap with existing subscriptions</emphasis> excludes subscriptions with duplicate products. If a system is already subscribed to an entitlement for a specific product or if multiple entitlements supply the same product, then the subscription service filters those subscriptions and shows only the best fit.
+					</para>
+
+				</listitem>
+
+			</itemizedlist>
+			<formalpara>
+				<title>Installed Products</title>
+				<para>
+					The <guibutton>My Installed Software</guibutton> area shows the currently installed products on the system, along with their subscription status. This does not allow administrators to install software, only to view installed software.
+				</para>
+
+			</formalpara>
+
+		</sect1>
+
+	<sect1 id="responding-to-nags-ui">
+		<title>Responding to Subscription Notifications</title>
+	<indexterm>
+		<primary>entitlements</primary>
+		<secondary>notifications</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>systems</primary>
+		<secondary>notifications</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>subscriptions</primary>
+		<secondary>notifications</secondary>
+	</indexterm>
+		<para>
+			The Red Hat Subscription Manager provides a series of log and UI messages that indicate any changes to the valid certificates of any installed products for a system. In the Subscription Manager GUI, 
+			the status of the system entitlements are color-coded, where <emphasis>green</emphasis> means all products are fully subscribed, <emphasis>yellow</emphasis> 
+			means that some products may not be subscribed but updates are still in effect, and <emphasis>red</emphasis> means that updates are disabled.
+		</para>
+		<para>
+			Whenever there is a warning about subscription changes, a small icon appears in the top menu bar, similar to a fuel gauge.
+		</para>
+		<para>
+			As any installed product nears the expiration date of the subscription, the Subscription Manager daemon will issue a warning. A similar message is given when the system is has products without a valid certificate, meaning either the system is not subscribed to a subscription that entitles that product or the product is installed past the expiration of the subscription. Clicking the <guilabel>Manage My Subscriptions...</guilabel> button in the subscription notification window opens the Red Hat Subscription Manager GUI to view and update subscriptions.
+		</para>
+		<para>
+			When the Subscription Manager UI opens, whether it was opened through a notification or just opened normally, there is a box in the upper left corner that shows the number of products that lack a valid certificate. The easiest way to allocate subscriptions which match invalidated products is to click the <guibutton>Update Certificates</guibutton> button.
+		</para>
+	</sect1>
+
+</article> 
