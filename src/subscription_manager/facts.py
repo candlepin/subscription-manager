@@ -140,4 +140,3 @@ class Facts(CacheManager):
     def _load_data(self, open_file):
         json_str = open_file.read()
         return json.loads(json_str)
-

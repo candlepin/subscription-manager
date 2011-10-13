@@ -107,11 +107,8 @@ class HealingLib(DataLib):
         cs = cert_sorter.CertSorter(ProductDirectory(), EntitlementDirectory(),
                                         facts_dict=self.facts_dict)
 
-
         if 'autoheal' in consumer and consumer['autoheal']:
             try:
-
-
                 #
                 # find_first_invalid_date returns today or some date in the
                 # future. If the date is beyond tomorrow, we're good for a

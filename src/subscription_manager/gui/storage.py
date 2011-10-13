@@ -15,6 +15,7 @@
 
 import gtk
 
+
 class MappedStore(object):
     def __init__(self, type_map):
         self.type_index = {}
@@ -34,6 +35,7 @@ class MappedStore(object):
         for key, value in item_map.iteritems():
             entry[self[key]] = value
         return entry
+
 
 class MappedListStore(MappedStore, gtk.ListStore):
 
@@ -63,6 +65,7 @@ class MappedListStore(MappedStore, gtk.ListStore):
         list to append to the list store.
         """
         self.append(self._create_initial_entry(item_map))
+
 
 class MappedTreeStore(MappedStore, gtk.TreeStore):
     def __init__(self, type_map):

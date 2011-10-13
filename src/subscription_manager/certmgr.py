@@ -115,7 +115,7 @@ if __name__ == '__main__':
 
     logutil.init_logger()
     log = logging.getLogger('rhsm-app.' + __name__)
- 
+
     parser = OptionParser()
     parser.add_option("--autoheal", dest="autoheal", action="store_true", default=False,
                   help="perform an autoheal check")

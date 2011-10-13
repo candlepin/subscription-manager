@@ -46,6 +46,7 @@ def populate_yumvars(conduit, env, org):
         repo.yumvar['env'] = env
         repo.yumvar['org'] = org
 
+
 def _init_hook(conduit):
     # FIXME: we can only run this plugin as root,
     # we do need to handle that
@@ -59,7 +60,6 @@ def _init_hook(conduit):
         conduit.info(2, "Unable to import ConsumerIdentity")
         populate_yumvars(conduit, env, org)
         return
-
 
     cert_file = ConsumerIdentity.certpath()
     key_file = ConsumerIdentity.keypath()
@@ -102,6 +102,7 @@ def _init_hook(conduit):
         return
 
     populate_yumvars(conduit, env, org)
+
 
 def init_hook(conduit):
     try:

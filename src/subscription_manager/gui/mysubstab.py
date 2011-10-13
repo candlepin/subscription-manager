@@ -36,6 +36,7 @@ WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
 WARNING_COLOR = '#FFFB82'
 EXPIRED_COLOR = '#FFAF99'
 
+
 class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
     # Are facts required here? [mstead]
@@ -164,7 +165,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         # Update the parent color if required.
         if change_parent_color and iter:
             self.store.set_value(iter, self.store['background'], new_parent_color)
-
 
     def get_label(self):
         return _("My Subscriptions")

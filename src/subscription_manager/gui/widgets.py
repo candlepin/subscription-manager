@@ -518,6 +518,7 @@ class ToggleTextColumn(gtk.TreeViewColumn):
     def _get_false_text(self):
         raise NotImplementedError("Subclasses must implement _get_false_text(self).")
 
+
 class MultiEntitlementColumn(ToggleTextColumn):
     MULTI_ENTITLEMENT_STRING = "*"
     NOT_MULTI_ENTITLEMENT_STRING = ""

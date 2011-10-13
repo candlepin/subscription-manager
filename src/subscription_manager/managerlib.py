@@ -17,7 +17,6 @@
 import os
 import re
 import stat
-import sys
 import shutil
 import syslog
 import time
@@ -96,8 +95,8 @@ def getInstalledProductStatus(product_directory=None,
     for installed_product in sorter.installed_products:
         product_cert = sorter.installed_products[installed_product]
         for product in product_cert.getProducts():
-            begin = "";
-            end = "";
+            begin = ""
+            end = ""
             if sorter.get_entitlements_for_product(product.getHash()):
                 begin = formatDate(sorter.get_begin_date(product.getHash()))
                 end = formatDate(sorter.get_end_date(product.getHash()))
@@ -276,8 +275,8 @@ class PoolFilter(object):
             for productid in entitled_product_ids:
                 if str(productid) in provided_ids or \
                     str(productid) == pool['productId']:
-                        overlap = True
-                        break
+                    overlap = True
+                    break
             if not overlap:
                 filtered_pools.append(pool)
         return filtered_pools
@@ -559,6 +558,7 @@ class PoolStash(object):
             provided_products.append((product['productName'], product['productId']))
         return provided_products
 
+
 class ImportFileExtractor(object):
     """
     Responsible for checking an import file and pulling cert and key from it.
@@ -595,11 +595,11 @@ class ImportFileExtractor(object):
     _KEY_DICT_TAG = "KEY"
 
     def __init__(self, cert_file_path):
-            self.path = cert_file_path
-            self.file_name = os.path.basename(cert_file_path)
+        self.path = cert_file_path
+        self.file_name = os.path.basename(cert_file_path)
 
-            content = self._read(cert_file_path)
-            self.parts = self._process_content(content)
+        content = self._read(cert_file_path)
+        self.parts = self._process_content(content)
 
     def _read(self, file_path):
         fd = open(file_path, "r")
@@ -691,7 +691,6 @@ class ImportFileExtractor(object):
         return "%s.pem" % (ent_cert.serialNumber())
 
 
-
 def _sub_dict(datadict, subkeys, default=None):
     return dict([(k, datadict.get(k, default)) for k in subkeys])
 
@@ -714,12 +713,12 @@ def parseDate(date):
     # so we aren't "naive"
     try:
         posix_time = xml.utils.iso8601.parse(date)
-    except OverflowError,e :
+    except OverflowError:
         # Handle dates above 2038 on 32-bit systems by swapping it out with
         # 2038-01-01. (which should be ok) Such a system is quite clearly
         # in big trouble come that date, we just want to make sure they
         # can still list such subscription now.
-        log.warning("Date overflow: %s, using Jan 1 2038 instead." %  date)
+        log.warning("Date overflow: %s, using Jan 1 2038 instead." % date)
         posix_time = OVERFLOW_DATE
 
     dt = datetime.fromtimestamp(posix_time, tz=server_tz)
@@ -731,6 +730,7 @@ def formatDate(dt):
         return dt.astimezone(LocalTz()).strftime("%x")
     else:
         return ""
+
 
 class ServerTz(tzinfo):
     """
@@ -809,8 +809,6 @@ def check_identity_cert_perms():
         if mode != ID_CERT_PERMS:
             os.chmod(cert, ID_CERT_PERMS)
             log.warn("Corrected incorrect permissions on %s." % cert)
-
-
 
 
 def enhance_facts(facts, consumer):

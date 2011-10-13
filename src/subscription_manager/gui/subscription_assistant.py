@@ -518,7 +518,6 @@ class SubscriptionAssistant(widgets.GladeWidget):
             row[self.invalid_store['active']] = active
         self._display_subscriptions()
 
-
     def format_date(self, date):
         return managerlib.formatDate(date)
 

@@ -221,7 +221,6 @@ class MainWindow(widgets.GladeWidget):
                                                             ent_dir=self.entitlement_dir,
                                                             prod_dir=self.product_dir)
 
-
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
         self.network_config_dialog.xml.get_widget("closeButton").connect("clicked", self._config_changed)
 
@@ -396,11 +395,11 @@ class MainWindow(widgets.GladeWidget):
         """ Updates the entitlement validity status portion of the UI. """
 
         if ClassicCheck().is_registered_with_classic():
-		buf = gtk.gdk.pixbuf_new_from_file_at_size(VALID_IMG, 32, 32)
-		self.subscription_status_image.set_from_pixbuf(buf)
-		self.subscription_status_label.set_text(
-                        _("This system is registered to RHN Classic"))
-                return
+            buf = gtk.gdk.pixbuf_new_from_file_at_size(VALID_IMG, 32, 32)
+            self.subscription_status_image.set_from_pixbuf(buf)
+            self.subscription_status_label.set_text(
+                _("This system is registered to RHN Classic"))
+            return
 
         # Look for productswhich have invalid entitlements
         sorter = CertSorter(self.product_dir, self.entitlement_dir, facts_dict=self.facts.get_facts())

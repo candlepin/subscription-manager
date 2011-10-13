@@ -140,6 +140,7 @@ class StatusChecker(dbus.service.Object):
         self.watchdog()
         return ret
 
+
 def parse_force_signal(cli_arg):
     if cli_arg is None:
         return None

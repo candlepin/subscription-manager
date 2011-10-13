@@ -258,7 +258,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     'quantity_to_consume': 0,
                     'available': "",
                     'product_id': "",
-                    'pool_id':"",  # not displayed, just for lookup later
+                    'pool_id': "",  # not displayed, just for lookup later
                     'merged_pools': None,  # likewise not displayed, for subscription
                     'align': 0.5,
                     'multi-entitlement': False,

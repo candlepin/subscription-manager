@@ -28,6 +28,7 @@ from subscription_manager.certdirectory import Directory, ProductDirectory
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
+
 class DatabaseDirectory(Directory):
 
     PATH = 'var/lib/rhsm'
@@ -160,7 +161,7 @@ class ProductManager:
 
     # We should only delete productcerts if there are no
     # packages from that repo installed (not "active")
-    # and we have the product cert installed. 
+    # and we have the product cert installed.
     def updateRemoved(self, active):
         for cert in self.pdir.list():
             p = cert.getProduct()
@@ -234,4 +235,4 @@ class ProductManager:
 
 if __name__ == '__main__':
     pm = ProductManager()
-    pm.update()
+    pm.update(yb=None)

@@ -97,7 +97,7 @@ def autosubscribe(cp, consumer, disable_product_upload=False):
     """
     try:
         if disable_product_upload:
-            cp.bind(consumer) # new style
+            cp.bind(consumer)  # new style
         else:
             products = managerlib.getInstalledProductHashMap()
             cp.bindByProduct(consumer, products.values())
@@ -105,6 +105,7 @@ def autosubscribe(cp, consumer, disable_product_upload=False):
     except Exception, e:
         log.warning("Error during auto-subscribe.")
         log.exception(e)
+
 
 def show_autosubscribe_output():
     installed_status = managerlib.getInstalledProductStatus()
@@ -114,7 +115,6 @@ def show_autosubscribe_output():
     for prod_status in installed_status:
         status = status_map[prod_status[3]]
         print (constants.product_status % (prod_status[0], status))
-
 
 
 class CliCommand(object):
@@ -589,7 +589,7 @@ class RegisterCommand(UserPassCommand):
                                     proxy_password=self.proxy_password)
 
             if self.options.consumerid:
-            #TODO remove the username/password
+                #TODO remove the username/password
                 consumer = admin_cp.getConsumer(self.options.consumerid,
                         self.username, self.password)
             else:
@@ -1119,7 +1119,7 @@ class ConfigCommand(CliCommand):
                     if name == key:
                         found = True
                 if not found:
-                    sys.stderr.write(_("Error: Section %s and name %s does not exist.") % (section,name))
+                    sys.stderr.write(_("Error: Section %s and name %s does not exist.") % (section, name))
                     sys.exit(-1)
 
     def _do_command(self):
@@ -1130,13 +1130,13 @@ class ConfigCommand(CliCommand):
                 print '[%s]' % (section)
                 sourceList = cfg.items(section)
                 sourceList.sort()
-                for (name,value) in sourceList:
+                for (name, value) in sourceList:
                     indicator1 = ''
                     indicator2 = ''
                     if (value == cfg.defaults().get(name)):
                         indicator1 = '['
                         indicator2 = ']'
-                    print '   %s = %s%s%s' % (name,indicator1,value,indicator2)
+                    print '   %s = %s%s%s' % (name, indicator1, value, indicator2)
                 print
             print _("[] - Default value in use\n")
         elif self.options.remove:
@@ -1151,13 +1151,13 @@ class ConfigCommand(CliCommand):
                         cfg.remove_option(section, name)
                         print _("You have removed the value for section %s and name %s.") % (section, name)
                         print _("The default value for %s will now be used.") % (name)
-                except Exception, e:
+                except Exception:
                     print _("Section %s and name %s cannot be removed.") % (section, name)
             cfg.save()
         else:
             for section in cfg.sections():
-                for name,value in cfg.items(section):
-                    value = "%s" % getattr(self.options,section + "." + name)
+                for name, value in cfg.items(section):
+                    value = "%s" % getattr(self.options, section + "." + name)
                     if not value == 'None':
                         cfg.set(section, name, value)
             cfg.save()
@@ -1369,12 +1369,14 @@ class CLI:
 
         cmd.main()
 
+
 # from http://farmdev.com/talks/unicode/
 def to_unicode_or_bust(obj, encoding='utf-8'):
     if isinstance(obj, basestring):
         if not isinstance(obj, unicode):
             obj = unicode(obj, encoding)
     return obj
+
 
 def systemExit(code, msgs=None):
     "Exit with a code and optional message(s). Saved a few lines of code."

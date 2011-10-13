@@ -1,6 +1,7 @@
 import gettext
 _ = gettext.gettext
 
+
 class Branding(object):
     def __init__(self):
         self.CLI_REGISTER = _("register the client to RHN")
@@ -11,7 +12,7 @@ class Branding(object):
 
 This system has already been registered with RHN using RHN Classic technology.
 
-The tool you are using is attempting to re-register using RHN Certificate-Based technology. Red Hat recommends (except in a few cases) that customers only register with RHN once. 
+The tool you are using is attempting to re-register using RHN Certificate-Based technology. Red Hat recommends (except in a few cases) that customers only register with RHN once.
 
 To learn more about RHN registration and technologies please consult this Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563
 """)

@@ -28,6 +28,7 @@ status_map = {"future_subscribed": _("Future Subscription"),
               "partially_subscribed": _("Partially Subscribed")
 }
 
+
 class CertSorter(object):
     """
     Class used to sort all certificates in the given Entitlement and Product
@@ -79,7 +80,6 @@ class CertSorter(object):
 
         # products that we have entitlements for but no product cert for:
         self.not_installed_products = {}
-
 
         # do we need a future entitled list? we seem to use that
         # in the gui TODO
@@ -150,12 +150,12 @@ class CertSorter(object):
         return end_dates[0]
 
     def get_entitlements_for_product(self, product_hash):
-	entitlements = []
-	for cert in self.entitlement_dir.list():
-	    for cert_product in cert.getProducts():
-		if product_hash == cert_product.getHash():
-		    entitlements.append(cert)
-	return entitlements
+        entitlements = []
+        for cert in self.entitlement_dir.list():
+            for cert_product in cert.getProducts():
+                if product_hash == cert_product.getHash():
+                    entitlements.append(cert)
+        return entitlements
 
     def _populate_installed_products(self):
         """ Build the dict of all installed products. """
@@ -173,8 +173,6 @@ class CertSorter(object):
         ent_certs = self.entitlement_dir.list()
 
         for ent_cert in ent_certs:
-
- #           now = datetime.now(GMT())
             now = self.on_date
             if ent_cert.validRange().begin() > now:
                 self.future_entitlement_certs.append(ent_cert)
@@ -241,7 +239,7 @@ class CertSorter(object):
         for stackable_id in stackable_ents.keys():
             log.debug("Stack ID: %s" % stackable_id)
             log.debug("  entitlements: %s" % len(stackable_ents[stackable_id]))
-            socket_total = 0 # sockets covered by entitlements
+            socket_total = 0  # sockets covered by entitlements
             system_sockets = 1
             if self.facts_dict:
                 system_sockets = int(self.facts_dict['cpu.cpu_socket(s)'])
@@ -284,7 +282,6 @@ class CertSorter(object):
                     if product_id in self.valid_products:
                         del self.valid_products[product_id]
 
-
     def _scan_for_unentitled_products(self):
         # For all installed products, if not in valid or expired hash, it
         # must be completely unentitled
@@ -305,6 +302,7 @@ class CertSorter(object):
         for product_id in self.expired_products.keys():
             if product_id in self.valid_products:
                 del self.expired_products[product_id]
+
 
 class StackingGroupSorter(object):
     def __init__(self, entitlements):
@@ -341,6 +339,7 @@ class EntitlementGroup(object):
 
     def add_entitlement_cert(self, entitlement):
         self.entitlements.append(entitlement)
+
 
 class EntitlementCertStackingGroupSorter(StackingGroupSorter):
     def __init__(self, certs):

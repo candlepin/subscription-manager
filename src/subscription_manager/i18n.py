@@ -17,6 +17,7 @@ APP = 'rhsm'
 # Directory where translations are deployed:
 DIR = '/usr/share/locale/'
 
+
 def configure_i18n(with_glade=False):
     """
     Configure internationalization for the application. Should only be

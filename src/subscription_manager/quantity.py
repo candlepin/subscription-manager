@@ -72,10 +72,10 @@ class QuantityDefaultValueCalculator(object):
         # - if product vcpu attribute is set then, machine cpus / product vcpu
         # - if no vcpu, then, machine_sockets / product_sockets
         # - if no sockets and vcpu, then, 1
-        if product_attrs.has_key(self._CPUS_PROD_ATTR_NAME):
+        if self._CPUS_PROD_ATTR_NAME in product_attrs:
             machine_val = self._get_float_from_dict(self.fact_dict, self._CPUS_FACT_NAME)
             product_val = self._get_float_from_dict(product_attrs, self._CPUS_PROD_ATTR_NAME)
-        elif product_attrs.has_key(self._SOCKETS_PROD_ATTR_NAME):
+        elif self._SOCKETS_PROD_ATTR_NAME in product_attrs:
             machine_val = self._get_float_from_dict(self.fact_dict, self._SOCKET_FACT_NAME)
             product_val = self._get_float_from_dict(product_attrs, self._SOCKETS_PROD_ATTR_NAME)
         else:
