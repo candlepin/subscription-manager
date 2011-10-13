@@ -116,7 +116,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="padding">6</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -258,6 +258,38 @@
                 <property name="fill">False</property>
                 <property name="pack_type">end</property>
                 <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkAlignment" id="alignment3">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="yalign">0</property>
+                <property name="xscale">0</property>
+                <property name="yscale">0</property>
+                <property name="top_padding">8</property>
+                <property name="left_padding">5</property>
+                <child>
+                  <widget class="GtkButton" id="help_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <signal name="clicked" handler="on_help_button_clicked"/>
+                    <accelerator key="F1" signal="clicked"/>
+                    <child>
+                      <widget class="GtkImage" id="image1">
+                        <property name="visible">True</property>
+                        <property name="stock">gtk-help</property>
+                      </widget>
+                    </child>
+                  </widget>
+                </child>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="pack_type">end</property>
+                <property name="position">0</property>
               </packing>
             </child>
           </widget>

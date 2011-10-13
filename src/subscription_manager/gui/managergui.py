@@ -197,7 +197,8 @@ class MainWindow(widgets.GladeWidget):
               ['main_window', 'notebook', 'subscription_status_label',
                'subscription_status_image', 'system_name_label',
                'next_update_label', 'next_update_title', 'register_button',
-               'unregister_button', 'update_certificates_button', 'redeem_button'])
+               'unregister_button', 'update_certificates_button',
+               'redeem_button', 'help_button'])
 
         self.backend = backend or Backend()
         self.consumer = consumer or Consumer()
@@ -251,6 +252,7 @@ class MainWindow(widgets.GladeWidget):
             "on_proxy_config_button_clicked":
                 self._network_config_button_clicked,
             "on_redeem_button_clicked": self._redeem_button_clicked,
+            "on_help_button_clicked": self._help_button_clicked,
         })
 
         # Register callback for when product/entitlement certs are updated
@@ -384,6 +386,15 @@ class MainWindow(widgets.GladeWidget):
     def _redeem_button_clicked(self, widget):
         self.redeem_dialog.set_parent_window(self._get_window())
         self.redeem_dialog.show()
+
+    def _help_button_clicked(self, widget):
+        try:
+            gtk.show_uri(None, "ghelp:subscription-manager",
+                    gtk.get_current_event_time())
+        except Exception, e:
+            # if we can't open it, it's probably because the user didn't
+            # install the docs, or yelp. no need to bother them.
+            log.warn("Unable to open help documentation: %s", e)
 
     def _config_changed(self, widget):
         # update the backend's UEP in case we changed proxy
