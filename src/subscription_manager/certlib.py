@@ -104,47 +104,41 @@ class HealingLib(DataLib):
         uuid = ConsumerIdentity.read().getConsumerId()
         consumer = self.uep.getConsumer(uuid)
         from subscription_manager import managerlib
-        cs = cert_sorter.CertSorter(ProductDirectory(), EntitlementDirectory(),
-                                        facts_dict=self.facts_dict)
 
 
         if 'autoheal' in consumer and consumer['autoheal']:
             try:
-
-
-                #
-                # find_first_invalid_date returns today or some date in the
-                # future. If the date is beyond tomorrow, we're good for a
-                # little while longer, nothing to do. Otherwise, we either are
-                # or will be unentitled soon, in which case we should heal
-                # ourselves.
-                #
-                expiring_date = find_first_invalid_date()
+                log.info("Checking if system requires healing.")
 
                 today = datetime.now(GMT())
                 tomorrow = today + timedelta(days=1)
 
-                log.debug("Expiring date: %s, Today: %s, Tomorrow: %s" % (
-                    str(expiring_date), str(today), str(tomorrow)))
+                prod_dir = ProductDirectory()
 
-                if expiring_date is None or expiring_date >= tomorrow:
-                    log.debug("System does not require healing")
-                    return 0
-
-                #
-                # Otherwise, expiring_date <= tomorrow we should
-                # try to heal.
-                #
-
-                log.info("Attempting to auto-heal the system.")
-
-                #
-                # we're already unentitled, better heal ourselves
-                #
-                if expiring_date <= today:
+                # Check if we're out of compliance today and heal if so. If not
+                # we'll do the same check for tomorrow to hopefully always keep
+                # us compliant:
+                ent_dir = EntitlementDirectory()
+                cs = cert_sorter.CertSorter(prod_dir, ent_dir,
+                        on_date=today)
+                if not cs.is_valid():
+                    log.warn("Found invalid entitlements for today: %s" %
+                            today)
                     self.uep.bind(uuid, today)
                 else:
-                    self.uep.bind(uuid, tomorrow)
+                    log.info("Entitlements are valid for today: %s" %
+                            today)
+
+                    cs = cert_sorter.CertSorter(prod_dir, ent_dir,
+                            on_date=tomorrow)
+                    if not cs.is_valid():
+                        log.warn("Found invalid entitlements for tomorrow: %s" %
+                                tomorrow)
+                        self.uep.bind(uuid, tomorrow)
+                    else:
+                        log.info("Entitlements are valid for tomorrow: %s" %
+                                tomorrow)
+
             except Exception, e:
                 log.error("Error attempting to auto-heal:")
                 log.exception(e)
@@ -452,9 +446,14 @@ class UpdateReport:
 
 def find_first_invalid_date(ent_dir=None, product_dir=None):
     """
-    Find the first datetime where an entitlement will be invalid.
-    If there are currently unentitled products, then return the current
-    datetime.
+    Find the first date when the system is out of compliance at midnight
+    GMT.
+
+    WARNING: This method does *not* return the exact first datetime when
+    we're out of compliance. Due to it's uses in the GUI it needs to
+    return a datetime into the first day of complete non-compliance so
+    the subscription assistant can search for that time and find expired
+    products.
 
     If there are no products installed, return None, as there technically
     is no first invalid date.
@@ -477,6 +476,7 @@ def find_first_invalid_date(ent_dir=None, product_dir=None):
     # run it for the future to figure this out
     # First check if we have anything installed but not entitled *today*:
     cs = cert_sorter.CertSorter(product_dir, ent_dir, on_date=current_date)
+    # TODO: partially stacked?
     if cs.unentitled_products or cs.expired_products:
         log.debug("Found installed but not entitled products.")
         return current_date
@@ -493,6 +493,9 @@ def find_first_invalid_date(ent_dir=None, product_dir=None):
     # status on their end date, and return the first date where we're not
     # compliant.
     for ent_cert in all_ent_certs:
+        # Adding a timedelta of one day here so we can be sure we get a date
+        # the subscription assitant (which does not use time) can use to search
+        # for.
         end_date = ent_cert.validRange().end() + timedelta(days=1)
         if end_date < current_date:
             # This cert is expired, ignore it:
@@ -503,6 +506,7 @@ def find_first_invalid_date(ent_dir=None, product_dir=None):
         # new cert_sort stuff, use _scan_for_entitled_products, since
         # we just need to know if stuff is expired
         cs = cert_sorter.CertSorter(product_dir, ent_dir, on_date=end_date)
+        # TODO: partially stacked?
         if cs.expired_products:
             log.debug("Found non-compliant status on %s" % end_date)
             return end_date

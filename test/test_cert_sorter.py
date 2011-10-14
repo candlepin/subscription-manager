@@ -123,6 +123,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertFalse('product4' in self.sorter.expired_products)  # it's not installed
         self.assertTrue('product1' in self.sorter.unentitled_products)
         self.assertEqual(0, len(self.sorter.valid_entitlement_certs))
+        self.assertFalse(self.sorter.is_valid())
 
     def test_entitled_products(self):
         provided = [StubProduct('product1'), StubProduct('product2'),
