@@ -70,9 +70,11 @@ class CertSorterTests(unittest.TestCase):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir)
         self.assertEqual(1, len(self.sorter.unentitled_products.keys()))
         self.assertTrue(INST_PID_1 in self.sorter.unentitled_products)
+        self.assertFalse(self.sorter.is_valid())
 
     def test_ent_cert_no_installed_product(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir)
+        # TODO: looks like this test was never completed
 
     def test_ent_cert_no_product(self):
         self.ent_dir = StubCertificateDirectory(
@@ -99,6 +101,7 @@ class CertSorterTests(unittest.TestCase):
 
         self.assertEqual(1, len(self.sorter.expired_products.keys()))
         self.assertTrue(INST_PID_3 in self.sorter.expired_products)
+        self.assertFalse(self.sorter.is_valid())
 
     def test_expired_in_future(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir,
@@ -109,6 +112,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertFalse(INST_PID_4 in self.sorter.expired_products)  # it's not installed
         self.assertTrue(INST_PID_1 in self.sorter.unentitled_products)
         self.assertEqual(0, len(self.sorter.valid_entitlement_certs))
+        self.assertFalse(self.sorter.is_valid())
 
     def test_entitled_products(self):
         provided = [StubProduct(INST_PID_1), StubProduct(INST_PID_2),
@@ -122,6 +126,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertTrue(INST_PID_1 in self.sorter.valid_products)
         self.assertTrue(INST_PID_2 in self.sorter.valid_products)
         self.assertTrue(INST_PID_3 in self.sorter.valid_products)
+        self.assertTrue(self.sorter.is_valid())
 
     def test_expired_but_provided_in_another_entitlement(self):
         self.ent_dir = StubCertificateDirectory([
@@ -155,6 +160,7 @@ class CertSorterTests(unittest.TestCase):
 
         self.assertEquals(1, len(self.sorter.unentitled_products.keys()))
         self.assertTrue(INST_PID_1 in self.sorter.unentitled_products)
+        self.assertFalse(self.sorter.is_valid())
 
 
 # TODO: These tests are commented out, they expose broken behavior that

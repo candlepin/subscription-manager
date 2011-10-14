@@ -98,6 +98,17 @@ class CertSorter(object):
         log.debug("unentitled products: %s" % self.unentitled_products.keys())
         log.debug("future products: %s" % self.future_products.keys())
 
+    def is_valid(self):
+        """
+        Return true if the results of this cert sort indicate our
+        entitlements are completely valid.
+        """
+        if self.partially_valid_products or self.expired_products or \
+                self.unentitled_products:
+            return False
+
+        return True
+
     def refresh(self):
         refresh_dicts = [self.installed_products,
                          self.unentitled_products,
