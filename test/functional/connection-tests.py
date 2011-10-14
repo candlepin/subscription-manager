@@ -22,11 +22,25 @@ from rhsm.connection import *
 class ConnectionTests(unittest.TestCase):
 
     def setUp(self):
-        self.cp = UEPConnection(username="admin", password="admin", 
+        self.cp = UEPConnection(username="admin", password="admin",
                 insecure=True)
+
+        consumerInfo = self.cp.registerConsumer("test-consumer", "system", owner="admin")
+        self.consumer_uuid = consumerInfo['uuid']
 
     def test_supports_resource(self):
         self.assertTrue(self.cp.supports_resource('consumers'))
         self.assertTrue(self.cp.supports_resource('admin'))
         self.assertFalse(self.cp.supports_resource('boogity'))
 
+    def test_update_consumer_can_update_guests_with_empty_list(self):
+        self.cp.updateConsumer(self.consumer_uuid, guest_uuids=[])
+
+    def test_update_consumer_can_update_facts_with_empty_dict(self):
+        self.cp.updateConsumer(self.consumer_uuid, facts={})
+
+    def test_update_consumer_can_update_installed_products_with_empty_list(self):
+        self.cp.updateConsumer(self.consumer_uuid, installed_products=[])
+
+    def tearDown(self):
+        self.cp.unregisterConsumer(self.consumer_uuid)

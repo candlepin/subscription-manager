@@ -399,7 +399,7 @@ class UEPConnection:
     def ping(self, username=None, password=None):
         return self.conn.request_get("/status/")
 
-    def registerConsumer(self, name="unknown", type="system", facts={}, 
+    def registerConsumer(self, name="unknown", type="system", facts={},
             owner=None, environment=None, keys=None,
             installed_products=None):
         """
@@ -443,11 +443,11 @@ class UEPConnection:
         example parsing is in subscription-manager's format_for_server() method.
         """
         params = {}
-        if installed_products:
+        if installed_products != None:
             params['installedProducts'] = installed_products
-        if guest_uuids:
+        if guest_uuids != None:
             params['guestIds'] = guest_uuids
-        if facts:
+        if facts != None:
             params['facts'] = facts
 
         method = "/consumers/%s" % self.sanitize(uuid)
