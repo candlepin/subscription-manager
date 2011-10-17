@@ -236,6 +236,143 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Mon Oct 17 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.97.1-1
+- 743704: Fix healing date issues. (dgoodwin@redhat.com)
+- 580905: Add a help button to subscription-manager-gui (jbowes@redhat.com)
+- 580905: include help documentation for the gui (jbowes@redhat.com)
+- pep8/whitespace cleanups. make "make pep8" clean (alikins@redhat.com)
+- remove en.po (alikins@redhat.com)
+- 742128: Fix string concats in the get text calls to improve the strings for
+  the translators (bkearney@redhat.com)
+- 744536: handle unicode and plain str types passed to systemExit
+  (alikins@redhat.com)
+- 743732: French and Chinese Usage strings were incomplete
+  (bkearney@redhat.com)
+- 743732: typo in the as.po file caused the entire language to be dropped
+  (bkearney@redhat.com)
+- 744136: workaround date parsing problems in some locales (alikins@redhat.com)
+- 744110: Fuzzy strings from translation tool are visibile in the UI
+  (bkearney@redhat.com)
+- 742128: Newlines in strings cause the Usage line in help to not be
+  translated. (bkearney@redhat.com)
+- 737145: remove the call to tidy(), it wasn't needed and isn't always
+  available (jbowes@redhat.com)
+- 737145: prevent whitespace from building up in redhat.repo
+  (jbowes@redhat.com)
+- 743082: don't show stale subscriptions after autosub (jbowes@redhat.com)
+- 740773: Do not delete certs if we have repo metadata errors
+  (alikins@redhat.com)
+- Be even more paranoid about exceptions in the plugin. (alikins@redhat.com)
+- add katello plugin to spec file (alikins@redhat.com)
+- katello yum plugin to support $env and $org in repo confs
+  (alikins@redhat.com)
+- 742416: Remove the close button from our progress dialog (jbowes@redhat.com)
+- 742013: sub-mgr translations not showing up in firstboot (cduryee@redhat.com)
+- 742425:Extra strings are in the translation files (bkearney@redhat.com)
+- 742473:Extra strings are in the Korean translations (bkearney@redhat.com)
+- Find instances where the string substitution is done before the string
+  lookup, this will cause localization to fail (bkearney@redhat.com)
+- 742027: Certificate status does not account for rhn classic
+  (cduryee@redhat.com)
+- 741857,741820: Fixed issue where i18n was not being loaded before constants,
+  causing untranslated text (mstead@redhat.com)
+- 741563: Wrapped Type column name in gettext (mstead@redhat.com)
+- 741863: Made the date box larger. (mstead@redhat.com)
+- 741850: Properly wrapped with gettext. (mstead@redhat.com)
+- 741293: Ensure that blank gpg urls do not have the baseurl prepended to them
+  (bkearney@redhat.com)
+- 737553: Change criteria for system.entitlements_valid comsumer fact
+  (wpoteat@redhat.com)
+- 725535: check that fopen was successful before writing to timestamp
+  (cduryee@redhat.com)
+- 740675: do a condrestart on rhsmcertd when we upgrade subscription-manager
+  (cduryee@redhat.com)
+- 741335: Fix a date comparison bug for healing. (dgoodwin@redhat.com)
+- 740877: autosubscribe output was showing ver instead of status
+  (alikins@redhat.com)
+- heal for today and future (jesusr@redhat.com)
+- 740046: Change entitlement match to product hash for date detection
+  (wpoteat@redhat.com)
+- 730020: Change if error logging to stderr (wpoteat@redhat.com)
+- 740831: set subscribe button insensitive if nothing is selected
+  (alikins@redhat.com)
+- 692242: rhsm_icon disappears and will not return (cduryee@redhat.com)
+- Pull in the latest translations from zanata (bkearney@redhat.com)
+- 720022: Update man page for new command line options (bkearney@redhat.com)
+- Add logging, tests, and comments for broken yellow detection.
+  (dgoodwin@redhat.com)
+- Cleanup several stacking problems in tests. (dgoodwin@redhat.com)
+- 738517: use https when writing proxy values to redhat.repo
+  (cduryee@redhat.com)
+- 740046: Ensure common behavior on dates between CLI and GUI
+  (wpoteat@redhat.com)
+- 688454: On error, set DatePicker's date to the previously accepted date.
+  (mstead@redhat.com)
+- 733873: disable proxy options for cert import command (cduryee@redhat.com)
+- Revert "zanata syncrhonization" (jesusr@redhat.com)
+- uncomment daemonize(), was commented by mistake for debugging
+  (cduryee@redhat.com)
+- Bump the zanata version to match the spec version (bkearney@redhat.com)
+- zanata syncrhonization (bkearney@redhat.com)
+- 706853: Do not perform local cleanup if unregister server call fails
+  (mstead@redhat.com)
+- 737684: replace through with until in sub assistant (jbowes@redhat.com)
+- 739796: replace certificate column with status (jbowes@redhat.com)
+- 736784: Incorrect use of sys.exit in option checking (wpoteat@redhat.com)
+- Move the CertSorter tests into correct module. (dgoodwin@redhat.com)
+- 738549: Allow subscription-manager to run without dbus (jbowes@redhat.com)
+- Allow sslverify to be changed (bkearney@redhat.com)
+- 739714: Fix typo in the clean help text (bkearney@redhat.com)
+- add check-syntax makefile target for emacs user[s] (alikins@redhat.com)
+- add support for bash completion of subscription-manager (alikins@redhat.com)
+- Revert "katello yum plugin to support $env and $org in repo confs"
+  (alikins@redhat.com)
+- 718045: Registration dialog remains open on invalid credentials.
+  (mstead@redhat.com)
+- 642660: [First Boot] Disable 'Back' button once registered and on
+  subscription-manager screen (RHEL6) (mstead@redhat.com)
+- 739595: [Fistboot] Ensure the credentials screen is reset on FB module
+  initialization. (mstead@redhat.com)
+- comment clarification (cduryee@redhat.com)
+- 739227: make healFrequency non-mandatory (cduryee@redhat.com)
+- move the future check around so we check it first (alikins@redhat.com)
+- start tracking products that will be valid in the future (alikins@redhat.com)
+- 736424: list --installed only shows installed products (alikins@redhat.com)
+- s/all_products/installed_products (more accurate name) (alikins@redhat.com)
+- katello yum plugin to support $env and $org in repo confs
+  (alikins@redhat.com)
+- 738327: C refactoring from sgrubb (cduryee@redhat.com)
+- 738549: remove dbus dependency in post/postun steps (cduryee@redhat.com)
+- Applying "indent -linux -pcs -psl -ci8 -cs -cli8 -cp0" to codebase.
+  (cduryee@redhat.com)
+- post branch version bump (jbowes@redhat.com)
+- 737841: Handle dates beyond 2038 on 32-bit systems. (dgoodwin@redhat.com)
+- Update the strings and the remote server location (bkearney@redhat.com)
+- Changes to rhsmcertd to support healing frequency (part I).
+  (cduryee@redhat.com)
+- add autoheal option to certmgr.py (cduryee@redhat.com)
+- 707641: CLI auto-subscribe tries to re-use basic auth credentials.
+  (wpoteat@redhat.com)
+- make "make stylish" run all the checks, make whitespace "pop"
+  (alikins@redhat.com)
+- 712047: yum prints non-error messages when running in quiet mode
+  (cduryee@redhat.com)
+- 736784: Subscription-manager config --remove add config property to rhsm.conf
+  if it doesn't exist. (wpoteat@redhat.com)
+- Update translations (bkearney@redhat.com)
+- 735338: Subscription Manager CLI tool does not allow unsubscribe when not
+  registered. (wpoteat@redhat.com)
+- 735695: add support for multiple config "--remove" options via cli
+  (cduryee@redhat.com)
+- 734606: ImportFileExtractor now creates cert/key files based on serial number
+  of the cert. (mstead@redhat.com)
+- Moved multi-entitlement column (*) next to the quantity column.
+  (mstead@redhat.com)
+- Made the contract selector a little wider so all columns were visible (no
+  manual resize). (mstead@redhat.com)
+- 736166: move certs from subscription-manager to python-rhsm
+  (cduryee@redhat.com)
+
 * Wed Sep 07 2011 James Bowes <jbowes@redhat.com> 0.96.9-1
 - 734880: Handle bundled certs in the installed produict status.
   (bkearney@redhat.com)
