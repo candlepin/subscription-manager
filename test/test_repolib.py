@@ -15,9 +15,11 @@
 
 import unittest
 
+from StringIO import StringIO
+
 from stubs import StubCertificateDirectory, StubProductCertificate, StubProduct, \
     StubEntitlementCertificate, StubContent, StubProductDirectory
-from subscription_manager.repolib import Repo, UpdateAction
+from subscription_manager.repolib import Repo, UpdateAction, TidyWriter
 
 
 class RepoTests(unittest.TestCase):
@@ -128,3 +130,74 @@ class UpdateActionTests(unittest.TestCase):
             self.update_action.join(base, "baz"))
         self.assertEquals("http://foo/bar/baz",
             self.update_action.join(base, "/baz"))
+
+
+class TidyWriterTests(unittest.TestCase):
+    
+    def test_just_newlines_compressed_to_one(self):
+        output = StringIO()
+        tidy_writer = TidyWriter(output)
+
+        tidy_writer.write("\n\n\n\n")
+        tidy_writer.close()
+
+        self.assertEquals("\n", output.getvalue())
+
+    def test_newline_added_to_eof(self):
+        output = StringIO()
+        tidy_writer = TidyWriter(output)
+
+        tidy_writer.write("a line\n")
+        tidy_writer.write("another line")
+        tidy_writer.close()
+
+        self.assertEquals("a line\nanother line\n", output.getvalue())
+
+    def test_newline_preserved_on_eof(self):
+        output = StringIO()
+        tidy_writer = TidyWriter(output)
+
+        tidy_writer.write("a line\n")
+        tidy_writer.write("another line\n")
+        tidy_writer.close()
+
+        self.assertEquals("a line\nanother line\n", output.getvalue())
+
+    def test_compression_preserves_a_single_blank_line(self):
+        output = StringIO()
+        tidy_writer = TidyWriter(output)
+
+        tidy_writer.write("test stuff\n\ntest\n")
+        tidy_writer.close()
+
+        self.assertEquals("test stuff\n\ntest\n", output.getvalue())
+
+    def test_newlines_compressed_in_single_write(self):
+        output = StringIO()
+        tidy_writer = TidyWriter(output)
+
+        tidy_writer.write("test stuff\n\n\ntest\n")
+        tidy_writer.close()
+
+        self.assertEquals("test stuff\n\ntest\n", output.getvalue())
+
+    def test_newlines_compressed_across_writes(self):
+        output = StringIO()
+        tidy_writer = TidyWriter(output)
+
+        tidy_writer.write("test stuff\n\n")
+        tidy_writer.write("\ntest\n")
+        tidy_writer.close()
+
+        self.assertEquals("test stuff\n\ntest\n", output.getvalue())
+
+        # now try the other split
+        output = StringIO()
+        tidy_writer = TidyWriter(output)
+
+        tidy_writer.write("test stuff\n")
+        tidy_writer.write("\n\ntest\n")
+        tidy_writer.close()
+
+        self.assertEquals("test stuff\n\ntest\n", output.getvalue())
+

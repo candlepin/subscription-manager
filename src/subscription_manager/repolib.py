@@ -307,6 +307,51 @@ class Repo(dict):
         return hash(self.id)
 
 
+class TidyWriter:
+
+    """
+    ini file reader that removes successive newlines,
+    and adds a trailing newline to the end of a file.
+
+    used to keep our repo file clean after removals and additions of
+    new sections, as iniparser's tidy function is not available in all
+    versions.
+    """
+
+    def __init__(self, backing_file):
+        self.backing_file = backing_file
+        self.ends_with_newline = False
+        self.writing_empty_lines = False
+
+    def write(self, line):
+        lines = line.split("\n")
+       
+        i = 0
+        while i < len(lines):
+            line = lines[i]
+            if line == "":
+                if i != len(lines) - 1:
+                    if not self.writing_empty_lines:
+                        self.backing_file.write("\n")
+                    self.writing_empty_lines = True
+            else:
+                self.writing_empty_lines = False
+                self.backing_file.write(line)
+                if i != len(lines) - 1:
+                    self.backing_file.write("\n")
+
+            i += 1
+
+        if lines[-1] == "":
+            self.ends_with_newline = True
+        else:
+            self.ends_with_newline = False
+
+    def close(self):
+        if not self.ends_with_newline:
+            self.backing_file.write("\n")
+
+
 class RepoFile(ConfigParser):
 
     PATH = 'etc/yum.repos.d/'
@@ -321,7 +366,9 @@ class RepoFile(ConfigParser):
 
     def write(self):
         f = open(self.path, 'w')
-        ConfigParser.write(self, f)
+        tidy_writer = TidyWriter(f)
+        ConfigParser.write(self, tidy_writer)
+        tidy_writer.close()
         f.close()
 
     def add(self, repo):
