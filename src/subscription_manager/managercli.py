@@ -312,6 +312,8 @@ class CleanCommand(CliCommand):
         log.info("Cleaned local data")
         print (_("All local data removed"))
 
+        self._request_validity_check()
+
 
 class RefreshCommand(CliCommand):
     def __init__(self, ent_dir=None, prod_dir=None):
@@ -334,6 +336,8 @@ class RefreshCommand(CliCommand):
             systemExit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Unable to perform refresh due to the following exception \n Error: %s") % e, e)
+
+        self._request_validity_check()
 
 
 class IdentityCommand(UserPassCommand):
@@ -773,6 +777,8 @@ class RedeemCommand(CliCommand):
         except Exception, e:
             handle_exception("Unable to redeem: %s" % e, e)
 
+        self._request_validity_check()
+
 
 class SubscribeCommand(CliCommand):
 
@@ -855,6 +861,10 @@ class SubscribeCommand(CliCommand):
 
         except Exception, e:
             handle_exception("Unable to subscribe: %s" % e, e)
+
+        # it is okay to call this no matter what happens above,
+        # it's just a notification to perform a check
+        self._request_validity_check()
 
 
 class UnSubscribeCommand(CliCommand):
@@ -1021,6 +1031,8 @@ class ImportCertCommand(CliCommand):
                 log.error("Supplied certificate file does not exist: %s" % src_cert_file)
                 print(_("%s is not a valid certificate file. Please use a valid certificate.") %
                     os.path.basename(src_cert_file))
+
+        self._request_validity_check()
 
 
 class ReposCommand(CliCommand):
