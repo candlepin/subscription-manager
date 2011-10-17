@@ -44,6 +44,7 @@ start() {
     daemon $BINDIR/$PROG $CERT_INTERVAL $HEAL_INTERVAL
     RETVAL=$?
     [ $RETVAL -eq 0 ] && touch $LOCK
+    [ -x /sbin/restorecon ] && /sbin/restorecon $LOCK
   else
     echo -n "rhsmcertd is already running"
   fi
