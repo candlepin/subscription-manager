@@ -4,10 +4,12 @@ import json
 import shutil
 import datetime
 import time
+from mock import patch, Mock
 
 from stubs import StubEntitlementDirectory, StubProductDirectory, StubProduct,\
                   StubCertificateDirectory, StubProductCertificate, StubEntitlementCertificate
 from subscription_manager import facts
+from subscription_manager import cert_sorter
 from subscription_manager.managerlib import getInstalledProductStatus
 from subscription_manager.facts import Facts
 from modelhelpers import *
@@ -112,7 +114,7 @@ facts_buf = """
     "memory.memtotal": "10326220",
     "memory.swaptotal": "12419068",
     "nxxxw.tddng3": "10d0",
-    "system.entitlements_valid": false,
+    "system.entitlements_valid": "invalid",
     "test.attr": "blippy2",
     "uname.machine": "x86_64",
     "uname.release": "2.6.35.11-83.fc14.x86_64",
@@ -187,7 +189,7 @@ class InstalledProductStatusTests(unittest.TestCase):
         facts.product_dir = product_directory
         facts.entitlement_dir = entitlement_directory
         facts_dict = facts.get_facts()
-        self.assertEquals(True, facts_dict['system.entitlements_valid'])
+        self.assertEquals("valid", facts_dict['system.entitlements_valid'])
 
     def test_expired_entitlement_for_installed_product_shows_invalid(self):
         product = StubProduct("product1")
@@ -201,7 +203,7 @@ class InstalledProductStatusTests(unittest.TestCase):
         facts.product_dir = product_directory
         facts.entitlement_dir = entitlement_directory
         facts_dict = facts.get_facts()
-        self.assertEquals(False, facts_dict['system.entitlements_valid'])
+        self.assertEquals("invalid", facts_dict['system.entitlements_valid'])
 
     def test_no_entitlement_for_installed_product_shows_invalid(self):
         product = StubProduct("product1")
@@ -213,7 +215,7 @@ class InstalledProductStatusTests(unittest.TestCase):
         facts.product_dir = product_directory
         facts.entitlement_dir = entitlement_directory
         facts_dict = facts.get_facts()
-        self.assertEquals(False, facts_dict['system.entitlements_valid'])
+        self.assertEquals("invalid", facts_dict['system.entitlements_valid'])
 
     def test_future_dated_entitlement_shows_invalid(self):
         product = StubProduct("product1")
@@ -227,4 +229,59 @@ class InstalledProductStatusTests(unittest.TestCase):
         facts.product_dir = product_directory
         facts.entitlement_dir = entitlement_directory
         facts_dict = facts.get_facts()
-        self.assertEquals(False, facts_dict['system.entitlements_valid'])
+        self.assertEquals("invalid", facts_dict['system.entitlements_valid'])
+
+
+    @patch('subscription_manager.cert_sorter.CertSorter')
+    def test_partial_fact(self, mock_sorter):
+
+        ents = []
+        stub_product = StubProduct('1005')
+
+        stub_ent_cert =  StubEntitlementCertificate(stub_product, quantity=2, stacking_id='stack1', sockets=2)
+
+        ents.append(stub_ent_cert)
+        entitlement_directory = StubCertificateDirectory(ents)
+
+
+        product = StubProduct("product1")
+        product_directory = StubCertificateDirectory([
+                StubProductCertificate(product)])
+
+        mock_sorter_instance = mock_sorter.return_value
+        mock_sorter_instance.partially_valid_products = {'foo'}
+        mock_sorter_instance.unentitled_products =  {}
+        mock_sorter_instance.expired_entitlement_certs =  {}
+
+        facts = Facts(None)
+        facts.product_dir = product_directory
+        facts.entitlement_dir = entitlement_directory
+        facts_dict = facts.get_facts()
+        self.assertEquals("partial", facts_dict['system.entitlements_valid'])
+
+    @patch('subscription_manager.cert_sorter.CertSorter')
+    def test_partial_and_invalid_fact(self, mock_sorter):
+
+        ents = []
+        stub_product = StubProduct('1005')
+
+        stub_ent_cert =  StubEntitlementCertificate(stub_product, quantity=2, stacking_id='stack1', sockets=2)
+
+        ents.append(stub_ent_cert)
+        entitlement_directory = StubCertificateDirectory(ents)
+
+
+        product = StubProduct("product1")
+        product_directory = StubCertificateDirectory([
+                StubProductCertificate(product)])
+
+        mock_sorter_instance = mock_sorter.return_value
+        mock_sorter_instance.partially_valid_products = {'foo'}
+        mock_sorter_instance.unentitled_products =  {'bar'}
+        mock_sorter_instance.expired_entitlement_certs =  {}
+
+        facts = Facts(None)
+        facts.product_dir = product_directory
+        facts.entitlement_dir = entitlement_directory
+        facts_dict = facts.get_facts()
+        self.assertEquals("invalid", facts_dict['system.entitlements_valid'])

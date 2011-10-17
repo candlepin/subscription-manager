@@ -120,19 +120,27 @@ class Facts(CacheManager):
         # point
 
         # figure out if we think we have valid entitlements
-
-        validity_facts = {'system.entitlements_valid': True}
-        if not ClassicCheck().is_registered_with_classic():
-            sorter = cert_sorter.CertSorter(self.product_dir,
-                                            self.entitlement_dir,
-                                            facts_dict=facts)
-            for product in sorter.installed_products:
-                if sorter.get_status(product) != "subscribed":
-                    validity_facts['system.entitlements_valid'] = False
+        validity_facts = self._get_validity_facts(facts)
 
         facts.update(validity_facts)
 
         return facts
+
+
+    def _get_validity_facts(self, facts):
+        validity_facts = {'system.entitlements_valid': 'valid'}
+        if not ClassicCheck().is_registered_with_classic():
+            sorter = cert_sorter.CertSorter(self.product_dir,
+                                            self.entitlement_dir,
+                                            facts_dict=facts)
+            if (len(sorter.partially_valid_products) > 0):
+                validity_facts['system.entitlements_valid'] = 'partial'
+
+            if ((len(sorter.expired_entitlement_certs) +
+                len(sorter.unentitled_products)) > 0):
+                validity_facts['system.entitlements_valid'] = 'invalid'
+
+        return validity_facts
 
     def _update_server(self, uep, consumer_uuid):
         uep.updateConsumer(consumer_uuid, facts=self.get_facts())
