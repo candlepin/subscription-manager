@@ -166,11 +166,23 @@ References an existing consumer ID to reregister a system. The consumer ID is us
 .TP
 .B --activationkey=KEYS
 Gives a comma-separated list of product keys to use to redeem or apply specific subscriptions to the machine. This is used generally for preconfigured machines, which may already have products installed and subscriptions allocated for that consumer.
+.PP
+When the 
+.B --activationkey
+option is used, it is not necessary to use the 
+.B --username 
+and 
+.B --password
+options, because the authentication information is implicit in the activation key.
+.PP
+In hosted or single organization environments, it is not necessary to specify an organization with the 
+.B --org
+option, but in multi-organization environments, this is required.
+.PP
 For example:
 .RS
 .nf
-subscription-manager register --username=admin --password=secret 
---org="IT Dept" --activationkey=1234abcd
+subscription-manager register --org="IT Dept" --activationkey=1234abcd
 .fi
 .RE
 
