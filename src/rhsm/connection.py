@@ -356,9 +356,8 @@ class UEPConnection:
                     ssl_verify_depth=self.ssl_verify_depth)
             log.info("Using no auth")
 
-        self._load_supported_resources()
-
-        log.info("Connection Established: host: %s, port: %s, handler: %s" %
+        self.resources = None
+        log.info("Connection Built: host: %s, port: %s, handler: %s" %
                 (self.host, self.ssl_port, self.handler))
 
     def _load_supported_resources(self):
@@ -372,17 +371,12 @@ class UEPConnection:
         leave the list of supported resources empty.
         """
         self.resources = {}
-        try:
-            resources_list = self.conn.request_get("/")
-            for r in resources_list:
-                self.resources[r['rel']] = r['href']
-            log.debug("Server supports the following resources:")
-            log.debug(self.resources)
-        # Handle situations where the UEPConnection isn't actually usable:
-        except Exception, e:
-            log.warn("Error fetching supported resources, this "
-                    "UEPConnection is likely not usable:")
-            log.exception(e)
+        resources_list = self.conn.request_get("/")
+        for r in resources_list:
+            self.resources[r['rel']] = r['href']
+        log.debug("Server supports the following resources:")
+        log.debug(self.resources)
+
 
     def supports_resource(self, resource_name):
         """
@@ -390,6 +384,9 @@ class UEPConnection:
         resource. For our use cases this is generally the plural form
         of the resource.
         """
+        if self.resources is None:
+            self._load_supported_resources()
+
         return resource_name in self.resources
 
     def shutDown(self):
