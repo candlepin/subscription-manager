@@ -22,6 +22,7 @@ import logging
 import gtk
 import gtk.glade
 
+
 from subscription_manager import managerlib
 import rhsm.config as config
 from subscription_manager import constants
@@ -32,7 +33,7 @@ from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager.gui.utils import handle_gui_exception, errorWindow, linkify
 
 import gettext
-_ = gettext.gettext
+_ = lambda x: gettext.ldgettext("rhsm", x)
 gettext.textdomain("rhsm")
 gtk.glade.bindtextdomain("rhsm")
 gtk.glade.textdomain("rhsm")

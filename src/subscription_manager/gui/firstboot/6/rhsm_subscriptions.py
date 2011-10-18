@@ -9,7 +9,7 @@ from firstboot.module import *
 from firstboot.module import Module
 
 import gettext
-_ = lambda x: gettext.ldgettext("firstboot", x)
+_ = lambda x: gettext.ldgettext("rhsm", x)
 N_ = lambda x: x
 
 sys.path.append("/usr/share/rhsm")
