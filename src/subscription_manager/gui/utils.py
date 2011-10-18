@@ -23,7 +23,7 @@ import dbus
 import gtk
 
 import gettext
-_ = gettext.gettext
+_ = lambda x: gettext.ldgettext("rhsm", x)
 
 import rhsm.connection as connection
 from subscription_manager.gui import messageWindow

@@ -19,7 +19,7 @@
 #
 
 import gettext
-_ = gettext.gettext
+_ = lambda x: gettext.ldgettext("rhsm", x)
 
 
 installed_product_status = _("""
