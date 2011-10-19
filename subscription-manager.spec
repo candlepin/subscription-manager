@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.15
+Version: 0.96.16
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -232,6 +232,18 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Oct 19 2011 James Bowes <jbowes@redhat.com> 0.96.16-1
+- 742013: Fix for translations in firstboot (alikins@redhat.com)
+- 692242: subscription-manager does not force a dbus status check when certs
+  are updated (cduryee@redhat.com)
+- 717654: subscription-manager lock file should be created with the correct
+  label (awood@redhat.com)
+- 746257: update activationkey man page example (jbowes@redhat.com)
+- 737145: remove successive newlines on write (jbowes@redhat.com)
+- 694450: Updated chinese string which was incorrect (bkearney@redhat.com)
+- 743704: Fix healing date issues. (dgoodwin@redhat.com)
+- 580905: include help documentation for the gui (jbowes@redhat.com)
+
 * Wed Oct 12 2011 James Bowes <jbowes@redhat.com> 0.96.15-1
 - 744536: handle unicode and plain str types passed to systemExit
   (alikins@redhat.com)
