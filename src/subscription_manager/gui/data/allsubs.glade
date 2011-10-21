@@ -61,15 +61,27 @@
                     <property name="position">2</property>
                   </packing>
                 </child>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkHBox" id="hbox4">
+                <property name="visible">True</property>
                 <child>
                   <widget class="GtkLabel" id="label3">
                     <property name="visible">True</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                     <property name="xpad">6</property>
                     <property name="label" translatable="yes">Contains the text:</property>
                   </widget>
                   <packing>
-                    <property name="position">3</property>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -77,7 +89,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">&#x25CF;</property>
-                    <property name="width_chars">15</property>
+                    <property name="width_chars">30</property>
                     <property name="invisible_char_set">True</property>
                     <accessibility>
                       <atkproperty name="AtkObject::accessible-name" translatable="yes">Text in Subscription</atkproperty>
@@ -85,14 +97,14 @@
                     <signal name="changed" handler="on_contain_text_entry_changed"/>
                   </widget>
                   <packing>
-                    <property name="position">4</property>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </widget>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -231,7 +243,7 @@
                 </child>
               </widget>
               <packing>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </widget>
