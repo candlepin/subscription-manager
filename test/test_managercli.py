@@ -216,6 +216,60 @@ class TestImportCertCommand(TestCliCommand):
             # i18n_optparse returns 2 on no args
             self.assertEquals(e.code, -1)
 
+class TestSystemExit(unittest.TestCase):
+    def setUp(self):
+        sys.stderr = MockStderr()
+
+    def test_a_msg(self):
+        msg = "some message"
+        try:
+            managercli.systemExit(1, msg)
+        except SystemExit:
+            pass
+        self.assertEquals("%s\n" % msg, sys.stderr.buffer)
+
+    def test_msgs(self):
+        msgs = ["a", "b", "c"]
+        try:
+            managercli.systemExit(1, msgs)
+        except SystemExit:
+            pass
+        self.assertEquals("%s\n" % ("\n".join(msgs)), sys.stderr.buffer)
+
+    def test_msg_and_exception(self):
+        msgs = ["a", ValueError()]
+        try:
+            managercli.systemExit(1, msgs)
+        except SystemExit:
+            pass
+        self.assertEquals("%s\n\n" % msgs[0], sys.stderr.buffer)
+
+    def test_msg_and_exception_no_str(self):
+        class NoStrException(Exception):
+            pass
+
+        msgs = ["a", NoStrException()]
+        try:
+            managercli.systemExit(1, msgs)
+        except SystemExit:
+            pass
+        self.assertEquals("%s\n\n" % msgs[0], sys.stderr.buffer)
+
+    def test_msg_and_exception_str(self):
+        class StrException(Exception):
+            def __init__(self, msg):
+                self.msg = msg
+            def __str__(self):
+                return self.msg
+
+        msg = "bar"
+        msgs = ["a", StrException(msg)]
+        try:
+            managercli.systemExit(1, msgs)
+        except SystemExit:
+            pass
+        self.assertEquals("%s\n%s\n" % ("a", msg), sys.stderr.buffer)
+
 
 class HandleExceptionTests(unittest.TestCase):
     def setUp(self):
