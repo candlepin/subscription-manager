@@ -87,7 +87,7 @@ def handle_exception(msg, ex):
         print _("Bad CA certificate: %s") % ex.cert_path
         sys.exit(-1)
     else:
-        systemExit(-1, msg)
+        systemExit(-1, ex)
 
 
 def autosubscribe(cp, consumer, disable_product_upload=False):
@@ -1402,8 +1402,13 @@ def systemExit(code, msgs=None):
             # from rhsm.connection are unicode type. This method didn't
             # really expect that, so make sure msg is unicode, then
             # try to encode it as utf-8.
-            msg = to_unicode_or_bust(msg)
-            sys.stderr.write("%s\n" % msg.encode("utf-8"))
+            msg = "%s" % to_unicode_or_bust(msg)
+            # if we get an exception passed in, and it doesn't
+            # have a str repr, just ignore it. This is to
+            # preserve existing behaviour. see bz#747024
+            if hasattr(msg, 'encode'):
+                sys.stderr.write("%s\n" % msg.encode("utf-8"))
+
     sys.exit(code)
 
 
