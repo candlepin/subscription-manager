@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.97.1
+Version: 0.97.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -236,6 +236,26 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Oct 25 2011 William Poteat <wpoteat@redhat.com> 0.97.2-1
+- Update the strings file and push it to Zanata (bkearney@redhat.com)
+- 747024: Restore previous behaviour for unhandled exceptions
+  (alikins@redhat.com)
+- 747630: Fit allsubs tab in firstboot for verbose locales (jbowes@redhat.com)
+- 747630: Use shorter strings for 'Entitlement Platform Registration'
+  (jbowes@redhat.com)
+- Fix yum repo location for EL6. (dgoodwin@redhat.com)
+- 742013: More fixes for translations in firstboot (alikins@redhat.com)
+- 742013: Fix for translations in firstboot (alikins@redhat.com)
+- 692242: Subscription-manager does not force a dbus status check when certs
+  are updated (cduryee@redhat.com)
+- 746257: Update activationkey man page example (jbowes@redhat.com)
+- 737145: remove successive newlines on write (jbowes@redhat.com)
+- 694450: Updated chinese string which was incorrect (bkearney@redhat.com)
+- 717654: Subscription-manager lock file should be created with the correct
+  label (awood@redhat.com)
+- Alter entitlements_valid to be ternary (cduryee@redhat.com)
+- Adding new tito releasers.conf. (dgoodwin@redhat.com)
+
 * Mon Oct 17 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.97.1-1
 - 743704: Fix healing date issues. (dgoodwin@redhat.com)
 - 580905: Add a help button to subscription-manager-gui (jbowes@redhat.com)
