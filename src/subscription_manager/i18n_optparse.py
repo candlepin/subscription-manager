@@ -73,4 +73,4 @@ class OptionParser(_OptionParser):
         """
         self.print_usage(sys.stderr)
         #translators: arg 1 is the program name, arg 2 is the error message
-        self.exit(2, _("%s: error: %s\n") % (self.get_prog_name(), msg))
+        self.exit(2, _("%s: error: %s") % (self.get_prog_name(), msg))

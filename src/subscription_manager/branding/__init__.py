@@ -80,10 +80,9 @@ class DefaultBranding(object):
         self.CLI_UNREGISTER = _("Unregister the machine from the server")
         self.RHSMD_REGISTERED_TO_OTHER = \
                 _("This system is registered to spacewalk")
-        self.REGISTERED_TO_OTHER_WARNING = _("""WARNING
-
-You have already registered with spacewalk.
-""")
+        self.REGISTERED_TO_OTHER_WARNING = _("WARNING") + \
+            "\n" + \
+            _("You have already registered with spacewalk.")
 
         self.GUI_REGISTRATION_HEADER = \
                 _("Please enter your account information:")

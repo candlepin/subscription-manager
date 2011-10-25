@@ -22,56 +22,81 @@ import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
 
-installed_product_status = _("""
-ProductName:        \t%-25s
-Version:            \t%-25s
-Arch:               \t%-25s
-Status:             \t%-25s
-Starts:             \t%-25s
-Expires:            \t%-25s
-""")
+installed_product_status = \
+    _("ProductName:          \t%-25s") + \
+    "\n" + \
+    _("Version:              \t%-25s") + \
+    "\n" + \
+    _("Arch:                 \t%-25s") + \
+    "\n" + \
+    _("Status:               \t%-25s") + \
+    "\n" + \
+    _("Starts:               \t%-25s") + \
+    "\n" + \
+    _("Expires:              \t%-25s") + \
+    "\n" 
 
-available_subs_list = _("""
-ProductName:       \t%-25s
-ProductId:         \t%-25s
-PoolId:            \t%-25s
-Quantity:          \t%-25s
-Multi-Entitlement: \t%-25s
-Expires:           \t%-25s
-MachineType:       \t%-25s
-""")
+available_subs_list = \
+    _("ProductName:          \t%-25s") + \
+    "\n" + \
+    _("ProductId:            \t%-25s") + \
+    "\n" + \
+    _("PoolId:               \t%-25s") + \
+    "\n" + \
+    _("Quantity:             \t%-25s") + \
+    "\n" + \
+    _("Multi-Entitlement:    \t%-25s") + \
+    "\n" + \
+    _("Expires:              \t%-25s") + \
+    "\n" + \
+    _("MachineType:          \t%-25s") + \
+    "\n"
 
-consumed_subs_list = _("""
-ProductName:        \t%-25s
-ContractNumber:     \t%-25s
-AccountNumber:      \t%-25s
-SerialNumber:       \t%-25s
-Active:             \t%-25s
-QuantityUsed:       \t%-25s
-Begins:             \t%-25s
-Expires:            \t%-25s
-""")
+consumed_subs_list = \
+    _("ProductName:          \t%-25s") + \
+    "\n" + \
+    _("ContractNumber:       \t%-25s") + \
+    "\n" + \
+    _("AccountNumber:        \t%-25s") + \
+    "\n" + \
+    _("SerialNumber:         \t%-25s") + \
+    "\n" + \
+    _("Active:               \t%-25s") + \
+    "\n" + \
+    _("Begins:               \t%-25s") + \
+    "\n" + \
+    _("Expires:              \t%-25s") + \
+    "\n"
 
-repos_list = _("""
-RepoName:            \t%-25s
-RepoId:              \t%-25s
-RepoUrl:             \t%-25s
-Enabled:             \t%-25s
-""")
+repos_list = \
+    _("RepoName:             \t%-25s") + \
+    "\n" + \
+    _("RepoId:               \t%-25s") + \
+    "\n" + \
+    _("RepoUrl:              \t%-25s") + \
+    "\n" + \
+    _("Enabled:              \t%-25s") + \
+    "\n" 
 
-product_status = _("""
-ProductName:         \t%-25s
-Status:               \t%-25s
-""")
+product_status = \
+    _("ProductName:          \t%-25s") + \
+    "\n" + \
+    _("Status:               \t%-25s") + \
+    "\n"
 
-environment_list = _("""
-Name:                \t%-25s
-Description:         \t%-25s
-""")
+environment_list = \
+    _("Name:                 \t%-25s") + \
+    "\n" + \
+    _("Description:          \t%-25s") + \
+    "\n" \
 
-UNREGISTER_ERROR = _("<b>Errors were encountered during unregister.</b>\n%s\nPlease see /var/log/rhsm/rhsm.log for more information.")
+UNREGISTER_ERROR = _("<b>Errors were encountered during unregister.</b>") + \
+    "\n%s\n" + \
+    _("Please see /var/log/rhsm/rhsm.log for more information.")
 
-REGISTER_ERROR = _("<b>Unable to register the system.</b>\n\n %s\n\nPlease see /var/log/rhsm/rhsm.log for more information.")
+REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
+    "\n%s\n" + \
+    _("Please see /var/log/rhsm/rhsm.log for more information.")
 
 CONFIRM_UNREGISTER = _("<b>Are you sure you want to unregister?</b>")
 

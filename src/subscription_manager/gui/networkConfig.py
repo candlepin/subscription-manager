@@ -121,9 +121,8 @@ class NetworkConfigDialog:
         try:
             self.cfg.save()
         except:
-            errorWindow(_(
-                    "There was an error saving your configuration. "\
-                    "Make sure that\nyou own %s.") % self.cfg.fileName)
+            errorWindow(_("There was an error saving your configuration.") +
+                    _("Make sure that you own %s.") % self.cfg.fileName)
 
     def show(self):
         self.setInitialValues()

@@ -65,8 +65,8 @@ def handle_exception(msg, ex):
     log.error(msg)
     log.exception(ex)
     if isinstance(ex, socket.error):
-        print _("""Network error, unable to connect to server.
- Please see /var/log/rhsm/rhsm.log for more information.""")
+        print _("Network error, unable to connect to server.")
+        print _("Please see /var/log/rhsm/rhsm.log for more information.")
         sys.exit(-1)
     elif isinstance(ex, connection.NetworkException):
         # NOTE: yes this looks a lot like the socket error, but I think these
@@ -335,7 +335,7 @@ class RefreshCommand(CliCommand):
             log.error(re)
             systemExit(-1, re.msg)
         except Exception, e:
-            handle_exception(_("Unable to perform refresh due to the following exception \n Error: %s") % e, e)
+            handle_exception(_("Unable to perform refresh due to the following exception: %s") % e, e)
 
         self._request_validity_check()
 
@@ -382,8 +382,10 @@ class IdentityCommand(UserPassCommand):
                 owner = self.cp.getOwner(consumerid)
                 ownername = owner['displayName']
                 ownerid = owner['id']
-                print _('Current identity is: %s \nname: %s \norg name: %s \norg id: %s') \
-                         % (consumerid, consumer_name, ownername, ownerid)
+                print _('Current identity is: %s') % consumerid
+                print _('name: %s') % consumer_name
+                print _('org name: %s') % ownername
+                print _('org id: %s') % ownerid
             else:
                 if self.options.force:
                     self.cp = connection.UEPConnection(username=self.username,
@@ -912,7 +914,7 @@ class UnSubscribeCommand(CliCommand):
                 log.error(re)
                 systemExit(-1, re.msg)
             except Exception, e:
-                handle_exception(_("Unable to perform unsubscribe due to the following exception \n Error: %s") % e, e)
+                handle_exception(_("Unable to perform unsubscribe due to the following exception: %s") % e, e)
         else:
             # We never got registered, just remove the cert
             try:
@@ -927,7 +929,7 @@ class UnSubscribeCommand(CliCommand):
                             print _("This machine has been unsubscribed from subscription " +
                                        "with serial number %s" % (self.options.serial))
             except Exception, e:
-                handle_exception(_("Unable to perform unsubscribe due to the following exception \n Error: %s") % e, e)
+                handle_exception(_("Unable to perform unsubscribe due to the following exception: %s") % e, e)
 
         # it is okay to call this no matter what happens above,
         # it's just a notification to perform a check
@@ -1105,8 +1107,10 @@ class ConfigCommand(CliCommand):
                             too_many = True
                             break
             if too_many:
-                sys.stderr.write(_("Error: --list should not be used with any other options for "\
-                                    "setting or removing configurations.\n"))
+                sys.stderr.write(
+                    _("Error: --list should not be used with any other options for setting or removing configurations.")
+                )
+                sys.stderr.write("\n")
                 sys.exit(-1)
 
         if not (self.options.list or self.options.remove):
@@ -1121,8 +1125,10 @@ class ConfigCommand(CliCommand):
         if self.options.remove:
             for r in self.options.remove:
                 if not "." in r:
-                    sys.stderr.write(_("Error: configuration entry designation for removal must be "\
-                                        "of format [section.name]\n"))
+                    sys.stderr.write(
+                        _("Error: configuration entry designation for removal must be of format [section.name]")
+                    )
+                    sys.stderr.write("\n")                    
                     sys.exit(-1)
                 section = r.split('.')[0]
                 name = r.split('.')[1]
@@ -1150,7 +1156,8 @@ class ConfigCommand(CliCommand):
                         indicator2 = ']'
                     print '   %s = %s%s%s' % (name, indicator1, value, indicator2)
                 print
-            print _("[] - Default value in use\n")
+            print _("[] - Default value in use")
+            print ("\n")
         elif self.options.remove:
             for r in self.options.remove:
                 section = r.split('.')[0]
@@ -1324,7 +1331,9 @@ class CLI:
         self.cli_commands[cmd.name] = cmd
 
     def _usage(self):
-        print _("\nUsage: %s [options] MODULENAME --help\n") % os.path.basename(sys.argv[0])
+        print "\n"
+        print _("Usage: %s [options] MODULENAME --help") % os.path.basename(sys.argv[0])
+        print "\n"
         print _("Primary Modules:")
         print "\r"
 
