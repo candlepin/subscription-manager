@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.16
+Version: 0.96.17
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -232,6 +232,13 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Oct 25 2011 James Bowes <jbowes@redhat.com> 0.96.17-1
+- 747024: restore previous behaviour for unhandled exceptions
+  (alikins@redhat.com)
+- 747630: fit allsubs tab in firstboot for verbose locales (jbowes@redhat.com)
+- 747630: use shorter strings for 'Entitlement Platform Registration'
+  (jbowes@redhat.com)
+
 * Wed Oct 19 2011 James Bowes <jbowes@redhat.com> 0.96.16-1
 - 742013: Fix for translations in firstboot (alikins@redhat.com)
 - 692242: subscription-manager does not force a dbus status check when certs
