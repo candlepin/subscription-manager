@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.97.2
+Version: 0.97.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -236,4 +236,8 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Oct 26 2011 William Poteat <wpoteat@redhat.com> 0.97.3-1
+- Create 5.8 branch (wpoteat@redhat.com)
+
+Resolves: bz749267
 
