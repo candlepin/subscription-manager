@@ -251,7 +251,8 @@ class InstalledProductStatusTests(unittest.TestCase):
         mock_sorter_instance = mock_sorter.return_value
         mock_sorter_instance.partially_valid_products = {'foo'}
         mock_sorter_instance.unentitled_products =  {}
-        mock_sorter_instance.expired_entitlement_certs =  {}
+        mock_sorter_instance.expired_products =  {}
+        mock_sorter_instance.partial_stacks =  {}
 
         facts = Facts(None)
         facts.product_dir = product_directory
@@ -278,7 +279,8 @@ class InstalledProductStatusTests(unittest.TestCase):
         mock_sorter_instance = mock_sorter.return_value
         mock_sorter_instance.partially_valid_products = {'foo'}
         mock_sorter_instance.unentitled_products =  {'bar'}
-        mock_sorter_instance.expired_entitlement_certs =  {}
+        mock_sorter_instance.expired_products =  {}
+        mock_sorter_instance.partial_stacks =  {}
 
         facts = Facts(None)
         facts.product_dir = product_directory

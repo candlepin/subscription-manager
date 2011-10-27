@@ -91,9 +91,9 @@ class CertLib(DataLib):
 
 class HealingLib(DataLib):
     """
-    An object used to run healing nightly. Checks compliance for today, heals
+    An object used to run healing nightly. Checks cert validity for today, heals
     if necessary, then checks for 24 hours from now, so we theoretically will
-    never go out of compliance if subscriptions are available.
+    never have invalid certificats if subscriptions are available.
     """
 
     def __init__(self, lock=ActionLock(), uep=None, facts_dict=None):
@@ -114,12 +114,12 @@ class HealingLib(DataLib):
 
                 prod_dir = ProductDirectory()
 
-                # Check if we're out of compliance today and heal if so. If not
+                # Check if we're not valid today and heal if so. If not
                 # we'll do the same check for tomorrow to hopefully always keep
-                # us compliant:
+                # us valid:
                 ent_dir = EntitlementDirectory()
                 cs = cert_sorter.CertSorter(prod_dir, ent_dir,
-                        on_date=today)
+                        self.facts_dict, on_date=today)
                 cert_updater = CertLib(uep=self.uep)
                 if not cs.is_valid():
                     log.warn("Found invalid entitlements for today: %s" %
@@ -131,7 +131,7 @@ class HealingLib(DataLib):
                             today)
 
                     cs = cert_sorter.CertSorter(prod_dir, ent_dir,
-                            on_date=tomorrow)
+                            self.facts_dict, on_date=tomorrow)
                     if not cs.is_valid():
                         log.warn("Found invalid entitlements for tomorrow: %s" %
                                 tomorrow)
@@ -437,79 +437,6 @@ class UpdateReport:
         self.write(s, _('Expired (not deleted):'), self.expnd)
         self.write(s, _('Expired (deleted):'), self.expd)
         return '\n'.join(s)
-
-
-def find_first_invalid_date(ent_dir=None, product_dir=None):
-    """
-    Find the first date when the system is out of compliance at midnight
-    GMT.
-
-    WARNING: This method does *not* return the exact first datetime when
-    we're out of compliance. Due to it's uses in the GUI it needs to
-    return a datetime into the first day of complete non-compliance so
-    the subscription assistant can search for that time and find expired
-    products.
-
-    If there are no products installed, return None, as there technically
-    is no first invalid date.
-    """
-    if not ent_dir:
-        ent_dir = EntitlementDirectory()
-    if not product_dir:
-        product_dir = ProductDirectory()
-
-    current_date = datetime.now(GMT())
-
-    if not product_dir.list():
-        # If there are no products installed, return None, there is no
-        # invalid date:
-        log.debug("Unable to determine first invalid date, no products "
-                "installed.")
-        return None
-
-    # change _scan_entitlement_certs to take product lists,
-    # run it for the future to figure this out
-    # First check if we have anything installed but not entitled *today*:
-    cs = cert_sorter.CertSorter(product_dir, ent_dir, on_date=current_date)
-    # TODO: partially stacked?
-    if cs.unentitled_products or cs.expired_products:
-        log.debug("Found installed but not entitled products.")
-        return current_date
-
-    # Sort all the ent certs by end date. (ascending)
-    all_ent_certs = ent_dir.list()
-
-    def get_date(ent_cert):
-        return ent_cert.validRange().end()
-
-    all_ent_certs.sort(key=get_date)
-
-    # Loop through all current and future entitlement certs, check compliance
-    # status on their end date, and return the first date where we're not
-    # compliant.
-    for ent_cert in all_ent_certs:
-        # Adding a timedelta of one day here so we can be sure we get a date
-        # the subscription assitant (which does not use time) can use to search
-        # for.
-        end_date = ent_cert.validRange().end() + timedelta(days=1)
-        if end_date < current_date:
-            # This cert is expired, ignore it:
-            continue
-        log.debug("Checking cert: %s, end date: %s" % (ent_cert.serialNumber(),
-            end_date))
-
-        # new cert_sort stuff, use _scan_for_entitled_products, since
-        # we just need to know if stuff is expired
-        cs = cert_sorter.CertSorter(product_dir, ent_dir, on_date=end_date)
-        # TODO: partially stacked?
-        if cs.expired_products:
-            log.debug("Found non-compliant status on %s" % end_date)
-            return end_date
-        else:
-            log.debug("Compliant on %s" % end_date)
-
-    # Should never hit this:
-    raise Exception("Unable to determine first invalid date.")
 
 
 def main():

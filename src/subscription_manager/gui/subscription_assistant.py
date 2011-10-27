@@ -29,7 +29,7 @@ import rhsm.certificate as certificate
 from subscription_manager import certdirectory
 from subscription_manager import managerlib
 from subscription_manager import async
-from subscription_manager.certlib import find_first_invalid_date
+from subscription_manager.validity import find_first_invalid_date
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.gui import storage
 from subscription_manager.gui import widgets
@@ -332,7 +332,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
         last validity. Ignore the timestamp returned from certlib.
         """
         d = find_first_invalid_date(ent_dir=self.entitlement_dir,
-                                    product_dir=self.product_dir)
+                product_dir=self.product_dir, facts_dict=self.facts.get_facts())
         # If we can't calculate a first invalid date, just use current date.
         # The GUI shouldn't let the subscription assistant be called
         # in this case, this just lets the screen be instantiated.
@@ -346,27 +346,27 @@ class SubscriptionAssistant(widgets.GladeWidget):
         the selected date.
         """
         sorter = CertSorter(self.product_dir, self.entitlement_dir,
-                            on_date=self._get_invalid_date(), facts_dict=self.facts.get_facts())
+                self.facts.get_facts(),
+                on_date=self._get_invalid_date())
 
         # These display the list of products invalid on the selected date:
         self.invalid_store.clear()
 
         # installed but not entitled products:
         na = _("N/A")
-        for product_certs in sorter.unentitled_products.values():
-            for product_cert in product_certs:
-                self.invalid_store.add_map({
-                        'active': False,
-                        'product_name': product_cert.getProduct().getName(),
-                        'contract': na,
-                        'end_date': na,
-                        'entitlement_id': None,
-                        'entitlement': None,
-                        'product_id': product_cert.getProduct().getHash(),
-                        'align': 0.0
-                        })
+        for product_cert in sorter.unentitled_products.values():
+            self.invalid_store.add_map({
+                    'active': False,
+                    'product_name': product_cert.getProduct().getName(),
+                    'contract': na,
+                    'end_date': na,
+                    'entitlement_id': None,
+                    'entitlement': None,
+                    'product_id': product_cert.getProduct().getHash(),
+                    'align': 0.0
+                    })
 
-        # installed and invalid
+        # installed and expired
         for product_id in sorter.expired_products.keys():
             ent_certs = sorter.expired_products[product_id]
             for ent_cert in ent_certs:

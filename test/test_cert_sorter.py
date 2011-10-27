@@ -16,7 +16,7 @@ import unittest
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
     StubCertificateDirectory, StubEntitlementDirectory, StubFacts
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter, \
-        CertSorter
+        CertSorter, FUTURE_SUBSCRIBED, SUBSCRIBED
 from datetime import timedelta, datetime
 from rhsm.certificate import GMT
 
@@ -67,13 +67,13 @@ class CertSorterTests(unittest.TestCase):
             ])
 
     def test_unentitled_product_certs(self):
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir)
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
         self.assertEqual(1, len(self.sorter.unentitled_products.keys()))
         self.assertTrue(INST_PID_1 in self.sorter.unentitled_products)
         self.assertFalse(self.sorter.is_valid())
 
     def test_ent_cert_no_installed_product(self):
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir)
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
         # TODO: looks like this test was never completed
 
     def test_ent_cert_no_product(self):
@@ -83,12 +83,12 @@ class CertSorterTests(unittest.TestCase):
 
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 42})
         self.sorter = CertSorter(self.prod_dir, self.ent_dir,
-                                 facts_dict=stub_facts.get_facts())
+                stub_facts.get_facts())
 
         self.assertEqual(0, len(self.sorter.partially_valid_products))
 
     def test_expired(self):
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir)
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
         self.assertEqual(2, len(self.sorter.expired_entitlement_certs))
 
         self.assertTrue(cert_list_has_product(
@@ -104,7 +104,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertFalse(self.sorter.is_valid())
 
     def test_expired_in_future(self):
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir,
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {},
                 on_date=datetime(2050, 1, 1,tzinfo=GMT()))
         self.assertEqual(5, len(self.sorter.expired_entitlement_certs))
         self.assertTrue(INST_PID_2 in self.sorter.expired_products)
@@ -120,7 +120,7 @@ class CertSorterTests(unittest.TestCase):
         self.ent_dir = StubCertificateDirectory([
             StubEntitlementCertificate(StubProduct(INST_PID_5),
                 provided_products=provided)])
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir)
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
         self.assertEquals(3, len(self.sorter.valid_products.keys()))
         self.assertTrue(INST_PID_1 not in self.sorter.partially_valid_products)
         self.assertTrue(INST_PID_1 in self.sorter.valid_products)
@@ -138,7 +138,7 @@ class CertSorterTests(unittest.TestCase):
                 provided_products=[StubProduct(INST_PID_3)]),
             StubEntitlementCertificate(StubProduct(INST_PID_4))
         ])
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir)
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
         self.assertEquals(1, len(self.sorter.valid_products.keys()))
         self.assertTrue(INST_PID_3 in self.sorter.valid_products)
         self.assertEquals(0, len(self.sorter.expired_products.keys()))
@@ -150,7 +150,7 @@ class CertSorterTests(unittest.TestCase):
         self.ent_dir = StubCertificateDirectory([
             StubEntitlementCertificate(StubProduct(INST_PID_5),
                 provided_products=provided)])
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir,
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {},
                 on_date=datetime(2050, 1, 1, tzinfo=GMT()))
 
         self.assertEquals(1, len(self.sorter.expired_entitlement_certs))
@@ -158,165 +158,203 @@ class CertSorterTests(unittest.TestCase):
         self.assertTrue(INST_PID_2 in self.sorter.expired_products)
         self.assertTrue(INST_PID_3 in self.sorter.expired_products)
 
+        # Expired should not show up as unentitled also:
         self.assertEquals(1, len(self.sorter.unentitled_products.keys()))
         self.assertTrue(INST_PID_1 in self.sorter.unentitled_products)
         self.assertFalse(self.sorter.is_valid())
 
+    def test_future_entitled(self):
+        provided = [StubProduct(INST_PID_2), StubProduct(INST_PID_3)]
+        self.ent_dir = StubCertificateDirectory([
+            StubEntitlementCertificate(StubProduct(INST_PID_5),
+                provided_products=provided,
+                start_date=datetime.now() + timedelta(days=30),
+                end_date=datetime.now() + timedelta(days=120)),
+            ])
 
-# TODO: These tests are commented out, they expose broken behavior that
-# was deemed too big to fix in time for 6.2. Hopefully they will be a good
-# base to start with when we fix. (apologies for any mistakes in the test,
-# there may be some bad assertions but the jist is there) See bug #740377.
-#class CertSorterStackingTests(unittest.TestCase):
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
 
-#    def stub_ent_cert(self, parent_pid, provided_pids, quantity=1,
-#            stack_id=None, sockets=1):
-#        provided_prods = []
-#        for provided_pid in provided_pids:
-#            provided_prods.append(StubProduct(provided_pid))
+        self.assertEquals(0, len(self.sorter.valid_products))
+        self.assertEquals(2, len(self.sorter.future_products))
+        self.assertEquals(3, len(self.sorter.unentitled_products))
+        self.assertTrue(INST_PID_2 in self.sorter.future_products)
+        self.assertTrue(INST_PID_3 in self.sorter.future_products)
+        self.assertEquals(FUTURE_SUBSCRIBED, self.sorter.get_status(INST_PID_2))
+        self.assertEquals(FUTURE_SUBSCRIBED, self.sorter.get_status(INST_PID_3))
 
-#        parent_prod = StubProduct(parent_pid)
+    def test_future_and_currently_entitled(self):
+        provided = [StubProduct(INST_PID_2), StubProduct(INST_PID_3)]
+        self.ent_dir = StubCertificateDirectory([
+            StubEntitlementCertificate(StubProduct(INST_PID_5),
+                provided_products=provided,
+                start_date=datetime.now() + timedelta(days=30),
+                end_date=datetime.now() + timedelta(days=120)),
+            StubEntitlementCertificate(StubProduct(INST_PID_5),
+                provided_products=provided),
+            ])
 
-#        return StubEntitlementCertificate(parent_prod,
-#                provided_products=provided_prods, quantity=quantity,
-#                stacking_id=stack_id, sockets=sockets)
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
 
-#    def stub_prod_cert(self, pid):
-#        return StubProductCertificate(StubProduct(INST_PID_1))
+        self.assertEquals(2, len(self.sorter.valid_products))
+        self.assertEquals(2, len(self.sorter.future_products))
+        self.assertEquals(1, len(self.sorter.unentitled_products))
+        self.assertTrue(INST_PID_2 in self.sorter.future_products)
+        self.assertTrue(INST_PID_3 in self.sorter.future_products)
+        self.assertTrue(INST_PID_2 in self.sorter.valid_products)
+        self.assertTrue(INST_PID_3 in self.sorter.valid_products)
+        self.assertEquals(SUBSCRIBED, self.sorter.get_status(INST_PID_2))
+        self.assertEquals(SUBSCRIBED, self.sorter.get_status(INST_PID_3))
 
-#    def test_simple_partial_stack(self):
-#        prod_dir = StubCertificateDirectory([self.stub_prod_cert(INST_PID_1)])
-#        # System has 8 sockets:
-#        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 8})
-#        # Only 2 sockets covered:
-#        ent_dir = StubCertificateDirectory([
-#            self.stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=2)])
-#        sorter = CertSorter(prod_dir, ent_dir, facts_dict=stub_facts.get_facts())
 
-#        self.assertFalse(INST_PID_1 in sorter.unentitled_products)
-#        self.assertFalse(INST_PID_1 in sorter.valid_products)
-#        self.assertTrue(INST_PID_1 in sorter.partially_valid_products)
-#        self.assertEquals(1, len(sorter.partially_valid_products))
-#        self.assertEquals(1, len(sorter.partially_valid_products[INST_PID_1]))
+class CertSorterStackingTests(unittest.TestCase):
 
-#    def test_simple_full_stack_multicert(self):
-#        prod_dir = StubCertificateDirectory([self.stub_prod_cert(INST_PID_1)])
-#        # System has 8 sockets:
-#        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 8})
-#        # 2 ent certs providing 4 sockets each means we're compliant:
-#        ent_dir = StubCertificateDirectory([
-#            self.stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=4),
-#            self.stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=4)])
-#        sorter = CertSorter(prod_dir, ent_dir, facts_dict=stub_facts.get_facts())
+    def stub_ent_cert(self, parent_pid, provided_pids, quantity=1,
+            stack_id=None, sockets=1):
+        provided_prods = []
+        for provided_pid in provided_pids:
+            provided_prods.append(StubProduct(provided_pid))
 
-#        self.assertFalse(INST_PID_1 in sorter.unentitled_products)
-#        self.assertTrue(INST_PID_1 in sorter.valid_products)
-#        self.assertFalse(INST_PID_1 in sorter.partially_valid_products)
-#        self.assertEquals(0, len(sorter.partially_valid_products))
+        parent_prod = StubProduct(parent_pid)
 
-#    def test_simple_full_stack_singlecert_with_quantity(self):
-#        prod_dir = StubCertificateDirectory([self.stub_prod_cert(INST_PID_1)])
-#        # System has 8 sockets:
-#        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 8})
-#        # 1 ent cert providing 4 sockets with quantity 2 means we're compliant:
-#        ent_dir = StubCertificateDirectory([
-#            self.stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1,
-#                sockets=4, quantity=2)])
-#        sorter = CertSorter(prod_dir, ent_dir, facts_dict=stub_facts.get_facts())
+        return StubEntitlementCertificate(parent_prod,
+                provided_products=provided_prods, quantity=quantity,
+                stacking_id=stack_id, sockets=sockets)
 
-#        self.assertFalse(INST_PID_1 in sorter.unentitled_products)
-#        self.assertTrue(INST_PID_1 in sorter.valid_products)
-#        self.assertFalse(INST_PID_1 in sorter.partially_valid_products)
-#        self.assertEquals(0, len(sorter.partially_valid_products))
+    def stub_prod_cert(self, pid):
+        return StubProductCertificate(StubProduct(INST_PID_1))
 
-#    # This is still technically uncompliant:
-#    def test_partial_stack_for_uninstalled_products(self):
-#        # No products installed:
-#        prod_dir = StubCertificateDirectory([])
+    def test_simple_partial_stack(self):
+        prod_dir = StubCertificateDirectory([self.stub_prod_cert(INST_PID_1)])
+        # System has 8 sockets:
+        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 8})
+        # Only 2 sockets covered:
+        ent_dir = StubCertificateDirectory([
+            self.stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=2)])
+        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
 
-#        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 42})
-#        ents = []
-#        ents.append(self.stub_ent_cert(INST_PID_5, ['prod1'],
-#            stack_id=STACK_1, quantity=2))
-#        ent_dir = StubCertificateDirectory(ents)
-#        sorter = CertSorter(prod_dir, ent_dir,
-#                facts_dict=stub_facts.get_facts())
+        self.assertFalse(INST_PID_1 in sorter.unentitled_products)
+        self.assertFalse(INST_PID_1 in sorter.valid_products)
+        self.assertTrue(INST_PID_1 in sorter.partially_valid_products)
+        self.assertEquals(1, len(sorter.partially_valid_products))
+        self.assertEquals(1, len(sorter.partially_valid_products[INST_PID_1]))
 
-#        # No installed products, so nothing should show up as partially valid:
-#        self.assertEquals(0, len(sorter.partially_valid_products))
+    def test_simple_full_stack_multicert(self):
+        prod_dir = StubCertificateDirectory([self.stub_prod_cert(INST_PID_1)])
+        # System has 8 sockets:
+        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 8})
+        # 2 ent certs providing 4 sockets each means we're valid:
+        ent_dir = StubCertificateDirectory([
+            self.stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=4),
+            self.stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=4)])
+        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
 
-#        # TODO: But we should have a partial stack:
-#        #self.assertEquals(1, len(sorter.partial_stacks))
-#        #self.assertTrue(STACK_ID in sorter.partial_stacks)
+        self.assertFalse(INST_PID_1 in sorter.unentitled_products)
+        self.assertTrue(INST_PID_1 in sorter.valid_products)
+        self.assertFalse(INST_PID_1 in sorter.partially_valid_products)
+        self.assertEquals(0, len(sorter.partially_valid_products))
 
-#    # Entitlements with the same stack ID will not necessarily have the same
-#    # first product, thus why we key off stacking_id attribute:
-#    def test_partial_stack_different_first_product(self):
-#        prod_dir = StubCertificateDirectory([self.stub_prod_cert(INST_PID_1)])
+    def test_simple_full_stack_singlecert_with_quantity(self):
+        prod_dir = StubCertificateDirectory([self.stub_prod_cert(INST_PID_1)])
+        # System has 8 sockets:
+        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 8})
+        # 1 ent cert providing 4 sockets with quantity 2 means we're valid:
+        ent_dir = StubCertificateDirectory([
+            self.stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1,
+                sockets=4, quantity=2)])
+        sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
 
-#        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 4})
-#        ents = []
-#        ents.append(self.stub_ent_cert(INST_PID_5, [INST_PID_1],
-#            stack_id=STACK_1, sockets=1))
-#        ents.append(self.stub_ent_cert(INST_PID_6, [INST_PID_1],
-#            stack_id=STACK_1, sockets=1))
-#        ent_dir = StubCertificateDirectory(ents)
+        self.assertFalse(INST_PID_1 in sorter.unentitled_products)
+        self.assertTrue(INST_PID_1 in sorter.valid_products)
+        self.assertFalse(INST_PID_1 in sorter.partially_valid_products)
+        self.assertEquals(0, len(sorter.partially_valid_products))
 
-#        sorter = CertSorter(prod_dir, ent_dir,
-#                facts_dict=stub_facts.get_facts())
+    # This is still technically invalid:
+    def test_partial_stack_for_uninstalled_products(self):
+        # No products installed:
+        prod_dir = StubCertificateDirectory([])
 
-#        # Installed product should show up as partially valid:
-#        self.assertEquals(1, len(sorter.partially_valid_products))
-#        self.assertTrue(INST_PID_1 in sorter.partially_valid_products)
-#        self.assertFalse(INST_PID_1 in sorter.valid_products)
-#        # TODO: self.assertTrue(STACK_1 in sorter.partial_stacks)
+        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 42})
+        ents = []
+        ents.append(self.stub_ent_cert(INST_PID_5, ['prod1'],
+            stack_id=STACK_1, quantity=2))
+        ent_dir = StubCertificateDirectory(ents)
+        sorter = CertSorter(prod_dir, ent_dir,
+                stub_facts.get_facts())
 
-#    # Edge case, but technically two stacks could have same first product
-#    def test_multiple_partial_stacks_same_first_product(self):
-#        prod_dir = StubCertificateDirectory([
-#            self.stub_prod_cert(INST_PID_1)])
+        # No installed products, so nothing should show up as partially valid:
+        self.assertEquals(0, len(sorter.partially_valid_products))
 
-#        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 4})
+        self.assertEquals(1, len(sorter.partial_stacks))
+        self.assertTrue(STACK_1 in sorter.partial_stacks)
+        self.assertFalse(sorter.is_valid())
 
-#        ents = []
-#        ents.append(self.stub_ent_cert(INST_PID_5, [INST_PID_1],
-#            stack_id=STACK_1, sockets=1))
-#        ents.append(self.stub_ent_cert(INST_PID_5, [INST_PID_1],
-#            stack_id=STACK_2, sockets=1))
-#        ent_dir = StubCertificateDirectory(ents)
-#        sorter = CertSorter(prod_dir, ent_dir,
-#                facts_dict=stub_facts.get_facts())
+    # Entitlements with the same stack ID will not necessarily have the same
+    # first product, thus why we key off stacking_id attribute:
+    def test_partial_stack_different_first_product(self):
+        prod_dir = StubCertificateDirectory([self.stub_prod_cert(INST_PID_1)])
 
-#        # Our installed product should be partially valid:
-#        self.assertEquals(1, len(sorter.partially_valid_products))
-#        self.assertTrue(INST_PID_1 in sorter.partially_valid_products)
-#        self.assertFalse(INST_PID_1 in sorter.valid_products)
-#        # TODO:
-#        #self.assertEquals(2, len(sorter.partial_stacks))
-#        #self.assertTrue(STACK_1 in sorter.partial_stacks)
-#        #self.assertTrue(STACK_2 in sorter.partial_stacks)
+        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 4})
+        ents = []
+        ents.append(self.stub_ent_cert(INST_PID_5, [INST_PID_1],
+            stack_id=STACK_1, sockets=1))
+        ents.append(self.stub_ent_cert(INST_PID_6, [INST_PID_1],
+            stack_id=STACK_1, sockets=1))
+        ent_dir = StubCertificateDirectory(ents)
 
-#    def test_compliant_stack_different_first_products(self):
-#        prod_dir = StubCertificateDirectory([self.stub_prod_cert(INST_PID_1)])
+        sorter = CertSorter(prod_dir, ent_dir,
+                stub_facts.get_facts())
 
-#        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 4})
-#        # Two entitlements, same stack, different first products, each
-#        # providing 2 sockets: (should be compliant)
-#        ents = []
-#        ents.append(self.stub_ent_cert(INST_PID_5, [INST_PID_1],
-#            stack_id=STACK_1, sockets=2))
-#        ents.append(self.stub_ent_cert(INST_PID_6, [INST_PID_1],
-#            stack_id=STACK_1, sockets=2))
-#        ent_dir = StubCertificateDirectory(ents)
+        # Installed product should show up as partially valid:
+        self.assertEquals(1, len(sorter.partially_valid_products))
+        self.assertTrue(INST_PID_1 in sorter.partially_valid_products)
+        self.assertFalse(INST_PID_1 in sorter.valid_products)
+        self.assertTrue(STACK_1 in sorter.partial_stacks)
 
-#        sorter = CertSorter(prod_dir, ent_dir,
-#                facts_dict=stub_facts.get_facts())
+    # Edge case, but technically two stacks could have same first product
+    def test_multiple_partial_stacks_same_first_product(self):
+        prod_dir = StubCertificateDirectory([
+            self.stub_prod_cert(INST_PID_1)])
 
-#        # Installed product should show up as valid:
-#        self.assertEquals(1, len(sorter.valid_products))
-#        self.assertTrue(INST_PID_1 in sorter.valid_products)
-#        self.assertEquals(0, len(sorter.partially_valid_products))
-#        # TODO: self.assertEquals(0, len(sorter.partial_stacks))
+        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 4})
+
+        ents = []
+        ents.append(self.stub_ent_cert(INST_PID_5, [INST_PID_1],
+            stack_id=STACK_1, sockets=1))
+        ents.append(self.stub_ent_cert(INST_PID_5, [INST_PID_1],
+            stack_id=STACK_2, sockets=1))
+        ent_dir = StubCertificateDirectory(ents)
+        sorter = CertSorter(prod_dir, ent_dir,
+                stub_facts.get_facts())
+
+        # Our installed product should be partially valid:
+        self.assertEquals(1, len(sorter.partially_valid_products))
+        self.assertTrue(INST_PID_1 in sorter.partially_valid_products)
+        self.assertFalse(INST_PID_1 in sorter.valid_products)
+        self.assertEquals(2, len(sorter.partial_stacks))
+        self.assertTrue(STACK_1 in sorter.partial_stacks)
+        self.assertTrue(STACK_2 in sorter.partial_stacks)
+
+    def test_valid_stack_different_first_products(self):
+        prod_dir = StubCertificateDirectory([self.stub_prod_cert(INST_PID_1)])
+
+        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 4})
+        # Two entitlements, same stack, different first products, each
+        # providing 2 sockets: (should be valid)
+        ents = []
+        ents.append(self.stub_ent_cert(INST_PID_5, [INST_PID_1],
+            stack_id=STACK_1, sockets=2))
+        ents.append(self.stub_ent_cert(INST_PID_6, [INST_PID_1],
+            stack_id=STACK_1, sockets=2))
+        ent_dir = StubCertificateDirectory(ents)
+
+        sorter = CertSorter(prod_dir, ent_dir,
+                stub_facts.get_facts())
+
+        # Installed product should show up as valid:
+        self.assertEquals(1, len(sorter.valid_products))
+        self.assertTrue(INST_PID_1 in sorter.valid_products)
+        self.assertEquals(0, len(sorter.partially_valid_products))
+        self.assertEquals(0, len(sorter.partial_stacks))
 
 
 class TestEntitlementCertStackingGroupSorter(unittest.TestCase):

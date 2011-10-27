@@ -28,7 +28,7 @@ from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.cert_sorter import CertSorter
 
 from subscription_manager import managerlib, cert_sorter
-from subscription_manager.certlib import find_first_invalid_date
+from subscription_manager.validity import find_first_invalid_date
 
 import gettext
 _ = gettext.gettext
@@ -60,7 +60,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         self.facts = facts
         self.cs = cert_sorter.CertSorter(prod_dir, ent_dir,
-                                 facts_dict=self.facts.get_facts())
+                self.facts.get_facts())
 
         #set up the iconset
         PARTIAL_IMG = os.path.join(os.path.dirname(__file__),
@@ -113,7 +113,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def update_products(self):
         self.store.clear()
-        self.cs.refresh()
+        self.cs = cert_sorter.CertSorter(self.product_dir,
+                self.entitlement_dir, self.facts.get_facts())
 
         for product_cert in self.product_dir.list():
             for product in product_cert.getProducts():
@@ -238,9 +239,10 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
             return
 
         # Look for products which have invalid entitlements
-        sorter = CertSorter(self.product_dir, self.entitlement_dir, facts_dict=self.facts.get_facts())
+        sorter = CertSorter(self.product_dir, self.entitlement_dir,
+                self.facts.get_facts())
 
-        warn_count = len(sorter.expired_entitlement_certs) + \
+        warn_count = len(sorter.expired_products) + \
                 len(sorter.unentitled_products)
 
         partial_count = len(sorter.partially_valid_products)
@@ -270,14 +272,14 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         else:
             first_invalid = find_first_invalid_date(self.entitlement_dir,
-                                                    self.product_dir)
+                    self.product_dir, self.facts.get_facts())
             self._set_status_icons(VALID)
             if first_invalid:
                 self.subscription_status_label.set_markup(
                         _("Product entitlement certificates <i>valid</i> until %s") % \
                             managerlib.formatDate(first_invalid))
             else:
-                # No product certs installed, no first incompliant date, and
+                # No product certs installed, no first invalid date, and
                 # the subscription assistant can't do anything, so we'll disable
                 # the button to launch it:
                 self.subscription_status_label.set_text(

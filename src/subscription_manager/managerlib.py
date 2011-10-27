@@ -85,12 +85,16 @@ def getInstalledProductStatus(product_directory=None,
      Returns the Installed products and their subscription states
     """
     # allow us to stub these out for testing
-    product_directory = product_directory or certdirectory.ProductDirectory()
-    entitlement_directory = entitlement_directory or certdirectory.EntitlementDirectory()
+    if product_directory is None:
+        product_directory = certdirectory.ProductDirectory()
+    if entitlement_directory is None:
+        entitlement_directory = certdirectory.EntitlementDirectory()
+    if facts is None:
+        facts = Facts().get_facts()
 
     product_status = []
 
-    sorter = CertSorter(product_directory, entitlement_directory, facts_dict=facts)
+    sorter = CertSorter(product_directory, entitlement_directory, facts)
 
     for installed_product in sorter.installed_products:
         product_cert = sorter.installed_products[installed_product]

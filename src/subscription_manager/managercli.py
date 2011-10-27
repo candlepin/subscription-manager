@@ -46,11 +46,21 @@ from subscription_manager import managerlib
 from subscription_manager.facts import Facts
 from subscription_manager.quantity import valid_quantity
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
-from subscription_manager.cert_sorter import status_map
+from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
+        NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
 cfg = rhsm.config.initConfig()
+
+# Translates the cert sorter status constants:
+STATUS_MAP = {
+        FUTURE_SUBSCRIBED: _("Future Subscription"),
+        SUBSCRIBED: _("Subscribed"),
+        NOT_SUBSCRIBED: _("Not Subscribed"),
+        EXPIRED: _("Expired"),
+        PARTIALLY_SUBSCRIBED: _("Partially Subscribed")
+}
 
 
 def handle_exception(msg, ex):
@@ -113,7 +123,7 @@ def show_autosubscribe_output():
     log.info("Attempted to auto-subscribe/heal the system.")
     print _("Installed Product Current Status:")
     for prod_status in installed_status:
-        status = status_map[prod_status[3]]
+        status = STATUS_MAP[prod_status[3]]
         print (constants.product_status % (prod_status[0], status))
 
 
@@ -1128,7 +1138,7 @@ class ConfigCommand(CliCommand):
                     sys.stderr.write(
                         _("Error: configuration entry designation for removal must be of format [section.name]")
                     )
-                    sys.stderr.write("\n")                    
+                    sys.stderr.write("\n")
                     sys.exit(-1)
                 section = r.split('.')[0]
                 name = r.split('.')[1]
@@ -1241,7 +1251,7 @@ class ListCommand(CliCommand):
             print _("    Installed Product Status")
             print "+-------------------------------------------+"
             for product in iproducts:
-                status = status_map[product[3]]
+                status = STATUS_MAP[product[3]]
                 print self._none_wrap(constants.installed_product_status, product[0],
                                 product[1], product[2], status, product[4],
                                 product[5])

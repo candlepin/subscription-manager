@@ -24,7 +24,6 @@ from stubs import StubCertificateDirectory, StubProductCertificate, StubProduct,
 from subscription_manager.facts import Facts
 from subscription_manager.managerlib import merge_pools, PoolFilter, getInstalledProductStatus, \
     LocalTz, parseDate, merge_pools, MergedPoolsStackingGroupSorter
-from subscription_manager.cert_sorter import status_map
 from modelhelpers import *
 from subscription_manager import managerlib
 import stubs
@@ -341,7 +340,7 @@ class InstalledProductStatusTests(unittest.TestCase):
                 StubProductCertificate(product)])
         entitlement_directory = StubCertificateDirectory([
                 StubEntitlementCertificate(product,
-                                           start_date=(datetime.now() + timedelta(days=1365)))])
+                    start_date=(datetime.now() + timedelta(days=1365)))])
 
         product_status = getInstalledProductStatus(product_directory,
                                                    entitlement_directory)
