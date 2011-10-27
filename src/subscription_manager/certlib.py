@@ -120,10 +120,12 @@ class HealingLib(DataLib):
                 ent_dir = EntitlementDirectory()
                 cs = cert_sorter.CertSorter(prod_dir, ent_dir,
                         on_date=today)
+                cert_updater = CertLib(uep=self.uep)
                 if not cs.is_valid():
                     log.warn("Found invalid entitlements for today: %s" %
                             today)
                     self.uep.bind(uuid, today)
+                    cert_updater.update()
                 else:
                     log.info("Entitlements are valid for today: %s" %
                             today)
@@ -134,6 +136,7 @@ class HealingLib(DataLib):
                         log.warn("Found invalid entitlements for tomorrow: %s" %
                                 tomorrow)
                         self.uep.bind(uuid, tomorrow)
+                        cert_updater.update()
                     else:
                         log.info("Entitlements are valid for tomorrow: %s" %
                                 tomorrow)
