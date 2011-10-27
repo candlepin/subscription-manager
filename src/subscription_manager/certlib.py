@@ -147,13 +147,6 @@ class HealingLib(DataLib):
                 return 0
             else:
                 log.info("Auto-heal check complete.")
-                #FIXME: this may need to be changed with getInstalledProductStatus
-                # changes
-                installed_status = managerlib.getInstalledProductStatus()
-                log.info("Current installed product status:")
-                for prod_status in installed_status:
-                    log.info(constants.product_status % (prod_status[0],
-                        prod_status[1]))
                 return 1
         else:
             log.info("Auto-heal disabled on server, skipping.")
