@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.98.1
+Version: 0.98.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -236,6 +236,13 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Fri Oct 28 2011 William Poteat <wpoteat@redhat.com> 0.98.2-1
+- Switch to EL5 compatible APIs (jbowes@redhat.com)
+- Remove post-healing logging of product status. (dgoodwin@redhat.com)
+- Refresh certificates after healing. (dgoodwin@redhat.com)
+- Push the latest strings to zanata (bkearney@redhat.com)
+- 699970: Remove many of the multiple line items in the translated strings.
+  (bkearney@redhat.com)
 * Tue Oct 25 2011 William Poteat <wpoteat@redhat.com> 0.97.2-1
 - Update the strings file and push it to Zanata (bkearney@redhat.com)
 - 747024: Restore previous behaviour for unhandled exceptions
