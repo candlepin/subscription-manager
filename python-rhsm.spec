@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.98.1
+Version: 0.98.2
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,14 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Fri Oct 28 2011 William Poteat <wpoteat@redhat.com> 0.98.2-1
+- 749853: backport new python-rhsm API calls present in 6.2 for 5.8
+  (cduryee@redhat.com)
+- rev python-rhsm version to match sub-mgr (cduryee@redhat.com)
+- point master to rhel5 builder (cduryee@redhat.com)
+- fix python syntax for older versions (jbowes@redhat.com)
+- Fix yum repo location for EL6. (dgoodwin@redhat.com)
+
 * Mon Oct 17 2011 Devan Goodwin <dgoodwin@rm-rf.ca> 0.97.1-1
 - 746241: UEPConnection.updateConsumer now passes empty list in POST request
   (mstead@redhat.com)
