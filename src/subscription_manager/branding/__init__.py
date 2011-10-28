@@ -24,6 +24,7 @@ want to override.
 """
 
 import os
+import sys
 import glob
 
 import gettext
@@ -41,7 +42,8 @@ def find_custom_branding():
         return None
     # we don't support multiple brandings
     branding_module = os.path.basename(mods[0])[:-3]
-    mod = __import__(__name__ + "." + branding_module, fromlist=[''])
+    __import__(__name__ + "." + branding_module)
+    mod = sys.modules[__name__ + "." + branding_module]
     return mod.Branding()
 
 

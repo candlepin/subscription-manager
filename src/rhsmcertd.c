@@ -193,14 +193,14 @@ main (int argc, char *argv[])
 
 	gboolean heal = TRUE;
 	cert_check (heal);
-	g_timeout_add_seconds (heal_interval, (GSourceFunc) cert_check, heal);
+	g_timeout_add (heal_interval * 1000, (GSourceFunc) cert_check, heal);
 
 	heal = FALSE;
 	cert_check (heal);
-	g_timeout_add_seconds (cert_interval, (GSourceFunc) cert_check, heal);
+	g_timeout_add (cert_interval * 1000, (GSourceFunc) cert_check, heal);
 
 	logUpdate (cert_interval);
-	g_timeout_add_seconds (cert_interval, (GSourceFunc) logUpdate,
+	g_timeout_add (cert_interval * 1000, (GSourceFunc) logUpdate,
 			       cert_interval);
 
 	main_loop = g_main_loop_new (NULL, FALSE);
