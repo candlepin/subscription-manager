@@ -60,11 +60,6 @@ gtk.glade.bindtextdomain("rhsm")
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
-prefix = os.path.dirname(__file__)
-VALID_IMG = os.path.join(prefix, "data/icons/valid.svg")
-PARTIAL_IMG = os.path.join(prefix, "data/icons/partial.svg")
-INVALID_IMG = os.path.join(prefix, "data/icons/invalid.svg")
-
 
 # this is a fairly terrible work around for
 # bz #744136 and #704069. Basically, we don't
@@ -194,10 +189,9 @@ class MainWindow(widgets.GladeWidget):
     def __init__(self, backend=None, consumer=None,
                  facts=None, ent_dir=None, prod_dir=None):
         super(MainWindow, self).__init__('mainwindow.glade',
-              ['main_window', 'notebook', 'subscription_status_label',
-               'subscription_status_image', 'system_name_label',
+              ['main_window', 'notebook', 'system_name_label',
                'next_update_label', 'next_update_title', 'register_button',
-               'unregister_button', 'update_certificates_button',
+               'unregister_button',
                'redeem_button', 'help_button'])
 
         self.backend = backend or Backend()
@@ -227,8 +221,14 @@ class MainWindow(widgets.GladeWidget):
 
         self.redeem_dialog = redeem.RedeemDialog(self.backend, self.consumer)
 
+        self.installed_tab_icon = gtk.Image()
+        self.installed_tab_icon.set_from_stock(gtk.STOCK_YES,
+                gtk.ICON_SIZE_MENU)
+
         self.installed_tab = InstalledProductsTab(self.backend, self.consumer,
                                                   self.facts,
+                                                  self.installed_tab_icon,
+                                                  self,
                                                   ent_dir=self.entitlement_dir,
                                                   prod_dir=self.product_dir)
         self.my_subs_tab = MySubscriptionsTab(self.backend, self.consumer,
@@ -239,11 +239,16 @@ class MainWindow(widgets.GladeWidget):
         self.all_subs_tab = AllSubscriptionsTab(self.backend, self.consumer,
                 self.facts)
 
-        for tab in [self.installed_tab, self.my_subs_tab]:
-            self.notebook.append_page(tab.get_content(), gtk.Label(tab.get_label()))
+        hbox = gtk.HBox(spacing=6)
+        hbox.pack_start(self.installed_tab_icon, False, False)
+        hbox.pack_start(gtk.Label(self.installed_tab.get_label()), False, False)
+        self.notebook.append_page(self.installed_tab.get_content(), hbox)
+        hbox.show_all()
+
+        self.notebook.append_page(self.my_subs_tab.get_content(),
+                gtk.Label(self.my_subs_tab.get_label()))
 
         self.glade.signal_autoconnect({
-            "on_update_certificates_button_clicked": self._update_certificates_button_clicked,
             "on_register_button_clicked": self._register_button_clicked,
             "on_unregister_button_clicked": self._unregister_button_clicked,
             "on_add_sub_button_clicked": self._add_sub_button_clicked,
@@ -254,14 +259,9 @@ class MainWindow(widgets.GladeWidget):
             "on_help_button_clicked": self._help_button_clicked,
         })
 
-        # Register callback for when product/entitlement certs are updated
-        def on_cert_change(filemonitor):
-            self._set_validity_status()
-
         def on_identity_change(filemonitor):
             self.refresh()
 
-        self.backend.monitor_certs(on_cert_change)
         self.backend.monitor_identity(on_identity_change)
 
         self.main_window.show_all()
@@ -282,7 +282,6 @@ class MainWindow(widgets.GladeWidget):
     def refresh(self):
         """ Refresh the UI. """
         self.consumer.reload()
-        self._set_validity_status()
 
         # Show the All Subscriptions tab if registered, hide it otherwise:
         if self.registered() and self.notebook.get_n_pages() == 2:
@@ -295,6 +294,8 @@ class MainWindow(widgets.GladeWidget):
         self.all_subs_tab.refresh()
         self.installed_tab.refresh()
         self.my_subs_tab.refresh()
+
+        self.installed_tab.set_registered(self.registered())
 
         self._show_buttons()
         self._show_redemption_buttons()
@@ -374,13 +375,8 @@ class MainWindow(widgets.GladeWidget):
         self.import_sub_dialog.show()
 
     def _update_certificates_button_clicked(self, widget):
-        if self.registered():
-            self.subscription_assistant.set_parent_window(self._get_window())
-            self.subscription_assistant.show()
-        else:
-            messageWindow.OkDialog(messageWindow.wrap_text(
-                _("You must register before using the subscription assistant.")),
-                self._get_window())
+        self.subscription_assistant.set_parent_window(self._get_window())
+        self.subscription_assistant.show()
 
     def _redeem_button_clicked(self, widget):
         self.redeem_dialog.set_parent_window(self._get_window())
@@ -401,66 +397,6 @@ class MainWindow(widgets.GladeWidget):
         # are new and the default UEP init won't get them
         # (it's default args are set at class init time)
         self.backend.update()
-
-    def _set_validity_status(self):
-        """ Updates the entitlement validity status portion of the UI. """
-
-        if ClassicCheck().is_registered_with_classic():
-            buf = gtk.gdk.pixbuf_new_from_file_at_size(VALID_IMG, 32, 32)
-            self.subscription_status_image.set_from_pixbuf(buf)
-            self.subscription_status_label.set_text(
-                _("This system is registered to RHN Classic"))
-            return
-
-        # Look for productswhich have invalid entitlements
-        sorter = CertSorter(self.product_dir, self.entitlement_dir, facts_dict=self.facts.get_facts())
-
-        warn_count = len(sorter.expired_entitlement_certs) + \
-                len(sorter.unentitled_products)
-
-        partial_count = len(sorter.partially_valid_products)
-
-        self.update_certificates_button.show()
-        if warn_count > 0:
-            buf = gtk.gdk.pixbuf_new_from_file_at_size(INVALID_IMG, 32, 32)
-            self.subscription_status_image.set_from_pixbuf(buf)
-            # Change wording slightly for just one product
-            if warn_count > 1:
-                self.subscription_status_label.set_markup(
-                        _("You have <b>%s</b> products with invalid entitlement certificates.")
-                        % warn_count)
-            else:
-                self.subscription_status_label.set_markup(
-                        _("You have <b>1</b> product without a valid entitlement certificate."))
-
-        elif partial_count > 0:
-            buf = gtk.gdk.pixbuf_new_from_file_at_size(PARTIAL_IMG, 32, 32)
-            self.subscription_status_image.set_from_pixbuf(buf)
-            # Change wording slightly for just one product
-            if partial_count > 1:
-                self.subscription_status_label.set_markup(
-                        _("You have <b>%s</b> products in need of additional entitlement certificates.")
-                        % partial_count)
-            else:
-                self.subscription_status_label.set_markup(
-                        _("You have <b>1</b> product in need of additional entitlement certificates."))
-
-        else:
-            first_invalid = find_first_invalid_date(self.entitlement_dir,
-                                                    self.product_dir)
-            buf = gtk.gdk.pixbuf_new_from_file_at_size(VALID_IMG, 32, 32)
-            self.subscription_status_image.set_from_pixbuf(buf)
-            if first_invalid:
-                self.subscription_status_label.set_text(
-                        _("Product entitlement certificates valid until %s") % \
-                            managerlib.formatDate(first_invalid))
-            else:
-                # No product certs installed, no first incompliant date, and
-                # the subscription assistant can't do anything, so we'll disable
-                # the button to launch it:
-                self.subscription_status_label.set_text(
-                        _("No product certificates installed."))
-                self.update_certificates_button.hide()
 
     def _check_rhn_classic(self):
         if ClassicCheck().is_registered_with_classic():
