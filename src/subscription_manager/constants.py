@@ -34,7 +34,7 @@ installed_product_status = \
     _("Starts:               \t%-25s") + \
     "\n" + \
     _("Expires:              \t%-25s") + \
-    "\n" 
+    "\n"
 
 available_subs_list = \
     _("ProductName:          \t%-25s") + \
@@ -63,6 +63,8 @@ consumed_subs_list = \
     "\n" + \
     _("Active:               \t%-25s") + \
     "\n" + \
+    _("QuantityUsed:         \t%-25s") + \
+    "\n" + \
     _("Begins:               \t%-25s") + \
     "\n" + \
     _("Expires:              \t%-25s") + \
@@ -76,7 +78,7 @@ repos_list = \
     _("RepoUrl:              \t%-25s") + \
     "\n" + \
     _("Enabled:              \t%-25s") + \
-    "\n" 
+    "\n"
 
 product_status = \
     _("ProductName:          \t%-25s") + \
