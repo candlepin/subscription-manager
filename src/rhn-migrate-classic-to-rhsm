@@ -90,12 +90,7 @@ def checkOkToProceed():
 	consumer = ConsumerIdentity.read()
         systemExit(1, "\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details." % consumer.getConsumerId())
 
-    # verify system is utilizing RHN hosted and not a satellite
-    # is there a better way to check this?
-    serverURL = rhncfg['serverURL']
-    if not 'xmlrpc.rhn.redhat.com' in serverURL:
-        log.info("serverURL = %s" % serverURL)
-	systemExit(1, "This migration script requires the system to be registered to RHN Hosted Classic.\nHowever this system appears to be registered to '%s'.\nExiting." % serverURL.split('/')[2])
+    #TODO check if user is register to candlepin and RHN classic here.
 
 #################################################
 
@@ -121,7 +116,8 @@ def unRegisterSystemFromRhnClassic(username, password):
     systemId = int(p.xpathEval('string(//member[* = "system_id"]/value/string)').split('-')[1])
 
     log.info("Deleting system %s from RHN Classic...", systemId)
-    server_url = 'https://xmlrpc.rhn.redhat.com/rpc/api'
+    hostname = rhncfg['serverURL'].split('/')[2]
+    server_url = 'https://%s/rpc/api' % (hostname)
     try:
 	sc = xmlrpclib.Server(server_url)
 	sk = sc.auth.login(username, password)
