@@ -162,6 +162,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/subscription_manager/jsonwrapper.py*
 
 %attr(755,root,root) %{_datadir}/rhsm/subscription_manager/certmgr.py*
+%attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
 %attr(755,root,root) %{_sbindir}/subscription-manager
 %attr(755,root,root) %{_bindir}/subscription-manager
 %attr(755,root,root) %{_bindir}/rhsmcertd

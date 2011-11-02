@@ -1,0 +1,359 @@
+#!/usr/bin/python
+#
+# Migration Script (for bz 726407) which will :
+# 1] install subscription-manger and depdendent packages
+# 2] determine the subscribed channels on RHN Classic
+# 3] copy the corresponding RHSM product certificates to /etc/pki/product
+# 4] unregister the system from RHN Classic
+# 5] transfer any http proxy settings from the up2date to rhsm.conf files
+# 6] run the subscription-manager tool to register the system and consume
+#   a subscription
+#
+# Authors: Paresh Mutha <pmutha@redhat.com>
+#          Mark Huth <mhuth@redhat.com>
+#################################################
+
+import sys
+import os
+import xmlrpclib
+import time
+import getpass
+import libxml2
+import subprocess
+import re
+import shutil
+import logging
+import traceback
+
+# quick check to see if you are a super-user.
+if os.getuid() != 0:
+    print "Must be root user to execute\n"
+    sys.exit(8)
+
+# access the rhn/up2date python libaries and read the up2date config file
+_RHNLIBPATH = "/usr/share/rhn"
+if _RHNLIBPATH not in sys.path:
+    sys.path.append(_RHNLIBPATH)
+
+from up2date_client import up2dateErrors
+from up2date_client.rhnChannel import  getChannels
+import up2date_client.config
+
+rhncfg = up2date_client.config.initUp2dateConfig()
+
+from optparse import Option, OptionParser
+options_table = [
+    Option("-f", "--force", action="store_true", default=False, help="Ignore Channels not available on RHSM"),
+    Option("-c", "--cli-only",  action="store_true", default=False, dest='clionly', help="Don't launch the GUI tool to subscribe the system, just use the CLI tool which will do it automatically"),
+]
+
+parser = OptionParser(option_list=options_table, usage="%s [--force|--cli-only|--help]" % sys.argv[0])
+(options, args) = parser.parse_args()
+
+# access the rhsm python libraries, read rhsm config file and setup logging
+_RHSMLIBPATH = "/usr/share/rhsm"
+if _RHSMLIBPATH not in sys.path:
+    sys.path.append(_RHSMLIBPATH)
+
+try:
+    # try importing from RHEL 5 location
+    from subscription_manager.certlib import ConsumerIdentity, ProductDirectory
+    from subscription_manager import repolib, logutil
+except ImportError:
+    # new RHEL 6 location
+    from certlib import ConsumerIdentity, ProductDirectory
+    import repolib, logutil
+
+import rhsm.config
+
+logutil.init_logger()
+log = logging.getLogger('rhsm-app.' + __name__)
+rhsmcfg = rhsm.config.initConfig()
+
+#################################################
+
+def systemExit(code, msgs=None):
+    "Exit with a code and optional message(s). Saved a few lines of code."
+    if msgs:
+        if type(msgs) not in [type([]), type(())]:
+            msgs = (msgs, )
+        for msg in msgs:
+            sys.stderr.write(str(msg) + '\n')
+    sys.exit(code)
+
+#################################################
+
+def checkOkToProceed():
+    # check if this machine is already registered to Certicate-based RHN
+    if ConsumerIdentity.existsAndValid():
+        print "\nThis machine appears to be already registered to Certificate-based RHN.  Exiting."
+	consumer = ConsumerIdentity.read()
+        systemExit(1, "\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details." % consumer.getConsumerId())
+
+    # verify system is utilizing RHN hosted and not a satellite
+    # is there a better way to check this?
+    serverURL = rhncfg['serverURL']
+    if not 'xmlrpc.rhn.redhat.com' in serverURL:
+        log.info("serverURL = %s" % serverURL)
+	systemExit(1, "This migration script requires the system to be registered to RHN Hosted Classic.\nHowever this system appears to be registered to '%s'.\nExiting." % serverURL.split('/')[2])
+
+#################################################
+
+def getSubscribedChannelsList():
+    try:
+        subscribedChannels = map(lambda x: x['label'], getChannels().channels())
+    except up2dateErrors.NoChannelsError:
+        systemExit(1, 'This system is not associated with any channel.')
+    except up2dateErrors.NoSystemIdError:
+        systemExit(1, 'Unable to locate SystemId file. Is this system registered?')
+    except:
+	log.error(traceback.format_exc())
+	systemExit(1, "Problem encountered getting the list of subscribed channels.  Exiting.")
+    return subscribedChannels
+
+#################################################
+
+def unRegisterSystemFromRhnClassic(username, password):
+    #getSystemIdPath
+    systemIdPath = rhncfg["systemIdPath"]
+    ## get SystemID
+    p = libxml2.parseDoc(file(systemIdPath).read())
+    systemId = int(p.xpathEval('string(//member[* = "system_id"]/value/string)').split('-')[1])
+
+    log.info("Deleting system %s from RHN Classic...", systemId)
+    server_url = 'https://xmlrpc.rhn.redhat.com/rpc/api'
+    try:
+	sc = xmlrpclib.Server(server_url)
+	sk = sc.auth.login(username, password)
+        result = sc.system.deleteSystems(sk, systemId)
+	if result:
+	    log.info("System %s deleted.  Removing systemid file and disabling rhnplugin.conf", systemId)
+	    os.remove(systemIdPath)
+	    disableYumRhnPlugin()
+	    print "System successfully unregistered from RHN Classic."
+	else:
+	    systemExit(1, "Unable to unregister system from RHN Classic.  Exiting.")
+    except:
+	log.error(traceback.format_exc())
+	systemExit(1, "Problem encountered unregistering system from RHN Classic.  Exiting.")
+
+#################################################
+
+def disableYumRhnPlugin():
+    # 'Inspired by' up2date_client/rhnreg.py
+    """ disable yum-rhn-plugin by setting enabled=0 in file
+        /etc/yum/pluginconf.d/rhnplugin.conf
+        Can thrown IOError exception.
+    """
+    log.info("Disabling rhnplugin.conf")
+    YUM_PLUGIN_CONF = '/etc/yum/pluginconf.d/rhnplugin.conf'
+    f = open(YUM_PLUGIN_CONF, 'r')
+    lines = f.readlines()
+    f.close()
+    main_section = False
+    f = open(YUM_PLUGIN_CONF, 'w')
+    for line in lines:
+        if re.match("^\[.*]", line):
+            if re.match("^\[main]", line):
+                main_section = True
+            else:
+                main_section = False
+        if main_section:
+            line = re.sub('^(\s*)enabled\s*=.+', r'\1enabled = 0', line)
+        f.write(line)
+    f.close()
+
+#################################################
+
+def readChannelCertMapping():
+    release = getRelease()
+    supportedReleases = ['RHEL-5.7']
+    if release not in supportedReleases:
+        print "Error: Current release " + release + " is not supported for migration to Red Hat Subscription Manager."
+        sys.exit(1)
+    mappingfile = "/usr/share/rhsm/product/" + release + "/channel-cert-mapping.txt"
+    log.info("Using mapping file %s", mappingfile)
+    f = open(mappingfile)
+    lines = f.readlines()
+    dic_data = {}
+    for line in lines:
+        if re.match("^[a-zA-Z]", line):
+            line = line.replace("\n", "")
+            key, val = line.split(": ")
+            dic_data[key] = val
+    return dic_data
+
+#################################################
+
+def transferHttpProxySettings():
+    # transfer http proxy information from up2date to rhsm.conf
+    if rhncfg['enableProxy'] and not rhsmcfg.get('server', 'proxy_hostname'):
+        proxy_hostname, proxy_port = rhncfg['httpProxy'].split(':')
+        log.info("Using proxy %s:%s - transferring settings to rhsm.conf" % (proxy_hostname, proxy_port))
+        rhsmcfg.set('server', 'proxy_hostname', proxy_hostname)
+        rhsmcfg.set('server', 'proxy_port', proxy_port)
+        if rhncfg['enableProxyAuth']:
+            rhsmcfg.set('server', 'proxy_user', rhncfg['proxyUser'])
+            rhsmcfg.set('server', 'proxy_password', rhncfg['proxyPassword'])
+        rhsmcfg.save()
+
+#################################################
+
+def runSubscriptionManager(username, password):
+    # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
+    print "\nAttempting to register system to Certificate-based RHN ..."
+    result = subprocess.call(['subscription-manager', 'register', '--username=' + username, '--password=' + password])
+    if result != 0:
+        systemExit(2, "\nUnable to register.\nFor further assistance, please contact Red Hat Global Support Services.")
+    else:
+        consumer = ConsumerIdentity.read()
+        print "System '%s' successfully registered to Certificate-based RHN.\n" % consumer.getConsumerName()
+
+    # For subscribing, use the GUI tool if the DISPLAY environment variable is set and the gui tool exists
+    if os.getenv('DISPLAY') and os.path.exists('/usr/bin/subscription-manager-gui') and not options.clionly:
+        print "Launching the GUI tool to manually subscribe the system ..."
+        result = subprocess.call(['subscription-manager-gui'], stderr=open(os.devnull, 'w'))
+    else:
+        print "Attempting to auto-subscribe to appropriate subscriptions ..."
+        result = subprocess.call(['subscription-manager', 'subscribe', '--auto'])
+        if result != 0:
+            print "\nUnable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?"
+        else:
+            print "Successfully subscribed."
+    print "\nPlease visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary." % consumer.getConsumerId()
+
+#################################################
+
+def deployProdCertificates(subscribedChannels):
+    dic_data = readChannelCertMapping()
+
+    applicableCerts = []
+    validRhsmChannels = []
+    invalidRhsmChannels = []
+    unrecognizedChannels = []
+
+    for channel in subscribedChannels:
+        try:
+            if dic_data[channel] != 'none':
+                validRhsmChannels.append(channel)
+                log.info("mapping found for : %s = %s", channel, dic_data[channel])
+                if dic_data[channel] not in applicableCerts:
+                    applicableCerts.append(dic_data[channel])
+            else:
+                invalidRhsmChannels.append(channel)
+                log.info("%s None", channel)
+        except:
+            print "\nUnrecognized Channel. Mapping not found !!!"
+            unrecognizedChannels.append(channel)
+
+    if invalidRhsmChannels:
+        print "\n+--------------------------------------------------+"
+        print "Below mentioned channels are NOT available on RHSM"
+        print "+--------------------------------------------------+"
+        for i in invalidRhsmChannels:
+            print i
+        if not options.force:
+            print "\nUse --force to ignore these channels and continue the migration.\n"
+            sys.exit(1)
+
+    log.info("certs to be copied: %s", applicableCerts)
+
+    print "\nList of channels for which certs are being copied"
+    for i in validRhsmChannels:
+        print i
+
+    if unrecognizedChannels:
+        print "\nUnrecognized channels. Channel to Product Certificate mapping missing for these channels."
+        for i in unrecognizedChannels:
+            print i
+        sys.exit(1)
+
+    release = getRelease()
+
+    # creates the product directory if it doesn't already exist
+    productDir = ProductDirectory()
+    for cert in applicableCerts:
+        sourcepath = "/usr/share/rhsm/product/" + release + "/" + cert
+        destinationpath = str(productDir) + "/" + cert
+        log.info("cp %s %s ", sourcepath, destinationpath)
+        shutil.copy2(sourcepath, destinationpath)
+    print "\nProduct Certificates copied successfully to %s !!" % str(productDir)
+
+#################################################
+
+def getRelease():
+    f = open('/etc/redhat-release')
+    lines = f.readlines()
+    f.close()
+    release = "RHEL-" + str(lines).split(' ')[6]
+    return release
+
+#################################################
+
+def enableExtraChannels(subscribedChannels):
+    # Check if system was subscribed to extra channels like supplementary, optional, fastrack etc.
+    # If so, enable them in the redhat.repo file
+
+    rhelRelease = getRelease()[5]
+
+    # mapping of all RHN extra channel names to RHSM equivalent channel names
+    if rhelRelease == '5':
+	extraChannelMap = {'rhel-x86_64-server-productivity-5' : 'rhel-5-server-productivity-rpms',
+			   'rhel-x86_64-server-supplementary-5': 'rhel-5-server-supplementary'}
+    else:
+	extraChannelMap = {'rhel-x86_64-server-productivity-6' : 'rhel-6-server-productivity-rpms',
+			   'rhel-x86_64-server-supplementary-6': 'rhel-6-server-supplementary'}
+    
+    # remove from the list any we are not using.  Return if the list is empty
+    for rhnChannel in extraChannelMap.keys():
+	if rhnChannel not in subscribedChannels:
+	    del extraChannelMap[rhnChannel]
+
+    if not extraChannelMap:
+	return
+
+    # create and populate the redhat.repo file
+    repolib.RepoLib().update()
+
+    # read in the redhat.repo file
+    repofile = repolib.RepoFile()
+    repofile.read()
+
+    # enable any extra channels we are using and write out redhat.repo
+    log.info("Extra channels to enable in redhat.repo: %s" % extraChannelMap.values())
+    for rhsmChannel in extraChannelMap.values():
+	repofile.set(rhsmChannel, 'enabled', '1')
+    repofile.write()
+
+#################################################
+
+def main():
+    checkOkToProceed()
+
+    # get a list of RHN classic channels this machine is subscribed to
+    print "\nRetrieving existing RHN classic subscription information ..."
+    subscribedChannels = getSubscribedChannelsList()
+    print "+----------------------------------+"
+    print "System is currently subscribed to:"
+    print "+----------------------------------+"
+    for channel in subscribedChannels:
+        print channel
+
+    deployProdCertificates(subscribedChannels)
+
+    print "\nPreparing to unregister system from RHN classic ..."
+    username = raw_input("RHN Username: ").strip()
+    password = getpass.getpass()
+    unRegisterSystemFromRhnClassic(username, password)
+
+    # register the system to Certificate-based RHN and consume a subscription
+    transferHttpProxySettings()
+    runSubscriptionManager(username, password)
+
+    # check if we need to enable to supplementary/optional channels
+    enableExtraChannels(subscribedChannels)
+		
+#################################################
+
+if __name__ == '__main__':
+    main()
