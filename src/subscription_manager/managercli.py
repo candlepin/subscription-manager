@@ -823,8 +823,10 @@ class SubscribeCommand(CliCommand):
         quantity = self.options.quantity
         if self.options.quantity:
             if not valid_quantity(quantity):
-                print _("Error: Quantity must be a positive number.")
+                print _("Error: Quantity must be a positive integer.")
                 sys.exit(-1)
+            else:
+                self.options.quantity = int(self.options.quantity)
 
     def _do_command(self):
         """

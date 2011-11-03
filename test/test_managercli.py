@@ -187,6 +187,13 @@ class TestSubscribeCommand(TestCliProxyCommand):
         self.cc.main(["--auto", "--quantity", "1"])
         self.cc._validate_options()
 
+    def test_positive_quantity_with_plus(self):
+        self.cc.main(["--auto", "--quantity", "+1"])
+        self.cc._validate_options()
+
+    def test_positive_quantity_as_float(self):
+        self._test_quantity_exception("2.0")
+
 
 class TestUnSubscribeCommand(TestCliProxyCommand):
     command_class = managercli.UnSubscribeCommand
