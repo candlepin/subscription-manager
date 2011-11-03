@@ -285,7 +285,8 @@ def deployProdCertificates(subscribedChannels):
     productDir = ProductDirectory()
     for cert in applicableCerts:
         sourcepath = "/usr/share/rhsm/product/" + release + "/" + cert
-        destinationpath = str(productDir) + "/" + cert
+        truncated_cert_name = cert.split('-')[-1]
+        destinationpath = str(productDir) + "/" + truncated_cert_name
         log.info("cp %s %s ", sourcepath, destinationpath)
         shutil.copy2(sourcepath, destinationpath)
     print "\nProduct Certificates copied successfully to %s !!" % str(productDir)
