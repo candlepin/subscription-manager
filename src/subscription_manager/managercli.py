@@ -1216,10 +1216,19 @@ class ListCommand(CliCommand):
         if not (self.options.available or self.options.consumed):
             self.options.installed = True
 
+    def _none_wrap(self, template_str, *args):
+      arglist = []
+      for arg in args:
+        if not arg:
+          arg = _("None")
+        arglist.append(arg)
+      return template_str % tuple(arglist)
+
     def _do_command(self):
         """
         Executes the command.
         """
+
 
         self._validate_options()
 
@@ -1233,10 +1242,9 @@ class ListCommand(CliCommand):
             print "+-------------------------------------------+"
             for product in iproducts:
                 status = status_map[product[3]]
-                # this should probably really be a dict, and a template string
-                print constants.installed_product_status % (product[0], product[1],
-                                                            product[2], status,
-                                                            product[4], product[5])
+                print self._none_wrap(constants.installed_product_status, product[0],
+                                product[1], product[2], status, product[4],
+                                product[5])
 
         if self.options.available:
             consumer = check_registration()['uuid']
@@ -1265,13 +1273,13 @@ class ListCommand(CliCommand):
                 else:
                     machine_type = _("physical")
 
-                print constants.available_subs_list % (product_name,
-                                                       data['productId'],
-                                                       data['id'],
-                                                       data['quantity'],
-                                                       data['multi-entitlement'],
-                                                       data['endDate'],
-                                                       machine_type)
+                print self._none_wrap(constants.available_subs_list, product_name,
+                                                               data['productId'],
+                                                               data['id'],
+                                                               data['quantity'],
+                                                               data['multi-entitlement'],
+                                                               data['endDate'],
+                                                               machine_type)
 
         if self.options.consumed:
             cpents = managerlib.getConsumedProductEntitlements()
@@ -1280,7 +1288,10 @@ class ListCommand(CliCommand):
                 sys.exit(0)
             print """+-------------------------------------------+\n    %s\n+-------------------------------------------+\n""" % _("Consumed Product Subscriptions")
             for product in cpents:
-                print constants.consumed_subs_list % product
+                print self._none_wrap(constants.consumed_subs_list, product[0], product[1],
+                                                              product[2], product[3],
+                                                              product[4], product[5],
+                                                              product[6])
 
     def _format_name(self, name, indent, max_length):
         """

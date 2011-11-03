@@ -122,6 +122,11 @@ class TestListCommand(TestCliProxyCommand):
         self.max_length = 40
         TestCliProxyCommand.setUp(self)
 
+    def test_none_wrap(self):
+        listCommand = managercli.ListCommand()
+        result = listCommand._none_wrap('foo %s %s', 'doberman pinscher', None)
+        self.assertEquals(result, 'foo doberman pinscher None')
+
     def test_format_name_long(self):
         name = "This is a Really Long Name For A Product That We Do Not Want To See But Should Be Able To Deal With"
         formatted_name = self.cc._format_name(name, self.indent, self.max_length)
