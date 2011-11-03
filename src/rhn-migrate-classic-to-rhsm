@@ -24,6 +24,7 @@ import re
 import shutil
 import logging
 import traceback
+from rhsm.connection import UEPConnection, RestlibException
 
 # quick check to see if you are a super-user.
 if os.getuid() != 0:
@@ -45,9 +46,10 @@ from optparse import Option, OptionParser
 options_table = [
     Option("-f", "--force", action="store_true", default=False, help="Ignore Channels not available on RHSM"),
     Option("-c", "--cli-only",  action="store_true", default=False, dest='clionly', help="Don't launch the GUI tool to subscribe the system, just use the CLI tool which will do it automatically"),
+    Option("-n", "--no-auto",  action="store_true", default=False, dest='noauto', help="Don't launch subscription manager at end of process."),
 ]
 
-parser = OptionParser(option_list=options_table, usage="%s [--force|--cli-only|--help]" % sys.argv[0])
+parser = OptionParser(option_list=options_table, usage="%s [--force|--cli-only|--help|--no-auto]" % sys.argv[0])
 (options, args) = parser.parse_args()
 
 # access the rhsm python libraries, read rhsm config file and setup logging
@@ -83,14 +85,20 @@ def systemExit(code, msgs=None):
 
 #################################################
 
-def checkOkToProceed():
+def checkOkToProceed(username, password):
     # check if this machine is already registered to Certicate-based RHN
     if ConsumerIdentity.existsAndValid():
         print "\nThis machine appears to be already registered to Certificate-based RHN.  Exiting."
 	consumer = ConsumerIdentity.read()
         systemExit(1, "\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details." % consumer.getConsumerId())
 
-    #TODO check if user is register to candlepin and RHN classic here.
+    cp = UEPConnection(username=username, password=password)
+
+    try:
+        cp.getOwnerList(username)
+    except rhsm.connection.RestlibException:
+        systemExit(1, 'Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for more details.')
+
 
 #################################################
 
@@ -324,7 +332,9 @@ def enableExtraChannels(subscribedChannels):
 #################################################
 
 def main():
-    checkOkToProceed()
+    username = raw_input("RHN Username: ").strip()
+    password = getpass.getpass()
+    checkOkToProceed(username, password)
 
     # get a list of RHN classic channels this machine is subscribed to
     print "\nRetrieving existing RHN classic subscription information ..."
@@ -338,13 +348,12 @@ def main():
     deployProdCertificates(subscribedChannels)
 
     print "\nPreparing to unregister system from RHN classic ..."
-    username = raw_input("RHN Username: ").strip()
-    password = getpass.getpass()
     unRegisterSystemFromRhnClassic(username, password)
 
     # register the system to Certificate-based RHN and consume a subscription
-    transferHttpProxySettings()
-    runSubscriptionManager(username, password)
+    if not options.noauto:
+        transferHttpProxySettings()
+        runSubscriptionManager(username, password)
 
     # check if we need to enable to supplementary/optional channels
     enableExtraChannels(subscribedChannels)
