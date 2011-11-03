@@ -405,6 +405,9 @@ class RepoFile(ConfigParser):
         s.append('# Certificate-Based Repositories')
         s.append('# Managed by (rhsm) subscription-manager')
         s.append('#')
+        s.append('# If this file is empty and this system is subscribed consider ')
+        s.append('# a "yum repolist" to refresh available repos')
+        s.append('#')
         f.write('\n'.join(s))
         f.close()
 
