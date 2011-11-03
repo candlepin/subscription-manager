@@ -92,6 +92,13 @@ def checkOkToProceed(username, password):
 	consumer = ConsumerIdentity.read()
         systemExit(1, "\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details." % consumer.getConsumerId())
 
+    # Check to make sure we're hooked up to Hosted.
+    serverURL = rhncfg['serverURL']
+    if not re.search('xmlrpc\.rhn\..*redhat\.com', serverURL):
+        log.info("serverURL = %s" % serverURL)
+        systemExit(1, "This migration script requires the system to be registered to RHN Hosted Classic.\nHowever this system appears to be registered to '%s'.\nExiting." % serverURL.split('/')[2])
+
+    # Check to make sure we can connect to the certificate server.
     cp = UEPConnection(username=username, password=password)
 
     try:
