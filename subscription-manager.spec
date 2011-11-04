@@ -163,6 +163,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %attr(755,root,root) %{_datadir}/rhsm/subscription_manager/certmgr.py*
 %attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
+%attr(755,root,root) %{_sbindir}/install-num-migrate-to-rhsm
 %attr(755,root,root) %{_sbindir}/subscription-manager
 %attr(755,root,root) %{_bindir}/subscription-manager
 %attr(755,root,root) %{_bindir}/rhsmcertd

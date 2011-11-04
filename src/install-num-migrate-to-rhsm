@@ -1,0 +1,57 @@
+#!/usr/bin/python
+import os
+import platform
+import sys
+import optparse
+import glob
+import shutil
+from instnum import InstallationNumber
+
+PRODUCT_CERT_DIR = '/etc/pki/product/'
+
+parser = optparse.OptionParser()
+parser.add_option('-i', '--instnumber', help='Install number to run against')
+parser.add_option('-d', '--dryrun', action="store_true", default=False, help='Only print the files which would be copied over')
+(options, args) = parser.parse_args()
+
+def getRelease():
+    f = open('/etc/redhat-release')
+    lines = f.readlines()
+    f.close()
+    release = "RHEL-" + str(lines).split(' ')[6]
+    return release
+
+if __name__ == '__main__':
+    #quick check to see if you are a super-user.
+    if os.getuid() != 0:
+        print "Must be root user to execute\n"
+        sys.exit(8)
+
+    #get the instnum
+    instnumber = options.instnumber
+    if not instnumber:
+        f = open('/etc/sysconfig/rhn/install-num', 'r')
+        instnumber = f.readline()
+        f.close()
+    
+    #parse the instnum
+    instnum = InstallationNumber(instnumber)
+    dict = instnum.get_repos_dict()
+
+    sourcepath = "/usr/share/rhsm/product/" + getRelease()
+    globs = []
+    #generate globs to potentially match the name of the certs under sourcepath
+    for key in dict.keys():
+        globs.append(dict['Base'] + '-' + dict[key] + '-' + platform.machine() + '*')
+
+    files = [glob.glob(sourcepath + '/' + x) for x in globs]
+    
+    #flatten the list of lists
+    files = [item for sublist in files for item in sublist]
+    
+    for file in files:
+        dest_file = file.split('-')[-1]
+        dest_file = PRODUCT_CERT_DIR + dest_file
+        print "Copying %s to %s" % (file, dest_file)
+        if not options.dryrun:
+            shutil.copyfile(file, dest_file)

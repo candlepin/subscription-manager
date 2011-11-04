@@ -115,6 +115,7 @@ install-files: dbus-service-install compile-po desktop-files
 	ln -sf  /usr/share/${INSTALL_MODULE}/${PKGNAME}/gui/data/icons/scalable/subscription-manager.svg ${PREFIX}/${INSTALL_DIR}/icons/hicolor/scalable/apps/
 	install src/subscription-manager ${PREFIX}/usr/sbin
 	install src/rhn-migrate-classic-to-rhsm  ${PREFIX}/usr/sbin
+	install src/install-num-migrate-to-rhsm ${PREFIX}/usr/sbin
 	install src/subscription-manager-gui ${PREFIX}/usr/sbin
 	install bin/* ${PREFIX}/usr/bin
 	install src/rhsmcertd.init.d ${PREFIX}/etc/rc.d/init.d/rhsmcertd
