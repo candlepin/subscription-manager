@@ -123,33 +123,6 @@ def getInstalledProductHashMap():
     return phash
 
 
-def getConsumedProductEntitlements():
-    """
-     Gets the list of available products with entitlements based on
-      its subscription cert
-    """
-    consumed_products = []
-
-    def append_consumed_product(cert, product):
-        consumed_products.append((product.getName(), cert.getOrder().getContract(),
-            cert.getOrder().getAccountNumber(), cert.serialNumber(),
-            cert.valid(), cert.getOrder().getQuantityUsed(),
-            formatDate(cert.validRange().begin()),
-            formatDate(cert.validRange().end())))
-
-    entdir = certdirectory.EntitlementDirectory()
-    for cert in entdir.listValid():
-        eproducts = cert.getProducts()
-        #for entitlement certificates with no product data,
-        #use Order's details.
-        if len(eproducts) == 0:
-            append_consumed_product(cert, cert.getOrder())
-        else:
-            for product in eproducts:
-                append_consumed_product(cert, product)
-    return consumed_products
-
-
 class CertificateFetchError(Exception):
     def __init__(self, errors):
         self.errors = errors

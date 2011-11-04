@@ -6,7 +6,8 @@ import socket
 import stubs
 
 from subscription_manager import managercli
-from stubs import MockStdout, MockStderr, StubProductDirectory, StubEntitlementDirectory
+from stubs import MockStdout, MockStderr, StubProductDirectory, \
+        StubEntitlementDirectory, StubEntitlementCertificate, StubProduct
 from test_handle_gui_exception import FakeException, FakeLogger
 
 
@@ -138,6 +139,26 @@ class TestListCommand(TestCliProxyCommand):
     def test_format_name_empty(self):
         name = 'e'
         formatted_name = self.cc._format_name(name, self.indent, self.max_length)
+
+    def test_print_consumed_no_ents(self):
+        ent_dir = StubEntitlementDirectory([])
+        try:
+            self.cc.print_consumed(ent_dir)
+            fail("Should have exited.")
+        except SystemExit, e:
+            pass
+
+    def test_print_consumed_one_ent_one_product(self):
+        product = StubProduct("product1")
+        ent_dir = StubEntitlementDirectory([
+            StubEntitlementCertificate(product)])
+        self.cc.print_consumed(ent_dir)
+
+    def test_print_consumed_one_ent_no_product(self):
+        ent_dir = StubEntitlementDirectory([
+            StubEntitlementCertificate(product=None)])
+        self.cc.print_consumed(ent_dir)
+
 
 class TestUnRegisterCommand(TestCliProxyCommand):
     command_class = managercli.UnRegisterCommand

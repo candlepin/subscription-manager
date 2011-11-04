@@ -52,24 +52,6 @@ available_subs_list = \
     _("MachineType:          \t%-25s") + \
     "\n"
 
-consumed_subs_list = \
-    _("ProductName:          \t%-25s") + \
-    "\n" + \
-    _("ContractNumber:       \t%-25s") + \
-    "\n" + \
-    _("AccountNumber:        \t%-25s") + \
-    "\n" + \
-    _("SerialNumber:         \t%-25s") + \
-    "\n" + \
-    _("Active:               \t%-25s") + \
-    "\n" + \
-    _("QuantityUsed:         \t%-25s") + \
-    "\n" + \
-    _("Begins:               \t%-25s") + \
-    "\n" + \
-    _("Expires:              \t%-25s") + \
-    "\n"
-
 repos_list = \
     _("RepoName:             \t%-25s") + \
     "\n" + \

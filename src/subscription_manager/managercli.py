@@ -62,6 +62,26 @@ STATUS_MAP = {
         PARTIALLY_SUBSCRIBED: _("Partially Subscribed")
 }
 
+CONSUMED_SUBS_LIST = \
+    _("ProductName:          \t%-25s") + \
+    "\n" + \
+    _("ContractNumber:       \t%-25s") + \
+    "\n" + \
+    _("AccountNumber:        \t%-25s") + \
+    "\n" + \
+    _("SerialNumber:         \t%-25s") + \
+    "\n" + \
+    _("Active:               \t%-25s") + \
+    "\n" + \
+    _("QuantityUsed:         \t%-25s") + \
+    "\n" + \
+    _("Begins:               \t%-25s") + \
+    "\n" + \
+    _("Expires:              \t%-25s") + \
+    "\n"
+
+
+
 
 def handle_exception(msg, ex):
 
@@ -1294,16 +1314,41 @@ class ListCommand(CliCommand):
                                                                machine_type)
 
         if self.options.consumed:
-            cpents = managerlib.getConsumedProductEntitlements()
-            if not len(cpents):
-                print(_("No Consumed subscription pools to list"))
-                sys.exit(0)
-            print """+-------------------------------------------+\n    %s\n+-------------------------------------------+\n""" % _("Consumed Product Subscriptions")
-            for product in cpents:
-                print self._none_wrap(constants.consumed_subs_list, product[0], product[1],
-                                                              product[2], product[3],
-                                                              product[4], product[5],
-                                                              product[6])
+            self.print_consumed()
+
+    def print_consumed(self, ent_dir=None):
+        if ent_dir is None:
+            ent_dir = EntitlementDirectory()
+        if not len(ent_dir.listValid()):
+            print(_("No Consumed subscription pools to list"))
+            sys.exit(0)
+
+        print """+-------------------------------------------+\n    %s\n+-------------------------------------------+\n""" % _("Consumed Product Subscriptions")
+
+        for cert in ent_dir.listValid():
+            eproducts = cert.getProducts()
+            # Use order details for entitlement certificates with no product data:
+            if len(eproducts) == 0:
+                print self._none_wrap(CONSUMED_SUBS_LIST,
+                        cert.getOrder().getName(),
+                        cert.getOrder().getContract(),
+                        cert.getOrder().getAccountNumber(),
+                        cert.serialNumber(),
+                        cert.valid(),
+                        cert.getOrder().getQuantityUsed(),
+                        managerlib.formatDate(cert.validRange().begin()),
+                        managerlib.formatDate(cert.validRange().end()))
+            else:
+                for product in eproducts:
+                    print self._none_wrap(CONSUMED_SUBS_LIST,
+                            product.getName(),
+                            cert.getOrder().getContract(),
+                            cert.getOrder().getAccountNumber(),
+                            cert.serialNumber(),
+                            cert.valid(),
+                            cert.getOrder().getQuantityUsed(),
+                            managerlib.formatDate(cert.validRange().begin()),
+                            managerlib.formatDate(cert.validRange().end()))
 
     def _format_name(self, name, indent, max_length):
         """
