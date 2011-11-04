@@ -249,7 +249,7 @@ class InstalledProductStatusTests(unittest.TestCase):
                 StubProductCertificate(product)])
 
         mock_sorter_instance = mock_sorter.return_value
-        mock_sorter_instance.partially_valid_products = {'foo'}
+        mock_sorter_instance.partially_valid_products = {'foo': 'blah'}
         mock_sorter_instance.unentitled_products =  {}
         mock_sorter_instance.expired_products =  {}
         mock_sorter_instance.partial_stacks =  {}
@@ -277,7 +277,7 @@ class InstalledProductStatusTests(unittest.TestCase):
                 StubProductCertificate(product)])
 
         mock_sorter_instance = mock_sorter.return_value
-        mock_sorter_instance.partially_valid_products = {'foo'}
+        mock_sorter_instance.partially_valid_products = {'foo': 'blah'}
         mock_sorter_instance.unentitled_products =  {'bar'}
         mock_sorter_instance.expired_products =  {}
         mock_sorter_instance.partial_stacks =  {}
