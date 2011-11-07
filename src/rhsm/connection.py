@@ -415,7 +415,8 @@ class UEPConnection:
         if environment:
             url = "/environments/%s/consumers" % self.sanitize(environment)
         elif owner:
-            url = "%s?owner=%s" % (url, owner)
+            query_param = urlencode({"owner": owner})
+            url = "%s?%s" % (url, query_param)
             prepend = ""
             if keys:
                 url = url + "&activation_keys="
