@@ -199,6 +199,7 @@ po/POTFILES.in:
 	# file per line, but we're lazy.
 	find ${SRC_DIR}/ -name "*.py" > po/POTFILES.in
 	find ${SRC_DIR}/gui/data/ -name "*.glade" >> po/POTFILES.in
+	find src/ -name "*-to-rhsm" >> po/POTFILES.in
 	find src/ -name "*.c" >> po/POTFILES.in
 	find etc-conf/ -name "*.desktop.in" >> po/POTFILES.in
 
