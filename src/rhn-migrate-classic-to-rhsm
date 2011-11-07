@@ -26,9 +26,12 @@ import logging
 import traceback
 from rhsm.connection import UEPConnection, RestlibException
 
+import gettext
+_ = gettext.gettext
+
 # quick check to see if you are a super-user.
 if os.getuid() != 0:
-    print "Must be root user to execute\n"
+    print _("Must be root user to execute\n")
     sys.exit(8)
 
 # access the rhn/up2date python libaries and read the up2date config file
@@ -44,9 +47,9 @@ rhncfg = up2date_client.config.initUp2dateConfig()
 
 from optparse import Option, OptionParser
 options_table = [
-    Option("-f", "--force", action="store_true", default=False, help="Ignore Channels not available on RHSM"),
-    Option("-c", "--cli-only",  action="store_true", default=False, dest='clionly', help="Don't launch the GUI tool to subscribe the system, just use the CLI tool which will do it automatically"),
-    Option("-n", "--no-auto",  action="store_true", default=False, dest='noauto', help="Don't launch subscription manager at end of process."),
+    Option("-f", "--force", action="store_true", default=False, help=_("Ignore Channels not available on RHSM")),
+    Option("-c", "--cli-only",  action="store_true", default=False, dest='clionly', help=_("Don't launch the GUI tool to subscribe the system, just use the CLI tool which will do it automatically")),
+    Option("-n", "--no-auto",  action="store_true", default=False, dest='noauto', help=_("Don't launch subscription manager at end of process.")),
 ]
 
 parser = OptionParser(option_list=options_table, usage="%s [--force|--cli-only|--help|--no-auto]" % sys.argv[0])
@@ -88,15 +91,15 @@ def systemExit(code, msgs=None):
 def checkOkToProceed(username, password):
     # check if this machine is already registered to Certicate-based RHN
     if ConsumerIdentity.existsAndValid():
-        print "\nThis machine appears to be already registered to Certificate-based RHN.  Exiting."
+        print _("\nThis machine appears to be already registered to Certificate-based RHN.  Exiting.")
 	consumer = ConsumerIdentity.read()
-        systemExit(1, "\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details." % consumer.getConsumerId())
+        systemExit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % consumer.getConsumerId())
 
     # Check to make sure we're hooked up to Hosted.
     serverURL = rhncfg['serverURL']
     if not re.search('xmlrpc\.rhn\..*redhat\.com', serverURL):
         log.info("serverURL = %s" % serverURL)
-        systemExit(1, "This migration script requires the system to be registered to RHN Hosted Classic.\nHowever this system appears to be registered to '%s'.\nExiting." % serverURL.split('/')[2])
+        systemExit(1, _("This migration script requires the system to be registered to RHN Hosted Classic.\nHowever this system appears to be registered to '%s'.\nExiting.") % serverURL.split('/')[2])
 
     # Check to make sure we can connect to the certificate server.
     cp = UEPConnection(username=username, password=password)
@@ -104,7 +107,7 @@ def checkOkToProceed(username, password):
     try:
         cp.getOwnerList(username)
     except rhsm.connection.RestlibException:
-        systemExit(1, 'Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for more details.')
+        systemExit(1, _('Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for more details.'))
 
 
 #################################################
@@ -113,12 +116,12 @@ def getSubscribedChannelsList():
     try:
         subscribedChannels = map(lambda x: x['label'], getChannels().channels())
     except up2dateErrors.NoChannelsError:
-        systemExit(1, 'This system is not associated with any channel.')
+        systemExit(1, _('This system is not associated with any channel.'))
     except up2dateErrors.NoSystemIdError:
-        systemExit(1, 'Unable to locate SystemId file. Is this system registered?')
+        systemExit(1, _('Unable to locate SystemId file. Is this system registered?'))
     except:
 	log.error(traceback.format_exc())
-	systemExit(1, "Problem encountered getting the list of subscribed channels.  Exiting.")
+	systemExit(1, _("Problem encountered getting the list of subscribed channels.  Exiting."))
     return subscribedChannels
 
 #################################################
@@ -141,12 +144,12 @@ def unRegisterSystemFromRhnClassic(username, password):
 	    log.info("System %s deleted.  Removing systemid file and disabling rhnplugin.conf", systemId)
 	    os.remove(systemIdPath)
 	    disableYumRhnPlugin()
-	    print "System successfully unregistered from RHN Classic."
+	    print _("System successfully unregistered from RHN Classic.")
 	else:
-	    systemExit(1, "Unable to unregister system from RHN Classic.  Exiting.")
+	    systemExit(1, _("Unable to unregister system from RHN Classic.  Exiting."))
     except:
 	log.error(traceback.format_exc())
-	systemExit(1, "Problem encountered unregistering system from RHN Classic.  Exiting.")
+	systemExit(1, _("Problem encountered unregistering system from RHN Classic.  Exiting."))
 
 #################################################
 
@@ -180,7 +183,7 @@ def readChannelCertMapping():
     release = getRelease()
     supportedReleases = ['RHEL-5.7']
     if release not in supportedReleases:
-        print "Error: Current release " + release + " is not supported for migration to Red Hat Subscription Manager."
+        print _("Error: Current release " + release + " is not supported for migration to Red Hat Subscription Manager.")
         sys.exit(1)
     mappingfile = "/usr/share/rhsm/product/" + release + "/channel-cert-mapping.txt"
     log.info("Using mapping file %s", mappingfile)
@@ -212,26 +215,26 @@ def transferHttpProxySettings():
 
 def runSubscriptionManager(username, password):
     # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
-    print "\nAttempting to register system to Certificate-based RHN ..."
+    print _("\nAttempting to register system to Certificate-based RHN ...")
     result = subprocess.call(['subscription-manager', 'register', '--username=' + username, '--password=' + password])
     if result != 0:
-        systemExit(2, "\nUnable to register.\nFor further assistance, please contact Red Hat Global Support Services.")
+        systemExit(2, _("\nUnable to register.\nFor further assistance, please contact Red Hat Global Support Services."))
     else:
         consumer = ConsumerIdentity.read()
-        print "System '%s' successfully registered to Certificate-based RHN.\n" % consumer.getConsumerName()
+        print _("System '%s' successfully registered to Certificate-based RHN.\n") % consumer.getConsumerName()
 
     # For subscribing, use the GUI tool if the DISPLAY environment variable is set and the gui tool exists
     if os.getenv('DISPLAY') and os.path.exists('/usr/bin/subscription-manager-gui') and not options.clionly:
-        print "Launching the GUI tool to manually subscribe the system ..."
+        print _("Launching the GUI tool to manually subscribe the system ...")
         result = subprocess.call(['subscription-manager-gui'], stderr=open(os.devnull, 'w'))
     else:
-        print "Attempting to auto-subscribe to appropriate subscriptions ..."
+        print _("Attempting to auto-subscribe to appropriate subscriptions ...")
         result = subprocess.call(['subscription-manager', 'subscribe', '--auto'])
         if result != 0:
-            print "\nUnable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?"
+            print _("\nUnable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?")
         else:
-            print "Successfully subscribed."
-    print "\nPlease visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary." % consumer.getConsumerId()
+            print _("Successfully subscribed.")
+    print _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary.") % consumer.getConsumerId()
 
 #################################################
 
@@ -254,27 +257,27 @@ def deployProdCertificates(subscribedChannels):
                 invalidRhsmChannels.append(channel)
                 log.info("%s None", channel)
         except:
-            print "\nUnrecognized Channel. Mapping not found !!!"
+            print _("\nUnrecognized Channel. Mapping not found !!!")
             unrecognizedChannels.append(channel)
 
     if invalidRhsmChannels:
         print "\n+--------------------------------------------------+"
-        print "Below mentioned channels are NOT available on RHSM"
+        print _("Below mentioned channels are NOT available on RHSM")
         print "+--------------------------------------------------+"
         for i in invalidRhsmChannels:
             print i
         if not options.force:
-            print "\nUse --force to ignore these channels and continue the migration.\n"
+            print _("\nUse --force to ignore these channels and continue the migration.\n")
             sys.exit(1)
 
     log.info("certs to be copied: %s", applicableCerts)
 
-    print "\nList of channels for which certs are being copied"
+    print _("\nList of channels for which certs are being copied")
     for i in validRhsmChannels:
         print i
 
     if unrecognizedChannels:
-        print "\nUnrecognized channels. Channel to Product Certificate mapping missing for these channels."
+        print _("\nUnrecognized channels. Channel to Product Certificate mapping missing for these channels.")
         for i in unrecognizedChannels:
             print i
         sys.exit(1)
@@ -289,7 +292,7 @@ def deployProdCertificates(subscribedChannels):
         destinationpath = str(productDir) + "/" + truncated_cert_name
         log.info("cp %s %s ", sourcepath, destinationpath)
         shutil.copy2(sourcepath, destinationpath)
-    print "\nProduct Certificates copied successfully to %s !!" % str(productDir)
+    print _("\nProduct Certificates copied successfully to %s !!") % str(productDir)
 
 #################################################
 
@@ -340,22 +343,22 @@ def enableExtraChannels(subscribedChannels):
 #################################################
 
 def main():
-    username = raw_input("RHN Username: ").strip()
+    username = raw_input(_("RHN Username: ")).strip()
     password = getpass.getpass()
     checkOkToProceed(username, password)
 
     # get a list of RHN classic channels this machine is subscribed to
-    print "\nRetrieving existing RHN classic subscription information ..."
+    print _("\nRetrieving existing RHN classic subscription information ...")
     subscribedChannels = getSubscribedChannelsList()
     print "+----------------------------------+"
-    print "System is currently subscribed to:"
+    print _("System is currently subscribed to:")
     print "+----------------------------------+"
     for channel in subscribedChannels:
         print channel
 
     deployProdCertificates(subscribedChannels)
 
-    print "\nPreparing to unregister system from RHN classic ..."
+    print _("\nPreparing to unregister system from RHN classic ...")
     unRegisterSystemFromRhnClassic(username, password)
 
     # register the system to Certificate-based RHN and consume a subscription

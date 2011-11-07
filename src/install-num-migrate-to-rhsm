@@ -7,11 +7,14 @@ import glob
 import shutil
 from instnum import InstallationNumber
 
+import gettext
+_ = gettext.gettext
+
 PRODUCT_CERT_DIR = '/etc/pki/product/'
 
 parser = optparse.OptionParser()
-parser.add_option('-i', '--instnumber', help='Install number to run against')
-parser.add_option('-d', '--dryrun', action="store_true", default=False, help='Only print the files which would be copied over')
+parser.add_option('-i', '--instnumber', help=_('Install number to run against'))
+parser.add_option('-d', '--dryrun', action="store_true", default=False, help=_('Only print the files which would be copied over'))
 (options, args) = parser.parse_args()
 
 def getRelease():
@@ -24,7 +27,7 @@ def getRelease():
 if __name__ == '__main__':
     #quick check to see if you are a super-user.
     if os.getuid() != 0:
-        print "Must be root user to execute\n"
+        print _("Must be root user to execute\n")
         sys.exit(8)
 
     #get the instnum
@@ -52,6 +55,6 @@ if __name__ == '__main__':
     for file in files:
         dest_file = file.split('-')[-1]
         dest_file = PRODUCT_CERT_DIR + dest_file
-        print "Copying %s to %s" % (file, dest_file)
+        print _("Copying %s to %s") % (file, dest_file)
         if not options.dryrun:
             shutil.copyfile(file, dest_file)
