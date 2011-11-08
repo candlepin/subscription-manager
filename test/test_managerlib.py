@@ -24,7 +24,7 @@ from stubs import StubCertificateDirectory, StubProductCertificate, StubProduct,
 from subscription_manager.facts import Facts
 from subscription_manager.managerlib import merge_pools, PoolFilter, getInstalledProductStatus, \
     LocalTz, parseDate, merge_pools, MergedPoolsStackingGroupSorter
-from modelhelpers import *
+from modelhelpers import create_pool, create_attribute_list
 from subscription_manager import managerlib
 import stubs
 import rhsm
@@ -314,7 +314,7 @@ class InstalledProductStatusTests(unittest.TestCase):
             StubProductCertificate(product)])
         entitlement_directory = StubCertificateDirectory([
             StubEntitlementCertificate(product,
-                end_date=(datetime.now() - timedelta(days=2)))])
+                end_date=(datetime.datetime.now() - datetime.timedelta(days=2)))])
 
         product_status = getInstalledProductStatus(product_directory,
                 entitlement_directory)
@@ -340,7 +340,7 @@ class InstalledProductStatusTests(unittest.TestCase):
                 StubProductCertificate(product)])
         entitlement_directory = StubCertificateDirectory([
                 StubEntitlementCertificate(product,
-                    start_date=(datetime.now() + timedelta(days=1365)))])
+                    start_date=(datetime.datetime.now() + datetime.timedelta(days=1365)))])
 
         product_status = getInstalledProductStatus(product_directory,
                                                    entitlement_directory)
@@ -408,32 +408,89 @@ class InstalledProductStatusTests(unittest.TestCase):
 
 
 class TestParseDate(unittest.TestCase):
-    def test_now_local_tz(self):
+    def _test_local_tz(self, epoch):
         tz = LocalTz()
-        epoch = time.time()
-        dt_no_tz = datetime.fromtimestamp(epoch)
-        dt = datetime.fromtimestamp(epoch, tz=tz)
-        parseDate(dt.isoformat())
+        dt_no_tz = datetime.datetime.fromtimestamp(epoch)
+        now_dt = datetime.datetime.fromtimestamp(epoch, tz=tz)
+        parseDate(now_dt.isoformat())
         # last member is is_dst, which is -1, if there is no tzinfo, which
         # we expect for dt_no_tz
         #
         # see if we get the same times
-        self.assertEquals(dt.timetuple()[:7], dt_no_tz.timetuple()[:7])
-#        self.assertEquals(dt.isoformat(), dt_no_tz.isoformat())
+        now_dt_tt = now_dt.timetuple()
+        dt_no_tz_tt = dt_no_tz.timetuple()
+
+        # tm_isdst (timpletuple()[8]) is 0 if a tz is set, 
+        # but the dst offset is 0
+        # if it is -1, no timezone is set
+        if now_dt_tt[8] == 1:
+            # we are applying DST to now time, but not no_tz time, so
+            # they will be off by an hour. This is kind of weird
+            self.assertEquals(now_dt_tt[:2], dt_no_tz_tt[:2])
+            self.assertEquals(now_dt_tt[4:7], dt_no_tz_tt[4:7])
+
+            # add an hour for comparisons
+            dt_no_tz_dst = dt_no_tz + datetime.timedelta(hours=1)
+            self.assertEquals(now_dt_tt[3], dt_no_tz_dst.timetuple()[3])
+        else:
+            self.assertEquals(now_dt_tt[:7], dt_no_tz_tt[:7])
+
+    def test_local_tz_now(self):
+        epoch = time.time()
+        self._test_local_tz(epoch)
+
+    def test_local_tz_not_dst(self):
+        epoch = time.time()
+        time.daylight = 0
+        self._test_local_tz(epoch)
+
+    def test_local_tz_dst(self):
+        epoch = time.time()
+        time.daylight = 1
+        self._test_local_tz(epoch)
 
     def test_server_date_utc_timezone(self):
         # sample date from json response from server
         server_date = "2012-04-10T00:00:00.000+0000"
         dt = parseDate(server_date)
         # no dst
-        self.assertEquals(timedelta(seconds=0), dt.tzinfo.dst(dt))
+        self.assertEquals(datetime.timedelta(seconds=0), dt.tzinfo.dst(dt))
         # it's a utc date, no offset
-        self.assertEquals(timedelta(seconds=0), dt.tzinfo.utcoffset(dt))
+        self.assertEquals(datetime.timedelta(seconds=0), dt.tzinfo.utcoffset(dt))
 
     def test_server_date_est_timezone(self):
         est_date = "2012-04-10T00:00:00.000-04:00"
         dt = parseDate(est_date)
-        self.assertEquals(timedelta(hours=4), dt.tzinfo.utcoffset(dt))
+        self.assertEquals(datetime.timedelta(hours=4), dt.tzinfo.utcoffset(dt))
+
+
+# http://docs.python.org/library/datetime.html
+# trying to verify the behaviour for dst() there
+class TestLocalTz(unittest.TestCase):
+    def _testDst(self):
+        tz = LocalTz()
+        epoch = time.time()
+        now_dt = datetime.datetime.fromtimestamp(epoch, tz=tz)
+        diff_now = tz.utcoffset(now_dt) - tz.dst(now_dt)
+        td = datetime.timedelta(weeks=26)
+        dt = now_dt + td
+
+        diff_six_months = tz.utcoffset(dt) - tz.dst(dt)
+
+        week_ago_dt = dt - datetime.timedelta(weeks=4)
+        diff_week_ago = tz.utcoffset(week_ago_dt) - tz.dst(week_ago_dt)
+
+        print diff_now, diff_six_months, diff_week_ago
+        self.assertEquals(diff_now, diff_six_months)
+        self.assertEquals(diff_six_months, diff_week_ago)
+
+    def testDst(self):
+        time.daylight = 1
+        self._testDst()
+
+    def testNoDst(self):
+        time.daylight = 0
+        self._testDst()
 
 
 class MockLog:
