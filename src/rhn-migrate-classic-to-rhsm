@@ -25,6 +25,7 @@ import simplejson as json
 import shutil
 import logging
 import traceback
+import libxml2
 from rhsm.connection import UEPConnection, RestlibException
 
 import gettext
@@ -344,12 +345,22 @@ def enableExtraChannels(subscribedChannels):
 #################################################
 
 def writeMigrationFacts():
-    FACT_FILE = "/etc/rhsm/facts/migration.json"
+    FACT_FILE = "/etc/rhsm/facts/migration.facts"
     if not os.path.exists(FACT_FILE):
         f = open(FACT_FILE, 'w')
-        json.dump({"migrated_from" : "rhn_hosted_classic"}, f)
-        f.close()
 
+        doc = libxml2.parseFile("/etc/sysconfig/rhn/systemid")
+        context = doc.xpathNewContext()
+        results = context.xpathEval("/params/param/value/struct/member")
+        for n in results:
+            if n.xpathEval("name")[0].content == 'system_id':
+                system_id = n.xpathEval("value/string")[0].content
+        doc.freeDoc()
+        context.xpathFreeContext()
+
+        json.dump({"migration.classic_system_id" : system_id,
+                   "migration.migrated_from" : "rhn_hosted_classic"}, f) 
+        f.close()
 #################################################
 
 def main():
@@ -368,6 +379,7 @@ def main():
 
     deployProdCertificates(subscribedChannels)
 
+    writeMigrationFacts()
     print _("\nPreparing to unregister system from RHN classic ...")
     unRegisterSystemFromRhnClassic(username, password)
 
@@ -378,7 +390,6 @@ def main():
 
     # check if we need to enable to supplementary/optional channels
     enableExtraChannels(subscribedChannels)
-    writeMigrationFacts()
 #################################################
 
 if __name__ == '__main__':
