@@ -120,17 +120,13 @@ def handle_exception(msg, ex):
         systemExit(-1, ex)
 
 
-def autosubscribe(cp, consumer, disable_product_upload=False):
+def autosubscribe(cp, consumer):
     """
     This is a wrapper for bind/bindByProduct. Eventually, we will exclusively
     use bind, but for now, we support both.
     """
     try:
-        if disable_product_upload:
-            cp.bind(consumer)  # new style
-        else:
-            products = managerlib.getInstalledProductHashMap()
-            cp.bindByProduct(consumer, products.values())
+        cp.bind(consumer)  # new style
 
     except Exception, e:
         log.warning("Error during auto-subscribe.")
@@ -666,7 +662,7 @@ class RegisterCommand(UserPassCommand):
                                            proxy_user=self.proxy_user,
                                            proxy_password=self.proxy_password)
         if self.options.autosubscribe:
-            autosubscribe(self.cp, consumer['uuid'], self.certlib)
+            autosubscribe(self.cp, consumer['uuid'])
         if (self.options.consumerid or self.options.activation_keys or
                 self.options.autosubscribe):
             self.certlib.update()
@@ -882,7 +878,7 @@ class SubscribeCommand(CliCommand):
                             systemExit(-1, re.msg)  # some other error.. don't try again
             # must be auto
             else:
-                autosubscribe(self.cp, consumer_uuid, disable_product_upload=True)
+                autosubscribe(self.cp, consumer_uuid)
 
             result = self.certlib.update()
             if result[1]:
