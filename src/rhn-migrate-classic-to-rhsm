@@ -21,6 +21,7 @@ import getpass
 import libxml2
 import subprocess
 import re
+import simplejson as json
 import shutil
 import logging
 import traceback
@@ -342,6 +343,15 @@ def enableExtraChannels(subscribedChannels):
 
 #################################################
 
+def writeMigrationFacts():
+    FACT_FILE = "/etc/rhsm/facts/migration.json"
+    if not os.path.exists(FACT_FILE):
+        f = open(FACT_FILE, 'w')
+        json.dump({"migrated_from" : "rhn_hosted_classic"}, f)
+        f.close()
+
+#################################################
+
 def main():
     username = raw_input(_("RHN Username: ")).strip()
     password = getpass.getpass()
@@ -368,7 +378,7 @@ def main():
 
     # check if we need to enable to supplementary/optional channels
     enableExtraChannels(subscribedChannels)
-		
+    writeMigrationFacts()
 #################################################
 
 if __name__ == '__main__':

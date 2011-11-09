@@ -5,6 +5,7 @@ import sys
 import optparse
 import glob
 import shutil
+import simplejson as json
 from instnum import InstallationNumber
 
 import gettext
@@ -23,6 +24,14 @@ def getRelease():
     f.close()
     release = "RHEL-" + str(lines).split(' ')[6]
     return release
+
+def writeMigrationFacts():
+    FACT_FILE = "/etc/rhsm/facts/migration.json"
+    if not os.path.exists(FACT_FILE):
+        f = open(FACT_FILE, 'w')
+        json.dump({"migrated_from" : "install_number"}, f)
+        f.close()
+
 
 if __name__ == '__main__':
     #quick check to see if you are a super-user.
@@ -58,3 +67,5 @@ if __name__ == '__main__':
         print _("Copying %s to %s") % (file, dest_file)
         if not options.dryrun:
             shutil.copyfile(file, dest_file)
+
+    writeMigrationFacts()
