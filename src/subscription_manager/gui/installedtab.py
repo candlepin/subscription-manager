@@ -288,11 +288,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def set_registered(self, is_registered):
         self.update_certificates_button.set_sensitive(is_registered)
-        if not is_registered:
-            self.update_certificates_button.set_tooltip_text(
-                    _("You must register first."))
-        else:
-            self.update_certificates_button.set_tooltip_text(None)
 
     def refresh(self):
         self._set_next_update()
