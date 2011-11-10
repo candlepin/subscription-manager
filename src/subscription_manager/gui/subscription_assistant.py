@@ -225,6 +225,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
         """
         try:
             self.window.show()
+            self.subscribe_button.set_sensitive(False)
             self._reload_screen()
         except Exception, e:
             handle_gui_exception(e, _("Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log for more information."),
@@ -397,6 +398,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
         state.
         """
         self.subscriptions_store.clear()
+        self.sub_details.clear()
 
         # this should be roughly correct for locally manager certs, needs
         # remote subs/pools as well
