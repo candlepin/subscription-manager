@@ -21,8 +21,9 @@ import shutil
 import syslog
 import time
 import xml.utils.iso8601
+import locale
 import logging
-from datetime import datetime, tzinfo, timedelta
+import datetime
 
 from rhsm.config import initConfig
 from rhsm.certificate import EntitlementCertificate, Key
@@ -674,6 +675,22 @@ class ImportFileExtractor(object):
         return "%s.pem" % (ent_cert.serialNumber())
 
 
+def find_date_picker_locale():
+    # this is a fairly terrible work around
+    # bz #744136 and #704069. Basically, we don't
+    # seem to be able to parse dates with time.strptime()
+    # in some locales, even if the date is exactly the
+    # string created by today.strftime("%x"). So we
+    # just set LC_TIME to en_GB which we can parse
+    try:
+        today = datetime.date.today()
+        dt = time.strptime(today.strftime("%x"), "%x")
+    except ValueError:
+        # we can't parse our own "preferred" date format
+        # for whatever reason, so let's use en_GB
+        return ('en_GB', 'UTF-8')
+    return locale.getlocale()
+
 def _sub_dict(datadict, subkeys, default=None):
     return dict([(k, datadict.get(k, default)) for k in subkeys])
 
@@ -704,7 +721,7 @@ def parseDate(date):
         log.warning("Date overflow: %s, using Jan 1 2038 instead." % date)
         posix_time = OVERFLOW_DATE
 
-    dt = datetime.fromtimestamp(posix_time, tz=server_tz)
+    dt = datetime.datetime.fromtimestamp(posix_time, tz=server_tz)
     return dt
 
 
@@ -715,22 +732,22 @@ def formatDate(dt):
         return ""
 
 
-class ServerTz(tzinfo):
+class ServerTz(datetime.tzinfo):
     """
     tzinfo object for the tz offset of the entitlement server
     """
 
     def __init__(self, offset):
-        self.__offset = timedelta(seconds=offset)
+        self.__offset = datetime.timedelta(seconds=offset)
 
     def utcoffset(self, dt):
         return self.__offset
 
     def dst(self, dt):
-        return timedelta(seconds=0)
+        return datetime.timedelta(seconds=0)
 
 
-class LocalTz(tzinfo):
+class LocalTz(datetime.tzinfo):
 
     """
     tzinfo object representing whatever this systems tz offset is.
@@ -738,13 +755,13 @@ class LocalTz(tzinfo):
 
     def utcoffset(self, dt):
         if time.daylight:
-            return timedelta(seconds=-time.altzone)
-        return timedelta(seconds=-time.timezone)
+            return datetime.timedelta(seconds=-time.altzone)
+        return datetime.timedelta(seconds=-time.timezone)
 
     def dst(self, dt):
         if time.daylight:
-            return timedelta(seconds=(time.timezone - time.altzone))
-        return timedelta(seconds=0)
+            return datetime.timedelta(seconds=(time.timezone - time.altzone))
+        return datetime.timedelta(seconds=0)
 
     def tzname(self, dt):
         if time.daylight:

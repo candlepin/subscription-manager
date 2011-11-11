@@ -19,6 +19,7 @@ import time
 import gobject
 import gtk
 import pango
+import locale
 
 import gettext
 _ = gettext.gettext
@@ -379,7 +380,15 @@ class DatePicker(gtk.HBox):
         self._date_entry.set_width_chars(14)
         # we could use managerlib.formatDate here, but since we are parsing
         # this, leave it alone
+
+        self.date_picker_locale = managerlib.find_date_picker_locale()
+
+        # unset locale if we can't parse it here
+        self.orig_locale = locale.getlocale(locale.LC_TIME)
+        locale.setlocale(locale.LC_TIME, self.date_picker_locale)
         self._date_entry.set_text(self._date.strftime("%x"))
+        locale.setlocale(locale.LC_TIME, self.orig_locale)
+
         atk_entry = self._date_entry.get_accessible()
         atk_entry.set_name('date-entry')
 
@@ -400,6 +409,8 @@ class DatePicker(gtk.HBox):
         self._date_entry.show()
         self._cal_button.show()
 
+
+
     @property
     def date(self):
         # if the selected date is today, set the time to be the current time.
@@ -414,8 +425,12 @@ class DatePicker(gtk.HBox):
         today = datetime.date.today()
         try:
             # doing it this ugly way for pre python 2.5
+            # wrap this in locale setting so we can potentially set the
+            # date format to one we know we can parse
+            locale.setlocale(locale.LC_TIME, self.date_picker_locale)
             date = datetime.datetime(
                     *(time.strptime(self._date_entry.get_text(), '%x')[0:6]))
+            locale.setlocale(locale.LC_ALL, self.orig_locale)
             self._date = datetime.datetime(date.year, date.month, date.day,
                     tzinfo=managerlib.LocalTz())
             self.emit('date-picked-text')
@@ -432,7 +447,10 @@ class DatePicker(gtk.HBox):
 
     def _date_update_cal(self, dummy=None):
         #set the text box to the date from the calendar
+        # but check to see what local we want the text in
+        locale.setlocale(locale.LC_TIME, self.date_picker_locale)
         self._date_entry.set_text(self._date.strftime("%x"))
+        locale.setlocale(locale.LC_ALL, self.orig_locale)
 
     def _date_update_text(self, dummy=None):
         #set the cal to the date from the text box
