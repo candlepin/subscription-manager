@@ -303,6 +303,8 @@ class SubDetailsWidget(GladeWidget):
 
     def _set(self, text_view, text):
         """Set the buffer of the given TextView to contain the text"""
+        if not text:
+          text = _("None")
         text_view.get_buffer().set_text(text)
 
     def clear(self):

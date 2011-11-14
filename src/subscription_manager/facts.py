@@ -127,16 +127,16 @@ class Facts(CacheManager):
         return facts
 
 
-    def _get_validity_facts(self, facts):
+    def _get_validity_facts(self, facts_dict):
         validity_facts = {'system.entitlements_valid': 'valid'}
         if not ClassicCheck().is_registered_with_classic():
             sorter = cert_sorter.CertSorter(self.product_dir,
-                                            self.entitlement_dir,
-                                            facts_dict=facts)
-            if (len(sorter.partially_valid_products) > 0):
+                    self.entitlement_dir, facts_dict)
+            if (len(sorter.partially_valid_products) > 0) or \
+                (len(sorter.partial_stacks) > 0):
                 validity_facts['system.entitlements_valid'] = 'partial'
 
-            if ((len(sorter.expired_entitlement_certs) +
+            if ((len(sorter.expired_products) +
                 len(sorter.unentitled_products)) > 0):
                 validity_facts['system.entitlements_valid'] = 'invalid'
 

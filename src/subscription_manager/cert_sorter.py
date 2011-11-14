@@ -21,13 +21,13 @@ log = logging.getLogger('rhsm-app.' + __name__)
 import gettext
 _ = gettext.gettext
 
-status_map = {"future_subscribed": _("Future Subscription"),
-              "subscribed": _("Subscribed"),
-              "not_subscribed": _("Not Subscribed"),
-              "expired": _("Expired"),
-              "partially_subscribed": _("Partially Subscribed")
-}
+FUTURE_SUBSCRIBED = "future_subscribed"
+SUBSCRIBED = "subscribed"
+NOT_SUBSCRIBED = "not_subscribed"
+EXPIRED = "expired"
+PARTIALLY_SUBSCRIBED = "partially_subscribed"
 
+SOCKET_FACT = 'cpu.cpu_socket(s)'
 
 class CertSorter(object):
     """
@@ -43,7 +43,7 @@ class CertSorter(object):
     The date can be used to examine the state this system will likely be in
     at some point in the future.
     """
-    def __init__(self, product_dir, entitlement_dir, on_date=None, facts_dict=None):
+    def __init__(self, product_dir, entitlement_dir, facts_dict, on_date=None):
         self.product_dir = product_dir
         self.entitlement_dir = entitlement_dir
         if not on_date:
@@ -52,51 +52,70 @@ class CertSorter(object):
 
         self.expired_entitlement_certs = []
         self.valid_entitlement_certs = []
-        self.future_entitlement_certs = []
 
         # All products installed on this machine, regardless of status. Maps
-        # product ID to certlib.Product object.
+        # installed product ID to product certificate.
         self.installed_products = {}
 
-        # the specific products that are not entitled in the above certs,
-        # dict maps product ID to product certificate.
+        # Installed products which do not have an entitlement that is valid,
+        # or expired. They may however have entitlements for the future.
+        # Maps installed product ID to the product certificate.
         self.unentitled_products = {}
 
-        # specific products which are installed, we're entitled, but have expired
-        # on the date in question. this must watch out for possibility some other
-        # entitlement certificate provides this product. Certificates which are
-        # within their grace period will appear in this dict. maps product ID
-        # to the expired entitlement certificate:
+        # Products which are installed, there are entitlements, but they have
+        # expired on the date in question. If another valid or partially valid
+        # entitlement provides the installed product, that product should not
+        # appear in this dict.
+        # Certificates which are within their grace period will appear in this dict.
+        # Maps product ID to the expired entitlement certificate:
         self.expired_products = {}
 
-        # products that are only partially entitled (aka, "yellow")
-        # WARNING: this is broken currently, see the TODO below where items are
-        # added to this hash.
+        # Products that are only partially entitled (aka, "yellow"). If another
+        # non-stacked entitlement is valid and provides the installed product,
+        # it will not appear in this dict.
+        # Maps installed product ID to the stacked entitlement certificates
+        # providing it.
         self.partially_valid_products = {}
 
-        # specific products which are installed, and entitled on the given date.
-        # maps product ID to a list of all valid entitlement certificates:
+        # Products which are installed, and entitled on the given date.
+        # Maps product ID to a list of all valid entitlement certificates:
         self.valid_products = {}
 
-        # products that we have entitlements for but no product cert for:
-        self.not_installed_products = {}
-
-        # do we need a future entitled list? we seem to use that
-        # in the gui TODO
+        # Products which are installed and entitled sometime in the future.
+        # Maps product ID to future entitlements.
         self.future_products = {}
 
+        # Maps stack ID to a list of the entitlement certs composing a
+        # partially valid stack:
+        self.partial_stacks = {}
+
+        # Maps stack ID to a list of the entitlement certs composing a
+        # valid stack:
+        self.valid_stacks = {}
+
         self.facts_dict = facts_dict
+
+        # Number of sockets on this system:
+        self.socket_count = 1
+        if SOCKET_FACT in self.facts_dict:
+            self.socket_count = int(self.facts_dict[SOCKET_FACT])
+        else:
+            log.warn("System has no socket fact, assuming 1.")
 
         log.debug("Sorting product and entitlement cert status for: %s" %
                 on_date)
 
-        self.refresh()
+        self._populate_installed_products()
+        self._scan_entitlement_certs()
+        self._scan_for_unentitled_products()
 
         log.debug("valid entitled products: %s" % self.valid_products.keys())
         log.debug("expired entitled products: %s" % self.expired_products.keys())
         log.debug("partially entitled products: %s" % self.partially_valid_products.keys())
         log.debug("unentitled products: %s" % self.unentitled_products.keys())
         log.debug("future products: %s" % self.future_products.keys())
+        log.debug("partial stacks: %s" % self.partial_stacks.keys())
+        log.debug("valid stacks: %s" % self.valid_stacks.keys())
 
     def is_valid(self):
         """
@@ -104,41 +123,29 @@ class CertSorter(object):
         entitlements are completely valid.
         """
         if self.partially_valid_products or self.expired_products or \
-                self.unentitled_products:
+                self.partial_stacks or self.unentitled_products:
             return False
 
         return True
 
-    def refresh(self):
-        refresh_dicts = [self.installed_products,
-                         self.unentitled_products,
-                         self.expired_products,
-                         self.partially_valid_products,
-                         self.valid_products,
-                         self.not_installed_products]
-
-        for d in refresh_dicts:
-            d.clear()
-
-        self._populate_installed_products()
-        self._scan_entitlement_certs()
-        self._scan_ent_cert_stackable_products()
-        self._scan_for_unentitled_products()
-        self._remove_expired_if_valid_elsewhere()
-
     def get_status(self, product_id):
         """Return the status of a given product"""
-        # TODO: magic strings below:
         if product_id in self.valid_products:
-            return "subscribed"
+            return SUBSCRIBED
         if product_id in self.future_products:
-            return "future_subscribed"
-        if product_id in self.unentitled_products:
-            return "not_subscribed"
+            return FUTURE_SUBSCRIBED
         if product_id in self.expired_products:
-            return "expired"
+            return EXPIRED
+        if product_id in self.unentitled_products:
+            return NOT_SUBSCRIBED
         if product_id in self.partially_valid_products:
-            return "partially_subscribed"
+            return PARTIALLY_SUBSCRIBED
+
+    # TODO: get_begin_date and get_end_date don't look right, I think
+    # we're showing earliest start date through last end date, without
+    # considering that we might be invalid somewhere in the
+    # middle. Figuring out how to show this on the CLI where this is used
+    # will not be easy.
 
     # find the display start date for this product id
     def get_begin_date(self, product_hash):
@@ -179,140 +186,128 @@ class CertSorter(object):
 
     # pass in list to update, like installed_products
     # keep duplicate lists for future dates, to find first_invalid
-    # see certlib.find_first_invalid_date
+    # see validity.find_first_invalid_date
     def _scan_entitlement_certs(self):
+        """
+        Main method used to scan all entitlement certs on the machine, and
+        sort them into the appropriate lists.
+
+        Iterates all entitlement certs once, plus an single additional pass for
+        each unique stack ID found.
+        """
         ent_certs = self.entitlement_dir.list()
 
         for ent_cert in ent_certs:
-            now = self.on_date
-            if ent_cert.validRange().begin() > now:
-                self.future_entitlement_certs.append(ent_cert)
-                self._scan_ent_cert_products(ent_cert, self.future_products)
+            log.debug("Checking certificate: %s" % ent_cert.serial)
+
+
+            # If the entitlement starts after the date we're checking, we
+            # consider this a future entitlement. Technically it could be
+            # partially stacked on that date, but we cannot determine that
+            # without recursively cert sorting again on that date.
+            if ent_cert.validRange().begin() > self.on_date:
+                log.debug("  future entitled: %s" % ent_cert.validRange().begin())
+                self._add_products_to_hash(ent_cert, self.future_products)
+
+            # Check if entitlement has already expired:
+            elif ent_cert.validRange().end() < self.on_date:
+                log.debug("  expired: %s" % ent_cert.validRange().end())
+                self.expired_entitlement_certs.append(ent_cert)
+                self._add_products_to_hash(ent_cert, self.expired_products)
+
+            # Current entitlements:
             elif ent_cert.valid(on_date=self.on_date):
                 self.valid_entitlement_certs.append(ent_cert)
-                self._scan_ent_cert_products(ent_cert, self.valid_products,
-                                             self.not_installed_products)
-            else:
-                self.expired_entitlement_certs.append(ent_cert)
-                log.debug("expired:")
-                if ent_cert.getProduct():
-                    log.debug(ent_cert.getProduct().getHash())
-                self._scan_ent_cert_products(ent_cert, self.expired_products)
 
-    def _scan_ent_cert_products(self, ent_cert, product_dict, uninstalled_dict=None):
+                order = ent_cert.getOrder()
+                stack_id = order.getStackingId()
+                quantity = order.getQuantityUsed()
+
+                partially_stacked = False
+                if stack_id:
+                    log.debug("  stack ID: %s" % stack_id)
+
+                    # Just add to the correct list if we've already checked this stack:
+                    if stack_id in self.partial_stacks:
+                        log.debug("  stack already found to be invalid")
+                        partially_stacked = True
+                        self.partial_stacks[stack_id].append(ent_cert)
+                    elif stack_id in self.valid_stacks:
+                        log.debug("  stack already found to be valid")
+                        self.valid_stacks[stack_id].append(ent_cert)
+
+                    elif not self._stack_id_valid(stack_id, ent_certs):
+                        log.debug("  stack is invalid")
+                        partially_stacked = True
+                        self.partial_stacks[stack_id] = [ent_cert]
+                    else:
+                        log.debug("  stack is valid")
+                        self.valid_stacks[stack_id] = [ent_cert]
+
+                if partially_stacked:
+                    self._add_products_to_hash(ent_cert, self.partially_valid_products)
+                else:
+                    self._add_products_to_hash(ent_cert, self.valid_products)
+
+        # Remove any partially valid products if we have a regular
+        # entitlement that provides them:
+        for pid in self.partially_valid_products.keys():
+            if pid in self.valid_products:
+                self.partially_valid_products.pop(pid)
+
+        # Remove any expired products if we have a valid entitlement
+        # that provides them:
+        for pid in self.expired_products.keys():
+            if pid in self.valid_products or pid in \
+                    self.partially_valid_products:
+                self.expired_products.pop(pid)
+
+        # NOTE: unentitled_products will be detected in another method call
+
+    def _stack_id_valid(self, stack_id, ent_certs):
         """
-        Scans this ent certs products, checks if they are installed, and
-        adds them to the provided dict (expired/valid) if so:
+        Returns True if the given stack ID is valid.
+
+        Assumes that the certificate is valid on the date we're sorting for.
+        Future and expired certs are filtered out before this is called.
+        """
+        sockets_covered = 0
+        log.debug("Checking stack validity: %s" % stack_id)
+
+        for ent in ent_certs:
+            if ent.getOrder().getStackingId() == stack_id:
+                quantity = int(ent.getOrder().getQuantityUsed())
+                sockets = int(ent.getOrder().getSocketLimit())
+                sockets_covered += sockets * quantity
+
+        log.debug("  system has %s sockets, %s covered by entitlements" %
+                (self.socket_count, sockets_covered))
+        if sockets_covered >= self.socket_count:
+            return True
+        return False
+
+    def _add_products_to_hash(self, ent_cert, product_dict):
+        """
+        Adds any installed product IDs provided by the entitlement cert to
+        the given dict. Maps product ID to entitlement certificate.
         """
         for product in ent_cert.getProducts():
             product_id = product.getHash()
 
-            # Is this an installed product?
             if product_id in self.installed_products:
                 if product_id not in product_dict:
                     product_dict[product_id] = []
                 product_dict[product_id].append(ent_cert)
-            elif uninstalled_dict != None:
-                if product_id not in uninstalled_dict:
-                    uninstalled_dict[product_id] = []
-                uninstalled_dict[product_id].append(ent_cert)
-
-    def _scan_ent_cert_stackable_products(self):
-        log.debug("Scanning stacked entitlements.")
-        ent_certs = self.entitlement_dir.list()
-        stackable_ents = {}
-
-        for ent_cert in ent_certs:
-            product = ent_cert.getProduct()
-            log.debug("Checking certificate: %s" % ent_cert.serial)
-            # handle a cert with no products
-            if product is None:
-                log.warn("  cert has no products")
-                continue
-
-            product_id = product.getHash()
-            order = ent_cert.getOrder()
-            stacking_id = order.getStackingId()
-            quantity = order.getQuantityUsed()
-            if stacking_id:
-                log.debug("  cert is stacked: %s" % stacking_id)
-                if stacking_id not in stackable_ents:
-                    stackable_ents[stacking_id] = []
-                stackable_ents[stacking_id].append({'ent_cert': ent_cert,
-                                                    'product_id': product_id,
-                                                    'product': product,
-                                                    'quantity': quantity,
-                                                    'sockets_provided': None,
-                                                    'valid': None})
-
-        # Now iterate all stacks and check compliance for each:
-        log.debug("Checking stack compliance:")
-        for stackable_id in stackable_ents.keys():
-            log.debug("Stack ID: %s" % stackable_id)
-            log.debug("  entitlements: %s" % len(stackable_ents[stackable_id]))
-            socket_total = 0  # sockets covered by entitlements
-            system_sockets = 1
-            if self.facts_dict:
-                system_sockets = int(self.facts_dict['cpu.cpu_socket(s)'])
-
-            for stackable_ent in stackable_ents[stackable_id]:
-                socket_count = stackable_ent['ent_cert'].getOrder().getSocketLimit()
-                quantity = stackable_ent['quantity']
-                if socket_count:
-                    socket_total = socket_total + (int(socket_count) * int(quantity))
-
-            for stackable_product_info in stackable_ents[stackable_id]:
-                stackable_product_info['sockets_provided'] = socket_total
-                log.debug("  sockets: %s" % system_sockets)
-                log.debug("  sockets covered: %s" % socket_total)
-                if socket_total >= system_sockets:
-                    stackable_product_info['valid'] = True
-                else:
-                    # TODO: this is broken, we're storing a product ID that came from
-                    # the *first* product in the *last* entitlement certificate we looked
-                    # at in the stack. The first product in the cert may or may not be
-                    # the one that was actually installed, or we may have multiple
-                    # installed that this cert provides, all of which need to show up
-                    # as partially valid.
-                    #
-                    # Only using the last entitlement cert in the stack is also a bug,
-                    # a stack could be composed of many certs which may have different
-                    # provided products.
-                    #
-                    # This should be changed to map installed product ID to the entitlements
-                    # which make up it's partial stack. All installed products involved
-                    # should go into the dict.
-                    #
-                    # We should also track a hash of partial_stacks (stack_id mapping
-                    # to list of entitlements in the stack)
-                    #
-                    # See bug #740377
-                    if product_id not in self.partially_valid_products:
-                        self.partially_valid_products[product_id] = []
-                    self.partially_valid_products[product_id].append(stackable_product_info['ent_cert'])
-                    if product_id in self.valid_products:
-                        del self.valid_products[product_id]
 
     def _scan_for_unentitled_products(self):
-        # For all installed products, if not in valid or expired hash, it
+        # For all installed products, if not in valid or partially valid hash, it
         # must be completely unentitled
         for product_id in self.installed_products.keys():
-            if (product_id in self.valid_products) or (product_id in self.expired_products) \
-                    or (product_id in self.partially_valid_products):
+            if (product_id in self.valid_products) or \
+                    (product_id in self.expired_products) or \
+                    (product_id in self.partially_valid_products):
                 continue
-            self.unentitled_products[product_id] = [self.installed_products[product_id]]
-
-    def _remove_expired_if_valid_elsewhere(self):
-        """
-        Scan the expired products, if any are showing up also in the valid dict,
-        remove them from expired.
-
-        This catches situations where an entitlement for a product expires, but
-        another still valid entitlement already provides the missing product.
-        """
-        for product_id in self.expired_products.keys():
-            if product_id in self.valid_products:
-                del self.expired_products[product_id]
+            self.unentitled_products[product_id] = self.installed_products[product_id]
 
 
 class StackingGroupSorter(object):

@@ -301,8 +301,7 @@ class RegisterScreen:
             if self.auto_subscribe():
                 self._set_register_details_label(_("Autosubscribing"))
                 # try to auomatically bind products
-                products = managerlib.getInstalledProductHashMap()
-                self.async.bind_by_products(self.consumer.uuid, products,
+                self.async.bind_by_products(self.consumer.uuid,
                         self._on_bind_by_products_cb)
             else:
                 self._finish_registration()
@@ -311,14 +310,12 @@ class RegisterScreen:
             handle_gui_exception(e, constants.REGISTER_ERROR)
             self._finish_registration(failed=True)
 
-    def _on_bind_by_products_cb(self, products, error=None):
+    def _on_bind_by_products_cb(self, error=None):
         if error:
             log.exception(error)
-            log.warning("Warning: Unable to auto subscribe to %s" \
-                    % ", ".join(products.keys()))
+            log.warning("Unable to autosubscribe.")
         else:
-            log.info("Automatically subscribed to products: %s " \
-                    % ", ".join(products.keys()))
+            log.info("Autosubscribe complete.")
 
         self._set_register_details_label("Fetching certificates")
         self.async.fetch_certificates(self._on_fetch_certificates_cb)
@@ -453,16 +450,15 @@ class AsyncBackend(object):
         except Exception, e:
             self.queue.put((callback, None, e))
 
-    def _bind_by_products(self, uuid, products, callback):
+    def _bind_by_products(self, uuid, callback):
         """
         method run in the worker thread.
         """
         try:
-            # TODO: should use same code as CLI autosubscribe/heal
-            self.backend.uep.bindByProduct(uuid, products.values())
-            self.queue.put((callback, products, None))
+            retval = self.backend.uep.bind(uuid)
+            self.queue.put((callback, retval, None))
         except Exception, e:
-            self.queue.put((callback, products, e))
+            self.queue.put((callback, None, e))
 
     def _fetch_certificates(self, callback):
         """
@@ -507,10 +503,10 @@ class AsyncBackend(object):
         threading.Thread(target=self._register_consumer,
                 args=(name, facts, owner, env, callback)).start()
 
-    def bind_by_products(self, uuid, products, callback):
+    def bind_by_products(self, uuid, callback):
         gobject.idle_add(self._watch_thread)
         threading.Thread(target=self._bind_by_products,
-                args=(uuid, products, callback)).start()
+                args=(uuid, callback)).start()
 
     def fetch_certificates(self, callback):
         gobject.idle_add(self._watch_thread)

@@ -32,6 +32,7 @@ from subscription_manager import managerlib
 from subscription_manager import certdirectory
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.hwprobe import ClassicCheck
+from subscription_manager.facts import Facts
 import rhsm.certificate as certificate
 
 enable_debug = False
@@ -72,8 +73,9 @@ def check_status(force_signal):
         debug("System is already registered to another entitlement system")
         return RHN_CLASSIC
 
+    facts = Facts()
     sorter = CertSorter(certdirectory.ProductDirectory(),
-            certdirectory.EntitlementDirectory())
+            certdirectory.EntitlementDirectory(), facts.get_facts())
 
     if len(sorter.unentitled_products.keys()) > 0 or len(sorter.expired_products.keys()) > 0:
         debug("System has one or more certificates that are not valid")

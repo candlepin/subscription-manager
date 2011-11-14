@@ -85,12 +85,16 @@ def getInstalledProductStatus(product_directory=None,
      Returns the Installed products and their subscription states
     """
     # allow us to stub these out for testing
-    product_directory = product_directory or certdirectory.ProductDirectory()
-    entitlement_directory = entitlement_directory or certdirectory.EntitlementDirectory()
+    if product_directory is None:
+        product_directory = certdirectory.ProductDirectory()
+    if entitlement_directory is None:
+        entitlement_directory = certdirectory.EntitlementDirectory()
+    if facts is None:
+        facts = Facts().get_facts()
 
     product_status = []
 
-    sorter = CertSorter(product_directory, entitlement_directory, facts_dict=facts)
+    sorter = CertSorter(product_directory, entitlement_directory, facts)
 
     for installed_product in sorter.installed_products:
         product_cert = sorter.installed_products[installed_product]
@@ -117,33 +121,6 @@ def getInstalledProductHashMap():
     for product in products:
         phash[product.getProduct().getName()] = product.getProduct().getHash()
     return phash
-
-
-def getConsumedProductEntitlements():
-    """
-     Gets the list of available products with entitlements based on
-      its subscription cert
-    """
-    consumed_products = []
-
-    def append_consumed_product(cert, product):
-        consumed_products.append((product.getName(), cert.getOrder().getContract(),
-            cert.getOrder().getAccountNumber(), cert.serialNumber(),
-            cert.valid(), cert.getOrder().getQuantityUsed(),
-            formatDate(cert.validRange().begin()),
-            formatDate(cert.validRange().end())))
-
-    entdir = certdirectory.EntitlementDirectory()
-    for cert in entdir.listValid():
-        eproducts = cert.getProducts()
-        #for entitlement certificates with no product data,
-        #use Order's details.
-        if len(eproducts) == 0:
-            append_consumed_product(cert, cert.getOrder())
-        else:
-            for product in eproducts:
-                append_consumed_product(cert, product)
-    return consumed_products
 
 
 class CertificateFetchError(Exception):

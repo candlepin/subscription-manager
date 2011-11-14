@@ -46,11 +46,41 @@ from subscription_manager import managerlib
 from subscription_manager.facts import Facts
 from subscription_manager.quantity import valid_quantity
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
-from subscription_manager.cert_sorter import status_map
+from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
+        NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
 cfg = rhsm.config.initConfig()
+
+# Translates the cert sorter status constants:
+STATUS_MAP = {
+        FUTURE_SUBSCRIBED: _("Future Subscription"),
+        SUBSCRIBED: _("Subscribed"),
+        NOT_SUBSCRIBED: _("Not Subscribed"),
+        EXPIRED: _("Expired"),
+        PARTIALLY_SUBSCRIBED: _("Partially Subscribed")
+}
+
+CONSUMED_SUBS_LIST = \
+    _("ProductName:          \t%-25s") + \
+    "\n" + \
+    _("ContractNumber:       \t%-25s") + \
+    "\n" + \
+    _("AccountNumber:        \t%-25s") + \
+    "\n" + \
+    _("SerialNumber:         \t%-25s") + \
+    "\n" + \
+    _("Active:               \t%-25s") + \
+    "\n" + \
+    _("QuantityUsed:         \t%-25s") + \
+    "\n" + \
+    _("Begins:               \t%-25s") + \
+    "\n" + \
+    _("Expires:              \t%-25s") + \
+    "\n"
+
+
 
 
 def handle_exception(msg, ex):
@@ -90,17 +120,13 @@ def handle_exception(msg, ex):
         systemExit(-1, ex)
 
 
-def autosubscribe(cp, consumer, disable_product_upload=False):
+def autosubscribe(cp, consumer):
     """
     This is a wrapper for bind/bindByProduct. Eventually, we will exclusively
     use bind, but for now, we support both.
     """
     try:
-        if disable_product_upload:
-            cp.bind(consumer)  # new style
-        else:
-            products = managerlib.getInstalledProductHashMap()
-            cp.bindByProduct(consumer, products.values())
+        cp.bind(consumer)  # new style
 
     except Exception, e:
         log.warning("Error during auto-subscribe.")
@@ -113,7 +139,7 @@ def show_autosubscribe_output():
     log.info("Attempted to auto-subscribe/heal the system.")
     print _("Installed Product Current Status:")
     for prod_status in installed_status:
-        status = status_map[prod_status[3]]
+        status = STATUS_MAP[prod_status[3]]
         print (constants.product_status % (prod_status[0], status))
 
 
@@ -636,7 +662,7 @@ class RegisterCommand(UserPassCommand):
                                            proxy_user=self.proxy_user,
                                            proxy_password=self.proxy_password)
         if self.options.autosubscribe:
-            autosubscribe(self.cp, consumer['uuid'], self.certlib)
+            autosubscribe(self.cp, consumer['uuid'])
         if (self.options.consumerid or self.options.activation_keys or
                 self.options.autosubscribe):
             self.certlib.update()
@@ -813,8 +839,10 @@ class SubscribeCommand(CliCommand):
         quantity = self.options.quantity
         if self.options.quantity:
             if not valid_quantity(quantity):
-                print _("Error: Quantity must be a positive number.")
+                print _("Error: Quantity must be a positive integer.")
                 sys.exit(-1)
+            else:
+                self.options.quantity = int(self.options.quantity)
 
     def _do_command(self):
         """
@@ -850,7 +878,7 @@ class SubscribeCommand(CliCommand):
                             systemExit(-1, re.msg)  # some other error.. don't try again
             # must be auto
             else:
-                autosubscribe(self.cp, consumer_uuid, disable_product_upload=True)
+                autosubscribe(self.cp, consumer_uuid)
 
             result = self.certlib.update()
             if result[1]:
@@ -1128,7 +1156,7 @@ class ConfigCommand(CliCommand):
                     sys.stderr.write(
                         _("Error: configuration entry designation for removal must be of format [section.name]")
                     )
-                    sys.stderr.write("\n")                    
+                    sys.stderr.write("\n")
                     sys.exit(-1)
                 section = r.split('.')[0]
                 name = r.split('.')[1]
@@ -1216,10 +1244,19 @@ class ListCommand(CliCommand):
         if not (self.options.available or self.options.consumed):
             self.options.installed = True
 
+    def _none_wrap(self, template_str, *args):
+      arglist = []
+      for arg in args:
+        if not arg:
+          arg = _("None")
+        arglist.append(arg)
+      return template_str % tuple(arglist)
+
     def _do_command(self):
         """
         Executes the command.
         """
+
 
         self._validate_options()
 
@@ -1232,11 +1269,10 @@ class ListCommand(CliCommand):
             print _("    Installed Product Status")
             print "+-------------------------------------------+"
             for product in iproducts:
-                status = status_map[product[3]]
-                # this should probably really be a dict, and a template string
-                print constants.installed_product_status % (product[0], product[1],
-                                                            product[2], status,
-                                                            product[4], product[5])
+                status = STATUS_MAP[product[3]]
+                print self._none_wrap(constants.installed_product_status, product[0],
+                                product[1], product[2], status, product[4],
+                                product[5])
 
         if self.options.available:
             consumer = check_registration()['uuid']
@@ -1265,22 +1301,50 @@ class ListCommand(CliCommand):
                 else:
                     machine_type = _("physical")
 
-                print constants.available_subs_list % (product_name,
-                                                       data['productId'],
-                                                       data['id'],
-                                                       data['quantity'],
-                                                       data['multi-entitlement'],
-                                                       data['endDate'],
-                                                       machine_type)
+                print self._none_wrap(constants.available_subs_list, product_name,
+                                                               data['productId'],
+                                                               data['id'],
+                                                               data['quantity'],
+                                                               data['multi-entitlement'],
+                                                               data['endDate'],
+                                                               machine_type)
 
         if self.options.consumed:
-            cpents = managerlib.getConsumedProductEntitlements()
-            if not len(cpents):
-                print(_("No Consumed subscription pools to list"))
-                sys.exit(0)
-            print """+-------------------------------------------+\n    %s\n+-------------------------------------------+\n""" % _("Consumed Product Subscriptions")
-            for product in cpents:
-                print constants.consumed_subs_list % product
+            self.print_consumed()
+
+    def print_consumed(self, ent_dir=None):
+        if ent_dir is None:
+            ent_dir = EntitlementDirectory()
+        if not len(ent_dir.listValid()):
+            print(_("No Consumed subscription pools to list"))
+            sys.exit(0)
+
+        print """+-------------------------------------------+\n    %s\n+-------------------------------------------+\n""" % _("Consumed Product Subscriptions")
+
+        for cert in ent_dir.listValid():
+            eproducts = cert.getProducts()
+            # Use order details for entitlement certificates with no product data:
+            if len(eproducts) == 0:
+                print self._none_wrap(CONSUMED_SUBS_LIST,
+                        cert.getOrder().getName(),
+                        cert.getOrder().getContract(),
+                        cert.getOrder().getAccountNumber(),
+                        cert.serialNumber(),
+                        cert.valid(),
+                        cert.getOrder().getQuantityUsed(),
+                        managerlib.formatDate(cert.validRange().begin()),
+                        managerlib.formatDate(cert.validRange().end()))
+            else:
+                for product in eproducts:
+                    print self._none_wrap(CONSUMED_SUBS_LIST,
+                            product.getName(),
+                            cert.getOrder().getContract(),
+                            cert.getOrder().getAccountNumber(),
+                            cert.serialNumber(),
+                            cert.valid(),
+                            cert.getOrder().getQuantityUsed(),
+                            managerlib.formatDate(cert.validRange().begin()),
+                            managerlib.formatDate(cert.validRange().end()))
 
     def _format_name(self, name, indent, max_length):
         """
