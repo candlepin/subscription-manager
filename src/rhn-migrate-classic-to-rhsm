@@ -141,12 +141,18 @@ def getSubscribedChannelsList():
 
 #################################################
 
+def getSystemId():
+    systemIdPath = rhncfg["systemIdPath"]
+    p = libxml2.parseDoc(file(systemIdPath).read())
+    systemId = int(p.xpathEval('string(//member[* = "system_id"]/value/string)').split('-')[1])
+    return systemId
+
+#################################################
+
 def unRegisterSystemFromRhnClassic(username, password):
     #getSystemIdPath
     systemIdPath = rhncfg["systemIdPath"]
-    ## get SystemID
-    p = libxml2.parseDoc(file(systemIdPath).read())
-    systemId = int(p.xpathEval('string(//member[* = "system_id"]/value/string)').split('-')[1])
+    systemId = getSystemId()
 
     log.info("Deleting system %s from RHN Classic...", systemId)
     hostname = rhncfg['serverURL'].split('/')[2]
@@ -361,17 +367,7 @@ def writeMigrationFacts():
     FACT_FILE = "/etc/rhsm/facts/migration.facts"
     if not os.path.exists(FACT_FILE):
         f = open(FACT_FILE, 'w')
-
-        doc = libxml2.parseFile("/etc/sysconfig/rhn/systemid")
-        context = doc.xpathNewContext()
-        results = context.xpathEval("/params/param/value/struct/member")
-        for n in results:
-            if n.xpathEval("name")[0].content == 'system_id':
-                system_id = n.xpathEval("value/string")[0].content
-        doc.freeDoc()
-        context.xpathFreeContext()
-
-        json.dump({"migration.classic_system_id" : system_id,
+        json.dump({"migration.classic_system_id" : getSystemId(),
                    "migration.migrated_from" : "rhn_hosted_classic"}, f) 
         f.close()
 #################################################
