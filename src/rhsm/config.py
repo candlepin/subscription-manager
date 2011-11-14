@@ -55,6 +55,13 @@ class RhsmConfigParser(SafeConfigParser):
             self.add_section(section)
         return SafeConfigParser.get(self, section, prop)
 
+    # Overriding this method to address
+    # http://code.google.com/p/iniparse/issues/detail?id=9
+    def defaults(self):
+        d = {}
+        for name, lineobj in self.data._defaults._options.items():
+            d[name] = lineobj.value
+        return d
 
 def initConfig(config_file=None):
 
