@@ -373,6 +373,20 @@ class EntitlementCertificate(ProductCertificate):
         else:
             self.order = None
 
+    def delete(self):
+        """
+        Delete the file associated with this certificate.
+        """
+        if hasattr(self, 'path'):
+            os.unlink(self.path)
+            # we should keep the key path around, but
+            # we dont seem to, but it's consistent
+            parts = self.path.split('.')
+            key_path = "%s-key.pem" % parts[0]
+            os.unlink(key_path)
+        else:
+            raise Exception('no path, not deleted')
+
     def getOrder(self):
         """
         Get the B{order} object defined in the certificate.
