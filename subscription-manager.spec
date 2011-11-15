@@ -69,6 +69,14 @@ Requires: librsvg2
 %description -n subscription-manager-firstboot
 This package contains the firstboot screens for subscription manager.
 
+%package -n subscription-manager-migration
+Summary: Migration scripts for moving to certificate based subscriptions
+Group: System Environment/Base
+Requires: %{name} = %{version}-%{release}
+
+%description -n subscription-manager-migration
+This package contains scripts that aid in moving to certificate based
+subscriptions
 
 %prep
 %setup -q
@@ -163,8 +171,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/rhsm/subscription_manager/jsonwrapper.py*
 
 %attr(755,root,root) %{_datadir}/rhsm/subscription_manager/certmgr.py*
-%attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
-%attr(755,root,root) %{_sbindir}/install-num-migrate-to-rhsm
 %attr(755,root,root) %{_sbindir}/subscription-manager
 %attr(755,root,root) %{_bindir}/subscription-manager
 %attr(755,root,root) %{_bindir}/rhsmcertd
@@ -219,6 +225,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_prefix}/share/firstboot/modules/rhsm_subscriptions.py*
 %endif
 %endif
+
+%files -n subscription-manager-migration
+%defattr(-,root,root,-)
+%attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
+%attr(755,root,root) %{_sbindir}/install-num-migrate-to-rhsm
 
 %post
 chkconfig --add rhsmcertd
