@@ -651,9 +651,6 @@ class RegisterCommand(UserPassCommand):
         self.facts.write_cache()
         self.installed_mgr.write_cache()
 
-        profile_mgr = ProfileManager()
-        profile_mgr.update_check(admin_cp, consumer['uuid'])
-
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
         self.cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
@@ -661,6 +658,10 @@ class RegisterCommand(UserPassCommand):
                                            proxy_port=self.proxy_port,
                                            proxy_user=self.proxy_user,
                                            proxy_password=self.proxy_password)
+
+        profile_mgr = ProfileManager()
+        profile_mgr.update_check(self.cp, consumer['uuid'])
+
         if self.options.autosubscribe:
             autosubscribe(self.cp, consumer['uuid'])
         if (self.options.consumerid or self.options.activation_keys or
