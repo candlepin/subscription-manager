@@ -92,6 +92,8 @@ class RegisterScreen:
         self.facts = facts
         self.callbacks = callbacks
 
+	self.finished = None
+
         self.async = AsyncBackend(self.backend)
 
         dic = {"on_register_cancel_button_clicked": self.cancel,
@@ -196,6 +198,9 @@ class RegisterScreen:
         self.cancel_button.set_sensitive(False)
         self.register_button.set_sensitive(False)
 
+	if self.finished:
+	    return True
+
     def _timeout_callback(self):
         self.register_progressbar.pulse()
         # return true to keep it pulsing
@@ -290,7 +295,6 @@ class RegisterScreen:
         self._set_register_details_label(_("Registering your system"))
 
     def _on_registration_finished_cb(self, new_account, error=None):
-
         try:
             if error != None:
                 raise error
@@ -331,6 +335,7 @@ class RegisterScreen:
         # failed is used by the firstboot subclasses to decide if they should
         # advance the screen or not.
         if not failed:
+	    self.finished = True
             self.close_window()
 
         self.emit_consumer_signal()
