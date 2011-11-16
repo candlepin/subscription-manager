@@ -44,7 +44,7 @@
                       <widget class="GtkCheckButton" id="enableProxyButton">
                         <property name="label" translatable="yes">I would like to connect via an _HTTP proxy.</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
@@ -145,7 +145,7 @@
                       <widget class="GtkCheckButton" id="enableProxyAuthButton">
                         <property name="label" translatable="yes">Use Au_thentication with HTTP Proxy:</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
