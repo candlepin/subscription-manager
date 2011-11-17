@@ -19,28 +19,28 @@ msgstr ""
 "Language: es-ES\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: ../src/subscription_manager/managerlib.py:78
-#: ../src/subscription_manager/managercli.py:59
 #: ../src/subscription_manager/gui/installedtab.py:167
+#,
 msgid "Subscribed"
 msgstr "Suscrito"
 
-#: ../src/subscription_manager/managerlib.py:78
-#: ../src/subscription_manager/managercli.py:61
 #: ../src/subscription_manager/gui/installedtab.py:158
+#,
 msgid "Expired"
 msgstr "Expirado"
 
-#: ../src/subscription_manager/managerlib.py:78
-#: ../src/subscription_manager/managercli.py:60
-#: ../src/subscription_manager/gui/installedtab.py:174
 #: ../src/subscription_manager/gui/installedtab.py:175
+#,
 msgid "Not Subscribed"
 msgstr "No suscrito"
 
 #: ../src/subscription_manager/cache.py:166
-msgid "Error updating system data, see /var/log/rhsm/rhsm.log for more details."
-msgstr "Error al actualizar los datos del sistema, consulte /var/log/rhsm/rhsm.log para mayor información."
+#,
+msgid ""
+"Error updating system data, see /var/log/rhsm/rhsm.log for more details."
+msgstr ""
+"Error al actualizar los datos del sistema, consulte /var/log/rhsm/rhsm.log "
+"para mayor información."
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
@@ -59,14 +59,17 @@ msgid "Usage: %s\n"
 msgstr "Uso: %s\n"
 
 #: ../src/subscription_manager/i18n_optparse.py:44
+#,
 msgid "Usage"
 msgstr "Uso"
 
 #: ../src/subscription_manager/i18n_optparse.py:45
+#,
 msgid "%prog [options]"
 msgstr "% de Prog [opciones]"
 
 #: ../src/subscription_manager/i18n_optparse.py:46
+#,
 msgid "Options"
 msgstr "Opciones"
 
@@ -97,18 +100,22 @@ msgid "%s option does not take a value"
 msgstr "opción %s no tiene un valor"
 
 #: ../src/subscription_manager/i18n_optparse.py:54
+#,
 msgid "integer"
 msgstr "entero"
 
 #: ../src/subscription_manager/i18n_optparse.py:55
+#,
 msgid "long integer"
 msgstr "número entero largo"
 
 #: ../src/subscription_manager/i18n_optparse.py:56
+#,
 msgid "floating-point"
 msgstr "punto flotante"
 
 #: ../src/subscription_manager/i18n_optparse.py:57
+#,
 msgid "complex"
 msgstr "complejo"
 
@@ -124,10 +131,12 @@ msgstr "opción %s: elección inválida: %r (elija de %s)"
 
 #. default options
 #: ../src/subscription_manager/i18n_optparse.py:62
+#,
 msgid "show this help message and exit"
 msgstr "mostrar este mensaje de ayuda y salir"
 
 #: ../src/subscription_manager/i18n_optparse.py:63
+#,
 msgid "show program's version number and exit"
 msgstr "mostrar el número de versión de programa y salir"
 
@@ -137,20 +146,16 @@ msgstr "mostrar el número de versión de programa y salir"
 msgid "%s: error: %s"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:58
 #: ../src/subscription_manager/gui/installedtab.py:154
+#,
 msgid "Future Subscription"
 msgstr "Próxima suscripción"
 
-#: ../src/subscription_manager/managercli.py:62
-#: ../src/subscription_manager/gui/installedtab.py:163
 #: ../src/subscription_manager/gui/installedtab.py:164
+#,
 msgid "Partially Subscribed"
 msgstr "Parcialmente suscrito"
 
-#: ../src/subscription_manager/managercli.py:66
-#: ../src/subscription_manager/constants.py:26
-#: ../src/subscription_manager/constants.py:40
 #: ../src/subscription_manager/constants.py:66
 #, python-format
 msgid "ProductName:          \t%-25s"
@@ -186,8 +191,6 @@ msgstr ""
 msgid "Begins:               \t%-25s"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:80
-#: ../src/subscription_manager/constants.py:36
 #: ../src/subscription_manager/constants.py:50
 #, python-format
 msgid "Expires:              \t%-25s"
@@ -198,8 +201,6 @@ msgstr ""
 msgid "Network error, unable to connect to server."
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:99
-#: ../src/subscription_manager/constants.py:79
 #: ../src/subscription_manager/constants.py:83
 #, 
 msgid "Please see /var/log/rhsm/rhsm.log for more information."
@@ -207,77 +208,102 @@ msgstr ""
 
 #. NOTE: yes this looks a lot like the socket error, but I think these
 #. were actually intended to display slightly different messages:
-#: ../src/subscription_manager/managercli.py:104
 #: ../src/subscription_manager/gui/utils.py:64
-msgid "Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."
-msgstr "Error de red. Por favor revise la información de conexión o consulte /var/log/rhsm/rhsm.log para obtener mayor información."
+#,
+msgid ""
+"Network error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
+msgstr ""
+"Error de red. Por favor revise la información de conexión o consulte "
+"/var/log/rhsm/rhsm.log para obtener mayor información."
 
 #. This is what happens when there's an issue with the server on the other
 #. side of the wire
-#: ../src/subscription_manager/managercli.py:108
 #: ../src/subscription_manager/gui/utils.py:67
-msgid "Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."
-msgstr "Error de servidor remoto. Por favor revise los detalles de conexión o consulte /var/log/rhsm/rhsm.log para obtener más información."
+#,
+msgid ""
+"Remote server error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
+msgstr ""
+"Error de servidor remoto. Por favor revise los detalles de conexión o "
+"consulte /var/log/rhsm/rhsm.log para obtener más información."
 
-#: ../src/subscription_manager/managercli.py:117
 #: ../src/subscription_manager/gui/utils.py:88
 #, python-format
 msgid "Bad CA certificate: %s"
 msgstr "Certificado CA incorrecto: %s"
 
 #: ../src/subscription_manager/managercli.py:140
+#,
 msgid "Installed Product Current Status:"
 msgstr "Estatus de productos instalados:"
 
 #: ../src/subscription_manager/managercli.py:193
+#,
 msgid "proxy url in the form of proxy_hostname:proxy_port"
 msgstr "URL del proxy en la forma de proxy_hostname:proxy_port"
 
 #: ../src/subscription_manager/managercli.py:195
+#,
 msgid "user for http proxy with basic authentication"
 msgstr "Usuario para http proxy con autenticación básica"
 
 #: ../src/subscription_manager/managercli.py:197
+#,
 msgid "password for http proxy with basic authentication"
 msgstr "Contraseña para http proxy con autenticación básica"
 
 #: ../src/subscription_manager/managercli.py:204
-msgid "Consumer not registered. Please register using --username and --password"
-msgstr "Usuario no registrado. Por favor regístrese mediante --username y --password"
+#,
+msgid ""
+"Consumer not registered. Please register using --username and --password"
+msgstr ""
+"Usuario no registrado. Por favor regístrese mediante --username y --password"
 
 #: ../src/subscription_manager/managercli.py:262
+#,
 msgid "Consumer certificates corrupted. Please reregister."
 msgstr "Certificados de usuario incorrectos. Por favor vuélvase a registrar."
 
 #: ../src/subscription_manager/managercli.py:281
+#,
 msgid "username to use when authorizing against the server"
 msgstr "Nombre de usuario a usar cuando se autorice con el servidor"
 
 #: ../src/subscription_manager/managercli.py:283
+#,
 msgid "password to use when authorizing against the server"
 msgstr "Contraseña a usar cuando se autorice con el servidor"
 
 #: ../src/subscription_manager/managercli.py:295
+#,
 msgid "Username: "
 msgstr "Nombre de usuario:"
 
 #: ../src/subscription_manager/managercli.py:298
+#,
 msgid "Password: "
 msgstr "Contraseña:"
 
 #: ../src/subscription_manager/managercli.py:323
-msgid "Remove all local consumer and subscription data without affecting the server"
-msgstr "Retire todos los datos del usuario y suscripción sin afectar el servidor"
+#,
+msgid ""
+"Remove all local consumer and subscription data without affecting the server"
+msgstr ""
+"Retire todos los datos del usuario y suscripción sin afectar el servidor"
 
 #: ../src/subscription_manager/managercli.py:339
+#,
 msgid "All local data removed"
 msgstr "Todos los datos eliminados"
 
 #: ../src/subscription_manager/managercli.py:347
+#,
 msgid "Pull the latest subscription data from the server"
 msgstr "Extraiga los últimos datos de suscripción del servidor"
 
 #: ../src/subscription_manager/managercli.py:359
+#,
 msgid "All local data refreshed"
 msgstr "Todos los datos actualizados"
 
@@ -287,26 +313,38 @@ msgid "Unable to perform refresh due to the following exception: %s"
 msgstr ""
 
 #: ../src/subscription_manager/managercli.py:373
+#,
 msgid "Display the identity certificate for this machine or request a new one"
-msgstr "Visualice el certificado de identidad para esta máquina o solicite una nueva"
+msgstr ""
+"Visualice el certificado de identidad para esta máquina o solicite una nueva"
 
 #: ../src/subscription_manager/managercli.py:382
+#,
 msgid "request a new certificate be generated"
 msgstr "Solicite un nuevo certificado"
 
 #: ../src/subscription_manager/managercli.py:384
+#,
 msgid "force certificate regeneration (requires username and password)"
-msgstr "Fuerce la expedición de certificado (se requiere nombre de usuario y contraseña)"
+msgstr ""
+"Fuerce la expedición de certificado (se requiere nombre de usuario y "
+"contraseña)"
 
 #: ../src/subscription_manager/managercli.py:389
-msgid "Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr "La identidad de usuario puede no existir o estar corrupta. Intente register --help"
+#,
+msgid ""
+"Consumer identity either does not exist or is corrupted. Try register --help"
+msgstr ""
+"La identidad de usuario puede no existir o estar corrupta. Intente register "
+"--help"
 
 #: ../src/subscription_manager/managercli.py:392
+#,
 msgid "--force can only be used with --regenerate"
 msgstr "--force solamente puede utilizarse con --regenerate"
 
 #: ../src/subscription_manager/managercli.py:396
+#,
 msgid "--username and --password can only be used with --force"
 msgstr "--username y --password solo pueden utilizarse con --force"
 
@@ -331,111 +369,142 @@ msgid "org id: %s"
 msgstr ""
 
 #: ../src/subscription_manager/managercli.py:425
+#,
 msgid "Identity certificate has been regenerated."
 msgstr "Ha sido regenerado el certificado de identidad."
 
 #: ../src/subscription_manager/managercli.py:433
+#,
 msgid "Error: Unable to generate a new identity for the system"
 msgstr "Error: No se puede generar nueva identidad para el sistema"
 
 #: ../src/subscription_manager/managercli.py:440
+#,
 msgid "Display the orgs against which a user can register a system"
-msgstr "Mostrar las organizaciones con las que el usuario puede registrar un sistema"
+msgstr ""
+"Mostrar las organizaciones con las que el usuario puede registrar un sistema"
 
 #: ../src/subscription_manager/managercli.py:460
+#,
 msgid "Organizations"
 msgstr "Organizaciones"
 
 #: ../src/subscription_manager/managercli.py:464
+#,
 msgid "OrgName"
 msgstr "NormbreOrg"
 
 #: ../src/subscription_manager/managercli.py:465
+#,
 msgid "OrgKey"
 msgstr "LlaveOrg"
 
-#: ../src/subscription_manager/managercli.py:468
 #: ../src/subscription_manager/managercli.py:710
 #, python-format
 msgid "%s cannot register to any organizations."
 msgstr "%s no se puede registrar a ninguna organización."
 
 #: ../src/subscription_manager/managercli.py:475
+#,
 msgid "Error: Unable to retrieve org list from Entitlement Platform"
 msgstr "Error: No se puede recuperar lista de la plataforma de autor"
 
 #: ../src/subscription_manager/managercli.py:482
+#,
 msgid "Display the environments available for a user"
 msgstr "Mostrar los entornos disponibles para un usuario"
 
 #: ../src/subscription_manager/managercli.py:490
+#,
 msgid "specify org for environment list"
 msgstr "Especificar la organización para la lista de entornos"
 
 #: ../src/subscription_manager/managercli.py:494
+#,
 msgid "you must specify an --org"
 msgstr "Debe especificar una --org"
 
 #: ../src/subscription_manager/managercli.py:510
+#,
 msgid "Environments"
 msgstr "Entornos"
 
 #: ../src/subscription_manager/managercli.py:526
+#,
 msgid "Error: Unable to retrieve environment list from Entitlement Platform"
-msgstr "Error: No se puede recuperar la lista de entornos de la plataforma de derechos"
+msgstr ""
+"Error: No se puede recuperar la lista de entornos de la plataforma de "
+"derechos"
 
 #: ../src/subscription_manager/managercli.py:541
+#,
 msgid "the type of consumer to register, defaults to system"
 msgstr "El tipo de usuario a registrar, se predetermina a sistema"
 
 #: ../src/subscription_manager/managercli.py:543
+#,
 msgid "name of the consumer to register, defaults to the hostname"
 msgstr "Nombre del usuario a registrar, se predetermina a nombre de host"
 
 #: ../src/subscription_manager/managercli.py:545
+#,
 msgid "if supplied, the existing consumer data is pulled from the server"
-msgstr "Si se proporciona, los datos del usuario existente se extraen del servidor"
+msgstr ""
+"Si se proporciona, los datos del usuario existente se extraen del servidor"
 
 #: ../src/subscription_manager/managercli.py:547
+#,
 msgid "register to one of multiple organizations for the user"
 msgstr "Registrar una de las varias organizaciones para el usuario"
 
 #: ../src/subscription_manager/managercli.py:549
+#,
 msgid "register to a specific environment in the destination org"
 msgstr "Registrar un entorno específico en la organización de destino"
 
-#: ../src/subscription_manager/managercli.py:551
 #: ../src/subscription_manager/managercli.py:828
-msgid "automatically subscribe this system to                                     compatible subscriptions."
+#,
+msgid ""
+"automatically subscribe this system to                                     "
+"compatible subscriptions."
 msgstr "Suscribir automáticamente este sistema a  suscripciones compatibles."
 
 #: ../src/subscription_manager/managercli.py:554
+#,
 msgid "register the system even if it is already registered"
 msgstr "Registrar el sistema incluso si ya está registrado"
 
 #: ../src/subscription_manager/managercli.py:556
+#,
 msgid "one or more activation keys to use for registration"
 msgstr "Una o más llaves de activación a usar para registrarse"
 
 #: ../src/subscription_manager/managercli.py:563
+#,
 msgid "This system is already registered. Use --force to override"
 msgstr "Este sistema ya está registrado. Use --force para sobrescribir"
 
 #: ../src/subscription_manager/managercli.py:566
+#,
 msgid "Error: consumer name can not be empty."
 msgstr "Error: nombre de usuario no puede estar vacío."
 
 #: ../src/subscription_manager/managercli.py:569
+#,
 msgid "Error: Activation keys do not require user credentials"
 msgstr "Error: Llaves de activación no se requieren credenciales de usuario"
 
 #: ../src/subscription_manager/managercli.py:572
+#,
 msgid "Error: Must specify --org to register to an environment."
 msgstr "Error: Se debe especificar --org para registrarse a un entorno."
 
 #: ../src/subscription_manager/managercli.py:575
+#,
 msgid "Error: Must specify --org to register with activation keys."
-msgstr "Error: Se debe especificar --org para registrarse a las llaves de activación."
+msgstr ""
+"Error: Se debe especificar --org para registrarse a las llaves de "
+"activación."
 
 #: ../src/subscription_manager/managercli.py:602
 #, python-format
@@ -453,6 +522,7 @@ msgid "The system has been registered with id: %s "
 msgstr "El sistema ha sido registrado con id: %s"
 
 #: ../src/subscription_manager/managercli.py:691
+#,
 msgid "ERROR: Server does not support environments."
 msgstr "ERROR: El servidor no admite entornos"
 
@@ -462,44 +532,65 @@ msgid "No such environment: %s"
 msgstr "No existe tal entorno:%s"
 
 #: ../src/subscription_manager/managercli.py:735
+#,
 msgid "This system is currently not registered."
 msgstr "Este sistema no está registrado."
 
 #: ../src/subscription_manager/managercli.py:757
+#,
 msgid "System has been un-registered."
 msgstr "Se ha cancelado el registro del sistema."
 
 #: ../src/subscription_manager/managercli.py:764
+#,
 msgid "Attempt to redeem a subscription for a preconfigured machine"
 msgstr "Intente recuperar una suscripción de una máquina preconfigurada."
 
 #: ../src/subscription_manager/managercli.py:770
+#,
 msgid "Email address to notify when subscription redemption is complete."
-msgstr "La dirección de correo-e para notificar cuando se redima la suscripción completamente. "
+msgstr ""
+"La dirección de correo-e para notificar cuando se redima la suscripción "
+"completamente. "
 
 #: ../src/subscription_manager/managercli.py:773
-msgid "Optional language to use for email notification when subscription redemption is complete. Examples: en-us, de-de"
-msgstr "Idioma alternativo para usar en la notificación de correo-e cuando se redima la suscripción completamente. Ejemplos: en-us, de-de"
+#,
+msgid ""
+"Optional language to use for email notification when subscription redemption"
+" is complete. Examples: en-us, de-de"
+msgstr ""
+"Idioma alternativo para usar en la notificación de correo-e cuando se redima"
+" la suscripción completamente. Ejemplos: en-us, de-de"
 
 #: ../src/subscription_manager/managercli.py:816
+#,
 msgid "Subscribe the registered machine to a specified product"
 msgstr "Suscribe la máquina registrada a un producto específico"
 
 #: ../src/subscription_manager/managercli.py:824
+#,
 msgid "the id of the pool to subscribe to"
 msgstr "El ID del grupo a suscribir a"
 
 #: ../src/subscription_manager/managercli.py:826
+#,
 msgid "number of subscriptions to consume"
 msgstr "Número de suscripciones a usar"
 
 #: ../src/subscription_manager/managercli.py:833
-msgid "Error: This command requires that you specify a pool with --pool or use --auto."
-msgstr "Error: Este comando requiere que usted especifique un grupo con --pool o use --auto."
+#,
+msgid ""
+"Error: This command requires that you specify a pool with --pool or use "
+"--auto."
+msgstr ""
+"Error: Este comando requiere que usted especifique un grupo con --pool o use"
+" --auto."
 
 #: ../src/subscription_manager/managercli.py:836
+#,
 msgid "Error: Only one of --pool or --auto may be used with this command."
-msgstr "Error: únicamente --pool o --auto puede ser utilizado para este comando."
+msgstr ""
+"Error: únicamente --pool o --auto puede ser utilizado para este comando."
 
 #: ../src/subscription_manager/managercli.py:843
 #, 
@@ -507,6 +598,7 @@ msgid "Error: Quantity must be a positive integer."
 msgstr ""
 
 #: ../src/subscription_manager/managercli.py:868
+#,
 msgid "Please enter a valid numeric pool id."
 msgstr "Por favor ingrese un ID de grupo numérico válido."
 
@@ -516,14 +608,18 @@ msgid "Successfully subscribed the system to Pool %s"
 msgstr "Suscripción exitosa del sistema al Grupo %s"
 
 #: ../src/subscription_manager/managercli.py:905
+#,
 msgid "Unsubscribe the machine from all or specific subscriptions"
-msgstr "Retire la suscripción de la máquina de todas las suscripciones específicas"
+msgstr ""
+"Retire la suscripción de la máquina de todas las suscripciones específicas"
 
 #: ../src/subscription_manager/managercli.py:912
+#,
 msgid "Certificate serial to unsubscribe"
 msgstr "Serial de certificado para anular suscripción"
 
 #: ../src/subscription_manager/managercli.py:914
+#,
 msgid "Unsubscribe from all subscriptions"
 msgstr "Anular todas las suscripciones"
 
@@ -533,58 +629,69 @@ msgid "'%s' is not a valid serial number"
 msgstr "'%s' no es un número de serie válido"
 
 #: ../src/subscription_manager/managercli.py:922
+#,
 msgid "One of --serial or --all must be provided"
 msgstr "Una de --serial u --all debe proporcionarse"
 
-#: ../src/subscription_manager/managercli.py:946
 #: ../src/subscription_manager/managercli.py:961
 #, python-format
 msgid "Unable to perform unsubscribe due to the following exception: %s"
 msgstr ""
 
 #: ../src/subscription_manager/managercli.py:953
+#,
 msgid "This machine has been unsubscribed from all subscriptions"
 msgstr "Se han cancelado todas las suscripciones de esta máquina. "
 
 #: ../src/subscription_manager/managercli.py:958
+#,
 msgid "This machine has been unsubscribed from subscription "
 msgstr "Se ha anulado la suscripción de esta máquina. "
 
 #: ../src/subscription_manager/managercli.py:972
+#,
 msgid "Work with the current facts for this machine"
 msgstr "Funciona con los hechos actuales para esta máquina"
 
 #: ../src/subscription_manager/managercli.py:978
+#,
 msgid "list known facts for this system"
 msgstr "Listar eventos conocidos para este sistema"
 
 #: ../src/subscription_manager/managercli.py:980
+#,
 msgid "update the system facts"
 msgstr "Actualizar los eventos del sistema"
 
 #: ../src/subscription_manager/managercli.py:989
+#,
 msgid "Error: Need either --list or --update, Try facts --help"
 msgstr "Error: Necesita --list o --update, Intente facts --help"
 
-#: ../src/subscription_manager/managercli.py:1005
 #: ../src/subscription_manager/gui/factsgui.py:103
+#,
 msgid "Unknown"
 msgstr "Desconocido"
 
 #: ../src/subscription_manager/managercli.py:1013
+#,
 msgid "Successfully updated the system facts."
 msgstr "Actualizados correctamente los eventos del sistema."
 
 #: ../src/subscription_manager/managercli.py:1020
+#,
 msgid "Import certificates which were provided outside of the tool"
 msgstr "Importar certificados que fueron provistos fuera de esta herramienta"
 
 #: ../src/subscription_manager/managercli.py:1026
 #, 
-msgid "certificate file to import (for multiple imports, specify this option more than once)"
+msgid ""
+"certificate file to import (for multiple imports, specify this option more "
+"than once)"
 msgstr ""
 
 #: ../src/subscription_manager/managercli.py:1030
+#,
 msgid "Error: At least one certificate is required"
 msgstr "Error: se requiere por lo menos un certificado"
 
@@ -593,28 +700,33 @@ msgstr "Error: se requiere por lo menos un certificado"
 msgid "Successfully imported certificate %s"
 msgstr "Certificado %s importado correctamente"
 
-#: ../src/subscription_manager/managercli.py:1053
 #: ../src/subscription_manager/managercli.py:1063
 #, python-format
 msgid "%s is not a valid certificate file. Please use a valid certificate."
-msgstr "%s no es un archivo de certificado válido. Por favor use el certificado válido."
+msgstr ""
+"%s no es un archivo de certificado válido. Por favor use el certificado "
+"válido."
 
-#: ../src/subscription_manager/managercli.py:1059
 #: ../src/subscription_manager/gui/importsub.py:86
+#,
 msgid "An error occurred while importing the certificate. "
 msgstr "Ha ocurrido un error al importar el certificado."
 
 #: ../src/subscription_manager/managercli.py:1073
+#,
 msgid "List the repos which this machine is entitled to use"
 msgstr "Lista el repositorio al cual esta máquina está autorizado a usar"
 
 #: ../src/subscription_manager/managercli.py:1083
+#,
 msgid "list the entitled repositories for this system"
 msgstr "Lista los repositorios certificados para este sistema"
 
 #: ../src/subscription_manager/managercli.py:1087
+#,
 msgid "Error: No options provided. Please see the help comand."
-msgstr "Error: No se proporcionaron opciones. Por favor vea el comando de ayuda."
+msgstr ""
+"Error: No se proporcionaron opciones. Por favor vea el comando de ayuda."
 
 #: ../src/subscription_manager/managercli.py:1097
 #, python-format
@@ -622,14 +734,20 @@ msgid "    Entitled Repositories in %s"
 msgstr "Repositorios autorizados en %s"
 
 #: ../src/subscription_manager/managercli.py:1105
+#,
 msgid "The system is not entitled to use any repositories."
 msgstr "El sistema no está autorizado para usar ningún repositorio."
 
 #: ../src/subscription_manager/managercli.py:1112
-msgid "List, set, or remove the configuration parameters in use by this machine."
-msgstr "Liste, establezca o retire los parámetros de configuración que esta máquina esté utilizando."
+#,
+msgid ""
+"List, set, or remove the configuration parameters in use by this machine."
+msgstr ""
+"Liste, establezca o retire los parámetros de configuración que esta máquina "
+"esté utilizando."
 
 #: ../src/subscription_manager/managercli.py:1119
+#,
 msgid "list the configuration for this system"
 msgstr "Liste la configuración para este sistema"
 
@@ -645,12 +763,16 @@ msgstr ""
 
 #: ../src/subscription_manager/managercli.py:1140
 #, 
-msgid "Error: --list should not be used with any other options for setting or removing configurations."
+msgid ""
+"Error: --list should not be used with any other options for setting or "
+"removing configurations."
 msgstr ""
 
 #: ../src/subscription_manager/managercli.py:1158
 #, 
-msgid "Error: configuration entry designation for removal must be of format [section.name]"
+msgid ""
+"Error: configuration entry designation for removal must be of format "
+"[section.name]"
 msgstr ""
 
 #: ../src/subscription_manager/managercli.py:1169
@@ -663,7 +785,6 @@ msgstr "Error: La sección %s y nombre %s no existen."
 msgid "[] - Default value in use"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1197
 #: ../src/subscription_manager/managercli.py:1200
 #, python-format
 msgid "You have removed the value for section %s and name %s."
@@ -680,79 +801,103 @@ msgid "Section %s and name %s cannot be removed."
 msgstr "La sección  %s y nombre  %s  no se pueden eliminar."
 
 #: ../src/subscription_manager/managercli.py:1218
+#,
 msgid "List subscription and product information for this machine"
 msgstr "Lista la información de suscripción y producto para esta máquina"
 
 #: ../src/subscription_manager/managercli.py:1224
-msgid "if supplied then list shows those products which are installed (default)"
-msgstr "Si se proporciona lista entonces los productos que están instalados (por defecto)."
+#,
+msgid ""
+"if supplied then list shows those products which are installed (default)"
+msgstr ""
+"Si se proporciona lista entonces los productos que están instalados (por "
+"defecto)."
 
 #: ../src/subscription_manager/managercli.py:1226
+#,
 msgid "if supplied then list shows those subscriptions which are available"
-msgstr "Si la lista se proporciona, muestra las suscripciones instaladas (por defecto)."
+msgstr ""
+"Si la lista se proporciona, muestra las suscripciones instaladas (por "
+"defecto)."
 
 #: ../src/subscription_manager/managercli.py:1228
 #, python-format
-msgid "date to search on, defaults to today's date, only used with --available (example: %s)"
+msgid ""
+"date to search on, defaults to today's date, only used with --available "
+"(example: %s)"
 msgstr ""
 
 #: ../src/subscription_manager/managercli.py:1231
+#,
 msgid "shows the subscriptions being consumed by this system."
 msgstr "Muestra las suscripciones que están siendo usadas por el sistema."
 
 #: ../src/subscription_manager/managercli.py:1233
+#,
 msgid "if supplied with --available then all subscriptions are returned"
-msgstr "Si se proporciona con --available, todas las suscripciones se devuelven"
+msgstr ""
+"Si se proporciona con --available, todas las suscripciones se devuelven"
 
 #: ../src/subscription_manager/managercli.py:1240
+#,
 msgid "Error: --all is only applicable with --available"
 msgstr "Error: --all solamente se aplica con --available "
 
 #: ../src/subscription_manager/managercli.py:1243
+#,
 msgid "Error: --ondate is only applicable with --available"
 msgstr "Error: --ondate solamente se aplica con --available "
 
-#: ../src/subscription_manager/managercli.py:1252
 #: ../src/subscription_manager/gui/widgets.py:307
 #, 
 msgid "None"
 msgstr ""
 
 #: ../src/subscription_manager/managercli.py:1267
+#,
 msgid "No installed Products to list"
 msgstr "No hay productos instalados para listar"
 
 #: ../src/subscription_manager/managercli.py:1270
+#,
 msgid "    Installed Product Status"
 msgstr "    Estatus de productos instalados"
 
 #: ../src/subscription_manager/managercli.py:1287
-msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-msgstr "La fecha que ingresó no es válida. El formato de fecha debe ser AAAA-MM-DD (ejemplo: "
+#,
+msgid ""
+"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgstr ""
+"La fecha que ingresó no es válida. El formato de fecha debe ser AAAA-MM-DD "
+"(ejemplo: "
 
 #: ../src/subscription_manager/managercli.py:1293
+#,
 msgid "No Available subscription pools to list"
 msgstr "No hay grupos de suscripciones disponibles para listar "
 
-#: ../src/subscription_manager/managercli.py:1295
-#: ../src/subscription_manager/gui/allsubs.py:77
 #: ../src/subscription_manager/gui/subscription_assistant.py:170
+#,
 msgid "Available Subscriptions"
 msgstr "Suscripciones disponibles"
 
 #: ../src/subscription_manager/managercli.py:1301
+#,
 msgid "virtual"
 msgstr "Virtuales"
 
 #: ../src/subscription_manager/managercli.py:1303
+#,
 msgid "physical"
 msgstr "Físicas"
 
 #: ../src/subscription_manager/managercli.py:1320
+#,
 msgid "No Consumed subscription pools to list"
 msgstr "No hay grupos de suscripción consumidos para listar"
 
 #: ../src/subscription_manager/managercli.py:1323
+#,
 msgid "Consumed Product Subscriptions"
 msgstr "Suscripciones de productos consumidos"
 
@@ -762,30 +907,39 @@ msgid "Usage: %s [options] MODULENAME --help"
 msgstr ""
 
 #: ../src/subscription_manager/managercli.py:1402
+#,
 msgid "Primary Modules:"
 msgstr "Módulos primarios:"
 
 #: ../src/subscription_manager/managercli.py:1411
+#,
 msgid "Other Modules (Please consult documentation):"
 msgstr "Otros módulos (Por favor consulte la documentación):"
 
 #: ../src/subscription_manager/managercli.py:1492
-msgid "Error: You need to register this system by running `register` command before using this option."
-msgstr "Error: Necesita registrar este sistema, ejecute el comando `register` antes de utilizar esta opción."
+#,
+msgid ""
+"Error: You need to register this system by running `register` command before"
+" using this option."
+msgstr ""
+"Error: Necesita registrar este sistema, ejecute el comando `register` antes "
+"de utilizar esta opción."
 
 #: ../src/subscription_manager/branding/__init__.py:81
+#,
 msgid "Register the machine to the server"
 msgstr "Registre la máquina al servidor"
 
 #: ../src/subscription_manager/branding/__init__.py:82
+#,
 msgid "Unregister the machine from the server"
 msgstr "Retire del servidor el registro de la máquina "
 
 #: ../src/subscription_manager/branding/__init__.py:84
+#,
 msgid "This system is registered to spacewalk"
 msgstr "El sistema está registrado a Spacewalk"
 
-#: ../src/subscription_manager/branding/__init__.py:85
 #: ../src/subscription_manager/branding/redhat_branding.py:11
 #, 
 msgid "WARNING"
@@ -797,98 +951,117 @@ msgid "You have already registered with spacewalk."
 msgstr ""
 
 #: ../src/subscription_manager/branding/__init__.py:90
+#,
 msgid "Please enter your account information:"
 msgstr "Por favor ingrese su información de cuenta:"
 
 #: ../src/subscription_manager/branding/__init__.py:92
-msgid "Contact your system adminsitrator if you've forgot your login or password"
-msgstr "Contacte a su administrador de sistemas si olvidó su nombre de usuario o contraseña"
+#,
+msgid ""
+"Contact your system adminsitrator if you've forgot your login or password"
+msgstr ""
+"Contacte a su administrador de sistemas si olvidó su nombre de usuario o "
+"contraseña"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:7
+#,
 msgid "register the client to RHN"
 msgstr "Registrar al cliente a RHN"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:8
+#,
 msgid "unregister the client from RHN"
 msgstr "Cancelar el registro del cliente de RHN"
 
-#: ../src/subscription_manager/branding/redhat_branding.py:10
 #: ../src/subscription_manager/gui/installedtab.py:238
+#,
 msgid "This system is registered to RHN Classic"
 msgstr "Este sistema está registrado a RHN Classic"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:13
 #, 
-msgid "This system has already been registered with RHN using RHN Classic technology."
+msgid ""
+"This system has already been registered with RHN using RHN Classic "
+"technology."
 msgstr ""
 
 #: ../src/subscription_manager/branding/redhat_branding.py:15
 #, 
-msgid "The tool you are using is attempting to re-register using RHN Certificate-Based technology. Red Hat recommends (except in a few cases) that customers only register with RHN once."
+msgid ""
+"The tool you are using is attempting to re-register using RHN Certificate-"
+"Based technology. Red Hat recommends (except in a few cases) that customers "
+"only register with RHN once."
 msgstr ""
 
 #: ../src/subscription_manager/branding/redhat_branding.py:17
 #, 
-msgid "To learn more about RHN registration and technologies please consult this Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
+msgid ""
+"To learn more about RHN registration and technologies please consult this "
+"Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
 
 #: ../src/subscription_manager/branding/redhat_branding.py:20
+#,
 msgid "Please enter your Red Hat Network account information:"
 msgstr "Por favor ingrese su información de cuenta de Red Hat Network:"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:22
 #, 
-msgid "Tip: Forgot your login or password? Look it up at https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
+msgid ""
+"Tip: Forgot your login or password? Look it up at "
+"https://www.redhat.com/wapps/sso/rhn/lostPassword.html"
 msgstr ""
 
 #: ../src/subscription_manager/gui/importsub.py:66
+#,
 msgid "You must select a certificate."
 msgstr "Debe seleccionar un certificado."
 
 #: ../src/subscription_manager/gui/importsub.py:78
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
-msgstr "%s no es un archivo de certificado válido. Por favor cargue un certificado válido."
+msgstr ""
+"%s no es un archivo de certificado válido. Por favor cargue un certificado "
+"válido."
 
 #. if we get to this point, the import was successful
 #: ../src/subscription_manager/gui/importsub.py:91
+#,
 msgid "Certificate import was successful."
 msgstr "La importación del certificado fue correcta. "
 
-#: ../src/subscription_manager/gui/installedtab.py:81
-#: ../src/subscription_manager/gui/subscription_assistant.py:137
-#: ../src/subscription_manager/gui/widgets.py:197
 #: ../src/subscription_manager/gui/data/installed.glade.h:8
+#,
 msgid "Product"
 msgstr "Producto"
 
 #: ../src/subscription_manager/gui/installedtab.py:93
+#,
 msgid "Version"
 msgstr "Versión"
 
 #: ../src/subscription_manager/gui/installedtab.py:94
+#,
 msgid "Arch"
 msgstr "Arquitectura"
 
 #: ../src/subscription_manager/gui/installedtab.py:96
+#,
 msgid "Status"
 msgstr "Estatus"
 
-#: ../src/subscription_manager/gui/installedtab.py:97
-#: ../src/subscription_manager/gui/contract_selection.py:97
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:17
+#,
 msgid "Start Date"
 msgstr "Fecha de inicio"
 
-#: ../src/subscription_manager/gui/installedtab.py:98
-#: ../src/subscription_manager/gui/mysubstab.py:76
-#: ../src/subscription_manager/gui/subscription_assistant.py:139
-#: ../src/subscription_manager/gui/contract_selection.py:101
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:15
+#,
 msgid "End Date"
 msgstr "Fecha de terminación"
 
 #: ../src/subscription_manager/gui/installedtab.py:155
+#,
 msgid "Never Subscribed"
 msgstr "Nunca suscrito"
 
@@ -903,27 +1076,34 @@ msgid "Covered by contract %s through %s"
 msgstr "Cubierta por contrato %s hasta %s"
 
 #: ../src/subscription_manager/gui/installedtab.py:219
+#,
 msgid "My Installed Software"
 msgstr "Mi software instalado"
 
 #: ../src/subscription_manager/gui/installedtab.py:256
 #, python-format
-msgid "You have <b>%s</b> products with <i>invalid</i> entitlement certificates."
+msgid ""
+"You have <b>%s</b> products with <i>invalid</i> entitlement certificates."
 msgstr ""
 
 #: ../src/subscription_manager/gui/installedtab.py:260
 #, 
-msgid "You have <b>1</b> product with an <i>invalid</i> entitlement certificate."
+msgid ""
+"You have <b>1</b> product with an <i>invalid</i> entitlement certificate."
 msgstr ""
 
 #: ../src/subscription_manager/gui/installedtab.py:267
 #, python-format
-msgid "You have <b>%s</b> products in need of <i>additional</i> entitlement certificates."
+msgid ""
+"You have <b>%s</b> products in need of <i>additional</i> entitlement "
+"certificates."
 msgstr ""
 
 #: ../src/subscription_manager/gui/installedtab.py:271
 #, 
-msgid "You have <b>1</b> product in need of <i>additional</i> entitlement certificates."
+msgid ""
+"You have <b>1</b> product in need of <i>additional</i> entitlement "
+"certificates."
 msgstr ""
 
 #: ../src/subscription_manager/gui/installedtab.py:279
@@ -932,63 +1112,70 @@ msgid "Product entitlement certificates <i>valid</i> until %s"
 msgstr ""
 
 #: ../src/subscription_manager/gui/installedtab.py:286
+#,
 msgid "No product certificates installed."
 msgstr "No se han instalado certificados de productos."
 
 #: ../src/subscription_manager/gui/registergui.py:121
+#,
 msgid "Organization"
 msgstr "Organización"
 
 #: ../src/subscription_manager/gui/registergui.py:127
+#,
 msgid "Environment"
 msgstr "Entorno"
 
 #: ../src/subscription_manager/gui/registergui.py:194
+#,
 msgid "Fetching list of possible organizations"
 msgstr "Buscando lista de posibles organizaciones"
 
 #: ../src/subscription_manager/gui/registergui.py:290
+#,
 msgid "Registering your system"
 msgstr "Registrando su sistema"
 
 #: ../src/subscription_manager/gui/registergui.py:302
+#,
 msgid "Autosubscribing"
 msgstr "Auto suscribiendo"
 
 #: ../src/subscription_manager/gui/registergui.py:356
+#,
 msgid "You must enter a system name."
 msgstr "Debe ingresar un nombre de sistema."
 
 #: ../src/subscription_manager/gui/registergui.py:364
+#,
 msgid "You must enter a login."
 msgstr "Debe ingresar un nombre de usuario."
 
 #: ../src/subscription_manager/gui/registergui.py:369
+#,
 msgid "You must enter a password."
 msgstr "Debe ingresar una contraseña."
 
 #: ../src/subscription_manager/gui/registergui.py:424
+#,
 msgid "Server supports environments, but none are available."
 msgstr "El servidor admite entornos pero no hay ninguno disponible"
 
 #. Set up columns on the view
-#: ../src/subscription_manager/gui/mysubstab.py:64
-#: ../src/subscription_manager/gui/allsubs.py:68
-#: ../src/subscription_manager/gui/subscription_assistant.py:164
 #: ../src/subscription_manager/gui/data/installed.glade.h:9
+#,
 msgid "Subscription"
 msgstr "Suscripción"
 
 #: ../src/subscription_manager/gui/mysubstab.py:67
+#,
 msgid "Installed Products"
 msgstr "Productos instalados"
 
 #. Set up the quantity column.
 #. Set up editable quantity column.
-#: ../src/subscription_manager/gui/mysubstab.py:82
-#: ../src/subscription_manager/gui/allsubs.py:83
-#: ../src/subscription_manager/gui/subscription_assistant.py:179
 #: ../src/subscription_manager/gui/contract_selection.py:107
+#,
 msgid "Quantity"
 msgstr "Cantidad"
 
@@ -1003,16 +1190,17 @@ msgid "Are you sure you want to unsubscribe from %s?"
 msgstr "¿Está seguro de querer anular la suscripción de %s?"
 
 #: ../src/subscription_manager/gui/mysubstab.py:170
+#,
 msgid "My Subscriptions"
 msgstr "Mis suscripciones"
 
-#: ../src/subscription_manager/gui/mysubstab.py:207
 #: ../src/subscription_manager/gui/mysubstab.py:212
+#,
 msgid "Yes"
 msgstr "Sí"
 
-#: ../src/subscription_manager/gui/mysubstab.py:209
 #: ../src/subscription_manager/gui/mysubstab.py:214
+#,
 msgid "No"
 msgstr "No"
 
@@ -1021,18 +1209,18 @@ msgstr "No"
 msgid "Error redeeming subscription: %s"
 msgstr "Error al redimir la suscripción: %s"
 
-#: ../src/subscription_manager/gui/allsubs.py:211
-#: ../src/subscription_manager/gui/subscription_assistant.py:425
 #: ../src/subscription_manager/gui/contract_selection.py:120
+#,
 msgid "unlimited"
 msgstr "Ilimitado"
 
 #: ../src/subscription_manager/gui/allsubs.py:269
+#,
 msgid "All Available Subscriptions"
 msgstr "Todas las suscripciones disponibles"
 
-#: ../src/subscription_manager/gui/allsubs.py:281
 #: ../src/subscription_manager/gui/subscription_assistant.py:288
+#,
 msgid "Searching for subscriptions. Please wait."
 msgstr "Buscando suscripciones. Por favor espere."
 
@@ -1046,12 +1234,11 @@ msgstr "Error en la búsqueda de suscripciones desde el servidor:  %s"
 msgid "Unable to search for subscriptions:  %s"
 msgstr "No se pueden buscar suscripciones:  %s"
 
-#: ../src/subscription_manager/gui/allsubs.py:315
 #: ../src/subscription_manager/gui/subscription_assistant.py:562
+#,
 msgid "Quantity must be a positive number."
 msgstr "La cantidad debe ser un número positivo."
 
-#: ../src/subscription_manager/gui/allsubs.py:324
 #: ../src/subscription_manager/gui/subscription_assistant.py:571
 #, python-format
 msgid "Error getting subscription: %s"
@@ -1059,56 +1246,66 @@ msgstr "Error en la obtención de suscripción: %s"
 
 #. Set up columns on the view
 #: ../src/subscription_manager/gui/factsgui.py:54
+#,
 msgid "Fact"
 msgstr "Evento"
 
 #: ../src/subscription_manager/gui/factsgui.py:55
+#,
 msgid "Value"
 msgstr "Valor"
 
 #: ../src/subscription_manager/gui/factsgui.py:87
+#,
 msgid "No previous update"
 msgstr "Sin fecha previa"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:41
+#,
 msgid "Entitlement Registration"
 msgstr "Registro de derechos"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:42
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:35
+#,
 msgid "Entitlement Platform Registration"
 msgstr "Registro de plataforma de derechos"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:210
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_subscriptions.py:29
-#: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:225
-#: ../src/subscription_manager/gui/data/subsgui.glade.h:3
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:6
 #: ../etc-conf/subscription-manager.desktop.in.h:2
+#,
 msgid "Subscription Manager"
 msgstr "Gestor de suscripción"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_subscriptions.py:28
+#,
 msgid "RHSM Subscriptions Management"
 msgstr "Administración de suscripciones de RHSM"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_subscriptions.py:25
+#,
 msgid "RHSM Subscriptions Managemen"
 msgstr "Administración de suscripciones RHSM "
 
 #: ../src/subscription_manager/gui/subscription_assistant.py:132
+#,
 msgid "Invalid Product List"
 msgstr "Lista de productos inválidos"
 
 #: ../src/subscription_manager/gui/subscription_assistant.py:159
+#,
 msgid "Subscription List"
 msgstr "Lista de suscripción"
 
 #: ../src/subscription_manager/gui/subscription_assistant.py:231
-msgid "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log for more information."
-msgstr "Error en el despliegue del asistente de suscripción. Por favor, consulte /var/log/rhsm/rhsm.log para obtener mayor información."
+#,
+msgid ""
+"Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
+"for more information."
+msgstr ""
+"Error en el despliegue del asistente de suscripción. Por favor, consulte "
+"/var/log/rhsm/rhsm.log para obtener mayor información."
 
 #: ../src/subscription_manager/gui/subscription_assistant.py:246
+#,
 msgid "Unable to search for subscriptions"
 msgstr "No se pueden buscar suscripciones"
 
@@ -1125,10 +1322,12 @@ msgstr "%s (primera fecha de derechos no válidos)"
 #: ../src/subscription_manager/gui/subscription_assistant.py:276
 #, python-format
 msgid "The following subscriptions will cover the products selected on %s"
-msgstr "Las siguientes suscripciones cubrirán los productos seleccionados en %s"
+msgstr ""
+"Las siguientes suscripciones cubrirán los productos seleccionados en %s"
 
 #. installed but not entitled products:
 #: ../src/subscription_manager/gui/subscription_assistant.py:357
+#,
 msgid "N/A"
 msgstr "N/A"
 
@@ -1148,8 +1347,13 @@ msgid "Make sure that you own %s."
 msgstr ""
 
 #: ../src/subscription_manager/gui/utils.py:58
-msgid "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information."
-msgstr "Error de red, no puede conectarse al servidor. Por favor, consulte /var/log/rhsm/rhsm.log para obtener más información."
+#,
+msgid ""
+"Network error, unable to connect to server. Please see "
+"/var/log/rhsm/rhsm.log for more information."
+msgstr ""
+"Error de red, no puede conectarse al servidor. Por favor, consulte "
+"/var/log/rhsm/rhsm.log para obtener más información."
 
 #: ../src/subscription_manager/gui/utils.py:60
 #, python-format
@@ -1162,22 +1366,28 @@ msgid "Next Update: %s"
 msgstr "Próxima actualización: %s "
 
 #: ../src/subscription_manager/gui/widgets.py:201
+#,
 msgid "Installed"
 msgstr "Instalado"
 
 #: ../src/subscription_manager/gui/widgets.py:425
+#,
 msgid "Invalid date format. Please re-enter a valid date. Example: "
-msgstr "Formato de fecha inválido. Por favor reingrese una fecha válida. Ejemplo:"
+msgstr ""
+"Formato de fecha inválido. Por favor reingrese una fecha válida. Ejemplo:"
 
 #: ../src/subscription_manager/gui/widgets.py:461
+#,
 msgid "Today"
 msgstr "Hoy"
 
 #: ../src/subscription_manager/gui/widgets.py:549
+#,
 msgid "Physical"
 msgstr "Físicos"
 
 #: ../src/subscription_manager/gui/widgets.py:550
+#,
 msgid "Virtual"
 msgstr "Virtuales"
 
@@ -1187,23 +1397,27 @@ msgid "Type"
 msgstr ""
 
 #: ../src/subscription_manager/gui/widgets.py:582
+#,
 msgid "Click to Adjust Quantity"
 msgstr "Haga clic para ajustar la cantidad"
 
-#: ../src/subscription_manager/gui/contract_selection.py:82
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:14
+#,
 msgid "Contract Number"
 msgstr "Número de contrato"
 
 #: ../src/subscription_manager/gui/contract_selection.py:92
+#,
 msgid "Used / Available"
 msgstr "Utilizado / Disponible"
 
 #: ../src/subscription_manager/gui/managergui.py:405
+#,
 msgid "System Already Registered"
 msgstr "El sistema ya está registrado"
 
 #: ../src/subscription_manager/certlib.py:170
+#,
 msgid "Reasons(s):"
 msgstr "Razón(es):"
 
@@ -1223,45 +1437,52 @@ msgid "Expected (UEP) serial# %s"
 msgstr "Se espera (UEP) serial# %s"
 
 #: ../src/subscription_manager/certlib.py:435
+#,
 msgid "Added (new)"
 msgstr "Añadido (nuevo)"
 
 #: ../src/subscription_manager/certlib.py:436
+#,
 msgid "Deleted (rogue):"
 msgstr "Borrado (falso):"
 
 #: ../src/subscription_manager/certlib.py:437
+#,
 msgid "Expired (not deleted):"
 msgstr "Expirado (no borrado):"
 
 #: ../src/subscription_manager/certlib.py:438
+#,
 msgid "Expired (deleted):"
 msgstr "Expirado (borrado):"
 
 #: ../src/subscription_manager/certlib.py:443
+#,
 msgid "Updating entitlement certificates"
 msgstr "Actualizando certificados de derechos "
 
-#: ../src/subscription_manager/certlib.py:446
 #: ../src/subscription_manager/certmgr.py:104
 #, python-format
 msgid "%d updates required"
 msgstr "%d actualizaciones requeridas"
 
-#: ../src/subscription_manager/certlib.py:447
 #: ../src/subscription_manager/certmgr.py:105
+#,
 msgid "done"
 msgstr "terminado"
 
 #: ../src/subscription_manager/certmgr.py:99
+#,
 msgid "Updating entitlement certificates & repositories"
 msgstr "Actualizando certificados  y repositorios de derechos"
 
 #: ../src/subscription_manager/certmgr.py:132
+#,
 msgid "Unable to update entitlement certificates & repositories"
 msgstr "No se pueden actualizar certificados de derechos y repositorios"
 
 #: ../src/subscription_manager/certdirectory.py:179
+#,
 msgid "Reason(s):"
 msgstr "Razón(es):"
 
@@ -1275,7 +1496,6 @@ msgstr ""
 msgid "Arch:                 \t%-25s"
 msgstr ""
 
-#: ../src/subscription_manager/constants.py:32
 #: ../src/subscription_manager/constants.py:68
 #, python-format
 msgid "Status:               \t%-25s"
@@ -1352,15 +1572,17 @@ msgid "<b>Unable to register the system.</b>"
 msgstr ""
 
 #: ../src/subscription_manager/constants.py:85
+#,
 msgid "<b>Are you sure you want to unregister?</b>"
 msgstr "<b>¿Está seguro de querer anular el registro?</b>"
 
 #: ../src/subscription_manager/constants.py:87
 #, python-format
 msgid "<b>User %s is not able to register with any orgs.</b>"
-msgstr "<b>Usuario %s no está disponible para registrarse con ninguna organización.</b>"
+msgstr ""
+"<b>Usuario %s no está disponible para registrarse con ninguna "
+"organización.</b>"
 
-#: ../src/subscription_manager/hwprobe.py:90
 #: ../src/subscription_manager/hwprobe.py:398
 #, python-format
 msgid "Error reading system DMI information: %s"
@@ -1372,22 +1594,27 @@ msgid "Error reading system DMI information with %s: %s"
 msgstr "Error al leer información DMI de sistema con %s: %s"
 
 #: ../src/subscription_manager/hwprobe.py:181
+#,
 msgid "Error reading system memory information:"
 msgstr "Error en la lectura de información de memoria del sistema:"
 
 #: ../src/subscription_manager/hwprobe.py:255
+#,
 msgid "Error reading system cpu information:"
 msgstr "Error en la lectura de información de CPU del sistema:"
 
 #: ../src/subscription_manager/hwprobe.py:268
+#,
 msgid "Error reading networking information:"
 msgstr "Error en la lectura de información de redes:"
 
 #: ../src/subscription_manager/hwprobe.py:285
+#,
 msgid "Error reading net Interface information:"
 msgstr "Error en la lectura de información de interfaz de red:"
 
 #: ../src/subscription_manager/hwprobe.py:353
+#,
 msgid "Virtualization platform does not support UUIDs"
 msgstr "La plataforma de virtualización no soporta UUID"
 
@@ -1397,62 +1624,67 @@ msgid "Error finding UUID: %s"
 msgstr "Error al buscar UUID: %s"
 
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:1
+#,
 msgid "* Click to Change Quantity"
 msgstr "* Haga clic para cambiar cantidad"
 
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:2
+#,
 msgid "<b>Choose the specific contract to use:</b>"
 msgstr "<b>Elija el contrato específico a usar:</b>"
 
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:3
-#: ../src/subscription_manager/gui/data/installed.glade.h:4
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:9
+#,
 msgid "<b>Subscription:</b>"
 msgstr "<b>Suscripción:</b>"
 
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:4
+#,
 msgid "<b>Total Contracts:</b>"
 msgstr "<b>Total de contratos:</b>"
 
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:5
+#,
 msgid "Contract Selection"
 msgstr "Selección de contrato"
 
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:6
-#: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:6
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:12
+#,
 msgid "Subscribe"
 msgstr "Suscribir"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:1
+#,
 msgid "<b>Certificate Status:</b>"
 msgstr "<b>Estatus de certificado:</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:2
+#,
 msgid "<b>Product's Subscription Details</b>"
 msgstr "<b>Información de suscripción de producto</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:3
+#,
 msgid "<b>Product:</b>"
 msgstr "<b>Producto:</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:5
+#,
 msgid "Certificate Status"
 msgstr "Estatus del certificado"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:6
+#,
 msgid "Installed View"
 msgstr "Ver instalados"
 
-#: ../src/subscription_manager/gui/data/installed.glade.h:7
-#: ../src/subscription_manager/gui/data/mysubs.glade.h:2
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:9
+#,
 msgid "Next Update:"
 msgstr "Próxima actualización:"
 
-#: ../src/subscription_manager/gui/data/installed.glade.h:10
-#: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:25
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:14
+#,
 msgid "Update"
 msgstr "Actualizar"
 
@@ -1462,449 +1694,566 @@ msgid "label"
 msgstr ""
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:1
+#,
 msgid "<b>Environment Selection</b>"
 msgstr "<b>Selección de entorno</b>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:2
+#,
 msgid "<b>Organization Selection</b>"
 msgstr "<b>Selección de organización</b>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:3
+#,
 msgid "<b>Please enter the following for this system:</b>"
 msgstr "<b>Por favor ingrese lo siguiente para este sistema:</b>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:4
+#,
 msgid "<b>Registering</b>"
 msgstr "<b>Registrando</b>"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:5
+#,
 msgid "A unique label for this system"
 msgstr "Una etiqueta única para este sistema"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:6
+#,
 msgid "Login:"
 msgstr "Nombre de usuario:"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:7
+#,
 msgid "Password:"
 msgstr "Contraseña:"
 
-#: ../src/subscription_manager/gui/data/registration.glade.h:8
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:5
+#,
 msgid "Register"
 msgstr "Registrar"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:9
+#,
 msgid "Select the most appropriate subscriptions for this system"
 msgstr "Seleccione las suscripciones más apropiadas para este sistema"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:10
+#,
 msgid "System Name:"
 msgstr "Nombre de sistema:"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:11
+#,
 msgid "System Registration"
 msgstr "Registro de sistema"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:12
+#,
 msgid "page 1"
 msgstr "página 1"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:13
+#,
 msgid "page 2"
 msgstr "página 2"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:14
+#,
 msgid "page 3"
 msgstr "página 3"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:15
+#,
 msgid "page 4"
 msgstr "página 4"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:16
+#,
 msgid "register_button"
 msgstr "register_button"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:17
+#,
 msgid "register_dialog_main_vbox"
 msgstr "register_dialog_main_vbox"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:18
+#,
 msgid "registration_dialog_action_area\n"
 msgstr "registration_dialog_action_area\n"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:1
+#,
 msgid "Certificate _Location:"
 msgstr "Lugar_de_certificado:"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
-msgid "Choose a certificate to import to your subscription certificate directory."
-msgstr "Elija un certificado a importar a su directorio de certificados de suscripción."
+#,
+msgid ""
+"Choose a certificate to import to your subscription certificate directory."
+msgstr ""
+"Elija un certificado a importar a su directorio de certificados de "
+"suscripción."
 
-#: ../src/subscription_manager/gui/data/importsub.glade.h:3
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:2
+#,
 msgid "Import Certificate"
 msgstr "Importar certificado"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:4
+#,
 msgid "Provide a Subscription Certificate"
 msgstr "Proporcionar un certificado de suscripción"
 
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:1
+#,
 msgid "<b>System Facts:</b>"
 msgstr "<b>Eventos de sistema:</b>"
 
-#: ../src/subscription_manager/gui/data/factsdialog.glade.h:2
 #: ../src/subscription_manager/gui/data/redeem.glade.h:1
+#,
 msgid "Close"
 msgstr "Cerrar"
 
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:3
+#,
 msgid "Last Update:"
 msgstr "Última actualización:"
 
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:4
+#,
 msgid "Organization:"
 msgstr "Organización:"
 
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:5
+#,
 msgid "Subscription Manager - Facts"
 msgstr "Gestor de suscripción - Eventos"
 
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:6
+#,
 msgid "Update Facts"
 msgstr "Actualización de eventos"
 
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:7
+#,
 msgid "Update Time"
 msgstr "Actualización de hora"
 
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:8
+#,
 msgid "close_button"
 msgstr "close_button"
 
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:9
+#,
 msgid "facts_view"
 msgstr "facts_view"
 
 #: ../src/subscription_manager/gui/data/mysubs.glade.h:1
+#,
 msgid "My Subscriptions View"
 msgstr "Ver mis suscripciones"
 
 #: ../src/subscription_manager/gui/data/mysubs.glade.h:3
+#,
 msgid "Unsubscribe"
 msgstr "Anular suscripción"
 
 #: ../src/subscription_manager/gui/data/redeem.glade.h:2
+#,
 msgid "Email Address:"
 msgstr "Dirección de correo-e:"
 
 #: ../src/subscription_manager/gui/data/redeem.glade.h:3
+#,
 msgid "Redeem"
 msgstr "Redimir"
 
 #: ../src/subscription_manager/gui/data/redeem.glade.h:4
+#,
 msgid ""
 "Redeeming the subscription may take a few minutes.\n"
 "Please provide an email address to receive notification\n"
 "when the redemption is complete."
-msgstr "Redimir una suscripción puede tardar unos minutos. Por favor provea una dirección de correo-e para recibir notificación cuando la redención se complete. "
+msgstr ""
+"Redimir una suscripción puede tardar unos minutos. Por favor provea una "
+"dirección de correo-e para recibir notificación cuando la redención se "
+"complete. "
 
 #: ../src/subscription_manager/gui/data/redeem.glade.h:7
+#,
 msgid "Subscription Redemption"
 msgstr "Redimir suscripción"
 
-#: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:1
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:1
+#,
 msgid "* Click to Adjust Quantity"
 msgstr "* Haga clic para ajustar la cantidad"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:2
+#,
 msgid "A different date:"
 msgstr "En una fecha diferente:"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:3
+#,
 msgid "Check/uncheck all products"
 msgstr "Marque o desmarque todos los productos"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:4
+#,
 msgid "Invalid Product List ScrolledWindow"
 msgstr "Listado de productos ScrolledWindow inválido  "
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:5
+#,
 msgid "Show products with invalid entitlement certificates as of:"
-msgstr "Mostrar productos que no tienen certificados de derechos válidos a partir de: "
+msgstr ""
+"Mostrar productos que no tienen certificados de derechos válidos a partir "
+"de: "
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:7
+#,
 msgid "Subscription Action Area"
 msgstr "Área de suscripción"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:8
+#,
 msgid "Subscription Assistant"
 msgstr "Asistente de suscripción"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:9
+#,
 msgid "Subscription Assistant Box"
 msgstr "Caja de asistente de suscripción"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:10
+#,
 msgid "Subscription Assistant Status"
 msgstr "Estatus de asistente de suscripción"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:11
+#,
 msgid "Subscription Date Box"
 msgstr "Caja de fecha de suscripción"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:12
+#,
 msgid "Subscription Date Label"
 msgstr "Etiqueta de fecha de suscripción"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:13
+#,
 msgid "Subscription Date Picker"
 msgstr "Selector de fecha de suscripción"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:14
+#,
 msgid "Subscription Details"
 msgstr "Información de suscripción"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:15
+#,
 msgid "Subscription Label"
 msgstr "Etiqueta de suscripción"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:16
+#,
 msgid "Subscription Label Box"
 msgstr "Caja de etiqueta de suscripción"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:17
+#,
 msgid "Subscription Manager - Subscription Assistant"
 msgstr "Gestor de suscripción - Asistente de suscripción"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:18
+#,
 msgid "Subscription Product List"
 msgstr "Lista de productos de suscripción"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:19
+#,
 msgid "Subscription Subscriptions Box"
 msgstr "Caja de suscripciones"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:20
+#,
 msgid "Subscription Subscriptions Label"
 msgstr "Etiqueta de suscripciones"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:21
+#,
 msgid "Subscription Update Box"
 msgstr "Caja de actualizador de suscripciones"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:22
+#,
 msgid "Subscriptions List"
 msgstr "Lista de suscripciones"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:23
+#,
 msgid "Subscriptions Panel"
 msgstr "Panel de suscripciones"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:24
-msgid "The following subscriptions will cover the products selected on MM/DD/YYYY"
-msgstr "Las suscripciones a continuación cubrirán los productos seleccionados en MM/DD/AAAA"
+#,
+msgid ""
+"The following subscriptions will cover the products selected on MM/DD/YYYY"
+msgstr ""
+"Las suscripciones a continuación cubrirán los productos seleccionados en "
+"MM/DD/AAAA"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:26
+#,
 msgid "_Check all"
 msgstr "_Marcar todos"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:27
+#,
 msgid "subscribe button"
 msgstr "botón de suscripción"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:1
+#,
 msgid "<b>Account Number:</b>"
 msgstr "<b>Número de cuenta:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:2
+#,
 msgid "<b>Bundled Products:</b>"
 msgstr "<b>Paquete de productos:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:3
+#,
 msgid "<b>Contract Number:</b>"
 msgstr "<b>Número de contrato:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:4
+#,
 msgid "<b>End Date:</b>"
 msgstr "<b>Fecha final:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:5
+#,
 msgid "<b>Provides Management:</b>"
 msgstr "<b>Ofrece administración:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:6
+#,
 msgid "<b>Stacking ID:</b>"
 msgstr "<b>ID de apilamiento:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
+#,
 msgid "<b>Start Date:</b>"
 msgstr "<b>Fecha de inicio:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
+#,
 msgid "<b>Subscription Details</b>"
 msgstr "<b>Información de suscripción</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:10
+#,
 msgid "<b>Support Level:</b>"
 msgstr "<b>Nivel de soporte:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:11
+#,
 msgid "<b>Support Type:</b>"
 msgstr "<b>Tipo de soporte:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:12
+#,
 msgid "<b>Virtual Only:</b>"
 msgstr "<b>Solamente virtual:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:13
+#,
 msgid "Account Text"
 msgstr "Texto de cuenta "
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:16
+#,
 msgid "Provides Management Text"
 msgstr "Proporciona texto de administración"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:18
+#,
 msgid "Subscription Text"
 msgstr "Texto de suscripción"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:19
+#,
 msgid "Support Level Text"
 msgstr "Texto de nivel de soporte"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:20
+#,
 msgid "Support Type Text"
 msgstr "Soporte de tipo de texto"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:1
+#,
 msgid "<b>HTTP Proxy</b>"
 msgstr "<b>Proxy HTTP</b>"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:2
+#,
 msgid "<small><b>Example:</b> squid.example.com:3128</small>"
 msgstr "<small><b>Ejemplo:</b> squid.example.com:3128</small>"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:3
+#,
 msgid "Advanced Network Configuration"
 msgstr "Configuración de red avanzada"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:4
+#,
 msgid "Authentication Checkbox"
 msgstr "Casilla de verificación de autenticación"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:5
+#,
 msgid "Close Button"
 msgstr "Botón de cierre"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:6
+#,
 msgid "Enter in the format hostname(:port)"
 msgstr "Ingresar en el formato hostname(:port)"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:7
+#,
 msgid "I would like to connect via an _HTTP proxy."
 msgstr "Desearía conectarme a través de un _HTTP proxy."
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:8
+#,
 msgid "Password Text"
 msgstr "Texto de contraseña"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:9
+#,
 msgid "Proxy Checkbox"
 msgstr "Casilla de verificación de proxy"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:10
+#,
 msgid "Proxy Location Text"
 msgstr "Texto de ubicación de proxy"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:11
+#,
 msgid "Proxy P_assword:"
 msgstr "Contr_aseña de Proxy:"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:12
+#,
 msgid "Proxy _Username:"
 msgstr "Nombre de _usuario de Proxy:"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:13
+#,
 msgid "Use Au_thentication with HTTP Proxy:"
 msgstr "Usar au_tenticación con proxy HTTP:"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:14
+#,
 msgid "Username Text"
 msgstr "Texto de nombre de usuario"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:15
+#,
 msgid "_Close"
 msgstr "_Cerrar"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:16
+#,
 msgid "_Proxy Location:"
 msgstr "Ubicación de _Proxy:"
 
 #: ../src/subscription_manager/gui/data/subsgui.glade.h:1
+#,
 msgid "Enter your Subscription account information"
 msgstr "Ingrese su información de cuenta de suscripción"
 
 #: ../src/subscription_manager/gui/data/subsgui.glade.h:2
+#,
 msgid "Manage Your Product Subscriptions"
 msgstr "Administre sus suscripciones de productos"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:2
+#,
 msgid "<b>More search options</b>"
 msgstr "<b>Más opciones de búsqueda</b>"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:3
+#,
 msgid "<b>Show subscriptions active on:</b>"
 msgstr "<b>Mostrar suscripciones activas en:</b>"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:4
+#,
 msgid "All Subscriptions View"
 msgstr "Ver todas las suscripciones"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:5
+#,
 msgid "Contains the text:"
 msgstr "Contiene el texto:"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:6
+#,
 msgid "Do Not Overlap"
 msgstr "No sobreponer"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:7
+#,
 msgid "Match Installed"
 msgstr "Coincide con instalado"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:8
+#,
 msgid "Match System"
 msgstr "Coincide con sistema"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:10
+#,
 msgid "Only show subscriptions that:"
 msgstr "Solo muestra las suscripciones que:"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:11
+#,
 msgid "Search"
 msgstr "Búsqueda"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:13
+#,
 msgid "Text in Subscription"
 msgstr "Texto en suscripción"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:15
+#,
 msgid "have no overlap with existing subscriptions"
 msgstr "No coinciden con suscripciones existentes"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:16
+#,
 msgid "match my installed products"
 msgstr "Coinciden con mis productos instalados"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:17
+#,
 msgid "match my system"
 msgstr "Coinciden con mi sistema"
 
 #: ../src/subscription_manager/gui/data/progress.glade.h:1
+#,
 msgid "Progress Dialog"
 msgstr "Diálogo de progreso"
 
@@ -1914,10 +2263,12 @@ msgid "Help"
 msgstr ""
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:3
+#,
 msgid "Proxy Configuration"
 msgstr "Configuración de Proxy"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:4
+#,
 msgid "Redeem a Subscription"
 msgstr "Redimir una suscripción"
 
@@ -1927,6 +2278,7 @@ msgid "Unregister"
 msgstr ""
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:8
+#,
 msgid "View System Facts"
 msgstr "Ver eventos del sistema"
 
@@ -1940,7 +2292,7 @@ msgstr ""
 msgid "_Proxy Configuration"
 msgstr ""
 
-#: ../src/install-num-migrate-to-rhsm:53 ../src/rhn-migrate-classic-to-rhsm:49
+#: ../src/rhn-migrate-classic-to-rhsm:49
 #, 
 msgid "Must be root user to execute\n"
 msgstr ""
@@ -1957,7 +2309,9 @@ msgstr ""
 
 #: ../src/rhn-migrate-classic-to-rhsm:66
 #, 
-msgid "Don't launch the GUI tool to subscribe the system, just use the CLI tool which will do it automatically"
+msgid ""
+"Don't launch the GUI tool to subscribe the system, just use the CLI tool "
+"which will do it automatically"
 msgstr ""
 
 #: ../src/rhn-migrate-classic-to-rhsm:67
@@ -2126,54 +2480,73 @@ msgid ""
 msgstr ""
 
 #: ../src/rhsm_icon.c:45
+#,
 msgid "How often to check for validity (in seconds)"
 msgstr "Frecuencia con que revisa la validez (en segundos)"
 
 #: ../src/rhsm_icon.c:47
+#,
 msgid "Show debug messages"
 msgstr "Mostrar mensaje de depuración"
 
 #: ../src/rhsm_icon.c:49
+#,
 msgid "Force display of the icon (expired, partial or warning)"
 msgstr "Forzar muestra del icono (expirado, parcial o advertencia)"
 
 #: ../src/rhsm_icon.c:52
+#,
 msgid "Run the first status check right away"
 msgstr "Realizar la primera revisión de estatus en este momento"
 
-#: ../src/rhsm_icon.c:189 ../src/rhsm_icon.c:191
+#: ../src/rhsm_icon.c:191
+#,
 msgid "Invalid or Missing Entitlement Certificates"
 msgstr "Certificados de derechos faltantes o inválidos"
 
 #: ../src/rhsm_icon.c:193
+#,
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr "A este sistema le faltan uno o varios certificados de derechos válidos."
+msgstr ""
+"A este sistema le faltan uno o varios certificados de derechos válidos."
 
-#: ../src/rhsm_icon.c:196 ../src/rhsm_icon.c:197
+#: ../src/rhsm_icon.c:197
+#,
 msgid "Partially Entitled Products"
 msgstr "Productos con derechos parciales"
 
 #: ../src/rhsm_icon.c:198
-msgid "This system is missing one or more valid entitlement certificates to fully cover its products"
-msgstr "A este sistema le falta uno o más certificados de derechos para cubrir totalmente sus productos."
+#,
+msgid ""
+"This system is missing one or more valid entitlement certificates to fully "
+"cover its products"
+msgstr ""
+"A este sistema le falta uno o más certificados de derechos para cubrir "
+"totalmente sus productos."
 
 #: ../src/rhsm_icon.c:204
+#,
 msgid "Some of the system's subscriptions are about to expire"
 msgstr "Algunas de las suscripciones del sistema están a punto de expirar"
 
 #: ../src/rhsm_icon.c:206
+#,
 msgid "This System's Subscriptions Are About to Expire"
 msgstr "Las suscripciones de este sistema están a punto de expirar"
 
 #: ../src/rhsm_icon.c:208
+#,
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr "Una o varias de las suscripciones de este sistema están a punto de expirar."
+msgstr ""
+"Una o varias de las suscripciones de este sistema están a punto de expirar."
 
 #: ../src/rhsm_icon.c:227
+#,
 msgid "Remind Me Later"
 msgstr "Recuérdeme más tarde"
 
 #: ../src/rhsm_icon.c:232
+#,
 msgid "Manage My Subscriptions..."
 msgstr "Administrar mis suscripciones..."
 
@@ -2182,7 +2555,7 @@ msgstr "Administrar mis suscripciones..."
 msgid "Unknown argument to force-icon: %s\n"
 msgstr "Argumento desconocido para force-icon: %s\n"
 
-#: ../src/rhsm_icon.c:336 ../src/rhsm_icon.c:399
+#: ../src/rhsm_icon.c:399
 #, c-format
 msgid "Failed to open connection to bus: %s\n"
 msgstr "Falló al abrir conexión para bus: %s\n"
@@ -2193,13 +2566,16 @@ msgid "option parsing failed: %s\n"
 msgstr "Falló lectura de opción: %s\n"
 
 #: ../etc-conf/rhsm-icon.desktop.in.h:1
+#,
 msgid "Red Hat Subscription Validity Applet"
 msgstr "Miniaplicación de validez de suscripción de Red Hat"
 
 #: ../etc-conf/rhsm-icon.desktop.in.h:2
+#,
 msgid "Subscription Validity Applet"
 msgstr "Miniaplicación de validez de suscripción"
 
 #: ../etc-conf/subscription-manager.desktop.in.h:1
+#,
 msgid "Red Hat Subscription Manager"
 msgstr "Gestor de suscripción de Red Hat"
