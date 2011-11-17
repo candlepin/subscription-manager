@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.98.2
+Version: 0.98.3
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,13 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Nov 17 2011 William Poteat <wpoteat@redhat.com> 0.98.3-1
+- 752854: Fixing error in iniparser around unpacking of a dictionary for
+  default values. (awood@redhat.com)
+- 708362: remove entitlement keys on delete as well (alikins@redhat.com)
+- 734114: registering with --org="foo bar" throws a NetworkException instead of
+  a RestlibException (awood@redhat.com)
+
 * Fri Oct 28 2011 William Poteat <wpoteat@redhat.com> 0.98.2-1
 - 749853: backport new python-rhsm API calls present in 6.2 for 5.8
   (cduryee@redhat.com)
