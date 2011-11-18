@@ -115,6 +115,44 @@ class TestEnvironmentsCommand(TestCliProxyCommand):
 class TestRegisterCommand(TestCliProxyCommand):
     command_class = managercli.RegisterCommand
 
+    def _test_exception(self, args):
+        try:
+            self.cc.main(args)
+            self.cc._validate_options()
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+        else:
+            self.fail("No Exception Raised")
+
+    def _test_no_exception(self, args):
+        try:
+            self.cc.main(args)
+            self.cc._validate_options()
+        except SystemExit, e:
+            self.fail("Exception Raised")
+
+    def test_keys_and_consumerid(self):
+        self._test_exception(["--consumerid", "22", "--activationkey", "key"])
+
+    def test_key_and_no_org(self):
+        self._test_exception(["--activationkey", "key"])
+
+    def test_key_and_org(self):
+        self._test_no_exception(["--activationkey", "key", "--org", "org"])
+
+    def test_keys_and_username(self):
+        self._test_exception(["--username", "bob", "--activationkey", "key"])
+
+    def test_env_and_no_org(self):
+        self._test_exception(["--env", "env"])
+
+    def test_env_and_org(self):
+        self._test_no_exception(["--env", "env", "--org", "org"])
+
+    def test_no_commands(self):
+        self._test_no_exception([])
+
+
 class TestListCommand(TestCliProxyCommand):
     command_class = managercli.ListCommand
 

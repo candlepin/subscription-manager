@@ -568,6 +568,9 @@ class RegisterCommand(UserPassCommand):
         elif (self.options.username and self.options.activation_keys):
             print(_("Error: Activation keys do not require user credentials"))
             sys.exit(-1)
+        elif (self.options.consumerid and self.options.activation_keys):
+            print(_("Error: Activation keys can not be used with previously registered ids."))
+            sys.exit(-1)
         elif (self.options.environment and not self.options.org):
             print(_("Error: Must specify --org to register to an environment."))
             sys.exit(-1)
