@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-16 14:38-0500\n"
+"POT-Creation-Date: 2011-11-21 11:01-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -242,8 +242,12 @@ msgid "password for http proxy with basic authentication"
 msgstr ""
 
 #: ../src/subscription_manager/managercli.py:204
+#: ../src/subscription_manager/managercli.py:389
+#: ../src/subscription_manager/managercli.py:735
+#: ../src/subscription_manager/managercli.py:1491
 msgid ""
-"Consumer not registered. Please register using --username and --password"
+"Error: You need to register this system by running `register` command.  Try "
+"register --help."
 msgstr ""
 
 #: ../src/subscription_manager/managercli.py:262
@@ -298,11 +302,6 @@ msgstr ""
 
 #: ../src/subscription_manager/managercli.py:384
 msgid "force certificate regeneration (requires username and password)"
-msgstr ""
-
-#: ../src/subscription_manager/managercli.py:389
-msgid ""
-"Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 
 #: ../src/subscription_manager/managercli.py:392
@@ -466,10 +465,6 @@ msgstr ""
 msgid "No such environment: %s"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:735
-msgid "This system is currently not registered."
-msgstr ""
-
 #: ../src/subscription_manager/managercli.py:757
 msgid "System has been un-registered."
 msgstr ""
@@ -574,8 +569,10 @@ msgstr ""
 msgid "Error: Need either --list or --update, Try facts --help"
 msgstr ""
 
+#. TODO: could stand to check if registered before trying to do this:
 #: ../src/subscription_manager/managercli.py:1005
 #: ../src/subscription_manager/gui/factsgui.py:103
+#: ../src/subscription_manager/gui/factsgui.py:107
 msgid "Unknown"
 msgstr ""
 
@@ -781,12 +778,6 @@ msgstr ""
 msgid "Other Modules (Please consult documentation):"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1492
-msgid ""
-"Error: You need to register this system by running `register` command before "
-"using this option."
-msgstr ""
-
 #: ../src/subscription_manager/branding/__init__.py:81
 msgid "Register the machine to the server"
 msgstr ""
@@ -957,39 +948,39 @@ msgstr ""
 msgid "No product certificates installed."
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:121
+#: ../src/subscription_manager/gui/registergui.py:123
 msgid "Organization"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:127
+#: ../src/subscription_manager/gui/registergui.py:129
 msgid "Environment"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:194
+#: ../src/subscription_manager/gui/registergui.py:196
 msgid "Fetching list of possible organizations"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:290
+#: ../src/subscription_manager/gui/registergui.py:295
 msgid "Registering your system"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:302
+#: ../src/subscription_manager/gui/registergui.py:306
 msgid "Autosubscribing"
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:356
+#: ../src/subscription_manager/gui/registergui.py:361
 msgid "You must enter a system name."
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:364
+#: ../src/subscription_manager/gui/registergui.py:369
 msgid "You must enter a login."
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:369
+#: ../src/subscription_manager/gui/registergui.py:374
 msgid "You must enter a password."
 msgstr ""
 
-#: ../src/subscription_manager/gui/registergui.py:424
+#: ../src/subscription_manager/gui/registergui.py:429
 msgid "Server supports environments, but none are available."
 msgstr ""
 
@@ -1103,7 +1094,6 @@ msgstr ""
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:210
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_subscriptions.py:29
-#: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:225
 #: ../src/subscription_manager/gui/data/subsgui.glade.h:3
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:6
 #: ../etc-conf/subscription-manager.desktop.in.h:2
