@@ -229,7 +229,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
             self._reload_screen()
         except Exception, e:
             handle_gui_exception(e, _("Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log for more information."),
-                                 formatMsg=False)
+                    self.window, formatMsg=False)
 
     def set_parent_window(self, window):
         self.window.set_transient_for(window)
@@ -244,7 +244,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
         if error:
             handle_gui_exception(error,
                                  _("Unable to search for subscriptions"),
-                                 formatMsg=False)
+                                 self.window, formatMsg=False)
         else:
             # order here is important, to show subs that match the
             # reselected products.
@@ -559,7 +559,8 @@ class SubscriptionAssistant(widgets.GladeWidget):
             self.subscriptions_store['quantity_to_consume'])
 
         if not valid_quantity(quantity_to_consume):
-            errorWindow(_("Quantity must be a positive number."))
+            errorWindow(_("Quantity must be a positive number."),
+                    parent=self.window)
             return
 
         pool = self.pool_stash.all_pools[pool_id]
@@ -568,6 +569,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
                                                    quantity_to_consume)
             managerlib.fetch_certificates(self.backend)
         except Exception, e:
-            handle_gui_exception(e, _("Error getting subscription: %s"))
+            handle_gui_exception(e, _("Error getting subscription: %s"),
+                    self.window)
 
         self._reload_screen()

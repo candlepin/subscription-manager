@@ -16,7 +16,7 @@
 import logging
 import gtk
 
-from subscription_manager.gui.utils import errorWindow, linkify, handle_gui_exception
+from subscription_manager.gui.utils import linkify, handle_gui_exception
 from subscription_manager.gui import widgets
 from subscription_manager.managerlib import enhance_facts
 
@@ -119,7 +119,7 @@ class SystemFactsDialog(widgets.GladeWidget):
             self.facts.update_check(self.backend.uep, consumer_uuid, force=True)
         except Exception, e:
             log.error("Could not update system facts \nError: %s" % e)
-            handle_gui_exception(e, linkify(str(e)))
+            handle_gui_exception(e, linkify(str(e)), self.system_facts_dialog)
 
     # GTK callback function for hiding this dialog.
     def _hide_callback(self, button, event=None):

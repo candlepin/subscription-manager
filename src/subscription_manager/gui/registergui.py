@@ -198,8 +198,8 @@ class RegisterScreen:
         self.cancel_button.set_sensitive(False)
         self.register_button.set_sensitive(False)
 
-	if self.finished:
-	    return True
+        if self.finished:
+            return True
 
     def _timeout_callback(self):
         self.register_progressbar.pulse()
@@ -208,14 +208,17 @@ class RegisterScreen:
 
     def _on_get_owner_list_cb(self, owners, error=None):
         if error != None:
-            handle_gui_exception(error, constants.REGISTER_ERROR)
+            handle_gui_exception(error, constants.REGISTER_ERROR,
+                    self.registerWin)
             self._finish_registration(failed=True)
             return
 
         owners = [(owner['key'], owner['displayName']) for owner in owners]
 
         if len(owners) == 0:
-            handle_gui_exception(None, (constants.NO_ORG_ERROR % (self.uname.get_text().strip())))
+            handle_gui_exception(None,
+                    (constants.NO_ORG_ERROR % (self.uname.get_text().strip())),
+                    self.registerWin)
             self._finish_registration(failed=True)
             return
 
@@ -240,7 +243,7 @@ class RegisterScreen:
     def _on_get_environment_list_cb(self, result_tuple, error=None):
         environments = result_tuple
         if error != None:
-            handle_gui_exception(error, constants.REGISTER_ERROR)
+            handle_gui_exception(error, constants.REGISTER_ERROR, self.registerWin)
             self._finish_registration(failed=True)
             return
 
@@ -311,7 +314,7 @@ class RegisterScreen:
                 self._finish_registration()
 
         except Exception, e:
-            handle_gui_exception(e, constants.REGISTER_ERROR)
+            handle_gui_exception(e, constants.REGISTER_ERROR, self.registerWin)
             self._finish_registration(failed=True)
 
     def _on_bind_by_products_cb(self, error=None):
@@ -327,7 +330,7 @@ class RegisterScreen:
     def _on_fetch_certificates_cb(self, error=None):
         failed = False
         if error:
-            handle_gui_exception(error, constants.REGISTER_ERROR)
+            handle_gui_exception(error, constants.REGISTER_ERROR, self.registerWin)
             failed = True
         self._finish_registration(failed=failed)
 
@@ -335,7 +338,7 @@ class RegisterScreen:
         # failed is used by the firstboot subclasses to decide if they should
         # advance the screen or not.
         if not failed:
-	    self.finished = True
+            self.finished = True
             self.close_window()
 
         self.emit_consumer_signal()
@@ -358,7 +361,7 @@ class RegisterScreen:
 
     def validate_consumername(self, consumername):
         if not consumername:
-            errorWindow(_("You must enter a system name."))
+            errorWindow(_("You must enter a system name."), parent=self.registerWin)
             self.consumer_name.grab_focus()
             return False
         return True
@@ -366,12 +369,12 @@ class RegisterScreen:
     def validate_account(self):
         # validate / check user name
         if self.uname.get_text().strip() == "":
-            errorWindow(_("You must enter a login."))
+            errorWindow(_("You must enter a login."), parent=self.registerWin)
             self.uname.grab_focus()
             return False
 
         if self.passwd.get_text().strip() == "":
-            errorWindow(_("You must enter a password."))
+            errorWindow(_("You must enter a password."), parent=self.registerWin)
             self.passwd.grab_focus()
             return False
         return True

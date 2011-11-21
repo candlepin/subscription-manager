@@ -39,12 +39,13 @@ MIN_GTK_MICRO = 0
 EVEN_ROW_COLOR = '#eeeeee'
 
 
-def handle_gui_exception(e, msg, formatMsg=True, logMsg=None):
+def handle_gui_exception(e, msg, parent, formatMsg=True, logMsg=None):
     """
     Handles an exception for the gui by logging the stack trace and
     displaying a user-friendly internationalized message.
 
     msg = User friendly message to display in GUI.
+    parent = Parent window where the error originates.
     logMsg = Optional message to be logged in addition to stack trace.
     formatMsg = if true, string sub the exception error in the msg
     """
@@ -55,16 +56,18 @@ def handle_gui_exception(e, msg, formatMsg=True, logMsg=None):
 
     # If exception is of these types we ignore the given display msg:
     if isinstance(e, socket_error):
-        errorWindow(_('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.'))
+        errorWindow(_('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.'),
+                parent=parent)
     elif isinstance(e, SSL.SSLError):
-        errorWindow(_('Unable to verify server\'s identity: %s') % str(e))
+        errorWindow(_('Unable to verify server\'s identity: %s') % str(e),
+                parent=parent)
     elif isinstance(e, connection.NetworkException):
         # NOTE: yes this looks a lot like the socket error, but I think these
         # were actually intended to display slightly different messages:
-        errorWindow(_("Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."))
+        errorWindow(_("Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."), parent=parent)
     elif isinstance(e, connection.RemoteServerException):
         # This is what happens when there's an issue with the server on the other side of the wire
-        errorWindow(_("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."))
+        errorWindow(_("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."), parent=parent)
     elif isinstance(e, connection.RestlibException):
         # If this exception's code is in the 200 range (such as 202 ACCEPTED)
         # we're going to ignore the message we were given and just display
@@ -82,21 +85,22 @@ def handle_gui_exception(e, msg, formatMsg=True, logMsg=None):
             except:
                 message = msg
 
-            errorWindow(message)
+            errorWindow(message, parent=parent)
 
     elif isinstance(e, connection.BadCertificateException):
-        errorWindow(_("Bad CA certificate: %s") % e.cert_path)
+        errorWindow(_("Bad CA certificate: %s") % e.cert_path, parent=parent)
     else:
         #catch-all, try to interpolate and if it doesn't work out, just display the message
         try:
             interpolatedStr = msg % e
-            errorWindow(interpolatedStr)
+            errorWindow(interpolatedStr, parent=parent)
         except:
-            errorWindow(msg)
+            errorWindow(msg, parent=parent)
 
 
-def errorWindow(message):
-    messageWindow.ErrorDialog(messageWindow.wrap_text(message))
+def errorWindow(message, parent=None):
+    messageWindow.ErrorDialog(messageWindow.wrap_text(message),
+            parent)
 
 
 def linkify(msg):

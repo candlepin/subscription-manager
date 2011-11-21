@@ -40,7 +40,7 @@ EXPIRED_COLOR = '#FFAF99'
 class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
     # Are facts required here? [mstead]
-    def __init__(self, backend, consumer, facts,
+    def __init__(self, backend, consumer, facts, parent_win,
                  ent_dir=None,
                  prod_dir=None):
         """
@@ -51,6 +51,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
+        self.parent_win = parent_win
         self.entitlement_dir = ent_dir or EntitlementDirectory()
         self.product_dir = prod_dir or ProductDirectory()
 
@@ -107,7 +108,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             try:
                 self.backend.uep.unbindBySerial(self.consumer.uuid, serial)
             except Exception, e:
-                handle_gui_exception(e, _("There was an error unsubscribing from %s with serial number %s") % (selection['subscription'], serial), formatMsg=False)
+                handle_gui_exception(e, _("There was an error unsubscribing from %s with serial number %s") % (selection['subscription'], serial), self.parent_win, formatMsg=False)
 
             try:
                 self.backend.certlib.update()

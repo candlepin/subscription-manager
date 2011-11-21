@@ -63,7 +63,8 @@ class MySubscriptionsTabTest(unittest.TestCase):
             column_entries.append(entry);
 
         # Test that the data from a subscription is loaded into the store.
-        my_subs_tab = MySubscriptionsTab(self.backend, self.consumer, {}, self.cert_dir)
+        my_subs_tab = MySubscriptionsTab(self.backend, self.consumer, {},
+                None, self.cert_dir)
         my_subs_tab.store.add_map = collect_entries
         my_subs_tab.update_subscriptions();
         return column_entries

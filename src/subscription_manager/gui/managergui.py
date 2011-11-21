@@ -219,12 +219,12 @@ class MainWindow(widgets.GladeWidget):
                                                   ent_dir=self.entitlement_dir,
                                                   prod_dir=self.product_dir)
         self.my_subs_tab = MySubscriptionsTab(self.backend, self.consumer,
-                                              self.facts,
+                                              self.facts, self.main_window,
                                               ent_dir=self.entitlement_dir,
                                               prod_dir=self.product_dir)
 
         self.all_subs_tab = AllSubscriptionsTab(self.backend, self.consumer,
-                self.facts)
+                self.facts, self.main_window)
 
         hbox = gtk.HBox(spacing=6)
         hbox.pack_start(self.installed_tab_icon, False, False)
@@ -335,6 +335,7 @@ class MainWindow(widgets.GladeWidget):
         except Exception, e:
             log.error("Error unregistering system with entitlement platform.")
             handle_gui_exception(e, constants.UNREGISTER_ERROR,
+                    self.main_window,
                     logMsg="Consumer may need to be manually cleaned up: %s" %
                     self.consumer.uuid)
         self.consumer.reload()

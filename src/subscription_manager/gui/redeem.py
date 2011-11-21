@@ -51,7 +51,8 @@ class RedeemDialog(widgets.GladeWidget):
             self.hide()
         except Exception, e:
             handle_gui_exception(e,
-                _("Error redeeming subscription: %s"))
+                _("Error redeeming subscription: %s"),
+                self.redeem_dialog)
 
     # Pulled from facts dialog - TODO:  Refactor!
     def show(self):

@@ -63,7 +63,8 @@ class ImportSubDialog(widgets.GladeWidget):
     def _import_button_clicked(self, button):
         src_cert_file = self.certificate_chooser_button.get_filename()
         if src_cert_file is None:
-            errorWindow(_("You must select a certificate."))
+            errorWindow(_("You must select a certificate."),
+                    parent=self.main_dialog)
             return False
 
         # Check to see if we have a key included in the cert file
@@ -76,7 +77,7 @@ class ImportSubDialog(widgets.GladeWidget):
                 log.error("Error parsing manually imported entitlement "
                     "certificate: %s" % src_cert_file)
                 errorWindow(_("%s is not a valid certificate file. Please upload a valid certificate.") %
-                            os.path.basename(src_cert_file))
+                        os.path.basename(src_cert_file), parent=self.main_dialog)
                 return False
 
             extractor.write_to_disk()
@@ -84,7 +85,8 @@ class ImportSubDialog(widgets.GladeWidget):
             # Should not get here unless something really bad happened.
             log.exception(e)
             errorWindow(_("An error occurred while importing the certificate. " +
-                          "Please check log file for more information."))
+                          "Please check log file for more information."),
+                          parent=self.main_dialog)
             return False
 
         #if we get to this point, the import was successful

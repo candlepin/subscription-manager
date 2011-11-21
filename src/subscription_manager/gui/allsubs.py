@@ -42,7 +42,7 @@ from subscription_manager.gui.storage import MappedTreeStore
 
 class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
-    def __init__(self, backend, consumer, facts):
+    def __init__(self, backend, consumer, facts, parent_win):
         widget_names = ['details_box', 'date_picker_hbox',
                         'compatible_checkbutton', 'overlap_checkbutton',
                         'installed_checkbutton', 'contains_text_entry',
@@ -51,6 +51,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                         'edit_quantity_label']
         super(AllSubscriptionsTab, self).__init__('allsubs.glade', widget_names)
 
+        self.parent_win = parent_win
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
@@ -299,7 +300,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             self.timer = gobject.timeout_add(100, self.pb.pulse)
             self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
         except Exception, e:
-            handle_gui_exception(e, _("Error fetching subscriptions from server:  %s"))
+            handle_gui_exception(e, _("Error fetching subscriptions from server:  %s"),
+                    self.parent_win)
 
     def _update_display(self, data, error):
         if self.pb:
@@ -309,7 +311,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             self.pb = None
 
         if error:
-            handle_gui_exception(error, _("Unable to search for subscriptions:  %s"))
+            handle_gui_exception(error, _("Unable to search for subscriptions:  %s"),
+                    self.parent_win)
         else:
             self.display_pools()
 
@@ -329,7 +332,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def _contract_selected(self, pool, quantity=1):
         if not valid_quantity(quantity):
-            errorWindow(_("Quantity must be a positive number."))
+            errorWindow(_("Quantity must be a positive number."),
+                    parent=self.parent_win)
             return
 
         self._contract_selection_cancelled()
@@ -338,7 +342,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             managerlib.fetch_certificates(self.backend)
 
         except Exception, e:
-            handle_gui_exception(e, _("Error getting subscription: %s"))
+            handle_gui_exception(e, _("Error getting subscription: %s"),
+                    self.parent_win)
 
         #Force the search results to refresh with the new info
         self.search_button_clicked(None)
