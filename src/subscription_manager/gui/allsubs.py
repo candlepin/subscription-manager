@@ -126,7 +126,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def get_type_map(self):
         return {
-            'virt_only': bool,
+            'virt_only': gobject.TYPE_PYOBJECT,
             'product_name': str,
             'available': str,
             'product_id': str,
@@ -212,9 +212,10 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 else:
                     available = entry.quantity - entry.consumed
 
+
                 pool = entry.pools[0]
                 self.store.add_map(iter, {
-                    'virt_only': PoolWrapper(entry.pools[0]).is_virt_only(),
+                    'virt_only': self._machine_type(entry.pools),
                     'product_name': entry.product_name,
                     'product_name_formatted': \
                             apply_highlight(entry.product_name,
@@ -247,6 +248,22 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     itr = self.store.iter_next(itr)
         if not found:
             self.sub_details.clear()
+
+    # need to determine what type of machine the product is for
+    #  based on the pools accumulated.
+    # returns true for virtual, false for physical, and
+    #  None for both.
+    def _machine_type(self, pools):
+        virt_only = None
+        first = True
+        for pool in pools:
+            if first:
+                virt_only = PoolWrapper(pool).is_virt_only()
+                first = False
+            else:
+                if virt_only != PoolWrapper(pool).is_virt_only():
+                    return None
+        return virt_only
 
     def _create_parent_map(self, title, bg_color):
         return {

@@ -351,9 +351,15 @@ class MergedPools(object):
 
     def add_pool(self, pool):
         # TODO: check if product id and name match?
-
         self.consumed += pool['consumed']
-        self.quantity += pool['quantity']
+        # we want to add the quantity for this pool
+        #  the total. if the pool is unlimited, the
+        #  resulting quantity will be set to -1 and
+        #  subsequent added pools will not change that.
+        if pool['quantity'] == -1:
+            self.quantity = -1
+        elif self.quantity != -1:
+            self.quantity += pool['quantity']
         self.pools.append(pool)
 
         # This is a little tricky, technically speaking, subscriptions

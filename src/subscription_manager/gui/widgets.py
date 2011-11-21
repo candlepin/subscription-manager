@@ -509,9 +509,12 @@ class ToggleTextColumn(gtk.TreeViewColumn):
             return
 
         bool_val = tree_model.get_value(iter, self.model_idx)
-        text = self._get_false_text()
-        if bool_val:
+        if bool_val is None:
+            text = self._get_none_text()
+        elif bool(bool_val):
             text = self._get_true_text()
+        else:
+            text = self._get_false_text()
         cell_renderer.set_property("text", text)
 
     def _get_true_text(self):
@@ -520,6 +523,8 @@ class ToggleTextColumn(gtk.TreeViewColumn):
     def _get_false_text(self):
         raise NotImplementedError("Subclasses must implement _get_false_text(self).")
 
+    def _get_none_text(self):
+        raise NotImplementedError("Subclasses must implement _get_none_text(self).")
 
 class MultiEntitlementColumn(ToggleTextColumn):
     MULTI_ENTITLEMENT_STRING = "*"
@@ -548,6 +553,7 @@ class MachineTypeColumn(ToggleTextColumn):
 
     PHYSICAL_MACHINE = _("Physical")
     VIRTUAL_MACHINE = _("Virtual")
+    BOTH_MACHINES = _("Both")
 
     def __init__(self, virt_only_model_idx):
         ToggleTextColumn.__init__(self, _("Type"), virt_only_model_idx)
@@ -559,6 +565,9 @@ class MachineTypeColumn(ToggleTextColumn):
 
     def _get_false_text(self):
         return self.PHYSICAL_MACHINE
+
+    def _get_none_text(self):
+        return self.BOTH_MACHINES
 
 
 class QuantitySelectionColumn(gtk.TreeViewColumn):
