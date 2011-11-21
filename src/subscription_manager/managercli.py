@@ -201,7 +201,7 @@ class CliCommand(object):
 
     def assert_should_be_registered(self):
         if not ConsumerIdentity.exists():
-            print (_("Consumer not registered. Please register using --username and --password"))
+            print(_("Error: You need to register this system by running `register` command.  Try register --help."))
             sys.exit(-1)
 
     def require_connection(self):
@@ -386,7 +386,7 @@ class IdentityCommand(UserPassCommand):
     def _validate_options(self):
         self.assert_should_be_registered()
         if not ConsumerIdentity.existsAndValid():
-            print (_("Consumer identity either does not exist or is corrupted. Try register --help"))
+            print(_("Error: You need to register this system by running `register` command.  Try register --help."))
             sys.exit(-1)
         if self.options.force and not self.options.regenerate:
             print(_("--force can only be used with --regenerate"))
@@ -732,8 +732,8 @@ class UnRegisterCommand(CliCommand):
 
     def _do_command(self):
         if not ConsumerIdentity.exists():
-            print(_("This system is currently not registered."))
-            sys.exit(1)
+            print(_("Error: You need to register this system by running `register` command.  Try register --help."))
+            sys.exit(-1)
 
         try:
             consumer = check_registration()['uuid']
@@ -1488,11 +1488,8 @@ def systemExit(code, msgs=None):
 
 def check_registration():
     if not ConsumerIdentity.exists():
-        needToRegister = \
-            _("Error: You need to register this system by running " \
-            "`register` command before using this option.")
-        print needToRegister
-        sys.exit(1)
+        print(_("Error: You need to register this system by running `register` command.  Try register --help."))
+        sys.exit(-1)
     consumer = ConsumerIdentity.read()
     consumer_info = {"consumer_name": consumer.getConsumerName(),
                      "uuid": consumer.getConsumerId()}
