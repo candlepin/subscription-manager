@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.98.2
+Version: 0.98.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -250,6 +250,29 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Thu Nov 17 2011 William Poteat <wpoteat@redhat.com> 0.98.3-1
+- 754329 - firstboot error: gtk.Notebook object has no attribute 'moveToPage'
+  (alikins@redhat.com)
+- 753941: Accessibility tools cannot access checkboxes in proxy config.
+  (awood@redhat.com)
+- Fix for package upload in registration process (tstrachota@redhat.com)
+- Cleanup auto-subscribe behavior. (dgoodwin@redhat.com)
+- 727973: Clear subscription details in assistant. (dgoodwin@redhat.com)
+- The set_tooltip_text function was added in PyGTK 2.12 and isn't available to
+  RHEL 5. (awood@redhat.com)
+- Fix list --consumed formatting error. (dgoodwin@redhat.com)
+- Add a script to perform offline migrations from installation numbers to
+  certificates. (awood@redhat.com)
+- 746262: Quantity errors are reported as integers, and only ints are used for
+  quantity subscriptions (bkearney@redhat.com)
+- 740377: Fix multiple stacking issues in the cert sorter.
+  (dgoodwin@redhat.com)
+- Convert type None to the string "None" when displaying info from certs (per
+  katello team) (cduryee@redhat.com)
+- Fix CLI list --consumed. (dgoodwin@redhat.com)
+- Adding rhn-migration-classic-to-rhsm script. (awood@redhat.com)
+- Toolbox and subscription status changes (jbowes@redhat.com)
+
 * Fri Oct 28 2011 William Poteat <wpoteat@redhat.com> 0.98.2-1
 - Switch to EL5 compatible APIs (jbowes@redhat.com)
 - Remove post-healing logging of product status. (dgoodwin@redhat.com)

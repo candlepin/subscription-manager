@@ -35,6 +35,7 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
     shortMessage = _("Entitlement Platform Registration")
     needsnetwork = 1
     icon = None
+    needsparent = 1
 
     def __init__(self):
         """
@@ -49,6 +50,9 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
 
 #        managergui.create_and_set_basic_connection()
         self._cached_credentials = None
+
+    def passInParent(self,parent):
+        self.parent = parent
 
     def _read_rhn_proxy_settings(self):
         # Read and store rhn-setup's proxy settings, as they have been set
@@ -113,7 +117,7 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
 
             if valid_registration:
                 self._cached_credentials = credentials
-                return 0
+		return 0
             else:
                 return None
 
@@ -222,6 +226,6 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
     def _finish_registration(self, failed=False):
         registergui.RegisterScreen._finish_registration(self, failed=failed)
         if not failed:
-            self.interface.moveToPage(moduleTitle=(_("Subscription Manager")))
+	    self.parent.setPage("rhsm_subscriptions")
 
 childWindow = moduleClass
