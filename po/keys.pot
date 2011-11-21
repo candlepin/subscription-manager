@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-21 11:01-0500\n"
+"POT-Creation-Date: 2011-11-21 12:42-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2012,48 +2012,44 @@ msgstr ""
 msgid "Problem encountered unregistering system from RHN Classic.  Exiting."
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:207
-msgid "Error: Current release "
-msgstr ""
-
-#: ../src/rhn-migrate-classic-to-rhsm:239
+#: ../src/rhn-migrate-classic-to-rhsm:235
 msgid ""
 "\n"
 "Attempting to register system to Certificate-based RHN ..."
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:242
+#: ../src/rhn-migrate-classic-to-rhsm:238
 msgid ""
 "\n"
 "Unable to register.\n"
 "For further assistance, please contact Red Hat Global Support Services."
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:245
+#: ../src/rhn-migrate-classic-to-rhsm:241
 #, c-format
 msgid "System '%s' successfully registered to Certificate-based RHN.\n"
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:249
+#: ../src/rhn-migrate-classic-to-rhsm:245
 msgid "Launching the GUI tool to manually subscribe the system ..."
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:252
+#: ../src/rhn-migrate-classic-to-rhsm:248
 msgid "Attempting to auto-subscribe to appropriate subscriptions ..."
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:255
+#: ../src/rhn-migrate-classic-to-rhsm:251
 msgid ""
 "\n"
 "Unable to auto-subscribe.  Do your existing subscriptions match the products "
 "installed on this system?"
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:257
+#: ../src/rhn-migrate-classic-to-rhsm:253
 msgid "Successfully subscribed."
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:258
+#: ../src/rhn-migrate-classic-to-rhsm:254
 #, c-format
 msgid ""
 "\n"
@@ -2061,57 +2057,57 @@ msgid ""
 "details, and to make changes if necessary."
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:281
+#: ../src/rhn-migrate-classic-to-rhsm:277
 msgid ""
 "\n"
 "Unrecognized Channel. Mapping not found !!!"
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:286
+#: ../src/rhn-migrate-classic-to-rhsm:282
 msgid "Below mentioned channels are NOT available on RHSM"
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:291
+#: ../src/rhn-migrate-classic-to-rhsm:287
 msgid ""
 "\n"
 "Use --force to ignore these channels and continue the migration.\n"
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:296
+#: ../src/rhn-migrate-classic-to-rhsm:292
 msgid ""
 "\n"
 "List of channels for which certs are being copied"
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:301
+#: ../src/rhn-migrate-classic-to-rhsm:297
 msgid ""
 "\n"
 "Unrecognized channels. Channel to Product Certificate mapping missing for "
 "these channels."
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:316
+#: ../src/rhn-migrate-classic-to-rhsm:312
 #, c-format
 msgid ""
 "\n"
 "Product Certificates copied successfully to %s !!"
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:376
+#: ../src/rhn-migrate-classic-to-rhsm:372
 msgid "RHN Username: "
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:381
+#: ../src/rhn-migrate-classic-to-rhsm:377
 msgid ""
 "\n"
 "Retrieving existing RHN classic subscription information ..."
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:384
+#: ../src/rhn-migrate-classic-to-rhsm:380
 msgid "System is currently subscribed to:"
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:392
+#: ../src/rhn-migrate-classic-to-rhsm:388
 msgid ""
 "\n"
 "Preparing to unregister system from RHN classic ..."
