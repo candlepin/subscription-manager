@@ -202,10 +202,6 @@ def disableYumRhnPlugin():
 
 def readChannelCertMapping():
     release = getRelease()
-    supportedReleases = ['RHEL-5.7']
-    if release not in supportedReleases:
-        print _("Error: Current release " + release + " is not supported for migration to Red Hat Subscription Manager.")
-        sys.exit(1)
     mappingfile = "/usr/share/rhsm/product/" + release + "/channel-cert-mapping.txt"
     log.info("Using mapping file %s", mappingfile)
     f = open(mappingfile)
@@ -321,7 +317,7 @@ def getRelease():
     f = open('/etc/redhat-release')
     lines = f.readlines()
     f.close()
-    release = "RHEL-" + str(lines).split(' ')[6]
+    release = "RHEL-" + str(lines).split(' ')[6].split('.')[0]
     return release
 
 #################################################
