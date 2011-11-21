@@ -97,7 +97,7 @@ def _init_hook(conduit):
             conduit.info(2, e)
             return
     else:
-        conduit.info(2, "Unable to find consumer: %s" % ConsumerIdentity.read().getConsumerId())
+        conduit.info(4, "Entitlement server does not support environments")
         # log env not supported on this cp version
         return
 
