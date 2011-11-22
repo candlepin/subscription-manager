@@ -43,7 +43,19 @@ class TestCliCommand(unittest.TestCase):
 
     def test_main_no_args(self):
         try:
+            # we fall back to sys.argv if there
+            # is no args passed in, so stub out
+            # sys.argv for test
+            sys.argv = ["subscription-manager"]
             self.cc.main()
+        except SystemExit, e:
+            # 2 == no args given
+            self.assertEquals(e.code, 2)
+
+    def test_main_empty_args(self):
+        try:
+            sys.argv = ["subscription-manager"]
+            self.cc.main([])
         except SystemExit, e:
             # 2 == no args given
             self.assertEquals(e.code, 2)
