@@ -532,6 +532,7 @@ class RegisterCommand(UserPassCommand):
         usage = "usage: %prog register [OPTIONS]"
         shortdesc = get_branding().CLI_REGISTER
         desc = shortdesc
+        self.consumerIdentity = ConsumerIdentity
 
         super(RegisterCommand, self).__init__("register", usage, shortdesc,
                                               desc, True, ent_dir=ent_dir,
@@ -559,7 +560,7 @@ class RegisterCommand(UserPassCommand):
         self.installed_mgr = InstalledProductsManager()
 
     def _validate_options(self):
-        if ConsumerIdentity.exists() and not self.options.force:
+        if self.consumerIdentity.exists() and not self.options.force:
             print(_("This system is already registered. Use --force to override"))
             sys.exit(1)
         elif (self.options.consumername == ''):

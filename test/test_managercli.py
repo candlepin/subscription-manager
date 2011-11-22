@@ -7,7 +7,8 @@ import stubs
 
 from subscription_manager import managercli
 from stubs import MockStdout, MockStderr, StubProductDirectory, \
-        StubEntitlementDirectory, StubEntitlementCertificate, StubProduct
+        StubEntitlementDirectory, StubEntitlementCertificate, \
+        StubConsumerIdentity, StubProduct
 from test_handle_gui_exception import FakeException, FakeLogger
 
 
@@ -114,6 +115,10 @@ class TestEnvironmentsCommand(TestCliProxyCommand):
 
 class TestRegisterCommand(TestCliProxyCommand):
     command_class = managercli.RegisterCommand
+
+    def setUp(self):
+        TestCliProxyCommand.setUp(self)
+        self.cc.consumerIdentity = StubConsumerIdentity
 
     def _test_exception(self, args):
         try:
