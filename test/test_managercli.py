@@ -145,6 +145,9 @@ class TestRegisterCommand(TestCliProxyCommand):
     def test_key_and_org(self):
         self._test_no_exception(["--activationkey", "key", "--org", "org"])
 
+    def test_empty_string_key_and_org(self):
+        self._test_exception(["--activationkey=", "--org", "org"])
+
     def test_keys_and_username(self):
         self._test_exception(["--username", "bob", "--activationkey", "key"])
 

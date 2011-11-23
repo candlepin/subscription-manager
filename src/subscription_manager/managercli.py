@@ -579,6 +579,11 @@ class RegisterCommand(UserPassCommand):
         elif (self.options.activation_keys and not self.options.org):
             print(_("Error: Must specify --org to register with activation keys."))
             sys.exit(-1)
+        #746259: Don't allow the user to pass in an empty string as an activation key
+        elif (self.options.activation_keys and '' in self.options.activation_keys):
+            print(_("Error: Must specify an activation key"))
+            sys.exit(-1)
+        
 
     def _do_command(self):
         """
