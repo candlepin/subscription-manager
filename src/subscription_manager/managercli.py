@@ -737,8 +737,8 @@ class UnRegisterCommand(CliCommand):
 
     def _do_command(self):
         if not ConsumerIdentity.exists():
-            print(_("Error: You need to register this system by running `register` command.  Try register --help."))
-            sys.exit(-1)
+            print(_("This system is currently not registered."))
+            sys.exit(1)
 
         try:
             consumer = check_registration()['uuid']
