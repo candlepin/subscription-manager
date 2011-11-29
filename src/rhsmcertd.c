@@ -187,9 +187,16 @@ main (int argc, char *argv[])
 		heal_interval = HEAL_INTERVAL;
 	}
 
-    //note that we call the function directly first, before assigning a timer
-    //to it. Otherwise, it would only get executed when the timer went off, and
-    //not at startup.
+	log = get_log ();
+	fprintf (log, "%s: healing check started: interval = %i\n", ts (),
+		 HEAL_INTERVAL / 60);
+	fprintf (log, "%s: cert check started: interval = %i\n", ts (),
+		 CERT_INTERVAL / 60);
+	fflush (log);
+
+	//note that we call the function directly first, before assigning a timer
+	//to it. Otherwise, it would only get executed when the timer went off, and
+	//not at startup.
 
 	gboolean heal = TRUE;
 	cert_check (heal);
@@ -201,7 +208,7 @@ main (int argc, char *argv[])
 
 	logUpdate (cert_interval);
 	g_timeout_add (cert_interval * 1000, (GSourceFunc) logUpdate,
-			       cert_interval);
+		       cert_interval);
 
 	main_loop = g_main_loop_new (NULL, FALSE);
 	g_main_loop_run (main_loop);
