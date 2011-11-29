@@ -688,8 +688,8 @@ def find_date_picker_locale():
     except ValueError:
         # we can't parse our own "preferred" date format
         # for whatever reason, so let's use en_GB
-        return ('en_GB', 'UTF-8')
-    return locale.getlocale()
+        return 'en_GB'
+    return ''
 
 def _sub_dict(datadict, subkeys, default=None):
     return dict([(k, datadict.get(k, default)) for k in subkeys])

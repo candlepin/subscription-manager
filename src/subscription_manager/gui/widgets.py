@@ -384,10 +384,10 @@ class DatePicker(gtk.HBox):
         self.date_picker_locale = managerlib.find_date_picker_locale()
 
         # unset locale if we can't parse it here
-        self.orig_locale = locale.getlocale(locale.LC_TIME)
         locale.setlocale(locale.LC_TIME, self.date_picker_locale)
         self._date_entry.set_text(self._date.strftime("%x"))
-        locale.setlocale(locale.LC_TIME, self.orig_locale)
+        # return to original locale
+        locale.setlocale(locale.LC_TIME, '')
 
         atk_entry = self._date_entry.get_accessible()
         atk_entry.set_name('date-entry')
@@ -430,7 +430,7 @@ class DatePicker(gtk.HBox):
             locale.setlocale(locale.LC_TIME, self.date_picker_locale)
             date = datetime.datetime(
                     *(time.strptime(self._date_entry.get_text(), '%x')[0:6]))
-            locale.setlocale(locale.LC_ALL, self.orig_locale)
+            locale.setlocale(locale.LC_ALL, '')
             self._date = datetime.datetime(date.year, date.month, date.day,
                     tzinfo=managerlib.LocalTz())
             self.emit('date-picked-text')
@@ -450,7 +450,7 @@ class DatePicker(gtk.HBox):
         # but check to see what local we want the text in
         locale.setlocale(locale.LC_TIME, self.date_picker_locale)
         self._date_entry.set_text(self._date.strftime("%x"))
-        locale.setlocale(locale.LC_ALL, self.orig_locale)
+        locale.setlocale(locale.LC_ALL, '')
 
     def _date_update_text(self, dummy=None):
         #set the cal to the date from the text box
