@@ -228,7 +228,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         pix_buf = gtk.gdk.pixbuf_new_from_file_at_size(img, 13, 13)
         self.tab_icon.set_from_pixbuf(pix_buf)
 
-
     def _set_validity_status(self):
         """ Updates the entitlement validity status portion of the UI. """
 

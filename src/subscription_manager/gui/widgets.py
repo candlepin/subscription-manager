@@ -305,7 +305,7 @@ class SubDetailsWidget(GladeWidget):
     def _set(self, text_view, text):
         """Set the buffer of the given TextView to contain the text"""
         if not text:
-          text = _("None")
+            text = _("None")
         text_view.get_buffer().set_text(text)
 
     def clear(self):
@@ -408,8 +408,6 @@ class DatePicker(gtk.HBox):
         self.show()
         self._date_entry.show()
         self._cal_button.show()
-
-
 
     @property
     def date(self):
@@ -543,6 +541,7 @@ class ToggleTextColumn(gtk.TreeViewColumn):
 
     def _get_none_text(self):
         raise NotImplementedError("Subclasses must implement _get_none_text(self).")
+
 
 class MultiEntitlementColumn(ToggleTextColumn):
     MULTI_ENTITLEMENT_STRING = "*"

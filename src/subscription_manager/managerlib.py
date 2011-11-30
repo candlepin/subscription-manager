@@ -21,7 +21,6 @@ import shutil
 import syslog
 import time
 import xml.utils.iso8601
-import locale
 import logging
 import datetime
 
@@ -684,12 +683,13 @@ def find_date_picker_locale():
     # just set LC_TIME to en_GB which we can parse
     try:
         today = datetime.date.today()
-        dt = time.strptime(today.strftime("%x"), "%x")
+        time.strptime(today.strftime("%x"), "%x")
     except ValueError:
         # we can't parse our own "preferred" date format
         # for whatever reason, so let's use en_GB
         return 'en_GB'
     return ''
+
 
 def _sub_dict(datadict, subkeys, default=None):
     return dict([(k, datadict.get(k, default)) for k in subkeys])
@@ -821,5 +821,4 @@ if __name__ == '__main__':
     print("\nInstalled Product Status:\n")
     print getInstalledProductStatus()
     print("\nConsumed Product Status:\n")
-    getConsumedProductEntitlements()
     getInstalledProductHashMap()

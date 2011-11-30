@@ -29,6 +29,7 @@ PARTIALLY_SUBSCRIBED = "partially_subscribed"
 
 SOCKET_FACT = 'cpu.cpu_socket(s)'
 
+
 class CertSorter(object):
     """
     Class used to sort all certificates in the given Entitlement and Product
@@ -200,7 +201,6 @@ class CertSorter(object):
         for ent_cert in ent_certs:
             log.debug("Checking certificate: %s" % ent_cert.serial)
 
-
             # If the entitlement starts after the date we're checking, we
             # consider this a future entitlement. Technically it could be
             # partially stacked on that date, but we cannot determine that
@@ -221,7 +221,6 @@ class CertSorter(object):
 
                 order = ent_cert.getOrder()
                 stack_id = order.getStackingId()
-                quantity = order.getQuantityUsed()
 
                 partially_stacked = False
                 if stack_id:

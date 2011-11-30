@@ -25,7 +25,9 @@ if __name__ != '__main__':
 import sys
 import os
 import dbus
-import dbus.service, dbus.glib, dbus.exceptions
+import dbus.service
+import dbus.glib
+import dbus.exceptions
 import dbus.dbus_bindings
 import gtk
 import logging
@@ -42,6 +44,7 @@ except ImportError:
 
 gtk.gdk.threads_init()
 
+
 def systemExit(code, msgs=None):
     "Exit with a code and optional message(s). Saved a few lines of code."
 
@@ -49,7 +52,7 @@ def systemExit(code, msgs=None):
         if type(msgs) not in [type([]), type(())]:
             msgs = (msgs, )
         for msg in msgs:
-            sys.stderr.write(str(msg)+'\n')
+            sys.stderr.write(str(msg) + '\n')
     sys.exit(code)
 
 BUS_NAME = "com.redhat.SubscriptionManagerGUI"
@@ -78,11 +81,12 @@ except ImportError, e:
     systemExit(2, "Unable to find Subscription Manager module.\n"
                   "Error: %s" % e)
 
+
 class SubscriptionManagerService(dbus.service.Object):
 
     def __init__(self, window):
         self.window = window
-        bus_name = dbus.service.BusName(BUS_NAME, bus = dbus.SessionBus())
+        bus_name = dbus.service.BusName(BUS_NAME, bus=dbus.SessionBus())
         dbus.service.Object.__init__(self, bus_name, BUS_PATH)
 
     @dbus.service.method(dbus_interface=BUS_NAME)
@@ -98,7 +102,7 @@ if __name__ == '__main__':
         # Just ignore it if for some reason we can't find the session bus
         bus = None
 
-    bus_name = dbus.service.BusName(BUS_NAME, bus = dbus.SessionBus())
+    bus_name = dbus.service.BusName(BUS_NAME, bus=dbus.SessionBus())
     request_name_res = dbus.dbus_bindings.bus_request_name(bus.get_connection(), bus_name.get_name())
 
     if bus and ((request_name_res != REQUEST_NAME_REPLY_PRIMARY_OWNER) and \
@@ -129,4 +133,3 @@ if __name__ == '__main__':
         except Exception, e:
             log.exception(e)
             systemExit(1, e)
-

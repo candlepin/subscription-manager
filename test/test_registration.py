@@ -19,8 +19,6 @@ from stubs import StubUEP, StubEntitlementDirectory, StubProductDirectory
 import rhsm.connection as connection
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.managercli import RegisterCommand
-from subscription_manager import managerlib
-
 
 class CliRegistrationTests(unittest.TestCase):
 
@@ -45,7 +43,7 @@ class CliRegistrationTests(unittest.TestCase):
 
         # Then
         self.assertEqual('dummy-consumer-uuid', self.persisted_consumer["uuid"])
-        
+
     def test_installed_products_cache_written(self):
         connection.UEPConnection = StubUEP
 
@@ -62,4 +60,3 @@ class CliRegistrationTests(unittest.TestCase):
         cmd.main(['register', '--username=testuser1', '--password=password'])
 
         self.assertEquals(1, cmd.installed_mgr.write_cache.call_count)
-

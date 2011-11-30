@@ -51,7 +51,7 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
 #        managergui.create_and_set_basic_connection()
         self._cached_credentials = None
 
-    def passInParent(self,parent):
+    def passInParent(self, parent):
         self.parent = parent
 
     def _read_rhn_proxy_settings(self):
@@ -117,7 +117,7 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
 
             if valid_registration:
                 self._cached_credentials = credentials
-		return 0
+                return 0
             else:
                 return None
 
@@ -226,6 +226,6 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
     def _finish_registration(self, failed=False):
         registergui.RegisterScreen._finish_registration(self, failed=failed)
         if not failed:
-	    self.parent.setPage("rhsm_subscriptions")
+            self.parent.setPage("rhsm_subscriptions")
 
 childWindow = moduleClass

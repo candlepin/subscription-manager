@@ -133,7 +133,7 @@ class UpdateActionTests(unittest.TestCase):
 
 
 class TidyWriterTests(unittest.TestCase):
-    
+
     def test_just_newlines_compressed_to_one(self):
         output = StringIO()
         tidy_writer = TidyWriter(output)
@@ -200,4 +200,3 @@ class TidyWriterTests(unittest.TestCase):
         tidy_writer.close()
 
         self.assertEquals("test stuff\n\ntest\n", output.getvalue())
-

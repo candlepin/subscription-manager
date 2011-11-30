@@ -19,8 +19,6 @@ import logging
 
 _ = gettext.gettext
 
-import rhsm.config
-
 from subscription_manager.managerlib import ImportFileExtractor
 from subscription_manager.gui import widgets, messageWindow
 from subscription_manager.gui.utils import errorWindow

@@ -28,7 +28,6 @@ from optparse import OptionParser
 import sys
 sys.path.append("/usr/share/rhsm")
 from subscription_manager.branding import get_branding
-from subscription_manager import managerlib
 from subscription_manager import certdirectory
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.hwprobe import ClassicCheck

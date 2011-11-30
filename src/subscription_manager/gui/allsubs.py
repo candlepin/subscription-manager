@@ -213,7 +213,6 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 else:
                     available = entry.quantity - entry.consumed
 
-
                 pool = entry.pools[0]
                 self.store.add_map(iter, {
                     'virt_only': self._machine_type(entry.pools),

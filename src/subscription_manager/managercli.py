@@ -18,7 +18,6 @@
 
 import os
 import sys
-import locale
 import logging
 import socket
 import getpass
@@ -80,8 +79,6 @@ CONSUMED_SUBS_LIST = \
     "\n" + \
     _("Expires:              \t%-25s") + \
     "\n"
-
-
 
 
 def handle_exception(msg, ex):
@@ -583,7 +580,6 @@ class RegisterCommand(UserPassCommand):
         elif (self.options.activation_keys and '' in self.options.activation_keys):
             print(_("Error: Must specify an activation key"))
             sys.exit(-1)
-        
 
     def _do_command(self):
         """
@@ -1256,18 +1252,17 @@ class ListCommand(CliCommand):
             self.options.installed = True
 
     def _none_wrap(self, template_str, *args):
-      arglist = []
-      for arg in args:
-        if not arg:
-          arg = _("None")
-        arglist.append(arg)
-      return template_str % tuple(arglist)
+        arglist = []
+        for arg in args:
+            if not arg:
+                arg = _("None")
+            arglist.append(arg)
+        return template_str % tuple(arglist)
 
     def _do_command(self):
         """
         Executes the command.
         """
-
 
         self._validate_options()
 

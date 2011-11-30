@@ -92,7 +92,7 @@ class RegisterScreen:
         self.facts = facts
         self.callbacks = callbacks
 
-	self.finished = None
+        self.finished = None
 
         self.async = AsyncBackend(self.backend)
 

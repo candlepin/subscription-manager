@@ -106,12 +106,15 @@ class TestIdentityCommand(TestCliProxyCommand):
     def test_regenerate_no_force(self):
         self.cc.main(["--regenerate"])
 
+
 # re, orgs
 class TestOwnersCommand(TestCliProxyCommand):
     command_class = managercli.OwnersCommand
 
+
 class TestEnvironmentsCommand(TestCliProxyCommand):
     command_class = managercli.EnvironmentsCommand
+
 
 class TestRegisterCommand(TestCliProxyCommand):
     command_class = managercli.RegisterCommand
@@ -229,6 +232,7 @@ class TestConfigCommand(TestCliCommand):
         self.cc.main(["--remove", "server.hostname", "--remove", "server.port"])
         self.cc._validate_options()
 
+
 class TestSubscribeCommand(TestCliProxyCommand):
     command_class = managercli.SubscribeCommand
 
@@ -269,6 +273,7 @@ class TestUnSubscribeCommand(TestCliProxyCommand):
 class TestFactsCommand(TestCliProxyCommand):
     command_class = managercli.FactsCommand
 
+
 class TestImportCertCommand(TestCliCommand):
     command_class = managercli.ImportCertCommand
 
@@ -294,6 +299,7 @@ class TestImportCertCommand(TestCliCommand):
             # get a -1 from validate_options
             # i18n_optparse returns 2 on no args
             self.assertEquals(e.code, -1)
+
 
 class TestSystemExit(unittest.TestCase):
     def setUp(self):
@@ -338,6 +344,7 @@ class TestSystemExit(unittest.TestCase):
         class StrException(Exception):
             def __init__(self, msg):
                 self.msg = msg
+
             def __str__(self):
                 return self.msg
 

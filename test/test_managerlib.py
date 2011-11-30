@@ -125,6 +125,7 @@ ufxBTlg4v0B3xS1GgvATMY4hyk53o5PffmlRO03dbfpGK/rkTIPwFg==
 
 EXPECTED_CERT = EntitlementCertificate(EXPECTED_CERT_CONTENT)
 
+
 class MergePoolsTests(unittest.TestCase):
 
     def test_single_pool(self):
@@ -420,7 +421,7 @@ class TestParseDate(unittest.TestCase):
         now_dt_tt = now_dt.timetuple()
         dt_no_tz_tt = dt_no_tz.timetuple()
 
-        # tm_isdst (timpletuple()[8]) is 0 if a tz is set, 
+        # tm_isdst (timpletuple()[8]) is 0 if a tz is set,
         # but the dst offset is 0
         # if it is -1, no timezone is set
         if now_dt_tt[8] == 1:
@@ -502,6 +503,7 @@ def MockSystemLog(self, message, priority):
     pass
 
 EXPECTED_CONTENT = EXPECTED_CERT_CONTENT + NEW_LINE + EXPECTED_KEY_CONTENT
+
 
 class ExtractorStub(managerlib.ImportFileExtractor):
 

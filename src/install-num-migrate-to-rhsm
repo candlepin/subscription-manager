@@ -41,6 +41,7 @@ parser.add_option('-i', '--instnumber', help=_('Install number to run against'))
 parser.add_option('-d', '--dryrun', action="store_true", default=False, help=_('Only print the files which would be copied over'))
 (options, args) = parser.parse_args()
 
+
 def getRelease():
     f = open('/etc/redhat-release')
     lines = f.readlines()
@@ -48,14 +49,16 @@ def getRelease():
     release = "RHEL-" + str(lines).split(' ')[6].split('.')[0]
     return release
 
+
 def writeMigrationFacts():
     FACT_FILE = "/etc/rhsm/facts/migration.facts"
     if not os.path.exists(FACT_FILE):
         f = open(FACT_FILE, 'w')
-        json.dump({"migration.migrated_from" : "install_number"}, f)
+        json.dump({"migration.migrated_from": "install_number"}, f)
         f.close()
 
-if __name__ == '__main__':
+
+def main():
     #quick check to see if you are a super-user.
     if os.getuid() != 0:
         print _("Must be root user to execute\n")
@@ -74,24 +77,27 @@ if __name__ == '__main__':
 
     #parse the instnum
     instnum = InstallationNumber(instnumber)
-    dict = instnum.get_repos_dict()
+    repo_dict = instnum.get_repos_dict()
 
     sourcepath = "/usr/share/rhsm/product/" + getRelease()
     globs = []
     #generate globs to potentially match the name of the certs under sourcepath
-    for key in dict.keys():
-        globs.append(dict['Base'] + '-' + dict[key] + '-' + platform.machine() + '*')
+    for key in repo_dict.keys():
+        globs.append(repo_dict['Base'] + '-' + repo_dict[key] + '-' + platform.machine() + '*')
 
-    files = [glob.glob(sourcepath + '/' + x) for x in globs]
-    
+    paths = [glob.glob(sourcepath + '/' + x) for x in globs]
+
     #flatten the list of lists
-    files = [item for sublist in files for item in sublist]
-    
-    for file in files:
-        dest_file = file.split('-')[-1]
+    paths = [item for sublist in paths for item in sublist]
+
+    for path in paths:
+        dest_file = path.split('-')[-1]
         dest_file = PRODUCT_CERT_DIR + dest_file
-        print _("Copying %s to %s") % (file, dest_file)
+        print _("Copying %s to %s") % (path, dest_file)
         if not options.dryrun:
-            shutil.copyfile(file, dest_file)
+            shutil.copyfile(path, dest_file)
 
     writeMigrationFacts()
+
+if __name__ == "__main__":
+    main()

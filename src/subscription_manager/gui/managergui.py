@@ -17,12 +17,7 @@
 # in this software or its documentation.
 #
 
-import os
-import socket
-import datetime
-import time
 import logging
-import locale
 
 import gtk
 import gtk.glade
@@ -39,7 +34,6 @@ from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.facts import Facts
 from subscription_manager.certdirectory import ProductDirectory, EntitlementDirectory
 from subscription_manager.certlib import ConsumerIdentity, CertLib
-from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.branding import get_branding
 
 from subscription_manager.gui import redeem
@@ -59,7 +53,6 @@ gettext.textdomain("rhsm")
 gtk.glade.bindtextdomain("rhsm")
 
 log = logging.getLogger('rhsm-app.' + __name__)
-
 
 
 cert_file = ConsumerIdentity.certpath()

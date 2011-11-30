@@ -24,7 +24,6 @@ from subscription_manager.lock import Lock
 from subscription_manager import cert_sorter
 from subscription_manager.certdirectory import EntitlementDirectory, \
     ProductDirectory, Path, Writer
-from subscription_manager import constants
 from rhsm.config import initConfig
 from rhsm.certificate import *
 
@@ -103,7 +102,6 @@ class HealingLib(DataLib):
     def _do_update(self):
         uuid = ConsumerIdentity.read().getConsumerId()
         consumer = self.uep.getConsumer(uuid)
-        from subscription_manager import managerlib
 
         if 'autoheal' in consumer and consumer['autoheal']:
             try:

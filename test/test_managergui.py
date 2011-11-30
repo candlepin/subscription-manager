@@ -2,7 +2,6 @@ import unittest
 
 import stubs
 from subscription_manager.gui import managergui, registergui
-from subscription_manager import certdirectory
 
 
 class StubBackend:
@@ -22,6 +21,7 @@ class StubConsumer:
 
     def reload(self):
         pass
+
 
 class StubFacts:
     def __init__(self):

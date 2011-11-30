@@ -29,7 +29,6 @@
 import sys
 import os
 import xmlrpclib
-import time
 import getpass
 import libxml2
 import subprocess
@@ -38,7 +37,6 @@ import simplejson as json
 import shutil
 import logging
 import traceback
-import libxml2
 from rhsm.connection import UEPConnection, RestlibException
 
 _LIBPATH = "/usr/share/rhsm"
@@ -70,9 +68,12 @@ rhncfg = up2date_client.config.initUp2dateConfig()
 
 from optparse import Option, OptionParser
 options_table = [
-    Option("-f", "--force", action="store_true", default=False, help=_("Ignore Channels not available on RHSM")),
-    Option("-c", "--cli-only",  action="store_true", default=False, dest='clionly', help=_("Don't launch the GUI tool to subscribe the system, just use the CLI tool which will do it automatically")),
-    Option("-n", "--no-auto",  action="store_true", default=False, dest='noauto', help=_("Don't launch subscription manager at end of process.")),
+    Option("-f", "--force", action="store_true", default=False,
+           help=_("Ignore Channels not available on RHSM")),
+    Option("-c", "--cli-only", action="store_true", default=False, dest='clionly',
+           help=_("Don't launch the GUI tool to subscribe the system, just use the CLI tool which will do it automatically")),
+    Option("-n", "--no-auto", action="store_true", default=False, dest='noauto',
+           help=_("Don't launch subscription manager at end of process.")),
 ]
 
 parser = OptionParser(option_list=options_table, usage="%s [--force|--cli-only|--help|--no-auto]" % sys.argv[0])
@@ -90,7 +91,8 @@ try:
 except ImportError:
     # new RHEL 6 location
     from certlib import ConsumerIdentity, ProductDirectory
-    import repolib, logutil
+    import repolib
+    import logutil
 
 import rhsm.config
 
@@ -98,7 +100,6 @@ logutil.init_logger()
 log = logging.getLogger('rhsm-app.' + __name__)
 rhsmcfg = rhsm.config.initConfig()
 
-#################################################
 
 def systemExit(code, msgs=None):
     "Exit with a code and optional message(s). Saved a few lines of code."
@@ -109,13 +110,12 @@ def systemExit(code, msgs=None):
             sys.stderr.write(str(msg) + '\n')
     sys.exit(code)
 
-#################################################
 
 def checkOkToProceed(username, password):
     # check if this machine is already registered to Certicate-based RHN
     if ConsumerIdentity.existsAndValid():
         print _("\nThis machine appears to be already registered to Certificate-based RHN.  Exiting.")
-	consumer = ConsumerIdentity.read()
+        consumer = ConsumerIdentity.read()
         systemExit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % consumer.getConsumerId())
 
     # Check to make sure we're hooked up to Hosted.
@@ -129,11 +129,9 @@ def checkOkToProceed(username, password):
 
     try:
         cp.getOwnerList(username)
-    except rhsm.connection.RestlibException:
+    except RestlibException:
         systemExit(1, _('Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for more details.'))
 
-
-#################################################
 
 def getSubscribedChannelsList():
     try:
@@ -143,11 +141,10 @@ def getSubscribedChannelsList():
     except up2dateErrors.NoSystemIdError:
         systemExit(1, _('Unable to locate SystemId file. Is this system registered?'))
     except:
-	log.error(traceback.format_exc())
-	systemExit(1, _("Problem encountered getting the list of subscribed channels.  Exiting."))
+        log.error(traceback.format_exc())
+        systemExit(1, _("Problem encountered getting the list of subscribed channels.  Exiting."))
     return subscribedChannels
 
-#################################################
 
 def getSystemId():
     systemIdPath = rhncfg["systemIdPath"]
@@ -155,7 +152,6 @@ def getSystemId():
     systemId = int(p.xpathEval('string(//member[* = "system_id"]/value/string)').split('-')[1])
     return systemId
 
-#################################################
 
 def unRegisterSystemFromRhnClassic(username, password):
     #getSystemIdPath
@@ -166,21 +162,20 @@ def unRegisterSystemFromRhnClassic(username, password):
     hostname = rhncfg['serverURL'].split('/')[2]
     server_url = 'https://%s/rpc/api' % (hostname)
     try:
-	sc = xmlrpclib.Server(server_url)
-	sk = sc.auth.login(username, password)
+        sc = xmlrpclib.Server(server_url)
+        sk = sc.auth.login(username, password)
         result = sc.system.deleteSystems(sk, systemId)
-	if result:
-	    log.info("System %s deleted.  Removing systemid file and disabling rhnplugin.conf", systemId)
-	    os.remove(systemIdPath)
-	    disableYumRhnPlugin()
-	    print _("System successfully unregistered from RHN Classic.")
-	else:
-	    systemExit(1, _("Unable to unregister system from RHN Classic.  Exiting."))
+        if result:
+            log.info("System %s deleted.  Removing systemid file and disabling rhnplugin.conf", systemId)
+            os.remove(systemIdPath)
+            disableYumRhnPlugin()
+            print _("System successfully unregistered from RHN Classic.")
+        else:
+            systemExit(1, _("Unable to unregister system from RHN Classic.  Exiting."))
     except:
-	log.error(traceback.format_exc())
-	systemExit(1, _("Problem encountered unregistering system from RHN Classic.  Exiting."))
+        log.error(traceback.format_exc())
+        systemExit(1, _("Problem encountered unregistering system from RHN Classic.  Exiting."))
 
-#################################################
 
 def disableYumRhnPlugin():
     # 'Inspired by' up2date_client/rhnreg.py
@@ -206,7 +201,6 @@ def disableYumRhnPlugin():
         f.write(line)
     f.close()
 
-#################################################
 
 def readChannelCertMapping():
     release = getRelease()
@@ -222,7 +216,6 @@ def readChannelCertMapping():
             dic_data[key] = val
     return dic_data
 
-#################################################
 
 def transferHttpProxySettings():
     # transfer http proxy information from up2date to rhsm.conf
@@ -236,7 +229,6 @@ def transferHttpProxySettings():
             rhsmcfg.set('server', 'proxy_password', rhncfg['proxyPassword'])
         rhsmcfg.save()
 
-#################################################
 
 def runSubscriptionManager(username, password):
     # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
@@ -261,7 +253,6 @@ def runSubscriptionManager(username, password):
             print _("Successfully subscribed.")
     print _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary.") % consumer.getConsumerId()
 
-#################################################
 
 def deployProdCertificates(subscribedChannels):
     dic_data = readChannelCertMapping()
@@ -319,7 +310,6 @@ def deployProdCertificates(subscribedChannels):
         shutil.copy2(sourcepath, destinationpath)
     print _("\nProduct Certificates copied successfully to %s !!") % str(productDir)
 
-#################################################
 
 def getRelease():
     f = open('/etc/redhat-release')
@@ -328,7 +318,6 @@ def getRelease():
     release = "RHEL-" + str(lines).split(' ')[6].split('.')[0]
     return release
 
-#################################################
 
 def enableExtraChannels(subscribedChannels):
     # Check if system was subscribed to extra channels like supplementary, optional, fastrack etc.
@@ -338,19 +327,19 @@ def enableExtraChannels(subscribedChannels):
 
     # mapping of all RHN extra channel names to RHSM equivalent channel names
     if rhelRelease == '5':
-	extraChannelMap = {'rhel-x86_64-server-productivity-5' : 'rhel-5-server-productivity-rpms',
-			   'rhel-x86_64-server-supplementary-5': 'rhel-5-server-supplementary'}
+        extraChannelMap = {'rhel-x86_64-server-productivity-5': 'rhel-5-server-productivity-rpms',
+                           'rhel-x86_64-server-supplementary-5': 'rhel-5-server-supplementary'}
     else:
-	extraChannelMap = {'rhel-x86_64-server-productivity-6' : 'rhel-6-server-productivity-rpms',
-			   'rhel-x86_64-server-supplementary-6': 'rhel-6-server-supplementary'}
-    
+        extraChannelMap = {'rhel-x86_64-server-productivity-6': 'rhel-6-server-productivity-rpms',
+                           'rhel-x86_64-server-supplementary-6': 'rhel-6-server-supplementary'}
+
     # remove from the list any we are not using.  Return if the list is empty
     for rhnChannel in extraChannelMap.keys():
-	if rhnChannel not in subscribedChannels:
-	    del extraChannelMap[rhnChannel]
+        if rhnChannel not in subscribedChannels:
+            del extraChannelMap[rhnChannel]
 
     if not extraChannelMap:
-	return
+        return
 
     # create and populate the redhat.repo file
     repolib.RepoLib().update()
@@ -362,19 +351,18 @@ def enableExtraChannels(subscribedChannels):
     # enable any extra channels we are using and write out redhat.repo
     log.info("Extra channels to enable in redhat.repo: %s" % extraChannelMap.values())
     for rhsmChannel in extraChannelMap.values():
-	repofile.set(rhsmChannel, 'enabled', '1')
+        repofile.set(rhsmChannel, 'enabled', '1')
     repofile.write()
 
-#################################################
 
 def writeMigrationFacts():
     FACT_FILE = "/etc/rhsm/facts/migration.facts"
     if not os.path.exists(FACT_FILE):
         f = open(FACT_FILE, 'w')
-        json.dump({"migration.classic_system_id" : getSystemId(),
-                   "migration.migrated_from" : "rhn_hosted_classic"}, f) 
+        json.dump({"migration.classic_system_id": getSystemId(),
+                   "migration.migrated_from": "rhn_hosted_classic"}, f)
         f.close()
-#################################################
+
 
 def main():
     username = raw_input(_("RHN Username: ")).strip()
@@ -403,7 +391,6 @@ def main():
 
     # check if we need to enable to supplementary/optional channels
     enableExtraChannels(subscribedChannels)
-#################################################
 
 if __name__ == '__main__':
     main()

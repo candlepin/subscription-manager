@@ -325,7 +325,6 @@ class TidyWriter:
 
     def write(self, line):
         lines = line.split("\n")
-       
         i = 0
         while i < len(lines):
             line = lines[i]

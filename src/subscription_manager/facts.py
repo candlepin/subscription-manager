@@ -126,7 +126,6 @@ class Facts(CacheManager):
 
         return facts
 
-
     def _get_validity_facts(self, facts_dict):
         validity_facts = {'system.entitlements_valid': 'valid'}
         if not ClassicCheck().is_registered_with_classic():
