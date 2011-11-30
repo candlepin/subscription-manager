@@ -37,7 +37,7 @@ def getRelease():
     f = open('/etc/redhat-release')
     lines = f.readlines()
     f.close()
-    release = "RHEL-" + str(lines).split(' ')[6]
+    release = "RHEL-" + str(lines).split(' ')[6].split('.')[0]
     return release
 
 def writeMigrationFacts():
