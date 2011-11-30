@@ -56,10 +56,14 @@ if __name__ == '__main__':
     #get the instnum
     instnumber = options.instnumber
     if not instnumber:
-        f = open('/etc/sysconfig/rhn/install-num', 'r')
-        instnumber = f.readline()
-        f.close()
-    
+        try:
+            f = open('/etc/sysconfig/rhn/install-num', 'r')
+            instnumber = f.readline()
+            f.close()
+        except IOError:
+            print _('Could not read installation number from /etc/sysconfig/rhn/install-num.  Aborting.')
+            sys.exit(-1)
+
     #parse the instnum
     instnum = InstallationNumber(instnumber)
     dict = instnum.get_repos_dict()
