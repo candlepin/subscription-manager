@@ -56,12 +56,12 @@ class Package(object):
             return False
 
         if self.name == other.name and \
-            self.version == other.version and \
-            self.release == other.release and \
-            self.arch == other.arch and \
-            self.epoch == other.epoch and \
-            self.vendor == other.vendor:
-                return True
+                self.version == other.version and \
+                self.release == other.release and \
+                self.arch == other.arch and \
+                self.epoch == other.epoch and \
+                self.vendor == other.vendor:
+            return True
 
         return False
 
