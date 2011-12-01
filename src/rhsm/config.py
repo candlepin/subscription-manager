@@ -63,6 +63,7 @@ class RhsmConfigParser(SafeConfigParser):
             d[name] = lineobj.value
         return d
 
+
 def initConfig(config_file=None):
 
     global CFG

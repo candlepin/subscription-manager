@@ -114,14 +114,6 @@ class RPMProfile(object):
                 # skip these for now as there isnt compelling
                 # reason for server to know this info
                 continue
-            info = {
-                'name': h['name'],
-                'version': h['version'],
-                'release': h['release'],
-                'epoch': h['epoch'] or 0,
-                'arch': h['arch'],
-                'vendor': h['vendor'] or None,
-            }
             pkg_list.append(Package(
                 name=h['name'],
                 version=h['version'],
@@ -182,4 +174,3 @@ def get_profile(profile_type):
 PROFILE_MAP = {
     "rpm": RPMProfile,
 }
-

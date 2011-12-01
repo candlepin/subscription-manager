@@ -16,7 +16,6 @@
 #
 
 import unittest
-import sys, os
 from tempfile import NamedTemporaryFile
 
 from rhsm.config import *
@@ -46,6 +45,7 @@ consumerCertDir = /etc/pki/consumer
 [rhsmcertd]
 certFrequency = 240
 """
+
 
 class ConfigTests(unittest.TestCase):
 

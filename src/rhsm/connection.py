@@ -192,7 +192,7 @@ class Restlib(object):
         handler = self.apihandler + method
         context = SSL.Context("tlsv1")
 
-        if self.insecure:  #allow clients to work insecure mode if required..
+        if self.insecure:  # allow clients to work insecure mode if required..
             context.post_connection_check = NoOpChecker()
         else:
             context.set_verify(SSL.verify_fail_if_no_peer_cert, self.ssl_verify_depth)
@@ -223,7 +223,7 @@ class Restlib(object):
         headers = self.headers
         if body is None:
             headers = dict(self.headers.items() + \
-                    {"Content-Length":"0"}.items())
+                    {"Content-Length": "0"}.items())
         conn.request(request_type, handler, body=body, headers=headers)
 
         response = conn.getresponse()
@@ -391,7 +391,6 @@ class UEPConnection:
             self.resources[r['rel']] = r['href']
         log.debug("Server supports the following resources:")
         log.debug(self.resources)
-
 
     def supports_resource(self, resource_name):
         """
@@ -590,7 +589,6 @@ class UEPConnection:
         else:
             raise Exception("Must specify an owner or a consumer to list pools.")
 
-
         if listAll:
             method = "%s&listall=true" % method
         if active_on:
@@ -666,10 +664,10 @@ class UEPConnection:
         return self.conn.request_post(method)
 
     def sanitize(self, urlParam, plus=False):
-         #This is a wrapper around urllib.quote to avoid issues like the one
-         #discussed in http://bugs.python.org/issue9301
-         if plus:
-             retStr = urllib.quote_plus(str(urlParam))
-         else:
-             retStr = urllib.quote(str(urlParam))
-         return retStr
+        #This is a wrapper around urllib.quote to avoid issues like the one
+        #discussed in http://bugs.python.org/issue9301
+        if plus:
+            retStr = urllib.quote_plus(str(urlParam))
+        else:
+            retStr = urllib.quote(str(urlParam))
+        return retStr

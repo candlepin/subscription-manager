@@ -18,7 +18,7 @@
 import unittest
 
 from rhsm.certificate import Key
-from mock import Mock
+
 
 class KeyTests(unittest.TestCase):
 
@@ -64,4 +64,3 @@ pzqLRw7mjUfdCJ5Gdx0TPYl8ckRKQAwuSWm4a8XaUCP73NCIe6e3lVn/29wsVtTI
 """
         key = Key(keyString)
         self.assertFalse(key.bogus())
-
