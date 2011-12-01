@@ -30,8 +30,8 @@
 #define LOGFILE "/var/log/rhsm/rhsmcertd.log"
 #define LOCKFILE "/var/lock/subsys/rhsmcertd"
 #define UPDATEFILE "/var/run/rhsm/update"
-#define CERT_INTERVAL 14400	/* 4 hours */
-#define HEAL_INTERVAL 86400	/* 24 hours */
+#define DEFAULT_CERT_INTERVAL 14400	/* 4 hours */
+#define DEFAULT_HEAL_INTERVAL 86400	/* 24 hours */
 #define BUF_MAX 256
 
 //TODO: we should be using glib's logging facilities
@@ -181,17 +181,17 @@ main (int argc, char *argv[])
 	fclose (log);
 
 	if (cert_interval < 1) {
-		cert_interval = CERT_INTERVAL;
+		cert_interval = DEFAULT_CERT_INTERVAL;
 	}
 	if (heal_interval < 1) {
-		heal_interval = HEAL_INTERVAL;
+		heal_interval = DEFAULT_HEAL_INTERVAL;
 	}
 
 	log = get_log ();
 	fprintf (log, "%s: healing check started: interval = %i\n", ts (),
-		 HEAL_INTERVAL / 60);
+		 heal_interval / 60);
 	fprintf (log, "%s: cert check started: interval = %i\n", ts (),
-		 CERT_INTERVAL / 60);
+		 cert_interval / 60);
 	fflush (log);
 
 	//note that we call the function directly first, before assigning a timer
