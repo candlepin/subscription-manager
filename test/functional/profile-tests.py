@@ -17,6 +17,7 @@ from rhsm.profile import *
 from mock import Mock
 import simplejson as json
 
+
 class ProfileTests(unittest.TestCase):
 
     def test_get_rpm_profile(self):
@@ -49,7 +50,7 @@ class ProfileTests(unittest.TestCase):
         dummy_pkgs = [
                 Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
                 Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
-        profile = self._mock_pkg_profile(dummy_pkgs) 
+        profile = self._mock_pkg_profile(dummy_pkgs)
         self.assertEquals(2, len(profile.packages))
 
     def _mock_pkg_profile(self, packages):
@@ -71,60 +72,59 @@ class ProfileTests(unittest.TestCase):
         dummy_pkgs = [
                 Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
                 Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
-        profile = self._mock_pkg_profile(dummy_pkgs) 
+        profile = self._mock_pkg_profile(dummy_pkgs)
         self.assertFalse(profile == "hello")
 
     def test_equality_no_change(self):
         dummy_pkgs = [
                 Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
                 Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
-        profile = self._mock_pkg_profile(dummy_pkgs) 
+        profile = self._mock_pkg_profile(dummy_pkgs)
 
-        other = self._mock_pkg_profile(dummy_pkgs) 
+        other = self._mock_pkg_profile(dummy_pkgs)
         self.assertTrue(profile == other)
 
     def test_equality_packages_added(self):
         dummy_pkgs = [
                 Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
                 Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
-        profile = self._mock_pkg_profile(dummy_pkgs) 
+        profile = self._mock_pkg_profile(dummy_pkgs)
 
-        dummy_pkgs.append(Package(name="package3", version="3.0.0", release=2, 
+        dummy_pkgs.append(Package(name="package3", version="3.0.0", release=2,
             arch="x86_64"))
-        other = self._mock_pkg_profile(dummy_pkgs) 
+        other = self._mock_pkg_profile(dummy_pkgs)
         self.assertFalse(profile == other)
 
     def test_equality_packages_removed(self):
         dummy_pkgs = [
                 Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
                 Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
-        profile = self._mock_pkg_profile(dummy_pkgs) 
+        profile = self._mock_pkg_profile(dummy_pkgs)
 
         dummy_pkgs.pop()
-        other = self._mock_pkg_profile(dummy_pkgs) 
+        other = self._mock_pkg_profile(dummy_pkgs)
         self.assertFalse(profile == other)
 
     def test_equality_packages_updated(self):
         dummy_pkgs = [
                 Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
                 Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
-        profile = self._mock_pkg_profile(dummy_pkgs) 
+        profile = self._mock_pkg_profile(dummy_pkgs)
 
         # "Upgrade" package2:
         dummy_pkgs[1].version = "3.1.5"
-        other = self._mock_pkg_profile(dummy_pkgs) 
+        other = self._mock_pkg_profile(dummy_pkgs)
         self.assertFalse(profile == other)
 
     def test_equality_packages_replaced(self):
         dummy_pkgs = [
                 Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
                 Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
-        profile = self._mock_pkg_profile(dummy_pkgs) 
+        profile = self._mock_pkg_profile(dummy_pkgs)
 
         # Remove package2, add package3:
         dummy_pkgs.pop()
-        dummy_pkgs.append(Package(name="package3", version="3.0.0", release=2, 
+        dummy_pkgs.append(Package(name="package3", version="3.0.0", release=2,
             arch="x86_64"))
-        other = self._mock_pkg_profile(dummy_pkgs) 
+        other = self._mock_pkg_profile(dummy_pkgs)
         self.assertFalse(profile == other)
-

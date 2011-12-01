@@ -42,6 +42,7 @@ def parse_tags(tag_str):
         tags = tag_str.split(",")
     return tags
 
+
 # from M2Crypto
 class UTC(tzinfo):
     def tzname(self, date_time):
@@ -510,7 +511,7 @@ class Key(object):
         bogus = []
         if self.content:
             try:
-                rsa = RSA.load_key_string(self.content)
+                RSA.load_key_string(self.content)
             except:
                 bogus.append("Invalid key data")
         else:

@@ -16,6 +16,7 @@ import simplejson as json
 
 log = logging.getLogger(__name__)
 
+
 class InvalidProfileType(Exception):
     """
     Thrown when attempting to get a profile of an unsupported type.
@@ -28,7 +29,7 @@ class Package(object):
     Represents a package installed on the system.
     """
     def __init__(self, name, version, release, arch, epoch=0, vendor=None,
-            from_dict=None):
+                 from_dict=None):
         self.name = name
         self.version = version
         self.release = release

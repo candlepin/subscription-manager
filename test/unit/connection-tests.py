@@ -21,13 +21,14 @@ from rhsm.connection import *
 from mock import Mock
 from datetime import date
 
+
 class ConnectionTests(unittest.TestCase):
 
     def setUp(self):
-        # NOTE: this won't actually work, idea for this suite of unit tests 
-        # is to mock the actual server responses and just test logic in the 
+        # NOTE: this won't actually work, idea for this suite of unit tests
+        # is to mock the actual server responses and just test logic in the
         # UEPConnection:
-        self.cp = UEPConnection(username="dummy", password="dummy", 
+        self.cp = UEPConnection(username="dummy", password="dummy",
                 insecure=True)
 
     def test_get_environment_by_name_requires_owner(self):
