@@ -9,11 +9,11 @@ class Branding(object):
         self.RHSMD_REGISTERED_TO_OTHER = \
                 _("This system is registered to RHN Classic")
         self.REGISTERED_TO_OTHER_WARNING = _("WARNING") + \
-            "\n" + \
+            "\n\n" + \
             _("This system has already been registered with RHN using RHN Classic technology.") + \
-            "\n" + \
+            "\n\n" + \
             _("The tool you are using is attempting to re-register using RHN Certificate-Based technology. Red Hat recommends (except in a few cases) that customers only register with RHN once.") + \
-            "\n" + \
+            "\n\n" + \
             _("To learn more about RHN registration and technologies please consult this Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563")
 
         self.GUI_REGISTRATION_HEADER = \
