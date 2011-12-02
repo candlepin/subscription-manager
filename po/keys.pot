@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-02 08:08-0500\n"
+"POT-Creation-Date: 2011-12-02 12:02-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1964,8 +1964,22 @@ msgstr ""
 msgid "_Proxy Configuration"
 msgstr ""
 
+#: ../src/install-num-migrate-to-rhsm:40
+msgid "Install number to run against"
+msgstr ""
+
+#: ../src/install-num-migrate-to-rhsm:41
+msgid "Only print the files which would be copied over"
+msgstr ""
+
 #: ../src/install-num-migrate-to-rhsm:64 ../src/rhn-migrate-classic-to-rhsm:55
 msgid "Must be root user to execute\n"
+msgstr ""
+
+#: ../src/install-num-migrate-to-rhsm:75
+msgid ""
+"Could not read installation number from /etc/sysconfig/rhn/install-num.  "
+"Aborting."
 msgstr ""
 
 #: ../src/install-num-migrate-to-rhsm:96
@@ -2009,6 +2023,20 @@ msgid ""
 "Classic.\n"
 "However this system appears to be registered to '%s'.\n"
 "Exiting."
+msgstr ""
+
+#: ../src/rhn-migrate-classic-to-rhsm:133
+msgid ""
+"Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for "
+"more details."
+msgstr ""
+
+#: ../src/rhn-migrate-classic-to-rhsm:140
+msgid "This system is not associated with any channel."
+msgstr ""
+
+#: ../src/rhn-migrate-classic-to-rhsm:142
+msgid "Unable to locate SystemId file. Is this system registered?"
 msgstr ""
 
 #: ../src/rhn-migrate-classic-to-rhsm:145
