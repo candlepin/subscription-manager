@@ -37,8 +37,8 @@ _ = gettext.gettext
 PRODUCT_CERT_DIR = '/etc/pki/product/'
 
 parser = optparse.OptionParser()
-parser.add_option('-i', '--instnumber', help=_('Install number to run against'))
-parser.add_option('-d', '--dryrun', action="store_true", default=False, help=_('Only print the files which would be copied over'))
+parser.add_option('-i', '--instnumber', help=_("Install number to run against"))
+parser.add_option('-d', '--dryrun', action="store_true", default=False, help=_("Only print the files which would be copied over"))
 (options, args) = parser.parse_args()
 
 
@@ -72,7 +72,7 @@ def main():
             instnumber = f.readline()
             f.close()
         except IOError:
-            print _('Could not read installation number from /etc/sysconfig/rhn/install-num.  Aborting.')
+            print _("Could not read installation number from /etc/sysconfig/rhn/install-num.  Aborting.")
             sys.exit(-1)
 
     #parse the instnum
