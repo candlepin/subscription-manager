@@ -83,7 +83,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         # Set up the quantity column.
         quantity_column = QuantitySelectionColumn(_("Quantity"),
                                                   self.store['quantity_to_consume'],
-                                                  self.store['multi-entitlement'])
+                                                  self.store['multi-entitlement'],
+                                                  self.store['quantity_available'])
         self.top_view.append_column(quantity_column)
 
         self.edit_quantity_label.set_label(quantity_column.get_column_legend_text())
@@ -140,6 +141,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             # TODO:  This is not needed here.
             'align': float,
             'multi-entitlement': bool,
+            'quantity_available': int,
         }
 
     def filter_incompatible(self):
@@ -208,10 +210,13 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 iter = self.store.add_map(iter, self._create_parent_map(group.name, bg_color))
 
             for entry in group.entitlements:
+                quantity_available = 0
                 if entry.quantity < 0:
                     available = _('unlimited')
+                    quantity_available = -1
                 else:
                     available = entry.quantity - entry.consumed
+                    quantity_available = entry.quantity - entry.consumed
 
                 pool = entry.pools[0]
                 self.store.add_map(iter, {
@@ -229,6 +234,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     'align': 0.5,
                     'multi-entitlement': allows_multi_entitlement(pool),
                     'background': bg_color,
+                    'quantity_available': quantity_available,
                 })
 
         # Ensure that all nodes are expanded in the tree view.
@@ -280,6 +286,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     'align': 0.5,
                     'multi-entitlement': False,
                     'background': bg_color,
+                    'quantity_available': 0,
                 }
 
     def get_label(self):

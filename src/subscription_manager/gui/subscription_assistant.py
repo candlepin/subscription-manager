@@ -148,10 +148,11 @@ class SubscriptionAssistant(widgets.GladeWidget):
             'total_subscriptions': int,
             'available_subscriptions': str,
             'quantity_to_consume': int,
-            'pool_id': str,
+            'pool_ids': gobject.TYPE_PYOBJECT,
             'multi-entitlement': bool,
             'virt_only': bool,
-            'background': str
+            'background': str,
+            'quantity_available': int
         }
 
         self.subscriptions_store = storage.MappedTreeStore(subscriptions_type_map)
@@ -178,7 +179,8 @@ class SubscriptionAssistant(widgets.GladeWidget):
         # Set up editable quantity column.
         quantity_col = widgets.QuantitySelectionColumn(_("Quantity"),
                                         self.subscriptions_store['quantity_to_consume'],
-                                        self.subscriptions_store['multi-entitlement'])
+                                        self.subscriptions_store['multi-entitlement'],
+                                        self.subscriptions_store['quantity_available'])
         self.subscriptions_treeview.append_column(quantity_col)
 
         self.edit_quantity_label.set_label(quantity_col.get_column_legend_text())
@@ -421,13 +423,18 @@ class SubscriptionAssistant(widgets.GladeWidget):
 
             for entry in group.entitlements:
                 quantity = entry.quantity
+                quantity_available = 0
                 if quantity < 0:
                     available = _('unlimited')
+                    quantity_available = -1
                 else:
                     available = _('%s of %s') % \
                         (entry.quantity - entry.consumed, quantity)
+                    quantity_available = entry.quantity - entry.consumed
 
-                pool = entry.pools[0]
+                pool_ids = []
+                for pool in entry.pools:
+                    pool_ids.append(pool['id'])
                 default_quantity_calculator = \
                     QuantityDefaultValueCalculator(self.facts, self.entitlement_dir.list())
 
@@ -437,10 +444,11 @@ class SubscriptionAssistant(widgets.GladeWidget):
                     'total_subscriptions': entry.quantity,
                     'available_subscriptions': available,
                     'quantity_to_consume': default_quantity_calculator.calculate(pool),
-                    'pool_id': pool['id'],
+                    'pool_ids': pool_ids,
                     'multi-entitlement': allows_multi_entitlement(pool),
                     'virt_only': PoolWrapper(pool).is_virt_only(),
                     'background': bg_color,
+                    'quantity_available': quantity_available,
                 })
         # Ensure that the tree is fully expanded
         self.subscriptions_treeview.expand_all()
@@ -452,10 +460,11 @@ class SubscriptionAssistant(widgets.GladeWidget):
             'total_subscriptions': 0,
             'available_subscriptions': '',
             'quantity_to_consume': 0,
-            'pool_id': '',
+            'pool_ids': [],
             'multi-entitlement': False,
             'virt_only': False,
             'background': bg_color,
+            'quantity_available': 0,
         }
 
     def _get_selected_product_ids(self):
@@ -544,8 +553,8 @@ class SubscriptionAssistant(widgets.GladeWidget):
         has_children = model.iter_n_children(selected_tree_iter) > 0
         if not has_children and selected_tree_iter:
             product_name = model.get_value(selected_tree_iter, self.subscriptions_store['product_name'])
-            pool_id = model.get_value(selected_tree_iter, self.subscriptions_store['pool_id'])
-            provided = self.pool_stash.lookup_provided_products(pool_id)
+            pool_ids = model.get_value(selected_tree_iter, self.subscriptions_store['pool_ids'])
+            provided = self.pool_stash.lookup_provided_products(pool_ids[0])
             self.sub_details.show(product_name, products=provided)
             self.subscribe_button.set_sensitive(True)
         else:
@@ -554,22 +563,42 @@ class SubscriptionAssistant(widgets.GladeWidget):
 
     def subscribe_button_clicked(self, button):
         model, tree_iter = self.subscriptions_treeview.get_selection().get_selected()
-        pool_id = model.get_value(tree_iter, self.subscriptions_store['pool_id'])
+        pool_ids = model.get_value(tree_iter, self.subscriptions_store['pool_ids'])
         quantity_to_consume = model.get_value(tree_iter,
             self.subscriptions_store['quantity_to_consume'])
+        available = model.get_value(tree_iter,
+            self.subscriptions_store['quantity_available'])
 
         if not valid_quantity(quantity_to_consume):
             errorWindow(_("Quantity must be a positive number."),
                     parent=self.window)
             return
+        if int(available) < int(quantity_to_consume):
+            errorWindow(_("A quantity of %s is not available."
+                          % quantity_to_consume))
+            return
 
-        pool = self.pool_stash.all_pools[pool_id]
-        try:
-            self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'],
-                                                   quantity_to_consume)
-            managerlib.fetch_certificates(self.backend)
-        except Exception, e:
-            handle_gui_exception(e, _("Error getting subscription: %s"),
-                    self.window)
+        for pool_id in pool_ids:
+	    try:
+                if(pool_id == ''):
+                    break
+                pool = self.pool_stash.all_pools[pool_id]
+                available = pool['quantity'] - pool['consumed']
+                consume = 0
+                if  available >= quantity_to_consume:
+                    consume = quantity_to_consume
+                    quantity_to_consume = 0
+                else:
+                    consume = available
+                    quantity_to_consume = quantity_to_consume - available
 
+	        self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'],
+	                                           consume)
+                if quantity_to_consume == 0:
+                    break
+
+	    except Exception, e:
+	        handle_gui_exception(e, _("Error getting subscription: %s"))
+
+        managerlib.fetch_certificates(self.backend)
         self._reload_screen()

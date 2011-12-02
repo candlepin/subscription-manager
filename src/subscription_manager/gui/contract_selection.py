@@ -66,7 +66,8 @@ class ContractSelectionWindow(object):
                                    str,
                                    gobject.TYPE_PYOBJECT,
                                    bool,
-                                   bool)
+                                   bool,
+                                   int)
         self.contract_selection_treeview.set_model(self.model)
 
     def show(self):
@@ -89,7 +90,7 @@ class ContractSelectionWindow(object):
 
         renderer = gtk.CellRendererText()
         renderer.set_property("xalign", 0.5)
-        column = gtk.TreeViewColumn(_("Used / Available"), renderer,
+        column = gtk.TreeViewColumn(_("Used / Total"), renderer,
                 text=1)
         self.contract_selection_treeview.append_column(column)
 
@@ -104,7 +105,7 @@ class ContractSelectionWindow(object):
         column = MultiEntitlementColumn(8)
         self.contract_selection_treeview.append_column(column)
 
-        column = widgets.QuantitySelectionColumn(_("Quantity"), 4, 8)
+        column = widgets.QuantitySelectionColumn(_("Quantity"), 4, 8, 9)
         self.contract_selection_treeview.append_column(column)
 
         self.edit_quantity_label.set_label(column.get_column_legend_text())
@@ -118,6 +119,9 @@ class ContractSelectionWindow(object):
         quantity = pool['quantity']
         if quantity < 0:
             quantity = _('unlimited')
+            quantity_available = -1
+        else:
+            quantity_available = int(pool['quantity']) - int(pool['consumed'])
 
         row = [pool['contractNumber'],
                 "%s / %s" % (pool['consumed'], quantity),
@@ -126,7 +130,8 @@ class ContractSelectionWindow(object):
                default_quantity_value,
                pool['productName'], pool,
                PoolWrapper(pool).is_virt_only(),
-               allows_multi_entitlement(pool)]
+               allows_multi_entitlement(pool),
+               quantity_available]
         self.model.append(row)
 
     def set_parent_window(self, window):

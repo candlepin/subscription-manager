@@ -589,9 +589,10 @@ class MachineTypeColumn(ToggleTextColumn):
 
 class QuantitySelectionColumn(gtk.TreeViewColumn):
     def __init__(self, column_title, quantity_store_idx, is_multi_entitled_store_idx,
-                 editable=True):
+                 available_store_idx=None, editable=True):
         self.quantity_store_idx = quantity_store_idx
         self.is_multi_entitled_store_idx = is_multi_entitled_store_idx
+        self.available_store_idx = available_store_idx
 
         self.quantity_renderer = gtk.CellRendererSpin()
         self.quantity_renderer.set_property("xalign", 0.5)
@@ -629,6 +630,12 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
         # Disable editor if not multi-entitled.
         is_multi_entitled = tree_model.get_value(iter, self.is_multi_entitled_store_idx)
         cell_renderer.set_property("editable", is_multi_entitled)
+
+        if self.available_store_idx != None:
+            available = tree_model.get_value(iter, self.available_store_idx)
+            if available and available != -1:
+                cell_renderer.set_property("adjustment",
+                    gtk.Adjustment(lower=1, upper=int(available), step_incr=1))
 
     def _get_model(self):
         return self.get_tree_view().get_model()
