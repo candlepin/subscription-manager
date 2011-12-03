@@ -21,7 +21,7 @@ import optparse
 import glob
 import shutil
 import simplejson as json
-from instnum import InstallationNumber
+from instnum import InstallationNumber, InstallationNumberError
 
 _LIBPATH = "/usr/share/rhsm"
 # add to the path if need be
@@ -36,6 +36,13 @@ _ = gettext.gettext
 
 PRODUCT_CERT_DIR = '/etc/pki/product/'
 
+# Error messages in instnum that need to be translated.
+_("Not a valid hex string")
+_("Not a string")
+_("Unsupported string length")
+_("Checksum verification failed")
+
+# Set up command line options
 parser = optparse.OptionParser()
 parser.add_option('-i', '--instnumber', help=_("Install number to run against"))
 parser.add_option('-d', '--dryrun', action="store_true", default=False, help=_("Only print the files which would be copied over"))
@@ -76,7 +83,12 @@ def main():
             sys.exit(-1)
 
     #parse the instnum
-    instnum = InstallationNumber(instnumber)
+    try:
+        instnum = InstallationNumber(instnumber)
+    except InstallationNumberError, e:
+        print _("Could not parse the installation number: %s") % (e)
+        sys.exit(-1)
+
     repo_dict = instnum.get_repos_dict()
 
     sourcepath = "/usr/share/rhsm/product/" + getRelease()
