@@ -13,9 +13,9 @@ Group: Development/Libraries
 License: GPLv2
 # How to create the source tarball:
 #
-# git clone git://git.fedorahosted.org/git/candlepin.git/
+# git clone git://git.fedorahosted.org/git/python-rhsm.git/
 # cd client/python-rhsm
-# tito build --tag python-rhsm-%{name}-%{version}-%{release} --tgz
+# tito build --tag python-rhsm-%{version}-%{release} --tgz
 Source0: %{name}-%{version}.tar.gz
 URL: http://fedorahosted.org/candlepin
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -29,7 +29,7 @@ BuildRequires: python2-devel
 BuildRequires: python-setuptools
 BuildRequires:  rpm-python
 
-%description 
+%description
 A small library for communicating with the REST interface of a Red Hat Unified
 Entitlement Platform. This interface is used for the management of system
 entitlements, certificates, and access to content.
