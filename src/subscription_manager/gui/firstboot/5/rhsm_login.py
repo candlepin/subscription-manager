@@ -23,6 +23,7 @@ except Exception, e:
 from subscription_manager.gui import registergui
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.facts import Facts
+from subscription_manager import managerlib
 
 sys.path.append("/usr/share/rhn")
 from up2date_client import config
@@ -50,9 +51,18 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
 
 #        managergui.create_and_set_basic_connection()
         self._cached_credentials = None
+        self._registration_finished = False
+        self._first_registration_apply_run = True
 
     def passInParent(self, parent):
         self.parent = parent
+
+        # override the cancel and next button references with those of
+        # firstboot so the register flow will sensitize/desensitize them
+        # as it goes
+
+        self.cancel_button = parent.backButton
+        self.register_button = parent.nextButton
 
     def _read_rhn_proxy_settings(self):
         # Read and store rhn-setup's proxy settings, as they have been set
@@ -101,6 +111,10 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
         value.
         """
 
+        if self._registration_finished:
+            self._registration_finished = False
+            return 0
+
         self._read_rhn_proxy_settings()
 
         credentials = self._get_credentials_hash()
@@ -112,14 +126,20 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
             # reregistering the consumer
             return 0
         else:
-            self.interface = interface
+            # if they've already registered during firstboot and have clicked
+            # back to register again, we must first unregister.
+            # XXX i'd like this call to be inside the async progress stuff,
+            # since it does take some time
+            if self._first_registration_apply_run and ConsumerIdentity.exists():
+                managerlib.unregister(self.backend.uep, self.consumer.uuid)
+                self.consumer.reload()
+                self._first_registration_apply_run = False
+
             valid_registration = self.register(testing=testing)
 
             if valid_registration:
                 self._cached_credentials = credentials
-                return 0
-            else:
-                return None
+            return None
 
     def close_window(self):
         """
@@ -226,6 +246,8 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
     def _finish_registration(self, failed=False):
         registergui.RegisterScreen._finish_registration(self, failed=failed)
         if not failed:
-            self.parent.setPage("rhsm_subscriptions")
+            self._first_registration_apply_run = True
+            self._registration_finished = True
+            self.parent.nextClicked()
 
 childWindow = moduleClass

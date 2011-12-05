@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.98.3
+Version: 0.98.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -261,3 +261,39 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Mon Dec 05 2011 William Poteat <wpoteat@redhat.com> 0.98.5-1
+- 755031: Unregister before attempting to run a second registration
+  (jbowes@redhat.com)
+
+* Mon Dec 05 2011 William Poteat <wpoteat@redhat.com> 0.98.4-1
+- 740788: Getting error with quantity subscribe using subscription-assitance
+  page. (wpoteat@redhat.com)
+- 755130: add extra whitespace to classic warning (cduryee@redhat.com)
+- 759199: rhsmcertd is logging the wrong value for certFrequency
+  (cduryee@redhat.com)
+- 758471: install-num-migrate-to-rhsm threw traceback when no instnum was
+  found. (awood@redhat.com)
+- 752572: add interval logging statements back in on rhsmcertd startup
+  (cduryee@redhat.com)
+- 756507: do not use output from "getlocale" as input for "setlocale"
+  (cduryee@redhat.com)
+- 746259: Don't allow the user to pass in an empty string as an activation key
+  (awood@redhat.com)
+- 705883: Fix error dialog modal issues. (dgoodwin@redhat.com)
+- 756173: Unexpected behavoir change in subscription-manager unregister
+  (wpoteat@redhat.com)
+- 746732: Only use fallback locales for dates we need to parse
+  (alikins@redhat.com)
+- 753093: The available subscriptions count does not show correctly in
+  Subscription Manager GUI (wpoteat@redhat.com)
+- 749636: Client should not support users entering activation keys and existing
+  consumer ids (bkearney@redhat.com)
+- 719743: Improved text output for successful pool subscription
+  (bkearney@redhat.com)
+- 755541: Enhanced the message in the katello plugin to debug when the backend
+  system does not support environments. (bkearney@redhat.com)
+- 755035: Migration script should work on RHEL 5.7 and up. (awood@redhat.com)
+- 749332: Normalize the error messages for not being registered
+  (bkearney@redhat.com)
+- 754821: Default org of "Unknown" was not marked for gettext
+  (alikins@redhat.com)

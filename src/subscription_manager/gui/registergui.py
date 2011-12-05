@@ -92,8 +92,6 @@ class RegisterScreen:
         self.facts = facts
         self.callbacks = callbacks
 
-        self.finished = None
-
         self.async = AsyncBackend(self.backend)
 
         dic = {"on_register_cancel_button_clicked": self.cancel,
@@ -167,10 +165,10 @@ class RegisterScreen:
         if self.register_notebook.get_current_page() == OWNER_SELECT_PAGE:
             # we're on the owner select page
             self._owner_selected()
-            return
+            return True
         elif self.register_notebook.get_current_page() == ENVIRONMENT_SELECT_PAGE:
             self._environment_selected()
-            return
+            return True
 
         username = self.uname.get_text().strip()
         password = self.passwd.get_text().strip()
@@ -197,9 +195,7 @@ class RegisterScreen:
 
         self.cancel_button.set_sensitive(False)
         self.register_button.set_sensitive(False)
-
-        if self.finished:
-            return True
+        return True
 
     def _timeout_callback(self):
         self.register_progressbar.pulse()
@@ -337,8 +333,10 @@ class RegisterScreen:
     def _finish_registration(self, failed=False):
         # failed is used by the firstboot subclasses to decide if they should
         # advance the screen or not.
+        # XXX it would be cool here to do some async spinning while the
+        # main window gui refreshes itself
+
         if not failed:
-            self.finished = True
             self.close_window()
 
         self.emit_consumer_signal()
