@@ -1,29 +1,29 @@
 <?xml version="1.0"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
-"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
   <!ENTITY legal SYSTEM "legal.xml">
   <!ENTITY version "0.96.12-1">
   <!ENTITY manrevision "1.0">
   <!ENTITY date "October 2011">
   <!ENTITY app "Subscription Manager">
 ]>
-<!-- 
+<!--
       (Do not remove this comment block.)
   Maintained by the GNOME Documentation Project
   http://developer.gnome.org/projects/gdp
   Template version: 2.0 beta
   Template last modified Feb 11, 2002
-  
+
 -->
 <!-- =============Document Header ============================= -->
 <article id="index" lang="en">
 <!-- please do not change the id; for translations, change lang to -->
 <!-- appropriate code -->
-  <articleinfo> 
-	 <title>&app; Manual</title> 
-	 <copyright> 
-		<year>2011</year> 
-		<holder>Red Hat, Inc.</holder> 
+  <articleinfo>
+	 <title>&app; Manual</title>
+	 <copyright>
+		<year>2011</year>
+		<holder>Red Hat, Inc.</holder>
 	 </copyright>
 <!-- translators: uncomment this:
 
@@ -33,76 +33,76 @@
   </copyright>
 
    -->
-<!-- An address can be added to the publisher information.  If a role is 
-     not specified, the publisher/author is the same for all versions of the 
+<!-- An address can be added to the publisher information.  If a role is
+     not specified, the publisher/author is the same for all versions of the
      document.  -->
-	 <publisher role="maintainer"> 
-		<publishername> Red Hat, Inc. </publishername> 
-	 </publisher> 
+	 <publisher role="maintainer">
+		<publishername> Red Hat, Inc. </publishername>
+	 </publisher>
 
 &legal;
-<!-- This file  contains link to license for the documentation (GNU FDL), and 
-     other legal stuff such as "NO WARRANTY" statement. Please do not change 
+<!-- This file  contains link to license for the documentation (GNU FDL), and
+     other legal stuff such as "NO WARRANTY" statement. Please do not change
      any of this. -->
 
-	 <authorgroup> 
-		<author> 
-		  <firstname>Ella Deon</firstname> 
-		  <surname> Lackey</surname> 
-		  <affiliation> 
-			 <orgname>Red Hat Content Services</orgname> 
-			 <address> <email>dlackey@redhat.com</email> </address> 
-		  </affiliation> 
-		</author> 
+	 <authorgroup>
+		<author>
+		  <firstname>Ella Deon</firstname>
+		  <surname> Lackey</surname>
+		  <affiliation>
+			 <orgname>Red Hat Content Services</orgname>
+			 <address> <email>dlackey@redhat.com</email> </address>
+		  </affiliation>
+		</author>
       <!-- This is appropriate place for other contributors: translators,
            maintainers,  etc. Commented out by default.
            <othercredit role="translator">
-	     <firstname>Latin</firstname> 
-	     <surname>Translator 1</surname> 
-	     <affiliation> 
-	       <orgname>Latin Translation Team</orgname> 
-	       <address> <email>translator@gnome.org</email> </address> 
+	     <firstname>Latin</firstname>
+	     <surname>Translator 1</surname>
+	     <affiliation>
+	       <orgname>Latin Translation Team</orgname>
+	       <address> <email>translator@gnome.org</email> </address>
 	     </affiliation>
 	     <contrib>Latin translation</contrib>
            </othercredit>
 -->
 	 </authorgroup>
-	 
+
 	 <releaseinfo revision="1.0" role="review">
 	 </releaseinfo>
-  
+
 	 <revhistory>
 
-		<revision> 
-		  <revnumber>&app; Manual</revnumber> 
-		  <date>October 2011</date> 
-		  <revdescription> 
+		<revision>
+		  <revnumber>&app; Manual</revnumber>
+		  <date>October 2011</date>
+		  <revdescription>
 			 <para role="author">Ella Deon Lackey
-				<email>dlackey@redhat.com</email></para> 
-			 <para role="publisher">Red Hat Content Services</para> 
-		  </revdescription> 
-		</revision> 
-	 </revhistory> 
+				<email>dlackey@redhat.com</email></para>
+			 <para role="publisher">Red Hat Content Services</para>
+		  </revdescription>
+		</revision>
+	 </revhistory>
 	 <releaseinfo> This manual describes version &version; of &app;.
-		</releaseinfo> 
-	 <legalnotice> 
-		<title>Feedback</title> 
+		</releaseinfo>
+	 <legalnotice>
+		<title>Feedback</title>
 		<para> To report a bug or make a suggestion regarding &app; or this manual, enter a bug through <ulink url="http://bugzilla.redhat.com/">Bugzilla</ulink>. </para>
-		
-	 </legalnotice> 
+
+	 </legalnotice>
 	 <abstract role="description">
-	 	<para>The <application>Subscription Manager</application> is a systems administration tool.  The <application>&app;</application> can be customized to show seconds or a 12 or 24 hour clock.</para>
+		<para>The <application>Subscription Manager</application> is a systems administration tool.  The <application>&app;</application> can be customized to show seconds or a 12 or 24 hour clock.</para>
 	 </abstract>
-  </articleinfo> 
-  <indexterm> 
-	 <primary>Clock</primary> 
-  </indexterm>  
+  </articleinfo>
+  <indexterm>
+	 <primary>Clock</primary>
+  </indexterm>
 <!-- ============= Document Body ============================= -->
 
 <!-- ============= Introduction ============================== -->
 
-  <sect1 id="subscription-manager-introduction"> 
-	 <title>Introduction</title> 
+  <sect1 id="subscription-manager-introduction">
+	 <title>Introduction</title>
 	<indexterm>
 		<primary>subscriptions</primary>
 	</indexterm>
@@ -188,7 +188,7 @@
 			<para>
 				The top right box contains the tools required to perform maintenance tasks like changing the registration connection information and viewing system facts.
 			</para>
-			
+
 			<figure id="fig.rhsm-gui-overview">
 				<title>Red Hat Subscription Manager Main Screen</title>
 				<mediaobject>
@@ -319,13 +319,13 @@
 
 		<sect2 id="registering-multiorg"><title>Registering Consumers to a Local Organization</title>
 			<para>
-				Infrastructures which manage their own local content repository and subscription service must have a defined 
-				<emphasis>organization</emphasis>. This organization is essentially a group definition, and systems must be 
-				assigned to that group as part of the registration process. This allows there to be multiple, discrete organizations or 
+				Infrastructures which manage their own local content repository and subscription service must have a defined
+				<emphasis>organization</emphasis>. This organization is essentially a group definition, and systems must be
+				assigned to that group as part of the registration process. This allows there to be multiple, discrete organizations or
 				tenants within the infrastructure.
 			</para>
 			<para>
-				When a system is registered using the Subscription Manager GUI, Subscription Manager automatically scans the local subscription and content service 
+				When a system is registered using the Subscription Manager GUI, Subscription Manager automatically scans the local subscription and content service
 				to see what organizations are configured.
 			</para>
 			<orderedlist>
@@ -397,7 +397,7 @@
 		<primary>subscriptions</primary>
 		<secondary>subscribing</secondary>
 	</indexterm>
- 	<orderedlist>
+	<orderedlist>
 					<listitem>
 						<para>
 							Open the <guilabel>All Available Subscriptions</guilabel> tab.
@@ -488,22 +488,22 @@
 
 		<sect2 id="stacking"><title>Stacking Subscriptions</title>
 			<para>
-				Some subscriptions define a <emphasis>count</emphasis> which works as a restriction on the subscription. For example, counts can be set on the number of sockets or CPUs on a machine, 
-				the number of virtual guests on a host, or the number of clients in a domain.  
+				Some subscriptions define a <emphasis>count</emphasis> which works as a restriction on the subscription. For example, counts can be set on the number of sockets or CPUs on a machine,
+				the number of virtual guests on a host, or the number of clients in a domain.
 			</para>
 			<para>
-				The entire count must be covered for the system to be fully entitled. If there are four sockets on a machine, then 
+				The entire count must be covered for the system to be fully entitled. If there are four sockets on a machine, then
 				the server subscriptions must cover four sockets, or if there are eight guests, then there must be enough to cover all eight guests.
 			</para>
 			<para>
-				Many subscriptions can be combined together to cover the count on the system. Two subscriptions for <emphasis>RHEL Server for 2-Sockets</emphasis> can be combined together to 
-				cover a four-socket machine. These subscriptions can be <emphasis>stacked</emphasis>. 
+				Many subscriptions can be combined together to cover the count on the system. Two subscriptions for <emphasis>RHEL Server for 2-Sockets</emphasis> can be combined together to
+				cover a four-socket machine. These subscriptions can be <emphasis>stacked</emphasis>.
 			</para>
 			<para>
 				There are some rules on what subscriptions can be stacked:
 			</para>
 			<itemizedlist>
-				
+
 				<listitem>
 					<para>
 						Subscriptions can be stacked by using multiple quantities from the same subscription set.
@@ -516,7 +516,7 @@
 				</listitem>
 				<listitem>
 					<para>
-						Only the same product subscription can be stacked. <emphasis>RHEL Server for 2-Sockets</emphasis> can be stacked with another <emphasis>RHEL Server for 2-Sockets</emphasis> subscription, 
+						Only the same product subscription can be stacked. <emphasis>RHEL Server for 2-Sockets</emphasis> can be stacked with another <emphasis>RHEL Server for 2-Sockets</emphasis> subscription,
 						but not with <emphasis>RHEL Server for Virtualization</emphasis>, even if they both cover the socket count.
 					</para>
 				</listitem>
@@ -554,7 +554,7 @@
 				<orderedlist>
 			<listitem>
 				<para>
-						Retrieve the certificate information for the consumer from the Customer Portal. 
+						Retrieve the certificate information for the consumer from the Customer Portal.
 				</para>
 				<orderedlist>
 			<listitem>
@@ -565,7 +565,7 @@
 			</listitem>
 			<listitem>
 				<para>
-					In the summary of consumers, click the name of the offline consumer. 
+					In the summary of consumers, click the name of the offline consumer.
 				</para>
 			</listitem>
 					<listitem>
@@ -763,8 +763,8 @@
 		<secondary>notifications</secondary>
 	</indexterm>
 		<para>
-			The Red Hat Subscription Manager provides a series of log and UI messages that indicate any changes to the valid certificates of any installed products for a system. In the Subscription Manager GUI, 
-			the status of the system entitlements are color-coded, where <emphasis>green</emphasis> means all products are fully subscribed, <emphasis>yellow</emphasis> 
+			The Red Hat Subscription Manager provides a series of log and UI messages that indicate any changes to the valid certificates of any installed products for a system. In the Subscription Manager GUI,
+			the status of the system entitlements are color-coded, where <emphasis>green</emphasis> means all products are fully subscribed, <emphasis>yellow</emphasis>
 			means that some products may not be subscribed but updates are still in effect, and <emphasis>red</emphasis> means that updates are disabled.
 		</para>
 		<para>
@@ -778,4 +778,4 @@
 		</para>
 	</sect1>
 
-</article> 
+</article>
