@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.98.4
+Version: 0.98.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -250,6 +250,11 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Mon Dec 05 2011 William Poteat <wpoteat@redhat.com> 0.98.5-1
+- 
++- 755031: Unregister before attempting to run a second registration
++  (jbowes@redhat.com)
+
 * Mon Dec 05 2011 William Poteat <wpoteat@redhat.com> 0.98.4-1
 - 755031: Unregister before attempting to run a second registration
   (jbowes@redhat.com)
