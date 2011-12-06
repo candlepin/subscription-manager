@@ -84,6 +84,10 @@ class TestLocale(unittest.TestCase):
 
 
 class TestLocaleDate(TestLocale):
+
+    def tearDown(self):
+        self._setupLang("en_US")
+
     # FIXME
     # we work around this dynamicaly in managergui.py, but this
     # is here to see if we get anything new, or if the known
@@ -109,6 +113,8 @@ class TestUnicodeGettext(TestLocale):
     def setUp(self):
         self._setupLang("ja_JP.UTF-8")
 
+    def tearDown(self):
+        self._setupLang("en_US")
 
     def test_ja_not_serial(self):
         msg = _("'%s' is not a valid serial number") % "123123"
@@ -143,7 +149,6 @@ class TestUnicodeGettext(TestLocale):
             reload(constants)
 
             "%s" % constants.CONFIRM_UNREGISTER
-
 
 if __name__ == "__main__":
     po = PotFile()
