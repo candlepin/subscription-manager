@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.98.5
+Version: 0.98.6
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,8 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed Dec 07 2011 William Poteat <wpoteat@redhat.com> 0.98.6-1
+
 * Tue Dec 06 2011 William Poteat <wpoteat@redhat.com> 0.98.5-1
 - 
 +- 754366: workaround a bug in httpslib.ProxyHttpsConnection
