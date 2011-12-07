@@ -437,6 +437,22 @@ class UEPConnection:
 
         return self.conn.request_post(url, params)
 
+    def hypervisorCheckIn(self, owner, env, host_guest_mapping):
+        """
+        Sends a mapping of hostIds to list of guestIds to candlepin
+        to be registered/updated.
+
+        host_guest_mapping is as follows:
+
+        {
+            'host-id-1': ['guest-id-1', 'guest-id-2'],
+            'host-id-2': ['guest-id-3', 'guest-id-4']
+        }
+        """
+        query_params = urlencode({"owner": owner, "env": env})
+        url = "/hypervisors?%s" % (query_params)
+        return self.conn.request_post(url, host_guest_mapping)
+
     def updateConsumerFacts(self, consumer_uuid, facts={}):
         """
         Update a consumers facts on candlepin server
