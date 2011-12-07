@@ -302,7 +302,7 @@ msgstr "Todos os dados locais atualizados"
 #: ../src/subscription_manager/managercli.py:362
 #, python-format
 msgid "Unable to perform refresh due to the following exception: %s"
-msgstr "Incapaz de realizar uma atualização devido a seguinte exceção: %s\n"
+msgstr "Incapaz de realizar uma atualização devido a seguinte exceção: %s"
 
 #: ../src/subscription_manager/managercli.py:371
 msgid "Display the identity certificate for this machine or request a new one"
@@ -411,10 +411,7 @@ msgstr "o nome do consumidor, o padrão é o hostname"
 #: ../src/subscription_manager/managercli.py:544
 msgid "if supplied, the existing consumer data is pulled from the server"
 msgstr ""
-"se fornecido, os dados do consumidor existente é puxado do servidor\n"
-"\n"
-"\n"
-"\n"
+"se fornecido, os dados do consumidor existente é puxado do servidor"
 
 #: ../src/subscription_manager/managercli.py:546
 msgid "register to one of multiple organizations for the user"
@@ -2050,7 +2047,7 @@ msgstr ""
 
 #: ../src/install-num-migrate-to-rhsm:64 ../src/rhn-migrate-classic-to-rhsm:55
 msgid "Must be root user to execute\n"
-msgstr "Deve ser usuário root para executar"
+msgstr "Deve ser usuário root para executar\n"
 
 #: ../src/install-num-migrate-to-rhsm:75
 #, 
@@ -2085,7 +2082,7 @@ msgid ""
 "\n"
 "This machine appears to be already registered to Certificate-based RHN.  Exiting."
 msgstr ""
-"¶\n"
+"\n"
 "Esta máguina parece já ter sido registrada no Certificate-based RHN. Saindo."
 
 #: ../src/rhn-migrate-classic-to-rhsm:119
@@ -2094,6 +2091,7 @@ msgid ""
 "\n"
 "Please visit https://access.redhat.com/management/consumers/%s to view the profile details."
 msgstr ""
+"\n"
 "Por favor visite https://access.redhat.com/management/consumers/%s para "
 "visualizar os detalhes do perfil."
 
@@ -2149,7 +2147,7 @@ msgid ""
 "\n"
 "Attempting to register system to Certificate-based RHN ..."
 msgstr ""
-"¶\n"
+"\n"
 "Tentando se registrar no sistema para o RHN de Certificado"
 
 #: ../src/rhn-migrate-classic-to-rhsm:238
@@ -2158,14 +2156,14 @@ msgid ""
 "Unable to register.\n"
 "For further assistance, please contact Red Hat Global Support Services."
 msgstr ""
-"¶\n"
+"\n"
 "Incapaz de se registrar. \n"
 "Para assistência futura, por favor entre em contato com os Serviços de Suporte da Red Hat Global."
 
 #: ../src/rhn-migrate-classic-to-rhsm:241
 #, c-format
 msgid "System '%s' successfully registered to Certificate-based RHN.\n"
-msgstr "Sistema '%s' registrado com sucesso para o RHN de Certificado."
+msgstr "Sistema '%s' registrado com sucesso para o RHN de Certificado.\n"
 
 #: ../src/rhn-migrate-classic-to-rhsm:245
 msgid "Launching the GUI tool to manually subscribe the system ..."
@@ -2180,7 +2178,7 @@ msgid ""
 "\n"
 "Unable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?"
 msgstr ""
-"¶\n"
+"\n"
 "Incapaz de se auto-registrar. Suas subscrições existentes coincidem com os produtos instalados neste sistema?"
 
 #: ../src/rhn-migrate-classic-to-rhsm:253
@@ -2214,7 +2212,7 @@ msgid ""
 "Use --force to ignore these channels and continue the migration.\n"
 msgstr ""
 "\n"
-"Use --force para ignorar estes canais e continuar a migração. "
+"Use --force para ignorar estes canais e continuar a migração.\n"
 
 #: ../src/rhn-migrate-classic-to-rhsm:291
 msgid ""
@@ -2238,7 +2236,7 @@ msgid ""
 "\n"
 "Product Certificates copied successfully to %s !!"
 msgstr ""
-"¶\n"
+"\n"
 "Certificado de Produto copiado com sucesso para %s!"
 
 #: ../src/rhn-migrate-classic-to-rhsm:368
@@ -2250,7 +2248,7 @@ msgid ""
 "\n"
 "Retrieving existing RHN classic subscription information ..."
 msgstr ""
-"¶\n"
+"\n"
 "Recuperando informações de subscrição existentes do RHN clássico..."
 
 #: ../src/rhn-migrate-classic-to-rhsm:376
@@ -2262,7 +2260,7 @@ msgid ""
 "\n"
 "Preparing to unregister system from RHN classic ..."
 msgstr ""
-"¶\n"
+"\n"
 "Preparando para cancelar registro de sistema do RHN clássico"
 
 #: ../src/rhsm_icon.c:45
