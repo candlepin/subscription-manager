@@ -573,17 +573,21 @@ class SubscriptionAssistant(widgets.GladeWidget):
             errorWindow(_("Quantity must be a positive number."),
                     parent=self.window)
             return
-        if int(available) < int(quantity_to_consume):
+        if available != -1 and \
+            int(available) < int(quantity_to_consume):
             errorWindow(_("A quantity of %s is not available."
                           % quantity_to_consume))
             return
 
         for pool_id in pool_ids:
 	    try:
-                if(pool_id == ''):
+                if pool_id == '':
                     break
                 pool = self.pool_stash.all_pools[pool_id]
-                available = pool['quantity'] - pool['consumed']
+                if pool['quantity'] == -1:
+                    available = quantity_to_consume
+                else:
+                    available = pool['quantity'] - pool['consumed']
                 consume = 0
                 if  available >= quantity_to_consume:
                     consume = quantity_to_consume
