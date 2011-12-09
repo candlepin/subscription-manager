@@ -241,6 +241,9 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
 %attr(755,root,root) %{_sbindir}/install-num-migrate-to-rhsm
+%doc
+%{_mandir}/man8/rhn-migrate-classic-to-rhsm.8*
+%{_mandir}/man8/install-num-migrate-to-rhsm.8*
 
 %post
 chkconfig --add rhsmcertd
