@@ -105,7 +105,7 @@ class ContractSelectionWindow(object):
         column = MultiEntitlementColumn(8)
         self.contract_selection_treeview.append_column(column)
 
-        column = widgets.QuantitySelectionColumn(_("Quantity"), 4, 8, 9)
+        column = widgets.QuantitySelectionColumn(_("Quantity"), self.model, 4, 8, 9)
         self.contract_selection_treeview.append_column(column)
 
         self.edit_quantity_label.set_label(column.get_column_legend_text())

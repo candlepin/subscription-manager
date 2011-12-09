@@ -82,6 +82,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         # Set up the quantity column.
         quantity_column = QuantitySelectionColumn(_("Quantity"),
+                                                  self.store,
                                                   self.store['quantity_to_consume'],
                                                   self.store['multi-entitlement'],
                                                   self.store['quantity_available'])

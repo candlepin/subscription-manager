@@ -588,7 +588,7 @@ class MachineTypeColumn(ToggleTextColumn):
 
 
 class QuantitySelectionColumn(gtk.TreeViewColumn):
-    def __init__(self, column_title, quantity_store_idx, is_multi_entitled_store_idx,
+    def __init__(self, column_title, tree_model, quantity_store_idx, is_multi_entitled_store_idx,
                  available_store_idx=None, editable=True):
         self.quantity_store_idx = quantity_store_idx
         self.is_multi_entitled_store_idx = is_multi_entitled_store_idx
@@ -599,7 +599,7 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
         self.quantity_renderer.set_property("adjustment",
             gtk.Adjustment(lower=1, upper=100, step_incr=1))
         self.quantity_renderer.set_property("editable", editable)
-        self.quantity_renderer.connect("edited", self._on_edit)
+        self.quantity_renderer.connect("edited", self._on_edit, tree_model)
 
         gtk.TreeViewColumn.__init__(self, column_title, self.quantity_renderer,
                                     text=self.quantity_store_idx)
@@ -608,13 +608,12 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
     def get_column_legend_text(self):
         return "<b><small>* %s</small></b>" % (_("Click to Adjust Quantity"))
 
-    def _on_edit(self, renderer, path, new_text):
+    def _on_edit(self, renderer, path, new_text, model):
         """
         Handles when a quantity is changed in the cell. Stores new value in
         model.
         """
         try:
-            model = self._get_model()
             new_quantity = int(new_text)
             iter = model.get_iter(path)
             model.set_value(iter, self.quantity_store_idx, new_quantity)
@@ -636,9 +635,6 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
             if available and available != -1:
                 cell_renderer.set_property("adjustment",
                     gtk.Adjustment(lower=1, upper=int(available), step_incr=1))
-
-    def _get_model(self):
-        return self.get_tree_view().get_model()
 
 
 def expand_collapse_on_row_activated_callback(treeview, path, view_column):

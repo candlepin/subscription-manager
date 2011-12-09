@@ -178,6 +178,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
 
         # Set up editable quantity column.
         quantity_col = widgets.QuantitySelectionColumn(_("Quantity"),
+                                        self.subscriptions_store,
                                         self.subscriptions_store['quantity_to_consume'],
                                         self.subscriptions_store['multi-entitlement'],
                                         self.subscriptions_store['quantity_available'])
@@ -580,7 +581,7 @@ class SubscriptionAssistant(widgets.GladeWidget):
             return
 
         for pool_id in pool_ids:
-	    try:
+            try:
                 if pool_id == '':
                     break
                 pool = self.pool_stash.all_pools[pool_id]
@@ -596,13 +597,13 @@ class SubscriptionAssistant(widgets.GladeWidget):
                     consume = available
                     quantity_to_consume = quantity_to_consume - available
 
-	        self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'],
-	                                           consume)
+                self.backend.uep.bindByEntitlementPool(self.consumer.uuid, pool['id'],
+                                                       consume)
                 if quantity_to_consume == 0:
                     break
 
-	    except Exception, e:
-	        handle_gui_exception(e, _("Error getting subscription: %s"))
+            except Exception, e:
+                handle_gui_exception(e, _("Error getting subscription: %s"))
 
         managerlib.fetch_certificates(self.backend)
         self._reload_screen()

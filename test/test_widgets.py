@@ -119,15 +119,15 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
     def test_value_not_changed_when_editor_has_invalid_text(self):
         expected_initial_value = 12
         column, tree_model, iter = self._setup_column(expected_initial_value, False)
-        column._get_model = lambda: tree_model
-        column._on_edit(column.quantity_renderer, tree_model.get_path(iter), "aaa")
+        column._on_edit(column.quantity_renderer, tree_model.get_path(iter), "aaa",
+                        tree_model)
         self.assertEquals(expected_initial_value,
                           tree_model.get_value(iter, column.quantity_store_idx))
 
     def test_value_changed_when_editor_has_valid_text(self):
         column, tree_model, iter = self._setup_column(1, False)
-        column._get_model = lambda: tree_model
-        column._on_edit(column.quantity_renderer, tree_model.get_path(iter), "20")
+        column._on_edit(column.quantity_renderer, tree_model.get_path(iter), "20",
+                        tree_model)
         self.assertEquals(20, tree_model.get_value(iter, column.quantity_store_idx))
 
     def _create_store_map(self, quantity, multi_entitlement):
@@ -135,7 +135,7 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
 
     def _setup_column(self, initial_quantity, inital_multi_entitlement):
         tree_model = MappedTreeStore(self._create_store_map(int, bool))
-        column = QuantitySelectionColumn("test-col", tree_model['quantity'],
+        column = QuantitySelectionColumn("test-col", tree_model, tree_model['quantity'],
                                          tree_model['multi-entitlement'])
         iter = tree_model.add_map(None, self._create_store_map(initial_quantity,
                                                                inital_multi_entitlement))
