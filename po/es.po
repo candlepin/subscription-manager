@@ -2,7 +2,7 @@
 # Language es-ES translations for l package.
 # Copyright (C) 2011 THE l'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the l package.
-# 
+#
 # Automatically generated, 2011.
 # Gladys Guerrero <gguerrer@redhat.com>, 2011.
 # gguerrer <gguerrer@fedoraproject.org>, 2011. #zanata
@@ -453,9 +453,10 @@ msgid "Error: Activation keys do not require user credentials"
 msgstr "Error: Llaves de activación no se requieren credenciales de usuario"
 
 #: ../src/subscription_manager/managercli.py:571
-#, 
 msgid "Error: Activation keys can not be used with previously registered ids."
 msgstr ""
+"Error: Las llaves de activación no se pueden utilizar con ID registrados "
+"anteriormente."
 
 #: ../src/subscription_manager/managercli.py:574
 msgid "Error: Must specify --org to register to an environment."
@@ -468,9 +469,8 @@ msgstr ""
 "activación."
 
 #: ../src/subscription_manager/managercli.py:581
-#, 
 msgid "Error: Must specify an activation key"
-msgstr ""
+msgstr "Error: Se debe especificar una llave de activación"
 
 #: ../src/subscription_manager/managercli.py:608
 #, python-format
@@ -1287,9 +1287,8 @@ msgid "Virtual"
 msgstr "Virtuales"
 
 #: ../src/subscription_manager/gui/widgets.py:573
-#, 
 msgid "Both"
-msgstr ""
+msgstr "Ambos"
 
 #: ../src/subscription_manager/gui/widgets.py:576
 msgid "Type"
@@ -2056,25 +2055,24 @@ msgid "_Proxy Configuration"
 msgstr "_Configuración de proxy"
 
 #: ../src/install-num-migrate-to-rhsm:40
-#, 
 msgid "Install number to run against"
-msgstr ""
+msgstr "El número de instalación a ejecutar"
 
 #: ../src/install-num-migrate-to-rhsm:41
-#, 
 msgid "Only print the files which would be copied over"
-msgstr ""
+msgstr "Solamente imprima las archivos que serían copiados"
 
 #: ../src/install-num-migrate-to-rhsm:64 ../src/rhn-migrate-classic-to-rhsm:55
 msgid "Must be root user to execute\n"
 msgstr "Debe ser root para ejecutar\n"
 
 #: ../src/install-num-migrate-to-rhsm:75
-#, 
 msgid ""
 "Could not read installation number from /etc/sysconfig/rhn/install-num.  "
 "Aborting."
 msgstr ""
+"No se pudo leer número de instalación desde /etc/sysconfig/rhn/install-num. "
+"Cancelando."
 
 #: ../src/install-num-migrate-to-rhsm:96
 #, c-format
@@ -2121,25 +2119,25 @@ msgid ""
 "However this system appears to be registered to '%s'.\n"
 "Exiting."
 msgstr ""
-"Este script de migración requiere que el sistema esté registrado a RHN Hosted Classic. Sin embargo, este sistema aparece registrado a '%s'.¶\n"
+"Este script de migración requiere que el sistema esté registrado a RHN Hosted Classic. Sin embargo, este sistema aparece registrado a '%s'.\n"
 "Saliendo."
 
 #: ../src/rhn-migrate-classic-to-rhsm:133
-#, 
 msgid ""
 "Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for "
 "more details."
 msgstr ""
+"No se pudo conectar al servidor del certificado. Ver /var/log/rhsm/rhsm.log "
+"para obtener mayor información."
 
 #: ../src/rhn-migrate-classic-to-rhsm:140
-#, 
 msgid "This system is not associated with any channel."
-msgstr ""
+msgstr "Este sistema no está asociado con ningún canal."
 
 #: ../src/rhn-migrate-classic-to-rhsm:142
-#, 
 msgid "Unable to locate SystemId file. Is this system registered?"
 msgstr ""
+"No se pudo localizar el archivo SystemId. ¿Este sistema está registrado?"
 
 #: ../src/rhn-migrate-classic-to-rhsm:145
 msgid "Problem encountered getting the list of subscribed channels.  Exiting."
@@ -2181,8 +2179,7 @@ msgstr ""
 #: ../src/rhn-migrate-classic-to-rhsm:241
 #, c-format
 msgid "System '%s' successfully registered to Certificate-based RHN.\n"
-msgstr ""
-"El sistema '%s' fue registrado con éxito a RHN basado en certificado.\n"
+msgstr "El sistema '%s' fue registrado con éxito a RHN basado en certificado.\n"
 
 #: ../src/rhn-migrate-classic-to-rhsm:245
 msgid "Launching the GUI tool to manually subscribe the system ..."

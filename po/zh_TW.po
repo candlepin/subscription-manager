@@ -2,10 +2,11 @@
 # Language zh-TW translations for l package.
 # Copyright (C) 2011 THE l'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the l package.
-# 
+#
 # Automatically generated, 2011.
 # Terry Chuang <tchuang@redhat.com>, 2011.
 # snowlet <snowlet@fedoraproject.org>, 2011. #zanata
+# tchuang <tchuang@redhat.com>, 2011. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: zh_TW\n"
@@ -248,11 +249,10 @@ msgstr "含有基本驗證的 http 代理伺服器的密碼"
 #: ../src/subscription_manager/managercli.py:202
 #: ../src/subscription_manager/managercli.py:387
 #: ../src/subscription_manager/managercli.py:1496
-#, 
 msgid ""
 "Error: You need to register this system by running `register` command.  Try "
 "register --help."
-msgstr ""
+msgstr "錯誤：您需要藉由執行 `register` 指令，以註冊這台系統。請嘗試 register --help。"
 
 #: ../src/subscription_manager/managercli.py:260
 msgid "Consumer certificates corrupted. Please reregister."
@@ -438,9 +438,8 @@ msgid "Error: Activation keys do not require user credentials"
 msgstr "錯誤：啟動金鑰不需要使用者認證資訊"
 
 #: ../src/subscription_manager/managercli.py:571
-#, 
 msgid "Error: Activation keys can not be used with previously registered ids."
-msgstr ""
+msgstr "錯誤：啟動金鑰無法與先前註冊的 id 搭配使用。"
 
 #: ../src/subscription_manager/managercli.py:574
 msgid "Error: Must specify --org to register to an environment."
@@ -451,9 +450,8 @@ msgid "Error: Must specify --org to register with activation keys."
 msgstr "錯誤：必須指定 --org 使用啟動金鑰註冊。"
 
 #: ../src/subscription_manager/managercli.py:581
-#, 
 msgid "Error: Must specify an activation key"
-msgstr ""
+msgstr "錯誤：必須指定一組啟動金鑰。"
 
 #: ../src/subscription_manager/managercli.py:608
 #, python-format
@@ -534,7 +532,7 @@ msgstr "請輸入一組有效的數字集區 id。"
 #: ../src/subscription_manager/managercli.py:876
 #, python-format
 msgid "Successfully consumed a subscription from the pool with id %s"
-msgstr ""
+msgstr "已成功由 id 為 %s 的集區消耗訂閱"
 
 #: ../src/subscription_manager/managercli.py:911
 msgid "Unsubscribe the machine from all or specific subscriptions"
@@ -1218,9 +1216,8 @@ msgid "Virtual"
 msgstr "虛擬"
 
 #: ../src/subscription_manager/gui/widgets.py:573
-#, 
 msgid "Both"
-msgstr ""
+msgstr "兩者"
 
 #: ../src/subscription_manager/gui/widgets.py:576
 msgid "Type"
@@ -1976,25 +1973,22 @@ msgid "_Proxy Configuration"
 msgstr "代理伺服器配置（_P）"
 
 #: ../src/install-num-migrate-to-rhsm:40
-#, 
 msgid "Install number to run against"
-msgstr ""
+msgstr "欲針對其執行的安裝序號"
 
 #: ../src/install-num-migrate-to-rhsm:41
-#, 
 msgid "Only print the files which would be copied over"
-msgstr ""
+msgstr "僅印出會被複製的檔案"
 
 #: ../src/install-num-migrate-to-rhsm:64 ../src/rhn-migrate-classic-to-rhsm:55
 msgid "Must be root user to execute\n"
 msgstr "必須是 root 才可以執行\n"
 
 #: ../src/install-num-migrate-to-rhsm:75
-#, 
 msgid ""
 "Could not read installation number from /etc/sysconfig/rhn/install-num.  "
 "Aborting."
-msgstr ""
+msgstr "無法由 /etc/sysconfig/rhn/install-num 讀取安裝序號。即將退出。"
 
 #: ../src/install-num-migrate-to-rhsm:96
 #, c-format
@@ -2044,21 +2038,18 @@ msgstr ""
 "退出中。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:133
-#, 
 msgid ""
 "Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for "
 "more details."
-msgstr ""
+msgstr "無法連至憑證伺服器。詳情請參閱 /var/log/rhsm/rhsm.log。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:140
-#, 
 msgid "This system is not associated with any channel."
-msgstr ""
+msgstr "此系統未與任何頻道相聯。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:142
-#, 
 msgid "Unable to locate SystemId file. Is this system registered?"
-msgstr ""
+msgstr "找不到 SystemId 檔案。系統是否已註冊？"
 
 #: ../src/rhn-migrate-classic-to-rhsm:145
 msgid "Problem encountered getting the list of subscribed channels.  Exiting."

@@ -466,9 +466,10 @@ msgstr ""
 "d'identification de l'utilisateur"
 
 #: ../src/subscription_manager/managercli.py:571
-#, 
 msgid "Error: Activation keys can not be used with previously registered ids."
 msgstr ""
+"Erreur : les clés d'activation ne peuvent pas être utilisées avec des ID "
+"précédemment enregistrés."
 
 #: ../src/subscription_manager/managercli.py:574
 msgid "Error: Must specify --org to register to an environment."
@@ -482,9 +483,8 @@ msgstr ""
 "d'activation."
 
 #: ../src/subscription_manager/managercli.py:581
-#, 
 msgid "Error: Must specify an activation key"
-msgstr ""
+msgstr "Erreur : une clé d'activation doit être spécifiée"
 
 #: ../src/subscription_manager/managercli.py:608
 #, python-format
@@ -1304,9 +1304,8 @@ msgid "Virtual"
 msgstr "Virtuel"
 
 #: ../src/subscription_manager/gui/widgets.py:573
-#, 
 msgid "Both"
-msgstr ""
+msgstr "Les deux"
 
 #: ../src/subscription_manager/gui/widgets.py:576
 msgid "Type"
@@ -2075,25 +2074,24 @@ msgid "_Proxy Configuration"
 msgstr "Configuration du _Proxy"
 
 #: ../src/install-num-migrate-to-rhsm:40
-#, 
 msgid "Install number to run against"
-msgstr ""
+msgstr "Installer le numéro pour exécuter avec"
 
 #: ../src/install-num-migrate-to-rhsm:41
-#, 
 msgid "Only print the files which would be copied over"
-msgstr ""
+msgstr "Uniquement imprimer les fichiers devant être copiés"
 
 #: ../src/install-num-migrate-to-rhsm:64 ../src/rhn-migrate-classic-to-rhsm:55
 msgid "Must be root user to execute\n"
 msgstr "Vous devez être Root pour exécuter\n"
 
 #: ../src/install-num-migrate-to-rhsm:75
-#, 
 msgid ""
 "Could not read installation number from /etc/sysconfig/rhn/install-num.  "
 "Aborting."
 msgstr ""
+"Impossible de lire le numéro d'installation de /etc/sysconfig/rhn/install-"
+"num. Annulé."
 
 #: ../src/install-num-migrate-to-rhsm:96
 #, c-format
@@ -2145,21 +2143,22 @@ msgstr ""
 "Fermeture."
 
 #: ../src/rhn-migrate-classic-to-rhsm:133
-#, 
 msgid ""
 "Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for "
 "more details."
 msgstr ""
+"Impossible de connecter au serveur des certificats. Voir "
+"/var/log/rhsm/rhsm.log pour obtenir plus de détails."
 
 #: ../src/rhn-migrate-classic-to-rhsm:140
-#, 
 msgid "This system is not associated with any channel."
-msgstr ""
+msgstr "Ce système n'est associé à aucun canal."
 
 #: ../src/rhn-migrate-classic-to-rhsm:142
-#, 
 msgid "Unable to locate SystemId file. Is this system registered?"
 msgstr ""
+"Impossible de localiser le fichier SystemId. Êtes-vous certain que ce "
+"fichier est enregistré ?"
 
 #: ../src/rhn-migrate-classic-to-rhsm:145
 msgid "Problem encountered getting the list of subscribed channels.  Exiting."

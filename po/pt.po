@@ -410,8 +410,7 @@ msgstr "o nome do consumidor, o padrão é o hostname"
 
 #: ../src/subscription_manager/managercli.py:544
 msgid "if supplied, the existing consumer data is pulled from the server"
-msgstr ""
-"se fornecido, os dados do consumidor existente é puxado do servidor"
+msgstr "se fornecido, os dados do consumidor existente é puxado do servidor"
 
 #: ../src/subscription_manager/managercli.py:546
 msgid "register to one of multiple organizations for the user"
@@ -451,9 +450,10 @@ msgid "Error: Activation keys do not require user credentials"
 msgstr "Erro: Chaves de ativação não requerem credenciais do usuário"
 
 #: ../src/subscription_manager/managercli.py:571
-#, 
 msgid "Error: Activation keys can not be used with previously registered ids."
 msgstr ""
+"Erro: Chaves de ativação não podem ser usadas com os ids registrados "
+"anteriormente."
 
 #: ../src/subscription_manager/managercli.py:574
 msgid "Error: Must specify --org to register to an environment."
@@ -464,9 +464,8 @@ msgid "Error: Must specify --org to register with activation keys."
 msgstr "Erro: Deve especificar --org para registrar com chaves de ativação."
 
 #: ../src/subscription_manager/managercli.py:581
-#, 
 msgid "Error: Must specify an activation key"
-msgstr ""
+msgstr "Erro: É necessário especificar uma chave de ativação"
 
 #: ../src/subscription_manager/managercli.py:608
 #, python-format
@@ -1272,9 +1271,8 @@ msgid "Virtual"
 msgstr "Virtual"
 
 #: ../src/subscription_manager/gui/widgets.py:573
-#, 
 msgid "Both"
-msgstr ""
+msgstr "Ambos"
 
 #: ../src/subscription_manager/gui/widgets.py:576
 msgid "Type"
@@ -2036,25 +2034,24 @@ msgid "_Proxy Configuration"
 msgstr "_Proxy Configuration"
 
 #: ../src/install-num-migrate-to-rhsm:40
-#, 
 msgid "Install number to run against"
-msgstr ""
+msgstr "Número da instalação a executar"
 
 #: ../src/install-num-migrate-to-rhsm:41
-#, 
 msgid "Only print the files which would be copied over"
-msgstr ""
+msgstr "Somente impressões de arquivos que poderiam ser copiados"
 
 #: ../src/install-num-migrate-to-rhsm:64 ../src/rhn-migrate-classic-to-rhsm:55
 msgid "Must be root user to execute\n"
 msgstr "Deve ser usuário root para executar\n"
 
 #: ../src/install-num-migrate-to-rhsm:75
-#, 
 msgid ""
 "Could not read installation number from /etc/sysconfig/rhn/install-num.  "
 "Aborting."
 msgstr ""
+"Não foi possível ler o número de instalação a partir do /etc/sysconfig/rhn"
+"/install-num. Abortando."
 
 #: ../src/install-num-migrate-to-rhsm:96
 #, c-format
@@ -2092,8 +2089,7 @@ msgid ""
 "Please visit https://access.redhat.com/management/consumers/%s to view the profile details."
 msgstr ""
 "\n"
-"Por favor visite https://access.redhat.com/management/consumers/%s para "
-"visualizar os detalhes do perfil."
+"Por favor visite https://access.redhat.com/management/consumers/%s para visualizar os detalhes do perfil."
 
 #: ../src/rhn-migrate-classic-to-rhsm:125
 #, c-format
@@ -2107,21 +2103,21 @@ msgstr ""
 "Saindo."
 
 #: ../src/rhn-migrate-classic-to-rhsm:133
-#, 
 msgid ""
 "Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for "
 "more details."
 msgstr ""
+"Incapaz de conectar ao servidor do certificado. Veja /var/log/rhsm/rhsm.log "
+"para obter mais detalhes."
 
 #: ../src/rhn-migrate-classic-to-rhsm:140
-#, 
 msgid "This system is not associated with any channel."
-msgstr ""
+msgstr "Este sistema não está associado a nenhum canal."
 
 #: ../src/rhn-migrate-classic-to-rhsm:142
-#, 
 msgid "Unable to locate SystemId file. Is this system registered?"
 msgstr ""
+"Incapaz de localizar o arquivo Systemid. Este sistema está registrado?"
 
 #: ../src/rhn-migrate-classic-to-rhsm:145
 msgid "Problem encountered getting the list of subscribed channels.  Exiting."

@@ -1,7 +1,7 @@
 # Language as-IN translations for l package.
 # Copyright (C) 2011 THE l'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the l package.
-# 
+#
 # Automatically generated, 2011.
 # Nilamdyuti Goswami <ngoswami@redhat.com>, 2011.
 # ngoswami <ngoswami@fedoraproject.org>, 2011. #zanata
@@ -448,9 +448,10 @@ msgid "Error: Activation keys do not require user credentials"
 msgstr "ত্ৰুটি: সক্ৰিয়কৰণ চাবিসমূহৰ ব্যৱহাৰকাৰী তথ্যসমূহৰ প্ৰয়োজন নাই"
 
 #: ../src/subscription_manager/managercli.py:571
-#, 
 msgid "Error: Activation keys can not be used with previously registered ids."
 msgstr ""
+"ত্ৰুটি: সক্ৰিয়কৰণ চাবিসমূহ পূৰ্বতে ৰেজিস্টাৰ্ড আইডিসমূহৰ সৈতে ব্যৱহাৰ কৰিব "
+"নোৱাৰি।"
 
 #: ../src/subscription_manager/managercli.py:574
 msgid "Error: Must specify --org to register to an environment."
@@ -462,9 +463,8 @@ msgstr ""
 "ত্ৰুটি: সক্ৰিয়কৰণ চাবিসমূহৰ সৈতে ৰেজিস্টাৰ কৰিবলে --org ধাৰ্য্য কৰিব লাগিব।"
 
 #: ../src/subscription_manager/managercli.py:581
-#, 
 msgid "Error: Must specify an activation key"
-msgstr ""
+msgstr "ত্ৰুটি: এটা সক্ৰিয়কৰণ চাবি ধাৰ্য্য কৰিব লাগিব"
 
 #: ../src/subscription_manager/managercli.py:608
 #, python-format
@@ -1270,9 +1270,8 @@ msgid "Virtual"
 msgstr "ভাৰছুৱেল"
 
 #: ../src/subscription_manager/gui/widgets.py:573
-#, 
 msgid "Both"
-msgstr ""
+msgstr "দুয়ো"
 
 #: ../src/subscription_manager/gui/widgets.py:576
 msgid "Type"
@@ -2033,25 +2032,24 @@ msgid "_Proxy Configuration"
 msgstr "প্ৰক্সি সংৰূপ (_P)"
 
 #: ../src/install-num-migrate-to-rhsm:40
-#, 
 msgid "Install number to run against"
-msgstr ""
+msgstr "চলাবলে ইনস্টল নম্বৰ"
 
 #: ../src/install-num-migrate-to-rhsm:41
-#, 
 msgid "Only print the files which would be copied over"
-msgstr ""
+msgstr "কেৱল কপি কৰিব লগিয়া নথিপত্ৰসমূহ প্ৰিন্ট কৰক"
 
 #: ../src/install-num-migrate-to-rhsm:64 ../src/rhn-migrate-classic-to-rhsm:55
 msgid "Must be root user to execute\n"
 msgstr "প্ৰেৰণ কৰিবলে ৰুট ব্যৱহাৰকাৰী হব লাগিব\n"
 
 #: ../src/install-num-migrate-to-rhsm:75
-#, 
 msgid ""
 "Could not read installation number from /etc/sysconfig/rhn/install-num.  "
 "Aborting."
 msgstr ""
+"/etc/sysconfig/rhn/install-num -ৰ পৰা ইনস্টল নম্বৰ পঢ়িব নোৱাৰি। বাদ দিয়া "
+"হৈছে।"
 
 #: ../src/install-num-migrate-to-rhsm:96
 #, c-format
@@ -2103,21 +2101,20 @@ msgstr ""
 "প্ৰস্থান কৰা হৈছে।"
 
 #: ../src/rhn-migrate-classic-to-rhsm:133
-#, 
 msgid ""
 "Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for "
 "more details."
 msgstr ""
+"প্ৰমাণপত্ৰ চাৰ্ভাৰলে সংযোগ কৰিবলে অক্ষম। অধিক বিৱৰণৰ বাবে "
+"/var/log/rhsm/rhsm.log চাওক।"
 
 #: ../src/rhn-migrate-classic-to-rhsm:140
-#, 
 msgid "This system is not associated with any channel."
-msgstr ""
+msgstr "এই চিস্টেম কোনো চেনেলৰ সৈতে সংযুক্ত নহয়।"
 
 #: ../src/rhn-migrate-classic-to-rhsm:142
-#, 
 msgid "Unable to locate SystemId file. Is this system registered?"
-msgstr ""
+msgstr "SystemId নথিপত্ৰ অৱস্তিত কৰিবলে অক্ষম। এই চিস্টেম ৰেজিস্টাৰ্ড নহয়?"
 
 #: ../src/rhn-migrate-classic-to-rhsm:145
 msgid "Problem encountered getting the list of subscribed channels.  Exiting."

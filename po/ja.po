@@ -439,7 +439,7 @@ msgstr "このシステムは既に登録済みです。上書きするには  -
 
 #: ../src/subscription_manager/managercli.py:565
 msgid "Error: consumer name can not be empty."
-msgstr "エラー: コンシューマー名は空白ではいけません"
+msgstr "エラー: コンシューマー名は空白にできません。"
 
 #: ../src/subscription_manager/managercli.py:568
 msgid "Error: Activation keys do not require user credentials"
@@ -1304,11 +1304,11 @@ msgstr "完了"
 
 #: ../src/subscription_manager/certmgr.py:99
 msgid "Updating entitlement certificates & repositories"
-msgstr "エンタイトルメント証明書 & リポジトリを更新しています。"
+msgstr "エンタイトルメント証明書 & リポジトリを更新しています"
 
 #: ../src/subscription_manager/certmgr.py:132
 msgid "Unable to update entitlement certificates & repositories"
-msgstr "エンタイトルメント証明書 & リポジトリを更新できません。"
+msgstr "エンタイトルメント証明書 & リポジトリを更新できません"
 
 #: ../src/subscription_manager/certdirectory.py:179
 msgid "Reason(s):"
@@ -2003,7 +2003,7 @@ msgstr "実行するには root ユーザーでなければなりません\n"
 msgid ""
 "Could not read installation number from /etc/sysconfig/rhn/install-num.  "
 "Aborting."
-msgstr "/etc/sysconfig/rhn/install-num からインストール番号を読み取ることができませんでした。中止しています。"
+msgstr "/etc/sysconfig/rhn/install-num からインストール番号を読み取れませんでした。中止しています。"
 
 #: ../src/install-num-migrate-to-rhsm:96
 #, c-format
