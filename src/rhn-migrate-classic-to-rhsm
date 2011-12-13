@@ -350,9 +350,13 @@ def enableExtraChannels(subscribedChannels):
 
     # enable any extra channels we are using and write out redhat.repo
     log.info("Extra channels to enable in redhat.repo: %s" % extraChannelMap.values())
-    for rhsmChannel in extraChannelMap.values():
-        repofile.set(rhsmChannel, 'enabled', '1')
-    repofile.write()
+    try:
+        for rhsmChannel in extraChannelMap.values():
+            repofile.set(rhsmChannel, 'enabled', '1')
+        repofile.write()
+    except:
+        print _("\nUnable to enable extra repositories.")
+        print _("Please ensure system is subscribed to entitlements, and alter /etc/yum.repos.d/redhat.repo to enable extra repositories.")
 
 
 def writeMigrationFacts():
