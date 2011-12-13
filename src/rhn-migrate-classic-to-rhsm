@@ -273,7 +273,6 @@ def deployProdCertificates(subscribedChannels):
                 invalidRhsmChannels.append(channel)
                 log.info("%s None", channel)
         except:
-            print _("\nUnrecognized Channel. Mapping not found !!!")
             unrecognizedChannels.append(channel)
 
     if invalidRhsmChannels:
@@ -282,6 +281,15 @@ def deployProdCertificates(subscribedChannels):
         print "+--------------------------------------------------+"
         for i in invalidRhsmChannels:
             print i
+
+    if unrecognizedChannels:
+        print   "\n+---------------------------------------------------------------------------------------+",
+        print _("\nUnrecognized channels. Channel to Product Certificate mapping missing for these channels.")
+        print   "+---------------------------------------------------------------------------------------+"
+        for i in unrecognizedChannels:
+            print i
+
+    if unrecognizedChannels or invalidRhsmChannels:
         if not options.force:
             print _("\nUse --force to ignore these channels and continue the migration.\n")
             sys.exit(1)
@@ -292,11 +300,6 @@ def deployProdCertificates(subscribedChannels):
     for i in validRhsmChannels:
         print i
 
-    if unrecognizedChannels:
-        print _("\nUnrecognized channels. Channel to Product Certificate mapping missing for these channels.")
-        for i in unrecognizedChannels:
-            print i
-        sys.exit(1)
 
     release = getRelease()
 
