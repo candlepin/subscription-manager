@@ -16,7 +16,8 @@ import unittest
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
     StubCertificateDirectory, StubEntitlementDirectory, StubFacts
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter, \
-        CertSorter, FUTURE_SUBSCRIBED, SUBSCRIBED
+        CertSorter, FUTURE_SUBSCRIBED, SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED,\
+    PARTIALLY_SUBSCRIBED
 from datetime import timedelta, datetime
 from rhsm.certificate import GMT
 
@@ -70,6 +71,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertEqual(1, len(self.sorter.unentitled_products.keys()))
         self.assertTrue(INST_PID_1 in self.sorter.unentitled_products)
         self.assertFalse(self.sorter.is_valid())
+        self.assertEqual(NOT_SUBSCRIBED, self.sorter.get_status(INST_PID_1))
 
     def test_ent_cert_no_installed_product(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
@@ -96,6 +98,7 @@ class CertSorterTests(unittest.TestCase):
         self.assertEqual(1, len(self.sorter.expired_products.keys()))
         self.assertTrue(INST_PID_3 in self.sorter.expired_products)
         self.assertFalse(self.sorter.is_valid())
+        self.assertEquals(EXPIRED, self.sorter.get_status(INST_PID_3))
 
     def test_expired_in_future(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir, {},
@@ -202,18 +205,6 @@ class CertSorterTests(unittest.TestCase):
 
 class CertSorterStackingTests(unittest.TestCase):
 
-    def stub_ent_cert(self, parent_pid, provided_pids, quantity=1,
-            stack_id=None, sockets=1):
-        provided_prods = []
-        for provided_pid in provided_pids:
-            provided_prods.append(StubProduct(provided_pid))
-
-        parent_prod = StubProduct(parent_pid)
-
-        return StubEntitlementCertificate(parent_prod,
-                provided_products=provided_prods, quantity=quantity,
-                stacking_id=stack_id, sockets=sockets)
-
     def stub_prod_cert(self, pid):
         return StubProductCertificate(StubProduct(INST_PID_1))
 
@@ -223,7 +214,7 @@ class CertSorterStackingTests(unittest.TestCase):
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 8})
         # Only 2 sockets covered:
         ent_dir = StubCertificateDirectory([
-            self.stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=2)])
+            stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=2)])
         sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
 
         self.assertFalse(INST_PID_1 in sorter.unentitled_products)
@@ -238,8 +229,8 @@ class CertSorterStackingTests(unittest.TestCase):
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 8})
         # 2 ent certs providing 4 sockets each means we're valid:
         ent_dir = StubCertificateDirectory([
-            self.stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=4),
-            self.stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=4)])
+            stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=4),
+            stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1, sockets=4)])
         sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
 
         self.assertFalse(INST_PID_1 in sorter.unentitled_products)
@@ -253,7 +244,7 @@ class CertSorterStackingTests(unittest.TestCase):
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 8})
         # 1 ent cert providing 4 sockets with quantity 2 means we're valid:
         ent_dir = StubCertificateDirectory([
-            self.stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1,
+            stub_ent_cert(INST_PID_5, [INST_PID_1], stack_id=STACK_1,
                 sockets=4, quantity=2)])
         sorter = CertSorter(prod_dir, ent_dir, stub_facts.get_facts())
 
@@ -269,7 +260,7 @@ class CertSorterStackingTests(unittest.TestCase):
 
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 42})
         ents = []
-        ents.append(self.stub_ent_cert(INST_PID_5, ['prod1'],
+        ents.append(stub_ent_cert(INST_PID_5, ['prod1'],
             stack_id=STACK_1, quantity=2))
         ent_dir = StubCertificateDirectory(ents)
         sorter = CertSorter(prod_dir, ent_dir,
@@ -289,9 +280,9 @@ class CertSorterStackingTests(unittest.TestCase):
 
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 4})
         ents = []
-        ents.append(self.stub_ent_cert(INST_PID_5, [INST_PID_1],
+        ents.append(stub_ent_cert(INST_PID_5, [INST_PID_1],
             stack_id=STACK_1, sockets=1))
-        ents.append(self.stub_ent_cert(INST_PID_6, [INST_PID_1],
+        ents.append(stub_ent_cert(INST_PID_6, [INST_PID_1],
             stack_id=STACK_1, sockets=1))
         ent_dir = StubCertificateDirectory(ents)
 
@@ -312,9 +303,9 @@ class CertSorterStackingTests(unittest.TestCase):
         stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 4})
 
         ents = []
-        ents.append(self.stub_ent_cert(INST_PID_5, [INST_PID_1],
+        ents.append(stub_ent_cert(INST_PID_5, [INST_PID_1],
             stack_id=STACK_1, sockets=1))
-        ents.append(self.stub_ent_cert(INST_PID_5, [INST_PID_1],
+        ents.append(stub_ent_cert(INST_PID_5, [INST_PID_1],
             stack_id=STACK_2, sockets=1))
         ent_dir = StubCertificateDirectory(ents)
         sorter = CertSorter(prod_dir, ent_dir,
@@ -335,9 +326,9 @@ class CertSorterStackingTests(unittest.TestCase):
         # Two entitlements, same stack, different first products, each
         # providing 2 sockets: (should be valid)
         ents = []
-        ents.append(self.stub_ent_cert(INST_PID_5, [INST_PID_1],
+        ents.append(stub_ent_cert(INST_PID_5, [INST_PID_1],
             stack_id=STACK_1, sockets=2))
-        ents.append(self.stub_ent_cert(INST_PID_6, [INST_PID_1],
+        ents.append(stub_ent_cert(INST_PID_6, [INST_PID_1],
             stack_id=STACK_1, sockets=2))
         ent_dir = StubCertificateDirectory(ents)
 
@@ -349,6 +340,75 @@ class CertSorterStackingTests(unittest.TestCase):
         self.assertTrue(INST_PID_1 in sorter.valid_products)
         self.assertEquals(0, len(sorter.partially_valid_products))
         self.assertEquals(0, len(sorter.partial_stacks))
+
+
+class TestCertSorterStatus(unittest.TestCase):
+
+    def create_cert_sorter(self, product_certs, entitlement_certs):
+        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 8})
+        return CertSorter(StubCertificateDirectory(product_certs),
+                          StubEntitlementDirectory(entitlement_certs),
+                          stub_facts.get_facts())
+
+    def test_subscribed(self):
+        product = self.create_prod_cert(INST_PID_1)
+        entitlement = stub_ent_cert(INST_PID_1)
+        sorter = self.create_cert_sorter([product], [entitlement])
+        self.assertEqual(SUBSCRIBED, sorter.get_status(INST_PID_1))
+
+    def test_not_subscribed(self):
+        installed = self.create_prod_cert(INST_PID_1);
+        sorter = self.create_cert_sorter([installed], [])
+        self.assertEqual(NOT_SUBSCRIBED, sorter.get_status(INST_PID_1))
+
+    def test_expired(self):
+        installed = self.create_prod_cert(INST_PID_1);
+        expired_ent = stub_ent_cert(INST_PID_1,
+                                         start_date=datetime.now() - timedelta(days=365),
+                                         end_date=datetime.now() - timedelta(days=2))
+        sorter = self.create_cert_sorter([installed], [expired_ent])
+        self.assertEqual(EXPIRED, sorter.get_status(INST_PID_1))
+
+    def test_future_subscribed(self):
+        installed = self.create_prod_cert(INST_PID_1);
+        expired_ent = stub_ent_cert(INST_PID_1,
+                                         start_date=datetime.now() + timedelta(days=10),
+                                         end_date=datetime.now() + timedelta(days=365))
+        sorter = self.create_cert_sorter([installed], [expired_ent])
+        self.assertEqual(FUTURE_SUBSCRIBED, sorter.get_status(INST_PID_1))
+
+    def test_partially_subscribed(self):
+        installed = self.create_prod_cert(INST_PID_1);
+        partial_ent = stub_ent_cert(INST_PID_2, [INST_PID_1], quantity=1,
+                                         stack_id=STACK_1, sockets=2)
+        sorter = self.create_cert_sorter([installed], [partial_ent])
+        self.assertEqual(PARTIALLY_SUBSCRIBED, sorter.get_status(INST_PID_1))
+
+    def test_partially_subscribed_and_future_subscription(self):
+        installed = self.create_prod_cert(INST_PID_1);
+        partial_ent = stub_ent_cert(INST_PID_2, [INST_PID_1], quantity=1,
+                                         stack_id=STACK_1, sockets=2)
+        future_ent = stub_ent_cert(INST_PID_2, [INST_PID_1], quantity=1,
+                                         stack_id=STACK_1, sockets=2,
+                                         start_date=datetime.now() + timedelta(days=10),
+                                         end_date=datetime.now() + timedelta(days=365))
+        sorter = self.create_cert_sorter([installed], [partial_ent, future_ent])
+        self.assertEqual(PARTIALLY_SUBSCRIBED, sorter.get_status(INST_PID_1))
+
+    def test_expired_and_future_entitlements_report_future(self):
+        installed = self.create_prod_cert(INST_PID_1);
+        expired_ent = stub_ent_cert(INST_PID_1,
+                                         start_date=datetime.now() + timedelta(days=10),
+                                         end_date=datetime.now() + timedelta(days=365))
+        future_ent = stub_ent_cert(INST_PID_1,
+                                         start_date=datetime.now() + timedelta(days=10),
+                                         end_date=datetime.now() + timedelta(days=365))
+
+        sorter = self.create_cert_sorter([installed], [future_ent, expired_ent])
+        self.assertEqual(FUTURE_SUBSCRIBED, sorter.get_status(INST_PID_1))
+
+    def create_prod_cert(self, pid):
+        return StubProductCertificate(StubProduct(pid))
 
 
 class TestEntitlementCertStackingGroupSorter(unittest.TestCase):
@@ -413,3 +473,17 @@ class TestEntitlementCertStackingGroupSorter(unittest.TestCase):
         self.assertEquals(name, group.name)
         self.assertEquals(1, len(group.entitlements))
         self.assertEquals(entitlement, group.entitlements[0])
+
+
+def stub_ent_cert(parent_pid, provided_pids=[], quantity=1,
+        stack_id=None, sockets=1, start_date=None, end_date=None):
+    provided_prods = []
+    for provided_pid in provided_pids:
+        provided_prods.append(StubProduct(provided_pid))
+
+    parent_prod = StubProduct(parent_pid)
+
+    return StubEntitlementCertificate(parent_prod,
+            provided_products=provided_prods, quantity=quantity,
+            stacking_id=stack_id, sockets=sockets, start_date=start_date,
+            end_date=end_date)

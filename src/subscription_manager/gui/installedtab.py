@@ -25,7 +25,7 @@ from subscription_manager.gui import widgets
 from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.certdirectory import ProductDirectory
 from subscription_manager.hwprobe import ClassicCheck
-from subscription_manager.cert_sorter import CertSorter
+from subscription_manager.cert_sorter import CertSorter, FUTURE_SUBSCRIBED, SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 
 from subscription_manager import managerlib, cert_sorter
 from subscription_manager.validity import find_first_invalid_date
@@ -109,10 +109,10 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.store.clear()
         self.cs = cert_sorter.CertSorter(self.product_dir,
                 self.entitlement_dir, self.facts.get_facts())
-
         for product_cert in self.product_dir.list():
             for product in product_cert.getProducts():
                 product_hash = product.getHash()
+                status = self.cs.get_status(product_hash)
 
                 # TODO: assumptions are being made here that could display
                 # inaccurate data for stacking subscriptions. We look up only one
@@ -120,8 +120,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 # from it like dates and order numbers. In a stacking scenario there
                 # could be many such entitlements, with different dates and order
                 # numbers. Will be tricky to represent this here to say the least.
-                entitlement_cert = self.entitlement_dir. \
-                                        findByProduct(product_hash)
+                entitlement_cert = self.entitlement_dir.findByProduct(product_hash)
 
                 entry = {}
                 entry['product'] = product.getName()
@@ -130,29 +129,25 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 # Common properties
                 entry['align'] = 0.5
 
-                if entitlement_cert:
+                # TODO:  Pull this date logic out into a separate lib!
+                #        This is also used in mysubstab...
+                if status != NOT_SUBSCRIBED:
                     order = entitlement_cert.getOrder()
 
                     entry['subscription'] = order.getName()
                     entry['start_date'] = self.cs.get_begin_date(product.getHash())
                     entry['expiration_date'] = self.cs.get_end_date(product.getHash())
 
-                    # TODO:  Pull this date logic out into a separate lib!
-                    #        This is also used in mysubstab...
-                    # TODO: we already have a cert sorter, we do not need to do all this
-                    # manual checking of expirations, the sorter should tell us:
-                    date_range = entitlement_cert.validRange()
-                    now = datetime.now(GMT())
-
-                    if now < date_range.begin():
+                    if status == FUTURE_SUBSCRIBED:
+                        entry['image'] = self._render_icon('red')
                         entry['status'] = _('Future Subscription')
                         entry['validity_note'] = _("Never Subscribed")
-                    elif now > date_range.end():
+                    elif status == EXPIRED:
                         entry['image'] = self._render_icon('red')
                         entry['status'] = _('Expired')
                         entry['validity_note'] = \
                             _('Subscription %s is expired') % order.getSubscription()
-                    elif product.getHash() in self.cs.partially_valid_products:
+                    elif status == PARTIALLY_SUBSCRIBED:
                         entry['image'] = self._render_icon('yellow')
                         entry['status'] = _('Partially Subscribed')
                         entry['validity_note'] = _("Partially Subscribed")
