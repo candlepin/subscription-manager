@@ -130,6 +130,8 @@ class CertSorter(object):
 
     def get_status(self, product_id):
         """Return the status of a given product"""
+        if product_id in self.partially_valid_products:
+            return PARTIALLY_SUBSCRIBED
         if product_id in self.valid_products:
             return SUBSCRIBED
         if product_id in self.future_products:
@@ -138,8 +140,6 @@ class CertSorter(object):
             return EXPIRED
         if product_id in self.unentitled_products:
             return NOT_SUBSCRIBED
-        if product_id in self.partially_valid_products:
-            return PARTIALLY_SUBSCRIBED
 
     # TODO: get_begin_date and get_end_date don't look right, I think
     # we're showing earliest start date through last end date, without
