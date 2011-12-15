@@ -244,6 +244,10 @@ rm -rf %{buildroot}
 %doc
 %{_mandir}/man8/rhn-migrate-classic-to-rhsm.8*
 %{_mandir}/man8/install-num-migrate-to-rhsm.8*
+#only install this file on Fedora
+%if 0%{?fedora} > 14
+%doc README.Fedora
+%endif
 
 %post
 chkconfig --add rhsmcertd

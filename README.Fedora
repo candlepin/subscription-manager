@@ -1,0 +1,29 @@
+The subscription-manager-migration package contains two scripts:
+rhn-migrate-classic-to-rhsm and install-num-migrate-to-rhsm. These are
+migration scripts; the first is intended to move people from Classic RHN Hosted
+to Hosted Candlepin and the second is intended for people with installation
+numbers on their machines to obtain the proper product certificates for the
+data encoded in their instnum. While unsupported, these scripts could also be
+used to migrate machines from Spacewalk to Candlepin.
+
+If a user wanted to do this, they would need to perform a few steps. First, the
+user would have to register their machine with a Spacewalk[1] instance. Then,
+they would need to set up Candlepin[2], load product data, and pull down
+product certificates into /usr/share/rhsm/product/16/on the system to be
+migrated. The product certs can be obtained via REST calls[3]. Additionally, a
+file called "channel-cert-mappings.txt" has to be created in the same
+directory, and filled out in the following format:
+
+spacewalk-channel-name1: product-cert1-filename.pem
+spacewalk-channel-name2: product-cert1-filename.pem
+spacewalk-channel-name3: product-cert2-filename.pem
+
+Once that is complete, the user can run "rhn-migrate-classic-to-rhsm" and
+migrate from Spacewalk to Candlepin. Note that for now, the two usernames and
+passwords must be identical. This will be corrected in later versions of the
+migration script.
+
+
+[1]: http://spacewalk.redhat.com/
+[2]: https://fedorahosted.org/candlepin/
+[3]: example call: curl -k -u admin:adminpw https://<hostname>:8443/candlepin/products/<product_id>/certificate
