@@ -13,6 +13,7 @@
 # in this software or its documentation.
 #
 import unittest
+from datetime import timedelta, datetime
 from stubs import StubFacts, StubEntitlementCertificate, StubProduct
 from modelhelpers import create_pool
 from subscription_manager.quantity import QuantityDefaultValueCalculator, allows_multi_entitlement, \
@@ -25,6 +26,10 @@ entitlements = [
     StubEntitlementCertificate(StubProduct(product_id_1), quantity=3),
     StubEntitlementCertificate(StubProduct(product_id_1), quantity=2),
     StubEntitlementCertificate(StubProduct(product_id_2), quantity=9),
+    StubEntitlementCertificate(StubProduct(product_id_2),
+                               start_date=datetime.now() + timedelta(days=365),
+                               end_date=datetime.now() + timedelta(days=600),
+                               quantity=4),
 ]
 
 
@@ -89,6 +94,10 @@ class TestQuantityDefaultValueCalculator(unittest.TestCase):
         qty = calculator.calculate(pool)
         # 10 are already consumed, so 4/2 - 10 = -8
         self.assertEquals(0, qty)
+
+    def test_total_consumed_does_not_include_future_entitlements(self):
+        calculator = QuantityDefaultValueCalculator(StubFacts({}), entitlements)
+        self.assertEquals(9, calculator._get_total_consumed(product_id_2))
 
 class TestDefaultQuantityCalculationOnPhysicalMachine(unittest.TestCase):
 
