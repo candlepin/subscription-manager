@@ -18,6 +18,7 @@
 #
 
 import logging
+import subprocess
 
 import gtk
 import gtk.glade
@@ -365,8 +366,8 @@ class MainWindow(widgets.GladeWidget):
 
     def _help_button_clicked(self, widget):
         try:
-            gtk.show_uri(None, "ghelp:subscription-manager",
-                    gtk.get_current_event_time())
+            # unfortunately, gtk.show_uri does not work in RHEL 5
+            subprocess.call(["gnome-open", "ghelp:subscription-manager"])
         except Exception, e:
             # if we can't open it, it's probably because the user didn't
             # install the docs, or yelp. no need to bother them.
