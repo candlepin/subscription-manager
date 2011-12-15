@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.98.8
+Version: 0.99.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -18,7 +18,7 @@ Requires:  python-simplejson
 Requires:  python-iniparse
 Requires:  PyXML
 Requires:  virt-what
-Requires:  python-rhsm >= 0.96.11
+Requires:  python-rhsm >= 0.99.1
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 
