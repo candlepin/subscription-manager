@@ -274,7 +274,9 @@ class CertSorter(object):
         log.debug("Checking stack validity: %s" % stack_id)
 
         for ent in ent_certs:
-            if ent.getOrder().getStackingId() == stack_id:
+            if ent.getOrder().getStackingId() == stack_id and \
+              ent.validRange().begin() <= self.on_date and \
+              ent.validRange().end() >= self.on_date:
                 quantity = int(ent.getOrder().getQuantityUsed())
                 sockets = int(ent.getOrder().getSocketLimit())
                 sockets_covered += sockets * quantity
