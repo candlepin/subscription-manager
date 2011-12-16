@@ -307,8 +307,12 @@ class Hardware:
 
         # xen dom0 is a guest for virt-what's purposes, but is a host for
         # our purposes. Adjust is_guest accordingly. (#757697)
-        if virt_dict['virt.host_type'].find('dom0') > -1:
-            virt_dict['virt.is_guest'] = False
+        try:
+            if virt_dict['virt.host_type'].find('dom0') > -1:
+                virt_dict['virt.is_guest'] = False
+        except KeyError:
+            # if host_type is not defined, do nothing (#768397)
+            pass
 
         self.allhw.update(virt_dict)
         return virt_dict
