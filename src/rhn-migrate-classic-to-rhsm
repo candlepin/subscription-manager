@@ -326,22 +326,16 @@ def enableExtraChannels(subscribedChannels):
     # Check if system was subscribed to extra channels like supplementary, optional, fastrack etc.
     # If so, enable them in the redhat.repo file
 
-    rhelRelease = getRelease()[5]
+    extraChannels = {'supplementary':False, 'productivity':False, 'optional':False}
+    for subscribedChannel in subscribedChannels:
+        if 'supplementary' in subscribedChannel:
+            extraChannels['supplementary'] = True
+        elif 'optional' in subscribedChannel:
+            extraChannels['optional'] = True
+        elif 'productivity' in subscribedChannel:
+            extraChannels['productivity'] = True
 
-    # mapping of all RHN extra channel names to RHSM equivalent channel names
-    if rhelRelease == '5':
-        extraChannelMap = {'rhel-x86_64-server-productivity-5': 'rhel-5-server-productivity-rpms',
-                           'rhel-x86_64-server-supplementary-5': 'rhel-5-server-supplementary'}
-    else:
-        extraChannelMap = {'rhel-x86_64-server-productivity-6': 'rhel-6-server-productivity-rpms',
-                           'rhel-x86_64-server-supplementary-6': 'rhel-6-server-supplementary'}
-
-    # remove from the list any we are not using.  Return if the list is empty
-    for rhnChannel in extraChannelMap.keys():
-        if rhnChannel not in subscribedChannels:
-            del extraChannelMap[rhnChannel]
-
-    if not extraChannelMap:
+    if True not in extraChannels.values():
         return
 
     # create and populate the redhat.repo file
@@ -352,11 +346,14 @@ def enableExtraChannels(subscribedChannels):
     repofile.read()
 
     # enable any extra channels we are using and write out redhat.repo
-    log.info("Extra channels to enable in redhat.repo: %s" % extraChannelMap.values())
     try:
-        for rhsmChannel in extraChannelMap.values():
-            repofile.set(rhsmChannel, 'enabled', '1')
-        repofile.write()
+        for rhsmChannel in repofile.sections():
+            if ((extraChannels['supplementary'] and re.search('supplementary$', rhsmChannel)) or
+            (extraChannels['optional']  and re.search('optional-rpms$', rhsmChannel)) or
+            (extraChannels['productivity']  and re.search('productivity-rpms$', rhsmChannel))):
+                log.info("Enabling extra channel '%s'" % rhsmChannel)
+                repofile.set(rhsmChannel, 'enabled', '1')
+                repofile.write()
     except:
         print _("\nUnable to enable extra repositories.")
         print _("Please ensure system is subscribed to entitlements, and alter /etc/yum.repos.d/redhat.repo to enable extra repositories.")
