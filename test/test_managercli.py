@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import unittest
 import sys
 import socket
@@ -352,6 +353,14 @@ class TestSystemExit(unittest.TestCase):
             pass
         self.assertEquals("%s\n\n" % msgs[0], sys.stderr.buffer)
 
+    def test_msg_unicode(self):
+        msgs = [u"\u2620 \u2603 \u203D"]
+        try:
+            managercli.systemExit(1, msgs)
+        except SystemExit:
+            pass
+        self.assertEquals("%s\n" % msgs[0].encode("utf8"), sys.stderr.buffer)
+
     def test_msg_and_exception_str(self):
         class StrException(Exception):
             def __init__(self, msg):
@@ -379,6 +388,14 @@ class HandleExceptionTests(unittest.TestCase):
         e = FakeException()
         try:
             managercli.handle_exception(self.msg, e)
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+
+    def test_he_unicode(self):
+        e = Exception("Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
+    #    e = FakeException(msg="Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
+        try:
+            managercli.handle_exception("a: %s" % e, e)
         except SystemExit, e:
             self.assertEquals(e.code, -1)
 
