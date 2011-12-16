@@ -50,7 +50,6 @@ from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 
 log = logging.getLogger('rhsm-app.' + __name__)
-
 cfg = rhsm.config.initConfig()
 
 # Translates the cert sorter status constants:
@@ -1481,12 +1480,17 @@ def systemExit(code, msgs=None):
             # from rhsm.connection are unicode type. This method didn't
             # really expect that, so make sure msg is unicode, then
             # try to encode it as utf-8.
-            msg = "%s" % to_unicode_or_bust(msg)
+
             # if we get an exception passed in, and it doesn't
             # have a str repr, just ignore it. This is to
             # preserve existing behaviour. see bz#747024
-            if hasattr(msg, 'encode'):
-                sys.stderr.write("%s\n" % msg.encode("utf-8"))
+            if isinstance(msg, Exception):
+                msg = "%s" % msg
+
+            if isinstance(msg, unicode):
+                sys.stderr.write("%s\n" % msg.encode("utf8"))
+            else:
+                sys.stderr.write("%s\n" % msg)
 
     sys.exit(code)
 
