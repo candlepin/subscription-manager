@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.99.1
+Version: 0.99.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -268,6 +268,23 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Fri Dec 16 2011 Devan Goodwin 0.99.2-1
+- Initial Fedora build. (dgoodwin@redhat.com)
+- 754425: Remove grace period logic (jbowes@redhat.com)
+- 766577: Fix error on "redeem" with multibyte lang (alikins@redhat.com)
+- Add README.Fedora to Fedora builds (cduryee@redhat.com)
+- 757697: report xen dom0 as host, not guest (cduryee@redhat.com)
+- 747014: Help icon was not working in RHEL 5. (awood@redhat.com)
+- 767754: Invalid certificate status when stacked entitlements have overlapping
+  dates (wpoteat@redhat.com)
+- 745995: Ensure default quantity calc does not include future entitlements.
+  (mstead@redhat.com)
+- 760017: Display a friendly message when an invalid installation number is
+  encountered. (awood@redhat.com)
+- 758162: allow --force to override missing mappings (cduryee@redhat.com)
+- 759069: catch exception when enabling invalid repositories
+  (cduryee@redhat.com)
+
 * Mon Dec 12 2011 William Poteat <wpoteat@redhat.com> 0.98.8-1
 - 755861: Fixed quantity selection issue due to older version of pygtk on 5.8.
   (mstead@redhat.com)
