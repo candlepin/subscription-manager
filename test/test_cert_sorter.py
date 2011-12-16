@@ -59,8 +59,7 @@ class CertSorterTests(unittest.TestCase):
                 end_date=datetime.now() - timedelta(days=2)),
             StubEntitlementCertificate(StubProduct(INST_PID_4),
                 start_date=datetime.now() - timedelta(days=365),
-                end_date=datetime.now() + timedelta(days=365),
-                order_end_date=datetime.now() - timedelta(days=2)),  # in warning period
+                end_date=datetime.now() + timedelta(days=365)),
             StubEntitlementCertificate(StubProduct(INST_PID_5)),
             # entitled, but not installed
             StubEntitlementCertificate(StubProduct('not_installed_product')),
@@ -89,15 +88,10 @@ class CertSorterTests(unittest.TestCase):
 
     def test_expired(self):
         self.sorter = CertSorter(self.prod_dir, self.ent_dir, {})
-        self.assertEqual(2, len(self.sorter.expired_entitlement_certs))
+        self.assertEqual(1, len(self.sorter.expired_entitlement_certs))
 
         self.assertTrue(cert_list_has_product(
             self.sorter.expired_entitlement_certs, INST_PID_3))
-        # Certificate in warning period should show up as expired, even though
-        # they can technically still be used. We use the CertSorter to warn
-        # customer of invalid entitlement issues.
-        self.assertTrue(cert_list_has_product(
-            self.sorter.expired_entitlement_certs, INST_PID_4))
 
         self.assertEqual(1, len(self.sorter.expired_products.keys()))
         self.assertTrue(INST_PID_3 in self.sorter.expired_products)

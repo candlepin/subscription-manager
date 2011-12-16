@@ -223,6 +223,7 @@ class UpdateAction(Action):
         #certificates in grace period were being renamed everytime.
         #this makes sure we don't try to re-write certificates in
         #grace period
+        # XXX since we don't use grace period, this might not be needed
         for valid in self.entdir.list():
             sn = valid.serialNumber()
             report.valid.append(sn)
@@ -303,7 +304,7 @@ class UpdateAction(Action):
             cert.delete()
 
     def mayLinger(self, cert):
-        return cert.validWithGracePeriod()
+        return cert.valid()
 
 
 class Disconnected(Exception):
