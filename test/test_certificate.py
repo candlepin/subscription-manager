@@ -66,21 +66,3 @@ class EntitlementCertificateTests(unittest.TestCase):
                 end_date=yesterday())
 
         self.assertFalse(cert.valid())
-
-    def test_invalid_order_date_gives_valid_cert_with_grace(self):
-        # order ends yesterday, but cert expires tomorrow
-        cert = StubEntitlementCertificate(StubProduct('product'),
-                start_date=datetime(2010, 7, 27),
-                end_date=datetime.now() + timedelta(days=1),
-                order_end_date=yesterday())
-
-        self.assertTrue(cert.validWithGracePeriod())
-
-    def test_invalid_x509_date_gives_invalid_cert_with_grace(self):
-        # order ends yesterday, cert expires 5 minutes ago
-        cert = StubEntitlementCertificate(StubProduct('product'),
-                start_date=datetime(2010, 7, 27),
-                end_date=datetime.now() - timedelta(minutes=5),
-                order_end_date=yesterday())
-
-        self.assertFalse(cert.validWithGracePeriod())

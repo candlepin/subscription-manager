@@ -115,13 +115,10 @@ class CertificateDirectory(Directory):
             factory.append(path, listing)
         return listing
 
-    def listValid(self, grace_period=False):
+    def listValid(self):
         valid = []
         for c in self.list():
-            if grace_period:
-                if c.validWithGracePeriod():
-                    valid.append(c)
-            elif c.valid():
+            if c.valid():
                 valid.append(c)
         return valid
 
@@ -251,7 +248,7 @@ class EntitlementDirectory(CertificateDirectory):
             cert_writer.write(key, cert)
         return True
 
-    def listValid(self, grace_period=False):
+    def listValid(self):
         valid = []
         for c in self.list():
 
@@ -260,10 +257,7 @@ class EntitlementDirectory(CertificateDirectory):
             if not self._check_key(c):
                 continue
 
-            if grace_period:
-                if c.validWithGracePeriod():
-                    valid.append(c)
-            elif c.valid():
+            if c.valid():
                 valid.append(c)
 
         return valid

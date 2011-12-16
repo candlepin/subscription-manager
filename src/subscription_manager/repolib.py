@@ -109,9 +109,7 @@ class UpdateAction:
 
     def get_unique_content(self):
         unique = set()
-        # Though they are expired, we keep repos around that are within their
-        # grace period, as they will still allow access to the content.
-        ent_certs = self.ent_dir.listValid(grace_period=True)
+        ent_certs = self.ent_dir.listValid()
         cfg = initConfig()
         baseurl = cfg.get('rhsm', 'baseurl')
         ca_cert = cfg.get('rhsm', 'repo_ca_cert')

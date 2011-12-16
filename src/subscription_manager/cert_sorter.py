@@ -67,7 +67,6 @@ class CertSorter(object):
         # expired on the date in question. If another valid or partially valid
         # entitlement provides the installed product, that product should not
         # appear in this dict.
-        # Certificates which are within their grace period will appear in this dict.
         # Maps product ID to the expired entitlement certificate:
         self.expired_products = {}
 

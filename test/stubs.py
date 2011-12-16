@@ -170,14 +170,13 @@ class StubOrder(object):
 
 class StubContent(Content):
 
-    def __init__(self, label, name=None, quantity=1, flex_quantity=1, vendor="",
+    def __init__(self, label, name=None, quantity=1, vendor="",
             url="", gpg="", enabled=1, metadata_expire=None, required_tags=""):
         self.label = label
         self.name = label
         if name:
             self.name = name
         self.quantity = quantity
-        self.flex_quantity = flex_quantity
         self.vendor = vendor
         self.url = url
         self.gpg = gpg
@@ -268,10 +267,6 @@ class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate)
         if content:
             self.content = content
         self.path = "/tmp/fake_ent_cert.pem"
-
-    # Need to override this implementation to avoid requirement on X509:
-    def validRangeWithGracePeriod(self):
-        return DateRange(self.start_date, self.end_date)
 
     def validRange(self):
         return DateRange(self.start_date, self.order_end_date)
