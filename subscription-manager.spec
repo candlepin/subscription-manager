@@ -18,7 +18,7 @@ Requires:  python-simplejson
 Requires:  python-iniparse
 Requires:  PyXML
 Requires:  virt-what
-Requires:  python-rhsm >= 0.99.1
+Requires:  python-rhsm >= 0.98.2
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 
@@ -268,7 +268,7 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
-* Fri Dec 16 2011 Devan Goodwin 0.99.2-1
+* Fri Dec 16 2011 Devan Goodwin <dgoodwin@redhat.com> 0.99.2-1
 - Initial Fedora build. (dgoodwin@redhat.com)
 - 754425: Remove grace period logic (jbowes@redhat.com)
 - 766577: Fix error on "redeem" with multibyte lang (alikins@redhat.com)
