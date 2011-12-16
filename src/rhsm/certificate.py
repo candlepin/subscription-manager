@@ -29,6 +29,7 @@ from datetime import datetime as dt
 from datetime import tzinfo, timedelta
 from time import strptime
 import logging
+import warnings
 
 log = logging.getLogger(__name__)
 
@@ -439,28 +440,14 @@ class EntitlementCertificate(ProductCertificate):
             lst.append(Role(ext))
         return lst
 
-    def validRange(self):
-        """
-        Get the I{valid} date range.
-
-        Overrides the L{Certificate} method to look at the L{Order} end date,
-        ignoring the grace period (if there is one).
-
-        @return: The valid date range.
-        @rtype: L{DateRange}
-        """
-        fmt = "%Y-%m-%dT%H:%M:%SZ"
-        order = self.getOrder()
-
-        begin = dt(*strptime(order.getStart(), fmt)[0:6])
-        end = dt(*strptime(order.getEnd(), fmt)[0:6])
-
-        return DateRange(begin, end)
-
     def validRangeWithGracePeriod(self):
+        warnings.warn("validRangeWithGracePeriod is deprecated. use validRange instead.",
+                DeprecationWarning)
         return super(EntitlementCertificate, self).validRange()
 
     def validWithGracePeriod(self):
+        warnings.warn("validWithGracePeriod is deprecated. use valid instead.",
+                DeprecationWarning)
         return self.validRangeWithGracePeriod().hasNow()
 
     def bogus(self):
