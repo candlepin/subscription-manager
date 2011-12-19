@@ -807,9 +807,9 @@ class RedeemCommand(CliCommand):
             if  200 <= e.code <= 210:
                 systemExit(0, e)
             else:
-                handle_exception("Unable to redeem: %s" % e, e)
+                handle_exception(u"Unable to redeem: %s" % e, e)
         except Exception, e:
-            handle_exception("Unable to redeem: %s" % e, e)
+            handle_exception(u"Unable to redeem: %s" % e, e)
 
         self._request_validity_check()
 
