@@ -12,8 +12,8 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 import gtk
+
 import gobject
 import os
 
@@ -39,6 +39,13 @@ VALID_IMG = os.path.join(prefix, "data/icons/valid.svg")
 PARTIAL_IMG = os.path.join(prefix, "data/icons/partial.svg")
 INVALID_IMG = os.path.join(prefix, "data/icons/invalid.svg")
 
+ICONSET = {
+    'green': gtk.gdk.pixbuf_new_from_file_at_size(VALID_IMG, 13, 13),
+    'red': gtk.gdk.pixbuf_new_from_file_at_size(INVALID_IMG, 13, 13),
+    'yellow': gtk.gdk.pixbuf_new_from_file_at_size(PARTIAL_IMG, 13, 13)
+}
+
+
 PARTIAL = 0
 INVALID = 1
 VALID = 2
@@ -61,19 +68,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.facts = facts
         self.cs = cert_sorter.CertSorter(prod_dir, ent_dir,
                 self.facts.get_facts())
-
-        #set up the iconset
-        PARTIAL_IMG = os.path.join(os.path.dirname(__file__),
-                                     "data/icons/partial.svg")
-        VALID_IMG = os.path.join(os.path.dirname(__file__),
-                                     "data/icons/valid.svg")
-        INVALID_IMG = os.path.join(os.path.dirname(__file__),
-                                     "data/icons/invalid.svg")
-        self.iconset = {
-            'green': gtk.gdk.pixbuf_new_from_file_at_size(VALID_IMG, 13, 13),
-            'red': gtk.gdk.pixbuf_new_from_file_at_size(INVALID_IMG, 13, 13),
-            'yellow': gtk.gdk.pixbuf_new_from_file_at_size(PARTIAL_IMG, 13, 13)
-        }
 
         # Product column
         text_renderer = gtk.CellRendererText()
@@ -178,7 +172,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def _render_icon(self, icon_id):
         try:
-            return self.iconset[icon_id]
+            return ICONSET[icon_id]
         except KeyError:
             print("Iconset does not contain icon for string '%s'" % icon_id)
             raise
