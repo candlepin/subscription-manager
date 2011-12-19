@@ -36,6 +36,8 @@ from subscription_manager.gui import widgets
 from subscription_manager.gui import progress
 from subscription_manager.gui.utils import handle_gui_exception, make_today_now, errorWindow,\
     get_cell_background_color, set_background_model_index
+from subscription_manager.gui.installedtab import VALID_IMG, PARTIAL_IMG, \
+        INVALID_IMG, ICONSET
 from subscription_manager.quantity import QuantityDefaultValueCalculator, valid_quantity, \
                                             allows_multi_entitlement
 from subscription_manager.jsonwrapper import PoolWrapper
@@ -118,9 +120,9 @@ class SubscriptionAssistant(widgets.GladeWidget):
 
         invalid_type_map = {'active': bool,
                             'product_name': str,
-                            'contract': str,
+                            'image': gtk.gdk.Pixbuf,
+                            'background': str,
                             'end_date': str,
-                            'entitlement_id': str,
                             'product_id': str,
                             'entitlement': gobject.TYPE_PYOBJECT,
                             'align': float}
@@ -134,8 +136,23 @@ class SubscriptionAssistant(widgets.GladeWidget):
         self.invalid_treeview.add_toggle_column(None,
                                                 self.invalid_store['active'],
                                                 self._on_invalid_active_toggled)
-        self.invalid_treeview.add_column(_("Product"),
-                self.invalid_store['product_name'], expand=True)
+
+        # Setup a Product column capable of showing red/yellow status as well
+        # as the product name:
+        text_renderer = gtk.CellRendererText()
+        image_renderer = gtk.CellRendererPixbuf()
+        column = gtk.TreeViewColumn(_('Product'),
+                image_renderer,
+                pixbuf=self.invalid_store['image'])
+        column.set_expand(True)
+        column.pack_end(text_renderer, True)
+        column.add_attribute(text_renderer, 'text',
+                self.invalid_store['product_name'])
+        column.add_attribute(text_renderer, 'cell-background',
+                self.invalid_store['background'])
+        self.invalid_treeview.append_column(column)
+
+
         self.invalid_treeview.add_date_column(_("End Date"),
                 self.invalid_store['end_date'], expand=True)
         self.invalid_treeview.set_model(self.invalid_store)
@@ -362,13 +379,16 @@ class SubscriptionAssistant(widgets.GladeWidget):
             self.invalid_store.add_map({
                     'active': False,
                     'product_name': product_cert.getProduct().getName(),
-                    'contract': na,
                     'end_date': na,
-                    'entitlement_id': None,
                     'entitlement': None,
                     'product_id': product_cert.getProduct().getHash(),
+                    'image': ICONSET['red'],
                     'align': 0.0
                     })
+
+        # TODO: there could be multiple expired certificates for the same product,
+        # or perhaps even the same contract in the case of stacking. It might be
+        # worth filtering to only show a given product name once.
 
         # installed and expired
         for product_id in sorter.expired_products.keys():
@@ -378,14 +398,36 @@ class SubscriptionAssistant(widgets.GladeWidget):
                 self.invalid_store.add_map({
                         'active': False,
                         'product_name': product.getName(),
-                        'contract': ent_cert.getOrder().getNumber(),
                         # is end_date when the cert expires or the orders end date? is it differnt?
                         'end_date': '%s' % self.format_date(ent_cert.validRange().end()),
-                        'entitlement_id': ent_cert.serialNumber(),
                         'entitlement': ent_cert,
                         'product_id': product.getHash(),
+                        'image': ICONSET['red'],
                         'align': 0.0
                         })
+
+        # Installed but only partially stacked. This is quite tricky as there
+        # could be multiple entitlement certs involved, different end dates,
+        # different provided products, etc. We will simplify by just using the
+        # first entitlement cert, and hoping that the others contain data which
+        # roughly matches. (this should be the case)
+        for product_id in sorter.partially_valid_products.keys():
+            # Doesn't make sense to display an end date for partially stacked,
+            # as your stack is still valid on the date in question. Treating
+            # this like unentitled.
+            ent_cert = sorter.partially_valid_products[product_id][0]
+            product = sorter.installed_products[product_id].getProduct()
+            self.invalid_store.add_map({
+                    'active': False,
+                    'product_name': product.getName(),
+                    # is end_date when the cert expires or the orders end date? is it differnt?
+                    'end_date': na,
+                    'entitlement': ent_cert,
+                    'product_id': product.getHash(),
+                    'image': ICONSET['yellow'],
+                    'align': 0.0
+                    })
+
 
     def _display_subscriptions(self):
         """
