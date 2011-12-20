@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.98.8
+Version: 0.98.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -264,6 +264,28 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Dec 20 2011 William Poteat <wpoteat@redhat.com> 0.98.9-1
+- 766577: use unicode strings for possible server errors (alikins@redhat.com)
+- 768415: remove hardcoded reference to x86_64 for extra channel enablement
+  (cduryee@redhat.com)
+- 754425: Remove grace period logic (jbowes@redhat.com)
+- 766577: Fix error on "redeem" with multibyte lang (alikins@redhat.com)
+- 768397: KeyError exception should not be fatal here (cduryee@redhat.com)
+- 757697: report xen dom0 as host, not guest (cduryee@redhat.com)
+- 767754: Invalid certificate status when stacked entitlements have overlapping
+  dates (wpoteat@redhat.com)
+- 745995: Ensure default quantity calc does not include future entitlements.
+  (mstead@redhat.com)
+- Merge branch 'master' of ssh://git.fedorahosted.org/git/subscription-manager
+  (awood@redhat.com)
+- 760017: Display a friendly message when an invalid installation number is
+  encountered. (awood@redhat.com)
+- Bump the verison in zanata based on comments from the translators
+  (bkearney@redhat.com)
+- 758162: allow --force to override missing mappings (cduryee@redhat.com)
+- 759069: catch exception when enabling invalid repositories
+  (cduryee@redhat.com)
+
 * Mon Dec 12 2011 William Poteat <wpoteat@redhat.com> 0.98.8-1
 - 755861: Fixed quantity selection issue due to older version of pygtk on 5.8.
   (mstead@redhat.com)
