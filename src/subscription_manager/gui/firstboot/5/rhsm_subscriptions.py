@@ -20,7 +20,7 @@ except Exception, e:
 
 class moduleClass(FirstbootModuleWindow, managergui.MainWindow):
     runPriority = 109.11
-    moduleName = "Subscription Manager"
+    moduleName = _("Subscription Manager")
     windowTitle = moduleName
     shortMessage = _("RHSM Subscriptions Managemen")
     needsnetwork = 1
