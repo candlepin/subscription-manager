@@ -31,7 +31,7 @@ from up2date_client import config
 
 class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
     runPriority = 109.10
-    moduleName = "Entitlement Registration"
+    moduleName = _("Entitlement Registration")
     windowTitle = moduleName
     shortMessage = _("Entitlement Platform Registration")
     needsnetwork = 1
