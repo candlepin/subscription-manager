@@ -169,12 +169,14 @@ class TestFacts(unittest.TestCase):
         self.f.fact_cache_dir = fact_cache_dir
         self.f.CACHE_FILE = fact_cache
 
-        self.f.facts = {'empty.facts': 1, 'otherthing': True}
+        # use a stub impl of get_facts since the normal impl always loads
+        # the real facts
+        self.f.get_facts = stub_get_facts
         self.f.write_cache()
 
         new_facts_buf = open(fact_cache).read()
         new_facts = json.loads(new_facts_buf)
-        self.assertEquals(new_facts['empty.facts'], True)
+        self.assertEquals(new_facts['newstuff'], True)
 
 class InstalledProductStatusTests(unittest.TestCase):
 
