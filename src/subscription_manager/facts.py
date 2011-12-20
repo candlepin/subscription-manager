@@ -85,11 +85,19 @@ class Facts(CacheManager):
         return len(diff) > 0
 
     def get_facts(self):
-        self.facts = self._load_custom_facts()
+        facts = {}
+        facts.update(self._load_custom_facts())
+        facts.update(self._load_hw_facts())
+        facts.update(self._get_validity_facts(facts))
+        self.facts = facts
         return self.facts
 
     def to_dict(self):
         return self.get_facts()
+
+    def _load_hw_facts(self):
+        import hwprobe
+        return hwprobe.Hardware().getAll()
 
     def _load_custom_facts(self):
         """
@@ -103,22 +111,7 @@ class Facts(CacheManager):
                 json_buffer = f.read()
                 file_facts.update(json.loads(json_buffer))
 
-        facts = {}
-        import hwprobe
-        hw_facts = hwprobe.Hardware().getAll()
-
-        facts.update(hw_facts)
-        facts.update(file_facts)
-
-        # fact collection should probably become "pluggable" at some
-        # point
-
-        # figure out if we think we have valid entitlements
-        validity_facts = self._get_validity_facts(facts)
-
-        facts.update(validity_facts)
-
-        return facts
+        return file_facts
 
     def _get_validity_facts(self, facts_dict):
         validity_facts = {'system.entitlements_valid': 'valid'}
