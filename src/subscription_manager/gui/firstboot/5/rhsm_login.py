@@ -4,16 +4,14 @@ from gtk import glade
 
 from firstboot_module_window import FirstbootModuleWindow
 
-
-from rhpl.translate import _
-import rhpl.translate as translate
-translate.textdomain("firstboot")
+import gettext
+_ = lambda x: gettext.ldgettext("rhsm", x)
+gettext.textdomain("rhsm")
 gtk.glade.bindtextdomain("firstboot", "/usr/share/locale")
 
 import rhsm
 
 sys.path.append("/usr/share/rhsm/")
-print sys.path
 try:
     from subscription_manager.gui import managergui
 except Exception, e:
