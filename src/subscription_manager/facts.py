@@ -86,8 +86,8 @@ class Facts(CacheManager):
 
     def get_facts(self):
         facts = {}
-        facts.update(self._load_custom_facts())
         facts.update(self._load_hw_facts())
+        facts.update(self._load_custom_facts())
         facts.update(self._get_validity_facts(facts))
         self.facts = facts
         return self.facts
