@@ -161,6 +161,14 @@ class TestFacts(unittest.TestCase):
         f = self.f.get_facts()
         self.assertEquals(f['net.interface.lo.ipaddr'], '127.0.0.1')
 
+    def test_custom_facts_override_hardware_facts(self):
+        self.f._load_custom_facts = Mock()
+        self.f._load_custom_facts.return_value = \
+            {'net.interface.lo.ipaddr' : 'foobar'}
+
+        f = self.f.get_facts()
+        self.assertEquals(f['net.interface.lo.ipaddr'], 'foobar')
+
     def test_write_facts(self):
         fact_cache_dir = tempfile.mkdtemp()
         fact_cache = fact_cache_dir + "/facts.json"
