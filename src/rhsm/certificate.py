@@ -177,6 +177,19 @@ class Certificate(object):
         gmt = gmt.replace(tzinfo=GMT())
         return valid_range.hasDate(gmt)
 
+    def expired(self, on_date=None):
+        """
+        Get whether the certificate is expired based on date.
+        @return: True if valid.
+        @rtype: boolean
+        """
+        valid_range = self.validRange()
+        gmt = dt.utcnow()
+        if on_date:
+            gmt = on_date
+        gmt = gmt.replace(tzinfo=GMT())
+        return valid_range.end() < gmt
+
     def bogus(self):
         """
         Get whether the certificate contains bogus
