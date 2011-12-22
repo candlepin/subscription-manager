@@ -249,8 +249,6 @@ def runSubscriptionManager(username, password):
         result = subprocess.call(['subscription-manager', 'subscribe', '--auto'])
         if result != 0:
             print _("\nUnable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?")
-        else:
-            print _("Successfully subscribed.")
     print _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary.") % consumer.getConsumerId()
 
 
