@@ -175,7 +175,7 @@ class Certificate(object):
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())
-        return valid_range.end() >= gmt
+        return valid_range.hasDate(gmt)
 
     def bogus(self):
         """
