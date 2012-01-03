@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.98.9
+Version: 0.98.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -264,6 +264,17 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Jan 03 2012 William Poteat <wpoteat@redhat.com> 0.98.10-1
+- 768983: don't purge future dated entitlements (jbowes@redhat.com)
+- 745973: Fixed missing product icons for partially stacked future entitlement.
+  (mstead@redhat.com)
+- 769433: make rhel5 firstboot modules use bound gettext (alikins@redhat.com)
+- 761478: Facts viewed in the GUI were getting out of date when system
+  entitlement status changed. (awood@redhat.com)
+- 769433: Tag the module names as gettext (alikins@redhat.com)
+- 761133: Support fixing yellow state in compliance assistant.
+  (dgoodwin@redhat.com)
+
 * Tue Dec 20 2011 William Poteat <wpoteat@redhat.com> 0.98.9-1
 - 766577: use unicode strings for possible server errors (alikins@redhat.com)
 - 768415: remove hardcoded reference to x86_64 for extra channel enablement
