@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.99.2
+Version: 0.99.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -273,6 +273,23 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Jan 03 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 0.99.3-1
+- 768983: don't purge future dated entitlements (jbowes@redhat.com)
+- 769642: confusing output from rhn-migrate-to-rhsm when autosubscribe fails
+  (cduryee@redhat.com)
+- 769433: make rhel5 firstboot modules use bound gettext (alikins@redhat.com)
+- Custom facts should be loaded after hardware facts. (awood@redhat.com)
+- 745973: Fixed missing product icons for partially stacked future entitlement.
+  (mstead@redhat.com)
+- 769433: Tag the module names as gettext (alikins@redhat.com)
+- 761478: Facts viewed in the GUI were getting out of date when system
+  entitlement status changed. (awood@redhat.com)
+- 761133: Support fixing yellow state in compliance assistant.
+  (dgoodwin@redhat.com)
+- 766577: use unicode strings for possible server errors (alikins@redhat.com)
+- 768415: remove hardcoded reference to x86_64 for extra channel enablement
+  (cduryee@redhat.com)
+
 * Fri Dec 16 2011 Devan Goodwin <dgoodwin@redhat.com> 0.99.2-1
 - Initial Fedora build. (dgoodwin@redhat.com)
 - 754425: Remove grace period logic (jbowes@redhat.com)
