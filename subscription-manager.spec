@@ -8,6 +8,7 @@ License: GPLv2
 # How to create the source tarball:
 #
 # git clone git://git.fedorahosted.org/git/subscription-manager.git/
+# yum install tito
 # tito build --tag subscription-manager-%{version}-%{release} --tgz
 Source0: %{name}-%{version}.tar.gz
 URL:     https://fedorahosted.org/subscription-manager/
@@ -195,6 +196,7 @@ rm -rf %{buildroot}
 %doc
 %{_mandir}/man8/subscription-manager.8*
 %{_mandir}/man8/rhsmcertd.8*
+%doc LICENSE
 
 
 %files -n subscription-manager-gnome
@@ -224,6 +226,7 @@ rm -rf %{buildroot}
 %{_datadir}/gnome/help/subscription-manager
 %attr(644,root,root) %{_datadir}/gnome/help/subscription-manager/C/*
 %attr(755,root,root) %{_datadir}/gnome/help/subscription-manager/C/figures
+%doc LICENSE
 
 %files -n subscription-manager-firstboot
 %defattr(-,root,root,-)
@@ -241,10 +244,12 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
 %attr(755,root,root) %{_sbindir}/install-num-migrate-to-rhsm
+
 %doc
 %{_mandir}/man8/rhn-migrate-classic-to-rhsm.8*
 %{_mandir}/man8/install-num-migrate-to-rhsm.8*
 #only install this file on Fedora
+%doc LICENSE
 %if 0%{?fedora} > 14
 %doc README.Fedora
 %endif
