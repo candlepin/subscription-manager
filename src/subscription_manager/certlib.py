@@ -297,14 +297,8 @@ class UpdateAction(Action):
 
     def purgeExpired(self, report):
         for cert in self.entdir.listExpired():
-            if self.mayLinger(cert):
-                report.expnd.append(cert)
-                continue
-            report.expd.append(cert)
+            report.expnd.append(cert)
             cert.delete()
-
-    def mayLinger(self, cert):
-        return cert.valid()
 
 
 class Disconnected(Exception):
