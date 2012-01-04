@@ -1320,13 +1320,16 @@ class ListCommand(CliCommand):
     def print_consumed(self, ent_dir=None):
         if ent_dir is None:
             ent_dir = EntitlementDirectory()
-        if not len(ent_dir.listValid()):
+        # list all certificates that have not yet expired, even those
+        # that are not yet active.
+        certs = [cert for cert in ent_dir.list() if not cert.expired()]
+        if len(certs) == 0:
             print(_("No Consumed subscription pools to list"))
             sys.exit(0)
 
         print """+-------------------------------------------+\n    %s\n+-------------------------------------------+\n""" % _("Consumed Product Subscriptions")
 
-        for cert in ent_dir.listValid():
+        for cert in certs:
             eproducts = cert.getProducts()
             # Use order details for entitlement certificates with no product data:
             if len(eproducts) == 0:
