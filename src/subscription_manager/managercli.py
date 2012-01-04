@@ -665,7 +665,8 @@ class RegisterCommand(UserPassCommand):
                                            proxy_password=self.proxy_password)
 
         profile_mgr = ProfileManager()
-        profile_mgr.update_check(self.cp, consumer['uuid'])
+        # 767265: always force an upload of the packages when registering
+        profile_mgr.update_check(self.cp, consumer['uuid'], True)
 
         if self.options.autosubscribe:
             autosubscribe(self.cp, consumer['uuid'])

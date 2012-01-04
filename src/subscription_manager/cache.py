@@ -199,7 +199,7 @@ class ProfileManager(CacheManager):
     def _load_data(self, open_file):
         return RPMProfile(from_file=open_file)
 
-    def update_check(self, uep, consumer_uuid):
+    def update_check(self, uep, consumer_uuid, force=False):
         """
         Check if packages have changed, and push an update if so.
         """
@@ -209,7 +209,7 @@ class ProfileManager(CacheManager):
             log.info("Server does not support packages, skipping profile upload.")
             return 0
 
-        return CacheManager.update_check(self, uep, consumer_uuid)
+        return CacheManager.update_check(self, uep, consumer_uuid, force)
 
     def has_changed(self):
         if not self._cache_exists():
