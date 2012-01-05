@@ -220,7 +220,7 @@ rm -rf %{buildroot}
 
 %doc
 %{_mandir}/man8/subscription-manager-gui.8*
-%{_mandir}/man8/rhsm-compliance-icon.8*
+%{_mandir}/man8/rhsm-icon.8*
 %{_datadir}/omf/subscription-manager
 %attr(644,root,root) %{_datadir}/omf/subscription-manager/*.omf
 %{_datadir}/gnome/help/subscription-manager
