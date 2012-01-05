@@ -114,14 +114,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 product_hash = product.getHash()
                 status = self.cs.get_status(product_hash)
 
-                # TODO: assumptions are being made here that could display
-                # inaccurate data for stacking subscriptions. We look up only one
-                # entitlement cert for the installed product, and display things
-                # from it like dates and order numbers. In a stacking scenario there
-                # could be many such entitlements, with different dates and order
-                # numbers. Will be tricky to represent this here to say the least.
-                entitlement_cert = self.entitlement_dir.findByProduct(product_hash)
-
                 entry = {}
                 entry['product'] = product.getName()
                 entry['version'] = product.getVersion()
@@ -132,9 +124,25 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 # TODO:  Pull this date logic out into a separate lib!
                 #        This is also used in mysubstab...
                 if status != NOT_SUBSCRIBED:
-                    order = entitlement_cert.getOrder()
+                    # TODO: Simplified and will need adjustment when the
+                    # date range work is done. Shows all available contracts for
+                    # the product and shows the final end date.
+                    entitlement_cert = self.entitlement_dir.findByProduct(product_hash)
+                    contract = ""
+                    name = ""
+                    first = True
+                    for cert in self.entitlement_dir.listValid():
+                        if entitlement_cert.getOrder().getStackingId() == "" or \
+                            cert.getOrder().getStackingId() == \
+                            entitlement_cert.getOrder().getStackingId():
+                            if not first:
+                                contract += ", "
+                                name += ", "
+                            first = False
+                            contract = contract + cert.getOrder().getContract()
+                            name = name + cert.getOrder().getName()
 
-                    entry['subscription'] = order.getName()
+                    entry['subscription'] = name
                     entry['start_date'] = self.cs.get_begin_date(product.getHash())
                     entry['expiration_date'] = self.cs.get_end_date(product.getHash())
 
@@ -156,7 +164,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['status'] = _('Subscribed')
                         entry['validity_note'] = \
                             _('Covered by contract %s through %s') % \
-                            (order.getContract(),
+                            (contract,
                              managerlib.formatDate(entry['expiration_date']))
                 else:
                     entry['image'] = self._render_icon('red')
