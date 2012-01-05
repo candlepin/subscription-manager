@@ -371,7 +371,7 @@ class Hardware:
         #potentially override DMI-determined UUID with
         #what is on the file system (xen para-virt)
         try:
-            uuid_file = open('/system/hypervisor/uuid', 'r')
+            uuid_file = open('/sys/hypervisor/uuid', 'r')
             uuid = uuid_file.read()
             uuid_file.close()
             self.allhw['virt.uuid'] = uuid.rstrip("\r\n")
