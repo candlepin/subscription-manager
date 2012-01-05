@@ -92,14 +92,25 @@ class TestLocaleDate(TestLocale):
     # we work around this dynamicaly in managergui.py, but this
     # is here to see if we get anything new, or if the known
     # busted start working
-    known_busted = ["or_IN.UTF-8", "ja_JP.UTF-8", "ko_KR.UTF-8"]
-    def test_strftime(self):
+
+    def test_strftime_1_1_2012(self):
+        # yeah, this is weird. parsing the localized date format
+        # for ja_JP and ko_KR fails in double digit months (10,11,12) even
+        # though it seems to use a zero padded month field.
+        # wibbly wobbly timey wimey
+        self.known_busted = ["or_IN.UTF-8"]
+        self.__test_strftime(datetime.date(2012, 1, 1))
+
+    def test_strftime_10_30_2011(self):
+        self.known_busted = ["or_IN.UTF-8", "ja_JP.UTF-8", "ko_KR.UTF-8"]
+        self.__test_strftime(datetime.date(2011, 10, 30))
+
+    def __test_strftime(self, dt):
         for test_locale in self.test_locales:
             lc = "%s.UTF-8" % test_locale
             self._setupLang(lc)
             try:
-                today = datetime.date.today()
-                time.strptime(today.strftime("%x"), "%x")
+                time.strptime(dt.strftime("%x"), "%x")
             except ValueError:
                 if lc not in self.known_busted:
                     raise
