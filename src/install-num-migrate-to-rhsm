@@ -15,6 +15,7 @@
 #
 
 import os
+import re
 import platform
 import sys
 import optparse
@@ -91,11 +92,17 @@ def main():
 
     repo_dict = instnum.get_repos_dict()
 
+    # make all x86 arches map to i386 to match the proper cert
+    platform_machine = platform.machine()
+    parser = re.compile(r'i[\d]86')
+    if parser.match(platform_machine):
+      platform_machine = 'i386'
+
     sourcepath = "/usr/share/rhsm/product/" + getRelease()
     globs = []
     #generate globs to potentially match the name of the certs under sourcepath
     for key in repo_dict.keys():
-        globs.append(repo_dict['Base'] + '-' + repo_dict[key] + '-' + platform.machine() + '*')
+        globs.append(repo_dict['Base'] + '-' + repo_dict[key] + '-' + platform_machine + '*')
 
     paths = [glob.glob(sourcepath + '/' + x) for x in globs]
 
