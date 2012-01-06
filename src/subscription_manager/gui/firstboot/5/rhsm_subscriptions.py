@@ -35,14 +35,9 @@ class moduleClass(FirstbootModuleWindow, managergui.MainWindow):
         """
         Override the parent class behaviour to not display register/unregister
         buttons during firstboot
-
-        Hide the help button as well, and disable it so an accidental
-        F1 won't click it.
         """
         self.register_button.hide()
         self.unregister_button.hide()
-        self.help_button.hide()
-        self.help_button.set_property("sensitive", False)
 
     def _show_redemption_buttons(self):
         """
