@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.98.10
+Version: 0.98.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -264,6 +264,19 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Mon Jan 09 2012 William Poteat <wpoteat@redhat.com> 0.98.11-1
+- 761140: enable the help button in firstboot (jbowes@redhat.com)
+- 772209: install-num-migrate-to-rhsm does not work on x86 arch
+  (cduryee@redhat.com)
+- 747014: Help icon was not working in RHEL 5. (awood@redhat.com)
+- 758038: Guest's system facts displays "virt.uuid: Unknown"
+  (wpoteat@redhat.com)
+- 767265: Always send up the list of packages on registration.
+  (awood@redhat.com)
+- 768983: show future subs in list --consumed (jbowes@redhat.com)
+- 769856: confusing output from rhn-migrate-to-rhsm when autosubscribe fails
+  (cduryee@redhat.com)
+
 * Tue Jan 03 2012 William Poteat <wpoteat@redhat.com> 0.98.10-1
 - 768983: don't purge future dated entitlements (jbowes@redhat.com)
 - 745973: Fixed missing product icons for partially stacked future entitlement.
