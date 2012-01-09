@@ -232,6 +232,12 @@ compile-po:
 		msgfmt -c --statistics -o po/build/$$lang/LC_MESSAGES/rhsm.mo po/$$lang.po ; \
 	done
 
+zanata-pull:
+	cd po && zanata po pull --srcdir  ..
+
+zanata-push:
+	cd po && zanata po push --srcdir .
+
 # generate a en_US.po with long strings for testing
 gen-test-long-po:
 	-@ scripts/gen_test_en_po.py --long po/en_US.po
