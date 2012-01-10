@@ -600,10 +600,47 @@ class QuantitySelectionColumn(gtk.TreeViewColumn):
             gtk.Adjustment(lower=1, upper=100, step_incr=1))
         self.quantity_renderer.set_property("editable", editable)
         self.quantity_renderer.connect("edited", self._on_edit, tree_model)
+        self.quantity_renderer.connect("editing-started", self._setup_editor)
 
         gtk.TreeViewColumn.__init__(self, column_title, self.quantity_renderer,
                                     text=self.quantity_store_idx)
         self.set_cell_data_func(self.quantity_renderer, self._update_cell_based_on_data)
+
+    def _setup_editor(self, cellrenderer, editable, path):
+        # Only allow numeric characters.
+        editable.set_property("numeric", True)
+        editable.connect("insert-text", self._text_inserted_in_spinner)
+
+    def _text_inserted_in_spinner(self, widget, text, length, position):
+        # if you don't do this, garbage comes in with text
+        text = text[:length]
+        pos = widget.get_position()
+        orig_text = widget.get_text()
+        new_text = orig_text[:pos] + text + orig_text[pos:]
+        self._filter_spinner_value("insert-text", widget, new_text)
+
+    def _filter_spinner_value(self, triggering_event, editable, new_value):
+        adj = editable.get_property("adjustment")
+        upper = int(adj.get_property("upper"))
+        lower = int(adj.get_property("lower"))
+
+        # Ensure that a digit was entered.
+        if len(new_value) >= 1 and not new_value.isdigit():
+            editable.emit_stop_by_name(triggering_event)
+            return
+
+        # Allow entering 0 as it is a possible default.
+        # Do not allow values such as 001, 012 ...
+        if len(new_value) > 1 and new_value[0] == '0':
+            editable.emit_stop_by_name(triggering_event)
+            return
+
+        # Ensure the value is within upper/lower bounds with
+        # exception of 0.
+        int_value = int(new_value)
+        if int_value > upper or (int_value != 0 and int_value < lower):
+            editable.emit_stop_by_name(triggering_event)
+            return
 
     def get_column_legend_text(self):
         return "<b><small>* %s</small></b>" % (_("Click to Adjust Quantity"))

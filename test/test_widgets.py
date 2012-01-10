@@ -130,6 +130,49 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
                         tree_model)
         self.assertEquals(20, tree_model.get_value(iter, column.quantity_store_idx))
 
+    def test_filter_spinner_value_only_allows_digits(self):
+        self._run_filter_value_test("4", True)
+        self._run_filter_value_test("q", False)
+        self._run_filter_value_test("!", False)
+        self._run_filter_value_test("1d3f", False)
+
+    def test_filter_spinner_value_always_allows_zero(self):
+        self._run_filter_value_test("0", True, upper=5, lower=1)
+
+    # Tests for values like 01, 002, 00003 ...
+    def test_filter_spinner_value_does_not_allow_zero_at_start_of_value(self):
+        self._run_filter_value_test("02", False)
+        self._run_filter_value_test("004", False)
+        self._run_filter_value_test("0", True)
+
+    def test_filter_spinner_value_does_not_accept_value_over_upper_limit(self):
+        self._run_filter_value_test("13", False, upper=12.0)
+
+    def test_filter_spinner_value_does_not_accept_value_under_lower_limit(self):
+        self._run_filter_value_test("2", False, lower=3.0)
+
+    def test_filter_spinner_value_allows_value_on_bounds(self):
+        self._run_filter_value_test("1", True, upper=10, lower=1)
+        self._run_filter_value_test("10", True, upper=10, lower=1)
+
+    def _run_filter_value_test(self, test_input_value, is_allowed, upper=15, lower=1):
+        column, tree_model, iter = self._setup_column(1, True)
+
+        adjustment = gtk.Adjustment(upper=upper, lower=lower, value=7.0)
+        # Simulate the editable created by the CellRendererSpin object.
+        editable = gtk.SpinButton()
+        editable.set_property("adjustment", adjustment)
+
+        self.stopped = False
+        def ensure_stopped(name):
+            self.stopped = True
+
+        editable.emit_stop_by_name = ensure_stopped
+
+        column._filter_spinner_value("test-event", editable, test_input_value)
+
+        self.assertEquals(not is_allowed, self.stopped)
+
     def _create_store_map(self, quantity, multi_entitlement):
         return {"quantity": quantity, "multi-entitlement": multi_entitlement}
 
