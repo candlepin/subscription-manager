@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.99.3
+Version: 0.99.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -273,6 +273,21 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Thu Jan 12 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 0.99.4-1
+- 766778: Improvements on quantity spinner max value entry. (mstead@redhat.com)
+- 736465: "Product's Subscription Details" in the gui is neglecting stack
+  subscriptions (wpoteat@redhat.com)
+- 772209: install-num-migrate-to-rhsm does not work on x86 arch
+  (cduryee@redhat.com)
+- 761140: enable the help button in firstboot (jbowes@redhat.com)
+- 771726: Rename man manpage for rhsm-compliance-icon to rhsm-icon.
+  (bkearney@redhat.com)
+- 758038: Guest's system facts displays "virt.uuid: Unknown"
+  (wpoteat@redhat.com)
+- 767265: Always send up the list of packages on registration.
+  (awood@redhat.com)
+- 768983: show future subs in list --consumed (jbowes@redhat.com)
+
 * Tue Jan 03 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 0.99.3-1
 - 768983: don't purge future dated entitlements (jbowes@redhat.com)
 - 769642: confusing output from rhn-migrate-to-rhsm when autosubscribe fails
