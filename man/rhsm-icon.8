@@ -35,6 +35,10 @@ or
 and uses a different icon for each type of message.
 
 .TP
+.B --i, --check-immediately
+Runs the status check process immediately when the command is invoked. Otherwise, there is a four (4) minute delay before running the check.
+
+.TP
 .B -d, --debug
 Shows debug messages for the daemon.
 
@@ -50,9 +54,24 @@ manually:
 * To view the status icons or messages regardless of the state of the machine
 
 .PP
-Since X runs the daemon automatically and on schedule, it is not necessary normally to run the subscription status daemon. Administrators can run it to view any immediate changes to the subscription status of the system. For example:
+Since X runs the daemon automatically and on schedule, it is not necessary normally to run the subscription status daemon. The 
+.B rhsm-icon
+command can change this schedule. For example:
 .nf
 rhsm-icon --check-period 120
+.fi
+
+.PP
+Administrators can also run 
+.B rhsm-icon
+to view any immediate changes to the subscription status of the system. Using the 
+.B --check-immediately
+option runs the check at the time the command is run; otherwise, running 
+.B rhsm-icon
+has a four-minute delay before running the status check.
+
+.nf
+rhsm-icon --check-immediately
 .fi
 
 .PP
