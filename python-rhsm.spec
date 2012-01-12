@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.99.1
+Version: 0.99.2
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,12 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Jan 12 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 0.99.2-1
+- 768983: When consuming a future subsciption, the repos --list should be empty
+  (wpoteat@redhat.com)
+- 720360: Write *-key.pem files out with 0600 permissions. (awood@redhat.com)
+- 754425: Remove grace period logic (cduryee@redhat.com)
+
 * Mon Dec 12 2011 William Poteat <wpoteat@redhat.com> 0.98.7-1
 - 766895: Added hypervisorCheckIn call to allow sending a mapping of host/guest ids for
   creation/update. (mstead@redhat.com)
