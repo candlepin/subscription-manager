@@ -59,6 +59,10 @@ class RepoLib(DataLib):
         repo_file = RepoFile()
         return repo_file.path
 
+    @classmethod
+    def delete_repo_file(self):
+        repo_file = RepoFile()
+        os.unlink(repo_file.path)
 
 # WARNING: exact same name as another action in factlib and certlib.
 # TODO: This is the third disjoint "Action" class hierarchy, this one inherits nothing

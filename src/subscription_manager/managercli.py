@@ -332,6 +332,7 @@ class CleanCommand(CliCommand):
         ProfileManager.delete_cache()
         InstalledProductsManager.delete_cache()
         Facts.delete_cache()
+        RepoLib.delete_repo_file()
         log.info("Cleaned local data")
         print (_("All local data removed"))
 
