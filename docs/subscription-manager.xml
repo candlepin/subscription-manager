@@ -299,7 +299,7 @@
 			<orderedlist>
 				<listitem>
 					<para>
-						If the system is not already registered, then there will be a <guibutton>Register</guibutton> button at the top of the window in the <guilabel>Tools</guilabel> area.
+						If the system is not already registered, then there will be a <guibutton>Register</guibutton> button at the top of the window in the toolbar.
 					</para>
 				</listitem>
 				<listitem>
@@ -331,7 +331,7 @@
 			<orderedlist>
 				<listitem>
 					<para>
-						Click the <guibutton>Register</guibutton> button at the top of the window in the <guilabel>Tools</guilabel> area.
+						Click the <guibutton>Register</guibutton> button at the top of the window in the toolbar.
 					</para>
 				</listitem>
 				<listitem>
@@ -375,7 +375,7 @@
 				The only thing required to unregister a machine is to run the <command>unregister</command> command. This removes the system's entry from the subscription service, unsubscribes it from any subscriptions, and, locally, deletes its identity and entitlement certificates.
 			</para>
 			<para>
-				In the Red Hat Subscription Manager GUI, there is an <guibutton>Unregister</guibutton> button at the top of the window in the <guilabel>Tools</guilabel> area.
+				In the Red Hat Subscription Manager GUI, there is an <guibutton>Unregister</guibutton> button at the top of the window in the toolbar.
 			</para>
 		</sect2>
 
@@ -432,7 +432,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							Select the available entitlements. To select multiple subscriptions, use the <keycap>Ctrl</keycap> key.
+							Select the desired entitlement. 
 						</para>
 					</listitem>
 					<listitem>
@@ -471,7 +471,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							Select the entitlements to unsubscribe. To select multiple subscriptions, use the <keycap>Ctrl</keycap> key.
+							Select the entitlement to unsubscribe. 
 						</para>
 
 					</listitem>
@@ -522,7 +522,7 @@
 				</listitem>
 				<listitem>
 					<para>
-						Stackable entitlements are indicated in the Subscription Manager UI with an asterisk (*). In the UI, available subscriptions are grouped first by what subscriptions are compatible for stacking, and then by other available subscriptions.
+						In the UI, available subscriptions are grouped first by what subscriptions are compatible for stacking, and then by other available subscriptions.
 					</para>
 				</listitem>
 			</itemizedlist>
@@ -603,7 +603,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							In the <guilabel>Tools</guilabel> area, click the <guibutton>Import Certificate</guibutton> button.
+							In the toolbar, click the plus icon to import a subscription certificate.
 						</para>
 					</listitem>
 					<listitem>
@@ -637,12 +637,12 @@
 		</para>
 
 				<para>
-					If the machine does not have any subscriptions to be redeemed, then the <guibutton>Redeem Subscription</guibutton> button is not there.
+					If the machine does not have any subscriptions to be redeemed, then the <guibutton>Redeem a Subscription</guibutton> button is not there.
 				</para>
 				<orderedlist>
 					<listitem>
 						<para>
-							At the top of the main window, click the <guibutton>Activate Subscription</guibutton> button.
+							At the top of the main window, click the <guibutton>Redeem a Subscription</guibutton> button.
 						</para>
 					</listitem>
 					<listitem>
@@ -652,7 +652,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							Click the <guibutton>Actiavte</guibutton> button.
+							Click the <guibutton>Redeem</guibutton> button.
 						</para>
 					</listitem>
 				</orderedlist>
@@ -771,10 +771,30 @@
 			Whenever there is a warning about subscription changes, a small icon appears in the top menu bar, similar to a fuel gauge.
 		</para>
 		<para>
-			As any installed product nears the expiration date of the subscription, the Subscription Manager daemon will issue a warning. A similar message is given when the system is has products without a valid certificate, meaning either the system is not subscribed to a subscription that entitles that product or the product is installed past the expiration of the subscription. Clicking the <guilabel>Manage My Subscriptions...</guilabel> button in the subscription notification window opens the Red Hat Subscription Manager GUI to view and update subscriptions.
+			As any installed product nears the expiration date of the subscription, the Subscription Manager daemon will issue a warning. A similar message is given when the system has products without a valid certificate, meaning either the system is not subscribed to a subscription that entitles that product or the product is installed past the expiration of the subscription. Clicking the <guilabel>Manage My Subscriptions...</guilabel> button in the subscription notification window opens the Red Hat Subscription Manager GUI to view and update subscriptions.
 		</para>
 		<para>
-			When the Subscription Manager UI opens, whether it was opened through a notification or just opened normally, there is a box in the upper left corner that shows the number of products that lack a valid certificate. The easiest way to allocate subscriptions which match invalidated products is to click the <guibutton>Update Certificates</guibutton> button.
+			The left corner of the <guilabel>My Installed Products</guilabel> tab has a small icon that indicates the overall status of subscriptions on the system. <emphasis>Green</emphasis> means all products are fully subscribed, <emphasis>yellow</emphasis> 
+			means that some products may not be subscribed but updates are still in effect, and <emphasis>red</emphasis> means that updates are disabled. The total number of products which do not have valid subscriptions is listed at the text summary at the top of the <guilabel>My Installed Products</guilabel> tab. Otherwise, the summary shows how long the system subscriptions are valid, meaning the next upcoming subscription expiration date.
+		</para>
+		<figure id="fig.status">
+			<title>Subscription Status Information</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="figures/rhsm-status.png" />
+				</imageobject>
+				<textobject>
+					<phrase>
+						Subscription status information.
+					</phrase>
+				</textobject>
+			</mediaobject>
+		</figure>
+		<para>
+			Each product has its own color-coded icon, indicating the subscription status of that specific product. 
+		</para>
+		<para>
+			Clicking the <guibutton>Update</guibutton> button opens the Subscription Assistant, which allows you to assign entitlements for products with invalid (missing or expired) subscriptions.
 		</para>
 	</sect1>
 
