@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.98.11
+Version: 0.98.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -264,6 +264,14 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Mon Jan 16 2012 William Poteat <wpoteat@redhat.com> 0.98.12-1
+- 772338: subscription-manager-gui Help documentation needs a review
+  (wpoteat@redhat.com)
+- 771726: Rename man manpage for rhsm-compliance-icon to rhsm-icon.
+  (bkearney@redhat.com)
+- 736465: "Product's Subscription Details" in the gui is neglecting stack
+  subscriptions (wpoteat@redhat.com)
+
 * Mon Jan 09 2012 William Poteat <wpoteat@redhat.com> 0.98.11-1
 - 761140: enable the help button in firstboot (jbowes@redhat.com)
 - 772209: install-num-migrate-to-rhsm does not work on x86 arch
