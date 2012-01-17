@@ -70,6 +70,8 @@ install-help-files:
 		${PREFIX}/${INSTALL_DIR}/gnome/help/subscription-manager/C
 	install docs/figures/rhsm-subscribe-prod.png \
 		${PREFIX}/${INSTALL_DIR}/gnome/help/subscription-manager/C/figures
+	install docs/figures/rhsm-status.png \
+		${PREFIX}/${INSTALL_DIR}/gnome/help/subscription-manager/C/figures
 	install docs/subscription-manager-C.omf \
 		${PREFIX}/${INSTALL_DIR}/omf/subscription-manager
 
