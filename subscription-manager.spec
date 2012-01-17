@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.98.12
+Version: 0.98.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -264,6 +264,10 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Jan 17 2012 William Poteat <wpoteat@redhat.com> 0.98.13-1
+- 772338: Subscription-manager-gui help documentation review
+  (wpoteat@redhat.com)
+
 * Mon Jan 16 2012 William Poteat <wpoteat@redhat.com> 0.98.12-1
 - 772338: subscription-manager-gui Help documentation needs a review
   (wpoteat@redhat.com)
