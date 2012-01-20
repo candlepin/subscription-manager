@@ -253,7 +253,9 @@ class CliCommand(object):
 
         # do the work, catch most common errors here:
         try:
-            self._do_command()
+            return_code = self._do_command()
+            if return_code is not None:
+                systemExit(return_code)
         except X509.X509Error, e:
             log.error(e)
             print _('Consumer certificates corrupted. Please reregister.')
@@ -1043,6 +1045,8 @@ class ImportCertCommand(CliCommand):
 
     def _do_command(self):
         self._validate_options()
+        # Return code
+        return_code = 0
         for src_cert_file in self.options.certificate_file:
             if os.path.exists(src_cert_file):
                 try:
@@ -1056,21 +1060,24 @@ class ImportCertCommand(CliCommand):
                     else:
                         log.error("Error parsing manually imported entitlement "
                             "certificate: %s" % src_cert_file)
-
+                        return_code = 1
                         print(_("%s is not a valid certificate file. Please use a valid certificate.") %
                                     os.path.basename(src_cert_file))
 
                 except Exception, e:
                     # Should not get here unless something really bad happened.
                     log.exception(e)
+                    return_code = 1
                     print(_("An error occurred while importing the certificate. " +
                                   "Please check log file for more information."))
             else:
                 log.error("Supplied certificate file does not exist: %s" % src_cert_file)
+                return_code = 1
                 print(_("%s is not a valid certificate file. Please use a valid certificate.") %
                     os.path.basename(src_cert_file))
 
         self._request_validity_check()
+        return return_code
 
 
 class ReposCommand(CliCommand):
