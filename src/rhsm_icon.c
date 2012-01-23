@@ -122,7 +122,6 @@ static void
 run_smg (Context * context)
 {
 	g_spawn_command_line_async ("subscription-manager-gui", NULL);
-	hide_icon (context);
 }
 
 static void
