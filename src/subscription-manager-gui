@@ -108,7 +108,6 @@ if __name__ == '__main__':
     if bus and ((request_name_res != REQUEST_NAME_REPLY_PRIMARY_OWNER) and \
        (request_name_res != REQUEST_NAME_REPLY_ALREADY_OWNER)):
         print _("subscription-manager-gui is already running")
-        messageWindow.InfoDialog(_('Subscription Manager is already running'))
     else:
         try:
             main = managergui.MainWindow()
