@@ -109,9 +109,6 @@ if __name__ == '__main__':
        (request_name_res != REQUEST_NAME_REPLY_ALREADY_OWNER)):
         print _("subscription-manager-gui is already running")
         messageWindow.InfoDialog(_('Subscription Manager is already running'))
-
-        show = bus.get_object(BUS_NAME, BUS_PATH).get_dbus_method('show_window')
-        show()
     else:
         try:
             main = managergui.MainWindow()
