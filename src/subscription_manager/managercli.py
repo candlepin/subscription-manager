@@ -135,10 +135,12 @@ def show_autosubscribe_output():
 
     log.info("Attempted to auto-subscribe/heal the system.")
     print _("Installed Product Current Status:")
+    subscribed = False
     for prod_status in installed_status:
+        subscribed = subscribed or prod_status[3] == SUBSCRIBED
         status = STATUS_MAP[prod_status[3]]
         print (constants.product_status % (prod_status[0], status))
-
+    return subscribed
 
 class CliCommand(object):
     """ Base class for all sub-commands. """
@@ -255,7 +257,7 @@ class CliCommand(object):
         try:
             return_code = self._do_command()
             if return_code is not None:
-                systemExit(return_code)
+                return return_code
         except X509.X509Error, e:
             log.error(e)
             print _('Consumer certificates corrupted. Please reregister.')
@@ -678,10 +680,14 @@ class RegisterCommand(UserPassCommand):
             self.certlib.update()
 
         # run this after certlib update, so we have the new entitlements
+        return_code = 0
         if self.options.autosubscribe:
-            show_autosubscribe_output()
+            subscribed = show_autosubscribe_output()
+            if not subscribed:
+                return_code = 1
 
         self._request_validity_check()
+        return return_code
 
     def _persist_identity_cert(self, consumer):
         """
@@ -868,7 +874,7 @@ class SubscribeCommand(CliCommand):
 
             profile_mgr = ProfileManager()
             profile_mgr.update_check(self.cp, consumer_uuid)
-
+            return_code = 0
             if self.options.pool:
                 for pool in self.options.pool:
                     try:
@@ -880,6 +886,7 @@ class SubscribeCommand(CliCommand):
                         log.info("Info: Successfully subscribed the system to the Entitlement Pool %s" % pool)
                     except connection.RestlibException, re:
                         log.exception(re)
+                        return_code = 1
                         if re.code == 403:
                             print re.msg  # already subscribed.
                         elif re.code == 400:
@@ -897,7 +904,9 @@ class SubscribeCommand(CliCommand):
                     print '\t-', ' '.join(str(e).split('-')[1:]).strip()
             elif self.options.auto:
                 # run this after certlib update, so we have the new entitlements
-                show_autosubscribe_output()
+                subscribed = show_autosubscribe_output()
+                if not subscribed:
+                    return_code = 1
 
         except Exception, e:
             handle_exception("Unable to subscribe: %s" % e, e)
@@ -905,6 +914,7 @@ class SubscribeCommand(CliCommand):
         # it is okay to call this no matter what happens above,
         # it's just a notification to perform a check
         self._request_validity_check()
+        return return_code
 
 
 class UnSubscribeCommand(CliCommand):
@@ -1469,7 +1479,7 @@ class CLI:
             self._usage()
             sys.exit(0)
 
-        cmd.main()
+        return cmd.main()
 
 
 # from http://farmdev.com/talks/unicode/
