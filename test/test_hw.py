@@ -116,15 +116,15 @@ class HardwareProbeTests(unittest.TestCase):
         reload(hwprobe)
         hw = hwprobe.Hardware()
         net = hw.getNetworkInfo()
-        self.assertEquals(len(net), 2)
+        self.assertEquals(len(net), 3)
         for key in net:
-            assert key in ['network.hostname', 'network.ipaddr']
+            assert key in ['network.hostname', 'network.ipv4_address', 'network.ipv6_address']
 
     def test_network_interfaces(self):
         reload(hwprobe)
         hw = hwprobe.Hardware()
         net_int = hw.getNetworkInterfaces()
-        self.assertEquals(net_int['net.interface.lo.ipaddr'], '127.0.0.1')
+        self.assertEquals(net_int['net.interface.lo.ipv4_address'], '127.0.0.1')
 
 # FIXME: not real useful as non-root, plus noisy
 #    def test_platform_specific_info(self):

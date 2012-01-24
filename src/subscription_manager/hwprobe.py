@@ -259,11 +259,23 @@ class Hardware:
     def getNetworkInfo(self):
         self.netinfo = {}
         try:
-            self.netinfo['network.hostname'] = socket.gethostname()
+            host = socket.gethostname()
+            self.netinfo['network.hostname'] = host
+
             try:
-                self.netinfo['network.ipaddr'] = socket.gethostbyname(self.netinfo['network.hostname'])
+                info = socket.getaddrinfo(host, None, socket.AF_INET, socket.SOCK_STREAM)
+                ip_list = set([x[4][0] for x in info])
+                self.netinfo['network.ipv4_address'] = ', '.join(ip_list)
             except:
-                self.netinfo['network.ipaddr'] = "127.0.0.1"
+                self.netinfo['network.ipv4_address'] = "127.0.0.1"
+
+            try:
+                info = socket.getaddrinfo(host, None, socket.AF_INET6, socket.SOCK_STREAM)
+                ip_list = set([x[4][0] for x in info])
+                self.netinfo['network.ipv6_address'] = ', '.join(ip_list)
+            except:
+                self.netinfo['network.ipv6_address'] = "::1"
+
         except:
             print _("Error reading networking information:"), sys.exc_type
         self.allhw.update(self.netinfo)
@@ -271,14 +283,26 @@ class Hardware:
 
     def getNetworkInterfaces(self):
         netinfdict = {}
-        metakeys = ['hwaddr', 'ipaddr', 'netmask', 'broadcast']
+        metakeys = ['mac_address', 'ipv4_address', 'ipv4_netmask', 'ipv4_broadcast']
+        ipv6_metakeys = ['address', 'netmask']
         try:
-            for interface in ethtool.get_devices():
+            for info in ethtool.get_interfaces_info(ethtool.get_devices()):
+                for addr in info.get_ipv6_addresses():
+                    for mkey in ipv6_metakeys:
+                        key = '.'.join(['net.interface', info.device, 'ipv6_%s' % (mkey), addr.scope])
+                        try:
+                            netinfdict[key] = getattr(addr, mkey)
+                        except:
+                            netinfdict[key] = "Unknown"
+
+                # XXX: The kernel supports multiple IPv4 addresses on a single
+                # interface when using iproute2.  However, the ethtool.etherinfo.ipv4_*
+                # members will only return the last retrieved IPv4 configuration.  As
+                # of 25 Jan 2012 work on a patch was in progress.  See BZ 759150.
                 for mkey in metakeys:
-                    key = '.'.join(['net.interface', interface, mkey])
+                    key = '.'.join(['net.interface', info.device, mkey])
                     try:
-                        netinfdict[key] = getattr(
-                                            ethtool, 'get_' + mkey)(interface)
+                        netinfdict[key] = getattr(info, mkey)
                     except:
                         netinfdict[key] = "Unknown"
         except:

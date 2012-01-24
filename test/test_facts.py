@@ -159,15 +159,15 @@ class TestFacts(unittest.TestCase):
 
     def test_get_facts(self):
         f = self.f.get_facts()
-        self.assertEquals(f['net.interface.lo.ipaddr'], '127.0.0.1')
+        self.assertEquals(f['net.interface.lo.ipv4_address'], '127.0.0.1')
 
     def test_custom_facts_override_hardware_facts(self):
         self.f._load_custom_facts = Mock()
         self.f._load_custom_facts.return_value = \
-            {'net.interface.lo.ipaddr' : 'foobar'}
+            {'net.interface.lo.ipv4_address' : 'foobar'}
 
         f = self.f.get_facts()
-        self.assertEquals(f['net.interface.lo.ipaddr'], 'foobar')
+        self.assertEquals(f['net.interface.lo.ipv4_address'], 'foobar')
 
     def test_write_facts(self):
         fact_cache_dir = tempfile.mkdtemp()
