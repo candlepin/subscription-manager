@@ -14,12 +14,13 @@
 #
 
 import logging
+import math
 from subscription_manager.certdirectory import EntitlementDirectory, \
     ProductDirectory
 from subscription_manager import cert_sorter
 from subscription_manager.facts import Facts
 from datetime import timedelta, datetime
-from rhsm.certificate import GMT
+from rhsm.certificate import GMT, DateRange
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -98,3 +99,179 @@ def find_first_invalid_date(ent_dir=None, product_dir=None,
 
     # Should never hit this:
     raise Exception("Unable to determine first invalid date.")
+
+class ValidProductDateRangeCalculator(object):
+    def __init__(self, certsorter):
+        self.sorter = certsorter
+
+    def calculate(self, product_hash):
+        """
+        Calculate the valid date range for the specified product based on
+        today's date.
+
+        Partially entitled products are considered when determining the
+        valid range.
+
+        NOTE:
+        The returned date range will be in GMT, so keep this in mind when
+        presenting these dates to the user.
+        """
+        # Only calculate a range if the status of the product is SUBSCRIBED.
+        if not cert_sorter.SUBSCRIBED == self.sorter.get_status(product_hash):
+            return None
+
+        all_entitlements = self.sorter.get_entitlements_for_product(product_hash)
+
+        # Determine which entitlements will potentially create a span
+        # across today's date. Stacking is not considered here.
+        possible_ents = self._get_entitlements_spanning_now(all_entitlements)
+
+        # Since at this point we know that we are valid, we should always
+        # get possible ents. Check here just to be sure.
+        if not possible_ents:
+            return None
+
+        # Now that we have all entitlements that could potentially be
+        # our valid span, figure out the start/end dates considering
+        # stacking and overlapped entitlements. Entitlements are sorted
+        # by start date so that we can process each from left to right
+        # (relative to time). For example, while iterating the entitlements
+        # we can assume that the start_date is next in line considering the
+        # last processed.
+        start_date = None
+        end_date = None
+        last_processed_ent = None
+        for i, ent in enumerate(self._sort_past_to_future(possible_ents)):
+            is_last = i == len(possible_ents) - 1
+            ent_range = ent.validRange()
+            ent_start = ent_range.begin()
+            ent_end = ent_range.end()
+            ent_valid_on_start = self._entitlement_valid_on_date(ent, possible_ents,
+                                                                 ent_start)
+            ent_valid_on_end = self._entitlement_valid_on_date(ent, possible_ents, ent_end)
+
+            # Determine if after the last processed entitlement's end date,
+            # the product is still valid. If we are not valid after the last,
+            # and there are other entitlements to process, this can not be
+            # the start date since there is a gap in validity from the last
+            # processed entitlement's end date to the start of another entitlement.
+            valid_after_last = True
+            if last_processed_ent and not is_last:
+                last_processed_end = last_processed_ent.validRange().end()
+                valid_after_last = self._entitlement_valid_on_date(last_processed_ent,
+                                                                   possible_ents,
+                                                                   last_processed_end +
+                                                                   timedelta(seconds=1))
+                if not valid_after_last:
+                    start_date = None
+
+            if ent_valid_on_start and valid_after_last:
+                if not start_date or start_date > ent_start:
+                    start_date = ent_start
+
+            if ent_valid_on_end:
+                if not end_date or end_date < ent_end:
+                    end_date = ent_end
+
+            last_processed_ent = ent
+
+        # If we couldn't determine a start/end date, report
+        # that there is no valid range for the product.
+        if not start_date or not end_date:
+            return None
+        return DateRange(start_date, end_date)
+
+    def _sort_past_to_future(self, entitlements):
+        """
+        Sorts the specified entitlements by start date from
+        past to future.
+        """
+        return sorted(entitlements, cmp=self._compare_by_start_date)
+
+    def _compare_by_start_date(self, ent1, ent2):
+        """
+        Compare entitlements by start dates.
+        """
+        e1_start = ent1.validRange().begin()
+        e2_start = ent2.validRange().begin()
+        delta = e1_start - e2_start
+        return int(math.ceil(delta.total_seconds()))
+
+    def _get_entitlements_spanning_now(self, entitlements):
+        """
+        From the specified entitlements, find the ones that make
+        up a complete continuous span across today. Entitlements
+        completely in the past/future will be included only if
+        entitlements exist who's start or end dates overlap and
+        a joined span reaches today.
+        """
+        sorted_ents = self._sort_past_to_future(entitlements)
+
+        groups = []
+        ent_group = None
+        for ent in sorted_ents:
+            if ent_group and not self._is_entitlement_covered_by_group(ent, ent_group):
+                ent_group = [ent]
+                groups.append(ent_group)
+            else:
+                if not ent_group:
+                    ent_group = []
+                    groups.append(ent_group)
+                ent_group.append(ent)
+
+        # Check each group to find the group that spans today.
+        for group in groups:
+            for ent in group:
+                # DateRange is in GMT so convert now to GMT before compare
+                if ent.validRange().hasDate(datetime.now().replace(tzinfo=GMT())):
+                    return group
+        return []
+
+    def _is_entitlement_covered_by_group(self, to_check, group):
+        """
+        Given a group of entitlements, check if the specified entitlement
+        is completely covered by another entitlement, with no gaps.
+        """
+        for ent in group:
+            if not self._gap_exists_between(ent, to_check):
+                return True
+        return False
+
+    def _gap_exists_between(self, ent1, ent2):
+        """
+        Determines id there is a gap in time between two entitlements.
+        """
+        ent1_range = ent1.validRange()
+        ent2_range = ent2.validRange()
+
+        if ent1_range.hasDate(ent2_range.begin()) or ent1_range.hasDate(ent2_range.end()):
+            return False
+
+        if ent2_range.hasDate(ent1_range.begin()) or ent2_range.hasDate(ent1_range.end()):
+            return False
+
+        return True
+
+    def _entitlement_valid_on_date(self, entitlement, entitlements_to_check, date):
+        """
+        Given a list of entitlements, check if the specified entitlement is
+        valid on the specified date.
+
+        NOTE: An entitlement is not stackable, it is considered valid its
+        range contains the specified date. If the entitlement is stackable,
+        it is considered valid if its stack is valid, or there is a
+        non-stackable entitlement who's span includes the specified date.
+        """
+        stack_id = entitlement.getOrder().getStackingId()
+        if stack_id:
+            if self.sorter.stack_id_valid(stack_id, entitlements_to_check, on_date=date):
+                return True
+
+            for ent in entitlements_to_check:
+                if not ent.getOrder().getStackingId():
+                    return ent.validRange().hasDate(date) \
+                        and entitlement.validRange().hasDate(date)
+
+            return False
+
+        return entitlement.validRange().hasDate(date)

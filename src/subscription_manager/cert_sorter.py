@@ -141,32 +141,6 @@ class CertSorter(object):
         if product_id in self.unentitled_products:
             return NOT_SUBSCRIBED
 
-    # TODO: get_begin_date and get_end_date don't look right, I think
-    # we're showing earliest start date through last end date, without
-    # considering that we might be invalid somewhere in the
-    # middle. Figuring out how to show this on the CLI where this is used
-    # will not be easy.
-
-    # find the display start date for this product id
-    def get_begin_date(self, product_hash):
-        begin_dates = []
-        ent_certs = self.get_entitlements_for_product(product_hash)
-        for ent_cert in ent_certs:
-            begin_date = ent_cert.validRange().begin()
-            begin_dates.append(begin_date)
-        begin_dates.sort()
-        return begin_dates[0]
-
-    # find the display end date for this product id
-    def get_end_date(self, product_hash):
-        end_dates = []
-        ent_certs = self.get_entitlements_for_product(product_hash)
-        for ent_cert in ent_certs:
-            end_date = ent_cert.validRange().end()
-            end_dates.append(end_date)
-        end_dates.sort()
-        return end_dates[0]
-
     def get_entitlements_for_product(self, product_hash):
         entitlements = []
         for cert in self.entitlement_dir.list():
@@ -234,7 +208,7 @@ class CertSorter(object):
                         log.debug("  stack already found to be valid")
                         self.valid_stacks[stack_id].append(ent_cert)
 
-                    elif not self._stack_id_valid(stack_id, ent_certs):
+                    elif not self.stack_id_valid(stack_id, ent_certs):
                         log.debug("  stack is invalid")
                         partially_stacked = True
                         self.partial_stacks[stack_id] = [ent_cert]
@@ -262,7 +236,7 @@ class CertSorter(object):
 
         # NOTE: unentitled_products will be detected in another method call
 
-    def _stack_id_valid(self, stack_id, ent_certs):
+    def stack_id_valid(self, stack_id, ent_certs, on_date=None):
         """
         Returns True if the given stack ID is valid.
 
@@ -272,10 +246,12 @@ class CertSorter(object):
         sockets_covered = 0
         log.debug("Checking stack validity: %s" % stack_id)
 
+        date_to_check = on_date or self.on_date
+
         for ent in ent_certs:
             if ent.getOrder().getStackingId() == stack_id and \
-              ent.validRange().begin() <= self.on_date and \
-              ent.validRange().end() >= self.on_date:
+              ent.validRange().begin() <= date_to_check and \
+              ent.validRange().end() >= date_to_check:
                 quantity = int(ent.getOrder().getQuantityUsed())
                 sockets = int(ent.getOrder().getSocketLimit())
                 sockets_covered += sockets * quantity

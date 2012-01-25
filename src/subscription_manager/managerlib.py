@@ -35,6 +35,7 @@ from subscription_manager.quantity import allows_multi_entitlement
 from subscription_manager.cert_sorter import StackingGroupSorter
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.cert_sorter import CertSorter
+from subscription_manager.validity import ValidProductDateRangeCalculator
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -101,9 +102,13 @@ def getInstalledProductStatus(product_directory=None,
         for product in product_cert.getProducts():
             begin = ""
             end = ""
-            if sorter.get_entitlements_for_product(product.getHash()):
-                begin = formatDate(sorter.get_begin_date(product.getHash()))
-                end = formatDate(sorter.get_end_date(product.getHash()))
+            calculator = ValidProductDateRangeCalculator(sorter)
+            prod_status_range = calculator.calculate(product.getHash())
+            if prod_status_range:
+                # Format the date in user's local time as the date
+                # range is returned in GMT.
+                begin = formatDate(prod_status_range.begin())
+                end = formatDate(prod_status_range.end())
             data = (product.getName(),
                     product.getVersion(),
                     product.getArch(),

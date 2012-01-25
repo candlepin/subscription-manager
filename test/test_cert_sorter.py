@@ -16,8 +16,7 @@ import unittest
 from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
     StubCertificateDirectory, StubEntitlementDirectory, StubFacts
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter, \
-        CertSorter, FUTURE_SUBSCRIBED, SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED,\
-    PARTIALLY_SUBSCRIBED
+    CertSorter, FUTURE_SUBSCRIBED, SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 from datetime import timedelta, datetime
 from rhsm.certificate import GMT
 
@@ -344,71 +343,62 @@ class CertSorterStackingTests(unittest.TestCase):
 
 class TestCertSorterStatus(unittest.TestCase):
 
-    def create_cert_sorter(self, product_certs, entitlement_certs):
-        stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": 8})
-        return CertSorter(StubCertificateDirectory(product_certs),
-                          StubEntitlementDirectory(entitlement_certs),
-                          stub_facts.get_facts())
-
     def test_subscribed(self):
-        product = self.create_prod_cert(INST_PID_1)
+        product = create_prod_cert(INST_PID_1)
         entitlement = stub_ent_cert(INST_PID_1)
-        sorter = self.create_cert_sorter([product], [entitlement])
+        sorter = create_cert_sorter([product], [entitlement])
         self.assertEqual(SUBSCRIBED, sorter.get_status(INST_PID_1))
 
     def test_not_subscribed(self):
-        installed = self.create_prod_cert(INST_PID_1);
-        sorter = self.create_cert_sorter([installed], [])
+        installed = create_prod_cert(INST_PID_1);
+        sorter = create_cert_sorter([installed], [])
         self.assertEqual(NOT_SUBSCRIBED, sorter.get_status(INST_PID_1))
 
     def test_expired(self):
-        installed = self.create_prod_cert(INST_PID_1);
+        installed = create_prod_cert(INST_PID_1);
         expired_ent = stub_ent_cert(INST_PID_1,
                                          start_date=datetime.now() - timedelta(days=365),
                                          end_date=datetime.now() - timedelta(days=2))
-        sorter = self.create_cert_sorter([installed], [expired_ent])
+        sorter = create_cert_sorter([installed], [expired_ent])
         self.assertEqual(EXPIRED, sorter.get_status(INST_PID_1))
 
     def test_future_subscribed(self):
-        installed = self.create_prod_cert(INST_PID_1);
+        installed = create_prod_cert(INST_PID_1);
         expired_ent = stub_ent_cert(INST_PID_1,
                                          start_date=datetime.now() + timedelta(days=10),
                                          end_date=datetime.now() + timedelta(days=365))
-        sorter = self.create_cert_sorter([installed], [expired_ent])
+        sorter = create_cert_sorter([installed], [expired_ent])
         self.assertEqual(FUTURE_SUBSCRIBED, sorter.get_status(INST_PID_1))
 
     def test_partially_subscribed(self):
-        installed = self.create_prod_cert(INST_PID_1);
+        installed = create_prod_cert(INST_PID_1);
         partial_ent = stub_ent_cert(INST_PID_2, [INST_PID_1], quantity=1,
                                          stack_id=STACK_1, sockets=2)
-        sorter = self.create_cert_sorter([installed], [partial_ent])
+        sorter = create_cert_sorter([installed], [partial_ent])
         self.assertEqual(PARTIALLY_SUBSCRIBED, sorter.get_status(INST_PID_1))
 
     def test_partially_subscribed_and_future_subscription(self):
-        installed = self.create_prod_cert(INST_PID_1);
+        installed = create_prod_cert(INST_PID_1);
         partial_ent = stub_ent_cert(INST_PID_2, [INST_PID_1], quantity=1,
                                          stack_id=STACK_1, sockets=2)
         future_ent = stub_ent_cert(INST_PID_2, [INST_PID_1], quantity=1,
                                          stack_id=STACK_1, sockets=2,
                                          start_date=datetime.now() + timedelta(days=10),
                                          end_date=datetime.now() + timedelta(days=365))
-        sorter = self.create_cert_sorter([installed], [partial_ent, future_ent])
+        sorter = create_cert_sorter([installed], [partial_ent, future_ent])
         self.assertEqual(PARTIALLY_SUBSCRIBED, sorter.get_status(INST_PID_1))
 
     def test_expired_and_future_entitlements_report_future(self):
-        installed = self.create_prod_cert(INST_PID_1);
+        installed = create_prod_cert(INST_PID_1);
         expired_ent = stub_ent_cert(INST_PID_1,
-                                         start_date=datetime.now() + timedelta(days=10),
-                                         end_date=datetime.now() + timedelta(days=365))
+                                         start_date=datetime.now() - timedelta(days=365),
+                                         end_date=datetime.now() - timedelta(days=10))
         future_ent = stub_ent_cert(INST_PID_1,
                                          start_date=datetime.now() + timedelta(days=10),
                                          end_date=datetime.now() + timedelta(days=365))
 
-        sorter = self.create_cert_sorter([installed], [future_ent, expired_ent])
+        sorter = create_cert_sorter([installed], [future_ent, expired_ent])
         self.assertEqual(FUTURE_SUBSCRIBED, sorter.get_status(INST_PID_1))
-
-    def create_prod_cert(self, pid):
-        return StubProductCertificate(StubProduct(pid))
 
 
 class TestEntitlementCertStackingGroupSorter(unittest.TestCase):
@@ -487,3 +477,12 @@ def stub_ent_cert(parent_pid, provided_pids=[], quantity=1,
             provided_products=provided_prods, quantity=quantity,
             stacking_id=stack_id, sockets=sockets, start_date=start_date,
             end_date=end_date)
+
+def create_prod_cert(pid):
+    return StubProductCertificate(StubProduct(pid))
+
+def create_cert_sorter(product_certs, entitlement_certs, machine_sockets=8):
+    stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": machine_sockets})
+    return CertSorter(StubCertificateDirectory(product_certs),
+                      StubEntitlementDirectory(entitlement_certs),
+                      stub_facts.get_facts())

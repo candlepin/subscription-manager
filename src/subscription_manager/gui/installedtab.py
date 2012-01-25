@@ -12,25 +12,20 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import gtk
-
+from subscription_manager import managerlib, cert_sorter
+from subscription_manager.cert_sorter import CertSorter, FUTURE_SUBSCRIBED, \
+    NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
+from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
+from subscription_manager.gui import widgets
+from subscription_manager.hwprobe import ClassicCheck
+from subscription_manager.validity import find_first_invalid_date, \
+    ValidProductDateRangeCalculator
+import gettext
 import gobject
+import gtk
 import os
 
-from datetime import datetime
 
-from rhsm.certificate import GMT
-
-from subscription_manager.gui import widgets
-from subscription_manager.certdirectory import EntitlementDirectory
-from subscription_manager.certdirectory import ProductDirectory
-from subscription_manager.hwprobe import ClassicCheck
-from subscription_manager.cert_sorter import CertSorter, FUTURE_SUBSCRIBED, SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
-
-from subscription_manager import managerlib, cert_sorter
-from subscription_manager.validity import find_first_invalid_date
-
-import gettext
 _ = gettext.gettext
 
 
@@ -143,8 +138,17 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                             name = name + cert.getOrder().getName()
 
                     entry['subscription'] = name
-                    entry['start_date'] = self.cs.get_begin_date(product.getHash())
-                    entry['expiration_date'] = self.cs.get_end_date(product.getHash())
+
+                    range_calculator = ValidProductDateRangeCalculator(self.cs)
+                    compliant_range = range_calculator.calculate(product.getHash())
+                    start = ''
+                    end = ''
+                    if compliant_range:
+                        start = compliant_range.begin()
+                        end = compliant_range.end()
+
+                    entry['start_date'] = start
+                    entry['expiration_date'] = end
 
                     if status == FUTURE_SUBSCRIBED:
                         entry['image'] = self._render_icon('red')
