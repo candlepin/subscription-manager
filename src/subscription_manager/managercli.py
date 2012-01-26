@@ -876,6 +876,7 @@ class SubscribeCommand(CliCommand):
             profile_mgr.update_check(self.cp, consumer_uuid)
             return_code = 0
             if self.options.pool:
+                subscribed = False
                 for pool in self.options.pool:
                     try:
                         # odd html strings will cause issues, reject them here.
@@ -884,15 +885,17 @@ class SubscribeCommand(CliCommand):
                         self.cp.bindByEntitlementPool(consumer_uuid, pool, self.options.quantity)
                         print _("Successfully consumed a subscription from the pool with id %s") % pool
                         log.info("Info: Successfully subscribed the system to the Entitlement Pool %s" % pool)
+                        subscribed = True
                     except connection.RestlibException, re:
                         log.exception(re)
-                        return_code = 1
                         if re.code == 403:
                             print re.msg  # already subscribed.
                         elif re.code == 400:
                             print re.msg  # no such pool.
                         else:
                             systemExit(-1, re.msg)  # some other error.. don't try again
+                if not subscribed:
+                    return_code = 1
             # must be auto
             else:
                 autosubscribe(self.cp, consumer_uuid)
