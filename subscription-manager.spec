@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.99.4
+Version: 0.99.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -273,6 +273,32 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Fri Jan 27 2012 Michael Stead <mstead@redhat.com> 0.99.5-1
+- Updated releasers.conf for rhel-6.3 (mstead@redhat.com)
+- Making return code from subscribe --pool consistent with subscribe --auto
+  (awood@redhat.com)
+- 785018: Corrected help text for --no-auto. (awood@redhat.com)
+- 656944: List IPv6 information in facts. (awood@redhat.com)
+- 689608: Subscription failure should result in a return code of 1.
+  (awood@redhat.com)
+- 772921: Do not show message dialog when multiple sub-man launches detected.
+  (mstead@redhat.com)
+- 772921: Clicking notification icon shuts down subscription manager.
+  (mstead@redhat.com)
+- 734533: Failure to import should result in a return code of 1.
+  (awood@redhat.com)
+- 782549: Subscription manager throws exception when an expired cert exists.
+  (mstead@redhat.com)
+- 772338: Subscription-manager-gui help documentation review
+  (wpoteat@redhat.com)
+- 772338: subscription-manager-gui Help documentation needs a review
+  (wpoteat@redhat.com)
+- latest strings from zanata (alikins@redhat.com)
+- 781510: 'subscription-manager clean' should delete redhat.repo
+  (awood@redhat.com)
+- 771726: Man page for rhsm-compliance-icon should be re-authored to rhsm-icon
+  (wpoteat@redhat.com)
+
 * Thu Jan 12 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 0.99.4-1
 - 766778: Improvements on quantity spinner max value entry. (mstead@redhat.com)
 - 736465: "Product's Subscription Details" in the gui is neglecting stack
