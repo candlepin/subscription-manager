@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.99.2
+Version: 0.99.3
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,10 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Fri Jan 27 2012 Michael Stead <mstead@redhat.com> 0.99.3-1
+- 785247: Update releasers.conf for RHEL6.3 (mstead@redhat.com)
+- Stop building for F14. (dgoodwin@redhat.com)
+
 * Thu Jan 12 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 0.99.2-1
 - 768983: When consuming a future subsciption, the repos --list should be empty
   (wpoteat@redhat.com)
