@@ -73,7 +73,7 @@ options_table = [
     Option("-c", "--cli-only", action="store_true", default=False, dest='clionly',
            help=_("Don't launch the GUI tool to subscribe the system, just use the CLI tool which will do it automatically")),
     Option("-n", "--no-auto", action="store_true", default=False, dest='noauto',
-           help=_("Don't launch subscription manager at end of process.")),
+           help=_("Don't execute the autosubscribe option while registering with subscription manager.")),
 ]
 
 parser = OptionParser(option_list=options_table, usage="%s [--force|--cli-only|--help|--no-auto]" % sys.argv[0])
