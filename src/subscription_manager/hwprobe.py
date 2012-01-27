@@ -290,9 +290,10 @@ class Hardware:
                 for addr in info.get_ipv6_addresses():
                     for mkey in ipv6_metakeys:
                         key = '.'.join(['net.interface', info.device, 'ipv6_%s' % (mkey), addr.scope])
-                        try:
-                            netinfdict[key] = getattr(addr, mkey)
-                        except:
+                        attr = getattr(addr, mkey)
+                        if attr:
+                            netinfdict[key] = attr
+                        else:
                             netinfdict[key] = "Unknown"
 
                 # XXX: The kernel supports multiple IPv4 addresses on a single
@@ -301,9 +302,10 @@ class Hardware:
                 # of 25 Jan 2012 work on a patch was in progress.  See BZ 759150.
                 for mkey in metakeys:
                     key = '.'.join(['net.interface', info.device, mkey])
-                    try:
-                        netinfdict[key] = getattr(info, mkey)
-                    except:
+                    attr = getattr(info, mkey)
+                    if attr:
+                        netinfdict[key] = attr
+                    else:
                         netinfdict[key] = "Unknown"
         except:
             print _("Error reading net Interface information:"), sys.exc_type
