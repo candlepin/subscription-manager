@@ -22,6 +22,7 @@ import optparse
 import glob
 import shutil
 import simplejson as json
+import rhsm.config as config
 from instnum import InstallationNumber, InstallationNumberError
 
 _LIBPATH = "/usr/share/rhsm"
@@ -35,7 +36,8 @@ configure_i18n()
 import gettext
 _ = gettext.gettext
 
-PRODUCT_CERT_DIR = '/etc/pki/product/'
+cfg = config.initConfig()
+PRODUCT_CERT_DIR = cfg.get('rhsm', 'productcertdir')
 
 # Error messages in instnum that need to be translated.
 _("Not a valid hex string")
@@ -111,7 +113,7 @@ def main():
 
     for path in paths:
         dest_file = path.split('-')[-1]
-        dest_file = PRODUCT_CERT_DIR + dest_file
+        dest_file = os.path.join(PRODUCT_CERT_DIR, dest_file)
         print _("Copying %s to %s") % (path, dest_file)
         if not options.dryrun:
             shutil.copyfile(path, dest_file)
