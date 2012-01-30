@@ -83,14 +83,14 @@ def main():
             f.close()
         except IOError:
             print _("Could not read installation number from /etc/sysconfig/rhn/install-num.  Aborting.")
-            sys.exit(-1)
+            sys.exit(1)
 
     #parse the instnum
     try:
         instnum = InstallationNumber(instnumber)
     except InstallationNumberError, e:
         print _("Could not parse the installation number: %s") % (e)
-        sys.exit(-1)
+        sys.exit(1)
 
     repo_dict = instnum.get_repos_dict()
 
