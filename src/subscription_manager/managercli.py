@@ -1059,7 +1059,7 @@ class ImportCertCommand(CliCommand):
     def _do_command(self):
         self._validate_options()
         # Return code
-        return_code = 0
+        imported = False
         for src_cert_file in self.options.certificate_file:
             if os.path.exists(src_cert_file):
                 try:
@@ -1070,26 +1070,29 @@ class ImportCertCommand(CliCommand):
                         extractor.write_to_disk()
                         print(_("Successfully imported certificate %s") %
                                     os.path.basename(src_cert_file))
+                        imported = True
                     else:
                         log.error("Error parsing manually imported entitlement "
                             "certificate: %s" % src_cert_file)
-                        return_code = 1
                         print(_("%s is not a valid certificate file. Please use a valid certificate.") %
                                     os.path.basename(src_cert_file))
 
                 except Exception, e:
                     # Should not get here unless something really bad happened.
                     log.exception(e)
-                    return_code = 1
                     print(_("An error occurred while importing the certificate. " +
                                   "Please check log file for more information."))
             else:
                 log.error("Supplied certificate file does not exist: %s" % src_cert_file)
-                return_code = 1
                 print(_("%s is not a valid certificate file. Please use a valid certificate.") %
                     os.path.basename(src_cert_file))
 
         self._request_validity_check()
+
+        return_code = 0
+        if not imported:
+            return_code = 1
+
         return return_code
 
 
