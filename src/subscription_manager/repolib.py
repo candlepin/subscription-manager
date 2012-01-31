@@ -23,7 +23,7 @@ from iniparse import ConfigParser
 
 from rhsm.config import initConfig
 
-from certlib import ActionLock, DataLib
+from certlib import ActionLock, DataLib, ConsumerIdentity
 from certdirectory import Path, EntitlementDirectory, ProductDirectory
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -90,6 +90,11 @@ class UpdateAction:
         if CFG.has_option('rhsm', 'manage_repos'):
             self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
 
+        self.release = None
+        self.consumer = ConsumerIdentity.read()
+        self.consumer_uuid = self.consumer.getConsumerId()
+        self.release = self.uep.getRelease(self.consumer_uuid)
+
     def perform(self):
         # Load the RepoFile from disk, this contains all our managed yum repo sections:
         repo_file = RepoFile()
@@ -153,7 +158,6 @@ class UpdateAction:
 
     def get_content(self, ent_cert, baseurl, ca_cert):
         lst = []
-        CFG = initConfig()
 
         tags_we_have = self.prod_dir.get_provided_tags()
 
@@ -173,7 +177,8 @@ class UpdateAction:
             repo = Repo(content_id)
             repo['name'] = content.getName()
             repo['enabled'] = content.getEnabled()
-            repo['baseurl'] = self.join(baseurl, content.getUrl())
+            repo['baseurl'] = self.join(baseurl, self._use_release_for_releasever(content.getUrl()))
+            # FIXME: gpg key url as well?
             repo['gpgkey'] = self.join(baseurl, content.getGpg())
             repo['sslclientkey'] = self.get_key_path(ent_cert)
             repo['sslclientcert'] = ent_cert.path
@@ -183,6 +188,10 @@ class UpdateAction:
             self._set_proxy_info(repo)
             lst.append(repo)
         return lst
+
+    def _use_release_for_releasever(self, contenturl):
+        # FIXME: release ala uep.getRelease should not be an int
+        return contenturl.replace("$releasever", "%s" % self.release)
 
     def _set_proxy_info(self, repo):
         proxy = ""

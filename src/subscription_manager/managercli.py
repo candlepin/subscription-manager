@@ -1,5 +1,5 @@
 #
-# Subscription manager commandline utility. This script is a modified version of
+# Subscription manager command line utility. This script is a modified version of
 # cp_client.py from candlepin scripts
 #
 # Copyright (c) 2010 Red Hat, Inc.
@@ -24,6 +24,7 @@ import getpass
 import dbus
 import datetime
 from time import strftime, strptime, localtime
+import urlparse
 from M2Crypto import X509
 from M2Crypto import SSL
 
@@ -44,10 +45,11 @@ from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager import managerlib
 from subscription_manager.facts import Facts
+from subscription_manager import listing
 from subscription_manager.quantity import valid_quantity
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
-        NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
+        NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, CertSorter
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
@@ -648,6 +650,8 @@ class RegisterCommand(UserPassCommand):
                                help=_("register to one of multiple organizations for the user"))
         self.parser.add_option("--environment", dest="environment",
                                help=_("register to a specific environment in the destination org"))
+        self.parser.add_option("--release", dest="release",
+                               help=_("set a release version"))
         self.parser.add_option("--autosubscribe", action='store_true',
                                help=_("automatically subscribe this system to\
                                      compatible subscriptions."))
@@ -776,6 +780,10 @@ class RegisterCommand(UserPassCommand):
         profile_mgr = ProfileManager()
         # 767265: always force an upload of the packages when registering
         profile_mgr.update_check(self.cp, consumer['uuid'], True)
+
+        if self.options.release:
+            # TODO: grab the list of valid options, and check
+            self.cp.updateConsumer(consumer['uuid'], release=self.options.release)
 
         if self.options.autosubscribe:
             autosubscribe(self.cp, consumer['uuid'],
@@ -927,6 +935,122 @@ class RedeemCommand(CliCommand):
             handle_exception(u"Unable to redeem: %s" % e, e)
 
         self._request_validity_check()
+
+
+class ReleaseCommand(CliCommand):
+    def __init__(self, ent_dir=None, prod_dir=None):
+        usage = "usage: %prog release [OPTIONS]"
+        shortdesc = _("Configure what os release to use")
+        desc = shortdesc
+        CliCommand.__init__(self, "release", usage, shortdesc, desc, True,
+                            ent_dir=ent_dir, prod_dir=prod_dir)
+
+        self.parser.add_option("--list", dest="list", action="store_true",
+                               help=_("list available releases"))
+        self.parser.add_option("--set", dest="release", action="store",
+                               default=None,
+                               help=_("set the release"))
+
+        self.proxy_hostname = cfg.get('server', 'proxy_hostname')
+        self.proxy_port = cfg.get('server', 'proxy_port')
+        self.proxy_user = cfg.get('server', 'proxy_user')
+        self.proxy_password = cfg.get('server', 'proxy_password')
+
+    def __get_releases(self):
+        # cdn base url
+        cdn_url = cfg.get('rhsm', 'baseurl')
+
+        self.facts = Facts(ent_dir=self.entitlement_dir,
+                           prod_dir=self.product_dir)
+
+       # find entitlements for rhel product? (or vice versa)
+        sorter = CertSorter(self.product_dir,
+                            self.entitlement_dir,
+                            self.facts.get_facts())
+
+        # find the rhel product
+        rhel_product = None
+        for product_hash in sorter.installed_products:
+            product_cert = sorter.installed_products[product_hash]
+            products = product_cert.getProducts()
+            for product in products:
+                product_tags = product.getProvidedTags()
+
+                if self._is_rhel(product_tags):
+                    rhel_product = product
+
+        if rhel_product is None:
+            return []
+
+        entitlements = sorter.get_entitlements_for_product(rhel_product.getHash())
+        listings = []
+        for entitlement in entitlements:
+            contents = entitlement.getContentEntitlements()
+            for content in contents:
+
+                # FIXME: we need to match on content required tags here?
+                # maybe we just need to match on content required tags?
+                if self._is_rhel(content.getRequiredTags()):
+                    content_url = content.getUrl()
+                    listing_parts = content_url.split('$releasever', 1)
+                    listing_base = listing_parts[0]
+                    listing_path = "%s/listing" % listing_base
+                    listings.append(listing_path)
+
+        # FIXME: not sure how to get the "base" content if we have multiple
+        # entitlements for a product
+
+        # for a entitlement, gran the corresponding entitlement cert
+        # use it for this connection
+
+        parsed_url = urlparse.urlparse(cdn_url)
+
+        self.cc = connection.ContentConnection(host=parsed_url.netloc,
+                                               ssl_port=443,
+                                               proxy_hostname=self.proxy_hostname,
+                                               proxy_port=self.proxy_port,
+                                               proxy_user=self.proxy_user,
+                                               proxy_password=self.proxy_password)
+
+        # hmm. We are really only supposed to have one product
+        # with one content with one listing file. We shall see.
+        releases = []
+        listings = sorted(set(listings))
+        for listing_path in listings:
+            data = self.cc.get_versions(listing_path)
+            ver_listing = listing.ListingFile(data=data)
+            releases = releases + ver_listing.get_releases()
+
+        releases_set = sorted(set(releases))
+        for release in releases_set:
+            print release
+
+    def _is_rhel(self, product_tags):
+
+        for product_tag in product_tags:
+            # so in theory, we should only have one rhel
+            # product. Not sure what to do if we have
+            # more than one. Probably throw an error
+            # TESTME
+            if product_tag[:5] == "rhel-":
+                # we only need to match the first hit
+                return True
+
+    def show_current_release(self):
+        consumer_uuid = check_registration()['uuid']
+        consumer = self.cp.getConsumer(consumer_uuid)
+        # we need newer cp here, should maybe set a resource?
+        if 'releaseVer' in consumer:
+            print consumer['releaseVer']
+
+    def _do_command(self):
+        self.consumer = check_registration()
+        if self.options.release:
+            self.cp.updateConsumer(self.consumer['uuid'], release=self.options.release)
+        elif self.options.list:
+            self.__get_releases()
+        else:
+            self.show_current_release()
 
 
 class SubscribeCommand(CliCommand):
@@ -1532,7 +1656,7 @@ class CLI:
         self.cli_commands = {}
         for clazz in [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand, SubscribeCommand,\
                        UnSubscribeCommand, FactsCommand, IdentityCommand, OwnersCommand, \
-                       RefreshCommand, CleanCommand, RedeemCommand, ReposCommand, \
+                       RefreshCommand, CleanCommand, RedeemCommand, ReposCommand, ReleaseCommand, \
                        EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand]:
             cmd = clazz()
             # ignore the base class
@@ -1645,6 +1769,7 @@ def check_registration():
     consumer = ConsumerIdentity.read()
     consumer_info = {"consumer_name": consumer.getConsumerName(),
                      "uuid": consumer.getConsumerId()}
+
     return consumer_info
 
 if __name__ == "__main__":

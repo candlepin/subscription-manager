@@ -17,10 +17,11 @@ import unittest
 
 from StringIO import StringIO
 
+import stubs
 from stubs import StubCertificateDirectory, StubProductCertificate, StubProduct, \
     StubEntitlementCertificate, StubContent, StubProductDirectory
 from subscription_manager.repolib import Repo, UpdateAction, TidyWriter
-
+from subscription_manager import repolib
 
 class RepoTests(unittest.TestCase):
     """
@@ -102,8 +103,10 @@ class UpdateActionTests(unittest.TestCase):
         stub_ent_cert = StubEntitlementCertificate(stub_prod, content=stub_content)
         stub_ent_dir = StubCertificateDirectory([stub_ent_cert])
 
+        repolib.ConsumerIdentity = stubs.StubConsumerIdentity
+        stub_uep = stubs.StubUEP()
         self.update_action = UpdateAction(prod_dir=stub_prod_dir,
-                ent_dir=stub_ent_dir)
+                ent_dir=stub_ent_dir, uep=stub_uep)
 
     def test_tags_found(self):
         content = self.update_action.get_unique_content()

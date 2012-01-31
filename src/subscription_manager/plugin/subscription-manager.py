@@ -22,10 +22,19 @@ from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
 sys.path.append('/usr/share/rhsm')
 from subscription_manager import logutil
 from subscription_manager.repolib import RepoLib, EntitlementDirectory
+from rhsm import connection
 
 requires_api_version = '2.5'
 plugin_type = (TYPE_CORE, TYPE_INTERACTIVE)
 
+# this fails as non root
+# FIXME: this fais as non root
+try:
+    from subscription_manager.certlib import ConsumerIdentity
+except ImportError:
+    ConsumerIdentity = None
+except ConfigParser.NoOptionError:
+    ConsumerIdentity = None
 
 warning = \
 """
@@ -45,7 +54,27 @@ def update(conduit):
         conduit.info(2, 'Not root, certificate-based repositories not updated')
         return
     conduit.info(2, 'Updating certificate-based repositories.')
-    rl = RepoLib()
+
+
+    cert_file = ConsumerIdentity.certpath()
+    key_file = ConsumerIdentity.keypath()
+
+    try:
+        ConsumerIdentity.read().getConsumerId()
+    except Exception, e:
+        conduit.error(2, "Unable to read consumer identity")
+        return
+
+    try:
+        uep = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
+    #FIXME: catchall exception
+    except Exception:
+        # log
+        conduit.info(2, "Unable to connect to entitlement server")
+        return
+
+
+    rl = RepoLib(uep=uep)
     rl.update()
 
 

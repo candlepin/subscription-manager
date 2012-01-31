@@ -314,6 +314,14 @@ class TestImportCertCommand(TestCliCommand):
             self.assertEquals(e.code, -1)
 
 
+class TestReleaseCommand(TestCliProxyCommand):
+    command_class = managercli.ReleaseCommand
+
+    # def test_no_product_certs
+    # def test_no_rhel_product
+
+    # def test_invalid_content_url
+
 class TestSystemExit(unittest.TestCase):
     def setUp(self):
         sys.stderr = MockStderr()

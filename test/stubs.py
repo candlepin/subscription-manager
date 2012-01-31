@@ -362,6 +362,8 @@ class StubUEP:
     def getProduct(self):
         return {}
 
+    def getRelease(self, consumerId):
+        return ''
 
 class StubBackend:
     def __init__(self, uep=StubUEP()):
