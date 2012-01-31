@@ -134,6 +134,94 @@ class RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
         return msg
 
 
+# FIXME: this is terrible, we need to refactor
+# Restlib to be Restlib based on a https client class
+class ContentConnection(object):
+    def __init__(self, host, ssl_port=None,
+                 username=None, password=None,
+                 proxy_hostname=None, proxy_port=None,
+                 proxy_user=None, proxy_password=None,
+                 ca_dir=None, insecure=False,
+                 ssl_verify_depth=1):
+
+        log.debug("ContectConnection")
+        # FIXME
+        self.ent_dir = "/etc/pki/entitlement"
+        self.handler = "/"
+        self.ssl_verify_depth = ssl_verify_depth
+
+        self.host = host
+        self.ssl_port = ssl_port
+        self.ca_dir = ca_dir
+        self.insecure = insecure
+        self.username = username
+        self.password = password
+        self.ssl_verify_depth = ssl_verify_depth
+        self.proxy_hostname = proxy_hostname
+        self.proxy_port = proxy_port
+        self.proxy_user = proxy_user
+        self.proxy_password = proxy_password
+
+    def _request(self, request_type, handler, body=None):
+        context = SSL.Context("tlsv1")
+
+
+        self._load_ca_certificates(context)
+
+        if self.proxy_hostname and self.proxy_port:
+            log.debug("Using proxy: %s:%s" % (self.proxy_hostname, self.proxy_port))
+            conn = RhsmProxyHTTPSConnection(self.proxy_hostname, self.proxy_port,
+                                            username=self.proxy_user,
+                                            password=self.proxy_password,
+                                            ssl_context=context)
+            # this connection class wants the full url
+            self.handler = "https://%s:%s%s" % (self.host, self.ssl_port, handler)
+        else:
+            conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
+
+        conn.request("GET", handler, body="", headers={"Content-Length": "0"})
+        response = conn.getresponse()
+        result = {
+            "content": response.read(),
+            "status": response.status}
+
+        return result
+
+    def _load_ca_certificates(self, context):
+        try:
+            for cert_file in os.listdir(self.ent_dir):
+                if cert_file.endswith(".pem") and not cert_file.endswith("-key.pem"):
+                    cert_path = os.path.join(self.ent_dir, cert_file)
+                    key_path = os.path.join(self.ent_dir, "%s-key.pem" % cert_file.split('.', 1)[0])
+                    log.debug("Loading CA certificate: '%s'" % cert_path)
+
+                    #FIXME: reenable
+                    res = context.load_verify_info(cert_path)
+                    context.load_cert(cert_path, key_path)
+                    #if res == 0:
+                    #    raise BadCertificateException(cert_path)
+        except OSError, e:
+            raise ConnectionSetupException(e.strerror)
+
+
+    def test(self):
+        pass
+
+    def request_get(self, method):
+        return self._request("GET", method)
+
+    def get_versions(self, path):
+        handler = "%s/%s" % (self.handler, path)
+        results = self._request("GET", handler, body="")
+
+        if results['status'] == 200:
+            return results['content']
+        return ''
+
+    def _get_versions_for_product(self, product_id):
+        pass
+
+
 def _get_locale():
     l = None
     try:
@@ -153,7 +241,8 @@ def _get_locale():
 
     return None
 
-
+# FIXME: it would be nice if the ssl server connection stuff
+# was decomposed from the api handling parts
 class Restlib(object):
     """
      A wrapper around httplib to make rest calls easier
@@ -205,6 +294,7 @@ class Restlib(object):
         except OSError, e:
             raise ConnectionSetupException(e.strerror)
 
+    # FIXME: can method be emtpty?
     def _request(self, request_type, method, info=None):
         handler = self.apihandler + method
         context = SSL.Context("tlsv1")
@@ -250,9 +340,14 @@ class Restlib(object):
             "candlepin_version": response.getheader("X-CANDLEPIN-VERSION", None)
         }
         log.debug('Response status: ' + str(result['status']))
+
+        # FIXME: we should probably do this in a wrapper method
+        # so we can use the request method for normal http
+
         self.validateResponse(result)
         if not len(result['content']):
             return None
+
         return json.loads(result['content'])
 
     def validateResponse(self, response):
@@ -303,6 +398,9 @@ class Restlib(object):
         return self._request("DELETE", method)
 
 
+# FIXME: there should probably be a class here for just
+# the connection bits, then a sub class for the api
+# stuff
 class UEPConnection:
     """
     Class for communicating with the REST interface of a Red Hat Unified
@@ -484,7 +582,7 @@ class UEPConnection:
         return self.updateConsumer(consumer_uuid, facts=facts)
 
     def updateConsumer(self, uuid, facts=None, installed_products=None,
-            guest_uuids=None, service_level=None):
+            guest_uuids=None, service_level=None, release=None):
         """
         Update a consumer on the server.
 
@@ -501,6 +599,8 @@ class UEPConnection:
             params['guestIds'] = guest_uuids
         if facts != None:
             params['facts'] = facts
+        if release != None:
+            params['releaseVer'] = release
 
         # The server will reject a service level that is not available
         # in the consumer's organization, so no need to check if it's safe
@@ -663,6 +763,11 @@ class UEPConnection:
     def getProduct(self, product_id):
         method = "/products/%s" % self.sanitize(product_id)
         return self.conn.request_get(method)
+
+    def getRelease(self, consumerId):
+        method = "/consumers/%s/release" % self.sanitize(consumerId)
+        results = self.conn.request_get(method)
+        return results
 
     def getEntitlementList(self, consumerId):
         method = "/consumers/%s/entitlements" % self.sanitize(consumerId)

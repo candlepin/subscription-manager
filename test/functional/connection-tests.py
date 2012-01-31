@@ -44,3 +44,12 @@ class ConnectionTests(unittest.TestCase):
 
     def tearDown(self):
         self.cp.unregisterConsumer(self.consumer_uuid)
+
+class ContentConnectionTests(unittest.TestCase):
+
+#    def setUp(self):
+#        self.cc = ContentConnection(insecure=True)
+
+    def testInsecure(self):
+        cc = ContentConnection(host="127.0.0.1", insecure=True)
+        
