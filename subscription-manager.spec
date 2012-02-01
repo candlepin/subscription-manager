@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.99.5
+Version: 0.99.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -273,6 +273,14 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Feb 01 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 0.99.6-1
+- 783542: Return code for bad input to install-num-migrate-to-rhsm should be 1.
+  (awood@redhat.com)
+- 773707: remove hard coded reference to /etc/pki/product (cduryee@redhat.com)
+- 783278: do not alter system facts on dry run (cduryee@redhat.com)
+- IPv4 and IPv6 facts that are undefined should return 'Unknown' instead of
+  'None'. (awood@redhat.com)
+
 * Fri Jan 27 2012 Michael Stead <mstead@redhat.com> 0.99.5-1
 - Updated releasers.conf for rhel-6.3 (mstead@redhat.com)
 - Making return code from subscribe --pool consistent with subscribe --auto
