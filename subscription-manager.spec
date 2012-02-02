@@ -140,7 +140,6 @@ rm -rf %{buildroot}
 
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/subscription-manager.conf
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/product-id.conf
-%config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/katello.conf
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/subscription-manager
 %{_sysconfdir}/bash_completion.d/subscription-manager
 
@@ -162,7 +161,6 @@ rm -rf %{buildroot}
 # but yum plugins seem to normally be sent to /usr/lib/:
 %{_prefix}/lib/yum-plugins/subscription-manager.py*
 %{_prefix}/lib/yum-plugins/product-id.py*
-%{_prefix}/lib/yum-plugins/katello.py*
 
 %{_datadir}/rhsm/subscription_manager/certlib.py*
 %{_datadir}/rhsm/subscription_manager/certdirectory.py*
