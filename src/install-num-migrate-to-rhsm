@@ -66,6 +66,18 @@ def writeMigrationFacts():
         f.close()
 
 
+def determine_arch():
+    platform_machine = platform.machine()
+    parser = re.compile(r'i[\d]86')
+    if parser.match(platform_machine):
+        # make all x86 arches map to i386 to match the proper cert
+        platform_machine = 'i386'
+    elif getRelease() == 'RHEL-5' and platform_machine == 'ppc64':
+        # 786450: map ppc64 to ppc for RHEL 5
+        platform_machine = 'ppc'
+    return platform_machine
+
+
 def main():
     #quick check to see if you are a super-user.
     if os.getuid() != 0:
@@ -92,11 +104,7 @@ def main():
 
     repo_dict = instnum.get_repos_dict()
 
-    # make all x86 arches map to i386 to match the proper cert
-    platform_machine = platform.machine()
-    parser = re.compile(r'i[\d]86')
-    if parser.match(platform_machine):
-      platform_machine = 'i386'
+    platform_machine = determine_arch()
 
     sourcepath = "/usr/share/rhsm/product/" + getRelease()
     globs = []
