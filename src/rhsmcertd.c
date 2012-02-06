@@ -41,7 +41,7 @@ GMainLoop *main_loop = NULL;
 void
 printUsage ()
 {
-	printf ("usage: rhsmcertd <certinterval> <healinterval>");
+	printf ("usage: rhsmcertd <certinterval> <healinterval>\n");
 }
 
 FILE *
@@ -49,7 +49,7 @@ get_log ()
 {
 	FILE *log = fopen (LOGFILE, "at");
 	if (log == NULL) {
-		printf ("Could not open %s, exiting", LOGFILE);
+		printf ("Could not open %s, exiting\n", LOGFILE);
 		exit (EXIT_FAILURE);
 	}
 	return log;
@@ -95,12 +95,6 @@ int
 get_lock ()
 {
 	int fdlock;
-	struct flock fl;
-
-	fl.l_type = F_WRLCK;
-	fl.l_whence = SEEK_SET;
-	fl.l_start = 0;
-	fl.l_len = 1;
 
 	if ((fdlock = open (LOCKFILE, O_WRONLY | O_CREAT, 0640)) == -1)
 		return 1;
@@ -198,17 +192,19 @@ main (int argc, char *argv[])
 	//to it. Otherwise, it would only get executed when the timer went off, and
 	//not at startup.
 
-	gboolean heal = TRUE;
+	bool heal = true;
 	cert_check (heal);
-	g_timeout_add (heal_interval * 1000, (GSourceFunc) cert_check, heal);
+	g_timeout_add (heal_interval * 1000, (GSourceFunc) cert_check,
+		       (gpointer) heal);
 
-	heal = FALSE;
+	heal = false;
 	cert_check (heal);
-	g_timeout_add (cert_interval * 1000, (GSourceFunc) cert_check, heal);
+	g_timeout_add (cert_interval * 1000, (GSourceFunc) cert_check,
+		       (gpointer) heal);
 
 	logUpdate (cert_interval);
 	g_timeout_add (cert_interval * 1000, (GSourceFunc) logUpdate,
-		       cert_interval);
+		       GINT_TO_POINTER (cert_interval));
 
 	main_loop = g_main_loop_new (NULL, FALSE);
 	g_main_loop_run (main_loop);
