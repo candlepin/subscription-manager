@@ -1122,7 +1122,10 @@ class ReposCommand(CliCommand):
         if self.options.list:
             rl = RepoLib()
             repos = rl.get_repos()
-            if len(repos) > 0:
+            if cfg.has_option('rhsm', 'manage_repos') and \
+                    not int(cfg.get('rhsm', 'manage_repos')):
+                print _("Repositories disabled by configuration.")
+            elif len(repos) > 0:
                 print("+----------------------------------------------------------+")
                 print _("    Entitled Repositories in %s") % rl.get_repo_file()
                 print("+----------------------------------------------------------+")

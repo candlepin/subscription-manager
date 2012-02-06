@@ -28,6 +28,7 @@ from certdirectory import Path, EntitlementDirectory, ProductDirectory
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
+CFG = initConfig()
 
 class RepoLib(DataLib):
 
@@ -82,10 +83,25 @@ class UpdateAction:
             self.prod_dir = ProductDirectory()
 
         self.uep = uep
+        self.manage_repos = 1
+        if CFG.has_option('rhsm', 'manage_repos'):
+            self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
 
     def perform(self):
         # Load the RepoFile from disk, this contains all our managed yum repo sections:
         repo_file = RepoFile()
+
+        # the [rhsm] manage_repos can be overridden to disable generation of the
+        # redhat.repo file:
+        if not self.manage_repos:
+            log.debug("manage_repos is 0, skipping generation of: %s" %
+                    repo_file.path)
+            if repo_file.exists():
+                log.info("Removing %s due to manage_repos configuration." %
+                        repo_file.path)
+                RepoLib.delete_repo_file()
+            return 0
+
         repo_file.read()
         valid = set()
         updates = 0
@@ -113,10 +129,11 @@ class UpdateAction:
 
     def get_unique_content(self):
         unique = set()
+        if not self.manage_repos:
+            return unique
         ent_certs = self.ent_dir.listValid()
-        cfg = initConfig()
-        baseurl = cfg.get('rhsm', 'baseurl')
-        ca_cert = cfg.get('rhsm', 'repo_ca_cert')
+        baseurl = CFG.get('rhsm', 'baseurl')
+        ca_cert = CFG.get('rhsm', 'repo_ca_cert')
         for ent_cert in ent_certs:
             for r in self.get_content(ent_cert, baseurl, ca_cert):
                 unique.add(r)
@@ -133,7 +150,7 @@ class UpdateAction:
 
     def get_content(self, ent_cert, baseurl, ca_cert):
         lst = []
-        cfg = initConfig()
+        CFG = initConfig()
 
         tags_we_have = self.prod_dir.get_provided_tags()
 
@@ -160,15 +177,15 @@ class UpdateAction:
             repo['sslcacert'] = ca_cert
             repo['metadata_expire'] = content.getMetadataExpire()
 
-            self._set_proxy_info(repo, cfg)
+            self._set_proxy_info(repo)
             lst.append(repo)
         return lst
 
-    def _set_proxy_info(self, repo, cfg):
+    def _set_proxy_info(self, repo):
         proxy = ""
 
-        proxy_host = cfg.get('server', 'proxy_hostname')
-        proxy_port = cfg.get('server', 'proxy_port')
+        proxy_host = CFG.get('server', 'proxy_hostname')
+        proxy_port = CFG.get('server', 'proxy_port')
         if proxy_host != "":
             proxy = "https://%s" % proxy_host
             if proxy_port != "":
@@ -177,8 +194,8 @@ class UpdateAction:
         # These could be empty string, in which case they will not be
         # set in the yum repo file:
         repo['proxy'] = proxy
-        repo['proxy_username'] = cfg.get('server', 'proxy_user')
-        repo['proxy_password'] = cfg.get('server', 'proxy_password')
+        repo['proxy_username'] = CFG.get('server', 'proxy_user')
+        repo['proxy_password'] = CFG.get('server', 'proxy_password')
 
     def join(self, base, url):
         if len(url) == 0:
@@ -360,12 +377,22 @@ class RepoFile(ConfigParser):
     def __init__(self, name='redhat.repo'):
         ConfigParser.__init__(self)
         self.path = Path.join(self.PATH, name)
+        self.manage_repos = 1
+        if CFG.has_option('rhsm', 'manage_repos'):
+            self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
         self.create()
+
+    def exists(self):
+        return os.path.exists(self.path)
 
     def read(self):
         ConfigParser.read(self, self.path)
 
     def write(self):
+        if not self.manage_repos:
+            log.debug("Skipping write due to manage_repos setting: %s" %
+                    self.path)
+            return
         f = open(self.path, 'w')
         tidy_writer = TidyWriter(f)
         ConfigParser.write(self, tidy_writer)
@@ -398,7 +425,7 @@ class RepoFile(ConfigParser):
             return repo
 
     def create(self):
-        if os.path.exists(self.path):
+        if os.path.exists(self.path) or not self.manage_repos:
             return
         f = open(self.path, 'w')
         s = []
