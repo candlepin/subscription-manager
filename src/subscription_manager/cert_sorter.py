@@ -218,6 +218,11 @@ class CertSorter(object):
 
                 if partially_stacked:
                     self._add_products_to_hash(ent_cert, self.partially_valid_products)
+                # Check for non-stacked entitlements which do not provide enough
+                # socket coverage for the system:
+                elif not stack_id and not self.ent_cert_sockets_valid(ent_cert):
+                    self._add_products_to_hash(ent_cert, self.partially_valid_products)
+                # Anything else must be valid:
                 else:
                     self._add_products_to_hash(ent_cert, self.valid_products)
 
@@ -257,6 +262,27 @@ class CertSorter(object):
                 sockets_covered += sockets * quantity
 
         log.debug("  system has %s sockets, %s covered by entitlements" %
+                (self.socket_count, sockets_covered))
+        if sockets_covered >= self.socket_count:
+            return True
+        return False
+
+    def ent_cert_sockets_valid(self, ent, on_date=None):
+        """
+        Returns True if the given entitlement covers enough sockets for this
+        system.
+
+        If the entitlement has no socket restriction, True will always be
+        returned.
+        """
+        if ent.getOrder().getSocketLimit() is None:
+            return True
+
+        # We do not check quantity here, as this is not a stacked
+        # subscription:
+        sockets_covered = int(ent.getOrder().getSocketLimit())
+
+        log.debug("  system has %s sockets, %s covered by entitlement" %
                 (self.socket_count, sockets_covered))
         if sockets_covered >= self.socket_count:
             return True

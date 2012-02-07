@@ -486,8 +486,28 @@ class ValidProductDateRangeCalculatorTests(unittest.TestCase):
         self.assertTrue(calculator._gap_exists_between(ent1, ent3))
         self.assertTrue(calculator._gap_exists_between(ent2, ent1))
 
-    def _create_entitlement(self, prod_id, start, end):
-        return stub_ent_cert(self.INST_PID_1, start_date=start, end_date=end)
+    def _create_entitlement(self, prod_id, start, end, sockets=None,
+            quantity=1):
+        return stub_ent_cert(self.INST_PID_1, start_date=start, end_date=end,
+                sockets=sockets, quantity=quantity)
+
+    def test_non_stacking_entitlements(self):
+        start1 = self.NOW - self.THREE_MONTHS
+        end1 = self.NOW + self.THREE_MONTHS
+
+        start2 = self.NOW - self.ONE_MONTH
+        end2 = self.NOW + self.YEAR
+
+        installed = create_prod_cert(self.INST_PID_1)
+        ent1 = self._create_entitlement(self.INST_PID_1, start1, end1,
+            sockets=4, quantity=2)
+        ent2 = self._create_entitlement(self.INST_PID_1, start2, end2,
+            sockets=4)
+
+        sorter = create_cert_sorter([installed], [ent1, ent2])
+        calculator = ValidProductDateRangeCalculator(sorter)
+        prod_range = calculator.calculate(self.INST_PID_1)
+        self.assertTrue(prod_range is None)
 
 def create_cert_sorter(product_certs, entitlement_certs, machine_sockets=8):
     stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": machine_sockets})

@@ -101,6 +101,7 @@ def find_first_invalid_date(ent_dir=None, product_dir=None,
     raise Exception("Unable to determine first invalid date.")
 
 class ValidProductDateRangeCalculator(object):
+
     def __init__(self, certsorter):
         self.sorter = certsorter
 
@@ -263,7 +264,7 @@ class ValidProductDateRangeCalculator(object):
         Given a list of entitlements, check if the specified entitlement is
         valid on the specified date.
 
-        NOTE: An entitlement is not stackable, it is considered valid its
+        NOTE: If an entitlement is not stackable, it is considered valid if its
         range contains the specified date. If the entitlement is stackable,
         it is considered valid if its stack is valid, or there is a
         non-stackable entitlement who's span includes the specified date.
@@ -278,6 +279,11 @@ class ValidProductDateRangeCalculator(object):
                     return ent.validRange().hasDate(date) \
                         and entitlement.validRange().hasDate(date)
 
+            return False
+
+        # If the socket count on a non stacked entitlement doesn't cover
+        # the system, we're not valid, dates are irrelevant:
+        elif not self.sorter.ent_cert_sockets_valid(entitlement):
             return False
 
         return entitlement.validRange().hasDate(date)

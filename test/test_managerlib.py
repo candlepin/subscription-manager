@@ -301,7 +301,7 @@ class InstalledProductStatusTests(unittest.TestCase):
         product_directory = StubCertificateDirectory([
             StubProductCertificate(product)])
         entitlement_directory = StubCertificateDirectory([
-            StubEntitlementCertificate(product)])
+            StubEntitlementCertificate(product, sockets=10)])
 
         product_status = getInstalledProductStatus(product_directory,
                 entitlement_directory)
@@ -370,7 +370,8 @@ class InstalledProductStatusTests(unittest.TestCase):
         product_directory = StubCertificateDirectory([
             StubProductCertificate(product1)])
         entitlement_directory = StubCertificateDirectory([
-            StubEntitlementCertificate(product1, [product2, product3])
+            StubEntitlementCertificate(product1, [product2, product3],
+            sockets=10)
         ])
 
         product_status = getInstalledProductStatus(product_directory,
@@ -392,7 +393,8 @@ class InstalledProductStatusTests(unittest.TestCase):
         product_directory = StubCertificateDirectory([
             StubProductCertificate(product1), StubProductCertificate(product2)])
         entitlement_directory = StubCertificateDirectory([
-            StubEntitlementCertificate(product1, [product2, product3])
+            StubEntitlementCertificate(product1, [product2, product3],
+            sockets=10)
         ])
 
         product_status = getInstalledProductStatus(product_directory,
