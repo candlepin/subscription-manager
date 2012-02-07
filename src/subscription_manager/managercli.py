@@ -142,6 +142,7 @@ def show_autosubscribe_output():
         print (constants.product_status % (prod_status[0], status))
     return subscribed
 
+
 class CliCommand(object):
     """ Base class for all sub-commands. """
 

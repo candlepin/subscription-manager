@@ -47,8 +47,13 @@ _("Checksum verification failed")
 
 # Set up command line options
 parser = optparse.OptionParser()
-parser.add_option('-i', '--instnumber', help=_("Install number to run against"))
-parser.add_option('-d', '--dryrun', action="store_true", default=False, help=_("Only print the files which would be copied over"))
+parser.add_option('-i',
+                  '--instnumber',
+                  help=_("Install number to run against"))
+parser.add_option('-d',
+                  '--dryrun', action="store_true",
+                  default=False,
+                  help=_("Only print the files which would be copied over"))
 (options, args) = parser.parse_args()
 
 

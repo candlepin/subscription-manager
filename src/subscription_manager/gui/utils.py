@@ -38,6 +38,7 @@ MIN_GTK_MICRO = 0
 
 EVEN_ROW_COLOR = '#eeeeee'
 
+
 def handle_gui_exception(e, msg, parent, formatMsg=True, logMsg=None):
     """
     Handles an exception for the gui by logging the stack trace and

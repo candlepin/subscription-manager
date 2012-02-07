@@ -152,7 +152,6 @@ class SubscriptionAssistant(widgets.GladeWidget):
                 self.invalid_store['background'])
         self.invalid_treeview.append_column(column)
 
-
         self.invalid_treeview.add_date_column(_("End Date"),
                 self.invalid_store['end_date'], expand=True)
         self.invalid_treeview.set_model(self.invalid_store)
@@ -427,7 +426,6 @@ class SubscriptionAssistant(widgets.GladeWidget):
                     'image': ICONSET['yellow'],
                     'align': 0.0
                     })
-
 
     def _display_subscriptions(self):
         """

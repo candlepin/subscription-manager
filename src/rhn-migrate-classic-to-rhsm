@@ -298,7 +298,6 @@ def deployProdCertificates(subscribedChannels):
     for i in validRhsmChannels:
         print i
 
-
     release = getRelease()
 
     # creates the product directory if it doesn't already exist
@@ -324,7 +323,7 @@ def enableExtraChannels(subscribedChannels):
     # Check if system was subscribed to extra channels like supplementary, optional, fastrack etc.
     # If so, enable them in the redhat.repo file
 
-    extraChannels = {'supplementary':False, 'productivity':False, 'optional':False}
+    extraChannels = {'supplementary': False, 'productivity': False, 'optional': False}
     for subscribedChannel in subscribedChannels:
         if 'supplementary' in subscribedChannel:
             extraChannels['supplementary'] = True

@@ -30,6 +30,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 CFG = initConfig()
 
+
 class RepoLib(DataLib):
 
     def __init__(self, lock=ActionLock(), uep=None):
@@ -64,6 +65,7 @@ class RepoLib(DataLib):
     def delete_repo_file(self):
         repo_file = RepoFile()
         os.unlink(repo_file.path)
+
 
 # WARNING: exact same name as another action in factlib and certlib.
 # TODO: This is the third disjoint "Action" class hierarchy, this one inherits nothing
