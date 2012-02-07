@@ -176,12 +176,13 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/branding
 %{_datadir}/rhsm/subscription_manager/quantity.py*
 %{_datadir}/rhsm/subscription_manager/jsonwrapper.py*
+%{_datadir}/rhsm/subscription_manager/certmgr.py*
 
-%attr(755,root,root) %{_datadir}/rhsm/subscription_manager/certmgr.py*
 %attr(755,root,root) %{_sbindir}/subscription-manager
 %attr(755,root,root) %{_bindir}/subscription-manager
 %attr(755,root,root) %{_bindir}/rhsmcertd
 %attr(755,root,root) %{_initrddir}/rhsmcertd
+%attr(755,root,root) %{_libexecdir}/rhsmcertd-worker
 %attr(755,root,root) %{_libexecdir}/rhsmd
 %attr(755,root,root) %dir %{_var}/run/rhsm
 %attr(755,root,root) %dir %{_var}/lib/rhsm

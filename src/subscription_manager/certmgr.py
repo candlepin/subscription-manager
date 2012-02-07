@@ -16,17 +16,12 @@
 # in this software or its documentation.
 #
 
-import sys
-sys.path.append("/usr/share/rhsm")
-
 from subscription_manager.certlib import CertLib, ActionLock, ConsumerIdentity,\
         HealingLib
 from subscription_manager.repolib import RepoLib
 from subscription_manager.factlib import FactLib
 from subscription_manager.facts import Facts
 from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
-
-import rhsm.connection as connection
 
 import gettext
 _ = gettext.gettext
@@ -89,46 +84,3 @@ class CertManager:
         finally:
             lock.release()
         return updates
-
-
-def main(options):
-    if not ConsumerIdentity.existsAndValid():
-        log.error('Either the consumer is not registered or the certificates' +
-                  ' are corrupted. Certificate update using daemon failed.')
-        sys.exit(-1)
-    print _('Updating entitlement certificates and repositories')
-    uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
-                                   key_file=ConsumerIdentity.keypath())
-    mgr = CertManager(uep=uep)
-    updates = mgr.update(options.autoheal)
-    print _('%d updates required') % updates
-    print _('done')
-
-
-# WARNING: This is not a block of code used to test, this module is
-# actually run as a script via cron to periodically update the system's
-# certificates, yum repos, and facts.
-if __name__ == '__main__':
-    import logging
-    import logutil
-    from i18n_optparse import OptionParser
-
-    logutil.init_logger()
-    log = logging.getLogger('rhsm-app.' + __name__)
-
-    parser = OptionParser()
-    parser.add_option("--autoheal", dest="autoheal", action="store_true", default=False,
-                  help="perform an autoheal check")
-    (options, args) = parser.parse_args()
-    try:
-        main(options)
-    except SystemExit:
-        # sys.exit triggers an exception in older Python versions, which
-        # in this case  we can safely ignore as we do not want to log the
-        # stack trace.
-        pass
-    except Exception, e:
-        log.error("Error while updating certificates using daemon")
-        print _('Unable to update entitlement certificates & repositories')
-        log.exception(e)
-        sys.exit(-1)

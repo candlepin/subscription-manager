@@ -30,6 +30,8 @@
 #define LOGFILE "/var/log/rhsm/rhsmcertd.log"
 #define LOCKFILE "/var/lock/subsys/rhsmcertd"
 #define UPDATEFILE "/var/run/rhsm/update"
+#define WORKER "/usr/libexec/rhsmcertd-worker"
+#define WORKER_NAME "/usr/libexec/rhsmcertd-worker"
 #define DEFAULT_CERT_INTERVAL 14400	/* 4 hours */
 #define DEFAULT_HEAL_INTERVAL 86400	/* 24 hours */
 #define BUF_MAX 256
@@ -119,17 +121,11 @@ cert_check (gboolean heal)
 	}
 	if (pid == 0) {
 		if (heal) {
-			execl ("/usr/bin/python", "python",
-			       "/usr/share/rhsm/subscription_manager/certmgr.py",
-			       "--autoheal", NULL);
-			_exit (errno);
+			execl (WORKER, WORKER_NAME, "--autoheal", NULL);
 		} else {
-			execl ("/usr/bin/python", "python",
-			       "/usr/share/rhsm/subscription_manager/certmgr.py",
-			       NULL);
-			_exit (errno);
+			execl (WORKER, WORKER_NAME, NULL);
 		}
-
+		_exit (errno);
 	}
 	waitpid (pid, &status, 0);
 	status = WEXITSTATUS (status);
