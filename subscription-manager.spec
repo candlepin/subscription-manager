@@ -264,7 +264,7 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
-* Thu Jan 23 2014 William Poteat <wpoteat@redhat.com> 0.98.14-1
+* Thu Jan 23 2012 William Poteat <wpoteat@redhat.com> 0.98.14-1
 - 782549: Subscription manager throws exception when an expired cert exists.
   (mstead@redhat.com)
 - 772921: Do not show message dialog when multiple sub-man launches detected.
