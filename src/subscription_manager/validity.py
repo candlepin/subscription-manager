@@ -194,8 +194,14 @@ class ValidProductDateRangeCalculator(object):
         """
         e1_start = ent1.validRange().begin()
         e2_start = ent2.validRange().begin()
-        delta = e1_start - e2_start
-        return int(math.ceil(delta.total_seconds()))
+
+        if e1_start == e2_start:
+            return 0;
+
+        if e1_start < e2_start:
+            return -1
+
+        return 1
 
     def _get_entitlements_spanning_now(self, entitlements):
         """
