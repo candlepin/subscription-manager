@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.98.14
+Version: 0.98.15
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -264,6 +264,12 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Feb 08 2012 Alex Wood <awood@redhat.com> 0.98.15-1
+- Adding rhel-5.8 releaser (awood@redhat.com)
+- 788665: Clean up improper installation of multiple products.
+  (awood@redhat.com)
+- 788661: 'ppc64' arch needs to map to 'ppc' on RHEL 5. (awood@redhat.com)
+
 * Thu Jan 23 2012 William Poteat <wpoteat@redhat.com> 0.98.14-1
 - 782549: Subscription manager throws exception when an expired cert exists.
   (mstead@redhat.com)
