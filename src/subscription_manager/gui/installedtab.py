@@ -100,14 +100,45 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         backend.monitor_certs(on_cert_change)
 
+    def _calc_subs_providing(self, product_id, compliant_range):
+        """
+        Calculates the relevant contract IDs and subscription names which are
+        providing an installed product during the dates we are covered.
+        If an entitlement is outside the date range it is excluded.
+
+        Duplicate contract IDs and subscription names will be filtered.
+
+        Return value is a tuple, a contract IDs set and a subscription names
+        set.
+        """
+        contract_ids = set()
+        sub_names = set()
+
+        # No compliant range means we're not fully compliant right now, so
+        # not much point displaying the contracts that are covering us:
+        if compliant_range is None:
+            return contract_ids, sub_names
+
+        for cert in self.entitlement_dir.findAllByProduct(product_id):
+
+            # Only include if this cert overlaps with the overall date range
+            # we are currently covered for:
+            if compliant_range.hasDate(cert.validRange().begin()) or \
+                    compliant_range.hasDate(cert.validRange().end()):
+
+                contract_ids.add(cert.getOrder().getContract())
+                sub_names.add(cert.getOrder().getName())
+
+        return contract_ids, sub_names
+
     def update_products(self):
         self.store.clear()
         self.cs = cert_sorter.CertSorter(self.product_dir,
                 self.entitlement_dir, self.facts.get_facts())
         for product_cert in self.product_dir.list():
             for product in product_cert.getProducts():
-                product_hash = product.getHash()
-                status = self.cs.get_status(product_hash)
+                product_id = product.getHash()
+                status = self.cs.get_status(product_id)
 
                 entry = {}
                 entry['product'] = product.getName()
@@ -119,25 +150,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 # TODO:  Pull this date logic out into a separate lib!
                 #        This is also used in mysubstab...
                 if status != NOT_SUBSCRIBED:
-                    # TODO: Simplified and will need adjustment when the
-                    # date range work is done. Shows all available contracts for
-                    # the product and shows the final end date.
-                    entitlement_cert = self.entitlement_dir.findByProduct(product_hash)
-                    contract = ""
-                    name = ""
-                    first = True
-                    for cert in self.entitlement_dir.listValid():
-                        if entitlement_cert.getOrder().getStackingId() == "" or \
-                            cert.getOrder().getStackingId() == \
-                            entitlement_cert.getOrder().getStackingId():
-                            if not first:
-                                contract += ", "
-                                name += ", "
-                            first = False
-                            contract = contract + cert.getOrder().getContract()
-                            name = name + cert.getOrder().getName()
-
-                    entry['subscription'] = name
 
                     range_calculator = ValidProductDateRangeCalculator(self.cs)
                     compliant_range = range_calculator.calculate(product.getHash())
@@ -147,13 +159,20 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         start = compliant_range.begin()
                         end = compliant_range.end()
 
+                    contract_ids, sub_names = self._calc_subs_providing(
+                            product_id, compliant_range)
+                    name = ", ".join(sub_names)
+                    contract = ", ".join(contract_ids)
+
+                    entry['subscription'] = name
+
                     entry['start_date'] = start
                     entry['expiration_date'] = end
 
                     if status == FUTURE_SUBSCRIBED:
                         entry['image'] = self._render_icon('red')
                         entry['status'] = _('Future Subscription')
-                        entry['validity_note'] = _("Never Subscribed")
+                        entry['validity_note'] = _("Future Subscribed")
                     elif status == EXPIRED:
                         #TODO: This order value may potentially be wrong in the case of
                         # multi-entitlement.
@@ -170,7 +189,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['image'] = self._render_icon('green')
                         entry['status'] = _('Subscribed')
                         entry['validity_note'] = \
-                            _('Covered by contract %s through %s') % \
+                            _('Covered by contract(s) %s through %s') % \
                             (contract,
                              managerlib.formatDate(entry['expiration_date']))
                 else:
