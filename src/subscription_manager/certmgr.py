@@ -70,14 +70,17 @@ class CertManager:
             else:
                 libset = [self.repolib, self.factlib, self.profilelib, self.installedprodlib]
 
-            for lib in libset:
-                updates += lib.update()
-
             # WARNING
             # Certlib inherits DataLib as well as the above 'lib' objects,
             # but for some reason it's update method returns a tuple instead
             # of an int:
             ret = self.certlib.update()
+
+            # run the certlib update first as it will talk to candlepin,
+            # and we can find out if we got deleted or not.
+            for lib in libset:
+                updates += lib.update()
+
             updates += ret[0]
             for e in ret[1]:
                 print ' '.join(str(e).split('-')[1:]).strip()

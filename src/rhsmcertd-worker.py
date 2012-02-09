@@ -22,6 +22,7 @@ import logging
 from rhsm import connection
 from subscription_manager import certmgr
 from subscription_manager import logutil
+from subscription_manager import managerlib
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.i18n_optparse import OptionParser
 
@@ -35,25 +36,33 @@ def main(options, log):
                   ' are corrupted. Certificate update using daemon failed.')
         sys.exit(-1)
     print _('Updating entitlement certificates & repositories')
-    uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
-                                   key_file=ConsumerIdentity.keypath())
-    mgr = certmgr.CertManager(uep=uep)
-    updates = mgr.update(options.autoheal)
-    print _('%d updates required') % updates
-    print _('done')
+
+    try:
+        uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
+                                       key_file=ConsumerIdentity.keypath())
+        mgr = certmgr.CertManager(uep=uep)
+        updates = mgr.update(options.autoheal)
+
+        print _('%d updates required') % updates
+        print _('done')
+    except connection.GoneException, ge:
+        uuid = ConsumerIdentity.read().getConsumerId()
+        if ge.candlepin_version is not None and ge.deleted_id == uuid:
+            log.critical(_("This consumer's profile has been deleted from the server. It's local certificates will now be archived"))
+            managerlib.clean_all_data()
+            log.critical(_("Certificates archived to '/etc/pki/consumer.old'. Contact your system administrator if you need more information."))
+        else:
+            raise ge
 
 
-# WARNING: This is not a block of code used to test, this module is
-# actually run as a script via cron to periodically update the system's
-# certificates, yum repos, and facts.
 if __name__ == '__main__':
 
     logutil.init_logger()
     log = logging.getLogger('rhsm-app.' + __name__)
 
     parser = OptionParser()
-    parser.add_option("--autoheal", dest="autoheal", action="store_true", default=False,
-                  help="perform an autoheal check")
+    parser.add_option("--autoheal", dest="autoheal", action="store_true",
+            default=False, help="perform an autoheal check")
     (options, args) = parser.parse_args()
     try:
         main(options, log)
