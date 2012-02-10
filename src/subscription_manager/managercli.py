@@ -884,7 +884,7 @@ class SubscribeCommand(CliCommand):
                         if (pool.find("#") >= 0):
                             systemExit(-1, _("Please enter a valid numeric pool id."))
                         self.cp.bindByEntitlementPool(consumer_uuid, pool, self.options.quantity)
-                        print _("Successfully consumed a subscription from the pool with id %s") % pool
+                        print _("Successfully consumed a subscription from the pool with id %s.") % pool
                         log.info("Info: Successfully subscribed the system to the Entitlement Pool %s" % pool)
                         subscribed = True
                     except connection.RestlibException, re:
