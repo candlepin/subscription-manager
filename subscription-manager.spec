@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.99.6
+Version: 0.99.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -271,6 +271,26 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Mon Feb 13 2012 Michael Stead <mstead@redhat.com> 0.99.7-1
+- Improve relevancy of details on my installed products tab.
+  (dgoodwin@redhat.com)
+- 719743: Added better punctuation to one status message (bkearney@redhat.com)
+- Have client check sockets on non-stacked entitlements as well.
+  (dgoodwin@redhat.com)
+- New date compare implemetation for determining start/end dates
+  (mstead@redhat.com)
+- Add "zanata-pull" and "zanata-push" makefile targets (alikins@redhat.com)
+- as_IN seems busted on RHEL6, so skip it (alikins@redhat.com)
+- pep8/make stylish cleanups (alikins@redhat.com)
+- 741155: Fixed start/end date calculations for My Installed Software tab
+  (mstead@redhat.com)
+- fixes for po files from zanata (alikins@redhat.com)
+- new po files from zanata (alikins@redhat.com)
+- 767620: Add manage_repos config option. (dgoodwin@redhat.com)
+- 784031: remove katello plugin (cduryee@redhat.com)
+- Make return code from import consistent with subscribe. (awood@redhat.com)
+- Add Fedora release target. (dgoodwin@redhat.com)
+
 * Wed Feb 01 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 0.99.6-1
 - 783542: Return code for bad input to install-num-migrate-to-rhsm should be 1.
   (awood@redhat.com)
