@@ -16,7 +16,7 @@
     <accessibility>
       <atkproperty name="AtkObject::accessible-name">facts_dialog</atkproperty>
     </accessibility>
-    <signal name="delete_event" handler="on_system_facts_dialog_delete_event" swapped="no"/>
+    <signal name="delete_event" handler="on_system_facts_dialog_delete_event"/>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -142,7 +142,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_facts_update_button_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_facts_update_button_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -160,7 +160,7 @@
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">close_button</atkproperty>
                 </accessibility>
-                <signal name="clicked" handler="on_close_button_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_close_button_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
