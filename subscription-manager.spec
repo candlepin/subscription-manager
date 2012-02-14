@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.98.15
+Version: 0.98.16
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -264,6 +264,10 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Feb 14 2012 Alex Wood <awood@redhat.com> 0.98.16-1
+- 790437: install-num-migrate-to-rhsm shouldn't copy both Desktop and
+  Workstation product certs. (awood@redhat.com)
+
 * Wed Feb 08 2012 Alex Wood <awood@redhat.com> 0.98.15-1
 - Adding rhel-5.8 releaser (awood@redhat.com)
 - 788665: Clean up improper installation of multiple products.
