@@ -96,7 +96,7 @@ def main(options):
         log.error('Either the consumer is not registered or the certificates' +
                   ' are corrupted. Certificate update using daemon failed.')
         sys.exit(-1)
-    print _('Updating entitlement certificates & repositories')
+    print _('Updating entitlement certificates and repositories')
     uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
                                    key_file=ConsumerIdentity.keypath())
     mgr = CertManager(uep=uep)

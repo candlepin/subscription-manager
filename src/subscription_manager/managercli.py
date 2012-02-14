@@ -1297,7 +1297,7 @@ class ListCommand(CliCommand):
         if self.options.installed:
             iproducts = managerlib.getInstalledProductStatus(facts=self.facts.get_facts())
             if not len(iproducts):
-                print(_("No installed Products to list"))
+                print(_("No installed products to list"))
                 sys.exit(0)
             print "+-------------------------------------------+"
             print _("    Installed Product Status")
@@ -1323,7 +1323,7 @@ class ListCommand(CliCommand):
             epools = managerlib.getAvailableEntitlements(self.cp, consumer,
                     self.facts, self.options.all, on_date)
             if not len(epools):
-                print(_("No Available subscription pools to list"))
+                print(_("No available subscription pools to list"))
                 sys.exit(0)
             print "+-------------------------------------------+\n    %s\n+-------------------------------------------+\n" % _("Available Subscriptions")
             for data in epools:
@@ -1353,7 +1353,7 @@ class ListCommand(CliCommand):
         # that are not yet active.
         certs = [cert for cert in ent_dir.list() if not cert.expired()]
         if len(certs) == 0:
-            print(_("No Consumed subscription pools to list"))
+            print(_("No consumed subscription pools to list"))
             sys.exit(0)
 
         print """+-------------------------------------------+\n    %s\n+-------------------------------------------+\n""" % _("Consumed Product Subscriptions")

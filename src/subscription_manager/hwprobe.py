@@ -308,7 +308,7 @@ class Hardware:
                     else:
                         netinfdict[key] = "Unknown"
         except:
-            print _("Error reading net Interface information:"), sys.exc_type
+            print _("Error reading network interface information:"), sys.exc_type
         self.allhw.update(netinfdict)
         return netinfdict
 

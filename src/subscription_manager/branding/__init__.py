@@ -89,7 +89,7 @@ class DefaultBranding(object):
         self.GUI_REGISTRATION_HEADER = \
                 _("Please enter your account information:")
         self.GUI_FORGOT_LOGIN_TIP = \
-                _("Contact your system adminsitrator if you've forgot your login or password")
+                _("Contact your system administrator if you have forgotten your login or password")
 
 
 class EmptyBranding(object):

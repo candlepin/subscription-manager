@@ -69,7 +69,7 @@ rhncfg = up2date_client.config.initUp2dateConfig()
 from optparse import Option, OptionParser
 options_table = [
     Option("-f", "--force", action="store_true", default=False,
-           help=_("Ignore Channels not available on RHSM")),
+           help=_("Ignore channels not available on RHSM")),
     Option("-c", "--cli-only", action="store_true", default=False, dest='clionly',
            help=_("Don't launch the GUI tool to subscribe the system, just use the CLI tool which will do it automatically")),
     Option("-n", "--no-auto", action="store_true", default=False, dest='noauto',
@@ -122,7 +122,7 @@ def checkOkToProceed(username, password):
     serverURL = rhncfg['serverURL']
     if not re.search('xmlrpc\.rhn\..*redhat\.com', serverURL):
         log.info("serverURL = %s" % serverURL)
-        systemExit(1, _("This migration script requires the system to be registered to RHN Hosted Classic.\nHowever this system appears to be registered to '%s'.\nExiting.") % serverURL.split('/')[2])
+        systemExit(1, _("This migration script requires the system to be registered to RHN Classic.\nHowever this system appears to be registered to '%s'.\nExiting.") % serverURL.split('/')[2])
 
     # Check to make sure we can connect to the certificate server.
     cp = UEPConnection(username=username, password=password)
@@ -275,14 +275,14 @@ def deployProdCertificates(subscribedChannels):
 
     if invalidRhsmChannels:
         print "\n+--------------------------------------------------+"
-        print _("Below mentioned channels are NOT available on RHSM")
+        print _("Below mentioned channels are not available on RHSM")
         print "+--------------------------------------------------+"
         for i in invalidRhsmChannels:
             print i
 
     if unrecognizedChannels:
         print   "\n+---------------------------------------------------------------------------------------+",
-        print _("\nUnrecognized channels. Channel to Product Certificate mapping missing for these channels.")
+        print _("\nUnrecognized channels. Channel to product certificate mapping missing for these channels.")
         print   "+---------------------------------------------------------------------------------------+"
         for i in unrecognizedChannels:
             print i
@@ -308,7 +308,7 @@ def deployProdCertificates(subscribedChannels):
         destinationpath = str(productDir) + "/" + truncated_cert_name
         log.info("cp %s %s ", sourcepath, destinationpath)
         shutil.copy2(sourcepath, destinationpath)
-    print _("\nProduct Certificates copied successfully to %s !!") % str(productDir)
+    print _("\nProduct certificates copied successfully to %s !!") % str(productDir)
 
 
 def getRelease():
@@ -392,7 +392,7 @@ def main():
     checkOkToProceed(username, password)
 
     # get a list of RHN classic channels this machine is subscribed to
-    print _("\nRetrieving existing RHN classic subscription information ...")
+    print _("\nRetrieving existing RHN Classic subscription information ...")
     subscribedChannels = getSubscribedChannelsList()
     print "+----------------------------------+"
     print _("System is currently subscribed to:")

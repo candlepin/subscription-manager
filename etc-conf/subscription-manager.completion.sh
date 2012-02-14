@@ -1,11 +1,11 @@
 #
-# susbcription-manager bash completion script
+# subscription-manager bash completion script
 #   based on katello script
 # vim:ts=2:sw=2:et:
 #
 
 # options common to all subcommands (+ 3rd level opts for simplicity)
-_susbcription_manager_common_opts="-h --help --proxy --proxyuser --proxypassword"
+_subscription_manager_common_opts="-h --help --proxy --proxyuser --proxypassword"
 
 # complete functions for subcommands ($1 - current opt, $2 - previous opt)
 

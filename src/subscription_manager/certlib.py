@@ -165,7 +165,7 @@ class Action:
         cert = EntitlementCertificate(crtpem)
         bogus = cert.bogus()
         if bogus:
-            bogus.insert(0, _('Reasons(s):'))
+            bogus.insert(0, _('Reason(s):'))
             raise Exception('\n - '.join(bogus))
         return (key, cert)
 
