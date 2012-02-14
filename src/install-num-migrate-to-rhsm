@@ -126,6 +126,12 @@ def main():
 
     for path in paths:
         dest_file = path.split('-')[-1]
+
+        #even though 68.pem is a match, skip it for Workstation
+        #71.pem will be installed instead.
+        if dest_file == '68.pem' and 'Workstation' in repo_dict.keys():
+            continue
+
         dest_file = os.path.join(PRODUCT_CERT_DIR, dest_file)
         print _("Copying %s to %s") % (path, dest_file)
         if not options.dryrun:
