@@ -529,6 +529,103 @@ class EnvironmentsCommand(UserPassCommand):
             handle_exception(_("Error: Unable to retrieve environment list from Entitlement Platform"), e)
 
 
+class ServiceLevelsCommand(UserPassCommand):
+
+    def __init__(self, ent_dir=None, prod_dir=None):
+        usage = "usage: %prog service-level [OPTIONS]"
+        shortdesc = _("Display the service levels available for an organization.")
+        desc = shortdesc
+
+        super(ServiceLevelsCommand, self).__init__("service-levels", usage, shortdesc,
+                desc, ent_dir=ent_dir, prod_dir=prod_dir)
+
+        self.parser.add_option("--org", dest="org",
+                help=_("specify org for service level list"))
+        self.parser.add_option("--list", dest="list", action='store_true',
+                help=_("list all service levels available"))
+        self.parser.add_option("--show", dest="show", action='store_true',
+                help=_("show this system's current service level"))
+
+    def _validate_options(self):
+
+        # Assume --show if run with no args:
+        if not self.options.list and not self.options.show:
+            self.options.show = True
+
+        if not ConsumerIdentity.existsAndValid():
+            if self.options.list:
+                if not (self.options.username and self.options.password):
+                    print(_("Error: you must register or specify --username and password to list service levels"))
+                    sys.exit(-1)
+                if not self.options.org:
+                    print(_("Error: you must register or specify --org."))
+                    sys.exit(-1)
+            if self.options.show:
+                print(_("Error: This system is currently not registered."))
+                sys.exit(-1)
+
+    def _do_command(self):
+        self._validate_options()
+        try:
+            # If we have a username/password, we're going to use that, otherwise
+            # we'll use the identity certificate. We already know one or the other
+            # exists:
+            if self.options.username and self.options.password:
+                self.cp = connection.UEPConnection(username=self.username,
+                        password=self.password,
+                        proxy_hostname=self.proxy_hostname,
+                        proxy_port=self.proxy_port,
+                        proxy_user=self.proxy_user,
+                        proxy_password=self.proxy_password)
+            else:
+                cert_file = ConsumerIdentity.certpath()
+                key_file = ConsumerIdentity.keypath()
+
+                self.cp = connection.UEPConnection(cert_file=cert_file,
+                        key_file=key_file,
+                        proxy_hostname=self.proxy_hostname,
+                        proxy_port=self.proxy_port,
+                        proxy_user=self.proxy_user,
+                        proxy_password=self.proxy_password)
+
+            if self.options.show:
+                self.show_service_level()
+
+            if self.options.list:
+                self.list_service_levels()
+
+        except connection.RestlibException, re:
+            log.exception(re)
+            log.error("Error: Unable to retrieve service levels: %s" % re)
+            systemExit(-1, re.msg)
+        except Exception, e:
+            handle_exception(_("Error: Unable to retrieve service levels."), e)
+
+    def show_service_level(self):
+        consumer_uuid = ConsumerIdentity.read().getConsumerId()
+        consumer = self.cp.getConsumer(consumer_uuid)
+        print(_("Current service level: %s") % consumer['serviceLevel'])
+
+    def list_service_levels(self):
+        org_key = self.options.org
+        if not org_key:
+            consumer_uuid = ConsumerIdentity.read().getConsumerId()
+            org_key = self.cp.getOwner(consumer_uuid)['key']
+
+        # TODO: do we need to check if service levels are supported?
+        slas = self.cp.getServiceLevelList(org_key)
+        if len(slas):
+            print("+-------------------------------------------+")
+            print("               %s" % (_("Service Levels")))
+            print("+-------------------------------------------+")
+            for sla in slas:
+                print sla
+                #constants.environment_list % (env['name'],
+                #    env['description'])
+        else:
+            print "This org does not have any subscriptions with service levels."
+
+
 class RegisterCommand(UserPassCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
@@ -1422,7 +1519,7 @@ class CLI:
         for clazz in [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand, SubscribeCommand,\
                        UnSubscribeCommand, FactsCommand, IdentityCommand, OwnersCommand, \
                        RefreshCommand, CleanCommand, RedeemCommand, ReposCommand, \
-                       EnvironmentsCommand, ImportCertCommand]:
+                       EnvironmentsCommand, ImportCertCommand, ServiceLevelsCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":
