@@ -645,6 +645,14 @@ class UEPConnection:
         results = self.conn.request_get(method)
         return results
 
+    def getServiceLevelList(self, owner_key):
+        """
+        List the service levels available for an owner.
+        """
+        method = "/owners/%s/servicelevels" % self.sanitize(owner_key)
+        results = self.conn.request_get(method)
+        return results
+
     def getEnvironmentList(self, owner_key):
         """
         List the environments for a particular owner.
