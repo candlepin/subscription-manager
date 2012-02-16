@@ -68,6 +68,18 @@ class RestlibException(ConnectionException):
         return self.msg
 
 
+class GoneException(RestlibException):
+    """
+    GoneException - used to detect when a consumer has been deleted on the
+    candlepin side. We check both the deleted id and the candlepin version,
+    to ensure both were populated and have expected values
+    """
+    def __init__(self, code, msg, deleted_id, candlepin_version):
+        super(GoneException, self).__init__(code, msg)
+        self.deleted_id = deleted_id
+        self.candlepin_version = candlepin_version
+
+
 class NetworkException(ConnectionException):
 
     def __init__(self, code):
@@ -229,7 +241,9 @@ class Restlib(object):
         response = conn.getresponse()
         result = {
             "content": response.read(),
-            "status": response.status}
+            "status": response.status,
+            "candlepin_version": response.getheader("X-CANDLEPIN-VERSION", None)
+        }
         log.debug('Response status: ' + str(result['status']))
         self.validateResponse(result)
         if not len(result['content']):
@@ -249,6 +263,11 @@ class Restlib(object):
                     raise RemoteServerException(response['status'])
                 else:
                     raise NetworkException(response['status'])
+
+            if str(response['status']) == "410":
+                raise GoneException(response['status'],
+                        parsed['displayMessage'], parsed['deletedId'],
+                        response['candlepin_version'])
 
             error_msg = self._parse_msg_from_error_response_body(parsed)
             raise RestlibException(response['status'], error_msg)
