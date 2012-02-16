@@ -275,15 +275,15 @@ def deployProdCertificates(subscribedChannels):
 
     if invalidRhsmChannels:
         print "\n+--------------------------------------------------+"
-        print _("Below mentioned channels are not available on RHSM")
+        print _("Channels not available on RHSM:")
         print "+--------------------------------------------------+"
         for i in invalidRhsmChannels:
             print i
 
     if unrecognizedChannels:
-        print   "\n+---------------------------------------------------------------------------------------+",
+        print "\n+--------------------------------------------------+",
         print _("\nUnrecognized channels. Channel to product certificate mapping missing for these channels.")
-        print   "+---------------------------------------------------------------------------------------+"
+        print "+--------------------------------------------------+"
         for i in unrecognizedChannels:
             print i
 
@@ -308,7 +308,7 @@ def deployProdCertificates(subscribedChannels):
         destinationpath = str(productDir) + "/" + truncated_cert_name
         log.info("cp %s %s ", sourcepath, destinationpath)
         shutil.copy2(sourcepath, destinationpath)
-    print _("\nProduct certificates copied successfully to %s !!") % str(productDir)
+    print _("\nProduct certificates copied successfully to %s") % str(productDir)
 
 
 def getRelease():
