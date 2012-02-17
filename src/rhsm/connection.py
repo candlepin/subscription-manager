@@ -479,7 +479,7 @@ class UEPConnection:
         return self.updateConsumer(consumer_uuid, facts=facts)
 
     def updateConsumer(self, uuid, facts=None, installed_products=None,
-                                                      guest_uuids=None):
+            guest_uuids=None, service_level=None):
         """
         Update a consumer on the server.
 
@@ -496,6 +496,12 @@ class UEPConnection:
             params['guestIds'] = guest_uuids
         if facts != None:
             params['facts'] = facts
+
+        # The server will reject a service level that is not available
+        # in the consumer's organization, so no need to check if it's safe
+        # here:
+        if service_level:
+            params['serviceLevel'] = service_level
 
         method = "/consumers/%s" % self.sanitize(uuid)
         ret = self.conn.request_put(method, params)
