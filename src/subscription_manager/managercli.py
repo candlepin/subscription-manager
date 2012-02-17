@@ -117,13 +117,17 @@ def handle_exception(msg, ex):
         systemExit(-1, ex)
 
 
-def autosubscribe(cp, consumer):
+def autosubscribe(cp, consumer_uuid, service_level=None):
     """
     This is a wrapper for bind/bindByProduct. Eventually, we will exclusively
     use bind, but for now, we support both.
     """
+    if service_level:
+        cp.updateConsumer(consumer_uuid, service_level=service_level)
+        print(_("Service level set to: %s") % service_level)
+
     try:
-        cp.bind(consumer)  # new style
+        cp.bind(consumer_uuid)  # new style
 
     except Exception, e:
         log.warning("Error during auto-subscribe.")
@@ -627,8 +631,8 @@ class ServiceLevelsCommand(UserPassCommand):
 
 
 class RegisterCommand(UserPassCommand):
-
     def __init__(self, ent_dir=None, prod_dir=None):
+
         usage = "usage: %prog register [OPTIONS]"
         shortdesc = get_branding().CLI_REGISTER
         desc = shortdesc
@@ -655,6 +659,9 @@ class RegisterCommand(UserPassCommand):
                                help=_("register the system even if it is already registered"))
         self.parser.add_option("--activationkey", action='append', dest="activation_keys",
                                help=_("one or more activation keys to use for registration"))
+        self.parser.add_option("--servicelevel", dest="service_level",
+                               help=_("service level to apply to this system"))
+
         self.facts = Facts(ent_dir=self.entitlement_dir,
                            prod_dir=self.product_dir)
         self.installed_mgr = InstalledProductsManager()
@@ -681,6 +688,9 @@ class RegisterCommand(UserPassCommand):
         #746259: Don't allow the user to pass in an empty string as an activation key
         elif (self.options.activation_keys and '' in self.options.activation_keys):
             print(_("Error: Must specify an activation key"))
+            sys.exit(-1)
+        elif (self.options.service_level and not self.options.autosubscribe):
+            print(_("Error: Must use --autosubscribe with --servicelevel."))
             sys.exit(-1)
 
     def _do_command(self):
@@ -772,7 +782,8 @@ class RegisterCommand(UserPassCommand):
         profile_mgr.update_check(self.cp, consumer['uuid'], True)
 
         if self.options.autosubscribe:
-            autosubscribe(self.cp, consumer['uuid'])
+            autosubscribe(self.cp, consumer['uuid'],
+                    service_level=self.options.service_level)
         if (self.options.consumerid or self.options.activation_keys or
                 self.options.autosubscribe):
             self.certlib.update()
@@ -940,6 +951,8 @@ class SubscribeCommand(CliCommand):
         self.parser.add_option("--auto", action='store_true',
                                help=_("automatically subscribe this system to\
                                      compatible subscriptions."))
+        self.parser.add_option("--servicelevel", dest="service_level",
+                               help=_("service level to apply to this system"))
 
     def _validate_options(self):
         if not (self.options.pool or self.options.auto):
@@ -957,6 +970,10 @@ class SubscribeCommand(CliCommand):
                 sys.exit(-1)
             else:
                 self.options.quantity = int(self.options.quantity)
+
+        if (self.options.service_level and not self.options.auto):
+            print(_("Error: Must use --auto with --servicelevel."))
+            sys.exit(-1)
 
     def _do_command(self):
         """
@@ -996,7 +1013,8 @@ class SubscribeCommand(CliCommand):
                     return_code = 1
             # must be auto
             else:
-                autosubscribe(self.cp, consumer_uuid)
+                autosubscribe(self.cp, consumer_uuid,
+                        service_level=self.options.service_level)
 
             result = self.certlib.update()
             if result[1]:
