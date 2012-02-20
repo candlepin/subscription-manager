@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.17.1
+Version: 0.96.17.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -232,6 +232,10 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Mon Feb 20 2012 Bryan Kearney <bkearney@redhat.com> 0.96.17.2-1
+- Fix for package upload in registration process (tstrachota@redhat.com)
+- Bump the version number (bkearney@redhat.com)
+
 * Tue Oct 25 2011 James Bowes <jbowes@redhat.com> 0.96.17-1
 - 747024: restore previous behaviour for unhandled exceptions
   (alikins@redhat.com)
