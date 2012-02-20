@@ -7,7 +7,8 @@ INSTALL_MODULE = rhsm
 PKGNAME = subscription_manager
 CODE_DIR = ${PREFIX}/${INSTALL_DIR}/${INSTALL_MODULE}/${PKGNAME}
 VERSION = $(shell echo `grep ^Version: $(PKGNAME).spec | awk '{ print $$2 }'`)
-RHELVERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
+OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
+OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
 
 
 #this is the compat area for firstboot versions. If it's 6-compat, set to 6.
@@ -35,9 +36,15 @@ check-syntax:
 ICON_FLAGS=`pkg-config --cflags --libs gtk+-2.0 libnotify`
 
 rhsm-icon: src/rhsm_icon.c bin
-	# RHSM Status icon needs to be skipped in Fedora 15 and beyond:
-	if [ ${RHELVERSION} -lt 15 ]; then \
-		${CC} ${CFLAGS} ${ICON_FLAGS} -o bin/rhsm-icon src/rhsm_icon.c;\
+	# RHSM Status icon needs to be skipped in Fedora 15+ and RHEL7+:
+	if [ ${OS} = Fedora ]; then \
+		if [ ${OS_VERSION} -lt 15 ]; then \
+			${CC} ${CFLAGS} ${ICON_FLAGS} -o bin/rhsm-icon src/rhsm_icon.c;\
+		fi;\
+	else \
+		if [ ${OS_VERSION} -lt 7 ]; then \
+			${CC} ${CFLAGS} ${ICON_FLAGS} -o bin/rhsm-icon src/rhsm_icon.c;\
+		fi;\
 	fi;\
 
 dbus-service-install:
@@ -102,7 +109,7 @@ install-files: dbus-service-install compile-po desktop-files
 	install -d ${PREFIX}/etc/rc.d/init.d
 	install -d ${PREFIX}/usr/share/icons/hicolor/scalable/apps
 	install -d ${PREFIX}/usr/share/rhn/up2date_client/firstboot/
-	if [ ${RHELVERSION} = 5 ]; then install -d ${PREFIX}/usr/share/firstboot/modules; fi
+	if [ ${OS_VERSION} = 5 ]; then install -d ${PREFIX}/usr/share/firstboot/modules; fi
 
 	cp -R po/build/* ${PREFIX}/${INSTALL_DIR}/locale/
 
@@ -123,8 +130,8 @@ install-files: dbus-service-install compile-po desktop-files
 	install src/rhsmcertd.init.d ${PREFIX}/etc/rc.d/init.d/rhsmcertd
 
 	# RHEL 5 Customizations:
-	if [ ${RHELVERSION} = 5 ]; then \
-		install -m644 ${SRC_DIR}/gui/firstboot/${RHELVERSION}/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot;\
+	if [ ${OS_VERSION} = 5 ]; then \
+		install -m644 ${SRC_DIR}/gui/firstboot/${OS_VERSION}/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot;\
 		ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_login.py ${PREFIX}/usr/share/firstboot/modules/;\
 		ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_subscriptions.py ${PREFIX}/usr/share/firstboot/modules/;\
 	else \
@@ -133,11 +140,19 @@ install-files: dbus-service-install compile-po desktop-files
 
 	install -m 644 man/* ${PREFIX}/${INSTALL_DIR}/man/man8/
 
-	# RHSM Status icon needs to be skipped in Fedora 15 and beyond:
-	if [ ${RHELVERSION} -lt 15 ]; then \
-		install -m 644 etc-conf/rhsm-icon.desktop \
-			${PREFIX}/etc/xdg/autostart;\
+	# RHSM Status icon needs to be skipped in Fedora 15+ and RHEL7+:
+	if [ ${OS} = Fedora ]; then \
+		if [ ${OS_VERSION} -lt 15 ]; then \
+			install -m 644 etc-conf/rhsm-icon.desktop \
+				${PREFIX}/etc/xdg/autostart;\
+		fi;\
+	else \
+		if [ ${OS_VERSION} -lt 7 ]; then \
+			install -m 644 etc-conf/rhsm-icon.desktop \
+				${PREFIX}/etc/xdg/autostart;\
+		fi;\
 	fi;\
+
 	install -m 755 etc-conf/rhsmd.cron \
 		${PREFIX}/etc/cron.daily/rhsmd
 	install -m 644 etc-conf/subscription-manager.desktop \
