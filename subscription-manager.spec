@@ -1,3 +1,6 @@
+# Skip rhsm-icon on Fedora 15+ and RHEL 7+
+%define use_rhsm_icon (0%{?fedora} && 0%{?fedora} < 15) || (0%{?rhel} && 0%{?rhel} < 7)
+
 Name: subscription-manager
 Version: 0.99.7
 Release: 1%{?dist}
@@ -93,10 +96,11 @@ make -f Makefile
 rm -rf %{buildroot}
 make -f Makefile install VERSION=%{version}-%{release} PREFIX=%{buildroot} MANPATH=%{_mandir}
 
-%if 0%{?fedora} < 15
+%if %use_rhsm_icon
 desktop-file-validate \
         %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
 %endif
+
 desktop-file-validate \
         %{buildroot}/usr/share/applications/subscription-manager.desktop
 %find_lang rhsm
@@ -208,7 +212,7 @@ rm -rf %{buildroot}
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(755,root,root) %{_bindir}/subscription-manager-gui
 
-%if 0%{?fedora} < 15
+%if %use_rhsm_icon
 %{_bindir}/rhsm-icon
 %{_sysconfdir}/xdg/autostart/rhsm-icon.desktop
 %endif
