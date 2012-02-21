@@ -111,6 +111,10 @@ install-files: dbus-service-install compile-po desktop-files
 	install -d ${PREFIX}/usr/share/rhn/up2date_client/firstboot/
 	if [ ${OS_VERSION} = 5 ]; then install -d ${PREFIX}/usr/share/firstboot/modules; fi
 
+	install -d ${PREFIX}/usr/libexec
+	install -m 755 src/rhsmcertd-worker.py \
+		${PREFIX}/usr/libexec/rhsmcertd-worker
+
 	cp -R po/build/* ${PREFIX}/${INSTALL_DIR}/locale/
 
 	install -m 644 -p ${SRC_DIR}/*.py ${CODE_DIR}

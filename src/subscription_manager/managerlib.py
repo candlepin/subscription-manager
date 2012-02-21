@@ -36,6 +36,7 @@ from subscription_manager.cert_sorter import StackingGroupSorter
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.validity import ValidProductDateRangeCalculator
+from subscription_manager.repolib import RepoLib
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -775,11 +776,6 @@ class LocalTz(datetime.tzinfo):
         return time.tzname[0]
 
 
-def delete_consumer_certs():
-    shutil.rmtree(cfg.get('rhsm', 'consumerCertDir'), ignore_errors=True)
-    shutil.rmtree(cfg.get('rhsm', 'entitlementCertDir'), ignore_errors=True)
-
-
 def unregister(uep, consumer_uuid):
     """
     Shared logic for un-registration.
@@ -789,7 +785,8 @@ def unregister(uep, consumer_uuid):
     system_log("Unregistered machine with identity: %s" % consumer_uuid)
 
     # Clean up certificates, these are no longer valid:
-    delete_consumer_certs()
+    shutil.rmtree(cfg.get('rhsm', 'consumerCertDir'), ignore_errors=True)
+    shutil.rmtree(cfg.get('rhsm', 'entitlementCertDir'), ignore_errors=True)
     ProfileManager.delete_cache()
     Facts.delete_cache()
     InstalledProductsManager.delete_cache()
@@ -822,8 +819,23 @@ def enhance_facts(facts, consumer):
     if consumer.getConsumerName():
         facts.update({"system.name": consumer.getConsumerName()})
 
-if __name__ == '__main__':
-    print("\nInstalled Product Status:\n")
-    print getInstalledProductStatus()
-    print("\nConsumed Product Status:\n")
-    getInstalledProductHashMap()
+def clean_all_data(backup=True):
+    consumer_dir = cfg.get('rhsm', 'consumerCertDir')
+    if backup:
+        if consumer_dir[-1] == "/":
+            consumer_dir_backup = consumer_dir[0:-1] + ".old"
+        else:
+            consumer_dir_backup = consumer_dir + ".old"
+
+        shutil.rmtree(consumer_dir_backup, ignore_errors=True)
+        os.rename(consumer_dir, consumer_dir_backup)
+    else:
+        shutil.rmtree(consumer_dir, ignore_errors=True)
+
+    shutil.rmtree(cfg.get('rhsm', 'entitlementCertDir'), ignore_errors=True)
+
+    ProfileManager.delete_cache()
+    InstalledProductsManager.delete_cache()
+    Facts.delete_cache()
+    RepoLib.delete_repo_file()
+    log.info("Cleaned local data")

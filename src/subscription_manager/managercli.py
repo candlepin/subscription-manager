@@ -337,12 +337,7 @@ class CleanCommand(CliCommand):
         return
 
     def _do_command(self):
-        managerlib.delete_consumer_certs()
-        ProfileManager.delete_cache()
-        InstalledProductsManager.delete_cache()
-        Facts.delete_cache()
-        RepoLib.delete_repo_file()
-        log.info("Cleaned local data")
+        managerlib.clean_all_data(False)
         print (_("All local data removed"))
 
         self._request_validity_check()

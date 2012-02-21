@@ -30,6 +30,8 @@
 #define LOGFILE "/var/log/rhsm/rhsmcertd.log"
 #define LOCKFILE "/var/lock/subsys/rhsmcertd"
 #define UPDATEFILE "/var/run/rhsm/update"
+#define WORKER "/usr/libexec/rhsmcertd-worker"
+#define WORKER_NAME "/usr/libexec/rhsmcertd-worker"
 #define DEFAULT_CERT_INTERVAL 14400	/* 4 hours */
 #define DEFAULT_HEAL_INTERVAL 86400	/* 24 hours */
 #define BUF_MAX 256
@@ -41,7 +43,7 @@ GMainLoop *main_loop = NULL;
 void
 printUsage ()
 {
-	printf ("usage: rhsmcertd <certinterval> <healinterval>");
+	printf ("usage: rhsmcertd <certinterval> <healinterval>\n");
 }
 
 FILE *
@@ -49,7 +51,7 @@ get_log ()
 {
 	FILE *log = fopen (LOGFILE, "at");
 	if (log == NULL) {
-		printf ("Could not open %s, exiting", LOGFILE);
+		printf ("Could not open %s, exiting\n", LOGFILE);
 		exit (EXIT_FAILURE);
 	}
 	return log;
@@ -95,12 +97,6 @@ int
 get_lock ()
 {
 	int fdlock;
-	struct flock fl;
-
-	fl.l_type = F_WRLCK;
-	fl.l_whence = SEEK_SET;
-	fl.l_start = 0;
-	fl.l_len = 1;
 
 	if ((fdlock = open (LOCKFILE, O_WRONLY | O_CREAT, 0640)) == -1)
 		return 1;
@@ -125,17 +121,11 @@ cert_check (gboolean heal)
 	}
 	if (pid == 0) {
 		if (heal) {
-			execl ("/usr/bin/python", "python",
-			       "/usr/share/rhsm/subscription_manager/certmgr.py",
-			       "--autoheal", NULL);
-			_exit (errno);
+			execl (WORKER, WORKER_NAME, "--autoheal", NULL);
 		} else {
-			execl ("/usr/bin/python", "python",
-			       "/usr/share/rhsm/subscription_manager/certmgr.py",
-			       NULL);
-			_exit (errno);
+			execl (WORKER, WORKER_NAME, NULL);
 		}
-
+		_exit (errno);
 	}
 	waitpid (pid, &status, 0);
 	status = WEXITSTATUS (status);
@@ -198,17 +188,19 @@ main (int argc, char *argv[])
 	//to it. Otherwise, it would only get executed when the timer went off, and
 	//not at startup.
 
-	gboolean heal = TRUE;
+	bool heal = true;
 	cert_check (heal);
-	g_timeout_add (heal_interval * 1000, (GSourceFunc) cert_check, heal);
+	g_timeout_add (heal_interval * 1000, (GSourceFunc) cert_check,
+		       (gpointer) heal);
 
-	heal = FALSE;
+	heal = false;
 	cert_check (heal);
-	g_timeout_add (cert_interval * 1000, (GSourceFunc) cert_check, heal);
+	g_timeout_add (cert_interval * 1000, (GSourceFunc) cert_check,
+		       (gpointer) heal);
 
 	logUpdate (cert_interval);
 	g_timeout_add (cert_interval * 1000, (GSourceFunc) logUpdate,
-		       cert_interval);
+		       GINT_TO_POINTER (cert_interval));
 
 	main_loop = g_main_loop_new (NULL, FALSE);
 	g_main_loop_run (main_loop);
