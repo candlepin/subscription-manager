@@ -2,7 +2,7 @@
 %define use_rhsm_icon (0%{?fedora} && 0%{?fedora} < 15) || (0%{?rhel} && 0%{?rhel} < 7)
 
 Name: subscription-manager
-Version: 0.99.8
+Version: 0.99.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -276,17 +276,6 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
-* Tue Feb 21 2012 Michael Stead <mstead@redhat.com> 0.99.8-1
-- Fix spec for both Fedora 15+ and RHEL 7+. (dgoodwin@redhat.com)
-- Fix Makefile for both Fedora 15+ and RHEL 7+. (dgoodwin@redhat.com)
-- Add service level to register and subscribe CLI commands.
-  (dgoodwin@redhat.com)
-- Add service-level CLI command. (dgoodwin@redhat.com)
-- More string cleanups (alikins@redhat.com)
-- String cleanups (alikins@redhat.com)
-- 790217: install-num-migrate-to-rhsm shouldn't copy both Desktop and
-  Workstation product certs. (awood@redhat.com)
-
 * Mon Feb 13 2012 Michael Stead <mstead@redhat.com> 0.99.7-1
 - Improve relevancy of details on my installed products tab.
   (dgoodwin@redhat.com)
