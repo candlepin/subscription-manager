@@ -33,6 +33,11 @@ class NullHandler(logging.Handler):
     def emit(self, record):
         pass
 
+def safe_int(value, safe_value=None):
+    try:
+        return int(value)
+    except:
+        return safe_value
 
 h = NullHandler()
 logging.getLogger("rhsm").addHandler(h)
@@ -118,7 +123,7 @@ class RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
 
     def _get_connect_msg(self):
         """ Return an HTTP CONNECT request to send to the proxy. """
-        port = int(self._real_port)
+        port = safe_int(self._real_port)
         msg = "CONNECT %s:%d HTTP/1.1\r\n" % (self._real_host, port)
         msg = msg + "Host: %s:%d\r\n" % (self._real_host, port)
         if self._proxy_UA:
@@ -306,7 +311,7 @@ class UEPConnection:
 
     def __init__(self,
             host=config.get('server', 'hostname'),
-            ssl_port=int(config.get('server', 'port')),
+            ssl_port=safe_int(config.get('server', 'port')),
             handler=config.get('server', 'prefix'),
             proxy_hostname=config.get('server', 'proxy_hostname'),
             proxy_port=config.get('server', 'proxy_port'),
@@ -338,12 +343,12 @@ class UEPConnection:
         self.password = password
 
         self.ca_cert_dir = config.get('server', 'ca_cert_dir')
-        self.ssl_verify_depth = int(config.get('server', 'ssl_verify_depth'))
+        self.ssl_verify_depth = safe_int(config.get('server', 'ssl_verify_depth'))
 
         self.insecure = insecure
         if insecure is None:
             self.insecure = False
-            config_insecure = int(config.get('server', 'insecure'))
+            config_insecure = safe_int(config.get('server', 'insecure'))
             if config_insecure:
                 self.insecure = True
 
