@@ -2,7 +2,7 @@
 %define use_rhsm_icon (0%{?fedora} && 0%{?fedora} < 15) || (0%{?rhel} && 0%{?rhel} < 7)
 
 Name: subscription-manager
-Version: 0.99.7
+Version: 0.99.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -276,6 +276,25 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Feb 22 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 0.99.8-1
+- 790205: do not lay down install-num-migrate-to-rhsm on rhel6 systems
+  (cduryee@redhat.com)
+- latest translations from zanata (alikins@redhat.com)
+- 795541: Change the environment filtering which is being done on the client
+  side (bkearney@redhat.com)
+- Add consumer deleted on server detection. (jbowes@redhat.com)
+- Fix spec for both Fedora 15+ and RHEL 7+. (dgoodwin@redhat.com)
+- Fix Makefile for both Fedora 15+ and RHEL 7+. (dgoodwin@redhat.com)
+- Add service level to register and subscribe CLI commands.
+  (dgoodwin@redhat.com)
+- Add service-level CLI command. (dgoodwin@redhat.com)
+- delete consumer on rhsmcertd checkin (jbowes@redhat.com)
+- pull out rhsmcertd python worker to its own file (jbowes@redhat.com)
+- clean up some compiler warnings in rhsmcertd (jbowes@redhat.com)
+- String cleanups (alikins@redhat.com)
+- 790217: install-num-migrate-to-rhsm shouldn't copy both Desktop and
+  Workstation product certs. (awood@redhat.com)
+
 * Mon Feb 13 2012 Michael Stead <mstead@redhat.com> 0.99.7-1
 - Improve relevancy of details on my installed products tab.
   (dgoodwin@redhat.com)
