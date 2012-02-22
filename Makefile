@@ -128,7 +128,7 @@ install-files: dbus-service-install compile-po desktop-files
 	ln -sf  /usr/share/${INSTALL_MODULE}/${PKGNAME}/gui/data/icons/scalable/subscription-manager.svg ${PREFIX}/${INSTALL_DIR}/icons/hicolor/scalable/apps/
 	install src/subscription-manager ${PREFIX}/usr/sbin
 	install src/rhn-migrate-classic-to-rhsm  ${PREFIX}/usr/sbin
-	install src/install-num-migrate-to-rhsm ${PREFIX}/usr/sbin
+	if [ ${OS_VERSION} = 5 ]; then install src/install-num-migrate-to-rhsm ${PREFIX}/usr/sbin; fi
 	install src/subscription-manager-gui ${PREFIX}/usr/sbin
 	install bin/* ${PREFIX}/usr/bin
 	install src/rhsmcertd.init.d ${PREFIX}/etc/rc.d/init.d/rhsmcertd
@@ -142,7 +142,12 @@ install-files: dbus-service-install compile-po desktop-files
 		install -m644 ${SRC_DIR}/gui/firstboot/6/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot;\
 	fi;\
 
-	install -m 644 man/* ${PREFIX}/${INSTALL_DIR}/man/man8/
+	install -m 644 man/rhn-migrate-classic-to-rhsm.8 ${PREFIX}/${INSTALL_DIR}/man/man8/
+	install -m 644 man/rhsmcertd.8 ${PREFIX}/${INSTALL_DIR}/man/man8/
+	install -m 644 man/rhsm-icon.8 ${PREFIX}/${INSTALL_DIR}/man/man8/
+	install -m 644 man/subscription-manager.8 ${PREFIX}/${INSTALL_DIR}/man/man8/
+	install -m 644 man/subscription-manager-gui.8 ${PREFIX}/${INSTALL_DIR}/man/man8/
+	if [ ${OS_VERSION} = 5 ]; then install -m 644 man/install-num-migrate-to-rhsm.8 ${PREFIX}/${INSTALL_DIR}/man/man8/; fi
 
 	# RHSM Status icon needs to be skipped in Fedora 15+ and RHEL7+:
 	if [ ${OS} = Fedora ]; then \

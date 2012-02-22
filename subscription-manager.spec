@@ -246,11 +246,11 @@ rm -rf %{buildroot}
 %files -n subscription-manager-migration
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
-%attr(755,root,root) %{_sbindir}/install-num-migrate-to-rhsm
+%{?el5:%attr(755,root,root) %{_sbindir}/install-num-migrate-to-rhsm}
 
 %doc
 %{_mandir}/man8/rhn-migrate-classic-to-rhsm.8*
-%{_mandir}/man8/install-num-migrate-to-rhsm.8*
+%{?el5:%{_mandir}/man8/install-num-migrate-to-rhsm.8*}
 #only install this file on Fedora
 %doc LICENSE
 %if 0%{?fedora} > 14
