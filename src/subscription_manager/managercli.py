@@ -528,22 +528,23 @@ class EnvironmentsCommand(UserPassCommand):
             handle_exception(_("Error: Unable to retrieve environment list from Entitlement Platform"), e)
 
 
-class ServiceLevelsCommand(UserPassCommand):
+class ServiceLevelCommand(UserPassCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
         usage = "usage: %prog service-level [OPTIONS]"
-        shortdesc = _("Display the service levels available for an organization.")
+        shortdesc = _("Manage service levels for this system.")
         desc = shortdesc
 
-        super(ServiceLevelsCommand, self).__init__("service-levels", usage, shortdesc,
+        super(ServiceLevelCommand, self).__init__("service-level", usage, shortdesc,
                 desc, ent_dir=ent_dir, prod_dir=prod_dir)
+
+        self.parser.add_option("--show", dest="show", action='store_true',
+                help=_("show this system's current service level"))
 
         self.parser.add_option("--org", dest="org",
                 help=_("specify org for service level list"))
         self.parser.add_option("--list", dest="list", action='store_true',
                 help=_("list all service levels available"))
-        self.parser.add_option("--show", dest="show", action='store_true',
-                help=_("show this system's current service level"))
 
     def _validate_options(self):
 
@@ -616,7 +617,7 @@ class ServiceLevelsCommand(UserPassCommand):
         slas = self.cp.getServiceLevelList(org_key)
         if len(slas):
             print("+-------------------------------------------+")
-            print("               %s" % (_("Service Levels")))
+            print("          %s" % (_("Available Service Levels")))
             print("+-------------------------------------------+")
             for sla in slas:
                 print sla
@@ -1533,7 +1534,7 @@ class CLI:
         for clazz in [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand, SubscribeCommand,\
                        UnSubscribeCommand, FactsCommand, IdentityCommand, OwnersCommand, \
                        RefreshCommand, CleanCommand, RedeemCommand, ReposCommand, \
-                       EnvironmentsCommand, ImportCertCommand, ServiceLevelsCommand]:
+                       EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":
