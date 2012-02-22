@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.99.3
+Version: 0.99.4
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,11 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed Feb 22 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 0.99.4-1
+- Add support for updating consumer service level. (dgoodwin@redhat.com)
+- Add call to list service levels for an org. (dgoodwin@redhat.com)
+- Add GoneException for deleted consumers (jbowes@redhat.com)
+
 * Fri Jan 27 2012 Michael Stead <mstead@redhat.com> 0.99.3-1
 - 785247: Update releasers.conf for RHEL6.3 (mstead@redhat.com)
 - Stop building for F14. (dgoodwin@redhat.com)
