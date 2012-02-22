@@ -289,7 +289,14 @@ class Hardware:
             for info in ethtool.get_interfaces_info(ethtool.get_devices()):
                 for addr in info.get_ipv6_addresses():
                     for mkey in ipv6_metakeys:
-                        key = '.'.join(['net.interface', info.device, 'ipv6_%s' % (mkey), addr.scope])
+                        # ethtool returns a different scope for "public" IPv6 addresses
+                        # on different versions of RHEL.  EL5 is "global", while EL6 is
+                        # "universe".  Make them consistent.
+                        scope = addr.scope
+                        if scope == 'universe':
+                            scope = 'global'
+
+                        key = '.'.join(['net.interface', info.device, 'ipv6_%s' % (mkey), scope])
                         attr = getattr(addr, mkey)
                         if attr:
                             netinfdict[key] = attr
