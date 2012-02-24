@@ -52,6 +52,8 @@ from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
 
+NOT_REGISTERED = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
+
 # Translates the cert sorter status constants:
 STATUS_MAP = {
         FUTURE_SUBSCRIBED: _("Future Subscription"),
@@ -204,8 +206,8 @@ class CliCommand(object):
         pass
 
     def assert_should_be_registered(self):
-        if not ConsumerIdentity.exists():
-            print(_("Error: You need to register this system by running `register` command.  Try register --help."))
+        if not ConsumerIdentity.existsAndValid():
+            print(NOT_REGISTERED)
             sys.exit(-1)
 
     def require_connection(self):
@@ -387,9 +389,6 @@ class IdentityCommand(UserPassCommand):
 
     def _validate_options(self):
         self.assert_should_be_registered()
-        if not ConsumerIdentity.existsAndValid():
-            print(_("Error: You need to register this system by running `register` command.  Try register --help."))
-            sys.exit(-1)
         if self.options.force and not self.options.regenerate:
             print(_("--force can only be used with --regenerate"))
             sys.exit(-1)
@@ -1640,8 +1639,8 @@ def systemExit(code, msgs=None):
 
 
 def check_registration():
-    if not ConsumerIdentity.exists():
-        print(_("Error: You need to register this system by running `register` command.  Try register --help."))
+    if not ConsumerIdentity.existsAndValid():
+        print(NOT_REGISTERED)
         sys.exit(-1)
     consumer = ConsumerIdentity.read()
     consumer_info = {"consumer_name": consumer.getConsumerName(),
