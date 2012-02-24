@@ -1544,7 +1544,7 @@ class CLI:
 
     def _usage(self):
         print "\n"
-        print _("Usage: %s [options] MODULENAME --help") % os.path.basename(sys.argv[0])
+        print _("Usage: %s MODULENAME [MODULE-OPTIONS] [--help]") % os.path.basename(sys.argv[0])
         print "\n"
         print _("Primary Modules:")
         print "\r"
