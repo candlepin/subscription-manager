@@ -76,7 +76,7 @@ options_table = [
            help=_("Don't execute the autosubscribe option while registering with subscription manager.")),
 ]
 
-parser = OptionParser(option_list=options_table, usage="%s [--force|--cli-only|--help|--no-auto]" % sys.argv[0])
+parser = OptionParser(option_list=options_table, usage=_("%s [OPTIONS]") % sys.argv[0])
 (options, args) = parser.parse_args()
 
 # access the rhsm python libraries, read rhsm config file and setup logging
