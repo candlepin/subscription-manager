@@ -601,6 +601,19 @@ class UEPConnection:
 
         return self.conn.request_post(method)
 
+    def dryRunBind(self, consumer_uuid, service_level):
+        """
+        Performs a dry-run autobind on the server and returns the results of
+        what we would get. Callers can use this information to determine if
+        they wish to perform the autobind, and to explicitly grab entitlements
+        from each pool returned.
+
+        Return will be a dict containing a "quantity" and a "pool".
+        """
+        method = "/consumers/%s/entitlements/dry-run?service_level=%s" % \
+                (self.sanitize(consumer_uuid), self.sanitize(service_level))
+        return self.conn.request_get(method)
+
     def unbindBySerial(self, consumerId, serial):
         method = "/consumers/%s/certificates/%s" % (self.sanitize(consumerId), self.sanitize(str(serial)))
         return self.conn.request_delete(method)
