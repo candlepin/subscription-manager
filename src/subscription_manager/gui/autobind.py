@@ -25,12 +25,15 @@ _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
 
 from subscription_manager.cert_sorter import CertSorter
+from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import GladeWrapper
 from subscription_manager.gui.confirm_subs import ConfirmSubscriptionsScreen
 
 DATA_PREFIX = os.path.dirname(__file__)
 AUTOBIND_XML = GladeWrapper(os.path.join(DATA_PREFIX, "data/autobind.glade"))
 
+CONFIRM_SUBS = 0
+SELECT_SLA = 1
 
 class DryRunResult(object):
     """ Encapsulates a dry-run autobind result from the server. """
@@ -133,20 +136,76 @@ class AutobindWizard(object):
             log.debug(dry_run.covers_required_products())
 
     def _setup_screens(self):
-        self.screens = [
-                ConfirmSubscriptionsScreen(),
-        ]
+        self.screens = {
+                CONFIRM_SUBS: ConfirmSubscriptionsScreen(),
+                SELECT_SLA: SelectSLAScreen(),
+        }
         # TODO: this probably won't work, the screen flow is too conditional,
         # so we'll likely need to hard code the screens, and hook up logic
         # to the back button somehow
 
         # For each screen configured in this wizard, create a tab:
-        for screen in self.screens:
+        for screen in self.screens.values():
             widget = screen.get_main_widget()
             widget.unparent()
             widget.reparent(self.notebook)
             self.notebook.append_page(widget)
 
     def show(self):
+        self._load_initial_screen()
         self.main_window.show()
+
+    def _load_initial_screen(self):
+        available_sla = self._get_sla_data()
+
+        next_screen = SELECT_SLA
+        screen = self.screens[next_screen]
+        self.notebook.set_page(next_screen)
+        screen.load_data(available_sla)
+
+    def _get_sla_data(self):
+        owner = self.backend.uep.getOwner(self.consumer.getConsumerId())
+        if not owner:
+            return []
+
+        possible_slas = self.backend.uep.getServiceLevelList(owner['key'])
+        return possible_slas
+
+
+class SelectSLAScreen(widgets.GladeWidget):
+    """
+    An autobind wizard screen that displays the  available
+    SLAs that are provided by the installed products.
+    """
+
+    def __init__(self):
+        widget_names = [
+            'main_content',
+            'detection_label',
+            'detected_products_label',
+            'product_list_label',
+            'subscribe_all_as_label',
+            'sla_radio_container'
+        ]
+        super(SelectSLAScreen, self).__init__('selectsla.glade', widget_names)
+
+    def get_main_widget(self):
+        """
+        Returns the content wodget for this screen.
+        """
+        return self.main_content
+
+    def load_data(self, available_sla):
+        self._clear_buttons()
+        group = None
+        for sla in available_sla:
+            radio = gtk.RadioButton(group = group, label = sla)
+            self.sla_radio_container.pack_start(radio)
+            radio.show()
+            group = radio
+
+    def _clear_buttons(self):
+        child_widgets = self.sla_radio_container.get_children()
+        for child in child_widgets:
+            self.sla_radio_container.remove(child)
 
