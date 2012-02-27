@@ -35,9 +35,18 @@ class AutobindWizard:
     Autobind Wizard: Manages screenflow used in several places in the UI.
     """
 
-    def __init__(self, backend, facts=None):
+    def __init__(self, backend, consumer):
+        """
+        Create the Autobind wizard.
+
+        backend - A managergui.Backend object.
+        consumer - A managergui.Consumer object.
+        """
+        log.debug("Launching autobind wizard.")
         self.backend = backend
-        self.facts = facts
+        self.consumer = consumer
+        self.owner_key = self.backend.uep.getOwner(
+                self.consumer.getConsumerId())['key']
 
         signals = {
         }
@@ -48,6 +57,23 @@ class AutobindWizard:
         self.notebook = AUTOBIND_XML.get_widget("autobind_notebook")
 
         self._setup_screens()
+
+        self._find_suitable_service_levels()
+
+    def _find_suitable_service_levels(self):
+        # Figure out what screen to display initially:
+        # TODO: what if we already have an SLA selected?
+        # TODO: what if we have no installed products?
+        self.available_slas = self.backend.uep.getServiceLevelList(
+                self.owner_key)
+        log.debug("Available service levels: %s" % self.available_slas)
+        # Will map service level (string) to the results of the dry-run
+        # autobind results for each SLA that covers all installed products:
+        self.suitable_slas = {}
+        for sla in self.available_slas:
+            dry_run = self.backend.uep.dryRunBind(self.consumer.uuid,
+                    sla)
+            log.debug("Dry run results: %s" % dry_run)
 
     def _setup_screens(self):
         self.screens = [

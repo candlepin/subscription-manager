@@ -361,7 +361,7 @@ class MainWindow(widgets.GladeWidget):
         #self.subscription_assistant.set_parent_window(self._get_window())
         #self.subscription_assistant.show()
 
-        autobind_wizard = AutobindWizard(self.backend)
+        autobind_wizard = AutobindWizard(self.backend, self.consumer)
         autobind_wizard.show()
 
     def _redeem_button_clicked(self, widget):
