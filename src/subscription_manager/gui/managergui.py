@@ -45,10 +45,9 @@ from subscription_manager.gui.mysubstab import MySubscriptionsTab
 from subscription_manager.gui.allsubs import AllSubscriptionsTab
 from subscription_manager.gui.subscription_assistant import \
         SubscriptionAssistant
-from subscription_manager.gui.confirm_subs import \
-        ConfirmSubscriptions
 from subscription_manager.gui.importsub import ImportSubDialog
 from subscription_manager.gui.utils import handle_gui_exception, linkify
+from subscription_manager.gui.autobind import AutobindWizard
 
 import gettext
 _ = gettext.gettext
@@ -361,8 +360,9 @@ class MainWindow(widgets.GladeWidget):
     def _update_certificates_button_clicked(self, widget):
         #self.subscription_assistant.set_parent_window(self._get_window())
         #self.subscription_assistant.show()
-        confirm_subs = ConfirmSubscriptions()
-        confirm_subs.show()
+
+        autobind_wizard = AutobindWizard(self.backend)
+        autobind_wizard.show()
 
     def _redeem_button_clicked(self, widget):
         self.redeem_dialog.set_parent_window(self._get_window())

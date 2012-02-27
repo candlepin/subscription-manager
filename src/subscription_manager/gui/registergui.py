@@ -30,7 +30,8 @@ from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 
-from subscription_manager.gui.utils import handle_gui_exception, errorWindow, linkify
+from subscription_manager.gui.utils import handle_gui_exception, errorWindow, \
+        linkify, GladeWrapper
 
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
@@ -62,17 +63,6 @@ PROGRESS_PAGE = 1
 OWNER_SELECT_PAGE = 2
 ENVIRONMENT_SELECT_PAGE = 3
 
-
-class GladeWrapper(gtk.glade.XML):
-    def __init__(self, filename):
-        gtk.glade.XML.__init__(self, filename)
-
-    def get_widget(self, widget_name):
-        widget = gtk.glade.XML.get_widget(self, widget_name)
-        if widget is None:
-            print "ERROR: widget %s was not found" % widget_name
-            raise Exception("Widget %s not found" % widget_name)
-        return widget
 
 registration_xml = GladeWrapper(os.path.join(prefix,
     "data/registration.glade"))

@@ -24,16 +24,20 @@ _ = gettext.gettext
 log = logging.getLogger('rhsm-app.' + __name__)
 from subscription_manager.gui import widgets
 
-class ConfirmSubscriptions(widgets.GladeWidget):
+class ConfirmSubscriptionsScreen(widgets.GladeWidget):
 
     """ Confirm Subscriptions GUI Window """
     def __init__(self):
         widget_names = [
-                'window',
+                'confirm_subs_vbox',
                 'subs_treeview',
         ]
-        super(ConfirmSubscriptions,
+        super(ConfirmSubscriptionsScreen,
                 self).__init__('confirmsubs.glade', widget_names)
 
-    def show(self):
-        self.window.show()
+    def get_main_widget(self):
+        """
+        Returns the main widget to be shown in a wizard that is using
+        this screen.
+        """
+        return self.confirm_subs_vbox
