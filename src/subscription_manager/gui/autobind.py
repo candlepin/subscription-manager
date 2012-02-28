@@ -26,7 +26,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.gui import widgets
 from subscription_manager.managerlib import fetch_certificates
-from subscription_manager.gui.messageWindow import InfoDialog
+from subscription_manager.gui.messageWindow import InfoDialog, ErrorDialog
 
 # Define indexes for screens.
 CONFIRM_SUBS = 0
@@ -197,7 +197,6 @@ class AutobindWizard(widgets.GladeWidget):
 
         self._find_suitable_service_levels()
         self._load_initial_screen()
-        self.autobind_dialog.show()
 
     def destroy(self):
         self.autobind_dialog.destroy()
@@ -208,8 +207,13 @@ class AutobindWizard(widgets.GladeWidget):
         elif len(self.suitable_slas) > 1:
             self.show_select_sla()
         else:
-            # TODO: Show advanced or error message
             log.info("No suitable service levels found.")
+            ErrorDialog(_("No service levels will cover all installed products. "
+                "Please use the \"All Available Subscriptions\" tab to manually "
+                "entitle this system."))
+            self.destroy()
+            return
+        self.autobind_dialog.show()
 
     def show_confirm_subs(self, service_level):
         confirm_subs_screen = self.screens[CONFIRM_SUBS]
