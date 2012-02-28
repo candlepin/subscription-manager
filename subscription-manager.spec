@@ -1,6 +1,11 @@
 # Skip rhsm-icon on Fedora 15+ and RHEL 7+
 %define use_rhsm_icon (0%{?fedora} && 0%{?fedora} < 15) || (0%{?rhel} && 0%{?rhel} < 7)
 
+# A couple files are for RHEL 5 only:
+%if 0%{?rhel} == 5
+%define el5 1
+%endif
+
 Name: subscription-manager
 Version: 0.99.8
 Release: 1%{?dist}
@@ -246,13 +251,15 @@ rm -rf %{buildroot}
 %files -n subscription-manager-migration
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
+# Install num migration is only for RHEL 5:
 %{?el5:%attr(755,root,root) %{_sbindir}/install-num-migrate-to-rhsm}
 
 %doc
 %{_mandir}/man8/rhn-migrate-classic-to-rhsm.8*
+# Install num migration is only for RHEL 5:
 %{?el5:%{_mandir}/man8/install-num-migrate-to-rhsm.8*}
-#only install this file on Fedora
 %doc LICENSE
+#only install this file on Fedora
 %if 0%{?fedora} > 14
 %doc README.Fedora
 %endif
