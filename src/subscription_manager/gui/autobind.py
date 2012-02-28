@@ -26,6 +26,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.gui import widgets
 from subscription_manager.managerlib import fetch_certificates
+from subscription_manager.gui.messageWindow import InfoDialog
 
 # Define indexes for screens.
 CONFIRM_SUBS = 0
@@ -151,7 +152,6 @@ class AutobindWizard(widgets.GladeWidget):
         self.glade.signal_autoconnect(signals)
 
         self._setup_screens()
-        self._find_suitable_service_levels()
 
     def _find_suitable_service_levels(self):
         # Figure out what screen to display initially:
@@ -189,6 +189,13 @@ class AutobindWizard(widgets.GladeWidget):
             self.autobind_notebook.append_page(widget)
 
     def show(self):
+        if len(self.sorter.unentitled_products) == 0:
+            InfoDialog(_("All installed products are covered by valid entitlements. "
+                "No need to update certificates at this time."))
+            self.destroy()
+            return
+
+        self._find_suitable_service_levels()
         self._load_initial_screen()
         self.autobind_dialog.show()
 
