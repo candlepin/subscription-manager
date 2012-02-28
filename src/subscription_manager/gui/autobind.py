@@ -148,7 +148,7 @@ class AutobindWizard(object):
         for screen in self.screens.values():
             widget = screen.get_main_widget()
             widget.unparent()
-            widget.reparent(self.notebook)
+            widget.show()
             self.notebook.append_page(widget)
 
     def show(self):

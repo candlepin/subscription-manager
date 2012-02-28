@@ -27,16 +27,13 @@
             <property name="can_focus">True</property>
             <property name="show_tabs">False</property>
             <property name="show_border">False</property>
+            <property name="tab_vborder">0</property>
             <child>
               <placeholder/>
             </child>
             <child>
-              <widget class="GtkLabel" id="label1">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">page 1</property>
-              </widget>
+              <placeholder/>
               <packing>
-                <property name="tab_fill">False</property>
                 <property name="type">tab</property>
               </packing>
             </child>
@@ -44,13 +41,8 @@
               <placeholder/>
             </child>
             <child>
-              <widget class="GtkLabel" id="label2">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">page 2</property>
-              </widget>
+              <placeholder/>
               <packing>
-                <property name="position">1</property>
-                <property name="tab_fill">False</property>
                 <property name="type">tab</property>
               </packing>
             </child>
@@ -58,13 +50,8 @@
               <placeholder/>
             </child>
             <child>
-              <widget class="GtkLabel" id="label3">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">page 3</property>
-              </widget>
+              <placeholder/>
               <packing>
-                <property name="position">2</property>
-                <property name="tab_fill">False</property>
                 <property name="type">tab</property>
               </packing>
             </child>
@@ -72,13 +59,8 @@
               <placeholder/>
             </child>
             <child>
-              <widget class="GtkLabel" id="label6">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">page 4</property>
-              </widget>
+              <placeholder/>
               <packing>
-                <property name="position">3</property>
-                <property name="tab_fill">False</property>
                 <property name="type">tab</property>
               </packing>
             </child>
