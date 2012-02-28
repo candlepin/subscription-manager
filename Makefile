@@ -302,10 +302,12 @@ pyflakes:
 # and the variants of "redefination" we get now aren't really valid
 # and other tools detect the valid cases, so ignore these
 #
-	-@TMPFILE=`mktemp` || exit 1; \
+	@TMPFILE=`mktemp` || exit 1; \
 	pyflakes $(STYLEFILES) |  grep -v "redefinition of unused.*from line.*" | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
+pylint:
+	@PYTHONPATH="src/:/usr/share/rhn:../python-rhsm/src/:/usr/share/rhsm" pylint --rcfile=pylintrc $(STYLEFILES)
 
 tablint:
 	@! GREP_COLOR='7;31' grep --color -nP "^\W*\t" $(STYLEFILES)
@@ -313,20 +315,21 @@ tablint:
 trailinglint:
 	@! GREP_COLOR='7;31'  grep --color -nP "[ \t]$$" $(STYLEFILES)
 
+
 whitespacelint: tablint trailinglint
 
 gettext_lint:
-	-@TMPFILE=`mktemp` || exit 1; \
+	@TMPFILE=`mktemp` || exit 1; \
 	pcregrep -n --color=auto -M  "_\(.*[\'|\"].*[\'|\"]\s*\+\s*[\"|\'].*[\"|\'].*\)" $(STYLEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 pep8:
-	-@TMPFILE=`mktemp` || exit 1; \
+	@TMPFILE=`mktemp` || exit 1; \
 	pep8 --ignore E501 --exclude ".#*" --repeat src $(STYLEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 rpmlint:
-	-@TMPFILE=`mktemp` || exit 1; \
+	@TMPFILE=`mktemp` || exit 1; \
 	rpmlint -f rpmlint.config subscription-manager.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
