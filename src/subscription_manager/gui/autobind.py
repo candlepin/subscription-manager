@@ -25,6 +25,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.gui import widgets
+from subscription_manager.managerlib import fetch_certificates
 
 # Define indexes for screens.
 CONFIRM_SUBS = 0
@@ -191,6 +192,9 @@ class AutobindWizard(widgets.GladeWidget):
         self._load_initial_screen()
         self.autobind_dialog.show()
 
+    def destroy(self):
+        self.autobind_dialog.destroy()
+
     def _load_initial_screen(self):
         if len(self.suitable_slas) == 1:
             self.show_confirm_subs(self.suitable_slas.keys()[0])
@@ -260,6 +264,8 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
             log.info("  pool %s quantity %s" % (pool_id, quantity))
             self.backend.uep.bindByEntitlementPool(
                     self.consumer.getConsumerId(), pool_id, quantity)
+        fetch_certificates(self.backend)
+        self.wizard.destroy()
 
     def get_title(self):
         return _("Confirm Subscription(s)")
