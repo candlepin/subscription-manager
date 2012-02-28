@@ -358,10 +358,7 @@ class MainWindow(widgets.GladeWidget):
         self.import_sub_dialog.show()
 
     def _update_certificates_button_clicked(self, widget):
-        #self.subscription_assistant.set_parent_window(self._get_window())
-        #self.subscription_assistant.show()
-
-        autobind_wizard = AutobindWizard(self.backend, self.consumer)
+        autobind_wizard = AutobindWizard(self.backend, self.consumer, self.facts)
         autobind_wizard.show()
 
     def _redeem_button_clicked(self, widget):

@@ -24,18 +24,62 @@ _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
+from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.gui.utils import GladeWrapper
 from subscription_manager.gui.confirm_subs import ConfirmSubscriptionsScreen
 
 DATA_PREFIX = os.path.dirname(__file__)
 AUTOBIND_XML = GladeWrapper(os.path.join(DATA_PREFIX, "data/autobind.glade"))
 
-class AutobindWizard:
+
+class DryRunResult(object):
+    """ Encapsulates a dry-run autobind result from the server. """
+
+    def __init__(self, service_level, server_json, cert_sorter):
+        self.json = server_json
+        self.sorter = cert_sorter
+        self.service_level = service_level
+
+    def covers_required_products(self):
+        """
+        Return True if this dry-run result would cover all installed
+        products which are not covered by a valid entitlement.
+
+        NOTE: we do not require full stacking compliance here. The server
+        will return the best match it can find, but that may still leave you
+        only partially entitled. We will still consider this situation a valid
+        SLA to use, the key point being you have access to the content you
+        need.
+        """
+        required_products = set(self.sorter.unentitled_products.keys())
+
+        # The products that would be covered if we did this autobind:
+        autobind_products = set()
+
+        log.debug("Unentitled products: %s" % required_products)
+        for pool_quantity in self.json:
+            pool = pool_quantity['pool']
+            # This is usually the MKT product and has no content, but it
+            # doesn't hurt to include it:
+            autobind_products.add(pool['productId'])
+            for provided_prod in pool['providedProducts']:
+                autobind_products.add(provided_prod['productId'])
+        log.debug("Autobind would give access to: %s" % autobind_products)
+        if required_products.issubset(autobind_products):
+            log.debug("Found valid service level: %s" % self.service_level)
+            return True
+        else:
+            log.debug("Service level does not cover required products: %s" % \
+                    self.service_level)
+            return False
+
+
+class AutobindWizard(object):
     """
     Autobind Wizard: Manages screenflow used in several places in the UI.
     """
 
-    def __init__(self, backend, consumer):
+    def __init__(self, backend, consumer, facts):
         """
         Create the Autobind wizard.
 
@@ -45,8 +89,18 @@ class AutobindWizard:
         log.debug("Launching autobind wizard.")
         self.backend = backend
         self.consumer = consumer
+        self.facts = facts
+        self.prod_dir = self.backend.product_dir
+        self.ent_dir = self.backend.entitlement_dir
+
         self.owner_key = self.backend.uep.getOwner(
                 self.consumer.getConsumerId())['key']
+
+        # Using the current date time, we may need to expand this to work
+        # with arbitrary dates for future entitling someday:
+        # TODO: what if no products need entitlements?
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir,
+                self.facts.get_facts())
 
         signals = {
         }
@@ -63,7 +117,8 @@ class AutobindWizard:
     def _find_suitable_service_levels(self):
         # Figure out what screen to display initially:
         # TODO: what if we already have an SLA selected?
-        # TODO: what if we have no installed products?
+        # TODO: test no SLA's available
+        # TODO: test no results are returned for any SLA
         self.available_slas = self.backend.uep.getServiceLevelList(
                 self.owner_key)
         log.debug("Available service levels: %s" % self.available_slas)
@@ -71,9 +126,11 @@ class AutobindWizard:
         # autobind results for each SLA that covers all installed products:
         self.suitable_slas = {}
         for sla in self.available_slas:
-            dry_run = self.backend.uep.dryRunBind(self.consumer.uuid,
+            dry_run_json = self.backend.uep.dryRunBind(self.consumer.uuid,
                     sla)
-            log.debug("Dry run results: %s" % dry_run)
+            log.debug("Dry run results: %s" % dry_run_json)
+            dry_run = DryRunResult(sla, dry_run_json, self.sorter)
+            log.debug(dry_run.covers_required_products())
 
     def _setup_screens(self):
         self.screens = [
