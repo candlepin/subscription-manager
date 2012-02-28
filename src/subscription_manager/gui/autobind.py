@@ -145,12 +145,15 @@ class AutobindWizard(widgets.GladeWidget):
         self.prod_dir = self.backend.product_dir
         self.ent_dir = self.backend.entitlement_dir
 
-        self.owner_key = self.backend.uep.getOwner(
-                self.consumer.getConsumerId())['key']
+        consumer_json = self.backend.uep.getConsumer(
+                self.consumer.getConsumerId())
+        self.owner_key = consumer_json['owner']['key']
+
+        # This is often "", set to None in that case:
+        self.current_sla = consumer_json['serviceLevel'] or None
 
         # Using the current date time, we may need to expand this to work
         # with arbitrary dates for future entitling someday:
-        # TODO: what if no products need entitlements?
         self.sorter = CertSorter(self.prod_dir, self.ent_dir,
                 self.facts.get_facts())
 
@@ -166,23 +169,29 @@ class AutobindWizard(widgets.GladeWidget):
         self._setup_screens()
 
     def _find_suitable_service_levels(self):
-        # Figure out what screen to display initially:
-        # TODO: what if we already have an SLA selected?
-        # TODO: test no SLA's available
-        # TODO: test no results are returned for any SLA
-        self.available_slas = self.backend.uep.getServiceLevelList(
-                self.owner_key)
-        log.debug("Available service levels: %s" % self.available_slas)
+
+        if self.current_sla:
+            available_slas = [self.current_sla]
+            log.debug("Using system's current service level: %s" %
+                    self.current_sla)
+        else:
+            # TODO: test no SLA's available
+            available_slas = self.backend.uep.getServiceLevelList(
+                    self.owner_key)
+            log.debug("Available service levels: %s" % available_slas)
+
         # Will map service level (string) to the results of the dry-run
         # autobind results for each SLA that covers all installed products:
         self.suitable_slas = {}
-        for sla in self.available_slas:
+        for sla in available_slas:
             dry_run_json = self.backend.uep.dryRunBind(self.consumer.uuid,
                     sla)
             dry_run = DryRunResult(sla, dry_run_json, self.sorter)
-            log.debug(dry_run.covers_required_products())
 
-            if dry_run.covers_required_products():
+            # If we have a current SLA for this system, we do not need
+            # all products to be covered by the SLA to proceed through
+            # this wizard:
+            if self.current_sla or dry_run.covers_required_products():
                 self.suitable_slas[sla] = dry_run
 
     def _setup_screens(self):
@@ -215,6 +224,14 @@ class AutobindWizard(widgets.GladeWidget):
 
     def _load_initial_screen(self):
         if len(self.suitable_slas) == 1:
+            # If system already had a service level, we can hit this point
+            # when we cannot fix any unentitled products:
+            result = self.suitable_slas[self.suitable_slas.keys()[0]]
+            if len(result.json) == 0 and self.current_sla:
+                ErrorDialog(_("Unable to subscribe to any additional products at current service level: %s") %
+                        self.current_sla)
+                self.destroy()
+                return
             self.show_confirm_subs(self.suitable_slas.keys()[0], initial=True)
         elif len(self.suitable_slas) > 1:
             self.show_select_sla(initial=True)
@@ -322,6 +339,13 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         # Make sure that the store is cleared each time
         # the data is loaded into the screen.
         self.store.clear()
+        log.info("Using service level: %s" % dry_run_result.service_level)
+
+        if not self.wizard.current_sla:
+            log.info("Saving selected service level for this system.")
+            self.backend.uep.updateConsumer(self.consumer.getConsumerId(),
+                    service_level=dry_run_result.service_level)
+
         for pool_quantity in dry_run_result.json:
             self.store.append([pool_quantity['pool']['productName']])
 
