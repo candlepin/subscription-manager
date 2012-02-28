@@ -66,48 +66,53 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkHBox" id="hbox2">
+          <widget class="GtkHBox" id="button_box">
             <property name="visible">True</property>
+            <property name="spacing">4</property>
             <child>
-              <widget class="GtkButton" id="button1">
-                <property name="label" translatable="yes">Select Different Subscriptions</property>
+              <widget class="GtkHBox" id="button_spacer">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <child>
+                  <placeholder/>
+                </child>
               </widget>
               <packing>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
-              <widget class="GtkButton" id="button2">
+              <widget class="GtkButton" id="back_button">
                 <property name="label" translatable="yes">Back</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_back_button_clicked"/>
               </widget>
               <packing>
-                <property name="position">2</property>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="button3">
-                <property name="label" translatable="yes">Subscribe</property>
+              <widget class="GtkButton" id="forward_button">
+                <property name="label" translatable="yes">Forward</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_forward_button_clicked"/>
               </widget>
               <packing>
-                <property name="position">3</property>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="padding">5</property>
+            <property name="fill">False</property>
+            <property name="pack_type">end</property>
             <property name="position">3</property>
           </packing>
         </child>

@@ -72,6 +72,16 @@ class DryRunResult(object):
                     self.service_level)
             return False
 
+    def get_pool_quantities(self):
+        """
+        Returns a list of tuples, each of which is a pool ID and a quantity
+        to consume. Used when we actually decide to bind to this pool.
+        """
+        tuples = []
+        for pool_quantity in self.json:
+            tuples.append((pool_quantity['pool']['id'], pool_quantity['quantity']))
+        return tuples
+
 
 class AutobindWizardScreen(object):
     """
@@ -156,7 +166,6 @@ class AutobindWizard(widgets.GladeWidget):
         for sla in self.available_slas:
             dry_run_json = self.backend.uep.dryRunBind(self.consumer.uuid,
                     sla)
-            log.debug("Dry run results: %s" % dry_run_json)
             dry_run = DryRunResult(sla, dry_run_json, self.sorter)
             log.debug(dry_run.covers_required_products())
 
@@ -168,10 +177,6 @@ class AutobindWizard(widgets.GladeWidget):
                 CONFIRM_SUBS: ConfirmSubscriptionsScreen(self),
                 SELECT_SLA: SelectSLAScreen(self),
         }
-        # TODO: this probably won't work, the screen flow is too conditional,
-        # so we'll likely need to hard code the screens, and hook up logic
-        # to the back button somehow
-
         # For each screen configured in this wizard, create a tab:
         for screen in self.screens.values():
             if not isinstance(screen, AutobindWizardScreen):
@@ -193,7 +198,7 @@ class AutobindWizard(widgets.GladeWidget):
             self.show_select_sla()
         else:
             # TODO: Show advanced or error message
-            pass
+            log.info("No suitable service levels found.")
 
     def show_confirm_subs(self, service_level):
         confirm_subs_screen = self.screens[CONFIRM_SUBS]
@@ -219,9 +224,15 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         AutobindWizardScreen.__init__(self, wizard)
         widgets.GladeWidget.__init__(self, 'confirmsubs.glade', widget_names)
 
+        self.backend = wizard.backend
+        self.consumer = wizard.consumer
+
+        signals = {
+            'on_back_button_clicked': self._back,
+            'on_forward_button_clicked': self._forward,
+        }
+        self.glade.signal_autoconnect(signals)
         self.store = gtk.ListStore(str)
-        self.store.append(["Pool 1"])
-        self.store.append(["Pool 2"])
 
         # For now just going to set up one product name column, we will need
         # to display more information though.
@@ -235,9 +246,24 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         column.set_sort_column_id(0)
         self.subs_treeview.set_search_column(0)
 
-    def get_title(self):
+    def _back(self, button):
+        print("Back button pressed...")
+        pass
+        # TODO
 
+    def _forward(self, button):
+        log.info("Binding to subscriptions at service level: %s" %
+                self.dry_run_result.service_level)
+        for pool_quantity in self.dry_run_result.json:
+            pool_id = pool_quantity['pool']['id']
+            quantity = pool_quantity['quantity']
+            log.info("  pool %s quantity %s" % (pool_id, quantity))
+            self.backend.uep.bindByEntitlementPool(
+                    self.consumer.getConsumerId(), pool_id, quantity)
+
+    def get_title(self):
         return _("Confirm Subscription(s)")
+
     def get_main_widget(self):
         """
         Returns the main widget to be shown in a wizard that is using
@@ -246,8 +272,10 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         return self.confirm_subs_vbox
 
     def load_data(self, dry_run_result):
-        # TODO: Implement ME.
+        self.dry_run_result = dry_run_result
         print("Selected SLA is %s" % dry_run_result.service_level)
+        for pool_quantity in dry_run_result.json:
+            self.store.append([pool_quantity['pool']['productName']])
 
 
 class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
