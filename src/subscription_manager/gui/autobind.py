@@ -135,6 +135,9 @@ class AutobindWizard(object):
             dry_run = DryRunResult(sla, dry_run_json, self.sorter)
             log.debug(dry_run.covers_required_products())
 
+            if dry_run.covers_required_products():
+                self.suitable_slas[sla] = dry_run
+
     def _setup_screens(self):
         self.screens = {
                 CONFIRM_SUBS: ConfirmSubscriptionsScreen(),
@@ -156,20 +159,19 @@ class AutobindWizard(object):
         self.main_window.show()
 
     def _load_initial_screen(self):
-        available_sla = self._get_sla_data()
+        next_screen = None
+        if len(self.suitable_slas) == 1:
+            next_screen = CONFIRM_SUBS
+        elif len(self.suitable_slas) > 1:
+            next_screen = SELECT_SLA
 
-        next_screen = SELECT_SLA
-        screen = self.screens[next_screen]
-        self.notebook.set_page(next_screen)
-        screen.load_data(available_sla)
-
-    def _get_sla_data(self):
-        owner = self.backend.uep.getOwner(self.consumer.getConsumerId())
-        if not owner:
-            return []
-
-        possible_slas = self.backend.uep.getServiceLevelList(owner['key'])
-        return possible_slas
+        if next_screen == None:
+            # TODO Show advanced, or error message.
+            pass
+        else:
+            screen = self.screens[next_screen]
+            self.notebook.set_page(next_screen)
+            screen.load_data(self.suitable_slas)
 
 
 class SelectSLAScreen(widgets.GladeWidget):
@@ -195,10 +197,10 @@ class SelectSLAScreen(widgets.GladeWidget):
         """
         return self.main_content
 
-    def load_data(self, available_sla):
+    def load_data(self, sla_data_map):
         self._clear_buttons()
         group = None
-        for sla in available_sla:
+        for sla in sla_data_map:
             radio = gtk.RadioButton(group = group, label = sla)
             self.sla_radio_container.pack_start(radio)
             radio.show()

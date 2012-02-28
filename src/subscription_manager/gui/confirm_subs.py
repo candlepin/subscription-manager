@@ -41,3 +41,11 @@ class ConfirmSubscriptionsScreen(widgets.GladeWidget):
         this screen.
         """
         return self.confirm_subs_vbox
+
+    def load_data(self, sla_data_map):
+        """
+        Loads the data into this screen. sla_data_map is a map
+        of sla_name to DryRunResult objects.
+        """
+        # TODO: Implement ME.
+        pass
