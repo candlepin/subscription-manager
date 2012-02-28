@@ -84,8 +84,10 @@ class AutobindWizardScreen(object):
     to the wizard object itself.
     """
 
-    def __init__(self, screen_change_callback):
-        self.screen_change_callback = screen_change_callback
+    def __init__(self, wizard):
+        # Maintain a reference to the parent wizard so we can reliably switch
+        # to other screens and pass data along:
+        self.wizard = wizard
 
     def get_title(self):
         """
@@ -100,13 +102,6 @@ class AutobindWizardScreen(object):
         content inside a parent window object, and return the first child.
         """
         raise NotImplementedError("Screen object must implement: get_main_widget()")
-
-    def load_data(self, sla_data_map, *args, **kwargs):
-        """
-        Loads the data into this screen. sla_data_map is a map
-        of sla_name to DryRunResult objects.
-        """
-        raise NotImplementedError("Screen object must implement: load_data(sla_data_map)")
 
 
 class AutobindWizard(object):
@@ -172,8 +167,8 @@ class AutobindWizard(object):
 
     def _setup_screens(self):
         self.screens = {
-                CONFIRM_SUBS: ConfirmSubscriptionsScreen(self.change_screen),
-                SELECT_SLA: SelectSLAScreen(self.change_screen),
+                CONFIRM_SUBS: ConfirmSubscriptionsScreen(self),
+                SELECT_SLA: SelectSLAScreen(self),
         }
         # TODO: this probably won't work, the screen flow is too conditional,
         # so we'll likely need to hard code the screens, and hook up logic
@@ -196,44 +191,56 @@ class AutobindWizard(object):
     def _load_initial_screen(self):
         next_screen = None
         if len(self.suitable_slas) == 1:
-            next_screen = CONFIRM_SUBS
+            self.show_confirm_subs(self.suitable_slas.keys()[0])
         elif len(self.suitable_slas) > 1:
-            next_screen = SELECT_SLA
-
-        if next_screen == None:
-            # TODO Show advanced, or error message.
-            pass
+            self.show_select_sla()
         else:
-            self._show_screen(next_screen)
+            # TODO: Show advanced or error message
+            pass
 
-    def _show_screen(self, screen_idx, *args, **kwargs):
-        if not screen_idx in self.screens:
-            log.debug("AutobindWizard: Could not display screen at %d" % screen_idx)
-            return
+    def show_confirm_subs(self, service_level):
+        confirm_subs_screen = self.screens[CONFIRM_SUBS]
+        self.notebook.set_current_page(CONFIRM_SUBS)
+        self.main_window.set_title(confirm_subs_screen.get_title())
+        confirm_subs_screen.load_data(self.suitable_slas[service_level])
 
-        screen = self.screens[screen_idx]
-        self.main_window.set_title(screen.get_title())
-        self.notebook.set_page(screen_idx)
-        screen.load_data(self.suitable_slas, *args, **kwargs)
-
-    def change_screen(self, screen_idx, *args, **kwargs):
-        self._show_screen(screen_idx, *args, **kwargs)
+    def show_select_sla(self):
+        select_sla_screen = self.screens[SELECT_SLA]
+        self.notebook.set_current_page(SELECT_SLA)
+        self.main_window.set_title(select_sla_screen.get_title())
+        select_sla_screen.load_data(self.suitable_slas)
 
 
 class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
 
     """ Confirm Subscriptions GUI Window """
-    def __init__(self, screen_change_callback):
+    def __init__(self, wizard):
         widget_names = [
                 'confirm_subs_vbox',
                 'subs_treeview',
         ]
-        AutobindWizardScreen.__init__(self, screen_change_callback)
+        AutobindWizardScreen.__init__(self, wizard)
         widgets.GladeWidget.__init__(self, 'confirmsubs.glade', widget_names)
 
-    def get_title(self):
-        return _("Confirm Subscription(s)")
+        self.store = gtk.ListStore(str)
+        self.store.append(["Pool 1"])
+        self.store.append(["Pool 2"])
 
+        # For now just going to set up one product name column, we will need
+        # to display more information though.
+        self.subs_treeview.set_model(self.store)
+        column = gtk.TreeViewColumn(_("Subscription"))
+        self.subs_treeview.append_column(column)
+        # create a CellRendererText to render the data
+        self.cell = gtk.CellRendererText()
+        column.pack_start(self.cell, True)
+        column.add_attribute(self.cell, 'text', 0)
+        column.set_sort_column_id(0)
+        self.subs_treeview.set_search_column(0)
+
+    def get_title(self):
+
+        return _("Confirm Subscription(s)")
     def get_main_widget(self):
         """
         Returns the main widget to be shown in a wizard that is using
@@ -241,9 +248,9 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         """
         return self.confirm_subs_vbox
 
-    def load_data(self, sla_data_map, selected=None):
+    def load_data(self, dry_run_result):
         # TODO: Implement ME.
-        print "Selected SLA is %s" % selected
+        print("Selected SLA is %s" % dry_run_result.service_level)
 
 
 class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
@@ -252,7 +259,7 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
     SLAs that are provided by the installed products.
     """
 
-    def __init__(self, screen_change_callback):
+    def __init__(self, wizard):
         widget_names = [
             'main_content',
             'detection_label',
@@ -262,7 +269,7 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
             'sla_radio_container'
         ]
 
-        AutobindWizardScreen.__init__(self, screen_change_callback)
+        AutobindWizardScreen.__init__(self, wizard)
         widgets.GladeWidget.__init__(self, 'selectsla.glade', widget_names)
 
         signals = {
@@ -276,7 +283,7 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
 
     def get_main_widget(self):
         """
-        Returns the content wodget for this screen.
+        Returns the content widget for this screen.
         """
         return self.main_content
 
@@ -293,7 +300,7 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
         pass
 
     def _forward(self, button):
-        self.screen_change_callback(CONFIRM_SUBS, selected="Standard")
+        self.wizard.show_confirm_subs("Standard")
 
     def _clear_buttons(self):
         child_widgets = self.sla_radio_container.get_children()
