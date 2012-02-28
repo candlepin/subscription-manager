@@ -27,13 +27,13 @@ log = logging.getLogger('rhsm-app.' + __name__)
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import GladeWrapper
-from subscription_manager.gui.confirm_subs import ConfirmSubscriptionsScreen
 
 DATA_PREFIX = os.path.dirname(__file__)
 AUTOBIND_XML = GladeWrapper(os.path.join(DATA_PREFIX, "data/autobind.glade"))
 
 CONFIRM_SUBS = 0
 SELECT_SLA = 1
+
 
 class DryRunResult(object):
     """ Encapsulates a dry-run autobind result from the server. """
@@ -75,6 +75,29 @@ class DryRunResult(object):
             log.debug("Service level does not cover required products: %s" % \
                     self.service_level)
             return False
+
+
+class AutobindWizardScreen(object):
+    """
+    An object representing a screen that can be displayed by the
+    AutobindWizard. Its primary purpose is to define an interface
+    to the wizard object itself.
+    """
+
+    def get_main_widget(self):
+        """
+        Returns the widget that contains the main content of the screen.
+        Since we use glade to design our screens, we create our screen
+        content inside a parent window object, and return the first child.
+        """
+        raise NotImplementedError("Object must implement: get_main_widget()")
+
+    def load_data(self, sla_data_map):
+        """
+        Loads the data into this screen. sla_data_map is a map
+        of sla_name to DryRunResult objects.
+        """
+        raise NotImplementedError("Object must implement: load_data(sla_data_map)")
 
 
 class AutobindWizard(object):
@@ -149,6 +172,9 @@ class AutobindWizard(object):
 
         # For each screen configured in this wizard, create a tab:
         for screen in self.screens.values():
+            if not isinstance(screen, AutobindWizardScreen):
+                raise RuntimeError("AutobindWizard screens must implement type" + \
+                                   "AutobindWizardScreen")
             widget = screen.get_main_widget()
             widget.unparent()
             widget.show()
@@ -174,7 +200,30 @@ class AutobindWizard(object):
             screen.load_data(self.suitable_slas)
 
 
-class SelectSLAScreen(widgets.GladeWidget):
+class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
+
+    """ Confirm Subscriptions GUI Window """
+    def __init__(self):
+        widget_names = [
+                'confirm_subs_vbox',
+                'subs_treeview',
+        ]
+        super(ConfirmSubscriptionsScreen,
+                self).__init__('confirmsubs.glade', widget_names)
+
+    def get_main_widget(self):
+        """
+        Returns the main widget to be shown in a wizard that is using
+        this screen.
+        """
+        return self.confirm_subs_vbox
+
+    def load_data(self, sla_data_map):
+        # TODO: Implement ME.
+        pass
+
+
+class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
     """
     An autobind wizard screen that displays the  available
     SLAs that are provided by the installed products.
