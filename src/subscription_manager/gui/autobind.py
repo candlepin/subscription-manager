@@ -87,20 +87,26 @@ class AutobindWizardScreen(object):
     def __init__(self, screen_change_callback):
         self.screen_change_callback = screen_change_callback
 
+    def get_title(self):
+        """
+        Gets the title for this screen.
+        """
+        raise NotImplementedError("Screen object must implement: get_title()")
+
     def get_main_widget(self):
         """
         Returns the widget that contains the main content of the screen.
         Since we use glade to design our screens, we create our screen
         content inside a parent window object, and return the first child.
         """
-        raise NotImplementedError("Object must implement: get_main_widget()")
+        raise NotImplementedError("Screen object must implement: get_main_widget()")
 
     def load_data(self, sla_data_map, *args, **kwargs):
         """
         Loads the data into this screen. sla_data_map is a map
         of sla_name to DryRunResult objects.
         """
-        raise NotImplementedError("Object must implement: load_data(sla_data_map)")
+        raise NotImplementedError("Screen object must implement: load_data(sla_data_map)")
 
 
 class AutobindWizard(object):
@@ -206,6 +212,7 @@ class AutobindWizard(object):
             return
 
         screen = self.screens[screen_idx]
+        self.main_window.set_title(screen.get_title())
         self.notebook.set_page(screen_idx)
         screen.load_data(self.suitable_slas, *args, **kwargs)
 
@@ -223,6 +230,9 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         ]
         AutobindWizardScreen.__init__(self, screen_change_callback)
         widgets.GladeWidget.__init__(self, 'confirmsubs.glade', widget_names)
+
+    def get_title(self):
+        return _("Confirm Subscription(s)")
 
     def get_main_widget(self):
         """
@@ -260,6 +270,9 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
             'on_forward_button_clicked': self._forward,
         }
         self.glade.signal_autoconnect(signals)
+
+    def get_title(self):
+        return _("Select Service Level Agreement")
 
     def get_main_widget(self):
         """
