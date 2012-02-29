@@ -311,6 +311,11 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         self.wizard.previous_screen()
 
     def _forward(self, button):
+        if not self.wizard.current_sla:
+            log.info("Saving selected service level for this system.")
+            self.backend.uep.updateConsumer(self.consumer.getConsumerId(),
+                    service_level=self.dry_run_result.service_level)
+
         log.info("Binding to subscriptions at service level: %s" %
                 self.dry_run_result.service_level)
         for pool_quantity in self.dry_run_result.json:
@@ -339,11 +344,6 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         # the data is loaded into the screen.
         self.store.clear()
         log.info("Using service level: %s" % dry_run_result.service_level)
-
-        if not self.wizard.current_sla:
-            log.info("Saving selected service level for this system.")
-            self.backend.uep.updateConsumer(self.consumer.getConsumerId(),
-                    service_level=dry_run_result.service_level)
 
         for pool_quantity in dry_run_result.json:
             self.store.append([pool_quantity['pool']['productName']])
