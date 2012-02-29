@@ -15,7 +15,6 @@
 # in this software or its documentation.
 #
 
-import os
 import gtk
 import logging
 
@@ -26,11 +25,8 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.gui import widgets
-from subscription_manager.gui.utils import GladeWrapper
 
-DATA_PREFIX = os.path.dirname(__file__)
-AUTOBIND_XML = GladeWrapper(os.path.join(DATA_PREFIX, "data/autobind.glade"))
-
+# Define indexes for screens.
 CONFIRM_SUBS = 0
 SELECT_SLA = 1
 
@@ -104,7 +100,7 @@ class AutobindWizardScreen(object):
         raise NotImplementedError("Screen object must implement: get_main_widget()")
 
 
-class AutobindWizard(object):
+class AutobindWizard(widgets.GladeWidget):
     """
     Autobind Wizard: Manages screenflow used in several places in the UI.
     """
@@ -117,6 +113,13 @@ class AutobindWizard(object):
         consumer - A managergui.Consumer object.
         """
         log.debug("Launching autobind wizard.")
+
+        widget_names = [
+                'autobind_dialog',
+                'autobind_notebook',
+        ]
+        widgets.GladeWidget.__init__(self, "autobind.glade", widget_names)
+
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
@@ -134,14 +137,9 @@ class AutobindWizard(object):
 
         signals = {
         }
-
-        AUTOBIND_XML.signal_autoconnect(signals)
-        self.main_window = AUTOBIND_XML.get_widget("autobind_dialog")
-        self.main_window.set_title(_("Subscribe System"))
-        self.notebook = AUTOBIND_XML.get_widget("autobind_notebook")
+        self.glade.signal_autoconnect(signals)
 
         self._setup_screens()
-
         self._find_suitable_service_levels()
 
     def _find_suitable_service_levels(self):
@@ -182,14 +180,13 @@ class AutobindWizard(object):
             widget = screen.get_main_widget()
             widget.unparent()
             widget.show()
-            self.notebook.append_page(widget)
+            self.autobind_notebook.append_page(widget)
 
     def show(self):
         self._load_initial_screen()
-        self.main_window.show()
+        self.autobind_dialog.show()
 
     def _load_initial_screen(self):
-        next_screen = None
         if len(self.suitable_slas) == 1:
             self.show_confirm_subs(self.suitable_slas.keys()[0])
         elif len(self.suitable_slas) > 1:
@@ -200,14 +197,14 @@ class AutobindWizard(object):
 
     def show_confirm_subs(self, service_level):
         confirm_subs_screen = self.screens[CONFIRM_SUBS]
-        self.notebook.set_current_page(CONFIRM_SUBS)
-        self.main_window.set_title(confirm_subs_screen.get_title())
+        self.autobind_notebook.set_current_page(CONFIRM_SUBS)
+        self.autobind_dialog.set_title(confirm_subs_screen.get_title())
         confirm_subs_screen.load_data(self.suitable_slas[service_level])
 
     def show_select_sla(self):
         select_sla_screen = self.screens[SELECT_SLA]
-        self.notebook.set_current_page(SELECT_SLA)
-        self.main_window.set_title(select_sla_screen.get_title())
+        self.autobind_notebook.set_current_page(SELECT_SLA)
+        self.autobind_dialog.set_title(select_sla_screen.get_title())
         select_sla_screen.load_data(self.suitable_slas)
 
 
