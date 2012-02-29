@@ -175,7 +175,6 @@ class AutobindWizard(widgets.GladeWidget):
             log.debug("Using system's current service level: %s" %
                     self.current_sla)
         else:
-            # TODO: test no SLA's available
             available_slas = self.backend.uep.getServiceLevelList(
                     self.owner_key)
             log.debug("Available service levels: %s" % available_slas)
@@ -365,10 +364,7 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
     def __init__(self, wizard):
         widget_names = [
             'main_content',
-            'detection_label',
-            'detected_products_label',
             'product_list_label',
-            'subscribe_all_as_label',
             'sla_radio_container',
             'back_button',
         ]
@@ -381,10 +377,6 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
             'on_forward_button_clicked': self._forward,
         }
         self.glade.signal_autoconnect(signals)
-
-        self.detected_products_label.set_label("<b>%s:</b>" % _("Detected products"))
-        self.subscribe_all_as_label.set_label("<b>%s:</b>" % \
-                                              _("Subscribe all detected Products as"))
 
     def get_title(self):
         return _("Select Service Level Agreement")

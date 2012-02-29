@@ -7,10 +7,12 @@
       <widget class="GtkVBox" id="confirm_subs_vbox">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
         <child>
           <widget class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="xalign">0</property>
+            <property name="xpad">10</property>
             <property name="label" translatable="yes">You will be subscribed to:</property>
           </widget>
           <packing>
@@ -57,6 +59,7 @@
           <widget class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="xalign">0</property>
+            <property name="xpad">10</property>
             <property name="label" translatable="yes">Core repositories will be enabled for each product.</property>
           </widget>
           <packing>
@@ -68,7 +71,7 @@
         <child>
           <widget class="GtkHBox" id="button_box">
             <property name="visible">True</property>
-            <property name="spacing">4</property>
+            <property name="spacing">3</property>
             <child>
               <widget class="GtkHBox" id="button_spacer">
                 <property name="visible">True</property>

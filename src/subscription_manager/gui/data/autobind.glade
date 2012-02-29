@@ -3,12 +3,13 @@
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="autobind_dialog">
+    <property name="width_request">500</property>
+    <property name="height_request">375</property>
     <property name="can_focus">True</property>
     <property name="title" translatable="yes">Autobind Start</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
-    <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <child>
       <widget class="GtkNotebook" id="autobind_notebook">
