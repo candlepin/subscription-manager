@@ -214,7 +214,8 @@ class AutobindWizard(widgets.GladeWidget):
         select_sla_screen = self.screens[SELECT_SLA]
         self.autobind_notebook.set_current_page(SELECT_SLA)
         self.autobind_dialog.set_title(select_sla_screen.get_title())
-        select_sla_screen.load_data(self.suitable_slas)
+        select_sla_screen.load_data(set(self.sorter.unentitled_products.values()),
+                                    self.suitable_slas)
 
 
 class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
@@ -318,7 +319,8 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
         """
         return self.main_content
 
-    def load_data(self, sla_data_map):
+    def load_data(self, unentitled_prod_certs, sla_data_map):
+        self.product_list_label.set_text(self._format_prods(unentitled_prod_certs))
         self._clear_buttons()
         group = None
         for sla in sla_data_map:
@@ -345,4 +347,15 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
     def _radio_clicked(self, button, sla):
         if button.get_active():
             self.selected_sla = sla
+
+    def _format_prods(self, prod_certs):
+        prod_str = ""
+        for i, cert in enumerate(prod_certs):
+            log.debug(cert)
+            prod_str = "%s%s" % (prod_str, cert.getProduct().getName())
+            if i + 1 < len(prod_certs):
+                prod_str += ", "
+        return prod_str
+
+
 
