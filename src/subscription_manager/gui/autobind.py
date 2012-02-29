@@ -111,6 +111,13 @@ class AutobindWizardScreen(object):
         """
         raise NotImplementedError("Screen object must implement: get_main_widget()")
 
+    def set_initial(self, is_initial):
+        """
+        Sets this screen as the initial screen that was loaded by the wizard.
+        This method is meant to change the appearance of the screen, such as
+        widget states.
+        """
+        raise NotImplementedError("Screen object must implement: set_initial(bool)")
 
 class AutobindWizard(widgets.GladeWidget):
     """
@@ -151,6 +158,11 @@ class AutobindWizard(widgets.GladeWidget):
         }
         self.glade.signal_autoconnect(signals)
 
+        # The screen display stack keeps track of screen indexes as we progress
+        # through the wizard. A screen's index will be placed on the stack once
+        # it has been displayed. NOTE: Showing the initial screen of the wizard
+        # does not put anything on the stack.
+        self.screen_display_stack = []
         self._setup_screens()
 
     def _find_suitable_service_levels(self):
@@ -203,9 +215,9 @@ class AutobindWizard(widgets.GladeWidget):
 
     def _load_initial_screen(self):
         if len(self.suitable_slas) == 1:
-            self.show_confirm_subs(self.suitable_slas.keys()[0])
+            self.show_confirm_subs(self.suitable_slas.keys()[0], initial=True)
         elif len(self.suitable_slas) > 1:
-            self.show_select_sla()
+            self.show_select_sla(initial=True)
         else:
             log.info("No suitable service levels found.")
             ErrorDialog(_("No service levels will cover all installed products. "
@@ -215,18 +227,34 @@ class AutobindWizard(widgets.GladeWidget):
             return
         self.autobind_dialog.show()
 
-    def show_confirm_subs(self, service_level):
-        confirm_subs_screen = self.screens[CONFIRM_SUBS]
-        self.autobind_notebook.set_current_page(CONFIRM_SUBS)
-        self.autobind_dialog.set_title(confirm_subs_screen.get_title())
+    def show_confirm_subs(self, service_level, initial=False):
+        confirm_subs_screen = self._show_screen(CONFIRM_SUBS, initial)
         confirm_subs_screen.load_data(self.suitable_slas[service_level])
 
-    def show_select_sla(self):
-        select_sla_screen = self.screens[SELECT_SLA]
-        self.autobind_notebook.set_current_page(SELECT_SLA)
-        self.autobind_dialog.set_title(select_sla_screen.get_title())
+    def show_select_sla(self, initial=False):
+        select_sla_screen = self._show_screen(SELECT_SLA, initial)
         select_sla_screen.load_data(set(self.sorter.unentitled_products.values()),
                                     self.suitable_slas)
+
+    def _show_screen(self, screen_idx, initial):
+        # Do not put the initial page on the stack as the stack should be empty
+        # for the first page shown.
+        if not initial:
+            self.screen_display_stack.append(self.autobind_notebook.get_current_page())
+
+        screen = self.screens[screen_idx]
+        screen.set_initial(initial)
+        self.autobind_notebook.set_current_page(screen_idx)
+        self.autobind_dialog.set_title(screen.get_title())
+        return screen
+
+    def previous_screen(self):
+        if len(self.screen_display_stack) == 0:
+            raise RuntimeError("No screens available on wizard screen stack.")
+
+        previous_screen_idx = self.screen_display_stack.pop()
+        initial = len(self.screen_display_stack) == 0
+        self._show_screen(previous_screen_idx, initial)
 
 
 class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
@@ -236,6 +264,7 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         widget_names = [
                 'confirm_subs_vbox',
                 'subs_treeview',
+                'back_button',
         ]
         AutobindWizardScreen.__init__(self, wizard)
         widgets.GladeWidget.__init__(self, 'confirmsubs.glade', widget_names)
@@ -263,9 +292,7 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         self.subs_treeview.set_search_column(0)
 
     def _back(self, button):
-        print("Back button pressed...")
-        pass
-        # TODO
+        self.wizard.previous_screen()
 
     def _forward(self, button):
         log.info("Binding to subscriptions at service level: %s" %
@@ -291,9 +318,18 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
 
     def load_data(self, dry_run_result):
         self.dry_run_result = dry_run_result
-        print("Selected SLA is %s" % dry_run_result.service_level)
+
+        # Make sure that the store is cleared each time
+        # the data is loaded into the screen.
+        self.store.clear()
         for pool_quantity in dry_run_result.json:
             self.store.append([pool_quantity['pool']['productName']])
+
+    def set_initial(self, is_initial):
+        if is_initial:
+            self.back_button.hide()
+        else:
+            self.back_button.show()
 
 
 class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
@@ -309,7 +345,8 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
             'detected_products_label',
             'product_list_label',
             'subscribe_all_as_label',
-            'sla_radio_container'
+            'sla_radio_container',
+            'back_button',
         ]
 
         AutobindWizardScreen.__init__(self, wizard)
@@ -368,5 +405,8 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
                 prod_str += ", "
         return prod_str
 
-
-
+    def set_initial(self, is_initial):
+        if is_initial:
+            self.back_button.hide()
+        else:
+            self.back_button.show()
