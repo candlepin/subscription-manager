@@ -84,13 +84,17 @@ class Facts(CacheManager):
 
         return len(diff) > 0
 
-    def get_facts(self):
-        facts = {}
-        facts.update(self._load_hw_facts())
-        facts.update(self._load_custom_facts())
-        facts.update(self._get_validity_facts(facts))
-        self.facts = facts
+    def get_facts(self, refresh=False):
+        if ((len(self.facts) == 0) or refresh):
+            facts = {}
+            facts.update(self._load_hw_facts())
+            facts.update(self._load_custom_facts())
+            facts.update(self._get_validity_facts(facts))
+            self.facts = facts
         return self.facts
+
+    def refresh_validity_facts(self):
+        self.facts.update(self._get_validity_facts(self.facts))
 
     def to_dict(self):
         return self.get_facts()

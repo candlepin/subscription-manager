@@ -379,7 +379,7 @@ class StubBackend:
 
 
 class StubFacts(object):
-    def __init__(self, fact_dict, facts_changed=True):
+    def __init__(self, fact_dict={}, facts_changed=True):
         self.facts = fact_dict
 
         self.delta_values = {}
@@ -387,11 +387,17 @@ class StubFacts(object):
         if facts_changed:
             self.delta_values = self.facts
 
-    def get_facts(self):
+    def get_facts(self, refresh=True):
         return self.facts
+
+    def refresh_validity_facts(self):
+        pass
 
     def has_changed(self):
         return self.delta_values
 
     def update_check(self, uep, consumer_uuid, force=False):
         uep.updateConsumerFacts(consumer_uuid, self.facts)
+
+    def get_last_update(self):
+        return None

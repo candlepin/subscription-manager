@@ -334,8 +334,9 @@ class Hardware:
                 virt_dict['virt.is_guest'] = False
                 virt_dict['virt.host_type'] = "Not Applicable"
         # TODO:  Should this only catch OSErrors?
-        except:
+        except Exception, e:
             # Otherwise there was an error running virt-what - who knows
+            log.exception(e)
             virt_dict['virt.is_guest'] = 'Unknown'
 
         # xen dom0 is a guest for virt-what's purposes, but is a host for

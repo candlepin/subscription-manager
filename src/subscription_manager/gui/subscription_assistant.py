@@ -646,4 +646,5 @@ class SubscriptionAssistant(widgets.GladeWidget):
                 handle_gui_exception(e, _("Error getting subscription: %s"))
 
         managerlib.fetch_certificates(self.backend)
+        self.facts.refresh_validity_facts()
         self._reload_screen()

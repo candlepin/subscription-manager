@@ -142,6 +142,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.top_view.expand_all()
         dbus_iface = get_dbus_iface()
         dbus_iface.check_status(ignore_reply=True)
+        self.facts.refresh_validity_facts()
 
     def _add_group(self, group_idx, group):
         iter = None

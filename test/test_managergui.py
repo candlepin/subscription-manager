@@ -23,23 +23,15 @@ class StubConsumer:
         pass
 
 
-class StubFacts:
-    def __init__(self):
-        pass
-
-    def get_facts(self):
-        return {}
-
-
 class TestManagerGuiMainWindow(unittest.TestCase):
     def test_main_window(self):
         managergui.ConsumerIdentity = stubs.StubConsumerIdentity
         managergui.Backend = stubs.StubBackend
         managergui.Consumer = StubConsumer
-        managergui.Facts = StubFacts
+        managergui.Facts = stubs.StubFacts()
 
         managergui.MainWindow(backend=stubs.StubBackend(), consumer=StubConsumer(),
-                              facts=StubFacts(),
+                              facts=stubs.StubFacts(),
                               ent_dir=stubs.StubCertificateDirectory([]),
                               prod_dir=stubs.StubProductDirectory([]))
 

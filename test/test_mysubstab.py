@@ -15,7 +15,7 @@
 import unittest
 import datetime
 from mock import Mock
-from stubs import StubUEP, StubEntitlementCertificate, StubCertificateDirectory, StubProduct, StubBackend
+from stubs import StubUEP, StubEntitlementCertificate, StubCertificateDirectory, StubProduct, StubBackend, StubFacts
 from subscription_manager.gui.mysubstab import MySubscriptionsTab
 
 class MySubscriptionsTabTest(unittest.TestCase):
@@ -24,6 +24,7 @@ class MySubscriptionsTabTest(unittest.TestCase):
         self.uep = StubUEP
         self.backend = StubBackend()
         self.consumer = Mock()
+        self.facts = StubFacts({})
 
         self.cert1 = StubEntitlementCertificate(
             StubProduct('product2'),
@@ -63,7 +64,7 @@ class MySubscriptionsTabTest(unittest.TestCase):
             column_entries.append(entry);
 
         # Test that the data from a subscription is loaded into the store.
-        my_subs_tab = MySubscriptionsTab(self.backend, self.consumer, {},
+        my_subs_tab = MySubscriptionsTab(self.backend, self.consumer, self.facts,
                 None, self.cert_dir)
         my_subs_tab.store.add_map = collect_entries
         my_subs_tab.update_subscriptions();

@@ -1,7 +1,7 @@
 import sys
 import unittest
 
-from stubs import MockStderr, MockStdout, StubUEP
+from stubs import MockStderr, MockStdout, StubUEP, StubFacts
 from subscription_manager.gui import factsgui, managergui
 from mock import Mock
 
@@ -15,18 +15,8 @@ class FactDialogTests(unittest.TestCase):
                           'system': 'Unknown',
                           'system.uuid': 'MOCKUUID'}
 
-        class StubFacts:
-            def get_facts(self):
-                return expected_facts
-
-            def get_last_update(self):
-                return None
-
-            def find_facts(self):
-                return expected_facts
-
         self.expected_facts = expected_facts
-        self.stub_facts = StubFacts()
+        self.stub_facts = StubFacts(expected_facts)
 
         self.uep = StubUEP()
 
