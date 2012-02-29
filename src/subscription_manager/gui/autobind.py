@@ -95,7 +95,7 @@ class AutobindWizardScreen(object):
         """
         raise NotImplementedError("Object must implement: get_main_widget()")
 
-    def load_data(self, sla_data_map):
+    def load_data(self, sla_data_map, *args, **kwargs):
         """
         Loads the data into this screen. sla_data_map is a map
         of sla_name to DryRunResult objects.
@@ -200,17 +200,17 @@ class AutobindWizard(object):
         else:
             self._show_screen(next_screen)
 
-    def _show_screen(self, screen_idx):
+    def _show_screen(self, screen_idx, *args, **kwargs):
         if not screen_idx in self.screens:
             log.debug("AutobindWizard: Could not display screen at %d" % screen_idx)
             return
 
         screen = self.screens[screen_idx]
         self.notebook.set_page(screen_idx)
-        screen.load_data(self.suitable_slas)
+        screen.load_data(self.suitable_slas, *args, **kwargs)
 
-    def change_screen(self, screen_idx):
-        self._show_screen(screen_idx)
+    def change_screen(self, screen_idx, *args, **kwargs):
+        self._show_screen(screen_idx, *args, **kwargs)
 
 
 class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
@@ -231,9 +231,9 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         """
         return self.confirm_subs_vbox
 
-    def load_data(self, sla_data_map):
+    def load_data(self, sla_data_map, selected=None):
         # TODO: Implement ME.
-        pass
+        print "Selected SLA is %s" % selected
 
 
 class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
@@ -280,7 +280,7 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
         pass
 
     def _forward(self, button):
-        self.screen_change_callback(CONFIRM_SUBS)
+        self.screen_change_callback(CONFIRM_SUBS, selected="Standard")
 
     def _clear_buttons(self):
         child_widgets = self.sla_radio_container.get_children()
