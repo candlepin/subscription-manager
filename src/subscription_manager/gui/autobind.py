@@ -289,18 +289,26 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
         group = None
         for sla in sla_data_map:
             radio = gtk.RadioButton(group = group, label = sla)
-            self.sla_radio_container.pack_start(radio)
+            radio.connect("toggled", self._radio_clicked, sla)
+            self.sla_radio_container.pack_end(radio)
             radio.show()
             group = radio
+
+        # set the initial radio button as default selection.
+        group.set_active(True)
 
     def _back(self, button):
         pass
 
     def _forward(self, button):
-        self.wizard.show_confirm_subs("Standard")
+        self.wizard.show_confirm_subs(self.selected_sla)
 
     def _clear_buttons(self):
         child_widgets = self.sla_radio_container.get_children()
         for child in child_widgets:
             self.sla_radio_container.remove(child)
+
+    def _radio_clicked(self, button, sla):
+        if button.get_active():
+            self.selected_sla = sla
 
