@@ -84,6 +84,9 @@ class AutobindWizardScreen(object):
     to the wizard object itself.
     """
 
+    def __init__(self, screen_change_callback):
+        self.screen_change_callback = screen_change_callback
+
     def get_main_widget(self):
         """
         Returns the widget that contains the main content of the screen.
@@ -163,8 +166,8 @@ class AutobindWizard(object):
 
     def _setup_screens(self):
         self.screens = {
-                CONFIRM_SUBS: ConfirmSubscriptionsScreen(),
-                SELECT_SLA: SelectSLAScreen(),
+                CONFIRM_SUBS: ConfirmSubscriptionsScreen(self.change_screen),
+                SELECT_SLA: SelectSLAScreen(self.change_screen),
         }
         # TODO: this probably won't work, the screen flow is too conditional,
         # so we'll likely need to hard code the screens, and hook up logic
@@ -195,21 +198,27 @@ class AutobindWizard(object):
             # TODO Show advanced, or error message.
             pass
         else:
-            screen = self.screens[next_screen]
-            self.notebook.set_page(next_screen)
-            screen.load_data(self.suitable_slas)
+            self._show_screen(next_screen)
+
+    def _show_screen(self, screen_idx):
+        screen = self.screens[screen_idx]
+        self.notebook.set_page(screen_idx)
+        screen.load_data(self.suitable_slas)
+
+    def change_screen(self, screen_idx):
+        self._show_screen(screen_idx)
 
 
 class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
 
     """ Confirm Subscriptions GUI Window """
-    def __init__(self):
+    def __init__(self, screen_change_callback):
         widget_names = [
                 'confirm_subs_vbox',
                 'subs_treeview',
         ]
-        super(ConfirmSubscriptionsScreen,
-                self).__init__('confirmsubs.glade', widget_names)
+        AutobindWizardScreen.__init__(self, screen_change_callback)
+        widgets.GladeWidget.__init__(self, 'confirmsubs.glade', widget_names)
 
     def get_main_widget(self):
         """
@@ -229,7 +238,7 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
     SLAs that are provided by the installed products.
     """
 
-    def __init__(self):
+    def __init__(self, screen_change_callback):
         widget_names = [
             'main_content',
             'detection_label',
@@ -238,7 +247,8 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
             'subscribe_all_as_label',
             'sla_radio_container'
         ]
-        super(SelectSLAScreen, self).__init__('selectsla.glade', widget_names)
+        AutobindWizardScreen.__init__(self, screen_change_callback)
+        widgets.GladeWidget.__init__(self, 'selectsla.glade', widget_names)
 
     def get_main_widget(self):
         """
