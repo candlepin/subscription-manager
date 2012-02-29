@@ -409,7 +409,7 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
         for sla in sla_data_map:
             radio = gtk.RadioButton(group = group, label = sla)
             radio.connect("toggled", self._radio_clicked, sla)
-            self.sla_radio_container.pack_end(radio)
+            self.sla_radio_container.pack_end(radio, expand=True, fill=True)
             radio.show()
             group = radio
 
