@@ -117,6 +117,7 @@ want them assigned.</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_back_button_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -130,6 +131,7 @@ want them assigned.</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_forward_button_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>

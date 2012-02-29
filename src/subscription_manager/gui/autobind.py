@@ -201,6 +201,10 @@ class AutobindWizard(object):
             self._show_screen(next_screen)
 
     def _show_screen(self, screen_idx):
+        if not screen_idx in self.screens:
+            log.debug("AutobindWizard: Could not display screen at %d" % screen_idx)
+            return
+
         screen = self.screens[screen_idx]
         self.notebook.set_page(screen_idx)
         screen.load_data(self.suitable_slas)
@@ -247,8 +251,15 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
             'subscribe_all_as_label',
             'sla_radio_container'
         ]
+
         AutobindWizardScreen.__init__(self, screen_change_callback)
         widgets.GladeWidget.__init__(self, 'selectsla.glade', widget_names)
+
+        signals = {
+            'on_back_button_clicked': self._back,
+            'on_forward_button_clicked': self._forward,
+        }
+        self.glade.signal_autoconnect(signals)
 
     def get_main_widget(self):
         """
@@ -264,6 +275,12 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
             self.sla_radio_container.pack_start(radio)
             radio.show()
             group = radio
+
+    def _back(self, button):
+        pass
+
+    def _forward(self, button):
+        self.screen_change_callback(CONFIRM_SUBS)
 
     def _clear_buttons(self):
         child_widgets = self.sla_radio_container.get_children()
