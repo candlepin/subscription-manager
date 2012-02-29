@@ -30,7 +30,7 @@ class TestSubDetailsWidget(unittest.TestCase):
         pass
 
     def testVirtOnly(self):
-        d = datetime.now()
+        d = datetime(2011, 4, 16, tzinfo=LocalTz())
         start_date = datetime(d.year, d.month, d.day, tzinfo=LocalTz())
         end_date = datetime(d.year+1, d.month, d.day, tzinfo=LocalTz())
         details = SubDetailsWidget(show_contract=True)
@@ -42,7 +42,7 @@ class TestSubDetailsWidget(unittest.TestCase):
         self.assertEquals(details.virt_only_text.get_buffer().get_text(s_iter, e_iter), 'v_o')
 
     def testNoneForStacking(self):
-        d = datetime.now()
+        d = datetime(2011, 4, 16, tzinfo=LocalTz())
         start_date = datetime(d.year, d.month, d.day, tzinfo=LocalTz())
         end_date = datetime(d.year+1, d.month, d.day, tzinfo=LocalTz())
         details = SubDetailsWidget(show_contract=True)
