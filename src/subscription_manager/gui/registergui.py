@@ -30,7 +30,7 @@ from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 
-from subscription_manager.gui.utils import handle_gui_exception, errorWindow, linkify
+from subscription_manager.gui.utils import handle_gui_exception, errorWindow
 
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
@@ -133,7 +133,7 @@ class RegisterScreen:
 
         register_tip_label = registration_xml.get_widget("registrationTip")
         register_tip_label.set_label("<small>%s</small>" % \
-                linkify(get_branding().GUI_FORGOT_LOGIN_TIP))
+                get_branding().GUI_FORGOT_LOGIN_TIP)
 
         register_header_label = \
                 registration_xml.get_widget("registrationHeader")
