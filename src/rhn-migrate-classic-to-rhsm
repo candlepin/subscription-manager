@@ -129,9 +129,9 @@ def checkOkToProceed(username, password):
 
     try:
         cp.getOwnerList(username)
-    except RestlibException:
+    except Exception, e:
+        log.fatal(e)
         systemExit(1, _("Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for more details."))
-
 
 def getSubscribedChannelsList():
     try:
