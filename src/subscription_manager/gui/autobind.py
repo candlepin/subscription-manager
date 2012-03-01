@@ -358,6 +358,10 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
         }
         self.glade.signal_autoconnect(signals)
 
+        self.detected_products_label.set_label("<b>%s:</b>" % _("Detected products"))
+        self.subscribe_all_as_label.set_label("<b>%s:</b>" % \
+                                              _("Subscribe all detected Products as"))
+
     def get_title(self):
         return _("Select Service Level Agreement")
 
