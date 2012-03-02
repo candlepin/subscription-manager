@@ -267,6 +267,7 @@ class MainWindow(widgets.GladeWidget):
         if self.registered():
             autobind_wizard = AutobindWizard(self.backend, self.consumer, self.facts,
                                              self._on_sla_back_button_press)
+            autobind_wizard.set_parent_window(self._get_window())
             autobind_wizard.show()
             return
 
@@ -373,6 +374,7 @@ class MainWindow(widgets.GladeWidget):
 
     def _update_certificates_button_clicked(self, widget):
         autobind_wizard = AutobindWizard(self.backend, self.consumer, self.facts)
+        autobind_wizard.set_parent_window(self._get_window())
         autobind_wizard.show()
 
     def _redeem_button_clicked(self, widget):

@@ -136,6 +136,7 @@ class AutobindWizard(widgets.GladeWidget):
         widget_names = [
                 'autobind_dialog',
                 'autobind_notebook',
+                'screen_label'
         ]
         widgets.GladeWidget.__init__(self, "autobind.glade", widget_names)
 
@@ -173,6 +174,9 @@ class AutobindWizard(widgets.GladeWidget):
         # does not put anything on the stack.
         self.screen_display_stack = []
         self._setup_screens()
+
+    def set_parent_window(self, parent):
+        self.autobind_dialog.set_transient_for(parent)
 
     def _find_suitable_service_levels(self):
 
@@ -267,7 +271,7 @@ class AutobindWizard(widgets.GladeWidget):
         screen = self.screens[screen_idx]
         screen.set_initial(initial)
         self.autobind_notebook.set_current_page(screen_idx)
-        self.autobind_dialog.set_title(screen.get_title())
+        self.screen_label.set_label("<b>%s</b>" % screen.get_title())
         return screen
 
     def previous_screen(self):
