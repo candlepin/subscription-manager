@@ -67,6 +67,9 @@ Requires: dbus-x11
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
 
+# Fedora can figure this out automatically, but RHEL cannot:
+Requires: librsvg2
+
 %description -n subscription-manager-gnome
 This package contains a GTK+ graphical interface for configuring and
 registering a system with a Red Hat Entitlement platform and manage
@@ -78,6 +81,10 @@ Group: System Environment/Base
 Requires: %{name}-gnome = %{version}-%{release}
 %{?el5:Requires: rhn-setup-gnome >= 0.4.20-49}
 %{?el6:Requires: rhn-setup-gnome >= 1.0.0-39}
+
+# Fedora can figure this out automatically, but RHEL cannot:
+Requires: librsvg2
+
 
 %description -n subscription-manager-firstboot
 This package contains the firstboot screens for subscription manager.
