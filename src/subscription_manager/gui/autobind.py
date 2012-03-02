@@ -124,7 +124,7 @@ class AutobindWizard(widgets.GladeWidget):
     Autobind Wizard: Manages screenflow used in several places in the UI.
     """
 
-    def __init__(self, backend, consumer, facts):
+    def __init__(self, backend, consumer, facts, initial_screen_back_callback=None):
         """
         Create the Autobind wizard.
 
@@ -144,6 +144,12 @@ class AutobindWizard(widgets.GladeWidget):
         self.facts = facts
         self.prod_dir = self.backend.product_dir
         self.ent_dir = self.backend.entitlement_dir
+
+        # This signifies that the wizard is embedded by another. The
+        # callback will be executed when the back button is clicked
+        # on the initial screen.
+        self.initial_screen_back_callback = initial_screen_back_callback
+        self.embedded = self.initial_screen_back_callback != None
 
         consumer_json = self.backend.uep.getConsumer(
                 self.consumer.getConsumerId())
@@ -266,6 +272,11 @@ class AutobindWizard(widgets.GladeWidget):
 
     def previous_screen(self):
         if len(self.screen_display_stack) == 0:
+            if self.embedded:
+                self.destroy()
+                self.initial_screen_back_callback()
+                return
+            # If not embedded, we should have not be able to click back.
             raise RuntimeError("No screens available on wizard screen stack.")
 
         previous_screen_idx = self.screen_display_stack.pop()
@@ -349,7 +360,7 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
             self.store.append([pool_quantity['pool']['productName']])
 
     def set_initial(self, is_initial):
-        if is_initial:
+        if is_initial and not self.wizard.embedded:
             self.back_button.hide()
         else:
             self.back_button.show()
@@ -402,7 +413,7 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
         group.set_active(True)
 
     def _back(self, button):
-        pass
+        self.wizard.previous_screen()
 
     def _forward(self, button):
         self.wizard.show_confirm_subs(self.selected_sla)
@@ -426,7 +437,7 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
         return prod_str
 
     def set_initial(self, is_initial):
-        if is_initial:
+        if is_initial and not self.wizard.embedded:
             self.back_button.hide()
         else:
             self.back_button.show()

@@ -256,8 +256,19 @@ class MainWindow(widgets.GladeWidget):
     def registered(self):
         return ConsumerIdentity.existsAndValid()
 
+    def _on_sla_back_button_press(self):
+        self._perform_unregister()
+        self._register_button_clicked(None)
+
     def registration_changed(self):
         log.debug("Registration changed, updating main window.")
+        self.consumer.reload()
+        # If we are now registered, load the Autobind wizard.
+        if self.registered():
+            autobind_wizard = AutobindWizard(self.backend, self.consumer, self.facts,
+                                             self._on_sla_back_button_press)
+            autobind_wizard.show()
+            return
 
         self.refresh()
 
@@ -325,6 +336,9 @@ class MainWindow(widgets.GladeWidget):
             log.info("unregistrater not confirmed. cancelling")
             return
         log.info("Proceeding with un-registration: %s", self.consumer.uuid)
+        self._perform_unregister()
+
+    def _perform_unregister(self):
         try:
             managerlib.unregister(self.backend.uep, self.consumer.uuid)
         except Exception, e:
