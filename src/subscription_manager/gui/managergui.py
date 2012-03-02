@@ -267,8 +267,15 @@ class MainWindow(widgets.GladeWidget):
         if self.registered():
             autobind_wizard = AutobindWizard(self.backend, self.consumer, self.facts,
                                              self._on_sla_back_button_press)
-            autobind_wizard.set_parent_window(self._get_window())
-            autobind_wizard.show()
+            try:
+                autobind_wizard.set_parent_window(self._get_window())
+                autobind_wizard.show()
+            except Exception, e:
+                # If an exception occurs here, refresh the UI so that
+                # it remains in the correct state an then raise the
+                # exception again.
+                self.refresh()
+                raise e
             return
 
         self.refresh()
