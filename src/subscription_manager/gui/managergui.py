@@ -48,6 +48,7 @@ from subscription_manager.gui.subscription_assistant import \
 from subscription_manager.gui.importsub import ImportSubDialog
 from subscription_manager.gui.utils import handle_gui_exception, linkify
 from subscription_manager.gui.autobind import AutobindWizard
+from subscription_manager.gui.preferences import PreferencesDialog
 
 import gettext
 _ = gettext.gettext
@@ -190,6 +191,8 @@ class MainWindow(widgets.GladeWidget):
                 self.consumer, self.facts,
                 callbacks=[self.registration_changed])
 
+        self.preferences_dialog = PreferencesDialog()
+
         self.import_sub_dialog = ImportSubDialog()
 
         self.subscription_assistant = SubscriptionAssistant(self.backend,
@@ -239,6 +242,7 @@ class MainWindow(widgets.GladeWidget):
                 self._network_config_button_clicked,
             "on_redeem_button_clicked": self._redeem_button_clicked,
             "on_help_button_clicked": self._help_button_clicked,
+            "on_preferences_button_clicked": self._preferences_button_clicked,
         })
 
         def on_identity_change(filemonitor):
@@ -338,6 +342,9 @@ class MainWindow(widgets.GladeWidget):
     def _register_button_clicked(self, widget):
         self.registration_dialog.set_parent_window(self._get_window())
         self.registration_dialog.show()
+
+    def _preferences_button_clicked(self, widget):
+        self.preferences_dialog.show()
 
     def _on_unregister_prompt_response(self, dialog, response):
         if not response:
