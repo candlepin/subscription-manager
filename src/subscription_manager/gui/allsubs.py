@@ -298,18 +298,19 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         Reload the subscriptions from the server when the Search button
         is clicked.
         """
-        if self.date_picker._date_entry_validate():
-            try:
-                async_stash = async.AsyncPool(self.pool_stash)
-                async_stash.refresh(self.date_picker.date, self._update_display)
-                # show pulsating progress bar while we wait for results
-                self.pb = progress.Progress(
-                        _("Searching for subscriptions. Please wait."))
-                self.timer = gobject.timeout_add(100, self.pb.pulse)
-                self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
-            except Exception, e:
-                handle_gui_exception(e, _("Error fetching subscriptions from server:  %s"),
-                        self.parent_win)
+        if not self.date_picker.date_entry_validate():
+            return
+        try:
+            async_stash = async.AsyncPool(self.pool_stash)
+            async_stash.refresh(self.date_picker.date, self._update_display)
+            # show pulsating progress bar while we wait for results
+            self.pb = progress.Progress(
+                    _("Searching for subscriptions. Please wait."))
+            self.timer = gobject.timeout_add(100, self.pb.pulse)
+            self.pb.set_parent_window(self.content.get_parent_window().get_user_data())
+        except Exception, e:
+            handle_gui_exception(e, _("Error fetching subscriptions from server:  %s"),
+                    self.parent_win)
 
     def _update_display(self, data, error):
         if self.pb:
