@@ -401,8 +401,6 @@ class DatePicker(gtk.HBox):
         self.connect('date-picked-cal', self._date_update_cal)
         self.connect('date-picked-text', self._date_update_text)
 
-        self._validator_sig_handler = self._date_entry.connect('focus-out-event', self._date_entry_validate)
-
         self._calendar = gtk.Calendar()
 
         self.show()
@@ -416,42 +414,58 @@ class DatePicker(gtk.HBox):
         # started or ended today.
         return utils.make_today_now(self._date)
 
-    def _date_entry_validate(self, widget, dummy):
+    def _date_entry_validate(self):
         """
-        validate the date, pop up a box and then re-focus on date if not valid
+        validate the date and pop up a box if not valid
+        Note that this returns a bool, but the underlying call to
+        _date_validate will either set self._date, or throw ValueError
         """
-        today = datetime.date.today()
         try:
-            # doing it this ugly way for pre python 2.5
-            # wrap this in locale setting so we can potentially set the
-            # date format to one we know we can parse
+            self._date_validate(self._date_entry.get_text())
+            self.emit('date-picked-text')
+            return True
+        except ValueError:
+            today = datetime.date.today()
+            error_dialog = messageWindow.ErrorDialog(messageWindow.wrap_text(
+                                "%s %s" % (_("Invalid date format. Please re-enter a valid date. Example: "), today.strftime('%x'))))
+            self._date_entry.set_text(today.strftime('%x'))
+            return False
+
+    def _date_validate(self, date_str):
+        # doing it this ugly way for pre python 2.5
+        # wrap this in locale setting so we can potentially set the
+        # date format to one we know we can parse
+        try:
             locale.setlocale(locale.LC_TIME, self.date_picker_locale)
             date = datetime.datetime(
-                    *(time.strptime(self._date_entry.get_text(), '%x')[0:6]))
+                    *(time.strptime(date_str, '%x')[0:6]))
             locale.setlocale(locale.LC_ALL, '')
             self._date = datetime.datetime(date.year, date.month, date.day,
                     tzinfo=managerlib.LocalTz())
-            self.emit('date-picked-text')
         except ValueError:
-            self._date_entry.handler_block(self._validator_sig_handler)  # this sig handler gets unmuted in date_entry_box_grab_focus.
-            error_dialog = messageWindow.ErrorDialog(messageWindow.wrap_text(
-                                "%s %s" % (_("Invalid date format. Please re-enter a valid date. Example: "), today.strftime('%x'))))
-            self._date_entry.set_text(self._date.strftime('%x'))
-            error_dialog.connect('response', self._date_entry_box_grab_focus)
+            # the caller needs to handle this
+            raise
 
     def _date_entry_box_grab_focus(self, dummy2=None, dummy3=None):
         self._date_entry.grab_focus()
-        self._date_entry.handler_unblock(self._validator_sig_handler)
 
     def _date_update_cal(self, dummy=None):
-        #set the text box to the date from the calendar
+        # set the text box to the date from the calendar
         # but check to see what local we want the text in
         locale.setlocale(locale.LC_TIME, self.date_picker_locale)
         self._date_entry.set_text(self._date.strftime("%x"))
         locale.setlocale(locale.LC_ALL, '')
 
     def _date_update_text(self, dummy=None):
-        #set the cal to the date from the text box
+        # set the cal to the date from the text box, and set self._date
+
+        try:
+            self._date_validate(self._date_entry.get_text())
+        except ValueError:
+            today = datetime.date.today()
+            self._date = datetime.datetime(today.year, today.month, today.day,
+                tzinfo=managerlib.LocalTz())
+
         self._calendar.select_month(self._date.month - 1, self._date.year)
         self._calendar.select_day(self._date.day)
 
