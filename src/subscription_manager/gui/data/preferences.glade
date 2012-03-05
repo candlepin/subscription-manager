@@ -43,6 +43,7 @@
               <widget class="GtkComboBox" id="sla_combobox">
                 <property name="visible">True</property>
                 <property name="items" translatable="yes"></property>
+                <signal name="changed" handler="on_sla_combobox_changed"/>
               </widget>
               <packing>
                 <property name="position">1</property>
@@ -55,7 +56,18 @@
           </packing>
         </child>
         <child>
-          <placeholder/>
+          <widget class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">&lt;small&gt;Your system's SLA preference is followed when subscribing to new products&lt;/small&gt;</property>
+            <property name="use_markup">True</property>
+            <property name="wrap">True</property>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">3</property>
+          </packing>
         </child>
         <child internal-child="action_area">
           <widget class="GtkHButtonBox" id="dialog-action_area6">
