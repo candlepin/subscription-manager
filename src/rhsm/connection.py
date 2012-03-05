@@ -505,7 +505,7 @@ class UEPConnection:
         # The server will reject a service level that is not available
         # in the consumer's organization, so no need to check if it's safe
         # here:
-        if service_level:
+        if service_level is not None:
             params['serviceLevel'] = service_level
 
         method = "/consumers/%s" % self.sanitize(uuid)
