@@ -530,7 +530,7 @@ class EnvironmentsCommand(UserPassCommand):
 class ServiceLevelCommand(UserPassCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog service-level [OPTIONS]"
+        usage = "usage: %prog service-levels [OPTIONS]"
         shortdesc = _("Manage service levels for this system.")
         desc = shortdesc
 
