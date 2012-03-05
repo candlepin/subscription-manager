@@ -97,6 +97,21 @@ class AutobindWizardScreen(object):
         # to other screens and pass data along:
         self.wizard = wizard
 
+        # Each of these screens is expected to have a cancel button we can
+        # use to callback to the wizard and destroy the window:
+        self.widgets = [
+                'cancel_button',
+        ]
+        self.signals = {
+                'on_cancel_button_clicked': self._cancel,
+        }
+
+    def _cancel(self, button):
+        """
+        Cancel button on every screen calls back to the parent wizard.
+        """
+        self.wizard.destroy()
+
     def get_title(self):
         """
         Gets the title for this screen.
@@ -292,22 +307,22 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
 
     """ Confirm Subscriptions GUI Window """
     def __init__(self, wizard):
-        widget_names = [
+        AutobindWizardScreen.__init__(self, wizard)
+
+        self.widgets.extend([
                 'confirm_subs_vbox',
                 'subs_treeview',
                 'back_button',
-        ]
-        AutobindWizardScreen.__init__(self, wizard)
-        widgets.GladeWidget.__init__(self, 'confirmsubs.glade', widget_names)
+        ])
+        widgets.GladeWidget.__init__(self, 'confirmsubs.glade', self.widgets)
 
         self.backend = wizard.backend
         self.consumer = wizard.consumer
 
-        signals = {
-            'on_back_button_clicked': self._back,
-            'on_forward_button_clicked': self._forward,
-        }
-        self.glade.signal_autoconnect(signals)
+        self.signals['on_back_button_clicked'] = self._back
+        self.signals['on_forward_button_clicked'] = self._forward
+
+        self.glade.signal_autoconnect(self.signals)
         self.store = gtk.ListStore(str)
 
         # For now just going to set up one product name column, we will need
@@ -377,21 +392,21 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
     """
 
     def __init__(self, wizard):
-        widget_names = [
+        AutobindWizardScreen.__init__(self, wizard)
+
+        self.widgets.extend([
             'main_content',
             'product_list_label',
             'sla_radio_container',
             'back_button',
-        ]
+        ])
 
-        AutobindWizardScreen.__init__(self, wizard)
-        widgets.GladeWidget.__init__(self, 'selectsla.glade', widget_names)
+        widgets.GladeWidget.__init__(self, 'selectsla.glade', self.widgets)
 
-        signals = {
-            'on_back_button_clicked': self._back,
-            'on_forward_button_clicked': self._forward,
-        }
-        self.glade.signal_autoconnect(signals)
+        self.signals['on_back_button_clicked'] = self._back
+        self.signals['on_forward_button_clicked'] = self._forward
+
+        self.glade.signal_autoconnect(self.signals)
 
     def get_title(self):
         return _("Select Service Level Agreement")
