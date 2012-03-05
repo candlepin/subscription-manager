@@ -97,7 +97,7 @@ class RegisterScreen:
         self.uname = registration_xml.get_widget("account_login")
         self.passwd = registration_xml.get_widget("account_password")
         self.consumer_name = registration_xml.get_widget("consumer_name")
-        self.autobind = registration_xml.get_widget("auto_bind")
+        self.skip_auto_bind = registration_xml.get_widget("skip_auto_bind")
 
         self.register_notebook = \
                 registration_xml.get_widget("register_notebook")
@@ -131,15 +131,16 @@ class RegisterScreen:
                 get_branding().GUI_REGISTRATION_HEADER)
 
     def show(self):
+        # Ensure that we start on the first page and that
+        # all widgets are cleared.
+        self.register_notebook.set_page(CREDENTIALS_PAGE)
+        self._clear_registration_widgets()
         self.registerWin.present()
 
     def delete_event(self, event, data=None):
         return self.close_window()
 
     def cancel(self, button):
-        # On cancellation, reset back to the credentials page.
-        self.register_notebook.set_page(CREDENTIALS_PAGE)
-        self._clear_registration_widgets()
         self.close_window()
 
     def initializeConsumerName(self):
@@ -290,35 +291,35 @@ class RegisterScreen:
 
             managerlib.persist_consumer_cert(new_account)
             self.consumer.reload()
-            # reload CP instance with new ssl certs
-            if self.auto_subscribe():
-                self._set_register_details_label(_("Autosubscribing"))
-                # try to auomatically bind products
-                self.async.bind_by_products(self.consumer.uuid,
-                        self._on_bind_by_products_cb)
-            else:
-                self._finish_registration()
+#            # reload CP instance with new ssl certs
+#            if self.auto_subscribe():
+#                self._set_register_details_label(_("Autosubscribing"))
+#                # try to auomatically bind products
+#                self.async.bind_by_products(self.consumer.uuid,
+#                        self._on_bind_by_products_cb)
+#            else:
+            self._finish_registration()
 
         except Exception, e:
             handle_gui_exception(e, constants.REGISTER_ERROR, self.registerWin)
             self._finish_registration(failed=True)
 
-    def _on_bind_by_products_cb(self, error=None):
-        if error:
-            log.exception(error)
-            log.warning("Unable to autosubscribe.")
-        else:
-            log.info("Autosubscribe complete.")
+#    def _on_bind_by_products_cb(self, error=None):
+#        if error:
+#            log.exception(error)
+#            log.warning("Unable to autosubscribe.")
+#        else:
+#            log.info("Autosubscribe complete.")
+#
+#        self._set_register_details_label("Fetching certificates")
+#        self.async.fetch_certificates(self._on_fetch_certificates_cb)
 
-        self._set_register_details_label("Fetching certificates")
-        self.async.fetch_certificates(self._on_fetch_certificates_cb)
-
-    def _on_fetch_certificates_cb(self, error=None):
-        failed = False
-        if error:
-            handle_gui_exception(error, constants.REGISTER_ERROR, self.registerWin)
-            failed = True
-        self._finish_registration(failed=failed)
+#    def _on_fetch_certificates_cb(self, error=None):
+#        failed = False
+#        if error:
+#            handle_gui_exception(error, constants.REGISTER_ERROR, self.registerWin)
+#            failed = True
+#        self._finish_registration(failed=failed)
 
     def _finish_registration(self, failed=False):
         # failed is used by the firstboot subclasses to decide if they should
@@ -338,14 +339,14 @@ class RegisterScreen:
 
     def emit_consumer_signal(self):
         for method in self.callbacks:
-            method()
+            method(skip_auto_bind=self.skip_auto_subscribe())
 
     def close_window(self):
         self.registerWin.hide()
         return True
 
-    def auto_subscribe(self):
-        return self.autobind.get_active()
+    def skip_auto_subscribe(self):
+        return self.skip_auto_bind.get_active()
 
     def validate_consumername(self, consumername):
         if not consumername:
@@ -378,7 +379,7 @@ class RegisterScreen:
         self.passwd.set_text("")
         self.consumer_name.set_text("")
         self.initializeConsumerName()
-        self.autobind.set_active(False)
+        self.skip_auto_bind.set_active(False)
 
     def _show_credentials_page(self):
         self.register_notebook.set_page(CREDENTIALS_PAGE)
