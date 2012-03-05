@@ -74,16 +74,22 @@ class CertManager:
             # Certlib inherits DataLib as well as the above 'lib' objects,
             # but for some reason it's update method returns a tuple instead
             # of an int:
-            ret = self.certlib.update()
-
+            ret = []
+            try:
+                ret = self.certlib.update()
+            except Exception, e:
+                print e
             # run the certlib update first as it will talk to candlepin,
             # and we can find out if we got deleted or not.
             for lib in libset:
                 updates += lib.update()
 
-            updates += ret[0]
-            for e in ret[1]:
-                print ' '.join(str(e).split('-')[1:]).strip()
+            # NOTE: with no consumer cert, most of these actually
+            # fail
+            if ret:
+                updates += ret[0]
+                for e in ret[1]:
+                    print ' '.join(str(e).split('-')[1:]).strip()
         finally:
             lock.release()
         return updates

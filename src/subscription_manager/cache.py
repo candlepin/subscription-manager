@@ -41,7 +41,10 @@ class PackageProfileLib(DataLib):
     """
     def _do_update(self):
         profile_mgr = ProfileManager()
-        consumer = ConsumerIdentity.read()
+        try:
+            consumer = ConsumerIdentity.read()
+        except IOError,e:
+            return 0
         consumer_uuid = consumer.getConsumerId()
         return profile_mgr.update_check(self.uep, consumer_uuid)
 
@@ -53,7 +56,10 @@ class InstalledProductsLib(DataLib):
     """
     def _do_update(self):
         mgr = InstalledProductsManager()
-        consumer = ConsumerIdentity.read()
+        try:
+            consumer = ConsumerIdentity.read()
+        except IOError, e:
+            return 0
         consumer_uuid = consumer.getConsumerId()
         return mgr.update_check(self.uep, consumer_uuid)
 

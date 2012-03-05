@@ -69,6 +69,8 @@ class Facts(CacheManager):
         for key in self.facts:
             value = self.facts[key]
             # new fact found
+            if cached_facts is None:
+                continue
             if key not in cached_facts:
                 diff[key] = value
             if key in cached_facts:
@@ -77,10 +79,11 @@ class Facts(CacheManager):
                     diff[key] = value
 
         # look for keys that went away
-        for key  in cached_facts:
-            if key not in self.facts:
-                #update with new value, though it doesnt matter
-                diff[key] = cached_facts[key]
+        if cached_facts:
+            for key in cached_facts:
+                if key not in self.facts:
+                    #update with new value, though it doesnt matter
+                    diff[key] = cached_facts[key]
 
         return len(diff) > 0
 

@@ -865,9 +865,9 @@ class UnRegisterCommand(CliCommand):
         #there is no issue since it will most likely be cleaned up elsewhere (most
         #likely by the yum plugin)
         try:
-            uep = connection.UEPConnection(cert_file=ConsumerIdentity.certpath(),
-            key_file=ConsumerIdentity.keypath())
-            certmgr = CertManager(uep=uep)
+            # there is no consumer cert at this point, a uep object
+            # is not useful
+            certmgr = CertManager(uep=None)
             certmgr.update()
         except Exception, e:
             pass
