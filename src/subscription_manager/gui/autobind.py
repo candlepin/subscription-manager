@@ -313,6 +313,7 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
                 'confirm_subs_vbox',
                 'subs_treeview',
                 'back_button',
+                'sla_label',
         ])
         widgets.GladeWidget.__init__(self, 'confirmsubs.glade', self.widgets)
 
@@ -374,6 +375,7 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         # the data is loaded into the screen.
         self.store.clear()
         log.info("Using service level: %s" % dry_run_result.service_level)
+        self.sla_label.set_markup("<b>" + dry_run_result.service_level + "</b>")
 
         for pool_quantity in dry_run_result.json:
             self.store.append([pool_quantity['pool']['productName']])
