@@ -240,6 +240,9 @@ class UpdateAction(Action):
 
     def getCertificateSerialsList(self):
         results = []
+        # if there is no UEP object, short circuit
+        if self.uep is None:
+            return results
         reply = self.uep.getCertificateSerials(self._getConsumerId())
         for d in reply:
             sn = d['serial']
