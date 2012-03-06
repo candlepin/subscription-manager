@@ -291,35 +291,11 @@ class RegisterScreen:
 
             managerlib.persist_consumer_cert(new_account)
             self.consumer.reload()
-#            # reload CP instance with new ssl certs
-#            if self.auto_subscribe():
-#                self._set_register_details_label(_("Autosubscribing"))
-#                # try to auomatically bind products
-#                self.async.bind_by_products(self.consumer.uuid,
-#                        self._on_bind_by_products_cb)
-#            else:
             self._finish_registration()
 
         except Exception, e:
             handle_gui_exception(e, constants.REGISTER_ERROR, self.registerWin)
             self._finish_registration(failed=True)
-
-#    def _on_bind_by_products_cb(self, error=None):
-#        if error:
-#            log.exception(error)
-#            log.warning("Unable to autosubscribe.")
-#        else:
-#            log.info("Autosubscribe complete.")
-#
-#        self._set_register_details_label("Fetching certificates")
-#        self.async.fetch_certificates(self._on_fetch_certificates_cb)
-
-#    def _on_fetch_certificates_cb(self, error=None):
-#        failed = False
-#        if error:
-#            handle_gui_exception(error, constants.REGISTER_ERROR, self.registerWin)
-#            failed = True
-#        self._finish_registration(failed=failed)
 
     def _finish_registration(self, failed=False):
         # failed is used by the firstboot subclasses to decide if they should
