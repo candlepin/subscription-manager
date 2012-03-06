@@ -49,8 +49,6 @@ class PreferencesDialog(object):
         self.dialog = GLADE_XML.get_widget('preferences_dialog')
         self.sla_combobox = GLADE_XML.get_widget('sla_combobox')
 
-        self.load_current_settings()
-
         GLADE_XML.signal_autoconnect({
             "on_close_button_clicked": self._close_button_clicked,
             "on_sla_combobox_changed": self._sla_changed,
@@ -58,20 +56,25 @@ class PreferencesDialog(object):
 
     def load_current_settings(self):
         self.sla_combobox.get_model().clear()
-        consumer_json = self.backend.uep.getConsumer(self.consumer.uuid)
-        current_sla = consumer_json['serviceLevel']
-        owner_key = consumer_json['owner']['key']
-        available_slas = self.backend.uep.getServiceLevelList(owner_key)
 
-        # An empty string entry is available for "un-setting" the system's SLA:
-        available_slas.insert(0, "")
+        if self.consumer.uuid is None:
+            self.sla_combobox.set_sensitive(False)
+        else:
+            self.sla_combobox.set_sensitive(True)
+            consumer_json = self.backend.uep.getConsumer(self.consumer.uuid)
+            current_sla = consumer_json['serviceLevel']
+            owner_key = consumer_json['owner']['key']
+            available_slas = self.backend.uep.getServiceLevelList(owner_key)
 
-        i = 0
-        for sla in available_slas:
-            self.sla_combobox.append_text(sla)
-            if sla == current_sla:
-                self.sla_combobox.set_active(i)
-            i += 1
+            # An empty string entry is available for "un-setting" the system's SLA:
+            available_slas.insert(0, "")
+
+            i = 0
+            for sla in available_slas:
+                self.sla_combobox.append_text(sla)
+                if sla == current_sla:
+                    self.sla_combobox.set_active(i)
+                i += 1
 
     def _close_button_clicked(self, widget):
         self.dialog.hide()
