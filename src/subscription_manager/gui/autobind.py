@@ -162,6 +162,7 @@ class AutobindWizard(widgets.GladeWidget):
         self.facts = facts
         self.prod_dir = self.backend.product_dir
         self.ent_dir = self.backend.entitlement_dir
+        self.parent_window = parent_window
 
         # This signifies that the wizard is embedded by another. The
         # callback will be executed when the back button is clicked
@@ -195,7 +196,8 @@ class AutobindWizard(widgets.GladeWidget):
 
         if len(self.sorter.unentitled_products) == 0:
             InfoDialog(_("All installed products are covered by valid entitlements. "
-                "No need to update certificates at this time."))
+                "No need to update certificates at this time."),
+                parent = self.parent_window)
             self.destroy()
             return
 
@@ -251,7 +253,7 @@ class AutobindWizard(widgets.GladeWidget):
             result = self.suitable_slas[self.suitable_slas.keys()[0]]
             if len(result.json) == 0 and self.current_sla:
                 ErrorDialog(_("Unable to subscribe to any additional products at current service level: %s") %
-                        self.current_sla)
+                        self.current_sla, parent = self.parent_window)
                 self.destroy()
                 return
             self.show_confirm_subs(self.suitable_slas.keys()[0], initial=True)
@@ -261,7 +263,7 @@ class AutobindWizard(widgets.GladeWidget):
             log.info("No suitable service levels found.")
             ErrorDialog(_("No service levels will cover all installed products. "
                 "Please use the \"All Available Subscriptions\" tab to manually "
-                "entitle this system."))
+                "entitle this system."), parent = self.parent_window)
             self.destroy()
             return
         self.autobind_dialog.show()
