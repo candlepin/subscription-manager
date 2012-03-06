@@ -392,7 +392,6 @@ class MainWindow(widgets.GladeWidget):
                     self._get_window())
         except Exception, e:
             handle_gui_exception(e, _("Error in autobind wizard"), self._get_window())
-            autobind_wizard.destroy()
 
     def _redeem_button_clicked(self, widget):
         self.redeem_dialog.set_parent_window(self._get_window())
