@@ -27,7 +27,7 @@ Requires:  python-simplejson
 Requires:  python-iniparse
 Requires:  PyXML
 Requires:  virt-what
-Requires:  python-rhsm >= 0.98.2
+Requires:  python-rhsm >= 0.99.5
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 
