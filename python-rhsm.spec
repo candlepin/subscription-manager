@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.99.4
+Version: 0.99.5
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,12 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Tue Mar 06 2012 Michael Stead <mstead@redhat.com> 0.99.5-1
+- 744654: Any bad value from the config file, when converting to an int, causes
+  a traceback. (bkearney@redhat.com)
+- Add support for dry-run autobind requests. (dgoodwin@redhat.com)
+- Build for Fedora 17. (dgoodwin@redhat.com)
+
 * Wed Feb 22 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 0.99.4-1
 - Add support for updating consumer service level. (dgoodwin@redhat.com)
 - Add call to list service levels for an org. (dgoodwin@redhat.com)
