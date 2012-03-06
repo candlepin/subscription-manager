@@ -143,6 +143,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         dbus_iface = get_dbus_iface()
         dbus_iface.check_status(ignore_reply=True)
         self.facts.refresh_validity_facts()
+        self.unsubscribe_button.set_property('sensitive', False)
 
     def _add_group(self, group_idx, group):
         iter = None
