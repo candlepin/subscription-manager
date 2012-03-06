@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 0.99.8
+Version: 0.99.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -290,6 +290,44 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Mar 06 2012 Michael Stead <mstead@redhat.com> 0.99.9-1
+- Updating required version of python-rhsm (mstead@redhat.com)
+- fixes for po files (alikins@redhat.com)
+- latest translations from zanata (alikins@redhat.com)
+- 799394: Do not attempt to remove redhat.repo if it does not exist.
+  (awood@redhat.com)
+- 800121: do not attempt to call UEP when system is unregistered
+  (cduryee@redhat.com)
+- 799271: The usage string for service-levels contained the incorrect command
+  name (bkearney@redhat.com)
+- 799271: The usage string for service-levels contained the incorrect command
+  name (bkearney@redhat.com)
+- 704408: date field patch fixes per jbowes (cduryee@redhat.com)
+- 797243: make unregister finish updating repos (alikins@redhat.com)
+- 704408: allow users to clear the date box for contract searches
+  (cduryee@redhat.com)
+- 799316: Re-add librsvg2 dependency (dgoodwin@redhat.com)
+- 797996: Add manage_repos setting to default rhsm.conf (dgoodwin@redhat.com)
+- 795564: Add a newline at the end of the options error (bkearney@redhat.com)
+- 752756: Cache the facts, and refresh the validity facts whenever they change.
+  (bkearney@redhat.com)
+- Return a consistent scope for public IPv6 addresses across EL5 and EL6.
+  (awood@redhat.com)
+- 737773: Do not show the forgotten password url as a link.
+  (bkearney@redhat.com)
+- Fixing broken tests due to leap year. (mstead@redhat.com)
+- Explicitly define el5 macro in spec file. (dgoodwin@redhat.com)
+- 796730: Improve the clarity of the usage statement (bkearney@redhat.com)
+- 767790: Improve the messaging when a system is not registered.
+  (bkearney@redhat.com)
+- 797294: Typo in commit caused execution error. (bkearney@redhat.com)
+- 796756: use only the basename for the usage string (bkearney@redhat.com)
+- 796756: The usage string should be less verbose to be more consistent with
+  the other executable files (bkearney@redhat.com)
+- CLI service-levels touchups. (dgoodwin@redhat.com)
+- 656896: remove attribute 'swapped' (msuchy@redhat.com)
+- Release to Fedora 17 branch as well. (dgoodwin@redhat.com)
+
 * Wed Feb 22 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 0.99.8-1
 - 790205: do not lay down install-num-migrate-to-rhsm on rhel6 systems
   (cduryee@redhat.com)
