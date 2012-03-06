@@ -269,11 +269,9 @@ class MainWindow(widgets.GladeWidget):
         self.consumer.reload()
         # If we are now registered, load the Autobind wizard.
         if self.registered():
-            autobind_wizard = AutobindWizard(self.backend, self.consumer, self.facts,
-                                             self._on_sla_back_button_press)
             try:
-                autobind_wizard.set_parent_window(self._get_window())
-                autobind_wizard.show()
+                autobind_wizard = AutobindWizard(self.backend, self.consumer, self.facts,
+                        self._get_window(), self._on_sla_back_button_press)
             except Exception, e:
                 # If an exception occurs here, refresh the UI so that
                 # it remains in the correct state an then raise the
@@ -387,9 +385,13 @@ class MainWindow(widgets.GladeWidget):
         self.import_sub_dialog.show()
 
     def _update_certificates_button_clicked(self, widget):
-        autobind_wizard = AutobindWizard(self.backend, self.consumer, self.facts)
-        autobind_wizard.set_parent_window(self._get_window())
-        autobind_wizard.show()
+        # Catch exceptions in the autobind wizard initialization (only)
+        try:
+            autobind_wizard = AutobindWizard(self.backend, self.consumer, self.facts,
+                    self._get_window())
+        except Exception, e:
+            handle_gui_exception(e, _("Error in autobind wizard"), self._get_window())
+            autobind_wizard.destroy()
 
     def _redeem_button_clicked(self, widget):
         self.redeem_dialog.set_parent_window(self._get_window())

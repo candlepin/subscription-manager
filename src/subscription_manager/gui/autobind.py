@@ -25,6 +25,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.gui import widgets
+from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.managerlib import fetch_certificates
 from subscription_manager.gui.messageWindow import InfoDialog, ErrorDialog
 
@@ -139,7 +140,8 @@ class AutobindWizard(widgets.GladeWidget):
     Autobind Wizard: Manages screenflow used in several places in the UI.
     """
 
-    def __init__(self, backend, consumer, facts, initial_screen_back_callback=None):
+    def __init__(self, backend, consumer, facts, parent_window,
+            initial_screen_back_callback=None):
         """
         Create the Autobind wizard.
 
@@ -189,12 +191,18 @@ class AutobindWizard(widgets.GladeWidget):
         # does not put anything on the stack.
         self.screen_display_stack = []
         self._setup_screens()
+        self.autobind_dialog.set_transient_for(parent_window)
 
-    def set_parent_window(self, parent):
-        self.autobind_dialog.set_transient_for(parent)
+        if len(self.sorter.unentitled_products) == 0:
+            InfoDialog(_("All installed products are covered by valid entitlements. "
+                "No need to update certificates at this time."))
+            self.destroy()
+            return
+
+        self._find_suitable_service_levels()
+        self._load_initial_screen()
 
     def _find_suitable_service_levels(self):
-
         if self.current_sla:
             available_slas = [self.current_sla]
             log.debug("Using system's current service level: %s" %
@@ -232,16 +240,6 @@ class AutobindWizard(widgets.GladeWidget):
             widget.unparent()
             widget.show()
             self.autobind_notebook.append_page(widget)
-
-    def show(self):
-        if len(self.sorter.unentitled_products) == 0:
-            InfoDialog(_("All installed products are covered by valid entitlements. "
-                "No need to update certificates at this time."))
-            self.destroy()
-            return
-
-        self._find_suitable_service_levels()
-        self._load_initial_screen()
 
     def destroy(self):
         self.autobind_dialog.destroy()
@@ -342,20 +340,32 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         self.wizard.previous_screen()
 
     def _forward(self, button):
-        if not self.wizard.current_sla:
-            log.info("Saving selected service level for this system.")
-            self.backend.uep.updateConsumer(self.consumer.getConsumerId(),
-                    service_level=self.dry_run_result.service_level)
+        try:
+            if not self.wizard.current_sla:
+                log.info("Saving selected service level for this system.")
+                self.backend.uep.updateConsumer(self.consumer.getConsumerId(),
+                        service_level=self.dry_run_result.service_level)
 
-        log.info("Binding to subscriptions at service level: %s" %
-                self.dry_run_result.service_level)
-        for pool_quantity in self.dry_run_result.json:
-            pool_id = pool_quantity['pool']['id']
-            quantity = pool_quantity['quantity']
-            log.info("  pool %s quantity %s" % (pool_id, quantity))
-            self.backend.uep.bindByEntitlementPool(
-                    self.consumer.getConsumerId(), pool_id, quantity)
-        fetch_certificates(self.backend)
+            log.info("Binding to subscriptions at service level: %s" %
+                    self.dry_run_result.service_level)
+            for pool_quantity in self.dry_run_result.json:
+                pool_id = pool_quantity['pool']['id']
+                quantity = pool_quantity['quantity']
+                log.info("  pool %s quantity %s" % (pool_id, quantity))
+                self.backend.uep.bindByEntitlementPool(
+                        self.consumer.getConsumerId(), pool_id, quantity)
+                fetch_certificates(self.backend)
+        except Exception, e:
+            # Going to try to update certificates just in case we errored out
+            # mid-way through a bunch of binds:
+            try:
+                fetch_certificates(self.backend)
+            except Exception, cert_update_ex:
+                log.info("Error updating certificates after error:")
+                log.exception(cert_update_ex)
+            handle_gui_exception(e, _("Error subscribing:"),
+                    self.wizard.autobind_dialog)
+
         self.wizard.destroy()
 
     def get_title(self):
