@@ -77,6 +77,7 @@ try:
 
     from subscription_manager.gui import managergui, messageWindow
     from subscription_manager import logutil
+    from subscription_manager.i18n_optparse import OptionParser
 except ImportError, e:
     systemExit(2, "Unable to find Subscription Manager module.\n"
                   "Error: %s" % e)
@@ -94,6 +95,11 @@ class SubscriptionManagerService(dbus.service.Object):
         self.window.present()
 
 if __name__ == '__main__':
+    parser = OptionParser()
+    parser.add_option("--register", action='store_true',
+                      help=_("Launches the registration dialog on startup."))
+    options, args = parser.parse_args(args=sys.argv)
+
     logutil.init_logger()
     log = logging.getLogger('subscription-manager-gui')
     try:
@@ -110,7 +116,7 @@ if __name__ == '__main__':
         print _("subscription-manager-gui is already running")
     else:
         try:
-            main = managergui.MainWindow()
+            main = managergui.MainWindow(auto_launch_registration=options.register)
 
             # Hook into dbus service - only if it is available
             if bus:

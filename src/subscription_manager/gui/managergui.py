@@ -170,7 +170,8 @@ class MainWindow(widgets.GladeWidget):
     The new RHSM main window.
     """
     def __init__(self, backend=None, consumer=None,
-                 facts=None, ent_dir=None, prod_dir=None):
+                 facts=None, ent_dir=None, prod_dir=None,
+                 auto_launch_registration=False):
         super(MainWindow, self).__init__('mainwindow.glade',
               ['main_window', 'notebook', 'system_name_label',
                'next_update_label', 'next_update_title', 'register_button',
@@ -256,6 +257,9 @@ class MainWindow(widgets.GladeWidget):
         # Check to see if already registered to old RHN/Spacewalk
         # and show dialog if so
         self._check_rhn_classic()
+
+        if auto_launch_registration and not self.registered():
+            self._register_button_clicked(None)
 
     def registered(self):
         return ConsumerIdentity.existsAndValid()
