@@ -13,22 +13,11 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-# Migration Script (for bz 726407) which will :
-# 1] install subscription-manger and depdendent packages
-# 2] determine the subscribed channels on RHN Classic
-# 3] copy the corresponding RHSM product certificates to /etc/pki/product
-# 4] unregister the system from RHN Classic
-# 5] transfer any http proxy settings from the up2date to rhsm.conf files
-# 6] run the subscription-manager tool to register the system and consume
-#   a subscription
-#
-# Authors: Paresh Mutha <pmutha@redhat.com>
-#          Mark Huth <mhuth@redhat.com>
-#################################################
 
 import sys
 import os
 import xmlrpclib
+import httplib
 import getpass
 import libxml2
 import subprocess
@@ -37,6 +26,7 @@ import simplejson as json
 import shutil
 import logging
 import traceback
+import base64
 from rhsm.connection import UEPConnection, RestlibException
 
 _LIBPATH = "/usr/share/rhsm"
@@ -101,6 +91,21 @@ log = logging.getLogger('rhsm-app.' + __name__)
 rhsmcfg = rhsm.config.initConfig()
 
 
+class ProxiedTransport(xmlrpclib.Transport):
+    def set_proxy(self, proxy, credentials):
+        self.proxy = proxy
+        self.credentials = credentials
+    def make_connection(self, host):
+        self.realhost = host
+        return httplib.HTTP(self.proxy)
+    def send_request(self, connection, handler, request_body):
+        connection.putrequest("POST", 'http://%s%s' % (self.realhost, handler))
+    def send_host(self, connection, host):
+        connection.putheader('Host', self.realhost)
+        if self.credentials:
+            connection.putheader('Proxy-Authorization', 'Basic ' + self.credentials)
+
+
 def systemExit(code, msgs=None):
     "Exit with a code and optional message(s). Saved a few lines of code."
     if msgs:
@@ -125,7 +130,11 @@ def checkOkToProceed(username, password):
         systemExit(1, _("This migration script requires the system to be registered to RHN Classic.\nHowever this system appears to be registered to '%s'.\nExiting.") % serverURL.split('/')[2])
 
     # Check to make sure we can connect to the certificate server.
-    cp = UEPConnection(username=username, password=password)
+    cp = UEPConnection(username=username, password=password,
+            proxy_hostname=rhsmcfg.get('server', 'proxy_hostname'),
+            proxy_port=rhsmcfg.get('server', 'proxy_port'),
+            proxy_user=rhsmcfg.get('server', 'proxy_user'),
+            proxy_password=rhsmcfg.get('server', 'proxy_password'))
 
     try:
         cp.getOwnerList(username)
@@ -162,7 +171,19 @@ def unRegisterSystemFromRhnClassic(username, password):
     hostname = rhncfg['serverURL'].split('/')[2]
     server_url = 'https://%s/rpc/api' % (hostname)
     try:
-        sc = xmlrpclib.Server(server_url)
+        if rhncfg['enableProxy']:
+            pt = ProxiedTransport()
+            if rhncfg['enableProxyAuth']:
+                credentials = base64.encodestring('%s:%s' % (proxyUser, proxyPass)).strip()
+            else:
+                credentials = ""
+
+            pt.set_proxy("%s:%s" % (proxyHost, proxyPort), credentials)
+            log.info("Using proxy %s:%s for deleteSystems RHN API method" % (proxyHost, proxyPort))
+            sc = xmlrpclib.Server(server_url, transport=pt)
+        else:
+            sc = xmlrpclib.Server(server_url)
+
         sk = sc.auth.login(username, password)
         result = sc.system.deleteSystems(sk, systemId)
         if result:
@@ -219,14 +240,21 @@ def readChannelCertMapping():
 
 def transferHttpProxySettings():
     # transfer http proxy information from up2date to rhsm.conf
-    if rhncfg['enableProxy'] and not rhsmcfg.get('server', 'proxy_hostname'):
-        proxy_hostname, proxy_port = rhncfg['httpProxy'].split(':')
-        log.info("Using proxy %s:%s - transferring settings to rhsm.conf" % (proxy_hostname, proxy_port))
-        rhsmcfg.set('server', 'proxy_hostname', proxy_hostname)
-        rhsmcfg.set('server', 'proxy_port', proxy_port)
+    global proxyHost, proxyPort, proxyUser, proxyPass
+    if rhncfg['enableProxy']:
+        httpProxy  = rhncfg['httpProxy']
+        if httpProxy[:7] == "http://":
+            httpProxy = httpProxy[7:]
+        proxyHost, proxyPort = httpProxy.split(':')
+
+        log.info("Using proxy %s:%s - transferring settings to rhsm.conf" % (proxyHost, proxyPort))
+        rhsmcfg.set('server', 'proxy_hostname', proxyHost)
+        rhsmcfg.set('server', 'proxy_port', proxyPort)
         if rhncfg['enableProxyAuth']:
-            rhsmcfg.set('server', 'proxy_user', rhncfg['proxyUser'])
-            rhsmcfg.set('server', 'proxy_password', rhncfg['proxyPassword'])
+            proxyUser = rhncfg['proxyUser']
+            proxyPass = rhncfg['proxyPassword']
+            rhsmcfg.set('server', 'proxy_user', proxyUser)
+            rhsmcfg.set('server', 'proxy_password', proxyPass)
         rhsmcfg.save()
 
 
@@ -389,6 +417,7 @@ def cleanUp(subscribedChannels):
 def main():
     username = raw_input(_("RHN Username: ")).strip()
     password = getpass.getpass()
+    transferHttpProxySettings()
     checkOkToProceed(username, password)
 
     # get a list of RHN classic channels this machine is subscribed to
@@ -408,7 +437,6 @@ def main():
 
     # register the system to Certificate-based RHN and consume a subscription
     if not options.noauto:
-        transferHttpProxySettings()
         runSubscriptionManager(username, password)
 
     # check if we need to enable to supplementary/optional channels
