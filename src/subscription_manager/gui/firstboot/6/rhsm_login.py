@@ -41,6 +41,8 @@ class moduleClass(Module, registergui.RegisterScreen):
         self.sidebarTitle = _("Entitlement Registration")
         self.title = _("Entitlement Platform Registration")
         self._cached_credentials = None
+        self._registration_finished = False
+        self._first_registration_apply_run = True
 
     def _read_rhn_proxy_settings(self):
         # Read and store rhn-setup's proxy settings, as they have been set
@@ -89,6 +91,12 @@ class moduleClass(Module, registergui.RegisterScreen):
         value.
         """
 
+        self.interface = interface
+
+        if self._registration_finished:
+            self._registration_finished = False
+            return RESULT_SUCCESS
+
         self._read_rhn_proxy_settings()
 
         credentials = self._get_credentials_hash()
@@ -100,14 +108,20 @@ class moduleClass(Module, registergui.RegisterScreen):
             # reregistering the consumer
             return RESULT_SUCCESS
         else:
-            self.interface = interface
+            # if they've already registered during firstboot and have clicked
+            # back to register again, we must first unregister.
+            # XXX i'd like this call to be inside the async progress stuff,
+            # since it does take some time
+            if self._first_registration_apply_run and ConsumerIdentity.exists():
+                managerlib.unregister(self.backend.uep, self.consumer.uuid)
+                self.consumer.reload()
+                self._first_registration_apply_run = False
+
             valid_registration = self.register(testing=testing)
 
             if valid_registration:
                 self._cached_credentials = credentials
-                return RESULT_SUCCESS
-            else:
-                return RESULT_FAILURE
+            return RESULT_FAILURE
 
     def close_window(self):
         """
@@ -207,4 +221,6 @@ class moduleClass(Module, registergui.RegisterScreen):
     def _finish_registration(self, failed=False):
         registergui.RegisterScreen._finish_registration(self, failed=failed)
         if not failed:
+            self._first_registration_apply_run = True
+            self._registration_finished = True
             self.interface.moveToPage(moduleTitle=(_("Subscription Manager")))

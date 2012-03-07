@@ -62,8 +62,6 @@ class moduleClass(Module, managergui.MainWindow):
 
     def initializeUI(self):
         self.refresh()
-        # Always disable the back button when this screen is shown.
-        self.interface.backButton.set_sensitive(False)
 
     def shouldAppear(self):
         return True
