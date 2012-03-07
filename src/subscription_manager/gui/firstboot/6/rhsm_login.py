@@ -14,6 +14,7 @@ import rhsm
 
 sys.path.append("/usr/share/rhsm")
 from subscription_manager.gui import managergui
+from subscription_manager import managerlib
 from subscription_manager.gui import registergui
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.facts import Facts
