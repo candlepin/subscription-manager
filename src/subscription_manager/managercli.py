@@ -64,17 +64,17 @@ STATUS_MAP = {
 }
 
 CONSUMED_SUBS_LIST = \
-    _("ProductName:          \t%-25s") + \
+    _("Product Name:         \t%-25s") + \
     "\n" + \
-    _("ContractNumber:       \t%-25s") + \
+    _("Contract Number:      \t%-25s") + \
     "\n" + \
-    _("AccountNumber:        \t%-25s") + \
+    _("Account Number:       \t%-25s") + \
     "\n" + \
-    _("SerialNumber:         \t%-25s") + \
+    _("Serial Number:        \t%-25s") + \
     "\n" + \
     _("Active:               \t%-25s") + \
     "\n" + \
-    _("QuantityUsed:         \t%-25s") + \
+    _("Quantity Used:        \t%-25s") + \
     "\n" + \
     _("Begins:               \t%-25s") + \
     "\n" + \
@@ -462,8 +462,8 @@ class OwnersCommand(UserPassCommand):
                 print("+-------------------------------------------+")
                 print("")
                 for owner in owners:
-                    print("%s: \t%-25s" % (_("OrgName"), owner['displayName']))
-                    print("%s: \t%-25s" % (_("OrgKey"), owner['key']))
+                    print("%s: \t%-25s" % (_("Name"), owner['displayName']))
+                    print("%s: \t%-25s" % (_("Key"), owner['key']))
                     print("")
             else:
                 print(_("%s cannot register to any organizations.") % self.username)
@@ -1544,7 +1544,7 @@ class CLI:
 
     def _usage(self):
         print "\n"
-        print _("Usage: %s MODULENAME [MODULE-OPTIONS] [--help]") % os.path.basename(sys.argv[0])
+        print _("Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]") % os.path.basename(sys.argv[0])
         print "\n"
         print _("Primary Modules:")
         print "\r"

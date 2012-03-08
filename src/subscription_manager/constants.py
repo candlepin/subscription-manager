@@ -23,7 +23,7 @@ _ = lambda x: gettext.ldgettext("rhsm", x)
 
 
 installed_product_status = \
-    _("ProductName:          \t%-25s") + \
+    _("Product Name:         \t%-25s") + \
     "\n" + \
     _("Version:              \t%-25s") + \
     "\n" + \
@@ -37,11 +37,11 @@ installed_product_status = \
     "\n"
 
 available_subs_list = \
-    _("ProductName:          \t%-25s") + \
+    _("Product Name:         \t%-25s") + \
     "\n" + \
-    _("ProductId:            \t%-25s") + \
+    _("Product Id:           \t%-25s") + \
     "\n" + \
-    _("PoolId:               \t%-25s") + \
+    _("Pool Id:              \t%-25s") + \
     "\n" + \
     _("Quantity:             \t%-25s") + \
     "\n" + \
@@ -49,21 +49,21 @@ available_subs_list = \
     "\n" + \
     _("Expires:              \t%-25s") + \
     "\n" + \
-    _("MachineType:          \t%-25s") + \
+    _("Machine Type:         \t%-25s") + \
     "\n"
 
 repos_list = \
-    _("RepoName:             \t%-25s") + \
+    _("Repo Name:            \t%-25s") + \
     "\n" + \
-    _("RepoId:               \t%-25s") + \
+    _("Repo Id:              \t%-25s") + \
     "\n" + \
-    _("RepoUrl:              \t%-25s") + \
+    _("Repo Url:             \t%-25s") + \
     "\n" + \
     _("Enabled:              \t%-25s") + \
     "\n"
 
 product_status = \
-    _("ProductName:          \t%-25s") + \
+    _("Product Name:         \t%-25s") + \
     "\n" + \
     _("Status:               \t%-25s") + \
     "\n"
