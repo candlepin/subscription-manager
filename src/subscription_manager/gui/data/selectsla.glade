@@ -1,205 +1,141 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.24 -->
   <!-- interface-naming-policy project-wide -->
   <widget class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
     <child>
       <widget class="GtkVBox" id="main_content">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
+        <property name="can_focus">False</property>
         <property name="spacing">12</property>
         <child>
-          <widget class="GtkVBox" id="vbox1">
+          <widget class="GtkLabel" id="detection_label">
             <property name="visible">True</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
-            <child>
-              <widget class="GtkLabel" id="detection_label">
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="yalign">0</property>
-                <property name="xpad">10</property>
-                <property name="label" translatable="yes">We have detected that you have multiple service level
+            <property name="can_focus">False</property>
+            <property name="xalign">0</property>
+            <property name="yalign">0</property>
+            <property name="xpad">10</property>
+            <property name="label" translatable="yes">We have detected that you have multiple service level
 agreements on various products. Please select how you
 want them assigned.</property>
-                <property name="track_visited_links">False</property>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="padding">3</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
+            <property name="track_visited_links">False</property>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="padding">3</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkLabel" id="detected_products_label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xalign">0</property>
+            <property name="yalign">0</property>
+            <property name="xpad">10</property>
+            <property name="label" translatable="yes">&lt;b&gt;Detected products:&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkLabel" id="product_list_label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xalign">0</property>
+            <property name="yalign">0</property>
+            <property name="xpad">25</property>
+            <property name="label" translatable="yes">prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8</property>
+            <property name="use_markup">True</property>
+            <property name="wrap">True</property>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkLabel" id="subscribe_all_as_label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xalign">0</property>
+            <property name="yalign">0</property>
+            <property name="xpad">10</property>
+            <property name="label" translatable="yes">&lt;b&gt;Subscribe all detected products as:&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkScrolledWindow" id="scrolledwindow1">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="hscrollbar_policy">automatic</property>
+            <property name="vscrollbar_policy">automatic</property>
             <child>
-              <widget class="GtkLabel" id="detected_products_label">
+              <widget class="GtkViewport" id="viewport1">
                 <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="yalign">0</property>
-                <property name="xpad">10</property>
-                <property name="label" translatable="yes">&lt;b&gt;Detected products:&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkLabel" id="product_list_label">
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="yalign">0</property>
-                <property name="xpad">25</property>
-                <property name="label" translatable="yes">prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8</property>
-                <property name="use_markup">True</property>
-                <property name="wrap">True</property>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkLabel" id="subscribe_all_as_label">
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="yalign">0</property>
-                <property name="xpad">10</property>
-                <property name="label" translatable="yes">&lt;b&gt;Subscribe all detected products as:&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkScrolledWindow" id="scrolledwindow1">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hscrollbar_policy">automatic</property>
-                <property name="vscrollbar_policy">automatic</property>
+                <property name="can_focus">False</property>
+                <property name="resize_mode">queue</property>
+                <property name="shadow_type">none</property>
                 <child>
-                  <widget class="GtkViewport" id="viewport1">
+                  <widget class="GtkAlignment" id="alignment1">
                     <property name="visible">True</property>
-                    <property name="resize_mode">queue</property>
-                    <property name="shadow_type">none</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                    <property name="yalign">0</property>
+                    <property name="yscale">0</property>
                     <child>
-                      <widget class="GtkAlignment" id="alignment1">
+                      <widget class="GtkVBox" id="sla_radio_container">
                         <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="yalign">0</property>
-                        <property name="yscale">0</property>
+                        <property name="can_focus">False</property>
+                        <property name="border_width">4</property>
                         <child>
-                          <widget class="GtkVBox" id="sla_radio_container">
+                          <widget class="GtkLabel" id="label1">
                             <property name="visible">True</property>
-                            <property name="border_width">4</property>
-                            <property name="orientation">vertical</property>
-                            <child>
-                              <widget class="GtkLabel" id="label1">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">label</property>
-                              </widget>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkLabel" id="label2">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">label</property>
-                              </widget>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">label</property>
                           </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="label2">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">label</property>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
                         </child>
                       </widget>
                     </child>
                   </widget>
                 </child>
               </widget>
-              <packing>
-                <property name="position">4</property>
-              </packing>
             </child>
           </widget>
           <packing>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkHBox" id="button_box">
-            <property name="visible">True</property>
-            <property name="spacing">3</property>
-            <child>
-              <widget class="GtkButton" id="cancel_button">
-                <property name="label" translatable="yes">Cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_cancel_button_clicked"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkHBox" id="button_spacer">
-                <property name="visible">True</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </widget>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkButton" id="back_button">
-                <property name="label" translatable="yes">Back</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_back_button_clicked"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkButton" id="forward_button">
-                <property name="label" translatable="yes">Forward</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_forward_button_clicked"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="pack_type">end</property>
-            <property name="position">1</property>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
           </packing>
         </child>
       </widget>

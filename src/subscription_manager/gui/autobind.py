@@ -97,27 +97,24 @@ class AutobindWizardScreen(object):
         # Maintain a reference to the parent wizard so we can reliably switch
         # to other screens and pass data along:
         self.wizard = wizard
-
-        # Each of these screens is expected to have a cancel button we can
-        # use to callback to the wizard and destroy the window:
-        self.widgets = [
-                'cancel_button',
-        ]
-        self.signals = {
-                'on_cancel_button_clicked': self._cancel,
-        }
-
-    def _cancel(self, button):
-        """
-        Cancel button on every screen calls back to the parent wizard.
-        """
-        self.wizard.destroy()
+        self.widgets = []
+        self.signals = {}
 
     def get_title(self):
         """
         Gets the title for this screen.
         """
         raise NotImplementedError("Screen object must implement: get_title()")
+
+    def get_forward_button_label(self):
+        """
+        Gets the forward button label for this screen (so you can set Subscribe
+        instead of Forward)
+
+        Return None if you want to use Forward
+        """
+        raise NotImplementedError("Screen object must implement: get_forward_button_label()")
+
 
     def get_main_widget(self):
         """
@@ -127,13 +124,6 @@ class AutobindWizardScreen(object):
         """
         raise NotImplementedError("Screen object must implement: get_main_widget()")
 
-    def set_initial(self, is_initial):
-        """
-        Sets this screen as the initial screen that was loaded by the wizard.
-        This method is meant to change the appearance of the screen, such as
-        widget states.
-        """
-        raise NotImplementedError("Screen object must implement: set_initial(bool)")
 
 class AutobindWizard(widgets.GladeWidget):
     """
@@ -153,7 +143,9 @@ class AutobindWizard(widgets.GladeWidget):
         widget_names = [
                 'autobind_dialog',
                 'autobind_notebook',
-                'screen_label'
+                'screen_label',
+                'back_button',
+                'forward_button',
         ]
         widgets.GladeWidget.__init__(self, "autobind.glade", widget_names)
 
@@ -171,6 +163,9 @@ class AutobindWizard(widgets.GladeWidget):
         self.embedded = self.initial_screen_back_callback != None
 
         signals = {
+                "on_cancel_button_clicked": self._cancel,
+                "on_back_button_clicked": self._back,
+                "on_forward_button_clicked": self._forward,
         }
         self.glade.signal_autoconnect(signals)
 
@@ -181,6 +176,15 @@ class AutobindWizard(widgets.GladeWidget):
         self.screen_display_stack = []
         self._setup_screens()
         self.autobind_dialog.set_transient_for(parent_window)
+
+    def _cancel(self, button):
+        self.destroy()
+
+    def _back(self, button):
+        self.previous_screen()
+
+    def _forward(self, button):
+        self._current_screen.forward()
 
     def _load_data(self):
         consumer_json = self.backend.uep.getConsumer(
@@ -240,6 +244,7 @@ class AutobindWizard(widgets.GladeWidget):
                 self.suitable_slas[sla] = dry_run
 
     def _setup_screens(self):
+        self._current_screen = None
         self.screens = {
                 CONFIRM_SUBS: ConfirmSubscriptionsScreen(self),
                 SELECT_SLA: SelectSLAScreen(self),
@@ -293,12 +298,19 @@ class AutobindWizard(widgets.GladeWidget):
         # for the first page shown.
         if not initial:
             self.screen_display_stack.append(self.autobind_notebook.get_current_page())
-
         screen = self.screens[screen_idx]
-        screen.set_initial(initial)
+        self._toggle_back_button(initial)
         self.autobind_notebook.set_current_page(screen_idx)
         self.screen_label.set_label("<b>%s</b>" % screen.get_title())
+        self.forward_button.set_label(screen.get_forward_button_label())
+        self._current_screen = screen
         return screen
+
+    def _toggle_back_button(self, is_initial):
+        if is_initial and not self.embedded:
+            self.back_button.hide()
+        else:
+            self.back_button.show()
 
     def previous_screen(self):
         if len(self.screen_display_stack) == 0:
@@ -331,9 +343,6 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         self.backend = wizard.backend
         self.consumer = wizard.consumer
 
-        self.signals['on_back_button_clicked'] = self._back
-        self.signals['on_forward_button_clicked'] = self._forward
-
         self.glade.signal_autoconnect(self.signals)
         self.store = gtk.ListStore(str)
 
@@ -349,10 +358,7 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         column.set_sort_column_id(0)
         self.subs_treeview.set_search_column(0)
 
-    def _back(self, button):
-        self.wizard.previous_screen()
-
-    def _forward(self, button):
+    def forward(self):
         try:
             if not self.wizard.current_sla:
                 log.info("Saving selected service level for this system.")
@@ -384,6 +390,9 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
     def get_title(self):
         return _("Confirm Subscription(s)")
 
+    def get_forward_button_label(self):
+        return _("Subscribe")
+
     def get_main_widget(self):
         """
         Returns the main widget to be shown in a wizard that is using
@@ -403,12 +412,6 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         for pool_quantity in dry_run_result.json:
             self.store.append([pool_quantity['pool']['productName']])
 
-    def set_initial(self, is_initial):
-        if is_initial and not self.wizard.embedded:
-            self.back_button.hide()
-        else:
-            self.back_button.show()
-
 
 class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
     """
@@ -423,18 +426,17 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
             'main_content',
             'product_list_label',
             'sla_radio_container',
-            'back_button',
         ])
 
         widgets.GladeWidget.__init__(self, 'selectsla.glade', self.widgets)
-
-        self.signals['on_back_button_clicked'] = self._back
-        self.signals['on_forward_button_clicked'] = self._forward
 
         self.glade.signal_autoconnect(self.signals)
 
     def get_title(self):
         return _("Select Service Level Agreement")
+
+    def get_forward_button_label(self):
+        return _("Forward")
 
     def get_main_widget(self):
         """
@@ -456,10 +458,7 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
         # set the initial radio button as default selection.
         group.set_active(True)
 
-    def _back(self, button):
-        self.wizard.previous_screen()
-
-    def _forward(self, button):
+    def forward(self):
         self.wizard.show_confirm_subs(self.selected_sla)
 
     def _clear_buttons(self):
@@ -479,9 +478,3 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
             if i + 1 < len(prod_certs):
                 prod_str += ", "
         return prod_str
-
-    def set_initial(self, is_initial):
-        if is_initial and not self.wizard.embedded:
-            self.back_button.hide()
-        else:
-            self.back_button.show()
