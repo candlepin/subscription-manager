@@ -101,7 +101,7 @@ class SystemFactsDialog(widgets.GladeWidget):
                 parent = self.facts_store.append(None, [group, ""])
             if str(value).strip() == "":
                 value = _("Unknown")
-            self.facts_store.append(parent, [fact, value])
+            self.facts_store.append(parent, [fact, str(value).decode("utf-8")])
 
         # TODO: could stand to check if registered before trying to do this:
         owner = _('Unknown')

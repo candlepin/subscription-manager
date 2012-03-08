@@ -360,7 +360,9 @@ class ConsumerIdentity:
 
     def getConsumerName(self):
         altName = self.x509.alternateName()
-        return altName.replace("DirName:/CN=", "")
+        print "%s" % ((altName.replace("DirName:/CN=", "")).decode("utf-8"))
+        return altName.replace("DirName:/CN=", "").decode().decode("utf-8")
+
 
     def write(self):
         from subscription_manager import managerlib
