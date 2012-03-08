@@ -264,6 +264,9 @@ class MainWindow(widgets.GladeWidget):
         self._perform_unregister()
         self._register_button_clicked(None)
 
+    def _on_sla_cancel_button_press(self):
+        self._perform_unregister()
+
     def registration_changed(self, skip_auto_bind):
         log.debug("Registration changed, updating main window.")
         self.consumer.reload()
@@ -272,7 +275,8 @@ class MainWindow(widgets.GladeWidget):
         if self.registered() and not skip_auto_bind:
             try:
                 autobind_wizard = AutobindWizard(self.backend, self.consumer, self.facts,
-                        self._get_window(), self._on_sla_back_button_press)
+                        self._get_window(), self._on_sla_back_button_press,
+                        self._on_sla_cancel_button_press)
                 autobind_wizard.show()
             except Exception, e:
                 # If an exception occurs here, refresh the UI so that

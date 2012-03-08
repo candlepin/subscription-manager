@@ -131,7 +131,7 @@ class AutobindWizard(widgets.GladeWidget):
     """
 
     def __init__(self, backend, consumer, facts, parent_window,
-            initial_screen_back_callback=None):
+            initial_screen_back_callback=None, cancel_callback=None):
         """
         Create the Autobind wizard.
 
@@ -160,6 +160,10 @@ class AutobindWizard(widgets.GladeWidget):
         # callback will be executed when the back button is clicked
         # on the initial screen.
         self.initial_screen_back_callback = initial_screen_back_callback
+
+        # Optional callback to be called when the cancel button is pressed:
+        self.cancel_callback = cancel_callback
+
         self.embedded = self.initial_screen_back_callback != None
 
         signals = {
@@ -179,6 +183,8 @@ class AutobindWizard(widgets.GladeWidget):
 
     def _cancel(self, button):
         self.destroy()
+        if self.cancel_callback:
+            self.cancel_callback()
 
     def _back(self, button):
         self.previous_screen()
