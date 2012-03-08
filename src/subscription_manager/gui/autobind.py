@@ -27,7 +27,7 @@ from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.managerlib import fetch_certificates
-from subscription_manager.gui.messageWindow import InfoDialog, ErrorDialog
+from subscription_manager.gui.messageWindow import InfoDialog, ErrorDialog, OkDialog
 
 # Define indexes for screens.
 CONFIRM_SUBS = 0
@@ -185,6 +185,13 @@ class AutobindWizard(widgets.GladeWidget):
     def _load_data(self):
         consumer_json = self.backend.uep.getConsumer(
                 self.consumer.getConsumerId())
+
+        if 'serviceLevel' not in consumer_json:
+            OkDialog(_("Unable to auto-subscribe, server does not support service levels."),
+                    parent = self.parent_window)
+            self.destroy()
+            return
+
         self.owner_key = consumer_json['owner']['key']
 
         # This is often "", set to None in that case:
@@ -203,10 +210,10 @@ class AutobindWizard(widgets.GladeWidget):
             return
 
         self._find_suitable_service_levels()
+        self._load_initial_screen()
 
     def show(self):
         self._load_data()
-        self._load_initial_screen()
 
     def _find_suitable_service_levels(self):
         if self.current_sla:

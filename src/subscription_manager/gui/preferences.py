@@ -62,6 +62,11 @@ class PreferencesDialog(object):
         else:
             self.sla_combobox.set_sensitive(True)
             consumer_json = self.backend.uep.getConsumer(self.consumer.uuid)
+            if 'serviceLevel' not in consumer_json:
+                log.warn("Disabling service level dropdown, server does not support service levels.")
+                self.sla_combobox.set_sensitive(False)
+                return
+
             current_sla = consumer_json['serviceLevel']
             owner_key = consumer_json['owner']['key']
             available_slas = self.backend.uep.getServiceLevelList(owner_key)
