@@ -395,6 +395,8 @@ class DatePicker(gtk.HBox):
 
         self._cal_button = gtk.Button()
         self._cal_button.set_image(image)
+        atk_entry = self._cal_button.get_accessible()
+        atk_entry.set_name("Calendar")
 
         self.pack_start(self._date_entry)
         self.pack_start(self._cal_button)
@@ -403,6 +405,8 @@ class DatePicker(gtk.HBox):
         self.connect('date-picked-text', self._date_update_text)
 
         self._calendar = gtk.Calendar()
+        atk_entry = self._calendar.get_accessible()
+        atk_entry.set_name("Calendar")
 
         self.show()
         self._date_entry.show()
