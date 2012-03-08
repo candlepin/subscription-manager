@@ -34,6 +34,7 @@ _ = gettext.gettext
 
 import rhsm.config
 import rhsm.connection as connection
+from rhsm.connection import ServiceLevelUnsupportedException
 
 from i18n_optparse import OptionParser
 from subscription_manager.branding import get_branding
@@ -603,6 +604,8 @@ class ServiceLevelsCommand(UserPassCommand):
     def show_service_level(self):
         consumer_uuid = ConsumerIdentity.read().getConsumerId()
         consumer = self.cp.getConsumer(consumer_uuid)
+        if 'serviceLevel' not in consumer:
+            systemExit(-1, _("ERROR: Server does not support service levels."))
         service_level = consumer['serviceLevel'] or ""
         print(_("Current service level: %s") % service_level)
 
@@ -612,18 +615,18 @@ class ServiceLevelsCommand(UserPassCommand):
             consumer_uuid = ConsumerIdentity.read().getConsumerId()
             org_key = self.cp.getOwner(consumer_uuid)['key']
 
-        # TODO: do we need to check if service levels are supported?
-        slas = self.cp.getServiceLevelList(org_key)
-        if len(slas):
-            print("+-------------------------------------------+")
-            print("               %s" % (_("Service Levels")))
-            print("+-------------------------------------------+")
-            for sla in slas:
-                print sla
-                #constants.environment_list % (env['name'],
-                #    env['description'])
-        else:
-            print "This org does not have any subscriptions with service levels."
+        try:
+            slas = self.cp.getServiceLevelList(org_key)
+            if len(slas):
+                print("+-------------------------------------------+")
+                print("               %s" % (_("Service Levels")))
+                print("+-------------------------------------------+")
+                for sla in slas:
+                    print sla
+            else:
+                print "This org does not have any subscriptions with service levels."
+        except ServiceLevelUnsupportedException:
+            systemExit(-1, _("ERROR: Server does not support service levels."))
 
 
 class RegisterCommand(UserPassCommand):
@@ -778,6 +781,8 @@ class RegisterCommand(UserPassCommand):
         profile_mgr.update_check(self.cp, consumer['uuid'], True)
 
         if self.options.autosubscribe:
+            if 'serviceLevel' not in consumer and self.options.service_level:
+                systemExit(-1, _("ERROR: Server does not support service levels."))
             autosubscribe(self.cp, consumer['uuid'],
                     service_level=self.options.service_level)
         if (self.options.consumerid or self.options.activation_keys or
@@ -808,7 +813,7 @@ class RegisterCommand(UserPassCommand):
             return environment_name
 
         if not cp.supports_resource('environments'):
-            systemExit(_("ERROR: Server does not support environments."))
+            systemExit(-1, _("ERROR: Server does not support environments."))
 
         env = cp.getEnvironment(owner_key=owner_key, name=environment_name)
         if not env:
@@ -995,8 +1000,8 @@ class SubscribeCommand(CliCommand):
                             systemExit(-1, _("Please enter a valid numeric pool id."))
                         self.cp.bindByEntitlementPool(consumer_uuid, pool, self.options.quantity)
                         print _("Successfully consumed a subscription from the pool with id %s.") % pool
-                        log.info("Info: Successfully subscribed the system to the Entitlement Pool %s" % pool)
                         subscribed = True
+                        log.info("Info: Successfully subscribed the system to the Entitlement Pool %s" % pool)
                     except connection.RestlibException, re:
                         log.exception(re)
                         if re.code == 403:
@@ -1009,6 +1014,12 @@ class SubscribeCommand(CliCommand):
                     return_code = 1
             # must be auto
             else:
+                # If service level specified, make an additional request to
+                # verify service levels are supported on the server:
+                if self.options.service_level:
+                    consumer = self.cp.getConsumer(consumer_uuid)
+                    if 'serviceLevel' not in consumer:
+                        systemExit(-1, _("ERROR: Server does not support service levels."))
                 autosubscribe(self.cp, consumer_uuid,
                         service_level=self.options.service_level)
 
