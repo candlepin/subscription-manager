@@ -273,6 +273,7 @@ class MainWindow(widgets.GladeWidget):
             try:
                 autobind_wizard = AutobindWizard(self.backend, self.consumer, self.facts,
                         self._get_window(), self._on_sla_back_button_press)
+                autobind_wizard.show()
             except Exception, e:
                 # If an exception occurs here, refresh the UI so that
                 # it remains in the correct state an then raise the
@@ -390,6 +391,7 @@ class MainWindow(widgets.GladeWidget):
         try:
             autobind_wizard = AutobindWizard(self.backend, self.consumer, self.facts,
                     self._get_window())
+            autobind_wizard.show()
         except Exception, e:
             handle_gui_exception(e, _("Error in autobind wizard"), self._get_window())
 

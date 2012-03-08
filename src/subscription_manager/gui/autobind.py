@@ -170,18 +170,6 @@ class AutobindWizard(widgets.GladeWidget):
         self.initial_screen_back_callback = initial_screen_back_callback
         self.embedded = self.initial_screen_back_callback != None
 
-        consumer_json = self.backend.uep.getConsumer(
-                self.consumer.getConsumerId())
-        self.owner_key = consumer_json['owner']['key']
-
-        # This is often "", set to None in that case:
-        self.current_sla = consumer_json['serviceLevel'] or None
-
-        # Using the current date time, we may need to expand this to work
-        # with arbitrary dates for future entitling someday:
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir,
-                self.facts.get_facts())
-
         signals = {
         }
         self.glade.signal_autoconnect(signals)
@@ -194,6 +182,19 @@ class AutobindWizard(widgets.GladeWidget):
         self._setup_screens()
         self.autobind_dialog.set_transient_for(parent_window)
 
+    def _load_data(self):
+        consumer_json = self.backend.uep.getConsumer(
+                self.consumer.getConsumerId())
+        self.owner_key = consumer_json['owner']['key']
+
+        # This is often "", set to None in that case:
+        self.current_sla = consumer_json['serviceLevel'] or None
+
+        # Using the current date time, we may need to expand this to work
+        # with arbitrary dates for future entitling someday:
+        self.sorter = CertSorter(self.prod_dir, self.ent_dir,
+                self.facts.get_facts())
+
         if len(self.sorter.unentitled_products) == 0:
             InfoDialog(_("All installed products are covered by valid entitlements. "
                 "No need to update certificates at this time."),
@@ -202,6 +203,9 @@ class AutobindWizard(widgets.GladeWidget):
             return
 
         self._find_suitable_service_levels()
+
+    def show(self):
+        self._load_data()
         self._load_initial_screen()
 
     def _find_suitable_service_levels(self):
