@@ -27,7 +27,8 @@ from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.managerlib import fetch_certificates
-from subscription_manager.gui.messageWindow import InfoDialog, ErrorDialog, OkDialog
+from subscription_manager.gui.messageWindow import InfoDialog, ErrorDialog, \
+        OkDialog
 
 # Define indexes for screens.
 CONFIRM_SUBS = 0
@@ -82,7 +83,8 @@ class DryRunResult(object):
         """
         tuples = []
         for pool_quantity in self.json:
-            tuples.append((pool_quantity['pool']['id'], pool_quantity['quantity']))
+            tuples.append((pool_quantity['pool']['id'],
+                pool_quantity['quantity']))
         return tuples
 
 
@@ -113,7 +115,8 @@ class AutobindWizardScreen(object):
 
         Return None if you want to use Forward
         """
-        raise NotImplementedError("Screen object must implement: get_forward_button_label()")
+        raise NotImplementedError(
+                "Screen object must implement: get_forward_button_label()")
 
 
     def get_main_widget(self):
@@ -122,7 +125,8 @@ class AutobindWizardScreen(object):
         Since we use glade to design our screens, we create our screen
         content inside a parent window object, and return the first child.
         """
-        raise NotImplementedError("Screen object must implement: get_main_widget()")
+        raise NotImplementedError(
+                "Screen object must implement: get_main_widget()")
 
 
 class AutobindWizard(widgets.GladeWidget):
@@ -213,17 +217,16 @@ class AutobindWizard(widgets.GladeWidget):
                 self.facts.get_facts())
 
         if len(self.sorter.unentitled_products) == 0:
-            InfoDialog(_("All installed products are covered by valid entitlements. "
-                "No need to update certificates at this time."),
+            InfoDialog(_("All installed products are covered by valid entitlements. No need to update certificates at this time."),
                 parent = self.parent_window)
             self.destroy()
             return
 
         self._find_suitable_service_levels()
-        self._load_initial_screen()
 
     def show(self):
         self._load_data()
+        self._load_initial_screen()
 
     def _find_suitable_service_levels(self):
         if self.current_sla:
@@ -258,8 +261,8 @@ class AutobindWizard(widgets.GladeWidget):
         # For each screen configured in this wizard, create a tab:
         for screen in self.screens.values():
             if not isinstance(screen, AutobindWizardScreen):
-                raise RuntimeError("AutobindWizard screens must implement type" + \
-                                   "AutobindWizardScreen")
+                raise RuntimeError(
+                        "AutobindWizard screens must implement type AutobindWizardScreen")
             widget = screen.get_main_widget()
             widget.unparent()
             widget.show()
@@ -296,14 +299,16 @@ class AutobindWizard(widgets.GladeWidget):
 
     def show_select_sla(self, initial=False):
         select_sla_screen = self._show_screen(SELECT_SLA, initial)
-        select_sla_screen.load_data(set(self.sorter.unentitled_products.values()),
-                                    self.suitable_slas)
+        select_sla_screen.load_data(
+                set(self.sorter.unentitled_products.values()),
+                self.suitable_slas)
 
     def _show_screen(self, screen_idx, initial):
         # Do not put the initial page on the stack as the stack should be empty
         # for the first page shown.
         if not initial:
-            self.screen_display_stack.append(self.autobind_notebook.get_current_page())
+            self.screen_display_stack.append(
+                    self.autobind_notebook.get_current_page())
         screen = self.screens[screen_idx]
         self._toggle_back_button(initial)
         self.autobind_notebook.set_current_page(screen_idx)
@@ -451,7 +456,8 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
         return self.main_content
 
     def load_data(self, unentitled_prod_certs, sla_data_map):
-        self.product_list_label.set_text(self._format_prods(unentitled_prod_certs))
+        self.product_list_label.set_text(
+                self._format_prods(unentitled_prod_certs))
         self._clear_buttons()
         group = None
         for sla in sla_data_map:
