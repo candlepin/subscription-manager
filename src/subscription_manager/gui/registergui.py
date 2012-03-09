@@ -320,7 +320,7 @@ class RegisterScreen:
         else:
             log.info("Autosubscribe complete.")
 
-        self._set_register_details_label("Fetching certificates")
+        self._set_register_details_label(_("Fetching certificates"))
         self.async.fetch_certificates(self._on_fetch_certificates_cb)
 
     def _on_fetch_certificates_cb(self, error=None):
