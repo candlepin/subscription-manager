@@ -255,6 +255,9 @@ def transferHttpProxySettings():
             proxyPass = rhncfg['proxyPassword']
             rhsmcfg.set('server', 'proxy_user', proxyUser)
             rhsmcfg.set('server', 'proxy_password', proxyPass)
+        else:
+            rhsmcfg.set('server', 'proxy_user', '')
+            rhsmcfg.set('server', 'proxy_password', '')
         rhsmcfg.save()
 
 
