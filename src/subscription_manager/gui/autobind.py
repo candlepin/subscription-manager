@@ -351,9 +351,6 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         ])
         widgets.GladeWidget.__init__(self, 'confirmsubs.glade', self.widgets)
 
-        self.backend = wizard.backend
-        self.consumer = wizard.consumer
-
         self.glade.signal_autoconnect(self.signals)
         self.store = gtk.ListStore(str)
 
@@ -373,7 +370,8 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         try:
             if not self.wizard.current_sla:
                 log.info("Saving selected service level for this system.")
-                self.backend.uep.updateConsumer(self.consumer.getConsumerId(),
+                self.wizard.backend.uep.updateConsumer(
+                        self.wizard.consumer.getConsumerId(),
                         service_level=self.dry_run_result.service_level)
 
             log.info("Binding to subscriptions at service level: %s" %
@@ -382,14 +380,14 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
                 pool_id = pool_quantity['pool']['id']
                 quantity = pool_quantity['quantity']
                 log.info("  pool %s quantity %s" % (pool_id, quantity))
-                self.backend.uep.bindByEntitlementPool(
-                        self.consumer.getConsumerId(), pool_id, quantity)
-                fetch_certificates(self.backend)
+                self.wizard.backend.uep.bindByEntitlementPool(
+                        self.wizard.consumer.getConsumerId(), pool_id, quantity)
+                fetch_certificates(self.wizard.backend)
         except Exception, e:
             # Going to try to update certificates just in case we errored out
             # mid-way through a bunch of binds:
             try:
-                fetch_certificates(self.backend)
+                fetch_certificates(self.wizard.backend)
             except Exception, cert_update_ex:
                 log.info("Error updating certificates after error:")
                 log.exception(cert_update_ex)

@@ -23,7 +23,7 @@ class moduleClass(Module, managergui.MainWindow):
         self.main_window.hide()
         #this value is relative to when you want to load the screen
         # so check other modules before setting
-        self.priority = 200.2
+        self.priority = 200.4
         self.sidebarTitle = _("RHSM Subscriptions Management")
         self.title = _("Subscription Manager")
 
