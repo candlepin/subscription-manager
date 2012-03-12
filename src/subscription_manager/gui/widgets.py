@@ -231,7 +231,8 @@ class ProductsTable(object):
 class SubDetailsWidget(GladeWidget):
 
     def __init__(self, show_contract=True):
-        widget_names = ["sub_details_vbox", "subscription_text", "products_view"]
+        widget_names = ["sub_details_vbox", "subscription_text", "products_view",
+                "support_level_text", "support_type_text"]
         super(SubDetailsWidget, self).__init__("subdetails.glade", widget_names)
 
         self.show_contract = show_contract
@@ -252,21 +253,18 @@ class SubDetailsWidget(GladeWidget):
             destroy('expiration_date')
             destroy('account')
             destroy('provides_management')
-            destroy('support_level')
-            destroy('support_type')
             destroy('virt_only')
             destroy("stacking_id")
         else:
             self.pull_widgets(["contract_number_text", "start_date_text",
                                "expiration_date_text", "account_text",
                                "provides_management_text", "stacking_id_text",
-                               "support_level_text",
-                               "support_type_text", "virt_only_text"])
+                               "virt_only_text"])
 
         self.bundled_products = ProductsTable(self.products_view)
 
     def show(self, name, contract=None, start=None, end=None, account=None,
-            management=None, support_level=None, stacking_id=None, support_type=None,
+            management=None, support_level="", stacking_id=None, support_type="",
             virt_only=None, products=[], highlight=None):
         """
         Show subscription details.
@@ -284,6 +282,9 @@ class SubDetailsWidget(GladeWidget):
             buf.apply_tag(tag, buf.get_iter_at_offset(index),
                     buf.get_iter_at_offset(index + len(highlight)))
 
+        self._set(self.support_level_text, support_level)
+        self._set(self.support_type_text, support_type)
+
         if self.show_contract:
             self._set(self.contract_number_text, contract)
             self._set(self.start_date_text,
@@ -293,8 +294,6 @@ class SubDetailsWidget(GladeWidget):
             self._set(self.account_text, account)
             self._set(self.provides_management_text, management)
             self._set(self.stacking_id_text, stacking_id)
-            self._set(self.support_level_text, support_level)
-            self._set(self.support_type_text, support_type)
             self._set(self.virt_only_text, virt_only)
 
         self.bundled_products.clear()
@@ -304,7 +303,7 @@ class SubDetailsWidget(GladeWidget):
 
     def _set(self, text_view, text):
         """Set the buffer of the given TextView to contain the text"""
-        if not text:
+        if text is None:
             text = _("None")
         text_view.get_buffer().set_text(text)
 
@@ -312,6 +311,10 @@ class SubDetailsWidget(GladeWidget):
         """ No subscription to display. """
         self.bundled_products.clear()
         self.subscription_text.get_buffer().set_text("")
+
+        self._set(self.support_level_text, "")
+        self._set(self.support_type_text, "")
+
         if self.show_contract:
             self._set(self.contract_number_text, "")
             self._set(self.start_date_text, "")
@@ -319,8 +322,6 @@ class SubDetailsWidget(GladeWidget):
             self._set(self.account_text, "")
             self._set(self.provides_management_text, "")
             self._set(self.stacking_id_text, "")
-            self._set(self.support_level_text, "")
-            self._set(self.support_type_text, "")
             self._set(self.virt_only_text, "")
 
     def get_widget(self):

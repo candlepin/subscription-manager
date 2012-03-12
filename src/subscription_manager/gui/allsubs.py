@@ -138,6 +138,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             'product_name_formatted': str,
             'quantity_to_consume': int,
             'background': str,
+            'support_type': str,
+            'support_level': str,
 
             # TODO:  This is not needed here.
             'align': float,
@@ -220,6 +222,16 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     quantity_available = entry.quantity - entry.consumed
 
                 pool = entry.pools[0]
+                attrs = self._product_attrs_to_dict(pool['productAttributes'])
+
+                # Display support level and type if the attributes are present:
+                support_level = ""
+                support_type = ""
+                if 'support_level' in attrs:
+                    support_level = attrs['support_level']
+                if 'support_type' in attrs:
+                    support_type = attrs['support_type']
+
                 self.store.add_map(iter, {
                     'virt_only': self._machine_type(entry.pools),
                     'product_name': entry.product_name,
@@ -236,6 +248,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     'multi-entitlement': allows_multi_entitlement(pool),
                     'background': bg_color,
                     'quantity_available': quantity_available,
+                    'support_level': support_level,
+                    'support_type': support_type,
                 })
 
         # Ensure that all nodes are expanded in the tree view.
@@ -255,6 +269,17 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     itr = self.store.iter_next(itr)
         if not found:
             self.sub_details.clear()
+
+
+    def _product_attrs_to_dict(self, productAttributesList):
+        """
+        Convert the JSON list of product attributes into a dict we can
+        work with more easily.
+        """
+        final_attrs = {}
+        for pa in productAttributesList:
+            final_attrs[pa['name']] = pa['value']
+        return final_attrs
 
     # need to determine what type of machine the product is for
     #  based on the pools accumulated.
@@ -288,6 +313,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                     'multi-entitlement': False,
                     'background': bg_color,
                     'quantity_available': 0,
+                    'support_level': "",
+                    'support_type': "",
                 }
 
     def get_label(self):
@@ -398,8 +425,13 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         if selection.is_valid():
             product_name = selection['product_name']
             pool_id = selection['pool_id']
+            support_level = selection['support_level']
+            support_type = selection['support_type']
             provided = self.pool_stash.lookup_provided_products(pool_id)
-            self.sub_details.show(product_name, products=provided, highlight=self.get_filter_text())
+
+            self.sub_details.show(product_name, products=provided,
+                    highlight=self.get_filter_text(),
+                    support_level=support_level, support_type=support_type)
         else:
             self.sub_details.clear()
 
