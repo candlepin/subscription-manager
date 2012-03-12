@@ -410,7 +410,7 @@ class IdentityCommand(UserPassCommand):
                 ownername = owner['displayName']
                 ownerid = owner['id']
                 print _('Current identity is: %s') % consumerid
-                print _('name: %s') % unicode(consumer_name, "utf-8")
+                print _('name: %s') % consumer_name
                 print _('org name: %s') % ownername
                 print _('org id: %s') % ownerid
             else:
