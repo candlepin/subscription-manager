@@ -411,10 +411,10 @@ class InstalledProductStatusTests(unittest.TestCase):
 
 
 class TestParseDate(unittest.TestCase):
-    def _test_local_tz(self, epoch):
+    def _test_local_tz(self):
         tz = LocalTz()
-        dt_no_tz = datetime.datetime.fromtimestamp(epoch)
-        now_dt = datetime.datetime.fromtimestamp(epoch, tz=tz)
+        dt_no_tz = datetime.datetime(year=2000, month=1, day=1, hour=12, minute=34)
+        now_dt = datetime.datetime(year=2000, month=1, day=1, hour=12, minute=34, tzinfo=tz)
         parseDate(now_dt.isoformat())
         # last member is is_dst, which is -1, if there is no tzinfo, which
         # we expect for dt_no_tz
@@ -426,31 +426,29 @@ class TestParseDate(unittest.TestCase):
         # tm_isdst (timpletuple()[8]) is 0 if a tz is set,
         # but the dst offset is 0
         # if it is -1, no timezone is set
-        if now_dt_tt[8] == 1:
+        if now_dt_tt[8] == 1 and dt_no_tz_tt == -1:
             # we are applying DST to now time, but not no_tz time, so
             # they will be off by an hour. This is kind of weird
             self.assertEquals(now_dt_tt[:2], dt_no_tz_tt[:2])
             self.assertEquals(now_dt_tt[4:7], dt_no_tz_tt[4:7])
 
             # add an hour for comparisons
+            dt_no_tz_dst = dt_no_tz
             dt_no_tz_dst = dt_no_tz + datetime.timedelta(hours=1)
             self.assertEquals(now_dt_tt[3], dt_no_tz_dst.timetuple()[3])
         else:
             self.assertEquals(now_dt_tt[:7], dt_no_tz_tt[:7])
 
     def test_local_tz_now(self):
-        epoch = time.time()
-        self._test_local_tz(epoch)
+        self._test_local_tz()
 
     def test_local_tz_not_dst(self):
-        epoch = time.time()
         time.daylight = 0
-        self._test_local_tz(epoch)
+        self._test_local_tz()
 
     def test_local_tz_dst(self):
-        epoch = time.time()
         time.daylight = 1
-        self._test_local_tz(epoch)
+        self._test_local_tz()
 
     def test_server_date_utc_timezone(self):
         # sample date from json response from server
