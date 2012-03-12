@@ -198,11 +198,6 @@ display_icon (Context * context, StatusType status_type)
 	static char *notification_title;
 	static char *notification_body;
 
-	if (context->is_visible) {
-		g_debug ("Icon already visible");
-		return;
-	}
-
 	if (status_type == RHSM_REGISTRATION_REQUIRED) {
 		tooltip = _("Register System For Support And Updates");
 		notification_title = _("Register System For Support And Updates");
