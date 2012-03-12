@@ -82,6 +82,7 @@ static void icon_right_clicked (GtkStatusIcon *, guint, guint, Context *);
 static void remind_me_later_clicked (NotifyNotification *, gchar *, Context *);
 static void manage_subs_clicked (NotifyNotification *, gchar *, Context *);
 static void register_now_clicked (NotifyNotification *, gchar *, Context *);
+static void register_icon_click_listeners (Context *);
 static void do_nothing_logger (const gchar *, GLogLevelFlags, const gchar *,
 			       gpointer);
 static void status_changed_cb (NotifyNotification *, gint, Context *);
@@ -234,10 +235,6 @@ display_icon (Context * context, StatusType status_type)
 	}
 
 	gtk_status_icon_set_tooltip (context->icon, tooltip);
-	g_signal_connect (context->icon, "activate",
-			  G_CALLBACK (icon_clicked), context);
-	g_signal_connect (context->icon, "popup-menu",
-			  G_CALLBACK (icon_right_clicked), context);
 	context->is_visible = true;
 
 	context->notification =
@@ -394,6 +391,14 @@ add_signal_listener (Context * context)
 				     NULL);
 }
 
+static void
+register_icon_click_listeners (Context * context) {
+	g_signal_connect (context->icon, "activate",
+			  G_CALLBACK (icon_clicked), context);
+	g_signal_connect (context->icon, "popup-menu",
+			  G_CALLBACK (icon_right_clicked), context);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -469,6 +474,7 @@ main (int argc, char **argv)
 
 	context.icon =
 		gtk_status_icon_new_from_icon_name ("subscription-manager");
+	register_icon_click_listeners (&context);
 	gtk_status_icon_set_visible (context.icon, false);
 
 	context.entitlement_status_proxy = get_entitlement_status_proxy ();
