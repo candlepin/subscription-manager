@@ -37,6 +37,8 @@ class moduleClass(Module):
 
         self.interface = interface
 
+        # XXX store selected SLA in global data thingy here
+
         return RESULT_SUCCESS
 
     def createScreen(self):
@@ -49,12 +51,8 @@ class moduleClass(Module):
         widget.reparent(self.vbox)
 
     def initializeUI(self):
-        # Need to make sure that each time the UI is initialized we reset back to the
-        # main register screen.
-        #self._show_credentials_page()
-        #self._clear_registration_widgets()
-        #self.initializeConsumerName()
         self.vbox.show_all()
+        # XXX populate available service levels from global data thingy here
 
     def needsNetwork(self):
         """

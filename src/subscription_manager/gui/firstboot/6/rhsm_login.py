@@ -224,4 +224,4 @@ class moduleClass(Module, registergui.RegisterScreen):
         if not failed:
             self._first_registration_apply_run = True
             self._registration_finished = True
-            self.interface.moveToPage(moduleTitle="Service Level")
+            self.interface.moveToPage(moduleTitle=_("Service Level"))

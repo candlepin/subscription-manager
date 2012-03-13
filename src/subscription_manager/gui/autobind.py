@@ -88,6 +88,85 @@ class DryRunResult(object):
         return tuples
 
 
+class ServiceLevelNotSupportedException(Exception):
+    """
+    Exception for AutobindController.load. The remote candlepin doesn't
+    support service levels.
+    """
+    pass
+
+
+class AllProductsCoveredException(Exception):
+    """
+    Exception for AutobindController.load. The system doesn't have any
+    products that are in need of entitlements.
+    """
+    pass
+
+class AutobindController(object):
+
+    """
+    Class to hold non gui related logic and data for sla selection/autobind,
+    so we can share this between firstboot and the regular gui.
+    """
+
+    def __init__(self, backend, consumer, facts):
+        self.backend = backend
+        self.consumer = consumer
+        self.facts = facts
+
+        # set by select sla screen
+        self.selected_sla = None
+
+    def load(self):
+        consumer_json = self.backend.uep.getConsumer(
+                self.consumer.getConsumerId())
+
+        if 'serviceLevel' not in consumer_json:
+            raise ServiceLevelNotSupportedException()
+
+        self.owner_key = consumer_json['owner']['key']
+
+        # This is often "", set to None in that case:
+        self.current_sla = consumer_json['serviceLevel'] or None
+
+        # Using the current date time, we may need to expand this to work
+        # with arbitrary dates for future entitling someday:
+        self.sorter = CertSorter(self.backend.product_dir,
+                self.backend.entitlement_dir,
+                self.facts.get_facts())
+
+        if len(self.sorter.unentitled_products) == 0:
+            raise AllProductsCoveredException()
+
+        self._find_suitable_service_levels()
+
+
+    def _find_suitable_service_levels(self):
+        if self.current_sla:
+            available_slas = [self.current_sla]
+            log.debug("Using system's current service level: %s" %
+                    self.current_sla)
+        else:
+            available_slas = self.backend.uep.getServiceLevelList(
+                    self.owner_key)
+            log.debug("Available service levels: %s" % available_slas)
+
+        # Will map service level (string) to the results of the dry-run
+        # autobind results for each SLA that covers all installed products:
+        self.suitable_slas = {}
+        for sla in available_slas:
+            dry_run_json = self.backend.uep.dryRunBind(self.consumer.uuid,
+                    sla)
+            dry_run = DryRunResult(sla, dry_run_json, self.sorter)
+
+            # If we have a current SLA for this system, we do not need
+            # all products to be covered by the SLA to proceed through
+            # this wizard:
+            if self.current_sla or dry_run.covers_required_products():
+                self.suitable_slas[sla] = dry_run
+
+
 class AutobindWizardScreen(object):
     """
     An object representing a screen that can be displayed by the
@@ -95,10 +174,11 @@ class AutobindWizardScreen(object):
     to the wizard object itself.
     """
 
-    def __init__(self, wizard):
+    def __init__(self, controller, parent_window):
         # Maintain a reference to the parent wizard so we can reliably switch
         # to other screens and pass data along:
-        self.wizard = wizard
+        self.controller = controller
+        self.parent_window = parent_window
         self.widgets = []
         self.signals = {}
 
@@ -153,11 +233,8 @@ class AutobindWizard(widgets.GladeWidget):
         ]
         widgets.GladeWidget.__init__(self, "autobind.glade", widget_names)
 
-        self.backend = backend
-        self.consumer = consumer
-        self.facts = facts
-        self.prod_dir = self.backend.product_dir
-        self.ent_dir = self.backend.entitlement_dir
+        self.controller = AutobindController(backend, consumer, facts)
+
         self.parent_window = parent_window
 
         # This signifies that the wizard is embedded by another. The
@@ -194,69 +271,36 @@ class AutobindWizard(widgets.GladeWidget):
         self.previous_screen()
 
     def _forward(self, button):
-        self._current_screen.forward()
+        self.screens[self._current_screen_idx].forward()
 
-    def _load_data(self):
-        consumer_json = self.backend.uep.getConsumer(
-                self.consumer.getConsumerId())
+        if self._current_screen_idx == SELECT_SLA:
+            self.show_confirm_subs(self.controller.selected_sla)
+        else:
+            #screen is confirm subs, we're done now.
+            self.destroy()
 
-        if 'serviceLevel' not in consumer_json:
+    def show(self):
+        try:
+            self.controller.load()
+        except ServiceLevelNotSupportedException:
             OkDialog(_("Unable to auto-subscribe, server does not support service levels."),
                     parent = self.parent_window)
             self.destroy()
             return
-
-        self.owner_key = consumer_json['owner']['key']
-
-        # This is often "", set to None in that case:
-        self.current_sla = consumer_json['serviceLevel'] or None
-
-        # Using the current date time, we may need to expand this to work
-        # with arbitrary dates for future entitling someday:
-        self.sorter = CertSorter(self.prod_dir, self.ent_dir,
-                self.facts.get_facts())
-
-        if len(self.sorter.unentitled_products) == 0:
+        except AllProductsCoveredException:
             InfoDialog(_("All installed products are covered by valid entitlements. No need to update certificates at this time."),
                 parent = self.parent_window)
             self.destroy()
             return
 
-        self._find_suitable_service_levels()
-
-    def show(self):
-        self._load_data()
         self._load_initial_screen()
 
-    def _find_suitable_service_levels(self):
-        if self.current_sla:
-            available_slas = [self.current_sla]
-            log.debug("Using system's current service level: %s" %
-                    self.current_sla)
-        else:
-            available_slas = self.backend.uep.getServiceLevelList(
-                    self.owner_key)
-            log.debug("Available service levels: %s" % available_slas)
-
-        # Will map service level (string) to the results of the dry-run
-        # autobind results for each SLA that covers all installed products:
-        self.suitable_slas = {}
-        for sla in available_slas:
-            dry_run_json = self.backend.uep.dryRunBind(self.consumer.uuid,
-                    sla)
-            dry_run = DryRunResult(sla, dry_run_json, self.sorter)
-
-            # If we have a current SLA for this system, we do not need
-            # all products to be covered by the SLA to proceed through
-            # this wizard:
-            if self.current_sla or dry_run.covers_required_products():
-                self.suitable_slas[sla] = dry_run
-
     def _setup_screens(self):
-        self._current_screen = None
         self.screens = {
-                CONFIRM_SUBS: ConfirmSubscriptionsScreen(self),
-                SELECT_SLA: SelectSLAScreen(self),
+                SELECT_SLA: SelectSLAScreen(self.controller,
+                    self.autobind_dialog),
+                CONFIRM_SUBS: ConfirmSubscriptionsScreen(self.controller,
+                    self.autobind_dialog),
         }
         # For each screen configured in this wizard, create a tab:
         for screen in self.screens.values():
@@ -272,17 +316,18 @@ class AutobindWizard(widgets.GladeWidget):
         self.autobind_dialog.destroy()
 
     def _load_initial_screen(self):
-        if len(self.suitable_slas) == 1:
+        if len(self.controller.suitable_slas) == 1:
             # If system already had a service level, we can hit this point
             # when we cannot fix any unentitled products:
-            result = self.suitable_slas[self.suitable_slas.keys()[0]]
-            if len(result.json) == 0 and self.current_sla:
+            result = self.controller.suitable_slas[self.controller.suitable_slas.keys()[0]]
+            if len(result.json) == 0 and self.controller.current_sla:
                 ErrorDialog(_("Unable to subscribe to any additional products at current service level: %s") %
-                        self.current_sla, parent = self.parent_window)
+                        self.controller.current_sla,
+                        parent = self.parent_window)
                 self.destroy()
                 return
-            self.show_confirm_subs(self.suitable_slas.keys()[0], initial=True)
-        elif len(self.suitable_slas) > 1:
+            self.show_confirm_subs(self.controller.suitable_slas.keys()[0], initial=True)
+        elif len(self.controller.suitable_slas) > 1:
             self.show_select_sla(initial=True)
         else:
             log.info("No suitable service levels found.")
@@ -295,13 +340,13 @@ class AutobindWizard(widgets.GladeWidget):
 
     def show_confirm_subs(self, service_level, initial=False):
         confirm_subs_screen = self._show_screen(CONFIRM_SUBS, initial)
-        confirm_subs_screen.load_data(self.suitable_slas[service_level])
+        confirm_subs_screen.load_data(self.controller.suitable_slas[service_level])
 
     def show_select_sla(self, initial=False):
         select_sla_screen = self._show_screen(SELECT_SLA, initial)
         select_sla_screen.load_data(
-                set(self.sorter.unentitled_products.values()),
-                self.suitable_slas)
+                set(self.controller.sorter.unentitled_products.values()),
+                self.controller.suitable_slas)
 
     def _show_screen(self, screen_idx, initial):
         # Do not put the initial page on the stack as the stack should be empty
@@ -314,7 +359,7 @@ class AutobindWizard(widgets.GladeWidget):
         self.autobind_notebook.set_current_page(screen_idx)
         self.screen_label.set_label("<b>%s</b>" % screen.get_title())
         self.forward_button.set_label(screen.get_forward_button_label())
-        self._current_screen = screen
+        self._current_screen_idx = screen_idx
         return screen
 
     def _toggle_back_button(self, is_initial):
@@ -340,8 +385,8 @@ class AutobindWizard(widgets.GladeWidget):
 class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
 
     """ Confirm Subscriptions GUI Window """
-    def __init__(self, wizard):
-        AutobindWizardScreen.__init__(self, wizard)
+    def __init__(self, controller, parent_window):
+        AutobindWizardScreen.__init__(self, controller, parent_window)
 
         self.widgets.extend([
                 'confirm_subs_vbox',
@@ -368,10 +413,10 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
 
     def forward(self):
         try:
-            if not self.wizard.current_sla:
+            if not self.controller.current_sla:
                 log.info("Saving selected service level for this system.")
-                self.wizard.backend.uep.updateConsumer(
-                        self.wizard.consumer.getConsumerId(),
+                self.controller.backend.uep.updateConsumer(
+                        self.controller.consumer.getConsumerId(),
                         service_level=self.dry_run_result.service_level)
 
             log.info("Binding to subscriptions at service level: %s" %
@@ -380,21 +425,20 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
                 pool_id = pool_quantity['pool']['id']
                 quantity = pool_quantity['quantity']
                 log.info("  pool %s quantity %s" % (pool_id, quantity))
-                self.wizard.backend.uep.bindByEntitlementPool(
-                        self.wizard.consumer.getConsumerId(), pool_id, quantity)
-                fetch_certificates(self.wizard.backend)
+                self.controller.backend.uep.bindByEntitlementPool(
+                        self.controller.consumer.getConsumerId(), pool_id,
+                        quantity)
+                fetch_certificates(self.controller.backend)
         except Exception, e:
             # Going to try to update certificates just in case we errored out
             # mid-way through a bunch of binds:
             try:
-                fetch_certificates(self.wizard.backend)
+                fetch_certificates(self.controller.backend)
             except Exception, cert_update_ex:
                 log.info("Error updating certificates after error:")
                 log.exception(cert_update_ex)
             handle_gui_exception(e, _("Error subscribing:"),
-                    self.wizard.autobind_dialog)
-
-        self.wizard.destroy()
+                    self.parent_window)
 
     def get_title(self):
         return _("Confirm Subscription(s)")
@@ -428,8 +472,8 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
     SLAs that are provided by the installed products.
     """
 
-    def __init__(self, wizard):
-        AutobindWizardScreen.__init__(self, wizard)
+    def __init__(self, controller, parent_window):
+        AutobindWizardScreen.__init__(self, controller, parent_window)
 
         self.widgets.extend([
             'main_content',
@@ -469,7 +513,7 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
         group.set_active(True)
 
     def forward(self):
-        self.wizard.show_confirm_subs(self.selected_sla)
+        pass
 
     def _clear_buttons(self):
         child_widgets = self.sla_radio_container.get_children()
@@ -478,7 +522,7 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
 
     def _radio_clicked(self, button, sla):
         if button.get_active():
-            self.selected_sla = sla
+            self.controller.selected_sla = sla
 
     def _format_prods(self, prod_certs):
         prod_str = ""
