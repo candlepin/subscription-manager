@@ -193,6 +193,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/quantity.py*
 %{_datadir}/rhsm/subscription_manager/jsonwrapper.py*
 %{_datadir}/rhsm/subscription_manager/certmgr.py*
+%{_datadir}/rhsm/subscription_manager/listing.py*
 
 %attr(755,root,root) %{_sbindir}/subscription-manager
 %attr(755,root,root) %{_bindir}/subscription-manager
