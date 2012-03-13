@@ -34,6 +34,18 @@ from subscription_manager.gui.messageWindow import InfoDialog, ErrorDialog, \
 CONFIRM_SUBS = 0
 SELECT_SLA = 1
 
+# XXX ugly hacks for firstboot
+_controller = None
+
+def init_controller(backend, consumer, facts):
+    global _controller
+    _controller = AutobindController(backend, consumer, facts)
+    return _controller
+
+
+def get_controller():
+    return _controller
+
 
 class DryRunResult(object):
     """ Encapsulates a dry-run autobind result from the server. """
@@ -156,6 +168,9 @@ class AutobindController(object):
         # autobind results for each SLA that covers all installed products:
         self.suitable_slas = {}
         for sla in available_slas:
+            # if the list is only 1 long, ie a pre-existing sla,
+            # then we use that
+            self.selected_sla = sla
             dry_run_json = self.backend.uep.dryRunBind(self.consumer.uuid,
                     sla)
             dry_run = DryRunResult(sla, dry_run_json, self.sorter)
@@ -326,7 +341,8 @@ class AutobindWizard(widgets.GladeWidget):
                         parent = self.parent_window)
                 self.destroy()
                 return
-            self.show_confirm_subs(self.controller.suitable_slas.keys()[0], initial=True)
+            self.show_confirm_subs(self.controller.suitable_slas.keys()[0],
+                    initial=True)
         elif len(self.controller.suitable_slas) > 1:
             self.show_select_sla(initial=True)
         else:

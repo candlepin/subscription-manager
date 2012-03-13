@@ -16,6 +16,7 @@ sys.path.append("/usr/share/rhsm")
 from subscription_manager.gui import managergui
 from subscription_manager import managerlib
 from subscription_manager.gui import registergui
+from subscription_manager.gui import autobind
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.facts import Facts
 
@@ -224,4 +225,28 @@ class moduleClass(Module, registergui.RegisterScreen):
         if not failed:
             self._first_registration_apply_run = True
             self._registration_finished = True
-            self.interface.moveToPage(moduleTitle=_("Service Level"))
+
+            # sla autosubscribe time. load up the possible slas, to decide if
+            # we need to display the selection screen, or go to the confirm
+            # screen.
+            # XXX this should really be done async.
+
+            controller = autobind.init_controller(self.backend, self.consumer,
+                    Facts())
+
+            try:
+                controller.load()
+            except autobind.ServiceLevelNotSupportedException:
+                pass
+            except autobind.AllProductsCoveredException:
+                pass
+
+            if len(controller.suitable_slas) > 1:
+                self.interface.moveToPage(moduleTitle=_("Service Level"))
+            elif len(controller.suitable_slas) == 1:
+                self.interface.moveToPage(
+                        moduleTitle=_("Confirm Subscriptions"))
+            else:
+                # XXX jump to some error state screen about manually
+                # subscribing
+                pass

@@ -26,7 +26,7 @@ class moduleClass(Module):
         self.sidebarTitle = _("Entitlement Registration")
         self.title = _("Confirm Subscriptions")
 
-        self.screen = autobind.ConfirmSubscriptionsScreen(None)
+        self.screen = autobind.ConfirmSubscriptionsScreen(None, None)
 
     def apply(self, interface, testing=False):
         # subscribe and set sla level from global data thingy here
@@ -41,10 +41,14 @@ class moduleClass(Module):
         widget = self.screen.get_main_widget()
         widget.reparent(self.vbox)
 
-
     def initializeUI(self):
         self.vbox.show_all()
-        # XXX set values from global data thingy here
+
+        # lazy initialize this, so its created in rhsm_login
+        controller = autobind.get_controller()
+        self.screen.controller = controller
+
+        self.screen.load_data(controller.suitable_slas[controller.selected_sla])
 
     def needsNetwork(self):
         """

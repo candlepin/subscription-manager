@@ -26,19 +26,13 @@ class moduleClass(Module):
         self.sidebarTitle = _("Entitlement Registration")
         self.title = _("Service Level")
 
-        self.screen = autobind.SelectSLAScreen(None)
+        self.screen = autobind.SelectSLAScreen(None, None)
 
     def apply(self, interface, testing=False):
         """
-        'Next' button has been clicked - try to register with the
-        provided user credentials and return the appropriate result
-        value.
+        'Next' button has been clicked - autobind controller
+        will have already stored the selected sla
         """
-
-        self.interface = interface
-
-        # XXX store selected SLA in global data thingy here
-
         return RESULT_SUCCESS
 
     def createScreen(self):
@@ -52,7 +46,14 @@ class moduleClass(Module):
 
     def initializeUI(self):
         self.vbox.show_all()
-        # XXX populate available service levels from global data thingy here
+
+        # lazy initialize this, so its created in rhsm_login
+        controller = autobind.get_controller()
+        self.screen.controller = controller
+
+        self.screen.load_data(
+                set(controller.sorter.unentitled_products.values()),
+                controller.suitable_slas)
 
     def needsNetwork(self):
         """
