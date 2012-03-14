@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 0.99.9
+Version: 0.99.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -291,6 +291,28 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Mar 14 2012 Michael Stead <mstead@redhat.com> 0.99.10-1
+- latest strings from zanata (alikins@redhat.com)
+- 801434: Add at-spi accessibility name to calendar selection widget.
+  (awood@redhat.com)
+- 800917: Display service level and type in All Subs tab (dgoodwin@redhat.com)
+- Add support for "release" command (alikins@redhat.com)
+- 801517: Missed translating a label during the registration process
+  (bkearney@redhat.com)
+- 801513: One translation had a copy/paste error (bkearney@redhat.com)
+- The migration script should write default proxy auth settings.
+  (awood@redhat.com)
+- Revert "801513: A replacement variable was used in a translation file where
+  it was not needed" (dgoodwin@redhat.com)
+- 801545: Break apart the string to make them easier for the translators
+  (bkearney@redhat.com)
+- 801513: A replacement variable was used in a translation file where it was
+  not needed (bkearney@redhat.com)
+- 798015: Migration script should play nicely with proxies. (awood@redhat.com)
+- 742033: Unsubscribe button is not greyed out when nothing is selected
+  (wpoteat@redhat.com)
+- 783990: Handle network errors when migrating. (awood@redhat.com)
+
 * Tue Mar 06 2012 Michael Stead <mstead@redhat.com> 0.99.9-1
 - Updating required version of python-rhsm (mstead@redhat.com)
 - fixes for po files (alikins@redhat.com)
