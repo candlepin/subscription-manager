@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.99.5
+Version: 0.99.6
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,10 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed Mar 14 2012 Michael Stead <mstead@redhat.com> 0.99.6-1
+- Add ContentConnection to support rhsm "release" command (alikins@redhat.com)
+- Allow unsetting the consumer service level. (dgoodwin@redhat.com)
+
 * Tue Mar 06 2012 Michael Stead <mstead@redhat.com> 0.99.5-1
 - 744654: Any bad value from the config file, when converting to an int, causes
   a traceback. (bkearney@redhat.com)
