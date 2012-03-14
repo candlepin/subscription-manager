@@ -819,6 +819,7 @@ def enhance_facts(facts, consumer):
     if consumer.getConsumerName():
         facts.update({"system.name": consumer.getConsumerName()})
 
+
 def clean_all_data(backup=True):
     consumer_dir = cfg.get('rhsm', 'consumerCertDir')
     if backup:

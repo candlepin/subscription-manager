@@ -100,6 +100,7 @@ def find_first_invalid_date(ent_dir=None, product_dir=None,
     # Should never hit this:
     raise Exception("Unable to determine first invalid date.")
 
+
 class ValidProductDateRangeCalculator(object):
 
     def __init__(self, certsorter):
@@ -197,7 +198,7 @@ class ValidProductDateRangeCalculator(object):
         e2_start = ent2.validRange().begin()
 
         if e1_start == e2_start:
-            return 0;
+            return 0
 
         if e1_start < e2_start:
             return -1

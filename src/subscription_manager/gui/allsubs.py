@@ -270,7 +270,6 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         if not found:
             self.sub_details.clear()
 
-
     def _product_attrs_to_dict(self, productAttributesList):
         """
         Convert the JSON list of product attributes into a dict we can

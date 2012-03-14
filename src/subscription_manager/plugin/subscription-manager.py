@@ -55,7 +55,6 @@ def update(conduit):
         return
     conduit.info(2, 'Updating certificate-based repositories.')
 
-
     cert_file = ConsumerIdentity.certpath()
     key_file = ConsumerIdentity.keypath()
 
@@ -72,7 +71,6 @@ def update(conduit):
         # log
         conduit.info(2, "Unable to connect to entitlement server")
         return
-
 
     rl = RepoLib(uep=uep)
     rl.update()

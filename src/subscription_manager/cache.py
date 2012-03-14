@@ -43,7 +43,7 @@ class PackageProfileLib(DataLib):
         profile_mgr = ProfileManager()
         try:
             consumer = ConsumerIdentity.read()
-        except IOError,e:
+        except IOError, e:
             return 0
         consumer_uuid = consumer.getConsumerId()
         return profile_mgr.update_check(self.uep, consumer_uuid)
