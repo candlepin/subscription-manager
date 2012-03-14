@@ -29,7 +29,8 @@ class moduleClass(Module):
         self.screen = autobind.ConfirmSubscriptionsScreen(None, None)
 
     def apply(self, interface, testing=False):
-        # subscribe and set sla level from global data thingy here
+        # screen.forward takes care of subscribing.
+        self.screen.forward()
         return RESULT_SUCCESS
 
     def createScreen(self):
