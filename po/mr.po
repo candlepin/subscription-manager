@@ -35,11 +35,7 @@ msgstr "सबस्क्रिप्शन"
 
 #: ../src/subscription_manager/gui/allsubs.py:78
 #: ../src/subscription_manager/gui/subscription_assistant.py:187
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1457
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1342
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1368
-#: ../src/subscription_manager/managercli.py:1443
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1483
+#: ../src/subscription_manager/managercli.py:1563
 msgid "Available Subscriptions"
 msgstr "उपलब्ध सबस्क्रिप्शन्स्"
 
@@ -52,37 +48,37 @@ msgstr "उपलब्ध सबस्क्रिप्शन्स्"
 msgid "Quantity"
 msgstr "प्रमाण"
 
-#: ../src/subscription_manager/gui/allsubs.py:216
+#: ../src/subscription_manager/gui/allsubs.py:218
 #: ../src/subscription_manager/gui/contract_selection.py:121
 #: ../src/subscription_manager/gui/subscription_assistant.py:469
 msgid "unlimited"
 msgstr "अमर्यादित"
 
-#: ../src/subscription_manager/gui/allsubs.py:294
+#: ../src/subscription_manager/gui/allsubs.py:321
 msgid "All Available Subscriptions"
 msgstr "सर्व उपलब्ध सबस्क्रिप्शन्स्"
 
-#: ../src/subscription_manager/gui/allsubs.py:306
+#: ../src/subscription_manager/gui/allsubs.py:335
 #: ../src/subscription_manager/gui/subscription_assistant.py:307
 msgid "Searching for subscriptions. Please wait."
 msgstr "सबस्क्रिप्शन्स् करीता शोधत आहे. कृपया थांबा."
 
-#: ../src/subscription_manager/gui/allsubs.py:310
+#: ../src/subscription_manager/gui/allsubs.py:339
 #, python-format
 msgid "Error fetching subscriptions from server:  %s"
 msgstr "सर्व्हरपासून सबसक्रिप्शन्स् प्राप्त करतेवेळी त्रुटी आढळली:  %s"
 
-#: ../src/subscription_manager/gui/allsubs.py:321
+#: ../src/subscription_manager/gui/allsubs.py:350
 #, python-format
 msgid "Unable to search for subscriptions:  %s"
 msgstr "सबस्क्रिप्शन्स् करीता शोध अशक्य:  %s"
 
-#: ../src/subscription_manager/gui/allsubs.py:342
+#: ../src/subscription_manager/gui/allsubs.py:371
 #: ../src/subscription_manager/gui/subscription_assistant.py:614
 msgid "Quantity must be a positive number."
 msgstr "प्रमाण सकारात्मक क्रमांक असायला हवे."
 
-#: ../src/subscription_manager/gui/allsubs.py:352
+#: ../src/subscription_manager/gui/allsubs.py:382
 #: ../src/subscription_manager/gui/subscription_assistant.py:646
 #, python-format
 msgid "Error getting subscription: %s"
@@ -122,11 +118,7 @@ msgid "End Date"
 msgstr "समाप्ति दिनांक"
 
 #: ../src/subscription_manager/gui/installedtab.py:174
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:57
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:57
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:57
-#: ../src/subscription_manager/managercli.py:57
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:57
+#: ../src/subscription_manager/managercli.py:61
 msgid "Future Subscription"
 msgstr "भविष्यातील सबस्क्रिप्शन"
 
@@ -135,12 +127,8 @@ msgid "Future Subscribed"
 msgstr "फ्युचरकरीता सबस्क्राइब केले"
 
 #: ../src/subscription_manager/gui/installedtab.py:181
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:60
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:60
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:60
-#: ../src/subscription_manager/managercli.py:60
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:60
-#: ../src/subscription_manager/managerlib.py:79
+#: ../src/subscription_manager/managercli.py:64
+#: ../src/subscription_manager/managerlib.py:80
 msgid "Expired"
 msgstr "वेळ समाप्ति"
 
@@ -151,21 +139,13 @@ msgstr "सबस्क्रिप्शन %s ची वेळ समाप्
 
 #: ../src/subscription_manager/gui/installedtab.py:186
 #: ../src/subscription_manager/gui/installedtab.py:187
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:61
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:61
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:61
-#: ../src/subscription_manager/managercli.py:61
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:61
+#: ../src/subscription_manager/managercli.py:65
 msgid "Partially Subscribed"
 msgstr "अपुरेरित्या सबस्क्राइब केले"
 
 #: ../src/subscription_manager/gui/installedtab.py:190
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:58
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:58
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:58
-#: ../src/subscription_manager/managercli.py:58
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:58
-#: ../src/subscription_manager/managerlib.py:79
+#: ../src/subscription_manager/managercli.py:62
+#: ../src/subscription_manager/managerlib.py:80
 msgid "Subscribed"
 msgstr "सबस्क्राइब्ड्"
 
@@ -176,12 +156,8 @@ msgstr "काँट्रॅक्ट %s तर्फे समाविष्�
 
 #: ../src/subscription_manager/gui/installedtab.py:197
 #: ../src/subscription_manager/gui/installedtab.py:198
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:59
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:59
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:59
-#: ../src/subscription_manager/managercli.py:59
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:59
-#: ../src/subscription_manager/managerlib.py:79
+#: ../src/subscription_manager/managercli.py:63
+#: ../src/subscription_manager/managerlib.py:80
 msgid "Not Subscribed"
 msgstr "सबस्क्राइब्ड् नाही"
 
@@ -261,11 +237,7 @@ msgid "%s is not a valid certificate file. Please upload a valid certificate."
 msgstr "%s वैध प्रमाणपत्र फाइल नाही. कृपया वैध प्रमाणपत्र अपलोड करा."
 
 #: ../src/subscription_manager/gui/importsub.py:85
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1213
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1098
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1124
-#: ../src/subscription_manager/managercli.py:1199
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1239
+#: ../src/subscription_manager/managercli.py:1319
 msgid "An error occurred while importing the certificate. "
 msgstr "प्रमाणपत्र आयात करतेवेळी त्रुटी आढळली. "
 
@@ -333,40 +305,36 @@ msgstr "पुढील सुधारणा: %s"
 msgid "Installed"
 msgstr "प्रतिष्ठापीत"
 
-#: ../src/subscription_manager/gui/widgets.py:308
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1415
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1300
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1326
-#: ../src/subscription_manager/managercli.py:1401
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1441
+#: ../src/subscription_manager/gui/widgets.py:307
+#: ../src/subscription_manager/managercli.py:1521
 msgid "None"
 msgstr "काहिच नाही"
 
-#: ../src/subscription_manager/gui/widgets.py:438
+#: ../src/subscription_manager/gui/widgets.py:434
 msgid "Invalid date format. Please re-enter a valid date. Example: "
 msgstr "अवैध दिनांक रूपण. कृपया वैध दिनांक पुनः द्या. उदाहरणार्थ: "
 
-#: ../src/subscription_manager/gui/widgets.py:477
+#: ../src/subscription_manager/gui/widgets.py:500
 msgid "Today"
 msgstr "आज"
 
-#: ../src/subscription_manager/gui/widgets.py:571
+#: ../src/subscription_manager/gui/widgets.py:594
 msgid "Physical"
 msgstr "फिजिकल"
 
-#: ../src/subscription_manager/gui/widgets.py:572
+#: ../src/subscription_manager/gui/widgets.py:595
 msgid "Virtual"
 msgstr "वर्च्युअल"
 
-#: ../src/subscription_manager/gui/widgets.py:573
+#: ../src/subscription_manager/gui/widgets.py:596
 msgid "Both"
 msgstr "दोंही"
 
-#: ../src/subscription_manager/gui/widgets.py:576
+#: ../src/subscription_manager/gui/widgets.py:599
 msgid "Type"
 msgstr "प्रकार"
 
-#: ../src/subscription_manager/gui/widgets.py:646
+#: ../src/subscription_manager/gui/widgets.py:669
 msgid "Click to Adjust Quantity"
 msgstr "प्रमाण सुस्थीत करण्यासाठी क्लिक करा"
 
@@ -385,17 +353,17 @@ msgstr ""
 msgid "Are you sure you want to unsubscribe from %s?"
 msgstr "तुम्हाला नक्की %s पासून सबस्क्रिप्शन अशक्य करायचे?"
 
-#: ../src/subscription_manager/gui/mysubstab.py:171
+#: ../src/subscription_manager/gui/mysubstab.py:173
 msgid "My Subscriptions"
 msgstr "माझे सबस्क्रिप्शन्स्"
 
-#: ../src/subscription_manager/gui/mysubstab.py:208
-#: ../src/subscription_manager/gui/mysubstab.py:213
+#: ../src/subscription_manager/gui/mysubstab.py:210
+#: ../src/subscription_manager/gui/mysubstab.py:215
 msgid "Yes"
 msgstr "होय"
 
-#: ../src/subscription_manager/gui/mysubstab.py:210
-#: ../src/subscription_manager/gui/mysubstab.py:215
+#: ../src/subscription_manager/gui/mysubstab.py:212
+#: ../src/subscription_manager/gui/mysubstab.py:217
 msgid "No"
 msgstr "नाही"
 
@@ -415,11 +383,7 @@ msgstr "मागील सुधारणा नाही"
 #. TODO: could stand to check if registered before trying to do this:
 #: ../src/subscription_manager/gui/factsgui.py:103
 #: ../src/subscription_manager/gui/factsgui.py:107
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1157
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1042
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1068
-#: ../src/subscription_manager/managercli.py:1143
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1183
+#: ../src/subscription_manager/managercli.py:1263
 msgid "Unknown"
 msgstr "अपरिचीत"
 
@@ -468,11 +432,7 @@ msgstr "सर्व्हरची ओळख तपासण्यास अश
 #. NOTE: yes this looks a lot like the socket error, but I think these
 #. were actually intended to display slightly different messages:
 #: ../src/subscription_manager/gui/utils.py:67
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:101
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:101
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:101
-#: ../src/subscription_manager/managercli.py:101
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:101
+#: ../src/subscription_manager/managercli.py:105
 msgid ""
 "Network error. Please check the connection details, or see "
 "/var/log/rhsm/rhsm.log for more information."
@@ -483,11 +443,7 @@ msgstr ""
 #. This is what happens when there's an issue with the server on the other
 #. side of the wire
 #: ../src/subscription_manager/gui/utils.py:70
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:105
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:105
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:105
-#: ../src/subscription_manager/managercli.py:105
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:105
+#: ../src/subscription_manager/managercli.py:109
 msgid ""
 "Remote server error. Please check the connection details, or see "
 "/var/log/rhsm/rhsm.log for more information."
@@ -496,11 +452,7 @@ msgstr ""
 "/var/log/rhsm/rhsm.log पहा."
 
 #: ../src/subscription_manager/gui/utils.py:91
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:114
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:114
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:114
-#: ../src/subscription_manager/managercli.py:114
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:114
+#: ../src/subscription_manager/managercli.py:118
 #, python-format
 msgid "Bad CA certificate: %s"
 msgstr "अयोग्य CA प्रमाणपत्र: %s"
@@ -525,6 +477,11 @@ msgstr "प्रणालीची नोंदणी करत आहे"
 msgid "Autosubscribing"
 msgstr "स्वयंसबस्क्रिप्शन"
 
+#: ../src/subscription_manager/gui/registergui.py:323
+#, 
+msgid "Fetching certificates"
+msgstr ""
+
 #: ../src/subscription_manager/gui/registergui.py:362
 msgid "You must enter a system name."
 msgstr "तुम्ही प्रणाली नाव देऊ शकता."
@@ -542,7 +499,7 @@ msgid "Server supports environments, but none are available."
 msgstr "सर्व्हर एंवार्यंमेंट करीता समर्थन पुरवतो, परंतु एकहि उपलब्ध नाही."
 
 #: ../src/subscription_manager/hwprobe.py:90
-#: ../src/subscription_manager/hwprobe.py:433
+#: ../src/subscription_manager/hwprobe.py:441
 #, python-format
 msgid "Error reading system DMI information: %s"
 msgstr "प्रणलीची DMI माहिती वाचतेवेळी त्रुटी: %s"
@@ -564,20 +521,20 @@ msgstr "प्रणालीची cpu माहिती वाचतेवे
 msgid "Error reading networking information:"
 msgstr "नेटवर्किंग माहिती वाचतेवेळी त्रुटी:"
 
-#: ../src/subscription_manager/hwprobe.py:311
+#: ../src/subscription_manager/hwprobe.py:318
 msgid "Error reading network interface information:"
 msgstr "नेटवर्क इंटरफेस माहिती वाचतेवेळी त्रुटी:"
 
-#: ../src/subscription_manager/hwprobe.py:388
+#: ../src/subscription_manager/hwprobe.py:396
 msgid "Virtualization platform does not support UUIDs"
 msgstr "वर्च्युअलाइजेशन प्लॅटफॉर्म UUIDs करीता समर्थन पुरवत नाही"
 
-#: ../src/subscription_manager/hwprobe.py:390
+#: ../src/subscription_manager/hwprobe.py:398
 #, python-format
 msgid "Error finding UUID: %s"
 msgstr "UUID शोधतेवेळी त्रुटी: %s"
 
-#: ../src/subscription_manager/cache.py:166
+#: ../src/subscription_manager/cache.py:172
 msgid ""
 "Error updating system data, see /var/log/rhsm/rhsm.log for more details."
 msgstr ""
@@ -660,1302 +617,6 @@ msgid ""
 msgstr ""
 "टिप: प्रवेश किंवा पासवर्ड विसरलात? "
 "https://www.redhat.com/wapps/sso/rhn/lostPassword.html येथे शोधा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:65
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:65
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:65
-#: ../src/subscription_manager/constants.py:26
-#: ../src/subscription_manager/constants.py:40
-#: ../src/subscription_manager/constants.py:66
-#: ../src/subscription_manager/managercli.py:65
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:65
-#, python-format
-msgid "ProductName:          \t%-25s"
-msgstr "प्रोडक्टनेम:          \t%-25s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:67
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:67
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:67
-#: ../src/subscription_manager/managercli.py:67
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:67
-#, python-format
-msgid "ContractNumber:       \t%-25s"
-msgstr "काँट्रॅक्टनंबर:       \t%-25s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:69
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:69
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:69
-#: ../src/subscription_manager/managercli.py:69
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:69
-#, python-format
-msgid "AccountNumber:        \t%-25s"
-msgstr "अकाँटनंबर:        \t%-25s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:71
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:71
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:71
-#: ../src/subscription_manager/managercli.py:71
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:71
-#, python-format
-msgid "SerialNumber:         \t%-25s"
-msgstr "सिरिअलनंबर:         \t%-25s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:73
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:73
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:73
-#: ../src/subscription_manager/managercli.py:73
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:73
-#, python-format
-msgid "Active:               \t%-25s"
-msgstr "ॲक्टिव्ह:               \t%-25s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:75
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:75
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:75
-#: ../src/subscription_manager/managercli.py:75
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:75
-#, python-format
-msgid "QuantityUsed:         \t%-25s"
-msgstr "क्वांटिटियुज्ड्:         \t%-25s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:77
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:77
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:77
-#: ../src/subscription_manager/managercli.py:77
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:77
-#, python-format
-msgid "Begins:               \t%-25s"
-msgstr "बिगिंस्:               \t%-25s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:79
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:79
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:79
-#: ../src/subscription_manager/constants.py:36
-#: ../src/subscription_manager/constants.py:50
-#: ../src/subscription_manager/managercli.py:79
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:79
-#, python-format
-msgid "Expires:              \t%-25s"
-msgstr "एक्सपायर्स्:              \t%-25s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:95
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:95
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:95
-#: ../src/subscription_manager/managercli.py:95
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:95
-msgid "Network error, unable to connect to server."
-msgstr "नेटवर्क त्रुटी, सर्व्हरशी जोडणी अशक्य."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:96
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:96
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:96
-#: ../src/subscription_manager/constants.py:79
-#: ../src/subscription_manager/constants.py:83
-#: ../src/subscription_manager/managercli.py:96
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:96
-msgid "Please see /var/log/rhsm/rhsm.log for more information."
-msgstr "अधिक माहितीकरीता कृपया /var/log/rhsm/rhsm.log पहा."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:127
-#: ../src/subscription_manager/managercli.py:127
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:127
-#, python-format
-msgid "Service level set to: %s"
-msgstr "सर्व्हिस स्तर याकरीता निश्चित केली: %s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:141
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:137
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:137
-#: ../src/subscription_manager/managercli.py:141
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:141
-msgid "Installed Product Current Status:"
-msgstr "उत्पादनाची सध्याची स्थिती प्रतिष्ठापीत केली:"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:197
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:193
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:193
-#: ../src/subscription_manager/managercli.py:197
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:197
-msgid "proxy url in the form of proxy_hostname:proxy_port"
-msgstr "प्रॉक्सी url proxy_hostname:proxy_port या स्वरूपात"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:199
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:195
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:195
-#: ../src/subscription_manager/managercli.py:199
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:199
-msgid "user for http proxy with basic authentication"
-msgstr "पूर्वनिर्धारीत ओळखसह http प्रॉक्सीकरीता वापरकर्ता"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:201
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:197
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:197
-#: ../src/subscription_manager/managercli.py:201
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:201
-msgid "password for http proxy with basic authentication"
-msgstr "पूर्वनिर्धारीत ओळखसह http प्रॉक्सीकरीता पासवर्ड"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:208
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:396
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1661
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:204
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:392
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1546
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:204
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:392
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1572
-#: ../src/subscription_manager/managercli.py:208
-#: ../src/subscription_manager/managercli.py:396
-#: ../src/subscription_manager/managercli.py:1647
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:208
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:396
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1692
-msgid ""
-"Error: You need to register this system by running `register` command.  Try "
-"register --help."
-msgstr ""
-"त्रुटी: `register` आदेश चालवून या प्रणालीची नोंदणी करणे आवश्यक.  register "
-"--help वापरून पहा."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:268
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:264
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:264
-#: ../src/subscription_manager/managercli.py:268
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:268
-msgid "Consumer certificates corrupted. Please reregister."
-msgstr "ग्राहकाचे प्रमाणपत्रे सदोषीत आहे. कृपया पुनःनोंदणी करा."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:287
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:283
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:283
-#: ../src/subscription_manager/managercli.py:287
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:287
-msgid "username to use when authorizing against the server"
-msgstr "सर्व्हरच्या विरुद्ध वापरण्याजोगी वापरकर्तानाव"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:289
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:285
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:285
-#: ../src/subscription_manager/managercli.py:289
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:289
-msgid "password to use when authorizing against the server"
-msgstr "सर्व्हरच्या विरुद्ध ओळख पटवतेवेळी वापरण्याजोगी पासवर्ड"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:301
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:297
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:297
-#: ../src/subscription_manager/managercli.py:301
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:301
-msgid "Username: "
-msgstr "वापरकर्तानाव: "
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:304
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:300
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:300
-#: ../src/subscription_manager/managercli.py:304
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:304
-msgid "Password: "
-msgstr "पासवर्ड: "
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:329
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:325
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:325
-#: ../src/subscription_manager/managercli.py:329
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:329
-msgid ""
-"Remove all local consumer and subscription data without affecting the server"
-msgstr ""
-"सर्व्हरवर प्रभाव न टाकता सर्व स्थानीय ग्राहका व सबस्क्रिप्शन डाटा काढून टाका"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:346
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:342
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:342
-#: ../src/subscription_manager/managercli.py:346
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:346
-msgid "All local data removed"
-msgstr "सर्व स्थानीय डाटा काढून टाकले"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:354
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:350
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:350
-#: ../src/subscription_manager/managercli.py:354
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:354
-msgid "Pull the latest subscription data from the server"
-msgstr "सर्व्हरपासून सर्वात अलिकडील सबस्क्रिप्शन डाटा पूल करा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:366
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:362
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:362
-#: ../src/subscription_manager/managercli.py:366
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:366
-msgid "All local data refreshed"
-msgstr "सर्व स्थानीय डाटा पुनःताजे केले"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:371
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:367
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:367
-#: ../src/subscription_manager/managercli.py:371
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:371
-#, python-format
-msgid "Unable to perform refresh due to the following exception: %s"
-msgstr "खालील अपवादमुळे ताजे करणे अशक्य: %s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:380
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:376
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:376
-#: ../src/subscription_manager/managercli.py:380
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:380
-msgid "Display the identity certificate for this machine or request a new one"
-msgstr "या मशीनपासून ओळख प्रमाणपत्र दाखवा किंवा नवीनकरीता विनंती करा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:389
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:385
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:385
-#: ../src/subscription_manager/managercli.py:389
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:389
-msgid "request a new certificate be generated"
-msgstr "निर्माणजोगी नवीन प्रमाणपत्रकरीता विनंती करा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:391
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:387
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:387
-#: ../src/subscription_manager/managercli.py:391
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:391
-msgid "force certificate regeneration (requires username and password)"
-msgstr "प्रमाणपत्र पुनःनिर्माण जबरनरित्या करा (वापरकर्तानाव व पासवर्ड आवश्यक)"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:399
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:395
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:395
-#: ../src/subscription_manager/managercli.py:399
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:399
-msgid "--force can only be used with --regenerate"
-msgstr "--force फक्त --regenerate सह वापरले जाऊ शकते"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:403
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:399
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:399
-#: ../src/subscription_manager/managercli.py:403
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:403
-msgid "--username and --password can only be used with --force"
-msgstr "--username व --password फक्त --force सह वापरले जाऊ शकते"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:418
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:414
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:414
-#: ../src/subscription_manager/managercli.py:418
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:418
-#, python-format
-msgid "Current identity is: %s"
-msgstr "सध्याची ओळख: %s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:419
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:415
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:415
-#: ../src/subscription_manager/managercli.py:419
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:419
-#, python-format
-msgid "name: %s"
-msgstr "नाव: %s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:420
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:416
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:416
-#: ../src/subscription_manager/managercli.py:420
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:420
-#, python-format
-msgid "org name: %s"
-msgstr "संस्थाचे नाव: %s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:421
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:417
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:417
-#: ../src/subscription_manager/managercli.py:421
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:421
-#, python-format
-msgid "org id: %s"
-msgstr "संस्थाचे id: %s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:432
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:428
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:428
-#: ../src/subscription_manager/managercli.py:432
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:432
-msgid "Identity certificate has been regenerated."
-msgstr "ओळखप्रमाणपत्र पुनःनिर्माण केले."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:440
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:436
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:436
-#: ../src/subscription_manager/managercli.py:440
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:440
-msgid "Error: Unable to generate a new identity for the system"
-msgstr "त्रुटी: प्रणालीकरीता नवीन ओळख निर्माण करण्यास अशक्य"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:447
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:443
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:443
-#: ../src/subscription_manager/managercli.py:447
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:447
-msgid "Display the orgs against which a user can register a system"
-msgstr ""
-"संस्था ज्याविरुद्ध वापरकर्ता प्रणालीची नोंदणी करू शकतो, तशी सूची दाखवा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:467
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:463
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:463
-#: ../src/subscription_manager/managercli.py:467
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:467
-msgid "Organizations"
-msgstr "संस्था"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:471
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:467
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:467
-#: ../src/subscription_manager/managercli.py:471
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:471
-msgid "OrgName"
-msgstr "संस्थानाव"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:472
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:468
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:468
-#: ../src/subscription_manager/managercli.py:472
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:472
-msgid "OrgKey"
-msgstr "संस्थाकि"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:475
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:848
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:471
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:740
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:471
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:739
-#: ../src/subscription_manager/managercli.py:475
-#: ../src/subscription_manager/managercli.py:834
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:475
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:847
-#, python-format
-msgid "%s cannot register to any organizations."
-msgstr "%s कोणत्याहि संस्थाशी नोंदणी करू शकत नाही."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:482
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:478
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:478
-#: ../src/subscription_manager/managercli.py:482
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:482
-msgid "Error: Unable to retrieve org list from Entitlement Platform"
-msgstr "त्रुटी: एंटाइटलमेंट प्लॅटफार्मसह ऑर्ग सूची प्राप्त करणे अशक्य"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:489
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:485
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:485
-#: ../src/subscription_manager/managercli.py:489
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:489
-msgid "Display the environments available for a user"
-msgstr "वापरकर्त्यासाठी उपलब्ध एंवार्यंमेंटस् दाखवा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:497
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:493
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:493
-#: ../src/subscription_manager/managercli.py:497
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:497
-msgid "specify org for environment list"
-msgstr "एंवार्यंमेंट सूचीकरीता org निर्देशीत करा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:501
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:497
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:497
-#: ../src/subscription_manager/managercli.py:501
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:501
-msgid "you must specify an --org"
-msgstr "--org निर्देशीत करणे आवश्यक आहे"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:517
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:513
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:513
-#: ../src/subscription_manager/managercli.py:517
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:517
-msgid "Environments"
-msgstr "वातावरणे"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:533
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:529
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:529
-#: ../src/subscription_manager/managercli.py:533
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:533
-msgid "Error: Unable to retrieve environment list from Entitlement Platform"
-msgstr ""
-"त्रुटी: एंटाइटलमेंट प्लॅटफार्मपासून एंवार्यनमेंट सूची प्राप्त करणे अशक्य"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:540
-#: ../src/subscription_manager/managercli.py:540
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:540
-msgid "Display the service levels available for an organization."
-msgstr "संस्थाकरीता उपलब्ध सर्व्हिस स्तर दाखवा."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:547
-#: ../src/subscription_manager/managercli.py:547
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:547
-msgid "specify org for service level list"
-msgstr "सर्व्हिस स्तर सूचीकरीता संस्था ठरवा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:549
-#: ../src/subscription_manager/managercli.py:549
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:549
-msgid "list all service levels available"
-msgstr "सर्व उपलब्ध सर्व्हिस स्तर सूचीत दाखवा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:551
-#: ../src/subscription_manager/managercli.py:551
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:551
-msgid "show this system's current service level"
-msgstr "ह्या प्रणालीचे सध्याचे सर्व्हिस स्तर दाखवा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:562
-#: ../src/subscription_manager/managercli.py:562
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:562
-msgid ""
-"Error: you must register or specify --username and password to list service "
-"levels"
-msgstr ""
-"त्रुटी: सर्व्हिस स्तरची सूची दाखवण्याकरीता नोंदणी किंवा --username व पासवर्ड"
-" निश्चित केले पाहिजे"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:565
-#: ../src/subscription_manager/managercli.py:565
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:565
-msgid "Error: you must register or specify --org."
-msgstr "त्रुटी: --org ची नोंदणी किंवा त्यास ठरवणे आवश्यक."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:568
-#: ../src/subscription_manager/managercli.py:568
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:568
-msgid "Error: This system is currently not registered."
-msgstr "त्रुटी: हि प्रणालीची नोंदणी सध्या झाली नाही."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:606
-#: ../src/subscription_manager/managercli.py:606
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:606
-msgid "Error: Unable to retrieve service levels."
-msgstr "त्रुटी: सर्व्हिस स्तर प्राप्त करणे अशक्य."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:611
-#: ../src/subscription_manager/managercli.py:611
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:611
-#, python-format
-msgid "Current service level: %s"
-msgstr "सध्याचे सर्व्हिस स्तर: %s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:623
-#: ../src/subscription_manager/managercli.py:623
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:623
-msgid "Service Levels"
-msgstr "सर्व्हिस स्तर"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:646
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:545
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:545
-#: ../src/subscription_manager/managercli.py:646
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:646
-msgid "the type of consumer to register, defaults to system"
-msgstr "नोंदणी करण्याजोगी विक्रेताचे नाव, प्रणालीकरीता पूर्वनिर्धारित आहे"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:648
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:547
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:547
-#: ../src/subscription_manager/managercli.py:648
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:648
-msgid "name of the consumer to register, defaults to the hostname"
-msgstr "नोंदणी करण्याजोगी वापरकर्त्याचे नाव, यजमाननावकरीता पूर्वनिर्धारित आहे"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:650
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:549
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:549
-#: ../src/subscription_manager/managercli.py:650
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:650
-msgid "if supplied, the existing consumer data is pulled from the server"
-msgstr "पूरवले असल्यास, अस्तित्वातील ग्राहक डाटा सर्व्हर पासून पूल केले जाते"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:652
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:551
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:551
-#: ../src/subscription_manager/managercli.py:652
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:652
-msgid "register to one of multiple organizations for the user"
-msgstr "वापरकर्ताकरीता एकापेक्षाजास्त संस्थासाठी नोंदणी करा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:654
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:553
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:553
-#: ../src/subscription_manager/managercli.py:654
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:654
-msgid "register to a specific environment in the destination org"
-msgstr "लक्ष्य संस्थापनमध्ये ठराविक वातावरणकरीता नोंदणी करा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:656
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:555
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:555
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:656
-msgid "set a release version"
-msgstr "प्रकाशन आवृत्ती ठरवा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:660
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:559
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:559
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:660
-msgid "list releases available for this consumer"
-msgstr "ह्या ग्राहककरीता उपलब्ध प्रकाशनांची सूची दाखवा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:662
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:966
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:561
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:858
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:561
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:884
-#: ../src/subscription_manager/managercli.py:656
-#: ../src/subscription_manager/managercli.py:952
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:662
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:992
-msgid ""
-"automatically subscribe this system to                                     "
-"compatible subscriptions."
-msgstr "स्वयं या प्रणालीला सहत्व सबस्क्रिप्शन्स् करीता सबस्क्राइब करा."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:665
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:564
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:564
-#: ../src/subscription_manager/managercli.py:659
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:665
-msgid "register the system even if it is already registered"
-msgstr "आधिपासूनच नोंदणी झाल्यावरही प्रणालीची नोंदणी करा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:667
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:566
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:566
-#: ../src/subscription_manager/managercli.py:661
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:667
-msgid "one or more activation keys to use for registration"
-msgstr "नोंदणीकरीता वापरण्योजगी एक किंवा त्यापेक्षाजास्त ॲक्टिवेशन किज्"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:669
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:969
-#: ../src/subscription_manager/managercli.py:663
-#: ../src/subscription_manager/managercli.py:955
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:669
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:995
-msgid "service level to apply to this system"
-msgstr "ह्या प्रणालीकरीता लागू करण्याजोगी सर्व्हिस स्तर"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:677
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:573
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:573
-#: ../src/subscription_manager/managercli.py:671
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:677
-msgid "This system is already registered. Use --force to override"
-msgstr ""
-"या प्रणालीची आधिपासूनच नोंदणी झाली आहे. खोडूनपुनः लिहण्यासाठी --force याचा "
-"वापर करा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:680
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:576
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:576
-#: ../src/subscription_manager/managercli.py:674
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:680
-msgid "Error: consumer name can not be empty."
-msgstr "त्रुटी: वापरकर्तानाव रिकामे असणे अशक्य."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:683
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:579
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:579
-#: ../src/subscription_manager/managercli.py:677
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:683
-msgid "Error: Activation keys do not require user credentials"
-msgstr "त्रुटी: ॲक्टिवेशन किज्ला वापकर्ता श्रेयची आवश्यकता नाही"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:686
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:582
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:582
-#: ../src/subscription_manager/managercli.py:680
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:686
-msgid "Error: Activation keys can not be used with previously registered ids."
-msgstr ""
-"त्रुटी: ॲक्टिवेशन किज्चा वापर पूर्वीच्या नोंदणी केलेल्या ids सह शक्य नाही."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:689
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:585
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:585
-#: ../src/subscription_manager/managercli.py:683
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:689
-msgid "Error: Must specify --org to register to an environment."
-msgstr "त्रुटी: एंवार्यनमेंटची नोंदणी करण्यासाठी --org निर्देशीत करा."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:692
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:588
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:588
-#: ../src/subscription_manager/managercli.py:686
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:692
-msgid "Error: Must specify --org to register with activation keys."
-msgstr "त्रुटी: ॲक्टिवेशन किज्सह नोंदणी करण्यासाठी --org निर्देशीत करा."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:696
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:592
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:592
-#: ../src/subscription_manager/managercli.py:690
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:696
-msgid "Error: Must specify an activation key"
-msgstr "त्रुटी: ॲक्टिवेशन कि निर्देशीत करणे आवश्यक"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:699
-#: ../src/subscription_manager/managercli.py:693
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:699
-msgid "Error: Must use --autosubscribe with --servicelevel."
-msgstr "त्रुटी: --servicelevel सह --autosubscribe याचा वापर आवश्यक."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:729
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:622
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:622
-#: ../src/subscription_manager/managercli.py:720
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:729
-#, python-format
-msgid "The system with UUID %s has been unregistered"
-msgstr "UUID %s असलेली प्रणालीची नोंदणी अशक्य केली आहे"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:770
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:663
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:663
-#: ../src/subscription_manager/managercli.py:761
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:770
-#, python-format
-msgid "Error during registration: %s"
-msgstr "नोंदणीवेळी त्रुटी आढळली: %s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:774
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:667
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:667
-#: ../src/subscription_manager/managercli.py:765
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:774
-#, python-format
-msgid "The system has been registered with id: %s "
-msgstr "प्रणालीची id सह नोंदणी झाली आहे: %s "
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:829
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:721
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:720
-#: ../src/subscription_manager/managercli.py:815
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:828
-msgid "ERROR: Server does not support environments."
-msgstr "त्रुटी: सर्व्हर एंवार्यनमेंटस्करीता समर्थन पुरवत नाही."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:833
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:725
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:724
-#: ../src/subscription_manager/managercli.py:819
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:832
-#, python-format
-msgid "No such environment: %s"
-msgstr "या प्रकारचे एंवार्यनमेंट आढळले नाही: %s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:873
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:765
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:764
-#: ../src/subscription_manager/managercli.py:859
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:872
-msgid "This system is currently not registered."
-msgstr "सध्या प्रणालीची नोंदणी केली नाही."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:895
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:787
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:786
-#: ../src/subscription_manager/managercli.py:881
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:894
-msgid "System has been un-registered."
-msgstr "प्रणाली नोंदणी-अशक्य केली आहे."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:902
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:794
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:793
-#: ../src/subscription_manager/managercli.py:888
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:901
-msgid "Attempt to redeem a subscription for a preconfigured machine"
-msgstr "पूर्वसंरचीत मशीनकरीता सबस्क्रिप्शनचा वापर करण्याचा प्रयत्न झाला"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:908
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:800
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:799
-#: ../src/subscription_manager/managercli.py:894
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:907
-msgid "Email address to notify when subscription redemption is complete."
-msgstr "सबस्क्रिप्शन रिडिम्शन पूर्ण झाल्यावर सूचना पोहचण्यासाठीचा इमेल पत्ता."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:911
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:803
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:802
-#: ../src/subscription_manager/managercli.py:897
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:910
-msgid ""
-"Optional language to use for email notification when subscription redemption"
-" is complete. Examples: en-us, de-de"
-msgstr ""
-"सबस्क्रिप्शन वापर पूर्ण झाल्यावर इमेल सूचनाकरीता वापरण्याजोगी वैकल्पिक भाषा."
-" उदाहरणे: en-us, de-de"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:954
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:846
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:872
-#: ../src/subscription_manager/managercli.py:940
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:980
-msgid "Subscribe the registered machine to a specified product"
-msgstr "नोंदणी मशीनला निर्देशीत उत्पादनसह सबस्क्राइब करा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:962
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:854
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:880
-#: ../src/subscription_manager/managercli.py:948
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:988
-msgid "the id of the pool to subscribe to"
-msgstr "सबस्क्राइब करण्याजोगी पूलचे id"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:964
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:856
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:882
-#: ../src/subscription_manager/managercli.py:950
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:990
-msgid "number of subscriptions to consume"
-msgstr "वापरण्याजोगी सबस्क्रिप्शन्स्ची संख्या"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:973
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:863
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:889
-#: ../src/subscription_manager/managercli.py:959
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:999
-msgid ""
-"Error: This command requires that you specify a pool with --pool or use "
-"--auto."
-msgstr ""
-"त्रुटी: या आदेशला --pool सह पूल निर्देशीत करणे आवश्यक आहे किंवा --auto याचा "
-"वापर करा."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:976
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:866
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:892
-#: ../src/subscription_manager/managercli.py:962
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1002
-msgid "Error: Only one of --pool or --auto may be used with this command."
-msgstr "त्रुटी: या आदेशसह फक्त --pool किंवा --auto यापैकी एकचा वापर शक्य आहे."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:983
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:873
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:899
-#: ../src/subscription_manager/managercli.py:969
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1009
-msgid "Error: Quantity must be a positive integer."
-msgstr "त्रुटी: प्रमाण सकारात्मक क्रमांक असायला हवे."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:989
-#: ../src/subscription_manager/managercli.py:975
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1015
-msgid "Error: Must use --auto with --servicelevel."
-msgstr "त्रुटी: --servicelevel सह --auto चा वापर आवश्यक."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1013
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:899
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:925
-#: ../src/subscription_manager/managercli.py:999
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1039
-msgid "Please enter a valid numeric pool id."
-msgstr "कृपया वैध संख्यायीक पूल आयडी द्या."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1015
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:901
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:927
-#: ../src/subscription_manager/managercli.py:1001
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1041
-#, python-format
-msgid "Successfully consumed a subscription from the pool with id %s."
-msgstr "id %s सह यशस्वीरित्या पूल पासून सबस्क्रिप्शन प्राप्त केले."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1057
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:942
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:968
-#: ../src/subscription_manager/managercli.py:1043
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1083
-msgid "Unsubscribe the machine from all or specific subscriptions"
-msgstr "सर्व किंवा ठराविक सबस्क्रिप्शन्स् पासून मशीन सबस्क्रिप्शन अशक्य करा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1064
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:949
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:975
-#: ../src/subscription_manager/managercli.py:1050
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1090
-msgid "Certificate serial to unsubscribe"
-msgstr "सबस्क्राइब अशक्यकरीता सर्टिफिकेट सिरीअल"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1066
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:951
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:977
-#: ../src/subscription_manager/managercli.py:1052
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1092
-msgid "Unsubscribe from all subscriptions"
-msgstr "सर्व सबस्क्रिप्शन्स् पासून सबस्क्राइब अशक्य करा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1071
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:956
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:982
-#: ../src/subscription_manager/managercli.py:1057
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1097
-#, python-format
-msgid "'%s' is not a valid serial number"
-msgstr "'%s' वैध सिरिअल क्रमांक नाही"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1074
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:959
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:985
-#: ../src/subscription_manager/managercli.py:1060
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1100
-msgid "One of --serial or --all must be provided"
-msgstr "--serial किंवा --all पैकी एक पुरवणे आवश्यक आहे"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1098
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1113
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:983
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:998
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1009
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1024
-#: ../src/subscription_manager/managercli.py:1084
-#: ../src/subscription_manager/managercli.py:1099
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1124
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1139
-#, python-format
-msgid "Unable to perform unsubscribe due to the following exception: %s"
-msgstr "खालील अपवादमुळे सबस्क्राइब अशक्य करणे शक्य नाही: %s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1105
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:990
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1016
-#: ../src/subscription_manager/managercli.py:1091
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1131
-msgid "This machine has been unsubscribed from all subscriptions"
-msgstr "या मशीनला सर्व सबस्क्रिप्शन्स् पासून सबस्क्राइब अशक्य केले आहे"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1110
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:995
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1021
-#: ../src/subscription_manager/managercli.py:1096
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1136
-msgid "This machine has been unsubscribed from subscription "
-msgstr "या मशीनला सबस्क्रिप्शनपासून सबस्क्राइब अशक्य केले आहे"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1124
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1009
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1035
-#: ../src/subscription_manager/managercli.py:1110
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1150
-msgid "Work with the current facts for this machine"
-msgstr "या मशीनकरीता सध्याच्या फॅक्टस्सह कार्य करा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1130
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1015
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1041
-#: ../src/subscription_manager/managercli.py:1116
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1156
-msgid "list known facts for this system"
-msgstr "या प्रणालीकरीता परिचीत वस्तुस्थिती दाखवा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1132
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1017
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1043
-#: ../src/subscription_manager/managercli.py:1118
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1158
-msgid "update the system facts"
-msgstr "प्रणालीची वस्तुस्थिती सुधारीत करा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1141
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1026
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1052
-#: ../src/subscription_manager/managercli.py:1127
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1167
-msgid "Error: Need either --list or --update, Try facts --help"
-msgstr ""
-"त्रुटी: --list किंवा --update यापैकी एक आवश्यक आहे, facts --help वापरून पहा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1165
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1050
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1076
-#: ../src/subscription_manager/managercli.py:1151
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1191
-msgid "Successfully updated the system facts."
-msgstr "यशस्वीरित्या प्रणाली वस्तुस्थिती सुधारित केले."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1172
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1057
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1083
-#: ../src/subscription_manager/managercli.py:1158
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1198
-msgid "Import certificates which were provided outside of the tool"
-msgstr "साधनच्या बाहेरील पुरवलेले प्रमाणपत्रे आयात करा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1178
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1063
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1089
-#: ../src/subscription_manager/managercli.py:1164
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1204
-msgid ""
-"certificate file to import (for multiple imports, specify this option more "
-"than once)"
-msgstr ""
-"आयात (एकापेक्षाजास्त आयातकरीता, या पर्यायला एकापेक्षा जास्तवेळी निर्देशीत "
-"करा) करण्याजोगी प्रमाणपत्र"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1182
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1067
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1093
-#: ../src/subscription_manager/managercli.py:1168
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1208
-msgid "Error: At least one certificate is required"
-msgstr "त्रुटी: किमान एक प्रमाणपत्र आवश्यक आहे"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1201
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1086
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1112
-#: ../src/subscription_manager/managercli.py:1187
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1227
-#, python-format
-msgid "Successfully imported certificate %s"
-msgstr "यशस्वीरित्या प्रमाणपत्र %s आयात केले"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1207
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1217
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1092
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1102
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1118
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1128
-#: ../src/subscription_manager/managercli.py:1193
-#: ../src/subscription_manager/managercli.py:1203
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1233
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1243
-#, python-format
-msgid "%s is not a valid certificate file. Please use a valid certificate."
-msgstr "%s वैध प्रमाणपत्र नाही. कृपया वैध प्रमाणपत्रचा वापर करा."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1233
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1118
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1144
-#: ../src/subscription_manager/managercli.py:1219
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1259
-msgid "List the repos which this machine is entitled to use"
-msgstr "वापरण्याजोगी मशीनसह रेपोज्ची सूची दाखवा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1243
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1128
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1154
-#: ../src/subscription_manager/managercli.py:1229
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1269
-msgid "list the entitled repositories for this system"
-msgstr "या प्रणालीकरीता सूचीतील रेपॉजिटरीज् सूचीत दाखवा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1247
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1132
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1158
-#: ../src/subscription_manager/managercli.py:1233
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1273
-msgid "Error: No options provided. Please see the help comand."
-msgstr "त्रुटी: पर्याय पुरवले नाही. कृपया help आदेश पहा."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1257
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1142
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1168
-#: ../src/subscription_manager/managercli.py:1243
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1283
-msgid "Repositories disabled by configuration."
-msgstr "संरचनातर्फे रेपॉजिटरिज् बंद केले."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1260
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1145
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1171
-#: ../src/subscription_manager/managercli.py:1246
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1286
-#, python-format
-msgid "    Entitled Repositories in %s"
-msgstr "%s मधील एंटाइटलड् रेपॉजिटरीज्"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1268
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1153
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1179
-#: ../src/subscription_manager/managercli.py:1254
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1294
-msgid "The system is not entitled to use any repositories."
-msgstr "प्रणाली कोणतेहि रेपॉजिटरीज्चा वापर करण्यास एंटाइटल्ड् नाही."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1275
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1160
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1186
-#: ../src/subscription_manager/managercli.py:1261
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1301
-msgid ""
-"List, set, or remove the configuration parameters in use by this machine."
-msgstr ""
-"या मशीनतर्फे वापरण्याजोगी संरचना घटकांची सूची दाखवा, सेट करा, किंवा काढून "
-"टाका."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1282
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1167
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1193
-#: ../src/subscription_manager/managercli.py:1268
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1308
-msgid "list the configuration for this system"
-msgstr "या प्रणालीकरीता संरचना सूचीत दाखवा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1284
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1169
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1195
-#: ../src/subscription_manager/managercli.py:1270
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1310
-msgid "remove configuration entry by section.name"
-msgstr "section.name तर्फे संरचना काढून टाका"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1288
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1173
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1199
-#: ../src/subscription_manager/managercli.py:1274
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1314
-#, python-format
-msgid "Section: %s, Name: %s"
-msgstr "विभाग: %s, नाव: %s"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1303
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1188
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1214
-#: ../src/subscription_manager/managercli.py:1289
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1329
-msgid ""
-"Error: --list should not be used with any other options for setting or "
-"removing configurations."
-msgstr ""
-"त्रुटी: संरचना सेट किंवा काढून टाकण्यासाठी --list याचा वापर कोणत्याहि इतर "
-"पर्यायसह वापरू नका."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1321
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1206
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1232
-#: ../src/subscription_manager/managercli.py:1307
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1347
-msgid ""
-"Error: configuration entry designation for removal must be of format "
-"[section.name]"
-msgstr ""
-"त्रुटी: काढून टाकताना कॉन्फिगरेशन एंट्री डेजिगनेशनचे रूपण [section.name] "
-"असायला हवे"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1332
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1217
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1243
-#: ../src/subscription_manager/managercli.py:1318
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1358
-#, python-format
-msgid "Error: Section %s and name %s does not exist."
-msgstr "त्रुटी: विभाग %s व नाव %s अस्तित्वात नाही."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1351
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1236
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1262
-#: ../src/subscription_manager/managercli.py:1337
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1377
-msgid "[] - Default value in use"
-msgstr "[] - वापरण्याजोगी पूर्वनिर्धारित मूल्य"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1360
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1363
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1245
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1248
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1271
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1274
-#: ../src/subscription_manager/managercli.py:1346
-#: ../src/subscription_manager/managercli.py:1349
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1386
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1389
-#, python-format
-msgid "You have removed the value for section %s and name %s."
-msgstr "विभाग %s व नाव %s करीता तुम्ही मूल्य काढून टाकले."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1364
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1249
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1275
-#: ../src/subscription_manager/managercli.py:1350
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1390
-#, python-format
-msgid "The default value for %s will now be used."
-msgstr "%s करीता पूर्वनिर्धारित मूल्याचा वापर आत्ता शक्य आहे."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1366
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1251
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1277
-#: ../src/subscription_manager/managercli.py:1352
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1392
-#, python-format
-msgid "Section %s and name %s cannot be removed."
-msgstr "विभाग %s व नाव %s याचे पुनःनामांकन शक्य नाही."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1381
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1266
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1292
-#: ../src/subscription_manager/managercli.py:1367
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1407
-msgid "List subscription and product information for this machine"
-msgstr "या मशीनकरीता सबस्क्रिप्शन सूची व उत्पादन माहिती दाखवा"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1387
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1272
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1298
-#: ../src/subscription_manager/managercli.py:1373
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1413
-msgid ""
-"if supplied then list shows those products which are installed (default)"
-msgstr "पुरवले असल्यास सूची प्रतिष्ठापीत उत्पादने दाखवा (पूर्वनिर्धारित)"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1389
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1274
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1300
-#: ../src/subscription_manager/managercli.py:1375
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1415
-msgid "if supplied then list shows those subscriptions which are available"
-msgstr "पुरवले असल्यास सूची उपलब्ध सबस्क्रिप्शन्स् दाखवते"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1391
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1276
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1302
-#: ../src/subscription_manager/managercli.py:1377
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1417
-#, python-format
-msgid ""
-"date to search on, defaults to today's date, only used with --available "
-"(example: %s)"
-msgstr ""
-"शोधण्याजोगी दिनांक, आजच्या दिनांककरीता पूर्वनिर्धारीत होते, फक्त --available"
-" (उदाहरणार्थ: %s) सह वापरले जाते"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1394
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1279
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1305
-#: ../src/subscription_manager/managercli.py:1380
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1420
-msgid "shows the subscriptions being consumed by this system."
-msgstr "प्रणालीतर्फे प्राप्त वापरण्याजोगी सबस्क्रिप्शन्स् दाखवते."
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1396
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1281
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1307
-#: ../src/subscription_manager/managercli.py:1382
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1422
-msgid "if supplied with --available then all subscriptions are returned"
-msgstr "--available सह पुरवल्यास सर्व सबस्क्रिप्शन्स् रिटर्न केले जातात"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1403
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1288
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1314
-#: ../src/subscription_manager/managercli.py:1389
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1429
-msgid "Error: --all is only applicable with --available"
-msgstr "त्रुटी: --all फक्त --available सह लागू होते"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1406
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1291
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1317
-#: ../src/subscription_manager/managercli.py:1392
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1432
-msgid "Error: --ondate is only applicable with --available"
-msgstr "त्रुटी: --ondate फक्त --available सह लागू होते"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1429
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1314
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1340
-#: ../src/subscription_manager/managercli.py:1415
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1455
-msgid "No installed products to list"
-msgstr "सूचीत दाखवण्याकरीता प्रतिष्ठापीत उत्पादने आढळली नाही"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1432
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1317
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1343
-#: ../src/subscription_manager/managercli.py:1418
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1458
-msgid "    Installed Product Status"
-msgstr "उत्पादनाची स्थिती प्रतिष्ठापीत केली"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1449
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1334
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1360
-#: ../src/subscription_manager/managercli.py:1435
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1475
-msgid ""
-"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-msgstr ""
-"दिलेले दिनांक अवैध आहे. दिनांक YYYY-MM-DD स्वरूपाचे असायला हवे (उदाहरणार्थ: "
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1455
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1340
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1366
-#: ../src/subscription_manager/managercli.py:1441
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1481
-msgid "No available subscription pools to list"
-msgstr "सूचीत दाखवण्याकरीता उपलब्ध सबसक्रिप्शन पूल्स् आढळले नाही"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1463
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1348
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1374
-#: ../src/subscription_manager/managercli.py:1449
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1489
-msgid "virtual"
-msgstr "वर्च्युअल"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1465
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1350
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1376
-#: ../src/subscription_manager/managercli.py:1451
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1491
-msgid "physical"
-msgstr "फिजिकल"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1485
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1370
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1396
-#: ../src/subscription_manager/managercli.py:1471
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1511
-msgid "No consumed subscription pools to list"
-msgstr "दाखवण्याकरीता प्राप्य सबस्क्रिश्न पूल्स् आढळले नाही"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1488
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1373
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1399
-#: ../src/subscription_manager/managercli.py:1474
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1514
-msgid "Consumed Product Subscriptions"
-msgstr "प्राप्त उत्पादन सबस्क्रिप्शन्स्"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1565
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1450
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1476
-#: ../src/subscription_manager/managercli.py:1551
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1596
-#, python-format
-msgid "Usage: %s [options] MODULENAME --help"
-msgstr "वापर: %s [options] MODULENAME --help"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1567
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1452
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1478
-#: ../src/subscription_manager/managercli.py:1553
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1598
-msgid "Primary Modules:"
-msgstr "प्राथमिक घटके:"
-
-#: ../src/subscription_manager/managercli.py.LOCAL.10011.py:1576
-#: ../src/subscription_manager/managercli.py.BASE.10011.py:1461
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:1487
-#: ../src/subscription_manager/managercli.py:1562
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:1607
-msgid "Other Modules (Please consult documentation):"
-msgstr "इतर घटके (कृपया दस्तऐवजीकरण पहा):"
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
@@ -2052,71 +713,62 @@ msgstr "कार्यक्रमाचे आवृत्ती क्रम�
 msgid "%s: error: %s"
 msgstr "%s: त्रुटी: %s"
 
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:844
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:952
-msgid "Configure what os release to use"
-msgstr "वापरण्यासाठीचे os प्रकाशन संरचीत करा"
-
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:850
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:958
-msgid "list available releases"
-msgstr "उपलब्ध प्रकाशनांची सूची दाखवा"
-
-#: ../src/subscription_manager/managercli.py.REMOTE.10011.py:853
-#: ../src/subscription_manager/managercli.py.BACKUP.10011.py:961
-msgid "set the release"
-msgstr "प्रकाशन निश्चित करा"
-
 #: ../src/subscription_manager/certlib.py:168
 #: ../src/subscription_manager/certdirectory.py:168
 msgid "Reason(s):"
 msgstr "कारणे:"
 
-#: ../src/subscription_manager/certlib.py:425
+#: ../src/subscription_manager/certlib.py:428
 #, python-format
 msgid "Total updates: %d"
 msgstr "एकूण सुधारणा: %d"
 
-#: ../src/subscription_manager/certlib.py:426
+#: ../src/subscription_manager/certlib.py:429
 #, python-format
 msgid "Found (local) serial# %s"
 msgstr "(स्थानीय) सिरीअल# %s आढळले"
 
-#: ../src/subscription_manager/certlib.py:427
+#: ../src/subscription_manager/certlib.py:430
 #, python-format
 msgid "Expected (UEP) serial# %s"
 msgstr "अपेक्षीत (UEP) सिरीअल# %s"
 
-#: ../src/subscription_manager/certlib.py:428
+#: ../src/subscription_manager/certlib.py:431
 msgid "Added (new)"
 msgstr "समाविष्ट केले (नवीन)"
 
-#: ../src/subscription_manager/certlib.py:429
+#: ../src/subscription_manager/certlib.py:432
 msgid "Deleted (rogue):"
 msgstr "नष्ट केले (दुष्ट):"
 
-#: ../src/subscription_manager/certlib.py:430
+#: ../src/subscription_manager/certlib.py:433
 msgid "Expired (not deleted):"
 msgstr "वेळ समाप्ति (नष्ट केले नाही):"
 
-#: ../src/subscription_manager/certlib.py:431
+#: ../src/subscription_manager/certlib.py:434
 msgid "Expired (deleted):"
 msgstr "वेळ समाप्ति (नष्ट केले):"
 
-#: ../src/subscription_manager/certlib.py:436
+#: ../src/subscription_manager/certlib.py:439
 msgid "Updating entitlement certificates"
 msgstr "एंटाइटलमेंट प्रमाणपत्रे सुधारित करत आहे"
 
-#: ../src/subscription_manager/certlib.py:439
-#: ../src/subscription_manager/certmgr.py:104
+#: ../src/subscription_manager/certlib.py:442
 #, python-format
 msgid "%d updates required"
 msgstr "%d सुधारणा आवश्यक"
 
-#: ../src/subscription_manager/certlib.py:440
-#: ../src/subscription_manager/certmgr.py:105
+#: ../src/subscription_manager/certlib.py:443
 msgid "done"
 msgstr "पूर्ण झाले"
+
+#: ../src/subscription_manager/constants.py:26
+#: ../src/subscription_manager/constants.py:40
+#: ../src/subscription_manager/constants.py:66
+#: ../src/subscription_manager/managercli.py:69
+#, python-format
+msgid "Product Name:         \t%-25s"
+msgstr ""
 
 #: ../src/subscription_manager/constants.py:28
 #, python-format
@@ -2139,15 +791,22 @@ msgstr "स्थिती:             \t%-25s"
 msgid "Starts:               \t%-25s"
 msgstr "सुरवात:             \t%-25s"
 
+#: ../src/subscription_manager/constants.py:36
+#: ../src/subscription_manager/constants.py:50
+#: ../src/subscription_manager/managercli.py:83
+#, python-format
+msgid "Expires:              \t%-25s"
+msgstr "एक्सपायर्स्:              \t%-25s"
+
 #: ../src/subscription_manager/constants.py:42
 #, python-format
-msgid "ProductId:            \t%-25s"
-msgstr "उत्पादनआयडी:         \t%-25s"
+msgid "Product Id:           \t%-25s"
+msgstr ""
 
 #: ../src/subscription_manager/constants.py:44
 #, python-format
-msgid "PoolId:               \t%-25s"
-msgstr "पूलआयडी:            \t%-25s"
+msgid "Pool Id:              \t%-25s"
+msgstr ""
 
 #: ../src/subscription_manager/constants.py:46
 #, python-format
@@ -2161,23 +820,23 @@ msgstr "बहु-एंटाइटलमेंट:    \t%-25s"
 
 #: ../src/subscription_manager/constants.py:52
 #, python-format
-msgid "MachineType:          \t%-25s"
-msgstr "मशीन प्रकार:          \t%-25s"
+msgid "Machine Type:         \t%-25s"
+msgstr ""
 
 #: ../src/subscription_manager/constants.py:56
 #, python-format
-msgid "RepoName:             \t%-25s"
-msgstr "रेपोनाव:             \t%-25s"
+msgid "Repo Name:            \t%-25s"
+msgstr ""
 
 #: ../src/subscription_manager/constants.py:58
 #, python-format
-msgid "RepoId:               \t%-25s"
-msgstr "रेपोआयडी:               \t%-25s"
+msgid "Repo Id:              \t%-25s"
+msgstr ""
 
 #: ../src/subscription_manager/constants.py:60
 #, python-format
-msgid "RepoUrl:              \t%-25s"
-msgstr "रेपोयुआरएल्:              \t%-25s"
+msgid "Repo Url:             \t%-25s"
+msgstr ""
 
 #: ../src/subscription_manager/constants.py:62
 #, python-format
@@ -2198,6 +857,12 @@ msgstr "वर्णन:          \t%-25s"
 msgid "<b>Errors were encountered during unregister.</b>"
 msgstr "<b>नोंदणी अशक्य करतेवेली त्रुटी आढळली.</b>"
 
+#: ../src/subscription_manager/constants.py:79
+#: ../src/subscription_manager/constants.py:83
+#: ../src/subscription_manager/managercli.py:100
+msgid "Please see /var/log/rhsm/rhsm.log for more information."
+msgstr "अधिक माहितीकरीता कृपया /var/log/rhsm/rhsm.log पहा."
+
 #: ../src/subscription_manager/constants.py:81
 msgid "<b>Unable to register the system.</b>"
 msgstr "<b>प्रणालीची नोंदणी करणे अशक्य.</b>"
@@ -2211,13 +876,689 @@ msgstr "<b>तुम्हाला नक्की नोंदणी अशक
 msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr "<b>वापरकर्ता %s कोणत्याहि संघटनाशी नोंदणी करण्यास अपयशी.</b>"
 
-#: ../src/subscription_manager/certmgr.py:99
-msgid "Updating entitlement certificates and repositories"
-msgstr "एंटाइटलमेंट प्रमाणपत्रे व रेपॉजिटरिज् सुधारित करत आहे"
+#: ../src/subscription_manager/managercli.py:57
+#, 
+msgid ""
+"This system is not yet registered. Try 'subscription-manager register "
+"--help' for more information."
+msgstr ""
 
-#: ../src/subscription_manager/certmgr.py:132
-msgid "Unable to update entitlement certificates & repositories"
-msgstr "एंटाइलमेंट प्रमाणपत्रे व रेपॉजिटरीज् सुधारित करणे अशक्य"
+#: ../src/subscription_manager/managercli.py:71
+#, python-format
+msgid "Contract Number:      \t%-25s"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:73
+#, python-format
+msgid "Account Number:       \t%-25s"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:75
+#, python-format
+msgid "Serial Number:        \t%-25s"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:77
+#, python-format
+msgid "Active:               \t%-25s"
+msgstr "ॲक्टिव्ह:               \t%-25s"
+
+#: ../src/subscription_manager/managercli.py:79
+#, python-format
+msgid "Quantity Used:        \t%-25s"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:81
+#, python-format
+msgid "Begins:               \t%-25s"
+msgstr "बिगिंस्:               \t%-25s"
+
+#: ../src/subscription_manager/managercli.py:99
+msgid "Network error, unable to connect to server."
+msgstr "नेटवर्क त्रुटी, सर्व्हरशी जोडणी अशक्य."
+
+#: ../src/subscription_manager/managercli.py:131
+#, python-format
+msgid "Service level set to: %s"
+msgstr "सर्व्हिस स्तर याकरीता निश्चित केली: %s"
+
+#: ../src/subscription_manager/managercli.py:145
+msgid "Installed Product Current Status:"
+msgstr "उत्पादनाची सध्याची स्थिती प्रतिष्ठापीत केली:"
+
+#: ../src/subscription_manager/managercli.py:201
+msgid "proxy url in the form of proxy_hostname:proxy_port"
+msgstr "प्रॉक्सी url proxy_hostname:proxy_port या स्वरूपात"
+
+#: ../src/subscription_manager/managercli.py:203
+msgid "user for http proxy with basic authentication"
+msgstr "पूर्वनिर्धारीत ओळखसह http प्रॉक्सीकरीता वापरकर्ता"
+
+#: ../src/subscription_manager/managercli.py:205
+msgid "password for http proxy with basic authentication"
+msgstr "पूर्वनिर्धारीत ओळखसह http प्रॉक्सीकरीता पासवर्ड"
+
+#: ../src/subscription_manager/managercli.py:272
+msgid "Consumer certificates corrupted. Please reregister."
+msgstr "ग्राहकाचे प्रमाणपत्रे सदोषीत आहे. कृपया पुनःनोंदणी करा."
+
+#: ../src/subscription_manager/managercli.py:291
+msgid "username to use when authorizing against the server"
+msgstr "सर्व्हरच्या विरुद्ध वापरण्याजोगी वापरकर्तानाव"
+
+#: ../src/subscription_manager/managercli.py:293
+msgid "password to use when authorizing against the server"
+msgstr "सर्व्हरच्या विरुद्ध ओळख पटवतेवेळी वापरण्याजोगी पासवर्ड"
+
+#: ../src/subscription_manager/managercli.py:305
+msgid "Username: "
+msgstr "वापरकर्तानाव: "
+
+#: ../src/subscription_manager/managercli.py:308
+msgid "Password: "
+msgstr "पासवर्ड: "
+
+#: ../src/subscription_manager/managercli.py:333
+msgid ""
+"Remove all local consumer and subscription data without affecting the server"
+msgstr ""
+"सर्व्हरवर प्रभाव न टाकता सर्व स्थानीय ग्राहका व सबस्क्रिप्शन डाटा काढून टाका"
+
+#: ../src/subscription_manager/managercli.py:345
+msgid "All local data removed"
+msgstr "सर्व स्थानीय डाटा काढून टाकले"
+
+#: ../src/subscription_manager/managercli.py:353
+msgid "Pull the latest subscription data from the server"
+msgstr "सर्व्हरपासून सर्वात अलिकडील सबस्क्रिप्शन डाटा पूल करा"
+
+#: ../src/subscription_manager/managercli.py:365
+msgid "All local data refreshed"
+msgstr "सर्व स्थानीय डाटा पुनःताजे केले"
+
+#: ../src/subscription_manager/managercli.py:370
+#, python-format
+msgid "Unable to perform refresh due to the following exception: %s"
+msgstr "खालील अपवादमुळे ताजे करणे अशक्य: %s"
+
+#: ../src/subscription_manager/managercli.py:379
+msgid "Display the identity certificate for this machine or request a new one"
+msgstr "या मशीनपासून ओळख प्रमाणपत्र दाखवा किंवा नवीनकरीता विनंती करा"
+
+#: ../src/subscription_manager/managercli.py:388
+msgid "request a new certificate be generated"
+msgstr "निर्माणजोगी नवीन प्रमाणपत्रकरीता विनंती करा"
+
+#: ../src/subscription_manager/managercli.py:390
+msgid "force certificate regeneration (requires username and password)"
+msgstr "प्रमाणपत्र पुनःनिर्माण जबरनरित्या करा (वापरकर्तानाव व पासवर्ड आवश्यक)"
+
+#: ../src/subscription_manager/managercli.py:395
+msgid "--force can only be used with --regenerate"
+msgstr "--force फक्त --regenerate सह वापरले जाऊ शकते"
+
+#: ../src/subscription_manager/managercli.py:399
+msgid "--username and --password can only be used with --force"
+msgstr "--username व --password फक्त --force सह वापरले जाऊ शकते"
+
+#: ../src/subscription_manager/managercli.py:414
+#, python-format
+msgid "Current identity is: %s"
+msgstr "सध्याची ओळख: %s"
+
+#: ../src/subscription_manager/managercli.py:415
+#, python-format
+msgid "name: %s"
+msgstr "नाव: %s"
+
+#: ../src/subscription_manager/managercli.py:416
+#, python-format
+msgid "org name: %s"
+msgstr "संस्थाचे नाव: %s"
+
+#: ../src/subscription_manager/managercli.py:417
+#, python-format
+msgid "org id: %s"
+msgstr "संस्थाचे id: %s"
+
+#: ../src/subscription_manager/managercli.py:428
+msgid "Identity certificate has been regenerated."
+msgstr "ओळखप्रमाणपत्र पुनःनिर्माण केले."
+
+#: ../src/subscription_manager/managercli.py:436
+msgid "Error: Unable to generate a new identity for the system"
+msgstr "त्रुटी: प्रणालीकरीता नवीन ओळख निर्माण करण्यास अशक्य"
+
+#: ../src/subscription_manager/managercli.py:443
+msgid "Display the orgs against which a user can register a system"
+msgstr ""
+"संस्था ज्याविरुद्ध वापरकर्ता प्रणालीची नोंदणी करू शकतो, तशी सूची दाखवा"
+
+#: ../src/subscription_manager/managercli.py:463
+msgid "Organizations"
+msgstr "संस्था"
+
+#: ../src/subscription_manager/managercli.py:467
+#, 
+msgid "Name"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:468
+#, 
+msgid "Key"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:471
+#: ../src/subscription_manager/managercli.py:838
+#, python-format
+msgid "%s cannot register to any organizations."
+msgstr "%s कोणत्याहि संस्थाशी नोंदणी करू शकत नाही."
+
+#: ../src/subscription_manager/managercli.py:478
+msgid "Error: Unable to retrieve org list from Entitlement Platform"
+msgstr "त्रुटी: एंटाइटलमेंट प्लॅटफार्मसह ऑर्ग सूची प्राप्त करणे अशक्य"
+
+#: ../src/subscription_manager/managercli.py:485
+msgid "Display the environments available for a user"
+msgstr "वापरकर्त्यासाठी उपलब्ध एंवार्यंमेंटस् दाखवा"
+
+#: ../src/subscription_manager/managercli.py:493
+msgid "specify org for environment list"
+msgstr "एंवार्यंमेंट सूचीकरीता org निर्देशीत करा"
+
+#: ../src/subscription_manager/managercli.py:497
+msgid "you must specify an --org"
+msgstr "--org निर्देशीत करणे आवश्यक आहे"
+
+#: ../src/subscription_manager/managercli.py:513
+msgid "Environments"
+msgstr "वातावरणे"
+
+#: ../src/subscription_manager/managercli.py:529
+msgid "Error: Unable to retrieve environment list from Entitlement Platform"
+msgstr ""
+"त्रुटी: एंटाइटलमेंट प्लॅटफार्मपासून एंवार्यनमेंट सूची प्राप्त करणे अशक्य"
+
+#: ../src/subscription_manager/managercli.py:536
+#, 
+msgid "Manage service levels for this system."
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:543
+msgid "show this system's current service level"
+msgstr "ह्या प्रणालीचे सध्याचे सर्व्हिस स्तर दाखवा"
+
+#: ../src/subscription_manager/managercli.py:546
+msgid "specify org for service level list"
+msgstr "सर्व्हिस स्तर सूचीकरीता संस्था ठरवा"
+
+#: ../src/subscription_manager/managercli.py:548
+msgid "list all service levels available"
+msgstr "सर्व उपलब्ध सर्व्हिस स्तर सूचीत दाखवा"
+
+#: ../src/subscription_manager/managercli.py:559
+msgid ""
+"Error: you must register or specify --username and password to list service "
+"levels"
+msgstr ""
+"त्रुटी: सर्व्हिस स्तरची सूची दाखवण्याकरीता नोंदणी किंवा --username व पासवर्ड"
+" निश्चित केले पाहिजे"
+
+#: ../src/subscription_manager/managercli.py:562
+msgid "Error: you must register or specify --org."
+msgstr "त्रुटी: --org ची नोंदणी किंवा त्यास ठरवणे आवश्यक."
+
+#: ../src/subscription_manager/managercli.py:565
+msgid "Error: This system is currently not registered."
+msgstr "त्रुटी: हि प्रणालीची नोंदणी सध्या झाली नाही."
+
+#: ../src/subscription_manager/managercli.py:603
+msgid "Error: Unable to retrieve service levels."
+msgstr "त्रुटी: सर्व्हिस स्तर प्राप्त करणे अशक्य."
+
+#: ../src/subscription_manager/managercli.py:609
+#, python-format
+msgid "Current service level: %s"
+msgstr "सध्याचे सर्व्हिस स्तर: %s"
+
+#: ../src/subscription_manager/managercli.py:621
+#, 
+msgid "Available Service Levels"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:644
+msgid "the type of consumer to register, defaults to system"
+msgstr "नोंदणी करण्याजोगी विक्रेताचे नाव, प्रणालीकरीता पूर्वनिर्धारित आहे"
+
+#: ../src/subscription_manager/managercli.py:646
+msgid "name of the consumer to register, defaults to the hostname"
+msgstr "नोंदणी करण्याजोगी वापरकर्त्याचे नाव, यजमाननावकरीता पूर्वनिर्धारित आहे"
+
+#: ../src/subscription_manager/managercli.py:648
+msgid "if supplied, the existing consumer data is pulled from the server"
+msgstr "पूरवले असल्यास, अस्तित्वातील ग्राहक डाटा सर्व्हर पासून पूल केले जाते"
+
+#: ../src/subscription_manager/managercli.py:650
+msgid "register to one of multiple organizations for the user"
+msgstr "वापरकर्ताकरीता एकापेक्षाजास्त संस्थासाठी नोंदणी करा"
+
+#: ../src/subscription_manager/managercli.py:652
+msgid "register to a specific environment in the destination org"
+msgstr "लक्ष्य संस्थापनमध्ये ठराविक वातावरणकरीता नोंदणी करा"
+
+#: ../src/subscription_manager/managercli.py:654
+msgid "set a release version"
+msgstr "प्रकाशन आवृत्ती ठरवा"
+
+#: ../src/subscription_manager/managercli.py:656
+#: ../src/subscription_manager/managercli.py:1072
+msgid ""
+"automatically subscribe this system to                                     "
+"compatible subscriptions."
+msgstr "स्वयं या प्रणालीला सहत्व सबस्क्रिप्शन्स् करीता सबस्क्राइब करा."
+
+#: ../src/subscription_manager/managercli.py:659
+msgid "register the system even if it is already registered"
+msgstr "आधिपासूनच नोंदणी झाल्यावरही प्रणालीची नोंदणी करा"
+
+#: ../src/subscription_manager/managercli.py:661
+msgid "one or more activation keys to use for registration"
+msgstr "नोंदणीकरीता वापरण्योजगी एक किंवा त्यापेक्षाजास्त ॲक्टिवेशन किज्"
+
+#: ../src/subscription_manager/managercli.py:663
+#: ../src/subscription_manager/managercli.py:1075
+msgid "service level to apply to this system"
+msgstr "ह्या प्रणालीकरीता लागू करण्याजोगी सर्व्हिस स्तर"
+
+#: ../src/subscription_manager/managercli.py:671
+msgid "This system is already registered. Use --force to override"
+msgstr ""
+"या प्रणालीची आधिपासूनच नोंदणी झाली आहे. खोडूनपुनः लिहण्यासाठी --force याचा "
+"वापर करा"
+
+#: ../src/subscription_manager/managercli.py:674
+msgid "Error: consumer name can not be empty."
+msgstr "त्रुटी: वापरकर्तानाव रिकामे असणे अशक्य."
+
+#: ../src/subscription_manager/managercli.py:677
+msgid "Error: Activation keys do not require user credentials"
+msgstr "त्रुटी: ॲक्टिवेशन किज्ला वापकर्ता श्रेयची आवश्यकता नाही"
+
+#: ../src/subscription_manager/managercli.py:680
+msgid "Error: Activation keys can not be used with previously registered ids."
+msgstr ""
+"त्रुटी: ॲक्टिवेशन किज्चा वापर पूर्वीच्या नोंदणी केलेल्या ids सह शक्य नाही."
+
+#: ../src/subscription_manager/managercli.py:683
+msgid "Error: Must specify --org to register to an environment."
+msgstr "त्रुटी: एंवार्यनमेंटची नोंदणी करण्यासाठी --org निर्देशीत करा."
+
+#: ../src/subscription_manager/managercli.py:686
+msgid "Error: Must specify --org to register with activation keys."
+msgstr "त्रुटी: ॲक्टिवेशन किज्सह नोंदणी करण्यासाठी --org निर्देशीत करा."
+
+#: ../src/subscription_manager/managercli.py:690
+msgid "Error: Must specify an activation key"
+msgstr "त्रुटी: ॲक्टिवेशन कि निर्देशीत करणे आवश्यक"
+
+#: ../src/subscription_manager/managercli.py:693
+msgid "Error: Must use --autosubscribe with --servicelevel."
+msgstr "त्रुटी: --servicelevel सह --autosubscribe याचा वापर आवश्यक."
+
+#: ../src/subscription_manager/managercli.py:720
+#, python-format
+msgid "The system with UUID %s has been unregistered"
+msgstr "UUID %s असलेली प्रणालीची नोंदणी अशक्य केली आहे"
+
+#: ../src/subscription_manager/managercli.py:761
+#, python-format
+msgid "Error during registration: %s"
+msgstr "नोंदणीवेळी त्रुटी आढळली: %s"
+
+#: ../src/subscription_manager/managercli.py:765
+#, python-format
+msgid "The system has been registered with id: %s "
+msgstr "प्रणालीची id सह नोंदणी झाली आहे: %s "
+
+#: ../src/subscription_manager/managercli.py:819
+msgid "ERROR: Server does not support environments."
+msgstr "त्रुटी: सर्व्हर एंवार्यनमेंटस्करीता समर्थन पुरवत नाही."
+
+#: ../src/subscription_manager/managercli.py:823
+#, python-format
+msgid "No such environment: %s"
+msgstr "या प्रकारचे एंवार्यनमेंट आढळले नाही: %s"
+
+#: ../src/subscription_manager/managercli.py:863
+msgid "This system is currently not registered."
+msgstr "सध्या प्रणालीची नोंदणी केली नाही."
+
+#: ../src/subscription_manager/managercli.py:885
+msgid "System has been un-registered."
+msgstr "प्रणाली नोंदणी-अशक्य केली आहे."
+
+#: ../src/subscription_manager/managercli.py:892
+msgid "Attempt to redeem a subscription for a preconfigured machine"
+msgstr "पूर्वसंरचीत मशीनकरीता सबस्क्रिप्शनचा वापर करण्याचा प्रयत्न झाला"
+
+#: ../src/subscription_manager/managercli.py:898
+msgid "Email address to notify when subscription redemption is complete."
+msgstr "सबस्क्रिप्शन रिडिम्शन पूर्ण झाल्यावर सूचना पोहचण्यासाठीचा इमेल पत्ता."
+
+#: ../src/subscription_manager/managercli.py:901
+msgid ""
+"Optional language to use for email notification when subscription redemption"
+" is complete. Examples: en-us, de-de"
+msgstr ""
+"सबस्क्रिप्शन वापर पूर्ण झाल्यावर इमेल सूचनाकरीता वापरण्याजोगी वैकल्पिक भाषा."
+" उदाहरणे: en-us, de-de"
+
+#: ../src/subscription_manager/managercli.py:943
+msgid "Configure what os release to use"
+msgstr "वापरण्यासाठीचे os प्रकाशन संरचीत करा"
+
+#: ../src/subscription_manager/managercli.py:949
+msgid "list available releases"
+msgstr "उपलब्ध प्रकाशनांची सूची दाखवा"
+
+#: ../src/subscription_manager/managercli.py:952
+msgid "set the release"
+msgstr "प्रकाशन निश्चित करा"
+
+#: ../src/subscription_manager/managercli.py:1060
+msgid "Subscribe the registered machine to a specified product"
+msgstr "नोंदणी मशीनला निर्देशीत उत्पादनसह सबस्क्राइब करा"
+
+#: ../src/subscription_manager/managercli.py:1068
+msgid "the id of the pool to subscribe to"
+msgstr "सबस्क्राइब करण्याजोगी पूलचे id"
+
+#: ../src/subscription_manager/managercli.py:1070
+msgid "number of subscriptions to consume"
+msgstr "वापरण्याजोगी सबस्क्रिप्शन्स्ची संख्या"
+
+#: ../src/subscription_manager/managercli.py:1079
+msgid ""
+"Error: This command requires that you specify a pool with --pool or use "
+"--auto."
+msgstr ""
+"त्रुटी: या आदेशला --pool सह पूल निर्देशीत करणे आवश्यक आहे किंवा --auto याचा "
+"वापर करा."
+
+#: ../src/subscription_manager/managercli.py:1082
+msgid "Error: Only one of --pool or --auto may be used with this command."
+msgstr "त्रुटी: या आदेशसह फक्त --pool किंवा --auto यापैकी एकचा वापर शक्य आहे."
+
+#: ../src/subscription_manager/managercli.py:1089
+msgid "Error: Quantity must be a positive integer."
+msgstr "त्रुटी: प्रमाण सकारात्मक क्रमांक असायला हवे."
+
+#: ../src/subscription_manager/managercli.py:1095
+msgid "Error: Must use --auto with --servicelevel."
+msgstr "त्रुटी: --servicelevel सह --auto चा वापर आवश्यक."
+
+#: ../src/subscription_manager/managercli.py:1119
+msgid "Please enter a valid numeric pool id."
+msgstr "कृपया वैध संख्यायीक पूल आयडी द्या."
+
+#: ../src/subscription_manager/managercli.py:1121
+#, python-format
+msgid "Successfully consumed a subscription from the pool with id %s."
+msgstr "id %s सह यशस्वीरित्या पूल पासून सबस्क्रिप्शन प्राप्त केले."
+
+#: ../src/subscription_manager/managercli.py:1163
+msgid "Unsubscribe the machine from all or specific subscriptions"
+msgstr "सर्व किंवा ठराविक सबस्क्रिप्शन्स् पासून मशीन सबस्क्रिप्शन अशक्य करा"
+
+#: ../src/subscription_manager/managercli.py:1170
+msgid "Certificate serial to unsubscribe"
+msgstr "सबस्क्राइब अशक्यकरीता सर्टिफिकेट सिरीअल"
+
+#: ../src/subscription_manager/managercli.py:1172
+msgid "Unsubscribe from all subscriptions"
+msgstr "सर्व सबस्क्रिप्शन्स् पासून सबस्क्राइब अशक्य करा"
+
+#: ../src/subscription_manager/managercli.py:1177
+#, python-format
+msgid "'%s' is not a valid serial number"
+msgstr "'%s' वैध सिरिअल क्रमांक नाही"
+
+#: ../src/subscription_manager/managercli.py:1180
+msgid "One of --serial or --all must be provided"
+msgstr "--serial किंवा --all पैकी एक पुरवणे आवश्यक आहे"
+
+#: ../src/subscription_manager/managercli.py:1204
+#: ../src/subscription_manager/managercli.py:1219
+#, python-format
+msgid "Unable to perform unsubscribe due to the following exception: %s"
+msgstr "खालील अपवादमुळे सबस्क्राइब अशक्य करणे शक्य नाही: %s"
+
+#: ../src/subscription_manager/managercli.py:1211
+msgid "This machine has been unsubscribed from all subscriptions"
+msgstr "या मशीनला सर्व सबस्क्रिप्शन्स् पासून सबस्क्राइब अशक्य केले आहे"
+
+#: ../src/subscription_manager/managercli.py:1216
+msgid "This machine has been unsubscribed from subscription "
+msgstr "या मशीनला सबस्क्रिप्शनपासून सबस्क्राइब अशक्य केले आहे"
+
+#: ../src/subscription_manager/managercli.py:1230
+msgid "Work with the current facts for this machine"
+msgstr "या मशीनकरीता सध्याच्या फॅक्टस्सह कार्य करा"
+
+#: ../src/subscription_manager/managercli.py:1236
+msgid "list known facts for this system"
+msgstr "या प्रणालीकरीता परिचीत वस्तुस्थिती दाखवा"
+
+#: ../src/subscription_manager/managercli.py:1238
+msgid "update the system facts"
+msgstr "प्रणालीची वस्तुस्थिती सुधारीत करा"
+
+#: ../src/subscription_manager/managercli.py:1247
+msgid "Error: Need either --list or --update, Try facts --help"
+msgstr ""
+"त्रुटी: --list किंवा --update यापैकी एक आवश्यक आहे, facts --help वापरून पहा"
+
+#: ../src/subscription_manager/managercli.py:1271
+msgid "Successfully updated the system facts."
+msgstr "यशस्वीरित्या प्रणाली वस्तुस्थिती सुधारित केले."
+
+#: ../src/subscription_manager/managercli.py:1278
+msgid "Import certificates which were provided outside of the tool"
+msgstr "साधनच्या बाहेरील पुरवलेले प्रमाणपत्रे आयात करा"
+
+#: ../src/subscription_manager/managercli.py:1284
+msgid ""
+"certificate file to import (for multiple imports, specify this option more "
+"than once)"
+msgstr ""
+"आयात (एकापेक्षाजास्त आयातकरीता, या पर्यायला एकापेक्षा जास्तवेळी निर्देशीत "
+"करा) करण्याजोगी प्रमाणपत्र"
+
+#: ../src/subscription_manager/managercli.py:1288
+msgid "Error: At least one certificate is required"
+msgstr "त्रुटी: किमान एक प्रमाणपत्र आवश्यक आहे"
+
+#: ../src/subscription_manager/managercli.py:1307
+#, python-format
+msgid "Successfully imported certificate %s"
+msgstr "यशस्वीरित्या प्रमाणपत्र %s आयात केले"
+
+#: ../src/subscription_manager/managercli.py:1313
+#: ../src/subscription_manager/managercli.py:1323
+#, python-format
+msgid "%s is not a valid certificate file. Please use a valid certificate."
+msgstr "%s वैध प्रमाणपत्र नाही. कृपया वैध प्रमाणपत्रचा वापर करा."
+
+#: ../src/subscription_manager/managercli.py:1339
+msgid "List the repos which this machine is entitled to use"
+msgstr "वापरण्याजोगी मशीनसह रेपोज्ची सूची दाखवा"
+
+#: ../src/subscription_manager/managercli.py:1349
+msgid "list the entitled repositories for this system"
+msgstr "या प्रणालीकरीता सूचीतील रेपॉजिटरीज् सूचीत दाखवा"
+
+#: ../src/subscription_manager/managercli.py:1353
+msgid "Error: No options provided. Please see the help comand."
+msgstr "त्रुटी: पर्याय पुरवले नाही. कृपया help आदेश पहा."
+
+#: ../src/subscription_manager/managercli.py:1363
+msgid "Repositories disabled by configuration."
+msgstr "संरचनातर्फे रेपॉजिटरिज् बंद केले."
+
+#: ../src/subscription_manager/managercli.py:1366
+#, python-format
+msgid "    Entitled Repositories in %s"
+msgstr "%s मधील एंटाइटलड् रेपॉजिटरीज्"
+
+#: ../src/subscription_manager/managercli.py:1374
+msgid "The system is not entitled to use any repositories."
+msgstr "प्रणाली कोणतेहि रेपॉजिटरीज्चा वापर करण्यास एंटाइटल्ड् नाही."
+
+#: ../src/subscription_manager/managercli.py:1381
+msgid ""
+"List, set, or remove the configuration parameters in use by this machine."
+msgstr ""
+"या मशीनतर्फे वापरण्याजोगी संरचना घटकांची सूची दाखवा, सेट करा, किंवा काढून "
+"टाका."
+
+#: ../src/subscription_manager/managercli.py:1388
+msgid "list the configuration for this system"
+msgstr "या प्रणालीकरीता संरचना सूचीत दाखवा"
+
+#: ../src/subscription_manager/managercli.py:1390
+msgid "remove configuration entry by section.name"
+msgstr "section.name तर्फे संरचना काढून टाका"
+
+#: ../src/subscription_manager/managercli.py:1394
+#, python-format
+msgid "Section: %s, Name: %s"
+msgstr "विभाग: %s, नाव: %s"
+
+#: ../src/subscription_manager/managercli.py:1409
+msgid ""
+"Error: --list should not be used with any other options for setting or "
+"removing configurations."
+msgstr ""
+"त्रुटी: संरचना सेट किंवा काढून टाकण्यासाठी --list याचा वापर कोणत्याहि इतर "
+"पर्यायसह वापरू नका."
+
+#: ../src/subscription_manager/managercli.py:1427
+msgid ""
+"Error: configuration entry designation for removal must be of format "
+"[section.name]"
+msgstr ""
+"त्रुटी: काढून टाकताना कॉन्फिगरेशन एंट्री डेजिगनेशनचे रूपण [section.name] "
+"असायला हवे"
+
+#: ../src/subscription_manager/managercli.py:1438
+#, python-format
+msgid "Error: Section %s and name %s does not exist."
+msgstr "त्रुटी: विभाग %s व नाव %s अस्तित्वात नाही."
+
+#: ../src/subscription_manager/managercli.py:1457
+msgid "[] - Default value in use"
+msgstr "[] - वापरण्याजोगी पूर्वनिर्धारित मूल्य"
+
+#: ../src/subscription_manager/managercli.py:1466
+#: ../src/subscription_manager/managercli.py:1469
+#, python-format
+msgid "You have removed the value for section %s and name %s."
+msgstr "विभाग %s व नाव %s करीता तुम्ही मूल्य काढून टाकले."
+
+#: ../src/subscription_manager/managercli.py:1470
+#, python-format
+msgid "The default value for %s will now be used."
+msgstr "%s करीता पूर्वनिर्धारित मूल्याचा वापर आत्ता शक्य आहे."
+
+#: ../src/subscription_manager/managercli.py:1472
+#, python-format
+msgid "Section %s and name %s cannot be removed."
+msgstr "विभाग %s व नाव %s याचे पुनःनामांकन शक्य नाही."
+
+#: ../src/subscription_manager/managercli.py:1487
+msgid "List subscription and product information for this machine"
+msgstr "या मशीनकरीता सबस्क्रिप्शन सूची व उत्पादन माहिती दाखवा"
+
+#: ../src/subscription_manager/managercli.py:1493
+msgid ""
+"if supplied then list shows those products which are installed (default)"
+msgstr "पुरवले असल्यास सूची प्रतिष्ठापीत उत्पादने दाखवा (पूर्वनिर्धारित)"
+
+#: ../src/subscription_manager/managercli.py:1495
+msgid "if supplied then list shows those subscriptions which are available"
+msgstr "पुरवले असल्यास सूची उपलब्ध सबस्क्रिप्शन्स् दाखवते"
+
+#: ../src/subscription_manager/managercli.py:1497
+#, python-format
+msgid ""
+"date to search on, defaults to today's date, only used with --available "
+"(example: %s)"
+msgstr ""
+"शोधण्याजोगी दिनांक, आजच्या दिनांककरीता पूर्वनिर्धारीत होते, फक्त --available"
+" (उदाहरणार्थ: %s) सह वापरले जाते"
+
+#: ../src/subscription_manager/managercli.py:1500
+msgid "shows the subscriptions being consumed by this system."
+msgstr "प्रणालीतर्फे प्राप्त वापरण्याजोगी सबस्क्रिप्शन्स् दाखवते."
+
+#: ../src/subscription_manager/managercli.py:1502
+msgid "if supplied with --available then all subscriptions are returned"
+msgstr "--available सह पुरवल्यास सर्व सबस्क्रिप्शन्स् रिटर्न केले जातात"
+
+#: ../src/subscription_manager/managercli.py:1509
+msgid "Error: --all is only applicable with --available"
+msgstr "त्रुटी: --all फक्त --available सह लागू होते"
+
+#: ../src/subscription_manager/managercli.py:1512
+msgid "Error: --ondate is only applicable with --available"
+msgstr "त्रुटी: --ondate फक्त --available सह लागू होते"
+
+#: ../src/subscription_manager/managercli.py:1535
+msgid "No installed products to list"
+msgstr "सूचीत दाखवण्याकरीता प्रतिष्ठापीत उत्पादने आढळली नाही"
+
+#: ../src/subscription_manager/managercli.py:1538
+msgid "    Installed Product Status"
+msgstr "उत्पादनाची स्थिती प्रतिष्ठापीत केली"
+
+#: ../src/subscription_manager/managercli.py:1555
+msgid ""
+"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgstr ""
+"दिलेले दिनांक अवैध आहे. दिनांक YYYY-MM-DD स्वरूपाचे असायला हवे (उदाहरणार्थ: "
+
+#: ../src/subscription_manager/managercli.py:1561
+msgid "No available subscription pools to list"
+msgstr "सूचीत दाखवण्याकरीता उपलब्ध सबसक्रिप्शन पूल्स् आढळले नाही"
+
+#: ../src/subscription_manager/managercli.py:1569
+msgid "virtual"
+msgstr "वर्च्युअल"
+
+#: ../src/subscription_manager/managercli.py:1571
+msgid "physical"
+msgstr "फिजिकल"
+
+#: ../src/subscription_manager/managercli.py:1591
+msgid "No consumed subscription pools to list"
+msgstr "दाखवण्याकरीता प्राप्य सबस्क्रिश्न पूल्स् आढळले नाही"
+
+#: ../src/subscription_manager/managercli.py:1594
+msgid "Consumed Product Subscriptions"
+msgstr "प्राप्त उत्पादन सबस्क्रिप्शन्स्"
+
+#: ../src/subscription_manager/managercli.py:1671
+#, python-format
+msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:1673
+msgid "Primary Modules:"
+msgstr "प्राथमिक घटके:"
+
+#: ../src/subscription_manager/managercli.py:1682
+msgid "Other Modules (Please consult documentation):"
+msgstr "इतर घटके (कृपया दस्तऐवजीकरण पहा):"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:1
 msgid "<b>Account Number:</b>"
@@ -2240,30 +1581,32 @@ msgid "<b>Provides Management:</b>"
 msgstr "<b>व्यवस्थापन पुरवतो:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:6
+#, 
+msgid "<b>Service Level:</b>"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:7
+#, 
+msgid "<b>Service Type:</b>"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 msgid "<b>Stacking ID:</b>"
 msgstr "<b>स्टॅकिंग ID:</b>"
 
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:7
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:9
 msgid "<b>Start Date:</b>"
 msgstr "<b>प्रारंभ दिनांक:</b>"
 
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:8
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:10
 msgid "<b>Subscription Details</b>"
 msgstr "<b>सबस्क्रिप्शन तपशील</b>"
 
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:9
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:11
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:3
 #: ../src/subscription_manager/gui/data/installed.glade.h:4
 msgid "<b>Subscription:</b>"
 msgstr "<b>सबस्क्रिप्शन:</b>"
-
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:10
-msgid "<b>Support Level:</b>"
-msgstr "<b>सपोर्ट स्तर:</b>"
-
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:11
-msgid "<b>Support Type:</b>"
-msgstr "<b>सपोर्ट प्रकार:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:12
 msgid "<b>Virtual Only:</b>"
@@ -2790,7 +2133,7 @@ msgstr "चालवण्याकरीता क्रमांक प्र�
 msgid "Only print the files which would be copied over"
 msgstr "फक्त प्रत बनवण्याजोगी फाइल्सचीच छपाई करा"
 
-#: ../src/install-num-migrate-to-rhsm:91 ../src/rhn-migrate-classic-to-rhsm:55
+#: ../src/install-num-migrate-to-rhsm:91 ../src/rhn-migrate-classic-to-rhsm:45
 msgid "Must be root user to execute\n"
 msgstr "चालवण्याकरीता रूट वापरकर्ता असायला हवे\n"
 
@@ -2812,11 +2155,11 @@ msgstr "प्रतिष्ठापन क्रमांक वाचणे 
 msgid "Copying %s to %s"
 msgstr "%s चे %s करीता प्रत बनवत आहे"
 
-#: ../src/rhn-migrate-classic-to-rhsm:72
+#: ../src/rhn-migrate-classic-to-rhsm:62
 msgid "Ignore channels not available on RHSM"
 msgstr "RHSM वरील उपलब्ध वाहिनींकडे दुर्लक्ष करा"
 
-#: ../src/rhn-migrate-classic-to-rhsm:74
+#: ../src/rhn-migrate-classic-to-rhsm:64
 msgid ""
 "Don't launch the GUI tool to subscribe the system, just use the CLI tool "
 "which will do it automatically"
@@ -2824,14 +2167,19 @@ msgstr ""
 "प्रणालीला सबस्क्राइब करण्यासाठी GUI साधन सुरू करू नका, फक्त CLI साधनाचा वापर"
 " करा जे सगळेकाहि स्वतः करेल"
 
-#: ../src/rhn-migrate-classic-to-rhsm:76
+#: ../src/rhn-migrate-classic-to-rhsm:66
 msgid ""
 "Don't execute the autosubscribe option while registering with subscription "
 "manager."
 msgstr ""
 "सबस्क्रिप्शन मॅनेजरसह नोंदणी करतेवेळी autosubscribe पर्याय चालवू नका ."
 
-#: ../src/rhn-migrate-classic-to-rhsm:117
+#: ../src/rhn-migrate-classic-to-rhsm:69
+#, c-format
+msgid "%s [OPTIONS]"
+msgstr ""
+
+#: ../src/rhn-migrate-classic-to-rhsm:122
 msgid ""
 "\n"
 "This machine appears to be already registered to Certificate-based RHN.  Exiting."
@@ -2839,7 +2187,7 @@ msgstr ""
 "\n"
 "ह्या मशीनची आधिपासून प्रमाणपत्र आधारित RHN सह नोंदणी झाली आहे.  बाहेर पडत आहे."
 
-#: ../src/rhn-migrate-classic-to-rhsm:119
+#: ../src/rhn-migrate-classic-to-rhsm:124
 #, c-format
 msgid ""
 "\n"
@@ -2848,7 +2196,7 @@ msgstr ""
 "\n"
 "प्रोफाइलचे तपशील पहाण्याकरीता कृपया https://access.redhat.com/management/consumers/%s येथे भेट द्या."
 
-#: ../src/rhn-migrate-classic-to-rhsm:125
+#: ../src/rhn-migrate-classic-to-rhsm:130
 #, c-format
 msgid ""
 "This migration script requires the system to be registered to RHN Classic.\n"
@@ -2858,7 +2206,7 @@ msgstr ""
 "ह्या माइग्रेशन स्क्रिप्टला प्रणालीने RHN क्लासिकसह नोंदणी करणे आवश्यक आहे.\n"
 "तरी ह्या प्रणालीची नोंदणी '%s' सह झाली असे आढळते. बाहेर पडत आहे."
 
-#: ../src/rhn-migrate-classic-to-rhsm:133
+#: ../src/rhn-migrate-classic-to-rhsm:143
 msgid ""
 "Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for "
 "more details."
@@ -2866,35 +2214,35 @@ msgstr ""
 "सर्टिफिकेट सर्व्हरशी जोडणी अशक्य. अधिक तपशीलकरीता /var/log/rhsm/rhsm.log "
 "पहा."
 
-#: ../src/rhn-migrate-classic-to-rhsm:140
+#: ../src/rhn-migrate-classic-to-rhsm:149
 msgid "This system is not associated with any channel."
 msgstr "हि प्रणाली कोणत्याहि वाहिनीशी संलग्न नाही."
 
-#: ../src/rhn-migrate-classic-to-rhsm:142
+#: ../src/rhn-migrate-classic-to-rhsm:151
 msgid "Unable to locate SystemId file. Is this system registered?"
 msgstr "SystemId फाइल शोधणे अशक्य. या प्रणालीची नोंदणी झाली?"
 
-#: ../src/rhn-migrate-classic-to-rhsm:145
+#: ../src/rhn-migrate-classic-to-rhsm:154
 msgid "Problem encountered getting the list of subscribed channels.  Exiting."
 msgstr ""
 "सबसक्राइब्ड् वाहिन्यांची सूची प्राप्त करतेवेळी त्रुटी.  बाहेर पडत आहे."
 
-#: ../src/rhn-migrate-classic-to-rhsm:172
+#: ../src/rhn-migrate-classic-to-rhsm:193
 msgid "System successfully unregistered from RHN Classic."
 msgstr "RHN क्लासिकपासून यशस्वीरित्या प्रणालीची नोंदणी अशक्य केली."
 
-#: ../src/rhn-migrate-classic-to-rhsm:174
+#: ../src/rhn-migrate-classic-to-rhsm:195
 msgid "Unable to unregister system from RHN Classic.  Exiting."
 msgstr ""
 "RHN क्लासिकपासून प्रणालीची नोंदणी अशक्य करणे शक्य नाही. बाहेर पडत आहे."
 
-#: ../src/rhn-migrate-classic-to-rhsm:177
+#: ../src/rhn-migrate-classic-to-rhsm:198
 msgid "Problem encountered unregistering system from RHN Classic.  Exiting."
 msgstr ""
 "RHN क्लासिकपासून प्रणालीला नोंदणी अशक्य करतेवेळी त्रुटी आढळली.  बाहेर पडत "
 "आहे."
 
-#: ../src/rhn-migrate-classic-to-rhsm:235
+#: ../src/rhn-migrate-classic-to-rhsm:266
 msgid ""
 "\n"
 "Attempting to register system to Certificate-based RHN ..."
@@ -2902,7 +2250,7 @@ msgstr ""
 "\n"
 "प्रणलीला प्रमाणपत्र आधारित RHN सह नोंदणी करण्यास प्रयत्न करत आहे ..."
 
-#: ../src/rhn-migrate-classic-to-rhsm:238
+#: ../src/rhn-migrate-classic-to-rhsm:269
 msgid ""
 "\n"
 "Unable to register.\n"
@@ -2912,20 +2260,20 @@ msgstr ""
 "नोंदणी अशक्य.\n"
 "पुढील मदतकरीता, कृपया Red Hat ग्लोबल सपोर्ट सर्व्हिसेस्सह संपर्क करा."
 
-#: ../src/rhn-migrate-classic-to-rhsm:241
+#: ../src/rhn-migrate-classic-to-rhsm:272
 #, c-format
 msgid "System '%s' successfully registered to Certificate-based RHN.\n"
 msgstr "प्रणाली '%s' याची यशस्वीरित्या प्रमाणपत्र आधारित RHN सह नोंदणी केली.\n"
 
-#: ../src/rhn-migrate-classic-to-rhsm:245
+#: ../src/rhn-migrate-classic-to-rhsm:276
 msgid "Launching the GUI tool to manually subscribe the system ..."
 msgstr "प्रणालीला स्वहस्ते सबस्क्राइब करण्यासाठी GUI साधन सुरू करत आहे ..."
 
-#: ../src/rhn-migrate-classic-to-rhsm:248
+#: ../src/rhn-migrate-classic-to-rhsm:279
 msgid "Attempting to auto-subscribe to appropriate subscriptions ..."
 msgstr "योग्य सबस्क्रिप्शन्स्करीता स्वंय-सबस्क्राइबचा प्रयत्न करत आहे ..."
 
-#: ../src/rhn-migrate-classic-to-rhsm:251
+#: ../src/rhn-migrate-classic-to-rhsm:282
 msgid ""
 "\n"
 "Unable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?"
@@ -2933,7 +2281,7 @@ msgstr ""
 "\n"
 "स्वयंसबस्क्राइब अशक्य.  सध्याचे सबस्क्रिप्शन्स् प्रणलीवरील प्रतिष्ठापीत उत्पादनांसह जुळते?"
 
-#: ../src/rhn-migrate-classic-to-rhsm:252
+#: ../src/rhn-migrate-classic-to-rhsm:283
 #, c-format
 msgid ""
 "\n"
@@ -2942,11 +2290,11 @@ msgstr ""
 "\n"
 "तपशील पहाण्याकरीता कृपया https://access.redhat.com/management/consumers/%s येथे भेट द्या, व आवश्यक असल्यास बदल लागू करा."
 
-#: ../src/rhn-migrate-classic-to-rhsm:278
+#: ../src/rhn-migrate-classic-to-rhsm:309
 msgid "Channels not available on RHSM:"
 msgstr "RHSM वरील वाहिनी उपलब्ध नाही:"
 
-#: ../src/rhn-migrate-classic-to-rhsm:285
+#: ../src/rhn-migrate-classic-to-rhsm:316
 msgid ""
 "\n"
 "Unrecognized channels. Channel to product certificate mapping missing for these channels."
@@ -2954,7 +2302,7 @@ msgstr ""
 "\n"
 "अपरिचीत वाहिनी. ह्या वाहिन्यांकरीता वाहिनी ते उत्पादन प्रमाणपत्र मॅपिंग आढळली नाही."
 
-#: ../src/rhn-migrate-classic-to-rhsm:292
+#: ../src/rhn-migrate-classic-to-rhsm:323
 msgid ""
 "\n"
 "Use --force to ignore these channels and continue the migration.\n"
@@ -2962,7 +2310,7 @@ msgstr ""
 "\n"
 "या वाहिनींना वगळण्याकरीता --force याचा वापर करा व माइग्रेशन सुरू ठेवा.\n"
 
-#: ../src/rhn-migrate-classic-to-rhsm:297
+#: ../src/rhn-migrate-classic-to-rhsm:328
 msgid ""
 "\n"
 "List of channels for which certs are being copied"
@@ -2970,7 +2318,7 @@ msgstr ""
 "\n"
 "certs ज्याकरीता प्रत बनवले जात आहे त्या वाहिनींची सूची"
 
-#: ../src/rhn-migrate-classic-to-rhsm:311
+#: ../src/rhn-migrate-classic-to-rhsm:342
 #, c-format
 msgid ""
 "\n"
@@ -2979,7 +2327,7 @@ msgstr ""
 "\n"
 "%s वरील यशस्वीरित्या उत्पादन प्रमाणपत्रांची प्रत बनवले"
 
-#: ../src/rhn-migrate-classic-to-rhsm:355
+#: ../src/rhn-migrate-classic-to-rhsm:386
 msgid ""
 "\n"
 "Unable to enable extra repositories."
@@ -2987,7 +2335,7 @@ msgstr ""
 "\n"
 "अगाऊ रेपॉजिटरिज् सुरू करणे अशक्य."
 
-#: ../src/rhn-migrate-classic-to-rhsm:356
+#: ../src/rhn-migrate-classic-to-rhsm:387
 msgid ""
 "Please ensure system is subscribed to entitlements, and alter "
 "/etc/yum.repos.d/redhat.repo to enable extra repositories."
@@ -2995,11 +2343,11 @@ msgstr ""
 "कृपया प्रणाली एंटाइटलमेंटस्करीता सबस्क्राइब्ड् आहे याची खात्री करा, व अगाऊ "
 "रेपॉजिटरिज् सुरू करण्यासाठी /etc/yum.repos.d/redhat.repo बदला."
 
-#: ../src/rhn-migrate-classic-to-rhsm:390
+#: ../src/rhn-migrate-classic-to-rhsm:421
 msgid "RHN Username: "
 msgstr "RHN वापरकर्तानाव: "
 
-#: ../src/rhn-migrate-classic-to-rhsm:395
+#: ../src/rhn-migrate-classic-to-rhsm:427
 msgid ""
 "\n"
 "Retrieving existing RHN Classic subscription information ..."
@@ -3007,11 +2355,11 @@ msgstr ""
 "\n"
 "अस्तित्वातील RHN क्लासिक सबस्क्रिप्शन माहिती प्राप्त करत आहे ..."
 
-#: ../src/rhn-migrate-classic-to-rhsm:398
+#: ../src/rhn-migrate-classic-to-rhsm:430
 msgid "System is currently subscribed to:"
 msgstr "प्रणाली सध्या खालीलकरीता सबस्क्राइब्ड् आहे:"
 
-#: ../src/rhn-migrate-classic-to-rhsm:406
+#: ../src/rhn-migrate-classic-to-rhsm:438
 msgid ""
 "\n"
 "Preparing to unregister system from RHN classic ..."
