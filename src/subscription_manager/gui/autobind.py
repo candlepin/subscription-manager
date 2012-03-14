@@ -181,6 +181,14 @@ class AutobindController(object):
             if self.current_sla or dry_run.covers_required_products():
                 self.suitable_slas[sla] = dry_run
 
+    def can_add_more_subs(self):
+        """
+        Check if a system that already has a selected sla can get more
+        entitlements at their sla level
+        """
+        result = self.controller.suitable_slas[self.controller.selected_sla]
+        return len(result.json) > 0 and self.controller.current_sla is not None
+
 
 class AutobindWizardScreen(object):
     """
@@ -334,8 +342,8 @@ class AutobindWizard(widgets.GladeWidget):
         if len(self.controller.suitable_slas) == 1:
             # If system already had a service level, we can hit this point
             # when we cannot fix any unentitled products:
-            result = self.controller.suitable_slas[self.controller.suitable_slas.keys()[0]]
-            if len(result.json) == 0 and self.controller.current_sla:
+            if self.controller.current_sla and \
+                    not self.controller.can_add_more_subs():
                 ErrorDialog(_("Unable to subscribe to any additional products at current service level: %s") %
                         self.controller.current_sla,
                         parent = self.parent_window)

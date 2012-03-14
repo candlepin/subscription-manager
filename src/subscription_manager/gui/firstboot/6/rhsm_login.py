@@ -220,6 +220,20 @@ class moduleClass(Module, registergui.RegisterScreen):
         widget = registergui.registration_xml.get_widget(widget_name)
         return widget.get_text()
 
+    def _skip_sla_screens(self):
+        """
+        Find the first non rhsm module after the rhsm modules, and move to it.
+
+        Assumes that only our modules are named rhsm_, and that they are all
+        grouped together.
+        """
+        i = 0
+        while not self.interface.moduleList[i].__module.startswith('rhsm_'):
+            i += 1
+        while self.interface.moduleList[i].__module.startswith('rhsm_'):
+            i += 1
+        self.interface.moveToPage(pageNum=i)
+
     def _finish_registration(self, failed=False):
         registergui.RegisterScreen._finish_registration(self, failed=failed)
         if not failed:
@@ -234,19 +248,40 @@ class moduleClass(Module, registergui.RegisterScreen):
             controller = autobind.init_controller(self.backend, self.consumer,
                     Facts())
 
+            # XXX see autobind.AutobindWizard load() and _show_initial_screen
+            # for matching error handling.
             try:
                 controller.load()
             except autobind.ServiceLevelNotSupportedException:
-                pass
+                OkDialog(_("Unable to auto-subscribe, server does not support service levels. Please run 'Subscription Manager' to manually subscribe."))
+
+                # XXX show a dialog about manually subscribing
+                self._skip_sla_screens()
+                return
             except autobind.AllProductsCoveredException:
-                pass
+                # XXX show a dialog about manually subscribing
+                InfoDialog(_("All installed products are covered by valid entitlements. Please run 'Subscription Manager' to subscribe to additional products."))
+
+                self._skip_sla_screens()
+                return
 
             if len(controller.suitable_slas) > 1:
                 self.interface.moveToPage(moduleTitle=_("Service Level"))
             elif len(controller.suitable_slas) == 1:
+                if self.controller.current_sla and \
+                        not self.controller.can_add_more_subs():
+                    ErrorDialog(_("Unable to subscribe to any additional products at current service level: %s") %
+                            self.controller.current_sla)
+                    self._skip_sla_screens()
+                    return
+
                 self.interface.moveToPage(
                         moduleTitle=_("Confirm Subscriptions"))
             else:
-                # XXX jump to some error state screen about manually
-                # subscribing
-                pass
+                ErrorDialog(_("No service levels will cover all installed products. "
+                    "Please run 'Subscription Manager' tab to manually "
+                    "entitle this system."))
+
+                # XXX show a dialog about manually subscribing
+                self._skip_sla_screens()
+                return
