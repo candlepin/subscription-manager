@@ -90,6 +90,10 @@ logutil.init_logger()
 log = logging.getLogger('rhsm-app.' + __name__)
 rhsmcfg = rhsm.config.initConfig()
 
+proxyHost = ""
+proxyPort = ""
+proxyUser = ""
+proxyPass = ""
 
 class ProxiedTransport(xmlrpclib.Transport):
     def set_proxy(self, proxy, credentials):
