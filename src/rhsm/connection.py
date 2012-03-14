@@ -33,11 +33,13 @@ class NullHandler(logging.Handler):
     def emit(self, record):
         pass
 
+
 def safe_int(value, safe_value=None):
     try:
         return int(value)
     except:
         return safe_value
+
 
 h = NullHandler()
 logging.getLogger("rhsm").addHandler(h)
@@ -165,7 +167,6 @@ class ContentConnection(object):
     def _request(self, request_type, handler, body=None):
         context = SSL.Context("tlsv1")
 
-
         self._load_ca_certificates(context)
 
         if self.proxy_hostname and self.proxy_port:
@@ -203,7 +204,6 @@ class ContentConnection(object):
         except OSError, e:
             raise ConnectionSetupException(e.strerror)
 
-
     def test(self):
         pass
 
@@ -240,6 +240,7 @@ def _get_locale():
         return l[0]
 
     return None
+
 
 # FIXME: it would be nice if the ssl server connection stuff
 # was decomposed from the api handling parts

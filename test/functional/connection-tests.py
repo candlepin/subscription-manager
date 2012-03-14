@@ -52,4 +52,4 @@ class ContentConnectionTests(unittest.TestCase):
 
     def testInsecure(self):
         cc = ContentConnection(host="127.0.0.1", insecure=True)
-        
+
