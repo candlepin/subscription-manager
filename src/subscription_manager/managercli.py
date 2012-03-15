@@ -1515,6 +1515,9 @@ class ListCommand(CliCommand):
                                       % strftime("%Y-%m-%d", localtime())))
         self.parser.add_option("--consumed", action='store_true',
                                help=_("shows the subscriptions being consumed by this system."))
+        self.parser.add_option("--servicelevel", dest="servicelevel",
+                               help=_("if supplied then list shows only subscriptions matching the specified service level. " +
+                                      "Only used with --available and --consumed"))
         self.parser.add_option("--all", action='store_true',
                                help=_("if supplied with --available then all subscriptions are returned"))
 
@@ -1527,6 +1530,10 @@ class ListCommand(CliCommand):
             sys.exit(-1)
         if (self.options.on_date and not self.options.available):
             print _("Error: --ondate is only applicable with --available")
+            sys.exit(-1)
+        if self.options.servicelevel is not None and not (self.options.consumed or
+                                              self.options.available):
+            print _("Error: --servicelevel is only applicable with --available or --consumed")
             sys.exit(-1)
         if not (self.options.available or self.options.consumed):
             self.options.installed = True
@@ -1574,6 +1581,13 @@ class ListCommand(CliCommand):
 
             epools = managerlib.getAvailableEntitlements(self.cp, consumer,
                     self.facts, self.options.all, on_date)
+
+            # Filter certs by service level, if specified.
+            # Allowing "" here.
+            if self.options.servicelevel is not None:
+                epools = self._filter_pool_json_by_service_level(epools,
+                                                    self.options.servicelevel)
+
             if not len(epools):
                 print(_("No available subscription pools to list"))
                 sys.exit(0)
@@ -1587,33 +1601,48 @@ class ListCommand(CliCommand):
                 else:
                     machine_type = _("physical")
 
-                service_level = ""
-                service_type = ""
-                for product_attr in data['productAttributes']:
-                    if product_attr['name'] == 'support_level':
-                        service_level = product_attr['value']
-                    elif product_attr['name'] == 'support_type':
-                        service_type = product_attr['value']
-
                 print self._none_wrap(constants.available_subs_list, product_name,
                         data['productId'],
                         data['id'],
                         data['quantity'],
-                        service_level,
-                        service_type,
+                        data['service_level'] or "",
+                        data['service_type'] or "",
                         data['multi-entitlement'],
                         data['endDate'],
                         machine_type)
 
         if self.options.consumed:
-            self.print_consumed()
+            self.print_consumed(service_level=self.options.servicelevel)
 
-    def print_consumed(self, ent_dir=None):
+    def _filter_pool_json_by_service_level(self, pools, service_level):
+
+        def filter_pool_data_by_service_level(pool_data):
+            pool_level = ""
+            if pool_data['service_level']:
+                pool_level = pool_data['service_level']
+
+            return service_level.lower() == pool_level.lower()
+
+        return filter(filter_pool_data_by_service_level, pools)
+
+    def print_consumed(self, ent_dir=None, service_level=None):
         if ent_dir is None:
             ent_dir = EntitlementDirectory()
         # list all certificates that have not yet expired, even those
         # that are not yet active.
         certs = [cert for cert in ent_dir.list() if not cert.expired()]
+
+        # Filter certs by service level, if specified.
+        # Allowing "" here.
+        if service_level is not None:
+            def filter_cert_by_service_level(cert):
+                cert_level = ""
+                if cert.getOrder() and cert.getOrder().getSupportLevel():
+                    cert_level = cert.getOrder().getSupportLevel()
+                return service_level.lower() == \
+                    cert_level.lower()
+            certs = filter(filter_cert_by_service_level, certs)
+
         if len(certs) == 0:
             print(_("No consumed subscription pools to list"))
             sys.exit(0)

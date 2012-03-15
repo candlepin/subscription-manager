@@ -319,15 +319,22 @@ def getAvailableEntitlements(cpserver, consumer_uuid, facts, get_all=False, acti
     """
     columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
             'providedProducts', 'productId', 'attributes', 'multi-entitlement',
-            'productAttributes']
+            'service_level', 'service_type']
 
     dlist = list_pools(cpserver, consumer_uuid, facts, get_all, active_on)
 
     for pool in dlist:
+        pool_wrapper = PoolWrapper(pool)
         if allows_multi_entitlement(pool):
             pool['multi-entitlement'] = "Yes"
         else:
             pool['multi-entitlement'] = "No"
+
+        support_attrs = pool_wrapper.get_product_attributes("support_level",
+                                                            "support_type")
+        pool['service_level'] = support_attrs['support_level']
+        pool['service_type'] = support_attrs['support_type']
+
 
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:

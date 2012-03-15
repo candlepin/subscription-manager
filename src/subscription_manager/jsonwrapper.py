@@ -34,10 +34,37 @@ class PoolWrapper(object):
         return virt_only
 
     def get_stacking_id(self):
-        product_attrs = self.data['productAttributes']
+        return self._get_attribute_value('productAttributes', 'stacking_id')
+
+    def get_service_level(self):
+        return self._get_attribute_value('productAttributes', 'support_level')
+
+    def get_service_type(self):
+        return self._get_attribute_value('productAttributes', 'support_type')
+
+    def get_product_attributes(self, *attribute_names):
+        attrs = {}
+
+        if 'productAttributes' not in self.data:
+            return attrs
+
+        #Initialize all requested attribute names to have a value
+        # of None
+        for attr_name in attribute_names:
+            attrs[attr_name] = None
+
+        for attr in self.data['productAttributes']:
+            name = attr['name']
+            if name in attribute_names:
+                attrs[name] = attr['value']
+        return attrs
+
+
+    def _get_attribute_value(self, attr_list_name, attr_name):
+        product_attrs = self.data[attr_list_name]
         for attribute in product_attrs:
             name = attribute['name']
             value = attribute['value']
-            if name == "stacking_id" and value:
+            if name == attr_name and value:
                 return value
         return None

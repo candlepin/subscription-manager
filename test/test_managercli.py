@@ -183,6 +183,8 @@ class TestListCommand(TestCliProxyCommand):
     def setUp(self):
         self.indent = 1
         self.max_length = 40
+        self.cert_with_service_level = StubEntitlementCertificate(
+            StubProduct("test-product"), service_level="Premium")
         TestCliProxyCommand.setUp(self)
 
     def test_none_wrap(self):
@@ -206,7 +208,7 @@ class TestListCommand(TestCliProxyCommand):
         ent_dir = StubEntitlementDirectory([])
         try:
             self.cc.print_consumed(ent_dir)
-            fail("Should have exited.")
+            self.fail("Should have exited.")
         except SystemExit, e:
             pass
 
@@ -220,6 +222,32 @@ class TestListCommand(TestCliProxyCommand):
         ent_dir = StubEntitlementDirectory([
             StubEntitlementCertificate(product=None)])
         self.cc.print_consumed(ent_dir)
+
+    def test_print_consumed_prints_nothing_with_no_service_level_match(self):
+        ent_dir = StubEntitlementDirectory([self.cert_with_service_level])
+        try:
+            self.cc.print_consumed(ent_dir, service_level="NotFound")
+            self.fail("Should have exited since an entitlement with the " + \
+                      "specified service level does not exist.")
+        except SystemExit, e:
+            pass
+
+    def test_print_consumed_prints_enitlement_with_service_level_match(self):
+        ent_dir = StubEntitlementDirectory([self.cert_with_service_level])
+        self.cc.print_consumed(ent_dir, service_level="Premium")
+
+    def test_filter_only_specified_service_level(self):
+        pools = [{'service_level':'Level1'},
+                 {'service_level':'Level2'},
+                 {'service_level':'Level3'}]
+        filtered = self.cc._filter_pool_json_by_service_level(pools, "Level2")
+        self.assertEqual(1, len(filtered))
+        self.assertEqual("Level2", filtered[0]['service_level'])
+
+    def test_no_pool_with_specified_filter(self):
+        pools = [{'service_level':'Level1'}]
+        filtered = self.cc._filter_pool_json_by_service_level(pools, "NotFound")
+        self.assertEqual(0, len(filtered))
 
 
 class TestUnRegisterCommand(TestCliProxyCommand):

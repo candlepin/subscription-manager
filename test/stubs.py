@@ -128,7 +128,8 @@ class StubOrder(object):
 
     # Start/end are formatted strings, not actual datetimes.
     def __init__(self, start, end, name="STUB NAME", quantity=None,
-                 stacking_id=None, virt_only=None, socket_limit=1, sku=""):
+                 stacking_id=None, virt_only=None, socket_limit=1, sku="",
+                 service_level='None', service_type='None'):
         self.name = name
         self.start = start
         self.end = end
@@ -137,6 +138,8 @@ class StubOrder(object):
         self.virt_only = virt_only
         self.socket_limit = socket_limit
         self.sku = sku
+        self.service_level = service_level
+        self.service_type = service_type
 
     def getStart(self):
         return self.start
@@ -169,10 +172,10 @@ class StubOrder(object):
         return self.virt_only
 
     def getSupportLevel(self):
-        return "None"
+        return self.service_level
 
     def getSupportType(self):
-        return "None"
+        return self.service_type
 
 
 class StubContent(Content):
@@ -246,7 +249,8 @@ class StubProductCertificate(ProductCertificate):
 class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate):
 
     def __init__(self, product, provided_products=None, start_date=None, end_date=None,
-            order_end_date=None, content=None, quantity=1, stacking_id=None, sockets=2):
+            order_end_date=None, content=None, quantity=1, stacking_id=None, sockets=2,
+            service_level=None):
         StubProductCertificate.__init__(self, product, provided_products)
 
         self.start_date = start_date
@@ -267,7 +271,8 @@ class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate)
             sku = product.hash
         self.order = StubOrder(self.start_date.strftime(fmt),
                                self.order_end_date.strftime(fmt), quantity=quantity,
-                               stacking_id=stacking_id, socket_limit=sockets, sku=sku)
+                               stacking_id=stacking_id, socket_limit=sockets, sku=sku,
+                               service_level=service_level)
 
         self.valid_range = DateRange(self.start_date, self.end_date)
         self.content = []
