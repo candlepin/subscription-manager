@@ -95,10 +95,6 @@ class moduleClass(Module, registergui.RegisterScreen):
 
         self.interface = interface
 
-        if self._registration_finished:
-            self._registration_finished = False
-            return RESULT_SUCCESS
-
         self._read_rhn_proxy_settings()
 
         credentials = self._get_credentials_hash()
@@ -106,9 +102,11 @@ class moduleClass(Module, registergui.RegisterScreen):
         if credentials == self._cached_credentials and \
                 ConsumerIdentity.exists():
             # User has already successfully authenticaed with these
-            # credentials, just go on to the next module without
+            # credentials, just go on to sla screens without
             # reregistering the consumer
-            return RESULT_SUCCESS
+
+            self._init_sla()
+            return RESULT_JUMP
         else:
             # if they've already registered during firstboot and have clicked
             # back to register again, we must first unregister.
@@ -240,48 +238,59 @@ class moduleClass(Module, registergui.RegisterScreen):
             self._first_registration_apply_run = True
             self._registration_finished = True
 
-            # sla autosubscribe time. load up the possible slas, to decide if
-            # we need to display the selection screen, or go to the confirm
-            # screen.
-            # XXX this should really be done async.
+            self._init_sla()
+        else:
+            # something went wrong during registration. skip sla.
+            self._skip_sla_screens()
 
-            controller = autobind.init_controller(self.backend, self.consumer,
-                    Facts())
+    def _init_sla():
+        if self.skip_auto_subscribe():
+            self._skip_sla_screens()
+            return
 
-            # XXX see autobind.AutobindWizard load() and _show_initial_screen
-            # for matching error handling.
-            try:
-                controller.load()
-            except autobind.ServiceLevelNotSupportedException:
-                OkDialog(_("Unable to auto-subscribe, server does not support service levels. Please run 'Subscription Manager' to manually subscribe."))
+        # sla autosubscribe time. load up the possible slas, to decide if
+        # we need to display the selection screen, or go to the confirm
+        # screen.
+        # XXX this should really be done async.
 
-                # XXX show a dialog about manually subscribing
+        controller = autobind.init_controller(self.backend, self.consumer,
+                Facts())
+
+        # XXX see autobind.AutobindWizard load() and _show_initial_screen
+        # for matching error handling.
+        try:
+            controller.load()
+        except autobind.ServiceLevelNotSupportedException:
+            OkDialog(_("Unable to auto-subscribe, server does not support service levels. Please run 'Subscription Manager' to manually subscribe."))
+
+            # XXX show a dialog about manually subscribing
+            self._skip_sla_screens()
+            return
+        except autobind.AllProductsCoveredException:
+            # XXX show a dialog about manually subscribing
+            InfoDialog(_("All installed products are covered by valid entitlements. Please run 'Subscription Manager' to subscribe to additional products."))
+
+            self._skip_sla_screens()
+            return
+
+    def _init_sla():
+        if len(controller.suitable_slas) > 1:
+            self.interface.moveToPage(moduleTitle=_("Service Level"))
+        elif len(controller.suitable_slas) == 1:
+            if self.controller.current_sla and \
+                    not self.controller.can_add_more_subs():
+                ErrorDialog(_("Unable to subscribe to any additional products at current service level: %s") %
+                        self.controller.current_sla)
                 self._skip_sla_screens()
                 return
-            except autobind.AllProductsCoveredException:
-                # XXX show a dialog about manually subscribing
-                InfoDialog(_("All installed products are covered by valid entitlements. Please run 'Subscription Manager' to subscribe to additional products."))
 
-                self._skip_sla_screens()
-                return
+            self.interface.moveToPage(
+                    moduleTitle=_("Confirm Subscriptions"))
+        else:
+            ErrorDialog(_("No service levels will cover all installed products. "
+                "Please run 'Subscription Manager' tab to manually "
+                "entitle this system."))
 
-            if len(controller.suitable_slas) > 1:
-                self.interface.moveToPage(moduleTitle=_("Service Level"))
-            elif len(controller.suitable_slas) == 1:
-                if self.controller.current_sla and \
-                        not self.controller.can_add_more_subs():
-                    ErrorDialog(_("Unable to subscribe to any additional products at current service level: %s") %
-                            self.controller.current_sla)
-                    self._skip_sla_screens()
-                    return
-
-                self.interface.moveToPage(
-                        moduleTitle=_("Confirm Subscriptions"))
-            else:
-                ErrorDialog(_("No service levels will cover all installed products. "
-                    "Please run 'Subscription Manager' tab to manually "
-                    "entitle this system."))
-
-                # XXX show a dialog about manually subscribing
-                self._skip_sla_screens()
-                return
+            # XXX show a dialog about manually subscribing
+            self._skip_sla_screens()
+            return
