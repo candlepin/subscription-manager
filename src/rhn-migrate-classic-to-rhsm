@@ -143,8 +143,8 @@ def checkOkToProceed(username, password):
     try:
         cp.getOwnerList(username)
     except Exception, e:
-        log.fatal(e)
-        systemExit(1, _("Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for more details."))
+        log.error(traceback.format_exc())
+        systemExit(1, _("Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for more details.") % e)
 
 def getSubscribedChannelsList():
     try:
