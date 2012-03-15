@@ -45,6 +45,10 @@ available_subs_list = \
     "\n" + \
     _("Quantity:             \t%-25s") + \
     "\n" + \
+    _("Service Level:        \t%-25s") + \
+    "\n" + \
+    _("Service Type:        \t%-25s") + \
+    "\n" + \
     _("Multi-Entitlement:    \t%-25s") + \
     "\n" + \
     _("Expires:              \t%-25s") + \

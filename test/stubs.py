@@ -168,6 +168,13 @@ class StubOrder(object):
     def getVirtOnly(self):
         return self.virt_only
 
+    def getSupportLevel(self):
+        return "None"
+
+    def getSupportType(self):
+        return "None"
+
+
 class StubContent(Content):
 
     def __init__(self, label, name=None, quantity=1, vendor="",

@@ -78,6 +78,10 @@ CONSUMED_SUBS_LIST = \
     "\n" + \
     _("Quantity Used:        \t%-25s") + \
     "\n" + \
+    _("Service Level:        \t%-25s") + \
+    "\n" + \
+    _("Service Type :        \t%-25s") + \
+    "\n" + \
     _("Begins:               \t%-25s") + \
     "\n" + \
     _("Expires:              \t%-25s") + \
@@ -1517,7 +1521,7 @@ class ListCommand(CliCommand):
     def _none_wrap(self, template_str, *args):
         arglist = []
         for arg in args:
-            if not arg:
+            if arg is None:
                 arg = _("None")
             arglist.append(arg)
         return template_str % tuple(arglist)
@@ -1570,13 +1574,23 @@ class ListCommand(CliCommand):
                 else:
                     machine_type = _("physical")
 
+                service_level = ""
+                service_type = ""
+                for product_attr in data['productAttributes']:
+                    if product_attr['name'] == 'support_level':
+                        service_level = product_attr['value']
+                    elif product_attr['name'] == 'support_type':
+                        service_type = product_attr['value']
+
                 print self._none_wrap(constants.available_subs_list, product_name,
-                                                               data['productId'],
-                                                               data['id'],
-                                                               data['quantity'],
-                                                               data['multi-entitlement'],
-                                                               data['endDate'],
-                                                               machine_type)
+                        data['productId'],
+                        data['id'],
+                        data['quantity'],
+                        service_level,
+                        service_type,
+                        data['multi-entitlement'],
+                        data['endDate'],
+                        machine_type)
 
         if self.options.consumed:
             self.print_consumed()
@@ -1604,6 +1618,8 @@ class ListCommand(CliCommand):
                         cert.serialNumber(),
                         cert.valid(),
                         cert.getOrder().getQuantityUsed(),
+                        cert.getOrder().getSupportLevel() or "",
+                        cert.getOrder().getSupportType() or "",
                         managerlib.formatDate(cert.validRange().begin()),
                         managerlib.formatDate(cert.validRange().end()))
             else:
@@ -1615,6 +1631,8 @@ class ListCommand(CliCommand):
                             cert.serialNumber(),
                             cert.valid(),
                             cert.getOrder().getQuantityUsed(),
+                            cert.getOrder().getSupportLevel() or "",
+                            cert.getOrder().getSupportType() or "",
                             managerlib.formatDate(cert.validRange().begin()),
                             managerlib.formatDate(cert.validRange().end()))
 

@@ -318,7 +318,8 @@ def getAvailableEntitlements(cpserver, consumer_uuid, facts, get_all=False, acti
     not pass. (i.e. show pools that are incompatible for your hardware)
     """
     columns = ['id', 'quantity', 'consumed', 'endDate', 'productName',
-            'providedProducts', 'productId', 'attributes', 'multi-entitlement']
+            'providedProducts', 'productId', 'attributes', 'multi-entitlement',
+            'productAttributes']
 
     dlist = list_pools(cpserver, consumer_uuid, facts, get_all, active_on)
 
