@@ -218,6 +218,9 @@ class ProductsTable(object):
         """
         self.product_store.append([product_name, self._get_icon(product_id)])
 
+    def set_accessibility_name(self, accessibility_name):
+        self.table_widget.get_accessible().set_name(accessibility_name)
+
     def _render_icon(self, icon_id):
         return self.table_widget.render_icon(icon_id, gtk.ICON_SIZE_MENU)
 
@@ -238,6 +241,8 @@ class SubDetailsWidget(GladeWidget):
         self.show_contract = show_contract
         self.sub_details_vbox.unparent()
 
+        self.bundled_products = ProductsTable(self.products_view)
+
         # Clean out contract and date widgets if not showing contract info
         if not show_contract:
             def destroy(widget_prefix):
@@ -255,13 +260,26 @@ class SubDetailsWidget(GladeWidget):
             destroy('provides_management')
             destroy('virt_only')
             destroy("stacking_id")
+
+            # Since all the tabs have the same parent window, the accessibility
+            # names must be unique among all three tabs to allow unambiguous
+            # access to the widgets.  Since the SubDetails widget is used
+            # under two different tabs, we must programatically override the
+            # accessibility name for duplicated widgets in one of the tabs.
+            # See BZ 803374.
+            self.subscription_text.get_accessible().set_name(
+                    "All Available Subscription Text")
+            self.support_type_text.get_accessible().set_name(
+                    "All Available Support Type Text")
+            self.support_level_text.get_accessible().set_name(
+                    "All Available Support Level Text")
+            self.bundled_products.set_accessibility_name(
+                    "All Available Bundled Product Table")
         else:
             self.pull_widgets(["contract_number_text", "start_date_text",
                                "expiration_date_text", "account_text",
                                "provides_management_text", "stacking_id_text",
                                "virt_only_text"])
-
-        self.bundled_products = ProductsTable(self.products_view)
 
     def show(self, name, contract=None, start=None, end=None, account=None,
             management=None, support_level="", stacking_id=None, support_type="",
