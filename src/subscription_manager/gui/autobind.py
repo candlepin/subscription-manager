@@ -436,6 +436,11 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
         self.subs_treeview.set_search_column(0)
 
     def forward(self):
+        """
+        Subscribe to the selected pools.
+        returns a list of granted entitlement ids.
+        """
+        entitlement_cert_ids = []
         try:
             if not self.controller.current_sla:
                 log.info("Saving selected service level for this system.")
@@ -449,9 +454,12 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
                 pool_id = pool_quantity['pool']['id']
                 quantity = pool_quantity['quantity']
                 log.info("  pool %s quantity %s" % (pool_id, quantity))
-                self.controller.backend.uep.bindByEntitlementPool(
+                result = self.controller.backend.uep.bindByEntitlementPool(
                         self.controller.consumer.getConsumerId(), pool_id,
                         quantity)
+                for entitlement in result:
+                    for certificate in entitlement['certificates']:
+                        entitlement_cert_ids.append(certificate['serial']['id'])
                 fetch_certificates(self.controller.backend)
         except Exception, e:
             # Going to try to update certificates just in case we errored out
@@ -463,6 +471,8 @@ class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
                 log.exception(cert_update_ex)
             handle_gui_exception(e, _("Error subscribing:"),
                     self.parent_window)
+
+        return entitlement_cert_ids
 
     def get_title(self):
         return _("Confirm Subscription(s)")

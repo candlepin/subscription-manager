@@ -222,15 +222,13 @@ class moduleClass(Module, registergui.RegisterScreen):
         """
         Find the first non rhsm module after the rhsm modules, and move to it.
 
-        Assumes that only our modules are named rhsm_, and that they are all
-        grouped together.
+        Assumes that only our modules are grouped together, and that we have
+        3.
         """
         i = 0
-        while not self.interface.moduleList[i].__module.startswith('rhsm_'):
+        while not self.interface.moduleList[i].__module__.startswith('rhsm_'):
             i += 1
-        while self.interface.moduleList[i].__module.startswith('rhsm_'):
-            i += 1
-        self.interface.moveToPage(pageNum=i)
+        self.interface.moveToPage(pageNum=i + 3)
 
     def _finish_registration(self, failed=False):
         registergui.RegisterScreen._finish_registration(self, failed=failed)
@@ -243,7 +241,7 @@ class moduleClass(Module, registergui.RegisterScreen):
             # something went wrong during registration. skip sla.
             self._skip_sla_screens()
 
-    def _init_sla():
+    def _init_sla(self):
         if self.skip_auto_subscribe():
             self._skip_sla_screens()
             return
@@ -273,7 +271,6 @@ class moduleClass(Module, registergui.RegisterScreen):
             self._skip_sla_screens()
             return
 
-    def _init_sla():
         if len(controller.suitable_slas) > 1:
             self.interface.moveToPage(moduleTitle=_("Service Level"))
         elif len(controller.suitable_slas) == 1:

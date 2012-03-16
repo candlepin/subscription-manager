@@ -28,9 +28,31 @@ class moduleClass(Module):
 
         self.screen = autobind.ConfirmSubscriptionsScreen(None, None)
 
+        # Used to determine if the user has selected a new SLA or reregistered
+        # after a back button press
+        self.old_consumer = None
+        self.old_sla = None
+        self.old_entitlements = []
+
     def apply(self, interface, testing=False):
-        # screen.forward takes care of subscribing.
-        self.screen.forward()
+
+        if self.old_consumer == self.screen.controller.consumer:
+            if self.old_sla != self.screen.controller.selected_sla:
+                self.old_sla = self.screen.controller.selected_sla
+                # XXX need to unsubscribe from previously subscribed
+                # entitlements here.
+                for entitlement in self.old_entitlements:
+                    self.screen.controller.backend.uep.unbindBySerial(
+                            self.screen.controller.consumer.uuid, entitlement)
+                self.old_entitlements = self.screen.forward()
+            # otherwise both consumer and selected sla are the same. we can
+            # just move forward.
+        else:
+            self.old_consumer = self.screen.controller.consumer
+            self.old_sla = self.screen.controller.selected_sla
+            # screen.forward takes care of subscribing.
+            self.old_entitlements = self.screen.forward()
+
         return RESULT_SUCCESS
 
     def createScreen(self):
@@ -49,7 +71,8 @@ class moduleClass(Module):
         controller = autobind.get_controller()
         self.screen.controller = controller
 
-        self.screen.load_data(controller.suitable_slas[controller.selected_sla])
+        self.screen.load_data(
+                controller.suitable_slas[controller.selected_sla])
 
     def needsNetwork(self):
         """
