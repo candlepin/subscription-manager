@@ -27,6 +27,7 @@ from optparse import OptionParser
 
 import sys
 sys.path.append("/usr/share/rhsm")
+from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
 from subscription_manager import certdirectory
 from subscription_manager.cert_sorter import CertSorter
@@ -41,6 +42,7 @@ RHSM_EXPIRED = 1
 RHSM_WARNING = 2
 RHN_CLASSIC = 3
 RHSM_PARTIALLY_VALID = 4
+RHSM_REGISTRATION_REQUIRED = 5
 
 
 def debug(msg):
@@ -71,6 +73,10 @@ def check_status(force_signal):
     if ClassicCheck().is_registered_with_classic():
         debug("System is already registered to another entitlement system")
         return RHN_CLASSIC
+
+    if not ConsumerIdentity.existsAndValid():
+        debug("The system is not currently registered.")
+        return RHSM_REGISTRATION_REQUIRED
 
     facts = Facts()
     sorter = CertSorter(certdirectory.ProductDirectory(),
@@ -158,6 +164,8 @@ def parse_force_signal(cli_arg):
         return RHSM_PARTIALLY_VALID
     elif cli_arg == "classic":
         return RHN_CLASSIC
+    elif cli_arg == "registration_required":
+        return RHSM_REGISTRATION_REQUIRED
     else:
         sys.stderr.write("Invalid force option: %s\n" % cli_arg)
         sys.exit(-1)
@@ -175,7 +183,7 @@ def main():
             action="store_true", default=False)
     parser.add_option("-f", "--force-signal", dest="force_signal",
             help="Force firing of a signal " +
-            "(valid, expired, warning, partial or classic)")
+            "(valid, expired, warning, partial, classic or registration_required)")
 
     options, args = parser.parse_args()
 
@@ -208,6 +216,13 @@ def main():
             syslog.openlog("rhsmd")
             syslog.syslog(syslog.LOG_NOTICE,
                     get_branding().RHSMD_REGISTERED_TO_OTHER)
+        elif status == RHSM_REGISTRATION_REQUIRED:
+            syslog.openlog("rhsmd")
+            syslog.syslog(syslog.LOG_NOTICE,
+                    "In order for Subscription Manager to provide your " +
+                    "system with updates, your system must be registered " +
+                    "with RHN. Please enter your Red Hat login to ensure " +
+                    "your system is up-to-date.")
 
         # Return an exit code for the program. having valid entitlements is
         # good, so it gets an exit status of 0.

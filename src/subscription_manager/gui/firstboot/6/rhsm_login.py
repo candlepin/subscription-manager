@@ -14,7 +14,9 @@ import rhsm
 
 sys.path.append("/usr/share/rhsm")
 from subscription_manager.gui import managergui
+from subscription_manager import managerlib
 from subscription_manager.gui import registergui
+from subscription_manager.gui import autobind
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.facts import Facts
 
@@ -41,6 +43,8 @@ class moduleClass(Module, registergui.RegisterScreen):
         self.sidebarTitle = _("Entitlement Registration")
         self.title = _("Entitlement Platform Registration")
         self._cached_credentials = None
+        self._registration_finished = False
+        self._first_registration_apply_run = True
 
     def _read_rhn_proxy_settings(self):
         # Read and store rhn-setup's proxy settings, as they have been set
@@ -89,6 +93,8 @@ class moduleClass(Module, registergui.RegisterScreen):
         value.
         """
 
+        self.interface = interface
+
         self._read_rhn_proxy_settings()
 
         credentials = self._get_credentials_hash()
@@ -96,18 +102,26 @@ class moduleClass(Module, registergui.RegisterScreen):
         if credentials == self._cached_credentials and \
                 ConsumerIdentity.exists():
             # User has already successfully authenticaed with these
-            # credentials, just go on to the next module without
+            # credentials, just go on to sla screens without
             # reregistering the consumer
-            return RESULT_SUCCESS
+
+            self._init_sla()
+            return RESULT_JUMP
         else:
-            self.interface = interface
+            # if they've already registered during firstboot and have clicked
+            # back to register again, we must first unregister.
+            # XXX i'd like this call to be inside the async progress stuff,
+            # since it does take some time
+            if self._first_registration_apply_run and ConsumerIdentity.exists():
+                managerlib.unregister(self.backend.uep, self.consumer.uuid)
+                self.consumer.reload()
+                self._first_registration_apply_run = False
+
             valid_registration = self.register(testing=testing)
 
             if valid_registration:
                 self._cached_credentials = credentials
-                return RESULT_SUCCESS
-            else:
-                return RESULT_FAILURE
+            return RESULT_FAILURE
 
     def close_window(self):
         """
@@ -204,7 +218,76 @@ class moduleClass(Module, registergui.RegisterScreen):
         widget = registergui.registration_xml.get_widget(widget_name)
         return widget.get_text()
 
+    def _skip_sla_screens(self):
+        """
+        Find the first non rhsm module after the rhsm modules, and move to it.
+
+        Assumes that only our modules are grouped together, and that we have
+        3.
+        """
+        i = 0
+        while not self.interface.moduleList[i].__module__.startswith('rhsm_'):
+            i += 1
+        self.interface.moveToPage(pageNum=i + 3)
+
     def _finish_registration(self, failed=False):
         registergui.RegisterScreen._finish_registration(self, failed=failed)
         if not failed:
-            self.interface.moveToPage(moduleTitle=(_("Subscription Manager")))
+            self._first_registration_apply_run = True
+            self._registration_finished = True
+
+            self._init_sla()
+        else:
+            # something went wrong during registration. skip sla.
+            self._skip_sla_screens()
+
+    def _init_sla(self):
+        if self.skip_auto_subscribe():
+            self._skip_sla_screens()
+            return
+
+        # sla autosubscribe time. load up the possible slas, to decide if
+        # we need to display the selection screen, or go to the confirm
+        # screen.
+        # XXX this should really be done async.
+
+        controller = autobind.init_controller(self.backend, self.consumer,
+                Facts())
+
+        # XXX see autobind.AutobindWizard load() and _show_initial_screen
+        # for matching error handling.
+        try:
+            controller.load()
+        except autobind.ServiceLevelNotSupportedException:
+            OkDialog(_("Unable to auto-subscribe, server does not support service levels. Please run 'Subscription Manager' to manually subscribe."))
+
+            # XXX show a dialog about manually subscribing
+            self._skip_sla_screens()
+            return
+        except autobind.AllProductsCoveredException:
+            # XXX show a dialog about manually subscribing
+            InfoDialog(_("All installed products are covered by valid entitlements. Please run 'Subscription Manager' to subscribe to additional products."))
+
+            self._skip_sla_screens()
+            return
+
+        if len(controller.suitable_slas) > 1:
+            self.interface.moveToPage(moduleTitle=_("Service Level"))
+        elif len(controller.suitable_slas) == 1:
+            if self.controller.current_sla and \
+                    not self.controller.can_add_more_subs():
+                ErrorDialog(_("Unable to subscribe to any additional products at current service level: %s") %
+                        self.controller.current_sla)
+                self._skip_sla_screens()
+                return
+
+            self.interface.moveToPage(
+                    moduleTitle=_("Confirm Subscriptions"))
+        else:
+            ErrorDialog(_("No service levels will cover all installed products. "
+                "Please run 'Subscription Manager' tab to manually "
+                "entitle this system."))
+
+            # XXX show a dialog about manually subscribing
+            self._skip_sla_screens()
+            return

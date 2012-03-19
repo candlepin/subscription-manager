@@ -218,3 +218,16 @@ def set_background_model_index(tree_view, model_idx):
     for col in tree_view.get_columns():
         for renderer in col.get_cell_renderers():
             col.add_attribute(renderer, 'cell-background', model_idx)
+
+
+class GladeWrapper(gtk.glade.XML):
+    def __init__(self, filename):
+        gtk.glade.XML.__init__(self, filename)
+
+    def get_widget(self, widget_name):
+        widget = gtk.glade.XML.get_widget(self, widget_name)
+        if widget is None:
+            print "ERROR: widget %s was not found" % widget_name
+            raise Exception("Widget %s not found" % widget_name)
+        return widget
+

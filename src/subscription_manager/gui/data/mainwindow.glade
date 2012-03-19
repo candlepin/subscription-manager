@@ -25,6 +25,30 @@
                 <property name="icon_size">1</property>
                 <property name="icon_size_set">True</property>
                 <child>
+                  <widget class="GtkToolButton" id="preferences_button">
+                    <property name="visible">True</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip" translatable="yes">System Preferences</property>
+                    <property name="label" translatable="yes">System Preferences</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-preferences</property>
+                    <signal name="clicked" handler="on_preferences_button_clicked"/>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkSeparatorToolItem" id="toolbutton1">
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
                   <widget class="GtkToolButton" id="proxy_config_button">
                     <property name="visible">True</property>
                     <property name="has_tooltip">True</property>
@@ -84,6 +108,14 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkSeparatorToolItem" id="sep">
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
                   </packing>
                 </child>
                 <child>

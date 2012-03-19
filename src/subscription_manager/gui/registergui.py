@@ -30,7 +30,8 @@ from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 
-from subscription_manager.gui.utils import handle_gui_exception, errorWindow
+from subscription_manager.gui.utils import handle_gui_exception, errorWindow, \
+        linkify, GladeWrapper
 
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
@@ -62,17 +63,6 @@ PROGRESS_PAGE = 1
 OWNER_SELECT_PAGE = 2
 ENVIRONMENT_SELECT_PAGE = 3
 
-
-class GladeWrapper(gtk.glade.XML):
-    def __init__(self, filename):
-        gtk.glade.XML.__init__(self, filename)
-
-    def get_widget(self, widget_name):
-        widget = gtk.glade.XML.get_widget(self, widget_name)
-        if widget is None:
-            print "ERROR: widget %s was not found" % widget_name
-            raise Exception("Widget %s not found" % widget_name)
-        return widget
 
 registration_xml = GladeWrapper(os.path.join(prefix,
     "data/registration.glade"))
@@ -107,7 +97,7 @@ class RegisterScreen:
         self.uname = registration_xml.get_widget("account_login")
         self.passwd = registration_xml.get_widget("account_password")
         self.consumer_name = registration_xml.get_widget("consumer_name")
-        self.autobind = registration_xml.get_widget("auto_bind")
+        self.skip_auto_bind = registration_xml.get_widget("skip_auto_bind")
 
         self.register_notebook = \
                 registration_xml.get_widget("register_notebook")
@@ -141,15 +131,16 @@ class RegisterScreen:
                 get_branding().GUI_REGISTRATION_HEADER)
 
     def show(self):
+        # Ensure that we start on the first page and that
+        # all widgets are cleared.
+        self.register_notebook.set_page(CREDENTIALS_PAGE)
+        self._clear_registration_widgets()
         self.registerWin.present()
 
     def delete_event(self, event, data=None):
         return self.close_window()
 
     def cancel(self, button):
-        # On cancellation, reset back to the credentials page.
-        self.register_notebook.set_page(CREDENTIALS_PAGE)
-        self._clear_registration_widgets()
         self.close_window()
 
     def initializeConsumerName(self):
@@ -300,19 +291,13 @@ class RegisterScreen:
 
             managerlib.persist_consumer_cert(new_account)
             self.consumer.reload()
-            # reload CP instance with new ssl certs
-            if self.auto_subscribe():
-                self._set_register_details_label(_("Autosubscribing"))
-                # try to auomatically bind products
-                self.async.bind_by_products(self.consumer.uuid,
-                        self._on_bind_by_products_cb)
-            else:
-                self._finish_registration()
+            self._finish_registration()
 
         except Exception, e:
             handle_gui_exception(e, constants.REGISTER_ERROR, self.registerWin)
             self._finish_registration(failed=True)
 
+<<<<<<< HEAD
     def _on_bind_by_products_cb(self, error=None):
         if error:
             log.exception(error)
@@ -330,6 +315,8 @@ class RegisterScreen:
             failed = True
         self._finish_registration(failed=failed)
 
+=======
+>>>>>>> sla
     def _finish_registration(self, failed=False):
         # failed is used by the firstboot subclasses to decide if they should
         # advance the screen or not.
@@ -348,14 +335,14 @@ class RegisterScreen:
 
     def emit_consumer_signal(self):
         for method in self.callbacks:
-            method()
+            method(skip_auto_bind=self.skip_auto_subscribe())
 
     def close_window(self):
         self.registerWin.hide()
         return True
 
-    def auto_subscribe(self):
-        return self.autobind.get_active()
+    def skip_auto_subscribe(self):
+        return self.skip_auto_bind.get_active()
 
     def validate_consumername(self, consumername):
         if not consumername:
@@ -388,7 +375,7 @@ class RegisterScreen:
         self.passwd.set_text("")
         self.consumer_name.set_text("")
         self.initializeConsumerName()
-        self.autobind.set_active(False)
+        self.skip_auto_bind.set_active(False)
 
     def _show_credentials_page(self):
         self.register_notebook.set_page(CREDENTIALS_PAGE)

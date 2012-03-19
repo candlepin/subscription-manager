@@ -55,6 +55,7 @@ static GOptionEntry entries[] = {
 
 typedef struct _Context {
 	bool is_visible;
+	bool show_registration;
 	GtkStatusIcon *icon;
 	NotifyNotification *notification;
 	DBusGProxy *entitlement_status_proxy;
@@ -66,7 +67,8 @@ typedef enum _StatusType {
 	RHSM_EXPIRED,
 	RHSM_WARNING,
 	RHN_CLASSIC,
-	RHSM_PARTIALLY_VALID
+	RHSM_PARTIALLY_VALID,
+	RHSM_REGISTRATION_REQUIRED
 } StatusType;
 
 /* prototypes */
@@ -79,6 +81,8 @@ static void icon_clicked (GtkStatusIcon *, Context *);
 static void icon_right_clicked (GtkStatusIcon *, guint, guint, Context *);
 static void remind_me_later_clicked (NotifyNotification *, gchar *, Context *);
 static void manage_subs_clicked (NotifyNotification *, gchar *, Context *);
+static void register_now_clicked (NotifyNotification *, gchar *, Context *);
+static void register_icon_click_listeners (Context *);
 static void do_nothing_logger (const gchar *, GLogLevelFlags, const gchar *,
 			       gpointer);
 static void status_changed_cb (NotifyNotification *, gint, Context *);
@@ -100,6 +104,8 @@ create_status_type (int status)
 			return RHN_CLASSIC;
 		case 4:
 			return RHSM_PARTIALLY_VALID;
+		case 5:
+			return RHSM_REGISTRATION_REQUIRED;
 		default:
 			// we don't know this one, better to play it safe
 			return RHSM_EXPIRED;
@@ -121,7 +127,12 @@ hide_icon (Context * context)
 static void
 run_smg (Context * context)
 {
-	g_spawn_command_line_async ("subscription-manager-gui", NULL);
+	if (context->show_registration) {
+		g_spawn_command_line_async ("subscription-manager-gui --register", NULL);
+	} else {
+		g_spawn_command_line_async ("subscription-manager-gui", NULL);    
+	}
+	hide_icon (context);
 }
 
 static void
@@ -156,6 +167,14 @@ manage_subs_clicked (NotifyNotification * notification G_GNUC_UNUSED,
 	run_smg (context);
 }
 
+static void
+register_now_clicked (NotifyNotification * notification G_GNUC_UNUSED,
+			gchar * action G_GNUC_UNUSED, Context * context)
+{
+	g_debug ("Register now clicked");
+	run_smg (context);
+}
+
 /*
  * This signal handler waits for the status icon to first appear in the status
  * bar after we set its visibility to true. We have to do this for el5 era
@@ -179,12 +198,14 @@ display_icon (Context * context, StatusType status_type)
 	static char *notification_title;
 	static char *notification_body;
 
-	if (context->is_visible) {
-		g_debug ("Icon already visible");
-		return;
-	}
-
-	if (status_type == RHSM_EXPIRED) {
+	if (status_type == RHSM_REGISTRATION_REQUIRED) {
+		tooltip = _("Register System For Support And Updates");
+		notification_title = _("Register System For Support And Updates");
+		notification_body = _("In order for Subscription Manager to provide your "
+				      "system with updates, your system must be registered "
+				      "with RHN. Please enter your Red Hat login to ensure "
+				      "your system is up-to-date.");
+	} else if (status_type == RHSM_EXPIRED) {
 		tooltip = _("Invalid or Missing Entitlement Certificates");
 		notification_title =
 			_("Invalid or Missing Entitlement Certificates");
@@ -209,10 +230,6 @@ display_icon (Context * context, StatusType status_type)
 	}
 
 	gtk_status_icon_set_tooltip (context->icon, tooltip);
-	g_signal_connect (context->icon, "activate",
-			  G_CALLBACK (icon_clicked), context);
-	g_signal_connect (context->icon, "popup-menu",
-			  G_CALLBACK (icon_right_clicked), context);
 	context->is_visible = true;
 
 	context->notification =
@@ -226,11 +243,20 @@ display_icon (Context * context, StatusType status_type)
 					_("Remind Me Later"),
 					(NotifyActionCallback)
 					remind_me_later_clicked, context, NULL);
-	notify_notification_add_action (context->notification,
-					"manage-subscriptions",
-					_("Manage My Subscriptions..."),
-					(NotifyActionCallback)
-					manage_subs_clicked, context, NULL);
+
+	if (status_type == RHSM_REGISTRATION_REQUIRED) {
+		notify_notification_add_action (context->notification,
+						"register-system",
+						_("Register Now"),
+						(NotifyActionCallback)
+						register_now_clicked, context, NULL);
+	} else {
+		notify_notification_add_action (context->notification,
+						"manage-subscriptions",
+						_("Manage My Subscriptions..."),
+						(NotifyActionCallback)
+						manage_subs_clicked, context, NULL);
+	}
 
 	gtk_status_icon_set_visible (context->icon, true);
 	context->handler_id = g_signal_connect (context->icon, "size-changed",
@@ -241,6 +267,7 @@ display_icon (Context * context, StatusType status_type)
 static void
 alter_icon (Context * context, StatusType status_type)
 {
+	context->show_registration = status_type == RHSM_REGISTRATION_REQUIRED;
 	if ((status_type != RHN_CLASSIC) && (status_type != RHSM_VALID)) {
 		display_icon (context, status_type);
 	} else {
@@ -283,7 +310,9 @@ check_status (Context * context)
 
 	if (force_icon) {
 		g_debug ("Forcing display of icon (simulated invalidity)");
-		if (g_str_equal (force_icon, "expired")) {
+		if (g_str_equal (force_icon, "registration_required")) {
+			status_type = RHSM_REGISTRATION_REQUIRED;
+		} else if (g_str_equal (force_icon, "expired")) {
 			status_type = RHSM_EXPIRED;
 		} else if (g_str_equal (force_icon, "partial")) {
 			status_type = RHSM_PARTIALLY_VALID;
@@ -294,12 +323,10 @@ check_status (Context * context)
 				 force_icon);
 			exit (1);
 		}
+		alter_icon (context, status_type);
 	} else {
 		status_type = check_status_over_dbus (context);
 	}
-
-	alter_icon (context, status_type);
-
 	return true;
 }
 
@@ -359,6 +386,14 @@ add_signal_listener (Context * context)
 				     NULL);
 }
 
+static void
+register_icon_click_listeners (Context * context) {
+	g_signal_connect (context->icon, "activate",
+			  G_CALLBACK (icon_clicked), context);
+	g_signal_connect (context->icon, "popup-menu",
+			  G_CALLBACK (icon_right_clicked), context);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -369,6 +404,7 @@ main (int argc, char **argv)
 	guint32 result;
 	Context context;
 	context.is_visible = false;
+	context.show_registration = false;
 
 	setlocale (LC_ALL, "");
 	bindtextdomain ("rhsm", "/usr/share/locale");
@@ -433,6 +469,7 @@ main (int argc, char **argv)
 
 	context.icon =
 		gtk_status_icon_new_from_icon_name ("subscription-manager");
+	register_icon_click_listeners (&context);
 	gtk_status_icon_set_visible (context.icon, false);
 
 	context.entitlement_status_proxy = get_entitlement_status_proxy ();

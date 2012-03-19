@@ -26,12 +26,14 @@ class RegisterScreenTests(unittest.TestCase):
         self.rs.passwd.set_text("bar")
         self.rs.register()
 
-    def test_cancel_registration_returns_to_credentials_screen(self):
+    def test_show_registration_returns_to_credentials_screen(self):
         self.rs.uname.set_text("foo")
         self.rs.passwd.set_text("bar")
         self.rs.register()
         self.assertNotEquals(CREDENTIALS_PAGE, self.rs.register_notebook.get_current_page())
         self.rs.cancel(self.rs.cancel_button)
+        self.assertNotEquals(CREDENTIALS_PAGE, self.rs.register_notebook.get_current_page())
+        self.rs.show()
         self.assertEquals(CREDENTIALS_PAGE, self.rs.register_notebook.get_current_page())
 
     def test_clear_credentials_dialog(self):
@@ -39,10 +41,10 @@ class RegisterScreenTests(unittest.TestCase):
         default_consumer_name_value = self.rs.consumer_name.get_text()
         self.rs.uname.set_text("foo")
         self.rs.passwd.set_text("bar")
-        self.rs.autobind.set_active(True)
+        self.rs.skip_auto_bind.set_active(True)
         self.rs.consumer_name.set_text("CONSUMER")
-        self.rs.cancel(self.rs.cancel_button)
+        self.rs._clear_registration_widgets()
         self.assertEquals("", self.rs.uname.get_text())
         self.assertEquals("", self.rs.passwd.get_text())
-        self.assertFalse(self.rs.autobind.get_active())
+        self.assertFalse(self.rs.skip_auto_bind.get_active())
         self.assertEquals(default_consumer_name_value, self.rs.consumer_name.get_text())

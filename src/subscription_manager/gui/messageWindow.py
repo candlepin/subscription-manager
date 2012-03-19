@@ -82,7 +82,6 @@ class MessageWindow(gobject.GObject):
 
     def hide(self):
         self.dialog.hide()
-        self.dialog.destroy()
 
     def noop_hook(self, dummy1=None, dummy2=None):
         pass

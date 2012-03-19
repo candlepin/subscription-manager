@@ -47,6 +47,8 @@ from subscription_manager.gui.subscription_assistant import \
         SubscriptionAssistant
 from subscription_manager.gui.importsub import ImportSubDialog
 from subscription_manager.gui.utils import handle_gui_exception, linkify
+from subscription_manager.gui.autobind import AutobindWizard
+from subscription_manager.gui.preferences import PreferencesDialog
 
 import gettext
 _ = gettext.gettext
@@ -168,7 +170,8 @@ class MainWindow(widgets.GladeWidget):
     The new RHSM main window.
     """
     def __init__(self, backend=None, consumer=None,
-                 facts=None, ent_dir=None, prod_dir=None):
+                 facts=None, ent_dir=None, prod_dir=None,
+                 auto_launch_registration=False):
         super(MainWindow, self).__init__('mainwindow.glade',
               ['main_window', 'notebook', 'system_name_label',
                'next_update_label', 'next_update_title', 'register_button',
@@ -188,6 +191,8 @@ class MainWindow(widgets.GladeWidget):
         self.registration_dialog = registergui.RegisterScreen(self.backend,
                 self.consumer, self.facts,
                 callbacks=[self.registration_changed])
+
+        self.preferences_dialog = PreferencesDialog(self.backend, self.consumer)
 
         self.import_sub_dialog = ImportSubDialog()
 
@@ -238,6 +243,7 @@ class MainWindow(widgets.GladeWidget):
                 self._network_config_button_clicked,
             "on_redeem_button_clicked": self._redeem_button_clicked,
             "on_help_button_clicked": self._help_button_clicked,
+            "on_preferences_button_clicked": self._preferences_button_clicked,
         })
 
         def on_identity_change(filemonitor):
@@ -252,11 +258,37 @@ class MainWindow(widgets.GladeWidget):
         # and show dialog if so
         self._check_rhn_classic()
 
+        if auto_launch_registration and not self.registered():
+            self._register_button_clicked(None)
+
     def registered(self):
         return ConsumerIdentity.existsAndValid()
 
-    def registration_changed(self):
+    def _on_sla_back_button_press(self):
+        self._perform_unregister()
+        self._register_button_clicked(None)
+
+    def _on_sla_cancel_button_press(self):
+        self._perform_unregister()
+
+    def registration_changed(self, skip_auto_bind):
         log.debug("Registration changed, updating main window.")
+        self.consumer.reload()
+        # If we are now registered, load the Autobind wizard.
+
+        if self.registered() and not skip_auto_bind:
+            try:
+                autobind_wizard = AutobindWizard(self.backend, self.consumer, self.facts,
+                        self._get_window(), self._on_sla_back_button_press,
+                        self._on_sla_cancel_button_press)
+                autobind_wizard.show()
+            except Exception, e:
+                # If an exception occurs here, refresh the UI so that
+                # it remains in the correct state an then raise the
+                # exception again.
+                self.refresh()
+                raise e
+            return
 
         self.refresh()
 
@@ -319,11 +351,17 @@ class MainWindow(widgets.GladeWidget):
         self.registration_dialog.set_parent_window(self._get_window())
         self.registration_dialog.show()
 
+    def _preferences_button_clicked(self, widget):
+        self.preferences_dialog.show()
+
     def _on_unregister_prompt_response(self, dialog, response):
         if not response:
             log.info("unregistrater not confirmed. cancelling")
             return
         log.info("Proceeding with un-registration: %s", self.consumer.uuid)
+        self._perform_unregister()
+
+    def _perform_unregister(self):
         try:
             managerlib.unregister(self.backend.uep, self.consumer.uuid)
         except Exception, e:
@@ -357,8 +395,13 @@ class MainWindow(widgets.GladeWidget):
         self.import_sub_dialog.show()
 
     def _update_certificates_button_clicked(self, widget):
-        self.subscription_assistant.set_parent_window(self._get_window())
-        self.subscription_assistant.show()
+        # Catch exceptions in the autobind wizard initialization (only)
+        try:
+            autobind_wizard = AutobindWizard(self.backend, self.consumer, self.facts,
+                    self._get_window())
+            autobind_wizard.show()
+        except Exception, e:
+            handle_gui_exception(e, _("Error in autobind wizard"), self._get_window())
 
     def _redeem_button_clicked(self, widget):
         self.redeem_dialog.set_parent_window(self._get_window())

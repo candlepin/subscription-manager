@@ -259,11 +259,12 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkCheckButton" id="auto_bind">
-                            <property name="label" translatable="yes">Select the most appropriate subscriptions for this system</property>
+                          <widget class="GtkCheckButton" id="skip_auto_bind">
+                            <property name="label" translatable="yes">Skip automatic subscription selection for this system</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="relief">none</property>
                             <property name="draw_indicator">True</property>
                             <accessibility>
                               <atkproperty name="AtkObject::accessible-name">auto_bind</atkproperty>
