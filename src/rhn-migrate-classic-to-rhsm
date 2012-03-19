@@ -120,7 +120,7 @@ def systemExit(code, msgs=None):
     sys.exit(code)
 
 
-def checkOkToProceed(username, password):
+def checkOkToProceed(username, password, sc, sk):
     # check if this machine is already registered to Certicate-based RHN
     if ConsumerIdentity.existsAndValid():
         print _("\nThis machine appears to be already registered to Certificate-based RHN.  Exiting.")
@@ -146,6 +146,15 @@ def checkOkToProceed(username, password):
         log.error(traceback.format_exc())
         systemExit(1, _("Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for more details.") % e)
 
+    try:
+        roles = sc.user.listRoles(sk, username)
+    except:
+        log.error(traceback.format_exc())
+        systemExit(1, _("Problem encountered determining user roles in RHN Classic.  Exiting."))
+    if "org_admin" not in roles:
+        systemExit(1, _("You must be an org admin to successfully run this script."))
+
+
 def getSubscribedChannelsList():
     try:
         subscribedChannels = map(lambda x: x['label'], getChannels().channels())
@@ -166,12 +175,7 @@ def getSystemId():
     return systemId
 
 
-def unRegisterSystemFromRhnClassic(username, password):
-    #getSystemIdPath
-    systemIdPath = rhncfg["systemIdPath"]
-    systemId = getSystemId()
-
-    log.info("Deleting system %s from RHN Classic...", systemId)
+def connectToRhn(username, password):
     hostname = rhncfg['serverURL'].split('/')[2]
     server_url = 'https://%s/rpc/api' % (hostname)
     try:
@@ -183,24 +187,32 @@ def unRegisterSystemFromRhnClassic(username, password):
                 credentials = ""
 
             pt.set_proxy("%s:%s" % (proxyHost, proxyPort), credentials)
-            log.info("Using proxy %s:%s for deleteSystems RHN API method" % (proxyHost, proxyPort))
+            log.info("Using proxy %s:%s for RHN API methods" % (proxyHost, proxyPort))
             sc = xmlrpclib.Server(server_url, transport=pt)
         else:
             sc = xmlrpclib.Server(server_url)
 
         sk = sc.auth.login(username, password)
-        result = sc.system.deleteSystems(sk, systemId)
-        if result:
-            log.info("System %s deleted.  Removing systemid file and disabling rhnplugin.conf", systemId)
-            os.remove(systemIdPath)
-            disableYumRhnPlugin()
-            print _("System successfully unregistered from RHN Classic.")
-        else:
-            systemExit(1, _("Unable to unregister system from RHN Classic.  Exiting."))
+        return (sc, sk)
     except:
         log.error(traceback.format_exc())
-        systemExit(1, _("Problem encountered unregistering system from RHN Classic.  Exiting."))
+        systemExit(1, _("Problem encountered connecting to RHN Classic.  Exiting."))
 
+
+def unRegisterSystemFromRhnClassic(sc, sk):
+    #getSystemIdPath
+    systemIdPath = rhncfg["systemIdPath"]
+    systemId = getSystemId()
+
+    log.info("Deleting system %s from RHN Classic...", systemId)
+    result = sc.system.deleteSystems(sk, systemId)
+    if result:
+        log.info("System %s deleted.  Removing systemid file and disabling rhnplugin.conf", systemId)
+        os.remove(systemIdPath)
+        disableYumRhnPlugin()
+        print _("System successfully unregistered from RHN Classic.")
+    else:
+        systemExit(1, _("Unable to unregister system from RHN Classic.  Exiting."))
 
 def disableYumRhnPlugin():
     # 'Inspired by' up2date_client/rhnreg.py
@@ -425,7 +437,8 @@ def main():
     username = raw_input(_("RHN Username: ")).strip()
     password = getpass.getpass()
     transferHttpProxySettings()
-    checkOkToProceed(username, password)
+    (sc, sk) = connectToRhn(username, password)
+    checkOkToProceed(username, password, sc, sk)
 
     # get a list of RHN classic channels this machine is subscribed to
     print _("\nRetrieving existing RHN Classic subscription information ...")
@@ -440,7 +453,7 @@ def main():
 
     writeMigrationFacts()
     print _("\nPreparing to unregister system from RHN classic ...")
-    unRegisterSystemFromRhnClassic(username, password)
+    unRegisterSystemFromRhnClassic(sc, sk)
 
     # register the system to Certificate-based RHN and consume a subscription
     if not options.noauto:
