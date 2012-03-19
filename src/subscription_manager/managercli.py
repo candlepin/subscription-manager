@@ -1346,7 +1346,7 @@ class ReposCommand(CliCommand):
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
     def require_connection(self):
-        return False
+        return True
 
     def _add_common_options(self):
         self.parser.add_option("--list", action="store_true",
@@ -1360,7 +1360,7 @@ class ReposCommand(CliCommand):
     def _do_command(self):
         self._validate_options()
         if self.options.list:
-            rl = RepoLib()
+            rl = RepoLib(uep=self.cp)
             repos = rl.get_repos()
             if cfg.has_option('rhsm', 'manage_repos') and \
                     not int(cfg.get('rhsm', 'manage_repos')):
