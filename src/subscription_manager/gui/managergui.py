@@ -176,7 +176,7 @@ class MainWindow(widgets.GladeWidget):
               ['main_window', 'notebook', 'system_name_label',
                'next_update_label', 'next_update_title', 'register_button',
                'unregister_button',
-               'redeem_button', 'help_button'])
+               'redeem_button', 'redeem_button_sep', 'help_button'])
 
         self.backend = backend or Backend()
         self.consumer = consumer or Consumer()
@@ -344,8 +344,10 @@ class MainWindow(widgets.GladeWidget):
 
         if can_redeem:
             self.redeem_button.show()
+            self.redeem_button_sep.show()
         else:
             self.redeem_button.hide()
+            self.redeem_button_sep.hide()
 
     def _register_button_clicked(self, widget):
         self.registration_dialog.set_parent_window(self._get_window())
