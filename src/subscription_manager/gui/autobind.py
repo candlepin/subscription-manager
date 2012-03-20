@@ -186,8 +186,8 @@ class AutobindController(object):
         Check if a system that already has a selected sla can get more
         entitlements at their sla level
         """
-        result = self.controller.suitable_slas[self.controller.selected_sla]
-        return len(result.json) > 0 and self.controller.current_sla is not None
+        result = self.suitable_slas[self.selected_sla]
+        return len(result.json) > 0 and self.current_sla is not None
 
 
 class AutobindWizardScreen(object):
