@@ -481,9 +481,8 @@ msgid "Autosubscribing"
 msgstr "Automatische Subskription"
 
 #: ../src/subscription_manager/gui/registergui.py:323
-#, 
 msgid "Fetching certificates"
-msgstr ""
+msgstr "Zertifikate werden abgerufen"
 
 #: ../src/subscription_manager/gui/registergui.py:362
 msgid "You must enter a system name."
@@ -775,7 +774,7 @@ msgstr "erledigt"
 #: ../src/subscription_manager/managercli.py:69
 #, python-format
 msgid "Product Name:         \t%-25s"
-msgstr ""
+msgstr "Produktname:         \t%-25s"
 
 #: ../src/subscription_manager/constants.py:28
 #, python-format
@@ -808,12 +807,12 @@ msgstr "LäuftAb:              \t%-25s"
 #: ../src/subscription_manager/constants.py:42
 #, python-format
 msgid "Product Id:           \t%-25s"
-msgstr ""
+msgstr "Produkt-ID:           \t%-25s"
 
 #: ../src/subscription_manager/constants.py:44
 #, python-format
 msgid "Pool Id:              \t%-25s"
-msgstr ""
+msgstr "Pool-ID:              \t%-25s"
 
 #: ../src/subscription_manager/constants.py:46
 #, python-format
@@ -828,22 +827,22 @@ msgstr "Multi-Berechtigung:    \t%-25s"
 #: ../src/subscription_manager/constants.py:52
 #, python-format
 msgid "Machine Type:         \t%-25s"
-msgstr ""
+msgstr "Rechnertyp:         \t%-25s"
 
 #: ../src/subscription_manager/constants.py:56
 #, python-format
 msgid "Repo Name:            \t%-25s"
-msgstr ""
+msgstr "Repo-Name:            \t%-25s"
 
 #: ../src/subscription_manager/constants.py:58
 #, python-format
 msgid "Repo Id:              \t%-25s"
-msgstr ""
+msgstr "Repo-ID:              \t%-25s"
 
 #: ../src/subscription_manager/constants.py:60
 #, python-format
 msgid "Repo Url:             \t%-25s"
-msgstr ""
+msgstr "Repo-URL:             \t%-25s"
 
 #: ../src/subscription_manager/constants.py:62
 #, python-format
@@ -884,26 +883,27 @@ msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr "<b>Benutzer %s kann sich bei keiner Organisation registrieren.</b>"
 
 #: ../src/subscription_manager/managercli.py:57
-#, 
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register "
 "--help' for more information."
 msgstr ""
+"Dieses System ist noch nicht registriert. Führen Sie 'subscription-manager "
+"register --help' aus, um mehr Informationen zu erhalten."
 
 #: ../src/subscription_manager/managercli.py:71
 #, python-format
 msgid "Contract Number:      \t%-25s"
-msgstr ""
+msgstr "Vertragsnummer:      \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:73
 #, python-format
 msgid "Account Number:       \t%-25s"
-msgstr ""
+msgstr "Accountnummer:       \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:75
 #, python-format
 msgid "Serial Number:        \t%-25s"
-msgstr ""
+msgstr "Seriennummer:        \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:77
 #, python-format
@@ -913,7 +913,7 @@ msgstr "Aktiv:               \t%-25s"
 #: ../src/subscription_manager/managercli.py:79
 #, python-format
 msgid "Quantity Used:        \t%-25s"
-msgstr ""
+msgstr "Anzahl verbraucht:        \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:81
 #, python-format
@@ -1054,14 +1054,12 @@ msgid "Organizations"
 msgstr "Organisationen"
 
 #: ../src/subscription_manager/managercli.py:467
-#, 
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: ../src/subscription_manager/managercli.py:468
-#, 
 msgid "Key"
-msgstr ""
+msgstr "Schlüssel"
 
 #: ../src/subscription_manager/managercli.py:471
 #: ../src/subscription_manager/managercli.py:838
@@ -1097,9 +1095,8 @@ msgstr ""
 "werden"
 
 #: ../src/subscription_manager/managercli.py:536
-#, 
 msgid "Manage service levels for this system."
-msgstr ""
+msgstr "Service-Levels für dieses System verwalten."
 
 #: ../src/subscription_manager/managercli.py:543
 msgid "show this system's current service level"
@@ -1139,9 +1136,8 @@ msgid "Current service level: %s"
 msgstr "Derzeitiges Service-Level: %s"
 
 #: ../src/subscription_manager/managercli.py:621
-#, 
 msgid "Available Service Levels"
-msgstr ""
+msgstr "Verfügbare Service-Levels"
 
 #: ../src/subscription_manager/managercli.py:644
 msgid "the type of consumer to register, defaults to system"
@@ -1591,7 +1587,7 @@ msgstr "Verbrauchte Produktsubskriptionen"
 #: ../src/subscription_manager/managercli.py:1671
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr ""
+msgstr "Verwendung: %s MODUL-NAME [MODUL-OPTIONEN] [--help]"
 
 #: ../src/subscription_manager/managercli.py:1673
 msgid "Primary Modules:"
@@ -1622,14 +1618,12 @@ msgid "<b>Provides Management:</b>"
 msgstr "<b>Bietet Management:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#, 
 msgid "<b>Service Level:</b>"
-msgstr ""
+msgstr "<b>Service-Level:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#, 
 msgid "<b>Service Type:</b>"
-msgstr ""
+msgstr "<b>Service-Typ:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 msgid "<b>Stacking ID:</b>"
@@ -2220,7 +2214,7 @@ msgstr ""
 #: ../src/rhn-migrate-classic-to-rhsm:69
 #, c-format
 msgid "%s [OPTIONS]"
-msgstr ""
+msgstr "%s [OPTIONEN]"
 
 #: ../src/rhn-migrate-classic-to-rhsm:122
 msgid ""

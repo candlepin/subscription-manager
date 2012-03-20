@@ -463,9 +463,8 @@ msgid "Autosubscribing"
 msgstr "자동 가입하기 "
 
 #: ../src/subscription_manager/gui/registergui.py:323
-#, 
 msgid "Fetching certificates"
-msgstr ""
+msgstr "인증서 가져오는 중 "
 
 #: ../src/subscription_manager/gui/registergui.py:362
 msgid "You must enter a system name."
@@ -749,7 +748,7 @@ msgstr "완료 "
 #: ../src/subscription_manager/managercli.py:69
 #, python-format
 msgid "Product Name:         \t%-25s"
-msgstr ""
+msgstr "제품 이름: %-25s"
 
 #: ../src/subscription_manager/constants.py:28
 #, python-format
@@ -782,12 +781,12 @@ msgstr "만료일: %-25s"
 #: ../src/subscription_manager/constants.py:42
 #, python-format
 msgid "Product Id:           \t%-25s"
-msgstr ""
+msgstr "제품 ID: %-25s"
 
 #: ../src/subscription_manager/constants.py:44
 #, python-format
 msgid "Pool Id:              \t%-25s"
-msgstr ""
+msgstr "풀 ID: %-25s"
 
 #: ../src/subscription_manager/constants.py:46
 #, python-format
@@ -802,22 +801,22 @@ msgstr "멀티-인타이틀먼트: %-25s"
 #: ../src/subscription_manager/constants.py:52
 #, python-format
 msgid "Machine Type:         \t%-25s"
-msgstr ""
+msgstr "컴퓨터 유형: %-25s"
 
 #: ../src/subscription_manager/constants.py:56
 #, python-format
 msgid "Repo Name:            \t%-25s"
-msgstr ""
+msgstr "리포지터리 이름: %-25s"
 
 #: ../src/subscription_manager/constants.py:58
 #, python-format
 msgid "Repo Id:              \t%-25s"
-msgstr ""
+msgstr "리포지터리 ID: %-25s"
 
 #: ../src/subscription_manager/constants.py:60
 #, python-format
 msgid "Repo Url:             \t%-25s"
-msgstr ""
+msgstr "리포지터리 URL: %-25s"
 
 #: ../src/subscription_manager/constants.py:62
 #, python-format
@@ -858,26 +857,27 @@ msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr "<b>사용자 %s은(는) 어떤 조직에도 등록할 수 없습니다.</b>  "
 
 #: ../src/subscription_manager/managercli.py:57
-#, 
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register "
 "--help' for more information."
 msgstr ""
+"이 시스템은 아직 등록되어 있지 않습니다. 보다 자세한 내용은 'subscription-manager register --help'를 "
+"사용하여 살펴보십시오. "
 
 #: ../src/subscription_manager/managercli.py:71
 #, python-format
 msgid "Contract Number:      \t%-25s"
-msgstr ""
+msgstr "계약 번호: %-25s"
 
 #: ../src/subscription_manager/managercli.py:73
 #, python-format
 msgid "Account Number:       \t%-25s"
-msgstr ""
+msgstr "계정 번호: %-25s"
 
 #: ../src/subscription_manager/managercli.py:75
 #, python-format
 msgid "Serial Number:        \t%-25s"
-msgstr ""
+msgstr "일련 번호: %-25s"
 
 #: ../src/subscription_manager/managercli.py:77
 #, python-format
@@ -887,7 +887,7 @@ msgstr "활성: %-25s"
 #: ../src/subscription_manager/managercli.py:79
 #, python-format
 msgid "Quantity Used:        \t%-25s"
-msgstr ""
+msgstr "사용 수량: %-25s"
 
 #: ../src/subscription_manager/managercli.py:81
 #, python-format
@@ -1018,14 +1018,12 @@ msgid "Organizations"
 msgstr "조직 "
 
 #: ../src/subscription_manager/managercli.py:467
-#, 
 msgid "Name"
-msgstr ""
+msgstr "이름 "
 
 #: ../src/subscription_manager/managercli.py:468
-#, 
 msgid "Key"
-msgstr ""
+msgstr "키 "
 
 #: ../src/subscription_manager/managercli.py:471
 #: ../src/subscription_manager/managercli.py:838
@@ -1058,9 +1056,8 @@ msgid "Error: Unable to retrieve environment list from Entitlement Platform"
 msgstr "오류: 인타이틀먼트 플랫폼에서 환경 목록을 검색할 수 없음 "
 
 #: ../src/subscription_manager/managercli.py:536
-#, 
 msgid "Manage service levels for this system."
-msgstr ""
+msgstr "시스템의 서비스 레벨을 관리합니다. "
 
 #: ../src/subscription_manager/managercli.py:543
 msgid "show this system's current service level"
@@ -1098,9 +1095,8 @@ msgid "Current service level: %s"
 msgstr "현재 서비스 레벨: %s"
 
 #: ../src/subscription_manager/managercli.py:621
-#, 
 msgid "Available Service Levels"
-msgstr ""
+msgstr "사용 가능한 서비스 레벨 "
 
 #: ../src/subscription_manager/managercli.py:644
 msgid "the type of consumer to register, defaults to system"
@@ -1507,7 +1503,7 @@ msgstr "사용되는 제품 서브스크립션 "
 #: ../src/subscription_manager/managercli.py:1671
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr ""
+msgstr "사용법: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
 #: ../src/subscription_manager/managercli.py:1673
 msgid "Primary Modules:"
@@ -1538,14 +1534,12 @@ msgid "<b>Provides Management:</b>"
 msgstr "<b>관리 제공:</b> "
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#, 
 msgid "<b>Service Level:</b>"
-msgstr ""
+msgstr "<b>서비스 레벨:</b> "
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#, 
 msgid "<b>Service Type:</b>"
-msgstr ""
+msgstr "<b>서비스 유형:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 msgid "<b>Stacking ID:</b>"
@@ -2125,7 +2119,7 @@ msgstr "서브스크립션 관리자로 등록하는 동안 자동 등록 옵션
 #: ../src/rhn-migrate-classic-to-rhsm:69
 #, c-format
 msgid "%s [OPTIONS]"
-msgstr ""
+msgstr "%s [OPTIONS]"
 
 #: ../src/rhn-migrate-classic-to-rhsm:122
 msgid ""

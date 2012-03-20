@@ -477,9 +477,8 @@ msgid "Autosubscribing"
 msgstr "ਸਵੈ-ਮੈਂਬਰੀ"
 
 #: ../src/subscription_manager/gui/registergui.py:323
-#, 
 msgid "Fetching certificates"
-msgstr ""
+msgstr "ਸਾਰਟੀਫਿਕੇਟ ਲੈ ਰਿਹਾ ਹੈ"
 
 #: ../src/subscription_manager/gui/registergui.py:362
 msgid "You must enter a system name."
@@ -767,7 +766,7 @@ msgstr "ਮੁਕੰਮਲ"
 #: ../src/subscription_manager/managercli.py:69
 #, python-format
 msgid "Product Name:         \t%-25s"
-msgstr ""
+msgstr "ਉਤਪਾਦ ਨਾਂ:         \t%-25s"
 
 #: ../src/subscription_manager/constants.py:28
 #, python-format
@@ -800,12 +799,12 @@ msgstr "ਮਿਆਦ:              \t%-25s"
 #: ../src/subscription_manager/constants.py:42
 #, python-format
 msgid "Product Id:           \t%-25s"
-msgstr ""
+msgstr "ਉਤਪਾਦ Id:           \t%-25s"
 
 #: ../src/subscription_manager/constants.py:44
 #, python-format
 msgid "Pool Id:              \t%-25s"
-msgstr ""
+msgstr "ਪੂਲ Id:              \t%-25s"
 
 #: ../src/subscription_manager/constants.py:46
 #, python-format
@@ -820,22 +819,22 @@ msgstr "ਮਲਟੀ-ਇੰਟਾਈਟਲਮੈਂਟ:    \t%-25s"
 #: ../src/subscription_manager/constants.py:52
 #, python-format
 msgid "Machine Type:         \t%-25s"
-msgstr ""
+msgstr "ਮਸ਼ੀਨ ਕਿਸਮ:         \t%-25s"
 
 #: ../src/subscription_manager/constants.py:56
 #, python-format
 msgid "Repo Name:            \t%-25s"
-msgstr ""
+msgstr "ਰਿਪੋ ਨਾਂ:            \t%-25s"
 
 #: ../src/subscription_manager/constants.py:58
 #, python-format
 msgid "Repo Id:              \t%-25s"
-msgstr ""
+msgstr "ਰਿਪੋ Id:              \t%-25s"
 
 #: ../src/subscription_manager/constants.py:60
 #, python-format
 msgid "Repo Url:             \t%-25s"
-msgstr ""
+msgstr "ਰਿਪੋ Url:             \t%-25s"
 
 #: ../src/subscription_manager/constants.py:62
 #, python-format
@@ -876,26 +875,27 @@ msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr "<b>ਯੂਜ਼ਰ %s ਕਿਸੇ ਸੰਗਠਨ ਨਾਲ ਰਜਿਸਟਰ ਨਹੀਂ ਕਰ ਸਕਦਾ।</b>"
 
 #: ../src/subscription_manager/managercli.py:57
-#, 
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register "
 "--help' for more information."
 msgstr ""
+"ਇਹ ਸਿਸਟਮ ਹਾਲੇ ਰਜਿਸਟਰ ਨਹੀਂ ਹੈ। ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ 'subscription-manager "
+"register --help' ਚਲਾਓ।"
 
 #: ../src/subscription_manager/managercli.py:71
 #, python-format
 msgid "Contract Number:      \t%-25s"
-msgstr ""
+msgstr "ਕੰਟਰੈਕਟ ਨੰਬਰ:      \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:73
 #, python-format
 msgid "Account Number:       \t%-25s"
-msgstr ""
+msgstr "ਅਕਾਊਂਟ ਨੰਬਰ:       \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:75
 #, python-format
 msgid "Serial Number:        \t%-25s"
-msgstr ""
+msgstr "ਲੜੀਵਾਰ ਨੰਬਰ:        \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:77
 #, python-format
@@ -905,7 +905,7 @@ msgstr "ਸਰਗਰਮ:               \t%-25s"
 #: ../src/subscription_manager/managercli.py:79
 #, python-format
 msgid "Quantity Used:        \t%-25s"
-msgstr ""
+msgstr "ਵਰਤੀ ਮਾਤਰਾ:        \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:81
 #, python-format
@@ -1036,14 +1036,12 @@ msgid "Organizations"
 msgstr "ਸੰਗਠਨ"
 
 #: ../src/subscription_manager/managercli.py:467
-#, 
 msgid "Name"
-msgstr ""
+msgstr "ਨਾਂ"
 
 #: ../src/subscription_manager/managercli.py:468
-#, 
 msgid "Key"
-msgstr ""
+msgstr "ਕੁੰਜੀ"
 
 #: ../src/subscription_manager/managercli.py:471
 #: ../src/subscription_manager/managercli.py:838
@@ -1076,9 +1074,8 @@ msgid "Error: Unable to retrieve environment list from Entitlement Platform"
 msgstr "ਗਲਤੀ: ਇੰਟਾਈਟਲਮੈਂਟ ਪਲੇਟਫਾਰਮ ਤੋਂ ਇਨਵਾਇਰਮੈਂਟ ਸੂਚੀ ਲੈਣ ਵਿੱਚ ਅਸਮਰਥ"
 
 #: ../src/subscription_manager/managercli.py:536
-#, 
 msgid "Manage service levels for this system."
-msgstr ""
+msgstr "ਇਸ ਸਿਸਟਮ ਲਈ ਸਰਵਿਸ ਲੈਵਲ ਪਰਬੰਧਨ"
 
 #: ../src/subscription_manager/managercli.py:543
 msgid "show this system's current service level"
@@ -1118,9 +1115,8 @@ msgid "Current service level: %s"
 msgstr "ਮੌਜੂਦਾ ਸਰਵਿਸ ਲੈਵਲ: %s"
 
 #: ../src/subscription_manager/managercli.py:621
-#, 
 msgid "Available Service Levels"
-msgstr ""
+msgstr "ਉਪਲੱਬਧ ਸਰਵਿਸ ਲੈਵਲ"
 
 #: ../src/subscription_manager/managercli.py:644
 msgid "the type of consumer to register, defaults to system"
@@ -1537,7 +1533,7 @@ msgstr "ਵਰਤੀਆਂ ਗਈਆਂ ਉਤਪਾਦ ਮੈਂਬਰੀਆਂ
 #: ../src/subscription_manager/managercli.py:1671
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr ""
+msgstr "ਵਰਤੋਂ: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
 #: ../src/subscription_manager/managercli.py:1673
 msgid "Primary Modules:"
@@ -1568,14 +1564,12 @@ msgid "<b>Provides Management:</b>"
 msgstr "<b>ਮੈਨੇਜਮੈਂਟ ਦਿੰਦਾ ਹੈ:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#, 
 msgid "<b>Service Level:</b>"
-msgstr ""
+msgstr "<b>ਸਰਵਿਸ ਲੈਵਲ:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#, 
 msgid "<b>Service Type:</b>"
-msgstr ""
+msgstr "<b>ਸਰਵਿਸ ਕਿਸਮ:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 msgid "<b>Stacking ID:</b>"
@@ -1654,7 +1648,7 @@ msgid ""
 msgstr ""
 "ਮੈਂਬਰੀ ਹਟਾਉਣ ਲਈ ਕੁਝ ਮਿੰਟ ਲੱਗ ਸਕਦੇ ਹਨ।\n"
 "ਕਿਰਪਾ ਕਰਕੇ ਈਮੇਲ ਐਡਰੈੱਸ ਦਿਓ ਜਿਸ ਉੱਪਰ ਮੈਂਬਰੀ ਹਟਾਉਣ ਬਾਰੇ ਸੂਚਨਾ ਆਵੇਗੀ\n"
-"when the redemption is complete."
+"ਜਦੋਂ ਰੀਡੈਂਪਸ਼ਨ ਮੁਕੰਮਲ ਹੁੰਦੀ ਹੈ।"
 
 #: ../src/subscription_manager/gui/data/redeem.glade.h:7
 msgid "Subscription Redemption"
@@ -2159,7 +2153,7 @@ msgstr "autosubscribe ਚੋਣ ਨਾਲ ਚਲਾਓ ਜਦੋਂ ਮੈਂਬ
 #: ../src/rhn-migrate-classic-to-rhsm:69
 #, c-format
 msgid "%s [OPTIONS]"
-msgstr ""
+msgstr "%s [OPTIONS]"
 
 #: ../src/rhn-migrate-classic-to-rhsm:122
 msgid ""

@@ -472,7 +472,7 @@ msgstr "ఎన్విరాన్మెంట్"
 
 #: ../src/subscription_manager/gui/registergui.py:194
 msgid "Fetching list of possible organizations"
-msgstr "సాధ్యమగు సంస్థలను వెతుకుతోంది"
+msgstr "సాధ్యమగు సంస్థలను వెతికితెస్తోంది."
 
 #: ../src/subscription_manager/gui/registergui.py:294
 msgid "Registering your system"
@@ -483,9 +483,8 @@ msgid "Autosubscribing"
 msgstr "ఆటో‌సబ్‌స్క్రైబింగ్"
 
 #: ../src/subscription_manager/gui/registergui.py:323
-#, 
 msgid "Fetching certificates"
-msgstr ""
+msgstr "ధృవీకరణపత్రములను వెతికితెస్తోంది."
 
 #: ../src/subscription_manager/gui/registergui.py:362
 msgid "You must enter a system name."
@@ -773,7 +772,7 @@ msgstr "అయినది"
 #: ../src/subscription_manager/managercli.py:69
 #, python-format
 msgid "Product Name:         \t%-25s"
-msgstr ""
+msgstr "ఉత్పత్తి పేరు:         \t%-25s"
 
 #: ../src/subscription_manager/constants.py:28
 #, python-format
@@ -806,12 +805,12 @@ msgstr "ముగింపు: %-25s"
 #: ../src/subscription_manager/constants.py:42
 #, python-format
 msgid "Product Id:           \t%-25s"
-msgstr ""
+msgstr "ఉత్పత్తి ఐడి:           \t%-25s"
 
 #: ../src/subscription_manager/constants.py:44
 #, python-format
 msgid "Pool Id:              \t%-25s"
-msgstr ""
+msgstr "పూల్ ఐడి:              \t%-25s"
 
 #: ../src/subscription_manager/constants.py:46
 #, python-format
@@ -826,22 +825,22 @@ msgstr "బహుళ-యెన్టైటిల్మెంట్: %-25s"
 #: ../src/subscription_manager/constants.py:52
 #, python-format
 msgid "Machine Type:         \t%-25s"
-msgstr ""
+msgstr "మిషన్ రకం:         \t%-25s"
 
 #: ../src/subscription_manager/constants.py:56
 #, python-format
 msgid "Repo Name:            \t%-25s"
-msgstr ""
+msgstr "రెపో పేరు:            \t%-25s"
 
 #: ../src/subscription_manager/constants.py:58
 #, python-format
 msgid "Repo Id:              \t%-25s"
-msgstr ""
+msgstr "రెపో ఐడి:              \t%-25s"
 
 #: ../src/subscription_manager/constants.py:60
 #, python-format
 msgid "Repo Url:             \t%-25s"
-msgstr ""
+msgstr "రెపో Url:             \t%-25s"
 
 #: ../src/subscription_manager/constants.py:62
 #, python-format
@@ -882,26 +881,27 @@ msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr "<b>వాడుకరి %s యే సంస్థలతో నమోదు కాలేరు</b>"
 
 #: ../src/subscription_manager/managercli.py:57
-#, 
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register "
 "--help' for more information."
 msgstr ""
+"ఈ వ్యవస్థ యింకా నమోదు కాలేదు. అదిక సమాచారం కొరకు 'subscription-manager "
+"register --help' ప్రయత్నించు."
 
 #: ../src/subscription_manager/managercli.py:71
 #, python-format
 msgid "Contract Number:      \t%-25s"
-msgstr ""
+msgstr "ఒడంబడిక సంఖ్య:      \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:73
 #, python-format
 msgid "Account Number:       \t%-25s"
-msgstr ""
+msgstr "ఖాతా సంఖ్య:       \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:75
 #, python-format
 msgid "Serial Number:        \t%-25s"
-msgstr ""
+msgstr "వరుస సంఖ్య:        \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:77
 #, python-format
@@ -911,7 +911,7 @@ msgstr "క్రియాశీల: %-25s"
 #: ../src/subscription_manager/managercli.py:79
 #, python-format
 msgid "Quantity Used:        \t%-25s"
-msgstr ""
+msgstr "ఉపయోగించిన పరిమాణం:        \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:81
 #, python-format
@@ -1047,14 +1047,12 @@ msgid "Organizations"
 msgstr "సంస్థలు"
 
 #: ../src/subscription_manager/managercli.py:467
-#, 
 msgid "Name"
-msgstr ""
+msgstr "పేరు"
 
 #: ../src/subscription_manager/managercli.py:468
-#, 
 msgid "Key"
-msgstr ""
+msgstr "కీ"
 
 #: ../src/subscription_manager/managercli.py:471
 #: ../src/subscription_manager/managercli.py:838
@@ -1090,9 +1088,8 @@ msgstr ""
 " పోయింది"
 
 #: ../src/subscription_manager/managercli.py:536
-#, 
 msgid "Manage service levels for this system."
-msgstr ""
+msgstr "ఈ వ్యవస్థ కొరకు సేవా స్థాయిలను నిర్వహించు."
 
 #: ../src/subscription_manager/managercli.py:543
 msgid "show this system's current service level"
@@ -1132,9 +1129,8 @@ msgid "Current service level: %s"
 msgstr "ప్రస్తుత సేవా స్థాయి: %s"
 
 #: ../src/subscription_manager/managercli.py:621
-#, 
 msgid "Available Service Levels"
-msgstr ""
+msgstr "అందుబాటులోని సేవా స్థాయిలు"
 
 #: ../src/subscription_manager/managercli.py:644
 msgid "the type of consumer to register, defaults to system"
@@ -1564,7 +1560,7 @@ msgstr "వినియోగిత వుత్పత్తి సబ్‌స�
 #: ../src/subscription_manager/managercli.py:1671
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr ""
+msgstr "వాడుక: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
 #: ../src/subscription_manager/managercli.py:1673
 msgid "Primary Modules:"
@@ -1595,14 +1591,12 @@ msgid "<b>Provides Management:</b>"
 msgstr "<b>నిర్వహణను అందించును:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#, 
 msgid "<b>Service Level:</b>"
-msgstr ""
+msgstr "<b>సేవా స్థాయి:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#, 
 msgid "<b>Service Type:</b>"
-msgstr ""
+msgstr "<b>సేవా రకం:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 msgid "<b>Stacking ID:</b>"
@@ -2192,7 +2186,7 @@ msgstr ""
 #: ../src/rhn-migrate-classic-to-rhsm:69
 #, c-format
 msgid "%s [OPTIONS]"
-msgstr ""
+msgstr "%s [ఐచ్చికాలు]"
 
 #: ../src/rhn-migrate-classic-to-rhsm:122
 msgid ""

@@ -478,9 +478,8 @@ msgid "Autosubscribing"
 msgstr "স্বচালিতভাৱে স্বাক্ষৰ কৰা হৈ আছে"
 
 #: ../src/subscription_manager/gui/registergui.py:323
-#, 
 msgid "Fetching certificates"
-msgstr ""
+msgstr "প্ৰমাণপত্ৰসমূহ প্ৰাপ্ত কৰা হৈ আছে"
 
 #: ../src/subscription_manager/gui/registergui.py:362
 msgid "You must enter a system name."
@@ -769,7 +768,7 @@ msgstr "কৰা হ'ল"
 #: ../src/subscription_manager/managercli.py:69
 #, python-format
 msgid "Product Name:         \t%-25s"
-msgstr ""
+msgstr "উৎপাদন নাম: %-25s"
 
 #: ../src/subscription_manager/constants.py:28
 #, python-format
@@ -802,12 +801,12 @@ msgstr "অৱসান ঘটিব: %-25s"
 #: ../src/subscription_manager/constants.py:42
 #, python-format
 msgid "Product Id:           \t%-25s"
-msgstr ""
+msgstr "উৎপাদন আইডি: %-25s"
 
 #: ../src/subscription_manager/constants.py:44
 #, python-format
 msgid "Pool Id:              \t%-25s"
-msgstr ""
+msgstr "পুল আইডি: %-25s"
 
 #: ../src/subscription_manager/constants.py:46
 #, python-format
@@ -822,22 +821,22 @@ msgstr "বহু-অনুজ্ঞা: %-25s"
 #: ../src/subscription_manager/constants.py:52
 #, python-format
 msgid "Machine Type:         \t%-25s"
-msgstr ""
+msgstr "মেচিনৰ ধৰণ: %-25s"
 
 #: ../src/subscription_manager/constants.py:56
 #, python-format
 msgid "Repo Name:            \t%-25s"
-msgstr ""
+msgstr "ভঁৰালৰ ধৰণ: %-25s"
 
 #: ../src/subscription_manager/constants.py:58
 #, python-format
 msgid "Repo Id:              \t%-25s"
-msgstr ""
+msgstr "ভঁৰালৰ আইডি: %-25s"
 
 #: ../src/subscription_manager/constants.py:60
 #, python-format
 msgid "Repo Url:             \t%-25s"
-msgstr ""
+msgstr "ভঁৰালৰ Url: %-25s"
 
 #: ../src/subscription_manager/constants.py:62
 #, python-format
@@ -878,26 +877,27 @@ msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr "<b>ব্যৱহাৰকাৰী %s কোনো সংঘঠনৰ লগত ৰেজিস্টাৰ কৰিবলে সক্ষম নহয়।</b>"
 
 #: ../src/subscription_manager/managercli.py:57
-#, 
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register "
 "--help' for more information."
 msgstr ""
+"এই চিস্টেম এতিয়াও ৰেজিস্টাৰ কৰা হোৱা নাই। অধিক তথ্যৰ বাবে 'subscription-"
+"manager register --help' চেষ্টা কৰি চাওক।"
 
 #: ../src/subscription_manager/managercli.py:71
 #, python-format
 msgid "Contract Number:      \t%-25s"
-msgstr ""
+msgstr "চুক্তি নম্বৰ: %-25s"
 
 #: ../src/subscription_manager/managercli.py:73
 #, python-format
 msgid "Account Number:       \t%-25s"
-msgstr ""
+msgstr "একাওন্ট নম্বৰ: %-25s"
 
 #: ../src/subscription_manager/managercli.py:75
 #, python-format
 msgid "Serial Number:        \t%-25s"
-msgstr ""
+msgstr "ক্ৰমিক নম্বৰ: %-25s"
 
 #: ../src/subscription_manager/managercli.py:77
 #, python-format
@@ -907,7 +907,7 @@ msgstr "সক্ৰিয়: %-25s"
 #: ../src/subscription_manager/managercli.py:79
 #, python-format
 msgid "Quantity Used:        \t%-25s"
-msgstr ""
+msgstr "ব্যৱহৃত পৰিমাণ: %-25s"
 
 #: ../src/subscription_manager/managercli.py:81
 #, python-format
@@ -1039,14 +1039,12 @@ msgid "Organizations"
 msgstr "সংঘঠনসমূহ"
 
 #: ../src/subscription_manager/managercli.py:467
-#, 
 msgid "Name"
-msgstr ""
+msgstr "নাম"
 
 #: ../src/subscription_manager/managercli.py:468
-#, 
 msgid "Key"
-msgstr ""
+msgstr "চাবি"
 
 #: ../src/subscription_manager/managercli.py:471
 #: ../src/subscription_manager/managercli.py:838
@@ -1079,9 +1077,8 @@ msgid "Error: Unable to retrieve environment list from Entitlement Platform"
 msgstr "ত্ৰুটি: অনুজ্ঞা প্লেটফৰ্মৰ পৰা পৰিৱেশ তালিকা উদ্ধাৰ কৰিবলে অক্ষম"
 
 #: ../src/subscription_manager/managercli.py:536
-#, 
 msgid "Manage service levels for this system."
-msgstr ""
+msgstr "এই চিস্টেমৰ বাবে সেৱা স্তৰসমূহ ব্যৱস্থাপনা কৰক।"
 
 #: ../src/subscription_manager/managercli.py:543
 msgid "show this system's current service level"
@@ -1119,9 +1116,8 @@ msgid "Current service level: %s"
 msgstr "বৰ্তমান সেৱা স্তৰ: %s"
 
 #: ../src/subscription_manager/managercli.py:621
-#, 
 msgid "Available Service Levels"
-msgstr ""
+msgstr "উপলব্ধ সেৱা স্তৰসমূহ"
 
 #: ../src/subscription_manager/managercli.py:644
 msgid "the type of consumer to register, defaults to system"
@@ -1554,7 +1550,7 @@ msgstr "উপভোক্ত উৎপাদন স্বাক্ষৰণস�
 #: ../src/subscription_manager/managercli.py:1671
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr ""
+msgstr "ব্যৱহাৰ: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
 #: ../src/subscription_manager/managercli.py:1673
 msgid "Primary Modules:"
@@ -1585,14 +1581,12 @@ msgid "<b>Provides Management:</b>"
 msgstr "<b>ব্যৱস্থাপনাৰ যোগান দিয়ে:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#, 
 msgid "<b>Service Level:</b>"
-msgstr ""
+msgstr "<b>সেৱাৰ স্তৰ:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#, 
 msgid "<b>Service Type:</b>"
-msgstr ""
+msgstr "<b>সেৱাৰ ধৰণ:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 msgid "<b>Stacking ID:</b>"
@@ -2181,7 +2175,7 @@ msgstr ""
 #: ../src/rhn-migrate-classic-to-rhsm:69
 #, c-format
 msgid "%s [OPTIONS]"
-msgstr ""
+msgstr "%s [OPTIONS]"
 
 #: ../src/rhn-migrate-classic-to-rhsm:122
 msgid ""

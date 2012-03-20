@@ -4,6 +4,7 @@
 # 
 # Automatically generated, 2011.
 # Manoj Kumar Giri <mgiri@redhat.com>, 2011.
+# mgiri <mgiri@fedoraproject.org>, 2012. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
@@ -480,9 +481,8 @@ msgid "Autosubscribing"
 msgstr "ସ୍ୱୟଂ ସଦସ୍ୟତା ଗ୍ରହଣ କରିବା"
 
 #: ../src/subscription_manager/gui/registergui.py:323
-#, 
 msgid "Fetching certificates"
-msgstr ""
+msgstr "ପ୍ରମାଣପତ୍ରଗୁଡ଼ିକୁ ଆଣୁଅଛି"
 
 #: ../src/subscription_manager/gui/registergui.py:362
 msgid "You must enter a system name."
@@ -773,7 +773,7 @@ msgstr "ସମାପ୍ତ"
 #: ../src/subscription_manager/managercli.py:69
 #, python-format
 msgid "Product Name:         \t%-25s"
-msgstr ""
+msgstr "ଉତ୍ପାଦନ ନାମ:         \t%-25s"
 
 #: ../src/subscription_manager/constants.py:28
 #, python-format
@@ -806,12 +806,12 @@ msgstr "ସମାପ୍ତି: %-25s"
 #: ../src/subscription_manager/constants.py:42
 #, python-format
 msgid "Product Id:           \t%-25s"
-msgstr ""
+msgstr "ଉତ୍ପାଦନ Id: %-25s"
 
 #: ../src/subscription_manager/constants.py:44
 #, python-format
 msgid "Pool Id:              \t%-25s"
-msgstr ""
+msgstr "ପୁଲ Id: %-25s"
 
 #: ../src/subscription_manager/constants.py:46
 #, python-format
@@ -826,22 +826,22 @@ msgstr "ଏକାଧିକ-ଅଧିକାର: %-25s"
 #: ../src/subscription_manager/constants.py:52
 #, python-format
 msgid "Machine Type:         \t%-25s"
-msgstr ""
+msgstr "ଯନ୍ତ୍ର ପ୍ରକାର: %-25s"
 
 #: ../src/subscription_manager/constants.py:56
 #, python-format
 msgid "Repo Name:            \t%-25s"
-msgstr ""
+msgstr "ରେପୋ ନାମ:             \t%-25s"
 
 #: ../src/subscription_manager/constants.py:58
 #, python-format
 msgid "Repo Id:              \t%-25s"
-msgstr ""
+msgstr "ରେପୋ Id:               \t%-25s"
 
 #: ../src/subscription_manager/constants.py:60
 #, python-format
 msgid "Repo Url:             \t%-25s"
-msgstr ""
+msgstr "ରେପୋUrl:              \t%-25s"
 
 #: ../src/subscription_manager/constants.py:62
 #, python-format
@@ -882,26 +882,27 @@ msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr "<b>ଚାଳକ %s କୌଣସି ଅନୁଷ୍ଠାନ ସହିତ ପଞ୍ଜିକୃତ ହେବାରେ ସମର୍ଥ ନୁହଁ।</b>"
 
 #: ../src/subscription_manager/managercli.py:57
-#, 
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register "
 "--help' for more information."
 msgstr ""
+"ତନ୍ତ୍ରଟି ଏପର୍ଯ୍ୟନ୍ତ ପଞ୍ଜୀକୃତ ହୋଇନାହିଁ। ଅଧିକ ସୂଚନା ପାଇଁ 'subscription-manager"
+" register --help' କୁ ବ୍ଯବହାର କରନ୍ତୁ"
 
 #: ../src/subscription_manager/managercli.py:71
 #, python-format
 msgid "Contract Number:      \t%-25s"
-msgstr ""
+msgstr "ରାଜିନାମା କ୍ରମ ସଂଖ୍ୟା:       \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:73
 #, python-format
 msgid "Account Number:       \t%-25s"
-msgstr ""
+msgstr "ଖାତା କ୍ରମ ସଂଖ୍ୟା:        \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:75
 #, python-format
 msgid "Serial Number:        \t%-25s"
-msgstr ""
+msgstr "କ୍ରମ ସଂଖ୍ୟା: %-25s"
 
 #: ../src/subscription_manager/managercli.py:77
 #, python-format
@@ -911,7 +912,7 @@ msgstr "ସକ୍ରିୟ:               \t%-25s"
 #: ../src/subscription_manager/managercli.py:79
 #, python-format
 msgid "Quantity Used:        \t%-25s"
-msgstr ""
+msgstr "ବ୍ୟବହୃତ ପରିମାଣ:         \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:81
 #, python-format
@@ -1049,14 +1050,12 @@ msgid "Organizations"
 msgstr "ଅନୁଷ୍ଠାନଗୁଡ଼ିକ"
 
 #: ../src/subscription_manager/managercli.py:467
-#, 
 msgid "Name"
-msgstr ""
+msgstr "ନାମ"
 
 #: ../src/subscription_manager/managercli.py:468
-#, 
 msgid "Key"
-msgstr ""
+msgstr "କି"
 
 #: ../src/subscription_manager/managercli.py:471
 #: ../src/subscription_manager/managercli.py:838
@@ -1089,9 +1088,8 @@ msgid "Error: Unable to retrieve environment list from Entitlement Platform"
 msgstr "ତ୍ରୁଟି: ଅଧିକାର ପ୍ଲାଟଫର୍ମରୁ ପରିବେଶ ତାଲିକା କାଢ଼ିବାରେ ଅସମର୍ଥ"
 
 #: ../src/subscription_manager/managercli.py:536
-#, 
 msgid "Manage service levels for this system."
-msgstr ""
+msgstr "ଏହି ତନ୍ତ୍ର ପାଇଁ ସର୍ଭିସ ସ୍ତର ପରିଚାଳନା"
 
 #: ../src/subscription_manager/managercli.py:543
 msgid "show this system's current service level"
@@ -1131,9 +1129,8 @@ msgid "Current service level: %s"
 msgstr "ପ୍ରଚଳିତ ସର୍ଭିସ ସ୍ତର: %s"
 
 #: ../src/subscription_manager/managercli.py:621
-#, 
 msgid "Available Service Levels"
-msgstr ""
+msgstr "ଉପଲବ୍ଧ ସର୍ଭିସ ସ୍ତରଗୁଡ଼ିକ"
 
 #: ../src/subscription_manager/managercli.py:644
 msgid "the type of consumer to register, defaults to system"
@@ -1576,7 +1573,7 @@ msgstr "ବ୍ୟବହୃତ ଉତ୍ପାଦନ ସଦସ୍ୟତା"
 #: ../src/subscription_manager/managercli.py:1671
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr ""
+msgstr "ବ୍ୟବହାର ବିଧି: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
 #: ../src/subscription_manager/managercli.py:1673
 msgid "Primary Modules:"
@@ -1607,14 +1604,12 @@ msgid "<b>Provides Management:</b>"
 msgstr "<b>ପରିଚାଳନା ପ୍ରଦାନ କରିଥାଏ:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#, 
 msgid "<b>Service Level:</b>"
-msgstr ""
+msgstr "<b>ସର୍ଭିସ ସ୍ତର:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#, 
 msgid "<b>Service Type:</b>"
-msgstr ""
+msgstr "<b>ସର୍ଭିସ ପ୍ରକାର:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 msgid "<b>Stacking ID:</b>"
@@ -1692,8 +1687,7 @@ msgid ""
 "when the redemption is complete."
 msgstr ""
 "ସଦସ୍ୟତାକୁ ହ୍ରାସ କରିବା ପାଇଁ କିଛି ସମୟ ନେଇପାରେ।\n"
-"ବିଜ୍ଞପ୍ତି ପାଇବା ପାଇଁ ଦୟାକରି ଗୋଟିଏ ଇମେଲ ଠିକଣା ପ୍ରଦାନ କରନ୍ତୁ ଯେତେବେଳେ ତାହା ସମାପ୍ତ ହୋଇଥାଏ।\n"
-"when the redemption is complete."
+"ବିଜ୍ଞପ୍ତି ପାଇବା ପାଇଁ ଦୟାକରି ଗୋଟିଏ ଇମେଲ ଠିକଣା ପ୍ରଦାନ କରନ୍ତୁ ଯେତେବେଳେ ତାହା ସମାପ୍ତ ହୋଇଥାଏ।"
 
 #: ../src/subscription_manager/gui/data/redeem.glade.h:7
 msgid "Subscription Redemption"
@@ -2203,7 +2197,7 @@ msgstr ""
 #: ../src/rhn-migrate-classic-to-rhsm:69
 #, c-format
 msgid "%s [OPTIONS]"
-msgstr ""
+msgstr "%s [OPTIONS]"
 
 #: ../src/rhn-migrate-classic-to-rhsm:122
 msgid ""

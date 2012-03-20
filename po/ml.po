@@ -4,6 +4,7 @@
 # Copyright (C) 2011 THE l'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the l package.
 # Automatically generated, 2011.
+# anipeter <anipeter@fedoraproject.org>, 2012. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: ml\n"
@@ -482,9 +483,8 @@ msgid "Autosubscribing"
 msgstr "സ്വയം സബ്സ്ക്രൈബ് ചെയ്യുന്നു"
 
 #: ../src/subscription_manager/gui/registergui.py:323
-#, 
 msgid "Fetching certificates"
-msgstr ""
+msgstr "സര്‍ട്ടിഫിക്കേറ്റുകള്‍ ലഭ്യമാക്കുന്നു"
 
 #: ../src/subscription_manager/gui/registergui.py:362
 msgid "You must enter a system name."
@@ -777,7 +777,7 @@ msgstr "കഴിഞ്ഞു"
 #: ../src/subscription_manager/managercli.py:69
 #, python-format
 msgid "Product Name:         \t%-25s"
-msgstr ""
+msgstr "പ്രൊഡക്ടിന്റെ പേരു്: %-25s"
 
 #: ../src/subscription_manager/constants.py:28
 #, python-format
@@ -810,12 +810,12 @@ msgstr "കാലാവധി കഴിയുന്നതു്: %-25s"
 #: ../src/subscription_manager/constants.py:42
 #, python-format
 msgid "Product Id:           \t%-25s"
-msgstr ""
+msgstr "പ്രൊഡക്ട് ഐഡി: %-25s"
 
 #: ../src/subscription_manager/constants.py:44
 #, python-format
 msgid "Pool Id:              \t%-25s"
-msgstr ""
+msgstr "പൂള്‍ ഐഡി: %-25s"
 
 #: ../src/subscription_manager/constants.py:46
 #, python-format
@@ -830,22 +830,22 @@ msgstr "മള്‍ട്ടി-എന്റൈറ്റില്‍മെന�
 #: ../src/subscription_manager/constants.py:52
 #, python-format
 msgid "Machine Type:         \t%-25s"
-msgstr ""
+msgstr "മഷീന്‍ രീതി: %-25s"
 
 #: ../src/subscription_manager/constants.py:56
 #, python-format
 msgid "Repo Name:            \t%-25s"
-msgstr ""
+msgstr "റിപ്പോയുടെ പേരു്: %-25s"
 
 #: ../src/subscription_manager/constants.py:58
 #, python-format
 msgid "Repo Id:              \t%-25s"
-msgstr ""
+msgstr "റിപ്പോയുടെ ഐഡി: %-25s"
 
 #: ../src/subscription_manager/constants.py:60
 #, python-format
 msgid "Repo Url:             \t%-25s"
-msgstr ""
+msgstr "റിപ്പോയുടെ യുആര്‍എല്‍: %-25s"
 
 #: ../src/subscription_manager/constants.py:62
 #, python-format
@@ -888,26 +888,27 @@ msgstr ""
 "സാധ്യമല്ല.</b>"
 
 #: ../src/subscription_manager/managercli.py:57
-#, 
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register "
 "--help' for more information."
 msgstr ""
+"സിസ്റ്റം ഇതു് വരെ രജിസ്ടര്‍ ചെയ്തിട്ടില്ല. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി "
+"'subscription-manager register --help' കാണുക."
 
 #: ../src/subscription_manager/managercli.py:71
 #, python-format
 msgid "Contract Number:      \t%-25s"
-msgstr ""
+msgstr "കോണ്‍ട്രാക്റ്റ് നംബര്‍: %-25s"
 
 #: ../src/subscription_manager/managercli.py:73
 #, python-format
 msgid "Account Number:       \t%-25s"
-msgstr ""
+msgstr "അക്കൌണ്ട് നംബര്‍: %-25s"
 
 #: ../src/subscription_manager/managercli.py:75
 #, python-format
 msgid "Serial Number:        \t%-25s"
-msgstr ""
+msgstr "സീരിയല്‍ നംബര്‍: %-25s"
 
 #: ../src/subscription_manager/managercli.py:77
 #, python-format
@@ -917,7 +918,7 @@ msgstr "സജിവം: %-25s"
 #: ../src/subscription_manager/managercli.py:79
 #, python-format
 msgid "Quantity Used:        \t%-25s"
-msgstr ""
+msgstr "ഉപയോഗിച്ച് അളവു്: %-25s"
 
 #: ../src/subscription_manager/managercli.py:81
 #, python-format
@@ -1063,14 +1064,12 @@ msgid "Organizations"
 msgstr "സ്ഥാപനങ്ങള്‍"
 
 #: ../src/subscription_manager/managercli.py:467
-#, 
 msgid "Name"
-msgstr ""
+msgstr "പേരു്"
 
 #: ../src/subscription_manager/managercli.py:468
-#, 
 msgid "Key"
-msgstr ""
+msgstr "കീ"
 
 #: ../src/subscription_manager/managercli.py:471
 #: ../src/subscription_manager/managercli.py:838
@@ -1107,9 +1106,8 @@ msgstr ""
 "ലഭ്യമാക്കുവാന്‍ സാധ്യമല്ല"
 
 #: ../src/subscription_manager/managercli.py:536
-#, 
 msgid "Manage service levels for this system."
-msgstr ""
+msgstr "ഈ സിസ്റ്റത്തിനുള്ള സര്‍വീസ് ലവലുകള്‍ കൈകാര്യം ചെയ്യുക"
 
 #: ../src/subscription_manager/managercli.py:543
 msgid "show this system's current service level"
@@ -1150,9 +1148,8 @@ msgid "Current service level: %s"
 msgstr "നിലവിലുള്ള സര്‍വീസ് ലവല്‍: %s"
 
 #: ../src/subscription_manager/managercli.py:621
-#, 
 msgid "Available Service Levels"
-msgstr ""
+msgstr "ലഭ്യമായ സര്‍വീസ് ലവലുകള്‍"
 
 #: ../src/subscription_manager/managercli.py:644
 msgid "the type of consumer to register, defaults to system"
@@ -1604,7 +1601,7 @@ msgstr "ഉപയോഗിയ്ക്കുന്ന പ്രൊഡക്ട�
 #: ../src/subscription_manager/managercli.py:1671
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr ""
+msgstr "ഉപയോഗിയ്ക്കേണ്ട വിധം: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
 #: ../src/subscription_manager/managercli.py:1673
 msgid "Primary Modules:"
@@ -1635,14 +1632,12 @@ msgid "<b>Provides Management:</b>"
 msgstr "<b>മാനേജ്മെന്റ് ലഭ്യമാക്കുന്നു:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#, 
 msgid "<b>Service Level:</b>"
-msgstr ""
+msgstr "<b>സര്‍വീസ് ലവല്‍:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#, 
 msgid "<b>Service Type:</b>"
-msgstr ""
+msgstr "<b>സര്‍വീസ് രീതി:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 msgid "<b>Stacking ID:</b>"
@@ -2234,7 +2229,7 @@ msgstr ""
 #: ../src/rhn-migrate-classic-to-rhsm:69
 #, c-format
 msgid "%s [OPTIONS]"
-msgstr ""
+msgstr "%s [OPTIONS]"
 
 #: ../src/rhn-migrate-classic-to-rhsm:122
 msgid ""

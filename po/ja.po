@@ -471,9 +471,8 @@ msgid "Autosubscribing"
 msgstr "自動サブスクリプション"
 
 #: ../src/subscription_manager/gui/registergui.py:323
-#, 
 msgid "Fetching certificates"
-msgstr ""
+msgstr "証明書の取得中"
 
 #: ../src/subscription_manager/gui/registergui.py:362
 msgid "You must enter a system name."
@@ -756,90 +755,90 @@ msgstr "完了"
 #: ../src/subscription_manager/managercli.py:69
 #, python-format
 msgid "Product Name:         \t%-25s"
-msgstr ""
+msgstr "製品名: %-25s"
 
 #: ../src/subscription_manager/constants.py:28
 #, python-format
 msgid "Version:              \t%-25s"
-msgstr "バージョン:              \t%-25s"
+msgstr "バージョン: %-25s"
 
 #: ../src/subscription_manager/constants.py:30
 #, python-format
 msgid "Arch:                 \t%-25s"
-msgstr "アーキテクチャー:                 \t%-25s"
+msgstr "アーキテクチャー: %-25s"
 
 #: ../src/subscription_manager/constants.py:32
 #: ../src/subscription_manager/constants.py:68
 #, python-format
 msgid "Status:               \t%-25s"
-msgstr "ステータス:               \t%-25s"
+msgstr "ステータス: %-25s"
 
 #: ../src/subscription_manager/constants.py:34
 #, python-format
 msgid "Starts:               \t%-25s"
-msgstr "開始日:               \t%-25s"
+msgstr "開始日: %-25s"
 
 #: ../src/subscription_manager/constants.py:36
 #: ../src/subscription_manager/constants.py:50
 #: ../src/subscription_manager/managercli.py:83
 #, python-format
 msgid "Expires:              \t%-25s"
-msgstr "終了日:              \t%-25s"
+msgstr "終了日: %-25s"
 
 #: ../src/subscription_manager/constants.py:42
 #, python-format
 msgid "Product Id:           \t%-25s"
-msgstr ""
+msgstr "製品 Id: %-25s"
 
 #: ../src/subscription_manager/constants.py:44
 #, python-format
 msgid "Pool Id:              \t%-25s"
-msgstr ""
+msgstr "プール Id: %-25s"
 
 #: ../src/subscription_manager/constants.py:46
 #, python-format
 msgid "Quantity:             \t%-25s"
-msgstr "数量:             \t%-25s"
+msgstr "数量: %-25s"
 
 #: ../src/subscription_manager/constants.py:48
 #, python-format
 msgid "Multi-Entitlement:    \t%-25s"
-msgstr "複数エンタイトルメント:    \t%-25s"
+msgstr "複数エンタイトルメント: %-25s"
 
 #: ../src/subscription_manager/constants.py:52
 #, python-format
 msgid "Machine Type:         \t%-25s"
-msgstr ""
+msgstr "マシンタイプ: %-25s"
 
 #: ../src/subscription_manager/constants.py:56
 #, python-format
 msgid "Repo Name:            \t%-25s"
-msgstr ""
+msgstr "レポジトリ名: %-25s"
 
 #: ../src/subscription_manager/constants.py:58
 #, python-format
 msgid "Repo Id:              \t%-25s"
-msgstr ""
+msgstr "レポジトリ Id: %-25s"
 
 #: ../src/subscription_manager/constants.py:60
 #, python-format
 msgid "Repo Url:             \t%-25s"
-msgstr ""
+msgstr "リポジトリ URL: %-25s"
 
 #: ../src/subscription_manager/constants.py:62
 #, python-format
 msgid "Enabled:              \t%-25s"
-msgstr "有効:              \t%-25s"
+msgstr "有効: %-25s"
 
 #: ../src/subscription_manager/constants.py:72
 #, python-format
 msgid "Name:                 \t%-25s"
-msgstr "名前:                 \t%-25s"
+msgstr "名前: %-25s"
 
 #: ../src/subscription_manager/constants.py:74
 #, python-format
 msgid "Description:          \t%-25s"
-msgstr "詳細:          \t%-25s"
+msgstr "詳細: %-25s"
 
 #: ../src/subscription_manager/constants.py:77
 msgid "<b>Errors were encountered during unregister.</b>"
@@ -865,41 +864,41 @@ msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr "<b>ユーザー %s はどの組織でも登録できません。</b>"
 
 #: ../src/subscription_manager/managercli.py:57
-#, 
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register "
 "--help' for more information."
 msgstr ""
+"このシステムはまだ登録されていません。 詳細については「subscription-manager register --help」をご覧ください。"
 
 #: ../src/subscription_manager/managercli.py:71
 #, python-format
 msgid "Contract Number:      \t%-25s"
-msgstr ""
+msgstr "契約番号: %-25s"
 
 #: ../src/subscription_manager/managercli.py:73
 #, python-format
 msgid "Account Number:       \t%-25s"
-msgstr ""
+msgstr "アカウント番号: %-25s"
 
 #: ../src/subscription_manager/managercli.py:75
 #, python-format
 msgid "Serial Number:        \t%-25s"
-msgstr ""
+msgstr "シリアル番号: %-25s"
 
 #: ../src/subscription_manager/managercli.py:77
 #, python-format
 msgid "Active:               \t%-25s"
-msgstr "アクティブ:               \t%-25s"
+msgstr "アクティブ: %-25s"
 
 #: ../src/subscription_manager/managercli.py:79
 #, python-format
 msgid "Quantity Used:        \t%-25s"
-msgstr ""
+msgstr "使用済み数量: %-25s"
 
 #: ../src/subscription_manager/managercli.py:81
 #, python-format
 msgid "Begins:               \t%-25s"
-msgstr "開始日:               \t%-25s"
+msgstr "開始日: %-25s"
 
 #: ../src/subscription_manager/managercli.py:99
 msgid "Network error, unable to connect to server."
@@ -1025,14 +1024,12 @@ msgid "Organizations"
 msgstr "組織"
 
 #: ../src/subscription_manager/managercli.py:467
-#, 
 msgid "Name"
-msgstr ""
+msgstr "名前"
 
 #: ../src/subscription_manager/managercli.py:468
-#, 
 msgid "Key"
-msgstr ""
+msgstr "キー"
 
 #: ../src/subscription_manager/managercli.py:471
 #: ../src/subscription_manager/managercli.py:838
@@ -1065,27 +1062,26 @@ msgid "Error: Unable to retrieve environment list from Entitlement Platform"
 msgstr "エラー: エンタイトルメントプラットフォームから環境一覧を取り込めません"
 
 #: ../src/subscription_manager/managercli.py:536
-#, 
 msgid "Manage service levels for this system."
-msgstr ""
+msgstr "このシステムのサービスレベルを管理します。"
 
 #: ../src/subscription_manager/managercli.py:543
 msgid "show this system's current service level"
-msgstr "このシステムの現在のサービスレベルを表示します"
+msgstr "このシステムの現在のサービスレベルを表示"
 
 #: ../src/subscription_manager/managercli.py:546
 msgid "specify org for service level list"
-msgstr "サービスレベル一覧に組織を指定します"
+msgstr "サービスレベル一覧に組織を指定"
 
 #: ../src/subscription_manager/managercli.py:548
 msgid "list all service levels available"
-msgstr "使用可能なサービスレベルをすべて表示します"
+msgstr "使用可能なサービスレベルをすべて表示"
 
 #: ../src/subscription_manager/managercli.py:559
 msgid ""
 "Error: you must register or specify --username and password to list service "
 "levels"
-msgstr "エラー: サービスレベルを表示させるには --username と --password の登録または指定を行う必要があります。"
+msgstr "エラー: サービスレベルを表示させるには --username と --password の登録または指定を行う必要があります"
 
 #: ../src/subscription_manager/managercli.py:562
 msgid "Error: you must register or specify --org."
@@ -1105,9 +1101,8 @@ msgid "Current service level: %s"
 msgstr "現在のサービスレベル: %s"
 
 #: ../src/subscription_manager/managercli.py:621
-#, 
 msgid "Available Service Levels"
-msgstr ""
+msgstr "利用可能なサービスレベル"
 
 #: ../src/subscription_manager/managercli.py:644
 msgid "the type of consumer to register, defaults to system"
@@ -1514,7 +1509,7 @@ msgstr "消費済み製品サブスクリプション"
 #: ../src/subscription_manager/managercli.py:1671
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr ""
+msgstr "使い方: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
 #: ../src/subscription_manager/managercli.py:1673
 msgid "Primary Modules:"
@@ -1545,14 +1540,12 @@ msgid "<b>Provides Management:</b>"
 msgstr "<b>管理の提供:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#, 
 msgid "<b>Service Level:</b>"
-msgstr ""
+msgstr "<b>サービスレベル:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#, 
 msgid "<b>Service Type:</b>"
-msgstr ""
+msgstr "<b>サービスタイプ:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 msgid "<b>Stacking ID:</b>"
@@ -2133,7 +2126,7 @@ msgstr "サブスクリプションマネージャで登録を行っている間
 #: ../src/rhn-migrate-classic-to-rhsm:69
 #, c-format
 msgid "%s [OPTIONS]"
-msgstr ""
+msgstr "%s [OPTIONS]"
 
 #: ../src/rhn-migrate-classic-to-rhsm:122
 msgid ""

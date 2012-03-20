@@ -462,9 +462,8 @@ msgid "Autosubscribing"
 msgstr "自动订阅"
 
 #: ../src/subscription_manager/gui/registergui.py:323
-#, 
 msgid "Fetching certificates"
-msgstr ""
+msgstr "获取证书"
 
 #: ../src/subscription_manager/gui/registergui.py:362
 msgid "You must enter a system name."
@@ -743,7 +742,7 @@ msgstr "完成"
 #: ../src/subscription_manager/managercli.py:69
 #, python-format
 msgid "Product Name:         \t%-25s"
-msgstr ""
+msgstr "产品名称：%-25s"
 
 #: ../src/subscription_manager/constants.py:28
 #, python-format
@@ -776,12 +775,12 @@ msgstr "过期：%-25s"
 #: ../src/subscription_manager/constants.py:42
 #, python-format
 msgid "Product Id:           \t%-25s"
-msgstr ""
+msgstr "产品 ID：%-25s"
 
 #: ../src/subscription_manager/constants.py:44
 #, python-format
 msgid "Pool Id:              \t%-25s"
-msgstr ""
+msgstr "池 ID：%-25s"
 
 #: ../src/subscription_manager/constants.py:46
 #, python-format
@@ -796,22 +795,22 @@ msgstr "多个授权：%-25s"
 #: ../src/subscription_manager/constants.py:52
 #, python-format
 msgid "Machine Type:         \t%-25s"
-msgstr ""
+msgstr "机器类型：%-25s"
 
 #: ../src/subscription_manager/constants.py:56
 #, python-format
 msgid "Repo Name:            \t%-25s"
-msgstr ""
+msgstr "库名称：%-25s"
 
 #: ../src/subscription_manager/constants.py:58
 #, python-format
 msgid "Repo Id:              \t%-25s"
-msgstr ""
+msgstr "库 ID：%-25s"
 
 #: ../src/subscription_manager/constants.py:60
 #, python-format
 msgid "Repo Url:             \t%-25s"
-msgstr ""
+msgstr "库 Url：%-25s"
 
 #: ../src/subscription_manager/constants.py:62
 #, python-format
@@ -852,26 +851,25 @@ msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr "<b>用户 %s 无法注册任何机构。</b>"
 
 #: ../src/subscription_manager/managercli.py:57
-#, 
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register "
 "--help' for more information."
-msgstr ""
+msgstr "这个系统尚未注册。详情请查看 'subscription-manager register --help'。"
 
 #: ../src/subscription_manager/managercli.py:71
 #, python-format
 msgid "Contract Number:      \t%-25s"
-msgstr ""
+msgstr "合同号：%-25s"
 
 #: ../src/subscription_manager/managercli.py:73
 #, python-format
 msgid "Account Number:       \t%-25s"
-msgstr ""
+msgstr "帐户号：%-25s"
 
 #: ../src/subscription_manager/managercli.py:75
 #, python-format
 msgid "Serial Number:        \t%-25s"
-msgstr ""
+msgstr "序列号：%-25s"
 
 #: ../src/subscription_manager/managercli.py:77
 #, python-format
@@ -881,7 +879,7 @@ msgstr "活动：%-25s"
 #: ../src/subscription_manager/managercli.py:79
 #, python-format
 msgid "Quantity Used:        \t%-25s"
-msgstr ""
+msgstr "已使用的量：%-25s"
 
 #: ../src/subscription_manager/managercli.py:81
 #, python-format
@@ -1012,20 +1010,18 @@ msgid "Organizations"
 msgstr "机构"
 
 #: ../src/subscription_manager/managercli.py:467
-#, 
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
 #: ../src/subscription_manager/managercli.py:468
-#, 
 msgid "Key"
-msgstr ""
+msgstr "密钥"
 
 #: ../src/subscription_manager/managercli.py:471
 #: ../src/subscription_manager/managercli.py:838
 #, python-format
 msgid "%s cannot register to any organizations."
-msgstr "%s 无法注册到任何机构。"
+msgstr "在这个系统中应用的服务等级"
 
 #: ../src/subscription_manager/managercli.py:478
 msgid "Error: Unable to retrieve org list from Entitlement Platform"
@@ -1052,9 +1048,8 @@ msgid "Error: Unable to retrieve environment list from Entitlement Platform"
 msgstr "错误：无法从环境平台获取环境列表"
 
 #: ../src/subscription_manager/managercli.py:536
-#, 
 msgid "Manage service levels for this system."
-msgstr ""
+msgstr "这个系统的服务等级。"
 
 #: ../src/subscription_manager/managercli.py:543
 msgid "show this system's current service level"
@@ -1092,9 +1087,8 @@ msgid "Current service level: %s"
 msgstr "目前服务等级：%s"
 
 #: ../src/subscription_manager/managercli.py:621
-#, 
 msgid "Available Service Levels"
-msgstr ""
+msgstr "可用服务等级"
 
 #: ../src/subscription_manager/managercli.py:644
 msgid "the type of consumer to register, defaults to system"
@@ -1501,7 +1495,7 @@ msgstr "消耗的产品订阅"
 #: ../src/subscription_manager/managercli.py:1671
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr ""
+msgstr "用法: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
 #: ../src/subscription_manager/managercli.py:1673
 msgid "Primary Modules:"
@@ -1532,14 +1526,12 @@ msgid "<b>Provides Management:</b>"
 msgstr "<b>提供管理：</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#, 
 msgid "<b>Service Level:</b>"
-msgstr ""
+msgstr "<b>服务等级：</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#, 
 msgid "<b>Service Type:</b>"
-msgstr ""
+msgstr "<b>服务类型：</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 msgid "<b>Stacking ID:</b>"
@@ -2120,7 +2112,7 @@ msgstr "使用订阅管理器注册时请不要执行 autosubscribe 选项。"
 #: ../src/rhn-migrate-classic-to-rhsm:69
 #, c-format
 msgid "%s [OPTIONS]"
-msgstr ""
+msgstr "%s [OPTIONS]"
 
 #: ../src/rhn-migrate-classic-to-rhsm:122
 msgid ""

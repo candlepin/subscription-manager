@@ -4,6 +4,7 @@
 # 
 # Automatically generated, 2011.
 # I Felix <ifelix@redhat.com>, 2011.
+# ifelix <ifelix@redhat.com>, 2012. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
@@ -476,9 +477,8 @@ msgid "Autosubscribing"
 msgstr "தானியக்கசந்தாபடுத்தல்"
 
 #: ../src/subscription_manager/gui/registergui.py:323
-#, 
 msgid "Fetching certificates"
-msgstr ""
+msgstr "சான்றிதழை எடுக்கிறது"
 
 #: ../src/subscription_manager/gui/registergui.py:362
 msgid "You must enter a system name."
@@ -771,7 +771,7 @@ msgstr "முடிந்தது"
 #: ../src/subscription_manager/managercli.py:69
 #, python-format
 msgid "Product Name:         \t%-25s"
-msgstr ""
+msgstr "தயாரிப்பு பெயர்:         \t%-25s"
 
 #: ../src/subscription_manager/constants.py:28
 #, python-format
@@ -804,12 +804,12 @@ msgstr "Expires:              \t%-25s"
 #: ../src/subscription_manager/constants.py:42
 #, python-format
 msgid "Product Id:           \t%-25s"
-msgstr ""
+msgstr "தயாரிப்பு Id:           \t%-25s"
 
 #: ../src/subscription_manager/constants.py:44
 #, python-format
 msgid "Pool Id:              \t%-25s"
-msgstr ""
+msgstr "பூல் Id:              \t%-25s"
 
 #: ../src/subscription_manager/constants.py:46
 #, python-format
@@ -824,22 +824,22 @@ msgstr "பல-உரிமை:    \t%-25s"
 #: ../src/subscription_manager/constants.py:52
 #, python-format
 msgid "Machine Type:         \t%-25s"
-msgstr ""
+msgstr "இயந்திர வகை: %-25s"
 
 #: ../src/subscription_manager/constants.py:56
 #, python-format
 msgid "Repo Name:            \t%-25s"
-msgstr ""
+msgstr "Repo பெயர்:            \t%-25s"
 
 #: ../src/subscription_manager/constants.py:58
 #, python-format
 msgid "Repo Id:              \t%-25s"
-msgstr ""
+msgstr "Repo Id:              \t%-25s"
 
 #: ../src/subscription_manager/constants.py:60
 #, python-format
 msgid "Repo Url:             \t%-25s"
-msgstr ""
+msgstr "Repo Url:             \t%-25s"
 
 #: ../src/subscription_manager/constants.py:62
 #, python-format
@@ -880,41 +880,42 @@ msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr "<b>பயனர் %s எந்த orgs உடனும் பதிவு செய்ய முடியாது.</b>"
 
 #: ../src/subscription_manager/managercli.py:57
-#, 
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register "
 "--help' for more information."
 msgstr ""
+"இந்த கணினி இன்னும் பதிவு செய்யப்படவில்லை. மேலும் தகவலுக்கு 'subscription-"
+"manager register --help'-ஐ பார்க்கவும்."
 
 #: ../src/subscription_manager/managercli.py:71
 #, python-format
 msgid "Contract Number:      \t%-25s"
-msgstr ""
+msgstr "ஒப்பந்த எண்:      \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:73
 #, python-format
 msgid "Account Number:       \t%-25s"
-msgstr ""
+msgstr "கணக்கு எண்:       \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:75
 #, python-format
 msgid "Serial Number:        \t%-25s"
-msgstr ""
+msgstr "வரிசை எண்:        \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:77
 #, python-format
 msgid "Active:               \t%-25s"
-msgstr "Active:               \t%-25s"
+msgstr "செயலில்:               \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:79
 #, python-format
 msgid "Quantity Used:        \t%-25s"
-msgstr ""
+msgstr "பயன்படுத்தப்பட்ட எண்ணிக்கை:        \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:81
 #, python-format
 msgid "Begins:               \t%-25s"
-msgstr "Begins:               \t%-25s"
+msgstr "ஆரம்பம்:               \t%-25s"
 
 #: ../src/subscription_manager/managercli.py:99
 msgid "Network error, unable to connect to server."
@@ -1045,14 +1046,12 @@ msgid "Organizations"
 msgstr "நிறுவனங்கள்"
 
 #: ../src/subscription_manager/managercli.py:467
-#, 
 msgid "Name"
-msgstr ""
+msgstr "பெயர்"
 
 #: ../src/subscription_manager/managercli.py:468
-#, 
 msgid "Key"
-msgstr ""
+msgstr "விசை"
 
 #: ../src/subscription_manager/managercli.py:471
 #: ../src/subscription_manager/managercli.py:838
@@ -1085,9 +1084,8 @@ msgid "Error: Unable to retrieve environment list from Entitlement Platform"
 msgstr "பிழை: உரிம தளத்திலிருந்து சூழலை  திரும்ப பெற முடியவில்லை"
 
 #: ../src/subscription_manager/managercli.py:536
-#, 
 msgid "Manage service levels for this system."
-msgstr ""
+msgstr "இந்த கணினிக்கான சேவை நிலைகளை நிர்வகிக்கவும்"
 
 #: ../src/subscription_manager/managercli.py:543
 msgid "show this system's current service level"
@@ -1127,9 +1125,8 @@ msgid "Current service level: %s"
 msgstr "நடப்பு சேவை நிலைகள்: %s"
 
 #: ../src/subscription_manager/managercli.py:621
-#, 
 msgid "Available Service Levels"
-msgstr ""
+msgstr "இருக்கும் சேவை நிலைகள்"
 
 #: ../src/subscription_manager/managercli.py:644
 msgid "the type of consumer to register, defaults to system"
@@ -1573,7 +1570,7 @@ msgstr "உபயோகமான தயாரிப்பு சந்தாப�
 #: ../src/subscription_manager/managercli.py:1671
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr ""
+msgstr "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
 #: ../src/subscription_manager/managercli.py:1673
 msgid "Primary Modules:"
@@ -1604,14 +1601,12 @@ msgid "<b>Provides Management:</b>"
 msgstr "<b>நிர்வாகத்தை வழங்குகிறது:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#, 
 msgid "<b>Service Level:</b>"
-msgstr ""
+msgstr "<b>சேவை நிலை:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#, 
 msgid "<b>Service Type:</b>"
-msgstr ""
+msgstr "<b>சேவை வகை:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 msgid "<b>Stacking ID:</b>"
@@ -2203,7 +2198,7 @@ msgstr ""
 #: ../src/rhn-migrate-classic-to-rhsm:69
 #, c-format
 msgid "%s [OPTIONS]"
-msgstr ""
+msgstr "%s [OPTIONS]"
 
 #: ../src/rhn-migrate-classic-to-rhsm:122
 msgid ""

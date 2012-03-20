@@ -115,7 +115,7 @@ msgstr "Дата начала"
 #: ../src/subscription_manager/gui/mysubstab.py:77
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:15
 msgid "End Date"
-msgstr "Срок действия"
+msgstr "Истекает"
 
 #: ../src/subscription_manager/gui/installedtab.py:174
 #: ../src/subscription_manager/managercli.py:61
@@ -473,9 +473,8 @@ msgid "Autosubscribing"
 msgstr "Автоматическая подписка"
 
 #: ../src/subscription_manager/gui/registergui.py:323
-#, 
 msgid "Fetching certificates"
-msgstr ""
+msgstr "Получение сертификатов"
 
 #: ../src/subscription_manager/gui/registergui.py:362
 msgid "You must enter a system name."
@@ -758,7 +757,7 @@ msgstr "готово"
 #: ../src/subscription_manager/managercli.py:69
 #, python-format
 msgid "Product Name:         \t%-25s"
-msgstr ""
+msgstr "Продукт: %-25s"
 
 #: ../src/subscription_manager/constants.py:28
 #, python-format
@@ -791,12 +790,12 @@ msgstr "Истекает: %-25s"
 #: ../src/subscription_manager/constants.py:42
 #, python-format
 msgid "Product Id:           \t%-25s"
-msgstr ""
+msgstr "ID продукта: %-25s"
 
 #: ../src/subscription_manager/constants.py:44
 #, python-format
 msgid "Pool Id:              \t%-25s"
-msgstr ""
+msgstr "ID пула: %-25s"
 
 #: ../src/subscription_manager/constants.py:46
 #, python-format
@@ -811,22 +810,22 @@ msgstr "Многоразовые полномочия: %-25s"
 #: ../src/subscription_manager/constants.py:52
 #, python-format
 msgid "Machine Type:         \t%-25s"
-msgstr ""
+msgstr "Тип компьютера: %-25s"
 
 #: ../src/subscription_manager/constants.py:56
 #, python-format
 msgid "Repo Name:            \t%-25s"
-msgstr ""
+msgstr "Репозиторий: %-25s"
 
 #: ../src/subscription_manager/constants.py:58
 #, python-format
 msgid "Repo Id:              \t%-25s"
-msgstr ""
+msgstr "ID репозитория: %-25s"
 
 #: ../src/subscription_manager/constants.py:60
 #, python-format
 msgid "Repo Url:             \t%-25s"
-msgstr ""
+msgstr "URL: %-25s"
 
 #: ../src/subscription_manager/constants.py:62
 #, python-format
@@ -868,26 +867,27 @@ msgstr ""
 "<b>Пользователь %s не может осуществлять регистрацию в организациях.</b>"
 
 #: ../src/subscription_manager/managercli.py:57
-#, 
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register "
 "--help' for more information."
 msgstr ""
+"Система еще не зарегистрирована. Выполните «subscription-manager register "
+"--help» для получения информации."
 
 #: ../src/subscription_manager/managercli.py:71
 #, python-format
 msgid "Contract Number:      \t%-25s"
-msgstr ""
+msgstr "Номер контракта: %-25s"
 
 #: ../src/subscription_manager/managercli.py:73
 #, python-format
 msgid "Account Number:       \t%-25s"
-msgstr ""
+msgstr "Номер счета: %-25s"
 
 #: ../src/subscription_manager/managercli.py:75
 #, python-format
 msgid "Serial Number:        \t%-25s"
-msgstr ""
+msgstr "Серийный номер: %-25s"
 
 #: ../src/subscription_manager/managercli.py:77
 #, python-format
@@ -897,7 +897,7 @@ msgstr "Активно: %-25s"
 #: ../src/subscription_manager/managercli.py:79
 #, python-format
 msgid "Quantity Used:        \t%-25s"
-msgstr ""
+msgstr "Всего используется: %-25s"
 
 #: ../src/subscription_manager/managercli.py:81
 #, python-format
@@ -990,7 +990,7 @@ msgstr "«--force» используется вместе с «--regenerate»"
 
 #: ../src/subscription_manager/managercli.py:399
 msgid "--username and --password can only be used with --force"
-msgstr "--username и --password используются вместе с --force"
+msgstr "«--username» и «--password» используются вместе с «--force»"
 
 #: ../src/subscription_manager/managercli.py:414
 #, python-format
@@ -1029,14 +1029,12 @@ msgid "Organizations"
 msgstr "Организации"
 
 #: ../src/subscription_manager/managercli.py:467
-#, 
 msgid "Name"
-msgstr ""
+msgstr "Имя"
 
 #: ../src/subscription_manager/managercli.py:468
-#, 
 msgid "Key"
-msgstr ""
+msgstr "Ключ"
 
 #: ../src/subscription_manager/managercli.py:471
 #: ../src/subscription_manager/managercli.py:838
@@ -1073,9 +1071,8 @@ msgstr ""
 "полномочий"
 
 #: ../src/subscription_manager/managercli.py:536
-#, 
 msgid "Manage service levels for this system."
-msgstr ""
+msgstr "Управление уровнями обслуживания."
 
 #: ../src/subscription_manager/managercli.py:543
 msgid "show this system's current service level"
@@ -1087,7 +1084,7 @@ msgstr "выберите организацию для просмотра уро
 
 #: ../src/subscription_manager/managercli.py:548
 msgid "list all service levels available"
-msgstr "показать доступные уровни обслуживания"
+msgstr "показать доступные уровни"
 
 #: ../src/subscription_manager/managercli.py:559
 msgid ""
@@ -1115,9 +1112,8 @@ msgid "Current service level: %s"
 msgstr "Текущий уровень обслуживания: %s"
 
 #: ../src/subscription_manager/managercli.py:621
-#, 
 msgid "Available Service Levels"
-msgstr ""
+msgstr "Доступные уровни обслуживания"
 
 #: ../src/subscription_manager/managercli.py:644
 msgid "the type of consumer to register, defaults to system"
@@ -1215,7 +1211,7 @@ msgstr "Ошибка в процессе регистрации: %s"
 #: ../src/subscription_manager/managercli.py:765
 #, python-format
 msgid "The system has been registered with id: %s "
-msgstr "Система с ID %s успешно зарегистрирована"
+msgstr "Система (ID %s) успешно зарегистрирована"
 
 #: ../src/subscription_manager/managercli.py:819
 msgid "ERROR: Server does not support environments."
@@ -1536,15 +1532,15 @@ msgstr "Занятые подписки"
 #: ../src/subscription_manager/managercli.py:1671
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr ""
+msgstr "Формат: %s ДЕЙСТВИЕ [ПАРАМЕТРЫ] [--help]"
 
 #: ../src/subscription_manager/managercli.py:1673
 msgid "Primary Modules:"
-msgstr "Основные модули:"
+msgstr "Основные действия:"
 
 #: ../src/subscription_manager/managercli.py:1682
 msgid "Other Modules (Please consult documentation):"
-msgstr "Другие модули (см. документацию):"
+msgstr "Другие действия (см. документацию):"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:1
 msgid "<b>Account Number:</b>"
@@ -1567,14 +1563,12 @@ msgid "<b>Provides Management:</b>"
 msgstr "<b>Предоставляет управление:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#, 
 msgid "<b>Service Level:</b>"
-msgstr ""
+msgstr "<b>Уровень поддержки:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#, 
 msgid "<b>Service Type:</b>"
-msgstr ""
+msgstr "<b>Тип поддержки:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 msgid "<b>Stacking ID:</b>"
@@ -1586,7 +1580,7 @@ msgstr "<b>Дата начала:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:10
 msgid "<b>Subscription Details</b>"
-msgstr "<b>Данные подписки</b>"
+msgstr "<b>Сведения о подписке</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:11
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:3
@@ -1651,8 +1645,9 @@ msgid ""
 "Please provide an email address to receive notification\n"
 "when the redemption is complete."
 msgstr ""
-"Получение подписки может занять несколько минут. Укажите электронный адрес "
-"для получения уведомления об успешном завершении операции."
+"Получение подписки может занять несколько минут.\n"
+"Укажите электронный адрес для получения \n"
+"уведомления об успешном завершении операции."
 
 #: ../src/subscription_manager/gui/data/redeem.glade.h:7
 msgid "Subscription Redemption"
@@ -1940,7 +1935,7 @@ msgstr "Совпадение по системе"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:10
 msgid "Only show subscriptions that:"
-msgstr "Показать подписки, которые:"
+msgstr "Фильтр подписок:"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:11
 msgid "Search"
@@ -2040,7 +2035,7 @@ msgstr "_Имя пользователя:"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:13
 msgid "Use Au_thentication with HTTP Proxy:"
-msgstr "Включить _аутентификацию прокси"
+msgstr "Включить _аутентификацию"
 
 #: ../src/subscription_manager/gui/data/networkConfig.glade.h:14
 msgid "Username Text"
@@ -2159,7 +2154,7 @@ msgstr ""
 #: ../src/rhn-migrate-classic-to-rhsm:69
 #, c-format
 msgid "%s [OPTIONS]"
-msgstr ""
+msgstr "%s [ПАРАМЕТРЫ]"
 
 #: ../src/rhn-migrate-classic-to-rhsm:122
 msgid ""
@@ -2185,7 +2180,7 @@ msgid ""
 "However this system appears to be registered to '%s'.\n"
 "Exiting."
 msgstr ""
-"Для запуска сценария требуется регистрация в RHN Classic.¶\n"
+"Для запуска сценария требуется регистрация RHN Classic.\n"
 "Эта система зарегистрирована в \"%s\".\n"
 "Выход..."
 
@@ -2241,7 +2236,7 @@ msgstr ""
 #: ../src/rhn-migrate-classic-to-rhsm:272
 #, c-format
 msgid "System '%s' successfully registered to Certificate-based RHN.\n"
-msgstr "Система '%s' успешно зарегистрирована с помощью сертификата RHN. \n"
+msgstr "Система «%s» успешно зарегистрирована с помощью сертификата RHN. \n"
 
 #: ../src/rhn-migrate-classic-to-rhsm:276
 msgid "Launching the GUI tool to manually subscribe the system ..."

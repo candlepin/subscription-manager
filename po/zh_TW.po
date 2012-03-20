@@ -6,6 +6,7 @@
 # Automatically generated, 2011.
 # Terry Chuang <tchuang@redhat.com>, 2011.
 # snowlet <snowlet@fedoraproject.org>, 2012. #zanata
+# tchuang <tchuang@redhat.com>, 2012. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: zh_TW\n"
@@ -462,9 +463,8 @@ msgid "Autosubscribing"
 msgstr "自動訂閱"
 
 #: ../src/subscription_manager/gui/registergui.py:323
-#, 
 msgid "Fetching certificates"
-msgstr ""
+msgstr "搜尋認證"
 
 #: ../src/subscription_manager/gui/registergui.py:362
 msgid "You must enter a system name."
@@ -743,7 +743,7 @@ msgstr "完成"
 #: ../src/subscription_manager/managercli.py:69
 #, python-format
 msgid "Product Name:         \t%-25s"
-msgstr ""
+msgstr "產品名稱：%-25s"
 
 #: ../src/subscription_manager/constants.py:28
 #, python-format
@@ -776,12 +776,12 @@ msgstr "Expires:              \t%-25s"
 #: ../src/subscription_manager/constants.py:42
 #, python-format
 msgid "Product Id:           \t%-25s"
-msgstr ""
+msgstr "產品 Id：%-25s"
 
 #: ../src/subscription_manager/constants.py:44
 #, python-format
 msgid "Pool Id:              \t%-25s"
-msgstr ""
+msgstr "集池 Id：%-25s"
 
 #: ../src/subscription_manager/constants.py:46
 #, python-format
@@ -796,22 +796,22 @@ msgstr "多重權利：%-25s"
 #: ../src/subscription_manager/constants.py:52
 #, python-format
 msgid "Machine Type:         \t%-25s"
-msgstr ""
+msgstr "機器類型：%-25s"
 
 #: ../src/subscription_manager/constants.py:56
 #, python-format
 msgid "Repo Name:            \t%-25s"
-msgstr ""
+msgstr "軟體庫名稱：%-25s"
 
 #: ../src/subscription_manager/constants.py:58
 #, python-format
 msgid "Repo Id:              \t%-25s"
-msgstr ""
+msgstr "軟體庫 Id：%-25s"
 
 #: ../src/subscription_manager/constants.py:60
 #, python-format
 msgid "Repo Url:             \t%-25s"
-msgstr ""
+msgstr "軟體庫 Url：%-25s"
 
 #: ../src/subscription_manager/constants.py:62
 #, python-format
@@ -852,41 +852,40 @@ msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr "<b>使用者 %s 再也無法註冊任何組織。</b>"
 
 #: ../src/subscription_manager/managercli.py:57
-#, 
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register "
 "--help' for more information."
-msgstr ""
+msgstr "這部系統尚未註冊。請嘗試 'subscription-manager register --help' 以取得更多資訊。"
 
 #: ../src/subscription_manager/managercli.py:71
 #, python-format
 msgid "Contract Number:      \t%-25s"
-msgstr ""
+msgstr "聯絡號碼：%-25s"
 
 #: ../src/subscription_manager/managercli.py:73
 #, python-format
 msgid "Account Number:       \t%-25s"
-msgstr ""
+msgstr "帳號號碼：%-25s"
 
 #: ../src/subscription_manager/managercli.py:75
 #, python-format
 msgid "Serial Number:        \t%-25s"
-msgstr ""
+msgstr "序號：%-25s"
 
 #: ../src/subscription_manager/managercli.py:77
 #, python-format
 msgid "Active:               \t%-25s"
-msgstr "Active:               \t%-25s"
+msgstr "啟用：%-25s"
 
 #: ../src/subscription_manager/managercli.py:79
 #, python-format
 msgid "Quantity Used:        \t%-25s"
-msgstr ""
+msgstr "已使用數量：%-25s"
 
 #: ../src/subscription_manager/managercli.py:81
 #, python-format
 msgid "Begins:               \t%-25s"
-msgstr "Begins:               \t%-25s"
+msgstr "起始：%-25s"
 
 #: ../src/subscription_manager/managercli.py:99
 msgid "Network error, unable to connect to server."
@@ -1012,14 +1011,12 @@ msgid "Organizations"
 msgstr "組織"
 
 #: ../src/subscription_manager/managercli.py:467
-#, 
 msgid "Name"
-msgstr ""
+msgstr "名稱"
 
 #: ../src/subscription_manager/managercli.py:468
-#, 
 msgid "Key"
-msgstr ""
+msgstr "金鑰"
 
 #: ../src/subscription_manager/managercli.py:471
 #: ../src/subscription_manager/managercli.py:838
@@ -1052,9 +1049,8 @@ msgid "Error: Unable to retrieve environment list from Entitlement Platform"
 msgstr "錯誤：無法從權利平台取得環境清單"
 
 #: ../src/subscription_manager/managercli.py:536
-#, 
 msgid "Manage service levels for this system."
-msgstr ""
+msgstr "為這部系統管理服務等級。"
 
 #: ../src/subscription_manager/managercli.py:543
 msgid "show this system's current service level"
@@ -1092,9 +1088,8 @@ msgid "Current service level: %s"
 msgstr "目前的服務等級：%s"
 
 #: ../src/subscription_manager/managercli.py:621
-#, 
 msgid "Available Service Levels"
-msgstr ""
+msgstr "可用的服務等級"
 
 #: ../src/subscription_manager/managercli.py:644
 msgid "the type of consumer to register, defaults to system"
@@ -1501,7 +1496,7 @@ msgstr "已使用的產品訂閱"
 #: ../src/subscription_manager/managercli.py:1671
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr ""
+msgstr "使用方法：%s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
 #: ../src/subscription_manager/managercli.py:1673
 msgid "Primary Modules:"
@@ -1532,18 +1527,16 @@ msgid "<b>Provides Management:</b>"
 msgstr "<b>提供管理：</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#, 
 msgid "<b>Service Level:</b>"
-msgstr ""
+msgstr "<b>服務等級：</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#, 
 msgid "<b>Service Type:</b>"
-msgstr ""
+msgstr "<b>服務類型：</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 msgid "<b>Stacking ID:</b>"
-msgstr "<b>大量 ID：</b>"
+msgstr "<b>堆疊 ID：</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:9
 msgid "<b>Start Date:</b>"
@@ -2117,7 +2110,7 @@ msgstr "以訂閱管理員註冊時，不要執行 autosubscribe 選項。"
 #: ../src/rhn-migrate-classic-to-rhsm:69
 #, c-format
 msgid "%s [OPTIONS]"
-msgstr ""
+msgstr "%s [OPTIONS]"
 
 #: ../src/rhn-migrate-classic-to-rhsm:122
 msgid ""

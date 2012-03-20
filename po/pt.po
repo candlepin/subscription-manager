@@ -4,6 +4,7 @@
 # Copyright (C) 2011 THE l'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the l package.
 # Automatically generated, 2011.
+# gcintra <gcintra@fedoraproject.org>, 2012. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: pt_BR\n"
@@ -476,9 +477,8 @@ msgid "Autosubscribing"
 msgstr "Auto subscrição"
 
 #: ../src/subscription_manager/gui/registergui.py:323
-#, 
 msgid "Fetching certificates"
-msgstr ""
+msgstr "Buscando Certificados"
 
 #: ../src/subscription_manager/gui/registergui.py:362
 msgid "You must enter a system name."
@@ -769,7 +769,7 @@ msgstr "finalizado"
 #: ../src/subscription_manager/managercli.py:69
 #, python-format
 msgid "Product Name:         \t%-25s"
-msgstr ""
+msgstr "Nome do Produto:         \t%-25s"
 
 #: ../src/subscription_manager/constants.py:28
 #, python-format
@@ -802,12 +802,12 @@ msgstr "Expira:              \t%-25s"
 #: ../src/subscription_manager/constants.py:42
 #, python-format
 msgid "Product Id:           \t%-25s"
-msgstr ""
+msgstr "Id do Produto:           \t%-25s"
 
 #: ../src/subscription_manager/constants.py:44
 #, python-format
 msgid "Pool Id:              \t%-25s"
-msgstr ""
+msgstr "Pool Id:              \t%-25s"
 
 #: ../src/subscription_manager/constants.py:46
 #, python-format
@@ -822,22 +822,22 @@ msgstr "Multi-Entitlement:    \t%-25s"
 #: ../src/subscription_manager/constants.py:52
 #, python-format
 msgid "Machine Type:         \t%-25s"
-msgstr ""
+msgstr "Machine Type:         \t%-25s"
 
 #: ../src/subscription_manager/constants.py:56
 #, python-format
 msgid "Repo Name:            \t%-25s"
-msgstr ""
+msgstr "Repo Name:            \t%-25s"
 
 #: ../src/subscription_manager/constants.py:58
 #, python-format
 msgid "Repo Id:              \t%-25s"
-msgstr ""
+msgstr "Repo Id:              \t%-25s"
 
 #: ../src/subscription_manager/constants.py:60
 #, python-format
 msgid "Repo Url:             \t%-25s"
-msgstr ""
+msgstr "Repo Url:             \t%-25s"
 
 #: ../src/subscription_manager/constants.py:62
 #, python-format
@@ -878,26 +878,27 @@ msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr "<b>Usuário %s não é capaz de se registar com quaisquer orgs.</b>"
 
 #: ../src/subscription_manager/managercli.py:57
-#, 
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register "
 "--help' for more information."
 msgstr ""
+"Este sistema ainda não foi registrado. Tente 'subscription-manager register "
+"--help' para mais informações"
 
 #: ../src/subscription_manager/managercli.py:71
 #, python-format
 msgid "Contract Number:      \t%-25s"
-msgstr ""
+msgstr "Número de Contrato: %-25s"
 
 #: ../src/subscription_manager/managercli.py:73
 #, python-format
 msgid "Account Number:       \t%-25s"
-msgstr ""
+msgstr "Número de Conta: %-25s"
 
 #: ../src/subscription_manager/managercli.py:75
 #, python-format
 msgid "Serial Number:        \t%-25s"
-msgstr ""
+msgstr "Número de série: %-25s"
 
 #: ../src/subscription_manager/managercli.py:77
 #, python-format
@@ -907,7 +908,7 @@ msgstr "Ativo: %-25s"
 #: ../src/subscription_manager/managercli.py:79
 #, python-format
 msgid "Quantity Used:        \t%-25s"
-msgstr ""
+msgstr "Quantidade Usada: %-25s"
 
 #: ../src/subscription_manager/managercli.py:81
 #, python-format
@@ -1041,14 +1042,12 @@ msgid "Organizations"
 msgstr "Organizações"
 
 #: ../src/subscription_manager/managercli.py:467
-#, 
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: ../src/subscription_manager/managercli.py:468
-#, 
 msgid "Key"
-msgstr ""
+msgstr "Chave"
 
 #: ../src/subscription_manager/managercli.py:471
 #: ../src/subscription_manager/managercli.py:838
@@ -1082,9 +1081,8 @@ msgstr ""
 "Erro: Incapaz de recuperar a lista de ambiente da Plataforma de Direitos"
 
 #: ../src/subscription_manager/managercli.py:536
-#, 
 msgid "Manage service levels for this system."
-msgstr ""
+msgstr "Gerenciar Níveis de serviço para este sistema."
 
 #: ../src/subscription_manager/managercli.py:543
 msgid "show this system's current service level"
@@ -1124,9 +1122,8 @@ msgid "Current service level: %s"
 msgstr "Nível de serviço atual: %s"
 
 #: ../src/subscription_manager/managercli.py:621
-#, 
 msgid "Available Service Levels"
-msgstr ""
+msgstr "Níveis de Serviço Disponíveis"
 
 #: ../src/subscription_manager/managercli.py:644
 msgid "the type of consumer to register, defaults to system"
@@ -1557,7 +1554,7 @@ msgstr "Subscrições Utilizadas de Produto "
 #: ../src/subscription_manager/managercli.py:1671
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr ""
+msgstr "Uso: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
 #: ../src/subscription_manager/managercli.py:1673
 msgid "Primary Modules:"
@@ -1588,14 +1585,12 @@ msgid "<b>Provides Management:</b>"
 msgstr "<b>Fornece Gerenciamento:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:6
-#, 
 msgid "<b>Service Level:</b>"
-msgstr ""
+msgstr "<b>Nível de Serviço:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
-#, 
 msgid "<b>Service Type:</b>"
-msgstr ""
+msgstr "<b>Tipo de Serviço:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 msgid "<b>Stacking ID:</b>"
@@ -2185,7 +2180,7 @@ msgstr ""
 #: ../src/rhn-migrate-classic-to-rhsm:69
 #, c-format
 msgid "%s [OPTIONS]"
-msgstr ""
+msgstr "%s [OPTIONS]"
 
 #: ../src/rhn-migrate-classic-to-rhsm:122
 msgid ""
