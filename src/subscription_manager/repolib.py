@@ -22,6 +22,7 @@ from urllib import basejoin
 from iniparse import ConfigParser
 
 from rhsm.config import initConfig
+from rhsm.connection import RemoteServerException, RestlibException
 
 from certlib import ActionLock, DataLib, ConsumerIdentity
 from certdirectory import Path, EntitlementDirectory, ProductDirectory
@@ -93,7 +94,19 @@ class UpdateAction:
         self.release = None
         self.consumer = ConsumerIdentity.read()
         self.consumer_uuid = self.consumer.getConsumerId()
-        self.release = self.uep.getRelease(self.consumer_uuid)
+        try:
+            self.release = self.uep.getRelease(self.consumer_uuid)
+        # ie, a 404 from a old server that doesn't support the release API
+        except RemoteServerException, e:
+            log.debug("Release API not supported by the server. Using default.")
+            self.release = None
+        except RestlibException, e:
+            if e.code == 404:
+                log.debug("Release API not supported by the server. Using default.")
+                self.release = None
+            else:
+                raise e
+
 
     def perform(self):
         # Load the RepoFile from disk, this contains all our managed yum repo sections:
@@ -160,6 +173,7 @@ class UpdateAction:
         lst = []
 
         tags_we_have = self.prod_dir.get_provided_tags()
+        tags_we_have.add("rhel-6-computenode")
 
         for content in ent_cert.getContentEntitlements():
 
@@ -191,6 +205,8 @@ class UpdateAction:
 
     def _use_release_for_releasever(self, contenturl):
         # FIXME: release ala uep.getRelease should not be an int
+        if self.release is None:
+            return contenturl
         return contenturl.replace("$releasever", "%s" % self.release)
 
     def _set_proxy_info(self, repo):
