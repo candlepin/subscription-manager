@@ -610,7 +610,8 @@ class ServiceLevelCommand(UserPassCommand):
         consumer_uuid = ConsumerIdentity.read().getConsumerId()
         consumer = self.cp.getConsumer(consumer_uuid)
         if 'serviceLevel' not in consumer:
-            systemExit(-1, _("ERROR: Server does not support service levels."))
+            systemExit(-1, _("ERROR: The service-level command is not supported by " + \
+                             "the server."))
         service_level = consumer['serviceLevel'] or ""
         print(_("Current service level: %s") % service_level)
 
@@ -632,7 +633,8 @@ class ServiceLevelCommand(UserPassCommand):
                 print _("This org does not have any subscriptions with service levels.")
         except connection.RestlibException, e:
             if e.code == 404:
-                systemExit(-1, _("ERROR: Server does not support service levels."))
+                systemExit(-1, _("ERROR: The service-level command is not supported by " + \
+                                 "the server."))
             else:
                 raise e
 
