@@ -798,7 +798,8 @@ class RegisterCommand(UserPassCommand):
 
         if self.options.autosubscribe:
             if 'serviceLevel' not in consumer and self.options.service_level:
-                systemExit(-1, _("ERROR: Server does not support service levels."))
+                systemExit(-1, _("ERROR: The --servicelevel option is not supported " + \
+                                 "by the server. Did not perform autosubscribe."))
             autosubscribe(self.cp, consumer['uuid'],
                     service_level=self.options.service_level)
         if (self.options.consumerid or self.options.activation_keys or
