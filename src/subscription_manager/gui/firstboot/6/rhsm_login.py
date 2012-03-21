@@ -19,6 +19,8 @@ from subscription_manager.gui import registergui
 from subscription_manager.gui import autobind
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.facts import Facts
+from subscription_manager.gui.messageWindow import InfoDialog, ErrorDialog, \
+        OkDialog
 
 sys.path.append("/usr/share/rhn")
 from up2date_client import config
