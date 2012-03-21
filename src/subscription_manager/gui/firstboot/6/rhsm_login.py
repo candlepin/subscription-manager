@@ -276,10 +276,10 @@ class moduleClass(Module, registergui.RegisterScreen):
         if len(controller.suitable_slas) > 1:
             self.interface.moveToPage(moduleTitle=_("Service Level"))
         elif len(controller.suitable_slas) == 1:
-            if self.controller.current_sla and \
-                    not self.controller.can_add_more_subs():
+            if controller.current_sla and \
+                    not controller.can_add_more_subs():
                 ErrorDialog(_("Unable to subscribe to any additional products at current service level: %s") %
-                        self.controller.current_sla)
+                        controller.current_sla)
                 self._skip_sla_screens()
                 return
 
