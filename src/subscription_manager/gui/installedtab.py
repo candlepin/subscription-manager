@@ -50,8 +50,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
     def __init__(self, backend, consumer, facts, tab_icon,
                  parent, ent_dir=None, prod_dir=None):
 
-        widgets = ['product_text', 'validity_text', 'subscription_text',
-                 'subscription_status_label',
+        widgets = ['product_text', 'product_id_text', 'validity_text',
+                 'subscription_text', 'subscription_status_label',
                  'update_certificates_button']
         super(InstalledProductsTab, self).__init__('installed.glade', widgets)
 
@@ -144,6 +144,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 entry['product'] = product.getName()
                 entry['version'] = product.getVersion()
                 entry['arch'] = product.getArch()
+                entry['product_id'] = product_id
                 # Common properties
                 entry['align'] = 0.5
 
@@ -211,6 +212,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         product = selection['product']
         self.product_text.get_buffer().set_text(product)
 
+        product_id = selection['product_id']
+        self.product_id_text.get_buffer().set_text(product_id)
+
         validity = selection['validity_note']
         self.validity_text.get_buffer().set_text(validity)
 
@@ -219,6 +223,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def on_no_selection(self):
         self.product_text.get_buffer().set_text("")
+        self.product_id_text.get_buffer().set_text("")
         self.validity_text.get_buffer().set_text("")
         self.subscription_text.get_buffer().set_text("")
 
@@ -226,6 +231,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         return {
             'image': gtk.gdk.Pixbuf,
             'product': str,
+            'product_id': str,
             'version': str,
             'arch': str,
             'status': str,

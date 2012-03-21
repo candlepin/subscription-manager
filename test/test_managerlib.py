@@ -307,7 +307,7 @@ class InstalledProductStatusTests(unittest.TestCase):
                 entitlement_directory)
 
         self.assertEquals(1, len(product_status))
-        self.assertEquals("subscribed", product_status[0][3])
+        self.assertEquals("subscribed", product_status[0][4])
 
     def test_expired_entitlement_for_installed_product_shows_expired(self):
         product = StubProduct("product1")
@@ -321,7 +321,7 @@ class InstalledProductStatusTests(unittest.TestCase):
                 entitlement_directory)
 
         self.assertEquals(1, len(product_status))
-        self.assertEquals("expired", product_status[0][3])
+        self.assertEquals("expired", product_status[0][4])
 
     def test_no_entitlement_for_installed_product_shows_no_subscribed(self):
         product = StubProduct("product1")
@@ -333,7 +333,7 @@ class InstalledProductStatusTests(unittest.TestCase):
                 entitlement_directory)
 
         self.assertEquals(1, len(product_status))
-        self.assertEquals("not_subscribed", product_status[0][3])
+        self.assertEquals("not_subscribed", product_status[0][4])
 
     def test_future_dated_entitlement_shows_future_subscribed(self):
         product = StubProduct("product1")
@@ -346,7 +346,7 @@ class InstalledProductStatusTests(unittest.TestCase):
         product_status = getInstalledProductStatus(product_directory,
                                                    entitlement_directory)
         self.assertEquals(1, len(product_status))
-        self.assertEquals("future_subscribed", product_status[0][3])
+        self.assertEquals("future_subscribed", product_status[0][4])
 
     def test_one_product_with_two_entitlements_lists_product_twice(self):
         product = StubProduct("product1")
@@ -384,7 +384,7 @@ class InstalledProductStatusTests(unittest.TestCase):
  #       self.assertEquals("product2", product_status[1][0])
  #       self.assertEquals("Not Installed", product_status[1][3])
         self.assertEquals("product1", product_status[0][0])
-        self.assertEquals("subscribed", product_status[0][3])
+        self.assertEquals("subscribed", product_status[0][4])
 
     def test_one_subscription_with_bundled_products_lists_once_part_two(self):
         product1 = StubProduct("product1")
@@ -405,9 +405,9 @@ class InstalledProductStatusTests(unittest.TestCase):
         #self.assertEquals("product3", product_status[0][0])
         #self.assertEquals("Not Installed", product_status[0][3])
         self.assertEquals("product2", product_status[0][0])
-        self.assertEquals("subscribed", product_status[0][3])
+        self.assertEquals("subscribed", product_status[0][4])
         self.assertEquals("product1", product_status[1][0])
-        self.assertEquals("subscribed", product_status[1][3])
+        self.assertEquals("subscribed", product_status[1][4])
 
 
 class TestParseDate(unittest.TestCase):

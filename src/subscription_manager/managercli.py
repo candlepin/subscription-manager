@@ -149,8 +149,8 @@ def show_autosubscribe_output():
     print _("Installed Product Current Status:")
     subscribed = False
     for prod_status in installed_status:
-        subscribed = subscribed or prod_status[3] == SUBSCRIBED
-        status = STATUS_MAP[prod_status[3]]
+        subscribed = subscribed or prod_status[4] == SUBSCRIBED
+        status = STATUS_MAP[prod_status[4]]
         print (constants.product_status % (prod_status[0], status))
     return subscribed
 
@@ -1567,10 +1567,10 @@ class ListCommand(CliCommand):
             print _("    Installed Product Status")
             print "+-------------------------------------------+"
             for product in iproducts:
-                status = STATUS_MAP[product[3]]
+                status = STATUS_MAP[product[4]]
                 print self._none_wrap(constants.installed_product_status, product[0],
-                                product[1], product[2], status, product[4],
-                                product[5])
+                                product[1], product[2], product[3], status,
+                                product[5], product[6])
 
         if self.options.available:
             consumer = check_registration()['uuid']

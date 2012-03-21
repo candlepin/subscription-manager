@@ -25,6 +25,8 @@ _ = lambda x: gettext.ldgettext("rhsm", x)
 installed_product_status = \
     _("Product Name:         \t%-25s") + \
     "\n" + \
+    _("Product ID:           \t%-25s") + \
+    "\n" + \
     _("Version:              \t%-25s") + \
     "\n" + \
     _("Arch:                 \t%-25s") + \

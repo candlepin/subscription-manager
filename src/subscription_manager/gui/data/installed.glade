@@ -131,7 +131,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="border_width">3</property>
-                                <property name="vadjustment">0 0 84 7 63 70</property>
+                                <property name="vadjustment">6.3000000000000007 0 108 6.9000000000000004 62.100000000000001 69</property>
                                 <property name="hscrollbar_policy">automatic</property>
                                 <property name="vscrollbar_policy">automatic</property>
                                 <property name="shadow_type">in</property>
@@ -143,7 +143,7 @@
                                     <child>
                                       <widget class="GtkTable" id="table2">
                                         <property name="visible">True</property>
-                                        <property name="n_rows">3</property>
+                                        <property name="n_rows">4</property>
                                         <property name="n_columns">2</property>
                                         <property name="column_spacing">8</property>
                                         <child>
@@ -154,22 +154,6 @@
                                             <property name="use_markup">True</property>
                                           </widget>
                                           <packing>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options">GTK_FILL</property>
-                                            <property name="x_padding">10</property>
-                                            <property name="y_padding">5</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <widget class="GtkLabel" id="validity_label">
-                                            <property name="visible">True</property>
-                                            <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">&lt;b&gt;Certificate Status:&lt;/b&gt;</property>
-                                            <property name="use_markup">True</property>
-                                          </widget>
-                                          <packing>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
                                             <property name="x_options">GTK_FILL</property>
                                             <property name="y_options">GTK_FILL</property>
                                             <property name="x_padding">10</property>
@@ -212,26 +196,6 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <widget class="GtkTextView" id="validity_text">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="pixels_above_lines">5</property>
-                                            <property name="editable">False</property>
-                                            <property name="left_margin">10</property>
-                                            <property name="cursor_visible">False</property>
-                                            <accessibility>
-                                              <atkproperty name="AtkObject::accessible-name" translatable="yes">Certificate Status Text</atkproperty>
-                                            </accessibility>
-                                          </widget>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                            <property name="y_options">GTK_FILL</property>
-                                          </packing>
-                                        </child>
-                                        <child>
                                           <widget class="GtkTextView" id="subscription_text">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
@@ -248,6 +212,78 @@
                                             <property name="right_attach">2</property>
                                             <property name="top_attach">2</property>
                                             <property name="bottom_attach">3</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkLabel" id="validity_label">
+                                            <property name="visible">True</property>
+                                            <property name="xalign">0</property>
+                                            <property name="label" translatable="yes">&lt;b&gt;Certificate Status:&lt;/b&gt;</property>
+                                            <property name="use_markup">True</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="top_attach">3</property>
+                                            <property name="bottom_attach">4</property>
+                                            <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options">GTK_FILL</property>
+                                            <property name="x_padding">10</property>
+                                            <property name="y_padding">5</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkTextView" id="validity_text">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="pixels_above_lines">5</property>
+                                            <property name="editable">False</property>
+                                            <property name="left_margin">10</property>
+                                            <property name="cursor_visible">False</property>
+                                            <accessibility>
+                                              <atkproperty name="AtkObject::accessible-name" translatable="yes">Certificate Status Text</atkproperty>
+                                            </accessibility>
+                                          </widget>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">3</property>
+                                            <property name="bottom_attach">4</property>
+                                            <property name="y_options">GTK_FILL</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkLabel" id="product_id_label">
+                                            <property name="visible">True</property>
+                                            <property name="xalign">0</property>
+                                            <property name="label" translatable="yes">&lt;b&gt;Product ID:&lt;/b&gt;</property>
+                                            <property name="use_markup">True</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="top_attach">1</property>
+                                            <property name="bottom_attach">2</property>
+                                            <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options">GTK_FILL</property>
+                                            <property name="x_padding">10</property>
+                                            <property name="y_padding">5</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkTextView" id="product_id_text">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="pixels_above_lines">5</property>
+                                            <property name="editable">False</property>
+                                            <property name="left_margin">10</property>
+                                            <property name="cursor_visible">False</property>
+                                            <accessibility>
+                                              <atkproperty name="AtkObject::accessible-name" translatable="yes">Product ID Text</atkproperty>
+                                            </accessibility>
+                                          </widget>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">1</property>
+                                            <property name="bottom_attach">2</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                       </widget>

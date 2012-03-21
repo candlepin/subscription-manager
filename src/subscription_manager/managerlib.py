@@ -111,6 +111,7 @@ def getInstalledProductStatus(product_directory=None,
                 begin = formatDate(prod_status_range.begin())
                 end = formatDate(prod_status_range.end())
             data = (product.getName(),
+                    installed_product,
                     product.getVersion(),
                     product.getArch(),
                     sorter.get_status(product.getHash()),
