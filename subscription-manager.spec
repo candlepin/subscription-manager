@@ -247,14 +247,22 @@ rm -rf %{buildroot}
 %files -n subscription-manager-firstboot
 %defattr(-,root,root,-)
 %{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
-%{_datadir}/rhn/up2date_client/firstboot/rhsm_select_sla.py*
-%{_datadir}/rhn/up2date_client/firstboot/rhsm_confirm_subs.py*
+
 %if 0%{?rhel} < 6
-%if 0%{?fedora} > 12
+  %if 0%{?fedora} > 12
+    # we are building for fedora > 12 (not rhel)
+    %{_datadir}/rhn/up2date_client/firstboot/rhsm_select_sla.py*
+    %{_datadir}/rhn/up2date_client/firstboot/rhsm_confirm_subs.py*
+  %else
+    # we are building for fedora <= 12 or rhel < 6
+    %{_datadir}/rhn/up2date_client/firstboot/rhsm_subscriptions.py*
+    %{_prefix}/share/firstboot/modules/rhsm_login.py*
+    %{_prefix}/share/firstboot/modules/rhsm_subscriptions.py*
+  %endif
 %else
-%{_prefix}/share/firstboot/modules/rhsm_login.py*
-%{_prefix}/share/firstboot/modules/rhsm_subscriptions.py*
-%endif
+  # we are building for rhel >= 6 (not fedora)
+  %{_datadir}/rhn/up2date_client/firstboot/rhsm_select_sla.py*
+  %{_datadir}/rhn/up2date_client/firstboot/rhsm_confirm_subs.py*
 %endif
 
 %files -n subscription-manager-migration
