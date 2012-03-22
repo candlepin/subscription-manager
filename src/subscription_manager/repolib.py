@@ -95,7 +95,8 @@ class UpdateAction:
         self.consumer = ConsumerIdentity.read()
         self.consumer_uuid = self.consumer.getConsumerId()
         try:
-            self.release = self.uep.getRelease(self.consumer_uuid)
+            result = self.uep.getRelease(self.consumer_uuid)
+            self.release = result['releaseVer']
         # ie, a 404 from a old server that doesn't support the release API
         except RemoteServerException, e:
             log.debug("Release API not supported by the server. Using default.")
@@ -106,7 +107,6 @@ class UpdateAction:
                 self.release = None
             else:
                 raise e
-
 
     def perform(self):
         # Load the RepoFile from disk, this contains all our managed yum repo sections:
@@ -173,7 +173,6 @@ class UpdateAction:
         lst = []
 
         tags_we_have = self.prod_dir.get_provided_tags()
-        tags_we_have.add("rhel-6-computenode")
 
         for content in ent_cert.getContentEntitlements():
 

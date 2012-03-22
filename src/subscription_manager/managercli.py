@@ -1061,7 +1061,9 @@ class ReleaseCommand(CliCommand):
         consumer = self.cp.getConsumer(consumer_uuid)
         # we need newer cp here, should maybe set a resource?
         if 'releaseVer' in consumer:
-            print consumer['releaseVer']
+            # don't show anything if unset, aka, no None
+            if consumer['releaseVer']:
+                print consumer['releaseVer']['releaseVer']
 
     def _do_command(self):
         self.consumer = check_registration()
