@@ -1526,7 +1526,7 @@ class ListCommand(CliCommand):
                                       % strftime("%Y-%m-%d", localtime())))
         self.parser.add_option("--consumed", action='store_true',
                                help=_("shows the subscriptions being consumed by this system."))
-        self.parser.add_option("--servicelevel", dest="servicelevel",
+        self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("if supplied then list shows only subscriptions matching the specified service level. " +
                                       "Only used with --available and --consumed"))
         self.parser.add_option("--all", action='store_true',
@@ -1542,7 +1542,7 @@ class ListCommand(CliCommand):
         if (self.options.on_date and not self.options.available):
             print _("Error: --ondate is only applicable with --available")
             sys.exit(-1)
-        if self.options.servicelevel is not None and not (self.options.consumed or
+        if self.options.service_level is not None and not (self.options.consumed or
                                               self.options.available):
             print _("Error: --servicelevel is only applicable with --available or --consumed")
             sys.exit(-1)
@@ -1595,9 +1595,9 @@ class ListCommand(CliCommand):
 
             # Filter certs by service level, if specified.
             # Allowing "" here.
-            if self.options.servicelevel is not None:
+            if self.options.service_level is not None:
                 epools = self._filter_pool_json_by_service_level(epools,
-                                                    self.options.servicelevel)
+                                                    self.options.service_level)
 
             if not len(epools):
                 print(_("No available subscription pools to list"))
@@ -1623,7 +1623,7 @@ class ListCommand(CliCommand):
                         machine_type)
 
         if self.options.consumed:
-            self.print_consumed(service_level=self.options.servicelevel)
+            self.print_consumed(service_level=self.options.service_level)
 
     def _filter_pool_json_by_service_level(self, pools, service_level):
 
