@@ -287,7 +287,7 @@ class moduleClass(Module, registergui.RegisterScreen):
                     moduleTitle=_("Confirm Subscriptions"))
         else:
             ErrorDialog(_("No service levels will cover all installed products. "
-                "Please run 'Subscription Manager' tab to manually "
+                "Please run 'Subscription Manager' to manually "
                 "entitle this system."))
 
             # XXX show a dialog about manually subscribing
