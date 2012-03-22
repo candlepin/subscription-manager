@@ -325,6 +325,9 @@
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">All Available Subscribe</atkproperty>
+                    </accessibility>
                     <signal name="clicked" handler="on_subscribe_button_clicked"/>
                   </widget>
                   <packing>
