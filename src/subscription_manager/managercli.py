@@ -1056,19 +1056,34 @@ class ReleaseCommand(CliCommand):
                 # we only need to match the first hit
                 return True
 
+    def _get_consumer_release(self):
+        err_msg = _("ERROR: The 'release' command is not supported by the server.")
+        try:
+            return self.cp.getRelease(self.consumer['uuid'])['releaseVer']
+        # ie, a 404 from a old server that doesn't support the release API
+        except connection.RemoteServerException, e:
+            systemExit(-1, err_msg)
+        except connection.RestlibException, e:
+            if e.code == 404:
+                systemExit(-1, err_msg)
+            else:
+                raise e
+
     def show_current_release(self):
-        consumer_uuid = check_registration()['uuid']
-        consumer = self.cp.getConsumer(consumer_uuid)
-        # we need newer cp here, should maybe set a resource?
-        if 'releaseVer' in consumer:
-            # don't show anything if unset, aka, no None
-            if consumer['releaseVer']:
-                print consumer['releaseVer']['releaseVer']
+        release = self._get_consumer_release()
+        if release:
+            print _("Release: %s") % release
+        else:
+            print _("Release not set")
 
     def _do_command(self):
         self.consumer = check_registration()
         if self.options.release:
-            self.cp.updateConsumer(self.consumer['uuid'], release=self.options.release)
+            # check first if the server supports releases
+            self._get_consumer_release()
+            self.cp.updateConsumer(self.consumer['uuid'],
+                    release=self.options.release)
+            print _("Release set to: %s") % self.options.release
         elif self.options.list:
             self.__get_releases()
         else:
