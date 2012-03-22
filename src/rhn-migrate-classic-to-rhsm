@@ -120,7 +120,7 @@ def systemExit(code, msgs=None):
     sys.exit(code)
 
 
-def checkOkToProceed(username, password, sc, sk):
+def checkOkToProceed(username, password):
     # check if this machine is already registered to Certicate-based RHN
     if ConsumerIdentity.existsAndValid():
         print _("\nThis machine appears to be already registered to Certificate-based RHN.  Exiting.")
@@ -146,6 +146,8 @@ def checkOkToProceed(username, password, sc, sk):
         log.error(traceback.format_exc())
         systemExit(1, _("Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for more details.") % e)
 
+
+def checkIsOrgAdmin(sc, sk, username):
     try:
         roles = sc.user.listRoles(sk, username)
     except:
@@ -196,7 +198,7 @@ def connectToRhn(username, password):
         return (sc, sk)
     except:
         log.error(traceback.format_exc())
-        systemExit(1, _("Problem encountered connecting to RHN Classic.  Exiting."))
+        systemExit(1, _("Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more details."))
 
 
 def unRegisterSystemFromRhnClassic(sc, sk):
@@ -437,8 +439,10 @@ def main():
     username = raw_input(_("RHN Username: ")).strip()
     password = getpass.getpass()
     transferHttpProxySettings()
+    checkOkToProceed(username, password)
+
     (sc, sk) = connectToRhn(username, password)
-    checkOkToProceed(username, password, sc, sk)
+    checkIsOrgAdmin(sc, sk, username)
 
     # get a list of RHN classic channels this machine is subscribed to
     print _("\nRetrieving existing RHN Classic subscription information ...")
