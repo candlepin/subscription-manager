@@ -555,7 +555,7 @@ class UEPConnection:
             if keys:
                 url = url + "&activation_keys="
                 for key in keys:
-                    url = url + prepend + key
+                    url = url + prepend + self.sanitize(key)
                     prepend = ","
 
         return self.conn.request_post(url, params)
