@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 0.99.10
+Version: 0.99.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -300,6 +300,120 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Thu Mar 22 2012 Michael Stead <mstead@redhat.com> 0.99.11-1
+- 805906: fix missing imports for firstboot (jbowes@redhat.com)
+- Fix RHEL6 firstboot attribute error (dgoodwin@redhat.com)
+- 772218: throw an error if unparsed command line options exist
+  (cduryee@redhat.com)
+- Add missing imports to rhsm_login for error dialogs (jbowes@redhat.com)
+- 803386: Display product ID in GUI and CLI. (awood@redhat.com)
+- Fix specfile for el5 firstboot (jbowes@redhat.com)
+- 804227,804076,804228: Handle 404's from old candlepin servers without
+  /release (alikins@redhat.com)
+- 803778: Updated the --servicelevel not supported messages for subscribe
+  command (mstead@redhat.com)
+- 803778: Updated the --servicelevel not supported messages for register
+  command (mstead@redhat.com)
+- 803756,803762: Updated error message for service-level command
+  (mstead@redhat.com)
+- fixups for strings from zanata (alikins@redhat.com)
+- latest strings from zanata (alikins@redhat.com)
+- 789007: Migration should fail early when attempted with non org admin user.
+  (awood@redhat.com)
+- 805024: Hide extra separator along with redeem button. (awood@redhat.com)
+- 800999: Added --servicelevel arg to CLI list command (mstead@redhat.com)
+- 804227: Fix issues with repos --list (alikins@redhat.com)
+- Add proper back/forward logic for firstboot sla subscribe (jbowes@redhat.com)
+- 800933: Display service level and type in CLI list commands.
+  (dgoodwin@redhat.com)
+- 789008: Print a more specific error message when Candlepin calls fail.
+  (awood@redhat.com)
+- hook up sla firstboot to more registration cases (jbowes@redhat.com)
+- Define globals at module scope. (awood@redhat.com)
+- Remove firstboot subscriptions module (jbowes@redhat.com)
+- Fix broken tests for DST. Stop using time.time() (alikins@redhat.com)
+- Add error cases for firstboot autobind (jbowes@redhat.com)
+- Perform the actual entitlement bind on confirm subs screen
+  (jbowes@redhat.com)
+- Set up shared state for AutobindController in firstboot (jbowes@redhat.com)
+- Extract a controller class for sla select logic (jbowes@redhat.com)
+- Break apart autobind first boot module (jbowes@redhat.com)
+- Add some autobind wizard button spacing. (dgoodwin@redhat.com)
+- Always update the icon and notification details on status change.
+  (mstead@redhat.com)
+- Only add icon click listeners once. (mstead@redhat.com)
+- Adding notification nag icon support for Registration Required
+  (mstead@redhat.com)
+- add firstboot rhsm_autobind to spec file (jbowes@redhat.com)
+- Autobind cancel during registration will now unregister you.
+  (dgoodwin@redhat.com)
+- Update CLI to handle server that doesn't support service levels.
+  (dgoodwin@redhat.com)
+- Move back/forward/cancel buttons in sla selection to parent
+  (jbowes@redhat.com)
+- Revert "Update CLI to handle server that doesn't support service levels."
+  (dgoodwin@redhat.com)
+- Update GUI to handle server that does not support service levels.
+  (dgoodwin@redhat.com)
+- Update CLI to handle server that doesn't support service levels.
+  (dgoodwin@redhat.com)
+- Add autobind screen to firstboot (jbowes@redhat.com)
+- Fix firstboot unregister import error. (dgoodwin@redhat.com)
+- Add missing spacers to main window toolbar. (dgoodwin@redhat.com)
+- Fix an error handling bug. (dgoodwin@redhat.com)
+- Get register screen working in el6 firstboot (jbowes@redhat.com)
+- Center wizard's error dialog on main window (mstead@redhat.com)
+- Removing commented out code in register dialog (mstead@redhat.com)
+- Add skip option instead of autobind in register dialog. (mstead@redhat.com)
+- Fix preferences dialog error when not registered. (dgoodwin@redhat.com)
+- Improved error handling for autobind wizard. (dgoodwin@rm-rf.ca)
+- Fix message window warnings. (dgoodwin@rm-rf.ca)
+- Fix alignment on select SLA screen. (dgoodwin@redhat.com)
+- Display the service level selected when confirming autobind subs (dgoodwin
+  @rm-rf.ca)
+- Implement Cancel button on autobind wizard screens. (dgoodwin@redhat.com)
+- Allow setting service level from preferences dialog. (dgoodwin@redhat.com)
+- First cut at a preferences dialog. (dgoodwin@redhat.com)
+- Pack SLA's into a scrolled window. (dgoodwin@rm-rf.ca)
+- Handle any exception that happens when the autobind wizard is loaded.
+  (mstead@redhat.com)
+- Setting parent window on AutobindDialog and add titles to screens.
+  (mstead@redhat.com)
+- Integrating autobind wizard with register gui. (mstead@redhat.com)
+- Fix autobind wizard disappearing on window switch. (dgoodwin@redhat.com)
+- Do not set SLA until user hit's subscribe button. (dgoodwin@redhat.com)
+- Polish autobind glade UI (dgoodwin@redhat.com)
+- Set and use the system's service level. (dgoodwin@redhat.com)
+- Cleaning up Select SLA screen (mstead@redhat.com)
+- Added framework for back button support (mstead@redhat.com)
+- Handle no SLAs cover all installed products. (dgoodwin@rm-rf.ca)
+- Handle launching autobind when no entitlements needed. (dgoodwin@rm-rf.ca)
+- Set detected prod list in Select SLA screen (mstead@redhat.com)
+- Close autobind wizard once complete. (dgoodwin@redhat.com)
+- Hookup actual bind in autobind wizard. (dgoodwin@redhat.com)
+- SelectSLA now keeps track of selected SLA and pass to confirm dialog.
+  (mstead@redhat.com)
+- Load the autobind glade file on wizard creation. (mstead@redhat.com)
+- Switch to more explicit screen switching. (dgoodwin@redhat.com)
+- Set screen title when screen is changed. (mstead@redhat.com)
+- Allow screens to pass custum data during wizard screen change.
+  (mstead@redhat.com)
+- Hooking up button signals for selectsla (mstead@redhat.com)
+- Add callback to allow screen change in wizard (mstead@redhat.com)
+- Fixing broken tests due to leap year. (mstead@redhat.com)
+- Attempt to keep button bar right aligned. (mstead@redhat.com)
+- Removed the button bar form the wizard. (mstead@redhat.com)
+- Created AutobindWizardScreen to provide contract for AutobindWizard
+  (mstead@redhat.com)
+- Display appropriate screen in SLA wizard. (mstead@redhat.com)
+- Fixed GtkWarning: IA__gtk_widget_reparent error when launchig dialog
+  (mstead@redhat.com)
+- First cut at adding the Select SLA screen. (mstead@redhat.com)
+- Check if dry-run results cover required products. (dgoodwin@redhat.com)
+- Check dry run autobind results for each service level. (dgoodwin@redhat.com)
+- Sketch out an autobind wizard class. (dgoodwin@redhat.com)
+- Start sketching out the confirm subscriptions screen. (dgoodwin@redhat.com)
+
 * Wed Mar 14 2012 Michael Stead <mstead@redhat.com> 0.99.10-1
 - latest strings from zanata (alikins@redhat.com)
 - 801434: Add at-spi accessibility name to calendar selection widget.
