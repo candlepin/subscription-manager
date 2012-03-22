@@ -16,6 +16,7 @@ from datetime import datetime
 import logging
 
 from rhsm.certificate import GMT
+from rhsm.connection import safe_int
 log = logging.getLogger('rhsm-app.' + __name__)
 
 import gettext
@@ -98,7 +99,7 @@ class CertSorter(object):
         # Number of sockets on this system:
         self.socket_count = 1
         if SOCKET_FACT in self.facts_dict:
-            self.socket_count = int(self.facts_dict[SOCKET_FACT])
+            self.socket_count = safe_int(self.facts_dict[SOCKET_FACT], 1)
         else:
             log.warn("System has no socket fact, assuming 1.")
 
@@ -257,8 +258,8 @@ class CertSorter(object):
             if ent.getOrder().getStackingId() == stack_id and \
               ent.validRange().begin() <= date_to_check and \
               ent.validRange().end() >= date_to_check:
-                quantity = int(ent.getOrder().getQuantityUsed())
-                sockets = int(ent.getOrder().getSocketLimit())
+                quantity = safe_int(ent.getOrder().getQuantityUsed(), 1)
+                sockets = safe_int(ent.getOrder().getSocketLimit(), 1)
                 sockets_covered += sockets * quantity
 
         log.debug("  system has %s sockets, %s covered by entitlements" %
@@ -280,7 +281,7 @@ class CertSorter(object):
 
         # We do not check quantity here, as this is not a stacked
         # subscription:
-        sockets_covered = int(ent.getOrder().getSocketLimit())
+        sockets_covered = safe_int(ent.getOrder().getSocketLimit(), 1)
 
         log.debug("  system has %s sockets, %s covered by entitlement" %
                 (self.socket_count, sockets_covered))
