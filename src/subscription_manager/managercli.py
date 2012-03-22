@@ -229,6 +229,12 @@ class CliCommand(object):
 
         # we dont need argv[0] in this list...
         self.args = self.args[1:]
+        # check for unparsed arguments
+        if self.args:
+            for arg in self.args:
+                print _("cannot parse argument: %s") % arg
+            sys.exit(-1)
+
 
         self.proxy_hostname = cfg.get('server', 'proxy_hostname')
         self.proxy_port = cfg.get('server', 'proxy_port')
