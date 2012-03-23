@@ -106,7 +106,12 @@ class ProductManager:
             # we could be very confused here, so do not
             # delete anything. see bz #736424
             if not self.meta_data_error:
-                self.updateRemoved(active)
+                # check that we have any repo's enabled
+                # and that we have some enabled repo's. Not just
+                # that we have packages from repo's that are
+                # not active. See #806457
+                if enabled and active:
+                    self.updateRemoved(active)
         self.updateInstalled(enabled, active)
 
     def _isWorkstation(self, product):
@@ -176,6 +181,7 @@ class ProductManager:
             if repo in active:
                 continue
 
+            log.info("product cert %s for %s is being deleted" % (prod_hash, p.getName()))
             cert.delete()
 
             self.db.delete(prod_hash)
