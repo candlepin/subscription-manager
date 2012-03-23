@@ -239,9 +239,10 @@ class moduleClass(Module, registergui.RegisterScreen):
             self._registration_finished = True
 
             self._init_sla()
-        else:
-            # something went wrong during registration. skip sla.
-            self._skip_sla_screens()
+        # if something did fail, we will have shown the user an error message
+        # from the superclass _finish_registration. then just leave them on the
+        # rhsm_login page so they can try again (or go back and select to skip
+        # registration).
 
     def _init_sla(self):
         if self.skip_auto_subscribe():
