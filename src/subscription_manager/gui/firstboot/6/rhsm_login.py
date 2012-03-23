@@ -266,6 +266,12 @@ class moduleClass(Module, registergui.RegisterScreen):
             # XXX show a dialog about manually subscribing
             self._skip_sla_screens()
             return
+
+        except autobind.NoProductsException:
+            InfoDialog(_("No installed products on system. No need to update certificates at this time."))
+            self._skip_sla_screens()
+            return
+
         except autobind.AllProductsCoveredException:
             # XXX show a dialog about manually subscribing
             InfoDialog(_("All installed products are covered by valid entitlements. Please run 'Subscription Manager' to subscribe to additional products."))

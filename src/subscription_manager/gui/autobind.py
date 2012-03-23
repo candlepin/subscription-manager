@@ -115,6 +115,13 @@ class AllProductsCoveredException(Exception):
     """
     pass
 
+class NoProductsException(Exception):
+    """
+    Exception for AutobindController.load. The system has no products, and
+    thus needs no entitlements.
+    """
+    pass
+
 class AutobindController(object):
 
     """
@@ -147,6 +154,9 @@ class AutobindController(object):
         self.sorter = CertSorter(self.backend.product_dir,
                 self.backend.entitlement_dir,
                 self.facts.get_facts())
+
+        if len(self.sorter.installed_products) == 0:
+            raise NoProductsException()
 
         if len(self.sorter.unentitled_products) == 0:
             raise AllProductsCoveredException()
@@ -308,6 +318,11 @@ class AutobindWizard(widgets.GladeWidget):
         except ServiceLevelNotSupportedException:
             OkDialog(_("Unable to auto-subscribe, server does not support service levels."),
                     parent = self.parent_window)
+            self.destroy()
+            return
+        except NoProductsException:
+            InfoDialog(_("No installed products on system. No need to update certificates at this time."),
+                parent = self.parent_window)
             self.destroy()
             return
         except AllProductsCoveredException:
