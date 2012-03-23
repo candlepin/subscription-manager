@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 0.99.11
+Version: 0.99.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -300,6 +300,23 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Fri Mar 23 2012 Michael Stead <mstead@redhat.com> 0.99.12-1
+- Don't skip past firstboot login page on invalid user/pass (jbowes@redhat.com)
+- 805690: Turn repo gpgcheck off if no gpgkey specified. (dgoodwin@redhat.com)
+- 795552: Put safe int conversions around certain fact checks.
+  (bkearney@redhat.com)
+- 804100: display an error when candlepin doesn't support release
+  (jbowes@redhat.com)
+- 804227: expect a Release object instead of a bare string (alikins@redhat.com)
+- Latest string files from zanata (bkearney@redhat.com)
+- 805450: display better error message when autosubscribing
+  (cduryee@redhat.com)
+- 805594: Give each "Subscribe" button in the GUI a unique at-spi name.
+  (awood@redhat.com)
+- 803374: Provide unambiguous at-spi names for widgets. (awood@redhat.com)
+- 805353: subscription-manager list --help should use consistent wording for
+  servicelevel option. (awood@redhat.com)
+
 * Thu Mar 22 2012 Michael Stead <mstead@redhat.com> 0.99.11-1
 - 805906: fix missing imports for firstboot (jbowes@redhat.com)
 - Fix RHEL6 firstboot attribute error (dgoodwin@redhat.com)
