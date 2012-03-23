@@ -19,7 +19,11 @@ msgstr ""
 "Language: ml-IN\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: ../src/subscription_manager/gui/managergui.py:387
+#: ../src/subscription_manager/gui/managergui.py:404
+msgid "Error in autobind wizard"
+msgstr "ഓട്ടോബൈന്‍ഡ് വിസാര്‍ഡില്‍ പിശക്"
+
+#: ../src/subscription_manager/gui/managergui.py:430
 msgid "System Already Registered"
 msgstr "സിസ്റ്റം നിലവില്‍ രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്നു"
 
@@ -27,13 +31,13 @@ msgstr "സിസ്റ്റം നിലവില്‍ രജിസ്ടര�
 #: ../src/subscription_manager/gui/allsubs.py:69
 #: ../src/subscription_manager/gui/subscription_assistant.py:181
 #: ../src/subscription_manager/gui/mysubstab.py:65
-#: ../src/subscription_manager/gui/data/installed.glade.h:9
+#: ../src/subscription_manager/gui/autobind.py:429
 msgid "Subscription"
 msgstr "സബ്സ്ക്രിപ്ഷന്‍"
 
 #: ../src/subscription_manager/gui/allsubs.py:78
 #: ../src/subscription_manager/gui/subscription_assistant.py:187
-#: ../src/subscription_manager/managercli.py:1563
+#: ../src/subscription_manager/managercli.py:1580
 msgid "Available Subscriptions"
 msgstr "ലഭ്യമായ സബ്സ്ക്രിപ്ഷനുകള്‍"
 
@@ -52,32 +56,32 @@ msgstr "വ്യാപ്തി"
 msgid "unlimited"
 msgstr "അപരിമിതം"
 
-#: ../src/subscription_manager/gui/allsubs.py:321
+#: ../src/subscription_manager/gui/allsubs.py:320
 msgid "All Available Subscriptions"
 msgstr "ലഭ്യമായ എല്ലാ സബ്സ്ക്രിപ്ഷനുകള്‍"
 
-#: ../src/subscription_manager/gui/allsubs.py:335
+#: ../src/subscription_manager/gui/allsubs.py:334
 #: ../src/subscription_manager/gui/subscription_assistant.py:307
 msgid "Searching for subscriptions. Please wait."
 msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ക്കായി തെരയുന്നു. ദയവായി കാത്തിരിയ്ക്കുക."
 
-#: ../src/subscription_manager/gui/allsubs.py:339
+#: ../src/subscription_manager/gui/allsubs.py:338
 #, python-format
 msgid "Error fetching subscriptions from server:  %s"
 msgstr ""
 "സര്‍വറുകളില്‍ നിന്നും സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമാക്കുന്നതില്‍ പിശക്:  %s"
 
-#: ../src/subscription_manager/gui/allsubs.py:350
+#: ../src/subscription_manager/gui/allsubs.py:349
 #, python-format
 msgid "Unable to search for subscriptions:  %s"
 msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ തെരയുവാന്‍ സാധ്യമല്ല:  %s"
 
-#: ../src/subscription_manager/gui/allsubs.py:371
+#: ../src/subscription_manager/gui/allsubs.py:370
 #: ../src/subscription_manager/gui/subscription_assistant.py:614
 msgid "Quantity must be a positive number."
 msgstr "വ്യാപ്തി ഒരു പൂര്‍ണ്ണ അക്കമായിരിയ്ക്കണം."
 
-#: ../src/subscription_manager/gui/allsubs.py:382
+#: ../src/subscription_manager/gui/allsubs.py:381
 #: ../src/subscription_manager/gui/subscription_assistant.py:646
 #, python-format
 msgid "Error getting subscription: %s"
@@ -86,7 +90,6 @@ msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ ലഭ്യമ�
 #: ../src/subscription_manager/gui/installedtab.py:70
 #: ../src/subscription_manager/gui/subscription_assistant.py:144
 #: ../src/subscription_manager/gui/widgets.py:198
-#: ../src/subscription_manager/gui/data/installed.glade.h:8
 msgid "Product"
 msgstr "പ്രൊഡക്ട്"
 
@@ -104,7 +107,6 @@ msgstr "അവസ്ഥ"
 
 #: ../src/subscription_manager/gui/installedtab.py:86
 #: ../src/subscription_manager/gui/contract_selection.py:98
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:17
 msgid "Start Date"
 msgstr "തുടക്ക തീയതി"
 
@@ -112,7 +114,6 @@ msgstr "തുടക്ക തീയതി"
 #: ../src/subscription_manager/gui/contract_selection.py:102
 #: ../src/subscription_manager/gui/subscription_assistant.py:155
 #: ../src/subscription_manager/gui/mysubstab.py:77
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:15
 msgid "End Date"
 msgstr "അവസാന തീയതി"
 
@@ -222,7 +223,7 @@ msgid "Make sure that you own %s."
 msgstr "നിങ്ങള്‍ %s-ന്റെ ഉടമയെന്നുറപ്പാക്കുക."
 
 #: ../src/subscription_manager/gui/contract_selection.py:83
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:14
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:15
 msgid "Contract Number"
 msgstr "കോണ്ട്രാക്ട് നമ്പര്‍"
 
@@ -241,7 +242,7 @@ msgstr ""
 "%s ശരിയായൊരു സര്‍ട്ടിഫിക്കേറ്റ് ഫയലല്ല. ദയവായി ശരിയായൊന്നു് അപ്ലോഡ് ചെയ്യുക."
 
 #: ../src/subscription_manager/gui/importsub.py:85
-#: ../src/subscription_manager/managercli.py:1319
+#: ../src/subscription_manager/managercli.py:1336
 msgid "An error occurred while importing the certificate. "
 msgstr "സര്‍ട്ടിഫിക്കേറ്റ് ഇംപോര്‍ട്ട് ചെയ്യുന്നതില്‍ പിശക്."
 
@@ -310,7 +311,7 @@ msgid "Installed"
 msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്തിരിയ്ക്കുന്നു"
 
 #: ../src/subscription_manager/gui/widgets.py:307
-#: ../src/subscription_manager/managercli.py:1521
+#: ../src/subscription_manager/managercli.py:1538
 msgid "None"
 msgstr "ശൂന്യം"
 
@@ -372,6 +373,63 @@ msgstr "ഉവ്വു്"
 msgid "No"
 msgstr "അല്ല"
 
+#: ../src/subscription_manager/gui/autobind.py:309
+msgid "Unable to auto-subscribe, server does not support service levels."
+msgstr ""
+"ഓട്ടോ-സബ്സ്ക്രൈബ് ചെയ്യുവാന്‍ സാധ്യമല്ല, സര്‍വര്‍ സര്‍വീസ് ലവലുകള്‍ "
+"പിന്തുണയ്ക്കുന്നില്ല."
+
+#: ../src/subscription_manager/gui/autobind.py:314
+msgid ""
+"All installed products are covered by valid entitlements. No need to update "
+"certificates at this time."
+msgstr ""
+"ശരിയായ എന്റൈറ്റില്‍മെന്റുകള്‍ എല്ലാ ഇന്‍സ്റ്റോള്‍ ചെയ്ത പ്രൊഡക്ടുകളിലും "
+"ലഭ്യമാകുന്നു. ഇപ്പോള്‍ സര്‍ട്ടിഫിക്കേറ്റുകള്‍ പരിഷ്കരിയ്ക്കേണ്ടതില്ല."
+
+#: ../src/subscription_manager/gui/autobind.py:347
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:279
+#, python-format
+msgid ""
+"Unable to subscribe to any additional products at current service level: %s"
+msgstr ""
+"നിലവിലുള്ള സര്‍വീസ് ലവലില്‍ അധികമായൊരു പ്രൊഡക്ടുകളിലേക്കും സബ്സ്ക്രൈബ് "
+"ചെയ്യുവാന്‍ സാധ്യമല്ല: %s"
+
+#: ../src/subscription_manager/gui/autobind.py:358
+msgid ""
+"No service levels will cover all installed products. Please use the \"All "
+"Available Subscriptions\" tab to manually entitle this system."
+msgstr ""
+"ഇന്‍സ്റ്റോള്‍ ചെയ്ത എല്ലാ പ്രൊഡക്ടുകള്‍ക്കുമുള്ള സര്‍വീസ് ലവലുകള്‍ ലഭ്യമല്ല."
+" ഈ സിസ്റ്റം നിങ്ങള്‍ സ്വയം എന്റൈറ്റില്‍ ചെയ്യുന്നതിനായി, ദയവായി \"ലഭ്യമായ "
+"എല്ല സബ്സ്ക്രിപ്ഷനുകള്‍\" റ്റാബ് ഉപയോഗിയ്ക്കുക"
+
+#: ../src/subscription_manager/gui/autobind.py:472
+msgid "Error subscribing:"
+msgstr "അംഗമാകുന്നതില്‍ പിശക്:"
+
+#: ../src/subscription_manager/gui/autobind.py:478
+msgid "Confirm Subscription(s)"
+msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ ഉറപ്പാക്കുക"
+
+#: ../src/subscription_manager/gui/autobind.py:481
+#: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:6
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:12
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:6
+#: ../src/subscription_manager/gui/data/installed.glade.h:9
+msgid "Subscribe"
+msgstr "അംഗമാകുക"
+
+#: ../src/subscription_manager/gui/autobind.py:523
+msgid "Select Service Level Agreement"
+msgstr "സര്‍വീസ് ലവല്‍ എഗ്രീമെന്റ് തെരഞ്ഞെടുക്കുക"
+
+#: ../src/subscription_manager/gui/autobind.py:526
+#: ../src/subscription_manager/gui/data/autobind.glade.h:4
+msgid "Forward"
+msgstr "മുമ്പോട്ട്"
+
 #. Set up columns on the view
 #: ../src/subscription_manager/gui/factsgui.py:54
 msgid "Fact"
@@ -388,13 +446,11 @@ msgstr "മുമ്പുള്ള പരിഷ്കരണം ലഭ്യമ�
 #. TODO: could stand to check if registered before trying to do this:
 #: ../src/subscription_manager/gui/factsgui.py:103
 #: ../src/subscription_manager/gui/factsgui.py:107
-#: ../src/subscription_manager/managercli.py:1263
+#: ../src/subscription_manager/managercli.py:1280
 msgid "Unknown"
 msgstr "അപരിചിതം"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_subscriptions.py:23
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_subscriptions.py:28
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:210
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:6
 #: ../src/subscription_manager/gui/data/subsgui.glade.h:3
 #: ../etc-conf/subscription-manager.desktop.in.h:2
@@ -402,19 +458,58 @@ msgid "Subscription Manager"
 msgstr "സബ്സ്ക്രിപ്ഷന്‍ മാനേജര്‍"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_subscriptions.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_subscriptions.py:27
 msgid "RHSM Subscriptions Management"
 msgstr "RHSM സബ്സ്ക്രിപ്ഷന്‍സ് മാനേജ്മെന്റ്"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:32
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:41
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:26
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:26
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:43
 msgid "Entitlement Registration"
 msgstr "എന്റൈറ്റില്‍മെന്റ് രജിസ്ട്രേഷന്‍"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:34
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:42
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:44
 msgid "Entitlement Platform Registration"
 msgstr "എന്റൈറ്റില്‍മെന്റ് പ്ലാറ്റ്ഫോം രജിസ്ട്രേഷന്‍"
+
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:27
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:285
+msgid "Confirm Subscriptions"
+msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ ഉറപ്പാക്കുക"
+
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:27
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:275
+msgid "Service Level"
+msgstr "സര്‍വീസ് ലവല്‍"
+
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:262
+msgid ""
+"Unable to auto-subscribe, server does not support service levels. Please run"
+" 'Subscription Manager' to manually subscribe."
+msgstr ""
+"ഓട്ടോ-സബ്സ്ക്രൈബ് ചെയ്യുവാന്‍ സാധ്യമല്ല, സര്‍വര്‍ സര്‍വീസ് ലവലുകള്‍ "
+"പിന്തുണയ്ക്കുന്നില്ല. നിങ്ങള്‍ക്കു് സ്വയം സബ്സ്ക്രൈബ് ചെയ്യുന്നതിനായി ദയവായി"
+" 'സബ്സ്ക്രിപ്ഷന്‍ മാനേജര്‍' പ്രവര്‍ത്തിപ്പിയ്ക്കുക."
+
+#. XXX show a dialog about manually subscribing
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:269
+msgid ""
+"All installed products are covered by valid entitlements. Please run "
+"'Subscription Manager' to subscribe to additional products."
+msgstr ""
+"ഇന്‍സ്റ്റോള്‍ ചെയ്ത എല്ലാ പ്രൊഡക്ടുകള്‍ക്കും ശരിയായ എന്റൈറ്റില്‍മെന്റുകള്‍ "
+"ലഭ്യമാകുന്നു. കൂടുതല്‍ പ്രൊഡക്ടുകളിലേക്കു് സബ്സ്ക്രൈബ് ചെയ്യുന്നതിനായി, "
+"ദയവായി 'സബ്സ്ക്രിപ്ഷന്‍ മാനേജര്‍' പ്രവര്‍ത്തിപ്പിയ്ക്കുക."
+
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:287
+msgid ""
+"No service levels will cover all installed products. Please run "
+"'Subscription Manager' tab to manually entitle this system."
+msgstr ""
+"ഇന്‍സ്റ്റോള്‍ ചെയ്ത എല്ലാ പ്രൊഡക്ടുകള്‍ക്കുമുള്ള സര്‍വീസ് ലവലുകള്‍ ലഭ്യമല്ല."
+" നിങ്ങള്‍ക്കു് സ്വയം സബ്സ്ക്രൈബ് ചെയ്യുന്നതിനായി ദയവായി 'സബ്സ്ക്രിപ്ഷന്‍ "
+"മാനേജര്‍' പ്രവര്‍ത്തിപ്പിയ്ക്കുക."
 
 #: ../src/subscription_manager/gui/redeem.py:54
 #, python-format
@@ -437,7 +532,7 @@ msgstr "സര്‍വറിനെ തിരിച്ചറിയുവാന�
 #. NOTE: yes this looks a lot like the socket error, but I think these
 #. were actually intended to display slightly different messages:
 #: ../src/subscription_manager/gui/utils.py:67
-#: ../src/subscription_manager/managercli.py:105
+#: ../src/subscription_manager/managercli.py:109
 msgid ""
 "Network error. Please check the connection details, or see "
 "/var/log/rhsm/rhsm.log for more information."
@@ -448,7 +543,7 @@ msgstr ""
 #. This is what happens when there's an issue with the server on the other
 #. side of the wire
 #: ../src/subscription_manager/gui/utils.py:70
-#: ../src/subscription_manager/managercli.py:109
+#: ../src/subscription_manager/managercli.py:113
 msgid ""
 "Remote server error. Please check the connection details, or see "
 "/var/log/rhsm/rhsm.log for more information."
@@ -457,48 +552,40 @@ msgstr ""
 "അല്ലാങ്കില്‍ കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി/var/log/rhsm/rhsm.log കാണുക."
 
 #: ../src/subscription_manager/gui/utils.py:91
-#: ../src/subscription_manager/managercli.py:118
+#: ../src/subscription_manager/managercli.py:122
 #, python-format
 msgid "Bad CA certificate: %s"
 msgstr "തെറ്റായ സിഎ സര്‍ട്ടിഫിക്കേറ്റ്: %s"
 
-#: ../src/subscription_manager/gui/registergui.py:121
+#: ../src/subscription_manager/gui/registergui.py:111
 msgid "Organization"
 msgstr "സ്ഥാപനം"
 
-#: ../src/subscription_manager/gui/registergui.py:127
+#: ../src/subscription_manager/gui/registergui.py:117
 msgid "Environment"
 msgstr "സാഹചര്യം"
 
-#: ../src/subscription_manager/gui/registergui.py:194
+#: ../src/subscription_manager/gui/registergui.py:185
 msgid "Fetching list of possible organizations"
 msgstr "സാധ്യമായ സ്ഥാപനങ്ങളുടെ പട്ടിക ലഭ്യമാക്കുക"
 
-#: ../src/subscription_manager/gui/registergui.py:294
+#: ../src/subscription_manager/gui/registergui.py:285
 msgid "Registering your system"
 msgstr "നിങ്ങളുടെ സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുന്നു"
 
-#: ../src/subscription_manager/gui/registergui.py:305
-msgid "Autosubscribing"
-msgstr "സ്വയം സബ്സ്ക്രൈബ് ചെയ്യുന്നു"
-
-#: ../src/subscription_manager/gui/registergui.py:323
-msgid "Fetching certificates"
-msgstr "സര്‍ട്ടിഫിക്കേറ്റുകള്‍ ലഭ്യമാക്കുന്നു"
-
-#: ../src/subscription_manager/gui/registergui.py:362
+#: ../src/subscription_manager/gui/registergui.py:329
 msgid "You must enter a system name."
 msgstr "ഒരു സിസ്റ്റം പേരു് നല്‍കണം."
 
-#: ../src/subscription_manager/gui/registergui.py:370
+#: ../src/subscription_manager/gui/registergui.py:337
 msgid "You must enter a login."
 msgstr "ഒരു ലോഗിന്‍ നല്‍കുക."
 
-#: ../src/subscription_manager/gui/registergui.py:375
+#: ../src/subscription_manager/gui/registergui.py:342
 msgid "You must enter a password."
 msgstr "ഒരു രഹസ്യവാക്ക് നല്‍കുക."
 
-#: ../src/subscription_manager/gui/registergui.py:430
+#: ../src/subscription_manager/gui/registergui.py:397
 msgid "Server supports environments, but none are available."
 msgstr "സര്‍വര്‍ പിന്തുണയ്ക്കുന്ന സാഹചര്യങ്ങള്‍, പക്ഷേ ഒന്നും ലഭ്യമല്ല."
 
@@ -773,7 +860,7 @@ msgstr "കഴിഞ്ഞു"
 
 #: ../src/subscription_manager/constants.py:26
 #: ../src/subscription_manager/constants.py:40
-#: ../src/subscription_manager/constants.py:66
+#: ../src/subscription_manager/constants.py:70
 #: ../src/subscription_manager/managercli.py:69
 #, python-format
 msgid "Product Name:         \t%-25s"
@@ -790,7 +877,7 @@ msgid "Arch:                 \t%-25s"
 msgstr "ആര്‍ക്കിറ്റക്ചര്‍: %-25s"
 
 #: ../src/subscription_manager/constants.py:32
-#: ../src/subscription_manager/constants.py:68
+#: ../src/subscription_manager/constants.py:72
 #, python-format
 msgid "Status:               \t%-25s"
 msgstr "അവസ്ഥ: %-25s"
@@ -801,8 +888,8 @@ msgid "Starts:               \t%-25s"
 msgstr "ആരംഭിയ്ക്കുന്നതു്: %-25s"
 
 #: ../src/subscription_manager/constants.py:36
-#: ../src/subscription_manager/constants.py:50
-#: ../src/subscription_manager/managercli.py:83
+#: ../src/subscription_manager/constants.py:54
+#: ../src/subscription_manager/managercli.py:87
 #, python-format
 msgid "Expires:              \t%-25s"
 msgstr "കാലാവധി കഴിയുന്നതു്: %-25s"
@@ -823,64 +910,75 @@ msgid "Quantity:             \t%-25s"
 msgstr "വ്യാപ്തി: %-25s"
 
 #: ../src/subscription_manager/constants.py:48
+#: ../src/subscription_manager/managercli.py:81
+#, python-format
+msgid "Service Level:        \t%-25s"
+msgstr "സര്‍വീസ് ലവല്‍: %-25s"
+
+#: ../src/subscription_manager/constants.py:50
+#, python-format
+msgid "Service Type:        \t%-25s"
+msgstr "സര്‍വീസ് തരം: %-25s"
+
+#: ../src/subscription_manager/constants.py:52
 #, python-format
 msgid "Multi-Entitlement:    \t%-25s"
 msgstr "മള്‍ട്ടി-എന്റൈറ്റില്‍മെന്റ്: %-25s"
 
-#: ../src/subscription_manager/constants.py:52
+#: ../src/subscription_manager/constants.py:56
 #, python-format
 msgid "Machine Type:         \t%-25s"
 msgstr "മഷീന്‍ രീതി: %-25s"
 
-#: ../src/subscription_manager/constants.py:56
+#: ../src/subscription_manager/constants.py:60
 #, python-format
 msgid "Repo Name:            \t%-25s"
 msgstr "റിപ്പോയുടെ പേരു്: %-25s"
 
-#: ../src/subscription_manager/constants.py:58
+#: ../src/subscription_manager/constants.py:62
 #, python-format
 msgid "Repo Id:              \t%-25s"
 msgstr "റിപ്പോയുടെ ഐഡി: %-25s"
 
-#: ../src/subscription_manager/constants.py:60
+#: ../src/subscription_manager/constants.py:64
 #, python-format
 msgid "Repo Url:             \t%-25s"
 msgstr "റിപ്പോയുടെ യുആര്‍എല്‍: %-25s"
 
-#: ../src/subscription_manager/constants.py:62
+#: ../src/subscription_manager/constants.py:66
 #, python-format
 msgid "Enabled:              \t%-25s"
 msgstr "പ്രവര്‍ത്തന സജ്ജം: %-25s"
 
-#: ../src/subscription_manager/constants.py:72
+#: ../src/subscription_manager/constants.py:76
 #, python-format
 msgid "Name:                 \t%-25s"
 msgstr "പേരു്: %-25s"
 
-#: ../src/subscription_manager/constants.py:74
+#: ../src/subscription_manager/constants.py:78
 #, python-format
 msgid "Description:          \t%-25s"
 msgstr "വിവരണം: %-25s"
 
-#: ../src/subscription_manager/constants.py:77
+#: ../src/subscription_manager/constants.py:81
 msgid "<b>Errors were encountered during unregister.</b>"
 msgstr "<b>അണ്‍രജിസ്ടര്‍ ചെയ്യുമ്പോള്‍ പിശകുകള്‍ നേരിട്ടു.</b>"
 
-#: ../src/subscription_manager/constants.py:79
 #: ../src/subscription_manager/constants.py:83
-#: ../src/subscription_manager/managercli.py:100
+#: ../src/subscription_manager/constants.py:87
+#: ../src/subscription_manager/managercli.py:104
 msgid "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr "കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി ദയവായി /var/log/rhsm/rhsm.log കാണുക."
 
-#: ../src/subscription_manager/constants.py:81
+#: ../src/subscription_manager/constants.py:85
 msgid "<b>Unable to register the system.</b>"
 msgstr "<b>സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുവാന്‍ സാധ്യമല്ല.</b>"
 
-#: ../src/subscription_manager/constants.py:85
+#: ../src/subscription_manager/constants.py:89
 msgid "<b>Are you sure you want to unregister?</b>"
 msgstr "<b>അണ്‍രജിസ്ടര്‍ ചെയ്യണമെന്നുറപ്പാണോ?</b>"
 
-#: ../src/subscription_manager/constants.py:87
+#: ../src/subscription_manager/constants.py:91
 #, python-format
 msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr ""
@@ -920,208 +1018,213 @@ msgstr "സജിവം: %-25s"
 msgid "Quantity Used:        \t%-25s"
 msgstr "ഉപയോഗിച്ച് അളവു്: %-25s"
 
-#: ../src/subscription_manager/managercli.py:81
+#: ../src/subscription_manager/managercli.py:83
+#, python-format
+msgid "Service Type :        \t%-25s"
+msgstr "സര്‍വീസ് തരം: %-25s"
+
+#: ../src/subscription_manager/managercli.py:85
 #, python-format
 msgid "Begins:               \t%-25s"
 msgstr "ആരംഭിയ്ക്കുന്നതു്: %-25s"
 
-#: ../src/subscription_manager/managercli.py:99
+#: ../src/subscription_manager/managercli.py:103
 msgid "Network error, unable to connect to server."
 msgstr "നെറ്റ്‌വര്‍ക്ക് പിശക്, സര്‍വറിലേക്കു് കണക്ട് ചെയ്യുവാന്‍ സാധ്യമല്ല."
 
-#: ../src/subscription_manager/managercli.py:131
+#: ../src/subscription_manager/managercli.py:135
 #, python-format
 msgid "Service level set to: %s"
 msgstr "സര്‍വീസ് ലവല്‍ സജ്ജമാക്കിയിരിയ്ക്കുന്നതു്: %s"
 
-#: ../src/subscription_manager/managercli.py:145
+#: ../src/subscription_manager/managercli.py:149
 msgid "Installed Product Current Status:"
 msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത പ്രൊഡക്ടിന്റെ നിലവിലുള്ള അവസ്ഥ:"
 
-#: ../src/subscription_manager/managercli.py:201
+#: ../src/subscription_manager/managercli.py:205
 msgid "proxy url in the form of proxy_hostname:proxy_port"
 msgstr "proxy_hostname:proxy_port മാതൃകയിലുള്ള പ്രോക്സി യുആര്‍എല്‍"
 
-#: ../src/subscription_manager/managercli.py:203
+#: ../src/subscription_manager/managercli.py:207
 msgid "user for http proxy with basic authentication"
 msgstr "അടിസ്ഥാന ആഝികാരികത ഉറപ്പാക്കലുള്ള http പ്രോക്സിയ്ക്കുള്ള ഉപയോക്താവു്"
 
-#: ../src/subscription_manager/managercli.py:205
+#: ../src/subscription_manager/managercli.py:209
 msgid "password for http proxy with basic authentication"
 msgstr "അടിസ്ഥാന ആഝികാരികത ഉറപ്പാക്കലുള്ള http പ്രോക്സിയ്ക്കുള്ള രഹസ്യവാക്ക്"
 
-#: ../src/subscription_manager/managercli.py:272
+#: ../src/subscription_manager/managercli.py:276
 msgid "Consumer certificates corrupted. Please reregister."
 msgstr ""
 "ഉപഭോക്താവിനുള്ള സര്‍ട്ടിഫിക്കേറ്റുകള്‍ക്കു് തകരാറും. ദയവായി വീണ്ടും "
 "രജിസ്ടര്‍ ചെയ്യുക."
 
-#: ../src/subscription_manager/managercli.py:291
+#: ../src/subscription_manager/managercli.py:295
 msgid "username to use when authorizing against the server"
 msgstr ""
 "സര്‍വറുമായി ആധികാരികത ഉറപ്പിയ്ക്കുമ്പോള്‍, ഉപയോഗിയ്ക്കേണ്ട ഉപയോക്തൃനാമം"
 
-#: ../src/subscription_manager/managercli.py:293
+#: ../src/subscription_manager/managercli.py:297
 msgid "password to use when authorizing against the server"
 msgstr ""
 "സര്‍വറുമായി ആധികാരികത ഉറപ്പിയ്ക്കുമ്പോള്‍, ഉപയോഗിയ്ക്കേണ്ട രഹസ്യവാക്ക്"
 
-#: ../src/subscription_manager/managercli.py:305
+#: ../src/subscription_manager/managercli.py:309
 msgid "Username: "
 msgstr "ഉപയോക്തൃനാമം: "
 
-#: ../src/subscription_manager/managercli.py:308
+#: ../src/subscription_manager/managercli.py:312
 msgid "Password: "
 msgstr "രഹസ്യവാക്ക്:"
 
-#: ../src/subscription_manager/managercli.py:333
+#: ../src/subscription_manager/managercli.py:337
 msgid ""
 "Remove all local consumer and subscription data without affecting the server"
 msgstr ""
 "സര്‍വറിനെ ബാധിയ്ക്കാത്തവിധം എല്ലാ ഉപഭോക്താക്കളും സബ്സ്ക്രിപ്ഷന്‍ ഡേറ്റയും "
 "നീക്കം ചെയ്യുക"
 
-#: ../src/subscription_manager/managercli.py:345
+#: ../src/subscription_manager/managercli.py:349
 msgid "All local data removed"
 msgstr "എല്ലാ ലോക്കല്‍ ഡേറ്റാ നീക്കം ചെയ്തിരിയ്ക്കുന്നു"
 
-#: ../src/subscription_manager/managercli.py:353
+#: ../src/subscription_manager/managercli.py:357
 msgid "Pull the latest subscription data from the server"
 msgstr "സര്‍വറില്‍ നിന്നും ഏറ്റവും പുതിയ സബ്സ്ക്രിപ്ഷന്‍ ഡേറ്റാ ലഭ്യമാക്കുക"
 
-#: ../src/subscription_manager/managercli.py:365
+#: ../src/subscription_manager/managercli.py:369
 msgid "All local data refreshed"
 msgstr "എല്ലാ ലോക്കല്‍ ഡേറ്റയും പുതുക്കിയിരിയ്ക്കുന്നു"
 
-#: ../src/subscription_manager/managercli.py:370
+#: ../src/subscription_manager/managercli.py:374
 #, python-format
 msgid "Unable to perform refresh due to the following exception: %s"
 msgstr "ഈ പിശക് കാരണം നിങ്ങള്‍ക്കു് പുതുക്കുവാന്‍ സാധ്യമാകില്ല: %s"
 
-#: ../src/subscription_manager/managercli.py:379
+#: ../src/subscription_manager/managercli.py:383
 msgid "Display the identity certificate for this machine or request a new one"
 msgstr ""
 "ഈ സിസ്റ്റത്തിനുള്ള തിരിച്ചറിയല്‍ സര്‍ട്ടിഫിക്കേറ്റ് കാണിയ്ക്കുക അല്ലെങ്കില്‍"
 " പുതിയതു് ആവശ്യപ്പെടുക"
 
-#: ../src/subscription_manager/managercli.py:388
+#: ../src/subscription_manager/managercli.py:392
 msgid "request a new certificate be generated"
 msgstr "ഒരു പുതിയ സര്‍ട്ടിഫിക്കേറ്റ് ലഭ്യമാക്കുവാന്‍ ആവശ്യപ്പെടുക"
 
-#: ../src/subscription_manager/managercli.py:390
+#: ../src/subscription_manager/managercli.py:394
 msgid "force certificate regeneration (requires username and password)"
 msgstr ""
 "സര്‍ട്ടിഫിക്കേറ്റ് വീണ്ടും ലഭ്യമാക്കല്‍ നിര്‍ബന്ധമാക്കുക (ഉപയോക്തൃനാമവും "
 "രഹസ്യവാക്കും)"
 
-#: ../src/subscription_manager/managercli.py:395
+#: ../src/subscription_manager/managercli.py:399
 msgid "--force can only be used with --regenerate"
 msgstr "--force --regenerate-നൊപ്പം മാത്രമേ ഉപയോഗിയ്ക്കുവാന്‍ പാടുള്ളൂ"
 
-#: ../src/subscription_manager/managercli.py:399
+#: ../src/subscription_manager/managercli.py:403
 msgid "--username and --password can only be used with --force"
 msgstr ""
 "--username, --password എന്നിവ --force-നൊപ്പം മാത്രമേ ഉപയോഗിയ്ക്കുവാന്‍ "
 "പാടുള്ളൂ"
 
-#: ../src/subscription_manager/managercli.py:414
+#: ../src/subscription_manager/managercli.py:418
 #, python-format
 msgid "Current identity is: %s"
 msgstr "നിലവിലുള്ള തിരിച്ചറിയല്‍: %s"
 
-#: ../src/subscription_manager/managercli.py:415
+#: ../src/subscription_manager/managercli.py:419
 #, python-format
 msgid "name: %s"
 msgstr "പേരു്: %s"
 
-#: ../src/subscription_manager/managercli.py:416
+#: ../src/subscription_manager/managercli.py:420
 #, python-format
 msgid "org name: %s"
 msgstr "സ്ഥാപനത്തിന്റെ പേരു്: %s"
 
-#: ../src/subscription_manager/managercli.py:417
+#: ../src/subscription_manager/managercli.py:421
 #, python-format
 msgid "org id: %s"
 msgstr "സ്ഥാപനത്തിന്റെ ഐഡി: %s"
 
-#: ../src/subscription_manager/managercli.py:428
+#: ../src/subscription_manager/managercli.py:432
 msgid "Identity certificate has been regenerated."
 msgstr "തിരിച്ചറിയല്‍ സര്‍ട്ടിഫിക്കേറ്റ് വീണ്ടും ലഭ്യമാക്കുക."
 
-#: ../src/subscription_manager/managercli.py:436
+#: ../src/subscription_manager/managercli.py:440
 msgid "Error: Unable to generate a new identity for the system"
 msgstr ""
 "പിശക്: സിസ്റ്റത്തിനുള്ള പുതിയ തിരിച്ചറിയല്‍ ലഭ്യമാക്കുവാന്‍ സാധിച്ചില്ല"
 
-#: ../src/subscription_manager/managercli.py:443
+#: ../src/subscription_manager/managercli.py:447
 msgid "Display the orgs against which a user can register a system"
 msgstr ""
 "ഒരു ഉപയോക്താവിനു് സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുവാന്‍ സാധിയ്ക്കുന്ന സ്ഥാപനങ്ങള്‍ "
 "കാണിയ്ക്കുക"
 
-#: ../src/subscription_manager/managercli.py:463
+#: ../src/subscription_manager/managercli.py:467
 msgid "Organizations"
 msgstr "സ്ഥാപനങ്ങള്‍"
 
-#: ../src/subscription_manager/managercli.py:467
+#: ../src/subscription_manager/managercli.py:471
 msgid "Name"
 msgstr "പേരു്"
 
-#: ../src/subscription_manager/managercli.py:468
+#: ../src/subscription_manager/managercli.py:472
 msgid "Key"
 msgstr "കീ"
 
-#: ../src/subscription_manager/managercli.py:471
-#: ../src/subscription_manager/managercli.py:838
+#: ../src/subscription_manager/managercli.py:475
+#: ../src/subscription_manager/managercli.py:849
 #, python-format
 msgid "%s cannot register to any organizations."
 msgstr "ഒരു സ്ഥാപനങ്ങള്‍ക്കും %s രജിസ്ടര്‍ ചെയ്യുവാന്‍ സാധ്യമല്ല."
 
-#: ../src/subscription_manager/managercli.py:478
+#: ../src/subscription_manager/managercli.py:482
 msgid "Error: Unable to retrieve org list from Entitlement Platform"
 msgstr ""
 "പിശക്: എന്റൈറ്റില്‍മെന്റ് പ്ലാറ്റ്ഫോമില്‍ നിന്നും സ്ഥാപനങ്ങളുടെ പട്ടിക "
 "ലഭ്യമാക്കുവാന്‍ സാധ്യമല്ല"
 
-#: ../src/subscription_manager/managercli.py:485
+#: ../src/subscription_manager/managercli.py:489
 msgid "Display the environments available for a user"
 msgstr "ഒരു ഉപയോക്താവിനു് ലഭ്യമായ സാഹചര്യങ്ങള്‍ കാണിയ്ക്കുക"
 
-#: ../src/subscription_manager/managercli.py:493
+#: ../src/subscription_manager/managercli.py:497
 msgid "specify org for environment list"
 msgstr "എന്‍വയണ്മെന്റ് പട്ടികയ്ക്കുള്ള സ്ഥാപനം കാണിയ്ക്കുക"
 
-#: ../src/subscription_manager/managercli.py:497
+#: ../src/subscription_manager/managercli.py:501
 msgid "you must specify an --org"
 msgstr "ഒരു --org വ്യക്തമാക്കുക"
 
-#: ../src/subscription_manager/managercli.py:513
+#: ../src/subscription_manager/managercli.py:517
 msgid "Environments"
 msgstr "സാഹചര്യങ്ങള്‍"
 
-#: ../src/subscription_manager/managercli.py:529
+#: ../src/subscription_manager/managercli.py:533
 msgid "Error: Unable to retrieve environment list from Entitlement Platform"
 msgstr ""
 "പിശക്: എന്റൈറ്റില്‍മെന്റ് പ്ലാറ്റ്ഫോമില്‍ നിന്നും എന്‍വയണ്മെന്റ് പട്ടിക "
 "ലഭ്യമാക്കുവാന്‍ സാധ്യമല്ല"
 
-#: ../src/subscription_manager/managercli.py:536
+#: ../src/subscription_manager/managercli.py:540
 msgid "Manage service levels for this system."
 msgstr "ഈ സിസ്റ്റത്തിനുള്ള സര്‍വീസ് ലവലുകള്‍ കൈകാര്യം ചെയ്യുക"
 
-#: ../src/subscription_manager/managercli.py:543
+#: ../src/subscription_manager/managercli.py:547
 msgid "show this system's current service level"
 msgstr "ഈ സിസ്റ്റത്തിന്റെ നിലവിലുള്ള സര്‍വീസ് ലവല്‍ കാണിയ്ക്കുക"
 
-#: ../src/subscription_manager/managercli.py:546
+#: ../src/subscription_manager/managercli.py:550
 msgid "specify org for service level list"
 msgstr "സര്‍വീസ് ലവല്‍ പട്ടികയ്ക്കുള്ള സ്ഥാപനം നിഷ്കര്‍ഷിയ്ക്കുക"
 
-#: ../src/subscription_manager/managercli.py:548
+#: ../src/subscription_manager/managercli.py:552
 msgid "list all service levels available"
 msgstr "ലഭ്യമായ എല്ലാ സര്‍വീസ് ലവലുകളും കാണിയ്ക്കുക"
 
-#: ../src/subscription_manager/managercli.py:559
+#: ../src/subscription_manager/managercli.py:563
 msgid ""
 "Error: you must register or specify --username and password to list service "
 "levels"
@@ -1129,59 +1232,70 @@ msgstr ""
 "പിശക്: ഒന്നുങ്കില്‍ രജിസ്ടര്‍ ചെയ്യുക അല്ലെങ്കില്‍ സര്‍വീസ് ലവലുകള്‍ "
 "ലഭ്യമാക്കുന്നതിനായി --username, password നിഷ്കര്‍ഷിയ്ക്കുക"
 
-#: ../src/subscription_manager/managercli.py:562
+#: ../src/subscription_manager/managercli.py:566
 msgid "Error: you must register or specify --org."
 msgstr ""
 "പിശക്: ഒന്നുങ്കില്‍ രജിസ്ടര്‍ ചെയ്യുക അല്ലെങ്കില്‍ --org നിഷ്കര്‍ഷിയ്ക്കുക."
 
-#: ../src/subscription_manager/managercli.py:565
+#: ../src/subscription_manager/managercli.py:569
 msgid "Error: This system is currently not registered."
 msgstr "പിശക്: ഈ സിസ്റ്റം നിലവില്‍ രജിസ്ടര്‍ ചെയ്തിട്ടില്ല."
 
-#: ../src/subscription_manager/managercli.py:603
+#: ../src/subscription_manager/managercli.py:607
 msgid "Error: Unable to retrieve service levels."
 msgstr "പിശക്: സര്‍വീസ് ലവലുകള്‍ ലഭ്യമാക്കുവാന്‍ സാധ്യമല്ല."
 
-#: ../src/subscription_manager/managercli.py:609
+#: ../src/subscription_manager/managercli.py:613
+#: ../src/subscription_manager/managercli.py:635
+#: ../src/subscription_manager/managercli.py:799
+#: ../src/subscription_manager/managercli.py:1152
+msgid "ERROR: Server does not support service levels."
+msgstr "പിശക്: സര്‍വര്‍ സര്‍വീസ് ലവലുകള്‍ പിന്തുണയ്ക്കുന്നില്ല."
+
+#: ../src/subscription_manager/managercli.py:615
 #, python-format
 msgid "Current service level: %s"
 msgstr "നിലവിലുള്ള സര്‍വീസ് ലവല്‍: %s"
 
-#: ../src/subscription_manager/managercli.py:621
+#: ../src/subscription_manager/managercli.py:627
 msgid "Available Service Levels"
 msgstr "ലഭ്യമായ സര്‍വീസ് ലവലുകള്‍"
 
-#: ../src/subscription_manager/managercli.py:644
+#: ../src/subscription_manager/managercli.py:632
+msgid "This org does not have any subscriptions with service levels."
+msgstr "സര്‍വീസ് ലവലുകളുള്ള ഒരു സബ്സ്ക്രിപ്ഷുകളും ഈ സ്ഥാപനത്തിനു് ലഭ്യമല്ല."
+
+#: ../src/subscription_manager/managercli.py:653
 msgid "the type of consumer to register, defaults to system"
 msgstr ""
 "രജിസ്ടര്‍ ചെയ്യുവാന്‍ ഏതു് തരം ഉപഭോക്താവു്, സിസ്റ്റത്തില്‍ സ്വതവേയുള്ളതു്"
 
-#: ../src/subscription_manager/managercli.py:646
+#: ../src/subscription_manager/managercli.py:655
 msgid "name of the consumer to register, defaults to the hostname"
 msgstr ""
 "രജിസ്ടര്‍ ചെയ്യുവാനുള്ള ഉപഭോക്താവിന്റെ പേരു്, ഹോസ്റ്റ്നാമത്തിനു് "
 "സ്വതവേയുള്ളതു്"
 
-#: ../src/subscription_manager/managercli.py:648
+#: ../src/subscription_manager/managercli.py:657
 msgid "if supplied, the existing consumer data is pulled from the server"
 msgstr ""
 "നല്‍കുന്നുണ്ടെങ്കില്‍, നിലവിലുള്ള ഉപഭോക്താവിനുള്ള ഡേറ്റാ സര്‍വറില്‍ നിന്നും "
 "ലഭ്യമാക്കുന്നു"
 
-#: ../src/subscription_manager/managercli.py:650
+#: ../src/subscription_manager/managercli.py:659
 msgid "register to one of multiple organizations for the user"
 msgstr "ഉപയോക്താവിനുള്ള അനവധി സ്ഥാപനങ്ങളില്‍ ഒന്നിലേക്കു് രജിസ്ടര്‍ ചെയ്യുക"
 
-#: ../src/subscription_manager/managercli.py:652
+#: ../src/subscription_manager/managercli.py:661
 msgid "register to a specific environment in the destination org"
 msgstr "ലക്ഷ്യ സ്ഥാപനത്തിലുള്ള സാഹചര്യത്തിലേക്കു് രജിസ്ടര്‍ ചെയ്യുക"
 
-#: ../src/subscription_manager/managercli.py:654
+#: ../src/subscription_manager/managercli.py:663
 msgid "set a release version"
 msgstr "റിലീസിനുള്ള പതിപ്പു് സജ്ജമാക്കുക"
 
-#: ../src/subscription_manager/managercli.py:656
-#: ../src/subscription_manager/managercli.py:1072
+#: ../src/subscription_manager/managercli.py:665
+#: ../src/subscription_manager/managercli.py:1083
 msgid ""
 "automatically subscribe this system to                                     "
 "compatible subscriptions."
@@ -1189,100 +1303,100 @@ msgstr ""
 " ഉചിതമായ സബ്സ്ക്രിപ്ഷനുകളിലേക്കു് ഓട്ടോമാറ്റിക്കായി  ഈ സിസ്റ്റം സബ്സ്ക്രൈബ് "
 "ചെയ്യുക "
 
-#: ../src/subscription_manager/managercli.py:659
+#: ../src/subscription_manager/managercli.py:668
 msgid "register the system even if it is already registered"
 msgstr "രജിസ്ടര്‍ ചെയ്തിട്ടുണ്ടെങ്കിലും സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുക"
 
-#: ../src/subscription_manager/managercli.py:661
+#: ../src/subscription_manager/managercli.py:670
 msgid "one or more activation keys to use for registration"
 msgstr "രജിസ്ട്രേഷനുള്ള ഒന്നോ അതിലധികമോ ആക്ടിവേഷന്‍ കീകള്‍"
 
-#: ../src/subscription_manager/managercli.py:663
-#: ../src/subscription_manager/managercli.py:1075
+#: ../src/subscription_manager/managercli.py:672
+#: ../src/subscription_manager/managercli.py:1086
 msgid "service level to apply to this system"
 msgstr "ഈ സിസ്റ്റത്തിലേക്കു് അനുവദിയ്ക്കുന്നതിനുള്ള സര്‍വീസ് ലവല്‍"
 
-#: ../src/subscription_manager/managercli.py:671
+#: ../src/subscription_manager/managercli.py:680
 msgid "This system is already registered. Use --force to override"
 msgstr ""
 "ഈ സിസ്റ്റം രജിസ്ടര്‍ ചെയ്തിട്ടുണ്ടു്. തിരുത്തി എഴുതുന്നതിനായി --force "
 "ഉപയോഗിയ്ക്കുക"
 
-#: ../src/subscription_manager/managercli.py:674
+#: ../src/subscription_manager/managercli.py:683
 msgid "Error: consumer name can not be empty."
 msgstr "പിശക്: ഉപഭോക്താവിന്റെ നാമം നല്‍കുക."
 
-#: ../src/subscription_manager/managercli.py:677
+#: ../src/subscription_manager/managercli.py:686
 msgid "Error: Activation keys do not require user credentials"
 msgstr "പിശക്: ആക്ടിവേഷന്‍ കീകള്‍ക്കു് അനുമതികള്‍ ആവശ്യമില്ല"
 
-#: ../src/subscription_manager/managercli.py:680
+#: ../src/subscription_manager/managercli.py:689
 msgid "Error: Activation keys can not be used with previously registered ids."
 msgstr ""
 "പിശക്: മുമ്പു് രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്ന ഐഡികള്‍ ഉപയോഗിച്ചു് ആക്ടിവേഷന്‍ "
 "കീകള്‍ ഉപയോഗിയ്ക്കുവാന്‍ സാധ്യമല്ല."
 
-#: ../src/subscription_manager/managercli.py:683
+#: ../src/subscription_manager/managercli.py:692
 msgid "Error: Must specify --org to register to an environment."
 msgstr ""
 "പിശക്: ഒരു സാഹചര്യത്തിലേക്കു് രജിസ്ടര്‍ ചെയ്യുന്നതിനായി --org നല്‍കുക."
 
-#: ../src/subscription_manager/managercli.py:686
+#: ../src/subscription_manager/managercli.py:695
 msgid "Error: Must specify --org to register with activation keys."
 msgstr "പിശക്: ആക്ടിവേഷന്‍ കീകളമായി രജിസ്ടര്‍ ചെയ്യുന്നതിനായി --org നല്‍കുക."
 
-#: ../src/subscription_manager/managercli.py:690
+#: ../src/subscription_manager/managercli.py:699
 msgid "Error: Must specify an activation key"
 msgstr "പിശക്: ഒരു ആക്ടിവേഷന്‍ കീ നല്‍കേണ്ടതുണ്ടു്"
 
-#: ../src/subscription_manager/managercli.py:693
+#: ../src/subscription_manager/managercli.py:702
 msgid "Error: Must use --autosubscribe with --servicelevel."
 msgstr "പിശക്: --servicelevel-നൊപ്പം --autosubscribe ഉപയോഗിയ്ക്കണം."
 
-#: ../src/subscription_manager/managercli.py:720
+#: ../src/subscription_manager/managercli.py:729
 #, python-format
 msgid "The system with UUID %s has been unregistered"
 msgstr "UUID %s എന്നുള്ള സിസ്റ്റം രജിസ്ടര്‍ ചെയ്തിട്ടില്ല"
 
-#: ../src/subscription_manager/managercli.py:761
+#: ../src/subscription_manager/managercli.py:770
 #, python-format
 msgid "Error during registration: %s"
 msgstr "രജിസ്ടര്‍ സമയത്തു് പിശക്: %s"
 
-#: ../src/subscription_manager/managercli.py:765
+#: ../src/subscription_manager/managercli.py:774
 #, python-format
 msgid "The system has been registered with id: %s "
 msgstr "സിസ്റ്റം ഐഡിയുമായി രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്നു: %s"
 
-#: ../src/subscription_manager/managercli.py:819
+#: ../src/subscription_manager/managercli.py:830
 msgid "ERROR: Server does not support environments."
 msgstr "പിശക്: സര്‍വര്‍ സാഹചര്യങ്ങള്‍ പിന്തുണയ്ക്കുന്നില്ല."
 
-#: ../src/subscription_manager/managercli.py:823
+#: ../src/subscription_manager/managercli.py:834
 #, python-format
 msgid "No such environment: %s"
 msgstr "ഇത്തരം സാഹചര്യമില്ല: %s"
 
-#: ../src/subscription_manager/managercli.py:863
+#: ../src/subscription_manager/managercli.py:874
 msgid "This system is currently not registered."
 msgstr "ഈ സിസ്റ്റം നിലവില്‍ രജിസ്ടര്‍ ചെയ്തിട്ടില്ല."
 
-#: ../src/subscription_manager/managercli.py:885
+#: ../src/subscription_manager/managercli.py:896
 msgid "System has been un-registered."
 msgstr "സിസ്റ്റം അണ്‌-രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്നു."
 
-#: ../src/subscription_manager/managercli.py:892
+#: ../src/subscription_manager/managercli.py:903
 msgid "Attempt to redeem a subscription for a preconfigured machine"
 msgstr ""
 "മുന്‍ക്രമീകരിച്ചിട്ടുള്ള സിസ്റ്റത്തിനുള്ള സബ്സ്ക്രിപ്ഷന്‍ ലഭ്യമാക്കുവാന്‍ "
 "ശ്രമിയ്ക്കുക"
 
-#: ../src/subscription_manager/managercli.py:898
+#: ../src/subscription_manager/managercli.py:909
 msgid "Email address to notify when subscription redemption is complete."
 msgstr ""
 "സബ്സ്ക്രിപ്ഷന്‍ പൂര്‍ത്തിയാകുമ്പോള്‍ അറിയിയ്ക്കുവാനുള്ള ഈമെയില്‍ വിലാസം."
 
-#: ../src/subscription_manager/managercli.py:901
+#: ../src/subscription_manager/managercli.py:912
 msgid ""
 "Optional language to use for email notification when subscription redemption"
 " is complete. Examples: en-us, de-de"
@@ -1290,31 +1404,31 @@ msgstr ""
 "സബ്സ്ക്രിപ്ഷന്‍ പൂര്‍ത്തിയാകുമ്പോള്‍ ഈമെയില്‍ വഴി അറിയിയ്ക്കുവാനുള്ള "
 "മറ്റേതെങ്കിലും ഭാഷ. ഉദാഹരണങ്ങള്‍: en-US, de-De"
 
-#: ../src/subscription_manager/managercli.py:943
+#: ../src/subscription_manager/managercli.py:954
 msgid "Configure what os release to use"
 msgstr "ഉപയോഗിയ്ക്കുവാനുള്ള ഒഎസ് പതിപ്പു് ക്രമീകരിയ്ക്കുക"
 
-#: ../src/subscription_manager/managercli.py:949
+#: ../src/subscription_manager/managercli.py:960
 msgid "list available releases"
 msgstr "ലഭ്യമായ പതിപ്പുകള്‍ ലഭ്യമാക്കുക"
 
-#: ../src/subscription_manager/managercli.py:952
+#: ../src/subscription_manager/managercli.py:963
 msgid "set the release"
 msgstr "പതിപ്പു് സജ്ജമാക്കുക"
 
-#: ../src/subscription_manager/managercli.py:1060
+#: ../src/subscription_manager/managercli.py:1071
 msgid "Subscribe the registered machine to a specified product"
 msgstr "ഒരു പ്രൊഡക്ടിനായി രജിസ്ടര്‍ ചെയ്ത സിസ്റ്റം സബ്സ്ക്രൈബ് ചെയ്യുക"
 
-#: ../src/subscription_manager/managercli.py:1068
+#: ../src/subscription_manager/managercli.py:1079
 msgid "the id of the pool to subscribe to"
 msgstr "സബ്സ്ക്രൈബ് ചെയ്യുവാനുള്ള പൂളിനുള്ള ഐഡി"
 
-#: ../src/subscription_manager/managercli.py:1070
+#: ../src/subscription_manager/managercli.py:1081
 msgid "number of subscriptions to consume"
 msgstr "ഉപയോഗിയ്ക്കുവാനുള്ള സബ്സ്ക്രിപ്ഷനുകളുടെ എണ്ണം"
 
-#: ../src/subscription_manager/managercli.py:1079
+#: ../src/subscription_manager/managercli.py:1090
 msgid ""
 "Error: This command requires that you specify a pool with --pool or use "
 "--auto."
@@ -1322,94 +1436,94 @@ msgstr ""
 "പിശക്: ഈ കമാന്‍ഡിനു് ഒരു പൂള്‍ വ്യക്തമാക്കുമ്പോള്‍, --pool നല്‍കണം "
 "അല്ലെങ്കില്‍ --auto ഉപയോഗിയ്ക്കുക."
 
-#: ../src/subscription_manager/managercli.py:1082
+#: ../src/subscription_manager/managercli.py:1093
 msgid "Error: Only one of --pool or --auto may be used with this command."
 msgstr ""
 "പിശക്: ഈ കമാന്‍ഡിനൊപ്പം --pool അല്ലെങ്കില്‍ --auto മാത്രമേ ഉപയോഗിയ്ക്കുവാന്‍"
 " പാടുള്ളൂ."
 
-#: ../src/subscription_manager/managercli.py:1089
+#: ../src/subscription_manager/managercli.py:1100
 msgid "Error: Quantity must be a positive integer."
 msgstr "പിശക്: വ്യാപ്തി ഒരു പോസിറ്റീവ് ഇന്റിജര്‍ ആയിരിയ്ക്കണം."
 
-#: ../src/subscription_manager/managercli.py:1095
+#: ../src/subscription_manager/managercli.py:1106
 msgid "Error: Must use --auto with --servicelevel."
 msgstr "പിശക്: --servicelevel-നൊപ്പം --auto ഉപയോഗിയ്ക്കണം."
 
-#: ../src/subscription_manager/managercli.py:1119
+#: ../src/subscription_manager/managercli.py:1130
 msgid "Please enter a valid numeric pool id."
 msgstr "ശരിയായ ന്യൂമെറിക് പൂള്‍ ഐഡി ദയവായി നല്‍കുക."
 
-#: ../src/subscription_manager/managercli.py:1121
+#: ../src/subscription_manager/managercli.py:1132
 #, python-format
 msgid "Successfully consumed a subscription from the pool with id %s."
 msgstr ""
 "%s ഐഡിയായുള്ള പീളില്‍ നിന്നും ഒരു സബ്സ്ക്രിപ്ഷന്‍ വിജയകരമായി "
 "ഉപയോഗിച്ചിരിയ്ക്കുന്നു."
 
-#: ../src/subscription_manager/managercli.py:1163
+#: ../src/subscription_manager/managercli.py:1180
 msgid "Unsubscribe the machine from all or specific subscriptions"
 msgstr ""
 "എല്ലാം അല്ലെങ്കില്‍ പ്രത്യേക സബ്സ്ക്രിപ്ഷനുകളില്‍ നിന്നും സിസ്റ്റം "
 "അണ്‍സബ്സ്ക്രൈബ് ചെയ്യുക"
 
-#: ../src/subscription_manager/managercli.py:1170
+#: ../src/subscription_manager/managercli.py:1187
 msgid "Certificate serial to unsubscribe"
 msgstr "അണ്‍സബ്സ്ക്രൈബ് ചെയ്യുന്നതിനുള്ള സര്‍ട്ടിഫിക്കേറ്റ് സീരിയല്‍"
 
-#: ../src/subscription_manager/managercli.py:1172
+#: ../src/subscription_manager/managercli.py:1189
 msgid "Unsubscribe from all subscriptions"
 msgstr "എല്ലാ സബ്സ്ക്രിപ്ഷനുകളില്‍ നിന്നും അണ്‍സബ്സ്ക്രൈബ് ചെയ്യുക"
 
-#: ../src/subscription_manager/managercli.py:1177
+#: ../src/subscription_manager/managercli.py:1194
 #, python-format
 msgid "'%s' is not a valid serial number"
 msgstr "'%s' ശരിയായൊരു സീരിയല്‍ നംബര്‍ അല്ല"
 
-#: ../src/subscription_manager/managercli.py:1180
+#: ../src/subscription_manager/managercli.py:1197
 msgid "One of --serial or --all must be provided"
 msgstr "--serial അല്ലെങ്കില്‍ --all നല്‍കേണ്ടതുണ്ടു്"
 
-#: ../src/subscription_manager/managercli.py:1204
-#: ../src/subscription_manager/managercli.py:1219
+#: ../src/subscription_manager/managercli.py:1221
+#: ../src/subscription_manager/managercli.py:1236
 #, python-format
 msgid "Unable to perform unsubscribe due to the following exception: %s"
 msgstr "ഈ പിശക് കാരണം അണ്‍സബ്സ്ക്രൈബ് ചെയ്യുവാന്‍ സാധ്യമായില്ല: %s"
 
-#: ../src/subscription_manager/managercli.py:1211
+#: ../src/subscription_manager/managercli.py:1228
 msgid "This machine has been unsubscribed from all subscriptions"
 msgstr "എല്ലാ സബ്സ്ക്രിപ്ഷനുകളില്‍ നിന്നും ഈ സിസ്റ്റം അണ്‍സബ്സ്ക്രൈബ് ചെയ്യുക"
 
-#: ../src/subscription_manager/managercli.py:1216
+#: ../src/subscription_manager/managercli.py:1233
 msgid "This machine has been unsubscribed from subscription "
 msgstr ""
 "സബ്സ്ക്രിപ്ഷനില്‍ നിന്നും ഈ സിസ്റ്റം അണ്‍സബ്സ്ക്രൈബ് ചെയ്തിരിയ്ക്കുന്നു"
 
-#: ../src/subscription_manager/managercli.py:1230
+#: ../src/subscription_manager/managercli.py:1247
 msgid "Work with the current facts for this machine"
 msgstr "നിലവിലുള്ള വിവരങ്ങളുമായി ഈ സിസ്റ്റത്തില്‍ പ്രവര്‍ത്തിയ്ക്കുക"
 
-#: ../src/subscription_manager/managercli.py:1236
+#: ../src/subscription_manager/managercli.py:1253
 msgid "list known facts for this system"
 msgstr "ഈ സിസ്റ്റത്തിനു് പരിചിതമായ വിവരം അയയ്ക്കുക"
 
-#: ../src/subscription_manager/managercli.py:1238
+#: ../src/subscription_manager/managercli.py:1255
 msgid "update the system facts"
 msgstr "സിസ്റ്റത്തിനുള്ള വിവരങ്ങള്‍ പരിഷ്കരിയ്ക്കുക"
 
-#: ../src/subscription_manager/managercli.py:1247
+#: ../src/subscription_manager/managercli.py:1264
 msgid "Error: Need either --list or --update, Try facts --help"
 msgstr "പിശക്: --list അല്ലെങ്കില്‍ --update ആവശ്യമുണ്ടു്. --help ശ്രമിയ്ക്കുക"
 
-#: ../src/subscription_manager/managercli.py:1271
+#: ../src/subscription_manager/managercli.py:1288
 msgid "Successfully updated the system facts."
 msgstr "സിസ്റ്റം വിവരങ്ങള്‍ വിജയകരമായി പരിഷ്കരിച്ചിരിയ്ക്കുന്നു."
 
-#: ../src/subscription_manager/managercli.py:1278
+#: ../src/subscription_manager/managercli.py:1295
 msgid "Import certificates which were provided outside of the tool"
 msgstr "പ്രയോഗത്തിനു് പുറത്തു് ലഭ്യമാക്കിയ സര്‍ട്ടിഫിക്കേറ്റുകള്‍ ലഭ്യമാക്കുക"
 
-#: ../src/subscription_manager/managercli.py:1284
+#: ../src/subscription_manager/managercli.py:1301
 msgid ""
 "certificate file to import (for multiple imports, specify this option more "
 "than once)"
@@ -1417,71 +1531,71 @@ msgstr ""
 "ഇംപോര്‍ട്ട് ചെയ്യുവാനുള്ള സര്‍ട്ടിഫിക്കേറ്റ് ഫയല്‍ (അനവധി തവണ ഇംപോര്‍ട്ട് "
 "ചെയ്യുന്നതിനായി, ഈ ഐച്ഛികം ഒന്നില്‍ കൂടുതല്‍ തവണ നല്‍കുക)"
 
-#: ../src/subscription_manager/managercli.py:1288
+#: ../src/subscription_manager/managercli.py:1305
 msgid "Error: At least one certificate is required"
 msgstr "പിശക്: ഒരു സര്‍ട്ടിഫിക്കേറ്റ് എങ്കിലും ആവശ്യമുണ്ടു്"
 
-#: ../src/subscription_manager/managercli.py:1307
+#: ../src/subscription_manager/managercli.py:1324
 #, python-format
 msgid "Successfully imported certificate %s"
 msgstr "വിജയകരമായി സര്‍ട്ടിഫിക്കേറ്റ് %s ഇംപോര്‍ട്ട് ചെയ്തിരിയ്ക്കുന്നു"
 
-#: ../src/subscription_manager/managercli.py:1313
-#: ../src/subscription_manager/managercli.py:1323
+#: ../src/subscription_manager/managercli.py:1330
+#: ../src/subscription_manager/managercli.py:1340
 #, python-format
 msgid "%s is not a valid certificate file. Please use a valid certificate."
 msgstr ""
 "%s ശരിയായൊരു സര്‍ട്ടിഫിക്കേറ്റ് അല്ല, ദയവായി ഉത്തമായൊന്നും ഉപയോഗിയ്ക്കുക"
 
-#: ../src/subscription_manager/managercli.py:1339
+#: ../src/subscription_manager/managercli.py:1356
 msgid "List the repos which this machine is entitled to use"
 msgstr ""
 "ഈ സിസ്റ്റത്തിനു് ഉപയോഗിയ്ക്കുവാന്‍ സാധിയ്ക്കുന്ന റിപ്പോകളുടെ പട്ടിക "
 "ലഭ്യമാക്കുക"
 
-#: ../src/subscription_manager/managercli.py:1349
+#: ../src/subscription_manager/managercli.py:1366
 msgid "list the entitled repositories for this system"
 msgstr "ഈ സിസ്റ്റത്തിനുള്ള റിപ്പോസിറ്ററികള്‍ ലഭ്യമാക്കുക"
 
-#: ../src/subscription_manager/managercli.py:1353
+#: ../src/subscription_manager/managercli.py:1370
 msgid "Error: No options provided. Please see the help comand."
 msgstr "പിശക്: ഐച്ഛികങ്ങള്‍ ലഭ്യമല്ല. ദയവായി hel‍p കമാന്‍ഡ് ഉപയോഗിയ്ക്കുക."
 
-#: ../src/subscription_manager/managercli.py:1363
+#: ../src/subscription_manager/managercli.py:1380
 msgid "Repositories disabled by configuration."
 msgstr "ക്രമീകരണം പ്രവര്‍ത്തന രഹിതമാക്കിയിരിയ്ക്കുന്ന റിപ്പോസിറ്ററികള്‍."
 
-#: ../src/subscription_manager/managercli.py:1366
+#: ../src/subscription_manager/managercli.py:1383
 #, python-format
 msgid "    Entitled Repositories in %s"
 msgstr "%s-ലുള്ള റിപ്പോസിറ്ററികള്‍"
 
-#: ../src/subscription_manager/managercli.py:1374
+#: ../src/subscription_manager/managercli.py:1391
 msgid "The system is not entitled to use any repositories."
 msgstr ""
 "ഈ സിസ്റ്റത്തിനു് ഉപയോഗിയ്ക്കുവാന്‍ സാധിയ്ക്കുന്ന റിപ്പോസിറ്ററികള്‍ ലഭ്യമല്ല."
 
-#: ../src/subscription_manager/managercli.py:1381
+#: ../src/subscription_manager/managercli.py:1398
 msgid ""
 "List, set, or remove the configuration parameters in use by this machine."
 msgstr ""
 "ഈ സിസ്റ്റത്തിനുള്ള ക്രമീകരണ പരാമീറ്ററുകള്‍ ലഭ്യമാക്കുക, സജ്ജമാക്കുക, നീക്കം "
 "ചെയ്യുക."
 
-#: ../src/subscription_manager/managercli.py:1388
+#: ../src/subscription_manager/managercli.py:1405
 msgid "list the configuration for this system"
 msgstr "ഈ സിസ്റ്റത്തിനുള്ള ക്രമീകരണം ലഭ്യമാക്കുക"
 
-#: ../src/subscription_manager/managercli.py:1390
+#: ../src/subscription_manager/managercli.py:1407
 msgid "remove configuration entry by section.name"
 msgstr "section.name ഉപയോഗിച്ചു് ക്രമീകരണത്തിനുള്ള എന്‍ട്രി നീക്കം ചെയ്യുക"
 
-#: ../src/subscription_manager/managercli.py:1394
+#: ../src/subscription_manager/managercli.py:1411
 #, python-format
 msgid "Section: %s, Name: %s"
 msgstr "വിഭാഗം: %s, പേരു്: %s"
 
-#: ../src/subscription_manager/managercli.py:1409
+#: ../src/subscription_manager/managercli.py:1426
 msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
@@ -1489,7 +1603,7 @@ msgstr ""
 "പിശക്: ക്രമീകരണങ്ങള്‍ സജ്ജമാക്കുന്നതിനോ നീക്കം ചെയ്യുന്നതിനോ ഒരു "
 "ഐച്ഛികങ്ങള്‍ക്കൊപ്പവും --list ഉപയോഗിയ്ക്കുവാന്‍ പാടില്ല."
 
-#: ../src/subscription_manager/managercli.py:1427
+#: ../src/subscription_manager/managercli.py:1444
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
@@ -1497,48 +1611,48 @@ msgstr ""
 "പിശക്: നീക്കം ചെയ്യുന്നതിനുള്ള ക്രമീകരണ എന്‍ട്രിയുടെ ശൈലി [section.name] "
 "എന്നായിരിയ്ക്കണം"
 
-#: ../src/subscription_manager/managercli.py:1438
+#: ../src/subscription_manager/managercli.py:1455
 #, python-format
 msgid "Error: Section %s and name %s does not exist."
 msgstr "പിശക്: %s വിഭാഗവും %s പേരു് ലഭ്യമല്ല."
 
-#: ../src/subscription_manager/managercli.py:1457
+#: ../src/subscription_manager/managercli.py:1474
 msgid "[] - Default value in use"
 msgstr "[] - ഉപയോഗത്തില്‍ സ്വതവേയുള്ള മൂല്ല്യം"
 
-#: ../src/subscription_manager/managercli.py:1466
-#: ../src/subscription_manager/managercli.py:1469
+#: ../src/subscription_manager/managercli.py:1483
+#: ../src/subscription_manager/managercli.py:1486
 #, python-format
 msgid "You have removed the value for section %s and name %s."
 msgstr ""
 "വിഭാഗം %s, പേരു് %s എന്നിവയ്ക്കുള്ള മൂല്ല്യം നീക്കം ചെയ്തിരിയ്ക്കുന്നു."
 
-#: ../src/subscription_manager/managercli.py:1470
+#: ../src/subscription_manager/managercli.py:1487
 #, python-format
 msgid "The default value for %s will now be used."
 msgstr "%s-നുള്ള സ്വതവേയുള്ള മൂല്ല്യം ഇപ്പോള്‍ ഉപയോഗിയ്ക്കാം."
 
-#: ../src/subscription_manager/managercli.py:1472
+#: ../src/subscription_manager/managercli.py:1489
 #, python-format
 msgid "Section %s and name %s cannot be removed."
 msgstr "വിഭാഗം %s, പേരു് %s എന്നിവ നീക്കം ചെയ്യുവാന്‍ സാധ്യമല്ല."
 
-#: ../src/subscription_manager/managercli.py:1487
+#: ../src/subscription_manager/managercli.py:1504
 msgid "List subscription and product information for this machine"
 msgstr "ഈ സിസ്റ്റത്തിനുള്ള സബ്സ്ക്രിപ്ഷനും പ്രൊഡക്ട് വിവരവും ലഭ്യമാക്കുക"
 
-#: ../src/subscription_manager/managercli.py:1493
+#: ../src/subscription_manager/managercli.py:1510
 msgid ""
 "if supplied then list shows those products which are installed (default)"
 msgstr ""
 "ലഭ്യമാക്കിയെങ്കില്‍, ഇന്‍സ്റ്റോള്‍ ചെയ്തിരിയ്ക്കുന്ന പ്രൊഡക്ടുകള്‍ "
 "കാണിയ്ക്കുക (സ്വതവേയുള്ളവ)"
 
-#: ../src/subscription_manager/managercli.py:1495
+#: ../src/subscription_manager/managercli.py:1512
 msgid "if supplied then list shows those subscriptions which are available"
 msgstr "ലഭ്യമാക്കിയെങ്കില്‍, നിലവിലുള്ള സബ്സ്ക്രിപ്ഷനുകള്‍ കാണിയ്ക്കുക"
 
-#: ../src/subscription_manager/managercli.py:1497
+#: ../src/subscription_manager/managercli.py:1514
 #, python-format
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
@@ -1547,67 +1661,67 @@ msgstr ""
 "തെരയുവാനുള്ള തീയതി, ഇന്നത്തെ തീയതിയായി സ്വതവേ സജ്ജമാകുന്നു. --available-മായി"
 " മാത്രം ഉപയോഗിയ്ക്കുക (ഉദാഹരണം: %s)"
 
-#: ../src/subscription_manager/managercli.py:1500
+#: ../src/subscription_manager/managercli.py:1517
 msgid "shows the subscriptions being consumed by this system."
 msgstr "ഈ സിസ്റ്റം ഉപയോഗിയ്ക്കുന്ന സബ്സ്ക്രിപ്ഷനുകള്‍ കാണിയ്ക്കുക."
 
-#: ../src/subscription_manager/managercli.py:1502
+#: ../src/subscription_manager/managercli.py:1519
 msgid "if supplied with --available then all subscriptions are returned"
 msgstr ""
 "--available-നൊപ്പം ലഭ്യമാക്കുന്നെങ്കില്‍, എല്ലാ സബ്സക്രിപ്ഷനുകള്‍ തിരികെ "
 "ലഭ്യമാകുന്നു"
 
-#: ../src/subscription_manager/managercli.py:1509
+#: ../src/subscription_manager/managercli.py:1526
 msgid "Error: --all is only applicable with --available"
 msgstr "പിശക്: --available-നൊപ്പം മാത്രം --all ഉപയോഗിയ്ക്കാന്‍ സാധ്യമാകൂ"
 
-#: ../src/subscription_manager/managercli.py:1512
+#: ../src/subscription_manager/managercli.py:1529
 msgid "Error: --ondate is only applicable with --available"
 msgstr "പിശക്: --available-നൊപ്പം മാത്രം --ondate ഉപയോഗിയ്ക്കാന്‍ സാധ്യമാകൂ"
 
-#: ../src/subscription_manager/managercli.py:1535
+#: ../src/subscription_manager/managercli.py:1552
 msgid "No installed products to list"
 msgstr "ലഭ്യമാക്കുവാന്‍ പ്രൊഡക്ടുകള്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ല"
 
-#: ../src/subscription_manager/managercli.py:1538
+#: ../src/subscription_manager/managercli.py:1555
 msgid "    Installed Product Status"
 msgstr "    ഇന്‍സ്റ്റോള്‍ ചെയ്ത പ്രൊഡക്ടിന്റെ അവസ്ഥ"
 
-#: ../src/subscription_manager/managercli.py:1555
+#: ../src/subscription_manager/managercli.py:1572
 msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr "നല്‍കിയ തീയതി തെറ്റാണു്. തീയതി YYYY-MM-DD മാതൃകയിലാവണം (ഉദാഹരണം: "
 
-#: ../src/subscription_manager/managercli.py:1561
+#: ../src/subscription_manager/managercli.py:1578
 msgid "No available subscription pools to list"
 msgstr "ലഭ്യമാക്കുവാന്‍ സബ്സ്ക്രിപ്ഷന്‍ പൂളുകള്‍ ലഭ്യമല്ല"
 
-#: ../src/subscription_manager/managercli.py:1569
+#: ../src/subscription_manager/managercli.py:1586
 msgid "virtual"
 msgstr "വിര്‍ച്ച്വല്‍"
 
-#: ../src/subscription_manager/managercli.py:1571
+#: ../src/subscription_manager/managercli.py:1588
 msgid "physical"
 msgstr "ഫിസിക്കല്‍"
 
-#: ../src/subscription_manager/managercli.py:1591
+#: ../src/subscription_manager/managercli.py:1618
 msgid "No consumed subscription pools to list"
 msgstr "ലഭ്യമാക്കുവാന്‍ ഉപയോഗിച്ച സബ്സ്ക്രിപ്ഷന്‍ പൂളികളില്ല"
 
-#: ../src/subscription_manager/managercli.py:1594
+#: ../src/subscription_manager/managercli.py:1621
 msgid "Consumed Product Subscriptions"
 msgstr "ഉപയോഗിയ്ക്കുന്ന പ്രൊഡക്ടിനുള്ള സബ്സ്ക്രിപ്ഷനുകള്‍"
 
-#: ../src/subscription_manager/managercli.py:1671
+#: ../src/subscription_manager/managercli.py:1702
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 msgstr "ഉപയോഗിയ്ക്കേണ്ട വിധം: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
-#: ../src/subscription_manager/managercli.py:1673
+#: ../src/subscription_manager/managercli.py:1704
 msgid "Primary Modules:"
 msgstr "പ്രൈമറി ഘടകങ്ങള്‍:"
 
-#: ../src/subscription_manager/managercli.py:1682
+#: ../src/subscription_manager/managercli.py:1713
 msgid "Other Modules (Please consult documentation):"
 msgstr "മറ്റു് ഘടകങ്ങള്‍ (വിവരണക്കുറിപ്പു് കാണുക):"
 
@@ -1665,19 +1779,36 @@ msgstr "<b>വിര്‍ച്ച്വല്‍ മാത്രം:</b>"
 msgid "Account Text"
 msgstr "അക്കൊണ്ട് വാചകം"
 
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:14
+msgid "Bundled Products Table"
+msgstr "ബന്‍ഡില്‍ഡ് പ്രൊഡക്ടുകളുടെ പട്ടിക"
+
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:16
+msgid "End Date Text"
+msgstr "അവസാന തീയതിയ്ക്കുള്ള പദാവലി"
+
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:17
 msgid "Provides Management Text"
 msgstr "മാനേജ്മെന്റ് വാചകം നല്‍കുന്നു"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:18
+msgid "Stacking ID Text"
+msgstr "സ്റ്റാക്കിങ് ഐഡിയ്ക്കുള്ള പദാവലി"
+
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:19
+msgid "Start Date Text"
+msgstr "പ്രാരംഭ തീയതിയ്ക്കുള്ള പദാവലി"
+
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:20
+#: ../src/subscription_manager/gui/data/installed.glade.h:10
 msgid "Subscription Text"
 msgstr "സബ്സ്ക്രിപ്ഷന്‍ വാചകം"
 
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:19
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:21
 msgid "Support Level Text"
 msgstr "സപ്പോര്‍ട്ട് ലവല്‍ വാചകം"
 
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:20
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:22
 msgid "Support Type Text"
 msgstr "സപ്പോര്‍ട്ട് രീതിയ്ക്കുള്ള വാചകം"
 
@@ -1694,6 +1825,34 @@ msgstr "അടുത്ത പരിഷ്കരണം:"
 #: ../src/subscription_manager/gui/data/mysubs.glade.h:3
 msgid "Unsubscribe"
 msgstr "അണ്‍സബ്സ്ക്രൈബ്"
+
+#: ../src/subscription_manager/gui/data/selectsla.glade.h:1
+msgid "<b>Detected products:</b>"
+msgstr "<b>കണ്ടുപിടിച്ച പ്രൊഡക്ടുകള്‍:</b>"
+
+#: ../src/subscription_manager/gui/data/selectsla.glade.h:2
+msgid "<b>Subscribe all detected products as:</b>"
+msgstr "<b>കണ്ടുപിടിച്ച പ്രൊഡക്ടുകള്‍ സബ്സ്ക്രൈബ് ചെയ്യേണ്ടതു്:</b>"
+
+#: ../src/subscription_manager/gui/data/selectsla.glade.h:3
+msgid ""
+"We have detected that you have multiple service level\n"
+"agreements on various products. Please select how you\n"
+"want them assigned."
+msgstr ""
+"അനവധി പ്രൊഡക്ടുകള്‍ക്കു് നിങ്ങള്‍ക്കു് അനവധി¶ സര്‍വീസ് ലവല്‍ എഗ്രീമെന്റുകള്‍"
+" ഉണ്ടെന്നു്¶ കണ്ടുപിടിച്ചിരിയ്ക്കുന്നു. നിങ്ങള്‍ക്കു് ഇവ എങ്ങനെ വേണമെന്നു് "
+"തെരഞ്ഞെടുക്കുക."
+
+#: ../src/subscription_manager/gui/data/selectsla.glade.h:6
+#: ../src/subscription_manager/gui/data/autobind.glade.h:5
+#: ../src/subscription_manager/gui/data/installed.glade.h:11
+msgid "label"
+msgstr "ലേബല്‍"
+
+#: ../src/subscription_manager/gui/data/selectsla.glade.h:7
+msgid "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
+msgstr "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
 
 #: ../src/subscription_manager/gui/data/redeem.glade.h:1
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:2
@@ -1744,20 +1903,41 @@ msgid "Register"
 msgstr "രജിസ്ടര്‍ ചെയ്യുക"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:7
+#: ../src/subscription_manager/gui/data/preferences.glade.h:2
+msgid "System Preferences"
+msgstr "സിസ്റ്റത്തിനുള്ള മുന്‍ഗണനകള്‍"
+
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:8
 msgid "Unregister"
 msgstr "അണ്‍രജിസ്ടര്‍ ചെയ്യുക"
 
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:8
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:9
 msgid "View System Facts"
 msgstr "സിസ്റ്റം വിവരങ്ങള്‍ കാണുക"
 
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:9
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:10
 msgid "_Help"
 msgstr "_സഹായം"
 
-#: ../src/subscription_manager/gui/data/mainwindow.glade.h:10
+#: ../src/subscription_manager/gui/data/mainwindow.glade.h:11
 msgid "_Proxy Configuration"
 msgstr "പ്രോ_ക്സി ക്രമീകരണം"
+
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:1
+msgid "Core repositories will be enabled for each product."
+msgstr "ഓരോ പ്രൊഡക്ടിനും കോര്‍ റിപ്പോസിറ്ററികള്‍ പ്രവര്‍ത്തന സജ്ജമാക്കുന്നു."
+
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:2
+msgid "SLA"
+msgstr "എസ്എല്‍എ"
+
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:3
+msgid "Using service level:"
+msgstr "സര്‍വീസ് ലവല്‍ ഉപയോഗിയ്ക്കുന്നു:"
+
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:4
+msgid "You will be subscribed to:"
+msgstr "നിങ്ങള്‍ ഇതിലേക്കു് സബ്സ്ക്രൈബ് ചെയ്യപ്പെടുന്നു:"
 
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
@@ -1820,8 +2000,10 @@ msgid "Password:"
 msgstr "രഹസ്യവാക്ക്:"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:9
-msgid "Select the most appropriate subscriptions for this system"
-msgstr "ഈ സിസ്റ്റത്തിനുള്ള ഏറ്റവും ഉചിതമായ സബ്സ്ക്രിപ്ഷനുകള്‍ തെരഞ്ഞെടുക്കുക"
+msgid "Skip automatic subscription selection for this system"
+msgstr ""
+"ഈ സിസ്റ്റത്തിനുള്ള ഓട്ടോമാറ്റിക് സബ്സ്ക്രിപ്ഷന്‍ തെരഞ്ഞെടുക്കല്‍ "
+"ഉപേക്ഷിയ്ക്കുക"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:10
 msgid "System Name:"
@@ -1848,14 +2030,17 @@ msgid "page 4"
 msgstr "താള്‍ 4"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:16
+#: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid "register_button"
 msgstr "register_button"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:17
+#: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "register_dialog_main_vbox"
 msgstr "register_dialog_main_vbox"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:18
+#: ../src/subscription_manager/gui/data/preferences.glade.h:6
 msgid "registration_dialog_action_area\n"
 msgstr "registration_dialog_action_area\n"
 
@@ -1879,12 +2064,6 @@ msgstr "തെറ്റായ പ്രൊഡക്ട് ലിസ്റ്റ�
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:5
 msgid "Show products with invalid entitlement certificates as of:"
 msgstr "തെറ്റായ എന്റൈറ്റില്‍മെന്റ് പ്രൊഡക്ടുകള്‍ കാണിയ്ക്കുക:"
-
-#: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:6
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:12
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:6
-msgid "Subscribe"
-msgstr "അംഗമാകുക"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:7
 msgid "Subscription Action Area"
@@ -1963,7 +2142,6 @@ msgstr ""
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:25
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:14
-#: ../src/subscription_manager/gui/data/installed.glade.h:10
 msgid "Update"
 msgstr "പരിഷ്കരിയ്ക്കുക"
 
@@ -2121,6 +2299,18 @@ msgstr "_അടയ്ക്കുക"
 msgid "_Proxy Location:"
 msgstr "_പ്രോക്സിയുടെ സ്ഥാനം:"
 
+#: ../src/subscription_manager/gui/data/autobind.glade.h:1
+msgid "Autobind Start"
+msgstr "ഓട്ടോബൈന്‍ഡ് ആരംഭിയ്ക്കുക"
+
+#: ../src/subscription_manager/gui/data/autobind.glade.h:2
+msgid "Back"
+msgstr "പുറകോട്ട്"
+
+#: ../src/subscription_manager/gui/data/autobind.glade.h:3
+msgid "Cancel"
+msgstr "റദ്ദാക്കുക"
+
 #: ../src/subscription_manager/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
 msgstr "<b>സര്‍ട്ടിഫിക്കേറ്റിന്റെ സ്ഥിതി:</b>"
@@ -2134,16 +2324,28 @@ msgid "<b>Product:</b>"
 msgstr "<b>പ്രൊഡക്ട്:</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:5
-msgid "Certificate Status"
-msgstr "സര്‍ട്ടിഫിക്കേറ്റിന്റെ സ്ഥിതി"
+msgid "Certificate Status Text"
+msgstr "സര്‍ട്ടിഫിക്കേറ്റിന്റെ അവസ്ഥയ്ക്കുള്ള പദാവലി"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:6
 msgid "Installed View"
 msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്ത കാഴ്ച"
 
-#: ../src/subscription_manager/gui/data/installed.glade.h:11
-msgid "label"
-msgstr "ലേബല്‍"
+#: ../src/subscription_manager/gui/data/installed.glade.h:8
+msgid "Product Text"
+msgstr "പ്രൊഡക്ടിനുള്ള പദാവലി"
+
+#: ../src/subscription_manager/gui/data/preferences.glade.h:1
+msgid ""
+"<small>Your system's SLA preference is followed when subscribing to new "
+"products</small>"
+msgstr ""
+"<small>പുതിയ പ്രൊഡക്ടുകളിലേക്കു് സബ്സ്ക്രൈബ് ചെയ്യുമ്പോള്‍, നിങ്ങളുടെ "
+"സിസ്റ്റത്തിന്റെ എസ്എല്‍എ മുന്‍ഗണന ലഭ്യമാകുന്നു</small>"
+
+#: ../src/subscription_manager/gui/data/preferences.glade.h:3
+msgid "System Service Level Agreement Preference:"
+msgstr "സിസ്റ്റം സര്‍വീസ് ലവല്‍ എഗ്രീമെന്റിനുള്ള മുന്‍ഗണന:"
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:1
 msgid "Certificate _Location:"
@@ -2231,7 +2433,7 @@ msgstr ""
 msgid "%s [OPTIONS]"
 msgstr "%s [OPTIONS]"
 
-#: ../src/rhn-migrate-classic-to-rhsm:122
+#: ../src/rhn-migrate-classic-to-rhsm:126
 msgid ""
 "\n"
 "This machine appears to be already registered to Certificate-based RHN.  Exiting."
@@ -2239,7 +2441,7 @@ msgstr ""
 "\n"
 "സര്‍ട്ടിഫിക്കേറ്റിന്റെ അടിസ്ഥാനത്തിലുള്ള ആര്‍എച്എനിലേക്കു് സിസ്റ്റം നിലവില്‍ രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്നു. പുറത്തു് കടക്കുന്നു."
 
-#: ../src/rhn-migrate-classic-to-rhsm:124
+#: ../src/rhn-migrate-classic-to-rhsm:128
 #, c-format
 msgid ""
 "\n"
@@ -2248,7 +2450,7 @@ msgstr ""
 "\n"
 "പ്രൊഫൈല്‍ വിവരങ്ങള്‍ കാണുന്നതിനായി, ദയവായി https://access.redhat.com/management /consumers/%s കാണുക."
 
-#: ../src/rhn-migrate-classic-to-rhsm:130
+#: ../src/rhn-migrate-classic-to-rhsm:134
 #, c-format
 msgid ""
 "This migration script requires the system to be registered to RHN Classic.\n"
@@ -2259,49 +2461,50 @@ msgstr ""
 "ഈ സിസ്റ്റം '%s'-ലേക്കു് രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്നു.¶\n"
 "പുറത്തു് കടക്കുന്നു"
 
-#: ../src/rhn-migrate-classic-to-rhsm:143
+#: ../src/rhn-migrate-classic-to-rhsm:147
+#, c-format
 msgid ""
-"Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for "
-"more details."
+"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for"
+" more details."
 msgstr ""
-"സര്‍ട്ടിഫിക്കേറ്റിന്റെ സര്‍വറിലേക്കു് കണക്ട് ചെയ്യുവാന്‍ സാധ്യമല്ല. കൂടുതല്‍"
-" വിവരങ്ങള്‍ക്കായി /var/log/rhsm/rhsm.log കാണുക."
+"സര്‍ട്ടിഫിക്കേറ്റിന്റെ സര്‍വറിലേക്കു് കണക്ട് ചെയ്യുവാന്‍ സാധ്യമല്ല: %s. "
+"കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/log/rhsm/rhsm.log കാണുക."
 
-#: ../src/rhn-migrate-classic-to-rhsm:149
+#: ../src/rhn-migrate-classic-to-rhsm:153
 msgid "This system is not associated with any channel."
 msgstr "ഈ സിസ്റ്റത്തിനു് ഒരു ചാനലുമായി ബന്ധമില്ല."
 
-#: ../src/rhn-migrate-classic-to-rhsm:151
+#: ../src/rhn-migrate-classic-to-rhsm:155
 msgid "Unable to locate SystemId file. Is this system registered?"
 msgstr ""
 "SystemId ഫയല്‍ ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല. ഈ സിസ്റ്റം രജിസ്ടര്‍ "
 "ചെയ്തിട്ടുണ്ടോ?"
 
-#: ../src/rhn-migrate-classic-to-rhsm:154
+#: ../src/rhn-migrate-classic-to-rhsm:158
 msgid "Problem encountered getting the list of subscribed channels.  Exiting."
 msgstr ""
 "അംഗമായിട്ടുള്ള ചാനലുകളുടെ പട്ടിക ലഭ്യമാക്കുന്നതില്‍ പ്രശ്നം "
 "നേരിട്ടിരിയ്ക്കുന്നു. പുറത്തു് കടക്കുന്നു."
 
-#: ../src/rhn-migrate-classic-to-rhsm:193
+#: ../src/rhn-migrate-classic-to-rhsm:197
 msgid "System successfully unregistered from RHN Classic."
 msgstr ""
 "ആര്‍എച്എന്‍ ക്ലാസിക്കില്‍ നിന്നും സിസ്റ്റം വിജയകരമായി അണ്‍രജിസ്ടര്‍ "
 "ചെയ്തിരിയ്ക്കുന്നു."
 
-#: ../src/rhn-migrate-classic-to-rhsm:195
+#: ../src/rhn-migrate-classic-to-rhsm:199
 msgid "Unable to unregister system from RHN Classic.  Exiting."
 msgstr ""
 "ആര്‍എച്എന്‍ ക്ലാസിക്കില്‍ നിന്നും സിസ്റ്റം അണ്‍രജിസ്ടര്‍ ചെയ്യുവാന്‍ "
 "സാധ്യമല്ല. പുറത്തു് കടക്കുന്നു."
 
-#: ../src/rhn-migrate-classic-to-rhsm:198
+#: ../src/rhn-migrate-classic-to-rhsm:202
 msgid "Problem encountered unregistering system from RHN Classic.  Exiting."
 msgstr ""
 "ആര്‍എച്എന്‍ ക്ലാസിക്കില്‍ നിന്നും സിസ്റ്റം അണ്‍രജിസ്ടര്‍ ചെയ്യുന്നതില്‍ "
 "പ്രശ്നമുണ്ടായിരിയ്ക്കുന്നു. പുറത്തു് കടക്കുന്നു."
 
-#: ../src/rhn-migrate-classic-to-rhsm:266
+#: ../src/rhn-migrate-classic-to-rhsm:270
 msgid ""
 "\n"
 "Attempting to register system to Certificate-based RHN ..."
@@ -2309,7 +2512,7 @@ msgstr ""
 "\n"
 "സര്‍ട്ടിഫിക്കേറ്റ് അടിസ്ഥാനത്തിലുള്ള ആര്‍എച്എനിലേക്കു് സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുവാന്‍ ശ്രമിയ്ക്കുന്നു ..."
 
-#: ../src/rhn-migrate-classic-to-rhsm:269
+#: ../src/rhn-migrate-classic-to-rhsm:273
 msgid ""
 "\n"
 "Unable to register.\n"
@@ -2319,24 +2522,24 @@ msgstr ""
 "രജിസ്ടര്‍ ചെയ്യുവാന്‍ സാധ്യമല്ല.¶\n"
 "കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി ദയവായി Red Hat ഗ്ലോബല്‍ സപ്പോര്‍ട്ട് സര്‍വീസുകളുമായി ബന്ധപ്പെടുക."
 
-#: ../src/rhn-migrate-classic-to-rhsm:272
+#: ../src/rhn-migrate-classic-to-rhsm:276
 #, c-format
 msgid "System '%s' successfully registered to Certificate-based RHN.\n"
 msgstr ""
 "സര്‍ട്ടിഫിക്കേറ്റ് അടിസ്ഥാനത്തിലുള്ള ആര്‍എച്എനിലേക്കു് സിസ്റ്റം '%s' "
 "വിജയകരമായി രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്നു.¶\n"
 
-#: ../src/rhn-migrate-classic-to-rhsm:276
+#: ../src/rhn-migrate-classic-to-rhsm:280
 msgid "Launching the GUI tool to manually subscribe the system ..."
 msgstr ""
 "സ്വയമായി സിസ്റ്റത്തിലേക്കു് അംഗമാകുന്നതിനായി ജിയുഐ പ്രയോഗം ലഭ്യമാക്കുന്നു..."
 
-#: ../src/rhn-migrate-classic-to-rhsm:279
+#: ../src/rhn-migrate-classic-to-rhsm:283
 msgid "Attempting to auto-subscribe to appropriate subscriptions ..."
 msgstr ""
 "ഉചിതമായ സബ്സ്ക്രിപ്ഷനുകളിലേക്കു് സ്വയം അംഗമാകുന്നതിനായി ശ്രമിയ്ക്കുന്നു ...."
 
-#: ../src/rhn-migrate-classic-to-rhsm:282
+#: ../src/rhn-migrate-classic-to-rhsm:286
 msgid ""
 "\n"
 "Unable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?"
@@ -2344,7 +2547,7 @@ msgstr ""
 "\n"
 "സ്വയം അംഗമാകുവാന്‍ സാധ്യമല്ല. ഈ സിസ്റ്റത്തില്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്തിരിയ്ക്കുന്ന പ്രൊഡക്ടുകളുമായി നിലവിലുള്ള സബ്സ്ക്രിപ്ഷനുകള്‍ പൊരുത്തപ്പെടുന്നുവോ?"
 
-#: ../src/rhn-migrate-classic-to-rhsm:283
+#: ../src/rhn-migrate-classic-to-rhsm:287
 #, c-format
 msgid ""
 "\n"
@@ -2353,11 +2556,11 @@ msgstr ""
 "\n"
 "വിശദാംശങ്ങള്‍ കാണുന്നതിനും ആവശ്യമെങ്കില്‍ മാറ്റങ്ങള്‍ വരുത്തുന്നതിനും https://access.redhat.com/management/consumers/%s കാണുക."
 
-#: ../src/rhn-migrate-classic-to-rhsm:309
+#: ../src/rhn-migrate-classic-to-rhsm:313
 msgid "Channels not available on RHSM:"
 msgstr "RHSM-ല്‍ ചാനലുകള്‍ ലഭ്യമല്ല:"
 
-#: ../src/rhn-migrate-classic-to-rhsm:316
+#: ../src/rhn-migrate-classic-to-rhsm:320
 msgid ""
 "\n"
 "Unrecognized channels. Channel to product certificate mapping missing for these channels."
@@ -2365,7 +2568,7 @@ msgstr ""
 "\n"
 "അപരിചിതമായ ചാനലുകള്‍. ഈ ചാനലുകള്‍ക്കുള്ള പ്രൊഡക്ട് മാപ്പിങിനുള്ള ചാനല്‍ ലഭ്യമല്ല."
 
-#: ../src/rhn-migrate-classic-to-rhsm:323
+#: ../src/rhn-migrate-classic-to-rhsm:327
 msgid ""
 "\n"
 "Use --force to ignore these channels and continue the migration.\n"
@@ -2373,7 +2576,7 @@ msgstr ""
 "\n"
 "ഈ ചാനലുകള്‍ വേണ്ടെന്നു് വയ്ക്കുന്നതിനും മൈഗ്രേഷനുമായി തുടരുന്നതിനായി --force ഉപയോഗിയ്ക്കുക.¶\n"
 
-#: ../src/rhn-migrate-classic-to-rhsm:328
+#: ../src/rhn-migrate-classic-to-rhsm:332
 msgid ""
 "\n"
 "List of channels for which certs are being copied"
@@ -2381,7 +2584,7 @@ msgstr ""
 "\n"
 "സര്‍ട്ടിഫിക്കേറ്റുകള്‍ പകര്‍ത്തപ്പടേണ്ട ചാനലുകളുടെ പട്ടിക"
 
-#: ../src/rhn-migrate-classic-to-rhsm:342
+#: ../src/rhn-migrate-classic-to-rhsm:346
 #, c-format
 msgid ""
 "\n"
@@ -2390,7 +2593,7 @@ msgstr ""
 "\n"
 "പ്രൊഡക്ട് സര്‍ട്ടിഫിക്കേറ്റുകള്‍ വിജയകരമായി %s-ലേക്കു് പകര്‍ത്തിയിരിയ്ക്കുന്നു"
 
-#: ../src/rhn-migrate-classic-to-rhsm:386
+#: ../src/rhn-migrate-classic-to-rhsm:390
 msgid ""
 "\n"
 "Unable to enable extra repositories."
@@ -2398,7 +2601,7 @@ msgstr ""
 "\n"
 "അധികം റിപ്പോസിറ്ററികള്‍ പ്രവര്‍ത്തന സജ്ജമാക്കുവാന്‍ സാധ്യമല്ല."
 
-#: ../src/rhn-migrate-classic-to-rhsm:387
+#: ../src/rhn-migrate-classic-to-rhsm:391
 msgid ""
 "Please ensure system is subscribed to entitlements, and alter "
 "/etc/yum.repos.d/redhat.repo to enable extra repositories."
@@ -2407,11 +2610,11 @@ msgstr ""
 "ഉറപ്പാക്കുക, ശേഷം അധികം റിപ്പോസിറ്ററികള്‍ പ്രവര്‍ത്തന സജ്ജമാക്കുന്നതിനായി "
 "/etc/yum.repos.d/redhat.repo-ല്‍ മാറ്റം വരുത്തുക."
 
-#: ../src/rhn-migrate-classic-to-rhsm:421
+#: ../src/rhn-migrate-classic-to-rhsm:425
 msgid "RHN Username: "
 msgstr "ആര്‍എച്എന്‍ ഉപയോക്തൃനാമം: "
 
-#: ../src/rhn-migrate-classic-to-rhsm:427
+#: ../src/rhn-migrate-classic-to-rhsm:431
 msgid ""
 "\n"
 "Retrieving existing RHN Classic subscription information ..."
@@ -2419,11 +2622,11 @@ msgstr ""
 "\n"
 "നിലവിലുള്ള RHN ക്ലാസ്സിക് സബ്സ്ക്രിപ്ഷന്‍ വിവരം ലഭ്യമാക്കുന്നു ..."
 
-#: ../src/rhn-migrate-classic-to-rhsm:430
+#: ../src/rhn-migrate-classic-to-rhsm:434
 msgid "System is currently subscribed to:"
 msgstr "സിസ്റ്റം നിലവില്‍ അംഗമായിരിയ്ക്കുന്നതു്: "
 
-#: ../src/rhn-migrate-classic-to-rhsm:438
+#: ../src/rhn-migrate-classic-to-rhsm:442
 msgid ""
 "\n"
 "Preparing to unregister system from RHN classic ..."
@@ -2447,22 +2650,37 @@ msgstr "പ്രതിരൂപം നിര്‍ബന്ധിച്ചു�
 msgid "Run the first status check right away"
 msgstr "ആദ്യത്തെ അവസ്ഥ പരിശോധന ഉടന്‍ നടപ്പിലാക്കുക"
 
-#: ../src/rhsm_icon.c:188 ../src/rhsm_icon.c:190
+#: ../src/rhsm_icon.c:202 ../src/rhsm_icon.c:203
+msgid "Register System For Support And Updates"
+msgstr "പിന്തുണയ്ക്കും പരിഷ്കരണത്തിനും സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുക"
+
+#: ../src/rhsm_icon.c:204
+msgid ""
+"In order for Subscription Manager to provide your system with updates, your "
+"system must be registered with RHN. Please enter your Red Hat login to "
+"ensure your system is up-to-date."
+msgstr ""
+"സബ്സ്ക്രിപ്ഷന്‍ മാനേജര്‍ നിങ്ങളുടെ സിസ്റ്റത്തിനു് ആവശ്യമുള്ള പരിഷ്കരണങ്ങള്‍ "
+"ലഭ്യമാക്കുന്നതിനായി, സിസ്റ്റം ആര്‍എച്എനുമായി രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കണം. "
+"നിങ്ങളുടെ സിസ്റ്റത്തില്‍ ഏറ്റവും പുതിയ പരിഷ്കരണങ്ങള്‍ "
+"ലഭ്യമെന്നുറപ്പാക്കുന്നതിനായി, ദയവായി നിങ്ങളുടെ Red Hat ലോഗിന്‍ നല്‍കുക."
+
+#: ../src/rhsm_icon.c:209 ../src/rhsm_icon.c:211
 msgid "Invalid or Missing Entitlement Certificates"
 msgstr ""
 "തെറ്റായ അല്ലെങ്കില്‍ ലഭ്യമല്ലാത്ത എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റുകള്‍"
 
-#: ../src/rhsm_icon.c:192
+#: ../src/rhsm_icon.c:213
 msgid "This system is missing one or more valid entitlement certificates."
 msgstr ""
 "ഈ സിസ്റ്റത്തില്‍ ഒന്നോ അതിലധികമോ ശരിയായ എന്റൈറ്റില്‍മെന്റ് "
 "സര്‍ട്ടിഫിക്കേറ്റുകള്‍ ലഭ്യമല്ല."
 
-#: ../src/rhsm_icon.c:195 ../src/rhsm_icon.c:196
+#: ../src/rhsm_icon.c:216 ../src/rhsm_icon.c:217
 msgid "Partially Entitled Products"
 msgstr "പകുതി എന്റൈറ്റില്‍ ആയ പ്രൊഡക്ടുകള്‍"
 
-#: ../src/rhsm_icon.c:197
+#: ../src/rhsm_icon.c:218
 msgid ""
 "This system is missing one or more valid entitlement certificates to fully "
 "cover its products"
@@ -2470,38 +2688,42 @@ msgstr ""
 "പ്രൊഡക്ടുകള്‍ക്കുള്ള ഒന്നോ അതിലധികമോ സാധുതയുള്ള എന്റൈറ്റില്‍മെന്റ് "
 "സര്‍ട്ടിഫിക്കേറ്റുകള്‍ ലഭ്യമല്ല."
 
-#: ../src/rhsm_icon.c:203
+#: ../src/rhsm_icon.c:224
 msgid "Some of the system's subscriptions are about to expire"
 msgstr "ചില സിസ്റ്റത്തിന്റെ സബ്സ്ക്രിപ്ഷനുകളുടെ കാലാവധി കഴിയാറായി"
 
-#: ../src/rhsm_icon.c:205
+#: ../src/rhsm_icon.c:226
 msgid "This System's Subscriptions Are About to Expire"
 msgstr "സിസ്റ്റത്തിന്റെ സബ്സ്ക്രിപ്ഷനുകളുടെ കാലാവധി കഴിയാറായി"
 
-#: ../src/rhsm_icon.c:207
+#: ../src/rhsm_icon.c:228
 msgid "One or more of this system's subscriptions are about to expire."
 msgstr ""
 "ഒന്നോ അതില്‍ കൂടുതല്‍ സിസ്റ്റത്തിന്റെ സബ്സ്ക്രിപ്ഷനുകളുടെ കാലാവധി കഴിയാറായി."
 
-#: ../src/rhsm_icon.c:226
+#: ../src/rhsm_icon.c:243
 msgid "Remind Me Later"
 msgstr "പിന്നീടു് അറിയിയ്ക്കുക"
 
-#: ../src/rhsm_icon.c:231
+#: ../src/rhsm_icon.c:250
+msgid "Register Now"
+msgstr "ഉടന്‍ രജിസ്ടര്‍ ചെയ്യുക"
+
+#: ../src/rhsm_icon.c:256
 msgid "Manage My Subscriptions..."
 msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ കൈകാര്യം ചെയ്യുക..."
 
-#: ../src/rhsm_icon.c:293
+#: ../src/rhsm_icon.c:322
 #, c-format
 msgid "Unknown argument to force-icon: %s\n"
 msgstr "force-icon-നു് അപരിചിതമായ ആര്‍ഗ്യുമെന്റ്: %s\n"
 
-#: ../src/rhsm_icon.c:335 ../src/rhsm_icon.c:398
+#: ../src/rhsm_icon.c:362 ../src/rhsm_icon.c:434
 #, c-format
 msgid "Failed to open connection to bus: %s\n"
 msgstr "Failed to open connection to bus: %s\n"
 
-#: ../src/rhsm_icon.c:383
+#: ../src/rhsm_icon.c:419
 #, c-format
 msgid "option parsing failed: %s\n"
 msgstr "ഐച്ഛികം പാഴ്സ് ചെയ്യുന്നതില്‍ പരാജയം: %s\n"
