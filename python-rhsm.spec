@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 0.99.6
+Version: 0.99.7
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,11 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Fri Mar 23 2012 Michael Stead <mstead@redhat.com> 0.99.7-1
+- 803773: quote international characters in activation keys before sending to
+  server (cduryee@redhat.com)
+- PEP8 fixes. (mstead@redhat.com)
+
 * Wed Mar 14 2012 Michael Stead <mstead@redhat.com> 0.99.6-1
 - Add ContentConnection to support rhsm "release" command (alikins@redhat.com)
 - Allow unsetting the consumer service level. (dgoodwin@redhat.com)
