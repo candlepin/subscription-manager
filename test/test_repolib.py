@@ -45,6 +45,13 @@ class RepoTests(unittest.TestCase):
         existing_repo.update(incoming_repo)
         self.assertEqual(1000, existing_repo['metadata_expire'])
 
+    def test_gpgcheck_is_mutable(self):
+        existing_repo = Repo('testrepo')
+        existing_repo['gpgcheck'] = "0"
+        incoming_repo = {'gpgcheck': "1"}
+        existing_repo.update(incoming_repo)
+        self.assertEqual("0", existing_repo['gpgcheck'])
+
     def test_mutable_property_in_repo_but_not_in_cert(self):
         existing_repo = Repo('testrepo')
         existing_repo['metadata_expire'] = 1000
@@ -95,18 +102,47 @@ class UpdateActionTests(unittest.TestCase):
         stub_prod_dir = StubProductDirectory([stub_prod_cert, stub_prod2_cert])
 
         stub_content = [
-                StubContent("c1", required_tags=""),  # no required tags
-                StubContent("c2", required_tags="TAG1"),
-                StubContent("c3", required_tags="TAG1,TAG2,TAG3"),   # should get skipped
-                StubContent("c4", required_tags="TAG1,TAG2,TAG4,TAG5,TAG6"),
+                StubContent("c1", required_tags="", gpg=None),  # no required tags
+                StubContent("c2", required_tags="TAG1", gpg=""),
+                StubContent("c3", required_tags="TAG1,TAG2,TAG3"), # should get skipped
+                StubContent("c4", required_tags="TAG1,TAG2,TAG4,TAG5,TAG6",
+                    gpg="/gpg.key"),
         ]
-        stub_ent_cert = StubEntitlementCertificate(stub_prod, content=stub_content)
-        stub_ent_dir = StubCertificateDirectory([stub_ent_cert])
+        self.stub_ent_cert = StubEntitlementCertificate(stub_prod, content=stub_content)
+        stub_ent_dir = StubCertificateDirectory([self.stub_ent_cert])
 
         repolib.ConsumerIdentity = stubs.StubConsumerIdentity
         stub_uep = stubs.StubUEP()
         self.update_action = UpdateAction(prod_dir=stub_prod_dir,
                 ent_dir=stub_ent_dir, uep=stub_uep)
+
+
+    def _find_content(self, content_list, name):
+        """
+        Scan list of content for one with name.
+        """
+        for content in content_list:
+            if content['name'] == name:
+                return content
+        return None
+
+    def test_no_gpg_key(self):
+        content = self.update_action.get_content(self.stub_ent_cert,
+                "http://example.com", None)
+        c1 = self._find_content(content, 'c1')
+        self.assertEquals('', c1['gpgkey'])
+        self.assertEquals('0', c1['gpgcheck'])
+
+        c2 = self._find_content(content, 'c2')
+        self.assertEquals('', c2['gpgkey'])
+        self.assertEquals('0', c2['gpgcheck'])
+
+    def test_gpg_key(self):
+        content = self.update_action.get_content(self.stub_ent_cert,
+                "http://example.com", None)
+        c4 = self._find_content(content, 'c4')
+        self.assertEquals('http://example.com/gpg.key', c4['gpgkey'])
+        self.assertEquals('1', c4['gpgcheck'])
 
     def test_tags_found(self):
         content = self.update_action.get_unique_content()

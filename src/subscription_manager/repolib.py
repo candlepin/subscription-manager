@@ -191,8 +191,16 @@ class UpdateAction:
             repo['name'] = content.getName()
             repo['enabled'] = content.getEnabled()
             repo['baseurl'] = self.join(baseurl, self._use_release_for_releasever(content.getUrl()))
-            # FIXME: gpg key url as well?
-            repo['gpgkey'] = self.join(baseurl, content.getGpg())
+
+            # If no GPG key URL is specified, turn gpgcheck off:
+            gpg_url = content.getGpg()
+            if not gpg_url:
+                repo['gpgkey'] = ""
+                repo['gpgcheck'] = '0'
+            else:
+                repo['gpgkey'] = self.join(baseurl, gpg_url)
+                # Leave gpgcheck as the default of 1
+
             repo['sslclientkey'] = self.get_key_path(ent_cert)
             repo['sslclientcert'] = ent_cert.path
             repo['sslcacert'] = ca_cert
@@ -244,7 +252,7 @@ class Repo(dict):
         ('name', 0, None),
         ('baseurl', 0, None),
         ('enabled', 1, '1'),
-        ('gpgcheck', 0, '1'),
+        ('gpgcheck', 1, '1'),
         ('gpgkey', 0, None),
         ('sslverify', 1, '1'),
         ('sslcacert', 0, None),
