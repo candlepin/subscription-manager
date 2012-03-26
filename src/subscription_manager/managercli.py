@@ -622,6 +622,9 @@ class ServiceLevelCommand(UserPassCommand):
         print(_("Current service level: %s") % service_level)
 
     def list_service_levels(self):
+        not_supported = _("ERROR: The service-level command is not supported by " + \
+                           "the server.")
+
         org_key = self.options.org
         if not org_key:
             consumer_uuid = ConsumerIdentity.read().getConsumerId()
@@ -637,10 +640,11 @@ class ServiceLevelCommand(UserPassCommand):
                     print sla
             else:
                 print _("This org does not have any subscriptions with service levels.")
+        except connection.RemoteServerException, e:
+            systemExit(-1, not_supported)
         except connection.RestlibException, e:
             if e.code == 404:
-                systemExit(-1, _("ERROR: The service-level command is not supported by " + \
-                                 "the server."))
+                systemExit(-1, not_supported)
             else:
                 raise e
 
