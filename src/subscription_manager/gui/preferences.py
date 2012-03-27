@@ -19,10 +19,7 @@ import gtk
 import gtk.glade
 import logging
 
-import rhsm.config
-
-from subscription_manager.gui.utils import errorWindow
-from subscription_manager.gui.widgets import SubscriptionManagerTab
+from subscription_manager import release
 
 _ = gettext.gettext
 
@@ -45,41 +42,82 @@ class PreferencesDialog(object):
 
         self.backend = backend
         self.consumer = consumer
+        self.release_backend = release.ReleaseBackend(ent_dir=self.backend.entitlement_dir,
+                                                      prod_dir=self.backend.product_dir,
+                                                      content_connection=self.backend.content_connection)
 
         self.dialog = GLADE_XML.get_widget('preferences_dialog')
+        self.release_combobox = GLADE_XML.get_widget('release_combobox')
         self.sla_combobox = GLADE_XML.get_widget('sla_combobox')
 
         GLADE_XML.signal_autoconnect({
             "on_close_button_clicked": self._close_button_clicked,
             "on_sla_combobox_changed": self._sla_changed,
+            "on_release_combobox_changed": self._release_changed,
         })
 
     def load_current_settings(self):
         self.sla_combobox.get_model().clear()
+        self.release_combobox.get_model().clear()
 
         if self.consumer.uuid is None:
             self.sla_combobox.set_sensitive(False)
-        else:
-            self.sla_combobox.set_sensitive(True)
-            consumer_json = self.backend.uep.getConsumer(self.consumer.uuid)
-            if 'serviceLevel' not in consumer_json:
-                log.warn("Disabling service level dropdown, server does not support service levels.")
-                self.sla_combobox.set_sensitive(False)
-                return
+            self.release_combobox.set_sensitive(False)
+            return
 
-            current_sla = consumer_json['serviceLevel']
-            owner_key = consumer_json['owner']['key']
-            available_slas = self.backend.uep.getServiceLevelList(owner_key)
+        self.sla_combobox.set_sensitive(True)
+        self.release_combobox.set_sensitive(True)
 
-            # An empty string entry is available for "un-setting" the system's SLA:
-            available_slas.insert(0, "")
+        consumer_json = self.backend.uep.getConsumer(self.consumer.uuid)
 
-            i = 0
-            for sla in available_slas:
-                self.sla_combobox.append_text(sla)
-                if sla == current_sla:
-                    self.sla_combobox.set_active(i)
-                i += 1
+        self.load_releases(consumer_json)
+        self.load_servicelevel(consumer_json)
+
+    def load_servicelevel(self, consumer_json):
+        if 'serviceLevel' not in consumer_json:
+            log.warn("Disabling service level dropdown, server does not support service levels.")
+            self.sla_combobox.set_sensitive(False)
+            return
+
+        current_sla = consumer_json['serviceLevel']
+        owner_key = consumer_json['owner']['key']
+        available_slas = self.backend.uep.getServiceLevelList(owner_key)
+
+        # An empty string entry is available for "un-setting" the system's SLA:
+        available_slas.insert(0, "")
+
+        i = 0
+        for sla in available_slas:
+            self.sla_combobox.append_text(sla)
+            if sla == current_sla:
+                self.sla_combobox.set_active(i)
+            i += 1
+
+    def load_releases(self, consumer_json):
+        if "releaseVer" not in consumer_json:
+            log.warn("Disabling release version  dropdown, server does not support release versions.")
+            self.release_combobox.set_sensitive(False)
+            return
+
+        self.release_combobox.set_sensitive(True)
+        current_release = None
+        if consumer_json['releaseVer']:
+            current_release = consumer_json['releaseVer']['releaseVer']
+
+        available_releases = self.release_backend.get_releases()
+        # current release might not be in the release listing
+        if current_release and current_release not in available_releases:
+            available_releases.insert(0, current_release)
+
+        # for unsetting
+        available_releases.insert(0, "")
+
+        i = 0
+        for available_release in available_releases:
+            self.release_combobox.append_text(available_release)
+            if available_release == current_release:
+                self.release_combobox.set_active(i)
+            i += 1
 
     def _close_button_clicked(self, widget):
         self.dialog.hide()
@@ -94,7 +132,18 @@ class PreferencesDialog(object):
         new_sla = model[active][0]
         log.info("SLA changed to: %s" % new_sla)
         self.backend.uep.updateConsumer(self.consumer.uuid,
-                service_level=new_sla)
+                                        service_level=new_sla)
+
+    def _release_changed(self, combobox):
+        model = combobox.get_model()
+        active = combobox.get_active()
+        if active < 0:
+            log.info("release changed but nothing selected? Ignoring.")
+            return
+        new_release = model[active][0]
+        log.info("release changed to: %s" % new_release)
+        self.backend.uep.updateConsumer(self.consumer.uuid,
+                                        release=new_release)
 
     def show(self):
         self.load_current_settings()

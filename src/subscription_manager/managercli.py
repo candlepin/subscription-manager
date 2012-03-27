@@ -47,6 +47,7 @@ from subscription_manager import managerlib
 from subscription_manager.facts import Facts
 from subscription_manager import listing
 from subscription_manager.quantity import valid_quantity
+from subscription_manager.release import ReleaseBackend
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, CertSorter
@@ -980,54 +981,7 @@ class ReleaseCommand(CliCommand):
         self.proxy_user = cfg.get('server', 'proxy_user')
         self.proxy_password = cfg.get('server', 'proxy_password')
 
-    def __get_releases(self):
-        # cdn base url
         cdn_url = cfg.get('rhsm', 'baseurl')
-
-        self.facts = Facts(ent_dir=self.entitlement_dir,
-                           prod_dir=self.product_dir)
-
-       # find entitlements for rhel product? (or vice versa)
-        sorter = CertSorter(self.product_dir,
-                            self.entitlement_dir,
-                            self.facts.get_facts())
-
-        # find the rhel product
-        rhel_product = None
-        for product_hash in sorter.installed_products:
-            product_cert = sorter.installed_products[product_hash]
-            products = product_cert.getProducts()
-            for product in products:
-                product_tags = product.getProvidedTags()
-
-                if self._is_rhel(product_tags):
-                    rhel_product = product
-
-        if rhel_product is None:
-            print _("No valid releases could be located.")
-            return []
-
-        entitlements = sorter.get_entitlements_for_product(rhel_product.getHash())
-        listings = []
-        for entitlement in entitlements:
-            contents = entitlement.getContentEntitlements()
-            for content in contents:
-
-                # FIXME: we need to match on content required tags here?
-                # maybe we just need to match on content required tags?
-                if self._is_rhel(content.getRequiredTags()):
-                    content_url = content.getUrl()
-                    listing_parts = content_url.split('$releasever', 1)
-                    listing_base = listing_parts[0]
-                    listing_path = "%s/listing" % listing_base
-                    listings.append(listing_path)
-
-        # FIXME: not sure how to get the "base" content if we have multiple
-        # entitlements for a product
-
-        # for a entitlement, gran the corresponding entitlement cert
-        # use it for this connection
-
         parsed_url = urlparse.urlparse(cdn_url)
 
         self.cc = connection.ContentConnection(host=parsed_url.netloc,
@@ -1037,35 +991,9 @@ class ReleaseCommand(CliCommand):
                                                proxy_user=self.proxy_user,
                                                proxy_password=self.proxy_password)
 
-        # hmm. We are really only supposed to have one product
-        # with one content with one listing file. We shall see.
-        releases = []
-        listings = sorted(set(listings))
-        for listing_path in listings:
-            data = self.cc.get_versions(listing_path)
-            ver_listing = listing.ListingFile(data=data)
-            releases = releases + ver_listing.get_releases()
-
-        releases_set = sorted(set(releases))
-        if len(releases_set) > 0:
-            print("+-------------------------------------------+")
-            print("          %s" % (_("Available Releases")))
-            print("+-------------------------------------------+")
-            for release in releases_set:
-                print release
-        else:
-            print _("No valid releases could be located.")
-
-    def _is_rhel(self, product_tags):
-
-        for product_tag in product_tags:
-            # so in theory, we should only have one rhel
-            # product. Not sure what to do if we have
-            # more than one. Probably throw an error
-            # TESTME
-            if product_tag[:5] == "rhel-":
-                # we only need to match the first hit
-                return True
+        self.release_backend = ReleaseBackend(ent_dir=self.entitlement_dir,
+                                              prod_dir=self.product_dir,
+                                              content_connection=self.cc)
 
     def _get_consumer_release(self):
         err_msg = _("ERROR: The 'release' command is not supported by the server.")
@@ -1096,7 +1024,9 @@ class ReleaseCommand(CliCommand):
                     release=self.options.release)
             print _("Release set to: %s") % self.options.release
         elif self.options.list:
-            self.__get_releases()
+            releases = self.release_backend.get_releases()
+            for release in releases:
+                print release
         else:
             self.show_current_release()
 

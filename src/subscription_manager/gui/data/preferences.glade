@@ -15,7 +15,7 @@
       <atkproperty name="AtkObject::accessible-name">register_dialog</atkproperty>
     </accessibility>
     <child internal-child="vbox">
-      <widget class="GtkVBox" id="dialog-vbox6">
+      <widget class="GtkVBox" id="preference-dialog-vbox">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
@@ -23,11 +23,11 @@
           <atkproperty name="AtkObject::accessible-name" translatable="yes">register_dialog_main_vbox</atkproperty>
         </accessibility>
         <child>
-          <widget class="GtkHBox" id="hbox4">
+          <widget class="GtkHBox" id="sla_hbox">
             <property name="visible">True</property>
             <property name="spacing">6</property>
             <child>
-              <widget class="GtkLabel" id="label3">
+              <widget class="GtkLabel" id="sla_combobox_label">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="xpad">6</property>
@@ -56,7 +56,7 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="label1">
+          <widget class="GtkLabel" id="sla_label">
             <property name="visible">True</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">&lt;small&gt;Your system's SLA preference is followed when subscribing to new products&lt;/small&gt;</property>
@@ -67,6 +67,53 @@
             <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkHBox" id="release-hbox">
+            <property name="visible">True</property>
+            <child>
+              <widget class="GtkLabel" id="release-label">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="xpad">6</property>
+                <property name="label" translatable="yes">Release version:</property>
+              </widget>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkComboBox" id="release_combobox">
+                <property name="visible">True</property>
+                <property name="items" translatable="yes"></property>
+                <signal name="changed" handler="on_release_combobox_changed"/>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkLabel" id="release_label">
+            <property name="visible">True</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">&lt;small&gt;Your system's release preference is followed when installing and updating packages.&lt;/small&gt;</property>
+            <property name="use_markup">True</property>
+            <property name="wrap">True</property>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">5</property>
           </packing>
         </child>
         <child internal-child="action_area">

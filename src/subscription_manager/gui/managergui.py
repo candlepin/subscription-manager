@@ -19,6 +19,7 @@
 
 import logging
 import subprocess
+import urlparse
 
 import gtk
 import gtk.glade
@@ -80,6 +81,7 @@ class Backend(object):
         self.create_uep(cert_file=ConsumerIdentity.certpath(),
                         key_file=ConsumerIdentity.keypath())
 
+        self.create_content_connection()
         # we don't know the user/pass yet, so no point in
         # creating an admin uep till we need it
         self.admin_uep = None
@@ -99,6 +101,7 @@ class Backend(object):
     def update(self):
         self.create_uep(cert_file=ConsumerIdentity.certpath(),
                         key_file=ConsumerIdentity.keypath())
+        self.content_connection = self._create_content_connection()
 
     def create_uep(self, cert_file=None, key_file=None):
         # Re-initialize our connection:
@@ -120,6 +123,17 @@ class Backend(object):
             password=password,
             cert_file=cert_file,
             key_file=key_file)
+
+    def create_content_connection(self):
+        self.content_connection = self._create_content_connection()
+
+    def _create_content_connection(self):
+        return connection.ContentConnection(host=urlparse.urlparse(cfg.get('rhsm', 'baseurl')).netloc,
+                                            ssl_port=443,
+                                            proxy_hostname=cfg.get('server', 'proxy_hostname'),
+                                            proxy_port=cfg.get('server', 'proxy_port'),
+                                            proxy_user=cfg.get('server', 'proxy_user'),
+                                            proxy_password=cfg.get('server', 'proxy_password'))
 
     def is_registered(self):
         if ConsumerIdentity.existsAndValid():

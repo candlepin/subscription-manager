@@ -215,6 +215,8 @@ class StubProductCertificate(ProductCertificate):
         self.end_date = end_date
         if not end_date:
             self.end_date = datetime.now() + timedelta(days=365)
+        self.order = "9241968"
+        self.stacking_id = "1"
 
     def getProduct(self):
         return self.product
@@ -233,6 +235,12 @@ class StubProductCertificate(ProductCertificate):
 
     def get_provided_tags(self):
         return self.provided_tags
+
+    def getOrder(self):
+        return self.order
+
+    def getStackingId(self):
+        return self.stacking_id
 
     def validRange(self):
         return DateRange(self.start_date, self.end_date)
@@ -312,6 +320,7 @@ class StubCertificateDirectory(EntitlementDirectory):
 # so we can use a less confusing name when we use this stub
 StubEntitlementDirectory = StubCertificateDirectory
 
+
 class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
     """
     Stub for mimicing behavior of an on-disk certificate directory.
@@ -377,10 +386,19 @@ class StubUEP:
     def getRelease(self, consumerId):
         return {'releaseVer': ''}
 
+    def getServiceLevelList(self, owner):
+        return ['Pro', 'Super Pro', 'ProSumer']
+
+    def updateConsumer(self, consumer, service_level=None, release=None):
+        return consumer
+
+
 class StubBackend:
     def __init__(self, uep=StubUEP()):
         self.uep = uep
-        pass
+        self.entitlement_dir = None
+        self.product_dir = None
+        self.content_connection = None
 
     def monitor_certs(self, callback):
         pass
@@ -390,6 +408,11 @@ class StubBackend:
 
     def create_admin_uep(self, username, password):
         return StubUEP(username, password)
+
+
+class StubContentConnection:
+    def __init__(self):
+        pass
 
 
 class StubFacts(object):
