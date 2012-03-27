@@ -92,21 +92,29 @@ class UpdateAction:
             self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
 
         self.release = None
-        self.consumer = ConsumerIdentity.read()
-        self.consumer_uuid = self.consumer.getConsumerId()
+
+        # If we are not registered, skip trying to refresh the
+        # data from the server
         try:
-            result = self.uep.getRelease(self.consumer_uuid)
-            self.release = result['releaseVer']
-        # ie, a 404 from a old server that doesn't support the release API
-        except RemoteServerException, e:
-            log.debug("Release API not supported by the server. Using default.")
-            self.release = None
-        except RestlibException, e:
-            if e.code == 404:
+            self.consumer = ConsumerIdentity.read()
+        except:
+            self.consumer = None
+
+        if self.consumer:
+            self.consumer_uuid = self.consumer.getConsumerId()
+            try:
+                result = self.uep.getRelease(self.consumer_uuid)
+                self.release = result['releaseVer']
+            # ie, a 404 from a old server that doesn't support the release API
+            except RemoteServerException, e:
                 log.debug("Release API not supported by the server. Using default.")
                 self.release = None
-            else:
-                raise e
+            except RestlibException, e:
+                if e.code == 404:
+                    log.debug("Release API not supported by the server. Using default.")
+                    self.release = None
+                else:
+                    raise e
 
     def perform(self):
         # Load the RepoFile from disk, this contains all our managed yum repo sections:
