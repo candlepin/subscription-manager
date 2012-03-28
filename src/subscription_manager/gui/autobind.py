@@ -359,9 +359,10 @@ class AutobindWizard(widgets.GladeWidget):
             # when we cannot fix any unentitled products:
             if self.controller.current_sla and \
                     not self.controller.can_add_more_subs():
-                ErrorDialog(_("Unable to subscribe to any additional products at current service level: %s") %
-                        self.controller.current_sla,
-                        parent = self.parent_window)
+                ErrorDialog(_("Unable to subscribe to any additional products at current service level: %s. "
+                    "Please use the \"All Available Subscriptions\" tab to manually "
+                    "entitle this system.") % self.controller.current_sla,
+                    parent = self.parent_window)
                 self.destroy()
                 return
             self.show_confirm_subs(self.controller.suitable_slas.keys()[0],
