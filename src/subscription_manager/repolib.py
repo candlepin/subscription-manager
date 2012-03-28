@@ -220,7 +220,8 @@ class UpdateAction:
 
     def _use_release_for_releasever(self, contenturl):
         # FIXME: release ala uep.getRelease should not be an int
-        if self.release is None:
+        if self.release is None or \
+           len(self.release) == 0:
             return contenturl
         return contenturl.replace("$releasever", "%s" % self.release)
 
