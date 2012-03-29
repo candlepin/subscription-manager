@@ -1082,7 +1082,7 @@ class ReleaseCommand(CliCommand):
 
     def _do_command(self):
         self.consumer = check_registration()
-        if self.options.release:
+        if self.options.release is not None:
             # check first if the server supports releases
             self._get_consumer_release()
             self.cp.updateConsumer(self.consumer['uuid'],
