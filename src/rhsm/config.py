@@ -22,22 +22,27 @@ DEFAULT_CONFIG_DIR = "/etc/rhsm"
 DEFAULT_CONFIG_PATH = "%s/rhsm.conf" % DEFAULT_CONFIG_DIR
 DEFAULT_PROXY_PORT = "3128"
 
-# TODO: I don't think these defaults are getting used, code requests section
-# + property, but these are going in as sectionless defaults and the code still
-# errors on missing section.
+# Defaults are applied to each section in the config file.
 DEFAULTS = {
-        'hostname': 'localhost',
-        'prefix': '/candlepin',
-        'port': '8443',
-        'ca_cert_dir': '/etc/rhsm/ca/',
-        'repo_ca_cert': '/etc/rhsm/ca/redhat-uep.pem',
-        'ssl_verify_depth': '3',
-        'proxy_hostname': '',
-        'proxy_port': '',
-        'proxy_user': '',
-        'proxy_password': '',
-        'insecure': '0'
-        }
+                'hostname': 'localhost',
+                'prefix': '/candlepin',
+                'port': '8443',
+                'ca_cert_dir': '/etc/rhsm/ca/',
+                'repo_ca_cert': '/etc/rhsm/ca/redhat-uep.pem',
+                'ssl_verify_depth': '3',
+                'proxy_hostname': '',
+                'proxy_port': '',
+                'proxy_user': '',
+                'proxy_password': '',
+                'insecure': '0',
+                'baseurl': 'https://cdn.redhat.com',
+                'manage_repos': '1',
+                'productCertDir': '/etc/pki/product',
+                'entitlementCertDir': '/etc/pki/entitlement',
+                'consumerCertDir': '/etc/pki/consumer',
+                'certFrequency': '240',
+                'healFrequency': '1440',
+            }
 
 
 class RhsmConfigParser(SafeConfigParser):
