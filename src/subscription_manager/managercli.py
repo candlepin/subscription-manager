@@ -984,7 +984,7 @@ class ReleaseCommand(CliCommand):
         cdn_url = cfg.get('rhsm', 'baseurl')
         parsed_url = urlparse.urlparse(cdn_url)
 
-        self.cc = connection.ContentConnection(host=parsed_url.netloc,
+        self.cc = connection.ContentConnection(host=parsed_url[1],
                                                ssl_port=443,
                                                proxy_hostname=self.proxy_hostname,
                                                proxy_port=self.proxy_port,
