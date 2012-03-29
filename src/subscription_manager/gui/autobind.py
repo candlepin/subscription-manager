@@ -552,10 +552,13 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
                 self._format_prods(unentitled_prod_certs))
         self._clear_buttons()
         group = None
-        for sla in sla_data_map:
+        # reverse iterate the list as that will most likely put 'None' last.
+        # then pack_start so we don't end up with radio buttons at xhte bottom
+        # of the screen.
+        for sla in reversed(sla_data_map.keys()):
             radio = gtk.RadioButton(group = group, label = sla)
             radio.connect("toggled", self._radio_clicked, sla)
-            self.sla_radio_container.pack_end(radio, expand=False, fill=False)
+            self.sla_radio_container.pack_start(radio, expand=False, fill=False)
             radio.show()
             group = radio
 
