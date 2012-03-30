@@ -264,7 +264,7 @@ class CertSorter(object):
 
         log.debug("  system has %s sockets, %s covered by entitlements" %
                 (self.socket_count, sockets_covered))
-        if sockets_covered >= self.socket_count:
+        if sockets_covered >= self.socket_count or sockets_covered == 0:
             return True
         return False
 
@@ -285,7 +285,7 @@ class CertSorter(object):
 
         log.debug("  system has %s sockets, %s covered by entitlement" %
                 (self.socket_count, sockets_covered))
-        if sockets_covered >= self.socket_count:
+        if sockets_covered >= self.socket_count or sockets_covered == 0:
             return True
         return False
 
