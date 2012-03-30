@@ -1004,6 +1004,7 @@ class ReleaseCommand(CliCommand):
                     rhel_product = product
 
         if rhel_product is None:
+            print _("No valid releases could be located.")
             return []
 
         entitlements = sorter.get_entitlements_for_product(rhel_product.getHash())
@@ -1046,8 +1047,14 @@ class ReleaseCommand(CliCommand):
             releases = releases + ver_listing.get_releases()
 
         releases_set = sorted(set(releases))
-        for release in releases_set:
-            print release
+        if len(releases_set) > 0:
+            print("+-------------------------------------------+")
+            print("          %s" % (_("Available Releases")))
+            print("+-------------------------------------------+")
+            for release in releases_set:
+                print release
+        else:
+            print _("No valid releases could be located.")
 
     def _is_rhel(self, product_tags):
 
