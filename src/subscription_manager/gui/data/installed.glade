@@ -56,10 +56,13 @@
                         </child>
                         <child>
                           <widget class="GtkButton" id="update_certificates_button">
-                            <property name="label" translatable="yes">Subscribe</property>
+                            <property name="label" translatable="yes">Auto-subscribe</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">Auto-subscribe</atkproperty>
+                            </accessibility>
                             <signal name="clicked" handler="on_update_certificates_button_clicked"/>
                           </widget>
                           <packing>
