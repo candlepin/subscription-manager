@@ -223,7 +223,8 @@ class ProductManager:
                     continue
                 lst.append((cert, repo.id))
             except Exception, e:
-                log.warn("Error loading productid metadata")
+                log.warn("Error loading productid metadata.  No product " +
+                         "certificates will be removed.")
                 log.exception(e)
                 self.meta_data_error = e
         return lst
