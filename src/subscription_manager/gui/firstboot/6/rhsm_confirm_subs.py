@@ -10,8 +10,6 @@ from firstboot.module import Module
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
-import rhsm
-
 sys.path.append("/usr/share/rhsm")
 from subscription_manager.gui import autobind
 from subscription_manager.certlib import ConsumerIdentity
@@ -88,4 +86,3 @@ class moduleClass(Module):
         certificate on the machine (most likely laid down in a kickstart).
         """
         return not ConsumerIdentity.existsAndValid()
-

@@ -14,7 +14,6 @@
 #
 
 import logging
-import math
 from subscription_manager.certdirectory import EntitlementDirectory, \
     ProductDirectory
 from subscription_manager import cert_sorter

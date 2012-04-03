@@ -37,6 +37,7 @@ SELECT_SLA = 1
 # XXX ugly hacks for firstboot
 _controller = None
 
+
 def init_controller(backend, consumer, facts):
     global _controller
     _controller = AutobindController(backend, consumer, facts)
@@ -115,12 +116,14 @@ class AllProductsCoveredException(Exception):
     """
     pass
 
+
 class NoProductsException(Exception):
     """
     Exception for AutobindController.load. The system has no products, and
     thus needs no entitlements.
     """
     pass
+
 
 class AutobindController(object):
 
@@ -162,7 +165,6 @@ class AutobindController(object):
             raise AllProductsCoveredException()
 
         self._find_suitable_service_levels()
-
 
     def _find_suitable_service_levels(self):
         if self.current_sla:
@@ -230,7 +232,6 @@ class AutobindWizardScreen(object):
         """
         raise NotImplementedError(
                 "Screen object must implement: get_forward_button_label()")
-
 
     def get_main_widget(self):
         """
@@ -317,17 +318,17 @@ class AutobindWizard(widgets.GladeWidget):
             self.controller.load()
         except ServiceLevelNotSupportedException:
             OkDialog(_("Unable to auto-subscribe, server does not support service levels."),
-                    parent = self.parent_window)
+                    parent=self.parent_window)
             self.destroy()
             return
         except NoProductsException:
             InfoDialog(_("No installed products on system. No need to update certificates at this time."),
-                parent = self.parent_window)
+                parent=self.parent_window)
             self.destroy()
             return
         except AllProductsCoveredException:
             InfoDialog(_("All installed products are covered by valid entitlements. No need to update certificates at this time."),
-                parent = self.parent_window)
+                parent=self.parent_window)
             self.destroy()
             return
 
@@ -362,7 +363,7 @@ class AutobindWizard(widgets.GladeWidget):
                 ErrorDialog(_("Unable to subscribe to any additional products at current service level: %s. "
                     "Please use the \"All Available Subscriptions\" tab to manually "
                     "entitle this system.") % self.controller.current_sla,
-                    parent = self.parent_window)
+                    parent=self.parent_window)
                 self.destroy()
                 return
             self.show_confirm_subs(self.controller.suitable_slas.keys()[0],
@@ -373,7 +374,7 @@ class AutobindWizard(widgets.GladeWidget):
             log.info("No suitable service levels found.")
             ErrorDialog(_("No service levels will cover all installed products. "
                 "Please use the \"All Available Subscriptions\" tab to manually "
-                "entitle this system."), parent = self.parent_window)
+                "entitle this system."), parent=self.parent_window)
             self.destroy()
             return
         self.autobind_dialog.show()
@@ -556,7 +557,7 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
         # then pack_start so we don't end up with radio buttons at xhte bottom
         # of the screen.
         for sla in reversed(sla_data_map.keys()):
-            radio = gtk.RadioButton(group = group, label = sla)
+            radio = gtk.RadioButton(group=group, label=sla)
             radio.connect("toggled", self._radio_clicked, sla)
             self.sla_radio_container.pack_start(radio, expand=False, fill=False)
             radio.show()

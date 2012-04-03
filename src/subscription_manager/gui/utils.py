@@ -230,4 +230,3 @@ class GladeWrapper(gtk.glade.XML):
             print "ERROR: widget %s was not found" % widget_name
             raise Exception("Widget %s not found" % widget_name)
         return widget
-

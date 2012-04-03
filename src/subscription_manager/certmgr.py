@@ -16,8 +16,7 @@
 # in this software or its documentation.
 #
 
-from subscription_manager.certlib import CertLib, ActionLock, ConsumerIdentity,\
-        HealingLib
+from subscription_manager.certlib import CertLib, ActionLock, HealingLib
 from subscription_manager.repolib import RepoLib
 from subscription_manager.factlib import FactLib
 from subscription_manager.facts import Facts

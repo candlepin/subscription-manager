@@ -31,7 +31,7 @@ from subscription_manager.branding import get_branding
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 
 from subscription_manager.gui.utils import handle_gui_exception, errorWindow, \
-        linkify, GladeWrapper
+    GladeWrapper
 
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)

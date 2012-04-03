@@ -36,7 +36,7 @@ _ = gettext.gettext
 import rhsm.config
 import rhsm.connection as connection
 
-from i18n_optparse import OptionParser
+from subscription_manager.i18n_optparse import OptionParser
 from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib, ConsumerIdentity
 from subscription_manager.repolib import RepoLib
@@ -45,12 +45,11 @@ from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager import managerlib
 from subscription_manager.facts import Facts
-from subscription_manager import listing
 from subscription_manager.quantity import valid_quantity
 from subscription_manager.release import ReleaseBackend
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
-        NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, CertSorter
+        NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
@@ -235,7 +234,6 @@ class CliCommand(object):
             for arg in self.args:
                 print _("cannot parse argument: %s") % arg
             sys.exit(-1)
-
 
         self.proxy_hostname = cfg.get('server', 'proxy_hostname')
         self.proxy_port = cfg.get('server', 'proxy_port')
@@ -1116,11 +1114,11 @@ class SubscribeCommand(CliCommand):
                 if self.options.service_level:
                     consumer = self.cp.getConsumer(consumer_uuid)
                     if 'serviceLevel' not in consumer:
-                        systemExit(-1,_("ERROR: The --servicelevel option is not " + \
-                                        "supported by the server. Did not perform " + \
-                                        "autosubscribe."))
+                        systemExit(-1, _("ERROR: The --servicelevel option is not " + \
+                                         "supported by the server. Did not perform " + \
+                                         "autosubscribe."))
                 autosubscribe(self.cp, consumer_uuid,
-                        service_level=self.options.service_level)
+                              service_level=self.options.service_level)
 
             result = self.certlib.update()
             if result[1]:

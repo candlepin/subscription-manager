@@ -27,7 +27,7 @@ import shutil
 import logging
 import traceback
 import base64
-from rhsm.connection import UEPConnection, RestlibException
+from rhsm.connection import UEPConnection
 
 _LIBPATH = "/usr/share/rhsm"
 # add to the path if need be
@@ -95,15 +95,19 @@ proxyPort = ""
 proxyUser = ""
 proxyPass = ""
 
+
 class ProxiedTransport(xmlrpclib.Transport):
     def set_proxy(self, proxy, credentials):
         self.proxy = proxy
         self.credentials = credentials
+
     def make_connection(self, host):
         self.realhost = host
         return httplib.HTTP(self.proxy)
+
     def send_request(self, connection, handler, request_body):
         connection.putrequest("POST", 'http://%s%s' % (self.realhost, handler))
+
     def send_host(self, connection, host):
         connection.putheader('Host', self.realhost)
         if self.credentials:
@@ -216,6 +220,7 @@ def unRegisterSystemFromRhnClassic(sc, sk):
     else:
         systemExit(1, _("Unable to unregister system from RHN Classic.  Exiting."))
 
+
 def disableYumRhnPlugin():
     # 'Inspired by' up2date_client/rhnreg.py
     """ disable yum-rhn-plugin by setting enabled=0 in file
@@ -260,7 +265,7 @@ def transferHttpProxySettings():
     # transfer http proxy information from up2date to rhsm.conf
     global proxyHost, proxyPort, proxyUser, proxyPass
     if rhncfg['enableProxy']:
-        httpProxy  = rhncfg['httpProxy']
+        httpProxy = rhncfg['httpProxy']
         if httpProxy[:7] == "http://":
             httpProxy = httpProxy[7:]
         proxyHost, proxyPort = httpProxy.split(':')

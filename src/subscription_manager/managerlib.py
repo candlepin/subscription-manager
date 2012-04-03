@@ -336,7 +336,6 @@ def getAvailableEntitlements(cpserver, consumer_uuid, facts, get_all=False, acti
         pool['service_level'] = support_attrs['support_level']
         pool['service_type'] = support_attrs['support_type']
 
-
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
         if int(d['quantity']) < 0:

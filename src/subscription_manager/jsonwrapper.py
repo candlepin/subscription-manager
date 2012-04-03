@@ -59,7 +59,6 @@ class PoolWrapper(object):
                 attrs[name] = attr['value']
         return attrs
 
-
     def _get_attribute_value(self, attr_list_name, attr_name):
         product_attrs = self.data[attr_list_name]
         for attribute in product_attrs:

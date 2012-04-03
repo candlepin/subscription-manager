@@ -36,8 +36,7 @@ from subscription_manager.gui import widgets
 from subscription_manager.gui import progress
 from subscription_manager.gui.utils import handle_gui_exception, make_today_now, errorWindow,\
     get_cell_background_color, set_background_model_index
-from subscription_manager.gui.installedtab import VALID_IMG, PARTIAL_IMG, \
-        INVALID_IMG, ICONSET
+from subscription_manager.gui.installedtab import ICONSET
 from subscription_manager.quantity import QuantityDefaultValueCalculator, valid_quantity, \
                                             allows_multi_entitlement
 from subscription_manager.jsonwrapper import PoolWrapper

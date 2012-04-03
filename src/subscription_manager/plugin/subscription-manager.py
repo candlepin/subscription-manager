@@ -18,6 +18,7 @@
 import os
 import sys
 from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
+import ConfigParser
 
 sys.path.append('/usr/share/rhsm')
 from subscription_manager import logutil
