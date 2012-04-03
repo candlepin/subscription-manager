@@ -145,7 +145,7 @@ def checkOkToProceed(username, password):
     except Exception, e:
         log.error(traceback.format_exc())
         systemExit(1, _("Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for more details.") % e)
-
+    return cp
 
 def checkIsOrgAdmin(sc, sk, username):
     try:
@@ -368,7 +368,7 @@ def getRelease():
     return release
 
 
-def enableExtraChannels(subscribedChannels):
+def enableExtraChannels(subscribedChannels, cp):
     # Check if system was subscribed to extra channels like supplementary, optional, fastrack etc.
     # If so, enable them in the redhat.repo file
 
@@ -385,7 +385,7 @@ def enableExtraChannels(subscribedChannels):
         return
 
     # create and populate the redhat.repo file
-    repolib.RepoLib().update()
+    repolib.RepoLib(uep=cp).update()
 
     # read in the redhat.repo file
     repofile = repolib.RepoFile()
@@ -439,7 +439,7 @@ def main():
     username = raw_input(_("RHN Username: ")).strip()
     password = getpass.getpass()
     transferHttpProxySettings()
-    checkOkToProceed(username, password)
+    cp = checkOkToProceed(username, password)
 
     (sc, sk) = connectToRhn(username, password)
     checkIsOrgAdmin(sc, sk, username)
@@ -464,7 +464,7 @@ def main():
         runSubscriptionManager(username, password)
 
     # check if we need to enable to supplementary/optional channels
-    enableExtraChannels(subscribedChannels)
+    enableExtraChannels(subscribedChannels, cp)
     cleanUp(subscribedChannels)
 
 
