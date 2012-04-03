@@ -175,13 +175,18 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['status'] = _('Future Subscription')
                         entry['validity_note'] = _("Future Subscribed")
                     elif status == EXPIRED:
-                        #TODO: This order value may potentially be wrong in the case of
-                        # multi-entitlement.
-                        order = entitlement_cert.getOrder()
                         entry['image'] = self._render_icon('red')
                         entry['status'] = _('Expired')
+                        sub_numbers = set([])
+                        for ent_cert in self.cs.get_entitlements_for_product(product_id):
+                            order = ent_cert.getOrder()
+                            # FIXME:  getSubscription() seems to always be None...?
+                            if order.getSubscription():
+                                sub_numbers.add(order.getSubscription())
+                        subs_str = ', '.join(sub_numbers)
+
                         entry['validity_note'] = \
-                            _('Subscription %s is expired') % order.getSubscription()
+                             _('Subscription %s is expired') % subs_str
                     elif status == PARTIALLY_SUBSCRIBED:
                         entry['image'] = self._render_icon('yellow')
                         entry['status'] = _('Partially Subscribed')
