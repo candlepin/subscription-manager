@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 0.99.12
+Version: 0.99.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -302,6 +302,38 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Apr 04 2012 Michael Stead <mstead@redhat.com> 0.99.13-1
+- latest strings into keys.pot and updated from zanata (alikins@redhat.com)
+- 809611: Fix undefined variable in installedtab for expired
+  (alikins@redhat.com)
+- pep8/pyflakes cleanups (alikins@redhat.com)
+- Repolib now requires a UEP connection. (awood@redhat.com)
+- Use numeric index to access portion of URL. (awood@redhat.com)
+- 807785: use a better title on the autobind wizard (jbowes@redhat.com)
+- latest strings from zanata (alikins@redhat.com)
+- Add release selection to preferences dialog (alikins@redhat.com)
+- 805415: handle entitlements for socket count of 0 (alikins@redhat.com)
+- 804201: Fix sla select in firstboot after back button (jbowes@redhat.com)
+- 807477: Delay attempt to connect to RHN until after basic error checks.
+  (awood@redhat.com)
+- 803374: Change the 'Subscribe' button to read 'Auto-subscribe.'
+  (awood@redhat.com)
+- 808217: Add a header to the release list (bkearney@redhat.com)
+- 807153: Provide a more informative error message when encountering repodata
+  errors. (awood@redhat.com)
+- 807822: Allow setting release to '' (mstead@redhat.com)
+- 807036: Instruct users to go to All Subscriptions for all SLA failures
+  (bkearney@redhat.com)
+- 807407: Subscripton Manager substitutes "" for $releasever when releaseVer
+  not set on consumer (wpoteat@redhat.com)
+- 803756: Trap RemoteServerException as well as RestLibException (404) for
+  service-level command (mstead@redhat.com)
+- 806941: Removed unknown swapped attribute from autobind.glade.
+  (mstead@redhat.com)
+- 807360: Allow the repos command to work without being registered
+  (bkearney@redhat.com)
+- 806457: Fix deletion of productids with yum localinstall (alikins@redhat.com)
+
 * Fri Mar 23 2012 Michael Stead <mstead@redhat.com> 0.99.12-1
 - Don't skip past firstboot login page on invalid user/pass (jbowes@redhat.com)
 - 805690: Turn repo gpgcheck off if no gpgkey specified. (dgoodwin@redhat.com)
