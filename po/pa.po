@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-02 11:15-0400\n"
+"POT-Creation-Date: 2012-04-04 10:02-0400\n"
 "PO-Revision-Date: 2011-04-01 15:02+0530\n"
 "Last-Translator: Jaswinder Singh <jsingh@redhat.com>\n"
 "Language-Team: Punjabi/Panjabi <kde-i18n-doc@kde.org>\n"
@@ -30,15 +30,15 @@ msgstr "ਸਿਸਟਮ ਪਹਿਲਾਂ ਹੀ ਰਜਿਸਟਰ ਕੀਤ�
 
 #. Set up columns on the view
 #: ../src/subscription_manager/gui/allsubs.py:69
-#: ../src/subscription_manager/gui/subscription_assistant.py:181
+#: ../src/subscription_manager/gui/subscription_assistant.py:180
 #: ../src/subscription_manager/gui/mysubstab.py:65
-#: ../src/subscription_manager/gui/autobind.py:445
+#: ../src/subscription_manager/gui/autobind.py:446
 msgid "Subscription"
 msgstr "ਮੈਂਬਰੀ"
 
 #: ../src/subscription_manager/gui/allsubs.py:78
-#: ../src/subscription_manager/gui/subscription_assistant.py:187
-#: ../src/subscription_manager/managercli.py:1563
+#: ../src/subscription_manager/gui/subscription_assistant.py:186
+#: ../src/subscription_manager/managercli.py:1561
 msgid "Available Subscriptions"
 msgstr "ਉਪਲੱਬਧ ਮੈਂਬਰੀਆਂ"
 
@@ -46,14 +46,14 @@ msgstr "ਉਪਲੱਬਧ ਮੈਂਬਰੀਆਂ"
 #. Set up editable quantity column.
 #: ../src/subscription_manager/gui/allsubs.py:84
 #: ../src/subscription_manager/gui/contract_selection.py:108
-#: ../src/subscription_manager/gui/subscription_assistant.py:196
+#: ../src/subscription_manager/gui/subscription_assistant.py:195
 #: ../src/subscription_manager/gui/mysubstab.py:83
 msgid "Quantity"
 msgstr "ਮਾਤਰਾ"
 
 #: ../src/subscription_manager/gui/allsubs.py:218
 #: ../src/subscription_manager/gui/contract_selection.py:121
-#: ../src/subscription_manager/gui/subscription_assistant.py:469
+#: ../src/subscription_manager/gui/subscription_assistant.py:468
 msgid "unlimited"
 msgstr "ਅਸੀਮਿਤ"
 
@@ -62,7 +62,7 @@ msgid "All Available Subscriptions"
 msgstr "ਸਭ ਉਪਲੱਬਧ ਮੈਂਬਰੀਆਂ"
 
 #: ../src/subscription_manager/gui/allsubs.py:334
-#: ../src/subscription_manager/gui/subscription_assistant.py:307
+#: ../src/subscription_manager/gui/subscription_assistant.py:306
 msgid "Searching for subscriptions. Please wait."
 msgstr "ਮੈਂਬਰੀਆਂ ਲਈ ਖੋਜ ਰਿਹਾ ਹੈ। ਉਡੀਕ ਕਰੋ ਜੀ।"
 
@@ -77,18 +77,18 @@ msgid "Unable to search for subscriptions:  %s"
 msgstr "ਮੈਂਬਰੀਆਂ ਲਈ ਖੋਜਣ ਵਿੱਚ ਫੇਲ:  %s"
 
 #: ../src/subscription_manager/gui/allsubs.py:370
-#: ../src/subscription_manager/gui/subscription_assistant.py:614
+#: ../src/subscription_manager/gui/subscription_assistant.py:613
 msgid "Quantity must be a positive number."
 msgstr "ਮਾਤਰਾ ਧਨਾਤਮਕ ਅੰਕ ਹੋਣਾ ਜਰੂਰੀ ਹੈ:"
 
 #: ../src/subscription_manager/gui/allsubs.py:381
-#: ../src/subscription_manager/gui/subscription_assistant.py:646
+#: ../src/subscription_manager/gui/subscription_assistant.py:645
 #, python-format
 msgid "Error getting subscription: %s"
 msgstr "ਮੈਂਬਰੀ ਪਤਾ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %s"
 
 #: ../src/subscription_manager/gui/installedtab.py:70
-#: ../src/subscription_manager/gui/subscription_assistant.py:144
+#: ../src/subscription_manager/gui/subscription_assistant.py:143
 #: ../src/subscription_manager/gui/widgets.py:198
 msgid "Product"
 msgstr "ਉਤਪਾਦ"
@@ -112,13 +112,13 @@ msgstr "ਸ਼ੁਰੂਆਤੀ ਮਿਤੀ"
 
 #: ../src/subscription_manager/gui/installedtab.py:87
 #: ../src/subscription_manager/gui/contract_selection.py:102
-#: ../src/subscription_manager/gui/subscription_assistant.py:155
+#: ../src/subscription_manager/gui/subscription_assistant.py:154
 #: ../src/subscription_manager/gui/mysubstab.py:77
 msgid "End Date"
 msgstr "ਆਖਰੀ ਮਿਤੀ"
 
 #: ../src/subscription_manager/gui/installedtab.py:175
-#: ../src/subscription_manager/managercli.py:62
+#: ../src/subscription_manager/managercli.py:61
 msgid "Future Subscription"
 msgstr "ਭਵਿੱਖ ਦੀਆਂ ਮੈਂਬਰੀਆਂ"
 
@@ -126,80 +126,80 @@ msgstr "ਭਵਿੱਖ ਦੀਆਂ ਮੈਂਬਰੀਆਂ"
 msgid "Future Subscribed"
 msgstr "ਭਵਿੱਖ ਦੀਆਂ ਮੈਂਬਰੀਆਂ ਲੈ ਲਈਆਂ"
 
-#: ../src/subscription_manager/gui/installedtab.py:182
-#: ../src/subscription_manager/managercli.py:65
+#: ../src/subscription_manager/gui/installedtab.py:179
+#: ../src/subscription_manager/managercli.py:64
 #: ../src/subscription_manager/managerlib.py:80
 msgid "Expired"
 msgstr "ਮਿਆਦ ਪੁੱਗਿਆ"
 
-#: ../src/subscription_manager/gui/installedtab.py:184
+#: ../src/subscription_manager/gui/installedtab.py:189
 #, python-format
 msgid "Subscription %s is expired"
 msgstr "ਮੈਂਬਰੀ %s ਦੀ ਮਿਆਦ ਪੁੱਗ ਗਈ ਹੈ"
 
-#: ../src/subscription_manager/gui/installedtab.py:187
-#: ../src/subscription_manager/gui/installedtab.py:188
-#: ../src/subscription_manager/managercli.py:66
+#: ../src/subscription_manager/gui/installedtab.py:192
+#: ../src/subscription_manager/gui/installedtab.py:193
+#: ../src/subscription_manager/managercli.py:65
 msgid "Partially Subscribed"
 msgstr "ਅਧੂਰਾ ਮੈਂਬਰ"
 
-#: ../src/subscription_manager/gui/installedtab.py:191
-#: ../src/subscription_manager/managercli.py:63
+#: ../src/subscription_manager/gui/installedtab.py:196
+#: ../src/subscription_manager/managercli.py:62
 #: ../src/subscription_manager/managerlib.py:80
 msgid "Subscribed"
 msgstr "ਮੈਂਬਰੀ ਵਾਲਾ"
 
-#: ../src/subscription_manager/gui/installedtab.py:193
+#: ../src/subscription_manager/gui/installedtab.py:198
 #, python-format
 msgid "Covered by contract(s) %s through %s"
 msgstr "ਕੰਟਰੈਕਟ %s ਦੁਆਰਾਂ  %s ਰਾਹੀਂ ਕਵਰ ਕੀਤਾ ਗਿਆ ਹੈ"
 
-#: ../src/subscription_manager/gui/installedtab.py:198
-#: ../src/subscription_manager/gui/installedtab.py:199
-#: ../src/subscription_manager/managercli.py:64
+#: ../src/subscription_manager/gui/installedtab.py:203
+#: ../src/subscription_manager/gui/installedtab.py:204
+#: ../src/subscription_manager/managercli.py:63
 #: ../src/subscription_manager/managerlib.py:80
 msgid "Not Subscribed"
 msgstr "ਮੈਂਬਰੀ ਨਾ ਬਣਿਆ"
 
-#: ../src/subscription_manager/gui/installedtab.py:248
+#: ../src/subscription_manager/gui/installedtab.py:253
 msgid "My Installed Software"
 msgstr "ਮੇਰੇ ਇੰਸਟਾਲ ਕੀਤੇ ਸਾਫਟਵੇਅਰ"
 
-#: ../src/subscription_manager/gui/installedtab.py:266
+#: ../src/subscription_manager/gui/installedtab.py:271
 #: ../src/subscription_manager/branding/redhat_branding.py:10
 msgid "This system is registered to RHN Classic"
 msgstr "ਇਹ ਸਿਸਟਮ RHN ਕਲਾਸਿਕ ਨਾਲ ਰਜਿਸਟਰ ਹੈ"
 
-#: ../src/subscription_manager/gui/installedtab.py:284
+#: ../src/subscription_manager/gui/installedtab.py:289
 #, python-format
 msgid ""
 "You have <b>%s</b> products with <i>invalid</i> entitlement certificates."
 msgstr "ਤੁਹਾਡੇ ਕੋਲ <b>%s</b> ਉਤਪਾਦ ਹੈ ਜਿਸਦਾ <i>ਗਲਤ</i> ਇੰਟਾਈਟਲਮੈਂਟ ਸਾਰਟੀਫਿਕੇਟ ਹੈ।"
 
-#: ../src/subscription_manager/gui/installedtab.py:288
+#: ../src/subscription_manager/gui/installedtab.py:293
 msgid ""
 "You have <b>1</b> product with an <i>invalid</i> entitlement certificate."
 msgstr "ਤੁਹਾਡੇ ਕੋਲ <b>1</b> ਉਤਪਾਦ ਹੈ ਜਿਸਦਾ <i>ਗਲਤ</i> ਇੰਟਾਈਟਲਮੈਂਟ ਸਾਰਟੀਫਿਕੇਟ ਹੈ।"
 
-#: ../src/subscription_manager/gui/installedtab.py:295
+#: ../src/subscription_manager/gui/installedtab.py:300
 #, python-format
 msgid ""
 "You have <b>%s</b> products in need of <i>additional</i> entitlement "
 "certificates."
 msgstr "ਤੁਹਾਡੇ ਕੋਲ <b>%s</b> ਉਤਪਾਦ ਹੈ ਜਿਸਨੂੰ <i>ਵਾਧੂ</i> ਇੰਟਾਈਟਲਮੈਂਟ ਸਾਰਟੀਫਿਕੇਟਾਂ ਦੀ ਲੋੜ ਹੈ।"
 
-#: ../src/subscription_manager/gui/installedtab.py:299
+#: ../src/subscription_manager/gui/installedtab.py:304
 msgid ""
 "You have <b>1</b> product in need of <i>additional</i> entitlement "
 "certificates."
 msgstr "ਤੁਹਾਡੇ ਕੋਲ <b>1</b> ਉਤਪਾਦ ਹੈ ਜਿਸਨੂੰ <i>ਵਾਧੂ</i> ਇੰਟਾਈਟਲਮੈਂਟ ਸਾਰਟੀਫਿਕੇਟਾਂ ਦੀ ਲੋੜ ਹੈ।"
 
-#: ../src/subscription_manager/gui/installedtab.py:307
+#: ../src/subscription_manager/gui/installedtab.py:312
 #, python-format
 msgid "Product entitlement certificates <i>valid</i> until %s"
 msgstr "ਉਤਪਾਦ ਇੰਟਾਈਟਲਮੈਂਟ ਸਾਰੀਟਫਿਕੇਟ <i>ਯੋਗ</i> ਹੈ ਜਦੋਂ ਤੱਕ %s"
 
-#: ../src/subscription_manager/gui/installedtab.py:314
+#: ../src/subscription_manager/gui/installedtab.py:319
 msgid "No product certificates installed."
 msgstr "ਕੋਈ ਉਤਪਾਦ ਸਾਰਟੀਫਿਕੇਟ ਇੰਸਟਾਲ ਨਹੀਂ ਹੈ।"
 
@@ -231,7 +231,7 @@ msgid "%s is not a valid certificate file. Please upload a valid certificate."
 msgstr "%s ਇੱਕ ਯੋਗ ਸਾਰਟੀਫਿਕੇਟ ਫਾਇਲ ਨਹੀਂ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਯੋਗ ਸਾਰਟੀਫਿਕੇਟ ਅੱਪਲੋਡ ਕਰੋ।"
 
 #: ../src/subscription_manager/gui/importsub.py:85
-#: ../src/subscription_manager/managercli.py:1305
+#: ../src/subscription_manager/managercli.py:1303
 msgid "An error occurred while importing the certificate. "
 msgstr "ਸਾਰਟੀਫਿਕੇਟ ਬਰਾਮਦ ਕਰਨ ਵੇਲੇ ਇੱਕ ਗਲਤੀ ਆਈ ਹੈ।"
 
@@ -240,15 +240,15 @@ msgstr "ਸਾਰਟੀਫਿਕੇਟ ਬਰਾਮਦ ਕਰਨ ਵੇਲੇ �
 msgid "Certificate import was successful."
 msgstr "ਸਾਰਟੀਫਿਕੇਟ ਬਰਾਮਦੀ ਸਫਲਤਾਪੂਰਕ ਰਹੀ।"
 
-#: ../src/subscription_manager/gui/subscription_assistant.py:134
+#: ../src/subscription_manager/gui/subscription_assistant.py:133
 msgid "Invalid Product List"
 msgstr "ਗਲਤ ਉਤਪਾਦ ਸੂਚੀ"
 
-#: ../src/subscription_manager/gui/subscription_assistant.py:176
+#: ../src/subscription_manager/gui/subscription_assistant.py:175
 msgid "Subscription List"
 msgstr "ਮੈਂਬਰੀ ਲਿਸਟ"
 
-#: ../src/subscription_manager/gui/subscription_assistant.py:250
+#: ../src/subscription_manager/gui/subscription_assistant.py:249
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
@@ -256,36 +256,36 @@ msgstr ""
 "ਮਨਜੂਰੀ ਸਹਾਇਕ ਵੇਖਾਉਣ ਵਿੱਚ ਗਲਤੀ। ਕਿਰਪਾ ਕਰਕੇ ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/rhsm.log "
 "ਵੇਖੋ।"
 
-#: ../src/subscription_manager/gui/subscription_assistant.py:265
+#: ../src/subscription_manager/gui/subscription_assistant.py:264
 msgid "Unable to search for subscriptions"
 msgstr "ਮੈਂਬਰੀਆਂ ਲਈ ਖੋਜਣ ਵਿੱਚ ਅਸਫਲ"
 
-#: ../src/subscription_manager/gui/subscription_assistant.py:289
+#: ../src/subscription_manager/gui/subscription_assistant.py:288
 #, python-format
 msgid "Software entitlements valid until %s"
 msgstr "ਸਾਫਟਵੇਅਰ ਇੰਟਾਈਟਲਮੈਂਟ %s ਤੱਕ ਯੋਗ ਹਨ"
 
-#: ../src/subscription_manager/gui/subscription_assistant.py:293
+#: ../src/subscription_manager/gui/subscription_assistant.py:292
 #, python-format
 msgid "%s (first date of invalid entitlements)"
 msgstr "%s (ਗੈਰ-ਮਨਜੂਰ ਇੰਟਾਈਟਲਮੈਂਟ ਦੀ ਪਹਿਲੀ ਮਿਤੀ)"
 
-#: ../src/subscription_manager/gui/subscription_assistant.py:295
+#: ../src/subscription_manager/gui/subscription_assistant.py:294
 #, python-format
 msgid "The following subscriptions will cover the products selected on %s"
 msgstr "ਹੇਠਲੀਆਂ ਮੈਂਬਰੀਆਂ ਅਧੀਨ %s ਉੱਪਰ ਚੁਣੇ ਉਤਪਾਦ ਆਉਣਗੇ"
 
 #. installed but not entitled products:
-#: ../src/subscription_manager/gui/subscription_assistant.py:376
+#: ../src/subscription_manager/gui/subscription_assistant.py:375
 msgid "N/A"
 msgstr "N/A"
 
-#: ../src/subscription_manager/gui/subscription_assistant.py:472
+#: ../src/subscription_manager/gui/subscription_assistant.py:471
 #, python-format
 msgid "%s of %s"
 msgstr "%s of %s"
 
-#: ../src/subscription_manager/gui/subscription_assistant.py:619
+#: ../src/subscription_manager/gui/subscription_assistant.py:618
 #, python-format
 msgid "A quantity of %s is not available."
 msgstr "%s ਲਈ ਮਾਤਰਾ ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ।"
@@ -300,7 +300,7 @@ msgid "Installed"
 msgstr "ਇੰਸਟਾਲ ਕੀਤੇ"
 
 #: ../src/subscription_manager/gui/widgets.py:325
-#: ../src/subscription_manager/managercli.py:1514
+#: ../src/subscription_manager/managercli.py:1512
 msgid "None"
 msgstr "ਕੋਈ ਨਹੀਂ"
 
@@ -360,17 +360,17 @@ msgstr "ਹਾਂ"
 msgid "No"
 msgstr "ਨਹੀਂ"
 
-#: ../src/subscription_manager/gui/autobind.py:319
+#: ../src/subscription_manager/gui/autobind.py:320
 msgid "Unable to auto-subscribe, server does not support service levels."
 msgstr "ਆਟੋ-ਮੈਂਬਰੀ ਲਈ ਅਸਮਰਥ, ਸਰਵਰ ਸਰਵਿਸ ਲੈਵਲ ਨੂੰ ਸਹਿਯੋਗ ਨਹੀਂ ਦਿੰਦਾ।"
 
-#: ../src/subscription_manager/gui/autobind.py:324
+#: ../src/subscription_manager/gui/autobind.py:325
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:272
 msgid ""
 "No installed products on system. No need to update certificates at this time."
 msgstr ""
 
-#: ../src/subscription_manager/gui/autobind.py:329
+#: ../src/subscription_manager/gui/autobind.py:330
 msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "certificates at this time."
@@ -378,7 +378,7 @@ msgstr ""
 "ਸਭ ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦ ਯੋਗ ਇੰਟਾਈਟਲਮੈਂਟ ਦੁਆਰਾ ਕਵਰ ਕੀਤੇ ਹਨ। ਇਸ ਸਮੇਂ ਸਾਰਟੀਫਿਕੇਟ ਨੂੰ ਅੱਪਡੇਟ ਕਰਨ "
 "ਦੀ ਕੋਈ ਲੋੜ ਨਹੀਂ ਹੈ।"
 
-#: ../src/subscription_manager/gui/autobind.py:362
+#: ../src/subscription_manager/gui/autobind.py:363
 #, python-format
 msgid ""
 "Unable to subscribe to any additional products at current service level: %s. "
@@ -386,7 +386,7 @@ msgid ""
 "system."
 msgstr ""
 
-#: ../src/subscription_manager/gui/autobind.py:374
+#: ../src/subscription_manager/gui/autobind.py:375
 msgid ""
 "No service levels will cover all installed products. Please use the \"All "
 "Available Subscriptions\" tab to manually entitle this system."
@@ -394,27 +394,27 @@ msgstr ""
 "ਕੋਈ ਵੀ ਸਰਵਿਸ ਲੈਵਲ ਸਭ ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦ ਕਵਰ ਨਹੀਂ ਕਰਦਾ। ਕਿਰਪਾ ਕਰਕੇਇਸ ਸਿਸਟਮ ਤੇ ਦਸਤੀ "
 "ਇੰਟਾਈਟਲ ਬਣਨ ਲਈ \"ਸਭ ਉਪਲੱਬਧ ਮੈਂਬਰੀਆਂ\" ਟੈਬ ਵਰਤੋ।"
 
-#: ../src/subscription_manager/gui/autobind.py:488
+#: ../src/subscription_manager/gui/autobind.py:489
 msgid "Error subscribing:"
 msgstr "ਮੈਂਬਰੀ ਲੈਣ ਸਮੇਂ ਗਲਤੀ:"
 
-#: ../src/subscription_manager/gui/autobind.py:494
+#: ../src/subscription_manager/gui/autobind.py:495
 msgid "Confirm Subscription(s)"
 msgstr "ਮੈਂਬਰੀ ਪੁਸ਼ਟੀ"
 
-#: ../src/subscription_manager/gui/autobind.py:497
+#: ../src/subscription_manager/gui/autobind.py:498
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:6
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:12
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:6
 msgid "Subscribe"
 msgstr "ਮੈਂਬਰ ਬਣੋ"
 
-#: ../src/subscription_manager/gui/autobind.py:539
+#: ../src/subscription_manager/gui/autobind.py:540
 msgid "Select Service Level Agreement"
 msgstr "ਸਰਵਿਸ ਲੈਵਲ ਸਹਿਮਤੀ ਚੁਣੋ"
 
-#: ../src/subscription_manager/gui/autobind.py:542
-#: ../src/subscription_manager/gui/data/autobind.glade.h:4
+#: ../src/subscription_manager/gui/autobind.py:543
+#: ../src/subscription_manager/gui/data/autobind.glade.h:3
 msgid "Forward"
 msgstr "ਅੱਗੇ"
 
@@ -434,7 +434,7 @@ msgstr "ਕੋਈ ਪਿਛਲਾ ਅੱਪਡੇਟ ਨਹੀਂ"
 #. TODO: could stand to check if registered before trying to do this:
 #: ../src/subscription_manager/gui/factsgui.py:103
 #: ../src/subscription_manager/gui/factsgui.py:107
-#: ../src/subscription_manager/managercli.py:1249
+#: ../src/subscription_manager/managercli.py:1247
 msgid "Unknown"
 msgstr "ਅਣਜਾਣ"
 
@@ -450,8 +450,8 @@ msgid "RHSM Subscriptions Management"
 msgstr "RHSM ਮੈਂਬਰੀ ਪਰਬੰਧਨ"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:32
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:26
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:26
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:24
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:25
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:45
 msgid "Entitlement Registration"
 msgstr "ਇੰਟਾਈਟਲਮੈਂਟ ਰਜਿਸਟਰੇਸ਼ਨ"
@@ -461,12 +461,12 @@ msgstr "ਇੰਟਾਈਟਲਮੈਂਟ ਰਜਿਸਟਰੇਸ਼ਨ"
 msgid "Entitlement Platform Registration"
 msgstr "ਇੰਟਾਈਟਲਮੈਂਟ ਪਲੇਟਫਾਰਮ ਰਜਿਸਟਰੇਸ਼ਨ"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:27
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:25
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:294
 msgid "Confirm Subscriptions"
 msgstr "ਮੈਂਬਰੀ ਪੁਸ਼ਟੀ"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:27
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:26
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
 msgid "Service Level"
 msgstr "ਸਰਵਿਸ ਲੈਵਲ"
@@ -521,7 +521,7 @@ msgstr "ਸਰਵਰ ਦਾ ਸ਼ਨਾਖਤ ਕਰਨ ਵਿੱਚ ਫੇਲ: %s
 #. NOTE: yes this looks a lot like the socket error, but I think these
 #. were actually intended to display slightly different messages:
 #: ../src/subscription_manager/gui/utils.py:67
-#: ../src/subscription_manager/managercli.py:110
+#: ../src/subscription_manager/managercli.py:109
 msgid ""
 "Network error. Please check the connection details, or see /var/log/rhsm/"
 "rhsm.log for more information."
@@ -531,7 +531,7 @@ msgstr ""
 
 #. This is what happens when there's an issue with the server on the other side of the wire
 #: ../src/subscription_manager/gui/utils.py:70
-#: ../src/subscription_manager/managercli.py:114
+#: ../src/subscription_manager/managercli.py:113
 msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
@@ -540,7 +540,7 @@ msgstr ""
 "log ਵੇਖੋ।"
 
 #: ../src/subscription_manager/gui/utils.py:91
-#: ../src/subscription_manager/managercli.py:123
+#: ../src/subscription_manager/managercli.py:122
 #, python-format
 msgid "Bad CA certificate: %s"
 msgstr "ਗਲਤ CA ਸਾਰਟੀਫਿਕੇਟ: %s"
@@ -840,7 +840,7 @@ msgstr "ਮੁਕੰਮਲ"
 #: ../src/subscription_manager/constants.py:26
 #: ../src/subscription_manager/constants.py:42
 #: ../src/subscription_manager/constants.py:72
-#: ../src/subscription_manager/managercli.py:70
+#: ../src/subscription_manager/managercli.py:69
 #, python-format
 msgid "Product Name:         \t%-25s"
 msgstr "ਉਤਪਾਦ ਨਾਂ:         \t%-25s"
@@ -873,7 +873,7 @@ msgstr "ਸ਼ੁਰੂ:               \t%-25s"
 
 #: ../src/subscription_manager/constants.py:38
 #: ../src/subscription_manager/constants.py:56
-#: ../src/subscription_manager/managercli.py:88
+#: ../src/subscription_manager/managercli.py:87
 #, python-format
 msgid "Expires:              \t%-25s"
 msgstr "ਮਿਆਦ:              \t%-25s"
@@ -894,7 +894,7 @@ msgid "Quantity:             \t%-25s"
 msgstr "ਮਾਤਰਾ:             \t%-25s"
 
 #: ../src/subscription_manager/constants.py:50
-#: ../src/subscription_manager/managercli.py:82
+#: ../src/subscription_manager/managercli.py:81
 #, python-format
 msgid "Service Level:        \t%-25s"
 msgstr "ਸਰਵਿਸ ਲੈਵਲ:        \t%-25s"
@@ -950,7 +950,7 @@ msgstr "<b>ਅਨ-ਰਜਿਸਟਰ ਕਰਨ ਵੇਲੇ ਗਲਤੀਆਂ �
 
 #: ../src/subscription_manager/constants.py:85
 #: ../src/subscription_manager/constants.py:89
-#: ../src/subscription_manager/managercli.py:105
+#: ../src/subscription_manager/managercli.py:104
 msgid "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr "ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/rhsm.log ਵੇਖੋ ਜੀ।"
 
@@ -967,7 +967,7 @@ msgstr "<b>ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ ਅਨ-ਰਜਿਸਟਰ ਕ�
 msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr "<b>ਯੂਜ਼ਰ %s ਕਿਸੇ ਸੰਗਠਨ ਨਾਲ ਰਜਿਸਟਰ ਨਹੀਂ ਕਰ ਸਕਦਾ।</b>"
 
-#: ../src/subscription_manager/managercli.py:58
+#: ../src/subscription_manager/managercli.py:57
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register --"
 "help' for more information."
@@ -975,224 +975,224 @@ msgstr ""
 "ਇਹ ਸਿਸਟਮ ਹਾਲੇ ਰਜਿਸਟਰ ਨਹੀਂ ਹੈ। ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ 'subscription-manager register --"
 "help' ਚਲਾਓ।"
 
-#: ../src/subscription_manager/managercli.py:72
+#: ../src/subscription_manager/managercli.py:71
 #, python-format
 msgid "Contract Number:      \t%-25s"
 msgstr "ਕੰਟਰੈਕਟ ਨੰਬਰ:      \t%-25s"
 
-#: ../src/subscription_manager/managercli.py:74
+#: ../src/subscription_manager/managercli.py:73
 #, python-format
 msgid "Account Number:       \t%-25s"
 msgstr "ਅਕਾਊਂਟ ਨੰਬਰ:       \t%-25s"
 
-#: ../src/subscription_manager/managercli.py:76
+#: ../src/subscription_manager/managercli.py:75
 #, python-format
 msgid "Serial Number:        \t%-25s"
 msgstr "ਲੜੀਵਾਰ ਨੰਬਰ:        \t%-25s"
 
-#: ../src/subscription_manager/managercli.py:78
+#: ../src/subscription_manager/managercli.py:77
 #, python-format
 msgid "Active:               \t%-25s"
 msgstr "ਸਰਗਰਮ:               \t%-25s"
 
-#: ../src/subscription_manager/managercli.py:80
+#: ../src/subscription_manager/managercli.py:79
 #, python-format
 msgid "Quantity Used:        \t%-25s"
 msgstr "ਵਰਤੀ ਮਾਤਰਾ:        \t%-25s"
 
-#: ../src/subscription_manager/managercli.py:84
+#: ../src/subscription_manager/managercli.py:83
 #, python-format
 msgid "Service Type :        \t%-25s"
 msgstr "ਸਰਵਿਸ ਕਿਸਮ :        \t%-25s"
 
-#: ../src/subscription_manager/managercli.py:86
+#: ../src/subscription_manager/managercli.py:85
 #, python-format
 msgid "Begins:               \t%-25s"
 msgstr "ਸ਼ੁਰੂ:               \t%-25s"
 
-#: ../src/subscription_manager/managercli.py:104
+#: ../src/subscription_manager/managercli.py:103
 msgid "Network error, unable to connect to server."
 msgstr "ਨੈੱਟਵਰਕ ਗਲਤੀ, ਸਰਵਰ ਨਾਲ ਜੁੜ ਨਹੀਂ ਸਕਿਆ।"
 
-#: ../src/subscription_manager/managercli.py:136
+#: ../src/subscription_manager/managercli.py:135
 #, python-format
 msgid "Service level set to: %s"
 msgstr "ਸਰਵਿਸ ਲੈਵਲ ਇਸ ਤਰਾਂ ਸੈੱਟ ਕੀਤਾ ਗਿਆ ਹੈ: %s"
 
-#: ../src/subscription_manager/managercli.py:150
+#: ../src/subscription_manager/managercli.py:149
 msgid "Installed Product Current Status:"
 msgstr "ਇੰਸਟਾਲ ਕੀਤਾ ਉਤਪਾਦ ਮੌਜੂਦਾ ਹਾਲਤ:"
 
-#: ../src/subscription_manager/managercli.py:206
+#: ../src/subscription_manager/managercli.py:205
 msgid "proxy url in the form of proxy_hostname:proxy_port"
 msgstr "proxy_hostname:proxy_port ਦੇ ਰੂਪ ਵਿੱਚ ਪਰਾਕਸੀ url"
 
-#: ../src/subscription_manager/managercli.py:208
+#: ../src/subscription_manager/managercli.py:207
 msgid "user for http proxy with basic authentication"
 msgstr "http ਪਰਾਕਸੀ ਲਈ ਯੂਜ਼ਰ ਮੁਢਲੀ ਪ੍ਰਮਾਣਿਕਤਾ ਸਮੇਤ"
 
-#: ../src/subscription_manager/managercli.py:210
+#: ../src/subscription_manager/managercli.py:209
 msgid "password for http proxy with basic authentication"
 msgstr "http ਪਰਾਕਸੀ ਲਈ ਪਾਸਵਰਡ ਮੁਢਲੀ ਪ੍ਰਮਾਣਿਕਤਾ ਸਮੇਤ"
 
-#: ../src/subscription_manager/managercli.py:236
+#: ../src/subscription_manager/managercli.py:235
 #, python-format
 msgid "cannot parse argument: %s"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:283
+#: ../src/subscription_manager/managercli.py:281
 msgid "Consumer certificates corrupted. Please reregister."
 msgstr "ਖਪਤਕਾਰ ਸਾਰਟੀਫਿਕੇਟ ਖਰਾਬ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ-ਰਜਿਸਟਰ ਕਰੋ।"
 
-#: ../src/subscription_manager/managercli.py:302
+#: ../src/subscription_manager/managercli.py:300
 msgid "username to use when authorizing against the server"
 msgstr "ਸਰਵਰ ਤੇ ਪ੍ਰਮਾਣਿਕਤਾ ਲਈ ਯੂਜ਼ਰ ਨਾਂ"
 
-#: ../src/subscription_manager/managercli.py:304
+#: ../src/subscription_manager/managercli.py:302
 msgid "password to use when authorizing against the server"
 msgstr "ਸਰਵਰ ਤੇ ਪ੍ਰਮਾਣਿਕਤਾ ਲਈ ਯੂਜ਼ਰ ਪਾਸਵਰਡ"
 
-#: ../src/subscription_manager/managercli.py:316
+#: ../src/subscription_manager/managercli.py:314
 msgid "Username: "
 msgstr "ਯੂਜ਼ਰ-ਨਾਂ:"
 
-#: ../src/subscription_manager/managercli.py:319
+#: ../src/subscription_manager/managercli.py:317
 msgid "Password: "
 msgstr "ਪਾਸਵਰਡ:"
 
-#: ../src/subscription_manager/managercli.py:344
+#: ../src/subscription_manager/managercli.py:342
 msgid ""
 "Remove all local consumer and subscription data without affecting the server"
 msgstr "ਸਰਵਰ ਤੇ ਬਿਨਾ ਅਸਰ ਕੀਤੇ ਸਭ ਲੋਕਲ ਗਾਹਕ ਅਤੇ ਮੈਂਬਰੀ ਡਾਟਾ ਹਟਾਓ"
 
-#: ../src/subscription_manager/managercli.py:356
+#: ../src/subscription_manager/managercli.py:354
 msgid "All local data removed"
 msgstr "ਸਭ ਲੋਕਲ ਡਾਟਾ ਹਟਾਇਆ ਗਿਆ"
 
-#: ../src/subscription_manager/managercli.py:364
+#: ../src/subscription_manager/managercli.py:362
 msgid "Pull the latest subscription data from the server"
 msgstr "ਸਰਵਰ ਤੋਂ ਤਾਜ਼ਾ ਮੈਂਬਰੀ ਡਾਟਾ ਭਰੋ"
 
-#: ../src/subscription_manager/managercli.py:376
+#: ../src/subscription_manager/managercli.py:374
 msgid "All local data refreshed"
 msgstr "ਸਭ ਲੋਕਲ ਡਾਟਾ ਮੁੜ-ਤਾਜ਼ਾ ਕੀਤਾ ਗਿਆ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:381
+#: ../src/subscription_manager/managercli.py:379
 #, python-format
 msgid "Unable to perform refresh due to the following exception: %s"
 msgstr "ਹੇਠਲੇ ਅੱਪਵਾਦ ਕਰਕੇ ਮੁੜ-ਤਾਜ਼ਾ ਨਹੀਂ ਕਰ ਸਕਦਾ: %s"
 
-#: ../src/subscription_manager/managercli.py:390
+#: ../src/subscription_manager/managercli.py:388
 msgid "Display the identity certificate for this machine or request a new one"
 msgstr "ਇਸ ਮਸ਼ੀਨ ਲਈ ਪਛਾਣ ਸਾਰਟੀਫਿਕੇਟ ਵੇਖਾਓ ਜਾਂ ਨਵੇਂ ਲਈ ਬੇਨਤੀ ਕਰੋ"
 
-#: ../src/subscription_manager/managercli.py:399
+#: ../src/subscription_manager/managercli.py:397
 msgid "request a new certificate be generated"
 msgstr "ਨਵਾਂ ਸਾਰਟੀਫਿਕੇਟ ਬਣਾਉਣ ਲਈ ਬੇਨਤੀ ਕਰੋ"
 
-#: ../src/subscription_manager/managercli.py:401
+#: ../src/subscription_manager/managercli.py:399
 msgid "force certificate regeneration (requires username and password)"
 msgstr "ਸਾਰਟੀਫਿਕੇਸ਼ਨ ਜਨਰੇਸ਼ਨ ਮਜਬੂਰ ਕਰੋ (ਯੂਜ਼ਰ-ਨਾਂ ਅਤੇ ਪਾਸਵਰਡ ਦੀ ਲੋੜ ਹੈ)"
 
-#: ../src/subscription_manager/managercli.py:406
+#: ../src/subscription_manager/managercli.py:404
 msgid "--force can only be used with --regenerate"
 msgstr "--force ਸਿਰਫ --regenerate ਨਾਲ ਹੀ ਵਰਤੀ ਜਾ ਸਕਦੀ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:410
+#: ../src/subscription_manager/managercli.py:408
 msgid "--username and --password can only be used with --force"
 msgstr "--username ਅਤੇ --password ਸਿਰਫ --force ਨਾਲ ਵਰਤੇ ਜਾ ਸਕਦੇ ਹਨ"
 
-#: ../src/subscription_manager/managercli.py:425
+#: ../src/subscription_manager/managercli.py:423
 #, python-format
 msgid "Current identity is: %s"
 msgstr "ਮੌਜੂਦਾ ਸ਼ਨਾਖਤ ਹੈ: %s"
 
-#: ../src/subscription_manager/managercli.py:426
+#: ../src/subscription_manager/managercli.py:424
 #, python-format
 msgid "name: %s"
 msgstr "ਨਾਂ: %s"
 
-#: ../src/subscription_manager/managercli.py:427
+#: ../src/subscription_manager/managercli.py:425
 #, python-format
 msgid "org name: %s"
 msgstr "ਸੰਗਠਨ ਨਾਂ: %s"
 
-#: ../src/subscription_manager/managercli.py:428
+#: ../src/subscription_manager/managercli.py:426
 #, python-format
 msgid "org id: %s"
 msgstr "ਸੰਗਠਨ id: %s"
 
-#: ../src/subscription_manager/managercli.py:439
+#: ../src/subscription_manager/managercli.py:437
 msgid "Identity certificate has been regenerated."
 msgstr "ਪਛਾਣ ਸਾਰਟੀਫਿਕੇਟ ਮੁੜ-ਬਣਾ ਦਿੱਤਾ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:447
+#: ../src/subscription_manager/managercli.py:445
 msgid "Error: Unable to generate a new identity for the system"
 msgstr "ਗਲਤੀ: ਸਿਸਟਮ ਲਈ ਨਵੀਂ ਪਛਾਣ ਬਣਾਉਣ ਵਿੱਚ ਅਸਫਲ"
 
-#: ../src/subscription_manager/managercli.py:454
+#: ../src/subscription_manager/managercli.py:452
 msgid "Display the orgs against which a user can register a system"
 msgstr "ਸੰਗਠਨ ਵੇਖਾਓ ਜਿਸ ਨਾਲ ਯੂਜ਼ਰ ਸਿਸਟਮ ਨੂੰ ਰਜਿਸਟਰ ਕਰ ਸਕਦਾ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:474
+#: ../src/subscription_manager/managercli.py:472
 msgid "Organizations"
 msgstr "ਸੰਗਠਨ"
 
-#: ../src/subscription_manager/managercli.py:478
+#: ../src/subscription_manager/managercli.py:476
 msgid "Name"
 msgstr "ਨਾਂ"
 
-#: ../src/subscription_manager/managercli.py:479
+#: ../src/subscription_manager/managercli.py:477
 msgid "Key"
 msgstr "ਕੁੰਜੀ"
 
-#: ../src/subscription_manager/managercli.py:482
-#: ../src/subscription_manager/managercli.py:863
+#: ../src/subscription_manager/managercli.py:480
+#: ../src/subscription_manager/managercli.py:861
 #, python-format
 msgid "%s cannot register to any organizations."
 msgstr "%s ਕਿਸੇ ਵੀ ਸੰਗਠਨ ਨਾਲ ਰਜਿਸਟਰ ਨਹੀਂ ਕਰ ਸਕਦਾ।"
 
-#: ../src/subscription_manager/managercli.py:489
+#: ../src/subscription_manager/managercli.py:487
 msgid "Error: Unable to retrieve org list from Entitlement Platform"
 msgstr "ਗਲਤੀ: ਇੰਟਾਈਟਲਮੈਂਟ ਪਲੇਟਫਾਰਮ ਤੋਂ ਸੰਗਠਨ ਸੂਚੀ ਲੈਣ ਵਿੱਚ ਅਸਮਰਥ"
 
-#: ../src/subscription_manager/managercli.py:496
+#: ../src/subscription_manager/managercli.py:494
 msgid "Display the environments available for a user"
 msgstr "ਯੂਜ਼ਰ ਲਈ ਉਪਲੱਬਧ ਇਨਵਾਇਰਮੈਂਟ ਵੇਖਾਓ"
 
-#: ../src/subscription_manager/managercli.py:504
+#: ../src/subscription_manager/managercli.py:502
 msgid "specify org for environment list"
 msgstr "ਇਨਵਾਇਰਮੈਂਟ ਸੂਚੀ ਲਈ ਸੰਗਠਨ ਦਿਓ"
 
-#: ../src/subscription_manager/managercli.py:508
+#: ../src/subscription_manager/managercli.py:506
 msgid "you must specify an --org"
 msgstr "you ਵਿੱਚ ਇੱਕ --org ਦੇਣਾ ਜਰੂਰੀ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:524
+#: ../src/subscription_manager/managercli.py:522
 msgid "Environments"
 msgstr "ਇਨਵਾਇਰਮੈਂਟ"
 
-#: ../src/subscription_manager/managercli.py:540
+#: ../src/subscription_manager/managercli.py:538
 msgid "Error: Unable to retrieve environment list from Entitlement Platform"
 msgstr "ਗਲਤੀ: ਇੰਟਾਈਟਲਮੈਂਟ ਪਲੇਟਫਾਰਮ ਤੋਂ ਇਨਵਾਇਰਮੈਂਟ ਸੂਚੀ ਲੈਣ ਵਿੱਚ ਅਸਮਰਥ"
 
-#: ../src/subscription_manager/managercli.py:547
+#: ../src/subscription_manager/managercli.py:545
 msgid "Manage service levels for this system."
 msgstr "ਇਸ ਸਿਸਟਮ ਲਈ ਸਰਵਿਸ ਲੈਵਲ ਪਰਬੰਧਨ"
 
-#: ../src/subscription_manager/managercli.py:554
+#: ../src/subscription_manager/managercli.py:552
 msgid "show this system's current service level"
 msgstr "ਇਸ ਸਿਸਟਮ ਦਾ ਮੌਜੂਦਾ ਸਰਵਿਸ ਲੈਵਲ ਵੇਖਾਓ"
 
-#: ../src/subscription_manager/managercli.py:557
+#: ../src/subscription_manager/managercli.py:555
 msgid "specify org for service level list"
 msgstr "ਸਰਵਿਸ ਲੈਵਲ ਲਿਸਟ ਲਈ ਸੰਗਠਨ ਦਿਓ"
 
-#: ../src/subscription_manager/managercli.py:559
+#: ../src/subscription_manager/managercli.py:557
 msgid "list all service levels available"
 msgstr "ਸਭ ਉਪਲੱਬਧ ਸਰਵਿਸ ਲੈਵਲ ਵੇਖਾਓ"
 
-#: ../src/subscription_manager/managercli.py:570
+#: ../src/subscription_manager/managercli.py:568
 msgid ""
 "Error: you must register or specify --username and password to list service "
 "levels"
@@ -1200,412 +1200,412 @@ msgstr ""
 "ਗਲਤੀ: ਸਰਵਿਸ ਲੈਵਲ ਵੇਖਾਉਣ ਲਈ ਤੁਹਾਨੂੰ ਪਹਿਲਾਂ ਰਜਿਸਟਰ ਕਰਨਾ ਜਾਂ --username ਅਤੇ ਪਾਸਵਰਡ "
 "ਨਿਰਧਾਰਤ ਕਰਨੇ ਜਰੂਰੀ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:573
+#: ../src/subscription_manager/managercli.py:571
 msgid "Error: you must register or specify --org."
 msgstr "ਗਲਤੀ: ਤੁਹਾਨੂੰ ਰਜਿਸਟਰ ਕਰਨਾ ਜਾਂ --org ਨਿਰਧਾਰਤ ਕਰਨਾ ਜਰੂਰੀ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:576
+#: ../src/subscription_manager/managercli.py:574
 msgid "Error: This system is currently not registered."
 msgstr "ਗਲਤੀ: ਇਹ ਸਿਸਟਮ ਹਾਲੇ ਰਜਿਸਟਰ ਨਹੀਂ ਹੈ।"
 
-#: ../src/subscription_manager/managercli.py:614
+#: ../src/subscription_manager/managercli.py:612
 msgid "Error: Unable to retrieve service levels."
 msgstr "ਗਲਤੀ: ਸਰਵਿਸ ਲੈਵਲ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਮਰਥ।"
 
-#: ../src/subscription_manager/managercli.py:620
-#: ../src/subscription_manager/managercli.py:626
+#: ../src/subscription_manager/managercli.py:618
+#: ../src/subscription_manager/managercli.py:624
 msgid "ERROR: The service-level command is not supported by "
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:623
+#: ../src/subscription_manager/managercli.py:621
 #, python-format
 msgid "Current service level: %s"
 msgstr "ਮੌਜੂਦਾ ਸਰਵਿਸ ਲੈਵਲ: %s"
 
-#: ../src/subscription_manager/managercli.py:638
+#: ../src/subscription_manager/managercli.py:636
 msgid "Available Service Levels"
 msgstr "ਉਪਲੱਬਧ ਸਰਵਿਸ ਲੈਵਲ"
 
-#: ../src/subscription_manager/managercli.py:643
+#: ../src/subscription_manager/managercli.py:641
 msgid "This org does not have any subscriptions with service levels."
 msgstr "ਇਹ ਸੰਗਠਨ ਕੋਲ ਸਰਵਿਸ ਲੈਵਲ ਵਾਲੀ ਕੋਈ ਮੈਂਬਰੀ ਨਹੀਂ ਹੈ।"
 
-#: ../src/subscription_manager/managercli.py:666
+#: ../src/subscription_manager/managercli.py:664
 msgid "the type of consumer to register, defaults to system"
 msgstr "ਰਜਿਸਟਰ ਕਰਨ ਲਈ ਖਪਤਕਾਰ ਦੀ ਕਿਸਮ, ਸਿਸਟਮ ਲਈ ਮੂਲ"
 
-#: ../src/subscription_manager/managercli.py:668
+#: ../src/subscription_manager/managercli.py:666
 msgid "name of the consumer to register, defaults to the hostname"
 msgstr "ਰਜਿਸਟਰ ਕਰਨ ਲਈ ਖਪਤਕਾਰ ਦਾ ਨਾਂ, ਮੂਲ hostname ਹੁੰਦਾ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:670
+#: ../src/subscription_manager/managercli.py:668
 msgid "if supplied, the existing consumer data is pulled from the server"
 msgstr "ਜੇ ਦਿੱਤਾ ਗਿਆ ਹੈ, ਮੌਜੂਦਾ ਖਪਤਕਾਰ ਡਾਟਾ ਸਰਵਰ ਤੋਂ ਲਿਆ ਗਿਆ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:672
+#: ../src/subscription_manager/managercli.py:670
 msgid "register to one of multiple organizations for the user"
 msgstr "ਯੂਜ਼ਰ ਲਈ ਬਹੁਤੇ ਸੰਗਠਨਾਂ ਵਿੱਚੋਂ ਕਿਸੇ ਇੱਕ ਤੇ ਰਜਿਸਟਰ ਕਰੋ"
 
-#: ../src/subscription_manager/managercli.py:674
+#: ../src/subscription_manager/managercli.py:672
 msgid "register to a specific environment in the destination org"
 msgstr "ਨੀਯਤ ਸੰਗਠਨ ਵਿੱਚ ਖਾਸ ਇਨਵਾਇਰਮੈਂਟ ਤੇ ਰਜਿਸਟਰ ਕਰੋ"
 
-#: ../src/subscription_manager/managercli.py:676
+#: ../src/subscription_manager/managercli.py:674
 msgid "set a release version"
 msgstr "ਰੀਲੀਜ਼ ਵਰਜਨ ਸੈੱਟ ਕਰੋ"
 
-#: ../src/subscription_manager/managercli.py:678
-#: ../src/subscription_manager/managercli.py:1050
+#: ../src/subscription_manager/managercli.py:676
+#: ../src/subscription_manager/managercli.py:1048
 msgid ""
 "automatically subscribe this system to                                     "
 "compatible subscriptions."
 msgstr "ਇਸ ਸਿਸਟਮ ਨੂੰ ਆਟੋਮੈਟਿਕ ਹੀ ਅਨੁਕੂਲ ਮੈਂਬਰੀਆਂ ਤੇ ਮੈਂਬਰ ਬਣਾਓ।"
 
-#: ../src/subscription_manager/managercli.py:681
+#: ../src/subscription_manager/managercli.py:679
 msgid "register the system even if it is already registered"
 msgstr "ਸਿਸਟਮ ਨੂੰ ਰਜਿਸਟਰ ਕਰੋ ਭਾਵੇਂ ਇਹ ਪਹਿਲਾਂ ਹੀ ਰਜਿਸਟਰ ਕੀਤਾ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:683
+#: ../src/subscription_manager/managercli.py:681
 msgid "one or more activation keys to use for registration"
 msgstr "ਰਜਿਸਟਰੇਸ਼ਨ ਲਈ ਵਰਤਣ ਵਾਲੀਆਂ ਇੱਕ ਜਾਂ ਜਿਆਦਾ ਸਰਗਰਮੀ ਕੁੰਜੀਆਂ"
 
-#: ../src/subscription_manager/managercli.py:685
-#: ../src/subscription_manager/managercli.py:1053
+#: ../src/subscription_manager/managercli.py:683
+#: ../src/subscription_manager/managercli.py:1051
 msgid "service level to apply to this system"
 msgstr "ਇਸ ਸਿਸਟਮ ਤੇ ਲਾਗੂ ਕਰਨ ਲਈ ਸਰਵਿਸ ਲੈਵਲ"
 
-#: ../src/subscription_manager/managercli.py:693
+#: ../src/subscription_manager/managercli.py:691
 msgid "This system is already registered. Use --force to override"
 msgstr "ਇਹ ਸਿਸਟਮ ਪਹਿਲਾਂ ਹੀ ਰਜਿਸਟਰ ਕੀਤਾ ਹੈ। ਓਵਰਰਾਈਡ ਕਰਨ ਲਈ --force ਵਰਤੋ"
 
-#: ../src/subscription_manager/managercli.py:696
+#: ../src/subscription_manager/managercli.py:694
 msgid "Error: consumer name can not be empty."
 msgstr "ਗਲਤੀ: ਖਪਤਕਾਰ ਨਾਂ ਖਾਲੀ ਨਹੀਂ ਹੋ ਸਕਦਾ।"
 
-#: ../src/subscription_manager/managercli.py:699
+#: ../src/subscription_manager/managercli.py:697
 msgid "Error: Activation keys do not require user credentials"
 msgstr "ਗਲਤੀ: ਸਰਗਰਮੀ ਕੁੰਜੀ ਲਈ ਯੂਜ਼ਰ ਕਰੀਡੈਂਸ਼ਲ ਦੀ ਲੋੜ ਨਹੀਂ ਹੁੰਦੀ"
 
-#: ../src/subscription_manager/managercli.py:702
+#: ../src/subscription_manager/managercli.py:700
 msgid "Error: Activation keys can not be used with previously registered ids."
 msgstr "ਗਲਤੀ: ਸਰਗਰਮੀ ਕੁੰਜੀ ਨੂੰ ਪਹਿਲਾਂ ਹੀ ਰਜਿਸਟਰ ਕੀਤੇ ids ਨਾਲ ਨਹੀਂ ਵਰਤਿਆ ਜਾ ਸਕਦਾ।"
 
-#: ../src/subscription_manager/managercli.py:705
+#: ../src/subscription_manager/managercli.py:703
 msgid "Error: Must specify --org to register to an environment."
 msgstr "ਗਲਤੀ: ਇਨਵਾਇਰਮੈਂਟ ਰਜਿਸਟਰ ਕਰਨ ਲੀ --org ਦੇਣਾ ਜਰੂਰੀ ਹੈ।"
 
-#: ../src/subscription_manager/managercli.py:708
+#: ../src/subscription_manager/managercli.py:706
 msgid "Error: Must specify --org to register with activation keys."
 msgstr "ਗਲਤੀ: ਸਰਗਰਮੀ ਕੁੰਜੀ ਨਾਲ ਰਜਿਸਟਰ ਕਰਨ ਲਈ --org ਦੇਣਾ ਜਰੂਰੀ ਹੈ।"
 
-#: ../src/subscription_manager/managercli.py:712
+#: ../src/subscription_manager/managercli.py:710
 msgid "Error: Must specify an activation key"
 msgstr "ਗਲਤੀ: ਇੱਕ ਸਰਗਰਮੀ ਕੁੰਜੀ ਦੇਣੀ ਜਰੂਰੀ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:715
+#: ../src/subscription_manager/managercli.py:713
 msgid "Error: Must use --autosubscribe with --servicelevel."
 msgstr "ਗਲਤੀ: --autosubscribe ਨੂੰ --servicelevel ਨਾਲ ਵਰਤਣਾ ਜਰੂਰੀ ਹੈ।"
 
-#: ../src/subscription_manager/managercli.py:742
+#: ../src/subscription_manager/managercli.py:740
 #, python-format
 msgid "The system with UUID %s has been unregistered"
 msgstr "UUID %s ਵਾਲਾ ਸਿਸਟਮ ਅਨ-ਰਜਿਸਟਰ ਕੀਤਾ ਗਿਆ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:783
+#: ../src/subscription_manager/managercli.py:781
 #, python-format
 msgid "Error during registration: %s"
 msgstr "ਰਜਿਸਟਰੇਸ਼ਨ ਦੌਰਾਨ ਗਲਤੀ ਆਈ ਹੈ: %s"
 
-#: ../src/subscription_manager/managercli.py:787
+#: ../src/subscription_manager/managercli.py:785
 #, python-format
 msgid "The system has been registered with id: %s "
 msgstr "ਸਿਸਟਮ ਨੂੰ ਜਿਸ id ਨਾਲ ਰਜਿਸਟਰ ਕੀਤਾ ਗਿਆ ਹੈ: %s "
 
-#: ../src/subscription_manager/managercli.py:812
+#: ../src/subscription_manager/managercli.py:810
 msgid "ERROR: The --servicelevel option is not supported "
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:844
+#: ../src/subscription_manager/managercli.py:842
 msgid "ERROR: Server does not support environments."
 msgstr "ਗਲਤੀ: ਸਰਵਰ ਇਨਵਾਇਰਮੈਂਟ ਨੂੰ ਸਹਿਯੋਗ ਨਹੀਂ ਦਿੰਦਾ।"
 
-#: ../src/subscription_manager/managercli.py:848
+#: ../src/subscription_manager/managercli.py:846
 #, python-format
 msgid "No such environment: %s"
 msgstr "ਅਜਿਹਾ ਕੋਈ ਇਨਵਾਇਰਮੈਂਟ ਨਹੀਂ: %s"
 
-#: ../src/subscription_manager/managercli.py:888
+#: ../src/subscription_manager/managercli.py:886
 msgid "This system is currently not registered."
 msgstr "ਇਹ ਸਿਸਟਮ ਹੁਣ ਰਜਿਸਟਰ ਨਹੀਂ ਕੀਤਾ ਹੈ।"
 
-#: ../src/subscription_manager/managercli.py:910
+#: ../src/subscription_manager/managercli.py:908
 msgid "System has been un-registered."
 msgstr "ਸਿਸਟਮ ਅਨ-ਰਜਿਸਟਰ ਕੀਤਾ ਗਿਆ ਹੈ।"
 
-#: ../src/subscription_manager/managercli.py:917
+#: ../src/subscription_manager/managercli.py:915
 msgid "Attempt to redeem a subscription for a preconfigured machine"
 msgstr "ਪਹਿਲਾਂ-ਸੰਰਚਿਤ ਮਸ਼ੀਨ ਲਈ ਮੈਂਬਰੀ ਛੱਡ ਦਿਓ"
 
-#: ../src/subscription_manager/managercli.py:923
+#: ../src/subscription_manager/managercli.py:921
 msgid "Email address to notify when subscription redemption is complete."
 msgstr "ਮੈਂਬਰੀ ਛੱਡਣ ਤੇ ਸੂਚਨਾ ਦੇਣ ਲਈ ਈਮੇਲ ਐਡਰੈੱਸ।"
 
-#: ../src/subscription_manager/managercli.py:926
+#: ../src/subscription_manager/managercli.py:924
 msgid ""
 "Optional language to use for email notification when subscription redemption "
 "is complete. Examples: en-us, de-de"
 msgstr "ਮੈਂਬਰੀ ਛੱਡਣ ਤੇ ਈਮੇਲ ਸੂਚਨਾ ਲਈ ਲੋੜੀਂਦੀ ਭਾਸ਼ਾ। ਉਦਾਹਰਨਾਂ: en-us, de-de"
 
-#: ../src/subscription_manager/managercli.py:968
+#: ../src/subscription_manager/managercli.py:966
 msgid "Configure what os release to use"
 msgstr "ਸੰਰਚਿਤ ਕਰੋ ਕਿ ਕਿਹੜਾ os ਵਰਤਣਾ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:974
+#: ../src/subscription_manager/managercli.py:972
 msgid "list available releases"
 msgstr "ਉਪਲੱਬਧ ਰੀਲੀਜ਼ ਵੇਖਾਓ"
 
-#: ../src/subscription_manager/managercli.py:977
+#: ../src/subscription_manager/managercli.py:975
 msgid "set the release"
 msgstr "ਰੀਲੀਜ਼ ਸੈੱਟ ਕਰੋ"
 
-#: ../src/subscription_manager/managercli.py:999
+#: ../src/subscription_manager/managercli.py:997
 msgid "ERROR: The 'release' command is not supported by the server."
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1014
+#: ../src/subscription_manager/managercli.py:1012
 #, python-format
 msgid "Release: %s"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1016
+#: ../src/subscription_manager/managercli.py:1014
 msgid "Release not set"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1025
+#: ../src/subscription_manager/managercli.py:1023
 #, python-format
 msgid "Release set to: %s"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1038
+#: ../src/subscription_manager/managercli.py:1036
 msgid "Subscribe the registered machine to a specified product"
 msgstr "ਕਿਸੇ ਉਤਪਾਦ ਤੇ ਮਸ਼ੀਨ ਰਜਿਸਟਰ ਕਰਨ ਲਈ ਮੈਂਬਰੀ ਬਣੋ"
 
-#: ../src/subscription_manager/managercli.py:1046
+#: ../src/subscription_manager/managercli.py:1044
 msgid "the id of the pool to subscribe to"
 msgstr "ਪੂਲ ਦਾ id ਜਿਸ ਤੇ ਮੈਂਬਰੀ ਬਣਨਾ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:1048
+#: ../src/subscription_manager/managercli.py:1046
 msgid "number of subscriptions to consume"
 msgstr "ਵਰਤਣ ਲਈ ਮੈਂਬਰੀਆਂ ਦੀ ਗਿਣਤੀ"
 
-#: ../src/subscription_manager/managercli.py:1057
+#: ../src/subscription_manager/managercli.py:1055
 msgid ""
 "Error: This command requires that you specify a pool with --pool or use --"
 "auto."
 msgstr ""
 "ਗਲਤੀ: ਇਸ ਕਮਾਂਡ ਲਈ ਤੁਹਾਨੂੰ --pool ਨਾਲ ਪੂਲ ਜਾਂ ਦੇਣਾ ਚਾਹੀਦਾ ਹੈ ਜਾਂ --auto ਵਰਤਣਾ ਚਾਹੀਦਾ ਹੈ।"
 
-#: ../src/subscription_manager/managercli.py:1060
+#: ../src/subscription_manager/managercli.py:1058
 msgid "Error: Only one of --pool or --auto may be used with this command."
 msgstr "ਗਲਤੀ: ਸਿਰਫ ਇੱਕ --pool ਜਾਂ --auto ਇਸ ਕਮਾਂਡ ਨਾਲ ਵਰਤੇ ਜਾ ਸਕਦੇ ਹਨ"
 
-#: ../src/subscription_manager/managercli.py:1067
+#: ../src/subscription_manager/managercli.py:1065
 msgid "Error: Quantity must be a positive integer."
 msgstr "ਗਲਤੀ: ਮਾਤਰਾ ਧਨਾਤਮਕ ਪੂਰਨਅੰਕ ਹੋਣਾ ਜਰੂਰੀ ਹੈ।"
 
-#: ../src/subscription_manager/managercli.py:1073
+#: ../src/subscription_manager/managercli.py:1071
 msgid "Error: Must use --auto with --servicelevel."
 msgstr "ਗਲਤੀ: --auto ਨੂੰ --servicelevel ਨਾਲ ਵਰਤਣਾ ਜਰੂਰੀ ਹੈ।"
 
-#: ../src/subscription_manager/managercli.py:1097
+#: ../src/subscription_manager/managercli.py:1095
 msgid "Please enter a valid numeric pool id."
 msgstr "ਕਿਰਪਾ ਕਰਕੇ ਯੋਗ ਅੰਕੀ ਪੂਲ id ਦਿਓ।"
 
-#: ../src/subscription_manager/managercli.py:1099
+#: ../src/subscription_manager/managercli.py:1097
 #, python-format
 msgid "Successfully consumed a subscription from the pool with id %s."
 msgstr "id %s ਵਾਲੇ ਪੂਲ ਤੋਂ ਮੈਂਬਰੀ ਸਫਲਤਾਪੂਰਕ ਵਰਤੀ ਗਈ ਹੈ।"
 
-#: ../src/subscription_manager/managercli.py:1119
+#: ../src/subscription_manager/managercli.py:1117
 msgid "ERROR: The --servicelevel option is not "
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1149
+#: ../src/subscription_manager/managercli.py:1147
 msgid "Unsubscribe the machine from all or specific subscriptions"
 msgstr "ਮਸ਼ੀਨ ਨੂੰ ਸਭ ਜਾਂ ਖਾਸ ਮੈਂਬਰੀ ਤੋਂ ਹਟਾਓ"
 
-#: ../src/subscription_manager/managercli.py:1156
+#: ../src/subscription_manager/managercli.py:1154
 msgid "Certificate serial to unsubscribe"
 msgstr "ਮੈਂਬਰੀ ਹਟਾਉਣ ਲਈ ਸਾਰਟੀਫਿਕੇਟ ਸੀਰੀਅਲ"
 
-#: ../src/subscription_manager/managercli.py:1158
+#: ../src/subscription_manager/managercli.py:1156
 msgid "Unsubscribe from all subscriptions"
 msgstr "ਸਭ ਮੈਂਬਰੀਆਂ ਹਟਾਓ"
 
-#: ../src/subscription_manager/managercli.py:1163
+#: ../src/subscription_manager/managercli.py:1161
 #, python-format
 msgid "'%s' is not a valid serial number"
 msgstr "'%s' ਇੱਕ ਯੋਗ ਸੀਰੀਅਲ ਨੰਬਰ ਨਹੀਂ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:1166
+#: ../src/subscription_manager/managercli.py:1164
 msgid "One of --serial or --all must be provided"
 msgstr "--serial ਜਾਂ --all ਵਿੱਚੋਂ ਇੱਕ ਦੇਣਾ ਜਰੂਰੀ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:1190
-#: ../src/subscription_manager/managercli.py:1205
+#: ../src/subscription_manager/managercli.py:1188
+#: ../src/subscription_manager/managercli.py:1203
 #, python-format
 msgid "Unable to perform unsubscribe due to the following exception: %s"
 msgstr "ਹੇਠਲੇ ਅੱਪਵਾਦ ਕਰਕੇ ਮੈਂਬਰੀ ਹਟਾਉਣ ਤੋਂ ਅਸਮਰਥ ਹੈ: %s"
 
-#: ../src/subscription_manager/managercli.py:1197
+#: ../src/subscription_manager/managercli.py:1195
 msgid "This machine has been unsubscribed from all subscriptions"
 msgstr "ਇਹ ਮਸ਼ੀਨ ਸਭ ਮੈਂਬਰੀਆਂ ਤੋਂ ਹਟਾਈ ਗਈ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:1202
+#: ../src/subscription_manager/managercli.py:1200
 msgid "This machine has been unsubscribed from subscription "
 msgstr "ਇਸ ਮਸ਼ੀਨ ਦੀ ਮੈਂਬਰੀ ਹਟਾਈ ਗਈ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:1216
+#: ../src/subscription_manager/managercli.py:1214
 msgid "Work with the current facts for this machine"
 msgstr "ਇਸ ਮਸ਼ੀਨ ਤੋਂ ਮੌਜੂਦਾ ਸਿਧਾਂਤਾਂ ਨਾਲ ਕੰਮ ਕਰੋ"
 
-#: ../src/subscription_manager/managercli.py:1222
+#: ../src/subscription_manager/managercli.py:1220
 msgid "list known facts for this system"
 msgstr "ਇਸ ਸਿਸਟਮ ਲਈ ਜਾਣੇ-ਪਛਾਣ ਸਿਧਾਂਤ ਵੇਖਾਓ"
 
-#: ../src/subscription_manager/managercli.py:1224
+#: ../src/subscription_manager/managercli.py:1222
 msgid "update the system facts"
 msgstr "ਸਿਸਟਮ ਸਿਧਾਂਤ ਅੱਪਡੇਟ ਕਰੋ"
 
-#: ../src/subscription_manager/managercli.py:1233
+#: ../src/subscription_manager/managercli.py:1231
 msgid "Error: Need either --list or --update, Try facts --help"
 msgstr "ਗਲਤੀ: --list ਜਾਂ --update ਦੀ ਲੋੜ ਹੈ, facts --help ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ"
 
-#: ../src/subscription_manager/managercli.py:1257
+#: ../src/subscription_manager/managercli.py:1255
 msgid "Successfully updated the system facts."
 msgstr "ਸਿਸਟਮ ਸਿਧਾਂਤ ਸਫਲਤਾਪੂਰਕ ਅੱਪਡੇਟ ਹੋ ਗਏ।"
 
-#: ../src/subscription_manager/managercli.py:1264
+#: ../src/subscription_manager/managercli.py:1262
 msgid "Import certificates which were provided outside of the tool"
 msgstr "ਟੂਲ ਤੇ ਬਾਹਰ ਦਿੱਤੇ ਸਾਰਟੀਫਿਕੇਟ ਬਰਾਮਦ ਕਰੋ"
 
-#: ../src/subscription_manager/managercli.py:1270
+#: ../src/subscription_manager/managercli.py:1268
 msgid ""
 "certificate file to import (for multiple imports, specify this option more "
 "than once)"
 msgstr ""
 "ਬਰਾਮਦ ਕਰਨ ਲਈ ਸਾਰਟੀਫਿਕੇਟ ਫਾਇਲ (ਬਹੁਤੀਆਂ ਬਰਾਮਦੀਆਂ ਲਈ, ਇਹ ਚੋਣ ਇੱਕ ਤੋਂ ਜਿਆਦਾ ਵਾਰ ਦਿਓ)"
 
-#: ../src/subscription_manager/managercli.py:1274
+#: ../src/subscription_manager/managercli.py:1272
 msgid "Error: At least one certificate is required"
 msgstr "ਗਲਤੀ: ਘੱਟੋ-ਘੱਟ ਇੱਕ ਸਾਰਟੀਫਿਕੇਟ ਦੀ ਲੋੜ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:1293
+#: ../src/subscription_manager/managercli.py:1291
 #, python-format
 msgid "Successfully imported certificate %s"
 msgstr "ਸਫਲਤਾਪੂਰਕ ਬਰਾਮਦ ਸਾਰਟੀਫਿਕੇਟ %s"
 
-#: ../src/subscription_manager/managercli.py:1299
-#: ../src/subscription_manager/managercli.py:1309
+#: ../src/subscription_manager/managercli.py:1297
+#: ../src/subscription_manager/managercli.py:1307
 #, python-format
 msgid "%s is not a valid certificate file. Please use a valid certificate."
 msgstr "%s ਇੱਕ ਯੋਗ ਸਾਰਟੀਫਿਕੇਟ ਫਾਇਲ ਨਹੀਂ ਹੈ। ਯੋਗ ਸਾਰਟੀਫਿਕੇਟ ਵਰਤੋ ਜੀ।"
 
-#: ../src/subscription_manager/managercli.py:1325
+#: ../src/subscription_manager/managercli.py:1323
 msgid "List the repos which this machine is entitled to use"
 msgstr "ਰਿਪੋ ਦੀ ਸੂਚੀ ਜੋ ਇਸ ਮਸ਼ੀਨ ਨੇ ਵਰਤਣੀਆਂ ਹਨ"
 
-#: ../src/subscription_manager/managercli.py:1335
+#: ../src/subscription_manager/managercli.py:1333
 msgid "list the entitled repositories for this system"
 msgstr "ਇਸ ਸਿਸਟਮ ਲਈ ਇੰਟਾਈਟਲਡ ਰਿਪੋਜ਼ਟਰੀਆਂ ਵੇਖਾਓ"
 
-#: ../src/subscription_manager/managercli.py:1339
+#: ../src/subscription_manager/managercli.py:1337
 msgid "Error: No options provided. Please see the help comand."
 msgstr "ਗਲਤੀ: ਕੋਈ ਚੋਣ ਨਹੀਂ ਦਿੱਤੀ। help ਕਮਾਂਡ ਵੇਖੋ ਜੀ।"
 
-#: ../src/subscription_manager/managercli.py:1349
+#: ../src/subscription_manager/managercli.py:1347
 msgid "Repositories disabled by configuration."
 msgstr "ਸੰਚਰਨਾ ਦੁਆਰਾ ਰਿਪੋਜ਼ਟਰੀ ਅਯੋਗ ਕੀਤੀ ਹੈ।"
 
-#: ../src/subscription_manager/managercli.py:1352
+#: ../src/subscription_manager/managercli.py:1350
 #, python-format
 msgid "    Entitled Repositories in %s"
 msgstr "    %s ਵਿੱਚ ਇੰਟਾਈਟਲਡ ਰਿਪੋਜ਼ਟਰੀਆਂ"
 
-#: ../src/subscription_manager/managercli.py:1360
+#: ../src/subscription_manager/managercli.py:1358
 msgid "The system is not entitled to use any repositories."
 msgstr "ਸਿਸਟਮ ਕੋਈ ਵੀ ਰਿਪੋਜ਼ਟਰੀ ਵਰਤਣ ਲਈ ਇੰਟਾਈਟਲ ਨਹੀਂ ਹੈ।"
 
-#: ../src/subscription_manager/managercli.py:1367
+#: ../src/subscription_manager/managercli.py:1365
 msgid ""
 "List, set, or remove the configuration parameters in use by this machine."
 msgstr "ਇਸ ਮਸ਼ੀਨ ਦੁਆਰਾ ਵਰਤੇ ਪੈਰਾਮੀਟਰ ਵੇਖਾਓ, ਸੈੱਟ ਕਰੋ, ਜਾਂ ਹਟਾਓ।"
 
-#: ../src/subscription_manager/managercli.py:1374
+#: ../src/subscription_manager/managercli.py:1372
 msgid "list the configuration for this system"
 msgstr "ਇਸ ਸਿਸਟਮ ਲਈ ਸੰਰਚਨਾ ਵੇਖਾਓ"
 
-#: ../src/subscription_manager/managercli.py:1376
+#: ../src/subscription_manager/managercli.py:1374
 msgid "remove configuration entry by section.name"
 msgstr "section.name ਵਾਲੀ ਸੰਰਚਨਾ ਐਂਟਰੀ ਹਟਾਓ"
 
-#: ../src/subscription_manager/managercli.py:1380
+#: ../src/subscription_manager/managercli.py:1378
 #, python-format
 msgid "Section: %s, Name: %s"
 msgstr "ਸ਼ੈਕਸ਼ਨ: %s, ਨਾਂ: %s"
 
-#: ../src/subscription_manager/managercli.py:1395
+#: ../src/subscription_manager/managercli.py:1393
 msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
 msgstr ""
 "ਗਲਤੀ: --list ਨੂੰ ਕਿਸੇ ਹੋਰ ਚੋਣ ਨਾਲ ਨਹੀਂ ਵਰਤਣਾ ਚਾਹੀਦਾ ਸੰਰਚਨਾ ਸੈਟਿੰਗ ਕਰਨ ਲਈ ਜਾਂ ਹਟਾਉਣ ਲਈ।"
 
-#: ../src/subscription_manager/managercli.py:1413
+#: ../src/subscription_manager/managercli.py:1411
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
 msgstr "ਗਲਤੀ: ਹਟਾਉਣ ਲਈ ਸੰਰਚਨਾ ਐਂਟਰੀ ਦਾ ਫਾਰਮੈਟ [section.name] ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:1424
+#: ../src/subscription_manager/managercli.py:1422
 #, python-format
 msgid "Error: Section %s and name %s does not exist."
 msgstr "ਗਲਤੀ: ਸ਼ੈਕਸ਼ਨ %s ਅਤੇ ਨਾਂ %s ਮੌਜੂਦ ਨਹੀਂ ਹੈ।"
 
-#: ../src/subscription_manager/managercli.py:1443
+#: ../src/subscription_manager/managercli.py:1441
 msgid "[] - Default value in use"
 msgstr "[] - ਵਰਤੋਂ ਅਧੀਨ ਮੂਲ ਮੁੱਲ"
 
-#: ../src/subscription_manager/managercli.py:1452
-#: ../src/subscription_manager/managercli.py:1455
+#: ../src/subscription_manager/managercli.py:1450
+#: ../src/subscription_manager/managercli.py:1453
 #, python-format
 msgid "You have removed the value for section %s and name %s."
 msgstr "ਤੁਸੀਂ ਸ਼ੈਕਸ਼ਨ %s ਅਤੇ ਨਾਂ %s ਲਈ ਮੁੱਲ ਹਟਾ ਦਿੱਤੇ ਹਨ।"
 
-#: ../src/subscription_manager/managercli.py:1456
+#: ../src/subscription_manager/managercli.py:1454
 #, python-format
 msgid "The default value for %s will now be used."
 msgstr "%s ਲਈ ਮੂਲ ਮੁੱਲ ਵਰਤਿਆ ਜਾਵੇਗਾ।"
 
-#: ../src/subscription_manager/managercli.py:1458
+#: ../src/subscription_manager/managercli.py:1456
 #, python-format
 msgid "Section %s and name %s cannot be removed."
 msgstr "ਸ਼ੈਕਸ਼ਨ %s ਅਤੇ ਨਾਂ %s ਹਟਾਏ ਨਹੀਂ ਜਾ ਸਕਦੇ।"
 
-#: ../src/subscription_manager/managercli.py:1473
+#: ../src/subscription_manager/managercli.py:1471
 msgid "List subscription and product information for this machine"
 msgstr "ਇਸ ਮਸ਼ੀਨ ਲਈ ਮੈਂਬਰੀਆਂ ਅਤੇ ਉਤਪਾਦ ਜਾਣਕਾਰੀ ਵੇਖਾਓ"
 
-#: ../src/subscription_manager/managercli.py:1479
+#: ../src/subscription_manager/managercli.py:1477
 msgid ""
 "if supplied then list shows those products which are installed (default)"
 msgstr "ਜੇ ਦਿੱਤੇ ਹਨ ਤਾਂ ਇੰਸਟਾਲ (ਮੂਲ) ਕੀਤੇ ਉਤਪਾਦ ਵੇਖਾਓ"
 
-#: ../src/subscription_manager/managercli.py:1481
+#: ../src/subscription_manager/managercli.py:1479
 msgid "if supplied then list shows those subscriptions which are available"
 msgstr "ਜੇ ਦਿੱਤੀਆਂ ਹਨ ਤਾਂ ਉਪਲੱਬਧ ਮੈਂਬਰੀਆਂ ਵੇਖਾਓ"
 
-#: ../src/subscription_manager/managercli.py:1483
+#: ../src/subscription_manager/managercli.py:1481
 #, python-format
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
@@ -1614,74 +1614,74 @@ msgstr ""
 "ਖੋਜ ਕਰਨ ਲਈ ਮਿਤੀ, ਮੂਲ ਅੱਜ ਦੀ ਤਰੀਕ ਹੁੰਦੀ ਹੈ, ਸਿਰਫ --available ਨਾਲ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ "
 "(ਉਦਾਹਰਨ: %s)"
 
-#: ../src/subscription_manager/managercli.py:1486
+#: ../src/subscription_manager/managercli.py:1484
 msgid "shows the subscriptions being consumed by this system."
 msgstr "ਇਸ ਸਿਸਟਮ ਦੁਆਰਾ ਵਰਤੀਆਂ ਜਾਂਦੀਆਂ ਮੈਂਬਰੀਆਂ ਵੇਖਾਓ।"
 
-#: ../src/subscription_manager/managercli.py:1488
+#: ../src/subscription_manager/managercli.py:1486
 msgid ""
 "if supplied then list shows only subscriptions matching the specified "
 "service level. "
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1491
+#: ../src/subscription_manager/managercli.py:1489
 msgid "if supplied with --available then all subscriptions are returned"
 msgstr "ਜੇ --available ਨਾਲ ਦਿੱਤਾ ਹੋਵੇ ਤਾਂ ਸਭ ਮੈਂਬਰੀਆਂ ਹਟਾਈਆਂ ਗਈਆਂ ਹਨ"
 
-#: ../src/subscription_manager/managercli.py:1498
+#: ../src/subscription_manager/managercli.py:1496
 msgid "Error: --all is only applicable with --available"
 msgstr "ਗਲਤੀ: --all ਸਿਰਫ --available ਨਾਲ ਅਨੁਕੂਲ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:1501
+#: ../src/subscription_manager/managercli.py:1499
 msgid "Error: --ondate is only applicable with --available"
 msgstr "ਗਲਤੀ: --ondate ਸਿਰਫ --available ਨਾਲ ਅਨੁਕੂਲ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:1505
+#: ../src/subscription_manager/managercli.py:1503
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1528
+#: ../src/subscription_manager/managercli.py:1526
 msgid "No installed products to list"
 msgstr "ਵੇਖਾਉਣ ਲਈ ਕੋਈ ਇੰਸਟਾਲ ਕੀਤਾ ਉਤਪਾਦ ਨਹੀਂ"
 
-#: ../src/subscription_manager/managercli.py:1531
+#: ../src/subscription_manager/managercli.py:1529
 msgid "    Installed Product Status"
 msgstr "ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦ ਦੀ ਹਾਲਤ"
 
-#: ../src/subscription_manager/managercli.py:1548
+#: ../src/subscription_manager/managercli.py:1546
 msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr "ਦਿੱਤੀ ਗਈ ਮਿਤੀ ਗਲਤ ਹੈ।  ਮਿਤੀ YYYY-MM-DD ਫਾਰਮੈਟ ਵਿੱਚ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ (ਉਦਾਹਰਨ: "
 
-#: ../src/subscription_manager/managercli.py:1561
+#: ../src/subscription_manager/managercli.py:1559
 msgid "No available subscription pools to list"
 msgstr "ਵੇਖਾਉਣ ਲਈ ਕੋਈ ਉਪਲੱਬਧ ਮੈਂਬਰੀ ਪੂਲ ਨਹੀਂ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:1569
+#: ../src/subscription_manager/managercli.py:1567
 msgid "virtual"
 msgstr "ਵਰਚੁਅਲ"
 
-#: ../src/subscription_manager/managercli.py:1571
+#: ../src/subscription_manager/managercli.py:1569
 msgid "physical"
 msgstr "ਭੌਤਿਕ"
 
-#: ../src/subscription_manager/managercli.py:1616
+#: ../src/subscription_manager/managercli.py:1614
 msgid "No consumed subscription pools to list"
 msgstr "ਵੇਖਾਉਣ ਲਈ ਕੋਈ ਵਰਤਿਆ ਮੈਂਬਰੀ ਪੂਲ ਨਹੀਂ ਹੈ"
 
-#: ../src/subscription_manager/managercli.py:1619
+#: ../src/subscription_manager/managercli.py:1617
 msgid "Consumed Product Subscriptions"
 msgstr "ਵਰਤੀਆਂ ਗਈਆਂ ਉਤਪਾਦ ਮੈਂਬਰੀਆਂ"
 
-#: ../src/subscription_manager/managercli.py:1700
+#: ../src/subscription_manager/managercli.py:1698
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 msgstr "ਵਰਤੋਂ: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
-#: ../src/subscription_manager/managercli.py:1702
+#: ../src/subscription_manager/managercli.py:1700
 msgid "Primary Modules:"
 msgstr "ਪਰਾਇਮਰੀ ਮੋਡੀਊਲ:"
 
-#: ../src/subscription_manager/managercli.py:1711
+#: ../src/subscription_manager/managercli.py:1709
 msgid "Other Modules (Please consult documentation):"
 msgstr "ਹੋਰ ਮੋਡੀਊਲ (ਕਿਰਪਾ ਕਰਕੇ ਦਸਤਾਵੇਜ਼ ਵੇਖੋ):"
 
@@ -2253,16 +2253,16 @@ msgid "_Proxy Location:"
 msgstr "ਪਰਾਕਸੀ ਟਿਕਾਣਾ(_P):"
 
 #: ../src/subscription_manager/gui/data/autobind.glade.h:1
-msgid "Autobind Start"
-msgstr "ਆਟੋਬਾਈਂਡ ਚਾਲੂ"
-
-#: ../src/subscription_manager/gui/data/autobind.glade.h:2
 msgid "Back"
 msgstr "ਪਿੱਛੇ"
 
-#: ../src/subscription_manager/gui/data/autobind.glade.h:3
+#: ../src/subscription_manager/gui/data/autobind.glade.h:2
 msgid "Cancel"
 msgstr "ਰੱਦ ਕਰੋ"
+
+#: ../src/subscription_manager/gui/data/autobind.glade.h:4
+msgid "Subscribe System"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
@@ -2405,7 +2405,7 @@ msgstr "autosubscribe ਚੋਣ ਨਾਲ ਚਲਾਓ ਜਦੋਂ ਮੈਂਬ
 msgid "%s [OPTIONS]"
 msgstr "%s [OPTIONS]"
 
-#: ../src/rhn-migrate-classic-to-rhsm:126
+#: ../src/rhn-migrate-classic-to-rhsm:130
 msgid ""
 "\n"
 "This machine appears to be already registered to Certificate-based RHN.  "
@@ -2414,7 +2414,7 @@ msgstr ""
 "\n"
 "ਇਹ ਮਸ਼ੀਨ ਪਹਿਲਾਂ ਹੀ ਸਾਰਟੀਫਿਕੇਟ-ਅਧਾਰਿਤ RHN ਤੇ ਮੈਂਬਰ ਬਣੀ ਹੈ।  ਬੰਦ ਹੋ ਰਿਹਾ ਹੈ।"
 
-#: ../src/rhn-migrate-classic-to-rhsm:128
+#: ../src/rhn-migrate-classic-to-rhsm:132
 #, c-format
 msgid ""
 "\n"
@@ -2424,7 +2424,7 @@ msgstr ""
 "\n"
 "ਕਿਰਪਾ ਕਰਕੇ ਪਰੋਫਾਈਲ ਵੇਖਣ ਲਈ https://access.redhat.com/management/consumers/%s ਵੇਖੋ।"
 
-#: ../src/rhn-migrate-classic-to-rhsm:134
+#: ../src/rhn-migrate-classic-to-rhsm:138
 #, c-format
 msgid ""
 "This migration script requires the system to be registered to RHN Classic.\n"
@@ -2435,7 +2435,7 @@ msgstr ""
 "ਇਸ ਲਈ ਇਸ ਸਿਸਟਮ '%s' ਨਾਲ ਰਜਿਸਟਰ ਹੋਇਆ ਦਿਸੇ।\n"
 "ਬੰਦ ਹੋ ਰਿਹਾ ਹੈ।"
 
-#: ../src/rhn-migrate-classic-to-rhsm:147
+#: ../src/rhn-migrate-classic-to-rhsm:151
 #, c-format
 msgid ""
 "Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
@@ -2443,41 +2443,41 @@ msgid ""
 msgstr ""
 "ਸਾਰਟੀਫਿਕੇਟ ਸਰਵਰ ਨਾਲ ਜੁੜਨ ਤੋਂ ਅਸਮਰਥ: %s। ਹੋਰ ਵੇਰਵੇ ਲਈ  /var/log/rhsm/rhsm.log ਵੇਖੋ।"
 
-#: ../src/rhn-migrate-classic-to-rhsm:155
+#: ../src/rhn-migrate-classic-to-rhsm:159
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:157
+#: ../src/rhn-migrate-classic-to-rhsm:161
 msgid "You must be an org admin to successfully run this script."
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:164
+#: ../src/rhn-migrate-classic-to-rhsm:168
 msgid "This system is not associated with any channel."
 msgstr "ਇਸ ਸਿਸਟਮ ਕਿਸੇ ਵੀ ਚੈਨਲ ਨਾਲ ਸੰਬੰਧਿਤ ਨਹੀਂ।"
 
-#: ../src/rhn-migrate-classic-to-rhsm:166
+#: ../src/rhn-migrate-classic-to-rhsm:170
 msgid "Unable to locate SystemId file. Is this system registered?"
 msgstr "SystemId ਫਾਇਲ ਲੱਭ ਨਹੀਂ ਸਕਿਆ। ਕੀ ਇਹ ਸਿਸਟਮ ਰਜਿਸਟਰ ਕੀਤਾ ਹੈ?"
 
-#: ../src/rhn-migrate-classic-to-rhsm:169
+#: ../src/rhn-migrate-classic-to-rhsm:173
 msgid "Problem encountered getting the list of subscribed channels.  Exiting."
 msgstr "ਮੈਂਬਰੀ ਚੈਨਲਾਂ ਦੀ ਸੂਚੀ ਵੇਖਣ ਵਿੱਚ ਸਮੱਸਿਆ ਹੈ।  ਬੰਦ ਹੋ ਰਿਹਾ ਹੈ।"
 
-#: ../src/rhn-migrate-classic-to-rhsm:201
+#: ../src/rhn-migrate-classic-to-rhsm:205
 msgid ""
 "Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
 "details."
 msgstr ""
 
-#: ../src/rhn-migrate-classic-to-rhsm:215
+#: ../src/rhn-migrate-classic-to-rhsm:219
 msgid "System successfully unregistered from RHN Classic."
 msgstr "RHN ਕਲਾਸਿਕ ਤੋਂ ਸਿਸਟਮ ਸਫਲਤਾਪੂਰਕ ਅਨਰਜਿਸਟਰ ਹੋ ਗਿਆ ਹੈ।"
 
-#: ../src/rhn-migrate-classic-to-rhsm:217
+#: ../src/rhn-migrate-classic-to-rhsm:221
 msgid "Unable to unregister system from RHN Classic.  Exiting."
 msgstr "RHN ਕਲਾਸਿਕ ਤੋਂ ਅਨਰਜਿਸਟਰ ਹੋਣ ਵਿੱਚ ਅਸਮਰਥ। ਬੰਦ ਹੋ ਰਿਹਾ ਹੈ।"
 
-#: ../src/rhn-migrate-classic-to-rhsm:284
+#: ../src/rhn-migrate-classic-to-rhsm:289
 msgid ""
 "\n"
 "Attempting to register system to Certificate-based RHN ..."
@@ -2485,7 +2485,7 @@ msgstr ""
 "\n"
 "ਸਿਸਟਮ ਨੂੰ ਸਾਰਟੀਫਿਕੇਟ-ਅਧਾਰਿਤ RHN ਤੇ ਰਜਿਸਟਰ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰ ਰਿਹਾ ਹੈ ..."
 
-#: ../src/rhn-migrate-classic-to-rhsm:287
+#: ../src/rhn-migrate-classic-to-rhsm:292
 msgid ""
 "\n"
 "Unable to register.\n"
@@ -2495,20 +2495,20 @@ msgstr ""
 "ਰਜਿਸਟਰ ਕਰਨ ਵਿੱਚ ਅਸਮਰਥ।\n"
 "ਹੋਰ ਸਹਾਇਤਾ ਲਈ, ਕਿਰਪਾ ਕਰਕੇ Red Hat ਗਲੋਬਲ ਸਪੋਰਟ ਸਰਵਿਸ ਨਾਲ ਸੰਪਰਕ ਕਰੋ।"
 
-#: ../src/rhn-migrate-classic-to-rhsm:290
+#: ../src/rhn-migrate-classic-to-rhsm:295
 #, c-format
 msgid "System '%s' successfully registered to Certificate-based RHN.\n"
 msgstr "ਸਿਸਟਮ '%s' ਸਫਲਤਾਪੂਰਕ ਸਾਰਟੀਫਿਕੇਟ-ਅਧਾਰਿਤ RHN ਤੇ ਰਜਿਸਟਰ ਹੋ ਗਿਆ ਹੈ।\n"
 
-#: ../src/rhn-migrate-classic-to-rhsm:294
+#: ../src/rhn-migrate-classic-to-rhsm:299
 msgid "Launching the GUI tool to manually subscribe the system ..."
 msgstr "ਸਿਸਟਮ ਨੂੰ ਦਸਤੀ ਮੈਂਬਰ ਬਣਾਉਣ ਲਈ GUI ਟੂਲ ਚਲਾ ਰਿਹਾ ਹੈ..."
 
-#: ../src/rhn-migrate-classic-to-rhsm:297
+#: ../src/rhn-migrate-classic-to-rhsm:302
 msgid "Attempting to auto-subscribe to appropriate subscriptions ..."
 msgstr "ਲੋੜੀਂਦੀਆਂ ਮੈਂਬਰੀਆਂ ਤੇ ਆਪੇ-ਮੈਂਬਰ ਬਣਾਉਣ ਲਈ ਕੋਸ਼ਇਸ਼ ਕਰ ਰਿਹਾ ਹੈ..."
 
-#: ../src/rhn-migrate-classic-to-rhsm:300
+#: ../src/rhn-migrate-classic-to-rhsm:305
 msgid ""
 "\n"
 "Unable to auto-subscribe.  Do your existing subscriptions match the products "
@@ -2518,7 +2518,7 @@ msgstr ""
 "ਆਪੇ-ਮੈਂਬਰ ਬਣਨ ਤੋਂ ਅਸਮਰਥ। ਕੀ ਤੁਹਾਡੀਆਂ ਮੌਜੂਦਾ ਮੈਂਬਰੀਆਂ ਇਸ ਸਿਸਟਮ ਉੱਪਰ ਇੰਸਟਾਲ ਉਤਪਾਦ ਨਾਲ ਮਿਲਦੀਆਂ "
 "ਹਨ?"
 
-#: ../src/rhn-migrate-classic-to-rhsm:301
+#: ../src/rhn-migrate-classic-to-rhsm:306
 #, c-format
 msgid ""
 "\n"
@@ -2529,11 +2529,11 @@ msgstr ""
 "ਵੇਰਵਾ ਵੇਖਣ ਲਈ https://access.redhat.com/management/consumers/%s ਵੇਖੋ, ਅਤੇ ਤਬਦੀਲੀ "
 "ਕਰਨ ਲਈ ਜੇ ਲੋੜ ਹੋਵੇ।"
 
-#: ../src/rhn-migrate-classic-to-rhsm:327
+#: ../src/rhn-migrate-classic-to-rhsm:332
 msgid "Channels not available on RHSM:"
 msgstr "RHSM ਉੱਪਰ ਨਾ-ਉਪਲੱਬਧ ਚੈਨਲ:"
 
-#: ../src/rhn-migrate-classic-to-rhsm:334
+#: ../src/rhn-migrate-classic-to-rhsm:339
 msgid ""
 "\n"
 "Unrecognized channels. Channel to product certificate mapping missing for "
@@ -2542,7 +2542,7 @@ msgstr ""
 "\n"
 "ਅਣਜਾ ਚੈਨਲ। ਉਤਪਾਦ ਸਾਰਟੀਫਿਕੇਟ ਮੈਪਿੰਗ ਵਾਲੇ ਚੈਨਲ ਇਹਨਾਂ ਚੈਨਲਾਂ ਵਿੱਚ ਮੌਜੂਦ ਨਹੀਂ ਹਨ।"
 
-#: ../src/rhn-migrate-classic-to-rhsm:341
+#: ../src/rhn-migrate-classic-to-rhsm:346
 msgid ""
 "\n"
 "Use --force to ignore these channels and continue the migration.\n"
@@ -2550,7 +2550,7 @@ msgstr ""
 "\n"
 "ਇਹਨਾਂ ਚੈਨਲਾਂ ਨੂੰ ਅਣਡਿੱਠਾ ਕਰਨ ਲਈ ਅਤੇ ਮਾਈਗਰੇਸ਼ਨ ਜਾਰੀ ਕਰਨ ਲਈ --force ਵਰਤੋ।\n"
 
-#: ../src/rhn-migrate-classic-to-rhsm:346
+#: ../src/rhn-migrate-classic-to-rhsm:351
 msgid ""
 "\n"
 "List of channels for which certs are being copied"
@@ -2558,7 +2558,7 @@ msgstr ""
 "\n"
 "ਚੈਨਲਾਂ ਦੀ ਲੂਚੀ ਜਿਨਾਂ ਲਈ ਸਾਰਟੀਫਿਕੇਟ ਕਾਪੀ ਕੀਤੇ ਜਾਣੇ ਹਨ"
 
-#: ../src/rhn-migrate-classic-to-rhsm:360
+#: ../src/rhn-migrate-classic-to-rhsm:365
 #, c-format
 msgid ""
 "\n"
@@ -2567,7 +2567,7 @@ msgstr ""
 "\n"
 "ਉਤਪਾਦ ਸਾਰਟੀਫਿਕੇਟ ਸਫਲਤਾਪੂਰਕ %s ਤੇ ਨਕਲ ਕੀਤਾ ਗਿਆ ਹੈ"
 
-#: ../src/rhn-migrate-classic-to-rhsm:404
+#: ../src/rhn-migrate-classic-to-rhsm:409
 msgid ""
 "\n"
 "Unable to enable extra repositories."
@@ -2575,7 +2575,7 @@ msgstr ""
 "\n"
 "ਵਾਧੂ ਰਿਪੋਜ਼ਟਰੀ ਯੋਗ ਕਰਨ ਤੋਂ ਅਸਮਰਥ।"
 
-#: ../src/rhn-migrate-classic-to-rhsm:405
+#: ../src/rhn-migrate-classic-to-rhsm:410
 msgid ""
 "Please ensure system is subscribed to entitlements, and alter /etc/yum.repos."
 "d/redhat.repo to enable extra repositories."
@@ -2583,11 +2583,11 @@ msgstr ""
 "ਕਿਰਪਾ ਕਰਕੇ ਜਾਂਚ ਕਰੋ ਕਿ ਇੰਟਾਈਟਲਮੈਂਟਾਂ ਉੱਪਰ ਸਿਸਟਮ ਮੈਂਬਰ ਹੈ, ਅਤੇ /etc/yum.repos.d/redhat."
 "repo ਨੂੰ ਵਾਧੂ ਰਿਪੋਜ਼ਟਰੀਆਂ ਯੋਗ ਕਰਨ ਲਈ ਸੋਧੋ।"
 
-#: ../src/rhn-migrate-classic-to-rhsm:439
+#: ../src/rhn-migrate-classic-to-rhsm:444
 msgid "RHN Username: "
 msgstr "RHN ਯੂਜ਼ਰ-ਨਾਂ: "
 
-#: ../src/rhn-migrate-classic-to-rhsm:448
+#: ../src/rhn-migrate-classic-to-rhsm:453
 msgid ""
 "\n"
 "Retrieving existing RHN Classic subscription information ..."
@@ -2595,11 +2595,11 @@ msgstr ""
 "\n"
 "ਮੌਜੂਦਾ RHN ਕਲਾਸਿਕ ਮੈਂਬਰੀ ਜਾਣਕਾਰੀ ਲੈ ਰਿਹਾ ਹੈ ..."
 
-#: ../src/rhn-migrate-classic-to-rhsm:451
+#: ../src/rhn-migrate-classic-to-rhsm:456
 msgid "System is currently subscribed to:"
 msgstr "ਸਿਸਟਮ ਇਹਨਾਂ ਤੇ ਮੈਂਬਰ ਬਣਿਆ ਹੈ:"
 
-#: ../src/rhn-migrate-classic-to-rhsm:459
+#: ../src/rhn-migrate-classic-to-rhsm:464
 msgid ""
 "\n"
 "Preparing to unregister system from RHN classic ..."
@@ -2707,16 +2707,3 @@ msgstr "ਮੈਂਬਰੀ ਯੋਗਤਾ ਐਪਲਿਟ"
 #: ../etc-conf/subscription-manager.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
 msgstr "Red Hat ਮੈਂਬਰੀ ਮੈਨੇਜਰ"
-
-#~ msgid ""
-#~ "No service levels will cover all installed products. Please run "
-#~ "'Subscription Manager' tab to manually entitle this system."
-#~ msgstr ""
-#~ "ਕੋਈ ਸਰਵਿਸ ਲੈਵਲ ਸਭ ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦਾਂ ਨੂੰ ਕਵਰ ਨਹੀਂ ਕਰੇਗਾ। ਇਸ ਸਿਸਟਮ ਤੇ ਦਸਤੀ ਇੰਟਾਈਟਲ "
-#~ "ਲੈਣ ਲਈ 'ਮੈਂਬਰੀ ਮੈਨੇਜਰ' ਚਲਾਓ।"
-
-#~ msgid "ERROR: Server does not support service levels."
-#~ msgstr "ਗਲਤੀ: ਸਰਵਰ ਸਰਵਿਸ ਲੈਵਲਾਂ ਨੂੰ ਸਹਿਯੋਗ ਨਹੀਂ ਦਿੰਦਾ ਹੈ।"
-
-#~ msgid "Problem encountered unregistering system from RHN Classic.  Exiting."
-#~ msgstr "ਸਿਸਟਮ ਨੂੰ RHN ਕਲਾਸਿਕ ਤੋਂ ਅਨਰਜਿਸਟਰ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ ਆਈ ਹੈ।  ਬੰਦ ਹੋ ਰਿਹਾ ਹੈ।"
