@@ -19,4 +19,4 @@ class Branding(object):
         self.GUI_REGISTRATION_HEADER = \
                 _("Please enter your Red Hat Network account information:")
         self.GUI_FORGOT_LOGIN_TIP = \
-                _("Tip: Forgot your login or password? Look it up at https://www.redhat.com/wapps/sso/rhn/lostPassword.html")
+                _("Tip: Forgot your login or password? Look it up at http://red.ht/lost_password")
