@@ -20,8 +20,8 @@ from subscription_manager.gui import registergui
 from subscription_manager.gui import autobind
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.facts import Facts
-from subscription_manager.gui.messageWindow import InfoDialog, ErrorDialog, \
-        OkDialog
+from subscription_manager.gui.manually_subscribe import get_screen
+
 from subscription_manager.gui.utils import handle_gui_exception
 
 sys.path.append("/usr/share/rhn")
@@ -223,18 +223,6 @@ class moduleClass(Module, registergui.RegisterScreen):
         widget = registergui.registration_xml.get_widget(widget_name)
         return widget.get_text()
 
-    def _skip_sla_screens(self):
-        """
-        Find the first non rhsm module after the rhsm modules, and move to it.
-
-        Assumes that only our modules are grouped together, and that we have
-        3.
-        """
-        i = 0
-        while not self.interface.moduleList[i].__module__.startswith('rhsm_'):
-            i += 1
-        self.interface.moveToPage(pageNum=i + 3)
-
     def _finish_registration(self, failed=False):
         registergui.RegisterScreen._finish_registration(self, failed=failed)
         if not failed:
@@ -246,10 +234,14 @@ class moduleClass(Module, registergui.RegisterScreen):
         # rhsm_login page so they can try again (or go back and select to skip
         # registration).
 
+    def _move_to_manual_install(self, title):
+        # TODO Change the message on the screen.
+        get_screen().set_title(title)
+        self.interface.moveToPage(moduleTitle=_("Manual Configuraton Required"))
+
     def _init_sla(self):
         if self.skip_auto_subscribe():
-            self._skip_sla_screens()
-            return
+            return self._move_to_manual_install(_("You have opted to skip auto-subscribe."))
 
         # sla autosubscribe time. load up the possible slas, to decide if
         # we need to display the selection screen, or go to the confirm
@@ -264,23 +256,17 @@ class moduleClass(Module, registergui.RegisterScreen):
         try:
             controller.load()
         except autobind.ServiceLevelNotSupportedException:
-            OkDialog(_("Unable to auto-subscribe, server does not support service levels. Please run 'Subscription Manager' to manually subscribe."))
-
-            # XXX show a dialog about manually subscribing
-            self._skip_sla_screens()
-            return
+            message = _("Unable to auto-subscribe, server does not support service levels. Please run 'Subscription Manager' to manually subscribe.")
+            return self._move_to_manual_install(message)
 
         except autobind.NoProductsException:
-            InfoDialog(_("No installed products on system. No need to update certificates at this time."))
-            self._skip_sla_screens()
-            return
+            message = _("No installed products on system. No need to update certificates at this time.")
+            return self._move_to_manual_install(message)
 
         except autobind.AllProductsCoveredException:
-            # XXX show a dialog about manually subscribing
-            InfoDialog(_("All installed products are covered by valid entitlements. Please run 'Subscription Manager' to subscribe to additional products."))
+            message = _("All installed products are covered by valid entitlements. Please run 'Subscription Manager' to subscribe to additional products.")
+            return self._move_to_manual_install(message)
 
-            self._skip_sla_screens()
-            return
         except socket.error, e:
             handle_gui_exception(e, None, self.registerWin)
             return
@@ -290,18 +276,12 @@ class moduleClass(Module, registergui.RegisterScreen):
         elif len(controller.suitable_slas) == 1:
             if controller.current_sla and \
                     not controller.can_add_more_subs():
-                ErrorDialog(_("Unable to subscribe to any additional products at current service level: %s") %
-                        controller.current_sla)
-                self._skip_sla_screens()
-                return
+                message = _("Unable to subscribe to any additional products at current service level: %s") % controller.current_sla
+                return self._move_to_manual_install(message)
 
-            self.interface.moveToPage(
-                    moduleTitle=_("Confirm Subscriptions"))
+            self.interface.moveToPage(moduleTitle=_("Confirm Subscriptions"))
         else:
-            ErrorDialog(_("No service levels will cover all installed products. "
-                "Please run 'Subscription Manager' to manually "
-                "entitle this system."))
-
-            # XXX show a dialog about manually subscribing
-            self._skip_sla_screens()
-            return
+            message = _("No service levels will cover all installed products. " + \
+                "Please run 'Subscription Manager' to manually " + \
+                "entitle this system.")
+            return self._move_to_manual_install(message)
