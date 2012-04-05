@@ -20,7 +20,7 @@ class moduleClass(Module):
     def __init__(self):
         Module.__init__(self)
 
-        self.priority = 200.3
+        self.priority = 200.4
         self.sidebarTitle = _("Entitlement Registration")
         self.title = _("Confirm Subscriptions")
 

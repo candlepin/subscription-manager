@@ -255,6 +255,7 @@ rm -rf %{buildroot}
     # we are building for fedora > 12 (not rhel)
     %{_datadir}/rhn/up2date_client/firstboot/rhsm_select_sla.py*
     %{_datadir}/rhn/up2date_client/firstboot/rhsm_confirm_subs.py*
+    %{_datadir}/rhn/up2date_client/firstboot/rhsm_manually_subscribe.py*
   %else
     # we are building for fedora <= 12 or rhel < 6
     %{_datadir}/rhn/up2date_client/firstboot/rhsm_subscriptions.py*
@@ -265,6 +266,7 @@ rm -rf %{buildroot}
   # we are building for rhel >= 6 (not fedora)
   %{_datadir}/rhn/up2date_client/firstboot/rhsm_select_sla.py*
   %{_datadir}/rhn/up2date_client/firstboot/rhsm_confirm_subs.py*
+  %{_datadir}/rhn/up2date_client/firstboot/rhsm_manually_subscribe.py*
 %endif
 
 %files -n subscription-manager-migration
