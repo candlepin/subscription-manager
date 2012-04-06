@@ -500,7 +500,7 @@ class DatePicker(gtk.HBox):
         self._calendar_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self._calendar_window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
         self._calendar_window.set_modal(True)
-        self._calendar_window.set_title("")
+        self._calendar_window.set_title(_("Date Selection"))
         self._calendar_window.set_transient_for(
                 self.get_parent_window().get_user_data())
 
