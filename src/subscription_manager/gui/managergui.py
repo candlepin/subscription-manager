@@ -128,7 +128,7 @@ class Backend(object):
         self.content_connection = self._create_content_connection()
 
     def _create_content_connection(self):
-        return connection.ContentConnection(host=urlparse.urlparse(cfg.get('rhsm', 'baseurl')).netloc,
+        return connection.ContentConnection(host=urlparse.urlparse(cfg.get('rhsm', 'baseurl'))[1],
                                             ssl_port=443,
                                             proxy_hostname=cfg.get('server', 'proxy_hostname'),
                                             proxy_port=cfg.get('server', 'proxy_port'),
