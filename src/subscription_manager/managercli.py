@@ -1244,10 +1244,9 @@ class FactsCommand(CliCommand):
         if self.options.update:
             self.assert_should_be_registered()
 
-        # one or the other
+        # if no relevant options, default to listing.
         if not (self.options.list or self.options.update):
-            print _("Error: Need either --list or --update, Try facts --help")
-            sys.exit(-1)
+            self.options.list = True
 
     def _do_command(self):
         self._validate_options()
@@ -1347,33 +1346,25 @@ class ReposCommand(CliCommand):
         return True
 
     def _add_common_options(self):
-        self.parser.add_option("--list", action="store_true",
-                               help=_("list the entitled repositories for this system"))
-
-    def _validate_options(self):
-        if not (self.options.list):
-            print _("Error: No options provided. Please see the help comand.")
-            sys.exit(-1)
+        pass
 
     def _do_command(self):
-        self._validate_options()
-        if self.options.list:
-            rl = RepoLib(uep=self.cp)
-            repos = rl.get_repos()
-            if cfg.has_option('rhsm', 'manage_repos') and \
-                    not int(cfg.get('rhsm', 'manage_repos')):
-                print _("Repositories disabled by configuration.")
-            elif len(repos) > 0:
-                print("+----------------------------------------------------------+")
-                print _("    Entitled Repositories in %s") % rl.get_repo_file()
-                print("+----------------------------------------------------------+")
-                for repo in repos:
-                    print constants.repos_list % (repo["name"],
-                        repo.id,
-                        repo["baseurl"],
-                        repo["enabled"])
-            else:
-                print _("The system is not entitled to use any repositories.")
+        rl = RepoLib(uep=self.cp)
+        repos = rl.get_repos()
+        if cfg.has_option('rhsm', 'manage_repos') and \
+                not int(cfg.get('rhsm', 'manage_repos')):
+            print _("Repositories disabled by configuration.")
+        elif len(repos) > 0:
+            print("+----------------------------------------------------------+")
+            print _("    Entitled Repositories in %s") % rl.get_repo_file()
+            print("+----------------------------------------------------------+")
+            for repo in repos:
+                print constants.repos_list % (repo["name"],
+                    repo.id,
+                    repo["baseurl"],
+                    repo["enabled"])
+        else:
+            print _("The system is not entitled to use any repositories.")
 
 
 class ConfigCommand(CliCommand):
@@ -1420,8 +1411,9 @@ class ConfigCommand(CliCommand):
                     test = "%s" % getattr(self.options, section + "." + name)
                     has = has or (test != 'None')
             if not has:
-                self.parser.print_help()
-                sys.exit(-1)
+                # if no options are given, default to --list
+                self.options.list = True
+
         if self.options.remove:
             for r in self.options.remove:
                 if not "." in r:
