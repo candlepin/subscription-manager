@@ -1,5 +1,6 @@
 import sys
 import gtk
+import socket
 
 from firstboot.config import *
 from firstboot.constants import *
@@ -21,6 +22,7 @@ from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.facts import Facts
 from subscription_manager.gui.messageWindow import InfoDialog, ErrorDialog, \
         OkDialog
+from subscription_manager.gui.utils import handle_gui_exception
 
 sys.path.append("/usr/share/rhn")
 from up2date_client import config
@@ -115,11 +117,21 @@ class moduleClass(Module, registergui.RegisterScreen):
             # XXX i'd like this call to be inside the async progress stuff,
             # since it does take some time
             if self._first_registration_apply_run and ConsumerIdentity.exists():
-                managerlib.unregister(self.backend.uep, self.consumer.uuid)
+                try:
+                    managerlib.unregister(self.backend.uep, self.consumer.uuid)
+                except socket.error, e:
+                    handle_gui_exception(e, e, self.registerWin)
+                    return RESULT_FAILURE
                 self.consumer.reload()
                 self._first_registration_apply_run = False
 
-            valid_registration = self.register(testing=testing)
+            # bad proxy settings can cause socket.error or friends here
+            # see bz #810363
+            try:
+                valid_registration = self.register(testing=testing)
+            except socket.error, e:
+                handle_gui_exception(e, e, self.registerWin)
+                return RESULT_FAILURE
 
             if valid_registration:
                 self._cached_credentials = credentials
@@ -278,6 +290,9 @@ class moduleClass(Module, registergui.RegisterScreen):
             InfoDialog(_("All installed products are covered by valid entitlements. Please run 'Subscription Manager' to subscribe to additional products."))
 
             self._skip_sla_screens()
+            return
+        except socket.error, e:
+            handle_gui_exception(e, None, self.registerWin)
             return
 
         if len(controller.suitable_slas) > 1:
