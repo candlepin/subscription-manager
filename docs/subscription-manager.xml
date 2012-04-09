@@ -2,9 +2,9 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
     "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
   <!ENTITY legal SYSTEM "legal.xml">
-  <!ENTITY version "0.96.12-1">
-  <!ENTITY manrevision "1.0">
-  <!ENTITY date "October 2011">
+  <!ENTITY version "0.99.13-1">
+  <!ENTITY manrevision "1.1">
+  <!ENTITY date "April 2012">
   <!ENTITY app "Subscription Manager">
 ]>
 <!--
@@ -22,7 +22,7 @@
   <articleinfo>
 	 <title>&app; Manual</title>
 	 <copyright>
-		<year>2011</year>
+		<year>2012</year>
 		<holder>Red Hat, Inc.</holder>
 	 </copyright>
 <!-- translators: uncomment this:
@@ -37,7 +37,7 @@
      not specified, the publisher/author is the same for all versions of the
      document.  -->
 	 <publisher role="maintainer">
-		<publishername> Red Hat, Inc. </publishername>
+		<publishername> Red Hat, Inc.</publishername>
 	 </publisher>
 
 &legal;
@@ -75,7 +75,7 @@
 
 		<revision>
 		  <revnumber>&app; Manual</revnumber>
-		  <date>October 2011</date>
+		  <date>April 2012</date>
 		  <revdescription>
 			 <para role="author">Ella Deon Lackey
 				<email>dlackey@redhat.com</email></para>
@@ -91,11 +91,11 @@
 
 	 </legalnotice>
 	 <abstract role="description">
-		<para>The <application>Subscription Manager</application> is a systems administration tool.  The <application>&app;</application> can be customized to show seconds or a 12 or 24 hour clock.</para>
+		<para>The <application>Subscription Manager</application> is a systems administration tool which manages the product-related entitlements for a local system.</para>
 	 </abstract>
   </articleinfo>
   <indexterm>
-	 <primary>Clock</primary>
+	 <primary>subscriptions</primary>
   </indexterm>
 <!-- ============= Document Body ============================= -->
 
@@ -150,7 +150,9 @@
 				Any number of products, for any number of different architectures, can be contained in a single subscription. The subscription options that are visible to a consumer are filtered, by default, according to whether the architecture for the product matches the architecture of the system. This is <emphasis>compatibility</emphasis>. Depending on compatible subscriptions makes sure that subscriptions are allocated efficiently, only to systems which can actually use the products.
 			</para>
 			<para>
-				Some subscriptions define some element count on the consumer, like the number of sockets on the machine, the number of virtual guests on a host, or the number of clients in a domain. Multiple subscriptions can be combined together to cover the counts on the consumer. For example, if there is a four socket server, two subscriptions for "RHEL Server for Two Sockets" can be consumed by the system to cover the socket count. Combining multiple subscriptions to cover the system count is called <emphasis>stacking</emphasis>.
+				Some subscriptions define some element count on the consumer, like the number of sockets on the machine, the number of virtual guests on a host, or the number of clients in a domain. Multiple subscriptions can be combined together to cover the counts on the consumer.
+				<!--	For example, if there is a four socket server, two subscriptions for "RHEL Server for Two Sockets" can be consumed by the system to cover the socket count. Combining multiple subscriptions to cover the system count is called <emphasis>stacking</emphasis>.
+				-->
 			</para>
 			<para>
 				The subscription tools can display even incompatible entitlements. Alternatively, the architecture definition for the system can be overridden by defining custom system facts for the subscription tools to use.
@@ -317,7 +319,10 @@
 			</orderedlist>
 		</sect2>
 
-		<sect2 id="registering-multiorg"><title>Registering Consumers to a Local Organization</title>
+		<sect2 id="registering-multiorg"><title>Registering Consumers to a Local Distributor (Organization)</title>
+			<para>
+				Subscription services can be hosted by a company locally rather than by Red Hat's hosted services. The local subscription service receives information about its available subscriptions from Red Hat and then parcels them out to the local systems. This local subscription service is called a <emphasis>distributor</emphasis>. Distributors include applications like Subscription Asset Manager and CloudForms System Engine.
+			</para>
 			<para>
 				Infrastructures which manage their own local content repository and subscription service must have a defined
 				<emphasis>organization</emphasis>. This organization is essentially a group definition, and systems must be
@@ -329,6 +334,31 @@
 				to see what organizations are configured.
 			</para>
 			<orderedlist>
+				<listitem>
+					<para>
+						Update the local Subscription Manager configuration to point to the distributor server rather than &OSORG;'s hosted services.
+						</para>
+						<orderedlist>
+			<listitem>
+				<para>
+						Obtain a copy of the CA certificate for the Subscription Asset Manager server and install it in the Subscription Manager certificate directory.
+
+				</para>
+<screen>[root@server ~]# cd /etc/rhsm/ca
+[root@server ca]# scp  sam.example.com:/etc/candlepin/certs/candlepin-ca.crt .
+[root@server ca]# mv candlepin-ca.crt sam_local.pem</screen>						
+
+			</listitem>
+			<listitem>
+				<para>
+					Update the settings in the <filename>rhsm.conf</filename> file.
+				This can be done by editing the <filename>rhsm.conf</filename> file directly or by using the <command>config</command> command. 
+			For example:
+			</para>
+<programlisting>[root@server1 ~]# subscription-manager config --server.hostname=sam.example.com --server.prefix=/sam/api --rhsm.baseurl=https://sam.example.com:8088 --rhsm.repo_ca_cert=%\(ca_cert_dir\)ssam_local.pem</programlisting>
+			</listitem>
+		</orderedlist>
+	</listitem>
 				<listitem>
 					<para>
 						Click the <guibutton>Register</guibutton> button at the top of the window in the toolbar.
@@ -372,7 +402,7 @@
 		<secondary>unregistering</secondary>
 	</indexterm>
 			<para>
-				The only thing required to unregister a machine is to run the <command>unregister</command> command. This removes the system's entry from the subscription service, unsubscribes it from any subscriptions, and, locally, deletes its identity and entitlement certificates.
+				Unregistering a system removes the system's entry from the subscription service, unsubscribes it from any subscriptions, and, locally, deletes its identity and entitlement certificates. It does not change or uninstall any currently-installed products.
 			</para>
 			<para>
 				In the Red Hat Subscription Manager GUI, there is an <guibutton>Unregister</guibutton> button at the top of the window in the toolbar.
@@ -385,6 +415,9 @@
 			<title>Subscribing and Unsubscribing</title>
 			<sect2 id="subscribing-product-ui">
 				<title>Subscribing to a Product</title>
+	<indexterm>
+		<primary>subscribing</primary>
+	</indexterm>
 	<indexterm>
 		<primary>entitlements</primary>
 		<secondary>subscribing</secondary>
@@ -485,7 +518,7 @@
 				</orderedlist>
 
 		</sect2>
-
+		<!--
 		<sect2 id="stacking"><title>Stacking Subscriptions</title>
 			<para>
 				Some subscriptions define a <emphasis>count</emphasis> which works as a restriction on the subscription. For example, counts can be set on the number of sockets or CPUs on a machine,
@@ -530,6 +563,7 @@
 				To stack subscriptions in the Subscription Manager UI, simply set the <guilabel>Quantity</guilabel> field to the required quantity to cover the count.
 			</para>
 		</sect2>
+		-->
 
 			<sect2 id="ADDING-SUB">
 				<title>Manually Adding a New Subscription</title>
@@ -625,10 +659,60 @@
 
 			</sect2>
 
+		</sect1>
+
+		
+
+	<sect1 id="autosubscribing"><title>Autosubscribing Systems</title>
+	<indexterm>
+		<primary>autosubscribing</primary>
+	</indexterm>
+	<indexterm>
+		<primary>entitlements</primary>
+		<secondary>autosubscribing</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>systems</primary>
+		<secondary>autosubscribing</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>subscriptions</primary>
+		<secondary>autosubscribing</secondary>
+	</indexterm>
+		<para>
+			With Subscription Manager, the act of <emphasis>registering</emphasis> a system can be separate from the act of <emphasis>subscribing</emphasis> the system to entitlements. This separation actually allows a fair amount of flexibility in how administrators allocate subscriptions, and even allows administrators to force specific subscriptions to a system when the logic of an automatic subscription process may prevent that subscription.
+		</para>
+		<para>
+			But this separation is not desirable in a lot of deployments. The simplicity of registering and subscribing systems simultaneously is easier for bulk deployments, kickstarts, QE or development systems, and 
+			many other scenarios. 
+		</para>
+		<para>
+			A system can be autosubscribed in either of two ways:
+		</para>
+		<itemizedlist>
+			<listitem>
+				<para>
+					<emphasis>During registration.</emphasis> A system can be autosubscribed during firstboot or when the system is registered. The default, in fact, is to auto-subscribe the system. (To disable autosubscribe and only register, select the <guilabel>Skip automatic subscription selection</guilabel> checkbox.)
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>From the Installed Products tab</emphasis>. After registration, the <guilabel>My Installed Products</guilabel> tab tracks the subscriptions and validity periods for products on the system. There is an <guibutton>Auto-subscribe</guibutton> button on this tab which will automatically select new subscriptions for any products with no or partial subscriptions applied.
+				</para>
+			</listitem>
+		</itemizedlist>
+		<note><title>NOTE</title>
+			<para>
+				In Red Hat Enterprise Linux 6.3, Subscription Manager supports preferences for service level settings for subscriptions. Service level preferences are one component of the algorithm that Subscription Manager uses to calculate the best matching subscriptions. 
+			</para>
+			<para>
+				Other factors include other installed products, contract expiry, architecture, and platform.
+			</para>
+		</note>
 	</sect1>
 
 
-	<sect1 id="activating-machine"><title>Redeeming Subscriptions on a Machine</title>
+	<sect1 id="activating-machine"><title>Redeeming Subscriptions Through Activation Keys</title>
 		<para>
 			Systems can be set up with pre-existing subscriptions already available to that system. For some systems which were purchased through third-party vendors, a subscription to Red Hat products is included with the purchase of the machine. Companies using the Subscription Asset Manager can allocate subscriptions to their own systems by creating <emphasis>activation keys</emphasis> which are used to claim those assigned subscriptions.
 		</para>
@@ -747,6 +831,101 @@
 			</formalpara>
 
 		</sect1>
+
+		
+		
+
+	<sect1 id="sla-preferences"><title>Setting Service Level Preferences</title>
+	<indexterm>
+		<primary>service-level preference</primary>
+	</indexterm>
+	<indexterm>
+		<primary>entitlements</primary>
+		<secondary>service-level preference</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>systems</primary>
+		<secondary>service levels</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>subscriptions</primary>
+		<secondary>service-level preference</secondary>
+	</indexterm>
+	<para>
+				Part of a subscription is a defined service level for that product on a given system. Red Hat service levels are defined in the contract; a summary of production support levels is available at <ulink url="https://access.redhat.com/support/offerings/production/sla.html" />.
+			</para>
+			<para>
+				The service information for each subscription is part of the subscription details. Two attributes are displayed, per subscription: its support level and its support type. The <emphasis>level</emphasis> defines how quickly support is guaranteed to respond to a case. The <emphasis>type</emphasis> defines the methods of communication; for production level support, this is always web and phone.
+			</para>
+			<para>
+				An organization can have multiple levels of support available, even for the same product. Even on the same system, different product subscriptions could have different service levels. Additionally, a single product could have multiple service levels available.
+				</para>
+				<para>
+					A system can be set up to select subscriptions based on a preferred service level. This is used as a component in autosubscribing a system.
+				</para>
+		<para>
+			To assign a service level, click the preferences icon (<inlinemediaobject><mediaobject><imageobject><imagedata fileref="figures/pref-icon.png" /></imageobject></mediaobject></inlinemediaobject>), and select the desired service level from the drop-down menu.
+		</para>
+		<figure id="fig.sla-prefs">
+			<title>Preferences Dialog: Service Levels</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="figures/rhsm-sla.png" />
+				</imageobject>
+				<textobject>
+					<phrase>
+						Subscription Manager preferences dialog.
+					</phrase>
+				</textobject>
+			</mediaobject>
+		</figure>
+	</sect1>
+		
+
+	<sect1 id="ystream-preferences"><title>Setting Release Version Preferences</title>
+	<indexterm>
+		<primary>entitlements</primary>
+		<secondary>static release version</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>systems</primary>
+		<secondary>static release version</secondary>
+	</indexterm>
+	<indexterm>
+		<primary>subscriptions</primary>
+		<secondary>static release version</secondary>
+	</indexterm>
+	<para>
+		Many IT environments have to be certified to meet a certain level of security or other 
+		criteria. In that case, major upgrades must be carefully planned and controlled &mdash; 
+		so administrators can't simply run <command>yum update</command> and move from version to 
+		version.
+	</para>
+	<para>
+		The preferences dialog can set a preferred minor, or <emphasis>y-stream</emphasis>, release
+		number for the system to stick to. This limits the system to content repositories associated 
+		with that operating system version instead of moving to the newest or latest version repositories. 
+		For example, if the preferred operating system version is 6.3, then 6.3 content repositories will 
+		be preferred for all installed and subscribed products for the system, even if other repositories 
+		are available.
+	</para>
+		<para>
+			To assign a preferred operating system version, click the preferences icon (<inlinemediaobject><mediaobject><imageobject><imagedata fileref="figures/pref-icon.png" /></imageobject></mediaobject></inlinemediaobject>), and select the desired operating system version number from the drop-down menu.
+		</para>
+		<figure id="fig.os-refs">
+			<title>Preferences Dialog: Minor OS Version</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="figures/rhsm-sla.png" />
+				</imageobject>
+				<textobject>
+					<phrase>
+						Subscription Manager preferences dialog.
+					</phrase>
+				</textobject>
+			</mediaobject>
+		</figure>
+	</sect1>
 
 	<sect1 id="responding-to-nags-ui">
 		<title>Responding to Subscription Notifications</title>

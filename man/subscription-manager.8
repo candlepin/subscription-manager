@@ -1,4 +1,4 @@
-.TH subscription-manager 8 "August 10, 2011" "version 2.0" "Subscription Management"  Deon Lackey 
+.TH subscription-manager 8 "April 5, 2012" "version 2.1" "Subscription Management"  Deon Lackey 
 .SH NAME
 subscription-manager \- Register machines and manage subscriptions to products.
 
@@ -75,37 +75,43 @@ has specific options available for each command, depending on what operation is 
 4. unsubscribe
 
 .IP
-5. import 
+5. release
 
 .IP
-6. redeem
+6. service-level
 
 .IP
-7. list
+7. import 
 
 .IP
-8. refresh
+8. redeem
 
 .IP
-9. environments
+9. list
 
 .IP
-10. repos
+10. refresh
 
 .IP
-11. orgs
+11. environments
 
 .IP
-12. identity
+12. repos
 
 .IP
-13. facts
+13. orgs
 
 .IP
-14. clean
+14. identity
 
 .IP
-15. config
+15. facts
+
+.IP
+16. clean
+
+.IP
+17. config
 
 
 .SS COMMON OPTIONS
@@ -166,7 +172,7 @@ References an existing consumer ID to reregister a system. The consumer ID is us
 .TP
 .B --activationkey=KEYS
 Gives a comma-separated list of product keys to use to redeem or apply specific subscriptions to the machine. This is used generally for preconfigured machines, which may already have products installed and subscriptions allocated for that consumer.
-.PP
+.IP
 When the 
 .B --activationkey
 option is used, it is not necessary to use the 
@@ -174,11 +180,11 @@ option is used, it is not necessary to use the
 and 
 .B --password
 options, because the authentication information is implicit in the activation key.
-.PP
+.IP
 In hosted or single organization environments, it is not necessary to specify an organization with the 
 .B --org
 option, but in multi-organization environments, this is required.
-.PP
+.IP
 For example:
 .RS
 .nf
@@ -186,14 +192,20 @@ subscription-manager register --org="IT Dept" --activationkey=1234abcd
 .fi
 .RE
 
-.PP
+.IP
 Giving the org name is not necessary in hosted environments or infrastructures which have only a single organization.
-
 
 
 .TP
 .B --autosubscribe
 Automatically subscribes this system to the best-matched compatible subscription.
+
+
+.TP
+.B --servicelevel=None|Standard|Premium
+Sets the preferred service level to use with subscriptions added to the system. This can only be used in conjunction with the 
+.B --autosubscribe
+optiona
 
 .TP
 .B --force
@@ -241,6 +253,12 @@ subscriptions) to cover the number of sockets, guests, or other characteristic.
 .B --auto
 Automatically subscribes this system to the best-matched compatible subscription or subscriptions.
 
+.TP
+.B --servicelevel=None|Standard|Premium
+Sets the preferred service level to use with subscriptions added to the system. This can only be used in conjunction with the 
+.B --auto
+optiona
+
 .SS UNSUBSCRIBE OPTIONS
 The 
 .B unsubscribe
@@ -256,6 +274,42 @@ Gives the serial number of the entitlement certificate for the specific product 
 Unsubscribes the system from 
 .I all 
 of the products it's subscribed to.
+
+
+.SS RELEASE OPTIONS
+The 
+.B release
+command sets a sticky OS version to use when installing or updating packages. This sets a preference for the minor version of the OS, such as 6.2 or 6.3. This can prevent unplanned or unsupported operating system version upgrades when an IT environment must maintain a certified configuration.
+
+.TP
+.B --list
+Lists the available OS versions.
+
+.TP
+.B --set=RELEASE
+Sets the minor (Y-stream) release version to use, such as 6.3.
+
+
+.SS SERVICE-LEVEL OPTIONS
+The 
+.B service-level
+command displays the current configured service level 
+.I preference 
+for products installed on the system. For example, if the service level preference is Standard, then a subscription with a standard service level is selected when autosubscribing the system. 
+
+.IP
+The 
+.B service-level
+command does not set the service level for the system; it only shows its current setting or available settings. The service level preference must be set in the Subscription Manager UI.
+
+.TP
+.B --list
+Lists the available service levels.
+
+.TP
+.B --show
+Shows the system's current service level preference.
+
 
 .SS IMPORT OPTIONS
 The 
@@ -328,7 +382,7 @@ This command has no options.
 .SS ENVIRONMENTS OPTIONS
 The 
 .B environments
-command lists all of the environments that have been configured for an organization. This command is only used for organizations which have a locally-hosted subscriptions or content service of some kind, like Katello and Subscription Asset Manager. The concept of environments -- and therefore this command -- have no meaning in a hosted subscription/content structure.
+command lists all of the environments that have been configured for an organization. This command is only used for organizations which have a locally-hosted subscriptions or content service of some kind, like Subscription Asset Manager. The concept of environments -- and therefore this command -- have no meaning in a hosted subscription/content structure.
 
 .TP
 .B --username=USERNAME
@@ -346,7 +400,7 @@ Identifies the organization for which to list the configured environments.
 .SS REPOS OPTIONS
 The 
 .B repos
-command lists all of the repositories that are available to a consumer. This command is only used for organizations which have a locally-hosted content service of some kind, like Katello. With Red Hat's hosted content service, there is only one central repository.
+command lists all of the repositories that are available to a consumer. This command is only used for organizations which have a locally-hosted content service of some kind, like Subscription Asset Manager. With Red Hat's hosted content service, there is only one central repository.
 
 .TP
 .B --list
@@ -598,6 +652,30 @@ subscription-manager unregister
 .fi
 .RE
 
+.PP
+An option with registration, 
+.B --autosubscribe
+, will automatically subscribe the newly-registered system to the entitlements pool which best matches the system architecture and configuration. This option allows the system to be subscribed as part of the registration process, rather than separately managing subscriptions.
+.RS
+.nf
+subscription-manager register --username=admin --password=secret 
+--autosubscribe
+.fi
+.RE
+
+.PP
+Autosubscribe also supports an option to set a preferred service level with the selected subscriptions, the 
+.B --servicelevel
+option. In this case, the 
+.B --servicelevel
+option sets a preference that helps the autosubscribe process select appropriate subscriptions. For example, if the preferred service level for a production server is Premium, and there are three matching subscriptions with different service levels (none, standard, and premium), the autosubscribe process selects the subscription which offers a Premium subscription.
+
+.RS
+.nf
+subscription-manager register --username=admin --password=secret 
+--autosubscribe --servicelevel=Premium
+.fi
+.RE
 
 .SS LISTING, SUBSCRIBING, AND UNSUBSCRIBING TO PRODUCTS
 A 
@@ -681,6 +759,20 @@ subscription-manager subscribe --auto
 .fi
 .RE
 
+
+.PP
+Autosubscribe also supports an option to set a preferred service level with the selected subscriptions, the 
+.B --servicelevel
+option. In this case, the 
+.B --servicelevel
+option sets a preference that helps the autosubscribe process select appropriate subscriptions. For example, if the preferred service level for a production server is Premium, and there are three matching subscriptions with different service levels (none, standard, and premium), the autosubscribe process selects the subscription which offers a Premium subscription.
+
+.RS
+.nf
+subscription-manager subscribe --auto --servicelevel=Premium
+.fi
+.RE
+
 .PP
 Some subscriptions define a count on the consumer, like the number of sockets on the machine or the number of virtual guests on a host. You can 
 .I stack
@@ -711,16 +803,6 @@ command with the
 .B --all
 option unsubscribes the machine from every subscription it has consumed.
 
-.PP
-An option with registration, 
-.B --autosubscribe
-, will automatically subscribe the newly-registered system to the entitlements pool which best matches the system architecture and configuration. This option allows the system to be subscribed as part of the registration process, rather than separately managing subscriptions.
-.RS
-.nf
-subscription-manager register --username=admin --password=secret 
---autosubscribe
-.fi
-.RE
 
 .SS REDEEMING EXISTING SUBSCRIPTIONS
 Sometimes, a machine may come pre-configured with products and subscriptions. Rather than subscribing to a pool and claiming a subscription, this system simply needs to 
@@ -738,7 +820,7 @@ subscription-manager redeem --email=admin@example.com --org="IT Dept"
 .RE
 
 .SS VIEWING LOCAL SUBSCRIPTION & CONTENT PROVIDER INFORMATION
-Red Hat has a hosted environment, through the Customer Portal, that provides centralized access to subscription management and content repositories. However, organizations can use other tools -- like Katello -- for content hosting  and subscription management. With a local content provider, the organization, environments, repositories, and other structural configuration is performed in the content provider. Red Hat Subscription Manager can be used to display this information, using the 
+Red Hat has a hosted environment, through the Customer Portal, that provides centralized access to subscription management and content repositories. However, organizations can use other tools -- like Subscription Manager -- for content hosting  and subscription management. With a local content provider, the organization, environments, repositories, and other structural configuration is performed in the content provider. Red Hat Subscription Manager can be used to display this information, using the 
 .B environments, orgs,
 and
 .B repos
@@ -753,6 +835,27 @@ subscription-manager environments --username=jsmith
 
 subscription-manager orgs --username=jsmith
 --password=secret 
+.fi
+.RE
+
+.SS CHANGING SUBSCRIPTION MANAGER CONFIGURATION
+The Subscription Manager CLI and UI both use the 
+.B /etc/rhsm/rhsm.conf
+file for its configuration, including what content and subscription services to use and management settings like autohealing. This configuration file can be edited directly, or it can be edited using the 
+.B config 
+command. Parameters and values are passed as arguments with the 
+.B config
+command in the format 
+.I --section.parameter=value
+, where 
+.I section
+is the configuration section in the file: server, rhsm, or rhsmcertd.
+
+.PP
+For example, to change the hostname of the subscription service host:
+.RS
+.nf
+subscription-manager config --server.hostname=myserver.example.com
 .fi
 .RE
 
@@ -796,7 +899,7 @@ tool can be run as a post-install script as part of the kickstart installation p
 .RS
 .nf
 %post --log=/root/ks-post.log
-/usr/sbin/subscription-manager register --username admin --password secret --org 'east colo' --autosubscribe --force
+/usr/sbin/subscription-manager register --username admin --password secret --org 'east colo' --autosubscribe --servicelevel=Premium --force
 .fi
 .RE
 
