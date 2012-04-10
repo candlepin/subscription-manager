@@ -32,8 +32,8 @@
 #define UPDATEFILE "/var/run/rhsm/update"
 #define WORKER "/usr/libexec/rhsmcertd-worker"
 #define WORKER_NAME "/usr/libexec/rhsmcertd-worker"
-#define DEFAULT_CERT_INTERVAL 14400	/* 4 hours */
-#define DEFAULT_HEAL_INTERVAL 86400	/* 24 hours */
+#define DEFAULT_CERT_INTERVAL_SECONDS 14400	/* 4 hours */
+#define DEFAULT_HEAL_INTERVAL_SECONDS 86400	/* 24 hours */
 #define BUF_MAX 256
 
 //TODO: we should be using glib's logging facilities
@@ -79,7 +79,7 @@ logUpdate (int delay)
 	struct tm update_tm = *localtime (&update);
 	char buf[BUF_MAX];
 
-	update_tm.tm_min += delay;
+	update_tm.tm_sec += delay;
 	strftime (buf, BUF_MAX, "%s", &update_tm);
 
 	FILE *updatefile = fopen (UPDATEFILE, "w");
@@ -157,8 +157,8 @@ main (int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	int cert_interval = atoi (argv[1]) * 60;
-	int heal_interval = atoi (argv[2]) * 60;
+	int cert_interval_seconds = atoi (argv[1]) * 60;
+	int heal_interval_seconds = atoi (argv[2]) * 60;
 
 	daemon (0, 0);
 	log = get_log ();
@@ -170,41 +170,45 @@ main (int argc, char *argv[])
 	}
 	fclose (log);
 
-	if (cert_interval < 1) {
-		cert_interval = DEFAULT_CERT_INTERVAL;
+	if (cert_interval_seconds < 1) {
+		cert_interval_seconds = DEFAULT_CERT_INTERVAL_SECONDS;
 	}
-	if (heal_interval < 1) {
-		heal_interval = DEFAULT_HEAL_INTERVAL;
+	if (heal_interval_seconds < 1) {
+		heal_interval_seconds = DEFAULT_HEAL_INTERVAL_SECONDS;
 	}
 
 	log = get_log ();
 	fprintf (log, "%s: healing check started: interval = %i\n", ts (),
-		 heal_interval / 60);
+		 heal_interval_seconds / 60);
 	fprintf (log, "%s: cert check started: interval = %i\n", ts (),
-		 cert_interval / 60);
+		 cert_interval_seconds / 60);
 	fflush (log);
 
-	//note that we call the function directly first, before assigning a timer
-	//to it. Otherwise, it would only get executed when the timer went off, and
-	//not at startup.
+	// note that we call the function directly first, before assigning a timer
+	// to it. Otherwise, it would only get executed when the timer went off, and
+	// not at startup.
 
 	bool heal = true;
 	cert_check (heal);
-	g_timeout_add (heal_interval * 1000, (GSourceFunc) cert_check,
+	g_timeout_add (heal_interval_seconds * 1000, (GSourceFunc) cert_check,
 		       (gpointer) heal);
 
 	heal = false;
 	cert_check (heal);
-	g_timeout_add (cert_interval * 1000, (GSourceFunc) cert_check,
+
+	g_timeout_add (cert_interval_seconds * 1000, (GSourceFunc) cert_check,
 		       (gpointer) heal);
 
-	logUpdate (cert_interval);
-	g_timeout_add (cert_interval * 1000, (GSourceFunc) logUpdate,
-		       GINT_TO_POINTER (cert_interval));
+	// NB: we only use cert_interval_seconds when calculating the next update
+	// time. This works for most users, since the cert_interval aligns with
+	// runs of heal_interval (i.e., heal_interval % cert_interval = 0)
+	logUpdate (cert_interval_seconds);
+	g_timeout_add (cert_interval_seconds * 1000, (GSourceFunc) logUpdate,
+		       GINT_TO_POINTER (cert_interval_seconds));
 
 	main_loop = g_main_loop_new (NULL, FALSE);
 	g_main_loop_run (main_loop);
-	//we will never get past here
+	// we will never get past here
 
 	return EXIT_SUCCESS;
 }
