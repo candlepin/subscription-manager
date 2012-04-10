@@ -91,7 +91,7 @@ class ProductManager:
         self.pdir = ProductDirectory()
         self.db = ProductDatabase()
         self.db.read()
-        self.meta_data_error = None
+        self.meta_data_errors = []
 
     def update(self, yb):
         if yb is None:
@@ -102,16 +102,12 @@ class ProductManager:
         #only execute this on versions of yum that track
         #which repo a package came from
         if yum.__version_info__[2] >= 28:
-            # if we had errors with the repo or productid metadata
-            # we could be very confused here, so do not
-            # delete anything. see bz #736424
-            if not self.meta_data_error:
-                # check that we have any repo's enabled
-                # and that we have some enabled repo's. Not just
-                # that we have packages from repo's that are
-                # not active. See #806457
-                if enabled and active:
-                    self.updateRemoved(active)
+            # check that we have any repo's enabled
+            # and that we have some enabled repo's. Not just
+            # that we have packages from repo's that are
+            # not active. See #806457
+            if enabled and active:
+                self.updateRemoved(active)
         self.updateInstalled(enabled, active)
 
     def _isWorkstation(self, product):
@@ -173,6 +169,13 @@ class ProductManager:
             prod_hash = p.getHash()
             repo = self.db.findRepo(prod_hash)
 
+            # if we had errors with the repo or productid metadata
+            # we could be very confused here, so do not
+            # delete anything. see bz #736424
+            if repo in self.meta_data_errors:
+                log.info("%s has meta-data errors.  Not deleting product cert %s." % (repo, prod_hash))
+                continue
+
             # FIXME: not entirely sure why we do this
             #  to avoid a none on cert.delete surely
             # but is there another reason?
@@ -223,10 +226,9 @@ class ProductManager:
                     continue
                 lst.append((cert, repo.id))
             except Exception, e:
-                log.warn("Error loading productid metadata.  No product " +
-                         "certificates will be removed.")
+                log.warn("Error loading productid metadata for %s." % repo)
                 log.exception(e)
-                self.meta_data_error = e
+                self.meta_data_errors.append(repo.id)
         return lst
 
     def __getCert(self, fn):
