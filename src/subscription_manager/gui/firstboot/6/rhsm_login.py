@@ -48,7 +48,6 @@ class moduleClass(Module, registergui.RegisterScreen):
         self.title = _("Entitlement Platform Registration")
         self._cached_credentials = None
         self._registration_finished = False
-        self._first_registration_apply_run = True
 
     def _read_rhn_proxy_settings(self):
         # Read and store rhn-setup's proxy settings, as they have been set
@@ -103,39 +102,17 @@ class moduleClass(Module, registergui.RegisterScreen):
 
         credentials = self._get_credentials_hash()
 
-        if credentials == self._cached_credentials and \
-                ConsumerIdentity.exists():
-            # User has already successfully authenticaed with these
-            # credentials, just go on to sla screens without
-            # reregistering the consumer
-
-            self._init_sla()
-            return RESULT_JUMP
-        else:
-            # if they've already registered during firstboot and have clicked
-            # back to register again, we must first unregister.
-            # XXX i'd like this call to be inside the async progress stuff,
-            # since it does take some time
-            if self._first_registration_apply_run and ConsumerIdentity.exists():
-                try:
-                    managerlib.unregister(self.backend.uep, self.consumer.uuid)
-                except socket.error, e:
-                    handle_gui_exception(e, e, self.registerWin)
-                    return RESULT_FAILURE
-                self.consumer.reload()
-                self._first_registration_apply_run = False
-
-            # bad proxy settings can cause socket.error or friends here
-            # see bz #810363
-            try:
-                valid_registration = self.register(testing=testing)
-            except socket.error, e:
-                handle_gui_exception(e, e, self.registerWin)
-                return RESULT_FAILURE
-
-            if valid_registration:
-                self._cached_credentials = credentials
+        # bad proxy settings can cause socket.error or friends here
+        # see bz #810363
+        try:
+            valid_registration = self.register(testing=testing)
+        except socket.error, e:
+            handle_gui_exception(e, e, self.registerWin)
             return RESULT_FAILURE
+
+        if valid_registration:
+            self._cached_credentials = credentials
+        return RESULT_FAILURE
 
     def close_window(self):
         """
@@ -174,8 +151,22 @@ class moduleClass(Module, registergui.RegisterScreen):
         self._destroy_widget('cancel_button')
 
     def initializeUI(self):
-        # Need to make sure that each time the UI is initialized we reset back to the
-        # main register screen.
+        # Need to make sure that each time the UI is initialized we reset back
+        # to the main register screen.
+
+        # if they've already registered during firstboot and have clicked
+        # back to register again, we must first unregister.
+        # XXX i'd like this call to be inside the async progress stuff,
+        # since it does take some time
+        if self._registration_finished and ConsumerIdentity.exists():
+            try:
+                managerlib.unregister(self.backend.uep, self.consumer.uuid)
+            except socket.error, e:
+                handle_gui_exception(e, e, self.registerWin)
+            self.consumer.reload()
+            self._registration_finished = False
+
+
         self._show_credentials_page()
         self._clear_registration_widgets()
         self.initializeConsumerName()
@@ -247,7 +238,6 @@ class moduleClass(Module, registergui.RegisterScreen):
     def _finish_registration(self, failed=False):
         registergui.RegisterScreen._finish_registration(self, failed=failed)
         if not failed:
-            self._first_registration_apply_run = True
             self._registration_finished = True
 
             self._init_sla()
