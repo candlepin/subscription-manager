@@ -80,7 +80,7 @@ Summary: Firstboot screens for subscription manager
 Group: System Environment/Base
 Requires: %{name}-gnome = %{version}-%{release}
 %{?el5:Requires: rhn-setup-gnome >= 0.4.20-49}
-%{?el6:Requires: rhn-setup-gnome >= 1.0.0-39}
+%{?el6:Requires: rhn-setup-gnome >= 1.0.0-82}
 
 # Fedora can figure this out automatically, but RHEL cannot:
 Requires: librsvg2
