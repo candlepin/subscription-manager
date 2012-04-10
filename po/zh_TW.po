@@ -2,7 +2,7 @@
 # Language zh-TW translations for l package.
 # Copyright (C) 2011 THE l'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the l package.
-#
+# 
 # Automatically generated, 2011.
 # Terry Chuang <tchuang@redhat.com>, 2011.
 # snowlet <snowlet@fedoraproject.org>, 2012. #zanata
@@ -254,8 +254,7 @@ msgstr "訂閱清單"
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
-msgstr ""
-"顯示規範協助時發生了錯誤。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+msgstr "顯示規範協助時發生了錯誤。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
 #: ../src/subscription_manager/gui/subscription_assistant.py:264
 msgid "Unable to search for subscriptions"
@@ -366,9 +365,10 @@ msgid "Unable to auto-subscribe, server does not support service levels."
 msgstr "無法自動訂閱，伺服器不支援服務等級。"
 
 #: ../src/subscription_manager/gui/autobind.py:325
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:263
 msgid ""
-"No installed products on system. No need to update certificates at this time."
+"No installed products on system. No need to update certificates at this "
+"time."
 msgstr "系統上沒有已安裝的產品。現在不需要更新憑證。"
 
 #: ../src/subscription_manager/gui/autobind.py:330
@@ -380,20 +380,16 @@ msgstr "所有已安裝產品皆由正確的權利所支援。現在不需要更
 #: ../src/subscription_manager/gui/autobind.py:363
 #, python-format
 msgid ""
-"Unable to subscribe to any additional products at current service level: %s. "
-"Please use the \"All Available Subscriptions\" tab to manually entitle this "
-"system."
-msgstr ""
-"現有服務等級無法訂閱任何額外產品：%s。請使用「所有可用的訂閱服務」分頁來手動"
-"賦予此系統權利。"
+"Unable to subscribe to any additional products at current service level: %s."
+" Please use the \"All Available Subscriptions\" tab to manually entitle this"
+" system."
+msgstr "現有服務等級無法訂閱任何額外產品：%s。請使用「所有可用的訂閱服務」分頁來手動賦予此系統權利。"
 
 #: ../src/subscription_manager/gui/autobind.py:375
 msgid ""
 "No service levels will cover all installed products. Please use the \"All "
 "Available Subscriptions\" tab to manually entitle this system."
-msgstr ""
-"沒有服務等即可涵蓋所有已安裝產品。請使用「所有可用訂閱」分頁來手動賦予系統權"
-"利。"
+msgstr "沒有服務等即可涵蓋所有已安裝產品。請使用「所有可用訂閱」分頁來手動賦予系統權利。"
 
 #: ../src/subscription_manager/gui/autobind.py:489
 msgid "Error subscribing:"
@@ -451,6 +447,7 @@ msgid "RHSM Subscriptions Management"
 msgstr "RHSM 訂閱管理"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:32
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_manually_subscribe.py:41
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:24
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:25
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:47
@@ -462,43 +459,46 @@ msgstr "權利註冊"
 msgid "Entitlement Platform Registration"
 msgstr "權利平台註冊"
 
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_manually_subscribe.py:42
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:240
+msgid "Manual Configuraton Required"
+msgstr ""
+
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:309
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:282
 msgid "Confirm Subscriptions"
 msgstr "確認訂閱"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:26
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:299
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:275
 msgid "Service Level"
 msgstr "服務等級"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:277
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:244
+msgid "You have opted to skip auto-subscribe."
+msgstr ""
+
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:259
 msgid ""
-"Unable to auto-subscribe, server does not support service levels. Please run "
-"'Subscription Manager' to manually subscribe."
+"Unable to auto-subscribe, server does not support service levels. Please run"
+" 'Subscription Manager' to manually subscribe."
 msgstr "無法自動訂閱，伺服器不支援服務等級。請執行「訂閱管理員」以手動訂閱。"
 
-#. XXX show a dialog about manually subscribing
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:290
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:267
 msgid ""
 "All installed products are covered by valid entitlements. Please run "
 "'Subscription Manager' to subscribe to additional products."
-msgstr ""
-"所有已安裝產品皆由正確的權利所支援。請執行「訂閱管理員」以訂閱額外產品。"
+msgstr "所有已安裝產品皆由正確的權利所支援。請執行「訂閱管理員」以訂閱額外產品。"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:303
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:279
 #, python-format
 msgid ""
 "Unable to subscribe to any additional products at current service level: %s"
 msgstr "現有的服務等級無法訂閱任何額外產品：%s"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:311
-msgid ""
-"No service levels will cover all installed products. Please run "
-"'Subscription Manager' to manually entitle this system."
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+msgid "No service levels will cover all installed products. "
 msgstr ""
-"沒有服務等級可涵蓋所有已安裝產品。請執行「訂閱管理員」以手動整台賦予系統權"
-"利。"
 
 #: ../src/subscription_manager/gui/redeem.py:54
 #, python-format
@@ -507,10 +507,9 @@ msgstr "取得訂閱時發生錯誤：%s"
 
 #: ../src/subscription_manager/gui/utils.py:59
 msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
-msgstr ""
-"發生網路錯誤，無法連至伺服器。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+"Network error, unable to connect to server. Please see "
+"/var/log/rhsm/rhsm.log for more information."
+msgstr "發生網路錯誤，無法連至伺服器。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
 #: ../src/subscription_manager/gui/utils.py:62
 #, python-format
@@ -522,20 +521,18 @@ msgstr "無法驗證伺服器的身份：%s"
 #: ../src/subscription_manager/gui/utils.py:67
 #: ../src/subscription_manager/managercli.py:109
 msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
-msgstr ""
-"發生網路錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+"Network error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
+msgstr "發生網路錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
-#. This is what happens when there's an issue with the server on the other side of the wire
+#. This is what happens when there's an issue with the server on the other
+#. side of the wire
 #: ../src/subscription_manager/gui/utils.py:70
 #: ../src/subscription_manager/managercli.py:113
 msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
-msgstr ""
-"遠端伺服器錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資"
-"訊。"
+"Remote server error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
+msgstr "遠端伺服器錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
 #: ../src/subscription_manager/gui/utils.py:91
 #: ../src/subscription_manager/managercli.py:122
@@ -666,17 +663,14 @@ msgid ""
 "The tool you are using is attempting to re-register using RHN Certificate-"
 "Based technology. Red Hat recommends (except in a few cases) that customers "
 "only register with RHN once."
-msgstr ""
-"您使用的工具正試圖使用以認證為主的 RHN 技術，向 RHN 重新註冊。除了少數情況以"
-"外，Red Hat 建議顧客僅向 RHN 註冊一次。"
+msgstr "您使用的工具正試圖使用以認證為主的 RHN 技術，向 RHN 重新註冊。除了少數情況以外，Red Hat 建議顧客僅向 RHN 註冊一次。"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:17
 msgid ""
 "To learn more about RHN registration and technologies please consult this "
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"欲知更多關於 RHN 的註冊問題與技術資訊，請參閱此知識庫文章：https://access."
-"redhat.com/kb/docs/DOC-45563"
+"欲知更多關於 RHN 的註冊問題與技術資訊，請參閱此知識庫文章：https://access.redhat.com/kb/docs/DOC-45563"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:20
 msgid "Please enter your Red Hat Network account information:"
@@ -684,7 +678,8 @@ msgstr "請輸入您的 RHN 帳號資訊："
 
 #: ../src/subscription_manager/branding/redhat_branding.py:22
 msgid ""
-"Tip: Forgot your login or password? Look it up at http://red.ht/lost_password"
+"Tip: Forgot your login or password? Look it up at "
+"http://red.ht/lost_password"
 msgstr "提示：忘記登入帳號或密碼？請參閱 http://red.ht/lost_password"
 
 #. These are a bunch of strings that are marked for translation in optparse,
@@ -963,11 +958,9 @@ msgstr "<b>使用者 %s 再也無法註冊任何組織。</b>"
 
 #: ../src/subscription_manager/managercli.py:57
 msgid ""
-"This system is not yet registered. Try 'subscription-manager register --"
-"help' for more information."
-msgstr ""
-"這部系統尚未註冊。請嘗試 'subscription-manager register --help' 以取得更多資"
-"訊。"
+"This system is not yet registered. Try 'subscription-manager register "
+"--help' for more information."
+msgstr "這部系統尚未註冊。請嘗試 'subscription-manager register --help' 以取得更多資訊。"
 
 #: ../src/subscription_manager/managercli.py:71
 #, python-format
@@ -1344,11 +1337,9 @@ msgstr "取得訂閱服務後，要發送提示的電子郵件位址。"
 
 #: ../src/subscription_manager/managercli.py:924
 msgid ""
-"Optional language to use for email notification when subscription redemption "
-"is complete. Examples: en-us, de-de"
-msgstr ""
-"取得訂閱服務後，要發送提示的電子郵件之選用語言。例如 en-us（美式英文）、de-de"
-"（德文）"
+"Optional language to use for email notification when subscription redemption"
+" is complete. Examples: en-us, de-de"
+msgstr "取得訂閱服務後，要發送提示的電子郵件之選用語言。例如 en-us（美式英文）、de-de（德文）"
 
 #: ../src/subscription_manager/managercli.py:966
 msgid "Configure what os release to use"
@@ -1394,8 +1385,8 @@ msgstr "可消耗的訂閱數量"
 
 #: ../src/subscription_manager/managercli.py:1055
 msgid ""
-"Error: This command requires that you specify a pool with --pool or use --"
-"auto."
+"Error: This command requires that you specify a pool with --pool or use "
+"--auto."
 msgstr "錯誤：這指令需要透過 --pool 指定集區，或使用 --auto 選項。"
 
 #: ../src/subscription_manager/managercli.py:1058
@@ -1626,7 +1617,8 @@ msgid "Error: --ondate is only applicable with --available"
 msgstr "錯誤：--ondate 僅適用於 --available"
 
 #: ../src/subscription_manager/managercli.py:1503
-msgid "Error: --servicelevel is only applicable with --available or --consumed"
+msgid ""
+"Error: --servicelevel is only applicable with --available or --consumed"
 msgstr "錯誤：--servicelevel 只能與 --available 或 --consumed 合用"
 
 #: ../src/subscription_manager/managercli.py:1526
@@ -1638,7 +1630,8 @@ msgid "    Installed Product Status"
 msgstr "...已安裝之產品的狀態"
 
 #: ../src/subscription_manager/managercli.py:1546
-msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgid ""
+"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr "輸入的日期無效。日期格式應為 YYYY-MM-DD（例如："
 
 #: ../src/subscription_manager/managercli.py:1559
@@ -1820,8 +1813,7 @@ msgid ""
 "Redeeming the subscription may take a few minutes.\n"
 "Please provide an email address to receive notification\n"
 "when the redemption is complete."
-msgstr ""
-"兌換訂閱服務可能會花上幾分鐘。請提供電子郵件信箱，好在兌換服務完成時通知您。"
+msgstr "兌換訂閱服務可能會花上幾分鐘。請提供電子郵件信箱，好在兌換服務完成時通知您。"
 
 #: ../src/subscription_manager/gui/data/redeem.glade.h:7
 msgid "Subscription Redemption"
@@ -2292,6 +2284,23 @@ msgstr "產品 ID 文字"
 msgid "Product Text"
 msgstr "產品文字"
 
+#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:1
+msgid ""
+"After opening Subscription Manager, manually subscribe via the <b>All "
+"Available Subscriptions</b> tab."
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
+msgid "Manual Configuration Required"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:3
+msgid ""
+"You will need to manually subscribe this system after completing firstboot. "
+"Subscription Manager can be found in <b>System > Administration > "
+"Subscription Manager</b>."
+msgstr ""
+
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1
 msgid ""
 "<small>Your system's SLA preference is followed when subscribing to new "
@@ -2393,8 +2402,7 @@ msgstr "%s [OPTIONS]"
 #: ../src/rhn-migrate-classic-to-rhsm:130
 msgid ""
 "\n"
-"This machine appears to be already registered to Certificate-based RHN.  "
-"Exiting."
+"This machine appears to be already registered to Certificate-based RHN.  Exiting."
 msgstr ""
 "\n"
 "這部電腦已經向以認證為基礎的 RHN 訂閱。退出中。"
@@ -2403,12 +2411,10 @@ msgstr ""
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"profile details."
+"Please visit https://access.redhat.com/management/consumers/%s to view the profile details."
 msgstr ""
 "\n"
-"請參閱 https://access.redhat.com/management/consumers/%s 以檢視設定檔的詳細資"
-"料。"
+"請參閱 https://access.redhat.com/management/consumers/%s 以檢視設定檔的詳細資料。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:138
 #, c-format
@@ -2424,8 +2430,8 @@ msgstr ""
 #: ../src/rhn-migrate-classic-to-rhsm:151
 #, c-format
 msgid ""
-"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
-"more details."
+"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for"
+" more details."
 msgstr "無法連上憑證伺服器：%s。詳情請見 /var/log/rhsm/rhsm.log。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:159
@@ -2496,8 +2502,7 @@ msgstr "正試圖自動訂閱適當的訂閱服務……"
 #: ../src/rhn-migrate-classic-to-rhsm:305
 msgid ""
 "\n"
-"Unable to auto-subscribe.  Do your existing subscriptions match the products "
-"installed on this system?"
+"Unable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?"
 msgstr ""
 "\n"
 "無法自動訂閱。您現有的訂閱服務是否與系統上安裝的產品相符？"
@@ -2506,12 +2511,10 @@ msgstr ""
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"details, and to make changes if necessary."
+"Please visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary."
 msgstr ""
 "\n"
-"要檢視詳情，並視需要變更，請參閱 https://access.redhat.com/management/"
-"consumers/%s。"
+"要檢視詳情，並視需要變更，請參閱 https://access.redhat.com/management/consumers/%s。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:332
 msgid "Channels not available on RHSM:"
@@ -2520,8 +2523,7 @@ msgstr "RHSM 上找不到頻道："
 #: ../src/rhn-migrate-classic-to-rhsm:339
 msgid ""
 "\n"
-"Unrecognized channels. Channel to product certificate mapping missing for "
-"these channels."
+"Unrecognized channels. Channel to product certificate mapping missing for these channels."
 msgstr ""
 "\n"
 "無法辨識的頻道。找不到這些頻道的頻道與產品憑證對應。"
@@ -2561,11 +2563,9 @@ msgstr ""
 
 #: ../src/rhn-migrate-classic-to-rhsm:410
 msgid ""
-"Please ensure system is subscribed to entitlements, and alter /etc/yum.repos."
-"d/redhat.repo to enable extra repositories."
-msgstr ""
-"請確定系統已向權利訂閱，並修改 /etc/yum.repos.d/redhat.repo 已啟用額外的軟體"
-"庫。"
+"Please ensure system is subscribed to entitlements, and alter "
+"/etc/yum.repos.d/redhat.repo to enable extra repositories."
+msgstr "請確定系統已向權利訂閱，並修改 /etc/yum.repos.d/redhat.repo 已啟用額外的軟體庫。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:444
 msgid "RHN Username: "
@@ -2616,9 +2616,7 @@ msgid ""
 "In order for Subscription Manager to provide your system with updates, your "
 "system must be registered with RHN. Please enter your Red Hat login to "
 "ensure your system is up-to-date."
-msgstr ""
-"為了要讓訂閱管理員為提供系統更新，您的系統必須向 RHN 註冊。請輸入 Red Hat 的"
-"登入名稱，已確保系統處於最新狀態。"
+msgstr "為了要讓訂閱管理員為提供系統更新，您的系統必須向 RHN 註冊。請輸入 Red Hat 的登入名稱，已確保系統處於最新狀態。"
 
 #: ../src/rhsm_icon.c:209 ../src/rhsm_icon.c:211
 msgid "Invalid or Missing Entitlement Certificates"

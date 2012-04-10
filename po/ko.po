@@ -3,7 +3,7 @@
 # Language ko-KR translations for l package.
 # Copyright (C) 2011 THE l'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the l package.
-#
+# 
 # Automatically generated, 2011.
 # Eun-Ju Kim <eukim@redhat.com>, 2011.
 # eukim <eukim@fedoraproject.org>, 2012. #zanata
@@ -176,31 +176,25 @@ msgstr "이 시스템은 RHN 클래식에 등록됩니다 "
 #, python-format
 msgid ""
 "You have <b>%s</b> products with <i>invalid</i> entitlement certificates."
-msgstr ""
-"<i>유효하지 않은</i> 인타이틀먼트 인증서를 갖는 <b>%s</b> 개의 제품이 있습니"
-"다. "
+msgstr "<i>유효하지 않은</i> 인타이틀먼트 인증서를 갖는 <b>%s</b> 개의 제품이 있습니다. "
 
 #: ../src/subscription_manager/gui/installedtab.py:293
 msgid ""
 "You have <b>1</b> product with an <i>invalid</i> entitlement certificate."
-msgstr ""
-"<i>유효하지 않은</i> 인타이틀먼트 인증서를 갖는 <b>1</b> 개의 제품이 있습니"
-"다. "
+msgstr "<i>유효하지 않은</i> 인타이틀먼트 인증서를 갖는 <b>1</b> 개의 제품이 있습니다. "
 
 #: ../src/subscription_manager/gui/installedtab.py:300
 #, python-format
 msgid ""
 "You have <b>%s</b> products in need of <i>additional</i> entitlement "
 "certificates."
-msgstr ""
-"<i>추가</i> 인타이틀먼트 인증서가 필요한 <b>%s</b> 개의 제품이 있습니다. "
+msgstr "<i>추가</i> 인타이틀먼트 인증서가 필요한 <b>%s</b> 개의 제품이 있습니다. "
 
 #: ../src/subscription_manager/gui/installedtab.py:304
 msgid ""
 "You have <b>1</b> product in need of <i>additional</i> entitlement "
 "certificates."
-msgstr ""
-"<i>추가</i> 인타이틀먼트 인증서가 필요한 <b>1</b> 개의 제품이 있습니다. "
+msgstr "<i>추가</i> 인타이틀먼트 인증서가 필요한 <b>1</b> 개의 제품이 있습니다. "
 
 #: ../src/subscription_manager/gui/installedtab.py:312
 #, python-format
@@ -236,8 +230,7 @@ msgstr "인증서를 선택하셔야 합니다. "
 #: ../src/subscription_manager/gui/importsub.py:77
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
-msgstr ""
-"%s 은(는) 유효한 인증서 파일이 아닙니다. 유효한 인증서를 업로드하십시오. "
+msgstr "%s 은(는) 유효한 인증서 파일이 아닙니다. 유효한 인증서를 업로드하십시오. "
 
 #: ../src/subscription_manager/gui/importsub.py:85
 #: ../src/subscription_manager/managercli.py:1303
@@ -261,9 +254,7 @@ msgstr "서브스크립션 목록 "
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
-msgstr ""
-"서브스크립션 어시스턴트 표시 오류. 자세한 정보는 /var/log/rhsm/rhsm.log에서 "
-"확인하십시오. "
+msgstr "서브스크립션 어시스턴트 표시 오류. 자세한 정보는 /var/log/rhsm/rhsm.log에서 확인하십시오. "
 
 #: ../src/subscription_manager/gui/subscription_assistant.py:264
 msgid "Unable to search for subscriptions"
@@ -371,42 +362,38 @@ msgstr "아니요 "
 
 #: ../src/subscription_manager/gui/autobind.py:320
 msgid "Unable to auto-subscribe, server does not support service levels."
-msgstr ""
-"자동 등록을 실행할 수 없습니다, 서버가 서비스 레벨을 지원하지 않습니다. "
+msgstr "자동 등록을 실행할 수 없습니다, 서버가 서비스 레벨을 지원하지 않습니다. "
 
 #: ../src/subscription_manager/gui/autobind.py:325
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:263
 msgid ""
-"No installed products on system. No need to update certificates at this time."
-msgstr ""
-"시스템에 설치된 제품이 없습니다. 현재로서는 인증서를 업데이트할 필요가 없습니"
-"다. "
+"No installed products on system. No need to update certificates at this "
+"time."
+msgstr "시스템에 설치된 제품이 없습니다. 현재로서는 인증서를 업데이트할 필요가 없습니다. "
 
 #: ../src/subscription_manager/gui/autobind.py:330
 msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "certificates at this time."
-msgstr ""
-"설치된 모든 제품에는 유효한 인타이틀먼트가 적용됩니다. 인증서를 업데이트할 필"
-"요가 없습니다. "
+msgstr "설치된 모든 제품에는 유효한 인타이틀먼트가 적용됩니다. 인증서를 업데이트할 필요가 없습니다. "
 
 #: ../src/subscription_manager/gui/autobind.py:363
 #, python-format
 msgid ""
-"Unable to subscribe to any additional products at current service level: %s. "
-"Please use the \"All Available Subscriptions\" tab to manually entitle this "
-"system."
+"Unable to subscribe to any additional products at current service level: %s."
+" Please use the \"All Available Subscriptions\" tab to manually entitle this"
+" system."
 msgstr ""
-"현재 서비스 레벨에서 추가 제품에 등록할 수 없습니다: %s. \"사용 가능한 모든 "
-"서브스크립션\" 탭에서 수동으로 시스템에 인타이틀먼트를 부여합니다. "
+"현재 서비스 레벨에서 추가 제품에 등록할 수 없습니다: %s. \"사용 가능한 모든 서브스크립션\" 탭에서 수동으로 시스템에 "
+"인타이틀먼트를 부여합니다. "
 
 #: ../src/subscription_manager/gui/autobind.py:375
 msgid ""
 "No service levels will cover all installed products. Please use the \"All "
 "Available Subscriptions\" tab to manually entitle this system."
 msgstr ""
-"설치된 모든 제품에 적용되는 서비스 레벨이 없습니다. \"사용 가능한 모든 서브스"
-"크립션\" 탭에서 수동으로 시스템에 인타이틀먼트를 부여합니다. "
+"설치된 모든 제품에 적용되는 서비스 레벨이 없습니다. \"사용 가능한 모든 서브스크립션\" 탭에서 수동으로 시스템에 인타이틀먼트를 "
+"부여합니다. "
 
 #: ../src/subscription_manager/gui/autobind.py:489
 msgid "Error subscribing:"
@@ -464,6 +451,7 @@ msgid "RHSM Subscriptions Management"
 msgstr "RHSM 서브스크립션 관리 "
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:32
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_manually_subscribe.py:41
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:24
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:25
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:47
@@ -475,46 +463,47 @@ msgstr "인타이틀먼트 등록 "
 msgid "Entitlement Platform Registration"
 msgstr "인타이틀먼트 플랫폼 등록 "
 
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_manually_subscribe.py:42
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:240
+msgid "Manual Configuraton Required"
+msgstr ""
+
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:309
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:282
 msgid "Confirm Subscriptions"
 msgstr "서브스크립션 확인 "
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:26
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:299
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:275
 msgid "Service Level"
 msgstr "서비스 레벨 "
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:277
-msgid ""
-"Unable to auto-subscribe, server does not support service levels. Please run "
-"'Subscription Manager' to manually subscribe."
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:244
+msgid "You have opted to skip auto-subscribe."
 msgstr ""
-"자동 등록할 수 없습니다. 서버가 서비스 레벨을 지원하지 않습니다. '서브스크립"
-"션 관리자'를 실행하여 수동으로 등록하십시오. "
 
-#. XXX show a dialog about manually subscribing
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:290
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:259
+msgid ""
+"Unable to auto-subscribe, server does not support service levels. Please run"
+" 'Subscription Manager' to manually subscribe."
+msgstr ""
+"자동 등록할 수 없습니다. 서버가 서비스 레벨을 지원하지 않습니다. '서브스크립션 관리자'를 실행하여 수동으로 등록하십시오. "
+
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:267
 msgid ""
 "All installed products are covered by valid entitlements. Please run "
 "'Subscription Manager' to subscribe to additional products."
-msgstr ""
-"설치된 모든 제품에는 유효한 인타이틀먼트가 적용됩니다. '서브스크립션 관리"
-"자'를 실행하여 추가 제품을 등록하십시오. "
+msgstr "설치된 모든 제품에는 유효한 인타이틀먼트가 적용됩니다. '서브스크립션 관리자'를 실행하여 추가 제품을 등록하십시오. "
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:303
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:279
 #, python-format
 msgid ""
 "Unable to subscribe to any additional products at current service level: %s"
 msgstr "현재 서비스 레벨에서 추가 제품에 등록할 수 없음: %s"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:311
-msgid ""
-"No service levels will cover all installed products. Please run "
-"'Subscription Manager' to manually entitle this system."
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+msgid "No service levels will cover all installed products. "
 msgstr ""
-"모든 설치된 제품에 적용되는 서비스 레벨이 없습니다. '서브스크립션 관리자'를 "
-"실행하여 수동으로 시스템에 인타이틀먼트를 부여합니다. "
 
 #: ../src/subscription_manager/gui/redeem.py:54
 #, python-format
@@ -523,11 +512,9 @@ msgstr "서브스크립션 교환 중 오류 발생: %s "
 
 #: ../src/subscription_manager/gui/utils.py:59
 msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
-msgstr ""
-"네트워크 오류, 서버에 연결할 수 없음. 보다 자세한 정보는 /var/log/rhsm/rhsm."
-"log에서 확인하십시오.  "
+"Network error, unable to connect to server. Please see "
+"/var/log/rhsm/rhsm.log for more information."
+msgstr "네트워크 오류, 서버에 연결할 수 없음. 보다 자세한 정보는 /var/log/rhsm/rhsm.log에서 확인하십시오.  "
 
 #: ../src/subscription_manager/gui/utils.py:62
 #, python-format
@@ -539,16 +526,17 @@ msgstr "서버 ID를 확인할 수 없음: %s"
 #: ../src/subscription_manager/gui/utils.py:67
 #: ../src/subscription_manager/managercli.py:109
 msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
+"Network error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr "네트워크 오류. 연결 정보 또는 /var/log/rhsm/rhsm.log를 확인하십시오. "
 
-#. This is what happens when there's an issue with the server on the other side of the wire
+#. This is what happens when there's an issue with the server on the other
+#. side of the wire
 #: ../src/subscription_manager/gui/utils.py:70
 #: ../src/subscription_manager/managercli.py:113
 msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
+"Remote server error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr "원격 서버 오류. 연결 정보 또는 /var/log/rhsm/rhsm.log를 확인하십시오. "
 
 #: ../src/subscription_manager/gui/utils.py:91
@@ -629,8 +617,7 @@ msgstr "UUID를 찾는 도중 오류 발생: %s"
 msgid ""
 "Error updating system data, see /var/log/rhsm/rhsm.log for more details."
 msgstr ""
-"시스템 데이터를 업데이트하는 도중 오류 발생. 보다 자세한 내용은 /var/log/"
-"rhsm/rhsm.log에서 확인하십시오. "
+"시스템 데이터를 업데이트하는 도중 오류 발생. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 확인하십시오. "
 
 #: ../src/subscription_manager/branding/__init__.py:81
 msgid "Register the machine to the server"
@@ -683,16 +670,16 @@ msgid ""
 "Based technology. Red Hat recommends (except in a few cases) that customers "
 "only register with RHN once."
 msgstr ""
-"사용하시는 도구는 RHN 인증서 기반 기술을 사용하여 다시 등록하려 합니다. Red "
-"Hat은 (일부 경우 제외) RHN에 한 번만 등록할 것을 권장합니다. "
+"사용하시는 도구는 RHN 인증서 기반 기술을 사용하여 다시 등록하려 합니다. Red Hat은 (일부 경우 제외) RHN에 한 번만 등록할"
+" 것을 권장합니다. "
 
 #: ../src/subscription_manager/branding/redhat_branding.py:17
 msgid ""
 "To learn more about RHN registration and technologies please consult this "
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"RHN 등록 및 기술에 대한 보다 자세한 내용은 Knowledge Base 문서를 참조하십시"
-"오: https://access.redhat.com/kb/docs/DOC-45563"
+"RHN 등록 및 기술에 대한 보다 자세한 내용은 Knowledge Base 문서를 참조하십시오: "
+"https://access.redhat.com/kb/docs/DOC-45563"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:20
 msgid "Please enter your Red Hat Network account information:"
@@ -700,10 +687,9 @@ msgstr "Red Hat Network 계정 정보를 입력하십시오: "
 
 #: ../src/subscription_manager/branding/redhat_branding.py:22
 msgid ""
-"Tip: Forgot your login or password? Look it up at http://red.ht/lost_password"
-msgstr ""
-"정보: 로그인 또는 암호를 잊어버리셨습니까? http://red.ht/lost_password에서 찾"
-"아보십시오. "
+"Tip: Forgot your login or password? Look it up at "
+"http://red.ht/lost_password"
+msgstr "정보: 로그인 또는 암호를 잊어버리셨습니까? http://red.ht/lost_password에서 찾아보십시오. "
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
@@ -981,11 +967,11 @@ msgstr "<b>사용자 %s은(는) 어떤 조직에도 등록할 수 없습니다.<
 
 #: ../src/subscription_manager/managercli.py:57
 msgid ""
-"This system is not yet registered. Try 'subscription-manager register --"
-"help' for more information."
+"This system is not yet registered. Try 'subscription-manager register "
+"--help' for more information."
 msgstr ""
-"이 시스템은 아직 등록되어 있지 않습니다. 보다 자세한 내용은 'subscription-"
-"manager register --help'를 사용하여 살펴보십시오. "
+"이 시스템은 아직 등록되어 있지 않습니다. 보다 자세한 내용은 'subscription-manager register --help'를 "
+"사용하여 살펴보십시오. "
 
 #: ../src/subscription_manager/managercli.py:71
 #, python-format
@@ -1075,8 +1061,7 @@ msgstr "암호: "
 #: ../src/subscription_manager/managercli.py:342
 msgid ""
 "Remove all local consumer and subscription data without affecting the server"
-msgstr ""
-"서버에 영향을 미치지 않고 모든 로컬 컨슈머 및 서브스크립션 데이터를 삭제 "
+msgstr "서버에 영향을 미치지 않고 모든 로컬 컨슈머 및 서브스크립션 데이터를 삭제 "
 
 #: ../src/subscription_manager/managercli.py:354
 msgid "All local data removed"
@@ -1209,9 +1194,7 @@ msgstr "사용 가능한 모든 서비스 레벨 목록 나열 "
 msgid ""
 "Error: you must register or specify --username and password to list service "
 "levels"
-msgstr ""
-"오류: 서비스 레벨 목록을 나열하려면 등록하거나 --username 및 --password를 지"
-"정하셔야 합니다. "
+msgstr "오류: 서비스 레벨 목록을 나열하려면 등록하거나 --username 및 --password를 지정하셔야 합니다. "
 
 #: ../src/subscription_manager/managercli.py:571
 msgid "Error: you must register or specify --org."
@@ -1365,10 +1348,9 @@ msgstr "서브스크립션 교환 완료 시 통지하기 위한 이메일 주�
 
 #: ../src/subscription_manager/managercli.py:924
 msgid ""
-"Optional language to use for email notification when subscription redemption "
-"is complete. Examples: en-us, de-de"
-msgstr ""
-"서브스크립션 교환 완료 시 이메일 통지에 사용할 언어 옵션. 예: en-us, de-de"
+"Optional language to use for email notification when subscription redemption"
+" is complete. Examples: en-us, de-de"
+msgstr "서브스크립션 교환 완료 시 이메일 통지에 사용할 언어 옵션. 예: en-us, de-de"
 
 #: ../src/subscription_manager/managercli.py:966
 msgid "Configure what os release to use"
@@ -1414,15 +1396,13 @@ msgstr "사용할 서브스크립션 수 "
 
 #: ../src/subscription_manager/managercli.py:1055
 msgid ""
-"Error: This command requires that you specify a pool with --pool or use --"
-"auto."
-msgstr ""
-"오류: 이 명령에서는 --pool 또는 --auto를 사용하여 풀을 지정해야 합니다."
+"Error: This command requires that you specify a pool with --pool or use "
+"--auto."
+msgstr "오류: 이 명령에서는 --pool 또는 --auto를 사용하여 풀을 지정해야 합니다."
 
 #: ../src/subscription_manager/managercli.py:1058
 msgid "Error: Only one of --pool or --auto may be used with this command."
-msgstr ""
-"오류: --pool 또는 --auto 중 하나만이 이 명령과 함께 사용될 수 있습니다. "
+msgstr "오류: --pool 또는 --auto 중 하나만이 이 명령과 함께 사용될 수 있습니다. "
 
 #: ../src/subscription_manager/managercli.py:1065
 msgid "Error: Quantity must be a positive integer."
@@ -1494,8 +1474,7 @@ msgstr "시스템 정보 업데이트 "
 
 #: ../src/subscription_manager/managercli.py:1231
 msgid "Error: Need either --list or --update, Try facts --help"
-msgstr ""
-"오류: --list 또는 --update가 필요합니다. facts --help를 시도해 보십시오 "
+msgstr "오류: --list 또는 --update가 필요합니다. facts --help를 시도해 보십시오 "
 
 #: ../src/subscription_manager/managercli.py:1255
 msgid "Successfully updated the system facts."
@@ -1509,8 +1488,7 @@ msgstr "도구 외부에서 제공된 인증서를 가져옵니다 "
 msgid ""
 "certificate file to import (for multiple imports, specify this option more "
 "than once)"
-msgstr ""
-"가져올 인증서 파일 (여러 개를 가져오기할 경우 이 옵션을 한 번 이상 지정함) "
+msgstr "가져올 인증서 파일 (여러 개를 가져오기할 경우 이 옵션을 한 번 이상 지정함) "
 
 #: ../src/subscription_manager/managercli.py:1272
 msgid "Error: At least one certificate is required"
@@ -1574,16 +1552,13 @@ msgstr "섹션: %s, 이름: %s"
 msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
-msgstr ""
-"오류: 설정을 구성 또는 삭제할 경우 --list는 다른 옵션과 함께 사용하지 않는 것"
-"이 좋습니다. "
+msgstr "오류: 설정을 구성 또는 삭제할 경우 --list는 다른 옵션과 함께 사용하지 않는 것이 좋습니다. "
 
 #: ../src/subscription_manager/managercli.py:1411
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
-msgstr ""
-"오류: 삭제하기 위한 설정 항목은 [section.name] 형식으로 지정해야 합니다 "
+msgstr "오류: 삭제하기 위한 설정 항목은 [section.name] 형식으로 지정해야 합니다 "
 
 #: ../src/subscription_manager/managercli.py:1422
 #, python-format
@@ -1628,9 +1603,7 @@ msgstr "제공될 경우 사용 가능한 서브스크립션 목록이 나타납
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
 "(example: %s)"
-msgstr ""
-"검색일, 기본값은 오늘로 되어 있으며, --available과 함께 사용해야 합니다 (예: "
-"%s) "
+msgstr "검색일, 기본값은 오늘로 되어 있으며, --available과 함께 사용해야 합니다 (예: %s) "
 
 #: ../src/subscription_manager/managercli.py:1484
 msgid "shows the subscriptions being consumed by this system."
@@ -1640,8 +1613,7 @@ msgstr "이 시스템에서 사용되고 있는 서브스크립션을 보여줍�
 msgid ""
 "if supplied then list shows only subscriptions matching the specified "
 "service level. "
-msgstr ""
-"제공될 경우 지정된 서비스 레벨과 일치하는 서브스크립션 목록만이 표시됩니다. "
+msgstr "제공될 경우 지정된 서비스 레벨과 일치하는 서브스크립션 목록만이 표시됩니다. "
 
 #: ../src/subscription_manager/managercli.py:1489
 msgid "if supplied with --available then all subscriptions are returned"
@@ -1656,7 +1628,8 @@ msgid "Error: --ondate is only applicable with --available"
 msgstr "오류: --ondate는 --available과만 사용 가능     "
 
 #: ../src/subscription_manager/managercli.py:1503
-msgid "Error: --servicelevel is only applicable with --available or --consumed"
+msgid ""
+"Error: --servicelevel is only applicable with --available or --consumed"
 msgstr "오류: --servicelevel은  --available 또는 --consumed와만 사용 가능 "
 
 #: ../src/subscription_manager/managercli.py:1526
@@ -1668,10 +1641,9 @@ msgid "    Installed Product Status"
 msgstr "설치된 제품 상태 "
 
 #: ../src/subscription_manager/managercli.py:1546
-msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-msgstr ""
-"입력하신 날짜가 유효하지 않습니다. YYYY-MM-DD 형식으로 날짜를 입력해 주십시"
-"오. (예: "
+msgid ""
+"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgstr "입력하신 날짜가 유효하지 않습니다. YYYY-MM-DD 형식으로 날짜를 입력해 주십시오. (예: "
 
 #: ../src/subscription_manager/managercli.py:1559
 msgid "No available subscription pools to list"
@@ -2325,20 +2297,34 @@ msgstr "제품 ID 텍스트 "
 msgid "Product Text"
 msgstr "제품 텍스트 "
 
+#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:1
+msgid ""
+"After opening Subscription Manager, manually subscribe via the <b>All "
+"Available Subscriptions</b> tab."
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
+msgid "Manual Configuration Required"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:3
+msgid ""
+"You will need to manually subscribe this system after completing firstboot. "
+"Subscription Manager can be found in <b>System > Administration > "
+"Subscription Manager</b>."
+msgstr ""
+
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1
 msgid ""
 "<small>Your system's SLA preference is followed when subscribing to new "
 "products</small>"
-msgstr ""
-"<small>새 제품에 등록할 때 시스템의 SLA 환경 설정은 다음과 같습니다</small>"
+msgstr "<small>새 제품에 등록할 때 시스템의 SLA 환경 설정은 다음과 같습니다</small>"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid ""
 "<small>Your system's release preference is followed when installing and "
 "updating packages.</small>"
-msgstr ""
-"<small>패키지를 설치 및 업데이트할 때 시스템의 릴리즈 환경 설정은 다음과 같습"
-"니다.</small>"
+msgstr "<small>패키지를 설치 및 업데이트할 때 시스템의 릴리즈 환경 설정은 다음과 같습니다.</small>"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Release version:"
@@ -2393,8 +2379,7 @@ msgstr "root 사용자로 실행해야 함 \n"
 msgid ""
 "Could not read installation number from /etc/sysconfig/rhn/install-num.  "
 "Aborting."
-msgstr ""
-"/etc/sysconfig/rhn/install-num에서 설치 번호를 읽을 수 없습니다. 중지 중 "
+msgstr "/etc/sysconfig/rhn/install-num에서 설치 번호를 읽을 수 없습니다. 중지 중 "
 
 #: ../src/install-num-migrate-to-rhsm:109
 #, c-format
@@ -2414,16 +2399,13 @@ msgstr "RHSM에서 사용 가능하지 않은 채널 무시 "
 msgid ""
 "Don't launch the GUI tool to subscribe the system, just use the CLI tool "
 "which will do it automatically"
-msgstr ""
-"시스템을 등록하기 위해  도구를 시작하지 않고 자동으로 실행되는 CLI  도구를 사"
-"용합니다 "
+msgstr "시스템을 등록하기 위해  도구를 시작하지 않고 자동으로 실행되는 CLI  도구를 사용합니다 "
 
 #: ../src/rhn-migrate-classic-to-rhsm:66
 msgid ""
 "Don't execute the autosubscribe option while registering with subscription "
 "manager."
-msgstr ""
-"서브스크립션 관리자로 등록하는 동안 자동 등록 옵션을 실행할 수 없습니다. "
+msgstr "서브스크립션 관리자로 등록하는 동안 자동 등록 옵션을 실행할 수 없습니다. "
 
 #: ../src/rhn-migrate-classic-to-rhsm:69
 #, c-format
@@ -2433,8 +2415,7 @@ msgstr "%s [OPTIONS]"
 #: ../src/rhn-migrate-classic-to-rhsm:130
 msgid ""
 "\n"
-"This machine appears to be already registered to Certificate-based RHN.  "
-"Exiting."
+"This machine appears to be already registered to Certificate-based RHN.  Exiting."
 msgstr ""
 "\n"
 "이 시스템은 인증서 기반 RHN에 이미 등록되어 있습니다. 종료하고 있습니다. "
@@ -2443,12 +2424,10 @@ msgstr ""
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"profile details."
+"Please visit https://access.redhat.com/management/consumers/%s to view the profile details."
 msgstr ""
 "\n"
-"https://access.redhat.com/management/consumers/%s에서 프로파일 정보를 확인하"
-"십시오. "
+"https://access.redhat.com/management/consumers/%s에서 프로파일 정보를 확인하십시오. "
 
 #: ../src/rhn-migrate-classic-to-rhsm:138
 #, c-format
@@ -2464,17 +2443,13 @@ msgstr ""
 #: ../src/rhn-migrate-classic-to-rhsm:151
 #, c-format
 msgid ""
-"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"인증서 서버에 연결할 수 없습니다: %s. 보다 자세한 내용은 /var/log/rhsm/rhsm."
-"log에서 참조하십시오. "
+"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for"
+" more details."
+msgstr "인증서 서버에 연결할 수 없습니다: %s. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 참조하십시오. "
 
 #: ../src/rhn-migrate-classic-to-rhsm:159
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
-msgstr ""
-"RHN 클래식에서 사용자 역할을 지정하는 도중 문제가 발생했습니다. 종료하고 있습"
-"니다. "
+msgstr "RHN 클래식에서 사용자 역할을 지정하는 도중 문제가 발생했습니다. 종료하고 있습니다. "
 
 #: ../src/rhn-migrate-classic-to-rhsm:161
 msgid "You must be an org admin to successfully run this script."
@@ -2486,21 +2461,17 @@ msgstr "이 시스템은 어느 채널에도 연결되어 있지 않습니다. "
 
 #: ../src/rhn-migrate-classic-to-rhsm:170
 msgid "Unable to locate SystemId file. Is this system registered?"
-msgstr ""
-"SystemId 파일 위치를 지정할 수 없습니다. 이 시스템은 등록되어 있습니까? "
+msgstr "SystemId 파일 위치를 지정할 수 없습니다. 이 시스템은 등록되어 있습니까? "
 
 #: ../src/rhn-migrate-classic-to-rhsm:173
 msgid "Problem encountered getting the list of subscribed channels.  Exiting."
-msgstr ""
-"등록된 채널 목록을 가져오는 도중 문제가 발생했습니다. 종료하고 있습니다. "
+msgstr "등록된 채널 목록을 가져오는 도중 문제가 발생했습니다. 종료하고 있습니다. "
 
 #: ../src/rhn-migrate-classic-to-rhsm:205
 msgid ""
 "Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
 "details."
-msgstr ""
-"RHN 클래식에 인증할 수 없습니다. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에"
-"서 참조하십시오. "
+msgstr "RHN 클래식에 인증할 수 없습니다. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 참조하십시오. "
 
 #: ../src/rhn-migrate-classic-to-rhsm:219
 msgid "System successfully unregistered from RHN Classic."
@@ -2544,23 +2515,19 @@ msgstr "적절한 서브스크립션에 자동 등록 시도하고 있습니다 
 #: ../src/rhn-migrate-classic-to-rhsm:305
 msgid ""
 "\n"
-"Unable to auto-subscribe.  Do your existing subscriptions match the products "
-"installed on this system?"
+"Unable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?"
 msgstr ""
 "\n"
-"자동 등록할 수 없습니다. 기존 서브스크립션이 시스템에 설치된 제품과 일치합니"
-"까? "
+"자동 등록할 수 없습니다. 기존 서브스크립션이 시스템에 설치된 제품과 일치합니까? "
 
 #: ../src/rhn-migrate-classic-to-rhsm:306
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"details, and to make changes if necessary."
+"Please visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary."
 msgstr ""
 "\n"
-"https://access.redhat.com/management/consumers/%s에서 정보를 확인하고 필요한 "
-"사항을 변경하십시오.  "
+"https://access.redhat.com/management/consumers/%s에서 정보를 확인하고 필요한 사항을 변경하십시오.  "
 
 #: ../src/rhn-migrate-classic-to-rhsm:332
 msgid "Channels not available on RHSM:"
@@ -2569,12 +2536,10 @@ msgstr "RHSM에서 사용 가능하지 않은 채널:"
 #: ../src/rhn-migrate-classic-to-rhsm:339
 msgid ""
 "\n"
-"Unrecognized channels. Channel to product certificate mapping missing for "
-"these channels."
+"Unrecognized channels. Channel to product certificate mapping missing for these channels."
 msgstr ""
 "\n"
-"채널을 인식할 수 없습니다. 이 채널에 대한 제품 인증서 매핑이 누락되어 있습니"
-"다. "
+"채널을 인식할 수 없습니다. 이 채널에 대한 제품 인증서 매핑이 누락되어 있습니다. "
 
 #: ../src/rhn-migrate-classic-to-rhsm:346
 msgid ""
@@ -2611,11 +2576,11 @@ msgstr ""
 
 #: ../src/rhn-migrate-classic-to-rhsm:410
 msgid ""
-"Please ensure system is subscribed to entitlements, and alter /etc/yum.repos."
-"d/redhat.repo to enable extra repositories."
+"Please ensure system is subscribed to entitlements, and alter "
+"/etc/yum.repos.d/redhat.repo to enable extra repositories."
 msgstr ""
-"시스템이 인타이틀먼트에 등록되었는지를 확인하고 /etc/yum.repos.d/redhat.repo"
-"를 변경하여 추가 리포지터리를 활성화합니다. "
+"시스템이 인타이틀먼트에 등록되었는지를 확인하고 /etc/yum.repos.d/redhat.repo를 변경하여 추가 리포지터리를 "
+"활성화합니다. "
 
 #: ../src/rhn-migrate-classic-to-rhsm:444
 msgid "RHN Username: "
@@ -2667,9 +2632,8 @@ msgid ""
 "system must be registered with RHN. Please enter your Red Hat login to "
 "ensure your system is up-to-date."
 msgstr ""
-"서브스크립션 관리자가 시스템을 업데이트하게 하려면 시스템을 반드시 RHN으로 등"
-"록해야 합니다. Red Hat 로그인을 입력하여 시스템이 업데이트되어 있는지 확인하"
-"십시오. "
+"서브스크립션 관리자가 시스템을 업데이트하게 하려면 시스템을 반드시 RHN으로 등록해야 합니다. Red Hat 로그인을 입력하여 시스템이 "
+"업데이트되어 있는지 확인하십시오. "
 
 #: ../src/rhsm_icon.c:209 ../src/rhsm_icon.c:211
 msgid "Invalid or Missing Entitlement Certificates"
@@ -2677,8 +2641,7 @@ msgstr "유효하지 않거나 누락된 인타이틀먼트 인증서 "
 
 #: ../src/rhsm_icon.c:213
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr ""
-"시스템에는 하나 이상의 유요한 인타이틀먼트 인증서가 누락되어 있습니다.  "
+msgstr "시스템에는 하나 이상의 유요한 인타이틀먼트 인증서가 누락되어 있습니다.  "
 
 #: ../src/rhsm_icon.c:216 ../src/rhsm_icon.c:217
 msgid "Partially Entitled Products"
@@ -2688,9 +2651,7 @@ msgstr "부분적 권한을 갖는 제품 "
 msgid ""
 "This system is missing one or more valid entitlement certificates to fully "
 "cover its products"
-msgstr ""
-"이 시스템에는 제품을 완전하게 커버할 하나 이상의 유효한 인타이틀먼트 인증서"
-"가 누락되어 있습니다. "
+msgstr "이 시스템에는 제품을 완전하게 커버할 하나 이상의 유효한 인타이틀먼트 인증서가 누락되어 있습니다. "
 
 #: ../src/rhsm_icon.c:224
 msgid "Some of the system's subscriptions are about to expire"

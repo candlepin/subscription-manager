@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the l package.
 # Automatically generated, 2011.
 # Rajesh Ranjan <rranjan@redhat.com>, 2011.
-# rajesh <rajesh@fedoraproject.org>, 2012. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
@@ -173,12 +172,16 @@ msgstr "तंत्र RHN क्लासिक में पंजीकृ�
 #, python-format
 msgid ""
 "You have <b>%s</b> products with <i>invalid</i> entitlement certificates."
-msgstr "आपके पास <b>%s</b> उत्पाद <i>अवैध</i> एंटाइटेलमेंट प्रमाणपत्र के साथ रहना चाहिए."
+msgstr ""
+"आपके पास <b>%s</b> उत्पाद <i>अवैध</i> एंटाइटेलमेंट प्रमाणपत्र के साथ रहना "
+"चाहिए."
 
 #: ../src/subscription_manager/gui/installedtab.py:293
 msgid ""
 "You have <b>1</b> product with an <i>invalid</i> entitlement certificate."
-msgstr "आपके पास <b>1</b> उत्पाद <i>अवैध</i> एंटाइटेलमेंट प्रमाणपत्र के साथ रहना चाहिए."
+msgstr ""
+"आपके पास <b>1</b> उत्पाद <i>अवैध</i> एंटाइटेलमेंट प्रमाणपत्र के साथ रहना "
+"चाहिए."
 
 #: ../src/subscription_manager/gui/installedtab.py:300
 #, python-format
@@ -186,14 +189,16 @@ msgid ""
 "You have <b>%s</b> products in need of <i>additional</i> entitlement "
 "certificates."
 msgstr ""
-"आपके पास <b>%s</b> उत्पाद हैं <i>अतिरिक्त एंटाइटेलमेंट</i> प्रमाणपत्र की जरूरत के मुताबिक."
+"आपके पास <b>%s</b> उत्पाद हैं <i>अतिरिक्त एंटाइटेलमेंट</i> प्रमाणपत्र की "
+"जरूरत के मुताबिक."
 
 #: ../src/subscription_manager/gui/installedtab.py:304
 msgid ""
 "You have <b>1</b> product in need of <i>additional</i> entitlement "
 "certificates."
 msgstr ""
-"आपके पास <b>%s</b> उत्पाद हैं <i>अतिरिक्त एंटाइटेलमेंट</i> प्रमाणपत्र की जरूरत के मुताबिक."
+"आपके पास <b>%s</b> उत्पाद हैं <i>अतिरिक्त एंटाइटेलमेंट</i> प्रमाणपत्र की "
+"जरूरत के मुताबिक."
 
 #: ../src/subscription_manager/gui/installedtab.py:312
 #, python-format
@@ -229,7 +234,8 @@ msgstr "आपको जरूर कोई प्रमाणपत्र च�
 #: ../src/subscription_manager/gui/importsub.py:77
 #, python-format
 msgid "%s is not a valid certificate file. Please upload a valid certificate."
-msgstr "%s एक वैध प्रमाणपत्र फ़ाइल नहीं है. कृपया एक वैध प्रमाणपत्र अपलोड करें."
+msgstr ""
+"%s एक वैध प्रमाणपत्र फ़ाइल नहीं है. कृपया एक वैध प्रमाणपत्र अपलोड करें."
 
 #: ../src/subscription_manager/gui/importsub.py:85
 #: ../src/subscription_manager/managercli.py:1303
@@ -254,7 +260,8 @@ msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
 msgstr ""
-"सदस्यता मदद दिखाने में त्रुटि. कृपया /var/log/rhsm/rhsm.log को अधिक सूचना के लिए देखें."
+"सदस्यता मदद दिखाने में त्रुटि. कृपया /var/log/rhsm/rhsm.log को अधिक सूचना के"
+" लिए देखें."
 
 #: ../src/subscription_manager/gui/subscription_assistant.py:264
 msgid "Unable to search for subscriptions"
@@ -365,36 +372,39 @@ msgid "Unable to auto-subscribe, server does not support service levels."
 msgstr "स्वतः सदस्यता में असमर्थ, सर्वर सेवा स्तर का समर्थन नहीं रहता है."
 
 #: ../src/subscription_manager/gui/autobind.py:325
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:263
 msgid ""
-"No installed products on system. No need to update certificates at this time."
-msgstr "तंत्र पर कोई संस्थापित उत्पाद नहीं. इस समय प्रमाणपत्र अद्यतन की कोई जरूरत नहीं."
+"No installed products on system. No need to update certificates at this "
+"time."
+msgstr ""
+"तंत्र पर कोई संस्थापित उत्पाद नहीं. इस समय प्रमाणपत्र अद्यतन की कोई जरूरत "
+"नहीं."
 
 #: ../src/subscription_manager/gui/autobind.py:330
 msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "certificates at this time."
 msgstr ""
-"वैध एंटाइटेलमेंट के द्वारा सभी संस्थापित उत्पाद कवर किए गए जाते हैं. इस समय प्रमाणपत्र "
-"अद्यतन करने की कोई जरूरत नहीं."
+"वैध एंटाइटेलमेंट के द्वारा सभी संस्थापित उत्पाद कवर किए गए जाते हैं. इस समय "
+"प्रमाणपत्र अद्यतन करने की कोई जरूरत नहीं."
 
 #: ../src/subscription_manager/gui/autobind.py:363
 #, python-format
 msgid ""
-"Unable to subscribe to any additional products at current service level: %s. "
-"Please use the \"All Available Subscriptions\" tab to manually entitle this "
-"system."
+"Unable to subscribe to any additional products at current service level: %s."
+" Please use the \"All Available Subscriptions\" tab to manually entitle this"
+" system."
 msgstr ""
-"किसी अतिरिक्त उत्पाद में सदस्यता लेने में असमर्थ: %s. कृपया \"सभी उपलब्ध सदस्यताओं\" टैब का "
-"उपयोग इस तंत्र को दस्ती रूप से एंटाइटेल करने के लिए करें."
+"किसी अतिरिक्त उत्पाद में सदस्यता लेने में असमर्थ: %s. कृपया \"सभी उपलब्ध "
+"सदस्यताओं\" टैब का उपयोग इस तंत्र को दस्ती रूप से एंटाइटेल करने के लिए करें."
 
 #: ../src/subscription_manager/gui/autobind.py:375
 msgid ""
 "No service levels will cover all installed products. Please use the \"All "
 "Available Subscriptions\" tab to manually entitle this system."
 msgstr ""
-"कोई सेवा स्तर सभी संस्थापित उत्पादों को कवर नहीं करेगा. कृपया \"सभी उपलब्ध सदस्यताओं\" "
-"टैब का उपयोग इस तंत्र को दस्ती रूप से एंटाइटेल करने के लिए करें."
+"कोई सेवा स्तर सभी संस्थापित उत्पादों को कवर नहीं करेगा. कृपया \"सभी उपलब्ध "
+"सदस्यताओं\" टैब का उपयोग इस तंत्र को दस्ती रूप से एंटाइटेल करने के लिए करें."
 
 #: ../src/subscription_manager/gui/autobind.py:489
 msgid "Error subscribing:"
@@ -452,6 +462,7 @@ msgid "RHSM Subscriptions Management"
 msgstr "RHSM सदस्यता प्रबंधन"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:32
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_manually_subscribe.py:41
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:24
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:25
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:47
@@ -463,46 +474,51 @@ msgstr "एंटाइटेलमेंट पंजीयन"
 msgid "Entitlement Platform Registration"
 msgstr "एंटाइटेलमेंट प्लेटफॉर्म पंजीयन"
 
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_manually_subscribe.py:42
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:240
+msgid "Manual Configuraton Required"
+msgstr ""
+
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:309
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:282
 msgid "Confirm Subscriptions"
 msgstr "सदस्यता की पुष्टि करें"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:26
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:299
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:275
 msgid "Service Level"
 msgstr "सेवा स्तर"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:277
-msgid ""
-"Unable to auto-subscribe, server does not support service levels. Please run "
-"'Subscription Manager' to manually subscribe."
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:244
+msgid "You have opted to skip auto-subscribe."
 msgstr ""
-"स्वतः सदस्यता लेने में असमर्थ, सर्वर सेवा स्तर का समर्थन नहीं करता है. कृपया 'सदस्यता "
-"प्रबंधन' को दस्ती रूप से सदस्यता लेने के लिए चलाएँ."
 
-#. XXX show a dialog about manually subscribing
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:290
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:259
+msgid ""
+"Unable to auto-subscribe, server does not support service levels. Please run"
+" 'Subscription Manager' to manually subscribe."
+msgstr ""
+"स्वतः सदस्यता लेने में असमर्थ, सर्वर सेवा स्तर का समर्थन नहीं करता है. कृपया"
+" 'सदस्यता प्रबंधन' को दस्ती रूप से सदस्यता लेने के लिए चलाएँ."
+
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:267
 msgid ""
 "All installed products are covered by valid entitlements. Please run "
 "'Subscription Manager' to subscribe to additional products."
 msgstr ""
-"वैध एंटाइटेलमेंट के द्वारा सभी संस्थापित उत्पाद कवर किए गए जाते हैं. कृपया 'सदस्यता प्रबंधन' "
-"को अतिरिक्त उत्पाद की सदस्यता लेने के लिए चलाएँ."
+"वैध एंटाइटेलमेंट के द्वारा सभी संस्थापित उत्पाद कवर किए गए जाते हैं. कृपया "
+"'सदस्यता प्रबंधन' को अतिरिक्त उत्पाद की सदस्यता लेने के लिए चलाएँ."
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:303
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:279
 #, python-format
 msgid ""
 "Unable to subscribe to any additional products at current service level: %s"
-msgstr "किसी अतिरिक्त उत्पाद में सदस्यता लेने में असमर्थ मौजूदा सर्विस स्तर पर: %s"
-
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:311
-msgid ""
-"No service levels will cover all installed products. Please run "
-"'Subscription Manager' to manually entitle this system."
 msgstr ""
-"कोई सेवा स्तर सभी संस्थापित उत्पादों को कवर नहीं करेगा. कृपया \"सदस्यता प्रबंधक\" का "
-"उपयोग इस तंत्र को दस्ती रूप से एंटाइटेल करने के लिए करें."
+"किसी अतिरिक्त उत्पाद में सदस्यता लेने में असमर्थ मौजूदा सर्विस स्तर पर: %s"
+
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+msgid "No service levels will cover all installed products. "
+msgstr ""
 
 #: ../src/subscription_manager/gui/redeem.py:54
 #, python-format
@@ -511,11 +527,11 @@ msgstr "सदस्यता पाने में त्रुटि: %s"
 
 #: ../src/subscription_manager/gui/utils.py:59
 msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
+"Network error, unable to connect to server. Please see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr ""
-"संजाल त्रुटि, सर्वर में कनेक्ट करने में असमर्थ. कृपया देखें /var/log/rhsm/rhsm.log अधिक सूचना "
-"के लिए."
+"संजाल त्रुटि, सर्वर में कनेक्ट करने में असमर्थ. कृपया देखें "
+"/var/log/rhsm/rhsm.log अधिक सूचना के लिए."
 
 #: ../src/subscription_manager/gui/utils.py:62
 #, python-format
@@ -527,21 +543,22 @@ msgstr "सर्वर की पहचान जाँचने में अ�
 #: ../src/subscription_manager/gui/utils.py:67
 #: ../src/subscription_manager/managercli.py:109
 msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
+"Network error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr ""
-"संजाल त्रुटि. कृपया कनेक्शन विवरण की जाँच करें या देखें /var/log/rhsm/rhsm.log अधिक सूचना "
-"के लिए."
+"संजाल त्रुटि. कृपया कनेक्शन विवरण की जाँच करें या देखें "
+"/var/log/rhsm/rhsm.log अधिक सूचना के लिए."
 
-#. This is what happens when there's an issue with the server on the other side of the wire
+#. This is what happens when there's an issue with the server on the other
+#. side of the wire
 #: ../src/subscription_manager/gui/utils.py:70
 #: ../src/subscription_manager/managercli.py:113
 msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
+"Remote server error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr ""
-"दूरस्थ सर्वर त्रुटि. कृपया कनेक्शन विवरण की जाँच करें या देखें /var/log/rhsm/rhsm.log अधिक "
-"सूचना के लिए."
+"दूरस्थ सर्वर त्रुटि. कृपया कनेक्शन विवरण की जाँच करें या देखें "
+"/var/log/rhsm/rhsm.log अधिक सूचना के लिए."
 
 #: ../src/subscription_manager/gui/utils.py:91
 #: ../src/subscription_manager/managercli.py:122
@@ -620,7 +637,9 @@ msgstr "UUID ढूँढ़ने में त्रुटि: %s"
 #: ../src/subscription_manager/cache.py:172
 msgid ""
 "Error updating system data, see /var/log/rhsm/rhsm.log for more details."
-msgstr "तंत्र आँकड़ा अद्यतन करने में त्रुटि, अधिक विवरण के लिए देखें /var/log/rhsm/rhsm.log."
+msgstr ""
+"तंत्र आँकड़ा अद्यतन करने में त्रुटि, अधिक विवरण के लिए देखें "
+"/var/log/rhsm/rhsm.log."
 
 #: ../src/subscription_manager/branding/__init__.py:81
 msgid "Register the machine to the server"
@@ -651,7 +670,8 @@ msgstr "कृपया अपना खाता सूचना दर्ज �
 msgid ""
 "Contact your system administrator if you have forgotten your login or "
 "password"
-msgstr "अपने तंत्र प्रशासक से संपर्क करें यदि आप अपना लॉगिन या कूटशब्द भूल गए हैं"
+msgstr ""
+"अपने तंत्र प्रशासक से संपर्क करें यदि आप अपना लॉगिन या कूटशब्द भूल गए हैं"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:7
 msgid "register the client to RHN"
@@ -666,7 +686,8 @@ msgid ""
 "This system has already been registered with RHN using RHN Classic "
 "technology."
 msgstr ""
-"इस तंत्र को RHN के साथ RHN क्लासिक प्रौद्योगिकी के साथ पहले से पंजीकृत किया गया है."
+"इस तंत्र को RHN के साथ RHN क्लासिक प्रौद्योगिकी के साथ पहले से पंजीकृत किया "
+"गया है."
 
 #: ../src/subscription_manager/branding/redhat_branding.py:15
 msgid ""
@@ -674,17 +695,17 @@ msgid ""
 "Based technology. Red Hat recommends (except in a few cases) that customers "
 "only register with RHN once."
 msgstr ""
-"औजार जिसे आप उपयोग कर रहे हैं वह RHN प्रमाणपत्र आधारित प्रौद्योगिकी के साथ फिर से "
-"पंजीयन का प्रयास कर रहा है. Red Hat की अनुशंसा है (सिवाय कुछ स्थितियों के) कि उपभोक्ता  "
-"केवल RHN से एक बार पंजीकृत करें."
+"औजार जिसे आप उपयोग कर रहे हैं वह RHN प्रमाणपत्र आधारित प्रौद्योगिकी के साथ "
+"फिर से पंजीयन का प्रयास कर रहा है. Red Hat की अनुशंसा है (सिवाय कुछ "
+"स्थितियों के) कि उपभोक्ता  केवल RHN से एक बार पंजीकृत करें."
 
 #: ../src/subscription_manager/branding/redhat_branding.py:17
 msgid ""
 "To learn more about RHN registration and technologies please consult this "
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"RHN पंजीयन और प्रौद्योगिकी के बारे में अधिक जानने के लिए इस नॉलेजबेस आलेख को देखें:  "
-"https://access.redhat.com/kb/docs/DOC-45563"
+"RHN पंजीयन और प्रौद्योगिकी के बारे में अधिक जानने के लिए इस नॉलेजबेस आलेख को"
+" देखें:  https://access.redhat.com/kb/docs/DOC-45563"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:20
 msgid "Please enter your Red Hat Network account information:"
@@ -692,9 +713,11 @@ msgstr "कृपया अपना Red Hat Network खाता सूचन�
 
 #: ../src/subscription_manager/branding/redhat_branding.py:22
 msgid ""
-"Tip: Forgot your login or password? Look it up at http://red.ht/lost_password"
+"Tip: Forgot your login or password? Look it up at "
+"http://red.ht/lost_password"
 msgstr ""
-"संकेत: अपना लॉगिन या कूटशब्द भूल गए हैं? इसके लिए यहाँ देखें http://red.ht/lost_password"
+"संकेत: अपना लॉगिन या कूटशब्द भूल गए हैं? इसके लिए यहाँ देखें "
+"http://red.ht/lost_password"
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
@@ -972,11 +995,11 @@ msgstr "<b>उपयोक्ता %s किसी संगठन से प�
 
 #: ../src/subscription_manager/managercli.py:57
 msgid ""
-"This system is not yet registered. Try 'subscription-manager register --"
-"help' for more information."
+"This system is not yet registered. Try 'subscription-manager register "
+"--help' for more information."
 msgstr ""
-"यह तंत्र अभी तक पंजीकृत नहीं है. 'subscription-manager register --help' को अधिक "
-"सूचना के लिए देखें."
+"यह तंत्र अभी तक पंजीकृत नहीं है. 'subscription-manager register --help' को "
+"अधिक सूचना के लिए देखें."
 
 #: ../src/subscription_manager/managercli.py:71
 #, python-format
@@ -1066,7 +1089,8 @@ msgstr "कूटशब्द: "
 #: ../src/subscription_manager/managercli.py:342
 msgid ""
 "Remove all local consumer and subscription data without affecting the server"
-msgstr "सभी स्थानीय ग्राहक और सदस्यता आँकड़ा को बिना सर्वर को प्रभावित किए हटाएँ"
+msgstr ""
+"सभी स्थानीय ग्राहक और सदस्यता आँकड़ा को बिना सर्वर को प्रभावित किए हटाएँ"
 
 #: ../src/subscription_manager/managercli.py:354
 msgid "All local data removed"
@@ -1103,7 +1127,8 @@ msgstr "--force को केवल --regenerate के साथ प्रय�
 
 #: ../src/subscription_manager/managercli.py:408
 msgid "--username and --password can only be used with --force"
-msgstr "--username और --password को केवल --force के साथ प्रयोग किया जा सकता है"
+msgstr ""
+"--username और --password को केवल --force के साथ प्रयोग किया जा सकता है"
 
 #: ../src/subscription_manager/managercli.py:423
 #, python-format
@@ -1200,8 +1225,8 @@ msgid ""
 "Error: you must register or specify --username and password to list service "
 "levels"
 msgstr ""
-"त्रुटि: आप जरूर पंजीकृत करें या निर्दिष्ट करें--उपयोक्तानाम और कूटशब्द ताकि सर्विस लेवल "
-"सूचीबद्ध किया जा सके"
+"त्रुटि: आप जरूर पंजीकृत करें या निर्दिष्ट करें--उपयोक्तानाम और कूटशब्द ताकि "
+"सर्विस लेवल सूचीबद्ध किया जा सके"
 
 #: ../src/subscription_manager/managercli.py:571
 msgid "Error: you must register or specify --org."
@@ -1279,7 +1304,8 @@ msgstr "इस सिस्टम में लागू करने के ल
 
 #: ../src/subscription_manager/managercli.py:691
 msgid "This system is already registered. Use --force to override"
-msgstr "यह तंत्र पर से पंजीकृत है.  --force का उपयोग अधिरोहित करने के लिए करें"
+msgstr ""
+"यह तंत्र पर से पंजीकृत है.  --force का उपयोग अधिरोहित करने के लिए करें"
 
 #: ../src/subscription_manager/managercli.py:694
 msgid "Error: consumer name can not be empty."
@@ -1291,7 +1317,9 @@ msgstr "त्रुटि: सक्रिय करण कुंजी के 
 
 #: ../src/subscription_manager/managercli.py:700
 msgid "Error: Activation keys can not be used with previously registered ids."
-msgstr "त्रुटि: सक्रियकरण कुंजी पहले से प्रतिबंधित आईडी के साथ प्रयोग नहीं किया जा सकता है."
+msgstr ""
+"त्रुटि: सक्रियकरण कुंजी पहले से प्रतिबंधित आईडी के साथ प्रयोग नहीं किया जा "
+"सकता है."
 
 #: ../src/subscription_manager/managercli.py:703
 msgid "Error: Must specify --org to register to an environment."
@@ -1299,7 +1327,8 @@ msgstr "त्रुटि: किसी संगठन में --org को 
 
 #: ../src/subscription_manager/managercli.py:706
 msgid "Error: Must specify --org to register with activation keys."
-msgstr "त्रुटि: किसी संगठन में --org को सक्रियकरण कुंजी के साथ जरूर निर्दिष्ट करें."
+msgstr ""
+"त्रुटि: किसी संगठन में --org को सक्रियकरण कुंजी के साथ जरूर निर्दिष्ट करें."
 
 #: ../src/subscription_manager/managercli.py:710
 msgid "Error: Must specify an activation key"
@@ -1355,11 +1384,11 @@ msgstr "सूचित करने के लिए ईमेल पता ज
 
 #: ../src/subscription_manager/managercli.py:924
 msgid ""
-"Optional language to use for email notification when subscription redemption "
-"is complete. Examples: en-us, de-de"
+"Optional language to use for email notification when subscription redemption"
+" is complete. Examples: en-us, de-de"
 msgstr ""
-"ईमेल अधिसूचना के लिए वैकल्पिक भाषा जब सदस्यता की पूर्णता समाप्त हो जाती है. उदाहरण: en-"
-"us, de-de"
+"ईमेल अधिसूचना के लिए वैकल्पिक भाषा जब सदस्यता की पूर्णता समाप्त हो जाती है. "
+"उदाहरण: en-us, de-de"
 
 #: ../src/subscription_manager/managercli.py:966
 msgid "Configure what os release to use"
@@ -1405,15 +1434,16 @@ msgstr "खपत के लिए सदस्यता की संख्य�
 
 #: ../src/subscription_manager/managercli.py:1055
 msgid ""
-"Error: This command requires that you specify a pool with --pool or use --"
-"auto."
+"Error: This command requires that you specify a pool with --pool or use "
+"--auto."
 msgstr ""
-"त्रुटि: इस कमांड के लिए जरूरी है कि आप --pool के साथ पूल निर्दिष्ट करें या --auto का "
-"उपयोग करें."
+"त्रुटि: इस कमांड के लिए जरूरी है कि आप --pool के साथ पूल निर्दिष्ट करें या "
+"--auto का उपयोग करें."
 
 #: ../src/subscription_manager/managercli.py:1058
 msgid "Error: Only one of --pool or --auto may be used with this command."
-msgstr "त्रुटि: कोई एक --pool या --auto को इस कमांड के लिए प्रयोग किया जा सकता है."
+msgstr ""
+"त्रुटि: कोई एक --pool या --auto को इस कमांड के लिए प्रयोग किया जा सकता है."
 
 #: ../src/subscription_manager/managercli.py:1065
 msgid "Error: Quantity must be a positive integer."
@@ -1500,8 +1530,8 @@ msgid ""
 "certificate file to import (for multiple imports, specify this option more "
 "than once)"
 msgstr ""
-"आयात के लिए प्रमाणपत्र फ़ाइल (बहुल आयात के लिए, एक बार से अधिक इस विकल्प को निर्दिष्ट "
-"करें)"
+"आयात के लिए प्रमाणपत्र फ़ाइल (बहुल आयात के लिए, एक बार से अधिक इस विकल्प को "
+"निर्दिष्ट करें)"
 
 #: ../src/subscription_manager/managercli.py:1272
 msgid "Error: At least one certificate is required"
@@ -1516,7 +1546,8 @@ msgstr "%s प्रमाणपत्र को सफलतापूर्व�
 #: ../src/subscription_manager/managercli.py:1307
 #, python-format
 msgid "%s is not a valid certificate file. Please use a valid certificate."
-msgstr "%s एक वैध प्रमाणपत्र फ़ाइल नहीं है. कृपया एक वैध प्रमाणपत्र का उपयोग करें."
+msgstr ""
+"%s एक वैध प्रमाणपत्र फ़ाइल नहीं है. कृपया एक वैध प्रमाणपत्र का उपयोग करें."
 
 #: ../src/subscription_manager/managercli.py:1323
 msgid "List the repos which this machine is entitled to use"
@@ -1547,7 +1578,8 @@ msgstr "यह तंत्र किसी रेपोजिटरी मे�
 msgid ""
 "List, set, or remove the configuration parameters in use by this machine."
 msgstr ""
-"इस मशीन के द्वारा उपयोग में आया विन्यास पैरामीटर को सूचीबद्ध करें, सेट करें या हटाएँ."
+"इस मशीन के द्वारा उपयोग में आया विन्यास पैरामीटर को सूचीबद्ध करें, सेट करें "
+"या हटाएँ."
 
 #: ../src/subscription_manager/managercli.py:1372
 msgid "list the configuration for this system"
@@ -1567,16 +1599,16 @@ msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
 msgstr ""
-"त्रुटि: --list को किसी विकल्प के साथ प्रयोग नहीं किया जाना चाहिए विन्यास के सेटिंग या "
-"हटाए जाने के लिए."
+"त्रुटि: --list को किसी विकल्प के साथ प्रयोग नहीं किया जाना चाहिए विन्यास के "
+"सेटिंग या हटाए जाने के लिए."
 
 #: ../src/subscription_manager/managercli.py:1411
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
 msgstr ""
-"त्रुटि: हटाए जाने के लिए विन्यास प्रविष्टि पदनाम इस प्रारूप [section.name] का होना "
-"चाहिए"
+"त्रुटि: हटाए जाने के लिए विन्यास प्रविष्टि पदनाम इस प्रारूप [section.name] "
+"का होना चाहिए"
 
 #: ../src/subscription_manager/managercli.py:1422
 #, python-format
@@ -1610,11 +1642,14 @@ msgstr "इस मशीन के लिए सदस्यता की सू
 #: ../src/subscription_manager/managercli.py:1477
 msgid ""
 "if supplied then list shows those products which are installed (default)"
-msgstr "यदि आपूर्ति की जाती है तो सूची उन उत्पादों को दिखाती है जो संस्थापित है (तयशुदा)"
+msgstr ""
+"यदि आपूर्ति की जाती है तो सूची उन उत्पादों को दिखाती है जो संस्थापित है "
+"(तयशुदा)"
 
 #: ../src/subscription_manager/managercli.py:1479
 msgid "if supplied then list shows those subscriptions which are available"
-msgstr "यदि आपूर्ति की जाती है तो सूची उन सदस्यताओं को दिखाती है जो उपलब्ध हैं"
+msgstr ""
+"यदि आपूर्ति की जाती है तो सूची उन सदस्यताओं को दिखाती है जो उपलब्ध हैं"
 
 #: ../src/subscription_manager/managercli.py:1481
 #, python-format
@@ -1622,8 +1657,8 @@ msgid ""
 "date to search on, defaults to today's date, only used with --available "
 "(example: %s)"
 msgstr ""
-"तिथि जिसपर खोजना है, आज की तिथि में तयशुदा, केवल --available के साथ प्रयुक्त (उदाहरण: "
-"%s)"
+"तिथि जिसपर खोजना है, आज की तिथि में तयशुदा, केवल --available के साथ प्रयुक्त"
+" (उदाहरण: %s)"
 
 #: ../src/subscription_manager/managercli.py:1484
 msgid "shows the subscriptions being consumed by this system."
@@ -1634,12 +1669,14 @@ msgid ""
 "if supplied then list shows only subscriptions matching the specified "
 "service level. "
 msgstr ""
-"यदि आपूर्ति की जाती है तो सूची केवल सेवा स्तर को निर्दिष्ट मेल खाते सदस्यता को दिखाता है. "
+"यदि आपूर्ति की जाती है तो सूची केवल सेवा स्तर को निर्दिष्ट मेल खाते सदस्यता "
+"को दिखाता है. "
 
 #: ../src/subscription_manager/managercli.py:1489
 msgid "if supplied with --available then all subscriptions are returned"
 msgstr ""
-"यदि --available के साथ आपूर्ति की जाती है फिर सभी सदस्यता को वापस किया जाता है"
+"यदि --available के साथ आपूर्ति की जाती है फिर सभी सदस्यता को वापस किया जाता "
+"है"
 
 #: ../src/subscription_manager/managercli.py:1496
 msgid "Error: --all is only applicable with --available"
@@ -1650,8 +1687,10 @@ msgid "Error: --ondate is only applicable with --available"
 msgstr "त्रुटि: --ondate केवल --available के साथ लागू"
 
 #: ../src/subscription_manager/managercli.py:1503
-msgid "Error: --servicelevel is only applicable with --available or --consumed"
-msgstr "त्रुटि: --servicelevel केवल --available या --consumed के साथ अनुप्रयुक्त है"
+msgid ""
+"Error: --servicelevel is only applicable with --available or --consumed"
+msgstr ""
+"त्रुटि: --servicelevel केवल --available या --consumed के साथ अनुप्रयुक्त है"
 
 #: ../src/subscription_manager/managercli.py:1526
 msgid "No installed products to list"
@@ -1662,8 +1701,10 @@ msgid "    Installed Product Status"
 msgstr "    संस्थापित उत्पाद स्थिति"
 
 #: ../src/subscription_manager/managercli.py:1546
-msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-msgstr "दाखिल तिथि अवैध है. तिथि को YYYY-MM-DD प्रारूप में होना चाहिए (उदाहरण: "
+msgid ""
+"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgstr ""
+"दाखिल तिथि अवैध है. तिथि को YYYY-MM-DD प्रारूप में होना चाहिए (उदाहरण: "
 
 #: ../src/subscription_manager/managercli.py:1559
 msgid "No available subscription pools to list"
@@ -1812,8 +1853,8 @@ msgid ""
 "agreements on various products. Please select how you\n"
 "want them assigned."
 msgstr ""
-"हमने पाया है कि आपके पास विविध उत्पादों के साथ बहुल सेवा स्तर अनुबंध हैं. कृपया चुनें कि आप "
-"उन्हें कैसे नियत करना चाहते हैं."
+"हमने पाया है कि आपके पास विविध उत्पादों के साथ बहुल सेवा स्तर अनुबंध हैं. "
+"कृपया चुनें कि आप उन्हें कैसे नियत करना चाहते हैं."
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:6
 #: ../src/subscription_manager/gui/data/autobind.glade.h:5
@@ -2032,7 +2073,8 @@ msgstr "अवैध उत्पाद सूची ScrolledWindow"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:5
 msgid "Show products with invalid entitlement certificates as of:"
-msgstr "इस समय तक के उन उत्पादों को दिखाएँ जो अवैध एंटाइटेलमेंट प्रमाणपत्र रखते हैं:"
+msgstr ""
+"इस समय तक के उन उत्पादों को दिखाएँ जो अवैध एंटाइटेलमेंट प्रमाणपत्र रखते हैं:"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:7
 msgid "Subscription Action Area"
@@ -2316,21 +2358,38 @@ msgstr "उत्पाद आईडी पाठ"
 msgid "Product Text"
 msgstr "उत्पाद पाठ"
 
+#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:1
+msgid ""
+"After opening Subscription Manager, manually subscribe via the <b>All "
+"Available Subscriptions</b> tab."
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
+msgid "Manual Configuration Required"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:3
+msgid ""
+"You will need to manually subscribe this system after completing firstboot. "
+"Subscription Manager can be found in <b>System > Administration > "
+"Subscription Manager</b>."
+msgstr ""
+
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1
 msgid ""
 "<small>Your system's SLA preference is followed when subscribing to new "
 "products</small>"
 msgstr ""
-"<small>आपके तंत्र की SLA वरीयता का पालन किया जाता है जब नए उत्पाद की सदस्यता ली "
-"जाती है</small>"
+"<small>आपके तंत्र की SLA वरीयता का पालन किया जाता है जब नए उत्पाद की सदस्यता"
+" ली जाती है</small>"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid ""
 "<small>Your system's release preference is followed when installing and "
 "updating packages.</small>"
 msgstr ""
-"<small>आपके तंत्र का रिलीज वरीयता का पालन किया जाता है जब संकुल को संस्थापित और "
-"अद्यतन किया जाता है.</small>"
+"<small>आपके तंत्र का रिलीज वरीयता का पालन किया जाता है जब संकुल को संस्थापित"
+" और अद्यतन किया जाता है.</small>"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Release version:"
@@ -2347,7 +2406,8 @@ msgstr "प्रमाणपत्र अवस्थिति (_L):"
 #: ../src/subscription_manager/gui/data/importsub.glade.h:2
 msgid ""
 "Choose a certificate to import to your subscription certificate directory."
-msgstr "अपने सदस्यता प्रमाणपत्र निर्देशिका में आयात करने के लिए एक प्रमाणपत्र चुनें."
+msgstr ""
+"अपने सदस्यता प्रमाणपत्र निर्देशिका में आयात करने के लिए एक प्रमाणपत्र चुनें."
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:4
 msgid "Provide a Subscription Certificate"
@@ -2386,7 +2446,8 @@ msgid ""
 "Could not read installation number from /etc/sysconfig/rhn/install-num.  "
 "Aborting."
 msgstr ""
-"/etc/sysconfig/rhn/install-num से संस्थापन संख्या को पढ़ नहीं सका.  छोड़ रहा है."
+"/etc/sysconfig/rhn/install-num से संस्थापन संख्या को पढ़ नहीं सका.  छोड़ रहा"
+" है."
 
 #: ../src/install-num-migrate-to-rhsm:109
 #, c-format
@@ -2407,14 +2468,15 @@ msgid ""
 "Don't launch the GUI tool to subscribe the system, just use the CLI tool "
 "which will do it automatically"
 msgstr ""
-"तंत्र में सदस्यता लेने के लिए GUI औज़ार नहीं लॉन्च करें, बस CLI औज़ार का उपयोग करें जो इसे "
-"स्वतः करेगा"
+"तंत्र में सदस्यता लेने के लिए GUI औज़ार नहीं लॉन्च करें, बस CLI औज़ार का "
+"उपयोग करें जो इसे स्वतः करेगा"
 
 #: ../src/rhn-migrate-classic-to-rhsm:66
 msgid ""
 "Don't execute the autosubscribe option while registering with subscription "
 "manager."
-msgstr "स्वतः सदस्यता लिया विकल्प न चलाएँ जब सदस्यता प्रबंधक से पंजीकृत कर रहे है."
+msgstr ""
+"स्वतः सदस्यता लिया विकल्प न चलाएँ जब सदस्यता प्रबंधक से पंजीकृत कर रहे है."
 
 #: ../src/rhn-migrate-classic-to-rhsm:69
 #, c-format
@@ -2424,8 +2486,7 @@ msgstr "%s [OPTIONS]"
 #: ../src/rhn-migrate-classic-to-rhsm:130
 msgid ""
 "\n"
-"This machine appears to be already registered to Certificate-based RHN.  "
-"Exiting."
+"This machine appears to be already registered to Certificate-based RHN.  Exiting."
 msgstr ""
 "\n"
 "प्रमाणपत्र आधारित RHN में यह मशीन पहले से पंजीकृत दिखता है.  रोमांचक."
@@ -2434,12 +2495,10 @@ msgstr ""
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"profile details."
+"Please visit https://access.redhat.com/management/consumers/%s to view the profile details."
 msgstr ""
 "\n"
-"प्रोफाइल विवरण देखने के लिए https://access.redhat.com/management/consumers/%s को "
-"देखें."
+"प्रोफाइल विवरण देखने के लिए https://access.redhat.com/management/consumers/%s को देखें."
 
 #: ../src/rhn-migrate-classic-to-rhsm:138
 #, c-format
@@ -2455,11 +2514,11 @@ msgstr ""
 #: ../src/rhn-migrate-classic-to-rhsm:151
 #, c-format
 msgid ""
-"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
-"more details."
+"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for"
+" more details."
 msgstr ""
-"प्रमाणपत्र सर्वर से कनेक्ट करने में असमर्थ: %s. अधिक सूचना के लिए /var/log/rhsm/rhsm.log "
-"कृपया देखें."
+"प्रमाणपत्र सर्वर से कनेक्ट करने में असमर्थ: %s. अधिक सूचना के लिए "
+"/var/log/rhsm/rhsm.log कृपया देखें."
 
 #: ../src/rhn-migrate-classic-to-rhsm:159
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
@@ -2486,7 +2545,8 @@ msgid ""
 "Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
 "details."
 msgstr ""
-"RHN क्लासिक में सत्यापित करने में असमर्थ. अधिक विवरण के लिए देखें: /var/log/rhsm/rhsm.log"
+"RHN क्लासिक में सत्यापित करने में असमर्थ. अधिक विवरण के लिए देखें: "
+"/var/log/rhsm/rhsm.log"
 
 #: ../src/rhn-migrate-classic-to-rhsm:219
 msgid "System successfully unregistered from RHN Classic."
@@ -2530,8 +2590,7 @@ msgstr "उचित सदस्यताओं में स्वतः स�
 #: ../src/rhn-migrate-classic-to-rhsm:305
 msgid ""
 "\n"
-"Unable to auto-subscribe.  Do your existing subscriptions match the products "
-"installed on this system?"
+"Unable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?"
 msgstr ""
 "\n"
 "स्वतः सदस्यता में असमर्थ.  क्या आपका मौजूदा सदस्यता इस तंत्र पर संस्थापित से मेल खाता है?"
@@ -2540,12 +2599,10 @@ msgstr ""
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"details, and to make changes if necessary."
+"Please visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary."
 msgstr ""
 "\n"
-"विवरण देखने के लिए https://access.redhat.com/management/consumers/%s को कृपया देखें "
-"और जरुरी पड़ने पर इसमें बदलाव लाएँ."
+"विवरण देखने के लिए https://access.redhat.com/management/consumers/%s को कृपया देखें और जरुरी पड़ने पर इसमें बदलाव लाएँ."
 
 #: ../src/rhn-migrate-classic-to-rhsm:332
 msgid "Channels not available on RHSM:"
@@ -2554,8 +2611,7 @@ msgstr "RHSM पर चैनल उपलब्ध नहीं:"
 #: ../src/rhn-migrate-classic-to-rhsm:339
 msgid ""
 "\n"
-"Unrecognized channels. Channel to product certificate mapping missing for "
-"these channels."
+"Unrecognized channels. Channel to product certificate mapping missing for these channels."
 msgstr ""
 "\n"
 "अपरिचित चैनल. इन चैनलों के लिए उत्पाद प्रमाणपत्र मैपिंग अनुपस्थित है."
@@ -2595,11 +2651,11 @@ msgstr ""
 
 #: ../src/rhn-migrate-classic-to-rhsm:410
 msgid ""
-"Please ensure system is subscribed to entitlements, and alter /etc/yum.repos."
-"d/redhat.repo to enable extra repositories."
+"Please ensure system is subscribed to entitlements, and alter "
+"/etc/yum.repos.d/redhat.repo to enable extra repositories."
 msgstr ""
-"कृपया सुनिश्चित करें कि तंत्र एंटाइटेलमेंट के साथ सदस्यता लिया हुआ है और /etc/yum.repos.d/"
-"redhat.repo को अतिरिक्त रिपोजिटरी सक्रिय करने के लिए बदलें."
+"कृपया सुनिश्चित करें कि तंत्र एंटाइटेलमेंट के साथ सदस्यता लिया हुआ है और "
+"/etc/yum.repos.d/redhat.repo को अतिरिक्त रिपोजिटरी सक्रिय करने के लिए बदलें."
 
 #: ../src/rhn-migrate-classic-to-rhsm:444
 msgid "RHN Username: "
@@ -2651,9 +2707,9 @@ msgid ""
 "system must be registered with RHN. Please enter your Red Hat login to "
 "ensure your system is up-to-date."
 msgstr ""
-"अद्यतन के लिए आपके तंत्र में सदस्यता प्रबंधन देने के लिए, आपके तंत्र को RHN से साथ जरूर पंजीकृत "
-"होना चाहिए. कृपया अपना Red Hat लॉगिन सुनिश्चित करने के लिए दर्ज करें कि आपका तंत्र "
-"अद्यतन है."
+"अद्यतन के लिए आपके तंत्र में सदस्यता प्रबंधन देने के लिए, आपके तंत्र को RHN "
+"से साथ जरूर पंजीकृत होना चाहिए. कृपया अपना Red Hat लॉगिन सुनिश्चित करने के "
+"लिए दर्ज करें कि आपका तंत्र अद्यतन है."
 
 #: ../src/rhsm_icon.c:209 ../src/rhsm_icon.c:211
 msgid "Invalid or Missing Entitlement Certificates"
@@ -2672,8 +2728,8 @@ msgid ""
 "This system is missing one or more valid entitlement certificates to fully "
 "cover its products"
 msgstr ""
-"यह तंत्र एक या अधिक वैध एंटाइटेलमेंट प्रमाणपत्र से वंचित है इसके उत्पादों को पूरी तरह से कवर "
-"करने के लिए"
+"यह तंत्र एक या अधिक वैध एंटाइटेलमेंट प्रमाणपत्र से वंचित है इसके उत्पादों को"
+" पूरी तरह से कवर करने के लिए"
 
 #: ../src/rhsm_icon.c:224
 msgid "Some of the system's subscriptions are about to expire"

@@ -2,10 +2,9 @@
 # Language ja-JP translations for l package.
 # Copyright (C) 2011 THE l'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the l package.
-#
+# 
 # Automatically generated, 2011.
 # Kiyoto Hashida <khashida@redhat.com>, 2011.
-# khasida <khasida@fedoraproject.org>, 2012. #zanata
 # noriko <noriko@fedoraproject.org>, 2012. #zanata
 msgid ""
 msgstr ""
@@ -184,8 +183,7 @@ msgstr "このシステムは RHN Classic に登録されています"
 #, python-format
 msgid ""
 "You have <b>%s</b> products with <i>invalid</i> entitlement certificates."
-msgstr ""
-"<i>無効な</i> エンタイトルメント証明書を持つ <b>%s</b> 製品があります。"
+msgstr "<i>無効な</i> エンタイトルメント証明書を持つ <b>%s</b> 製品があります。"
 
 #: ../src/subscription_manager/gui/installedtab.py:293
 msgid ""
@@ -197,15 +195,13 @@ msgstr "<i>無効な</i> エンタイトルメント証明書を持つ <b>1</b> 
 msgid ""
 "You have <b>%s</b> products in need of <i>additional</i> entitlement "
 "certificates."
-msgstr ""
-"<i>追加の</i> エンタイトルメント証明書が必要な <b>%s</b> 製品があります。"
+msgstr "<i>追加の</i> エンタイトルメント証明書が必要な <b>%s</b> 製品があります。"
 
 #: ../src/subscription_manager/gui/installedtab.py:304
 msgid ""
 "You have <b>1</b> product in need of <i>additional</i> entitlement "
 "certificates."
-msgstr ""
-"<i>追加の</i> エンタイトルメント証明書が必要な <b>1</b> 製品があります。"
+msgstr "<i>追加の</i> エンタイトルメント証明書が必要な <b>1</b> 製品があります。"
 
 #: ../src/subscription_manager/gui/installedtab.py:312
 #, python-format
@@ -265,9 +261,7 @@ msgstr "サブスクリプション一覧"
 msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
-msgstr ""
-"サブスクリプションアシスタントの表示でエラーです。詳細情報には /var/log/rhsm/"
-"rhsm.log をご覧下さい。"
+msgstr "サブスクリプションアシスタントの表示でエラーです。詳細情報には /var/log/rhsm/rhsm.log をご覧下さい。"
 
 #: ../src/subscription_manager/gui/subscription_assistant.py:264
 msgid "Unable to search for subscriptions"
@@ -375,44 +369,38 @@ msgstr "いいえ"
 
 #: ../src/subscription_manager/gui/autobind.py:320
 msgid "Unable to auto-subscribe, server does not support service levels."
-msgstr ""
-"自動サブスクライブできません、 サーバーがサービスレベルに対応していません"
+msgstr "自動サブスクライブできません、 サーバーがサービスレベルに対応していません"
 
 #: ../src/subscription_manager/gui/autobind.py:325
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:263
 msgid ""
-"No installed products on system. No need to update certificates at this time."
-msgstr ""
-"システム上にインスト－ルされた製品はありません。現時点では証明書の更新は不要"
-"です。"
+"No installed products on system. No need to update certificates at this "
+"time."
+msgstr "システム上にインスト－ルされた製品はありません。現時点では証明書の更新は不要です。"
 
 #: ../src/subscription_manager/gui/autobind.py:330
 msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "certificates at this time."
-msgstr ""
-"インストールしている製品にはすべて有効なエンタイトルメントが与えられていま"
-"す。 現時点では証明書を更新する必要はありません。"
+msgstr "インストールしている製品にはすべて有効なエンタイトルメントが与えられています。 現時点では証明書を更新する必要はありません。"
 
 #: ../src/subscription_manager/gui/autobind.py:363
 #, python-format
 msgid ""
-"Unable to subscribe to any additional products at current service level: %s. "
-"Please use the \"All Available Subscriptions\" tab to manually entitle this "
-"system."
+"Unable to subscribe to any additional products at current service level: %s."
+" Please use the \"All Available Subscriptions\" tab to manually entitle this"
+" system."
 msgstr ""
-"現在のサービスレベル: %s では、追加の製品へサブスクライブすることはできませ"
-"ん。このシステムに手動でエンタイトルメントを得るためには \"All Available "
-"Subscriptions\" を使用します。"
+"現在のサービスレベル: %s では、追加の製品へサブスクライブすることはできません。このシステムに手動でエンタイトルメントを得るためには \"All "
+"Available Subscriptions\" を使用します。"
 
 #: ../src/subscription_manager/gui/autobind.py:375
 msgid ""
 "No service levels will cover all installed products. Please use the \"All "
 "Available Subscriptions\" tab to manually entitle this system."
 msgstr ""
-"インストールしている製品すべてを対象とするサービスレベルはありません。 「全て"
-"の利用可能なサブスクリプション」タブを使って手作業でこのシステムに権利を付与"
-"してください。"
+"インストールしている製品すべてを対象とするサービスレベルはありません。 "
+"「全ての利用可能なサブスクリプション」タブを使って手作業でこのシステムに権利を付与してください。"
 
 #: ../src/subscription_manager/gui/autobind.py:489
 msgid "Error subscribing:"
@@ -470,6 +458,7 @@ msgid "RHSM Subscriptions Management"
 msgstr "RHSM サブスクリプション管理"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:32
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_manually_subscribe.py:41
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:24
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:25
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:47
@@ -481,51 +470,50 @@ msgstr "エンタイトルメントの登録"
 msgid "Entitlement Platform Registration"
 msgstr "エンタイトルメントの登録"
 
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_manually_subscribe.py:42
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:240
+msgid "Manual Configuraton Required"
+msgstr ""
+
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:309
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:282
 msgid "Confirm Subscriptions"
 msgstr "サブスクリプションの確認"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:26
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:299
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:275
 msgid "Service Level"
 msgstr "サービスレベル"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:277
-msgid ""
-"Unable to auto-subscribe, server does not support service levels. Please run "
-"'Subscription Manager' to manually subscribe."
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:244
+msgid "You have opted to skip auto-subscribe."
 msgstr ""
-"自動サブスクライブができません、 サーバーがサービスレベルに対応していませ"
-"ん。 「サブスクリプションマネージャー」を実行して手作業でサブスクライブを行っ"
-"てください。"
 
-#. XXX show a dialog about manually subscribing
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:290
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:259
+msgid ""
+"Unable to auto-subscribe, server does not support service levels. Please run"
+" 'Subscription Manager' to manually subscribe."
+msgstr ""
+"自動サブスクライブができません、 サーバーがサービスレベルに対応していません。 "
+"「サブスクリプションマネージャー」を実行して手作業でサブスクライブを行ってください。"
+
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:267
 msgid ""
 "All installed products are covered by valid entitlements. Please run "
 "'Subscription Manager' to subscribe to additional products."
 msgstr ""
-"インストールしている製品にはすべて有効なエンタイトルメントが与えられていま"
-"す。 「サブスクリプションマネージャー」を実行して追加製品へのサブスクライブを"
-"行ってください。"
+"インストールしている製品にはすべて有効なエンタイトルメントが与えられています。 "
+"「サブスクリプションマネージャー」を実行して追加製品へのサブスクライブを行ってください。"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:303
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:279
 #, python-format
 msgid ""
 "Unable to subscribe to any additional products at current service level: %s"
-msgstr ""
-"現在のサービスレベルではいずれの追加製品にもサブスクライブすることができませ"
-"ん: %s"
+msgstr "現在のサービスレベルではいずれの追加製品にもサブスクライブすることができません: %s"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:311
-msgid ""
-"No service levels will cover all installed products. Please run "
-"'Subscription Manager' to manually entitle this system."
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+msgid "No service levels will cover all installed products. "
 msgstr ""
-"どのサービスレベルもインスト－ル済み製品の全てに該当することはありません。 "
-"'Subscription Manager' を実行して手動でこのシステムにエンタイトルメントを得て"
-"下さい。"
 
 #: ../src/subscription_manager/gui/redeem.py:54
 #, python-format
@@ -534,11 +522,9 @@ msgstr "サブスクリプションの償還でエラー: %s"
 
 #: ../src/subscription_manager/gui/utils.py:59
 msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
-msgstr ""
-"ネットワークエラーでサーバーに接続できません。詳細には /var/log/rhsm/rhsm."
-"log をご覧下さい"
+"Network error, unable to connect to server. Please see "
+"/var/log/rhsm/rhsm.log for more information."
+msgstr "ネットワークエラーでサーバーに接続できません。詳細には /var/log/rhsm/rhsm.log をご覧下さい"
 
 #: ../src/subscription_manager/gui/utils.py:62
 #, python-format
@@ -550,21 +536,18 @@ msgstr "サーバーの識別子を確認できません: %s"
 #: ../src/subscription_manager/gui/utils.py:67
 #: ../src/subscription_manager/managercli.py:109
 msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
-msgstr ""
-"ネットワークエラーです。接続の詳細を確認するか、又は /var/log/rhsm/rhsm.log "
-"をご覧下さい。"
+"Network error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
+msgstr "ネットワークエラーです。接続の詳細を確認するか、又は /var/log/rhsm/rhsm.log をご覧下さい。"
 
-#. This is what happens when there's an issue with the server on the other side of the wire
+#. This is what happens when there's an issue with the server on the other
+#. side of the wire
 #: ../src/subscription_manager/gui/utils.py:70
 #: ../src/subscription_manager/managercli.py:113
 msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
-msgstr ""
-"リモートサーバーエラーです。接続詳細を確認するか、又は /var/log/rhsm/rhsm."
-"log をご覧下さい"
+"Remote server error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
+msgstr "リモートサーバーエラーです。接続詳細を確認するか、又は /var/log/rhsm/rhsm.log をご覧下さい"
 
 #: ../src/subscription_manager/gui/utils.py:91
 #: ../src/subscription_manager/managercli.py:122
@@ -643,8 +626,7 @@ msgstr "UUID の検索でエラー: %s"
 #: ../src/subscription_manager/cache.py:172
 msgid ""
 "Error updating system data, see /var/log/rhsm/rhsm.log for more details."
-msgstr ""
-"システムデータの更新でエラー。詳細には /var/log/rhsm/rhsm.log をご覧下さい。"
+msgstr "システムデータの更新でエラー。詳細には /var/log/rhsm/rhsm.log をご覧下さい。"
 
 #: ../src/subscription_manager/branding/__init__.py:81
 msgid "Register the machine to the server"
@@ -675,9 +657,7 @@ msgstr "アカウント情報を記入して下さい:"
 msgid ""
 "Contact your system administrator if you have forgotten your login or "
 "password"
-msgstr ""
-"ログインまたはパスワードを忘れてしまった場合はシステム管理者に連絡してくださ"
-"い"
+msgstr "ログインまたはパスワードを忘れてしまった場合はシステム管理者に連絡してください"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:7
 msgid "register the client to RHN"
@@ -691,8 +671,7 @@ msgstr "クライアントを RHN から登録解除"
 msgid ""
 "This system has already been registered with RHN using RHN Classic "
 "technology."
-msgstr ""
-"このシステムは、RHN Classic の技術を使用して既に RHN に登録されています。"
+msgstr "このシステムは、RHN Classic の技術を使用して既に RHN に登録されています。"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:15
 msgid ""
@@ -700,9 +679,8 @@ msgid ""
 "Based technology. Red Hat recommends (except in a few cases) that customers "
 "only register with RHN once."
 msgstr ""
-"使用しているツールは RHN 証明書ベースの技術を使用して再登録しようとしていま"
-"す。Red Hat では (一部のケースを除き) お客様は RHN に 1 回のみ登録されること"
-"をお勧めしています。"
+"使用しているツールは RHN 証明書ベースの技術を使用して再登録しようとしています。Red Hat では (一部のケースを除き) お客様は RHN に "
+"1 回のみ登録されることをお勧めしています。"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:17
 msgid ""
@@ -718,10 +696,9 @@ msgstr "Red Hat Network のアカウント情報を入力して下さい:"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:22
 msgid ""
-"Tip: Forgot your login or password? Look it up at http://red.ht/lost_password"
-msgstr ""
-"ヒント:ログイン又はパスワードを忘れましたか？http://red.ht/lost_password で確"
-"認できます。"
+"Tip: Forgot your login or password? Look it up at "
+"http://red.ht/lost_password"
+msgstr "ヒント:ログイン又はパスワードを忘れましたか？http://red.ht/lost_password で確認できます。"
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
@@ -999,11 +976,10 @@ msgstr "<b>ユーザー %s はどの組織でも登録できません。</b>"
 
 #: ../src/subscription_manager/managercli.py:57
 msgid ""
-"This system is not yet registered. Try 'subscription-manager register --"
-"help' for more information."
+"This system is not yet registered. Try 'subscription-manager register "
+"--help' for more information."
 msgstr ""
-"このシステムはまだ登録されていません。 詳細については「subscription-manager "
-"register --help」をご覧ください。"
+"このシステムはまだ登録されていません。 詳細については「subscription-manager register --help」をご覧ください。"
 
 #: ../src/subscription_manager/managercli.py:71
 #, python-format
@@ -1093,9 +1069,7 @@ msgstr "パスワード: "
 #: ../src/subscription_manager/managercli.py:342
 msgid ""
 "Remove all local consumer and subscription data without affecting the server"
-msgstr ""
-"サーバーに影響を与えないようにして全てのローカルコンシューマーとサブスクリプ"
-"ションデータを削除"
+msgstr "サーバーに影響を与えないようにして全てのローカルコンシューマーとサブスクリプションデータを削除"
 
 #: ../src/subscription_manager/managercli.py:354
 msgid "All local data removed"
@@ -1228,9 +1202,7 @@ msgstr "使用可能なサービスレベルをすべて表示"
 msgid ""
 "Error: you must register or specify --username and password to list service "
 "levels"
-msgstr ""
-"エラー: サービスレベルを表示させるには --username と --password の登録または"
-"指定を行う必要があります"
+msgstr "エラー: サービスレベルを表示させるには --username と --password の登録または指定を行う必要があります"
 
 #: ../src/subscription_manager/managercli.py:571
 msgid "Error: you must register or specify --org."
@@ -1272,8 +1244,7 @@ msgstr "登録するコンシューマーのタイプ。ホスト名にデフォ
 
 #: ../src/subscription_manager/managercli.py:668
 msgid "if supplied, the existing consumer data is pulled from the server"
-msgstr ""
-"供給されている場合、既存のコンシューマーデータはサーバーから引き出されます。"
+msgstr "供給されている場合、既存のコンシューマーデータはサーバーから引き出されます。"
 
 #: ../src/subscription_manager/managercli.py:670
 msgid "register to one of multiple organizations for the user"
@@ -1329,9 +1300,7 @@ msgstr "エラー: 環境を登録するには、--org を指定する必要が�
 
 #: ../src/subscription_manager/managercli.py:706
 msgid "Error: Must specify --org to register with activation keys."
-msgstr ""
-"エラー: アクティベーションキーで登録するには、--org を指定する必要がありま"
-"す。"
+msgstr "エラー: アクティベーションキーで登録するには、--org を指定する必要があります。"
 
 #: ../src/subscription_manager/managercli.py:710
 msgid "Error: Must specify an activation key"
@@ -1339,8 +1308,7 @@ msgstr "エラー: アクティベーションキーを指定する必要があ�
 
 #: ../src/subscription_manager/managercli.py:713
 msgid "Error: Must use --autosubscribe with --servicelevel."
-msgstr ""
-"エラー: --autosubscribe は --servicelevel を付けて使用しなければなりません。"
+msgstr "エラー: --autosubscribe は --servicelevel を付けて使用しなければなりません。"
 
 #: ../src/subscription_manager/managercli.py:740
 #, python-format
@@ -1388,11 +1356,9 @@ msgstr "サブスクリプションの償還が完了した時に通知するた
 
 #: ../src/subscription_manager/managercli.py:924
 msgid ""
-"Optional language to use for email notification when subscription redemption "
-"is complete. Examples: en-us, de-de"
-msgstr ""
-"サブスクリプションの償還が完了した時に電子メール通知で使用するオプションの言"
-"語。例えば、en-us, de-de"
+"Optional language to use for email notification when subscription redemption"
+" is complete. Examples: en-us, de-de"
+msgstr "サブスクリプションの償還が完了した時に電子メール通知で使用するオプションの言語。例えば、en-us, de-de"
 
 #: ../src/subscription_manager/managercli.py:966
 msgid "Configure what os release to use"
@@ -1438,11 +1404,9 @@ msgstr "消費するサブスクリプションの数"
 
 #: ../src/subscription_manager/managercli.py:1055
 msgid ""
-"Error: This command requires that you specify a pool with --pool or use --"
-"auto."
-msgstr ""
-"エラー: このコマンドは --pool でプールを指定するか、又は --auto の使用を要求"
-"します。"
+"Error: This command requires that you specify a pool with --pool or use "
+"--auto."
+msgstr "エラー: このコマンドは --pool でプールを指定するか、又は --auto の使用を要求します。"
 
 #: ../src/subscription_manager/managercli.py:1058
 msgid "Error: Only one of --pool or --auto may be used with this command."
@@ -1532,9 +1496,7 @@ msgstr "ツール外で用意された証明書をインポート"
 msgid ""
 "certificate file to import (for multiple imports, specify this option more "
 "than once)"
-msgstr ""
-"インポートする証明書ファイル (複数のインポートには、このオプションを複数指定"
-"します)。"
+msgstr "インポートする証明書ファイル (複数のインポートには、このオプションを複数指定します)。"
 
 #: ../src/subscription_manager/managercli.py:1272
 msgid "Error: At least one certificate is required"
@@ -1549,8 +1511,7 @@ msgstr "正常に証明書 %s をインポートしました"
 #: ../src/subscription_manager/managercli.py:1307
 #, python-format
 msgid "%s is not a valid certificate file. Please use a valid certificate."
-msgstr ""
-"%s は有効な証明書ファイルではありません。有効な証明書を使用して下さい。"
+msgstr "%s は有効な証明書ファイルではありません。有効な証明書を使用して下さい。"
 
 #: ../src/subscription_manager/managercli.py:1323
 msgid "List the repos which this machine is entitled to use"
@@ -1599,17 +1560,13 @@ msgstr "セクション: %s、名前: %s"
 msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
-msgstr ""
-"エラー: 設定の実行または削除には、--list と他のオプションを併用しないことをお"
-"勧めします。"
+msgstr "エラー: 設定の実行または削除には、--list と他のオプションを併用しないことをお勧めします。"
 
 #: ../src/subscription_manager/managercli.py:1411
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
-msgstr ""
-"エラー: 削除する設定エントリの項目表示は [セクション.名前] の形式でなければな"
-"りません"
+msgstr "エラー: 削除する設定エントリの項目表示は [セクション.名前] の形式でなければなりません"
 
 #: ../src/subscription_manager/managercli.py:1422
 #, python-format
@@ -1643,8 +1600,7 @@ msgstr "このマシン用のサブスクリプションと製品情報の一覧
 #: ../src/subscription_manager/managercli.py:1477
 msgid ""
 "if supplied then list shows those products which are installed (default)"
-msgstr ""
-"供給されていれば、インストール済みの製品を一覧で表示します (デフォルト)"
+msgstr "供給されていれば、インストール済みの製品を一覧で表示します (デフォルト)"
 
 #: ../src/subscription_manager/managercli.py:1479
 msgid "if supplied then list shows those subscriptions which are available"
@@ -1680,7 +1636,8 @@ msgid "Error: --ondate is only applicable with --available"
 msgstr "エラー: --ondate は  --available との併用でのみ適用可能"
 
 #: ../src/subscription_manager/managercli.py:1503
-msgid "Error: --servicelevel is only applicable with --available or --consumed"
+msgid ""
+"Error: --servicelevel is only applicable with --available or --consumed"
 msgstr ""
 
 #: ../src/subscription_manager/managercli.py:1526
@@ -1692,7 +1649,8 @@ msgid "    Installed Product Status"
 msgstr "インストールしている製品の状態"
 
 #: ../src/subscription_manager/managercli.py:1546
-msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgid ""
+"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr "入力した日付は無効です。日付は YYYY-MM-DD の形式にして下さい（例えば:"
 
 #: ../src/subscription_manager/managercli.py:1559
@@ -2348,13 +2306,28 @@ msgstr ""
 msgid "Product Text"
 msgstr "製品テキスト"
 
+#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:1
+msgid ""
+"After opening Subscription Manager, manually subscribe via the <b>All "
+"Available Subscriptions</b> tab."
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
+msgid "Manual Configuration Required"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:3
+msgid ""
+"You will need to manually subscribe this system after completing firstboot. "
+"Subscription Manager can be found in <b>System > Administration > "
+"Subscription Manager</b>."
+msgstr ""
+
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1
 msgid ""
 "<small>Your system's SLA preference is followed when subscribing to new "
 "products</small>"
-msgstr ""
-"<small>新しい製品にサブスクライブを行った場合、 ご使用のシステムの SLA 設定は"
-"以下の通りになります。</small>"
+msgstr "<small>新しい製品にサブスクライブを行った場合、 ご使用のシステムの SLA 設定は以下の通りになります。</small>"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid ""
@@ -2415,9 +2388,7 @@ msgstr "実行するには root ユーザーでなければなりません\n"
 msgid ""
 "Could not read installation number from /etc/sysconfig/rhn/install-num.  "
 "Aborting."
-msgstr ""
-"/etc/sysconfig/rhn/install-num からインストール番号を読み取れませんでした。中"
-"止しています。"
+msgstr "/etc/sysconfig/rhn/install-num からインストール番号を読み取れませんでした。中止しています。"
 
 #: ../src/install-num-migrate-to-rhsm:109
 #, c-format
@@ -2437,17 +2408,13 @@ msgstr "RHSM では利用できないチャンネルは無視する"
 msgid ""
 "Don't launch the GUI tool to subscribe the system, just use the CLI tool "
 "which will do it automatically"
-msgstr ""
-"システムをサブスクライブする場合、GUI ツールを起動しないで下さい。自動的に実"
-"行する CLI ツールを使用して下さい。"
+msgstr "システムをサブスクライブする場合、GUI ツールを起動しないで下さい。自動的に実行する CLI ツールを使用して下さい。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:66
 msgid ""
 "Don't execute the autosubscribe option while registering with subscription "
 "manager."
-msgstr ""
-"サブスクリプションマネージャで登録を行っている間は、 自動サブスクライブのオプ"
-"ションは実行しないでください。"
+msgstr "サブスクリプションマネージャで登録を行っている間は、 自動サブスクライブのオプションは実行しないでください。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:69
 #, c-format
@@ -2457,8 +2424,7 @@ msgstr "%s [OPTIONS]"
 #: ../src/rhn-migrate-classic-to-rhsm:130
 msgid ""
 "\n"
-"This machine appears to be already registered to Certificate-based RHN.  "
-"Exiting."
+"This machine appears to be already registered to Certificate-based RHN.  Exiting."
 msgstr ""
 "\n"
 "このマシンは既に証明書ベースの RHN に登録されているようです。終了しています。"
@@ -2467,12 +2433,10 @@ msgstr ""
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"profile details."
+"Please visit https://access.redhat.com/management/consumers/%s to view the profile details."
 msgstr ""
 "\n"
-"プロファイルの詳細を表示するには、https://access.redhat.com/management/"
-"consumers/%s にアクセスして下さい。"
+"プロファイルの詳細を表示するには、https://access.redhat.com/management/consumers/%s にアクセスして下さい。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:138
 #, c-format
@@ -2481,19 +2445,16 @@ msgid ""
 "However this system appears to be registered to '%s'.\n"
 "Exiting."
 msgstr ""
-"この移行スクリプトを使用する場合は、 システムを RHN Classic に登録させる必要"
-"があります。\n"
+"この移行スクリプトを使用する場合は、 システムを RHN Classic に登録させる必要があります。\n"
 "このシステムは「%s」に登録されているようです。\n"
 "終了します。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:151
 #, c-format
 msgid ""
-"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"証明書サーバーに接続できません: %s。 詳細を /var/log/rhsm/rhsm.log で確認して"
-"ください。"
+"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for"
+" more details."
+msgstr "証明書サーバーに接続できません: %s。 詳細を /var/log/rhsm/rhsm.log で確認してください。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:159
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
@@ -2513,9 +2474,7 @@ msgstr "SystemId ファイルが見つかりません。このシステムは登
 
 #: ../src/rhn-migrate-classic-to-rhsm:173
 msgid "Problem encountered getting the list of subscribed channels.  Exiting."
-msgstr ""
-"サブスクライブしたチャンネル一覧の取得時に問題が発生しました。終了していま"
-"す。"
+msgstr "サブスクライブしたチャンネル一覧の取得時に問題が発生しました。終了しています。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:205
 msgid ""
@@ -2565,23 +2524,19 @@ msgstr "適切なサブスクリプションを自動サブスクライブしよ
 #: ../src/rhn-migrate-classic-to-rhsm:305
 msgid ""
 "\n"
-"Unable to auto-subscribe.  Do your existing subscriptions match the products "
-"installed on this system?"
+"Unable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?"
 msgstr ""
 "\n"
-"自動サブスクライブできません。使用している既存のサブスクリプションはこのシス"
-"テムにインストール済みの製品と適合しますか?"
+"自動サブスクライブできません。使用している既存のサブスクリプションはこのシステムにインストール済みの製品と適合しますか?"
 
 #: ../src/rhn-migrate-classic-to-rhsm:306
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"details, and to make changes if necessary."
+"Please visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary."
 msgstr ""
 "\n"
-"詳細を表示するには https://access.redhat.com/management/consumers/%s にアクセ"
-"スし、必要に応じて変更して下さい。"
+"詳細を表示するには https://access.redhat.com/management/consumers/%s にアクセスし、必要に応じて変更して下さい。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:332
 msgid "Channels not available on RHSM:"
@@ -2590,12 +2545,10 @@ msgstr "RHSM では使用できないチャンネル:"
 #: ../src/rhn-migrate-classic-to-rhsm:339
 msgid ""
 "\n"
-"Unrecognized channels. Channel to product certificate mapping missing for "
-"these channels."
+"Unrecognized channels. Channel to product certificate mapping missing for these channels."
 msgstr ""
 "\n"
-"認識できないチャンネルです。 これらのチャンネルにはチャンネルと製品証明書をつ"
-"なぐマッピングがありません。"
+"認識できないチャンネルです。 これらのチャンネルにはチャンネルと製品証明書をつなぐマッピングがありません。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:346
 msgid ""
@@ -2632,11 +2585,11 @@ msgstr ""
 
 #: ../src/rhn-migrate-classic-to-rhsm:410
 msgid ""
-"Please ensure system is subscribed to entitlements, and alter /etc/yum.repos."
-"d/redhat.repo to enable extra repositories."
+"Please ensure system is subscribed to entitlements, and alter "
+"/etc/yum.repos.d/redhat.repo to enable extra repositories."
 msgstr ""
-"システムがエンタイトルメントに購読していることを確認してから、余分なレポジト"
-"リを有効にできるように /etc/yum.repos.d/redhat.repo を変更して下さい。"
+"システムがエンタイトルメントに購読していることを確認してから、余分なレポジトリを有効にできるように "
+"/etc/yum.repos.d/redhat.repo を変更して下さい。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:444
 msgid "RHN Username: "
@@ -2688,9 +2641,8 @@ msgid ""
 "system must be registered with RHN. Please enter your Red Hat login to "
 "ensure your system is up-to-date."
 msgstr ""
-"サブスクリプションマネージャーでシステムに更新を提供させるには、 システムを "
-"RHN に登録する必要があります。 Red Hat ログインを行いシステムが最新の状態であ"
-"ることを確認してください。"
+"サブスクリプションマネージャーでシステムに更新を提供させるには、 システムを RHN に登録する必要があります。 Red Hat "
+"ログインを行いシステムが最新の状態であることを確認してください。"
 
 #: ../src/rhsm_icon.c:209 ../src/rhsm_icon.c:211
 msgid "Invalid or Missing Entitlement Certificates"
@@ -2698,8 +2650,7 @@ msgstr "無効の、又は存在しないエンタイトルメント証明書"
 
 #: ../src/rhsm_icon.c:213
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr ""
-"このシステムには１つ以上の有効なエンタイトルメント証明書が欠如しています。"
+msgstr "このシステムには１つ以上の有効なエンタイトルメント証明書が欠如しています。"
 
 #: ../src/rhsm_icon.c:216 ../src/rhsm_icon.c:217
 msgid "Partially Entitled Products"
@@ -2709,9 +2660,7 @@ msgstr "部分的に権利のある製品"
 msgid ""
 "This system is missing one or more valid entitlement certificates to fully "
 "cover its products"
-msgstr ""
-"このシステムは製品を完全に保障するための１つ又はそれ以上の有効なエンタイトル"
-"メント証明書が欠如しています。"
+msgstr "このシステムは製品を完全に保障するための１つ又はそれ以上の有効なエンタイトルメント証明書が欠如しています。"
 
 #: ../src/rhsm_icon.c:224
 msgid "Some of the system's subscriptions are about to expire"

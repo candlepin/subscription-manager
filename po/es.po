@@ -2,7 +2,7 @@
 # Language es-ES translations for l package.
 # Copyright (C) 2011 THE l'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the l package.
-#
+# 
 # Automatically generated, 2011.
 # Gladys Guerrero <gguerrer@redhat.com>, 2011.
 # gguerrer <gguerrer@fedoraproject.org>, 2012. #zanata
@@ -262,8 +262,8 @@ msgid ""
 "Error displaying Subscription Assistant. Please see /var/log/rhsm/rhsm.log "
 "for more information."
 msgstr ""
-"Error en el despliegue del asistente de suscripción. Por favor, consulte /"
-"var/log/rhsm/rhsm.log para obtener mayor información."
+"Error en el despliegue del asistente de suscripción. Por favor, consulte "
+"/var/log/rhsm/rhsm.log para obtener mayor información."
 
 #: ../src/subscription_manager/gui/subscription_assistant.py:264
 msgid "Unable to search for subscriptions"
@@ -377,9 +377,10 @@ msgstr ""
 "No se puede auto-suscribir, el servidor no soporta niveles de servicio."
 
 #: ../src/subscription_manager/gui/autobind.py:325
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:263
 msgid ""
-"No installed products on system. No need to update certificates at this time."
+"No installed products on system. No need to update certificates at this "
+"time."
 msgstr ""
 
 #: ../src/subscription_manager/gui/autobind.py:330
@@ -393,9 +394,9 @@ msgstr ""
 #: ../src/subscription_manager/gui/autobind.py:363
 #, python-format
 msgid ""
-"Unable to subscribe to any additional products at current service level: %s. "
-"Please use the \"All Available Subscriptions\" tab to manually entitle this "
-"system."
+"Unable to subscribe to any additional products at current service level: %s."
+" Please use the \"All Available Subscriptions\" tab to manually entitle this"
+" system."
 msgstr ""
 
 #: ../src/subscription_manager/gui/autobind.py:375
@@ -463,6 +464,7 @@ msgid "RHSM Subscriptions Management"
 msgstr "Administración de suscripciones de RHSM"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:32
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_manually_subscribe.py:41
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:24
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:25
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:47
@@ -474,26 +476,34 @@ msgstr "Registro de derechos"
 msgid "Entitlement Platform Registration"
 msgstr "Registro de plataforma de derechos"
 
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_manually_subscribe.py:42
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:240
+msgid "Manual Configuraton Required"
+msgstr ""
+
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:309
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:282
 msgid "Confirm Subscriptions"
 msgstr "Confirmar suscripciones"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:26
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:299
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:275
 msgid "Service Level"
 msgstr "Nivel de servicio"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:277
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:244
+msgid "You have opted to skip auto-subscribe."
+msgstr ""
+
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:259
 msgid ""
-"Unable to auto-subscribe, server does not support service levels. Please run "
-"'Subscription Manager' to manually subscribe."
+"Unable to auto-subscribe, server does not support service levels. Please run"
+" 'Subscription Manager' to manually subscribe."
 msgstr ""
 "No se puede auto-suscribir, el servidor no soporta niveles de servicio. Por "
 "favor ejecute 'Subscription Manager' para suscribir de forma manual."
 
-#. XXX show a dialog about manually subscribing
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:290
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:267
 msgid ""
 "All installed products are covered by valid entitlements. Please run "
 "'Subscription Manager' to subscribe to additional products."
@@ -502,7 +512,7 @@ msgstr ""
 "favor ejecute 'Subscription Manager' para suscribir los productos "
 "adicionales."
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:303
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:279
 #, python-format
 msgid ""
 "Unable to subscribe to any additional products at current service level: %s"
@@ -510,10 +520,8 @@ msgstr ""
 "No se puede suscribir a ningún producto adicional en el nivel actual de "
 "servicio: %s"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:311
-msgid ""
-"No service levels will cover all installed products. Please run "
-"'Subscription Manager' to manually entitle this system."
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+msgid "No service levels will cover all installed products. "
 msgstr ""
 
 #: ../src/subscription_manager/gui/redeem.py:54
@@ -523,11 +531,11 @@ msgstr "Error al redimir la suscripción: %s"
 
 #: ../src/subscription_manager/gui/utils.py:59
 msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
+"Network error, unable to connect to server. Please see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr ""
-"Error de red, no puede conectarse al servidor. Por favor, consulte /var/log/"
-"rhsm/rhsm.log para obtener más información."
+"Error de red, no puede conectarse al servidor. Por favor, consulte "
+"/var/log/rhsm/rhsm.log para obtener más información."
 
 #: ../src/subscription_manager/gui/utils.py:62
 #, python-format
@@ -539,18 +547,19 @@ msgstr "No se puede verificar la identidad de servidor: %s"
 #: ../src/subscription_manager/gui/utils.py:67
 #: ../src/subscription_manager/managercli.py:109
 msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
+"Network error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr ""
-"Error de red. Por favor revise la información de conexión o consulte /var/"
-"log/rhsm/rhsm.log para obtener mayor información."
+"Error de red. Por favor revise la información de conexión o consulte "
+"/var/log/rhsm/rhsm.log para obtener mayor información."
 
-#. This is what happens when there's an issue with the server on the other side of the wire
+#. This is what happens when there's an issue with the server on the other
+#. side of the wire
 #: ../src/subscription_manager/gui/utils.py:70
 #: ../src/subscription_manager/managercli.py:113
 msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
+"Remote server error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr ""
 "Error de servidor remoto. Por favor revise los detalles de conexión o "
 "consulte /var/log/rhsm/rhsm.log para obtener más información."
@@ -700,9 +709,9 @@ msgid ""
 "To learn more about RHN registration and technologies please consult this "
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"Para saber más sobre el registro de RHN y las tecnologías por favor consulte "
-"este artículo de la  base de conocimientos: https://access.redhat.com/kb/"
-"docs/DOC-45563"
+"Para saber más sobre el registro de RHN y las tecnologías por favor consulte"
+" este artículo de la  base de conocimientos: "
+"https://access.redhat.com/kb/docs/DOC-45563"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:20
 msgid "Please enter your Red Hat Network account information:"
@@ -710,7 +719,8 @@ msgstr "Por favor ingrese su información de cuenta de Red Hat Network:"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:22
 msgid ""
-"Tip: Forgot your login or password? Look it up at http://red.ht/lost_password"
+"Tip: Forgot your login or password? Look it up at "
+"http://red.ht/lost_password"
 msgstr ""
 
 #. These are a bunch of strings that are marked for translation in optparse,
@@ -986,12 +996,13 @@ msgstr "<b>¿Está seguro de querer anular el registro?</b>"
 #, python-format
 msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr ""
-"<b>Usuario %s no está disponible para registrarse a ninguna organización.</b>"
+"<b>Usuario %s no está disponible para registrarse a ninguna "
+"organización.</b>"
 
 #: ../src/subscription_manager/managercli.py:57
 msgid ""
-"This system is not yet registered. Try 'subscription-manager register --"
-"help' for more information."
+"This system is not yet registered. Try 'subscription-manager register "
+"--help' for more information."
 msgstr ""
 "Este sistema no está registrado aún. Intente 'subscription-manager register "
 "--help' para obtener mayor información."
@@ -1328,7 +1339,8 @@ msgstr "Error: Se debe especificar --org para registrarse a un entorno."
 #: ../src/subscription_manager/managercli.py:706
 msgid "Error: Must specify --org to register with activation keys."
 msgstr ""
-"Error: Se debe especificar --org para registrarse a las llaves de activación."
+"Error: Se debe especificar --org para registrarse a las llaves de "
+"activación."
 
 #: ../src/subscription_manager/managercli.py:710
 msgid "Error: Must specify an activation key"
@@ -1386,11 +1398,11 @@ msgstr ""
 
 #: ../src/subscription_manager/managercli.py:924
 msgid ""
-"Optional language to use for email notification when subscription redemption "
-"is complete. Examples: en-us, de-de"
+"Optional language to use for email notification when subscription redemption"
+" is complete. Examples: en-us, de-de"
 msgstr ""
-"Idioma alternativo para usar en la notificación de correo-e cuando se redima "
-"la suscripción completamente. Ejemplos: en-us, de-de"
+"Idioma alternativo para usar en la notificación de correo-e cuando se redima"
+" la suscripción completamente. Ejemplos: en-us, de-de"
 
 #: ../src/subscription_manager/managercli.py:966
 msgid "Configure what os release to use"
@@ -1436,8 +1448,8 @@ msgstr "Número de suscripciones que va a usar"
 
 #: ../src/subscription_manager/managercli.py:1055
 msgid ""
-"Error: This command requires that you specify a pool with --pool or use --"
-"auto."
+"Error: This command requires that you specify a pool with --pool or use "
+"--auto."
 msgstr ""
 "Error: Con este comando debe especificar un grupo con --pool o usar --auto."
 
@@ -1532,8 +1544,8 @@ msgid ""
 "certificate file to import (for multiple imports, specify this option more "
 "than once)"
 msgstr ""
-"Archivo de certificado a importar (para múltiples importaciones, especificar "
-"esta opción más de una vez)"
+"Archivo de certificado a importar (para múltiples importaciones, especificar"
+" esta opción más de una vez)"
 
 #: ../src/subscription_manager/managercli.py:1272
 msgid "Error: At least one certificate is required"
@@ -1611,8 +1623,8 @@ msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
 msgstr ""
-"Error: La designación de entrada de configuración para retirar debe tener el "
-"formato [section.name]"
+"Error: La designación de entrada de configuración para retirar debe tener el"
+" formato [section.name]"
 
 #: ../src/subscription_manager/managercli.py:1422
 #, python-format
@@ -1688,7 +1700,8 @@ msgid "Error: --ondate is only applicable with --available"
 msgstr "Error: --ondate solamente se aplica con --available "
 
 #: ../src/subscription_manager/managercli.py:1503
-msgid "Error: --servicelevel is only applicable with --available or --consumed"
+msgid ""
+"Error: --servicelevel is only applicable with --available or --consumed"
 msgstr ""
 
 #: ../src/subscription_manager/managercli.py:1526
@@ -1700,7 +1713,8 @@ msgid "    Installed Product Status"
 msgstr "Estatus de productos instalados"
 
 #: ../src/subscription_manager/managercli.py:1546
-msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgid ""
+"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr ""
 "La fecha que ingresó no es válida. El formato de fecha debe ser AAAA-MM-DD "
 "(ejemplo: "
@@ -2149,8 +2163,8 @@ msgstr "Panel de suscripciones"
 msgid ""
 "The following subscriptions will cover the products selected on MM/DD/YYYY"
 msgstr ""
-"Las suscripciones a continuación cubrirán los productos seleccionados en MM/"
-"DD/AAAA"
+"Las suscripciones a continuación cubrirán los productos seleccionados en "
+"MM/DD/AAAA"
 
 #: ../src/subscription_manager/gui/data/subscription_assistant.glade.h:25
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:14
@@ -2361,13 +2375,30 @@ msgstr ""
 msgid "Product Text"
 msgstr "Texto de producto"
 
+#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:1
+msgid ""
+"After opening Subscription Manager, manually subscribe via the <b>All "
+"Available Subscriptions</b> tab."
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
+msgid "Manual Configuration Required"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:3
+msgid ""
+"You will need to manually subscribe this system after completing firstboot. "
+"Subscription Manager can be found in <b>System > Administration > "
+"Subscription Manager</b>."
+msgstr ""
+
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1
 msgid ""
 "<small>Your system's SLA preference is followed when subscribing to new "
 "products</small>"
 msgstr ""
-"<small>La preferencia SLA de su sistema continúa cuando se suscribe a nuevos "
-"productos</small>"
+"<small>La preferencia SLA de su sistema continúa cuando se suscribe a nuevos"
+" productos</small>"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid ""
@@ -2472,8 +2503,7 @@ msgstr "%s [OPCIONES]"
 #: ../src/rhn-migrate-classic-to-rhsm:130
 msgid ""
 "\n"
-"This machine appears to be already registered to Certificate-based RHN.  "
-"Exiting."
+"This machine appears to be already registered to Certificate-based RHN.  Exiting."
 msgstr ""
 "\n"
 "Esta máquina ya aparece registrada a u RHN basada en Certificado. Saliendo."
@@ -2482,12 +2512,10 @@ msgstr ""
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"profile details."
+"Please visit https://access.redhat.com/management/consumers/%s to view the profile details."
 msgstr ""
 "\n"
-"Por favor visite https://access.redhat.com/management/consumers/%s para ver "
-"la información del perfil."
+"Por favor visite https://access.redhat.com/management/consumers/%s para ver la información del perfil."
 
 #: ../src/rhn-migrate-classic-to-rhsm:138
 #, c-format
@@ -2496,18 +2524,17 @@ msgid ""
 "However this system appears to be registered to '%s'.\n"
 "Exiting."
 msgstr ""
-"El script de migración requiere que el sistema esté registrado a RHN "
-"Classic. Sin embargo, este sistema aparece registrado a %s'.¶\n"
+"El script de migración requiere que el sistema esté registrado a RHN Classic. Sin embargo, este sistema aparece registrado a %s'.¶\n"
 "Saliendo."
 
 #: ../src/rhn-migrate-classic-to-rhsm:151
 #, c-format
 msgid ""
-"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
-"more details."
+"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for"
+" more details."
 msgstr ""
-"No se puede conectar al servidor de certificados: %s. Consulte /var/log/rhsm/"
-"rhsm.log para obtener mayor información. "
+"No se puede conectar al servidor de certificados: %s. Consulte "
+"/var/log/rhsm/rhsm.log para obtener mayor información. "
 
 #: ../src/rhn-migrate-classic-to-rhsm:159
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
@@ -2562,14 +2589,12 @@ msgid ""
 msgstr ""
 "\n"
 "No se pudo registrar\n"
-"Para obtener ayuda, por favor contacte los servicios de soporte global de "
-"Red Hat."
+"Para obtener ayuda, por favor contacte los servicios de soporte global de Red Hat."
 
 #: ../src/rhn-migrate-classic-to-rhsm:295
 #, c-format
 msgid "System '%s' successfully registered to Certificate-based RHN.\n"
-msgstr ""
-"El sistema '%s' fue registrado con éxito a RHN basado en certificado.\n"
+msgstr "El sistema '%s' fue registrado con éxito a RHN basado en certificado.\n"
 
 #: ../src/rhn-migrate-classic-to-rhsm:299
 msgid "Launching the GUI tool to manually subscribe the system ..."
@@ -2583,23 +2608,19 @@ msgstr "Intentando auto suscribir a suscripciones apropiadas..."
 #: ../src/rhn-migrate-classic-to-rhsm:305
 msgid ""
 "\n"
-"Unable to auto-subscribe.  Do your existing subscriptions match the products "
-"installed on this system?"
+"Unable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?"
 msgstr ""
 "\n"
-"No se pudo auto suscribir. ¿Sus suscripciones existentes coinciden con los "
-"productos instalados en este sistema?"
+"No se pudo auto suscribir. ¿Sus suscripciones existentes coinciden con los productos instalados en este sistema?"
 
 #: ../src/rhn-migrate-classic-to-rhsm:306
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"details, and to make changes if necessary."
+"Please visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary."
 msgstr ""
 "\n"
-"Por favor visite https://access.redhat.com/management/consumers/%s para ver "
-"información y hacer cambios si es necesario."
+"Por favor visite https://access.redhat.com/management/consumers/%s para ver información y hacer cambios si es necesario."
 
 #: ../src/rhn-migrate-classic-to-rhsm:332
 msgid "Channels not available on RHSM:"
@@ -2608,12 +2629,10 @@ msgstr "Canales no disponibles en RHSM:"
 #: ../src/rhn-migrate-classic-to-rhsm:339
 msgid ""
 "\n"
-"Unrecognized channels. Channel to product certificate mapping missing for "
-"these channels."
+"Unrecognized channels. Channel to product certificate mapping missing for these channels."
 msgstr ""
 "\n"
-"Canales irreconocibles. Falta el canal para la asignación del productos para "
-"estos canales."
+"Canales irreconocibles. Falta el canal para la asignación del productos para estos canales."
 
 #: ../src/rhn-migrate-classic-to-rhsm:346
 msgid ""
@@ -2650,11 +2669,11 @@ msgstr ""
 
 #: ../src/rhn-migrate-classic-to-rhsm:410
 msgid ""
-"Please ensure system is subscribed to entitlements, and alter /etc/yum.repos."
-"d/redhat.repo to enable extra repositories."
+"Please ensure system is subscribed to entitlements, and alter "
+"/etc/yum.repos.d/redhat.repo to enable extra repositories."
 msgstr ""
-"Por favor verifique si el sistema está suscrito a derechos y altere /etc/yum."
-"repos.d/redhat.repo para habilitar repositorios adicionales. "
+"Por favor verifique si el sistema está suscrito a derechos y altere "
+"/etc/yum.repos.d/redhat.repo para habilitar repositorios adicionales. "
 
 #: ../src/rhn-migrate-classic-to-rhsm:444
 msgid "RHN Username: "
