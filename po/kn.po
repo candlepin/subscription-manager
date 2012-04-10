@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-04 10:02-0400\n"
-"PO-Revision-Date: 2011-03-31 18:07+0530\n"
-"Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
+"POT-Creation-Date: 2012-04-10 13:55-0400\n"
+"PO-Revision-Date: 2012-03-20 07:12-0400\n"
+"Last-Translator: shanky <shanky@fedoraproject.org>\n"
 "Language-Team: kn_IN <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: kn-IN\n"
+"Language: kn\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 1.1\n"
+"X-Generator: Zanata 1.5.0\n"
 
 #: ../src/subscription_manager/gui/managergui.py:420
 msgid "Error in autobind wizard"
@@ -378,7 +378,7 @@ msgid "Unable to auto-subscribe, server does not support service levels."
 msgstr "ಸ್ವಯಂ-ಚಂದಾದಾರಿಕೆ ಸಾಧ್ಯವಾಗಿಲ್ಲ, ಪರಿಚಾರಕವು ಸೇವಾ ಮಟ್ಟಗಳನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ."
 
 #: ../src/subscription_manager/gui/autobind.py:325
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:272
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
 msgid ""
 "No installed products on system. No need to update certificates at this time."
 msgstr ""
@@ -466,26 +466,26 @@ msgstr "RHSM ಚಂದಾದಾರಿಕೆಯ ವ್ಯವಸ್ಥಾಪನೆ
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:32
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:24
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:45
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:47
 msgid "Entitlement Registration"
 msgstr "ಎಂಟೈಟಲ್ಮೆಂಟ್ ನೋಂದಣಿ"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:34
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:46
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:48
 msgid "Entitlement Platform Registration"
 msgstr "ಎಂಟೈಟಲ್ಮೆಂಟ್ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್ ನೋಂದಣಿ"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:294
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:309
 msgid "Confirm Subscriptions"
 msgstr "ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಖಚಿತಪಡಿಸಿ"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:26
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:299
 msgid "Service Level"
 msgstr "ಸೇವಾ ಮಟ್ಟ"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:265
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:277
 msgid ""
 "Unable to auto-subscribe, server does not support service levels. Please run "
 "'Subscription Manager' to manually subscribe."
@@ -495,7 +495,7 @@ msgstr ""
 "ಚಲಾಯಿಸಿ."
 
 #. XXX show a dialog about manually subscribing
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:278
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:290
 msgid ""
 "All installed products are covered by valid entitlements. Please run "
 "'Subscription Manager' to subscribe to additional products."
@@ -503,14 +503,14 @@ msgstr ""
 "ಅನುಸ್ಥಾಪಿಸಲಾದ ಎಲ್ಲಾ ಉತ್ಪನಗಳನ್ನು ಮಾನ್ಯವಾದ ಎಂಟೈಟಲ್ಮೆಂಟುಗಳನ್ನು ಹೊಂದಿರುತ್ತವೆ. ಹೆಚ್ಚಿನ "
 "ಉತ್ಪನ್ನಗಳಿಗಾಗಿ 'ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪಕನನ್ನು (Subscription Manager)' ಚಲಾಯಿಸಿ."
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:288
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:303
 #, python-format
 msgid ""
 "Unable to subscribe to any additional products at current service level: %s"
 msgstr ""
 "ಈಗಿನ ಸೇವಾ ಮಟ್ಟದಲ್ಲಿ ಯಾವುದೆ ಹೆಚ್ಚುವರಿ ಉತ್ಪನ್ನಗಳಿಗೆ ಚಂದಾದಾರನಾಗಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ: %s"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:296
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:311
 msgid ""
 "No service levels will cover all installed products. Please run "
 "'Subscription Manager' to manually entitle this system."
@@ -708,11 +708,8 @@ msgstr "ದಯವಿಟ್ಟು ನಿಮ್ಮ Red Hat ನೆಟ್‌ವರ�
 
 #: ../src/subscription_manager/branding/redhat_branding.py:22
 msgid ""
-"Tip: Forgot your login or password? Look it up at "
-"http://red.ht/lost_password
+"Tip: Forgot your login or password? Look it up at http://red.ht/lost_password"
 msgstr ""
-"ಸೂಚನೆ: ನಿಮ್ಮ ಲಾಗಿನ್ ಅಥವ ಗುಪ್ತಪದನ್ನು ಮರೆತಿರಾ? "
-"http://red.ht/lost_password ಎಂಬಲ್ಲಿ ನೋಡಿ"
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,

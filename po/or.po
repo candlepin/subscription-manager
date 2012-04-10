@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-04 10:02-0400\n"
-"PO-Revision-Date: 2011-03-31 18:24+0530\n"
-"Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
+"POT-Creation-Date: 2012-04-10 13:55-0400\n"
+"PO-Revision-Date: 2012-04-10 01:30-0400\n"
+"Last-Translator: mgiri <mgiri@fedoraproject.org>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: or-IN\n"
+"Language: or\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 1.1\n"
+"X-Generator: Zanata 1.5.0\n"
 
 #: ../src/subscription_manager/gui/managergui.py:420
 msgid "Error in autobind wizard"
@@ -367,10 +367,11 @@ msgid "Unable to auto-subscribe, server does not support service levels."
 msgstr "ସ୍ୱୟଂ-ସଦସ୍ୟତା ଗ୍ରହଣ କରିବାରେ ଅସମର୍ଥ, ସର୍ଭର ଏହି ସର୍ଭିସ ସ୍ତରକୁ ସହାୟତା କରିନଥାଏ।"
 
 #: ../src/subscription_manager/gui/autobind.py:325
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:272
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
 msgid ""
 "No installed products on system. No need to update certificates at this time."
 msgstr ""
+"ତନ୍ତ୍ରରେ କୌଣସି ସ୍ଥାପିତ ଉତ୍ପାଦନ ନାହିଁ। ବର୍ତ୍ତମାନ କୌଣସି ପ୍ରମାଣପତ୍ରକୁ ଅଦ୍ୟତନ କରିବା ଆବଶ୍ୟକ ନାହିଁ।"
 
 #: ../src/subscription_manager/gui/autobind.py:330
 msgid ""
@@ -387,6 +388,8 @@ msgid ""
 "Please use the \"All Available Subscriptions\" tab to manually entitle this "
 "system."
 msgstr ""
+"କୌଣସି ଅତିରିକ୍ତ ଉତ୍ପାଦନକୁ ପ୍ରଚଳିତ ସର୍ଭିସ ସ୍ତରରେ ସଦସ୍ୟତା ଗ୍ରହଣ କରିବାରେ ଅସମର୍ଥ:%s. \"ସମସ୍ତ "
+"ଉପଲବ୍ଧ ସଦସ୍ୟତା\" ଟ୍ୟାବଗୁଡ଼ିକୁ ଏହି ତନ୍ତ୍ରକୁ ହସ୍ତକୃତ ଭାବରେ ଅଧିକାର ଦେବା ପାଇଁ ବ୍ୟବହାର କରନ୍ତୁ।"
 
 #: ../src/subscription_manager/gui/autobind.py:375
 msgid ""
@@ -454,26 +457,26 @@ msgstr "RHSM ସ୍ବୀକାର ପରିଚାଳନା"
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:32
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:24
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:45
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:47
 msgid "Entitlement Registration"
 msgstr "ଅଧିକାର ପଞ୍ଜିକରଣ"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:34
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:46
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:48
 msgid "Entitlement Platform Registration"
 msgstr "ଅଧିକାର ପ୍ଲାଟଫର୍ମ ପଞ୍ଜିକରଣ"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:294
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:309
 msgid "Confirm Subscriptions"
 msgstr "ସଦସ୍ୟତାଗୁଡ଼ିକୁ ନିଶ୍ଚିତ କରନ୍ତୁ"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:26
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:299
 msgid "Service Level"
 msgstr "ସର୍ଭିସ ସ୍ତର"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:265
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:277
 msgid ""
 "Unable to auto-subscribe, server does not support service levels. Please run "
 "'Subscription Manager' to manually subscribe."
@@ -482,7 +485,7 @@ msgstr ""
 "ସଦସ୍ୟତା ଗ୍ରହଣ କରିବା ପାଇଁ 'ସଦସ୍ୟତା ପରିଚାଳନା' କୁ ଚଲାନ୍ତୁ।"
 
 #. XXX show a dialog about manually subscribing
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:278
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:290
 msgid ""
 "All installed products are covered by valid entitlements. Please run "
 "'Subscription Manager' to subscribe to additional products."
@@ -490,17 +493,19 @@ msgstr ""
 "ସମସ୍ତ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ବୈଧ ଅଧିକାର ପ୍ରାପ୍ତ ହୋଇଛି। ଅତିରିକ୍ତ ଉତ୍ପାଦନଗୁଡ଼ିକର ସଦସ୍ୟତା ଗ୍ରହଣ କରିବା "
 "ପାଇଁ 'ସଦସ୍ୟତା ପରିଚାଳନା' କୁ ଚଲାନ୍ତୁ।"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:288
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:303
 #, python-format
 msgid ""
 "Unable to subscribe to any additional products at current service level: %s"
 msgstr "ପ୍ରଚଳିତ ସର୍ଭିସ ସ୍ତରରେ କୌଣସି ଅତ୍ରିକ୍ତ ଉତ୍ପାଦନଗୁଡ଼ିକର ସଦସ୍ୟତା ଗ୍ରହଣ କରିବାରେ ଅସମର୍ଥ: %s"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:296
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:311
 msgid ""
 "No service levels will cover all installed products. Please run "
 "'Subscription Manager' to manually entitle this system."
 msgstr ""
+"କୌଣସି ସର୍ଭିସ ସ୍ତର ସମସ୍ତ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକୁ ଗ୍ରହଣ କରିନଥାଏ। \"ସଦସ୍ୟତା ପରିଚାଳକ\" କୁ ଏହି ତନ୍ତ୍ରକୁ "
+"ହସ୍ତକୃତ ଭାବରେ ଅଧିକାର ଦେବା ପାଇଁ ବ୍ୟବହାର କରନ୍ତୁ।"
 
 #: ../src/subscription_manager/gui/redeem.py:54
 #, python-format
@@ -692,11 +697,10 @@ msgstr "ଦୟାକରି ଆପଣଙ୍କର Red Hat ନେଟୱର୍କ �
 
 #: ../src/subscription_manager/branding/redhat_branding.py:22
 msgid ""
-"Tip: Forgot your login or password? Look it up at "
-"http://red.ht/lost_password"
+"Tip: Forgot your login or password? Look it up at http://red.ht/lost_password"
 msgstr ""
-"ସୂଚନା: ଆପଣଙ୍କର ଲଗଇନ କିମ୍ବା ପ୍ରବେଶ ସଂକେତ ଭୁଲିଯାଇଛନ୍ତି କି? \n"
-"http://red.ht/lost_password ରେ ଦେଖନ୍ତୁ"
+"ସୂଚନା: ଆପଣଙ୍କର ଲଗଇନ କିମ୍ବା ପ୍ରବେଶ ସଂକେତ ଭୁଲିଯାଇଛନ୍ତି କି? http://red.ht/lost_password "
+"ଠାରେ ତାହାକୁ ଦେଖନ୍ତୁ"
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
@@ -853,7 +857,7 @@ msgstr "ଉତ୍ପାଦନ ନାମ:         \t%-25s"
 #: ../src/subscription_manager/constants.py:28
 #, python-format
 msgid "Product ID:           \t%-25s"
-msgstr ""
+msgstr "ଉତ୍ପାଦନ ID: %-25s"
 
 #: ../src/subscription_manager/constants.py:30
 #, python-format
@@ -1043,7 +1047,7 @@ msgstr "ମୌଳିକ ବୈଧିକରଣ ସହିତ http ପ୍ରକ୍�
 #: ../src/subscription_manager/managercli.py:235
 #, python-format
 msgid "cannot parse argument: %s"
-msgstr ""
+msgstr "ସ୍ୱତନ୍ତ୍ରଚରକୁ ବିଶ୍ଳେଷଣ କରିପାରିବେ ନାହିଁ: %s"
 
 #: ../src/subscription_manager/managercli.py:281
 msgid "Consumer certificates corrupted. Please reregister."
@@ -1222,7 +1226,7 @@ msgstr "ତ୍ରୁଟି: ସର୍ଭିସ ସ୍ତର କାଢ଼ିବ�
 #: ../src/subscription_manager/managercli.py:618
 #: ../src/subscription_manager/managercli.py:624
 msgid "ERROR: The service-level command is not supported by "
-msgstr ""
+msgstr "ତ୍ରୁଟି: ସର୍ଭିସ-ସ୍ତର ନିର୍ଦ୍ଦେଶ ଏହା ଦ୍ୱାରା ସମର୍ଥିତ ନୁହଁ"
 
 #: ../src/subscription_manager/managercli.py:621
 #, python-format
@@ -1333,7 +1337,7 @@ msgstr "ତନ୍ତ୍ରଟି id ଦ୍ୱାରା ପଞ୍ଜିକୃତ 
 
 #: ../src/subscription_manager/managercli.py:810
 msgid "ERROR: The --servicelevel option is not supported "
-msgstr ""
+msgstr "ତ୍ରୁଟି: --servicelevel ବିକଳ୍ପଟି ସମର୍ଥିତ ନୁହଁ"
 
 #: ../src/subscription_manager/managercli.py:842
 msgid "ERROR: Server does not support environments."
@@ -1382,21 +1386,21 @@ msgstr "ପ୍ରକାଶନକୁ ସେଟ କରନ୍ତୁ"
 
 #: ../src/subscription_manager/managercli.py:997
 msgid "ERROR: The 'release' command is not supported by the server."
-msgstr ""
+msgstr "ତ୍ରୁଟି: 'release' ନିର୍ଦ୍ଦେଶ ସର୍ଭର ଦ୍ୱାରା ସମର୍ଥିତ ନୁହଁ।"
 
 #: ../src/subscription_manager/managercli.py:1012
 #, python-format
 msgid "Release: %s"
-msgstr ""
+msgstr "ପ୍ରକାଶନ: %s"
 
 #: ../src/subscription_manager/managercli.py:1014
 msgid "Release not set"
-msgstr ""
+msgstr "ପ୍ରକାଶନକୁ ସେଟ କରାଯାଇନାହିଁ"
 
 #: ../src/subscription_manager/managercli.py:1023
 #, python-format
 msgid "Release set to: %s"
-msgstr ""
+msgstr "ପ୍ରକାଶନକୁ ଏହି ପରି ସେଟ କରାଯାଇଛି: %s"
 
 #: ../src/subscription_manager/managercli.py:1036
 msgid "Subscribe the registered machine to a specified product"
@@ -1442,7 +1446,7 @@ msgstr "id %s ବିଶିଷ୍ଟ ପୁଲରୁ ଏକ ସଦସ୍ୟତା
 
 #: ../src/subscription_manager/managercli.py:1117
 msgid "ERROR: The --servicelevel option is not "
-msgstr ""
+msgstr "ତ୍ରୁଟି: --servicelevel ବିକଳ୍ପଟି ସମର୍ଥିତ ନୁହଁ"
 
 #: ../src/subscription_manager/managercli.py:1147
 msgid "Unsubscribe the machine from all or specific subscriptions"
@@ -1642,7 +1646,7 @@ msgstr "ଏହି ତନ୍ତ୍ର ଦ୍ୱାରା ବ୍ୟବହାର �
 msgid ""
 "if supplied then list shows only subscriptions matching the specified "
 "service level. "
-msgstr ""
+msgstr "ଯଦି ଦିଆଯାଇଥାଏ ତେବେ ତାଲିକାଟି କେବଳ ଉଲ୍ଲିଖିତ ସର୍ଭିସ ସ୍ତରକୁ ଦର୍ଶାଇଥାଏ।"
 
 #: ../src/subscription_manager/managercli.py:1489
 msgid "if supplied with --available then all subscriptions are returned"
@@ -1658,7 +1662,7 @@ msgstr "ତ୍ରୁଟି: --ondate ଟି କେବଳ --available ସହି�
 
 #: ../src/subscription_manager/managercli.py:1503
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
-msgstr ""
+msgstr "ତ୍ରୁଟି: --servicelevel ଟି କେବଳ --available କିମ୍ବା --consumed ସହିତ ପ୍ରଯୁଜ୍ୟ"
 
 #: ../src/subscription_manager/managercli.py:1526
 msgid "No installed products to list"
@@ -2283,7 +2287,7 @@ msgstr "ବାତିଲ"
 
 #: ../src/subscription_manager/gui/data/autobind.glade.h:4
 msgid "Subscribe System"
-msgstr ""
+msgstr "ତନ୍ତ୍ର ସଦସ୍ୟତା ଗ୍ରହଣ କରନ୍ତୁ"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
@@ -2291,7 +2295,7 @@ msgstr "<b>ପ୍ରମାଣପତ୍ର ସ୍ଥିତି:</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:2
 msgid "<b>Product ID:</b>"
-msgstr ""
+msgstr "<b>ଉତ୍ପାଦନ ID:</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:3
 msgid "<b>Product's Subscription Details</b>"
@@ -2303,7 +2307,7 @@ msgstr "<b>ଉତ୍ପାଦ:</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:6
 msgid "Auto-subscribe"
-msgstr ""
+msgstr "ସ୍ୱୟଂ-ସଦସ୍ୟତା ଗ୍ରହଣ"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:7
 msgid "Certificate Status Text"
@@ -2311,7 +2315,7 @@ msgstr "ପ୍ରମାଣପତ୍ର ସ୍ଥିତି ପାଠ୍ୟ"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:8
 msgid "Installed Subscription Text"
-msgstr ""
+msgstr "ସ୍ଥାପିତ ସଦସ୍ୟତା ପାଠ୍ୟ"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:9
 msgid "Installed View"
@@ -2319,7 +2323,7 @@ msgstr "ସ୍ଥାପିତ ଦୃଶ୍ୟ"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:11
 msgid "Product ID Text"
-msgstr ""
+msgstr "ଉତ୍ପାଦନ ID ପାଠ୍ୟ"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:12
 msgid "Product Text"
@@ -2338,10 +2342,12 @@ msgid ""
 "<small>Your system's release preference is followed when installing and "
 "updating packages.</small>"
 msgstr ""
+"<small>ଆପଣଙ୍କର ତନ୍ତ୍ରର ପ୍ରକାଶନ ପସନ୍ଦକୁ ଅନୁସରଣ କରାଯାଇଥାଏ ଯେତେବେଳେ ପ୍ୟାକେଜଗୁଡ଼ିକୁ ସ୍ଥାପନ "
+"କିମ୍ବା ଅଦ୍ୟତନ କରାଯାଇଥାଏ।</small>"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Release version:"
-msgstr ""
+msgstr "ପ୍ରକାଶନ ସଂସ୍କରଣ:"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "System Service Level Agreement Preference:"
@@ -2469,11 +2475,11 @@ msgstr ""
 
 #: ../src/rhn-migrate-classic-to-rhsm:159
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
-msgstr ""
+msgstr "RHN କ୍ଲାସିକରେ ଭୂମିକା ନିର୍ଦ୍ଧାରଣ ସମୟରେ ସମସ୍ୟା ଦେଖାଦେଇଛି। ପ୍ରସ୍ଥାନ କରୁଅଛି।"
 
 #: ../src/rhn-migrate-classic-to-rhsm:161
 msgid "You must be an org admin to successfully run this script."
-msgstr ""
+msgstr "ଏହି ସ୍କ୍ରିପ୍ଟକୁ ଚଲାଇବା ପାଇଁ ଆପଣ ନିଶ୍ଚିତ ଭାବରେ ଜଣେ ଅନୁଷ୍ଠାନ ପ୍ରଶାସକ ହୋଇଥିବା ଉଚିତ।"
 
 #: ../src/rhn-migrate-classic-to-rhsm:168
 msgid "This system is not associated with any channel."
@@ -2492,6 +2498,7 @@ msgid ""
 "Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
 "details."
 msgstr ""
+"RHN କ୍ଲାସିକକୁ ବୈଧିକୃତ କରିବାରେ ଅସମର୍ଥ। ଅଧିକ ବିବରଣୀ ପାଇଁ  /var/log/rhsm/rhsm.log କୁ ଦେଖନ୍ତୁ।"
 
 #: ../src/rhn-migrate-classic-to-rhsm:219
 msgid "System successfully unregistered from RHN Classic."

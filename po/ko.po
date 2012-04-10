@@ -11,15 +11,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-04 10:02-0400\n"
-"PO-Revision-Date: 2011-04-01 12:50+1000\n"
-"Last-Translator: Eun-Ju Kim <eukim@redhat.com>\n"
+"POT-Creation-Date: 2012-04-10 13:55-0400\n"
+"PO-Revision-Date: 2012-04-10 09:39-0400\n"
+"Last-Translator: eukim <eukim@fedoraproject.org>\n"
 "Language-Team: <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ko-KR\n"
-"X-Generator: KBabel 1.11.4\n"
+"Language: ko\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: Zanata 1.5.0\n"
 
 #: ../src/subscription_manager/gui/managergui.py:420
 msgid "Error in autobind wizard"
@@ -374,10 +375,12 @@ msgstr ""
 "자동 등록을 실행할 수 없습니다, 서버가 서비스 레벨을 지원하지 않습니다. "
 
 #: ../src/subscription_manager/gui/autobind.py:325
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:272
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
 msgid ""
 "No installed products on system. No need to update certificates at this time."
 msgstr ""
+"시스템에 설치된 제품이 없습니다. 현재로서는 인증서를 업데이트할 필요가 없습니"
+"다. "
 
 #: ../src/subscription_manager/gui/autobind.py:330
 msgid ""
@@ -394,6 +397,8 @@ msgid ""
 "Please use the \"All Available Subscriptions\" tab to manually entitle this "
 "system."
 msgstr ""
+"현재 서비스 레벨에서 추가 제품에 등록할 수 없습니다: %s. \"사용 가능한 모든 "
+"서브스크립션\" 탭에서 수동으로 시스템에 인타이틀먼트를 부여합니다. "
 
 #: ../src/subscription_manager/gui/autobind.py:375
 msgid ""
@@ -461,26 +466,26 @@ msgstr "RHSM 서브스크립션 관리 "
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:32
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:24
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:45
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:47
 msgid "Entitlement Registration"
 msgstr "인타이틀먼트 등록 "
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:34
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:46
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:48
 msgid "Entitlement Platform Registration"
 msgstr "인타이틀먼트 플랫폼 등록 "
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:294
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:309
 msgid "Confirm Subscriptions"
 msgstr "서브스크립션 확인 "
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:26
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:299
 msgid "Service Level"
 msgstr "서비스 레벨 "
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:265
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:277
 msgid ""
 "Unable to auto-subscribe, server does not support service levels. Please run "
 "'Subscription Manager' to manually subscribe."
@@ -489,7 +494,7 @@ msgstr ""
 "션 관리자'를 실행하여 수동으로 등록하십시오. "
 
 #. XXX show a dialog about manually subscribing
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:278
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:290
 msgid ""
 "All installed products are covered by valid entitlements. Please run "
 "'Subscription Manager' to subscribe to additional products."
@@ -497,17 +502,19 @@ msgstr ""
 "설치된 모든 제품에는 유효한 인타이틀먼트가 적용됩니다. '서브스크립션 관리"
 "자'를 실행하여 추가 제품을 등록하십시오. "
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:288
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:303
 #, python-format
 msgid ""
 "Unable to subscribe to any additional products at current service level: %s"
 msgstr "현재 서비스 레벨에서 추가 제품에 등록할 수 없음: %s"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:296
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:311
 msgid ""
 "No service levels will cover all installed products. Please run "
 "'Subscription Manager' to manually entitle this system."
 msgstr ""
+"모든 설치된 제품에 적용되는 서비스 레벨이 없습니다. '서브스크립션 관리자'를 "
+"실행하여 수동으로 시스템에 인타이틀먼트를 부여합니다. "
 
 #: ../src/subscription_manager/gui/redeem.py:54
 #, python-format
@@ -693,11 +700,10 @@ msgstr "Red Hat Network 계정 정보를 입력하십시오: "
 
 #: ../src/subscription_manager/branding/redhat_branding.py:22
 msgid ""
-"Tip: Forgot your login or password? Look it up at "
-"http://red.ht/lost_password"
+"Tip: Forgot your login or password? Look it up at http://red.ht/lost_password"
 msgstr ""
-"정보: 로그인 또는 암호를 잊어버리셨습니까? "
-"http://red.ht/lost_password 에서 찾아보십시오. "
+"정보: 로그인 또는 암호를 잊어버리셨습니까? http://red.ht/lost_password에서 찾"
+"아보십시오. "
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
@@ -854,7 +860,7 @@ msgstr "제품 이름: %-25s"
 #: ../src/subscription_manager/constants.py:28
 #, python-format
 msgid "Product ID:           \t%-25s"
-msgstr ""
+msgstr "제품 ID: %-25s"
 
 #: ../src/subscription_manager/constants.py:30
 #, python-format
@@ -1044,7 +1050,7 @@ msgstr "기본 인증을 갖는 http proxy 암호 "
 #: ../src/subscription_manager/managercli.py:235
 #, python-format
 msgid "cannot parse argument: %s"
-msgstr ""
+msgstr "인수를 해석할 수 없음: %s"
 
 #: ../src/subscription_manager/managercli.py:281
 msgid "Consumer certificates corrupted. Please reregister."
@@ -1222,7 +1228,7 @@ msgstr "오류: 서비스 레벨을 검색할 수 없습니다. "
 #: ../src/subscription_manager/managercli.py:618
 #: ../src/subscription_manager/managercli.py:624
 msgid "ERROR: The service-level command is not supported by "
-msgstr ""
+msgstr "오류: service-level 명령은 다음에서 지원하지 않습니다 "
 
 #: ../src/subscription_manager/managercli.py:621
 #, python-format
@@ -1330,7 +1336,7 @@ msgstr "시스템 id가 등록되었습니다: %s "
 
 #: ../src/subscription_manager/managercli.py:810
 msgid "ERROR: The --servicelevel option is not supported "
-msgstr ""
+msgstr "오류: --servicelevel 옵션은 지원되지 않습니다 "
 
 #: ../src/subscription_manager/managercli.py:842
 msgid "ERROR: Server does not support environments."
@@ -1378,21 +1384,21 @@ msgstr "릴리즈 설정 "
 
 #: ../src/subscription_manager/managercli.py:997
 msgid "ERROR: The 'release' command is not supported by the server."
-msgstr ""
+msgstr "오류: 'release' 명령은 서버에서 지원되지 않습니다. "
 
 #: ../src/subscription_manager/managercli.py:1012
 #, python-format
 msgid "Release: %s"
-msgstr ""
+msgstr "릴리즈: %s"
 
 #: ../src/subscription_manager/managercli.py:1014
 msgid "Release not set"
-msgstr ""
+msgstr "릴리즈가 설정되지 않음 "
 
 #: ../src/subscription_manager/managercli.py:1023
 #, python-format
 msgid "Release set to: %s"
-msgstr ""
+msgstr "릴리즈가 설정됨: %s"
 
 #: ../src/subscription_manager/managercli.py:1036
 msgid "Subscribe the registered machine to a specified product"
@@ -1437,7 +1443,7 @@ msgstr "id %s를 갖는 풀에서 성공적으로 서브스크립션이 사용�
 
 #: ../src/subscription_manager/managercli.py:1117
 msgid "ERROR: The --servicelevel option is not "
-msgstr ""
+msgstr "오류:  --servicelevel 옵션이 없음 "
 
 #: ../src/subscription_manager/managercli.py:1147
 msgid "Unsubscribe the machine from all or specific subscriptions"
@@ -1635,6 +1641,7 @@ msgid ""
 "if supplied then list shows only subscriptions matching the specified "
 "service level. "
 msgstr ""
+"제공될 경우 지정된 서비스 레벨과 일치하는 서브스크립션 목록만이 표시됩니다. "
 
 #: ../src/subscription_manager/managercli.py:1489
 msgid "if supplied with --available then all subscriptions are returned"
@@ -1650,7 +1657,7 @@ msgstr "오류: --ondate는 --available과만 사용 가능     "
 
 #: ../src/subscription_manager/managercli.py:1503
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
-msgstr ""
+msgstr "오류: --servicelevel은  --available 또는 --consumed와만 사용 가능 "
 
 #: ../src/subscription_manager/managercli.py:1526
 msgid "No installed products to list"
@@ -2276,7 +2283,7 @@ msgstr "취소 "
 
 #: ../src/subscription_manager/gui/data/autobind.glade.h:4
 msgid "Subscribe System"
-msgstr ""
+msgstr "시스템 등록 "
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
@@ -2284,7 +2291,7 @@ msgstr "<b>인증서 상태:</b>  "
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:2
 msgid "<b>Product ID:</b>"
-msgstr ""
+msgstr "<b>제품 ID:</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:3
 msgid "<b>Product's Subscription Details</b>"
@@ -2296,7 +2303,7 @@ msgstr "<b>제품:</b> "
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:6
 msgid "Auto-subscribe"
-msgstr ""
+msgstr "자동 등록 "
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:7
 msgid "Certificate Status Text"
@@ -2304,7 +2311,7 @@ msgstr "인증서 상태 텍스트 "
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:8
 msgid "Installed Subscription Text"
-msgstr ""
+msgstr "설치된 서브스크립션 텍스트 "
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:9
 msgid "Installed View"
@@ -2312,7 +2319,7 @@ msgstr "설치 보기 "
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:11
 msgid "Product ID Text"
-msgstr ""
+msgstr "제품 ID 텍스트 "
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:12
 msgid "Product Text"
@@ -2330,10 +2337,12 @@ msgid ""
 "<small>Your system's release preference is followed when installing and "
 "updating packages.</small>"
 msgstr ""
+"<small>패키지를 설치 및 업데이트할 때 시스템의 릴리즈 환경 설정은 다음과 같습"
+"니다.</small>"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Release version:"
-msgstr ""
+msgstr "릴리즈 버전: "
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "System Service Level Agreement Preference:"
@@ -2464,10 +2473,12 @@ msgstr ""
 #: ../src/rhn-migrate-classic-to-rhsm:159
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
 msgstr ""
+"RHN 클래식에서 사용자 역할을 지정하는 도중 문제가 발생했습니다. 종료하고 있습"
+"니다. "
 
 #: ../src/rhn-migrate-classic-to-rhsm:161
 msgid "You must be an org admin to successfully run this script."
-msgstr ""
+msgstr "이 스크립트를 성공적으로 실행하려면 반드시 조직 관리자여야 합니다.  "
 
 #: ../src/rhn-migrate-classic-to-rhsm:168
 msgid "This system is not associated with any channel."
@@ -2488,6 +2499,8 @@ msgid ""
 "Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
 "details."
 msgstr ""
+"RHN 클래식에 인증할 수 없습니다. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에"
+"서 참조하십시오. "
 
 #: ../src/rhn-migrate-classic-to-rhsm:219
 msgid "System successfully unregistered from RHN Classic."

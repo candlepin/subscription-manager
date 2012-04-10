@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-04 10:02-0400\n"
+"POT-Creation-Date: 2012-04-10 13:55-0400\n"
 "PO-Revision-Date: 2011-04-01 16:12+1100\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -365,7 +365,7 @@ msgid "Unable to auto-subscribe, server does not support service levels."
 msgstr ""
 
 #: ../src/subscription_manager/gui/autobind.py:325
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:272
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
 msgid ""
 "No installed products on system. No need to update certificates at this time."
 msgstr ""
@@ -449,45 +449,45 @@ msgstr "Gerenciamento de Subscrições RHMS"
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:32
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:24
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:45
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:47
 msgid "Entitlement Registration"
 msgstr "Registro de Entitlement"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:34
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:46
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:48
 msgid "Entitlement Platform Registration"
 msgstr "Registro da Plataforma de Entitlement"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:294
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:309
 msgid "Confirm Subscriptions"
 msgstr ""
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:26
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:299
 msgid "Service Level"
 msgstr ""
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:265
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:277
 msgid ""
 "Unable to auto-subscribe, server does not support service levels. Please run "
 "'Subscription Manager' to manually subscribe."
 msgstr ""
 
 #. XXX show a dialog about manually subscribing
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:278
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:290
 msgid ""
 "All installed products are covered by valid entitlements. Please run "
 "'Subscription Manager' to subscribe to additional products."
 msgstr ""
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:288
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:303
 #, python-format
 msgid ""
 "Unable to subscribe to any additional products at current service level: %s"
 msgstr ""
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:296
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:311
 msgid ""
 "No service levels will cover all installed products. Please run "
 "'Subscription Manager' to manually entitle this system."
@@ -675,11 +675,10 @@ msgstr ""
 
 #: ../src/subscription_manager/branding/redhat_branding.py:22
 msgid ""
-"Tip: Forgot your login or password? Look it up at "
-"http://red.ht/lost_password"
-msgstr "Dica: Você esqueceu de seu nome do usuário ou sua senha? Verifique "
-"http://red.ht/lost_password"
-
+"Tip: Forgot your login or password? Look it up at http://red.ht/lost_password"
+msgstr ""
+"Dica: Você esqueceu de seu nome do usuário ou sua senha? Verifique http://"
+"red.ht/lost_password"
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
@@ -3090,13 +3089,13 @@ msgstr "Gerenciamento de Subscrição da Red Hat"
 
 #~ msgid ""
 #~ "<small>Tip: Forgot your login or password? Look it up at\n"
-#~ "<a href=\"http://red.ht/lost_password"
-#~ "\">http://red.ht/lost_password</a></small>"
+#~ "<a href=\"http://red.ht/lost_password\">http://red.ht/lost_password</a></"
+#~ "small>"
 #~ msgstr ""
 #~ "<small>Dica: Você esqueceu de seu nome do usuário ou sua senha? Verifique "
 #~ "em\n"
-#~ "<a href=\"http://red.ht/lost_password"
-#~ "\">http://red.ht/lost_password</a></small>"
+#~ "<a href=\"http://red.ht/lost_password\">http://red.ht/lost_password</a></"
+#~ "small>"
 
 #~ msgid "Red Hat Login:"
 #~ msgstr ""

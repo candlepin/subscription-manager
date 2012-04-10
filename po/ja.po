@@ -5,19 +5,20 @@
 #
 # Automatically generated, 2011.
 # Kiyoto Hashida <khashida@redhat.com>, 2011.
+# khasida <khasida@fedoraproject.org>, 2012. #zanata
 # noriko <noriko@fedoraproject.org>, 2012. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-04 10:02-0400\n"
-"PO-Revision-Date: 2011-04-11 10:38+0900\n"
-"Last-Translator: Kiyoto Hashida <khashida@redhat.com>\n"
+"POT-Creation-Date: 2012-04-10 13:55-0400\n"
+"PO-Revision-Date: 2012-04-10 04:09-0400\n"
+"Last-Translator: khasida <khasida@fedoraproject.org>\n"
 "Language-Team: Japanese <jp@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ja-JP\n"
+"Language: ja\n"
 "Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "\n"
 "\n"
@@ -27,7 +28,7 @@ msgstr ""
 "\n"
 "\n"
 "\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Zanata 1.5.0\n"
 
 #: ../src/subscription_manager/gui/managergui.py:420
 msgid "Error in autobind wizard"
@@ -378,10 +379,12 @@ msgstr ""
 "自動サブスクライブできません、 サーバーがサービスレベルに対応していません"
 
 #: ../src/subscription_manager/gui/autobind.py:325
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:272
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
 msgid ""
 "No installed products on system. No need to update certificates at this time."
 msgstr ""
+"システム上にインスト－ルされた製品はありません。現時点では証明書の更新は不要"
+"です。"
 
 #: ../src/subscription_manager/gui/autobind.py:330
 msgid ""
@@ -398,6 +401,9 @@ msgid ""
 "Please use the \"All Available Subscriptions\" tab to manually entitle this "
 "system."
 msgstr ""
+"現在のサービスレベル: %s では、追加の製品へサブスクライブすることはできませ"
+"ん。このシステムに手動でエンタイトルメントを得るためには \"All Available "
+"Subscriptions\" を使用します。"
 
 #: ../src/subscription_manager/gui/autobind.py:375
 msgid ""
@@ -466,26 +472,26 @@ msgstr "RHSM サブスクリプション管理"
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:32
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:24
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:45
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:47
 msgid "Entitlement Registration"
 msgstr "エンタイトルメントの登録"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:34
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:46
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:48
 msgid "Entitlement Platform Registration"
 msgstr "エンタイトルメントの登録"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:294
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:309
 msgid "Confirm Subscriptions"
 msgstr "サブスクリプションの確認"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:26
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:299
 msgid "Service Level"
 msgstr "サービスレベル"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:265
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:277
 msgid ""
 "Unable to auto-subscribe, server does not support service levels. Please run "
 "'Subscription Manager' to manually subscribe."
@@ -495,7 +501,7 @@ msgstr ""
 "てください。"
 
 #. XXX show a dialog about manually subscribing
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:278
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:290
 msgid ""
 "All installed products are covered by valid entitlements. Please run "
 "'Subscription Manager' to subscribe to additional products."
@@ -504,7 +510,7 @@ msgstr ""
 "す。 「サブスクリプションマネージャー」を実行して追加製品へのサブスクライブを"
 "行ってください。"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:288
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:303
 #, python-format
 msgid ""
 "Unable to subscribe to any additional products at current service level: %s"
@@ -512,11 +518,14 @@ msgstr ""
 "現在のサービスレベルではいずれの追加製品にもサブスクライブすることができませ"
 "ん: %s"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:296
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:311
 msgid ""
 "No service levels will cover all installed products. Please run "
 "'Subscription Manager' to manually entitle this system."
 msgstr ""
+"どのサービスレベルもインスト－ル済み製品の全てに該当することはありません。 "
+"'Subscription Manager' を実行して手動でこのシステムにエンタイトルメントを得て"
+"下さい。"
 
 #: ../src/subscription_manager/gui/redeem.py:54
 #, python-format
@@ -709,11 +718,10 @@ msgstr "Red Hat Network のアカウント情報を入力して下さい:"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:22
 msgid ""
-"Tip: Forgot your login or password? Look it up at "
-"http://red.ht/lost_password"
+"Tip: Forgot your login or password? Look it up at http://red.ht/lost_password"
 msgstr ""
-"ヒント: ログイン名、パスワードをお忘れの場合はこちらで確認して下さい。"
-"http://red.ht/lost_password"
+"ヒント:ログイン又はパスワードを忘れましたか？http://red.ht/lost_password で確"
+"認できます。"
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
@@ -870,7 +878,7 @@ msgstr "製品名: %-25s"
 #: ../src/subscription_manager/constants.py:28
 #, python-format
 msgid "Product ID:           \t%-25s"
-msgstr ""
+msgstr "製品 ID:  %-25s"
 
 #: ../src/subscription_manager/constants.py:30
 #, python-format
@@ -1060,7 +1068,7 @@ msgstr "ベーシック認証による http プロキシのパスワード"
 #: ../src/subscription_manager/managercli.py:235
 #, python-format
 msgid "cannot parse argument: %s"
-msgstr ""
+msgstr "引数: %s を解析できません"
 
 #: ../src/subscription_manager/managercli.py:281
 msgid "Consumer certificates corrupted. Please reregister."
@@ -1239,7 +1247,7 @@ msgstr "エラー: サービスレベルを読み出せません。"
 #: ../src/subscription_manager/managercli.py:618
 #: ../src/subscription_manager/managercli.py:624
 msgid "ERROR: The service-level command is not supported by "
-msgstr ""
+msgstr "エラー: service-level コマンドは以下ではサポートしていません"
 
 #: ../src/subscription_manager/managercli.py:621
 #, python-format
@@ -1351,7 +1359,7 @@ msgstr "システムは id で登録されています: %s "
 
 #: ../src/subscription_manager/managercli.py:810
 msgid "ERROR: The --servicelevel option is not supported "
-msgstr ""
+msgstr "エラー: --servicelevel オプションはサポートされていません"
 
 #: ../src/subscription_manager/managercli.py:842
 msgid "ERROR: Server does not support environments."

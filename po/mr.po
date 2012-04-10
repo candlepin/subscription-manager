@@ -10,16 +10,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-04 10:02-0400\n"
-"PO-Revision-Date: 2011-09-21 11:57+0530\n"
-"Last-Translator: Sandeep Shedmake <sshedmak@redhat.com>\n"
+"POT-Creation-Date: 2012-04-10 13:55-0400\n"
+"PO-Revision-Date: 2012-04-10 01:12-0400\n"
+"Last-Translator: sandeeps <sandeeps@fedoraproject.org>\n"
 "Language-Team: Marathi <fedora-trans-mr@redhat.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: mr-IN\n"
+"Language: mr\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Zanata 1.5.0\n"
 
 #: ../src/subscription_manager/gui/managergui.py:420
 msgid "Error in autobind wizard"
@@ -368,10 +368,12 @@ msgid "Unable to auto-subscribe, server does not support service levels."
 msgstr "स्वयंसबस्क्राइब अशक्य, सर्व्हर सर्व्हिस स्तरकरीता समर्थन पुरवत नाही."
 
 #: ../src/subscription_manager/gui/autobind.py:325
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:272
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
 msgid ""
 "No installed products on system. No need to update certificates at this time."
 msgstr ""
+"प्रणालीवर प्रतिष्ठापीत उत्पादने आढळली नाही. यावेळी प्रमाणपत्रांना सुधारित करणे आवश्यक "
+"नाही."
 
 #: ../src/subscription_manager/gui/autobind.py:330
 msgid ""
@@ -388,6 +390,8 @@ msgid ""
 "Please use the \"All Available Subscriptions\" tab to manually entitle this "
 "system."
 msgstr ""
+"सध्याच्या सर्व्हिस लेव्हल : %s करीता अगऊ उत्पादनांकरीता सबस्क्राइब करणे अशक्य. स्वतः या "
+"प्रणालीला शीर्षक देण्यासाठी कृपया \"सर्व उपलब्ध सबस्क्रिप्शन्स्\" टॅब्चा वापर करा."
 
 #: ../src/subscription_manager/gui/autobind.py:375
 msgid ""
@@ -455,26 +459,26 @@ msgstr "RHSM सबस्क्रिप्शन्स् व्यवस्थ
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:32
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:24
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:45
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:47
 msgid "Entitlement Registration"
 msgstr "एंटाइटलमेंट नोंदणी"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:34
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:46
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:48
 msgid "Entitlement Platform Registration"
 msgstr "एंटाइटलमेंट प्लॅटफॉर्म नोंदणी"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:294
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:309
 msgid "Confirm Subscriptions"
 msgstr "सबस्क्रिप्शन्स्ची खात्री करा"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:26
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:299
 msgid "Service Level"
 msgstr "सर्व्हिस स्तर"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:265
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:277
 msgid ""
 "Unable to auto-subscribe, server does not support service levels. Please run "
 "'Subscription Manager' to manually subscribe."
@@ -483,7 +487,7 @@ msgstr ""
 "कारयचे असल्यास कृपया 'सबस्क्रिप्शन मॅनेजर' चालवा."
 
 #. XXX show a dialog about manually subscribing
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:278
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:290
 msgid ""
 "All installed products are covered by valid entitlements. Please run "
 "'Subscription Manager' to subscribe to additional products."
@@ -491,17 +495,19 @@ msgstr ""
 "वैध एंटाइटलमेंटसतर्फे सर्व प्रतिष्ठापीत उत्पादने समाविष्टीत केले आहे. कृपया अगाऊ "
 "उत्पादनांकरीता सबस्क्राइब करण्यासाठी 'सबस्क्रिप्शन मॅनेजर' चालवा."
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:288
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:303
 #, python-format
 msgid ""
 "Unable to subscribe to any additional products at current service level: %s"
 msgstr "सध्याच्या सर्व्हिस स्तर: %s वरील कोणतेहि अगाऊ उत्पादनांकरीता सबस्क्राइब होणे अशक्य"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:296
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:311
 msgid ""
 "No service levels will cover all installed products. Please run "
 "'Subscription Manager' to manually entitle this system."
 msgstr ""
+"सर्व प्रतिष्ठापीत उत्पादनांना सर्व्हिस लेव्हल्स् कवर करणार नाही. स्वतः या प्रणालीला शीर्षक "
+"द्यायचे असल्यास 'सबस्क्रिप्शन मॅनेजर' चालवा."
 
 #: ../src/subscription_manager/gui/redeem.py:54
 #, python-format
@@ -691,11 +697,8 @@ msgstr "कृपया तुमचे Red Hat नेटवर्क खात�
 
 #: ../src/subscription_manager/branding/redhat_branding.py:22
 msgid ""
-"Tip: Forgot your login or password? Look it up at "
-"http://red.ht/lost_password"
-msgstr ""
-"टिप: प्रवेश किंवा पासवर्ड विसरलात? "
-"http://red.ht/lost_password येथे शोधा"
+"Tip: Forgot your login or password? Look it up at http://red.ht/lost_password"
+msgstr "टिप: प्रवेश किंवा पासवर्ड विसरलात? http://red.ht/lost_password पहा"
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
@@ -852,7 +855,7 @@ msgstr "उत्पादन नाव:         \t%-25s"
 #: ../src/subscription_manager/constants.py:28
 #, python-format
 msgid "Product ID:           \t%-25s"
-msgstr ""
+msgstr "उत्पादन ID:           \t%-25s"
 
 #: ../src/subscription_manager/constants.py:30
 #, python-format
@@ -1042,7 +1045,7 @@ msgstr "पूर्वनिर्धारीत ओळखसह http प्�
 #: ../src/subscription_manager/managercli.py:235
 #, python-format
 msgid "cannot parse argument: %s"
-msgstr ""
+msgstr "घटक वाचणे अशक्य: %s"
 
 #: ../src/subscription_manager/managercli.py:281
 msgid "Consumer certificates corrupted. Please reregister."
@@ -1219,7 +1222,7 @@ msgstr "त्रुटी: सर्व्हिस स्तर प्रा�
 #: ../src/subscription_manager/managercli.py:618
 #: ../src/subscription_manager/managercli.py:624
 msgid "ERROR: The service-level command is not supported by "
-msgstr ""
+msgstr "त्रुटी: सर्व्हिस-स्तर आदेश समर्थीत नाही"
 
 #: ../src/subscription_manager/managercli.py:621
 #, python-format
@@ -1328,7 +1331,7 @@ msgstr "प्रणालीची id सह नोंदणी झाली �
 
 #: ../src/subscription_manager/managercli.py:810
 msgid "ERROR: The --servicelevel option is not supported "
-msgstr ""
+msgstr "त्रुटी: --servicelevel पर्याय समर्थीत नाही"
 
 #: ../src/subscription_manager/managercli.py:842
 msgid "ERROR: Server does not support environments."
@@ -1377,21 +1380,21 @@ msgstr "प्रकाशन निश्चित करा"
 
 #: ../src/subscription_manager/managercli.py:997
 msgid "ERROR: The 'release' command is not supported by the server."
-msgstr ""
+msgstr "त्रुटी: 'release' आदेश सर्व्हरतर्फे समर्थीत नाही."
 
 #: ../src/subscription_manager/managercli.py:1012
 #, python-format
 msgid "Release: %s"
-msgstr ""
+msgstr "प्रकाशन: %s"
 
 #: ../src/subscription_manager/managercli.py:1014
 msgid "Release not set"
-msgstr ""
+msgstr "प्रकाशन ठरवले नाही"
 
 #: ../src/subscription_manager/managercli.py:1023
 #, python-format
 msgid "Release set to: %s"
-msgstr ""
+msgstr "प्रकाशन ठरवले: %s करीता"
 
 #: ../src/subscription_manager/managercli.py:1036
 msgid "Subscribe the registered machine to a specified product"
@@ -1435,7 +1438,7 @@ msgstr "id %s सह यशस्वीरित्या पूल पासू
 
 #: ../src/subscription_manager/managercli.py:1117
 msgid "ERROR: The --servicelevel option is not "
-msgstr ""
+msgstr "त्रुटी: --servicelevel पर्याय नाही"
 
 #: ../src/subscription_manager/managercli.py:1147
 msgid "Unsubscribe the machine from all or specific subscriptions"
@@ -1632,7 +1635,7 @@ msgstr "प्रणालीतर्फे प्राप्त वापर�
 msgid ""
 "if supplied then list shows only subscriptions matching the specified "
 "service level. "
-msgstr ""
+msgstr "पुरवले असल्यास सूची फक्त निर्देशीत सर्व्हिस लेव्हलसह जुळणारे सबस्क्रिप्शन्स् दाखवतो. "
 
 #: ../src/subscription_manager/managercli.py:1489
 msgid "if supplied with --available then all subscriptions are returned"
@@ -1648,7 +1651,7 @@ msgstr "त्रुटी: --ondate फक्त --available सह लाग�
 
 #: ../src/subscription_manager/managercli.py:1503
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
-msgstr ""
+msgstr "त्रुटी: --servicelevel फक्त --available किंवा --consumed सह लागू होते"
 
 #: ../src/subscription_manager/managercli.py:1526
 msgid "No installed products to list"
@@ -1685,7 +1688,7 @@ msgstr "प्राप्त उत्पादन सबस्क्रिप�
 #: ../src/subscription_manager/managercli.py:1698
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr "वापर: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
+msgstr "वापर: %s मॉड्युल-नाव [मॉड्युल-पर्याय] [--help]"
 
 #: ../src/subscription_manager/managercli.py:1700
 msgid "Primary Modules:"
@@ -2272,7 +2275,7 @@ msgstr "रद्द करा"
 
 #: ../src/subscription_manager/gui/data/autobind.glade.h:4
 msgid "Subscribe System"
-msgstr ""
+msgstr "प्रणालीकरीता सबस्क्राइब व्हा"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
@@ -2280,7 +2283,7 @@ msgstr "<b>प्रमाणपत्र स्थिती:</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:2
 msgid "<b>Product ID:</b>"
-msgstr ""
+msgstr "<b>उत्पादन ID:</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:3
 msgid "<b>Product's Subscription Details</b>"
@@ -2292,7 +2295,7 @@ msgstr "<b>उत्पादन:</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:6
 msgid "Auto-subscribe"
-msgstr ""
+msgstr "स्वयं सबस्क्राइब"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:7
 msgid "Certificate Status Text"
@@ -2300,7 +2303,7 @@ msgstr "प्रमाणपत्र स्थिती मजकूर"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:8
 msgid "Installed Subscription Text"
-msgstr ""
+msgstr "प्रतिष्ठापीत सबस्क्रिप्शन मजकूर"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:9
 msgid "Installed View"
@@ -2308,7 +2311,7 @@ msgstr "प्रतिष्ठापीत दृष्य"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:11
 msgid "Product ID Text"
-msgstr ""
+msgstr "उत्पादन ID मजकूर"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:12
 msgid "Product Text"
@@ -2327,10 +2330,12 @@ msgid ""
 "<small>Your system's release preference is followed when installing and "
 "updating packages.</small>"
 msgstr ""
+"<small>संकुले प्रतिष्ठापीत व सुधारणा करतेवेळी प्रणालीची प्रकाशन पसंती लागू केली जाते.</"
+"small>"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Release version:"
-msgstr ""
+msgstr "प्रकाशन आवृत्ती:"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "System Service Level Agreement Preference:"
@@ -2457,11 +2462,11 @@ msgstr ""
 
 #: ../src/rhn-migrate-classic-to-rhsm:159
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
-msgstr ""
+msgstr "RHN क्लासिकमध्ये वापरकर्ता रोल्स् ओळखतेवेळी त्रुटी.  बाहेर पडत आहे."
 
 #: ../src/rhn-migrate-classic-to-rhsm:161
 msgid "You must be an org admin to successfully run this script."
-msgstr ""
+msgstr "हि स्क्रिप्ट यशस्वीरित्या चालवण्यासाठी तुम्ही संस्थाचे प्रशासक असायला हवे."
 
 #: ../src/rhn-migrate-classic-to-rhsm:168
 msgid "This system is not associated with any channel."
@@ -2480,6 +2485,7 @@ msgid ""
 "Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
 "details."
 msgstr ""
+"RHN क्लासिककरीता ओळख पटवणे अशक्य.  अधिक तपशीलकरीता /var/log/rhsm/rhsm.log पहा."
 
 #: ../src/rhn-migrate-classic-to-rhsm:219
 msgid "System successfully unregistered from RHN Classic."

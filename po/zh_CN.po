@@ -10,15 +10,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-04 10:02-0400\n"
-"PO-Revision-Date: 2011-04-01 10:21+1000\n"
-"Last-Translator: Leah Liu <lliu@redhat.com>\n"
+"POT-Creation-Date: 2012-04-10 13:55-0400\n"
+"PO-Revision-Date: 2012-04-09 08:34-0400\n"
+"Last-Translator: leahliu <lliu@redhat.com>\n"
 "Language-Team: Wei Liu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: zh-CN\n"
-"X-Generator: KBabel 1.11.4\n"
+"Language: zh-Hans-CN\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: Zanata 1.5.0\n"
 
 #: ../src/subscription_manager/gui/managergui.py:420
 msgid "Error in autobind wizard"
@@ -363,10 +364,10 @@ msgid "Unable to auto-subscribe, server does not support service levels."
 msgstr "无法自动订阅，服务器不支持服务等级。"
 
 #: ../src/subscription_manager/gui/autobind.py:325
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:272
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
 msgid ""
 "No installed products on system. No need to update certificates at this time."
-msgstr ""
+msgstr "系统中没有安装的产品。现在不需要更新证书。"
 
 #: ../src/subscription_manager/gui/autobind.py:330
 msgid ""
@@ -381,6 +382,8 @@ msgid ""
 "Please use the \"All Available Subscriptions\" tab to manually entitle this "
 "system."
 msgstr ""
+"在当前的服务等级中无法订阅任何附加产品：%s。请使用“所有可用订阅”标签手动为这"
+"个系统授权。 "
 
 #: ../src/subscription_manager/gui/autobind.py:375
 msgid ""
@@ -448,49 +451,51 @@ msgstr "RHSM 订阅管理"
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:32
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:24
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:45
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:47
 msgid "Entitlement Registration"
 msgstr "授权注册"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:34
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:46
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:48
 msgid "Entitlement Platform Registration"
 msgstr "授权平台注册"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:294
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:309
 msgid "Confirm Subscriptions"
 msgstr "确认订阅"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:26
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:299
 msgid "Service Level"
 msgstr "服务等级"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:265
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:277
 msgid ""
 "Unable to auto-subscribe, server does not support service levels. Please run "
 "'Subscription Manager' to manually subscribe."
 msgstr "无法自动订阅，服务器不支持服务等级。请运行 ‘订阅管理器’ 手动订阅。"
 
 #. XXX show a dialog about manually subscribing
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:278
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:290
 msgid ""
 "All installed products are covered by valid entitlements. Please run "
 "'Subscription Manager' to subscribe to additional products."
 msgstr "有效授权涵盖所有安装的产品。请运行 ‘订阅管理器’ 订阅附加产品。"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:288
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:303
 #, python-format
 msgid ""
 "Unable to subscribe to any additional products at current service level: %s"
 msgstr "在当前的服务等级中无法订阅任何附加产品：%s"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:296
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:311
 msgid ""
 "No service levels will cover all installed products. Please run "
 "'Subscription Manager' to manually entitle this system."
 msgstr ""
+"没有任何服务等级可覆盖所有安装的产品。请运行 ‘订阅管理器’ 标签手动为这个系统"
+"授权。"
 
 #: ../src/subscription_manager/gui/redeem.py:54
 #, python-format
@@ -672,11 +677,8 @@ msgstr "请输入您的红帽网络帐号信息："
 
 #: ../src/subscription_manager/branding/redhat_branding.py:22
 msgid ""
-"Tip: Forgot your login or password? Look it up at "
-"http://red.ht/lost_password"
-msgstr ""
-"提示：忘记您的登录或者密码？请查看 "
-"http://red.ht/lost_password"
+"Tip: Forgot your login or password? Look it up at http://red.ht/lost_password"
+msgstr "提示：忘记您的登录或者密码？请查看 http://red.ht/lost_password"
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
@@ -833,7 +835,7 @@ msgstr "产品名称：%-25s"
 #: ../src/subscription_manager/constants.py:28
 #, python-format
 msgid "Product ID:           \t%-25s"
-msgstr ""
+msgstr "产品 ID：%-25s"
 
 #: ../src/subscription_manager/constants.py:30
 #, python-format
@@ -1021,7 +1023,7 @@ msgstr "使用基本验证的 http proxy 密码"
 #: ../src/subscription_manager/managercli.py:235
 #, python-format
 msgid "cannot parse argument: %s"
-msgstr ""
+msgstr "无法解析参数：%s"
 
 #: ../src/subscription_manager/managercli.py:281
 msgid "Consumer certificates corrupted. Please reregister."
@@ -1196,12 +1198,12 @@ msgstr "错误：无法检索服务等级。"
 #: ../src/subscription_manager/managercli.py:618
 #: ../src/subscription_manager/managercli.py:624
 msgid "ERROR: The service-level command is not supported by "
-msgstr ""
+msgstr "错误：不支持该服务等级命令"
 
 #: ../src/subscription_manager/managercli.py:621
 #, python-format
 msgid "Current service level: %s"
-msgstr "目前服务等级：%s"
+msgstr "当前服务等级：%s"
 
 #: ../src/subscription_manager/managercli.py:636
 msgid "Available Service Levels"
@@ -1304,7 +1306,7 @@ msgstr "已经使用 id %s 注册该系统"
 
 #: ../src/subscription_manager/managercli.py:810
 msgid "ERROR: The --servicelevel option is not supported "
-msgstr ""
+msgstr "错误：不支持 --servicelevel 选项"
 
 #: ../src/subscription_manager/managercli.py:842
 msgid "ERROR: Server does not support environments."
@@ -1351,21 +1353,21 @@ msgstr "设定发行本"
 
 #: ../src/subscription_manager/managercli.py:997
 msgid "ERROR: The 'release' command is not supported by the server."
-msgstr ""
+msgstr "错误：该服务器不支持‘release’命令。"
 
 #: ../src/subscription_manager/managercli.py:1012
 #, python-format
 msgid "Release: %s"
-msgstr ""
+msgstr "Release: %s"
 
 #: ../src/subscription_manager/managercli.py:1014
 msgid "Release not set"
-msgstr ""
+msgstr "没有设定 release"
 
 #: ../src/subscription_manager/managercli.py:1023
 #, python-format
 msgid "Release set to: %s"
-msgstr ""
+msgstr "将 release 设定为：%s"
 
 #: ../src/subscription_manager/managercli.py:1036
 msgid "Subscribe the registered machine to a specified product"
@@ -1408,7 +1410,7 @@ msgstr "成功在 id 为 %s 的池中消耗一个订阅。"
 
 #: ../src/subscription_manager/managercli.py:1117
 msgid "ERROR: The --servicelevel option is not "
-msgstr ""
+msgstr "错误：--servicelevel 选项为 not"
 
 #: ../src/subscription_manager/managercli.py:1147
 msgid "Unsubscribe the machine from all or specific subscriptions"
@@ -1598,7 +1600,7 @@ msgstr "显示本系统消费的订阅。"
 msgid ""
 "if supplied then list shows only subscriptions matching the specified "
 "service level. "
-msgstr ""
+msgstr "如果提供，那么列表只显示那些与指定服务等级匹配的订阅"
 
 #: ../src/subscription_manager/managercli.py:1489
 msgid "if supplied with --available then all subscriptions are returned"
@@ -1614,7 +1616,7 @@ msgstr "错误：--ondate 只能与 --available 合用"
 
 #: ../src/subscription_manager/managercli.py:1503
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
-msgstr ""
+msgstr "错误：--servicelevel 只能与 --available 合用"
 
 #: ../src/subscription_manager/managercli.py:1526
 msgid "No installed products to list"
@@ -2239,7 +2241,7 @@ msgstr "取消"
 
 #: ../src/subscription_manager/gui/data/autobind.glade.h:4
 msgid "Subscribe System"
-msgstr ""
+msgstr "订阅系统"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
@@ -2247,7 +2249,7 @@ msgstr "<b>证书状态：</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:2
 msgid "<b>Product ID:</b>"
-msgstr ""
+msgstr "<b>产品 ID：</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:3
 msgid "<b>Product's Subscription Details</b>"
@@ -2259,7 +2261,7 @@ msgstr "<b>产品：</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:6
 msgid "Auto-subscribe"
-msgstr ""
+msgstr "自动订阅"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:7
 msgid "Certificate Status Text"
@@ -2267,7 +2269,7 @@ msgstr "证书状态文本"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:8
 msgid "Installed Subscription Text"
-msgstr ""
+msgstr "安装的订阅文本"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:9
 msgid "Installed View"
@@ -2275,7 +2277,7 @@ msgstr "安装的查看"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:11
 msgid "Product ID Text"
-msgstr ""
+msgstr "产品 ID 文本"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:12
 msgid "Product Text"
@@ -2291,15 +2293,15 @@ msgstr "<small>订阅新产品时会沿用您系统的 SLA 属性。</small>"
 msgid ""
 "<small>Your system's release preference is followed when installing and "
 "updating packages.</small>"
-msgstr ""
+msgstr "<small>安装和更新软件包时沿用您系统的发行属性。</small>"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Release version:"
-msgstr ""
+msgstr "发行版本："
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "System Service Level Agreement Preference:"
-msgstr "系统服务等级协议属性："
+msgstr "系统服务等级协议属性： "
 
 #: ../src/subscription_manager/gui/data/importsub.glade.h:1
 msgid "Certificate _Location:"
@@ -2418,11 +2420,11 @@ msgstr "无法连接到证书服务器：%s。详情请查看 /var/log/rhsm/rhsm
 
 #: ../src/rhn-migrate-classic-to-rhsm:159
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
-msgstr ""
+msgstr "确定 RHN 传统方法中的用户角色时遇到问题。退出。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:161
 msgid "You must be an org admin to successfully run this script."
-msgstr ""
+msgstr "您必须是机构管理员方可运行这个脚本。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:168
 msgid "This system is not associated with any channel."
@@ -2440,7 +2442,7 @@ msgstr "获取已订阅频道列表时出错。退出。"
 msgid ""
 "Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
 "details."
-msgstr ""
+msgstr "无法使用 RHN 传统方法认证。详情请查看 /var/log/rhsm/rhsm.log。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:219
 msgid "System successfully unregistered from RHN Classic."

@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-04 10:02-0400\n"
-"PO-Revision-Date: 2011-04-01 19:46+0530\n"
-"Last-Translator: Krishnababu Krothapalli <kkrothap@redhat.com>\n"
+"POT-Creation-Date: 2012-04-10 13:55-0400\n"
+"PO-Revision-Date: 2012-04-10 03:32-0400\n"
+"Last-Translator: kkrothap <kkrothap@fedoraproject.org>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: te-IN\n"
+"Language: te\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.1\n"
+"X-Generator: Zanata 1.5.0\n"
 
 #: ../src/subscription_manager/gui/managergui.py:420
 msgid "Error in autobind wizard"
@@ -367,10 +367,11 @@ msgid "Unable to auto-subscribe, server does not support service levels."
 msgstr "ఆటో-సబ్‌స్క్రైబ్ కాలేదు, సేవిక సేవా స్థాయిలకు తోడ్పాటు నీయదు."
 
 #: ../src/subscription_manager/gui/autobind.py:325
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:272
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
 msgid ""
 "No installed products on system. No need to update certificates at this time."
 msgstr ""
+"వ్యవస్థపై యే వుత్పత్తులు సంస్థాపించిలేవు. ఈ సమయంలో ధృవీకరణపత్రాలను నవీకరించవలసిన అవసరంలేదు."
 
 #: ../src/subscription_manager/gui/autobind.py:330
 msgid ""
@@ -387,6 +388,8 @@ msgid ""
 "Please use the \"All Available Subscriptions\" tab to manually entitle this "
 "system."
 msgstr ""
+"ప్రస్తుత సేవా స్థాయి వద్ద యే అదనపు వుత్పత్తులకు సబ్‌స్క్రైబ్ కాలేకపోయింది: %s. వ్యవస్థను మానవీయంగా "
+"యెన్టైటిల్ చేయుటకు దయచేసి \"అన్ని అందుబాటులోని సబ్‌స్క్రిప్షన్లు\" వుపయోగించుము."
 
 #: ../src/subscription_manager/gui/autobind.py:375
 msgid ""
@@ -454,26 +457,26 @@ msgstr "RHSM సబ్‌స్క్రిప్షన్స్ నిర్వ
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:32
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:24
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:45
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:47
 msgid "Entitlement Registration"
 msgstr "ఎన్‌టైటిల్‌మెంట్ నమోదీకరణ"
 
 #: ../src/subscription_manager/gui/firstboot/5/rhsm_login.py:34
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:46
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:48
 msgid "Entitlement Platform Registration"
 msgstr "ఎన్‌టైటిల్‌మెంట్ ప్లాట్‌ఫాం నమోదీకరణ"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:25
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:294
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:309
 msgid "Confirm Subscriptions"
 msgstr "సబ్‌స్క్రిప్షన్లను నిర్థారించు"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_select_sla.py:26
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:299
 msgid "Service Level"
 msgstr "సేవా స్థాయి"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:265
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:277
 msgid ""
 "Unable to auto-subscribe, server does not support service levels. Please run "
 "'Subscription Manager' to manually subscribe."
@@ -482,7 +485,7 @@ msgstr ""
 "'సబ్‌స్క్రిప్షన్ నిర్వాహిక' ను నడుపండి."
 
 #. XXX show a dialog about manually subscribing
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:278
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:290
 msgid ""
 "All installed products are covered by valid entitlements. Please run "
 "'Subscription Manager' to subscribe to additional products."
@@ -490,17 +493,19 @@ msgstr ""
 "అన్ని సంస్థాపిత వుత్పత్తులు చెల్లునటువంటి యెన్టైటిల్మెంట్సుతో వున్నాయి. అదనపు వుత్పత్తులకు సబ్‌స్క్రైబ్ "
 "అగుటకు దయచేసి 'సబ్‌స్క్రిప్షన్ నిర్వాహిక' నడుపండి."
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:288
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:303
 #, python-format
 msgid ""
 "Unable to subscribe to any additional products at current service level: %s"
 msgstr "ప్రస్తుత సేవా స్థాయివద్ద యే అదనపు వుత్పత్తులకు సబ్‌స్క్రైబ్ కాలేదు: %s"
 
-#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:296
+#: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:311
 msgid ""
 "No service levels will cover all installed products. Please run "
 "'Subscription Manager' to manually entitle this system."
 msgstr ""
+"అన్ని సంస్థాపిత వుత్పత్తులను యే సేవా స్థాయిలు కవర్ చేయవు. ఈ వ్యవస్థను మానవీయంగా యెన్టైటిల్ చేయుటకు "
+"దయచేసి 'సబ్‌స్క్రిప్షన్ నిర్వాహిక' నడుపండి."
 
 #: ../src/subscription_manager/gui/redeem.py:54
 #, python-format
@@ -690,11 +695,8 @@ msgstr "దయచేసి మీ Red Hat నెట్వర్కు ఖాత�
 
 #: ../src/subscription_manager/branding/redhat_branding.py:22
 msgid ""
-"Tip: Forgot your login or password? Look it up at "
-"http://red.ht/lost_password"
-msgstr ""
-"చిట్కా: మీ లాగిన్ లేదా సంకేతపదం మరిచారా? దీని వద్ద చూడండి "
-"http://red.ht/lost_password"
+"Tip: Forgot your login or password? Look it up at http://red.ht/lost_password"
+msgstr "చిట్కా: మీ సంకేతపదం లేదా లాగిన్ మరచారా? http://red.ht/lost_password వద్ద చూడండి."
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
@@ -851,7 +853,7 @@ msgstr "ఉత్పత్తి పేరు:         \t%-25s"
 #: ../src/subscription_manager/constants.py:28
 #, python-format
 msgid "Product ID:           \t%-25s"
-msgstr ""
+msgstr "ఉత్పత్తి ID:           \t%-25s"
 
 #: ../src/subscription_manager/constants.py:30
 #, python-format
@@ -1041,7 +1043,7 @@ msgstr "ప్రాధమిక ధృవీకరణతో http ప్రో�
 #: ../src/subscription_manager/managercli.py:235
 #, python-format
 msgid "cannot parse argument: %s"
-msgstr ""
+msgstr "ఆర్గుమెంట్‌ను పార్స్ చేయలేదు: %s"
 
 #: ../src/subscription_manager/managercli.py:281
 msgid "Consumer certificates corrupted. Please reregister."
@@ -1216,7 +1218,7 @@ msgstr "దోషం: సేవా స్థాయిలను వెలిక�
 #: ../src/subscription_manager/managercli.py:618
 #: ../src/subscription_manager/managercli.py:624
 msgid "ERROR: The service-level command is not supported by "
-msgstr ""
+msgstr "దోషం: సేవా-స్థాయి ఆదేశం తోడ్పాటు నీయబడుటలేదు"
 
 #: ../src/subscription_manager/managercli.py:621
 #, python-format
@@ -1324,7 +1326,7 @@ msgstr "సిస్టమ్ ఐడి తో నమోదు చేయబడ�
 
 #: ../src/subscription_manager/managercli.py:810
 msgid "ERROR: The --servicelevel option is not supported "
-msgstr ""
+msgstr "దోషం: --servicelevel ఐచ్చికం తోడ్పాటు నిచ్చుటలేదు"
 
 #: ../src/subscription_manager/managercli.py:842
 msgid "ERROR: Server does not support environments."
@@ -1372,21 +1374,21 @@ msgstr "విడుదలను అమర్చు"
 
 #: ../src/subscription_manager/managercli.py:997
 msgid "ERROR: The 'release' command is not supported by the server."
-msgstr ""
+msgstr "దోషం: 'release' ఆదేశం సేవికచే తోడ్పాటు యివ్వ బడుటలేదు."
 
 #: ../src/subscription_manager/managercli.py:1012
 #, python-format
 msgid "Release: %s"
-msgstr ""
+msgstr "విడుదల: %s"
 
 #: ../src/subscription_manager/managercli.py:1014
 msgid "Release not set"
-msgstr ""
+msgstr "విడుదల అమర్చలేదు"
 
 #: ../src/subscription_manager/managercli.py:1023
 #, python-format
 msgid "Release set to: %s"
-msgstr ""
+msgstr "విడుదల దీనికి అమర్చబడెను: %s"
 
 #: ../src/subscription_manager/managercli.py:1036
 msgid "Subscribe the registered machine to a specified product"
@@ -1429,7 +1431,7 @@ msgstr "పూల్ నుండి %s ఐడితో వొక సబ్‌�
 
 #: ../src/subscription_manager/managercli.py:1117
 msgid "ERROR: The --servicelevel option is not "
-msgstr ""
+msgstr "దోషం: --servicelevel ఐచ్చికం కాదు"
 
 #: ../src/subscription_manager/managercli.py:1147
 msgid "Unsubscribe the machine from all or specific subscriptions"
@@ -1623,6 +1625,7 @@ msgid ""
 "if supplied then list shows only subscriptions matching the specified "
 "service level. "
 msgstr ""
+"ఒకవేళ యీయబడితే అప్పుడు జాబితా అనునది తెలుపబడిన సేవా స్థాయికు సరిపోలిన సబ్‌స్క్రిప్షన్లను మాత్రమే చూపును."
 
 #: ../src/subscription_manager/managercli.py:1489
 msgid "if supplied with --available then all subscriptions are returned"
@@ -1638,7 +1641,7 @@ msgstr "దోషం: --ondate అనునది --available తో మాత�
 
 #: ../src/subscription_manager/managercli.py:1503
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
-msgstr ""
+msgstr "దోషం: --servicelevel అనునది --available లేదా --consumed తో మాత్రమే ఆపాదితం"
 
 #: ../src/subscription_manager/managercli.py:1526
 msgid "No installed products to list"
@@ -2262,7 +2265,7 @@ msgstr "రద్దు"
 
 #: ../src/subscription_manager/gui/data/autobind.glade.h:4
 msgid "Subscribe System"
-msgstr ""
+msgstr "సబ్‌స్క్రైబ్ సిస్టమ్"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:1
 msgid "<b>Certificate Status:</b>"
@@ -2270,7 +2273,7 @@ msgstr "<b>ధృవీకరణపత్రం స్థితి:</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:2
 msgid "<b>Product ID:</b>"
-msgstr ""
+msgstr "<b>ఉత్పత్తి ఐడి:</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:3
 msgid "<b>Product's Subscription Details</b>"
@@ -2282,7 +2285,7 @@ msgstr "<b>ఉత్పత్తి:</b>"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:6
 msgid "Auto-subscribe"
-msgstr ""
+msgstr "స్వయంచాలక-సబ్‌స్క్రైబ్"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:7
 msgid "Certificate Status Text"
@@ -2290,7 +2293,7 @@ msgstr "ధృవీకరణపత్ర స్థితి పాఠము"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:8
 msgid "Installed Subscription Text"
-msgstr ""
+msgstr "సంస్థాపిత సబ్‌స్క్రిప్షన్ పాఠం"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:9
 msgid "Installed View"
@@ -2298,7 +2301,7 @@ msgstr "సంస్థాపిత దర్శనం"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:11
 msgid "Product ID Text"
-msgstr ""
+msgstr "ఉత్పత్తి ఐడి పాఠం"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:12
 msgid "Product Text"
@@ -2317,10 +2320,12 @@ msgid ""
 "<small>Your system's release preference is followed when installing and "
 "updating packages.</small>"
 msgstr ""
+"<small>ప్యాకేజీలను సంస్థాపించునప్పుడు మరియు నవీకరించునప్పుడు మీ వ్యవస్థ యొక్క విడుదల అభీష్టం "
+"అనుసరించబడును.</small>"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Release version:"
-msgstr ""
+msgstr "విడుదల వర్షన్:"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "System Service Level Agreement Preference:"
@@ -2451,11 +2456,11 @@ msgstr ""
 
 #: ../src/rhn-migrate-classic-to-rhsm:159
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
-msgstr ""
+msgstr "RHN క్లాసిక్ నందు వాడుకరి పాత్రలను నిర్థారించుటలో సమస్య యెదురైంది."
 
 #: ../src/rhn-migrate-classic-to-rhsm:161
 msgid "You must be an org admin to successfully run this script."
-msgstr ""
+msgstr "ఈ స్క్రిప్టును విజయవంతంగా నడుపుటకు మీరు తప్పక org నిర్వాహకులు అయివుండాలి."
 
 #: ../src/rhn-migrate-classic-to-rhsm:168
 msgid "This system is not associated with any channel."
@@ -2473,7 +2478,7 @@ msgstr "సబ్‌స్క్రైబ్‌డ్ చానళ్ళ జా�
 msgid ""
 "Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
 "details."
-msgstr ""
+msgstr "RHN క్లాసిక్ నిర్థారించలేక పోయింది. మరిన్ని వివరాల కొరకు /var/log/rhsm/rhsm.log చూడండి."
 
 #: ../src/rhn-migrate-classic-to-rhsm:219
 msgid "System successfully unregistered from RHN Classic."
