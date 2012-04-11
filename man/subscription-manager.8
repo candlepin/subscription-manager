@@ -205,7 +205,7 @@ Automatically subscribes this system to the best-matched compatible subscription
 .B --servicelevel=None|Standard|Premium
 Sets the preferred service level to use with subscriptions added to the system. This can only be used in conjunction with the 
 .B --autosubscribe
-optiona
+option.
 
 .TP
 .B --force
@@ -366,6 +366,15 @@ Lists products which are currently installed on the system which may (or may not
 Lists all possible subscriptions that have been purchased by the organization, even if they don't match the architecture of the system. This is used with the
 .B --available 
 option. 
+
+
+.TP
+.B --servicelevel
+Displays the current preferred service level for the system. Service levels can be None, Standard, or Premium. If no service-level preference is set, then the display value is blank. For example:
+.nf
+subscription-manager list --servicelevel
+Current service level: 
+.fi
 
 
 .SS REFRESH OPTIONS
