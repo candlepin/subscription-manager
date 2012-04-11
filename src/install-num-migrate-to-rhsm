@@ -106,7 +106,7 @@ def main():
     try:
         instnum = InstallationNumber(instnumber)
     except InstallationNumberError, e:
-        print _("Could not parse the installation number: %s") % (e)
+        print _("Could not parse the installation number: %s") % (_(str(e)))
         sys.exit(1)
 
     repo_dict = instnum.get_repos_dict()
