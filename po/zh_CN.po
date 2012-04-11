@@ -2,7 +2,7 @@
 # Language zh-CN translations for l package.
 # Copyright (C) 2011 THE l'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the l package.
-# 
+#
 # Automatically generated, 2011.
 # Leah Liu <lliu@redhat.com>, 2011.
 # leahliu <lliu@redhat.com>, 2012. #zanata
@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-10 13:55-0400\n"
-"PO-Revision-Date: 2012-04-09 08:18-0400\n"
+"POT-Creation-Date: 2012-04-11 09:20-0400\n"
+"PO-Revision-Date: 2012-04-10 09:17-0400\n"
 "Last-Translator: leahliu <lliu@redhat.com>\n"
 "Language-Team: Wei Liu\n"
 "MIME-Version: 1.0\n"
@@ -366,8 +366,7 @@ msgstr "无法自动订阅，服务器不支持服务等级。"
 #: ../src/subscription_manager/gui/autobind.py:325
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:263
 msgid ""
-"No installed products on system. No need to update certificates at this "
-"time."
+"No installed products on system. No need to update certificates at this time."
 msgstr "系统中没有安装的产品。现在不需要更新证书。"
 
 #: ../src/subscription_manager/gui/autobind.py:330
@@ -379,16 +378,20 @@ msgstr "有效授权涵盖所有安装的产品。这次不需要更新证书。
 #: ../src/subscription_manager/gui/autobind.py:363
 #, python-format
 msgid ""
-"Unable to subscribe to any additional products at current service level: %s."
-" Please use the \"All Available Subscriptions\" tab to manually entitle this"
-" system."
-msgstr "在当前的服务等级中无法订阅任何附加产品：%s。请使用“所有可用订阅”标签手动为这个系统授权。 "
+"Unable to subscribe to any additional products at current service level: %s. "
+"Please use the \"All Available Subscriptions\" tab to manually entitle this "
+"system."
+msgstr ""
+"在当前的服务等级中无法订阅任何附加产品：%s。请使用“所有可用订阅”标签手动为这"
+"个系统授权。 "
 
 #: ../src/subscription_manager/gui/autobind.py:375
 msgid ""
 "No service levels will cover all installed products. Please use the \"All "
 "Available Subscriptions\" tab to manually entitle this system."
-msgstr "没有任何服务等级可覆盖所有安装的产品。请使用“所有可用订阅”标签手动为这个系统授权。"
+msgstr ""
+"没有任何服务等级可覆盖所有安装的产品。请使用“所有可用订阅”标签手动为这个系统"
+"授权。"
 
 #: ../src/subscription_manager/gui/autobind.py:489
 msgid "Error subscribing:"
@@ -461,7 +464,7 @@ msgstr "授权平台注册"
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_manually_subscribe.py:42
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:240
 msgid "Manual Configuraton Required"
-msgstr ""
+msgstr "手动配置必填项"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_confirm_subs.py:25
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:282
@@ -475,12 +478,12 @@ msgstr "服务等级"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:244
 msgid "You have opted to skip auto-subscribe."
-msgstr ""
+msgstr "您选择跳过自动订阅。"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:259
 msgid ""
-"Unable to auto-subscribe, server does not support service levels. Please run"
-" 'Subscription Manager' to manually subscribe."
+"Unable to auto-subscribe, server does not support service levels. Please run "
+"'Subscription Manager' to manually subscribe."
 msgstr "无法自动订阅，服务器不支持服务等级。请运行 ‘订阅管理器’ 手动订阅。"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:267
@@ -497,7 +500,7 @@ msgstr "在当前的服务等级中无法订阅任何附加产品：%s"
 
 #: ../src/subscription_manager/gui/firstboot/6/rhsm_login.py:284
 msgid "No service levels will cover all installed products. "
-msgstr ""
+msgstr "没有任何服务等级可覆盖所有安装的产品。"
 
 #: ../src/subscription_manager/gui/redeem.py:54
 #, python-format
@@ -506,8 +509,8 @@ msgstr "兑换订阅出错：%s"
 
 #: ../src/subscription_manager/gui/utils.py:59
 msgid ""
-"Network error, unable to connect to server. Please see "
-"/var/log/rhsm/rhsm.log for more information."
+"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
+"log for more information."
 msgstr "网络出错，无法连接到服务器。详情请查看 /var/log/rhsm/rhsm.log。"
 
 #: ../src/subscription_manager/gui/utils.py:62
@@ -520,17 +523,16 @@ msgstr "无法确认服务器身份：%s"
 #: ../src/subscription_manager/gui/utils.py:67
 #: ../src/subscription_manager/managercli.py:109
 msgid ""
-"Network error. Please check the connection details, or see "
-"/var/log/rhsm/rhsm.log for more information."
+"Network error. Please check the connection details, or see /var/log/rhsm/"
+"rhsm.log for more information."
 msgstr "网络出错。请查看连接详情，或者 /var/log/rhsm/rhsm.log。"
 
-#. This is what happens when there's an issue with the server on the other
-#. side of the wire
+#. This is what happens when there's an issue with the server on the other side of the wire
 #: ../src/subscription_manager/gui/utils.py:70
 #: ../src/subscription_manager/managercli.py:113
 msgid ""
-"Remote server error. Please check the connection details, or see "
-"/var/log/rhsm/rhsm.log for more information."
+"Remote server error. Please check the connection details, or see /var/log/"
+"rhsm/rhsm.log for more information."
 msgstr "远程服务器出错。详情请查看连接情况或者 /var/log/rhsm/rhsm.log。"
 
 #: ../src/subscription_manager/gui/utils.py:91
@@ -662,14 +664,17 @@ msgid ""
 "The tool you are using is attempting to re-register using RHN Certificate-"
 "Based technology. Red Hat recommends (except in a few cases) that customers "
 "only register with RHN once."
-msgstr "您正在使用的工具要尝试使用 RHN 证书式技术重新注册。红帽建议客户只在 RHN 注册一次（只有少数例外情况）。"
+msgstr ""
+"您正在使用的工具要尝试使用 RHN 证书式技术重新注册。红帽建议客户只在 RHN 注册"
+"一次（只有少数例外情况）。"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:17
 msgid ""
 "To learn more about RHN registration and technologies please consult this "
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"要了解更多有关 RHN 注册和技术的信息，请查询知识库文章：https://access.redhat.com/kb/docs/DOC-45563"
+"要了解更多有关 RHN 注册和技术的信息，请查询知识库文章：https://access.redhat."
+"com/kb/docs/DOC-45563"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:20
 msgid "Please enter your Red Hat Network account information:"
@@ -677,8 +682,7 @@ msgstr "请输入您的红帽网络帐号信息："
 
 #: ../src/subscription_manager/branding/redhat_branding.py:22
 msgid ""
-"Tip: Forgot your login or password? Look it up at "
-"http://red.ht/lost_password"
+"Tip: Forgot your login or password? Look it up at http://red.ht/lost_password"
 msgstr "提示：忘记您的登录或者密码？请查看 http://red.ht/lost_password"
 
 #. These are a bunch of strings that are marked for translation in optparse,
@@ -957,8 +961,8 @@ msgstr "<b>用户 %s 无法注册任何机构。</b>"
 
 #: ../src/subscription_manager/managercli.py:57
 msgid ""
-"This system is not yet registered. Try 'subscription-manager register "
-"--help' for more information."
+"This system is not yet registered. Try 'subscription-manager register --"
+"help' for more information."
 msgstr "这个系统尚未注册。详情请查看 'subscription-manager register --help'。"
 
 #: ../src/subscription_manager/managercli.py:71
@@ -1336,8 +1340,8 @@ msgstr "订阅兑换完成时接收通知的电子邮件。"
 
 #: ../src/subscription_manager/managercli.py:924
 msgid ""
-"Optional language to use for email notification when subscription redemption"
-" is complete. Examples: en-us, de-de"
+"Optional language to use for email notification when subscription redemption "
+"is complete. Examples: en-us, de-de"
 msgstr "当订阅兑换完成时接收电子邮件通知的语言。例如：en-us、de-de 等。"
 
 #: ../src/subscription_manager/managercli.py:966
@@ -1384,8 +1388,8 @@ msgstr "要消耗的订阅数"
 
 #: ../src/subscription_manager/managercli.py:1055
 msgid ""
-"Error: This command requires that you specify a pool with --pool or use "
-"--auto."
+"Error: This command requires that you specify a pool with --pool or use --"
+"auto."
 msgstr "错误：这个命令要求您使用 --pool 或者 --auto 指定池。"
 
 #: ../src/subscription_manager/managercli.py:1058
@@ -1616,8 +1620,7 @@ msgid "Error: --ondate is only applicable with --available"
 msgstr "错误：--ondate 只能与 --available 合用"
 
 #: ../src/subscription_manager/managercli.py:1503
-msgid ""
-"Error: --servicelevel is only applicable with --available or --consumed"
+msgid "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr "错误：--servicelevel 只能与 --available 合用"
 
 #: ../src/subscription_manager/managercli.py:1526
@@ -1629,8 +1632,7 @@ msgid "    Installed Product Status"
 msgstr "安装的产品状态"
 
 #: ../src/subscription_manager/managercli.py:1546
-msgid ""
-"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr "输入的日期无效。日期格式应为 YYYY-MM-DD（例如："
 
 #: ../src/subscription_manager/managercli.py:1559
@@ -2290,11 +2292,11 @@ msgstr "产品文本"
 msgid ""
 "After opening Subscription Manager, manually subscribe via the <b>All "
 "Available Subscriptions</b> tab."
-msgstr ""
+msgstr "打开订阅管理器后，使用<b>所有可用订阅</b>标签手动订阅。"
 
 #: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
 msgid "Manual Configuration Required"
-msgstr ""
+msgstr "手动配置必填项"
 
 #: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:3
 msgid ""
@@ -2302,6 +2304,8 @@ msgid ""
 "Subscription Manager can be found in <b>System > Administration > "
 "Subscription Manager</b>."
 msgstr ""
+"完成首次引导后，您需要手动订阅这个系统。在 <b>系统 > 管理 > 订阅管理器 </b> "
+"中可找到订阅管理器。"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1
 msgid ""
@@ -2404,7 +2408,8 @@ msgstr "%s [选项]"
 #: ../src/rhn-migrate-classic-to-rhsm:130
 msgid ""
 "\n"
-"This machine appears to be already registered to Certificate-based RHN.  Exiting."
+"This machine appears to be already registered to Certificate-based RHN.  "
+"Exiting."
 msgstr ""
 "\n"
 "这台机器已经使用证书式 RHN 注册。退出。"
@@ -2413,7 +2418,8 @@ msgstr ""
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the profile details."
+"Please visit https://access.redhat.com/management/consumers/%s to view the "
+"profile details."
 msgstr ""
 "\n"
 "要查看侧写详情请访问 https://access.redhat.com/management/consumers/%s。"
@@ -2432,8 +2438,8 @@ msgstr ""
 #: ../src/rhn-migrate-classic-to-rhsm:151
 #, c-format
 msgid ""
-"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for"
-" more details."
+"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
+"more details."
 msgstr "无法连接到证书服务器：%s。详情请查看 /var/log/rhsm/rhsm.log。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:159
@@ -2504,7 +2510,8 @@ msgstr "尝试自动订阅到正确的订阅......"
 #: ../src/rhn-migrate-classic-to-rhsm:305
 msgid ""
 "\n"
-"Unable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?"
+"Unable to auto-subscribe.  Do your existing subscriptions match the products "
+"installed on this system?"
 msgstr ""
 "\n"
 "无法自动订阅。您现有的订阅是否与这个系统中安装的产品匹配？"
@@ -2513,10 +2520,12 @@ msgstr ""
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary."
+"Please visit https://access.redhat.com/management/consumers/%s to view the "
+"details, and to make changes if necessary."
 msgstr ""
 "\n"
-"详情请访问 https://access.redhat.com/management/consumers/%s，并根据需要进行修改。"
+"详情请访问 https://access.redhat.com/management/consumers/%s，并根据需要进行"
+"修改。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:332
 msgid "Channels not available on RHSM:"
@@ -2525,7 +2534,8 @@ msgstr "RHSM 中不可用的频道："
 #: ../src/rhn-migrate-classic-to-rhsm:339
 msgid ""
 "\n"
-"Unrecognized channels. Channel to product certificate mapping missing for these channels."
+"Unrecognized channels. Channel to product certificate mapping missing for "
+"these channels."
 msgstr ""
 "\n"
 "无法识别的频道。这些频道缺少频道和产品证书之间的映射。"
@@ -2565,9 +2575,11 @@ msgstr ""
 
 #: ../src/rhn-migrate-classic-to-rhsm:410
 msgid ""
-"Please ensure system is subscribed to entitlements, and alter "
-"/etc/yum.repos.d/redhat.repo to enable extra repositories."
-msgstr "请确定在授权中订阅了该系统，并将 /etc/yum.repos.d/redhat.repo 改为启用附加库。"
+"Please ensure system is subscribed to entitlements, and alter /etc/yum.repos."
+"d/redhat.repo to enable extra repositories."
+msgstr ""
+"请确定在授权中订阅了该系统，并将 /etc/yum.repos.d/redhat.repo 改为启用附加"
+"库。"
 
 #: ../src/rhn-migrate-classic-to-rhsm:444
 msgid "RHN Username: "
@@ -2618,7 +2630,9 @@ msgid ""
 "In order for Subscription Manager to provide your system with updates, your "
 "system must be registered with RHN. Please enter your Red Hat login to "
 "ensure your system is up-to-date."
-msgstr "要让订阅管理器为您的系统提供更新，您就必须在 RHN 中注册该系统。请输入您的红帽登录以便确定系统处于最新状态。"
+msgstr ""
+"要让订阅管理器为您的系统提供更新，您就必须在 RHN 中注册该系统。请输入您的红帽"
+"登录以便确定系统处于最新状态。"
 
 #: ../src/rhsm_icon.c:209 ../src/rhsm_icon.c:211
 msgid "Invalid or Missing Entitlement Certificates"
