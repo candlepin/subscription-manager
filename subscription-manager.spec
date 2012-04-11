@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 0.99.13
+Version: 0.99.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -304,6 +304,24 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Apr 11 2012 Michael Stead <mstead@redhat.com> 0.99.14-1
+- Update strings and pull latest from zanata (alikins@redhat.com)
+- 810306: Improved messaging in firstboot (mstead@redhat.com)
+- 811337: Unregister any time we return to rhsm_login (jbowes@redhat.com)
+- 811294: Refresh strings to fix broken kn.po (alikins@redhat.com)
+- 807153: Allow more aggressive deletion of product certs. (awood@redhat.com)
+- 810399: Require the latest rhn-setup-gnome for firstboot (alikins@redhat.com)
+- 810290: Use correct calculation for "Next update" time in sm-gui
+  (cduryee@redhat.com)
+- Extracted the latest strings, and sent them to the zanata
+  (bkearney@redhat.com)
+- 810363: Handle socket errors for bad proxy host in firstboot
+  (alikins@redhat.com)
+- Latest man page and documentation (dlackey@redhat.com)
+- 809989: Add the shortened password url to the strings files.
+  (bkearney@redhat.com)
+- 809989: Add a shorter URL to the registration screen (bkearney@redhat.com)
+
 * Wed Apr 04 2012 Michael Stead <mstead@redhat.com> 0.99.13-1
 - latest strings into keys.pot and updated from zanata (alikins@redhat.com)
 - 809611: Fix undefined variable in installedtab for expired
