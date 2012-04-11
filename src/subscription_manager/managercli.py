@@ -571,7 +571,7 @@ class ServiceLevelCommand(UserPassCommand):
                     print(_("Error: you must register or specify --org."))
                     sys.exit(-1)
             if self.options.show:
-                print(_("Error: This system is currently not registered."))
+                print(NOT_REGISTERED)
                 sys.exit(-1)
 
     def _do_command(self):
