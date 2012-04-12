@@ -1,4 +1,4 @@
-.TH subscription-manager 8 "April 5, 2012" "version 2.1" "Subscription Management"  Deon Lackey 
+.TH subscription-manager 8 "April 12, 2012" "version 2.1" "Subscription Management"  Deon Lackey 
 .SH NAME
 subscription-manager \- Register machines and manage subscriptions to products.
 
@@ -46,7 +46,7 @@ if the platform and hardware can support that specific product.
 
 .PP
 Subscription Manager also collects and 
-summarizes system facts related it its hardware, operating system, and other characteristics. These facts can be edited in the Subscription Manager configuration and displayed through Subscription Manager.
+summarizes system facts related to its hardware, operating system, and other characteristics. These facts can be edited in the Subscription Manager configuration and displayed through Subscription Manager.
 
 .PP
 There is also a Subscription Manager GUI, which can be invoked simply by running 
@@ -202,10 +202,10 @@ Automatically subscribes this system to the best-matched compatible subscription
 
 
 .TP
-.B --servicelevel=None|Standard|Premium
-Sets the preferred service level to use with subscriptions added to the system. This can only be used in conjunction with the 
+.B --servicelevel=LEVEL
+Sets the preferred service level to use with subscriptions added to the system. Service levels are commonly premium, standard, and none, though other levels may be available depending on the product and the contract. This preference can only be used in conjunction with the 
 .B --autosubscribe
-option.
+option, and then it is used as one of the factors for matching subscriptions.
 
 .TP
 .B --force
@@ -247,17 +247,17 @@ is used.
 .B --quantity=NUMBER
 Subscribes the system to a specified number of subscriptions. Subscriptions may have certain limits on them, like the number of sockets on the machine or the number of allowed virtual guests. It is possible to assign multiple subscriptions (or 
 .I stacking
-subscriptions) to cover the number of sockets, guests, or other characteristic.
+subscriptions) to cover the number of sockets, guests, or other characteristics.
 
 .TP
 .B --auto
 Automatically subscribes this system to the best-matched compatible subscription or subscriptions.
 
 .TP
-.B --servicelevel=None|Standard|Premium
-Sets the preferred service level to use with subscriptions added to the system. This can only be used in conjunction with the 
+.B --servicelevel=LEVEL
+Sets the preferred service level to use with subscriptions added to the system. Service levels are commonly premium, standard, and none, though other levels may be available depending on the product and the contract. This preference can only be used in conjunction with the 
 .B --auto
-optiona
+option, and then it is used as one of the factors for matching subscriptions.
 
 .SS UNSUBSCRIBE OPTIONS
 The 
@@ -295,7 +295,7 @@ The
 .B service-level
 command displays the current configured service level 
 .I preference 
-for products installed on the system. For example, if the service level preference is Standard, then a subscription with a standard service level is selected when autosubscribing the system. 
+for products installed on the system. For example, if the service level preference is standard, then a subscription with a standard service level is selected when autosubscribing the system. 
 
 .IP
 The 
@@ -308,7 +308,7 @@ Lists the available service levels.
 
 .TP
 .B --show
-Shows the system's current service level preference.
+Shows the system's current service-level preference.
 
 
 .SS IMPORT OPTIONS
@@ -318,7 +318,7 @@ command imports and applies an entitlement certificate for the consumer which wa
 
 .TP
 .B --certificate=CERTIFICATE_FILE
-Points to a certificate PEM file which contains the entitlement certificate. This can be mused multiple times to import multiple entitlement certificates.
+Points to a certificate PEM file which contains the entitlement certificate. This can be used multiple times to import multiple entitlement certificates.
 
 .SS REDEEM OPTIONS
 The 
@@ -370,7 +370,7 @@ option.
 
 .TP
 .B --servicelevel
-Displays the current preferred service level for the system. Service levels can be None, Standard, or Premium. If no service-level preference is set, then the display value is blank. For example:
+Displays the current preferred service level for the system. Service levels commonly are none, standard, or premium. If no service-level preference is set, then the display value is blank. For example:
 .nf
 subscription-manager list --servicelevel
 Current service level: 
@@ -535,7 +535,7 @@ Prints the current configuration for Subscription Manager.
 
 .TP
 .B --remove=section.name
-Deletes the current value for the parameter without supplying a new parameter. A blank value tells Subscription Manager to use service default values for that parameter. If there no defaults, then the feature is ignored.
+Deletes the current value for the parameter without supplying a new parameter. A blank value tells Subscription Manager to use service default values for that parameter. If there are no defaults, then the feature is ignored.
 
 .TP
 .B --section.name=VALUE
@@ -677,12 +677,12 @@ Autosubscribe also supports an option to set a preferred service level with the 
 .B --servicelevel
 option. In this case, the 
 .B --servicelevel
-option sets a preference that helps the autosubscribe process select appropriate subscriptions. For example, if the preferred service level for a production server is Premium, and there are three matching subscriptions with different service levels (none, standard, and premium), the autosubscribe process selects the subscription which offers a Premium subscription.
+option sets a preference that helps the autosubscribe process select appropriate subscriptions. For example, if the preferred service level for a production server is premium, and there are three matching subscriptions with different service levels (none, standard, and premium), the autosubscribe process selects the subscription which offers a premium service level.
 
 .RS
 .nf
 subscription-manager register --username=admin --password=secret 
---autosubscribe --servicelevel=Premium
+--autosubscribe --servicelevel=premium
 .fi
 .RE
 
@@ -774,11 +774,11 @@ Autosubscribe also supports an option to set a preferred service level with the 
 .B --servicelevel
 option. In this case, the 
 .B --servicelevel
-option sets a preference that helps the autosubscribe process select appropriate subscriptions. For example, if the preferred service level for a production server is Premium, and there are three matching subscriptions with different service levels (none, standard, and premium), the autosubscribe process selects the subscription which offers a Premium subscription.
+option sets a preference that helps the autosubscribe process select appropriate subscriptions. For example, if the preferred service level for a production server is premium, and there are three matching subscriptions with different service levels (none, standard, and premium), the autosubscribe process selects the subscription which offers a premium subscription.
 
 .RS
 .nf
-subscription-manager subscribe --auto --servicelevel=Premium
+subscription-manager subscribe --auto --servicelevel=premium
 .fi
 .RE
 
@@ -872,7 +872,7 @@ subscription-manager config --server.hostname=myserver.example.com
 .SS UPDATING FACTS
 The information about a system, such as its hardware and CPU, its operating system versions, and memory, are collected by Subscription Manager in a list of 
 .I facts.
-Subscription Manager uses these facts to determine what purchased entitlements are compatible with the system. Whenever these facts changes (such as installing an additional CPU), the facts can be updated immediately using the 
+Subscription Manager uses these facts to determine what purchased entitlements are compatible with the system. Whenever these facts change (such as installing an additional CPU), the facts can be updated immediately using the 
 .B facts
 command.
 
@@ -908,7 +908,7 @@ tool can be run as a post-install script as part of the kickstart installation p
 .RS
 .nf
 %post --log=/root/ks-post.log
-/usr/sbin/subscription-manager register --username admin --password secret --org 'east colo' --autosubscribe --servicelevel=Premium --force
+/usr/sbin/subscription-manager register --username admin --password secret --org 'east colo' --autosubscribe --servicelevel=premium --force
 .fi
 .RE
 
