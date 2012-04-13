@@ -345,11 +345,21 @@ class Restlib(object):
         # FIXME: we should probably do this in a wrapper method
         # so we can use the request method for normal http
 
-        self.validateResponse(result)
         if not len(result['content']):
             return None
 
-        return json.loads(result['content'])
+        self.validateResponse(result)
+        try:
+            ret = json.loads(result['content'])
+        # json lib's throw ValueError on a parse failure...
+        except ValueError:
+            # wt...? candlepin 0.5.26 returns a bare string for release
+            # instead of a object, so if we get a json parse error,
+            # when getting the release, try just returning a string
+            # see rhbz #811638
+            if method[-8:] == "/release":
+                return result['content']
+        return ret
 
     def validateResponse(self, response):
         if str(response['status']) not in ["200", "204"]:
