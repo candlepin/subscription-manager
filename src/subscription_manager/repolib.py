@@ -104,7 +104,15 @@ class UpdateAction:
             self.consumer_uuid = self.consumer.getConsumerId()
             try:
                 result = self.uep.getRelease(self.consumer_uuid)
-                self.release = result['releaseVer']
+                if result is None:
+                    log.debug("Release API not supported by the server. Using default.")
+                    self.release = None
+                # cp 0.5.26  just returns a bare string or int
+                # see rhbz #811638
+                elif (type(result) == type("")) or (type(result) == type(1)):
+                     self.release = "%s" % result
+                else:
+                     self.release = result['releaseVer']
             # ie, a 404 from a old server that doesn't support the release API
             except RemoteServerException, e:
                 log.debug("Release API not supported by the server. Using default.")
