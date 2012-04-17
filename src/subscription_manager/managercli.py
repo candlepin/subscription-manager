@@ -50,6 +50,7 @@ from subscription_manager.release import ReleaseBackend
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
+from subscription_manager.utils import remove_scheme
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
@@ -235,14 +236,14 @@ class CliCommand(object):
                 print _("cannot parse argument: %s") % arg
             sys.exit(-1)
 
-        self.proxy_hostname = cfg.get('server', 'proxy_hostname')
+        self.proxy_hostname = remove_scheme(cfg.get('server', 'proxy_hostname'))
         self.proxy_port = cfg.get('server', 'proxy_port')
         self.proxy_user = cfg.get('server', 'proxy_user')
         self.proxy_password = cfg.get('server', 'proxy_password')
 
         # support foo.example.com:3128 format
         if hasattr(self.options, "proxy_url") and self.options.proxy_url:
-            parts = self.options.proxy_url.split(':')
+            parts = remove_scheme(self.options.proxy_url).split(':')
             self.proxy_hostname = parts[0]
             # no ':'
             if len(parts) > 1:

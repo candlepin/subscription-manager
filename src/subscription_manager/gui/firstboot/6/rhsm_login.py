@@ -23,6 +23,7 @@ from subscription_manager.facts import Facts
 from subscription_manager.gui.manually_subscribe import get_screen
 
 from subscription_manager.gui.utils import handle_gui_exception
+from subscription_manager.utils import remove_scheme
 
 sys.path.append("/usr/share/rhn")
 from up2date_client import config
@@ -58,6 +59,8 @@ class moduleClass(Module, registergui.RegisterScreen):
         if up2date_cfg['enableProxy']:
             proxy = up2date_cfg['httpProxy']
             if proxy:
+                # Remove any URI scheme provided
+                proxy = remove_scheme(proxy)
                 try:
                     host, port = proxy.split(':')
                     cfg.set('server', 'proxy_hostname', host)

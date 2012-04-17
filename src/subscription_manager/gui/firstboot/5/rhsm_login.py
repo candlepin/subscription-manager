@@ -22,6 +22,7 @@ from subscription_manager.gui import registergui
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.facts import Facts
 from subscription_manager import managerlib
+from subscription_manager.utils import remove_scheme
 
 sys.path.append("/usr/share/rhn")
 from up2date_client import config
@@ -71,6 +72,8 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
         if up2date_cfg['enableProxy']:
             proxy = up2date_cfg['httpProxy']
             if proxy:
+                # Remove any URI scheme provided
+                proxy = remove_scheme(proxy)
                 try:
                     host, port = proxy.split(':')
                     cfg.set('server', 'proxy_hostname', host)

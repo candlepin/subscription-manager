@@ -195,6 +195,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/certmgr.py*
 %{_datadir}/rhsm/subscription_manager/listing.py*
 %{_datadir}/rhsm/subscription_manager/release.py*
+%{_datadir}/rhsm/subscription_manager/utils.py*
 
 
 %attr(755,root,root) %{_sbindir}/subscription-manager
