@@ -368,7 +368,12 @@ class MainWindow(widgets.GladeWidget):
         self.registration_dialog.show()
 
     def _preferences_button_clicked(self, widget):
-        self.preferences_dialog.show()
+        try:
+            self.preferences_dialog.show()
+        except Exception, e:
+            # TODO: we are restricted to re-use strings for 6.3,
+            # but this should be made more clear in the future.
+            handle_gui_exception(e, _("Please see /var/log/rhsm/rhsm.log for more information."), self._get_window())
 
     def _on_unregister_prompt_response(self, dialog, response):
         if not response:
