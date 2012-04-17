@@ -37,8 +37,10 @@ class moduleClass(Module):
         self.old_entitlements = []
 
     def apply(self, interface, testing=False):
-
-        if self.old_consumer == self.screen.controller.consumer:
+        # if we have an old_consumer and it's id is different than the current one
+        # we are in a reregister case. See rhbz #811952
+        if self.old_consumer and self.old_consumer.getConsumerId() == \
+                self.screen.controller.consumer.getConsumerId():
             if self.old_sla != self.screen.controller.selected_sla:
                 self.old_sla = self.screen.controller.selected_sla
                 # XXX need to unsubscribe from previously subscribed
