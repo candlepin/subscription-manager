@@ -1,5 +1,6 @@
 import sys
 import gtk
+import logging
 
 from firstboot.config import *
 from firstboot.constants import *
@@ -13,7 +14,10 @@ _ = lambda x: gettext.ldgettext("rhsm", x)
 sys.path.append("/usr/share/rhsm")
 from subscription_manager.gui import autobind
 from subscription_manager.certlib import ConsumerIdentity
+from rhsm.connection import RestlibException
 
+
+log = logging.getLogger('rhsm-app.' + __name__)
 
 class moduleClass(Module):
 
@@ -40,8 +44,14 @@ class moduleClass(Module):
                 # XXX need to unsubscribe from previously subscribed
                 # entitlements here.
                 for entitlement in self.old_entitlements:
-                    self.screen.controller.backend.uep.unbindBySerial(
+                    try:
+                        self.screen.controller.backend.uep.unbindBySerial(
                             self.screen.controller.consumer.uuid, entitlement)
+                    except RestlibException, e:
+                        # we can get into this scenario with back/forward
+                        # since we can unregister if we get back to the login
+                        # screen. See rhbz #811952
+                        log.info("Error while unsubscribing: %s" % e)
                 self.old_entitlements = self.screen.forward()
             # otherwise both consumer and selected sla are the same. we can
             # just move forward.
