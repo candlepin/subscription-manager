@@ -69,8 +69,12 @@ class moduleClass(Module):
         controller = autobind.get_controller()
         self.screen.controller = controller
 
-        self.screen.load_data(
-                controller.suitable_slas[controller.selected_sla])
+        if len(controller.suitable_slas) == 1:
+            service_level = controller.suitable_slas.keys()[0]
+        else:
+            service_level = controller.selected_sla
+
+        self.screen.load_data(controller.suitable_slas[service_level])
 
     def needsNetwork(self):
         """
