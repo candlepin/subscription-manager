@@ -993,34 +993,16 @@ class ReleaseCommand(CliCommand):
                                               prod_dir=self.product_dir,
                                               content_connection=self.cc)
 
-
     def _get_consumer_release(self):
         err_msg = _("ERROR: The 'release' command is not supported by the server.")
         try:
-            results = self.cp.getRelease(self.consumer['uuid'])
-            if results is None:
-                return ""
-
-            release = None
-            # try to guess if we got back a plain string (or an int) instead
-            # a json object. This happens with candlepin 0.5.26
-            if (type(results) == type("")) or (type(results) == type(1)):
-                release = "%s" % results
-            if release:
-                return release
-            return results['releaseVer']
+            return self.cp.getRelease(self.consumer['uuid'])['releaseVer']
         # ie, a 404 from a old server that doesn't support the release API
         except connection.RemoteServerException, e:
             systemExit(-1, err_msg)
         except connection.RestlibException, e:
             if e.code == 404:
                 systemExit(-1, err_msg)
-            # FIXME: this is an uGly hack to handle candlepin
-            # 0.5.26, which throws a 500/NPE if we request a consumers
-            # release and it is not set
-            # see rhbz #811638
-            elif e.code == 500:
-                return ""
             else:
                 raise e
 
