@@ -615,13 +615,13 @@ class ServiceLevelCommand(UserPassCommand):
         consumer_uuid = ConsumerIdentity.read().getConsumerId()
         consumer = self.cp.getConsumer(consumer_uuid)
         if 'serviceLevel' not in consumer:
-            systemExit(-1, _("ERROR: The service-level command is not supported by " + \
+            systemExit(-1, _("Error: The service-level command is not supported by " + \
                              "the server."))
         service_level = consumer['serviceLevel'] or ""
         print(_("Current service level: %s") % service_level)
 
     def list_service_levels(self):
-        not_supported = _("ERROR: The service-level command is not supported by " + \
+        not_supported = _("Error: The service-level command is not supported by " + \
                            "the server.")
 
         org_key = self.options.org
@@ -807,7 +807,7 @@ class RegisterCommand(UserPassCommand):
 
         if self.options.autosubscribe:
             if 'serviceLevel' not in consumer and self.options.service_level:
-                systemExit(-1, _("ERROR: The --servicelevel option is not supported " + \
+                systemExit(-1, _("Error: The --servicelevel option is not supported " + \
                                  "by the server. Did not perform autosubscribe."))
             autosubscribe(self.cp, consumer['uuid'],
                     service_level=self.options.service_level)
@@ -839,7 +839,7 @@ class RegisterCommand(UserPassCommand):
             return environment_name
 
         if not cp.supports_resource('environments'):
-            systemExit(-1, _("ERROR: Server does not support environments."))
+            systemExit(-1, _("Error: Server does not support environments."))
 
         env = cp.getEnvironment(owner_key=owner_key, name=environment_name)
         if not env:
@@ -994,7 +994,7 @@ class ReleaseCommand(CliCommand):
                                               content_connection=self.cc)
 
     def _get_consumer_release(self):
-        err_msg = _("ERROR: The 'release' command is not supported by the server.")
+        err_msg = _("Error: The 'release' command is not supported by the server.")
         try:
             return self.cp.getRelease(self.consumer['uuid'])['releaseVer']
         # ie, a 404 from a old server that doesn't support the release API
@@ -1114,7 +1114,7 @@ class SubscribeCommand(CliCommand):
                 if self.options.service_level:
                     consumer = self.cp.getConsumer(consumer_uuid)
                     if 'serviceLevel' not in consumer:
-                        systemExit(-1, _("ERROR: The --servicelevel option is not " + \
+                        systemExit(-1, _("Error: The --servicelevel option is not " + \
                                          "supported by the server. Did not perform " + \
                                          "autosubscribe."))
                 autosubscribe(self.cp, consumer_uuid,

@@ -227,6 +227,6 @@ class GladeWrapper(gtk.glade.XML):
     def get_widget(self, widget_name):
         widget = gtk.glade.XML.get_widget(self, widget_name)
         if widget is None:
-            print "ERROR: widget %s was not found" % widget_name
+            print "Error: widget %s was not found" % widget_name
             raise Exception("Widget %s not found" % widget_name)
         return widget
