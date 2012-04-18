@@ -180,9 +180,6 @@ class AutobindController(object):
         # autobind results for each SLA that covers all installed products:
         self.suitable_slas = {}
         for sla in available_slas:
-            # if the list is only 1 long, ie a pre-existing sla,
-            # then we use that
-            self.selected_sla = sla
             dry_run_json = self.backend.uep.dryRunBind(self.consumer.uuid,
                     sla)
             dry_run = DryRunResult(sla, dry_run_json, self.sorter)
@@ -198,8 +195,10 @@ class AutobindController(object):
         Check if a system that already has a selected sla can get more
         entitlements at their sla level
         """
-        result = self.suitable_slas[self.selected_sla]
-        return len(result.json) > 0 and self.current_sla is not None
+        if self.current_sla is not None:
+            result = self.suitable_slas[self.current_sla]
+            return len(result.json) > 0
+        return False
 
 
 class AutobindWizardScreen(object):
