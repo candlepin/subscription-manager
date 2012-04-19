@@ -372,7 +372,7 @@ class StubUEP:
         return False
 
     def registerConsumer(self, name, type, facts, owner, environment, keys,
-            installed_products):
+                         installed_products):
         return self.registered_consumer_info
 
     def getOwnerList(self, username):
@@ -445,3 +445,14 @@ class StubFacts(object):
 
     def get_last_update(self):
         return None
+
+
+class StubConsumer:
+    def __init__(self):
+        self.uuid = None
+
+    def reload(self):
+        pass
+
+    def getConsumerId(self):
+        return "12341234234"
