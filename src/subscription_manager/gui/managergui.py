@@ -44,8 +44,6 @@ from subscription_manager.gui import widgets
 from subscription_manager.gui.installedtab import InstalledProductsTab
 from subscription_manager.gui.mysubstab import MySubscriptionsTab
 from subscription_manager.gui.allsubs import AllSubscriptionsTab
-from subscription_manager.gui.subscription_assistant import \
-        SubscriptionAssistant
 from subscription_manager.gui.importsub import ImportSubDialog
 from subscription_manager.gui.utils import handle_gui_exception, linkify
 from subscription_manager.gui.autobind import AutobindWizard
@@ -209,12 +207,6 @@ class MainWindow(widgets.GladeWidget):
         self.preferences_dialog = PreferencesDialog(self.backend, self.consumer)
 
         self.import_sub_dialog = ImportSubDialog()
-
-        self.subscription_assistant = SubscriptionAssistant(self.backend,
-                                                            self.consumer,
-                                                            self.facts,
-                                                            ent_dir=self.entitlement_dir,
-                                                            prod_dir=self.product_dir)
 
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
         self.network_config_dialog.xml.get_widget("closeButton").connect("clicked", self._config_changed)
