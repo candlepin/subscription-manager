@@ -365,6 +365,7 @@ class StubUEP:
         proxy_user=None, proxy_password=None,
         cert_file=None, key_file=None):
             self.registered_consumer_info = {"uuid": 'dummy-consumer-uuid'}
+            self.environment_list = []
             pass
 
     def supports_resource(self, resource):
@@ -391,6 +392,12 @@ class StubUEP:
 
     def updateConsumer(self, consumer, service_level=None, release=None):
         return consumer
+
+    def setEnvironmentList(self, env_list):
+        self.environment_list = env_list
+
+    def getEnvironmentList(self, owner):
+        return self.environment_list
 
 
 class StubBackend:

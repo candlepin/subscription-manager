@@ -9,7 +9,7 @@ import stubs
 from subscription_manager import managercli
 from stubs import MockStdout, MockStderr, StubProductDirectory, \
         StubEntitlementDirectory, StubEntitlementCertificate, \
-        StubConsumerIdentity, StubProduct
+        StubConsumerIdentity, StubProduct, StubUEP
 from test_handle_gui_exception import FakeException, FakeLogger
 
 
@@ -127,6 +127,19 @@ class TestOwnersCommand(TestCliProxyCommand):
 
 class TestEnvironmentsCommand(TestCliProxyCommand):
     command_class = managercli.EnvironmentsCommand
+
+    def test_no_library(self):
+        self.cc.cp=StubUEP()
+        environments = []
+        environments.append({'name' : 'JarJar'})
+        environments.append({'name' : 'Library'})
+        environments.append({'name' : 'library'})
+        environments.append({'name' : 'Binks'})
+        self.cc.cp.setEnvironmentList(environments)
+        results = self.cc._get_enviornments("Anikan")
+        self.assertTrue(len(results) == 2)
+        self.assertTrue(results[0]['name'] == 'JarJar')
+        self.assertTrue(results[1]['name'] == 'Binks')
 
 
 class TestRegisterCommand(TestCliProxyCommand):
