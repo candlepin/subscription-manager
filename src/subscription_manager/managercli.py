@@ -55,6 +55,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
 
 NOT_REGISTERED = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
+LIBRARY_ENV_NAME = "library"
 
 # Translates the cert sorter status constants:
 STATUS_MAP = {
@@ -506,6 +507,15 @@ class EnvironmentsCommand(UserPassCommand):
             print(_("you must specify an --org"))
             sys.exit(-1)
 
+    def _get_enviornments(self, org):
+        raw_environments = self.cp.getEnvironmentList(org)
+        environments = []
+        # Remove the library environemnt
+        for env in raw_environments:
+            if env['name'].lower() != LIBRARY_ENV_NAME.lower():
+                environments.append(env)
+        return environments
+
     def _do_command(self):
         self._validate_options()
         try:
@@ -516,7 +526,8 @@ class EnvironmentsCommand(UserPassCommand):
                                                proxy_user=self.proxy_user,
                                                proxy_password=self.proxy_password)
             if self.cp.supports_resource('environments'):
-                environments = self.cp.getEnvironmentList(self.options.org)
+                environments = self._get_enviornments(self.options.org)
+
                 if len(environments):
                     print("+-------------------------------------------+")
                     print("          %s" % (_("Environments")))
