@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 0.99.14
+Version: 0.99.15
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -304,6 +304,19 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Apr 24 2012 Michael Stead <mstead@redhat.com> 0.99.15-1
+- update translations from zanata (alikins@redhat.com)
+- 815563: Remove incorrect at-spi locators. (awood@redhat.com)
+- 795541: Environment command should omit the Library from katello
+  (bkearney@redhat.com)
+- 811952: Don't try to unsubscribe old ents if we register (alikins@redhat.com)
+- 811952: Handle errors on unsubscribing ent certs (alikins@redhat.com)
+- 812929: Fix issue with selected sla not being in suitable_slas
+  (mstead@redhat.com)
+- 811863: Handle unforseen errors in preferences dialog. (dgoodwin@redhat.com)
+- 812104: add "release" and "service-level" to completion (alikins@redhat.com)
+- Latest man page (bkearney@redhat.com)
+
 * Wed Apr 11 2012 Michael Stead <mstead@redhat.com> 0.99.14-1
 - Update strings and pull latest from zanata (alikins@redhat.com)
 - 810306: Improved messaging in firstboot (mstead@redhat.com)
