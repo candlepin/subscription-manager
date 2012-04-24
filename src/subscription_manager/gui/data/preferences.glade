@@ -11,17 +11,11 @@
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="deletable">False</property>
-    <accessibility>
-      <atkproperty name="AtkObject::accessible-name">register_dialog</atkproperty>
-    </accessibility>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="preference-dialog-vbox">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
-        <accessibility>
-          <atkproperty name="AtkObject::accessible-name" translatable="yes">register_dialog_main_vbox</atkproperty>
-        </accessibility>
         <child>
           <widget class="GtkHBox" id="sla_hbox">
             <property name="visible">True</property>
@@ -120,10 +114,6 @@
           <widget class="GtkHButtonBox" id="dialog-action_area6">
             <property name="visible">True</property>
             <property name="layout_style">end</property>
-            <accessibility>
-              <atkproperty name="AtkObject::accessible-name" translatable="yes">registration_dialog_action_area
-</atkproperty>
-            </accessibility>
             <child>
               <widget class="GtkButton" id="close_button">
                 <property name="label">gtk-close</property>
@@ -132,10 +122,6 @@
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
                 <property name="image_position">right</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">register_button</atkproperty>
-                  <atkproperty name="AtkObject::accessible-description">register_button</atkproperty>
-                </accessibility>
                 <signal name="clicked" handler="on_close_button_clicked"/>
               </widget>
               <packing>
