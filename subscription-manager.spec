@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.96.17
+Version: 0.96.18
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -232,6 +232,10 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Apr 24 2012 Alex Wood <awood@redhat.com> 0.96.18-1
+- Adding RHEL6.2 releaser for tito. (awood@redhat.com)
+- 812446: Fix deletion of productids with yum localinstall (alikins@redhat.com)
+
 * Tue Oct 25 2011 James Bowes <jbowes@redhat.com> 0.96.17-1
 - 747024: restore previous behaviour for unhandled exceptions
   (alikins@redhat.com)
