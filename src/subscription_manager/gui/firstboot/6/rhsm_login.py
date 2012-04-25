@@ -169,7 +169,6 @@ class moduleClass(Module, registergui.RegisterScreen):
             self.consumer.reload()
             self._registration_finished = False
 
-
         self._show_credentials_page()
         self._clear_registration_widgets()
         self.initializeConsumerName()

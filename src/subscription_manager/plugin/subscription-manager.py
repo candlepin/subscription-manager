@@ -61,7 +61,7 @@ def update(conduit):
 
     try:
         ConsumerIdentity.read().getConsumerId()
-    except Exception, e:
+    except Exception:
         conduit.error(2, "Unable to read consumer identity")
         return
 

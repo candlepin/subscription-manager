@@ -18,6 +18,7 @@ import logging
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
+
 def remove_scheme(uri):
     """Remove the scheme component from a URI."""
     return re.sub("^[A-Za-z][A-Za-z0-9+-.]*://", "", uri)

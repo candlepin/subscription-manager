@@ -3,9 +3,6 @@ import unittest
 import sys
 import socket
 
-# to override config
-import stubs
-
 from subscription_manager import managercli
 from stubs import MockStdout, MockStderr, StubProductDirectory, \
         StubEntitlementDirectory, StubEntitlementCertificate, \
@@ -162,7 +159,7 @@ class TestRegisterCommand(TestCliProxyCommand):
         try:
             self.cc.main(args)
             self.cc._validate_options()
-        except SystemExit, e:
+        except SystemExit:
             self.fail("Exception Raised")
 
     def test_keys_and_consumerid(self):
@@ -207,22 +204,22 @@ class TestListCommand(TestCliProxyCommand):
 
     def test_format_name_long(self):
         name = "This is a Really Long Name For A Product That We Do Not Want To See But Should Be Able To Deal With"
-        formatted_name = self.cc._format_name(name, self.indent, self.max_length)
+        self.cc._format_name(name, self.indent, self.max_length)
 
     def test_format_name_short(self):
         name = "a"
-        formatted_name = self.cc._format_name(name, self.indent, self.max_length)
+        self.cc._format_name(name, self.indent, self.max_length)
 
     def test_format_name_empty(self):
         name = 'e'
-        formatted_name = self.cc._format_name(name, self.indent, self.max_length)
+        self.cc._format_name(name, self.indent, self.max_length)
 
     def test_print_consumed_no_ents(self):
         ent_dir = StubEntitlementDirectory([])
         try:
             self.cc.print_consumed(ent_dir)
             self.fail("Should have exited.")
-        except SystemExit, e:
+        except SystemExit:
             pass
 
     def test_print_consumed_one_ent_one_product(self):
@@ -242,7 +239,7 @@ class TestListCommand(TestCliProxyCommand):
             self.cc.print_consumed(ent_dir, service_level="NotFound")
             self.fail("Should have exited since an entitlement with the " + \
                       "specified service level does not exist.")
-        except SystemExit, e:
+        except SystemExit:
             pass
 
     def test_print_consumed_prints_enitlement_with_service_level_match(self):

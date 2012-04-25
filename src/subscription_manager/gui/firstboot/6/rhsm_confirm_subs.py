@@ -19,6 +19,7 @@ from rhsm.connection import RestlibException
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
+
 class moduleClass(Module):
 
     def __init__(self):

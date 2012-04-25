@@ -19,14 +19,13 @@ import unittest
 import os
 from os import linesep as NEW_LINE
 
-from stubs import StubCertificateDirectory, StubProductCertificate, StubProduct, \
-    StubEntitlementCertificate
-from subscription_manager.facts import Facts
-from subscription_manager.managerlib import merge_pools, PoolFilter, getInstalledProductStatus, \
-    LocalTz, parseDate, merge_pools, MergedPoolsStackingGroupSorter
-from modelhelpers import create_pool, create_attribute_list
+from stubs import StubCertificateDirectory, StubProductCertificate, \
+        StubProduct, StubEntitlementCertificate
+from subscription_manager.managerlib import merge_pools, PoolFilter, \
+        getInstalledProductStatus, LocalTz, parseDate, \
+        MergedPoolsStackingGroupSorter
+from modelhelpers import create_pool
 from subscription_manager import managerlib
-import stubs
 import rhsm
 from rhsm.certificate import EntitlementCertificate
 from mock import Mock

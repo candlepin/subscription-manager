@@ -2,17 +2,13 @@ import unittest
 import tempfile
 import json
 import shutil
-import datetime
-import time
+from datetime import datetime, timedelta
 from mock import patch, Mock
 
 from stubs import StubEntitlementDirectory, StubProductDirectory, StubProduct,\
                   StubCertificateDirectory, StubProductCertificate, StubEntitlementCertificate
 from subscription_manager import facts
-from subscription_manager import cert_sorter
-from subscription_manager.managerlib import getInstalledProductStatus
 from subscription_manager.facts import Facts
-from modelhelpers import *
 
 facts_buf = """
 {

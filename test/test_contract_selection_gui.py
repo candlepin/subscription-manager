@@ -1,7 +1,6 @@
 import unittest
 import datetime
 
-import stubs
 from subscription_manager.gui import contract_selection
 from subscription_manager import managerlib
 

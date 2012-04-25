@@ -2,7 +2,6 @@ import unittest
 import socket
 from M2Crypto import SSL
 
-import stubs
 from subscription_manager.gui import utils
 import rhsm.connection as connection
 

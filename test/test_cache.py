@@ -16,10 +16,10 @@ from mock import Mock
 import simplejson as json
 
 # used to get a user readable cfg class for test cases
-from stubs import *
+from stubs import StubProduct, StubProductCertificate, StubCertificateDirectory
 
-from subscription_manager.cache import *
-from rhsm.profile import *
+from subscription_manager.cache import ProfileManager, InstalledProductsManager
+from rhsm.profile import Package, RPMProfile
 
 
 class _FACT_MATCHER(object):

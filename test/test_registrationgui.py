@@ -1,9 +1,9 @@
-import sys
 import unittest
 
 from mock import Mock
-from stubs import StubUEP, StubEntitlementCertificate, StubCertificateDirectory, StubProduct, StubBackend, StubFacts
-from subscription_manager.gui.registergui import RegisterScreen, CREDENTIALS_PAGE, OWNER_SELECT_PAGE
+from stubs import StubBackend, StubFacts
+from subscription_manager.gui.registergui import RegisterScreen, \
+        CREDENTIALS_PAGE
 
 
 class RegisterScreenTests(unittest.TestCase):
