@@ -307,7 +307,11 @@ def runSubscriptionManager(username, password):
 
 
 def deployProdCertificates(subscribedChannels):
-    dic_data = readChannelCertMapping()
+    try:
+        dic_data = readChannelCertMapping()
+    except IOError, e:
+        log.exception(e)
+        systemExit(1, _("Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for more details.") % e)
 
     applicableCerts = []
     validRhsmChannels = []
