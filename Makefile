@@ -256,6 +256,9 @@ compile-po:
 		msgfmt -c --statistics -o po/build/$$lang/LC_MESSAGES/rhsm.mo po/$$lang.po ; \
 	done
 
+just-strings:
+	-@ scripts/just_strings.py po/keys.pot
+
 zanata-pull:
 	cd po && zanata po pull --srcdir  ..
 
