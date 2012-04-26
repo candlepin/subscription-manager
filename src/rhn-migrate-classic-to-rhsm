@@ -151,6 +151,7 @@ def checkOkToProceed(username, password):
         systemExit(1, _("Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for more details.") % e)
     return cp
 
+
 def checkIsOrgAdmin(sc, sk, username):
     try:
         roles = sc.user.listRoles(sk, username)
@@ -246,10 +247,7 @@ def disableYumRhnPlugin():
     f.close()
 
 
-def readChannelCertMapping():
-    release = getRelease()
-    mappingfile = "/usr/share/rhsm/product/" + release + "/channel-cert-mapping.txt"
-    log.info("Using mapping file %s", mappingfile)
+def readChannelCertMapping(mappingfile):
     f = open(mappingfile)
     lines = f.readlines()
     dic_data = {}
@@ -307,11 +305,15 @@ def runSubscriptionManager(username, password):
 
 
 def deployProdCertificates(subscribedChannels):
+    release = getRelease()
+    mappingfile = "/usr/share/rhsm/product/" + release + "/channel-cert-mapping.txt"
+    log.info("Using mapping file %s", mappingfile)
+
     try:
-        dic_data = readChannelCertMapping()
+        dic_data = readChannelCertMapping(mappingfile)
     except IOError, e:
         log.exception(e)
-        systemExit(1, _("Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for more details.") % e)
+        systemExit(1, _("Unable to read mapping file: %s") % mappingfile)
 
     applicableCerts = []
     validRhsmChannels = []
