@@ -295,7 +295,7 @@ class AutobindWizard(widgets.GladeWidget):
         self.screen_display_stack = []
         self._setup_screens()
         if self.parent_window:
-            self.autobind_dialog.set_transient_for(self.parent_window())
+            self.autobind_dialog.set_transient_for(self.parent_window)
 
     def _cancel(self, button):
         self.destroy()
