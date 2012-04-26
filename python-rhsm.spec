@@ -62,6 +62,9 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Apr 26 2012 Michael Stead <mstead@redhat.com> 1.0.0-1
+- Updated version due to 6.3 branching. (mstead@redhat.com)
+
 * Wed Apr 04 2012 Michael Stead <mstead@redhat.com> 0.99.8-1
 - 807721: Setting missing default values (mstead@redhat.com)
 
