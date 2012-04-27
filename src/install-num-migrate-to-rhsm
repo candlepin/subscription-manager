@@ -24,6 +24,7 @@ import shutil
 import simplejson as json
 import rhsm.config as config
 from instnum import InstallationNumber, InstallationNumberError
+from datetime import datetime
 
 _LIBPATH = "/usr/share/rhsm"
 # add to the path if need be
@@ -65,11 +66,16 @@ def getRelease():
     return release
 
 
-def writeMigrationFacts():
+def writeMigrationFacts(instnumber):
+    migration_date = datetime.now().isoformat()
+
     FACT_FILE = "/etc/rhsm/facts/migration.facts"
     if not os.path.exists(FACT_FILE):
         f = open(FACT_FILE, 'w')
-        json.dump({"migration.migrated_from": "install_number"}, f)
+        json.dump({"migration.migrated_from": "install_number"
+                    , "migration.migration_date": migration_date
+                    , "migration.install_number": instnumber.strip()
+            }, f)
         f.close()
 
 
@@ -138,7 +144,7 @@ def main():
             shutil.copyfile(path, dest_file)
 
     if not options.dryrun:
-        writeMigrationFacts()
+        writeMigrationFacts(instnumber)
 
 if __name__ == "__main__":
     main()
