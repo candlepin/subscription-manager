@@ -654,7 +654,8 @@ class ServiceLevelCommand(UserPassCommand):
         except connection.RemoteServerException, e:
             systemExit(-1, not_supported)
         except connection.RestlibException, e:
-            if e.code == 404:
+            if e.code == 404 and\
+                e.msg.find('/servicelevels') > 0:
                 systemExit(-1, not_supported)
             else:
                 raise e
