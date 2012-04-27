@@ -173,7 +173,7 @@ _subscription-manager()
       unsubscribe|\
       clean|\
       config|\
-      enviroments|\
+      environments|\
       facts|\
       identity|\
       import|\
