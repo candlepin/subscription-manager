@@ -27,6 +27,7 @@ _subscription-manager_register()
 {
   local opts="--username --password --type --name --consumerid
               --org --environment --autosubscribe --force --activationkey
+              --release --servicelevel
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
@@ -43,7 +44,7 @@ _subscription-manager_subscribe()
           COMPREPLY=($(compgen -W "${POOLS}" -- ${1}))
           return 0
   esac
-  local opts="--pool --quantity --auto
+  local opts="--pool --quantity --auto --servicelevel
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
