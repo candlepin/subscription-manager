@@ -18,7 +18,7 @@
 import unittest
 from tempfile import NamedTemporaryFile
 
-from rhsm.config import *
+from rhsm.config import RhsmConfigParser
 
 TEST_CONFIG = """
 [foo]

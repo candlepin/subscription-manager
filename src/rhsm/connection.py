@@ -196,8 +196,8 @@ class ContentConnection(object):
                     key_path = os.path.join(self.ent_dir, "%s-key.pem" % cert_file.split('.', 1)[0])
                     log.debug("Loading CA certificate: '%s'" % cert_path)
 
-                    #FIXME: reenable
-                    res = context.load_verify_info(cert_path)
+                    #FIXME: reenable res =
+                    context.load_verify_info(cert_path)
                     context.load_cert(cert_path, key_path)
                     #if res == 0:
                     #    raise BadCertificateException(cert_path)

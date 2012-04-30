@@ -17,7 +17,8 @@
 
 import unittest
 
-from rhsm.connection import *
+from rhsm.connection import ContentConnection, UEPConnection
+
 
 class ConnectionTests(unittest.TestCase):
 
@@ -51,5 +52,5 @@ class ContentConnectionTests(unittest.TestCase):
 #        self.cc = ContentConnection(insecure=True)
 
     def testInsecure(self):
-        cc = ContentConnection(host="127.0.0.1", insecure=True)
+        ContentConnection(host="127.0.0.1", insecure=True)
 

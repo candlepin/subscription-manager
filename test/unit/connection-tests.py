@@ -17,7 +17,7 @@
 
 import unittest
 
-from rhsm.connection import *
+from rhsm.connection import UEPConnection
 from mock import Mock
 from datetime import date
 
