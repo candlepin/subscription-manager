@@ -27,6 +27,7 @@ import shutil
 import logging
 import traceback
 import base64
+from datetime import datetime
 from rhsm.connection import UEPConnection
 
 _LIBPATH = "/usr/share/rhsm"
@@ -417,11 +418,14 @@ def enableExtraChannels(subscribedChannels, cp):
 
 
 def writeMigrationFacts():
+    migration_date = datetime.now().isoformat()
+
     FACT_FILE = "/etc/rhsm/facts/migration.facts"
     if not os.path.exists(FACT_FILE):
         f = open(FACT_FILE, 'w')
         json.dump({"migration.classic_system_id": getSystemId(),
-                   "migration.migrated_from": "rhn_hosted_classic"}, f)
+                   "migration.migrated_from": "rhn_hosted_classic",
+                   "migration.migration_date": migration_date}, f)
         f.close()
 
 
