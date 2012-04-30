@@ -1,10 +1,7 @@
 import sys
 import gtk
 
-from firstboot.config import *
-from firstboot.constants import *
-from firstboot.functions import *
-from firstboot.module import *
+from firstboot.constants import RESULT_SUCCESS
 from firstboot.module import Module
 
 import gettext

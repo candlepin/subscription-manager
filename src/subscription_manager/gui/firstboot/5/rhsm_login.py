@@ -1,6 +1,5 @@
 import sys
 import gtk
-from gtk import glade
 
 from firstboot_module_window import FirstbootModuleWindow
 

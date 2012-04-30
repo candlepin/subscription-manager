@@ -25,7 +25,7 @@ from subscription_manager import cert_sorter
 from subscription_manager.certdirectory import EntitlementDirectory, \
     ProductDirectory, Path, Writer
 from rhsm.config import initConfig
-from rhsm.certificate import *
+from rhsm.certificate import EntitlementCertificate, Certificate, GMT, Key
 
 log = logging.getLogger('rhsm-app.' + __name__)
 

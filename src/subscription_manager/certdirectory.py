@@ -19,7 +19,8 @@
 import os
 import logging
 
-from rhsm.certificate import *
+from rhsm.certificate import Certificate, ProductCertificate, \
+        EntitlementCertificate, Key
 
 from rhsm.config import initConfig
 

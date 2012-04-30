@@ -448,7 +448,7 @@ class DatePicker(gtk.HBox):
             return True
         except ValueError:
             today = datetime.date.today()
-            error_dialog = messageWindow.ErrorDialog(messageWindow.wrap_text(
+            messageWindow.ErrorDialog(messageWindow.wrap_text(
                                 "%s %s" % (_("Invalid date format. Please re-enter a valid date. Example: "), today.strftime('%x'))))
             return False
 
