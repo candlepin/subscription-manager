@@ -51,7 +51,7 @@ LIBRARY_ENV_NAME = "library"
 cert_file = ConsumerIdentity.certpath()
 key_file = ConsumerIdentity.keypath()
 
-cfg = config.initConfig()
+CFG = config.initConfig()
 
 import threading
 import Queue
@@ -62,6 +62,7 @@ CREDENTIALS_PAGE = 0
 PROGRESS_PAGE = 1
 OWNER_SELECT_PAGE = 2
 ENVIRONMENT_SELECT_PAGE = 3
+CHOOSE_SERVER_PAGE = 4
 
 
 registration_xml = GladeWrapper(os.path.join(prefix,
@@ -86,6 +87,9 @@ class RegisterScreen:
 
         dic = {"on_register_cancel_button_clicked": self.cancel,
                "on_register_button_clicked": self.on_register_button_clicked,
+               "on_rhn_radio_toggled": self._rhn_selected,
+               "on_local_radio_toggled": self._local_selected,
+               "on_offline_radio_toggled": self._offline_selected,
             }
 
         registration_xml.signal_autoconnect(dic)
@@ -133,7 +137,7 @@ class RegisterScreen:
     def show(self):
         # Ensure that we start on the first page and that
         # all widgets are cleared.
-        self.register_notebook.set_page(CREDENTIALS_PAGE)
+        self.register_notebook.set_page(CHOOSE_SERVER_PAGE)
         self._clear_registration_widgets()
         self.registerWin.present()
 
@@ -153,6 +157,9 @@ class RegisterScreen:
         self.register()
 
     def register(self, testing=None):
+        if self.register_notebook.get_current_page() == CHOOSE_SERVER_PAGE:
+            self._server_selected()
+            return True
         if self.register_notebook.get_current_page() == OWNER_SELECT_PAGE:
             # we're on the owner select page
             self._owner_selected()
@@ -265,6 +272,19 @@ class RegisterScreen:
         self.owner_key = model.get_value(tree_iter, 0)
 
         self.async.get_environment_list(self.owner_key, self._on_get_environment_list_cb)
+
+    def _rhn_selected(self, button):
+        print("RHN selected")
+
+    def _local_selected(self, button):
+        print("Local selected")
+
+    def _offline_selected(self, button):
+        print("Offline selected")
+
+    def _server_selected(self):
+        self.register_notebook.set_page(CREDENTIALS_PAGE)
+        # TODO: write config here
 
     def _environment_selected(self):
         self.cancel_button.set_sensitive(False)
