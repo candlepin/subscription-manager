@@ -33,7 +33,7 @@ check-syntax:
 	${CC} ${CFLAGS} ${ICON_FLAGS} -o nul -S $(CHK_SOURCES)
 
 
-ICON_FLAGS=`pkg-config --cflags --libs gtk+-2.0 libnotify`
+ICON_FLAGS=`pkg-config --cflags --libs gtk+-2.0 libnotify gconf-2.0`
 
 rhsm-icon: src/rhsm_icon.c bin
 	# RHSM Status icon needs to be skipped in Fedora 15+ and RHEL7+:
