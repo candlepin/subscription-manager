@@ -2,8 +2,13 @@ import sys
 import gtk
 import logging
 
-from firstboot.constants import RESULT_SUCCESS
-from firstboot.module import Module
+try:
+    from firstboot.constants import RESULT_SUCCESS
+    from firstboot.module import Module
+except Exception:
+    # we must be on el5
+    RESULT_SUCCESS = True
+    from firstboot_module_window import FirstbootModuleWindow as Module
 
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
@@ -25,6 +30,13 @@ class moduleClass(Module):
         self.priority = 200.4
         self.sidebarTitle = _("Entitlement Registration")
         self.title = _("Confirm Subscriptions")
+
+        # el5 values
+        self.runPriority = 109.13
+        self.moduleName = self.sidebarTitle
+        self.windowTitle = self.moduleName
+        self.shortMessage = self.title
+        self.noSidebar = True
 
         self.screen = autobind.ConfirmSubscriptionsScreen(None, None)
 
@@ -100,3 +112,15 @@ class moduleClass(Module):
         certificate on the machine (most likely laid down in a kickstart).
         """
         return not ConsumerIdentity.existsAndValid()
+
+    ##############################
+    # el5 compat functions follow
+    ##############################
+
+    def launch(self, doDebug=None):
+        self.createScreen()
+        return self.vbox, self.icon, self.windowTitle
+
+
+# for el5
+childWindow = moduleClass

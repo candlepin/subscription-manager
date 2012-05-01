@@ -2,8 +2,14 @@ import sys
 import gtk
 import socket
 
-from firstboot.constants import RESULT_FAILURE
-from firstboot.module import Module
+try:
+    from firstboot.constants import RESULT_SUCCESS, RESULT_FAILURE
+    from firstboot.module import Module
+except Exception:
+    # we must be on el5
+    RESULT_SUCCESS = True
+    RESULT_FAILURE = None
+    from firstboot_module_window import FirstbootModuleWindow as Module
 
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
@@ -34,6 +40,12 @@ class moduleClass(Module, registergui.RegisterScreen):
         """
         Module.__init__(self)
 
+        self.pages = {
+                "rhsm_manually_subscribe": _("Manual Configuraton Required"),
+                "rhsm_select_sla": _("Service Level"),
+                "rhsm_confirm_subs": _("Confirm Subscriptions"),
+                }
+
         backend = managergui.Backend()
 
         registergui.RegisterScreen.__init__(self, backend,
@@ -44,6 +56,18 @@ class moduleClass(Module, registergui.RegisterScreen):
         self.priority = 200.1
         self.sidebarTitle = _("Entitlement Registration")
         self.title = _("Entitlement Platform Registration")
+
+        # el5 values
+        self.runPriority = 109.10
+        self.moduleName = self.sidebarTitle
+        self.windowTitle = self.moduleName
+        self.shortMessage = self.title
+        self.noSidebar = True
+
+        # el5 value to get access to parent object for page jumping
+        self.needsparent = 1
+        self._skip_apply_for_page_jump = False
+
         self._cached_credentials = None
         self._registration_finished = False
 
@@ -95,6 +119,13 @@ class moduleClass(Module, registergui.RegisterScreen):
         provided user credentials and return the appropriate result
         value.
         """
+
+        # on el5 we can't just move to another page, we have to set the next
+        # page then do an apply. since we've already done our work async, skip
+        # this time through
+        if self._skip_apply_for_page_jump:
+            self._skip_apply_for_page_jump = False
+            return RESULT_SUCCESS
 
         self.interface = interface
 
@@ -236,7 +267,7 @@ class moduleClass(Module, registergui.RegisterScreen):
     def _move_to_manual_install(self, title):
         # TODO Change the message on the screen.
         get_screen().set_title(title)
-        self.interface.moveToPage(moduleTitle=_("Manual Configuraton Required"))
+        self.moveToPage("rhsm_manually_subscribe")
 
     def _init_sla(self):
         if self.skip_auto_subscribe():
@@ -271,16 +302,46 @@ class moduleClass(Module, registergui.RegisterScreen):
             return
 
         if len(controller.suitable_slas) > 1:
-            self.interface.moveToPage(moduleTitle=_("Service Level"))
+            self.moveToPage("rhsm_select_sla")
         elif len(controller.suitable_slas) == 1:
             if controller.current_sla and \
                     not controller.can_add_more_subs():
                 message = _("Unable to subscribe to any additional products at current service level: %s") % controller.current_sla
                 return self._move_to_manual_install(message)
 
-            self.interface.moveToPage(moduleTitle=_("Confirm Subscriptions"))
+            self.moveToPage("rhsm_confirm_subs")
         else:
             message = _("No service levels will cover all installed products. " + \
                 "Please run 'Subscription Manager' to manually " + \
                 "entitle this system.")
             return self._move_to_manual_install(message)
+
+    ##############################
+    # el5 compat functions follow
+    ##############################
+
+    def launch(self, doDebug=None):
+        self.createScreen()
+        return self.vbox, self.icon, self.windowTitle
+
+    def passInParent(self, parent):
+        self.parent = parent
+
+        # override the cancel and next button references with those of
+        # firstboot so the register flow will sensitize/desensitize them
+        # as it goes
+
+        self.cancel_button = parent.backButton
+        self.register_button = parent.nextButton
+
+    def moveToPage(self, page):
+        if hasattr(self, "parent"):
+            # parent is set, we must be on el5.
+            self._skip_apply_for_page_jump = True
+            self.parent.setPage(page)
+            self.parent.nextClicked()
+        else:
+            self.interface.moveToPage(moduleTitle=self.pages[page])
+
+# for el5
+childWindow = moduleClass

@@ -18,8 +18,13 @@
 import sys
 import gtk
 
-from firstboot.constants import RESULT_JUMP
-from firstboot.module import Module
+try:
+    from firstboot.constants import RESULT_JUMP
+    from firstboot.module import Module
+except Exception:
+    # we must be on el5
+    RESULT_JUMP = True
+    from firstboot_module_window import FirstbootModuleWindow as Module
 
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
@@ -37,6 +42,16 @@ class moduleClass(Module):
         self.priority = 200.2
         self.sidebarTitle = _("Entitlement Registration")
         self.title = _("Manual Configuraton Required")
+
+        # el5 values
+        self.runPriority = 109.11
+        self.moduleName = self.sidebarTitle
+        self.windowTitle = self.moduleName
+        self.shortMessage = self.title
+        self.noSidebar = True
+
+        # el5 needs the parent to be able to skip past the other rhsm screens
+        self.needsparent = True
 
         self.screen = get_screen()
 
@@ -70,7 +85,36 @@ class moduleClass(Module):
         Assumes that only our modules are grouped together, and that we have
         4.
         """
+
+        if hasattr(self, "parent"):
+            # must be el5, need to use self.parent to get the moduleList
+            interface = self.parent
+
         i = 0
         while not interface.moduleList[i].__module__.startswith('rhsm_'):
             i += 1
-        interface.moveToPage(pageNum=i + 4)
+
+        i += 4
+
+        # el5 compat. depends on this being called from apply,
+        # interface = self.parent
+        # and apply returning true
+        if hasattr(self, "parent"):
+            self.parent.nextPage = i
+        else:
+            interface.moveToPage(pageNum=i)
+
+    ##############################
+    # el5 compat functions follow
+    ##############################
+
+    def launch(self, doDebug=None):
+        self.createScreen()
+        return self.vbox, self.icon, self.windowTitle
+
+    def passInParent(self, parent):
+        self.parent = parent
+
+
+# for el5
+childWindow = moduleClass
