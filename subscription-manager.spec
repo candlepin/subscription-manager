@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 0.99.15
+Version: 0.99.16
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -304,6 +304,11 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue May 01 2012 Bryan Kearney <bkearney@redhat.com> 0.99.16-1
+- 817390: add completion support for servicelevel (alikins@redhat.com)
+- 817117: fix completion of environment command (alikins@redhat.com)
+- 816377: handle cert migration data being missing (alikins@redhat.com)
+
 * Tue Apr 24 2012 Michael Stead <mstead@redhat.com> 0.99.15-1
 - update translations from zanata (alikins@redhat.com)
 - 815563: Remove incorrect at-spi locators. (awood@redhat.com)
