@@ -786,6 +786,8 @@ class RegisterCommand(UserPassCommand):
 
             if self.options.consumerid:
                 #TODO remove the username/password
+                log.info("Registering as existing consumer: %s" %
+                        self.options.consumerid)
                 consumer = admin_cp.getConsumer(self.options.consumerid,
                         self.username, self.password)
             else:
@@ -810,11 +812,6 @@ class RegisterCommand(UserPassCommand):
 
         print (_("The system has been registered with id: %s ")) % (consumer_info["uuid"])
 
-        # Facts and installed products went out with the registration request,
-        # manually write caches to disk:
-        self.facts.write_cache()
-        self.installed_mgr.write_cache()
-
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
         self.cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
@@ -823,9 +820,20 @@ class RegisterCommand(UserPassCommand):
                                            proxy_user=self.proxy_user,
                                            proxy_password=self.proxy_password)
 
+        # Must update facts to clear out the old ones:
+        if self.options.consumerid:
+            log.info("Updating facts")
+            self.facts.update_check(self.cp, consumer['uuid'], force=True)
+
         profile_mgr = ProfileManager()
         # 767265: always force an upload of the packages when registering
         profile_mgr.update_check(self.cp, consumer['uuid'], True)
+
+        # Facts and installed products went out with the registration request,
+        # manually write caches to disk:
+        self.facts.write_cache()
+        self.installed_mgr.write_cache()
+
 
         if self.options.release:
             # TODO: grab the list of valid options, and check
