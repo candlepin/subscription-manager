@@ -48,6 +48,7 @@ BuildRequires: gtk2-devel
 BuildRequires: desktop-file-utils
 BuildRequires: redhat-lsb
 BuildRequires: scrollkeeper
+BuildRequires: GConf2-devel
 
 
 %description
