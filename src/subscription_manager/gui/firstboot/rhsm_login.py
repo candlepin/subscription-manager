@@ -2,15 +2,6 @@ import sys
 import gtk
 import socket
 
-try:
-    from firstboot.constants import RESULT_SUCCESS, RESULT_FAILURE
-    from firstboot.module import Module
-except Exception:
-    # we must be on el5
-    RESULT_SUCCESS = True
-    RESULT_FAILURE = None
-    from firstboot_module_window import FirstbootModuleWindow as Module
-
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
@@ -24,6 +15,7 @@ from subscription_manager.gui import autobind
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.facts import Facts
 from subscription_manager.gui.manually_subscribe import get_screen
+from subscription_manager.gui.firstboot_base import RhsmFirstbootModule
 
 from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.utils import remove_scheme
@@ -32,13 +24,16 @@ sys.path.append("/usr/share/rhn")
 from up2date_client import config
 
 
-class moduleClass(Module, registergui.RegisterScreen):
+class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
     def __init__(self):
         """
         Create a new firstboot Module for the 'register' screen.
         """
-        Module.__init__(self)
+        RhsmFirstbootModule.__init__(self,
+                _("Entitlement Platform Registration"),
+                _("Entitlement Registration"),
+                200.1, 109.10)
 
         self.pages = {
                 "rhsm_manually_subscribe": _("Manual Configuraton Required"),
@@ -51,23 +46,7 @@ class moduleClass(Module, registergui.RegisterScreen):
         registergui.RegisterScreen.__init__(self, backend,
                 managergui.Consumer(), Facts())
 
-        # this value is relative to when you want to load the screen
-        # so check other modules before setting
-        self.priority = 200.1
-        self.sidebarTitle = _("Entitlement Registration")
-        self.title = _("Entitlement Platform Registration")
-
-        # el5 values
-        self.runPriority = 109.10
-        self.moduleName = self.sidebarTitle
-        self.windowTitle = self.moduleName
-        self.shortMessage = self.title
-        self.noSidebar = True
-
-        # el5 value to get access to parent object for page jumping
-        self.needsparent = 1
         self._skip_apply_for_page_jump = False
-
         self._cached_credentials = None
         self._registration_finished = False
 
@@ -125,7 +104,7 @@ class moduleClass(Module, registergui.RegisterScreen):
         # this time through
         if self._skip_apply_for_page_jump:
             self._skip_apply_for_page_jump = False
-            return RESULT_SUCCESS
+            return self._RESULT_SUCCESS
 
         self.interface = interface
 
@@ -139,11 +118,11 @@ class moduleClass(Module, registergui.RegisterScreen):
             valid_registration = self.register(testing=testing)
         except socket.error, e:
             handle_gui_exception(e, e, self.registerWin)
-            return RESULT_FAILURE
+            return self._RESULT_FAILURE
 
         if valid_registration:
             self._cached_credentials = credentials
-        return RESULT_FAILURE
+        return self._RESULT_FAILURE
 
     def close_window(self):
         """
@@ -201,13 +180,6 @@ class moduleClass(Module, registergui.RegisterScreen):
         self._clear_registration_widgets()
         self.initializeConsumerName()
 
-    def needsNetwork(self):
-        """
-        This lets firstboot know that networking is required, in order to
-        talk to hosted UEP.
-        """
-        return True
-
     def focus(self):
         """
         Focus the initial UI element on the page, in this case the
@@ -216,14 +188,6 @@ class moduleClass(Module, registergui.RegisterScreen):
         # FIXME:  This is currently broken
         login_text = registergui.registration_xml.get_widget("account_login")
         login_text.grab_focus()
-
-    def shouldAppear(self):
-        """
-        Indicates to firstboot whether to show this screen.  In this case
-        we want to skip over this screen if there is already an identity
-        certificate on the machine (most likely laid down in a kickstart).
-        """
-        return not ConsumerIdentity.existsAndValid()
 
     def _destroy_widget(self, widget_name):
         """
@@ -316,27 +280,12 @@ class moduleClass(Module, registergui.RegisterScreen):
                 "entitle this system.")
             return self._move_to_manual_install(message)
 
-    ##############################
-    # el5 compat functions follow
-    ##############################
-
-    def launch(self, doDebug=None):
-        self.createScreen()
-        return self.vbox, self.icon, self.windowTitle
-
-    def passInParent(self, parent):
-        self.parent = parent
-
-        # override the cancel and next button references with those of
-        # firstboot so the register flow will sensitize/desensitize them
-        # as it goes
-
-        self.cancel_button = parent.backButton
-        self.register_button = parent.nextButton
-
     def moveToPage(self, page):
-        if hasattr(self, "parent"):
-            # parent is set, we must be on el5.
+        """
+        el5 compat method for jumping pages
+        """
+        if self._is_compat:
+            # we must be on el5.
             self._skip_apply_for_page_jump = True
             self.parent.setPage(page)
             self.parent.nextClicked()

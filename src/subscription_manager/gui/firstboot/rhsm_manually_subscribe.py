@@ -18,47 +18,28 @@
 import sys
 import gtk
 
-try:
-    from firstboot.constants import RESULT_JUMP
-    from firstboot.module import Module
-except Exception:
-    # we must be on el5
-    RESULT_JUMP = True
-    from firstboot_module_window import FirstbootModuleWindow as Module
-
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
 sys.path.append("/usr/share/rhsm")
-from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.gui.manually_subscribe import get_screen
+from subscription_manager.gui.firstboot_base import RhsmFirstbootModule
 
 
-class moduleClass(Module):
+class moduleClass(RhsmFirstbootModule):
 
     def __init__(self):
-        Module.__init__(self)
-
-        self.priority = 200.2
-        self.sidebarTitle = _("Entitlement Registration")
-        self.title = _("Manual Configuraton Required")
-
-        # el5 values
-        self.runPriority = 109.11
-        self.moduleName = self.sidebarTitle
-        self.windowTitle = self.moduleName
-        self.shortMessage = self.title
-        self.noSidebar = True
-
-        # el5 needs the parent to be able to skip past the other rhsm screens
-        self.needsparent = True
+        RhsmFirstbootModule.__init__(self,
+                _("Manual Configuraton Required"),
+                _("Entitlement Registration"),
+                200.2, 109.11)
 
         self.screen = get_screen()
 
     def apply(self, interface, testing=False):
         # Clicking Next always proceeds to the next screen.
         self._skip_sla_screens(interface)
-        return RESULT_JUMP
+        return self._RESULT_JUMP
 
     def createScreen(self):
         self.vbox = gtk.VBox(spacing=10)
@@ -66,17 +47,6 @@ class moduleClass(Module):
 
     def initializeUI(self):
         self.vbox.show_all()
-
-    def needsNetwork(self):
-        return False
-
-    def shouldAppear(self):
-        """
-        Indicates to firstboot whether to show this screen.  In this case
-        we want to skip over this screen if there is already an identity
-        certificate on the machine (most likely laid down in a kickstart).
-        """
-        return not ConsumerIdentity.existsAndValid()
 
     def _skip_sla_screens(self, interface):
         """
@@ -86,7 +56,7 @@ class moduleClass(Module):
         4.
         """
 
-        if hasattr(self, "parent"):
+        if self._is_compat:
             # must be el5, need to use self.parent to get the moduleList
             interface = self.parent
 
@@ -99,21 +69,10 @@ class moduleClass(Module):
         # el5 compat. depends on this being called from apply,
         # interface = self.parent
         # and apply returning true
-        if hasattr(self, "parent"):
+        if self._is_compat:
             self.parent.nextPage = i
         else:
             interface.moveToPage(pageNum=i)
-
-    ##############################
-    # el5 compat functions follow
-    ##############################
-
-    def launch(self, doDebug=None):
-        self.createScreen()
-        return self.vbox, self.icon, self.windowTitle
-
-    def passInParent(self, parent):
-        self.parent = parent
 
 
 # for el5
