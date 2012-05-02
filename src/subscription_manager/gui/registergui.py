@@ -134,10 +134,17 @@ class RegisterScreen:
         register_header_label.set_label("<b>%s</b>" % \
                 get_branding().GUI_REGISTRATION_HEADER)
 
+        self.rhn_radio = registration_xml.get_widget("rhn_radio")
+        self.local_radio = registration_xml.get_widget("local_radio")
+        self.offline_radio = registration_xml.get_widget("offline_radio")
+
+        self.local_entry = registration_xml.get_widget("local_entry")
+
     def show(self):
         # Ensure that we start on the first page and that
         # all widgets are cleared.
         self.register_notebook.set_page(CHOOSE_SERVER_PAGE)
+
         self._clear_registration_widgets()
         self.registerWin.present()
 
@@ -285,6 +292,24 @@ class RegisterScreen:
     def _server_selected(self):
         self.register_notebook.set_page(CREDENTIALS_PAGE)
         # TODO: write config here
+        if self.rhn_radio.get_active():
+            CFG.set('server', 'hostname', constants.DEFAULT_HOSTNAME)
+            CFG.set('server', 'port', constants.DEFAULT_PORT)
+            CFG.set('server', 'prefix', constants.DEFAULT_PREFIX)
+        elif self.offline_radio.get_active():
+            # We'll signal the user set offline by setting an empty hostname:
+            CFG.set('server', 'hostname', '')
+            CFG.set('server', 'port', constants.DEFAULT_PORT)
+            CFG.set('server', 'prefix', constants.DEFAULT_PREFIX)
+        elif self.local_radio.get_active():
+            # TODO: Parse the local setting
+            CFG.set('server', 'hostname', 'SOMETHINGLOCAL')
+            CFG.set('server', 'port', constants.DEFAULT_PORT)
+            CFG.set('server', 'prefix', constants.DEFAULT_PREFIX)
+
+        log.info("Writing server data to rhsm.conf")
+        CFG.save()
+
 
     def _environment_selected(self):
         self.cancel_button.set_sensitive(False)
@@ -376,6 +401,25 @@ class RegisterScreen:
         self.consumer_name.set_text("")
         self.initializeConsumerName()
         self.skip_auto_bind.set_active(False)
+        self.local_entry.set_text("")
+
+        # We need to determine the current state of the server info in
+        # the config file so we can pre-select the correct options:
+        current_hostname = CFG.get('server', 'hostname')
+        current_port = CFG.get('server', 'port')
+        current_prefix = CFG.get('server', 'prefix')
+        if current_hostname == constants.DEFAULT_HOSTNAME:
+            print("RHN server pre-selected.")
+            self.rhn_radio.set_active(True)
+        elif current_hostname == "":
+            print("Offline pre-selected.")
+            self.offline_radio.set_active(True)
+        else:
+            print("Local server pre-selected.")
+            self.local_radio.set_active(True)
+            self.local_entry.set_text("%s:%s%s" % (current_hostname,
+                current_port, current_prefix))
+
 
     def _show_credentials_page(self):
         self.register_notebook.set_page(CREDENTIALS_PAGE)
