@@ -65,6 +65,9 @@ options_table = [
            help=_("Launch the GUI tool to subscribe the system, instead of autosubscribing")),
     Option("-n", "--no-auto", action="store_true", default=False, dest='noauto',
            help=_("Don't execute the autosubscribe option while registering with subscription manager.")),
+    Option("-s", "--servicelevel", dest="servicelevel",
+           help=_("Service level to subscribe this system to. For no service " +
+                  "level use --service-level=\"\"")),
 ]
 
 parser = OptionParser(option_list=options_table, usage=_("%s [OPTIONS]") % os.path.basename(sys.argv[0]))
@@ -95,6 +98,49 @@ proxyHost = ""
 proxyPort = ""
 proxyUser = ""
 proxyPass = ""
+
+CONNECTION_FAILURE = _("Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for more details.")
+
+class InvalidChoiceError(Exception):
+    pass
+
+
+class Menu(object):
+    def __init__(self, choices, header):
+        # choices is a tuple with the first value being the display string
+        # and the second value being the value to return.
+        self.choices = choices
+        self.header = header
+
+    def choose(self):
+        while True:
+            self.display()
+            selection = raw_input("? ").strip()
+            try:
+                return self.getItem(selection)
+            except InvalidChoiceError:
+                print _("You have entered an invalid choice.")
+
+    def display(self):
+        print self.header
+        for index, entry in enumerate(self.choices):
+            print "%s. %s" % (index + 1, entry[0])
+
+    def getItem(self, selection):
+        try:
+            index = int(selection) - 1
+            # In case some joker enters zero or a negative number
+            if index < 0:
+                raise InvalidChoiceError
+        except TypeError:
+            raise InvalidChoiceError
+        except ValueError:
+            raise InvalidChoiceError
+
+        try:
+            return self.choices[index][1]
+        except IndexError:
+            raise InvalidChoiceError
 
 
 class ProxiedTransport(xmlrpclib.Transport):
@@ -147,9 +193,9 @@ def checkOkToProceed(username, password):
 
     try:
         cp.getOwnerList(username)
-    except Exception, e:
+    except Exception:
         log.error(traceback.format_exc())
-        systemExit(1, _("Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for more details.") % e)
+        systemExit(1, CONNECTION_FAILURE)
     return cp
 
 
@@ -161,6 +207,41 @@ def checkIsOrgAdmin(sc, sk, username):
         systemExit(1, _("Problem encountered determining user roles in RHN Classic.  Exiting."))
     if "org_admin" not in roles:
         systemExit(1, _("You must be an org admin to successfully run this script."))
+
+
+def selectServiceLevel(cp, consumer, servicelevel):
+    uuid = consumer.getConsumerId()
+    try:
+        org_key = cp.getOwner(uuid)['key']
+        levels = cp.getServiceLevelList(org_key)
+    except:
+        log.error(traceback.format_exc())
+        systemExit(1, CONNECTION_FAILURE)
+
+    # Create the sla tuple before appending the empty string to the list of
+    # valid slas.
+    slas = [(sla, sla) for sla in levels]
+    # Display an actual message for the empty string level.
+    slas.append((_("No service level"), ""))
+
+    # The empty string is a valid level so append it to the list.
+    levels.append("")
+    if servicelevel is None or servicelevel not in levels:
+        if servicelevel is not None and servicelevel not in levels:
+            print _("\nService level \"%s\" is not available." % servicelevel)
+        menu = Menu(slas, _("Please select a service level agreement for this system."))
+        servicelevel = menu.choose()
+    return servicelevel
+
+
+def setServiceLevel(cp, consumer, servicelevel):
+    uuid = consumer.getConsumerId()
+    print _("\nSubscribing to service level %s" % servicelevel)
+    try:
+        cp.updateConsumer(uuid, service_level=servicelevel)
+    except:
+        log.error(traceback.format_exc())
+        systemExit(1, CONNECTION_FAILURE)
 
 
 def getSubscribedChannelsList():
@@ -303,6 +384,7 @@ def runSubscriptionManager(username, password):
         if result != 0:
             print _("\nUnable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?")
     print _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary.") % consumer.getConsumerId()
+    return consumer
 
 
 def deployProdCertificates(subscribedChannels):
@@ -476,8 +558,9 @@ def main():
 
     # register the system to Certificate-based RHN and consume a subscription
     if not options.noauto:
-        runSubscriptionManager(username, password)
-
+        consumer = runSubscriptionManager(username, password)
+        servicelevel = selectServiceLevel(cp, consumer, options.servicelevel)
+        setServiceLevel(cp, consumer, servicelevel)
     # check if we need to enable to supplementary/optional channels
     enableExtraChannels(subscribedChannels, cp)
     cleanUp(subscribedChannels)
