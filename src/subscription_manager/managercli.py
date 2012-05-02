@@ -570,7 +570,6 @@ class ServiceLevelCommand(UserPassCommand):
         self.parser.add_option("--set", dest="service_level",
                                help=_("service level to apply to this system"))
 
-
     def _validate_options(self):
 
         # Assume --show if run with no args:
