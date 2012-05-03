@@ -18,7 +18,7 @@ Helper methods for mocking up JSON model objects, certificates, etc.
 """
 
 
-import md5
+import hashlib
 from datetime import timedelta, datetime
 
 
@@ -35,8 +35,7 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
             'productName': pid,
         })
 
-    md5sum = md5.new()
-    md5sum.update(product_id)
+    md5sum = hashlib.md5(product_id)
     pool_id = md5sum.hexdigest()
 
     return {
