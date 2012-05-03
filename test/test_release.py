@@ -52,14 +52,48 @@ class TestReleaseBackend(unittest.TestCase):
                                          prod_dir=stub_product_dir,
                                          content_connection=stub_content_connection)
 
-    def testGetReleases(self):
+    def test_get_releases(self):
         releases = self.rb.get_releases()
         print releases
 
-    def testIsRhel(self):
+    def test_is_rhel(self):
         ir = self.rb._is_rhel(["rhel-6-test"])
         self.assertTrue(ir)
 
-    def testIsNotRhel(self):
+    def test_is_not_rhel(self):
         ir = self.rb._is_rhel(["awesome-test"])
         self.assertFalse(ir)
+
+    def test_is_correct_rhel(self):
+        icr = self.rb._is_correct_rhel(["rhel-6-test"], ["rhel-6"])
+        self.assertTrue(icr)
+
+    def test_is_incorrect_rhel_version(self):
+        icr = self.rb._is_correct_rhel(["rhel-6-test"], ["rhel-5"])
+        self.assertFalse(icr)
+
+    def test_is_incorrect_rhel(self):
+        icr = self.rb._is_correct_rhel(["rhel-6-test"], ["awesomeos"])
+        self.assertFalse(icr)
+
+    def test_is_correct_rhel_wacky_tags_match(self):
+        icr = self.rb._is_correct_rhel(["rhel-6-test"], ["rhel6"])
+        self.assertFalse(icr)
+
+    def test_is_correct_rhel_multiple_content(self):
+        icr = self.rb._is_correct_rhel(["rhel-6-test"],
+                                        ["awesomeos-", "thisthingimadeup",
+                                         "rhel-6","notasawesome"])
+        self.assertTrue(icr)
+
+    def test_is_correct_rhel_mutliple_multiple(self):
+        icr = self.rb._is_correct_rhel(["awesomeos", "rhel-6-test"],
+                                       ["awesomeos", "thisthingimadeup",
+                                        "rhel-6","notasawesome"])
+        self.assertTrue(icr)
+
+    def test_is_correct_rhel_mutliple_matches_but_not_rhel(self):
+        icr = self.rb._is_correct_rhel(["awesomeos", "rhel-6-test"],
+                                       ["awesomeos", "thisthingimadeup",
+                                        "candy","notasawesome"])
+        self.assertFalse(icr)
