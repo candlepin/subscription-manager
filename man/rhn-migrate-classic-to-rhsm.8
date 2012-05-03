@@ -14,7 +14,7 @@
 .\" along with this man page; if not, write to the Free Software
 .\" Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 .\"
-.TH "rhn-migrate-classic-to-rhsm" "8" "December 8 2011" "Version 0.2" ""
+.TH "rhn-migrate-classic-to-rhsm" "8" "May 3, 2012" "Version 0.3" ""
 
 .SH NAME
 
@@ -27,6 +27,12 @@ rhn-migrate-classic-to-rhsm [--force|--cli-only|--help|--no-auto]
 \fBrhn-migrate-classic-to-rhsm\fP migrates a system profile which is registered with Red Hat Network Classic to Certificate-based Red Hat Network. This is intended for hosted-to-hosted migrations, not for migrating from a Satellite system.
 
 .PP
+This script migrates configuration, from a channel-based subscription framework to a certificate-based subscription framework. While the \fBrhn-migrate-classic-to-rhsm\fP script performs the migration operation, the data used to map the channels to the corresponding product certificates is defined in the \fBsubscription-manager-migration-data\fP package. The \fBsubscription-manager-migration-data\fP package must be installed before the \fBrhn-migrate-classic-to-rhsm\fP script can be run successfully.
+
+.PP
+This tool is supported for Red Hat Enterprise Linux 5.8 and later systems.
+
+.SH BACKGROUND
 Access to support and updates for products is determined through 
 .I subscriptions.
 Subscriptions are assigned to a system, which means that the system has the right to install and update a product with full support. Subscriptions for an entire organization are tracked through a 
@@ -41,9 +47,6 @@ For environments which use a hosted subscription service rather than a local Sat
 Registering with a subscription service is exclusive. If a system is registered with Red Hat Network Classic, it cannot simultaneously be registered with Certificate-based Red Hat Network. The 
 .B rhn-migrate-classic-to-rhsm
 tool is provided specifically so that there is a way to transition from the deprecated Red Hat Network Classic to the new Certificate-based Red Hat Network.
-
-.PP
-This tool is supported for Red Hat Enterprise Linux 5.8 and later.
 
 .SH OPTIONS
 .TP
@@ -204,7 +207,10 @@ The Subscription Manager log file. This contains any errors registering the syst
 .IP \fI/etc/rhsm/facts/migration.facts\fP
 The file which contains the migration information. This is displayed as one of the system facts by Subscription Manager.
 
-.SH "SEE ALSO"
+.IP \fBsubscription-manager-migration-data.rpm\fB
+The package which contains the mappings for the migration script to migrate channels to the appropriate product certificates.
+
+.SH SEE ALSO
 \fBinstall-num-migrate-to-rhsm\fP(8), \fBsubscription-manager\fP(8).
 
 
@@ -212,7 +218,7 @@ The file which contains the migration information. This is displayed as one of t
 .PP
 Paresh Mutha <pmutha@redhat.com>, Mark Huth <mhuth@redhat.com>, Tasos Papaioannou <tpapaioa@redhat.com>
 
-.SH "BUGS"
+.SH BUGS
 .PP
 Report bugs to <http://bugzilla.redhat.com>.
 
