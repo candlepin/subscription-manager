@@ -72,9 +72,8 @@ class ReleaseBackend(object):
         for entitlement in entitlements:
             contents = entitlement.getContentEntitlements()
             for content in contents:
-                # FIXME: we need to match on content required tags here?
-                # maybe we just need to match on content required tags?
-                if self._is_rhel(content.getRequiredTags()):
+                if self._is_correct_rhel(rhel_product.getProvidedTags(),
+                                     content.getRequiredTags()):
                     content_url = content.getUrl()
                     listing_parts = content_url.split('$releasever', 1)
                     listing_base = listing_parts[0]
@@ -108,8 +107,29 @@ class ReleaseBackend(object):
             # product. Not sure what to do if we have
             # more than one. Probably throw an error
             # TESTME
-            if product_tag[:5] == "rhel-":
+            if product_tag.split('-', 1)[0] == "rhel":
                 # we only need to match the first hit
                 return True
         log.info("No products with RHEL product tags found")
+        return False
+
+    #required tags provided by installed products?
+    def _is_correct_rhel(self, product_tags, content_tags):
+        #easy to pass a string instead of a list
+        assert not isinstance(product_tags, basestring)
+        assert not isinstance(content_tags, basestring)
+
+        for product_tag in product_tags:
+            # we are comparing the lists to see if they
+            # have a matching rhel-#
+            # TESTME
+            product_split = product_tag.split('-', 2)
+            if product_split[0] == "rhel":
+                # look for match in content tags
+                for content_tag in content_tags:
+                    content_split = content_tag.split('-', 2)
+                    if content_split[0] == "rhel" and \
+                       content_split[1] == product_split[1]:
+                        return True
+        log.info("No matching products with RHEL product tags found")
         return False
