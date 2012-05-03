@@ -14,7 +14,7 @@
 .\" along with this man page; if not, write to the Free Software
 .\" Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 .\"
-.TH "install-num-migrate-to-rhsm" "8" "December 8 2011" "Version 0.1" ""
+.TH "install-num-migrate-to-rhsm" "8" "May 3, 2012" "Version 0.2" ""
 
 .SH NAME
 
@@ -27,6 +27,12 @@ install-num-migrate-to-rhsm [--dryrun|--instnum=NUMBER|--help]
 \fBinstall-num-migrate-to-rhsm\fP migrates a system using legacy Red Hat Enterprise Linux installation numbers to the X.509 certificates used by Certificate-based Red Hat Network. 
 
 .PP
+While the \fBinstall-num-migrate-to-rhsm\fP script performs the migration operation, the data used to map the channels to the corresponding product certificates is defined in the \fBsubscription-manager-migration-data\fP package. The \fBsubscription-manager-migration-data\fP package must be installed before the \fBinstall-num-migrate-to-rhsm\fP script can be run successfully.
+
+.PP
+This tool is supported for Red Hat Enterprise Linux 5.8 and later systems.
+
+.SH BACKGROUND
 Access to support and updates for products is determined through 
 .I subscriptions.
 Subscriptions are assigned to a system, which means that the system has the right to install and update a product with full support. Even disconnected or offline systems still need a way to track the products installed on them and the subscriptions used by them. In the older Red Hat Network Classic model of subscription management, a system was associated with a 
@@ -72,9 +78,6 @@ For an offline system, one which is not connect to either Red Hat Network Classi
 
 .PP
 \fBinstall-num-migrate-to-rhsm\fP identifies the channel that a disconnected system is subscribed to and then copies in the appropriate product certificates.
-
-.PP
-This tool is supported for Red Hat Enterprise Linux 5.8 and later.
 
 .SH OPTIONS
 .TP
@@ -137,7 +140,10 @@ The Subscription Manager log file. This contains any errors registering the syst
 .IP \fI/etc/rhsm/facts/migration.facts\fP
 The file which contains the migration information. This is displayed as one of the system facts by Subscription Manager.
 
-.SH "SEE ALSO"
+.IP \fBsubscription-manager-migration-data.rpm\fB
+The package which contains the mappings for the migration script to migrate channels to the appropriate product certificates.
+
+.SH SEE ALSO
 \fBinstall-num-migrate-to-rhsm\fP(8), \fBsubscription-manager\fP(8).
 
 
@@ -145,7 +151,7 @@ The file which contains the migration information. This is displayed as one of t
 .PP
 Alex Wood <awood@redhat.com>
 
-.SH "BUGS"
+.SH BUGS
 .PP
 Report bugs to <http://bugzilla.redhat.com>.
 
