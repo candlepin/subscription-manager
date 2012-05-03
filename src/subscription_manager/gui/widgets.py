@@ -443,7 +443,6 @@ class DatePicker(gtk.HBox):
         """
         try:
             self._date_validate(self._date_entry.get_text())
-            self._date = self._date_str_to_date(self._date_entry.get_text())
             self.emit('date-picked-text')
             return True
         except ValueError:
@@ -458,22 +457,17 @@ class DatePicker(gtk.HBox):
         # date format to one we know we can parse
         try:
             locale.setlocale(locale.LC_TIME, self.date_picker_locale)
-            self._date_str_to_date(date_str)
+            date = datetime.datetime(
+                    *(time.strptime(date_str, '%x')[0:6]))
             locale.setlocale(locale.LC_ALL, '')
+            self._date = datetime.datetime(date.year, date.month, date.day,
+                    tzinfo=managerlib.LocalTz())
         except ValueError:
             # the caller needs to handle this
             raise
 
     def _date_entry_box_grab_focus(self, dummy2=None, dummy3=None):
         self._date_entry.grab_focus()
-
-    def _date_str_to_date(self, date_str):
-        # this converts a date string to a date, AND clears the time on the
-        # date (i.e., becomes midnight)
-        date = datetime.datetime(
-            *(time.strptime(date_str, '%x')[0:6]))
-        return datetime.datetime(date.year, date.month, date.day,
-                    tzinfo=managerlib.LocalTz())
 
     def _date_update_cal(self, dummy=None):
         # set the text box to the date from the calendar
@@ -487,7 +481,6 @@ class DatePicker(gtk.HBox):
 
         try:
             self._date_validate(self._date_entry.get_text())
-            self._date = self._date_str_to_date(self._date_entry.get_text())
         except ValueError:
             today = datetime.date.today()
             self._date = datetime.datetime(today.year, today.month, today.day,
