@@ -1208,12 +1208,16 @@ class UnSubscribeCommand(CliCommand):
             consumer = ConsumerIdentity.read().getConsumerId()
             try:
                 if self.options.all:
-                    self.cp.unbindAll(consumer)
-                    log.info("Warning: This machine has been unsubscribed from " +
-                                "all subscriptions.")
+                    total = self.cp.unbindAll(consumer)
+                    # total will be None on older Candlepins that don't
+                    # support returning the number of subscriptions unsubscribed from
+                    if total is None:
+                        print _("This machine has been unsubscribed from all subscriptions.")
+                    else:
+                        print _("This machine has been unsubscribed from %s subscriptions" % total)
                 else:
                     self.cp.unbindBySerial(consumer, self.options.serial)
-                    log.info("This machine has been unsubscribed from subscription with serial number %s" % (self.options.serial))
+                    print _("This machine has been unsubscribed from subscription with serial number %s" % (self.options.serial))
                 self.certlib.update()
             except connection.RestlibException, re:
                 log.error(re)
@@ -1224,9 +1228,11 @@ class UnSubscribeCommand(CliCommand):
             # We never got registered, just remove the cert
             try:
                 if self.options.all:
+                    total = 0
                     for ent in self.entitlement_dir.list():
                         ent.delete()
-                    print _("This machine has been unsubscribed from all subscriptions")
+                        total = total + 1
+                    print _("This machine has been unsubscribed from %s subscriptions" % total)
                 else:
                     for ent in self.entitlement_dir.list():
                         if str(ent.serialNumber()) == self.options.serial:
