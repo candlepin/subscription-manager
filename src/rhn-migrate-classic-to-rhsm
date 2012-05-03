@@ -27,6 +27,7 @@ import shutil
 import logging
 import traceback
 import base64
+from datetime import datetime
 from rhsm.connection import UEPConnection
 
 _LIBPATH = "/usr/share/rhsm"
@@ -60,8 +61,8 @@ from optparse import Option, OptionParser
 options_table = [
     Option("-f", "--force", action="store_true", default=False,
            help=_("Ignore channels not available on RHSM")),
-    Option("-c", "--cli-only", action="store_true", default=False, dest='clionly',
-           help=_("Don't launch the GUI tool to subscribe the system, just use the CLI tool which will do it automatically")),
+    Option("-g", "--gui", action="store_true", default=False, dest='gui',
+           help=_("Launch the GUI tool to subscribe the system, instead of autosubscribing")),
     Option("-n", "--no-auto", action="store_true", default=False, dest='noauto',
            help=_("Don't execute the autosubscribe option while registering with subscription manager.")),
 ]
@@ -150,6 +151,7 @@ def checkOkToProceed(username, password):
         log.error(traceback.format_exc())
         systemExit(1, _("Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for more details.") % e)
     return cp
+
 
 def checkIsOrgAdmin(sc, sk, username):
     try:
@@ -246,10 +248,7 @@ def disableYumRhnPlugin():
     f.close()
 
 
-def readChannelCertMapping():
-    release = getRelease()
-    mappingfile = "/usr/share/rhsm/product/" + release + "/channel-cert-mapping.txt"
-    log.info("Using mapping file %s", mappingfile)
+def readChannelCertMapping(mappingfile):
     f = open(mappingfile)
     lines = f.readlines()
     dic_data = {}
@@ -295,7 +294,7 @@ def runSubscriptionManager(username, password):
         print _("System '%s' successfully registered to Certificate-based RHN.\n") % consumer.getConsumerName()
 
     # For subscribing, use the GUI tool if the DISPLAY environment variable is set and the gui tool exists
-    if os.getenv('DISPLAY') and os.path.exists('/usr/bin/subscription-manager-gui') and not options.clionly:
+    if os.getenv('DISPLAY') and os.path.exists('/usr/bin/subscription-manager-gui') and options.gui:
         print _("Launching the GUI tool to manually subscribe the system ...")
         result = subprocess.call(['subscription-manager-gui'], stderr=open(os.devnull, 'w'))
     else:
@@ -307,7 +306,15 @@ def runSubscriptionManager(username, password):
 
 
 def deployProdCertificates(subscribedChannels):
-    dic_data = readChannelCertMapping()
+    release = getRelease()
+    mappingfile = "/usr/share/rhsm/product/" + release + "/channel-cert-mapping.txt"
+    log.info("Using mapping file %s", mappingfile)
+
+    try:
+        dic_data = readChannelCertMapping(mappingfile)
+    except IOError, e:
+        log.exception(e)
+        systemExit(1, _("Unable to read mapping file: %s") % mappingfile)
 
     applicableCerts = []
     validRhsmChannels = []
@@ -411,11 +418,14 @@ def enableExtraChannels(subscribedChannels, cp):
 
 
 def writeMigrationFacts():
+    migration_date = datetime.now().isoformat()
+
     FACT_FILE = "/etc/rhsm/facts/migration.facts"
     if not os.path.exists(FACT_FILE):
         f = open(FACT_FILE, 'w')
         json.dump({"migration.classic_system_id": getSystemId(),
-                   "migration.migrated_from": "rhn_hosted_classic"}, f)
+                   "migration.migrated_from": "rhn_hosted_classic",
+                   "migration.migration_date": migration_date}, f)
         f.close()
 
 

@@ -13,7 +13,6 @@ _ = gettext.gettext
 
 #locale.setlocale(locale.LC_ALL, '')
 
-import stubs
 from subscription_manager import managercli
 
 # Localization domain:

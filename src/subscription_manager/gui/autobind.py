@@ -16,6 +16,7 @@
 #
 
 import gtk
+import gtk.glade
 import logging
 
 import gettext
@@ -180,9 +181,6 @@ class AutobindController(object):
         # autobind results for each SLA that covers all installed products:
         self.suitable_slas = {}
         for sla in available_slas:
-            # if the list is only 1 long, ie a pre-existing sla,
-            # then we use that
-            self.selected_sla = sla
             dry_run_json = self.backend.uep.dryRunBind(self.consumer.uuid,
                     sla)
             dry_run = DryRunResult(sla, dry_run_json, self.sorter)
@@ -198,8 +196,10 @@ class AutobindController(object):
         Check if a system that already has a selected sla can get more
         entitlements at their sla level
         """
-        result = self.suitable_slas[self.selected_sla]
-        return len(result.json) > 0 and self.current_sla is not None
+        if self.current_sla is not None:
+            result = self.suitable_slas[self.current_sla]
+            return len(result.json) > 0
+        return False
 
 
 class AutobindWizardScreen(object):
@@ -248,7 +248,7 @@ class AutobindWizard(widgets.GladeWidget):
     Autobind Wizard: Manages screenflow used in several places in the UI.
     """
 
-    def __init__(self, backend, consumer, facts, parent_window,
+    def __init__(self, backend, consumer, facts, parent_window=None,
             initial_screen_back_callback=None, cancel_callback=None):
         """
         Create the Autobind wizard.
@@ -294,7 +294,8 @@ class AutobindWizard(widgets.GladeWidget):
         # does not put anything on the stack.
         self.screen_display_stack = []
         self._setup_screens()
-        self.autobind_dialog.set_transient_for(parent_window)
+        if self.parent_window:
+            self.autobind_dialog.set_transient_for(self.parent_window)
 
     def _cancel(self, button):
         self.destroy()
@@ -426,7 +427,7 @@ class AutobindWizard(widgets.GladeWidget):
 class ConfirmSubscriptionsScreen(AutobindWizardScreen, widgets.GladeWidget):
 
     """ Confirm Subscriptions GUI Window """
-    def __init__(self, controller, parent_window):
+    def __init__(self, controller, parent_window=None):
         AutobindWizardScreen.__init__(self, controller, parent_window)
 
         self.widgets.extend([

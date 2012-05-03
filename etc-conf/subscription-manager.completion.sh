@@ -27,6 +27,7 @@ _subscription-manager_register()
 {
   local opts="--username --password --type --name --consumerid
               --org --environment --autosubscribe --force --activationkey
+              --release --servicelevel
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
@@ -43,7 +44,7 @@ _subscription-manager_subscribe()
           COMPREPLY=($(compgen -W "${POOLS}" -- ${1}))
           return 0
   esac
-  local opts="--pool --quantity --auto
+  local opts="--pool --quantity --auto --servicelevel
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
@@ -127,14 +128,31 @@ _subscription-manager_redeem()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
+_subscription-manager_release()
+{
+    # we could autocomplete the release version for
+    # --set
+    local opts="--list --set
+                  ${_subscription_manager_common_opts}"
+    COMPREPLY=($(compgen -W "${opts}" -- ${1}))
+}
+
 _subscription-manager_repos()
 {
   local opts="--list
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
-# main complete function
 
+_subscription-manager_service-level()
+{
+    local opts="--show --org --list
+                  ${_subscription_manager_common_opts}"
+    COMPREPLY=($(compgen -W "${opts}" -- ${1}))
+}
+
+
+# main complete function
 _subscription-manager()
 {
   local first cur prev opts base
@@ -145,7 +163,7 @@ _subscription-manager()
 
   # top-level commands and options
   opts="list refresh register subscribe unregister unsubscribe clean config environments
-  facts identity import orgs redeem repos"
+  facts identity import orgs release redeem repos service-level"
 
   case "${first}" in
       list|\
@@ -156,13 +174,15 @@ _subscription-manager()
       unsubscribe|\
       clean|\
       config|\
-      enviroments|\
+      environments|\
       facts|\
       identity|\
       import|\
       orgs|\
       redeem|\
-      repos)
+      release|\
+      repos|\
+      service-level)
       "_subscription-manager_$first" "${cur}" "${prev}"
       return 0
       ;;

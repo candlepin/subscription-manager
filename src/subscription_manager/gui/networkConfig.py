@@ -22,6 +22,7 @@ import gtk.glade
 import rhsm.config
 
 from subscription_manager.gui.utils import errorWindow
+from subscription_manager.utils import remove_scheme
 
 _ = gettext.gettext
 
@@ -92,7 +93,8 @@ class NetworkConfigDialog:
 
         # don't save these values if they are disabled in the gui
         if proxy and self.xml.get_widget("enableProxyButton").get_active():
-            # FIXME: this should probably be smarter
+            # Remove any URI scheme provided
+            proxy = remove_scheme(proxy)
             try:
                 proxy_hostname, proxy_port = proxy.split(':')
                 self.cfg.set("server", "proxy_hostname", proxy_hostname)

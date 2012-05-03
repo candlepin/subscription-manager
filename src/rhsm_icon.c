@@ -24,6 +24,7 @@
 #include <locale.h>
 
 #include <glib.h>
+#include <gconf/gconf-client.h>
 #include <gtk/gtk.h>
 #include <libnotify/notify.h>
 #include <dbus/dbus-glib.h>
@@ -128,9 +129,10 @@ static void
 run_smg (Context * context)
 {
 	if (context->show_registration) {
-		g_spawn_command_line_async ("subscription-manager-gui --register", NULL);
+		g_spawn_command_line_async
+			("subscription-manager-gui --register", NULL);
 	} else {
-		g_spawn_command_line_async ("subscription-manager-gui", NULL);    
+		g_spawn_command_line_async ("subscription-manager-gui", NULL);
 	}
 	hide_icon (context);
 }
@@ -169,7 +171,7 @@ manage_subs_clicked (NotifyNotification * notification G_GNUC_UNUSED,
 
 static void
 register_now_clicked (NotifyNotification * notification G_GNUC_UNUSED,
-			gchar * action G_GNUC_UNUSED, Context * context)
+		      gchar * action G_GNUC_UNUSED, Context * context)
 {
 	g_debug ("Register now clicked");
 	run_smg (context);
@@ -200,11 +202,13 @@ display_icon (Context * context, StatusType status_type)
 
 	if (status_type == RHSM_REGISTRATION_REQUIRED) {
 		tooltip = _("Register System For Support And Updates");
-		notification_title = _("Register System For Support And Updates");
-		notification_body = _("In order for Subscription Manager to provide your "
-				      "system with updates, your system must be registered "
-				      "with RHN. Please enter your Red Hat login to ensure "
-				      "your system is up-to-date.");
+		notification_title =
+			_("Register System For Support And Updates");
+		notification_body =
+			_("In order for Subscription Manager to provide your "
+			  "system with updates, your system must be registered "
+			  "with RHN. Please enter your Red Hat login to ensure "
+			  "your system is up-to-date.");
 	} else if (status_type == RHSM_EXPIRED) {
 		tooltip = _("Invalid or Missing Entitlement Certificates");
 		notification_title =
@@ -249,13 +253,15 @@ display_icon (Context * context, StatusType status_type)
 						"register-system",
 						_("Register Now"),
 						(NotifyActionCallback)
-						register_now_clicked, context, NULL);
+						register_now_clicked, context,
+						NULL);
 	} else {
 		notify_notification_add_action (context->notification,
 						"manage-subscriptions",
 						_("Manage My Subscriptions..."),
 						(NotifyActionCallback)
-						manage_subs_clicked, context, NULL);
+						manage_subs_clicked, context,
+						NULL);
 	}
 
 	gtk_status_icon_set_visible (context->icon, true);
@@ -387,7 +393,8 @@ add_signal_listener (Context * context)
 }
 
 static void
-register_icon_click_listeners (Context * context) {
+register_icon_click_listeners (Context * context)
+{
 	g_signal_connect (context->icon, "activate",
 			  G_CALLBACK (icon_clicked), context);
 	g_signal_connect (context->icon, "popup-menu",
@@ -428,6 +435,24 @@ main (int argc, char **argv)
 	}
 
 	gtk_init (&argc, &argv);
+	gconf_init (argc, argv, NULL);
+
+	// read conf and quit if we shouldn't be running
+	GConfClient *config;
+	config = gconf_client_get_default ();
+
+	// NB: if something goes awry, FALSE will be returned
+	gboolean icon_setting =
+		gconf_client_get_bool (config, "/apps/rhsm-icon/hide_icon",
+				       NULL);
+	g_debug ("icon setting: %i", icon_setting);
+	if (icon_setting == TRUE) {
+		g_warning
+			("GConf setting \"/apps/rhsm-icon/hide_icon\" set to true, exiting");
+		return 0;
+	}
+
+	g_object_unref (config);
 
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (connection == NULL) {

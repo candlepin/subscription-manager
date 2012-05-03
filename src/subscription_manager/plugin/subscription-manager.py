@@ -18,7 +18,6 @@
 import os
 import sys
 from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
-import ConfigParser
 
 sys.path.append('/usr/share/rhsm')
 from subscription_manager import logutil
@@ -27,15 +26,6 @@ from rhsm import connection
 
 requires_api_version = '2.5'
 plugin_type = (TYPE_CORE, TYPE_INTERACTIVE)
-
-# this fails as non root
-# FIXME: this fais as non root
-try:
-    from subscription_manager.certlib import ConsumerIdentity
-except ImportError:
-    ConsumerIdentity = None
-except ConfigParser.NoOptionError:
-    ConsumerIdentity = None
 
 warning = \
 """
@@ -56,12 +46,15 @@ def update(conduit):
         return
     conduit.info(2, 'Updating certificate-based repositories.')
 
+    # XXX: Importing inline as you must be root to read the config file
+    from subscription_manager.certlib import ConsumerIdentity
+
     cert_file = ConsumerIdentity.certpath()
     key_file = ConsumerIdentity.keypath()
 
     try:
         ConsumerIdentity.read().getConsumerId()
-    except Exception, e:
+    except Exception:
         conduit.error(2, "Unable to read consumer identity")
         return
 

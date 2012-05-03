@@ -44,8 +44,6 @@ from subscription_manager.gui import widgets
 from subscription_manager.gui.installedtab import InstalledProductsTab
 from subscription_manager.gui.mysubstab import MySubscriptionsTab
 from subscription_manager.gui.allsubs import AllSubscriptionsTab
-from subscription_manager.gui.subscription_assistant import \
-        SubscriptionAssistant
 from subscription_manager.gui.importsub import ImportSubDialog
 from subscription_manager.gui.utils import handle_gui_exception, linkify
 from subscription_manager.gui.autobind import AutobindWizard
@@ -210,12 +208,6 @@ class MainWindow(widgets.GladeWidget):
 
         self.import_sub_dialog = ImportSubDialog()
 
-        self.subscription_assistant = SubscriptionAssistant(self.backend,
-                                                            self.consumer,
-                                                            self.facts,
-                                                            ent_dir=self.entitlement_dir,
-                                                            prod_dir=self.product_dir)
-
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
         self.network_config_dialog.xml.get_widget("closeButton").connect("clicked", self._config_changed)
 
@@ -368,7 +360,10 @@ class MainWindow(widgets.GladeWidget):
         self.registration_dialog.show()
 
     def _preferences_button_clicked(self, widget):
-        self.preferences_dialog.show()
+        try:
+            self.preferences_dialog.show()
+        except Exception, e:
+            handle_gui_exception(e, _("Error in preferences dialog. Please see /var/log/rhsm/rhsm.log for more information."), self._get_window())
 
     def _on_unregister_prompt_response(self, dialog, response):
         if not response:

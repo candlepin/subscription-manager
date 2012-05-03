@@ -204,6 +204,10 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                     entry['validity_note'] = _("Not Subscribed")
 
                 self.store.add_map(entry)
+        # 811340: Select the first product in My Installed Software
+        # table by default.
+        selection = self.top_view.get_selection()
+        selection.select_path(0)
 
     def _render_icon(self, icon_id):
         try:

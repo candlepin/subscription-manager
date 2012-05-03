@@ -1,66 +1,54 @@
 import sys
 import gtk
-from gtk import glade
-
-from firstboot_module_window import FirstbootModuleWindow
+import socket
 
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
-gettext.textdomain("rhsm")
-gtk.glade.bindtextdomain("firstboot", "/usr/share/locale")
 
 import rhsm
 
-sys.path.append("/usr/share/rhsm/")
-try:
-    from subscription_manager.gui import managergui
-except Exception, e:
-    print e
-    raise
-
+sys.path.append("/usr/share/rhsm")
+from subscription_manager.gui import managergui
+from subscription_manager import managerlib
 from subscription_manager.gui import registergui
+from subscription_manager.gui import autobind
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.facts import Facts
-from subscription_manager import managerlib
+from subscription_manager.gui.manually_subscribe import get_screen
+from subscription_manager.gui.firstboot_base import RhsmFirstbootModule
+
+from subscription_manager.gui.utils import handle_gui_exception
+from subscription_manager.utils import remove_scheme
 
 sys.path.append("/usr/share/rhn")
 from up2date_client import config
 
 
-class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
-    runPriority = 109.10
-    moduleName = _("Entitlement Registration")
-    windowTitle = moduleName
-    shortMessage = _("Entitlement Platform Registration")
-    needsnetwork = 1
-    icon = None
-    needsparent = 1
+class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
     def __init__(self):
         """
         Create a new firstboot Module for the 'register' screen.
         """
-        FirstbootModuleWindow.__init__(self)
+        RhsmFirstbootModule.__init__(self,
+                _("Entitlement Platform Registration"),
+                _("Entitlement Registration"),
+                200.1, 109.10)
+
+        self.pages = {
+                "rhsm_manually_subscribe": _("Manual Configuraton Required"),
+                "rhsm_select_sla": _("Service Level"),
+                "rhsm_confirm_subs": _("Confirm Subscriptions"),
+                }
 
         backend = managergui.Backend()
 
         registergui.RegisterScreen.__init__(self, backend,
                 managergui.Consumer(), Facts())
 
-#        managergui.create_and_set_basic_connection()
+        self._skip_apply_for_page_jump = False
         self._cached_credentials = None
         self._registration_finished = False
-        self._first_registration_apply_run = True
-
-    def passInParent(self, parent):
-        self.parent = parent
-
-        # override the cancel and next button references with those of
-        # firstboot so the register flow will sensitize/desensitize them
-        # as it goes
-
-        self.cancel_button = parent.backButton
-        self.register_button = parent.nextButton
 
     def _read_rhn_proxy_settings(self):
         # Read and store rhn-setup's proxy settings, as they have been set
@@ -71,6 +59,8 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
         if up2date_cfg['enableProxy']:
             proxy = up2date_cfg['httpProxy']
             if proxy:
+                # Remove any URI scheme provided
+                proxy = remove_scheme(proxy)
                 try:
                     host, port = proxy.split(':')
                     cfg.set('server', 'proxy_hostname', host)
@@ -109,35 +99,30 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
         value.
         """
 
-        if self._registration_finished:
-            self._registration_finished = False
-            return 0
+        # on el5 we can't just move to another page, we have to set the next
+        # page then do an apply. since we've already done our work async, skip
+        # this time through
+        if self._skip_apply_for_page_jump:
+            self._skip_apply_for_page_jump = False
+            return self._RESULT_SUCCESS
+
+        self.interface = interface
 
         self._read_rhn_proxy_settings()
 
         credentials = self._get_credentials_hash()
 
-        if credentials == self._cached_credentials and \
-                ConsumerIdentity.exists():
-            # User has already successfully authenticaed with these
-            # credentials, just go on to the next module without
-            # reregistering the consumer
-            return 0
-        else:
-            # if they've already registered during firstboot and have clicked
-            # back to register again, we must first unregister.
-            # XXX i'd like this call to be inside the async progress stuff,
-            # since it does take some time
-            if self._first_registration_apply_run and ConsumerIdentity.exists():
-                managerlib.unregister(self.backend.uep, self.consumer.uuid)
-                self.consumer.reload()
-                self._first_registration_apply_run = False
-
+        # bad proxy settings can cause socket.error or friends here
+        # see bz #810363
+        try:
             valid_registration = self.register(testing=testing)
+        except socket.error, e:
+            handle_gui_exception(e, e, self.registerWin)
+            return self._RESULT_FAILURE
 
-            if valid_registration:
-                self._cached_credentials = credentials
-            return None
+        if valid_registration:
+            self._cached_credentials = credentials
+        return self._RESULT_FAILURE
 
     def close_window(self):
         """
@@ -160,7 +145,7 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
         """
         pass
 
-    def launch(self, doDebug=None):
+    def createScreen(self):
         """
         Create a new instance of gtk.VBox, pulling in child widgets from the
         glade file.
@@ -175,24 +160,25 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
         self._destroy_widget('register_button')
         self._destroy_widget('cancel_button')
 
-        toplevel = gtk.VBox(False, 10)
-        toplevel.pack_start(self.vbox, True)
-
-        return toplevel, self.icon, self.windowTitle
-
     def initializeUI(self):
-        # Need to make sure that each time the UI is initialized we reset back to the
-        # main register screen.
+        # Need to make sure that each time the UI is initialized we reset back
+        # to the main register screen.
+
+        # if they've already registered during firstboot and have clicked
+        # back to register again, we must first unregister.
+        # XXX i'd like this call to be inside the async progress stuff,
+        # since it does take some time
+        if self._registration_finished and ConsumerIdentity.exists():
+            try:
+                managerlib.unregister(self.backend.uep, self.consumer.uuid)
+            except socket.error, e:
+                handle_gui_exception(e, e, self.registerWin)
+            self.consumer.reload()
+            self._registration_finished = False
+
         self._show_credentials_page()
         self._clear_registration_widgets()
         self.initializeConsumerName()
-
-    def needsNetwork(self):
-        """
-        This lets firstboot know that networking is required, in order to
-        talk to hosted UEP.
-        """
-        return True
 
     def focus(self):
         """
@@ -202,16 +188,6 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
         # FIXME:  This is currently broken
         login_text = registergui.registration_xml.get_widget("account_login")
         login_text.grab_focus()
-
-    def shouldAppear(self):
-        """
-        Indicates to firstboot whether to show this screen.  In this case
-        we want to skip over this screen if there is already an identity
-        certificate on the machine (most likely laid down in a kickstart),
-        but showing the screen and allowing the user to reregister if
-        firstboot is run in reconfig mode.
-        """
-        return True
 
     def _destroy_widget(self, widget_name):
         """
@@ -244,8 +220,77 @@ class moduleClass(FirstbootModuleWindow, registergui.RegisterScreen):
     def _finish_registration(self, failed=False):
         registergui.RegisterScreen._finish_registration(self, failed=failed)
         if not failed:
-            self._first_registration_apply_run = True
             self._registration_finished = True
-            self.parent.nextClicked()
 
+            self._init_sla()
+        # if something did fail, we will have shown the user an error message
+        # from the superclass _finish_registration. then just leave them on the
+        # rhsm_login page so they can try again (or go back and select to skip
+        # registration).
+
+    def _move_to_manual_install(self, title):
+        # TODO Change the message on the screen.
+        get_screen().set_title(title)
+        self.moveToPage("rhsm_manually_subscribe")
+
+    def _init_sla(self):
+        if self.skip_auto_subscribe():
+            return self._move_to_manual_install(_("You have opted to skip auto-subscribe."))
+
+        # sla autosubscribe time. load up the possible slas, to decide if
+        # we need to display the selection screen, or go to the confirm
+        # screen.
+        # XXX this should really be done async.
+
+        controller = autobind.init_controller(self.backend, self.consumer,
+                Facts())
+
+        # XXX see autobind.AutobindWizard load() and _show_initial_screen
+        # for matching error handling.
+        try:
+            controller.load()
+        except autobind.ServiceLevelNotSupportedException:
+            message = _("Unable to auto-subscribe, server does not support service levels. Please run 'Subscription Manager' to manually subscribe.")
+            return self._move_to_manual_install(message)
+
+        except autobind.NoProductsException:
+            message = _("No installed products on system. No need to update certificates at this time.")
+            return self._move_to_manual_install(message)
+
+        except autobind.AllProductsCoveredException:
+            message = _("All installed products are covered by valid entitlements. Please run 'Subscription Manager' to subscribe to additional products.")
+            return self._move_to_manual_install(message)
+
+        except socket.error, e:
+            handle_gui_exception(e, None, self.registerWin)
+            return
+
+        if len(controller.suitable_slas) > 1:
+            self.moveToPage("rhsm_select_sla")
+        elif len(controller.suitable_slas) == 1:
+            if controller.current_sla and \
+                    not controller.can_add_more_subs():
+                message = _("Unable to subscribe to any additional products at current service level: %s") % controller.current_sla
+                return self._move_to_manual_install(message)
+
+            self.moveToPage("rhsm_confirm_subs")
+        else:
+            message = _("No service levels will cover all installed products. " + \
+                "Please run 'Subscription Manager' to manually " + \
+                "entitle this system.")
+            return self._move_to_manual_install(message)
+
+    def moveToPage(self, page):
+        """
+        el5 compat method for jumping pages
+        """
+        if self._is_compat:
+            # we must be on el5.
+            self._skip_apply_for_page_jump = True
+            self.parent.setPage(page)
+            self.parent.nextClicked()
+        else:
+            self.interface.moveToPage(moduleTitle=self.pages[page])
+
+# for el5
 childWindow = moduleClass

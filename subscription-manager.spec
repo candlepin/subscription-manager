@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.0
+Version: 1.0.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -48,6 +48,7 @@ BuildRequires: gtk2-devel
 BuildRequires: desktop-file-utils
 BuildRequires: redhat-lsb
 BuildRequires: scrollkeeper
+BuildRequires: GConf2-devel
 
 
 %description
@@ -195,6 +196,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/certmgr.py*
 %{_datadir}/rhsm/subscription_manager/listing.py*
 %{_datadir}/rhsm/subscription_manager/release.py*
+%{_datadir}/rhsm/subscription_manager/utils.py*
 
 
 %attr(755,root,root) %{_sbindir}/subscription-manager
@@ -249,24 +251,18 @@ rm -rf %{buildroot}
 %files -n subscription-manager-firstboot
 %defattr(-,root,root,-)
 %{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
+%{_datadir}/rhn/up2date_client/firstboot/rhsm_select_sla.py*
+%{_datadir}/rhn/up2date_client/firstboot/rhsm_confirm_subs.py*
+%{_datadir}/rhn/up2date_client/firstboot/rhsm_manually_subscribe.py*
 
 %if 0%{?rhel} < 6
-  %if 0%{?fedora} > 12
-    # we are building for fedora > 12 (not rhel)
-    %{_datadir}/rhn/up2date_client/firstboot/rhsm_select_sla.py*
-    %{_datadir}/rhn/up2date_client/firstboot/rhsm_confirm_subs.py*
-    %{_datadir}/rhn/up2date_client/firstboot/rhsm_manually_subscribe.py*
-  %else
+  %if 0%{?fedora} <= 12
     # we are building for fedora <= 12 or rhel < 6
-    %{_datadir}/rhn/up2date_client/firstboot/rhsm_subscriptions.py*
     %{_prefix}/share/firstboot/modules/rhsm_login.py*
-    %{_prefix}/share/firstboot/modules/rhsm_subscriptions.py*
+    %{_prefix}/share/firstboot/modules/rhsm_select_sla.py*
+    %{_prefix}/share/firstboot/modules/rhsm_confirm_subs.py*
+    %{_prefix}/share/firstboot/modules/rhsm_manually_subscribe.py*
   %endif
-%else
-  # we are building for rhel >= 6 (not fedora)
-  %{_datadir}/rhn/up2date_client/firstboot/rhsm_select_sla.py*
-  %{_datadir}/rhn/up2date_client/firstboot/rhsm_confirm_subs.py*
-  %{_datadir}/rhn/up2date_client/firstboot/rhsm_manually_subscribe.py*
 %endif
 
 %files -n subscription-manager-migration
@@ -304,6 +300,52 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Thu Apr 26 2012 Michael Stead <mstead@redhat.com> 1.0.1-1
+- latest strings from zanata (alikins@redhat.com)
+- add test cases for autobind.py (alikins@redhat.com)
+- pep8 and pyflakes cleanups (jbowes@redhat.com)
+- 815563: Remove incorrect at-spi locators. (awood@redhat.com)
+- 795541: Environment command should omit the Library from katello
+  (bkearney@redhat.com)
+- 806993: Tolerate the provision of a scheme with the proxy string.
+  (awood@redhat.com)
+- remove remnants of subscription_assistant.py (alikins@redhat.com)
+- 811952: Don't try to unsubscribe old ents if we register (alikins@redhat.com)
+- 811952: Handle errors on unsubscribing ent certs (alikins@redhat.com)
+- 812929: Fix issue with selected sla not being in suitable_slas
+  (mstead@redhat.com)
+- 812897: Use consistent casing for the word "Error" (awood@redhat.com)
+- Improve preferences dialog error message. (dgoodwin@redhat.com)
+- 811863: Handle unforseen errors in preferences dialog. (dgoodwin@redhat.com)
+- 811340: Select the first product in My Installed Software table by default.
+  (awood@redhat.com)
+- 811594: The config, repos, and facts commands should default to --list if no
+  options are provided. (awood@redhat.com)
+- 812104: add "release" and "service-level" to completion (alikins@redhat.com)
+- 801434: Add at-spi accessibility name to calendar widget. (awood@redhat.com)
+- updates to man pages (deon@deonlackey.com)
+- 811591: Use consistent messages for not being registered
+  (bkearney@redhat.com)
+- Updated the --servicelevel option description (deon@deonlackey.com)
+- Use numeric index to access value returned by urlparse. (awood@redhat.com)
+- 790579: Show translations for errors thrown by installation number parsing.
+  (awood@redhat.com)
+- adding --servicelevel option to list command (deon@deonlackey.com)
+- 810306: Improved messaging in firstboot (mstead@redhat.com)
+- 811337: unregister any time we return to rhsm_login (jbowes@redhat.com)
+- 807153: Allow more aggressive deletion of product certs. (awood@redhat.com)
+- 810399: require the latest rhn-setup-gnome for firstboot (alikins@redhat.com)
+- 810290: use correct calculation for "Next update" time in sm-gui
+  (cduryee@redhat.com)
+- 810363: handle socket errors for bad proxy host in firstboot
+  (alikins@redhat.com)
+- Latest man page and documentation (dlackey@redhat.com)
+- 809989: Add the shortened password url to the strings files.
+  (bkearney@redhat.com)
+- 809989: Add a shorter URL to the registration screen (bkearney@redhat.com)
+- rev the zanata version to 1.0.X (alikins@redhat.com)
+- Incrementing version number after 6.3 branch. (mstead@redhat.com)
+
 * Wed Apr 04 2012 Michael Stead <mstead@redhat.com> 0.99.13-1
 - latest strings into keys.pot and updated from zanata (alikins@redhat.com)
 - 809611: Fix undefined variable in installedtab for expired

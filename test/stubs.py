@@ -365,13 +365,14 @@ class StubUEP:
         proxy_user=None, proxy_password=None,
         cert_file=None, key_file=None):
             self.registered_consumer_info = {"uuid": 'dummy-consumer-uuid'}
+            self.environment_list = []
             pass
 
     def supports_resource(self, resource):
         return False
 
     def registerConsumer(self, name, type, facts, owner, environment, keys,
-            installed_products):
+                         installed_products):
         return self.registered_consumer_info
 
     def getOwnerList(self, username):
@@ -391,6 +392,12 @@ class StubUEP:
 
     def updateConsumer(self, consumer, service_level=None, release=None):
         return consumer
+
+    def setEnvironmentList(self, env_list):
+        self.environment_list = env_list
+
+    def getEnvironmentList(self, owner):
+        return self.environment_list
 
 
 class StubBackend:
@@ -438,3 +445,14 @@ class StubFacts(object):
 
     def get_last_update(self):
         return None
+
+
+class StubConsumer:
+    def __init__(self):
+        self.uuid = None
+
+    def reload(self):
+        pass
+
+    def getConsumerId(self):
+        return "12341234234"

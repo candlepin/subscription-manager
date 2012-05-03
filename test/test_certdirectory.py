@@ -16,10 +16,9 @@
 import unittest
 import os
 
-from mock import Mock
 from mock import patch
 
-from stubs import StubConfig, StubProduct, StubEntitlementCertificate
+from stubs import StubProduct, StubEntitlementCertificate
 from subscription_manager.certdirectory import Path, EntitlementDirectory
 from subscription_manager.repolib import RepoFile
 from subscription_manager.productid import ProductDatabase

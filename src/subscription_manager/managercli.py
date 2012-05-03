@@ -50,11 +50,13 @@ from subscription_manager.release import ReleaseBackend
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
+from subscription_manager.utils import remove_scheme
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
 
 NOT_REGISTERED = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
+LIBRARY_ENV_NAME = "library"
 
 # Translates the cert sorter status constants:
 STATUS_MAP = {
@@ -235,14 +237,14 @@ class CliCommand(object):
                 print _("cannot parse argument: %s") % arg
             sys.exit(-1)
 
-        self.proxy_hostname = cfg.get('server', 'proxy_hostname')
+        self.proxy_hostname = remove_scheme(cfg.get('server', 'proxy_hostname'))
         self.proxy_port = cfg.get('server', 'proxy_port')
         self.proxy_user = cfg.get('server', 'proxy_user')
         self.proxy_password = cfg.get('server', 'proxy_password')
 
         # support foo.example.com:3128 format
         if hasattr(self.options, "proxy_url") and self.options.proxy_url:
-            parts = self.options.proxy_url.split(':')
+            parts = remove_scheme(self.options.proxy_url).split(':')
             self.proxy_hostname = parts[0]
             # no ':'
             if len(parts) > 1:
@@ -506,6 +508,15 @@ class EnvironmentsCommand(UserPassCommand):
             print(_("you must specify an --org"))
             sys.exit(-1)
 
+    def _get_enviornments(self, org):
+        raw_environments = self.cp.getEnvironmentList(org)
+        environments = []
+        # Remove the library environemnt
+        for env in raw_environments:
+            if env['name'].lower() != LIBRARY_ENV_NAME.lower():
+                environments.append(env)
+        return environments
+
     def _do_command(self):
         self._validate_options()
         try:
@@ -516,7 +527,8 @@ class EnvironmentsCommand(UserPassCommand):
                                                proxy_user=self.proxy_user,
                                                proxy_password=self.proxy_password)
             if self.cp.supports_resource('environments'):
-                environments = self.cp.getEnvironmentList(self.options.org)
+                environments = self._get_enviornments(self.options.org)
+
                 if len(environments):
                     print("+-------------------------------------------+")
                     print("          %s" % (_("Environments")))
@@ -555,6 +567,8 @@ class ServiceLevelCommand(UserPassCommand):
                 help=_("specify org for service level list"))
         self.parser.add_option("--list", dest="list", action='store_true',
                 help=_("list all service levels available"))
+        self.parser.add_option("--set", dest="service_level",
+                               help=_("service level to apply to this system"))
 
     def _validate_options(self):
 
@@ -598,6 +612,9 @@ class ServiceLevelCommand(UserPassCommand):
                         proxy_user=self.proxy_user,
                         proxy_password=self.proxy_password)
 
+            if self.options.service_level is not None:
+                self.set_service_level(self.options.service_level)
+
             if self.options.show:
                 self.show_service_level()
 
@@ -611,17 +628,25 @@ class ServiceLevelCommand(UserPassCommand):
         except Exception, e:
             handle_exception(_("Error: Unable to retrieve service levels."), e)
 
+    def set_service_level(self, service_level):
+        consumer_uuid = ConsumerIdentity.read().getConsumerId()
+        consumer = self.cp.getConsumer(consumer_uuid)
+        if 'serviceLevel' not in consumer:
+            systemExit(-1, _("Error: The service-level command is not supported " + \
+            "by the server."))
+        self.cp.updateConsumer(consumer_uuid, service_level=service_level)
+
     def show_service_level(self):
         consumer_uuid = ConsumerIdentity.read().getConsumerId()
         consumer = self.cp.getConsumer(consumer_uuid)
         if 'serviceLevel' not in consumer:
-            systemExit(-1, _("ERROR: The service-level command is not supported by " + \
+            systemExit(-1, _("Error: The service-level command is not supported by " + \
                              "the server."))
         service_level = consumer['serviceLevel'] or ""
         print(_("Current service level: %s") % service_level)
 
     def list_service_levels(self):
-        not_supported = _("ERROR: The service-level command is not supported by " + \
+        not_supported = _("Error: The service-level command is not supported by " + \
                            "the server.")
 
         org_key = self.options.org
@@ -642,7 +667,8 @@ class ServiceLevelCommand(UserPassCommand):
         except connection.RemoteServerException, e:
             systemExit(-1, not_supported)
         except connection.RestlibException, e:
-            if e.code == 404:
+            if e.code == 404 and\
+                e.msg.find('/servicelevels') > 0:
                 systemExit(-1, not_supported)
             else:
                 raise e
@@ -760,6 +786,8 @@ class RegisterCommand(UserPassCommand):
 
             if self.options.consumerid:
                 #TODO remove the username/password
+                log.info("Registering as existing consumer: %s" %
+                        self.options.consumerid)
                 consumer = admin_cp.getConsumer(self.options.consumerid,
                         self.username, self.password)
             else:
@@ -784,11 +812,6 @@ class RegisterCommand(UserPassCommand):
 
         print (_("The system has been registered with id: %s ")) % (consumer_info["uuid"])
 
-        # Facts and installed products went out with the registration request,
-        # manually write caches to disk:
-        self.facts.write_cache()
-        self.installed_mgr.write_cache()
-
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
         self.cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
@@ -797,9 +820,20 @@ class RegisterCommand(UserPassCommand):
                                            proxy_user=self.proxy_user,
                                            proxy_password=self.proxy_password)
 
+        # Must update facts to clear out the old ones:
+        if self.options.consumerid:
+            log.info("Updating facts")
+            self.facts.update_check(self.cp, consumer['uuid'], force=True)
+
         profile_mgr = ProfileManager()
         # 767265: always force an upload of the packages when registering
         profile_mgr.update_check(self.cp, consumer['uuid'], True)
+
+        # Facts and installed products went out with the registration request,
+        # manually write caches to disk:
+        self.facts.write_cache()
+        self.installed_mgr.write_cache()
+
 
         if self.options.release:
             # TODO: grab the list of valid options, and check
@@ -807,7 +841,7 @@ class RegisterCommand(UserPassCommand):
 
         if self.options.autosubscribe:
             if 'serviceLevel' not in consumer and self.options.service_level:
-                systemExit(-1, _("ERROR: The --servicelevel option is not supported " + \
+                systemExit(-1, _("Error: The --servicelevel option is not supported " + \
                                  "by the server. Did not perform autosubscribe."))
             autosubscribe(self.cp, consumer['uuid'],
                     service_level=self.options.service_level)
@@ -839,7 +873,7 @@ class RegisterCommand(UserPassCommand):
             return environment_name
 
         if not cp.supports_resource('environments'):
-            systemExit(-1, _("ERROR: Server does not support environments."))
+            systemExit(-1, _("Error: Server does not support environments."))
 
         env = cp.getEnvironment(owner_key=owner_key, name=environment_name)
         if not env:
@@ -994,7 +1028,7 @@ class ReleaseCommand(CliCommand):
                                               content_connection=self.cc)
 
     def _get_consumer_release(self):
-        err_msg = _("ERROR: The 'release' command is not supported by the server.")
+        err_msg = _("Error: The 'release' command is not supported by the server.")
         try:
             return self.cp.getRelease(self.consumer['uuid'])['releaseVer']
         # ie, a 404 from a old server that doesn't support the release API
@@ -1114,7 +1148,7 @@ class SubscribeCommand(CliCommand):
                 if self.options.service_level:
                     consumer = self.cp.getConsumer(consumer_uuid)
                     if 'serviceLevel' not in consumer:
-                        systemExit(-1, _("ERROR: The --servicelevel option is not " + \
+                        systemExit(-1, _("Error: The --servicelevel option is not " + \
                                          "supported by the server. Did not perform " + \
                                          "autosubscribe."))
                 autosubscribe(self.cp, consumer_uuid,
@@ -1226,10 +1260,9 @@ class FactsCommand(CliCommand):
         if self.options.update:
             self.assert_should_be_registered()
 
-        # one or the other
+        # if no relevant options, default to listing.
         if not (self.options.list or self.options.update):
-            print _("Error: Need either --list or --update, Try facts --help")
-            sys.exit(-1)
+            self.options.list = True
 
     def _do_command(self):
         self._validate_options()
@@ -1329,33 +1362,25 @@ class ReposCommand(CliCommand):
         return True
 
     def _add_common_options(self):
-        self.parser.add_option("--list", action="store_true",
-                               help=_("list the entitled repositories for this system"))
-
-    def _validate_options(self):
-        if not (self.options.list):
-            print _("Error: No options provided. Please see the help comand.")
-            sys.exit(-1)
+        pass
 
     def _do_command(self):
-        self._validate_options()
-        if self.options.list:
-            rl = RepoLib(uep=self.cp)
-            repos = rl.get_repos()
-            if cfg.has_option('rhsm', 'manage_repos') and \
-                    not int(cfg.get('rhsm', 'manage_repos')):
-                print _("Repositories disabled by configuration.")
-            elif len(repos) > 0:
-                print("+----------------------------------------------------------+")
-                print _("    Entitled Repositories in %s") % rl.get_repo_file()
-                print("+----------------------------------------------------------+")
-                for repo in repos:
-                    print constants.repos_list % (repo["name"],
-                        repo.id,
-                        repo["baseurl"],
-                        repo["enabled"])
-            else:
-                print _("The system is not entitled to use any repositories.")
+        rl = RepoLib(uep=self.cp)
+        repos = rl.get_repos()
+        if cfg.has_option('rhsm', 'manage_repos') and \
+                not int(cfg.get('rhsm', 'manage_repos')):
+            print _("Repositories disabled by configuration.")
+        elif len(repos) > 0:
+            print("+----------------------------------------------------------+")
+            print _("    Entitled Repositories in %s") % rl.get_repo_file()
+            print("+----------------------------------------------------------+")
+            for repo in repos:
+                print constants.repos_list % (repo["name"],
+                    repo.id,
+                    repo["baseurl"],
+                    repo["enabled"])
+        else:
+            print _("The system is not entitled to use any repositories.")
 
 
 class ConfigCommand(CliCommand):
@@ -1402,8 +1427,9 @@ class ConfigCommand(CliCommand):
                     test = "%s" % getattr(self.options, section + "." + name)
                     has = has or (test != 'None')
             if not has:
-                self.parser.print_help()
-                sys.exit(-1)
+                # if no options are given, default to --list
+                self.options.list = True
+
         if self.options.remove:
             for r in self.options.remove:
                 if not "." in r:
