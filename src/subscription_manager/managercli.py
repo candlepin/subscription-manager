@@ -567,6 +567,8 @@ class ServiceLevelCommand(UserPassCommand):
                 help=_("specify org for service level list"))
         self.parser.add_option("--list", dest="list", action='store_true',
                 help=_("list all service levels available"))
+        self.parser.add_option("--set", dest="service_level",
+                               help=_("service level to apply to this system"))
 
     def _validate_options(self):
 
@@ -610,6 +612,9 @@ class ServiceLevelCommand(UserPassCommand):
                         proxy_user=self.proxy_user,
                         proxy_password=self.proxy_password)
 
+            if self.options.service_level is not None:
+                self.set_service_level(self.options.service_level)
+
             if self.options.show:
                 self.show_service_level()
 
@@ -622,6 +627,14 @@ class ServiceLevelCommand(UserPassCommand):
             systemExit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Error: Unable to retrieve service levels."), e)
+
+    def set_service_level(self, service_level):
+        consumer_uuid = ConsumerIdentity.read().getConsumerId()
+        consumer = self.cp.getConsumer(consumer_uuid)
+        if 'serviceLevel' not in consumer:
+            systemExit(-1, _("Error: The service-level command is not supported " + \
+            "by the server."))
+        self.cp.updateConsumer(consumer_uuid, service_level=service_level)
 
     def show_service_level(self):
         consumer_uuid = ConsumerIdentity.read().getConsumerId()
@@ -654,7 +667,8 @@ class ServiceLevelCommand(UserPassCommand):
         except connection.RemoteServerException, e:
             systemExit(-1, not_supported)
         except connection.RestlibException, e:
-            if e.code == 404:
+            if e.code == 404 and\
+                e.msg.find('/servicelevels') > 0:
                 systemExit(-1, not_supported)
             else:
                 raise e
@@ -772,6 +786,8 @@ class RegisterCommand(UserPassCommand):
 
             if self.options.consumerid:
                 #TODO remove the username/password
+                log.info("Registering as existing consumer: %s" %
+                        self.options.consumerid)
                 consumer = admin_cp.getConsumer(self.options.consumerid,
                         self.username, self.password)
             else:
@@ -796,11 +812,6 @@ class RegisterCommand(UserPassCommand):
 
         print (_("The system has been registered with id: %s ")) % (consumer_info["uuid"])
 
-        # Facts and installed products went out with the registration request,
-        # manually write caches to disk:
-        self.facts.write_cache()
-        self.installed_mgr.write_cache()
-
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
         self.cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
@@ -809,9 +820,20 @@ class RegisterCommand(UserPassCommand):
                                            proxy_user=self.proxy_user,
                                            proxy_password=self.proxy_password)
 
+        # Must update facts to clear out the old ones:
+        if self.options.consumerid:
+            log.info("Updating facts")
+            self.facts.update_check(self.cp, consumer['uuid'], force=True)
+
         profile_mgr = ProfileManager()
         # 767265: always force an upload of the packages when registering
         profile_mgr.update_check(self.cp, consumer['uuid'], True)
+
+        # Facts and installed products went out with the registration request,
+        # manually write caches to disk:
+        self.facts.write_cache()
+        self.installed_mgr.write_cache()
+
 
         if self.options.release:
             # TODO: grab the list of valid options, and check
@@ -1186,12 +1208,16 @@ class UnSubscribeCommand(CliCommand):
             consumer = ConsumerIdentity.read().getConsumerId()
             try:
                 if self.options.all:
-                    self.cp.unbindAll(consumer)
-                    log.info("Warning: This machine has been unsubscribed from " +
-                                "all subscriptions.")
+                    total = self.cp.unbindAll(consumer)
+                    # total will be None on older Candlepins that don't
+                    # support returning the number of subscriptions unsubscribed from
+                    if total is None:
+                        print _("This machine has been unsubscribed from all subscriptions.")
+                    else:
+                        print _("This machine has been unsubscribed from %s subscriptions" % total)
                 else:
                     self.cp.unbindBySerial(consumer, self.options.serial)
-                    log.info("This machine has been unsubscribed from subscription with serial number %s" % (self.options.serial))
+                    print _("This machine has been unsubscribed from subscription with serial number %s" % (self.options.serial))
                 self.certlib.update()
             except connection.RestlibException, re:
                 log.error(re)
@@ -1202,9 +1228,11 @@ class UnSubscribeCommand(CliCommand):
             # We never got registered, just remove the cert
             try:
                 if self.options.all:
+                    total = 0
                     for ent in self.entitlement_dir.list():
                         ent.delete()
-                    print _("This machine has been unsubscribed from all subscriptions")
+                        total = total + 1
+                    print _("This machine has been unsubscribed from %s subscriptions" % total)
                 else:
                     for ent in self.entitlement_dir.list():
                         if str(ent.serialNumber()) == self.options.serial:

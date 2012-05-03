@@ -1,29 +1,21 @@
 import sys
 import gtk
 
-from firstboot.config import *
-from firstboot.constants import *
-from firstboot.functions import *
-from firstboot.module import *
-from firstboot.module import Module
-
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
-
 sys.path.append("/usr/share/rhsm")
 from subscription_manager.gui import autobind
-from subscription_manager.certlib import ConsumerIdentity
+from subscription_manager.gui.firstboot_base import RhsmFirstbootModule
 
 
-class moduleClass(Module):
+class moduleClass(RhsmFirstbootModule):
 
     def __init__(self):
-        Module.__init__(self)
-
-        self.priority = 200.3
-        self.sidebarTitle = _("Entitlement Registration")
-        self.title = _("Service Level")
+        RhsmFirstbootModule.__init__(self,
+                _("Service Level"),
+                _("Entitlement Registration"),
+                200.3, 109.12)
 
         self.screen = autobind.SelectSLAScreen(None, None)
 
@@ -32,7 +24,7 @@ class moduleClass(Module):
         'Next' button has been clicked - autobind controller
         will have already stored the selected sla
         """
-        return RESULT_SUCCESS
+        return self._RESULT_SUCCESS
 
     def createScreen(self):
         """
@@ -54,17 +46,6 @@ class moduleClass(Module):
                 set(controller.sorter.unentitled_products.values()),
                 controller.suitable_slas)
 
-    def needsNetwork(self):
-        """
-        This lets firstboot know that networking is required, in order to
-        talk to hosted UEP.
-        """
-        return True
 
-    def shouldAppear(self):
-        """
-        Indicates to firstboot whether to show this screen.  In this case
-        we want to skip over this screen if there is already an identity
-        certificate on the machine (most likely laid down in a kickstart).
-        """
-        return not ConsumerIdentity.existsAndValid()
+# for el5
+childWindow = moduleClass

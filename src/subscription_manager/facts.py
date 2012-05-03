@@ -136,6 +136,7 @@ class Facts(CacheManager):
         return validity_facts
 
     def _update_server(self, uep, consumer_uuid):
+        log.debug("Updating facts on server")
         uep.updateConsumer(consumer_uuid, facts=self.get_facts())
 
     def _load_data(self, open_file):

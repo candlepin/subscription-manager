@@ -2,32 +2,25 @@ import sys
 import gtk
 import logging
 
-from firstboot.config import *
-from firstboot.constants import *
-from firstboot.functions import *
-from firstboot.module import *
-from firstboot.module import Module
-
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
 sys.path.append("/usr/share/rhsm")
 from subscription_manager.gui import autobind
-from subscription_manager.certlib import ConsumerIdentity
 from rhsm.connection import RestlibException
+from subscription_manager.gui.firstboot_base import RhsmFirstbootModule
 
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-class moduleClass(Module):
+class moduleClass(RhsmFirstbootModule):
 
     def __init__(self):
-        Module.__init__(self)
-
-        self.priority = 200.4
-        self.sidebarTitle = _("Entitlement Registration")
-        self.title = _("Confirm Subscriptions")
+        RhsmFirstbootModule.__init__(self,
+                _("Confirm Subscriptions"),
+                _("Entitlement Registration"),
+                200.4, 109.13)
 
         self.screen = autobind.ConfirmSubscriptionsScreen(None, None)
 
@@ -64,7 +57,7 @@ class moduleClass(Module):
             # screen.forward takes care of subscribing.
             self.old_entitlements = self.screen.forward()
 
-        return RESULT_SUCCESS
+        return self._RESULT_SUCCESS
 
     def createScreen(self):
         """
@@ -89,17 +82,6 @@ class moduleClass(Module):
 
         self.screen.load_data(controller.suitable_slas[service_level])
 
-    def needsNetwork(self):
-        """
-        This lets firstboot know that networking is required, in order to
-        talk to hosted UEP.
-        """
-        return True
 
-    def shouldAppear(self):
-        """
-        Indicates to firstboot whether to show this screen.  In this case
-        we want to skip over this screen if there is already an identity
-        certificate on the machine (most likely laid down in a kickstart).
-        """
-        return not ConsumerIdentity.existsAndValid()
+# for el5
+childWindow = moduleClass

@@ -135,11 +135,13 @@ install-files: dbus-service-install compile-po desktop-files
 
 	# RHEL 5 Customizations:
 	if [ ${OS_VERSION} = 5 ]; then \
-		install -m644 ${SRC_DIR}/gui/firstboot/${OS_VERSION}/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot;\
+		install -m644 ${SRC_DIR}/gui/firstboot/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot;\
 		ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_login.py ${PREFIX}/usr/share/firstboot/modules/;\
-		ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_subscriptions.py ${PREFIX}/usr/share/firstboot/modules/;\
+		ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_confirm_subs.py ${PREFIX}/usr/share/firstboot/modules/;\
+		ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_select_sla.py ${PREFIX}/usr/share/firstboot/modules/;\
+		ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_manually_subscribe.py ${PREFIX}/usr/share/firstboot/modules/;\
 	else \
-		install -m644 ${SRC_DIR}/gui/firstboot/6/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot;\
+		install -m644 ${SRC_DIR}/gui/firstboot/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot;\
 	fi;\
 
 	install -m 644 man/rhn-migrate-classic-to-rhsm.8 ${PREFIX}/${INSTALL_DIR}/man/man8/
