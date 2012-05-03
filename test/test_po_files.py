@@ -2,6 +2,7 @@ import os
 import glob
 import unittest
 import datetime
+import sys
 import time
 
 # easy_install polib http://polib.readthedocs.org/
@@ -13,6 +14,8 @@ _ = gettext.gettext
 
 #locale.setlocale(locale.LC_ALL, '')
 
+from stubs import MockStderr
+from stubs import MockStdout
 from subscription_manager import managercli
 
 # Localization domain:
@@ -122,9 +125,13 @@ class TestLocaleDate(TestLocale):
 class TestUnicodeGettext(TestLocale):
     def setUp(self):
         self._setupLang("ja_JP.UTF-8")
+        sys.stderr = MockStderr()
+        sys.stdout = MockStdout()
 
     def tearDown(self):
         self._setupLang("en_US")
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
 
     def test_ja_not_serial(self):
         msg = _("'%s' is not a valid serial number") % "123123"
