@@ -39,7 +39,7 @@ import rhsm.connection as connection
 from subscription_manager.i18n_optparse import OptionParser
 from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib, ConsumerIdentity
-from subscription_manager.repolib import RepoLib
+from subscription_manager.repolib import RepoLib, RepoFile
 from subscription_manager.certmgr import CertManager
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
@@ -1364,30 +1364,76 @@ class ReposCommand(CliCommand):
         CliCommand.__init__(self, "repos", usage, shortdesc, desc,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
+    def _validate_options(self):
+        if not (self.options.list or self.options.enable or self.options.disable):
+            print _("Error: This command requires that you use a --list option " +
+                     "or specify a repo with --enable or --disable.")
+            sys.exit(-1)
+
     def require_connection(self):
         return True
 
     def _add_common_options(self):
-        pass
+        self.parser.add_option("--list", action="store_true",
+                               help=_("list known repos for this system"))
+        self.parser.add_option("--enable", dest="enable",
+                               help=_("repo to enable"))
+        self.parser.add_option("--disable", dest="disable",
+                               help=_("repo to disable"))
 
     def _do_command(self):
+        self._validate_options()
         rl = RepoLib(uep=self.cp)
         repos = rl.get_repos()
         if cfg.has_option('rhsm', 'manage_repos') and \
                 not int(cfg.get('rhsm', 'manage_repos')):
             print _("Repositories disabled by configuration.")
-        elif len(repos) > 0:
-            print("+----------------------------------------------------------+")
-            print _("    Entitled Repositories in %s") % rl.get_repo_file()
-            print("+----------------------------------------------------------+")
+        elif self.options.enable:
+            found = False
             for repo in repos:
-                print constants.repos_list % (repo["name"],
-                    repo.id,
-                    repo["baseurl"],
-                    repo["enabled"])
-        else:
-            print _("The system is not entitled to use any repositories.")
+                if repo.id == self.options.enable:
+                    if repo['enabled'] is not '1':
+                        repo['enabled'] = '1'
+                        self.updateFile(repo)
+                    print _("Repo %s is enabled for this system.") % repo.id
+                    found = True
+                    break
+            if not found:
+                print _("Error: A valid repo id is required. " +
+                         "Use --list option to see valid repos.")
+                sys.exit(-1)
+        elif self.options.disable:
+            found = False
+            for repo in repos:
+                if repo.id == self.options.disable:
+                    if repo['enabled'] is not '0':
+                        repo['enabled'] = '0'
+                        self.updateFile(repo)
+                    print _("Repo %s is disabled for this system.") % repo.id
+                    found = True
+                    break
+            if not found:
+                print _("Error: A valid repo id is required. " +
+                         "Use --list option to see valid repos.")
+                sys.exit(-1)
+        elif self.options.list:
+            if len(repos) > 0:
+                print("+----------------------------------------------------------+")
+                print _("    Entitled Repositories in %s") % rl.get_repo_file()
+                print("+----------------------------------------------------------+")
+                for repo in repos:
+                    print constants.repos_list % (repo["name"],
+                        repo.id,
+                        repo["baseurl"],
+                        repo["enabled"])
+            else:
+                print _("The system is not entitled to use any repositories.")
 
+    def updateFile(self, repo):
+        repo_file = RepoFile()
+        repo_file.read()
+        repo_file.update(repo)
+        repo_file.write()
 
 class ConfigCommand(CliCommand):
 
