@@ -236,7 +236,11 @@ def selectServiceLevel(cp, consumer, servicelevel):
 
 def setServiceLevel(cp, consumer, servicelevel):
     uuid = consumer.getConsumerId()
-    print _("\nSubscribing to service level %s" % servicelevel)
+    if servicelevel is "":
+        print _("\nNot subscribing to any service level.")
+    else:
+        print _("\nSubscribing to service level %s" % servicelevel)
+
     try:
         cp.updateConsumer(uuid, service_level=servicelevel)
     except:
