@@ -59,9 +59,9 @@ available_subs_list = \
     "\n"
 
 repos_list = \
-    _("Repo Name:            \t%-25s") + \
-    "\n" + \
     _("Repo Id:              \t%-25s") + \
+    "\n" + \
+    _("Repo Name:            \t%-25s") + \
     "\n" + \
     _("Repo Url:             \t%-25s") + \
     "\n" + \
