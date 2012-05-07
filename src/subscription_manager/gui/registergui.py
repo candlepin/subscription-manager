@@ -29,6 +29,7 @@ from subscription_manager import constants
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
+from subscription_manager.utils import parse_server_info
 
 from subscription_manager.gui.utils import handle_gui_exception, errorWindow, \
     GladeWrapper
@@ -279,7 +280,6 @@ class RegisterScreen:
 
     def _server_selected(self):
         self.register_notebook.set_page(CREDENTIALS_PAGE)
-        # TODO: write config here
         if self.rhn_radio.get_active():
             CFG.set('server', 'hostname', constants.DEFAULT_HOSTNAME)
             CFG.set('server', 'port', constants.DEFAULT_PORT)
@@ -290,10 +290,12 @@ class RegisterScreen:
             CFG.set('server', 'port', constants.DEFAULT_PORT)
             CFG.set('server', 'prefix', constants.DEFAULT_PREFIX)
         elif self.local_radio.get_active():
-            # TODO: Parse the local setting
-            CFG.set('server', 'hostname', 'SOMETHINGLOCAL')
-            CFG.set('server', 'port', constants.DEFAULT_PORT)
-            CFG.set('server', 'prefix', constants.DEFAULT_PREFIX)
+            local_server = self.local_entry.get_text()
+            (hostname, port, prefix) = parse_server_info(local_server)
+
+            CFG.set('server', 'hostname', hostname)
+            CFG.set('server', 'port', port)
+            CFG.set('server', 'prefix', prefix)
 
         log.info("Writing server data to rhsm.conf")
         CFG.save()
