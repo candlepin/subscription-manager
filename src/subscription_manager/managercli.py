@@ -35,6 +35,7 @@ _ = gettext.gettext
 
 import rhsm.config
 import rhsm.connection as connection
+from rhsm.version import Versions
 
 from subscription_manager.i18n_optparse import OptionParser
 from subscription_manager.branding import get_branding
@@ -1755,6 +1756,37 @@ class ListCommand(CliCommand):
         return '\n'.join(lines)
 
 
+class VersionCommand(CliCommand):
+
+    def __init__(self, ent_dir=None, prod_dir=None):
+        usage = "usage: %prog version"
+        shortdesc = _("Print version information")
+        desc = shortdesc
+
+        CliCommand.__init__(self, "version", usage, shortdesc, desc,
+                            ent_dir=ent_dir, prod_dir=prod_dir)
+
+    def _add_common_options(self):
+        pass
+
+    def _do_command(self):
+        try:
+            cp_version = self.cp.getStatus()['version']
+        except Exception, e:
+            cp_version = "Unknown"
+            log.error("Unable to communicate with Candlepin")
+            log.exception(e)
+
+        print (_("Candlepin version: %s") % cp_version)
+
+        versions = Versions()
+        print (_("subscription-manager version: %s") % \
+                versions.get_version(Versions.SUBSCRIPTION_MANAGER))
+        print (_("python-rhsm version: %s") % \
+                versions.get_version(Versions.PYTHON_RHSM))
+        self._request_validity_check()
+
+
 # taken wholseale from rho...
 class CLI:
 
@@ -1764,7 +1796,8 @@ class CLI:
         for clazz in [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand, SubscribeCommand,\
                        UnSubscribeCommand, FactsCommand, IdentityCommand, OwnersCommand, \
                        RefreshCommand, CleanCommand, RedeemCommand, ReposCommand, ReleaseCommand, \
-                       EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand]:
+                       EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand, \
+                       VersionCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":
