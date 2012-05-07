@@ -566,9 +566,6 @@ class ServiceLevelCommand(UserPassCommand):
                 help=_("specify org for service level list"))
         self.parser.add_option("--list", dest="list", action='store_true',
                 help=_("list all service levels available"))
-        self.parser.add_option("--set", dest="service_level",
-                               help=_("service level to apply to this system"))
-
 
     def _validate_options(self):
 
@@ -612,9 +609,6 @@ class ServiceLevelCommand(UserPassCommand):
                         proxy_user=self.proxy_user,
                         proxy_password=self.proxy_password)
 
-            if self.options.service_level is not None:
-                self.set_service_level(self.options.service_level)
-
             if self.options.show:
                 self.show_service_level()
 
@@ -627,14 +621,6 @@ class ServiceLevelCommand(UserPassCommand):
             systemExit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Error: Unable to retrieve service levels."), e)
-
-    def set_service_level(self, service_level):
-        consumer_uuid = ConsumerIdentity.read().getConsumerId()
-        consumer = self.cp.getConsumer(consumer_uuid)
-        if 'serviceLevel' not in consumer:
-            systemExit(-1, _("Error: The service-level command is not supported " + \
-            "by the server."))
-        self.cp.updateConsumer(consumer_uuid, service_level=service_level)
 
     def show_service_level(self):
         consumer_uuid = ConsumerIdentity.read().getConsumerId()
