@@ -15,6 +15,8 @@
 
 import re
 import logging
+from constants import DEFAULT_PORT, DEFAULT_PREFIX
+from urlparse import urlparse
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -22,3 +24,25 @@ log = logging.getLogger('rhsm-app.' + __name__)
 def remove_scheme(uri):
     """Remove the scheme component from a URI."""
     return re.sub("^[A-Za-z][A-Za-z0-9+-.]*://", "", uri)
+
+def parse_server_info(local_server_entry):
+    """
+    Parse hostname, port, and webapp prefix from the string a user entered.
+
+    Expected format: hostname:port/prefix
+
+    Port and prefix are optional.
+    """
+    # Adding http:// onto the front of the hostname
+    result = urlparse('http://%s' % local_server_entry)
+
+    port = DEFAULT_PORT
+    if result.port is not None:
+        port = str(result.port)
+
+    prefix = DEFAULT_PREFIX
+    if result.path != '':
+        prefix = result.path
+
+    return (result.hostname, port, prefix)
+

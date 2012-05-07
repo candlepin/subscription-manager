@@ -87,9 +87,6 @@ class RegisterScreen:
 
         dic = {"on_register_cancel_button_clicked": self.cancel,
                "on_register_button_clicked": self.on_register_button_clicked,
-               "on_rhn_radio_toggled": self._rhn_selected,
-               "on_local_radio_toggled": self._local_selected,
-               "on_offline_radio_toggled": self._offline_selected,
             }
 
         registration_xml.signal_autoconnect(dic)
@@ -279,15 +276,6 @@ class RegisterScreen:
         self.owner_key = model.get_value(tree_iter, 0)
 
         self.async.get_environment_list(self.owner_key, self._on_get_environment_list_cb)
-
-    def _rhn_selected(self, button):
-        print("RHN selected")
-
-    def _local_selected(self, button):
-        print("Local selected")
-
-    def _offline_selected(self, button):
-        print("Offline selected")
 
     def _server_selected(self):
         self.register_notebook.set_page(CREDENTIALS_PAGE)
