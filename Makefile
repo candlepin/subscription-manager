@@ -206,6 +206,9 @@ check:
 coverage:
 	nosetests --with-cover --cover-package subscription_manager --cover-erase
 
+coverage-xunit:
+	nosetests --with-xunit --with-cover --cover-package subscription_manager --cover-erase
+
 coverage-html: coverage
 	coverage html --include "${SRC_DIR}/*"
 
@@ -213,6 +216,10 @@ coverage-html-old:
 	nosetests --with-cover --cover-package subscription_manager --cover-html --cover-html-dir test/html --cover-erase
 
 coverage-xml: coverage
+	coverage xml --include "${SRC_DIR}/*"
+
+coverage-jenkins: coverage-xunit
+	coverage html --include "${SRC_DIR}/*"
 	coverage xml --include "${SRC_DIR}/*"
 
 clean:
@@ -312,3 +319,5 @@ pep8:
 
 
 stylish: pyflakes whitespacelint pep8
+
+jenkins: stylish coverage-jenkins
