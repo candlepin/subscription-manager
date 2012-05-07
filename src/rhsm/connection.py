@@ -823,6 +823,10 @@ class UEPConnection:
         method = "/consumers/%s" % self.sanitize(consumerId)
         return self.conn.request_post(method)
 
+    def getStatus(self):
+        method = "/status"
+        return self.conn.request_get(method)
+
     def activateMachine(self, consumerId, email=None, lang=None):
         """
         Activate a subscription by machine, information is located in the
