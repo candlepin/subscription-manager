@@ -834,7 +834,6 @@ class RegisterCommand(UserPassCommand):
         self.facts.write_cache()
         self.installed_mgr.write_cache()
 
-
         if self.options.release:
             # TODO: grab the list of valid options, and check
             self.cp.updateConsumer(consumer['uuid'], release=self.options.release)
@@ -1436,6 +1435,7 @@ class ReposCommand(CliCommand):
         repo_file.read()
         repo_file.update(repo)
         repo_file.write()
+
 
 class ConfigCommand(CliCommand):
 
