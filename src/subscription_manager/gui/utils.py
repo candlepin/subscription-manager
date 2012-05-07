@@ -21,6 +21,7 @@ import gobject
 import datetime
 import dbus
 import gtk
+import gtk.glade
 
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)

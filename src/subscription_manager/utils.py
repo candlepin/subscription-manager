@@ -34,9 +34,13 @@ def parse_server_info(local_server_entry):
     Port and prefix are optional.
     """
     # Adding http:// onto the front of the hostname
-    result = urlparse('http://%s' % local_server_entry)
+
+    url = 'http://%s' % local_server_entry
+    result = urlparse(url)
 
     port = DEFAULT_PORT
+    #foo = result.port
+    #print foo
     if result.port is not None:
         port = str(result.port)
 

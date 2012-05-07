@@ -50,7 +50,7 @@ from subscription_manager.release import ReleaseBackend
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
-from subscription_manager.utils import remove_scheme
+from subscription_manager.utils import remove_scheme, parse_server_info
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
@@ -173,6 +173,8 @@ class CliCommand(object):
         self.name = name
         self.primary = primary
 
+        self.server_url = None
+
         self.proxy_url = None
         self.proxy_hostname = None
         self.proxy_port = None
@@ -203,6 +205,8 @@ class CliCommand(object):
     def _add_common_options(self):
         """ Add options that apply to all sub-commands. """
 
+        self.parser.add_option("--serverurl", dest="server_url",
+                               default=None, help=_("server url in the form of https://hostname:443/prefix"))
         self.parser.add_option("--proxy", dest="proxy_url",
                                default=None, help=_("proxy url in the form of proxy_hostname:proxy_port"))
         self.parser.add_option("--proxyuser", dest="proxy_user",
@@ -236,6 +240,17 @@ class CliCommand(object):
             for arg in self.args:
                 print _("cannot parse argument: %s") % arg
             sys.exit(-1)
+
+        current_hostname = cfg.get('server', 'hostname')
+        current_port = cfg.get('server', 'port')
+        current_prefix = cfg.get('server', 'prefix')
+        self.server_url = "%s:%s%s" % (current_hostname,
+                                       current_port,
+                                        current_prefix)
+
+        if hasattr(self.options, "server_url") and self.options.server_url:
+            self.server_url = parse_server_info(self.options.server_url)
+        print self.server_url
 
         self.proxy_hostname = remove_scheme(cfg.get('server', 'proxy_hostname'))
         self.proxy_port = cfg.get('server', 'proxy_port')
