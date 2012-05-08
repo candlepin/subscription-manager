@@ -29,7 +29,7 @@ from subscription_manager import constants
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
-from subscription_manager.utils import parse_server_info
+from subscription_manager.utils import parse_server_info, ServerUrlParseError
 from subscription_manager.gui import networkConfig
 
 from subscription_manager.gui.utils import handle_gui_exception, errorWindow, \
@@ -303,8 +303,7 @@ class RegisterScreen:
                 CFG.set('server', 'hostname', hostname)
                 CFG.set('server', 'port', port)
                 CFG.set('server', 'prefix', prefix)
-            # TODO: get the right exception here
-            except Exception, e:
+            except ServerUrlParseError, e:
                 errorWindow(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"), self.registerWin)
                 return
 
