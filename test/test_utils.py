@@ -43,10 +43,9 @@ class LocalServerRegexTests(unittest.TestCase):
 
     def test_hostname_nothing(self):
         local_url = ""
-        (hostname, port, prefix) = parse_server_info(local_url)
-        self.assertEquals(DEFAULT_HOSTNAME, hostname)
-        self.assertEquals(DEFAULT_PORT, port)
-        self.assertEquals(DEFAULT_PREFIX, prefix)
+        self.assertRaises(ServerUrlParseErrorEmpty,
+                          parse_server_info,
+                          local_url)
 
     def test_hostname_with_scheme(self):
         # this is the default, so test it here
@@ -90,16 +89,46 @@ class LocalServerRegexTests(unittest.TestCase):
     # this should probably throw an error
     def test_wrong_scheme(self):
         local_url = "git://git.fedorahosted.org/candlepin.git"
-        (hostname, port, prefix) = parse_server_info(local_url)
-        self.assertEquals(DEFAULT_HOSTNAME, hostname)
-        self.assertEquals(DEFAULT_PORT, port)
-        self.assertEquals("/myapp", prefix)
+        self.assertRaises(ServerUrlParseErrorScheme,
+                          parse_server_info,
+                          local_url)
 
     # should probably throw an error
     def test_bad_http_scheme(self):
         # note missing /
         local_url = "https:/myhost.example.com:8443/myapp"
-        (hostname, port, prefix) = parse_server_info(local_url)
-        self.assertEquals(DEFAULT_HOSTNAME, hostname)
-        self.assertEquals(DEFAULT_PORT, port)
-        self.assertEquals("/myapp", prefix)
+        self.assertRaises(ServerUrlParseErrorSchemeNoDoubleSlash,
+                          parse_server_info,
+                          local_url)
+
+    def test_colon_but_no_port(self):
+        local_url = "https://myhost.example.com:/myapp"
+        self.assertRaises(ServerUrlParseErrorPort,
+                          parse_server_info,
+                          local_url)
+
+    def test_colon_but_no_port_no_scheme(self):
+        local_url = "myhost.example.com:/myapp"
+        self.assertRaises(ServerUrlParseErrorPort,
+                          parse_server_info,
+                          local_url)
+
+    def test_colon_slash_slash_but_nothing_else(self):
+        local_url = "http://"
+        # FIXME: more specific error
+        self.assertRaises(ServerUrlParseErrorJustScheme,
+                          parse_server_info,
+                          local_url)
+
+    def test_colon_slash_but_nothing_else(self):
+        local_url = "http:/"
+        self.assertRaises(ServerUrlParseErrorSchemeNoDoubleSlash,
+                          parse_server_info,
+                          local_url)
+
+    # fail at internet
+    def test_just_colon_slash(self):
+        local_url = "://"
+        self.assertRaises(ServerUrlParseErrorScheme,
+                          parse_server_info,
+                          local_url)

@@ -50,7 +50,8 @@ from subscription_manager.release import ReleaseBackend
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
-from subscription_manager.utils import remove_scheme, parse_server_info
+from subscription_manager.utils import remove_scheme, parse_server_info, \
+        ServerUrlParseError
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
@@ -249,8 +250,12 @@ class CliCommand(object):
                                         current_prefix)
 
         if hasattr(self.options, "server_url") and self.options.server_url:
-            self.server_url = parse_server_info(self.options.server_url)
-        print self.server_url
+            try:
+                self.server_url = parse_server_info(self.options.server_url)
+            except ServerUrlParseError, e:
+                print _("Error parsing serverurl: %s" % e.msg)
+                sys.exit(-1)
+
 
         self.proxy_hostname = remove_scheme(cfg.get('server', 'proxy_hostname'))
         self.proxy_port = cfg.get('server', 'proxy_port')
@@ -848,7 +853,6 @@ class RegisterCommand(UserPassCommand):
         # manually write caches to disk:
         self.facts.write_cache()
         self.installed_mgr.write_cache()
-
 
         if self.options.release:
             # TODO: grab the list of valid options, and check

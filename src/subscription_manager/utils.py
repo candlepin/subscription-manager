@@ -20,10 +20,49 @@ from urlparse import urlparse
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
+import gettext
+_ = lambda x: gettext.ldgettext("rhsm", x)
+gettext.textdomain("rhsm")
+
 
 def remove_scheme(uri):
     """Remove the scheme component from a URI."""
     return re.sub("^[A-Za-z][A-Za-z0-9+-.]*://", "", uri)
+
+
+class ServerUrlParseError(Exception):
+    def __init__(self, serverurl, msg=None):
+        self.serverurl = serverurl
+        self.msg = msg
+
+
+class ServerUrlParseErrorEmpty(ServerUrlParseError):
+    pass
+
+
+class ServerUrlParseErrorNone(ServerUrlParseError):
+    pass
+
+
+class ServerUrlParseErrorPort(ServerUrlParseError):
+    pass
+
+
+class ServerUrlParseErrorPath(ServerUrlParseError):
+    pass
+
+
+class ServerUrlParseErrorScheme(ServerUrlParseError):
+    pass
+
+
+class ServerUrlParseErrorSchemeNoDoubleSlash(ServerUrlParseError):
+    pass
+
+
+class ServerUrlParseErrorJustScheme(ServerUrlParseError):
+    pass
+
 
 def parse_server_info(local_server_entry):
     """
@@ -35,23 +74,76 @@ def parse_server_info(local_server_entry):
     """
     # Adding http:// onto the front of the hostname
 
-    # None or "" get's all defaults
-    if not local_server_entry:
-        return (DEFAULT_HOSTNAME, DEFAULT_PORT, DEFAULT_PREFIX)
+    if local_server_entry == "":
+        raise ServerUrlParseErrorEmpty(local_server_entry,
+                                       msg=_("Server URL can not be empty"))
 
-    if (local_server_entry[:7] != "http://") and (local_server_entry[:8] != "https://"):
-        url = 'http://%s' % local_server_entry
+    if local_server_entry is None:
+        raise ServerUrlParseErrorNone(local_server_entry,
+                                      msg=_("Server URL can not be None"))
+
+    # do we seem to have a scheme?
+    if local_server_entry.find("://") > -1:
+
+        # doh, but not one we want
+        if (local_server_entry[:7] != "http://") and (local_server_entry[:8] != "https://"):
+            raise ServerUrlParseErrorScheme(local_server_entry,
+                msg=_("Server URL has an invalid scheme. http:// and https:// are supported"))
+
+        # just the scheme? really?
+        elif local_server_entry.split('://')[1] == '':
+            raise ServerUrlParseErrorJustScheme(local_server_entry,
+                msg=_("Server URL is just a schema. Should include hostname, and/or port and path"))
+
+        # seem to have a workable schema already
+        else:
+            url = local_server_entry
+
+    # try to detect "http:/hostname"
+    elif len(local_server_entry.split(':/')) > 1:
+        # if we only have 'http:/dfsd' and we split on
+        # ':/' we end up with [0]='http'
+        # and [1] = "hostname"
+        # but for "http://hostname" we end up with [1] like
+        # "/hostname", so check for that
+        split_url = local_server_entry.split(':/')
+
+        # verify this is an attempt at http://
+        if split_url[0].startswith('http'):
+            if not split_url[1].startswith('/'):
+                raise ServerUrlParseErrorSchemeNoDoubleSlash(local_server_entry,
+                    msg=_("Server URL has an invalid scheme (no //?)"))
+
+        # else is just a url with no scheme and  ':/' in it somewhere
+        url = "https://%s" % local_server_entry
     else:
-        url = local_server_entry
+        # append https scheme
+        url = "https://%s" % local_server_entry
+
+    #FIXME: need a try except here? docs
+    # don't seem to indicate any expected exceptions
     result = urlparse(url)
 
+    # in some cases, if we try the attr accessors, we'll
+    # get a ValueError deep down in urlparse, particular if
+    # port ends up being None
+    #
+    # So maybe check result.port/path/hostname for None, and
+    # throw an exception in those cases.
+    # adding the schem seems to avoid this though
     port = DEFAULT_PORT
-    if result.port is not None:
-        port = str(result.port)
+    try:
+        if result.port is not None:
+            port = str(result.port)
+    except ValueError:
+        raise ServerUrlParseErrorPort(local_server_entry,
+                                      msg=_("Server url port could not be parsed"))
 
+    # path can be None?
     prefix = DEFAULT_PREFIX
-    if result.path != '':
-        prefix = result.path
+    if result.path is not None:
+        if result.path != '':
+            prefix = result.path
 
     hostname = DEFAULT_HOSTNAME
     if result.hostname is not None:
@@ -59,4 +151,3 @@ def parse_server_info(local_server_entry):
             hostname = result.hostname
 
     return (hostname, port, prefix)
-
