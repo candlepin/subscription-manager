@@ -76,3 +76,30 @@ class LocalServerRegexTests(unittest.TestCase):
         self.assertEquals(DEFAULT_HOSTNAME, hostname)
         self.assertEquals(DEFAULT_PORT, port)
         self.assertEquals("/myapp", prefix)
+
+    def test_short_name(self):
+        # could argue anything could be a local hostname, and we should
+        # use default port and path. You could also argue it should
+        # throw an error, especially if it's not a valid hostname
+        local_url = "a"
+        (hostname, port, prefix) = parse_server_info(local_url)
+        self.assertEquals("a", hostname)
+        self.assertEquals(DEFAULT_PORT, port)
+        self.assertEquals(DEFAULT_PREFIX, prefix)
+
+    # this should probably throw an error
+    def test_wrong_scheme(self):
+        local_url = "git://git.fedorahosted.org/candlepin.git"
+        (hostname, port, prefix) = parse_server_info(local_url)
+        self.assertEquals(DEFAULT_HOSTNAME, hostname)
+        self.assertEquals(DEFAULT_PORT, port)
+        self.assertEquals("/myapp", prefix)
+
+    # should probably throw an error
+    def test_bad_http_scheme(self):
+        # note missing /
+        local_url = "https:/myhost.example.com:8443/myapp"
+        (hostname, port, prefix) = parse_server_info(local_url)
+        self.assertEquals(DEFAULT_HOSTNAME, hostname)
+        self.assertEquals(DEFAULT_PORT, port)
+        self.assertEquals("/myapp", prefix)
