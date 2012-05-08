@@ -288,10 +288,13 @@ gen-test-long-po:
 	-@ scripts/gen_test_en_po.py --long po/en_US.po
 
 pyflakes:
+# pyflakes doesn't have a config file, cli options, or a ignore tag
+# and the variants of "redefination" we get now aren't really valid
+# and other tools detect the valid cases, so ignore these
+#
 	-@TMPFILE=`mktemp` || exit 1; \
-	pyflakes $(STYLEFILES) | tee $$TMPFILE; \
+	pyflakes $(STYLEFILES) |  grep -v "redefinition of unused.*from line.*" | tee $$TMPFILE; \
 	! test -s $$TMPFILE
-	exit 0
 
 
 tablint:
