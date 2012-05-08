@@ -15,7 +15,7 @@
 
 import re
 import logging
-from constants import DEFAULT_PORT, DEFAULT_PREFIX
+from constants import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME
 from urlparse import urlparse
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -35,12 +35,17 @@ def parse_server_info(local_server_entry):
     """
     # Adding http:// onto the front of the hostname
 
-    url = 'http://%s' % local_server_entry
+    # None or "" get's all defaults
+    if not local_server_entry:
+        return (DEFAULT_HOSTNAME, DEFAULT_PORT, DEFAULT_PREFIX)
+
+    if (local_server_entry[:7] != "http://") and (local_server_entry[:8] != "https://"):
+        url = 'http://%s' % local_server_entry
+    else:
+        url = local_server_entry
     result = urlparse(url)
 
     port = DEFAULT_PORT
-    #foo = result.port
-    #print foo
     if result.port is not None:
         port = str(result.port)
 
@@ -48,5 +53,10 @@ def parse_server_info(local_server_entry):
     if result.path != '':
         prefix = result.path
 
-    return (result.hostname, port, prefix)
+    hostname = DEFAULT_HOSTNAME
+    if result.hostname is not None:
+        if result.hostname != "":
+            hostname = result.hostname
+
+    return (hostname, port, prefix)
 
