@@ -516,12 +516,23 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkButton" id="proxy_config_button">
-                            <property name="label" translatable="yes">Proxy Configuration</property>
+                          <widget class="GtkVBox" id="vbox6">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <signal name="clicked" handler="on_proxy_config_button_clicked"/>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <widget class="GtkButton" id="proxy_config_button">
+                                <property name="label" translatable="yes">Proxy Configuration</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_proxy_config_button_clicked"/>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
