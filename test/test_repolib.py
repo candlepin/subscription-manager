@@ -23,6 +23,7 @@ from stubs import StubCertificateDirectory, StubProductCertificate, StubProduct,
 from subscription_manager.repolib import Repo, UpdateAction, TidyWriter
 from subscription_manager import repolib
 
+
 class RepoTests(unittest.TestCase):
     """
     Tests for the repolib Repo class
@@ -102,9 +103,9 @@ class UpdateActionTests(unittest.TestCase):
         stub_prod_dir = StubProductDirectory([stub_prod_cert, stub_prod2_cert])
 
         stub_content = [
-                StubContent("c1", required_tags="", gpg=None),  # no required tags
+                StubContent("c1", required_tags="", gpg=None),   # no required tags
                 StubContent("c2", required_tags="TAG1", gpg=""),
-                StubContent("c3", required_tags="TAG1,TAG2,TAG3"), # should get skipped
+                StubContent("c3", required_tags="TAG1,TAG2,TAG3"),  # should get skipped
                 StubContent("c4", required_tags="TAG1,TAG2,TAG4,TAG5,TAG6",
                     gpg="/gpg.key"),
         ]
@@ -115,7 +116,6 @@ class UpdateActionTests(unittest.TestCase):
         stub_uep = stubs.StubUEP()
         self.update_action = UpdateAction(prod_dir=stub_prod_dir,
                 ent_dir=stub_ent_dir, uep=stub_uep)
-
 
     def _find_content(self, content_list, name):
         """
@@ -149,7 +149,7 @@ class UpdateActionTests(unittest.TestCase):
         self.assertEquals(3, len(content))
 
     def test_join(self):
-        base="http://foo/bar"
+        base = "http://foo/bar"
         # File urls should be preserved
         self.assertEquals("file://this/is/a/file",
             self.update_action.join(base, "file://this/is/a/file"))

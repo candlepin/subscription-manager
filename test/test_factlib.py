@@ -49,6 +49,7 @@ class TestFactlib(unittest.TestCase):
 
         self.facts_passed_to_server = None
         self.consumer_uuid_passed_to_server = None
+
         def track_facts_update(consumer_uuid, facts):
             self.facts_passed_to_server = facts
             self.consumer_uuid_passed_to_server = consumer_uuid
@@ -59,6 +60,7 @@ class TestFactlib(unittest.TestCase):
         self.assertEquals(len(self.expected_facts), count)
         self.assertEquals(self.expected_facts, self.facts_passed_to_server)
         self.assertEquals(stubs.StubConsumerIdentity.CONSUMER_ID, self.consumer_uuid_passed_to_server)
+
 
 class ConsumerIdentityExistsStub(stubs.StubConsumerIdentity):
     def __init__(self, keystring, certstring):

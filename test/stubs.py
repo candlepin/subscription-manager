@@ -305,6 +305,7 @@ class StubCertificateDirectory(EntitlementDirectory):
     """
 
     path = "this/is/a/stub/cert/dir"
+
     def __init__(self, certificates):
         self.certs = certificates
 
@@ -328,6 +329,7 @@ class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
     """
 
     path = "this/is/a/stub"
+
     def __init__(self, certificates):
         StubCertificateDirectory.__init__(self, certificates)
 

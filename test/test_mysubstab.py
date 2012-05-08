@@ -18,6 +18,7 @@ from mock import Mock
 from stubs import StubUEP, StubEntitlementCertificate, StubCertificateDirectory, StubProduct, StubBackend, StubFacts
 from subscription_manager.gui.mysubstab import MySubscriptionsTab
 
+
 class MySubscriptionsTabTest(unittest.TestCase):
 
     def setUp(self):
@@ -32,8 +33,7 @@ class MySubscriptionsTabTest(unittest.TestCase):
             end_date=datetime.datetime(2060, 1, 1),
             quantity="10", stacking_id=None)
 
-        self.cert_dir = StubCertificateDirectory([self.cert1]);
-
+        self.cert_dir = StubCertificateDirectory([self.cert1])
 
     def tearDown(self):
         pass
@@ -61,13 +61,13 @@ class MySubscriptionsTabTest(unittest.TestCase):
         column_entries = []
 
         def collect_entries(iter, entry):
-            column_entries.append(entry);
+            column_entries.append(entry)
 
         # Test that the data from a subscription is loaded into the store.
         my_subs_tab = MySubscriptionsTab(self.backend, self.consumer, self.facts,
                 None, self.cert_dir)
         my_subs_tab.store.add_map = collect_entries
-        my_subs_tab.update_subscriptions();
+        my_subs_tab.update_subscriptions()
         return column_entries
 
     def _assert_entry(self, entry):
@@ -77,16 +77,16 @@ class MySubscriptionsTabTest(unittest.TestCase):
         self.assertEquals("0 / 1", entry['installed_text'])
         self.assertEquals(0, entry['installed_value'])
         self.assertEquals(self.cert1.getOrder().getQuantityUsed(), entry['quantity'])
-        self.assertEquals(self.cert1.serialNumber(), entry['serial']);
-        self.assertFalse(entry['is_group_row']);
+        self.assertEquals(self.cert1.serialNumber(), entry['serial'])
+        self.assertFalse(entry['is_group_row'])
 
     def _assert_group_entry(self, entry):
         self.assertEquals(self.cert1.getProduct().getName(),
                           entry['subscription'])
-        self.assertFalse(entry.has_key('start_date'))
-        self.assertFalse(entry.has_key('expiration_date'))
-        self.assertFalse(entry.has_key('installed_text'))
+        self.assertFalse('start_date' in entry)
+        self.assertFalse('expiration_date' in entry)
+        self.assertFalse('installed_text' in entry)
         self.assertEquals(0.0, entry['installed_value'])
-        self.assertFalse(entry.has_key('quantity'))
-        self.assertFalse(entry.has_key('serial'));
-        self.assertTrue(entry['is_group_row']);
+        self.assertFalse('quantity' in entry)
+        self.assertFalse('serial' in entry)
+        self.assertTrue(entry['is_group_row'])

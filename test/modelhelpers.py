@@ -61,6 +61,7 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
             'productAttributes': productAttributes,
         }
 
+
 def create_attribute_list(attribute_map):
     attribute_list = []
     for name, value in attribute_map.iteritems():

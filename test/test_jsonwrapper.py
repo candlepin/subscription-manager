@@ -16,6 +16,7 @@ import unittest
 from modelhelpers import create_pool, create_attribute_list
 from subscription_manager.jsonwrapper import PoolWrapper
 
+
 class TestPoolWrapper(unittest.TestCase):
 
     def _create_wrapper(self, add_is_virt_only=False, is_virt_only_value="true",

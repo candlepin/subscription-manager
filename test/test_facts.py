@@ -160,7 +160,7 @@ class TestFacts(unittest.TestCase):
     def test_custom_facts_override_hardware_facts(self):
         self.f._load_custom_facts = Mock()
         self.f._load_custom_facts.return_value = \
-            {'net.interface.lo.ipv4_address' : 'foobar'}
+            {'net.interface.lo.ipv4_address': 'foobar'}
 
         f = self.f.get_facts()
         self.assertEquals(f['net.interface.lo.ipv4_address'], 'foobar')
@@ -181,6 +181,7 @@ class TestFacts(unittest.TestCase):
         new_facts_buf = open(fact_cache).read()
         new_facts = json.loads(new_facts_buf)
         self.assertEquals(new_facts['newstuff'], True)
+
 
 class InstalledProductStatusTests(unittest.TestCase):
 
@@ -237,18 +238,16 @@ class InstalledProductStatusTests(unittest.TestCase):
         facts_dict = facts.get_facts()
         self.assertEquals("invalid", facts_dict['system.entitlements_valid'])
 
-
     @patch('subscription_manager.cert_sorter.CertSorter')
     def test_partial_fact(self, mock_sorter):
 
         ents = []
         stub_product = StubProduct('1005')
 
-        stub_ent_cert =  StubEntitlementCertificate(stub_product, quantity=2, stacking_id='stack1', sockets=2)
+        stub_ent_cert = StubEntitlementCertificate(stub_product, quantity=2, stacking_id='stack1', sockets=2)
 
         ents.append(stub_ent_cert)
         entitlement_directory = StubCertificateDirectory(ents)
-
 
         product = StubProduct("product1")
         product_directory = StubCertificateDirectory([
@@ -256,9 +255,9 @@ class InstalledProductStatusTests(unittest.TestCase):
 
         mock_sorter_instance = mock_sorter.return_value
         mock_sorter_instance.partially_valid_products = {'foo': 'blah'}
-        mock_sorter_instance.unentitled_products =  {}
-        mock_sorter_instance.expired_products =  {}
-        mock_sorter_instance.partial_stacks =  {}
+        mock_sorter_instance.unentitled_products = {}
+        mock_sorter_instance.expired_products = {}
+        mock_sorter_instance.partial_stacks = {}
 
         facts = Facts(None)
         facts.product_dir = product_directory
@@ -272,11 +271,10 @@ class InstalledProductStatusTests(unittest.TestCase):
         ents = []
         stub_product = StubProduct('1005')
 
-        stub_ent_cert =  StubEntitlementCertificate(stub_product, quantity=2, stacking_id='stack1', sockets=2)
+        stub_ent_cert = StubEntitlementCertificate(stub_product, quantity=2, stacking_id='stack1', sockets=2)
 
         ents.append(stub_ent_cert)
         entitlement_directory = StubCertificateDirectory(ents)
-
 
         product = StubProduct("product1")
         product_directory = StubCertificateDirectory([
@@ -284,9 +282,9 @@ class InstalledProductStatusTests(unittest.TestCase):
 
         mock_sorter_instance = mock_sorter.return_value
         mock_sorter_instance.partially_valid_products = {'foo': 'blah'}
-        mock_sorter_instance.unentitled_products =  {'bar': 'apple'}
-        mock_sorter_instance.expired_products =  {}
-        mock_sorter_instance.partial_stacks =  {}
+        mock_sorter_instance.unentitled_products = {'bar': 'apple'}
+        mock_sorter_instance.expired_products = {}
+        mock_sorter_instance.partial_stacks = {}
 
         facts = Facts(None)
         facts.product_dir = product_directory

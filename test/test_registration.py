@@ -20,6 +20,7 @@ import rhsm.connection as connection
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.managercli import RegisterCommand
 
+
 class CliRegistrationTests(unittest.TestCase):
 
     def stub_persist(self, consumer):

@@ -8,19 +8,19 @@ class TestProgress(unittest.TestCase):
         self.pw = progress.Progress("this is a test label")
 
     def test_set_progress_0(self):
-        self.pw.setProgress(0,100)
+        self.pw.setProgress(0, 100)
 
     def test_set_progress_0_0(self):
-        self.pw.setProgress(0,0)
+        self.pw.setProgress(0, 0)
 
     def test_set_progress_100(self):
-        self.pw.setProgress(100,100)
+        self.pw.setProgress(100, 100)
 
     def test_set_progress_100_0(self):
-        self.pw.setProgress(100,0)
+        self.pw.setProgress(100, 0)
 
     def test_set_progress_100_50(self):
-        self.pw.setProgress(100,50)
+        self.pw.setProgress(100, 50)
 
     def test_pulse(self):
         self.pw.pulse()
@@ -33,5 +33,3 @@ class TestProgress(unittest.TestCase):
 
     def test_destroy(self):
         self.pw.destroy()
-
-

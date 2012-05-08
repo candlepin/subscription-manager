@@ -78,7 +78,6 @@ class TestLocale(unittest.TestCase):
         "zh_TW",  # Chinese Traditional
         "ko_KR"]  # korean
 
-
     def _setupLang(self, lang):
         os.environ['LANG'] = lang
         locale.setlocale(locale.LC_ALL, '')

@@ -26,6 +26,7 @@ versions = """
 7
 """
 
+
 class TestReleaseBackend(unittest.TestCase):
     def setUp(self):
         stub_content = stubs.StubContent("c1", required_tags='rhel-6',
@@ -82,18 +83,18 @@ class TestReleaseBackend(unittest.TestCase):
 
     def test_is_correct_rhel_multiple_content(self):
         icr = self.rb._is_correct_rhel(["rhel-6-test"],
-                                        ["awesomeos-", "thisthingimadeup",
-                                         "rhel-6","notasawesome"])
+                                       ["awesomeos-", "thisthingimadeup",
+                                        "rhel-6", "notasawesome"])
         self.assertTrue(icr)
 
     def test_is_correct_rhel_mutliple_multiple(self):
         icr = self.rb._is_correct_rhel(["awesomeos", "rhel-6-test"],
                                        ["awesomeos", "thisthingimadeup",
-                                        "rhel-6","notasawesome"])
+                                        "rhel-6", "notasawesome"])
         self.assertTrue(icr)
 
     def test_is_correct_rhel_mutliple_matches_but_not_rhel(self):
         icr = self.rb._is_correct_rhel(["awesomeos", "rhel-6-test"],
                                        ["awesomeos", "thisthingimadeup",
-                                        "candy","notasawesome"])
+                                        "candy", "notasawesome"])
         self.assertFalse(icr)
