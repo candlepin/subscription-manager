@@ -135,3 +135,25 @@ class LocalServerRegexTests(unittest.TestCase):
         self.assertRaises(ServerUrlParseErrorScheme,
                           parse_server_info,
                           local_url)
+
+class TestRemoveScheme(unittest.TestCase):
+    def test_colon_port(self):
+        proxy_url = "proxy.example.com:3128"
+        res = remove_scheme(proxy_url)
+        self.assertEquals(res, proxy_url)
+
+    def test_http_scheme(self):
+        proxy_url = "http://example.com:3128"
+        res = remove_scheme(proxy_url)
+        self.assertEquals(res, "example.com:3128")
+
+    def test_https_scheme(self):
+        proxy_url = "https://example.com:3128"
+        res = remove_scheme(proxy_url)
+        self.assertEquals(res, "example.com:3128")
+
+    def test_no_port(self):
+        proxy_url = "proxy.example.com"
+        res = remove_scheme(proxy_url)
+        self.assertEquals(res, proxy_url)
+
