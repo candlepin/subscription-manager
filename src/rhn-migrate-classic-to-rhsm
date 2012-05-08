@@ -101,6 +101,7 @@ proxyPass = ""
 
 CONNECTION_FAILURE = _("Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for more details.")
 
+
 class InvalidChoiceError(Exception):
     pass
 
