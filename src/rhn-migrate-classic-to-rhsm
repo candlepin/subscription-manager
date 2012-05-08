@@ -79,11 +79,11 @@ if _RHSMLIBPATH not in sys.path:
     sys.path.append(_RHSMLIBPATH)
 
 try:
-    # try importing from RHEL 5 location
+    # try importing from RHEL 6 location
     from subscription_manager.certlib import ConsumerIdentity, ProductDirectory
     from subscription_manager import repolib, logutil
 except ImportError:
-    # new RHEL 6 location
+    # old RHEL 5 location
     from certlib import ConsumerIdentity, ProductDirectory
     import repolib
     import logutil
