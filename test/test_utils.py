@@ -49,6 +49,7 @@ class LocalServerRegexTests(unittest.TestCase):
         self.assertEquals(DEFAULT_PREFIX, prefix)
 
     def test_hostname_with_scheme(self):
+        # this is the default, so test it here
         local_url = "https://subscription.rhn.redhat.com/subscription"
         (hostname, port, prefix) = parse_server_info(local_url)
         self.assertEquals("subscription.rhn.redhat.com", hostname)
@@ -56,8 +57,22 @@ class LocalServerRegexTests(unittest.TestCase):
         self.assertEquals("/subscription", prefix)
 
     def test_hostname_with_scheme_no_prefix(self):
-        local_url = "https://subscription.rhn.redhat.com"
+        local_url = "https://myhost.example.com"
         (hostname, port, prefix) = parse_server_info(local_url)
-        self.assertEquals("subscription.rhn.redhat.com", hostname)
+        self.assertEquals("myhost.example.com", hostname)
         self.assertEquals(DEFAULT_PORT, port)
         self.assertEquals("/subscription", prefix)
+
+    def test_hostname_no_scheme_port_no_prefix(self):
+        local_url = "myhost.example.com:8443"
+        (hostname, port, prefix) = parse_server_info(local_url)
+        self.assertEquals("myhost.example.com", hostname)
+        self.assertEquals("8443", port)
+        self.assertEquals("/subscription", prefix)
+
+    def test_just_prefix(self):
+        local_url = "/myapp"
+        (hostname, port, prefix) = parse_server_info(local_url)
+        self.assertEquals(DEFAULT_HOSTNAME, hostname)
+        self.assertEquals(DEFAULT_PORT, port)
+        self.assertEquals("/myapp", prefix)
