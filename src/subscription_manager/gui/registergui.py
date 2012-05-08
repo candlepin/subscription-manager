@@ -145,10 +145,16 @@ class RegisterScreen:
     def show(self):
         # Ensure that we start on the first page and that
         # all widgets are cleared.
-        self.register_notebook.set_page(CHOOSE_SERVER_PAGE)
+        self._show_choose_server_page()
 
         self._clear_registration_widgets()
         self.registerWin.present()
+
+    def _show_choose_server_page(self):
+        self.register_notebook.set_page(CHOOSE_SERVER_PAGE)
+
+    def _show_credentials_page(self):
+        self.register_notebook.set_page(CREDENTIALS_PAGE)
 
     def delete_event(self, event, data=None):
         return self.close_window()
@@ -309,7 +315,8 @@ class RegisterScreen:
 
         log.info("Writing server data to rhsm.conf")
         CFG.save()
-        self.register_notebook.set_page(CREDENTIALS_PAGE)
+        self.backend.update()
+        self._show_credentials_page()
 
     def _environment_selected(self):
         self.cancel_button.set_sensitive(False)
@@ -419,10 +426,6 @@ class RegisterScreen:
             self.local_radio.set_active(True)
             self.local_entry.set_text("%s:%s%s" % (current_hostname,
                 current_port, current_prefix))
-
-
-    def _show_credentials_page(self):
-        self.register_notebook.set_page(CREDENTIALS_PAGE)
 
 
 class AsyncBackend(object):

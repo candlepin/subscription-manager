@@ -280,7 +280,6 @@ class MainWindow(widgets.GladeWidget):
     def registration_changed(self, skip_auto_bind):
         log.debug("Registration changed, updating main window.")
         self.consumer.reload()
-        self.backend.update()
         # If we are now registered, load the Autobind wizard.
 
         if self.registered() and not skip_auto_bind:
