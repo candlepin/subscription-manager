@@ -47,6 +47,12 @@ class LocalServerRegexTests(unittest.TestCase):
                           parse_server_info,
                           local_url)
 
+    def test_hostname_none(self):
+        local_url = None
+        self.assertRaises(ServerUrlParseErrorNone,
+                          parse_server_info,
+                          local_url)
+
     def test_hostname_with_scheme(self):
         # this is the default, so test it here
         local_url = "https://subscription.rhn.redhat.com/subscription"
@@ -86,14 +92,12 @@ class LocalServerRegexTests(unittest.TestCase):
         self.assertEquals(DEFAULT_PORT, port)
         self.assertEquals(DEFAULT_PREFIX, prefix)
 
-    # this should probably throw an error
     def test_wrong_scheme(self):
         local_url = "git://git.fedorahosted.org/candlepin.git"
         self.assertRaises(ServerUrlParseErrorScheme,
                           parse_server_info,
                           local_url)
 
-    # should probably throw an error
     def test_bad_http_scheme(self):
         # note missing /
         local_url = "https:/myhost.example.com:8443/myapp"
@@ -115,7 +119,6 @@ class LocalServerRegexTests(unittest.TestCase):
 
     def test_colon_slash_slash_but_nothing_else(self):
         local_url = "http://"
-        # FIXME: more specific error
         self.assertRaises(ServerUrlParseErrorJustScheme,
                           parse_server_info,
                           local_url)
