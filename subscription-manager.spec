@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 0.99.16
+Version: 0.99.17
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -304,6 +304,18 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue May 08 2012 Michael Stead <mstead@redhat.com> 0.99.17-1
+- latest strings from zanata (alikins@redhat.com)
+- 810236: Update facts after registering with --consumerid.
+  (dgoodwin@redhat.com)
+- 818298: release --list should not display rhel-5 when only rhel-6 product is
+  installed (wpoteat@redhat.com)
+- adding mention that subscription-manager-migration-data is a required package
+  for the migration scripts to work, bz818767 (deon@deonlackey.com)
+- 818461: invalid date format error when using or_IN.UTF-8 (cduryee@redhat.com)
+- 815479: Incorrect owner should be relayed on service level list call.
+  (wpoteat@redhat.com)
+
 * Tue May 01 2012 Bryan Kearney <bkearney@redhat.com> 0.99.16-1
 - 817390: add completion support for servicelevel (alikins@redhat.com)
 - 817117: fix completion of environment command (alikins@redhat.com)
