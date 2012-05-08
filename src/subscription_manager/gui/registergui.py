@@ -30,6 +30,7 @@ from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager.utils import parse_server_info
+from subscription_manager.gui import networkConfig
 
 from subscription_manager.gui.utils import handle_gui_exception, errorWindow, \
     GladeWrapper
@@ -88,6 +89,7 @@ class RegisterScreen:
 
         dic = {"on_register_cancel_button_clicked": self.cancel,
                "on_register_button_clicked": self.on_register_button_clicked,
+               "on_proxy_config_button_clicked": self._on_proxy_config_button_clicked,
             }
 
         registration_xml.signal_autoconnect(dic)
@@ -138,6 +140,8 @@ class RegisterScreen:
 
         self.local_entry = registration_xml.get_widget("local_entry")
 
+        self.network_config_dialog = networkConfig.NetworkConfigDialog()
+
     def show(self):
         # Ensure that we start on the first page and that
         # all widgets are cleared.
@@ -160,6 +164,10 @@ class RegisterScreen:
     # callback needs the extra arg, so just a wrapper here
     def on_register_button_clicked(self, button):
         self.register()
+
+    def _on_proxy_config_button_clicked(self, button):
+        self.network_config_dialog.set_parent_window(self.registerWin)
+        self.network_config_dialog.show()
 
     def register(self, testing=None):
         if self.register_notebook.get_current_page() == CHOOSE_SERVER_PAGE:
@@ -279,7 +287,6 @@ class RegisterScreen:
         self.async.get_environment_list(self.owner_key, self._on_get_environment_list_cb)
 
     def _server_selected(self):
-        self.register_notebook.set_page(CREDENTIALS_PAGE)
         if self.rhn_radio.get_active():
             CFG.set('server', 'hostname', constants.DEFAULT_HOSTNAME)
             CFG.set('server', 'port', constants.DEFAULT_PORT)
@@ -291,15 +298,19 @@ class RegisterScreen:
             CFG.set('server', 'prefix', constants.DEFAULT_PREFIX)
         elif self.local_radio.get_active():
             local_server = self.local_entry.get_text()
-            (hostname, port, prefix) = parse_server_info(local_server)
-
-            CFG.set('server', 'hostname', hostname)
-            CFG.set('server', 'port', port)
-            CFG.set('server', 'prefix', prefix)
+            try:
+                (hostname, port, prefix) = parse_server_info(local_server)
+                CFG.set('server', 'hostname', hostname)
+                CFG.set('server', 'port', port)
+                CFG.set('server', 'prefix', prefix)
+            # TODO: get the right exception here
+            except Exception, e:
+                errorWindow(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"), self.registerWin)
+                return
 
         log.info("Writing server data to rhsm.conf")
         CFG.save()
-
+        self.register_notebook.set_page(CREDENTIALS_PAGE)
 
     def _environment_selected(self):
         self.cancel_button.set_sensitive(False)

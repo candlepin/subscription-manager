@@ -500,12 +500,35 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label10">
+                      <widget class="GtkHBox" id="hbox6">
                         <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">12</property>
-                        <property name="label" translatable="yes">If you must connect through a proxy, please configure that via 'Proxy Configuration' before moving forward.</property>
-                        <property name="wrap">True</property>
+                        <child>
+                          <widget class="GtkLabel" id="label10">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="xpad">12</property>
+                            <property name="label" translatable="yes">If you must connect through a proxy, please configure that via 'Proxy Configuration' before moving forward.</property>
+                            <property name="wrap">True</property>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkButton" id="proxy_config_button">
+                            <property name="label" translatable="yes">Proxy Configuration</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <signal name="clicked" handler="on_proxy_config_button_clicked"/>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
