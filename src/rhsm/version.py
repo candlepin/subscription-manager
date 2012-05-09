@@ -12,8 +12,10 @@
 #
 from rhsm.profile import RPMProfile
 
+
 class VersionError(Exception):
     pass
+
 
 class Versions(object):
     """
