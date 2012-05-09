@@ -480,7 +480,6 @@ class TestLocalTz(unittest.TestCase):
         week_ago_dt = dt - datetime.timedelta(weeks=4)
         diff_week_ago = tz.utcoffset(week_ago_dt) - tz.dst(week_ago_dt)
 
-        print diff_now, diff_six_months, diff_week_ago
         self.assertEquals(diff_now, diff_six_months)
         self.assertEquals(diff_six_months, diff_week_ago)
 

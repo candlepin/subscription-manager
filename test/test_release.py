@@ -54,7 +54,6 @@ class TestReleaseBackend(unittest.TestCase):
 
     def test_get_releases(self):
         releases = self.rb.get_releases()
-        print releases
 
     def test_is_rhel(self):
         ir = self.rb._is_rhel(["rhel-6-test"])

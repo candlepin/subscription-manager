@@ -432,6 +432,8 @@ class HandleExceptionTests(unittest.TestCase):
     def setUp(self):
         self.msg = "some thing to log home about"
         self.formatted_msg = "some thing else like: %s"
+        sys.stderr = MockStderr()
+        sys.stdout = MockStdout()
         managercli.log = FakeLogger()
 
     def test_he(self):

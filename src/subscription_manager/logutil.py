@@ -20,21 +20,6 @@ from logging.handlers import RotatingFileHandler
 CERT_LOG = '/var/log/rhsm/rhsmcertd.log'
 
 
-def trace_me():
-    x = traceback.extract_stack()
-    bar = string.join(traceback.format_list(x))
-    return bar
-
-
-def trace_me_more():
-    frames = traceback.extract_stack()
-    stack = "\n"
-    for frame in frames:
-        stack = stack + "%s:%s\n" % (os.path.basename(frame[0]), frame[2])
-    stack = stack + "\n"
-    return stack
-
-
 def _get_handler():
     path = '/var/log/rhsm/rhsm.log'
     try:
