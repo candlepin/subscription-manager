@@ -36,7 +36,7 @@ _ = gettext.gettext
 import rhsm.config
 import rhsm.connection as connection
 
-from subscription_manager.i18n_optparse import OptionParser
+from subscription_manager.i18n_optparse import OptionParser, WrappedIndentedHelpFormatter
 from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib, ConsumerIdentity
 from subscription_manager.repolib import RepoLib
@@ -166,7 +166,10 @@ class CliCommand(object):
         if shortdesc is not None and description is None:
             description = shortdesc
 
-        self.parser = OptionParser(usage=usage, description=description)
+       # include our own HelpFormatter that doesn't try to break
+       # long words, since that fails on multibyte words
+        self.parser = OptionParser(usage=usage, description=description,
+                                   formatter=WrappedIndentedHelpFormatter())
         self._add_common_options()
 
         self.name = name
@@ -819,7 +822,6 @@ class RegisterCommand(UserPassCommand):
         # manually write caches to disk:
         self.facts.write_cache()
         self.installed_mgr.write_cache()
-
 
         if self.options.release:
             # TODO: grab the list of valid options, and check
@@ -1503,8 +1505,7 @@ class ListCommand(CliCommand):
         self.parser.add_option("--consumed", action='store_true',
                                help=_("shows the subscriptions being consumed by this system."))
         self.parser.add_option("--servicelevel", dest="service_level",
-                               help=_("if supplied then list shows only subscriptions matching the specified service level. " +
-                                      "Only used with --available and --consumed"))
+                               help=_("if supplied then list shows only subscriptions matching the specified service level. Only used with --available and --consumed"))
         self.parser.add_option("--all", action='store_true',
                                help=_("if supplied with --available then all subscriptions are returned"))
 
