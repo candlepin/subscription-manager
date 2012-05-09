@@ -3,7 +3,7 @@ import unittest
 from mock import Mock
 from stubs import StubBackend, StubFacts
 from subscription_manager.gui.registergui import RegisterScreen, \
-        CREDENTIALS_PAGE
+        CREDENTIALS_PAGE, CHOOSE_SERVER_PAGE
 
 
 class RegisterScreenTests(unittest.TestCase):
@@ -26,7 +26,8 @@ class RegisterScreenTests(unittest.TestCase):
         self.rs.passwd.set_text("bar")
         self.rs.register()
 
-    def test_show_registration_returns_to_credentials_screen(self):
+    def test_show_registration_returns_to_choose_server_screen(self):
+        self.rs._server_selected()
         self.rs.uname.set_text("foo")
         self.rs.passwd.set_text("bar")
         self.rs.register()
@@ -34,7 +35,7 @@ class RegisterScreenTests(unittest.TestCase):
         self.rs.cancel(self.rs.cancel_button)
         self.assertNotEquals(CREDENTIALS_PAGE, self.rs.register_notebook.get_current_page())
         self.rs.show()
-        self.assertEquals(CREDENTIALS_PAGE, self.rs.register_notebook.get_current_page())
+        self.assertEquals(CHOOSE_SERVER_PAGE, self.rs.register_notebook.get_current_page())
 
     def test_clear_credentials_dialog(self):
         # Pull initial value here since it will be different per machine.

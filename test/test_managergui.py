@@ -4,17 +4,6 @@ import stubs
 from subscription_manager.gui import managergui, registergui
 
 
-class StubBackend:
-    def __init__(self):
-        pass
-
-    def monitor_certs(self, callback):
-        pass
-
-    def monitor_identity(self, callback):
-        pass
-
-
 class StubConsumer:
     def __init__(self):
         self.uuid = None

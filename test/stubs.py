@@ -416,6 +416,9 @@ class StubBackend:
     def create_admin_uep(self, username, password):
         return StubUEP(username, password)
 
+    def update(self):
+        pass
+
 
 class StubContentConnection:
     def __init__(self):
