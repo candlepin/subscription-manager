@@ -39,7 +39,7 @@ class moduleClass(Module):
 
         self.priority = 200.2
         self.sidebarTitle = _("Entitlement Registration")
-        self.title = _("Manual Configuraton Required")
+        self.title = _("Manual Configuration Required")
 
         self.screen = get_screen()
 
