@@ -155,9 +155,15 @@ class RegisterScreen:
         self.registerWin.present()
 
     def _show_choose_server_page(self):
+        # Override the button text to clarify we're not actually registering
+        # by pressing that button here.
+        self.register_button.set_label(_("Next"))
         self.register_notebook.set_page(CHOOSE_SERVER_PAGE)
 
     def _show_credentials_page(self):
+        # Set the button text back after we changed it when showing the
+        # choose server screen.
+        self.register_button.set_label(_("Register"))
         self.register_notebook.set_page(CREDENTIALS_PAGE)
 
     def delete_event(self, event, data=None):
