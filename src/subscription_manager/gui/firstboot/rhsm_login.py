@@ -275,8 +275,8 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
             self.moveToPage("rhsm_confirm_subs")
         else:
-            message = _("No service levels will cover all installed products. " + \
-                "Please run 'Subscription Manager' to manually " + \
+            message = _("No service levels will cover all installed products. "
+                "Please run 'Subscription Manager' to manually "
                 "entitle this system.")
             return self._move_to_manual_install(message)
 
