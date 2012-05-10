@@ -281,7 +281,5 @@ class moduleClass(Module, registergui.RegisterScreen):
 
             self.interface.moveToPage(moduleTitle=_("Confirm Subscriptions"))
         else:
-            message = _("No service levels will cover all installed products. " + \
-                "Please run 'Subscription Manager' to manually " + \
-                "entitle this system.")
+            message = _("No service levels will cover all installed products. ")
             return self._move_to_manual_install(message)
