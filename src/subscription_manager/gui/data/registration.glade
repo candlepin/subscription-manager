@@ -714,7 +714,7 @@
                                   <widget class="GtkLabel" id="label14">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">I have already registered this machine and have my certificate stored locally.</property>
+                                    <property name="label" translatable="yes">I have already registered this machine and have my certificate(s) stored locally.</property>
                                     <property name="wrap">True</property>
                                   </widget>
                                   <packing>
@@ -740,7 +740,7 @@
                                       <widget class="GtkLabel" id="label16">
                                         <property name="visible">True</property>
                                         <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">This should be the certificate you exported from RHN after registering the system as a consumer.</property>
+                                        <property name="label" translatable="yes">These certificates are exported after registering the system as a consumer.</property>
                                         <property name="wrap">True</property>
                                       </widget>
                                       <packing>
@@ -757,6 +757,31 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkVBox" id="vbox7">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <widget class="GtkButton" id="import_certs_button">
+                                    <property name="label" translatable="yes">Import Certificates</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <signal name="clicked" handler="on_import_certs_button_clicked"/>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">2</property>
                               </packing>
                             </child>
                           </widget>

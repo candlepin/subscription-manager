@@ -31,6 +31,7 @@ from subscription_manager.branding import get_branding
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager.utils import parse_server_info, ServerUrlParseError
 from subscription_manager.gui import networkConfig
+from subscription_manager.gui.importsub import ImportSubDialog
 
 from subscription_manager.gui.utils import handle_gui_exception, errorWindow, \
     GladeWrapper
@@ -90,6 +91,7 @@ class RegisterScreen:
         dic = {"on_register_cancel_button_clicked": self.cancel,
                "on_register_button_clicked": self.on_register_button_clicked,
                "on_proxy_config_button_clicked": self._on_proxy_config_button_clicked,
+               "on_import_certs_button_clicked": self._on_import_certs_button_clicked,
             }
 
         registration_xml.signal_autoconnect(dic)
@@ -139,8 +141,10 @@ class RegisterScreen:
         self.offline_radio = registration_xml.get_widget("offline_radio")
 
         self.local_entry = registration_xml.get_widget("local_entry")
+        self.import_certs_button = registration_xml.get_widget("import_certs_button")
 
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
+        self.import_certs_dialog = ImportSubDialog()
 
     def show(self):
         # Ensure that we start on the first page and that
@@ -174,6 +178,10 @@ class RegisterScreen:
     def _on_proxy_config_button_clicked(self, button):
         self.network_config_dialog.set_parent_window(self.registerWin)
         self.network_config_dialog.show()
+
+    def _on_import_certs_button_clicked(self, button):
+        self.import_certs_dialog.set_parent_window(self.registerWin)
+        self.import_certs_dialog.show()
 
     def register(self, testing=None):
         if self.register_notebook.get_current_page() == CHOOSE_SERVER_PAGE:
@@ -302,6 +310,8 @@ class RegisterScreen:
             CFG.set('server', 'hostname', '')
             CFG.set('server', 'port', constants.DEFAULT_PORT)
             CFG.set('server', 'prefix', constants.DEFAULT_PREFIX)
+            # Because the user selected offline, the whole registration process
+            # must end here.
         elif self.local_radio.get_active():
             local_server = self.local_entry.get_text()
             try:
