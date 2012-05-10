@@ -72,6 +72,10 @@ class ReleaseBackend(object):
         for entitlement in entitlements:
             contents = entitlement.getContentEntitlements()
             for content in contents:
+                # ignore content that is not enabled
+                # see bz #820639
+                if content.getEnabled() != '1':
+                    continue
                 if self._is_correct_rhel(rhel_product.getProvidedTags(),
                                      content.getRequiredTags()):
                     content_url = content.getUrl()
