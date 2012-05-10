@@ -316,8 +316,6 @@ class RegisterScreen:
             CFG.set('server', 'hostname', '')
             CFG.set('server', 'port', constants.DEFAULT_PORT)
             CFG.set('server', 'prefix', constants.DEFAULT_PREFIX)
-            # Because the user selected offline, the whole registration process
-            # must end here.
         elif self.local_radio.get_active():
             local_server = self.local_entry.get_text()
             try:
@@ -332,7 +330,13 @@ class RegisterScreen:
         log.info("Writing server data to rhsm.conf")
         CFG.save()
         self.backend.update()
-        self._show_credentials_page()
+
+        if self.offline_radio.get_active():
+            # Because the user selected offline, the whole registration process
+            # must end here.
+            self.close_window()
+        else:
+            self._show_credentials_page()
 
     def _environment_selected(self):
         self.cancel_button.set_sensitive(False)
@@ -432,13 +436,10 @@ class RegisterScreen:
         current_port = CFG.get('server', 'port')
         current_prefix = CFG.get('server', 'prefix')
         if current_hostname == constants.DEFAULT_HOSTNAME:
-            print("RHN server pre-selected.")
             self.rhn_radio.set_active(True)
         elif current_hostname == "":
-            print("Offline pre-selected.")
             self.offline_radio.set_active(True)
         else:
-            print("Local server pre-selected.")
             self.local_radio.set_active(True)
             self.local_entry.set_text("%s:%s%s" % (current_hostname,
                 current_port, current_prefix))
