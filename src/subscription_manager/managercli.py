@@ -1505,7 +1505,7 @@ class ListCommand(CliCommand):
         self.parser.add_option("--consumed", action='store_true',
                                help=_("shows the subscriptions being consumed by this system."))
         self.parser.add_option("--servicelevel", dest="service_level",
-                               help=_("if supplied then list shows only subscriptions matching the specified service level. Only used with --available and --consumed"))
+                               help=_("if supplied then list shows only subscriptions matching the specified service level. "))
         self.parser.add_option("--all", action='store_true',
                                help=_("if supplied with --available then all subscriptions are returned"))
 
