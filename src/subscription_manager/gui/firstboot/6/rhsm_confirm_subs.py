@@ -16,6 +16,10 @@ from subscription_manager.gui import autobind
 from subscription_manager.certlib import ConsumerIdentity
 from rhsm.connection import RestlibException
 
+from subscription_manager.i18n import configure_i18n
+configure_i18n(with_glade=True)
+
+
 
 log = logging.getLogger('rhsm-app.' + __name__)
 

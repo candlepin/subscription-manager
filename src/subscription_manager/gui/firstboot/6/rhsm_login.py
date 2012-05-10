@@ -11,6 +11,7 @@ from firstboot.module import Module
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
+
 import rhsm
 
 sys.path.append("/usr/share/rhsm")
@@ -23,6 +24,9 @@ from subscription_manager.facts import Facts
 from subscription_manager.gui.manually_subscribe import get_screen
 
 from subscription_manager.gui.utils import handle_gui_exception
+
+from subscription_manager.i18n import configure_i18n
+configure_i18n(with_glade=True)
 
 sys.path.append("/usr/share/rhn")
 from up2date_client import config

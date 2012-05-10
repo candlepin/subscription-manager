@@ -31,6 +31,9 @@ sys.path.append("/usr/share/rhsm")
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.gui.manually_subscribe import get_screen
 
+from subscription_manager.i18n import configure_i18n
+configure_i18n(with_glade=True)
+
 
 class moduleClass(Module):
 
