@@ -38,7 +38,7 @@ class PreferencesDialog(object):
     changed, the new setting will be saved.
     """
 
-    def __init__(self, backend, consumer):
+    def __init__(self, backend, consumer, parent):
 
         self.backend = backend
         self.consumer = consumer
@@ -47,6 +47,9 @@ class PreferencesDialog(object):
                                                       content_connection=self.backend.content_connection)
 
         self.dialog = GLADE_XML.get_widget('preferences_dialog')
+        self.dialog.set_transient_for(parent)
+        self.dialog.set_modal(True)
+
         self.release_combobox = GLADE_XML.get_widget('release_combobox')
         self.sla_combobox = GLADE_XML.get_widget('sla_combobox')
 

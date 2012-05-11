@@ -210,7 +210,8 @@ class MainWindow(widgets.GladeWidget):
                 self.consumer, self.facts,
                 callbacks=[self.registration_changed])
 
-        self.preferences_dialog = PreferencesDialog(self.backend, self.consumer)
+        self.preferences_dialog = PreferencesDialog(self.backend, self.consumer,
+                                                    self._get_window())
 
         self.import_sub_dialog = ImportSubDialog()
 
