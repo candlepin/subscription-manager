@@ -71,6 +71,9 @@ def parse_server_info(local_server_entry):
     Expected format: hostname:port/prefix
 
     Port and prefix are optional.
+
+    Returns:
+        a tuple of (hostname, port, path)
     """
     # Adding http:// onto the front of the hostname
 

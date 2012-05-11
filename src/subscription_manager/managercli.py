@@ -242,20 +242,35 @@ class CliCommand(object):
                 print _("cannot parse argument: %s") % arg
             sys.exit(-1)
 
-        current_hostname = cfg.get('server', 'hostname')
-        current_port = cfg.get('server', 'port')
-        current_prefix = cfg.get('server', 'prefix')
-        self.server_url = "%s:%s%s" % (current_hostname,
-                                       current_port,
-                                        current_prefix)
+        print "cfg1", cfg
+        self.server_hostname = cfg.get('server', 'hostname')
+        self.server_port = cfg.get('server', 'port')
+        self.server_prefix = cfg.get('server', 'prefix')
 
         if hasattr(self.options, "server_url") and self.options.server_url:
             try:
-                self.server_url = parse_server_info(self.options.server_url)
+                (self.server_hostname,
+                 self.server_port,
+                 self.server_prefix) = parse_server_info(self.options.server_url)
             except ServerUrlParseError, e:
                 print _("Error parsing serverurl: %s" % e.msg)
                 sys.exit(-1)
-
+            print "cfg", cfg
+            cfg.set("server", "hostname", self.server_hostname)
+            cfg.set("server", "port", self.server_port)
+            cfg.set("server", "prefix", self.server_prefix)
+            # seems like cfg.save() could raise any wide variety of
+            # exceptions
+            print "cfg_pre", cfg, cfg.config_file, cfg.get("server", "hostname")
+            cfg.save()
+            cfg.read(cfg.config_file)
+            connection.config.read(cfg.config_file)
+            print "cfg_post", cfg, cfg.config_file, cfg.get("server", "hostname")
+#            cfg = None
+#           rhsm.config.CFG = None
+#            cfg = rhsm.config.initConfig()
+            global cfg
+#            print cfg
 
         self.proxy_hostname = remove_scheme(cfg.get('server', 'proxy_hostname'))
         self.proxy_port = cfg.get('server', 'proxy_port')
@@ -282,8 +297,14 @@ class CliCommand(object):
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
 
+        print self.server_hostname, self.server_port, self.server_prefix
         if self.require_connection():
-            self.cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
+            # make sure we pass in the new server info, otherwise we
+            # we use the defaults from connection module init
+            self.cp = connection.UEPConnection(host=self.server_hostname,
+                                               ssl_port=self.server_port,
+                                               handler=self.server_prefix,
+                                               cert_file=cert_file, key_file=key_file,
                                                proxy_hostname=self.proxy_hostname,
                                                proxy_port=self.proxy_port,
                                                proxy_user=self.proxy_user,
@@ -791,6 +812,7 @@ class RegisterCommand(UserPassCommand):
         # Proceed with new registration:
         try:
             if not self.options.activation_keys:
+                print "cfg2", cfg, cfg.config_file, cfg.get("server", "hostname")
                 admin_cp = connection.UEPConnection(username=self.username,
                                         password=self.password,
                                         proxy_hostname=self.proxy_hostname,
@@ -1036,6 +1058,8 @@ class ReleaseCommand(CliCommand):
         parsed_url = urlparse.urlparse(cdn_url)
 
         self.cc = connection.ContentConnection(host=parsed_url[1],
+                                               #FIXME: should be using the parsed value
+                                               # we can use utils.parse_server_info
                                                ssl_port=443,
                                                proxy_hostname=self.proxy_hostname,
                                                proxy_port=self.proxy_port,
@@ -1455,6 +1479,7 @@ class ReposCommand(CliCommand):
         repo_file.read()
         repo_file.update(repo)
         repo_file.write()
+
 
 class ConfigCommand(CliCommand):
 
