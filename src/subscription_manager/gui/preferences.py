@@ -56,6 +56,9 @@ class PreferencesDialog(object):
             "on_release_combobox_changed": self._release_changed,
         })
 
+        # Handle the dialog's delete event when ESC key is pressed.
+        self.dialog.connect("delete-event", self._dialog_deleted)
+
     def load_current_settings(self):
         self.sla_combobox.get_model().clear()
         self.release_combobox.get_model().clear()
@@ -120,7 +123,7 @@ class PreferencesDialog(object):
             i += 1
 
     def _close_button_clicked(self, widget):
-        self.dialog.hide()
+        self._close_dialog()
 
     def _sla_changed(self, combobox):
         model = combobox.get_model()
@@ -148,3 +151,10 @@ class PreferencesDialog(object):
     def show(self):
         self.load_current_settings()
         self.dialog.show()
+
+    def _close_dialog(self):
+        self.dialog.hide()
+
+    def _dialog_deleted(self, event, data):
+        self._close_dialog()
+        return True
