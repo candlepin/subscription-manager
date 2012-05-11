@@ -1061,6 +1061,7 @@ class ReleaseCommand(CliCommand):
                     release=self.options.release)
             print _("Release set to: %s") % self.options.release
         elif self.options.list:
+            self._get_consumer_release()
             releases = self.release_backend.get_releases()
             for release in releases:
                 print release
