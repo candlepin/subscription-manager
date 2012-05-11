@@ -593,7 +593,7 @@
                             <child>
                               <widget class="GtkAlignment" id="alignment5">
                                 <property name="visible">True</property>
-                                <property name="bottom_padding">25</property>
+                                <property name="bottom_padding">36</property>
                                 <child>
                                   <widget class="GtkRadioButton" id="local_radio">
                                     <property name="visible">True</property>
@@ -634,6 +634,7 @@
                                       <widget class="GtkLabel" id="label13">
                                         <property name="visible">True</property>
                                         <property name="xalign">0</property>
+                                        <property name="yalign">0.25</property>
                                         <property name="label" translatable="yes">Subscription Service:</property>
                                       </widget>
                                       <packing>
@@ -642,20 +643,43 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkEntry" id="local_entry">
+                                      <widget class="GtkVBox" id="vbox8">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="invisible_char">&#x25CF;</property>
-                                        <property name="width_chars">30</property>
+                                        <property name="orientation">vertical</property>
+                                        <child>
+                                          <widget class="GtkEntry" id="local_entry">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="invisible_char">&#x25CF;</property>
+                                            <property name="width_chars">30</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkLabel" id="label17">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">&lt;small&gt;&lt;i&gt;hostname[:port][/prefix]&lt;/i&gt;&lt;/small&gt;</property>
+                                            <property name="use_markup">True</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="padding">13</property>
+                                        <property name="fill">False</property>
+                                        <property name="padding">12</property>
                                         <property name="position">1</property>
                                       </packing>
                                     </child>
                                   </widget>
                                   <packing>
+                                    <property name="expand">False</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
@@ -687,7 +711,7 @@
                             <child>
                               <widget class="GtkAlignment" id="alignment4">
                                 <property name="visible">True</property>
-                                <property name="bottom_padding">61</property>
+                                <property name="bottom_padding">44</property>
                                 <child>
                                   <widget class="GtkRadioButton" id="offline_radio">
                                     <property name="visible">True</property>
