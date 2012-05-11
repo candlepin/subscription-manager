@@ -360,10 +360,11 @@ class StubConsumerIdentity:
 
 
 class StubUEP:
-    def __init__(self, username=None, password=None,
-        proxy_hostname=None, proxy_port=None,
-        proxy_user=None, proxy_password=None,
-        cert_file=None, key_file=None):
+    def __init__(self, host=None, ssl_port=None, handler=None,
+                 username=None, password=None,
+                 proxy_hostname=None, proxy_port=None,
+                 proxy_user=None, proxy_password=None,
+                 cert_file=None, key_file=None):
             self.registered_consumer_info = {"uuid": 'dummy-consumer-uuid'}
             self.environment_list = []
             pass
