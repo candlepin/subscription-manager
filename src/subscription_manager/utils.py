@@ -15,7 +15,8 @@
 
 import re
 import logging
-from constants import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME
+from constants import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
+    DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 from urlparse import urlparse
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -65,6 +66,23 @@ class ServerUrlParseErrorJustScheme(ServerUrlParseError):
 
 
 def parse_server_info(local_server_entry):
+    return parse_url(local_server_entry,
+                     DEFAULT_HOSTNAME,
+                     DEFAULT_PORT,
+                     DEFAULT_PREFIX)
+
+
+def parse_baseurl_info(local_server_entry):
+    return parse_url(local_server_entry,
+                     DEFAULT_CDN_HOSTNAME,
+                     DEFAULT_CDN_PORT,
+                     DEFAULT_CDN_PREFIX)
+
+
+def parse_url(local_server_entry,
+              default_hostname=None,
+              default_port=None,
+              default_prefix=None):
     """
     Parse hostname, port, and webapp prefix from the string a user entered.
 
@@ -134,7 +152,7 @@ def parse_server_info(local_server_entry):
     # So maybe check result.port/path/hostname for None, and
     # throw an exception in those cases.
     # adding the schem seems to avoid this though
-    port = DEFAULT_PORT
+    port = default_port
     try:
         if result.port is not None:
             port = str(result.port)
@@ -143,12 +161,12 @@ def parse_server_info(local_server_entry):
                                       msg=_("Server url port could not be parsed"))
 
     # path can be None?
-    prefix = DEFAULT_PREFIX
+    prefix = default_prefix
     if result.path is not None:
         if result.path != '':
             prefix = result.path
 
-    hostname = DEFAULT_HOSTNAME
+    hostname = default_hostname
     if result.hostname is not None:
         if result.hostname != "":
             hostname = result.hostname

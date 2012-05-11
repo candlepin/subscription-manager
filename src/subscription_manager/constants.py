@@ -97,3 +97,7 @@ NO_ORG_ERROR = _("<b>User %s is not able to register with any orgs.</b>")
 DEFAULT_HOSTNAME = "subscription.rhn.redhat.com"
 DEFAULT_PORT = "443"
 DEFAULT_PREFIX = "/subscription"
+
+DEFAULT_CDN_HOSTNAME = "cdn.redhat.com"
+DEFAULT_CDN_PORT = "443"
+DEFAULT_CDN_PREFIX = "/"

@@ -208,6 +208,8 @@ class CliCommand(object):
 
         self.parser.add_option("--serverurl", dest="server_url",
                                default=None, help=_("server url in the form of https://hostname:443/prefix"))
+        self.parser.add_option("--baseurl;", dest="base_url",
+                              default=None, help=_("base url for content in form of https://hostname:443/prefix"))
         self.parser.add_option("--proxy", dest="proxy_url",
                                default=None, help=_("proxy url in the form of proxy_hostname:proxy_port"))
         self.parser.add_option("--proxyuser", dest="proxy_user",
@@ -312,6 +314,8 @@ class CliCommand(object):
             # exceptions
             cfg.save()
 
+ #       if hasattr(self.options, "base_url") and self.options.base_url:
+
         self.proxy_hostname = remove_scheme(cfg.get('server', 'proxy_hostname'))
         self.proxy_port = cfg.get('server', 'proxy_port')
         self.proxy_user = cfg.get('server', 'proxy_user')
@@ -337,14 +341,13 @@ class CliCommand(object):
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
 
-        print self.server_hostname, self.server_port, self.server_prefix
         if self.require_connection():
             # make sure we pass in the new server info, otherwise we
             # we use the defaults from connection module init
             # we've set self.proxy* here, so we'll use them if they
             # are set
             self.cp = self._get_UEP(cert_file=cert_file,
-                                   key_file=key_file)
+                                    key_file=key_file)
 
             self.certlib = CertLib(uep=self.cp)
         else:
