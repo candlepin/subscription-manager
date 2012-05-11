@@ -92,6 +92,9 @@ class RegisterScreen:
                "on_register_button_clicked": self.on_register_button_clicked,
                "on_proxy_config_button_clicked": self._on_proxy_config_button_clicked,
                "on_import_certs_button_clicked": self._on_import_certs_button_clicked,
+               "on_rhn_radio_toggled": self._server_radio_toggled,
+               "on_local_radio_toggled": self._server_radio_toggled,
+               "on_offline_radio_toggled": self._server_radio_toggled,
             }
 
         registration_xml.signal_autoconnect(dic)
@@ -305,6 +308,9 @@ class RegisterScreen:
         self.owner_key = model.get_value(tree_iter, 0)
 
         self.async.get_environment_list(self.owner_key, self._on_get_environment_list_cb)
+
+    def _server_radio_toggled(self, widget):
+        self.local_entry.set_sensitive(self.local_radio.get_active())
 
     def _server_selected(self):
         if self.rhn_radio.get_active():
