@@ -49,6 +49,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         self._skip_apply_for_page_jump = False
         self._cached_credentials = None
         self._registration_finished = False
+        self._offline = False
 
     def _read_rhn_proxy_settings(self):
         # Read and store rhn-setup's proxy settings, as they have been set
@@ -122,7 +123,16 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         if valid_registration:
             self._cached_credentials = credentials
+        if self._offline:
+            return self._RESULT_JUMP
         return self._RESULT_FAILURE
+
+    def _offline_selected(self):
+        """
+        Override parent method to jump past all remaining RHSM screens.
+        """
+        self._skip_remaining_screens(self.interface)
+        self._offline = True
 
     def close_window(self):
         """

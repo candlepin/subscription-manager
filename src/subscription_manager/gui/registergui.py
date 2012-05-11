@@ -340,9 +340,12 @@ class RegisterScreen:
         if self.offline_radio.get_active():
             # Because the user selected offline, the whole registration process
             # must end here.
-            self.close_window()
+            self._offline_selected()
         else:
             self._show_credentials_page()
+
+    def _offline_selected(self):
+        self.close_window()
 
     def _environment_selected(self):
         self.cancel_button.set_sensitive(False)
