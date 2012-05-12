@@ -71,11 +71,15 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                                         markup=self.store['product_name_formatted'])
         subscription_column.set_expand(True)
         self.top_view.append_column(subscription_column)
+        cols = []
+        cols.append((subscription_column, 'text', 'product_name_formatted'))
 
         machine_type_col = MachineTypeColumn(self.store['virt_only'])
         self.top_view.append_column(machine_type_col)
+        cols.append((machine_type_col, 'text', 'virt_only'))
 
-        self.add_text_column(_('Available Subscriptions'), 'available')
+        column = self.add_text_column(_('Available Subscriptions'), 'available')
+        cols.append((column, 'text', 'available'))
 
         multi_entitle_col = MultiEntitlementColumn(self.store['multi-entitlement'])
         self.top_view.append_column(multi_entitle_col)
@@ -87,6 +91,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                                                   self.store['multi-entitlement'],
                                                   self.store['quantity_available'])
         self.top_view.append_column(quantity_column)
+
+        self.set_sorts(cols)
 
         self.edit_quantity_label.set_label(quantity_column.get_column_legend_text())
 
