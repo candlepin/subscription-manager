@@ -79,6 +79,22 @@ def parse_baseurl_info(local_server_entry):
                      DEFAULT_CDN_PREFIX)
 
 
+def format_baseurl(hostname, port, prefix):
+    # just to avoid double slashs. cosmetic
+    if prefix and prefix[0] != '/':
+        prefix = "/%s" % prefix
+
+    # just so we match how we format this by
+    # default
+    if port == DEFAULT_CDN_PORT:
+        return "https://%s%s" % (hostname,
+                                  prefix)
+
+    return "https://%s:%s%s" % (hostname,
+                                 port,
+                                 prefix)
+
+
 def parse_url(local_server_entry,
               default_hostname=None,
               default_port=None,

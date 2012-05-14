@@ -51,7 +51,7 @@ from subscription_manager.certdirectory import EntitlementDirectory, ProductDire
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 from subscription_manager.utils import remove_scheme, parse_server_info, \
-        ServerUrlParseError
+        ServerUrlParseError, parse_baseurl_info, format_baseurl
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
@@ -314,7 +314,21 @@ class CliCommand(object):
             # exceptions
             cfg.save()
 
- #       if hasattr(self.options, "base_url") and self.options.base_url:
+        if hasattr(self.options, "base_url") and self.options.base_url:
+            print "got a baseurl"
+            try:
+                (baseurl_server_hostname,
+                 baseurl_server_port,
+                 baseurl_server_prefix) = parse_baseurl_info(self.options.base_url)
+                print baseurl_server_hostname, baseurl_server_port, baseurl_server_prefix
+            except ServerUrlParseError, e:
+                print _("Error parsing baseurl: %s" % e.msg)
+                sys.exit(-1)
+
+            cfg.set("rhsm", "baseurl", format_baseurl(baseurl_server_hostname,
+                                                      baseurl_server_port,
+                                                      baseurl_server_prefix))
+            cfg.save()
 
         self.proxy_hostname = remove_scheme(cfg.get('server', 'proxy_hostname'))
         self.proxy_port = cfg.get('server', 'proxy_port')
