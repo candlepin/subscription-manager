@@ -63,7 +63,8 @@ class TestPreferencesDialog(unittest.TestCase):
         stub_backend.entitlement_dir = stubs.StubEntitlementDirectory([stubs.StubEntitlementCertificate(stubs.StubProduct("rhel-6"))])
 
         self.preferences_dialog = preferences.PreferencesDialog(backend=stub_backend,
-                                                                consumer=self.consumer)
+                                                                consumer=self.consumer,
+                                                                parent=None)
         self.preferences_dialog.release_backend.facts = stubs.StubFacts()
         self.preferences_dialog.release_backend.get_releases = get_releases
 
