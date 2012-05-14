@@ -308,10 +308,10 @@ pyflakes:
 
 
 tablint:
-	-@! GREP_COLOR='7;31' grep --color -nP "^\W*\t" $(STYLEFILES)
+	@! GREP_COLOR='7;31' grep --color -nP "^\W*\t" $(STYLEFILES)
 
 trailinglint:
-	-@! GREP_COLOR='7;31'  grep --color -nP "[ \t]$$" $(STYLEFILES)
+	@! GREP_COLOR='7;31'  grep --color -nP "[ \t]$$" $(STYLEFILES)
 
 whitespacelint: tablint trailinglint
 
@@ -326,9 +326,9 @@ pep8:
 	! test -s $$TMPFILE
 
 rpmlint:
-	rpmlint -f rpmlint.config subscription-manager.spec
+	@rpmlint -f rpmlint.config subscription-manager.spec
 
 
-stylish: pyflakes whitespacelint pep8
+stylish: pyflakes whitespacelint pep8 rpmlint
 
 jenkins: stylish coverage-jenkins
