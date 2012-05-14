@@ -409,13 +409,13 @@ class UEPConnection:
     """
 
     def __init__(self,
-            host=config.get('server', 'hostname'),
-            ssl_port=safe_int(config.get('server', 'port')),
-            handler=config.get('server', 'prefix'),
-            proxy_hostname=config.get('server', 'proxy_hostname'),
-            proxy_port=config.get('server', 'proxy_port'),
-            proxy_user=config.get('server', 'proxy_user'),
-            proxy_password=config.get('server', 'proxy_password'),
+            host=None,
+            ssl_port=None,
+            handler=None,
+            proxy_hostname=None,
+            proxy_port=None,
+            proxy_user=None,
+            proxy_password=None,
             username=None, password=None,
             cert_file=None, key_file=None,
             insecure=None):
@@ -427,14 +427,14 @@ class UEPConnection:
 
         Must specify one method of authentication or the other, not both.
         """
-        self.host = host
-        self.ssl_port = ssl_port
-        self.handler = handler
+        self.host = host or config.get('server', 'hostname')
+        self.ssl_port = ssl_port or safe_int(config.get('server', 'port'))
+        self.handler = handler or config.get('server', 'prefix')
 
-        self.proxy_hostname = proxy_hostname
-        self.proxy_port = proxy_port
-        self.proxy_user = proxy_user
-        self.proxy_password = proxy_password
+        self.proxy_hostname = proxy_hostname or config.get('server', 'proxy_hostname')
+        self.proxy_port = proxy_port or config.get('server', 'proxy_port')
+        self.proxy_user = proxy_user or config.get('server', 'proxy_user')
+        self.proxy_password = proxy_password or config.get('server', 'proxy_password')
 
         self.cert_file = cert_file
         self.key_file = key_file
