@@ -30,9 +30,23 @@ versions = """
 class TestReleaseBackend(unittest.TestCase):
     def setUp(self):
         stub_content = stubs.StubContent("c1", required_tags='rhel-6',
-                                           gpg=None)
+                                           gpg=None, enabled="1")
 
-        stub_contents = [stub_content]
+        # this content should be ignored since it's not enabled
+        stub_content_2 = stubs.StubContent("c2", required_tags='rhel-6',
+                                           gpg=None, enabled="0")
+
+        # this should be ignored because of required_tag isn't what we
+        # are looking for
+        stub_content_3 = stubs.StubContent("c3", required_tags="NotAwesomeOS",
+                                           gpg=None, enabled="1")
+
+        # this should be ignored because of required_tag isn't what we
+        # are looking for, and it is not enabled
+        stub_content_4 = stubs.StubContent("c4", required_tags="NotAwesomeOS",
+                                           gpg=None, enabled="0")
+
+        stub_contents = [stub_content, stub_content_2, stub_content_3, stub_content_4]
 
         stub_product = stubs.StubProduct("rhel-6")
         stub_entitlement_certs = [stubs.StubEntitlementCertificate(stub_product,
