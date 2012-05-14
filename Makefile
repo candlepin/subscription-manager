@@ -315,6 +315,11 @@ trailinglint:
 
 whitespacelint: tablint trailinglint
 
+gettext_lint:
+	-@TMPFILE=`mktemp` || exit 1; \
+	pcregrep -n --color=auto -M  "_\(.*[\'|\"].*[\'|\"]\s*\+\s*[\"|\'].*[\"|\'].*\)" $(STYLEFILES) | tee $$TMPFILE; \
+	! test -s $$TMPFILE
+
 pep8:
 	-@TMPFILE=`mktemp` || exit 1; \
 	pep8 --ignore E501 --exclude ".#*" --repeat src $(STYLEFILES) | tee $$TMPFILE; \
