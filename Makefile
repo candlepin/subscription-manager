@@ -225,6 +225,9 @@ coverage-jenkins: coverage-xunit
 clean:
 	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
 
+checkcommits:
+	scripts/checkcommits.sh
+
 archive: clean
 	@rm -rf ${PKGNAME}-%{VERSION}.tar.gz
 	@rm -rf /tmp/${PKGNAME}-$(VERSION) /tmp/${PKGNAME}
