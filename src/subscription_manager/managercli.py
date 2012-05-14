@@ -844,7 +844,7 @@ class RegisterCommand(UserPassCommand):
 
         if self.options.autosubscribe:
             if 'serviceLevel' not in consumer and self.options.service_level:
-                systemExit(-1, _("Error: The --servicelevel option is not supported " + \
+                systemExit(-1, _("Error: The --servicelevel option is not supported "
                                  "by the server. Did not perform autosubscribe."))
             autosubscribe(self.cp, consumer['uuid'],
                     service_level=self.options.service_level)
@@ -1342,8 +1342,8 @@ class ImportCertCommand(CliCommand):
                 except Exception, e:
                     # Should not get here unless something really bad happened.
                     log.exception(e)
-                    print(_("An error occurred while importing the certificate. " +
-                                  "Please check log file for more information."))
+                    print(_("An error occurred while importing the certificate. "
+                            "Please check log file for more information."))
             else:
                 log.error("Supplied certificate file does not exist: %s" % src_cert_file)
                 print(_("%s is not a valid certificate file. Please use a valid certificate.") %

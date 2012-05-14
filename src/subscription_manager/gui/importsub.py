@@ -82,7 +82,7 @@ class ImportSubDialog(widgets.GladeWidget):
         except Exception, e:
             # Should not get here unless something really bad happened.
             log.exception(e)
-            errorWindow(_("An error occurred while importing the certificate. " +
+            errorWindow(_("An error occurred while importing the certificate. "
                           "Please check log file for more information."),
                           parent=self.main_dialog)
             return False
