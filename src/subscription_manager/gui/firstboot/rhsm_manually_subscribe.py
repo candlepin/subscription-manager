@@ -30,7 +30,7 @@ class moduleClass(RhsmFirstbootModule):
 
     def __init__(self):
         RhsmFirstbootModule.__init__(self,
-                _("Manual Configuraton Required"),
+                _("Manual Configuration Required"),
                 _("Entitlement Registration"),
                 200.2, 109.11)
 
