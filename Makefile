@@ -320,6 +320,9 @@ pep8:
 	pep8 --ignore E501 --exclude ".#*" --repeat src $(STYLEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
+rpmlint:
+	rpmlint -f rpmlint.config subscription-manager.spec
+
 
 stylish: pyflakes whitespacelint pep8
 
