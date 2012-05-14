@@ -34,6 +34,7 @@ LICENSE = _("\nThis software is licensed to you under the GNU General Public Lic
 prefix = os.path.dirname(__file__)
 LOGO_PATH = os.path.join(prefix, "data/icons/scalable/subscription-manager.svg")
 
+
 class AboutDialog(object):
     def __init__(self, parent):
         self.dialog = GtkAboutDialog()

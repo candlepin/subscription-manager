@@ -69,6 +69,7 @@ cfg = config.initConfig()
 
 ONLINE_DOC_URL_TEMPLATE = "http://docs.redhat.com/docs/%s/Red_Hat_Enterprise_Linux/"
 
+
 class Backend(object):
     """
     Wrapper for sharing UEP connections to Candlepin.
