@@ -65,8 +65,6 @@ logutil.init_logger()
 
 
 def main():
-    import sys;sys.path.append(r'/home/adrian/eclipse/eclipse/plugins/org.python.pydev.debug_2.5.0.2012040618/pysrc')
-    import pydevd;pydevd.settrace(suspend=False)
     # execute
     try:
         return managercli.CLI().main()
