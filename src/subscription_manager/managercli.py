@@ -1005,6 +1005,8 @@ class ReleaseCommand(CliCommand):
         CliCommand.__init__(self, "release", usage, shortdesc, desc, True,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
+        self.parser.add_option("--show", dest="show", action="store_true",
+                               help=_("shows current release setting. default command."))
         self.parser.add_option("--list", dest="list", action="store_true",
                                help=_("list available releases"))
         self.parser.add_option("--set", dest="release", action="store",
