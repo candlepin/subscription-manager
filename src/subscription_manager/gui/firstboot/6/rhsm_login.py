@@ -241,7 +241,7 @@ class moduleClass(Module, registergui.RegisterScreen):
     def _move_to_manual_install(self, title):
         # TODO Change the message on the screen.
         get_screen().set_title(title)
-        self.interface.moveToPage(moduleTitle=_("Manual Configuraton Required"))
+        self.interface.moveToPage(moduleTitle=_("Manual Configuration Required"))
 
     def _init_sla(self):
         if self.skip_auto_subscribe():
