@@ -29,7 +29,8 @@ from subscription_manager import constants
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
-from subscription_manager.utils import parse_server_info, ServerUrlParseError
+from subscription_manager.utils import parse_server_info, ServerUrlParseError,\
+        is_valid_server_info
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui.importsub import ImportSubDialog
 
@@ -334,7 +335,13 @@ class RegisterScreen:
                 CFG.set('server', 'hostname', hostname)
                 CFG.set('server', 'port', port)
                 CFG.set('server', 'prefix', prefix)
-            except ServerUrlParseError:
+
+                if not is_valid_server_info(hostname, port, prefix):
+                    errorWindow(_("Unable to reach the server at %s:%s%s" %
+                        (hostname, port, prefix)))
+                    return
+
+            except ServerUrlParseError, e:
                 errorWindow(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"), self.registerWin)
                 return
 
@@ -348,6 +355,8 @@ class RegisterScreen:
             self._offline_selected()
         else:
             self._show_credentials_page()
+
+
 
     def _offline_selected(self):
         self.close_window()

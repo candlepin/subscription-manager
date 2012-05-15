@@ -25,6 +25,8 @@ import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
 gettext.textdomain("rhsm")
 
+from rhsm.connection import UEPConnection, RestlibException
+
 
 def remove_scheme(uri):
     """Remove the scheme component from a URI."""
@@ -193,3 +195,29 @@ def parse_url(local_server_entry,
             hostname = result.hostname
 
     return (hostname, port, prefix)
+
+
+def is_valid_server_info(hostname, port, prefix):
+    """
+    Check if we can communicate with a subscription service at the given
+    location.
+
+    Returns true or false, exceptions should not be handled internally.
+    """
+    # Proxy info should already be in config file and used by default:
+    try:
+        conn = UEPConnection(host=hostname, ssl_port=int(port), handler=prefix)
+        status = conn.ping()
+        print status
+        return True
+    except RestlibException, e:
+        # If we're getting Unauthorized that's a good indication this is a
+        # valid subscription service:
+        if e.code == 401:
+            return True
+        else:
+            log.exception(e)
+            return False
+    except Exception, e:
+        log.exception(e)
+        return False
