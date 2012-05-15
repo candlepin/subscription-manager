@@ -92,9 +92,9 @@ class ImportSubDialog(object):
                     log.error("Error parsing manually imported entitlement "
                         "certificate: %s" % cert_file)
                     invalid_certs.append(cert_file)
-
-                extractor.write_to_disk()
-                good_certs.append(cert_file)
+                else:
+                    extractor.write_to_disk()
+                    good_certs.append(cert_file)
             except Exception, e:
                 # Should not get here unless something really bad happened.
                 log.exception(e)
