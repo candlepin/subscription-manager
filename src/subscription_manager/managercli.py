@@ -1218,8 +1218,7 @@ class UnSubscribeCommand(CliCommand):
                     for ent in self.entitlement_dir.list():
                         if str(ent.serialNumber()) == self.options.serial:
                             ent.delete()
-                            print _("This machine has been unsubscribed from subscription " +
-                                       "with serial number %s" % (self.options.serial))
+                            print _("This machine has been unsubscribed from subscription "), self.options.serial
             except Exception, e:
                 handle_exception(_("Unable to perform unsubscribe due to the following exception: %s") % e, e)
 
