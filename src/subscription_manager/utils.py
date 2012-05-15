@@ -208,7 +208,6 @@ def is_valid_server_info(hostname, port, prefix):
     try:
         conn = UEPConnection(host=hostname, ssl_port=int(port), handler=prefix)
         status = conn.ping()
-        print status
         return True
     except RestlibException, e:
         # If we're getting Unauthorized that's a good indication this is a
