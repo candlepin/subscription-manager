@@ -1,10 +1,14 @@
 import unittest
 
-from subscription_manager.utils import *
-from subscription_manager.constants import *
+from subscription_manager.utils import remove_scheme, parse_server_info, \
+    parse_baseurl_info, format_baseurl, ServerUrlParseErrorEmpty, \
+    ServerUrlParseErrorNone, ServerUrlParseErrorPort, ServerUrlParseErrorScheme, \
+    ServerUrlParseErrorSchemeNoDoubleSlash, ServerUrlParseErrorJustScheme
+from subscription_manager.constants import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
+    DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 
 
-class LocalServerRegexTests(unittest.TestCase):
+class TestParseServerInfo(unittest.TestCase):
 
     def test_fully_specified(self):
         local_url = "myhost.example.com:900/myapp"
@@ -135,6 +139,28 @@ class LocalServerRegexTests(unittest.TestCase):
         self.assertRaises(ServerUrlParseErrorScheme,
                           parse_server_info,
                           local_url)
+
+
+# TestParseServerInfo pretty much covers this code wise
+class TestParseBaseUrlInfo(unittest.TestCase):
+    def test_hostname_with_scheme(self):
+        # this is the default, so test it here
+        local_url = "https://cdn.redhat.com"
+        (hostname, port, prefix) = parse_baseurl_info(local_url)
+        self.assertEquals("cdn.redhat.com", hostname)
+        self.assertEquals(DEFAULT_CDN_PORT, port)
+        self.assertEquals("/", prefix)
+
+    def test_format_base_url(self):
+        local_url = "https://cdn.redhat.com"
+        (hostname, port, prefix) = parse_baseurl_info(local_url)
+        self.assertEquals(local_url, format_baseurl(hostname, port, prefix))
+
+    def test_format_base_url_with_port(self):
+        local_url = "https://cdn.redhat.com:443"
+        (hostname, port, prefix) = parse_baseurl_info(local_url)
+        self.assertEquals(prefix, DEFAULT_CDN_PREFIX)
+        self.assertEquals("https://%s" % DEFAULT_CDN_HOSTNAME, format_baseurl(hostname, port, prefix))
 
 class TestRemoveScheme(unittest.TestCase):
     def test_colon_port(self):

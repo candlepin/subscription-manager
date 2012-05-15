@@ -84,6 +84,11 @@ def format_baseurl(hostname, port, prefix):
     if prefix and prefix[0] != '/':
         prefix = "/%s" % prefix
 
+    # remove trailing slash, just so same
+    # values as default matches default format
+    if prefix == DEFAULT_CDN_PREFIX:
+        prefix = prefix[:-1]
+
     # just so we match how we format this by
     # default
     if port == DEFAULT_CDN_PORT:
