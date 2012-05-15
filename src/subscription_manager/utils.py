@@ -197,6 +197,7 @@ def parse_url(local_server_entry,
     return (hostname, port, prefix)
 
 
+# TODO: make sure this works with --proxy cli options
 def is_valid_server_info(hostname, port, prefix):
     """
     Check if we can communicate with a subscription service at the given

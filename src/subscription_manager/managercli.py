@@ -51,7 +51,7 @@ from subscription_manager.certdirectory import EntitlementDirectory, ProductDire
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 from subscription_manager.utils import remove_scheme, parse_server_info, \
-        ServerUrlParseError, parse_baseurl_info, format_baseurl
+        ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
@@ -297,6 +297,12 @@ class CliCommand(object):
                 print _("cannot parse argument: %s") % arg
             sys.exit(-1)
 
+        # set proxy before we try to connect to server
+        self.proxy_hostname = remove_scheme(cfg.get('server', 'proxy_hostname'))
+        self.proxy_port = cfg.get('server', 'proxy_port')
+        self.proxy_user = cfg.get('server', 'proxy_user')
+        self.proxy_password = cfg.get('server', 'proxy_password')
+
         if hasattr(self.options, "server_url") and self.options.server_url:
             try:
                 (self.server_hostname,
@@ -304,6 +310,16 @@ class CliCommand(object):
                  self.server_prefix) = parse_server_info(self.options.server_url)
             except ServerUrlParseError, e:
                 print _("Error parsing serverurl: %s" % e.msg)
+                sys.exit(-1)
+
+            # this trys to actually connect to the server and ping it
+            if not is_valid_server_info(self.server_hostname,
+                                        self.server_port,
+                                        self.server_prefix):
+                print _("Unable to reach the server at %s:%s%s" %
+                        (self.server_hostname,
+                         self.server_port,
+                         self.server_prefix))
                 sys.exit(-1)
 
             cfg.set("server", "hostname", self.server_hostname)
@@ -328,10 +344,7 @@ class CliCommand(object):
                                                       baseurl_server_prefix))
             cfg.save()
 
-        self.proxy_hostname = remove_scheme(cfg.get('server', 'proxy_hostname'))
-        self.proxy_port = cfg.get('server', 'proxy_port')
-        self.proxy_user = cfg.get('server', 'proxy_user')
-        self.proxy_password = cfg.get('server', 'proxy_password')
+
 
         # support foo.example.com:3128 format
         if hasattr(self.options, "proxy_url") and self.options.proxy_url:
