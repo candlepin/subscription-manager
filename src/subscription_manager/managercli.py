@@ -1243,8 +1243,8 @@ class UnSubscribeCommand(CliCommand):
                     for ent in self.entitlement_dir.list():
                         if str(ent.serialNumber()) == self.options.serial:
                             ent.delete()
-                            print _("This machine has been unsubscribed from subscription " +
-                                       "with serial number %s" % (self.options.serial))
+                            print _("This machine has been unsubscribed from subscription "
+                                    "with serial number %s" % (self.options.serial))
             except Exception, e:
                 handle_exception(_("Unable to perform unsubscribe due to the following exception: %s") % e, e)
 
@@ -1372,8 +1372,8 @@ class ReposCommand(CliCommand):
 
     def _validate_options(self):
         if not (self.options.list or self.options.enable or self.options.disable):
-            print _("Error: This command requires that you use a --list option " +
-                     "or specify a repo with --enable or --disable.")
+            print _("Error: This command requires that you use a --list option "
+                    "or specify a repo with --enable or --disable.")
             sys.exit(-1)
 
     def require_connection(self):
@@ -1407,8 +1407,8 @@ class ReposCommand(CliCommand):
                     found = True
                     break
             if not found:
-                print _("Error: A valid repo id is required. " +
-                         "Use --list option to see valid repos.")
+                print _("Error: A valid repo id is required. "
+                        "Use --list option to see valid repos.")
                 sys.exit(-1)
         elif self.options.disable:
             found = False
@@ -1421,8 +1421,8 @@ class ReposCommand(CliCommand):
                     found = True
                     break
             if not found:
-                print _("Error: A valid repo id is required. " +
-                         "Use --list option to see valid repos.")
+                print _("Error: A valid repo id is required. "
+                        "Use --list option to see valid repos.")
                 sys.exit(-1)
         elif self.options.list:
             if len(repos) > 0:
