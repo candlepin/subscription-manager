@@ -51,6 +51,12 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         self._registration_finished = False
         self._offline = False
 
+        # In firstboot, we leverage the RHN setup proxy settings already
+        # presented to the user, so hide the choose server screen's proxy
+        # text and button.
+        self.proxy_label.destroy()
+        self.proxy_config_button.destroy()
+
     def _read_rhn_proxy_settings(self):
         # Read and store rhn-setup's proxy settings, as they have been set
         # on the prior screen (which is owned by rhn-setup)

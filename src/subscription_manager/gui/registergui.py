@@ -144,7 +144,12 @@ class RegisterScreen:
         self.offline_radio = registration_xml.get_widget("offline_radio")
 
         self.local_entry = registration_xml.get_widget("local_entry")
-        self.import_certs_button = registration_xml.get_widget("import_certs_button")
+        self.import_certs_button = registration_xml.get_widget(
+                "import_certs_button")
+
+        self.proxy_label = registration_xml.get_widget("proxy_label")
+        self.proxy_config_button = registration_xml.get_widget(
+                "proxy_config_button")
 
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
         self.import_certs_dialog = ImportSubDialog()
