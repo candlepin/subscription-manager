@@ -326,9 +326,10 @@ pep8:
 	! test -s $$TMPFILE
 
 rpmlint:
-	@rpmlint -f rpmlint.config subscription-manager.spec
+	-@TMPFILE=`mktemp` || exit 1; \
+	rpmlint -f rpmlint.config subscription-manager.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
+	! test -s $$TMPFILE
 
-
-stylish: pyflakes whitespacelint pep8 rpmlint
+stylish: pyflakes whitespacelint pep8 gettext_lint rpmlint
 
 jenkins: stylish coverage-jenkins
