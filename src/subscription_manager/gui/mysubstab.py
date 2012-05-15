@@ -213,9 +213,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         stacking_id = order.getStackingId()
 
         if str(order.getVirtOnly()) == "1":
-            virt_only = _("Yes")
+            virt_only = _("Virtual")
         else:
-            virt_only = _("No")
+            virt_only = _("Physical")
 
         if str(order.getProvidesManagement()) == "1":
             management = _("Yes")

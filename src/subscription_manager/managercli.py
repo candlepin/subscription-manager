@@ -71,9 +71,9 @@ STATUS_MAP = {
 CONSUMED_SUBS_LIST = \
     _("Product Name:         \t%-25s") + \
     "\n" + \
-    _("Contract Number:      \t%-25s") + \
+    _("Contract:             \t%-25s") + \
     "\n" + \
-    _("Account Number:       \t%-25s") + \
+    _("Account:              \t%-25s") + \
     "\n" + \
     _("Serial Number:        \t%-25s") + \
     "\n" + \
