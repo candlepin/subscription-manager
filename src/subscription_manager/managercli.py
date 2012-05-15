@@ -315,12 +315,10 @@ class CliCommand(object):
             cfg.save()
 
         if hasattr(self.options, "base_url") and self.options.base_url:
-            print "got a baseurl"
             try:
                 (baseurl_server_hostname,
                  baseurl_server_port,
                  baseurl_server_prefix) = parse_baseurl_info(self.options.base_url)
-                print baseurl_server_hostname, baseurl_server_port, baseurl_server_prefix
             except ServerUrlParseError, e:
                 print _("Error parsing baseurl: %s" % e.msg)
                 sys.exit(-1)

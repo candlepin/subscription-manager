@@ -334,7 +334,7 @@ class RegisterScreen:
                 CFG.set('server', 'hostname', hostname)
                 CFG.set('server', 'port', port)
                 CFG.set('server', 'prefix', prefix)
-            except ServerUrlParseError, e:
+            except ServerUrlParseError:
                 errorWindow(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"), self.registerWin)
                 return
 
