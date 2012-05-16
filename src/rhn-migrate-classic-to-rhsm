@@ -66,7 +66,7 @@ options_table = [
     Option("-n", "--no-auto", action="store_true", default=False, dest='noauto',
            help=_("Don't execute the autosubscribe option while registering with subscription manager.")),
     Option("-s", "--servicelevel", dest="servicelevel",
-           help=_("Service level to subscribe this system to. For no service " +
+           help=_("Service level to subscribe this system to. For no service "
                   "level use --service-level=\"\"")),
 ]
 
@@ -79,11 +79,11 @@ if _RHSMLIBPATH not in sys.path:
     sys.path.append(_RHSMLIBPATH)
 
 try:
-    # try importing from RHEL 5 location
+    # try importing from RHEL 6 location
     from subscription_manager.certlib import ConsumerIdentity, ProductDirectory
     from subscription_manager import repolib, logutil
 except ImportError:
-    # new RHEL 6 location
+    # old RHEL 5 location
     from certlib import ConsumerIdentity, ProductDirectory
     import repolib
     import logutil
@@ -100,6 +100,7 @@ proxyUser = ""
 proxyPass = ""
 
 CONNECTION_FAILURE = _("Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for more details.")
+
 
 class InvalidChoiceError(Exception):
     pass

@@ -17,6 +17,6 @@ class Branding(object):
             _("To learn more about RHN registration and technologies please consult this Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563")
 
         self.GUI_REGISTRATION_HEADER = \
-                _("Please enter your Red Hat Network account information:")
+                _("Please enter your Red Hat account information:")
         self.GUI_FORGOT_LOGIN_TIP = \
                 _("Tip: Forgot your login or password? Look it up at http://red.ht/lost_password")

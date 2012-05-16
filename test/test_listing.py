@@ -65,6 +65,7 @@ listing_multiple_non_int = """
 8
 """
 
+
 class ListingTests(unittest.TestCase):
 
     def setUp(self):
@@ -114,6 +115,7 @@ class TestMultipleReleaseWithComments(TestMultipleReleases):
 
 class TestMultipleReleasesUnsorted(TestMultipleReleases):
     data = listing_multiple_unsorted
+
 
 class TestMultipleNonInt(ListingTests):
     data = listing_multiple_non_int

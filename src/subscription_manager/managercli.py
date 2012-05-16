@@ -35,8 +35,9 @@ _ = gettext.gettext
 
 import rhsm.config
 import rhsm.connection as connection
+from rhsm.version import Versions
 
-from subscription_manager.i18n_optparse import OptionParser
+from subscription_manager.i18n_optparse import OptionParser, WrappedIndentedHelpFormatter
 from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib, ConsumerIdentity
 from subscription_manager.repolib import RepoLib, RepoFile
@@ -168,7 +169,10 @@ class CliCommand(object):
         if shortdesc is not None and description is None:
             description = shortdesc
 
-        self.parser = OptionParser(usage=usage, description=description)
+       # include our own HelpFormatter that doesn't try to break
+       # long words, since that fails on multibyte words
+        self.parser = OptionParser(usage=usage, description=description,
+                                   formatter=WrappedIndentedHelpFormatter())
         self._add_common_options()
 
         self.name = name
@@ -919,7 +923,7 @@ class RegisterCommand(UserPassCommand):
 
         if self.options.autosubscribe:
             if 'serviceLevel' not in consumer and self.options.service_level:
-                systemExit(-1, _("Error: The --servicelevel option is not supported " + \
+                systemExit(-1, _("Error: The --servicelevel option is not supported "
                                  "by the server. Did not perform autosubscribe."))
             autosubscribe(self.cp, consumer['uuid'],
                     service_level=self.options.service_level)
@@ -1080,6 +1084,8 @@ class ReleaseCommand(CliCommand):
         CliCommand.__init__(self, "release", usage, shortdesc, desc, True,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
+        self.parser.add_option("--show", dest="show", action="store_true",
+                               help=_("shows current release setting. default command."))
         self.parser.add_option("--list", dest="list", action="store_true",
                                help=_("list available releases"))
         self.parser.add_option("--set", dest="release", action="store",
@@ -1136,6 +1142,7 @@ class ReleaseCommand(CliCommand):
                     release=self.options.release)
             print _("Release set to: %s") % self.options.release
         elif self.options.list:
+            self._get_consumer_release()
             releases = self.release_backend.get_releases()
             for release in releases:
                 print release
@@ -1294,7 +1301,7 @@ class UnSubscribeCommand(CliCommand):
                     if total is None:
                         print _("This machine has been unsubscribed from all subscriptions.")
                     else:
-                        print _("This machine has been unsubscribed from %s subscriptions" % total)
+                        print _("This machine has been unsubscribed from %s subscriptions" % total['deletedRecords'])
                 else:
                     self.cp.unbindBySerial(consumer, self.options.serial)
                     print _("This machine has been unsubscribed from subscription with serial number %s" % (self.options.serial))
@@ -1317,8 +1324,8 @@ class UnSubscribeCommand(CliCommand):
                     for ent in self.entitlement_dir.list():
                         if str(ent.serialNumber()) == self.options.serial:
                             ent.delete()
-                            print _("This machine has been unsubscribed from subscription " +
-                                       "with serial number %s" % (self.options.serial))
+                            print _("This machine has been unsubscribed from subscription "
+                                    "with serial number %s" % (self.options.serial))
             except Exception, e:
                 handle_exception(_("Unable to perform unsubscribe due to the following exception: %s") % e, e)
 
@@ -1419,8 +1426,8 @@ class ImportCertCommand(CliCommand):
                 except Exception, e:
                     # Should not get here unless something really bad happened.
                     log.exception(e)
-                    print(_("An error occurred while importing the certificate. " +
-                                  "Please check log file for more information."))
+                    print(_("An error occurred while importing the certificate. "
+                            "Please check log file for more information."))
             else:
                 log.error("Supplied certificate file does not exist: %s" % src_cert_file)
                 print(_("%s is not a valid certificate file. Please use a valid certificate.") %
@@ -1446,8 +1453,8 @@ class ReposCommand(CliCommand):
 
     def _validate_options(self):
         if not (self.options.list or self.options.enable or self.options.disable):
-            print _("Error: This command requires that you use a --list option " +
-                     "or specify a repo with --enable or --disable.")
+            print _("Error: This command requires that you use a --list option "
+                    "or specify a repo with --enable or --disable.")
             sys.exit(-1)
 
     def require_connection(self):
@@ -1481,8 +1488,8 @@ class ReposCommand(CliCommand):
                     found = True
                     break
             if not found:
-                print _("Error: A valid repo id is required. " +
-                         "Use --list option to see valid repos.")
+                print _("Error: A valid repo id is required. "
+                        "Use --list option to see valid repos.")
                 sys.exit(-1)
         elif self.options.disable:
             found = False
@@ -1495,8 +1502,8 @@ class ReposCommand(CliCommand):
                     found = True
                     break
             if not found:
-                print _("Error: A valid repo id is required. " +
-                         "Use --list option to see valid repos.")
+                print _("Error: A valid repo id is required. "
+                        "Use --list option to see valid repos.")
                 sys.exit(-1)
         elif self.options.list:
             if len(repos) > 0:
@@ -1644,8 +1651,7 @@ class ListCommand(CliCommand):
         self.parser.add_option("--consumed", action='store_true',
                                help=_("shows the subscriptions being consumed by this system."))
         self.parser.add_option("--servicelevel", dest="service_level",
-                               help=_("if supplied then list shows only subscriptions matching the specified service level. " +
-                                      "Only used with --available and --consumed"))
+                               help=_("if supplied then list shows only subscriptions matching the specified service level. Only used with --available and --consumed"))
         self.parser.add_option("--all", action='store_true',
                                help=_("if supplied with --available then all subscriptions are returned"))
 
@@ -1836,6 +1842,37 @@ class ListCommand(CliCommand):
         return '\n'.join(lines)
 
 
+class VersionCommand(CliCommand):
+
+    def __init__(self, ent_dir=None, prod_dir=None):
+        usage = "usage: %prog version"
+        shortdesc = _("Print version information")
+        desc = shortdesc
+
+        CliCommand.__init__(self, "version", usage, shortdesc, desc,
+                            ent_dir=ent_dir, prod_dir=prod_dir)
+
+    def _add_common_options(self):
+        pass
+
+    def _do_command(self):
+        try:
+            cp_version = self.cp.getStatus()['version']
+        except Exception, e:
+            cp_version = "Unknown"
+            log.error("Unable to communicate with Candlepin")
+            log.exception(e)
+
+        print (_("Candlepin version: %s") % cp_version)
+
+        versions = Versions()
+        print (_("subscription-manager version: %s") % \
+                versions.get_version(Versions.SUBSCRIPTION_MANAGER))
+        print (_("python-rhsm version: %s") % \
+                versions.get_version(Versions.PYTHON_RHSM))
+        self._request_validity_check()
+
+
 # taken wholseale from rho...
 class CLI:
 
@@ -1845,7 +1882,8 @@ class CLI:
         for clazz in [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand, SubscribeCommand,\
                        UnSubscribeCommand, FactsCommand, IdentityCommand, OwnersCommand, \
                        RefreshCommand, CleanCommand, RedeemCommand, ReposCommand, ReleaseCommand, \
-                       EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand]:
+                       EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand, \
+                       VersionCommand]:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":

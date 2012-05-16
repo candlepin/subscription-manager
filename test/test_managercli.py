@@ -130,12 +130,12 @@ class TestEnvironmentsCommand(TestCliProxyCommand):
     command_class = managercli.EnvironmentsCommand
 
     def test_no_library(self):
-        self.cc.cp=StubUEP()
+        self.cc.cp = StubUEP()
         environments = []
-        environments.append({'name' : 'JarJar'})
-        environments.append({'name' : 'Library'})
-        environments.append({'name' : 'library'})
-        environments.append({'name' : 'Binks'})
+        environments.append({'name': 'JarJar'})
+        environments.append({'name': 'Library'})
+        environments.append({'name': 'library'})
+        environments.append({'name': 'Binks'})
         self.cc.cp.setEnvironmentList(environments)
         results = self.cc._get_enviornments("Anikan")
         self.assertTrue(len(results) == 2)
@@ -363,6 +363,7 @@ class TestReleaseCommand(TestCliProxyCommand):
     # def test_no_rhel_product
 
     # def test_invalid_content_url
+
 
 class TestSystemExit(unittest.TestCase):
     def setUp(self):

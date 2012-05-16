@@ -38,7 +38,7 @@ class PreferencesDialog(object):
     changed, the new setting will be saved.
     """
 
-    def __init__(self, backend, consumer):
+    def __init__(self, backend, consumer, parent):
 
         self.backend = backend
         self.consumer = consumer
@@ -47,6 +47,9 @@ class PreferencesDialog(object):
                                                       content_connection=self.backend.content_connection)
 
         self.dialog = GLADE_XML.get_widget('preferences_dialog')
+        self.dialog.set_transient_for(parent)
+        self.dialog.set_modal(True)
+
         self.release_combobox = GLADE_XML.get_widget('release_combobox')
         self.sla_combobox = GLADE_XML.get_widget('sla_combobox')
 
@@ -55,6 +58,9 @@ class PreferencesDialog(object):
             "on_sla_combobox_changed": self._sla_changed,
             "on_release_combobox_changed": self._release_changed,
         })
+
+        # Handle the dialog's delete event when ESC key is pressed.
+        self.dialog.connect("delete-event", self._dialog_deleted)
 
     def load_current_settings(self):
         self.sla_combobox.get_model().clear()
@@ -120,7 +126,7 @@ class PreferencesDialog(object):
             i += 1
 
     def _close_button_clicked(self, widget):
-        self.dialog.hide()
+        self._close_dialog()
 
     def _sla_changed(self, combobox):
         model = combobox.get_model()
@@ -148,3 +154,10 @@ class PreferencesDialog(object):
     def show(self):
         self.load_current_settings()
         self.dialog.show()
+
+    def _close_dialog(self):
+        self.dialog.hide()
+
+    def _dialog_deleted(self, event, data):
+        self._close_dialog()
+        return True

@@ -72,10 +72,9 @@ def writeMigrationFacts(instnumber):
     FACT_FILE = "/etc/rhsm/facts/migration.facts"
     if not os.path.exists(FACT_FILE):
         f = open(FACT_FILE, 'w')
-        json.dump({"migration.migrated_from": "install_number"
-                    , "migration.migration_date": migration_date
-                    , "migration.install_number": instnumber.strip()
-            }, f)
+        json.dump({"migration.migrated_from": "install_number",
+                   "migration.migration_date": migration_date,
+                   "migration.install_number": instnumber.strip()}, f)
         f.close()
 
 

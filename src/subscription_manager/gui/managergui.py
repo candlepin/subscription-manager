@@ -17,6 +17,7 @@
 # in this software or its documentation.
 #
 
+import locale
 import logging
 import subprocess
 import urlparse
@@ -48,6 +49,10 @@ from subscription_manager.gui.importsub import ImportSubDialog
 from subscription_manager.gui.utils import handle_gui_exception, linkify
 from subscription_manager.gui.autobind import AutobindWizard
 from subscription_manager.gui.preferences import PreferencesDialog
+from subscription_manager.gui.about import AboutDialog
+
+import webbrowser
+import urllib
 
 import gettext
 _ = gettext.gettext
@@ -61,6 +66,8 @@ cert_file = ConsumerIdentity.certpath()
 key_file = ConsumerIdentity.keypath()
 
 cfg = config.initConfig()
+
+ONLINE_DOC_URL_TEMPLATE = "http://docs.redhat.com/docs/%s/Red_Hat_Enterprise_Linux/"
 
 
 class Backend(object):
@@ -181,14 +188,14 @@ class MainWindow(widgets.GladeWidget):
     """
     The new RHSM main window.
     """
+
     def __init__(self, backend=None, consumer=None,
                  facts=None, ent_dir=None, prod_dir=None,
                  auto_launch_registration=False):
         super(MainWindow, self).__init__('mainwindow.glade',
               ['main_window', 'notebook', 'system_name_label',
-               'next_update_label', 'next_update_title', 'register_button',
-               'unregister_button',
-               'redeem_button', 'redeem_button_sep', 'help_button'])
+               'next_update_label', 'next_update_title', 'register_menu_item',
+               'unregister_menu_item', 'redeem_menu_item'])
 
         self.backend = backend or Backend()
         self.consumer = consumer or Consumer()
@@ -204,7 +211,8 @@ class MainWindow(widgets.GladeWidget):
                 self.consumer, self.facts,
                 callbacks=[self.registration_changed])
 
-        self.preferences_dialog = PreferencesDialog(self.backend, self.consumer)
+        self.preferences_dialog = PreferencesDialog(self.backend, self.consumer,
+                                                    self._get_window())
 
         self.import_sub_dialog = ImportSubDialog()
 
@@ -241,15 +249,17 @@ class MainWindow(widgets.GladeWidget):
                 gtk.Label(self.my_subs_tab.get_label()))
 
         self.glade.signal_autoconnect({
-            "on_register_button_clicked": self._register_button_clicked,
-            "on_unregister_button_clicked": self._unregister_button_clicked,
-            "on_add_sub_button_clicked": self._add_sub_button_clicked,
-            "on_view_facts_button_clicked": self._facts_button_clicked,
-            "on_proxy_config_button_clicked":
-                self._network_config_button_clicked,
-            "on_redeem_button_clicked": self._redeem_button_clicked,
-            "on_help_button_clicked": self._help_button_clicked,
-            "on_preferences_button_clicked": self._preferences_button_clicked,
+            "on_register_menu_item_activate": self._register_item_clicked,
+            "on_unregister_menu_item_activate": self._unregister_item_clicked,
+            "on_import_cert_menu_item_activate": self._import_cert_item_clicked,
+            "on_view_facts_menu_item_activate": self._facts_item_clicked,
+            "on_proxy_config_menu_item_activate": self._proxy_config_item_clicked,
+            "on_redeem_menu_item_activate": self._redeem_item_clicked,
+            "on_preferences_menu_item_activate": self._preferences_item_clicked,
+            "on_about_menu_item_activate": self._about_item_clicked,
+            "on_getting_started_menu_item_activate": self._getting_started_item_clicked,
+            "on_online_docs_menu_item_activate": self._online_docs_item_clicked,
+            "on_quit_menu_item_activate": gtk.main_quit,
         })
 
         def on_identity_change(filemonitor):
@@ -265,14 +275,14 @@ class MainWindow(widgets.GladeWidget):
         self._check_rhn_classic()
 
         if auto_launch_registration and not self.registered():
-            self._register_button_clicked(None)
+            self._register_item_clicked(None)
 
     def registered(self):
         return ConsumerIdentity.existsAndValid()
 
     def _on_sla_back_button_press(self):
         self._perform_unregister()
-        self._register_button_clicked(None)
+        self._register_item_clicked(None)
 
     def _on_sla_cancel_button_press(self):
         self._perform_unregister()
@@ -331,11 +341,11 @@ class MainWindow(widgets.GladeWidget):
         Renders the Tools buttons dynamically.
         """
         if self.registered():
-            self.register_button.hide()
-            self.unregister_button.show()
+            self.register_menu_item.hide()
+            self.unregister_menu_item.show()
         else:
-            self.register_button.show()
-            self.unregister_button.hide()
+            self.register_menu_item.show()
+            self.unregister_menu_item.hide()
 
     def _show_redemption_buttons(self):
         # Check if consumer can redeem a subscription - if an identity cert exists
@@ -349,17 +359,15 @@ class MainWindow(widgets.GladeWidget):
                 can_redeem = False
 
         if can_redeem:
-            self.redeem_button.show()
-            self.redeem_button_sep.show()
+            self.redeem_menu_item.show()
         else:
-            self.redeem_button.hide()
-            self.redeem_button_sep.hide()
+            self.redeem_menu_item.hide()
 
-    def _register_button_clicked(self, widget):
+    def _register_item_clicked(self, widget):
         self.registration_dialog.set_parent_window(self._get_window())
         self.registration_dialog.show()
 
-    def _preferences_button_clicked(self, widget):
+    def _preferences_item_clicked(self, widget):
         try:
             self.preferences_dialog.show()
         except Exception, e:
@@ -387,21 +395,21 @@ class MainWindow(widgets.GladeWidget):
         self.all_subs_tab.clear_pools()
         self.refresh()
 
-    def _unregister_button_clicked(self, widget):
+    def _unregister_item_clicked(self, widget):
         log.info("Unregister button pressed, asking for confirmation.")
         prompt = messageWindow.YesNoDialog(constants.CONFIRM_UNREGISTER,
                 self._get_window())
         prompt.connect('response', self._on_unregister_prompt_response)
 
-    def _network_config_button_clicked(self, widget):
+    def _proxy_config_item_clicked(self, widget):
         self.network_config_dialog.set_parent_window(self._get_window())
         self.network_config_dialog.show()
 
-    def _facts_button_clicked(self, widget):
+    def _facts_item_clicked(self, widget):
         self.system_facts_dialog.set_parent_window(self._get_window())
         self.system_facts_dialog.show()
 
-    def _add_sub_button_clicked(self, widget):
+    def _import_cert_item_clicked(self, widget):
         self.import_sub_dialog.set_parent_window(self._get_window())
         self.import_sub_dialog.show()
 
@@ -414,11 +422,11 @@ class MainWindow(widgets.GladeWidget):
         except Exception, e:
             handle_gui_exception(e, _("Error in autobind wizard"), self._get_window())
 
-    def _redeem_button_clicked(self, widget):
+    def _redeem_item_clicked(self, widget):
         self.redeem_dialog.set_parent_window(self._get_window())
         self.redeem_dialog.show()
 
-    def _help_button_clicked(self, widget):
+    def _getting_started_item_clicked(self, widget):
         try:
             # unfortunately, gtk.show_uri does not work in RHEL 5
             subprocess.call(["gnome-open", "ghelp:subscription-manager"])
@@ -426,6 +434,16 @@ class MainWindow(widgets.GladeWidget):
             # if we can't open it, it's probably because the user didn't
             # install the docs, or yelp. no need to bother them.
             log.warn("Unable to open help documentation: %s", e)
+
+    def _about_item_clicked(self, widget):
+        about = AboutDialog(self._get_window())
+        about.show()
+
+    def _online_docs_item_clicked(self, widget):
+        webbrowser.open_new(self._get_online_doc_url())
+
+    def _quit_item_clicked(self):
+        self.hide()
 
     def _config_changed(self, widget):
         # update the backend's UEP in case we changed proxy
@@ -444,3 +462,12 @@ class MainWindow(widgets.GladeWidget):
     def _on_rhn_classic_response(self, dialog, response):
         if not response:
             self.main_window.hide()
+
+    def _get_online_doc_url(self):
+        lang, encoding = locale.getdefaultlocale()
+        url = ONLINE_DOC_URL_TEMPLATE % (lang.replace("_", "-"))
+        data = urllib.urlopen(url)
+        # Use the default if there is no translation.
+        if data.getcode() != 200:
+            url = ONLINE_DOC_URL_TEMPLATE % ("en-US")
+        return url

@@ -15,6 +15,7 @@
 import unittest
 from subscription_manager.gui.storage import MappedTreeStore, MappedListStore
 
+
 class StorageTests(unittest.TestCase):
 
     def test_mapped_list_store(self):

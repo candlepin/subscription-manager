@@ -62,7 +62,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.details_box.pack_start(details)
 
         # Set up columns on the view
-        self.add_text_column(_("Subscription"), 'subscription', True)
+        column = self.add_text_column(_("Subscription"), 'subscription', True)
+        cols = []
+        cols.append((column, 'text', 'subscription'))
 
         progress_renderer = gtk.CellRendererProgress()
         products_column = gtk.TreeViewColumn(_("Installed Products"),
@@ -74,13 +76,17 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         products_column.set_cell_data_func(progress_renderer, self._update_progress_renderer)
         self.top_view.append_column(products_column)
 
-        self.add_date_column(_("End Date"), 'expiration_date')
+        column = self.add_date_column(_("End Date"), 'expiration_date')
+        cols.append((column, 'date', 'expiration_date'))
 
         # Disable row striping on the tree view as we are overriding the behavior
         # to display stacking groups as one color.
         self.top_view.set_rules_hint(False)
 
-        self.add_text_column(_("Quantity"), 'quantity')
+        column = self.add_text_column(_("Quantity"), 'quantity')
+        cols.append((column, 'text', 'quantity'))
+
+        self.set_sorts(cols)
 
         self.top_view.connect("row_activated",
                               widgets.expand_collapse_on_row_activated_callback)

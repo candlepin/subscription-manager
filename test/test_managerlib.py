@@ -526,11 +526,11 @@ class TestImportFileExtractor(unittest.TestCase):
 
     def test_contains_key_content_when_key_and_cert_exists_in_import_file(self):
         extractor = ExtractorStub(EXPECTED_CONTENT)
-        self.assertTrue(extractor.contains_key_content());
+        self.assertTrue(extractor.contains_key_content())
 
     def test_does_not_contain_key_when_key_does_not_exist_in_import_file(self):
         extractor = ExtractorStub(EXPECTED_CERT_CONTENT)
-        self.assertFalse(extractor.contains_key_content());
+        self.assertFalse(extractor.contains_key_content())
 
     def test_get_key_content_when_key_exists(self):
         extractor = ExtractorStub(EXPECTED_CONTENT, file_path="12345.pem")

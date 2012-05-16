@@ -21,6 +21,7 @@ from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui.widgets import MachineTypeColumn, MultiEntitlementColumn, \
                                              QuantitySelectionColumn, SubDetailsWidget
 
+
 class TestSubDetailsWidget(unittest.TestCase):
 
     def setUp(self):
@@ -32,7 +33,7 @@ class TestSubDetailsWidget(unittest.TestCase):
     def testVirtOnly(self):
         d = datetime(2011, 4, 16, tzinfo=LocalTz())
         start_date = datetime(d.year, d.month, d.day, tzinfo=LocalTz())
-        end_date = datetime(d.year+1, d.month, d.day, tzinfo=LocalTz())
+        end_date = datetime(d.year + 1, d.month, d.day, tzinfo=LocalTz())
         details = SubDetailsWidget(show_contract=True)
         details.show('noname', contract='c', start=start_date, end=end_date, account='a',
                      management='m', support_level='s_l', stacking_id='s_i',
@@ -44,7 +45,7 @@ class TestSubDetailsWidget(unittest.TestCase):
     def testNoneForStacking(self):
         d = datetime(2011, 4, 16, tzinfo=LocalTz())
         start_date = datetime(d.year, d.month, d.day, tzinfo=LocalTz())
-        end_date = datetime(d.year+1, d.month, d.day, tzinfo=LocalTz())
+        end_date = datetime(d.year + 1, d.month, d.day, tzinfo=LocalTz())
         details = SubDetailsWidget(show_contract=True)
         details.show('noname', contract='c', start=start_date, end=end_date, account='a',
                      management='m', support_level='s_l', stacking_id=None,
@@ -52,6 +53,7 @@ class TestSubDetailsWidget(unittest.TestCase):
         s_iter = details.stacking_id_text.get_buffer().get_start_iter()
         e_iter = details.stacking_id_text.get_buffer().get_end_iter()
         self.assertEquals(details.stacking_id_text.get_buffer().get_text(s_iter, e_iter), 'None')
+
 
 class BaseColumnTest(unittest.TestCase):
 
@@ -62,6 +64,7 @@ class BaseColumnTest(unittest.TestCase):
         column = column_class(0)
         column._render_cell(None, column.renderer, model, model.get_iter_first())
         self.assertEquals(expected_text, column.renderer.get_property("text"))
+
 
 class TestMachineTypeColumn(BaseColumnTest):
 
@@ -83,6 +86,7 @@ class TestMultiEntitlementColumn(BaseColumnTest):
     def test_render_empty_string_when_not_multi_entitled(self):
         self._assert_column_value(MultiEntitlementColumn, False,
                                   MultiEntitlementColumn.NOT_MULTI_ENTITLEMENT_STRING)
+
 
 class TestQuantitySelectionColumnTests(unittest.TestCase):
 
@@ -164,6 +168,7 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
         editable.set_property("adjustment", adjustment)
 
         self.stopped = False
+
         def ensure_stopped(name):
             self.stopped = True
 

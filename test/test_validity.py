@@ -24,6 +24,7 @@ from subscription_manager.validity import find_first_invalid_date, \
 from rhsm.certificate import GMT
 from subscription_manager.cert_sorter import CertSorter, SUBSCRIBED, PARTIALLY_SUBSCRIBED
 
+
 class FindFirstInvalidDateTests(unittest.TestCase):
 
     # No product certs installed, but we manually got entitlements:
@@ -111,7 +112,7 @@ class FindFirstInvalidDateTests(unittest.TestCase):
                 end_date=datetime(2001, 1, 1, tzinfo=GMT()))
         cert2 = StubEntitlementCertificate(
                 StubProduct('product1'),
-                start_date=datetime(2000, 12, 1,tzinfo=GMT()),
+                start_date=datetime(2000, 12, 1, tzinfo=GMT()),
                 end_date=datetime(2005, 1, 1, tzinfo=GMT()))
         ent_dir = StubCertificateDirectory([cert1, cert2])
 
@@ -186,8 +187,8 @@ class ValidProductDateRangeCalculatorTests(unittest.TestCase):
         self.assertEquals(expected_end_date.replace(tzinfo=GMT()), prod_range.end())
 
     def test_multiple_entitlements_overlap(self):
-        expected_start =  self.NOW - self.ONE_MONTH
-        expected_end =  self.NOW + self.YEAR
+        expected_start = self.NOW - self.ONE_MONTH
+        expected_end = self.NOW + self.YEAR
         installed = create_prod_cert(self.INST_PID_1)
 
         ent1 = self._create_entitlement(self.INST_PID_1, expected_start,
@@ -202,8 +203,8 @@ class ValidProductDateRangeCalculatorTests(unittest.TestCase):
         self.assertEquals(expected_end.replace(tzinfo=GMT()), prod_range.end())
 
     def test_multiple_entitlements_one_consumes_other(self):
-        expected_start =  self.NOW - self.THREE_MONTHS
-        expected_end =  self.NOW + self.YEAR
+        expected_start = self.NOW - self.THREE_MONTHS
+        expected_end = self.NOW + self.YEAR
         installed = create_prod_cert(self.INST_PID_1)
 
         ent1 = self._create_entitlement(self.INST_PID_1, self.NOW - self.ONE_MONTH,
@@ -218,8 +219,8 @@ class ValidProductDateRangeCalculatorTests(unittest.TestCase):
         self.assertEquals(expected_end.replace(tzinfo=GMT()), prod_range.end())
 
     def test_multiple_entitlements_future_overlap(self):
-        expected_start =  self.NOW - self.TEN_DAYS
-        expected_end =  self.NOW + self.YEAR
+        expected_start = self.NOW - self.TEN_DAYS
+        expected_end = self.NOW + self.YEAR
         installed = create_prod_cert(self.INST_PID_1)
 
         ent1 = self._create_entitlement(self.INST_PID_1, self.NOW + self.ONE_MONTH,
@@ -235,8 +236,8 @@ class ValidProductDateRangeCalculatorTests(unittest.TestCase):
         self.assertEquals(expected_end.replace(tzinfo=GMT()), prod_range.end())
 
     def test_multiple_entitlements_expired_with_overlap(self):
-        expected_start =  self.NOW - self.YEAR
-        expected_end =  self.NOW + self.YEAR
+        expected_start = self.NOW - self.YEAR
+        expected_end = self.NOW + self.YEAR
         installed = create_prod_cert(self.INST_PID_1)
 
         ent1 = self._create_entitlement(self.INST_PID_1, self.NOW - self.THREE_MONTHS,
@@ -263,8 +264,8 @@ class ValidProductDateRangeCalculatorTests(unittest.TestCase):
         self.assertEquals(None, prod_range)
 
     def test_only_expired_entitlement_returns_none(self):
-        expected_start =  self.NOW - self.YEAR
-        expected_end =  self.NOW - self.ONE_MONTH
+        expected_start = self.NOW - self.YEAR
+        expected_end = self.NOW - self.ONE_MONTH
         installed = create_prod_cert(self.INST_PID_1)
         ent = self._create_entitlement(self.INST_PID_1, expected_start, expected_end)
 
@@ -275,7 +276,7 @@ class ValidProductDateRangeCalculatorTests(unittest.TestCase):
 
     # Start testing calculations when stacking is involved.
     def test_partial_has_no_date_range_calculated(self):
-        installed = create_prod_cert(self.INST_PID_1);
+        installed = create_prod_cert(self.INST_PID_1)
         start = self.NOW
         end = self.NOW + self.YEAR
 
@@ -290,7 +291,7 @@ class ValidProductDateRangeCalculatorTests(unittest.TestCase):
         self.assertEquals(None, valid_range)
 
     def test_end_date_set_to_first_date_of_non_compliance_when_stacked(self):
-        installed = create_prod_cert(self.INST_PID_1);
+        installed = create_prod_cert(self.INST_PID_1)
         start1 = self.NOW - self.THREE_MONTHS
         end1 = self.NOW + self.THREE_MONTHS
 
@@ -317,7 +318,6 @@ class ValidProductDateRangeCalculatorTests(unittest.TestCase):
                                          start_date=start4, end_date=end4)
         ents = [partial_ent_1, partial_ent_2, partial_ent_3, partial_ent_4]
 
-
         sorter = create_cert_sorter([installed], ents, machine_sockets=4)
         self.assertEqual(SUBSCRIBED, sorter.get_status(self.INST_PID_1))
 
@@ -337,7 +337,7 @@ class ValidProductDateRangeCalculatorTests(unittest.TestCase):
         start3 = start2 + self.ONE_MONTH
         end3 = start3 + self.THREE_MONTHS
 
-        installed = create_prod_cert(self.INST_PID_1);
+        installed = create_prod_cert(self.INST_PID_1)
         ent1 = self._create_entitlement(self.INST_PID_1, start1, end1)
         partial_ent_1 = stub_ent_cert(self.INST_PID_2, [self.INST_PID_1], quantity=1,
                                       stack_id=self.STACK_1, sockets=2,
@@ -366,7 +366,7 @@ class ValidProductDateRangeCalculatorTests(unittest.TestCase):
         start3 = start2 + self.ONE_MONTH
         end3 = start3 + self.THREE_MONTHS
 
-        installed = create_prod_cert(self.INST_PID_1);
+        installed = create_prod_cert(self.INST_PID_1)
         ent1 = self._create_entitlement(self.INST_PID_1, start1, end1)
         partial_ent_1 = stub_ent_cert(self.INST_PID_2, [self.INST_PID_1], quantity=1,
                                       stack_id=self.STACK_1, sockets=2,
@@ -392,8 +392,8 @@ class ValidProductDateRangeCalculatorTests(unittest.TestCase):
         sorter = create_cert_sorter([installed], [ent1, ent2])
         calculator = ValidProductDateRangeCalculator(sorter)
         self.assertEquals(0, calculator._compare_by_start_date(ent1, ent1))
-        self.assertTrue(calculator._compare_by_start_date(ent1, ent2) < 0) # starts before
-        self.assertTrue(calculator._compare_by_start_date(ent2, ent1) > 0) # starts after
+        self.assertTrue(calculator._compare_by_start_date(ent1, ent2) < 0)  # starts before
+        self.assertTrue(calculator._compare_by_start_date(ent2, ent1) > 0)  # starts after
 
     def test_get_range_grouping_overlapping_today(self):
 
@@ -509,14 +509,17 @@ class ValidProductDateRangeCalculatorTests(unittest.TestCase):
         prod_range = calculator.calculate(self.INST_PID_1)
         self.assertTrue(prod_range is None)
 
+
 def create_cert_sorter(product_certs, entitlement_certs, machine_sockets=8):
     stub_facts = StubFacts(fact_dict={"cpu.cpu_socket(s)": machine_sockets})
     return CertSorter(StubCertificateDirectory(product_certs),
                       StubEntitlementDirectory(entitlement_certs),
                       stub_facts.get_facts())
 
+
 def create_prod_cert(pid):
     return StubProductCertificate(StubProduct(pid))
+
 
 def stub_ent_cert(parent_pid, provided_pids=[], quantity=1,
         stack_id=None, sockets=1, start_date=None, end_date=None):

@@ -11,8 +11,6 @@
 
 import os
 import logging
-import string
-import traceback
 
 from logging import Formatter
 from logging.handlers import RotatingFileHandler

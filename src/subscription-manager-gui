@@ -75,7 +75,7 @@ try:
     from subscription_manager.i18n import configure_i18n
     configure_i18n(with_glade=True)
 
-    from subscription_manager.gui import managergui, messageWindow
+    from subscription_manager.gui import managergui
     from subscription_manager import logutil
     from subscription_manager.i18n_optparse import OptionParser
 except ImportError, e:

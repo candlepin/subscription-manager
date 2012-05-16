@@ -9,7 +9,10 @@ CODE_DIR = ${PREFIX}/${INSTALL_DIR}/${INSTALL_MODULE}/${PKGNAME}
 VERSION = $(shell echo `grep ^Version: $(PKGNAME).spec | awk '{ print $$2 }'`)
 OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
 OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
-
+BIN_FILES = src/subscription-manager src/subscription-manager-gui \
+			src/rhn-migrate-classic-to-rhsm \
+			src/install-num-migrate-to-rhsm
+STYLETESTS ?=
 
 #this is the compat area for firstboot versions. If it's 6-compat, set to 6.
 SRC_DIR = src/subscription_manager
@@ -25,6 +28,19 @@ bin:
 	mkdir bin
 
 RHSMCERTD_FLAGS=`pkg-config --cflags --libs glib-2.0`
+
+PYFILES=`find  src/ -name "*.py"`
+TESTFILES=`find test/ -name "*.py"`
+STYLEFILES=$(PYFILES) $(BIN_FILES)
+
+# note, set STYLETEST to something if you want
+# make stylish to check the tests code
+# as well
+
+ifdef STYLETESTS
+STYLEFILES+=$(TESTFILES)
+endif
+
 
 rhsmcertd: src/rhsmcertd.c bin
 	${CC} ${CFLAGS} ${RHSMCERTD_FLAGS} src/rhsmcertd.c -o bin/rhsmcertd
@@ -190,6 +206,9 @@ check:
 coverage:
 	nosetests --with-cover --cover-package subscription_manager --cover-erase
 
+coverage-xunit:
+	nosetests --with-xunit --with-cover --cover-package subscription_manager --cover-erase
+
 coverage-html: coverage
 	coverage html --include "${SRC_DIR}/*"
 
@@ -199,8 +218,15 @@ coverage-html-old:
 coverage-xml: coverage
 	coverage xml --include "${SRC_DIR}/*"
 
+coverage-jenkins: coverage-xunit
+	coverage html --include "${SRC_DIR}/*"
+	coverage xml --include "${SRC_DIR}/*"
+
 clean:
 	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
+
+checkcommits:
+	scripts/checkcommits.sh
 
 archive: clean
 	@rm -rf ${PKGNAME}-%{VERSION}.tar.gz
@@ -272,23 +298,38 @@ gen-test-long-po:
 	-@ scripts/gen_test_en_po.py --long po/en_US.po
 
 pyflakes:
+# pyflakes doesn't have a config file, cli options, or a ignore tag
+# and the variants of "redefination" we get now aren't really valid
+# and other tools detect the valid cases, so ignore these
+#
 	-@TMPFILE=`mktemp` || exit 1; \
-	find -name \*.py | xargs pyflakes | tee $$TMPFILE; \
+	pyflakes $(STYLEFILES) |  grep -v "redefinition of unused.*from line.*" | tee $$TMPFILE; \
 	! test -s $$TMPFILE
-	exit 0
+
 
 tablint:
-	-@! find -name \*py | GREP_COLOR='7;31' xargs grep --color -nP "^\W*\t"
+	@! GREP_COLOR='7;31' grep --color -nP "^\W*\t" $(STYLEFILES)
 
 trailinglint:
-	-@! find -name \*py | GREP_COLOR='7;31' xargs grep --color -nP "[ \t]$$"
+	@! GREP_COLOR='7;31'  grep --color -nP "[ \t]$$" $(STYLEFILES)
 
 whitespacelint: tablint trailinglint
 
-pep8:
+gettext_lint:
 	-@TMPFILE=`mktemp` || exit 1; \
-	pep8 --ignore E501 --exclude ".#*" --repeat src | tee $$TMPFILE; \
+	pcregrep -n --color=auto -M  "_\(.*[\'|\"].*[\'|\"]\s*\+\s*[\"|\'].*[\"|\'].*\)" $(STYLEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
+pep8:
+	-@TMPFILE=`mktemp` || exit 1; \
+	pep8 --ignore E501 --exclude ".#*" --repeat src $(STYLEFILES) | tee $$TMPFILE; \
+	! test -s $$TMPFILE
 
-stylish: pyflakes whitespacelint pep8
+rpmlint:
+	-@TMPFILE=`mktemp` || exit 1; \
+	rpmlint -f rpmlint.config subscription-manager.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
+	! test -s $$TMPFILE
+
+stylish: pyflakes whitespacelint pep8 gettext_lint rpmlint
+
+jenkins: stylish coverage-jenkins

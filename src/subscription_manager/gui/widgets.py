@@ -127,6 +127,31 @@ class SubscriptionManagerTab(GladeWidget):
                              self.store['background'])
 
         self.top_view.append_column(column)
+        return column
+
+    def set_sorts(self, columns):
+        # columns is a list of tuples where the tuple is in the format
+        # (column object, column type, column key)
+        for index, column_data in enumerate(columns):
+            column_data[0].set_sort_column_id(index)
+            sort_func = getattr(self, 'sort_' + column_data[1])
+            self.store.set_sort_func(index, sort_func, column_data[2])
+
+    def sort_text(self, model, row1, row2, key):
+        # model is a MappedListStore which maps column names to
+        # column indexes.  The column name is passed in through 'key'.
+        str1 = model.get_value(row1, model[key])
+        str2 = model.get_value(row2, model[key])
+        return cmp(str1, str2)
+
+    def sort_date(self, model, row1, row2, key):
+        date1 = model.get_value(row1, model[key]) \
+            or datetime.date(datetime.MINYEAR, 1, 1)
+        date2 = model.get_value(row2, model[key]) \
+            or datetime.date(datetime.MINYEAR, 1, 1)
+        epoch1 = time.mktime(date1.timetuple())
+        epoch2 = time.mktime(date2.timetuple())
+        return cmp(epoch1, epoch2)
 
     def get_content(self):
         return self.content

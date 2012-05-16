@@ -132,7 +132,7 @@ _subscription-manager_release()
 {
     # we could autocomplete the release version for
     # --set
-    local opts="--list --set
+    local opts="--list --set --show
                   ${_subscription_manager_common_opts}"
     COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }

@@ -143,4 +143,3 @@ class HandleGuiExceptionTests(unittest.TestCase):
         utils.handle_gui_exception(FakeException(msg="bieber"),
                                    self.formatted_msg, None,
                                    logMsg=self.formatted_msg)
-

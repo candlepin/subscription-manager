@@ -99,6 +99,7 @@ class TestQuantityDefaultValueCalculator(unittest.TestCase):
         calculator = QuantityDefaultValueCalculator(StubFacts({}), entitlements)
         self.assertEquals(9, calculator._get_total_consumed(product_id_2))
 
+
 class TestDefaultQuantityCalculationOnPhysicalMachine(unittest.TestCase):
 
     def test_on_pysical_machine_default_to_num_sockets_by_socket_count(self):
@@ -295,14 +296,18 @@ class TestValidQuantity(unittest.TestCase):
     def test_string_quantity_not_valid(self):
         self.assertFalse(valid_quantity("12dfg2"))
 
+
 def zero_consumed(product_id):
     return 0
+
 
 def ten_consumed(product_id):
     return 10
 
+
 def two_consumed(product_id):
     return 2
+
 
 def create_attr(name, value):
     return {"name": name, "value": value}

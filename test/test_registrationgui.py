@@ -14,7 +14,7 @@ class RegisterScreenTests(unittest.TestCase):
                           'fact2': 'two',
                           'system': '',
                           'system.uuid': 'MOCKUUID'}
-        self.facts = StubFacts(fact_dict = expected_facts)
+        self.facts = StubFacts(fact_dict=expected_facts)
 
         self.rs = RegisterScreen(self.backend, self.consumer, self.facts)
 

@@ -76,15 +76,27 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         column.add_attribute(text_renderer, 'text', self.store['product'])
         column.add_attribute(text_renderer, 'cell-background',
                              self.store['background'])
-
         self.top_view.append_column(column)
+        cols = []
+        cols.append((column, 'text', 'product'))
 
-        self.add_text_column(_('Version'), 'version')
-        arch_col = self.add_text_column(_('Arch'), 'arch')
-        arch_col.set_alignment(0.5)
-        self.add_text_column(_('Status'), 'status')
-        self.add_date_column(_('Start Date'), 'start_date')
-        self.add_date_column(_('End Date'), 'expiration_date')
+        column = self.add_text_column(_('Version'), 'version')
+        cols.append((column, 'text', 'version'))
+
+        column = self.add_text_column(_('Arch'), 'arch')
+        column.set_alignment(0.5)
+        cols.append((column, 'text', 'arch'))
+
+        column = self.add_text_column(_('Status'), 'status')
+        cols.append((column, 'text', 'status'))
+
+        column = self.add_date_column(_('Start Date'), 'start_date')
+        cols.append((column, 'date', 'start_date'))
+
+        column = self.add_date_column(_('End Date'), 'expiration_date')
+        cols.append((column, 'date', 'expiration_date'))
+
+        self.set_sorts(cols)
 
         self.glade.signal_autoconnect({
             "on_update_certificates_button_clicked":
