@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.1
+Version: 1.0.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -27,7 +27,7 @@ Requires:  python-simplejson
 Requires:  python-iniparse
 Requires:  PyXML
 Requires:  virt-what
-Requires:  python-rhsm >= 0.99.5
+Requires:  python-rhsm >= 1.0.1
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 
@@ -300,6 +300,57 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed May 16 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 1.0.2-1
+- Updating strings from zanata (mstead@redhat.com)
+- Add new server setup GUI screen. (dgoodwin@redhat.com)
+- Add new server setup CLI options. (alikins@redhat.com)
+- 813296: Remove check for candlepin_version (jbowes@redhat.com)
+- Allow importing multiple subscriptions at once (jbowes@redhat.com)
+- 820170: Subscription Manager release --list should display "not supported"
+  message for older candlepin. (wpoteat@redhat.com)
+- 817938: Make columns in subscription-manager tables sortable.
+  (awood@redhat.com)
+- 812153: Release command should have a --show command which is the default.
+  (wpoteat@redhat.com)
+- 820080: Fix "Configuration" spelling on firstboot page (alikins@redhat.com)
+- Set the parent window for the about dialog (mstead@redhat.com)
+- removing a sentence from the manpage about working on RHEL 5.8 and later,
+  bz820765 (deon@deonlackey.com)
+- 821024: Properly handle ESC on preferences dialog (mstead@redhat.com)
+- Replaced toolbar with menubar. (mstead@redhat.com)
+- 820040,820037,820030: don't break multibyte help blurbs (alikins@redhat.com)
+- 817036: Add a version command to subscription-manager. (awood@redhat.com)
+- The unbindAll command now returns JSON. (awood@redhat.com)
+- Explain the conditional imports more accurately. (alikins@redhat.com)
+- Print different message when subscribing to no service level.
+  (awood@redhat.com)
+- remove deprecated use of "md5" module (alikins@redhat.com)
+- Enable and disable available repos on client machine from Subscription
+  Manager CLI (wpoteat@redhat.com)
+- 790939: Add SLA to rhn-migrate-classic-to-rhsm. (awood@redhat.com)
+- 812388: Show the number of entitlements unsubscribed from. (awood@redhat.com)
+- 818298: release --list should not display rhel-5 when only rhel-6 product is
+  installed (wpoteat@redhat.com)
+- 810236: Update facts after registering with --consumerid.
+  (dgoodwin@redhat.com)
+- 818461: invalid date format error when using or_IN.UTF-8 (cduryee@redhat.com)
+- Store date of migration in migration facts for rhn-migrate-classic-to-rhsm.
+  (awood@redhat.com)
+- Unify our el5 and el6 firstboot modules (jbowes@redhat.com)
+- add a gconf setting for users who do not want to use the icon
+  (cduryee@redhat.com)
+- do not use the gui by default when migrating (cduryee@redhat.com)
+- Allow service level change for consumer via CLI independent of other calls.
+  (wpoteat@redhat.com)
+- 815479: Incorrect owner should be relayed on service level list call.
+  (wpoteat@redhat.com)
+- 817390: add completion support for servicelevel (alikins@redhat.com)
+- 817117: fix completion of environment command (alikins@redhat.com)
+- 816377: handle cert migration data being missing (alikins@redhat.com)
+- Store date of migration and installation number in migration facts.
+  (awood@redhat.com)
+- Fixing registration error when loading SlaWizard (mstead@redhat.com)
+
 * Thu Apr 26 2012 Michael Stead <mstead@redhat.com> 1.0.1-1
 - latest strings from zanata (alikins@redhat.com)
 - add test cases for autobind.py (alikins@redhat.com)
