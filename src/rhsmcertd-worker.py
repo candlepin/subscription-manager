@@ -47,7 +47,7 @@ def main(options, log):
         print _('done')
     except connection.GoneException, ge:
         uuid = ConsumerIdentity.read().getConsumerId()
-        if ge.candlepin_version is not None and ge.deleted_id == uuid:
+        if ge.deleted_id == uuid:
             log.critical(_("This consumer's profile has been deleted from the server. It's local certificates will now be archived"))
             managerlib.clean_all_data()
             log.critical(_("Certificates archived to '/etc/pki/consumer.old'. Contact your system administrator if you need more information."))
