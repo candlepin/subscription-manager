@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 0.99.17
+Version: 0.99.18
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -304,6 +304,28 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed May 16 2012 Michael Stead <mstead@redhat.com> 0.99.18-1
+- 813296: Remove check for candlepin_version (jbowes@redhat.com)
+- latest strings from zanata (alikins@redhat.com)
+- 820743: fix multiline string that was not extracted (alikins@redhat.com)
+- 820080: Fix "Configuration" spelling on firstboot page (alikins@redhat.com)
+- 820671: Fix issues finding translated strings from glade (alikins@redhat.com)
+- 820765 removing reference to migration being supported on rhel 5.8 and later
+  (deon@deonlackey.com)
+- 821024: Properly handle ESC on preferences dialog (mstead@redhat.com)
+- 820639: Don't show unenabled content as an available release
+  (alikins@redhat.com)
+- 820743: fix some merge errors from fix for 820743 (alikins@redhat.com)
+- 820743: some multiline strings extracted into string catalog incorrectly
+  (alikins@redhat.com)
+- 820080: Fix "Configuration" spelling on firstboot page (alikins@redhat.com)
+- 820027: Fix unlocalized string blurb for "list --servicelevels"
+  (alikins@redhat.com)
+- 820042: update translations from zanata (alikins@redhat.com)
+- 819808: Fix untranslated string "No service levels..." (alikins@redhat.com)
+- 820040,820037,820030: don't break multibyte help blurbs (alikins@redhat.com)
+- 819828: Add translated strings for missing translations (alikins@redhat.com)
+
 * Tue May 08 2012 Michael Stead <mstead@redhat.com> 0.99.17-1
 - latest strings from zanata (alikins@redhat.com)
 - 810236: Update facts after registering with --consumerid.
