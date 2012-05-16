@@ -341,7 +341,7 @@ class RegisterScreen:
                         (hostname, port, prefix)))
                     return
 
-            except ServerUrlParseError, e:
+            except ServerUrlParseError:
                 errorWindow(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"), self.registerWin)
                 return
 
@@ -355,8 +355,6 @@ class RegisterScreen:
             self._offline_selected()
         else:
             self._show_credentials_page()
-
-
 
     def _offline_selected(self):
         self.close_window()

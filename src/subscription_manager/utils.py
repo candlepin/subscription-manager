@@ -208,7 +208,7 @@ def is_valid_server_info(hostname, port, prefix):
     # Proxy info should already be in config file and used by default:
     try:
         conn = UEPConnection(host=hostname, ssl_port=int(port), handler=prefix)
-        status = conn.ping()
+        conn.ping()
         return True
     except RestlibException, e:
         # If we're getting Unauthorized that's a good indication this is a
