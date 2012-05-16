@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.0.0
+Version: 1.0.1
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,13 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed May 16 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 1.0.1-1
+- Add default constants for RHN connections. (dgoodwin@redhat.com)
+- 813296: Remove check for candlepin_version (jbowes@redhat.com)
+- Remove module scope eval of config properties (alikins@redhat.com)
+- Add call to get Candlepin status. (awood@redhat.com)
+- Added access to python-rhsm/sub-man versions. (mstead@redhat.com)
+
 * Thu Apr 26 2012 Michael Stead <mstead@redhat.com> 1.0.0-1
 - Updated version due to 6.3 branching. (mstead@redhat.com)
 
