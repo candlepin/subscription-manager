@@ -91,4 +91,3 @@ REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
 CONFIRM_UNREGISTER = _("<b>Are you sure you want to unregister?</b>")
 
 NO_ORG_ERROR = _("<b>User %s is not able to register with any orgs.</b>")
-

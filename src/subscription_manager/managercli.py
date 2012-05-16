@@ -348,8 +348,6 @@ class CliCommand(object):
                                                       baseurl_server_prefix))
             cfg.save()
 
-
-
         # support foo.example.com:3128 format
         if hasattr(self.options, "proxy_url") and self.options.proxy_url:
             parts = remove_scheme(self.options.proxy_url).split(':')

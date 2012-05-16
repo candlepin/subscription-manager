@@ -14,14 +14,13 @@
 #
 
 import gettext
-import os
 import logging
 import gtk
 
 _ = gettext.gettext
 
 from subscription_manager.managerlib import ImportFileExtractor
-from subscription_manager.gui import widgets, messageWindow
+from subscription_manager.gui import messageWindow
 from subscription_manager.gui.utils import errorWindow
 
 log = logging.getLogger('rhsm-app.' + __name__)
