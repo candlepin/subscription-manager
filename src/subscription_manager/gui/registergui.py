@@ -320,14 +320,14 @@ class RegisterScreen:
 
     def _server_selected(self):
         if self.rhn_radio.get_active():
-            CFG.set('server', 'hostname', constants.DEFAULT_HOSTNAME)
-            CFG.set('server', 'port', constants.DEFAULT_PORT)
-            CFG.set('server', 'prefix', constants.DEFAULT_PREFIX)
+            CFG.set('server', 'hostname', config.DEFAULT_HOSTNAME)
+            CFG.set('server', 'port', config.DEFAULT_PORT)
+            CFG.set('server', 'prefix', config.DEFAULT_PREFIX)
         elif self.offline_radio.get_active():
             # We'll signal the user set offline by setting an empty hostname:
             CFG.set('server', 'hostname', '')
-            CFG.set('server', 'port', constants.DEFAULT_PORT)
-            CFG.set('server', 'prefix', constants.DEFAULT_PREFIX)
+            CFG.set('server', 'port', config.DEFAULT_PORT)
+            CFG.set('server', 'prefix', config.DEFAULT_PREFIX)
         elif self.local_radio.get_active():
             local_server = self.local_entry.get_text()
             try:
@@ -458,7 +458,7 @@ class RegisterScreen:
         current_hostname = CFG.get('server', 'hostname')
         current_port = CFG.get('server', 'port')
         current_prefix = CFG.get('server', 'prefix')
-        if current_hostname == constants.DEFAULT_HOSTNAME:
+        if current_hostname == config.DEFAULT_HOSTNAME:
             self.rhn_radio.set_active(True)
         elif current_hostname == "":
             self.offline_radio.set_active(True)

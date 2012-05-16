@@ -4,7 +4,7 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
     parse_baseurl_info, format_baseurl, ServerUrlParseErrorEmpty, \
     ServerUrlParseErrorNone, ServerUrlParseErrorPort, ServerUrlParseErrorScheme, \
     ServerUrlParseErrorSchemeNoDoubleSlash, ServerUrlParseErrorJustScheme
-from subscription_manager.constants import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
+from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 
 

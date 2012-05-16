@@ -92,12 +92,3 @@ CONFIRM_UNREGISTER = _("<b>Are you sure you want to unregister?</b>")
 
 NO_ORG_ERROR = _("<b>User %s is not able to register with any orgs.</b>")
 
-# Defaults for connecting to RHN, used to "reset" the configuration file
-# if requested by the user:
-DEFAULT_HOSTNAME = "subscription.rhn.redhat.com"
-DEFAULT_PORT = "443"
-DEFAULT_PREFIX = "/subscription"
-
-DEFAULT_CDN_HOSTNAME = "cdn.redhat.com"
-DEFAULT_CDN_PORT = "443"
-DEFAULT_CDN_PREFIX = "/"
