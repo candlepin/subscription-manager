@@ -22,6 +22,16 @@ DEFAULT_CONFIG_DIR = "/etc/rhsm"
 DEFAULT_CONFIG_PATH = "%s/rhsm.conf" % DEFAULT_CONFIG_DIR
 DEFAULT_PROXY_PORT = "3128"
 
+# Defaults for connecting to RHN, used to "reset" the configuration file
+# if requested by the user:
+DEFAULT_HOSTNAME = "subscription.rhn.redhat.com"
+DEFAULT_PORT = "443"
+DEFAULT_PREFIX = "/subscription"
+
+DEFAULT_CDN_HOSTNAME = "cdn.redhat.com"
+DEFAULT_CDN_PORT = "443"
+DEFAULT_CDN_PREFIX = "/"
+
 # Defaults are applied to each section in the config file.
 DEFAULTS = {
                 'hostname': 'localhost',
