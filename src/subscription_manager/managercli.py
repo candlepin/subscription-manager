@@ -51,7 +51,8 @@ from subscription_manager.release import ReleaseBackend
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
-from subscription_manager.utils import remove_scheme
+from subscription_manager.utils import remove_scheme, parse_server_info, \
+        ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
@@ -177,6 +178,8 @@ class CliCommand(object):
         self.name = name
         self.primary = primary
 
+        self.server_url = None
+
         self.proxy_url = None
         self.proxy_hostname = None
         self.proxy_port = None
@@ -207,6 +210,10 @@ class CliCommand(object):
     def _add_common_options(self):
         """ Add options that apply to all sub-commands. """
 
+        self.parser.add_option("--serverurl", dest="server_url",
+                               default=None, help=_("server url in the form of https://hostname:443/prefix"))
+        self.parser.add_option("--baseurl;", dest="base_url",
+                              default=None, help=_("base url for content in form of https://hostname:443/prefix"))
         self.parser.add_option("--proxy", dest="proxy_url",
                                default=None, help=_("proxy url in the form of proxy_hostname:proxy_port"))
         self.parser.add_option("--proxyuser", dest="proxy_user",
@@ -225,6 +232,59 @@ class CliCommand(object):
     def require_connection(self):
         return True
 
+    # split this basic auth? just
+    # to make it more clear?
+    #
+    #  getConsumerUEP/getAdminUEP?
+    #
+    def _get_UEP(self,
+                host=None,
+                ssl_port=None,
+                handler=None,
+                cert_file=None,
+                key_file=None,
+                proxy_hostname_arg=None,
+                proxy_port_arg=None,
+                proxy_user_arg=None,
+                proxy_password_arg=None,
+                username=None,
+                password=None):
+
+        # populate with config setttings if not specified
+        server_hostname = host or cfg.get('server', 'hostname')
+        server_port = ssl_port or cfg.get('server', 'port')
+        if server_port:
+            server_port = connection.safe_int(server_port)
+        server_prefix = handler or cfg.get('server', 'prefix')
+
+        # Note: username/password have no defaults, other than
+        # None
+
+        # touch ugly, but removes some duplicate args all over the place,
+        # also let's us override cfg values from the cli
+        proxy_hostname = proxy_hostname_arg or self.proxy_hostname or remove_scheme(cfg.get('server', 'proxy_hostname'))
+
+        proxy_port = proxy_port_arg or self.proxy_port or cfg.get('server', 'proxy_port')
+
+        proxy_user = proxy_user_arg or self.proxy_user or cfg.get('server', 'proxy_user')
+
+        proxy_password = proxy_password_arg or cfg.get('server', 'proxy_password')
+
+        # pass in all args, to make sure we don't rely on connections
+        # defautls pulled from config at class inst time
+        #FIXME: fix that in python-rhsm/connection
+        cp = connection.UEPConnection(host=server_hostname,
+                                      ssl_port=server_port,
+                                      handler=server_prefix,
+                                      cert_file=cert_file, key_file=key_file,
+                                      proxy_hostname=proxy_hostname,
+                                      proxy_port=proxy_port,
+                                      proxy_user=proxy_user,
+                                      proxy_password=proxy_password,
+                                      username=username,
+                                      password=password)
+        return cp
+
     def main(self, args=None):
 
         # In testing we sometimes specify args, otherwise use the default:
@@ -241,10 +301,54 @@ class CliCommand(object):
                 print _("cannot parse argument: %s") % arg
             sys.exit(-1)
 
+        # set proxy before we try to connect to server
         self.proxy_hostname = remove_scheme(cfg.get('server', 'proxy_hostname'))
         self.proxy_port = cfg.get('server', 'proxy_port')
         self.proxy_user = cfg.get('server', 'proxy_user')
         self.proxy_password = cfg.get('server', 'proxy_password')
+
+        if hasattr(self.options, "server_url") and self.options.server_url:
+            try:
+                (self.server_hostname,
+                 self.server_port,
+                 self.server_prefix) = parse_server_info(self.options.server_url)
+            except ServerUrlParseError, e:
+                print _("Error parsing serverurl: %s" % e.msg)
+                sys.exit(-1)
+
+            # this trys to actually connect to the server and ping it
+            if not is_valid_server_info(self.server_hostname,
+                                        self.server_port,
+                                        self.server_prefix):
+                print _("Unable to reach the server at %s:%s%s" %
+                        (self.server_hostname,
+                         self.server_port,
+                         self.server_prefix))
+                sys.exit(-1)
+
+            cfg.set("server", "hostname", self.server_hostname)
+            cfg.set("server", "port", self.server_port)
+            cfg.set("server", "prefix", self.server_prefix)
+
+            # seems like cfg.save() could raise any wide variety of
+            # exceptions
+            cfg.save()
+
+        if hasattr(self.options, "base_url") and self.options.base_url:
+            try:
+                (baseurl_server_hostname,
+                 baseurl_server_port,
+                 baseurl_server_prefix) = parse_baseurl_info(self.options.base_url)
+            except ServerUrlParseError, e:
+                print _("Error parsing baseurl: %s" % e.msg)
+                sys.exit(-1)
+
+            cfg.set("rhsm", "baseurl", format_baseurl(baseurl_server_hostname,
+                                                      baseurl_server_port,
+                                                      baseurl_server_prefix))
+            cfg.save()
+
+
 
         # support foo.example.com:3128 format
         if hasattr(self.options, "proxy_url") and self.options.proxy_url:
@@ -267,11 +371,12 @@ class CliCommand(object):
         key_file = ConsumerIdentity.keypath()
 
         if self.require_connection():
-            self.cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
-                                               proxy_hostname=self.proxy_hostname,
-                                               proxy_port=self.proxy_port,
-                                               proxy_user=self.proxy_user,
-                                               proxy_password=self.proxy_password)
+            # make sure we pass in the new server info, otherwise we
+            # we use the defaults from connection module init
+            # we've set self.proxy* here, so we'll use them if they
+            # are set
+            self.cp = self._get_UEP(cert_file=cert_file,
+                                    key_file=key_file)
 
             self.certlib = CertLib(uep=self.cp)
         else:
@@ -432,12 +537,9 @@ class IdentityCommand(UserPassCommand):
                 print _('org id: %s') % ownerid
             else:
                 if self.options.force:
-                    self.cp = connection.UEPConnection(username=self.username,
-                                                       password=self.password,
-                                                       proxy_hostname=self.proxy_hostname,
-                                                       proxy_port=self.proxy_port,
-                                                       proxy_user=self.proxy_user,
-                                                       proxy_password=self.proxy_password)
+                    # get an UEP with basic auth
+                    self.cp = self._get_UEP(username=self.username,
+                                            password=self.password)
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
                 print _("Identity certificate has been regenerated.")
@@ -465,12 +567,9 @@ class OwnersCommand(UserPassCommand):
     def _do_command(self):
 
         try:
-            self.cp = connection.UEPConnection(username=self.username,
-                                               password=self.password,
-                                               proxy_hostname=self.proxy_hostname,
-                                               proxy_port=self.proxy_port,
-                                               proxy_user=self.proxy_user,
-                                               proxy_password=self.proxy_password)
+            # get a UEP
+            self.cp = self._get_UEP(username=self.username,
+                                    password=self.password)
             owners = self.cp.getOwnerList(self.username)
             log.info("Successfully retrieved org list from Entitlement Platform.")
             if len(owners):
@@ -524,12 +623,9 @@ class EnvironmentsCommand(UserPassCommand):
     def _do_command(self):
         self._validate_options()
         try:
-            self.cp = connection.UEPConnection(username=self.username,
-                                               password=self.password,
-                                               proxy_hostname=self.proxy_hostname,
-                                               proxy_port=self.proxy_port,
-                                               proxy_user=self.proxy_user,
-                                               proxy_password=self.proxy_password)
+
+            self.cp = self._get_UEP(username=self.username,
+                                    password=self.password)
             if self.cp.supports_resource('environments'):
                 environments = self._get_enviornments(self.options.org)
 
@@ -599,22 +695,15 @@ class ServiceLevelCommand(UserPassCommand):
             # we'll use the identity certificate. We already know one or the other
             # exists:
             if self.options.username and self.options.password:
-                self.cp = connection.UEPConnection(username=self.username,
-                        password=self.password,
-                        proxy_hostname=self.proxy_hostname,
-                        proxy_port=self.proxy_port,
-                        proxy_user=self.proxy_user,
-                        proxy_password=self.proxy_password)
+                self.cp = self._get_UEP(username=self.username,
+                                        password=self.password)
             else:
                 cert_file = ConsumerIdentity.certpath()
                 key_file = ConsumerIdentity.keypath()
 
-                self.cp = connection.UEPConnection(cert_file=cert_file,
-                        key_file=key_file,
-                        proxy_hostname=self.proxy_hostname,
-                        proxy_port=self.proxy_port,
-                        proxy_user=self.proxy_user,
-                        proxy_password=self.proxy_password)
+                # get an UEP as consumer
+                self.cp = self._get_UEP(cert_file=cert_file,
+                                        key_file=key_file)
 
             if self.options.service_level is not None:
                 self.set_service_level(self.options.service_level)
@@ -775,18 +864,10 @@ class RegisterCommand(UserPassCommand):
         # Proceed with new registration:
         try:
             if not self.options.activation_keys:
-                admin_cp = connection.UEPConnection(username=self.username,
-                                        password=self.password,
-                                        proxy_hostname=self.proxy_hostname,
-                                        proxy_port=self.proxy_port,
-                                        proxy_user=self.proxy_user,
-                                        proxy_password=self.proxy_password)
-
+                admin_cp = self._get_UEP(username=self.username,
+                                         password=self.password)
             else:
-                admin_cp = connection.UEPConnection(proxy_hostname=self.proxy_hostname,
-                                    proxy_port=self.proxy_port,
-                                    proxy_user=self.proxy_user,
-                                    proxy_password=self.proxy_password)
+                admin_cp = self._get_UEP()
 
             if self.options.consumerid:
                 #TODO remove the username/password
@@ -818,11 +899,9 @@ class RegisterCommand(UserPassCommand):
 
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
-        self.cp = connection.UEPConnection(cert_file=cert_file, key_file=key_file,
-                                           proxy_hostname=self.proxy_hostname,
-                                           proxy_port=self.proxy_port,
-                                           proxy_user=self.proxy_user,
-                                           proxy_password=self.proxy_password)
+
+        # get a new UEP as the consumer
+        self.cp = self._get_UEP(cert_file=cert_file, key_file=key_file)
 
         # Must update facts to clear out the old ones:
         if self.options.consumerid:
@@ -1022,6 +1101,8 @@ class ReleaseCommand(CliCommand):
         parsed_url = urlparse.urlparse(cdn_url)
 
         self.cc = connection.ContentConnection(host=parsed_url[1],
+                                               #FIXME: should be using the parsed value
+                                               # we can use utils.parse_server_info
                                                ssl_port=443,
                                                proxy_hostname=self.proxy_hostname,
                                                proxy_port=self.proxy_port,

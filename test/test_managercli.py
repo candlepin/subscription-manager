@@ -100,6 +100,10 @@ class TestCliProxyCommand(TestCliCommand):
         self.cc.main(["--proxypassword", proxy_password])
         self.assertEquals(proxy_password, self.cc.proxy_password)
 
+class TestCliCommandServerurl(TestCliCommand):
+    def test_main_server_url(self):
+        server_url = "https://subscription.rhn.redhat.com/subscription"
+        self.cc.main(["--serverurl", server_url])
 
 class TestCleanCommand(TestCliCommand):
     command_class = managercli.CleanCommand

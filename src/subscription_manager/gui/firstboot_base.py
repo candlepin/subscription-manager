@@ -20,6 +20,10 @@ from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.i18n import configure_i18n
 configure_i18n(with_glade=True)
 
+# Number of total RHSM firstboot screens, used to skip past to whatever's
+# next in a couple places.
+NUM_RHSM_SCREENS = 4
+
 try:
     _version = "el6"
     from firstboot.constants import RESULT_SUCCESS, RESULT_FAILURE, RESULT_JUMP
@@ -94,3 +98,29 @@ class RhsmFirstbootModule(ParentClass):
 
     def passInParent(self, parent):
         self.parent = parent
+
+    def _skip_remaining_screens(self, interface):
+        """
+        Find the first non-rhsm module after the rhsm modules, and move to it.
+
+        Assumes that only our modules are grouped together, and there are four
+        of them.
+        """
+
+        if self._is_compat:
+            # must be el5, need to use self.parent to get the moduleList
+            interface = self.parent
+
+        i = 0
+        while not interface.moduleList[i].__module__.startswith('rhsm_'):
+            i += 1
+
+        i += NUM_RHSM_SCREENS
+
+        # el5 compat. depends on this being called from apply,
+        # interface = self.parent
+        # and apply returning true
+        if self._is_compat:
+            self.parent.nextPage = i
+        else:
+            interface.moveToPage(pageNum=i)

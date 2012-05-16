@@ -555,7 +555,7 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
         self._clear_buttons()
         group = None
         # reverse iterate the list as that will most likely put 'None' last.
-        # then pack_start so we don't end up with radio buttons at xhte bottom
+        # then pack_start so we don't end up with radio buttons at the bottom
         # of the screen.
         for sla in reversed(sla_data_map.keys()):
             radio = gtk.RadioButton(group=group, label=sla)

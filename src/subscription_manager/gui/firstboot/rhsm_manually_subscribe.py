@@ -38,7 +38,7 @@ class moduleClass(RhsmFirstbootModule):
 
     def apply(self, interface, testing=False):
         # Clicking Next always proceeds to the next screen.
-        self._skip_sla_screens(interface)
+        self._skip_remaining_screens(interface)
         return self._RESULT_JUMP
 
     def createScreen(self):
@@ -47,32 +47,6 @@ class moduleClass(RhsmFirstbootModule):
 
     def initializeUI(self):
         self.vbox.show_all()
-
-    def _skip_sla_screens(self, interface):
-        """
-        Find the first non rhsm module after the rhsm modules, and move to it.
-
-        Assumes that only our modules are grouped together, and that we have
-        4.
-        """
-
-        if self._is_compat:
-            # must be el5, need to use self.parent to get the moduleList
-            interface = self.parent
-
-        i = 0
-        while not interface.moduleList[i].__module__.startswith('rhsm_'):
-            i += 1
-
-        i += 4
-
-        # el5 compat. depends on this being called from apply,
-        # interface = self.parent
-        # and apply returning true
-        if self._is_compat:
-            self.parent.nextPage = i
-        else:
-            interface.moveToPage(pageNum=i)
 
 
 # for el5

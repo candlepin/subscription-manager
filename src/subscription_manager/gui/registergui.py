@@ -29,6 +29,10 @@ from subscription_manager import constants
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
+from subscription_manager.utils import parse_server_info, ServerUrlParseError,\
+        is_valid_server_info
+from subscription_manager.gui import networkConfig
+from subscription_manager.gui.importsub import ImportSubDialog
 
 from subscription_manager.gui.utils import handle_gui_exception, errorWindow, \
     GladeWrapper
@@ -51,7 +55,7 @@ LIBRARY_ENV_NAME = "library"
 cert_file = ConsumerIdentity.certpath()
 key_file = ConsumerIdentity.keypath()
 
-cfg = config.initConfig()
+CFG = config.initConfig()
 
 import threading
 import Queue
@@ -62,6 +66,7 @@ CREDENTIALS_PAGE = 0
 PROGRESS_PAGE = 1
 OWNER_SELECT_PAGE = 2
 ENVIRONMENT_SELECT_PAGE = 3
+CHOOSE_SERVER_PAGE = 4
 
 
 registration_xml = GladeWrapper(os.path.join(prefix,
@@ -86,6 +91,11 @@ class RegisterScreen:
 
         dic = {"on_register_cancel_button_clicked": self.cancel,
                "on_register_button_clicked": self.on_register_button_clicked,
+               "on_proxy_config_button_clicked": self._on_proxy_config_button_clicked,
+               "on_import_certs_button_clicked": self._on_import_certs_button_clicked,
+               "on_rhn_radio_toggled": self._server_radio_toggled,
+               "on_local_radio_toggled": self._server_radio_toggled,
+               "on_offline_radio_toggled": self._server_radio_toggled,
             }
 
         registration_xml.signal_autoconnect(dic)
@@ -130,12 +140,40 @@ class RegisterScreen:
         register_header_label.set_label("<b>%s</b>" % \
                 get_branding().GUI_REGISTRATION_HEADER)
 
+        self.rhn_radio = registration_xml.get_widget("rhn_radio")
+        self.local_radio = registration_xml.get_widget("local_radio")
+        self.offline_radio = registration_xml.get_widget("offline_radio")
+
+        self.local_entry = registration_xml.get_widget("local_entry")
+        self.import_certs_button = registration_xml.get_widget(
+                "import_certs_button")
+
+        self.proxy_label = registration_xml.get_widget("proxy_label")
+        self.proxy_config_button = registration_xml.get_widget(
+                "proxy_config_button")
+
+        self.network_config_dialog = networkConfig.NetworkConfigDialog()
+        self.import_certs_dialog = ImportSubDialog()
+
     def show(self):
         # Ensure that we start on the first page and that
         # all widgets are cleared.
-        self.register_notebook.set_page(CREDENTIALS_PAGE)
+        self._show_choose_server_page()
+
         self._clear_registration_widgets()
         self.registerWin.present()
+
+    def _show_choose_server_page(self):
+        # Override the button text to clarify we're not actually registering
+        # by pressing that button here.
+        self.register_button.set_label(_("Next"))
+        self.register_notebook.set_page(CHOOSE_SERVER_PAGE)
+
+    def _show_credentials_page(self):
+        # Set the button text back after we changed it when showing the
+        # choose server screen.
+        self.register_button.set_label(_("Register"))
+        self.register_notebook.set_page(CREDENTIALS_PAGE)
 
     def delete_event(self, event, data=None):
         return self.close_window()
@@ -152,7 +190,18 @@ class RegisterScreen:
     def on_register_button_clicked(self, button):
         self.register()
 
+    def _on_proxy_config_button_clicked(self, button):
+        self.network_config_dialog.set_parent_window(self.registerWin)
+        self.network_config_dialog.show()
+
+    def _on_import_certs_button_clicked(self, button):
+        self.import_certs_dialog.set_parent_window(self.registerWin)
+        self.import_certs_dialog.show()
+
     def register(self, testing=None):
+        if self.register_notebook.get_current_page() == CHOOSE_SERVER_PAGE:
+            self._server_selected()
+            return True
         if self.register_notebook.get_current_page() == OWNER_SELECT_PAGE:
             # we're on the owner select page
             self._owner_selected()
@@ -266,6 +315,52 @@ class RegisterScreen:
 
         self.async.get_environment_list(self.owner_key, self._on_get_environment_list_cb)
 
+    def _server_radio_toggled(self, widget):
+        self.local_entry.set_sensitive(self.local_radio.get_active())
+
+    def _server_selected(self):
+        if self.rhn_radio.get_active():
+            CFG.set('server', 'hostname', config.DEFAULT_HOSTNAME)
+            CFG.set('server', 'port', config.DEFAULT_PORT)
+            CFG.set('server', 'prefix', config.DEFAULT_PREFIX)
+        elif self.offline_radio.get_active():
+            # We'll signal the user set offline by setting an empty hostname:
+            CFG.set('server', 'hostname', '')
+            CFG.set('server', 'port', config.DEFAULT_PORT)
+            CFG.set('server', 'prefix', config.DEFAULT_PREFIX)
+        elif self.local_radio.get_active():
+            local_server = self.local_entry.get_text()
+            try:
+                (hostname, port, prefix) = parse_server_info(local_server)
+                CFG.set('server', 'hostname', hostname)
+                CFG.set('server', 'port', port)
+                CFG.set('server', 'prefix', prefix)
+
+                if not is_valid_server_info(hostname, port, prefix):
+                    errorWindow(_("Unable to reach the server at %s:%s%s" %
+                        (hostname, port, prefix)))
+                    return
+
+            except ServerUrlParseError, e:
+                errorWindow(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"), self.registerWin)
+                return
+
+        log.info("Writing server data to rhsm.conf")
+        CFG.save()
+        self.backend.update()
+
+        if self.offline_radio.get_active():
+            # Because the user selected offline, the whole registration process
+            # must end here.
+            self._offline_selected()
+        else:
+            self._show_credentials_page()
+
+
+
+    def _offline_selected(self):
+        self.close_window()
+
     def _environment_selected(self):
         self.cancel_button.set_sensitive(False)
         self.register_button.set_sensitive(False)
@@ -356,9 +451,21 @@ class RegisterScreen:
         self.consumer_name.set_text("")
         self.initializeConsumerName()
         self.skip_auto_bind.set_active(False)
+        self.local_entry.set_text("")
 
-    def _show_credentials_page(self):
-        self.register_notebook.set_page(CREDENTIALS_PAGE)
+        # We need to determine the current state of the server info in
+        # the config file so we can pre-select the correct options:
+        current_hostname = CFG.get('server', 'hostname')
+        current_port = CFG.get('server', 'port')
+        current_prefix = CFG.get('server', 'prefix')
+        if current_hostname == config.DEFAULT_HOSTNAME:
+            self.rhn_radio.set_active(True)
+        elif current_hostname == "":
+            self.offline_radio.set_active(True)
+        else:
+            self.local_radio.set_active(True)
+            self.local_entry.set_text("%s:%s%s" % (current_hostname,
+                current_port, current_prefix))
 
 
 class AsyncBackend(object):
