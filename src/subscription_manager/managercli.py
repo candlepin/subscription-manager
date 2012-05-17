@@ -723,22 +723,22 @@ class ServiceLevelCommand(UserPassCommand):
         consumer_uuid = ConsumerIdentity.read().getConsumerId()
         consumer = self.cp.getConsumer(consumer_uuid)
         if 'serviceLevel' not in consumer:
-            systemExit(-1, _("Error: The service-level command is not supported " + \
-            "by the server."))
+            systemExit(-1, _("Error: The service-level command is not supported "
+                             "by the server."))
         self.cp.updateConsumer(consumer_uuid, service_level=service_level)
 
     def show_service_level(self):
         consumer_uuid = ConsumerIdentity.read().getConsumerId()
         consumer = self.cp.getConsumer(consumer_uuid)
         if 'serviceLevel' not in consumer:
-            systemExit(-1, _("Error: The service-level command is not supported by " + \
+            systemExit(-1, _("Error: The service-level command is not supported by "
                              "the server."))
         service_level = consumer['serviceLevel'] or ""
         print(_("Current service level: %s") % service_level)
 
     def list_service_levels(self):
-        not_supported = _("Error: The service-level command is not supported by " + \
-                           "the server.")
+        not_supported = _("Error: The service-level command is not supported by "
+                          "the server.")
 
         org_key = self.options.org
         if not org_key:
