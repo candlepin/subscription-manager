@@ -86,9 +86,9 @@ CONSUMED_SUBS_LIST = \
     "\n" + \
     _("Service Type :        \t%-25s") + \
     "\n" + \
-    _("Begins:               \t%-25s") + \
+    _("Starts:               \t%-25s") + \
     "\n" + \
-    _("Expires:              \t%-25s") + \
+    _("Ends:                 \t%-25s") + \
     "\n"
 
 
