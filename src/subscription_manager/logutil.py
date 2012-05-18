@@ -25,11 +25,11 @@ def _get_handler():
             os.mkdir("/var/log/rhsm")
     except:
         pass
-    fmt = '%(asctime)s [%(levelname)s]  @%(filename)s:%(lineno)d - %(message)s'
+    fmt = u'%(asctime)s [%(levelname)s]  @%(filename)s:%(lineno)d - %(message)s'
 
     # Try to write to /var/log, fallback on console logging:
     try:
-        handler = RotatingFileHandler(path, maxBytes=0x100000, backupCount=5)
+        handler = RotatingFileHandler(path, maxBytes=0x100000, backupCount=5, encoding='utf-8')
     except IOError:
         handler = logging.StreamHandler()
     except:
