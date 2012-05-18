@@ -545,7 +545,7 @@ class IdentityCommand(UserPassCommand):
                 log.info("Successfully generated a new identity from Entitlement Platform.")
         except connection.RestlibException, re:
             log.exception(re)
-            log.error("Error: Unable to generate a new identity for the system: %s" % re)
+            log.error(u"Error: Unable to generate a new identity for the system: %s" % re)
             systemExit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Error: Unable to generate a new identity for the system"), e)
@@ -584,7 +584,7 @@ class OwnersCommand(UserPassCommand):
 
         except connection.RestlibException, re:
             log.exception(re)
-            log.error("Error: Unable to retrieve org list from Entitlement Platform: %s" % re)
+            log.error(u"Error: Unable to retrieve org list from Entitlement Platform: %s" % re)
             systemExit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Error: Unable to retrieve org list from Entitlement Platform"), e)
@@ -642,7 +642,7 @@ class EnvironmentsCommand(UserPassCommand):
             log.info("Successfully retrieved environment list from Entitlement Platform.")
         except connection.RestlibException, re:
             log.exception(re)
-            log.error("Error: Unable to retrieve environment list from Entitlement Platform: %s" % re)
+            log.error(u"Error: Unable to retrieve environment list from Entitlement Platform: %s" % re)
             systemExit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Error: Unable to retrieve environment list from Entitlement Platform"), e)
@@ -714,7 +714,7 @@ class ServiceLevelCommand(UserPassCommand):
 
         except connection.RestlibException, re:
             log.exception(re)
-            log.error("Error: Unable to retrieve service levels: %s" % re)
+            log.error(u"Error: Unable to retrieve service levels: %s" % re)
             systemExit(-1, re.msg)
         except Exception, e:
             handle_exception(_("Error: Unable to retrieve service levels."), e)
