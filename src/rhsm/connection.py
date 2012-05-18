@@ -174,7 +174,7 @@ class ContentConnection(object):
                                             password=self.proxy_password,
                                             ssl_context=context)
             # this connection class wants the full url
-            self.handler = "https://%s:%s%s" % (self.host, self.ssl_port, handler)
+            handler = "https://%s:%s%s" % (self.host, self.ssl_port, handler)
         else:
             conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
 
