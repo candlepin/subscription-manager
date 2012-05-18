@@ -64,6 +64,9 @@ class BadCertificateException(ConnectionException):
         """ Pass the full path to the bad certificate. """
         self.cert_path = cert_path
 
+    def __str__(self):
+        return "Bad certificate at %s" % self.cert_path
+
 
 class RestlibException(ConnectionException):
 
