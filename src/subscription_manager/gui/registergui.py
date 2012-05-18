@@ -30,7 +30,7 @@ from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager.utils import parse_server_info, ServerUrlParseError,\
-        is_valid_server_info
+        is_valid_server_info, MissingCaCertException
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui.importsub import ImportSubDialog
 
@@ -336,9 +336,13 @@ class RegisterScreen:
                 CFG.set('server', 'port', port)
                 CFG.set('server', 'prefix', prefix)
 
-                if not is_valid_server_info(hostname, port, prefix):
-                    errorWindow(_("Unable to reach the server at %s:%s%s" %
-                        (hostname, port, prefix)))
+                try:
+                    if not is_valid_server_info(hostname, port, prefix):
+                        errorWindow(_("Unable to reach the server at %s:%s%s" %
+                            (hostname, port, prefix)))
+                        return
+                except MissingCaCertException:
+                    errorWindow(_("CA certificate for subscription service has not been installed."))
                     return
 
             except ServerUrlParseError:

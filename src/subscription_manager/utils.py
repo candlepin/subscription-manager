@@ -26,6 +26,7 @@ _ = lambda x: gettext.ldgettext("rhsm", x)
 gettext.textdomain("rhsm")
 
 from rhsm.connection import UEPConnection, RestlibException
+from M2Crypto.SSL import SSLError
 
 
 def remove_scheme(uri):
@@ -197,13 +198,20 @@ def parse_url(local_server_entry,
     return (hostname, port, prefix)
 
 
+class MissingCaCertException(Exception):
+    pass
+
+
 # TODO: make sure this works with --proxy cli options
 def is_valid_server_info(hostname, port, prefix):
     """
     Check if we can communicate with a subscription service at the given
     location.
 
-    Returns true or false, exceptions should not be handled internally.
+    Returns true or false.
+
+    May throw a MissingCaCertException if the CA certificate has not been
+    imported yet, which may be relevant to the caller.
     """
     # Proxy info should already be in config file and used by default:
     try:
@@ -218,6 +226,10 @@ def is_valid_server_info(hostname, port, prefix):
         else:
             log.exception(e)
             return False
+    except SSLError, e:
+        # Indicates a missing CA certificate, which callers may need to
+        # notify the user of:
+        raise MissingCaCertException(e)
     except Exception, e:
         log.exception(e)
         return False
