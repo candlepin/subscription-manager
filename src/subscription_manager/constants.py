@@ -35,7 +35,7 @@ installed_product_status = \
     "\n" + \
     _("Starts:               \t%-25s") + \
     "\n" + \
-    _("Expires:              \t%-25s") + \
+    _("Ends:                 \t%-25s") + \
     "\n"
 
 available_subs_list = \
@@ -49,11 +49,11 @@ available_subs_list = \
     "\n" + \
     _("Service Level:        \t%-25s") + \
     "\n" + \
-    _("Service Type:        \t%-25s") + \
+    _("Service Type:         \t%-25s") + \
     "\n" + \
     _("Multi-Entitlement:    \t%-25s") + \
     "\n" + \
-    _("Expires:              \t%-25s") + \
+    _("Ends:                 \t%-25s") + \
     "\n" + \
     _("Machine Type:         \t%-25s") + \
     "\n"
