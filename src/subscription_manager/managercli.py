@@ -52,7 +52,8 @@ from subscription_manager.certdirectory import EntitlementDirectory, ProductDire
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 from subscription_manager.utils import remove_scheme, parse_server_info, \
-        ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info
+        ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
+        MissingCaCertException
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
@@ -317,13 +318,17 @@ class CliCommand(object):
                 sys.exit(-1)
 
             # this trys to actually connect to the server and ping it
-            if not is_valid_server_info(self.server_hostname,
-                                        self.server_port,
-                                        self.server_prefix):
-                print _("Unable to reach the server at %s:%s%s" %
-                        (self.server_hostname,
-                         self.server_port,
-                         self.server_prefix))
+            try:
+                if not is_valid_server_info(self.server_hostname,
+                                            self.server_port,
+                                            self.server_prefix):
+                    print _("Unable to reach the server at %s:%s%s" %
+                            (self.server_hostname,
+                             self.server_port,
+                             self.server_prefix))
+                    sys.exit(-1)
+            except MissingCaCertException:
+                print _("Error: CA certificate for subscription service has not been installed.")
                 sys.exit(-1)
 
             cfg.set("server", "hostname", self.server_hostname)
