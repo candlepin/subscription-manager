@@ -176,7 +176,7 @@ class ContentConnection(object):
             # this connection class wants the full url
             handler = "https://%s:%s%s" % (self.host, self.ssl_port, handler)
         else:
-            conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
+            conn = httpslib.HTTPSConnection(self.host, safe_int(self.ssl_port), ssl_context=context)
 
         conn.request("GET", handler, body="", headers={"Host": "%s:%s" % (self.host, self.ssl_port), "Content-Length": "0"} )
         response = conn.getresponse()
