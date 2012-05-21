@@ -291,7 +291,12 @@ zanata-pull:
 	cd po && zanata po pull --srcdir  ..
 
 zanata-push:
-	cd po && zanata po push --srcdir .
+	cd po
+	if [ -z $(shell find -name "*.pot" | grep -v keys.pot) ] ; then \
+		zanata po push --srcdir . ; \
+	else 	\
+		echo "po/ has more than one *.pot file, please clean up" ; \
+	fi
 
 # generate a en_US.po with long strings for testing
 gen-test-long-po:
