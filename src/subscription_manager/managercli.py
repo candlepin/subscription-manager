@@ -1001,8 +1001,14 @@ class ReleaseCommand(CliCommand):
         cdn_url = cfg.get('rhsm', 'baseurl')
         parsed_url = urlparse.urlparse(cdn_url)
 
-        self.cc = connection.ContentConnection(host=parsed_url[1],
-                                               ssl_port=443,
+        # default to 443 if urlprase can't interpret the port
+        if parsed_url.port:
+            cdn_port = parsed_url.port
+        else:
+            cdn_port = 443
+
+        self.cc = connection.ContentConnection(host=parsed_url.hostname,
+                                               ssl_port=cdn_port,
                                                proxy_hostname=self.proxy_hostname,
                                                proxy_port=self.proxy_port,
                                                proxy_user=self.proxy_user,
