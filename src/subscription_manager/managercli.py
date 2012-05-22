@@ -35,7 +35,6 @@ _ = gettext.gettext
 
 import rhsm.config
 import rhsm.connection as connection
-from rhsm.version import Versions
 
 from subscription_manager.i18n_optparse import OptionParser, WrappedIndentedHelpFormatter
 from subscription_manager.branding import get_branding
@@ -53,7 +52,7 @@ from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 from subscription_manager.utils import remove_scheme, parse_server_info, \
         ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
-        MissingCaCertException
+        MissingCaCertException, get_version_dict
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
@@ -384,6 +383,8 @@ class CliCommand(object):
             self.certlib = CertLib(uep=self.cp)
         else:
             self.cp = None
+
+        log.debug("Versions: %s " % get_version_dict(self.cp))
 
         # do the work, catch most common errors here:
         try:
@@ -1863,21 +1864,10 @@ class VersionCommand(CliCommand):
         pass
 
     def _do_command(self):
-        try:
-            cp_version = self.cp.getStatus()['version']
-        except Exception, e:
-            cp_version = "Unknown"
-            log.error("Unable to communicate with Candlepin")
-            log.exception(e)
-
-        print (_("Candlepin version: %s") % cp_version)
-
-        versions = Versions()
-        print (_("subscription-manager version: %s") % \
-                versions.get_version(Versions.SUBSCRIPTION_MANAGER))
-        print (_("python-rhsm version: %s") % \
-                versions.get_version(Versions.PYTHON_RHSM))
-        self._request_validity_check()
+        versions = get_version_dict(self.cp)
+        print (_("Candlepin version: %s") % versions["candlepin"])
+        print (_("subscription-manager version: %s") % versions["subscription manager"])
+        print (_("python-rhsm version: %s") % versions["python-rhsm"])
 
 
 # taken wholseale from rho...
