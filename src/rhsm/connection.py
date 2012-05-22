@@ -181,7 +181,7 @@ class ContentConnection(object):
         else:
             conn = httpslib.HTTPSConnection(self.host, safe_int(self.ssl_port), ssl_context=context)
 
-        conn.request("GET", handler, body="", headers={"Host": "%s:%s" % (self.host, self.ssl_port), "Content-Length": "0"} )
+        conn.request("GET", handler, body="", headers={"Host": "%s:%s" % (self.host, self.ssl_port), "Content-Length": "0"})
         response = conn.getresponse()
         result = {
             "content": response.read(),
