@@ -17,6 +17,7 @@ import os
 from gtk import gdk, RESPONSE_DELETE_EVENT, RESPONSE_CANCEL, \
                 AboutDialog as GtkAboutDialog, Label
 from rhsm.version import Versions
+from subscription_manager.utils import get_upstream_server_version
 
 import gettext
 _ = gettext.gettext
@@ -36,7 +37,8 @@ LOGO_PATH = os.path.join(prefix, "data/icons/scalable/subscription-manager.svg")
 
 
 class AboutDialog(object):
-    def __init__(self, parent):
+    def __init__(self, parent, backend):
+        self.backend = backend
         self.dialog = GtkAboutDialog()
         self.dialog.set_transient_for(parent)
         self.dialog.set_modal(True)
@@ -48,14 +50,18 @@ class AboutDialog(object):
         self.dialog.set_logo(gdk.pixbuf_new_from_file_at_size(LOGO_PATH, 100, 100))
 
         rhsm_version_label = Label()
+        backend_version_label = Label()
         context_box = self.dialog.get_content_area().get_children()[0]
         context_box.pack_end(rhsm_version_label)
+        context_box.pack_end(backend_version_label)
 
         # Set the component versions.
         versions = Versions()
         self.dialog.set_version(self._get_version(versions, Versions.SUBSCRIPTION_MANAGER))
         rhsm_version = self._get_version(versions, Versions.PYTHON_RHSM)
         rhsm_version_label.set_markup(_("<b>python-rhsm version:</b> %s" % rhsm_version))
+        backend_version = self._get_version(versions, Versions.UPSTREAM_SERVER)
+        backend_version_label.set_markup(_("<b>remote entitlement server version:</b> %s" % backend_version))
 
         self.dialog.connect("response", self._handle_response)
         self.dialog.show_all()
@@ -68,6 +74,10 @@ class AboutDialog(object):
             self.dialog.destroy()
 
     def _get_version(self, versions, package_name):
+
+        # if we want the version of the upstream server, short circuit here
+        if package_name == Versions.UPSTREAM_SERVER:
+            return get_upstream_server_version(self.backend.uep)
 
         # If the version is not set assume it is not installed via RPM.
         package_version = versions.get_version(package_name)

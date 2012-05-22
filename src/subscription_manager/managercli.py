@@ -53,7 +53,7 @@ from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 from subscription_manager.utils import remove_scheme, parse_server_info, \
         ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
-        MissingCaCertException
+        MissingCaCertException, get_upstream_server_version
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
@@ -1863,14 +1863,9 @@ class VersionCommand(CliCommand):
         pass
 
     def _do_command(self):
-        try:
-            cp_version = self.cp.getStatus()['version']
-        except Exception, e:
-            cp_version = "Unknown"
-            log.error("Unable to communicate with Candlepin")
-            log.exception(e)
+        uep_version = get_upstream_server_version(self.cp)
 
-        print (_("Candlepin version: %s") % cp_version)
+        print (_("remote entitlement server version: %s") % uep_version)
 
         versions = Versions()
         print (_("subscription-manager version: %s") % \
