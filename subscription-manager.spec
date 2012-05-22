@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 0.99.18
+Version: 0.99.19
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -304,6 +304,12 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue May 22 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 0.99.19-1
+- 824100: fix pt_BR translations, and update zanata (alikins@redhat.com)
+- 822057: do not hard-code cdn to port 443 (cduryee@redhat.com)
+- 820743: fix translation errors for "service-level" command
+  (alikins@redhat.com)
+
 * Wed May 16 2012 Michael Stead <mstead@redhat.com> 0.99.18-1
 - 813296: Remove check for candlepin_version (jbowes@redhat.com)
 - latest strings from zanata (alikins@redhat.com)
