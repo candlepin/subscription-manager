@@ -284,7 +284,6 @@ class SubDetailsWidget(GladeWidget):
             destroy('account')
             destroy('provides_management')
             destroy('virt_only')
-            destroy("stacking_id")
 
             # Since all the tabs have the same parent window, the accessibility
             # names must be unique among all three tabs to allow unambiguous
@@ -303,11 +302,11 @@ class SubDetailsWidget(GladeWidget):
         else:
             self.pull_widgets(["contract_number_text", "start_date_text",
                                "expiration_date_text", "account_text",
-                               "provides_management_text", "stacking_id_text",
+                               "provides_management_text",
                                "virt_only_text"])
 
     def show(self, name, contract=None, start=None, end=None, account=None,
-            management=None, support_level="", stacking_id=None, support_type="",
+            management=None, support_level="", support_type="",
             virt_only=None, products=[], highlight=None):
         """
         Show subscription details.
@@ -336,7 +335,6 @@ class SubDetailsWidget(GladeWidget):
                       managerlib.formatDate(end))
             self._set(self.account_text, account)
             self._set(self.provides_management_text, management)
-            self._set(self.stacking_id_text, stacking_id)
             self._set(self.virt_only_text, virt_only)
 
         self.bundled_products.clear()
@@ -364,7 +362,6 @@ class SubDetailsWidget(GladeWidget):
             self._set(self.expiration_date_text, "")
             self._set(self.account_text, "")
             self._set(self.provides_management_text, "")
-            self._set(self.stacking_id_text, "")
             self._set(self.virt_only_text, "")
 
     def get_widget(self):
