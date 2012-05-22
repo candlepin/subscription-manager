@@ -25,6 +25,7 @@ class Versions(object):
 
     SUBSCRIPTION_MANAGER = "subscription-manager"
     PYTHON_RHSM = "python-rhsm"
+    UPSTREAM_SERVER = "upstream-server"
 
     __shared_data = {}
     __initialized = False
