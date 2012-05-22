@@ -210,7 +210,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         order = cert.getOrder()
         products = [(product.getName(), product.getHash())
                         for product in cert.getProducts()]
-        stacking_id = order.getStackingId()
 
         if str(order.getVirtOnly()) == "1":
             virt_only = _("Virtual")
@@ -228,7 +227,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                               end=cert.validRange().end(),
                               account=order.getAccountNumber() or "",
                               management=management,
-                              stacking_id=stacking_id or "",
                               virt_only=virt_only or "",
                               support_level=order.getSupportLevel() or "",
                               support_type=order.getSupportType() or "",

@@ -355,41 +355,6 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="stacking_id_label">
-                                <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Stacking ID:&lt;/b&gt;</property>
-                                <property name="use_markup">True</property>
-                              </widget>
-                              <packing>
-                                <property name="top_attach">5</property>
-                                <property name="bottom_attach">6</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
-                                <property name="x_padding">10</property>
-                                <property name="y_padding">5</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkTextView" id="stacking_id_text">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="pixels_above_lines">5</property>
-                                <property name="editable">False</property>
-                                <property name="left_margin">10</property>
-                                <property name="cursor_visible">False</property>
-                                <accessibility>
-                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Stacking ID Text</atkproperty>
-                                </accessibility>
-                              </widget>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">5</property>
-                                <property name="bottom_attach">6</property>
-                              </packing>
-                            </child>
-                            <child>
                               <widget class="GtkLabel" id="virt_only_label">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
