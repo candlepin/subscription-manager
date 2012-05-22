@@ -17,6 +17,7 @@ import os
 from gtk import gdk, RESPONSE_DELETE_EVENT, RESPONSE_CANCEL, \
                 AboutDialog as GtkAboutDialog, Label
 from rhsm.version import Versions
+from subscription_manager.utils import get_version
 
 import gettext
 _ = gettext.gettext
@@ -53,8 +54,8 @@ class AboutDialog(object):
 
         # Set the component versions.
         versions = Versions()
-        self.dialog.set_version(self._get_version(versions, Versions.SUBSCRIPTION_MANAGER))
-        rhsm_version = self._get_version(versions, Versions.PYTHON_RHSM)
+        self.dialog.set_version(get_version(versions, Versions.SUBSCRIPTION_MANAGER))
+        rhsm_version = get_version(versions, Versions.PYTHON_RHSM)
         rhsm_version_label.set_markup(_("<b>python-rhsm version:</b> %s" % rhsm_version))
 
         self.dialog.connect("response", self._handle_response)
@@ -66,15 +67,3 @@ class AboutDialog(object):
     def _handle_response(self, dialog, response):
         if response == RESPONSE_DELETE_EVENT or response == RESPONSE_CANCEL:
             self.dialog.destroy()
-
-    def _get_version(self, versions, package_name):
-
-        # If the version is not set assume it is not installed via RPM.
-        package_version = versions.get_version(package_name)
-        if not package_version:
-            return ""
-
-        package_release = versions.get_release(package_name)
-        if package_release:
-            package_release = "-%s" % package_release
-        return "%s%s" % (package_version, package_release)
