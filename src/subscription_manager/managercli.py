@@ -1104,12 +1104,12 @@ class ReleaseCommand(CliCommand):
         parsed_url = urlparse.urlparse(cdn_url)
 
         # default to 443 if urlprase can't interpret the port
-        if parsed_url.port:
-            cdn_port = parsed_url.port
+        if parsed_url[2]:
+            cdn_port = parsed_url[2]
         else:
             cdn_port = 443
 
-        self.cc = connection.ContentConnection(host=parsed_url.hostname,
+        self.cc = connection.ContentConnection(host=parsed_url[1],
                                                ssl_port=cdn_port,
                                                proxy_hostname=self.proxy_hostname,
                                                proxy_port=self.proxy_port,
