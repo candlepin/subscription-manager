@@ -249,6 +249,10 @@ def get_version(versions, package_name):
 
 
 def get_version_dict(cp):
+    # It's possible (though unlikely, and kind of broken) to have more
+    # than one version of python-rhsm/subscription-manager installed.
+    # Versions() will only return one (and I suspect it's not predictable
+    # which it will return).
     versions = Versions()
     sm_version = get_version(versions, Versions.SUBSCRIPTION_MANAGER)
     pr_version = get_version(versions, Versions.PYTHON_RHSM)

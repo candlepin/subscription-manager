@@ -200,3 +200,4 @@ class TestGetVersion(unittest.TestCase):
         versions.get_release.return_value = ""
         result = get_version(versions, "foobar")
         self.assertEquals("1.0", result)
+
