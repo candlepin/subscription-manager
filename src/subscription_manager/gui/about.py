@@ -16,7 +16,12 @@
 import os
 from gtk import gdk, RESPONSE_DELETE_EVENT, RESPONSE_CANCEL, \
                 AboutDialog as GtkAboutDialog, Label
+<<<<<<< HEAD
 from subscription_manager.utils import get_version_dict
+=======
+from rhsm.version import Versions
+from subscription_manager.utils import get_version
+>>>>>>> origin/version_logging
 
 import gettext
 _ = gettext.gettext
