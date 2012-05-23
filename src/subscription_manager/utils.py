@@ -26,6 +26,7 @@ _ = lambda x: gettext.ldgettext("rhsm", x)
 gettext.textdomain("rhsm")
 
 from rhsm.connection import UEPConnection, RestlibException
+from rhsm.version import Versions
 from M2Crypto.SSL import SSLError
 
 
@@ -233,3 +234,38 @@ def is_valid_server_info(hostname, port, prefix):
     except Exception, e:
         log.exception(e)
         return False
+
+
+def get_version(versions, package_name):
+    """
+    Return a string containing the version (and release if available).
+    """
+    # If the version is not set assume it is not installed via RPM.
+    package_version = versions.get_version(package_name)
+    package_release = versions.get_release(package_name)
+    if package_release:
+        package_release = "-%s" % package_release
+    return "%s%s" % (package_version, package_release)
+
+
+def get_version_dict(cp):
+    versions = Versions()
+    sm_version = get_version(versions, Versions.SUBSCRIPTION_MANAGER)
+    pr_version = get_version(versions, Versions.PYTHON_RHSM)
+    cp_version = _("No connection made to remote entitlement server")
+
+    if cp:
+        try:
+            if cp.supports_resource("status"):
+                status = cp.getStatus()
+                cp_version = '-'.join([status['version'], status['release']])
+            else:
+                cp_version = _("Unknown")
+        except Exception:
+            cp_version = _("Unknown")
+
+    return {
+            "subscription manager": sm_version,
+            "python-rhsm": pr_version,
+            "candlepin": cp_version
+    }
