@@ -233,3 +233,13 @@ def is_valid_server_info(hostname, port, prefix):
     except Exception, e:
         log.exception(e)
         return False
+
+
+def get_upstream_server_version(uep):
+    try:
+        uep_version = uep.getStatus()['version']
+    except Exception, e:
+        uep_version = "Unknown"
+        log.error("Unable to communicate with upstream server")
+        log.exception(e)
+    return uep_version

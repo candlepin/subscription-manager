@@ -436,7 +436,7 @@ class MainWindow(widgets.GladeWidget):
             log.warn("Unable to open help documentation: %s", e)
 
     def _about_item_clicked(self, widget):
-        about = AboutDialog(self._get_window())
+        about = AboutDialog(self._get_window(), self.backend)
         about.show()
 
     def _online_docs_item_clicked(self, widget):
