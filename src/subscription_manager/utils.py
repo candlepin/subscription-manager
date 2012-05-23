@@ -242,9 +242,6 @@ def get_version(versions, package_name):
     """
     # If the version is not set assume it is not installed via RPM.
     package_version = versions.get_version(package_name)
-    if not package_version:
-        return ""
-
     package_release = versions.get_release(package_name)
     if package_release:
         package_release = "-%s" % package_release
@@ -255,7 +252,7 @@ def get_version_dict(cp):
     versions = Versions()
     sm_version = get_version(versions, Versions.SUBSCRIPTION_MANAGER)
     pr_version = get_version(versions, Versions.PYTHON_RHSM)
-    cp_version = "No connection made to Candlepin"
+    cp_version = _("No connection made to remote entitlement server")
 
     if cp:
         try:
@@ -263,9 +260,9 @@ def get_version_dict(cp):
                 status = cp.getStatus()
                 cp_version = '-'.join([status['version'], status['release']])
             else:
-                cp_version = "Unknown"
+                cp_version = _("Unknown")
         except Exception:
-            cp_version = "Unknown"
+            cp_version = _("Unknown")
 
     return {
             "subscription manager": sm_version,
