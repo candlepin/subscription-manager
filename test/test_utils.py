@@ -1,12 +1,14 @@
 import unittest
 
+from mock import Mock
 from subscription_manager.utils import remove_scheme, parse_server_info, \
     parse_baseurl_info, format_baseurl, ServerUrlParseErrorEmpty, \
     ServerUrlParseErrorNone, ServerUrlParseErrorPort, ServerUrlParseErrorScheme, \
-    ServerUrlParseErrorSchemeNoDoubleSlash, ServerUrlParseErrorJustScheme
+    ServerUrlParseErrorSchemeNoDoubleSlash, ServerUrlParseErrorJustScheme, \
+    get_version
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
-
+from rhsm.version import Versions
 
 class TestParseServerInfo(unittest.TestCase):
 
@@ -183,3 +185,18 @@ class TestRemoveScheme(unittest.TestCase):
         res = remove_scheme(proxy_url)
         self.assertEquals(res, proxy_url)
 
+
+class TestGetVersion(unittest.TestCase):
+    def test_version_and_release_present(self):
+        versions = Mock()
+        versions.get_version.return_value = "1.0"
+        versions.get_release.return_value = "1"
+        result = get_version(versions, "foobar")
+        self.assertEquals("1.0-1", result)
+
+    def test_version_no_release(self):
+        versions = Mock()
+        versions.get_version.return_value = "1.0"
+        versions.get_release.return_value = ""
+        result = get_version(versions, "foobar")
+        self.assertEquals("1.0", result)
