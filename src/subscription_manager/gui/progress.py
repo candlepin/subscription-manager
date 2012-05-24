@@ -20,7 +20,7 @@ import gtk.glade
 
 class Progress:
 
-    def __init__(self, label):
+    def __init__(self, title, label):
         glade_prefix = os.path.dirname(__file__)
 
         self.xml = gtk.glade.XML(os.path.join(glade_prefix, "data/progress.glade"),
@@ -32,12 +32,16 @@ class Progress:
 
         self.lastProgress = 0.0
 
+        self.setTitle(title)
         self.setLabel(label)
 
     def hide(self):
         self.progressWindow.hide()
 
         del self
+
+    def setTitle(self, text):
+        self.progressWindow.set_title(text)
 
     def setLabel(self, text):
         label = self.xml.get_widget("progressLabel")
