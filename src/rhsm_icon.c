@@ -417,7 +417,7 @@ main (int argc, char **argv)
 	bindtextdomain ("rhsm", "/usr/share/locale");
 	textdomain ("rhsm");
 
-	option_context = g_option_context_new ("rhsm icon");
+	option_context = g_option_context_new ("");
 	g_option_context_add_main_entries (option_context, entries, NULL);
 	g_option_context_add_group (option_context,
 				    gtk_get_option_group (TRUE));
