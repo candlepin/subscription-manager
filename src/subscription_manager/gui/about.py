@@ -41,7 +41,7 @@ class AboutDialog(object):
         self.dialog = GtkAboutDialog()
         self.dialog.set_transient_for(parent)
         self.dialog.set_modal(True)
-        self.dialog.set_program_name(_("Subscription Manager"))
+        self.dialog.set_name(_("Subscription Manager"))
         self.dialog.set_license(LICENSE)
         self.dialog.set_wrap_license(True)
         self.dialog.set_website("https://fedorahosted.org/subscription-manager/")
@@ -50,7 +50,7 @@ class AboutDialog(object):
 
         rhsm_version_label = Label()
         backend_version_label = Label()
-        context_box = self.dialog.get_content_area().get_children()[0]
+        context_box = self.dialog.vbox.get_children()[0]
         context_box.pack_end(rhsm_version_label)
         context_box.pack_end(backend_version_label)
 
