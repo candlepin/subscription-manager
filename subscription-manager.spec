@@ -57,7 +57,7 @@ to manage subscriptions and yum repositories from the Red Hat entitlement
 platform.
 
 
-%package -n subscription-manager-gnome
+%package -n subscription-manager-gui
 Summary: A GUI interface to manage Red Hat product subscriptions
 Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
@@ -68,10 +68,14 @@ Requires: dbus-x11
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
 
+# Renamed from -gnome, so obsolete it properly
+Obsoletes: %{name}-gnome < %{version}-%{release}
+Provides %{name}-gnome = %{version}-%{release}
+
 # Fedora can figure this out automatically, but RHEL cannot:
 Requires: librsvg2
 
-%description -n subscription-manager-gnome
+%description -n subscription-manager-gui
 This package contains a GTK+ graphical interface for configuring and
 registering a system with a Red Hat Entitlement platform and manage
 subscriptions.
@@ -79,7 +83,7 @@ subscriptions.
 %package -n subscription-manager-firstboot
 Summary: Firstboot screens for subscription manager
 Group: System Environment/Base
-Requires: %{name}-gnome = %{version}-%{release}
+Requires: %{name}-gui = %{version}-%{release}
 %{?el5:Requires: rhn-setup-gnome >= 0.4.20-49}
 %{?el6:Requires: rhn-setup-gnome >= 1.0.0-82}
 
@@ -125,18 +129,18 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 mkdir %{buildroot}%{_sysconfdir}/yum.repos.d
 touch %{buildroot}%{_sysconfdir}/yum.repos.d/redhat.repo
 
-%post -n subscription-manager-gnome
+%post -n subscription-manager-gui
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 scrollkeeper-update -q -o %{_datadir}/omf/%{name} || :
 
-%postun -n subscription-manager-gnome
+%postun -n subscription-manager-gui
 if [ $1 -eq 0 ] ; then
     touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
     scrollkeeper-update -q || :
 fi
 
-%posttrans -n subscription-manager-gnome
+%posttrans -n subscription-manager-gui
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %clean
@@ -219,7 +223,7 @@ rm -rf %{buildroot}
 %doc LICENSE
 
 
-%files -n subscription-manager-gnome
+%files -n subscription-manager-gui
 %defattr(-,root,root,-)
 %dir %{_datadir}/rhsm/subscription_manager/gui
 %dir %{_datadir}/rhsm/subscription_manager/gui/data
