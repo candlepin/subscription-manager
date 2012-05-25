@@ -169,9 +169,6 @@ class TestRegisterCommand(TestCliProxyCommand):
     def test_keys_and_consumerid(self):
         self._test_exception(["--consumerid", "22", "--activationkey", "key"])
 
-    def test_key_and_no_org(self):
-        self._test_exception(["--activationkey", "key"])
-
     def test_key_and_org(self):
         self._test_no_exception(["--activationkey", "key", "--org", "org"])
 
@@ -180,9 +177,6 @@ class TestRegisterCommand(TestCliProxyCommand):
 
     def test_keys_and_username(self):
         self._test_exception(["--username", "bob", "--activationkey", "key"])
-
-    def test_env_and_no_org(self):
-        self._test_exception(["--env", "env"])
 
     def test_env_and_org(self):
         self._test_no_exception(["--env", "env", "--org", "org"])
