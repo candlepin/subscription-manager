@@ -168,6 +168,7 @@ def parse_url(local_server_entry,
     #FIXME: need a try except here? docs
     # don't seem to indicate any expected exceptions
     result = urlparse(url)
+    netloc = result[1].split(":")
 
     # in some cases, if we try the attr accessors, we'll
     # get a ValueError deep down in urlparse, particular if
@@ -177,23 +178,23 @@ def parse_url(local_server_entry,
     # throw an exception in those cases.
     # adding the schem seems to avoid this though
     port = default_port
-    try:
-        if result.port is not None:
-            port = str(result.port)
-    except ValueError:
-        raise ServerUrlParseErrorPort(local_server_entry,
+    if len(netloc) > 1:
+        if netloc[1] != "":
+            port = str(netloc[1])
+        else:
+            raise ServerUrlParseErrorPort(local_server_entry,
                                       msg=_("Server url port could not be parsed"))
 
     # path can be None?
     prefix = default_prefix
-    if result.path is not None:
-        if result.path != '':
-            prefix = result.path
+    if result[2] is not None:
+        if result[2] != '':
+            prefix = result[2]
 
     hostname = default_hostname
-    if result.hostname is not None:
-        if result.hostname != "":
-            hostname = result.hostname
+    if netloc[0] is not None:
+        if netloc[0] != "":
+            hostname = netloc[0]
 
     return (hostname, port, prefix)
 
