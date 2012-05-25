@@ -5,7 +5,7 @@ from subscription_manager.gui import progress
 
 class TestProgress(unittest.TestCase):
     def setUp(self):
-        self.pw = progress.Progress("this is a test label")
+        self.pw = progress.Progress("test title", "this is a test label")
 
     def test_set_progress_0(self):
         self.pw.setProgress(0, 100)
