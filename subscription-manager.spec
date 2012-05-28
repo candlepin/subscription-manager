@@ -17,7 +17,7 @@ License: GPLv2
 #
 # git clone git://git.fedorahosted.org/git/subscription-manager.git/
 # yum install tito
-# tito build --tag subscription-manager-%{version}-%{release} --tgz
+# tito build --tag subscription-manager-$VERSION-$RELEASE --tgz
 Source0: %{name}-%{version}.tar.gz
 URL:     https://fedorahosted.org/subscription-manager/
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -70,7 +70,7 @@ Requires(postun): scrollkeeper
 
 # Renamed from -gnome, so obsolete it properly
 Obsoletes: %{name}-gnome < %{version}-%{release}
-Provides %{name}-gnome = %{version}-%{release}
+Provides: %{name}-gnome = %{version}-%{release}
 
 # Fedora can figure this out automatically, but RHEL cannot:
 Requires: librsvg2
