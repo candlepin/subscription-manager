@@ -1,6 +1,5 @@
 #
-# Subscription manager command line utility. This script is a modified version of
-# cp_client.py from candlepin scripts
+# Subscription manager command line utility.
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -163,12 +162,14 @@ def show_autosubscribe_output():
 class CliCommand(object):
     """ Base class for all sub-commands. """
 
-    def __init__(self, name="cli", usage=None, shortdesc=None,
+    def __init__(self, name="cli", shortdesc=None,
                  description=None, primary=False, ent_dir=None,
                  prod_dir=None):
         self.shortdesc = shortdesc
         if shortdesc is not None and description is None:
             description = shortdesc
+
+        usage = _("usage: %%prog %s [OPTIONS]") % name
 
        # include our own HelpFormatter that doesn't try to break
        # long words, since that fails on multibyte words
@@ -401,10 +402,10 @@ class UserPassCommand(CliCommand):
     Abstract class for commands that require a username and password
     """
 
-    def __init__(self, name, usage=None, shortdesc=None,
+    def __init__(self, name, shortdesc=None,
                  description=None, primary=False,
                  ent_dir=None, prod_dir=None):
-        super(UserPassCommand, self).__init__(name, usage, shortdesc,
+        super(UserPassCommand, self).__init__(name, shortdesc,
                                               description, primary,
                                               ent_dir=ent_dir, prod_dir=prod_dir)
         self._username = None
@@ -452,11 +453,10 @@ class UserPassCommand(CliCommand):
 
 class CleanCommand(CliCommand):
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog clean [OPTIONS]"
         shortdesc = _("Remove all local consumer and subscription data without affecting the server")
         desc = shortdesc
 
-        CliCommand.__init__(self, "clean", usage, shortdesc, desc,
+        CliCommand.__init__(self, "clean", shortdesc, desc,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
     def _add_common_options(self):
@@ -472,11 +472,10 @@ class CleanCommand(CliCommand):
 
 class RefreshCommand(CliCommand):
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog refresh [OPTIONS]"
         shortdesc = _("Pull the latest subscription data from the server")
         desc = shortdesc
 
-        CliCommand.__init__(self, "refresh", usage,
+        CliCommand.__init__(self, "refresh",
                             shortdesc, desc, True,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
@@ -498,12 +497,11 @@ class RefreshCommand(CliCommand):
 class IdentityCommand(UserPassCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog identity [OPTIONS]"
         shortdesc = _("Display the identity certificate for this machine or " \
                       "request a new one")
         desc = shortdesc
 
-        super(IdentityCommand, self).__init__("identity", usage, shortdesc,
+        super(IdentityCommand, self).__init__("identity", shortdesc,
                                               desc, ent_dir=ent_dir,
                                               prod_dir=prod_dir)
 
@@ -559,11 +557,10 @@ class IdentityCommand(UserPassCommand):
 class OwnersCommand(UserPassCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog orgs [OPTIONS]"
         shortdesc = _("Display the orgs against which a user can register a system")
         desc = shortdesc
 
-        super(OwnersCommand, self).__init__("orgs", usage, shortdesc,
+        super(OwnersCommand, self).__init__("orgs", shortdesc,
                                             desc, ent_dir=ent_dir,
                                             prod_dir=prod_dir)
 
@@ -598,11 +595,10 @@ class OwnersCommand(UserPassCommand):
 class EnvironmentsCommand(UserPassCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog environments [OPTIONS]"
         shortdesc = _("Display the environments available for a user")
         desc = shortdesc
 
-        super(EnvironmentsCommand, self).__init__("environments", usage, shortdesc,
+        super(EnvironmentsCommand, self).__init__("environments", shortdesc,
                                                   desc, ent_dir=ent_dir,
                                                   prod_dir=prod_dir)
 
@@ -656,11 +652,10 @@ class EnvironmentsCommand(UserPassCommand):
 class ServiceLevelCommand(UserPassCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog service-level [OPTIONS]"
         shortdesc = _("Manage service levels for this system.")
         desc = shortdesc
 
-        super(ServiceLevelCommand, self).__init__("service-level", usage, shortdesc,
+        super(ServiceLevelCommand, self).__init__("service-level", shortdesc,
                 desc, ent_dir=ent_dir, prod_dir=prod_dir)
 
         self.parser.add_option("--show", dest="show", action='store_true',
@@ -772,13 +767,11 @@ class ServiceLevelCommand(UserPassCommand):
 
 class RegisterCommand(UserPassCommand):
     def __init__(self, ent_dir=None, prod_dir=None):
-
-        usage = "usage: %prog register [OPTIONS]"
         shortdesc = get_branding().CLI_REGISTER
         desc = shortdesc
         self.consumerIdentity = ConsumerIdentity
 
-        super(RegisterCommand, self).__init__("register", usage, shortdesc,
+        super(RegisterCommand, self).__init__("register", shortdesc,
                                               desc, True, ent_dir=ent_dir,
                                               prod_dir=prod_dir)
 
@@ -983,11 +976,10 @@ class RegisterCommand(UserPassCommand):
 class UnRegisterCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog unregister [OPTIONS]"
         shortdesc = get_branding().CLI_UNREGISTER
         desc = shortdesc
 
-        CliCommand.__init__(self, "unregister", usage, shortdesc,
+        CliCommand.__init__(self, "unregister", shortdesc,
                             desc, True, ent_dir=ent_dir,
                             prod_dir=prod_dir)
 
@@ -1024,10 +1016,9 @@ class UnRegisterCommand(CliCommand):
 class RedeemCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog redeem [OPTIONS]"
         shortdesc = _("Attempt to redeem a subscription for a preconfigured machine")
         desc = shortdesc
-        CliCommand.__init__(self, "redeem", usage, shortdesc, desc,
+        CliCommand.__init__(self, "redeem", shortdesc, desc,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
         self.parser.add_option("--email", dest="email", action='store',
@@ -1075,10 +1066,9 @@ class RedeemCommand(CliCommand):
 
 class ReleaseCommand(CliCommand):
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog release [OPTIONS]"
         shortdesc = _("Configure what os release to use")
         desc = shortdesc
-        CliCommand.__init__(self, "release", usage, shortdesc, desc, True,
+        CliCommand.__init__(self, "release", shortdesc, desc, True,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
         self.parser.add_option("--show", dest="show", action="store_true",
@@ -1154,10 +1144,9 @@ class ReleaseCommand(CliCommand):
 class SubscribeCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog subscribe [OPTIONS]"
         shortdesc = _("Subscribe the registered machine to a specified product")
         desc = shortdesc
-        CliCommand.__init__(self, "subscribe", usage, shortdesc, desc, True,
+        CliCommand.__init__(self, "subscribe", shortdesc, desc, True,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
         self.product = None
@@ -1269,10 +1258,9 @@ class SubscribeCommand(CliCommand):
 class UnSubscribeCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog unsubscribe [OPTIONS]"
         shortdesc = _("Unsubscribe the machine from all or specific subscriptions")
         desc = shortdesc
-        CliCommand.__init__(self, "unsubscribe", usage, shortdesc, desc, True,
+        CliCommand.__init__(self, "unsubscribe", shortdesc, desc, True,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
         self.serial_numbers = None
@@ -1342,10 +1330,9 @@ class UnSubscribeCommand(CliCommand):
 class FactsCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog facts [OPTIONS]"
         shortdesc = _("Work with the current facts for this machine")
         desc = shortdesc
-        CliCommand.__init__(self, "facts", usage, shortdesc, desc,
+        CliCommand.__init__(self, "facts", shortdesc, desc,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
         self.parser.add_option("--list", action="store_true",
@@ -1389,10 +1376,9 @@ class FactsCommand(CliCommand):
 class ImportCertCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog import [OPTIONS]"
         shortdesc = _("Import certificates which were provided outside of the tool")
         desc = shortdesc
-        CliCommand.__init__(self, "import", usage, shortdesc, desc,
+        CliCommand.__init__(self, "import", shortdesc, desc,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
         self.parser.add_option("--certificate", action="append", dest="certificate_file",
@@ -1450,10 +1436,9 @@ class ImportCertCommand(CliCommand):
 class ReposCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog repos [OPTIONS]"
         shortdesc = _("List the repos which this machine is entitled to use")
         desc = shortdesc
-        CliCommand.__init__(self, "repos", usage, shortdesc, desc,
+        CliCommand.__init__(self, "repos", shortdesc, desc,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
     def _validate_options(self):
@@ -1533,10 +1518,9 @@ class ReposCommand(CliCommand):
 class ConfigCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog config [OPTIONS]"
         shortdesc = _("List, set, or remove the configuration parameters in use by this machine.")
         desc = shortdesc
-        CliCommand.__init__(self, "config", usage, shortdesc, desc,
+        CliCommand.__init__(self, "config", shortdesc, desc,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
     def _add_common_options(self):
@@ -1640,10 +1624,9 @@ class ConfigCommand(CliCommand):
 class ListCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog list [OPTIONS]"
         shortdesc = _("List subscription and product information for this machine")
         desc = shortdesc
-        CliCommand.__init__(self, "list", usage, shortdesc, desc, True,
+        CliCommand.__init__(self, "list", shortdesc, desc, True,
                             ent_dir=ent_dir, prod_dir=prod_dir)
         self.available = None
         self.consumed = None
@@ -1850,11 +1833,10 @@ class ListCommand(CliCommand):
 class VersionCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        usage = "usage: %prog version"
         shortdesc = _("Print version information")
         desc = shortdesc
 
-        CliCommand.__init__(self, "version", usage, shortdesc, desc,
+        CliCommand.__init__(self, "version", shortdesc, desc,
                             ent_dir=ent_dir, prod_dir=prod_dir)
 
     def _add_common_options(self):
