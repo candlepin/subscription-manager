@@ -69,28 +69,6 @@ STATUS_MAP = {
         PARTIALLY_SUBSCRIBED: _("Partially Subscribed")
 }
 
-CONSUMED_SUBS_LIST = \
-    _("Product Name:         \t%-25s") + \
-    "\n" + \
-    _("Contract:             \t%-25s") + \
-    "\n" + \
-    _("Account:              \t%-25s") + \
-    "\n" + \
-    _("Serial Number:        \t%-25s") + \
-    "\n" + \
-    _("Active:               \t%-25s") + \
-    "\n" + \
-    _("Quantity Used:        \t%-25s") + \
-    "\n" + \
-    _("Service Level:        \t%-25s") + \
-    "\n" + \
-    _("Service Type :        \t%-25s") + \
-    "\n" + \
-    _("Starts:               \t%-25s") + \
-    "\n" + \
-    _("Ends:                 \t%-25s") + \
-    "\n"
-
 
 def handle_exception(msg, ex):
 
@@ -1741,36 +1719,39 @@ class ListCommand(CliCommand):
             print(_("No consumed subscription pools to list"))
             sys.exit(0)
 
-        print """+-------------------------------------------+\n    %s\n+-------------------------------------------+\n""" % _("Consumed Product Subscriptions")
+        print("+-------------------------------------------+")
+        print("   " + _("Consumed Product Subscriptions"))
+        print("+-------------------------------------------+\n")
 
         for cert in certs:
-            eproducts = cert.getProducts()
-            # Use order details for entitlement certificates with no product data:
-            if len(eproducts) == 0:
-                print self._none_wrap(CONSUMED_SUBS_LIST,
-                        cert.getOrder().getName(),
-                        cert.getOrder().getContract(),
-                        cert.getOrder().getAccountNumber(),
-                        cert.serialNumber(),
-                        cert.valid(),
-                        cert.getOrder().getQuantityUsed(),
-                        cert.getOrder().getSupportLevel() or "",
-                        cert.getOrder().getSupportType() or "",
-                        managerlib.formatDate(cert.validRange().begin()),
-                        managerlib.formatDate(cert.validRange().end()))
-            else:
-                for product in eproducts:
-                    print self._none_wrap(CONSUMED_SUBS_LIST,
-                            product.getName(),
-                            cert.getOrder().getContract(),
-                            cert.getOrder().getAccountNumber(),
-                            cert.serialNumber(),
-                            cert.valid(),
-                            cert.getOrder().getQuantityUsed(),
-                            cert.getOrder().getSupportLevel() or "",
-                            cert.getOrder().getSupportType() or "",
-                            managerlib.formatDate(cert.validRange().begin()),
-                            managerlib.formatDate(cert.validRange().end()))
+            order = cert.getOrder()
+            print(self._none_wrap(_("Product Name:         \t%s"),
+                  order.getName()))
+
+            prefix = _("Provides:             \t%s")
+            for product in cert.getProducts():
+                print(self._none_wrap(prefix, product.getName()))
+                prefix = _("                      \t%s")
+
+            print(self._none_wrap(_("Contract:             \t%s"),
+                  order.getContract()))
+            print(self._none_wrap(_("Account:              \t%s"),
+                  order.getAccountNumber()))
+            print(self._none_wrap(_("Serial Number:        \t%s"),
+                  cert.serialNumber()))
+            print(self._none_wrap(_("Active:               \t%s"),
+                  cert.valid()))
+            print(self._none_wrap(_("Quantity Used:        \t%s"),
+                  order.getQuantityUsed()))
+            print(_("Service Level:        \t%s") %
+                  order.getSupportLevel() or "")
+            print(_("Service Type:         \t%s") %
+                  order.getSupportType() or "")
+            print(_("Starts:               \t%s") %
+                  managerlib.formatDate(cert.validRange().begin()))
+            print(_("Ends:                 \t%s") %
+                  managerlib.formatDate(cert.validRange().end()))
+            print("")
 
     def _format_name(self, name, indent, max_length):
         """
