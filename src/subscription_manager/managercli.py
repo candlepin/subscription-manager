@@ -30,7 +30,6 @@ from M2Crypto import SSL
 
 import gettext
 from subscription_manager.jsonwrapper import PoolWrapper
-from subscription_manager import constants
 _ = gettext.gettext
 
 import rhsm.config
@@ -91,6 +90,40 @@ CONSUMED_SUBS_LIST = \
     "\n" + \
     _("Ends:                 \t%-25s") + \
     "\n"
+
+INSTALLED_PRODUCT_STATUS = \
+    _("Product Name:         \t%s") + "\n" + \
+    _("Product ID:           \t%s") + "\n" + \
+    _("Version:              \t%s") + "\n" + \
+    _("Arch:                 \t%s") + "\n" + \
+    _("Status:               \t%s") + "\n" + \
+    _("Starts:               \t%s") + "\n" + \
+    _("Ends:                 \t%s") + "\n"
+
+AVAILABLE_SUBS_LIST = \
+    _("Product Name:         \t%s") + "\n" + \
+    _("Product Id:           \t%s") + "\n" + \
+    _("Pool Id:              \t%s") + "\n" + \
+    _("Quantity:             \t%s") + "\n" + \
+    _("Service Level:        \t%s") + "\n" + \
+    _("Service Type:         \t%s") + "\n" + \
+    _("Multi-Entitlement:    \t%s") + "\n" + \
+    _("Ends:                 \t%s") + "\n" + \
+    _("Machine Type:         \t%s") + "\n"
+
+REPOS_LIST = \
+    _("Repo Id:              \t%s") + "\n" + \
+    _("Repo Name:            \t%s") + "\n" + \
+    _("Repo Url:             \t%s") + "\n" + \
+    _("Enabled:              \t%s") + "\n"
+
+PRODUCT_STATUS = \
+    _("Product Name:         \t%s") + "\n" + \
+    _("Status:               \t%s") + "\n"
+
+ENVIRONMENT_LIST = \
+    _("Name:                 \t%s") + "\n" + \
+    _("Description:          \t%s") + "\n"
 
 
 def handle_exception(msg, ex):
@@ -156,7 +189,7 @@ def show_autosubscribe_output():
     for prod_status in installed_status:
         subscribed = subscribed or prod_status[4] == SUBSCRIBED
         status = STATUS_MAP[prod_status[4]]
-        print (constants.product_status % (prod_status[0], status))
+        print (PRODUCT_STATUS % (prod_status[0], status))
     return subscribed
 
 
@@ -637,7 +670,7 @@ class EnvironmentsCommand(UserPassCommand):
                     print("          %s" % (_("Environments")))
                     print("+-------------------------------------------+")
                     for env in environments:
-                        print constants.environment_list % (env['name'],
+                        print ENVIRONMENT_LIST % (env['name'],
                             env['description'])
                 else:
                     print "This org does not have environments."
@@ -1516,7 +1549,7 @@ class ReposCommand(CliCommand):
                 print _("    Entitled Repositories in %s") % rl.get_repo_file()
                 print("+----------------------------------------------------------+")
                 for repo in repos:
-                    print constants.repos_list % (repo.id,
+                    print REPOS_LIST % (repo.id,
                         repo["name"],
                         repo["baseurl"],
                         repo["enabled"])
@@ -1702,7 +1735,7 @@ class ListCommand(CliCommand):
             print "+-------------------------------------------+"
             for product in iproducts:
                 status = STATUS_MAP[product[4]]
-                print self._none_wrap(constants.installed_product_status, product[0],
+                print self._none_wrap(INSTALLED_PRODUCT_STATUS, product[0],
                                 product[1], product[2], product[3], status,
                                 product[5], product[6])
 
@@ -1740,7 +1773,7 @@ class ListCommand(CliCommand):
                 else:
                     machine_type = _("physical")
 
-                print self._none_wrap(constants.available_subs_list, product_name,
+                print self._none_wrap(AVAILABLE_SUBS_LIST, product_name,
                         data['productId'],
                         data['id'],
                         data['quantity'],
