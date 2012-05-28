@@ -581,8 +581,8 @@ class OwnersCommand(UserPassCommand):
                 print("+-------------------------------------------+")
                 print("")
                 for owner in owners:
-                    print("%s: \t%-25s" % (_("Name"), owner['displayName']))
-                    print("%s: \t%-25s" % (_("Key"), owner['key']))
+                    print("%s: \t%s" % (_("Name"), owner['displayName']))
+                    print("%s: \t%s" % (_("Key"), owner['key']))
                     print("")
             else:
                 print(_("%s cannot register to any organizations.") % self.username)
@@ -1908,13 +1908,13 @@ class CLI:
         items.sort()
         for (name, cmd) in items:
             if (cmd.primary):
-                print("\t%-14s %-25s" % (name, cmd.shortdesc))
+                print("\t%-14s %s" % (name, cmd.shortdesc))
         print("")
         print _("Other Modules (Please consult documentation):")
         print "\r"
         for (name, cmd) in items:
             if (not cmd.primary):
-                print("\t%-14s %-25s" % (name, cmd.shortdesc))
+                print("\t%-14s %s" % (name, cmd.shortdesc))
         print("")
 
     def _find_best_match(self, args):

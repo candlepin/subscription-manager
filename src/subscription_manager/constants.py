@@ -23,61 +23,61 @@ _ = lambda x: gettext.ldgettext("rhsm", x)
 
 
 installed_product_status = \
-    _("Product Name:         \t%-25s") + \
+    _("Product Name:         \t%s") + \
     "\n" + \
-    _("Product ID:           \t%-25s") + \
+    _("Product ID:           \t%s") + \
     "\n" + \
-    _("Version:              \t%-25s") + \
+    _("Version:              \t%s") + \
     "\n" + \
-    _("Arch:                 \t%-25s") + \
+    _("Arch:                 \t%s") + \
     "\n" + \
-    _("Status:               \t%-25s") + \
+    _("Status:               \t%s") + \
     "\n" + \
-    _("Starts:               \t%-25s") + \
+    _("Starts:               \t%s") + \
     "\n" + \
-    _("Ends:                 \t%-25s") + \
+    _("Ends:                 \t%s") + \
     "\n"
 
 available_subs_list = \
-    _("Product Name:         \t%-25s") + \
+    _("Product Name:         \t%s") + \
     "\n" + \
-    _("Product Id:           \t%-25s") + \
+    _("Product Id:           \t%s") + \
     "\n" + \
-    _("Pool Id:              \t%-25s") + \
+    _("Pool Id:              \t%s") + \
     "\n" + \
-    _("Quantity:             \t%-25s") + \
+    _("Quantity:             \t%s") + \
     "\n" + \
-    _("Service Level:        \t%-25s") + \
+    _("Service Level:        \t%s") + \
     "\n" + \
-    _("Service Type:         \t%-25s") + \
+    _("Service Type:         \t%s") + \
     "\n" + \
-    _("Multi-Entitlement:    \t%-25s") + \
+    _("Multi-Entitlement:    \t%s") + \
     "\n" + \
-    _("Ends:                 \t%-25s") + \
+    _("Ends:                 \t%s") + \
     "\n" + \
-    _("Machine Type:         \t%-25s") + \
+    _("Machine Type:         \t%s") + \
     "\n"
 
 repos_list = \
-    _("Repo Id:              \t%-25s") + \
+    _("Repo Id:              \t%s") + \
     "\n" + \
-    _("Repo Name:            \t%-25s") + \
+    _("Repo Name:            \t%s") + \
     "\n" + \
-    _("Repo Url:             \t%-25s") + \
+    _("Repo Url:             \t%s") + \
     "\n" + \
-    _("Enabled:              \t%-25s") + \
+    _("Enabled:              \t%s") + \
     "\n"
 
 product_status = \
-    _("Product Name:         \t%-25s") + \
+    _("Product Name:         \t%s") + \
     "\n" + \
-    _("Status:               \t%-25s") + \
+    _("Status:               \t%s") + \
     "\n"
 
 environment_list = \
-    _("Name:                 \t%-25s") + \
+    _("Name:                 \t%s") + \
     "\n" + \
-    _("Description:          \t%-25s") + \
+    _("Description:          \t%s") + \
     "\n" \
 
 UNREGISTER_ERROR = _("<b>Errors were encountered during unregister.</b>") + \
