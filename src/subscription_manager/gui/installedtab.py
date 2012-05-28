@@ -20,6 +20,8 @@ from subscription_manager.gui import widgets
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.validity import find_first_invalid_date, \
     ValidProductDateRangeCalculator
+from subscription_manager.certlib import ConsumerIdentity
+
 import gettext
 import gobject
 import gtk
@@ -52,7 +54,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         widgets = ['product_text', 'product_id_text', 'validity_text',
                  'subscription_text', 'subscription_status_label',
-                 'update_certificates_button']
+                 'update_certificates_button', 'register_button']
         super(InstalledProductsTab, self).__init__('installed.glade', widgets)
 
         self.tab_icon = tab_icon
@@ -101,6 +103,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.glade.signal_autoconnect({
             "on_update_certificates_button_clicked":
             parent._update_certificates_button_clicked,
+        })
+        self.glade.signal_autoconnect({
+            "on_register_button_clicked": parent._register_item_clicked,
         })
 
         self.update_products()
@@ -287,6 +292,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 _("This system is registered to RHN Classic"))
             return
 
+        is_registered = ConsumerIdentity.existsAndValid()
+        self.set_registered(is_registered)
+
         # Look for products which have invalid entitlements
         sorter = CertSorter(self.product_dir, self.entitlement_dir,
                 self.facts.get_facts())
@@ -296,7 +304,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         partial_count = len(sorter.partially_valid_products)
 
-        self.update_certificates_button.show()
         if warn_count > 0:
             self._set_status_icons(INVALID)
             # Change wording slightly for just one product
@@ -333,10 +340,14 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 # the button to launch it:
                 self.subscription_status_label.set_text(
                         _("No product certificates installed."))
-                self.update_certificates_button.hide()
+
+        if not is_registered:
+            self.subscription_status_label.set_text(
+                _("You must register this system before subscribing."))
 
     def set_registered(self, is_registered):
-        self.update_certificates_button.set_sensitive(is_registered)
+        self.update_certificates_button.set_visible(is_registered)
+        self.register_button.set_visible(not is_registered)
 
     def refresh(self):
         self._set_next_update()
