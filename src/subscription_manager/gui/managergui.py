@@ -37,6 +37,7 @@ from subscription_manager.facts import Facts
 from subscription_manager.certdirectory import ProductDirectory, EntitlementDirectory
 from subscription_manager.certlib import ConsumerIdentity, CertLib
 from subscription_manager.branding import get_branding
+from subscription_manager.utils import get_version_dict
 
 from subscription_manager.gui import redeem
 from subscription_manager.gui import factsgui
@@ -199,6 +200,8 @@ class MainWindow(widgets.GladeWidget):
         self.backend = backend or Backend()
         self.consumer = consumer or Consumer()
         self.facts = facts or Facts()
+
+        log.debug("Versions: %s " % get_version_dict(self.backend.uep))
 
         self.product_dir = prod_dir or ProductDirectory()
         self.entitlement_dir = ent_dir or EntitlementDirectory()
@@ -439,7 +442,7 @@ class MainWindow(widgets.GladeWidget):
             log.warn("Unable to open help documentation: %s", e)
 
     def _about_item_clicked(self, widget):
-        about = AboutDialog(self._get_window())
+        about = AboutDialog(self._get_window(), self.backend)
         about.show()
 
     def _online_docs_item_clicked(self, widget):
