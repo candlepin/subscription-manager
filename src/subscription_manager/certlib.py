@@ -211,7 +211,7 @@ class UpdateAction(Action):
             for product in cert.getProducts():
                 system_log("Removed subscription for product '%s'" % \
                     (product.getName()))
-        for cert in report.expnd:
+        for cert in report.expired:
             system_log("Expired subscription for '%s' contract '%s'" % \
                 (cert.getOrder().getName(), cert.getOrder().getContract()))
             for product in cert.getProducts():
@@ -300,7 +300,7 @@ class UpdateAction(Action):
 
     def purgeExpired(self, report):
         for cert in self.entdir.listExpired():
-            report.expnd.append(cert)
+            report.expired.append(cert)
             cert.delete()
 
 
@@ -400,11 +400,10 @@ class UpdateReport:
         self.expected = []
         self.added = []
         self.rogue = []
-        self.expd = []
-        self.expnd = []
+        self.expired = []
 
     def updates(self):
-        return (len(self.added) + len(self.rogue) + len(self.expd))
+        return (len(self.added) + len(self.rogue) + len(self.expired))
 
     def write(self, s, title, certificates):
         indent = '  '
@@ -430,8 +429,7 @@ class UpdateReport:
         s.append(_('Expected (UEP) serial# %s') % self.expected)
         self.write(s, _('Added (new)'), self.added)
         self.write(s, _('Deleted (rogue):'), self.rogue)
-        self.write(s, _('Expired (not deleted):'), self.expnd)
-        self.write(s, _('Expired (deleted):'), self.expd)
+        self.write(s, _('Expired (deleted):'), self.expired)
         return '\n'.join(s)
 
 
