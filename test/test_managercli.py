@@ -359,6 +359,10 @@ class TestReleaseCommand(TestCliProxyCommand):
     # def test_invalid_content_url
 
 
+class TestVersionCommand(TestCliCommand):
+    command_class = managercli.VersionCommand
+
+
 class TestSystemExit(unittest.TestCase):
     def setUp(self):
         sys.stderr = MockStderr()
