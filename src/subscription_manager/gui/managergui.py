@@ -32,7 +32,6 @@ from subscription_manager.gui import file_monitor
 from subscription_manager.gui import registergui
 import rhsm.connection as connection
 import rhsm.config as config
-from subscription_manager import constants
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.facts import Facts
 from subscription_manager.certdirectory import ProductDirectory, EntitlementDirectory
@@ -385,7 +384,10 @@ class MainWindow(widgets.GladeWidget):
             managerlib.unregister(self.backend.uep, self.consumer.uuid)
         except Exception, e:
             log.error("Error unregistering system with entitlement platform.")
-            handle_gui_exception(e, constants.UNREGISTER_ERROR,
+            handle_gui_exception(e,
+                    _("<b>Errors were encountered during unregister.</b>") + \
+                    "\n%s\n" + \
+                    _("Please see /var/log/rhsm/rhsm.log for more information."),
                     self.main_window,
                     logMsg="Consumer may need to be manually cleaned up: %s" %
                     self.consumer.uuid)
@@ -397,7 +399,8 @@ class MainWindow(widgets.GladeWidget):
 
     def _unregister_item_clicked(self, widget):
         log.info("Unregister button pressed, asking for confirmation.")
-        prompt = messageWindow.YesNoDialog(constants.CONFIRM_UNREGISTER,
+        prompt = messageWindow.YesNoDialog(
+                _("<b>Are you sure you want to unregister?</b>"),
                 self._get_window())
         prompt.connect('response', self._on_unregister_prompt_response)
 
