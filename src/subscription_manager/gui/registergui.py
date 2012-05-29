@@ -25,7 +25,6 @@ import gtk.glade
 
 from subscription_manager import managerlib
 import rhsm.config as config
-from subscription_manager import constants
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
@@ -68,6 +67,9 @@ OWNER_SELECT_PAGE = 2
 ENVIRONMENT_SELECT_PAGE = 3
 CHOOSE_SERVER_PAGE = 4
 
+REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
+    "\n%s\n" + \
+    _("Please see /var/log/rhsm/rhsm.log for more information.")
 
 registration_xml = GladeWrapper(os.path.join(prefix,
     "data/registration.glade"))
@@ -244,7 +246,7 @@ class RegisterScreen:
 
     def _on_get_owner_list_cb(self, owners, error=None):
         if error != None:
-            handle_gui_exception(error, constants.REGISTER_ERROR,
+            handle_gui_exception(error, REGISTER_ERROR,
                     self.registerWin)
             self._finish_registration(failed=True)
             return
@@ -253,7 +255,8 @@ class RegisterScreen:
 
         if len(owners) == 0:
             handle_gui_exception(None,
-                    (constants.NO_ORG_ERROR % (self.uname.get_text().strip())),
+                    _("<b>User %s is not able to register with any orgs.</b>") \
+                            % (self.uname.get_text().strip()),
                     self.registerWin)
             self._finish_registration(failed=True)
             return
@@ -279,7 +282,7 @@ class RegisterScreen:
     def _on_get_environment_list_cb(self, result_tuple, error=None):
         environments = result_tuple
         if error != None:
-            handle_gui_exception(error, constants.REGISTER_ERROR, self.registerWin)
+            handle_gui_exception(error, REGISTER_ERROR, self.registerWin)
             self._finish_registration(failed=True)
             return
 
@@ -391,7 +394,7 @@ class RegisterScreen:
             self._finish_registration()
 
         except Exception, e:
-            handle_gui_exception(e, constants.REGISTER_ERROR, self.registerWin)
+            handle_gui_exception(e, REGISTER_ERROR, self.registerWin)
             self._finish_registration(failed=True)
 
     def _finish_registration(self, failed=False):

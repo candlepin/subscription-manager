@@ -188,7 +188,6 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/cert_sorter.py*
 %{_datadir}/rhsm/subscription_manager/validity.py*
 %{_datadir}/rhsm/subscription_manager/hwprobe.py*
-%{_datadir}/rhsm/subscription_manager/constants.py*
 %{_datadir}/rhsm/subscription_manager/lock.py*
 %{_datadir}/rhsm/subscription_manager/facts.py*
 %{_datadir}/rhsm/subscription_manager/factlib.py*

@@ -152,19 +152,6 @@ class TestUnicodeGettext(TestLocale):
             for msgid in msgids:
                 "%s" % gettext.gettext(msgid)
 
-    #TODO:
-    def test_constants(self):
-    # make sure module set there textdomain in a way
-    # they are immune from the process wide textdomain
-    # aka, firstboot
-        for lang in self.test_locales:
-            self._setupLang(lang)
-            from subscription_manager import constants
-
-            # strings are gettext'ed at module scope...
-            reload(constants)
-
-            "%s" % constants.CONFIRM_UNREGISTER
 
 if __name__ == "__main__":
     po = PotFile()
