@@ -18,14 +18,15 @@
 import os
 import socket
 import logging
+import threading
+import Queue
 
+import gobject
 import gtk
 import gtk.glade
 
-
 from subscription_manager import managerlib
 import rhsm.config as config
-from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager.utils import parse_server_info, ServerUrlParseError,\
@@ -43,23 +44,10 @@ gtk.glade.bindtextdomain("rhsm")
 gtk.glade.textdomain("rhsm")
 
 log = logging.getLogger('rhsm-app.' + __name__)
-
-prefix = os.path.dirname(__file__)
-VALID_IMG = os.path.join(prefix, "data/icons/valid.svg")
-INVALID_IMG = os.path.join(prefix, "data/icons/invalid.svg")
+CFG = config.initConfig()
 
 # An implied Katello environment which we can't actual register to.
 LIBRARY_ENV_NAME = "library"
-
-cert_file = ConsumerIdentity.certpath()
-key_file = ConsumerIdentity.keypath()
-
-CFG = config.initConfig()
-
-import threading
-import Queue
-
-import gobject
 
 CREDENTIALS_PAGE = 0
 PROGRESS_PAGE = 1
@@ -71,7 +59,7 @@ REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
     "\n%s\n" + \
     _("Please see /var/log/rhsm/rhsm.log for more information.")
 
-registration_xml = GladeWrapper(os.path.join(prefix,
+registration_xml = GladeWrapper(os.path.join(os.path.dirname(__file__),
     "data/registration.glade"))
 
 
