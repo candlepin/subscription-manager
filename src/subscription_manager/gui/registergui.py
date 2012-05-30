@@ -119,8 +119,13 @@ class RegisterScreen(widgets.GladeWidget):
         # all widgets are cleared.
         self._show_choose_server_page()
 
+        self._set_navigation_sensitive(True)
         self._clear_registration_widgets()
         self.register_dialog.present()
+
+    def _set_navigation_sensitive(self, sensitive):
+        self.cancel_button.set_sensitive(sensitive)
+        self.register_button.set_sensitive(sensitive)
 
     def _show_choose_server_page(self):
         # Override the button text to clarify we're not actually registering
@@ -198,8 +203,7 @@ class RegisterScreen(widgets.GladeWidget):
         else:
             self.organization_screen.set_model(owners)
 
-            self.cancel_button.set_sensitive(True)
-            self.register_button.set_sensitive(True)
+            self._set_navigation_sensitive(True)
             self.register_notebook.set_page(OWNER_SELECT_PAGE)
 
     def _on_get_environment_list_cb(self, result_tuple, error=None):
@@ -226,28 +230,8 @@ class RegisterScreen(widgets.GladeWidget):
             self.environment_treeview.get_selection().select_iter(
                     environment_model.get_iter_first())
 
-            self.cancel_button.set_sensitive(True)
-            self.register_button.set_sensitive(True)
+            self._set_navigation_sensitive(True)
             self.register_notebook.set_page(ENVIRONMENT_SELECT_PAGE)
-
-    # Callback used by the owner selection screen:
-    def _owner_selected(self):
-        self.cancel_button.set_sensitive(False)
-        self.register_button.set_sensitive(False)
-        self.register_notebook.set_page(PROGRESS_PAGE)
-
-        self.async.get_environment_list(self.owner_key,
-                                        self._on_get_environment_list_cb)
-
-    def _environment_selected(self):
-        self.cancel_button.set_sensitive(False)
-        self.register_button.set_sensitive(False)
-        self.register_notebook.set_page(PROGRESS_PAGE)
-
-        model, tree_iter = self.environment_treeview.get_selection().get_selected()
-        env = model.get_value(tree_iter, 0)
-
-        self._run_register_step(env)
 
     def _credentials_entered(self):
         username = self.credentials_screen.username
@@ -260,11 +244,26 @@ class RegisterScreen(widgets.GladeWidget):
         self.async.get_owner_list(username, self._on_get_owner_list_cb)
 
         self.timer = gobject.timeout_add(100, self._timeout_callback)
+
+        self._set_navigation_sensitive(False)
         self.register_notebook.set_page(PROGRESS_PAGE)
         self._set_register_details_label(_("Fetching list of possible organizations"))
 
-        self.cancel_button.set_sensitive(False)
-        self.register_button.set_sensitive(False)
+    def _owner_selected(self):
+        self._set_navigation_sensitive(False)
+        self.register_notebook.set_page(PROGRESS_PAGE)
+        self._set_register_details_label(_("Fetching list of possible environments"))
+        self.async.get_environment_list(self.owner_key,
+                                        self._on_get_environment_list_cb)
+
+    def _environment_selected(self):
+        self._set_navigation_sensitive(False)
+        self.register_notebook.set_page(PROGRESS_PAGE)
+
+        model, tree_iter = self.environment_treeview.get_selection().get_selected()
+        env = model.get_value(tree_iter, 0)
+
+        self._run_register_step(env)
 
     def _run_register_step(self, env):
         log.info("Registering to owner: %s environment: %s" % (self.owner_key,
@@ -300,9 +299,6 @@ class RegisterScreen(widgets.GladeWidget):
         self.emit_consumer_signal()
 
         gobject.source_remove(self.timer)
-        self.cancel_button.set_sensitive(True)
-        self.register_button.set_sensitive(True)
-        self.register_notebook.set_page(CREDENTIALS_PAGE)
 
     def emit_consumer_signal(self):
         for method in self.callbacks:
