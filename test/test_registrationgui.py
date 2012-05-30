@@ -27,7 +27,7 @@ class RegisterScreenTests(unittest.TestCase):
         self.rs.register()
 
     def test_show_registration_returns_to_choose_server_screen(self):
-        self.rs._server_selected()
+        self.rs.register()
         self.rs.account_login.set_text("foo")
         self.rs.account_password.set_text("bar")
         self.rs.register()

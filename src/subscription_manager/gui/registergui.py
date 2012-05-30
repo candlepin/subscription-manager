@@ -49,11 +49,13 @@ CFG = config.initConfig()
 # An implied Katello environment which we can't actual register to.
 LIBRARY_ENV_NAME = "library"
 
+DONT_CHANGE = -1
 CREDENTIALS_PAGE = 0
 PROGRESS_PAGE = 1
 OWNER_SELECT_PAGE = 2
 ENVIRONMENT_SELECT_PAGE = 3
 CHOOSE_SERVER_PAGE = 4
+FINISH = 5
 
 REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
     "\n%s\n" + \
@@ -75,19 +77,12 @@ class RegisterScreen(widgets.GladeWidget):
                 'register_notebook',
                 'register_progressbar',
                 'register_details_label',
+                'skip_auto_bind',
                 'cancel_button',
                 'register_button',
                 'consumer_name',
-                'skip_auto_bind',
                 'owner_treeview',
                 'environment_treeview',
-                'rhn_radio',
-                'local_radio',
-                'offline_radio',
-                'local_entry',
-                'import_certs_button',
-                'proxy_label',
-                'proxy_config_button',
                 'account_login',
                 'account_password',
         ]
@@ -102,11 +97,6 @@ class RegisterScreen(widgets.GladeWidget):
 
         dic = {"on_register_cancel_button_clicked": self.cancel,
                "on_register_button_clicked": self._on_register_button_clicked,
-               "on_proxy_config_button_clicked": self._on_proxy_config_button_clicked,
-               "on_import_certs_button_clicked": self._on_import_certs_button_clicked,
-               "on_rhn_radio_toggled": self._server_radio_toggled,
-               "on_local_radio_toggled": self._server_radio_toggled,
-               "on_offline_radio_toggled": self._server_radio_toggled,
                "hide": self.cancel,
                "delete_event": self._delete_event,
             }
@@ -133,8 +123,9 @@ class RegisterScreen(widgets.GladeWidget):
         register_header_label.set_label("<b>%s</b>" % \
                 get_branding().GUI_REGISTRATION_HEADER)
 
-        self.network_config_dialog = networkConfig.NetworkConfigDialog()
-        self.import_certs_dialog = ImportSubDialog()
+        self.choose_server_screen = ChooseServerScreen(self.register_dialog,
+                                                       self.backend)
+        self.register_notebook.append_page(self.choose_server_screen.container)
 
     def show(self):
         # Ensure that we start on the first page and that
@@ -170,17 +161,13 @@ class RegisterScreen(widgets.GladeWidget):
     def _on_register_button_clicked(self, button):
         self.register()
 
-    def _on_proxy_config_button_clicked(self, button):
-        self.network_config_dialog.set_parent_window(self.register_dialog)
-        self.network_config_dialog.show()
-
-    def _on_import_certs_button_clicked(self, button):
-        self.import_certs_dialog.set_parent_window(self.register_dialog)
-        self.import_certs_dialog.show()
-
     def register(self, testing=None):
         if self.register_notebook.get_current_page() == CHOOSE_SERVER_PAGE:
-            self._server_selected()
+            result = self.choose_server_screen.apply()
+            if result == FINISH:
+                self.close_window()
+            elif result == CREDENTIALS_PAGE:
+                self._show_credentials_page()
             return True
         if self.register_notebook.get_current_page() == OWNER_SELECT_PAGE:
             # we're on the owner select page
@@ -241,8 +228,8 @@ class RegisterScreen(widgets.GladeWidget):
 
         if len(owners) == 1:
             self.owner_key = owners[0][0]
-            self.async.get_environment_list(self.owner_key, self._on_get_environment_list_cb)
-
+            self.async.get_environment_list(self.owner_key,
+                    self._on_get_environment_list_cb)
         else:
             owner_model = gtk.ListStore(str, str)
             for owner in owners:
@@ -295,54 +282,6 @@ class RegisterScreen(widgets.GladeWidget):
         self.owner_key = model.get_value(tree_iter, 0)
 
         self.async.get_environment_list(self.owner_key, self._on_get_environment_list_cb)
-
-    def _server_radio_toggled(self, widget):
-        self.local_entry.set_sensitive(self.local_radio.get_active())
-
-    def _server_selected(self):
-        if self.rhn_radio.get_active():
-            CFG.set('server', 'hostname', config.DEFAULT_HOSTNAME)
-            CFG.set('server', 'port', config.DEFAULT_PORT)
-            CFG.set('server', 'prefix', config.DEFAULT_PREFIX)
-        elif self.offline_radio.get_active():
-            # We'll signal the user set offline by setting an empty hostname:
-            CFG.set('server', 'hostname', '')
-            CFG.set('server', 'port', config.DEFAULT_PORT)
-            CFG.set('server', 'prefix', config.DEFAULT_PREFIX)
-        elif self.local_radio.get_active():
-            local_server = self.local_entry.get_text()
-            try:
-                (hostname, port, prefix) = parse_server_info(local_server)
-                CFG.set('server', 'hostname', hostname)
-                CFG.set('server', 'port', port)
-                CFG.set('server', 'prefix', prefix)
-
-                try:
-                    if not is_valid_server_info(hostname, port, prefix):
-                        errorWindow(_("Unable to reach the server at %s:%s%s" %
-                            (hostname, port, prefix)))
-                        return
-                except MissingCaCertException:
-                    errorWindow(_("CA certificate for subscription service has not been installed."))
-                    return
-
-            except ServerUrlParseError:
-                errorWindow(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"), self.register_dialog)
-                return
-
-        log.info("Writing server data to rhsm.conf")
-        CFG.save()
-        self.backend.update()
-
-        if self.offline_radio.get_active():
-            # Because the user selected offline, the whole registration process
-            # must end here.
-            self._offline_selected()
-        else:
-            self._show_credentials_page()
-
-    def _offline_selected(self):
-        self.close_window()
 
     def _environment_selected(self):
         self.cancel_button.set_sensitive(False)
@@ -434,6 +373,95 @@ class RegisterScreen(widgets.GladeWidget):
         self.consumer_name.set_text("")
         self._initialize_consumer_name()
         self.skip_auto_bind.set_active(False)
+
+        self.choose_server_screen.clear()
+
+
+class ChooseServerScreen(widgets.GladeWidget):
+
+    def __init__(self, parent, backend):
+        widget_names = [
+                'rhn_radio',
+                'local_radio',
+                'offline_radio',
+                'local_entry',
+                'import_certs_button',
+                'proxy_label',
+                'proxy_config_button',
+                'container',
+        ]
+        super(ChooseServerScreen, self).__init__("choose_server.glade",
+                                                 widget_names)
+
+        self._parent = parent
+        self._backend = backend
+
+        callbacks = {
+                "on_proxy_config_button_clicked": self._on_proxy_config_button_clicked,
+                "on_import_certs_button_clicked": self._on_import_certs_button_clicked,
+                "on_rhn_radio_toggled": self._on_server_radio_toggled,
+                "on_local_radio_toggled": self._on_server_radio_toggled,
+                "on_offline_radio_toggled": self._on_server_radio_toggled,
+            }
+        self.glade.signal_autoconnect(callbacks)
+
+        self.network_config_dialog = networkConfig.NetworkConfigDialog()
+        self.import_certs_dialog = ImportSubDialog()
+
+    def _on_server_radio_toggled(self, widget):
+        self.local_entry.set_sensitive(self.local_radio.get_active())
+
+    def _on_proxy_config_button_clicked(self, button):
+        self.network_config_dialog.set_parent_window(self._parent)
+        self.network_config_dialog.show()
+
+    def _on_import_certs_button_clicked(self, button):
+        self.import_certs_dialog.set_parent_window(self._parent)
+        self.import_certs_dialog.show()
+
+    def apply(self):
+        if self.rhn_radio.get_active():
+            CFG.set('server', 'hostname', config.DEFAULT_HOSTNAME)
+            CFG.set('server', 'port', config.DEFAULT_PORT)
+            CFG.set('server', 'prefix', config.DEFAULT_PREFIX)
+        elif self.offline_radio.get_active():
+            # We'll signal the user set offline by setting an empty hostname:
+            CFG.set('server', 'hostname', '')
+            CFG.set('server', 'port', config.DEFAULT_PORT)
+            CFG.set('server', 'prefix', config.DEFAULT_PREFIX)
+        elif self.local_radio.get_active():
+            local_server = self.local_entry.get_text()
+            try:
+                (hostname, port, prefix) = parse_server_info(local_server)
+                CFG.set('server', 'hostname', hostname)
+                CFG.set('server', 'port', port)
+                CFG.set('server', 'prefix', prefix)
+
+                try:
+                    if not is_valid_server_info(hostname, port, prefix):
+                        errorWindow(_("Unable to reach the server at %s:%s%s" %
+                            (hostname, port, prefix)), self._parent)
+                        return DONT_CHANGE
+                except MissingCaCertException:
+                    errorWindow(_("CA certificate for subscription service has not been installed."), self._parent)
+                    return DONT_CHANGE
+
+            except ServerUrlParseError:
+                errorWindow(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"), self._parent)
+                return DONT_CHANGE
+
+        log.info("Writing server data to rhsm.conf")
+        CFG.save()
+        self._backend.update()
+
+        if self.offline_radio.get_active():
+            # Because the user selected offline, the whole registration process
+            # must end here.
+            return FINISH
+        else:
+            return CREDENTIALS_PAGE
+
+    def clear(self):
         self.local_entry.set_text("")
 
         # We need to determine the current state of the server info in
