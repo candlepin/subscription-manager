@@ -21,21 +21,47 @@ from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
 
 sys.path.append('/usr/share/rhsm')
 from subscription_manager import logutil
+from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.repolib import RepoLib, EntitlementDirectory
 from rhsm import connection
 
 requires_api_version = '2.5'
 plugin_type = (TYPE_CORE, TYPE_INTERACTIVE)
 
-warning = \
+# TODO: translate strings
+
+expired_warning = \
 """
 *** WARNING ***
 The subscription for following product(s) has expired:
 %s
-You no longer have access to the repsoitories that
-provide these products.  It is important that you renew
-these subscriptions immediatly to resume access to security
-and other critical updates.
+You no longer have access to the repositories that
+provide these products.  It is important that you apply an
+active subscription in order to resume access to security
+and other critical updates. If you don't have other active
+subscriptions, you can renew the expired subscription.
+"""
+
+not_registered_warning = \
+"""
+This machine has not been registered and therefore has
+no access to security and other critical updates. Please
+register using subscription-manager.
+"""
+
+repo_usage_message = \
+"""
+This machine is using certificate-based subscription
+management. Please use yum-config-manager to configure
+which software repositories are active.
+"""
+
+no_subs_warning = \
+"""
+This machine has been registered to RHN, but has no
+subscriptions applied. Please use subscription-manager
+in order to enable access to security and other
+critical updates.
 """
 
 
@@ -79,7 +105,27 @@ def warnExpired(conduit):
             m = '  - %s' % p.getName()
             products.add(m)
     if products:
-        msg = warning % '\n'.join(sorted(products))
+        msg = expired_warning % '\n'.join(sorted(products))
+        conduit.info(2, msg)
+
+
+def warnOrGiveUsageMessage(conduit):
+    """ either output a warning, or a usage message """
+    msg = ""
+    # TODO: refactor so there are not two checks for this
+    if os.getuid() != 0:
+        return
+    try:
+        try:
+            ConsumerIdentity.read().getConsumerId()
+            entdir = EntitlementDirectory()
+            if len(entdir.listValid()) == 0:
+                msg = no_subs_warning
+            else:
+                msg = repo_usage_message
+        except:
+            msg = not_registered_warning
+    finally:
         conduit.info(2, msg)
 
 
@@ -92,6 +138,8 @@ def config_hook(conduit):
     logutil.init_logger_for_yum()
     try:
         update(conduit)
-        warnExpired(conduit)
+        if not ClassicCheck().is_registered_with_classic():
+                warnOrGiveUsageMessage(conduit)
+                warnExpired(conduit)
     except Exception, e:
         conduit.error(2, str(e))
