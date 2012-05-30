@@ -397,22 +397,21 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def subscribe_button_clicked(self, button):
         model, tree_iter = self.top_view.get_selection().get_selected()
-        pools = model.get_value(tree_iter, self.store['merged_pools'])
+        merged_pools = model.get_value(tree_iter, self.store['merged_pools'])
         quantity_to_consume = model.get_value(tree_iter, self.store['quantity_to_consume'])
 
         # Decide if we need to show the contract selection dialog or not.
         # If there's just one pool and does not allow multi-entitlement,
         # shortcut right to the callback that the dialog would have run.
-        if len(pools.pools) == 1:
-            self._contract_selected(pools.pools[0], quantity_to_consume)
+        if len(merged_pools.pools) == 1:
+            self._contract_selected(merged_pools.pools[0], quantity_to_consume)
             return
 
         self.contract_selection = ContractSelectionWindow(
                 self._contract_selected, self._contract_selection_cancelled)
 
         self.contract_selection.set_parent_window(self.content.get_parent_window().get_user_data())
-
-        for pool in pools.pools:
+        for pool in merged_pools.pools:
             self.contract_selection.add_pool(pool, quantity_to_consume)
 
         self.contract_selection.show()
