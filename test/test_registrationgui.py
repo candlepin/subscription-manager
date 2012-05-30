@@ -3,7 +3,7 @@ import unittest
 from mock import Mock
 from stubs import StubBackend, StubFacts
 from subscription_manager.gui.registergui import RegisterScreen, \
-        CREDENTIALS_PAGE, CHOOSE_SERVER_PAGE
+        CredentialsScreen, CREDENTIALS_PAGE, CHOOSE_SERVER_PAGE
 
 
 class RegisterScreenTests(unittest.TestCase):
@@ -18,34 +18,43 @@ class RegisterScreenTests(unittest.TestCase):
 
         self.rs = RegisterScreen(self.backend, self.consumer, self.facts)
 
+        self.rs.choose_server_screen = Mock()
+        self.rs.credentials_screen = Mock()
+
     def test_show(self):
         self.rs.show()
 
-    def test_register(self):
-        self.rs.account_login.set_text("foo")
-        self.rs.account_password.set_text("bar")
-        self.rs.register()
-
     def test_show_registration_returns_to_choose_server_screen(self):
-        self.rs.register()
-        self.rs.account_login.set_text("foo")
-        self.rs.account_password.set_text("bar")
-        self.rs.register()
-        self.assertNotEquals(CREDENTIALS_PAGE, self.rs.register_notebook.get_current_page())
-        self.rs.cancel(self.rs.cancel_button)
-        self.assertNotEquals(CREDENTIALS_PAGE, self.rs.register_notebook.get_current_page())
         self.rs.show()
-        self.assertEquals(CHOOSE_SERVER_PAGE, self.rs.register_notebook.get_current_page())
+        self.rs.register()
+        self.assertNotEquals(CREDENTIALS_PAGE,
+                          self.rs.register_notebook.get_current_page())
+        self.rs.cancel(self.rs.cancel_button)
+        self.rs.show()
+        self.assertEquals(CHOOSE_SERVER_PAGE,
+                          self.rs.register_notebook.get_current_page())
+
+
+class CredentialsScreenTests(unittest.TestCase):
+
+    def setUp(self):
+        self.backend = StubBackend()
+        self.parent= Mock()
+
+        self.screen = CredentialsScreen(self.backend, self.parent)
 
     def test_clear_credentials_dialog(self):
         # Pull initial value here since it will be different per machine.
-        default_consumer_name_value = self.rs.consumer_name.get_text()
-        self.rs.account_login.set_text("foo")
-        self.rs.account_password.set_text("bar")
-        self.rs.skip_auto_bind.set_active(True)
-        self.rs.consumer_name.set_text("CONSUMER")
-        self.rs._clear_registration_widgets()
-        self.assertEquals("", self.rs.account_login.get_text())
-        self.assertEquals("", self.rs.account_password.get_text())
-        self.assertFalse(self.rs.skip_auto_bind.get_active())
-        self.assertEquals(default_consumer_name_value, self.rs.consumer_name.get_text())
+        default_consumer_name_value = self.screen.consumer_name.get_text()
+        self.screen.account_login.set_text("foo")
+        self.screen.account_password.set_text("bar")
+        self.screen.skip_auto_bind.set_active(True)
+        self.screen.consumer_name.set_text("CONSUMER")
+        self.screen.clear()
+        self.assertEquals("", self.screen.account_login.get_text())
+        self.assertEquals("", self.screen.account_password.get_text())
+        self.assertFalse(self.screen.skip_auto_bind.get_active())
+        self.assertEquals(default_consumer_name_value,
+                          self.screen.consumer_name.get_text())
+
+

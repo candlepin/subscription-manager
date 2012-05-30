@@ -77,14 +77,10 @@ class RegisterScreen(widgets.GladeWidget):
                 'register_notebook',
                 'register_progressbar',
                 'register_details_label',
-                'skip_auto_bind',
                 'cancel_button',
                 'register_button',
-                'consumer_name',
                 'owner_treeview',
                 'environment_treeview',
-                'account_login',
-                'account_password',
         ]
         widgets.GladeWidget.__init__(self, "registration.glade", widget_names)
 
@@ -102,8 +98,6 @@ class RegisterScreen(widgets.GladeWidget):
             }
         self.glade.signal_autoconnect(dic)
 
-        self._initialize_consumer_name()
-
         renderer = gtk.CellRendererText()
         column = gtk.TreeViewColumn(_("Organization"), renderer, text=1)
         self.owner_treeview.set_property("headers-visible", False)
@@ -114,18 +108,13 @@ class RegisterScreen(widgets.GladeWidget):
         self.environment_treeview.set_property("headers-visible", False)
         self.environment_treeview.append_column(column)
 
-        register_tip_label = self.glade.get_widget("registrationTip")
-        register_tip_label.set_label("<small>%s</small>" % \
-                get_branding().GUI_FORGOT_LOGIN_TIP)
-
-        register_header_label = \
-                self.glade.get_widget("registrationHeader")
-        register_header_label.set_label("<b>%s</b>" % \
-                get_branding().GUI_REGISTRATION_HEADER)
-
         self.choose_server_screen = ChooseServerScreen(self.register_dialog,
                                                        self.backend)
         self.register_notebook.append_page(self.choose_server_screen.container)
+
+        self.credentials_screen = CredentialsScreen(self.register_dialog,
+                                                    self.backend)
+        self.register_notebook.prepend_page(self.credentials_screen.container)
 
     def show(self):
         # Ensure that we start on the first page and that
@@ -153,56 +142,48 @@ class RegisterScreen(widgets.GladeWidget):
     def cancel(self, button):
         self.close_window()
 
-    def _initialize_consumer_name(self):
-        if not self.consumer_name.get_text():
-            self.consumer_name.set_text(socket.gethostname())
-
     # callback needs the extra arg, so just a wrapper here
     def _on_register_button_clicked(self, button):
         self.register()
 
-    def register(self, testing=None):
+    def register(self):
         if self.register_notebook.get_current_page() == CHOOSE_SERVER_PAGE:
             result = self.choose_server_screen.apply()
             if result == FINISH:
                 self.close_window()
+            elif result == DONT_CHANGE:
+                return False
             elif result == CREDENTIALS_PAGE:
                 self._show_credentials_page()
-            return True
-        if self.register_notebook.get_current_page() == OWNER_SELECT_PAGE:
+                return True
+        elif self.register_notebook.get_current_page() == OWNER_SELECT_PAGE:
             # we're on the owner select page
             self._owner_selected()
             return True
         elif self.register_notebook.get_current_page() == ENVIRONMENT_SELECT_PAGE:
             self._environment_selected()
             return True
+        elif self.register_notebook.get_current_page() == CREDENTIALS_PAGE:
+            result = self.credentials_screen.apply()
+            if result == DONT_CHANGE:
+                return False
+            elif result == OWNER_SELECT_PAGE:
+                username = self.credentials_screen.username
+                password = self.credentials_screen.password
+                self.consumername = self.credentials_screen.consumername
 
-        username = self.account_login.get_text().strip()
-        password = self.account_password.get_text().strip()
-        consumername = self.consumer_name.get_text()
+                self.backend.create_admin_uep(username=username,
+                                              password=password)
 
-        if not self.validate_consumername(consumername):
-            return False
+                self.async.get_owner_list(username, self._on_get_owner_list_cb)
 
-        if not self.validate_account():
-            return False
+                self.timer = gobject.timeout_add(100, self._timeout_callback)
+                self.register_notebook.set_page(PROGRESS_PAGE)
+                self._set_register_details_label(_("Fetching list of possible organizations"))
 
-        # for firstboot -t
-        if testing:
-            return True
-
-        self.backend.create_admin_uep(username=username,
-                                      password=password)
-
-        self.async.get_owner_list(username, self._on_get_owner_list_cb)
-
-        self.timer = gobject.timeout_add(100, self._timeout_callback)
-        self.register_notebook.set_page(PROGRESS_PAGE)
-        self._set_register_details_label(_("Fetching list of possible organizations"))
-
-        self.cancel_button.set_sensitive(False)
-        self.register_button.set_sensitive(False)
-        return True
+                self.cancel_button.set_sensitive(False)
+                self.register_button.set_sensitive(False)
+                return True
 
     def _timeout_callback(self):
         self.register_progressbar.pulse()
@@ -295,7 +276,7 @@ class RegisterScreen(widgets.GladeWidget):
 
     def _run_register_step(self, owner, env):
         log.info("Registering to owner: %s environment: %s" % (owner, env))
-        self.async.register_consumer(self.consumer_name.get_text(),
+        self.async.register_consumer(self.consumername,
                 self.facts, owner, env,
                 self._on_registration_finished_cb)
 
@@ -339,27 +320,7 @@ class RegisterScreen(widgets.GladeWidget):
         return True
 
     def skip_auto_subscribe(self):
-        return self.skip_auto_bind.get_active()
-
-    def validate_consumername(self, consumername):
-        if not consumername:
-            errorWindow(_("You must enter a system name."), parent=self.register_dialog)
-            self.consumer_name.grab_focus()
-            return False
-        return True
-
-    def validate_account(self):
-        # validate / check user name
-        if self.account_login.get_text().strip() == "":
-            errorWindow(_("You must enter a login."), parent=self.register_dialog)
-            self.account_login.grab_focus()
-            return False
-
-        if self.account_password.get_text().strip() == "":
-            errorWindow(_("You must enter a password."), parent=self.register_dialog)
-            self.account_password.grab_focus()
-            return False
-        return True
+        return self.credentials_screen.skip_auto_bind.get_active()
 
     def set_parent_window(self, window):
         self.register_dialog.set_transient_for(window)
@@ -368,13 +329,80 @@ class RegisterScreen(widgets.GladeWidget):
         self.register_details_label.set_label("<small>%s</small>" % details)
 
     def _clear_registration_widgets(self):
+        self.credentials_screen.clear()
+        self.choose_server_screen.clear()
+
+
+class CredentialsScreen(widgets.GladeWidget):
+
+    def __init__(self, parent, backend):
+        widget_names = [
+                'skip_auto_bind',
+                'consumer_name',
+                'account_login',
+                'account_password',
+                'container',
+        ]
+        super(CredentialsScreen, self).__init__("credentials.glade",
+                                                 widget_names)
+
+        self._parent = parent
+        self._backend = backend
+
+        self._initialize_consumer_name()
+
+        register_tip_label = self.glade.get_widget("registrationTip")
+        register_tip_label.set_label("<small>%s</small>" % \
+                get_branding().GUI_FORGOT_LOGIN_TIP)
+
+        register_header_label = \
+                self.glade.get_widget("registrationHeader")
+        register_header_label.set_label("<b>%s</b>" % \
+                get_branding().GUI_REGISTRATION_HEADER)
+
+    def _initialize_consumer_name(self):
+        if not self.consumer_name.get_text():
+            self.consumer_name.set_text(socket.gethostname())
+
+    def _validate_consumername(self, consumername):
+        if not consumername:
+            errorWindow(_("You must enter a system name."), self._parent)
+            self.consumer_name.grab_focus()
+            return False
+        return True
+
+    def _validate_account(self):
+        # validate / check user name
+        if self.account_login.get_text().strip() == "":
+            errorWindow(_("You must enter a login."), self._parent)
+            self.account_login.grab_focus()
+            return False
+
+        if self.account_password.get_text().strip() == "":
+            errorWindow(_("You must enter a password."), self._parent)
+            self.account_password.grab_focus()
+            return False
+        return True
+
+    def apply(self):
+        self.username = self.account_login.get_text().strip()
+        self.password = self.account_password.get_text().strip()
+        self.consumername = self.consumer_name.get_text()
+
+        if not self._validate_consumername(self.consumername):
+            return DONT_CHANGE
+
+        if not self._validate_account():
+            return DONT_CHANGE
+
+        return OWNER_SELECT_PAGE
+
+    def clear(self):
         self.account_login.set_text("")
         self.account_password.set_text("")
         self.consumer_name.set_text("")
         self._initialize_consumer_name()
         self.skip_auto_bind.set_active(False)
-
-        self.choose_server_screen.clear()
 
 
 class ChooseServerScreen(widgets.GladeWidget):

@@ -122,7 +122,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         # bad proxy settings can cause socket.error or friends here
         # see bz #810363
         try:
-            valid_registration = self.register(testing=testing)
+            valid_registration = self.register()
         except socket.error, e:
             handle_gui_exception(e, e, self.registerWin)
             return self._RESULT_FAILURE
