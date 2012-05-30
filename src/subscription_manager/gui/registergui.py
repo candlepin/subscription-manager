@@ -167,21 +167,7 @@ class RegisterScreen(widgets.GladeWidget):
             if result == DONT_CHANGE:
                 return False
             elif result == OWNER_SELECT_PAGE:
-                username = self.credentials_screen.username
-                password = self.credentials_screen.password
-                self.consumername = self.credentials_screen.consumername
-
-                self.backend.create_admin_uep(username=username,
-                                              password=password)
-
-                self.async.get_owner_list(username, self._on_get_owner_list_cb)
-
-                self.timer = gobject.timeout_add(100, self._timeout_callback)
-                self.register_notebook.set_page(PROGRESS_PAGE)
-                self._set_register_details_label(_("Fetching list of possible organizations"))
-
-                self.cancel_button.set_sensitive(False)
-                self.register_button.set_sensitive(False)
+                self._credentials_entered()
                 return True
 
     def _timeout_callback(self):
@@ -262,6 +248,23 @@ class RegisterScreen(widgets.GladeWidget):
         env = model.get_value(tree_iter, 0)
 
         self._run_register_step(env)
+
+    def _credentials_entered(self):
+        username = self.credentials_screen.username
+        password = self.credentials_screen.password
+        self.consumername = self.credentials_screen.consumername
+
+        self.backend.create_admin_uep(username=username,
+                                      password=password)
+
+        self.async.get_owner_list(username, self._on_get_owner_list_cb)
+
+        self.timer = gobject.timeout_add(100, self._timeout_callback)
+        self.register_notebook.set_page(PROGRESS_PAGE)
+        self._set_register_details_label(_("Fetching list of possible organizations"))
+
+        self.cancel_button.set_sensitive(False)
+        self.register_button.set_sensitive(False)
 
     def _run_register_step(self, env):
         log.info("Registering to owner: %s environment: %s" % (self.owner_key,
