@@ -50,11 +50,11 @@ CFG = config.initConfig()
 LIBRARY_ENV_NAME = "library"
 
 DONT_CHANGE = -1
-CREDENTIALS_PAGE = 0
 PROGRESS_PAGE = 1
-OWNER_SELECT_PAGE = 2
-ENVIRONMENT_SELECT_PAGE = 3
 CHOOSE_SERVER_PAGE = 4
+CREDENTIALS_PAGE = 0
+OWNER_SELECT_PAGE = 3
+ENVIRONMENT_SELECT_PAGE = 2
 FINISH = 5
 
 REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
@@ -79,7 +79,6 @@ class RegisterScreen(widgets.GladeWidget):
                 'register_details_label',
                 'cancel_button',
                 'register_button',
-                'owner_treeview',
                 'environment_treeview',
         ]
         widgets.GladeWidget.__init__(self, "registration.glade", widget_names)
@@ -99,14 +98,13 @@ class RegisterScreen(widgets.GladeWidget):
         self.glade.signal_autoconnect(dic)
 
         renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn(_("Organization"), renderer, text=1)
-        self.owner_treeview.set_property("headers-visible", False)
-        self.owner_treeview.append_column(column)
-
-        renderer = gtk.CellRendererText()
         column = gtk.TreeViewColumn(_("Environment"), renderer, text=1)
         self.environment_treeview.set_property("headers-visible", False)
         self.environment_treeview.append_column(column)
+
+        self.organization_screen = OrganizationScreen(self.register_dialog,
+                                                      self.backend)
+        self.register_notebook.append_page(self.organization_screen.container)
 
         self.choose_server_screen = ChooseServerScreen(self.register_dialog,
                                                        self.backend)
@@ -157,7 +155,8 @@ class RegisterScreen(widgets.GladeWidget):
                 self._show_credentials_page()
                 return True
         elif self.register_notebook.get_current_page() == OWNER_SELECT_PAGE:
-            # we're on the owner select page
+            self.organization_screen.apply()
+            self.owner_key = self.organization_screen.owner_key
             self._owner_selected()
             return True
         elif self.register_notebook.get_current_page() == ENVIRONMENT_SELECT_PAGE:
@@ -209,17 +208,9 @@ class RegisterScreen(widgets.GladeWidget):
 
         if len(owners) == 1:
             self.owner_key = owners[0][0]
-            self.async.get_environment_list(self.owner_key,
-                    self._on_get_environment_list_cb)
+            self._owner_selected()
         else:
-            owner_model = gtk.ListStore(str, str)
-            for owner in owners:
-                owner_model.append(owner)
-
-            self.owner_treeview.set_model(owner_model)
-
-            self.owner_treeview.get_selection().select_iter(
-                    owner_model.get_iter_first())
+            self.organization_screen.set_model(owners)
 
             self.cancel_button.set_sensitive(True)
             self.register_button.set_sensitive(True)
@@ -233,12 +224,12 @@ class RegisterScreen(widgets.GladeWidget):
             return
 
         if not environments:
-            self._run_register_step(self.owner_key, None)
+            self._run_register_step(None)
             return
 
         envs = [(env['id'], env['name']) for env in environments]
         if len(envs) == 1:
-            self._run_register_step(self.owner_key, envs[0][0])
+            self._run_register_step(envs[0][0])
         else:
             environment_model = gtk.ListStore(str, str)
             for env in envs:
@@ -259,10 +250,8 @@ class RegisterScreen(widgets.GladeWidget):
         self.register_button.set_sensitive(False)
         self.register_notebook.set_page(PROGRESS_PAGE)
 
-        model, tree_iter = self.owner_treeview.get_selection().get_selected()
-        self.owner_key = model.get_value(tree_iter, 0)
-
-        self.async.get_environment_list(self.owner_key, self._on_get_environment_list_cb)
+        self.async.get_environment_list(self.owner_key,
+                                        self._on_get_environment_list_cb)
 
     def _environment_selected(self):
         self.cancel_button.set_sensitive(False)
@@ -272,13 +261,14 @@ class RegisterScreen(widgets.GladeWidget):
         model, tree_iter = self.environment_treeview.get_selection().get_selected()
         env = model.get_value(tree_iter, 0)
 
-        self._run_register_step(self.owner_key, env)
+        self._run_register_step(env)
 
-    def _run_register_step(self, owner, env):
-        log.info("Registering to owner: %s environment: %s" % (owner, env))
-        self.async.register_consumer(self.consumername,
-                self.facts, owner, env,
-                self._on_registration_finished_cb)
+    def _run_register_step(self, env):
+        log.info("Registering to owner: %s environment: %s" % (self.owner_key,
+                                                               env))
+        self.async.register_consumer(self.consumername, self.facts,
+                                     self.owner_key, env,
+                                     self._on_registration_finished_cb)
 
         self._set_register_details_label(_("Registering your system"))
 
@@ -331,6 +321,42 @@ class RegisterScreen(widgets.GladeWidget):
     def _clear_registration_widgets(self):
         self.credentials_screen.clear()
         self.choose_server_screen.clear()
+
+
+class OrganizationScreen(widgets.GladeWidget):
+
+    def __init__(self, parent, backend):
+        widget_names = [
+                'owner_treeview',
+                'container',
+        ]
+        super(OrganizationScreen, self).__init__("organization.glade",
+                                                 widget_names)
+
+        self._parent = parent
+        self._backend = backend
+
+        renderer = gtk.CellRendererText()
+        column = gtk.TreeViewColumn(_("Organization"), renderer, text=1)
+        self.owner_treeview.set_property("headers-visible", False)
+        self.owner_treeview.append_column(column)
+
+    def apply(self):
+        model, tree_iter = self.owner_treeview.get_selection().get_selected()
+        self.owner_key = model.get_value(tree_iter, 0)
+
+    def clear(self):
+        pass
+
+    def set_model(self, owners):
+        owner_model = gtk.ListStore(str, str)
+        for owner in owners:
+            owner_model.append(owner)
+
+        self.owner_treeview.set_model(owner_model)
+
+        self.owner_treeview.get_selection().select_iter(
+                owner_model.get_iter_first())
 
 
 class CredentialsScreen(widgets.GladeWidget):

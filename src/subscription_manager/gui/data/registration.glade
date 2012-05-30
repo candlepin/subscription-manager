@@ -151,67 +151,6 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkVBox" id="ownerSelectVbox">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="border_width">25</property>
-                <property name="spacing">7</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name">ownerSelectVbox</atkproperty>
-                </accessibility>
-                <child>
-                  <widget class="GtkLabel" id="label5">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Organization Selection&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkScrolledWindow" id="scrolledwindow1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="border_width">8</property>
-                    <property name="hscrollbar_policy">automatic</property>
-                    <property name="vscrollbar_policy">automatic</property>
-                    <property name="shadow_type">etched-in</property>
-                    <child>
-                      <widget class="GtkTreeView" id="owner_treeview">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                      </widget>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </widget>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkLabel" id="label3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">page 3</property>
-              </widget>
-              <packing>
-                <property name="position">1</property>
-                <property name="tab_fill">False</property>
-                <property name="type">tab</property>
-              </packing>
-            </child>
-            <child>
               <widget class="GtkVBox" id="envSelectVbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -257,7 +196,7 @@
                 </child>
               </widget>
               <packing>
-                <property name="position">2</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -267,7 +206,7 @@
                 <property name="label" translatable="yes">page 4</property>
               </widget>
               <packing>
-                <property name="position">2</property>
+                <property name="position">1</property>
                 <property name="tab_fill">False</property>
                 <property name="type">tab</property>
               </packing>
