@@ -167,7 +167,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         glade file.
         """
         self.vbox = gtk.VBox(spacing=10)
-        self.register_dialog = registergui.registration_xml.get_widget("dialog-vbox6")
+        self.register_dialog = self.glade.get_widget("dialog-vbox6")
         self.register_dialog.reparent(self.vbox)
 
         # Get rid of the 'register' and 'cancel' buttons, as we are going to
@@ -202,7 +202,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         login name field.
         """
         # FIXME:  This is currently broken
-        login_text = registergui.registration_xml.get_widget("account_login")
+        login_text = self.glade.get_widget("account_login")
         login_text.grab_focus()
 
     def _destroy_widget(self, widget_name):
@@ -211,7 +211,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         See gtk.Widget.destroy()
         """
-        widget = registergui.registration_xml.get_widget(widget_name)
+        widget = self.glade.get_widget(widget_name)
         widget.destroy()
 
     def _get_credentials_hash(self):
@@ -230,7 +230,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         Return the text value of an input widget referenced
         by name.
         """
-        widget = registergui.registration_xml.get_widget(widget_name)
+        widget = self.glade.get_widget(widget_name)
         return widget.get_text()
 
     def _finish_registration(self, failed=False):

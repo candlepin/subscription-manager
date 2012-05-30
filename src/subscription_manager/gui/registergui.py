@@ -15,7 +15,6 @@
 # in this software or its documentation.
 #
 
-import os
 import socket
 import logging
 import threading
@@ -32,10 +31,11 @@ from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager.utils import parse_server_info, ServerUrlParseError,\
         is_valid_server_info, MissingCaCertException
 from subscription_manager.gui import networkConfig
+from subscription_manager.gui import widgets
 from subscription_manager.gui.importsub import ImportSubDialog
 
-from subscription_manager.gui.utils import handle_gui_exception, errorWindow, \
-    GladeWrapper
+from subscription_manager.gui.utils import handle_gui_exception, errorWindow
+
 
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
@@ -59,11 +59,8 @@ REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
     "\n%s\n" + \
     _("Please see /var/log/rhsm/rhsm.log for more information.")
 
-registration_xml = GladeWrapper(os.path.join(os.path.dirname(__file__),
-    "data/registration.glade"))
 
-
-class RegisterScreen:
+class RegisterScreen(widgets.GladeWidget):
     """
       Registration Widget Screen
     """
@@ -72,6 +69,30 @@ class RegisterScreen:
         """
         Callbacks will be executed when registration status changes.
         """
+
+        widget_names = [
+                'register_dialog',
+                'register_notebook',
+                'register_progressbar',
+                'register_details_label',
+                'cancel_button',
+                'register_button',
+                'consumer_name',
+                'skip_auto_bind',
+                'owner_treeview',
+                'environment_treeview',
+                'rhn_radio',
+                'local_radio',
+                'offline_radio',
+                'local_entry',
+                'import_certs_button',
+                'proxy_label',
+                'proxy_config_button',
+                'account_login',
+                'account_password',
+        ]
+        widgets.GladeWidget.__init__(self, "registration.glade", widget_names)
+
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
@@ -80,67 +101,37 @@ class RegisterScreen:
         self.async = AsyncBackend(self.backend)
 
         dic = {"on_register_cancel_button_clicked": self.cancel,
-               "on_register_button_clicked": self.on_register_button_clicked,
+               "on_register_button_clicked": self._on_register_button_clicked,
                "on_proxy_config_button_clicked": self._on_proxy_config_button_clicked,
                "on_import_certs_button_clicked": self._on_import_certs_button_clicked,
                "on_rhn_radio_toggled": self._server_radio_toggled,
                "on_local_radio_toggled": self._server_radio_toggled,
                "on_offline_radio_toggled": self._server_radio_toggled,
+               "hide": self.cancel,
+               "delete_event": self._delete_event,
             }
+        self.glade.signal_autoconnect(dic)
 
-        registration_xml.signal_autoconnect(dic)
-        self.registerWin = registration_xml.get_widget("register_dialog")
-        self.registerWin.connect("hide", self.cancel)
-        self.registerWin.connect("delete_event", self.delete_event)
-        self.initializeConsumerName()
+        self._initialize_consumer_name()
 
-        self.uname = registration_xml.get_widget("account_login")
-        self.passwd = registration_xml.get_widget("account_password")
-        self.consumer_name = registration_xml.get_widget("consumer_name")
-        self.skip_auto_bind = registration_xml.get_widget("skip_auto_bind")
-
-        self.register_notebook = \
-                registration_xml.get_widget("register_notebook")
-        self.register_progressbar = \
-                registration_xml.get_widget("register_progressbar")
-        self.register_details_label = \
-                registration_xml.get_widget("register_details_label")
-
-        self.owner_treeview = registration_xml.get_widget("owner_treeview")
         renderer = gtk.CellRendererText()
         column = gtk.TreeViewColumn(_("Organization"), renderer, text=1)
         self.owner_treeview.set_property("headers-visible", False)
         self.owner_treeview.append_column(column)
 
-        self.environment_treeview = registration_xml.get_widget("environment_treeview")
         renderer = gtk.CellRendererText()
         column = gtk.TreeViewColumn(_("Environment"), renderer, text=1)
         self.environment_treeview.set_property("headers-visible", False)
         self.environment_treeview.append_column(column)
 
-        self.cancel_button = registration_xml.get_widget("cancel_button")
-        self.register_button = registration_xml.get_widget("register_button")
-
-        register_tip_label = registration_xml.get_widget("registrationTip")
+        register_tip_label = self.glade.get_widget("registrationTip")
         register_tip_label.set_label("<small>%s</small>" % \
                 get_branding().GUI_FORGOT_LOGIN_TIP)
 
         register_header_label = \
-                registration_xml.get_widget("registrationHeader")
+                self.glade.get_widget("registrationHeader")
         register_header_label.set_label("<b>%s</b>" % \
                 get_branding().GUI_REGISTRATION_HEADER)
-
-        self.rhn_radio = registration_xml.get_widget("rhn_radio")
-        self.local_radio = registration_xml.get_widget("local_radio")
-        self.offline_radio = registration_xml.get_widget("offline_radio")
-
-        self.local_entry = registration_xml.get_widget("local_entry")
-        self.import_certs_button = registration_xml.get_widget(
-                "import_certs_button")
-
-        self.proxy_label = registration_xml.get_widget("proxy_label")
-        self.proxy_config_button = registration_xml.get_widget(
-                "proxy_config_button")
 
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
         self.import_certs_dialog = ImportSubDialog()
@@ -151,7 +142,7 @@ class RegisterScreen:
         self._show_choose_server_page()
 
         self._clear_registration_widgets()
-        self.registerWin.present()
+        self.register_dialog.present()
 
     def _show_choose_server_page(self):
         # Override the button text to clarify we're not actually registering
@@ -165,27 +156,26 @@ class RegisterScreen:
         self.register_button.set_label(_("Register"))
         self.register_notebook.set_page(CREDENTIALS_PAGE)
 
-    def delete_event(self, event, data=None):
+    def _delete_event(self, event, data=None):
         return self.close_window()
 
     def cancel(self, button):
         self.close_window()
 
-    def initializeConsumerName(self):
-        consumername = registration_xml.get_widget("consumer_name")
-        if not consumername.get_text():
-            consumername.set_text(socket.gethostname())
+    def _initialize_consumer_name(self):
+        if not self.consumer_name.get_text():
+            self.consumer_name.set_text(socket.gethostname())
 
     # callback needs the extra arg, so just a wrapper here
-    def on_register_button_clicked(self, button):
+    def _on_register_button_clicked(self, button):
         self.register()
 
     def _on_proxy_config_button_clicked(self, button):
-        self.network_config_dialog.set_parent_window(self.registerWin)
+        self.network_config_dialog.set_parent_window(self.register_dialog)
         self.network_config_dialog.show()
 
     def _on_import_certs_button_clicked(self, button):
-        self.import_certs_dialog.set_parent_window(self.registerWin)
+        self.import_certs_dialog.set_parent_window(self.register_dialog)
         self.import_certs_dialog.show()
 
     def register(self, testing=None):
@@ -200,8 +190,8 @@ class RegisterScreen:
             self._environment_selected()
             return True
 
-        username = self.uname.get_text().strip()
-        password = self.passwd.get_text().strip()
+        username = self.account_login.get_text().strip()
+        password = self.account_password.get_text().strip()
         consumername = self.consumer_name.get_text()
 
         if not self.validate_consumername(consumername):
@@ -235,7 +225,7 @@ class RegisterScreen:
     def _on_get_owner_list_cb(self, owners, error=None):
         if error != None:
             handle_gui_exception(error, REGISTER_ERROR,
-                    self.registerWin)
+                    self.register_dialog)
             self._finish_registration(failed=True)
             return
 
@@ -244,8 +234,8 @@ class RegisterScreen:
         if len(owners) == 0:
             handle_gui_exception(None,
                     _("<b>User %s is not able to register with any orgs.</b>") \
-                            % (self.uname.get_text().strip()),
-                    self.registerWin)
+                            % (self.account_login.get_text().strip()),
+                    self.register_dialog)
             self._finish_registration(failed=True)
             return
 
@@ -270,7 +260,7 @@ class RegisterScreen:
     def _on_get_environment_list_cb(self, result_tuple, error=None):
         environments = result_tuple
         if error != None:
-            handle_gui_exception(error, REGISTER_ERROR, self.registerWin)
+            handle_gui_exception(error, REGISTER_ERROR, self.register_dialog)
             self._finish_registration(failed=True)
             return
 
@@ -337,7 +327,7 @@ class RegisterScreen:
                     return
 
             except ServerUrlParseError:
-                errorWindow(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"), self.registerWin)
+                errorWindow(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"), self.register_dialog)
                 return
 
         log.info("Writing server data to rhsm.conf")
@@ -382,7 +372,7 @@ class RegisterScreen:
             self._finish_registration()
 
         except Exception, e:
-            handle_gui_exception(e, REGISTER_ERROR, self.registerWin)
+            handle_gui_exception(e, REGISTER_ERROR, self.register_dialog)
             self._finish_registration(failed=True)
 
     def _finish_registration(self, failed=False):
@@ -406,7 +396,7 @@ class RegisterScreen:
             method(skip_auto_bind=self.skip_auto_subscribe())
 
     def close_window(self):
-        self.registerWin.hide()
+        self.register_dialog.hide()
         return True
 
     def skip_auto_subscribe(self):
@@ -414,35 +404,35 @@ class RegisterScreen:
 
     def validate_consumername(self, consumername):
         if not consumername:
-            errorWindow(_("You must enter a system name."), parent=self.registerWin)
+            errorWindow(_("You must enter a system name."), parent=self.register_dialog)
             self.consumer_name.grab_focus()
             return False
         return True
 
     def validate_account(self):
         # validate / check user name
-        if self.uname.get_text().strip() == "":
-            errorWindow(_("You must enter a login."), parent=self.registerWin)
-            self.uname.grab_focus()
+        if self.account_login.get_text().strip() == "":
+            errorWindow(_("You must enter a login."), parent=self.register_dialog)
+            self.account_login.grab_focus()
             return False
 
-        if self.passwd.get_text().strip() == "":
-            errorWindow(_("You must enter a password."), parent=self.registerWin)
-            self.passwd.grab_focus()
+        if self.account_password.get_text().strip() == "":
+            errorWindow(_("You must enter a password."), parent=self.register_dialog)
+            self.account_password.grab_focus()
             return False
         return True
 
     def set_parent_window(self, window):
-        self.registerWin.set_transient_for(window)
+        self.register_dialog.set_transient_for(window)
 
     def _set_register_details_label(self, details):
         self.register_details_label.set_label("<small>%s</small>" % details)
 
     def _clear_registration_widgets(self):
-        self.uname.set_text("")
-        self.passwd.set_text("")
+        self.account_login.set_text("")
+        self.account_password.set_text("")
         self.consumer_name.set_text("")
-        self.initializeConsumerName()
+        self._initialize_consumer_name()
         self.skip_auto_bind.set_active(False)
         self.local_entry.set_text("")
 
