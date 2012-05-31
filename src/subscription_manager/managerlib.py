@@ -401,7 +401,7 @@ class MergedPools(object):
 
         Used by contract selector to show these first in the list.
         """
-        self.pools.sort(key=lambda pool: self._virt_physical_sorter(pool))
+        self.pools.sort(key=self._virt_physical_sorter)
 
 
 def merge_pools(pools):
