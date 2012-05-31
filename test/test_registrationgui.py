@@ -20,6 +20,8 @@ class RegisterScreenTests(unittest.TestCase):
 
         self.rs._screens[CHOOSE_SERVER_PAGE] = Mock()
         self.rs._screens[CHOOSE_SERVER_PAGE].button_label = "Dummy"
+        self.rs._screens[CHOOSE_SERVER_PAGE].apply.return_value = \
+                CREDENTIALS_PAGE
 
     def test_show(self):
         self.rs.show()
@@ -27,7 +29,7 @@ class RegisterScreenTests(unittest.TestCase):
     def test_show_registration_returns_to_choose_server_screen(self):
         self.rs.show()
         self.rs.register()
-        self.assertNotEquals(CREDENTIALS_PAGE,
+        self.assertEquals(CREDENTIALS_PAGE,
                           self.rs.register_notebook.get_current_page() - 1)
         self.rs.cancel(self.rs.cancel_button)
         self.rs.show()

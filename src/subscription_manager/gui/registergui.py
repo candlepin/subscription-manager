@@ -96,14 +96,20 @@ class RegisterScreen(widgets.GladeWidget):
             }
         self.glade.signal_autoconnect(dic)
 
+        self.window = self.register_dialog
         screen_classes = [ChooseServerScreen, CredentialsScreen,
                           OrganizationScreen, EnvironmentScreen]
         self._screens = []
         for screen_class in screen_classes:
-            screen = screen_class(self.register_dialog, self.backend)
+            screen = screen_class(self, self.backend)
             self._screens.append(screen)
             self.register_notebook.append_page(screen.container)
         self._current_screen = CHOOSE_SERVER_PAGE
+
+        # values that will be set by the screens
+        self.username = None
+        self.owner_key = None
+        self.environment = None
 
     def show(self):
         # Ensure that we start on the first page and that
@@ -112,6 +118,7 @@ class RegisterScreen(widgets.GladeWidget):
 
         self._set_navigation_sensitive(True)
         self._clear_registration_widgets()
+        self.timer = gobject.timeout_add(100, self._timeout_callback)
         self.register_dialog.present()
 
     def _set_navigation_sensitive(self, sensitive):
@@ -119,10 +126,17 @@ class RegisterScreen(widgets.GladeWidget):
         self.register_button.set_sensitive(sensitive)
 
     def _set_screen(self, screen):
+        if screen == FINISH:
+            # XXX special case here!
+            self._set_navigation_sensitive(False)
+            self._set_screen(PROGRESS_PAGE)
+            self._run_register_step()
+            return
+
         self.register_notebook.set_page(screen + 1)
-        self._current_screen = screen
 
         if screen > PROGRESS_PAGE:
+            self._current_screen = screen
             button_label = self._screens[screen].button_label
             self.register_button.set_label(button_label)
 
@@ -138,6 +152,7 @@ class RegisterScreen(widgets.GladeWidget):
 
     def register(self):
         result = self._screens[self._current_screen].apply()
+
         if result == FINISH:
             self.close_window()
             return True
@@ -145,108 +160,44 @@ class RegisterScreen(widgets.GladeWidget):
             return False
 
         if self._current_screen == CHOOSE_SERVER_PAGE:
-            if result == CREDENTIALS_PAGE:
-                self._set_screen(CREDENTIALS_PAGE)
-                return True
+            pass
+        elif self._current_screen == CREDENTIALS_PAGE:
+            self._credentials_entered()
         elif self._current_screen == OWNER_SELECT_PAGE:
             self.owner_key = self._screens[OWNER_SELECT_PAGE].owner_key
-            self._owner_selected()
-            return True
         elif self._current_screen == ENVIRONMENT_SELECT_PAGE:
             self.environment = self._screens[ENVIRONMENT_SELECT_PAGE].environment
-            self._environment_selected()
+            self._set_screen(result)
             return True
-        elif self._current_screen == CREDENTIALS_PAGE:
-            if result == OWNER_SELECT_PAGE:
-                self._credentials_entered()
-                return True
+
+        self._set_screen(result)
+        async = self._screens[self._current_screen].pre()
+        if async:
+            self._set_navigation_sensitive(False)
+            self._set_screen(PROGRESS_PAGE)
+            self._set_register_details_label(
+                    self._screens[self._current_screen].pre_message)
+        return True
 
     def _timeout_callback(self):
         self.register_progressbar.pulse()
         # return true to keep it pulsing
         return True
 
-    def _on_get_owner_list_cb(self, owners, error=None):
-        if error != None:
-            handle_gui_exception(error, REGISTER_ERROR,
-                    self.register_dialog)
-            self._finish_registration(failed=True)
-            return
-
-        owners = [(owner['key'], owner['displayName']) for owner in owners]
-
-        if len(owners) == 0:
-            handle_gui_exception(None,
-                    _("<b>User %s is not able to register with any orgs.</b>") \
-                            % (self.account_login.get_text().strip()),
-                    self.register_dialog)
-            self._finish_registration(failed=True)
-            return
-
-        if len(owners) == 1:
-            self.owner_key = owners[0][0]
-            self._owner_selected()
-        else:
-            self._screens[OWNER_SELECT_PAGE].set_model(owners)
-
-            self._set_navigation_sensitive(True)
-            self._set_screen(OWNER_SELECT_PAGE)
-
-    def _on_get_environment_list_cb(self, result_tuple, error=None):
-        environments = result_tuple
-        if error != None:
-            handle_gui_exception(error, REGISTER_ERROR, self.register_dialog)
-            self._finish_registration(failed=True)
-            return
-
-        if not environments:
-            self._run_register_step(None)
-            return
-
-        envs = [(env['id'], env['name']) for env in environments]
-        if len(envs) == 1:
-            self._run_register_step(envs[0][0])
-        else:
-            self._screens[ENVIRONMENT_SELECT_PAGE].set_model(envs)
-
-            self._set_navigation_sensitive(True)
-            self._set_screen(ENVIRONMENT_SELECT_PAGE)
-
     def _credentials_entered(self):
         screen = self._screens[CREDENTIALS_PAGE]
-        username = screen.username
+        self.username = screen.username
         password = screen.password
         self.consumername = screen.consumername
 
-        self.backend.create_admin_uep(username=username,
+        self.backend.create_admin_uep(username=self.username,
                                       password=password)
 
-        self.async.get_owner_list(username, self._on_get_owner_list_cb)
-
-        self.timer = gobject.timeout_add(100, self._timeout_callback)
-
-        self._set_navigation_sensitive(False)
-        self._set_screen(PROGRESS_PAGE)
-        self._set_register_details_label(_("Fetching list of possible organizations"))
-
-    def _owner_selected(self):
-        self._set_navigation_sensitive(False)
-        self._set_screen(PROGRESS_PAGE)
-        self._set_register_details_label(_("Fetching list of possible environments"))
-        self.async.get_environment_list(self.owner_key,
-                                        self._on_get_environment_list_cb)
-
-    def _environment_selected(self):
-        self._set_navigation_sensitive(False)
-        self._set_screen(PROGRESS_PAGE)
-
-        self._run_register_step(self.environment)
-
-    def _run_register_step(self, env):
+    def _run_register_step(self):
         log.info("Registering to owner: %s environment: %s" % (self.owner_key,
-                                                               env))
+                                                               self.environment))
         self.async.register_consumer(self.consumername, self.facts,
-                                     self.owner_key, env,
+                                     self.owner_key, self.environment,
                                      self._on_registration_finished_cb)
 
         self._set_register_details_label(_("Registering your system"))
@@ -258,13 +209,13 @@ class RegisterScreen(widgets.GladeWidget):
 
             managerlib.persist_consumer_cert(new_account)
             self.consumer.reload()
-            self._finish_registration()
+            self.finish_registration()
 
         except Exception, e:
             handle_gui_exception(e, REGISTER_ERROR, self.register_dialog)
-            self._finish_registration(failed=True)
+            self.finish_registration(failed=True)
 
-    def _finish_registration(self, failed=False):
+    def finish_registration(self, failed=False):
         # failed is used by the firstboot subclasses to decide if they should
         # advance the screen or not.
         # XXX it would be cool here to do some async spinning while the
@@ -298,6 +249,13 @@ class RegisterScreen(widgets.GladeWidget):
         for screen in self._screens:
             screen.clear()
 
+    def pre_done(self, display_screen):
+        self._set_navigation_sensitive(True)
+        if display_screen:
+            self._set_screen(self._current_screen)
+        else:
+            self._set_screen(self._current_screen + 1)
+
 
 class Screen(widgets.GladeWidget):
 
@@ -308,6 +266,9 @@ class Screen(widgets.GladeWidget):
         self.button_label = _("Register")
         self._parent = parent
         self._backend = backend
+
+    def pre(self):
+        return False
 
     def apply(self):
         pass
@@ -325,14 +286,41 @@ class EnvironmentScreen(Screen):
         super(EnvironmentScreen, self).__init__("environment.glade",
                                                 widget_names, parent, backend)
 
+        self.pre_message = _("Fetching list of possible environments")
         renderer = gtk.CellRendererText()
         column = gtk.TreeViewColumn(_("Environment"), renderer, text=1)
         self.environment_treeview.set_property("headers-visible", False)
         self.environment_treeview.append_column(column)
 
+    def _on_get_environment_list_cb(self, result_tuple, error=None):
+        environments = result_tuple
+        if error != None:
+            handle_gui_exception(error, REGISTER_ERROR, self._parent.window)
+            self._parent.finish_registration(failed=True)
+            return
+
+        if not environments:
+#            self._run_register_step(None)
+            self._parent.pre_done(False)
+            return
+
+        envs = [(env['id'], env['name']) for env in environments]
+        if len(envs) == 1:
+            self.environment = envs[0][0]
+            self._parent.pre_done(False)
+        else:
+            self.set_model(envs)
+            self._parent.pre_done(True)
+
+    def pre(self):
+        self._parent.async.get_environment_list(self._parent.owner_key,
+                                                self._on_get_environment_list_cb)
+        return True
+
     def apply(self):
         model, tree_iter = self.environment_treeview.get_selection().get_selected()
         self.environment = model.get_value(tree_iter, 0)
+        return FINISH
 
     def set_model(self, envs):
         environment_model = gtk.ListStore(str, str)
@@ -354,14 +342,46 @@ class OrganizationScreen(Screen):
         super(OrganizationScreen, self).__init__("organization.glade",
                                                  widget_names, parent, backend)
 
+        self.pre_message = _("Fetching list of possible organizations")
+
         renderer = gtk.CellRendererText()
         column = gtk.TreeViewColumn(_("Organization"), renderer, text=1)
         self.owner_treeview.set_property("headers-visible", False)
         self.owner_treeview.append_column(column)
 
+    def _on_get_owner_list_cb(self, owners, error=None):
+        if error != None:
+            handle_gui_exception(error, REGISTER_ERROR,
+                    self._parent.window)
+            self._parent.finish_registration(failed=True)
+            return
+
+        owners = [(owner['key'], owner['displayName']) for owner in owners]
+
+        if len(owners) == 0:
+            handle_gui_exception(None,
+                    _("<b>User %s is not able to register with any orgs.</b>") \
+                            % (self._parent.username),
+                    self._parent.window)
+            self._parent.finish_registration(failed=True)
+            return
+
+        if len(owners) == 1:
+            self.owner_key = owners[0][0]
+            self._parent.pre_done(False)
+        else:
+            self.set_model(owners)
+            self._parent.pre_done(True)
+
+    def pre(self):
+        self._parent.async.get_owner_list(self._parent.username,
+                                          self._on_get_owner_list_cb)
+        return True
+
     def apply(self):
         model, tree_iter = self.owner_treeview.get_selection().get_selected()
         self.owner_key = model.get_value(tree_iter, 0)
+        return ENVIRONMENT_SELECT_PAGE
 
     def set_model(self, owners):
         owner_model = gtk.ListStore(str, str)
@@ -403,7 +423,7 @@ class CredentialsScreen(Screen):
 
     def _validate_consumername(self, consumername):
         if not consumername:
-            errorWindow(_("You must enter a system name."), self._parent)
+            errorWindow(_("You must enter a system name."), self._parent.window)
             self.consumer_name.grab_focus()
             return False
         return True
@@ -411,12 +431,12 @@ class CredentialsScreen(Screen):
     def _validate_account(self):
         # validate / check user name
         if self.account_login.get_text().strip() == "":
-            errorWindow(_("You must enter a login."), self._parent)
+            errorWindow(_("You must enter a login."), self._parent.window)
             self.account_login.grab_focus()
             return False
 
         if self.account_password.get_text().strip() == "":
-            errorWindow(_("You must enter a password."), self._parent)
+            errorWindow(_("You must enter a password."), self._parent.window)
             self.account_password.grab_focus()
             return False
         return True
@@ -475,11 +495,11 @@ class ChooseServerScreen(Screen):
         self.local_entry.set_sensitive(self.local_radio.get_active())
 
     def _on_proxy_config_button_clicked(self, button):
-        self.network_config_dialog.set_parent_window(self._parent)
+        self.network_config_dialog.set_parent_window(self._parent.window)
         self.network_config_dialog.show()
 
     def _on_import_certs_button_clicked(self, button):
-        self.import_certs_dialog.set_parent_window(self._parent)
+        self.import_certs_dialog.set_parent_window(self._parent.window)
         self.import_certs_dialog.show()
 
     def apply(self):
@@ -503,14 +523,16 @@ class ChooseServerScreen(Screen):
                 try:
                     if not is_valid_server_info(hostname, port, prefix):
                         errorWindow(_("Unable to reach the server at %s:%s%s" %
-                            (hostname, port, prefix)), self._parent)
+                            (hostname, port, prefix)), self._parent.window)
                         return DONT_CHANGE
                 except MissingCaCertException:
-                    errorWindow(_("CA certificate for subscription service has not been installed."), self._parent)
+                    errorWindow(_("CA certificate for subscription service has not been installed."),
+                                self._parent.window)
                     return DONT_CHANGE
 
             except ServerUrlParseError:
-                errorWindow(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"), self._parent)
+                errorWindow(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"),
+                            self._parent.window)
                 return DONT_CHANGE
 
         log.info("Writing server data to rhsm.conf")
