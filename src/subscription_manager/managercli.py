@@ -77,8 +77,7 @@ INSTALLED_PRODUCT_STATUS = \
     _("Ends:                 \t%s") + "\n"
 
 AVAILABLE_SUBS_LIST = \
-    _("Product Name:         \t%s") + "\n" + \
-    _("Product Id:           \t%s") + "\n" + \
+    _("Subscription Name:    \t%s") + "\n" + \
     _("Pool Id:              \t%s") + "\n" + \
     _("Quantity:             \t%s") + "\n" + \
     _("Service Level:        \t%s") + "\n" + \
@@ -1709,7 +1708,6 @@ class ListCommand(CliCommand):
 
                 print self._none_wrap(AVAILABLE_SUBS_LIST, product_name,
                         data['productId'],
-                        data['id'],
                         data['quantity'],
                         data['service_level'] or "",
                         data['service_type'] or "",
@@ -1759,7 +1757,7 @@ class ListCommand(CliCommand):
 
         for cert in certs:
             order = cert.getOrder()
-            print(self._none_wrap(_("Product Name:         \t%s"),
+            print(self._none_wrap(_("Subscription Name:    \t%s"),
                   order.getName()))
 
             prefix = _("Provides:             \t%s")
