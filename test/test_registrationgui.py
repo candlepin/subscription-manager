@@ -19,7 +19,7 @@ class RegisterScreenTests(unittest.TestCase):
         self.rs = RegisterScreen(self.backend, self.consumer, self.facts)
 
         self.rs._screens[CHOOSE_SERVER_PAGE] = Mock()
-        self.rs._screens[CREDENTIALS_PAGE] = Mock()
+        self.rs._screens[CHOOSE_SERVER_PAGE].button_label = "Dummy"
 
     def test_show(self):
         self.rs.show()

@@ -108,7 +108,7 @@ class RegisterScreen(widgets.GladeWidget):
     def show(self):
         # Ensure that we start on the first page and that
         # all widgets are cleared.
-        self._show_choose_server_page()
+        self._set_screen(CHOOSE_SERVER_PAGE)
 
         self._set_navigation_sensitive(True)
         self._clear_registration_widgets()
@@ -122,17 +122,9 @@ class RegisterScreen(widgets.GladeWidget):
         self.register_notebook.set_page(screen + 1)
         self._current_screen = screen
 
-    def _show_choose_server_page(self):
-        # Override the button text to clarify we're not actually registering
-        # by pressing that button here.
-        self.register_button.set_label(_("Next"))
-        self._set_screen(CHOOSE_SERVER_PAGE)
-
-    def _show_credentials_page(self):
-        # Set the button text back after we changed it when showing the
-        # choose server screen.
-        self.register_button.set_label(_("Register"))
-        self._set_screen(CREDENTIALS_PAGE)
+        if screen > PROGRESS_PAGE:
+            button_label = self._screens[screen].button_label
+            self.register_button.set_label(button_label)
 
     def _delete_event(self, event, data=None):
         return self.close_window()
@@ -154,7 +146,7 @@ class RegisterScreen(widgets.GladeWidget):
 
         if self._current_screen == CHOOSE_SERVER_PAGE:
             if result == CREDENTIALS_PAGE:
-                self._show_credentials_page()
+                self._set_screen(CREDENTIALS_PAGE)
                 return True
         elif self._current_screen == OWNER_SELECT_PAGE:
             self.owner_key = self._screens[OWNER_SELECT_PAGE].owner_key
@@ -317,6 +309,7 @@ class EnvironmentScreen(widgets.GladeWidget):
         super(EnvironmentScreen, self).__init__("environment.glade",
                                                 widget_names)
 
+        self.button_label = _("Register")
         self._parent = parent
         self._backend = backend
 
@@ -352,7 +345,7 @@ class OrganizationScreen(widgets.GladeWidget):
         ]
         super(OrganizationScreen, self).__init__("organization.glade",
                                                  widget_names)
-
+        self.button_label = _("Register")
         self._parent = parent
         self._backend = backend
 
@@ -392,6 +385,7 @@ class CredentialsScreen(widgets.GladeWidget):
         super(CredentialsScreen, self).__init__("credentials.glade",
                                                  widget_names)
 
+        self.button_label = _("Register")
         self._parent = parent
         self._backend = backend
 
@@ -467,6 +461,7 @@ class ChooseServerScreen(widgets.GladeWidget):
         super(ChooseServerScreen, self).__init__("choose_server.glade",
                                                  widget_names)
 
+        self.button_label = _("Next")
         self._parent = parent
         self._backend = backend
 
