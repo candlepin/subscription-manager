@@ -299,19 +299,31 @@ class RegisterScreen(widgets.GladeWidget):
             screen.clear()
 
 
-class EnvironmentScreen(widgets.GladeWidget):
+class Screen(widgets.GladeWidget):
 
-    def __init__(self, parent, backend):
-        widget_names = [
-                'environment_treeview',
-                'container',
-        ]
-        super(EnvironmentScreen, self).__init__("environment.glade",
-                                                widget_names)
+    def __init__(self, glade_file, widget_names, parent, backend):
+        widget_names.append('container')
+        super(Screen, self).__init__(glade_file, widget_names)
 
         self.button_label = _("Register")
         self._parent = parent
         self._backend = backend
+
+    def apply(self):
+        pass
+
+    def clear(self):
+        pass
+
+
+class EnvironmentScreen(Screen):
+
+    def __init__(self, parent, backend):
+        widget_names = [
+                'environment_treeview',
+        ]
+        super(EnvironmentScreen, self).__init__("environment.glade",
+                                                widget_names, parent, backend)
 
         renderer = gtk.CellRendererText()
         column = gtk.TreeViewColumn(_("Environment"), renderer, text=1)
@@ -321,9 +333,6 @@ class EnvironmentScreen(widgets.GladeWidget):
     def apply(self):
         model, tree_iter = self.environment_treeview.get_selection().get_selected()
         self.environment = model.get_value(tree_iter, 0)
-
-    def clear(self):
-        pass
 
     def set_model(self, envs):
         environment_model = gtk.ListStore(str, str)
@@ -336,18 +345,14 @@ class EnvironmentScreen(widgets.GladeWidget):
                 environment_model.get_iter_first())
 
 
-class OrganizationScreen(widgets.GladeWidget):
+class OrganizationScreen(Screen):
 
     def __init__(self, parent, backend):
         widget_names = [
                 'owner_treeview',
-                'container',
         ]
         super(OrganizationScreen, self).__init__("organization.glade",
-                                                 widget_names)
-        self.button_label = _("Register")
-        self._parent = parent
-        self._backend = backend
+                                                 widget_names, parent, backend)
 
         renderer = gtk.CellRendererText()
         column = gtk.TreeViewColumn(_("Organization"), renderer, text=1)
@@ -357,9 +362,6 @@ class OrganizationScreen(widgets.GladeWidget):
     def apply(self):
         model, tree_iter = self.owner_treeview.get_selection().get_selected()
         self.owner_key = model.get_value(tree_iter, 0)
-
-    def clear(self):
-        pass
 
     def set_model(self, owners):
         owner_model = gtk.ListStore(str, str)
@@ -372,7 +374,7 @@ class OrganizationScreen(widgets.GladeWidget):
                 owner_model.get_iter_first())
 
 
-class CredentialsScreen(widgets.GladeWidget):
+class CredentialsScreen(Screen):
 
     def __init__(self, parent, backend):
         widget_names = [
@@ -380,14 +382,9 @@ class CredentialsScreen(widgets.GladeWidget):
                 'consumer_name',
                 'account_login',
                 'account_password',
-                'container',
         ]
         super(CredentialsScreen, self).__init__("credentials.glade",
-                                                 widget_names)
-
-        self.button_label = _("Register")
-        self._parent = parent
-        self._backend = backend
+                                                 widget_names, parent, backend)
 
         self._initialize_consumer_name()
 
@@ -445,7 +442,7 @@ class CredentialsScreen(widgets.GladeWidget):
         self.skip_auto_bind.set_active(False)
 
 
-class ChooseServerScreen(widgets.GladeWidget):
+class ChooseServerScreen(Screen):
 
     def __init__(self, parent, backend):
         widget_names = [
@@ -456,14 +453,11 @@ class ChooseServerScreen(widgets.GladeWidget):
                 'import_certs_button',
                 'proxy_label',
                 'proxy_config_button',
-                'container',
         ]
         super(ChooseServerScreen, self).__init__("choose_server.glade",
-                                                 widget_names)
+                                                 widget_names, parent, backend)
 
         self.button_label = _("Next")
-        self._parent = parent
-        self._backend = backend
 
         callbacks = {
                 "on_proxy_config_button_clicked": self._on_proxy_config_button_clicked,
