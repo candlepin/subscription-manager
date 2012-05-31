@@ -50,11 +50,11 @@ CFG = config.initConfig()
 LIBRARY_ENV_NAME = "library"
 
 DONT_CHANGE = -1
-PROGRESS_PAGE = 1
-CHOOSE_SERVER_PAGE = 4
-CREDENTIALS_PAGE = 0
+PROGRESS_PAGE = 0
+CHOOSE_SERVER_PAGE = 1
+CREDENTIALS_PAGE = 2
 OWNER_SELECT_PAGE = 3
-ENVIRONMENT_SELECT_PAGE = 2
+ENVIRONMENT_SELECT_PAGE = 4
 FINISH = 5
 
 REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
@@ -79,7 +79,6 @@ class RegisterScreen(widgets.GladeWidget):
                 'register_details_label',
                 'cancel_button',
                 'register_button',
-                'environment_treeview',
         ]
         widgets.GladeWidget.__init__(self, "registration.glade", widget_names)
 
@@ -97,22 +96,21 @@ class RegisterScreen(widgets.GladeWidget):
             }
         self.glade.signal_autoconnect(dic)
 
-        renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn(_("Environment"), renderer, text=1)
-        self.environment_treeview.set_property("headers-visible", False)
-        self.environment_treeview.append_column(column)
-
-        self.organization_screen = OrganizationScreen(self.register_dialog,
-                                                      self.backend)
-        self.register_notebook.append_page(self.organization_screen.container)
-
         self.choose_server_screen = ChooseServerScreen(self.register_dialog,
                                                        self.backend)
         self.register_notebook.append_page(self.choose_server_screen.container)
 
         self.credentials_screen = CredentialsScreen(self.register_dialog,
                                                     self.backend)
-        self.register_notebook.prepend_page(self.credentials_screen.container)
+        self.register_notebook.append_page(self.credentials_screen.container)
+
+        self.organization_screen = OrganizationScreen(self.register_dialog,
+                                                      self.backend)
+        self.register_notebook.append_page(self.organization_screen.container)
+
+        self.environment_screen = EnvironmentScreen(self.register_dialog,
+                                                    self.backend)
+        self.register_notebook.append_page(self.environment_screen.container)
 
     def show(self):
         # Ensure that we start on the first page and that
@@ -165,6 +163,8 @@ class RegisterScreen(widgets.GladeWidget):
             self._owner_selected()
             return True
         elif self.register_notebook.get_current_page() == ENVIRONMENT_SELECT_PAGE:
+            self.environment_screen.apply()
+            self.environment = self.environment_screen.environment
             self._environment_selected()
             return True
         elif self.register_notebook.get_current_page() == CREDENTIALS_PAGE:
@@ -221,14 +221,7 @@ class RegisterScreen(widgets.GladeWidget):
         if len(envs) == 1:
             self._run_register_step(envs[0][0])
         else:
-            environment_model = gtk.ListStore(str, str)
-            for env in envs:
-                environment_model.append(env)
-
-            self.environment_treeview.set_model(environment_model)
-
-            self.environment_treeview.get_selection().select_iter(
-                    environment_model.get_iter_first())
+            self.environment_screen.set_model(envs)
 
             self._set_navigation_sensitive(True)
             self.register_notebook.set_page(ENVIRONMENT_SELECT_PAGE)
@@ -260,10 +253,7 @@ class RegisterScreen(widgets.GladeWidget):
         self._set_navigation_sensitive(False)
         self.register_notebook.set_page(PROGRESS_PAGE)
 
-        model, tree_iter = self.environment_treeview.get_selection().get_selected()
-        env = model.get_value(tree_iter, 0)
-
-        self._run_register_step(env)
+        self._run_register_step(self.environment)
 
     def _run_register_step(self, env):
         log.info("Registering to owner: %s environment: %s" % (self.owner_key,
@@ -320,6 +310,42 @@ class RegisterScreen(widgets.GladeWidget):
     def _clear_registration_widgets(self):
         self.credentials_screen.clear()
         self.choose_server_screen.clear()
+
+
+class EnvironmentScreen(widgets.GladeWidget):
+
+    def __init__(self, parent, backend):
+        widget_names = [
+                'environment_treeview',
+                'container',
+        ]
+        super(EnvironmentScreen, self).__init__("environment.glade",
+                                                widget_names)
+
+        self._parent = parent
+        self._backend = backend
+
+        renderer = gtk.CellRendererText()
+        column = gtk.TreeViewColumn(_("Environment"), renderer, text=1)
+        self.environment_treeview.set_property("headers-visible", False)
+        self.environment_treeview.append_column(column)
+
+    def apply(self):
+        model, tree_iter = self.environment_treeview.get_selection().get_selected()
+        self.environment = model.get_value(tree_iter, 0)
+
+    def clear(self):
+        pass
+
+    def set_model(self, envs):
+        environment_model = gtk.ListStore(str, str)
+        for env in envs:
+            environment_model.append(env)
+
+        self.environment_treeview.set_model(environment_model)
+
+        self.environment_treeview.get_selection().select_iter(
+                environment_model.get_iter_first())
 
 
 class OrganizationScreen(widgets.GladeWidget):
