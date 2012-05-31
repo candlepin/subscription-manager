@@ -49,13 +49,13 @@ CFG = config.initConfig()
 # An implied Katello environment which we can't actual register to.
 LIBRARY_ENV_NAME = "library"
 
-DONT_CHANGE = -1
-PROGRESS_PAGE = 0
-CHOOSE_SERVER_PAGE = 1
-CREDENTIALS_PAGE = 2
-OWNER_SELECT_PAGE = 3
-ENVIRONMENT_SELECT_PAGE = 4
-FINISH = 5
+DONT_CHANGE = -2
+PROGRESS_PAGE = -1
+CHOOSE_SERVER_PAGE = 0
+CREDENTIALS_PAGE = 1
+OWNER_SELECT_PAGE = 2
+ENVIRONMENT_SELECT_PAGE = 3
+FINISH = 4
 
 REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
     "\n%s\n" + \
@@ -96,21 +96,14 @@ class RegisterScreen(widgets.GladeWidget):
             }
         self.glade.signal_autoconnect(dic)
 
-        self.choose_server_screen = ChooseServerScreen(self.register_dialog,
-                                                       self.backend)
-        self.register_notebook.append_page(self.choose_server_screen.container)
-
-        self.credentials_screen = CredentialsScreen(self.register_dialog,
-                                                    self.backend)
-        self.register_notebook.append_page(self.credentials_screen.container)
-
-        self.organization_screen = OrganizationScreen(self.register_dialog,
-                                                      self.backend)
-        self.register_notebook.append_page(self.organization_screen.container)
-
-        self.environment_screen = EnvironmentScreen(self.register_dialog,
-                                                    self.backend)
-        self.register_notebook.append_page(self.environment_screen.container)
+        screen_classes = [ChooseServerScreen, CredentialsScreen,
+                          OrganizationScreen, EnvironmentScreen]
+        self._screens = []
+        for screen_class in screen_classes:
+            screen = screen_class(self.register_dialog, self.backend)
+            self._screens.append(screen)
+            self.register_notebook.append_page(screen.container)
+        self._current_screen = CHOOSE_SERVER_PAGE
 
     def show(self):
         # Ensure that we start on the first page and that
@@ -125,17 +118,21 @@ class RegisterScreen(widgets.GladeWidget):
         self.cancel_button.set_sensitive(sensitive)
         self.register_button.set_sensitive(sensitive)
 
+    def _set_screen(self, screen):
+        self.register_notebook.set_page(screen + 1)
+        self._current_screen = screen
+
     def _show_choose_server_page(self):
         # Override the button text to clarify we're not actually registering
         # by pressing that button here.
         self.register_button.set_label(_("Next"))
-        self.register_notebook.set_page(CHOOSE_SERVER_PAGE)
+        self._set_screen(CHOOSE_SERVER_PAGE)
 
     def _show_credentials_page(self):
         # Set the button text back after we changed it when showing the
         # choose server screen.
         self.register_button.set_label(_("Register"))
-        self.register_notebook.set_page(CREDENTIALS_PAGE)
+        self._set_screen(CREDENTIALS_PAGE)
 
     def _delete_event(self, event, data=None):
         return self.close_window()
@@ -148,30 +145,27 @@ class RegisterScreen(widgets.GladeWidget):
         self.register()
 
     def register(self):
-        if self.register_notebook.get_current_page() == CHOOSE_SERVER_PAGE:
-            result = self.choose_server_screen.apply()
-            if result == FINISH:
-                self.close_window()
-            elif result == DONT_CHANGE:
-                return False
-            elif result == CREDENTIALS_PAGE:
+        result = self._screens[self._current_screen].apply()
+        if result == FINISH:
+            self.close_window()
+            return True
+        elif result == DONT_CHANGE:
+            return False
+
+        if self._current_screen == CHOOSE_SERVER_PAGE:
+            if result == CREDENTIALS_PAGE:
                 self._show_credentials_page()
                 return True
-        elif self.register_notebook.get_current_page() == OWNER_SELECT_PAGE:
-            self.organization_screen.apply()
-            self.owner_key = self.organization_screen.owner_key
+        elif self._current_screen == OWNER_SELECT_PAGE:
+            self.owner_key = self._screens[OWNER_SELECT_PAGE].owner_key
             self._owner_selected()
             return True
-        elif self.register_notebook.get_current_page() == ENVIRONMENT_SELECT_PAGE:
-            self.environment_screen.apply()
-            self.environment = self.environment_screen.environment
+        elif self._current_screen == ENVIRONMENT_SELECT_PAGE:
+            self.environment = self._screens[ENVIRONMENT_SELECT_PAGE].environment
             self._environment_selected()
             return True
-        elif self.register_notebook.get_current_page() == CREDENTIALS_PAGE:
-            result = self.credentials_screen.apply()
-            if result == DONT_CHANGE:
-                return False
-            elif result == OWNER_SELECT_PAGE:
+        elif self._current_screen == CREDENTIALS_PAGE:
+            if result == OWNER_SELECT_PAGE:
                 self._credentials_entered()
                 return True
 
@@ -201,10 +195,10 @@ class RegisterScreen(widgets.GladeWidget):
             self.owner_key = owners[0][0]
             self._owner_selected()
         else:
-            self.organization_screen.set_model(owners)
+            self._screens[OWNER_SELECT_PAGE].set_model(owners)
 
             self._set_navigation_sensitive(True)
-            self.register_notebook.set_page(OWNER_SELECT_PAGE)
+            self._set_screen(OWNER_SELECT_PAGE)
 
     def _on_get_environment_list_cb(self, result_tuple, error=None):
         environments = result_tuple
@@ -221,15 +215,16 @@ class RegisterScreen(widgets.GladeWidget):
         if len(envs) == 1:
             self._run_register_step(envs[0][0])
         else:
-            self.environment_screen.set_model(envs)
+            self._screens[ENVIRONMENT_SELECT_PAGE].set_model(envs)
 
             self._set_navigation_sensitive(True)
-            self.register_notebook.set_page(ENVIRONMENT_SELECT_PAGE)
+            self._set_screen(ENVIRONMENT_SELECT_PAGE)
 
     def _credentials_entered(self):
-        username = self.credentials_screen.username
-        password = self.credentials_screen.password
-        self.consumername = self.credentials_screen.consumername
+        screen = self._screens[CREDENTIALS_PAGE]
+        username = screen.username
+        password = screen.password
+        self.consumername = screen.consumername
 
         self.backend.create_admin_uep(username=username,
                                       password=password)
@@ -239,19 +234,19 @@ class RegisterScreen(widgets.GladeWidget):
         self.timer = gobject.timeout_add(100, self._timeout_callback)
 
         self._set_navigation_sensitive(False)
-        self.register_notebook.set_page(PROGRESS_PAGE)
+        self._set_screen(PROGRESS_PAGE)
         self._set_register_details_label(_("Fetching list of possible organizations"))
 
     def _owner_selected(self):
         self._set_navigation_sensitive(False)
-        self.register_notebook.set_page(PROGRESS_PAGE)
+        self._set_screen(PROGRESS_PAGE)
         self._set_register_details_label(_("Fetching list of possible environments"))
         self.async.get_environment_list(self.owner_key,
                                         self._on_get_environment_list_cb)
 
     def _environment_selected(self):
         self._set_navigation_sensitive(False)
-        self.register_notebook.set_page(PROGRESS_PAGE)
+        self._set_screen(PROGRESS_PAGE)
 
         self._run_register_step(self.environment)
 
@@ -299,7 +294,7 @@ class RegisterScreen(widgets.GladeWidget):
         return True
 
     def skip_auto_subscribe(self):
-        return self.credentials_screen.skip_auto_bind.get_active()
+        return self._screens[CREDENTIALS_PAGE].skip_auto_bind.get_active()
 
     def set_parent_window(self, window):
         self.register_dialog.set_transient_for(window)
@@ -308,8 +303,8 @@ class RegisterScreen(widgets.GladeWidget):
         self.register_details_label.set_label("<small>%s</small>" % details)
 
     def _clear_registration_widgets(self):
-        self.credentials_screen.clear()
-        self.choose_server_screen.clear()
+        for screen in self._screens:
+            screen.clear()
 
 
 class EnvironmentScreen(widgets.GladeWidget):

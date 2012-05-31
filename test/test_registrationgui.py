@@ -18,8 +18,8 @@ class RegisterScreenTests(unittest.TestCase):
 
         self.rs = RegisterScreen(self.backend, self.consumer, self.facts)
 
-        self.rs.choose_server_screen = Mock()
-        self.rs.credentials_screen = Mock()
+        self.rs._screens[CHOOSE_SERVER_PAGE] = Mock()
+        self.rs._screens[CREDENTIALS_PAGE] = Mock()
 
     def test_show(self):
         self.rs.show()
@@ -28,11 +28,11 @@ class RegisterScreenTests(unittest.TestCase):
         self.rs.show()
         self.rs.register()
         self.assertNotEquals(CREDENTIALS_PAGE,
-                          self.rs.register_notebook.get_current_page())
+                          self.rs.register_notebook.get_current_page() - 1)
         self.rs.cancel(self.rs.cancel_button)
         self.rs.show()
         self.assertEquals(CHOOSE_SERVER_PAGE,
-                          self.rs.register_notebook.get_current_page())
+                          self.rs.register_notebook.get_current_page() - 1)
 
 
 class CredentialsScreenTests(unittest.TestCase):
