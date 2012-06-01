@@ -108,6 +108,7 @@ class RegisterScreen(widgets.GladeWidget):
 
         # values that will be set by the screens
         self.username = None
+        self.consumername = None
         self.owner_key = None
         self.environment = None
 
@@ -159,14 +160,10 @@ class RegisterScreen(widgets.GladeWidget):
         elif result == DONT_CHANGE:
             return False
 
-        if self._current_screen == CHOOSE_SERVER_PAGE:
-            pass
-        elif self._current_screen == CREDENTIALS_PAGE:
-            self._credentials_entered()
-        elif self._current_screen == OWNER_SELECT_PAGE:
-            self.owner_key = self._screens[OWNER_SELECT_PAGE].owner_key
-        elif self._current_screen == ENVIRONMENT_SELECT_PAGE:
-            self.environment = self._screens[ENVIRONMENT_SELECT_PAGE].environment
+        self._screens[self._current_screen].post()
+
+        if self._current_screen == ENVIRONMENT_SELECT_PAGE:
+            # XXX special cased for now
             self._set_screen(result)
             return True
 
@@ -183,15 +180,6 @@ class RegisterScreen(widgets.GladeWidget):
         self.register_progressbar.pulse()
         # return true to keep it pulsing
         return True
-
-    def _credentials_entered(self):
-        screen = self._screens[CREDENTIALS_PAGE]
-        self.username = screen.username
-        password = screen.password
-        self.consumername = screen.consumername
-
-        self.backend.create_admin_uep(username=self.username,
-                                      password=password)
 
     def _run_register_step(self):
         log.info("Registering to owner: %s environment: %s" % (self.owner_key,
@@ -273,6 +261,9 @@ class Screen(widgets.GladeWidget):
     def apply(self):
         pass
 
+    def post(self):
+        pass
+
     def clear(self):
         pass
 
@@ -306,7 +297,7 @@ class EnvironmentScreen(Screen):
 
         envs = [(env['id'], env['name']) for env in environments]
         if len(envs) == 1:
-            self.environment = envs[0][0]
+            self._environment = envs[0][0]
             self._parent.pre_done(False)
         else:
             self.set_model(envs)
@@ -319,8 +310,11 @@ class EnvironmentScreen(Screen):
 
     def apply(self):
         model, tree_iter = self.environment_treeview.get_selection().get_selected()
-        self.environment = model.get_value(tree_iter, 0)
+        self._environment = model.get_value(tree_iter, 0)
         return FINISH
+
+    def post(self):
+        self._parent.environment = self._environment
 
     def set_model(self, envs):
         environment_model = gtk.ListStore(str, str)
@@ -367,7 +361,7 @@ class OrganizationScreen(Screen):
             return
 
         if len(owners) == 1:
-            self.owner_key = owners[0][0]
+            self._owner_key = owners[0][0]
             self._parent.pre_done(False)
         else:
             self.set_model(owners)
@@ -380,8 +374,11 @@ class OrganizationScreen(Screen):
 
     def apply(self):
         model, tree_iter = self.owner_treeview.get_selection().get_selected()
-        self.owner_key = model.get_value(tree_iter, 0)
+        self._owner_key = model.get_value(tree_iter, 0)
         return ENVIRONMENT_SELECT_PAGE
+
+    def post(self):
+        self._parent.owner_key = self._owner_key
 
     def set_model(self, owners):
         owner_model = gtk.ListStore(str, str)
@@ -442,17 +439,24 @@ class CredentialsScreen(Screen):
         return True
 
     def apply(self):
-        self.username = self.account_login.get_text().strip()
-        self.password = self.account_password.get_text().strip()
-        self.consumername = self.consumer_name.get_text()
+        self._username = self.account_login.get_text().strip()
+        self._password = self.account_password.get_text().strip()
+        self._consumername = self.consumer_name.get_text()
 
-        if not self._validate_consumername(self.consumername):
+        if not self._validate_consumername(self._consumername):
             return DONT_CHANGE
 
         if not self._validate_account():
             return DONT_CHANGE
 
         return OWNER_SELECT_PAGE
+
+    def post(self):
+        self._parent.username = self._username
+        self._parent.consumername = self._consumername
+
+        self._backend.create_admin_uep(username=self._username,
+                                      password=self._password)
 
     def clear(self):
         self.account_login.set_text("")
