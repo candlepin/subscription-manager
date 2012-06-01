@@ -55,7 +55,8 @@ CHOOSE_SERVER_PAGE = 0
 CREDENTIALS_PAGE = 1
 OWNER_SELECT_PAGE = 2
 ENVIRONMENT_SELECT_PAGE = 3
-FINISH = 4
+PERFORM_REGISTER_PAGE = 4
+FINISH = 5
 
 REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
     "\n%s\n" + \
@@ -104,6 +105,10 @@ class RegisterScreen(widgets.GladeWidget):
             screen = screen_class(self, self.backend)
             self._screens.append(screen)
             self.register_notebook.append_page(screen.container)
+
+        # XXX un special case this
+        self._screens.append(PerformRegisterScreen(self, self.backend))
+
         self._current_screen = CHOOSE_SERVER_PAGE
 
         # values that will be set by the screens
@@ -127,19 +132,21 @@ class RegisterScreen(widgets.GladeWidget):
         self.register_button.set_sensitive(sensitive)
 
     def _set_screen(self, screen):
+        # XXX move this into the button handling somehow?
         if screen == FINISH:
-            # XXX special case here!
-            self._set_navigation_sensitive(False)
-            self._set_screen(PROGRESS_PAGE)
-            self._run_register_step()
+            self.finish_registration()
             return
 
-        self.register_notebook.set_page(screen + 1)
+        # XXX get rid of this special case somehow
+        if screen != PERFORM_REGISTER_PAGE:
+            self.register_notebook.set_page(screen + 1)
 
         if screen > PROGRESS_PAGE:
             self._current_screen = screen
             button_label = self._screens[screen].button_label
-            self.register_button.set_label(button_label)
+            # A button_label of None means to just keep whatever label is there
+            if button_label:
+                self.register_button.set_label(button_label)
 
     def _delete_event(self, event, data=None):
         return self.close_window()
@@ -155,53 +162,29 @@ class RegisterScreen(widgets.GladeWidget):
         result = self._screens[self._current_screen].apply()
 
         if result == FINISH:
-            self.close_window()
+            self.finish_registration()
             return True
         elif result == DONT_CHANGE:
             return False
 
         self._screens[self._current_screen].post()
 
-        if self._current_screen == ENVIRONMENT_SELECT_PAGE:
-            # XXX special cased for now
-            self._set_screen(result)
-            return True
+        self._run_pre(result)
+        return True
 
-        self._set_screen(result)
+    def _run_pre(self, screen):
+        self._set_screen(screen)
         async = self._screens[self._current_screen].pre()
         if async:
             self._set_navigation_sensitive(False)
             self._set_screen(PROGRESS_PAGE)
             self._set_register_details_label(
                     self._screens[self._current_screen].pre_message)
-        return True
 
     def _timeout_callback(self):
         self.register_progressbar.pulse()
         # return true to keep it pulsing
         return True
-
-    def _run_register_step(self):
-        log.info("Registering to owner: %s environment: %s" % (self.owner_key,
-                                                               self.environment))
-        self.async.register_consumer(self.consumername, self.facts,
-                                     self.owner_key, self.environment,
-                                     self._on_registration_finished_cb)
-
-        self._set_register_details_label(_("Registering your system"))
-
-    def _on_registration_finished_cb(self, new_account, error=None):
-        try:
-            if error != None:
-                raise error
-
-            managerlib.persist_consumer_cert(new_account)
-            self.consumer.reload()
-            self.finish_registration()
-
-        except Exception, e:
-            handle_gui_exception(e, REGISTER_ERROR, self.register_dialog)
-            self.finish_registration(failed=True)
 
     def finish_registration(self, failed=False):
         # failed is used by the firstboot subclasses to decide if they should
@@ -242,7 +225,7 @@ class RegisterScreen(widgets.GladeWidget):
         if display_screen:
             self._set_screen(self._current_screen)
         else:
-            self._set_screen(self._current_screen + 1)
+            self._run_pre(self._current_screen + 1)
 
 
 class Screen(widgets.GladeWidget):
@@ -251,6 +234,7 @@ class Screen(widgets.GladeWidget):
         widget_names.append('container')
         super(Screen, self).__init__(glade_file, widget_names)
 
+        self.pre_message = ""
         self.button_label = _("Register")
         self._parent = parent
         self._backend = backend
@@ -260,6 +244,49 @@ class Screen(widgets.GladeWidget):
 
     def apply(self):
         pass
+
+    def post(self):
+        pass
+
+    def clear(self):
+        pass
+
+
+class PerformRegisterScreen(object):
+
+    def __init__(self, parent, backend):
+        self._parent = parent
+        self._backend = backend
+        self.pre_message = _("Registering your system")
+        self.button_label = None
+
+    def _on_registration_finished_cb(self, new_account, error=None):
+        try:
+            if error != None:
+                raise error
+
+            managerlib.persist_consumer_cert(new_account)
+            self._parent.consumer.reload()
+            self._parent.pre_done(False)
+
+        except Exception, e:
+            handle_gui_exception(e, REGISTER_ERROR, self._parent.window)
+            self._parent.finish_registration(failed=True)
+
+    def pre(self):
+        log.info("Registering to owner: %s environment: %s" \
+                % (self._parent.owner_key, self._parent.environment))
+
+        self._parent.async.register_consumer(self._parent.consumername,
+                                             self._parent.facts,
+                                             self._parent.owner_key,
+                                             self._parent.environment,
+                                             self._on_registration_finished_cb)
+
+        return True
+
+    def apply(self):
+        return FINISH
 
     def post(self):
         pass
@@ -291,7 +318,6 @@ class EnvironmentScreen(Screen):
             return
 
         if not environments:
-#            self._run_register_step(None)
             self._parent.pre_done(False)
             return
 
@@ -311,7 +337,7 @@ class EnvironmentScreen(Screen):
     def apply(self):
         model, tree_iter = self.environment_treeview.get_selection().get_selected()
         self._environment = model.get_value(tree_iter, 0)
-        return FINISH
+        return PERFORM_REGISTER_PAGE
 
     def post(self):
         self._parent.environment = self._environment
