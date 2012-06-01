@@ -117,6 +117,9 @@ class RegisterScreen(widgets.GladeWidget):
         self.owner_key = None
         self.environment = None
 
+        # XXX needed by firstboot
+        self.password = None
+
     def show(self):
         # Ensure that we start on the first page and that
         # all widgets are cleared.
@@ -479,6 +482,7 @@ class CredentialsScreen(Screen):
 
     def post(self):
         self._parent.username = self._username
+        self._parent.password = self._password
         self._parent.consumername = self._consumername
 
         self._backend.create_admin_uep(username=self._username,
