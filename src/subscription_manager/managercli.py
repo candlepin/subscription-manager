@@ -524,10 +524,9 @@ class IdentityCommand(UserPassCommand):
 
     def _do_command(self):
 
-        self._validate_options()
-
         try:
             consumer = check_registration()
+            self._validate_options()
             consumerid = consumer['uuid']
             consumer_name = consumer['consumer_name']
             if not self.options.regenerate:
@@ -605,7 +604,7 @@ class EnvironmentsCommand(UserPassCommand):
 
     def _validate_options(self):
         if not self.options.org:
-            print(_("you must specify an --org"))
+            print(_("Error: This command requires that you specify an organizaiton with --org"))
             sys.exit(-1)
 
     def _get_enviornments(self, org):
@@ -1022,14 +1021,16 @@ class RedeemCommand(CliCommand):
                                "complete. Examples: en-us, de-de"))
 
     def _validate_options(self):
-        pass
+        if not self.options.email:
+            print(_("Error: This command requires that you specify an email address with --email."))
+            sys.exit(-1)
 
     def _do_command(self):
         """
         Executes the command.
         """
-        self._validate_options()
         consumer_uuid = check_registration()['uuid']
+        self._validate_options()
 
         try:
             # update facts first, if we need to
@@ -1176,8 +1177,8 @@ class SubscribeCommand(CliCommand):
         """
         Executes the command.
         """
-        self._validate_options()
         consumer_uuid = check_registration()['uuid']
+        self._validate_options()
         try:
             # update facts first, if we need to
             facts = Facts(ent_dir=self.entitlement_dir,
@@ -1261,17 +1262,17 @@ class UnSubscribeCommand(CliCommand):
     def _validate_options(self):
         if self.options.serial:
             if not self.options.serial.isdigit():
-                msg = _("'%s' is not a valid serial number") % self.options.serial
+                msg = _("Error: '%s' is not a valid serial number") % self.options.serial
                 systemExit(-1, msg)
         elif not self.options.all:
-            print _("One of --serial or --all must be provided")
-            self.parser.print_help()
+            print _("Error: This command requires that you specify one of --serial or --all.")
             systemExit(-1)
 
     def _do_command(self):
         """
         Executes the command.
         """
+        consumer_uuid = check_registration()['uuid']
         self._validate_options()
         if ConsumerIdentity.exists():
             consumer = ConsumerIdentity.read().getConsumerId()
@@ -1373,7 +1374,7 @@ class ImportCertCommand(CliCommand):
 
     def _validate_options(self):
         if not self.options.certificate_file:
-            print _("Error: At least one certificate is required")
+            print _("Error: This command requires that you specify a certificate with --certificate.")
             sys.exit(-1)
 
     def _add_common_options(self):
