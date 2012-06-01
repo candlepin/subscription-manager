@@ -95,7 +95,7 @@ class PreferencesDialog(object):
         i = 0
         for sla in available_slas:
             self.sla_combobox.append_text(sla)
-            if sla == current_sla:
+            if sla.lower() == current_sla.lower():
                 self.sla_combobox.set_active(i)
             i += 1
 
