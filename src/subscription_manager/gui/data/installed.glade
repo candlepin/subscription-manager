@@ -55,9 +55,20 @@
                           <placeholder/>
                         </child>
                         <child>
+                          <widget class="GtkButton" id="register_button">
+                            <property name="label" translatable="yes">Register</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <signal name="clicked" handler="on_register_button_clicked"/>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                        <child>
                           <widget class="GtkButton" id="update_certificates_button">
                             <property name="label" translatable="yes">Auto-subscribe</property>
-                            <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <accessibility>
@@ -69,7 +80,7 @@
                             <property name="expand">False</property>
                             <property name="fill">False</property>
                             <property name="pack_type">end</property>
-                            <property name="position">3</property>
+                            <property name="position">4</property>
                           </packing>
                         </child>
                       </widget>
