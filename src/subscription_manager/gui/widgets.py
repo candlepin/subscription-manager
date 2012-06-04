@@ -279,8 +279,7 @@ class SubDetailsWidget(GladeWidget):
                                      to destroy' % (widget_prefix, widget_prefix))
 
             destroy('contract_number')
-            destroy('start_date')
-            destroy('expiration_date')
+            destroy('start_end_date')
             destroy('account')
             destroy('provides_management')
             destroy('virt_only')
@@ -300,8 +299,8 @@ class SubDetailsWidget(GladeWidget):
             self.bundled_products.set_accessibility_name(
                     "All Available Bundled Product Table")
         else:
-            self.pull_widgets(["contract_number_text", "start_date_text",
-                               "expiration_date_text", "account_text",
+            self.pull_widgets(["contract_number_text", "start_end_date_text",
+                               "account_text",
                                "provides_management_text",
                                "virt_only_text"])
 
@@ -329,10 +328,8 @@ class SubDetailsWidget(GladeWidget):
 
         if self.show_contract:
             self._set(self.contract_number_text, contract)
-            self._set(self.start_date_text,
-                      managerlib.formatDate(start))
-            self._set(self.expiration_date_text,
-                      managerlib.formatDate(end))
+            self._set(self.start_end_date_text, "%s - %s" % (
+                      managerlib.formatDate(start), managerlib.formatDate(end)))
             self._set(self.account_text, account)
             self._set(self.provides_management_text, management)
             self._set(self.virt_only_text, virt_only)
@@ -358,8 +355,7 @@ class SubDetailsWidget(GladeWidget):
 
         if self.show_contract:
             self._set(self.contract_number_text, "")
-            self._set(self.start_date_text, "")
-            self._set(self.expiration_date_text, "")
+            self._set(self.start_end_date_text, "")
             self._set(self.account_text, "")
             self._set(self.provides_management_text, "")
             self._set(self.virt_only_text, "")
