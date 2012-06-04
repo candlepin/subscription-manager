@@ -729,7 +729,10 @@ class ServiceLevelCommand(UserPassCommand):
             systemExit(-1, _("Error: The service-level command is not supported by "
                              "the server."))
         service_level = consumer['serviceLevel'] or ""
-        print(_("Current service level: %s") % service_level)
+        if service_level:
+            print(_("Current service level: %s") % service_level)
+        else:
+            print _("Service level preference not set")
 
     def list_service_levels(self):
         not_supported = _("Error: The service-level command is not supported by "
