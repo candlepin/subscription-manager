@@ -672,7 +672,7 @@ class ServiceLevelCommand(UserPassCommand):
         if not ConsumerIdentity.existsAndValid():
             if self.options.list:
                 if not (self.options.username and self.options.password):
-                    print(_("Error: you must register or specify --username and password to list service levels"))
+                    print(_("Error: you must register or specify --username and --password to list service levels"))
                     sys.exit(-1)
                 if not self.options.org:
                     print(_("Error: you must register or specify --org."))
