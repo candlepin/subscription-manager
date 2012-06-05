@@ -346,8 +346,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 _("You must register this system before subscribing."))
 
     def set_registered(self, is_registered):
-        self.update_certificates_button.set_visible(is_registered)
-        self.register_button.set_visible(not is_registered)
+        self.update_certificates_button.set_property('visible', is_registered)
+        self.register_button.set_property('visible', not is_registered)
 
     def refresh(self):
         self._set_next_update()
