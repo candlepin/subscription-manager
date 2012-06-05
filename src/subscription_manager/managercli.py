@@ -1123,8 +1123,13 @@ class ReleaseCommand(CliCommand):
         if self.options.release is not None:
             # check first if the server supports releases
             self._get_consumer_release()
-            self.cp.updateConsumer(self.consumer['uuid'],
-                    release=self.options.release)
+            releases = self.release_backend.get_releases()
+            if self.options.release in releases:
+                self.cp.updateConsumer(self.consumer['uuid'],
+                        release=self.options.release)
+            else:
+                systemExit(-1, _("No releases match '%s'.  Consult 'release --list' for a full listing.") \
+                        % self.options.release)
             print _("Release set to: %s") % self.options.release
         elif self.options.list:
             self._get_consumer_release()
