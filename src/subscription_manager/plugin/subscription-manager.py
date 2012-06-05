@@ -61,17 +61,16 @@ register using subscription-manager.
 
 repo_usage_message = \
 """
-This machine is using certificate-based subscription
-management. Please use yum-config-manager to configure
-which software repositories are active.
+Please use yum-config-manager to configure which software
+repositories are used with Red Hat Subscription Management.
 """
 
 no_subs_warning = \
 """
-This machine has been registered to RHN, but has no
-subscriptions applied. Please use subscription-manager
-in order to enable access to security and other
-critical updates.
+This system has been registered to Red Hat Subscription
+Management, but has no subscriptions applied. Please use
+subscription-manager in order to enable access to security
+and other critical updates.
 """
 
 
