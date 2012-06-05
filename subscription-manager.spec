@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 0.99.19.1
+Version: 0.99.19.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -304,6 +304,9 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Tue Jun 05 2012 Chris Duryee (beav) <cduryee@redhat.com>
+- 818383: display better messages for yum plugin usage (cduryee@redhat.com)
+
 * Thu May 31 2012 Chris Duryee (beav) <cduryee@redhat.com>
 - rev version so next will be 0.99.19.1 (cduryee@redhat.com)
 - 818383: display better messages for yum plugin usage (cduryee@redhat.com)
