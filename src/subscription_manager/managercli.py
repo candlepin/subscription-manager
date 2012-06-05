@@ -1547,8 +1547,13 @@ class ConfigCommand(CliCommand):
                     has = has or (test != 'None')
             if not has:
                 # if no options are given, default to --list
-                self.options.list = True
-
+                sys.stderr.write(
+                    _("Error: This command requires that you use --list to show entries, "
+                    "use --[section.name] to set an entry, "
+                    "or use --remove [section.name] to remove an entry.")
+                )
+                sys.stderr.write("\n")
+                sys.exit(-1)
         if self.options.remove:
             for r in self.options.remove:
                 if not "." in r:
