@@ -14,6 +14,8 @@
 #
 
 import os
+import datetime
+import time
 import gobject
 import gtk
 import gtk.glade
@@ -78,14 +80,17 @@ class ContractSelectionWindow(object):
         self.contract_selection_win.destroy()
 
     def populate_treeview(self):
-
         renderer = gtk.CellRendererText()
         column = gtk.TreeViewColumn(_("Contract Number"), renderer,
                 text=0)
         column.set_expand(True)
+        column.set_sort_column_id(0)
+        self.model.set_sort_func(0, self._sort_text, None)
         self.contract_selection_treeview.append_column(column)
 
         column = MachineTypeColumn(7)
+        column.set_sort_column_id(7)
+        self.model.set_sort_func(7, self._sort_machine_type, column)
         self.contract_selection_treeview.append_column(column)
 
         renderer = gtk.CellRendererText()
@@ -96,10 +101,14 @@ class ContractSelectionWindow(object):
 
         renderer = widgets.CellRendererDate()
         column = gtk.TreeViewColumn(_("Start Date"), renderer, date=2)
+        column.set_sort_column_id(2)
+        self.model.set_sort_func(2, self._sort_date, None)
         self.contract_selection_treeview.append_column(column)
 
         renderer = widgets.CellRendererDate()
         column = gtk.TreeViewColumn(_("End Date"), renderer, date=3)
+        column.set_sort_column_id(3)
+        self.model.set_sort_func(3, self._sort_date, None)
         self.contract_selection_treeview.append_column(column)
 
         column = MultiEntitlementColumn(8)
@@ -154,3 +163,40 @@ class ContractSelectionWindow(object):
             enabled = False
 
         self.subscribe_button.set_sensitive(enabled)
+
+    def _sort_text(self, model, row1, row2, data):
+        sort_column, sort_type = model.get_sort_column_id()
+        str1 = model.get_value(row1, sort_column)
+        str2 = model.get_value(row2, sort_column)
+        return cmp(str1, str2)
+
+    def _sort_machine_type(self, model, row1, row2, col):
+        # Machine type is actually a boolean denoting whether the type is
+        # virtual or not.  We do not want to sort on the boolean value.
+        # Instead we want to sort on the text value that is going to get
+        # displayed for the boolean value.
+        sort_column, sort_type = model.get_sort_column_id()
+        results = []
+        for i, row in enumerate([row1, row2]):
+            _bool = model.get_value(row, sort_column)
+            if _bool is None:
+                text = col._get_none_text()
+            elif bool(_bool):
+                text = col._get_true_text()
+            else:
+                text = col._get_false_text()
+            results.append(text)
+        return cmp(results[0], results[1])
+
+    def _sort_date(self, model, row1, row2, data):
+        """
+        Used for sorting dates that could be None.
+        """
+        sort_column, sort_type = model.get_sort_column_id()
+        date1 = model.get_value(row1, sort_column) \
+            or datetime.date(datetime.MINYEAR, 1, 1)
+        date2 = model.get_value(row2, sort_column) \
+            or datetime.date(datetime.MINYEAR, 1, 1)
+        epoch1 = time.mktime(date1.timetuple())
+        epoch2 = time.mktime(date2.timetuple())
+        return cmp(epoch1, epoch2)
