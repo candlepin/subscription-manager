@@ -99,6 +99,9 @@ class RhsmFirstbootModule(ParentClass):
     def passInParent(self, parent):
         self.parent = parent
 
+    def grabFocus(self):
+        self.initializeUI()
+
     def _skip_remaining_screens(self, interface):
         """
         Find the first non-rhsm module after the rhsm modules, and move to it.
