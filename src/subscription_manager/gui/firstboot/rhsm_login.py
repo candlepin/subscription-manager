@@ -31,8 +31,8 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         Create a new firstboot Module for the 'register' screen.
         """
         RhsmFirstbootModule.__init__(self,
-                _("Entitlement Platform Registration"),
-                _("Entitlement Registration"),
+                _("Subscription Management Registration"),
+                _("Subscription Registration"),
                 200.1, 109.10)
 
         self.pages = {
