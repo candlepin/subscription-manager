@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.2
+Version: 1.0.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -303,6 +303,70 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Thu Jun 07 2012 Alex Wood <awood@redhat.com> 1.0.3-1
+- 817938: Add sorting to the contract selection table. (awood@redhat.com)
+- 822706: gtk widget visibility toggle compat for el5 (jbowes@repl.ca)
+- 822706: Display Register button on Installed Product tab if not registered.
+  (mstead@redhat.com)
+- 825286: Handle unset service levels in a manner similar to unset release
+  versions. (awood@redhat.com)
+- 826735: Merge start/end date sub details into one row. (dgoodwin@redhat.com)
+- fix make stylish (jbowes@repl.ca)
+- 811593: Feedback when not providing command options is not consistent.
+  (wpoteat@redhat.com)
+- 806986: Subscription-Manager should refer to subscription name and product
+  name. (wpoteat@redhat.com)
+- 825737: Service-level --set should configure proper value for GUI
+  (wpoteat@redhat.com)
+- 817901: Disable the match installed products filter. (dgoodwin@redhat.com)
+- Remove unecessary use of lambda. (dgoodwin@redhat.com)
+- 818282: Sort virtual subscriptions to the top of contract selector.
+  (dgoodwin@redhat.com)
+- 818383: display better messages for yum plugin usage (cduryee@redhat.com)
+- Fix logging of deleted expired certs (jbowes@repl.ca)
+- Remove the constants module (jbowes@repl.ca)
+- Remove useless format specifier (jbowes@repl.ca)
+- 801187: condense list --consumed output (jbowes@repl.ca)
+- Don't use kwargs for cli subclasses; it makes things shorter (jbowes@repl.ca)
+- Remove desc cli argument, no module used it (jbowes@repl.ca)
+- Use super for cli module init (jbowes@repl.ca)
+- Clean up rpmlint messages (jbowes@repl.ca)
+- Autogenerate the cli usage message (jbowes@repl.ca)
+- Remove obsolete nose tests (jbowes@repl.ca)
+- 812410: Show product name on CLI subscribe to pool. (dgoodwin@redhat.com)
+- 824680: make init script status return proper exit code (alikins@redhat.com)
+- fix nosetests for progress gui (jbowes@repl.ca)
+- Rework urlparse calls to work with RHEL 5. (awood@redhat.com)
+- 818238: Set a better progress title for sub search (jbowes@repl.ca)
+- 771756: Drop "rhsm icon" from the rhsm-icon usage message (jbowes@repl.ca)
+- 820294: Let candlepin handle org/env/key validation (jbowes@repl.ca)
+- 818397: Rename subscription-manager-gnome to -gui (jbowes@repl.ca)
+- Reduce wordiness of version command. (awood@redhat.com)
+- 824333: use rhel5-friendly urlparse options (cduryee@redhat.com)
+- Log the program versions when starting the GUI or making a CLI call.
+  (awood@redhat.com)
+- Fix the About dialog to work in RHEL 5.8 (awood@redhat.com)
+- 821544: Remove the stacking id attribute from my susbcriptions since it is
+  not being used currently. (bkearney@redhat.com)
+- add checkcommits exception for 824100 (alikins@redhat.com)
+- 824100: update zanata.xml to grab latest pt_BR.po (alikins@redhat.com)
+- 822057: do not hard-code cdn to port 443 (cduryee@redhat.com)
+- Display sane error on CLI if missing CA certificate. (dgoodwin@redhat.com)
+- Display sane error in GUI if missing CA certificate. (dgoodwin@redhat.com)
+- 812373: Terminology change for list --installed and --consumed
+  (wpoteat@redhat.com)
+- zanata client will push any po/*.pot files it finds. Stop.
+  (alikins@redhat.com)
+- 789182: Fix UnicodeEncodeError when logging. (awood@redhat.com)
+- README for github and people who like to read (alikins@redhat.com)
+- checkcommits exception for xgettext patch fixed in master
+  (alikins@redhat.com)
+- 820743: Fix these strings so xgettext finds extracts them
+  (alikins@redhat.com)
+- refine the regex for "make gettext_lint" (alikins@redhat.com)
+- Upload el6 yum packages to another dir for compatability.
+  (dgoodwin@redhat.com)
+
 * Wed May 16 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 1.0.2-1
 - Updating strings from zanata (mstead@redhat.com)
 - Add new server setup GUI screen. (dgoodwin@redhat.com)
