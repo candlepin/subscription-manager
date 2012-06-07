@@ -52,7 +52,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
     def __init__(self, backend, consumer, facts, tab_icon,
                  parent, ent_dir=None, prod_dir=None):
 
-        widgets = ['product_text', 'product_id_text', 'validity_text',
+        widgets = ['product_text', 'product_arch_text', 'validity_text',
                  'subscription_text', 'subscription_status_label',
                  'update_certificates_button', 'register_button']
         super(InstalledProductsTab, self).__init__('installed.glade', widgets)
@@ -84,10 +84,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         column = self.add_text_column(_('Version'), 'version')
         cols.append((column, 'text', 'version'))
-
-        column = self.add_text_column(_('Arch'), 'arch')
-        column.set_alignment(0.5)
-        cols.append((column, 'text', 'arch'))
 
         column = self.add_text_column(_('Status'), 'status')
         cols.append((column, 'text', 'status'))
@@ -160,8 +156,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 entry = {}
                 entry['product'] = product.getName()
                 entry['version'] = product.getVersion()
-                entry['arch'] = product.getArch()
                 entry['product_id'] = product_id
+                entry['arch'] = product.getArch()
                 # Common properties
                 entry['align'] = 0.5
 
@@ -238,8 +234,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         product = selection['product']
         self.product_text.get_buffer().set_text(product)
 
-        product_id = selection['product_id']
-        self.product_id_text.get_buffer().set_text(product_id)
+        arch = selection['arch']
+        self.product_arch_text.get_buffer().set_text(arch)
 
         validity = selection['validity_note']
         self.validity_text.get_buffer().set_text(validity)
