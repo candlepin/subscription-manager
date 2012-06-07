@@ -59,7 +59,7 @@ class AboutDialog(object):
         self.dialog.set_version(versions['subscription manager'])
         rhsm_version_label.set_markup(_("<b>python-rhsm version:</b> %s" % \
             versions['python-rhsm']))
-        backend_version_label.set_markup(_("<b>remote entitlement server version:</b> %s" % \
+        backend_version_label.set_markup(_("<b>subscription management service version:</b> %s" % \
             versions['candlepin']))
 
         self.dialog.connect("response", self._handle_response)
