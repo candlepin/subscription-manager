@@ -31,7 +31,7 @@ class moduleClass(RhsmFirstbootModule):
     def __init__(self):
         RhsmFirstbootModule.__init__(self,
                 _("Manual Configuration Required"),
-                _("Entitlement Registration"),
+                _("Subscription Registration"),
                 200.2, 109.11)
 
         self.screen = get_screen()

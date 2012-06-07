@@ -14,7 +14,7 @@ class moduleClass(RhsmFirstbootModule):
     def __init__(self):
         RhsmFirstbootModule.__init__(self,
                 _("Service Level"),
-                _("Entitlement Registration"),
+                _("Subscription Registration"),
                 200.3, 109.12)
 
         self.screen = autobind.SelectSLAScreen(None, None)

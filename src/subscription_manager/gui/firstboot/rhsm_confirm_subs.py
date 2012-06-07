@@ -19,7 +19,7 @@ class moduleClass(RhsmFirstbootModule):
     def __init__(self):
         RhsmFirstbootModule.__init__(self,
                 _("Confirm Subscriptions"),
-                _("Entitlement Registration"),
+                _("Subscription Registration"),
                 200.4, 109.13)
 
         self.screen = autobind.ConfirmSubscriptionsScreen(None, None)
