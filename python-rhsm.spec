@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.0.1
+Version: 1.0.2
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,19 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Jun 07 2012 Alex Wood <awood@redhat.com> 1.0.2-1
+- add upstream server var to version obj (cduryee@redhat.com)
+- 822057: wrap ContentConnection port in safe_int (cduryee@redhat.com)
+- 822965: subscription-manager release does not work with proxies
+  (cduryee@redhat.com)
+- 806958: BadCertificateException not displaying properly. (awood@redhat.com)
+- 822965: release verb does not work with proxies (cduryee@redhat.com)
+- Add config for "checkcommits" (alikins@redhat.com)
+- Include various Makefile improvements from subscription-manager
+  (alikins@redhat.com)
+- Upload el6 yum packages to another dir for compatability.
+  (dgoodwin@redhat.com)
+
 * Wed May 16 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 1.0.1-1
 - Add default constants for RHN connections. (dgoodwin@redhat.com)
 - 813296: Remove check for candlepin_version (jbowes@redhat.com)
