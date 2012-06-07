@@ -220,7 +220,7 @@ class CliCommand(object):
 
         self.parser.add_option("--serverurl", dest="server_url",
                                default=None, help=_("server url in the form of https://hostname:443/prefix"))
-        self.parser.add_option("--baseurl;", dest="base_url",
+        self.parser.add_option("--baseurl", dest="base_url",
                               default=None, help=_("base url for content in form of https://hostname:443/prefix"))
         self.parser.add_option("--proxy", dest="proxy_url",
                                default=None, help=_("proxy url in the form of proxy_hostname:proxy_port"))
