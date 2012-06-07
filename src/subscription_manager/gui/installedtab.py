@@ -221,7 +221,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                     entry['validity_note'] = _("Not Subscribed")
 
                 self.store.add_map(entry)
-        # 811340: Select the first product in My Installed Software
+        # 811340: Select the first product in My Installed Products
         # table by default.
         selection = self.top_view.get_selection()
         selection.select_path(0)
@@ -271,7 +271,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         }
 
     def get_label(self):
-        return _('My Installed Software')
+        return _('My Installed Products')
 
     def _set_status_icons(self, status_type):
         img = INVALID_IMG
