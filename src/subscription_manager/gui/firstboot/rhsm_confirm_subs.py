@@ -18,6 +18,9 @@ class moduleClass(RhsmFirstbootModule):
 
     def __init__(self):
         RhsmFirstbootModule.__init__(self,
+        # Firstboot module title
+        # Note: translated title needs to be unique across all
+        # firstboot modules, not just the rhsm ones. See bz #828042
                 _("Confirm Subscriptions"),
                 _("Entitlement Registration"),
                 200.4, 109.13)
