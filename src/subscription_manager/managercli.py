@@ -522,6 +522,10 @@ class IdentityCommand(UserPassCommand):
             sys.exit(-1)
 
     def _do_command(self):
+        # check for Classic before doing anything else
+        if ClassicCheck().is_registered_with_classic():
+            print(_("This system is registered with RHN Classic."))
+            return
 
         try:
             consumer = check_registration()
