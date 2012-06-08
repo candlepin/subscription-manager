@@ -55,9 +55,9 @@ no_subs_warning = \
 def update(conduit):
     """ update entitlement certificates """
     if os.getuid() != 0:
-        conduit.info(2, 'Not root, certificate-based repositories not updated')
+        conduit.info(3, 'Not root, Subscription Management repositories not updated')
         return
-    conduit.info(2, 'Updating certificate-based repositories.')
+    conduit.info(3, 'Updating Subscription Management repositories.')
 
     # XXX: Importing inline as you must be root to read the config file
     from subscription_manager.certlib import ConsumerIdentity
@@ -68,7 +68,7 @@ def update(conduit):
     try:
         ConsumerIdentity.read().getConsumerId()
     except Exception:
-        conduit.error(2, "Unable to read consumer identity")
+        conduit.info(3, "Unable to read consumer identity")
         return
 
     try:
@@ -76,7 +76,7 @@ def update(conduit):
     #FIXME: catchall exception
     except Exception:
         # log
-        conduit.info(2, "Unable to connect to entitlement server")
+        conduit.info(2, "Unable to connect to Subscription Management Service")
         return
 
     rl = RepoLib(uep=uep)
@@ -97,6 +97,10 @@ def warnExpired(conduit):
 
 
 def warnOrGiveUsageMessage(conduit):
+
+    # XXX: Importing inline as you must be root to read the config file
+    from subscription_manager.certlib import ConsumerIdentity
+
     """ either output a warning, or a usage message """
     msg = ""
     # TODO: refactor so there are not two checks for this
