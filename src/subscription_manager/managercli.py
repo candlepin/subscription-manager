@@ -1073,30 +1073,6 @@ class ReleaseCommand(CliCommand):
                                default=None,
                                help=_("set the release"))
 
-        self.proxy_hostname = cfg.get('server', 'proxy_hostname')
-        self.proxy_port = cfg.get('server', 'proxy_port')
-        self.proxy_user = cfg.get('server', 'proxy_user')
-        self.proxy_password = cfg.get('server', 'proxy_password')
-
-        cdn_url = cfg.get('rhsm', 'baseurl')
-        parsed_url = urlparse.urlparse(cdn_url)
-
-        # default to 443 if urlprase can't interpret the port
-        if parsed_url[2]:
-            cdn_port = parsed_url[2]
-        else:
-            cdn_port = 443
-
-        self.cc = connection.ContentConnection(host=parsed_url[1],
-                                               ssl_port=cdn_port,
-                                               proxy_hostname=self.proxy_hostname,
-                                               proxy_port=self.proxy_port,
-                                               proxy_user=self.proxy_user,
-                                               proxy_password=self.proxy_password)
-
-        self.release_backend = ReleaseBackend(ent_dir=self.entitlement_dir,
-                                              prod_dir=self.product_dir,
-                                              content_connection=self.cc)
 
     def _get_consumer_release(self):
         err_msg = _("Error: The 'release' command is not supported by the server.")
@@ -1119,6 +1095,26 @@ class ReleaseCommand(CliCommand):
             print _("Release not set")
 
     def _do_command(self):
+        cdn_url = cfg.get('rhsm', 'baseurl')
+        parsed_url = urlparse.urlparse(cdn_url)
+
+        # default to 443 if urlprase can't interpret the port
+        if parsed_url[2]:
+            cdn_port = parsed_url[2]
+        else:
+            cdn_port = 443
+
+        self.cc = connection.ContentConnection(host=parsed_url[1],
+                                               ssl_port=cdn_port,
+                                               proxy_hostname=self.proxy_hostname,
+                                               proxy_port=self.proxy_port,
+                                               proxy_user=self.proxy_user,
+                                               proxy_password=self.proxy_password)
+
+        self.release_backend = ReleaseBackend(ent_dir=self.entitlement_dir,
+                                              prod_dir=self.product_dir,
+                                              content_connection=self.cc)
+
         self.consumer = check_registration()
         if self.options.release is not None:
             # check first if the server supports releases
