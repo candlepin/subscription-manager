@@ -52,7 +52,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
     def __init__(self, backend, consumer, facts, tab_icon,
                  parent, ent_dir=None, prod_dir=None):
 
-        widgets = ['product_text', 'product_id_text', 'validity_text',
+        widgets = ['product_text', 'product_arch_text', 'validity_text',
                  'subscription_text', 'subscription_status_label',
                  'update_certificates_button', 'register_button']
         super(InstalledProductsTab, self).__init__('installed.glade', widgets)
@@ -84,10 +84,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         column = self.add_text_column(_('Version'), 'version')
         cols.append((column, 'text', 'version'))
-
-        column = self.add_text_column(_('Arch'), 'arch')
-        column.set_alignment(0.5)
-        cols.append((column, 'text', 'arch'))
 
         column = self.add_text_column(_('Status'), 'status')
         cols.append((column, 'text', 'status'))
@@ -160,8 +156,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 entry = {}
                 entry['product'] = product.getName()
                 entry['version'] = product.getVersion()
-                entry['arch'] = product.getArch()
                 entry['product_id'] = product_id
+                entry['arch'] = product.getArch()
                 # Common properties
                 entry['align'] = 0.5
 
@@ -221,7 +217,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                     entry['validity_note'] = _("Not Subscribed")
 
                 self.store.add_map(entry)
-        # 811340: Select the first product in My Installed Software
+        # 811340: Select the first product in My Installed Products
         # table by default.
         selection = self.top_view.get_selection()
         selection.select_path(0)
@@ -238,8 +234,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         product = selection['product']
         self.product_text.get_buffer().set_text(product)
 
-        product_id = selection['product_id']
-        self.product_id_text.get_buffer().set_text(product_id)
+        arch = selection['arch']
+        self.product_arch_text.get_buffer().set_text(arch)
 
         validity = selection['validity_note']
         self.validity_text.get_buffer().set_text(validity)
@@ -271,7 +267,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         }
 
     def get_label(self):
-        return _('My Installed Software')
+        return _('My Installed Products')
 
     def _set_status_icons(self, status_type):
         img = INVALID_IMG
