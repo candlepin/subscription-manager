@@ -43,26 +43,13 @@ subscriptions, you can renew the expired subscription.
 """
 
 not_registered_warning = \
-"""
-This machine has not been registered and therefore has
-no access to security and other critical updates. Please
-register using subscription-manager.
-"""
+"This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register."
 
-repo_usage_message = \
-"""
-This machine is using certificate-based subscription
-management. Please use yum-config-manager to configure
-which software repositories are active.
-"""
+registered_message = \
+"This system is receiving updates from Red Hat Subscription Management."
 
 no_subs_warning = \
-"""
-This machine has been registered to RHN, but has no
-subscriptions applied. Please use subscription-manager
-in order to enable access to security and other
-critical updates.
-"""
+"This system is registered to Red Hat Subscription Management, but not recieving updates. You can use subscription-manager to assign subscriptions."
 
 
 def update(conduit):
@@ -122,7 +109,7 @@ def warnOrGiveUsageMessage(conduit):
             if len(entdir.listValid()) == 0:
                 msg = no_subs_warning
             else:
-                msg = repo_usage_message
+                msg = registered_message
         except:
             msg = not_registered_warning
     finally:
