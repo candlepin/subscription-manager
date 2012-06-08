@@ -22,7 +22,7 @@ class moduleClass(RhsmFirstbootModule):
         # Note: translated title needs to be unique across all
         # firstboot modules, not just the rhsm ones. See bz #828042
                 _("Confirm Subscriptions"),
-                _("Entitlement Registration"),
+                _("Subscription Registration"),
                 200.4, 109.13)
 
         self.screen = autobind.ConfirmSubscriptionsScreen(None, None)

@@ -17,7 +17,7 @@ class moduleClass(RhsmFirstbootModule):
         # Note: translated title needs to be unique across all
         # firstboot modules, not just the rhsm ones. See bz #828042
                 _("Service Level"),
-                _("Entitlement Registration"),
+                _("Subscription Registration"),
                 200.3, 109.12)
 
         self.screen = autobind.SelectSLAScreen(None, None)
