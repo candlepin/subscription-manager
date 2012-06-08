@@ -21,6 +21,7 @@ class TestCliCommand(unittest.TestCase):
                                      prod_dir=StubProductDirectory([]))
         # neuter the _do_command, since this is mostly
         # for testing arg parsing
+        self._orig_do_command = self.cc._do_command
         self.cc._do_command = self._do_command
         self.cc.assert_should_be_registered = self._asert_should_be_registered
 
@@ -358,10 +359,34 @@ class TestImportCertCommand(TestCliCommand):
 class TestReleaseCommand(TestCliProxyCommand):
     command_class = managercli.ReleaseCommand
 
-    # def test_no_product_certs
-    # def test_no_rhel_product
+    def _stub_connection(self):
+        # er, first cc is command_class, second is ContentConnection
+        def check_registration():
+            consumer_info = {"consumer_name": "whatever",
+                     "uuid": "doesnt really matter"}
+            return consumer_info
 
-    # def test_invalid_content_url
+        def _get_consumer_release():
+            pass
+
+        self.cc._get_consumer_release = _get_consumer_release
+        managercli.check_registration = check_registration
+
+    def test_main_proxy_url_release(self):
+        proxy_host = "example.com"
+        proxy_port = "3128"
+        proxy_url = "%s:%s" % (proxy_host, proxy_port)
+        self.cc.main(["--proxy", proxy_url])
+        self._stub_connection()
+
+        self._orig_do_command()
+        self.assertEquals(proxy_host, self.cc.cc.proxy_hostname)
+
+        self.assertEquals(proxy_url, self.cc.options.proxy_url)
+        self.assertEquals(type(proxy_url), type(self.cc.options.proxy_url))
+        self.assertEquals(proxy_host, self.cc.proxy_hostname)
+        self.assertEquals(proxy_port, self.cc.proxy_port)
+
 
 class TestSystemExit(unittest.TestCase):
     def setUp(self):
