@@ -52,6 +52,6 @@ def posttrans_hook(conduit):
     try:
         pm = ProductManager()
         pm.update(conduit._base)
-        conduit.info(2, 'Installed products updated.')
+        conduit.info(3, 'Installed products updated.')
     except Exception, e:
-        conduit.error(2, str(e))
+        conduit.error(3, str(e))
