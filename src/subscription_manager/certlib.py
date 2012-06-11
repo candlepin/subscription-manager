@@ -151,6 +151,29 @@ class HealingLib(DataLib):
             return 0
 
 
+class IdentityCertLib(DataLib):
+    """
+    An object to update the identity certificate in the event the server
+    deems it is about to expire. This is done to prevent the identity
+    certificate from expiring thus disallowing connection to the server
+    for updates.
+    """
+
+    def __init__(self, lock=ActionLock(), uep=None):
+        super(IdentityCertLib, self).init(lock, uep)
+
+    def _do_update(self):
+        from subscription_manager import managerlib
+        idcert = ConsumerIdentity.read()
+        uuid = idcert.getConsumerId()
+        consumer = self.uep.getConsumer(uuid)
+        # only write the cert if the serial has changed
+        if idcert.getSerialNumber() != consumer['idCert']['serial']['serial']:
+            log.debug('identity certificate changed, writing new one')
+            managerlib.persist_consumer_cert(consumer)
+        return 1
+
+
 class Action:
 
     def __init__(self, uep=None):
@@ -361,6 +384,9 @@ class ConsumerIdentity:
     def getConsumerName(self):
         altName = self.x509.alternateName()
         return altName.replace("DirName:/CN=", "")
+
+    def getSerialNumber(self):
+        return self.x509.serialNumber()
 
     def write(self):
         from subscription_manager import managerlib
