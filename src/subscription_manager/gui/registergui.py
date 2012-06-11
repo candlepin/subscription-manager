@@ -99,15 +99,14 @@ class RegisterScreen(widgets.GladeWidget):
 
         self.window = self.register_dialog
         screen_classes = [ChooseServerScreen, CredentialsScreen,
-                          OrganizationScreen, EnvironmentScreen]
+                          OrganizationScreen, EnvironmentScreen,
+                          PerformRegisterScreen]
         self._screens = []
         for screen_class in screen_classes:
             screen = screen_class(self, self.backend)
             self._screens.append(screen)
-            self.register_notebook.append_page(screen.container)
-
-        # XXX un special case this
-        self._screens.append(PerformRegisterScreen(self, self.backend))
+            if screen.needs_gui:
+                self.register_notebook.append_page(screen.container)
 
         self._current_screen = CHOOSE_SERVER_PAGE
 
@@ -135,16 +134,14 @@ class RegisterScreen(widgets.GladeWidget):
         self.register_button.set_sensitive(sensitive)
 
     def _set_screen(self, screen):
-        # XXX get rid of this special case somehow
-        if screen != PERFORM_REGISTER_PAGE:
-            self.register_notebook.set_page(screen + 1)
-
         if screen > PROGRESS_PAGE:
             self._current_screen = screen
-            button_label = self._screens[screen].button_label
-            # A button_label of None means to just keep whatever label is there
-            if button_label:
+            if self._screens[screen].needs_gui:
+                button_label = self._screens[screen].button_label
                 self.register_button.set_label(button_label)
+                self.register_notebook.set_page(screen + 1)
+        else:
+            self.register_notebook.set_page(screen + 1)
 
     def _delete_event(self, event, data=None):
         return self.close_window()
@@ -239,6 +236,7 @@ class Screen(widgets.GladeWidget):
 
         self.pre_message = ""
         self.button_label = _("Register")
+        self.needs_gui = True
         self._parent = parent
         self._backend = backend
 
@@ -262,6 +260,7 @@ class PerformRegisterScreen(object):
         self._backend = backend
         self.pre_message = _("Registering your system")
         self.button_label = None
+        self.needs_gui = False
 
     def _on_registration_finished_cb(self, new_account, error=None):
         try:
