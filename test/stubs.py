@@ -358,6 +358,14 @@ class StubConsumerIdentity:
     def read(cls):
         return StubConsumerIdentity("", "")
 
+    @classmethod
+    def certpath(self):
+        return ""
+
+    @classmethod
+    def keypath(self):
+        return ""
+
 
 class StubUEP:
     def __init__(self, username=None, password=None,
