@@ -202,8 +202,7 @@ display_icon (Context * context, StatusType status_type)
 
 	if (status_type == RHSM_REGISTRATION_REQUIRED) {
 		tooltip = _("Register System For Support And Updates");
-		notification_title =
-			_("Register System For Support And Updates");
+		notification_title = tooltip;
 		notification_body =
 			_("In order for Subscription Manager to provide your "
 			  "system with updates, your system must be registered "
@@ -211,23 +210,20 @@ display_icon (Context * context, StatusType status_type)
 			  "your system is up-to-date.");
 	} else if (status_type == RHSM_EXPIRED) {
 		tooltip = _("Invalid or Missing Entitlement Certificates");
-		notification_title =
-			_("Invalid or Missing Entitlement Certificates");
+		notification_title = tooltip;
 		notification_body =
 			_("This system is missing one or more "
 			  "valid entitlement certificates.");
 	} else if (status_type == RHSM_PARTIALLY_VALID) {
 		tooltip = _("Partially Entitled Products");
-		notification_title = _("Partially Entitled Products");
-		notification_body = _("This system is missing one or more "
-				      "valid entitlement certificates to fully cover its "
-				      "products");
+		notification_title = tooltip;
+		notification_body =
+			_("This system is missing one or more valid "
+			  "entitlement certificates to fully cover its "
+			  "products.");
 	} else {
-		tooltip =
-			_
-			("Some of the system's subscriptions are about to expire");
-		notification_title =
-			_("This System's Subscriptions Are About to Expire");
+		tooltip = _("This System's Subscriptions Are About to Expire");
+		notification_title = tooltip;
 		notification_body =
 			_("One or more of this system's "
 			  "subscriptions are about to expire.");
