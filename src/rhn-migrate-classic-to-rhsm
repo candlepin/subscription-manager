@@ -223,7 +223,7 @@ def selectServiceLevel(cp, consumer, servicelevel):
     # valid slas.
     slas = [(sla, sla) for sla in levels]
     # Display an actual message for the empty string level.
-    slas.append((_("No service level"), ""))
+    slas.append((_("No service level preference"), ""))
 
     # The empty string is a valid level so append it to the list.
     levels.append("")

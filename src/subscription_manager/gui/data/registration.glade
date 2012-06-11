@@ -219,6 +219,7 @@
                     <property name="use_markup">True</property>
                   </widget>
                   <packing>
+                    <property name="expand">False</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
@@ -492,7 +493,7 @@
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                         <property name="xpad">12</property>
-                        <property name="label" translatable="yes">Please select if you would like to receive software updates through Red Hat Network or through an on-site Subscription Service.</property>
+                        <property name="label" translatable="yes">Please select if you would like to receive software updates through the Customer Portal or through another Subscription Management Service.</property>
                         <property name="wrap">True</property>
                       </widget>
                       <packing>
@@ -568,7 +569,7 @@
                         <child>
                           <widget class="GtkLabel" id="label11">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">I'd like to receive updates from Red Hat Network (I don't have access to an on-site Subscription Service).</property>
+                            <property name="label" translatable="yes">I'd like to receive updates from the Customer Portal.</property>
                             <property name="wrap">True</property>
                           </widget>
                           <packing>
@@ -619,7 +620,7 @@
                                   <widget class="GtkLabel" id="label12">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">I have access to an on-site Subscription Service. I'd like to receive software updates from the server below.</property>
+                                    <property name="label" translatable="yes">I have access to a Subscription Management Service. I'd like to receive software updates from the server below.</property>
                                     <property name="wrap">True</property>
                                   </widget>
                                   <packing>
@@ -635,7 +636,7 @@
                                         <property name="visible">True</property>
                                         <property name="xalign">0</property>
                                         <property name="yalign">0.25</property>
-                                        <property name="label" translatable="yes">Subscription Service:</property>
+                                        <property name="label" translatable="yes">Subscription Management Service:</property>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
@@ -764,7 +765,7 @@
                                       <widget class="GtkLabel" id="label16">
                                         <property name="visible">True</property>
                                         <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">&lt;small&gt;This could be the certificate(s) that you exported from RHN after registering the system as a consumer&lt;/small&gt;</property>
+                                        <property name="label" translatable="yes">&lt;small&gt;This could be the certificate(s) that you exported from the Customer Portal after registering the system as a consumer&lt;/small&gt;</property>
                                         <property name="use_markup">True</property>
                                         <property name="wrap">True</property>
                                       </widget>
