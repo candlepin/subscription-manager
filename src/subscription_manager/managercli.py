@@ -1073,7 +1073,6 @@ class ReleaseCommand(CliCommand):
                                default=None,
                                help=_("set the release"))
 
-
     def _get_consumer_release(self):
         err_msg = _("Error: The 'release' command is not supported by the server.")
         try:
