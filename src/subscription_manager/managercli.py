@@ -522,6 +522,14 @@ class IdentityCommand(UserPassCommand):
             sys.exit(-1)
 
     def _do_command(self):
+        # check for Classic before doing anything else
+        if ClassicCheck().is_registered_with_classic():
+            if ConsumerIdentity.existsAndValid():
+                print get_branding().REGISTERED_TO_BOTH_WARNING
+            else:
+                # no need to continue if user is only registered to Classic
+                print get_branding().RHSMD_REGISTERED_TO_OTHER
+                return
 
         try:
             consumer = check_registration()
