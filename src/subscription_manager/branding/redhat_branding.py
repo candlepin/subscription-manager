@@ -18,5 +18,11 @@ class Branding(object):
 
         self.GUI_REGISTRATION_HEADER = \
                 _("Please enter your Red Hat account information:")
+        self.REGISTERED_TO_BOTH_WARNING = \
+                _("This system is registered using both RHN Classic technology and RHN Certificate-Based technology.") + \
+                "\n\n" + \
+                _("Red Hat recommends (except in a few cases) that customers only register with RHN via one method.") + \
+                "\n\n" + \
+                _("To learn more about RHN registration and technologies please consult this Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563")
         self.GUI_FORGOT_LOGIN_TIP = \
                 _("Tip: Forgot your login or password? Look it up at http://red.ht/lost_password")
