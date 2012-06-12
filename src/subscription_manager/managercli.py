@@ -1554,9 +1554,12 @@ class ConfigCommand(CliCommand):
                     test = "%s" % getattr(self.options, section + "." + name)
                     has = has or (test != 'None')
             if not has:
-                # if no options are given, default to --list
-                self.options.list = True
-
+                sys.stderr.write(
+                    _("Error: This command requires that you use --list, "
+                    "--[section.name] to set, or --remove [section.name].")
+                )
+                sys.stderr.write("\n")
+                sys.exit(-1)
         if self.options.remove:
             for r in self.options.remove:
                 if not "." in r:
