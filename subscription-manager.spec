@@ -1,5 +1,7 @@
 # Skip rhsm-icon on Fedora 15+ and RHEL 7+
 %define use_rhsm_icon (0%{?fedora} && 0%{?fedora} < 15) || (0%{?rhel} && 0%{?rhel} < 7)
+# Prefer systemd over sysv on Fedora 17+ and RHEL 7+
+%define use_systemd (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 7)
 
 # A couple files are for RHEL 5 only:
 %if 0%{?rhel} == 5
@@ -39,6 +41,12 @@ Requires:  python-dmidecode
 Requires(post): chkconfig
 Requires(preun): chkconfig
 Requires(preun): initscripts
+
+%if %use_systemd
+Requires(post): systemd-units
+Requires(preun): systemd-units
+Requires(postun): systemd-units
+%endif
 
 BuildRequires: python-devel
 BuildRequires: gettext
@@ -205,7 +213,6 @@ rm -rf %{buildroot}
 %attr(755,root,root) %{_sbindir}/subscription-manager
 %attr(755,root,root) %{_bindir}/subscription-manager
 %attr(755,root,root) %{_bindir}/rhsmcertd
-%attr(755,root,root) %{_initrddir}/rhsmcertd
 %attr(755,root,root) %{_libexecdir}/rhsmcertd-worker
 %attr(755,root,root) %{_libexecdir}/rhsmd
 %attr(755,root,root) %dir %{_var}/run/rhsm
@@ -215,6 +222,12 @@ rm -rf %{buildroot}
 %attr(755,root,root) %dir %{_var}/lib/rhsm/cache
 %{_sysconfdir}/pam.d/subscription-manager
 %{_sysconfdir}/security/console.apps/subscription-manager
+
+%if %use_systemd
+    %attr(644,root,root) %{_unitdir}/rhsmcertd.service
+%else
+    %attr(755,root,root) %{_initrddir}/rhsmcertd
+%endif
 
 %doc
 %{_mandir}/man8/subscription-manager.8*
@@ -285,22 +298,46 @@ rm -rf %{buildroot}
 %endif
 
 %post
-chkconfig --add rhsmcertd
+%if %use_systemd
+    /bin/systemctl enable rhsmcertd.service >/dev/null 2>&1 || :
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+    /bin/systemctl try-restart rhsmcertd.service >/dev/null 2>&1 || :
+%else
+    chkconfig --add rhsmcertd
+%endif
+
 if [ -x /bin/dbus-send ] ; then
   dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig > /dev/null 2>&1 || :
 fi
-if [ "$1" -eq "2" ] ; then
-    /sbin/service rhsmcertd condrestart >/dev/null 2>&1 || :
-fi
+
+%if !%use_systemd
+    if [ "$1" -eq "2" ] ; then
+        /sbin/service rhsmcertd condrestart >/dev/null 2>&1 || :
+    fi
+%endif
 
 %preun
 if [ $1 -eq 0 ] ; then
-   /sbin/service rhsmcertd stop >/dev/null 2>&1
-   /sbin/chkconfig --del rhsmcertd
-   if [ -x /bin/dbus-send ] ; then
-     dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig > /dev/null 2>&1 || :
-   fi
+    %if %use_systemd
+        /bin/systemctl --no-reload disable rhsmcertd.service > /dev/null 2>&1 || :
+        /bin/systemctl stop rhsmcertd.service > /dev/null 2>&1 || :
+    %else
+        /sbin/service rhsmcertd stop >/dev/null 2>&1
+        /sbin/chkconfig --del rhsmcertd
+    %endif
+
+    if [ -x /bin/dbus-send ] ; then
+        dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig > /dev/null 2>&1 || :
+    fi
 fi
+
+%postun
+%if %use_systemd
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+    if [ $1 -eq 1 ] ; then
+        /bin/systemctl try-restart rhsmcertd.service >/dev/null 2>&1 || :
+    fi
+%endif
 
 %changelog
 * Thu Jun 07 2012 Alex Wood <awood@redhat.com> 1.0.3-1

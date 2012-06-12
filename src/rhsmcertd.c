@@ -35,6 +35,12 @@
 #define DEFAULT_CERT_INTERVAL_SECONDS 14400	/* 4 hours */
 #define DEFAULT_HEAL_INTERVAL_SECONDS 86400	/* 24 hours */
 #define BUF_MAX 256
+#define RHSM_CONFIG_FILE "/etc/rhsm/rhsm.conf"
+
+typedef struct _Config {
+	int heal_interval_seconds;
+	int cert_interval_seconds;
+} Config;
 
 //TODO: we should be using glib's logging facilities
 static FILE *log = NULL;
@@ -145,6 +151,84 @@ cert_check (gboolean heal)
 }
 
 int
+to_secs (int minutes)
+{
+	return minutes * 60;
+}
+
+void
+check_defaults_required (Config * config)
+{
+	log = get_log ();
+	if (config->cert_interval_seconds < 1) {
+		fprintf (log, "%s: Defaulting cert interval to: %i second(s)\n",
+			 ts (), DEFAULT_CERT_INTERVAL_SECONDS);
+		config->cert_interval_seconds = DEFAULT_CERT_INTERVAL_SECONDS;
+	}
+
+	if (config->heal_interval_seconds < 1) {
+		fprintf (log, "%s: Defaulting heal interval to: %i second(s)\n",
+			 ts (), DEFAULT_HEAL_INTERVAL_SECONDS);
+		config->heal_interval_seconds = DEFAULT_HEAL_INTERVAL_SECONDS;
+	}
+	fflush (log);
+	fclose (log);
+}
+
+Config*
+build_config (int cert_frequency, int heal_frequency)
+{
+	Config *config;
+	config = (Config*) malloc(sizeof(config));
+	config->cert_interval_seconds = to_secs (cert_frequency);
+	config->heal_interval_seconds = to_secs (heal_frequency);
+	check_defaults_required (config);
+	return config;
+}
+
+// FIXME Remove when glib is updated to >= 2.31.0 (see comment below).
+int
+get_int_from_config_file (GKeyFile * key_file, const char *group,
+			  const char *key)
+{
+	GError *error = NULL;
+	// Get the integer value from the config file. If value is 0 (due
+	// to any unhandled errors), the default value will be used.
+	int value = g_key_file_get_integer (key_file, group, key, &error);
+	if (error != NULL && error->code == G_KEY_FILE_ERROR_INVALID_VALUE) {
+		printf ("Found non standard value...");
+		// There is a bug that was fixed in glib 2.31.0 that deals with
+		// handling trailing white space for a config file value. Since
+		// we are on a lesser version, we have to deal with it ourselves
+		// since by default it returns 0.
+		char *str_value =
+			g_key_file_get_string (key_file, group, key, NULL);
+		g_strchomp (str_value);
+		value = atoi (str_value);
+	}
+	return value;
+}
+
+Config*
+get_file_configuration (GKeyFile * key_file)
+{
+	// g_key_file_get_integer defaults to 0 if not found.
+	int cert_frequency =
+		get_int_from_config_file (key_file, "rhsmcertd",
+					  "certFrequency");
+	int heal_frequency =
+		get_int_from_config_file (key_file, "rhsmcertd",
+					  "healFrequency");
+	return build_config (cert_frequency, heal_frequency);
+}
+
+Config*
+get_cli_configuration (char *argv[])
+{
+	return build_config (atoi (argv[1]), atoi (argv[2]));
+}
+
+int
 main (int argc, char *argv[])
 {
 	//we open and immediately close the log on startup, in order to check that
@@ -152,13 +236,47 @@ main (int argc, char *argv[])
 	log = get_log ();
 	fclose (log);
 
-	if (argc < 3) {
-		printUsage ();
-		return EXIT_FAILURE;
+	Config *config;
+	// Allow command line args to override configuration file values.
+	if (argc > 1) {
+		if (argc < 3) {
+			printUsage ();
+			return EXIT_FAILURE;
+		}
+		log = get_log ();
+		fprintf (log, "%s: Loading configuration from command line\n",
+			 ts ());
+		fflush (log);
+		fclose (log);
+
+		config = get_cli_configuration (argv);
+	} else {
+		// Load configuration values from the configuration file.
+		log = get_log ();
+		fprintf (log, "%s: Loading configuration from: %s\n", ts (),
+			 RHSM_CONFIG_FILE);
+		GKeyFile *key_file = g_key_file_new ();
+		if (!g_key_file_load_from_file
+		    (key_file, RHSM_CONFIG_FILE, G_KEY_FILE_NONE, NULL)) {
+			fprintf (log,
+				 "%s: ERROR: Unable to load configuration file.",
+				 ts ());
+			fflush (log);
+			fclose (log);
+			return EXIT_FAILURE;
+		}
+		fflush (log);
+		fclose (log);
+		config = get_file_configuration (key_file);
 	}
 
-	int cert_interval_seconds = atoi (argv[1]) * 60;
-	int heal_interval_seconds = atoi (argv[2]) * 60;
+	log = get_log ();
+	fprintf (log, "%s: Cert Frequency: %d seconds\n", ts (),
+		 config->cert_interval_seconds);
+	fprintf (log, "%s: Heal Frequency: %d seconds\n", ts (),
+		 config->heal_interval_seconds);
+	fflush (log);
+	fclose (log);
 
 	daemon (0, 0);
 	log = get_log ();
@@ -166,22 +284,16 @@ main (int argc, char *argv[])
 		fprintf (log, "%s: unable to get lock, exiting\n", ts ());
 		fflush (log);
 		fclose (log);	//need to close FD before we return out of main()
+		free (config);
 		return EXIT_FAILURE;
 	}
 	fclose (log);
 
-	if (cert_interval_seconds < 1) {
-		cert_interval_seconds = DEFAULT_CERT_INTERVAL_SECONDS;
-	}
-	if (heal_interval_seconds < 1) {
-		heal_interval_seconds = DEFAULT_HEAL_INTERVAL_SECONDS;
-	}
-
 	log = get_log ();
-	fprintf (log, "%s: healing check started: interval = %i\n", ts (),
-		 heal_interval_seconds / 60);
-	fprintf (log, "%s: cert check started: interval = %i\n", ts (),
-		 cert_interval_seconds / 60);
+	fprintf (log, "%s: healing check started: interval = %i minute(s)\n",
+		 ts (), config->heal_interval_seconds / 60);
+	fprintf (log, "%s: cert check started: interval = %i minute(s)\n",
+		 ts (), config->cert_interval_seconds / 60);
 	fflush (log);
 
 	// note that we call the function directly first, before assigning a timer
@@ -190,22 +302,24 @@ main (int argc, char *argv[])
 
 	bool heal = true;
 	cert_check (heal);
-	g_timeout_add (heal_interval_seconds * 1000, (GSourceFunc) cert_check,
-		       (gpointer) heal);
+	g_timeout_add (config->heal_interval_seconds * 1000,
+		       (GSourceFunc) cert_check, (gpointer) heal);
 
 	heal = false;
 	cert_check (heal);
 
-	g_timeout_add (cert_interval_seconds * 1000, (GSourceFunc) cert_check,
-		       (gpointer) heal);
+	g_timeout_add (config->cert_interval_seconds * 1000,
+		       (GSourceFunc) cert_check, (gpointer) heal);
 
 	// NB: we only use cert_interval_seconds when calculating the next update
 	// time. This works for most users, since the cert_interval aligns with
 	// runs of heal_interval (i.e., heal_interval % cert_interval = 0)
-	logUpdate (cert_interval_seconds);
-	g_timeout_add (cert_interval_seconds * 1000, (GSourceFunc) logUpdate,
-		       GINT_TO_POINTER (cert_interval_seconds));
+	logUpdate (config->cert_interval_seconds);
+	g_timeout_add (config->cert_interval_seconds * 1000,
+		       (GSourceFunc) logUpdate,
+		       GINT_TO_POINTER (config->cert_interval_seconds));
 
+	free (config);
 	main_loop = g_main_loop_new (NULL, FALSE);
 	g_main_loop_run (main_loop);
 	// we will never get past here
