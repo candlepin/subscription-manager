@@ -32,6 +32,7 @@ RHSMCERTD_FLAGS=`pkg-config --cflags --libs glib-2.0`
 PYFILES=`find  src/ -name "*.py"`
 TESTFILES=`find test/ -name "*.py"`
 STYLEFILES=$(PYFILES) $(BIN_FILES)
+GLADEFILES=`find src/subscription_manager/gui/data -name "*.glade"`
 
 # note, set STYLETEST to something if you want
 # make stylish to check the tests code
@@ -323,6 +324,24 @@ trailinglint:
 
 whitespacelint: tablint trailinglint
 
+# find widgets used via get_widget
+# find widgets used as passed to init of SubscriptionManagerTab,
+# find the widgets we actually find in the glade files
+# see if any used ones are not defined
+find-missing-widgets:
+	@TMPFILE=`mktemp` || exit 1; \
+	USED_WIDGETS="used_widgets_make.txt" ||exit 1; \
+	DEFINED_WIDGETS=`mktemp` ||exit 1; \
+	perl -n -e "if (/get_widget\([\'|\"](.*?)[\'|\"]\)/) { print(\"\$$1\n\")}" $(STYLEFILES) > $$USED_WIDGETS; \
+	pcregrep -h -o  -M  "(?:widgets|widget_names) = \[.*\s*.*?\s*.*\]" $(STYLEFILES) | perl -0 -n -e "my @matches = /[\'|\"](.*?)[\'|\"]/sg ; $$,=\"\n\"; print(@matches);" >> $$USED_WIDGETS; \
+	perl -n -e "if (/<widget class=\".*?\" id=\"(.*?)\">/) { print(\"\$$1\n\")}" $(GLADEFILES) > $$DEFINED_WIDGETS; \
+	while read line; do grep -F "$$line" $$DEFINED_WIDGETS > /dev/null ; STAT="$$?"; if [ "$$STAT" -ne "0" ] ; then echo "$$line"; fi;  done < $$USED_WIDGETS | tee $$TMPFILE; \
+	! test -s $$TMPFILE
+
+# look for python string formats that are known to break xgettext
+# namely constructs of the forms: _("a" + "b")
+#                                 _("a" + \
+#                                   "b")
 gettext_lint:
 	@TMPFILE=`mktemp` || exit 1; \
 	pcregrep -n --color=auto -M  "_\(.*[\'|\"].*[\'|\"]\s*\+.*?\s*[\"|\'].*[\"|\'].*\)"  $(STYLEFILES) | tee $$TMPFILE; \
@@ -338,6 +357,8 @@ rpmlint:
 	rpmlint -f rpmlint.config subscription-manager.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-stylish: pyflakes whitespacelint pep8 gettext_lint rpmlint
+stylish: find-missing-widgets pyflakes whitespacelint pep8 gettext_lint rpmlint
 
 jenkins: stylish coverage-jenkins
+
+
