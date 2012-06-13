@@ -245,7 +245,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def on_no_selection(self):
         self.product_text.get_buffer().set_text("")
-        self.product_id_text.get_buffer().set_text("")
+        self.product_arch_text.get_buffer().set_text("")
         self.validity_text.get_buffer().set_text("")
         self.subscription_text.get_buffer().set_text("")
 
