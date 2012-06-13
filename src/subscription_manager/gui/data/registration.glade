@@ -28,24 +28,27 @@
             <property name="can_focus">True</property>
             <property name="show_tabs">False</property>
             <property name="show_border">False</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">register_notebook</atkproperty>
+            </accessibility>
             <child>
-              <widget class="GtkVBox" id="initialLoginWindowVbox1">
+              <widget class="GtkVBox" id="initial_login_window_vbox">
                 <property name="visible">True</property>
                 <property name="border_width">25</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">7</property>
                 <accessibility>
-                  <atkproperty name="AtkObject::accessible-name">initialLoginWindowVbox1</atkproperty>
+                  <atkproperty name="AtkObject::accessible-name">initial_login_window_vbox</atkproperty>
                 </accessibility>
                 <child>
-                  <widget class="GtkLabel" id="registrationHeader">
+                  <widget class="GtkLabel" id="registration_header_label">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
                     <property name="use_markup">True</property>
                     <property name="single_line_mode">True</property>
                     <accessibility>
-                      <atkproperty name="AtkObject::accessible-name">instructionsLabel1</atkproperty>
+                      <atkproperty name="AtkObject::accessible-name">registration_header_label</atkproperty>
                     </accessibility>
                   </widget>
                   <packing>
@@ -56,35 +59,35 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkAlignment" id="alignment1">
+                  <widget class="GtkAlignment" id="initial_login_window_alignment">
                     <property name="visible">True</property>
                     <property name="left_padding">12</property>
                     <accessibility>
-                      <atkproperty name="AtkObject::accessible-name">alignment1</atkproperty>
+                      <atkproperty name="AtkObject::accessible-name">initial_login_window_alignment</atkproperty>
                     </accessibility>
                     <child>
-                      <widget class="GtkTable" id="table1">
+                      <widget class="GtkTable" id="initial_login_window_table">
                         <property name="visible">True</property>
                         <property name="n_rows">3</property>
                         <property name="n_columns">2</property>
                         <property name="column_spacing">15</property>
                         <property name="row_spacing">15</property>
                         <accessibility>
-                          <atkproperty name="AtkObject::accessible-name">table1</atkproperty>
+                          <atkproperty name="AtkObject::accessible-name">initial_login_window_table</atkproperty>
                         </accessibility>
                         <child>
-                          <widget class="GtkHBox" id="forgotInfoHbox1">
+                          <widget class="GtkHBox" id="forgot_info_hbox">
                             <property name="visible">True</property>
                             <accessibility>
-                              <atkproperty name="AtkObject::accessible-name">forgotInfoHbox1</atkproperty>
+                              <atkproperty name="AtkObject::accessible-name">forgot_info_hbox</atkproperty>
                             </accessibility>
                             <child>
-                              <widget class="GtkImage" id="tipIconHosted1">
+                              <widget class="GtkImage" id="tip_icon_hosted">
                                 <property name="visible">True</property>
                                 <property name="yalign">0</property>
                                 <property name="stock">gtk-info</property>
                                 <accessibility>
-                                  <atkproperty name="AtkObject::accessible-name">tipIconHosted1</atkproperty>
+                                  <atkproperty name="AtkObject::accessible-name">tip_icon_hosted</atkproperty>
                                 </accessibility>
                               </widget>
                               <packing>
@@ -94,7 +97,7 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="registrationTip">
+                              <widget class="GtkLabel" id="registration_tip_label">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
                                 <property name="yalign">0</property>
@@ -103,7 +106,7 @@
                                 <property name="use_markup">True</property>
                                 <property name="wrap">True</property>
                                 <accessibility>
-                                  <atkproperty name="AtkObject::accessible-name">forgotInfoHosted1</atkproperty>
+                                  <atkproperty name="AtkObject::accessible-name">registration_tip_label</atkproperty>
                                 </accessibility>
                               </widget>
                               <packing>
@@ -157,13 +160,13 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="loginPasswordEntryLabel1">
+                          <widget class="GtkLabel" id="login_password_entry_label">
                             <property name="visible">True</property>
                             <property name="xalign">1</property>
                             <property name="label" translatable="yes">Password:</property>
                             <property name="use_markup">True</property>
                             <accessibility>
-                              <atkproperty name="AtkObject::accessible-name">loginPasswordEntryLabel1</atkproperty>
+                              <atkproperty name="AtkObject::accessible-name">login_password_entry_label</atkproperty>
                             </accessibility>
                           </widget>
                           <packing>
@@ -174,13 +177,13 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="loginUserEntryLabel1">
+                          <widget class="GtkLabel" id="login_user_entry_label">
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">Login:</property>
                             <property name="use_markup">True</property>
                             <accessibility>
-                              <atkproperty name="AtkObject::accessible-name">loginUserEntryLabel1</atkproperty>
+                              <atkproperty name="AtkObject::accessible-name">login_user_entry_label</atkproperty>
                             </accessibility>
                           </widget>
                           <packing>
@@ -211,12 +214,15 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="systemInstructionsLabel">
+                  <widget class="GtkLabel" id="system_instructions_label">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Please enter the following for this system:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">system_instructions_label</atkproperty>
+                    </accessibility>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -224,21 +230,30 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkAlignment" id="alignment3">
+                  <widget class="GtkAlignment" id="system_name_alignment">
                     <property name="visible">True</property>
                     <property name="left_padding">12</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">system_name_alignment</atkproperty>
+                    </accessibility>
                     <child>
-                      <widget class="GtkTable" id="table3">
+                      <widget class="GtkTable" id="system_name_table">
                         <property name="visible">True</property>
                         <property name="n_rows">2</property>
                         <property name="n_columns">2</property>
                         <property name="column_spacing">15</property>
                         <property name="row_spacing">10</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">system_name_table</atkproperty>
+                        </accessibility>
                         <child>
-                          <widget class="GtkLabel" id="label15">
+                          <widget class="GtkLabel" id="system_name_label">
                             <property name="visible">True</property>
                             <property name="xalign">1</property>
                             <property name="label" translatable="yes">System Name:</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">system_name_label</atkproperty>
+                            </accessibility>
                           </widget>
                           <packing>
                             <property name="x_options">GTK_FILL</property>
@@ -296,6 +311,9 @@
               <widget class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">page 1</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">page1</atkproperty>
+                </accessibility>
               </widget>
               <packing>
                 <property name="tab_fill">False</property>
@@ -308,12 +326,18 @@
                 <property name="border_width">25</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">7</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">progressVbox</atkproperty>
+                </accessibility>
                 <child>
-                  <widget class="GtkLabel" id="label4">
+                  <widget class="GtkLabel" id="progress_label">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Registering&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">progress_label</atkproperty>
+                    </accessibility>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -330,6 +354,9 @@
                       <widget class="GtkProgressBar" id="register_progressbar">
                         <property name="visible">True</property>
                         <property name="activity_mode">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">register_progressbar</atkproperty>
+                        </accessibility>
                       </widget>
                     </child>
                   </widget>
@@ -344,6 +371,9 @@
                     <property name="visible">True</property>
                     <property name="xalign">0.11999999731779099</property>
                     <property name="use_markup">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">register_details_label</atkproperty>
+                    </accessibility>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -360,6 +390,9 @@
               <widget class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">page 2</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">page2</atkproperty>
+                </accessibility>
               </widget>
               <packing>
                 <property name="position">1</property>
@@ -368,20 +401,23 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkVBox" id="ownerSelectVbox">
+              <widget class="GtkVBox" id="owner_select_vbox">
                 <property name="visible">True</property>
                 <property name="border_width">25</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">7</property>
                 <accessibility>
-                  <atkproperty name="AtkObject::accessible-name">ownerSelectVbox</atkproperty>
+                  <atkproperty name="AtkObject::accessible-name">owner_select_vbox</atkproperty>
                 </accessibility>
                 <child>
-                  <widget class="GtkLabel" id="label5">
+                  <widget class="GtkLabel" id="org_selection_label">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Organization Selection&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">org_selection_label</atkproperty>
+                    </accessibility>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -389,17 +425,23 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkScrolledWindow" id="scrolledwindow1">
+                  <widget class="GtkScrolledWindow" id="org_selection_scrolledwindow">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="border_width">8</property>
                     <property name="hscrollbar_policy">automatic</property>
                     <property name="vscrollbar_policy">automatic</property>
                     <property name="shadow_type">etched-in</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">org_selection_scrolledwindow</atkproperty>
+                    </accessibility>
                     <child>
                       <widget class="GtkTreeView" id="owner_treeview">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">owner_treeview</atkproperty>
+                        </accessibility>
                       </widget>
                     </child>
                   </widget>
@@ -416,6 +458,9 @@
               <widget class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">page 3</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">page3</atkproperty>
+                </accessibility>
               </widget>
               <packing>
                 <property name="position">2</property>
@@ -424,20 +469,23 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkVBox" id="envSelectVbox">
+              <widget class="GtkVBox" id="env_select_vbox">
                 <property name="visible">True</property>
                 <property name="border_width">25</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">7</property>
                 <accessibility>
-                  <atkproperty name="AtkObject::accessible-name">envSelectVbox</atkproperty>
+                  <atkproperty name="AtkObject::accessible-name">env_select_vbox</atkproperty>
                 </accessibility>
                 <child>
-                  <widget class="GtkLabel" id="label7">
+                  <widget class="GtkLabel" id="env_select_vbox_label">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Environment Selection&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">env_select_vbox_label</atkproperty>
+                    </accessibility>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -445,17 +493,23 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkScrolledWindow" id="scrolledwindow2">
+                  <widget class="GtkScrolledWindow" id="env_select_vbox_scrolledwindow">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="border_width">8</property>
                     <property name="hscrollbar_policy">automatic</property>
                     <property name="vscrollbar_policy">automatic</property>
                     <property name="shadow_type">etched-in</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">env_select_vbox_scrolledwindow</atkproperty>
+                    </accessibility>
                     <child>
                       <widget class="GtkTreeView" id="environment_treeview">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">environment_treeview</atkproperty>
+                        </accessibility>
                       </widget>
                     </child>
                   </widget>
@@ -472,6 +526,9 @@
               <widget class="GtkLabel" id="label6">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">page 4</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">page4</atkproperty>
+                </accessibility>
               </widget>
               <packing>
                 <property name="position">3</property>
@@ -480,29 +537,38 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkVBox" id="vbox1">
+              <widget class="GtkVBox" id="choose_server_toplevel_vbox">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">choose_server_toplevel_vbox</atkproperty>
+                </accessibility>
                 <child>
                   <widget class="GtkVBox" id="choose_server_vbox">
                     <property name="visible">True</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">16</property>
                     <child>
-                      <widget class="GtkLabel" id="label9">
+                      <widget class="GtkLabel" id="choose_server_vbox_label">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                         <property name="xpad">12</property>
                         <property name="label" translatable="yes">Please select if you would like to receive software updates through the Customer Portal or through another Subscription Management Service.</property>
                         <property name="wrap">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">choose_server_vbox_label</atkproperty>
+                        </accessibility>
                       </widget>
                       <packing>
                         <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkHBox" id="hbox6">
+                      <widget class="GtkHBox" id="choose_server_proxy_hbox">
                         <property name="visible">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">choose_server_proxy_hbox</atkproperty>
+                        </accessibility>
                         <child>
                           <widget class="GtkLabel" id="proxy_label">
                             <property name="visible">True</property>
@@ -510,6 +576,9 @@
                             <property name="xpad">11</property>
                             <property name="label" translatable="yes">If you must connect through a proxy, please configure this before moving forward.</property>
                             <property name="wrap">True</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">proxy_label</atkproperty>
+                            </accessibility>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -517,15 +586,21 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkVBox" id="vbox6">
+                          <widget class="GtkVBox" id="proxy_config_button_vbox">
                             <property name="visible">True</property>
                             <property name="orientation">vertical</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">proxy_config_button_vbox</atkproperty>
+                            </accessibility>
                             <child>
                               <widget class="GtkButton" id="proxy_config_button">
                                 <property name="label" translatable="yes">Proxy Configuration</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <accessibility>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">proxy_config_button</atkproperty>
+                                </accessibility>
                                 <signal name="clicked" handler="on_proxy_config_button_clicked"/>
                               </widget>
                               <packing>
@@ -548,9 +623,12 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkHBox" id="hbox1">
+                      <widget class="GtkHBox" id="rhn_radio_hbox">
                         <property name="visible">True</property>
                         <property name="spacing">6</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">rhn_radio_hbox</atkproperty>
+                        </accessibility>
                         <child>
                           <widget class="GtkRadioButton" id="rhn_radio">
                             <property name="visible">True</property>
@@ -558,6 +636,9 @@
                             <property name="receives_default">False</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">rhn_radio</atkproperty>
+                            </accessibility>
                             <signal name="toggled" handler="on_rhn_radio_toggled"/>
                           </widget>
                           <packing>
@@ -567,10 +648,13 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="label11">
+                          <widget class="GtkLabel" id="rhn_radio_label">
                             <property name="visible">True</property>
                             <property name="label" translatable="yes">I'd like to receive updates from the Customer Portal.</property>
                             <property name="wrap">True</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">rhn_radio_label</atkproperty>
+                            </accessibility>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -583,18 +667,27 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkVBox" id="vbox2">
+                      <widget class="GtkVBox" id="local_radio_vbox">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">local_radio_vbox</atkproperty>
+                        </accessibility>
                         <child>
-                          <widget class="GtkHBox" id="hbox2">
+                          <widget class="GtkHBox" id="local_radio_hbox">
                             <property name="visible">True</property>
                             <property name="spacing">6</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">local_radio_hbox</atkproperty>
+                            </accessibility>
                             <child>
                               <widget class="GtkAlignment" id="alignment5">
                                 <property name="visible">True</property>
                                 <property name="bottom_padding">36</property>
+                                <accessibility>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">local_radio_alignment</atkproperty>
+                                </accessibility>
                                 <child>
                                   <widget class="GtkRadioButton" id="local_radio">
                                     <property name="visible">True</property>
@@ -602,6 +695,9 @@
                                     <property name="receives_default">False</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">rhn_radio</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">local_radio</atkproperty>
+                                    </accessibility>
                                     <signal name="toggled" handler="on_local_radio_toggled"/>
                                   </widget>
                                 </child>
@@ -613,15 +709,21 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkVBox" id="vbox5">
+                              <widget class="GtkVBox" id="local_radio_label_vbox">
                                 <property name="visible">True</property>
                                 <property name="orientation">vertical</property>
+                                <accessibility>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">local_radio_label_vbox</atkproperty>
+                                </accessibility>
                                 <child>
-                                  <widget class="GtkLabel" id="label12">
+                                  <widget class="GtkLabel" id="local_radio_label">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">I have access to a Subscription Management Service. I'd like to receive software updates from the server below.</property>
                                     <property name="wrap">True</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">local_radio_label</atkproperty>
+                                    </accessibility>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
@@ -629,14 +731,20 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkHBox" id="hbox4">
+                                  <widget class="GtkHBox" id="local_radio_server_hbox">
                                     <property name="visible">True</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">local_radio_server_hbox</atkproperty>
+                                    </accessibility>
                                     <child>
-                                      <widget class="GtkLabel" id="label13">
+                                      <widget class="GtkLabel" id="local_radio_server_label">
                                         <property name="visible">True</property>
                                         <property name="xalign">0</property>
                                         <property name="yalign">0.25</property>
                                         <property name="label" translatable="yes">Subscription Management Service:</property>
+                                        <accessibility>
+                                          <atkproperty name="AtkObject::accessible-name" translatable="yes">local_radio_server_label</atkproperty>
+                                        </accessibility>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
@@ -644,15 +752,21 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkVBox" id="vbox8">
+                                      <widget class="GtkVBox" id="local_radio_server_vbox">
                                         <property name="visible">True</property>
                                         <property name="orientation">vertical</property>
+                                        <accessibility>
+                                          <atkproperty name="AtkObject::accessible-name" translatable="yes">local_radio_server_vbox</atkproperty>
+                                        </accessibility>
                                         <child>
                                           <widget class="GtkEntry" id="local_entry">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="invisible_char">&#x25CF;</property>
                                             <property name="width_chars">30</property>
+                                            <accessibility>
+                                              <atkaction action_name="activate" description="local_entry"/>
+                                            </accessibility>
                                           </widget>
                                           <packing>
                                             <property name="expand">False</property>
@@ -660,10 +774,13 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <widget class="GtkLabel" id="label17">
+                                          <widget class="GtkLabel" id="local_entry_label">
                                             <property name="visible">True</property>
                                             <property name="label" translatable="yes">&lt;small&gt;&lt;i&gt;hostname[:port][/prefix]&lt;/i&gt;&lt;/small&gt;</property>
                                             <property name="use_markup">True</property>
+                                            <accessibility>
+                                              <atkproperty name="AtkObject::accessible-name" translatable="yes">local_entry_label</atkproperty>
+                                            </accessibility>
                                           </widget>
                                           <packing>
                                             <property name="expand">False</property>
@@ -701,18 +818,27 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkVBox" id="vbox3">
+                      <widget class="GtkVBox" id="offline_radio_vbox">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">offline_radio_vbox</atkproperty>
+                        </accessibility>
                         <child>
-                          <widget class="GtkHBox" id="hbox3">
+                          <widget class="GtkHBox" id="local_offline_hbox">
                             <property name="visible">True</property>
                             <property name="spacing">7</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">local_offline_hbox</atkproperty>
+                            </accessibility>
                             <child>
-                              <widget class="GtkAlignment" id="alignment4">
+                              <widget class="GtkAlignment" id="local_offline_hbox_alignment">
                                 <property name="visible">True</property>
                                 <property name="bottom_padding">44</property>
+                                <accessibility>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">local_offline_hbox_alignment</atkproperty>
+                                </accessibility>
                                 <child>
                                   <widget class="GtkRadioButton" id="offline_radio">
                                     <property name="visible">True</property>
@@ -720,6 +846,9 @@
                                     <property name="receives_default">False</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">rhn_radio</property>
+                                    <accessibility>
+                                      <atkaction action_name="click" description="offline_radio"/>
+                                    </accessibility>
                                     <signal name="toggled" handler="on_offline_radio_toggled"/>
                                   </widget>
                                 </child>
@@ -731,16 +860,22 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkVBox" id="vbox4">
+                              <widget class="GtkVBox" id="offline_radio_label_vbox">
                                 <property name="visible">True</property>
                                 <property name="orientation">vertical</property>
                                 <property name="spacing">6</property>
+                                <accessibility>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">offline_radio_label_vbox</atkproperty>
+                                </accessibility>
                                 <child>
-                                  <widget class="GtkLabel" id="label14">
+                                  <widget class="GtkLabel" id="offline_radio_label">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">I want to manually import my existing certificate files, which contain subscription information for this machine.</property>
                                     <property name="wrap">True</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">offline_radio_label</atkproperty>
+                                    </accessibility>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
@@ -748,13 +883,19 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkHBox" id="hbox5">
+                                  <widget class="GtkHBox" id="offline_radio_info_label_vbox">
                                     <property name="visible">True</property>
                                     <property name="spacing">12</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">offline_radio_info_label_vbox</atkproperty>
+                                    </accessibility>
                                     <child>
                                       <widget class="GtkImage" id="image1">
                                         <property name="visible">True</property>
                                         <property name="stock">gtk-info</property>
+                                        <accessibility>
+                                          <atkproperty name="AtkObject::accessible-name" translatable="yes">image1</atkproperty>
+                                        </accessibility>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
@@ -768,6 +909,9 @@
                                         <property name="label" translatable="yes">&lt;small&gt;This could be the certificate(s) that you exported from the Customer Portal after registering the system as a consumer&lt;/small&gt;</property>
                                         <property name="use_markup">True</property>
                                         <property name="wrap">True</property>
+                                        <accessibility>
+                                          <atkproperty name="AtkObject::accessible-name" translatable="yes">offline_radio_info_label_vbox</atkproperty>
+                                        </accessibility>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
@@ -786,15 +930,21 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkVBox" id="vbox7">
+                              <widget class="GtkVBox" id="import_certs_button_vbox">
                                 <property name="visible">True</property>
                                 <property name="orientation">vertical</property>
+                                <accessibility>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">import_certs_button_vbox</atkproperty>
+                                </accessibility>
                                 <child>
                                   <widget class="GtkButton" id="import_certs_button">
                                     <property name="label" translatable="yes">Import Certificates</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <accessibility>
+                                      <atkproperty name="AtkObject::accessible-name" translatable="yes">import_certs_button</atkproperty>
+                                    </accessibility>
                                     <signal name="clicked" handler="on_import_certs_button_clicked"/>
                                   </widget>
                                   <packing>
@@ -836,6 +986,9 @@
               <widget class="GtkLabel" id="label8">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">page 5</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">page_5</atkproperty>
+                </accessibility>
               </widget>
               <packing>
                 <property name="position">4</property>
