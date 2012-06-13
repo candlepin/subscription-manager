@@ -1137,6 +1137,8 @@ class ReleaseCommand(CliCommand):
         elif self.options.list:
             self._get_consumer_release()
             releases = self.release_backend.get_releases()
+            if not releases:
+                systemExit(-1, _("No release versions available, please check subscriptions."))
             for release in releases:
                 print release
         else:
