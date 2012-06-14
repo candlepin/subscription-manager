@@ -731,6 +731,7 @@ class ParseDateTests(unittest.TestCase):
         self.assertEquals(1, parsed.month)
         self.assertEquals(1, parsed.day)
 
+
 class MergedPoolsTests(unittest.TestCase):
 
     def test_sort_virt_to_top(self):

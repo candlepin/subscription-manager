@@ -12,7 +12,6 @@ OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1
 BIN_FILES = src/subscription-manager src/subscription-manager-gui \
 			src/rhn-migrate-classic-to-rhsm \
 			src/install-num-migrate-to-rhsm
-STYLETESTS ?=
 
 #this is the compat area for firstboot versions. If it's 6-compat, set to 6.
 SRC_DIR = src/subscription_manager
@@ -31,17 +30,8 @@ RHSMCERTD_FLAGS=`pkg-config --cflags --libs glib-2.0`
 
 PYFILES=`find  src/ -name "*.py"`
 TESTFILES=`find test/ -name "*.py"`
-STYLEFILES=$(PYFILES) $(BIN_FILES)
+STYLEFILES=$(PYFILES) $(BIN_FILES) $(TESTFILES)
 GLADEFILES=`find src/subscription_manager/gui/data -name "*.glade"`
-
-# note, set STYLETEST to something if you want
-# make stylish to check the tests code
-# as well
-
-ifdef STYLETESTS
-STYLEFILES+=$(TESTFILES)
-endif
-
 
 rhsmcertd: src/rhsmcertd.c bin
 	${CC} ${CFLAGS} ${RHSMCERTD_FLAGS} src/rhsmcertd.c -o bin/rhsmcertd

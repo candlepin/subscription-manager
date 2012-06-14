@@ -8,7 +8,7 @@ from subscription_manager.utils import remove_scheme, parse_server_info, \
     get_version
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
-from rhsm.version import Versions
+
 
 class TestParseServerInfo(unittest.TestCase):
 
@@ -164,6 +164,7 @@ class TestParseBaseUrlInfo(unittest.TestCase):
         self.assertEquals(prefix, DEFAULT_CDN_PREFIX)
         self.assertEquals("https://%s" % DEFAULT_CDN_HOSTNAME, format_baseurl(hostname, port, prefix))
 
+
 class TestRemoveScheme(unittest.TestCase):
     def test_colon_port(self):
         proxy_url = "proxy.example.com:3128"
@@ -200,4 +201,3 @@ class TestGetVersion(unittest.TestCase):
         versions.get_release.return_value = ""
         result = get_version(versions, "foobar")
         self.assertEquals("1.0", result)
-
