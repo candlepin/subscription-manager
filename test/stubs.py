@@ -409,9 +409,6 @@ class StubUEP:
         return self.consumer
 
 
-
-
-
 class StubBackend:
     def __init__(self, uep=StubUEP()):
         self.uep = uep
