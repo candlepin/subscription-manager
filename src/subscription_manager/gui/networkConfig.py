@@ -18,8 +18,10 @@ import os
 import gettext
 import gtk
 import gtk.glade
+import logging
 
 import rhsm.config
+import rhsm.connection as connection
 
 from subscription_manager.gui.utils import errorWindow
 from subscription_manager.utils import remove_scheme
@@ -28,6 +30,8 @@ _ = gettext.gettext
 
 DIR = os.path.dirname(__file__)
 GLADE_XML = os.path.join(DIR, "data/networkConfig.glade")
+
+log = logging.getLogger('rhsm-app.' + __name__)
 
 
 class NetworkConfigDialog:
@@ -57,12 +61,26 @@ class NetworkConfigDialog:
         self.setInitialValues()
         self.enableProxyButton.connect("toggled", self.enableAction)
         self.enableProxyAuthButton.connect("toggled", self.enableAction)
+
         self.enableProxyButton.connect("toggled", self.writeValues)
         self.enableProxyAuthButton.connect("toggled", self.writeValues)
+
+        self.enableProxyButton.connect("toggled", self.clearConnectionLabel)
+        self.enableProxyAuthButton.connect("toggled", self.clearConnectionLabel)
+
+        self.enableProxyButton.connect("toggled", self.enableTestButton)
+
         self.proxyEntry.connect("focus-out-event", self.writeValues)
         self.proxyUserEntry.connect("focus-out-event", self.writeValues)
         self.proxyPasswordEntry.connect("focus-out-event", self.writeValues)
+
+        self.proxyEntry.connect("changed", self.clearConnectionLabel)
+        self.proxyUserEntry.connect("changed", self.clearConnectionLabel)
+        self.proxyPasswordEntry.connect("changed", self.clearConnectionLabel)
+
         self.xml.get_widget("closeButton").connect("clicked", self.close)
+        self.xml.get_widget("testConnectionButton").connect("clicked", \
+                self.displayConnectionStatus)
         self.dlg.connect("delete-event", self.deleted)
 
     def setInitialValues(self):
@@ -86,9 +104,13 @@ class NetworkConfigDialog:
         # the extra or "" are to make sure we don't str None
         self.xml.get_widget("proxyUserEntry").set_text(str(self.cfg.get("server", "proxy_user") or ""))
         self.xml.get_widget("proxyPasswordEntry").set_text(str(self.cfg.get("server", "proxy_password") or ""))
+        self.xml.get_widget("connectionStatusLabel").set_label("")
+        # If there is no proxy information, disable the proxy test
+        # button.
+        if not self.xml.get_widget("enableProxyButton").get_active():
+            self.xml.get_widget("testConnectionButton").set_sensitive(False)
 
     def writeValues(self, widget=None, dummy=None):
-
         proxy = self.xml.get_widget("proxyEntry").get_text() or ""
 
         # don't save these values if they are disabled in the gui
@@ -134,6 +156,63 @@ class NetworkConfigDialog:
     def close(self, button):
         self.writeValues()
         self.dlg.hide()
+
+    def enableTestButton(self, button):
+        test_connection_button = self.xml.get_widget("testConnectionButton")
+        test_connection_button.set_sensitive(button.get_active())
+
+    def clearConnectionLabel(self, entry):
+        self.xml.get_widget("connectionStatusLabel").set_label("")
+
+    def displayConnectionStatus(self, button):
+        connection_label = self.xml.get_widget("connectionStatusLabel")
+        if self.testConnection():
+            connection_label.set_label(_("Proxy connection succeeded"))
+        else:
+            connection_label.set_label(_("Proxy connection failed"))
+
+    def testConnection(self):
+        proxy_host = remove_scheme(self.cfg.get("server", "proxy_hostname"))
+        proxy_port = self.cfg.get("server", "proxy_port")
+        proxy_user = self.cfg.get("server", "proxy_user")
+        proxy_password = self.cfg.get("server", "proxy_password")
+
+        server_host = self.cfg.get("server", "hostname")
+        server_port = self.cfg.get("server", "port")
+        server_prefix = self.cfg.get("server", "prefix")
+
+        cp = connection.UEPConnection(host=server_host,
+                                    ssl_port=server_port,
+                                    handler=server_prefix,
+                                    proxy_hostname=proxy_host,
+                                    proxy_port=proxy_port,
+                                    proxy_user=proxy_user,
+                                    proxy_password=proxy_password,
+                                    username=None,
+                                    password=None,
+                                    cert_file=None,
+                                    key_file=None
+                                    )
+        try:
+            cp.getStatus()
+        except connection.RemoteServerException, e:
+            log.debug("Reporting proxy connection as good despite %s" % \
+                        e.code)
+            return True
+        except connection.RestlibException, e:
+            log.debug("Reporting proxy connection as good despite %s" % \
+                        e.code)
+            return True
+        except connection.NetworkException, e:
+            log.debug("%s when attempting to connect through %s:%s" % \
+                    (e.code, proxy_host, proxy_port))
+            return False
+        except Exception, e:
+            log.debug("'%s' when attempting to connect through %s:%s" % \
+                    (e, proxy_host, proxy_port))
+            return False
+        else:
+            return True
 
     def deleted(self, event, data):
         self.writeValues()

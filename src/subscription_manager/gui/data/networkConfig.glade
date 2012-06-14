@@ -3,7 +3,7 @@
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy project-wide -->
   <widget class="GtkDialog" id="networkConfigDialog">
-    <property name="title" translatable="yes">Advanced Network Configuration</property>
+    <property name="title" translatable="yes">Proxy Configuration</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
@@ -252,10 +252,38 @@
             <property name="position">1</property>
           </packing>
         </child>
+        <child>
+          <widget class="GtkLabel" id="connectionStatusLabel">
+            <property name="visible">True</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">connectionStatusLabel</atkproperty>
+            </accessibility>
+          </widget>
+          <packing>
+            <property name="position">3</property>
+          </packing>
+        </child>
         <child internal-child="action_area">
           <widget class="GtkHButtonBox" id="dialog-action_area1">
             <property name="visible">True</property>
             <property name="layout_style">end</property>
+            <child>
+              <widget class="GtkButton" id="testConnectionButton">
+                <property name="label" translatable="yes">_Test Connection</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Test Connection Button</atkproperty>
+                </accessibility>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
             <child>
               <widget class="GtkButton" id="closeButton">
                 <property name="label" translatable="yes">_Close</property>
@@ -270,7 +298,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">0</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </widget>
