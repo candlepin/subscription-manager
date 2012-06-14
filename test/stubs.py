@@ -402,6 +402,15 @@ class StubUEP:
     def getEnvironmentList(self, owner):
         return self.environment_list
 
+    def setConsumer(self, consumer):
+        self.consumer = consumer
+
+    def getConsumer(self, consumerId):
+        return self.consumer
+
+
+
+
 
 class StubBackend:
     def __init__(self, uep=StubUEP()):
