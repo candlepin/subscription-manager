@@ -656,6 +656,8 @@ class EnvironmentsCommand(UserPassCommand):
 class ServiceLevelCommand(UserPassCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
+        self.consumerIdentity = ConsumerIdentity
+
         shortdesc = _("Manage service levels for this system.")
 
         super(ServiceLevelCommand, self).__init__("service-level", shortdesc,
@@ -670,14 +672,19 @@ class ServiceLevelCommand(UserPassCommand):
                 help=_("list all service levels available"))
         self.parser.add_option("--set", dest="service_level",
                                help=_("service level to apply to this system"))
+        self.parser.add_option("--unset", dest="unset",
+                               action='store_true',
+                               help=_("unset the service level for this system"))
 
     def _validate_options(self):
 
         # Assume --show if run with no args:
-        if not self.options.list and not self.options.show:
+        if not self.options.list and \
+           not self.options.show and \
+           not self.options.unset:
             self.options.show = True
 
-        if not ConsumerIdentity.existsAndValid():
+        if not self.consumerIdentity.existsAndValid():
             if self.options.list:
                 if not (self.options.username and self.options.password):
                     print(_("Error: you must register or specify --username and --password to list service levels"))
@@ -699,12 +706,15 @@ class ServiceLevelCommand(UserPassCommand):
                 self.cp = self._get_UEP(username=self.username,
                                         password=self.password)
             else:
-                cert_file = ConsumerIdentity.certpath()
-                key_file = ConsumerIdentity.keypath()
+                cert_file = self.consumerIdentity.certpath()
+                key_file = self.consumerIdentity.keypath()
 
                 # get an UEP as consumer
                 self.cp = self._get_UEP(cert_file=cert_file,
                                         key_file=key_file)
+
+            if self.options.unset:
+                self.unset_service_level()
 
             if self.options.service_level is not None:
                 self.set_service_level(self.options.service_level)
@@ -723,15 +733,21 @@ class ServiceLevelCommand(UserPassCommand):
             handle_exception(_("Error: Unable to retrieve service levels."), e)
 
     def set_service_level(self, service_level):
-        consumer_uuid = ConsumerIdentity.read().getConsumerId()
+        consumer_uuid = self.consumerIdentity.read().getConsumerId()
         consumer = self.cp.getConsumer(consumer_uuid)
         if 'serviceLevel' not in consumer:
             systemExit(-1, _("Error: The service-level command is not supported "
                              "by the server."))
         self.cp.updateConsumer(consumer_uuid, service_level=service_level)
 
+    def unset_service_level(self):
+        self.set_service_level("")
+        print _("Service level preference has been unset")
+
+
+
     def show_service_level(self):
-        consumer_uuid = ConsumerIdentity.read().getConsumerId()
+        consumer_uuid = self.consumerIdentity.read().getConsumerId()
         consumer = self.cp.getConsumer(consumer_uuid)
         if 'serviceLevel' not in consumer:
             systemExit(-1, _("Error: The service-level command is not supported by "
@@ -748,7 +764,7 @@ class ServiceLevelCommand(UserPassCommand):
 
         org_key = self.options.org
         if not org_key:
-            consumer_uuid = ConsumerIdentity.read().getConsumerId()
+            consumer_uuid = self.consumerIdentity.read().getConsumerId()
             org_key = self.cp.getOwner(consumer_uuid)['key']
 
         try:

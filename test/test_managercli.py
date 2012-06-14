@@ -350,6 +350,32 @@ class TestImportCertCommand(TestCliCommand):
             # i18n_optparse returns 2 on no args
             self.assertEquals(e.code, -1)
 
+class TestServiceLevelCommand(TestCliProxyCommand):
+    command_class = managercli.ServiceLevelCommand
+
+    def setUp(self):
+        TestCliProxyCommand.setUp(self)
+        self.cc.consumerIdentity = StubConsumerIdentity
+        self.cc.cp = StubUEP()
+
+
+    def test_service_level_not_supported(self):
+        self.cc.cp.setConsumer({})
+        try:
+            self.cc.set_service_level('JARJAR')
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+        else:
+            self.fail("No Exception Raised")
+
+    def test_service_level_supported(self):
+        self.cc.cp.setConsumer({'serviceLevel' : 'Jarjar'})
+        try:
+            self.cc.set_service_level('JRJAR')
+        except SystemExit, e:
+            self.fail("Exception Raised")
+
+
 
 class TestReleaseCommand(TestCliProxyCommand):
     command_class = managercli.ReleaseCommand
