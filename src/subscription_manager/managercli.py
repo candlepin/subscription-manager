@@ -1093,7 +1093,10 @@ class ReleaseCommand(CliCommand):
                                help=_("list available releases"))
         self.parser.add_option("--set", dest="release", action="store",
                                default=None,
-                               help=_("set the release"))
+                               help=_("set the release for this system"))
+        self.parser.add_option("--unset", dest="unset",
+                               action='store_true',
+                               help=_("unset the release for this system"))
 
     def _get_consumer_release(self):
         err_msg = _("Error: The 'release' command is not supported by the server.")
@@ -1137,7 +1140,11 @@ class ReleaseCommand(CliCommand):
                                               content_connection=self.cc)
 
         self.consumer = check_registration()
-        if self.options.release is not None:
+        if self.options.unset:
+            self.cp.updateConsumer(self.consumer['uuid'],
+                        release="")
+            print _("Release preference has been unset")
+        elif self.options.release is not None:
             # check first if the server supports releases
             self._get_consumer_release()
             releases = self.release_backend.get_releases()
