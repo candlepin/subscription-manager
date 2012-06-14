@@ -12,7 +12,6 @@ OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1
 BIN_FILES = src/subscription-manager src/subscription-manager-gui \
 			src/rhn-migrate-classic-to-rhsm \
 			src/install-num-migrate-to-rhsm
-STYLETESTS ?=
 
 #this is the compat area for firstboot versions. If it's 6-compat, set to 6.
 SRC_DIR = src/subscription_manager
@@ -31,17 +30,8 @@ RHSMCERTD_FLAGS=`pkg-config --cflags --libs glib-2.0`
 
 PYFILES=`find  src/ -name "*.py"`
 TESTFILES=`find test/ -name "*.py"`
-STYLEFILES=$(PYFILES) $(BIN_FILES)
+STYLEFILES=$(PYFILES) $(BIN_FILES) $(TESTFILES)
 GLADEFILES=`find src/subscription_manager/gui/data -name "*.glade"`
-
-# note, set STYLETEST to something if you want
-# make stylish to check the tests code
-# as well
-
-ifdef STYLETESTS
-STYLEFILES+=$(TESTFILES)
-endif
-
 
 rhsmcertd: src/rhsmcertd.c bin
 	${CC} ${CFLAGS} ${RHSMCERTD_FLAGS} src/rhsmcertd.c -o bin/rhsmcertd
@@ -309,7 +299,7 @@ pyflakes:
 # and other tools detect the valid cases, so ignore these
 #
 	@TMPFILE=`mktemp` || exit 1; \
-	pyflakes $(STYLEFILES) |  grep -v "redefinition of unused.*from line.*" |  grep -v "undefined name 'ConsumerIdentity'" |  tee $$TMPFILE; \
+	pyflakes $(STYLEFILES) |  grep -v "redefinition of unused.*from line.*" |  tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 pylint:
@@ -330,7 +320,7 @@ whitespacelint: tablint trailinglint
 # see if any used ones are not defined
 find-missing-widgets:
 	@TMPFILE=`mktemp` || exit 1; \
-	USED_WIDGETS="used_widgets_make.txt" ||exit 1; \
+	USED_WIDGETS=`mktemp` ||exit 1; \
 	DEFINED_WIDGETS=`mktemp` ||exit 1; \
 	perl -n -e "if (/get_widget\([\'|\"](.*?)[\'|\"]\)/) { print(\"\$$1\n\")}" $(STYLEFILES) > $$USED_WIDGETS; \
 	pcregrep -h -o  -M  "(?:widgets|widget_names) = \[.*\s*.*?\s*.*\]" $(STYLEFILES) | perl -0 -n -e "my @matches = /[\'|\"](.*?)[\'|\"]/sg ; $$,=\"\n\"; print(@matches);" >> $$USED_WIDGETS; \
