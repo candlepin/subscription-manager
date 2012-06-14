@@ -42,6 +42,7 @@ class TestSubDetailsWidget(unittest.TestCase):
         e_iter = details.virt_only_text.get_buffer().get_end_iter()
         self.assertEquals(details.virt_only_text.get_buffer().get_text(s_iter, e_iter), 'v_o')
 
+
 class BaseColumnTest(unittest.TestCase):
 
     def _assert_column_value(self, column_class, model_bool_val, expected_text):
