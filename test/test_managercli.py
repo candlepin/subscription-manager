@@ -101,10 +101,12 @@ class TestCliProxyCommand(TestCliCommand):
         self.cc.main(["--proxypassword", proxy_password])
         self.assertEquals(proxy_password, self.cc.proxy_password)
 
+
 class TestCliCommandServerurl(TestCliCommand):
     def test_main_server_url(self):
         server_url = "https://subscription.rhn.redhat.com/subscription"
         self.cc.main(["--serverurl", server_url])
+
 
 class TestCleanCommand(TestCliCommand):
     command_class = managercli.CleanCommand
@@ -350,6 +352,7 @@ class TestImportCertCommand(TestCliCommand):
             # i18n_optparse returns 2 on no args
             self.assertEquals(e.code, -1)
 
+
 class TestServiceLevelCommand(TestCliProxyCommand):
     command_class = managercli.ServiceLevelCommand
 
@@ -357,7 +360,6 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         TestCliProxyCommand.setUp(self)
         self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
-
 
     def test_service_level_not_supported(self):
         self.cc.cp.setConsumer({})
@@ -369,12 +371,11 @@ class TestServiceLevelCommand(TestCliProxyCommand):
             self.fail("No Exception Raised")
 
     def test_service_level_supported(self):
-        self.cc.cp.setConsumer({'serviceLevel' : 'Jarjar'})
+        self.cc.cp.setConsumer({'serviceLevel': 'Jarjar'})
         try:
             self.cc.set_service_level('JRJAR')
-        except SystemExit, e:
+        except SystemExit:
             self.fail("Exception Raised")
-
 
 
 class TestReleaseCommand(TestCliProxyCommand):
@@ -407,6 +408,7 @@ class TestReleaseCommand(TestCliProxyCommand):
         self.assertEquals(type(proxy_url), type(self.cc.options.proxy_url))
         self.assertEquals(proxy_host, self.cc.proxy_hostname)
         self.assertEquals(proxy_port, self.cc.proxy_port)
+
 
 class TestVersionCommand(TestCliCommand):
     command_class = managercli.VersionCommand
