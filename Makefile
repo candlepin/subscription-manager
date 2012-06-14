@@ -320,7 +320,7 @@ whitespacelint: tablint trailinglint
 # see if any used ones are not defined
 find-missing-widgets:
 	@TMPFILE=`mktemp` || exit 1; \
-	USED_WIDGETS="used_widgets_make.txt" ||exit 1; \
+	USED_WIDGETS=`mktemp` ||exit 1; \
 	DEFINED_WIDGETS=`mktemp` ||exit 1; \
 	perl -n -e "if (/get_widget\([\'|\"](.*?)[\'|\"]\)/) { print(\"\$$1\n\")}" $(STYLEFILES) > $$USED_WIDGETS; \
 	pcregrep -h -o  -M  "(?:widgets|widget_names) = \[.*\s*.*?\s*.*\]" $(STYLEFILES) | perl -0 -n -e "my @matches = /[\'|\"](.*?)[\'|\"]/sg ; $$,=\"\n\"; print(@matches);" >> $$USED_WIDGETS; \
