@@ -744,8 +744,6 @@ class ServiceLevelCommand(UserPassCommand):
         self.set_service_level("")
         print _("Service level preference has been unset")
 
-
-
     def show_service_level(self):
         consumer_uuid = self.consumerIdentity.read().getConsumerId()
         consumer = self.cp.getConsumer(consumer_uuid)
