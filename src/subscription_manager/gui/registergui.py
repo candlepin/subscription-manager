@@ -133,12 +133,12 @@ class RegisterScreen:
         self.cancel_button = registration_xml.get_widget("cancel_button")
         self.register_button = registration_xml.get_widget("register_button")
 
-        register_tip_label = registration_xml.get_widget("registrationTip")
+        register_tip_label = registration_xml.get_widget("registration_tip_label")
         register_tip_label.set_label("<small>%s</small>" % \
                 get_branding().GUI_FORGOT_LOGIN_TIP)
 
         register_header_label = \
-                registration_xml.get_widget("registrationHeader")
+                registration_xml.get_widget("registration_header_label")
         register_header_label.set_label("<b>%s</b>" % \
                 get_branding().GUI_REGISTRATION_HEADER)
 
