@@ -1740,7 +1740,7 @@ class ListCommand(CliCommand):
                     machine_type = _("physical")
 
                 print self._none_wrap(AVAILABLE_SUBS_LIST, product_name,
-                        data['productId'],
+                        data['id'],
                         data['quantity'],
                         data['service_level'] or "",
                         data['service_type'] or "",
