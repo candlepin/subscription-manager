@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.3
+Version: 1.0.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -340,6 +340,94 @@ fi
 %endif
 
 %changelog
+* Tue Jun 19 2012 Alex Wood <awood@redhat.com> 1.0.4-1
+- 818978: Use systemd instead of sysv when installing on F17+ and RHEL7+.
+  (mstead@redhat.com)
+- 827035: update identity certificate (jmrodri@gmail.com)
+- registergui: make screens without guis more generic (jbowes@redhat.com)
+- Incorrect field value removed on previous change (wpoteat@redhat.com)
+- 829812: Add an unset command for the release command (bkearney@redhat.com)
+- 823659: Update SLA text in Settings to Service Level (wpoteat@redhat.com)
+- Use a temp file for finding used widgets (jbowes@redhat.com)
+- clean up some unused import warnings (jbowes@redhat.com)
+- default to running style checks on tests (jbowes@redhat.com)
+- Make test cases stylish as well... (alikins@redhat.com)
+- Fix "make stylish" (alikins@redhat.com)
+- 829803: Added an unset command to service level. (bkearney@redhat.com)
+- Remove reference to InstalledProductsTab.product_id_text (alikins@redhat.com)
+- Add a "find-missing-widgets" target to makefile (alikins@redhat.com)
+- 830949: add accessibility locators for registration widgets
+  (alikins@redhat.com)
+- 824979: No message for subscription-manager release --list with no
+  subscriptions. (wpoteat@redhat.com)
+- Added UnRegisterCommand and UnSubscribeCommand nosetests (wpoteat@redhat.com)
+- registergui: get firstboot working with new new code (jbowes@repl.ca)
+- registergui: Create a PreformRegisterScreen class (jbowes@repl.ca)
+- registergui: add a post method for setting data on the parent
+  (jbowes@repl.ca)
+- registergui: create a 'pre' hook for screens (jbowes@repl.ca)
+  (cduryee@redhat.com)
+- 819665: print msg if user is registered to RHN Classic on "identity" command
+  (cduryee@redhat.com)
+  (wpoteat@redhat.com)
+- Add F17 yum repo release target. (dgoodwin@redhat.com)
+- fix make stylish (jbowes@redhat.com)
+- 810352: Disable the expansion of the system name selection in the register
+  dialog (bkearney@redhat.com)
+- 824530: add test case for setting proxy cli for release (alikins@redhat.com)
+- rhsm-icon codestyle cleanups (jbowes@repl.ca)
+- 829900: Use the term 'Subscription Management Service' to refer to SAM, CFSE,
+  etc (root@bkearney.(none))
+- 829898: Make the no service level option a bit clearer as to its meaning
+  (bkearney@redhat.com)
+- Improve the logging so that the user only sees the approved output by default
+  (bkearney@redhat.com)
+- 830193: Modify the output of the yum plugin to be consistent with RHN
+  (bkearney@redhat.com)
+- 824530: "release" command ignoring cli proxy options (alikins@redhat.com)
+- 828042,828068: Make ja_JP's Confirm Subscription unique for firstboot.
+  (mstead@redhat.com)
+- Updating strings from zanata (mstead@redhat.com)
+- 825309: Remove the archiecture field from the table. (bkearney@redhat.com)
+- 823608: Rename the software pane to product (bkearney@redhat.com)
+- 810369: Prefer the term Subscription to Entitlement (bkearney@redhat.com)
+- Add a warning comment about firstboot module titles (alikins@redhat.com)
+- Clean up an option (bkearney@redhat.com)
+- 827208: Fix the xmltag bugs in the or po file (bkearney@redhat.com)
+- 827214: Clean up the XML tags in ta po file. (bkearney@redhat.com)
+- Slight change in the path for the ta po file (bkearney@redhat.com)
+- Slight change in the path for the ta po file (bkearney@redhat.com)
+- Slight change in the path for the ml po file (bkearney@redhat.com)
+- 828583: Add some spacing at the end of the file paths in the ko.po file
+  (bkearney@redhat.com)
+- 828816: the %%prog variable should not be translated (bkearney@redhat.com)
+- 828821: Fix the addition of a new variable in the hi po file
+  (bkearney@redhat.com)
+- 828903: Fix translation of options in the bn po file. (bkearney@redhat.com)
+- Fix part of the mis translated options (bkearney@redhat.com)
+- 828965: Fix a translated option which should not have been translated
+  (bkearney@redhat.com)
+- 828954: fix the --pool option in the translated string (bkearney@redhat.com)
+- 828958: --available should not be translated (bkearney@redhat.com)
+- Add --password as an option, not a string. This cause several strings to be
+  retranslated (bkearney@redhat.com)
+- 828969: Fix the options in the translated string (bkearney@redhat.com)
+- 828985: Fix the url in the translated string (bkearney@redhat.com)
+- 828989: Fix the access url (bkearney@redhat.com)
+- 818205: Release --set command should only accept values from --list.
+  (awood@redhat.com)
+- registergui: extract out a screen superclass (jbowes@repl.ca)
+- registergui: get button label from screen class (jbowes@repl.ca)
+- registergui: keep screens in a list (jbowes@repl.ca)
+- registergui: pull out environment screen into its own class (jbowes@repl.ca)
+- registergui: sensitivity refactor and method move (jbowes@repl.ca)
+- registergui: extract out credentials_entered method (jbowes@repl.ca)
+- registergui: move organization screen to its own class (jbowes@repl.ca)
+- registergui: move credentials screen to its own class (jbowes@repl.ca)
+- registergui: move choose server screen to its own class (jbowes@repl.ca)
+- registergui: switch from GladeWrapper to GladeWidget (jbowes@repl.ca)
+- registergui: Remove some unused globals (jbowes@repl.ca)
+
 * Thu Jun 07 2012 Alex Wood <awood@redhat.com> 1.0.3-1
 - 817938: Add sorting to the contract selection table. (awood@redhat.com)
 - 822706: gtk widget visibility toggle compat for el5 (jbowes@repl.ca)
