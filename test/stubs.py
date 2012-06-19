@@ -287,6 +287,8 @@ class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate)
         if content:
             self.content = content
         self.path = "/tmp/fake_ent_cert.pem"
+        self.is_deleted = False
+        self.serial_number = '123456'
 
     def validRange(self):
         return DateRange(self.start_date, self.order_end_date)
@@ -296,6 +298,15 @@ class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate)
 
     def getRoleEntitlements(self):
         return []
+
+    def delete(self):
+        self.is_deleted = True
+
+    def serialNumber(self):
+        return self.serial_number
+
+    def setSerialNumber(self, serial):
+        self.serial_number = serial
 
 
 class StubCertificateDirectory(EntitlementDirectory):
@@ -308,8 +319,10 @@ class StubCertificateDirectory(EntitlementDirectory):
 
     def __init__(self, certificates):
         self.certs = certificates
+        self.list_called = False
 
     def list(self):
+        self.list_called = True
         return self.certs
 
     def _check_key(self, cert):
@@ -317,6 +330,9 @@ class StubCertificateDirectory(EntitlementDirectory):
         Fake filesystem access here so we don't try to read real keys.
         """
         return True
+
+    def getCerts(self):
+        return self.certs
 
 # so we can use a less confusing name when we use this stub
 StubEntitlementDirectory = StubCertificateDirectory
@@ -360,6 +376,14 @@ class StubConsumerIdentity:
     def read(cls):
         return StubConsumerIdentity("", "")
 
+    @classmethod
+    def certpath(self):
+        return ""
+
+    @classmethod
+    def keypath(self):
+        return ""
+
 
 class StubUEP:
     def __init__(self, host=None, ssl_port=None, handler=None,
@@ -369,6 +393,9 @@ class StubUEP:
                  cert_file=None, key_file=None):
             self.registered_consumer_info = {"uuid": 'dummy-consumer-uuid'}
             self.environment_list = []
+            self.called_unregister_uuid = None
+            self.called_unbind_uuid = None
+            self.called_unbind_serial = None
             pass
 
     def supports_resource(self, resource):
@@ -377,6 +404,9 @@ class StubUEP:
     def registerConsumer(self, name, type, facts, owner, environment, keys,
                          installed_products):
         return self.registered_consumer_info
+
+    def unregisterConsumer(self, uuid):
+        self.called_unregister_uuid = uuid
 
     def getOwnerList(self, username):
         return [{'key': 'dummyowner'}]
@@ -401,6 +431,18 @@ class StubUEP:
 
     def getEnvironmentList(self, owner):
         return self.environment_list
+
+    def setConsumer(self, consumer):
+        self.consumer = consumer
+
+    def getConsumer(self, consumerId):
+        return self.consumer
+
+    def unbindAll(self, consumer):
+        self.called_unbind_uuid = consumer
+
+    def unbindBySerial(self, consumer, serial):
+        self.called_unbind_serial = serial
 
 
 class StubBackend:
@@ -462,3 +504,11 @@ class StubConsumer:
 
     def getConsumerId(self):
         return "12341234234"
+
+
+class StubCertLib:
+    def __init__(self, uep=StubUEP()):
+        self.uep = uep
+
+    def update(self):
+        pass

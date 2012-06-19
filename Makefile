@@ -12,7 +12,6 @@ OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1
 BIN_FILES = src/subscription-manager src/subscription-manager-gui \
 			src/rhn-migrate-classic-to-rhsm \
 			src/install-num-migrate-to-rhsm
-STYLETESTS ?=
 
 #this is the compat area for firstboot versions. If it's 6-compat, set to 6.
 SRC_DIR = src/subscription_manager
@@ -31,16 +30,8 @@ RHSMCERTD_FLAGS=`pkg-config --cflags --libs glib-2.0`
 
 PYFILES=`find  src/ -name "*.py"`
 TESTFILES=`find test/ -name "*.py"`
-STYLEFILES=$(PYFILES) $(BIN_FILES)
-
-# note, set STYLETEST to something if you want
-# make stylish to check the tests code
-# as well
-
-ifdef STYLETESTS
-STYLEFILES+=$(TESTFILES)
-endif
-
+STYLEFILES=$(PYFILES) $(BIN_FILES) $(TESTFILES)
+GLADEFILES=`find src/subscription_manager/gui/data -name "*.glade"`
 
 rhsmcertd: src/rhsmcertd.c bin
 	${CC} ${CFLAGS} ${RHSMCERTD_FLAGS} src/rhsmcertd.c -o bin/rhsmcertd
@@ -308,7 +299,7 @@ pyflakes:
 # and other tools detect the valid cases, so ignore these
 #
 	@TMPFILE=`mktemp` || exit 1; \
-	pyflakes $(STYLEFILES) |  grep -v "redefinition of unused.*from line.*" | tee $$TMPFILE; \
+	pyflakes $(STYLEFILES) |  grep -v "redefinition of unused.*from line.*" |  tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 pylint:
@@ -323,6 +314,24 @@ trailinglint:
 
 whitespacelint: tablint trailinglint
 
+# find widgets used via get_widget
+# find widgets used as passed to init of SubscriptionManagerTab,
+# find the widgets we actually find in the glade files
+# see if any used ones are not defined
+find-missing-widgets:
+	@TMPFILE=`mktemp` || exit 1; \
+	USED_WIDGETS=`mktemp` ||exit 1; \
+	DEFINED_WIDGETS=`mktemp` ||exit 1; \
+	perl -n -e "if (/get_widget\([\'|\"](.*?)[\'|\"]\)/) { print(\"\$$1\n\")}" $(STYLEFILES) > $$USED_WIDGETS; \
+	pcregrep -h -o  -M  "(?:widgets|widget_names) = \[.*\s*.*?\s*.*\]" $(STYLEFILES) | perl -0 -n -e "my @matches = /[\'|\"](.*?)[\'|\"]/sg ; $$,=\"\n\"; print(@matches);" >> $$USED_WIDGETS; \
+	perl -n -e "if (/<widget class=\".*?\" id=\"(.*?)\">/) { print(\"\$$1\n\")}" $(GLADEFILES) > $$DEFINED_WIDGETS; \
+	while read line; do grep -F "$$line" $$DEFINED_WIDGETS > /dev/null ; STAT="$$?"; if [ "$$STAT" -ne "0" ] ; then echo "$$line"; fi;  done < $$USED_WIDGETS | tee $$TMPFILE; \
+	! test -s $$TMPFILE
+
+# look for python string formats that are known to break xgettext
+# namely constructs of the forms: _("a" + "b")
+#                                 _("a" + \
+#                                   "b")
 gettext_lint:
 	@TMPFILE=`mktemp` || exit 1; \
 	pcregrep -n --color=auto -M  "_\(.*[\'|\"].*[\'|\"]\s*\+.*?\s*[\"|\'].*[\"|\'].*\)"  $(STYLEFILES) | tee $$TMPFILE; \
@@ -338,6 +347,8 @@ rpmlint:
 	rpmlint -f rpmlint.config subscription-manager.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-stylish: pyflakes whitespacelint pep8 gettext_lint rpmlint
+stylish: find-missing-widgets pyflakes whitespacelint pep8 gettext_lint rpmlint
 
 jenkins: stylish coverage-jenkins
+
+

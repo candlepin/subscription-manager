@@ -433,12 +433,12 @@ class CredentialsScreen(Screen):
 
         self._initialize_consumer_name()
 
-        register_tip_label = self.glade.get_widget("registrationTip")
+        register_tip_label = self.glade.get_widget("registration_tip_label")
         register_tip_label.set_label("<small>%s</small>" % \
                 get_branding().GUI_FORGOT_LOGIN_TIP)
 
         register_header_label = \
-                self.glade.get_widget("registrationHeader")
+                self.glade.get_widget("registration_header_label")
         register_header_label.set_label("<b>%s</b>" % \
                 get_branding().GUI_REGISTRATION_HEADER)
 

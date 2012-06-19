@@ -383,6 +383,26 @@ class MergedPools(object):
         # is added and hope they are consistent.
         self.bundled_products = len(pool['providedProducts'])
 
+    def _virt_physical_sorter(self, pool):
+        """
+        Used to sort the pools, return Physical or Virt depending on
+        the value or existence of the virt_only attribute.
+
+        Returning numeric values to simulate the behavior we want.
+        """
+        for attr in pool['attributes']:
+            if attr['name'] == 'virt_only' and attr['value'] == 'true':
+                return 1
+        return 2
+
+    def sort_virt_to_top(self):
+        """
+        Prioritizes virt pools to the front of the list, if any are present.
+
+        Used by contract selector to show these first in the list.
+        """
+        self.pools.sort(key=self._virt_physical_sorter)
+
 
 def merge_pools(pools):
     """

@@ -18,6 +18,7 @@ class TestCliCommand(unittest.TestCase):
                                      prod_dir=StubProductDirectory([]))
         # neuter the _do_command, since this is mostly
         # for testing arg parsing
+        self._orig_do_command = self.cc._do_command
         self.cc._do_command = self._do_command
         self.cc.assert_should_be_registered = self._asert_should_be_registered
 
@@ -100,10 +101,12 @@ class TestCliProxyCommand(TestCliCommand):
         self.cc.main(["--proxypassword", proxy_password])
         self.assertEquals(proxy_password, self.cc.proxy_password)
 
+
 class TestCliCommandServerurl(TestCliCommand):
     def test_main_server_url(self):
         server_url = "https://subscription.rhn.redhat.com/subscription"
         self.cc.main(["--serverurl", server_url])
+
 
 class TestCleanCommand(TestCliCommand):
     command_class = managercli.CleanCommand
@@ -350,13 +353,61 @@ class TestImportCertCommand(TestCliCommand):
             self.assertEquals(e.code, -1)
 
 
+class TestServiceLevelCommand(TestCliProxyCommand):
+    command_class = managercli.ServiceLevelCommand
+
+    def setUp(self):
+        TestCliProxyCommand.setUp(self)
+        self.cc.consumerIdentity = StubConsumerIdentity
+        self.cc.cp = StubUEP()
+
+    def test_service_level_not_supported(self):
+        self.cc.cp.setConsumer({})
+        try:
+            self.cc.set_service_level('JARJAR')
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+        else:
+            self.fail("No Exception Raised")
+
+    def test_service_level_supported(self):
+        self.cc.cp.setConsumer({'serviceLevel': 'Jarjar'})
+        try:
+            self.cc.set_service_level('JRJAR')
+        except SystemExit:
+            self.fail("Exception Raised")
+
+
 class TestReleaseCommand(TestCliProxyCommand):
     command_class = managercli.ReleaseCommand
 
-    # def test_no_product_certs
-    # def test_no_rhel_product
+    def _stub_connection(self):
+        # er, first cc is command_class, second is ContentConnection
+        def check_registration():
+            consumer_info = {"consumer_name": "whatever",
+                     "uuid": "doesnt really matter"}
+            return consumer_info
 
-    # def test_invalid_content_url
+        def _get_consumer_release():
+            pass
+
+        self.cc._get_consumer_release = _get_consumer_release
+        managercli.check_registration = check_registration
+
+    def test_main_proxy_url_release(self):
+        proxy_host = "example.com"
+        proxy_port = "3128"
+        proxy_url = "%s:%s" % (proxy_host, proxy_port)
+        self.cc.main(["--proxy", proxy_url])
+        self._stub_connection()
+
+        self._orig_do_command()
+        self.assertEquals(proxy_host, self.cc.cc.proxy_hostname)
+
+        self.assertEquals(proxy_url, self.cc.options.proxy_url)
+        self.assertEquals(type(proxy_url), type(self.cc.options.proxy_url))
+        self.assertEquals(proxy_host, self.cc.proxy_hostname)
+        self.assertEquals(proxy_port, self.cc.proxy_port)
 
 
 class TestVersionCommand(TestCliCommand):

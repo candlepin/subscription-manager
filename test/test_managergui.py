@@ -1,7 +1,7 @@
 import unittest
 
 import stubs
-from subscription_manager.gui import managergui, registergui
+from subscription_manager.gui import managergui, registergui, installedtab
 
 
 class StubConsumer:
@@ -15,6 +15,7 @@ class StubConsumer:
 class TestManagerGuiMainWindow(unittest.TestCase):
     def test_main_window(self):
         managergui.ConsumerIdentity = stubs.StubConsumerIdentity
+        installedtab.ConsumerIdentity = stubs.StubConsumerIdentity
         managergui.Backend = stubs.StubBackend
         managergui.Consumer = StubConsumer
         managergui.Facts = stubs.StubFacts()

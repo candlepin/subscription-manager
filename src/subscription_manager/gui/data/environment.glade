@@ -8,15 +8,18 @@
     <property name="border_width">25</property>
     <property name="spacing">7</property>
     <accessibility>
-      <atkproperty name="AtkObject::accessible-name">envSelectVbox</atkproperty>
+      <atkproperty name="AtkObject::accessible-name">env_select_vbox</atkproperty>
     </accessibility>
     <child>
-      <widget class="GtkLabel" id="label7">
+      <widget class="GtkLabel" id="env_select_vbox_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">&lt;b&gt;Environment Selection&lt;/b&gt;</property>
         <property name="use_markup">True</property>
+        <accessibility>
+          <atkproperty name="AtkObject::accessible-name" translatable="yes">env_select_vbox_label</atkproperty>
+        </accessibility>
       </widget>
       <packing>
         <property name="expand">False</property>
@@ -25,7 +28,7 @@
       </packing>
     </child>
     <child>
-      <widget class="GtkScrolledWindow" id="scrolledwindow2">
+      <widget class="GtkScrolledWindow" id="env_select_vbox_scrolledwindow">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="border_width">8</property>
@@ -36,6 +39,9 @@
           <widget class="GtkTreeView" id="environment_treeview">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">environment_treeview</atkproperty>
+            </accessibility>
           </widget>
         </child>
       </widget>

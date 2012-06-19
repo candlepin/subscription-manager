@@ -30,8 +30,11 @@ class moduleClass(RhsmFirstbootModule):
 
     def __init__(self):
         RhsmFirstbootModule.__init__(self,
+        # Firstboot module title
+        # Note: translated title needs to be unique across all
+        # firstboot modules, not just the rhsm ones. See bz #828042
                 _("Manual Configuration Required"),
-                _("Entitlement Registration"),
+                _("Subscription Registration"),
                 200.2, 109.11)
 
         self.screen = get_screen()

@@ -77,8 +77,7 @@ INSTALLED_PRODUCT_STATUS = \
     _("Ends:                 \t%s") + "\n"
 
 AVAILABLE_SUBS_LIST = \
-    _("Product Name:         \t%s") + "\n" + \
-    _("Product Id:           \t%s") + "\n" + \
+    _("Subscription Name:    \t%s") + "\n" + \
     _("Pool Id:              \t%s") + "\n" + \
     _("Quantity:             \t%s") + "\n" + \
     _("Service Level:        \t%s") + "\n" + \
@@ -221,7 +220,7 @@ class CliCommand(object):
 
         self.parser.add_option("--serverurl", dest="server_url",
                                default=None, help=_("server url in the form of https://hostname:443/prefix"))
-        self.parser.add_option("--baseurl;", dest="base_url",
+        self.parser.add_option("--baseurl", dest="base_url",
                               default=None, help=_("base url for content in form of https://hostname:443/prefix"))
         self.parser.add_option("--proxy", dest="proxy_url",
                                default=None, help=_("proxy url in the form of proxy_hostname:proxy_port"))
@@ -523,11 +522,18 @@ class IdentityCommand(UserPassCommand):
             sys.exit(-1)
 
     def _do_command(self):
-
-        self._validate_options()
+        # check for Classic before doing anything else
+        if ClassicCheck().is_registered_with_classic():
+            if ConsumerIdentity.existsAndValid():
+                print get_branding().REGISTERED_TO_BOTH_WARNING
+            else:
+                # no need to continue if user is only registered to Classic
+                print get_branding().RHSMD_REGISTERED_TO_OTHER
+                return
 
         try:
             consumer = check_registration()
+            self._validate_options()
             consumerid = consumer['uuid']
             consumer_name = consumer['consumer_name']
             if not self.options.regenerate:
@@ -605,7 +611,7 @@ class EnvironmentsCommand(UserPassCommand):
 
     def _validate_options(self):
         if not self.options.org:
-            print(_("you must specify an --org"))
+            print(_("Error: This command requires that you specify an organizaiton with --org"))
             sys.exit(-1)
 
     def _get_enviornments(self, org):
@@ -650,6 +656,8 @@ class EnvironmentsCommand(UserPassCommand):
 class ServiceLevelCommand(UserPassCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
+        self.consumerIdentity = ConsumerIdentity
+
         shortdesc = _("Manage service levels for this system.")
 
         super(ServiceLevelCommand, self).__init__("service-level", shortdesc,
@@ -664,17 +672,22 @@ class ServiceLevelCommand(UserPassCommand):
                 help=_("list all service levels available"))
         self.parser.add_option("--set", dest="service_level",
                                help=_("service level to apply to this system"))
+        self.parser.add_option("--unset", dest="unset",
+                               action='store_true',
+                               help=_("unset the service level for this system"))
 
     def _validate_options(self):
 
         # Assume --show if run with no args:
-        if not self.options.list and not self.options.show:
+        if not self.options.list and \
+           not self.options.show and \
+           not self.options.unset:
             self.options.show = True
 
-        if not ConsumerIdentity.existsAndValid():
+        if not self.consumerIdentity.existsAndValid():
             if self.options.list:
                 if not (self.options.username and self.options.password):
-                    print(_("Error: you must register or specify --username and password to list service levels"))
+                    print(_("Error: you must register or specify --username and --password to list service levels"))
                     sys.exit(-1)
                 if not self.options.org:
                     print(_("Error: you must register or specify --org."))
@@ -693,12 +706,15 @@ class ServiceLevelCommand(UserPassCommand):
                 self.cp = self._get_UEP(username=self.username,
                                         password=self.password)
             else:
-                cert_file = ConsumerIdentity.certpath()
-                key_file = ConsumerIdentity.keypath()
+                cert_file = self.consumerIdentity.certpath()
+                key_file = self.consumerIdentity.keypath()
 
                 # get an UEP as consumer
                 self.cp = self._get_UEP(cert_file=cert_file,
                                         key_file=key_file)
+
+            if self.options.unset:
+                self.unset_service_level()
 
             if self.options.service_level is not None:
                 self.set_service_level(self.options.service_level)
@@ -717,21 +733,28 @@ class ServiceLevelCommand(UserPassCommand):
             handle_exception(_("Error: Unable to retrieve service levels."), e)
 
     def set_service_level(self, service_level):
-        consumer_uuid = ConsumerIdentity.read().getConsumerId()
+        consumer_uuid = self.consumerIdentity.read().getConsumerId()
         consumer = self.cp.getConsumer(consumer_uuid)
         if 'serviceLevel' not in consumer:
             systemExit(-1, _("Error: The service-level command is not supported "
                              "by the server."))
         self.cp.updateConsumer(consumer_uuid, service_level=service_level)
 
+    def unset_service_level(self):
+        self.set_service_level("")
+        print _("Service level preference has been unset")
+
     def show_service_level(self):
-        consumer_uuid = ConsumerIdentity.read().getConsumerId()
+        consumer_uuid = self.consumerIdentity.read().getConsumerId()
         consumer = self.cp.getConsumer(consumer_uuid)
         if 'serviceLevel' not in consumer:
             systemExit(-1, _("Error: The service-level command is not supported by "
                              "the server."))
         service_level = consumer['serviceLevel'] or ""
-        print(_("Current service level: %s") % service_level)
+        if service_level:
+            print(_("Current service level: %s") % service_level)
+        else:
+            print _("Service level preference not set")
 
     def list_service_levels(self):
         not_supported = _("Error: The service-level command is not supported by "
@@ -739,7 +762,7 @@ class ServiceLevelCommand(UserPassCommand):
 
         org_key = self.options.org
         if not org_key:
-            consumer_uuid = ConsumerIdentity.read().getConsumerId()
+            consumer_uuid = self.consumerIdentity.read().getConsumerId()
             org_key = self.cp.getOwner(consumer_uuid)['key']
 
         try:
@@ -1022,14 +1045,16 @@ class RedeemCommand(CliCommand):
                                "complete. Examples: en-us, de-de"))
 
     def _validate_options(self):
-        pass
+        if not self.options.email:
+            print(_("Error: This command requires that you specify an email address with --email."))
+            sys.exit(-1)
 
     def _do_command(self):
         """
         Executes the command.
         """
-        self._validate_options()
         consumer_uuid = check_registration()['uuid']
+        self._validate_options()
 
         try:
             # update facts first, if we need to
@@ -1068,32 +1093,10 @@ class ReleaseCommand(CliCommand):
                                help=_("list available releases"))
         self.parser.add_option("--set", dest="release", action="store",
                                default=None,
-                               help=_("set the release"))
-
-        self.proxy_hostname = cfg.get('server', 'proxy_hostname')
-        self.proxy_port = cfg.get('server', 'proxy_port')
-        self.proxy_user = cfg.get('server', 'proxy_user')
-        self.proxy_password = cfg.get('server', 'proxy_password')
-
-        cdn_url = cfg.get('rhsm', 'baseurl')
-        parsed_url = urlparse.urlparse(cdn_url)
-
-        # default to 443 if urlprase can't interpret the port
-        if parsed_url[2]:
-            cdn_port = parsed_url[2]
-        else:
-            cdn_port = 443
-
-        self.cc = connection.ContentConnection(host=parsed_url[1],
-                                               ssl_port=cdn_port,
-                                               proxy_hostname=self.proxy_hostname,
-                                               proxy_port=self.proxy_port,
-                                               proxy_user=self.proxy_user,
-                                               proxy_password=self.proxy_password)
-
-        self.release_backend = ReleaseBackend(ent_dir=self.entitlement_dir,
-                                              prod_dir=self.product_dir,
-                                              content_connection=self.cc)
+                               help=_("set the release for this system"))
+        self.parser.add_option("--unset", dest="unset",
+                               action='store_true',
+                               help=_("unset the release for this system"))
 
     def _get_consumer_release(self):
         err_msg = _("Error: The 'release' command is not supported by the server.")
@@ -1116,16 +1119,47 @@ class ReleaseCommand(CliCommand):
             print _("Release not set")
 
     def _do_command(self):
+        cdn_url = cfg.get('rhsm', 'baseurl')
+        parsed_url = urlparse.urlparse(cdn_url)
+
+        # default to 443 if urlprase can't interpret the port
+        if parsed_url[2]:
+            cdn_port = parsed_url[2]
+        else:
+            cdn_port = 443
+
+        self.cc = connection.ContentConnection(host=parsed_url[1],
+                                               ssl_port=cdn_port,
+                                               proxy_hostname=self.proxy_hostname,
+                                               proxy_port=self.proxy_port,
+                                               proxy_user=self.proxy_user,
+                                               proxy_password=self.proxy_password)
+
+        self.release_backend = ReleaseBackend(ent_dir=self.entitlement_dir,
+                                              prod_dir=self.product_dir,
+                                              content_connection=self.cc)
+
         self.consumer = check_registration()
-        if self.options.release is not None:
+        if self.options.unset:
+            self.cp.updateConsumer(self.consumer['uuid'],
+                        release="")
+            print _("Release preference has been unset")
+        elif self.options.release is not None:
             # check first if the server supports releases
             self._get_consumer_release()
-            self.cp.updateConsumer(self.consumer['uuid'],
-                    release=self.options.release)
+            releases = self.release_backend.get_releases()
+            if self.options.release in releases:
+                self.cp.updateConsumer(self.consumer['uuid'],
+                        release=self.options.release)
+            else:
+                systemExit(-1, _("No releases match '%s'.  Consult 'release --list' for a full listing.") \
+                        % self.options.release)
             print _("Release set to: %s") % self.options.release
         elif self.options.list:
             self._get_consumer_release()
             releases = self.release_backend.get_releases()
+            if not releases:
+                systemExit(-1, _("No release versions available, please check subscriptions."))
             for release in releases:
                 print release
         else:
@@ -1176,8 +1210,8 @@ class SubscribeCommand(CliCommand):
         """
         Executes the command.
         """
-        self._validate_options()
         consumer_uuid = check_registration()['uuid']
+        self._validate_options()
         try:
             # update facts first, if we need to
             facts = Facts(ent_dir=self.entitlement_dir,
@@ -1261,17 +1295,17 @@ class UnSubscribeCommand(CliCommand):
     def _validate_options(self):
         if self.options.serial:
             if not self.options.serial.isdigit():
-                msg = _("'%s' is not a valid serial number") % self.options.serial
+                msg = _("Error: '%s' is not a valid serial number") % self.options.serial
                 systemExit(-1, msg)
         elif not self.options.all:
-            print _("One of --serial or --all must be provided")
-            self.parser.print_help()
+            print _("Error: This command requires that you specify one of --serial or --all.")
             systemExit(-1)
 
     def _do_command(self):
         """
         Executes the command.
         """
+        check_registration()
         self._validate_options()
         if ConsumerIdentity.exists():
             consumer = ConsumerIdentity.read().getConsumerId()
@@ -1373,7 +1407,7 @@ class ImportCertCommand(CliCommand):
 
     def _validate_options(self):
         if not self.options.certificate_file:
-            print _("Error: At least one certificate is required")
+            print _("Error: This command requires that you specify a certificate with --certificate.")
             sys.exit(-1)
 
     def _add_common_options(self):
@@ -1708,7 +1742,6 @@ class ListCommand(CliCommand):
                     machine_type = _("physical")
 
                 print self._none_wrap(AVAILABLE_SUBS_LIST, product_name,
-                        data['productId'],
                         data['id'],
                         data['quantity'],
                         data['service_level'] or "",
@@ -1759,7 +1792,7 @@ class ListCommand(CliCommand):
 
         for cert in certs:
             order = cert.getOrder()
-            print(self._none_wrap(_("Product Name:         \t%s"),
+            print(self._none_wrap(_("Subscription Name:    \t%s"),
                   order.getName()))
 
             prefix = _("Provides:             \t%s")

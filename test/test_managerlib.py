@@ -23,7 +23,7 @@ from stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubEntitlementCertificate
 from subscription_manager.managerlib import merge_pools, PoolFilter, \
         getInstalledProductStatus, LocalTz, parseDate, \
-        MergedPoolsStackingGroupSorter
+        MergedPoolsStackingGroupSorter, MergedPools
 from modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
@@ -730,3 +730,51 @@ class ParseDateTests(unittest.TestCase):
         self.assertEquals(2038, parsed.year)
         self.assertEquals(1, parsed.month)
         self.assertEquals(1, parsed.day)
+
+
+class MergedPoolsTests(unittest.TestCase):
+
+    def test_sort_virt_to_top(self):
+        # Fake some pool JSON with the bare minimum of data:
+        pools = [
+            {
+                'id': 1,
+                'attributes': [],
+                'consumed': 0,
+                'quantity': 10,
+                'providedProducts': [],
+            },
+            {
+                'id': 2,
+                'attributes': [{'name': 'virt_only', 'value': 'true'}],
+                'consumed': 0,
+                'quantity': 10,
+                'providedProducts': [],
+            },
+            {
+                'id': 3,
+                'attributes': [],
+                'consumed': 0,
+                'quantity': 10,
+                'providedProducts': [],
+            },
+            {
+                'id': 4,
+                'attributes': [{'name': 'virt_only', 'value': 'true'}],
+                'consumed': 0,
+                'quantity': 10,
+                'providedProducts': [],
+            }]
+
+        merged_pools = MergedPools('product', 'A Product')
+        for p in pools:
+            merged_pools.add_pool(p)
+
+        merged_pools.sort_virt_to_top()
+        # If we sort, the virt pools should become the first two in the list:
+        self.assertEquals(merged_pools.pools[0]['attributes'][0]['value'],
+                "true")
+        self.assertEquals(merged_pools.pools[1]['attributes'][0]['value'],
+                "true")
+        self.assertFalse('virt_only' in merged_pools.pools[2]['attributes'])
+        self.assertFalse('virt_only' in merged_pools.pools[3]['attributes'])

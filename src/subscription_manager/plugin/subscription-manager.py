@@ -21,30 +21,43 @@ from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
 
 sys.path.append('/usr/share/rhsm')
 from subscription_manager import logutil
+from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.repolib import RepoLib, EntitlementDirectory
 from rhsm import connection
 
 requires_api_version = '2.5'
 plugin_type = (TYPE_CORE, TYPE_INTERACTIVE)
 
-warning = \
+# TODO: translate strings
+
+expired_warning = \
 """
 *** WARNING ***
 The subscription for following product(s) has expired:
 %s
-You no longer have access to the repsoitories that
-provide these products.  It is important that you renew
-these subscriptions immediatly to resume access to security
-and other critical updates.
+You no longer have access to the repositories that
+provide these products.  It is important that you apply an
+active subscription in order to resume access to security
+and other critical updates. If you don't have other active
+subscriptions, you can renew the expired subscription.
 """
+
+not_registered_warning = \
+"This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register."
+
+registered_message = \
+"This system is receiving updates from Red Hat Subscription Management."
+
+no_subs_warning = \
+"This system is registered to Red Hat Subscription Management, but not recieving updates. You can use subscription-manager to assign subscriptions."
 
 
 def update(conduit):
     """ update entitlement certificates """
     if os.getuid() != 0:
-        conduit.info(2, 'Not root, certificate-based repositories not updated')
+        conduit.info(3, 'Not root, Subscription Management repositories not updated')
         return
-    conduit.info(2, 'Updating certificate-based repositories.')
+    conduit.info(3, 'Updating Subscription Management repositories.')
 
     # XXX: Importing inline as you must be root to read the config file
     from subscription_manager.certlib import ConsumerIdentity
@@ -55,7 +68,7 @@ def update(conduit):
     try:
         ConsumerIdentity.read().getConsumerId()
     except Exception:
-        conduit.error(2, "Unable to read consumer identity")
+        conduit.info(3, "Unable to read consumer identity")
         return
 
     try:
@@ -63,7 +76,7 @@ def update(conduit):
     #FIXME: catchall exception
     except Exception:
         # log
-        conduit.info(2, "Unable to connect to entitlement server")
+        conduit.info(2, "Unable to connect to Subscription Management Service")
         return
 
     rl = RepoLib(uep=uep)
@@ -79,7 +92,31 @@ def warnExpired(conduit):
             m = '  - %s' % p.getName()
             products.add(m)
     if products:
-        msg = warning % '\n'.join(sorted(products))
+        msg = expired_warning % '\n'.join(sorted(products))
+        conduit.info(2, msg)
+
+
+def warnOrGiveUsageMessage(conduit):
+
+    # XXX: Importing inline as you must be root to read the config file
+    from subscription_manager.certlib import ConsumerIdentity
+
+    """ either output a warning, or a usage message """
+    msg = ""
+    # TODO: refactor so there are not two checks for this
+    if os.getuid() != 0:
+        return
+    try:
+        try:
+            ConsumerIdentity.read().getConsumerId()
+            entdir = EntitlementDirectory()
+            if len(entdir.listValid()) == 0:
+                msg = no_subs_warning
+            else:
+                msg = registered_message
+        except:
+            msg = not_registered_warning
+    finally:
         conduit.info(2, msg)
 
 
@@ -92,6 +129,8 @@ def config_hook(conduit):
     logutil.init_logger_for_yum()
     try:
         update(conduit)
-        warnExpired(conduit)
+        if not ClassicCheck().is_registered_with_classic():
+                warnOrGiveUsageMessage(conduit)
+                warnExpired(conduit)
     except Exception, e:
         conduit.error(2, str(e))
