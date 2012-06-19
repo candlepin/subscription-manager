@@ -41,7 +41,7 @@ class CredentialsScreenTests(unittest.TestCase):
 
     def setUp(self):
         self.backend = StubBackend()
-        self.parent= Mock()
+        self.parent = Mock()
 
         self.screen = CredentialsScreen(self.backend, self.parent)
 
@@ -58,5 +58,3 @@ class CredentialsScreenTests(unittest.TestCase):
         self.assertFalse(self.screen.skip_auto_bind.get_active())
         self.assertEquals(default_consumer_name_value,
                           self.screen.consumer_name.get_text())
-
-
