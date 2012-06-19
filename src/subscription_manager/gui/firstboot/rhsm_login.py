@@ -53,12 +53,6 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         self._registration_finished = False
         self._offline = False
 
-        # In firstboot, we leverage the RHN setup proxy settings already
-        # presented to the user, so hide the choose server screen's proxy
-        # text and button.
-        self.proxy_label.destroy()
-        self.proxy_config_button.destroy()
-
     def _read_rhn_proxy_settings(self):
         # Read and store rhn-setup's proxy settings, as they have been set
         # on the prior screen (which is owned by rhn-setup)
@@ -119,18 +113,16 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         self._read_rhn_proxy_settings()
 
-        credentials = self._get_credentials_hash()
-
         # bad proxy settings can cause socket.error or friends here
         # see bz #810363
         try:
-            valid_registration = self.register(testing=testing)
+            valid_registration = self.register()
         except socket.error, e:
             handle_gui_exception(e, e, self.registerWin)
             return self._RESULT_FAILURE
 
         if valid_registration:
-            self._cached_credentials = credentials
+            self._cached_credentials = self._get_credentials_hash()
         if self._offline:
             return self._RESULT_JUMP
         return self._RESULT_FAILURE
@@ -169,7 +161,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         glade file.
         """
         self.vbox = gtk.VBox(spacing=10)
-        self.register_dialog = registergui.registration_xml.get_widget("dialog-vbox6")
+        self.register_dialog = self.glade.get_widget("dialog-vbox6")
         self.register_dialog.reparent(self.vbox)
 
         # Get rid of the 'register' and 'cancel' buttons, as we are going to
@@ -177,6 +169,13 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         # to drive the same functionality
         self._destroy_widget('register_button')
         self._destroy_widget('cancel_button')
+
+        # In firstboot, we leverage the RHN setup proxy settings already
+        # presented to the user, so hide the choose server screen's proxy
+        # text and button.
+        screen = self._screens[registergui.CHOOSE_SERVER_PAGE]
+        screen.proxy_label.destroy()
+        screen.proxy_config_button.destroy()
 
     def initializeUI(self):
         # Need to make sure that each time the UI is initialized we reset back
@@ -194,9 +193,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
             self.consumer.reload()
             self._registration_finished = False
 
-        self._show_choose_server_page()
-        self._clear_registration_widgets()
-        self.initializeConsumerName()
+        self.show()
 
     def focus(self):
         """
@@ -204,8 +201,8 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         login name field.
         """
         # FIXME:  This is currently broken
-        login_text = registergui.registration_xml.get_widget("account_login")
-        login_text.grab_focus()
+        # login_text = self.glade.get_widget("account_login")
+        # login_text.grab_focus()
 
     def _destroy_widget(self, widget_name):
         """
@@ -213,7 +210,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         See gtk.Widget.destroy()
         """
-        widget = registergui.registration_xml.get_widget(widget_name)
+        widget = self.glade.get_widget(widget_name)
         widget.destroy()
 
     def _get_credentials_hash(self):
@@ -222,21 +219,21 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         widgets.  This is used to compare if we have changed anything
         when moving back and forth across modules.
         """
-        credentials = [self._get_text(name) for name in \
-                           ('account_login', 'account_password',
-                               'consumer_name')]
-        return hash(tuple(credentials))
+        return {"username": self.username,
+                "password": self.password,
+                "consumername": self.consumername,
+        }
 
     def _get_text(self, widget_name):
         """
         Return the text value of an input widget referenced
         by name.
         """
-        widget = registergui.registration_xml.get_widget(widget_name)
+        widget = self.glade.get_widget(widget_name)
         return widget.get_text()
 
-    def _finish_registration(self, failed=False):
-        registergui.RegisterScreen._finish_registration(self, failed=failed)
+    def finish_registration(self, failed=False):
+        registergui.RegisterScreen.finish_registration(self, failed=failed)
         if not failed:
             self._registration_finished = True
 

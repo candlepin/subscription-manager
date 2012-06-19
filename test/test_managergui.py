@@ -32,4 +32,4 @@ class TestRegisterScreen(unittest.TestCase):
 
     def test_register_screen_register(self):
         rs = registergui.RegisterScreen(stubs.StubBackend(), StubConsumer())
-        rs.register(testing=True)
+        rs.register()

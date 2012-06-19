@@ -15,26 +15,27 @@
 # in this software or its documentation.
 #
 
-import os
 import socket
 import logging
+import threading
+import Queue
 
+import gobject
 import gtk
 import gtk.glade
 
-
 from subscription_manager import managerlib
 import rhsm.config as config
-from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager.utils import parse_server_info, ServerUrlParseError,\
         is_valid_server_info, MissingCaCertException
 from subscription_manager.gui import networkConfig
+from subscription_manager.gui import widgets
 from subscription_manager.gui.importsub import ImportSubDialog
 
-from subscription_manager.gui.utils import handle_gui_exception, errorWindow, \
-    GladeWrapper
+from subscription_manager.gui.utils import handle_gui_exception, errorWindow
+
 
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
@@ -43,39 +44,26 @@ gtk.glade.bindtextdomain("rhsm")
 gtk.glade.textdomain("rhsm")
 
 log = logging.getLogger('rhsm-app.' + __name__)
-
-prefix = os.path.dirname(__file__)
-VALID_IMG = os.path.join(prefix, "data/icons/valid.svg")
-INVALID_IMG = os.path.join(prefix, "data/icons/invalid.svg")
+CFG = config.initConfig()
 
 # An implied Katello environment which we can't actual register to.
 LIBRARY_ENV_NAME = "library"
 
-cert_file = ConsumerIdentity.certpath()
-key_file = ConsumerIdentity.keypath()
-
-CFG = config.initConfig()
-
-import threading
-import Queue
-
-import gobject
-
-CREDENTIALS_PAGE = 0
-PROGRESS_PAGE = 1
+DONT_CHANGE = -2
+PROGRESS_PAGE = -1
+CHOOSE_SERVER_PAGE = 0
+CREDENTIALS_PAGE = 1
 OWNER_SELECT_PAGE = 2
 ENVIRONMENT_SELECT_PAGE = 3
-CHOOSE_SERVER_PAGE = 4
+PERFORM_REGISTER_PAGE = 4
+FINISH = 5
 
 REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
     "\n%s\n" + \
     _("Please see /var/log/rhsm/rhsm.log for more information.")
 
-registration_xml = GladeWrapper(os.path.join(prefix,
-    "data/registration.glade"))
 
-
-class RegisterScreen:
+class RegisterScreen(widgets.GladeWidget):
     """
       Registration Widget Screen
     """
@@ -84,6 +72,17 @@ class RegisterScreen:
         """
         Callbacks will be executed when registration status changes.
         """
+
+        widget_names = [
+                'register_dialog',
+                'register_notebook',
+                'register_progressbar',
+                'register_details_label',
+                'cancel_button',
+                'register_button',
+        ]
+        widgets.GladeWidget.__init__(self, "registration.glade", widget_names)
+
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
@@ -92,163 +91,291 @@ class RegisterScreen:
         self.async = AsyncBackend(self.backend)
 
         dic = {"on_register_cancel_button_clicked": self.cancel,
-               "on_register_button_clicked": self.on_register_button_clicked,
-               "on_proxy_config_button_clicked": self._on_proxy_config_button_clicked,
-               "on_import_certs_button_clicked": self._on_import_certs_button_clicked,
-               "on_rhn_radio_toggled": self._server_radio_toggled,
-               "on_local_radio_toggled": self._server_radio_toggled,
-               "on_offline_radio_toggled": self._server_radio_toggled,
+               "on_register_button_clicked": self._on_register_button_clicked,
+               "hide": self.cancel,
+               "delete_event": self._delete_event,
             }
+        self.glade.signal_autoconnect(dic)
 
-        registration_xml.signal_autoconnect(dic)
-        self.registerWin = registration_xml.get_widget("register_dialog")
-        self.registerWin.connect("hide", self.cancel)
-        self.registerWin.connect("delete_event", self.delete_event)
-        self.initializeConsumerName()
+        self.window = self.register_dialog
+        screen_classes = [ChooseServerScreen, CredentialsScreen,
+                          OrganizationScreen, EnvironmentScreen,
+                          PerformRegisterScreen]
+        self._screens = []
+        for screen_class in screen_classes:
+            screen = screen_class(self, self.backend)
+            self._screens.append(screen)
+            if screen.needs_gui:
+                self.register_notebook.append_page(screen.container)
 
-        self.uname = registration_xml.get_widget("account_login")
-        self.passwd = registration_xml.get_widget("account_password")
-        self.consumer_name = registration_xml.get_widget("consumer_name")
-        self.skip_auto_bind = registration_xml.get_widget("skip_auto_bind")
+        self._current_screen = CHOOSE_SERVER_PAGE
 
-        self.register_notebook = \
-                registration_xml.get_widget("register_notebook")
-        self.register_progressbar = \
-                registration_xml.get_widget("register_progressbar")
-        self.register_details_label = \
-                registration_xml.get_widget("register_details_label")
+        # values that will be set by the screens
+        self.username = None
+        self.consumername = None
+        self.owner_key = None
+        self.environment = None
 
-        self.owner_treeview = registration_xml.get_widget("owner_treeview")
-        renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn(_("Organization"), renderer, text=1)
-        self.owner_treeview.set_property("headers-visible", False)
-        self.owner_treeview.append_column(column)
-
-        self.environment_treeview = registration_xml.get_widget("environment_treeview")
-        renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn(_("Environment"), renderer, text=1)
-        self.environment_treeview.set_property("headers-visible", False)
-        self.environment_treeview.append_column(column)
-
-        self.cancel_button = registration_xml.get_widget("cancel_button")
-        self.register_button = registration_xml.get_widget("register_button")
-
-        register_tip_label = registration_xml.get_widget("registration_tip_label")
-        register_tip_label.set_label("<small>%s</small>" % \
-                get_branding().GUI_FORGOT_LOGIN_TIP)
-
-        register_header_label = \
-                registration_xml.get_widget("registration_header_label")
-        register_header_label.set_label("<b>%s</b>" % \
-                get_branding().GUI_REGISTRATION_HEADER)
-
-        self.rhn_radio = registration_xml.get_widget("rhn_radio")
-        self.local_radio = registration_xml.get_widget("local_radio")
-        self.offline_radio = registration_xml.get_widget("offline_radio")
-
-        self.local_entry = registration_xml.get_widget("local_entry")
-        self.import_certs_button = registration_xml.get_widget(
-                "import_certs_button")
-
-        self.proxy_label = registration_xml.get_widget("proxy_label")
-        self.proxy_config_button = registration_xml.get_widget(
-                "proxy_config_button")
-
-        self.network_config_dialog = networkConfig.NetworkConfigDialog()
-        self.import_certs_dialog = ImportSubDialog()
+        # XXX needed by firstboot
+        self.password = None
 
     def show(self):
         # Ensure that we start on the first page and that
         # all widgets are cleared.
-        self._show_choose_server_page()
+        self._set_screen(CHOOSE_SERVER_PAGE)
 
+        self._set_navigation_sensitive(True)
         self._clear_registration_widgets()
-        self.registerWin.present()
+        self.timer = gobject.timeout_add(100, self._timeout_callback)
+        self.register_dialog.present()
 
-    def _show_choose_server_page(self):
-        # Override the button text to clarify we're not actually registering
-        # by pressing that button here.
-        self.register_button.set_label(_("Next"))
-        self.register_notebook.set_page(CHOOSE_SERVER_PAGE)
+    def _set_navigation_sensitive(self, sensitive):
+        self.cancel_button.set_sensitive(sensitive)
+        self.register_button.set_sensitive(sensitive)
 
-    def _show_credentials_page(self):
-        # Set the button text back after we changed it when showing the
-        # choose server screen.
-        self.register_button.set_label(_("Register"))
-        self.register_notebook.set_page(CREDENTIALS_PAGE)
+    def _set_screen(self, screen):
+        if screen > PROGRESS_PAGE:
+            self._current_screen = screen
+            if self._screens[screen].needs_gui:
+                button_label = self._screens[screen].button_label
+                self.register_button.set_label(button_label)
+                self.register_notebook.set_page(screen + 1)
+        else:
+            self.register_notebook.set_page(screen + 1)
 
-    def delete_event(self, event, data=None):
+    def _delete_event(self, event, data=None):
         return self.close_window()
 
     def cancel(self, button):
         self.close_window()
 
-    def initializeConsumerName(self):
-        consumername = registration_xml.get_widget("consumer_name")
-        if not consumername.get_text():
-            consumername.set_text(socket.gethostname())
-
     # callback needs the extra arg, so just a wrapper here
-    def on_register_button_clicked(self, button):
+    def _on_register_button_clicked(self, button):
         self.register()
 
-    def _on_proxy_config_button_clicked(self, button):
-        self.network_config_dialog.set_parent_window(self.registerWin)
-        self.network_config_dialog.show()
+    def register(self):
+        result = self._screens[self._current_screen].apply()
 
-    def _on_import_certs_button_clicked(self, button):
-        self.import_certs_dialog.set_parent_window(self.registerWin)
-        self.import_certs_dialog.show()
-
-    def register(self, testing=None):
-        if self.register_notebook.get_current_page() == CHOOSE_SERVER_PAGE:
-            self._server_selected()
+        if result == FINISH:
+            self.finish_registration()
             return True
-        if self.register_notebook.get_current_page() == OWNER_SELECT_PAGE:
-            # we're on the owner select page
-            self._owner_selected()
-            return True
-        elif self.register_notebook.get_current_page() == ENVIRONMENT_SELECT_PAGE:
-            self._environment_selected()
-            return True
-
-        username = self.uname.get_text().strip()
-        password = self.passwd.get_text().strip()
-        consumername = self.consumer_name.get_text()
-
-        if not self.validate_consumername(consumername):
+        elif result == DONT_CHANGE:
             return False
 
-        if not self.validate_account():
-            return False
+        self._screens[self._current_screen].post()
 
-        # for firstboot -t
-        if testing:
-            return True
-
-        self.backend.create_admin_uep(username=username,
-                                      password=password)
-
-        self.async.get_owner_list(username, self._on_get_owner_list_cb)
-
-        self.timer = gobject.timeout_add(100, self._timeout_callback)
-        self.register_notebook.set_page(PROGRESS_PAGE)
-        self._set_register_details_label(_("Fetching list of possible organizations"))
-
-        self.cancel_button.set_sensitive(False)
-        self.register_button.set_sensitive(False)
+        self._run_pre(result)
         return True
+
+    def _run_pre(self, screen):
+        # XXX move this into the button handling somehow?
+        if screen == FINISH:
+            self.finish_registration()
+            return
+
+        self._set_screen(screen)
+        async = self._screens[self._current_screen].pre()
+        if async:
+            self._set_navigation_sensitive(False)
+            self._set_screen(PROGRESS_PAGE)
+            self._set_register_details_label(
+                    self._screens[self._current_screen].pre_message)
 
     def _timeout_callback(self):
         self.register_progressbar.pulse()
         # return true to keep it pulsing
         return True
 
+    def finish_registration(self, failed=False):
+        # failed is used by the firstboot subclasses to decide if they should
+        # advance the screen or not.
+        # XXX it would be cool here to do some async spinning while the
+        # main window gui refreshes itself
+
+        if not failed:
+            self.close_window()
+
+        self.emit_consumer_signal()
+
+        gobject.source_remove(self.timer)
+
+    def emit_consumer_signal(self):
+        for method in self.callbacks:
+            method(skip_auto_bind=self.skip_auto_subscribe())
+
+    def close_window(self):
+        self.register_dialog.hide()
+        return True
+
+    def skip_auto_subscribe(self):
+        return self._screens[CREDENTIALS_PAGE].skip_auto_bind.get_active()
+
+    def set_parent_window(self, window):
+        self.register_dialog.set_transient_for(window)
+
+    def _set_register_details_label(self, details):
+        self.register_details_label.set_label("<small>%s</small>" % details)
+
+    def _clear_registration_widgets(self):
+        for screen in self._screens:
+            screen.clear()
+
+    def pre_done(self, display_screen):
+        self._set_navigation_sensitive(True)
+        if display_screen:
+            self._set_screen(self._current_screen)
+        else:
+            self._run_pre(self._current_screen + 1)
+
+
+class Screen(widgets.GladeWidget):
+
+    def __init__(self, glade_file, widget_names, parent, backend):
+        widget_names.append('container')
+        super(Screen, self).__init__(glade_file, widget_names)
+
+        self.pre_message = ""
+        self.button_label = _("Register")
+        self.needs_gui = True
+        self._parent = parent
+        self._backend = backend
+
+    def pre(self):
+        return False
+
+    def apply(self):
+        pass
+
+    def post(self):
+        pass
+
+    def clear(self):
+        pass
+
+
+class PerformRegisterScreen(object):
+
+    def __init__(self, parent, backend):
+        self._parent = parent
+        self._backend = backend
+        self.pre_message = _("Registering your system")
+        self.button_label = None
+        self.needs_gui = False
+
+    def _on_registration_finished_cb(self, new_account, error=None):
+        try:
+            if error != None:
+                raise error
+
+            managerlib.persist_consumer_cert(new_account)
+            self._parent.consumer.reload()
+            self._parent.pre_done(False)
+
+        except Exception, e:
+            handle_gui_exception(e, REGISTER_ERROR, self._parent.window)
+            self._parent.finish_registration(failed=True)
+
+    def pre(self):
+        log.info("Registering to owner: %s environment: %s" \
+                % (self._parent.owner_key, self._parent.environment))
+
+        self._parent.async.register_consumer(self._parent.consumername,
+                                             self._parent.facts,
+                                             self._parent.owner_key,
+                                             self._parent.environment,
+                                             self._on_registration_finished_cb)
+
+        return True
+
+    def apply(self):
+        return FINISH
+
+    def post(self):
+        pass
+
+    def clear(self):
+        pass
+
+
+class EnvironmentScreen(Screen):
+
+    def __init__(self, parent, backend):
+        widget_names = [
+                'environment_treeview',
+        ]
+        super(EnvironmentScreen, self).__init__("environment.glade",
+                                                widget_names, parent, backend)
+
+        self.pre_message = _("Fetching list of possible environments")
+        renderer = gtk.CellRendererText()
+        column = gtk.TreeViewColumn(_("Environment"), renderer, text=1)
+        self.environment_treeview.set_property("headers-visible", False)
+        self.environment_treeview.append_column(column)
+
+    def _on_get_environment_list_cb(self, result_tuple, error=None):
+        environments = result_tuple
+        if error != None:
+            handle_gui_exception(error, REGISTER_ERROR, self._parent.window)
+            self._parent.finish_registration(failed=True)
+            return
+
+        if not environments:
+            self._parent.pre_done(False)
+            return
+
+        envs = [(env['id'], env['name']) for env in environments]
+        if len(envs) == 1:
+            self._environment = envs[0][0]
+            self._parent.pre_done(False)
+        else:
+            self.set_model(envs)
+            self._parent.pre_done(True)
+
+    def pre(self):
+        self._parent.async.get_environment_list(self._parent.owner_key,
+                                                self._on_get_environment_list_cb)
+        return True
+
+    def apply(self):
+        model, tree_iter = self.environment_treeview.get_selection().get_selected()
+        self._environment = model.get_value(tree_iter, 0)
+        return PERFORM_REGISTER_PAGE
+
+    def post(self):
+        self._parent.environment = self._environment
+
+    def set_model(self, envs):
+        environment_model = gtk.ListStore(str, str)
+        for env in envs:
+            environment_model.append(env)
+
+        self.environment_treeview.set_model(environment_model)
+
+        self.environment_treeview.get_selection().select_iter(
+                environment_model.get_iter_first())
+
+
+class OrganizationScreen(Screen):
+
+    def __init__(self, parent, backend):
+        widget_names = [
+                'owner_treeview',
+        ]
+        super(OrganizationScreen, self).__init__("organization.glade",
+                                                 widget_names, parent, backend)
+
+        self.pre_message = _("Fetching list of possible organizations")
+
+        renderer = gtk.CellRendererText()
+        column = gtk.TreeViewColumn(_("Organization"), renderer, text=1)
+        self.owner_treeview.set_property("headers-visible", False)
+        self.owner_treeview.append_column(column)
+
     def _on_get_owner_list_cb(self, owners, error=None):
         if error != None:
             handle_gui_exception(error, REGISTER_ERROR,
-                    self.registerWin)
-            self._finish_registration(failed=True)
+                    self._parent.window)
+            self._parent.finish_registration(failed=True)
             return
 
         owners = [(owner['key'], owner['displayName']) for owner in owners]
@@ -256,72 +383,159 @@ class RegisterScreen:
         if len(owners) == 0:
             handle_gui_exception(None,
                     _("<b>User %s is not able to register with any orgs.</b>") \
-                            % (self.uname.get_text().strip()),
-                    self.registerWin)
-            self._finish_registration(failed=True)
+                            % (self._parent.username),
+                    self._parent.window)
+            self._parent.finish_registration(failed=True)
             return
 
         if len(owners) == 1:
-            self.owner_key = owners[0][0]
-            self.async.get_environment_list(self.owner_key, self._on_get_environment_list_cb)
-
+            self._owner_key = owners[0][0]
+            self._parent.pre_done(False)
         else:
-            owner_model = gtk.ListStore(str, str)
-            for owner in owners:
-                owner_model.append(owner)
+            self.set_model(owners)
+            self._parent.pre_done(True)
 
-            self.owner_treeview.set_model(owner_model)
+    def pre(self):
+        self._parent.async.get_owner_list(self._parent.username,
+                                          self._on_get_owner_list_cb)
+        return True
 
-            self.owner_treeview.get_selection().select_iter(
-                    owner_model.get_iter_first())
-
-            self.cancel_button.set_sensitive(True)
-            self.register_button.set_sensitive(True)
-            self.register_notebook.set_page(OWNER_SELECT_PAGE)
-
-    def _on_get_environment_list_cb(self, result_tuple, error=None):
-        environments = result_tuple
-        if error != None:
-            handle_gui_exception(error, REGISTER_ERROR, self.registerWin)
-            self._finish_registration(failed=True)
-            return
-
-        if not environments:
-            self._run_register_step(self.owner_key, None)
-            return
-
-        envs = [(env['id'], env['name']) for env in environments]
-        if len(envs) == 1:
-            self._run_register_step(self.owner_key, envs[0][0])
-        else:
-            environment_model = gtk.ListStore(str, str)
-            for env in envs:
-                environment_model.append(env)
-
-            self.environment_treeview.set_model(environment_model)
-
-            self.environment_treeview.get_selection().select_iter(
-                    environment_model.get_iter_first())
-
-            self.cancel_button.set_sensitive(True)
-            self.register_button.set_sensitive(True)
-            self.register_notebook.set_page(ENVIRONMENT_SELECT_PAGE)
-
-    # Callback used by the owner selection screen:
-    def _owner_selected(self):
-        self.cancel_button.set_sensitive(False)
-        self.register_button.set_sensitive(False)
-        self.register_notebook.set_page(PROGRESS_PAGE)
-
+    def apply(self):
         model, tree_iter = self.owner_treeview.get_selection().get_selected()
-        self.owner_key = model.get_value(tree_iter, 0)
+        self._owner_key = model.get_value(tree_iter, 0)
+        return ENVIRONMENT_SELECT_PAGE
 
-        self.async.get_environment_list(self.owner_key, self._on_get_environment_list_cb)
+    def post(self):
+        self._parent.owner_key = self._owner_key
 
-    def _server_radio_toggled(self, widget):
+    def set_model(self, owners):
+        owner_model = gtk.ListStore(str, str)
+        for owner in owners:
+            owner_model.append(owner)
+
+        self.owner_treeview.set_model(owner_model)
+
+        self.owner_treeview.get_selection().select_iter(
+                owner_model.get_iter_first())
+
+
+class CredentialsScreen(Screen):
+
+    def __init__(self, parent, backend):
+        widget_names = [
+                'skip_auto_bind',
+                'consumer_name',
+                'account_login',
+                'account_password',
+        ]
+        super(CredentialsScreen, self).__init__("credentials.glade",
+                                                 widget_names, parent, backend)
+
+        self._initialize_consumer_name()
+
+        register_tip_label = self.glade.get_widget("registration_tip_label")
+        register_tip_label.set_label("<small>%s</small>" % \
+                get_branding().GUI_FORGOT_LOGIN_TIP)
+
+        register_header_label = \
+                self.glade.get_widget("registration_header_label")
+        register_header_label.set_label("<b>%s</b>" % \
+                get_branding().GUI_REGISTRATION_HEADER)
+
+    def _initialize_consumer_name(self):
+        if not self.consumer_name.get_text():
+            self.consumer_name.set_text(socket.gethostname())
+
+    def _validate_consumername(self, consumername):
+        if not consumername:
+            errorWindow(_("You must enter a system name."), self._parent.window)
+            self.consumer_name.grab_focus()
+            return False
+        return True
+
+    def _validate_account(self):
+        # validate / check user name
+        if self.account_login.get_text().strip() == "":
+            errorWindow(_("You must enter a login."), self._parent.window)
+            self.account_login.grab_focus()
+            return False
+
+        if self.account_password.get_text().strip() == "":
+            errorWindow(_("You must enter a password."), self._parent.window)
+            self.account_password.grab_focus()
+            return False
+        return True
+
+    def apply(self):
+        self._username = self.account_login.get_text().strip()
+        self._password = self.account_password.get_text().strip()
+        self._consumername = self.consumer_name.get_text()
+
+        if not self._validate_consumername(self._consumername):
+            return DONT_CHANGE
+
+        if not self._validate_account():
+            return DONT_CHANGE
+
+        return OWNER_SELECT_PAGE
+
+    def post(self):
+        self._parent.username = self._username
+        self._parent.password = self._password
+        self._parent.consumername = self._consumername
+
+        self._backend.create_admin_uep(username=self._username,
+                                      password=self._password)
+
+    def clear(self):
+        self.account_login.set_text("")
+        self.account_password.set_text("")
+        self.consumer_name.set_text("")
+        self._initialize_consumer_name()
+        self.skip_auto_bind.set_active(False)
+
+
+class ChooseServerScreen(Screen):
+
+    def __init__(self, parent, backend):
+        widget_names = [
+                'rhn_radio',
+                'local_radio',
+                'offline_radio',
+                'local_entry',
+                'import_certs_button',
+                'proxy_label',
+                'proxy_config_button',
+        ]
+        super(ChooseServerScreen, self).__init__("choose_server.glade",
+                                                 widget_names, parent, backend)
+
+        self.button_label = _("Next")
+
+        callbacks = {
+                "on_proxy_config_button_clicked": self._on_proxy_config_button_clicked,
+                "on_import_certs_button_clicked": self._on_import_certs_button_clicked,
+                "on_rhn_radio_toggled": self._on_server_radio_toggled,
+                "on_local_radio_toggled": self._on_server_radio_toggled,
+                "on_offline_radio_toggled": self._on_server_radio_toggled,
+            }
+        self.glade.signal_autoconnect(callbacks)
+
+        self.network_config_dialog = networkConfig.NetworkConfigDialog()
+        self.import_certs_dialog = ImportSubDialog()
+
+    def _on_server_radio_toggled(self, widget):
         self.local_entry.set_sensitive(self.local_radio.get_active())
 
-    def _server_selected(self):
+    def _on_proxy_config_button_clicked(self, button):
+        self.network_config_dialog.set_parent_window(self._parent.window)
+        self.network_config_dialog.show()
+
+    def _on_import_certs_button_clicked(self, button):
+        self.import_certs_dialog.set_parent_window(self._parent.window)
+        self.import_certs_dialog.show()
+
+    def apply(self):
         if self.rhn_radio.get_active():
             CFG.set('server', 'hostname', config.DEFAULT_HOSTNAME)
             CFG.set('server', 'port', config.DEFAULT_PORT)
@@ -342,120 +556,30 @@ class RegisterScreen:
                 try:
                     if not is_valid_server_info(hostname, port, prefix):
                         errorWindow(_("Unable to reach the server at %s:%s%s" %
-                            (hostname, port, prefix)))
-                        return
+                            (hostname, port, prefix)), self._parent.window)
+                        return DONT_CHANGE
                 except MissingCaCertException:
-                    errorWindow(_("CA certificate for subscription service has not been installed."))
-                    return
+                    errorWindow(_("CA certificate for subscription service has not been installed."),
+                                self._parent.window)
+                    return DONT_CHANGE
 
             except ServerUrlParseError:
-                errorWindow(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"), self.registerWin)
-                return
+                errorWindow(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"),
+                            self._parent.window)
+                return DONT_CHANGE
 
         log.info("Writing server data to rhsm.conf")
         CFG.save()
-        self.backend.update()
+        self._backend.update()
 
         if self.offline_radio.get_active():
             # Because the user selected offline, the whole registration process
             # must end here.
-            self._offline_selected()
+            return FINISH
         else:
-            self._show_credentials_page()
+            return CREDENTIALS_PAGE
 
-    def _offline_selected(self):
-        self.close_window()
-
-    def _environment_selected(self):
-        self.cancel_button.set_sensitive(False)
-        self.register_button.set_sensitive(False)
-        self.register_notebook.set_page(PROGRESS_PAGE)
-
-        model, tree_iter = self.environment_treeview.get_selection().get_selected()
-        env = model.get_value(tree_iter, 0)
-
-        self._run_register_step(self.owner_key, env)
-
-    def _run_register_step(self, owner, env):
-        log.info("Registering to owner: %s environment: %s" % (owner, env))
-        self.async.register_consumer(self.consumer_name.get_text(),
-                self.facts, owner, env,
-                self._on_registration_finished_cb)
-
-        self._set_register_details_label(_("Registering your system"))
-
-    def _on_registration_finished_cb(self, new_account, error=None):
-        try:
-            if error != None:
-                raise error
-
-            managerlib.persist_consumer_cert(new_account)
-            self.consumer.reload()
-            self._finish_registration()
-
-        except Exception, e:
-            handle_gui_exception(e, REGISTER_ERROR, self.registerWin)
-            self._finish_registration(failed=True)
-
-    def _finish_registration(self, failed=False):
-        # failed is used by the firstboot subclasses to decide if they should
-        # advance the screen or not.
-        # XXX it would be cool here to do some async spinning while the
-        # main window gui refreshes itself
-
-        if not failed:
-            self.close_window()
-
-        self.emit_consumer_signal()
-
-        gobject.source_remove(self.timer)
-        self.cancel_button.set_sensitive(True)
-        self.register_button.set_sensitive(True)
-        self.register_notebook.set_page(CREDENTIALS_PAGE)
-
-    def emit_consumer_signal(self):
-        for method in self.callbacks:
-            method(skip_auto_bind=self.skip_auto_subscribe())
-
-    def close_window(self):
-        self.registerWin.hide()
-        return True
-
-    def skip_auto_subscribe(self):
-        return self.skip_auto_bind.get_active()
-
-    def validate_consumername(self, consumername):
-        if not consumername:
-            errorWindow(_("You must enter a system name."), parent=self.registerWin)
-            self.consumer_name.grab_focus()
-            return False
-        return True
-
-    def validate_account(self):
-        # validate / check user name
-        if self.uname.get_text().strip() == "":
-            errorWindow(_("You must enter a login."), parent=self.registerWin)
-            self.uname.grab_focus()
-            return False
-
-        if self.passwd.get_text().strip() == "":
-            errorWindow(_("You must enter a password."), parent=self.registerWin)
-            self.passwd.grab_focus()
-            return False
-        return True
-
-    def set_parent_window(self, window):
-        self.registerWin.set_transient_for(window)
-
-    def _set_register_details_label(self, details):
-        self.register_details_label.set_label("<small>%s</small>" % details)
-
-    def _clear_registration_widgets(self):
-        self.uname.set_text("")
-        self.passwd.set_text("")
-        self.consumer_name.set_text("")
-        self.initializeConsumerName()
-        self.skip_auto_bind.set_active(False)
+    def clear(self):
         self.local_entry.set_text("")
 
         # We need to determine the current state of the server info in

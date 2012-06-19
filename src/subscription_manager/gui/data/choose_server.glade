@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glade-interface>
+  <!-- interface-requires gtk+ 2.16 -->
+  <!-- interface-naming-policy project-wide -->
+  <widget class="GtkVBox" id="container">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <widget class="GtkVBox" id="choose_server_vbox">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">16</property>
+        <child>
+          <widget class="GtkLabel" id="choose_server_vbox_label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xalign">0</property>
+            <property name="xpad">12</property>
+            <property name="label" translatable="yes">Please select if you would like to receive software updates through the Customer Portal or through another Subscription Management Service.</property>
+            <property name="wrap">True</property>
+            <accessibility>
+              <atkproperty name="AtkObject::accessible-name" translatable="yes">choose_server_vbox_label</atkproperty>
+            </accessibility>
+          </widget>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkHBox" id="choose_server_proxy_hbox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <widget class="GtkLabel" id="proxy_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="xalign">0</property>
+                <property name="xpad">11</property>
+                <property name="label" translatable="yes">If you must connect through a proxy, please configure this before moving forward.</property>
+                <property name="wrap">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">proxy_label</atkproperty>
+                </accessibility>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkVBox" id="proxy_config_button_vbox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <widget class="GtkButton" id="proxy_config_button">
+                    <property name="label" translatable="yes">Proxy Configuration</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <accessibility>
+                      <atkproperty name="AtkObject::accessible-name" translatable="yes">proxy_config_button</atkproperty>
+                    </accessibility>
+                    <signal name="clicked" handler="on_proxy_config_button_clicked" swapped="no"/>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkHBox" id="rhn_radio_hbox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="spacing">6</property>
+            <child>
+              <widget class="GtkRadioButton" id="rhn_radio">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="on_rhn_radio_toggled" swapped="no"/>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">rhn_radio</atkproperty>
+                </accessibility>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="padding">7</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="rhn_radio_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">I'd like to receive updates from the Customer Portal.</property>
+                <property name="wrap">True</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">rhn_radio_label</atkproperty>
+                </accessibility>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkVBox" id="local_radio_vbox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="spacing">6</property>
+            <child>
+              <widget class="GtkHBox" id="local_radio_hbox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="spacing">6</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">local_radio_hbox</atkproperty>
+                </accessibility>
+                <child>
+                  <widget class="GtkAlignment" id="alignment5">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="bottom_padding">36</property>
+                    <child>
+                      <widget class="GtkRadioButton" id="local_radio">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">rhn_radio</property>
+                        <accessibility>
+                            <atkproperty name="AtkObject::accessible-name" translatable="yes">local_radio</atkproperty>
+                        </accessibility>
+                        <signal name="toggled" handler="on_local_radio_toggled" swapped="no"/>
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">6</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkVBox" id="local_radio_label_vbox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <widget class="GtkLabel" id="local_radio_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">I have access to a Subscription Management Service. I'd like to receive software updates from the server below.</property>
+                        <property name="wrap">True</property>
+                        <accessibility>
+                            <atkproperty name="AtkObject::accessible-name" translatable="yes">local_radio_label</atkproperty>
+                        </accessibility>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkHBox" id="local_radio_server_hbox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <widget class="GtkLabel" id="local_radio_server_label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="yalign">0.25</property>
+                            <property name="label" translatable="yes">Subscription Management Service:</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">local_radio_server_label</atkproperty>
+                            </accessibility>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkVBox" id="local_radio_server_vbox">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <widget class="GtkEntry" id="local_entry">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="invisible_char">●</property>
+                                <property name="width_chars">30</property>
+                                <property name="invisible_char_set">True</property>
+                                <property name="primary_icon_activatable">False</property>
+                                <property name="secondary_icon_activatable">False</property>
+                                <property name="primary_icon_sensitive">True</property>
+                                <property name="secondary_icon_sensitive">True</property>
+                                <accessibility>
+                                    <atkproperty name="AtkObject::accessible-name" translatable="yes">local_entry</atkproperty>
+                                </accessibility>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="local_entry_label">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">&lt;small&gt;&lt;i&gt;hostname[:port][/prefix]&lt;/i&gt;&lt;/small&gt;</property>
+                                <property name="use_markup">True</property>
+                                <accessibility>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">local_entry_label</atkproperty>
+                                </accessibility>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="padding">12</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkVBox" id="offline_radio_vbox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="spacing">6</property>
+            <child>
+              <widget class="GtkHBox" id="local_offline_hbox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="spacing">7</property>
+                <child>
+                  <widget class="GtkAlignment" id="local_offline_hbox_alignment">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="bottom_padding">44</property>
+                    <child>
+                      <widget class="GtkRadioButton" id="offline_radio">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">rhn_radio</property>
+                        <accessibility>
+                          <atkaction action_name="click" description="offline_radio"/>
+                        </accessibility>
+                        <signal name="toggled" handler="on_offline_radio_toggled" swapped="no"/>
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">6</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkVBox" id="offline_radio_label_vbox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <widget class="GtkLabel" id="offline_radio_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">I want to manually import my existing certificate files, which contain subscription information for this machine.</property>
+                        <property name="wrap">True</property>
+                        <accessibility>
+                          <atkproperty name="AtkObject::accessible-name" translatable="yes">offline_radio_label</atkproperty>
+                        </accessibility>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkHBox" id="offline_radio_info_label_vbox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="spacing">12</property>
+                        <child>
+                          <widget class="GtkImage" id="image1">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="stock">gtk-info</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">image1</atkproperty>
+                            </accessibility>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="label16">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">&lt;small&gt;This could be the certificate(s) that you exported from the Customer Portal after registering the system as a consumer&lt;/small&gt;</property>
+                            <property name="use_markup">True</property>
+                            <property name="wrap">True</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">offline_radio_info_label_vbox</atkproperty>
+                            </accessibility>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkVBox" id="import_certs_button_vbox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <widget class="GtkButton" id="import_certs_button">
+                        <property name="label" translatable="yes">Import Certificates</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <accessibility>
+                            <atkproperty name="AtkObject::accessible-name" translatable="yes">import_certs_button</atkproperty>
+                        </accessibility>
+                        <signal name="clicked" handler="on_import_certs_button_clicked" swapped="no"/>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+      </widget>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="padding">12</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+  </widget>
+</glade-interface>
