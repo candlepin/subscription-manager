@@ -1,0 +1,9 @@
+[Unit]
+Description=Enable periodic update of entitlement certificates.
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/rhsmcertd 
+
+[Install]
+WantedBy=multi-user.target

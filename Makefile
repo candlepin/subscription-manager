@@ -12,6 +12,7 @@ OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1
 BIN_FILES = src/subscription-manager src/subscription-manager-gui \
 			src/rhn-migrate-classic-to-rhsm \
 			src/install-num-migrate-to-rhsm
+SYSTEMD_INST_DIR=${PREFIX}/usr/lib/systemd/system
 
 #this is the compat area for firstboot versions. If it's 6-compat, set to 6.
 SRC_DIR = src/subscription_manager
@@ -138,7 +139,24 @@ install-files: dbus-service-install compile-po desktop-files
 	if [ ${OS_VERSION} = 5 ]; then install src/install-num-migrate-to-rhsm ${PREFIX}/usr/sbin; fi
 	install src/subscription-manager-gui ${PREFIX}/usr/sbin
 	install bin/* ${PREFIX}/usr/bin
-	install src/rhsmcertd.init.d ${PREFIX}/etc/rc.d/init.d/rhsmcertd
+
+	# Set up rhsmcertd daemon. If installing on Fedora 17+ or RHEL 7+
+	# we prefer systemd over sysv as this is the new trend.
+	if [ ${OS} = Fedora ] ; then \
+		if [ ${OS_VERSION} -lt 17 ]; then \
+			install src/rhsmcertd.init.d ${PREFIX}/etc/rc.d/init.d/rhsmcertd; \
+		else \
+			install -d ${SYSTEMD_INST_DIR}; \
+			install etc-conf/rhsmcertd.service ${SYSTEMD_INST_DIR}; \
+		fi; \
+	else \
+		if [ ${OS_VERSION} -lt 7 ]; then \
+			install src/rhsmcertd.init.d ${PREFIX}/etc/rc.d/init.d/rhsmcertd; \
+		else \
+			install -d ${SYSTEMD_INST_DIR}; \
+			install etc-conf/rhsmcertd.service ${SYSTEMD_INST_DIR}; \
+		fi; \
+	fi; \
 
 	# RHEL 5 Customizations:
 	if [ ${OS_VERSION} = 5 ]; then \
