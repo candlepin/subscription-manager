@@ -681,6 +681,7 @@ class ServiceLevelCommand(UserPassCommand):
         # Assume --show if run with no args:
         if not self.options.list and \
            not self.options.show and \
+           not self.options.service_level and \
            not self.options.unset:
             self.options.show = True
 
@@ -692,7 +693,7 @@ class ServiceLevelCommand(UserPassCommand):
                 if not self.options.org:
                     print(_("Error: you must register or specify --org."))
                     sys.exit(-1)
-            if self.options.show:
+            else:
                 print(NOT_REGISTERED)
                 sys.exit(-1)
 
