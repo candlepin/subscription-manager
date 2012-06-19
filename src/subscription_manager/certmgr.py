@@ -19,8 +19,7 @@
 import sys
 sys.path.append("/usr/share/rhsm")
 
-from subscription_manager.certlib import CertLib, ActionLock, ConsumerIdentity,\
-        HealingLib
+from subscription_manager.certlib import CertLib, ActionLock, HealingLib, IdentityCertLib
 from subscription_manager.repolib import RepoLib
 from subscription_manager.factlib import FactLib
 from subscription_manager.facts import Facts
@@ -54,6 +53,7 @@ class CertManager:
         #healinglib requires a fact set in order to get socket count
         facts = Facts()
         self.healinglib = HealingLib(self.lock, uep=self.uep, facts_dict=facts.to_dict())
+        self.idcertlib = IdentityCertLib(self.lock, uep=self.uep)
 
     def update(self, autoheal=False):
         """
@@ -73,7 +73,7 @@ class CertManager:
             if autoheal:
                 libset = [self.healinglib]
             else:
-                libset = [self.repolib, self.factlib, self.profilelib, self.installedprodlib]
+                libset = [self.idcertlib, self.repolib, self.factlib, self.profilelib, self.installedprodlib]
 
             for lib in libset:
                 updates += lib.update()
