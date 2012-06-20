@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 0.99.19.2
+Version: 0.99.19.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -304,6 +304,10 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Wed Jun 20 2012 Michael Stead <mstead@redhat.com> 0.99.19.3-1
+- 828042,828068: Make ja_JP's Confirm Subscription unique for firstboot.
+  (mstead@redhat.com)
+
 * Tue Jun 05 2012 Chris Duryee (beav) <cduryee@redhat.com>
 - 818383: display better messages for yum plugin usage (cduryee@redhat.com)
 
