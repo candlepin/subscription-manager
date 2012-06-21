@@ -154,11 +154,13 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="proxy_label2">
+                      <widget class="GtkLabel" id="proxy_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">If required, please configure your proxy before moving forward.</property>
+                        <property name="label" translatable="yes">If required, please configure &lt;span underline="single" foreground="blue"&gt;your proxy&lt;/span&gt; before moving forward.</property>
+                        <property name="use_markup">True</property>
                         <property name="selectable">True</property>
+                        <signal name="button_press_event" handler="on_proxy_label_button_press_event" swapped="no"/>
                       </widget>
                       <packing>
                         <property name="expand">False</property>

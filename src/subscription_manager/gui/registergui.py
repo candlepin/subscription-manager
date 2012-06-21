@@ -508,7 +508,7 @@ class ChooseServerScreen(Screen):
         self.button_label = _("Next")
 
         callbacks = {
-                #"on_proxy_config_button_clicked": self._on_proxy_config_button_clicked,
+                "on_proxy_label_button_press_event": self._on_proxy_config_button_clicked,
                 "on_default_button_clicked": self._on_default_button_clicked,
             }
         self.glade.signal_autoconnect(callbacks)
@@ -520,7 +520,7 @@ class ChooseServerScreen(Screen):
         # put the hostname for RHN:
         self.server_entry.set_text(config.DEFAULT_HOSTNAME)
 
-    def _on_proxy_config_button_clicked(self, button):
+    def _on_proxy_config_button_clicked(self, button, event):
         self.network_config_dialog.set_parent_window(self._parent.window)
         self.network_config_dialog.show()
 
