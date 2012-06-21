@@ -3,7 +3,7 @@ import unittest
 import sys
 import socket
 
-from subscription_manager import managercli
+from subscription_manager import managercli, managerlib
 from stubs import MockStdout, MockStderr, StubProductDirectory, \
         StubEntitlementDirectory, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP
@@ -202,6 +202,34 @@ class TestListCommand(TestCliProxyCommand):
         listCommand = managercli.ListCommand()
         result = listCommand._none_wrap('foo %s %s', 'doberman pinscher', None)
         self.assertEquals(result, 'foo doberman pinscher None')
+
+    def test_none_wrap_available_pool_id(self):
+        listCommand = managercli.ListCommand()
+
+        def create_pool_list(self, one, two, three, four):
+            return [{'productName':'dummy-name', 'productId':'dummy-id', 'id':'888888888888',\
+                      'attributes':[{'name':'is_virt_only', 'value':'false'}], 'quantity':'4',\
+                      'service_level':'', 'service_type':'', 'multi-entitlement':'false',\
+                      'endDate':''}]
+        managerlib.getAvailableEntitlements = create_pool_list
+
+        # set to dummy true, will set back to original methods after test
+        def dummy_true(self):
+            return True
+        original_eav = managercli.ConsumerIdentity.existsAndValid
+        managercli.ConsumerIdentity.existsAndValid = dummy_true
+        original_e = managercli.ConsumerIdentity.exists
+        managercli.ConsumerIdentity.exists = dummy_true
+
+        def stub_consumer():
+            return {'consumer_name': 'stub_name', 'uuid': 'stub_uuid'}
+        managercli.check_registration = stub_consumer
+        listCommand.main(['list', '--available'])
+        self.assertTrue('888888888888' in sys.stdout.buffer)
+
+        # back to original
+        managercli.ConsumerIdentity.existsAndValid = original_eav
+        managercli.ConsumerIdentity.exists = original_e
 
     def test_format_name_long(self):
         name = "This is a Really Long Name For A Product That We Do Not Want To See But Should Be Able To Deal With"
