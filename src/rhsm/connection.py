@@ -84,7 +84,7 @@ class GoneException(RestlibException):
     candlepin side.
     """
     def __init__(self, code, msg, deleted_id):
-        super(GoneException, self).__init__(code, msg)
+        RestlibException.__init__(self, code, msg)
         self.deleted_id = deleted_id
 
 
