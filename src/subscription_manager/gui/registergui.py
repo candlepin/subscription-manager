@@ -192,8 +192,7 @@ class RegisterScreen(widgets.GladeWidget):
         # XXX it would be cool here to do some async spinning while the
         # main window gui refreshes itself
 
-        if not failed:
-            self.close_window()
+        self.close_window()
 
         self.emit_consumer_signal()
 
