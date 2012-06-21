@@ -1464,9 +1464,7 @@ class ReposCommand(CliCommand):
 
     def _validate_options(self):
         if not (self.options.list or self.options.enable or self.options.disable):
-            print _("Error: This command requires that you use a --list option "
-                    "or specify a repo with --enable or --disable.")
-            sys.exit(-1)
+            self.options.list = True
 
     def require_connection(self):
         return True
