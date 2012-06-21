@@ -16,14 +16,14 @@
             <property name="can_focus">False</property>
             <child>
               <widget class="GtkLabel" id="choose_server_vbox_label">
+                <property name="width_request">520</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip" translatable="yes">This is your test tooltip.</property>
                 <property name="xalign">0</property>
                 <property name="xpad">12</property>
-                <property name="label" translatable="yes">The &lt;span underline="single"&gt;Subscription Management Service&lt;/span&gt; you register with will provide your 
-system with updates and allow additional management.</property>
+                <property name="label" translatable="yes">The Subscription Management Service you register with will provide your system with updates and allow additional management.</property>
                 <property name="use_markup">True</property>
+                <property name="wrap">True</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">choose_server_vbox_label</atkproperty>
                 </accessibility>
@@ -33,6 +33,9 @@ system with updates and allow additional management.</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
+            </child>
+            <child>
+              <placeholder/>
             </child>
           </widget>
           <packing>
@@ -95,6 +98,7 @@ system with updates and allow additional management.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip" translatable="yes">Reset the Subscription Management Service to register to Customer Portal.</property>
                     <accessibility>
                       <atkproperty name="AtkObject::accessible-name" translatable="yes">default_button</atkproperty>
                     </accessibility>
