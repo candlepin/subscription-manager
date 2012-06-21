@@ -740,6 +740,7 @@ class ServiceLevelCommand(UserPassCommand):
             systemExit(-1, _("Error: The service-level command is not supported "
                              "by the server."))
         self.cp.updateConsumer(consumer_uuid, service_level=service_level)
+        print(_("Service level set to: %s") % service_level)
 
     def unset_service_level(self):
         self.set_service_level("")
