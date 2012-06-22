@@ -1652,7 +1652,7 @@ class ListCommand(CliCommand):
         self.parser.add_option("--available", action='store_true',
                                help=_("show those subscriptions which are available"))
         self.parser.add_option("--all", action='store_true',
-                               help=_("used with --available to ensure all subscriptions are returned"))                               
+                               help=_("used with --available to ensure all subscriptions are returned"))
         self.parser.add_option("--ondate", dest="on_date",
                                 help=(_("date to search on, defaults to today's date, only used with --available (example: %s)")
                                       % strftime("%Y-%m-%d", localtime())))
