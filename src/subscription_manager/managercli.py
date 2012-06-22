@@ -658,7 +658,7 @@ class ServiceLevelCommand(UserPassCommand):
     def __init__(self, ent_dir=None, prod_dir=None):
         self.consumerIdentity = ConsumerIdentity
 
-        shortdesc = _("Manage service levels for this system.")
+        shortdesc = _("Manage service levels for this system")
 
         super(ServiceLevelCommand, self).__init__("service-level", shortdesc,
                                                   False, ent_dir, prod_dir)
@@ -800,7 +800,7 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_option("--name", dest="consumername",
                                help=_("name of the consumer to register, defaults to the hostname"))
         self.parser.add_option("--consumerid", dest="consumerid",
-                               help=_("if supplied, the existing consumer data is pulled from the server"))
+                               help=_("the existing consumer data is pulled from the server"))
         self.parser.add_option("--org", dest="org",
                                help=_("register to one of multiple organizations for the user"))
         self.parser.add_option("--environment", dest="environment",
@@ -1355,7 +1355,7 @@ class UnSubscribeCommand(CliCommand):
 class FactsCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("Work with the current facts for this machine")
+        shortdesc = _("View or update the detected system information")
         super(FactsCommand, self).__init__("facts", shortdesc, False, ent_dir,
                                            prod_dir)
 
@@ -1538,7 +1538,7 @@ class ReposCommand(CliCommand):
 class ConfigCommand(CliCommand):
 
     def __init__(self, ent_dir=None, prod_dir=None):
-        shortdesc = _("List, set, or remove the configuration parameters in use by this machine.")
+        shortdesc = _("List, set, or remove the configuration parameters in use by this machine")
         super(ConfigCommand, self).__init__("config", shortdesc, False, ent_dir,
                                             prod_dir)
 
@@ -1648,18 +1648,18 @@ class ListCommand(CliCommand):
                                           ent_dir, prod_dir)
         self.available = None
         self.consumed = None
-        self.parser.add_option("--installed", action='store_true', help=_("if supplied then list shows those products which are installed (default)"))
+        self.parser.add_option("--installed", action='store_true', help=_("list shows those products which are installed (default)"))
         self.parser.add_option("--available", action='store_true',
-                               help=_("if supplied then list shows those subscriptions which are available"))
+                               help=_("show those subscriptions which are available"))
+        self.parser.add_option("--all", action='store_true',
+                               help=_("used with --available to ensure all subscriptions are returned"))                               
         self.parser.add_option("--ondate", dest="on_date",
                                 help=(_("date to search on, defaults to today's date, only used with --available (example: %s)")
                                       % strftime("%Y-%m-%d", localtime())))
         self.parser.add_option("--consumed", action='store_true',
-                               help=_("shows the subscriptions being consumed by this system."))
+                               help=_("show the subscriptions being consumed by this system."))
         self.parser.add_option("--servicelevel", dest="service_level",
-                               help=_("if supplied then list shows only subscriptions matching the specified service level. Only used with --available and --consumed"))
-        self.parser.add_option("--all", action='store_true',
-                               help=_("if supplied with --available then all subscriptions are returned"))
+                               help=_("show only subscriptions matching the specified service level. Only used with --available and --consumed"))
 
         self.facts = Facts(ent_dir=self.entitlement_dir,
                           prod_dir=self.product_dir)
