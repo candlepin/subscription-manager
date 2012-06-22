@@ -15,6 +15,7 @@
 
 import re
 import logging
+import sys
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 from urlparse import urlparse
@@ -26,6 +27,7 @@ _ = lambda x: gettext.ldgettext("rhsm", x)
 gettext.textdomain("rhsm")
 
 from rhsm.connection import UEPConnection, RestlibException
+from subscription_manager.hwprobe import ClassicCheck
 from rhsm.version import Versions
 from M2Crypto.SSL import SSLError
 
@@ -259,7 +261,10 @@ def get_version_dict(cp):
     pr_version = get_version(versions, Versions.PYTHON_RHSM)
     cp_version = _("No connection made to remote entitlement server")
 
+    server_type =  _("Unknown")
+
     if cp:
+        server_type = "candlepin"
         try:
             if cp.supports_resource("status"):
                 status = cp.getStatus()
@@ -269,8 +274,17 @@ def get_version_dict(cp):
         except Exception:
             cp_version = _("Unknown")
 
+    if ClassicCheck().is_registered_with_classic():
+        sys.path.append('/usr/share/rhn')
+        from up2date_client import config
+        cfg = config.initUp2dateConfig()
+        serverUrl = cfg['serverURL']
+        server_type = "RHN Classic"
+        cp_version = _("Unknown")
+
     return {
             "subscription manager": sm_version,
             "python-rhsm": pr_version,
-            "candlepin": cp_version
+            "candlepin": cp_version,
+            "server-type": server_type
     }
