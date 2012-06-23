@@ -1,8 +1,6 @@
-# A proxy interface to initiate and interact communication with Unified Entitlement Platform server such as candlepin.
+# A proxy interface to initiate and interact with candlepin.
 #
-# Copyright (c) 2010 Red Hat, Inc.
-#
-# Authors: Pradeep Kilambi <pkilambi@redhat.com>
+# Copyright (c) 2010 - 2012 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
 # version 2 (GPLv2). There is NO WARRANTY for this software, express or
