@@ -143,14 +143,16 @@ install-files: dbus-service-install compile-po desktop-files
 	# we prefer systemd over sysv as this is the new trend.
 	if [ ${OS} = Fedora ] ; then \
 		if [ ${OS_VERSION} -lt 17 ]; then \
-			install src/rhsmcertd.init.d ${PREFIX}/etc/rc.d/init.d/rhsmcertd; \
+			install etc-conf/rhsmcertd.init.d \
+			${PREFIX}/etc/rc.d/init.d/rhsmcertd; \
 		else \
 			install -d ${SYSTEMD_INST_DIR}; \
 			install etc-conf/rhsmcertd.service ${SYSTEMD_INST_DIR}; \
 		fi; \
 	else \
 		if [ ${OS_VERSION} -lt 7 ]; then \
-			install src/rhsmcertd.init.d ${PREFIX}/etc/rc.d/init.d/rhsmcertd; \
+			install etc-conf/rhsmcertd.init.d \
+			${PREFIX}/etc/rc.d/init.d/rhsmcertd; \
 		else \
 			install -d ${SYSTEMD_INST_DIR}; \
 			install etc-conf/rhsmcertd.service ${SYSTEMD_INST_DIR}; \
