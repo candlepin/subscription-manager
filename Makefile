@@ -236,6 +236,8 @@ coverage-jenkins: coverage-xunit
 
 clean:
 	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
+	rm -f bin/rhsmcertd
+	rm -f bin/rhsm-icon
 
 checkcommits:
 	scripts/checkcommits.sh
