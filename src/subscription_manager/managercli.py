@@ -685,6 +685,11 @@ class ServiceLevelCommand(UserPassCommand):
            not self.options.unset:
             self.options.show = True
 
+        if self.options.org and \
+           not self.options.list:
+            print(_("Error: --org is only supported with the --list command"))
+            sys.exit(-1)
+
         if not self.consumerIdentity.existsAndValid():
             if self.options.list:
                 if not (self.options.username and self.options.password):
