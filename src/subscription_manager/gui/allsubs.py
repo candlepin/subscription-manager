@@ -48,8 +48,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                         'installed_checkbutton', 'contains_text_entry',
                         'month_entry', 'day_entry', 'year_entry',
                         'active_on_checkbutton', 'subscribe_button',
-                        'edit_quantity_label',
-                        'subs_vpane', 'no_subs_label']
+                        'edit_quantity_label', 'no_subs_label']
         super(AllSubscriptionsTab, self).__init__('allsubs.glade', widget_names)
 
         self.parent_win = parent_win
@@ -199,7 +198,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         """
         Show a message in situations where we have no subscriptions to show.
         """
-        self.subs_vpane.hide()
+        self.top_view.hide()
         self.no_subs_label.set_markup("<b><big>%s</big></b>" % message)
         self.no_subs_label.show()
 
@@ -231,7 +230,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             return
 
         # Hide the no subscriptions label and show the pools list:
-        self.subs_vpane.show()
+        self.top_view.show()
         self.no_subs_label.hide()
 
         sorter = MergedPoolsStackingGroupSorter(merged_pools.values())
