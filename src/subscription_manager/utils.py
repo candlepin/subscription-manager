@@ -264,7 +264,7 @@ def get_version_dict(cp):
     server_type =  _("Unknown")
 
     if cp:
-        server_type = "candlepin"
+        server_type = _("subscription management service")
         try:
             if cp.supports_resource("status"):
                 status = cp.getStatus()
@@ -275,11 +275,7 @@ def get_version_dict(cp):
             cp_version = _("Unknown")
 
     if ClassicCheck().is_registered_with_classic():
-        sys.path.append('/usr/share/rhn')
-        from up2date_client import config
-        cfg = config.initUp2dateConfig()
-        serverUrl = cfg['serverURL']
-        server_type = "RHN Classic"
+        server_type = _("RHN Classic")
         cp_version = _("Unknown")
 
     return {
