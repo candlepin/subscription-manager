@@ -56,6 +56,10 @@ trailinglint:
 
 whitespacelint: tablint trailinglint
 
+# look for things that are likely debugging code left in by accident
+debuglint:
+	@! GREP_COLOR='7;31' grep --color -nP "pdb.set_trace|pydevd.settrace|import ipdb|import pdb|import pydevd" $(STYLEFILES)
+
 gettext_lint:
 	@TMPFILE=`mktemp` || exit 1; \
 	pcregrep -n --color=auto -M  "_\(.*[\'|\"].*[\'|\"]\s*\+\s*[\"|\'].*[\"|\'].*\)" $(STYLEFILES) | tee $$TMPFILE; \
@@ -71,6 +75,6 @@ rpmlint:
 	rpmlint -f rpmlint.config python-rhsm.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-stylish: pyflakes whitespacelint pep8 gettext_lint rpmlint
+stylish: pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
 
 jenkins: stylish coverage-jenkins
