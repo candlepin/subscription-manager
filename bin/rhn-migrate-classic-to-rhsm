@@ -92,7 +92,8 @@ proxyPort = ""
 proxyUser = ""
 proxyPass = ""
 
-CONNECTION_FAILURE = _("Unable to connect to certificate server.  See /var/log/rhsm/rhsm.log for more details.")
+CONNECTION_FAILURE = _(u"Unable to connect to certificate server: %s.  " \
+        "See /var/log/rhsm/rhsm.log for more details.")
 
 
 class InvalidChoiceError(Exception):
@@ -161,7 +162,7 @@ def systemExit(code, msgs=None):
         if type(msgs) not in [type([]), type(())]:
             msgs = (msgs, )
         for msg in msgs:
-            sys.stderr.write(str(msg) + '\n')
+            sys.stderr.write(unicode(msg).encode('utf-8') + '\n')
     sys.exit(code)
 
 
@@ -187,9 +188,10 @@ def checkOkToProceed(username, password):
 
     try:
         cp.getOwnerList(username)
-    except Exception:
+    except Exception, e:
+        log.error(e)
         log.error(traceback.format_exc())
-        systemExit(1, CONNECTION_FAILURE)
+        systemExit(1, CONNECTION_FAILURE % e)
     return cp
 
 
@@ -208,9 +210,10 @@ def selectServiceLevel(cp, consumer, servicelevel):
     try:
         org_key = cp.getOwner(uuid)['key']
         levels = cp.getServiceLevelList(org_key)
-    except:
+    except Exception, e:
+        log.error(e)
         log.error(traceback.format_exc())
-        systemExit(1, CONNECTION_FAILURE)
+        systemExit(1, CONNECTION_FAILURE % e)
 
     # Create the sla tuple before appending the empty string to the list of
     # valid slas.
@@ -237,9 +240,10 @@ def setServiceLevel(cp, consumer, servicelevel):
 
     try:
         cp.updateConsumer(uuid, service_level=servicelevel)
-    except:
+    except Exception, e:
+        log.error(e)
         log.error(traceback.format_exc())
-        systemExit(1, CONNECTION_FAILURE)
+        systemExit(1, CONNECTION_FAILURE % e)
 
 
 def getSubscribedChannelsList():
