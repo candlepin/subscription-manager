@@ -15,7 +15,7 @@ License: GPLv2
 #
 # git clone git://git.fedorahosted.org/git/python-rhsm.git/
 # cd client/python-rhsm
-# tito build --tag python-rhsm-%{version}-%{release} --tgz
+# tito build --tag python-rhsm-$VERSION-$RELEASE --tgz
 Source0: %{name}-%{version}.tar.gz
 URL: http://fedorahosted.org/candlepin
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
