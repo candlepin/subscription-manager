@@ -9,9 +9,10 @@ CODE_DIR = ${PREFIX}/${INSTALL_DIR}/${INSTALL_MODULE}/${PKGNAME}
 VERSION = $(shell echo `grep ^Version: $(PKGNAME).spec | awk '{ print $$2 }'`)
 OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
 OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
-BIN_FILES = src/subscription-manager src/subscription-manager-gui \
-			src/rhn-migrate-classic-to-rhsm \
-			src/install-num-migrate-to-rhsm
+BIN_DIR = bin
+BIN_FILES = $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui \
+			$(BIN_DIR)/rhn-migrate-classic-to-rhsm \
+			$(BIN_DIR)/install-num-migrate-to-rhsm
 SYSTEMD_INST_DIR=${PREFIX}/usr/lib/systemd/system
 
 SRC_DIR = src/subscription_manager
