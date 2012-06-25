@@ -48,7 +48,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                         'installed_checkbutton', 'contains_text_entry',
                         'month_entry', 'day_entry', 'year_entry',
                         'active_on_checkbutton', 'subscribe_button',
-                        'edit_quantity_label']
+                        'edit_quantity_label', 'no_subs_label']
         super(AllSubscriptionsTab, self).__init__('allsubs.glade', widget_names)
 
         self.parent_win = parent_win
@@ -117,6 +117,9 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             "on_contain_text_entry_changed": self.contain_text_entry_changed,
             "on_subscribe_button_clicked": self.subscribe_button_clicked,
         })
+
+        # Nothing displayed initially:
+        self.clear_pools()
 
     # Override so that we can use a tree store.
     def get_store(self):
@@ -189,6 +192,15 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         Clear pools list.
         """
         self.store.clear()
+        self.display_message(_("Press Update to search for subscriptions."))
+
+    def display_message(self, message):
+        """
+        Show a message in situations where we have no subscriptions to show.
+        """
+        self.top_view.hide()
+        self.no_subs_label.set_markup("<b><big>%s</big></b>" % message)
+        self.no_subs_label.show()
 
     def display_pools(self):
         """
@@ -202,8 +214,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.store.clear()
 
-        quantity_defaults_calculator = QuantityDefaultValueCalculator(self.facts,
-                                                            EntitlementDirectory().list())
+        quantity_defaults_calculator = QuantityDefaultValueCalculator(
+                self.facts, EntitlementDirectory().list())
 
         merged_pools = self.pool_stash.merge_pools(
                 incompatible=self.filter_incompatible(),
@@ -211,6 +223,16 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 uninstalled=self.filter_uninstalled(),
                 subscribed=True,
                 text=self.get_filter_text())
+
+        if len(merged_pools) == 0:
+            self.sub_details.clear()
+            self.display_message(_("No subscriptions match current filters."))
+            return
+
+        # Hide the no subscriptions label and show the pools list:
+        self.top_view.show()
+        self.no_subs_label.hide()
+
         sorter = MergedPoolsStackingGroupSorter(merged_pools.values())
         for group_idx, group in enumerate(sorter.groups):
             bg_color = get_cell_background_color(group_idx)
