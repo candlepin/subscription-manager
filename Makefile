@@ -14,7 +14,6 @@ BIN_FILES = src/subscription-manager src/subscription-manager-gui \
 			src/install-num-migrate-to-rhsm
 SYSTEMD_INST_DIR=${PREFIX}/usr/lib/systemd/system
 
-#this is the compat area for firstboot versions. If it's 6-compat, set to 6.
 SRC_DIR = src/subscription_manager
 
 CFLAGS = -Wall -g
@@ -128,30 +127,32 @@ install-files: dbus-service-install compile-po desktop-files
 	install -m 644 -p ${SRC_DIR}/*.py ${CODE_DIR}
 	install -m 644 -p ${SRC_DIR}/gui/*.py ${CODE_DIR}/gui
 	install -m 644 -p ${SRC_DIR}/branding/*.py ${CODE_DIR}/branding
-	install -m 644 -p ${SRC_DIR}/plugin/*.py ${PREFIX}/usr/lib/yum-plugins/
+	install -m 644 -p src/plugins/*.py ${PREFIX}/usr/lib/yum-plugins/
 
 	install -m 644 ${SRC_DIR}/gui/data/*.glade ${CODE_DIR}/gui/data/
 	install -m 644 ${SRC_DIR}/gui/data/icons/*.svg ${CODE_DIR}/gui/data/icons/
 	install -m 644 ${SRC_DIR}/gui/data/icons/scalable/*.svg ${CODE_DIR}/gui/data/icons/scalable/
 	ln -sf  /usr/share/${INSTALL_MODULE}/${PKGNAME}/gui/data/icons/scalable/subscription-manager.svg ${PREFIX}/${INSTALL_DIR}/icons/hicolor/scalable/apps/
-	install src/subscription-manager ${PREFIX}/usr/sbin
-	install src/rhn-migrate-classic-to-rhsm  ${PREFIX}/usr/sbin
-	if [ ${OS_VERSION} = 5 ]; then install src/install-num-migrate-to-rhsm ${PREFIX}/usr/sbin; fi
-	install src/subscription-manager-gui ${PREFIX}/usr/sbin
-	install bin/* ${PREFIX}/usr/bin
+	install bin/subscription-manager ${PREFIX}/usr/sbin
+	install bin/rhn-migrate-classic-to-rhsm  ${PREFIX}/usr/sbin
+	if [ ${OS_VERSION} = 5 ]; then install bin/install-num-migrate-to-rhsm ${PREFIX}/usr/sbin; fi
+	install bin/subscription-manager-gui ${PREFIX}/usr/sbin
+	install bin/rhsmcertd ${PREFIX}/usr/bin
 
 	# Set up rhsmcertd daemon. If installing on Fedora 17+ or RHEL 7+
 	# we prefer systemd over sysv as this is the new trend.
 	if [ ${OS} = Fedora ] ; then \
 		if [ ${OS_VERSION} -lt 17 ]; then \
-			install src/rhsmcertd.init.d ${PREFIX}/etc/rc.d/init.d/rhsmcertd; \
+			install etc-conf/rhsmcertd.init.d \
+			${PREFIX}/etc/rc.d/init.d/rhsmcertd; \
 		else \
 			install -d ${SYSTEMD_INST_DIR}; \
 			install etc-conf/rhsmcertd.service ${SYSTEMD_INST_DIR}; \
 		fi; \
 	else \
 		if [ ${OS_VERSION} -lt 7 ]; then \
-			install src/rhsmcertd.init.d ${PREFIX}/etc/rc.d/init.d/rhsmcertd; \
+			install etc-conf/rhsmcertd.init.d \
+			${PREFIX}/etc/rc.d/init.d/rhsmcertd; \
 		else \
 			install -d ${SYSTEMD_INST_DIR}; \
 			install etc-conf/rhsmcertd.service ${SYSTEMD_INST_DIR}; \
@@ -181,11 +182,13 @@ install-files: dbus-service-install compile-po desktop-files
 		if [ ${OS_VERSION} -lt 15 ]; then \
 			install -m 644 etc-conf/rhsm-icon.desktop \
 				${PREFIX}/etc/xdg/autostart;\
+			install bin/rhsm-icon ${PREFIX}/usr/bin;\
 		fi;\
 	else \
 		if [ ${OS_VERSION} -lt 7 ]; then \
 			install -m 644 etc-conf/rhsm-icon.desktop \
 				${PREFIX}/etc/xdg/autostart;\
+			install bin/rhsm-icon ${PREFIX}/usr/bin;\
 		fi;\
 	fi;\
 
@@ -233,6 +236,8 @@ coverage-jenkins: coverage-xunit
 
 clean:
 	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
+	rm -f bin/rhsmcertd
+	rm -f bin/rhsm-icon
 
 checkcommits:
 	scripts/checkcommits.sh
