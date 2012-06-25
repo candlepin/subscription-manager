@@ -40,6 +40,20 @@ class TestParseServerInfo(unittest.TestCase):
         self.assertEquals("443", port)
         self.assertEquals("/myapp", prefix)
 
+    def test_hostname_slash_no_prefix(self):
+        local_url = "http://myhost.example.com/"
+        (hostname, port, prefix) = parse_server_info(local_url)
+        self.assertEquals("myhost.example.com", hostname)
+        self.assertEquals("443", port)
+        self.assertEquals("/", prefix)
+
+    def test_hostname_just_slash(self):
+        local_url = "/"
+        (hostname, port, prefix) = parse_server_info(local_url)
+        self.assertEquals(DEFAULT_HOSTNAME, hostname)
+        self.assertEquals(DEFAULT_PORT, port)
+        self.assertEquals("/", prefix)
+
     def test_hostname_nested_prefix(self):
         local_url = "myhost.example.com/myapp/subapp"
         (hostname, port, prefix) = parse_server_info(local_url)
