@@ -9,9 +9,10 @@ CODE_DIR = ${PREFIX}/${INSTALL_DIR}/${INSTALL_MODULE}/${PKGNAME}
 VERSION = $(shell echo `grep ^Version: $(PKGNAME).spec | awk '{ print $$2 }'`)
 OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
 OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
-BIN_FILES = src/subscription-manager src/subscription-manager-gui \
-			src/rhn-migrate-classic-to-rhsm \
-			src/install-num-migrate-to-rhsm
+BIN_DIR = bin
+BIN_FILES = $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui \
+			$(BIN_DIR)/rhn-migrate-classic-to-rhsm \
+			$(BIN_DIR)/install-num-migrate-to-rhsm
 SYSTEMD_INST_DIR=${PREFIX}/usr/lib/systemd/system
 
 SRC_DIR = src/subscription_manager
@@ -334,8 +335,11 @@ tablint:
 trailinglint:
 	@! GREP_COLOR='7;31'  grep --color -nP "[ \t]$$" $(STYLEFILES)
 
-
 whitespacelint: tablint trailinglint
+
+# look for things that are likely debugging code left in by accident
+debuglint:
+	@! GREP_COLOR='7;31' grep --color -nP "pdb.set_trace|pydevd.settrace|import ipdb|import pdb|import pydevd" $(STYLEFILES)
 
 # find widgets used via get_widget
 # find widgets used as passed to init of SubscriptionManagerTab,
@@ -370,7 +374,7 @@ rpmlint:
 	rpmlint -f rpmlint.config subscription-manager.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-stylish: find-missing-widgets pyflakes whitespacelint pep8 gettext_lint rpmlint
+stylish: find-missing-widgets pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
 
 jenkins: stylish coverage-jenkins
 
