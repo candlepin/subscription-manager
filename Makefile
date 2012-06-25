@@ -329,8 +329,11 @@ tablint:
 trailinglint:
 	@! GREP_COLOR='7;31'  grep --color -nP "[ \t]$$" $(STYLEFILES)
 
-
 whitespacelint: tablint trailinglint
+
+# look for things that are likely debugging code left in by accident
+debuglint:
+	@! GREP_COLOR='7;31' grep --color -nP "pdb.set_trace|pydevd.settrace|import ipdb|import pdb|import pydevd" $(STYLEFILES)
 
 # find widgets used via get_widget
 # find widgets used as passed to init of SubscriptionManagerTab,
@@ -365,7 +368,7 @@ rpmlint:
 	rpmlint -f rpmlint.config subscription-manager.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-stylish: find-missing-widgets pyflakes whitespacelint pep8 gettext_lint rpmlint
+stylish: find-missing-widgets pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
 
 jenkins: stylish coverage-jenkins
 
