@@ -1,7 +1,5 @@
 #
-# Copyright (c) 2010 Red Hat, Inc.
-#
-# Authors: Jeff Ortel <jortel@redhat.com>
+# Copyright (c) 2010 - 2012 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
 # version 2 (GPLv2). There is NO WARRANTY for this software, express or
