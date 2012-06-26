@@ -63,7 +63,7 @@
                     <accessibility>
                       <atkproperty name="AtkObject::accessible-name" translatable="yes">proxy_config_button</atkproperty>
                     </accessibility>
-                    <signal name="clicked" handler="on_proxy_config_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="on_proxy_config_button_clicked" />
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -97,7 +97,7 @@
                 <property name="receives_default">False</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
-                <signal name="toggled" handler="on_rhn_radio_toggled" swapped="no"/>
+                <signal name="toggled" handler="on_rhn_radio_toggled" />
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">rhn_radio</atkproperty>
                 </accessibility>
@@ -160,7 +160,7 @@
                         <accessibility>
                             <atkproperty name="AtkObject::accessible-name" translatable="yes">local_radio</atkproperty>
                         </accessibility>
-                        <signal name="toggled" handler="on_local_radio_toggled" swapped="no"/>
+                        <signal name="toggled" handler="on_local_radio_toggled" />
                       </widget>
                     </child>
                   </widget>
@@ -315,7 +315,7 @@
                         <accessibility>
                           <atkaction action_name="click" description="offline_radio"/>
                         </accessibility>
-                        <signal name="toggled" handler="on_offline_radio_toggled" swapped="no"/>
+                        <signal name="toggled" handler="on_offline_radio_toggled" />
                       </widget>
                     </child>
                   </widget>
@@ -413,7 +413,7 @@
                         <accessibility>
                             <atkproperty name="AtkObject::accessible-name" translatable="yes">import_certs_button</atkproperty>
                         </accessibility>
-                        <signal name="clicked" handler="on_import_certs_button_clicked" swapped="no"/>
+                        <signal name="clicked" handler="on_import_certs_button_clicked" />
                       </widget>
                       <packing>
                         <property name="expand">False</property>
