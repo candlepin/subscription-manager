@@ -525,10 +525,10 @@ class IdentityCommand(UserPassCommand):
         # check for Classic before doing anything else
         if ClassicCheck().is_registered_with_classic():
             if ConsumerIdentity.existsAndValid():
-                print get_branding().REGISTERED_TO_BOTH_WARNING
+                print _("remote entitlement server type: %s") % get_branding().REGISTERED_TO_BOTH_SUMMARY
             else:
                 # no need to continue if user is only registered to Classic
-                print get_branding().RHSMD_REGISTERED_TO_OTHER
+                print _("remote entitlement server type: %s") % get_branding().REGISTERED_TO_OTHER_SUMMARY
                 return
 
         try:
