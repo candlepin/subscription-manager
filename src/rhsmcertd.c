@@ -31,7 +31,7 @@
 #define LOCKFILE "/var/lock/subsys/rhsmcertd"
 #define UPDATEFILE "/var/run/rhsm/update"
 #define WORKER "/usr/libexec/rhsmcertd-worker"
-#define WORKER_NAME "/usr/libexec/rhsmcertd-worker"
+#define WORKER_NAME WORKER
 #define DEFAULT_CERT_INTERVAL_SECONDS 14400	/* 4 hours */
 #define DEFAULT_HEAL_INTERVAL_SECONDS 86400	/* 24 hours */
 #define BUF_MAX 256
@@ -44,10 +44,9 @@ typedef struct _Config {
 
 //TODO: we should be using glib's logging facilities
 static FILE *log = NULL;
-GMainLoop *main_loop = NULL;
 
 void
-printUsage ()
+print_usage ()
 {
 	printf ("usage: rhsmcertd <certinterval> <healinterval>\n");
 }
@@ -79,7 +78,7 @@ ts ()
 }
 
 void
-logUpdate (int delay)
+log_update (int delay)
 {
 	time_t update = time (NULL);
 	struct tm update_tm = *localtime (&update);
@@ -240,7 +239,7 @@ main (int argc, char *argv[])
 	// Allow command line args to override configuration file values.
 	if (argc > 1) {
 		if (argc < 3) {
-			printUsage ();
+			print_usage ();
 			return EXIT_FAILURE;
 		}
 		log = get_log ();
@@ -314,13 +313,13 @@ main (int argc, char *argv[])
 	// NB: we only use cert_interval_seconds when calculating the next update
 	// time. This works for most users, since the cert_interval aligns with
 	// runs of heal_interval (i.e., heal_interval % cert_interval = 0)
-	logUpdate (config->cert_interval_seconds);
+	log_update (config->cert_interval_seconds);
 	g_timeout_add (config->cert_interval_seconds * 1000,
-		       (GSourceFunc) logUpdate,
+		       (GSourceFunc) log_update,
 		       GINT_TO_POINTER (config->cert_interval_seconds));
 
 	free (config);
-	main_loop = g_main_loop_new (NULL, FALSE);
+	GMainLoop *main_loop = g_main_loop_new (NULL, FALSE);
 	g_main_loop_run (main_loop);
 	// we will never get past here
 
