@@ -355,6 +355,11 @@ find-missing-widgets:
 	while read line; do grep -F "$$line" $$DEFINED_WIDGETS > /dev/null ; STAT="$$?"; if [ "$$STAT" -ne "0" ] ; then echo "$$line"; fi;  done < $$USED_WIDGETS | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
+# try to clean up the "swapped=no" signal thing in
+# glade files, since rhel6 hates it
+fix-glade-swapped:
+	perl -pi -e 's/(swapped=\"no\")//' $(GLADEFILES)
+
 # look for python string formats that are known to break xgettext
 # namely constructs of the forms: _("a" + "b")
 #                                 _("a" + \
