@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.4
+Version: 1.0.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -340,6 +340,45 @@ fi
 %endif
 
 %changelog
+* Tue Jun 26 2012 Alex Wood <awood@redhat.com> 1.0.5-1
+- 804109: Give a specific message when providing invalid credentials.
+  (awood@redhat.com)
+- 810360: update wording in gnome help file (cduryee@redhat.com)
+- use new bin location of files for $STYLEFILES (alikins@redhat.com)
+- add 'debuglint' for checking for leftover debugger imports
+  (alikins@redhat.com)
+- Update make clean target (jbowes@redhat.com)
+- Move py executables to bin/ (jbowes@redhat.com)
+- Put no results text inside the scrolled window (jbowes@redhat.com)
+- 817901: Show text when there are no subscriptions to show.
+  (dgoodwin@redhat.com)
+- Move initd file to etc-conf (jbowes@redhat.com)
+- Move plugins to their own src dir (jbowes@repl.ca)
+- More test cases for utils.parse_url (alikins@redhat.com)
+- 829482: Delete unstranslated strings in order force a retranslation
+  (bkearney@redhat.com)
+- 811602: Fix the help output based on UXD feedback (bkearney@redhat.com)
+- 828867: Removed the extra %%s string from the te translation
+  (bkearney@redhat.com)
+- 829479: Remove unstranslated strings to force a re-translation
+  (bkearney@redhat.com)
+- Delete the unused pt.po file (bkearney@redhat.com)
+- 829476: Remove untranslated strings. (bkearney@redhat.com)
+- 811553: Improve the text for auto subscribe during registration
+  (bkearney@redhat.com)
+- 829471: Fix the translation for usage, and remove a translation for %%org id
+  to force a retranslation (bkearney@redhat.com)
+- Remove an outdated ta.po file (bkearney@redhat.com)
+- 828810: Remove extra %%s in translation (bkearney@redhat.com)
+- Test to ensure that pool id is in the output for list --available
+  (wpoteat@redhat.com)
+- Close registration window even if it failed. (dgoodwin@redhat.com)
+- 825923: Subscription-manager service-level set should say "Service level set
+  to:" (wpoteat@redhat.com)
+- 811594: Default behavior for ReposCommand is --list (wpoteat@redhat.com)
+- 832400: service-level --unset should display proper message for unregistered
+  client. (wpoteat@redhat.com)
+
 * Tue Jun 19 2012 Alex Wood <awood@redhat.com> 1.0.4-1
 - 818978: Use systemd instead of sysv when installing on F17+ and RHEL7+.
   (mstead@redhat.com)
