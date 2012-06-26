@@ -1864,6 +1864,7 @@ class VersionCommand(CliCommand):
     def _do_command(self):
         versions = get_version_dict(self.cp)
         print (_("remote entitlement server: %s") % versions["candlepin"])
+        print (_("remote entitlement server type: %s") % versions["server-type"])
         print (_("subscription-manager: %s") % versions["subscription manager"])
         print (_("python-rhsm: %s") % versions["python-rhsm"])
 
