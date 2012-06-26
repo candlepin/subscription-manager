@@ -389,6 +389,16 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
 
+    def test_org_requires_list_error(self):
+        try:
+            self.cc.main(["--org", "one"])
+            self.cc._validate_options()
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+
+    def test_org_requires_list_good(self):
+        self.cc.main(["--org", "one", "--list"])
+
     def test_service_level_not_supported(self):
         self.cc.cp.setConsumer({})
         try:
