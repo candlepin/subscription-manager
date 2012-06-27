@@ -1260,8 +1260,8 @@ class SubscribeCommand(CliCommand):
                 if self.options.service_level:
                     consumer = self.cp.getConsumer(consumer_uuid)
                     if 'serviceLevel' not in consumer:
-                        systemExit(-1, _("Error: The --servicelevel option is not " + \
-                                         "supported by the server. Did not perform " + \
+                        systemExit(-1, _("Error: The --servicelevel option is not "
+                                         "supported by the server. Did not perform "
                                          "autosubscribe."))
                 autosubscribe(self.cp, consumer_uuid,
                               service_level=self.options.service_level)
