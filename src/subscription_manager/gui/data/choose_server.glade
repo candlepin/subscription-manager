@@ -313,7 +313,7 @@
                         <property name="draw_indicator">True</property>
                         <property name="group">rhn_radio</property>
                         <accessibility>
-                          <atkaction action_name="click" description="offline_radio"/>
+                            <atkproperty name="AtkObject::accessible-name" translatable="yes">offline_radio</atkproperty>
                         </accessibility>
                         <signal name="toggled" handler="on_offline_radio_toggled" />
                       </widget>
