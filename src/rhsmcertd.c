@@ -174,11 +174,11 @@ check_defaults_required (Config * config)
 	fclose (log);
 }
 
-Config*
+Config *
 build_config (int cert_frequency, int heal_frequency)
 {
 	Config *config;
-	config = (Config*) malloc(sizeof(config));
+	config = (Config *) malloc (sizeof (config));
 	config->cert_interval_seconds = to_secs (cert_frequency);
 	config->heal_interval_seconds = to_secs (heal_frequency);
 	check_defaults_required (config);
@@ -208,20 +208,18 @@ get_int_from_config_file (GKeyFile * key_file, const char *group,
 	return value;
 }
 
-Config*
+Config *
 get_file_configuration (GKeyFile * key_file)
 {
 	// g_key_file_get_integer defaults to 0 if not found.
-	int cert_frequency =
-		get_int_from_config_file (key_file, "rhsmcertd",
-					  "certFrequency");
-	int heal_frequency =
-		get_int_from_config_file (key_file, "rhsmcertd",
-					  "healFrequency");
+	int cert_frequency = get_int_from_config_file (key_file, "rhsmcertd",
+						       "certFrequency");
+	int heal_frequency = get_int_from_config_file (key_file, "rhsmcertd",
+						       "healFrequency");
 	return build_config (cert_frequency, heal_frequency);
 }
 
-Config*
+Config *
 get_cli_configuration (char *argv[])
 {
 	return build_config (atoi (argv[1]), atoi (argv[2]));
@@ -270,11 +268,17 @@ main (int argc, char *argv[])
 		g_key_file_free (key_file);
 	}
 
+	// Pull values from the config object so that we can free
+	// up its resources more reliably in case of error.
+	int cert_interval_seconds = config->cert_interval_seconds;
+	int heal_interval_seconds = config->heal_interval_seconds;
+	free (config);
+
 	log = get_log ();
 	fprintf (log, "%s: Cert Frequency: %d seconds\n", ts (),
-		 config->cert_interval_seconds);
+		 cert_interval_seconds);
 	fprintf (log, "%s: Heal Frequency: %d seconds\n", ts (),
-		 config->heal_interval_seconds);
+		 heal_interval_seconds);
 	fflush (log);
 	fclose (log);
 
@@ -284,16 +288,15 @@ main (int argc, char *argv[])
 		fprintf (log, "%s: unable to get lock, exiting\n", ts ());
 		fflush (log);
 		fclose (log);	//need to close FD before we return out of main()
-		free (config);
 		return EXIT_FAILURE;
 	}
 	fclose (log);
 
 	log = get_log ();
 	fprintf (log, "%s: healing check started: interval = %i minute(s)\n",
-		 ts (), config->heal_interval_seconds / 60);
+		 ts (), heal_interval_seconds / 60);
 	fprintf (log, "%s: cert check started: interval = %i minute(s)\n",
-		 ts (), config->cert_interval_seconds / 60);
+		 ts (), cert_interval_seconds / 60);
 	fflush (log);
 
 	// note that we call the function directly first, before assigning a timer
@@ -302,24 +305,23 @@ main (int argc, char *argv[])
 
 	bool heal = true;
 	cert_check (heal);
-	g_timeout_add (config->heal_interval_seconds * 1000,
+	g_timeout_add (heal_interval_seconds * 1000,
 		       (GSourceFunc) cert_check, (gpointer) heal);
 
 	heal = false;
 	cert_check (heal);
 
-	g_timeout_add (config->cert_interval_seconds * 1000,
+	g_timeout_add (cert_interval_seconds * 1000,
 		       (GSourceFunc) cert_check, (gpointer) heal);
 
 	// NB: we only use cert_interval_seconds when calculating the next update
 	// time. This works for most users, since the cert_interval aligns with
 	// runs of heal_interval (i.e., heal_interval % cert_interval = 0)
-	log_update (config->cert_interval_seconds);
-	g_timeout_add (config->cert_interval_seconds * 1000,
+	log_update (cert_interval_seconds);
+	g_timeout_add (cert_interval_seconds * 1000,
 		       (GSourceFunc) log_update,
-		       GINT_TO_POINTER (config->cert_interval_seconds));
+		       GINT_TO_POINTER (cert_interval_seconds));
 
-	free (config);
 	GMainLoop *main_loop = g_main_loop_new (NULL, FALSE);
 	g_main_loop_run (main_loop);
 	// we will never get past here
