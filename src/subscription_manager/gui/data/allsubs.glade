@@ -57,7 +57,7 @@
                     <accessibility>
                       <atkproperty name="AtkObject::accessible-name" translatable="yes">Search</atkproperty>
                     </accessibility>
-                    <signal name="clicked" handler="on_search_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="on_search_button_clicked" />
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -104,7 +104,7 @@
                     <accessibility>
                       <atkproperty name="AtkObject::accessible-name" translatable="yes">Text in Subscription</atkproperty>
                     </accessibility>
-                    <signal name="changed" handler="on_contain_text_entry_changed" swapped="no"/>
+                    <signal name="changed" handler="on_contain_text_entry_changed" />
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -170,7 +170,7 @@
                                         <accessibility>
                                           <atkproperty name="AtkObject::accessible-name" translatable="yes">Match System</atkproperty>
                                         </accessibility>
-                                        <signal name="clicked" handler="on_compatible_checkbutton_clicked" swapped="no"/>
+                                        <signal name="clicked" handler="on_compatible_checkbutton_clicked" />
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
@@ -188,7 +188,7 @@
                                         <accessibility>
                                           <atkproperty name="AtkObject::accessible-name" translatable="yes">Match Installed</atkproperty>
                                         </accessibility>
-                                        <signal name="clicked" handler="on_installed_checkbutton_clicked" swapped="no"/>
+                                        <signal name="clicked" handler="on_installed_checkbutton_clicked" />
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
@@ -207,7 +207,7 @@
                                         <accessibility>
                                           <atkproperty name="AtkObject::accessible-name" translatable="yes">Do Not Overlap</atkproperty>
                                         </accessibility>
-                                        <signal name="clicked" handler="on_overlap_checkbutton_clicked" swapped="no"/>
+                                        <signal name="clicked" handler="on_overlap_checkbutton_clicked" />
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
@@ -396,7 +396,7 @@
                     <accessibility>
                       <atkproperty name="AtkObject::accessible-name" translatable="yes">Subscribe</atkproperty>
                     </accessibility>
-                    <signal name="clicked" handler="on_subscribe_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="on_subscribe_button_clicked" />
                   </widget>
                   <packing>
                     <property name="expand">False</property>
