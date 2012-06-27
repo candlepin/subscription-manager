@@ -361,7 +361,7 @@ find-missing-widgets:
 #                                   "b")
 gettext_lint:
 	@TMPFILE=`mktemp` || exit 1; \
-	pcregrep -n --color=auto -M  "_\(.*[\'|\"].*[\'|\"]\s*\+.*?\s*[\"|\'].*[\"|\'].*\)"  $(STYLEFILES) | tee $$TMPFILE; \
+	pcregrep -n --color=auto -M "_\(.*[\'|\"].*?[\'|\"]\s*\+.*?(?s)\s*[\"|\'].*?(?-s)[\"|\'].*?\)"  $(STYLEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 pep8:
