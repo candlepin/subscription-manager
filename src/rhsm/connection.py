@@ -82,7 +82,8 @@ class GoneException(RestlibException):
     candlepin side.
     """
     def __init__(self, code, msg, deleted_id):
-        super(GoneException, self).__init__(code, msg)
+        # Exception doesn't inherit from object on el5 python version
+        RestlibException.__init__(self, code, msg)
         self.deleted_id = deleted_id
 
 
