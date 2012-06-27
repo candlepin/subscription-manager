@@ -267,6 +267,7 @@ main (int argc, char *argv[])
 		fflush (log);
 		fclose (log);
 		config = get_file_configuration (key_file);
+		g_key_file_free (key_file);
 	}
 
 	log = get_log ();
