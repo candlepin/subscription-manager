@@ -364,6 +364,11 @@ gettext_lint:
 	pcregrep -n --color=auto -M "_\(.*[\'|\"].*?[\'|\"]\s*\+.*?(?s)\s*[\"|\'].*?(?-s)[\"|\'].*?\)"  $(STYLEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
+swappedlint:
+	@TMPFILE=`mktemp` || exit 1; \
+	grep -nP  "swapped=\"no\"" $(GLADEFILES) | tee $$TMPFILE; \
+	! test -s $$TMPFILE
+
 pep8:
 	@TMPFILE=`mktemp` || exit 1; \
 	pep8 --ignore E501 --exclude ".#*" --repeat src $(STYLEFILES) | tee $$TMPFILE; \
@@ -374,7 +379,7 @@ rpmlint:
 	rpmlint -f rpmlint.config subscription-manager.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-stylish: find-missing-widgets pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
+stylish: swappedlint find-missing-widgets pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
 
 jenkins: stylish coverage-jenkins
 
