@@ -174,8 +174,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         # presented to the user, so hide the choose server screen's proxy
         # text and button.
         screen = self._screens[registergui.CHOOSE_SERVER_PAGE]
-        screen.proxy_label.destroy()
-        screen.proxy_config_button.destroy()
+        screen.proxy_frame.destroy()
 
     def initializeUI(self):
         # Need to make sure that each time the UI is initialized we reset back

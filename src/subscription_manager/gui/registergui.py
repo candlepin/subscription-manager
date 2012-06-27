@@ -32,7 +32,6 @@ from subscription_manager.utils import parse_server_info, ServerUrlParseError,\
         is_valid_server_info, MissingCaCertException
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui import widgets
-from subscription_manager.gui.importsub import ImportSubDialog
 
 from subscription_manager.gui.utils import handle_gui_exception, errorWindow
 
@@ -498,102 +497,120 @@ class ChooseServerScreen(Screen):
 
     def __init__(self, parent, backend):
         widget_names = [
-                'rhn_radio',
-                'local_radio',
-                'offline_radio',
-                'local_entry',
-                'import_certs_button',
-                'proxy_label',
-                'proxy_config_button',
+                'server_entry',
+                'proxy_frame',
+                'default_button',
+                'proxy_textview',
+                'choose_server_label',
         ]
         super(ChooseServerScreen, self).__init__("choose_server.glade",
-                                                 widget_names, parent, backend)
+                widget_names, parent, backend)
 
         self.button_label = _("Next")
 
         callbacks = {
-                "on_proxy_config_button_clicked": self._on_proxy_config_button_clicked,
-                "on_import_certs_button_clicked": self._on_import_certs_button_clicked,
-                "on_rhn_radio_toggled": self._on_server_radio_toggled,
-                "on_local_radio_toggled": self._on_server_radio_toggled,
-                "on_offline_radio_toggled": self._on_server_radio_toggled,
+                "on_default_button_clicked": self._on_default_button_clicked,
             }
         self.glade.signal_autoconnect(callbacks)
 
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
-        self.import_certs_dialog = ImportSubDialog()
+        self._setup_proxy_link()
 
-    def _on_server_radio_toggled(self, widget):
-        self.local_entry.set_sensitive(self.local_radio.get_active())
+    def _setup_proxy_link(self):
+        """
+        Set up the fake "link" to open the proxy settings dialog.
 
-    def _on_proxy_config_button_clicked(self, button):
-        self.network_config_dialog.set_parent_window(self._parent.window)
-        self.network_config_dialog.show()
+        To do this we use a text buffer with a tag with the appropriate event
+        listener configured. The tag has to be applied only to the correct
+        words in all languages, so we include a fake <a> tag in the message
+        which translators will leave in place. This can then be used to figure
+        out where to apply the tag.
+        """
+        proxy_buffer = gtk.TextBuffer()
 
-    def _on_import_certs_button_clicked(self, button):
-        self.import_certs_dialog.set_parent_window(self._parent.window)
-        self.import_certs_dialog.show()
+        # Translators please leave the <a></a> tags in the translated message.
+        proxy_msg = _("If required please configure <a>your proxy</a> before moving forward.")
+
+        try:
+            start_char = proxy_msg.index("<a>")
+            proxy_msg = proxy_msg.replace("<a>", "")
+            end_char = proxy_msg.index("</a>")
+            proxy_msg = proxy_msg.replace("</a>", "")
+        except ValueError:
+            # Something went wrong and the <a> tags we need are not present in
+            # the translation, leave the text view blank.
+            log.error("Translation error on the proxy setup message, leaving blank.")
+            return
+
+        proxy_buffer.set_text(proxy_msg)
+        start_iter = proxy_buffer.get_iter_at_offset(start_char)
+        end_iter = proxy_buffer.get_iter_at_offset(end_char)
+
+        # Apply the tag to the exact words we want "linkable":
+        tag = proxy_buffer.create_tag("proxylink", foreground="blue",
+                underline="single")
+        tag.connect("event", self.proxy_link_event_handler)
+        proxy_buffer.apply_tag(tag, start_iter, end_iter)
+
+        self.proxy_textview.set_buffer(proxy_buffer)
+
+        # We want this textview to look like a label, copy the background
+        # color off one:
+        style = self.choose_server_label.rc_get_style()
+        self.proxy_textview.modify_base(gtk.STATE_NORMAL,
+                style.bg[gtk.STATE_NORMAL])
+
+    def proxy_link_event_handler(self, tag, widget, event, iter):
+        if event.type == gtk.gdk.BUTTON_PRESS:
+            self.network_config_dialog.set_parent_window(self._parent.window)
+            self.network_config_dialog.show()
+
+    def _on_default_button_clicked(self, widget):
+        # Default port and prefix are fine, so we can be concise and just
+        # put the hostname for RHN:
+        self.server_entry.set_text(config.DEFAULT_HOSTNAME)
 
     def apply(self):
-        if self.rhn_radio.get_active():
-            CFG.set('server', 'hostname', config.DEFAULT_HOSTNAME)
-            CFG.set('server', 'port', config.DEFAULT_PORT)
-            CFG.set('server', 'prefix', config.DEFAULT_PREFIX)
-        elif self.offline_radio.get_active():
-            # We'll signal the user set offline by setting an empty hostname:
-            CFG.set('server', 'hostname', '')
-            CFG.set('server', 'port', config.DEFAULT_PORT)
-            CFG.set('server', 'prefix', config.DEFAULT_PREFIX)
-        elif self.local_radio.get_active():
-            local_server = self.local_entry.get_text()
+        server = self.server_entry.get_text()
+        try:
+            (hostname, port, prefix) = parse_server_info(server)
+            CFG.set('server', 'hostname', hostname)
+            CFG.set('server', 'port', port)
+            CFG.set('server', 'prefix', prefix)
+
             try:
-                (hostname, port, prefix) = parse_server_info(local_server)
-                CFG.set('server', 'hostname', hostname)
-                CFG.set('server', 'port', port)
-                CFG.set('server', 'prefix', prefix)
-
-                try:
-                    if not is_valid_server_info(hostname, port, prefix):
-                        errorWindow(_("Unable to reach the server at %s:%s%s" %
-                            (hostname, port, prefix)), self._parent.window)
-                        return DONT_CHANGE
-                except MissingCaCertException:
-                    errorWindow(_("CA certificate for subscription service has not been installed."),
-                                self._parent.window)
+                if not is_valid_server_info(hostname, port, prefix):
+                    errorWindow(_("Unable to reach the server at %s:%s%s" %
+                        (hostname, port, prefix)), self._parent.window)
                     return DONT_CHANGE
-
-            except ServerUrlParseError:
-                errorWindow(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"),
+            except MissingCaCertException:
+                errorWindow(_("CA certificate for subscription service has not been installed."),
                             self._parent.window)
                 return DONT_CHANGE
+
+        except ServerUrlParseError:
+            errorWindow(_("Please provide a hostname with optional port and/or prefix: hostname[:port][/prefix]"),
+                        self._parent.window)
+            return DONT_CHANGE
 
         log.info("Writing server data to rhsm.conf")
         CFG.save()
         self._backend.update()
 
-        if self.offline_radio.get_active():
-            # Because the user selected offline, the whole registration process
-            # must end here.
-            return FINISH
-        else:
-            return CREDENTIALS_PAGE
+        return CREDENTIALS_PAGE
 
     def clear(self):
-        self.local_entry.set_text("")
-
-        # We need to determine the current state of the server info in
-        # the config file so we can pre-select the correct options:
+        # Load the current server values from rhsm.conf:
         current_hostname = CFG.get('server', 'hostname')
         current_port = CFG.get('server', 'port')
         current_prefix = CFG.get('server', 'prefix')
+
+        # No need to show port and prefix for hosted:
         if current_hostname == config.DEFAULT_HOSTNAME:
-            self.rhn_radio.set_active(True)
-        elif current_hostname == "":
-            self.offline_radio.set_active(True)
+            self.server_entry.set_text(config.DEFAULT_HOSTNAME)
         else:
-            self.local_radio.set_active(True)
-            self.local_entry.set_text("%s:%s%s" % (current_hostname,
-                current_port, current_prefix))
+            self.server_entry.set_text("%s:%s%s" % (current_hostname,
+                    current_port, current_prefix))
 
 
 class AsyncBackend(object):
