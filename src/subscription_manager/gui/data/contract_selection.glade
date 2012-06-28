@@ -13,13 +13,13 @@
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
         <property name="border_width">4</property>
-        <property name="orientation">vertical</property>
+
         <property name="spacing">3</property>
         <child>
           <widget class="GtkVBox" id="vbox2">
             <property name="visible">True</property>
             <property name="border_width">6</property>
-            <property name="orientation">vertical</property>
+
             <property name="spacing">3</property>
             <child>
               <widget class="GtkLabel" id="label1">
@@ -50,7 +50,7 @@
                 <child>
                   <widget class="GtkVBox" id="vbox3">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
+
                     <property name="spacing">3</property>
                     <child>
                       <widget class="GtkTable" id="table1">
