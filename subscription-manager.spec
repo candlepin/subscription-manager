@@ -7,7 +7,7 @@
 %endif
 
 Name: subscription-manager
-Version: 0.99.19.3
+Version: 0.99.19.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -304,6 +304,12 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Thu Jun 28 2012 Michael Stead <mstead@redhat.com> 0.99.19.4-1
+- 827035: update identity certificate when updated on server
+  (jmrodri@gmail.com)
+- 824530: add test case for setting proxy cli for release (alikins@redhat.com)
+- 824530: "release" command ignoring cli proxy options (alikins@redhat.com)
+
 * Wed Jun 20 2012 Michael Stead <mstead@redhat.com> 0.99.19.3-1
 - 828042,828068: Make ja_JP's Confirm Subscription unique for firstboot.
   (mstead@redhat.com)
