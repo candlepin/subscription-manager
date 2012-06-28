@@ -66,10 +66,13 @@ if __name__ == '__main__':
     (options, args) = parser.parse_args()
     try:
         main(options, log)
-    except SystemExit:
+    except SystemExit, se:
         # sys.exit triggers an exception in older Python versions, which
         # in this case  we can safely ignore as we do not want to log the
-        # stack trace.
+        # stack trace. We need to check the code, since we want to signal
+        # exit with failure to the caller. Otherwise, we will exit with 0
+        if se.code:
+            sys.exit(-1)
         pass
     except Exception, e:
         log.error("Error while updating certificates using daemon")
