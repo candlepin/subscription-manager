@@ -640,9 +640,9 @@ class EnvironmentsCommand(UserPassCommand):
                         print ENVIRONMENT_LIST % (env['name'],
                             env['description'])
                 else:
-                    print "This org does not have environments."
+                    print _("Error: This org does not have environments.")
             else:
-                print "This system does not support environments."
+                print _("Error: Server does not support environments.")
 
             log.info("Successfully retrieved environment list from Entitlement Platform.")
         except connection.RestlibException, re:
