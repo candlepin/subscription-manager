@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 PREFIX ?=
 SYSCONF ?= etc
 PYTHON ?= python
@@ -299,6 +300,14 @@ compile-po:
 		msgfmt -c --statistics -o po/build/$$lang/LC_MESSAGES/rhsm.mo po/$$lang.po ; \
 	done
 
+# just run a check to make sure these compile
+polint:
+	@TMPFILE=`mktemp` || exit 1; \
+	for lang in $(basename $(notdir $(wildcard po/*.po))) ; do \
+		msgfmt -c -o /dev/null po/$$lang.po ; \
+	done 2> >(tee $$TMPFILE); \
+	! test -s $$TMPFILE
+
 just-strings:
 	-@ scripts/just_strings.py po/keys.pot
 
@@ -384,7 +393,7 @@ rpmlint:
 	rpmlint -f rpmlint.config subscription-manager.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-stylish: swappedlint find-missing-widgets pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
+stylish: polint swappedlint find-missing-widgets pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
 
 jenkins: stylish coverage-jenkins
 
