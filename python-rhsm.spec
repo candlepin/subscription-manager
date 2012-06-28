@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.0.2
+Version: 1.0.3
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -62,6 +62,10 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Jun 28 2012 Alex Wood <awood@redhat.com> 1.0.3-1
+- Update copyright dates (jbowes@redhat.com)
+- 825952: Error after deleting consumer at server (wpoteat@redhat.com)
+
 * Thu Jun 07 2012 Alex Wood <awood@redhat.com> 1.0.2-1
 - add upstream server var to version obj (cduryee@redhat.com)
 - 822057: wrap ContentConnection port in safe_int (cduryee@redhat.com)
