@@ -501,7 +501,6 @@ class ChooseServerScreen(Screen):
                 'server_entry',
                 'proxy_frame',
                 'default_button',
-                'proxy_textview',
                 'choose_server_label',
         ]
         super(ChooseServerScreen, self).__init__("choose_server.glade",
@@ -511,65 +510,20 @@ class ChooseServerScreen(Screen):
 
         callbacks = {
                 "on_default_button_clicked": self._on_default_button_clicked,
+                "on_proxy_button_clicked": self._on_proxy_button_clicked,
             }
         self.glade.signal_autoconnect(callbacks)
 
         self.network_config_dialog = networkConfig.NetworkConfigDialog()
-        self._setup_proxy_link()
-
-    def _setup_proxy_link(self):
-        """
-        Set up the fake "link" to open the proxy settings dialog.
-
-        To do this we use a text buffer with a tag with the appropriate event
-        listener configured. The tag has to be applied only to the correct
-        words in all languages, so we include a fake <a> tag in the message
-        which translators will leave in place. This can then be used to figure
-        out where to apply the tag.
-        """
-        proxy_buffer = gtk.TextBuffer()
-
-        # Translators please leave the <a></a> tags in the translated message.
-        proxy_msg = _("If required please configure <a>your proxy</a> before moving forward.")
-
-        try:
-            start_char = proxy_msg.index("<a>")
-            proxy_msg = proxy_msg.replace("<a>", "")
-            end_char = proxy_msg.index("</a>")
-            proxy_msg = proxy_msg.replace("</a>", "")
-        except ValueError:
-            # Something went wrong and the <a> tags we need are not present in
-            # the translation, leave the text view blank.
-            log.error("Translation error on the proxy setup message, leaving blank.")
-            return
-
-        proxy_buffer.set_text(proxy_msg)
-        start_iter = proxy_buffer.get_iter_at_offset(start_char)
-        end_iter = proxy_buffer.get_iter_at_offset(end_char)
-
-        # Apply the tag to the exact words we want "linkable":
-        tag = proxy_buffer.create_tag("proxylink", foreground="blue",
-                underline="single")
-        tag.connect("event", self.proxy_link_event_handler)
-        proxy_buffer.apply_tag(tag, start_iter, end_iter)
-
-        self.proxy_textview.set_buffer(proxy_buffer)
-
-        # We want this textview to look like a label, copy the background
-        # color off one:
-        style = self.choose_server_label.rc_get_style()
-        self.proxy_textview.modify_base(gtk.STATE_NORMAL,
-                style.bg[gtk.STATE_NORMAL])
-
-    def proxy_link_event_handler(self, tag, widget, event, iter):
-        if event.type == gtk.gdk.BUTTON_PRESS:
-            self.network_config_dialog.set_parent_window(self._parent.window)
-            self.network_config_dialog.show()
 
     def _on_default_button_clicked(self, widget):
         # Default port and prefix are fine, so we can be concise and just
         # put the hostname for RHN:
         self.server_entry.set_text(config.DEFAULT_HOSTNAME)
+
+    def _on_proxy_button_clicked(self, widget):
+        self.network_config_dialog.set_parent_window(self._parent.window)
+        self.network_config_dialog.show()
 
     def apply(self):
         server = self.server_entry.get_text()

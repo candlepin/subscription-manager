@@ -166,19 +166,31 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkTextView" id="proxy_textview">
+                      <widget class="GtkLabel" id="proxy_label">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="editable">False</property>
-                        <property name="left_margin">2</property>
-                        <property name="cursor_visible">False</property>
-                        <property name="accepts_tab">False</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">If required please configure your proxy before moving forward.</property>
+                        <property name="wrap">True</property>
                       </widget>
                       <packing>
                         <property name="expand">True</property>
                         <property name="fill">True</property>
-                        <property name="padding">6</property>
                         <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="proxy_button">
+                        <property name="label" translatable="yes">Configure Proxy</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <signal name="clicked" handler="on_proxy_button_clicked" swapped="no"/>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="padding">6</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </widget>
