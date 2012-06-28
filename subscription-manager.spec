@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.5
+Version: 1.0.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -340,6 +340,37 @@ fi
 %endif
 
 %changelog
+* Thu Jun 28 2012 Alex Wood <awood@redhat.com> 1.0.6-1
+- rhsmcertd no longer exits when not registered. (mstead@redhat.com)
+- po file cleanups (alikins@redhat.com)
+- latest strings from zanata (alikins@redhat.com)
+- Free config resources in one place (mstead@redhat.com)
+- rhsmcertd: free GKeyFile when done (jbowes@redhat.com)
+- rhsmcertd: remove studlyCaps (jbowes@redhat.com)
+- "make stylish" should failed on "swapped" in glade files (alikins@redhat.com)
+- Remove 'swapped=on' from glade signal markup. (alikins@redhat.com)
+- add 'fix-glade-swapped' target to de-'swapped' glade files
+  (alikins@redhat.com)
+- make stylish fixups (alikins@redhat.com)
+- Fix at-spi label for "offline_radio" widget (alikins@redhat.com)
+- shorter messages for cases where registered to RHN Classic
+  (alikins@redhat.com)
+- Tighten up the gettext_lint regex (alikins@redhat.com)
+- Fix string that was breaking xgettext (alikins@redhat.com)
+- 810998: Add a button to test a proxy connection. (awood@redhat.com)
+- new messages, and remove checking of rhn serverURL (alikins@redhat.com)
+- remove unused es.po file (bkearney@redhat.com)
+- 829486: Removed untranslated words to force a re-translation
+  (bkearney@redhat.com)
+- Remove unused bn.po file (bkearney@redhat.com)
+- 826856: Add check for service-level command that --org can only be used with
+  --list option (bkearney@redhat.com)
+- 829483: Remove english to english translation to force a re-translations
+  (bkearney@redhat.com)
+- Remove unused de po file (bkearney@redhat.com)
+- 819665: on 'version' display if we are registered to RHN Classic
+  (alikins@redhat.com)
+
 * Tue Jun 26 2012 Alex Wood <awood@redhat.com> 1.0.5-1
 - 804109: Give a specific message when providing invalid credentials.
   (awood@redhat.com)
