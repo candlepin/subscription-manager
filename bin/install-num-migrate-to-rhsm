@@ -18,7 +18,6 @@ import os
 import re
 import platform
 import sys
-import optparse
 import glob
 import shutil
 import simplejson as json
@@ -32,6 +31,8 @@ if _LIBPATH not in sys.path:
     sys.path.append(_LIBPATH)
 
 from subscription_manager.i18n import configure_i18n
+from subscription_manager.i18n_optparse import OptionParser
+
 configure_i18n()
 
 import gettext
