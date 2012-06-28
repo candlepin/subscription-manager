@@ -114,7 +114,7 @@
                     <accessibility>
                       <atkproperty name="AtkObject::accessible-name" translatable="yes">default_button</atkproperty>
                     </accessibility>
-                    <signal name="clicked" handler="on_default_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="on_default_button_clicked" />
                   </widget>
                   <packing>
                     <property name="expand">False</property>
