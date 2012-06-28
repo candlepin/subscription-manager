@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.6
+Version: 1.0.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -340,6 +340,9 @@ fi
 %endif
 
 %changelog
+* Thu Jun 28 2012 Alex Wood <awood@redhat.com> 1.0.7-1
+- Revamp choose server screen. (dgoodwin@redhat.com)
+
 * Thu Jun 28 2012 Alex Wood <awood@redhat.com> 1.0.6-1
 - rhsmcertd no longer exits when not registered. (mstead@redhat.com)
 - po file cleanups (alikins@redhat.com)
