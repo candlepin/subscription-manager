@@ -146,18 +146,24 @@ install-files: dbus-service-install compile-po desktop-files
 	if [ ${OS} = Fedora ] ; then \
 		if [ ${OS_VERSION} -lt 17 ]; then \
 			install etc-conf/rhsmcertd.init.d \
-			${PREFIX}/etc/rc.d/init.d/rhsmcertd; \
+				${PREFIX}/etc/rc.d/init.d/rhsmcertd; \
 		else \
 			install -d ${SYSTEMD_INST_DIR}; \
+			install -d ${PREFIX}/usr/lib/tmpfiles.d; \
 			install etc-conf/rhsmcertd.service ${SYSTEMD_INST_DIR}; \
+			install etc-conf/subscription-manager.conf.tmpfiles \
+				${PREFIX}/usr/lib/tmpfiles.d/subscription-manager.conf; \
 		fi; \
 	else \
 		if [ ${OS_VERSION} -lt 7 ]; then \
 			install etc-conf/rhsmcertd.init.d \
-			${PREFIX}/etc/rc.d/init.d/rhsmcertd; \
+				${PREFIX}/etc/rc.d/init.d/rhsmcertd; \
 		else \
 			install -d ${SYSTEMD_INST_DIR}; \
+			install -d ${PREFIX}/usr/lib/tmpfiles.d; \
 			install etc-conf/rhsmcertd.service ${SYSTEMD_INST_DIR}; \
+			install etc-conf/subscription-manager.conf.tmpfiles \
+				${PREFIX}/usr/lib/tmpfiles.d/subscription-manager.conf; \
 		fi; \
 	fi; \
 

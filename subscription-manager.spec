@@ -225,6 +225,7 @@ rm -rf %{buildroot}
 
 %if %use_systemd
     %attr(644,root,root) %{_unitdir}/rhsmcertd.service
+    %attr(644,root,root) %{_prefix}/lib/tmpfiles.d/%{name}.conf
 %else
     %attr(755,root,root) %{_initrddir}/rhsmcertd
 %endif
