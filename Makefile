@@ -10,7 +10,7 @@ CODE_DIR = ${PREFIX}/${INSTALL_DIR}/${INSTALL_MODULE}/${PKGNAME}
 VERSION = $(shell echo `grep ^Version: $(PKGNAME).spec | awk '{ print $$2 }'`)
 OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
 OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
-BIN_DIR = bin
+BIN_DIR = bin/
 BIN_FILES = $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui \
 			$(BIN_DIR)/rhn-migrate-classic-to-rhsm \
 			$(BIN_DIR)/install-num-migrate-to-rhsm
@@ -269,7 +269,7 @@ po/POTFILES.in:
 	# file per line, but we're lazy.
 	find ${SRC_DIR}/ -name "*.py" > po/POTFILES.in
 	find ${SRC_DIR}/gui/data/ -name "*.glade" >> po/POTFILES.in
-	find src/ -name "*-to-rhsm" >> po/POTFILES.in
+	find ${BIN_DIR} -name "*-to-rhsm" >> po/POTFILES.in
 	find src/ -name "*.c" >> po/POTFILES.in
 	find etc-conf/ -name "*.desktop.in" >> po/POTFILES.in
 

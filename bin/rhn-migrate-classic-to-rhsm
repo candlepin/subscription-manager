@@ -57,7 +57,9 @@ import up2date_client.config
 
 rhncfg = up2date_client.config.initUp2dateConfig()
 
-from optparse import Option, OptionParser
+from optparse import Option
+from subscription_manager.i18n_optparse import OptionParser, WrappedIndentedHelpFormatter
+
 options_table = [
     Option("-f", "--force", action="store_true", default=False,
            help=_("Ignore channels not available on RHSM")),
@@ -70,7 +72,10 @@ options_table = [
                   "level use --service-level=\"\"")),
 ]
 
-parser = OptionParser(option_list=options_table, usage=_("%s [OPTIONS]") % os.path.basename(sys.argv[0]))
+parser = OptionParser(usage=_("%s [OPTIONS]") % os.path.basename(sys.argv[0]),
+                      option_list=options_table,
+                      formatter=WrappedIndentedHelpFormatter())
+
 (options, args) = parser.parse_args()
 
 # access the rhsm python libraries, read rhsm config file and setup logging
