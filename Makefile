@@ -366,8 +366,12 @@ find-missing-widgets:
 
 # try to clean up the "swapped=no" signal thing in
 # glade files, since rhel6 hates it
-fix-glade-swapped:
+# also remove unneeded 'orientation' property for vbox's
+# since it causes warnings on RHEL5
+fix-glade:
 	perl -pi -e 's/(swapped=\"no\")//' $(GLADEFILES)
+	perl -pi -e 's/^.*property\s*name=\"orientation\">vertical.*$$//' $(GLADEFILES)
+
 
 # look for python string formats that are known to break xgettext
 # namely constructs of the forms: _("a" + "b")
@@ -378,9 +382,11 @@ gettext_lint:
 	pcregrep -n --color=auto -M "_\(.*[\'|\"].*?[\'|\"]\s*\+.*?(?s)\s*[\"|\'].*?(?-s)[\"|\'].*?\)"  $(STYLEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-swappedlint:
+#see bz #826874, causes issues on older libglade
+gladelint:
 	@TMPFILE=`mktemp` || exit 1; \
 	grep -nP  "swapped=\"no\"" $(GLADEFILES) | tee $$TMPFILE; \
+    grep -nP "property name=\"orientation\"" $(GLADEFILES) | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 pep8:
@@ -393,7 +399,7 @@ rpmlint:
 	rpmlint -f rpmlint.config subscription-manager.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-stylish: polint swappedlint find-missing-widgets pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
+stylish: polint gladelint find-missing-widgets pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
 
 jenkins: stylish coverage-jenkins
 

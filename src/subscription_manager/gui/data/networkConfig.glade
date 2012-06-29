@@ -11,12 +11,12 @@
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
+
         <child>
           <widget class="GtkVBox" id="vbox4">
             <property name="visible">True</property>
             <property name="border_width">10</property>
-            <property name="orientation">vertical</property>
+
             <property name="spacing">10</property>
             <child>
               <widget class="GtkLabel" id="label18">
@@ -38,7 +38,7 @@
                 <child>
                   <widget class="GtkVBox" id="vbox5">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
+
                     <property name="spacing">10</property>
                     <child>
                       <widget class="GtkCheckButton" id="enableProxyButton">
