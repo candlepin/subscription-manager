@@ -3,6 +3,10 @@
 # Prefer systemd over sysv on Fedora 17+ and RHEL 7+
 %define use_systemd (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 7)
 
+# trick rpmlint into ignoring the lib path for tmpfiles.d
+%define _mylib lib
+%define _tmpfilesdir %{_prefix}/%{_mylib}
+
 # A couple files are for RHEL 5 only:
 %if 0%{?rhel} == 5
 %define el5 1
@@ -225,7 +229,7 @@ rm -rf %{buildroot}
 
 %if %use_systemd
     %attr(644,root,root) %{_unitdir}/rhsmcertd.service
-    %attr(644,root,root) %{_prefix}/lib/tmpfiles.d/%{name}.conf
+    %attr(644,root,root) %{_tmpfilesdir}/tmpfiles.d/%{name}.conf
 %else
     %attr(755,root,root) %{_initrddir}/rhsmcertd
 %endif
