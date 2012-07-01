@@ -35,6 +35,7 @@ from subscription_manager.gui import progress
 from subscription_manager.gui.utils import handle_gui_exception, apply_highlight, errorWindow,\
     get_cell_background_color, set_background_model_index
 from subscription_manager.gui.contract_selection import ContractSelectionWindow
+from subscription_manager.gui.filter import FilterOptionsWindow, Filters
 from subscription_manager.quantity import QuantityDefaultValueCalculator, valid_quantity, \
                                           allows_multi_entitlement
 from subscription_manager.gui.storage import MappedTreeStore
@@ -44,11 +45,10 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def __init__(self, backend, consumer, facts, parent_win):
         widget_names = ['details_box', 'date_picker_hbox',
-                        'compatible_checkbutton', 'overlap_checkbutton',
-                        'installed_checkbutton', 'contains_text_entry',
                         'month_entry', 'day_entry', 'year_entry',
                         'active_on_checkbutton', 'subscribe_button',
-                        'edit_quantity_label', 'no_subs_label']
+                        'edit_quantity_label', 'no_subs_label',
+                        'filter_options_button', 'applied_filters_label']
         super(AllSubscriptionsTab, self).__init__('allsubs.glade', widget_names)
 
         self.parent_win = parent_win
@@ -103,19 +103,17 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                               widgets.expand_collapse_on_row_activated_callback)
 
         # This option should be selected by default:
-        self.compatible_checkbutton.set_active(True)
         self.sub_details = widgets.SubDetailsWidget(show_contract=False)
         self.details_box.add(self.sub_details.get_widget())
 
         self.contract_selection = None
 
+        self.filters = Filters(show_compatible=True)
+        self.update_applied_filters_label()
         self.glade.signal_autoconnect({
             "on_search_button_clicked": self.search_button_clicked,
-            "on_compatible_checkbutton_clicked": self.filters_changed,
-            "on_overlap_checkbutton_clicked": self.filters_changed,
-            "on_installed_checkbutton_clicked": self.filters_changed,
-            "on_contain_text_entry_changed": self.contain_text_entry_changed,
             "on_subscribe_button_clicked": self.subscribe_button_clicked,
+            "on_filter_options_button_clicked": self.filter_options_button_clicked,
         })
 
         # Nothing displayed initially:
@@ -156,32 +154,12 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             'quantity_available': int,
         }
 
-    def filter_incompatible(self):
-        """
-        Return True if we're not to include pools which failed a rule check.
-        """
-        return self.compatible_checkbutton.get_active()
-
-    def filter_overlapping(self):
-        """
-        Return True if we're not to include pools which provide products for
-        which we already have subscriptions.
-        """
-        return self.overlap_checkbutton.get_active()
-
-    def filter_uninstalled(self):
-        """
-        Return True if we're not to include pools for products that are
-        not installed.
-        """
-        return self.installed_checkbutton.get_active()
-
     def get_filter_text(self):
         """
         Returns the text to filter subscriptions based on. Will return None
         if the text box is empty.
         """
-        contains_text = self.contains_text_entry.get_text()
+        contains_text = self.filters.contains_text
         if not contains_text:
             contains_text = None
 
@@ -217,10 +195,13 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         quantity_defaults_calculator = QuantityDefaultValueCalculator(
                 self.facts, EntitlementDirectory().list())
 
+        # It may seem backwards that incompatible = self.filters.show_compatible
+        # etc., but think of it like "if show_compatible is true, then
+        # filter out all the incompatible products."
         merged_pools = self.pool_stash.merge_pools(
-                incompatible=self.filter_incompatible(),
-                overlapping=self.filter_overlapping(),
-                uninstalled=self.filter_uninstalled(),
+                incompatible=self.filters.show_compatible,
+                overlapping=self.filters.show_no_overlapping,
+                uninstalled=self.filters.show_installed,
                 subscribed=True,
                 text=self.get_filter_text())
 
@@ -379,20 +360,6 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         else:
             self.display_pools()
 
-    def contain_text_entry_changed(self, widget):
-        """
-        Redisplay the pools based on the new search string.
-        """
-        self.display_pools()
-
-    def filters_changed(self, widget):
-        """
-        Callback used by several widgets related to filtering, anytime
-        something changes, we re-display based on the latest choices.
-        """
-        log.debug("filters changed")
-        self.display_pools()
-
     def _contract_selected(self, pool, quantity=1):
         if not valid_quantity(quantity):
             errorWindow(_("Quantity must be a positive number."),
@@ -416,6 +383,18 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         if self.contract_selection:
             self.contract_selection.destroy()
         self.contract_selection = None
+
+    def update_applied_filters_label(self):
+        i = 0
+        for v in self.filters.__dict__.values():
+            if v:
+                i += 1
+        self.applied_filters_label.set_property('xalign', 1.0)
+        self.applied_filters_label.set_text(_("%s applied") % i)
+
+    def filter_options_button_clicked(self, button):
+        self.filter_dialog = FilterOptionsWindow(self.filters, self)
+        self.filter_dialog.show()
 
     def subscribe_button_clicked(self, button):
         model, tree_iter = self.top_view.get_selection().get_selected()
