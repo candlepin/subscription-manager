@@ -4,42 +4,12 @@
   <!-- interface-naming-policy project-wide -->
   <widget class="GtkWindow" id="filter_product_window">
     <property name="title" translatable="yes">Filter Options</property>
+    <property name="icon">icons/scalable/subscription-manager.svg</property>
     <signal name="delete_event" handler="on_filter_product_window_delete_event"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
-        <child>
-          <widget class="GtkHBox" id="hbox1">
-            <property name="visible">True</property>
-            <child>
-              <widget class="GtkLabel" id="contains_text_label">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Contains the text</property>
-              </widget>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkEntry" id="contains_text_entry">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="invisible_char">&#x25CF;</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Text in Subscription</atkproperty>
-                </accessibility>
-                <signal name="changed" handler="on_contains_text_entry_changed"/>
-              </widget>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </widget>
-          <packing>
-            <property name="position">0</property>
-          </packing>
-        </child>
         <child>
           <widget class="GtkVBox" id="vbox2">
             <property name="visible">True</property>
@@ -48,7 +18,7 @@
               <widget class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Only show subscriptions that</property>
+                <property name="label" translatable="yes">Only show subscriptions that:</property>
               </widget>
               <packing>
                 <property name="position">0</property>
@@ -108,24 +78,40 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkHButtonBox" id="hbuttonbox1">
+          <widget class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
-            <property name="layout_style">center</property>
             <child>
-              <widget class="GtkButton" id="close_button">
-                <property name="label">gtk-close</property>
+              <widget class="GtkLabel" id="contains_text_label">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_close_button_clicked"/>
+                <property name="label" translatable="yes">Contain the text</property>
               </widget>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
+            <child>
+              <widget class="GtkEntry" id="contains_text_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="invisible_char">&#x25CF;</property>
+                <accessibility>
+                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Text in Subscription</atkproperty>
+                </accessibility>
+                <signal name="changed" handler="on_contains_text_entry_changed"/>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="position">-1</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkHButtonBox" id="hbuttonbox1">
+            <property name="visible">True</property>
+            <property name="layout_style">edge</property>
             <child>
               <widget class="GtkButton" id="clear_button">
                 <property name="label">gtk-clear</property>
@@ -134,6 +120,21 @@
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="on_clear_button_clicked"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkButton" id="close_button">
+                <property name="label">gtk-close</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_close_button_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
