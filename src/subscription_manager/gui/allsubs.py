@@ -109,6 +109,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.contract_selection = None
 
         self.filters = Filters(show_compatible=True)
+        self.filter_dialog = FilterOptionsWindow(self.filters, self)
+
         self.update_applied_filters_label()
         self.glade.signal_autoconnect({
             "on_search_button_clicked": self.search_button_clicked,
@@ -393,7 +395,6 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.applied_filters_label.set_text(_("%s applied") % i)
 
     def filter_options_button_clicked(self, button):
-        self.filter_dialog = FilterOptionsWindow(self.filters, self)
         self.filter_dialog.show()
 
     def subscribe_button_clicked(self, button):

@@ -3,6 +3,8 @@
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy project-wide -->
   <widget class="GtkWindow" id="filter_product_window">
+    <property name="title" translatable="yes">Filter Options</property>
+    <signal name="delete_event" handler="on_filter_product_window_delete_event"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
@@ -27,6 +29,7 @@
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">Text in Subscription</atkproperty>
                 </accessibility>
+                <signal name="changed" handler="on_contains_text_entry_changed"/>
               </widget>
               <packing>
                 <property name="position">1</property>
@@ -61,6 +64,7 @@
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">Match System</atkproperty>
                 </accessibility>
+                <signal name="toggled" handler="on_compatible_checkbutton_toggled"/>
               </widget>
               <packing>
                 <property name="position">1</property>
@@ -76,6 +80,7 @@
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">Match Installed</atkproperty>
                 </accessibility>
+                <signal name="toggled" handler="on_installed_checkbutton_toggled"/>
               </widget>
               <packing>
                 <property name="position">2</property>
@@ -91,6 +96,7 @@
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">Do Not Overlap</atkproperty>
                 </accessibility>
+                <signal name="toggled" handler="on_no_overlapping_checkbutton_toggled"/>
               </widget>
               <packing>
                 <property name="position">3</property>
@@ -106,21 +112,6 @@
             <property name="visible">True</property>
             <property name="layout_style">center</property>
             <child>
-              <widget class="GtkButton" id="clear_button">
-                <property name="label">gtk-clear</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_clear_button_clicked"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
               <widget class="GtkButton" id="close_button">
                 <property name="label">gtk-close</property>
                 <property name="visible">True</property>
@@ -132,22 +123,22 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">1</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="apply_button">
-                <property name="label">gtk-apply</property>
+              <widget class="GtkButton" id="clear_button">
+                <property name="label">gtk-clear</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_apply_button_clicked"/>
+                <signal name="clicked" handler="on_clear_button_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">2</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </widget>

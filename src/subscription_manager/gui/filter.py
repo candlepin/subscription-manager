@@ -42,14 +42,18 @@ class FilterOptionsWindow(widgets.GladeWidget):
         super(FilterOptionsWindow, self).__init__(GLADE_XML, widgets)
         self.filters = filters
         self.parent = parent
-        self.filter_product_window.connect("delete-event", self.deleted)
+
         self.glade.signal_autoconnect({
+            "on_filter_product_window_delete_event": self.deleted,
             "on_clear_button_clicked": self.clear_button_clicked,
             "on_close_button_clicked": self.close_button_clicked,
-            "on_apply_button_clicked": self.apply_button_clicked,
+            "on_contains_text_entry_changed": self.update_filters,
+            "on_compatible_checkbutton_toggled": self.update_filters,
+            "on_installed_checkbutton_toggled": self.update_filters,
+            "on_no_overlapping_checkbutton_toggled": self.update_filters,
             })
 
-    def clear_button_clicked(self, button):
+    def clear_button_clicked(self, widget):
         self.compatible_checkbutton.set_active(False)
         self.installed_checkbutton.set_active(False)
         self.no_overlapping_checkbutton.set_active(False)
@@ -62,7 +66,7 @@ class FilterOptionsWindow(widgets.GladeWidget):
         self.contains_text_entry.set_text(self.filters.contains_text)
         self.filter_product_window.present()
 
-    def apply_button_clicked(self, button):
+    def update_filters(self, widget):
         new_filter = Filters()
         new_filter.show_compatible = self.compatible_checkbutton.get_active()
         new_filter.show_installed = self.installed_checkbutton.get_active()
@@ -73,10 +77,11 @@ class FilterOptionsWindow(widgets.GladeWidget):
         log.debug("filters changed: %s" % new_filter.__dict__)
         self.parent.display_pools()
         self.parent.update_applied_filters_label()
-        self.filter_product_window.destroy()
 
     def deleted(self, event, data):
-        self.filter_product_window.destroy()
+        self.filter_product_window.hide()
+        # See http://faq.pygtk.org/index.py?req=show&file=faq10.006.htp
+        return True
 
-    def close_button_clicked(self, button):
-        self.filter_product_window.destroy()
+    def close_button_clicked(self, widget):
+        self.filter_product_window.hide()
