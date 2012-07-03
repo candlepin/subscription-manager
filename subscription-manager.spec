@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.7
+Version: 1.0.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -341,6 +341,17 @@ fi
 %endif
 
 %changelog
+* Tue Jul 03 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 1.0.8-1
+- Add rpmlint config for tmpfiles.d (jbowes@redhat.com)
+- Use the i18n_optparse.OptionParser instead of optparse (alikins@redhat.com)
+- Use our i18n_optparse for the migration scripts (alikins@redhat.com)
+- Look for rhn-migrate* in bin for generating string catalogs
+  (alikins@redhat.com)
+- 826874: add gladelint support for 'orientation' prop (alikins@redhat.com)
+- 826874: Remove unneeded property 'orientation' from glade
+  (alikins@redhat.com)
+- 796782: add systemd tmpfiles configuration (jbowes@redhat.com)
+
 * Thu Jun 28 2012 Alex Wood <awood@redhat.com> 1.0.7-1
 - Revamp choose server screen. (dgoodwin@redhat.com)
 
