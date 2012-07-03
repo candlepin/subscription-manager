@@ -182,6 +182,11 @@ class TestFacts(unittest.TestCase):
         new_facts = json.loads(new_facts_buf)
         self.assertEquals(new_facts['newstuff'], True)
 
+    def test_entitlement_version(self):
+        self.assertTrue("system.entitlement_version" in self.f.get_facts())
+        self.assertEquals(facts.ENTITLEMENT_VERSION,
+                self.f.get_facts()['system.entitlement_version'])
+
 
 class InstalledProductStatusTests(unittest.TestCase):
 
