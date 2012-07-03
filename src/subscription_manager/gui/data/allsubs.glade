@@ -132,7 +132,7 @@
             <property name="position_set">True</property>
             <child>
               <widget class="GtkScrolledWindow" id="scrolledwindow1">
-                <property name="height_request">50</property>
+                <property name="height_request">125</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hscrollbar_policy">automatic</property>
@@ -181,7 +181,6 @@
             </child>
             <child>
               <widget class="GtkVBox" id="details_box">
-                <property name="height_request">50</property>
                 <property name="visible">True</property>
                 <child>
                   <placeholder/>
