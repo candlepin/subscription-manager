@@ -108,7 +108,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.contract_selection = None
 
-        self.filters = Filters(show_compatible=True)
+        self.filters = Filters(show_compatible=True, show_no_overlapping=True)
         self.filter_dialog = FilterOptionsWindow(self.filters, self)
 
         self.update_applied_filters_label()
