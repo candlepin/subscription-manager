@@ -1,9 +1,12 @@
 [Unit]
 Description=Enable periodic update of entitlement certificates.
+After=network.target
 
 [Service]
 Type=forking
 ExecStart=/usr/bin/rhsmcertd 
+Restart=on-failure
+RestartSec=60
 
 [Install]
 WantedBy=multi-user.target

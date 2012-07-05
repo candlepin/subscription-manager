@@ -138,6 +138,16 @@ cert_check (gboolean heal)
 	if (status == 0) {
 		fprintf (log, "%s: certificates updated\n", ts ());
 		fflush (log);
+	} else if (status == 101) {
+		fprintf (log,
+			 "%s: [%d] Network is unreachable. Shutting down.\n",
+			 ts (), status);
+		fprintf (log,
+			 "%s: NOTE: If the process was run by systemd, it will be automatically restarted. Otherwise, please attempt to restart the service manually.\n",
+			 ts ());
+		fflush (log);
+		fclose (log);
+		exit (status);
 	} else {
 		fprintf (log,
 			 "%s: update failed (%d), retry will occur on next run\n",
