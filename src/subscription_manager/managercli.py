@@ -1804,6 +1804,9 @@ class ListCommand(CliCommand):
             for product in cert.getProducts():
                 print(self._none_wrap(prefix, product.getName()))
                 prefix = _("                      \t%s")
+            # print an empty provides line for certs with no provided products
+            if len(cert.getProducts()) == 0:
+                print(prefix % "")
 
             print(self._none_wrap(_("Contract:             \t%s"),
                   order.getContract()))
