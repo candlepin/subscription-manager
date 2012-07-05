@@ -1,17 +1,14 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy project-wide -->
-  <widget class="GtkWindow" id="main_window">
-    <property name="title" translatable="yes">Manual Configuration Required</property>
-    <property name="resizable">False</property>
-    <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="destroy_with_parent">True</property>
+  <widget class="GtkVBox" id="container">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="border_width">2</property>
     <child>
-      <widget class="GtkVBox" id="content_container">
+      <widget class="GtkLabel" id="title">
         <property name="visible">True</property>
-        <property name="border_width">2</property>
 
         <child>
           <widget class="GtkLabel" id="title">
@@ -64,6 +61,47 @@
           </packing>
         </child>
       </widget>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <widget class="GtkLabel" id="message1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xalign">0</property>
+        <property name="yalign">0</property>
+        <property name="xpad">10</property>
+        <property name="ypad">10</property>
+        <property name="label" translatable="yes">You will need to manually subscribe this system after completing firstboot. Subscription Manager can be found in &lt;b&gt;System &gt; Administration &gt; Subscription Manager&lt;/b&gt;.</property>
+        <property name="use_markup">True</property>
+        <property name="wrap">True</property>
+      </widget>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <widget class="GtkLabel" id="message2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xalign">0</property>
+        <property name="yalign">0</property>
+        <property name="xpad">10</property>
+        <property name="ypad">10</property>
+        <property name="label" translatable="yes">After opening Subscription Manager, manually subscribe via the &lt;b&gt;All Available Subscriptions&lt;/b&gt; tab.</property>
+        <property name="use_markup">True</property>
+        <property name="wrap">True</property>
+      </widget>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="position">2</property>
+      </packing>
     </child>
   </widget>
 </glade-interface>
