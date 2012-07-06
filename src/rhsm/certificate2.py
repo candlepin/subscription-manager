@@ -13,9 +13,12 @@
 # in this software or its documentation.
 #
 
+from datetime import datetime
+
 from M2Crypto import X509
 
-from rhsm.certificate import Extensions, OID
+from rhsm.certificate import Extensions, OID, DateRange, GMT, \
+        get_datetime_from_x509
 
 REDHAT_OID_NAMESPACE = "1.3.6.1.4.1.2312.9"
 
@@ -56,7 +59,6 @@ class CertFactory(object):
         redhat_oid = OID(REDHAT_OID_NAMESPACE)
         # Trim down to only the extensions in the Red Hat namespace:
         extensions = extensions.ltrim(len(redhat_oid))
-        print extensions
 
         # Check the certificate version, absence of the extension implies v1.0:
         cert_version_str = "1.0"
@@ -64,13 +66,19 @@ class CertFactory(object):
             cert_version_str = extensions[EXT_CERT_VERSION]
 
         version = Version(cert_version_str)
-        cert = self._create_cert(version, extensions)
+        if version.major == 1:
+            return self._create_v1_cert(version, extensions, x509)
         return cert
 
-    def _create_cert(self, version, extensions):
+    def _create_v1_cert(self, version, extensions, x509):
         cert_class = VERSION_IMPLEMENTATIONS[version.major] \
                 [self._get_cert_type(extensions)]
-        cert = cert_class(version=version)
+        cert = cert_class(
+                version=version,
+                serial=x509.get_serial_number(),
+                start=get_datetime_from_x509(x509.get_not_before()),
+                end=get_datetime_from_x509(x509.get_not_after()),
+            )
         return cert
 
     def _get_cert_type(self, extensions):
@@ -104,8 +112,24 @@ class Version(object):
 
 class Certificate(object):
     """ Parent class of all certificate types. """
-    def __init__(self, version=None):
+    def __init__(self, version=None, serial=None, start=None, end=None):
+        # Version of the certificate sent by Candlepin:
         self.version = version
+
+        self.serial = serial
+
+        # Certificate start/end datetimes:
+        self.start = start
+        self.end = end
+
+        self.valid_range = DateRange(self.start, self.end)
+
+    def is_valid(self, on_date=None):
+        gmt = datetime.utcnow()
+        if on_date:
+            gmt = on_date
+        gmt = gmt.replace(tzinfo=GMT())
+        return self.valid_range.has_date(gmt)
 
 
 class ProductCertificate1(Certificate):
@@ -130,6 +154,7 @@ class CertificateException(Exception):
 
 # Maps a major cert version to the class implementations to use for
 # each certificate type:
+# TODO: may not be needed if we can go to just one set of classes
 VERSION_IMPLEMENTATIONS = {
     1: {
         ENTITLEMENT_CERT: EntitlementCertificate1,

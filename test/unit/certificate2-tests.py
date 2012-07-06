@@ -14,6 +14,7 @@
 #
 
 import unittest
+from datetime import datetime
 
 import certdata
 from rhsm.certificate2 import *
@@ -33,5 +34,13 @@ class ProductCert10Tests(unittest.TestCase):
         cert = self.factory.create_from_pem(certdata.ENTITLEMENT_CERT_V1_0)
         self.assertEquals("1.0", str(cert.version))
         self.assertTrue(isinstance(cert, EntitlementCertificate1))
+        self.assertEquals(666017019617507769L, cert.serial)
+        self.assertEquals(2012, cert.start.year)
+        self.assertEquals(2013, cert.end.year)
+
+    def test_is_valid(self):
+        cert = self.factory.create_from_pem(certdata.ENTITLEMENT_CERT_V1_0)
+        self.assertTrue(cert.is_valid(on_date=datetime(2012, 12, 1)))
+        self.assertFalse(cert.is_valid(on_date=datetime(2014, 12, 1)))
 
     # TODO: test exception when cert major version is newer than we can handle

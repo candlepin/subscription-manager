@@ -57,6 +57,45 @@ class UTC(tzinfo):
         return "<Timezone: %s>" % self.tzname(None)
 
 
+# m2Crypto available in 5.7 doesn't have the get_datetime, so
+# include the funtionality here
+def get_datetime_from_x509(date):
+    date_str = str(date)
+
+    if ' ' not in date_str:
+        raise ValueError("Invalid date: %s" % date_str)
+    month, rest = date_str.split(' ', 1)
+    _ssl_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
+                   "Sep", "Oct", "Nov", "Dec"]
+
+    if month not in _ssl_months:
+        raise ValueError("Invalid date %s: Invalid month: %s" % (date_str, month))
+    if rest.endswith(' GMT'):
+        timezone = UTC()
+        rest = rest[:-4]
+
+    tm = list(strptime(rest, "%d %H:%M:%S %Y"))[:6]
+    tm[1] = _ssl_months.index(month) + 1
+    tm.append(0)
+    tm.append(timezone)
+    return dt(*tm)
+
+
+def deprecated(func):
+    """
+    A decorator that marks a function as deprecated. This will cause a
+    warning to be emitted any time that function is used by a caller.
+    """
+    def new_func(*args, **kwargs):
+        warnings.warn("Call to deprecated function {}.".format(func.__name__),
+                category=DeprecationWarning)
+        return func(*args, **kwargs)
+    new_func.__name__ = func.__name__
+    new_func.__doc__ = func.__doc__
+    new_func.__dict__.update(func.__dict__)
+    return new_func
+
+
 class Certificate(object):
     """
     Represents and x.509 certificate.
@@ -136,31 +175,8 @@ class Certificate(object):
         @return: The valid date range.
         @rtype: L{DateRange}
         """
-        return DateRange(self._get_datetime(self.x509.get_not_before()),
-                self._get_datetime(self.x509.get_not_after()))
-
-    # m2Crypto available in 5.7 doesn't have the get_datetime, so
-    # include the funtionality here
-    def _get_datetime(self, date):
-        date_str = str(date)
-
-        if ' ' not in date_str:
-            raise ValueError("Invalid date: %s" % date_str)
-        month, rest = date_str.split(' ', 1)
-        _ssl_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
-                       "Sep", "Oct", "Nov", "Dec"]
-
-        if month not in _ssl_months:
-            raise ValueError("Invalid date %s: Invalid month: %s" % (date_str, month))
-        if rest.endswith(' GMT'):
-            timezone = UTC()
-            rest = rest[:-4]
-
-        tm = list(strptime(rest, "%d %H:%M:%S %Y"))[:6]
-        tm[1] = _ssl_months.index(month) + 1
-        tm.append(0)
-        tm.append(timezone)
-        return dt(*tm)
+        return DateRange(get_datetime_from_x509(self.x509.get_not_before()),
+                get_datetime_from_x509(self.x509.get_not_after()))
 
     def valid(self, on_date=None):
         """
@@ -451,14 +467,12 @@ class EntitlementCertificate(ProductCertificate):
             lst.append(Role(ext))
         return lst
 
+    @deprecated
     def validRangeWithGracePeriod(self):
-        warnings.warn("validRangeWithGracePeriod is deprecated. use validRange instead.",
-                DeprecationWarning)
         return super(EntitlementCertificate, self).validRange()
 
+    @deprecated
     def validWithGracePeriod(self):
-        warnings.warn("validWithGracePeriod is deprecated. use valid instead.",
-                DeprecationWarning)
         return self.validRangeWithGracePeriod().hasNow()
 
     def bogus(self):
@@ -590,7 +604,7 @@ class DateRange:
         gmt = gmt.replace(tzinfo=GMT())
         return (gmt >= self.begin() and gmt <= self.end())
 
-    def hasDate(self, date):
+    def has_date(self, date):
         """
         Get whether the certificate is valid based on the date now.
         @param: date
@@ -599,6 +613,10 @@ class DateRange:
         @rtype: boolean
         """
         return (date >= self.begin() and date <= self.end())
+
+    @deprecated
+    def hasDate(self, date):
+        return self.has_date(date)
 
     def __str__(self):
         return '\n\t%s\n\t%s' % (self._begin, self._end)
