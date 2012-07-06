@@ -78,6 +78,7 @@ INSTALLED_PRODUCT_STATUS = \
 
 AVAILABLE_SUBS_LIST = \
     _("Subscription Name:    \t%s") + "\n" + \
+    _("SKU:                  \t%s") + "\n" + \
     _("Pool Id:              \t%s") + "\n" + \
     _("Quantity:             \t%s") + "\n" + \
     _("Service Level:        \t%s") + "\n" + \
@@ -1736,7 +1737,9 @@ class ListCommand(CliCommand):
             if not len(epools):
                 print(_("No available subscription pools to list"))
                 sys.exit(0)
-            print "+-------------------------------------------+\n    %s\n+-------------------------------------------+\n" % _("Available Subscriptions")
+            print("+-------------------------------------------+")
+            print("    " + _("Available Subscriptions"))
+            print("+-------------------------------------------+")
             for data in epools:
                 # TODO:  Something about these magic numbers!
                 product_name = self._format_name(data['productName'], 24, 80)
@@ -1747,6 +1750,7 @@ class ListCommand(CliCommand):
                     machine_type = _("physical")
 
                 print self._none_wrap(AVAILABLE_SUBS_LIST, product_name,
+                        data['productId'],
                         data['id'],
                         data['quantity'],
                         data['service_level'] or "",
@@ -1792,7 +1796,7 @@ class ListCommand(CliCommand):
             sys.exit(0)
 
         print("+-------------------------------------------+")
-        print("   " + _("Consumed Product Subscriptions"))
+        print("   " + _("Consumed Subscriptions"))
         print("+-------------------------------------------+\n")
 
         for cert in certs:
@@ -1808,6 +1812,8 @@ class ListCommand(CliCommand):
             if len(cert.getProducts()) == 0:
                 print(prefix % "")
 
+            print(self._none_wrap(_("SKU:                  \t%s"),
+                  order.getSku()))
             print(self._none_wrap(_("Contract:             \t%s"),
                   order.getContract()))
             print(self._none_wrap(_("Account:              \t%s"),

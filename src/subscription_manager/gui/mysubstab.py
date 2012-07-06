@@ -230,7 +230,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                               virt_only=virt_only or "",
                               support_level=order.getSupportLevel() or "",
                               support_type=order.getSupportType() or "",
-                              products=products)
+                              products=products,
+                              sku=order.getSku())
 
     def on_no_selection(self):
         """
