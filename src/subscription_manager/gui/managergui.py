@@ -473,7 +473,7 @@ class MainWindow(widgets.GladeWidget):
         lang, encoding = locale.getdefaultlocale()
         url = ONLINE_DOC_URL_TEMPLATE % (lang.replace("_", "-"))
         try:
-            data = urllib2.urlopen(url)
+            urllib2.urlopen(url)
         except urllib2.URLError:
             # Use the default if there is no translation.
             url = ONLINE_DOC_URL_TEMPLATE % ("en-US")
