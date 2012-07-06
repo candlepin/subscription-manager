@@ -459,7 +459,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
             self.sub_details.show(product_name, products=provided,
                     highlight=self.get_filter_text(),
-                    support_level=support_level, support_type=support_type)
+                    support_level=support_level, support_type=support_type,
+                    sku=selection['product_id'])
         else:
             self.sub_details.clear()
 
