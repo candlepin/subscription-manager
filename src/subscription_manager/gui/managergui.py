@@ -52,7 +52,7 @@ from subscription_manager.gui.preferences import PreferencesDialog
 from subscription_manager.gui.about import AboutDialog
 
 import webbrowser
-import urllib
+import urllib2
 
 import gettext
 _ = gettext.gettext
@@ -472,8 +472,9 @@ class MainWindow(widgets.GladeWidget):
     def _get_online_doc_url(self):
         lang, encoding = locale.getdefaultlocale()
         url = ONLINE_DOC_URL_TEMPLATE % (lang.replace("_", "-"))
-        data = urllib.urlopen(url)
-        # Use the default if there is no translation.
-        if data.getcode() != 200:
+        try:
+            data = urllib2.urlopen(url)
+        except urllib2.URLError:
+            # Use the default if there is no translation.
             url = ONLINE_DOC_URL_TEMPLATE % ("en-US")
         return url
