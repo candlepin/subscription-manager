@@ -388,6 +388,8 @@ class OrganizationScreen(Screen):
 
         if len(owners) == 1:
             self._owner_key = owners[0][0]
+            # Run post since this is not done by the parent.
+            self.post()
             self._parent.pre_done(False)
         else:
             self.set_model(owners)
