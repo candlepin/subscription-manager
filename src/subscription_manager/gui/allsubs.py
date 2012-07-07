@@ -387,12 +387,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.contract_selection = None
 
     def update_applied_filters_label(self):
-        i = 0
-        for v in self.filters.__dict__.values():
-            if v:
-                i += 1
-        self.applied_filters_label.set_property('xalign', 1.0)
-        self.applied_filters_label.set_text(_("%s applied") % i)
+        self.applied_filters_label.set_text(_("%s applied") % \
+             self.filters.get_applied_count())
 
     def filter_options_button_clicked(self, button):
         self.filter_dialog.show()

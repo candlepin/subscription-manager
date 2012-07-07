@@ -33,6 +33,13 @@ class Filters(object):
         self.show_installed = show_installed
         self.contains_text = contains_text
 
+    def get_applied_count(self):
+        i = 0
+        for v in self.__dict__.values():
+            if v:
+                i += 1
+        return i
+
 
 class FilterOptionsWindow(widgets.GladeWidget):
     def __init__(self, filters, parent):
