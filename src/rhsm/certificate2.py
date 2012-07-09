@@ -17,10 +17,12 @@ from datetime import datetime
 
 from M2Crypto import X509
 
+from rhsm.connection import safe_int
 from rhsm.certificate import Extensions, OID, DateRange, GMT, \
         get_datetime_from_x509
 
 REDHAT_OID_NAMESPACE = "1.3.6.1.4.1.2312.9"
+ORDER_NAMESPACE = "4"
 
 EXT_ORDER_NAME = "4.1"
 EXT_CERT_VERSION = "6"
@@ -71,14 +73,44 @@ class CertFactory(object):
         return cert
 
     def _create_v1_cert(self, version, extensions, x509):
-        cert_class = VERSION_IMPLEMENTATIONS[version.major] \
-                [self._get_cert_type(extensions)]
-        cert = cert_class(
-                version=version,
-                serial=x509.get_serial_number(),
-                start=get_datetime_from_x509(x509.get_not_before()),
-                end=get_datetime_from_x509(x509.get_not_after()),
+
+        order_extensions = extensions.branch(ORDER_NAMESPACE)
+        print order_extensions
+        order = Order(
+                name=order_extensions.get('1'),
+                number=order_extensions.get('2'),
+                sku=order_extensions.get('3'),
+                subscription=order_extensions.get('4'),
+                quantity=safe_int(order_extensions.get('5')),
+                virt_limit=order_extensions.get('8'),
+                socket_limit=order_extensions.get('9'),
+                contract_number=order_extensions.get('10'),
+                quantity_used=order_extensions.get('11'),
+                warning_period=order_extensions.get('12'),
+                account_number=order_extensions.get('13'),
+                provides_management=order_extensions.get('14'),
+                support_level=order_extensions.get('15'),
+                support_type=order_extensions.get('16'),
+                stacking_id=order_extensions.get('17'),
+                virt_only=order_extensions.get('18')
             )
+
+        cert_type = self._get_cert_type(extensions)
+        if cert_type == ENTITLEMENT_CERT:
+            cert = EntitlementCertificate1(
+                    version=version,
+                    serial=x509.get_serial_number(),
+                    start=get_datetime_from_x509(x509.get_not_before()),
+                    end=get_datetime_from_x509(x509.get_not_after()),
+                    order=order,
+                )
+        elif cert_type == PRODUCT_CERT:
+            cert = ProductCertificate1(
+                    version=version,
+                    serial=x509.get_serial_number(),
+                    start=get_datetime_from_x509(x509.get_not_before()),
+                    end=get_datetime_from_x509(x509.get_not_after()),
+                )
         return cert
 
     def _get_cert_type(self, extensions):
@@ -137,7 +169,10 @@ class ProductCertificate1(Certificate):
 
 
 class EntitlementCertificate1(Certificate):
-    pass
+
+    def __init__(self, order=None, **kwargs):
+        Certificate.__init__(self, **kwargs)
+        self.order = order
 
 
 class ProductCertificate2(Certificate):
@@ -147,6 +182,41 @@ class ProductCertificate2(Certificate):
 class EntitlementCertificate2(Certificate):
     pass
 
+
+class Order(object):
+    """
+    Represents the order information for the subscription an entitlement
+    originated from.
+    """
+
+    def __init__(self, name, number, sku, subscription, quantity,
+            virt_limit, socket_limit, contract_number,
+            quantity_used, warning_period, account_number,
+            provides_management, support_level, support_type,
+            stacking_id, virt_only):
+
+        self.name = name
+        self.number = number # order number
+        self.sku = sku
+        self.subscription = subscription
+
+        # This is the total quantity on the order:
+        self.quantity = quantity
+
+        self.virt_limit = virt_limit
+        self.socket_limit = socket_limit
+        self.contract_number = contract_number
+
+        # The actual quantity used by this entitlement:
+        self.quantity_used = quantity_used
+
+        self.warning_period = warning_period
+        self.account_number = account_number
+        self.provides_management = provides_management
+        self.support_level = support_level
+        self.support_type = support_type
+        self.stacking_id = stacking_id
+        self.virt_only = virt_only
 
 
 class CertificateException(Exception):

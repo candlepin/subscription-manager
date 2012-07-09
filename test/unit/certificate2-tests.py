@@ -37,6 +37,7 @@ class ProductCert10Tests(unittest.TestCase):
         self.assertEquals(666017019617507769L, cert.serial)
         self.assertEquals(2012, cert.start.year)
         self.assertEquals(2013, cert.end.year)
+        self.assertEquals("Awesome OS for x86_64", cert.order.name)
 
     def test_is_valid(self):
         cert = self.factory.create_from_pem(certdata.ENTITLEMENT_CERT_V1_0)
