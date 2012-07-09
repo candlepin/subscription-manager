@@ -45,13 +45,12 @@ class CertFactory(object):
         """
         Create appropriate certificate object from a PEM file on disk.
         """
-        if from_file:
-            f = open(from_file)
-            contents = f.read()
-            f.close()
-        return self.create_from_pem(contents)
+        f = open(path)
+        contents = f.read()
+        f.close()
+        return self.create_from_pem(contents, path=path)
 
-    def create_from_pem(self, pem):
+    def create_from_pem(self, pem, path=None):
         """
         Create appropriate certificate object from a PEM string.
         """
@@ -69,23 +68,24 @@ class CertFactory(object):
 
         version = Version(cert_version_str)
         if version.major == 1:
-            return self.__create_v1_cert(version, extensions, x509)
+            return self.__create_v1_cert(version, extensions, x509, path)
         return cert
 
-    def __create_v1_cert(self, version, extensions, x509):
+    def __create_v1_cert(self, version, extensions, x509, path):
 
         cert_type = self._get_cert_type(extensions)
 
         if cert_type == ENTITLEMENT_CERT:
-            return self.__create_v1_ent_cert(version, extensions, x509)
+            return self.__create_v1_ent_cert(version, extensions, x509, path)
         elif cert_type == PRODUCT_CERT:
-            return self.__create_v1_prod_cert(version, extensions, x509)
+            return self.__create_v1_prod_cert(version, extensions, x509, path)
 #        cert_class = VERSION_IMPLEMENTATIONS[version.major] \
 #                [self._get_cert_type(extensions)]
 
-    def __create_v1_prod_cert(self, version, extensions, x509):
+    def __create_v1_prod_cert(self, version, extensions, x509, path):
         products = self.__parse_v1_products(extensions)
         cert = ProductCertificate1(
+                path=path,
                 version=version,
                 serial=x509.get_serial_number(),
                 start=get_datetime_from_x509(x509.get_not_before()),
@@ -94,12 +94,13 @@ class CertFactory(object):
             )
         return cert
 
-    def __create_v1_ent_cert(self, version, extensions, x509):
+    def __create_v1_ent_cert(self, version, extensions, x509, path):
         order = self.__parse_v1_order(extensions)
         content = self.__parse_v1_content(extensions)
         products = self.__parse_v1_products(extensions)
 
         cert = EntitlementCertificate1(
+                path=path,
                 version=version,
                 serial=x509.get_serial_number(),
                 start=get_datetime_from_x509(x509.get_not_before()),
@@ -203,8 +204,13 @@ class Version(object):
 
 class Certificate(object):
     """ Parent class of all certificate types. """
-    def __init__(self, version=None, serial=None, start=None, end=None,
+    def __init__(self, path=None, version=None, serial=None, start=None, end=None,
             products=None):
+
+        # Full file path to the certificate on disk. May be None if the cert
+        # hasn't yet been written to disk.
+        self.path = None
+
         # Version of the certificate sent by Candlepin:
         self.version = version
 
@@ -233,6 +239,22 @@ class Certificate(object):
         if self.end > other.end:
             return 1
         return 0
+
+    def write(self, path):
+        """
+        Write the certificate to disk.
+        """
+        f = open(path, 'w')
+        f.write(self.x509.as_pem())
+        f.close()
+        self.path = path
+
+    def delete(self):
+        """
+        Delete the file associated with this certificate.
+        """
+        if self.path:
+            os.unlink(self.path)
 
 
 class ProductCertificate1(Certificate):
