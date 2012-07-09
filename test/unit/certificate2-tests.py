@@ -32,6 +32,9 @@ class ProductCert10Tests(unittest.TestCase):
     def test_factory_method_on_product_cert(self):
         self.assertEquals("1.0", str(self.prod_cert.version))
         self.assertTrue(isinstance(self.prod_cert, ProductCertificate1))
+        self.assertEquals(1, len(self.prod_cert.products))
+        self.assertEquals('Awesome OS for x86_64 Bits',
+                self.prod_cert.products[0].name)
 
     def test_factory_method_on_ent_cert(self):
         self.ent_cert = self.factory.create_from_pem(certdata.ENTITLEMENT_CERT_V1_0)
@@ -41,6 +44,9 @@ class ProductCert10Tests(unittest.TestCase):
         self.assertEquals(2012, self.ent_cert.start.year)
         self.assertEquals(2013, self.ent_cert.end.year)
         self.assertEquals("Awesome OS for x86_64", self.ent_cert.order.name)
+        self.assertEquals(1, len(self.ent_cert.products))
+        self.assertEquals('Awesome OS for x86_64 Bits',
+                self.ent_cert.products[0].name)
 
     def test_is_valid(self):
         self.assertTrue(self.ent_cert.is_valid(on_date=datetime(2012, 12, 1)))
@@ -65,6 +71,7 @@ class ProductCert10Tests(unittest.TestCase):
         self.assertEquals("/foo/path/always/gpg", content.gpg)
 
     # TODO: test exception when cert major version is newer than we can handle
+
 
 class ContentTests(unittest.TestCase):
 

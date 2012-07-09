@@ -69,11 +69,68 @@ class CertFactory(object):
 
         version = Version(cert_version_str)
         if version.major == 1:
-            return self._create_v1_cert(version, extensions, x509)
+            return self.__create_v1_cert(version, extensions, x509)
         return cert
 
-    def _create_v1_cert(self, version, extensions, x509):
+    def __create_v1_cert(self, version, extensions, x509):
 
+        cert_type = self._get_cert_type(extensions)
+
+        if cert_type == ENTITLEMENT_CERT:
+            return self.__create_v1_ent_cert(version, extensions, x509)
+        elif cert_type == PRODUCT_CERT:
+            return self.__create_v1_prod_cert(version, extensions, x509)
+#        cert_class = VERSION_IMPLEMENTATIONS[version.major] \
+#                [self._get_cert_type(extensions)]
+
+    def __create_v1_prod_cert(self, version, extensions, x509):
+        products = self.__parse_v1_products(extensions)
+        cert = ProductCertificate1(
+                version=version,
+                serial=x509.get_serial_number(),
+                start=get_datetime_from_x509(x509.get_not_before()),
+                end=get_datetime_from_x509(x509.get_not_after()),
+                products=products,
+            )
+        return cert
+
+    def __create_v1_ent_cert(self, version, extensions, x509):
+        order = self.__parse_v1_order(extensions)
+        content = self.__parse_v1_content(extensions)
+        products = self.__parse_v1_products(extensions)
+
+        cert = EntitlementCertificate1(
+                version=version,
+                serial=x509.get_serial_number(),
+                start=get_datetime_from_x509(x509.get_not_before()),
+                end=get_datetime_from_x509(x509.get_not_after()),
+                order=order,
+                content=content,
+                products=products,
+            )
+        return cert
+
+    def __parse_v1_products(self, extensions):
+        """
+        Returns an ordered list of all the product data in the
+        certificate.
+        """
+        products = []
+        for prod_namespace in extensions.find('1.*.1'):
+            oid = prod_namespace[0]
+            root = oid.rtrim(1)
+            product_id = oid[1]
+            ext = extensions.branch(root)
+            products.append(Product(
+                id=product_id,
+                name=ext.get('1'),
+                version=ext.get('2'),
+                arch=ext.get('3'),
+                provided_tags=parse_tags(ext.get('4')),
+                ))
+        return products
+
+    def __parse_v1_order(self, extensions):
         order_extensions = extensions.branch(ORDER_NAMESPACE)
         order = Order(
                 name=order_extensions.get('1'),
@@ -93,7 +150,9 @@ class CertFactory(object):
                 stacking_id=order_extensions.get('17'),
                 virt_only=order_extensions.get('18')
             )
+        return order
 
+    def __parse_v1_content(self, extensions):
         content = []
         ents = extensions.find("2.*.1.1")
         for ent in ents:
@@ -111,28 +170,7 @@ class CertFactory(object):
                 metadata_expire=content_ext.get('9'),
                 required_tags=parse_tags(content_ext.get('10')),
             ))
-
-        cert_type = self._get_cert_type(extensions)
-        if cert_type == ENTITLEMENT_CERT:
-            cert = EntitlementCertificate1(
-                    version=version,
-                    serial=x509.get_serial_number(),
-                    start=get_datetime_from_x509(x509.get_not_before()),
-                    end=get_datetime_from_x509(x509.get_not_after()),
-                    order=order,
-                    content=content,
-                )
-        elif cert_type == PRODUCT_CERT:
-            cert = ProductCertificate1(
-                    version=version,
-                    serial=x509.get_serial_number(),
-                    start=get_datetime_from_x509(x509.get_not_before()),
-                    end=get_datetime_from_x509(x509.get_not_after()),
-                )
-
-#        cert_class = VERSION_IMPLEMENTATIONS[version.major] \
-#                [self._get_cert_type(extensions)]
-        return cert
+        return content
 
     def _get_cert_type(self, extensions):
         # Assume if there is an order name, it must be an entitlement cert:
@@ -165,7 +203,8 @@ class Version(object):
 
 class Certificate(object):
     """ Parent class of all certificate types. """
-    def __init__(self, version=None, serial=None, start=None, end=None):
+    def __init__(self, version=None, serial=None, start=None, end=None,
+            products=None):
         # Version of the certificate sent by Candlepin:
         self.version = version
 
@@ -177,12 +216,23 @@ class Certificate(object):
 
         self.valid_range = DateRange(self.start, self.end)
 
+        # The products in this certificate. The first is treated as the
+        # primary or "marketing" product.
+        self.products = products
+
     def is_valid(self, on_date=None):
         gmt = datetime.utcnow()
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())
         return self.valid_range.has_date(gmt)
+
+    def __cmp__(self, other):
+        if self.end < other.end:
+            return -1
+        if self.end > other.end:
+            return 1
+        return 0
 
 
 class ProductCertificate1(Certificate):
@@ -197,12 +247,32 @@ class EntitlementCertificate1(Certificate):
         self.content = content
 
 
+# TODO: delete these if they're not needed:
 class ProductCertificate2(Certificate):
     pass
 
 
 class EntitlementCertificate2(Certificate):
     pass
+
+
+class Product(object):
+    """
+    Represents the product information from a certificate.
+    """
+    def __init__(self, id=None, name=None, version=None, arch=None,
+            provided_tags=None):
+        self.id = id
+        self.name = name
+        self.version = version
+        self.arch = arch
+        self.provided_tags = provided_tags
+        if self.provided_tags is None:
+            self.provided_tags = []
+
+    def __eq__(self, other):
+        return (self.id == other.id)
+
 
 
 class Order(object):
