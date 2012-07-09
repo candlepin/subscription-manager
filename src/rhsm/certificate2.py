@@ -19,7 +19,7 @@ from M2Crypto import X509
 
 from rhsm.connection import safe_int
 from rhsm.certificate import Extensions, OID, DateRange, GMT, \
-        get_datetime_from_x509
+        get_datetime_from_x509, parse_tags
 
 REDHAT_OID_NAMESPACE = "1.3.6.1.4.1.2312.9"
 ORDER_NAMESPACE = "4"
@@ -75,7 +75,6 @@ class CertFactory(object):
     def _create_v1_cert(self, version, extensions, x509):
 
         order_extensions = extensions.branch(ORDER_NAMESPACE)
-        print order_extensions
         order = Order(
                 name=order_extensions.get('1'),
                 number=order_extensions.get('2'),
@@ -95,6 +94,24 @@ class CertFactory(object):
                 virt_only=order_extensions.get('18')
             )
 
+        content = []
+        ents = extensions.find("2.*.1.1")
+        for ent in ents:
+            oid = ent[0]
+            content_ext = extensions.branch(oid.rtrim(1))
+            content.append(Content(
+                name=content_ext.get('1'),
+                label=content_ext.get('2'),
+                quantity=content_ext.get('3'),
+                flex_quantity=content_ext.get('4'),
+                vendor=content_ext.get('5'),
+                url=content_ext.get('6'),
+                gpg=content_ext.get('7'),
+                enabled=content_ext.get('8'),
+                metadata_expire=content_ext.get('9'),
+                required_tags=parse_tags(content_ext.get('10')),
+            ))
+
         cert_type = self._get_cert_type(extensions)
         if cert_type == ENTITLEMENT_CERT:
             cert = EntitlementCertificate1(
@@ -103,6 +120,7 @@ class CertFactory(object):
                     start=get_datetime_from_x509(x509.get_not_before()),
                     end=get_datetime_from_x509(x509.get_not_after()),
                     order=order,
+                    content=content,
                 )
         elif cert_type == PRODUCT_CERT:
             cert = ProductCertificate1(
@@ -111,6 +129,9 @@ class CertFactory(object):
                     start=get_datetime_from_x509(x509.get_not_before()),
                     end=get_datetime_from_x509(x509.get_not_after()),
                 )
+
+#        cert_class = VERSION_IMPLEMENTATIONS[version.major] \
+#                [self._get_cert_type(extensions)]
         return cert
 
     def _get_cert_type(self, extensions):
@@ -170,9 +191,10 @@ class ProductCertificate1(Certificate):
 
 class EntitlementCertificate1(Certificate):
 
-    def __init__(self, order=None, **kwargs):
+    def __init__(self, order=None, content=None, **kwargs):
         Certificate.__init__(self, **kwargs)
         self.order = order
+        self.content = content
 
 
 class ProductCertificate2(Certificate):
@@ -217,6 +239,45 @@ class Order(object):
         self.support_type = support_type
         self.stacking_id = stacking_id
         self.virt_only = virt_only
+
+    def __str__(self):
+        return "<Order: name=%s number=%s support_level=%s>" % \
+                (self.name, self.number, self.support_level)
+
+
+class Content(object):
+
+    def __init__(self, name=None, label=None, quantity=None, flex_quantity=None,
+            vendor=None, url=None, gpg=None, enabled=None, metadata_expire=None,
+            required_tags=None):
+        self.name = name
+        self.label = label
+        self.vendor = vendor
+        self.url = url
+        self.gpg = gpg
+
+        if (enabled not in (None, 0, 1, "0", "1")):
+            raise CertificateException("Invalid enabled setting: %s" % enabled)
+
+        # Convert possible incoming None or string (0/1) to a boolean:
+        # If enabled isn't specified in cert we assume True.
+        self.enabled = True if \
+                (enabled is None or enabled == "1" or enabled == True) \
+                else False
+
+        self.metadata_expire = metadata_expire
+        self.required_tags = required_tags or []
+
+        # Suspect both of these are unused:
+        self.quantity = int(quantity) if quantity else None
+        self.flex_quantity = int(flex_quantity) if flex_quantity else None
+
+    def __eq__(self, other):
+        return (self.label == other.label)
+
+    def __str__(self):
+        return "<Content: name=%s label=%s enabled=%s>" % \
+                (self.name, self.label, self.enabled)
 
 
 class CertificateException(Exception):
