@@ -1,5 +1,5 @@
 Name: subscription-manager
-Version: 0.98.16.2
+Version: 0.98.16.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -264,6 +264,11 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %changelog
+* Mon Jul 09 2012 jesus m. rodriguez <jesusr@redhat.com> 0.98.16.3-1
+- 838091:  Teach rhsmcertd to refresh the identity certificate
+  (jesusr@redhat.com)
+- adding rhel 5.8.z release (jesusr@redhat.com)
+
 * Thu Jun 21 2012 jesus m. rodriguez <jesusr@redhat.com> 0.98.16.2-1
 - bump version (jesusr@redhat.com)
 - 827035: update identity certificate (jesusr@redhat.com)
