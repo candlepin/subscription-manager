@@ -19,7 +19,8 @@
 import sys
 sys.path.append("/usr/share/rhsm")
 
-from subscription_manager.certlib import CertLib, ActionLock, HealingLib, IdentityCertLib
+from subscription_manager.certlib import CertLib, ActionLock, HealingLib,\
+     ConsumerIdentity, IdentityCertLib
 from subscription_manager.repolib import RepoLib
 from subscription_manager.factlib import FactLib
 from subscription_manager.facts import Facts
