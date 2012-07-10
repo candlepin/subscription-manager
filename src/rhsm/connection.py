@@ -14,6 +14,8 @@
 # in this software or its documentation.
 #
 
+import sys
+import socket
 import locale
 import urllib
 import simplejson as json
@@ -25,6 +27,13 @@ from M2Crypto import SSL, httpslib
 from urllib import urlencode
 
 from config import initConfig
+
+# on EL5, there is a really long socket timeout. The
+# best thing we can do is set a process wide default socket timeout.
+# Limit this to affected python versions only, just to minimize any
+# problems the default timeout might cause.
+if sys.version_info[0] == 2 and sys.version_info[0] <= 4:
+    socket.setdefaulttimeout(60)
 
 
 class NullHandler(logging.Handler):
