@@ -277,6 +277,13 @@ class Certificate(object):
         gmt = gmt.replace(tzinfo=GMT())
         return self.valid_range.has_date(gmt)
 
+    def is_expired(self, on_date=None):
+        gmt = datetime.utcnow()
+        if on_date:
+            gmt = on_date
+        gmt = gmt.replace(tzinfo=GMT())
+        return self.valid_range.end() < gmt
+
     def __cmp__(self, other):
         if self.end < other.end:
             return -1
