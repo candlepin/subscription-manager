@@ -607,11 +607,13 @@ class OrganizationScreen(Screen):
         self.owner_treeview.set_property("headers-visible", False)
         self.owner_treeview.append_column(column)
 
+        self._owner_key = None
+
     def _on_get_owner_list_cb(self, owners, error=None):
         if error != None:
             handle_gui_exception(error, REGISTER_ERROR,
                     self._parent.window)
-            self._parent.finish_registration(failed=True)
+            self._parent.pre_done(CREDENTIALS_PAGE)
             return
 
         owners = [(owner['key'], owner['displayName']) for owner in owners]
