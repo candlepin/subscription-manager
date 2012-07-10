@@ -1108,16 +1108,10 @@ class ReleaseCommand(CliCommand):
 
     def _get_consumer_release(self):
         err_msg = _("Error: The 'release' command is not supported by the server.")
-        try:
-            return self.cp.getRelease(self.consumer['uuid'])['releaseVer']
-        # ie, a 404 from a old server that doesn't support the release API
-        except connection.RemoteServerException, e:
+        consumer = self.cp.getConsumer(self.consumer['uuid'])
+        if 'releaseVer' not in consumer:
             systemExit(-1, err_msg)
-        except connection.RestlibException, e:
-            if e.code == 404:
-                systemExit(-1, err_msg)
-            else:
-                raise e
+        return consumer['releaseVer']['releaseVer']
 
     def show_current_release(self):
         release = self._get_consumer_release()
