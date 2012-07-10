@@ -359,11 +359,11 @@ class Order(object):
     originated from.
     """
 
-    def __init__(self, name, number, sku, subscription, quantity,
-            virt_limit, socket_limit, contract_number,
-            quantity_used, warning_period, account_number,
-            provides_management, support_level, support_type,
-            stacking_id, virt_only):
+    def __init__(self, name=None, number=None, sku=None, subscription=None,
+            quantity=None, virt_limit=None, socket_limit=None,
+            contract_number=None, quantity_used=None, warning_period=None,
+            account_number=None, provides_management=None, support_level=None,
+            support_type=None, stacking_id=None, virt_only=None):
 
         self.name = name
         self.number = number # order number
