@@ -277,11 +277,10 @@ class CliCommand(object):
 
         proxy_user = proxy_user_arg or self.proxy_user or cfg.get('server', 'proxy_user')
 
-        proxy_password = proxy_password_arg or cfg.get('server', 'proxy_password')
+        proxy_password = proxy_password_arg or self.proxy_password or cfg.get('server', 'proxy_password')
 
         # pass in all args, to make sure we don't rely on connections
         # defautls pulled from config at class inst time
-        #FIXME: fix that in python-rhsm/connection
         cp = connection.UEPConnection(host=server_hostname,
                                       ssl_port=server_port,
                                       handler=server_prefix,
