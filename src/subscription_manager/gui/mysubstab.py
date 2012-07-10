@@ -207,29 +207,29 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         # Load the entitlement certificate for the selected row:
         serial = selection['serial']
         cert = self.entitlement_dir.find(long(serial))
-        order = cert.getOrder()
-        products = [(product.getName(), product.getHash())
-                        for product in cert.getProducts()]
+        order = cert.order
+        products = [(product.name, product.id)
+                        for product in cert.products]
 
-        if str(order.getVirtOnly()) == "1":
+        if str(order.virt_only) == "1":
             virt_only = _("Virtual")
         else:
             virt_only = _("Physical")
 
-        if str(order.getProvidesManagement()) == "1":
+        if str(order.provides_management) == "1":
             management = _("Yes")
         else:
             management = _("No")
 
-        self.sub_details.show(order.getName(),
-                              contract=order.getContract() or "",
-                              start=cert.validRange().begin(),
-                              end=cert.validRange().end(),
-                              account=order.getAccountNumber() or "",
+        self.sub_details.show(order.name,
+                              contract=order.contract_number or "",
+                              start=cert.valid_range.begin(),
+                              end=cert.valid_range.end(),
+                              account=order.account_number or "",
                               management=management,
                               virt_only=virt_only or "",
-                              support_level=order.getSupportLevel() or "",
-                              support_type=order.getSupportType() or "",
+                              support_level=order.support_level or "",
+                              support_type=order.support_type or "",
                               products=products)
 
     def on_no_selection(self):
@@ -250,19 +250,19 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         return entry
 
     def _create_entry_map(self, cert, background_color):
-        order = cert.getOrder()
-        products = cert.getProducts()
+        order = cert.order
+        products = cert.products
         installed = self._get_installed(products)
 
         # Initialize an entry list of the proper length
         entry = {}
-        entry['subscription'] = order.getName()
+        entry['subscription'] = order.name
         entry['installed_value'] = self._percentage(installed, products)
         entry['installed_text'] = '%s / %s' % (len(installed), len(products))
-        entry['start_date'] = cert.validRange().begin()
-        entry['expiration_date'] = cert.validRange().end()
-        entry['quantity'] = order.getQuantityUsed()
-        entry['serial'] = cert.serialNumber()
+        entry['start_date'] = cert.valid_range.begin()
+        entry['expiration_date'] = cert.valid_range.end()
+        entry['quantity'] = order.quantity_used
+        entry['serial'] = cert.serial
         entry['align'] = 0.5         # Center horizontally
         entry['background'] = background_color
         entry['is_group_row'] = False
@@ -271,7 +271,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def _get_background_color(self, idx, entitlement_cert=None):
         if entitlement_cert:
-            date_range = entitlement_cert.validRange()
+            date_range = entitlement_cert.valid_range
             now = datetime.now(GMT())
 
             if date_range.end() < now:
@@ -293,7 +293,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         installed_products = []
 
         for product in products:
-            installed = installed_dir.findByProduct(product.getHash())
+            installed = installed_dir.findByProduct(product.id)
 
             if installed:
                 installed_products.append(installed)

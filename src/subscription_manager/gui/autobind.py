@@ -583,7 +583,7 @@ class SelectSLAScreen(AutobindWizardScreen, widgets.GladeWidget):
         prod_str = ""
         for i, cert in enumerate(prod_certs):
             log.debug(cert)
-            prod_str = "%s%s" % (prod_str, cert.getProduct().getName())
+            prod_str = "%s%s" % (prod_str, cert.product.name)
             if i + 1 < len(prod_certs):
                 prod_str += ", "
         return prod_str

@@ -145,8 +145,8 @@ class CertSorter(object):
     def get_entitlements_for_product(self, product_hash):
         entitlements = []
         for cert in self.entitlement_dir.list():
-            for cert_product in cert.getProducts():
-                if product_hash == cert_product.getHash():
+            for cert_product in cert.products:
+                if product_hash == cert_product.id:
                     entitlements.append(cert)
         return entitlements
 
@@ -154,8 +154,8 @@ class CertSorter(object):
         """ Build the dict of all installed products. """
         prod_certs = self.product_dir.list()
         for product_cert in prod_certs:
-            product = product_cert.getProduct()
-            self.installed_products[product.getHash()] = product_cert
+            product = product_cert.products[0]
+            self.installed_products[product.id] = product_cert
 
         log.debug("Installed product IDs: %s" % self.installed_products.keys())
 
@@ -179,22 +179,22 @@ class CertSorter(object):
             # consider this a future entitlement. Technically it could be
             # partially stacked on that date, but we cannot determine that
             # without recursively cert sorting again on that date.
-            if ent_cert.validRange().begin() > self.on_date:
-                log.debug("  future entitled: %s" % ent_cert.validRange().begin())
+            if ent_cert.valid_range.begin() > self.on_date:
+                log.debug("  future entitled: %s" % ent_cert.valid_range.begin())
                 self._add_products_to_hash(ent_cert, self.future_products)
 
             # Check if entitlement has already expired:
-            elif ent_cert.validRange().end() < self.on_date:
-                log.debug("  expired: %s" % ent_cert.validRange().end())
+            elif ent_cert.valid_range.end() < self.on_date:
+                log.debug("  expired: %s" % ent_cert.valid_range.end())
                 self.expired_entitlement_certs.append(ent_cert)
                 self._add_products_to_hash(ent_cert, self.expired_products)
 
             # Current entitlements:
-            elif ent_cert.valid(on_date=self.on_date):
+            elif ent_cert.is_valid(on_date=self.on_date):
                 self.valid_entitlement_certs.append(ent_cert)
 
-                order = ent_cert.getOrder()
-                stack_id = order.getStackingId()
+                order = ent_cert.order
+                stack_id = order.stacking_id
 
                 partially_stacked = False
                 if stack_id:
@@ -255,11 +255,11 @@ class CertSorter(object):
         date_to_check = on_date or self.on_date
 
         for ent in ent_certs:
-            if ent.getOrder().getStackingId() == stack_id and \
-              ent.validRange().begin() <= date_to_check and \
-              ent.validRange().end() >= date_to_check:
-                quantity = safe_int(ent.getOrder().getQuantityUsed(), 1)
-                sockets = safe_int(ent.getOrder().getSocketLimit(), 1)
+            if ent.order.stacking_id == stack_id and \
+              ent.valid_range.begin() <= date_to_check and \
+              ent.valid_range.end() >= date_to_check:
+                quantity = safe_int(ent.order.quantity_used, 1)
+                sockets = safe_int(ent.order.socket_limit, 1)
                 sockets_covered += sockets * quantity
 
         log.debug("  system has %s sockets, %s covered by entitlements" %
@@ -276,12 +276,12 @@ class CertSorter(object):
         If the entitlement has no socket restriction, True will always be
         returned.
         """
-        if ent.getOrder().getSocketLimit() is None:
+        if ent.order.socket_limit is None:
             return True
 
         # We do not check quantity here, as this is not a stacked
         # subscription:
-        sockets_covered = safe_int(ent.getOrder().getSocketLimit(), 1)
+        sockets_covered = safe_int(ent.order.socket_limit, 1)
 
         log.debug("  system has %s sockets, %s covered by entitlement" %
                 (self.socket_count, sockets_covered))
@@ -294,8 +294,8 @@ class CertSorter(object):
         Adds any installed product IDs provided by the entitlement cert to
         the given dict. Maps product ID to entitlement certificate.
         """
-        for product in ent_cert.getProducts():
-            product_id = product.getHash()
+        for product in ent_cert.products:
+            product_id = product.id
 
             if product_id in self.installed_products:
                 if product_id not in product_dict:
@@ -355,7 +355,7 @@ class EntitlementCertStackingGroupSorter(StackingGroupSorter):
         StackingGroupSorter.__init__(self, certs)
 
     def _get_stacking_id(self, cert):
-        return cert.getOrder().getStackingId()
+        return cert.order.stacking_id
 
     def _get_product_name(self, cert):
-        return cert.getProduct().getName()
+        return cert.products[0].name

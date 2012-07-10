@@ -88,8 +88,8 @@ def warnExpired(conduit):
     entdir = EntitlementDirectory()
     products = set()
     for cert in entdir.listExpired():
-        for p in cert.getProducts():
-            m = '  - %s' % p.getName()
+        for p in cert.products:
+            m = '  - %s' % p.name
             products.add(m)
     if products:
         msg = expired_warning % '\n'.join(sorted(products))

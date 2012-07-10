@@ -27,7 +27,7 @@ from subscription_manager.managerlib import merge_pools, PoolFilter, \
 from modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
-from rhsm.certificate import EntitlementCertificate
+from rhsm.certificate2 import CertFactory
 from mock import Mock
 import xml
 
@@ -122,7 +122,7 @@ IEYRTwKBgQCXpMJ2P0bomDQMeIou2CSGCuEMcx8NuTA9x4t6xrf6Hyv7O9K7+fr1
 ufxBTlg4v0B3xS1GgvATMY4hyk53o5PffmlRO03dbfpGK/rkTIPwFg==
 -----END RSA PRIVATE KEY-----"""
 
-EXPECTED_CERT = EntitlementCertificate(EXPECTED_CERT_CONTENT)
+EXPECTED_CERT = CertFactory().create_from_pem(EXPECTED_CERT_CONTENT)
 
 
 class MergePoolsTests(unittest.TestCase):
@@ -567,7 +567,7 @@ class TestImportFileExtractor(unittest.TestCase):
         self.assertFalse(extractor.verify_valid_entitlement())
 
     def test_write_cert_only(self):
-        expected_cert_file = "%d.pem" % (EXPECTED_CERT.serialNumber())
+        expected_cert_file = "%d.pem" % (EXPECTED_CERT.serial)
         extractor = ExtractorStub(EXPECTED_CERT_CONTENT, file_path=expected_cert_file)
         extractor.write_to_disk()
 
@@ -578,15 +578,15 @@ class TestImportFileExtractor(unittest.TestCase):
         self.assertEquals(EXPECTED_CERT_CONTENT, write_one[1])
 
     def test_write_key_and_cert(self):
-        filename = "%d.pem" % (EXPECTED_CERT.serialNumber())
+        filename = "%d.pem" % (EXPECTED_CERT.serial)
         self._assert_correct_cert_and_key_files_generated_with_filename(filename)
 
     def test_file_renamed_when_imported_with_serial_no_and_custom_extension(self):
-        filename = "%d.cert" % (EXPECTED_CERT.serialNumber())
+        filename = "%d.cert" % (EXPECTED_CERT.serial)
         self._assert_correct_cert_and_key_files_generated_with_filename(filename)
 
     def test_file_renamed_when_imported_with_serial_no_and_no_extension(self):
-        filename = str(EXPECTED_CERT.serialNumber())
+        filename = str(EXPECTED_CERT.serial)
         self._assert_correct_cert_and_key_files_generated_with_filename(filename)
 
     def test_file_renamed_when_imported_with_custom_name_and_pem_extension(self):
@@ -598,7 +598,7 @@ class TestImportFileExtractor(unittest.TestCase):
         self._assert_correct_cert_and_key_files_generated_with_filename(filename)
 
     def _assert_correct_cert_and_key_files_generated_with_filename(self, filename):
-        expected_file_prefix = "%d" % (EXPECTED_CERT.serialNumber())
+        expected_file_prefix = "%d" % (EXPECTED_CERT.serial)
         expected_cert_file = expected_file_prefix + ".pem"
         expected_key_file = expected_file_prefix + "-key.pem"
 

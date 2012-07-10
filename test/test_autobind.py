@@ -13,8 +13,8 @@ class AutobindControllerBase(unittest.TestCase):
         self.stub_backend.uep.getConsumer = self._getConsumerData
 
         self.stub_product = stubs.StubProduct("rhel-6")
-        self.stub_pool = modelhelpers.create_pool(product_id=self.stub_product.getHash(),
-                                                  product_name=self.stub_product.getName())
+        self.stub_pool = modelhelpers.create_pool(product_id=self.stub_product.id,
+                                                  product_name=self.stub_product.id)
         self.stub_backend.uep.stub_pool = self.stub_pool
 
         self.stub_backend.product_dir = stubs.StubCertificateDirectory([stubs.StubProductCertificate(self.stub_product)])
@@ -136,8 +136,8 @@ class TestAutobindController(AutobindControllerBase):
 
     def test_autobind_load_provided_products(self):
         self.stub_product = stubs.StubProduct("some_random_product")
-        self.stub_pool = modelhelpers.create_pool(product_id=self.stub_product.getHash(),
-                                                  product_name=self.stub_product.getName(),
+        self.stub_pool = modelhelpers.create_pool(product_id=self.stub_product.id,
+                                                  product_name=self.stub_product.name,
                                                   provided_products=['rhel-6'])
         self.stub_backend.uep.stub_pool = self.stub_pool
 

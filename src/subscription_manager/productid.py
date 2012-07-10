@@ -23,7 +23,7 @@ import yum
 _ = gettext.gettext
 
 from gzip import GzipFile
-from rhsm.certificate import ProductCertificate
+from rhsm.certificate2 import CertFactory
 from subscription_manager.certdirectory import Directory, ProductDirectory
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -111,16 +111,16 @@ class ProductManager:
         self.updateInstalled(enabled, active)
 
     def _isWorkstation(self, product):
-        if product.getName() == "Red Hat Enterprise Linux Workstation" and \
-                "rhel-5-client-workstation" in product.getProvidedTags() and \
-                product.getVersion()[0] == '5':
+        if product.name == "Red Hat Enterprise Linux Workstation" and \
+                "rhel-5-client-workstation" in product.provided_tags and \
+                product.version[0] == '5':
             return True
         return False
 
     def _isDesktop(self, product):
-        if product.getName() == "Red Hat Enterprise Linux Desktop" and \
-                "rhel-5-client" in product.getProvidedTags() and \
-                product.getVersion()[0] == '5':
+        if product.name == "Red Hat Enterprise Linux Desktop" and \
+                "rhel-5-client" in product.provided_tags and \
+                product.version[0] == '5':
             return True
         return False
 
@@ -130,14 +130,14 @@ class ProductManager:
             if repo not in active:
                 continue
 
-            p = cert.getProduct()
-            prod_hash = p.getHash()
+            p = cert.product
+            prod_hash = p.id
 
             # Are we installing Workstation cert?
             if self._isWorkstation(p):
                 # is the Desktop product cert installed?
                 for pc in self.pdir.list():
-                    if self._isDesktop(pc.getProduct()):
+                    if self._isDesktop(pc.products[0]):
                         # Desktop product cert is installed,
                         # delete the Desktop product cert
                         pc.delete()
@@ -147,7 +147,7 @@ class ProductManager:
             # no point installing desktop only to delete it
             if self._isDesktop(p):
                 for pc in self.pdir.list():
-                    if self._isWorkstation(pc.getProduct()):
+                    if self._isWorkstation(pc.products[0]):
                         # we are installing Desktop, but we already have workstation
                         return
 
@@ -165,8 +165,8 @@ class ProductManager:
     # and we have the product cert installed.
     def updateRemoved(self, active):
         for cert in self.pdir.list():
-            p = cert.getProduct()
-            prod_hash = p.getHash()
+            p = cert.product
+            prod_hash = p.id
             repo = self.db.findRepo(prod_hash)
 
             # if we had errors with the repo or productid metadata
@@ -238,7 +238,8 @@ class ProductManager:
             f = open(fn)
         try:
             pem = f.read()
-            return ProductCertificate(pem)
+            factory = CertFactory()
+            return factory.create_from_pem(pem)
         finally:
             f.close()
 

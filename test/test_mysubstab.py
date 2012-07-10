@@ -71,17 +71,17 @@ class MySubscriptionsTabTest(unittest.TestCase):
         return column_entries
 
     def _assert_entry(self, entry):
-        self.assertEquals(self.cert1.getOrder().getName(), entry['subscription'])
-        self.assertEquals(self.cert1.validRange().begin(), entry['start_date'])
-        self.assertEquals(self.cert1.validRange().end(), entry['expiration_date'])
+        self.assertEquals(self.cert1.order.name, entry['subscription'])
+        self.assertEquals(self.cert1.valid_range.begin(), entry['start_date'])
+        self.assertEquals(self.cert1.valid_range.end(), entry['expiration_date'])
         self.assertEquals("0 / 1", entry['installed_text'])
         self.assertEquals(0, entry['installed_value'])
-        self.assertEquals(self.cert1.getOrder().getQuantityUsed(), entry['quantity'])
-        self.assertEquals(self.cert1.serialNumber(), entry['serial'])
+        self.assertEquals(self.cert1.order.quantity_used, entry['quantity'])
+        self.assertEquals(self.cert1.serial, entry['serial'])
         self.assertFalse(entry['is_group_row'])
 
     def _assert_group_entry(self, entry):
-        self.assertEquals(self.cert1.getProduct().getName(),
+        self.assertEquals(self.cert1.products[0].name,
                           entry['subscription'])
         self.assertFalse('start_date' in entry)
         self.assertFalse('expiration_date' in entry)
