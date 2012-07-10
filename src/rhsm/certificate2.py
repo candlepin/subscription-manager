@@ -85,13 +85,39 @@ class CertFactory(object):
 #        cert_class = VERSION_IMPLEMENTATIONS[version.major] \
 #                [self._get_cert_type(extensions)]
 
+    def __read_alt_name(self, x509):
+        alt_name = None
+        try:
+            name_ext = x509.get_ext('subjectAltName')
+            if name_ext:
+                alt_name = name_ext.get_value()
+        except LookupError:
+            # This may not be defined, seems to only be used for identity
+            # certificates:
+            pass
+        return alt_name
+
+    def __read_subject(self, x509):
+        subj = {}
+        subject = x509.get_subject()
+        subject.nid['UID'] = 458
+        for key, nid in subject.nid.items():
+            entry = subject.get_entries_by_nid(nid)
+            if len(entry):
+                asn1 = entry[0].get_data()
+                subj[key] = str(asn1)
+                continue
+        return subj
+
     def __create_identity_cert(self, extensions, x509, path):
-        cert = Certificate(
+        cert = IdentityCertificate(
                 x509=x509,
                 path=path,
                 serial=x509.get_serial_number(),
                 start=get_datetime_from_x509(x509.get_not_before()),
                 end=get_datetime_from_x509(x509.get_not_after()),
+                alt_name=self.__read_alt_name(x509),
+                subject=self.__read_subject(x509),
             )
         return cert
 
@@ -221,10 +247,12 @@ class Version(object):
 
 class Certificate(object):
     """ Parent class of all x509 certificate types. """
-    def __init__(self, x509=None, path=None, version=None, serial=None, start=None, end=None,
-            products=None):
+    def __init__(self, x509=None, path=None, version=None, serial=None, start=None,
+            end=None):
 
         # The X509 M2crypto object for this certificate:
+        # TODO: this shouldn't be here, makes it hard to create the object.
+        # More writing somewhere else.
         self.x509 = x509
 
         # Full file path to the certificate on disk. May be None if the cert
@@ -241,28 +269,6 @@ class Certificate(object):
         self.end = end
 
         self.valid_range = DateRange(self.start, self.end)
-
-        self._parse_subject()
-        self.alt_name = None
-        try:
-            name_ext = self.x509.get_ext('subjectAltName')
-            if name_ext:
-                self.alt_name = name_ext.get_value()
-        except LookupError:
-            # This may not be defined, seems to only be used for identity
-            # certificates:
-            pass
-
-    def _parse_subject(self):
-        self.subject = {}
-        subject = self.x509.get_subject()
-        subject.nid['UID'] = 458
-        for key, nid in subject.nid.items():
-            entry = subject.get_entries_by_nid(nid)
-            if len(entry):
-                asn1 = entry[0].get_data()
-                self.subject[key] = str(asn1)
-                continue
 
     def is_valid(self, on_date=None):
         gmt = datetime.utcnow()
@@ -293,6 +299,14 @@ class Certificate(object):
         """
         if self.path:
             os.unlink(self.path)
+
+
+class IdentityCertificate(Certificate):
+    def __init__(self, alt_name=None, subject=None, **kwargs):
+        Certificate.__init__(self, **kwargs)
+
+        self.subject = subject
+        self.alt_name = alt_name
 
 
 class ProductCertificate1(Certificate):

@@ -78,7 +78,7 @@ class IdentityCertTests(unittest.TestCase):
     def test_factory_creation(self):
         factory = CertFactory()
         id_cert = factory.create_from_pem(certdata.IDENTITY_CERT)
-        self.assertTrue(isinstance(id_cert, Certificate))
+        self.assertTrue(isinstance(id_cert, IdentityCertificate))
         self.assertEquals("DirName:/CN=redhat.local.rm-rf.ca", id_cert.alt_name)
         self.assertEquals("eaadd6ea-852d-4430-94a7-73d5887d48e8", id_cert.subject['CN'])
         self.assertFalse(hasattr(id_cert, 'products'))
