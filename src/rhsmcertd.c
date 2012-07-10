@@ -36,7 +36,26 @@
 #define DEFAULT_HEAL_INTERVAL_SECONDS 86400	/* 24 hours */
 #define BUF_MAX 256
 #define RHSM_CONFIG_FILE "/etc/rhsm/rhsm.conf"
-#define INITIAL_DELAY 10 /* seconds */
+
+#define _(STRING) gettext(STRING)
+#define N_(x) x
+
+static int initial_delay_seconds = 0;
+static int cert_interval_seconds = DEFAULT_CERT_INTERVAL_SECONDS;
+static int heal_interval_seconds = DEFAULT_HEAL_INTERVAL_SECONDS;
+
+static GOptionEntry entries[] = {
+	{"delay-startup", 'd', 0, G_OPTION_ARG_INT, &initial_delay_seconds,
+		N_("How long to delay service startup (in seconds)"),
+		NULL},
+	{"cert-check-interval", 'c', 0, G_OPTION_ARG_INT, &cert_interval_seconds,
+		N_("Interval to run cert check (in seconds)"),
+		NULL},
+	{"heal-interval", 'i', 0, G_OPTION_ARG_INT, &heal_interval_seconds,
+		N_("Interval to run healing (in seconds)"),
+		NULL},
+	{NULL}
+};
 
 typedef struct _Config {
 	int heal_interval_seconds;
@@ -228,9 +247,36 @@ get_file_configuration (GKeyFile * key_file)
 	return build_config (cert_frequency, heal_frequency);
 }
 
+bool
+depricated_args_specified(int argc, char *argv[]) {
+	if (argc == 1) {
+		// No args specified, consider new style args.
+		return false;
+	}
+	int arg_idx;
+	for (arg_idx = 1; arg_idx < argc; arg_idx++) {
+		
+		if (argv[arg_idx] != NULL && argv[arg_idx][0] == '-') {
+			return false;
+		}
+	}
+	return true;
+}
+
+Config *
+get_cli_configuration_depricated (char *argv[])
+{
+	return build_config (atoi (argv[1]), atoi (argv[2]));
+}
+
 Config *
 get_cli_configuration (char *argv[])
 {
+	log = get_log ();
+	fprintf (log, "%s: WARNING: Running with old style arguements.\n",
+		ts ());
+	fflush (log);
+	fclose (log);
 	return build_config (atoi (argv[1]), atoi (argv[2]));
 }
 
@@ -245,17 +291,41 @@ main (int argc, char *argv[])
 	Config *config;
 	// Allow command line args to override configuration file values.
 	if (argc > 1) {
-		if (argc < 3) {
-			print_usage ();
-			return EXIT_FAILURE;
-		}
-		log = get_log ();
-		fprintf (log, "%s: Loading configuration from command line\n",
-			 ts ());
-		fflush (log);
-		fclose (log);
+                log = get_log ();
+                fprintf (log, "%s: Loading configuration from command line\n",
+                         ts ());
+                fflush (log);
+                fclose (log);
+		if (depricated_args_specified(argc, argv)) {
+			if (argc < 3) {
+				print_usage ();
+				return EXIT_FAILURE;
+			}
+			log = get_log ();
+			fprintf (log, "%s: Loading configuration from command line\n",
+				 ts ());
+			fflush (log);
+			fclose (log);
+			config = get_cli_configuration_depricated (argv);
+		} else {
+			GError * error;
+			GOptionContext *option_context;
 
-		config = get_cli_configuration (argv);
+			option_context = g_option_context_new ("");
+			g_option_context_add_main_entries (option_context, entries, NULL);
+			g_option_group_new("rhsmcertd", "", "rhsmcertd", NULL, NULL);
+			g_option_context_add_group (option_context,
+				g_option_group_new("rhsmcertd", "", "rhsmcertd", NULL, NULL)); 
+
+			if (!g_option_context_parse (option_context, &argc, &argv, &error)) {
+				log = get_log ();
+				fprintf (log, "%s: Loading configuration from command line\n",
+					ts ());
+				fflush (log);
+				fclose (log);
+			}
+			config = get_cli_configuration (argv);
+		}
 	} else {
 		// Load configuration values from the configuration file.
 		log = get_log ();
@@ -316,14 +386,14 @@ main (int argc, char *argv[])
 	// we can ensure that the network interfaces are all up before the initial
 	// checks are done.
 	bool heal = true;
-	g_timeout_add (INITIAL_DELAY * 1000,
+	g_timeout_add (initial_delay_seconds * 1000,
 			(GSourceFunc) initial_cert_check,
 			(gpointer) heal);
 	g_timeout_add (heal_interval_seconds * 1000,
 		       (GSourceFunc) cert_check, (gpointer) heal);
 
 	heal = false;
-	g_timeout_add (INITIAL_DELAY * 1000,
+	g_timeout_add (initial_delay_seconds * 1000,
 			(GSourceFunc) initial_cert_check,
 			(gpointer) heal);
 	g_timeout_add (cert_interval_seconds * 1000,
