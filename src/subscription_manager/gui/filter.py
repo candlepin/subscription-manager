@@ -50,6 +50,10 @@ class FilterOptionsWindow(widgets.GladeWidget):
         self.filters = filters
         self.parent = parent
 
+        # Set all the filters to their default values before the signals are
+        # connected.  Otherwise, their callbacks will be triggered when we
+        # call set_active().
+        self.set_initial_widget_state()
         self.glade.signal_autoconnect({
             "on_filter_product_window_delete_event": self.deleted,
             "on_clear_button_clicked": self.clear_button_clicked,
@@ -66,11 +70,13 @@ class FilterOptionsWindow(widgets.GladeWidget):
         self.no_overlapping_checkbutton.set_active(False)
         self.contains_text_entry.set_text("")
 
-    def show(self):
+    def set_initial_widget_state(self):
         self.compatible_checkbutton.set_active(self.filters.show_compatible)
         self.installed_checkbutton.set_active(self.filters.show_installed)
         self.no_overlapping_checkbutton.set_active(self.filters.show_no_overlapping)
         self.contains_text_entry.set_text(self.filters.contains_text)
+
+    def show(self):
         self.filter_product_window.present()
 
     def update_filters(self, widget):
@@ -81,6 +87,7 @@ class FilterOptionsWindow(widgets.GladeWidget):
         new_filter.contains_text = self.contains_text_entry.get_text()
 
         self.parent.filters = new_filter
+        self.filters = new_filter
         log.debug("filters changed: %s" % new_filter.__dict__)
         self.parent.display_pools()
         self.parent.update_applied_filters_label()
