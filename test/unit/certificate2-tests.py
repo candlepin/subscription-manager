@@ -31,7 +31,7 @@ class ProductCert10Tests(unittest.TestCase):
 
     def test_factory_method_on_product_cert(self):
         self.assertEquals("1.0", str(self.prod_cert.version))
-        self.assertTrue(isinstance(self.prod_cert, ProductCertificate1))
+        self.assertTrue(isinstance(self.prod_cert, ProductCertificate))
         self.assertEquals(1, len(self.prod_cert.products))
         self.assertEquals('Awesome OS for x86_64 Bits',
                 self.prod_cert.products[0].name)
@@ -39,7 +39,7 @@ class ProductCert10Tests(unittest.TestCase):
     def test_factory_method_on_ent_cert(self):
         self.ent_cert = self.factory.create_from_pem(certdata.ENTITLEMENT_CERT_V1_0)
         self.assertEquals("1.0", str(self.ent_cert.version))
-        self.assertTrue(isinstance(self.ent_cert, EntitlementCertificate1))
+        self.assertTrue(isinstance(self.ent_cert, EntitlementCertificate))
         self.assertEquals(666017019617507769L, self.ent_cert.serial)
         self.assertEquals(2012, self.ent_cert.start.year)
         self.assertEquals(2013, self.ent_cert.end.year)

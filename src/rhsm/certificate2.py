@@ -123,7 +123,7 @@ class CertFactory(object):
 
     def __create_v1_prod_cert(self, version, extensions, x509, path):
         products = self.__parse_v1_products(extensions)
-        cert = ProductCertificate1(
+        cert = ProductCertificate(
                 x509=x509,
                 path=path,
                 version=version,
@@ -139,7 +139,7 @@ class CertFactory(object):
         content = self.__parse_v1_content(extensions)
         products = self.__parse_v1_products(extensions)
 
-        cert = EntitlementCertificate1(
+        cert = EntitlementCertificate(
                 x509=x509,
                 path=path,
                 version=version,
@@ -316,7 +316,7 @@ class IdentityCertificate(Certificate):
         self.alt_name = alt_name
 
 
-class ProductCertificate1(Certificate):
+class ProductCertificate(Certificate):
     def __init__(self, products=None, **kwargs):
         Certificate.__init__(self, **kwargs)
         # The products in this certificate. The first is treated as the
@@ -326,21 +326,12 @@ class ProductCertificate1(Certificate):
         self.products = products
 
 
-class EntitlementCertificate1(ProductCertificate1):
+class EntitlementCertificate(ProductCertificate):
 
     def __init__(self, order=None, content=None, **kwargs):
-        ProductCertificate1.__init__(self, **kwargs)
+        ProductCertificate.__init__(self, **kwargs)
         self.order = order
         self.content = content
-
-
-# TODO: delete these if they're not needed:
-class ProductCertificate2(Certificate):
-    pass
-
-
-class EntitlementCertificate2(Certificate):
-    pass
 
 
 class Product(object):
@@ -439,18 +430,4 @@ class Content(object):
 
 class CertificateException(Exception):
     pass
-
-# Maps a major cert version to the class implementations to use for
-# each certificate type:
-# TODO: may not be needed if we can go to just one set of classes
-VERSION_IMPLEMENTATIONS = {
-    1: {
-        ENTITLEMENT_CERT: EntitlementCertificate1,
-        PRODUCT_CERT: ProductCertificate1,
-    },
-    2: {
-        ENTITLEMENT_CERT: EntitlementCertificate2,
-        PRODUCT_CERT: ProductCertificate2,
-    },
-}
 
