@@ -28,11 +28,11 @@ from urllib import urlencode
 
 from config import initConfig
 
-# on EL5, there is no/a really long socket timeout. The
+# on EL5, there is a really long socket timeout. The
 # best thing we can do is set a process wide default socket timeout.
-# limit this to affected python versions only, just to minimize any
+# Limit this to affected python versions only, just to minimize any
 # problems the default timeout might cause.
-if sys.version_info.major == 2 and sys.version_info.minor <= 4:
+if sys.version_info[0] == 2 and sys.version_info[0] <= 4:
     socket.setdefaulttimeout(60)
 
 
