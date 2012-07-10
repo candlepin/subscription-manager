@@ -56,7 +56,11 @@ class CertFactory(object):
         Create appropriate certificate object from a PEM string.
         """
         # Load the X509 extensions so we can determine what we're dealing with:
-        x509 = X509.load_cert_string(pem)
+        try:
+            x509 = X509.load_cert_string(pem)
+        except X509.X509Error, e:
+            raise CertificateException(e)
+
         extensions = Extensions(x509)
         redhat_oid = OID(REDHAT_OID_NAMESPACE)
         # Trim down to only the extensions in the Red Hat namespace:

@@ -29,6 +29,10 @@ class ProductCert10Tests(unittest.TestCase):
         self.ent_cert = self.factory.create_from_pem(
                 certdata.ENTITLEMENT_CERT_V1_0)
 
+    def test_no_contents_throws_exception(self):
+        self.assertRaises(CertificateException, self.factory.create_from_pem,
+                "")
+
     def test_factory_method_on_product_cert(self):
         self.assertEquals("1.0", str(self.prod_cert.version))
         self.assertTrue(isinstance(self.prod_cert, ProductCertificate))
