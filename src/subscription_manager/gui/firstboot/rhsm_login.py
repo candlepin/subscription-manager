@@ -11,17 +11,121 @@ sys.path.append("/usr/share/rhsm")
 from subscription_manager.gui import managergui
 from subscription_manager import managerlib
 from subscription_manager.gui import registergui
-from subscription_manager.gui import autobind
 from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.facts import Facts
-from subscription_manager.gui.manually_subscribe import get_screen
 from subscription_manager.gui.firstboot_base import RhsmFirstbootModule
 
 from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.utils import remove_scheme
+from subscription_manager.gui.autobind import \
+        ServiceLevelNotSupportedException, NoProductsException, \
+        AllProductsCoveredException
 
 sys.path.append("/usr/share/rhn")
 from up2date_client import config
+
+
+MANUALLY_SUBSCRIBE_PAGE = 8
+
+
+class SelectSLAScreen(registergui.SelectSLAScreen):
+    """
+    override the default SelectSLAScreen to jump to the manual subscribe page.
+    """
+    def _on_get_service_levels_cb(self, result, error=None):
+        if error != None:
+            if isinstance(error, ServiceLevelNotSupportedException):
+                message = _("Unable to auto-subscribe, server does not support "
+                            "service levels. Please run 'Subscription Manager' "
+                            "to manually subscribe.")
+                self._parent.manual_message = message
+                self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
+            elif isinstance(error, NoProductsException):
+                message = _("No installed products on system. No need to "
+                            "update certificates at this time.")
+                self._parent.manual_message = message
+                self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
+            elif isinstance(error, AllProductsCoveredException):
+                message = _("All installed products are covered by valid "
+                            "entitlements. Please run 'Subscription Manager' "
+                            "to subscribe to additional products.")
+                self._parent.manual_message = message
+                self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
+            else:
+                handle_gui_exception(error, _("Error subscribing"),
+                                     self._parent.window)
+                self._parent.finish_registration(failed=True)
+            return
+
+        (current_sla, unentitled_products, sla_data_map) = result
+
+        self._parent.current_sla = current_sla
+        if len(sla_data_map) == 1:
+            # If system already had a service level, we can hit this point
+            # when we cannot fix any unentitled products:
+            if current_sla is not None and \
+                    not self._can_add_more_subs(current_sla, sla_data_map):
+                message = _("Unable to subscribe to any additional products at "
+                            "current service level: %s") % current_sla
+                self._parent.manual_message = message
+                self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
+                return
+
+            self._dry_run_result = sla_data_map.values()[0]
+            self._parent.pre_done(registergui.CONFIRM_SUBS_PAGE)
+        elif len(sla_data_map) > 1:
+            self._sla_data_map = sla_data_map
+            self.set_model(unentitled_products, sla_data_map)
+            self._parent.pre_done(registergui.DONT_CHANGE)
+        else:
+            message = _("No service levels will cover all installed products. "
+                "Please run 'Subscription Manager' to manually "
+                "entitle this system.")
+            self._parent.manual_message = message
+            self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
+
+
+class PerformRegisterScreen(registergui.PerformRegisterScreen):
+
+    def _on_registration_finished_cb(self, new_account, error=None):
+        try:
+            if error != None:
+                raise error
+
+            managerlib.persist_consumer_cert(new_account)
+            self._parent.consumer.reload()
+            if self._parent.skip_auto_bind:
+                message = _("You have opted to skip auto-subscribe.")
+                self._parent.manual_message = message
+                self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
+            else:
+                self._parent.pre_done(registergui.SELECT_SLA_PAGE)
+
+        except Exception, e:
+            handle_gui_exception(e, registergui.REGISTER_ERROR,
+                    self._parent.window)
+            self._parent.finish_registration(failed=True)
+
+
+class ManuallySubscribeScreen(registergui.Screen):
+
+    def __init__(self, parent, backend):
+        widget_names = [
+                'title',
+        ]
+        super(ManuallySubscribeScreen, self).__init__(
+                "manually_subscribe.glade", widget_names, parent, backend)
+
+        self.button_label = _("Finish")
+
+    def apply(self):
+        return registergui.FINISH
+
+    def pre(self):
+        if self._parent.manual_message:
+            self.title.set_label(self._parent.manual_message)
+        # XXX set message here.
+        return False
 
 
 class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
@@ -37,21 +141,31 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
                 _("Subscription Registration"),
                 200.1, 109.10)
 
-        self.pages = {
-                "rhsm_manually_subscribe": _("Manual Configuraton Required"),
-                "rhsm_select_sla": _("Service Level"),
-                "rhsm_confirm_subs": _("Confirm Subscriptions"),
-                }
-
         backend = managergui.Backend()
 
         registergui.RegisterScreen.__init__(self, backend,
                 managergui.Consumer(), Facts())
 
+        #insert our new screens
+        screen = SelectSLAScreen(self, backend)
+        screen.index = self._screens[registergui.SELECT_SLA_PAGE].index
+        self._screens[registergui.SELECT_SLA_PAGE] = screen
+        self.register_notebook.remove_page(screen.index)
+        self.register_notebook.insert_page(screen.container,
+                                           position=screen.index)
+
+        screen = PerformRegisterScreen(self, backend)
+        self._screens[registergui.PERFORM_REGISTER_PAGE] = screen
+
+        screen = ManuallySubscribeScreen(self, backend)
+        self._screens.append(screen)
+        screen.index = self.register_notebook.append_page(screen.container)
+
+        self.manual_message = None
+
         self._skip_apply_for_page_jump = False
         self._cached_credentials = None
         self._registration_finished = False
-        self._offline = False
 
     def _read_rhn_proxy_settings(self):
         # Read and store rhn-setup's proxy settings, as they have been set
@@ -123,16 +237,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
 
         if valid_registration:
             self._cached_credentials = self._get_credentials_hash()
-        if self._offline:
-            return self._RESULT_JUMP
         return self._RESULT_FAILURE
-
-    def _offline_selected(self):
-        """
-        Override parent method to jump past all remaining RHSM screens.
-        """
-        self._skip_remaining_screens(self.interface)
-        self._offline = True
 
     def close_window(self):
         """
@@ -145,13 +250,6 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         """
         Overriden from RegisterScreen - we don't care about consumer update
         signals.
-        """
-        pass
-
-    def registrationTokenScreen(self):
-        """
-        Overridden from RegisterScreen - ignore any requests to show the
-        registration screen on this particular page.
         """
         pass
 
@@ -231,80 +329,44 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         widget = self.glade.get_widget(widget_name)
         return widget.get_text()
 
+    def _set_register_label(self, screen):
+        """
+        Overridden from registergui to disable changing the firstboot button
+        labels.
+        """
+        pass
+
     def finish_registration(self, failed=False):
         registergui.RegisterScreen.finish_registration(self, failed=failed)
         if not failed:
             self._registration_finished = True
-
-            self._init_sla()
+            self._skip_remaining_screens(self.interface)
         # if something did fail, we will have shown the user an error message
         # from the superclass _finish_registration. then just leave them on the
         # rhsm_login page so they can try again (or go back and select to skip
         # registration).
 
-    def _move_to_manual_install(self, title):
-        # TODO Change the message on the screen.
-        get_screen().set_title(title)
-        self.moveToPage("rhsm_manually_subscribe")
-
-    def _init_sla(self):
-        if self.skip_auto_subscribe():
-            return self._move_to_manual_install(_("You have opted to skip auto-subscribe."))
-
-        # sla autosubscribe time. load up the possible slas, to decide if
-        # we need to display the selection screen, or go to the confirm
-        # screen.
-        # XXX this should really be done async.
-
-        controller = autobind.init_controller(self.backend, self.consumer,
-                Facts())
-
-        # XXX see autobind.AutobindWizard load() and _show_initial_screen
-        # for matching error handling.
-        try:
-            controller.load()
-        except autobind.ServiceLevelNotSupportedException:
-            message = _("Unable to auto-subscribe, server does not support service levels. Please run 'Subscription Manager' to manually subscribe.")
-            return self._move_to_manual_install(message)
-
-        except autobind.NoProductsException:
-            message = _("No installed products on system. No need to update certificates at this time.")
-            return self._move_to_manual_install(message)
-
-        except autobind.AllProductsCoveredException:
-            message = _("All installed products are covered by valid entitlements. Please run 'Subscription Manager' to subscribe to additional products.")
-            return self._move_to_manual_install(message)
-
-        except socket.error, e:
-            handle_gui_exception(e, None, self.registerWin)
-            return
-
-        if len(controller.suitable_slas) > 1:
-            self.moveToPage("rhsm_select_sla")
-        elif len(controller.suitable_slas) == 1:
-            if controller.current_sla and \
-                    not controller.can_add_more_subs():
-                message = _("Unable to subscribe to any additional products at current service level: %s") % controller.current_sla
-                return self._move_to_manual_install(message)
-
-            self.moveToPage("rhsm_confirm_subs")
-        else:
-            message = _("No service levels will cover all installed products. "
-                "Please run 'Subscription Manager' to manually "
-                "entitle this system.")
-            return self._move_to_manual_install(message)
-
-    def moveToPage(self, page):
+    def _skip_remaining_screens(self, interface):
         """
-        el5 compat method for jumping pages
+        Find the first non-rhsm module after the rhsm modules, and move to it.
+
+        Assumes that there is only _one_ rhsm screen
         """
         if self._is_compat:
-            # we must be on el5.
+            # el5 is easy, we can just pretend the next button was clicked,
+            # and tell our own logic not to run for the button press.
             self._skip_apply_for_page_jump = True
-            self.parent.setPage(page)
             self.parent.nextClicked()
         else:
-            self.interface.moveToPage(moduleTitle=self.pages[page])
+            # for newer firstboots, we have to iterate over all firstboot
+            # modules, to find our location in the list. then we can just jump
+            # to the next one after us.
+            i = 0
+            while not interface.moduleList[i].__module__.startswith('rhsm_'):
+                i += 1
+
+            i += 1
+            interface.moveToPage(pageNum=i)
 
 # for el5
 childWindow = moduleClass

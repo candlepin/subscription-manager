@@ -28,13 +28,17 @@ from subscription_manager import managerlib
 import rhsm.config as config
 from subscription_manager.branding import get_branding
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
+from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.utils import parse_server_info, ServerUrlParseError,\
         is_valid_server_info, MissingCaCertException
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui import widgets
 
 from subscription_manager.gui.utils import handle_gui_exception, errorWindow
-
+from subscription_manager.gui.autobind import DryRunResult, \
+        ServiceLevelNotSupportedException, AllProductsCoveredException, \
+        NoProductsException
+from subscription_manager.gui.messageWindow import InfoDialog, OkDialog
 
 import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
@@ -55,7 +59,10 @@ CREDENTIALS_PAGE = 1
 OWNER_SELECT_PAGE = 2
 ENVIRONMENT_SELECT_PAGE = 3
 PERFORM_REGISTER_PAGE = 4
-FINISH = 5
+SELECT_SLA_PAGE = 5
+CONFIRM_SUBS_PAGE = 6
+PERFORM_SUBSCRIBE_PAGE = 7
+FINISH = 100
 
 REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
     "\n%s\n" + \
@@ -67,7 +74,7 @@ class RegisterScreen(widgets.GladeWidget):
       Registration Widget Screen
     """
 
-    def __init__(self, backend, consumer, facts=None, callbacks=None):
+    def __init__(self, backend, consumer, facts=None, callbacks=[]):
         """
         Callbacks will be executed when registration status changes.
         """
@@ -99,13 +106,15 @@ class RegisterScreen(widgets.GladeWidget):
         self.window = self.register_dialog
         screen_classes = [ChooseServerScreen, CredentialsScreen,
                           OrganizationScreen, EnvironmentScreen,
-                          PerformRegisterScreen]
+                          PerformRegisterScreen, SelectSLAScreen,
+                          ConfirmSubscriptionsScreen, PerformSubscribeScreen]
         self._screens = []
         for screen_class in screen_classes:
             screen = screen_class(self, self.backend)
             self._screens.append(screen)
             if screen.needs_gui:
-                self.register_notebook.append_page(screen.container)
+                screen.index = self.register_notebook.append_page(
+                        screen.container)
 
         self._current_screen = CHOOSE_SERVER_PAGE
 
@@ -114,6 +123,9 @@ class RegisterScreen(widgets.GladeWidget):
         self.consumername = None
         self.owner_key = None
         self.environment = None
+        self.current_sla = None
+        self.dry_run_result = None
+        self.skip_auto_bind = False
 
         # XXX needed by firstboot
         self.password = None
@@ -126,7 +138,7 @@ class RegisterScreen(widgets.GladeWidget):
         self._set_navigation_sensitive(True)
         self._clear_registration_widgets()
         self.timer = gobject.timeout_add(100, self._timeout_callback)
-        self.register_dialog.present()
+        self.register_dialog.show()
 
     def _set_navigation_sensitive(self, sensitive):
         self.cancel_button.set_sensitive(sensitive)
@@ -136,11 +148,14 @@ class RegisterScreen(widgets.GladeWidget):
         if screen > PROGRESS_PAGE:
             self._current_screen = screen
             if self._screens[screen].needs_gui:
-                button_label = self._screens[screen].button_label
-                self.register_button.set_label(button_label)
-                self.register_notebook.set_page(screen + 1)
+                self._set_register_label(screen)
+                self.register_notebook.set_page(self._screens[screen].index)
         else:
             self.register_notebook.set_page(screen + 1)
+
+    def _set_register_label(self, screen):
+        button_label = self._screens[screen].button_label
+        self.register_button.set_label(button_label)
 
     def _delete_event(self, event, data=None):
         return self.close_window()
@@ -164,7 +179,7 @@ class RegisterScreen(widgets.GladeWidget):
         self._screens[self._current_screen].post()
 
         self._run_pre(result)
-        return True
+        return False
 
     def _run_pre(self, screen):
         # XXX move this into the button handling somehow?
@@ -199,14 +214,11 @@ class RegisterScreen(widgets.GladeWidget):
 
     def emit_consumer_signal(self):
         for method in self.callbacks:
-            method(skip_auto_bind=self.skip_auto_subscribe())
+            method()
 
     def close_window(self):
         self.register_dialog.hide()
         return True
-
-    def skip_auto_subscribe(self):
-        return self._screens[CREDENTIALS_PAGE].skip_auto_bind.get_active()
 
     def set_parent_window(self, window):
         self.register_dialog.set_transient_for(window)
@@ -218,12 +230,23 @@ class RegisterScreen(widgets.GladeWidget):
         for screen in self._screens:
             screen.clear()
 
-    def pre_done(self, display_screen):
+    def pre_done(self, next_screen):
         self._set_navigation_sensitive(True)
-        if display_screen:
+        if next_screen == DONT_CHANGE:
             self._set_screen(self._current_screen)
         else:
-            self._run_pre(self._current_screen + 1)
+            self._screens[self._current_screen].post()
+            self._run_pre(next_screen)
+
+
+class AutobindWizard(RegisterScreen):
+
+    def __init__(self, backend, consumer, facts):
+        super(AutobindWizard, self).__init__(backend, consumer, facts)
+
+    def show(self):
+        super(AutobindWizard, self).show()
+        self._run_pre(SELECT_SLA_PAGE)
 
 
 class Screen(widgets.GladeWidget):
@@ -235,6 +258,7 @@ class Screen(widgets.GladeWidget):
         self.pre_message = ""
         self.button_label = _("Register")
         self.needs_gui = True
+        self.index = -1
         self._parent = parent
         self._backend = backend
 
@@ -251,14 +275,32 @@ class Screen(widgets.GladeWidget):
         pass
 
 
-class PerformRegisterScreen(object):
+class NoGuiScreen(object):
 
     def __init__(self, parent, backend):
         self._parent = parent
         self._backend = backend
-        self.pre_message = _("Registering your system")
         self.button_label = None
         self.needs_gui = False
+
+    def pre(self):
+        return True
+
+    def apply(self):
+        pass
+
+    def post(self):
+        pass
+
+    def clear(self):
+        pass
+
+
+class PerformRegisterScreen(NoGuiScreen):
+
+    def __init__(self, parent, backend):
+        super(PerformRegisterScreen, self).__init__(parent, backend)
+        self.pre_message = _("Registering your system")
 
     def _on_registration_finished_cb(self, new_account, error=None):
         try:
@@ -267,7 +309,10 @@ class PerformRegisterScreen(object):
 
             managerlib.persist_consumer_cert(new_account)
             self._parent.consumer.reload()
-            self._parent.pre_done(False)
+            if self._parent.skip_auto_bind:
+                self._parent.pre_done(FINISH)
+            else:
+                self._parent.pre_done(SELECT_SLA_PAGE)
 
         except Exception, e:
             handle_gui_exception(e, REGISTER_ERROR, self._parent.window)
@@ -285,14 +330,206 @@ class PerformRegisterScreen(object):
 
         return True
 
+
+class PerformSubscribeScreen(NoGuiScreen):
+
+    def __init__(self, parent, backend):
+        super(PerformSubscribeScreen, self).__init__(parent, backend)
+        self.pre_message = _("Subscribing to entitlements")
+
+    def _on_subscribing_finished_cb(self, unused, error=None):
+        try:
+            if error != None:
+                raise error
+            self._parent.pre_done(FINISH)
+
+        except Exception, e:
+            handle_gui_exception(e, _("Error subscribing: %s"),
+                                 self._parent.window)
+            self._parent.finish_registration(failed=True)
+
+    def pre(self):
+        self._parent.async.subscribe(self._parent.consumer.getConsumerId(),
+                                     self._parent.current_sla,
+                                     self._parent.dry_run_result,
+                                     self._on_subscribing_finished_cb)
+
+        return True
+
+
+class ConfirmSubscriptionsScreen(Screen):
+
+    """ Confirm Subscriptions GUI Window """
+    def __init__(self, parent, backend):
+        widget_names = [
+                'subs_treeview',
+                'back_button',
+                'sla_label',
+        ]
+        super(ConfirmSubscriptionsScreen, self).__init__("confirmsubs.glade",
+                                                         widget_names, parent,
+                                                         backend)
+        self.button_label = _("Subscribe")
+
+        self.store = gtk.ListStore(str)
+        # For now just going to set up one product name column, we will need
+        # to display more information though.
+        self.subs_treeview.set_model(self.store)
+        column = gtk.TreeViewColumn(_("Subscription"))
+        self.subs_treeview.append_column(column)
+        # create a CellRendererText to render the data
+        self.cell = gtk.CellRendererText()
+        column.pack_start(self.cell, True)
+        column.add_attribute(self.cell, 'text', 0)
+        column.set_sort_column_id(0)
+        self.subs_treeview.set_search_column(0)
+
     def apply(self):
-        return FINISH
+        return PERFORM_SUBSCRIBE_PAGE
+
+    def set_model(self):
+        self._dry_run_result = self._parent.dry_run_result
+
+        # Make sure that the store is cleared each time
+        # the data is loaded into the screen.
+        self.store.clear()
+        log.info("Using service level: %s" % self._dry_run_result.service_level)
+        self.sla_label.set_markup("<b>" + self._dry_run_result.service_level + \
+                "</b>")
+
+        for pool_quantity in self._dry_run_result.json:
+            self.store.append([pool_quantity['pool']['productName']])
+
+    def pre(self):
+        self.set_model()
+        return False
+
+
+class SelectSLAScreen(Screen):
+    """
+    An wizard screen that displays the available
+    SLAs that are provided by the installed products.
+    """
+
+    def __init__(self, parent, backend):
+        widget_names = [
+                'product_list_label',
+                'sla_radio_container',
+                'owner_treeview',
+        ]
+        super(SelectSLAScreen, self).__init__("selectsla.glade",
+                                              widget_names, parent, backend)
+
+        self.pre_message = _("Finding suitable service levels")
+        self.button_label = _("Next")
+
+        self._dry_run_result = None
+
+    def set_model(self, unentitled_prod_certs, sla_data_map):
+        self.product_list_label.set_text(
+                self._format_prods(unentitled_prod_certs))
+        group = None
+        # reverse iterate the list as that will most likely put 'None' last.
+        # then pack_start so we don't end up with radio buttons at the bottom
+        # of the screen.
+        for sla in reversed(sla_data_map.keys()):
+            radio = gtk.RadioButton(group=group, label=sla)
+            radio.connect("toggled", self._radio_clicked, sla)
+            self.sla_radio_container.pack_start(radio, expand=False, fill=False)
+            radio.show()
+            group = radio
+
+        # set the initial radio button as default selection.
+        group.set_active(True)
+
+    def apply(self):
+        return CONFIRM_SUBS_PAGE
 
     def post(self):
-        pass
+        self._parent.dry_run_result = self._dry_run_result
 
     def clear(self):
-        pass
+        child_widgets = self.sla_radio_container.get_children()
+        for child in child_widgets:
+            self.sla_radio_container.remove(child)
+
+    def _radio_clicked(self, button, service_level):
+        if button.get_active():
+            self._dry_run_result = self._sla_data_map[service_level]
+
+    def _format_prods(self, prod_certs):
+        prod_str = ""
+        for i, cert in enumerate(prod_certs):
+            log.debug(cert)
+            prod_str = "%s%s" % (prod_str, cert.getProduct().getName())
+            if i + 1 < len(prod_certs):
+                prod_str += ", "
+        return prod_str
+
+    def _on_get_service_levels_cb(self, result, error=None):
+        if error != None:
+            if isinstance(error, ServiceLevelNotSupportedException):
+                OkDialog(_("Unable to auto-subscribe, server does not support service levels."),
+                        parent=self._parent.window)
+            elif isinstance(error, NoProductsException):
+                InfoDialog(_("No installed products on system. No need to update certificates at this time."),
+                           parent=self._parent.window)
+            elif isinstance(error, AllProductsCoveredException):
+                InfoDialog(_("All installed products are covered by valid entitlements. No need to update certificates at this time."),
+                           parent=self._parent.window)
+            else:
+                handle_gui_exception(error, _("Error subscribing"),
+                                     self._parent.window)
+            self._parent.finish_registration(failed=True)
+            return
+
+        (current_sla, unentitled_products, sla_data_map) = result
+
+        self._parent.current_sla = current_sla
+        if len(sla_data_map) == 1:
+            # If system already had a service level, we can hit this point
+            # when we cannot fix any unentitled products:
+            if current_sla is not None and \
+                    not self._can_add_more_subs(current_sla, sla_data_map):
+                handle_gui_exception(None,
+                                     _("Unable to subscribe to any additional "
+                                     "products at current service level: %s. "
+                                     "Please use the \"All Available "
+                                     "Subscriptions\" tab to manually "
+                                     "entitle this system.") % current_sla,
+                                    self._parent.window)
+                self._parent.finish_registration(failed=True)
+                return
+
+            self._dry_run_result = sla_data_map.values()[0]
+            self._parent.pre_done(CONFIRM_SUBS_PAGE)
+        elif len(sla_data_map) > 1:
+            self._sla_data_map = sla_data_map
+            self.set_model(unentitled_products, sla_data_map)
+            self._parent.pre_done(DONT_CHANGE)
+        else:
+            log.info("No suitable service levels found.")
+            handle_gui_exception(_("No service levels will cover all installed "
+                                 "products. Please use the \"All Available "
+                                 "Subscriptions\" tab to manually entitle "
+                                 "this system."), parent=self.parent_window)
+            self._parent.finish_registration(failed=True)
+
+    def pre(self):
+        self._parent.async.find_service_levels(self._parent.consumer,
+                                               self._parent.facts,
+                                               self._on_get_service_levels_cb)
+        return True
+
+    def _can_add_more_subs(self, current_sla, sla_data_map):
+        """
+        Check if a system that already has a selected sla can get more
+        entitlements at their sla level
+        """
+        if current_sla is not None:
+            result = sla_data_map[current_sla]
+            return len(result.json) > 0
+        return False
 
 
 class EnvironmentScreen(Screen):
@@ -318,16 +555,17 @@ class EnvironmentScreen(Screen):
             return
 
         if not environments:
-            self._parent.pre_done(False)
+            self._environment = None
+            self._parent.pre_done(PERFORM_REGISTER_PAGE)
             return
 
         envs = [(env['id'], env['name']) for env in environments]
         if len(envs) == 1:
             self._environment = envs[0][0]
-            self._parent.pre_done(False)
+            self._parent.pre_done(PERFORM_REGISTER_PAGE)
         else:
             self.set_model(envs)
-            self._parent.pre_done(True)
+            self._parent.pre_done(DONT_CHANGE)
 
     def pre(self):
         self._parent.async.get_environment_list(self._parent.owner_key,
@@ -369,11 +607,13 @@ class OrganizationScreen(Screen):
         self.owner_treeview.set_property("headers-visible", False)
         self.owner_treeview.append_column(column)
 
+        self._owner_key = None
+
     def _on_get_owner_list_cb(self, owners, error=None):
         if error != None:
             handle_gui_exception(error, REGISTER_ERROR,
                     self._parent.window)
-            self._parent.finish_registration(failed=True)
+            self._parent.pre_done(CREDENTIALS_PAGE)
             return
 
         owners = [(owner['key'], owner['displayName']) for owner in owners]
@@ -388,10 +628,10 @@ class OrganizationScreen(Screen):
 
         if len(owners) == 1:
             self._owner_key = owners[0][0]
-            self._parent.pre_done(False)
+            self._parent.pre_done(ENVIRONMENT_SELECT_PAGE)
         else:
             self.set_model(owners)
-            self._parent.pre_done(True)
+            self._parent.pre_done(DONT_CHANGE)
 
     def pre(self):
         self._parent.async.get_owner_list(self._parent.username,
@@ -468,6 +708,7 @@ class CredentialsScreen(Screen):
         self._username = self.account_login.get_text().strip()
         self._password = self.account_password.get_text().strip()
         self._consumername = self.consumer_name.get_text()
+        self._skip_auto_bind = self.skip_auto_bind.get_active()
 
         if not self._validate_consumername(self._consumername):
             return DONT_CHANGE
@@ -481,6 +722,7 @@ class CredentialsScreen(Screen):
         self._parent.username = self._username
         self._parent.password = self._password
         self._parent.consumername = self._consumername
+        self._parent.skip_auto_bind = self._skip_auto_bind
 
         self._backend.create_admin_uep(username=self._username,
                                       password=self._password)
@@ -591,8 +833,8 @@ class AsyncBackend(object):
             retval = None
             # If environments aren't supported, don't bother trying to list:
             if self.backend.admin_uep.supports_resource('environments'):
-                log.info("Server supports environments, checking for environment to "
-                        "register to.")
+                log.info("Server supports environments, checking for "
+                         "environment to register to.")
                 retval = []
                 for env in self.backend.admin_uep.getEnvironmentList(owner_key):
                     # We need to ignore the "locker" environment, you can't
@@ -619,33 +861,100 @@ class AsyncBackend(object):
                     facts=facts.get_facts(), owner=owner, environment=env,
                     installed_products=installed_mgr.format_for_server())
 
-            # Facts and installed products went out with the registration request,
-            # manually write caches to disk:
+            # Facts and installed products went out with the registration
+            # request, manually write caches to disk:
             facts.write_cache()
             installed_mgr.write_cache()
 
-            ProfileManager().update_check(self.backend.admin_uep, retval['uuid'])
+            ProfileManager().update_check(self.backend.admin_uep,
+                                          retval['uuid'])
             self.queue.put((callback, retval, None))
         except Exception, e:
             self.queue.put((callback, None, e))
 
-    def _bind_by_products(self, uuid, callback):
+    def _subscribe(self, uuid, current_sla, dry_run_result, callback):
         """
-        method run in the worker thread.
+        Subscribe to the selected pools.
         """
         try:
-            retval = self.backend.uep.bind(uuid)
-            self.queue.put((callback, retval, None))
-        except Exception, e:
-            self.queue.put((callback, None, e))
+            if not current_sla:
+                log.info("Saving selected service level for this system.")
+                self.backend.uep.updateConsumer(uuid,
+                        service_level=dry_run_result.service_level)
 
-    def _fetch_certificates(self, callback):
-        """
-        method run in the worker thread.
-        """
-        try:
+            log.info("Binding to subscriptions at service level: %s" %
+                    dry_run_result.service_level)
+            for pool_quantity in dry_run_result.json:
+                pool_id = pool_quantity['pool']['id']
+                quantity = pool_quantity['quantity']
+                log.info("  pool %s quantity %s" % (pool_id, quantity))
+                self.backend.uep.bindByEntitlementPool(uuid, pool_id, quantity)
             managerlib.fetch_certificates(self.backend)
-            self.queue.put((callback, None, None))
+        except Exception, e:
+            # Going to try to update certificates just in case we errored out
+            # mid-way through a bunch of binds:
+            try:
+                managerlib.fetch_certificates(self.backend)
+            except Exception, cert_update_ex:
+                log.info("Error updating certificates after error:")
+                log.exception(cert_update_ex)
+            self.queue.put((callback, None, e))
+            return
+        self.queue.put((callback, None, None))
+
+    def _find_suitable_service_levels(self, consumer, facts):
+        consumer_json = self.backend.uep.getConsumer(
+                consumer.getConsumerId())
+
+        if 'serviceLevel' not in consumer_json:
+            raise ServiceLevelNotSupportedException()
+
+        owner_key = consumer_json['owner']['key']
+
+        # This is often "", set to None in that case:
+        current_sla = consumer_json['serviceLevel'] or None
+
+        # Using the current date time, we may need to expand this to work
+        # with arbitrary dates for future entitling someday:
+        sorter = CertSorter(self.backend.product_dir,
+                self.backend.entitlement_dir,
+                facts.get_facts())
+
+        if len(sorter.installed_products) == 0:
+            raise NoProductsException()
+
+        if len(sorter.unentitled_products) == 0:
+            raise AllProductsCoveredException()
+
+        if current_sla:
+            available_slas = [current_sla]
+            log.debug("Using system's current service level: %s" %
+                    current_sla)
+        else:
+            available_slas = self.backend.uep.getServiceLevelList(owner_key)
+            log.debug("Available service levels: %s" % available_slas)
+
+        # Will map service level (string) to the results of the dry-run
+        # autobind results for each SLA that covers all installed products:
+        suitable_slas = {}
+        for sla in available_slas:
+            dry_run_json = self.backend.uep.dryRunBind(consumer.uuid, sla)
+            dry_run = DryRunResult(sla, dry_run_json, sorter)
+
+            # If we have a current SLA for this system, we do not need
+            # all products to be covered by the SLA to proceed through
+            # this wizard:
+            if current_sla or dry_run.covers_required_products():
+                suitable_slas[sla] = dry_run
+        return (current_sla, sorter.unentitled_products.values(), suitable_slas)
+
+    def _find_service_levels(self, consumer, facts, callback):
+        """
+        method run in the worker thread.
+        """
+        try:
+            suitable_slas = self._find_suitable_service_levels(consumer, facts)
+            self.queue.put((callback, suitable_slas, None))
         except Exception, e:
             self.queue.put((callback, None, e))
 
@@ -682,12 +991,12 @@ class AsyncBackend(object):
         threading.Thread(target=self._register_consumer,
                 args=(name, facts, owner, env, callback)).start()
 
-    def bind_by_products(self, uuid, callback):
+    def subscribe(self, uuid, current_sla, dry_run_result, callback):
         gobject.idle_add(self._watch_thread)
-        threading.Thread(target=self._bind_by_products,
-                args=(uuid, callback)).start()
+        threading.Thread(target=self._subscribe,
+                args=(uuid, current_sla, dry_run_result, callback)).start()
 
-    def fetch_certificates(self, callback):
+    def find_service_levels(self, consumer, facts, callback):
         gobject.idle_add(self._watch_thread)
-        threading.Thread(target=self._fetch_certificates,
-                args=(callback,)).start()
+        threading.Thread(target=self._find_service_levels,
+                args=(consumer, facts, callback)).start()
