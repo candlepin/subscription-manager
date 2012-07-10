@@ -36,6 +36,7 @@
 #define DEFAULT_HEAL_INTERVAL_SECONDS 86400	/* 24 hours */
 #define BUF_MAX 256
 #define RHSM_CONFIG_FILE "/etc/rhsm/rhsm.conf"
+#define INITIAL_DELAY 10 /* seconds */
 
 typedef struct _Config {
 	int heal_interval_seconds;
@@ -147,6 +148,14 @@ cert_check (gboolean heal)
 	fclose (log);
 	//returning FALSE will unregister the timer, always return TRUE
 	return TRUE;
+}
+
+static gboolean
+initial_cert_check(gboolean heal) {
+	cert_check(heal);
+	// Return false so that the timer does
+	// not run this again.
+	return false;
 }
 
 int
@@ -302,15 +311,21 @@ main (int argc, char *argv[])
 	// note that we call the function directly first, before assigning a timer
 	// to it. Otherwise, it would only get executed when the timer went off, and
 	// not at startup.
-
+	//
+	// NOTE: We put the initial checks on a timer so that in the case of systemd,
+	// we can ensure that the network interfaces are all up before the initial
+	// checks are done.
 	bool heal = true;
-	cert_check (heal);
+	g_timeout_add (INITIAL_DELAY * 1000,
+			(GSourceFunc) initial_cert_check,
+			(gpointer) heal);
 	g_timeout_add (heal_interval_seconds * 1000,
 		       (GSourceFunc) cert_check, (gpointer) heal);
 
 	heal = false;
-	cert_check (heal);
-
+	g_timeout_add (INITIAL_DELAY * 1000,
+			(GSourceFunc) initial_cert_check,
+			(gpointer) heal);
 	g_timeout_add (cert_interval_seconds * 1000,
 		       (GSourceFunc) cert_check, (gpointer) heal);
 
