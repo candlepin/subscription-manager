@@ -73,6 +73,17 @@ class ProductCert10Tests(unittest.TestCase):
     # TODO: test exception when cert major version is newer than we can handle
 
 
+class IdentityCertTests(unittest.TestCase):
+
+    def test_factory_creation(self):
+        factory = CertFactory()
+        id_cert = factory.create_from_pem(certdata.IDENTITY_CERT)
+        self.assertTrue(isinstance(id_cert, Certificate))
+        self.assertEquals("DirName:/CN=redhat.local.rm-rf.ca", id_cert.alt_name)
+        self.assertEquals("eaadd6ea-852d-4430-94a7-73d5887d48e8", id_cert.subject['CN'])
+        self.assertFalse(hasattr(id_cert, 'products'))
+
+
 class ContentTests(unittest.TestCase):
 
     def test_enabled(self):
@@ -86,3 +97,5 @@ class ContentTests(unittest.TestCase):
         self.assertFalse(c.enabled)
         self.assertRaises(CertificateException, Content, name="mycontent",
                 label="mycontent", enabled="5")
+
+

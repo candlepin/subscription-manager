@@ -30,6 +30,7 @@ EXT_CERT_VERSION = "6"
 # Constants representing the type of certificates:
 PRODUCT_CERT = 1
 ENTITLEMENT_CERT = 2
+IDENTITY_CERT = 3
 
 class CertFactory(object):
     """
@@ -75,16 +76,29 @@ class CertFactory(object):
 
         cert_type = self._get_cert_type(extensions)
 
-        if cert_type == ENTITLEMENT_CERT:
+        if cert_type == IDENTITY_CERT:
+            return self.__create_identity_cert(extensions, x509, path)
+        elif cert_type == ENTITLEMENT_CERT:
             return self.__create_v1_ent_cert(version, extensions, x509, path)
         elif cert_type == PRODUCT_CERT:
             return self.__create_v1_prod_cert(version, extensions, x509, path)
 #        cert_class = VERSION_IMPLEMENTATIONS[version.major] \
 #                [self._get_cert_type(extensions)]
 
+    def __create_identity_cert(self, extensions, x509, path):
+        cert = Certificate(
+                x509=x509,
+                path=path,
+                serial=x509.get_serial_number(),
+                start=get_datetime_from_x509(x509.get_not_before()),
+                end=get_datetime_from_x509(x509.get_not_after()),
+            )
+        return cert
+
     def __create_v1_prod_cert(self, version, extensions, x509, path):
         products = self.__parse_v1_products(extensions)
         cert = ProductCertificate1(
+                x509=x509,
                 path=path,
                 version=version,
                 serial=x509.get_serial_number(),
@@ -100,6 +114,7 @@ class CertFactory(object):
         products = self.__parse_v1_products(extensions)
 
         cert = EntitlementCertificate1(
+                x509=x509,
                 path=path,
                 version=version,
                 serial=x509.get_serial_number(),
@@ -174,8 +189,10 @@ class CertFactory(object):
         return content
 
     def _get_cert_type(self, extensions):
+        if len(extensions) == 0:
+            return IDENTITY_CERT
         # Assume if there is an order name, it must be an entitlement cert:
-        if EXT_ORDER_NAME in extensions:
+        elif EXT_ORDER_NAME in extensions:
             return ENTITLEMENT_CERT
         else:
             return PRODUCT_CERT
@@ -203,9 +220,12 @@ class Version(object):
 
 
 class Certificate(object):
-    """ Parent class of all certificate types. """
-    def __init__(self, path=None, version=None, serial=None, start=None, end=None,
+    """ Parent class of all x509 certificate types. """
+    def __init__(self, x509=None, path=None, version=None, serial=None, start=None, end=None,
             products=None):
+
+        # The X509 M2crypto object for this certificate:
+        self.x509 = x509
 
         # Full file path to the certificate on disk. May be None if the cert
         # hasn't yet been written to disk.
@@ -222,9 +242,27 @@ class Certificate(object):
 
         self.valid_range = DateRange(self.start, self.end)
 
-        # The products in this certificate. The first is treated as the
-        # primary or "marketing" product.
-        self.products = products
+        self._parse_subject()
+        self.alt_name = None
+        try:
+            name_ext = self.x509.get_ext('subjectAltName')
+            if name_ext:
+                self.alt_name = name_ext.get_value()
+        except LookupError:
+            # This may not be defined, seems to only be used for identity
+            # certificates:
+            pass
+
+    def _parse_subject(self):
+        self.subject = {}
+        subject = self.x509.get_subject()
+        subject.nid['UID'] = 458
+        for key, nid in subject.nid.items():
+            entry = subject.get_entries_by_nid(nid)
+            if len(entry):
+                asn1 = entry[0].get_data()
+                self.subject[key] = str(asn1)
+                continue
 
     def is_valid(self, on_date=None):
         gmt = datetime.utcnow()
@@ -258,13 +296,17 @@ class Certificate(object):
 
 
 class ProductCertificate1(Certificate):
-    pass
+    def __init__(self, products=None, **kwargs):
+        Certificate.__init__(self, **kwargs)
+        # The products in this certificate. The first is treated as the
+        # primary or "marketing" product.
+        self.products = products
 
 
-class EntitlementCertificate1(Certificate):
+class EntitlementCertificate1(ProductCertificate1):
 
     def __init__(self, order=None, content=None, **kwargs):
-        Certificate.__init__(self, **kwargs)
+        ProductCertificate1.__init__(self, **kwargs)
         self.order = order
         self.content = content
 
