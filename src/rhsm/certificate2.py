@@ -13,6 +13,8 @@
 # in this software or its documentation.
 #
 
+import os
+
 from datetime import datetime
 
 from M2Crypto import X509
