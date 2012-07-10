@@ -257,7 +257,7 @@ class Certificate(object):
 
         # Full file path to the certificate on disk. May be None if the cert
         # hasn't yet been written to disk.
-        self.path = None
+        self.path = path
 
         # Version of the certificate sent by Candlepin:
         self.version = version
@@ -314,6 +314,8 @@ class ProductCertificate1(Certificate):
         Certificate.__init__(self, **kwargs)
         # The products in this certificate. The first is treated as the
         # primary or "marketing" product.
+        if products is None:
+            products = []
         self.products = products
 
 
