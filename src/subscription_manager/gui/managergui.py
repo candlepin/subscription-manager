@@ -47,7 +47,6 @@ from subscription_manager.gui.mysubstab import MySubscriptionsTab
 from subscription_manager.gui.allsubs import AllSubscriptionsTab
 from subscription_manager.gui.importsub import ImportSubDialog
 from subscription_manager.gui.utils import handle_gui_exception, linkify
-from subscription_manager.gui.autobind import AutobindWizard
 from subscription_manager.gui.preferences import PreferencesDialog
 from subscription_manager.gui.about import AboutDialog
 
@@ -289,25 +288,9 @@ class MainWindow(widgets.GladeWidget):
     def _on_sla_cancel_button_press(self):
         self._perform_unregister()
 
-    def registration_changed(self, skip_auto_bind):
+    def registration_changed(self):
         log.debug("Registration changed, updating main window.")
         self.consumer.reload()
-        # If we are now registered, load the Autobind wizard.
-
-        if self.registered() and not skip_auto_bind:
-            try:
-                autobind_wizard = AutobindWizard(self.backend, self.consumer, self.facts,
-                        self._get_window(), self._on_sla_back_button_press,
-                        self._on_sla_cancel_button_press)
-                autobind_wizard.show()
-            except Exception, e:
-                # If an exception occurs here, refresh the UI so that
-                # it remains in the correct state an then raise the
-                # exception again.
-                self.refresh()
-                raise e
-            return
-
         self.refresh()
 
     def refresh(self):
@@ -420,13 +403,10 @@ class MainWindow(widgets.GladeWidget):
         self.import_sub_dialog.show()
 
     def _update_certificates_button_clicked(self, widget):
-        # Catch exceptions in the autobind wizard initialization (only)
-        try:
-            autobind_wizard = AutobindWizard(self.backend, self.consumer, self.facts,
-                    self._get_window())
-            autobind_wizard.show()
-        except Exception, e:
-            handle_gui_exception(e, _("Error in autobind wizard"), self._get_window())
+        autobind_wizard = registergui.AutobindWizard(self.backend,
+                                                     self.consumer, self.facts)
+        autobind_wizard.set_parent_window(self._get_window())
+        autobind_wizard.show()
 
     def _redeem_item_clicked(self, widget):
         self.redeem_dialog.set_parent_window(self._get_window())

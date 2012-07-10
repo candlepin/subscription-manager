@@ -22,7 +22,7 @@ _screen = None
 
 class ManuallySubscribeScreen(GladeWidget):
     def __init__(self):
-        widget_names = ['content_container', 'title']
+        widget_names = ['container', 'title']
         GladeWidget.__init__(self, "manually_subscribe.glade", widget_names)
 
     def set_title(self, title):
