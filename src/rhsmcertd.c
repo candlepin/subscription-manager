@@ -40,6 +40,9 @@
 #define _(STRING) gettext(STRING)
 #define N_(x) x
 
+// XXX set this to false and let the option parsing take over when
+// it is working properly
+static bool show_debug = true;
 static int initial_delay_seconds = 0;
 static int cert_interval_seconds = DEFAULT_CERT_INTERVAL_SECONDS;
 static int heal_interval_seconds = DEFAULT_HEAL_INTERVAL_SECONDS;
@@ -54,6 +57,8 @@ static GOptionEntry entries[] = {
 	{"heal-interval", 'i', 0, G_OPTION_ARG_INT, &heal_interval_seconds,
 		N_("Interval to run healing (in seconds)"),
 		NULL},
+	{"debug", '\0', 0, G_OPTION_ARG_NONE, &show_debug,
+	 N_("Show debug messages"), NULL},
 	{NULL}
 };
 
@@ -62,28 +67,14 @@ typedef struct _Config {
 	int cert_interval_seconds;
 } Config;
 
-//TODO: we should be using glib's logging facilities
-static FILE *log = NULL;
-
 void
 print_usage ()
 {
 	printf ("usage: rhsmcertd <certinterval> <healinterval>\n");
 }
 
-FILE *
-get_log ()
-{
-	FILE *log = fopen (LOGFILE, "at");
-	if (log == NULL) {
-		printf ("Could not open %s, exiting\n", LOGFILE);
-		exit (EXIT_FAILURE);
-	}
-	return log;
-}
-
-char *
-ts ()
+const char *
+timestamp ()
 {
 	time_t tm = time (0);
 	char *ts = asctime (localtime (&tm));
@@ -97,6 +88,36 @@ ts ()
 	return ts;
 }
 
+/*
+ * log function. If we can't open the log, attempt to log to stdout
+ * rather than fail. opening the log each time is OK since we log so rarely.
+ */
+void r_log (const char *level, const char *message, ...)
+{
+	bool use_stdout;
+	va_list argp;
+	FILE *log_file = fopen (LOGFILE, "a");
+	if (!log_file) {
+		// redirect message to stdout
+		log_file = stdout;
+		use_stdout = true;
+	}
+	va_start (argp, message);
+
+	fprintf (log_file, "%s [%s] ", timestamp(), level);
+	vfprintf (log_file, message, argp);
+	putc ('\n', log_file);
+
+	if (!use_stdout) {
+		fclose (log_file);
+	}
+}
+
+#define info(msg, ...) r_log ("INFO", msg, ##__VA_ARGS__)
+#define warn(msg, ...) r_log ("WARN", msg, ##__VA_ARGS__)
+#define error(msg, ...) r_log ("ERROR", msg, ##__VA_ARGS__)
+#define debug(msg, ...) if (show_debug) r_log ("DEBUG", msg, ##__VA_ARGS__)
+
 void
 log_update (int delay)
 {
@@ -109,9 +130,8 @@ log_update (int delay)
 
 	FILE *updatefile = fopen (UPDATEFILE, "w");
 	if (updatefile == NULL) {
-		fprintf (log, "%s: error opening %s to write timestamp: %s\n",
-			 ts (), UPDATEFILE, strerror (errno));
-		fflush (log);
+		warn ("unable to open %s to write timestamp: %s",
+		     UPDATEFILE, strerror (errno));
 	} else {
 		fprintf (updatefile, "%s", buf);
 		fclose (updatefile);
@@ -139,9 +159,7 @@ cert_check (gboolean heal)
 
 	int pid = fork ();
 	if (pid < 0) {
-		log = get_log ();
-		fprintf (log, "%s: fork failed\n", ts ());
-		fflush (log);
+		error ("fork failed");
 		exit (EXIT_FAILURE);
 	}
 	if (pid == 0) {
@@ -154,17 +172,12 @@ cert_check (gboolean heal)
 	}
 	waitpid (pid, &status, 0);
 	status = WEXITSTATUS (status);
-	log = get_log ();
 	if (status == 0) {
-		fprintf (log, "%s: certificates updated\n", ts ());
-		fflush (log);
+		info ("certificates updated");
 	} else {
-		fprintf (log,
-			 "%s: update failed (%d), retry will occur on next run\n",
-			 ts (), status);
-		fflush (log);
+		warn ("update failed (%d), retry will occur on next run",
+		     status);
 	}
-	fclose (log);
 	//returning FALSE will unregister the timer, always return TRUE
 	return TRUE;
 }
@@ -186,20 +199,17 @@ to_secs (int minutes)
 void
 check_defaults_required (Config * config)
 {
-	log = get_log ();
 	if (config->cert_interval_seconds < 1) {
-		fprintf (log, "%s: Defaulting cert interval to: %i second(s)\n",
-			 ts (), DEFAULT_CERT_INTERVAL_SECONDS);
+		debug ("Defaulting cert interval to: %i second(s)",
+		     DEFAULT_CERT_INTERVAL_SECONDS);
 		config->cert_interval_seconds = DEFAULT_CERT_INTERVAL_SECONDS;
 	}
 
 	if (config->heal_interval_seconds < 1) {
-		fprintf (log, "%s: Defaulting heal interval to: %i second(s)\n",
-			 ts (), DEFAULT_HEAL_INTERVAL_SECONDS);
+		debug ("Defaulting heal interval to: %i second(s)",
+		     DEFAULT_HEAL_INTERVAL_SECONDS);
 		config->heal_interval_seconds = DEFAULT_HEAL_INTERVAL_SECONDS;
 	}
-	fflush (log);
-	fclose (log);
 }
 
 Config *
@@ -272,11 +282,7 @@ get_cli_configuration_depricated (char *argv[])
 Config *
 get_cli_configuration (char *argv[])
 {
-	log = get_log ();
-	fprintf (log, "%s: WARNING: Running with old style arguements.\n",
-		ts ());
-	fflush (log);
-	fclose (log);
+	warn ("Running with old style arguements.");
 	return build_config (atoi (argv[1]), atoi (argv[2]));
 }
 
@@ -285,27 +291,17 @@ main (int argc, char *argv[])
 {
 	//we open and immediately close the log on startup, in order to check that
 	//it's accessible before we daemonize
-	log = get_log ();
-	fclose (log);
 
 	Config *config;
 	// Allow command line args to override configuration file values.
 	if (argc > 1) {
-                log = get_log ();
-                fprintf (log, "%s: Loading configuration from command line\n",
-                         ts ());
-                fflush (log);
-                fclose (log);
+                debug ("Loading configuration from command line");
 		if (depricated_args_specified(argc, argv)) {
 			if (argc < 3) {
 				print_usage ();
 				return EXIT_FAILURE;
 			}
-			log = get_log ();
-			fprintf (log, "%s: Loading configuration from command line\n",
-				 ts ());
-			fflush (log);
-			fclose (log);
+			debug ("Loading configuration from command line");
 			config = get_cli_configuration_depricated (argv);
 		} else {
 			GError * error;
@@ -318,31 +314,19 @@ main (int argc, char *argv[])
 				g_option_group_new("rhsmcertd", "", "rhsmcertd", NULL, NULL)); 
 
 			if (!g_option_context_parse (option_context, &argc, &argv, &error)) {
-				log = get_log ();
-				fprintf (log, "%s: Loading configuration from command line\n",
-					ts ());
-				fflush (log);
-				fclose (log);
+				debug ("Loading configuration from command line");
 			}
 			config = get_cli_configuration (argv);
 		}
 	} else {
 		// Load configuration values from the configuration file.
-		log = get_log ();
-		fprintf (log, "%s: Loading configuration from: %s\n", ts (),
-			 RHSM_CONFIG_FILE);
+		debug ("Loading configuration from: %s", RHSM_CONFIG_FILE);
 		GKeyFile *key_file = g_key_file_new ();
 		if (!g_key_file_load_from_file
 		    (key_file, RHSM_CONFIG_FILE, G_KEY_FILE_NONE, NULL)) {
-			fprintf (log,
-				 "%s: ERROR: Unable to load configuration file.",
-				 ts ());
-			fflush (log);
-			fclose (log);
+			error ("unable to load configuration file, exiting.");
 			return EXIT_FAILURE;
 		}
-		fflush (log);
-		fclose (log);
 		config = get_file_configuration (key_file);
 		g_key_file_free (key_file);
 	}
@@ -353,30 +337,16 @@ main (int argc, char *argv[])
 	int heal_interval_seconds = config->heal_interval_seconds;
 	free (config);
 
-	log = get_log ();
-	fprintf (log, "%s: Cert Frequency: %d seconds\n", ts (),
-		 cert_interval_seconds);
-	fprintf (log, "%s: Heal Frequency: %d seconds\n", ts (),
-		 heal_interval_seconds);
-	fflush (log);
-	fclose (log);
-
 	daemon (0, 0);
-	log = get_log ();
 	if (get_lock () != 0) {
-		fprintf (log, "%s: unable to get lock, exiting\n", ts ());
-		fflush (log);
-		fclose (log);	//need to close FD before we return out of main()
+		error ("unable to get lock, exiting");
 		return EXIT_FAILURE;
 	}
-	fclose (log);
 
-	log = get_log ();
-	fprintf (log, "%s: healing check started: interval = %i minute(s)\n",
-		 ts (), heal_interval_seconds / 60);
-	fprintf (log, "%s: cert check started: interval = %i minute(s)\n",
-		 ts (), cert_interval_seconds / 60);
-	fflush (log);
+	info ("healing check started: interval = %i minute(s)",
+	     heal_interval_seconds / 60);
+	info ("cert check started: interval = %i minute(s)",
+	     cert_interval_seconds / 60);
 
 	// note that we call the function directly first, before assigning a timer
 	// to it. Otherwise, it would only get executed when the timer went off, and
