@@ -30,7 +30,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 # Hardcoded value for the version of certificates this version of the client
 # prefers:
-ENTITLEMENT_VERSION = "2.0"
+CERT_VERSION = "2.0"
 
 
 class Facts(CacheManager):
@@ -98,7 +98,7 @@ class Facts(CacheManager):
             facts.update(self._load_hw_facts())
 
             # Set the preferred entitlement certificate version:
-            facts.update({"system.entitlement_version": ENTITLEMENT_VERSION})
+            facts.update({"system.certificate_version": CERT_VERSION})
 
             facts.update(self._load_custom_facts())
             facts.update(self._get_validity_facts(facts))
