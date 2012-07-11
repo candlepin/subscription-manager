@@ -20,7 +20,7 @@ import certdata
 from rhsm.certificate2 import *
 
 
-class ProductCert10Tests(unittest.TestCase):
+class V1CertTests(unittest.TestCase):
 
     def setUp(self):
         self.factory = CertFactory()
@@ -41,10 +41,8 @@ class ProductCert10Tests(unittest.TestCase):
                 self.prod_cert.products[0].name)
 
     def test_factory_method_on_ent_cert(self):
-        self.ent_cert = self.factory.create_from_pem(certdata.ENTITLEMENT_CERT_V1_0)
         self.assertEquals("1.0", str(self.ent_cert.version))
         self.assertTrue(isinstance(self.ent_cert, EntitlementCertificate))
-        self.assertEquals(666017019617507769L, self.ent_cert.serial)
         self.assertEquals(2012, self.ent_cert.start.year)
         self.assertEquals(2013, self.ent_cert.end.year)
         self.assertEquals("Awesome OS for x86_64", self.ent_cert.order.name)
@@ -77,6 +75,58 @@ class ProductCert10Tests(unittest.TestCase):
     # TODO: test exception when cert major version is newer than we can handle
 
 
+class V2CertTests(unittest.TestCase):
+
+    def setUp(self):
+        self.factory = CertFactory()
+        self.ent_cert = self.factory.create_from_pem(
+                certdata.ENTITLEMENT_CERT_V2_0)
+
+    def test_factory_method_on_ent_cert(self):
+        self.assertEquals("2.0", str(self.ent_cert.version))
+        self.assertTrue(isinstance(self.ent_cert, EntitlementCertificate))
+        self.assertEquals(2012, self.ent_cert.start.year)
+        self.assertEquals(2013, self.ent_cert.end.year)
+
+        self.assertEquals("Awesome OS for x86_64", self.ent_cert.order.name)
+
+        self.assertEquals(1, len(self.ent_cert.products))
+        self.assertEquals('Awesome OS for x86_64 Bits',
+                self.ent_cert.products[0].name)
+
+    def test_is_valid(self):
+        self.assertTrue(self.ent_cert.is_valid(on_date=datetime(2012, 12, 1)))
+        self.assertFalse(self.ent_cert.is_valid(on_date=datetime(2014, 12, 1)))
+
+    def _find_content_by_label(self, content, label):
+        """ Just pulls out content from a list if label matches. """
+        for c in content:
+            if c.label == label:
+                return c
+
+    def test_order(self):
+        self.assertEquals(2, self.ent_cert.order.quantity_used)
+        self.assertEquals("1", self.ent_cert.order.stacking_id)
+        self.assertEquals("awesomeos-x86_64", self.ent_cert.order.sku)
+
+    def test_content_enabled(self):
+        self.assertEquals(4, len(self.ent_cert.content))
+        content = self._find_content_by_label(self.ent_cert.content,
+                "always-enabled-content")
+        self.assertEquals("always-enabled-content", content.name)
+        self.assertEquals(True, content.enabled)
+        self.assertEquals(200, content.metadata_expire)
+        self.assertEquals("/foo/path/always/$releasever", content.url)
+        self.assertEquals("/foo/path/always/gpg", content.gpg)
+
+    def test_content_disabled(self):
+        self.assertEquals(4, len(self.ent_cert.content))
+        content = self._find_content_by_label(self.ent_cert.content,
+                "never-enabled-content")
+        self.assertEquals("never-enabled-content", content.name)
+        self.assertEquals(False, content.enabled)
+
+
 class IdentityCertTests(unittest.TestCase):
 
     def test_factory_creation(self):
@@ -101,5 +151,4 @@ class ContentTests(unittest.TestCase):
         self.assertFalse(c.enabled)
         self.assertRaises(CertificateException, Content, name="mycontent",
                 label="mycontent", enabled="5")
-
 
