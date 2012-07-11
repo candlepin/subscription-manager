@@ -26,6 +26,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <errno.h>
+#include <libintl.h>
+#include <locale.h>
 
 #define LOGFILE "/var/log/rhsm/rhsmcertd.log"
 #define LOCKFILE "/var/lock/subsys/rhsmcertd"
@@ -40,24 +42,26 @@
 #define _(STRING) gettext(STRING)
 #define N_(x) x
 
-// XXX set this to false and let the option parsing take over when
-// it is working properly
-static bool show_debug = true;
-static int initial_delay_seconds = 0;
-static int cert_interval_seconds = DEFAULT_CERT_INTERVAL_SECONDS;
-static int heal_interval_seconds = DEFAULT_HEAL_INTERVAL_SECONDS;
+static gboolean show_debug = FALSE;
+static gboolean run_now = FALSE;
+static gint initial_delay_seconds = 60;	// One minute delay
+static gint arg_cert_interval_seconds = -1;
+static gint arg_heal_interval_seconds = -1;
 
 static GOptionEntry entries[] = {
-	{"delay-startup", 'd', 0, G_OPTION_ARG_INT, &initial_delay_seconds,
-		N_("How long to delay service startup (in seconds)"),
-		NULL},
-	{"cert-check-interval", 'c', 0, G_OPTION_ARG_INT, &cert_interval_seconds,
-		N_("Interval to run cert check (in seconds)"),
-		NULL},
-	{"heal-interval", 'i', 0, G_OPTION_ARG_INT, &heal_interval_seconds,
-		N_("Interval to run healing (in seconds)"),
-		NULL},
-	{"debug", '\0', 0, G_OPTION_ARG_NONE, &show_debug,
+	{"wait", 'w', 0, G_OPTION_ARG_INT, &initial_delay_seconds,
+	 N_("How long to delay service startup (in seconds)"),
+	 "SECONDS"},
+	{"cert-interval", 'c', 0, G_OPTION_ARG_INT, &arg_cert_interval_seconds,
+	 N_("Interval to run cert check (in seconds)"),
+	 "SECONDS"},
+	{"heal-interval", 'i', 0, G_OPTION_ARG_INT, &arg_heal_interval_seconds,
+	 N_("Interval to run healing (in seconds)"),
+	 "SECONDS"},
+	{"now", 'n', 0, G_OPTION_ARG_NONE, &run_now,
+	 N_("Run the initial checks immediatly, with no delay."),
+	 NULL},
+	{"debug", 'd', 0, G_OPTION_ARG_NONE, &show_debug,
 	 N_("Show debug messages"), NULL},
 	{NULL}
 };
@@ -66,12 +70,6 @@ typedef struct _Config {
 	int heal_interval_seconds;
 	int cert_interval_seconds;
 } Config;
-
-void
-print_usage ()
-{
-	printf ("usage: rhsmcertd <certinterval> <healinterval>\n");
-}
 
 const char *
 timestamp ()
@@ -95,9 +93,10 @@ timestamp ()
  * prototype included here so we can use the printf format checking.
  */
 void r_log (const char *level, const char *message, ...)
-	__attribute__((format(printf, 2, 3)));
+	__attribute__ ((format (printf, 2, 3)));
 
-void r_log (const char *level, const char *message, ...)
+void
+r_log (const char *level, const char *message, ...)
 {
 	bool use_stdout;
 	va_list argp;
@@ -109,7 +108,7 @@ void r_log (const char *level, const char *message, ...)
 	}
 	va_start (argp, message);
 
-	fprintf (log_file, "%s [%s] ", timestamp(), level);
+	fprintf (log_file, "%s [%s] ", timestamp (), level);
 	vfprintf (log_file, message, argp);
 	putc ('\n', log_file);
 
@@ -136,7 +135,7 @@ log_update (int delay)
 	FILE *updatefile = fopen (UPDATEFILE, "w");
 	if (updatefile == NULL) {
 		warn ("unable to open %s to write timestamp: %s",
-		     UPDATEFILE, strerror (errno));
+		      UPDATEFILE, strerror (errno));
 	} else {
 		fprintf (updatefile, "%s", buf);
 		fclose (updatefile);
@@ -177,55 +176,29 @@ cert_check (gboolean heal)
 	}
 	waitpid (pid, &status, 0);
 	status = WEXITSTATUS (status);
+
+	char *action = "Cert Check";
+	if (heal) {
+		action = "Healing";
+	}
+
 	if (status == 0) {
-		info ("certificates updated");
+		info ("(%s) Certificates updated.", action);
 	} else {
-		warn ("update failed (%d), retry will occur on next run",
-		     status);
+		warn ("(%s) Update failed (%d), retry will occur on next run.",
+		      action, status);
 	}
 	//returning FALSE will unregister the timer, always return TRUE
 	return TRUE;
 }
 
 static gboolean
-initial_cert_check(gboolean heal) {
-	cert_check(heal);
+initial_cert_check (gboolean heal)
+{
+	cert_check (heal);
 	// Return false so that the timer does
 	// not run this again.
 	return false;
-}
-
-int
-to_secs (int minutes)
-{
-	return minutes * 60;
-}
-
-void
-check_defaults_required (Config * config)
-{
-	if (config->cert_interval_seconds < 1) {
-		debug ("Defaulting cert interval to: %i second(s)",
-		     DEFAULT_CERT_INTERVAL_SECONDS);
-		config->cert_interval_seconds = DEFAULT_CERT_INTERVAL_SECONDS;
-	}
-
-	if (config->heal_interval_seconds < 1) {
-		debug ("Defaulting heal interval to: %i second(s)",
-		     DEFAULT_HEAL_INTERVAL_SECONDS);
-		config->heal_interval_seconds = DEFAULT_HEAL_INTERVAL_SECONDS;
-	}
-}
-
-Config *
-build_config (int cert_frequency, int heal_frequency)
-{
-	Config *config;
-	config = (Config *) malloc (sizeof (config));
-	config->cert_interval_seconds = to_secs (cert_frequency);
-	config->heal_interval_seconds = to_secs (heal_frequency);
-	check_defaults_required (config);
-	return config;
 }
 
 // FIXME Remove when glib is updated to >= 2.31.0 (see comment below).
@@ -251,90 +224,164 @@ get_int_from_config_file (GKeyFile * key_file, const char *group,
 	return value;
 }
 
-Config *
-get_file_configuration (GKeyFile * key_file)
+GOptionContext *
+get_option_context ()
+{
+	GOptionContext *option_context;
+	option_context = g_option_context_new ("");
+	g_option_context_set_ignore_unknown_options (option_context, true);
+	g_option_context_add_main_entries (option_context, entries, NULL);
+	g_option_group_new ("rhsmcertd", "", "rhsmcertd", NULL, NULL);
+	g_option_context_add_group (option_context,
+				    g_option_group_new ("rhsmcertd", "",
+							"rhsmcertd", NULL,
+							NULL));
+	return option_context;
+}
+
+void print_argument_error (const char *message, ...);
+
+void
+print_argument_error (const char *message, ...)
+{
+	va_list argp;
+	
+	va_start (argp, message);
+	vprintf(message, argp);
+	printf(N_("For more information run: rhsmcertd --help\n"));
+}
+
+void
+key_file_init_config (Config * config, GKeyFile * key_file)
 {
 	// g_key_file_get_integer defaults to 0 if not found.
 	int cert_frequency = get_int_from_config_file (key_file, "rhsmcertd",
 						       "certFrequency");
+	if (cert_frequency > 0) {
+		config->cert_interval_seconds = cert_frequency * 60;
+	}
+
 	int heal_frequency = get_int_from_config_file (key_file, "rhsmcertd",
 						       "healFrequency");
-	return build_config (cert_frequency, heal_frequency);
+	if (heal_frequency > 0) {
+		config->heal_interval_seconds = heal_frequency * 60;
+	}
+}
+
+void
+depricated_arg_init_config (Config * config, int argc, char *argv[])
+{
+	if (argc != 3) {
+		error ("Wrong number of arguments specified.");
+		print_argument_error(N_("Wrong number of arguments specified.\n"));
+		free (config);
+		exit (EXIT_FAILURE);
+	}
+
+	config->cert_interval_seconds = atoi (argv[1]);
+	config->heal_interval_seconds = atoi (argv[2]);
 }
 
 bool
-depricated_args_specified(int argc, char *argv[]) {
-	if (argc == 1) {
-		// No args specified, consider new style args.
-		return false;
+opt_parse_init_config (Config * config)
+{
+	// Load the values from the options into the config
+	if (arg_cert_interval_seconds != -1) {
+		config->cert_interval_seconds = arg_cert_interval_seconds;
 	}
-	int arg_idx;
-	for (arg_idx = 1; arg_idx < argc; arg_idx++) {
-		
-		if (argv[arg_idx] != NULL && argv[arg_idx][0] == '-') {
-			return false;
+
+	if (arg_heal_interval_seconds != -1) {
+		config->heal_interval_seconds = arg_heal_interval_seconds;
+	}
+	// Let the caller know if opt parser found arg values
+	// for the intervals.
+	return arg_cert_interval_seconds != -1
+		|| arg_heal_interval_seconds != -1;
+}
+
+Config *
+get_config (int argc, char *argv[])
+{
+	Config *config;
+	config = (Config *) malloc (sizeof (config));
+
+	// Set the default values
+	config->cert_interval_seconds = DEFAULT_CERT_INTERVAL_SECONDS;
+	config->heal_interval_seconds = DEFAULT_HEAL_INTERVAL_SECONDS;
+
+	// Load configuration values from the configuration file
+	// which, if defined, will overwrite the current defaults.
+	debug ("Loading configuration from: %s", RHSM_CONFIG_FILE);
+	GKeyFile *key_file = g_key_file_new ();
+	if (!g_key_file_load_from_file
+	    (key_file, RHSM_CONFIG_FILE, G_KEY_FILE_NONE, NULL)) {
+		warn ("Unable to read configuration file values, ignoring.");
+	} else {
+		key_file_init_config (config, key_file);
+	}
+	g_key_file_free (key_file);
+
+	// Set any values provided from the options parser.
+	bool options_provided = opt_parse_init_config (config);
+
+	// If there are any args that were ignored by opt_parse, we assume
+	// that old school args were used.
+	if (argc > 1) {
+		if (options_provided) {
+			// New style args were used, assume error.
+			// We do not support both at once, other than
+			// debug and wait.
+			print_argument_error (N_("Invalid argument specified.\n"));
+			exit (EXIT_FAILURE);
+		} else {
+			// Old style args are being used.
+			warn ("Depricated CLI arguments are being used.");
+			printf (N_
+				("WARN: Depricated CLI arguments are being used."));
+			depricated_arg_init_config (config, argc, argv);
 		}
 	}
-	return true;
+
+	return config;
 }
 
-Config *
-get_cli_configuration_depricated (char *argv[])
+void
+parse_cli_args (int *argc, char *argv[])
 {
-	return build_config (atoi (argv[1]), atoi (argv[2]));
-}
+	GError *error = NULL;
+	GOptionContext *option_context = get_option_context ();
+	if (!g_option_context_parse (option_context, argc, &argv, &error)) {
+		error ("Invalid option: %s", error->message);
+		print_argument_error (N_("Invalid option: %s\n"), error->message);
+		g_option_context_free (option_context);
+		exit (EXIT_FAILURE);
+	}
 
-Config *
-get_cli_configuration (char *argv[])
-{
-	warn ("Running with old style arguements.");
-	return build_config (atoi (argv[1]), atoi (argv[2]));
+	g_option_context_free (option_context);
+
+	// Since we are ignoring unknown args to support
+	// old style arguments, we need to ensure that
+	// there are no opt style args tagging along.
+	int i;
+	for (i = 1; i < *argc; i++) {
+		if (argv[i][0] == '-') {
+			error ("Invalid argument specified: %s\n", argv[i]);
+			print_argument_error (N_("Invalid argument specified: %s\n"),
+				argv[i]);
+			exit (EXIT_FAILURE);
+		}
+	}
 }
 
 int
 main (int argc, char *argv[])
 {
-	//we open and immediately close the log on startup, in order to check that
-	//it's accessible before we daemonize
+	setlocale (LC_ALL, "");
+	bindtextdomain ("rhsm", "/usr/share/locale");
+	textdomain ("rhsm");
+	parse_cli_args (&argc, argv);
 
-	Config *config;
-	// Allow command line args to override configuration file values.
-	if (argc > 1) {
-                debug ("Loading configuration from command line");
-		if (depricated_args_specified(argc, argv)) {
-			if (argc < 3) {
-				print_usage ();
-				return EXIT_FAILURE;
-			}
-			debug ("Loading configuration from command line");
-			config = get_cli_configuration_depricated (argv);
-		} else {
-			GError * error;
-			GOptionContext *option_context;
-
-			option_context = g_option_context_new ("");
-			g_option_context_add_main_entries (option_context, entries, NULL);
-			g_option_group_new("rhsmcertd", "", "rhsmcertd", NULL, NULL);
-			g_option_context_add_group (option_context,
-				g_option_group_new("rhsmcertd", "", "rhsmcertd", NULL, NULL)); 
-
-			if (!g_option_context_parse (option_context, &argc, &argv, &error)) {
-				debug ("Loading configuration from command line");
-			}
-			config = get_cli_configuration (argv);
-		}
-	} else {
-		// Load configuration values from the configuration file.
-		debug ("Loading configuration from: %s", RHSM_CONFIG_FILE);
-		GKeyFile *key_file = g_key_file_new ();
-		if (!g_key_file_load_from_file
-		    (key_file, RHSM_CONFIG_FILE, G_KEY_FILE_NONE, NULL)) {
-			error ("unable to load configuration file, exiting.");
-			return EXIT_FAILURE;
-		}
-		config = get_file_configuration (key_file);
-		g_key_file_free (key_file);
-	}
+	Config *config = get_config (argc, argv);
 
 	// Pull values from the config object so that we can free
 	// up its resources more reliably in case of error.
@@ -348,10 +395,11 @@ main (int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	info ("healing check started: interval = %i minute(s)",
-	     heal_interval_seconds / 60);
-	info ("cert check started: interval = %i minute(s)",
-	     cert_interval_seconds / 60);
+	info ("Starting rhsmcertd...");
+	info ("Healing interval: %d second(s) [%.1f minute(s)]",
+	      heal_interval_seconds, heal_interval_seconds / 60.0);
+	info ("Cert check interval: %d second(s) [%.1f minute(s)]",
+	      cert_interval_seconds, cert_interval_seconds / 60.0);
 
 	// note that we call the function directly first, before assigning a timer
 	// to it. Otherwise, it would only get executed when the timer went off, and
@@ -360,17 +408,22 @@ main (int argc, char *argv[])
 	// NOTE: We put the initial checks on a timer so that in the case of systemd,
 	// we can ensure that the network interfaces are all up before the initial
 	// checks are done.
+	if (run_now) {
+		info ("Initial checks will be run now!");
+		initial_delay_seconds = 0;
+	} else {
+		info ("Waiting %d second(s) [%.1f minute(s)] before running updates.",
+				initial_delay_seconds, initial_delay_seconds / 60.0);
+	}
 	bool heal = true;
 	g_timeout_add (initial_delay_seconds * 1000,
-			(GSourceFunc) initial_cert_check,
-			(gpointer) heal);
+		       (GSourceFunc) initial_cert_check, (gpointer) heal);
 	g_timeout_add (heal_interval_seconds * 1000,
 		       (GSourceFunc) cert_check, (gpointer) heal);
 
 	heal = false;
 	g_timeout_add (initial_delay_seconds * 1000,
-			(GSourceFunc) initial_cert_check,
-			(gpointer) heal);
+		       (GSourceFunc) initial_cert_check, (gpointer) heal);
 	g_timeout_add (cert_interval_seconds * 1000,
 		       (GSourceFunc) cert_check, (gpointer) heal);
 
