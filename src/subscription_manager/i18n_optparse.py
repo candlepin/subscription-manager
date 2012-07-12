@@ -131,6 +131,8 @@ class OptionParser(_OptionParser):
     _("Usage")
     _("%prog [options]")
     _("Options")
+    _("options")
+    _("options:")
 
     # stuff for option value sanity checking
     _("no such option: %s")
