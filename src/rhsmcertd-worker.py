@@ -15,6 +15,8 @@
 #
 
 import sys
+import socket
+from M2Crypto.Err import SSLError
 sys.path.append("/usr/share/rhsm")
 
 import logging
@@ -74,6 +76,17 @@ if __name__ == '__main__':
         if se.code:
             sys.exit(-1)
         pass
+    except socket.error, e:
+        # 101 Network is Unreachable
+        log.error("caught socket exception")
+        log.info(e.errno)
+        if e.errno == 101:
+            log.error("Unable to establish network connection.")
+            log.exception(e)
+            sys.exit(e.errno)
+        else:
+            log.exception(e)
+            sys.exit(-1)
     except Exception, e:
         log.error("Error while updating certificates using daemon")
         print _('Unable to update entitlement certificates and repositories')
