@@ -1306,7 +1306,6 @@ class UnSubscribeCommand(CliCommand):
         """
         Executes the command.
         """
-        check_registration()
         self._validate_options()
         if ConsumerIdentity.exists():
             consumer = ConsumerIdentity.read().getConsumerId()
