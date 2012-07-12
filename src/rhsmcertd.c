@@ -91,7 +91,12 @@ timestamp ()
 /*
  * log function. If we can't open the log, attempt to log to stdout
  * rather than fail. opening the log each time is OK since we log so rarely.
+ *
+ * prototype included here so we can use the printf format checking.
  */
+void r_log (const char *level, const char *message, ...)
+	__attribute__((format(printf, 2, 3)));
+
 void r_log (const char *level, const char *message, ...)
 {
 	bool use_stdout;
