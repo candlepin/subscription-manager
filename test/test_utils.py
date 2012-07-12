@@ -149,6 +149,29 @@ class TestParseServerInfo(unittest.TestCase):
                           parse_server_info,
                           local_url)
 
+    def test_colon_no_slash(self):
+        local_url = "http:example.com/foobar"
+        self.assertRaises(ServerUrlParseErrorScheme,
+                          parse_server_info,
+                          local_url)
+
+    # Note: this means if you have a local server named
+    # "http", and you like redundant slashes, this actually
+    # valid url of http//path/to/something will fail.
+    # Don't do that. (or just use a single slash like http/path)
+    # But seriously, really?
+    def test_no_colon_double_slash(self):
+        local_url = "http//example.com/api"
+        self.assertRaises(ServerUrlParseErrorScheme,
+                          parse_server_info,
+                          local_url)
+
+    def test_https_no_colon_double_slash(self):
+        local_url = "https//example.com/api"
+        self.assertRaises(ServerUrlParseErrorScheme,
+                          parse_server_info,
+                          local_url)
+
     # fail at internet
     def test_just_colon_slash(self):
         local_url = "://"

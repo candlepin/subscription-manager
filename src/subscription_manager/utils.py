@@ -105,6 +105,15 @@ def format_baseurl(hostname, port, prefix):
                                  prefix)
 
 
+def has_bad_scheme(url):
+    bad_fragments = ["http:", "http:/", "http//",
+                     "https:", "https:/", "https//"]
+    for bad_fragment in bad_fragments:
+        if url.startswith(bad_fragment):
+            return True
+    return False
+
+
 def parse_url(local_server_entry,
               default_hostname=None,
               default_port=None,
@@ -163,6 +172,12 @@ def parse_url(local_server_entry,
 
         # else is just a url with no scheme and  ':/' in it somewhere
         url = "https://%s" % local_server_entry
+
+    elif has_bad_scheme(local_server_entry):
+        # not quite right, that's not a valid url schema. So close though...
+        raise ServerUrlParseErrorScheme(local_server_entry,
+                msg=_("Server URL has an invalid scheme. http:// and https:// are supported"))
+
     else:
         # append https scheme
         url = "https://%s" % local_server_entry
