@@ -24,7 +24,7 @@ from M2Crypto import X509
 
 from rhsm.connection import safe_int
 from rhsm.certificate import Extensions, OID, DateRange, GMT, \
-        get_datetime_from_x509, parse_tags
+        get_datetime_from_x509, parse_tags, CertificateException
 
 REDHAT_OID_NAMESPACE = "1.3.6.1.4.1.2312.9"
 ORDER_NAMESPACE = "4"
@@ -46,6 +46,9 @@ class CertFactory(object):
     from the server, and returns the correct implementation class.
     determines the type of certificate we're dealing with
     (entitlement/product), as well as the version of the certificate
+
+    NOTE: Please use the factory methods that leverage this class in
+    certificate.py instead of this class.
     """
 
     def create_from_file(self, path):
@@ -79,22 +82,22 @@ class CertFactory(object):
 
         version = Version(cert_version_str)
         if version.major == 1:
-            return self.__create_v1_cert(version, extensions, x509, path)
+            return self._create_v1_cert(version, extensions, x509, path)
         if version.major == 2:
-            return self.__create_v2_cert(version, extensions, x509, path)
+            return self._create_v2_cert(version, extensions, x509, path)
 
-    def __create_v1_cert(self, version, extensions, x509, path):
+    def _create_v1_cert(self, version, extensions, x509, path):
 
-        cert_type = self.__get_v1_cert_type(extensions)
+        cert_type = self._get_v1_cert_type(extensions)
 
         if cert_type == IDENTITY_CERT:
-            return self.__create_identity_cert(extensions, x509, path)
+            return self._create_identity_cert(extensions, x509, path)
         elif cert_type == ENTITLEMENT_CERT:
-            return self.__create_v1_ent_cert(version, extensions, x509, path)
+            return self._create_v1_ent_cert(version, extensions, x509, path)
         elif cert_type == PRODUCT_CERT:
-            return self.__create_v1_prod_cert(version, extensions, x509, path)
+            return self._create_v1_prod_cert(version, extensions, x509, path)
 
-    def __read_alt_name(self, x509):
+    def _read_alt_name(self, x509):
         alt_name = None
         try:
             name_ext = x509.get_ext('subjectAltName')
@@ -106,7 +109,7 @@ class CertFactory(object):
             pass
         return alt_name
 
-    def __read_subject(self, x509):
+    def _read_subject(self, x509):
         subj = {}
         subject = x509.get_subject()
         subject.nid['UID'] = 458
@@ -118,20 +121,20 @@ class CertFactory(object):
                 continue
         return subj
 
-    def __create_identity_cert(self, extensions, x509, path):
+    def _create_identity_cert(self, extensions, x509, path):
         cert = IdentityCertificate(
                 x509=x509,
                 path=path,
                 serial=x509.get_serial_number(),
                 start=get_datetime_from_x509(x509.get_not_before()),
                 end=get_datetime_from_x509(x509.get_not_after()),
-                alt_name=self.__read_alt_name(x509),
-                subject=self.__read_subject(x509),
+                alt_name=self._read_alt_name(x509),
+                subject=self._read_subject(x509),
             )
         return cert
 
-    def __create_v1_prod_cert(self, version, extensions, x509, path):
-        products = self.__parse_v1_products(extensions)
+    def _create_v1_prod_cert(self, version, extensions, x509, path):
+        products = self._parse_v1_products(extensions)
         cert = ProductCertificate(
                 x509=x509,
                 path=path,
@@ -143,10 +146,10 @@ class CertFactory(object):
             )
         return cert
 
-    def __create_v1_ent_cert(self, version, extensions, x509, path):
-        order = self.__parse_v1_order(extensions)
-        content = self.__parse_v1_content(extensions)
-        products = self.__parse_v1_products(extensions)
+    def _create_v1_ent_cert(self, version, extensions, x509, path):
+        order = self._parse_v1_order(extensions)
+        content = self._parse_v1_content(extensions)
+        products = self._parse_v1_products(extensions)
 
         cert = EntitlementCertificate(
                 x509=x509,
@@ -161,7 +164,7 @@ class CertFactory(object):
             )
         return cert
 
-    def __parse_v1_products(self, extensions):
+    def _parse_v1_products(self, extensions):
         """
         Returns an ordered list of all the product data in the
         certificate.
@@ -181,7 +184,7 @@ class CertFactory(object):
                 ))
         return products
 
-    def __parse_v1_order(self, extensions):
+    def _parse_v1_order(self, extensions):
         order_extensions = extensions.branch(ORDER_NAMESPACE)
         order = Order(
                 name=order_extensions.get('1'),
@@ -203,7 +206,7 @@ class CertFactory(object):
             )
         return order
 
-    def __parse_v1_content(self, extensions):
+    def _parse_v1_content(self, extensions):
         content = []
         ents = extensions.find("2.*.1.1")
         for ent in ents:
@@ -223,7 +226,7 @@ class CertFactory(object):
             ))
         return content
 
-    def __get_v1_cert_type(self, extensions):
+    def _get_v1_cert_type(self, extensions):
         # TODO: This should probably look for existence of products instead, we
         # might use OID's here someday:
         if len(extensions) == 0:
@@ -234,17 +237,23 @@ class CertFactory(object):
         else:
             return PRODUCT_CERT
 
-    def __create_v2_cert(self, version, extensions, x509, path):
+    def _create_v2_cert(self, version, extensions, x509, path):
         # At this time, we only support v2 entitlement certificates:
         if not EXT_ENT_PAYLOAD in extensions:
             raise CertificateException("Unable to parse non-entitlement "
-                    "v2 certificates.")
+                    "v2 certificates")
 
-        payload = self.__decompress_payload(extensions[EXT_ENT_PAYLOAD])
+        try:
+            payload = self._decompress_payload(extensions[EXT_ENT_PAYLOAD])
+        except Exception, e:
+            log.error("Error parsing certificate:")
+            log.error(x509.as_pem())
+            log.exception(e)
+            raise CertificateException(e)
 
-        order = self.__parse_v2_order(payload)
-        content = self.__parse_v2_content(payload)
-        products = self.__parse_v2_products(payload)
+        order = self._parse_v2_order(payload)
+        content = self._parse_v2_content(payload)
+        products = self._parse_v2_products(payload)
 
         cert = EntitlementCertificate(
                 x509=x509,
@@ -259,7 +268,7 @@ class CertFactory(object):
             )
         return cert
 
-    def __parse_v2_order(self, payload):
+    def _parse_v2_order(self, payload):
         sub = payload['subscription']
         order = payload['order']
 
@@ -286,7 +295,7 @@ class CertFactory(object):
                 virt_only=sub.get('virt_only', False),
             )
 
-    def __parse_v2_products(self, payload):
+    def _parse_v2_products(self, payload):
         """
         Returns an ordered list of all the product data in the
         certificate.
@@ -308,7 +317,7 @@ class CertFactory(object):
             # tags can exist.
         return products
 
-    def __parse_v2_content(self, payload):
+    def _parse_v2_content(self, payload):
         content = []
         for product in payload['products']:
             for c in product['content']:
@@ -325,7 +334,7 @@ class CertFactory(object):
         return content
 
 
-    def __decompress_payload(self, payload):
+    def _decompress_payload(self, payload):
         """
         Certificate payloads arrive in base64 encoded zlib compressed strings
         of JSON.
@@ -333,11 +342,7 @@ class CertFactory(object):
         resulting dict.
         """
         decoded = base64.decodestring(payload)
-        # TODO: switch back to decompress string method once server is finalizing properly
-        #decompr = zlib.decompressobj()
-        #decompressed = decompr.decompress(decoded)
         decompressed = zlib.decompress(decoded)
-        import sys
         #print json.dumps(json.loads(decompressed), sort_keys=True, indent=2)
         return json.loads(decompressed)
 
@@ -377,7 +382,7 @@ class Certificate(object):
         self.version = version
 
         if serial is None:
-            raise CertificateException("Certificate has no serial.")
+            raise CertificateException("Certificate has no serial")
 
         self.serial = serial
 
@@ -459,9 +464,9 @@ class Product(object):
             provided_tags=None):
 
         if name is None:
-            raise CertificateException("Product has no name.")
+            raise CertificateException("Product missing name")
         if id is None:
-            raise CertificateException("Product has no ID.")
+            raise CertificateException("Product missing ID")
 
         self.id = id
         self.name = name
@@ -469,6 +474,7 @@ class Product(object):
 
         # TODO: multi-valued?
         self.arch = arch
+
         self.provided_tags = provided_tags
         if self.provided_tags is None:
             self.provided_tags = []
@@ -491,31 +497,36 @@ class Order(object):
 
         self.name = name
         self.number = number # order number
-        self.sku = sku
-        self.subscription = subscription
+        self.sku = sku # aka the marketing product
 
-        # This is the total quantity on the order (rarely used)
-        self.quantity = safe_int(quantity, None)
+        self.subscription = subscription # seems to be unused
 
-        # The actual quantity used by this entitlement:
+        # total quantity on the order:
+        self.quantity = safe_int(quantity, None) # rarely used
+
+        # actual quantity used by this entitlement:
         self.quantity_used = safe_int(quantity_used, 1)
 
-        self.virt_limit = virt_limit
-        self.socket_limit = socket_limit
-        self.contract_number = contract_number
+        self.virt_limit = virt_limit # unused
 
-        self.warning_period = warning_period or 0
+        self.stacking_id = stacking_id
+
+        self.socket_limit = safe_int(socket_limit, None)
+        self.warning_period = safe_int(warning_period, 0)
+
+        self.contract_number = contract_number
         self.account_number = account_number
+
         self.provides_management = provides_management or False
+
         self.support_level = support_level
         self.support_type = support_type
-        self.stacking_id = stacking_id
 
         self.virt_only = virt_only or False
 
     def __str__(self):
-        return "<Order: name=%s number=%s support_level=%s>" % \
-                (self.name, self.number, self.support_level)
+        return "<Order: name=%s number=%s sku=%s>" % \
+                (self.name, self.number, self.sku)
 
 
 class Content(object):
@@ -525,7 +536,7 @@ class Content(object):
             required_tags=None):
 
         if (name is None) or (label is None):
-            raise CertificateException("Content has no name/label.")
+            raise CertificateException("Content missing name/label")
 
         self.name = name
         self.label = label
@@ -557,7 +568,4 @@ class Content(object):
         return "<Content: name=%s label=%s enabled=%s>" % \
                 (self.name, self.label, self.enabled)
 
-
-class CertificateException(Exception):
-    pass
 

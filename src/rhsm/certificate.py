@@ -32,6 +32,19 @@ import warnings
 log = logging.getLogger(__name__)
 
 
+# NOTE: These factory methods create new style certificate objects from
+# the certificate2 module. They are placed here to abstract the fact that
+# we're using two modules for the time being. Eventually the certificate2 code
+# should be moved here.
+def create_from_file(path):
+    from certificate2 import CertFactory # prevent circular deps
+    return CertFactory().create_from_file(path)
+
+def create_from_pem(pem):
+    from certificate2 import CertFactory # prevent circular deps
+    return CertFactory().create_from_pem(pem)
+
+
 def parse_tags(tag_str):
     """
     Split a comma separated list of tags from a certificate into a list.
@@ -1119,6 +1132,10 @@ class Role(Entitlement):
 
     def __repr__(self):
         return str(self)
+
+
+class CertificateException(Exception):
+    pass
 
 
 if __name__ == '__main__':

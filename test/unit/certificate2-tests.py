@@ -17,21 +17,22 @@ import unittest
 from datetime import datetime
 
 import certdata
+from rhsm.certificate import create_from_pem, CertificateException
 from rhsm.certificate2 import *
 
 
 class V1CertTests(unittest.TestCase):
 
     def setUp(self):
-        self.factory = CertFactory()
-        self.prod_cert = self.factory.create_from_pem(
-                certdata.PRODUCT_CERT_V1_0)
-        self.ent_cert = self.factory.create_from_pem(
-                certdata.ENTITLEMENT_CERT_V1_0)
+        self.prod_cert = create_from_pem(certdata.PRODUCT_CERT_V1_0)
+        self.ent_cert = create_from_pem(certdata.ENTITLEMENT_CERT_V1_0)
 
     def test_no_contents_throws_exception(self):
-        self.assertRaises(CertificateException, self.factory.create_from_pem,
-                "")
+        self.assertRaises(CertificateException, create_from_pem, "")
+
+    def test_junk_contents_throws_exception(self):
+        self.assertRaises(CertificateException, create_from_pem,
+                "DOESTHISLOOKLIKEACERTTOYOU?")
 
     def test_factory_method_on_product_cert(self):
         self.assertEquals("1.0", str(self.prod_cert.version))
@@ -78,9 +79,7 @@ class V1CertTests(unittest.TestCase):
 class V2CertTests(unittest.TestCase):
 
     def setUp(self):
-        self.factory = CertFactory()
-        self.ent_cert = self.factory.create_from_pem(
-                certdata.ENTITLEMENT_CERT_V2_0)
+        self.ent_cert = create_from_pem(certdata.ENTITLEMENT_CERT_V2_0)
 
     def test_factory_method_on_ent_cert(self):
         self.assertEquals("2.0", str(self.ent_cert.version))
@@ -129,9 +128,8 @@ class V2CertTests(unittest.TestCase):
 
 class IdentityCertTests(unittest.TestCase):
 
-    def test_factory_creation(self):
-        factory = CertFactory()
-        id_cert = factory.create_from_pem(certdata.IDENTITY_CERT)
+    def test_creation(self):
+        id_cert = create_from_pem(certdata.IDENTITY_CERT)
         self.assertTrue(isinstance(id_cert, IdentityCertificate))
         self.assertEquals("DirName:/CN=redhat.local.rm-rf.ca", id_cert.alt_name)
         self.assertEquals("eaadd6ea-852d-4430-94a7-73d5887d48e8", id_cert.subject['CN'])
