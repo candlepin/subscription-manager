@@ -199,8 +199,8 @@ class CertFactory(object):
                 warning_period=order_extensions.get('12'),
                 account_number=order_extensions.get('13'),
                 provides_management=order_extensions.get('14'),
-                support_level=order_extensions.get('15'),
-                support_type=order_extensions.get('16'),
+                service_level=order_extensions.get('15'),
+                service_type=order_extensions.get('16'),
                 stacking_id=order_extensions.get('17'),
                 virt_only=order_extensions.get('18')
             )
@@ -289,8 +289,8 @@ class CertFactory(object):
                 warning_period=sub.get('warning', 0),
                 account_number=order.get('account', None),
                 provides_management=sub.get('management', False),
-                support_level=service_level,
-                support_type=service_type,
+                service_level=service_level,
+                service_type=service_type,
                 stacking_id=sub.get('stacking_id', None),
                 virt_only=sub.get('virt_only', False),
             )
@@ -495,8 +495,8 @@ class Order(object):
     def __init__(self, name=None, number=None, sku=None, subscription=None,
             quantity=None, virt_limit=None, socket_limit=None,
             contract_number=None, quantity_used=None, warning_period=None,
-            account_number=None, provides_management=None, support_level=None,
-            support_type=None, stacking_id=None, virt_only=None):
+            account_number=None, provides_management=None, service_level=None,
+            service_type=None, stacking_id=None, virt_only=None):
 
         self.name = name
         self.number = number # order number
@@ -522,8 +522,8 @@ class Order(object):
 
         self.provides_management = provides_management or False
 
-        self.support_level = support_level
-        self.support_type = support_type
+        self.service_level = service_level
+        self.service_type = service_type
 
         self.virt_only = virt_only or False
 
