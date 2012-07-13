@@ -17,6 +17,7 @@
 
 #include <sys/file.h>
 #include <stdlib.h>
+#include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -139,6 +140,16 @@ log_update (int delay)
 	} else {
 		fprintf (updatefile, "%s", buf);
 		fclose (updatefile);
+	}
+}
+
+/* Handle program signals */
+void
+signal_handler(int signo) {
+	if (signo == SIGTERM) {
+		info ("rhsmcertd is shutting down...");
+		signal (signo, SIG_DFL);
+		raise (signo);
 	}
 }
 
@@ -375,6 +386,9 @@ parse_cli_args (int *argc, char *argv[])
 int
 main (int argc, char *argv[])
 {
+	if (signal(SIGTERM, signal_handler) == SIG_ERR) {
+		warn ("Unable to catch SIGTERM\n");
+	}
 	setlocale (LC_ALL, "");
 	bindtextdomain ("rhsm", "/usr/share/locale");
 	textdomain ("rhsm");
