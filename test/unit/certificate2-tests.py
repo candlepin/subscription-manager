@@ -150,3 +150,11 @@ class ContentTests(unittest.TestCase):
         self.assertRaises(CertificateException, Content, name="mycontent",
                 label="mycontent", enabled="5")
 
+
+class ProductTests(unittest.TestCase):
+
+    def test_arch_multi_valued(self):
+        p = Product(id="pid", name="pname", architectures="i386,x86_64")
+        self.assertEquals(2, len(p.architectures))
+        self.assertEquals("i386", p.architectures[0])
+        self.assertEquals("x86_64", p.architectures[1])

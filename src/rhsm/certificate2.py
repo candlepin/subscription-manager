@@ -179,7 +179,7 @@ class CertFactory(object):
                 id=product_id,
                 name=ext.get('1'),
                 version=ext.get('2'),
-                arch=ext.get('3'),
+                architectures=ext.get('3'),
                 provided_tags=parse_tags(ext.get('4')),
                 ))
         return products
@@ -191,12 +191,12 @@ class CertFactory(object):
                 number=order_extensions.get('2'),
                 sku=order_extensions.get('3'),
                 subscription=order_extensions.get('4'),
-                quantity=safe_int(order_extensions.get('5')),
+                quantity=order_extensions.get('5'),
                 virt_limit=order_extensions.get('8'),
                 socket_limit=order_extensions.get('9'),
                 contract_number=order_extensions.get('10'),
-                quantity_used=safe_int(order_extensions.get('11')),
-                warning_period=safe_int(order_extensions.get('12')),
+                quantity_used=order_extensions.get('11'),
+                warning_period=order_extensions.get('12'),
                 account_number=order_extensions.get('13'),
                 provides_management=order_extensions.get('14'),
                 support_level=order_extensions.get('15'),
@@ -310,7 +310,7 @@ class CertFactory(object):
                 id=product['id'],
                 name=product['name'],
                 version=product.get('version', None),
-                arch=product.get('architectures', []), # TODO:
+                architectures=product.get('architectures', []),
                 ))
             # TODO: skipping provided tags here, we don't yet generate
             # v2 product certs, we may never, which is the only place provided
@@ -460,7 +460,7 @@ class Product(object):
     """
     Represents the product information from a certificate.
     """
-    def __init__(self, id=None, name=None, version=None, arch=None,
+    def __init__(self, id=None, name=None, version=None, architectures=None,
             provided_tags=None):
 
         if name is None:
@@ -472,8 +472,11 @@ class Product(object):
         self.name = name
         self.version = version
 
-        # TODO: multi-valued?
-        self.arch = arch
+        self.architectures = architectures
+        # If this is sent in as a string split it, as the field
+        # can technically be multi-valued:
+        if isinstance(self.architectures, str):
+            self.architectures = parse_tags(self.architectures)
 
         self.provided_tags = provided_tags
         if self.provided_tags is None:
