@@ -46,19 +46,19 @@
 static gboolean show_debug = FALSE;
 static gboolean run_now = FALSE;
 static gint initial_delay_seconds = 60;	// One minute delay
-static gint arg_cert_interval_seconds = -1;
-static gint arg_heal_interval_seconds = -1;
+static gint arg_cert_interval_minutes = -1;
+static gint arg_heal_interval_minutes = -1;
 
 static GOptionEntry entries[] = {
 	{"wait", 'w', 0, G_OPTION_ARG_INT, &initial_delay_seconds,
 	 N_("How long to delay service startup (in seconds)"),
 	 "SECONDS"},
-	{"cert-interval", 'c', 0, G_OPTION_ARG_INT, &arg_cert_interval_seconds,
-	 N_("Interval to run cert check (in seconds)"),
-	 "SECONDS"},
-	{"heal-interval", 'i', 0, G_OPTION_ARG_INT, &arg_heal_interval_seconds,
-	 N_("Interval to run healing (in seconds)"),
-	 "SECONDS"},
+	{"cert-interval", 'c', 0, G_OPTION_ARG_INT, &arg_cert_interval_minutes,
+	 N_("Interval to run cert check (in minutes)"),
+	 "MINUTES"},
+	{"heal-interval", 'i', 0, G_OPTION_ARG_INT, &arg_heal_interval_minutes,
+	 N_("Interval to run healing (in minutes)"),
+	 "MINUTES"},
 	{"now", 'n', 0, G_OPTION_ARG_NONE, &run_now,
 	 N_("Run the initial checks immediatly, with no delay."),
 	 NULL},
@@ -288,25 +288,25 @@ deprecated_arg_init_config (Config * config, int argc, char *argv[])
 		exit (EXIT_FAILURE);
 	}
 
-	config->cert_interval_seconds = atoi (argv[1]);
-	config->heal_interval_seconds = atoi (argv[2]);
+	config->cert_interval_seconds = atoi (argv[1]) * 60;
+	config->heal_interval_seconds = atoi (argv[2]) * 60;
 }
 
 bool
 opt_parse_init_config (Config * config)
 {
 	// Load the values from the options into the config
-	if (arg_cert_interval_seconds != -1) {
-		config->cert_interval_seconds = arg_cert_interval_seconds;
+	if (arg_cert_interval_minutes != -1) {
+		config->cert_interval_seconds = arg_cert_interval_minutes * 60;
 	}
 
-	if (arg_heal_interval_seconds != -1) {
-		config->heal_interval_seconds = arg_heal_interval_seconds;
+	if (arg_heal_interval_minutes != -1) {
+		config->heal_interval_seconds = arg_heal_interval_minutes * 60;
 	}
 	// Let the caller know if opt parser found arg values
 	// for the intervals.
-	return arg_cert_interval_seconds != -1
-		|| arg_heal_interval_seconds != -1;
+	return arg_cert_interval_minutes != -1
+		|| arg_heal_interval_minutes != -1;
 }
 
 Config *
@@ -409,10 +409,10 @@ main (int argc, char *argv[])
 	}
 
 	info ("Starting rhsmcertd...");
-	info ("Healing interval: %d second(s) [%.1f minute(s)]",
-	      heal_interval_seconds, heal_interval_seconds / 60.0);
-	info ("Cert check interval: %d second(s) [%.1f minute(s)]",
-	      cert_interval_seconds, cert_interval_seconds / 60.0);
+	info ("Healing interval: %.1f minute(s) [%d second(s)]",
+	      heal_interval_seconds / 60.0, heal_interval_seconds);
+	info ("Cert check interval: %.1f minute(s) [%d second(s)]",
+	      cert_interval_seconds / 60.0, cert_interval_seconds);
 
 	// note that we call the function directly first, before assigning a timer
 	// to it. Otherwise, it would only get executed when the timer went off, and
