@@ -18,42 +18,24 @@ BINDIR=/usr/bin
 PROG=rhsmcertd
 LOCK=/var/lock/subsys/$PROG
 
-CERT_INTERVAL=`python -c "\
-import sys
-sys.path.append('/usr/share/rhsm')
-from rhsm.config import initConfig
-cfg = initConfig()
-print cfg.get('rhsmcertd', 'certFrequency')"`
-
-# if we cannot read the config value, assume 1440 minutes (24 hours)
-HEAL_INTERVAL=`python -c "\
-import sys
-sys.path.append('/usr/share/rhsm')
-from rhsm.config import initConfig
-try:
-  cfg = initConfig()
-  print cfg.get('rhsmcertd', 'healFrequency')
-except:
-  print 1440"`
-
 RETVAL=0
 
 start() {
   if [ ! -f $LOCK ]; then
-    echo -n "Starting rhsmcertd $CERT_INTERVAL $HEAL_INTERVAL"
-    daemon $BINDIR/$PROG $CERT_INTERVAL $HEAL_INTERVAL
+    echo -n "Starting rhsmcertd..."
+    daemon $BINDIR/$PROG
     RETVAL=$?
     [ $RETVAL -eq 0 ] && touch $LOCK
     [ -x /sbin/restorecon ] && /sbin/restorecon $LOCK
   else
-    echo -n "rhsmcertd is already running"
+    echo -n "rhsmcertd is already running."
   fi
   echo
   return $RETVAL
 }
 
 stop() {
-  echo -n "Stopping rhsmcertd"
+  echo -n "Stopping rhsmcertd..."
   killproc $PROG || failure
   RETVAL=$?
   echo
