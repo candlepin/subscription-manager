@@ -1,5 +1,6 @@
 [Unit]
 Description=Enable periodic update of entitlement certificates.
+After=network.target
 
 [Service]
 Type=forking
