@@ -157,7 +157,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 entry['product'] = product.name
                 entry['version'] = product.version
                 entry['product_id'] = product_id
-                entry['arch'] = product.arch
+                entry['arch'] = ",".join(product.architectures)
                 # Common properties
                 entry['align'] = 0.5
 

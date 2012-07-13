@@ -113,7 +113,7 @@ def getInstalledProductStatus(product_directory=None,
             data = (product.name,
                     installed_product,
                     product.version,
-                    product.arch,
+                    ",".join(product.architectures),
                     sorter.get_status(product.id),
                     begin,
                     end)

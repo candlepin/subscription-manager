@@ -99,15 +99,15 @@ MockStderr = MockStdout
 
 class StubProduct(Product):
 
-    def __init__(self, product_id, name=None, version=None, arch=None,
+    def __init__(self, product_id, name=None, version=None, architectures=None,
             provided_tags=None):
 
         # Initialize some defaults:
         if not name:
             name = product_id
 
-        if not arch:
-            arch = "x86_64"
+        if not architectures:
+            architectures = ["x86_64"]
 
         if not version:
             version = "1.0"
@@ -117,7 +117,7 @@ class StubProduct(Product):
             provided_tags = parse_tags(provided_tags)
 
         Product.__init__(self, id=product_id, name=name, version=version,
-                arch=arch, provided_tags=provided_tags)
+                architectures=architectures, provided_tags=provided_tags)
 
 
 class StubContent(Content):
@@ -200,7 +200,7 @@ class StubEntitlementCertificate(EntitlementCertificate):
             name = product.name
         order = Order(name=name, number="592837", sku=sku,
                     stacking_id=stacking_id, socket_limit=sockets,
-                    support_level=service_level, quantity_used=quantity)
+                    service_level=service_level, quantity_used=quantity)
 
         if content is None:
             content = []

@@ -1781,8 +1781,8 @@ class ListCommand(CliCommand):
         if service_level is not None:
             def filter_cert_by_service_level(cert):
                 cert_level = ""
-                if cert.order and cert.order.support_level:
-                    cert_level = cert.order.support_level
+                if cert.order and cert.order.service_level:
+                    cert_level = cert.order.service_level
                 return service_level.lower() == \
                     cert_level.lower()
             certs = filter(filter_cert_by_service_level, certs)
@@ -1816,9 +1816,9 @@ class ListCommand(CliCommand):
             print(self._none_wrap(_("Quantity Used:        \t%s"),
                   order.quantity_used))
             print(_("Service Level:        \t%s") %
-                  order.support_level or "")
+                  order.service_level or "")
             print(_("Service Type:         \t%s") %
-                  order.support_type or "")
+                  order.service_type or "")
             print(_("Starts:               \t%s") %
                   managerlib.formatDate(cert.valid_range.begin()))
             print(_("Ends:                 \t%s") %
