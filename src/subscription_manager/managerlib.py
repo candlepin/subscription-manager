@@ -25,8 +25,7 @@ import logging
 import datetime
 
 from rhsm.config import initConfig
-from rhsm.certificate import Key
-from rhsm.certificate2 import CertFactory, CertificateException
+from rhsm.certificate import Key, CertificateException, create_from_pem
 
 from subscription_manager import certlib, certdirectory
 from subscription_manager.certlib import system_log as inner_system_log
@@ -666,9 +665,8 @@ class ImportFileExtractor(object):
 
         @return: True if valid, False otherwise.
         """
-        factory = CertFactory()
         try:
-            ent_cert = factory.create_from_pem(self.get_cert_content())
+            ent_cert = create_from_pem(self.get_cert_content())
         except CertificateException:
             return False
         ent_key = Key(self.get_key_content())
@@ -709,7 +707,7 @@ class ImportFileExtractor(object):
         return file_parts[0] + "-key" + file_parts[1]
 
     def _create_filename_from_cert_serial_number(self):
-        ent_cert = CertFactory().create_from_pem(self.get_cert_content())
+        ent_cert = create_from_pem(self.get_cert_content())
         return "%s.pem" % (ent_cert.serial)
 
 

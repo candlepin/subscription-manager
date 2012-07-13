@@ -23,7 +23,7 @@ import yum
 _ = gettext.gettext
 
 from gzip import GzipFile
-from rhsm.certificate2 import CertFactory
+from rhsm.certificate import create_from_pem
 from subscription_manager.certdirectory import Directory, ProductDirectory
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -238,8 +238,7 @@ class ProductManager:
             f = open(fn)
         try:
             pem = f.read()
-            factory = CertFactory()
-            return factory.create_from_pem(pem)
+            return create_from_pem(pem)
         finally:
             f.close()
 

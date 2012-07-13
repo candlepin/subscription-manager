@@ -25,8 +25,7 @@ from subscription_manager import cert_sorter
 from subscription_manager.certdirectory import EntitlementDirectory, \
     ProductDirectory, Path, Writer
 from rhsm.config import initConfig
-from rhsm.certificate2 import CertFactory, GMT
-from rhsm.certificate import Key
+from rhsm.certificate import Key, create_from_pem, GMT
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -186,7 +185,7 @@ class Action:
         crtpem = bundle['cert']
         key = Key(keypem)
 
-        cert = CertFactory().create_from_pem(crtpem)
+        cert = create_from_pem(crtpem)
         return (key, cert)
 
 
@@ -374,8 +373,7 @@ class ConsumerIdentity:
         # TODO: bad variables, cert should be the certificate object, x509 is
         # used elsewhere for the m2crypto object of the same name.
         self.cert = certstring
-        factory = CertFactory()
-        self.x509 = factory.create_from_pem(certstring)
+        self.x509 = create_from_pem(certstring)
 
     def getConsumerId(self):
         subject = self.x509.subject

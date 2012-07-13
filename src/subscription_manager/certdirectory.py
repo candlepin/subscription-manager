@@ -19,8 +19,7 @@
 import os
 import logging
 
-from rhsm.certificate import Key
-from rhsm.certificate2 import CertFactory
+from rhsm.certificate import Key, create_from_file
 
 from rhsm.config import initConfig
 
@@ -104,7 +103,6 @@ class CertificateDirectory(Directory):
 
     def __init__(self, path):
         Directory.__init__(self, path)
-        self.factory = CertFactory()
         self.create()
 
     def list(self):
@@ -113,7 +111,7 @@ class CertificateDirectory(Directory):
             if not fn.endswith('.pem') or fn.endswith(self.KEY):
                 continue
             path = self.abspath(fn)
-            listing.append(self.factory.create_from_file(path))
+            listing.append(create_from_file(path))
         return listing
 
     def listValid(self):
