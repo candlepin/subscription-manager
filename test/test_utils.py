@@ -4,8 +4,7 @@ from mock import Mock
 from subscription_manager.utils import remove_scheme, parse_server_info, \
     parse_baseurl_info, format_baseurl, ServerUrlParseErrorEmpty, \
     ServerUrlParseErrorNone, ServerUrlParseErrorPort, ServerUrlParseErrorScheme, \
-    ServerUrlParseErrorSchemeNoDoubleSlash, ServerUrlParseErrorJustScheme, \
-    get_version
+    ServerUrlParseErrorJustScheme, get_version
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 
@@ -121,7 +120,7 @@ class TestParseServerInfo(unittest.TestCase):
     def test_bad_http_scheme(self):
         # note missing /
         local_url = "https:/myhost.example.com:8443/myapp"
-        self.assertRaises(ServerUrlParseErrorSchemeNoDoubleSlash,
+        self.assertRaises(ServerUrlParseErrorScheme,
                           parse_server_info,
                           local_url)
 
@@ -145,7 +144,7 @@ class TestParseServerInfo(unittest.TestCase):
 
     def test_colon_slash_but_nothing_else(self):
         local_url = "http:/"
-        self.assertRaises(ServerUrlParseErrorSchemeNoDoubleSlash,
+        self.assertRaises(ServerUrlParseErrorScheme,
                           parse_server_info,
                           local_url)
 
@@ -178,6 +177,32 @@ class TestParseServerInfo(unittest.TestCase):
         self.assertRaises(ServerUrlParseErrorScheme,
                           parse_server_info,
                           local_url)
+
+    def test_one_slash(self):
+        local_url = "http/example.com"
+        self.assertRaises(ServerUrlParseErrorScheme,
+                          parse_server_info,
+                          local_url)
+
+    def test_host_named_http(self):
+        local_url = "http://http/prefix"
+        (hostname, port, prefix) = parse_server_info(local_url)
+        self.assertEquals("http", hostname)
+        self.assertEquals(DEFAULT_PORT, port)
+        self.assertEquals('/prefix', prefix)
+
+    def test_one_slash_port_prefix(self):
+        local_url = "https/bogaddy:80/candlepin"
+        self.assertRaises(ServerUrlParseErrorScheme,
+                          parse_server_info,
+                          local_url)
+
+    def test_host_named_http_port_prefix(self):
+        local_url = "https://https:8000/prefix"
+        (hostname, port, prefix) = parse_server_info(local_url)
+        self.assertEquals("https", hostname)
+        self.assertEquals("8000", port)
+        self.assertEquals('/prefix', prefix)
 
 
 # TestParseServerInfo pretty much covers this code wise

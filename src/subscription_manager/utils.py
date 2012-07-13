@@ -62,10 +62,6 @@ class ServerUrlParseErrorScheme(ServerUrlParseError):
     pass
 
 
-class ServerUrlParseErrorSchemeNoDoubleSlash(ServerUrlParseError):
-    pass
-
-
 class ServerUrlParseErrorJustScheme(ServerUrlParseError):
     pass
 
@@ -106,12 +102,53 @@ def format_baseurl(hostname, port, prefix):
 
 
 def has_bad_scheme(url):
-    bad_fragments = ["http:", "http:/", "http//",
-                     "https:", "https:/", "https//"]
+    bad_fragments = ["http//", "http/",
+                     "https//", "https/"]
+    short_fragments = [("http:", "http://"),
+                       ("http:/", "http://"),
+                       ("https:", "https://"),
+                       ("https:/", "https://")]
+
+    # we could in theory, have a host named 'http',
+    # so that http/prefix is a valid url. However, do not
+    # do that. If you have to, use http://http/blah.
+    # Sorry.
     for bad_fragment in bad_fragments:
         if url.startswith(bad_fragment):
             return True
+
+    # handle truncated schemes
+    for short_fragment in short_fragments:
+        if url.startswith(short_fragment[0]) and \
+                not url.startswith(short_fragment[1]):
+            return True
+
+    # this could in theory be a local path, but that
+    # doesn't really help us
+    if url.startswith(':/'):
+        return True
+
+    # if we have a scheme, and we may not, make
+    # sure it's valid
+    url_split = url.split('://')
+    if len(url_split) > 1:
+        if url_split[0] not in ["http", "https"]:
+            return True
+
     return False
+
+
+def has_good_scheme(url):
+    good_schemes = ["http", "https"]
+    url_parts = url.split('://')
+    if url_parts[0] not in good_schemes:
+        return False
+
+    # a good scheme alone is not really a good scheme
+    if len(url_parts) > 1 and url_parts[1] == '':
+        raise ServerUrlParseErrorJustScheme(url,
+                msg=_("Server URL is just a schema. Should include hostname, and/or port and path"))
+    return True
 
 
 def parse_url(local_server_entry,
@@ -138,53 +175,28 @@ def parse_url(local_server_entry,
         raise ServerUrlParseErrorNone(local_server_entry,
                                       msg=_("Server URL can not be None"))
 
-    # do we seem to have a scheme?
-    if local_server_entry.find("://") > -1:
+    # good_url in this case meaning a schema we support, and
+    # _something_ else. This is to make urlparse happy
+    good_url = None
 
-        # doh, but not one we want
-        if (local_server_entry[:7] != "http://") and (local_server_entry[:8] != "https://"):
-            raise ServerUrlParseErrorScheme(local_server_entry,
-                msg=_("Server URL has an invalid scheme. http:// and https:// are supported"))
-
-        # just the scheme? really?
-        elif local_server_entry.split('://')[1] == '':
-            raise ServerUrlParseErrorJustScheme(local_server_entry,
-                msg=_("Server URL is just a schema. Should include hostname, and/or port and path"))
-
-        # seem to have a workable schema already
-        else:
-            url = local_server_entry
-
-    # try to detect "http:/hostname"
-    elif len(local_server_entry.split(':/')) > 1:
-        # if we only have 'http:/dfsd' and we split on
-        # ':/' we end up with [0]='http'
-        # and [1] = "hostname"
-        # but for "http://hostname" we end up with [1] like
-        # "/hostname", so check for that
-        split_url = local_server_entry.split(':/')
-
-        # verify this is an attempt at http://
-        if split_url[0].startswith('http'):
-            if not split_url[1].startswith('/'):
-                raise ServerUrlParseErrorSchemeNoDoubleSlash(local_server_entry,
-                    msg=_("Server URL has an invalid scheme (no //?)"))
-
-        # else is just a url with no scheme and  ':/' in it somewhere
-        url = "https://%s" % local_server_entry
-
-    elif has_bad_scheme(local_server_entry):
-        # not quite right, that's not a valid url schema. So close though...
+    # handle any known or troublesome or bogus typo's, etc
+    if has_bad_scheme(local_server_entry):
         raise ServerUrlParseErrorScheme(local_server_entry,
-                msg=_("Server URL has an invalid scheme. http:// and https:// are supported"))
+            msg=_("Server URL has an invalid scheme. http:// and https:// are supported"))
 
-    else:
-        # append https scheme
-        url = "https://%s" % local_server_entry
+    # we want to see if we have a good scheme, and
+    # at least _something_ else
+    if has_good_scheme(local_server_entry):
+        good_url = local_server_entry
+
+    # not having a good scheme could just mean we don't have a scheme,
+    # so let's include one so urlparse doesn't freak
+    if not good_url:
+        good_url = "https://%s" % local_server_entry
 
     #FIXME: need a try except here? docs
     # don't seem to indicate any expected exceptions
-    result = urlparse(url)
+    result = urlparse(good_url)
     netloc = result[1].split(":")
 
     # in some cases, if we try the attr accessors, we'll
