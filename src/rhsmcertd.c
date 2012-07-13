@@ -35,6 +35,7 @@
 #define UPDATEFILE "/var/run/rhsm/update"
 #define WORKER "/usr/libexec/rhsmcertd-worker"
 #define WORKER_NAME WORKER
+#define INITIAL_DELAY_SECONDS 120;
 #define DEFAULT_CERT_INTERVAL_SECONDS 14400	/* 4 hours */
 #define DEFAULT_HEAL_INTERVAL_SECONDS 86400	/* 24 hours */
 #define BUF_MAX 256
@@ -45,14 +46,10 @@
 
 static gboolean show_debug = FALSE;
 static gboolean run_now = FALSE;
-static gint initial_delay_seconds = 60;	// One minute delay
 static gint arg_cert_interval_minutes = -1;
 static gint arg_heal_interval_minutes = -1;
 
 static GOptionEntry entries[] = {
-	{"wait", 'w', 0, G_OPTION_ARG_INT, &initial_delay_seconds,
-	 N_("How long to delay service startup (in seconds)"),
-	 "SECONDS"},
 	{"cert-interval", 'c', 0, G_OPTION_ARG_INT, &arg_cert_interval_minutes,
 	 N_("Interval to run cert check (in minutes)"),
 	 "MINUTES"},
@@ -421,21 +418,23 @@ main (int argc, char *argv[])
 	// NOTE: We put the initial checks on a timer so that in the case of systemd,
 	// we can ensure that the network interfaces are all up before the initial
 	// checks are done.
+	int initial_delay = INITIAL_DELAY_SECONDS;
 	if (run_now) {
 		info ("Initial checks will be run now!");
-		initial_delay_seconds = 0;
+		initial_delay = 0;
 	} else {
 		info ("Waiting %d second(s) [%.1f minute(s)] before running updates.",
-				initial_delay_seconds, initial_delay_seconds / 60.0);
+				initial_delay, initial_delay / 60.0);
 	}
+
 	bool heal = true;
-	g_timeout_add (initial_delay_seconds * 1000,
+	g_timeout_add (initial_delay * 1000,
 		       (GSourceFunc) initial_cert_check, (gpointer) heal);
 	g_timeout_add (heal_interval_seconds * 1000,
 		       (GSourceFunc) cert_check, (gpointer) heal);
 
 	heal = false;
-	g_timeout_add (initial_delay_seconds * 1000,
+	g_timeout_add (initial_delay * 1000,
 		       (GSourceFunc) initial_cert_check, (gpointer) heal);
 	g_timeout_add (cert_interval_seconds * 1000,
 		       (GSourceFunc) cert_check, (gpointer) heal);
