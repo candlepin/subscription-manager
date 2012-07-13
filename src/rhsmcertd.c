@@ -211,7 +211,6 @@ get_int_from_config_file (GKeyFile * key_file, const char *group,
 	// to any unhandled errors), the default value will be used.
 	int value = g_key_file_get_integer (key_file, group, key, &error);
 	if (error != NULL && error->code == G_KEY_FILE_ERROR_INVALID_VALUE) {
-		printf ("Found non standard value...");
 		// There is a bug that was fixed in glib 2.31.0 that deals with
 		// handling trailing white space for a config file value. Since
 		// we are on a lesser version, we have to deal with it ourselves
@@ -269,7 +268,7 @@ key_file_init_config (Config * config, GKeyFile * key_file)
 }
 
 void
-depricated_arg_init_config (Config * config, int argc, char *argv[])
+deprecated_arg_init_config (Config * config, int argc, char *argv[])
 {
 	if (argc != 3) {
 		error ("Wrong number of arguments specified.");
@@ -335,10 +334,10 @@ get_config (int argc, char *argv[])
 			exit (EXIT_FAILURE);
 		} else {
 			// Old style args are being used.
-			warn ("Depricated CLI arguments are being used.");
+			warn ("Deprecated CLI arguments are being used.");
 			printf (N_
-				("WARN: Depricated CLI arguments are being used."));
-			depricated_arg_init_config (config, argc, argv);
+				("WARN: Deprecated CLI arguments are being used.\n"));
+			deprecated_arg_init_config (config, argc, argv);
 		}
 	}
 
