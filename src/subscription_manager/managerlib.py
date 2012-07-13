@@ -196,7 +196,7 @@ class PoolFilter(object):
         matched_data_dict = {}
         for d in pools:
             for product in installed_products:
-                productid = product.product.id
+                productid = product.products[0].id
                 # we only need one matched item per pool id, so add to dict to keep unique:
                 # Build a list of provided product IDs for comparison:
                 provided_ids = [p['productId'] for p in d['providedProducts']]
