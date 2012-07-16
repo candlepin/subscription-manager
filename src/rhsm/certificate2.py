@@ -16,6 +16,9 @@
 import os
 import base64
 import zlib
+import logging
+
+log = logging.getLogger(__name__)
 
 from datetime import datetime
 import simplejson as json
@@ -227,15 +230,15 @@ class CertFactory(object):
         return content
 
     def _get_v1_cert_type(self, extensions):
-        # TODO: This should probably look for existence of products instead, we
-        # might use OID's here someday:
-        if len(extensions) == 0:
-            return IDENTITY_CERT
         # Assume if there is an order name, it must be an entitlement cert:
-        elif EXT_ORDER_NAME in extensions:
+        if EXT_ORDER_NAME in extensions:
             return ENTITLEMENT_CERT
-        else:
+        # If there is no order, but there are products, must be a product cert:
+        elif len(extensions.find('1.*.1')) > 0:
             return PRODUCT_CERT
+        # Otherwise we assume it's a plain identity certificate:
+        else:
+            return IDENTITY_CERT
 
     def _create_v2_cert(self, version, extensions, x509, path):
         # At this time, we only support v2 entitlement certificates:
