@@ -259,13 +259,12 @@ rm -rf %{buildroot}
 %{_mandir}/man8/subscription-manager-gui.8*
 %{_mandir}/man8/rhsm-icon.8*
 %{_datadir}/omf/subscription-manager
-%attr(644,root,root) %{_datadir}/omf/subscription-manager/*.omf
+#%attr(644,root,root) %{_datadir}/omf/subscription-manager/*.omf
 %{_datadir}/gnome/help/subscription-manager
 %attr(644,root,root) %{_datadir}/gnome/help/subscription-manager/C/
 %attr(755,root,root) %{_datadir}/gnome/help/subscription-manager/C/figures
 %attr(644,root,root) %{_datadir}/gnome/help/subscription-manager/C/figures/*
 %attr(644,root,root) %{_datadir}/gnome/help/subscription-manager/C/legal.xml
-%attr(644,root,root) %{_datadir}/gnome/help/subscription-manager/C/subscription-manager-C.omf
 %doc LICENSE
 
 %files -n subscription-manager-firstboot
