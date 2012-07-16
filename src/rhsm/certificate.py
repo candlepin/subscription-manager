@@ -18,6 +18,14 @@ Contains classes for working with x.509 certificates.
 The backing implementation is M2Crypto.X509 which has insufficient
 support for custom v3 extensions.  It is not intended to be a
 replacement of full wrapper but instead an extension.
+
+Several of the classes in this module are now marked deprecated in favor
+of their new counterparts in certificate2 module. However, wather than
+depending on either specifically, you can use the create methods below to
+automatically create the correct object for any given certificate.
+
+Eventually the deprecated classes below will be removed, and the new classes
+will be relocated into this module.
 """
 
 import os
@@ -100,7 +108,7 @@ def deprecated(func):
     warning to be emitted any time that function is used by a caller.
     """
     def new_func(*args, **kwargs):
-        warnings.warn("Call to deprecated function {}.".format(func.__name__),
+        warnings.warn("Call to deprecated function: {}.".format(func.__name__),
                 category=DeprecationWarning)
         return func(*args, **kwargs)
     new_func.__name__ = func.__name__
@@ -118,6 +126,7 @@ class Certificate(object):
     @type __ext: L{Extensions}
     """
 
+    @deprecated
     def __init__(self, content=None):
         """
         @param pem: The (optional) PEM encoded content.
@@ -905,6 +914,7 @@ class OID(object):
 
 class Order:
 
+    @deprecated
     def __init__(self, ext):
         self.ext = ext
 
@@ -996,6 +1006,7 @@ class Order:
 
 class Product:
 
+    @deprecated
     def __init__(self, p_hash, ext):
         self.hash = p_hash
         self.ext = ext
@@ -1136,12 +1147,3 @@ class Role(Entitlement):
 
 class CertificateException(Exception):
     pass
-
-
-if __name__ == '__main__':
-    import sys
-    for path in sys.argv[1:]:
-        print path
-        pc = EntitlementCertificate()
-        pc.read(path)
-        print pc
