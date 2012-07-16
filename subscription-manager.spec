@@ -261,8 +261,9 @@ rm -rf %{buildroot}
 %{_datadir}/omf/subscription-manager
 %attr(644,root,root) %{_datadir}/omf/subscription-manager/*.omf
 %{_datadir}/gnome/help/subscription-manager
-%attr(644,root,root) %{_datadir}/gnome/help/subscription-manager/C/*
+%attr(644,root,root) %{_datadir}/gnome/help/subscription-manager/C/
 %attr(755,root,root) %{_datadir}/gnome/help/subscription-manager/C/figures
+%attr(644,root,root) %{_datadir}/gnome/help/subscription-manager/C/*
 %doc LICENSE
 
 %files -n subscription-manager-firstboot
