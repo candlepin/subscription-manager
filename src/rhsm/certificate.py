@@ -34,10 +34,18 @@ from M2Crypto import X509, RSA
 from datetime import datetime as dt
 from datetime import tzinfo, timedelta
 from time import strptime
+from subprocess import Popen, PIPE, STDOUT
 import logging
 import warnings
 
 log = logging.getLogger(__name__)
+
+# Regex used to scan for OIDs:
+OID_PATTERN = re.compile('([0-9]+\.)+[0-9]+:')
+
+# Regex used to parse OID values such as:
+#    0:d=0  hl=2 l=   3 prim: UTF8STRING        :2.0
+VALUE_PATTERN = re.compile('.*prim:\s(\w*)\s*:*(.*)')
 
 
 # NOTE: These factory methods create new style certificate objects from
@@ -662,8 +670,6 @@ class Extensions(dict):
     Represents x.509 (v3) I{custom} extensions.
     """
 
-    pattern = re.compile('([0-9]+\.)+[0-9]+:')
-
     def __init__(self, x509):
         """
         @param x509: A certificate object.
@@ -745,9 +751,13 @@ class Extensions(dict):
             d[trimmed] = v
         return Extensions(d)
 
-    def __ext(self, x509):
-        # get extensions substring
+    def _get_extensions_block(self, x509):
+        """ Isolate the block of text with the extensions. """
         text = x509.as_text()
+        p = Popen(['openssl', 'x509', '-text', '-certopt', 'ext_parse'],
+                stdout=PIPE, stdin=PIPE, stderr=STDOUT)
+        text = p.communicate(input=x509.as_pem())[0]
+
         start = text.find('extensions:')
         end = text.rfind('Signature Algorithm:')
         text = text[start:end]
@@ -756,18 +766,22 @@ class Extensions(dict):
         # but exclude empty values, which are ..\n
         # XXX this will surely break again, we need to parse the extensions
         # via some api.
-        text = re.sub("([^\.])\.\n", "\g<1>..", text, re.MULTILINE)
+
+        # TODO:
+        #text = re.sub("([^\.])\.\n", "\g<1>..", text, re.MULTILINE)
+
         return [s.strip() for s in text.split('\n')]
 
     def __parse(self, x509):
         # parse the extensions section
         oid = None
-        for entry in self.__ext(x509):
+        for entry in self._get_extensions_block(x509):
             if oid is not None:
-                self[oid] = entry[2:]
+                m = VALUE_PATTERN.match(entry)
+                self[oid] = m.group(2).strip()
                 oid = None
                 continue
-            m = self.pattern.match(entry)
+            m = OID_PATTERN.match(entry)
             if m is None:
                 continue
             oid = OID(entry[:-1])
