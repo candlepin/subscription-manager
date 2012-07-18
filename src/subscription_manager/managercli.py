@@ -1807,9 +1807,9 @@ class ListCommand(CliCommand):
             print(self._none_wrap(_("SKU:                  \t%s"),
                   order.sku))
             print(self._none_wrap(_("Contract:             \t%s"),
-                  order.contract_number))
+                  order.contract))
             print(self._none_wrap(_("Account:              \t%s"),
-                  order.account_number))
+                  order.account))
             print(self._none_wrap(_("Serial Number:        \t%s"),
                   cert.serial))
             print(self._none_wrap(_("Active:               \t%s"),

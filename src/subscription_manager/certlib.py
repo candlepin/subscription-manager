@@ -220,19 +220,19 @@ class UpdateAction(Action):
     def syslogResults(self, report):
         for cert in report.added:
             system_log("Added subscription for '%s' contract '%s'" % \
-                (cert.order.name, cert.order.contract_number))
+                (cert.order.name, cert.order.contract))
             for product in cert.products:
                 system_log("Added subscription for product '%s'" % \
                     (product.name))
         for cert in report.rogue:
             system_log("Removed subscription for '%s' contract '%s'" % \
-                (cert.order.name, cert.order.contract_number))
+                (cert.order.name, cert.order.contract))
             for product in cert.products:
                 system_log("Removed subscription for product '%s'" % \
                     (product.name))
         for cert in report.expired:
             system_log("Expired subscription for '%s' contract '%s'" % \
-                (cert.order.name, cert.order.contract_number))
+                (cert.order.name, cert.order.contract))
             for product in cert.products:
                 system_log("Expired subscription for product '%s'" % \
                     (product.name))

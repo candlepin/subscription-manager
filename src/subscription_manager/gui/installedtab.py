@@ -139,7 +139,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
             if compliant_range.hasDate(cert.valid_range.begin()) or \
                     compliant_range.hasDate(cert.valid_range.end()):
 
-                contract_ids.add(cert.order.contract_number)
+                contract_ids.add(cert.order.contract)
                 sub_names.add(cert.order.name)
 
         return contract_ids, sub_names

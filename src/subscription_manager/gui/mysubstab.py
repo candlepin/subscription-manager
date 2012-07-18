@@ -222,10 +222,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             management = _("No")
 
         self.sub_details.show(order.name,
-                              contract=order.contract_number or "",
+                              contract=order.contract or "",
                               start=cert.valid_range.begin(),
                               end=cert.valid_range.end(),
-                              account=order.account_number or "",
+                              account=order.account or "",
                               management=management,
                               virt_only=virt_only or "",
                               support_level=order.service_level or "",
