@@ -19,6 +19,7 @@ class RegisterScreenTests(unittest.TestCase):
         self.rs = RegisterScreen(self.backend, self.consumer, self.facts)
 
         self.rs._screens[CHOOSE_SERVER_PAGE] = Mock()
+        self.rs._screens[CHOOSE_SERVER_PAGE].index = 0
         self.rs._screens[CHOOSE_SERVER_PAGE].button_label = "Dummy"
         self.rs._screens[CHOOSE_SERVER_PAGE].apply.return_value = \
                 CREDENTIALS_PAGE
@@ -34,7 +35,7 @@ class RegisterScreenTests(unittest.TestCase):
         self.rs.cancel(self.rs.cancel_button)
         self.rs.show()
         self.assertEquals(CHOOSE_SERVER_PAGE,
-                          self.rs.register_notebook.get_current_page() - 1)
+                          self.rs.register_notebook.get_current_page())
 
 
 class CredentialsScreenTests(unittest.TestCase):

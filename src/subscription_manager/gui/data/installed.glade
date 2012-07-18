@@ -59,6 +59,9 @@
                             <property name="label" translatable="yes">Register</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <accessibility>
+                              <atkproperty name="AtkObject::accessible-name" translatable="yes">Register System</atkproperty>
+                            </accessibility>
                             <signal name="clicked" handler="on_register_button_clicked"/>
                           </widget>
                           <packing>

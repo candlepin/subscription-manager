@@ -171,9 +171,6 @@ install-files: dbus-service-install compile-po desktop-files
 	if [ ${OS_VERSION} = 5 ]; then \
 		install -m644 ${SRC_DIR}/gui/firstboot/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot;\
 		ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_login.py ${PREFIX}/usr/share/firstboot/modules/;\
-		ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_confirm_subs.py ${PREFIX}/usr/share/firstboot/modules/;\
-		ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_select_sla.py ${PREFIX}/usr/share/firstboot/modules/;\
-		ln -sf  /usr/share/rhn/up2date_client/firstboot/rhsm_manually_subscribe.py ${PREFIX}/usr/share/firstboot/modules/;\
 	else \
 		install -m644 ${SRC_DIR}/gui/firstboot/*.py ${PREFIX}/usr/share/rhn/up2date_client/firstboot;\
 	fi;\

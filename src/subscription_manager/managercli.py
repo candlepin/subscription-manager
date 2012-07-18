@@ -78,6 +78,7 @@ INSTALLED_PRODUCT_STATUS = \
 
 AVAILABLE_SUBS_LIST = \
     _("Subscription Name:    \t%s") + "\n" + \
+    _("SKU:                  \t%s") + "\n" + \
     _("Pool Id:              \t%s") + "\n" + \
     _("Quantity:             \t%s") + "\n" + \
     _("Service Level:        \t%s") + "\n" + \
@@ -276,11 +277,10 @@ class CliCommand(object):
 
         proxy_user = proxy_user_arg or self.proxy_user or cfg.get('server', 'proxy_user')
 
-        proxy_password = proxy_password_arg or cfg.get('server', 'proxy_password')
+        proxy_password = proxy_password_arg or self.proxy_password or cfg.get('server', 'proxy_password')
 
         # pass in all args, to make sure we don't rely on connections
         # defautls pulled from config at class inst time
-        #FIXME: fix that in python-rhsm/connection
         cp = connection.UEPConnection(host=server_hostname,
                                       ssl_port=server_port,
                                       handler=server_prefix,
@@ -687,7 +687,7 @@ class ServiceLevelCommand(UserPassCommand):
 
         if self.options.org and \
            not self.options.list:
-            print(_("Error: --org is only supported with the --list command"))
+            print(_("Error: --org is only supported with the --list option"))
             sys.exit(-1)
 
         if not self.consumerIdentity.existsAndValid():
@@ -1107,16 +1107,10 @@ class ReleaseCommand(CliCommand):
 
     def _get_consumer_release(self):
         err_msg = _("Error: The 'release' command is not supported by the server.")
-        try:
-            return self.cp.getRelease(self.consumer['uuid'])['releaseVer']
-        # ie, a 404 from a old server that doesn't support the release API
-        except connection.RemoteServerException, e:
+        consumer = self.cp.getConsumer(self.consumer['uuid'])
+        if 'releaseVer' not in consumer:
             systemExit(-1, err_msg)
-        except connection.RestlibException, e:
-            if e.code == 404:
-                systemExit(-1, err_msg)
-            else:
-                raise e
+        return consumer['releaseVer']['releaseVer']
 
     def show_current_release(self):
         release = self._get_consumer_release()
@@ -1312,7 +1306,6 @@ class UnSubscribeCommand(CliCommand):
         """
         Executes the command.
         """
-        check_registration()
         self._validate_options()
         if ConsumerIdentity.exists():
             consumer = ConsumerIdentity.read().getConsumerId()
@@ -1736,7 +1729,9 @@ class ListCommand(CliCommand):
             if not len(epools):
                 print(_("No available subscription pools to list"))
                 sys.exit(0)
-            print "+-------------------------------------------+\n    %s\n+-------------------------------------------+\n" % _("Available Subscriptions")
+            print("+-------------------------------------------+")
+            print("    " + _("Available Subscriptions"))
+            print("+-------------------------------------------+")
             for data in epools:
                 # TODO:  Something about these magic numbers!
                 product_name = self._format_name(data['productName'], 24, 80)
@@ -1747,6 +1742,7 @@ class ListCommand(CliCommand):
                     machine_type = _("physical")
 
                 print self._none_wrap(AVAILABLE_SUBS_LIST, product_name,
+                        data['productId'],
                         data['id'],
                         data['quantity'],
                         data['service_level'] or "",
@@ -1792,7 +1788,7 @@ class ListCommand(CliCommand):
             sys.exit(0)
 
         print("+-------------------------------------------+")
-        print("   " + _("Consumed Product Subscriptions"))
+        print("   " + _("Consumed Subscriptions"))
         print("+-------------------------------------------+\n")
 
         for cert in certs:
@@ -1804,7 +1800,12 @@ class ListCommand(CliCommand):
             for product in cert.products:
                 print(self._none_wrap(prefix, product.name))
                 prefix = _("                      \t%s")
+            # print an empty provides line for certs with no provided products
+            if len(cert.products) == 0:
+                print(prefix % "")
 
+            print(self._none_wrap(_("SKU:                  \t%s"),
+                  order.sku))
             print(self._none_wrap(_("Contract:             \t%s"),
                   order.contract_number))
             print(self._none_wrap(_("Account:              \t%s"),

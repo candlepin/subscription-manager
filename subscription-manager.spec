@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.8
+Version: 1.0.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -268,17 +268,11 @@ rm -rf %{buildroot}
 %files -n subscription-manager-firstboot
 %defattr(-,root,root,-)
 %{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
-%{_datadir}/rhn/up2date_client/firstboot/rhsm_select_sla.py*
-%{_datadir}/rhn/up2date_client/firstboot/rhsm_confirm_subs.py*
-%{_datadir}/rhn/up2date_client/firstboot/rhsm_manually_subscribe.py*
 
 %if 0%{?rhel} < 6
   %if 0%{?fedora} <= 12
     # we are building for fedora <= 12 or rhel < 6
     %{_prefix}/share/firstboot/modules/rhsm_login.py*
-    %{_prefix}/share/firstboot/modules/rhsm_select_sla.py*
-    %{_prefix}/share/firstboot/modules/rhsm_confirm_subs.py*
-    %{_prefix}/share/firstboot/modules/rhsm_manually_subscribe.py*
   %endif
 %endif
 
@@ -341,6 +335,44 @@ fi
 %endif
 
 %changelog
+* Tue Jul 10 2012 Alex Wood <awood@redhat.com> 1.0.9-1
+- On invalid credentials in register, return to the login screen
+  (jbowes@redhat.com)
+- 821065: Make SLA/subscription asyncronous (jbowes@redhat.com)
+- 838942: make gui and cli use the same releaseVer check (jbowes@redhat.com)
+- fixes for translations from zanata (alikins@redhat.com)
+- latest strings from zanata (alikins@redhat.com)
+- Remove check for date parsing not failing when we expect it to
+  (alikins@redhat.com)
+- Remove glade orientation properties. (awood@redhat.com)
+- Moving the filter counting mechanism into the Filters class.
+  (awood@redhat.com)
+- Adjust expand and fill properties for the filter dialog. (awood@redhat.com)
+- add za_CN.utf to list of known busted locales (alikins@redhat.com)
+- 824424: Fixing AttributeError thrown when accessing online help in RHEL 5.
+  (awood@redhat.com)
+- Add icon to update progress window. (awood@redhat.com)
+- 806986: Display SKU for available and consumed subscriptions
+  (jbowes@redhat.com)
+- Increase the default size of the subscriptions viewport. (awood@redhat.com)
+- Add no overlapping to the default filters. (awood@redhat.com)
+- Tweaks to filter options dialog. (awood@redhat.com)
+- 801187: print Provides: for all subs, even with no provides
+  (jbowes@redhat.com)
+- The filter dialog now updates results in real time. (awood@redhat.com)
+- 837106: Add a11y property for register button (jbowes@redhat.com)
+- 813336: Break filter options out into a separate dialog box.
+  (awood@redhat.com)
+- 837036: Do not refer to options as commands (bkearney@redhat.com)
+- 829495: Delete a mis-translated string to force re-translation
+  (bkearney@redhat.com)
+- 828966: Delete a mis-translated string to force trasnlations
+  (bkearney@redhat.com)
+- 767133: Remove english to english translations from bn_IN to force a new
+  translation (bkearney@redhat.com)
+- 829491: Remove english trnaslations for italian translations
+  (bkearney@redhat.com)
+
 * Tue Jul 03 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 1.0.8-1
 - Add rpmlint config for tmpfiles.d (jbowes@redhat.com)
 - Use the i18n_optparse.OptionParser instead of optparse (alikins@redhat.com)

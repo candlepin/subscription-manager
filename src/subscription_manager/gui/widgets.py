@@ -260,7 +260,7 @@ class SubDetailsWidget(GladeWidget):
 
     def __init__(self, show_contract=True):
         widget_names = ["sub_details_vbox", "subscription_text", "products_view",
-                "support_level_text", "support_type_text"]
+                "support_level_text", "support_type_text", "sku_text"]
         super(SubDetailsWidget, self).__init__("subdetails.glade", widget_names)
 
         self.show_contract = show_contract
@@ -293,6 +293,8 @@ class SubDetailsWidget(GladeWidget):
             self.subscription_text.get_accessible().set_name(
                     "All Available Subscription Text")
             self.support_type_text.get_accessible().set_name(
+                    "All Available SKU Text")
+            self.support_type_text.get_accessible().set_name(
                     "All Available Support Type Text")
             self.support_level_text.get_accessible().set_name(
                     "All Available Support Level Text")
@@ -306,7 +308,7 @@ class SubDetailsWidget(GladeWidget):
 
     def show(self, name, contract=None, start=None, end=None, account=None,
             management=None, support_level="", support_type="",
-            virt_only=None, products=[], highlight=None):
+            virt_only=None, products=[], highlight=None, sku=None):
         """
         Show subscription details.
 
@@ -322,6 +324,8 @@ class SubDetailsWidget(GladeWidget):
         for index in utils.find_text(name, highlight):
             buf.apply_tag(tag, buf.get_iter_at_offset(index),
                     buf.get_iter_at_offset(index + len(highlight)))
+
+        self._set(self.sku_text, sku)
 
         self._set(self.support_level_text, support_level)
         self._set(self.support_type_text, support_type)
@@ -349,6 +353,8 @@ class SubDetailsWidget(GladeWidget):
         """ No subscription to display. """
         self.bundled_products.clear()
         self.subscription_text.get_buffer().set_text("")
+
+        self._set(self.sku_text, "")
 
         self._set(self.support_level_text, "")
         self._set(self.support_type_text, "")

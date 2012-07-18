@@ -99,31 +99,8 @@ class RhsmFirstbootModule(ParentClass):
     def passInParent(self, parent):
         self.parent = parent
 
+        self.register_button = parent.nextButton
+        self.cancel_button = parent.backButton
+
     def grabFocus(self):
         self.initializeUI()
-
-    def _skip_remaining_screens(self, interface):
-        """
-        Find the first non-rhsm module after the rhsm modules, and move to it.
-
-        Assumes that only our modules are grouped together, and there are four
-        of them.
-        """
-
-        if self._is_compat:
-            # must be el5, need to use self.parent to get the moduleList
-            interface = self.parent
-
-        i = 0
-        while not interface.moduleList[i].__module__.startswith('rhsm_'):
-            i += 1
-
-        i += NUM_RHSM_SCREENS
-
-        # el5 compat. depends on this being called from apply,
-        # interface = self.parent
-        # and apply returning true
-        if self._is_compat:
-            self.parent.nextPage = i
-        else:
-            interface.moveToPage(pageNum=i)
