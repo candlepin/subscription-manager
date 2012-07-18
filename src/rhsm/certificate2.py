@@ -41,6 +41,7 @@ PRODUCT_CERT = 1
 ENTITLEMENT_CERT = 2
 IDENTITY_CERT = 3
 
+
 class CertFactory(object):
     """
     Factory for creating certificate objects.
@@ -307,8 +308,6 @@ class CertFactory(object):
         products = []
         for product in product_payload:
 
-            content = []
-
             products.append(Product(
                 id=product['id'],
                 name=product['name'],
@@ -335,7 +334,6 @@ class CertFactory(object):
                     required_tags=c.get('required_tags', []),
                 ))
         return content
-
 
     def _decompress_payload(self, payload):
         """
@@ -501,18 +499,18 @@ class Order(object):
             service_type=None, stacking_id=None, virt_only=None):
 
         self.name = name
-        self.number = number # order number
-        self.sku = sku # aka the marketing product
+        self.number = number  # order number
+        self.sku = sku  # aka the marketing product
 
-        self.subscription = subscription # seems to be unused
+        self.subscription = subscription  # seems to be unused
 
         # total quantity on the order:
-        self.quantity = safe_int(quantity, None) # rarely used
+        self.quantity = safe_int(quantity, None)  # rarely used
 
         # actual quantity used by this entitlement:
         self.quantity_used = safe_int(quantity_used, 1)
 
-        self.virt_limit = virt_limit # unused
+        self.virt_limit = virt_limit  # unused
 
         self.stacking_id = stacking_id
 
@@ -572,5 +570,3 @@ class Content(object):
     def __str__(self):
         return "<Content: name=%s label=%s enabled=%s>" % \
                 (self.name, self.label, self.enabled)
-
-

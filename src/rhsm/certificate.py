@@ -40,8 +40,10 @@ import warnings
 
 log = logging.getLogger(__name__)
 
+
 # Regex used to scan for OIDs:
 OID_PATTERN = re.compile('([0-9]+\.)+[0-9]+:')
+
 
 # Regex used to parse OID values such as:
 #    0:d=0  hl=2 l=   3 prim: UTF8STRING        :2.0
@@ -53,11 +55,12 @@ VALUE_PATTERN = re.compile('.*prim:\s(\w*)\s*:*(.*)')
 # we're using two modules for the time being. Eventually the certificate2 code
 # should be moved here.
 def create_from_file(path):
-    from certificate2 import CertFactory # prevent circular deps
+    from certificate2 import CertFactory  # prevent circular deps
     return CertFactory().create_from_file(path)
 
+
 def create_from_pem(pem):
-    from certificate2 import CertFactory # prevent circular deps
+    from certificate2 import CertFactory  # prevent circular deps
     return CertFactory().create_from_pem(pem)
 
 
