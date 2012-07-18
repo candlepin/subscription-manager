@@ -442,9 +442,9 @@ class UpdateReport:
                 for product in products:
                     s.append('%s[sn:%d (%s,) @ %s]' % \
                         (indent,
-                         c.serial),
+                         c.serial,
                          product.name,
-                         c.path)
+                         c.path))
         else:
             s.append('%s<NONE>' % indent)
 
