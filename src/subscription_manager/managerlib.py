@@ -666,7 +666,7 @@ class ImportFileExtractor(object):
         @return: True if valid, False otherwise.
         """
         try:
-            ent_cert = create_from_pem(self.get_cert_content())
+            create_from_pem(self.get_cert_content())
         except CertificateException:
             return False
         ent_key = Key(self.get_key_content())

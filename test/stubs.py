@@ -83,8 +83,9 @@ config.CFG.read("test/rhsm.conf")
 from datetime import datetime, timedelta
 
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
-from rhsm.certificate import DateRange, parse_tags, Content
-from rhsm.certificate2 import *
+from rhsm.certificate import parse_tags, Content
+from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, \
+        Product, Content, Order
 
 
 class MockStdout:
@@ -184,13 +185,10 @@ class StubEntitlementCertificate(EntitlementCertificate):
         if provided_products:
             products = products + provided_products
 
-
         if not start_date:
             start_date = datetime.now()
         if not end_date:
             end_date = start_date + timedelta(days=365)
-
-        fmt = "%Y-%m-%dT%H:%M:%SZ"
 
         # to simulate a cert with no product
         sku = None
