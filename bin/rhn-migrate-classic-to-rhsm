@@ -236,21 +236,6 @@ def selectServiceLevel(cp, consumer, servicelevel):
     return servicelevel
 
 
-def setServiceLevel(cp, consumer, servicelevel):
-    uuid = consumer.getConsumerId()
-    if servicelevel is "":
-        print _("\nNot subscribing to any service level.")
-    else:
-        print _("\nSubscribing to service level %s" % servicelevel)
-
-    try:
-        cp.updateConsumer(uuid, service_level=servicelevel)
-    except Exception, e:
-        log.error(e)
-        log.error(traceback.format_exc())
-        systemExit(1, CONNECTION_FAILURE % e)
-
-
 def getSubscribedChannelsList():
     try:
         subscribedChannels = map(lambda x: x['label'], getChannels().channels())
@@ -371,7 +356,7 @@ def transferHttpProxySettings():
         rhsmcfg.save()
 
 
-def runSubscriptionManager(username, password):
+def register(username, password):
     # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
     print _("\nAttempting to register system to Certificate-based RHN ...")
     result = subprocess.call(['subscription-manager', 'register', '--username=' + username, '--password=' + password])
@@ -380,18 +365,20 @@ def runSubscriptionManager(username, password):
     else:
         consumer = ConsumerIdentity.read()
         print _("System '%s' successfully registered to Certificate-based RHN.\n") % consumer.getConsumerName()
+    return consumer
 
+
+def subscribe(consumer, servicelevel):
     # For subscribing, use the GUI tool if the DISPLAY environment variable is set and the gui tool exists
     if os.getenv('DISPLAY') and os.path.exists('/usr/bin/subscription-manager-gui') and options.gui:
         print _("Launching the GUI tool to manually subscribe the system ...")
         result = subprocess.call(['subscription-manager-gui'], stderr=open(os.devnull, 'w'))
     else:
         print _("Attempting to auto-subscribe to appropriate subscriptions ...")
-        result = subprocess.call(['subscription-manager', 'subscribe', '--auto'])
+        result = subprocess.call(['subscription-manager', 'subscribe', '--auto', '--servicelevel=' + servicelevel])
         if result != 0:
             print _("\nUnable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?")
     print _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary.") % consumer.getConsumerId()
-    return consumer
 
 
 def deployProdCertificates(subscribedChannels):
@@ -565,9 +552,9 @@ def main():
 
     # register the system to Certificate-based RHN and consume a subscription
     if not options.noauto:
-        consumer = runSubscriptionManager(username, password)
+        consumer = register(username, password)
         servicelevel = selectServiceLevel(cp, consumer, options.servicelevel)
-        setServiceLevel(cp, consumer, servicelevel)
+        subscribe(consumer, servicelevel)
     # check if we need to enable to supplementary/optional channels
     enableExtraChannels(subscribedChannels, cp)
     cleanUp(subscribedChannels)
