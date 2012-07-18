@@ -198,10 +198,10 @@ class CertFactory(object):
                 quantity=order_extensions.get('5'),
                 virt_limit=order_extensions.get('8'),
                 socket_limit=order_extensions.get('9'),
-                contract_number=order_extensions.get('10'),
+                contract=order_extensions.get('10'),
                 quantity_used=order_extensions.get('11'),
                 warning_period=order_extensions.get('12'),
-                account_number=order_extensions.get('13'),
+                account=order_extensions.get('13'),
                 provides_management=order_extensions.get('14'),
                 service_level=order_extensions.get('15'),
                 service_type=order_extensions.get('16'),
@@ -288,10 +288,10 @@ class CertFactory(object):
                 sku=sub.get('sku', None),
                 quantity=order.get('quantity', None),
                 socket_limit=sub.get('sockets', None),
-                contract_number=order.get('contract', None),
+                contract=order.get('contract', None),
                 quantity_used=payload.get('quantity', 1),
                 warning_period=sub.get('warning', 0),
-                account_number=order.get('account', None),
+                account=order.get('account', None),
                 provides_management=sub.get('management', False),
                 service_level=service_level,
                 service_type=service_type,
@@ -494,8 +494,8 @@ class Order(object):
 
     def __init__(self, name=None, number=None, sku=None, subscription=None,
             quantity=None, virt_limit=None, socket_limit=None,
-            contract_number=None, quantity_used=None, warning_period=None,
-            account_number=None, provides_management=None, service_level=None,
+            contract=None, quantity_used=None, warning_period=None,
+            account=None, provides_management=None, service_level=None,
             service_type=None, stacking_id=None, virt_only=None):
 
         self.name = name
@@ -517,8 +517,8 @@ class Order(object):
         self.socket_limit = safe_int(socket_limit, None)
         self.warning_period = safe_int(warning_period, 0)
 
-        self.contract_number = contract_number
-        self.account_number = account_number
+        self.contract = contract
+        self.account = account
 
         self.provides_management = provides_management or False
 
