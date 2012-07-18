@@ -18,6 +18,14 @@ Contains classes for working with x.509 certificates.
 The backing implementation is M2Crypto.X509 which has insufficient
 support for custom v3 extensions.  It is not intended to be a
 replacement of full wrapper but instead an extension.
+
+Several of the classes in this module are now marked deprecated in favor
+of their new counterparts in certificate2 module. However, rather than
+depending on either specifically, you can use the create methods below to
+automatically create the correct object for any given certificate.
+
+Eventually the deprecated classes below will be removed, and the new classes
+will be relocated into this module.
 """
 
 import os
@@ -26,10 +34,34 @@ from M2Crypto import X509, RSA
 from datetime import datetime as dt
 from datetime import tzinfo, timedelta
 from time import strptime
+from subprocess import Popen, PIPE, STDOUT
 import logging
 import warnings
 
 log = logging.getLogger(__name__)
+
+
+# Regex used to scan for OIDs:
+OID_PATTERN = re.compile('([0-9]+\.)+[0-9]+:')
+
+
+# Regex used to parse OID values such as:
+#    0:d=0  hl=2 l=   3 prim: UTF8STRING        :2.0
+VALUE_PATTERN = re.compile('.*prim:\s(\w*)\s*:*(.*)')
+
+
+# NOTE: These factory methods create new style certificate objects from
+# the certificate2 module. They are placed here to abstract the fact that
+# we're using two modules for the time being. Eventually the certificate2 code
+# should be moved here.
+def create_from_file(path):
+    from certificate2 import CertFactory  # prevent circular deps
+    return CertFactory().create_from_file(path)
+
+
+def create_from_pem(pem):
+    from certificate2 import CertFactory  # prevent circular deps
+    return CertFactory().create_from_pem(pem)
 
 
 def parse_tags(tag_str):
@@ -57,6 +89,45 @@ class UTC(tzinfo):
         return "<Timezone: %s>" % self.tzname(None)
 
 
+# m2Crypto available in 5.7 doesn't have the get_datetime, so
+# include the funtionality here
+def get_datetime_from_x509(date):
+    date_str = str(date)
+
+    if ' ' not in date_str:
+        raise ValueError("Invalid date: %s" % date_str)
+    month, rest = date_str.split(' ', 1)
+    _ssl_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
+                   "Sep", "Oct", "Nov", "Dec"]
+
+    if month not in _ssl_months:
+        raise ValueError("Invalid date %s: Invalid month: %s" % (date_str, month))
+    if rest.endswith(' GMT'):
+        timezone = UTC()
+        rest = rest[:-4]
+
+    tm = list(strptime(rest, "%d %H:%M:%S %Y"))[:6]
+    tm[1] = _ssl_months.index(month) + 1
+    tm.append(0)
+    tm.append(timezone)
+    return dt(*tm)
+
+
+def deprecated(func):
+    """
+    A decorator that marks a function as deprecated. This will cause a
+    warning to be emitted any time that function is used by a caller.
+    """
+    def new_func(*args, **kwargs):
+        warnings.warn("Call to deprecated function: {}.".format(func.__name__),
+                category=DeprecationWarning)
+        return func(*args, **kwargs)
+    new_func.__name__ = func.__name__
+    new_func.__doc__ = func.__doc__
+    new_func.__dict__.update(func.__dict__)
+    return new_func
+
+
 class Certificate(object):
     """
     Represents and x.509 certificate.
@@ -66,6 +137,7 @@ class Certificate(object):
     @type __ext: L{Extensions}
     """
 
+    @deprecated
     def __init__(self, content=None):
         """
         @param pem: The (optional) PEM encoded content.
@@ -136,31 +208,8 @@ class Certificate(object):
         @return: The valid date range.
         @rtype: L{DateRange}
         """
-        return DateRange(self._get_datetime(self.x509.get_not_before()),
-                self._get_datetime(self.x509.get_not_after()))
-
-    # m2Crypto available in 5.7 doesn't have the get_datetime, so
-    # include the funtionality here
-    def _get_datetime(self, date):
-        date_str = str(date)
-
-        if ' ' not in date_str:
-            raise ValueError("Invalid date: %s" % date_str)
-        month, rest = date_str.split(' ', 1)
-        _ssl_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
-                       "Sep", "Oct", "Nov", "Dec"]
-
-        if month not in _ssl_months:
-            raise ValueError("Invalid date %s: Invalid month: %s" % (date_str, month))
-        if rest.endswith(' GMT'):
-            timezone = UTC()
-            rest = rest[:-4]
-
-        tm = list(strptime(rest, "%d %H:%M:%S %Y"))[:6]
-        tm[1] = _ssl_months.index(month) + 1
-        tm.append(0)
-        tm.append(timezone)
-        return dt(*tm)
+        return DateRange(get_datetime_from_x509(self.x509.get_not_before()),
+                get_datetime_from_x509(self.x509.get_not_after()))
 
     def valid(self, on_date=None):
         """
@@ -451,14 +500,12 @@ class EntitlementCertificate(ProductCertificate):
             lst.append(Role(ext))
         return lst
 
+    @deprecated
     def validRangeWithGracePeriod(self):
-        warnings.warn("validRangeWithGracePeriod is deprecated. use validRange instead.",
-                DeprecationWarning)
         return super(EntitlementCertificate, self).validRange()
 
+    @deprecated
     def validWithGracePeriod(self):
-        warnings.warn("validWithGracePeriod is deprecated. use valid instead.",
-                DeprecationWarning)
         return self.validRangeWithGracePeriod().hasNow()
 
     def bogus(self):
@@ -590,7 +637,7 @@ class DateRange:
         gmt = gmt.replace(tzinfo=GMT())
         return (gmt >= self.begin() and gmt <= self.end())
 
-    def hasDate(self, date):
+    def has_date(self, date):
         """
         Get whether the certificate is valid based on the date now.
         @param: date
@@ -599,6 +646,10 @@ class DateRange:
         @rtype: boolean
         """
         return (date >= self.begin() and date <= self.end())
+
+    @deprecated
+    def hasDate(self, date):
+        return self.has_date(date)
 
     def __str__(self):
         return '\n\t%s\n\t%s' % (self._begin, self._end)
@@ -621,8 +672,6 @@ class Extensions(dict):
     """
     Represents x.509 (v3) I{custom} extensions.
     """
-
-    pattern = re.compile('([0-9]+\.)+[0-9]+:')
 
     def __init__(self, x509):
         """
@@ -705,29 +754,28 @@ class Extensions(dict):
             d[trimmed] = v
         return Extensions(d)
 
-    def __ext(self, x509):
-        # get extensions substring
+    def _get_extensions_block(self, x509):
+        """ Isolate the block of text with the extensions. """
         text = x509.as_text()
+        p = Popen(['openssl', 'x509', '-text', '-certopt', 'ext_parse'],
+                stdout=PIPE, stdin=PIPE, stderr=STDOUT)
+        text = p.communicate(input=x509.as_pem())[0]
+
         start = text.find('extensions:')
         end = text.rfind('Signature Algorithm:')
         text = text[start:end]
-        # catch cases where the value is .\n<something> instead of just
-        # .<something>
-        # but exclude empty values, which are ..\n
-        # XXX this will surely break again, we need to parse the extensions
-        # via some api.
-        text = re.sub("([^\.])\.\n", "\g<1>..", text, re.MULTILINE)
         return [s.strip() for s in text.split('\n')]
 
     def __parse(self, x509):
         # parse the extensions section
         oid = None
-        for entry in self.__ext(x509):
+        for entry in self._get_extensions_block(x509):
             if oid is not None:
-                self[oid] = entry[2:]
+                m = VALUE_PATTERN.match(entry)
+                self[oid] = m.group(2).strip()
                 oid = None
                 continue
-            m = self.pattern.match(entry)
+            m = OID_PATTERN.match(entry)
             if m is None:
                 continue
             oid = OID(entry[:-1])
@@ -874,6 +922,7 @@ class OID(object):
 
 class Order:
 
+    @deprecated
     def __init__(self, ext):
         self.ext = ext
 
@@ -965,6 +1014,7 @@ class Order:
 
 class Product:
 
+    @deprecated
     def __init__(self, p_hash, ext):
         self.hash = p_hash
         self.ext = ext
@@ -1103,10 +1153,5 @@ class Role(Entitlement):
         return str(self)
 
 
-if __name__ == '__main__':
-    import sys
-    for path in sys.argv[1:]:
-        print path
-        pc = EntitlementCertificate()
-        pc.read(path)
-        print pc
+class CertificateException(Exception):
+    pass

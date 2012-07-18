@@ -23,6 +23,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: m2crypto
 Requires: python-simplejson
 Requires: python-iniparse
+Requires: openssl
 BuildArch: noarch
 
 BuildRequires: python2-devel
@@ -126,14 +127,7 @@ rm -rf %{buildroot}
 - 766895: Added hypervisorCheckIn call to allow sending a mapping of host/guest ids for
   creation/update. (mstead@redhat.com)
 
-* Wed Dec 07 2011 William Poteat <wpoteat@redhat.com> 0.98.6-1
-
 * Tue Dec 06 2011 William Poteat <wpoteat@redhat.com> 0.98.5-1
-- 
-+- 754366: workaround a bug in httpslib.ProxyHttpsConnection
-+  (alikins@redhat.com)
-
-* Tue Dec 06 2011 William Poteat <wpoteat@redhat.com> 0.98.4-1
 - 754366: workaround a bug in httpslib.ProxyHttpsConnection
   (alikins@redhat.com)
 
