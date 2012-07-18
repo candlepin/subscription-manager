@@ -346,7 +346,6 @@ class CertFactory(object):
         """
         decoded = base64.decodestring(payload)
         decompressed = zlib.decompress(decoded)
-        #print json.dumps(json.loads(decompressed), sort_keys=True, indent=2)
         return json.loads(decompressed)
 
 

@@ -20,7 +20,7 @@ support for custom v3 extensions.  It is not intended to be a
 replacement of full wrapper but instead an extension.
 
 Several of the classes in this module are now marked deprecated in favor
-of their new counterparts in certificate2 module. However, wather than
+of their new counterparts in certificate2 module. However, rather than
 depending on either specifically, you can use the create methods below to
 automatically create the correct object for any given certificate.
 
@@ -761,15 +761,6 @@ class Extensions(dict):
         start = text.find('extensions:')
         end = text.rfind('Signature Algorithm:')
         text = text[start:end]
-        # catch cases where the value is .\n<something> instead of just
-        # .<something>
-        # but exclude empty values, which are ..\n
-        # XXX this will surely break again, we need to parse the extensions
-        # via some api.
-
-        # TODO:
-        #text = re.sub("([^\.])\.\n", "\g<1>..", text, re.MULTILINE)
-
         return [s.strip() for s in text.split('\n')]
 
     def __parse(self, x509):
