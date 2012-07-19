@@ -71,24 +71,26 @@ class CertFactory(object):
         # Load the X509 extensions so we can determine what we're dealing with:
         try:
             x509 = X509.load_cert_string(pem)
-        except X509.X509Error, e:
-            raise CertificateException(e)
+            extensions = Extensions(x509)
+            redhat_oid = OID(REDHAT_OID_NAMESPACE)
+            # Trim down to only the extensions in the Red Hat namespace:
+            extensions = extensions.ltrim(len(redhat_oid))
 
-        extensions = Extensions(x509)
-        redhat_oid = OID(REDHAT_OID_NAMESPACE)
-        # Trim down to only the extensions in the Red Hat namespace:
-        extensions = extensions.ltrim(len(redhat_oid))
+            # Check the certificate version, absence of the extension implies v1.0:
+            cert_version_str = "1.0"
+            if EXT_CERT_VERSION in extensions:
+                cert_version_str = extensions[EXT_CERT_VERSION]
 
-        # Check the certificate version, absence of the extension implies v1.0:
-        cert_version_str = "1.0"
-        if EXT_CERT_VERSION in extensions:
-            cert_version_str = extensions[EXT_CERT_VERSION]
+            version = Version(cert_version_str)
+            if version.major == 1:
+                return self._create_v1_cert(version, extensions, x509, path)
+            if version.major == 2:
+                return self._create_v2_cert(version, extensions, x509, path)
 
-        version = Version(cert_version_str)
-        if version.major == 1:
-            return self._create_v1_cert(version, extensions, x509, path)
-        if version.major == 2:
-            return self._create_v2_cert(version, extensions, x509, path)
+        except CertificateException, e:
+            raise e
+        except Exception, e:
+            raise CertificateException(e.message)
 
     def _create_v1_cert(self, version, extensions, x509, path):
 
@@ -247,13 +249,7 @@ class CertFactory(object):
             raise CertificateException("Unable to parse non-entitlement "
                     "v2 certificates")
 
-        try:
-            payload = self._decompress_payload(extensions[EXT_ENT_PAYLOAD])
-        except Exception, e:
-            log.error("Error parsing certificate:")
-            log.error(x509.as_pem())
-            log.exception(e)
-            raise CertificateException(e)
+        payload = self._decompress_payload(extensions[EXT_ENT_PAYLOAD])
 
         order = self._parse_v2_order(payload)
         content = self._parse_v2_content(payload)
@@ -342,8 +338,13 @@ class CertFactory(object):
         This method decodes, de-compressed, parses the JSON and returns the
         resulting dict.
         """
-        decoded = base64.decodestring(payload)
-        decompressed = zlib.decompress(decoded)
+        try:
+            decoded = base64.decodestring(payload)
+            decompressed = zlib.decompress(decoded)
+        except Exception, e:
+            log.exception(e)
+            raise CertificateException("Error decoding/decompressing "
+                    "certificate payload.")
         return json.loads(decompressed)
 
 
