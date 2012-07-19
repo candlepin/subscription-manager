@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.9
+Version: 1.0.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -335,6 +335,44 @@ fi
 %endif
 
 %changelog
+* Thu Jul 19 2012 Alex Wood <awood@redhat.com> 1.0.10-1
+- 828903: Pull in the latest translation for error messages with no options
+  translated (bkearney@redhat.com)
+- 841011: Fix double words in the korean translations (bkearney@redhat.com)
+- 828958: Untranslate the word password when it it used as an option in the
+  pt_BR translations (bkearney@redhat.com)
+- Fixes for translations from zanata (alikins@redhat.com)
+- Latest translations from zanata (alikins@redhat.com)
+- 839887: Make error message text more clear when network is disconnected
+  (bkearney@redhat.com)
+- 839760: Fix the screen text for preferences based on UXD feedback
+  (bkearney@redhat.com)
+- 818355: Rename the use of 'Contract Number' to contract in the gui
+  (bkearney@redhat.com)
+- 840169: The service level was incorrectly being set after auto-subscription.
+  (awood@redhat.com)
+- 840637: Fixed missing reference to parent window. (mstead@redhat.com)
+- Import and translate error strings for 'envirovment' cmd (alikins@redhat.com)
+- Removed --wait arg, delay 2 min in rhsmcertd (mstead@redhat.com)
+- Interval CLI args for rhsmcertd now specified as minutes. (mstead@redhat.com)
+- Update rhsmcertd.init.d to use new CLI args (mstead@redhat.com)
+- Bad url format test and a refactor of parse_url (alikins@redhat.com)
+- Print message when rhsmcertd is shutting down (mstead@redhat.com)
+- Fixed spelling and newline issues in rhsmcertd (mstead@redhat.com)
+- Handle a few new bad url formats (http//foo or http:sdf) (alikins@redhat.com)
+- Add wait and now args to rhsmcertd (mstead@redhat.com)
+- 839683: Add some strings from older optparse to our i18n version
+  (alikins@redhat.com)
+- 838146: Subscription-manager cli does not allow unsubscribe when consumer not
+  registered. (wpoteat@redhat.com)
+- rhsmcertd: add format specifier checking to r_log (jbowes@redhat.com)
+- Improve rhsmcertd logging (jbowes@redhat.com)
+- Fix bug where filter options were not persisted when the dialog was reopened.
+  (awood@redhat.com)
+- 838242: proxy password from the cli wasn't getting used (alikins@redhat.com)
+- Adding options parsing support (work-in-progress). (mstead@redhat.com)
+- Added initial check delay to rhsmcertd (mstead@redhat.com)
+
 * Tue Jul 10 2012 Alex Wood <awood@redhat.com> 1.0.9-1
 - On invalid credentials in register, return to the login screen
   (jbowes@redhat.com)
