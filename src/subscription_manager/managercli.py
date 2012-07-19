@@ -1264,7 +1264,7 @@ class SubscribeCommand(CliCommand):
             if result[1]:
                 print 'Entitlement Certificate(s) update failed due to the following reasons:'
                 for e in result[1]:
-                    print '\t-', ' '.join(str(e).split('-')[1:]).strip()
+                    print '\t-', str(e)
             elif self.options.auto:
                 # run this after certlib update, so we have the new entitlements
                 subscribed = show_autosubscribe_output()

@@ -134,12 +134,9 @@ class CertificateFetchError(Exception):
     def __init__(self, errors):
         self.errors = errors
 
-    def errToMsg(self, err):
-        return ' '.join(str(err).split('-')[1:]).strip()
-
     def __str__(self, reason=""):
         msg = 'Entitlement Certificate(s) update failed due to the following reasons:\n' + \
-        '\n'.join(map(self.errToMsg, self.errors))
+        '\n'.join(self.errors)
         return msg
 
 

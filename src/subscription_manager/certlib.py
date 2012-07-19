@@ -314,7 +314,7 @@ class UpdateAction(Action):
                     'Bundle not loaded:\n%s\n%s',
                     bundle,
                     e)
-                exceptions.append(e)
+                exceptions.append(e.message)
         return exceptions
 
     def purgeExpired(self, report):
