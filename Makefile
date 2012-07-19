@@ -36,6 +36,12 @@ coverage-jenkins: coverage-xunit
 	coverage html --include "${SRC_DIR}/*"
 	coverage xml --include "${SRC_DIR}/*"
 
+version_check:
+# needs https://github.com/alikins/pyqver
+	-@TMPFILE=`mktemp` || exit 1; \
+	pyqver2.py -v -m 2.5  $(STYLEFILES) | tee $$TMPFILE; \
+	! test -s $$TMPFILE
+
 pyflakes:
 # pyflakes doesn't have a config file, cli options, or a ignore tag
 # and the variants of "redefination" we get now aren't really valid
