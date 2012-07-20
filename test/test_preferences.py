@@ -36,7 +36,7 @@ def getConsumerData(self):
     return CONSUMER_DATA
 
 
-class StubConsumerNone():
+class StubConsumerNone:
     def __init__(self):
         self.uuid = None
 
