@@ -197,7 +197,10 @@ class UpdateAction:
             content_id = content.label
             repo = Repo(content_id)
             repo['name'] = content.name
-            repo['enabled'] = "1" if content.enabled else "0"
+            if content.enabled:
+                repo['enabled'] = "1"
+            else:
+                repo['enabled'] = "0"
             repo['baseurl'] = self.join(baseurl, self._use_release_for_releasever(content.url))
 
             # If no GPG key URL is specified, turn gpgcheck off:
