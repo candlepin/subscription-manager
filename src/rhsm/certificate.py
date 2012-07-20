@@ -119,7 +119,7 @@ def deprecated(func):
     warning to be emitted any time that function is used by a caller.
     """
     def new_func(*args, **kwargs):
-        warnings.warn("Call to deprecated function: {}.".format(func.__name__),
+        warnings.warn("Call to deprecated function: %s" % func.__name__,
                 category=DeprecationWarning)
         return func(*args, **kwargs)
     new_func.__name__ = func.__name__
