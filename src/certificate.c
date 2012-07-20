@@ -4,6 +4,8 @@
 
 #include "Python.h"
 
+#define MAX_BUF 256
+
 static size_t
 get_extension_by_object(X509 *x509, ASN1_OBJECT *obj, char **output) {
 	int pos = X509_get_ext_by_OBJ(x509, obj, -1);
@@ -119,6 +121,39 @@ get_extension(PyObject *self, PyObject *args, PyObject *keywords) {
 }
 
 static PyObject *
+get_all_extensions(PyObject *self, PyObject *args) {
+	X509 *x509;
+	PyCObject *x509_object;
+
+	if (!PyArg_ParseTuple(args, "O", &x509_object)) {
+		return NULL;
+	}
+
+	x509 = PyCObject_AsVoidPtr(x509_object);
+
+	int i;
+	int ext_count = X509_get_ext_count(x509);
+
+	char oid[MAX_BUF];
+	PyObject *dict = PyDict_New();
+	for (i = 0; i < ext_count; i++) {
+		X509_EXTENSION *ext = X509_get_ext(x509, i);
+
+		OBJ_obj2txt(oid, MAX_BUF, ext->object, 1);
+		PyObject *key = PyString_FromString(oid);
+
+		char *value;
+		size_t length = get_extension_by_object(x509, ext->object,
+							&value);
+		PyObject *dict_value = PyString_FromString(value);
+
+		PyDict_SetItem(dict, key, dict_value);
+	}
+
+	return dict;
+
+}
+static PyObject *
 get_serial_number(PyObject *self, PyObject *args) {
 	X509 *x509;
 	PyCObject *x509_object;
@@ -228,6 +263,9 @@ static PyMethodDef cert_methods[] = {
 	 "get the certificate's end time"},
 	{"get_extension", get_extension, METH_VARARGS | METH_KEYWORDS,
 	 "get the string representation of an extension by oid"},
+	{"get_all_extensions", get_all_extensions, METH_VARARGS,
+	 "get a dict of oid: value"},
+
 	{NULL, NULL, 0, NULL}
 };
 
