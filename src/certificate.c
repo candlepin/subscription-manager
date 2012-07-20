@@ -3,8 +3,87 @@
 #include <openssl/x509.h>
 
 #include "Python.h"
+#include "structmember.h"
 
 #define MAX_BUF 256
+
+typedef struct {
+	PyObject_HEAD;
+	X509 *x509;
+} certificate_x509;
+
+static void
+certificate_x509_dealloc(certificate_x509 *self) {
+	X509_free(self->x509);
+	self->ob_type->tp_free((PyObject *)self);
+}
+
+static PyObject *get_not_before(certificate_x509 *self, PyObject *varargs);
+static PyObject *get_not_after(certificate_x509 *self, PyObject *varargs);
+static PyObject *get_serial_number(certificate_x509 *self, PyObject *varargs);
+static PyObject *get_subject(certificate_x509 *self, PyObject *varargs);
+static PyObject *get_extension(certificate_x509 *self, PyObject *varargs, PyObject *keywords);
+static PyObject *get_all_extensions(certificate_x509 *self, PyObject *varargs);
+
+static PyMethodDef x509_methods[] = {
+	{"get_not_before", get_not_before, METH_VARARGS,
+	 "get the certificate's start time"},
+	{"get_not_after", get_not_after, METH_VARARGS,
+	 "get the certificate's end time"},
+	{"get_serial_number", get_serial_number, METH_VARARGS,
+	 "get the certificate's serial number"},
+	{"get_subject", get_subject, METH_VARARGS,
+	 "get the certificate's subject"},
+	{"get_extension", get_extension, METH_VARARGS | METH_KEYWORDS,
+	 "get the string representation of an extension by oid"},
+	{"get_all_extensions", get_all_extensions, METH_VARARGS,
+	 "get a dict of oid: value"},
+	{NULL}
+};
+
+static PyTypeObject certificate_x509_type = {
+	PyObject_HEAD_INIT(NULL)
+	0,
+	"certificate.X509",
+	sizeof(certificate_x509),
+	0,                         /*tp_itemsize*/
+	(destructor) certificate_x509_dealloc,
+	0,                         /*tp_print*/
+	0,                         /*tp_getattr*/
+	0,                         /*tp_setattr*/
+	0,                         /*tp_compare*/
+	0,                         /*tp_repr*/
+	0,                         /*tp_as_number*/
+	0,                         /*tp_as_sequence*/
+	0,                         /*tp_as_mapping*/
+	0,                         /*tp_hash */
+	0,                         /*tp_call*/
+	0,                         /*tp_str*/
+	0,                         /*tp_getattro*/
+	0,                         /*tp_setattro*/
+	0,                         /*tp_as_buffer*/
+	Py_TPFLAGS_DEFAULT,        /*tp_flags*/
+	"X509 Certificate",        /* tp_doc */
+	0,		           /* tp_traverse */
+	0,		           /* tp_clear */
+	0,		           /* tp_richcompare */
+	0,		           /* tp_weaklistoffset */
+	0,		           /* tp_iter */
+	0,		           /* tp_iternext */
+	x509_methods,              /* tp_methods */
+	0,             		   /* tp_members */
+	0,                         /* tp_getset */
+	0,                         /* tp_base */
+	0,                         /* tp_dict */
+	0,                         /* tp_descr_get */
+	0,                         /* tp_descr_set */
+	0,                         /* tp_dictoffset */
+	0,			   /* tp_init */
+	0,                         /* tp_alloc */
+	0,			   /* tp_new */
+};
+
+
 
 static size_t
 get_extension_by_object(X509 *x509, ASN1_OBJECT *obj, char **output) {
@@ -84,24 +163,24 @@ load_cert(PyObject *self, PyObject *args, PyObject *keywords) {
 	X509 *x509 = PEM_read_bio_X509(bio, NULL, NULL, NULL);
 	BIO_free(bio);
 
-	return PyCObject_FromVoidPtr(x509, X509_free);
+	certificate_x509 *py_x509 = _PyObject_New(&certificate_x509_type);
+	py_x509->x509 = x509;
+	return py_x509;
+//	return PyCObject_FromVoidPtr(x509, X509_free);
 }
 
 static PyObject *
-get_extension(PyObject *self, PyObject *args, PyObject *keywords) {
-	X509 *x509;
-	PyCObject *x509_object;
+get_extension(certificate_x509 *self, PyObject *args, PyObject *keywords) {
 	const char *oid = NULL;
 	const char *name = NULL;
 
-	static char *keywordlist[] = {"x509", "oid", "name", NULL};
+	static char *keywordlist[] = {"oid", "name", NULL};
 
-	if (!PyArg_ParseTupleAndKeywords(args, keywords, "O|ss", keywordlist,
-					 &x509_object, &oid, &name)) {
+	if (!PyArg_ParseTupleAndKeywords(args, keywords, "|ss", keywordlist,
+					 &oid, &name)) {
 		return NULL;
 	}
 
-	x509 = PyCObject_AsVoidPtr(x509_object);
 	char *value = NULL;
 	size_t length;
 	ASN1_OBJECT *obj = NULL;
@@ -111,7 +190,7 @@ get_extension(PyObject *self, PyObject *args, PyObject *keywords) {
 		obj = get_object_by_oid(oid);
 	}
 
-	length = get_extension_by_object(x509, obj, &value);
+	length = get_extension_by_object(self->x509, obj, &value);
 	if (value != NULL) {
 		return PyString_FromStringAndSize(value, length);
 	} else {
@@ -121,29 +200,24 @@ get_extension(PyObject *self, PyObject *args, PyObject *keywords) {
 }
 
 static PyObject *
-get_all_extensions(PyObject *self, PyObject *args) {
-	X509 *x509;
-	PyCObject *x509_object;
-
-	if (!PyArg_ParseTuple(args, "O", &x509_object)) {
+get_all_extensions(certificate_x509 *self, PyObject *args) {
+	if (!PyArg_ParseTuple(args, "")) {
 		return NULL;
 	}
 
-	x509 = PyCObject_AsVoidPtr(x509_object);
-
 	int i;
-	int ext_count = X509_get_ext_count(x509);
+	int ext_count = X509_get_ext_count(self->x509);
 
 	char oid[MAX_BUF];
 	PyObject *dict = PyDict_New();
 	for (i = 0; i < ext_count; i++) {
-		X509_EXTENSION *ext = X509_get_ext(x509, i);
+		X509_EXTENSION *ext = X509_get_ext(self->x509, i);
 
 		OBJ_obj2txt(oid, MAX_BUF, ext->object, 1);
 		PyObject *key = PyString_FromString(oid);
 
 		char *value;
-		size_t length = get_extension_by_object(x509, ext->object,
+		size_t length = get_extension_by_object(self->x509, ext->object,
 							&value);
 		PyObject *dict_value = PyString_FromString(value);
 
@@ -154,34 +228,24 @@ get_all_extensions(PyObject *self, PyObject *args) {
 
 }
 static PyObject *
-get_serial_number(PyObject *self, PyObject *args) {
-	X509 *x509;
-	PyCObject *x509_object;
-
-	if (!PyArg_ParseTuple(args, "O", &x509_object)) {
+get_serial_number(certificate_x509 *self, PyObject *args) {
+	if (!PyArg_ParseTuple(args, "")) {
 		return NULL;
 	}
 
-	x509 = PyCObject_AsVoidPtr(x509_object);
-
-	ASN1_INTEGER *serial_asn = X509_get_serialNumber(x509);
+	ASN1_INTEGER *serial_asn = X509_get_serialNumber(self->x509);
 	long serial = ASN1_INTEGER_get (serial_asn);
 
 	return PyInt_FromLong(serial);
 }
 
 static PyObject *
-get_subject(PyObject *self, PyObject *args) {
-	X509 *x509;
-	PyCObject *x509_object;
-
-	if (!PyArg_ParseTuple(args, "O", &x509_object)) {
+get_subject(certificate_x509 *self, PyObject *args) {
+	if (!PyArg_ParseTuple(args, "")) {
 		return NULL;
 	}
 
-	x509 = PyCObject_AsVoidPtr(x509_object);
-
-	X509_NAME *name = X509_get_subject_name(x509);
+	X509_NAME *name = X509_get_subject_name(self->x509);
 	int entries = X509_NAME_entry_count(name);
 	int i;
 
@@ -215,17 +279,8 @@ time_to_string(ASN1_UTCTIME *time) {
 }
 
 static PyObject *
-get_not_before(PyObject *self, PyObject *args) {
-	X509 *x509;
-	PyCObject *x509_object;
-
-	if (!PyArg_ParseTuple(args, "O", &x509_object)) {
-		return NULL;
-	}
-
-	x509 = PyCObject_AsVoidPtr(x509_object);
-
-	ASN1_UTCTIME *time = X509_get_notBefore(x509);
+get_not_before(certificate_x509 *self, PyObject *args) {
+	ASN1_UTCTIME *time = X509_get_notBefore(self->x509);
 	return time_to_string(time);
 
 //	Py_INCREF(Py_None);
@@ -233,22 +288,14 @@ get_not_before(PyObject *self, PyObject *args) {
 }
 
 static PyObject *
-get_not_after(PyObject *self, PyObject *args) {
-	X509 *x509;
-	PyCObject *x509_object;
-
-	if (!PyArg_ParseTuple(args, "O", &x509_object)) {
-		return NULL;
-	}
-
-	x509 = PyCObject_AsVoidPtr(x509_object);
-
-	ASN1_UTCTIME *time = X509_get_notAfter(x509);
+get_not_after(certificate_x509 *self, PyObject *args) {
+	ASN1_UTCTIME *time = X509_get_notAfter(self->x509);
 	return time_to_string(time);
 
 //	Py_INCREF(Py_None);
 //	return Py_None;
 }
+
 
 static PyMethodDef cert_methods[] = {
 	{"load", load_cert, METH_VARARGS | METH_KEYWORDS,
@@ -257,10 +304,6 @@ static PyMethodDef cert_methods[] = {
 	 "get the certificate's serial number"},
 	{"get_subject", get_subject, METH_VARARGS,
 	 "get the certificate's subject"},
-	{"get_not_before", get_not_before, METH_VARARGS,
-	 "get the certificate's start time"},
-	{"get_not_after", get_not_after, METH_VARARGS,
-	 "get the certificate's end time"},
 	{"get_extension", get_extension, METH_VARARGS | METH_KEYWORDS,
 	 "get the string representation of an extension by oid"},
 	{"get_all_extensions", get_all_extensions, METH_VARARGS,
@@ -271,5 +314,14 @@ static PyMethodDef cert_methods[] = {
 
 PyMODINIT_FUNC
 init_certificate(void) {
-	Py_InitModule("_certificate", cert_methods);
+	PyObject *module;
+	module = Py_InitModule("_certificate", cert_methods);
+
+	certificate_x509_type.tp_new = PyType_GenericNew;
+	if (PyType_Ready(&certificate_x509_type) < 0) {
+		return;
+	}
+
+	Py_INCREF(&certificate_x509_type);
+	PyModule_AddObject(module, "X509", (PyObject *) &certificate_x509_type);
 }
