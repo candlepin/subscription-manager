@@ -553,16 +553,21 @@ class Content(object):
 
         # Convert possible incoming None or string (0/1) to a boolean:
         # If enabled isn't specified in cert we assume True.
-        self.enabled = True if \
-                (enabled is None or enabled == "1" or enabled == True) \
-                else False
+        self.enabled = False
+        if enabled is None or enabled == "1" or enabled == True:
+            self.enabled = True
 
         self.metadata_expire = metadata_expire
         self.required_tags = required_tags or []
 
         # Suspect both of these are unused:
-        self.quantity = int(quantity) if quantity else None
-        self.flex_quantity = int(flex_quantity) if flex_quantity else None
+        self.quantity = None
+        if quantity:
+            self.quantity = int(quantity) if quantity else None
+
+        self.flex_quantity = None
+        if flex_quantity:
+            self.flex_quantity = int(flex_quantity)
 
     def __eq__(self, other):
         return (self.label == other.label)
