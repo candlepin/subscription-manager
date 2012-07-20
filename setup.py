@@ -13,7 +13,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Extension
 
 
 setup(
@@ -30,6 +30,9 @@ setup(
     },
     packages = find_packages('src'),
     include_package_data = True,
+
+    ext_modules=[Extension("rhsm/_certificate", ["src/certificate.c"],
+                           libraries=["ssl"])],
 
     classifiers = [
         'License :: OSI Approved :: GNU General Public License (GPL)',

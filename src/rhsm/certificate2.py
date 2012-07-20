@@ -24,6 +24,7 @@ from datetime import datetime
 import simplejson as json
 
 from M2Crypto import X509
+from rhsm import _certificate
 
 from rhsm.connection import safe_int
 from rhsm.certificate import Extensions, OID, DateRange, GMT, \
@@ -59,15 +60,15 @@ class CertFactory(object):
         """
         Create appropriate certificate object from a PEM file on disk.
         """
-        f = open(path)
-        contents = f.read()
-        f.close()
-        return self.create_from_pem(contents, path=path)
+        return self._read_x509(_certificate.load(path), path)
 
     def create_from_pem(self, pem, path=None):
         """
         Create appropriate certificate object from a PEM string.
         """
+        return self._read_x509(_certificate.load(pem=pem), path)
+
+    def _read_x509(self, x509, path):
         # Load the X509 extensions so we can determine what we're dealing with:
         try:
             x509 = X509.load_cert_string(pem)
