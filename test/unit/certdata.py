@@ -13,11 +13,6 @@
 # in this software or its documentation.
 #
 
-import unittest
-
-from rhsm.certificate2 import *
-
-
 # A product cert from Candlepin's test data (product ID 100000000000002):
 PRODUCT_CERT_V1_0 = """
 -----BEGIN CERTIFICATE-----

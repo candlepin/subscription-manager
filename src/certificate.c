@@ -44,7 +44,7 @@ static PyMethodDef x509_methods[] = {
 static PyTypeObject certificate_x509_type = {
 	PyObject_HEAD_INIT(NULL)
 	0,
-	"certificate.X509",
+	"_certificate.X509",
 	sizeof(certificate_x509),
 	0,                         /*tp_itemsize*/
 	(destructor) certificate_x509_dealloc,
@@ -163,6 +163,11 @@ load_cert(PyObject *self, PyObject *args, PyObject *keywords) {
 	X509 *x509 = PEM_read_bio_X509(bio, NULL, NULL, NULL);
 	BIO_free(bio);
 
+	if (x509 == NULL) {
+		Py_INCREF(Py_None);
+		return Py_None;
+	}
+
 	certificate_x509 *py_x509 = _PyObject_New(&certificate_x509_type);
 	py_x509->x509 = x509;
 	return py_x509;
@@ -188,6 +193,11 @@ get_extension(certificate_x509 *self, PyObject *args, PyObject *keywords) {
 		obj = get_object_by_name(name);
 	} else {
 		obj = get_object_by_oid(oid);
+	}
+
+	if (obj == NULL) {
+		Py_INCREF(Py_None);
+		return Py_None;
 	}
 
 	length = get_extension_by_object(self->x509, obj, &value);

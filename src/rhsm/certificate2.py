@@ -23,7 +23,6 @@ log = logging.getLogger(__name__)
 from datetime import datetime
 import simplejson as json
 
-from M2Crypto import X509
 from rhsm import _certificate
 
 from rhsm.connection import safe_int
@@ -69,9 +68,10 @@ class CertFactory(object):
         return self._read_x509(_certificate.load(pem=pem), path)
 
     def _read_x509(self, x509, path):
+        if not x509:
+            raise CertificateException("Error loading certificate")
         # Load the X509 extensions so we can determine what we're dealing with:
         try:
-            x509 = X509.load_cert_string(pem)
             extensions = Extensions(x509)
             redhat_oid = OID(REDHAT_OID_NAMESPACE)
             # Trim down to only the extensions in the Red Hat namespace:
@@ -105,28 +105,10 @@ class CertFactory(object):
             return self._create_v1_prod_cert(version, extensions, x509, path)
 
     def _read_alt_name(self, x509):
-        alt_name = None
-        try:
-            name_ext = x509.get_ext('subjectAltName')
-            if name_ext:
-                alt_name = name_ext.get_value()
-        except LookupError:
-            # This may not be defined, seems to only be used for identity
-            # certificates:
-            pass
-        return alt_name
+        return x509.get_extension(name='subjectAltName')
 
     def _read_subject(self, x509):
-        subj = {}
-        subject = x509.get_subject()
-        subject.nid['UID'] = 458
-        for key, nid in subject.nid.items():
-            entry = subject.get_entries_by_nid(nid)
-            if len(entry):
-                asn1 = entry[0].get_data()
-                subj[key] = str(asn1)
-                continue
-        return subj
+        return x509.get_subject()
 
     def _create_identity_cert(self, extensions, x509, path):
         cert = IdentityCertificate(
