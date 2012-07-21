@@ -31,8 +31,10 @@ setup(
     packages = find_packages('src'),
     include_package_data = True,
 
-    ext_modules=[Extension("rhsm/_certificate", ["src/certificate.c"],
-                           libraries=["ssl"])],
+    ext_modules=[Extension('rhsm/_certificate', ['src/certificate.c'],
+                           libraries=['ssl'])],
+
+    test_suite = 'nose.collector',
 
     classifiers = [
         'License :: OSI Approved :: GNU General Public License (GPL)',
