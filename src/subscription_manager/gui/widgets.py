@@ -19,7 +19,6 @@ import time
 import gobject
 import gtk
 import pango
-import locale
 
 import gettext
 _ = gettext.gettext
@@ -421,16 +420,8 @@ class DatePicker(gtk.HBox):
                 tzinfo=managerlib.LocalTz())
         self._date_entry = gtk.Entry()
         self._date_entry.set_width_chars(14)
-        # we could use managerlib.formatDate here, but since we are parsing
-        # this, leave it alone
 
-        self.date_picker_locale = managerlib.find_date_picker_locale()
-
-        # unset locale if we can't parse it here
-        locale.setlocale(locale.LC_TIME, self.date_picker_locale)
-        self._date_entry.set_text(self._date.strftime("%x"))
-        # return to original locale
-        locale.setlocale(locale.LC_TIME, '')
+        self._date_entry.set_text(self._date.date().isoformat())
 
         atk_entry = self._date_entry.get_accessible()
         atk_entry.set_name('date-entry')
@@ -472,22 +463,17 @@ class DatePicker(gtk.HBox):
         except ValueError:
             today = datetime.date.today()
             messageWindow.ErrorDialog(messageWindow.wrap_text(
-                                "%s %s" % (_("Invalid date format. Please re-enter a valid date. Example: "), today.strftime('%x'))))
+                                "%s %s" % (_("Invalid date format. Please re-enter a valid date. Example: "), today.isoformat())))
             return False
 
     def _date_validate(self, date_str):
-        # doing it this ugly way for pre python 2.5
-        # wrap this in locale setting so we can potentially set the
-        # date format to one we know we can parse
+        # try this as a iso8601 date format, aka, 2012-12-25
         try:
-            locale.setlocale(locale.LC_TIME, self.date_picker_locale)
             date = datetime.datetime(
-                    *(time.strptime(date_str, '%x')[0:6]))
-            locale.setlocale(locale.LC_ALL, '')
+                    *(time.strptime(date_str, '%Y-%m-%d')[0:6]))
             self._date = datetime.datetime(date.year, date.month, date.day,
                     tzinfo=managerlib.LocalTz())
         except ValueError:
-            # the caller needs to handle this
             raise
 
     def _date_entry_box_grab_focus(self, dummy2=None, dummy3=None):
@@ -495,10 +481,7 @@ class DatePicker(gtk.HBox):
 
     def _date_update_cal(self, dummy=None):
         # set the text box to the date from the calendar
-        # but check to see what local we want the text in
-        locale.setlocale(locale.LC_TIME, self.date_picker_locale)
-        self._date_entry.set_text(self._date.strftime("%x"))
-        locale.setlocale(locale.LC_ALL, '')
+        self._date_entry.set_text(self._date.date().isoformat())
 
     def _date_update_text(self, dummy=None):
         # set the cal to the date from the text box, and set self._date
