@@ -148,10 +148,7 @@ get_extension_by_object (X509 *x509, ASN1_OBJECT *obj, char **output)
 	int tc;
 	const unsigned char *p = ext->value->data;
 
-	int res = ASN1_get_object (&p, &len, &tag, &tc, ext->value->length);
-	if (res) {
-		return 0;
-	}
+	ASN1_get_object (&p, &len, &tag, &tc, ext->value->length);
 
 	size_t size;
 	switch (tag) {
