@@ -72,7 +72,7 @@ class CertFactory(object):
             raise CertificateException("Error loading certificate")
         # Load the X509 extensions so we can determine what we're dealing with:
         try:
-            extensions = Extensions(x509)
+            extensions = Extensions2(x509)
             redhat_oid = OID(REDHAT_OID_NAMESPACE)
             # Trim down to only the extensions in the Red Hat namespace:
             extensions = extensions.ltrim(len(redhat_oid))
@@ -347,6 +347,18 @@ class Version(object):
     # TODO: comparator might be useful someday
     def __str__(self):
         return self.version_str
+
+
+class Extensions2(Extensions):
+
+    def _parse(self, x509):
+        """
+        Override parent method for the new C wrapper.
+        """
+        extensions = x509.get_all_extensions()
+        for (key, value) in extensions.items():
+            oid = OID(key)
+            self[oid] = value
 
 
 class Certificate(object):

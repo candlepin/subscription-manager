@@ -675,13 +675,13 @@ class Extensions(dict):
 
     def __init__(self, x509):
         """
-        @param x509: A certificate object.
+        @param x509: An m2crypto X509 object or dict.
         @type x509: L{X509}
         """
         if isinstance(x509, dict):
             self.update(x509)
         else:
-            self.__parse(x509)
+            self._parse(x509)
 
     def ltrim(self, n):
         """
@@ -754,13 +754,33 @@ class Extensions(dict):
             d[trimmed] = v
         return Extensions(d)
 
-    def __parse(self, x509):
-        # parse the extensions section
+    def _get_extensions_block(self, x509):
+        """ Isolate the block of text with the extensions. """
+        text = x509.as_text()
+        p = Popen(['openssl', 'x509', '-text', '-certopt', 'ext_parse'],
+                stdout=PIPE, stdin=PIPE, stderr=STDOUT)
+        text = p.communicate(input=x509.as_pem())[0]
+
+        start = text.find('extensions:')
+        end = text.rfind('Signature Algorithm:')
+        text = text[start:end]
+        return [s.strip() for s in text.split('\n')]
+
+    def _parse(self, x509):
+        """
+        Parse the extensions section. Expects an m2crypto X509 object.
+        """
         oid = None
-        extensions = x509.get_all_extensions()
-        for (key, value) in extensions.items():
-            oid = OID(key)
-            self[oid] = value
+        for entry in self._get_extensions_block(x509):
+            if oid is not None:
+                m = VALUE_PATTERN.match(entry)
+                self[oid] = m.group(2).strip()
+                oid = None
+                continue
+            m = OID_PATTERN.match(entry)
+            if m is None:
+                continue
+            oid = OID(entry[:-1])
 
     def __str__(self):
         s = []
