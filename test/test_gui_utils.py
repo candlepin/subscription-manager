@@ -1,5 +1,7 @@
 import unittest
 
+import rhsm_display
+rhsm_display.set_display()
 
 from subscription_manager.gui import utils
 

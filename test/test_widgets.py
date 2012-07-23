@@ -15,8 +15,11 @@
 import os
 import locale
 import gettext
-
 import unittest
+
+import rhsm_display
+rhsm_display.set_display()
+
 import gtk
 from datetime import datetime
 from subscription_manager.managerlib import LocalTz
