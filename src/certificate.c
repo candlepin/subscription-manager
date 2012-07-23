@@ -43,7 +43,9 @@
 
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
+#include <openssl/pem.h>
 #include <openssl/x509.h>
+#include <openssl/x509v3.h>
 
 #include "Python.h"
 #include "structmember.h"
@@ -72,19 +74,20 @@ static PyObject *get_all_extensions (certificate_x509 *self, PyObject *varargs);
 static PyObject *as_pem (certificate_x509 *self, PyObject *varargs);
 
 static PyMethodDef x509_methods[] = {
-	{"get_not_before", get_not_before, METH_VARARGS,
+	{"get_not_before", (PyCFunction) get_not_before, METH_VARARGS,
 	 "get the certificate's start time"},
-	{"get_not_after", get_not_after, METH_VARARGS,
+	{"get_not_after", (PyCFunction) get_not_after, METH_VARARGS,
 	 "get the certificate's end time"},
-	{"get_serial_number", get_serial_number, METH_VARARGS,
+	{"get_serial_number", (PyCFunction) get_serial_number, METH_VARARGS,
 	 "get the certificate's serial number"},
-	{"get_subject", get_subject, METH_VARARGS,
+	{"get_subject", (PyCFunction) get_subject, METH_VARARGS,
 	 "get the certificate's subject"},
-	{"get_extension", get_extension, METH_VARARGS | METH_KEYWORDS,
+	{"get_extension", (PyCFunction) get_extension,
+	 METH_VARARGS | METH_KEYWORDS,
 	 "get the string representation of an extension by oid"},
-	{"get_all_extensions", get_all_extensions, METH_VARARGS,
+	{"get_all_extensions", (PyCFunction) get_all_extensions, METH_VARARGS,
 	 "get a dict of oid: value"},
-	{"as_pem", as_pem, METH_VARARGS,
+	{"as_pem", (PyCFunction) as_pem, METH_VARARGS,
 	 "return the pem representation of this certificate"},
 	{NULL}
 };
@@ -142,8 +145,8 @@ get_extension_by_object (X509 *x509, ASN1_OBJECT *obj, char **output)
 
 	int tag;
 	long len;
-	long tc;
-	char *p = ext->value->data;
+	int tc;
+	const unsigned char *p = ext->value->data;
 	int res = ASN1_get_object (&p, &len, &tag, &tc, ext->value->length);
 
 	switch (tag) {
@@ -153,7 +156,8 @@ get_extension_by_object (X509 *x509, ASN1_OBJECT *obj, char **output)
 					ASN1_item_unpack (ext->value,
 							  ASN1_ITEM_rptr
 							  (ASN1_UTF8STRING));
-				*output = strdup (ASN1_STRING_data (str));
+				*output = strndup (ASN1_STRING_data (str),
+						   str->length);
 				return str->length;
 			}
 		case V_ASN1_OCTET_STRING:
@@ -209,7 +213,7 @@ load_cert (PyObject *self, PyObject *args, PyObject *keywords)
 
 	BIO *bio;
 	if (pem != NULL) {
-		bio = BIO_new_mem_buf (pem, strlen (pem));
+		bio = BIO_new_mem_buf ((void *) pem, strlen (pem));
 	} else {
 		bio = BIO_new_file (file_name, "r");
 	}
@@ -222,9 +226,10 @@ load_cert (PyObject *self, PyObject *args, PyObject *keywords)
 		return Py_None;
 	}
 
-	certificate_x509 *py_x509 = _PyObject_New (&certificate_x509_type);
+	certificate_x509 *py_x509 =
+		(certificate_x509 *) _PyObject_New (&certificate_x509_type);
 	py_x509->x509 = x509;
-	return py_x509;
+	return (PyObject *) py_x509;
 }
 
 static PyObject *
@@ -380,7 +385,7 @@ get_not_after (certificate_x509 *self, PyObject *args)
 }
 
 static PyMethodDef cert_methods[] = {
-	{"load", load_cert, METH_VARARGS | METH_KEYWORDS,
+	{"load", (PyCFunction) load_cert, METH_VARARGS | METH_KEYWORDS,
 	 "load a certificate from a file"},
 	{NULL}
 };
