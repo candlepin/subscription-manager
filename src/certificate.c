@@ -24,6 +24,7 @@ static PyObject *get_serial_number(certificate_x509 *self, PyObject *varargs);
 static PyObject *get_subject(certificate_x509 *self, PyObject *varargs);
 static PyObject *get_extension(certificate_x509 *self, PyObject *varargs, PyObject *keywords);
 static PyObject *get_all_extensions(certificate_x509 *self, PyObject *varargs);
+static PyObject *as_pem(certificate_x509 *self, PyObject *varargs);
 
 static PyMethodDef x509_methods[] = {
 	{"get_not_before", get_not_before, METH_VARARGS,
@@ -38,6 +39,8 @@ static PyMethodDef x509_methods[] = {
 	 "get the string representation of an extension by oid"},
 	{"get_all_extensions", get_all_extensions, METH_VARARGS,
 	 "get a dict of oid: value"},
+	{"as_pem", as_pem, METH_VARARGS,
+	 "return the pem representation of this certificate"},
 	{NULL}
 };
 
@@ -235,8 +238,25 @@ get_all_extensions(certificate_x509 *self, PyObject *args) {
 	}
 
 	return dict;
-
 }
+
+static PyObject *
+as_pem (certificate_x509 *self, PyObject *args) {
+	if (!PyArg_ParseTuple(args, "")) {
+		return NULL;
+	}
+
+	BIO *bio = BIO_new(BIO_s_mem());
+	PEM_write_bio_X509 (bio, self->x509);
+
+	size_t size = BIO_ctrl_pending(bio);
+	char *buf = malloc(sizeof(char) * size);
+	BIO_read(bio, buf, size);
+	BIO_free(bio);
+
+	return PyString_FromStringAndSize(buf, size);
+}
+
 static PyObject *
 get_serial_number(certificate_x509 *self, PyObject *args) {
 	if (!PyArg_ParseTuple(args, "")) {
