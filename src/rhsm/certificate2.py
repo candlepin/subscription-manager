@@ -14,7 +14,6 @@
 #
 
 import os
-import base64
 import zlib
 import logging
 
@@ -316,19 +315,18 @@ class CertFactory(object):
 
     def _decompress_payload(self, payload):
         """
-        Certificate payloads arrive in base64 encoded zlib compressed strings
+        Certificate payloads arrive in zlib compressed strings
         of JSON.
-        This method decodes, de-compressed, parses the JSON and returns the
+        This method de-compresses and parses the JSON and returns the
         resulting dict.
         """
         try:
-            decoded = base64.decodestring(payload)
-            decompressed = zlib.decompress(decoded)
+            decompressed = zlib.decompress(payload)
+            return json.loads(decompressed)
         except Exception, e:
             log.exception(e)
-            raise CertificateException("Error decoding/decompressing "
+            raise CertificateException("Error decompressing/parsing "
                     "certificate payload.")
-        return json.loads(decompressed)
 
 
 class Version(object):
@@ -353,7 +351,7 @@ class Extensions2(Extensions):
 
     def _parse(self, x509):
         """
-        Override parent method for the new C wrapper.
+        Override parent method for an X509 object from the new C wrapper.
         """
         extensions = x509.get_all_extensions()
         for (key, value) in extensions.items():

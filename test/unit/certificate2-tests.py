@@ -125,11 +125,6 @@ class V2CertTests(unittest.TestCase):
         self.assertEquals("never-enabled-content", content.name)
         self.assertEquals(False, content.enabled)
 
-    def test_bad_padding(self):
-        # Just want to see this pass, it would fail to decode the JSON in the past:
-        cert = create_from_pem(certdata.ENTITLEMENT_CERT_V2_0_LONG_BLOB)
-        self.assertEquals(9, len(cert.content))
-
 
 class IdentityCertTests(unittest.TestCase):
 
