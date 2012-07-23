@@ -147,8 +147,13 @@ get_extension_by_object (X509 *x509, ASN1_OBJECT *obj, char **output)
 	long len;
 	int tc;
 	const unsigned char *p = ext->value->data;
-	int res = ASN1_get_object (&p, &len, &tag, &tc, ext->value->length);
 
+	int res = ASN1_get_object (&p, &len, &tag, &tc, ext->value->length);
+	if (res) {
+		return 0;
+	}
+
+	size_t size;
 	switch (tag) {
 		case V_ASN1_UTF8STRING:
 			{
@@ -158,7 +163,9 @@ get_extension_by_object (X509 *x509, ASN1_OBJECT *obj, char **output)
 							  (ASN1_UTF8STRING));
 				*output = strndup (ASN1_STRING_data (str),
 						   str->length);
-				return str->length;
+				size = str->length;
+				ASN1_UTF8STRING_free (str);
+				return size;
 			}
 		case V_ASN1_OCTET_STRING:
 			{
@@ -168,7 +175,9 @@ get_extension_by_object (X509 *x509, ASN1_OBJECT *obj, char **output)
 							  (ASN1_OCTET_STRING));
 				*output = malloc (octstr->length);
 				memcpy (*output, octstr->data, octstr->length);
-				return octstr->length;
+				size = octstr->length;
+				ASN1_OCTET_STRING_free (octstr);
+				return size;
 			}
 		default:
 			{
@@ -185,7 +194,7 @@ get_extension_by_object (X509 *x509, ASN1_OBJECT *obj, char **output)
 	}
 }
 
-ASN1_OBJECT *
+static ASN1_OBJECT *
 get_object_by_oid (const char *oid)
 {
 	return OBJ_txt2obj (oid, 1);
@@ -260,8 +269,12 @@ get_extension (certificate_x509 *self, PyObject *args, PyObject *keywords)
 	}
 
 	length = get_extension_by_object (self->x509, obj, &value);
+	ASN1_OBJECT_free (obj);
 	if (value != NULL) {
-		return PyString_FromStringAndSize (value, length);
+		PyObject *extension = PyString_FromStringAndSize (value,
+								  length);
+		free (value);
+		return extension;
 	} else {
 		Py_INCREF (Py_None);
 		return Py_None;
@@ -293,7 +306,11 @@ get_all_extensions (certificate_x509 *self, PyObject *args)
 
 		PyObject *dict_value = PyString_FromStringAndSize (value,
 								   length);
+		free (value);
 		PyDict_SetItem (dict, key, dict_value);
+
+		Py_DECREF (key);
+		Py_DECREF (dict_value);
 	}
 
 	return dict;
@@ -314,7 +331,9 @@ as_pem (certificate_x509 *self, PyObject *args)
 	BIO_read (bio, buf, size);
 	BIO_free (bio);
 
-	return PyString_FromStringAndSize (buf, size);
+	PyObject *pem = PyString_FromStringAndSize (buf, size);
+	free (buf);
+	return pem;
 }
 
 static PyObject *
@@ -351,6 +370,9 @@ get_subject (certificate_x509 *self, PyObject *args)
 			PyString_FromString (OBJ_nid2sn (OBJ_obj2nid (obj)));
 		PyObject *value = PyString_FromString (ASN1_STRING_data (data));
 		PyDict_SetItem (dict, key, value);
+
+		Py_DECREF (key);
+		Py_DECREF (value);
 	}
 
 	return dict;
@@ -367,7 +389,9 @@ time_to_string (ASN1_UTCTIME *time)
 	BIO_read (bio, buf, size);
 	BIO_free (bio);
 
-	return PyString_FromStringAndSize (buf, size);
+	PyObject *time_str = PyString_FromStringAndSize (buf, size);
+	free (buf);
+	return time_str;
 }
 
 static PyObject *
