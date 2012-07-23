@@ -72,7 +72,7 @@ options_table = [
                   "level use --service-level=\"\"")),
 ]
 
-parser = OptionParser(usage=_("%s [OPTIONS]") % os.path.basename(sys.argv[0]),
+parser = OptionParser(usage=_("%prog [OPTIONS]"),
                       option_list=options_table,
                       formatter=WrappedIndentedHelpFormatter())
 

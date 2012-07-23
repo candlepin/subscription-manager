@@ -117,6 +117,11 @@ class WrappedIndentedHelpFormatter(_IndentedHelpFormatter):
             result.append("\n")
         return "".join(result)
 
+    # 2.4 uses lower case "usage", 2.6 uses "Usage"
+    # This was making QE jittery, always use upper
+    def format_usage(self, usage):
+        return _("Usage: %s\n") % usage
+
 
 class OptionParser(_OptionParser):
 

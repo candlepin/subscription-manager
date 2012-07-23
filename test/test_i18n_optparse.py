@@ -20,6 +20,13 @@ class TestWrappedIndentedHelpFormatter(unittest.TestCase):
         fh = self.parser.format_option_help(self.hf)
         fh.decode("utf8")
 
+    def test_format_usage(self):
+        # optparses default format_usage uses lower cases
+        # usage on 2.4, upper case on 2.6. We include our
+        # own for consistency
+        fu = self.hf.format_usage("%%prog [OPTIONS]")
+        self.assertEquals(fu[:6], "Usage:")
+
     # just to verify the old broken way continues
     # to be broken and the way we detect that still works
     def test_old(self):

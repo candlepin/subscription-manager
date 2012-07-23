@@ -176,7 +176,9 @@ class CliCommand(object):
                  prod_dir=None):
         self.shortdesc = shortdesc
 
-        usage = _("usage: %%prog %s [OPTIONS]") % name
+        # usage format strips any leading 'usage' so
+        # do not iclude it
+        usage = _("%%prog %s [OPTIONS]") % name
 
        # include our own HelpFormatter that doesn't try to break
        # long words, since that fails on multibyte words
