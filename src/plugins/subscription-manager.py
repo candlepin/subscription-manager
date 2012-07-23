@@ -44,7 +44,7 @@ registered_message = \
 "This system is receiving updates from Red Hat Subscription Management."
 
 no_subs_warning = \
-"This system is registered to Red Hat Subscription Management, but is not recieving updates. You can use subscription-manager to assign subscriptions."
+"This system is registered to Red Hat Subscription Management, but is not receiving updates. You can use subscription-manager to assign subscriptions."
 
 
 def update(conduit):
