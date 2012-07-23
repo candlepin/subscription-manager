@@ -1,6 +1,6 @@
 # If on Fedora 12 or RHEL 5 or earlier, we need to define these:
 %if ! (0%{?fedora} > 12 || 0%{?rhel} > 5)
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
+%{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
 
 
@@ -23,12 +23,12 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: m2crypto
 Requires: python-simplejson
 Requires: python-iniparse
-Requires: openssl
-BuildArch: noarch
+Requires: rpm-python
 
 BuildRequires: python2-devel
 BuildRequires: python-setuptools
-BuildRequires:  rpm-python
+BuildRequires: openssl-devel
+
 
 %description
 A small library for communicating with the REST interface of a Red Hat Unified
@@ -54,12 +54,12 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %doc README
 
-%dir %{python_sitelib}/rhsm
+%dir %{python_sitearch}/rhsm
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/ca
 
-%{python_sitelib}/rhsm/*
-%{python_sitelib}/rhsm-*.egg-info
+%{python_sitearch}/rhsm/*
+%{python_sitearch}/rhsm-*.egg-info
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
