@@ -109,12 +109,12 @@
                     </child>
                     <child>
                       <widget class="GtkImageMenuItem" id="proxy_config_menu_item">
-                        <property name="label" translatable="yes">Configure _Proxy</property>
+                        <property name="label" translatable="yes">Configure Pro_xy</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">False</property>
                         <signal name="activate" handler="on_proxy_config_menu_item_activate"/>
-                        <accelerator key="p" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                        <accelerator key="x" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <child internal-child="image">
                           <widget class="GtkImage" id="proxy_image">
                             <property name="visible">True</property>
@@ -125,12 +125,12 @@
                     </child>
                     <child>
                       <widget class="GtkImageMenuItem" id="settings_menu_item">
-                        <property name="label" translatable="yes">_Settings</property>
+                        <property name="label" translatable="yes">_Preferences</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">False</property>
                         <signal name="activate" handler="on_preferences_menu_item_activate"/>
-                        <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                        <accelerator key="p" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <child internal-child="image">
                           <widget class="GtkImage" id="settings_image">
                             <property name="visible">True</property>
