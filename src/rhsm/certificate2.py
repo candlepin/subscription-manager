@@ -64,6 +64,8 @@ class CertFactory(object):
         """
         Create appropriate certificate object from a PEM string.
         """
+        if not pem:
+            raise CertificateException("Empty certificate")
         return self._read_x509(_certificate.load(pem=pem), path)
 
     def _read_x509(self, x509, path):
