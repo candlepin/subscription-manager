@@ -708,23 +708,6 @@ class ImportFileExtractor(object):
         return "%s.pem" % (ent_cert.serialNumber())
 
 
-def find_date_picker_locale():
-    # this is a fairly terrible work around
-    # bz #744136 and #704069. Basically, we don't
-    # seem to be able to parse dates with time.strptime()
-    # in some locales, even if the date is exactly the
-    # string created by today.strftime("%x"). So we
-    # just set LC_TIME to en_GB which we can parse
-    try:
-        today = datetime.date.today()
-        time.strptime(today.strftime("%x"), "%x")
-    except ValueError:
-        # we can't parse our own "preferred" date format
-        # for whatever reason, so let's use en_GB
-        return 'en_GB'
-    return ''
-
-
 def _sub_dict(datadict, subkeys, default=None):
     return dict([(k, datadict.get(k, default)) for k in subkeys])
 
