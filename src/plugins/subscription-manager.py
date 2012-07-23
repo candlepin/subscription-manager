@@ -35,12 +35,7 @@ expired_warning = \
 *** WARNING ***
 The subscription for following product(s) has expired:
 %s
-You no longer have access to the repositories that
-provide these products.  It is important that you apply an
-active subscription in order to resume access to security
-and other critical updates. If you don't have other active
-subscriptions, you can renew the expired subscription.
-"""
+You no longer have access to the repositories that provide these products.  It is important that you apply an active subscription in order to resume access to security and other critical updates. If you don't have other active subscriptions, you can renew the expired subscription.  """
 
 not_registered_warning = \
 "This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register."
@@ -49,7 +44,7 @@ registered_message = \
 "This system is receiving updates from Red Hat Subscription Management."
 
 no_subs_warning = \
-"This system is registered to Red Hat Subscription Management, but not recieving updates. You can use subscription-manager to assign subscriptions."
+"This system is registered to Red Hat Subscription Management, but is not recieving updates. You can use subscription-manager to assign subscriptions."
 
 
 def update(conduit):
