@@ -161,7 +161,8 @@ get_extension_by_object (X509 *x509, ASN1_OBJECT *obj, char **output)
 					ASN1_item_unpack (ext->value,
 							  ASN1_ITEM_rptr
 							  (ASN1_UTF8STRING));
-				*output = strndup (ASN1_STRING_data (str),
+				*output = strndup ((const char *)
+						   ASN1_STRING_data (str),
 						   str->length);
 				size = str->length;
 				ASN1_UTF8STRING_free (str);
@@ -368,7 +369,8 @@ get_subject (certificate_x509 *self, PyObject *args)
 
 		PyObject *key =
 			PyString_FromString (OBJ_nid2sn (OBJ_obj2nid (obj)));
-		PyObject *value = PyString_FromString (ASN1_STRING_data (data));
+		PyObject *value = PyString_FromString ((const char *)
+						       ASN1_STRING_data (data));
 		PyDict_SetItem (dict, key, value);
 
 		Py_DECREF (key);
