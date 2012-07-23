@@ -1,3 +1,46 @@
+/*
+ * Copyright (c) 2012 Red Hat, Inc.
+ *
+ * This software is licensed to you under the GNU General Public License,
+ * version 2 (GPLv2). There is NO WARRANTY for this software, express or
+ * implied, including the implied warranties of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2
+ * along with this software; if not, see
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
+ *
+ * Red Hat trademarks are not licensed under GPLv2. No permission is
+ * granted to use or replicate Red Hat trademarks that are incorporated
+ * in this software or its documentation.
+ *
+ * This is an openssl wrapper to access X509 extensions. It is intended for use
+ * internally to rhsm only, and as such, will be subject to api breakage.
+ *
+ * Example usage:
+ *
+ * from rhsm import _certificate
+ *
+ * x509 = _certificate.load(pem=my_pem_string)
+ *
+ * print x509.get_extension('10.11.1.2.9.7')
+ * print x509.get_extension(name='subjectAltName')
+ *
+ * So why do we need this? The same versions of all python ssl bindings aren't
+ * available everywhere we need it (el 5 vs 6, etc), and in some cases, the
+ * behaviour of the libraries or commands changes across versions.
+ *
+ * Our specific need is to read non-standard extension values, as either
+ * UTF8 strings,  or binary octets. M2Crypto and openssl itself default to
+ * assuming that the extension payload is a printable string value, and
+ * giving you that. This is why you see ".." in front of most extension values. 
+ * Those are non printable characters that make up the DER encoded header of
+ * the value. You can instruct the openssl cli command to print out the
+ * structural information of a value, and use that to glean the type and do
+ * some parsing yourself (if necessary), but this argument does not work the
+ * same across all versions either.
+ *
+ * Thus, we write our own binding!
+ */
+
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
 #include <openssl/x509.h>
@@ -111,7 +154,7 @@ get_extension_by_object (X509 *x509, ASN1_OBJECT *obj, char **output)
 							  ASN1_ITEM_rptr
 							  (ASN1_UTF8STRING));
 				*output = strdup (ASN1_STRING_data (str));
-				return strlen (output);
+				return str->length;
 			}
 		case V_ASN1_OCTET_STRING:
 			{
@@ -238,12 +281,13 @@ get_all_extensions (certificate_x509 *self, PyObject *args)
 		OBJ_obj2txt (oid, MAX_BUF, ext->object, 1);
 		PyObject *key = PyString_FromString (oid);
 
-		char *value;
+		char *value = NULL;
 		size_t length =
 			get_extension_by_object (self->x509, ext->object,
 						 &value);
-		PyObject *dict_value = PyString_FromString (value);
 
+		PyObject *dict_value = PyString_FromStringAndSize (value,
+								   length);
 		PyDict_SetItem (dict, key, dict_value);
 	}
 
