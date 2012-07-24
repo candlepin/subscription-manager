@@ -55,13 +55,13 @@ VALUE_PATTERN = re.compile('.*prim:\s(\w*)\s*:*(.*)')
 # we're using two modules for the time being. Eventually the certificate2 code
 # should be moved here.
 def create_from_file(path):
-    from certificate2 import CertFactory  # prevent circular deps
-    return CertFactory().create_from_file(path)
+    from certificate2 import _CertFactory  # prevent circular deps
+    return _CertFactory().create_from_file(path)
 
 
 def create_from_pem(pem):
-    from certificate2 import CertFactory  # prevent circular deps
-    return CertFactory().create_from_pem(pem)
+    from certificate2 import _CertFactory  # prevent circular deps
+    return _CertFactory().create_from_pem(pem)
 
 
 def parse_tags(tag_str):
@@ -675,13 +675,13 @@ class Extensions(dict):
 
     def __init__(self, x509):
         """
-        @param x509: A certificate object.
+        @param x509: An m2crypto X509 object or dict.
         @type x509: L{X509}
         """
         if isinstance(x509, dict):
             self.update(x509)
         else:
-            self.__parse(x509)
+            self._parse(x509)
 
     def ltrim(self, n):
         """
@@ -766,8 +766,10 @@ class Extensions(dict):
         text = text[start:end]
         return [s.strip() for s in text.split('\n')]
 
-    def __parse(self, x509):
-        # parse the extensions section
+    def _parse(self, x509):
+        """
+        Parse the extensions section. Expects an m2crypto X509 object.
+        """
         oid = None
         for entry in self._get_extensions_block(x509):
             if oid is not None:

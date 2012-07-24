@@ -13,17 +13,16 @@
 # in this software or its documentation.
 #
 
-import os
-import base64
 import zlib
 import logging
+import os
 
 log = logging.getLogger(__name__)
 
 from datetime import datetime
 import simplejson as json
 
-from M2Crypto import X509
+from rhsm import _certificate
 
 from rhsm.connection import safe_int
 from rhsm.certificate import Extensions, OID, DateRange, GMT, \
@@ -42,7 +41,7 @@ ENTITLEMENT_CERT = 2
 IDENTITY_CERT = 3
 
 
-class CertFactory(object):
+class _CertFactory(object):
     """
     Factory for creating certificate objects.
 
@@ -59,36 +58,41 @@ class CertFactory(object):
         """
         Create appropriate certificate object from a PEM file on disk.
         """
-        f = open(path)
-        contents = f.read()
-        f.close()
-        return self.create_from_pem(contents, path=path)
+        return self._read_x509(_certificate.load(path), path)
 
     def create_from_pem(self, pem, path=None):
         """
         Create appropriate certificate object from a PEM string.
         """
+        if not pem:
+            raise CertificateException("Empty certificate")
+        return self._read_x509(_certificate.load(pem=pem), path)
+
+    def _read_x509(self, x509, path):
+        if not x509:
+            raise CertificateException("Error loading certificate")
         # Load the X509 extensions so we can determine what we're dealing with:
         try:
-            x509 = X509.load_cert_string(pem)
-        except X509.X509Error, e:
-            raise CertificateException(e)
+            extensions = _Extensions2(x509)
+            redhat_oid = OID(REDHAT_OID_NAMESPACE)
+            # Trim down to only the extensions in the Red Hat namespace:
+            extensions = extensions.ltrim(len(redhat_oid))
 
-        extensions = Extensions(x509)
-        redhat_oid = OID(REDHAT_OID_NAMESPACE)
-        # Trim down to only the extensions in the Red Hat namespace:
-        extensions = extensions.ltrim(len(redhat_oid))
+            # Check the certificate version, absence of the extension implies v1.0:
+            cert_version_str = "1.0"
+            if EXT_CERT_VERSION in extensions:
+                cert_version_str = extensions[EXT_CERT_VERSION]
 
-        # Check the certificate version, absence of the extension implies v1.0:
-        cert_version_str = "1.0"
-        if EXT_CERT_VERSION in extensions:
-            cert_version_str = extensions[EXT_CERT_VERSION]
+            version = Version(cert_version_str)
+            if version.major == 1:
+                return self._create_v1_cert(version, extensions, x509, path)
+            if version.major == 2:
+                return self._create_v2_cert(version, extensions, x509, path)
 
-        version = Version(cert_version_str)
-        if version.major == 1:
-            return self._create_v1_cert(version, extensions, x509, path)
-        if version.major == 2:
-            return self._create_v2_cert(version, extensions, x509, path)
+        except CertificateException, e:
+            raise e
+        except Exception, e:
+            raise CertificateException(e.message)
 
     def _create_v1_cert(self, version, extensions, x509, path):
 
@@ -102,28 +106,10 @@ class CertFactory(object):
             return self._create_v1_prod_cert(version, extensions, x509, path)
 
     def _read_alt_name(self, x509):
-        alt_name = None
-        try:
-            name_ext = x509.get_ext('subjectAltName')
-            if name_ext:
-                alt_name = name_ext.get_value()
-        except LookupError:
-            # This may not be defined, seems to only be used for identity
-            # certificates:
-            pass
-        return alt_name
+        return x509.get_extension(name='subjectAltName')
 
     def _read_subject(self, x509):
-        subj = {}
-        subject = x509.get_subject()
-        subject.nid['UID'] = 458
-        for key, nid in subject.nid.items():
-            entry = subject.get_entries_by_nid(nid)
-            if len(entry):
-                asn1 = entry[0].get_data()
-                subj[key] = str(asn1)
-                continue
-        return subj
+        return x509.get_subject()
 
     def _create_identity_cert(self, extensions, x509, path):
         cert = IdentityCertificate(
@@ -198,10 +184,10 @@ class CertFactory(object):
                 quantity=order_extensions.get('5'),
                 virt_limit=order_extensions.get('8'),
                 socket_limit=order_extensions.get('9'),
-                contract_number=order_extensions.get('10'),
+                contract=order_extensions.get('10'),
                 quantity_used=order_extensions.get('11'),
                 warning_period=order_extensions.get('12'),
-                account_number=order_extensions.get('13'),
+                account=order_extensions.get('13'),
                 provides_management=order_extensions.get('14'),
                 service_level=order_extensions.get('15'),
                 service_type=order_extensions.get('16'),
@@ -219,8 +205,6 @@ class CertFactory(object):
             content.append(Content(
                 name=content_ext.get('1'),
                 label=content_ext.get('2'),
-                quantity=content_ext.get('3'),
-                flex_quantity=content_ext.get('4'),
                 vendor=content_ext.get('5'),
                 url=content_ext.get('6'),
                 gpg=content_ext.get('7'),
@@ -247,13 +231,7 @@ class CertFactory(object):
             raise CertificateException("Unable to parse non-entitlement "
                     "v2 certificates")
 
-        try:
-            payload = self._decompress_payload(extensions[EXT_ENT_PAYLOAD])
-        except Exception, e:
-            log.error("Error parsing certificate:")
-            log.error(x509.as_pem())
-            log.exception(e)
-            raise CertificateException(e)
+        payload = self._decompress_payload(extensions[EXT_ENT_PAYLOAD])
 
         order = self._parse_v2_order(payload)
         content = self._parse_v2_content(payload)
@@ -288,10 +266,10 @@ class CertFactory(object):
                 sku=sub.get('sku', None),
                 quantity=order.get('quantity', None),
                 socket_limit=sub.get('sockets', None),
-                contract_number=order.get('contract', None),
+                contract=order.get('contract', None),
                 quantity_used=payload.get('quantity', 1),
                 warning_period=sub.get('warning', 0),
-                account_number=order.get('account', None),
+                account=order.get('account', None),
                 provides_management=sub.get('management', False),
                 service_level=service_level,
                 service_type=service_type,
@@ -337,14 +315,18 @@ class CertFactory(object):
 
     def _decompress_payload(self, payload):
         """
-        Certificate payloads arrive in base64 encoded zlib compressed strings
+        Certificate payloads arrive in zlib compressed strings
         of JSON.
-        This method decodes, de-compressed, parses the JSON and returns the
+        This method de-compresses and parses the JSON and returns the
         resulting dict.
         """
-        decoded = base64.decodestring(payload)
-        decompressed = zlib.decompress(decoded)
-        return json.loads(decompressed)
+        try:
+            decompressed = zlib.decompress(payload)
+            return json.loads(decompressed)
+        except Exception, e:
+            log.exception(e)
+            raise CertificateException("Error decompressing/parsing "
+                    "certificate payload.")
 
 
 class Version(object):
@@ -363,6 +345,18 @@ class Version(object):
     # TODO: comparator might be useful someday
     def __str__(self):
         return self.version_str
+
+
+class _Extensions2(Extensions):
+
+    def _parse(self, x509):
+        """
+        Override parent method for an X509 object from the new C wrapper.
+        """
+        extensions = x509.get_all_extensions()
+        for (key, value) in extensions.items():
+            oid = OID(key)
+            self[oid] = value
 
 
 class Certificate(object):
@@ -428,6 +422,8 @@ class Certificate(object):
         """
         if self.path:
             os.unlink(self.path)
+        else:
+            raise CertificateException('Certificate has no path, cannot delete.')
 
 
 class IdentityCertificate(Certificate):
@@ -454,6 +450,17 @@ class EntitlementCertificate(ProductCertificate):
         ProductCertificate.__init__(self, **kwargs)
         self.order = order
         self.content = content
+
+    def delete(self):
+        """
+        Override parent to also delete certificate key.
+        """
+        Certificate.delete(self)
+
+        # Can assume we have a path here, super method would have thrown
+        # Exception if we didn't:
+        key_path = self.path.replace(".pem", "-key.pem")
+        os.unlink(key_path)
 
 
 class Product(object):
@@ -494,8 +501,8 @@ class Order(object):
 
     def __init__(self, name=None, number=None, sku=None, subscription=None,
             quantity=None, virt_limit=None, socket_limit=None,
-            contract_number=None, quantity_used=None, warning_period=None,
-            account_number=None, provides_management=None, service_level=None,
+            contract=None, quantity_used=None, warning_period=None,
+            account=None, provides_management=None, service_level=None,
             service_type=None, stacking_id=None, virt_only=None):
 
         self.name = name
@@ -517,8 +524,8 @@ class Order(object):
         self.socket_limit = safe_int(socket_limit, None)
         self.warning_period = safe_int(warning_period, 0)
 
-        self.contract_number = contract_number
-        self.account_number = account_number
+        self.contract = contract
+        self.account = account
 
         self.provides_management = provides_management or False
 
@@ -534,9 +541,8 @@ class Order(object):
 
 class Content(object):
 
-    def __init__(self, name=None, label=None, quantity=None, flex_quantity=None,
-            vendor=None, url=None, gpg=None, enabled=None, metadata_expire=None,
-            required_tags=None):
+    def __init__(self, name=None, label=None, vendor=None, url=None,
+            gpg=None, enabled=None, metadata_expire=None, required_tags=None):
 
         if (name is None) or (label is None):
             raise CertificateException("Content missing name/label")
@@ -559,15 +565,6 @@ class Content(object):
 
         self.metadata_expire = metadata_expire
         self.required_tags = required_tags or []
-
-        # Suspect both of these are unused:
-        self.quantity = None
-        if quantity:
-            self.quantity = int(quantity)
-
-        self.flex_quantity = None
-        if flex_quantity:
-            self.flex_quantity = int(flex_quantity)
 
     def __eq__(self, other):
         return (self.label == other.label)

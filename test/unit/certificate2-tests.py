@@ -14,12 +14,14 @@
 #
 
 import unittest
+import os
 from datetime import datetime
 
 import certdata
 from rhsm.certificate import create_from_pem, CertificateException
 from rhsm.certificate2 import *
 
+from mock import patch
 
 class V1CertTests(unittest.TestCase):
 
@@ -125,10 +127,18 @@ class V2CertTests(unittest.TestCase):
         self.assertEquals("never-enabled-content", content.name)
         self.assertEquals(False, content.enabled)
 
-    def test_bad_padding(self):
-        # Just want to see this pass, it would fail to decode the JSON in the past:
-        cert = create_from_pem(certdata.ENTITLEMENT_CERT_V2_0_LONG_BLOB)
-        self.assertEquals(9, len(cert.content))
+    @patch('os.unlink')
+    def test_delete(self, unlink_mock):
+        """ Entitlement cert deletion should cleanup key as well. """
+        cert_path = "/etc/pki/entitlement/12345.pem"
+        key_path = "/etc/pki/entitlement/12345-key.pem"
+        self.ent_cert.path = cert_path
+        self.unlinked = []
+        self.ent_cert.delete()
+
+        self.assertEquals(2, unlink_mock.call_count)
+        self.assertEquals(cert_path, unlink_mock.call_args_list[0][0][0])
+        self.assertEquals(key_path, unlink_mock.call_args_list[1][0][0])
 
 
 class IdentityCertTests(unittest.TestCase):
