@@ -13,7 +13,7 @@
 # in this software or its documentation.
 #
 
-import datetime
+from datetime import datetime, timedelta
 import time
 import unittest
 import os
@@ -27,7 +27,7 @@ from subscription_manager.managerlib import merge_pools, PoolFilter, \
 from modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
-from rhsm.certificate import EntitlementCertificate
+from rhsm.certificate import EntitlementCertificate, DateRange
 from mock import Mock
 import xml
 
@@ -281,6 +281,76 @@ class PoolFilterTests(unittest.TestCase):
         self.assertEquals(1, len(result))
         self.assertEquals(product1, result[0]['productId'])
 
+    def test_filter_no_overlap(self):
+        product1 = "Test Product 1"
+        provided1 = "Provided By Test Product 1"
+
+        pd = StubCertificateDirectory([])
+        pool_filter = PoolFilter(product_dir=pd,
+                entitlement_dir=StubCertificateDirectory([]))
+
+        begin_date = datetime.now() - timedelta(days=10)
+        end_date = datetime.now() + timedelta(days=365)
+        pools = [
+                create_pool(product1, product1, provided_products=[provided1],
+                            start_end_range=DateRange(begin_date, end_date)),
+        ]
+        result = pool_filter.filter_out_overlapping(pools)
+        self.assertEquals(1, len(result))
+
+        result = pool_filter.filter_out_non_overlapping(pools)
+        self.assertEquals(0, len(result))
+
+    def test_filter_overlap(self):
+        product1 = "Test Product 1"
+        provided1 = "Provided By Test Product 1"
+
+        cert_start = datetime.now() - timedelta(days=10)
+        cert_end = datetime.now() + timedelta(days=365)
+        cert1 = StubProductCertificate(StubProduct(provided1),
+                                                   start_date=cert_start,
+                                                   end_date=cert_end)
+
+        ent_dir = StubCertificateDirectory([cert1])
+        pool_filter = PoolFilter(product_dir=StubCertificateDirectory([]),
+                entitlement_dir=ent_dir)
+
+        pools = [
+                create_pool(product1, product1, provided_products=[provided1],
+                            start_end_range=DateRange(cert_start, cert_end)),
+        ]
+        result = pool_filter.filter_out_overlapping(pools)
+        self.assertEquals(0, len(result))
+
+        result = pool_filter.filter_out_non_overlapping(pools)
+        self.assertEquals(1, len(result))
+
+    def test_filter_no_overlap_with_future_entitlement(self):
+        product1 = "Test Product 1"
+        provided1 = "Provided By Test Product 1"
+
+        cert_start = datetime.now() + timedelta(days=365)
+        cert_end = cert_start + timedelta(days=365)
+        cert1 = StubProductCertificate(StubProduct(provided1),
+                                                   start_date=cert_start,
+                                                   end_date=cert_end)
+
+        ent_dir = StubCertificateDirectory([cert1])
+        pool_filter = PoolFilter(product_dir=StubCertificateDirectory([]),
+                entitlement_dir=ent_dir)
+
+        begin_date = datetime.now() - timedelta(days=100)
+        end_date = datetime.now() + timedelta(days=100)
+        pools = [
+                create_pool(product1, product1, provided_products=[provided1],
+                            start_end_range=DateRange(begin_date, end_date)),
+        ]
+        result = pool_filter.filter_out_overlapping(pools)
+        self.assertEquals(1, len(result))
+
+        result = pool_filter.filter_out_non_overlapping(pools)
+        self.assertEquals(0, len(result))
+
 
 class InstalledProductStatusTests(unittest.TestCase):
 
@@ -314,7 +384,7 @@ class InstalledProductStatusTests(unittest.TestCase):
             StubProductCertificate(product)])
         entitlement_directory = StubCertificateDirectory([
             StubEntitlementCertificate(product,
-                end_date=(datetime.datetime.now() - datetime.timedelta(days=2)))])
+                end_date=(datetime.now() - timedelta(days=2)))])
 
         product_status = getInstalledProductStatus(product_directory,
                 entitlement_directory)
@@ -340,7 +410,7 @@ class InstalledProductStatusTests(unittest.TestCase):
                 StubProductCertificate(product)])
         entitlement_directory = StubCertificateDirectory([
                 StubEntitlementCertificate(product,
-                    start_date=(datetime.datetime.now() + datetime.timedelta(days=1365)))])
+                    start_date=(datetime.now() + timedelta(days=1365)))])
 
         product_status = getInstalledProductStatus(product_directory,
                                                    entitlement_directory)
@@ -412,8 +482,8 @@ class InstalledProductStatusTests(unittest.TestCase):
 class TestParseDate(unittest.TestCase):
     def _test_local_tz(self):
         tz = LocalTz()
-        dt_no_tz = datetime.datetime(year=2000, month=1, day=1, hour=12, minute=34)
-        now_dt = datetime.datetime(year=2000, month=1, day=1, hour=12, minute=34, tzinfo=tz)
+        dt_no_tz = datetime(year=2000, month=1, day=1, hour=12, minute=34)
+        now_dt = datetime(year=2000, month=1, day=1, hour=12, minute=34, tzinfo=tz)
         parseDate(now_dt.isoformat())
         # last member is is_dst, which is -1, if there is no tzinfo, which
         # we expect for dt_no_tz
@@ -433,7 +503,7 @@ class TestParseDate(unittest.TestCase):
 
             # add an hour for comparisons
             dt_no_tz_dst = dt_no_tz
-            dt_no_tz_dst = dt_no_tz + datetime.timedelta(hours=1)
+            dt_no_tz_dst = dt_no_tz + timedelta(hours=1)
             self.assertEquals(now_dt_tt[3], dt_no_tz_dst.timetuple()[3])
         else:
             self.assertEquals(now_dt_tt[:7], dt_no_tz_tt[:7])
@@ -454,14 +524,14 @@ class TestParseDate(unittest.TestCase):
         server_date = "2012-04-10T00:00:00.000+0000"
         dt = parseDate(server_date)
         # no dst
-        self.assertEquals(datetime.timedelta(seconds=0), dt.tzinfo.dst(dt))
+        self.assertEquals(timedelta(seconds=0), dt.tzinfo.dst(dt))
         # it's a utc date, no offset
-        self.assertEquals(datetime.timedelta(seconds=0), dt.tzinfo.utcoffset(dt))
+        self.assertEquals(timedelta(seconds=0), dt.tzinfo.utcoffset(dt))
 
     def test_server_date_est_timezone(self):
         est_date = "2012-04-10T00:00:00.000-04:00"
         dt = parseDate(est_date)
-        self.assertEquals(datetime.timedelta(hours=4), dt.tzinfo.utcoffset(dt))
+        self.assertEquals(timedelta(hours=4), dt.tzinfo.utcoffset(dt))
 
 
 # http://docs.python.org/library/datetime.html
@@ -470,14 +540,14 @@ class TestLocalTz(unittest.TestCase):
     def _testDst(self):
         tz = LocalTz()
         epoch = time.time()
-        now_dt = datetime.datetime.fromtimestamp(epoch, tz=tz)
+        now_dt = datetime.fromtimestamp(epoch, tz=tz)
         diff_now = tz.utcoffset(now_dt) - tz.dst(now_dt)
-        td = datetime.timedelta(weeks=26)
+        td = timedelta(weeks=26)
         dt = now_dt + td
 
         diff_six_months = tz.utcoffset(dt) - tz.dst(dt)
 
-        week_ago_dt = dt - datetime.timedelta(weeks=4)
+        week_ago_dt = dt - timedelta(weeks=4)
         diff_week_ago = tz.utcoffset(week_ago_dt) - tz.dst(week_ago_dt)
 
         self.assertEquals(diff_now, diff_six_months)

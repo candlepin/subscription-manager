@@ -250,17 +250,37 @@ class PoolFilter(object):
                 entitled_products.append(product.getHash())
         return entitled_products
 
+    def _get_entitled_product_to_cert_map(self):
+        entitled_products_to_certs = {}
+        for cert in self.entitlement_directory.list():
+            for product in cert.getProducts():
+                prod_id = product.getHash()
+                if prod_id not in entitled_products_to_certs:
+                    entitled_products_to_certs[prod_id] = set()
+                entitled_products_to_certs[prod_id].add(cert)
+        return entitled_products_to_certs
+
+    def _dates_overlap(self, pool, certs):
+        pool_start = parseDate(pool['startDate'])
+        pool_end = parseDate(pool['endDate'])
+
+        for cert in certs:
+            cert_range = cert.validRange()
+            if cert_range.hasDate(pool_start) or cert_range.hasDate(pool_end):
+                return True
+        return False
+
     def filter_out_overlapping(self, pools):
-        entitled_product_ids = self._get_entitled_product_ids()
+        entitled_product_ids_to_certs = self._get_entitled_product_to_cert_map()
         filtered_pools = []
         for pool in pools:
             provided_ids = [p['productId'] for p in pool['providedProducts']]
             overlap = False
-            for productid in entitled_product_ids:
-                if str(productid) in provided_ids or \
-                    str(productid) == pool['productId']:
-                    overlap = True
-                    break
+            for productid in entitled_product_ids_to_certs.keys():
+                if str(productid) in provided_ids or str(productid) == pool['productId']:
+                    if self._dates_overlap(pool, entitled_product_ids_to_certs[productid]):
+                        overlap = True
+                        break
             if not overlap:
                 filtered_pools.append(pool)
         return filtered_pools
