@@ -563,7 +563,7 @@ class Content(object):
         # Suspect both of these are unused:
         self.quantity = None
         if quantity:
-            self.quantity = int(quantity) if quantity else None
+            self.quantity = int(quantity)
 
         self.flex_quantity = None
         if flex_quantity:
