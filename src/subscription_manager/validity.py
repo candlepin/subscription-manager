@@ -68,7 +68,7 @@ def find_first_invalid_date(ent_dir=None, product_dir=None,
     all_ent_certs = ent_dir.list()
 
     def get_date(ent_cert):
-        return ent_cert.validRange().end()
+        return ent_cert.valid_range.end()
 
     all_ent_certs.sort(key=get_date)
 
@@ -79,11 +79,11 @@ def find_first_invalid_date(ent_dir=None, product_dir=None,
         # Adding a timedelta of one day here so we can be sure we get a date
         # the subscription assitant (which does not use time) can use to search
         # for.
-        end_date = ent_cert.validRange().end() + timedelta(days=1)
+        end_date = ent_cert.valid_range.end() + timedelta(days=1)
         if end_date < current_date:
             # This cert is expired, ignore it:
             continue
-        log.debug("Checking cert: %s, end date: %s" % (ent_cert.serialNumber(),
+        log.debug("Checking cert: %s, end date: %s" % (ent_cert.serial,
             end_date))
 
         # new cert_sort stuff, use _scan_for_entitled_products, since
@@ -144,7 +144,7 @@ class ValidProductDateRangeCalculator(object):
         last_processed_ent = None
         for i, ent in enumerate(self._sort_past_to_future(possible_ents)):
             is_last = i == len(possible_ents) - 1
-            ent_range = ent.validRange()
+            ent_range = ent.valid_range
             ent_start = ent_range.begin()
             ent_end = ent_range.end()
             ent_valid_on_start = self._entitlement_valid_on_date(ent, possible_ents,
@@ -158,7 +158,7 @@ class ValidProductDateRangeCalculator(object):
             # processed entitlement's end date to the start of another entitlement.
             valid_after_last = True
             if last_processed_ent and not is_last:
-                last_processed_end = last_processed_ent.validRange().end()
+                last_processed_end = last_processed_ent.valid_range.end()
                 valid_after_last = self._entitlement_valid_on_date(last_processed_ent,
                                                                    possible_ents,
                                                                    last_processed_end +
@@ -193,8 +193,8 @@ class ValidProductDateRangeCalculator(object):
         """
         Compare entitlements by start dates.
         """
-        e1_start = ent1.validRange().begin()
-        e2_start = ent2.validRange().begin()
+        e1_start = ent1.valid_range.begin()
+        e2_start = ent2.valid_range.begin()
 
         if e1_start == e2_start:
             return 0
@@ -230,7 +230,7 @@ class ValidProductDateRangeCalculator(object):
         for group in groups:
             for ent in group:
                 # DateRange is in GMT so convert now to GMT before compare
-                if ent.validRange().hasDate(datetime.now().replace(tzinfo=GMT())):
+                if ent.valid_range.has_date(datetime.now().replace(tzinfo=GMT())):
                     return group
         return []
 
@@ -248,13 +248,13 @@ class ValidProductDateRangeCalculator(object):
         """
         Determines id there is a gap in time between two entitlements.
         """
-        ent1_range = ent1.validRange()
-        ent2_range = ent2.validRange()
+        ent1_range = ent1.valid_range
+        ent2_range = ent2.valid_range
 
-        if ent1_range.hasDate(ent2_range.begin()) or ent1_range.hasDate(ent2_range.end()):
+        if ent1_range.has_date(ent2_range.begin()) or ent1_range.has_date(ent2_range.end()):
             return False
 
-        if ent2_range.hasDate(ent1_range.begin()) or ent2_range.hasDate(ent1_range.end()):
+        if ent2_range.has_date(ent1_range.begin()) or ent2_range.has_date(ent1_range.end()):
             return False
 
         return True
@@ -269,15 +269,15 @@ class ValidProductDateRangeCalculator(object):
         it is considered valid if its stack is valid, or there is a
         non-stackable entitlement who's span includes the specified date.
         """
-        stack_id = entitlement.getOrder().getStackingId()
+        stack_id = entitlement.order.stacking_id
         if stack_id:
             if self.sorter.stack_id_valid(stack_id, entitlements_to_check, on_date=date):
                 return True
 
             for ent in entitlements_to_check:
-                if not ent.getOrder().getStackingId():
-                    return ent.validRange().hasDate(date) \
-                        and entitlement.validRange().hasDate(date)
+                if not ent.order.stacking_id:
+                    return ent.valid_range.has_date(date) \
+                        and entitlement.valid_range.has_date(date)
 
             return False
 
@@ -286,4 +286,4 @@ class ValidProductDateRangeCalculator(object):
         elif not self.sorter.ent_cert_sockets_valid(entitlement):
             return False
 
-        return entitlement.validRange().hasDate(date)
+        return entitlement.valid_range.has_date(date)

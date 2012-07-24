@@ -25,7 +25,7 @@ import logging
 import datetime
 
 from rhsm.config import initConfig
-from rhsm.certificate import EntitlementCertificate, Key
+from rhsm.certificate import Key, CertificateException, create_from_pem
 
 from subscription_manager import certlib, certdirectory
 from subscription_manager.certlib import system_log as inner_system_log
@@ -100,21 +100,21 @@ def getInstalledProductStatus(product_directory=None,
 
     for installed_product in sorter.installed_products:
         product_cert = sorter.installed_products[installed_product]
-        for product in product_cert.getProducts():
+        for product in product_cert.products:
             begin = ""
             end = ""
             calculator = ValidProductDateRangeCalculator(sorter)
-            prod_status_range = calculator.calculate(product.getHash())
+            prod_status_range = calculator.calculate(product.id)
             if prod_status_range:
                 # Format the date in user's local time as the date
                 # range is returned in GMT.
                 begin = formatDate(prod_status_range.begin())
                 end = formatDate(prod_status_range.end())
-            data = (product.getName(),
+            data = (product.name,
                     installed_product,
-                    product.getVersion(),
-                    product.getArch(),
-                    sorter.get_status(product.getHash()),
+                    product.version,
+                    ",".join(product.architectures),
+                    sorter.get_status(product.id),
                     begin,
                     end)
             product_status.append(data)
@@ -126,7 +126,7 @@ def getInstalledProductHashMap():
     products = certdirectory.ProductDirectory().list()
     phash = {}
     for product in products:
-        phash[product.getProduct().getName()] = product.getProduct().getHash()
+        phash[product.products[0].name] = product.products[0].id
     return phash
 
 
@@ -134,12 +134,9 @@ class CertificateFetchError(Exception):
     def __init__(self, errors):
         self.errors = errors
 
-    def errToMsg(self, err):
-        return ' '.join(str(err).split('-')[1:]).strip()
-
     def __str__(self, reason=""):
         msg = 'Entitlement Certificate(s) update failed due to the following reasons:\n' + \
-        '\n'.join(map(self.errToMsg, self.errors))
+        '\n'.join(self.errors)
         return msg
 
 
@@ -195,7 +192,7 @@ class PoolFilter(object):
         matched_data_dict = {}
         for d in pools:
             for product in installed_products:
-                productid = product.getProduct().getHash()
+                productid = product.products[0].id
                 # we only need one matched item per pool id, so add to dict to keep unique:
                 # Build a list of provided product IDs for comparison:
                 provided_ids = [p['productId'] for p in d['providedProducts']]
@@ -217,7 +214,7 @@ class PoolFilter(object):
             matched_data_dict[d['id']] = d
             provided_ids = [p['productId'] for p in d['providedProducts']]
             for product in installed_products:
-                productid = product.getProduct().getHash()
+                productid = product.products[0].id
                 # we only need one matched item per pool id, so add to dict to keep unique:
                 if str(productid) in provided_ids or \
                         str(productid) == d['productId']:
@@ -246,15 +243,15 @@ class PoolFilter(object):
     def _get_entitled_product_ids(self):
         entitled_products = []
         for cert in self.entitlement_directory.list():
-            for product in cert.getProducts():
-                entitled_products.append(product.getHash())
+            for product in cert.products:
+                entitled_products.append(product.id)
         return entitled_products
 
     def _get_entitled_product_to_cert_map(self):
         entitled_products_to_certs = {}
         for cert in self.entitlement_directory.list():
-            for product in cert.getProducts():
-                prod_id = product.getHash()
+            for product in cert.products:
+                prod_id = product.id
                 if prod_id not in entitled_products_to_certs:
                     entitled_products_to_certs[prod_id] = set()
                 entitled_products_to_certs[prod_id].add(cert)
@@ -265,7 +262,7 @@ class PoolFilter(object):
         pool_end = parseDate(pool['endDate'])
 
         for cert in certs:
-            cert_range = cert.validRange()
+            cert_range = cert.valid_range
             if cert_range.hasDate(pool_start) or cert_range.hasDate(pool_end):
                 return True
         return False
@@ -685,9 +682,12 @@ class ImportFileExtractor(object):
 
         @return: True if valid, False otherwise.
         """
-        ent_cert = EntitlementCertificate(self.get_cert_content())
+        try:
+            create_from_pem(self.get_cert_content())
+        except CertificateException:
+            return False
         ent_key = Key(self.get_key_content())
-        if ent_cert.bogus() or ent_key.bogus():
+        if ent_key.bogus():
             return False
         return True
 
@@ -724,8 +724,8 @@ class ImportFileExtractor(object):
         return file_parts[0] + "-key" + file_parts[1]
 
     def _create_filename_from_cert_serial_number(self):
-        ent_cert = EntitlementCertificate(self.get_cert_content())
-        return "%s.pem" % (ent_cert.serialNumber())
+        ent_cert = create_from_pem(self.get_cert_content())
+        return "%s.pem" % (ent_cert.serial)
 
 
 def _sub_dict(datadict, subkeys, default=None):

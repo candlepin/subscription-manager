@@ -54,8 +54,8 @@ def in_warning_period(sorter):
 
     for entitlement in sorter.valid_entitlement_certs:
         warning_period = datetime.timedelta(
-                days=int(entitlement.getOrder().getWarningPeriod()))
-        valid_range = entitlement.validRange()
+                days=int(entitlement.order.warning_period))
+        valid_range = entitlement.valid_range
         warning_range = certificate.DateRange(
                 valid_range.end() - warning_period, valid_range.end())
         if warning_range.hasNow():

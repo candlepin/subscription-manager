@@ -62,9 +62,9 @@ class QuantityDefaultValueCalculator(object):
         """
         total_consumed = 0
         for cert in self.current_entitlements:
-            order = cert.getOrder()
-            if order.getSku() == product_id and cert.validRange().hasNow():
-                total_consumed += int(order.getQuantityUsed())
+            order = cert.order
+            if order.sku == product_id and cert.valid_range.hasNow():
+                total_consumed += int(order.quantity_used)
         return total_consumed
 
     def _get_allowed_quantity_for_virtual_machine(self, product_attrs):

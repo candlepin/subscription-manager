@@ -244,8 +244,8 @@ class InstalledProductsManager(CacheManager):
 
         self.installed = {}
         for prod_cert in product_dir.list():
-            prod = prod_cert.getProduct()
-            self.installed[prod.getHash()] = prod.getName()
+            prod = prod_cert.products[0]
+            self.installed[prod.id] = prod.name
 
     def to_dict(self):
         return self.installed

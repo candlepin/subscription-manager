@@ -25,7 +25,7 @@ from subscription_manager import cert_sorter
 from subscription_manager.certdirectory import EntitlementDirectory, \
     ProductDirectory, Path, Writer
 from rhsm.config import initConfig
-from rhsm.certificate import EntitlementCertificate, Certificate, GMT, Key
+from rhsm.certificate import Key, create_from_pem, GMT
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -185,11 +185,7 @@ class Action:
         crtpem = bundle['cert']
         key = Key(keypem)
 
-        cert = EntitlementCertificate(crtpem)
-        bogus = cert.bogus()
-        if bogus:
-            bogus.insert(0, _('Reason(s):'))
-            raise Exception('\n - '.join(bogus))
+        cert = create_from_pem(crtpem)
         return (key, cert)
 
 
@@ -224,22 +220,22 @@ class UpdateAction(Action):
     def syslogResults(self, report):
         for cert in report.added:
             system_log("Added subscription for '%s' contract '%s'" % \
-                (cert.getOrder().getName(), cert.getOrder().getContract()))
-            for product in cert.getProducts():
+                (cert.order.name, cert.order.contract))
+            for product in cert.products:
                 system_log("Added subscription for product '%s'" % \
-                    (product.getName()))
+                    (product.name))
         for cert in report.rogue:
             system_log("Removed subscription for '%s' contract '%s'" % \
-                (cert.getOrder().getName(), cert.getOrder().getContract()))
-            for product in cert.getProducts():
+                (cert.order.name, cert.order.contract))
+            for product in cert.products:
                 system_log("Removed subscription for product '%s'" % \
-                    (product.getName()))
+                    (product.name))
         for cert in report.expired:
             system_log("Expired subscription for '%s' contract '%s'" % \
-                (cert.getOrder().getName(), cert.getOrder().getContract()))
-            for product in cert.getProducts():
+                (cert.order.name, cert.order.contract))
+            for product in cert.products:
                 system_log("Expired subscription for product '%s'" % \
-                    (product.getName()))
+                    (product.name))
 
     def getLocal(self, report):
         local = {}
@@ -248,7 +244,7 @@ class UpdateAction(Action):
         #grace period
         # XXX since we don't use grace period, this might not be needed
         for valid in self.entdir.list():
-            sn = valid.serialNumber()
+            sn = valid.serial
             report.valid.append(sn)
             local[sn] = valid
         return local
@@ -318,7 +314,7 @@ class UpdateAction(Action):
                     'Bundle not loaded:\n%s\n%s',
                     bundle,
                     e)
-                exceptions.append(e)
+                exceptions.append(e.message)
         return exceptions
 
     def purgeExpired(self, report):
@@ -374,20 +370,24 @@ class ConsumerIdentity:
 
     def __init__(self, keystring, certstring):
         self.key = keystring
+        # TODO: bad variables, cert should be the certificate object, x509 is
+        # used elsewhere for the m2crypto object of the same name.
         self.cert = certstring
-        self.x509 = Certificate(certstring)
+        self.x509 = create_from_pem(certstring)
 
     def getConsumerId(self):
-        subject = self.x509.subject()
+        subject = self.x509.subject
         return subject.get('CN')
 
     def getConsumerName(self):
-        altName = self.x509.alternateName()
+        altName = self.x509.alt_name
         return altName.replace("DirName:/CN=", "")
 
     def getSerialNumber(self):
-        return self.x509.serialNumber()
+        return self.x509.serial
 
+    # TODO: we're using a Certificate which has it's own write/delete, no idea
+    # why this landed in a parallel disjoint class wrapping the actual cert.
     def write(self):
         from subscription_manager import managerlib
         self.__mkdir()
@@ -436,14 +436,14 @@ class UpdateReport:
         s.append(title)
         if certificates:
             for c in certificates:
-                products = c.getProducts()
+                products = c.products
                 if not products:
-                    product = c.getOrder()
+                    product = c.order
                 for product in products:
                     s.append('%s[sn:%d (%s,) @ %s]' % \
                         (indent,
-                         c.serialNumber(),
-                         product.getName(),
+                         c.serial,
+                         product.name,
                          c.path))
         else:
             s.append('%s<NONE>' % indent)

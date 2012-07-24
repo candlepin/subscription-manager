@@ -83,8 +83,9 @@ config.CFG.read("test/rhsm.conf")
 from datetime import datetime, timedelta
 
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
-from rhsm.certificate import EntitlementCertificate, Product, DateRange, \
-        ProductCertificate, parse_tags, Content
+from rhsm.certificate import parse_tags, Content
+from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, \
+        Product, Content, Order
 
 
 class MockStdout:
@@ -99,106 +100,50 @@ MockStderr = MockStdout
 
 class StubProduct(Product):
 
-    def __init__(self, product_id, name=None, version=None, arch=None,
+    def __init__(self, product_id, name=None, version=None, architectures=None,
             provided_tags=None):
-        """
-        provided_tags - Comma separated list of tags this product (cert)
-            provides.
-        """
-        self.hash = product_id
-        self.name = name
+
+        # Initialize some defaults:
         if not name:
-            self.name = product_id
+            name = product_id
 
-        self.arch = arch
-        if not arch:
-            self.arch = "x86_64"
+        if not architectures:
+            architectures = ["x86_64"]
 
-        self.provided_tags = parse_tags(provided_tags)
-
-        self.version = version
         if not version:
-            self.version = "1.0"
+            version = "1.0"
 
-    def getHash(self):
-        return self.hash
+        # Tests sadly pass these in as a flat string. # TODO
+        if provided_tags:
+            provided_tags = parse_tags(provided_tags)
 
-
-class StubOrder(object):
-
-    # Start/end are formatted strings, not actual datetimes.
-    def __init__(self, start, end, name="STUB NAME", quantity=None,
-                 stacking_id=None, virt_only=None, socket_limit=1, sku="",
-                 service_level='None', service_type='None'):
-        self.name = name
-        self.start = start
-        self.end = end
-        self.quantity = quantity
-        self.stacking_id = stacking_id
-        self.virt_only = virt_only
-        self.socket_limit = socket_limit
-        self.sku = sku
-        self.service_level = service_level
-        self.service_type = service_type
-
-    def getStart(self):
-        return self.start
-
-    def getEnd(self):
-        return self.end
-
-    def getContract(self):
-        return None
-
-    def getAccountNumber(self):
-        return None
-
-    def getName(self):
-        return self.name
-
-    def getQuantityUsed(self):
-        return self.quantity
-
-    def getStackingId(self):
-        return self.stacking_id
-
-    def getSocketLimit(self):
-        return self.socket_limit
-
-    def getSku(self):
-        return self.sku
-
-    def getVirtOnly(self):
-        return self.virt_only
-
-    def getSupportLevel(self):
-        return self.service_level
-
-    def getSupportType(self):
-        return self.service_type
+        Product.__init__(self, id=product_id, name=name, version=version,
+                architectures=architectures, provided_tags=provided_tags)
 
 
 class StubContent(Content):
 
-    def __init__(self, label, name=None, quantity=1, vendor="",
+    def __init__(self, label, name=None, vendor="",
             url="", gpg="", enabled=1, metadata_expire=None, required_tags=""):
-        self.label = label
-        self.name = label
+        name = label
         if name:
-            self.name = name
-        self.quantity = quantity
-        self.vendor = vendor
-        self.url = url
-        self.gpg = gpg
-        self.enabled = enabled
-        self.metadata_expire = metadata_expire
-        self.required_tags = parse_tags(required_tags)
+            name = name
+        if required_tags:
+            required_tags = parse_tags(required_tags)
+        Content.__init__(self, name=name, label=label,
+                vendor=vendor, url=url, gpg=gpg, enabled=enabled,
+                metadata_expire=metadata_expire, required_tags=required_tags)
 
 
 class StubProductCertificate(ProductCertificate):
 
     def __init__(self, product, provided_products=None, start_date=None,
             end_date=None, provided_tags=None):
+
+        products = [product]
+        if provided_products:
+            products = products + provided_products
+
         # TODO: product should be a StubProduct, check for strings coming in and error out
         self.product = product
         self.provided_products = []
@@ -208,105 +153,65 @@ class StubProductCertificate(ProductCertificate):
         self.provided_tags = set()
         if provided_tags:
             self.provided_tags = set(provided_tags)
-        self.serial = random.randint(1, 10000000)
-        self.start_date = start_date
+
         if not start_date:
-            self.start_date = datetime.now() - timedelta(days=100)
-        self.end_date = end_date
+            start_date = datetime.now() - timedelta(days=100)
         if not end_date:
-            self.end_date = datetime.now() + timedelta(days=365)
-        self.order = "9241968"
-        self.stacking_id = "1"
+            end_date = datetime.now() + timedelta(days=365)
 
-    def getProduct(self):
-        return self.product
-
-    # TODO: a little confusing here, we pass in a product and a list of
-    # provided products, but this concept doesn't really exist, getProduct()
-    # just returns the first one in the list. (and there is no concept of a
-    # 'parent' product in these certificates)
-    def getProducts(self):
-        if self.product is None:
-            return []
-        prods = [self.product]
-        if len(self.provided_products) > 0:
-            prods.extend(self.provided_products)
-        return prods
-
-    def get_provided_tags(self):
-        return self.provided_tags
-
-    def getOrder(self):
-        return self.order
-
-    def getStackingId(self):
-        return self.stacking_id
-
-    def validRange(self):
-        return DateRange(self.start_date, self.end_date)
+        ProductCertificate.__init__(self, products=products,
+                serial=random.randint(1, 10000000),
+                start=start_date,
+                end=end_date)
 
     def __str__(self):
         s = []
-        s.append('StubCertificate:')
+        s.append('StubProductCertificate:')
         s.append('===================================')
-        for p in self.getProducts():
+        for p in self.products:
             s.append(str(p))
         return '\n'.join(s)
 
 
-class StubEntitlementCertificate(StubProductCertificate, EntitlementCertificate):
+class StubEntitlementCertificate(EntitlementCertificate):
 
     def __init__(self, product, provided_products=None, start_date=None, end_date=None,
-            order_end_date=None, content=None, quantity=1, stacking_id=None, sockets=2,
+            content=None, quantity=1, stacking_id=None, sockets=2,
             service_level=None):
-        StubProductCertificate.__init__(self, product, provided_products)
 
-        self.start_date = start_date
-        self.end_date = end_date
+        products = []
+        if product:
+            products.append(product)
+        if provided_products:
+            products = products + provided_products
+
         if not start_date:
-            self.start_date = datetime.now()
+            start_date = datetime.now()
         if not end_date:
-            self.end_date = self.start_date + timedelta(days=365)
-
-        self.order_end_date = order_end_date
-        if not order_end_date:
-            self.order_end_date = self.end_date
-        fmt = "%Y-%m-%dT%H:%M:%SZ"
+            end_date = start_date + timedelta(days=365)
 
         # to simulate a cert with no product
         sku = None
+        name = None
         if product:
-            sku = product.hash
-        self.order = StubOrder(self.start_date.strftime(fmt),
-                               self.order_end_date.strftime(fmt), quantity=quantity,
-                               stacking_id=stacking_id, socket_limit=sockets, sku=sku,
-                               service_level=service_level)
+            sku = product.id
+            name = product.name
+        order = Order(name=name, number="592837", sku=sku,
+                    stacking_id=stacking_id, socket_limit=sockets,
+                    service_level=service_level, quantity_used=quantity)
 
-        self.valid_range = DateRange(self.start_date, self.end_date)
-        self.content = []
-        if content:
-            self.content = content
-        self.path = "/tmp/fake_ent_cert.pem"
+        if content is None:
+            content = []
+
+        path = "/tmp/fake_ent_cert.pem"
         self.is_deleted = False
-        self.serial_number = '123456'
 
-    def validRange(self):
-        return DateRange(self.start_date, self.order_end_date)
-
-    def getContentEntitlements(self):
-        return self.content
-
-    def getRoleEntitlements(self):
-        return []
+        EntitlementCertificate.__init__(self, path=path, products=products,
+                order=order, content=content, start=start_date, end=end_date,
+                serial=random.randint(1, 10000000))
 
     def delete(self):
         self.is_deleted = True
-
-    def serialNumber(self):
-        return self.serial_number
-
-    def setSerialNumber(self, serial):
-        self.serial_number = serial
 
 
 class StubCertificateDirectory(EntitlementDirectory):
