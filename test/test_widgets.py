@@ -58,13 +58,13 @@ class TestSubDetailsWidget(unittest.TestCase):
         details = SubDetailsWidget()
         yesterday = datetime.now(GMT()) - timedelta(days=1)
         bg_color = details._get_date_bg(yesterday)
-        self.assertEqual(gtk.gdk.color_parse(EXPIRED_COLOR), bg_color)
+        self.assertEqual(details.expired_color, bg_color)
 
     def test_get_warning_bg(self):
         details = SubDetailsWidget()
         tomorrow = datetime.now(GMT()) + timedelta(days=1)
         bg_color = details._get_date_bg(tomorrow)
-        self.assertEqual(gtk.gdk.color_parse(WARNING_COLOR), bg_color)
+        self.assertEqual(details.warning_color, bg_color)
 
 
 class TestDatePicker(unittest.TestCase):
