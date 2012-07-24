@@ -117,7 +117,7 @@ class CertificateDirectory(Directory):
     def listValid(self):
         valid = []
         for c in self.list():
-            if c.valid():
+            if c.is_valid():
                 valid.append(c)
         return valid
 
