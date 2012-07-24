@@ -263,7 +263,7 @@ class PoolFilter(object):
 
         for cert in certs:
             cert_range = cert.valid_range
-            if cert_range.hasDate(pool_start) or cert_range.hasDate(pool_end):
+            if cert_range.has_date(pool_start) or cert_range.has_date(pool_end):
                 return True
         return False
 
