@@ -230,7 +230,7 @@ class ValidProductDateRangeCalculator(object):
         for group in groups:
             for ent in group:
                 # DateRange is in GMT so convert now to GMT before compare
-                if ent.valid_range.hasDate(datetime.now().replace(tzinfo=GMT())):
+                if ent.valid_range.has_date(datetime.now().replace(tzinfo=GMT())):
                     return group
         return []
 
@@ -251,10 +251,10 @@ class ValidProductDateRangeCalculator(object):
         ent1_range = ent1.valid_range
         ent2_range = ent2.valid_range
 
-        if ent1_range.hasDate(ent2_range.begin()) or ent1_range.hasDate(ent2_range.end()):
+        if ent1_range.has_date(ent2_range.begin()) or ent1_range.has_date(ent2_range.end()):
             return False
 
-        if ent2_range.hasDate(ent1_range.begin()) or ent2_range.hasDate(ent1_range.end()):
+        if ent2_range.has_date(ent1_range.begin()) or ent2_range.has_date(ent1_range.end()):
             return False
 
         return True
@@ -276,8 +276,8 @@ class ValidProductDateRangeCalculator(object):
 
             for ent in entitlements_to_check:
                 if not ent.order.stacking_id:
-                    return ent.valid_range.hasDate(date) \
-                        and entitlement.valid_range.hasDate(date)
+                    return ent.valid_range.has_date(date) \
+                        and entitlement.valid_range.has_date(date)
 
             return False
 
@@ -286,4 +286,4 @@ class ValidProductDateRangeCalculator(object):
         elif not self.sorter.ent_cert_sockets_valid(entitlement):
             return False
 
-        return entitlement.valid_range.hasDate(date)
+        return entitlement.valid_range.has_date(date)

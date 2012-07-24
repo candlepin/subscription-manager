@@ -136,8 +136,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
             # Only include if this cert overlaps with the overall date range
             # we are currently covered for:
-            if compliant_range.hasDate(cert.valid_range.begin()) or \
-                    compliant_range.hasDate(cert.valid_range.end()):
+            if compliant_range.has_date(cert.valid_range.begin()) or \
+                    compliant_range.has_date(cert.valid_range.end()):
 
                 contract_ids.add(cert.order.contract)
                 sub_names.add(cert.order.name)
