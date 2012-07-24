@@ -2,6 +2,9 @@ import unittest
 import socket
 from M2Crypto import SSL
 
+import rhsm_display
+rhsm_display.set_display()
+
 from subscription_manager.gui import utils
 import rhsm.connection as connection
 
@@ -31,9 +34,11 @@ class FakeErrorWindow:
 
 
 class FakeException(Exception):
-    def __init__(self, msg=None, cert_path=None):
+    def __init__(self, msg=None):
         self.msg = msg
-        self.cert_path = cert_path
+
+    def __str__(self):
+        return repr(self.msg)
 
 
 class HandleGuiExceptionTests(unittest.TestCase):

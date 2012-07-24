@@ -18,16 +18,41 @@ Helper methods for mocking up JSON model objects, certificates, etc.
 """
 
 
-import hashlib
+hashlib = None
+md5 = None
+try:
+    import hashlib
+except ImportError:
+    import md5
+
 from datetime import timedelta, datetime
+
+from rhsm.certificate import GMT
+
+
+#grumble, no hashblib on 2.4 and
+# md5 is deprecated on 2.6
+def md5sum(buf):
+    if hashlib:
+        md = hashlib.md5(buf)
+        return md.hexdigest()
+    m = md5.new()
+    m.update(buf)
+    return m.hexdigest()
 
 
 def create_pool(product_id, product_name, quantity=10, consumed=0, provided_products=[],
-                attributes=[], productAttributes=[]):
+                attributes=[], productAttributes=[], start_end_range=None):
     """
     Returns a hash representing a pool. Used to simulate the JSON returned
     from Candlepin.
     """
+    start_date = datetime.now(GMT()) - timedelta(days=365)
+    end_date = datetime.now(GMT()) + timedelta(days=365)
+    if start_end_range:
+        start_date = start_end_range.begin()
+        end_date = start_end_range.end()
+
     provided = []
     for pid in provided_products:
         provided.append({
@@ -35,8 +60,7 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
             'productName': pid,
         })
 
-    md5sum = hashlib.md5(product_id)
-    pool_id = md5sum.hexdigest()
+    pool_id = md5sum(product_id)
 
     return {
             'productName': product_name,
@@ -45,10 +69,10 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
             'consumed': consumed,
             'id': pool_id,
             'subscriptionId': '402881062bc9a379012bc9a3d7380050',
-            'startDate': datetime.now() - timedelta(days=365),
-            'endDate': datetime.now() + timedelta(days=365),
-            'updated': datetime.now() - timedelta(days=365),
-            'created': datetime.now() - timedelta(days=365),
+            'startDate': start_date.isoformat(),
+            'endDate': end_date.isoformat(),
+            'updated': start_date.isoformat(),
+            'created': start_date.isoformat(),
             'activeSubscription': True,
             'providedProducts': provided,
             'sourceEntitlement': None,

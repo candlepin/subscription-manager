@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_TW\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-09 15:06-0400\n"
+"POT-Creation-Date: 2012-07-18 10:48-0400\n"
 "PO-Revision-Date: 2012-06-28 08:44-0400\n"
 "Last-Translator: tchuang <tchuang@redhat.com>\n"
 "Language-Team: Traditional Chinese <zh@li.org>\n"
@@ -22,44 +22,40 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "X-Generator: Zanata 1.6.1\n"
 
-#: ../src/subscription_manager/gui/managergui.py:376
+#: ../src/subscription_manager/gui/managergui.py:359
 msgid ""
 "Error in preferences dialog. Please see /var/log/rhsm/rhsm.log for more "
 "information."
 msgstr ""
 "偏好設定對話方塊中含有錯誤。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
-#: ../src/subscription_manager/gui/managergui.py:391
+#: ../src/subscription_manager/gui/managergui.py:374
 msgid "<b>Errors were encountered during unregister.</b>"
 msgstr "<b>取消註冊時發生錯誤。</b>"
 
-#: ../src/subscription_manager/gui/managergui.py:393
-#: ../src/subscription_manager/gui/registergui.py:62
+#: ../src/subscription_manager/gui/managergui.py:376
+#: ../src/subscription_manager/gui/registergui.py:69
 #: ../src/subscription_manager/managercli.py:118
 msgid "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr "欲知詳情，請參閱 /var/log/rhsm/rhsm.log。"
 
-#: ../src/subscription_manager/gui/managergui.py:406
+#: ../src/subscription_manager/gui/managergui.py:389
 msgid "<b>Are you sure you want to unregister?</b>"
 msgstr "<b>您是否確認要取消註冊？</b>"
 
-#: ../src/subscription_manager/gui/managergui.py:429
-msgid "Error in autobind wizard"
-msgstr "自動綁定精靈的錯誤"
-
-#: ../src/subscription_manager/gui/managergui.py:465
+#: ../src/subscription_manager/gui/managergui.py:445
 msgid "System Already Registered"
 msgstr "系統已經註冊"
 
 #. Set up columns on the view
 #: ../src/subscription_manager/gui/allsubs.py:69
 #: ../src/subscription_manager/gui/mysubstab.py:65
-#: ../src/subscription_manager/gui/autobind.py:447
+#: ../src/subscription_manager/gui/registergui.py:378
 msgid "Subscription"
 msgstr "訂閱"
 
 #: ../src/subscription_manager/gui/allsubs.py:81
-#: ../src/subscription_manager/managercli.py:1741
+#: ../src/subscription_manager/managercli.py:1733
 msgid "Available Subscriptions"
 msgstr "可用的訂閱"
 
@@ -302,9 +298,8 @@ msgid "Proxy connection failed"
 msgstr "代理伺服器連線失敗"
 
 #: ../src/subscription_manager/gui/contract_selection.py:84
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:14
-msgid "Contract Number"
-msgstr "聯絡號碼"
+msgid "Contract"
+msgstr ""
 
 #: ../src/subscription_manager/gui/contract_selection.py:98
 msgid "Used / Total"
@@ -355,7 +350,7 @@ msgid "Installed"
 msgstr "已安裝"
 
 #: ../src/subscription_manager/gui/widgets.py:349
-#: ../src/subscription_manager/managercli.py:1691
+#: ../src/subscription_manager/managercli.py:1683
 msgid "None"
 msgstr "無"
 
@@ -419,63 +414,6 @@ msgstr "是"
 msgid "No"
 msgstr "否"
 
-#: ../src/subscription_manager/gui/autobind.py:321
-msgid "Unable to auto-subscribe, server does not support service levels."
-msgstr "無法自動訂閱，伺服器不支援服務等級。"
-
-#: ../src/subscription_manager/gui/autobind.py:326
-#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:271
-msgid ""
-"No installed products on system. No need to update certificates at this time."
-msgstr "系統上沒有已安裝的產品。現在不需要更新憑證。"
-
-#: ../src/subscription_manager/gui/autobind.py:331
-msgid ""
-"All installed products are covered by valid entitlements. No need to update "
-"certificates at this time."
-msgstr "所有已安裝產品皆由正確的權利所支援。現在不需要更新憑證。"
-
-#: ../src/subscription_manager/gui/autobind.py:364
-#, python-format
-msgid ""
-"Unable to subscribe to any additional products at current service level: %s. "
-"Please use the \"All Available Subscriptions\" tab to manually entitle this "
-"system."
-msgstr ""
-"現有服務等級無法訂閱任何額外產品：%s。請使用「所有可用的訂閱服務」分頁來手動"
-"賦予此系統權利。"
-
-#: ../src/subscription_manager/gui/autobind.py:376
-msgid ""
-"No service levels will cover all installed products. Please use the \"All "
-"Available Subscriptions\" tab to manually entitle this system."
-msgstr ""
-"沒有服務等即可涵蓋所有已安裝產品。請使用「所有可用訂閱」分頁來手動賦予系統權"
-"利。"
-
-#: ../src/subscription_manager/gui/autobind.py:490
-msgid "Error subscribing:"
-msgstr "訂閱錯誤："
-
-#: ../src/subscription_manager/gui/autobind.py:496
-msgid "Confirm Subscription(s)"
-msgstr "確認訂閱"
-
-#: ../src/subscription_manager/gui/autobind.py:499
-#: ../src/subscription_manager/gui/data/allsubs.glade.h:7
-#: ../src/subscription_manager/gui/data/contract_selection.glade.h:6
-msgid "Subscribe"
-msgstr "訂閱"
-
-#: ../src/subscription_manager/gui/autobind.py:541
-msgid "Select Service Level Agreement"
-msgstr "選擇服務等級協議"
-
-#: ../src/subscription_manager/gui/autobind.py:544
-#: ../src/subscription_manager/gui/data/autobind.glade.h:3
-msgid "Forward"
-msgstr "下一步"
-
 #. Set up columns on the view
 #: ../src/subscription_manager/gui/factsgui.py:54
 msgid "Fact"
@@ -492,85 +430,69 @@ msgstr "先前沒有更新"
 #. TODO: could stand to check if registered before trying to do this:
 #: ../src/subscription_manager/gui/factsgui.py:103
 #: ../src/subscription_manager/gui/factsgui.py:107
-#: ../src/subscription_manager/managercli.py:1395
-#: ../src/subscription_manager/utils.py:263
-#: ../src/subscription_manager/utils.py:272
-#: ../src/subscription_manager/utils.py:274
-#: ../src/subscription_manager/utils.py:278
+#: ../src/subscription_manager/managercli.py:1387
+#: ../src/subscription_manager/utils.py:290
+#: ../src/subscription_manager/utils.py:299
+#: ../src/subscription_manager/utils.py:301
+#: ../src/subscription_manager/utils.py:305
 msgid "Unknown"
 msgstr "未知"
 
-#. Firstboot module title
-#. Note: translated title needs to be unique across all
-#. firstboot modules, not just the rhsm ones. See bz #828042
-#: ../src/subscription_manager/gui/firstboot/rhsm_manually_subscribe.py:36
-#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
-msgid "Manual Configuration Required"
-msgstr "須進行手動式配置"
-
-#: ../src/subscription_manager/gui/firstboot/rhsm_manually_subscribe.py:37
-#: ../src/subscription_manager/gui/firstboot/rhsm_confirm_subs.py:25
-#: ../src/subscription_manager/gui/firstboot/rhsm_select_sla.py:20
-#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:37
-msgid "Subscription Registration"
-msgstr "訂閱註冊"
-
-#. Firstboot module title
-#. Note: translated title needs to be unique across all
-#. firstboot modules, not just the rhsm ones. See bz #828042
-#: ../src/subscription_manager/gui/firstboot/rhsm_confirm_subs.py:24
-#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:43
-msgid "Confirm Subscriptions"
-msgstr "確認訂閱"
-
-#. Firstboot module title
-#. Note: translated title needs to be unique across all
-#. firstboot modules, not just the rhsm ones. See bz #828042
-#: ../src/subscription_manager/gui/firstboot/rhsm_select_sla.py:19
-#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:42
-msgid "Service Level"
-msgstr "服務等級"
-
-#. Firstboot module title
-#. Note: translated title needs to be unique across all
-#. firstboot modules, not just the rhsm ones. See bz #828042
-#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:36
-msgid "Subscription Management Registration"
-msgstr "訂閱管理註冊"
-
-#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:41
-msgid "Manual Configuraton Required"
-msgstr "須進行手動式配置"
-
-#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:252
-msgid "You have opted to skip auto-subscribe."
-msgstr "您已選擇跳過自動訂閱。"
-
-#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:267
+#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:38
 msgid ""
 "Unable to auto-subscribe, server does not support service levels. Please run "
 "'Subscription Manager' to manually subscribe."
 msgstr "無法自動訂閱，伺服器不支援服務等級。請執行「訂閱管理員」以手動訂閱。"
 
-#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:275
+#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:44
+#: ../src/subscription_manager/gui/registergui.py:475
+msgid ""
+"No installed products on system. No need to update certificates at this time."
+msgstr "系統上沒有已安裝的產品。現在不需要更新憑證。"
+
+#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:49
 msgid ""
 "All installed products are covered by valid entitlements. Please run "
 "'Subscription Manager' to subscribe to additional products."
 msgstr ""
 "所有已安裝產品皆由正確的權利所支援。請執行「訂閱管理員」以訂閱額外產品。"
 
-#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:287
+#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:55
+#: ../src/subscription_manager/gui/registergui.py:481
+msgid "Error subscribing"
+msgstr ""
+
+#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:68
 #, python-format
 msgid ""
 "Unable to subscribe to any additional products at current service level: %s"
 msgstr "現有的服務等級無法訂閱任何額外產品：%s"
 
-#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:292
+#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:81
 msgid ""
 "No service levels will cover all installed products. Please run "
 "'Subscription Manager' to manually entitle this system."
 msgstr ""
 "沒有服務等級能涵蓋所有已安裝產品。請執行「訂閱管理員」來手動賦予此系統權利。"
+
+#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:98
+msgid "You have opted to skip auto-subscribe."
+msgstr "您已選擇跳過自動訂閱。"
+
+#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:119
+msgid "Finish"
+msgstr ""
+
+#. Firstboot module title
+#. Note: translated title needs to be unique across all
+#. firstboot modules, not just the rhsm ones. See bz #828042
+#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:140
+msgid "Subscription Management Registration"
+msgstr "訂閱管理註冊"
+
+#: ../src/subscription_manager/gui/firstboot/rhsm_login.py:141
+msgid "Subscription Registration"
+msgstr "訂閱註冊"
 
 #: ../src/subscription_manager/gui/redeem.py:54
 #, python-format
@@ -615,77 +537,125 @@ msgstr ""
 msgid "Bad CA certificate: %s"
 msgstr "錯誤的 CA 認證：%s"
 
-#: ../src/subscription_manager/gui/registergui.py:60
+#: ../src/subscription_manager/gui/registergui.py:67
 msgid "<b>Unable to register the system.</b>"
 msgstr "<b>無法註冊系統。</b>"
 
-#: ../src/subscription_manager/gui/registergui.py:236
+#: ../src/subscription_manager/gui/registergui.py:259
 #: ../src/subscription_manager/gui/data/registration.glade.h:2
 #: ../src/subscription_manager/gui/data/installed.glade.h:13
 msgid "Register"
 msgstr "註冊"
 
-#: ../src/subscription_manager/gui/registergui.py:259
+#: ../src/subscription_manager/gui/registergui.py:303
 msgid "Registering your system"
 msgstr "註冊您的系統"
 
-#: ../src/subscription_manager/gui/registergui.py:307
+#: ../src/subscription_manager/gui/registergui.py:338
+msgid "Subscribing to entitlements"
+msgstr ""
+
+#: ../src/subscription_manager/gui/registergui.py:347
+#, python-format
+msgid "Error subscribing: %s"
+msgstr ""
+
+#: ../src/subscription_manager/gui/registergui.py:372
+#: ../src/subscription_manager/gui/data/allsubs.glade.h:7
+#: ../src/subscription_manager/gui/data/contract_selection.glade.h:6
+msgid "Subscribe"
+msgstr "訂閱"
+
+#: ../src/subscription_manager/gui/registergui.py:423
+msgid "Finding suitable service levels"
+msgstr ""
+
+# Override the button text to clarify we're not actually registering
+# by pressing that button here.
+#: ../src/subscription_manager/gui/registergui.py:424
+#: ../src/subscription_manager/gui/registergui.py:751
+msgid "Next"
+msgstr "下一步"
+
+#: ../src/subscription_manager/gui/registergui.py:472
+msgid "Unable to auto-subscribe, server does not support service levels."
+msgstr "無法自動訂閱，伺服器不支援服務等級。"
+
+#: ../src/subscription_manager/gui/registergui.py:478
+msgid ""
+"All installed products are covered by valid entitlements. No need to update "
+"certificates at this time."
+msgstr "所有已安裝產品皆由正確的權利所支援。現在不需要更新憑證。"
+
+#: ../src/subscription_manager/gui/registergui.py:495
+#, python-format
+msgid ""
+"Unable to subscribe to any additional products at current service level: %s. "
+"Please use the \"All Available Subscriptions\" tab to manually entitle this "
+"system."
+msgstr ""
+"現有服務等級無法訂閱任何額外產品：%s。請使用「所有可用的訂閱服務」分頁來手動"
+"賦予此系統權利。"
+
+#: ../src/subscription_manager/gui/registergui.py:513
+msgid ""
+"No service levels will cover all installed products. Please use the \"All "
+"Available Subscriptions\" tab to manually entitle this system."
+msgstr ""
+"沒有服務等即可涵蓋所有已安裝產品。請使用「所有可用訂閱」分頁來手動賦予系統權"
+"利。"
+
+#: ../src/subscription_manager/gui/registergui.py:545
 msgid "Fetching list of possible environments"
 msgstr "取得可用環境的清單"
 
-#: ../src/subscription_manager/gui/registergui.py:309
+#: ../src/subscription_manager/gui/registergui.py:547
 msgid "Environment"
 msgstr "環境"
 
-#: ../src/subscription_manager/gui/registergui.py:365
+#: ../src/subscription_manager/gui/registergui.py:604
 msgid "Fetching list of possible organizations"
 msgstr "取得可用組織的清單"
 
-#: ../src/subscription_manager/gui/registergui.py:368
+#: ../src/subscription_manager/gui/registergui.py:607
 msgid "Organization"
 msgstr "組織"
 
-#: ../src/subscription_manager/gui/registergui.py:383
+#: ../src/subscription_manager/gui/registergui.py:624
 #, python-format
 msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr "<b>使用者 %s 再也無法註冊任何組織。</b>"
 
-#: ../src/subscription_manager/gui/registergui.py:449
+#: ../src/subscription_manager/gui/registergui.py:690
 msgid "You must enter a system name."
 msgstr "您必須輸入一組系統名稱。"
 
-#: ../src/subscription_manager/gui/registergui.py:457
+#: ../src/subscription_manager/gui/registergui.py:698
 msgid "You must enter a login."
 msgstr "您必須輸入一組登錄名稱。"
 
-#: ../src/subscription_manager/gui/registergui.py:462
+#: ../src/subscription_manager/gui/registergui.py:703
 msgid "You must enter a password."
 msgstr "您必須輸入一組密碼。"
 
-# Override the button text to clarify we're not actually registering
-# by pressing that button here.
-#: ../src/subscription_manager/gui/registergui.py:508
-msgid "Next"
-msgstr "下一步"
-
-#: ../src/subscription_manager/gui/registergui.py:537
-#: ../src/subscription_manager/managercli.py:333
+#: ../src/subscription_manager/gui/registergui.py:780
+#: ../src/subscription_manager/managercli.py:332
 #, python-format
 msgid "Unable to reach the server at %s:%s%s"
 msgstr "無法連上位於 %s 的伺服器：%s%s"
 
-#: ../src/subscription_manager/gui/registergui.py:541
+#: ../src/subscription_manager/gui/registergui.py:784
 msgid "CA certificate for subscription service has not been installed."
 msgstr "訂閱服務的 CA 憑證尚未安裝。"
 
-#: ../src/subscription_manager/gui/registergui.py:546
+#: ../src/subscription_manager/gui/registergui.py:789
 msgid ""
 "Please provide a hostname with optional port and/or prefix: hostname[:port][/"
 "prefix]"
 msgstr ""
 "請提供一組主機名稱，以及選用性的連接埠與/或前綴字元：hostname[:port][/prefix]"
 
-#: ../src/subscription_manager/gui/registergui.py:603
+#: ../src/subscription_manager/gui/registergui.py:846
 msgid "Server supports environments, but none are available."
 msgstr "伺服器支援環境，但沒有可用的環境。"
 
@@ -727,8 +697,9 @@ msgstr "找不到 UUID: %s"
 
 #: ../src/subscription_manager/cache.py:172
 msgid ""
-"Error updating system data, see /var/log/rhsm/rhsm.log for more details."
-msgstr "更新系統資料時發生錯誤，詳情請見 /var/log/rhsm/rhsm.log。"
+"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
+"more details."
+msgstr ""
 
 #: ../src/subscription_manager/branding/__init__.py:81
 msgid "Register the machine to the server"
@@ -798,7 +769,7 @@ msgstr ""
 "redhat.com/kb/docs/DOC-45563"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:18
-#: ../src/subscription_manager/utils.py:277
+#: ../src/subscription_manager/utils.py:304
 msgid "RHN Classic"
 msgstr "RHN Classic"
 
@@ -855,69 +826,77 @@ msgstr "%prog [options]"
 msgid "Options"
 msgstr "選項"
 
+#: ../src/subscription_manager/i18n_optparse.py:134
+msgid "options"
+msgstr ""
+
+#: ../src/subscription_manager/i18n_optparse.py:135
+msgid "options:"
+msgstr ""
+
 #. stuff for option value sanity checking
-#: ../src/subscription_manager/i18n_optparse.py:136
+#: ../src/subscription_manager/i18n_optparse.py:138
 #, python-format
 msgid "no such option: %s"
 msgstr "無此選項：%s"
 
-#: ../src/subscription_manager/i18n_optparse.py:137
+#: ../src/subscription_manager/i18n_optparse.py:139
 #, python-format
 msgid "ambiguous option: %s (%s?)"
 msgstr "含糊不清的選項：%s（%s?）"
 
-#: ../src/subscription_manager/i18n_optparse.py:138
+#: ../src/subscription_manager/i18n_optparse.py:140
 #, python-format
 msgid "%s option requires an argument"
 msgstr "%s 選項需要一個引數"
 
-#: ../src/subscription_manager/i18n_optparse.py:139
+#: ../src/subscription_manager/i18n_optparse.py:141
 #, python-format
 msgid "%s option requires %d arguments"
 msgstr "%s 選項需要 %d 引數"
 
-#: ../src/subscription_manager/i18n_optparse.py:140
+#: ../src/subscription_manager/i18n_optparse.py:142
 #, python-format
 msgid "%s option does not take a value"
 msgstr "%s 選項不接受值"
 
-#: ../src/subscription_manager/i18n_optparse.py:141
+#: ../src/subscription_manager/i18n_optparse.py:143
 msgid "integer"
 msgstr "整數"
 
-#: ../src/subscription_manager/i18n_optparse.py:142
+#: ../src/subscription_manager/i18n_optparse.py:144
 msgid "long integer"
 msgstr "長整數"
 
-#: ../src/subscription_manager/i18n_optparse.py:143
+#: ../src/subscription_manager/i18n_optparse.py:145
 msgid "floating-point"
 msgstr "浮點數"
 
-#: ../src/subscription_manager/i18n_optparse.py:144
+#: ../src/subscription_manager/i18n_optparse.py:146
 msgid "complex"
 msgstr "複雜"
 
-#: ../src/subscription_manager/i18n_optparse.py:145
+#: ../src/subscription_manager/i18n_optparse.py:147
 #, python-format
 msgid "option %s: invalid %s value: %r"
 msgstr "選項 %s：無效的 %s 值：%r"
 
-#: ../src/subscription_manager/i18n_optparse.py:146
+#: ../src/subscription_manager/i18n_optparse.py:148
 #, python-format
 msgid "option %s: invalid choice: %r (choose from %s)"
 msgstr "選項 %s：無效的選擇：%r（由 %s 選擇）"
 
 #. default options
-#: ../src/subscription_manager/i18n_optparse.py:149
+#: ../src/subscription_manager/i18n_optparse.py:151
 msgid "show this help message and exit"
 msgstr "顯示此協助訊息並退出"
 
-#: ../src/subscription_manager/i18n_optparse.py:150
+#: ../src/subscription_manager/i18n_optparse.py:152
 msgid "show program's version number and exit"
 msgstr "顯示程式的版本號碼並退出"
 
 #. translators: arg 1 is the program name, arg 2 is the error message
-#: ../src/subscription_manager/i18n_optparse.py:163
+#: ../src/subscription_manager/i18n_optparse.py:165
 #, python-format
 msgid "%s: error: %s"
 msgstr "%s：錯誤：%s"
@@ -1003,26 +982,26 @@ msgid "Status:               \t%s"
 msgstr "狀態：               \t%s"
 
 #: ../src/subscription_manager/managercli.py:76
-#: ../src/subscription_manager/managercli.py:1831
+#: ../src/subscription_manager/managercli.py:1823
 #, python-format
 msgid "Starts:               \t%s"
 msgstr "起始：               \t%s"
 
 #: ../src/subscription_manager/managercli.py:77
 #: ../src/subscription_manager/managercli.py:87
-#: ../src/subscription_manager/managercli.py:1833
+#: ../src/subscription_manager/managercli.py:1825
 #, python-format
 msgid "Ends:                 \t%s"
 msgstr "結束：                 \t%s"
 
 #: ../src/subscription_manager/managercli.py:80
-#: ../src/subscription_manager/managercli.py:1804
+#: ../src/subscription_manager/managercli.py:1796
 #, python-format
 msgid "Subscription Name:    \t%s"
 msgstr "訂閱名稱：    \t%s"
 
 #: ../src/subscription_manager/managercli.py:81
-#: ../src/subscription_manager/managercli.py:1815
+#: ../src/subscription_manager/managercli.py:1807
 #, python-format
 msgid "SKU:                  \t%s"
 msgstr ""
@@ -1038,13 +1017,13 @@ msgid "Quantity:             \t%s"
 msgstr "數量：             \t%s"
 
 #: ../src/subscription_manager/managercli.py:84
-#: ../src/subscription_manager/managercli.py:1827
+#: ../src/subscription_manager/managercli.py:1819
 #, python-format
 msgid "Service Level:        \t%s"
 msgstr "服務等級：        \t%s"
 
 #: ../src/subscription_manager/managercli.py:85
-#: ../src/subscription_manager/managercli.py:1829
+#: ../src/subscription_manager/managercli.py:1821
 #, python-format
 msgid "Service Type:         \t%s"
 msgstr "服務類型：         \t%s"
@@ -1094,7 +1073,7 @@ msgid "Network error, unable to connect to server."
 msgstr "網路錯誤，無法連上伺服器。"
 
 #: ../src/subscription_manager/managercli.py:149
-#: ../src/subscription_manager/managercli.py:749
+#: ../src/subscription_manager/managercli.py:748
 #, python-format
 msgid "Service level set to: %s"
 msgstr "服務等級設為：%s"
@@ -1128,352 +1107,357 @@ msgstr "含有基本驗證的 http 代理伺服器的使用者"
 msgid "password for http proxy with basic authentication"
 msgstr "含有基本驗證的 http 代理伺服器的密碼"
 
-#: ../src/subscription_manager/managercli.py:310
+#: ../src/subscription_manager/managercli.py:309
 #, python-format
 msgid "cannot parse argument: %s"
 msgstr "無法解析引數：%s"
 
-#: ../src/subscription_manager/managercli.py:325
+#: ../src/subscription_manager/managercli.py:324
 #, python-format
 msgid "Error parsing serverurl: %s"
 msgstr "叵析 serverurl 時發生了錯誤：%s"
 
-#: ../src/subscription_manager/managercli.py:339
+#: ../src/subscription_manager/managercli.py:338
 msgid "Error: CA certificate for subscription service has not been installed."
 msgstr "錯誤：訂閱服務的 CA 憑證尚未安裝。"
 
-#: ../src/subscription_manager/managercli.py:356
+#: ../src/subscription_manager/managercli.py:355
 #, python-format
 msgid "Error parsing baseurl: %s"
 msgstr "叵析 baseurl 時發生了錯誤：%s"
 
-#: ../src/subscription_manager/managercli.py:405
+#: ../src/subscription_manager/managercli.py:404
 msgid "Consumer certificates corrupted. Please reregister."
 msgstr "使用者認證已損毀。請進行註冊。"
 
-#: ../src/subscription_manager/managercli.py:422
+#: ../src/subscription_manager/managercli.py:421
 msgid "username to use when authorizing against the server"
 msgstr "向伺服器認證時所使用的使用者名稱"
 
-#: ../src/subscription_manager/managercli.py:424
+#: ../src/subscription_manager/managercli.py:423
 msgid "password to use when authorizing against the server"
 msgstr "向伺服器認證時所使用的密碼"
 
-#: ../src/subscription_manager/managercli.py:436
+#: ../src/subscription_manager/managercli.py:435
 msgid "Username: "
 msgstr "使用者名稱："
 
-#: ../src/subscription_manager/managercli.py:439
+#: ../src/subscription_manager/managercli.py:438
 msgid "Password: "
 msgstr "密碼："
 
-#: ../src/subscription_manager/managercli.py:463
+#: ../src/subscription_manager/managercli.py:462
 msgid ""
 "Remove all local consumer and subscription data without affecting the server"
 msgstr "移除所有本地消耗者與訂閱資料，而不影響伺服器。"
 
-#: ../src/subscription_manager/managercli.py:474
+#: ../src/subscription_manager/managercli.py:473
 msgid "All local data removed"
 msgstr "所有本機資料皆已移除"
 
-#: ../src/subscription_manager/managercli.py:481
+#: ../src/subscription_manager/managercli.py:480
 msgid "Pull the latest subscription data from the server"
 msgstr "從伺服器取得最新的訂閱資料"
 
-#: ../src/subscription_manager/managercli.py:491
+#: ../src/subscription_manager/managercli.py:490
 msgid "All local data refreshed"
 msgstr "所有本機資料皆已更新"
 
-#: ../src/subscription_manager/managercli.py:496
+#: ../src/subscription_manager/managercli.py:495
 #, python-format
 msgid "Unable to perform refresh due to the following exception: %s"
 msgstr "無法更新，因為發生下列例外狀況：%s"
 
-#: ../src/subscription_manager/managercli.py:504
+#: ../src/subscription_manager/managercli.py:503
 msgid "Display the identity certificate for this machine or request a new one"
 msgstr "顯示這台機器的身份認證，或索取新的身份認證"
 
-#: ../src/subscription_manager/managercli.py:511
+#: ../src/subscription_manager/managercli.py:510
 msgid "request a new certificate be generated"
 msgstr "請求產生一組新的認證"
 
-#: ../src/subscription_manager/managercli.py:513
+#: ../src/subscription_manager/managercli.py:512
 msgid "force certificate regeneration (requires username and password)"
 msgstr "強制產生認證（需要使用者名稱與密碼）"
 
-#: ../src/subscription_manager/managercli.py:518
+#: ../src/subscription_manager/managercli.py:517
 msgid "--force can only be used with --regenerate"
 msgstr "--force 只可與 --regenerate 搭配使用"
 
-#: ../src/subscription_manager/managercli.py:522
+#: ../src/subscription_manager/managercli.py:521
 msgid "--username and --password can only be used with --force"
 msgstr "--username 與 --password 只可與 --force 搭配使用"
 
 #. no need to continue if user is only registered to Classic
-#: ../src/subscription_manager/managercli.py:529
-#: ../src/subscription_manager/managercli.py:532
-#: ../src/subscription_manager/managercli.py:1881
+#: ../src/subscription_manager/managercli.py:528
+#: ../src/subscription_manager/managercli.py:531
+#: ../src/subscription_manager/managercli.py:1873
 #, python-format
 msgid "remote entitlement server type: %s"
 msgstr "遠端權利伺服器類型：%s"
 
-#: ../src/subscription_manager/managercli.py:544
+#: ../src/subscription_manager/managercli.py:543
 #, python-format
 msgid "Current identity is: %s"
 msgstr "目前的身份認證是：%s"
 
-#: ../src/subscription_manager/managercli.py:545
+#: ../src/subscription_manager/managercli.py:544
 #, python-format
 msgid "name: %s"
 msgstr "名稱：%s"
 
-#: ../src/subscription_manager/managercli.py:546
+#: ../src/subscription_manager/managercli.py:545
 #, python-format
 msgid "org name: %s"
 msgstr "組織名稱：%s"
 
-#: ../src/subscription_manager/managercli.py:547
+#: ../src/subscription_manager/managercli.py:546
 #, python-format
 msgid "org id: %s"
 msgstr "組織 ID：%s"
 
-#: ../src/subscription_manager/managercli.py:555
+#: ../src/subscription_manager/managercli.py:554
 msgid "Identity certificate has been regenerated."
 msgstr "已產生身份認證。"
 
-#: ../src/subscription_manager/managercli.py:563
+#: ../src/subscription_manager/managercli.py:562
 msgid "Error: Unable to generate a new identity for the system"
 msgstr "錯誤：無法為系統產生新的身份"
 
-#: ../src/subscription_manager/managercli.py:569
+#: ../src/subscription_manager/managercli.py:568
 msgid "Display the orgs against which a user can register a system"
 msgstr "顯示使用者得以註冊系統的組織"
 
-#: ../src/subscription_manager/managercli.py:584
+#: ../src/subscription_manager/managercli.py:583
 msgid "Organizations"
 msgstr "組織"
 
-#: ../src/subscription_manager/managercli.py:588
+#: ../src/subscription_manager/managercli.py:587
 msgid "Name"
 msgstr "名稱"
 
-#: ../src/subscription_manager/managercli.py:589
+#: ../src/subscription_manager/managercli.py:588
 msgid "Key"
 msgstr "金鑰"
 
-#: ../src/subscription_manager/managercli.py:592
-#: ../src/subscription_manager/managercli.py:993
+#: ../src/subscription_manager/managercli.py:591
+#: ../src/subscription_manager/managercli.py:992
 #, python-format
 msgid "%s cannot register to any organizations."
 msgstr "%s 無法註冊到任何組織。"
 
-#: ../src/subscription_manager/managercli.py:599
+#: ../src/subscription_manager/managercli.py:598
 msgid "Error: Unable to retrieve org list from Entitlement Platform"
 msgstr "錯誤：無法從權利平台取得組織清單"
 
-#: ../src/subscription_manager/managercli.py:605
+#: ../src/subscription_manager/managercli.py:604
 msgid "Display the environments available for a user"
 msgstr "顯示使用者的可用環境"
 
-#: ../src/subscription_manager/managercli.py:611
+#: ../src/subscription_manager/managercli.py:610
 msgid "specify org for environment list"
 msgstr "為環境清單指定組織"
 
-#: ../src/subscription_manager/managercli.py:615
+#: ../src/subscription_manager/managercli.py:614
 msgid ""
 "Error: This command requires that you specify an organizaiton with --org"
 msgstr "錯誤：當您使用這項指令時，您必須以 --org 來指定組織"
 
-#: ../src/subscription_manager/managercli.py:638
+#: ../src/subscription_manager/managercli.py:637
 msgid "Environments"
 msgstr "環境"
 
-#: ../src/subscription_manager/managercli.py:654
+#: ../src/subscription_manager/managercli.py:643
+msgid "Error: This org does not have environments."
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:645
+#: ../src/subscription_manager/managercli.py:973
+msgid "Error: Server does not support environments."
+msgstr "錯誤：伺服器不支援環境。"
+
+#: ../src/subscription_manager/managercli.py:653
 msgid "Error: Unable to retrieve environment list from Entitlement Platform"
 msgstr "錯誤：無法從權利平台取得環境清單"
 
-#: ../src/subscription_manager/managercli.py:662
+#: ../src/subscription_manager/managercli.py:661
 msgid "Manage service levels for this system"
 msgstr "為這部系統管理服務等級"
 
-#: ../src/subscription_manager/managercli.py:668
+#: ../src/subscription_manager/managercli.py:667
 msgid "show this system's current service level"
 msgstr "顯示此系統目前的服務等級"
 
-#: ../src/subscription_manager/managercli.py:671
+#: ../src/subscription_manager/managercli.py:670
 msgid "specify org for service level list"
 msgstr "為服務等級清單指定組織"
 
-#: ../src/subscription_manager/managercli.py:673
+#: ../src/subscription_manager/managercli.py:672
 msgid "list all service levels available"
 msgstr "列出所有可用的服務等級"
 
-#: ../src/subscription_manager/managercli.py:675
-#: ../src/subscription_manager/managercli.py:824
-#: ../src/subscription_manager/managercli.py:1194
+#: ../src/subscription_manager/managercli.py:674
+#: ../src/subscription_manager/managercli.py:823
+#: ../src/subscription_manager/managercli.py:1187
 msgid "service level to apply to this system"
 msgstr "套用至此系統之服務等級"
 
-#: ../src/subscription_manager/managercli.py:678
+#: ../src/subscription_manager/managercli.py:677
 msgid "unset the service level for this system"
 msgstr "取消這部系統的服務等級設置"
 
-#: ../src/subscription_manager/managercli.py:691
+#: ../src/subscription_manager/managercli.py:690
 msgid "Error: --org is only supported with the --list option"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:697
+#: ../src/subscription_manager/managercli.py:696
 msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
 msgstr "錯誤：您必須註冊或指定 --username 和 --password，以列出服務等級"
 
-#: ../src/subscription_manager/managercli.py:700
+#: ../src/subscription_manager/managercli.py:699
 msgid "Error: you must register or specify --org."
 msgstr "錯誤：您必須註冊或指定 --org。"
 
-#: ../src/subscription_manager/managercli.py:740
+#: ../src/subscription_manager/managercli.py:739
 msgid "Error: Unable to retrieve service levels."
 msgstr "錯誤：無法讀取服務等級。"
 
-#: ../src/subscription_manager/managercli.py:746
-#: ../src/subscription_manager/managercli.py:759
-#: ../src/subscription_manager/managercli.py:768
+#: ../src/subscription_manager/managercli.py:745
+#: ../src/subscription_manager/managercli.py:758
+#: ../src/subscription_manager/managercli.py:767
 msgid "Error: The service-level command is not supported by the server."
 msgstr "錯誤：伺服器不支援 service-level 指令。"
 
-#: ../src/subscription_manager/managercli.py:753
+#: ../src/subscription_manager/managercli.py:752
 msgid "Service level preference has been unset"
 msgstr "服務等級的偏好設定已取消"
 
-#: ../src/subscription_manager/managercli.py:763
+#: ../src/subscription_manager/managercli.py:762
 #, python-format
 msgid "Current service level: %s"
 msgstr "目前的服務等級：%s"
 
-#: ../src/subscription_manager/managercli.py:765
+#: ../src/subscription_manager/managercli.py:764
 msgid "Service level preference not set"
 msgstr "尚未設置服務等級偏好設定"
 
-#: ../src/subscription_manager/managercli.py:780
+#: ../src/subscription_manager/managercli.py:779
 msgid "Available Service Levels"
 msgstr "可用的服務等級"
 
-#: ../src/subscription_manager/managercli.py:785
+#: ../src/subscription_manager/managercli.py:784
 msgid "This org does not have any subscriptions with service levels."
 msgstr "此組織沒有任何訂閱與服務等級。"
 
-#: ../src/subscription_manager/managercli.py:805
+#: ../src/subscription_manager/managercli.py:804
 msgid "the type of consumer to register, defaults to system"
 msgstr "要註冊的消耗者類型，預設值為系統"
 
-#: ../src/subscription_manager/managercli.py:807
+#: ../src/subscription_manager/managercli.py:806
 msgid "name of the consumer to register, defaults to the hostname"
 msgstr "要註冊的消耗者名稱，預設值是主機名稱"
 
-#: ../src/subscription_manager/managercli.py:809
+#: ../src/subscription_manager/managercli.py:808
 msgid "the existing consumer data is pulled from the server"
 msgstr "既有的消耗者資料將從伺服器中抓取"
 
-#: ../src/subscription_manager/managercli.py:811
+#: ../src/subscription_manager/managercli.py:810
 msgid "register to one of multiple organizations for the user"
 msgstr "註冊使用者到多組織中的其中之一"
 
-#: ../src/subscription_manager/managercli.py:813
+#: ../src/subscription_manager/managercli.py:812
 msgid "register to a specific environment in the destination org"
 msgstr "在目的地的組織中，註冊到特定的環境"
 
-#: ../src/subscription_manager/managercli.py:815
+#: ../src/subscription_manager/managercli.py:814
 msgid "set a release version"
 msgstr "設定發行版本"
 
-#: ../src/subscription_manager/managercli.py:817
-#: ../src/subscription_manager/managercli.py:1191
+#: ../src/subscription_manager/managercli.py:816
+#: ../src/subscription_manager/managercli.py:1184
 msgid ""
 "automatically subscribe this system to                                     "
 "compatible subscriptions."
 msgstr "自動將此系統註冊至相容的訂閱。"
 
-#: ../src/subscription_manager/managercli.py:820
+#: ../src/subscription_manager/managercli.py:819
 msgid "register the system even if it is already registered"
 msgstr "註冊系統，儘管此系統已註冊"
 
-#: ../src/subscription_manager/managercli.py:822
+#: ../src/subscription_manager/managercli.py:821
 msgid "one or more activation keys to use for registration"
 msgstr "用以註冊的一或多組啟動金鑰"
 
-#: ../src/subscription_manager/managercli.py:832
+#: ../src/subscription_manager/managercli.py:831
 msgid "This system is already registered. Use --force to override"
 msgstr "這部系統已註冊。請使用 --force 來覆寫"
 
-#: ../src/subscription_manager/managercli.py:835
+#: ../src/subscription_manager/managercli.py:834
 msgid "Error: consumer name can not be empty."
 msgstr "錯誤：使用者名稱不能是空白的。"
 
-#: ../src/subscription_manager/managercli.py:838
+#: ../src/subscription_manager/managercli.py:837
 msgid "Error: Activation keys do not require user credentials"
 msgstr "錯誤：啟動金鑰不需要使用者認證資訊"
 
-#: ../src/subscription_manager/managercli.py:841
+#: ../src/subscription_manager/managercli.py:840
 msgid "Error: Activation keys can not be used with previously registered ids."
 msgstr "錯誤：啟動金鑰無法與先前註冊的 id 搭配使用。"
 
-#: ../src/subscription_manager/managercli.py:845
+#: ../src/subscription_manager/managercli.py:844
 msgid "Error: Must specify an activation key"
 msgstr "錯誤：必須指定一組啟動金鑰。"
 
-#: ../src/subscription_manager/managercli.py:848
+#: ../src/subscription_manager/managercli.py:847
 msgid "Error: Must use --autosubscribe with --servicelevel."
 msgstr "錯誤：必須使用 --autosubscribe 並搭配 --servicelevel。"
 
-#: ../src/subscription_manager/managercli.py:875
+#: ../src/subscription_manager/managercli.py:874
 #, python-format
 msgid "The system with UUID %s has been unregistered"
 msgstr "UUID 為 %s 的系統已被取消註冊"
 
-#: ../src/subscription_manager/managercli.py:910
+#: ../src/subscription_manager/managercli.py:909
 #, python-format
 msgid "Error during registration: %s"
 msgstr "進行註冊時發生了錯誤：%s"
 
-#: ../src/subscription_manager/managercli.py:914
+#: ../src/subscription_manager/managercli.py:913
 #, python-format
 msgid "The system has been registered with id: %s "
 msgstr "系統已經使用此 ID 註冊：%s"
 
-#: ../src/subscription_manager/managercli.py:942
-#: ../src/subscription_manager/managercli.py:1264
+#: ../src/subscription_manager/managercli.py:941
+#: ../src/subscription_manager/managercli.py:1257
 msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "perform autosubscribe."
 msgstr "錯誤：伺服器不支援 --servicelevel 選項。並未執行自動訂閱。"
 
-#: ../src/subscription_manager/managercli.py:974
-msgid "Error: Server does not support environments."
-msgstr "錯誤：伺服器不支援環境。"
-
-#: ../src/subscription_manager/managercli.py:978
+#: ../src/subscription_manager/managercli.py:977
 #, python-format
 msgid "No such environment: %s"
 msgstr "無此環境：%s"
 
-#: ../src/subscription_manager/managercli.py:1015
+#: ../src/subscription_manager/managercli.py:1014
 msgid "This system is currently not registered."
 msgstr "這部系統目前尚未註冊。"
 
-#: ../src/subscription_manager/managercli.py:1037
+#: ../src/subscription_manager/managercli.py:1036
 msgid "System has been un-registered."
 msgstr "系統已取消註冊。"
 
-#: ../src/subscription_manager/managercli.py:1043
+#: ../src/subscription_manager/managercli.py:1042
 msgid "Attempt to redeem a subscription for a preconfigured machine"
 msgstr "試圖為預先配置的電腦取得訂閱服務"
 
-#: ../src/subscription_manager/managercli.py:1048
+#: ../src/subscription_manager/managercli.py:1047
 msgid "Email address to notify when subscription redemption is complete."
 msgstr "取得訂閱服務後，要發送提示的電子郵件位址。"
 
-#: ../src/subscription_manager/managercli.py:1051
+#: ../src/subscription_manager/managercli.py:1050
 msgid ""
 "Optional language to use for email notification when subscription redemption "
 "is complete. Examples: en-us, de-de"
@@ -1481,469 +1465,465 @@ msgstr ""
 "取得訂閱服務後，要發送提示的電子郵件之選用語言。例如 en-us（美式英文）、de-de"
 "（德文）"
 
-#: ../src/subscription_manager/managercli.py:1057
+#: ../src/subscription_manager/managercli.py:1056
 msgid ""
 "Error: This command requires that you specify an email address with --email."
 msgstr "錯誤：這項指令需要您以 --email 來指定電子郵件。"
 
-#: ../src/subscription_manager/managercli.py:1094
+#: ../src/subscription_manager/managercli.py:1093
 msgid "Configure what os release to use"
 msgstr "配置要使用的作業系統發行版本"
 
-#: ../src/subscription_manager/managercli.py:1099
+#: ../src/subscription_manager/managercli.py:1098
 msgid "shows current release setting. default command."
 msgstr "顯示目前發行版的設定。預設指令。"
 
-#: ../src/subscription_manager/managercli.py:1101
+#: ../src/subscription_manager/managercli.py:1100
 msgid "list available releases"
 msgstr "列出可用的發行版本"
 
-#: ../src/subscription_manager/managercli.py:1104
+#: ../src/subscription_manager/managercli.py:1103
 msgid "set the release for this system"
 msgstr "設置此系統的 release 值"
 
-#: ../src/subscription_manager/managercli.py:1107
+#: ../src/subscription_manager/managercli.py:1106
 msgid "unset the release for this system"
 msgstr "取消此系統 release 值的設置"
 
-#: ../src/subscription_manager/managercli.py:1110
+#: ../src/subscription_manager/managercli.py:1109
 msgid "Error: The 'release' command is not supported by the server."
 msgstr "錯誤：伺服器不支援「release」指令。"
 
-#: ../src/subscription_manager/managercli.py:1125
+#: ../src/subscription_manager/managercli.py:1118
 #, python-format
 msgid "Release: %s"
 msgstr "發行版本: %s"
 
-#: ../src/subscription_manager/managercli.py:1127
+#: ../src/subscription_manager/managercli.py:1120
 msgid "Release not set"
 msgstr "發行版本未設定"
 
-#: ../src/subscription_manager/managercli.py:1154
+#: ../src/subscription_manager/managercli.py:1147
 msgid "Release preference has been unset"
 msgstr "發行版偏好設定設置已取消"
 
-#: ../src/subscription_manager/managercli.py:1163
+#: ../src/subscription_manager/managercli.py:1156
 #, python-format
 msgid "No releases match '%s'.  Consult 'release --list' for a full listing."
 msgstr "沒有與「%s」相符的發行版。請參閱「release --list」以取得完整的清單。"
 
-#: ../src/subscription_manager/managercli.py:1165
+#: ../src/subscription_manager/managercli.py:1158
 #, python-format
 msgid "Release set to: %s"
 msgstr "發行版本設為：%s"
 
-#: ../src/subscription_manager/managercli.py:1170
+#: ../src/subscription_manager/managercli.py:1163
 msgid "No release versions available, please check subscriptions."
 msgstr "沒有可用的發行版版本，請檢查訂閱。"
 
-#: ../src/subscription_manager/managercli.py:1180
+#: ../src/subscription_manager/managercli.py:1173
 msgid "Subscribe the registered machine to a specified product"
 msgstr "將已註冊的系統訂閱特定產品"
 
-#: ../src/subscription_manager/managercli.py:1187
+#: ../src/subscription_manager/managercli.py:1180
 msgid "the id of the pool to subscribe to"
 msgstr "要訂閱之集區 ID"
 
-#: ../src/subscription_manager/managercli.py:1189
+#: ../src/subscription_manager/managercli.py:1182
 msgid "number of subscriptions to consume"
 msgstr "可消耗的訂閱數量"
 
-#: ../src/subscription_manager/managercli.py:1198
+#: ../src/subscription_manager/managercli.py:1191
 msgid ""
 "Error: This command requires that you specify a pool with --pool or use --"
 "auto."
 msgstr "錯誤：這指令需要透過 --pool 指定集區，或使用 --auto 選項。"
 
-#: ../src/subscription_manager/managercli.py:1201
+#: ../src/subscription_manager/managercli.py:1194
 msgid "Error: Only one of --pool or --auto may be used with this command."
 msgstr "錯誤：這指令只能擇一使用 --pool 或 --auto。"
 
-#: ../src/subscription_manager/managercli.py:1208
+#: ../src/subscription_manager/managercli.py:1201
 msgid "Error: Quantity must be a positive integer."
 msgstr "錯誤：數量必須是正整數。"
 
-#: ../src/subscription_manager/managercli.py:1214
+#: ../src/subscription_manager/managercli.py:1207
 msgid "Error: Must use --auto with --servicelevel."
 msgstr "錯誤：--servicelevel 必須搭配 --auto 使用。"
 
-#: ../src/subscription_manager/managercli.py:1238
+#: ../src/subscription_manager/managercli.py:1231
 msgid "Please enter a valid numeric pool id."
 msgstr "請輸入一組有效的數字集區 id。"
 
-#: ../src/subscription_manager/managercli.py:1243
+#: ../src/subscription_manager/managercli.py:1236
 #, python-format
 msgid "Successfully consumed a subscription for: %s"
 msgstr "已成功消耗一項訂閱：%s"
 
-#: ../src/subscription_manager/managercli.py:1293
+#: ../src/subscription_manager/managercli.py:1286
 msgid "Unsubscribe the machine from all or specific subscriptions"
 msgstr "讓電腦取消訂閱所有或特定的訂閱服務"
 
-#: ../src/subscription_manager/managercli.py:1299
+#: ../src/subscription_manager/managercli.py:1292
 msgid "Certificate serial to unsubscribe"
 msgstr "取消訂閱的認證序號"
 
-#: ../src/subscription_manager/managercli.py:1301
+#: ../src/subscription_manager/managercli.py:1294
 msgid "Unsubscribe from all subscriptions"
 msgstr "取消所有訂閱"
 
-#: ../src/subscription_manager/managercli.py:1306
+#: ../src/subscription_manager/managercli.py:1299
 #, python-format
 msgid "Error: '%s' is not a valid serial number"
 msgstr "錯誤：「%s」非有效的序列號碼"
 
-#: ../src/subscription_manager/managercli.py:1309
+#: ../src/subscription_manager/managercli.py:1302
 msgid "Error: This command requires that you specify one of --serial or --all."
 msgstr "錯誤：這項指令需要您指定 --serial 或是 --all 其中之一。"
 
-#: ../src/subscription_manager/managercli.py:1326
+#: ../src/subscription_manager/managercli.py:1318
 msgid "This machine has been unsubscribed from all subscriptions."
 msgstr "這部機器已取消所有訂閱。"
 
-#: ../src/subscription_manager/managercli.py:1328
-#: ../src/subscription_manager/managercli.py:1346
+#: ../src/subscription_manager/managercli.py:1320
+#: ../src/subscription_manager/managercli.py:1338
 #, python-format
 msgid "This machine has been unsubscribed from %s subscriptions"
 msgstr "這部機器已取消 %s 項訂閱"
 
-#: ../src/subscription_manager/managercli.py:1331
-#: ../src/subscription_manager/managercli.py:1351
+#: ../src/subscription_manager/managercli.py:1323
+#: ../src/subscription_manager/managercli.py:1343
 #, python-format
 msgid ""
 "This machine has been unsubscribed from subscription with serial number %s"
 msgstr "這部機器已取消序列號碼為 %s 的訂閱"
 
-#: ../src/subscription_manager/managercli.py:1337
-#: ../src/subscription_manager/managercli.py:1354
+#: ../src/subscription_manager/managercli.py:1329
+#: ../src/subscription_manager/managercli.py:1346
 #, python-format
 msgid "Unable to perform unsubscribe due to the following exception: %s"
 msgstr "無法取消訂閱，因為發生了以下例外情況：%s"
 
-#: ../src/subscription_manager/managercli.py:1364
+#: ../src/subscription_manager/managercli.py:1356
 msgid "View or update the detected system information"
 msgstr "檢視或更新已偵測到的系統資訊"
 
-#: ../src/subscription_manager/managercli.py:1369
+#: ../src/subscription_manager/managercli.py:1361
 msgid "list known facts for this system"
 msgstr "列出此系統的已知詳情"
 
-#: ../src/subscription_manager/managercli.py:1371
+#: ../src/subscription_manager/managercli.py:1363
 msgid "update the system facts"
 msgstr "更新系統詳情"
 
-#: ../src/subscription_manager/managercli.py:1403
+#: ../src/subscription_manager/managercli.py:1395
 msgid "Successfully updated the system facts."
 msgstr "已成功更新系統詳情。"
 
-#: ../src/subscription_manager/managercli.py:1409
+#: ../src/subscription_manager/managercli.py:1401
 msgid "Import certificates which were provided outside of the tool"
 msgstr "匯入工具以外提供的認證"
 
-#: ../src/subscription_manager/managercli.py:1414
+#: ../src/subscription_manager/managercli.py:1406
 msgid ""
 "certificate file to import (for multiple imports, specify this option more "
 "than once)"
 msgstr "要匯入的認證檔（要多重匯入，請多次指定此選項）"
 
-#: ../src/subscription_manager/managercli.py:1418
+#: ../src/subscription_manager/managercli.py:1410
 msgid ""
 "Error: This command requires that you specify a certificate with --"
 "certificate."
 msgstr "錯誤：這項指令需要您以 --certificate 來指定一組憑證。"
 
-#: ../src/subscription_manager/managercli.py:1437
+#: ../src/subscription_manager/managercli.py:1429
 #, python-format
 msgid "Successfully imported certificate %s"
 msgstr "成功匯入認證 %s"
 
-#: ../src/subscription_manager/managercli.py:1443
-#: ../src/subscription_manager/managercli.py:1453
+#: ../src/subscription_manager/managercli.py:1435
+#: ../src/subscription_manager/managercli.py:1445
 #, python-format
 msgid "%s is not a valid certificate file. Please use a valid certificate."
 msgstr "%s 不是正確的認證檔案。請使用正確的認證。"
 
-#: ../src/subscription_manager/managercli.py:1449
+#: ../src/subscription_manager/managercli.py:1441
 msgid ""
 "An error occurred while importing the certificate. Please check log file for "
 "more information."
 msgstr "匯入憑證時發生了一項錯誤。請檢查日誌檔案以取得更多資訊。"
 
-#: ../src/subscription_manager/managercli.py:1468
+#: ../src/subscription_manager/managercli.py:1460
 msgid "List the repos which this machine is entitled to use"
 msgstr "列出這台機器有權使用的檔案庫。"
 
-#: ../src/subscription_manager/managercli.py:1481
+#: ../src/subscription_manager/managercli.py:1473
 msgid "list known repos for this system"
 msgstr "列出這部系統的已知軟體庫"
 
-#: ../src/subscription_manager/managercli.py:1483
+#: ../src/subscription_manager/managercli.py:1475
 msgid "repo to enable"
 msgstr "欲啟用的軟體庫"
 
-#: ../src/subscription_manager/managercli.py:1485
+#: ../src/subscription_manager/managercli.py:1477
 msgid "repo to disable"
 msgstr "欲停用的軟體庫"
 
-#: ../src/subscription_manager/managercli.py:1495
+#: ../src/subscription_manager/managercli.py:1487
 msgid "Repositories disabled by configuration."
 msgstr "配置已停用了軟體庫。"
 
-#: ../src/subscription_manager/managercli.py:1503
+#: ../src/subscription_manager/managercli.py:1495
 #, python-format
 msgid "Repo %s is enabled for this system."
 msgstr "軟體庫 %s 已啟用於這部系統。"
 
-#: ../src/subscription_manager/managercli.py:1507
-#: ../src/subscription_manager/managercli.py:1521
+#: ../src/subscription_manager/managercli.py:1499
+#: ../src/subscription_manager/managercli.py:1513
 msgid ""
 "Error: A valid repo id is required. Use --list option to see valid repos."
 msgstr "錯誤：需要有效的軟體庫 id。請使用 --list 選項來查看有效的軟體庫。"
 
-#: ../src/subscription_manager/managercli.py:1517
+#: ../src/subscription_manager/managercli.py:1509
 #, python-format
 msgid "Repo %s is disabled for this system."
 msgstr "這部系統的軟體庫 %s 已停用。"
 
-#: ../src/subscription_manager/managercli.py:1527
+#: ../src/subscription_manager/managercli.py:1519
 #, python-format
 msgid "    Entitled Repositories in %s"
 msgstr "%s 中有權使用的檔案庫。"
 
-#: ../src/subscription_manager/managercli.py:1535
+#: ../src/subscription_manager/managercli.py:1527
 msgid "The system is not entitled to use any repositories."
 msgstr "系統無權使用任何檔案庫。"
 
-#: ../src/subscription_manager/managercli.py:1547
+#: ../src/subscription_manager/managercli.py:1539
 msgid ""
 "List, set, or remove the configuration parameters in use by this machine"
 msgstr "列出、設定、或移除這台機器使用中的配置參數"
 
-#: ../src/subscription_manager/managercli.py:1553
+#: ../src/subscription_manager/managercli.py:1545
 msgid "list the configuration for this system"
 msgstr "列出這台系統的配置"
 
-#: ../src/subscription_manager/managercli.py:1555
+#: ../src/subscription_manager/managercli.py:1547
 msgid "remove configuration entry by section.name"
 msgstr "透過 section.name 移除配置項目"
 
-#: ../src/subscription_manager/managercli.py:1559
+#: ../src/subscription_manager/managercli.py:1551
 #, python-format
 msgid "Section: %s, Name: %s"
 msgstr "分節：%s，名稱：%s"
 
-#: ../src/subscription_manager/managercli.py:1574
+#: ../src/subscription_manager/managercli.py:1566
 msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
 msgstr "錯誤：--list 不應該在設定或移除配置時使用。"
 
-#: ../src/subscription_manager/managercli.py:1593
+#: ../src/subscription_manager/managercli.py:1585
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
 msgstr "錯誤：移除所使用的配置項目的格式必須是 [section.name]"
 
-#: ../src/subscription_manager/managercli.py:1604
+#: ../src/subscription_manager/managercli.py:1596
 #, python-format
 msgid "Error: Section %s and name %s does not exist."
 msgstr "錯誤：分節 %s 與名稱 %s 不存在。"
 
-#: ../src/subscription_manager/managercli.py:1623
+#: ../src/subscription_manager/managercli.py:1615
 msgid "[] - Default value in use"
 msgstr "[] - 使用中的預設值"
 
-#: ../src/subscription_manager/managercli.py:1632
-#: ../src/subscription_manager/managercli.py:1635
+#: ../src/subscription_manager/managercli.py:1624
+#: ../src/subscription_manager/managercli.py:1627
 #, python-format
 msgid "You have removed the value for section %s and name %s."
 msgstr "您已經移除了分節 %s 與名稱 %s 的值。"
 
-#: ../src/subscription_manager/managercli.py:1636
+#: ../src/subscription_manager/managercli.py:1628
 #, python-format
 msgid "The default value for %s will now be used."
 msgstr "不會使用給 %s 的預設值。"
 
-#: ../src/subscription_manager/managercli.py:1638
+#: ../src/subscription_manager/managercli.py:1630
 #, python-format
 msgid "Section %s and name %s cannot be removed."
 msgstr "無法移除分節 %s 與名稱 %s。"
 
-#: ../src/subscription_manager/managercli.py:1652
+#: ../src/subscription_manager/managercli.py:1644
 msgid "List subscription and product information for this machine"
 msgstr "列出這台機器的訂閱與產品資訊"
 
-#: ../src/subscription_manager/managercli.py:1657
+#: ../src/subscription_manager/managercli.py:1649
 msgid "list shows those products which are installed (default)"
 msgstr "清單將顯示已安裝的產品（預設值）"
 
-#: ../src/subscription_manager/managercli.py:1659
+#: ../src/subscription_manager/managercli.py:1651
 msgid "show those subscriptions which are available"
 msgstr "顯示可用的訂閱"
 
-#: ../src/subscription_manager/managercli.py:1661
+#: ../src/subscription_manager/managercli.py:1653
 msgid "used with --available to ensure all subscriptions are returned"
 msgstr "與 --available 搭配使用，以確保所有訂閱皆已回傳"
 
-#: ../src/subscription_manager/managercli.py:1663
+#: ../src/subscription_manager/managercli.py:1655
 #, python-format
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
 "(example: %s)"
 msgstr "要搜尋的日期，預設值為今天，只與 --available 選項合用（例如：%s）"
 
-#: ../src/subscription_manager/managercli.py:1666
+#: ../src/subscription_manager/managercli.py:1658
 msgid "show the subscriptions being consumed by this system."
 msgstr "顯示這部系統所消耗的訂閱。"
 
-#: ../src/subscription_manager/managercli.py:1668
+#: ../src/subscription_manager/managercli.py:1660
 msgid ""
 "show only subscriptions matching the specified service level. Only used with "
 "--available and --consumed"
 msgstr ""
 "僅顯示與指定服務等級相符的訂閱。僅可與 --available 與 --consumed 搭配使用"
 
-#: ../src/subscription_manager/managercli.py:1675
+#: ../src/subscription_manager/managercli.py:1667
 msgid "Error: --all is only applicable with --available"
 msgstr "錯誤：--all 僅適用於 --available"
 
-#: ../src/subscription_manager/managercli.py:1678
+#: ../src/subscription_manager/managercli.py:1670
 msgid "Error: --ondate is only applicable with --available"
 msgstr "錯誤：--ondate 僅適用於 --available"
 
-#: ../src/subscription_manager/managercli.py:1682
+#: ../src/subscription_manager/managercli.py:1674
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr "錯誤：--servicelevel 只能與 --available 或 --consumed 合用"
 
-#: ../src/subscription_manager/managercli.py:1705
+#: ../src/subscription_manager/managercli.py:1697
 msgid "No installed products to list"
 msgstr "沒有已安裝的產品可列出"
 
-#: ../src/subscription_manager/managercli.py:1708
+#: ../src/subscription_manager/managercli.py:1700
 msgid "    Installed Product Status"
 msgstr "...已安裝之產品的狀態"
 
-#: ../src/subscription_manager/managercli.py:1725
+#: ../src/subscription_manager/managercli.py:1717
 msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr "輸入的日期無效。日期格式應為 YYYY-MM-DD（例如："
 
-#: ../src/subscription_manager/managercli.py:1738
+#: ../src/subscription_manager/managercli.py:1730
 msgid "No available subscription pools to list"
 msgstr "清單中沒有可用的訂閱集區"
 
-#: ../src/subscription_manager/managercli.py:1748
+#: ../src/subscription_manager/managercli.py:1740
 msgid "virtual"
 msgstr "虛擬"
 
-#: ../src/subscription_manager/managercli.py:1750
+#: ../src/subscription_manager/managercli.py:1742
 msgid "physical"
 msgstr "實體"
 
-#: ../src/subscription_manager/managercli.py:1795
+#: ../src/subscription_manager/managercli.py:1787
 msgid "No consumed subscription pools to list"
 msgstr "清單中沒有已消耗的訂閱集區"
 
-#: ../src/subscription_manager/managercli.py:1799
+#: ../src/subscription_manager/managercli.py:1791
 msgid "Consumed Subscriptions"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1807
+#: ../src/subscription_manager/managercli.py:1799
 #, python-format
 msgid "Provides:             \t%s"
 msgstr "提供了：             \t%s"
 
-#: ../src/subscription_manager/managercli.py:1810
+#: ../src/subscription_manager/managercli.py:1802
 #, python-format
 msgid "                      \t%s"
 msgstr "                      \t%s"
 
-#: ../src/subscription_manager/managercli.py:1817
+#: ../src/subscription_manager/managercli.py:1809
 #, python-format
 msgid "Contract:             \t%s"
 msgstr "合約：             \t%s"
 
-#: ../src/subscription_manager/managercli.py:1819
+#: ../src/subscription_manager/managercli.py:1811
 #, python-format
 msgid "Account:              \t%s"
 msgstr "帳號：              \t%s"
 
-#: ../src/subscription_manager/managercli.py:1821
+#: ../src/subscription_manager/managercli.py:1813
 #, python-format
 msgid "Serial Number:        \t%s"
 msgstr "序列號碼：        \t%s"
 
-#: ../src/subscription_manager/managercli.py:1823
+#: ../src/subscription_manager/managercli.py:1815
 #, python-format
 msgid "Active:               \t%s"
 msgstr "啟用：               \t%s"
 
-#: ../src/subscription_manager/managercli.py:1825
+#: ../src/subscription_manager/managercli.py:1817
 #, python-format
 msgid "Quantity Used:        \t%s"
 msgstr "已使用的數量：        \t%s"
 
-#: ../src/subscription_manager/managercli.py:1870
+#: ../src/subscription_manager/managercli.py:1862
 msgid "Print version information"
 msgstr "列印版本資訊"
 
-#: ../src/subscription_manager/managercli.py:1880
+#: ../src/subscription_manager/managercli.py:1872
 #, python-format
 msgid "remote entitlement server: %s"
 msgstr "遠端權利伺服器：%s"
 
-#: ../src/subscription_manager/managercli.py:1882
+#: ../src/subscription_manager/managercli.py:1874
 #, python-format
 msgid "subscription-manager: %s"
 msgstr "subscription-manager：%s"
 
-#: ../src/subscription_manager/managercli.py:1883
+#: ../src/subscription_manager/managercli.py:1875
 #, python-format
 msgid "python-rhsm: %s"
 msgstr "python-rhsm：%s"
 
-#: ../src/subscription_manager/managercli.py:1907
+#: ../src/subscription_manager/managercli.py:1899
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 msgstr "使用方法：%s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
-#: ../src/subscription_manager/managercli.py:1909
+#: ../src/subscription_manager/managercli.py:1901
 msgid "Primary Modules:"
 msgstr "主模組："
 
-#: ../src/subscription_manager/managercli.py:1918
+#: ../src/subscription_manager/managercli.py:1910
 msgid "Other Modules (Please consult documentation):"
 msgstr "其他模組（請參閱文件）："
 
-#: ../src/subscription_manager/utils.py:126
-msgid "Server URL can not be empty"
-msgstr "伺服器 URL 不可是空的"
-
-#: ../src/subscription_manager/utils.py:130
-msgid "Server URL can not be None"
-msgstr "不可缺少伺服器 URL"
-
-#: ../src/subscription_manager/utils.py:138
-msgid "Server URL has an invalid scheme. http:// and https:// are supported"
-msgstr "伺服器 URL 的格式無效。支援 http:// 和 https://"
-
-#: ../src/subscription_manager/utils.py:143
+#: ../src/subscription_manager/utils.py:150
 msgid ""
 "Server URL is just a schema. Should include hostname, and/or port and path"
 msgstr "伺服器 URL 僅為輪廓。應包含主機名稱，與/或連接埠和路徑"
 
-#: ../src/subscription_manager/utils.py:162
-msgid "Server URL has an invalid scheme (no //?)"
-msgstr "伺服器 URL 的格式無效（是否缺少了 //？）"
+#: ../src/subscription_manager/utils.py:172
+msgid "Server URL can not be empty"
+msgstr "伺服器 URL 不可是空的"
 
-#: ../src/subscription_manager/utils.py:188
+#: ../src/subscription_manager/utils.py:176
+msgid "Server URL can not be None"
+msgstr "不可缺少伺服器 URL"
+
+#: ../src/subscription_manager/utils.py:185
+msgid "Server URL has an invalid scheme. http:// and https:// are supported"
+msgstr "伺服器 URL 的格式無效。支援 http:// 和 https://"
+
+#: ../src/subscription_manager/utils.py:215
 msgid "Server url port could not be parsed"
 msgstr "無法叵析伺服器 url 連接埠"
 
-#: ../src/subscription_manager/utils.py:261
+#: ../src/subscription_manager/utils.py:288
 msgid "No connection made to remote entitlement server"
 msgstr "未與遠端權利伺服器連線"
 
-#: ../src/subscription_manager/utils.py:266
+#: ../src/subscription_manager/utils.py:293
 msgid "subscription management service"
 msgstr "訂閱管理服務"
 
@@ -2053,6 +2033,10 @@ msgstr "帳號文字"
 msgid "Bundled Products Table"
 msgstr "搭售產品表"
 
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:14
+msgid "Contract Number"
+msgstr "聯絡號碼"
+
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:15
 msgid "Provides Management Text"
 msgstr "提供管理文字"
@@ -2092,14 +2076,18 @@ msgid "Unsubscribe"
 msgstr "取消訂閱"
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:1
+msgid "<b>Confirm Subscriptions</b>"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/selectsla.glade.h:2
 msgid "<b>Detected products:</b>"
 msgstr "<b>已偵測到的產品：</b>"
 
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:2
+#: ../src/subscription_manager/gui/data/selectsla.glade.h:3
 msgid "<b>Subscribe all detected products as:</b>"
 msgstr "<b>將已偵測到的產品訂閱為：</b>"
 
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:3
+#: ../src/subscription_manager/gui/data/selectsla.glade.h:4
 msgid ""
 "We have detected that you have multiple service level\n"
 "agreements on various products. Please select how you\n"
@@ -2109,14 +2097,14 @@ msgstr ""
 "重服務等級協議。請選擇您想\n"
 "要如何指定這些產品。"
 
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:6
+#: ../src/subscription_manager/gui/data/selectsla.glade.h:7
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:9
 #: ../src/subscription_manager/gui/data/autobind.glade.h:5
 #: ../src/subscription_manager/gui/data/installed.glade.h:15
 msgid "label"
 msgstr "標籤"
 
-#: ../src/subscription_manager/gui/data/selectsla.glade.h:7
+#: ../src/subscription_manager/gui/data/selectsla.glade.h:8
 msgid "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
 msgstr "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
 
@@ -2190,18 +2178,22 @@ msgid "_Unregister"
 msgstr "取消註冊(_U)"
 
 #: ../src/subscription_manager/gui/data/confirmsubs.glade.h:1
+msgid "<b>Select Service Level Agreement</b>"
+msgstr ""
+
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:2
 msgid "Core repositories will be enabled for each product."
 msgstr "每項產品都會啟用核心軟體庫。"
 
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:2
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:3
 msgid "SLA"
 msgstr "SLA"
 
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:3
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:4
 msgid "Using service level:"
 msgstr "使用服務等級："
 
-#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:4
+#: ../src/subscription_manager/gui/data/confirmsubs.glade.h:5
 msgid "You will be subscribed to:"
 msgstr "您會訂閱至："
 
@@ -2470,6 +2462,10 @@ msgstr "上一步"
 msgid "Cancel"
 msgstr "取消"
 
+#: ../src/subscription_manager/gui/data/autobind.glade.h:3
+msgid "Forward"
+msgstr "下一步"
+
 #: ../src/subscription_manager/gui/data/autobind.glade.h:4
 msgid "Subscribe System"
 msgstr "訂閱系統"
@@ -2540,7 +2536,7 @@ msgid ""
 "Available Subscriptions</b> tab."
 msgstr "開啟訂閱管理員之後，請透過「<b>所有可用訂閱</b>」分頁來手動訂閱。"
 
-#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:3
+#: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
 msgid ""
 "You will need to manually subscribe this system after completing firstboot. "
 "Subscription Manager can be found in <b>System > Administration > "
@@ -2558,20 +2554,20 @@ msgstr "<small>安裝與更新套件時，會遵循您系統的發行版本。</
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid ""
 "<small>Your system's service level preference is followed when subscribing "
-"to new products</small>"
-msgstr "<small>訂閱新產品時，會遵循您系統的服務等級偏好設定</small>"
+"automatically.</small>"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Release version:"
 msgstr "發行版本："
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
-msgid "System Preferences"
-msgstr "取消註冊"
+msgid "Service Level Preference:"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:5
-msgid "System Service Level Preference:"
-msgstr "系統服務等級偏好設定："
+msgid "System Preferences"
+msgstr "取消註冊"
 
 #: ../src/subscription_manager/gui/data/credentials.glade.h:1
 msgid "<b>Please enter the following for this system:</b>"
@@ -2741,50 +2737,33 @@ msgstr ""
 msgid "Please select a service level agreement for this system."
 msgstr "請為這部系統選擇一項服務等級條款。"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:242
-msgid ""
-"\n"
-"Not subscribing to any service level."
-msgstr ""
-"\n"
-"不訂閱任何服務等級。"
-
-#: ../bin/rhn-migrate-classic-to-rhsm:244
-#, c-format
-msgid ""
-"\n"
-"Subscribing to service level %s"
-msgstr ""
-"\n"
-"訂閱服務等級 %s"
-
-#: ../bin/rhn-migrate-classic-to-rhsm:258
+#: ../bin/rhn-migrate-classic-to-rhsm:243
 msgid "This system is not associated with any channel."
 msgstr "此系統未與任何頻道相聯。"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:260
+#: ../bin/rhn-migrate-classic-to-rhsm:245
 msgid "Unable to locate SystemId file. Is this system registered?"
 msgstr "找不到 SystemId 檔案。系統是否已註冊？"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:263
+#: ../bin/rhn-migrate-classic-to-rhsm:248
 msgid "Problem encountered getting the list of subscribed channels.  Exiting."
 msgstr "取得已訂閱頻道清單時發生錯誤。退出中。"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:295
+#: ../bin/rhn-migrate-classic-to-rhsm:280
 msgid ""
 "Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
 "details."
 msgstr "無法登入 RHN Classic。詳情請參見 /var/log/rhsm/rhsm.log。"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:309
+#: ../bin/rhn-migrate-classic-to-rhsm:294
 msgid "System successfully unregistered from RHN Classic."
 msgstr "系統已成功地從 RHN Classic 取消訂閱。"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:311
+#: ../bin/rhn-migrate-classic-to-rhsm:296
 msgid "Unable to unregister system from RHN Classic.  Exiting."
 msgstr "無法從 RHN Classic 取消訂閱系統。退出中。"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:376
+#: ../bin/rhn-migrate-classic-to-rhsm:361
 msgid ""
 "\n"
 "Attempting to register system to Certificate-based RHN ..."
@@ -2792,7 +2771,7 @@ msgstr ""
 "\n"
 "正試圖向以認證為基礎的 RHN 註冊系統……"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:379
+#: ../bin/rhn-migrate-classic-to-rhsm:364
 msgid ""
 "\n"
 "Unable to register.\n"
@@ -2802,20 +2781,20 @@ msgstr ""
 "無法註冊。\n"
 "若您需要協助，請聯絡 Red Hat 全球支援服務。"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:382
+#: ../bin/rhn-migrate-classic-to-rhsm:367
 #, c-format
 msgid "System '%s' successfully registered to Certificate-based RHN.\n"
 msgstr "系統「%s」已成功地向以認證為基礎的 RHN 註冊。\n"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:386
+#: ../bin/rhn-migrate-classic-to-rhsm:374
 msgid "Launching the GUI tool to manually subscribe the system ..."
 msgstr "正在啟動 GUI 工具，以手動訂閱系統……"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:389
+#: ../bin/rhn-migrate-classic-to-rhsm:377
 msgid "Attempting to auto-subscribe to appropriate subscriptions ..."
 msgstr "正試圖自動訂閱適當的訂閱服務……"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:392
+#: ../bin/rhn-migrate-classic-to-rhsm:380
 msgid ""
 "\n"
 "Unable to auto-subscribe.  Do your existing subscriptions match the products "
@@ -2824,7 +2803,7 @@ msgstr ""
 "\n"
 "無法自動訂閱。您現有的訂閱服務是否與系統上安裝的產品相符？"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:393
+#: ../bin/rhn-migrate-classic-to-rhsm:381
 #, c-format
 msgid ""
 "\n"
@@ -2835,16 +2814,16 @@ msgstr ""
 "要檢視詳情，並視需要變更，請參閱 https://access.redhat.com/management/"
 "consumers/%s。"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:406
+#: ../bin/rhn-migrate-classic-to-rhsm:393
 #, c-format
 msgid "Unable to read mapping file: %s"
 msgstr "無法讀取映射檔案：%s"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:428
+#: ../bin/rhn-migrate-classic-to-rhsm:415
 msgid "Channels not available on RHSM:"
 msgstr "RHSM 上找不到頻道："
 
-#: ../bin/rhn-migrate-classic-to-rhsm:435
+#: ../bin/rhn-migrate-classic-to-rhsm:422
 msgid ""
 "\n"
 "Unrecognized channels. Channel to product certificate mapping missing for "
@@ -2853,7 +2832,7 @@ msgstr ""
 "\n"
 "無法辨識的頻道。找不到這些頻道的頻道與產品憑證對應。"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:442
+#: ../bin/rhn-migrate-classic-to-rhsm:429
 msgid ""
 "\n"
 "Use --force to ignore these channels and continue the migration.\n"
@@ -2861,7 +2840,7 @@ msgstr ""
 "\n"
 "使用 --force 選項已忽略這些頻道，並繼續遷移。\n"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:447
+#: ../bin/rhn-migrate-classic-to-rhsm:434
 msgid ""
 "\n"
 "List of channels for which certs are being copied"
@@ -2869,7 +2848,7 @@ msgstr ""
 "\n"
 "列出認證要複製到的頻道"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:461
+#: ../bin/rhn-migrate-classic-to-rhsm:448
 #, c-format
 msgid ""
 "\n"
@@ -2878,7 +2857,7 @@ msgstr ""
 "\n"
 "產品憑證已成功複製到 %s"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:505
+#: ../bin/rhn-migrate-classic-to-rhsm:492
 msgid ""
 "\n"
 "Unable to enable extra repositories."
@@ -2886,7 +2865,7 @@ msgstr ""
 "\n"
 "無法啟用額外的軟體庫。"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:506
+#: ../bin/rhn-migrate-classic-to-rhsm:493
 msgid ""
 "Please ensure system is subscribed to entitlements, and alter /etc/yum.repos."
 "d/redhat.repo to enable extra repositories."
@@ -2894,11 +2873,11 @@ msgstr ""
 "請確定系統已向權利訂閱，並修改 /etc/yum.repos.d/redhat.repo 已啟用額外的軟體"
 "庫。"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:543
+#: ../bin/rhn-migrate-classic-to-rhsm:530
 msgid "RHN Username: "
 msgstr "RHN 使用者名稱："
 
-#: ../bin/rhn-migrate-classic-to-rhsm:552
+#: ../bin/rhn-migrate-classic-to-rhsm:539
 msgid ""
 "\n"
 "Retrieving existing RHN Classic subscription information ..."
@@ -2906,11 +2885,11 @@ msgstr ""
 "\n"
 "正在取得退出中的 RHN Classic 訂閱資訊..."
 
-#: ../bin/rhn-migrate-classic-to-rhsm:555
+#: ../bin/rhn-migrate-classic-to-rhsm:542
 msgid "System is currently subscribed to:"
 msgstr "目前系統訂閱了："
 
-#: ../bin/rhn-migrate-classic-to-rhsm:563
+#: ../bin/rhn-migrate-classic-to-rhsm:550
 msgid ""
 "\n"
 "Preparing to unregister system from RHN classic ..."
@@ -2922,7 +2901,7 @@ msgstr ""
 msgid "How often to check for validity (in seconds)"
 msgstr "檢查認證的頻繁度（以秒為單位）"
 
-#: ../src/rhsm_icon.c:48
+#: ../src/rhsm_icon.c:48 ../src/rhsmcertd.c:63
 msgid "Show debug messages"
 msgstr "顯示除錯訊息"
 
@@ -3000,6 +2979,47 @@ msgstr "無法開啟至 bus 的連線：%s\n"
 msgid "option parsing failed: %s\n"
 msgstr "選項剖析失敗：%s\n"
 
+#: ../src/rhsmcertd.c:54
+msgid "Interval to run cert check (in minutes)"
+msgstr ""
+
+#: ../src/rhsmcertd.c:57
+msgid "Interval to run healing (in minutes)"
+msgstr ""
+
+#: ../src/rhsmcertd.c:60
+msgid "Run the initial checks immediatly, with no delay."
+msgstr ""
+
+#: ../src/rhsmcertd.c:258
+msgid "For more information run: rhsmcertd --help\n"
+msgstr ""
+
+#: ../src/rhsmcertd.c:283
+msgid "Wrong number of arguments specified.\n"
+msgstr ""
+
+#. New style args were used, assume error.
+#. We do not support both at once, other than
+#. debug and wait.
+#: ../src/rhsmcertd.c:341
+msgid "Invalid argument specified.\n"
+msgstr ""
+
+#: ../src/rhsmcertd.c:347
+msgid "WARN: Deprecated CLI arguments are being used.\n"
+msgstr ""
+
+#: ../src/rhsmcertd.c:362
+#, c-format
+msgid "Invalid option: %s\n"
+msgstr ""
+
+#: ../src/rhsmcertd.c:376
+#, c-format
+msgid "Invalid argument specified: %s\n"
+msgstr ""
+
 #: ../etc-conf/rhsm-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
 msgstr "Red Hat 訂閱認證驗證程式"
@@ -3011,12 +3031,3 @@ msgstr "訂閱認證驗證程式"
 #: ../etc-conf/subscription-manager.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
 msgstr "Red Hat 訂閱管理程式"
-
-#~ msgid "Consumed Product Subscriptions"
-#~ msgstr "已使用的產品訂閱"
-
-#~ msgid "<b>More search options</b>"
-#~ msgstr "<b>更多搜尋選項</b>"
-
-#~ msgid "Contains the text:"
-#~ msgstr "包含了文字："

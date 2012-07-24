@@ -1,6 +1,9 @@
 import sys
 import unittest
 
+import rhsm_display
+rhsm_display.set_display()
+
 from stubs import MockStderr, MockStdout, StubUEP, StubFacts
 from subscription_manager.gui import factsgui, managergui
 from mock import Mock

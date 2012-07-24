@@ -19,11 +19,11 @@ import time
 import gobject
 import gtk
 import pango
-import locale
 
 import gettext
 _ = gettext.gettext
 
+from rhsm.certificate import GMT
 
 from subscription_manager import managerlib
 from subscription_manager.gui import storage
@@ -34,6 +34,11 @@ from subscription_manager.certdirectory import ProductDirectory
 
 GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
 UPDATE_FILE = '/var/run/rhsm/update'
+
+WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
+
+WARNING_COLOR = '#FFFB82'
+EXPIRED_COLOR = '#FFAF99'
 
 
 class GladeWidget(object):
@@ -268,6 +273,9 @@ class SubDetailsWidget(GladeWidget):
 
         self.bundled_products = ProductsTable(self.products_view)
 
+        self.expired_color = gtk.gdk.color_parse(EXPIRED_COLOR)
+        self.warning_color = gtk.gdk.color_parse(WARNING_COLOR)
+
         # Clean out contract and date widgets if not showing contract info
         if not show_contract:
             def destroy(widget_prefix):
@@ -306,6 +314,11 @@ class SubDetailsWidget(GladeWidget):
                                "provides_management_text",
                                "virt_only_text"])
 
+            # Save the original background color for the
+            # start_end_date_text widget so we can restore it in the
+            # clear() function.
+            self.original_bg = self.start_end_date_text.rc_get_style().base[gtk.STATE_NORMAL]
+
     def show(self, name, contract=None, start=None, end=None, account=None,
             management=None, support_level="", support_type="",
             virt_only=None, products=[], highlight=None, sku=None):
@@ -331,6 +344,9 @@ class SubDetailsWidget(GladeWidget):
         self._set(self.support_type_text, support_type)
 
         if self.show_contract:
+            self.start_end_date_text.modify_base(gtk.STATE_NORMAL,
+                    self._get_date_bg(end))
+
             self._set(self.contract_number_text, contract)
             self._set(self.start_end_date_text, "%s - %s" % (
                       managerlib.formatDate(start), managerlib.formatDate(end)))
@@ -349,6 +365,17 @@ class SubDetailsWidget(GladeWidget):
             text = _("None")
         text_view.get_buffer().set_text(text)
 
+    def _get_date_bg(self, end):
+        now = datetime.datetime.now(GMT())
+
+        if end < now:
+            return self.expired_color
+
+        if end - datetime.timedelta(days=WARNING_DAYS) < now:
+            return self.warning_color
+
+        return self.original_bg
+
     def clear(self):
         """ No subscription to display. """
         self.bundled_products.clear()
@@ -360,6 +387,8 @@ class SubDetailsWidget(GladeWidget):
         self._set(self.support_type_text, "")
 
         if self.show_contract:
+            #Clear row highlighting
+            self.start_end_date_text.modify_base(gtk.STATE_NORMAL, self.original_bg)
             self._set(self.contract_number_text, "")
             self._set(self.start_end_date_text, "")
             self._set(self.account_text, "")
@@ -421,16 +450,8 @@ class DatePicker(gtk.HBox):
                 tzinfo=managerlib.LocalTz())
         self._date_entry = gtk.Entry()
         self._date_entry.set_width_chars(14)
-        # we could use managerlib.formatDate here, but since we are parsing
-        # this, leave it alone
 
-        self.date_picker_locale = managerlib.find_date_picker_locale()
-
-        # unset locale if we can't parse it here
-        locale.setlocale(locale.LC_TIME, self.date_picker_locale)
-        self._date_entry.set_text(self._date.strftime("%x"))
-        # return to original locale
-        locale.setlocale(locale.LC_TIME, '')
+        self._date_entry.set_text(self._date.date().isoformat())
 
         atk_entry = self._date_entry.get_accessible()
         atk_entry.set_name('date-entry')
@@ -472,22 +493,17 @@ class DatePicker(gtk.HBox):
         except ValueError:
             today = datetime.date.today()
             messageWindow.ErrorDialog(messageWindow.wrap_text(
-                                "%s %s" % (_("Invalid date format. Please re-enter a valid date. Example: "), today.strftime('%x'))))
+                                "%s %s" % (_("Invalid date format. Please re-enter a valid date. Example: "), today.isoformat())))
             return False
 
     def _date_validate(self, date_str):
-        # doing it this ugly way for pre python 2.5
-        # wrap this in locale setting so we can potentially set the
-        # date format to one we know we can parse
+        # try this as a iso8601 date format, aka, 2012-12-25
         try:
-            locale.setlocale(locale.LC_TIME, self.date_picker_locale)
             date = datetime.datetime(
-                    *(time.strptime(date_str, '%x')[0:6]))
-            locale.setlocale(locale.LC_ALL, '')
+                    *(time.strptime(date_str, '%Y-%m-%d')[0:6]))
             self._date = datetime.datetime(date.year, date.month, date.day,
                     tzinfo=managerlib.LocalTz())
         except ValueError:
-            # the caller needs to handle this
             raise
 
     def _date_entry_box_grab_focus(self, dummy2=None, dummy3=None):
@@ -495,10 +511,7 @@ class DatePicker(gtk.HBox):
 
     def _date_update_cal(self, dummy=None):
         # set the text box to the date from the calendar
-        # but check to see what local we want the text in
-        locale.setlocale(locale.LC_TIME, self.date_picker_locale)
-        self._date_entry.set_text(self._date.strftime("%x"))
-        locale.setlocale(locale.LC_ALL, '')
+        self._date_entry.set_text(self._date.date().isoformat())
 
     def _date_update_text(self, dummy=None):
         # set the cal to the date from the text box, and set self._date

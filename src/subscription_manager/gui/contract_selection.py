@@ -81,7 +81,7 @@ class ContractSelectionWindow(object):
 
     def populate_treeview(self):
         renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn(_("Contract Number"), renderer,
+        column = gtk.TreeViewColumn(_("Contract"), renderer,
                 text=0)
         column.set_expand(True)
         column.set_sort_column_id(0)
