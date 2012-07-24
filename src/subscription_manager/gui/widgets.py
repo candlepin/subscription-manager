@@ -23,6 +23,7 @@ import pango
 import gettext
 _ = gettext.gettext
 
+from rhsm.certificate import GMT
 
 from subscription_manager import managerlib
 from subscription_manager.gui import storage
@@ -33,6 +34,11 @@ from subscription_manager.certdirectory import ProductDirectory
 
 GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
 UPDATE_FILE = '/var/run/rhsm/update'
+
+WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
+
+WARNING_COLOR = '#FFFB82'
+EXPIRED_COLOR = '#FFAF99'
 
 
 class GladeWidget(object):
@@ -305,6 +311,11 @@ class SubDetailsWidget(GladeWidget):
                                "provides_management_text",
                                "virt_only_text"])
 
+            # Save the original background color for the
+            # start_end_date_text widget so we can restore it in the
+            # clear() function.
+            self.original_bg = self.start_end_date_text.rc_get_style().base[gtk.STATE_NORMAL]
+
     def show(self, name, contract=None, start=None, end=None, account=None,
             management=None, support_level="", support_type="",
             virt_only=None, products=[], highlight=None, sku=None):
@@ -330,6 +341,8 @@ class SubDetailsWidget(GladeWidget):
         self._set(self.support_type_text, support_type)
 
         if self.show_contract:
+            self._highlight_dates(self.start_end_date_text, end)
+
             self._set(self.contract_number_text, contract)
             self._set(self.start_end_date_text, "%s - %s" % (
                       managerlib.formatDate(start), managerlib.formatDate(end)))
@@ -348,6 +361,18 @@ class SubDetailsWidget(GladeWidget):
             text = _("None")
         text_view.get_buffer().set_text(text)
 
+    def _highlight_dates(self, text_view, end):
+        now = datetime.datetime.now(GMT())
+
+        if end < now:
+            text_view.modify_base(gtk.STATE_NORMAL,
+                    gtk.gdk.color_parse(EXPIRED_COLOR))
+        elif end - datetime.timedelta(days=WARNING_DAYS) < now:
+            text_view.modify_base(gtk.STATE_NORMAL,
+                    gtk.gdk.color_parse(WARNING_COLOR))
+        else:
+            text_view.modify_base(gtk.STATE_NORMAL, self.original_bg)
+
     def clear(self):
         """ No subscription to display. """
         self.bundled_products.clear()
@@ -359,6 +384,8 @@ class SubDetailsWidget(GladeWidget):
         self._set(self.support_type_text, "")
 
         if self.show_contract:
+            #Clear row highlighting
+            self.start_end_date_text.modify_base(gtk.STATE_NORMAL, self.original_bg)
             self._set(self.contract_number_text, "")
             self._set(self.start_end_date_text, "")
             self._set(self.account_text, "")
