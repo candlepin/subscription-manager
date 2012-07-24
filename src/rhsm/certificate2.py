@@ -13,9 +13,9 @@
 # in this software or its documentation.
 #
 
-import os
 import zlib
 import logging
+import os
 
 log = logging.getLogger(__name__)
 
@@ -422,6 +422,8 @@ class Certificate(object):
         """
         if self.path:
             os.unlink(self.path)
+        else:
+            raise CertificateException('Certificate has no path, cannot delete.')
 
 
 class IdentityCertificate(Certificate):
@@ -448,6 +450,17 @@ class EntitlementCertificate(ProductCertificate):
         ProductCertificate.__init__(self, **kwargs)
         self.order = order
         self.content = content
+
+    def delete(self):
+        """
+        Override parent to also delete certificate key.
+        """
+        Certificate.delete(self)
+
+        # Can assume we have a path here, super method would have thrown
+        # Exception if we didn't:
+        key_path = self.path.replace(".pem", "-key.pem")
+        os.unlink(key_path)
 
 
 class Product(object):
