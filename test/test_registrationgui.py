@@ -1,6 +1,10 @@
 import unittest
 
 from mock import Mock
+
+import rhsm_display
+rhsm_display.set_display()
+
 from stubs import StubBackend, StubFacts
 from subscription_manager.gui.registergui import RegisterScreen, \
         CredentialsScreen, CREDENTIALS_PAGE, CHOOSE_SERVER_PAGE
