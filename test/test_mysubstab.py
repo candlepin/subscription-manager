@@ -15,6 +15,10 @@
 import unittest
 import datetime
 from mock import Mock
+
+import rhsm_display
+rhsm_display.set_display()
+
 from stubs import StubUEP, StubEntitlementCertificate, StubCertificateDirectory, StubProduct, StubBackend, StubFacts
 from subscription_manager.gui.mysubstab import MySubscriptionsTab
 
