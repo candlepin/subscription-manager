@@ -273,6 +273,9 @@ class SubDetailsWidget(GladeWidget):
 
         self.bundled_products = ProductsTable(self.products_view)
 
+        self.expired_color = gtk.gdk.color_parse(EXPIRED_COLOR)
+        self.warning_color = gtk.gdk.color_parse(WARNING_COLOR)
+
         # Clean out contract and date widgets if not showing contract info
         if not show_contract:
             def destroy(widget_prefix):
@@ -366,10 +369,10 @@ class SubDetailsWidget(GladeWidget):
         now = datetime.datetime.now(GMT())
 
         if end < now:
-            return gtk.gdk.color_parse(EXPIRED_COLOR)
+            return self.expired_color
 
         if end - datetime.timedelta(days=WARNING_DAYS) < now:
-            return gtk.gdk.color_parse(WARNING_COLOR)
+            return self.warning_color
 
         return self.original_bg
 
