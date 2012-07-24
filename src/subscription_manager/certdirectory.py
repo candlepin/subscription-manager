@@ -19,8 +19,7 @@
 import os
 import logging
 
-from rhsm.certificate import Certificate, ProductCertificate, \
-        EntitlementCertificate, Key
+from rhsm.certificate import Key, create_from_file
 
 from rhsm.config import initConfig
 
@@ -108,73 +107,48 @@ class CertificateDirectory(Directory):
 
     def list(self):
         listing = []
-        factory = self.Factory(self.certClass())
         for p, fn in Directory.list(self):
             if not fn.endswith('.pem') or fn.endswith(self.KEY):
                 continue
             path = self.abspath(fn)
-            factory.append(path, listing)
+            listing.append(create_from_file(path))
         return listing
 
     def listValid(self):
         valid = []
         for c in self.list():
-            if c.valid():
+            if c.is_valid():
                 valid.append(c)
         return valid
 
     def listExpired(self):
         expired = []
         for c in self.list():
-            if c.expired():
+            if c.is_expired():
                 expired.append(c)
         return expired
 
     def find(self, sn):
         # TODO: could optimize to just load SERIAL.pem? Maybe not in all cases.
         for c in self.list():
-            if c.serialNumber() == sn:
+            if c.serial == sn:
                 return c
         return None
 
     def findAllByProduct(self, p_hash):
         certs = []
         for c in self.list():
-            for p in c.getProducts():
-                if p.getHash() == p_hash:
+            for p in c.products:
+                if p.id == p_hash:
                     certs.append(c)
         return certs
 
     def findByProduct(self, p_hash):
         for c in self.list():
-            for p in c.getProducts():
-                if p.getHash() == p_hash:
+            for p in c.products:
+                if p.id == p_hash:
                     return c
         return None
-
-    def certClass(self):
-        return Certificate
-
-    class Factory:
-
-        def __init__(self, cls):
-            self.cls = cls
-
-        def append(self, path, certlist):
-            try:
-                cert = self.cls()
-                cert.read(path)
-                bogus = cert.bogus()
-                if bogus:
-                    bogus.insert(0, _('Reason(s):'))
-                    raise Exception('\n - '.join(bogus))
-                certlist.append(cert)
-            except Exception, e:
-                log.exception(e)
-                log.error(
-                    'File: %s, not loaded\n%s',
-                    path,
-                    e)
 
 
 class ProductDirectory(CertificateDirectory):
@@ -184,9 +158,6 @@ class ProductDirectory(CertificateDirectory):
     def __init__(self):
         CertificateDirectory.__init__(self, self.PATH)
 
-    def certClass(self):
-        return ProductCertificate
-
     def get_provided_tags(self):
         """
         Iterates all product certificates in the directory and extracts a master
@@ -194,8 +165,8 @@ class ProductDirectory(CertificateDirectory):
         """
         tags = set()
         for prod_cert in self.listValid():
-            for product in prod_cert.getProducts():
-                for tag in product.getProvidedTags():
+            for product in prod_cert.products:
+                for tag in product.provided_tags:
                     tags.add(tag)
         return tags
 
@@ -212,9 +183,6 @@ class EntitlementDirectory(CertificateDirectory):
     def __init__(self):
         CertificateDirectory.__init__(self, self.productpath())
 
-    def certClass(self):
-        return EntitlementCertificate
-
     def _check_key(self, cert):
         """
         If the new key file (SERIAL-key.pem) does not exist, check for
@@ -225,7 +193,7 @@ class EntitlementDirectory(CertificateDirectory):
 
         See bz #711133.
         """
-        key_path = "%s/%s-key.pem" % (self.path, cert.serialNumber())
+        key_path = "%s/%s-key.pem" % (self.path, cert.serial)
         if not os.access(key_path, os.R_OK):
             # read key from old key path
             old_key_path = "%s/key.pem" % self.path
@@ -250,7 +218,7 @@ class EntitlementDirectory(CertificateDirectory):
             if not self._check_key(c):
                 continue
 
-            if c.valid():
+            if c.is_valid():
                 valid.append(c)
 
         return valid
@@ -286,7 +254,7 @@ class Writer:
         self.entdir = EntitlementDirectory()
 
     def write(self, key, cert):
-        serial = cert.serialNumber()
+        serial = cert.serial
         ent_dir_path = self.entdir.productpath()
 
         key_filename = '%s-key.pem' % str(serial)

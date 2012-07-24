@@ -28,6 +28,11 @@ from datetime import datetime
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
+# Hardcoded value for the version of certificates this version of the client
+# prefers:
+CERT_VERSION = "2.0"
+
+
 class Facts(CacheManager):
     """
     Manages the facts for this system, maintains a cache of the most
@@ -91,6 +96,10 @@ class Facts(CacheManager):
         if ((len(self.facts) == 0) or refresh):
             facts = {}
             facts.update(self._load_hw_facts())
+
+            # Set the preferred entitlement certificate version:
+            facts.update({"system.certificate_version": CERT_VERSION})
+
             facts.update(self._load_custom_facts())
             facts.update(self._get_validity_facts(facts))
             self.facts = facts

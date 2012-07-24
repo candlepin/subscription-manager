@@ -57,9 +57,9 @@ class ReleaseBackend(object):
         rhel_product = None
         for product_hash in sorter.installed_products:
             product_cert = sorter.installed_products[product_hash]
-            products = product_cert.getProducts()
+            products = product_cert.products
             for product in products:
-                product_tags = product.getProvidedTags()
+                product_tags = product.provided_tags
 
                 if self._is_rhel(product_tags):
                     rhel_product = product
@@ -67,18 +67,18 @@ class ReleaseBackend(object):
         if rhel_product is None:
             return []
 
-        entitlements = sorter.get_entitlements_for_product(rhel_product.getHash())
+        entitlements = sorter.get_entitlements_for_product(rhel_product.id)
         listings = []
         for entitlement in entitlements:
-            contents = entitlement.getContentEntitlements()
+            contents = entitlement.content
             for content in contents:
                 # ignore content that is not enabled
                 # see bz #820639
-                if content.getEnabled() != '1':
+                if not content.enabled:
                     continue
-                if self._is_correct_rhel(rhel_product.getProvidedTags(),
-                                     content.getRequiredTags()):
-                    content_url = content.getUrl()
+                if self._is_correct_rhel(rhel_product.provided_tags,
+                                     content.required_tags):
+                    content_url = content.url
                     listing_parts = content_url.split('$releasever', 1)
                     listing_base = listing_parts[0]
                     listing_path = "%s/listing" % listing_base

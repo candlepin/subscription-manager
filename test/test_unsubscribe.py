@@ -62,7 +62,6 @@ class CliUnSubscribeTests(unittest.TestCase):
         prod = StubProduct('stub_product')
         ent1 = StubEntitlementCertificate(prod)
         ent2 = StubEntitlementCertificate(prod)
-        ent2.setSerialNumber('654321')
 
         cmd = managercli.UnSubscribeCommand(ent_dir=StubEntitlementDirectory([ent1, ent2]),
                               prod_dir=StubProductDirectory([]))
@@ -70,7 +69,7 @@ class CliUnSubscribeTests(unittest.TestCase):
         StubConsumerIdentity.existsAndValid = classmethod(lambda cls: False)
         StubConsumerIdentity.exists = classmethod(lambda cls: False)
 
-        cmd.main(['unsubscribe', '--serial=%s' % '123456'])
+        cmd.main(['unsubscribe', '--serial=%s' % ent1.serial])
         self.assertTrue(cmd.entitlement_dir.list_called)
         self.assertTrue(ent1.is_deleted)
         self.assertFalse(ent2.is_deleted)

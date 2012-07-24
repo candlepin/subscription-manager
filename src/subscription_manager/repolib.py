@@ -182,26 +182,29 @@ class UpdateAction:
 
         tags_we_have = self.prod_dir.get_provided_tags()
 
-        for content in ent_cert.getContentEntitlements():
+        for content in ent_cert.content:
 
             all_tags_found = True
-            for tag in content.getRequiredTags():
+            for tag in content.required_tags:
                 if not tag in tags_we_have:
                     log.debug("Missing required tag '%s', skipping content: %s" % (
-                        tag, content.getLabel()))
+                        tag, content.label))
                     all_tags_found = False
             if not all_tags_found:
                 # Skip this content:
                 continue
 
-            content_id = content.getLabel()
+            content_id = content.label
             repo = Repo(content_id)
-            repo['name'] = content.getName()
-            repo['enabled'] = content.getEnabled()
-            repo['baseurl'] = self.join(baseurl, self._use_release_for_releasever(content.getUrl()))
+            repo['name'] = content.name
+            if content.enabled:
+                repo['enabled'] = "1"
+            else:
+                repo['enabled'] = "0"
+            repo['baseurl'] = self.join(baseurl, self._use_release_for_releasever(content.url))
 
             # If no GPG key URL is specified, turn gpgcheck off:
-            gpg_url = content.getGpg()
+            gpg_url = content.gpg
             if not gpg_url:
                 repo['gpgkey'] = ""
                 repo['gpgcheck'] = '0'
@@ -212,7 +215,7 @@ class UpdateAction:
             repo['sslclientkey'] = self.get_key_path(ent_cert)
             repo['sslclientcert'] = ent_cert.path
             repo['sslcacert'] = ca_cert
-            repo['metadata_expire'] = content.getMetadataExpire()
+            repo['metadata_expire'] = content.metadata_expire
 
             self._set_proxy_info(repo)
             lst.append(repo)

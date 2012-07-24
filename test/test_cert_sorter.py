@@ -23,8 +23,8 @@ from rhsm.certificate import GMT
 
 def cert_list_has_product(cert_list, product_id):
     for cert in cert_list:
-        for product in cert.getProducts():
-            if product.getHash() == product_id:
+        for product in cert.products:
+            if product.id == product_id:
                 return True
     return False
 
