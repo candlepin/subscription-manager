@@ -205,8 +205,6 @@ class _CertFactory(object):
             content.append(Content(
                 name=content_ext.get('1'),
                 label=content_ext.get('2'),
-                quantity=content_ext.get('3'),
-                flex_quantity=content_ext.get('4'),
                 vendor=content_ext.get('5'),
                 url=content_ext.get('6'),
                 gpg=content_ext.get('7'),
@@ -530,9 +528,8 @@ class Order(object):
 
 class Content(object):
 
-    def __init__(self, name=None, label=None, quantity=None, flex_quantity=None,
-            vendor=None, url=None, gpg=None, enabled=None, metadata_expire=None,
-            required_tags=None):
+    def __init__(self, name=None, label=None, vendor=None, url=None,
+            gpg=None, enabled=None, metadata_expire=None, required_tags=None):
 
         if (name is None) or (label is None):
             raise CertificateException("Content missing name/label")
@@ -555,15 +552,6 @@ class Content(object):
 
         self.metadata_expire = metadata_expire
         self.required_tags = required_tags or []
-
-        # Suspect both of these are unused:
-        self.quantity = None
-        if quantity:
-            self.quantity = int(quantity)
-
-        self.flex_quantity = None
-        if flex_quantity:
-            self.flex_quantity = int(flex_quantity)
 
     def __eq__(self, other):
         return (self.label == other.label)
