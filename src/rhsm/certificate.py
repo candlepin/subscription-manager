@@ -55,13 +55,13 @@ VALUE_PATTERN = re.compile('.*prim:\s(\w*)\s*:*(.*)')
 # we're using two modules for the time being. Eventually the certificate2 code
 # should be moved here.
 def create_from_file(path):
-    from certificate2 import CertFactory  # prevent circular deps
-    return CertFactory().create_from_file(path)
+    from certificate2 import _CertFactory  # prevent circular deps
+    return _CertFactory().create_from_file(path)
 
 
 def create_from_pem(pem):
-    from certificate2 import CertFactory  # prevent circular deps
-    return CertFactory().create_from_pem(pem)
+    from certificate2 import _CertFactory  # prevent circular deps
+    return _CertFactory().create_from_pem(pem)
 
 
 def parse_tags(tag_str):

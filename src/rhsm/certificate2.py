@@ -41,7 +41,7 @@ ENTITLEMENT_CERT = 2
 IDENTITY_CERT = 3
 
 
-class CertFactory(object):
+class _CertFactory(object):
     """
     Factory for creating certificate objects.
 
@@ -73,7 +73,7 @@ class CertFactory(object):
             raise CertificateException("Error loading certificate")
         # Load the X509 extensions so we can determine what we're dealing with:
         try:
-            extensions = Extensions2(x509)
+            extensions = _Extensions2(x509)
             redhat_oid = OID(REDHAT_OID_NAMESPACE)
             # Trim down to only the extensions in the Red Hat namespace:
             extensions = extensions.ltrim(len(redhat_oid))
@@ -349,7 +349,7 @@ class Version(object):
         return self.version_str
 
 
-class Extensions2(Extensions):
+class _Extensions2(Extensions):
 
     def _parse(self, x509):
         """
