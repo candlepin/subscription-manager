@@ -30,8 +30,7 @@ from subscription_manager.managerlib import LocalTz
 from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui.widgets import MachineTypeColumn, MultiEntitlementColumn, \
                                              QuantitySelectionColumn, SubDetailsWidget, \
-                                             DatePicker, WARNING_COLOR, \
-                                             EXPIRED_COLOR
+                                             DatePicker
 
 
 class TestSubDetailsWidget(unittest.TestCase):
