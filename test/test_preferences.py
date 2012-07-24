@@ -16,6 +16,8 @@
 import unittest
 
 import stubs
+import rhsm_display
+rhsm_display.set_display()
 
 from subscription_manager.gui import preferences
 
@@ -36,7 +38,7 @@ def getConsumerData(self):
     return CONSUMER_DATA
 
 
-class StubConsumerNone():
+class StubConsumerNone:
     def __init__(self):
         self.uuid = None
 

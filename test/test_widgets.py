@@ -12,14 +12,26 @@
 # in this software or its documentation.
 #
 
+import os
+import locale
+import gettext
 import unittest
+
+import rhsm_display
+rhsm_display.set_display()
+
+import test_po_files
+
 import gtk
-from datetime import datetime
+from datetime import datetime, timedelta
+from rhsm.certificate import GMT
 from subscription_manager.managerlib import LocalTz
 
 from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui.widgets import MachineTypeColumn, MultiEntitlementColumn, \
-                                             QuantitySelectionColumn, SubDetailsWidget
+                                             QuantitySelectionColumn, SubDetailsWidget, \
+                                             DatePicker, WARNING_COLOR, \
+                                             EXPIRED_COLOR
 
 
 class TestSubDetailsWidget(unittest.TestCase):
@@ -41,6 +53,58 @@ class TestSubDetailsWidget(unittest.TestCase):
         s_iter = details.virt_only_text.get_buffer().get_start_iter()
         e_iter = details.virt_only_text.get_buffer().get_end_iter()
         self.assertEquals(details.virt_only_text.get_buffer().get_text(s_iter, e_iter), 'v_o')
+
+    def test_get_expired_bg(self):
+        details = SubDetailsWidget()
+        yesterday = datetime.now(GMT()) - timedelta(days=1)
+        bg_color = details._get_date_bg(yesterday)
+        self.assertEqual(gtk.gdk.color_parse(EXPIRED_COLOR), bg_color)
+
+    def test_get_warning_bg(self):
+        details = SubDetailsWidget()
+        tomorrow = datetime.now(GMT()) + timedelta(days=1)
+        bg_color = details._get_date_bg(tomorrow)
+        self.assertEqual(gtk.gdk.color_parse(WARNING_COLOR), bg_color)
+
+
+class TestDatePicker(unittest.TestCase):
+    def tearDown(self):
+        self._setupLang("en_US")
+
+    def test_date_picker_date(self):
+        d = datetime(2033, 12, 29, tzinfo=LocalTz())
+        date_picker = DatePicker(d)
+        date_picker.date
+
+    def test_date_validate_default_date_locale(self):
+        d = datetime(2000, 1, 1, tzinfo=LocalTz())
+        date_picker = DatePicker(d)
+        date_picker.date_entry_validate()
+
+    def test_date_validate_supported_locales_1_1_2000(self):
+        d = datetime(2000, 1, 1, tzinfo=LocalTz())
+        self.__date_validate_supported_locales(d)
+
+    # why? because some locales fail to parse in dates with
+    # double digt months
+    def test_date_validate_supported_locales_12_29_2020(self):
+        d = datetime(2020, 12, 29, tzinfo=LocalTz())
+        self.__date_validate_supported_locales(d)
+
+    def __date_validate_supported_locales(self, d):
+        test_locales = test_po_files.TestLocale.test_locales
+        for test_locale in test_locales:
+            lc = "%s.UTF-8" % test_locale
+            self._setupLang(lc)
+            date_picker = DatePicker(d)
+            valid = date_picker.date_entry_validate()
+            self.assertTrue(valid)
+            self.assertEquals(date_picker._date_entry.get_text(), d.date().isoformat())
+
+    def _setupLang(self, lang):
+        os.environ['LANG'] = lang
+        locale.setlocale(locale.LC_ALL, '')
+        gettext.bindtextdomain(test_po_files.APP, test_po_files.DIR)
 
 
 class BaseColumnTest(unittest.TestCase):

@@ -167,9 +167,9 @@ class CacheManager(object):
                 # packages at once is one update.
                 return 1
             except Exception, e:
-                log.error("Error updating system data")
+                log.error("Error updating system data on the server")
                 log.exception(e)
-                raise Exception(_("Error updating system data, see /var/log/rhsm/rhsm.log "
+                raise Exception(_("Error updating system data on the server, see /var/log/rhsm/rhsm.log "
                         "for more details."))
         else:
             log.info("No changes.")
