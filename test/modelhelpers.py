@@ -23,7 +23,7 @@ from datetime import timedelta, datetime
 
 
 def create_pool(product_id, product_name, quantity=10, consumed=0, provided_products=[],
-                attributes=[], productAttributes=[], start_end_range = None):
+                attributes=[], productAttributes=[], start_end_range=None):
     """
     Returns a hash representing a pool. Used to simulate the JSON returned
     from Candlepin.
