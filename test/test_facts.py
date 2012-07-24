@@ -1,6 +1,6 @@
 import unittest
 import tempfile
-import json
+import simplejson as json
 import shutil
 from datetime import datetime, timedelta
 from mock import patch, Mock

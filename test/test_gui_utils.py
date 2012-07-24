@@ -1,5 +1,12 @@
 import unittest
 
+import gtk
+
+# we need gtk 2.18+ to do the right markup in likify
+MIN_GTK_MAJOR = 2
+MIN_GTK_MINOR = 18
+MIN_GTK_MICRO = 0
+
 import rhsm_display
 rhsm_display.set_display()
 
@@ -25,6 +32,9 @@ class TestLinkify(unittest.TestCase):
     example_2 = """https://www.redhat.com/wapps/sso/rhn/lostPassword.html"""
     expected_example_1 = """<a href="%s">%s</a>""" % (example_1, example_1)
     expected_example_2 = """<a href="%s">%s</a>""" % (example_2, example_2)
+
+    if gtk.check_version(MIN_GTK_MAJOR, MIN_GTK_MINOR, MIN_GTK_MICRO):
+        __test__ = False
 
     def test_no_url(self):
         ret = utils.linkify(self.no_url)

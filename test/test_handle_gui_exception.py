@@ -34,9 +34,11 @@ class FakeErrorWindow:
 
 
 class FakeException(Exception):
-    def __init__(self, msg=None, cert_path=None):
+    def __init__(self, msg=None):
         self.msg = msg
-        self.cert_path = cert_path
+
+    def __str__(self):
+        return repr(self.msg)
 
 
 class HandleGuiExceptionTests(unittest.TestCase):
