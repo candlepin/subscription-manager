@@ -27,7 +27,7 @@ from subscription_manager.managerlib import merge_pools, PoolFilter, \
 from modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
-from rhsm.certificate2 import CertFactory
+from rhsm.certificate import create_from_pem
 from mock import Mock
 import xml
 
@@ -122,7 +122,7 @@ IEYRTwKBgQCXpMJ2P0bomDQMeIou2CSGCuEMcx8NuTA9x4t6xrf6Hyv7O9K7+fr1
 ufxBTlg4v0B3xS1GgvATMY4hyk53o5PffmlRO03dbfpGK/rkTIPwFg==
 -----END RSA PRIVATE KEY-----"""
 
-EXPECTED_CERT = CertFactory().create_from_pem(EXPECTED_CERT_CONTENT)
+EXPECTED_CERT = create_from_pem(EXPECTED_CERT_CONTENT)
 
 
 class MergePoolsTests(unittest.TestCase):

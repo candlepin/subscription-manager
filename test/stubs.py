@@ -123,14 +123,14 @@ class StubProduct(Product):
 
 class StubContent(Content):
 
-    def __init__(self, label, name=None, quantity=1, vendor="",
+    def __init__(self, label, name=None, vendor="",
             url="", gpg="", enabled=1, metadata_expire=None, required_tags=""):
         name = label
         if name:
             name = name
         if required_tags:
             required_tags = parse_tags(required_tags)
-        Content.__init__(self, name=name, label=label, quantity=quantity,
+        Content.__init__(self, name=name, label=label,
                 vendor=vendor, url=url, gpg=gpg, enabled=enabled,
                 metadata_expire=metadata_expire, required_tags=required_tags)
 
