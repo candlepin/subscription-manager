@@ -127,9 +127,6 @@ class V2CertTests(unittest.TestCase):
         self.assertEquals("never-enabled-content", content.name)
         self.assertEquals(False, content.enabled)
 
-    def _stub_unlink(self, filename):
-        self.unlinked.append(filename)
-
     @patch('os.unlink')
     def test_delete(self, unlink_mock):
         """ Entitlement cert deletion should cleanup key as well. """
