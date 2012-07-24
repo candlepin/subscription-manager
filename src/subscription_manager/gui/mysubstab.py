@@ -15,6 +15,7 @@
 
 import gtk
 import gobject
+import os
 from datetime import datetime, timedelta
 
 from rhsm.certificate import GMT
@@ -33,8 +34,9 @@ _ = gettext.gettext
 
 WARNING_DAYS = 6 * 7   # 6 weeks * 7 days / week
 
-WARNING_COLOR = '#FFFB82'
-EXPIRED_COLOR = '#FFAF99'
+prefix = os.path.dirname(__file__)
+WARNING_IMG = os.path.join(prefix, "data/icons/partial.svg")
+EXPIRED_IMG = os.path.join(prefix, "data/icons/invalid.svg")
 
 
 class MySubscriptionsTab(widgets.SubscriptionManagerTab):
@@ -62,7 +64,20 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.details_box.pack_start(details)
 
         # Set up columns on the view
-        column = self.add_text_column(_("Subscription"), 'subscription', True)
+        text_renderer = gtk.CellRendererText()
+        image_renderer = gtk.CellRendererPixbuf()
+        column = gtk.TreeViewColumn(_('Subscription'))
+        column.set_expand(True)
+        column.pack_start(image_renderer, False)
+        column.pack_start(text_renderer, False)
+        column.add_attribute(image_renderer, 'pixbuf', self.store['image'])
+        column.add_attribute(text_renderer, 'text', self.store['subscription'])
+        column.add_attribute(text_renderer, 'cell-background',
+                            self.store['background'])
+        column.add_attribute(image_renderer, 'cell-background',
+                            self.store['background'])
+
+        self.top_view.append_column(column)
         cols = []
         cols.append((column, 'text', 'subscription'))
 
@@ -153,33 +168,44 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def _add_group(self, group_idx, group):
         iter = None
+        bg_color = get_cell_background_color(group_idx)
         if group.name:
-            bg_color = self._get_background_color(group_idx)
             iter = self.store.add_map(iter, self._create_stacking_header_entry(group.name,
                                                                                bg_color))
-        change_parent_color = False
-        new_parent_color = None
+        new_parent_image = None
         for i, cert in enumerate(group.entitlements):
-            bg_color = self._get_background_color(group_idx, cert)
-            self.store.add_map(iter, self._create_entry_map(cert, bg_color))
+            image = self._get_entry_image(cert)
+            self.store.add_map(iter, self._create_entry_map(cert, bg_color, image))
 
-            # Determine if we need to change the parent's color. We
-            # will match the parent's color with the childrent if all
-            # children are the same color.
-            if i == 0:
-                new_parent_color = bg_color
-            else:
-                change_parent_color = new_parent_color == bg_color
+            # Determine if we need to change the parent's image. We
+            # will match the parent's image with the children if any of
+            # the children have an image.
+            if self.image_ranks_higher(new_parent_image, image):
+                new_parent_image = image
 
-        # Update the parent color if required.
-        if change_parent_color and iter:
-            self.store.set_value(iter, self.store['background'], new_parent_color)
+        # Update the parent image if required.
+        if new_parent_image and iter:
+            self.store.set_value(iter, self.store['image'],
+                    gtk.gdk.pixbuf_new_from_file_at_size(new_parent_image, 13, 13))
+
+    def image_ranks_higher(self, old_image, new_image):
+        if old_image == new_image:
+            return False
+
+        if old_image == None and new_image:
+            return True
+
+        if old_image == WARNING_IMG and new_image == EXPIRED_IMG:
+            return True
+
+        return False
 
     def get_label(self):
         return _("My Subscriptions")
 
     def get_type_map(self):
         return {
+            'image': gtk.gdk.Pixbuf,
             'subscription': str,
             'installed_value': float,
             'installed_text': str,
@@ -250,13 +276,15 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         return entry
 
-    def _create_entry_map(self, cert, background_color):
+    def _create_entry_map(self, cert, background_color, image):
         order = cert.getOrder()
         products = cert.getProducts()
         installed = self._get_installed(products)
 
         # Initialize an entry list of the proper length
         entry = {}
+        if image:
+            entry['image'] = gtk.gdk.pixbuf_new_from_file_at_size(image, 13, 13)
         entry['subscription'] = order.getName()
         entry['installed_value'] = self._percentage(installed, products)
         entry['installed_text'] = '%s / %s' % (len(installed), len(products))
@@ -270,18 +298,17 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         return entry
 
-    def _get_background_color(self, idx, entitlement_cert=None):
-        if entitlement_cert:
-            date_range = entitlement_cert.validRange()
-            now = datetime.now(GMT())
+    def _get_entry_image(self, cert):
+        date_range = cert.validRange()
+        now = datetime.now(GMT())
 
-            if date_range.end() < now:
-                return EXPIRED_COLOR
+        if date_range.end() < now:
+            return EXPIRED_IMG
 
-            if date_range.end() - timedelta(days=WARNING_DAYS) < now:
-                return WARNING_COLOR
+        if date_range.end() - timedelta(days=WARNING_DAYS) < now:
+            return WARNING_IMG
 
-        return get_cell_background_color(idx)
+        return None
 
     def _percentage(self, subset, full_set):
         if (len(full_set) == 0):

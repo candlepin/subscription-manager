@@ -20,16 +20,18 @@ import unittest
 import rhsm_display
 rhsm_display.set_display()
 
+import test_po_files
+
 import gtk
-from datetime import datetime
+from datetime import datetime, timedelta
+from rhsm.certificate import GMT
 from subscription_manager.managerlib import LocalTz
 
 from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui.widgets import MachineTypeColumn, MultiEntitlementColumn, \
                                              QuantitySelectionColumn, SubDetailsWidget, \
-                                             DatePicker
-
-import test_po_files
+                                             DatePicker, WARNING_COLOR, \
+                                             EXPIRED_COLOR
 
 
 class TestSubDetailsWidget(unittest.TestCase):
@@ -51,6 +53,18 @@ class TestSubDetailsWidget(unittest.TestCase):
         s_iter = details.virt_only_text.get_buffer().get_start_iter()
         e_iter = details.virt_only_text.get_buffer().get_end_iter()
         self.assertEquals(details.virt_only_text.get_buffer().get_text(s_iter, e_iter), 'v_o')
+
+    def test_get_expired_bg(self):
+        details = SubDetailsWidget()
+        yesterday = datetime.now(GMT()) - timedelta(days=1)
+        bg_color = details._get_date_bg(yesterday)
+        self.assertEqual(gtk.gdk.color_parse(EXPIRED_COLOR), bg_color)
+
+    def test_get_warning_bg(self):
+        details = SubDetailsWidget()
+        tomorrow = datetime.now(GMT()) + timedelta(days=1)
+        bg_color = details._get_date_bg(tomorrow)
+        self.assertEqual(gtk.gdk.color_parse(WARNING_COLOR), bg_color)
 
 
 class TestDatePicker(unittest.TestCase):
