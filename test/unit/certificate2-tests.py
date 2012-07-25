@@ -80,13 +80,13 @@ class V1CertTests(unittest.TestCase):
     # TODO: test exception when cert major version is newer than we can handle
 
 
-class V2CertTests(unittest.TestCase):
+class V3CertTests(unittest.TestCase):
 
     def setUp(self):
-        self.ent_cert = create_from_pem(certdata.ENTITLEMENT_CERT_V2_0)
+        self.ent_cert = create_from_pem(certdata.ENTITLEMENT_CERT_V3_0)
 
     def test_factory_method_on_ent_cert(self):
-        self.assertEquals("2.0", str(self.ent_cert.version))
+        self.assertEquals("3.0", str(self.ent_cert.version))
         self.assertTrue(isinstance(self.ent_cert, EntitlementCertificate))
         self.assertEquals(2012, self.ent_cert.start.year)
         self.assertEquals(2013, self.ent_cert.end.year)
@@ -96,7 +96,8 @@ class V2CertTests(unittest.TestCase):
         self.assertEquals(1, len(self.ent_cert.products))
         self.assertEquals('Awesome OS for x86_64 Bits',
                 self.ent_cert.products[0].name)
-        self.assertEquals('ff80808138b430030138b47a325b011f', self.ent_cert.subject['CN'])
+        self.assertEquals('ff80808139d9e26c0139da23489a0066',
+                self.ent_cert.subject['CN'])
 
     def test_is_valid(self):
         self.assertTrue(self.ent_cert.is_valid(on_date=datetime(2012, 12, 1)))

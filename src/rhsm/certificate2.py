@@ -16,6 +16,7 @@
 import zlib
 import logging
 import os
+import base64
 
 log = logging.getLogger(__name__)
 
@@ -58,7 +59,8 @@ class _CertFactory(object):
         """
         Create appropriate certificate object from a PEM file on disk.
         """
-        return self._read_x509(_certificate.load(path), path)
+        pem = open(path, 'r').read()
+        return self._read_x509(_certificate.load(path), path, pem)
 
     def create_from_pem(self, pem, path=None):
         """
@@ -66,9 +68,9 @@ class _CertFactory(object):
         """
         if not pem:
             raise CertificateException("Empty certificate")
-        return self._read_x509(_certificate.load(pem=pem), path)
+        return self._read_x509(_certificate.load(pem=pem), path, pem)
 
-    def _read_x509(self, x509, path):
+    def _read_x509(self, x509, path, pem):
         if not x509:
             raise CertificateException("Error loading certificate")
         # Load the X509 extensions so we can determine what we're dealing with:
@@ -86,8 +88,8 @@ class _CertFactory(object):
             version = Version(cert_version_str)
             if version.major == 1:
                 return self._create_v1_cert(version, extensions, x509, path)
-            if version.major == 2:
-                return self._create_v2_cert(version, extensions, x509, path)
+            if version.major == 3:
+                return self._create_v3_cert(version, extensions, x509, path, pem)
 
         except CertificateException, e:
             raise e
@@ -228,17 +230,18 @@ class _CertFactory(object):
         else:
             return IDENTITY_CERT
 
-    def _create_v2_cert(self, version, extensions, x509, path):
-        # At this time, we only support v2 entitlement certificates:
-        if not EXT_ENT_PAYLOAD in extensions:
-            raise CertificateException("Unable to parse non-entitlement "
-                    "v2 certificates")
+    def _create_v3_cert(self, version, extensions, x509, path, pem):
+        # At this time, we only support v3 entitlement certificates:
+        try:
+            entitlement = pem.split("-----BEGIN ENTITLEMENT DATA-----\n")[1]
+            entitlement = entitlement.split("-----END ENTITLEMENT DATA-----")[0]
+        except IndexError:
+            raise CertificateException("Unable to parse non-entitlement v3 certificate")
+        payload = self._decompress_payload(base64.b64decode(entitlement))
 
-        payload = self._decompress_payload(extensions[EXT_ENT_PAYLOAD])
-
-        order = self._parse_v2_order(payload)
-        content = self._parse_v2_content(payload)
-        products = self._parse_v2_products(payload)
+        order = self._parse_v3_order(payload)
+        content = self._parse_v3_content(payload)
+        products = self._parse_v3_products(payload)
 
         cert = EntitlementCertificate(
                 x509=x509,
@@ -251,10 +254,11 @@ class _CertFactory(object):
                 order=order,
                 content=content,
                 products=products,
+                pem=pem
             )
         return cert
 
-    def _parse_v2_order(self, payload):
+    def _parse_v3_order(self, payload):
         sub = payload['subscription']
         order = payload['order']
 
@@ -281,7 +285,7 @@ class _CertFactory(object):
                 virt_only=sub.get('virt_only', False),
             )
 
-    def _parse_v2_products(self, payload):
+    def _parse_v3_products(self, payload):
         """
         Returns an ordered list of all the product data in the
         certificate.
@@ -297,11 +301,11 @@ class _CertFactory(object):
                 architectures=product.get('architectures', []),
                 ))
             # TODO: skipping provided tags here, we don't yet generate
-            # v2 product certs, we may never, which is the only place provided
+            # v3 product certs, we may never, which is the only place provided
             # tags can exist.
         return products
 
-    def _parse_v2_content(self, payload):
+    def _parse_v3_content(self, payload):
         content = []
         for product in payload['products']:
             for c in product['content']:
@@ -366,8 +370,9 @@ class _Extensions2(Extensions):
 
 class Certificate(object):
     """ Parent class of all x509 certificate types. """
-    def __init__(self, x509=None, path=None, version=None, serial=None,
-                 start=None, end=None, subject=None):
+    def __init__(self, x509=None, path=None, version=None, serial=None, start=None,
+            end=None, subject=None, pem=None):
+
         # The X509 M2crypto object for this certificate.
         # WARNING: May be None in tests
         self.x509 = x509
@@ -389,6 +394,7 @@ class Certificate(object):
         self.end = end
 
         self.valid_range = DateRange(self.start, self.end)
+        self.pem = pem
 
         self.subject = subject
 
@@ -418,7 +424,12 @@ class Certificate(object):
         Write the certificate to disk.
         """
         f = open(path, 'w')
-        f.write(self.x509.as_pem())
+        # if we were given the original pem, preserve it
+        # ie for certv3 detached format.
+        if self.pem is not None:
+            f.write(self.pem)
+        else:
+            f.write(self.x509.as_pem())
         f.close()
         self.path = path
 
