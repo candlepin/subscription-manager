@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.0.3
+Version: 1.0.4
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,62 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed Jul 25 2012 Alex Wood <awood@redhat.com> 1.0.4-1
+- Remove unused stub method. (dgoodwin@redhat.com)
+- Cleanup entitlement cert keys on delete. (dgoodwin@redhat.com)
+- Drop unused quantity and flex quantity from Content. (dgoodwin@redhat.com)
+- Make CertFactory and Extensions2 classes private. (dgoodwin@redhat.com)
+- RHEL5 syntax fixes. (dgoodwin@redhat.com)
+- Handle empty pem strings when creating certs. (dgoodwin@redhat.com)
+- Remove Base64 decoding. (dgoodwin@redhat.com)
+- Fix failing subjectAltName nosetest (jbowes@redhat.com)
+- Fix up remaining compiler warnings (jbowes@redhat.com)
+- Fix up memory leaks (jbowes@redhat.com)
+- clean up some C module compiler warnings (jbowes@redhat.com)
+- Fix get_all_extensions (jbowes@redhat.com)
+- C module formatting fixups (jbowes@redhat.com)
+- Add as_pem method to C module (jbowes@redhat.com)
+- Revert Extensions object to old state, add new sub-class.
+  (dgoodwin@redhat.com)
+- Spec file changes for C module (jbowes@redhat.com)
+- Get nosetests running (jbowes@redhat.com)
+- tell setup.py to use nose (jbowes@redhat.com)
+- get certv2 tests passing (jbowes@redhat.com)
+- Move methods onto X509 class in C cert reader (jbowes@redhat.com)
+- Add method to get all extensions in a dict (jbowes@redhat.com)
+- Add POC C based cert reader (jbowes@redhat.com)
+- Remove use of str.format for RHEL5. (dgoodwin@redhat.com)
+- Remove some python2.6'ism (trailing if's) (alikins@redhat.com)
+- add "version_check" target that runs pyqver (alikins@redhat.com)
+- Fix error reporting on bad certs. (dgoodwin@redhat.com)
+- Remove number from order/account fields. (dgoodwin@redhat.com)
+- Style fixes. (dgoodwin@redhat.com)
+- Certv2 cleanup. (dgoodwin@redhat.com)
+- Cleanup bad padding/header cert testing. (dgoodwin@redhat.com)
+- New method of parsing X509 extensions. (dgoodwin@redhat.com)
+- Better cert type detection. (dgoodwin@redhat.com)
+- Deprecate the old certificate module classes. (dgoodwin@redhat.com)
+- Rename order support level to service level. (dgoodwin@redhat.com)
+- Convert product arch to multi-valued. (dgoodwin@redhat.com)
+- Add factory methods to certificate module. (dgoodwin@redhat.com)
+- Parse V2 entitlement certificates. (dgoodwin@redhat.com)
+- Add missing os import. (dgoodwin@redhat.com)
+- Improve certificate2 error handling. (dgoodwin@redhat.com)
+- Remove V1 named classes. (dgoodwin@redhat.com)
+- Add cert is_expired method. (dgoodwin@redhat.com)
+- Fix cert path issue. (dgoodwin@redhat.com)
+- Major/minor attributes not available in 5.4 (mstead@redhat.com)
+- 834108: Set the default connection timeout to 1 min. (jbowes@redhat.com)
+- Add default values to certificate2 Order class. (dgoodwin@redhat.com)
+- Define identity certificates explicitly. (dgoodwin@redhat.com)
+- Add identity cert support to certificate2 module. (dgoodwin@redhat.com)
+- Add file writing/deleting for new certificates. (dgoodwin@redhat.com)
+- Add product info to certificate2 module. (dgoodwin@redhat.com)
+- Add content info to certificate2 module. (dgoodwin@redhat.com)
+- Add order info to certificate2 module. (dgoodwin@redhat.com)
+- Port basic certificate data into new module. (dgoodwin@redhat.com)
+- Add certificate2 module and cert creation factory. (dgoodwin@redhat.com)
+
 * Thu Jun 28 2012 Alex Wood <awood@redhat.com> 1.0.3-1
 - Update copyright dates (jbowes@redhat.com)
 - 825952: Error after deleting consumer at server (wpoteat@redhat.com)
