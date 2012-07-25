@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.10
+Version: 1.0.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -335,6 +335,53 @@ fi
 %endif
 
 %changelog
+* Wed Jul 25 2012 Alex Wood <awood@redhat.com> 1.0.11-1
+- Remove deprecated use of hasDate. (dgoodwin@redhat.com)
+- Fix missed use of renamed method. (dgoodwin@redhat.com)
+- make stylish clean (alikins@redhat.com)
+- use isoformat() here instead of strftime format string (alikins@redhat.com)
+- create warn and expire colors once, fix test failure (alikins@redhat.com)
+- make stylish cleanups (alikins@redhat.com)
+- Additional tests for date logic. (awood@redhat.com)
+- Update for some minor changes in python-rhsm. (dgoodwin@redhat.com)
+- add rhsm_display module (alikins@redhat.com)
+- Add module to set DISPLAY if RHSM_DISPLAY is set (alikins@redhat.com)
+- 837132: fix typo (alikins@redhat.com)
+- Add "ctrl-X" as accelerator for proxy config (alikins@redhat.com)
+- Make "Usage" consistent across rhel5/6 (alikins@redhat.com)
+- Add __str__ for our fake exception. (alikins@redhat.com)
+- class ClassName(): is not legal syntax on python2.4 (alikins@redhat.com)
+- Exception by default doesn't pass 'args' (alikins@redhat.com)
+- Linkify() doesn't work on rhel5, so disble the tests there
+  (alikins@redhat.com)
+- hashlib doesn't exist on 2.4, md5 is deprecated on 2.6 (alikins@redhat.com)
+- use simplejson since 'json' isnt part of python 2.4 (alikins@redhat.com)
+- Use ISO8601 date format in allsubs tab (alikins@redhat.com)
+- Fix syntax for RHEL5. (dgoodwin@redhat.com)
+- Fix awkward stretching in Subscription column. (awood@redhat.com)
+- 804144: Fix awkward stretching of Product column. (awood@redhat.com)
+- 814731: Change the name of the menu item to Preferences from Settings, and
+  change the accelerator keys (bkearney@redhat.com)
+- 837132: Clean up the error message in the yum plugin (bkearney@redhat.com)
+- 837038: Fix a grammatical error in the yum plugin (bkearney@redhat.com)
+- Fix certificate parsing error reporting. (dgoodwin@redhat.com)
+- Removing unnecessary assignments. (awood@redhat.com)
+- F15 builds can't be submitted in Fedora anymore. (dgoodwin@redhat.com)
+- updating options for rhn-migrate-classic-to-rhsm per bz840152; rewriting
+  rhsmcertd for different options and usage examples (dlackey@redhat.com.com)
+- Account/contract number field rename. (dgoodwin@redhat.com)
+- Stylish fixes. (dgoodwin@redhat.com)
+- Fix a certv2 error. (dgoodwin@redhat.com)
+- 829825: Alter highlighting used in My Subscriptions tab (awood@redhat.com)
+- 772040: Have no overlap filter properly handles subscription dates.
+  (mstead@redhat.com)
+- Update order support level/type to service. (dgoodwin@redhat.com)
+- Remove explicit use of certificate2 module. (dgoodwin@redhat.com)
+- Fix issues introduced in certv2 refactor. (dgoodwin@redhat.com)
+- Change entitlement_version fact to certificate_version. (dgoodwin@redhat.com)
+- Update to use new certificate2 module and classes. (dgoodwin@redhat.com)
+- Send entitlement version fact. (dgoodwin@redhat.com)
+
 * Thu Jul 19 2012 Alex Wood <awood@redhat.com> 1.0.10-1
 - 828903: Pull in the latest translation for error messages with no options
   translated (bkearney@redhat.com)
