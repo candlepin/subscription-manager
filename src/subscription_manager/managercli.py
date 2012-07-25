@@ -1266,7 +1266,7 @@ class SubscribeCommand(CliCommand):
             if result[1]:
                 print 'Entitlement Certificate(s) update failed due to the following reasons:'
                 for e in result[1]:
-                    print '\t-', ' '.join(str(e).split('-')[1:]).strip()
+                    print '\t-', str(e)
             elif self.options.auto:
                 # run this after certlib update, so we have the new entitlements
                 subscribed = show_autosubscribe_output()
@@ -1340,7 +1340,7 @@ class UnSubscribeCommand(CliCommand):
                     print _("This machine has been unsubscribed from %s subscriptions" % total)
                 else:
                     for ent in self.entitlement_dir.list():
-                        if str(ent.serialNumber()) == self.options.serial:
+                        if str(ent.serial) == self.options.serial:
                             ent.delete()
                             print _("This machine has been unsubscribed from subscription "
                                     "with serial number %s" % (self.options.serial))
@@ -1772,15 +1772,15 @@ class ListCommand(CliCommand):
             ent_dir = EntitlementDirectory()
         # list all certificates that have not yet expired, even those
         # that are not yet active.
-        certs = [cert for cert in ent_dir.list() if not cert.expired()]
+        certs = [cert for cert in ent_dir.list() if not cert.is_expired()]
 
         # Filter certs by service level, if specified.
         # Allowing "" here.
         if service_level is not None:
             def filter_cert_by_service_level(cert):
                 cert_level = ""
-                if cert.getOrder() and cert.getOrder().getSupportLevel():
-                    cert_level = cert.getOrder().getSupportLevel()
+                if cert.order and cert.order.service_level:
+                    cert_level = cert.order.service_level
                 return service_level.lower() == \
                     cert_level.lower()
             certs = filter(filter_cert_by_service_level, certs)
@@ -1794,38 +1794,38 @@ class ListCommand(CliCommand):
         print("+-------------------------------------------+\n")
 
         for cert in certs:
-            order = cert.getOrder()
+            order = cert.order
             print(self._none_wrap(_("Subscription Name:    \t%s"),
-                  order.getName()))
+                  order.name))
 
             prefix = _("Provides:             \t%s")
-            for product in cert.getProducts():
-                print(self._none_wrap(prefix, product.getName()))
+            for product in cert.products:
+                print(self._none_wrap(prefix, product.name))
                 prefix = _("                      \t%s")
             # print an empty provides line for certs with no provided products
-            if len(cert.getProducts()) == 0:
+            if len(cert.products) == 0:
                 print(prefix % "")
 
             print(self._none_wrap(_("SKU:                  \t%s"),
-                  order.getSku()))
+                  order.sku))
             print(self._none_wrap(_("Contract:             \t%s"),
-                  order.getContract()))
+                  order.contract))
             print(self._none_wrap(_("Account:              \t%s"),
-                  order.getAccountNumber()))
+                  order.account))
             print(self._none_wrap(_("Serial Number:        \t%s"),
-                  cert.serialNumber()))
+                  cert.serial))
             print(self._none_wrap(_("Active:               \t%s"),
-                  cert.valid()))
+                  cert.is_valid()))
             print(self._none_wrap(_("Quantity Used:        \t%s"),
-                  order.getQuantityUsed()))
+                  order.quantity_used))
             print(_("Service Level:        \t%s") %
-                  order.getSupportLevel() or "")
+                  order.service_level or "")
             print(_("Service Type:         \t%s") %
-                  order.getSupportType() or "")
+                  order.service_type or "")
             print(_("Starts:               \t%s") %
-                  managerlib.formatDate(cert.validRange().begin()))
+                  managerlib.formatDate(cert.valid_range.begin()))
             print(_("Ends:                 \t%s") %
-                  managerlib.formatDate(cert.validRange().end()))
+                  managerlib.formatDate(cert.valid_range.end()))
             print("")
 
     def _format_name(self, name, indent, max_length):

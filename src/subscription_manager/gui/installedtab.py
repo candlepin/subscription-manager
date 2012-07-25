@@ -136,11 +136,11 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
             # Only include if this cert overlaps with the overall date range
             # we are currently covered for:
-            if compliant_range.hasDate(cert.validRange().begin()) or \
-                    compliant_range.hasDate(cert.validRange().end()):
+            if compliant_range.has_date(cert.valid_range.begin()) or \
+                    compliant_range.has_date(cert.valid_range.end()):
 
-                contract_ids.add(cert.getOrder().getContract())
-                sub_names.add(cert.getOrder().getName())
+                contract_ids.add(cert.order.contract)
+                sub_names.add(cert.order.name)
 
         return contract_ids, sub_names
 
@@ -149,15 +149,15 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.cs = cert_sorter.CertSorter(self.product_dir,
                 self.entitlement_dir, self.facts.get_facts())
         for product_cert in self.product_dir.list():
-            for product in product_cert.getProducts():
-                product_id = product.getHash()
+            for product in product_cert.products:
+                product_id = product.id
                 status = self.cs.get_status(product_id)
 
                 entry = {}
-                entry['product'] = product.getName()
-                entry['version'] = product.getVersion()
+                entry['product'] = product.name
+                entry['version'] = product.version
                 entry['product_id'] = product_id
-                entry['arch'] = product.getArch()
+                entry['arch'] = ",".join(product.architectures)
                 # Common properties
                 entry['align'] = 0.5
 
@@ -166,7 +166,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 if status != NOT_SUBSCRIBED:
 
                     range_calculator = ValidProductDateRangeCalculator(self.cs)
-                    compliant_range = range_calculator.calculate(product.getHash())
+                    compliant_range = range_calculator.calculate(product.id)
                     start = ''
                     end = ''
                     if compliant_range:
@@ -192,10 +192,10 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['status'] = _('Expired')
                         sub_numbers = set([])
                         for ent_cert in self.cs.get_entitlements_for_product(product_id):
-                            order = ent_cert.getOrder()
+                            order = ent_cert.order
                             # FIXME:  getSubscription() seems to always be None...?
-                            if order.getSubscription():
-                                sub_numbers.add(order.getSubscription())
+                            if order.subscription:
+                                sub_numbers.add(order.subscription)
                         subs_str = ', '.join(sub_numbers)
 
                         entry['validity_note'] = \

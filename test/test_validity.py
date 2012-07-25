@@ -458,7 +458,7 @@ class ValidProductDateRangeCalculatorTests(unittest.TestCase):
         self.assertEqual(len(expected_dates), len(group))
 
         for ent in group:
-            ent_range = ent.validRange()
+            ent_range = ent.valid_range
             check = (ent_range.begin(), ent_range.end())
             self.assertTrue(check in expected_dates)
 
