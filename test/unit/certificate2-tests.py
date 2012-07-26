@@ -174,5 +174,7 @@ class ProductTests(unittest.TestCase):
         self.assertEquals("i386", p.architectures[0])
         self.assertEquals("x86_64", p.architectures[1])
 
-
-
+    def test_none_arch(self):
+        p = Product(id="pid", name="pname")
+        self.assertTrue(p.architectures is not None)
+        self.assertTrue(isinstance(p.architectures, list))

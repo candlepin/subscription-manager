@@ -484,6 +484,8 @@ class Product(object):
         # can technically be multi-valued:
         if isinstance(self.architectures, str):
             self.architectures = parse_tags(self.architectures)
+        if self.architectures is None:
+            self.architectures = []
 
         self.provided_tags = provided_tags
         if self.provided_tags is None:
