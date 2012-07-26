@@ -222,7 +222,7 @@ class Certificate(object):
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())
-        return valid_range.hasDate(gmt)
+        return valid_range.has_date(gmt)
 
     def expired(self, on_date=None):
         """
@@ -506,7 +506,7 @@ class EntitlementCertificate(ProductCertificate):
 
     @deprecated
     def validWithGracePeriod(self):
-        return self.validRangeWithGracePeriod().hasNow()
+        return self.validRangeWithGracePeriod().has_now()
 
     def bogus(self):
         bogus = ProductCertificate.bogus(self)
