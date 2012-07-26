@@ -627,7 +627,7 @@ class DateRange:
         """
         return self._end
 
-    def hasNow(self):
+    def has_now(self):
         """
         Get whether the certificate is valid based on the date now.
         @return: True if valid.
@@ -635,11 +635,11 @@ class DateRange:
         """
         gmt = dt.utcnow()
         gmt = gmt.replace(tzinfo=GMT())
-        return (gmt >= self.begin() and gmt <= self.end())
+        return self.has_date(gmt)
 
     def has_date(self, date):
         """
-        Get whether the certificate is valid based on the date now.
+        Get whether the certificate is valid based on the date.
         @param: date
         @type: datetime.datetime
         @return: True if valid.
@@ -650,6 +650,10 @@ class DateRange:
     @deprecated
     def hasDate(self, date):
         return self.has_date(date)
+
+    @deprecated
+    def hasNow(self):
+        return self.has_now()
 
     def __str__(self):
         return '\n\t%s\n\t%s' % (self._begin, self._end)
