@@ -1467,8 +1467,8 @@ class ReposCommand(CliCommand):
         if not (self.options.list or self.options.enable or self.options.disable):
             self.options.list = True
 
-    def require_connection(self):
-        return True
+#    def require_connection(self):
+#        return True
 
     def _add_common_options(self):
         self.parser.add_option("--list", action="store_true",
@@ -1480,8 +1480,8 @@ class ReposCommand(CliCommand):
 
     def _do_command(self):
         self._validate_options()
-        certmgr = CertManager(uep=self.cp)
-        certmgr.update()
+#        certmgr = CertManager(uep=self.cp)
+#        certmgr.update()
         rl = RepoLib(uep=self.cp)
         repos = rl.get_repos()
         if cfg.has_option('rhsm', 'manage_repos') and \
