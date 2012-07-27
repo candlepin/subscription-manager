@@ -63,7 +63,7 @@ class QuantityDefaultValueCalculator(object):
         total_consumed = 0
         for cert in self.current_entitlements:
             order = cert.order
-            if order.sku == product_id and cert.valid_range.hasNow():
+            if order.sku == product_id and cert.valid_range.has_now():
                 total_consumed += int(order.quantity_used)
         return total_consumed
 
