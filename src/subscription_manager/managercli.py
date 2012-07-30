@@ -149,6 +149,7 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
         print(_("Service level set to: %s") % service_level)
 
     try:
+        cp.updateConsumer(consumer_uuid, None, self.installed_mgr.format_for_server())
         cp.bind(consumer_uuid)  # new style
 
     except Exception, e:
