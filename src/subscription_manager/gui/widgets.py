@@ -42,8 +42,9 @@ EXPIRED_COLOR = '#FFAF99'
 
 
 class GladeWidget(object):
+    widget_names = []
 
-    def __init__(self, glade_file, initial_widget_names=None):
+    def __init__(self, glade_file):
         """
         Create a new widget backed by the give glade file (assumed to be in data/).
         The initial_widget_names is a list of widgets to pull in as instance
@@ -51,10 +52,13 @@ class GladeWidget(object):
         """
         self.glade = gtk.glade.XML(os.path.join(GLADE_DIR, glade_file))
 
-        if initial_widget_names:
-            self.pull_widgets(initial_widget_names)
+        if self.widget_names:
+            self.pull_widgets()
 
-    def pull_widgets(self, names):
+    def _get_widget_names(self):
+        return
+
+    def pull_widgets(self):
         """
         This is a convenience method to pull the widgets from the 'names' list
         out of the given glade file, and make them available as variables on self.
@@ -62,11 +66,12 @@ class GladeWidget(object):
         For example:  a widget with the name age_input could be accessed via self.age_input
         """
 
-        for name in names:
+        for name in self.widget_names:
             setattr(self, name, self.glade.get_widget(name))
 
 
 class SubscriptionManagerTab(GladeWidget):
+    widget_names = ['top_view', 'content', 'next_update_label']
 
     def __init__(self, glade_file, initial_widget_names=[]):
         """
@@ -75,9 +80,7 @@ class SubscriptionManagerTab(GladeWidget):
         """
         # Mix the specified widgets with standard names in the
         # glade file by convention
-        widgets = ['top_view', 'content', 'next_update_label'] + \
-                initial_widget_names
-        super(SubscriptionManagerTab, self).__init__(glade_file, widgets)
+        super(SubscriptionManagerTab, self).__init__(glade_file)
         self.content.unparent()
 
         self.store = self.get_store()
@@ -194,7 +197,6 @@ class SubscriptionManagerTab(GladeWidget):
 
 
 class SelectionWrapper(object):
-
     def __init__(self, treeselection, store):
         self.model, self.tree_iter = treeselection.get_selected()
         self.store = store
@@ -207,7 +209,6 @@ class SelectionWrapper(object):
 
 
 class ProductsTable(object):
-
     def __init__(self, table_widget, yes_id=gtk.STOCK_APPLY,
                  no_id=gtk.STOCK_REMOVE):
         """
@@ -262,13 +263,13 @@ class ProductsTable(object):
 
 
 class SubDetailsWidget(GladeWidget):
+    widget_names = ["sub_details_vbox", "subscription_text", "products_view",
+                    "support_level_text", "support_type_text", "sku_text"]
+    glade_file = "subdetails.glade"
 
-    def __init__(self, show_contract=True):
-        widget_names = ["sub_details_vbox", "subscription_text", "products_view",
-                "support_level_text", "support_type_text", "sku_text"]
-        super(SubDetailsWidget, self).__init__("subdetails.glade", widget_names)
+    def __init__(self):
+        super(SubDetailsWidget, self).__init__(self.glade_file)
 
-        self.show_contract = show_contract
         self.sub_details_vbox.unparent()
 
         self.bundled_products = ProductsTable(self.products_view)
@@ -276,48 +277,7 @@ class SubDetailsWidget(GladeWidget):
         self.expired_color = gtk.gdk.color_parse(EXPIRED_COLOR)
         self.warning_color = gtk.gdk.color_parse(WARNING_COLOR)
 
-        # Clean out contract and date widgets if not showing contract info
-        if not show_contract:
-            def destroy(widget_prefix):
-                try:
-                    self.glade.get_widget(widget_prefix + "_label").destroy()
-                    self.glade.get_widget(widget_prefix + "_text").destroy()
-                except AttributeError:
-                    raise Exception('Could not find widgets %s_label or %s_text \
-                                     to destroy' % (widget_prefix, widget_prefix))
-
-            destroy('contract_number')
-            destroy('start_end_date')
-            destroy('account')
-            destroy('provides_management')
-            destroy('virt_only')
-
-            # Since all the tabs have the same parent window, the accessibility
-            # names must be unique among all three tabs to allow unambiguous
-            # access to the widgets.  Since the SubDetails widget is used
-            # under two different tabs, we must programatically override the
-            # accessibility name for duplicated widgets in one of the tabs.
-            # See BZ 803374.
-            self.subscription_text.get_accessible().set_name(
-                    "All Available Subscription Text")
-            self.support_type_text.get_accessible().set_name(
-                    "All Available SKU Text")
-            self.support_type_text.get_accessible().set_name(
-                    "All Available Support Type Text")
-            self.support_level_text.get_accessible().set_name(
-                    "All Available Support Level Text")
-            self.bundled_products.set_accessibility_name(
-                    "All Available Bundled Product Table")
-        else:
-            self.pull_widgets(["contract_number_text", "start_end_date_text",
-                               "account_text",
-                               "provides_management_text",
-                               "virt_only_text"])
-
-            # Save the original background color for the
-            # start_end_date_text widget so we can restore it in the
-            # clear() function.
-            self.original_bg = self.start_end_date_text.rc_get_style().base[gtk.STATE_NORMAL]
+        self._set_accessibility_names()
 
     def show(self, name, contract=None, start=None, end=None, account=None,
             management=None, support_level="", support_type="",
@@ -325,7 +285,7 @@ class SubDetailsWidget(GladeWidget):
         """
         Show subscription details.
 
-        Start and end should be formatted strings, not actual date objects.
+        Start and end should be datetime objects.
         Products is a list of tuples in the format (name, id)
         """
         # set a new buffer to clear out all the old tag information
@@ -343,38 +303,25 @@ class SubDetailsWidget(GladeWidget):
         self._set(self.support_level_text, support_level)
         self._set(self.support_type_text, support_type)
 
-        if self.show_contract:
-            self.start_end_date_text.modify_base(gtk.STATE_NORMAL,
-                    self._get_date_bg(end))
-
-            self._set(self.contract_number_text, contract)
-            self._set(self.start_end_date_text, "%s - %s" % (
-                      managerlib.formatDate(start), managerlib.formatDate(end)))
-            self._set(self.account_text, account)
-            self._set(self.provides_management_text, management)
-            self._set(self.virt_only_text, virt_only)
+        self._show_other_details(name, contract, start, end, account,
+                                 management, support_level, support_type,
+                                 virt_only, products, highlight, sku)
 
         self.bundled_products.clear()
         for product in products:
             self.bundled_products.add_product(utils.apply_highlight(product[0],
                 highlight), product[1])
 
+    def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
+                           management=None, support_level="", support_type="",
+                           virt_only=None, products=[], highlight=None, sku=None):
+        pass
+
     def _set(self, text_view, text):
         """Set the buffer of the given TextView to contain the text"""
         if text is None:
             text = _("None")
         text_view.get_buffer().set_text(text)
-
-    def _get_date_bg(self, end):
-        now = datetime.datetime.now(GMT())
-
-        if end < now:
-            return self.expired_color
-
-        if end - datetime.timedelta(days=WARNING_DAYS) < now:
-            return self.warning_color
-
-        return self.original_bg
 
     def clear(self):
         """ No subscription to display. """
@@ -386,18 +333,93 @@ class SubDetailsWidget(GladeWidget):
         self._set(self.support_level_text, "")
         self._set(self.support_type_text, "")
 
-        if self.show_contract:
-            #Clear row highlighting
-            self.start_end_date_text.modify_base(gtk.STATE_NORMAL, self.original_bg)
-            self._set(self.contract_number_text, "")
-            self._set(self.start_end_date_text, "")
-            self._set(self.account_text, "")
-            self._set(self.provides_management_text, "")
-            self._set(self.virt_only_text, "")
+        self._clear_other_details()
+
+    def _clear_other_details(self):
+        pass
 
     def get_widget(self):
         """ Returns the widget to be packed into a parent window. """
         return self.sub_details_vbox
+
+    # fix me, probably not needed. base class for Details Widget
+    # and sub class for all_available and mysubs?
+    def _set_accessibility_names(self):
+        # Since all the tabs have the same parent window, the accessibility
+        # names must be unique among all three tabs to allow unambiguous
+        # access to the widgets.  Since the SubDetails widget is used
+        # under two different tabs, we must programatically override the
+        # accessibility name for duplicated widgets in one of the tabs.
+        # See BZ 803374.
+
+        self.subscription_text.get_accessible().set_name(
+                "All Available Subscription Text")
+        self.support_type_text.get_accessible().set_name(
+                "All Available SKU Text")
+        self.support_type_text.get_accessible().set_name(
+                "All Available Support Type Text")
+        self.support_level_text.get_accessible().set_name(
+                "All Available Support Level Text")
+        self.bundled_products.set_accessibility_name(
+                "All Available Bundled Product Table")
+
+
+# also show contract info on this details widget
+class ContractSubDetailsWidget(SubDetailsWidget):
+    widget_names = SubDetailsWidget.widget_names + \
+                    ["contract_number_text",
+                     "start_end_date_text",
+                     "account_text",
+                     "provides_management_text",
+                     "virt_only_text"]
+
+    glade_file = "subdetailscontract.glade"
+
+    def __init__(self):
+        super(ContractSubDetailsWidget, self).__init__()
+
+    def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
+                           management=None, support_level="", support_type="",
+                           virt_only=None, products=[], highlight=None, sku=None):
+
+        # Save the original background color for the
+        # start_end_date_text widget so we can restore it in the
+        # clear() function.
+        self.original_bg = self.start_end_date_text.rc_get_style().base[gtk.STATE_NORMAL]
+
+        self.start_end_date_text.modify_base(gtk.STATE_NORMAL,
+                self._get_date_bg(end))
+
+        self._set(self.contract_number_text, contract)
+        self._set(self.start_end_date_text, "%s - %s" % (
+                    managerlib.formatDate(start), managerlib.formatDate(end)))
+        self._set(self.account_text, account)
+        self._set(self.provides_management_text, management)
+        self._set(self.virt_only_text, virt_only)
+
+    def _clear_other_details(self):
+        #Clear row highlighting
+        self.start_end_date_text.modify_base(gtk.STATE_NORMAL, self.original_bg)
+        self._set(self.contract_number_text, "")
+        self._set(self.start_end_date_text, "")
+        self._set(self.account_text, "")
+        self._set(self.provides_management_text, "")
+        self._set(self.virt_only_text, "")
+
+    def _set_accessibility_names(self):
+        # already set in glade
+        pass
+
+    def _get_date_bg(self, end):
+        now = datetime.datetime.now(GMT())
+
+        if end < now:
+            return self.expired_color
+
+        if end - datetime.timedelta(days=WARNING_DAYS) < now:
+            return self.warning_color
+
+        return self.original_bg
 
 
 class CellRendererDate(gtk.CellRendererText):

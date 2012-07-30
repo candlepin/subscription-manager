@@ -49,13 +49,15 @@ VALID = 2
 
 
 class InstalledProductsTab(widgets.SubscriptionManagerTab):
+    widget_names = widgets.SubscriptionManagerTab.widget_names + \
+                ['product_text', 'product_arch_text', 'validity_text',
+                 'subscription_text', 'subscription_status_label',
+                 'update_certificates_button', 'register_button']
+
     def __init__(self, backend, consumer, facts, tab_icon,
                  parent, ent_dir=None, prod_dir=None):
 
-        widgets = ['product_text', 'product_arch_text', 'validity_text',
-                 'subscription_text', 'subscription_status_label',
-                 'update_certificates_button', 'register_button']
-        super(InstalledProductsTab, self).__init__('installed.glade', widgets)
+        super(InstalledProductsTab, self).__init__('installed.glade')
 
         self.tab_icon = tab_icon
 

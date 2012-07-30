@@ -28,10 +28,10 @@ class RedeemDialog(widgets.GladeWidget):
     """GTK dialog for allowing the user to redeem any subscriptions
     associated with this machine.
     """
+    widget_names = ['redeem_dialog', 'email_entry']
 
     def __init__(self, backend, consumer):
-        widget_names = ['redeem_dialog', 'email_entry']
-        super(RedeemDialog, self).__init__('redeem.glade', widget_names)
+        super(RedeemDialog, self).__init__('redeem.glade')
 
         self.glade.signal_autoconnect({
             "on_reeem_dialog_delete_event": self._hide_callback,

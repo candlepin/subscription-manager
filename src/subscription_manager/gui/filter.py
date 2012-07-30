@@ -42,11 +42,13 @@ class Filters(object):
 
 
 class FilterOptionsWindow(widgets.GladeWidget):
+    widget_names = ['filter_product_window', 'compatible_checkbutton',
+                    'installed_checkbutton', 'no_overlapping_checkbutton',
+                    'contains_text_entry']
+
     def __init__(self, filters, parent):
-        widgets = ['filter_product_window', 'compatible_checkbutton',
-                'installed_checkbutton', 'no_overlapping_checkbutton',
-                'contains_text_entry']
-        super(FilterOptionsWindow, self).__init__(GLADE_XML, widgets)
+
+        super(FilterOptionsWindow, self).__init__(GLADE_XML)
         self.filters = filters
         self.parent = parent
 
