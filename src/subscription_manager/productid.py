@@ -130,7 +130,9 @@ class ProductManager:
             if repo not in active:
                 continue
 
-            p = cert.product
+            # is this the same as v1 ProductCertificate.getProduct() ?
+            # assume [0] indexed item is the same item
+            p = cert.products[0]
             prod_hash = p.id
 
             # Are we installing Workstation cert?
@@ -165,7 +167,7 @@ class ProductManager:
     # and we have the product cert installed.
     def updateRemoved(self, active):
         for cert in self.pdir.list():
-            p = cert.product
+            p = cert.products[0]
             prod_hash = p.id
             repo = self.db.findRepo(prod_hash)
 
