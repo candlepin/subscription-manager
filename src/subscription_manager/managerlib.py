@@ -683,7 +683,11 @@ class ImportFileExtractor(object):
         @return: True if valid, False otherwise.
         """
         try:
-            create_from_pem(self.get_cert_content())
+            cert = create_from_pem(self.get_cert_content())
+            # Don't want to check class explicitly, instead we'll look for
+            # order info, which only an entitlement cert could have:
+            if not hasattr(cert, 'order'):
+                return False
         except CertificateException:
             return False
         ent_key = Key(self.get_key_content())
