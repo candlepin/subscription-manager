@@ -107,6 +107,9 @@ class RemoteServerException(ConnectionException):
     def __init__(self, code):
         self.code = code
 
+    def __str__(self):
+        return "Server returned %s" % self.code
+
 
 class NoOpChecker:
 
