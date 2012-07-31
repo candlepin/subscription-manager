@@ -124,6 +124,58 @@ ufxBTlg4v0B3xS1GgvATMY4hyk53o5PffmlRO03dbfpGK/rkTIPwFg==
 
 EXPECTED_CERT = create_from_pem(EXPECTED_CERT_CONTENT)
 
+# Used to simulate importing a valid bundle (cert+key) but when
+# the cert is not actually an entitlement cert.
+IDENTITY_CERT_WITH_KEY = """
+-----BEGIN CERTIFICATE-----
+MIIDVTCCAr6gAwIBAgIIdv1ldZ5/0IQwDQYJKoZIhvcNAQEFBQAwNjEVMBMGA1UE
+AwwMMTkyLjE2OC4xLjI1MQswCQYDVQQGEwJVUzEQMA4GA1UEBwwHUmFsZWlnaDAe
+Fw0xMjA3MzAxMzE5NTdaFw0yODA3MzAxMzE5NTdaMC8xLTArBgNVBAMTJDU2MzA4
+ODU4LTZhOTMtNGFmZC04YjIyLWY1MjFhZmFlNTRiZjCCASIwDQYJKoZIhvcNAQEB
+BQADggEPADCCAQoCggEBAJUDAlagg+Pbew+blR2S+DkDMZ81hfY3L10yalEDsXsq
+NtX7eXG6eiSnsKXfZKpJXEZ1qIuW3OZEtOoBl5EWyQipBCsBufS4KKA2VbH5r8EA
+gJKKXmu17pT9VH1mZ6A+eFUUAJU8CTvnNEchZLM9DZEoki4mPDiEizMPLpOzwtGp
+KKaTIBWU8Fp1uO66EadjLsE/gbPSo4V1q60JE1P7qNHm07qVAM1OEKENxj4j49mr
+bsiCPmVjppk+OezqwtJUseWEq/pAEYtOGJNy61l9EfFpp1HvaqdEsymjTal25j77
+kMbNUIPRvOctB7ZKeoO1xThfK9Saw0RZDJqg7dxDcccCAwEAAaOB7jCB6zARBglg
+hkgBhvhCAQEEBAMCBaAwCwYDVR0PBAQDAgSwMGYGA1UdIwRfMF2AFERAdhM2yQHc
+Adj/wRyZE6jmOs6ioTqkODA2MRUwEwYDVQQDDAwxOTIuMTY4LjEuMjUxCzAJBgNV
+BAYTAlVTMRAwDgYDVQQHDAdSYWxlaWdoggkA8x6iqYzAHdcwHQYDVR0OBBYEFLAY
+15fAInsF+qo+KH90JLEpiVNsMBMGA1UdJQQMMAoGCCsGAQUFBwMCMC0GA1UdEQQm
+MCSkIjAgMR4wHAYDVQQDDBVyZWRoYXQubG9jYWwucm0tcmYuY2EwDQYJKoZIhvcN
+AQEFBQADgYEAFZRsK8LUJ/WnbpG1069xCKy5xlKDWfTll7ckCEDWOVsviZ09aYKz
+Ceh5YXCYA+LJaNfePhGgASl/EdPB0ICdXefGM0Eg1OB+xGOAf0KU1OvVhxxp3q/D
+8X8FZinFLArJpXIk64kKggIRRAiFnfIBl1lkL9vt39f0F+qIgjBKV9Q=
+-----END CERTIFICATE-----
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEAlQMCVqCD49t7D5uVHZL4OQMxnzWF9jcvXTJqUQOxeyo21ft5
+cbp6JKewpd9kqklcRnWoi5bc5kS06gGXkRbJCKkEKwG59LgooDZVsfmvwQCAkope
+a7XulP1UfWZnoD54VRQAlTwJO+c0RyFksz0NkSiSLiY8OISLMw8uk7PC0akoppMg
+FZTwWnW47roRp2MuwT+Bs9KjhXWrrQkTU/uo0ebTupUAzU4QoQ3GPiPj2atuyII+
+ZWOmmT457OrC0lSx5YSr+kARi04Yk3LrWX0R8WmnUe9qp0SzKaNNqXbmPvuQxs1Q
+g9G85y0Htkp6g7XFOF8r1JrDRFkMmqDt3ENxxwIDAQABAoIBAQCFUifpcbwPRfQY
+xs7novNLrzvagnzVChLqg4zz5yYIWICve0vxITLfUNmPzwu1/+T7dZHTMqt5qsdj
+BwGg4o4DnZUJFYZXGd3fWj3Z+tfxCo3+jqZkIGbSDsZlXBYjHUF0fWz4GLr6SaZQ
+beQ3KczVr0L632LJ/my8xjyaEh+gjSACu0XxnX956O/1x/WTmZLUrLqwymm8ZwSC
++1HOnlbj67dw0jBpi1HwefNtTCjElgIinKQZXitDmWYMzFsIBebfzM563xy5PINa
+8mI4IprCFC9TWNgdNmMHnferdNteSmqH+a0G8YHc2yBAB4Yf41SB7mpWzkkFBJ5K
+9Pccz82hAoGBAO9La6Cg+ODcZoOqqE2upYMt4UWKx9yj0TZ3+s8mazg81k/HaylV
+5L6NS4H/VCiG17RhidI82z9807IeaVL4w7ZvpaYwFeMLEzagxzcZz6MzZIrXbyYd
+cDQCf9ZlEAGBO6tWSlKvG6fgnZU4gpReMgs38q9VKomZTx0sjx60hUizAoGBAJ9q
+Fr9Mf3w01RknrH8YylsO7O722L/4kaU9t+wnESzmktUIBoHcVcxpPnf53d5IVjRv
+iG7/AwMxj87ovjYUEMlHpW9XcF6y+Vs30bwhnm+lu4xRZAx9DZ6LN++5tAAypMWF
+3m1MgEFs6R5NejGXmTAM8y61krMGt0hf0ov2+LSdAoGAcIsxQGfVBbTDBjPyWi7E
+q1CdvZ5K54uobwy4ykqQbO+3/+eTj+pU3gYIOEjE5RaeRrkFH/r9RvvHeONyt9JG
+Afy6lNHSyWjBDZVKfLDIBkK6i85M+UkpJ1zxkP0RLRQB41B/PiobQLaUhsUALRWs
+Rbh3jFzq17JiEh+N5GwUr58CgYAZuHY/G0qeca/IRTxxrUBI/NmBnNZP8v0c2h5o
+vczpn7IlKQxTu4ckWf64QNppWOZ/w1cSAZcs1rxLOAYol4g10ZeBpWv9+4Z8Dz+J
+ySrU/LqL4z3vPeYKpI+74AyI06L+M6E1pVg0NixOtVV31uvictRxvt4SgIzl4oAI
+ESsDiQKBgQCTLo0f327QjLJuQpalQfRTDKXoQWOUhEGC1LLw21uvLSFEDbVIUjeH
+UFsAtbXIRAREdmZrLABgUgYUvoLQc3+GgVYMo0v4nCxUs8FDbcKkT6Hb8XcVqEhy
+HcikfLxQfRwalftfq5mDxkA8FDxrbGd/N8AviC2JJNL+VzMVthjy0w==
+-----END RSA PRIVATE KEY-----
+"""
+
 
 class MergePoolsTests(unittest.TestCase):
 
@@ -626,6 +678,12 @@ class TestImportFileExtractor(unittest.TestCase):
 
     def test_verify_valid_entitlement_for_invalid_cert(self):
         extractor = ExtractorStub(EXPECTED_KEY_CONTENT, file_path="12345.pem")
+        self.assertFalse(extractor.verify_valid_entitlement())
+
+    def test_verify_valid_entitlement_for_invalid_cert_bundle(self):
+        # Use a bundle of cert + key, but the cert is not an entitlement cert:
+        extractor = ExtractorStub(IDENTITY_CERT_WITH_KEY,
+                file_path="12345.pem")
         self.assertFalse(extractor.verify_valid_entitlement())
 
     def test_verify_valid_entitlement_for_no_key(self):
