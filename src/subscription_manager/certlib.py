@@ -163,7 +163,14 @@ class IdentityCertLib(DataLib):
         super(IdentityCertLib, self).__init__(lock, uep)
 
     def _do_update(self):
+        if not ConsumerIdentity.existsAndValid():
+            # we could in theory try to update the id in the
+            # case of it being bogus/corrupted, ala #844069,
+            # but that seems unneeded
+            return 0
+
         from subscription_manager import managerlib
+
         idcert = ConsumerIdentity.read()
         uuid = idcert.getConsumerId()
         consumer = self.uep.getConsumer(uuid)
