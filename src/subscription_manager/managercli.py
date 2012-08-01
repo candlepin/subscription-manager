@@ -1819,9 +1819,9 @@ class ListCommand(CliCommand):
             print(self._none_wrap(_("Quantity Used:        \t%s"),
                   order.quantity_used))
             print(_("Service Level:        \t%s") %
-                  order.service_level or "")
+                  (order.service_level or ""))
             print(_("Service Type:         \t%s") %
-                  order.service_type or "")
+                  (order.service_type or ""))
             print(_("Starts:               \t%s") %
                   managerlib.formatDate(cert.valid_range.begin()))
             print(_("Ends:                 \t%s") %
