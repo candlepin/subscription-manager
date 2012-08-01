@@ -358,14 +358,13 @@ class ConsumerIdentity:
 
     @classmethod
     def existsAndValid(cls):
-        from M2Crypto import X509
         if cls.exists():
             try:
                 cls.read()
                 return True
-            except X509.X509Error, e:
-                log.error(e)
+            except Exception, e:
                 log.warn('possible certificate corruption')
+                log.error(e)
         return False
 
     def __init__(self, keystring, certstring):
