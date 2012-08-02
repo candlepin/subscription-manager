@@ -22,6 +22,9 @@ from subscription_manager.factlib import FactLib
 from subscription_manager.facts import Facts
 from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
 
+import logging
+log = logging.getLogger('rhsm-app.' + __name__)
+
 import gettext
 _ = gettext.gettext
 
@@ -78,12 +81,16 @@ class CertManager:
             try:
                 ret = self.certlib.update()
             except Exception, e:
+                log.exception(e)
                 print e
             # run the certlib update first as it will talk to candlepin,
             # and we can find out if we got deleted or not.
             for lib in libset:
-                updates += lib.update()
-
+                try:
+                    updates += lib.update()
+                except Exception, e:
+                    log.exception(e)
+                    print e
             # NOTE: with no consumer cert, most of these actually
             # fail
             if ret:
