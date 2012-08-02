@@ -451,7 +451,7 @@ class DatePicker(gtk.HBox):
         self._date_entry = gtk.Entry()
         self._date_entry.set_width_chars(14)
 
-        self._date_entry.set_text(self._date.date().isoformat())
+        self._date_entry.set_text(managerlib.formatDate(self._date))
 
         atk_entry = self._date_entry.get_accessible()
         atk_entry.set_name('date-entry')
