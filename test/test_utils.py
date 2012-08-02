@@ -204,6 +204,12 @@ class TestParseServerInfo(unittest.TestCase):
         self.assertEquals("8000", port)
         self.assertEquals('/prefix', prefix)
 
+    def test_host_name_non_numeric_port(self):
+        local_url = "https://example.com:https/prefix"
+        self.assertRaises(ServerUrlParseErrorPort,
+                          parse_server_info,
+                          local_url)
+
 
 # TestParseServerInfo pretty much covers this code wise
 class TestParseBaseUrlInfo(unittest.TestCase):

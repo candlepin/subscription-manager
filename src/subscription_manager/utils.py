@@ -225,6 +225,12 @@ def parse_url(local_server_entry,
         if netloc[0] != "":
             hostname = netloc[0]
 
+    try:
+        int(port)
+    except ValueError:
+        raise ServerUrlParseErrorPort(local_server_entry,
+                                      msg=_("Server url port should be numeric"))
+
     return (hostname, port, prefix)
 
 
