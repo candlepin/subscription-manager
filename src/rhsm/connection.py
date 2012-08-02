@@ -101,6 +101,9 @@ class NetworkException(ConnectionException):
     def __init__(self, code):
         self.code = code
 
+    def __str__(self):
+        return "Network error code: %s" % self.code
+
 
 class RemoteServerException(ConnectionException):
 
