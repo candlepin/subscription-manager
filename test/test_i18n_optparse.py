@@ -27,6 +27,9 @@ class TestWrappedIndentedHelpFormatter(unittest.TestCase):
         fu = self.hf.format_usage("%%prog [OPTIONS]")
         self.assertEquals(fu[:6], "Usage:")
 
+        fu = self.hf.format_usage("%%prog [options]")
+        self.assertEquals(fu[:6], "Usage:")
+
     # just to verify the old broken way continues
     # to be broken and the way we detect that still works
     def test_old(self):
