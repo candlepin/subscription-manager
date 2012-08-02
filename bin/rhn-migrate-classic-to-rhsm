@@ -28,7 +28,7 @@ import logging
 import traceback
 import base64
 from datetime import datetime
-from rhsm.connection import UEPConnection
+from rhsm.connection import UEPConnection, RemoteServerException, RestlibException
 from M2Crypto.SSL import SSLError
 
 _LIBPATH = "/usr/share/rhsm"
@@ -239,9 +239,9 @@ def selectServiceLevel(cp, consumer, servicelevel):
     try:
         org_key = cp.getOwner(uuid)['key']
         levels = cp.getServiceLevelList(org_key)
-    except connection.RemoteServerException, e:
+    except RemoteServerException, e:
         systemExit(-1, not_supported)
-    except connection.RestlibException, e:
+    except RestlibException, e:
         if e.code == 404 and\
             e.msg.find('/servicelevels') > 0:
             systemExit(-1, not_supported)
