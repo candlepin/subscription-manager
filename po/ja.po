@@ -2,7 +2,7 @@
 # Language ja-JP translations for l package.
 # Copyright (C) 2011 THE l'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the l package.
-#
+# 
 # Automatically generated, 2011.
 # Kiyoto Hashida <khashida@redhat.com>, 2011.
 # khasida <khasida@fedoraproject.org>, 2012. #zanata
@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-18 10:48-0400\n"
+"POT-Creation-Date: 2012-07-06 15:50-0400\n"
 "PO-Revision-Date: 2012-06-28 02:45-0400\n"
 "Last-Translator: khasida <khasida@fedoraproject.org>\n"
 "Language-Team: Japanese <jp@li.org>\n"
@@ -33,9 +33,7 @@ msgstr ""
 msgid ""
 "Error in preferences dialog. Please see /var/log/rhsm/rhsm.log for more "
 "information."
-msgstr ""
-"詳細設定のダイアログのエラー。詳細については /var/log/rhsm/rhsm.log をご覧下"
-"さい。"
+msgstr "詳細設定のダイアログのエラー。詳細については /var/log/rhsm/rhsm.log をご覧下さい。"
 
 #: ../src/subscription_manager/gui/managergui.py:374
 msgid "<b>Errors were encountered during unregister.</b>"
@@ -55,22 +53,21 @@ msgstr "<b>本当に登録を解除しますか?</b>"
 msgid "System Already Registered"
 msgstr "システムは既に登録済みです"
 
-#. Set up columns on the view
 #: ../src/subscription_manager/gui/allsubs.py:69
-#: ../src/subscription_manager/gui/mysubstab.py:65
+#: ../src/subscription_manager/gui/mysubstab.py:69
 #: ../src/subscription_manager/gui/registergui.py:378
 msgid "Subscription"
 msgstr "サブスクリプション"
 
 #: ../src/subscription_manager/gui/allsubs.py:81
-#: ../src/subscription_manager/managercli.py:1733
+#: ../src/subscription_manager/managercli.py:1735
 msgid "Available Subscriptions"
 msgstr "利用可能なサブスクリプション"
 
 #. Set up the quantity column.
 #: ../src/subscription_manager/gui/allsubs.py:88
 #: ../src/subscription_manager/gui/contract_selection.py:117
-#: ../src/subscription_manager/gui/mysubstab.py:86
+#: ../src/subscription_manager/gui/mysubstab.py:101
 msgid "Quantity"
 msgstr "数量"
 
@@ -91,8 +88,8 @@ msgstr "無制限"
 msgid "All Available Subscriptions"
 msgstr "全ての利用可能なサブスクリプション"
 
-# show pulsating progress bar while we wait for results
 #. show pulsating progress bar while we wait for results
+# show pulsating progress bar while we wait for results
 #: ../src/subscription_manager/gui/allsubs.py:344
 msgid "Searching"
 msgstr "検索中"
@@ -128,30 +125,18 @@ msgstr ""
 #: ../src/subscription_manager/gui/about.py:24
 msgid ""
 "\n"
-"This software is licensed to you under the GNU General Public License, "
-"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
-"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
-"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
-"this software; if not, see:\n"
+"This software is licensed to you under the GNU General Public License, version 2 (GPLv2). There is NO WARRANTY for this software, express or implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with this software; if not, see:\n"
 "\n"
 "http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
 "\n"
-"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
-"use or replicate Red Hat trademarks that are incorporated in this software "
-"or its documentation.\n"
+"Red Hat trademarks are not licensed under GPLv2. No permission is granted to use or replicate Red Hat trademarks that are incorporated in this software or its documentation.\n"
 msgstr ""
 "\n"
-"This software is licensed to you under the GNU General Public License, "
-"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
-"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
-"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
-"this software; if not, see:\n"
+"This software is licensed to you under the GNU General Public License, version 2 (GPLv2). There is NO WARRANTY for this software, express or implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with this software; if not, see:\n"
 "\n"
 "http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
 "\n"
-"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
-"use or replicate Red Hat trademarks that are incorporated in this software "
-"or its documentation.\n"
+"Red Hat trademarks are not licensed under GPLv2. No permission is granted to use or replicate Red Hat trademarks that are incorporated in this software or its documentation.\n"
 
 #: ../src/subscription_manager/gui/about.py:44
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:3
@@ -175,7 +160,7 @@ msgid "<b>subscription management service version:</b> %s"
 msgstr "<b>サブスクリプション管理サービスバージョン:</b> %s"
 
 #: ../src/subscription_manager/gui/installedtab.py:72
-#: ../src/subscription_manager/gui/widgets.py:223
+#: ../src/subscription_manager/gui/widgets.py:228
 msgid "Product"
 msgstr "製品"
 
@@ -194,7 +179,7 @@ msgstr "開始日"
 
 #: ../src/subscription_manager/gui/installedtab.py:94
 #: ../src/subscription_manager/gui/contract_selection.py:109
-#: ../src/subscription_manager/gui/mysubstab.py:79
+#: ../src/subscription_manager/gui/mysubstab.py:94
 msgid "End Date"
 msgstr "終了期日"
 
@@ -255,8 +240,7 @@ msgstr "このシステムは RHN Classic に登録されています"
 #, python-format
 msgid ""
 "You have <b>%s</b> products with <i>invalid</i> entitlement certificates."
-msgstr ""
-"<i>無効な</i> エンタイトルメント証明書を持つ <b>%s</b> 製品があります。"
+msgstr "<i>無効な</i> エンタイトルメント証明書を持つ <b>%s</b> 製品があります。"
 
 #: ../src/subscription_manager/gui/installedtab.py:312
 msgid ""
@@ -268,15 +252,13 @@ msgstr "<i>無効な</i> エンタイトルメント証明書を持つ <b>1</b> 
 msgid ""
 "You have <b>%s</b> products in need of <i>additional</i> entitlement "
 "certificates."
-msgstr ""
-"<i>追加の</i> エンタイトルメント証明書が必要な <b>%s</b> 製品があります。"
+msgstr "<i>追加の</i> エンタイトルメント証明書が必要な <b>%s</b> 製品があります。"
 
 #: ../src/subscription_manager/gui/installedtab.py:323
 msgid ""
 "You have <b>1</b> product in need of <i>additional</i> entitlement "
 "certificates."
-msgstr ""
-"<i>追加の</i> エンタイトルメント証明書が必要な <b>1</b> 製品があります。"
+msgstr "<i>追加の</i> エンタイトルメント証明書が必要な <b>1</b> 製品があります。"
 
 #: ../src/subscription_manager/gui/installedtab.py:331
 #, python-format
@@ -309,6 +291,7 @@ msgid "Proxy connection failed"
 msgstr "プロキシへの接続に失敗しました"
 
 #: ../src/subscription_manager/gui/contract_selection.py:84
+#: ../src/subscription_manager/gui/data/subdetails.glade.h:14
 msgid "Contract"
 msgstr ""
 
@@ -340,9 +323,7 @@ msgstr "以下のファイルは有効な証明書ではなく、インポート
 msgid ""
 "An error occurred while importing the following certificates. Please check "
 "the log file for more information."
-msgstr ""
-"以下の証明書のインポート中にエラーが発生しました。詳細をログファイルで確認し"
-"て下さい。"
+msgstr "以下の証明書のインポート中にエラーが発生しました。詳細をログファイルで確認して下さい。"
 
 #: ../src/subscription_manager/gui/importsub.py:114
 msgid "The following certificates were successfully imported:"
@@ -353,77 +334,77 @@ msgstr "以下の証明書は正常にインポートされました:"
 msgid "Certificate import was successful."
 msgstr "証明書のインポートは成功しました。"
 
-#: ../src/subscription_manager/gui/widgets.py:181
+#: ../src/subscription_manager/gui/widgets.py:186
 #, python-format
 msgid "Next Update: %s"
 msgstr "次の更新: %s"
 
-#: ../src/subscription_manager/gui/widgets.py:227
+#: ../src/subscription_manager/gui/widgets.py:232
 msgid "Installed"
 msgstr "インストール済み"
 
-#: ../src/subscription_manager/gui/widgets.py:349
-#: ../src/subscription_manager/managercli.py:1683
+#: ../src/subscription_manager/gui/widgets.py:365
+#: ../src/subscription_manager/managercli.py:1685
 msgid "None"
 msgstr "なし"
 
-#: ../src/subscription_manager/gui/widgets.py:475
+#: ../src/subscription_manager/gui/widgets.py:496
 msgid "Invalid date format. Please re-enter a valid date. Example: "
 msgstr "無効な日付形式です。有効な日付を再入力して下さい。例えば:"
 
-#: ../src/subscription_manager/gui/widgets.py:520
+#: ../src/subscription_manager/gui/widgets.py:533
 msgid "Date Selection"
 msgstr "日付の選択"
 
-#: ../src/subscription_manager/gui/widgets.py:535
+#: ../src/subscription_manager/gui/widgets.py:548
 msgid "Today"
 msgstr "今日"
 
-#: ../src/subscription_manager/gui/widgets.py:629
-#: ../src/subscription_manager/gui/mysubstab.py:217
+#: ../src/subscription_manager/gui/widgets.py:642
+#: ../src/subscription_manager/gui/mysubstab.py:243
 msgid "Physical"
 msgstr "物理"
 
-#: ../src/subscription_manager/gui/widgets.py:630
-#: ../src/subscription_manager/gui/mysubstab.py:215
+#: ../src/subscription_manager/gui/widgets.py:643
+#: ../src/subscription_manager/gui/mysubstab.py:241
 msgid "Virtual"
 msgstr "仮想"
 
-#: ../src/subscription_manager/gui/widgets.py:631
+#: ../src/subscription_manager/gui/widgets.py:644
 msgid "Both"
 msgstr "両方"
 
-#: ../src/subscription_manager/gui/widgets.py:634
+#: ../src/subscription_manager/gui/widgets.py:647
 msgid "Type"
 msgstr "タイプ"
 
-#: ../src/subscription_manager/gui/widgets.py:704
+#: ../src/subscription_manager/gui/widgets.py:717
 msgid "Click to Adjust Quantity"
 msgstr "クリックして数量を調節"
 
-#: ../src/subscription_manager/gui/mysubstab.py:70
+#: ../src/subscription_manager/gui/mysubstab.py:85
 msgid "Installed Products"
 msgstr "インストール済みの製品"
 
-#: ../src/subscription_manager/gui/mysubstab.py:117
+#: ../src/subscription_manager/gui/mysubstab.py:132
 #, python-format
 msgid "There was an error unsubscribing from %s with serial number %s"
 msgstr "%s、シリアル番号 %s からサブスクライブ解除時にエラーが発生しました。"
 
-#: ../src/subscription_manager/gui/mysubstab.py:136
+#: ../src/subscription_manager/gui/mysubstab.py:151
 #, python-format
 msgid "Are you sure you want to unsubscribe from %s?"
 msgstr "本当に %s からサブスクリプションを解除しますか？"
 
-#: ../src/subscription_manager/gui/mysubstab.py:179
+#: ../src/subscription_manager/gui/mysubstab.py:204
 msgid "My Subscriptions"
 msgstr "自分のサブスクリプション"
 
-#: ../src/subscription_manager/gui/mysubstab.py:220
+#: ../src/subscription_manager/gui/mysubstab.py:246
 msgid "Yes"
 msgstr "はい"
 
-#: ../src/subscription_manager/gui/mysubstab.py:222
+#: ../src/subscription_manager/gui/mysubstab.py:248
 msgid "No"
 msgstr "いいえ"
 
@@ -443,7 +424,7 @@ msgstr "以前の更新はありません"
 #. TODO: could stand to check if registered before trying to do this:
 #: ../src/subscription_manager/gui/factsgui.py:103
 #: ../src/subscription_manager/gui/factsgui.py:107
-#: ../src/subscription_manager/managercli.py:1387
+#: ../src/subscription_manager/managercli.py:1389
 #: ../src/subscription_manager/utils.py:290
 #: ../src/subscription_manager/utils.py:299
 #: ../src/subscription_manager/utils.py:301
@@ -453,29 +434,26 @@ msgstr "不明"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:38
 msgid ""
-"Unable to auto-subscribe, server does not support service levels. Please run "
-"'Subscription Manager' to manually subscribe."
+"Unable to auto-subscribe, server does not support service levels. Please run"
+" 'Subscription Manager' to manually subscribe."
 msgstr ""
-"自動サブスクライブができません、 サーバーがサービスレベルに対応していませ"
-"ん。 「サブスクリプションマネージャー」を実行して手作業でサブスクライブを行っ"
-"てください。"
+"自動サブスクライブができません、 サーバーがサービスレベルに対応していません。 "
+"「サブスクリプションマネージャー」を実行して手作業でサブスクライブを行ってください。"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:44
 #: ../src/subscription_manager/gui/registergui.py:475
 msgid ""
-"No installed products on system. No need to update certificates at this time."
-msgstr ""
-"システム上にインスト－ルされた製品はありません。現時点では証明書の更新は不要"
-"です。"
+"No installed products on system. No need to update certificates at this "
+"time."
+msgstr "システム上にインスト－ルされた製品はありません。現時点では証明書の更新は不要です。"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:49
 msgid ""
 "All installed products are covered by valid entitlements. Please run "
 "'Subscription Manager' to subscribe to additional products."
 msgstr ""
-"インストールしている製品にはすべて有効なエンタイトルメントが与えられていま"
-"す。 「サブスクリプションマネージャー」を実行して追加製品へのサブスクライブを"
-"行ってください。"
+"インストールしている製品にはすべて有効なエンタイトルメントが与えられています。 "
+"「サブスクリプションマネージャー」を実行して追加製品へのサブスクライブを行ってください。"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:55
 #: ../src/subscription_manager/gui/registergui.py:481
@@ -486,18 +464,15 @@ msgstr ""
 #, python-format
 msgid ""
 "Unable to subscribe to any additional products at current service level: %s"
-msgstr ""
-"現在のサービスレベルではいずれの追加製品にもサブスクライブすることができませ"
-"ん: %s"
+msgstr "現在のサービスレベルではいずれの追加製品にもサブスクライブすることができません: %s"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:81
 msgid ""
 "No service levels will cover all installed products. Please run "
 "'Subscription Manager' to manually entitle this system."
 msgstr ""
-"どのサービスレベルもインスト－ル済み製品の全てに該当することはありません。 "
-"'Subscription Manager' を実行して手動でこのシステムにエンタイトルメントを得て"
-"下さい。"
+"どのサービスレベルもインスト－ル済み製品の全てに該当することはありません。 'Subscription Manager' "
+"を実行して手動でこのシステムにエンタイトルメントを得て下さい。"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:98
 msgid "You have opted to skip auto-subscribe."
@@ -525,11 +500,9 @@ msgstr "サブスクリプションの償還でエラー: %s"
 
 #: ../src/subscription_manager/gui/utils.py:60
 msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
-msgstr ""
-"ネットワークエラーでサーバーに接続できません。詳細には /var/log/rhsm/rhsm."
-"log をご覧下さい"
+"Network error, unable to connect to server. Please see "
+"/var/log/rhsm/rhsm.log for more information."
+msgstr "ネットワークエラーでサーバーに接続できません。詳細には /var/log/rhsm/rhsm.log をご覧下さい"
 
 #: ../src/subscription_manager/gui/utils.py:63
 #, python-format
@@ -541,21 +514,18 @@ msgstr "サーバーの識別子を確認できません: %s"
 #: ../src/subscription_manager/gui/utils.py:68
 #: ../src/subscription_manager/managercli.py:123
 msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
-msgstr ""
-"ネットワークエラーです。接続の詳細を確認するか、又は /var/log/rhsm/rhsm.log "
-"をご覧下さい。"
+"Network error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
+msgstr "ネットワークエラーです。接続の詳細を確認するか、又は /var/log/rhsm/rhsm.log をご覧下さい。"
 
-#. This is what happens when there's an issue with the server on the other side of the wire
+#. This is what happens when there's an issue with the server on the other
+#. side of the wire
 #: ../src/subscription_manager/gui/utils.py:71
 #: ../src/subscription_manager/managercli.py:127
 msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
-msgstr ""
-"リモートサーバーエラーです。接続詳細を確認するか、又は /var/log/rhsm/rhsm."
-"log をご覧下さい"
+"Remote server error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
+msgstr "リモートサーバーエラーです。接続詳細を確認するか、又は /var/log/rhsm/rhsm.log をご覧下さい"
 
 #: ../src/subscription_manager/gui/utils.py:92
 #: ../src/subscription_manager/managercli.py:136
@@ -605,36 +575,31 @@ msgstr "次へ"
 
 #: ../src/subscription_manager/gui/registergui.py:472
 msgid "Unable to auto-subscribe, server does not support service levels."
-msgstr ""
-"自動サブスクライブできません、 サーバーがサービスレベルに対応していません"
+msgstr "自動サブスクライブできません、 サーバーがサービスレベルに対応していません"
 
 #: ../src/subscription_manager/gui/registergui.py:478
 msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "certificates at this time."
-msgstr ""
-"インストールしている製品にはすべて有効なエンタイトルメントが与えられていま"
-"す。 現時点では証明書を更新する必要はありません。"
+msgstr "インストールしている製品にはすべて有効なエンタイトルメントが与えられています。 現時点では証明書を更新する必要はありません。"
 
 #: ../src/subscription_manager/gui/registergui.py:495
 #, python-format
 msgid ""
-"Unable to subscribe to any additional products at current service level: %s. "
-"Please use the \"All Available Subscriptions\" tab to manually entitle this "
-"system."
+"Unable to subscribe to any additional products at current service level: %s."
+" Please use the \"All Available Subscriptions\" tab to manually entitle this"
+" system."
 msgstr ""
-"現在のサービスレベル: %s では、追加の製品へサブスクライブすることはできませ"
-"ん。このシステムに手動でエンタイトルメントを得るためには \"All Available "
-"Subscriptions\" タブを使用します。"
+"現在のサービスレベル: %s では、追加の製品へサブスクライブすることはできません。このシステムに手動でエンタイトルメントを得るためには \"All "
+"Available Subscriptions\" タブを使用します。"
 
 #: ../src/subscription_manager/gui/registergui.py:513
 msgid ""
 "No service levels will cover all installed products. Please use the \"All "
 "Available Subscriptions\" tab to manually entitle this system."
 msgstr ""
-"インストールしている製品すべてを対象とするサービスレベルはありません。 「全て"
-"の利用可能なサブスクリプション」タブを使って手作業でこのシステムに権利を付与"
-"してください。"
+"インストールしている製品すべてを対象とするサービスレベルはありません。 "
+"「全ての利用可能なサブスクリプション」タブを使って手作業でこのシステムに権利を付与してください。"
 
 #: ../src/subscription_manager/gui/registergui.py:545
 msgid "Fetching list of possible environments"
@@ -670,7 +635,7 @@ msgid "You must enter a password."
 msgstr "パスワードを入力して下さい"
 
 #: ../src/subscription_manager/gui/registergui.py:780
-#: ../src/subscription_manager/managercli.py:332
+#: ../src/subscription_manager/managercli.py:334
 #, python-format
 msgid "Unable to reach the server at %s:%s%s"
 msgstr "%s にあるサーバーに到達できません:%s%s"
@@ -681,11 +646,9 @@ msgstr "サブスクリプションサービスの CA  証明書はインスト�
 
 #: ../src/subscription_manager/gui/registergui.py:789
 msgid ""
-"Please provide a hostname with optional port and/or prefix: hostname[:port][/"
-"prefix]"
-msgstr ""
-"オプションのポートと接頭辞の一方又は両方を付けてホスト名を示して下さい: ホス"
-"ト名[:ポート][/接頭辞]"
+"Please provide a hostname with optional port and/or prefix: "
+"hostname[:port][/prefix]"
+msgstr "オプションのポートと接頭辞の一方又は両方を付けてホスト名を示して下さい: ホスト名[:ポート][/接頭辞]"
 
 #: ../src/subscription_manager/gui/registergui.py:846
 msgid "Server supports environments, but none are available."
@@ -762,31 +725,25 @@ msgstr "アカウント情報を記入して下さい:"
 msgid ""
 "Contact your system administrator if you have forgotten your login or "
 "password"
-msgstr ""
-"ログインまたはパスワードを忘れてしまった場合はシステム管理者に連絡してくださ"
-"い"
+msgstr "ログインまたはパスワードを忘れてしまった場合はシステム管理者に連絡してください"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:7
 msgid ""
 "register the client to the Customer Portal or another subscription "
 "management service."
-msgstr ""
-"お客様をカスタマーポータル、あるいは他のサブスクリプション管理サービスに登録"
+msgstr "お客様をカスタマーポータル、あるいは他のサブスクリプション管理サービスに登録"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:8
 msgid ""
 "unregister the client from the Customer Portal or another subscription "
 "management service."
-msgstr ""
-"お客様をカスタマーポータル、あるいは他のサブスクリプション管理サービスから登"
-"録解除"
+msgstr "お客様をカスタマーポータル、あるいは他のサブスクリプション管理サービスから登録解除"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:13
 msgid ""
 "This system has already been registered with RHN using RHN Classic "
 "technology."
-msgstr ""
-"このシステムは、RHN Classic の技術を使用して既に RHN に登録されています。"
+msgstr "このシステムは、RHN Classic の技術を使用して既に RHN に登録されています。"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:15
 msgid ""
@@ -794,9 +751,8 @@ msgid ""
 "Subscription Management technology. Red Hat recommends (except in a few "
 "cases) that customers only register once."
 msgstr ""
-"使用しているツールは  Red Hat サブスクリプション管理の技術を使用して再登録し"
-"ようとしています。Red Hat では (一部のケースを除き) お客様は 1 回のみ登録され"
-"ることをお勧めしています。"
+"使用しているツールは  Red Hat サブスクリプション管理の技術を使用して再登録しようとしています。Red Hat では (一部のケースを除き) "
+"お客様は 1 回のみ登録されることをお勧めしています。"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:17
 #: ../src/subscription_manager/branding/redhat_branding.py:27
@@ -820,17 +776,13 @@ msgstr "お持ちの Red Hat アカウント情報を記入して下さい:"
 msgid ""
 "This system is registered using both RHN Classic technology and RHN "
 "Certificate-Based technology."
-msgstr ""
-"このシステムは RHN クラシックの技術、及び RHN 証明書ベースの技術の両方を使用"
-"して登録されています。"
+msgstr "このシステムは RHN クラシックの技術、及び RHN 証明書ベースの技術の両方を使用して登録されています。"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:25
 msgid ""
-"Red Hat recommends (except in a few cases) that customers only register with "
-"RHN via one method."
-msgstr ""
-"Red Hat では (一部のケースを除き) お客様は RHN に 1 つの方法でのみ登録される"
-"ことをお勧めしています"
+"Red Hat recommends (except in a few cases) that customers only register with"
+" RHN via one method."
+msgstr "Red Hat では (一部のケースを除き) お客様は RHN に 1 つの方法でのみ登録されることをお勧めしています"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:28
 msgid "RHN classic and subscription management service"
@@ -838,166 +790,160 @@ msgstr "RHN classic とサブスクリプション管理サービス"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:30
 msgid ""
-"Tip: Forgot your login or password? Look it up at http://red.ht/lost_password"
-msgstr ""
-"ヒント: ログイン又はパスワードをお忘れですか？　http://red.ht/lost_password "
-"をご覧下さい"
+"Tip: Forgot your login or password? Look it up at "
+"http://red.ht/lost_password"
+msgstr "ヒント: ログイン又はパスワードをお忘れですか？　http://red.ht/lost_password をご覧下さい"
+
+#. For older versions of optparse
+#: ../src/subscription_manager/i18n_optparse.py:123
+#: ../src/subscription_manager/i18n_optparse.py:135
+#, python-format
+msgid "Usage: %s\n"
+msgstr "使用法: %s\n"
 
 #. These are a bunch of strings that are marked for translation in optparse,
 #. but not actually translated anywhere. Mark them for translation here,
 #. so we get it picked up. for local translation, and then optparse will
 #. use them.
 #. translators: this should have the same translation as "Usage: %s\n"
-#: ../src/subscription_manager/i18n_optparse.py:129
+#: ../src/subscription_manager/i18n_optparse.py:134
 #, python-format
 msgid "usage: %s\n"
 msgstr "使用法: %s\n"
 
-#. For older versions of optparse
-#: ../src/subscription_manager/i18n_optparse.py:130
-#, python-format
-msgid "Usage: %s\n"
-msgstr "使用法: %s\n"
-
-#: ../src/subscription_manager/i18n_optparse.py:131
+#: ../src/subscription_manager/i18n_optparse.py:136
 msgid "Usage"
 msgstr "使用法"
 
-#: ../src/subscription_manager/i18n_optparse.py:132
+#: ../src/subscription_manager/i18n_optparse.py:137
 msgid "%prog [options]"
 msgstr "%prog [オプション]"
 
-#: ../src/subscription_manager/i18n_optparse.py:133
+#: ../src/subscription_manager/i18n_optparse.py:138
 msgid "Options"
 msgstr "オプション"
 
-#: ../src/subscription_manager/i18n_optparse.py:134
+#: ../src/subscription_manager/i18n_optparse.py:139
 msgid "options"
 msgstr ""
 
-#: ../src/subscription_manager/i18n_optparse.py:135
+#: ../src/subscription_manager/i18n_optparse.py:140
 msgid "options:"
 msgstr ""
 
 #. stuff for option value sanity checking
-#: ../src/subscription_manager/i18n_optparse.py:138
+#: ../src/subscription_manager/i18n_optparse.py:143
 #, python-format
 msgid "no such option: %s"
 msgstr "そのオプションはありません: %s"
 
-#: ../src/subscription_manager/i18n_optparse.py:139
+#: ../src/subscription_manager/i18n_optparse.py:144
 #, python-format
 msgid "ambiguous option: %s (%s?)"
 msgstr "曖昧なオプション: %s (%s?)"
 
-#: ../src/subscription_manager/i18n_optparse.py:140
+#: ../src/subscription_manager/i18n_optparse.py:145
 #, python-format
 msgid "%s option requires an argument"
 msgstr "%s オプションは引数を必要とします"
 
-#: ../src/subscription_manager/i18n_optparse.py:141
+#: ../src/subscription_manager/i18n_optparse.py:146
 #, python-format
 msgid "%s option requires %d arguments"
 msgstr "%s オプションは %d 個の引数を必要とします"
 
-#: ../src/subscription_manager/i18n_optparse.py:142
+#: ../src/subscription_manager/i18n_optparse.py:147
 #, python-format
 msgid "%s option does not take a value"
 msgstr "%s オプションは値を取りません"
 
-#: ../src/subscription_manager/i18n_optparse.py:143
+#: ../src/subscription_manager/i18n_optparse.py:148
 msgid "integer"
 msgstr "整数"
 
-#: ../src/subscription_manager/i18n_optparse.py:144
+#: ../src/subscription_manager/i18n_optparse.py:149
 msgid "long integer"
 msgstr "長整数型"
 
-#: ../src/subscription_manager/i18n_optparse.py:145
+#: ../src/subscription_manager/i18n_optparse.py:150
 msgid "floating-point"
 msgstr "浮動小数点"
 
-#: ../src/subscription_manager/i18n_optparse.py:146
+#: ../src/subscription_manager/i18n_optparse.py:151
 msgid "complex"
 msgstr "複合"
 
-#: ../src/subscription_manager/i18n_optparse.py:147
+#: ../src/subscription_manager/i18n_optparse.py:152
 #, python-format
 msgid "option %s: invalid %s value: %r"
 msgstr "オプション%s: 無効な %s 値: %r"
 
-#: ../src/subscription_manager/i18n_optparse.py:148
+#: ../src/subscription_manager/i18n_optparse.py:153
 #, python-format
 msgid "option %s: invalid choice: %r (choose from %s)"
 msgstr "オプション %s: 無効な選択: %r (%s から選択)"
 
 #. default options
-#: ../src/subscription_manager/i18n_optparse.py:151
+#: ../src/subscription_manager/i18n_optparse.py:156
 msgid "show this help message and exit"
 msgstr "このヘルプメッセージを表示して終了"
 
-#: ../src/subscription_manager/i18n_optparse.py:152
+#: ../src/subscription_manager/i18n_optparse.py:157
 msgid "show program's version number and exit"
 msgstr "プログラムのバージョン番号を表示して終了"
 
 #. translators: arg 1 is the program name, arg 2 is the error message
-#: ../src/subscription_manager/i18n_optparse.py:165
+#: ../src/subscription_manager/i18n_optparse.py:170
 #, python-format
 msgid "%s: error: %s"
 msgstr "%s: エラー: %s"
 
-#: ../src/subscription_manager/certlib.py:191
-#: ../src/subscription_manager/certdirectory.py:169
-msgid "Reason(s):"
-msgstr "理由:"
-
-#: ../src/subscription_manager/certlib.py:453
+#: ../src/subscription_manager/certlib.py:452
 #, python-format
 msgid "Total updates: %d"
 msgstr "全ての更新: %d"
 
-#: ../src/subscription_manager/certlib.py:454
+#: ../src/subscription_manager/certlib.py:453
 #, python-format
 msgid "Found (local) serial# %s"
 msgstr "見付かった (ローカル) シリアル # %s"
 
-#: ../src/subscription_manager/certlib.py:455
+#: ../src/subscription_manager/certlib.py:454
 #, python-format
 msgid "Expected (UEP) serial# %s"
 msgstr "予期される (UEP) シリアル# %s"
 
-#: ../src/subscription_manager/certlib.py:456
+#: ../src/subscription_manager/certlib.py:455
 msgid "Added (new)"
 msgstr "追加 (新規)"
 
-#: ../src/subscription_manager/certlib.py:457
+#: ../src/subscription_manager/certlib.py:456
 msgid "Deleted (rogue):"
 msgstr "削除済み (変異品):"
 
-#: ../src/subscription_manager/certlib.py:458
+#: ../src/subscription_manager/certlib.py:457
 msgid "Expired (deleted):"
 msgstr "期限切れ (削除済み):"
 
-#: ../src/subscription_manager/certlib.py:463
+#: ../src/subscription_manager/certlib.py:462
 msgid "Updating entitlement certificates"
 msgstr "エンタイトルメント証明書の更新"
 
-#: ../src/subscription_manager/certlib.py:466
+#: ../src/subscription_manager/certlib.py:465
 #, python-format
 msgid "%d updates required"
 msgstr "%d 個の更新が必要です"
 
-#: ../src/subscription_manager/certlib.py:467
+#: ../src/subscription_manager/certlib.py:466
 msgid "done"
 msgstr "完了"
 
 #: ../src/subscription_manager/managercli.py:58
 msgid ""
-"This system is not yet registered. Try 'subscription-manager register --"
-"help' for more information."
+"This system is not yet registered. Try 'subscription-manager register "
+"--help' for more information."
 msgstr ""
-"このシステムはまだ登録されていません。 詳細については「subscription-manager "
-"register --help」をご覧ください。"
+"このシステムはまだ登録されていません。 詳細については「subscription-manager register --help」をご覧ください。"
 
 #: ../src/subscription_manager/managercli.py:71
 #: ../src/subscription_manager/managercli.py:97
@@ -1027,26 +973,26 @@ msgid "Status:               \t%s"
 msgstr "状態:               \t%s"
 
 #: ../src/subscription_manager/managercli.py:76
-#: ../src/subscription_manager/managercli.py:1823
+#: ../src/subscription_manager/managercli.py:1825
 #, python-format
 msgid "Starts:               \t%s"
 msgstr "開始日:               \t%s"
 
 #: ../src/subscription_manager/managercli.py:77
 #: ../src/subscription_manager/managercli.py:87
-#: ../src/subscription_manager/managercli.py:1825
+#: ../src/subscription_manager/managercli.py:1827
 #, python-format
 msgid "Ends:                 \t%s"
 msgstr "終了日:                 \t%s"
 
 #: ../src/subscription_manager/managercli.py:80
-#: ../src/subscription_manager/managercli.py:1796
+#: ../src/subscription_manager/managercli.py:1798
 #, python-format
 msgid "Subscription Name:    \t%s"
 msgstr "サブスクリプション名:    \t%s"
 
 #: ../src/subscription_manager/managercli.py:81
-#: ../src/subscription_manager/managercli.py:1807
+#: ../src/subscription_manager/managercli.py:1809
 #, python-format
 msgid "SKU:                  \t%s"
 msgstr ""
@@ -1062,13 +1008,13 @@ msgid "Quantity:             \t%s"
 msgstr "数量:             \t%s"
 
 #: ../src/subscription_manager/managercli.py:84
-#: ../src/subscription_manager/managercli.py:1819
+#: ../src/subscription_manager/managercli.py:1821
 #, python-format
 msgid "Service Level:        \t%s"
 msgstr "サービスレベル:        \t%s"
 
 #: ../src/subscription_manager/managercli.py:85
-#: ../src/subscription_manager/managercli.py:1821
+#: ../src/subscription_manager/managercli.py:1823
 #, python-format
 msgid "Service Type:         \t%s"
 msgstr "サービスタイプ:         \t%s"
@@ -1118,7 +1064,7 @@ msgid "Network error, unable to connect to server."
 msgstr "ネットワークエラーです。サーバーに接続できません。"
 
 #: ../src/subscription_manager/managercli.py:149
-#: ../src/subscription_manager/managercli.py:748
+#: ../src/subscription_manager/managercli.py:750
 #, python-format
 msgid "Service level set to: %s"
 msgstr "サービスレベルをセットします: %s"
@@ -1127,866 +1073,828 @@ msgstr "サービスレベルをセットします: %s"
 msgid "Installed Product Current Status:"
 msgstr "インストール済み製品の現在の状態:"
 
-#: ../src/subscription_manager/managercli.py:179
+#. usage format strips any leading 'usage' so
+#. do not iclude it
+#: ../src/subscription_manager/managercli.py:181
 #, python-format
-msgid "usage: %%prog %s [OPTIONS]"
-msgstr "使用法: %%prog %s [オプション]"
+msgid "%%prog %s [OPTIONS]"
+msgstr ""
 
-#: ../src/subscription_manager/managercli.py:223
+#: ../src/subscription_manager/managercli.py:225
 msgid "server url in the form of https://hostname:443/prefix"
 msgstr "https://hostname:443/prefix の形式のサーバー url "
 
-#: ../src/subscription_manager/managercli.py:225
+#: ../src/subscription_manager/managercli.py:227
 msgid "base url for content in form of https://hostname:443/prefix"
 msgstr "https://hostname:443/prefix の形式のコンテンツ用ベース url "
 
-#: ../src/subscription_manager/managercli.py:227
+#: ../src/subscription_manager/managercli.py:229
 msgid "proxy url in the form of proxy_hostname:proxy_port"
 msgstr "proxy_hostname:proxy_port の形式のプロキシ url"
 
-#: ../src/subscription_manager/managercli.py:229
+#: ../src/subscription_manager/managercli.py:231
 msgid "user for http proxy with basic authentication"
 msgstr "ベーシック認証による http プロキシのユーザー"
 
-#: ../src/subscription_manager/managercli.py:231
+#: ../src/subscription_manager/managercli.py:233
 msgid "password for http proxy with basic authentication"
 msgstr "ベーシック認証による http プロキシのパスワード"
 
-#: ../src/subscription_manager/managercli.py:309
+#: ../src/subscription_manager/managercli.py:311
 #, python-format
 msgid "cannot parse argument: %s"
 msgstr "引数を解析できません: %s"
 
-#: ../src/subscription_manager/managercli.py:324
+#: ../src/subscription_manager/managercli.py:326
 #, python-format
 msgid "Error parsing serverurl: %s"
 msgstr "サーバー url のパーシング中にエラー:  %s"
 
-#: ../src/subscription_manager/managercli.py:338
+#: ../src/subscription_manager/managercli.py:340
 msgid "Error: CA certificate for subscription service has not been installed."
-msgstr ""
-"エラー: サブスクリプションサービス用の CA 証明書はインスト─ルされていません。"
+msgstr "エラー: サブスクリプションサービス用の CA 証明書はインスト─ルされていません。"
 
-#: ../src/subscription_manager/managercli.py:355
+#: ../src/subscription_manager/managercli.py:357
 #, python-format
 msgid "Error parsing baseurl: %s"
 msgstr "ベース url のパーシング中にエラー: %s"
 
-#: ../src/subscription_manager/managercli.py:404
+#: ../src/subscription_manager/managercli.py:406
 msgid "Consumer certificates corrupted. Please reregister."
 msgstr "コンシューマーの証明書が破損しています。再登録して下さい"
 
-#: ../src/subscription_manager/managercli.py:421
+#: ../src/subscription_manager/managercli.py:423
 msgid "username to use when authorizing against the server"
 msgstr "サーバーに対して認可する時に使用するユーザー名"
 
-#: ../src/subscription_manager/managercli.py:423
+#: ../src/subscription_manager/managercli.py:425
 msgid "password to use when authorizing against the server"
 msgstr "サーバーに対して認可する時に使用するパスワード"
 
-#: ../src/subscription_manager/managercli.py:435
+#: ../src/subscription_manager/managercli.py:437
 msgid "Username: "
 msgstr "ユーザー名: "
 
-#: ../src/subscription_manager/managercli.py:438
+#: ../src/subscription_manager/managercli.py:440
 msgid "Password: "
 msgstr "パスワード: "
 
-#: ../src/subscription_manager/managercli.py:462
+#: ../src/subscription_manager/managercli.py:464
 msgid ""
 "Remove all local consumer and subscription data without affecting the server"
-msgstr ""
-"サーバーに影響を与えないようにして全てのローカルコンシューマーとサブスクリプ"
-"ションデータを削除"
+msgstr "サーバーに影響を与えないようにして全てのローカルコンシューマーとサブスクリプションデータを削除"
 
-#: ../src/subscription_manager/managercli.py:473
+#: ../src/subscription_manager/managercli.py:475
 msgid "All local data removed"
 msgstr "ローカルデータが全て削除されました"
 
-#: ../src/subscription_manager/managercli.py:480
+#: ../src/subscription_manager/managercli.py:482
 msgid "Pull the latest subscription data from the server"
 msgstr "サーバーから最新のサブスクリプションデータを引き出す"
 
-#: ../src/subscription_manager/managercli.py:490
+#: ../src/subscription_manager/managercli.py:492
 msgid "All local data refreshed"
 msgstr "ローカルデータは全てリフレッシュされました"
 
-#: ../src/subscription_manager/managercli.py:495
+#: ../src/subscription_manager/managercli.py:497
 #, python-format
 msgid "Unable to perform refresh due to the following exception: %s"
 msgstr "次の例外のためリフレッシュを実行できません: %s"
 
-#: ../src/subscription_manager/managercli.py:503
+#: ../src/subscription_manager/managercli.py:505
 msgid "Display the identity certificate for this machine or request a new one"
 msgstr "このマシン用の識別証明書を表示するか、又は新規証明書を要求する"
 
-#: ../src/subscription_manager/managercli.py:510
+#: ../src/subscription_manager/managercli.py:512
 msgid "request a new certificate be generated"
 msgstr "新規証明書の生成を要求します"
 
-#: ../src/subscription_manager/managercli.py:512
+#: ../src/subscription_manager/managercli.py:514
 msgid "force certificate regeneration (requires username and password)"
 msgstr "証明書の再生成を強制（ユーザー名とパスワードが必要）"
 
-#: ../src/subscription_manager/managercli.py:517
+#: ../src/subscription_manager/managercli.py:519
 msgid "--force can only be used with --regenerate"
 msgstr "--force は  --regenerate との併用でのみ使用できます"
 
-#: ../src/subscription_manager/managercli.py:521
+#: ../src/subscription_manager/managercli.py:523
 msgid "--username and --password can only be used with --force"
 msgstr "--username と --password は --force との併用でのみ使用できます"
 
 #. no need to continue if user is only registered to Classic
-#: ../src/subscription_manager/managercli.py:528
-#: ../src/subscription_manager/managercli.py:531
-#: ../src/subscription_manager/managercli.py:1873
+#: ../src/subscription_manager/managercli.py:530
+#: ../src/subscription_manager/managercli.py:533
+#: ../src/subscription_manager/managercli.py:1875
 #, python-format
 msgid "remote entitlement server type: %s"
 msgstr "リモートエンタイトルメントサーバーのタイプ: %s"
 
-#: ../src/subscription_manager/managercli.py:543
+#: ../src/subscription_manager/managercli.py:545
 #, python-format
 msgid "Current identity is: %s"
 msgstr "現在の ID: %s"
 
-#: ../src/subscription_manager/managercli.py:544
+#: ../src/subscription_manager/managercli.py:546
 #, python-format
 msgid "name: %s"
 msgstr "名前: %s"
 
-#: ../src/subscription_manager/managercli.py:545
+#: ../src/subscription_manager/managercli.py:547
 #, python-format
 msgid "org name: %s"
 msgstr "組織名: %s"
 
-#: ../src/subscription_manager/managercli.py:546
+#: ../src/subscription_manager/managercli.py:548
 #, python-format
 msgid "org id: %s"
 msgstr "組織 ID: %s"
 
-#: ../src/subscription_manager/managercli.py:554
+#: ../src/subscription_manager/managercli.py:556
 msgid "Identity certificate has been regenerated."
 msgstr "識別証明書は再生成されました。"
 
-#: ../src/subscription_manager/managercli.py:562
+#: ../src/subscription_manager/managercli.py:564
 msgid "Error: Unable to generate a new identity for the system"
 msgstr "エラー: システム用に新規の識別子を生成できません"
 
-#: ../src/subscription_manager/managercli.py:568
+#: ../src/subscription_manager/managercli.py:570
 msgid "Display the orgs against which a user can register a system"
 msgstr "ユーザーがシステムの登録元にする組織の表示"
 
-#: ../src/subscription_manager/managercli.py:583
+#: ../src/subscription_manager/managercli.py:585
 msgid "Organizations"
 msgstr "組織"
 
-#: ../src/subscription_manager/managercli.py:587
+#: ../src/subscription_manager/managercli.py:589
 msgid "Name"
 msgstr "名前"
 
-#: ../src/subscription_manager/managercli.py:588
+#: ../src/subscription_manager/managercli.py:590
 msgid "Key"
 msgstr "キー"
 
-#: ../src/subscription_manager/managercli.py:591
-#: ../src/subscription_manager/managercli.py:992
+#: ../src/subscription_manager/managercli.py:593
+#: ../src/subscription_manager/managercli.py:994
 #, python-format
 msgid "%s cannot register to any organizations."
 msgstr "%s はどの組織にも登録できません。"
 
-#: ../src/subscription_manager/managercli.py:598
+#: ../src/subscription_manager/managercli.py:600
 msgid "Error: Unable to retrieve org list from Entitlement Platform"
 msgstr "エラー: エンタイトルメントプラットフォームから組織一覧を取り込めません"
 
-#: ../src/subscription_manager/managercli.py:604
+#: ../src/subscription_manager/managercli.py:606
 msgid "Display the environments available for a user"
 msgstr "ユーザーに使用可能な環境の表示"
 
-#: ../src/subscription_manager/managercli.py:610
+#: ../src/subscription_manager/managercli.py:612
 msgid "specify org for environment list"
 msgstr "環境一覧用の組織を指定"
 
-#: ../src/subscription_manager/managercli.py:614
+#: ../src/subscription_manager/managercli.py:616
 msgid ""
 "Error: This command requires that you specify an organizaiton with --org"
 msgstr "エラー: このコマンドでは、組織を --org で指定する必要があります"
 
-#: ../src/subscription_manager/managercli.py:637
+#: ../src/subscription_manager/managercli.py:639
 msgid "Environments"
 msgstr "環境"
 
-#: ../src/subscription_manager/managercli.py:643
+#: ../src/subscription_manager/managercli.py:645
 msgid "Error: This org does not have environments."
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:645
-#: ../src/subscription_manager/managercli.py:973
+#: ../src/subscription_manager/managercli.py:647
+#: ../src/subscription_manager/managercli.py:975
 msgid "Error: Server does not support environments."
 msgstr "エラー: サーバーは環境をサポートしません。"
 
-#: ../src/subscription_manager/managercli.py:653
+#: ../src/subscription_manager/managercli.py:655
 msgid "Error: Unable to retrieve environment list from Entitlement Platform"
 msgstr "エラー: エンタイトルメントプラットフォームから環境一覧を取り込めません"
 
-#: ../src/subscription_manager/managercli.py:661
+#: ../src/subscription_manager/managercli.py:663
 msgid "Manage service levels for this system"
 msgstr "このシステム用のサービスレベルを管理"
 
-#: ../src/subscription_manager/managercli.py:667
+#: ../src/subscription_manager/managercli.py:669
 msgid "show this system's current service level"
 msgstr "このシステムの現在のサービスレベルを表示"
 
-#: ../src/subscription_manager/managercli.py:670
+#: ../src/subscription_manager/managercli.py:672
 msgid "specify org for service level list"
 msgstr "サービスレベル一覧に組織を指定"
 
-#: ../src/subscription_manager/managercli.py:672
+#: ../src/subscription_manager/managercli.py:674
 msgid "list all service levels available"
 msgstr "使用可能なサービスレベルをすべて表示"
 
-#: ../src/subscription_manager/managercli.py:674
-#: ../src/subscription_manager/managercli.py:823
-#: ../src/subscription_manager/managercli.py:1187
+#: ../src/subscription_manager/managercli.py:676
+#: ../src/subscription_manager/managercli.py:825
+#: ../src/subscription_manager/managercli.py:1189
 msgid "service level to apply to this system"
 msgstr "このシステムに適用するサービスレベル"
 
-#: ../src/subscription_manager/managercli.py:677
+#: ../src/subscription_manager/managercli.py:679
 msgid "unset the service level for this system"
 msgstr "このシステム用のサービスレベルの設定解除"
 
-#: ../src/subscription_manager/managercli.py:690
+#: ../src/subscription_manager/managercli.py:692
 msgid "Error: --org is only supported with the --list option"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:696
+#: ../src/subscription_manager/managercli.py:698
 msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
-msgstr ""
-"エラー: サービスレベルを一覧表示するには、 --username と --password を登録す"
-"るか、又は指定する必要があります"
+msgstr "エラー: サービスレベルを一覧表示するには、 --username と --password を登録するか、又は指定する必要があります"
 
-#: ../src/subscription_manager/managercli.py:699
+#: ../src/subscription_manager/managercli.py:701
 msgid "Error: you must register or specify --org."
 msgstr "エラー: --org の登録または指定を行ってください。"
 
-#: ../src/subscription_manager/managercli.py:739
+#: ../src/subscription_manager/managercli.py:741
 msgid "Error: Unable to retrieve service levels."
 msgstr "エラー: サービスレベルを読み出せません。"
 
-#: ../src/subscription_manager/managercli.py:745
-#: ../src/subscription_manager/managercli.py:758
-#: ../src/subscription_manager/managercli.py:767
+#: ../src/subscription_manager/managercli.py:747
+#: ../src/subscription_manager/managercli.py:760
+#: ../src/subscription_manager/managercli.py:769
 msgid "Error: The service-level command is not supported by the server."
 msgstr "エラー:  service-level コマンドはサーバーでサポートされていません。"
 
-#: ../src/subscription_manager/managercli.py:752
+#: ../src/subscription_manager/managercli.py:754
 msgid "Service level preference has been unset"
 msgstr "サービスレベルの詳細設定は解除されました"
 
-#: ../src/subscription_manager/managercli.py:762
+#: ../src/subscription_manager/managercli.py:764
 #, python-format
 msgid "Current service level: %s"
 msgstr "現在のサービスレベル: %s"
 
-#: ../src/subscription_manager/managercli.py:764
+#: ../src/subscription_manager/managercli.py:766
 msgid "Service level preference not set"
 msgstr "サービスレベルの詳細設定はされていません"
 
-#: ../src/subscription_manager/managercli.py:779
+#: ../src/subscription_manager/managercli.py:781
 msgid "Available Service Levels"
 msgstr "利用可能なサービスレベル"
 
-#: ../src/subscription_manager/managercli.py:784
+#: ../src/subscription_manager/managercli.py:786
 msgid "This org does not have any subscriptions with service levels."
 msgstr "この組織にはサービスレベルのあるサブスクリプションがありません。"
 
-#: ../src/subscription_manager/managercli.py:804
+#: ../src/subscription_manager/managercli.py:806
 msgid "the type of consumer to register, defaults to system"
 msgstr "登録するコンシューマーのタイプ。システムにデフォルト設定"
 
-#: ../src/subscription_manager/managercli.py:806
+#: ../src/subscription_manager/managercli.py:808
 msgid "name of the consumer to register, defaults to the hostname"
 msgstr "登録するコンシューマーのタイプ。ホスト名にデフォルト設定"
 
-#: ../src/subscription_manager/managercli.py:808
+#: ../src/subscription_manager/managercli.py:810
 msgid "the existing consumer data is pulled from the server"
 msgstr "既存のコンシューマーデータはサーバーから引き出されます"
 
-#: ../src/subscription_manager/managercli.py:810
+#: ../src/subscription_manager/managercli.py:812
 msgid "register to one of multiple organizations for the user"
 msgstr "ユーザー用に複数組織の１つを登録"
 
-#: ../src/subscription_manager/managercli.py:812
+#: ../src/subscription_manager/managercli.py:814
 msgid "register to a specific environment in the destination org"
 msgstr "目的組織内の特定の環境に登録"
 
-#: ../src/subscription_manager/managercli.py:814
+#: ../src/subscription_manager/managercli.py:816
 msgid "set a release version"
 msgstr "リリースバージョンの設定"
 
-#: ../src/subscription_manager/managercli.py:816
-#: ../src/subscription_manager/managercli.py:1184
+#: ../src/subscription_manager/managercli.py:818
+#: ../src/subscription_manager/managercli.py:1186
 msgid ""
 "automatically subscribe this system to                                     "
 "compatible subscriptions."
 msgstr "このシステムを自動的に互換性のあるサブスクリプションに登録"
 
-#: ../src/subscription_manager/managercli.py:819
+#: ../src/subscription_manager/managercli.py:821
 msgid "register the system even if it is already registered"
 msgstr "既に登録済みでもシステムを登録します"
 
-#: ../src/subscription_manager/managercli.py:821
+#: ../src/subscription_manager/managercli.py:823
 msgid "one or more activation keys to use for registration"
 msgstr "登録用に使用する１つの又は複数のアクティベーションキー"
 
-#: ../src/subscription_manager/managercli.py:831
+#: ../src/subscription_manager/managercli.py:833
 msgid "This system is already registered. Use --force to override"
 msgstr "このシステムは既に登録済みです。上書きするには  --force を使用します"
 
-#: ../src/subscription_manager/managercli.py:834
+#: ../src/subscription_manager/managercli.py:836
 msgid "Error: consumer name can not be empty."
 msgstr "エラー: コンシューマー名は空白にできません。"
 
-#: ../src/subscription_manager/managercli.py:837
+#: ../src/subscription_manager/managercli.py:839
 msgid "Error: Activation keys do not require user credentials"
 msgstr "エラー: アクティベーションキーはユーザーの個人情報を必要としません。"
 
-#: ../src/subscription_manager/managercli.py:840
+#: ../src/subscription_manager/managercli.py:842
 msgid "Error: Activation keys can not be used with previously registered ids."
 msgstr "エラー: アクティベーションキーは以前に登録した id では使用できません。"
 
-#: ../src/subscription_manager/managercli.py:844
+#: ../src/subscription_manager/managercli.py:846
 msgid "Error: Must specify an activation key"
 msgstr "エラー: アクティベーションキーを指定する必要があります。"
 
-#: ../src/subscription_manager/managercli.py:847
+#: ../src/subscription_manager/managercli.py:849
 msgid "Error: Must use --autosubscribe with --servicelevel."
-msgstr ""
-"エラー: --autosubscribe は --servicelevel を付けて使用しなければなりません。"
+msgstr "エラー: --autosubscribe は --servicelevel を付けて使用しなければなりません。"
 
-#: ../src/subscription_manager/managercli.py:874
+#: ../src/subscription_manager/managercli.py:876
 #, python-format
 msgid "The system with UUID %s has been unregistered"
 msgstr "UUID %s を持つシステムの登録は解除されました"
 
-#: ../src/subscription_manager/managercli.py:909
+#: ../src/subscription_manager/managercli.py:911
 #, python-format
 msgid "Error during registration: %s"
 msgstr "登録中にエラーです: %s"
 
-#: ../src/subscription_manager/managercli.py:913
+#: ../src/subscription_manager/managercli.py:915
 #, python-format
 msgid "The system has been registered with id: %s "
 msgstr "システムは id で登録されています: %s "
 
-#: ../src/subscription_manager/managercli.py:941
-#: ../src/subscription_manager/managercli.py:1257
+#: ../src/subscription_manager/managercli.py:943
+#: ../src/subscription_manager/managercli.py:1259
 msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "perform autosubscribe."
-msgstr ""
-"エラー:  --servicelevel オプションはサーバーでサポートされていません。自動サ"
-"ブスクライブを実行しませんでした。"
+msgstr "エラー:  --servicelevel オプションはサーバーでサポートされていません。自動サブスクライブを実行しませんでした。"
 
-#: ../src/subscription_manager/managercli.py:977
+#: ../src/subscription_manager/managercli.py:979
 #, python-format
 msgid "No such environment: %s"
 msgstr "そのような環境はありません: %s"
 
-#: ../src/subscription_manager/managercli.py:1014
+#: ../src/subscription_manager/managercli.py:1016
 msgid "This system is currently not registered."
 msgstr "このシステムは現在登録されていません"
 
-#: ../src/subscription_manager/managercli.py:1036
+#: ../src/subscription_manager/managercli.py:1038
 msgid "System has been un-registered."
 msgstr "システムの登録は解除されました"
 
-#: ../src/subscription_manager/managercli.py:1042
+#: ../src/subscription_manager/managercli.py:1044
 msgid "Attempt to redeem a subscription for a preconfigured machine"
 msgstr "事前設定マシン用にサブスクリプションの償還を試行"
 
-#: ../src/subscription_manager/managercli.py:1047
+#: ../src/subscription_manager/managercli.py:1049
 msgid "Email address to notify when subscription redemption is complete."
 msgstr "サブスクリプションの償還が完了した時に通知するための電子メールアドレス"
 
-#: ../src/subscription_manager/managercli.py:1050
+#: ../src/subscription_manager/managercli.py:1052
 msgid ""
-"Optional language to use for email notification when subscription redemption "
-"is complete. Examples: en-us, de-de"
-msgstr ""
-"サブスクリプションの償還が完了した時に電子メール通知で使用するオプションの言"
-"語。例えば、en-us, de-de"
+"Optional language to use for email notification when subscription redemption"
+" is complete. Examples: en-us, de-de"
+msgstr "サブスクリプションの償還が完了した時に電子メール通知で使用するオプションの言語。例えば、en-us, de-de"
 
-#: ../src/subscription_manager/managercli.py:1056
+#: ../src/subscription_manager/managercli.py:1058
 msgid ""
 "Error: This command requires that you specify an email address with --email."
-msgstr ""
-"エラー: このコマンドでは、 --email を使用して電子メールアドレスを指定する必要"
-"があります。"
+msgstr "エラー: このコマンドでは、 --email を使用して電子メールアドレスを指定する必要があります。"
 
-#: ../src/subscription_manager/managercli.py:1093
+#: ../src/subscription_manager/managercli.py:1095
 msgid "Configure what os release to use"
 msgstr "どの OS リリースを使用するかを設定する"
 
-#: ../src/subscription_manager/managercli.py:1098
+#: ../src/subscription_manager/managercli.py:1100
 msgid "shows current release setting. default command."
 msgstr "現在のリリースセッティングを表示します。デフォルトのコマンドです。"
 
-#: ../src/subscription_manager/managercli.py:1100
+#: ../src/subscription_manager/managercli.py:1102
 msgid "list available releases"
 msgstr "使用可能なリリースを一覧表示"
 
-#: ../src/subscription_manager/managercli.py:1103
+#: ../src/subscription_manager/managercli.py:1105
 msgid "set the release for this system"
 msgstr "このシステム用のリリースをセット"
 
-#: ../src/subscription_manager/managercli.py:1106
+#: ../src/subscription_manager/managercli.py:1108
 msgid "unset the release for this system"
 msgstr "このシステム用のリリースをセット解除"
 
-#: ../src/subscription_manager/managercli.py:1109
+#: ../src/subscription_manager/managercli.py:1111
 msgid "Error: The 'release' command is not supported by the server."
 msgstr "エラー: 'release' コマンドはサーバーでサポートされていません。"
 
-#: ../src/subscription_manager/managercli.py:1118
+#: ../src/subscription_manager/managercli.py:1120
 #, python-format
 msgid "Release: %s"
 msgstr "リリース: %s"
 
-#: ../src/subscription_manager/managercli.py:1120
+#: ../src/subscription_manager/managercli.py:1122
 msgid "Release not set"
 msgstr "リリースはセットされていません"
 
-#: ../src/subscription_manager/managercli.py:1147
+#: ../src/subscription_manager/managercli.py:1149
 msgid "Release preference has been unset"
 msgstr "リリースの詳細設定は解除されました"
 
-#: ../src/subscription_manager/managercli.py:1156
+#: ../src/subscription_manager/managercli.py:1158
 #, python-format
 msgid "No releases match '%s'.  Consult 'release --list' for a full listing."
-msgstr ""
-"どのリリースも '%s' に一致しません。完全な一覧には 'release --list' を確認し"
-"て下さい。"
+msgstr "どのリリースも '%s' に一致しません。完全な一覧には 'release --list' を確認して下さい。"
 
-#: ../src/subscription_manager/managercli.py:1158
+#: ../src/subscription_manager/managercli.py:1160
 #, python-format
 msgid "Release set to: %s"
 msgstr "リリースは次のようにセットされています: %s"
 
-#: ../src/subscription_manager/managercli.py:1163
+#: ../src/subscription_manager/managercli.py:1165
 msgid "No release versions available, please check subscriptions."
-msgstr ""
-"リリースバージョンがありません。サブスクリプションをチェックして下さい。"
+msgstr "リリースバージョンがありません。サブスクリプションをチェックして下さい。"
 
-#: ../src/subscription_manager/managercli.py:1173
+#: ../src/subscription_manager/managercli.py:1175
 msgid "Subscribe the registered machine to a specified product"
 msgstr "登録マシンを指定製品へサブスクライブする"
 
-#: ../src/subscription_manager/managercli.py:1180
+#: ../src/subscription_manager/managercli.py:1182
 msgid "the id of the pool to subscribe to"
 msgstr "サブスクライブ先のプールの id "
 
-#: ../src/subscription_manager/managercli.py:1182
+#: ../src/subscription_manager/managercli.py:1184
 msgid "number of subscriptions to consume"
 msgstr "消費するサブスクリプションの数"
 
-#: ../src/subscription_manager/managercli.py:1191
+#: ../src/subscription_manager/managercli.py:1193
 msgid ""
-"Error: This command requires that you specify a pool with --pool or use --"
-"auto."
-msgstr ""
-"エラー: このコマンドは --pool でプールを指定するか、又は --auto の使用を要求"
-"します。"
+"Error: This command requires that you specify a pool with --pool or use "
+"--auto."
+msgstr "エラー: このコマンドは --pool でプールを指定するか、又は --auto の使用を要求します。"
 
-#: ../src/subscription_manager/managercli.py:1194
+#: ../src/subscription_manager/managercli.py:1196
 msgid "Error: Only one of --pool or --auto may be used with this command."
 msgstr "エラー: このコマンドには、--pool か --auto の一方のみが使用できます。"
 
-#: ../src/subscription_manager/managercli.py:1201
+#: ../src/subscription_manager/managercli.py:1203
 msgid "Error: Quantity must be a positive integer."
 msgstr "エラー: 数量は正の整数でなければなりません。"
 
-#: ../src/subscription_manager/managercli.py:1207
+#: ../src/subscription_manager/managercli.py:1209
 msgid "Error: Must use --auto with --servicelevel."
 msgstr "エラー: --auto は --servicelevel を付けて使用しなければなりません。"
 
-#: ../src/subscription_manager/managercli.py:1231
+#: ../src/subscription_manager/managercli.py:1233
 msgid "Please enter a valid numeric pool id."
 msgstr "有効な数値のプール id を入力して下さい"
 
-#: ../src/subscription_manager/managercli.py:1236
+#: ../src/subscription_manager/managercli.py:1238
 #, python-format
 msgid "Successfully consumed a subscription for: %s"
 msgstr "このサブスクリプションを正常に消費しました: %s"
 
-#: ../src/subscription_manager/managercli.py:1286
+#: ../src/subscription_manager/managercli.py:1288
 msgid "Unsubscribe the machine from all or specific subscriptions"
 msgstr "全ての、又は特定のサブスクリプションからマシンをサブスクライブ解除"
 
-#: ../src/subscription_manager/managercli.py:1292
+#: ../src/subscription_manager/managercli.py:1294
 msgid "Certificate serial to unsubscribe"
 msgstr "サブスクリプション解除する証明書シリアル番号"
 
-#: ../src/subscription_manager/managercli.py:1294
+#: ../src/subscription_manager/managercli.py:1296
 msgid "Unsubscribe from all subscriptions"
 msgstr "全てのサブスクリプションを解除"
 
-#: ../src/subscription_manager/managercli.py:1299
+#: ../src/subscription_manager/managercli.py:1301
 #, python-format
 msgid "Error: '%s' is not a valid serial number"
 msgstr "エラー: '%s' は有効なシリアル番号ではありません"
 
-#: ../src/subscription_manager/managercli.py:1302
-msgid "Error: This command requires that you specify one of --serial or --all."
-msgstr ""
-"エラー: このコマンドでは、 --serial か --all のどちらかを指定する必要がありま"
-"す。"
-
-#: ../src/subscription_manager/managercli.py:1318
-msgid "This machine has been unsubscribed from all subscriptions."
-msgstr ""
-"このマシンは、全てのサブスクリプションからサブスクライブ解除されています。"
+#: ../src/subscription_manager/managercli.py:1304
+msgid ""
+"Error: This command requires that you specify one of --serial or --all."
+msgstr "エラー: このコマンドでは、 --serial か --all のどちらかを指定する必要があります。"
 
 #: ../src/subscription_manager/managercli.py:1320
-#: ../src/subscription_manager/managercli.py:1338
+msgid "This machine has been unsubscribed from all subscriptions."
+msgstr "このマシンは、全てのサブスクリプションからサブスクライブ解除されています。"
+
+#: ../src/subscription_manager/managercli.py:1322
+#: ../src/subscription_manager/managercli.py:1340
 #, python-format
 msgid "This machine has been unsubscribed from %s subscriptions"
-msgstr ""
-"このマシンは、%s 個のサブスクリプションからサブスクライブ解除されています。"
+msgstr "このマシンは、%s 個のサブスクリプションからサブスクライブ解除されています。"
 
-#: ../src/subscription_manager/managercli.py:1323
-#: ../src/subscription_manager/managercli.py:1343
+#: ../src/subscription_manager/managercli.py:1325
+#: ../src/subscription_manager/managercli.py:1345
 #, python-format
 msgid ""
 "This machine has been unsubscribed from subscription with serial number %s"
-msgstr ""
-"このマシンはシリアル番号 %s を持つサブスクリプションからサブスクライブ解除さ"
-"れています。"
+msgstr "このマシンはシリアル番号 %s を持つサブスクリプションからサブスクライブ解除されています。"
 
-#: ../src/subscription_manager/managercli.py:1329
-#: ../src/subscription_manager/managercli.py:1346
+#: ../src/subscription_manager/managercli.py:1331
+#: ../src/subscription_manager/managercli.py:1348
 #, python-format
 msgid "Unable to perform unsubscribe due to the following exception: %s"
 msgstr "次の例外によりサブスクライブ解除を実行できません: %s"
 
-#: ../src/subscription_manager/managercli.py:1356
+#: ../src/subscription_manager/managercli.py:1358
 msgid "View or update the detected system information"
 msgstr "検出したシステム情報を表示、又は更新"
 
-#: ../src/subscription_manager/managercli.py:1361
+#: ../src/subscription_manager/managercli.py:1363
 msgid "list known facts for this system"
 msgstr "このシステムの既知の情報を一覧表示"
 
-#: ../src/subscription_manager/managercli.py:1363
+#: ../src/subscription_manager/managercli.py:1365
 msgid "update the system facts"
 msgstr "システムの情報を更新"
 
-#: ../src/subscription_manager/managercli.py:1395
+#: ../src/subscription_manager/managercli.py:1397
 msgid "Successfully updated the system facts."
 msgstr "正常にシステムの情報を更新しました。"
 
-#: ../src/subscription_manager/managercli.py:1401
+#: ../src/subscription_manager/managercli.py:1403
 msgid "Import certificates which were provided outside of the tool"
 msgstr "ツール外で用意された証明書をインポート"
 
-#: ../src/subscription_manager/managercli.py:1406
+#: ../src/subscription_manager/managercli.py:1408
 msgid ""
 "certificate file to import (for multiple imports, specify this option more "
 "than once)"
-msgstr ""
-"インポートする証明書ファイル (複数のインポートには、このオプションを複数指定"
-"します)。"
+msgstr "インポートする証明書ファイル (複数のインポートには、このオプションを複数指定します)。"
 
-#: ../src/subscription_manager/managercli.py:1410
+#: ../src/subscription_manager/managercli.py:1412
 msgid ""
-"Error: This command requires that you specify a certificate with --"
-"certificate."
-msgstr ""
-"エラー: このコマンドでは、 --certificate を使用して証明書を指定する必要があり"
-"ます。"
+"Error: This command requires that you specify a certificate with "
+"--certificate."
+msgstr "エラー: このコマンドでは、 --certificate を使用して証明書を指定する必要があります。"
 
-#: ../src/subscription_manager/managercli.py:1429
+#: ../src/subscription_manager/managercli.py:1431
 #, python-format
 msgid "Successfully imported certificate %s"
 msgstr "正常に証明書 %s をインポートしました"
 
-#: ../src/subscription_manager/managercli.py:1435
-#: ../src/subscription_manager/managercli.py:1445
+#: ../src/subscription_manager/managercli.py:1437
+#: ../src/subscription_manager/managercli.py:1447
 #, python-format
 msgid "%s is not a valid certificate file. Please use a valid certificate."
-msgstr ""
-"%s は有効な証明書ファイルではありません。有効な証明書を使用して下さい。"
+msgstr "%s は有効な証明書ファイルではありません。有効な証明書を使用して下さい。"
 
-#: ../src/subscription_manager/managercli.py:1441
+#: ../src/subscription_manager/managercli.py:1443
 msgid ""
-"An error occurred while importing the certificate. Please check log file for "
-"more information."
-msgstr ""
-"証明書のインポート中にエラーが発生しました。詳細についてはログファイルを"
-"チェックして下さい。"
+"An error occurred while importing the certificate. Please check log file for"
+" more information."
+msgstr "証明書のインポート中にエラーが発生しました。詳細についてはログファイルをチェックして下さい。"
 
-#: ../src/subscription_manager/managercli.py:1460
+#: ../src/subscription_manager/managercli.py:1462
 msgid "List the repos which this machine is entitled to use"
 msgstr "このマシンが使用権利を持つレポジトリの一覧表示"
 
-#: ../src/subscription_manager/managercli.py:1473
+#: ../src/subscription_manager/managercli.py:1475
 msgid "list known repos for this system"
 msgstr "このシステム用の既知のレポジトリを一覧表示"
 
-#: ../src/subscription_manager/managercli.py:1475
+#: ../src/subscription_manager/managercli.py:1477
 msgid "repo to enable"
 msgstr "有効にするレポジトリ"
 
-#: ../src/subscription_manager/managercli.py:1477
+#: ../src/subscription_manager/managercli.py:1479
 msgid "repo to disable"
 msgstr "無効にするレポジトリ"
 
-#: ../src/subscription_manager/managercli.py:1487
+#: ../src/subscription_manager/managercli.py:1489
 msgid "Repositories disabled by configuration."
 msgstr "リポジトリは設定により無効になっています。"
 
-#: ../src/subscription_manager/managercli.py:1495
+#: ../src/subscription_manager/managercli.py:1497
 #, python-format
 msgid "Repo %s is enabled for this system."
 msgstr "レポジトリ %s はこのシステム用に有効になっています。"
 
-#: ../src/subscription_manager/managercli.py:1499
-#: ../src/subscription_manager/managercli.py:1513
+#: ../src/subscription_manager/managercli.py:1501
+#: ../src/subscription_manager/managercli.py:1515
 msgid ""
 "Error: A valid repo id is required. Use --list option to see valid repos."
-msgstr ""
-"エラー: 有効なレポジトリ id が必要です。有効なレポジトリを見るには、 --list "
-"オプションを使います。"
+msgstr "エラー: 有効なレポジトリ id が必要です。有効なレポジトリを見るには、 --list オプションを使います。"
 
-#: ../src/subscription_manager/managercli.py:1509
+#: ../src/subscription_manager/managercli.py:1511
 #, python-format
 msgid "Repo %s is disabled for this system."
 msgstr "レポジトリ %s はこのシステム用に無効になっています"
 
-#: ../src/subscription_manager/managercli.py:1519
+#: ../src/subscription_manager/managercli.py:1521
 #, python-format
 msgid "    Entitled Repositories in %s"
 msgstr "%s 内で権利のあるレポジトリ"
 
-#: ../src/subscription_manager/managercli.py:1527
+#: ../src/subscription_manager/managercli.py:1529
 msgid "The system is not entitled to use any repositories."
 msgstr "システムはどのレポジトリでも使用権利がありません。"
 
-#: ../src/subscription_manager/managercli.py:1539
+#: ../src/subscription_manager/managercli.py:1541
 msgid ""
 "List, set, or remove the configuration parameters in use by this machine"
 msgstr "このマシンで使用中の設定パラメータを一覧表示、セット、あるいは削除"
 
-#: ../src/subscription_manager/managercli.py:1545
+#: ../src/subscription_manager/managercli.py:1547
 msgid "list the configuration for this system"
 msgstr "このシステム用の設定の一覧表示"
 
-#: ../src/subscription_manager/managercli.py:1547
+#: ../src/subscription_manager/managercli.py:1549
 msgid "remove configuration entry by section.name"
 msgstr "「セクション.名前」により設定エントリを削除"
 
-#: ../src/subscription_manager/managercli.py:1551
+#: ../src/subscription_manager/managercli.py:1553
 #, python-format
 msgid "Section: %s, Name: %s"
 msgstr "セクション: %s、名前: %s"
 
-#: ../src/subscription_manager/managercli.py:1566
+#: ../src/subscription_manager/managercli.py:1568
 msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
-msgstr ""
-"エラー: 設定の実行または削除には、--list と他のオプションを併用しないことをお"
-"勧めします。"
+msgstr "エラー: 設定の実行または削除には、--list と他のオプションを併用しないことをお勧めします。"
 
-#: ../src/subscription_manager/managercli.py:1585
+#: ../src/subscription_manager/managercli.py:1587
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
-msgstr ""
-"エラー: 削除する設定エントリの項目表示は [セクション.名前] の形式でなければな"
-"りません"
+msgstr "エラー: 削除する設定エントリの項目表示は [セクション.名前] の形式でなければなりません"
 
-#: ../src/subscription_manager/managercli.py:1596
+#: ../src/subscription_manager/managercli.py:1598
 #, python-format
 msgid "Error: Section %s and name %s does not exist."
 msgstr "エラー: セクション %s と名前 %s は存在しません。"
 
-#: ../src/subscription_manager/managercli.py:1615
+#: ../src/subscription_manager/managercli.py:1617
 msgid "[] - Default value in use"
 msgstr "[] - 使用中のデフォルト値"
 
-#: ../src/subscription_manager/managercli.py:1624
-#: ../src/subscription_manager/managercli.py:1627
+#: ../src/subscription_manager/managercli.py:1626
+#: ../src/subscription_manager/managercli.py:1629
 #, python-format
 msgid "You have removed the value for section %s and name %s."
 msgstr "セクション %s と名前 %s の値を削除しています。"
 
-#: ../src/subscription_manager/managercli.py:1628
+#: ../src/subscription_manager/managercli.py:1630
 #, python-format
 msgid "The default value for %s will now be used."
 msgstr "%s のデフォルト値は今使用されます。"
 
-#: ../src/subscription_manager/managercli.py:1630
+#: ../src/subscription_manager/managercli.py:1632
 #, python-format
 msgid "Section %s and name %s cannot be removed."
 msgstr "セクション %s と名前 %s は削除できません。"
 
-#: ../src/subscription_manager/managercli.py:1644
+#: ../src/subscription_manager/managercli.py:1646
 msgid "List subscription and product information for this machine"
 msgstr "このマシン用のサブスクリプションと製品情報の一覧表示"
 
-#: ../src/subscription_manager/managercli.py:1649
+#: ../src/subscription_manager/managercli.py:1651
 msgid "list shows those products which are installed (default)"
 msgstr "一覧はインスト─ル済みのそれらの製品を表示します (デフォルト)"
 
-#: ../src/subscription_manager/managercli.py:1651
+#: ../src/subscription_manager/managercli.py:1653
 msgid "show those subscriptions which are available"
 msgstr "利用可能なそれらのサブスクリプションを表示します。"
 
-#: ../src/subscription_manager/managercli.py:1653
-msgid "used with --available to ensure all subscriptions are returned"
-msgstr ""
-" --available と併用すると、全てのサブスクリプションが確実に返されます。"
-
 #: ../src/subscription_manager/managercli.py:1655
+msgid "used with --available to ensure all subscriptions are returned"
+msgstr " --available と併用すると、全てのサブスクリプションが確実に返されます。"
+
+#: ../src/subscription_manager/managercli.py:1657
 #, python-format
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
 "(example: %s)"
 msgstr "検索日。デフォルトは本日の日付です。--available との併用のみ (例: %s)"
 
-#: ../src/subscription_manager/managercli.py:1658
+#: ../src/subscription_manager/managercli.py:1660
 msgid "show the subscriptions being consumed by this system."
 msgstr "このシステムで消費されているサブスクリプションを表示"
 
-#: ../src/subscription_manager/managercli.py:1660
+#: ../src/subscription_manager/managercli.py:1662
 msgid ""
-"show only subscriptions matching the specified service level. Only used with "
-"--available and --consumed"
-msgstr ""
-"指定したサービスレベルと一致するサブスクリプションのみを表示。 --available "
-"と --consumed と併用でのみ使用"
+"show only subscriptions matching the specified service level. Only used with"
+" --available and --consumed"
+msgstr "指定したサービスレベルと一致するサブスクリプションのみを表示。 --available と --consumed と併用でのみ使用"
 
-#: ../src/subscription_manager/managercli.py:1667
+#: ../src/subscription_manager/managercli.py:1669
 msgid "Error: --all is only applicable with --available"
 msgstr "エラー: --all は --available との併用でのみ適用可能"
 
-#: ../src/subscription_manager/managercli.py:1670
+#: ../src/subscription_manager/managercli.py:1672
 msgid "Error: --ondate is only applicable with --available"
 msgstr "エラー: --ondate は  --available との併用でのみ適用可能"
 
-#: ../src/subscription_manager/managercli.py:1674
-msgid "Error: --servicelevel is only applicable with --available or --consumed"
-msgstr ""
-"エラー: --servicelevel は --available か --consumed との併用でのみ適用できま"
-"す"
+#: ../src/subscription_manager/managercli.py:1676
+msgid ""
+"Error: --servicelevel is only applicable with --available or --consumed"
+msgstr "エラー: --servicelevel は --available か --consumed との併用でのみ適用できます"
 
-#: ../src/subscription_manager/managercli.py:1697
+#: ../src/subscription_manager/managercli.py:1699
 msgid "No installed products to list"
 msgstr "表示できるインストール済み製品はありません"
 
-#: ../src/subscription_manager/managercli.py:1700
+#: ../src/subscription_manager/managercli.py:1702
 msgid "    Installed Product Status"
 msgstr "インストールしている製品の状態"
 
-#: ../src/subscription_manager/managercli.py:1717
-msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+#: ../src/subscription_manager/managercli.py:1719
+msgid ""
+"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr "入力した日付は無効です。日付は YYYY-MM-DD の形式にして下さい（例えば:"
 
-#: ../src/subscription_manager/managercli.py:1730
+#: ../src/subscription_manager/managercli.py:1732
 msgid "No available subscription pools to list"
 msgstr "表示できる使用可能なサブスクリプションプールはありません"
 
-#: ../src/subscription_manager/managercli.py:1740
+#: ../src/subscription_manager/managercli.py:1742
 msgid "virtual"
 msgstr "仮想"
 
-#: ../src/subscription_manager/managercli.py:1742
+#: ../src/subscription_manager/managercli.py:1744
 msgid "physical"
 msgstr "物理"
 
-#: ../src/subscription_manager/managercli.py:1787
+#: ../src/subscription_manager/managercli.py:1789
 msgid "No consumed subscription pools to list"
 msgstr "表示できる割り当て済みサブスクリプションプールはありません"
 
-#: ../src/subscription_manager/managercli.py:1791
+#: ../src/subscription_manager/managercli.py:1793
 msgid "Consumed Subscriptions"
 msgstr ""
 
-#: ../src/subscription_manager/managercli.py:1799
+#: ../src/subscription_manager/managercli.py:1801
 #, python-format
 msgid "Provides:             \t%s"
 msgstr "提供:             \t%s"
 
-#: ../src/subscription_manager/managercli.py:1802
+#: ../src/subscription_manager/managercli.py:1804
 #, python-format
 msgid "                      \t%s"
 msgstr "                      \t%s"
 
-#: ../src/subscription_manager/managercli.py:1809
+#: ../src/subscription_manager/managercli.py:1811
 #, python-format
 msgid "Contract:             \t%s"
 msgstr "コントラクト:             \t%s"
 
-#: ../src/subscription_manager/managercli.py:1811
+#: ../src/subscription_manager/managercli.py:1813
 #, python-format
 msgid "Account:              \t%s"
 msgstr "アカウント:              \t%s"
 
-#: ../src/subscription_manager/managercli.py:1813
+#: ../src/subscription_manager/managercli.py:1815
 #, python-format
 msgid "Serial Number:        \t%s"
 msgstr "シリアル番号:        \t%s"
 
-#: ../src/subscription_manager/managercli.py:1815
+#: ../src/subscription_manager/managercli.py:1817
 #, python-format
 msgid "Active:               \t%s"
 msgstr "アクティブ:               \t%s"
 
-#: ../src/subscription_manager/managercli.py:1817
+#: ../src/subscription_manager/managercli.py:1819
 #, python-format
 msgid "Quantity Used:        \t%s"
 msgstr "使用数量:        \t%s"
 
-#: ../src/subscription_manager/managercli.py:1862
+#: ../src/subscription_manager/managercli.py:1864
 msgid "Print version information"
 msgstr "バージョン情報を表示"
 
-#: ../src/subscription_manager/managercli.py:1872
+#: ../src/subscription_manager/managercli.py:1874
 #, python-format
 msgid "remote entitlement server: %s"
 msgstr "リモートのエンタイトルメントサーバー: %s"
 
-#: ../src/subscription_manager/managercli.py:1874
+#: ../src/subscription_manager/managercli.py:1876
 #, python-format
 msgid "subscription-manager: %s"
 msgstr "subscription-manager: %s"
 
-#: ../src/subscription_manager/managercli.py:1875
+#: ../src/subscription_manager/managercli.py:1877
 #, python-format
 msgid "python-rhsm: %s"
 msgstr "python-rhsm: %s"
 
-#: ../src/subscription_manager/managercli.py:1899
+#: ../src/subscription_manager/managercli.py:1901
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 msgstr "使い方: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 
-#: ../src/subscription_manager/managercli.py:1901
+#: ../src/subscription_manager/managercli.py:1903
 msgid "Primary Modules:"
 msgstr "プライマリモジュール:"
 
-#: ../src/subscription_manager/managercli.py:1910
+#: ../src/subscription_manager/managercli.py:1912
 msgid "Other Modules (Please consult documentation):"
 msgstr "その他のモジュール (ドキュメントをご覧下さい):"
 
 #: ../src/subscription_manager/utils.py:150
 msgid ""
 "Server URL is just a schema. Should include hostname, and/or port and path"
-msgstr ""
-"サーバー URL は単にスキーマです。ホスト名か、ポート/パスの一方、又は両方を含"
-"めます"
+msgstr "サーバー URL は単にスキーマです。ホスト名か、ポート/パスの一方、又は両方を含めます"
 
 #: ../src/subscription_manager/utils.py:172
 msgid "Server URL can not be empty"
@@ -1998,9 +1906,7 @@ msgstr "サーバーの URL を無しにすることはできません。"
 
 #: ../src/subscription_manager/utils.py:185
 msgid "Server URL has an invalid scheme. http:// and https:// are supported"
-msgstr ""
-"サーバーの URL に無効なスキームがあります。http:// と https:// がサポートされ"
-"ています"
+msgstr "サーバーの URL に無効なスキームがあります。http:// と https:// がサポートされています"
 
 #: ../src/subscription_manager/utils.py:215
 msgid "Server url port could not be parsed"
@@ -2075,6 +1981,7 @@ msgid "<b>Contract:</b>"
 msgstr "<b>コントラクト:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:3
+#: ../src/subscription_manager/gui/data/subdetailsnocontract.glade.h:1
 msgid "<b>Products:</b>"
 msgstr "<b>製品:</b>"
 
@@ -2083,14 +1990,17 @@ msgid "<b>Provides Management:</b>"
 msgstr "<b>管理の提供:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:5
+#: ../src/subscription_manager/gui/data/subdetailsnocontract.glade.h:2
 msgid "<b>SKU:</b>"
 msgstr ""
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:6
+#: ../src/subscription_manager/gui/data/subdetailsnocontract.glade.h:3
 msgid "<b>Service Level:</b>"
 msgstr "<b>サービスレベル:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
+#: ../src/subscription_manager/gui/data/subdetailsnocontract.glade.h:4
 msgid "<b>Service Type:</b>"
 msgstr "<b>サービスタイプ:</b>"
 
@@ -2099,12 +2009,14 @@ msgid "<b>Start - End Date:</b>"
 msgstr "<b>開始日 - 終了日:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:9
+#: ../src/subscription_manager/gui/data/subdetailsnocontract.glade.h:5
 msgid "<b>Subscription Details</b>"
 msgstr "<b>サブスクリプションの詳細</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:10
 #: ../src/subscription_manager/gui/data/contract_selection.glade.h:3
 #: ../src/subscription_manager/gui/data/installed.glade.h:5
+#: ../src/subscription_manager/gui/data/subdetailsnocontract.glade.h:6
 msgid "<b>Subscription:</b>"
 msgstr "<b>サブスクリプション:</b> "
 
@@ -2117,18 +2029,16 @@ msgid "Account Text"
 msgstr "アカウントテキスト"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:13
+#: ../src/subscription_manager/gui/data/subdetailsnocontract.glade.h:7
 msgid "Bundled Products Table"
 msgstr "同梱されている製品表"
-
-#: ../src/subscription_manager/gui/data/subdetails.glade.h:14
-msgid "Contract Number"
-msgstr "コントラクト番号"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:15
 msgid "Provides Management Text"
 msgstr "管理テキストを提供します"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:16
+#: ../src/subscription_manager/gui/data/subdetailsnocontract.glade.h:8
 msgid "SKU Text"
 msgstr ""
 
@@ -2137,14 +2047,17 @@ msgid "Start End Date Text"
 msgstr "開始日と終了日のテキスト"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:18
+#: ../src/subscription_manager/gui/data/subdetailsnocontract.glade.h:9
 msgid "Subscription Text"
 msgstr "サブスクリプションテキスト"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:19
+#: ../src/subscription_manager/gui/data/subdetailsnocontract.glade.h:10
 msgid "Support Level Text"
 msgstr "サポートレベルテキスト"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:20
+#: ../src/subscription_manager/gui/data/subdetailsnocontract.glade.h:11
 msgid "Support Type Text"
 msgstr "サポートタイプテキスト"
 
@@ -2223,8 +2136,8 @@ msgid "Subscription Redemption"
 msgstr "サブスクリプションの償還"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:1
-msgid "Configure _Proxy"
-msgstr "プロキシの設定 (_P)"
+msgid "Configure Pro_xy"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:2
 msgid "R_edeem Subscription"
@@ -2251,12 +2164,12 @@ msgid "_Online Documentation"
 msgstr "オンラインドキュメント (_O)"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:9
-msgid "_Register"
-msgstr "登録 (_R)"
+msgid "_Preferences"
+msgstr ""
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:10
-msgid "_Settings"
-msgstr "セッティング (_S)"
+msgid "_Register"
+msgstr "登録 (_R)"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:11
 msgid "_System"
@@ -2624,9 +2537,8 @@ msgid ""
 "After opening Subscription Manager, manually subscribe via the <b>All "
 "Available Subscriptions</b> tab."
 msgstr ""
-"サブスクリプションマネージャを開いた後に、 <b>All Available Subscriptions (全"
-"ての利用可能なサブスクリプション)</b> のタブ経由で手動でサブスクライブしま"
-"す。"
+"サブスクリプションマネージャを開いた後に、 <b>All Available Subscriptions (全ての利用可能なサブスクリプション)</b>"
+" のタブ経由で手動でサブスクライブします。"
 
 #: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
 msgid ""
@@ -2634,17 +2546,14 @@ msgid ""
 "Subscription Manager can be found in <b>System > Administration > "
 "Subscription Manager</b>."
 msgstr ""
-"ファーストブートが完了した後には、手動でこのシステムをサブスクライブする必要"
-"があります。サブスクリプションマネージャは <b>システム > 管理 > サブスクリプ"
-"ションマネージャ</b> と進んでいくと見つかります。"
+"ファーストブートが完了した後には、手動でこのシステムをサブスクライブする必要があります。サブスクリプションマネージャは <b>システム > 管理 > "
+"サブスクリプションマネージャ</b> と進んでいくと見つかります。"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1
 msgid ""
 "<small>Your system's release preference is followed when installing and "
 "updating packages.</small>"
-msgstr ""
-"<small>パッケージのインスト－ルと更新の際にご使用システムのリリース詳細設定が"
-"反映されます。</small>"
+msgstr "<small>パッケージのインスト－ルと更新の際にご使用システムのリリース詳細設定が反映されます。</small>"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:2
 msgid ""
@@ -2728,9 +2637,7 @@ msgstr "実行するには root ユーザーでなければなりません\n"
 msgid ""
 "Could not read installation number from /etc/sysconfig/rhn/install-num.  "
 "Aborting."
-msgstr ""
-"/etc/sysconfig/rhn/install-num からインストール番号を読み取れませんでした。中"
-"止しています。"
+msgstr "/etc/sysconfig/rhn/install-num からインストール番号を読み取れませんでした。中止しています。"
 
 #: ../bin/install-num-migrate-to-rhsm:115
 #, c-format
@@ -2747,39 +2654,33 @@ msgid "Ignore channels not available on RHSM"
 msgstr "RHSM では利用できないチャンネルは無視する"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:67
-msgid "Launch the GUI tool to subscribe the system, instead of autosubscribing"
-msgstr ""
-"自動サブスクライブの代わりに、 GUI ツールを起動してシステムをサブスクライブ"
+msgid ""
+"Launch the GUI tool to subscribe the system, instead of autosubscribing"
+msgstr "自動サブスクライブの代わりに、 GUI ツールを起動してシステムをサブスクライブ"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:69
 msgid ""
 "Don't execute the autosubscribe option while registering with subscription "
 "manager."
-msgstr ""
-"サブスクリプションマネージャで登録を行っている間は、 自動サブスクライブのオプ"
-"ションは実行しないでください。"
+msgstr "サブスクリプションマネージャで登録を行っている間は、 自動サブスクライブのオプションは実行しないでください。"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:71
 msgid ""
-"Service level to subscribe this system to. For no service level use --"
-"service-level=\"\""
-msgstr ""
-"このシステムをサブスクライブする為のサービスレベル。どのサービスレベルも --"
-"service-level=\"\" を使用しません。"
+"Service level to subscribe this system to. For no service level use "
+"--service-level=\"\""
+msgstr "このシステムをサブスクライブする為のサービスレベル。どのサービスレベルも --service-level=\"\" を使用しません。"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:75
 #, c-format
-msgid "%s [OPTIONS]"
-msgstr "%s [オプション]"
+msgid "%prog [OPTIONS]"
+msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:100
 #, c-format
 msgid ""
-"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"証明書サーバーに接続できません: %s。 詳細を /var/log/rhsm/rhsm.log で確認して"
-"ください。"
+"Unable to connect to certificate server: %s.  See /var/log/rhsm/rhsm.log for"
+" more details."
+msgstr "証明書サーバーに接続できません: %s。 詳細を /var/log/rhsm/rhsm.log で確認してください。"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:122
 msgid "You have entered an invalid choice."
@@ -2788,8 +2689,7 @@ msgstr "無効な選択肢を入力しました。"
 #: ../bin/rhn-migrate-classic-to-rhsm:177
 msgid ""
 "\n"
-"This machine appears to be already registered to Certificate-based RHN.  "
-"Exiting."
+"This machine appears to be already registered to Certificate-based RHN.  Exiting."
 msgstr ""
 "\n"
 "このマシンは既に証明書ベースの RHN に登録されているようです。終了しています。"
@@ -2798,12 +2698,10 @@ msgstr ""
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"profile details."
+"Please visit https://access.redhat.com/management/consumers/%s to view the profile details."
 msgstr ""
 "\n"
-"プロファイルの詳細を表示するには、https://access.redhat.com/management/"
-"consumers/%s にアクセスして下さい。"
+"プロファイルの詳細を表示するには、https://access.redhat.com/management/consumers/%s にアクセスして下さい。"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:185
 #, c-format
@@ -2812,15 +2710,13 @@ msgid ""
 "However this system appears to be registered to '%s'.\n"
 "Exiting."
 msgstr ""
-"この移行スクリプトを使用する場合は、 システムを RHN Classic に登録させる必要"
-"があります。\n"
+"この移行スクリプトを使用する場合は、 システムを RHN Classic に登録させる必要があります。\n"
 "このシステムは「%s」に登録されているようです。\n"
 "終了します。"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:208
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
-msgstr ""
-"RHN Classic でのユーザーの役割判定で問題が発生しました。終了しています。"
+msgstr "RHN Classic でのユーザーの役割判定で問題が発生しました。終了しています。"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:210
 msgid "You must be an org admin to successfully run this script."
@@ -2853,17 +2749,13 @@ msgstr "SystemId ファイルが見つかりません。このシステムは登
 
 #: ../bin/rhn-migrate-classic-to-rhsm:248
 msgid "Problem encountered getting the list of subscribed channels.  Exiting."
-msgstr ""
-"サブスクライブしたチャンネル一覧の取得時に問題が発生しました。終了していま"
-"す。"
+msgstr "サブスクライブしたチャンネル一覧の取得時に問題が発生しました。終了しています。"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:280
 msgid ""
 "Unable to authenticate to RHN Classic.  See /var/log/rhsm/rhsm.log for more "
 "details."
-msgstr ""
-"RHN Classic への認証ができません。詳細について、/var/log/rhsm/rhsm.log をご覧"
-"下さい。"
+msgstr "RHN Classic への認証ができません。詳細について、/var/log/rhsm/rhsm.log をご覧下さい。"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:294
 msgid "System successfully unregistered from RHN Classic."
@@ -2907,23 +2799,19 @@ msgstr "適切なサブスクリプションを自動サブスクライブしよ
 #: ../bin/rhn-migrate-classic-to-rhsm:380
 msgid ""
 "\n"
-"Unable to auto-subscribe.  Do your existing subscriptions match the products "
-"installed on this system?"
+"Unable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?"
 msgstr ""
 "\n"
-"自動サブスクライブできません。使用している既存のサブスクリプションはこのシス"
-"テムにインストール済みの製品と適合しますか?"
+"自動サブスクライブできません。使用している既存のサブスクリプションはこのシステムにインストール済みの製品と適合しますか?"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:381
 #, c-format
 msgid ""
 "\n"
-"Please visit https://access.redhat.com/management/consumers/%s to view the "
-"details, and to make changes if necessary."
+"Please visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary."
 msgstr ""
 "\n"
-"詳細を表示するには https://access.redhat.com/management/consumers/%s にアクセ"
-"スし、必要に応じて変更して下さい。"
+"詳細を表示するには https://access.redhat.com/management/consumers/%s にアクセスし、必要に応じて変更して下さい。"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:393
 #, c-format
@@ -2937,12 +2825,10 @@ msgstr "RHSM では使用できないチャンネル:"
 #: ../bin/rhn-migrate-classic-to-rhsm:422
 msgid ""
 "\n"
-"Unrecognized channels. Channel to product certificate mapping missing for "
-"these channels."
+"Unrecognized channels. Channel to product certificate mapping missing for these channels."
 msgstr ""
 "\n"
-"認識できないチャンネルです。 これらのチャンネルにはチャンネルと製品証明書をつ"
-"なぐマッピングがありません。"
+"認識できないチャンネルです。 これらのチャンネルにはチャンネルと製品証明書をつなぐマッピングがありません。"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:429
 msgid ""
@@ -2979,11 +2865,11 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:493
 msgid ""
-"Please ensure system is subscribed to entitlements, and alter /etc/yum.repos."
-"d/redhat.repo to enable extra repositories."
+"Please ensure system is subscribed to entitlements, and alter "
+"/etc/yum.repos.d/redhat.repo to enable extra repositories."
 msgstr ""
-"システムがエンタイトルメントに購読していることを確認してから、余分なレポジト"
-"リを有効にできるように /etc/yum.repos.d/redhat.repo を変更して下さい。"
+"システムがエンタイトルメントに購読していることを確認してから、余分なレポジトリを有効にできるように "
+"/etc/yum.repos.d/redhat.repo を変更して下さい。"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:530
 msgid "RHN Username: "
@@ -3035,9 +2921,8 @@ msgid ""
 "system must be registered with RHN. Please enter your Red Hat login to "
 "ensure your system is up-to-date."
 msgstr ""
-"サブスクリプションマネージャーでシステムに更新を提供させるには、 システムを "
-"RHN に登録する必要があります。 Red Hat ログインを行いシステムが最新の状態であ"
-"ることを確認してください。"
+"サブスクリプションマネージャーでシステムに更新を提供させるには、 システムを RHN に登録する必要があります。 Red Hat "
+"ログインを行いシステムが最新の状態であることを確認してください。"
 
 #: ../src/rhsm_icon.c:212
 msgid "Invalid or Missing Entitlement Certificates"
@@ -3045,8 +2930,7 @@ msgstr "無効の、又は存在しないエンタイトルメント証明書"
 
 #: ../src/rhsm_icon.c:215
 msgid "This system is missing one or more valid entitlement certificates."
-msgstr ""
-"このシステムには１つ以上の有効なエンタイトルメント証明書が欠如しています。"
+msgstr "このシステムには１つ以上の有効なエンタイトルメント証明書が欠如しています。"
 
 #: ../src/rhsm_icon.c:218
 msgid "Partially Entitled Products"
@@ -3056,9 +2940,7 @@ msgstr "部分的に権利のある製品"
 msgid ""
 "This system is missing one or more valid entitlement certificates to fully "
 "cover its products."
-msgstr ""
-"このシステムは、その製品を完全にカバーするための有効なエンタイトルメント証明"
-"書が１つ、又はそれ以上欠如しています。"
+msgstr "このシステムは、その製品を完全にカバーするための有効なエンタイトルメント証明書が１つ、又はそれ以上欠如しています。"
 
 #: ../src/rhsm_icon.c:225
 msgid "This System's Subscriptions Are About to Expire"
