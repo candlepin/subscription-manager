@@ -1,12 +1,14 @@
 import unittest
 
-from mock import Mock
+from mock import Mock, patch
 from subscription_manager.utils import remove_scheme, parse_server_info, \
     parse_baseurl_info, format_baseurl, ServerUrlParseErrorEmpty, \
     ServerUrlParseErrorNone, ServerUrlParseErrorPort, ServerUrlParseErrorScheme, \
-    ServerUrlParseErrorJustScheme, get_version
+    ServerUrlParseErrorJustScheme, get_version, get_version_dict, Versions
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
+
+from rhsm.version import Versions
 
 
 class TestParseServerInfo(unittest.TestCase):
@@ -253,6 +255,67 @@ class TestRemoveScheme(unittest.TestCase):
         proxy_url = "proxy.example.com"
         res = remove_scheme(proxy_url)
         self.assertEquals(res, proxy_url)
+
+
+NOT_COLLECTED = "non-collected-package"
+
+
+# Note, this is duped from python-rhsm/test/unit/version_tests.py
+class VersionsStub(Versions):
+    def _get_packages(self):
+        package_set = [{'name': Versions.SUBSCRIPTION_MANAGER, 'version':'1', 'release': "1"},
+                       {'name': Versions.PYTHON_RHSM, 'version':'2', 'release': "2"},
+                       {'name': NOT_COLLECTED, 'version':'3', 'release': "3"}]
+        return package_set
+
+
+class TestGetVersionDict(unittest.TestCase):
+    @patch('subscription_manager.utils.Versions')
+    def test_get_version_dict(self, MockVersions):
+        instance = MockVersions.return_value
+        instance.get_version.return_value = '2'
+        instance.get_release.return_value = '3'
+        vd = get_version_dict(None)
+
+        self.assertEquals(vd['subscription manager'], "2-3")
+        self.assertEquals(vd['python-rhsm'], '2-3')
+
+    @patch('subscription_manager.utils.ClassicCheck')
+    def test_get_version_dict_classic(self, MockClassicCheck):
+        from subscription_manager import utils
+        instance = MockClassicCheck.return_value
+        instance.is_registered_with_classic.return_value = True
+        utils.Versions = VersionsStub
+
+        vd = utils.get_version_dict(None)
+        self.assertEquals(vd['server-type'], "RHN Classic")
+        self.assertEquals(vd['candlepin'], "Unknown")
+
+    @patch('rhsm.connection.UEPConnection')
+    def test_get_version_dict_cp_no_status(self, MockUep):
+        MockUep.supports_resource.return_value = False
+        vd = get_version_dict(MockUep)
+        self.assertEquals(vd['server-type'], 'subscription management service')
+        self.assertEquals(vd['candlepin'], "Unknown")
+
+    @patch('rhsm.connection.UEPConnection')
+    def test_get_version_dict_cp_with_status(self, MockUep):
+        MockUep.supports_resource.return_value = True
+        MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
+        vd = get_version_dict(MockUep)
+        self.assertEquals(vd['server-type'], 'subscription management service')
+        self.assertEquals(vd['candlepin'], '101-23423c')
+
+    @patch('rhsm.connection.UEPConnection')
+    def test_get_version_dict_cp_exception(self, MockUep):
+        def raise_exception(arg):
+            raise Exception("boom")
+
+        MockUep.supports_resource.side_effect = raise_exception
+        MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
+        vd = get_version_dict(MockUep)
+        self.assertEquals(vd['server-type'], "Unknown")
+        self.assertEquals(vd['candlepin'], "Unknown")
 
 
 class TestGetVersion(unittest.TestCase):

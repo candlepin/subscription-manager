@@ -303,7 +303,12 @@ def get_version_dict(cp):
                 cp_version = '-'.join([status['version'], status['release']])
             else:
                 cp_version = _("Unknown")
-        except Exception:
+        except Exception, e:
+            # a more useful error would be handy here
+            print _("Error while checking server version: %s") % e
+            log.exception(e)
+
+            server_type = _("Unknown")
             cp_version = _("Unknown")
 
     if ClassicCheck().is_registered_with_classic():
