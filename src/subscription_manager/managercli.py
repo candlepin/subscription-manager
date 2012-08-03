@@ -147,7 +147,7 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
     if service_level:
         cp.updateConsumer(consumer_uuid, service_level=service_level)
         print(_("Service level set to: %s") % service_level)
-    
+
     try:
         cp.bind(consumer_uuid)  # new style
 
