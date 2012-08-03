@@ -22,6 +22,15 @@
 if __name__ != '__main__':
     raise ImportError("module cannot be imported")
 
+import warnings
+# this is a deprecation warning we see on rhel6, but the
+# functionality doesn't seem to exist in public api yet
+# Note that you do not see this on python2.7 systems as
+# deprecationWarnings are ignored by default
+warnings.filterwarnings(action="ignore",
+                        category=DeprecationWarning,
+                        message="^The dbus_bindings module is not public API and will go away soon.")
+
 import sys
 import os
 import dbus

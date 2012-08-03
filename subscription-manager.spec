@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.11
+Version: 1.0.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -335,6 +335,24 @@ fi
 %endif
 
 %changelog
+* Thu Aug 02 2012 Alex Wood <awood@redhat.com> 1.0.12-1
+- remove test cases that use si_LK locale (alikins@redhat.com)
+- 842845: Show better error if serverurl port is non numeric
+  (alikins@redhat.com)
+- 838113: 'unregister' was not cleaning up repos (alikins@redhat.com)
+- 842170: replace None service level/type with "" not None (alikins@redhat.com)
+- 844069: Allow register --force even if ID cert is totally invalid.
+  (dgoodwin@redhat.com)
+- 826874: Remove use of deprecated Gtk.Notebook.set_page (alikins@redhat.com)
+- 818355: Terminology Change: Contract Number -> Contract (wpoteat@redhat.com)
+- 844368: productid plugin was failing on ProductCert.product
+  (alikins@redhat.com)
+- Ignore warning about use of dbus.dbus_bindings (alikins@redhat.com)
+- 844178: Fix error message when importing a non-entitlement cert bundle.
+  (dgoodwin@redhat.com)
+- remove deprecated use of DateRange.hasNow() (jbowes@redhat.com)
+- remove use of DateRange.hasDate() (alikins@redhat.com)
+
 * Wed Jul 25 2012 Alex Wood <awood@redhat.com> 1.0.11-1
 - Remove deprecated use of hasDate. (dgoodwin@redhat.com)
 - Fix missed use of renamed method. (dgoodwin@redhat.com)

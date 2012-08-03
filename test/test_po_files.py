@@ -69,7 +69,7 @@ class TestLocale(unittest.TestCase):
         #"br_IN", # Maithili
         "pt_BR",  # Portugese
         "ru_RU",  # Russian
-        "si_LK",   # Sri Lankan
+        #"si_LK",   # Sri Lankan
         "ta_IN",  # Tamil
         "te_IN",  # telgu
         "zh_CN",  # Chinese Simplified
