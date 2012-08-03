@@ -127,7 +127,7 @@ def handle_exception(msg, ex):
         print _("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.")
         sys.exit(-1)
     elif isinstance(ex, connection.RestlibException):
-        print _(ex.msg)
+        print ex.msg
         sys.exit(-1)
     elif isinstance(ex, SSL.Checker.WrongHost):
         print str(ex)
