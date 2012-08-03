@@ -15,7 +15,10 @@
 
 import unittest
 
-from rhsm.connection import UEPConnection
+from rhsm.connection import UEPConnection, ConnectionException, ConnectionSetupException, \
+        BadCertificateException, RestlibException, GoneException, NetworkException, \
+        RemoteServerException
+
 from mock import Mock
 from datetime import date
 
@@ -51,3 +54,82 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn.request_post = Mock(return_value=[])
         self.cp.bind("abcd")
         self.cp.conn.request_post.assert_called_with("/consumers/abcd/entitlements")
+
+
+# see #830767 and #842885 for examples of why this is
+# a useful test. Aka, sometimes we forget to make
+# str/repr work and that cases weirdness
+class ExceptionTest(unittest.TestCase):
+    exception = Exception
+
+    def _stringify(self, e):
+        # FIXME: validate results are strings, unicode, etc
+        # but just looking for exceptions atm
+        # - no assertIsInstance on 2.4/2.6
+        self.assertTrue(isinstance("%s" % e, basestring))
+        self.assertTrue(isinstance("%s" % str(e), basestring))
+        self.assertTrue(isinstance("%s" % repr(e), basestring))
+
+    def _create_exception(self,*args, **kwargs):
+        return self.exception(args, kwargs)
+
+    def _test(self):
+        e = self._create_exception()
+        self._stringify(e)
+
+    def test_exception_str(self):
+        self._test()
+
+# not all our exceptions take a msg arg
+class ExceptionMsgTest(ExceptionTest):
+    def test_exception_str_with_msg(self):
+        e = self._create_exception("I have a bad feeling about this")
+        self._stringify(e)
+
+
+class ConnectionExceptionText(ExceptionMsgTest):
+    exception = ConnectionException
+
+
+class ConnectionSetupExceptionTest(ExceptionMsgTest):
+    exception = ConnectionSetupException
+
+
+class BadCertificateException(ExceptionTest):
+    exception = BadCertificateException
+
+    def _create_exception(self, *args, **kwargs):
+        kwargs['cert_path'] = "/etc/sdfsd"
+        return self.exception(*args, **kwargs)
+
+
+class RestlibExceptionTest(ExceptionTest):
+    exception = RestlibException
+
+    def _create_exception(self, *args, **kwargs):
+        kwargs['msg'] = "foo"
+        kwargs['code'] = 404
+        return self.exception(*args, **kwargs)
+
+
+class GoneExceptionTest(ExceptionTest):
+    exception = GoneException
+
+    def setUp(self):
+        self.code = 410
+        self.deleted_id = 12345
+
+    def _create_exception(self, *args, **kwargs):
+        kwargs['msg'] = "foo is gone"
+        kwargs['code'] = self.code
+        kwargs['deleted_id'] = self.deleted_id
+        return self.exception(*args, **kwargs)
+
+    # hmm, maybe these should fail?
+    def test_non_int_code(self):
+        self.code = "410"
+        self._test()
+
+    def test_even_less_int_code(self):
+        self.code = "asdfzczcvzcv"
+        self._test()
