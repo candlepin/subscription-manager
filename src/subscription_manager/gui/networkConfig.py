@@ -117,6 +117,8 @@ class NetworkConfigDialog:
         if proxy and self.xml.get_widget("enableProxyButton").get_active():
             # Remove any URI scheme provided
             proxy = remove_scheme(proxy)
+            # Update the proxy entry field to show we removed any scheme
+            self.xml.get_widget("proxyEntry").set_text(proxy)
             try:
                 proxy_hostname, proxy_port = proxy.split(':')
                 self.cfg.set("server", "proxy_hostname", proxy_hostname)
