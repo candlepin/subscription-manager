@@ -32,7 +32,7 @@ from subscription_manager import managerlib
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
-# we need gtk 2.18+ to do the right markup in likify
+# we need gtk 2.18+ to do the right markup in linkify
 MIN_GTK_MAJOR = 2
 MIN_GTK_MINOR = 18
 MIN_GTK_MICRO = 0
