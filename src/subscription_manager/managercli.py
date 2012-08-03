@@ -1474,9 +1474,9 @@ class ReposCommand(CliCommand):
         self.parser.add_option("--list", action="store_true",
                                help=_("list known repos for this system"))
         self.parser.add_option("--enable", dest="enable", metavar="REPOID",
-                               help=_("repo to enable"))
+                               action='append', help=_("repo to enable"))
         self.parser.add_option("--disable", dest="disable", metavar="REPOID",
-                               help=_("repo to disable"))
+                               action='append', help=_("repo to disable"))
 
     def _do_command(self):
         self._validate_options()
@@ -1487,35 +1487,47 @@ class ReposCommand(CliCommand):
         if cfg.has_option('rhsm', 'manage_repos') and \
                 not int(cfg.get('rhsm', 'manage_repos')):
             print _("Repositories disabled by configuration.")
-        elif self.options.enable:
+        if self.options.enable:
+            repos_enabled = []
+            change_repos = []
             found = False
-            for repo in repos:
-                if repo.id == self.options.enable:
-                    if repo['enabled'] is not '1':
-                        repo['enabled'] = '1'
-                        self.updateFile(repo)
-                    print _("Repo %s is enabled for this system.") % repo.id
-                    found = True
-                    break
+            for enable in self.options.enable:
+                for repo in repos:
+                    if repo.id == enable:
+                        if repo['enabled'] is not '1':
+                            repo['enabled'] = '1'
+                            change_repos.append(repo)
+                        repos_enabled.append(repo.id)
+                        found = True
+                        break
             if not found:
                 print _("Error: A valid repo id is required. "
                         "Use --list option to see valid repos.")
-                sys.exit(-1)
-        elif self.options.disable:
+            else:
+                self.updateFile(change_repos)
+                for repo in repos_enabled:
+                    print _("Repo %s is enabled for this system.") % repo
+        if self.options.disable:
+            repos_disabled = []
+            change_repos = []
             found = False
-            for repo in repos:
-                if repo.id == self.options.disable:
-                    if repo['enabled'] is not '0':
-                        repo['enabled'] = '0'
-                        self.updateFile(repo)
-                    print _("Repo %s is disabled for this system.") % repo.id
-                    found = True
-                    break
+            for disable in self.options.disable:
+                for repo in repos:
+                    if repo.id == disable:
+                        if repo['enabled'] is not '0':
+                            repo['enabled'] = '0'
+                            change_repos.append(repo)
+                        repos_disabled.append(repo.id)
+                        found = True
+                        break
             if not found:
                 print _("Error: A valid repo id is required. "
                         "Use --list option to see valid repos.")
-                sys.exit(-1)
-        elif self.options.list:
+            else:
+                self.updateFile(change_repos)
+                for repo in repos_disabled:
+                    print _("Repo %s is disabled for this system.") % repo
+        if self.options.list:
             if len(repos) > 0:
                 print("+----------------------------------------------------------+")
                 print _("    Entitled Repositories in %s") % rl.get_repo_file()
@@ -1528,10 +1540,11 @@ class ReposCommand(CliCommand):
             else:
                 print _("The system is not entitled to use any repositories.")
 
-    def updateFile(self, repo):
+    def updateFile(self, repos):
         repo_file = RepoFile()
         repo_file.read()
-        repo_file.update(repo)
+        for repo in repos:
+            repo_file.update(repo)
         repo_file.write()
 
 

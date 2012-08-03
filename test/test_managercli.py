@@ -300,6 +300,18 @@ class TestRedeemCommand(TestCliProxyCommand):
 class TestReposCommand(TestCliCommand):
     command_class = managercli.ReposCommand
 
+    def test_list(self):
+        self.cc.main(["--list"])
+        self.cc._validate_options()
+
+    def test_enable(self):
+        self.cc.main(["--enable", "one", "--enable", "two"])
+        self.cc._validate_options()
+
+    def test_disable(self):
+        self.cc.main(["--disable", "one", "--disable", "two"])
+        self.cc._validate_options()
+
 
 class TestConfigCommand(TestCliCommand):
     command_class = managercli.ConfigCommand
