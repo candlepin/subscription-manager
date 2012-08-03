@@ -174,8 +174,9 @@ def systemExit(code, msgs=None):
             sys.stderr.write(unicode(msg).encode('utf-8') + '\n')
     sys.exit(code)
 
-def isHosted(serverurl):
-    if re.search('subscription\.rhn\..*redhat\.com', serverurl):
+def isHosted():
+    hostname = rhsmcfg.get('server', 'hostname')
+    if re.search('subscription\.rhn\..*redhat\.com', hostname):
         return True # re.search doesn't return a boolean
     else:
         return False
@@ -421,7 +422,7 @@ def subscribe(consumer, servicelevel):
         if result != 0:
             print _("\nUnable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?")
     # don't show url for katello/CFSE/SAM
-    if options.serverurl:
+    if isHosted():
         print _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary.") % consumer.getConsumerId()
 
 
@@ -588,8 +589,7 @@ def main():
         serverurl = options.serverurl
     else:
         rhncreds = authenticate(_("RHN Username: "))
-        hostname = rhsmcfg.get('server', 'hostname')
-        if not isHosted(hostname):
+        if not isHosted():
             secreds = authenticate(_("System Engine Username: "))
         else:
             secreds = rhncreds # make them the same
