@@ -174,12 +174,14 @@ def systemExit(code, msgs=None):
             sys.stderr.write(unicode(msg).encode('utf-8') + '\n')
     sys.exit(code)
 
+
 def isHosted():
     hostname = rhsmcfg.get('server', 'hostname')
     if re.search('subscription\.rhn\..*redhat\.com', hostname):
-        return True # re.search doesn't return a boolean
+        return True  # re.search doesn't return a boolean
     else:
         return False
+
 
 def checkOkToProceed(secreds, serverurl):
 
@@ -570,10 +572,12 @@ def cleanUp(subscribedChannels):
             except OSError, e:
                 log.info(e)
 
+
 class UserCredentials(object):
     def __init__(self, username, password):
         self.username = username
         self.password = password
+
 
 def authenticate(prompt):
     username = raw_input(prompt).strip()
@@ -592,7 +596,7 @@ def main():
         if not isHosted():
             secreds = authenticate(_("System Engine Username: "))
         else:
-            secreds = rhncreds # make them the same
+            secreds = rhncreds  # make them the same
 
     transferHttpProxySettings()
     cp = checkOkToProceed(secreds, serverurl)
