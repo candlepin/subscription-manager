@@ -25,7 +25,7 @@ import gettext
 _ = lambda x: gettext.ldgettext("rhsm", x)
 gettext.textdomain("rhsm")
 
-from rhsm.connection import UEPConnection, RestlibException
+from rhsm.connection import UEPConnection, RestlibException, GoneException
 from subscription_manager.hwprobe import ClassicCheck
 from rhsm.version import Versions
 from M2Crypto.SSL import SSLError
@@ -283,7 +283,7 @@ def get_version(versions, package_name):
     return "%s%s" % (package_version, package_release)
 
 
-def get_version_dict(cp):
+def get_client_versions():
     # It's possible (though unlikely, and kind of broken) to have more
     # than one version of python-rhsm/subscription-manager installed.
     # Versions() will only return one (and I suspect it's not predictable
@@ -291,10 +291,14 @@ def get_version_dict(cp):
     versions = Versions()
     sm_version = get_version(versions, Versions.SUBSCRIPTION_MANAGER)
     pr_version = get_version(versions, Versions.PYTHON_RHSM)
+
+    return {"subscription manager": sm_version,
+            "python-rhsm": pr_version}
+
+
+def get_server_versions(cp):
     cp_version = _("No connection made to remote entitlement server")
-
     server_type = _("Unknown")
-
     if cp:
         server_type = _("subscription management service")
         try:
@@ -303,6 +307,9 @@ def get_version_dict(cp):
                 cp_version = '-'.join([status['version'], status['release']])
             else:
                 cp_version = _("Unknown")
+        except GoneException, e:
+            log.info(e)
+            raise
         except Exception, e:
             # a more useful error would be handy here
             print _("Error while checking server version: %s") % e
@@ -315,9 +322,5 @@ def get_version_dict(cp):
         server_type = _("RHN Classic")
         cp_version = _("Unknown")
 
-    return {
-            "subscription manager": sm_version,
-            "python-rhsm": pr_version,
-            "candlepin": cp_version,
-            "server-type": server_type
-    }
+    return {"candlepin": cp_version,
+            "server-type": server_type}

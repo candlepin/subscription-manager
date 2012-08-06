@@ -37,7 +37,7 @@ from subscription_manager.facts import Facts
 from subscription_manager.certdirectory import ProductDirectory, EntitlementDirectory
 from subscription_manager.certlib import ConsumerIdentity, CertLib
 from subscription_manager.branding import get_branding
-from subscription_manager.utils import get_version_dict
+from subscription_manager.utils import get_client_versions, get_server_versions
 
 from subscription_manager.gui import redeem
 from subscription_manager.gui import factsgui
@@ -200,7 +200,8 @@ class MainWindow(widgets.GladeWidget):
         self.consumer = consumer or Consumer()
         self.facts = facts or Facts()
 
-        log.debug("Versions: %s " % get_version_dict(self.backend.uep))
+        log.debug("Client Versions: %s " % get_client_versions())
+        log.debug("Server Versions: %s " % get_server_versions(self.backend.uep))
 
         self.product_dir = prod_dir or ProductDirectory()
         self.entitlement_dir = ent_dir or EntitlementDirectory()
