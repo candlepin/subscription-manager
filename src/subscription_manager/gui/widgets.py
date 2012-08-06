@@ -67,6 +67,11 @@ class GladeWidget(object):
 
 
 class SubscriptionManagerTab(GladeWidget):
+    # approx gtk version we need for grid lines to work
+    # and not throw errors, this relates to basically rhel6
+    MIN_GTK_MAJOR_GRID = 2
+    MIN_GTK_MINOR_GRID = 18
+    MIN_GTK_MICRO_GRID = 0
 
     def __init__(self, glade_file, initial_widget_names=[]):
         """
@@ -79,6 +84,13 @@ class SubscriptionManagerTab(GladeWidget):
                 initial_widget_names
         super(SubscriptionManagerTab, self).__init__(glade_file, widgets)
         self.content.unparent()
+
+        # grid lines seem busted in rhel5, so we disable
+        # in glade and turn on here for unbroken versions
+        if gtk.check_version(self.MIN_GTK_MAJOR_GRID,
+                             self.MIN_GTK_MINOR_GRID,
+                             self.MIN_GTK_MICRO_GRID) is None:
+            self.top_view.set_enable_tree_lines(gtk.TREE_VIEW_GRID_LINES_BOTH)
 
         self.store = self.get_store()
         self.top_view.set_model(self.store)

@@ -28,13 +28,15 @@ import logging
 import traceback
 import base64
 from datetime import datetime
-from rhsm.connection import UEPConnection
+from rhsm.connection import UEPConnection, RemoteServerException, RestlibException
+from M2Crypto.SSL import SSLError
 
 _LIBPATH = "/usr/share/rhsm"
 # add to the path if need be
 if _LIBPATH not in sys.path:
     sys.path.append(_LIBPATH)
 
+from subscription_manager.utils import parse_server_info, ServerUrlParseError
 from subscription_manager.i18n import configure_i18n
 configure_i18n()
 
@@ -70,6 +72,8 @@ options_table = [
     Option("-s", "--servicelevel", dest="servicelevel",
            help=_("Service level to subscribe this system to. For no service "
                   "level use --service-level=\"\"")),
+    Option("--serverurl", dest='serverurl',
+           help=_("Specify the SAM/System Engine server to migrate TO.")),
 ]
 
 parser = OptionParser(usage=_("%prog [OPTIONS]"),
@@ -171,28 +175,49 @@ def systemExit(code, msgs=None):
     sys.exit(code)
 
 
-def checkOkToProceed(username, password):
+def isHosted():
+    hostname = rhsmcfg.get('server', 'hostname')
+    if re.search('subscription\.rhn\..*redhat\.com', hostname):
+        return True  # re.search doesn't return a boolean
+    else:
+        return False
+
+
+def checkOkToProceed(secreds, serverurl):
+
     # check if this machine is already registered to Certicate-based RHN
     if ConsumerIdentity.existsAndValid():
         print _("\nThis machine appears to be already registered to Certificate-based RHN.  Exiting.")
         consumer = ConsumerIdentity.read()
         systemExit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % consumer.getConsumerId())
 
-    # Check to make sure we're hooked up to Hosted.
-    serverURL = rhncfg['serverURL']
-    if not re.search('xmlrpc\.rhn\..*redhat\.com', serverURL):
-        log.info("serverURL = %s" % serverURL)
-        systemExit(1, _("This migration script requires the system to be registered to RHN Classic.\nHowever this system appears to be registered to '%s'.\nExiting.") % serverURL.split('/')[2])
+    try:
+        if serverurl is None:
+            hostname = rhsmcfg.get('server', 'hostname')
+            port = rhsmcfg.get('server', 'port')
+            prefix = rhsmcfg.get('server', 'prefix')
+        else:
+            (hostname, port, prefix) = parse_server_info(serverurl)
+    except ServerUrlParseError, e:
+        print _("Error parsing serverurl: %s" % e.msg)
+        sys.exit(-1)
 
     # Check to make sure we can connect to the certificate server.
-    cp = UEPConnection(username=username, password=password,
+    cp = UEPConnection(host=hostname,
+            ssl_port=int(port),
+            handler=prefix,
+            username=secreds.username,
+            password=secreds.password,
             proxy_hostname=rhsmcfg.get('server', 'proxy_hostname'),
             proxy_port=rhsmcfg.get('server', 'proxy_port'),
             proxy_user=rhsmcfg.get('server', 'proxy_user'),
             proxy_password=rhsmcfg.get('server', 'proxy_password'))
 
     try:
-        cp.getOwnerList(username)
+        cp.getOwnerList(secreds.username)
+    except SSLError, e:
+        print _("Error: CA certificate for subscription service has not been installed.")
+        systemExit(1, CONNECTION_FAILURE % e)
     except Exception, e:
         log.error(e)
         log.error(traceback.format_exc())
@@ -211,14 +236,22 @@ def checkIsOrgAdmin(sc, sk, username):
 
 
 def selectServiceLevel(cp, consumer, servicelevel):
+    not_supported = _("Error: The service-level command is not supported by "
+                      "the server.")
     uuid = consumer.getConsumerId()
     try:
         org_key = cp.getOwner(uuid)['key']
         levels = cp.getServiceLevelList(org_key)
-    except Exception, e:
-        log.error(e)
-        log.error(traceback.format_exc())
-        systemExit(1, CONNECTION_FAILURE % e)
+    except RemoteServerException, e:
+        systemExit(-1, not_supported)
+    except RestlibException, e:
+            if e.code == 404:
+                # no need to die, just skip it
+                print not_supported
+                return None
+            else:
+                # server supports it but something went wrong, die.
+                raise e
 
     # Create the sla tuple before appending the empty string to the list of
     # valid slas.
@@ -256,7 +289,7 @@ def getSystemId():
     return systemId
 
 
-def connectToRhn(username, password):
+def connectToRhn(credentials):
     hostname = rhncfg['serverURL'].split('/')[2]
     server_url = 'https://%s/rpc/api' % (hostname)
     try:
@@ -273,7 +306,7 @@ def connectToRhn(username, password):
         else:
             sc = xmlrpclib.Server(server_url)
 
-        sk = sc.auth.login(username, password)
+        sk = sc.auth.login(credentials.username, credentials.password)
         return (sc, sk)
     except:
         log.error(traceback.format_exc())
@@ -356,10 +389,16 @@ def transferHttpProxySettings():
         rhsmcfg.save()
 
 
-def register(username, password):
+def register(credentials, serverurl):
     # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
     print _("\nAttempting to register system to Certificate-based RHN ...")
-    result = subprocess.call(['subscription-manager', 'register', '--username=' + username, '--password=' + password])
+    cmd = ['subscription-manager', 'register', '--username=' + credentials.username, '--password=' + credentials.password]
+    if serverurl:
+        # insert just after register (not sure if order matters,
+        # but just in case)
+        cmd.insert(2, '--serverurl=' + serverurl)
+    result = subprocess.call(cmd)
+
     if result != 0:
         systemExit(2, _("\nUnable to register.\nFor further assistance, please contact Red Hat Global Support Services."))
     else:
@@ -375,10 +414,18 @@ def subscribe(consumer, servicelevel):
         result = subprocess.call(['subscription-manager-gui'], stderr=open(os.devnull, 'w'))
     else:
         print _("Attempting to auto-subscribe to appropriate subscriptions ...")
-        result = subprocess.call(['subscription-manager', 'subscribe', '--auto', '--servicelevel=' + servicelevel])
+        cmd = ['subscription-manager', 'subscribe', '--auto']
+
+        # only add servicelevel if one was passed in
+        if servicelevel:
+            cmd.append('--servicelevel=' + servicelevel)
+
+        result = subprocess.call(cmd)
         if result != 0:
             print _("\nUnable to auto-subscribe.  Do your existing subscriptions match the products installed on this system?")
-    print _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary.") % consumer.getConsumerId()
+    # don't show url for katello/CFSE/SAM
+    if isHosted():
+        print _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary.") % consumer.getConsumerId()
 
 
 def deployProdCertificates(subscribedChannels):
@@ -526,14 +573,36 @@ def cleanUp(subscribedChannels):
                 log.info(e)
 
 
-def main():
-    username = raw_input(_("RHN Username: ")).strip()
-    password = getpass.getpass()
-    transferHttpProxySettings()
-    cp = checkOkToProceed(username, password)
+class UserCredentials(object):
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
 
-    (sc, sk) = connectToRhn(username, password)
-    checkIsOrgAdmin(sc, sk, username)
+
+def authenticate(prompt):
+    username = raw_input(prompt).strip()
+    password = getpass.getpass()
+    return UserCredentials(username, password)
+
+
+def main():
+    serverurl = None
+    if options.serverurl:
+        rhncreds = authenticate(_("RHN Username: "))
+        secreds = authenticate(_("System Engine Username: "))
+        serverurl = options.serverurl
+    else:
+        rhncreds = authenticate(_("RHN Username: "))
+        if not isHosted():
+            secreds = authenticate(_("System Engine Username: "))
+        else:
+            secreds = rhncreds  # make them the same
+
+    transferHttpProxySettings()
+    cp = checkOkToProceed(secreds, serverurl)
+
+    (sc, sk) = connectToRhn(rhncreds)
+    checkIsOrgAdmin(sc, sk, rhncreds.username)
 
     # get a list of RHN classic channels this machine is subscribed to
     print _("\nRetrieving existing RHN Classic subscription information ...")
@@ -552,9 +621,12 @@ def main():
 
     # register the system to Certificate-based RHN and consume a subscription
     if not options.noauto:
-        consumer = register(username, password)
-        servicelevel = selectServiceLevel(cp, consumer, options.servicelevel)
-        subscribe(consumer, servicelevel)
+        consumer = register(secreds, serverurl)
+        if options.servicelevel:
+            servicelevel = selectServiceLevel(cp, consumer, options.servicelevel)
+            subscribe(consumer, servicelevel)
+        else:
+            subscribe(consumer, None)
     # check if we need to enable to supplementary/optional channels
     enableExtraChannels(subscribedChannels, cp)
     cleanUp(subscribedChannels)
