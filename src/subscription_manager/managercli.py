@@ -1216,13 +1216,8 @@ class SubscribeCommand(CliCommand):
         consumer_uuid = check_registration()['uuid']
         self._validate_options()
         try:
-            # update facts first, if we need to
-            facts = Facts(ent_dir=self.entitlement_dir,
-                          prod_dir=self.product_dir)
-            facts.update_check(self.cp, consumer_uuid)
-
-            profile_mgr = ProfileManager()
-            profile_mgr.update_check(self.cp, consumer_uuid)
+            certmgr = CertManager(uep=self.cp)
+            certmgr.update()
             return_code = 0
             if self.options.pool:
                 subscribed = False
@@ -1480,8 +1475,8 @@ class ReposCommand(CliCommand):
 
     def _do_command(self):
         self._validate_options()
-#        certmgr = CertManager(uep=self.cp)
-#        certmgr.update()
+        certmgr = CertManager(uep=self.cp)
+        certmgr.update()
         rl = RepoLib(uep=self.cp)
         repos = rl.get_repos()
         if cfg.has_option('rhsm', 'manage_repos') and \
