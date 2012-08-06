@@ -9,6 +9,10 @@ from stubs import MockStdout, MockStderr, StubProductDirectory, \
         StubConsumerIdentity, StubProduct, StubUEP
 from test_handle_gui_exception import FakeException, FakeLogger
 
+# for some exceptions
+from rhsm import connection
+from M2Crypto import SSL
+
 
 class TestCliCommand(unittest.TestCase):
     command_class = managercli.CliCommand
@@ -300,6 +304,18 @@ class TestRedeemCommand(TestCliProxyCommand):
 class TestReposCommand(TestCliCommand):
     command_class = managercli.ReposCommand
 
+    def test_list(self):
+        self.cc.main(["--list"])
+        self.cc._validate_options()
+
+    def test_enable(self):
+        self.cc.main(["--enable", "one", "--enable", "two"])
+        self.cc._validate_options()
+
+    def test_disable(self):
+        self.cc.main(["--disable", "one", "--disable", "two"])
+        self.cc._validate_options()
+
 
 class TestConfigCommand(TestCliCommand):
     command_class = managercli.ConfigCommand
@@ -549,3 +565,55 @@ class HandleExceptionTests(unittest.TestCase):
         except SystemExit, e:
             self.assertEquals(e.code, -1)
         self.assertEqual(managercli.log.expected_msg, expected_msg)
+
+    def test_he_restlib_exception(self):
+        e = connection.RestlibException(404, "this is a msg")
+        try:
+            managercli.handle_exception("huh", e)
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+
+    def test_he_restlib_exception_unicode(self):
+        e = connection.RestlibException(404,
+            "Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
+        try:
+            managercli.handle_exception("обновлении", e)
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+
+    def test_he_bad_certificate(self):
+        e = connection.BadCertificateException("/road/to/nowhwere")
+        try:
+            managercli.handle_exception("huh", e)
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+
+    def test_he_remote_server_exception(self):
+        e = connection.RemoteServerException(1984)
+        try:
+            managercli.handle_exception("huh", e)
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+
+    def test_he_network_exception(self):
+        e = connection.NetworkException(1337)
+        try:
+            managercli.handle_exception("huh", e)
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+
+    def test_he_ssl_error(self):
+        e = SSL.SSLError()
+        try:
+            managercli.handle_exception("huh", e)
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)
+
+    def test_he_ssl_wrong_host(self):
+        e = SSL.Checker.WrongHost("expectedHost.example.com",
+                                   "actualHost.example.com",
+                                   "subjectAltName")
+        try:
+            managercli.handle_exception("huh", e)
+        except SystemExit, e:
+            self.assertEquals(e.code, -1)

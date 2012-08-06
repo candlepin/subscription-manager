@@ -44,24 +44,38 @@ def getDifferentSerialNumber(cls):
     return 3787455826750723381
 
 
+class InvalidConsumerIdentity(certlib.ConsumerIdentity):
+    @classmethod
+    def existsAndValid(cls):
+        return False
+
+
 class TestIdentityCertlib(unittest.TestCase):
 
-    def setUp(self):
+    def _get_idcertlib(self):
         self.stub_uep = stubs.StubUEP()
         self.stub_uep.getConsumer = getConsumerData
         self.stub_uep.getSerialNumber = getSerialNumber
-        self.idcertlib = certlib.IdentityCertLib(lock=MockActionLock(), uep=self.stub_uep)
+        return certlib.IdentityCertLib(lock=MockActionLock(), uep=self.stub_uep)
 
     def test_idcertlib_persists_cert(self):
+        idcertlib = self._get_idcertlib()
         certlib.ConsumerIdentity = stubs.StubConsumerIdentity
         certlib.ConsumerIdentity.getSerialNumber = getDifferentSerialNumber
         managerlib.persist_consumer_cert = Mock()
-        self.idcertlib._do_update()
+        idcertlib._do_update()
         managerlib.persist_consumer_cert.assert_called_once_with(CONSUMER_DATA)
 
     def test_idcertlib_noops_when_serialnum_is_same(self):
+        idcertlib = self._get_idcertlib()
         certlib.ConsumerIdentity = stubs.StubConsumerIdentity
         certlib.ConsumerIdentity.getSerialNumber = getSerialNumber
         managerlib.persist_consumer_cert = Mock()
-        self.idcertlib._do_update()
+        idcertlib._do_update()
         self.assertFalse(managerlib.persist_consumer_cert.called)
+
+    def test_idcertlib_no_id_cert(self):
+        certlib.ConsumerIdentity = InvalidConsumerIdentity
+        idcertlib = self._get_idcertlib()
+        ret = idcertlib._do_update()
+        self.assertEquals(ret, 0)

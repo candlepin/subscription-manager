@@ -380,9 +380,12 @@ fix-glade:
 # namely constructs of the forms: _("a" + "b")
 #                                 _("a" + \
 #                                   "b")
+#  also look for _(a) usages
+#   (though install-num-migrate-to-rhsm has a legit use, so ignore it)
 gettext_lint:
 	@TMPFILE=`mktemp` || exit 1; \
 	pcregrep -n --color=auto -M "_\(.*[\'|\"].*?[\'|\"]\s*\+.*?(?s)\s*[\"|\'].*?(?-s)[\"|\'].*?\)"  $(STYLEFILES) | tee $$TMPFILE; \
+	pcregrep -n --color=auto -M "[^_]_\([^\'\"].*?[\'\"]?\)" $(STYLEFILES) | grep -v "installation number"  | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
 #see bz #826874, causes issues on older libglade

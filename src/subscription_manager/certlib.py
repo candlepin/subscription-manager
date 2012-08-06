@@ -163,7 +163,14 @@ class IdentityCertLib(DataLib):
         super(IdentityCertLib, self).__init__(lock, uep)
 
     def _do_update(self):
+        if not ConsumerIdentity.existsAndValid():
+            # we could in theory try to update the id in the
+            # case of it being bogus/corrupted, ala #844069,
+            # but that seems unneeded
+            return 0
+
         from subscription_manager import managerlib
+
         idcert = ConsumerIdentity.read()
         uuid = idcert.getConsumerId()
         consumer = self.uep.getConsumer(uuid)
@@ -358,14 +365,13 @@ class ConsumerIdentity:
 
     @classmethod
     def existsAndValid(cls):
-        from M2Crypto import X509
         if cls.exists():
             try:
                 cls.read()
                 return True
-            except X509.X509Error, e:
-                log.error(e)
+            except Exception, e:
                 log.warn('possible certificate corruption')
+                log.error(e)
         return False
 
     def __init__(self, keystring, certstring):

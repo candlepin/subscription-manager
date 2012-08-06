@@ -144,9 +144,9 @@ class RegisterScreen(widgets.GladeWidget):
             self._current_screen = screen
             if self._screens[screen].needs_gui:
                 self._set_register_label(screen)
-                self.register_notebook.set_page(self._screens[screen].index)
+                self.register_notebook.set_current_page(self._screens[screen].index)
         else:
-            self.register_notebook.set_page(screen + 1)
+            self.register_notebook.set_current_page(screen + 1)
 
     def _set_register_label(self, screen):
         button_label = self._screens[screen].button_label
