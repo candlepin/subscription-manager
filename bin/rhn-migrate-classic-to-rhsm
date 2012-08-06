@@ -105,6 +105,12 @@ CONNECTION_FAILURE = _(u"Unable to connect to certificate server: %s.  " \
         "See /var/log/rhsm/rhsm.log for more details.")
 
 
+class UserCredentials(object):
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+
 class InvalidChoiceError(Exception):
     pass
 
@@ -553,9 +559,7 @@ def writeMigrationFacts():
 
 
 def cleanUp(subscribedChannels):
-    """
-    Hack to address BZ 786257.
-    """
+    #Hack to address BZ 786257.
     ch = (
             ('rhel-x86_64-client-supplementary-5', 'rhel-x86_64-client-workstation-5'),
             ('rhel-x86_64-client-5', 'rhel-x86_64-client-workstation-5'),
@@ -572,11 +576,21 @@ def cleanUp(subscribedChannels):
             except OSError, e:
                 log.info(e)
 
+    #Hack to address double mapping for 180.pem and 17{6|8}.pem
+    double_mapped = "rhel-.*?-(client|server)-dts-(5|6)-beta(-debuginfo)?"
+    #The (?!-beta) bit is a negative lookahead assertion.  So we won't match
+    #if the 5 or 6 is followed by the word "-beta"
+    single_mapped = "rhel-.*?-(client|server)-dts-(5|6)(?!-beta)(-debuginfo)?"
 
-class UserCredentials(object):
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
+    is_double_mapped = [x for x in subscribedChannels if re.match(double_mapped, x)]
+    is_single_mapped = [x for x in subscribedChannels if re.match(single_mapped, x)]
+
+    if is_double_mapped and is_single_mapped:
+        try:
+            os.remove(os.path.join(str(productDir), "180.pem"))
+            log.info("Removed 180.pem")
+        except OSError, e:
+            log.info(e)
 
 
 def authenticate(prompt):
