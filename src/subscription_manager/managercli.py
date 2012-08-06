@@ -508,6 +508,9 @@ class CleanCommand(CliCommand):
 
         self._request_validity_check()
 
+    def require_connection(self):
+        return False
+
 
 class RefreshCommand(CliCommand):
     def __init__(self, ent_dir=None, prod_dir=None):
@@ -1494,6 +1497,9 @@ class ImportCertCommand(CliCommand):
 
         return return_code
 
+    def require_connection(self):
+        return False
+
 
 class ReposCommand(CliCommand):
 
@@ -1677,6 +1683,9 @@ class ConfigCommand(CliCommand):
                     if not value == 'None':
                         cfg.set(section, name, value)
             cfg.save()
+
+    def require_connection(self):
+        return False
 
 
 class ListCommand(CliCommand):
