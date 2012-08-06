@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
-  <!-- interface-requires gtk+ 2.16 -->
+  <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy project-wide -->
   <widget class="GtkVBox" id="container">
     <property name="visible">True</property>
@@ -89,11 +89,6 @@
                     <property name="tooltip" translatable="yes">hostname[:port][/prefix]</property>
                     <property name="invisible_char">●</property>
                     <property name="width_chars">30</property>
-                    <property name="invisible_char_set">True</property>
-                    <property name="primary_icon_activatable">False</property>
-                    <property name="secondary_icon_activatable">False</property>
-                    <property name="primary_icon_sensitive">True</property>
-                    <property name="secondary_icon_sensitive">True</property>
                     <accessibility>
                       <atkproperty name="AtkObject::accessible-name" translatable="yes">server_entry</atkproperty>
                     </accessibility>

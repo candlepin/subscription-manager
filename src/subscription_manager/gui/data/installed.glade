@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <glade-interface>
-  <!-- interface-requires gtk+ 2.16 -->
+  <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy project-wide -->
   <widget class="GtkWindow" id="window1">
     <child>
@@ -108,7 +108,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="rules_hint">True</property>
-                        <property name="enable_grid_lines">vertical</property>
                         <accessibility>
                           <atkproperty name="AtkObject::accessible-name" translatable="yes">Installed View</atkproperty>
                         </accessibility>
