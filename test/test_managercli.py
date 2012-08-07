@@ -7,7 +7,7 @@ import socket
 import stubs
 
 from subscription_manager import managercli, managerlib
-from stubs import MockStdout, MockStderr, StubProductDirectory, \
+from stubs import MockStderr, MockStdout, StubProductDirectory, \
         StubEntitlementDirectory, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP
 from test_handle_gui_exception import FakeException, FakeLogger
@@ -21,8 +21,8 @@ from M2Crypto import SSL
 class TestCli(unittest.TestCase):
     # shut up stdout spew
     def setUp(self):
-        sys.stdout = MockStdout()
-        sys.stderr = MockStderr()
+        sys.stdout = stubs.MockStdout()
+        sys.stderr = stubs.MockStderr()
 
     def _restore_stdout(self):
         sys.stdout = sys.__stdout__
@@ -347,6 +347,29 @@ class TestReposCommand(TestCliCommand):
     def test_disable(self):
         self.cc.main(["--disable", "one", "--disable", "two"])
         self.cc._validate_options()
+
+    # stub uep, RepoFile test path, uep.getRelease stub
+    @mock.patch('subscription_manager.managercli.CertManager')
+    def test_real_list(self, MockCertMgr):
+        MockCertMgr.update.return_value = None
+        self.cc._do_command = self._orig_do_command
+
+        self.cc.main(['--list'])
+
+    @mock.patch('subscription_manager.managercli.CertManager')
+    def test_real_enable_empty(self, MockCertMgr):
+        MockCertMgr.update.return_value = None
+        self.cc._do_command = self._orig_do_command
+
+        self.assertRaises(SystemExit, self.cc.main, ['--enable'])
+
+    @mock.patch('subscription_manager.managercli.CertManager')
+    def test_real_enable_bogus(self, MockCertMgr):
+        MockCertMgr.update.return_value = None
+        self.cc._do_command = self._orig_do_command
+
+        # this should probably call system.exit
+        self.cc.main(['--enable', 'this-is-not-a-repo'])
 
 
 class TestConfigCommand(TestCliCommand):
