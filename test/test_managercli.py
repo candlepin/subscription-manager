@@ -3,6 +3,9 @@ import unittest
 import sys
 import socket
 
+# for monkey patching config
+import stubs
+
 from subscription_manager import managercli, managerlib
 from stubs import MockStdout, MockStderr, StubProductDirectory, \
         StubEntitlementDirectory, StubEntitlementCertificate, \
@@ -13,6 +16,39 @@ import mock
 # for some exceptions
 from rhsm import connection
 from M2Crypto import SSL
+
+
+class TestCli(unittest.TestCase):
+    # shut up stdout spew
+    def setUp(self):
+        sys.stdout = MockStdout()
+        sys.stderr = MockStderr()
+
+    def _restore_stdout(self):
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
+
+    def tearDown(self):
+        self._restore_stdout()
+
+    def test_cli(self):
+        cli = managercli.CLI()
+        self.assertTrue('register' in cli.cli_commands)
+
+    def test_main_empty(self):
+        cli = managercli.CLI()
+        self.assertRaises(SystemExit, cli.main)
+
+    def test_cli_find_best_match(self):
+        cli = managercli.CLI()
+        best_match = cli._find_best_match(['subscription-manager', 'version'])
+        self.assertEquals(best_match.name, 'version')
+
+    # shouldn't match on -sdf names
+    def test_cli_find_best_match_no_dash(self):
+        cli = managercli.CLI()
+        best_match = cli._find_best_match(['subscription-manager', '--version'])
+        self.assertEquals(best_match, None)
 
 
 class TestCliCommand(unittest.TestCase):

@@ -95,6 +95,10 @@ class MockStdout:
     def write(self, buf):
         self.buffer = self.buffer + buf
 
+    def isatty(buf):
+        return False
+
+
 MockStderr = MockStdout
 
 
