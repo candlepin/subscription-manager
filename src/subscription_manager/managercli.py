@@ -50,7 +50,7 @@ from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 from subscription_manager.utils import remove_scheme, parse_server_info, \
         ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
-        MissingCaCertException, get_version_dict
+        MissingCaCertException, get_client_versions, get_server_versions
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
@@ -180,8 +180,8 @@ class CliCommand(object):
         # do not iclude it
         usage = _("%%prog %s [OPTIONS]") % name
 
-       # include our own HelpFormatter that doesn't try to break
-       # long words, since that fails on multibyte words
+        # include our own HelpFormatter that doesn't try to break
+        # long words, since that fails on multibyte words
         self.parser = OptionParser(usage=usage, description=shortdesc,
                                    formatter=WrappedIndentedHelpFormatter())
         self._add_common_options()
@@ -236,18 +236,47 @@ class CliCommand(object):
         pass
 
     def assert_should_be_registered(self):
-        if not ConsumerIdentity.existsAndValid():
+        if not self.is_registered():
             print(NOT_REGISTERED)
             sys.exit(-1)
+
+    def is_registered(self):
+        return ConsumerIdentity.existsAndValid()
 
     def require_connection(self):
         return True
 
-    # split this basic auth? just
-    # to make it more clear?
-    #
-    #  getConsumerUEP/getAdminUEP?
-    #
+    def log_client_version(self):
+        log.debug("Client Versions: %s " % get_client_versions())
+
+    def log_server_version(self):
+        if not self.require_connection():
+            return
+
+        if not self.is_registered():
+            log.debug("Server Versions: Not registered, unable to check server version")
+            return
+
+        # can't check the server version without a connection
+        # and valid registration
+        try:
+            log.debug("Server Versions: %s " % get_server_versions(self.cp))
+        except connection.GoneException, e:
+            log.debug("Server Versions: Error: consumer has been deleted, unable to check server version")
+
+        # we really don't want to break on failing to get the version
+        # info from the server, since it ends up being the first
+        # call made in a lot of paths
+        except Exception, e:
+            log.debug("Server Versions: Unable to check server version")
+            log.exception(e)
+
+    def log_version(self):
+        self.log_client_version()
+        self.log_server_version()
+
+    # note, depending on that args, we could get a full
+    # fledged uep, a basic auth uep, or an unauthenticate uep
     def _get_UEP(self,
                 host=None,
                 ssl_port=None,
@@ -382,6 +411,8 @@ class CliCommand(object):
         cert_file = ConsumerIdentity.certpath()
         key_file = ConsumerIdentity.keypath()
 
+        self.log_client_version()
+
         if self.require_connection():
             # make sure we pass in the new server info, otherwise we
             # we use the defaults from connection module init
@@ -390,11 +421,12 @@ class CliCommand(object):
             self.cp = self._get_UEP(cert_file=cert_file,
                                     key_file=key_file)
 
+            self.log_server_version()
+
             self.certlib = CertLib(uep=self.cp)
+
         else:
             self.cp = None
-
-        log.debug("Versions: %s " % get_version_dict(self.cp))
 
         # do the work, catch most common errors here:
         try:
@@ -475,6 +507,9 @@ class CleanCommand(CliCommand):
         print (_("All local data removed"))
 
         self._request_validity_check()
+
+    def require_connection(self):
+        return False
 
 
 class RefreshCommand(CliCommand):
@@ -920,6 +955,9 @@ class RegisterCommand(UserPassCommand):
         # get a new UEP as the consumer
         self.cp = self._get_UEP(cert_file=cert_file, key_file=key_file)
 
+        # log the version of the server we registered to
+        self.log_server_version()
+
         # Must update facts to clear out the old ones:
         if self.options.consumerid:
             log.info("Updating facts")
@@ -957,6 +995,10 @@ class RegisterCommand(UserPassCommand):
 
         self._request_validity_check()
         return return_code
+
+    def log_version(self):
+        # we will log the server version after registration
+        self.log_client_version()
 
     def _persist_identity_cert(self, consumer):
         """
@@ -1450,6 +1492,9 @@ class ImportCertCommand(CliCommand):
 
         return return_code
 
+    def require_connection(self):
+        return False
+
 
 class ReposCommand(CliCommand):
 
@@ -1646,6 +1691,9 @@ class ConfigCommand(CliCommand):
                     if not value == 'None':
                         cfg.set(section, name, value)
             cfg.save()
+
+    def require_connection(self):
+        return False
 
 
 class ListCommand(CliCommand):
@@ -1878,11 +1926,15 @@ class VersionCommand(CliCommand):
         pass
 
     def _do_command(self):
-        versions = get_version_dict(self.cp)
-        print (_("remote entitlement server: %s") % versions["candlepin"])
-        print (_("remote entitlement server type: %s") % versions["server-type"])
-        print (_("subscription-manager: %s") % versions["subscription manager"])
-        print (_("python-rhsm: %s") % versions["python-rhsm"])
+        client_versions = get_client_versions()
+        server_versions = get_server_versions(self.cp)
+
+        # FIXME: slightly odd in that we log that we can't get the version,
+        # but then show "unknown" here.
+        print (_("remote entitlement server: %s") % server_versions["candlepin"])
+        print (_("remote entitlement server type: %s") % server_versions["server-type"])
+        print (_("subscription-manager: %s") % client_versions["subscription manager"])
+        print (_("python-rhsm: %s") % client_versions["python-rhsm"])
 
 
 # taken wholseale from rho...

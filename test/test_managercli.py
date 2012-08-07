@@ -9,6 +9,7 @@ from stubs import MockStdout, MockStderr, StubProductDirectory, \
         StubConsumerIdentity, StubProduct, StubUEP
 from test_handle_gui_exception import FakeException, FakeLogger
 
+import mock
 # for some exceptions
 from rhsm import connection
 from M2Crypto import SSL
@@ -207,7 +208,10 @@ class TestListCommand(TestCliProxyCommand):
         result = listCommand._none_wrap('foo %s %s', 'doberman pinscher', None)
         self.assertEquals(result, 'foo doberman pinscher None')
 
-    def test_none_wrap_available_pool_id(self):
+    @mock.patch.object(managercli.ConsumerIdentity, 'existsAndValid')
+    @mock.patch.object(managercli.ConsumerIdentity, 'exists')
+    @mock.patch('subscription_manager.managercli.check_registration')
+    def test_none_wrap_available_pool_id(self, mcli, mc_exists, mc_exists_and_valid):
         listCommand = managercli.ListCommand()
 
         def create_pool_list(self, one, two, three, four):
@@ -217,23 +221,12 @@ class TestListCommand(TestCliProxyCommand):
                       'endDate':''}]
         managerlib.getAvailableEntitlements = create_pool_list
 
-        # set to dummy true, will set back to original methods after test
-        def dummy_true(self):
-            return True
-        original_eav = managercli.ConsumerIdentity.existsAndValid
-        managercli.ConsumerIdentity.existsAndValid = dummy_true
-        original_e = managercli.ConsumerIdentity.exists
-        managercli.ConsumerIdentity.exists = dummy_true
+        mc_exists_and_valid.return_value = True
+        mc_exists.return_value = True
 
-        def stub_consumer():
-            return {'consumer_name': 'stub_name', 'uuid': 'stub_uuid'}
-        managercli.check_registration = stub_consumer
+        mcli.return_value = {'consumer_name': 'stub_name', 'uuid': 'stub_uuid'}
         listCommand.main(['list', '--available'])
         self.assertTrue('888888888888' in sys.stdout.buffer)
-
-        # back to original
-        managercli.ConsumerIdentity.existsAndValid = original_eav
-        managercli.ConsumerIdentity.exists = original_e
 
     def test_format_name_long(self):
         name = "This is a Really Long Name For A Product That We Do Not Want To See But Should Be Able To Deal With"

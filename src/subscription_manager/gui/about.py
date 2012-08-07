@@ -16,7 +16,7 @@
 import os
 from gtk import gdk, RESPONSE_DELETE_EVENT, RESPONSE_CANCEL, \
                 AboutDialog as GtkAboutDialog, Label
-from subscription_manager.utils import get_version_dict
+from subscription_manager.utils import get_client_versions, get_server_versions
 
 import gettext
 _ = gettext.gettext
@@ -55,12 +55,13 @@ class AboutDialog(object):
         context_box.pack_end(backend_version_label)
 
         # Set the component versions.
-        versions = get_version_dict(self.backend.uep)
-        self.dialog.set_version(versions['subscription manager'])
+        server_versions = get_server_versions(self.backend.uep)
+        client_versions = get_client_versions()
+        self.dialog.set_version(server_versions['subscription manager'])
         rhsm_version_label.set_markup(_("<b>python-rhsm version:</b> %s" % \
-            versions['python-rhsm']))
+            client_versions['python-rhsm']))
         backend_version_label.set_markup(_("<b>subscription management service version:</b> %s" % \
-            versions['candlepin']))
+            server_versions['candlepin']))
 
         self.dialog.connect("response", self._handle_response)
         self.dialog.show_all()
