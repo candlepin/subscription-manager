@@ -68,9 +68,12 @@ class TestCliCommand(unittest.TestCase):
         sys.stdout = MockStdout()
         sys.stderr = MockStderr()
 
-    def tearDown(self):
+    def _restore_stdout(self):
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
+
+    def tearDown(self):
+        self._restore_stdout()
 
     def _uep_connection(self, *args, **kwargs):
         pass
@@ -356,6 +359,42 @@ class TestConfigCommand(TestCliCommand):
     def test_remove(self):
         self.cc.main(["--remove", "server.hostname", "--remove", "server.port"])
         self.cc._validate_options()
+
+    # unneuter these guys, since config doesn't required much mocking
+    def test_config_list(self):
+        self.cc._do_command = self._orig_do_command
+        self.cc.main(["--list"])
+
+    def test_config(self):
+        self.cc._do_command = self._orig_do_command
+        # if args is empty we default to sys.argv, so stub it
+        sys.argv = ["subscription-manager", "config"]
+        self.cc.main([])
+
+    # testing this is a bit weird, since we are using a stub config
+    # already, we kind of need to mock the stub config to validate
+    def test_set_config(self):
+        self.cc._do_command = self._orig_do_command
+
+        baseurl = 'https://someserver.example.com/foo'
+        self.cc.main(['--rhsm.baseurl', baseurl])
+        self.assertEquals(managercli.cfg.store['rhsm.baseurl'], baseurl)
+
+    def test_remove_config_default(self):
+        self.cc._do_command = self._orig_do_command
+        self.cc.main(['--remove', 'rhsm.baseurl'])
+
+    def test_remove_config_section_does_not_exist(self):
+        self.cc._do_command = self._orig_do_command
+        self.assertRaises(SystemExit, self.cc.main, ['--remove', 'this.doesnotexist'])
+
+    def test_remove_config_key_does_not_exist(self):
+        self.cc._do_command = self._orig_do_command
+        self.assertRaises(SystemExit, self.cc.main, ['--remove', 'rhsm.thisdoesnotexist'])
+
+    def test_remove_config_key_not_dotted(self):
+        self.cc._do_command = self._orig_do_command
+        self.assertRaises(SystemExit, self.cc.main, ['--remove', 'notdotted'])
 
 
 class TestSubscribeCommand(TestCliProxyCommand):
