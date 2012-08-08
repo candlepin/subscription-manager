@@ -187,14 +187,14 @@ class MainWindow(widgets.GladeWidget):
     """
     The new RHSM main window.
     """
+    widget_names = ['main_window', 'notebook', 'system_name_label',
+                    'next_update_label', 'register_menu_item',
+                    'unregister_menu_item', 'redeem_menu_item']
 
     def __init__(self, backend=None, consumer=None,
                  facts=None, ent_dir=None, prod_dir=None,
                  auto_launch_registration=False):
-        super(MainWindow, self).__init__('mainwindow.glade',
-              ['main_window', 'notebook', 'system_name_label',
-               'next_update_label', 'next_update_title', 'register_menu_item',
-               'unregister_menu_item', 'redeem_menu_item'])
+        super(MainWindow, self).__init__('mainwindow.glade')
 
         self.backend = backend or Backend()
         self.consumer = consumer or Consumer()

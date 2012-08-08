@@ -74,21 +74,16 @@ class RegisterScreen(widgets.GladeWidget):
     """
       Registration Widget Screen
     """
+    widget_names = ['register_dialog', 'register_notebook',
+                    'register_progressbar', 'register_details_label',
+                    'cancel_button', 'register_button']
 
     def __init__(self, backend, consumer, facts=None, callbacks=[]):
         """
         Callbacks will be executed when registration status changes.
         """
 
-        widget_names = [
-                'register_dialog',
-                'register_notebook',
-                'register_progressbar',
-                'register_details_label',
-                'cancel_button',
-                'register_button',
-        ]
-        widgets.GladeWidget.__init__(self, "registration.glade", widget_names)
+        widgets.GladeWidget.__init__(self, "registration.glade")
 
         self.backend = backend
         self.consumer = consumer
@@ -251,10 +246,10 @@ class AutobindWizard(RegisterScreen):
 
 
 class Screen(widgets.GladeWidget):
+    widget_names = widgets.GladeWidget.widget_names + ['container']
 
-    def __init__(self, glade_file, widget_names, parent, backend):
-        widget_names.append('container')
-        super(Screen, self).__init__(glade_file, widget_names)
+    def __init__(self, glade_file, parent, backend):
+        super(Screen, self).__init__(glade_file)
 
         self.pre_message = ""
         self.button_label = _("Register")
@@ -359,16 +354,15 @@ class PerformSubscribeScreen(NoGuiScreen):
 
 
 class ConfirmSubscriptionsScreen(Screen):
-
     """ Confirm Subscriptions GUI Window """
+
+    widget_names = Screen.widget_names + ['subs_treeview', 'back_button',
+                                          'sla_label']
+
     def __init__(self, parent, backend):
-        widget_names = [
-                'subs_treeview',
-                'back_button',
-                'sla_label',
-        ]
+
         super(ConfirmSubscriptionsScreen, self).__init__("confirmsubs.glade",
-                                                         widget_names, parent,
+                                                         parent,
                                                          backend)
         self.button_label = _("Subscribe")
 
@@ -411,15 +405,13 @@ class SelectSLAScreen(Screen):
     An wizard screen that displays the available
     SLAs that are provided by the installed products.
     """
+    widget_names = Screen.widget_names + ['product_list_label',
+                                          'sla_radio_container',
+                                          'owner_treeview']
 
     def __init__(self, parent, backend):
-        widget_names = [
-                'product_list_label',
-                'sla_radio_container',
-                'owner_treeview',
-        ]
         super(SelectSLAScreen, self).__init__("selectsla.glade",
-                                              widget_names, parent, backend)
+                                               parent, backend)
 
         self.pre_message = _("Finding suitable service levels")
         self.button_label = _("Next")
@@ -535,13 +527,11 @@ class SelectSLAScreen(Screen):
 
 
 class EnvironmentScreen(Screen):
+    widget_names = Screen.widget_names + ['environment_treeview']
 
     def __init__(self, parent, backend):
-        widget_names = [
-                'environment_treeview',
-        ]
         super(EnvironmentScreen, self).__init__("environment.glade",
-                                                widget_names, parent, backend)
+                                                 parent, backend)
 
         self.pre_message = _("Fetching list of possible environments")
         renderer = gtk.CellRendererText()
@@ -594,13 +584,11 @@ class EnvironmentScreen(Screen):
 
 
 class OrganizationScreen(Screen):
+    widget_names = Screen.widget_names + ['owner_treeview']
 
     def __init__(self, parent, backend):
-        widget_names = [
-                'owner_treeview',
-        ]
         super(OrganizationScreen, self).__init__("organization.glade",
-                                                 widget_names, parent, backend)
+                                                  parent, backend)
 
         self.pre_message = _("Fetching list of possible organizations")
 
@@ -660,16 +648,12 @@ class OrganizationScreen(Screen):
 
 
 class CredentialsScreen(Screen):
+    widget_names = Screen.widget_names + ['skip_auto_bind', 'consumer_name',
+                                          'account_login', 'account_password']
 
     def __init__(self, parent, backend):
-        widget_names = [
-                'skip_auto_bind',
-                'consumer_name',
-                'account_login',
-                'account_password',
-        ]
         super(CredentialsScreen, self).__init__("credentials.glade",
-                                                 widget_names, parent, backend)
+                                                 parent, backend)
 
         self._initialize_consumer_name()
 
@@ -738,16 +722,18 @@ class CredentialsScreen(Screen):
 
 
 class ChooseServerScreen(Screen):
-
-    def __init__(self, parent, backend):
-        widget_names = [
+    # STYLE ME
+    widget_names = Screen.widget_names + [
                 'server_entry',
                 'proxy_frame',
                 'default_button',
                 'choose_server_label',
         ]
+
+    def __init__(self, parent, backend):
+
         super(ChooseServerScreen, self).__init__("choose_server.glade",
-                widget_names, parent, backend)
+                                                 parent, backend)
 
         self.button_label = _("Next")
 

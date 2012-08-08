@@ -30,40 +30,67 @@ from subscription_manager.managerlib import LocalTz
 from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui.widgets import MachineTypeColumn, MultiEntitlementColumn, \
                                              QuantitySelectionColumn, SubDetailsWidget, \
-                                             DatePicker
+                                             ContractSubDetailsWidget, DatePicker
 
 
 class TestSubDetailsWidget(unittest.TestCase):
+    widget = SubDetailsWidget
+    sku_text = "Some SKU"
+    expected_sub_text = "All Available Subscription Text"
 
-    def setUp(self):
-        pass
+    def show(self, details):
+        details.show(name="Some Product", contract="123123",
+                     start=datetime.now(GMT()), end=datetime.now(GMT()) + timedelta(days=365),
+                     highlight="some filter", support_level="Standard",
+                     support_type="L1",
+                     sku=self.sku_text)
 
-    def tearDown(self):
-        pass
+    def test_show(self):
+        details = self.widget()
+        self.show(details)
+
+    def test_clear(self):
+        details = self.widget()
+        self.show(details)
+        details.clear()
+
+    def test_a11y(self):
+        details = self.widget()
+        self.show(details)
+        sub_text = details.subscription_text.get_accessible().get_name()
+        self.assertEquals(self.expected_sub_text, sub_text)
+
+
+class TestContractSubDetailsWidget(TestSubDetailsWidget):
+    widget = ContractSubDetailsWidget
+    expected_sub_text = "Subscription Text"
+
+    def test_get_expired_bg(self):
+        details = self.widget()
+        self.show(details)
+        yesterday = datetime.now(GMT()) - timedelta(days=1)
+        bg_color = details._get_date_bg(yesterday)
+        self.assertEqual(details.expired_color, bg_color)
+
+    def test_get_warning_bg(self):
+        details = self.widget()
+        self.show(details)
+        tomorrow = datetime.now(GMT()) + timedelta(days=1)
+        bg_color = details._get_date_bg(tomorrow)
+        self.assertEqual(details.warning_color, bg_color)
 
     def testVirtOnly(self):
+        details = self.widget()
+        self.show(details)
         d = datetime(2011, 4, 16, tzinfo=LocalTz())
         start_date = datetime(d.year, d.month, d.day, tzinfo=LocalTz())
         end_date = datetime(d.year + 1, d.month, d.day, tzinfo=LocalTz())
-        details = SubDetailsWidget(show_contract=True)
         details.show('noname', contract='c', start=start_date, end=end_date, account='a',
                      management='m', support_level='s_l',
                      support_type='s_t', virt_only='v_o')
         s_iter = details.virt_only_text.get_buffer().get_start_iter()
         e_iter = details.virt_only_text.get_buffer().get_end_iter()
         self.assertEquals(details.virt_only_text.get_buffer().get_text(s_iter, e_iter), 'v_o')
-
-    def test_get_expired_bg(self):
-        details = SubDetailsWidget()
-        yesterday = datetime.now(GMT()) - timedelta(days=1)
-        bg_color = details._get_date_bg(yesterday)
-        self.assertEqual(details.expired_color, bg_color)
-
-    def test_get_warning_bg(self):
-        details = SubDetailsWidget()
-        tomorrow = datetime.now(GMT()) + timedelta(days=1)
-        bg_color = details._get_date_bg(tomorrow)
-        self.assertEqual(details.warning_color, bg_color)
 
 
 class TestDatePicker(unittest.TestCase):
