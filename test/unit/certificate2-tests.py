@@ -42,6 +42,7 @@ class V1CertTests(unittest.TestCase):
         self.assertEquals(1, len(self.prod_cert.products))
         self.assertEquals('Awesome OS for x86_64 Bits',
                 self.prod_cert.products[0].name)
+        self.assertEquals('100000000000002', self.prod_cert.subject['CN'])
 
     def test_factory_method_on_ent_cert(self):
         self.assertEquals("1.0", str(self.ent_cert.version))
@@ -52,6 +53,7 @@ class V1CertTests(unittest.TestCase):
         self.assertEquals(1, len(self.ent_cert.products))
         self.assertEquals('Awesome OS for x86_64 Bits',
                 self.ent_cert.products[0].name)
+        self.assertEquals('ff80808138574bd20138574d85a50b2f', self.ent_cert.subject['CN'])
 
     def test_is_valid(self):
         self.assertTrue(self.ent_cert.is_valid(on_date=datetime(2012, 12, 1)))
@@ -94,6 +96,7 @@ class V2CertTests(unittest.TestCase):
         self.assertEquals(1, len(self.ent_cert.products))
         self.assertEquals('Awesome OS for x86_64 Bits',
                 self.ent_cert.products[0].name)
+        self.assertEquals('ff80808138b430030138b47a325b011f', self.ent_cert.subject['CN'])
 
     def test_is_valid(self):
         self.assertTrue(self.ent_cert.is_valid(on_date=datetime(2012, 12, 1)))

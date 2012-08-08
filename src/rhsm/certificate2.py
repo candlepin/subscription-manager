@@ -133,6 +133,7 @@ class _CertFactory(object):
                 start=get_datetime_from_x509(x509.get_not_before()),
                 end=get_datetime_from_x509(x509.get_not_after()),
                 products=products,
+                subject=self._read_subject(x509),
             )
         return cert
 
@@ -148,6 +149,7 @@ class _CertFactory(object):
                 serial=x509.get_serial_number(),
                 start=get_datetime_from_x509(x509.get_not_before()),
                 end=get_datetime_from_x509(x509.get_not_after()),
+                subject=self._read_subject(x509),
                 order=order,
                 content=content,
                 products=products,
@@ -244,6 +246,7 @@ class _CertFactory(object):
                 serial=x509.get_serial_number(),
                 start=get_datetime_from_x509(x509.get_not_before()),
                 end=get_datetime_from_x509(x509.get_not_after()),
+                subject=self._read_subject(x509),
                 order=order,
                 content=content,
                 products=products,
@@ -361,9 +364,8 @@ class _Extensions2(Extensions):
 
 class Certificate(object):
     """ Parent class of all x509 certificate types. """
-    def __init__(self, x509=None, path=None, version=None, serial=None, start=None,
-            end=None):
-
+    def __init__(self, x509=None, path=None, version=None, serial=None,
+                 start=None, end=None, subject=None):
         # The X509 M2crypto object for this certificate.
         # WARNING: May be None in tests
         self.x509 = x509
@@ -385,6 +387,8 @@ class Certificate(object):
         self.end = end
 
         self.valid_range = DateRange(self.start, self.end)
+
+        self.subject = subject
 
     def is_valid(self, on_date=None):
         gmt = datetime.utcnow()
@@ -427,16 +431,15 @@ class Certificate(object):
 
 
 class IdentityCertificate(Certificate):
-    def __init__(self, alt_name=None, subject=None, **kwargs):
+    def __init__(self, alt_name=None, **kwargs):
         Certificate.__init__(self, **kwargs)
-
-        self.subject = subject
         self.alt_name = alt_name
 
 
 class ProductCertificate(Certificate):
     def __init__(self, products=None, **kwargs):
         Certificate.__init__(self, **kwargs)
+
         # The products in this certificate. The first is treated as the
         # primary or "marketing" product.
         if products is None:
