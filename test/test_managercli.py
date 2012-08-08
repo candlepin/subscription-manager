@@ -65,8 +65,10 @@ class TestCliCommand(unittest.TestCase):
 
         # stub out uep
         managercli.connection.UEPConnection = self._uep_connection
-        sys.stdout = MockStdout()
-        sys.stderr = MockStderr()
+        self.mock_stdout = MockStdout()
+        self.mock_stderr = MockStderr()
+        sys.stdout = self.mock_stdout
+        sys.stderr = self.mock_stderr
 
     def _restore_stdout(self):
         sys.stdout = sys.__stdout__
@@ -351,21 +353,18 @@ class TestReposCommand(TestCliCommand):
     # stub uep, RepoFile test path, uep.getRelease stub
     @mock.patch('subscription_manager.managercli.CertManager')
     def test_real_list(self, MockCertMgr):
-        MockCertMgr.update.return_value = None
         self.cc._do_command = self._orig_do_command
 
         self.cc.main(['--list'])
 
     @mock.patch('subscription_manager.managercli.CertManager')
     def test_real_enable_empty(self, MockCertMgr):
-        MockCertMgr.update.return_value = None
         self.cc._do_command = self._orig_do_command
 
         self.assertRaises(SystemExit, self.cc.main, ['--enable'])
 
     @mock.patch('subscription_manager.managercli.CertManager')
     def test_real_enable_bogus(self, MockCertMgr):
-        MockCertMgr.update.return_value = None
         self.cc._do_command = self._orig_do_command
 
         # this should probably call system.exit
@@ -406,6 +405,7 @@ class TestConfigCommand(TestCliCommand):
     def test_remove_config_default(self):
         self.cc._do_command = self._orig_do_command
         self.cc.main(['--remove', 'rhsm.baseurl'])
+        self.assertTrue('The default value for' in self.mock_stdout.buffer)
 
     def test_remove_config_section_does_not_exist(self):
         self.cc._do_command = self._orig_do_command
