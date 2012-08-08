@@ -350,6 +350,7 @@ class TestReposCommand(TestCliCommand):
         self.cc.main(["--disable", "one", "--disable", "two"])
         self.cc._validate_options()
 
+
 class TestConfigCommand(TestCliCommand):
     command_class = managercli.ConfigCommand
 
