@@ -3,8 +3,11 @@ import unittest
 import sys
 import socket
 
+# for monkey patching config
+import stubs
+
 from subscription_manager import managercli, managerlib
-from stubs import MockStdout, MockStderr, StubProductDirectory, \
+from stubs import MockStderr, MockStdout, StubProductDirectory, \
         StubEntitlementDirectory, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP
 from test_handle_gui_exception import FakeException, FakeLogger
@@ -13,6 +16,39 @@ import mock
 # for some exceptions
 from rhsm import connection
 from M2Crypto import SSL
+
+
+class TestCli(unittest.TestCase):
+    # shut up stdout spew
+    def setUp(self):
+        sys.stdout = stubs.MockStdout()
+        sys.stderr = stubs.MockStderr()
+
+    def _restore_stdout(self):
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
+
+    def tearDown(self):
+        self._restore_stdout()
+
+    def test_cli(self):
+        cli = managercli.CLI()
+        self.assertTrue('register' in cli.cli_commands)
+
+    def test_main_empty(self):
+        cli = managercli.CLI()
+        self.assertRaises(SystemExit, cli.main)
+
+    def test_cli_find_best_match(self):
+        cli = managercli.CLI()
+        best_match = cli._find_best_match(['subscription-manager', 'version'])
+        self.assertEquals(best_match.name, 'version')
+
+    # shouldn't match on -sdf names
+    def test_cli_find_best_match_no_dash(self):
+        cli = managercli.CLI()
+        best_match = cli._find_best_match(['subscription-manager', '--version'])
+        self.assertEquals(best_match, None)
 
 
 class TestCliCommand(unittest.TestCase):
@@ -29,12 +65,17 @@ class TestCliCommand(unittest.TestCase):
 
         # stub out uep
         managercli.connection.UEPConnection = self._uep_connection
-        sys.stdout = MockStdout()
-        sys.stderr = MockStderr()
+        self.mock_stdout = MockStdout()
+        self.mock_stderr = MockStderr()
+        sys.stdout = self.mock_stdout
+        sys.stderr = self.mock_stderr
 
-    def tearDown(self):
+    def _restore_stdout(self):
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
+
+    def tearDown(self):
+        self._restore_stdout()
 
     def _uep_connection(self, *args, **kwargs):
         pass
@@ -309,6 +350,26 @@ class TestReposCommand(TestCliCommand):
         self.cc.main(["--disable", "one", "--disable", "two"])
         self.cc._validate_options()
 
+    # stub uep, RepoFile test path, uep.getRelease stub
+    @mock.patch('subscription_manager.managercli.CertManager')
+    def test_real_list(self, MockCertMgr):
+        self.cc._do_command = self._orig_do_command
+
+        self.cc.main(['--list'])
+
+    @mock.patch('subscription_manager.managercli.CertManager')
+    def test_real_enable_empty(self, MockCertMgr):
+        self.cc._do_command = self._orig_do_command
+
+        self.assertRaises(SystemExit, self.cc.main, ['--enable'])
+
+    @mock.patch('subscription_manager.managercli.CertManager')
+    def test_real_enable_bogus(self, MockCertMgr):
+        self.cc._do_command = self._orig_do_command
+
+        # this should probably call system.exit
+        self.cc.main(['--enable', 'this-is-not-a-repo'])
+
 
 class TestConfigCommand(TestCliCommand):
     command_class = managercli.ConfigCommand
@@ -320,6 +381,43 @@ class TestConfigCommand(TestCliCommand):
     def test_remove(self):
         self.cc.main(["--remove", "server.hostname", "--remove", "server.port"])
         self.cc._validate_options()
+
+    # unneuter these guys, since config doesn't required much mocking
+    def test_config_list(self):
+        self.cc._do_command = self._orig_do_command
+        self.cc.main(["--list"])
+
+    def test_config(self):
+        self.cc._do_command = self._orig_do_command
+        # if args is empty we default to sys.argv, so stub it
+        sys.argv = ["subscription-manager", "config"]
+        self.cc.main([])
+
+    # testing this is a bit weird, since we are using a stub config
+    # already, we kind of need to mock the stub config to validate
+    def test_set_config(self):
+        self.cc._do_command = self._orig_do_command
+
+        baseurl = 'https://someserver.example.com/foo'
+        self.cc.main(['--rhsm.baseurl', baseurl])
+        self.assertEquals(managercli.cfg.store['rhsm.baseurl'], baseurl)
+
+    def test_remove_config_default(self):
+        self.cc._do_command = self._orig_do_command
+        self.cc.main(['--remove', 'rhsm.baseurl'])
+        self.assertTrue('The default value for' in self.mock_stdout.buffer)
+
+    def test_remove_config_section_does_not_exist(self):
+        self.cc._do_command = self._orig_do_command
+        self.assertRaises(SystemExit, self.cc.main, ['--remove', 'this.doesnotexist'])
+
+    def test_remove_config_key_does_not_exist(self):
+        self.cc._do_command = self._orig_do_command
+        self.assertRaises(SystemExit, self.cc.main, ['--remove', 'rhsm.thisdoesnotexist'])
+
+    def test_remove_config_key_not_dotted(self):
+        self.cc._do_command = self._orig_do_command
+        self.assertRaises(SystemExit, self.cc.main, ['--remove', 'notdotted'])
 
 
 class TestSubscribeCommand(TestCliProxyCommand):

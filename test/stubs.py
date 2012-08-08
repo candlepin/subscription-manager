@@ -52,6 +52,7 @@ class StubConfig(config.RhsmConfigParser):
         config.RhsmConfigParser.__init__(self, config_file=config_file, defaults=defaults)
         self.raise_io = None
         self.fileName = config_file
+        self.store = {}
 
     # isntead of reading a file, let's use the stringio
     def read(self, filename):
@@ -59,14 +60,14 @@ class StubConfig(config.RhsmConfigParser):
 
     def set(self, section, key, value):
 #        print self.sections()
-        pass
+        self.store['%s.%s' % (section, key)] = value
 
     def save(self, config_file=None):
         if self.raise_io:
             raise IOError
         return None
 
-    # replce read with readfp on stringio
+    # replace read with readfp on stringio
 
 
 def stubInitConfig():
@@ -94,6 +95,10 @@ class MockStdout:
 
     def write(self, buf):
         self.buffer = self.buffer + buf
+
+    def isatty(buf):
+        return False
+
 
 MockStderr = MockStdout
 
