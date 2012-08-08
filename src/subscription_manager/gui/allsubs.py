@@ -42,14 +42,16 @@ from subscription_manager.gui.storage import MappedTreeStore
 
 
 class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
-
-    def __init__(self, backend, consumer, facts, parent_win):
-        widget_names = ['details_box', 'date_picker_hbox',
+    widget_names = widgets.SubscriptionManagerTab.widget_names + \
+                       ['details_box', 'date_picker_hbox',
                         'month_entry', 'day_entry', 'year_entry',
                         'active_on_checkbutton', 'subscribe_button',
                         'edit_quantity_label', 'no_subs_label',
                         'filter_options_button', 'applied_filters_label']
-        super(AllSubscriptionsTab, self).__init__('allsubs.glade', widget_names)
+
+    def __init__(self, backend, consumer, facts, parent_win):
+
+        super(AllSubscriptionsTab, self).__init__('allsubs.glade')
 
         self.parent_win = parent_win
         self.backend = backend
@@ -103,7 +105,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                               widgets.expand_collapse_on_row_activated_callback)
 
         # This option should be selected by default:
-        self.sub_details = widgets.SubDetailsWidget(show_contract=False)
+        self.sub_details = widgets.SubDetailsWidget()
         self.details_box.add(self.sub_details.get_widget())
 
         self.contract_selection = None

@@ -31,11 +31,12 @@ class SystemFactsDialog(widgets.GladeWidget):
     providing functionality to update the UEP server with the current
     system facts.
     """
+    widget_names = ['system_facts_dialog', 'facts_view', 'update_button',
+                        'last_update_label', 'owner_label']
 
     def __init__(self, backend, consumer, facts):
-        widget_names = ['system_facts_dialog', 'facts_view', 'update_button',
-                        'last_update_label', 'owner_label']
-        super(SystemFactsDialog, self).__init__('factsdialog.glade', widget_names)
+
+        super(SystemFactsDialog, self).__init__('factsdialog.glade')
 
         self.consumer = consumer
         self.facts = facts

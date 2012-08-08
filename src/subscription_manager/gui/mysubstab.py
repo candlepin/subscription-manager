@@ -40,6 +40,8 @@ EXPIRED_IMG = os.path.join(prefix, "data/icons/invalid.svg")
 
 
 class MySubscriptionsTab(widgets.SubscriptionManagerTab):
+    widget_names = widgets.SubscriptionManagerTab.widget_names + \
+                    ['details_box', 'unsubscribe_button']
 
     # Are facts required here? [mstead]
     def __init__(self, backend, consumer, facts, parent_win,
@@ -48,8 +50,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         """
         Create a new 'My Subscriptions' tab.
         """
-        super(MySubscriptionsTab, self).__init__('mysubs.glade', ['details_box',
-                                                                  'unsubscribe_button'])
+        super(MySubscriptionsTab, self).__init__('mysubs.glade')
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
@@ -57,7 +58,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.entitlement_dir = ent_dir or EntitlementDirectory()
         self.product_dir = prod_dir or ProductDirectory()
 
-        self.sub_details = widgets.SubDetailsWidget()
+        self.sub_details = widgets.ContractSubDetailsWidget()
 
         # Put the details widget in the middle
         details = self.sub_details.get_widget()
