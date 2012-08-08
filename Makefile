@@ -81,6 +81,12 @@ rpmlint:
 	rpmlint -f rpmlint.config python-rhsm.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
-stylish: pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
+versionlint:
+	@TMPFILE=`mktemp` || exit 1; \
+	pyqver2.py -m 2.5 -v  $(STYLEFILES) | tee $$TMPFILE; \
+	! test -s $$TMPFILE
+
+
+stylish: versionlint pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
 
 jenkins: stylish coverage-jenkins
