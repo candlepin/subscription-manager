@@ -140,4 +140,4 @@ class CLI:
         try:
             return cmd.run()
         except InvalidCLIOptionError, error:
-            print error.message
+            print error
