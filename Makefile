@@ -13,10 +13,14 @@ OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1
 BIN_DIR = bin/
 BIN_FILES = $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui \
 			$(BIN_DIR)/rhn-migrate-classic-to-rhsm \
-			$(BIN_DIR)/install-num-migrate-to-rhsm
+			$(BIN_DIR)/install-num-migrate-to-rhsm \
+			$(BIN_DIR)/rt
 SYSTEMD_INST_DIR=${PREFIX}/usr/lib/systemd/system
 
 SRC_DIR = src/subscription_manager
+
+RT_CODE_DIR = ${PREFIX}/${INSTALL_DIR}/${INSTALL_MODULE}/rt
+RT_SRC_DIR = src/rt
 
 CFLAGS = -Wall -g
 
@@ -31,7 +35,9 @@ bin:
 RHSMCERTD_FLAGS=`pkg-config --cflags --libs glib-2.0`
 
 PYFILES=`find  src/ -name "*.py"`
-TESTFILES=`find test/ -name "*.py"`
+# Ignore certdata.py from style checks as tabs and trailing
+# whitespace are required for testing.
+TESTFILES=`find  test/ \( ! -name certdata.py \) -name "*.py"`
 STYLEFILES=$(PYFILES) $(BIN_FILES) $(TESTFILES)
 GLADEFILES=`find src/subscription_manager/gui/data -name "*.glade"`
 
@@ -215,6 +221,9 @@ install-files: dbus-service-install compile-po desktop-files
 	install -m 644 etc-conf/subscription-manager.console \
 		${PREFIX}/etc/security/console.apps/subscription-manager
 
+	install -d ${RT_CODE_DIR}
+	install -m 644 -p ${RT_SRC_DIR}/*.py ${RT_CODE_DIR}
+	install bin/rt ${PREFIX}/usr/bin
 
 
 check:
@@ -275,6 +284,7 @@ po/POTFILES.in:
 	find ${BIN_DIR} -name "*-to-rhsm" >> po/POTFILES.in
 	find src/ -name "*.c" >> po/POTFILES.in
 	find etc-conf/ -name "*.desktop.in" >> po/POTFILES.in
+	find ${RT_SRC_DIR}/ -name "*.py" >> po/POTFILES.in
 
 .PHONY: po/POTFILES.in %.desktop
 

@@ -230,6 +230,14 @@ rm -rf %{buildroot}
     %attr(755,root,root) %{_initrddir}/rhsmcertd
 %endif
 
+# Incude rt CLI tool
+%dir %{_datadir}/rhsm/rt
+%{_datadir}/rhsm/rt/__init__.py*
+%{_datadir}/rhsm/rt/cli.py*
+%{_datadir}/rhsm/rt/commands.py*
+%{_datadir}/rhsm/rt/printing.py*
+%attr(755,root,root) %{_bindir}/rt
+
 %doc
 %{_mandir}/man8/subscription-manager.8*
 %{_mandir}/man8/rhsmcertd.8*
