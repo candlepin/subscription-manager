@@ -1644,9 +1644,10 @@ class ConfigCommand(CliCommand):
                 section = r.split('.')[0]
                 name = r.split('.')[1]
                 found = False
-                for key, value in cfg.items(section):
-                    if name == key:
-                        found = True
+                if cfg.has_section(section):
+                    for key, value in cfg.items(section):
+                        if name == key:
+                            found = True
                 if not found:
                     sys.stderr.write(_("Error: Section %s and name %s does not exist.") % (section, name))
                     sys.exit(-1)
