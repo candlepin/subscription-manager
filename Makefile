@@ -405,6 +405,12 @@ rpmlint:
 	rpmlint -f rpmlint.config subscription-manager.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
 	! test -s $$TMPFILE
 
+versionlint:
+	@TMPFILE=`mktemp` || exit 1; \
+	pyqver2.py -m 2.5 -v  $(STYLEFILES) | grep -v hashlib | tee $$TMPFILE; \
+	! test -s $$TMPFILE
+
+
 stylish: polint gladelint find-missing-widgets pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
 
 jenkins: stylish coverage-jenkins
