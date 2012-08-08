@@ -350,27 +350,6 @@ class TestReposCommand(TestCliCommand):
         self.cc.main(["--disable", "one", "--disable", "two"])
         self.cc._validate_options()
 
-    # stub uep, RepoFile test path, uep.getRelease stub
-    @mock.patch('subscription_manager.managercli.CertManager')
-    def test_real_list(self, MockCertMgr):
-        self.cc._do_command = self._orig_do_command
-
-        self.cc.main(['--list'])
-
-    @mock.patch('subscription_manager.managercli.CertManager')
-    def test_real_enable_empty(self, MockCertMgr):
-        self.cc._do_command = self._orig_do_command
-
-        self.assertRaises(SystemExit, self.cc.main, ['--enable'])
-
-    @mock.patch('subscription_manager.managercli.CertManager')
-    def test_real_enable_bogus(self, MockCertMgr):
-        self.cc._do_command = self._orig_do_command
-
-        # this should probably call system.exit
-        self.cc.main(['--enable', 'this-is-not-a-repo'])
-
-
 class TestConfigCommand(TestCliCommand):
     command_class = managercli.ConfigCommand
 
