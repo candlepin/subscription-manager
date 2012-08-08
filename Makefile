@@ -411,7 +411,7 @@ versionlint:
 	! test -s $$TMPFILE
 
 
-stylish: polint gladelint find-missing-widgets pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
+stylish: versionlint polint gladelint find-missing-widgets pyflakes whitespacelint pep8 gettext_lint rpmlint debuglint
 
 jenkins: stylish coverage-jenkins
 
