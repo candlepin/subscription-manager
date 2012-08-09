@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.0.4
+Version: 1.0.5
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,15 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Aug 09 2012 Alex Wood <awood@redhat.com> 1.0.5-1
+- add versionlint, requires pyqver (alikins@redhat.com)
+- Adding subject back to new certs (mstead@redhat.com)
+- 842885: add __str__ to NetworkException, ala  #830767 (alikins@redhat.com)
+- 830767: Add __str__ method to RemoteServerException. (awood@redhat.com)
+- Fix None product architectures. (dgoodwin@redhat.com)
+- Remove deprecated use of DateRange.has[Date|Now] (jbowes@redhat.com)
+- mark hasDate as deprecated as well (alikins@redhat.com)
+
 * Wed Jul 25 2012 Alex Wood <awood@redhat.com> 1.0.4-1
 - Remove unused stub method. (dgoodwin@redhat.com)
 - Cleanup entitlement cert keys on delete. (dgoodwin@redhat.com)
