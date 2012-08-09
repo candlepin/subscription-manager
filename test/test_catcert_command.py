@@ -61,7 +61,7 @@ class CatCertCommandTests(unittest.TestCase):
             self.fail("Expected InvalidCLIOptionError since no file arg.")
         except InvalidCLIOptionError, e:
             self.assertEqual("You must specify a certificate file.",
-                             e.message)
+                             str(e))
 
     def test_invalid_file_arg(self):
         command = CatCertCommand()
@@ -69,7 +69,7 @@ class CatCertCommandTests(unittest.TestCase):
             command.run(["this_file_does_not_exist.crt"])
             self.fail("Expected InvalidCLIOptionError since no file does not exist.")
         except InvalidCLIOptionError, e:
-            self.assertEqual("The specified certificate file does not exist.", e.message)
+            self.assertEqual("The specified certificate file does not exist.", str(e))
 
     def test_omit_content_list(self):
         command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
