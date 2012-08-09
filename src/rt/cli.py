@@ -40,7 +40,7 @@ class CLICommand(object):
 
     def run(self, args=None):
         # Initialize args
-        if not args:
+        if args is None:
             # Skip the program name and the command name.
             args = sys.argv[2:]
 
@@ -140,4 +140,4 @@ class CLI:
         try:
             return cmd.run()
         except InvalidCLIOptionError, error:
-            print error.message
+            print error
