@@ -33,8 +33,8 @@ configure_i18n()
 import gettext
 _ = gettext.gettext
 
-from rt.cli import CLI
-from rt.commands import CatCertCommand
+from rct.cli import CLI
+from rct.commands import CatCertCommand
 
 # Make sure that we have root access
 if os.getuid() != 0:
@@ -43,8 +43,8 @@ if os.getuid() != 0:
 
 
 def main():
-    rt_commands = [CatCertCommand]
-    return CLI(commands=rt_commands).main()
+    rct_commands = [CatCertCommand]
+    return CLI(commands=rct_commands).main()
 
 
 if __name__ == '__main__':
