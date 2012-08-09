@@ -57,8 +57,7 @@ class CatCertCommandTests(unittest.TestCase):
     def test_file_arg_required(self):
         command = CatCertCommand()
         try:
-            sys.argv = ['rt']
-            command.run()
+            command.run([])
             self.fail("Expected InvalidCLIOptionError since no file arg.")
         except InvalidCLIOptionError, e:
             self.assertEqual("You must specify a certificate file.",
