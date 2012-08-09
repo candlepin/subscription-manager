@@ -108,13 +108,11 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
 
 
 class ManuallySubscribeScreen(registergui.Screen):
+    widget_names = registergui.Screen.widget_names + ['title']
 
     def __init__(self, parent, backend):
-        widget_names = [
-                'title',
-        ]
         super(ManuallySubscribeScreen, self).__init__(
-                "manually_subscribe.glade", widget_names, parent, backend)
+                "manually_subscribe.glade", parent, backend)
 
         self.button_label = _("Finish")
 
