@@ -231,12 +231,12 @@ rm -rf %{buildroot}
 %endif
 
 # Incude rt CLI tool
-%dir %{_datadir}/rhsm/rt
-%{_datadir}/rhsm/rt/__init__.py*
-%{_datadir}/rhsm/rt/cli.py*
-%{_datadir}/rhsm/rt/commands.py*
-%{_datadir}/rhsm/rt/printing.py*
-%attr(755,root,root) %{_bindir}/rt
+%dir %{_datadir}/rhsm/rct
+%{_datadir}/rhsm/rct/__init__.py*
+%{_datadir}/rhsm/rct/cli.py*
+%{_datadir}/rhsm/rct/commands.py*
+%{_datadir}/rhsm/rct/printing.py*
+%attr(755,root,root) %{_bindir}/rct
 
 %doc
 %{_mandir}/man8/subscription-manager.8*

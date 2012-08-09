@@ -15,8 +15,8 @@
 
 import os
 from rhsm import certificate
-from rt.cli import CLICommand, InvalidCLIOptionError
-from rt.printing import printc
+from rct.cli import CLICommand, InvalidCLIOptionError
+from rct.printing import printc
 
 import gettext
 _ = gettext.gettext
@@ -26,7 +26,8 @@ class CatCertCommand(CLICommand):
     FILE_ARG_IDX = 0
 
     def __init__(self):
-        CLICommand.__init__(self, "cc", _("Show certificate info."))
+        CLICommand.__init__(self, "cat-cert",
+                            _("Print certificate info to standard output."))
 
     def _define_custom_opts(self, parser):
         self.parser.add_option("--no-products", dest="no_products", action="store_true",

@@ -14,13 +14,13 @@ BIN_DIR = bin/
 BIN_FILES = $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui \
 			$(BIN_DIR)/rhn-migrate-classic-to-rhsm \
 			$(BIN_DIR)/install-num-migrate-to-rhsm \
-			$(BIN_DIR)/rt
+			$(BIN_DIR)/rct
 SYSTEMD_INST_DIR=${PREFIX}/usr/lib/systemd/system
 
 SRC_DIR = src/subscription_manager
 
-RT_CODE_DIR = ${PREFIX}/${INSTALL_DIR}/${INSTALL_MODULE}/rt
-RT_SRC_DIR = src/rt
+RCT_CODE_DIR = ${PREFIX}/${INSTALL_DIR}/${INSTALL_MODULE}/rct
+RCT_SRC_DIR = src/rct
 
 CFLAGS = -Wall -g
 
@@ -221,9 +221,9 @@ install-files: dbus-service-install compile-po desktop-files
 	install -m 644 etc-conf/subscription-manager.console \
 		${PREFIX}/etc/security/console.apps/subscription-manager
 
-	install -d ${RT_CODE_DIR}
-	install -m 644 -p ${RT_SRC_DIR}/*.py ${RT_CODE_DIR}
-	install bin/rt ${PREFIX}/usr/bin
+	install -d ${RCT_CODE_DIR}
+	install -m 644 -p ${RCT_SRC_DIR}/*.py ${RCT_CODE_DIR}
+	install bin/rct ${PREFIX}/usr/bin
 
 
 check:

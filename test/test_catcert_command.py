@@ -15,9 +15,9 @@
 import sys
 import unittest
 import certdata
-from rt.commands import CatCertCommand
 from rhsm.certificate import create_from_pem
-from rt.cli import InvalidCLIOptionError
+from rct.commands import CatCertCommand
+from rct.cli import InvalidCLIOptionError
 
 from stubs import MockStdout, MockStderr
 
