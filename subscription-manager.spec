@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.12
+Version: 1.0.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -343,6 +343,64 @@ fi
 %endif
 
 %changelog
+* Thu Aug 09 2012 Alex Wood <awood@redhat.com> 1.0.13-1
+- Fix "Project-Id-Version" for ta_IN.po (alikins@redhat.com)
+- latest strings from zanata (alikins@redhat.com)
+- Remove the 'repos' unittests until they are more mockable
+  (alikins@redhat.com)
+- Created CLI tool for viewing certificate data. (mstead@redhat.com)
+- add versionlint to "make stylish" (alikins@redhat.com)
+- add versionlint, requires pyqver (alikins@redhat.com)
+- Remove unused mock return values (alikins@redhat.com)
+- Remove enable_grid_lines from contract details glade file
+  (alikins@redhat.com)
+- more test cases for ConfigCommand (alikins@redhat.com)
+- 837897: Terminology Change: Service Level Agreement -> Service Level
+  (wpoteat@redhat.com)
+- add test cases for ConfigCommand (alikins@redhat.com)
+- Better error when rm'ing config item from missing section
+  (alikins@redhat.com)
+- unittest coverage for managercli.CLI (alikins@redhat.com)
+- Adding unit tests for migration script regexes. (awood@redhat.com)
+- 812903: Autosubscribe not working for newly added product cert after Register
+  (wpoteat@redhat.com)
+- 845827: Update command that do not require a candlepin connection
+  (alikins@redhat.com)
+- 845827: Split server version checkout out to avoid errors
+  (alikins@redhat.com)
+- Hack to address double mapping for 180.pem and 17{6|8}.pem (awood@redhat.com)
+- fix pep8 (jesusr@redhat.com)
+- don't show access.redhat.com url after registering to Katello
+  (jesusr@redhat.com)
+- remove the explicit url search from error handling. (jesusr@redhat.com)
+- Make gettext_lint also check for _(foo) usage (alikins@redhat.com)
+- Remove unneeded _(somevar) (alikins@redhat.com)
+- Fix NameError in migration script. (awood@redhat.com)
+- bogus newline in glade file (alikins@redhat.com)
+- 826874: Reenable grid lines on newer gtk (alikins@redhat.com)
+- 826874: Remove enable_grid_lines from treeviews in glade (alikins@redhat.com)
+- 826874: Removing more properties that don't exist on gtk2.10
+  (alikins@redhat.com)
+- 826874: Change gtk target version to gtk 2.10 for all glade files
+  (alikins@redhat.com)
+- 826874: Clean of gtk properties not in gtk2.10 in our glade files
+  (alikins@redhat.com)
+- Add support for migrating to Katello. (jesusr@redhat.com)
+- 843191: 'version' command showed wrong info with no network
+  (alikins@redhat.com)
+- 843915: Multiple-specifications of --enable and --disable repos
+  (wpoteat@redhat.com)
+- fix Package-Id-Version in ta_IN.po (alikins@redhat.com)
+- Fix es_ES.po (missing newline) (alikins@redhat.com)
+- 842898: fix missing --password in it.po (alikins@redhat.com)
+- 843113: latest strings from zanata (alikins@redhat.com)
+- 837280: Show users that we strip out any scheme given with a proxy.
+  (awood@redhat.com)
+- new strings (alikins@redhat.com)
+- Refactor of SubDetailsWidget and GladeWidget (alikins@redhat.com)
+- 826729: Move Cert Status up to top of Product's Subscription Details
+  (wpoteat@redhat.com)
+
 * Thu Aug 02 2012 Alex Wood <awood@redhat.com> 1.0.12-1
 - remove test cases that use si_LK locale (alikins@redhat.com)
 - 842845: Show better error if serverurl port is non numeric
