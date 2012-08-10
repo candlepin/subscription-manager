@@ -32,21 +32,21 @@ class TestCli(unittest.TestCase):
         self._restore_stdout()
 
     def test_cli(self):
-        cli = managercli.CLI()
+        cli = managercli.ManagerCLI()
         self.assertTrue('register' in cli.cli_commands)
 
     def test_main_empty(self):
-        cli = managercli.CLI()
+        cli = managercli.ManagerCLI()
         self.assertRaises(SystemExit, cli.main)
 
     def test_cli_find_best_match(self):
-        cli = managercli.CLI()
+        cli = managercli.ManagerCLI()
         best_match = cli._find_best_match(['subscription-manager', 'version'])
         self.assertEquals(best_match.name, 'version')
 
     # shouldn't match on -sdf names
     def test_cli_find_best_match_no_dash(self):
-        cli = managercli.CLI()
+        cli = managercli.ManagerCLI()
         best_match = cli._find_best_match(['subscription-manager', '--version'])
         self.assertEquals(best_match, None)
 
