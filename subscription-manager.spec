@@ -180,6 +180,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/__init__.py*
 %{_datadir}/rhsm/subscription_manager/i18n.py*
 %{_datadir}/rhsm/subscription_manager/i18n_optparse.py*
+%{_datadir}/rhsm/subscription_manager/cli.py*
 %{_datadir}/rhsm/subscription_manager/managercli.py*
 %{_datadir}/rhsm/subscription_manager/managerlib.py*
 %{_datadir}/rhsm/subscription_manager/async.py*

@@ -17,9 +17,9 @@ import unittest
 import certdata
 from rhsm.certificate import create_from_pem
 from rct.commands import CatCertCommand
-from rct.cli import InvalidCLIOptionError
 
 from stubs import MockStdout, MockStderr
+from subscription_manager.cli import InvalidCLIOptionError
 
 
 class CatCertCommandStub(CatCertCommand):
@@ -57,7 +57,7 @@ class CatCertCommandTests(unittest.TestCase):
     def test_file_arg_required(self):
         command = CatCertCommand()
         try:
-            command.run([])
+            command.main([])
             self.fail("Expected InvalidCLIOptionError since no file arg.")
         except InvalidCLIOptionError, e:
             self.assertEqual("You must specify a certificate file.",
@@ -66,49 +66,49 @@ class CatCertCommandTests(unittest.TestCase):
     def test_invalid_file_arg(self):
         command = CatCertCommand()
         try:
-            command.run(["this_file_does_not_exist.crt"])
+            command.main(["this_file_does_not_exist.crt"])
             self.fail("Expected InvalidCLIOptionError since no file does not exist.")
         except InvalidCLIOptionError, e:
             self.assertEqual("The specified certificate file does not exist.", str(e))
 
     def test_omit_content_list(self):
         command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
-        command.run(["not_used.pem", "--no-content"])
+        command.main(["not_used.pem", "--no-content"])
         cert_output = self.mock_stdout.buffer
         self.assertTrue(cert_output.find("Content:\n") == -1,
                         "Content was not excluded from the output.")
 
     def test_omit_product_list(self):
         command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
-        command.run(["not_used.pem", "--no-products"])
+        command.main(["not_used.pem", "--no-products"])
         cert_output = self.mock_stdout.buffer
         self.assertTrue(cert_output.find("Product:\n") == -1,
                         "Products were not excluded from the output.")
 
     def test_cert_v1_cat(self):
         command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
-        command.run(['will_use_stub'])
+        command.main(['will_use_stub'])
 
         cert_output = self.mock_stdout.buffer
         self.assertEqual(certdata.ENTITLEMENT_CERT_V1_0_OUTPUT, cert_output)
 
     def test_cert_v2_cat(self):
         command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V2_0)
-        command.run(['will_use_stub'])
+        command.main(['will_use_stub'])
 
         cert_output = self.mock_stdout.buffer
         self.assertEqual(certdata.ENTITLEMENT_CERT_V2_0_OUTPUT, cert_output)
 
     def test_product_cert_output(self):
         command = CatCertCommandStub(certdata.PRODUCT_CERT_V1_0)
-        command.run(['will_use_stub'])
+        command.main(['will_use_stub'])
 
         cert_output = self.mock_stdout.buffer
         self.assertEqual(certdata.PRODUCT_CERT_V1_0_OUTPUT, cert_output)
 
     def test_identity_cert_output(self):
         command = CatCertCommandStub(certdata.IDENTITY_CERT)
-        command.run(['will_use_stub'])
+        command.main(['will_use_stub'])
 
         cert_output = self.mock_stdout.buffer
         self.assertEqual(certdata.IDENTITY_CERT_OUTPUT, cert_output)
