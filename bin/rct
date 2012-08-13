@@ -36,11 +36,6 @@ _ = gettext.gettext
 from rct.cli import CLI
 from rct.commands import CatCertCommand
 
-# Make sure that we have root access
-if os.getuid() != 0:
-    sys.stderr.write('Error: this command requires root access to execute\n')
-    sys.exit(8)
-
 
 def main():
     rct_commands = [CatCertCommand]
