@@ -19,7 +19,6 @@ if __name__ != '__main__':
     raise ImportError("This module can not be imported.")
 
 import sys
-import os
 
 # Ensure that the RHSM libs are on the path.
 _LIBPATH = "/usr/share/rhsm"
