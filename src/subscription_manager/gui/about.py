@@ -57,7 +57,8 @@ class AboutDialog(object):
         # Set the component versions.
         server_versions = get_server_versions(self.backend.uep)
         client_versions = get_client_versions()
-        self.dialog.set_version(server_versions['subscription manager'])
+
+        self.dialog.set_version(client_versions['subscription manager'])
         rhsm_version_label.set_markup(_("<b>python-rhsm version:</b> %s" % \
             client_versions['python-rhsm']))
         backend_version_label.set_markup(_("<b>subscription management service version:</b> %s" % \
