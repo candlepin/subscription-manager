@@ -719,6 +719,7 @@ class ServiceLevelCommand(UserPassCommand):
         if not self.options.list and \
            not self.options.show and \
            not self.options.service_level and \
+           not self.options.service_level == "" and \
            not self.options.unset:
             self.options.show = True
 
