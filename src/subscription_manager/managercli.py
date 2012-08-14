@@ -723,6 +723,9 @@ class ServiceLevelCommand(UserPassCommand):
 
     def _validate_options(self):
 
+        if self.options.service_level:
+            self.options.service_level = self.options.service_level.strip()
+
         # Assume --show if run with no args:
         if not self.options.list and \
            not self.options.show and \
