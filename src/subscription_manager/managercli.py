@@ -713,6 +713,14 @@ class ServiceLevelCommand(UserPassCommand):
                                action='store_true',
                                help=_("unset the service level for this system"))
 
+    def _set_service_level(self, service_level):
+        consumer_uuid = self.consumerIdentity.read().getConsumerId()
+        consumer = self.cp.getConsumer(consumer_uuid)
+        if 'serviceLevel' not in consumer:
+            systemExit(-1, _("Error: The service-level command is not supported "
+                             "by the server."))
+        self.cp.updateConsumer(consumer_uuid, service_level=service_level)
+
     def _validate_options(self):
 
         # Assume --show if run with no args:
@@ -777,16 +785,14 @@ class ServiceLevelCommand(UserPassCommand):
             handle_exception(_("Error: Unable to retrieve service levels."), e)
 
     def set_service_level(self, service_level):
-        consumer_uuid = self.consumerIdentity.read().getConsumerId()
-        consumer = self.cp.getConsumer(consumer_uuid)
-        if 'serviceLevel' not in consumer:
-            systemExit(-1, _("Error: The service-level command is not supported "
-                             "by the server."))
-        self.cp.updateConsumer(consumer_uuid, service_level=service_level)
-        print(_("Service level set to: %s") % service_level)
+        if service_level == "":
+            self.unset_service_level()
+        else:
+            self._set_service_level(service_level)
+            print(_("Service level set to: %s") % service_level)
 
     def unset_service_level(self):
-        self.set_service_level("")
+        self._set_service_level("")
         print _("Service level preference has been unset")
 
     def show_service_level(self):
