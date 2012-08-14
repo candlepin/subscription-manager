@@ -785,8 +785,11 @@ class ServiceLevelCommand(UserPassCommand):
             handle_exception(_("Error: Unable to retrieve service levels."), e)
 
     def set_service_level(self, service_level):
-        self._set_service_level(service_level)
-        print(_("Service level set to: %s") % service_level)
+        if service_level == "":
+            self.unset_service_level()
+        else:
+            self._set_service_level(service_level)
+            print(_("Service level set to: %s") % service_level)
 
     def unset_service_level(self):
         self._set_service_level("")
