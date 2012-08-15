@@ -867,7 +867,7 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_option("--activationkey", action='append', dest="activation_keys",
                                help=_("one or more activation keys to use for registration"))
         self.parser.add_option("--servicelevel", dest="service_level",
-                               help=_("service level to apply to this system"))
+                               help=_("system preference used when subscribing automatically"))
 
         self.facts = Facts(ent_dir=self.entitlement_dir,
                            prod_dir=self.product_dir)
