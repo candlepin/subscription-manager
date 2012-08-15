@@ -193,7 +193,7 @@ def checkOkToProceed(secreds, serverurl):
 
     # check if this machine is already registered to Certicate-based RHN
     if ConsumerIdentity.existsAndValid():
-        print _("\nThis machine appears to be already registered to Certificate-based RHN.  Exiting.")
+        print _("\nThis machine appears to be already registered to Red Hat Subscription Management.  Exiting.")
         consumer = ConsumerIdentity.read()
         systemExit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % consumer.getConsumerId())
 
@@ -397,7 +397,7 @@ def transferHttpProxySettings():
 
 def register(credentials, serverurl):
     # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
-    print _("\nAttempting to register system to Certificate-based RHN ...")
+    print _("\nAttempting to register system to Red Hat Subscription Management ...")
     cmd = ['subscription-manager', 'register', '--username=' + credentials.username, '--password=' + credentials.password]
     if serverurl:
         # insert just after register (not sure if order matters,
@@ -409,7 +409,7 @@ def register(credentials, serverurl):
         systemExit(2, _("\nUnable to register.\nFor further assistance, please contact Red Hat Global Support Services."))
     else:
         consumer = ConsumerIdentity.read()
-        print _("System '%s' successfully registered to Certificate-based RHN.\n") % consumer.getConsumerName()
+        print _("System '%s' successfully registered to Red Hat Subscription Management.\n") % consumer.getConsumerName()
     return consumer
 
 
@@ -602,11 +602,11 @@ def authenticate(prompt):
 def main():
     serverurl = None
     if options.serverurl:
-        rhncreds = authenticate(_("RHN Username: "))
+        rhncreds = authenticate(_("Red Hat account: "))
         secreds = authenticate(_("System Engine Username: "))
         serverurl = options.serverurl
     else:
-        rhncreds = authenticate(_("RHN Username: "))
+        rhncreds = authenticate(_("Red Hat account: "))
         if not isHosted():
             secreds = authenticate(_("System Engine Username: "))
         else:
@@ -630,7 +630,7 @@ def main():
     deployProdCertificates(subscribedChannels)
 
     writeMigrationFacts()
-    print _("\nPreparing to unregister system from RHN classic ...")
+    print _("\nPreparing to unregister system from RHN Classic ...")
     unRegisterSystemFromRhnClassic(sc, sk)
 
     # register the system to Certificate-based RHN and consume a subscription
