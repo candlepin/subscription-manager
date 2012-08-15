@@ -37,7 +37,8 @@ from subscription_manager.facts import Facts
 from subscription_manager.certdirectory import ProductDirectory, EntitlementDirectory
 from subscription_manager.certlib import ConsumerIdentity, CertLib
 from subscription_manager.branding import get_branding
-from subscription_manager.utils import get_client_versions, get_server_versions
+from subscription_manager.utils import get_client_versions, get_server_versions, \
+restart_virt_who
 
 from subscription_manager.gui import redeem
 from subscription_manager.gui import factsgui
@@ -379,6 +380,10 @@ class MainWindow(widgets.GladeWidget):
                     logMsg="Consumer may need to be manually cleaned up: %s" %
                     self.consumer.uuid)
         self.consumer.reload()
+
+        # We have new credentials, restart virt-who
+        restart_virt_who()
+
         # we've unregistered, clear pools from all subscriptions tab
         # so it's correct if we reshow it
         self.all_subs_tab.clear_pools()

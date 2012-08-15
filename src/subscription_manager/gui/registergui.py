@@ -31,7 +31,7 @@ from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager.certmgr import CertManager
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.utils import parse_server_info, ServerUrlParseError,\
-        is_valid_server_info, MissingCaCertException
+        is_valid_server_info, MissingCaCertException, restart_virt_who
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui import widgets
 
@@ -856,6 +856,10 @@ class AsyncBackend(object):
 
             ProfileManager().update_check(self.backend.admin_uep,
                                           retval['uuid'])
+
+            # We have new credentials, restart virt-who
+            restart_virt_who()
+
             self.queue.put((callback, retval, None))
         except Exception, e:
             self.queue.put((callback, None, e))

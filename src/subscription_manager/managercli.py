@@ -50,7 +50,7 @@ from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 from subscription_manager.utils import remove_scheme, parse_server_info, \
         ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
-        MissingCaCertException, get_client_versions, get_server_versions
+        MissingCaCertException, get_client_versions, get_server_versions, restart_virt_who
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
@@ -508,6 +508,9 @@ class CleanCommand(CliCommand):
 
         self._request_validity_check()
 
+        # We have new credentials, restart virt-who
+        restart_virt_who()
+
     def require_connection(self):
         return False
 
@@ -957,6 +960,9 @@ class RegisterCommand(UserPassCommand):
 
         consumer_info = self._persist_identity_cert(consumer)
 
+        # We have new credentials, restart virt-who
+        restart_virt_who()
+
         print (_("The system has been registered with id: %s ")) % (consumer_info["uuid"])
 
         cert_file = ConsumerIdentity.certpath()
@@ -1086,6 +1092,9 @@ class UnRegisterCommand(CliCommand):
             pass
 
         self._request_validity_check()
+
+        # We have new credentials, restart virt-who
+        restart_virt_who()
 
         print(_("System has been un-registered."))
 
