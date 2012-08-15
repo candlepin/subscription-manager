@@ -7,7 +7,7 @@ class Branding(object):
         self.CLI_REGISTER = _("register the client to the Customer Portal or another subscription management service.")
         self.CLI_UNREGISTER = _("unregister the client from the Customer Portal or another subscription management service.")
         self.RHSMD_REGISTERED_TO_OTHER = \
-                _("This system is registered to RHN Classic")
+                _("This system is registered to RHN Classic.")
         self.REGISTERED_TO_OTHER_WARNING = _("WARNING") + \
             "\n\n" + \
             _("This system has already been registered with RHN using RHN Classic technology.") + \
