@@ -562,10 +562,10 @@ class IdentityCommand(UserPassCommand):
         # check for Classic before doing anything else
         if ClassicCheck().is_registered_with_classic():
             if ConsumerIdentity.existsAndValid():
-                print _("remote entitlement server type: %s") % get_branding().REGISTERED_TO_BOTH_SUMMARY
+                print _("server type: %s") % get_branding().REGISTERED_TO_BOTH_SUMMARY
             else:
                 # no need to continue if user is only registered to Classic
-                print _("remote entitlement server type: %s") % get_branding().REGISTERED_TO_OTHER_SUMMARY
+                print _("server type: %s") % get_branding().REGISTERED_TO_OTHER_SUMMARY
                 return
 
         try:
@@ -590,7 +590,7 @@ class IdentityCommand(UserPassCommand):
                 managerlib.persist_consumer_cert(consumer)
                 print _("Identity certificate has been regenerated.")
 
-                log.info("Successfully generated a new identity from Entitlement Platform.")
+                log.info("Successfully generated a new identity from server.")
         except connection.RestlibException, re:
             log.exception(re)
             log.error(u"Error: Unable to generate a new identity for the system: %s" % re)
@@ -614,7 +614,7 @@ class OwnersCommand(UserPassCommand):
             self.cp = self._get_UEP(username=self.username,
                                     password=self.password)
             owners = self.cp.getOwnerList(self.username)
-            log.info("Successfully retrieved org list from Entitlement Platform.")
+            log.info("Successfully retrieved org list from server.")
             if len(owners):
                 print("+-------------------------------------------+")
                 print("          %s %s" % (self.username, _("Organizations")))
@@ -629,10 +629,10 @@ class OwnersCommand(UserPassCommand):
 
         except connection.RestlibException, re:
             log.exception(re)
-            log.error(u"Error: Unable to retrieve org list from Entitlement Platform: %s" % re)
+            log.error(u"Error: Unable to retrieve org list from server: %s" % re)
             systemExit(-1, re.msg)
         except Exception, e:
-            handle_exception(_("Error: Unable to retrieve org list from Entitlement Platform"), e)
+            handle_exception(_("Error: Unable to retrieve org list from server"), e)
 
 
 class EnvironmentsCommand(UserPassCommand):
@@ -681,13 +681,13 @@ class EnvironmentsCommand(UserPassCommand):
             else:
                 print _("Error: Server does not support environments.")
 
-            log.info("Successfully retrieved environment list from Entitlement Platform.")
+            log.info("Successfully retrieved environment list from server.")
         except connection.RestlibException, re:
             log.exception(re)
-            log.error(u"Error: Unable to retrieve environment list from Entitlement Platform: %s" % re)
+            log.error(u"Error: Unable to retrieve environment list from server: %s" % re)
             systemExit(-1, re.msg)
         except Exception, e:
-            handle_exception(_("Error: Unable to retrieve environment list from Entitlement Platform"), e)
+            handle_exception(_("Error: Unable to retrieve environment list from server"), e)
 
 
 class ServiceLevelCommand(UserPassCommand):
@@ -1580,7 +1580,7 @@ class ReposCommand(CliCommand):
         if self.options.list:
             if len(repos) > 0:
                 print("+----------------------------------------------------------+")
-                print _("    Entitled Repositories in %s") % rl.get_repo_file()
+                print _("    Available Repositories in %s") % rl.get_repo_file()
                 print("+----------------------------------------------------------+")
                 for repo in repos:
                     print REPOS_LIST % (repo.id,
@@ -1588,7 +1588,7 @@ class ReposCommand(CliCommand):
                         repo["baseurl"],
                         repo["enabled"])
             else:
-                print _("The system is not entitled to use any repositories.")
+                print _("This system has no repositories available through subscriptions.")
 
     def updateFile(self, repos):
         repo_file = RepoFile()
@@ -1942,8 +1942,8 @@ class VersionCommand(CliCommand):
 
         # FIXME: slightly odd in that we log that we can't get the version,
         # but then show "unknown" here.
-        print (_("remote entitlement server: %s") % server_versions["candlepin"])
-        print (_("remote entitlement server type: %s") % server_versions["server-type"])
+        print (_("registered to: %s") % server_versions["candlepin"])
+        print (_("server type: %s") % server_versions["server-type"])
         print (_("subscription-manager: %s") % client_versions["subscription manager"])
         print (_("python-rhsm: %s") % client_versions["python-rhsm"])
 

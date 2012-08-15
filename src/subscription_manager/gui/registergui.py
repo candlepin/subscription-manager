@@ -331,7 +331,7 @@ class PerformSubscribeScreen(NoGuiScreen):
 
     def __init__(self, parent, backend):
         super(PerformSubscribeScreen, self).__init__(parent, backend)
-        self.pre_message = _("Subscribing to entitlements")
+        self.pre_message = _("Attaching subscriptions")
 
     def _on_subscribing_finished_cb(self, unused, error=None):
         try:
@@ -465,10 +465,10 @@ class SelectSLAScreen(Screen):
                 OkDialog(_("Unable to auto-subscribe, server does not support service levels."),
                         parent=self._parent.window)
             elif isinstance(error, NoProductsException):
-                InfoDialog(_("No installed products on system. No need to update certificates at this time."),
+                InfoDialog(_("No installed products on system. No need to update subscriptions at this time."),
                            parent=self._parent.window)
             elif isinstance(error, AllProductsCoveredException):
-                InfoDialog(_("All installed products are covered by valid entitlements. No need to update certificates at this time."),
+                InfoDialog(_("All installed products are covered by valid entitlements. No need to update subscriptions at this time."),
                            parent=self._parent.window)
             else:
                 handle_gui_exception(error, _("Error subscribing"),
@@ -485,11 +485,11 @@ class SelectSLAScreen(Screen):
             if current_sla is not None and \
                     not self._can_add_more_subs(current_sla, sla_data_map):
                 handle_gui_exception(None,
-                                     _("Unable to subscribe to any additional "
-                                     "products at current service level: %s. "
+                                     _("No available subscriptions at "
+                                     "the current service level: %s. "
                                      "Please use the \"All Available "
                                      "Subscriptions\" tab to manually "
-                                     "entitle this system.") % current_sla,
+                                     "subscribe this system.") % current_sla,
                                     self._parent.window)
                 self._parent.finish_registration(failed=True)
                 return
@@ -503,9 +503,9 @@ class SelectSLAScreen(Screen):
         else:
             log.info("No suitable service levels found.")
             handle_gui_exception(None,
-                                 _("No service levels will cover all installed "
+                                 _("No service level will cover all installed "
                                  "products. Please use the \"All Available "
-                                 "Subscriptions\" tab to manually entitle "
+                                 "Subscriptions\" tab to manually subscribe "
                                  "this system."), parent=self._parent.window)
             self._parent.finish_registration(failed=True)
 

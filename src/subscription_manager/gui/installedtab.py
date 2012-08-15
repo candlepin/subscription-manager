@@ -15,6 +15,7 @@
 from subscription_manager import managerlib, cert_sorter
 from subscription_manager.cert_sorter import CertSorter, FUTURE_SUBSCRIBED, \
     NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
+from subscription_manager.branding import get_branding
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 from subscription_manager.gui import widgets
 from subscription_manager.hwprobe import ClassicCheck
@@ -287,7 +288,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         if ClassicCheck().is_registered_with_classic():
             self._set_status_icons(VALID)
             self.subscription_status_label.set_text(
-                _("This system is registered to RHN Classic"))
+                get_branding().RHSMD_REGISTERED_TO_OTHER)
             return
 
         is_registered = ConsumerIdentity.existsAndValid()
@@ -307,22 +308,16 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
             # Change wording slightly for just one product
             if warn_count > 1:
                 self.subscription_status_label.set_markup(
-                        _("You have <b>%s</b> products with <i>invalid</i> entitlement certificates.")
+                        _("%s installed products do not have valid subscriptions.")
                         % warn_count)
             else:
                 self.subscription_status_label.set_markup(
-                        _("You have <b>1</b> product with an <i>invalid</i> entitlement certificate."))
+                        _("1 installed product does not have a valid subscription."))
 
         elif partial_count > 0:
             self._set_status_icons(PARTIAL)
-            # Change wording slightly for just one product
-            if partial_count > 1:
-                self.subscription_status_label.set_markup(
-                        _("You have <b>%s</b> products in need of <i>additional</i> entitlement certificates.")
-                        % partial_count)
-            else:
-                self.subscription_status_label.set_markup(
-                        _("You have <b>1</b> product in need of <i>additional</i> entitlement certificates."))
+            self.subscription_status_label.set_markup(
+                _("This system does not match subscription limits."))
 
         else:
             first_invalid = find_first_invalid_date(self.entitlement_dir,
@@ -330,18 +325,18 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
             self._set_status_icons(VALID)
             if first_invalid:
                 self.subscription_status_label.set_markup(
-                        _("Product entitlement certificates <i>valid</i> until %s") % \
+                        _("System is properly subscribed through %s.") % \
                             managerlib.formatDate(first_invalid))
             else:
                 # No product certs installed, no first invalid date, and
                 # the subscription assistant can't do anything, so we'll disable
                 # the button to launch it:
                 self.subscription_status_label.set_text(
-                        _("No product certificates installed."))
+                        _("No installed products detected."))
 
         if not is_registered:
             self.subscription_status_label.set_text(
-                _("You must register this system before subscribing."))
+                _("Keep your system up to date by registering."))
 
     def set_registered(self, is_registered):
         self.update_certificates_button.set_property('visible', is_registered)

@@ -297,7 +297,7 @@ def get_client_versions():
 
 
 def get_server_versions(cp):
-    cp_version = _("No connection made to remote entitlement server")
+    cp_version = _("Unable to reach server")
     server_type = _("Unknown")
     if cp:
         server_type = _("subscription management service")
