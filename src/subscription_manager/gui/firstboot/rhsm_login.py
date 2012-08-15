@@ -42,13 +42,11 @@ class SelectSLAScreen(registergui.SelectSLAScreen):
                 self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
             elif isinstance(error, NoProductsException):
                 message = _("No installed products on system. No need to "
-                            "update certificates at this time.")
+                            "update subscriptions at this time.")
                 self._parent.manual_message = message
                 self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
             elif isinstance(error, AllProductsCoveredException):
-                message = _("All installed products are covered by valid "
-                            "entitlements. Please run 'Subscription Manager' "
-                            "to subscribe to additional products.")
+                message = _("All installed products are fully subscribed.")
                 self._parent.manual_message = message
                 self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
             else:
@@ -80,7 +78,7 @@ class SelectSLAScreen(registergui.SelectSLAScreen):
         else:
             message = _("No service levels will cover all installed products. "
                 "Please run 'Subscription Manager' to manually "
-                "entitle this system.")
+                "subscribe this system.")
             self._parent.manual_message = message
             self._parent.pre_done(MANUALLY_SUBSCRIBE_PAGE)
 

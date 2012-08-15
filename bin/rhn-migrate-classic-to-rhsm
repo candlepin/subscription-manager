@@ -73,7 +73,7 @@ options_table = [
            help=_("Service level to subscribe this system to. For no service "
                   "level use --service-level=\"\"")),
     Option("--serverurl", dest='serverurl',
-           help=_("Specify the SAM/System Engine server to migrate TO.")),
+           help=_("Specify the Subscription Management Server to migrate TO.")),
 ]
 
 parser = OptionParser(usage=_("%prog [OPTIONS]"),
@@ -543,7 +543,7 @@ def enableExtraChannels(subscribedChannels, cp):
                 repofile.write()
     except:
         print _("\nUnable to enable extra repositories.")
-        print _("Please ensure system is subscribed to entitlements, and alter /etc/yum.repos.d/redhat.repo to enable extra repositories.")
+        print _("Please ensure system has subscriptions attached, and see 'subscription-manager repos --help' to enable additional repositories")
 
 
 def writeMigrationFacts():
