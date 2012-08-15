@@ -312,7 +312,7 @@ def get_server_versions(cp):
             raise
         except Exception, e:
             # a more useful error would be handy here
-            print _("Error while checking server version: %s") % e
+            log.error(("Error while checking server version: %s") % e)
             log.exception(e)
 
             server_type = _("Unknown")
