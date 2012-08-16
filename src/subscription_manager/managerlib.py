@@ -122,14 +122,6 @@ def getInstalledProductStatus(product_directory=None,
     return product_status
 
 
-def getInstalledProductHashMap():
-    products = certdirectory.ProductDirectory().list()
-    phash = {}
-    for product in products:
-        phash[product.products[0].name] = product.products[0].id
-    return phash
-
-
 class CertificateFetchError(Exception):
     def __init__(self, errors):
         self.errors = errors
