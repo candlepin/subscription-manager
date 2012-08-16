@@ -358,4 +358,4 @@ class EntitlementCertStackingGroupSorter(StackingGroupSorter):
         return cert.order.stacking_id
 
     def _get_product_name(self, cert):
-        return cert.products[0].name
+        return cert.order.name

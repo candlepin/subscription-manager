@@ -170,8 +170,13 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
     def _add_group(self, group_idx, group):
         iter = None
         bg_color = get_cell_background_color(group_idx)
-        if group.name:
-            iter = self.store.add_map(iter, self._create_stacking_header_entry(group.name,
+        if group.name and len(group.entitlements) > 1:
+            if len(group.entitlements) - 1 > 1:
+                name_string = _("Stack of %s and %s others") % \
+                        (group.name, str(len(group.entitlements) - 1))
+            else:
+                name_string = _("Stack of %s and 1 other") % (group.name)
+            iter = self.store.add_map(iter, self._create_stacking_header_entry(name_string,
                                                                                bg_color))
         new_parent_image = None
         for i, cert in enumerate(group.entitlements):
