@@ -157,7 +157,8 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
 
 
 def show_autosubscribe_output():
-    installed_status = managerlib.getInstalledProductStatus()
+    installed_status = managerlib.getInstalledProductStatus(ProductDirectory(),
+            EntitlementDirectory())
 
     log.info("Attempted to auto-subscribe/heal the system.")
     print _("Installed Product Current Status:")
@@ -1761,7 +1762,8 @@ class ListCommand(CliCommand):
         self._validate_options()
 
         if self.options.installed:
-            iproducts = managerlib.getInstalledProductStatus(facts=self.facts.get_facts())
+            iproducts = managerlib.getInstalledProductStatus(self.product_dir,
+                    self.entitlement_dir, self.facts.get_facts())
             if not len(iproducts):
                 print(_("No installed products to list"))
                 sys.exit(0)

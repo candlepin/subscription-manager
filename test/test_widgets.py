@@ -46,16 +46,16 @@ class TestSubDetailsWidget(unittest.TestCase):
                      sku=self.sku_text)
 
     def test_show(self):
-        details = self.widget()
+        details = self.widget(None)
         self.show(details)
 
     def test_clear(self):
-        details = self.widget()
+        details = self.widget(None)
         self.show(details)
         details.clear()
 
     def test_a11y(self):
-        details = self.widget()
+        details = self.widget(None)
         self.show(details)
         sub_text = details.subscription_text.get_accessible().get_name()
         self.assertEquals(self.expected_sub_text, sub_text)
@@ -66,21 +66,21 @@ class TestContractSubDetailsWidget(TestSubDetailsWidget):
     expected_sub_text = "Subscription Text"
 
     def test_get_expired_bg(self):
-        details = self.widget()
+        details = self.widget(None)
         self.show(details)
         yesterday = datetime.now(GMT()) - timedelta(days=1)
         bg_color = details._get_date_bg(yesterday)
         self.assertEqual(details.expired_color, bg_color)
 
     def test_get_warning_bg(self):
-        details = self.widget()
+        details = self.widget(None)
         self.show(details)
         tomorrow = datetime.now(GMT()) + timedelta(days=1)
         bg_color = details._get_date_bg(tomorrow)
         self.assertEqual(details.warning_color, bg_color)
 
     def testVirtOnly(self):
-        details = self.widget()
+        details = self.widget(None)
         self.show(details)
         d = datetime(2011, 4, 16, tzinfo=LocalTz())
         start_date = datetime(d.year, d.month, d.day, tzinfo=LocalTz())

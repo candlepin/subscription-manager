@@ -16,12 +16,10 @@ from subscription_manager import managerlib, cert_sorter
 from subscription_manager.cert_sorter import CertSorter, FUTURE_SUBSCRIBED, \
     NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 from subscription_manager.branding import get_branding
-from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 from subscription_manager.gui import widgets
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.validity import find_first_invalid_date, \
     ValidProductDateRangeCalculator
-from subscription_manager.certlib import ConsumerIdentity
 
 import gettext
 import gobject
@@ -56,14 +54,15 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                  'update_certificates_button', 'register_button']
 
     def __init__(self, backend, consumer, facts, tab_icon,
-                 parent, ent_dir=None, prod_dir=None):
+                 parent, ent_dir, prod_dir):
 
         super(InstalledProductsTab, self).__init__('installed.glade')
 
         self.tab_icon = tab_icon
 
-        self.product_dir = prod_dir or ProductDirectory()
-        self.entitlement_dir = ent_dir or EntitlementDirectory()
+        self.consumer = consumer
+        self.product_dir = prod_dir
+        self.entitlement_dir = ent_dir
 
         self.facts = facts
         self.cs = cert_sorter.CertSorter(prod_dir, ent_dir,
@@ -291,7 +290,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 get_branding().RHSMD_REGISTERED_TO_OTHER)
             return
 
-        is_registered = ConsumerIdentity.existsAndValid()
+        is_registered = self.consumer.is_valid()
         self.set_registered(is_registered)
 
         # Look for products which have invalid entitlements

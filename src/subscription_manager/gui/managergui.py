@@ -99,6 +99,13 @@ class Backend(object):
                 self.entitlement_dir.path)
         self.identity_monitor = file_monitor.Monitor(ConsumerIdentity.PATH)
 
+        # connect handlers to refresh the cached data when we notice a change.
+        # do this before any other handlers might connect
+        self.product_monitor.connect("changed",
+                lambda monitor: self.product_dir.refresh())
+        self.entitlement_monitor.connect("changed",
+                lambda monitor: self.entitlement_dir.refresh())
+
     # make a create that does the init
     # and a update() for a name
 
@@ -140,9 +147,7 @@ class Backend(object):
                                             proxy_password=cfg.get('server', 'proxy_password'))
 
     def is_registered(self):
-        if ConsumerIdentity.existsAndValid():
-            return True
-        return False
+        return self.consumer.is_valid()
 
     def create_admin_uep(self, username=None, password=None):
         self.admin_uep = self._create_uep(username=username, password=password)
@@ -168,13 +173,18 @@ class Consumer(object):
         Check for consumer certificate on disk and update our info accordingly.
         """
         log.debug("Loading consumer info from identity certificates.")
-        if not ConsumerIdentity.existsAndValid():
-            self.name = None
-            self.uuid = None
-        else:
+        try:
             consumer = ConsumerIdentity.read()
             self.name = consumer.getConsumerName()
             self.uuid = consumer.getConsumerId()
+        # XXX shouldn't catch the global exception here, but that's what
+        # existsAndValid did, so this is better.
+        except Exception:
+            self.name = None
+            self.uuid = None
+
+    def is_valid(self):
+        return self.uuid is not None
 
     def getConsumerName(self):
         return self.name
@@ -198,13 +208,14 @@ class MainWindow(widgets.GladeWidget):
 
         self.backend = backend or Backend()
         self.consumer = consumer or Consumer()
-        self.facts = facts or Facts()
+        self.facts = facts or Facts(self.backend.entitlement_dir,
+                self.backend.product_dir)
 
         log.debug("Client Versions: %s " % get_client_versions())
         log.debug("Server Versions: %s " % get_server_versions(self.backend.uep))
 
-        self.product_dir = prod_dir or ProductDirectory()
-        self.entitlement_dir = ent_dir or EntitlementDirectory()
+        self.product_dir = prod_dir or self.backend.product_dir
+        self.entitlement_dir = ent_dir or self.backend.entitlement_dir
 
         self.system_facts_dialog = factsgui.SystemFactsDialog(self.backend, self.consumer,
                 self.facts)
@@ -265,6 +276,7 @@ class MainWindow(widgets.GladeWidget):
         })
 
         def on_identity_change(filemonitor):
+            self.consumer.reload()
             self.refresh()
 
         self.backend.monitor_identity(on_identity_change)
@@ -280,7 +292,7 @@ class MainWindow(widgets.GladeWidget):
             self._register_item_clicked(None)
 
     def registered(self):
-        return ConsumerIdentity.existsAndValid()
+        return self.consumer.is_valid()
 
     def _on_sla_back_button_press(self):
         self._perform_unregister()
@@ -296,8 +308,6 @@ class MainWindow(widgets.GladeWidget):
 
     def refresh(self):
         """ Refresh the UI. """
-        self.consumer.reload()
-
         # Show the All Subscriptions tab if registered, hide it otherwise:
         if self.registered() and self.notebook.get_n_pages() == 2:
             self.notebook.append_page(self.all_subs_tab.get_content(),
