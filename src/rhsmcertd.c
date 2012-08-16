@@ -238,11 +238,6 @@ get_option_context ()
 	option_context = g_option_context_new ("");
 	g_option_context_set_ignore_unknown_options (option_context, true);
 	g_option_context_add_main_entries (option_context, entries, NULL);
-	g_option_group_new ("rhsmcertd", "", "rhsmcertd", NULL, NULL);
-	g_option_context_add_group (option_context,
-				    g_option_group_new ("rhsmcertd", "",
-							"rhsmcertd", NULL,
-							NULL));
 	return option_context;
 }
 
@@ -252,7 +247,7 @@ void
 print_argument_error (const char *message, ...)
 {
 	va_list argp;
-	
+
 	va_start (argp, message);
 	vprintf(message, argp);
 	printf(N_("For more information run: rhsmcertd --help\n"));
