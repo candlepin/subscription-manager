@@ -276,7 +276,7 @@ class ProductsTable(object):
 
 class SubDetailsWidget(GladeWidget):
     widget_names = ["sub_details_vbox", "subscription_text", "products_view",
-                    "support_level_text", "support_type_text", "sku_text"]
+                    "support_level_and_type_text", "sku_text"]
     glade_file = "subdetails.glade"
 
     def __init__(self):
@@ -312,8 +312,10 @@ class SubDetailsWidget(GladeWidget):
 
         self._set(self.sku_text, sku)
 
-        self._set(self.support_level_text, support_level)
-        self._set(self.support_type_text, support_type)
+        display_level = support_level
+        if support_level == "":
+            display_level = _("Not Set")
+        self._set(self.support_level_and_type_text, ", ".join([display_level, support_type]))
 
         self._show_other_details(name, contract, start, end, account,
                                  management, support_level, support_type,
@@ -342,8 +344,7 @@ class SubDetailsWidget(GladeWidget):
 
         self._set(self.sku_text, "")
 
-        self._set(self.support_level_text, "")
-        self._set(self.support_type_text, "")
+        self._set(self.support_level_and_type_text, "")
 
         self._clear_other_details()
 
@@ -366,12 +367,10 @@ class SubDetailsWidget(GladeWidget):
 
         self.subscription_text.get_accessible().set_name(
                 "All Available Subscription Text")
-        self.support_type_text.get_accessible().set_name(
+        self.sku_text.get_accessible().set_name(
                 "All Available SKU Text")
-        self.support_type_text.get_accessible().set_name(
-                "All Available Support Type Text")
-        self.support_level_text.get_accessible().set_name(
-                "All Available Support Level Text")
+        self.support_level_and_type_text.get_accessible().set_name(
+                "All Available Support Level And Type Text")
         self.bundled_products.set_accessibility_name(
                 "All Available Bundled Product Table")
 
