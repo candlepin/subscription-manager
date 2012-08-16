@@ -95,9 +95,12 @@ class HealingLib(DataLib):
     never have invalid certificats if subscriptions are available.
     """
 
-    def __init__(self, lock=ActionLock(), uep=None, facts_dict=None):
+    def __init__(self, lock=ActionLock(), uep=None, facts_dict=None,
+                 product_dir=None):
         self.facts_dict = facts_dict
         DataLib.__init__(self, lock, uep)
+
+        self._product_dir = product_dir or ProductDirectory()
 
     def _do_update(self):
         uuid = ConsumerIdentity.read().getConsumerId()
@@ -110,13 +113,11 @@ class HealingLib(DataLib):
                 today = datetime.now(GMT())
                 tomorrow = today + timedelta(days=1)
 
-                prod_dir = ProductDirectory()
-
                 # Check if we're not valid today and heal if so. If not
                 # we'll do the same check for tomorrow to hopefully always keep
                 # us valid:
                 ent_dir = EntitlementDirectory()
-                cs = cert_sorter.CertSorter(prod_dir, ent_dir,
+                cs = cert_sorter.CertSorter(self._product_dir, ent_dir,
                         self.facts_dict, on_date=today)
                 cert_updater = CertLib(uep=self.uep)
                 if not cs.is_valid():
@@ -128,7 +129,7 @@ class HealingLib(DataLib):
                     log.info("Entitlements are valid for today: %s" %
                             today)
 
-                    cs = cert_sorter.CertSorter(prod_dir, ent_dir,
+                    cs = cert_sorter.CertSorter(self._product_dir, ent_dir,
                             self.facts_dict, on_date=tomorrow)
                     if not cs.is_valid():
                         log.warn("Found invalid entitlements for tomorrow: %s" %

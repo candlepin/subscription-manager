@@ -105,7 +105,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                               widgets.expand_collapse_on_row_activated_callback)
 
         # This option should be selected by default:
-        self.sub_details = widgets.SubDetailsWidget()
+        self.sub_details = widgets.SubDetailsWidget(backend.product_dir)
         self.details_box.add(self.sub_details.get_widget())
 
         self.contract_selection = None

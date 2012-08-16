@@ -14,18 +14,14 @@
 #
 
 import logging
-from subscription_manager.certdirectory import EntitlementDirectory, \
-    ProductDirectory
 from subscription_manager import cert_sorter
-from subscription_manager.facts import Facts
 from datetime import timedelta, datetime
 from rhsm.certificate import GMT, DateRange
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-def find_first_invalid_date(ent_dir=None, product_dir=None,
-        facts_dict=None):
+def find_first_invalid_date(ent_dir, product_dir, facts_dict):
     """
     Find the first date when the system is invalid at midnight
     GMT.
@@ -39,13 +35,6 @@ def find_first_invalid_date(ent_dir=None, product_dir=None,
     If there are no products installed, return None, as there technically
     is no first invalid date.
     """
-    if not ent_dir:
-        ent_dir = EntitlementDirectory()
-    if not product_dir:
-        product_dir = ProductDirectory()
-    if facts_dict is None:
-        facts_dict = Facts().get_facts()
-
     current_date = datetime.now(GMT())
 
     if not product_dir.list():
