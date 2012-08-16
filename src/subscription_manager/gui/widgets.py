@@ -30,7 +30,6 @@ from subscription_manager.gui import storage
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import utils
 from subscription_manager.gui import file_monitor
-from subscription_manager.certdirectory import ProductDirectory
 
 GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
 UPDATE_FILE = '/var/run/rhsm/update'
@@ -221,7 +220,7 @@ class SelectionWrapper(object):
 
 
 class ProductsTable(object):
-    def __init__(self, table_widget, yes_id=gtk.STOCK_APPLY,
+    def __init__(self, table_widget, product_dir, yes_id=gtk.STOCK_APPLY,
                  no_id=gtk.STOCK_REMOVE):
         """
         Create a new products table, populating the gtk.TreeView.
@@ -236,7 +235,7 @@ class ProductsTable(object):
 
         self.yes_icon = self._render_icon(yes_id)
         self.no_icon = self._render_icon(no_id)
-        self.product_dir = ProductDirectory()
+        self.product_dir = product_dir
 
         name_column = gtk.TreeViewColumn(_("Product"),
                                          gtk.CellRendererText(),
@@ -279,12 +278,12 @@ class SubDetailsWidget(GladeWidget):
                     "support_level_and_type_text", "sku_text"]
     glade_file = "subdetails.glade"
 
-    def __init__(self):
+    def __init__(self, product_dir):
         super(SubDetailsWidget, self).__init__(self.glade_file)
 
         self.sub_details_vbox.unparent()
 
-        self.bundled_products = ProductsTable(self.products_view)
+        self.bundled_products = ProductsTable(self.products_view, product_dir)
 
         self.expired_color = gtk.gdk.color_parse(EXPIRED_COLOR)
         self.warning_color = gtk.gdk.color_parse(WARNING_COLOR)
@@ -386,8 +385,8 @@ class ContractSubDetailsWidget(SubDetailsWidget):
 
     glade_file = "subdetailscontract.glade"
 
-    def __init__(self):
-        super(ContractSubDetailsWidget, self).__init__()
+    def __init__(self, product_dir):
+        super(ContractSubDetailsWidget, self).__init__(product_dir)
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",

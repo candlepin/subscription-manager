@@ -40,7 +40,7 @@ class CertManager:
     @type repolib: L{RepoLib}
     """
 
-    def __init__(self, lock=ActionLock(), uep=None):
+    def __init__(self, lock=ActionLock(), uep=None, product_dir=None):
         self.lock = lock
         self.uep = uep
         self.certlib = CertLib(self.lock, uep=self.uep)
@@ -50,7 +50,8 @@ class CertManager:
         self.installedprodlib = InstalledProductsLib(self.lock, uep=self.uep)
         #healinglib requires a fact set in order to get socket count
         facts = Facts()
-        self.healinglib = HealingLib(self.lock, uep=self.uep, facts_dict=facts.to_dict())
+        self.healinglib = HealingLib(self.lock, self.uep, facts.to_dict(),
+                                     product_dir)
         self.idcertlib = IdentityCertLib(self.lock, uep=self.uep)
 
     def update(self, autoheal=False):
