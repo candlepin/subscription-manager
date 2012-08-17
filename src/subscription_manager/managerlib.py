@@ -667,7 +667,6 @@ class ImportFileExtractor(object):
         @return: True if valid, False otherwise.
         """
         try:
-            print "verify"
             cert = create_from_pem(self.get_cert_content())
             # Don't want to check class explicitly, instead we'll look for
             # order info, which only an entitlement cert could have:
