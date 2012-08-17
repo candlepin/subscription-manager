@@ -190,7 +190,8 @@ class TestFacts(unittest.TestCase):
 
 class InstalledProductStatusTests(unittest.TestCase):
 
-    def test_entitlement_for_installed_product_shows_valid(self):
+    @patch.object(Facts, "_load_custom_facts")
+    def test_entitlement_for_installed_product_shows_valid(self, mockCustomFacts):
         product = StubProduct("product1")
         product_directory = StubCertificateDirectory([
             StubProductCertificate(product)])
@@ -200,6 +201,7 @@ class InstalledProductStatusTests(unittest.TestCase):
         facts = Facts(None)
         facts.product_dir = product_directory
         facts.entitlement_dir = entitlement_directory
+        mockCustomFacts.return_value = {}
         facts_dict = facts.get_facts()
         self.assertEquals("valid", facts_dict['system.entitlements_valid'])
 

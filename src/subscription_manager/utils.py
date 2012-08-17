@@ -18,6 +18,8 @@ import logging
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 from urlparse import urlparse
+import os
+import signal
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -320,7 +322,7 @@ def get_server_versions(cp):
             raise
         except Exception, e:
             # a more useful error would be handy here
-            log.debug("Server Versions: Unable to check server version")
+            log.error(("Error while checking server version: %s") % e)
             log.exception(e)
 
             server_type = _("Unknown")
@@ -337,3 +339,23 @@ def get_server_versions(cp):
 
     return {"candlepin": cp_version,
             "server-type": server_type}
+
+
+def restart_virt_who():
+    """
+    Send a SIGHUP signal to virt-who if it running on the same machine.
+    """
+    try:
+        pidfile = open('/var/run/virt-who.pid', 'r')
+        pid = int(pidfile.read())
+        os.kill(pid, signal.SIGHUP)
+        log.debug("Restarted virt-who")
+    except IOError:
+        # The file was not found, this is ok
+        log.debug("No virt-who pid file, no attempting to restart")
+    except OSError:
+        # The file is referencing an old pid, record this and move on
+        log.error("There virt-who pid file references a non-existent pid")
+    except ValueError:
+        # The file has non numeric data in it
+        log.error("There virt-who pid file contains non numeric data")

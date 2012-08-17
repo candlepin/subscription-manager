@@ -409,6 +409,9 @@ class StubConsumer:
     def __init__(self):
         self.uuid = None
 
+    def is_valid(self):
+        return True
+
     def reload(self):
         pass
 
