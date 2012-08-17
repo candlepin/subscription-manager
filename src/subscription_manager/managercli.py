@@ -653,7 +653,7 @@ class EnvironmentsCommand(UserPassCommand):
 
     def _validate_options(self):
         if not self.options.org:
-            print(_("Error: This command requires that you specify an organizaiton with --org"))
+            print(_("Error: This command requires that you specify an organization with --org"))
             sys.exit(-1)
 
     def _get_enviornments(self, org):
