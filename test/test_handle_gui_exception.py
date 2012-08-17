@@ -27,6 +27,9 @@ class FakeLogger:
     def set_expected_msg(self, msg):
         self.expected_msg = msg
 
+    def info(self, buf):
+        self.msg = buf
+
 
 class FakeErrorWindow:
     def __init__(self, msg, parent=None):

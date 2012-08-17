@@ -199,6 +199,9 @@ class CliCommand(object):
         self.entitlement_dir = ent_dir or EntitlementDirectory()
         self.product_dir = prod_dir or ProductDirectory()
 
+        self.client_versions = self._default_client_version()
+        self.server_versions = self._default_server_version()
+
     def _request_validity_check(self):
         try:
             bus = dbus.SystemBus()
@@ -247,10 +250,21 @@ class CliCommand(object):
     def require_connection(self):
         return True
 
+    def _default_client_version(self):
+        return {"subscription-manager": _("Unknown"),
+                "python-rhsm": _("Unknown")}
+
+    def _default_server_version(self):
+        return {"candlepin": _("Unknown"),
+                "server-type": _("Unknown")}
+
     def log_client_version(self):
-        log.debug("Client Versions: %s " % get_client_versions())
+        self.client_versions = get_client_versions()
+        log.info("Client Versions: %s " % get_client_versions())
 
     def log_server_version(self):
+        # can't check the server version without a connection
+        # and valid registration
         if not self.require_connection():
             return
 
@@ -258,23 +272,10 @@ class CliCommand(object):
             log.debug("Server Versions: Not registered, unable to check server version")
             return
 
-        # can't check the server version without a connection
-        # and valid registration
-        try:
-            log.debug("Server Versions: %s " % get_server_versions(self.cp))
-        except connection.GoneException, e:
-            log.debug("Server Versions: Error: consumer has been deleted, unable to check server version")
-
-        # we really don't want to break on failing to get the version
-        # info from the server, since it ends up being the first
-        # call made in a lot of paths
-        except Exception, e:
-            log.debug("Server Versions: Unable to check server version")
-            log.exception(e)
-
-    def log_version(self):
-        self.log_client_version()
-        self.log_server_version()
+        # get_server_versions needs to handle any exceptions
+        # and return the server dict
+        self.server_versions = get_server_versions(self.cp)
+        log.info("Server Versions: %s " % get_server_versions(self.cp))
 
     # note, depending on that args, we could get a full
     # fledged uep, a basic auth uep, or an unauthenticate uep
@@ -902,6 +903,9 @@ class RegisterCommand(UserPassCommand):
         """
         Executes the command.
         """
+
+        self.log_client_version()
+
         # Always warn the user if registered to old RHN/Spacewalk
         if ClassicCheck().is_registered_with_classic():
             print(get_branding().REGISTERED_TO_OTHER_WARNING)
@@ -1012,10 +1016,6 @@ class RegisterCommand(UserPassCommand):
 
         self._request_validity_check()
         return return_code
-
-    def log_version(self):
-        # we will log the server version after registration
-        self.log_client_version()
 
     def _persist_identity_cert(self, consumer):
         """
@@ -1948,15 +1948,12 @@ class VersionCommand(CliCommand):
         pass
 
     def _do_command(self):
-        client_versions = get_client_versions()
-        server_versions = get_server_versions(self.cp)
-
         # FIXME: slightly odd in that we log that we can't get the version,
         # but then show "unknown" here.
-        print (_("registered to: %s") % server_versions["candlepin"])
-        print (_("server type: %s") % server_versions["server-type"])
-        print (_("subscription-manager: %s") % client_versions["subscription manager"])
-        print (_("python-rhsm: %s") % client_versions["python-rhsm"])
+        print (_("registered to: %s") % self.server_versions["candlepin"])
+        print (_("server type: %s") % self.server_versions["server-type"])
+        print (_("subscription-manager: %s") % self.client_versions["subscription-manager"])
+        print (_("python-rhsm: %s") % self.client_versions["python-rhsm"])
 
 
 # taken wholseale from rho...
