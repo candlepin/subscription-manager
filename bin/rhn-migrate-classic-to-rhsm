@@ -267,8 +267,9 @@ def selectServiceLevel(cp, consumer, servicelevel):
 
     # The empty string is a valid level so append it to the list.
     levels.append("")
-    if servicelevel is None or servicelevel not in levels:
-        if servicelevel is not None and servicelevel not in levels:
+    if servicelevel is None or \
+        servicelevel.upper() not in (level.upper() for level in levels):
+        if servicelevel is not None:
             print _("\nService level \"%s\" is not available." % servicelevel)
         menu = Menu(slas, _("Please select a service level agreement for this system."))
         servicelevel = menu.choose()
