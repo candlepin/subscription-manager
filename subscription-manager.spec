@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.13
+Version: 1.0.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -344,6 +344,52 @@ fi
 %endif
 
 %changelog
+* Fri Aug 17 2012 Alex Wood <awood@redhat.com> 1.0.14-1
+- 849171: Remove an extraneous print statement (bkearney@redhat.com)
+- 849105: Fixed a typo in the error message (bkearney@redhat.com)
+- 772161: Notifiy virt who, if running, when the identity changes
+  (bkearney@redhat.com)
+- Reduce reads/parses of certificates (jbowes@redhat.com)
+- remove unused function 'getInstalledProductHashMap' (jbowes@redhat.com)
+- 843191: handle network errors better for 'version' command
+  (alikins@redhat.com)
+- 826739, 827553: Combine Service Level and Service Type and move up in display
+  order. (awood@redhat.com)
+- 847316: Remove the menu path for Subscription Manager from the manual
+  registration screen. (bkearney@redhat.com)
+- 848409,848195,848190,848184: Do not print the exception when attempting to do
+  the server version check (bkearney@redhat.com)
+- 847795: String and terminology clean up (bkearney@redhat.com)
+- 847380: Update the verbiage to prefer the term Subscription Management
+  (bkearney@redhat.com)
+- 846834: Updated verbiage to focus on subsriptions and not on entitlements
+  (bkearney@redhat.com)
+- 846105: Verbiage changes to empasize subscriptions over entitlements
+  (bkearney@redhat.com)
+- 836933: Handle empty spaces for servce levels (bkearney@redhat.com)
+- 836932,835050: Fix the service level lifecycle (bkearney@redhat.com)
+- 836932: Reduce extra loggging when setting the service level
+  (bkearney@redhat.com)
+- About dialog was not working due to key errors from python
+  (bkearney@redhat.com)
+- 833319: Updated the help text for registration and service levels
+  (bkearney@redhat.com)
+- 847060: Add missing requires on pygobject2 (bkearney@redhat.com)
+- 828954: Fix ta_IN.po file error with options (bkearney@redhat.com)
+- 842898: re-implement string fix for it.po (bkearney@redhat.com)
+- 828958: Fix the accidental translation of an option (bkearney@redhat.com)
+- fix up make stylish (jbowes@redhat.com)
+- No longer require root to run rct (mstead@redhat.com)
+- Remove manually_subscribe.py, it's class moved to rhsm_login.py
+  (alikins@redhat.com)
+- Bumping the required python-rhsm version (mstead@redhat.com)
+- Renamed rt command to rct. (mstead@redhat.com)
+- Fix test case failure on 5.9 (Exception.message) (alikins@redhat.com)
+- Refactor ManuallySubscribeScreen to use new Screen api (alikins@redhat.com)
+- Check passed args as None to allow empty args (mstead@redhat.com)
+- Exception.message is deprecated, just let _str_ do it (alikins@redhat.com)
+- use MockStdout intead of nosetests sys.stdout.getvalue() (alikins@redhat.com)
+
 * Thu Aug 09 2012 Alex Wood <awood@redhat.com> 1.0.13-1
 - Fix "Project-Id-Version" for ta_IN.po (alikins@redhat.com)
 - latest strings from zanata (alikins@redhat.com)
