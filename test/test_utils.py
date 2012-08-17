@@ -293,14 +293,20 @@ class TestGetServerVersions(unittest.TestCase):
         self.assertEquals(sv['candlepin'], "Unknown")
 
     @patch('rhsm.connection.UEPConnection')
-    def test_get_server_versions_cp_no_status(self, MockUep):
+    @patch('subscription_manager.utils.ClassicCheck')
+    def test_get_server_versions_cp_no_status(self, MockClassicCheck, MockUep):
+        instance = MockClassicCheck.return_value
+        instance.is_registered_with_classic.return_value = False
         MockUep.supports_resource.return_value = False
         sv = get_server_versions(MockUep)
         self.assertEquals(sv['server-type'], 'subscription management service')
         self.assertEquals(sv['candlepin'], "Unknown")
 
     @patch('rhsm.connection.UEPConnection')
-    def test_get_server_versions_cp_with_status(self, MockUep):
+    @patch('subscription_manager.utils.ClassicCheck')
+    def test_get_server_versions_cp_with_status(self, MockClassicCheck, MockUep):
+        instance = MockClassicCheck.return_value
+        instance.is_registered_with_classic.return_value = False
         MockUep.supports_resource.return_value = True
         MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
         sv = get_server_versions(MockUep)
@@ -308,10 +314,12 @@ class TestGetServerVersions(unittest.TestCase):
         self.assertEquals(sv['candlepin'], '101-23423c')
 
     @patch('rhsm.connection.UEPConnection')
-    def test_get_server_versions_cp_exception(self, MockUep):
+    @patch('subscription_manager.utils.ClassicCheck')
+    def test_get_server_versions_cp_exception(self, MockClassicCheck, MockUep):
         def raise_exception(arg):
             raise Exception("boom")
-
+        instance = MockClassicCheck.return_value
+        instance.is_registered_with_classic.return_value = False
         MockUep.supports_resource.side_effect = raise_exception
         MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
         sv = get_server_versions(MockUep)
@@ -331,7 +339,7 @@ class TestGetClientVersions(unittest.TestCase):
         instance.get_release.return_value = '3'
         cv = get_client_versions()
 
-        self.assertEquals(cv['subscription manager'], "2-3")
+        self.assertEquals(cv['subscription-manager'], "2-3")
         self.assertEquals(cv['python-rhsm'], '2-3')
 
     @patch('subscription_manager.utils.Versions')
@@ -341,8 +349,22 @@ class TestGetClientVersions(unittest.TestCase):
         instance.get_release.return_value = 'vc'
         cv = get_client_versions()
 
-        self.assertEquals(cv['subscription manager'], "as-vc")
+        self.assertEquals(cv['subscription-manager'], "as-vc")
         self.assertEquals(cv['python-rhsm'], 'as-vc')
+
+    @patch('subscription_manager.utils.Versions')
+    def test_get_client_versions_exception(self, MockVersions):
+        def raise_exception(arg):
+            raise Exception("boom" + arg)
+
+        instance = MockVersions.return_value
+        instance.get_version.return_value = 'as'
+        instance.get_release.return_value = 'vc'
+        instance.get_version.side_effect = raise_exception
+
+        cv = get_client_versions()
+        self.assertEquals(cv['subscription-manager'], "Unknown")
+        self.assertEquals(cv['python-rhsm'], 'Unknown')
 
 
 class TestGetVersion(unittest.TestCase):

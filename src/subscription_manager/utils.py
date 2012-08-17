@@ -290,11 +290,18 @@ def get_client_versions():
     # than one version of python-rhsm/subscription-manager installed.
     # Versions() will only return one (and I suspect it's not predictable
     # which it will return).
-    versions = Versions()
-    sm_version = get_version(versions, Versions.SUBSCRIPTION_MANAGER)
-    pr_version = get_version(versions, Versions.PYTHON_RHSM)
+    sm_version = _("Unknown")
+    pr_version = _("Unknown")
 
-    return {"subscription manager": sm_version,
+    try:
+        versions = Versions()
+        sm_version = get_version(versions, Versions.SUBSCRIPTION_MANAGER)
+        pr_version = get_version(versions, Versions.PYTHON_RHSM)
+    except Exception, e:
+        log.debug("Client Versions: Unable to check client versions")
+        log.exception(e)
+
+    return {"subscription-manager": sm_version,
             "python-rhsm": pr_version}
 
 
@@ -310,6 +317,7 @@ def get_server_versions(cp):
             else:
                 cp_version = _("Unknown")
         except GoneException, e:
+            log.info("Server Versions: Error: consumer has been deleted, unable to check server version")
             log.info(e)
             raise
         except Exception, e:
@@ -320,9 +328,14 @@ def get_server_versions(cp):
             server_type = _("Unknown")
             cp_version = _("Unknown")
 
-    if ClassicCheck().is_registered_with_classic():
-        server_type = _("RHN Classic")
-        cp_version = _("Unknown")
+    # this isn't particularly important, so log any exceptions and carry on
+    try:
+        if ClassicCheck().is_registered_with_classic():
+            server_type = _("RHN Classic")
+            cp_version = _("Unknown")
+    except Exception, e:
+        log.debug("Server Versions: Unable to check RHN Classic version")
+        log.exception(e)
 
     return {"candlepin": cp_version,
             "server-type": server_type}
