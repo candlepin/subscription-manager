@@ -14,7 +14,7 @@
 #
 
 import os
-from gtk import gdk, RESPONSE_DELETE_EVENT, RESPONSE_CANCEL, \
+from gtk import RESPONSE_DELETE_EVENT, RESPONSE_CANCEL, \
                 AboutDialog as GtkAboutDialog, Label
 from subscription_manager.utils import get_client_versions, get_server_versions
 
@@ -32,7 +32,6 @@ LICENSE = _("\nThis software is licensed to you under the GNU General Public Lic
             "in this software or its documentation.\n")
 
 prefix = os.path.dirname(__file__)
-LOGO_PATH = os.path.join(prefix, "data/icons/scalable/subscription-manager.svg")
 
 
 class AboutDialog(object):
@@ -46,7 +45,7 @@ class AboutDialog(object):
         self.dialog.set_wrap_license(True)
         self.dialog.set_website("https://fedorahosted.org/subscription-manager/")
         self.dialog.set_copyright(_("Copyright (c) 2012 Red Hat, Inc."))
-        self.dialog.set_logo(gdk.pixbuf_new_from_file_at_size(LOGO_PATH, 100, 100))
+        self.dialog.set_logo_icon_name("subscription-manager")
 
         rhsm_version_label = Label()
         backend_version_label = Label()

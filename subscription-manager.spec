@@ -251,8 +251,14 @@ rm -rf %{buildroot}
 %dir %{_datadir}/rhsm/subscription_manager/gui/data
 %dir %{_datadir}/rhsm/subscription_manager/gui/data/icons
 %{_datadir}/rhsm/subscription_manager/gui/*
-%{_datadir}/icons/hicolor/scalable/apps/subscription-manager.svg
+%{_datadir}/rhsm/subscription_manager/gui/data/icons/*.svg
 %{_datadir}/applications/subscription-manager.desktop
+%{_datadir}/icons/hicolor/16x16/apps/*.png
+%{_datadir}/icons/hicolor/22x22/apps/*.png
+%{_datadir}/icons/hicolor/24x24/apps/*.png
+%{_datadir}/icons/hicolor/32x32/apps/*.png
+%{_datadir}/icons/hicolor/48x48/apps/*.png
+%{_datadir}/icons/hicolor/scalable/apps/*.svg
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(755,root,root) %{_bindir}/subscription-manager-gui
 
