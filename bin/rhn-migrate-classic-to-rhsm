@@ -635,8 +635,8 @@ def main():
     unRegisterSystemFromRhnClassic(sc, sk)
 
     # register the system to Certificate-based RHN and consume a subscription
+    consumer = register(secreds, serverurl)
     if not options.noauto:
-        consumer = register(secreds, serverurl)
         if options.servicelevel:
             servicelevel = selectServiceLevel(cp, consumer, options.servicelevel)
             subscribe(consumer, servicelevel)
