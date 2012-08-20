@@ -303,11 +303,11 @@ def connectToRhn(credentials):
         if rhncfg['enableProxy']:
             pt = ProxiedTransport()
             if rhncfg['enableProxyAuth']:
-                credentials = base64.encodestring('%s:%s' % (proxyUser, proxyPass)).strip()
+                proxy_credentials = base64.encodestring('%s:%s' % (proxyUser, proxyPass)).strip()
             else:
-                credentials = ""
+                proxy_credentials = ""
 
-            pt.set_proxy("%s:%s" % (proxyHost, proxyPort), credentials)
+            pt.set_proxy("%s:%s" % (proxyHost, proxyPort), proxy_credentials)
             log.info("Using proxy %s:%s for RHN API methods" % (proxyHost, proxyPort))
             sc = xmlrpclib.Server(server_url, transport=pt)
         else:
