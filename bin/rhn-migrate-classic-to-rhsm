@@ -380,7 +380,11 @@ def transferHttpProxySettings():
         httpProxy = rhncfg['httpProxy']
         if httpProxy[:7] == "http://":
             httpProxy = httpProxy[7:]
-        proxyHost, proxyPort = httpProxy.split(':')
+        try:
+            proxyHost, proxyPort = httpProxy.split(':')
+        except ValueError, e:
+            log.exception(e)
+            systemExit(1, _("Unable to read RHN proxy settings."))
 
         log.info("Using proxy %s:%s - transferring settings to rhsm.conf" % (proxyHost, proxyPort))
         rhsmcfg.set('server', 'proxy_hostname', proxyHost)
