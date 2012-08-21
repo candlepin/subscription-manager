@@ -206,8 +206,8 @@ display_icon (Context * context, StatusType status_type)
 		notification_body =
 			_("In order for Subscription Manager to provide your "
 			  "system with updates, your system must be registered "
-			  "with RHN. Please enter your Red Hat login to ensure "
-			  "your system is up-to-date.");
+			  "with the Customer Portal. Please enter your Red Hat "
+			  "login to ensure your system is up-to-date.");
 	} else if (status_type == RHSM_EXPIRED) {
 		tooltip = _("Invalid or Missing Entitlement Subscriptions");
 		notification_title = tooltip;
@@ -218,7 +218,7 @@ display_icon (Context * context, StatusType status_type)
 		tooltip = _("Partially Entitled Products");
 		notification_title = tooltip;
 		notification_body =
-			_("This system is missing one or more valid "
+			_("This system is missing one or more "
 			  "subscriptions to fully cover its "
 			  "products.");
 	} else {
