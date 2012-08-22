@@ -337,14 +337,21 @@ as_pem (certificate_x509 *self, PyObject *args)
 static PyObject *
 get_serial_number (certificate_x509 *self, PyObject *args)
 {
+	PyObject *ret;
+
 	if (!PyArg_ParseTuple (args, "")) {
 		return NULL;
 	}
 
 	ASN1_INTEGER *serial_asn = X509_get_serialNumber (self->x509);
-	long serial = ASN1_INTEGER_get (serial_asn);
+	BIGNUM *bn = ASN1_INTEGER_to_BN (serial_asn, NULL);
 
-	return PyInt_FromLong (serial);
+	char *hex = BN_bn2hex (bn);
+
+	BN_free (bn);
+	ret = PyLong_FromString (hex, NULL, 16);
+	OPENSSL_free (hex);
+	return ret;
 }
 
 static PyObject *
