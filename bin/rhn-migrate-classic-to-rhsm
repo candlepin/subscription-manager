@@ -190,7 +190,6 @@ def isHosted():
 
 
 def checkOkToProceed(secreds, serverurl):
-
     # check if this machine is already registered to Certicate-based RHN
     if ConsumerIdentity.existsAndValid():
         print _("\nThis machine appears to be already registered to Red Hat Subscription Management.  Exiting.")
@@ -229,6 +228,24 @@ def checkOkToProceed(secreds, serverurl):
         log.error(traceback.format_exc())
         systemExit(1, CONNECTION_FAILURE % e)
     return cp
+
+
+def getOrg(cp, username):
+    try:
+        owner_list = cp.getOwnerList(username)
+    except Exception, e:
+        log.error(e)
+        log.error(traceback.format_exc())
+        systemExit(1, CONNECTION_FAILURE % e)
+
+    org = None
+    if len(owner_list) == 0:
+        systemExit(1, "%s cannot register to any organizations." % username)
+
+    if len(owner_list) > 1:
+        org = raw_input(_("Org: ")).strip()
+
+    return org
 
 
 def checkIsOrgAdmin(sc, sk, username):
@@ -400,7 +417,7 @@ def transferHttpProxySettings():
         rhsmcfg.save()
 
 
-def register(credentials, serverurl):
+def register(credentials, serverurl, org):
     # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
     print _("\nAttempting to register system to Red Hat Subscription Management ...")
     cmd = ['subscription-manager', 'register', '--username=' + credentials.username, '--password=' + credentials.password]
@@ -408,6 +425,10 @@ def register(credentials, serverurl):
         # insert just after register (not sure if order matters,
         # but just in case)
         cmd.insert(2, '--serverurl=' + serverurl)
+
+    if org:
+        cmd.append('--org=' + org)
+
     result = subprocess.call(cmd)
 
     if result != 0:
@@ -620,6 +641,8 @@ def main():
     transferHttpProxySettings()
     cp = checkOkToProceed(secreds, serverurl)
 
+    org = getOrg(cp, secreds.username)
+
     (sc, sk) = connectToRhn(rhncreds)
     checkIsOrgAdmin(sc, sk, rhncreds.username)
 
@@ -639,7 +662,7 @@ def main():
     unRegisterSystemFromRhnClassic(sc, sk)
 
     # register the system to Certificate-based RHN and consume a subscription
-    consumer = register(secreds, serverurl)
+    consumer = register(secreds, serverurl, org)
     if not options.noauto:
         if options.servicelevel:
             servicelevel = selectServiceLevel(cp, consumer, options.servicelevel)
