@@ -387,16 +387,14 @@ class ContractSubDetailsWidget(SubDetailsWidget):
 
     def __init__(self, product_dir):
         super(ContractSubDetailsWidget, self).__init__(product_dir)
-
-    def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
-                           management=None, support_level="", support_type="",
-                           virt_only=None, products=[], highlight=None, sku=None):
-
         # Save the original background color for the
         # start_end_date_text widget so we can restore it in the
         # clear() function.
         self.original_bg = self.start_end_date_text.rc_get_style().base[gtk.STATE_NORMAL]
 
+    def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
+                           management=None, support_level="", support_type="",
+                           virt_only=None, products=[], highlight=None, sku=None):
         self.start_end_date_text.modify_base(gtk.STATE_NORMAL,
                 self._get_date_bg(end))
 
