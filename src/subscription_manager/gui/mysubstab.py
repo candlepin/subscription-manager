@@ -164,6 +164,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         dbus_iface.check_status(ignore_reply=True)
         self.facts.refresh_validity_facts()
         self.unsubscribe_button.set_property('sensitive', False)
+        # 841396: Select first item in My Subscriptions table by default
+        selection = self.top_view.get_selection()
+        selection.select_path(0)
 
     def _add_group(self, group_idx, group):
         iter = None
