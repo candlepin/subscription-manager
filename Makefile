@@ -100,7 +100,7 @@ install-help-files:
 install: install-files install-conf install-help-files
 
 install-files: dbus-service-install compile-po desktop-files
-	install -d ${CODE_DIR}/gui/data/icons/scalable
+	install -d ${CODE_DIR}/gui/data/icons
 	install -d ${CODE_DIR}/branding
 	install -d ${PREFIX}/${INSTALL_DIR}/locale/
 	install -d ${PREFIX}/usr/lib/yum-plugins/
@@ -122,6 +122,11 @@ install-files: dbus-service-install compile-po desktop-files
 	install -d ${PREFIX}/var/lib/rhsm/cache
 	install -d ${PREFIX}/usr/bin
 	install -d ${PREFIX}/etc/rc.d/init.d
+	install -d ${PREFIX}/usr/share/icons/hicolor/16x16/apps
+	install -d ${PREFIX}/usr/share/icons/hicolor/22x22/apps
+	install -d ${PREFIX}/usr/share/icons/hicolor/24x24/apps
+	install -d ${PREFIX}/usr/share/icons/hicolor/32x32/apps
+	install -d ${PREFIX}/usr/share/icons/hicolor/48x48/apps
 	install -d ${PREFIX}/usr/share/icons/hicolor/scalable/apps
 	install -d ${PREFIX}/usr/share/rhn/up2date_client/firstboot/
 	if [ ${OS_VERSION} = 5 ]; then install -d ${PREFIX}/usr/share/firstboot/modules; fi
@@ -138,9 +143,23 @@ install-files: dbus-service-install compile-po desktop-files
 	install -m 644 -p src/plugins/*.py ${PREFIX}/usr/lib/yum-plugins/
 
 	install -m 644 ${SRC_DIR}/gui/data/*.glade ${CODE_DIR}/gui/data/
-	install -m 644 ${SRC_DIR}/gui/data/icons/*.svg ${CODE_DIR}/gui/data/icons/
-	install -m 644 ${SRC_DIR}/gui/data/icons/scalable/*.svg ${CODE_DIR}/gui/data/icons/scalable/
-	ln -sf  /usr/share/${INSTALL_MODULE}/${PKGNAME}/gui/data/icons/scalable/subscription-manager.svg ${PREFIX}/${INSTALL_DIR}/icons/hicolor/scalable/apps/
+
+	#icons
+	install -m 644 ${SRC_DIR}/gui/data/icons/hicolor/16x16/apps/*.png \
+		${PREFIX}/usr/share/icons/hicolor/16x16/apps
+	install -m 644 ${SRC_DIR}/gui/data/icons/hicolor/22x22/apps/*.png \
+		${PREFIX}/usr/share/icons/hicolor/22x22/apps
+	install -m 644 ${SRC_DIR}/gui/data/icons/hicolor/24x24/apps/*.png \
+		${PREFIX}/usr/share/icons/hicolor/24x24/apps
+	install -m 644 ${SRC_DIR}/gui/data/icons/hicolor/32x32/apps/*.png \
+		${PREFIX}/usr/share/icons/hicolor/32x32/apps
+	install -m 644 ${SRC_DIR}/gui/data/icons/hicolor/48x48/apps/*.png \
+		${PREFIX}/usr/share/icons/hicolor/48x48/apps
+	install -m 644 ${SRC_DIR}/gui/data/icons/hicolor/scalable/apps/*.svg \
+		${PREFIX}/usr/share/icons/hicolor/scalable/apps
+	install -m 644 ${SRC_DIR}/gui/data/icons/*.svg \
+		${CODE_DIR}/gui/data/icons
+
 	install bin/subscription-manager ${PREFIX}/usr/sbin
 	install bin/rhn-migrate-classic-to-rhsm  ${PREFIX}/usr/sbin
 	if [ ${OS_VERSION} = 5 ]; then install bin/install-num-migrate-to-rhsm ${PREFIX}/usr/sbin; fi
