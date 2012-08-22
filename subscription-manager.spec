@@ -27,6 +27,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:  python-ethtool
 Requires:  python-simplejson
 Requires:  python-iniparse
+Requires:  pygobject2
 Requires:  PyXML
 Requires:  virt-what
 Requires:  python-rhsm >= 1.0.5
@@ -73,7 +74,6 @@ Requires: pygtk2 pygtk2-libglade gnome-python2 gnome-python2-canvas
 Requires: usermode
 Requires: usermode-gtk
 Requires: dbus-x11
-Requires: pygobject2
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
 
