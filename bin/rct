@@ -32,13 +32,11 @@ configure_i18n()
 import gettext
 _ = gettext.gettext
 
-from rct.cli import CLI
-from rct.commands import CatCertCommand
+from rct.cli import RctCLI
 
 
 def main():
-    rct_commands = [CatCertCommand]
-    return CLI(commands=rct_commands).main()
+    return RctCLI().main()
 
 
 if __name__ == '__main__':
@@ -49,5 +47,5 @@ if __name__ == '__main__':
         #re-raise, bypassing handle_exception
         raise e
     except KeyboardInterrupt:
-        sys.stderr.write("\nUser interrupted process.")
+        sys.stderr.write("\n" + _("User interrupted process."))
         sys.exit(0)

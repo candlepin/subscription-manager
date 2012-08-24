@@ -28,13 +28,13 @@ from M2Crypto import X509
 from M2Crypto import SSL
 
 import gettext
+from subscription_manager.cli import systemExit, CLI, AbstractCLICommand
 from subscription_manager.jsonwrapper import PoolWrapper
 _ = gettext.gettext
 
 import rhsm.config
 import rhsm.connection as connection
 
-from subscription_manager.i18n_optparse import OptionParser, WrappedIndentedHelpFormatter
 from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib, ConsumerIdentity
 from subscription_manager.repolib import RepoLib, RepoFile
@@ -170,25 +170,14 @@ def show_autosubscribe_output():
     return subscribed
 
 
-class CliCommand(object):
+class CliCommand(AbstractCLICommand):
     """ Base class for all sub-commands. """
 
     def __init__(self, name="cli", shortdesc=None, primary=False, ent_dir=None,
                  prod_dir=None):
-        self.shortdesc = shortdesc
+        AbstractCLICommand.__init__(self, name=name, shortdesc=shortdesc, primary=primary)
 
-        # usage format strips any leading 'usage' so
-        # do not iclude it
-        usage = _("%%prog %s [OPTIONS]") % name
-
-        # include our own HelpFormatter that doesn't try to break
-        # long words, since that fails on multibyte words
-        self.parser = OptionParser(usage=usage, description=shortdesc,
-                                   formatter=WrappedIndentedHelpFormatter())
         self._add_common_options()
-
-        self.name = name
-        self.primary = primary
 
         self.server_url = None
 
@@ -1956,84 +1945,15 @@ class VersionCommand(CliCommand):
         print (_("python-rhsm: %s") % self.client_versions["python-rhsm"])
 
 
-# taken wholseale from rho...
-class CLI:
+class ManagerCLI(CLI):
 
-    def __init__(self):
-
-        self.cli_commands = {}
-        for clazz in [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand, SubscribeCommand,\
+    def __init__(self, command_classes=[]):
+        commands = [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand, SubscribeCommand,\
                        UnSubscribeCommand, FactsCommand, IdentityCommand, OwnersCommand, \
                        RefreshCommand, CleanCommand, RedeemCommand, ReposCommand, ReleaseCommand, \
                        EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand, \
-                       VersionCommand]:
-            cmd = clazz()
-            # ignore the base class
-            if cmd.name != "cli":
-                self.cli_commands[cmd.name] = cmd
-
-    def _add_command(self, cmd):
-        self.cli_commands[cmd.name] = cmd
-
-    def _usage(self):
-        print "\n"
-        print _("Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]") % os.path.basename(sys.argv[0])
-        print "\n"
-        print _("Primary Modules:")
-        print "\r"
-
-        items = self.cli_commands.items()
-        items.sort()
-        for (name, cmd) in items:
-            if (cmd.primary):
-                print("\t%-14s %s" % (name, cmd.shortdesc))
-        print("")
-        print _("Other Modules (Please consult documentation):")
-        print "\r"
-        for (name, cmd) in items:
-            if (not cmd.primary):
-                print("\t%-14s %s" % (name, cmd.shortdesc))
-        print("")
-
-    def _find_best_match(self, args):
-        """
-        Returns the subcommand class that best matches the subcommand specified
-        in the argument list. For example, if you have two commands that start
-        with auth, 'auth show' and 'auth'. Passing in auth show will match
-        'auth show' not auth. If there is no 'auth show', it tries to find
-        'auth'.
-
-        This function ignores the arguments which begin with --
-        """
-        possiblecmd = []
-        for arg in args[1:]:
-            if not arg.startswith("-"):
-                possiblecmd.append(arg)
-
-        if not possiblecmd:
-            return None
-
-        cmd = None
-        i = len(possiblecmd)
-        while cmd == None:
-            key = " ".join(possiblecmd[:i])
-            if key is None or key == "":
-                break
-
-            cmd = self.cli_commands.get(key)
-            i -= 1
-
-        return cmd
-
-    def main(self):
-        managerlib.check_identity_cert_perms()
-
-        cmd = self._find_best_match(sys.argv)
-        if len(sys.argv) < 2 or not cmd:
-            self._usage()
-            sys.exit(0)
-
-        return cmd.main()
+                       VersionCommand]
+        CLI.__init__(self, command_classes=commands)
 
 
 # from http://farmdev.com/talks/unicode/
@@ -2042,33 +1962,6 @@ def to_unicode_or_bust(obj, encoding='utf-8'):
         if not isinstance(obj, unicode):
             obj = unicode(obj, encoding)
     return obj
-
-
-def systemExit(code, msgs=None):
-    "Exit with a code and optional message(s). Saved a few lines of code."
-
-    if msgs:
-        if type(msgs) not in [type([]), type(())]:
-            msgs = (msgs, )
-        for msg in msgs:
-            # see bz #590094 and #744536
-            # most of our errors are just str types, but error's returned
-            # from rhsm.connection are unicode type. This method didn't
-            # really expect that, so make sure msg is unicode, then
-            # try to encode it as utf-8.
-
-            # if we get an exception passed in, and it doesn't
-            # have a str repr, just ignore it. This is to
-            # preserve existing behaviour. see bz#747024
-            if isinstance(msg, Exception):
-                msg = "%s" % msg
-
-            if isinstance(msg, unicode):
-                sys.stderr.write("%s\n" % msg.encode("utf8"))
-            else:
-                sys.stderr.write("%s\n" % msg)
-
-    sys.exit(code)
 
 
 def check_registration():
@@ -2082,4 +1975,4 @@ def check_registration():
     return consumer_info
 
 if __name__ == "__main__":
-    CLI().main()
+    ManagerCLI().main()
