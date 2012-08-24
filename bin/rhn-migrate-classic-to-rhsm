@@ -656,6 +656,7 @@ def main():
         print channel
 
     deployProdCertificates(subscribedChannels)
+    cleanUp(subscribedChannels)
 
     writeMigrationFacts()
     print _("\nPreparing to unregister system from RHN Classic ...")
@@ -671,7 +672,6 @@ def main():
             subscribe(consumer, None)
     # check if we need to enable to supplementary/optional channels
     enableExtraChannels(subscribedChannels, cp)
-    cleanUp(subscribedChannels)
 
 
 if __name__ == '__main__':
