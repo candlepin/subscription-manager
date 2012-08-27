@@ -498,7 +498,7 @@ def deployProdCertificates(subscribedChannels):
 
     if unrecognizedChannels:
         print "\n+--------------------------------------------------+",
-        print _("\nUnrecognized channels. Channel to product certificate mapping missing for these channels.")
+        print _("\nNo product certificates are mapped to these RHN Classic channels:")
         print "+--------------------------------------------------+"
         for i in unrecognizedChannels:
             print i
@@ -508,9 +508,11 @@ def deployProdCertificates(subscribedChannels):
             print _("\nUse --force to ignore these channels and continue the migration.\n")
             sys.exit(1)
 
-    log.info("certs to be copied: %s", applicableCerts)
+    log.info("certs to be installed: %s", applicableCerts)
 
-    print _("\nList of channels for which certs are being copied")
+    print "\n+--------------------------------------------------+",
+    print _("\nInstalling product certificates for these RHN Classic channels:")
+    print "+--------------------------------------------------+"
     for i in validRhsmChannels:
         print i
 
@@ -524,7 +526,7 @@ def deployProdCertificates(subscribedChannels):
         destinationpath = str(productDir) + "/" + truncated_cert_name
         log.info("cp %s %s ", sourcepath, destinationpath)
         shutil.copy2(sourcepath, destinationpath)
-    print _("\nProduct certificates copied successfully to %s") % str(productDir)
+    print _("\nProduct certificates installed successfully to %s.") % str(productDir)
 
 
 def getRelease():
@@ -650,7 +652,7 @@ def main():
     print _("\nRetrieving existing RHN Classic subscription information ...")
     subscribedChannels = getSubscribedChannelsList()
     print "+----------------------------------+"
-    print _("System is currently subscribed to:")
+    print _("System is currently subscribed to these RHN Classic Channels:")
     print "+----------------------------------+"
     for channel in subscribedChannels:
         print channel
