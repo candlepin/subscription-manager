@@ -322,7 +322,7 @@ class Restlib(object):
             if self.ca_dir != None:
                 log.debug('Loading CA PEM certificates from: %s', self.ca_dir)
                 self._load_ca_certificates(context)
-        if self.cert_file:
+        if self.cert_file and os.path.exists(self.cert_file):
             context.load_cert(self.cert_file, keyfile=self.key_file)
 
         if self.proxy_hostname and self.proxy_port:
