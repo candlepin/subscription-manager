@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.0.6
+Version: 1.0.7
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,9 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed Aug 29 2012 Alex Wood <awood@redhat.com> 1.0.7-1
+- 851644: Only use the cert file if it exists (bkearney@redhat.com)
+
 * Tue Aug 28 2012 Alex Wood <awood@redhat.com> 1.0.6-1
 - 848742: support arbitrary bit length serial numbers (jbowes@redhat.com)
 - Stop doing F15 Fedora builds, add EL5 public builds. (dgoodwin@redhat.com)
