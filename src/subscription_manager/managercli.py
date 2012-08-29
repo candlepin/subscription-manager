@@ -570,7 +570,7 @@ class IdentityCommand(UserPassCommand):
             if not self.options.regenerate:
                 owner = self.cp.getOwner(consumerid)
                 ownername = owner['displayName']
-                ownerid = owner['id']
+                ownerid = owner['key']
                 print _('Current identity is: %s') % consumerid
                 print _('name: %s') % consumer_name
                 print _('org name: %s') % ownername
