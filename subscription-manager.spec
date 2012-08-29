@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.14
+Version: 1.0.15
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -351,6 +351,28 @@ fi
 %endif
 
 %changelog
+* Wed Aug 29 2012 Alex Wood <awood@redhat.com> 1.0.15-1
+- Replace 16x16 icon with a new version that has no background
+  (bkearney@redhat.com)
+- 852107: Update verbiage in migration script. (awood@redhat.com)
+- 847060: Push dependency higher up in the chain (bkearney@redhat.com)
+- 848534: Change the about dialog icon to be a PNG to ensure accurate
+  representation. (bkearney@redhat.com)
+- 841396: Select first item in My Subscriptions table by default.
+  (awood@redhat.com)
+- 849483: Prompt user for org name if necessary. (awood@redhat.com)
+- 849644: Calls made with --no-auto were not actually registering the system.
+  (awood@redhat.com)
+- 849494: Fix variable name collision. (awood@redhat.com)
+- 846834: Use Subscription instead of entitlement certificate
+  (bkearney@redhat.com)
+- 847859: Expiration highlighting was being set incorrectly. (awood@redhat.com)
+- 847750: Handle bad proxy values in migration script. (awood@redhat.com)
+- 841961: Ignore case when specifying the service level in migration
+  (bkearney@redhat.com)
+- 842020: Remove an extraneous option group for rhsmcertd (bkearney@redhat.com)
+- Refactored some of the shared CLI code in 'rct' (mstead@redhat.com)
+
 * Fri Aug 17 2012 Alex Wood <awood@redhat.com> 1.0.14-1
 - 849171: Remove an extraneous print statement (bkearney@redhat.com)
 - 849105: Fixed a typo in the error message (bkearney@redhat.com)
