@@ -303,7 +303,7 @@ po/POTFILES.in:
 	find ${BIN_DIR} -name "*-to-rhsm" >> po/POTFILES.in
 	find src/ -name "*.c" >> po/POTFILES.in
 	find etc-conf/ -name "*.desktop.in" >> po/POTFILES.in
-	find ${RT_SRC_DIR}/ -name "*.py" >> po/POTFILES.in
+	find ${RCT_SRC_DIR}/ -name "*.py" >> po/POTFILES.in
 
 .PHONY: po/POTFILES.in %.desktop
 
