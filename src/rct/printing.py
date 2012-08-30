@@ -19,14 +19,21 @@ _ = gettext.gettext
 from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, IdentityCertificate
 
 
+def xstr(value):
+    if value is None:
+        return ''
+    else:
+        return str(value)
+
+
 class ProductPrinter(object):
 
     def as_str(self, product):
         s = []
         s.append("%s:" % _("Product"))
-        s.append("\t%s: %s" % (_("ID"), product.id))
-        s.append("\t%s: %s" % (_("Name"), product.name))
-        s.append("\t%s: %s" % (_("Version"), product.version))
+        s.append("\t%s: %s" % (_("ID"), xstr(product.id)))
+        s.append("\t%s: %s" % (_("Name"), xstr(product.name)))
+        s.append("\t%s: %s" % (_("Version"), xstr(product.version)))
         s.append("\t%s: %s" % (_("Arch"), ",".join(product.architectures)))
         s.append("\t%s: %s" % (_("Tags"), ",".join(product.provided_tags)))
         return "%s\n" % '\n'.join(s)
@@ -37,22 +44,22 @@ class OrderPrinter(object):
     def as_str(self, order):
         s = []
         s.append("%s:" % _("Order"))
-        s.append("\t%s: %s" % (_("Name"), order.name))
-        s.append("\t%s: %s" % (_("Number"), order.number))
-        s.append("\t%s: %s" % (_("SKU"), order.sku))
-        s.append("\t%s: %s" % (_("Contract"), order.contract))
-        s.append("\t%s: %s" % (_("Account"), order.account))
-        s.append("\t%s: %s" % (_("Service Level"), order.service_level))
-        s.append("\t%s: %s" % (_("Service Type"), order.service_type))
-        s.append("\t%s: %s" % (_("Quantity"), order.quantity))
-        s.append("\t%s: %s" % (_("Quantity Used"), order.quantity_used))
-        s.append("\t%s: %s" % (_("Socket Limit"), order.socket_limit))
-        s.append("\t%s: %s" % (_("Virt Limit"), order.virt_limit))
-        s.append("\t%s: %s" % (_("Virt Only"), order.virt_only))
-        s.append("\t%s: %s" % (_("Subscription"), order.subscription))
-        s.append("\t%s: %s" % (_("Stacking ID"), order.stacking_id))
-        s.append("\t%s: %s" % (_("Warning Period"), order.warning_period))
-        s.append("\t%s: %s" % (_("Provides Management"), order.provides_management))
+        s.append("\t%s: %s" % (_("Name"), xstr(order.name)))
+        s.append("\t%s: %s" % (_("Number"), xstr(order.number)))
+        s.append("\t%s: %s" % (_("SKU"), xstr(order.sku)))
+        s.append("\t%s: %s" % (_("Contract"), xstr(order.contract)))
+        s.append("\t%s: %s" % (_("Account"), xstr(order.account)))
+        s.append("\t%s: %s" % (_("Service Level"), xstr(order.service_level)))
+        s.append("\t%s: %s" % (_("Service Type"), xstr(order.service_type)))
+        s.append("\t%s: %s" % (_("Quantity"), xstr(order.quantity)))
+        s.append("\t%s: %s" % (_("Quantity Used"), xstr(order.quantity_used)))
+        s.append("\t%s: %s" % (_("Socket Limit"), xstr(order.socket_limit)))
+        s.append("\t%s: %s" % (_("Virt Limit"), xstr(order.virt_limit)))
+        s.append("\t%s: %s" % (_("Virt Only"), xstr(order.virt_only)))
+        s.append("\t%s: %s" % (_("Subscription"), xstr(order.subscription)))
+        s.append("\t%s: %s" % (_("Stacking ID"), xstr(order.stacking_id)))
+        s.append("\t%s: %s" % (_("Warning Period"), xstr(order.warning_period)))
+        s.append("\t%s: %s" % (_("Provides Management"), xstr(order.provides_management)))
 
         return "%s\n" % '\n'.join(s)
 
@@ -62,13 +69,13 @@ class ContentPrinter(object):
     def as_str(self, content):
         s = []
         s.append("%s:" % _("Content"))
-        s.append("\t%s: %s" % (_("Name"), content.name))
-        s.append("\t%s: %s" % (_("Label"), content.label))
-        s.append("\t%s: %s" % (_("Vendor"), content.vendor))
-        s.append("\t%s: %s" % (_("URL"), content.url))
-        s.append("\t%s: %s" % (_("GPG"), content.gpg))
-        s.append("\t%s: %s" % (_("Enabled"), content.enabled))
-        s.append("\t%s: %s" % (_("Expires"), content.metadata_expire))
+        s.append("\t%s: %s" % (_("Name"), xstr(content.name)))
+        s.append("\t%s: %s" % (_("Label"), xstr(content.label)))
+        s.append("\t%s: %s" % (_("Vendor"), xstr(content.vendor)))
+        s.append("\t%s: %s" % (_("URL"), xstr(content.url)))
+        s.append("\t%s: %s" % (_("GPG"), xstr(content.gpg)))
+        s.append("\t%s: %s" % (_("Enabled"), xstr(content.enabled)))
+        s.append("\t%s: %s" % (_("Expires"), xstr(content.metadata_expire)))
         s.append("\t%s: %s" % (_("Required Tags"), ", ".join(content.required_tags)))
 
         return '\n'.join(s)
@@ -82,13 +89,13 @@ class CertificatePrinter(object):
         s.append("\t%s" % self._get_type_str(cert))
         s.append("+-------------------------------------------+\n")
         s.append(_("Certificate:"))
-        s.append("\t%s: %s" % (_("Path"), cert.path))
-        s.append("\t%s: %s" % (_("Version"), cert.version))
-        s.append("\t%s: %s" % (_("Serial"), cert.serial))
-        s.append("\t%s: %s" % (_("Start Date"), cert.start))
-        s.append("\t%s: %s" % (_("End Date"), cert.end))
+        s.append("\t%s: %s" % (_("Path"), xstr(cert.path)))
+        s.append("\t%s: %s" % (_("Version"), xstr(cert.version)))
+        s.append("\t%s: %s" % (_("Serial"), xstr(cert.serial)))
+        s.append("\t%s: %s" % (_("Start Date"), xstr(cert.start)))
+        s.append("\t%s: %s" % (_("End Date"), xstr(cert.end)))
         self._append_to_cert_section(cert, s)
-        s.append("\n%s" % self._get_subject(cert))
+        s.append("\n%s" % xstr(self._get_subject(cert)))
         return "%s" % '\n'.join(s)
 
     def printc(self, cert):
