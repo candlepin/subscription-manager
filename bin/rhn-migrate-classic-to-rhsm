@@ -306,6 +306,16 @@ def getSubscribedChannelsList():
     return subscribedChannels
 
 
+def checkForConflictingChannels(subscribedChannels):
+    jbossChannel = False
+    for channel in subscribedChannels:
+        if channel.startswith("jbappplatform"):
+            if jbossChannel:
+                systemExit(1, _("You are subscribed to more than one jbappplatform channel." + \
+                    "  This script does not support that configuration.  Exiting."))
+            jbossChannel = True
+
+
 def getSystemId():
     systemIdPath = rhncfg["systemIdPath"]
     p = libxml2.parseDoc(file(systemIdPath).read())
@@ -657,6 +667,7 @@ def main():
     for channel in subscribedChannels:
         print channel
 
+    checkForConflictingChannels(subscribedChannels)
     deployProdCertificates(subscribedChannels)
     cleanUp(subscribedChannels)
 
