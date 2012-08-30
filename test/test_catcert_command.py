@@ -17,9 +17,19 @@ import unittest
 import certdata
 from rhsm.certificate import create_from_pem
 from rct.commands import CatCertCommand
+from rct.printing import xstr
+
 
 from stubs import MockStdout, MockStderr
 from subscription_manager.cli import InvalidCLIOptionError
+
+
+class PrintingTests(unittest.TestCase):
+
+    def test_xstr(self):
+        self.assertEquals("", xstr(None))
+        self.assertEquals("1", xstr(1))
+        self.assertEquals("JarJar", xstr("JarJar"))
 
 
 class CatCertCommandStub(CatCertCommand):
