@@ -139,7 +139,7 @@ def main():
             continue
 
         dest_file = os.path.join(PRODUCT_CERT_DIR, dest_file)
-        print _("Copying %s to %s") % (path, dest_file)
+        print _("Installing %s to %s") % (path, dest_file)
         if not options.dryrun:
             shutil.copyfile(path, dest_file)
 
