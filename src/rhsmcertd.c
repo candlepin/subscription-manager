@@ -308,7 +308,7 @@ Config *
 get_config (int argc, char *argv[])
 {
 	Config *config;
-	config = (Config *) malloc (sizeof (*config));
+	config = malloc (sizeof (Config));
 
 	// Set the default values
 	config->cert_interval_seconds = DEFAULT_CERT_INTERVAL_SECONDS;
