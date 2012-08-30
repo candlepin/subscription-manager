@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.15
+Version: 1.0.16
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -351,6 +351,22 @@ fi
 %endif
 
 %changelog
+* Thu Aug 30 2012 Alex Wood <awood@redhat.com> 1.0.16-1
+- 853187: Verbiage change in install-num-migrate-to-rhsm. (awood@redhat.com)
+- 852894: Abort migration if multiple JBEAP channels are detected.
+  (awood@redhat.com)
+- 850715: Fix malloc for Config (jbowes@redhat.com)
+- 852001: output the orgs key as part of the identity command.
+  (bkearney@redhat.com)
+- fix "make gettext", wrong var name for the find root (alikins@redhat.com)
+- 850715: Fixes based on coverity scans (bkearney@redhat.com)
+- 846316: Use the full name of Subscrition Manager during first boot
+  (bkearney@redhat.com)
+- 851346: Remove special case channel certs before subscribing.
+  (awood@redhat.com)
+- 847354: When printing, translate None type into an empty string
+  (bkearney@redhat.com)
+
 * Wed Aug 29 2012 Alex Wood <awood@redhat.com> 1.0.15-1
 - Replace 16x16 icon with a new version that has no background
   (bkearney@redhat.com)
