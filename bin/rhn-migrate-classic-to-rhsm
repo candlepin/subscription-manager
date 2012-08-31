@@ -311,8 +311,8 @@ def checkForConflictingChannels(subscribedChannels):
     for channel in subscribedChannels:
         if channel.startswith("jbappplatform"):
             if jbossChannel:
-                systemExit(1, _("You are subscribed to more than one jbappplatform channel." + \
-                    "  This script does not support that configuration.  Exiting."))
+                systemExit(1, _("You are subscribed to more than one jbappplatform channel."
+                                "  This script does not support that configuration.  Exiting."))
             jbossChannel = True
 
 
