@@ -147,9 +147,6 @@ class Backend(object):
                                             proxy_user=cfg.get('server', 'proxy_user'),
                                             proxy_password=cfg.get('server', 'proxy_password'))
 
-    def is_registered(self):
-        return self.consumer.is_valid()
-
     def create_admin_uep(self, username=None, password=None):
         self.admin_uep = self._create_uep(username=username, password=password)
 
