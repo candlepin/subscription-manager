@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.16
+Version: 1.0.17
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -351,6 +351,12 @@ fi
 %endif
 
 %changelog
+* Fri Aug 31 2012 Alex Wood <awood@redhat.com> 1.0.17-1
+- Fix gettext_lint issue with concat string in rhn-migrate (alikins@redhat.com)
+- 851124: Fix GUI unsubscribe. (dgoodwin@redhat.com)
+- fix po version for ta_IN.po (alikins@redhat.com)
+- latest strings (alikins@redhat.com)
+
 * Thu Aug 30 2012 Alex Wood <awood@redhat.com> 1.0.16-1
 - 853187: Verbiage change in install-num-migrate-to-rhsm. (awood@redhat.com)
 - 852894: Abort migration if multiple JBEAP channels are detected.
