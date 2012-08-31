@@ -124,7 +124,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         serial = long(selection['serial'])
 
-        if self.backend.is_registered():
+        if self.consumer.is_valid():
             try:
                 self.backend.uep.unbindBySerial(self.consumer.uuid, serial)
             except Exception, e:
