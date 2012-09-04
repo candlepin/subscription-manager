@@ -18,8 +18,9 @@ import unittest
 from StringIO import StringIO
 
 import stubs
-from stubs import StubCertificateDirectory, StubProductCertificate, StubProduct, \
-    StubEntitlementCertificate, StubContent, StubProductDirectory
+from stubs import StubCertificateDirectory, StubProductCertificate, \
+        StubProduct, StubEntitlementCertificate, StubContent, \
+        StubProductDirectory
 from subscription_manager.repolib import Repo, UpdateAction, TidyWriter
 from subscription_manager import repolib
 
@@ -90,6 +91,17 @@ class RepoTests(unittest.TestCase):
         incoming_repo = {}
         existing_repo.update(incoming_repo)
         self.assertFalse("proxy_username" in existing_repo.keys())
+
+    def test_unknown_property_is_preserved(self):
+        existing_repo = Repo('testrepo')
+        existing_repo['fake_prop'] = 'fake'
+        self.assertTrue(('fake_prop', 'fake') in existing_repo.items())
+
+    def test_existing_order_is_preserved(self):
+        config = (('key 1', 'value 1'), ('key b', 'value b'),
+                ('key 3', 'value 3'))
+        repo = Repo('testrepo', config)
+        self.assertEquals(config, repo.items()[:3])
 
 
 class UpdateActionTests(unittest.TestCase):
