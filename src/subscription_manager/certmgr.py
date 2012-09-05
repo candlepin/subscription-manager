@@ -88,8 +88,10 @@ class CertManager:
             except GoneException, e:
                 raise
             except Exception, e:
+                log.warning("Exception caught while running certlib update")
                 log.exception(e)
                 print e
+
             # run the certlib update first as it will talk to candlepin,
             # and we can find out if we got deleted or not.
             for lib in libset:
@@ -98,14 +100,18 @@ class CertManager:
                 except GoneException, e:
                     raise
                 except Exception, e:
+                    log.warning("Exception caught while running %s update" % lib)
                     log.exception(e)
                     print e
+
+
             # NOTE: with no consumer cert, most of these actually
             # fail
             if ret:
                 updates += ret[0]
                 for e in ret[1]:
                     print ' '.join(str(e).split('-')[1:]).strip()
+
         finally:
             lock.release()
         return updates
