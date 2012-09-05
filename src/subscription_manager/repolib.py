@@ -92,6 +92,7 @@ class UpdateAction:
             self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
 
         self.release = None
+        return
 
         # If we are not registered, skip trying to refresh the
         # data from the server
@@ -276,13 +277,22 @@ class Repo(dict):
         ('proxy_password', 0, None),
     )
 
-    def __init__(self, repo_id):
+    def __init__(self, repo_id, existing_values={}):
         self.id = self._clean_id(repo_id)
+
+        # used to store key order, so we can write things out in the order
+        # we read them from the config.
+        self._order = []
+
+        for key, value in existing_values:
+            self[key] = value
+
         # NOTE: This sets the above properties to the default values even if
         # they are not defined on disk. i.e. these properties will always
         # appear in this dict, but their values may be None.
         for k, m, d in self.PROPERTIES:
-            self[k] = d
+            if k not in self.keys():
+                self[k] = d
 
     def _clean_id(self, repo_id):
         """
@@ -303,17 +313,14 @@ class Repo(dict):
         """
         Called when we fetch the items for this yum repo to write to disk.
         """
-        lst = []
-        for k, m, d in self.PROPERTIES:
-            if not k in self:
-                continue
-            v = self[k]
-            # Skip anything set to 'None', as this is likely not intended for
-            # a yum repo file. None can result here if the default is None,
-            # or the entitlement certificate did not have the value set.
-            if v:
-                lst.append((k, v))
-        return tuple(lst)
+        # Skip anything set to 'None', as this is likely not intended for
+        # a yum repo file. None can result here if the default is None,
+        # or the entitlement certificate did not have the value set.
+        #
+        # all values will be in _order, since the key has to have been set
+        # to get into our dict.
+        return tuple([(k, self[k]) for k in self._order if \
+                k in self and self[k] is not None])
 
     def update(self, new_repo):
         """
@@ -354,6 +361,11 @@ class Repo(dict):
                 changes_made += 1
 
         return changes_made
+
+    def __setitem__(self, key, value):
+        if key not in self._order:
+            self._order.append(key)
+        dict.__setitem__(self, key, value)
 
     def __str__(self):
         s = []
@@ -466,7 +478,7 @@ class RepoFile(ConfigParser):
 
     def section(self, section):
         if self.has_section(section):
-            repo = Repo(section)
+            repo = Repo(section, self.items(section))
             for k, v in self.items(section):
                 repo[k] = v
             return repo
