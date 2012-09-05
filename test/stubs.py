@@ -211,9 +211,14 @@ class StubEntitlementCertificate(EntitlementCertificate):
         path = "/tmp/fake_ent_cert.pem"
         self.is_deleted = False
 
+        # might as well make this a big num since live serials #'s are already > maxint
+        self.serial = random.randint(1000000000000000000, 10000000000000000000000)
+        # write these to tmp, could we abuse PATH thing in certs for tests?
+
+        path = "/tmp/fake_ent_cert-%s.pem" % self.serial
         EntitlementCertificate.__init__(self, path=path, products=products,
                 order=order, content=content, start=start_date, end=end_date,
-                serial=random.randint(1, 10000000))
+                serial=self.serial)
 
     def delete(self):
         self.is_deleted = True
@@ -226,6 +231,7 @@ class StubCertificateDirectory(EntitlementDirectory):
     """
 
     path = "this/is/a/stub/cert/dir"
+    expired = False
 
     def __init__(self, certificates):
         self.certs = certificates
@@ -234,6 +240,11 @@ class StubCertificateDirectory(EntitlementDirectory):
     def list(self):
         self.list_called = True
         return self.certs
+
+    def listExpired(self):
+        if self.expired:
+            return self.certs
+        return []
 
     def _check_key(self, cert):
         """
@@ -263,6 +274,7 @@ class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
 class StubConsumerIdentity:
     CONSUMER_NAME = "John Q Consumer"
     CONSUMER_ID = "211211381984"
+    SERIAL = "23234523452345234523453453434534534"
 
     def __init__(self, keystring, certstring):
         self.key = keystring
@@ -281,6 +293,9 @@ class StubConsumerIdentity:
 
     def getConsumerId(self):
         return StubConsumerIdentity.CONSUMER_ID
+
+    def getSerialNumber(self):
+        return StubConsumerIdentity.SERIAL
 
     @classmethod
     def read(cls):
@@ -353,6 +368,10 @@ class StubUEP:
 
     def unbindBySerial(self, consumer, serial):
         self.called_unbind_serial = serial
+
+    def getCertificateSerials(self, consumer):
+        print "getCertificateSerials"
+        return []
 
 
 class StubBackend:

@@ -120,7 +120,8 @@ class TestProfileManager(unittest.TestCase):
         self.assertTrue(self.profile_mgr.has_changed())
         self.profile_mgr._read_cache.assert_called_with()
 
-    def _mock_pkg_profile(self, packages):
+    @staticmethod
+    def _mock_pkg_profile(packages):
         """
         Turn a list of package objects into an RPMProfile object.
         """

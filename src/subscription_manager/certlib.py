@@ -119,7 +119,7 @@ class HealingLib(DataLib):
                 ent_dir = EntitlementDirectory()
                 cs = cert_sorter.CertSorter(self._product_dir, ent_dir,
                         self.facts_dict, on_date=today)
-                cert_updater = CertLib(uep=self.uep)
+                cert_updater = CertLib(lock=self.lock, uep=self.uep)
                 if not cs.is_valid():
                     log.warn("Found invalid entitlements for today: %s" %
                             today)
@@ -322,7 +322,7 @@ class UpdateAction(Action):
                     'Bundle not loaded:\n%s\n%s',
                     bundle,
                     e)
-                exceptions.append(e.message)
+                exceptions.append(e)
         return exceptions
 
     def purgeExpired(self, report):
