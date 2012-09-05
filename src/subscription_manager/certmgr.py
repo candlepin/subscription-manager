@@ -22,6 +22,8 @@ from subscription_manager.factlib import FactLib
 from subscription_manager.facts import Facts
 from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
 
+from rhsm.connection import GoneException
+
 import logging
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -81,6 +83,10 @@ class CertManager:
             ret = []
             try:
                 ret = self.certlib.update()
+            # see bz#852706, reraise GoneException so that
+            # consumer cert deletion works
+            except GoneException, e:
+                raise
             except Exception, e:
                 log.exception(e)
                 print e
@@ -89,6 +95,8 @@ class CertManager:
             for lib in libset:
                 try:
                     updates += lib.update()
+                except GoneException, e:
+                    raise
                 except Exception, e:
                     log.exception(e)
                     print e
