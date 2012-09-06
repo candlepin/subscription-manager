@@ -33,19 +33,6 @@ from rhsm.profile import Package, RPMProfile
 from rhsm.connection import GoneException
 
 
-#FIXME: not really a mock
-#FIXME: repeated three times, refactor
-#FIXME: we really shouldn't be creating ActionLocks in the
-# method defination...
-class MockActionLock(certlib.ActionLock):
-    PATH = tempfile.mkstemp()[1]
-
-    def __init__(self):
-        certlib.ActionLock.__init__(self)
-
-
-# from test_idcertlib
-# FIXME: refactor and reuse
 CONSUMER_DATA = {'releaseVer': {'id': 1, 'releaseVer': '123123'},
                  'serviceLevel': "Pro Turbo HD Plus Ultra",
                  'owner': {'key': 'admin'},
@@ -75,10 +62,7 @@ class TestCertmgr(unittest.TestCase):
     # work on python2.4, so this...
     # http://www.voidspace.org.uk/python/mock/patch.html#patch-methods-start-and-stop
     def setUp(self):
-#        self.patcher1 = mock.patch.object(certlib.UpdateAction, 'delete')
-#        self.certlib_updateaction_delete = self.patcher1.start()
-#       self.certlib_updateaction_delete.return_value = None
-
+        # we have to have a reference to the patchers
         self.patcher2 = mock.patch.object(certlib.UpdateAction, '_getConsumerId')
         self.certlib_updateaction_getconsumerid = self.patcher2.start()
 
@@ -161,7 +145,6 @@ class TestCertmgr(unittest.TestCase):
         self.certlib_consumeridentity.read.return_value = stubs.StubConsumerIdentity("sdfsdf", "sdfsdf")
 
     def tearDown(self):
-        #self.patcher1.stop()
         self.patcher2.stop()
         self.patcher3.stop()
         self.patcher4.stop()
@@ -178,11 +161,11 @@ class TestCertmgr(unittest.TestCase):
         self.hwprobe_getall_patcher.stop()
 
     def test_init(self):
-        mgr = certmgr.CertManager(lock=MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
         updates = mgr.update()
 
     def test_healing_no_heal(self):
-        mgr = certmgr.CertManager(lock=MockActionLock(), uep=self.mock_uep,
+        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,
                                   product_dir=self.stub_entitled_proddir)
         updates = mgr.update(autoheal=True)
 
@@ -190,7 +173,7 @@ class TestCertmgr(unittest.TestCase):
 
         # need a stub product dir with prods with no entitlements,
         # don't have to mock here since we can actually pass in a product
-        mgr = certmgr.CertManager(lock=MockActionLock(), uep=self.mock_uep,
+        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,
                                   product_dir=self.stub_unentitled_proddir)
         updates = mgr.update(autoheal=True)
 
@@ -199,7 +182,7 @@ class TestCertmgr(unittest.TestCase):
         cert_build_mock.return_value = (mock.Mock(), self.stub_ent_expires_tomorrow)
 
         self._stub_certificate_calls([self.stub_ent_expires_tomorrow])
-        mgr = certmgr.CertManager(lock=MockActionLock(), uep=self.mock_uep,
+        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,
                                   product_dir=self.stub_entitled_proddir)
         updates = mgr.update(autoheal=True)
 
@@ -209,7 +192,7 @@ class TestCertmgr(unittest.TestCase):
         # needs to be able to handle
         # StubProductDirectory is incorrectly created with a single product cert here,
         # where it wants a list, causing a TypeError
-        mgr = certmgr.CertManager(lock=MockActionLock(), uep=self.mock_uep,
+        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,
                                   product_dir=stubs.StubProductDirectory(self.stub_unentitled_prod))
         updates = mgr.update(autoheal=True)
         for call in mock_log.method_calls:
@@ -221,21 +204,21 @@ class TestCertmgr(unittest.TestCase):
     @mock.patch.object(certlib.CertLib, 'update')
     def test_gone_exception(self, mock_update):
         mock_update.side_effect = GoneException(410, "bye bye", " 234234")
-        mgr = certmgr.CertManager(lock=MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
         self.assertRaises(GoneException, mgr.update)
 
     # see bz #852706, except this time for idcertlib
     @mock.patch.object(certlib.IdentityCertLib, 'update')
     def test_idcertlib_gone_exception(self, mock_update):
         mock_update.side_effect = GoneException(410, "bye bye", " 234234")
-        mgr = certmgr.CertManager(lock=MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
         self.assertRaises(GoneException, mgr.update)
 
     @mock.patch.object(certlib.CertLib, 'update')
     @mock.patch('subscription_manager.certmgr.log')
     def test_certlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()
-        mgr = certmgr.CertManager(lock=MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
         mgr.update()
 
         for call in mock_log.method_calls:
@@ -247,7 +230,7 @@ class TestCertmgr(unittest.TestCase):
     @mock.patch('subscription_manager.certmgr.log')
     def test_idcertlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()
-        mgr = certmgr.CertManager(lock=MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
         mgr.update()
 
         for call in mock_log.method_calls:
@@ -279,14 +262,14 @@ class TestCertmgr(unittest.TestCase):
         self._stub_certificate_calls()
 
         cert_build_mock.return_value = (mock.Mock(), self.stub_ent1)
-        mgr = certmgr.CertManager(lock=MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
         updates = mgr.update()
 
     def test_rogue(self):
         # to mock "rogue" certs we need some local, that are not known to the
         # server so getCertificateSerials to return nothing
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
-        mgr = certmgr.CertManager(lock=MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
         updates = mgr.update()
 
     @mock.patch.object(certlib.Action, 'build')
@@ -295,7 +278,7 @@ class TestCertmgr(unittest.TestCase):
 
         self.stub_entdir.expired = True
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
-        mgr = certmgr.CertManager(lock=MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
         updates = mgr.update()
 
     @mock.patch.object(certlib.Action, 'build')
@@ -306,7 +289,7 @@ class TestCertmgr(unittest.TestCase):
         self._stub_certificate_calls()
 
         mock_cert_build.side_effect = ExceptionalException()
-        mgr = certmgr.CertManager(lock=MockActionLock(), uep=self.mock_uep)
+        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
         # we should fail on the certlib.update, but keep going...
         # and handle it well.
         updates = mgr.update()
@@ -315,5 +298,3 @@ class TestCertmgr(unittest.TestCase):
             if call[0] == 'exception' and isinstance(call[1][0], ExceptionalException):
                 return
         self.fail("Did not ExceptionException in the logged exceptions")
-
-

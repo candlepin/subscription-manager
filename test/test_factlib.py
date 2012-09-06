@@ -20,18 +20,11 @@ from subscription_manager import factlib
 from subscription_manager import certlib
 
 
-class MockActionLock(certlib.ActionLock):
-    PATH = tempfile.mkstemp()[1]
-
-    def __init__(self):
-        certlib.ActionLock.__init__(self)
-
-
 class TestFactlib(unittest.TestCase):
 
     def setUp(self):
         self.stub_uep = stubs.StubUEP()
-        self.fl = factlib.FactLib(lock=MockActionLock(), uep=self.stub_uep)
+        self.fl = factlib.FactLib(lock=stubs.MockActionLock(), uep=self.stub_uep)
 
         self.expected_facts = {'fact1': 'F1', 'fact2': 'F2'}
 

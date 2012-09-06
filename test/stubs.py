@@ -16,6 +16,7 @@
 import StringIO
 from rhsm import config
 import random
+import tempfile
 
 # config file is root only, so just fill in a stringbuffer
 cfg_buf = """
@@ -84,9 +85,17 @@ config.CFG.read("test/rhsm.conf")
 from datetime import datetime, timedelta
 
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
+from subscription_manager.certlib import ActionLock
 from rhsm.certificate import parse_tags, Content
 from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, \
         Product, Content, Order
+
+
+class MockActionLock(ActionLock):
+    PATH = tempfile.mkstemp()[1]
+
+    def __init__(self):
+        ActionLock.__init__(self)
 
 
 class MockStdout:
@@ -96,6 +105,7 @@ class MockStdout:
     def write(self, buf):
         self.buffer = self.buffer + buf
 
+    @staticmethod
     def isatty(buf):
         return False
 
