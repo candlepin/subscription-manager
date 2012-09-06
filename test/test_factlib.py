@@ -12,12 +12,10 @@
 #
 
 import unittest
-import tempfile
 
 import stubs
 
 from subscription_manager import factlib
-from subscription_manager import certlib
 
 
 class TestFactlib(unittest.TestCase):

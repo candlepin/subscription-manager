@@ -14,8 +14,6 @@
 #
 
 import unittest
-import os
-import tempfile
 import simplejson as json
 from datetime import datetime, timedelta
 
@@ -26,10 +24,9 @@ from subscription_manager import certmgr
 from subscription_manager import certlib
 from subscription_manager import repolib
 from subscription_manager import facts
-from subscription_manager import certdirectory
 from subscription_manager import hwprobe
 
-from rhsm.profile import Package, RPMProfile
+from rhsm.profile import  RPMProfile
 from rhsm.connection import GoneException
 
 
@@ -162,12 +159,12 @@ class TestCertmgr(unittest.TestCase):
 
     def test_init(self):
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
-        updates = mgr.update()
+        mgr.update()
 
     def test_healing_no_heal(self):
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,
                                   product_dir=self.stub_entitled_proddir)
-        updates = mgr.update(autoheal=True)
+        mgr.update(autoheal=True)
 
     def test_healing_needs_heal(self):
 
@@ -175,7 +172,7 @@ class TestCertmgr(unittest.TestCase):
         # don't have to mock here since we can actually pass in a product
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,
                                   product_dir=self.stub_unentitled_proddir)
-        updates = mgr.update(autoheal=True)
+        mgr.update(autoheal=True)
 
     @mock.patch.object(certlib.Action, 'build')
     def test_healing_needs_heal_tomorrow(self, cert_build_mock):
@@ -184,7 +181,7 @@ class TestCertmgr(unittest.TestCase):
         self._stub_certificate_calls([self.stub_ent_expires_tomorrow])
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,
                                   product_dir=self.stub_entitled_proddir)
-        updates = mgr.update(autoheal=True)
+        mgr.update(autoheal=True)
 
     @mock.patch('subscription_manager.certlib.log')
     def test_healing_trigger_exception(self, mock_log):
@@ -194,7 +191,7 @@ class TestCertmgr(unittest.TestCase):
         # where it wants a list, causing a TypeError
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,
                                   product_dir=stubs.StubProductDirectory(self.stub_unentitled_prod))
-        updates = mgr.update(autoheal=True)
+        mgr.update(autoheal=True)
         for call in mock_log.method_calls:
             if call[0] == 'exception' and isinstance(call[1][0], TypeError):
                 return
@@ -263,14 +260,14 @@ class TestCertmgr(unittest.TestCase):
 
         cert_build_mock.return_value = (mock.Mock(), self.stub_ent1)
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
-        updates = mgr.update()
+        mgr.update()
 
     def test_rogue(self):
         # to mock "rogue" certs we need some local, that are not known to the
         # server so getCertificateSerials to return nothing
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
-        updates = mgr.update()
+        mgr.update()
 
     @mock.patch.object(certlib.Action, 'build')
     def test_expired(self, cert_build_mock):
@@ -279,7 +276,7 @@ class TestCertmgr(unittest.TestCase):
         self.stub_entdir.expired = True
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
-        updates = mgr.update()
+        mgr.update()
 
     @mock.patch.object(certlib.Action, 'build')
     @mock.patch('subscription_manager.certlib.log')
@@ -292,7 +289,7 @@ class TestCertmgr(unittest.TestCase):
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
         # we should fail on the certlib.update, but keep going...
         # and handle it well.
-        updates = mgr.update()
+        mgr.update()
 
         for call in mock_log.method_calls:
             if call[0] == 'exception' and isinstance(call[1][0], ExceptionalException):

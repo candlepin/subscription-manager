@@ -104,7 +104,6 @@ class CertManager:
                     log.exception(e)
                     print e
 
-
             # NOTE: with no consumer cert, most of these actually
             # fail
             if ret:

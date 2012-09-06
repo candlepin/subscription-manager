@@ -12,7 +12,6 @@
 #
 
 import unittest
-import tempfile
 from mock import Mock
 
 import stubs
