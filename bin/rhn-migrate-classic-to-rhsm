@@ -597,22 +597,15 @@ def writeMigrationFacts():
 
 
 def cleanUp(subscribedChannels):
-    #Hack to address BZ 786257.
-    ch = (
-            ('rhel-x86_64-client-supplementary-5', 'rhel-x86_64-client-workstation-5'),
-            ('rhel-x86_64-client-5', 'rhel-x86_64-client-workstation-5'),
-            ('rhel-i386-client-supplementary-5', 'rhel-i386-client-workstation-5'),
-            ('rhel-i386-client-5', 'rhel-i386-client-workstation-5')
-         )
-
+    #Hack to address BZ 853233
     productDir = ProductDirectory()
-    for channelPair in ch:
-        if channelPair[0] in subscribedChannels and channelPair[1] in subscribedChannels:
-            try:
-                os.remove(os.path.join(str(productDir), "68.pem"))
-                log.info("Removed 68.pem due to existence of both %s and %s" % (channelPair[0], channelPair[1]))
-            except OSError, e:
-                log.info(e)
+    if os.path.isfile(os.path.join(str(productDir), "68.pem")) and \
+        os.path.isfile(os.path.join(str(productDir), "71.pem")):
+        try:
+            os.remove(os.path.join(str(productDir), "68.pem"))
+            log.info("Removed 68.pem due to existence of 71.pem")
+        except OSError, e:
+            log.info(e)
 
     #Hack to address double mapping for 180.pem and 17{6|8}.pem
     double_mapped = "rhel-.*?-(client|server)-dts-(5|6)-beta(-debuginfo)?"
