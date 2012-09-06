@@ -1,4 +1,4 @@
-.TH subscription-manager-gui 8 "January 25, 2011" "version 1.0" "Subscription Manager"  Deon Lackey 
+.TH subscription-manager-gui 8 "September 5, 2012" "version 1.1" "Subscription Manager"  Deon Lackey 
 .SH NAME
 subscription-manager-gui \- Launches the UI client of the Subscription Manager.
 
@@ -7,20 +7,26 @@ subscription-manager-gui
 
 .SH DESCRIPTION
 .B subscription-manager-gui
-opens the local client tool to manage subscriptions, entitlements, and installed products on Red Hat Enterprise Linux systems. The same tasks that can be performed by invoking 
+opens the local client tool to manage subscriptions and installed products on Red Hat Enterprise Linux systems. The same tasks that can be performed by invoking 
 .B subscription-manager
-can be performed in the GUI, including registering systems with the Red Hat Entitlement Service, subscribing and unsubscribing to entitlements, and viewing the subscription status of installed products.
+can be performed in the GUI, including registering systems with a subscription management service, applying and removing subscriptions, and viewing the subscription status of installed products.
 
 .PP
-The Subscription Manager UI can also be opened by going through the 
-.B System > Administration 
-menu and selecting the 
+The Subscription Manager UI can also be opened by selecting the
 .B Red Hat Subscription Manager
-item.
+item from the 
+.B Applications >  System Tools 
+menu in RHEL 5.x or the
+.B System > Administration
+menu in RHEL 6.x.
 
 
-.SH USAGE
-This command has no options.
+.SH OPTIONS
+This command has no options. 
+
+
+.SH REFERENCES
+For procedures and tasks that can be performed in the Subscription Manager UI, check the Gnome help files (by pressing <F1>) or refer to the RHEL Subscription Management Guide at <https://access.redhat.com/knowledge/docs/en-US/Red_Hat_Subscription_Management/1.0/html/Subscription_Management_Guide/index.html>.
 
 
 .SH ASSOCIATED FILES
@@ -32,11 +38,11 @@ This command has no options.
 * /etc/rhsm/rhsm.conf 
 
 .SH BUGS
-This client is part of the subscription management system available in Red Hat Enterprise Linux. To file bugs related to this tool, go to https://bugzilla.redhat.com/ and select Red Hat > Red Hat Enterprise Linux # > subscription-manager.
+This client is part of Red Hat Subscription Manager. To file bugs against this client, go to https://bugzilla.redhat.com, and select Red Hat > Red Hat Enterprise Linux > subscription-manager.
 
 
 .SH AUTHORS
 Deon Lackey, <dlackey@redhat.com>.
 
 .SH COPYRIGHT
-Copyright (c) 2010, 2011 Red Hat, Inc. This is licensed under the GNU General Public License, version 2 (GPLv2). A copy of this license is available at http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
+Copyright (c) 2010-2012 Red Hat, Inc. This is licensed under the GNU General Public License, version 2 (GPLv2). A copy of this license is available at http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
