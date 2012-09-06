@@ -101,6 +101,9 @@ class TestCertmgr(unittest.TestCase):
         self.patcher_certlib_writer = mock.patch("subscription_manager.certlib.Writer")
         self.certlib_writer = self.patcher_certlib_writer.start()
 
+        self.patcher_certlib_action_syslogreport = mock.patch.object(certlib.UpdateAction, 'syslogResults')
+        self.update_action_syslog_mock = self.patcher_certlib_action_syslogreport.start()
+
         # some stub certs
         stub_product = stubs.StubProduct('stub_product')
         self.stub_ent1 = stubs.StubEntitlementCertificate(stub_product)
@@ -156,23 +159,26 @@ class TestCertmgr(unittest.TestCase):
         self.patcher_certlib_writer.stop()
 
         self.hwprobe_getall_patcher.stop()
+        self.patcher_certlib_action_syslogreport.stop()
 
     def test_init(self):
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
         mgr.update()
 
-    def test_healing_no_heal(self):
+    @mock.patch('subscription_manager.certlib.log')
+    def test_healing_no_heal(self, mock_log):
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,
                                   product_dir=self.stub_entitled_proddir)
         mgr.update(autoheal=True)
+        mock_log.info.assert_called_with('Auto-heal check complete.')
 
     def test_healing_needs_heal(self):
-
         # need a stub product dir with prods with no entitlements,
         # don't have to mock here since we can actually pass in a product
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,
                                   product_dir=self.stub_unentitled_proddir)
         mgr.update(autoheal=True)
+        self.assertTrue(self.mock_uep.bind.called)
 
     @mock.patch.object(certlib.Action, 'build')
     def test_healing_needs_heal_tomorrow(self, cert_build_mock):
@@ -182,6 +188,8 @@ class TestCertmgr(unittest.TestCase):
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep,
                                   product_dir=self.stub_entitled_proddir)
         mgr.update(autoheal=True)
+        # see if we tried to update certs
+        self.assertTrue(self.mock_uep.bind.called)
 
     @mock.patch('subscription_manager.certlib.log')
     def test_healing_trigger_exception(self, mock_log):
@@ -210,6 +218,10 @@ class TestCertmgr(unittest.TestCase):
         mock_update.side_effect = GoneException(410, "bye bye", " 234234")
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
         self.assertRaises(GoneException, mgr.update)
+
+        # just verify the certlib update worked
+        report = self.update_action_syslog_mock.call_args[0][0]
+        self.assertTrue(self.stub_ent1.serial in report.valid)
 
     @mock.patch.object(certlib.CertLib, 'update')
     @mock.patch('subscription_manager.certmgr.log')
@@ -262,6 +274,9 @@ class TestCertmgr(unittest.TestCase):
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
         mgr.update()
 
+        report = self.update_action_syslog_mock.call_args[0][0]
+        self.assertTrue(self.stub_ent1 in report.added)
+
     def test_rogue(self):
         # to mock "rogue" certs we need some local, that are not known to the
         # server so getCertificateSerials to return nothing
@@ -269,14 +284,29 @@ class TestCertmgr(unittest.TestCase):
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
         mgr.update()
 
+        report = self.update_action_syslog_mock.call_args[0][0]
+
+        # our local ent certs should be showing up as rogue
+        self.assertTrue(self.local_ent_certs[0] in report.rogue)
+        self.assertTrue(self.local_ent_certs[1] in report.rogue)
+
     @mock.patch.object(certlib.Action, 'build')
     def test_expired(self, cert_build_mock):
         cert_build_mock.return_value = (mock.Mock(), self.stub_ent1)
 
+        # this makes the stub_entdir report all ents as being expired
+        # so we fetch new ones
         self.stub_entdir.expired = True
+
+        # we don't want to find replacements, so this forces a delete
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
         mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
         mgr.update()
+
+        # the expired certs should be delete/rogue and expired
+        report = self.update_action_syslog_mock.call_args[0][0]
+        self.assertTrue(self.stub_ent1 in report.rogue)
+        self.assertTrue(self.stub_ent1 in report.expired)
 
     @mock.patch.object(certlib.Action, 'build')
     @mock.patch('subscription_manager.certlib.log')
