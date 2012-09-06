@@ -1,4 +1,4 @@
-.TH rhsm-icon 8 "January 4, 2011" "version 1.1" "Subscription Status Daemon"  Deon Lackey 
+.TH rhsm-icon 8 "September 5, 2012" "version 1.2" "Subscription Status Daemon"  Deon Lackey 
 .SH NAME
 rhsm-icon \- Periodically checks installed products against active subscriptions to check their status.
 
@@ -8,14 +8,14 @@ rhsm-icon
 .SH DESCRIPTION
 Red Hat provides content updates and support by issuing 
 .I subscriptions
-for its products. These subscriptions are allocated to systems (machines) and apply to the installed software products. 
+for its products. These subscriptions are applied to systems (machines) and apply to the installed software products. 
 
 .PP
-On X systems (so, systems with a GUI interface), a product status daemon runs every 4 hours to check the currently installed software against the allocated subscriptions. If software is installed with expired subscriptions or no available subscription, then the daemon triggers an icon and warning message to display in the start menu bar. 
+On graphical X systems (systems with a GUI interface), a product status daemon runs every 4 hours to check the currently installed software against the applied subscriptions. If software is installed without a valid and applied subscription (such as a subscription expires or no subscription is available for the product), then the daemon triggers an icon and warning message to display in the notification area of the menu. 
 
 .PP
 .B rhsm-icon
- only runs on X-based systems. Servers which do not have a GUI interface do not run or require the 
+ only runs on graphical (X-based) systems. Servers which do not have a GUI interface do not run or require the 
 .B rhsm-icon
 daemon.
 
@@ -54,7 +54,7 @@ manually:
 * To view the status icons or messages regardless of the state of the machine
 
 .PP
-Since X runs the daemon automatically and on schedule, it is not necessary normally to run the subscription status daemon. The 
+Since X runs the daemon automatically and on schedule, it is not necessary to launch the subscription status daemon manually. The 
 .B rhsm-icon
 command can change this schedule. For example:
 .nf
@@ -86,7 +86,7 @@ rhsm-icon --force-icon=expired
 .fi
 
 .SH BUGS
-This process is part of the subscription management system for Red Hat systems. To file bugs against this process, go to https://bugzilla.redhat.com/ and select Red Hat > Red Hat Enterprise Linux 6 > subscription-manager.
+This daemon is part of Red Hat Subscription Manager. To file bugs against this daemon, go to https://bugzilla.redhat.com, and select Red Hat > Red Hat Enterprise Linux > subscription-manager.
 
 
 .SH AUTHORS
