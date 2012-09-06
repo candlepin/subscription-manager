@@ -1,9 +1,9 @@
-.TH rhsmcertd 8 "September 5, 2012" "version 1.2" "Subscription Management Certificate Daemon"  Deon Lackey 
+.TH rhsmcertd 8 "September 6, 2012" "version 1.3" "Subscription Management Certificate Daemon"  Deon Lackey 
 .SH NAME
 rhsmcertd \- Periodically scans and updates the entitlement certificates on a registered system.
 
 .SH SYNOPSIS
-rhsmcertd [--cert-interval=SECONDS] [--heal-interval=SECONDS] [--now] [--debug] [--help]
+rhsmcertd [--cert-interval=MINUTES] [--heal-interval=MINUTES] [--now] [--debug] [--help]
 
 .PP
 .I Deprecated usage
@@ -50,12 +50,16 @@ Records more verbose output to the \fB/var/log/rhsm/rhsmcertd.log\fP log file.
 Runs the \fBrhsmcertd\fP scan immediately, rather than waiting for the next scheduled interval.
 
 .TP
-.B -c, --cert-interval
-Resets the interval for checking for new subscription certificates. This value is in seconds. The default is 14400, or four hours.
+.B -c, --cert-interval=MINUTES
+Resets the interval for checking for new subscription certificates. This value is in minutes. The default is 240, or four hours. This interval is in effect until the daemon restarts, and then the values in the 
+.B /etc/rhsm/rhsm.conf
+file are used (unless the argument is passed again).
 
 .TP 
-.B -i, --heal-interval
-Resets the interval for checking for and replacing expired subscriptions. This value is in seconds. The default is 86400, or 24 hours.
+.B -i, --heal-interval=MINUTES
+Resets the interval for checking for and replacing expired subscriptions. This value is in minutes. The default is 1440, or 24 hours. This interval is in effect until the daemon restarts, and then the values in the 
+.B /etc/rhsm/rhsm.conf
+file are used (unless the argument is passed again).
 
 .SH USAGE EXAMPLES
 
@@ -74,7 +78,7 @@ Normally, the certificate and healing scans are run periodically, on a schedule 
 .PP
 For example:
 .nf
-rhsmcertd 1440 14400
+rhsmcertd 180 480
 .fi
 .PP 
 This usage is still allowed, but it is deprecated and not recommended.
