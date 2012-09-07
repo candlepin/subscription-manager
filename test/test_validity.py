@@ -126,12 +126,15 @@ class ValidProductDateRangeCalculatorTests(unittest.TestCase):
     INST_PID_2 = 'prod_2'
     STACK_1 = 'stack_1'
 
-    NOW = datetime.now()
+    NOW = datetime.now(tz=GMT())
     # Approximate month values
     TEN_DAYS = timedelta(days=10)
     ONE_MONTH = timedelta(days=31)
     THREE_MONTHS = timedelta(days=93)
     YEAR = timedelta(days=365)
+
+    TEN_MINUTES = timedelta(minutes=10)
+    THIRTY_MINUTES = timedelta(minutes=30)
 
     def test_single_entitlement(self):
         expected_begin_date = self.NOW - self.ONE_MONTH
@@ -503,6 +506,22 @@ class ValidProductDateRangeCalculatorTests(unittest.TestCase):
         calculator = ValidProductDateRangeCalculator(sorter)
         prod_range = calculator.calculate(self.INST_PID_1)
         self.assertTrue(prod_range is None)
+
+    def test_entitlements_with_overlap(self):
+        start1 = self.NOW - self.TEN_MINUTES
+        end1 = self.NOW + self.THIRTY_MINUTES
+
+        start2 = self.NOW - self.THIRTY_MINUTES
+        end2 = self.NOW + self.TEN_MINUTES
+
+        installed = create_prod_cert(self.INST_PID_1)
+        ent1 = self._create_entitlement(self.INST_PID_1, start1, end1, sockets=1)
+        ent2 = self._create_entitlement(self.INST_PID_1, start2, end2, sockets=1)
+
+        sorter = create_cert_sorter([installed], [ent1, ent2], machine_sockets=1)
+        calculator = ValidProductDateRangeCalculator(sorter)
+        prod_range = calculator.calculate(self.INST_PID_1)
+        self.assertFalse(prod_range is None)
 
 
 def create_cert_sorter(product_certs, entitlement_certs, machine_sockets=8):
