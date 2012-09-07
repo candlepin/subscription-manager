@@ -28,8 +28,9 @@ _ = gettext.gettext
 class RCTCliCommand(AbstractCLICommand):
     FILE_ARG_IDX = 0
 
-    def __init__(self, name="cli", shortdesc=None, primary=False):
-        AbstractCLICommand.__init__(self, name=name, shortdesc=shortdesc, primary=primary)
+    def __init__(self, name="cli", aliases=[], shortdesc=None, primary=False):
+        AbstractCLICommand.__init__(self, name=name, aliases=aliases,
+                shortdesc=shortdesc, primary=primary)
 
     def main(self, args=None):
         # In testing we sometimes specify args, otherwise use the default:
@@ -67,7 +68,7 @@ class RCTCliCommand(AbstractCLICommand):
 class CatCertCommand(RCTCliCommand):
 
     def __init__(self):
-        RCTCliCommand.__init__(self, name="cat-cert",
+        RCTCliCommand.__init__(self, name="cat-cert", aliases=['cc'],
                                shortdesc=_("Print certificate info to standard output."),
                                primary=True)
 
@@ -88,7 +89,7 @@ class CatCertCommand(RCTCliCommand):
 class StatCertCommand(RCTCliCommand):
 
     def __init__(self):
-        RCTCliCommand.__init__(self, name="stat-cert",
+        RCTCliCommand.__init__(self, name="stat-cert", aliases=['sc'],
                                shortdesc=_("Print certificate statistics and sizes."),
                                primary=True)
 
