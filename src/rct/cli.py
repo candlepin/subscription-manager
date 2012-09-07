@@ -14,11 +14,11 @@
 #
 
 from subscription_manager.cli import CLI
-from rct.commands import CatCertCommand
+from rct.commands import CatCertCommand, StatCertCommand
 
 
 class RctCLI(CLI):
 
     def __init__(self):
-        commands = [CatCertCommand]
+        commands = [CatCertCommand, StatCertCommand]
         CLI.__init__(self, commands)

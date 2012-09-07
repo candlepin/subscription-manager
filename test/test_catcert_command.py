@@ -19,9 +19,7 @@ from rhsm.certificate import create_from_pem
 from rct.commands import CatCertCommand
 from rct.printing import xstr
 
-
 from stubs import MockStdout, MockStderr
-from subscription_manager.cli import InvalidCLIOptionError
 
 
 class PrintingTests(unittest.TestCase):
@@ -63,23 +61,6 @@ class CatCertCommandTests(unittest.TestCase):
 
     def tearDown(self):
         self._restore_stdout()
-
-    def test_file_arg_required(self):
-        command = CatCertCommand()
-        try:
-            command.main([])
-            self.fail("Expected InvalidCLIOptionError since no file arg.")
-        except InvalidCLIOptionError, e:
-            self.assertEqual("You must specify a certificate file.",
-                             str(e))
-
-    def test_invalid_file_arg(self):
-        command = CatCertCommand()
-        try:
-            command.main(["this_file_does_not_exist.crt"])
-            self.fail("Expected InvalidCLIOptionError since no file does not exist.")
-        except InvalidCLIOptionError, e:
-            self.assertEqual("The specified certificate file does not exist.", str(e))
 
     def test_omit_content_list(self):
         command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)

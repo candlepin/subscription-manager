@@ -457,3 +457,18 @@ Subject:
 	CN: eaadd6ea-852d-4430-94a7-73d5887d48e8
 
 """
+
+PRODUCT_CERT_V1_0_STAT_OUTPUT = \
+"""Type: Product Certificate
+Version: 1.0
+DER size: 892b
+Subject Key ID size: 20b
+"""
+
+ENTITLEMENT_CERT_V2_0_STAT_OUTPUT = \
+"""Type: Entitlement Certificate
+Version: 2.0
+DER size: 1348b
+Subject Key ID size: 20b
+Content sets: 4
+"""
