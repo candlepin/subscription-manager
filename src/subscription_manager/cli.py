@@ -92,13 +92,16 @@ class CLI:
         for (name, cmd) in items:
             if (cmd.primary):
                 print("\t%-14s %s" % (name, cmd.shortdesc))
+
         print("")
-        print _("Other Modules (Please consult documentation):")
-        print "\r"
-        for (name, cmd) in items:
-            if (not cmd.primary):
+
+        other = [(item[0], item[1]) for item in items if not item[1].primary]
+        if len(other) > 0:
+            print _("Other Modules (Please consult documentation):")
+            print "\r"
+            for (name, cmd) in other:
                 print("\t%-14s %s" % (name, cmd.shortdesc))
-        print("")
+            print("")
 
     def _find_best_match(self, args):
         """
