@@ -637,7 +637,13 @@ def authenticate(prompt):
     return UserCredentials(username, password)
 
 
+def validateOptions():
+    if options.servicelevel and options.noauto:
+        systemExit(1, _("The --servicelevel and --no-auto options cannot be used together."))
+
+
 def main():
+    validateOptions()
     serverurl = None
     if options.serverurl:
         rhncreds = authenticate(_("Red Hat account: "))
