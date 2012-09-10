@@ -12,7 +12,6 @@
 #
 
 import unittest
-import tempfile
 from mock import Mock
 
 import stubs
@@ -23,13 +22,6 @@ CONSUMER_DATA = {'releaseVer': {'id': 1, 'releaseVer': '123123'},
                  'serviceLevel': "Pro Turbo HD Plus Ultra",
                  'owner': {'key': 'admin'},
                  'idCert': {'serial': {'serial': 3787455826750723380}}}
-
-
-class MockActionLock(certlib.ActionLock):
-    PATH = tempfile.mkstemp()[1]
-
-    def __init__(self):
-        certlib.ActionLock.__init__(self)
 
 
 def getConsumerData(cls):
@@ -56,7 +48,7 @@ class TestIdentityCertlib(unittest.TestCase):
         self.stub_uep = stubs.StubUEP()
         self.stub_uep.getConsumer = getConsumerData
         self.stub_uep.getSerialNumber = getSerialNumber
-        return certlib.IdentityCertLib(lock=MockActionLock(), uep=self.stub_uep)
+        return certlib.IdentityCertLib(lock=stubs.MockActionLock(), uep=self.stub_uep)
 
     def test_idcertlib_persists_cert(self):
         idcertlib = self._get_idcertlib()
