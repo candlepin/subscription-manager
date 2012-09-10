@@ -22,6 +22,8 @@ from subscription_manager.factlib import FactLib
 from subscription_manager.facts import Facts
 from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
 
+from rhsm.connection import GoneException
+
 import logging
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -81,23 +83,34 @@ class CertManager:
             ret = []
             try:
                 ret = self.certlib.update()
+            # see bz#852706, reraise GoneException so that
+            # consumer cert deletion works
+            except GoneException, e:
+                raise
             except Exception, e:
+                log.warning("Exception caught while running certlib update")
                 log.exception(e)
                 print e
+
             # run the certlib update first as it will talk to candlepin,
             # and we can find out if we got deleted or not.
             for lib in libset:
                 try:
                     updates += lib.update()
+                except GoneException, e:
+                    raise
                 except Exception, e:
+                    log.warning("Exception caught while running %s update" % lib)
                     log.exception(e)
                     print e
+
             # NOTE: with no consumer cert, most of these actually
             # fail
             if ret:
                 updates += ret[0]
                 for e in ret[1]:
                     print ' '.join(str(e).split('-')[1:]).strip()
+
         finally:
             lock.release()
         return updates
