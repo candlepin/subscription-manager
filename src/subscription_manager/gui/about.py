@@ -14,7 +14,7 @@
 #
 
 import os
-from gtk import gdk, RESPONSE_DELETE_EVENT, RESPONSE_CANCEL, \
+from gtk import RESPONSE_DELETE_EVENT, RESPONSE_CANCEL, \
                 AboutDialog as GtkAboutDialog, Label
 from subscription_manager.utils import get_client_versions, get_server_versions
 
@@ -32,7 +32,6 @@ LICENSE = _("\nThis software is licensed to you under the GNU General Public Lic
             "in this software or its documentation.\n")
 
 prefix = os.path.dirname(__file__)
-LOGO_PATH = os.path.join(prefix, "data/icons/scalable/subscription-manager.svg")
 
 
 class AboutDialog(object):
@@ -46,7 +45,7 @@ class AboutDialog(object):
         self.dialog.set_wrap_license(True)
         self.dialog.set_website("https://fedorahosted.org/subscription-manager/")
         self.dialog.set_copyright(_("Copyright (c) 2012 Red Hat, Inc."))
-        self.dialog.set_logo(gdk.pixbuf_new_from_file_at_size(LOGO_PATH, 100, 100))
+        self.dialog.set_logo_icon_name("subscription-manager")
 
         rhsm_version_label = Label()
         backend_version_label = Label()
@@ -57,7 +56,8 @@ class AboutDialog(object):
         # Set the component versions.
         server_versions = get_server_versions(self.backend.uep)
         client_versions = get_client_versions()
-        self.dialog.set_version(server_versions['subscription manager'])
+
+        self.dialog.set_version(client_versions['subscription-manager'])
         rhsm_version_label.set_markup(_("<b>python-rhsm version:</b> %s" % \
             client_versions['python-rhsm']))
         backend_version_label.set_markup(_("<b>subscription management service version:</b> %s" % \

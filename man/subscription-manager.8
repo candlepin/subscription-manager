@@ -1,6 +1,6 @@
-.TH subscription-manager 8 "April 12, 2012" "version 2.1" "Subscription Management"  Deon Lackey 
+.TH subscription-manager 8 "September 5, 2012" "version 2.2" "Subscription Management"  Deon Lackey 
 .SH NAME
-subscription-manager \- Register machines and manage subscriptions to products.
+subscription-manager \- Registers systems to a subscription management service and then assigns and manages subscriptions for software products.
 
 .SH SYNOPSIS
 subscription-manager
@@ -8,30 +8,26 @@ subscription-manager
 
 .SH DESCRIPTION
 .B subscription-manager 
-is a client program that registers a system with the Certificate-Based Red Hat Network. To register your system with RHN Classic or with an RHN Satellite 5.x system, then use the 
-.B rhn_register
-tool.
+is a client program that registers a system with a subscription management service such as the Customer Portal Subscription Management service or on-premise Subscription Asset Manager. 
 
 .PP
 Red Hat provides content updates and support by issuing 
 .I subscriptions
-for its products. These subscriptions are allocated to systems (machines); once a system is subscribed to content, it is 
-.I entitled
-to install and update that software product. IT administrators need to track these subscriptions and how they are assigned. This entitlement and subscription management is a feature available for Red Hat platforms version 5.7 (and later) and version 6.1 (and later). 
+for its products. These subscriptions are applied to systems (machines); once a system is subscribed for a product, it is entitled to install, update, and receive support for that software product. IT administrators need to track these subscriptions and how they are assigned. This subscription management is a feature available for Red Hat platforms version 5.7 (and later) and version 6.1 (and later). 
 
 .PP
-For RHEL systems, content is delivered through the Red Hat Customer Portal. Subscriptions and systems are managed globally through the Red Hat entitlement service, which is integrated with the Customer Portal. Subscriptions are managed for the local system by using the Red Hat Subscription Manager tool. Subscription Manager is a local client which connects a system with the entitlement service. 
+For RHEL systems, content is delivered through the Red Hat Customer Portal. Subscriptions and systems are managed globally through the Red Hat subscription management service, which is integrated with the Customer Portal. Subscriptions are managed for the local system by using the Red Hat Subscription Manager tool. Subscription Manager is a local client which connects a system with the subscription management service. 
 
 .PP
 .B subscription-manager 
 is the command-line based client for the Red Hat Subscription Manager tool.
 
 .PP
-The Subscription Manager performs several key operations:
+Subscription Manager performs several key operations:
 .IP
-* It registers machines to the Red Hat entitlement service and adds the machine to the systems inventory. Once a machine is registered, it can receive updates based on its subscriptions to any kind of software products.
+* It registers machines to the Red Hat subscription management service and adds the machine to the systems inventory. Once a machine is registered, it can receive updates based on its subscriptions to any kind of software products.
 .IP
-* It lists both available and used (consumed) subscriptions.
+* It lists both available and used subscriptions.
 .IP
 * It allows administrators to both subscribe and unsubscribe a system from specific subscriptions. 
 .PP
@@ -40,7 +36,7 @@ Subscription Manager can be used to autosubscribe a system, as well. The
 command can even be invoked as part of a kickstart process.
 
 .PP
-Available subscriptions are based on the specific information about the machine's architecture. An entitlement is only considered 
+Available subscriptions are based on the specific information about the machine's architecture. A subscription is only considered 
 .I available 
 if the platform and hardware can support that specific product.
 
@@ -60,7 +56,7 @@ command.
 
 .SH COMMANDS AND OPTIONS
 .B subscription-manager 
-has specific options available for each command, depending on what operation is being performed. The Subscription Manager commands are related to the different subscription operations:
+has specific options available for each command, depending on what operation is being performed. Subscription Manager commands are related to the different subscription operations:
 
 .IP
 1. register
@@ -138,7 +134,7 @@ Gives the password to use to authenticate to the HTTP proxy.
 .SS REGISTER OPTIONS
 The 
 .B register 
-command registers a new machine to the entitlement service.
+command registers a new machine to the subscription management service.
 
 .TP
 .B --username=USERNAME
@@ -154,7 +150,7 @@ Sets the type of consumer to register. Most systems will use the default value o
 .B system.
 For development or test systems, this can be 	 
 .B person
-, which indicates a personal (rather than organizational) entitlement subscription. Other systems can be
+, which indicates a personal (rather than organizational) subscription. Other systems can be
 .B candlepin
 for a local content service or 
 .B domain
@@ -162,16 +158,16 @@ for an IP domain.
 
 .TP
 .B --name=CONSUMERNAME
-Sets the name of the consumer (machine) to register. This defaults to be the same as the hostname.
+Sets the name of the system to register. This defaults to the hostname.
 
 
 .TP
 .B --consumerid=CONSUMERID
-References an existing consumer ID to reregister a system. The consumer ID is used as an inventory number for the system in the entitlements service database. If the entitlements data are lost or corrupted, reregistering the system restores it.
+References an existing consumer ID to reregister a system. The consumer ID is used as an inventory number for the system in the subscription management service database. If the subscriptions data are lost or corrupted, reregistering the system restores it.
 
 .TP
 .B --activationkey=KEYS
-Gives a comma-separated list of product keys to use to redeem or apply specific subscriptions to the machine. This is used generally for preconfigured machines, which may already have products installed and subscriptions allocated for that consumer.
+Gives a comma-separated list of product keys to use to redeem or apply specific subscriptions to the machine. This is used generally for preconfigured machines, which may already have products installed and subscriptions attached to that system.
 .IP
 When the 
 .B --activationkey
@@ -181,7 +177,7 @@ and
 .B --password
 options, because the authentication information is implicit in the activation key.
 .IP
-In hosted or single organization environments, it is not necessary to specify an organization with the 
+When there is a single organization or when using the Customer Portal Subscription Management service, it is not necessary to specify an organization with the 
 .B --org
 option, but in multi-organization environments, this is required.
 .IP
@@ -193,7 +189,7 @@ subscription-manager register --org="IT Dept" --activationkey=1234abcd
 .RE
 
 .IP
-Giving the org name is not necessary in hosted environments or infrastructures which have only a single organization.
+Giving the org name is not necessary when there is a single organization or when using the Customer Portal Subscription Management service.
 
 
 .TP
@@ -211,23 +207,23 @@ option, and then it is used as one of the factors for matching subscriptions.
 .B --force
 Registers the system even if it is already registered. Normally, any register operations will fail if the machine is already registered. With 
 .B --force, 
-the existing consumer entry is unregistered first, all of its subscriptions are returned to the pool, and then the consumer is registered as a new consumer.
+the existing consumer entry is unregistered first, all of its subscriptions are returned to the pool, and then the system is registered as a new entry.
 
 .TP
 .B --org=ORG
-Assigns the consumer to an organization. Infrastructures which are managed on-site may be 
+Assigns the system to an organization. Infrastructures which are managed on-site may be 
 .I multi-tenant,
-meaning that there are multiple organizations within one customer unit. A consumer may be assigned manually to one of these suborganizations. If there is only one organization configured (which is the case with infrastructures using the hosted service), then this is not used. With multi-tenant environments, this is required.
+meaning that there are multiple organizations within one customer unit. A system may be assigned manually to one of these suborganizations. If there is only one organization configured (which is the case with infrastructures using Customer Portal Subscription Management), then this is not used. With multi-tenant environments, this is required.
 
 .TP
 .B --environment=ENV
-Registers the consumer to an environment within an organization.
+Registers the system to an environment within an organization.
 
 
 .SS UNREGISTER OPTIONS
 The 
 .B unregister 
-command unregisters a machine, which strips its subscriptions and removes the machine from the entitlement service.
+command removes a system's subscriptions and removes it from the subscription management service.
 
 .PP
 This command has no options.
@@ -235,11 +231,11 @@ This command has no options.
 .SS SUBSCRIBE OPTIONS
 The 
 .B subscribe
-command allocates a specific subscription to the machine. 
+command applies a specific subscription to the machine. 
 
 .TP
 .B --pool=POOLID
-Gives the ID for the entitlements pool (collection of products) to subscribe the machine to. This option is required, unless 
+Gives the ID for the subscriptions pool (collection of products) to subscribe the machine to. This option is required, unless 
 .B --auto
 is used.
 
@@ -262,7 +258,7 @@ option, and then it is used as one of the factors for matching subscriptions.
 .SS UNSUBSCRIBE OPTIONS
 The 
 .B unsubscribe
-command removes a subscription allocation from the machine. (This does not uninstall the associated products.)
+command removes a subscription from the machine. (This does not uninstall the associated products.)
 
 .TP
 .B --serial=SERIALNUMBER
@@ -283,11 +279,15 @@ command sets a sticky OS version to use when installing or updating packages. Th
 
 .TP
 .B --list
-Lists the available OS versions.
+Lists the available OS versions. If a release preference is not set, then there is a message saying it is not set.
 
 .TP
 .B --set=RELEASE
 Sets the minor (Y-stream) release version to use, such as 6.3.
+
+.TP
+.B --unset
+Removes any previously set release version preference.
 
 
 .SS SERVICE-LEVEL OPTIONS
@@ -300,21 +300,25 @@ for products installed on the system. For example, if the service level preferen
 .IP
 The 
 .B service-level
-command does not set the service level for the system; it only shows its current setting or available settings. The service level preference must be set in the Subscription Manager UI.
+command does not set the service level for the system; it only shows its current setting or available settings. The service level preference must be set in the Subscription Manager GUI.
 
 .TP
 .B --list
-Lists the available service levels.
+Lists the available service levels. 
 
 .TP
 .B --show
-Shows the system's current service-level preference.
+Shows the system's current service-level preference. If a service level is not set, then there is a message saying it is not set.
+
+.TP
+.B --unset
+Removes any previously set service level preference.
 
 
 .SS IMPORT OPTIONS
 The 
 .B import
-command imports and applies an entitlement certificate for the consumer which was generated externally, such as in the Customer Portal, and then copied over to the machine. Importing can be necessary if a machine is pre-configured in the subscription service or if it is offline or unable to access the subscription service but it must be properly subscribed to relevant entitlements.
+command imports and applies an entitlement certificate for the system which was generated externally, such as in the Customer Portal, and then copied over to the machine. Importing can be necessary if a machine is pre-configured in the subscription management service or if it is offline or unable to access the subscription management service but it must be properly subscribed to relevant subscriptions.
 
 .TP
 .B --certificate=CERTIFICATE_FILE
@@ -335,7 +339,7 @@ Sets the locale to use for the message. If none is given, then it defaults to th
 
 .TP
 .B --org=ORG
-Identifies the organization which issued the entitlement being redeemed.
+Identifies the organization which issued the subscription being redeemed.
 
 
 .SS LIST OPTIONS
@@ -363,26 +367,22 @@ Lists products which are currently installed on the system which may (or may not
 
 .TP
 .B --all
-Lists all possible subscriptions that have been purchased by the organization, even if they don't match the architecture of the system. This is used with the
+Lists all possible subscriptions that have been purchased, even if they don't match the architecture of the system. This is used with the
 .B --available 
 option. 
 
 
 .TP
 .B --servicelevel
-Displays the current preferred service level for the system. Service levels commonly are none, standard, or premium. If no service-level preference is set, then the display value is blank. For example:
-.nf
-subscription-manager list --servicelevel
-Current service level: 
-.fi
+Displays the current preferred service level for the system. Service levels commonly are none, standard, or premium. If a service level is not set, then there is a message saying it is not set.
 
 
 .SS REFRESH OPTIONS
 The 
 .B refresh
-command pulls the latest entitlement data from the server. Normally, the system polls the entitlement server at a set interval (4 hours by default) to check for any changes in the available subscriptions. The 
+command pulls the latest subscription data from the server. Normally, the system polls the subscription management service at a set interval (4 hours by default) to check for any changes in the available subscriptions. The 
 .B refresh
-command checks with the entitlement server right then, outside the normal interval.
+command checks with the subscription management service right then, outside the normal interval.
 
 .PP
 This command has no options.
@@ -391,7 +391,7 @@ This command has no options.
 .SS ENVIRONMENTS OPTIONS
 The 
 .B environments
-command lists all of the environments that have been configured for an organization. This command is only used for organizations which have a locally-hosted subscriptions or content service of some kind, like Subscription Asset Manager. The concept of environments -- and therefore this command -- have no meaning in a hosted subscription/content structure.
+command lists all of the environments that have been configured for an organization. This command is only used for organizations which have a locally-hosted subscription or content service of some kind, like Subscription Asset Manager. The concept of environments -- and therefore this command -- have no meaning for environments which use the Customer Portal Subscription Management services.
 
 .TP
 .B --username=USERNAME
@@ -409,17 +409,17 @@ Identifies the organization for which to list the configured environments.
 .SS REPOS OPTIONS
 The 
 .B repos
-command lists all of the repositories that are available to a consumer. This command is only used for organizations which have a locally-hosted content service of some kind, like Subscription Asset Manager. With Red Hat's hosted content service, there is only one central repository.
+command lists all of the repositories that are available to a system. This command is only used for organizations which have a locally-hosted content service of some kind, like Subscription Asset Manager. With Red Hat's hosted content service, there is only one central repository.
 
 .TP
 .B --list
-Lists all of the repositories that are provided by the content service used by the consumer.
+Lists all of the repositories that are provided by the content service used by the system.
 
 
 .SS ORGS OPTIONS
 The 
 .B orgs
-command lists all of the organizations which are available to the specified user accounts. A multi-tenant infrastructure may have multiple organizations within a single customer, and users may be restricted to access only a subset of the total number of organizations.
+command lists all of the organizations which are available to the specified user account. A multi-tenant infrastructure may have multiple organizations within a single customer, and users may be restricted to access only a subset of the total number of organizations.
 
 .TP
 .B --username=USERNAME
@@ -433,13 +433,13 @@ Gives the user account password. This is required.
 .SS IDENTITY OPTIONS
 The 
 .B identity 
-command handles the UUID of a system, which identifies the system to the entitlement service after registration. This command can simply return the UUID or it can be used to restore the registration of a previously-registered system to the entitlement service.
+command handles the UUID of a system, which identifies the system to the subscription management service after registration. This command can simply return the UUID or it can be used to restore the registration of a previously-registered system to the subscription management service.
 
 .TP
 .B --regenerate
-Requests that the entitlement service issue a new identity certificate for the system, using an existing UUID in the original identity certificate. If this is used alone, then the
+Requests that the subscription management service issue a new identity certificate for the system, using an existing UUID in the original identity certificate. If this is used alone, then the
 .B identity 
-command also uses the original identity certificate to bind to the entitlement server, using certificate-based authentication.
+command also uses the original identity certificate to bind to the subscription management service, using certificate-based authentication.
 
 .TP
 .B --username=USERNAME
@@ -455,7 +455,7 @@ Regenerates the identity certificate for the system using username/password auth
 .B --regenerate
 option. 
 .B --regenerate
-alone will use an existing identity certificate to authenticate to the entitlement service. If the certificate is missing or corrupted or in other circumstances, then it may be better to use user authentication rather than certificate-based authentication. In that case, the 
+alone will use an existing identity certificate to authenticate to the subscription management service. If the certificate is missing or corrupted or in other circumstances, then it may be better to use user authentication rather than certificate-based authentication. In that case, the 
 .B --force
 option requires the username or password to be given either as an argument or in response to a prompt.
 
@@ -503,10 +503,10 @@ Updates the system information. This is particularly important whenever there is
 The 
 .B clean
 command removes all of the subscription and identity data from the local system 
-.I without affecting the consumer information in the entitlement service. 
-This means that any of the subscriptions consumed by the system are still consumed and are not available for other systems to use. The 
+.I without affecting the system information in the subscription management service. 
+This means that any of the subscriptions applied to the system are not available for other systems to use. The 
 .B clean
-command is useful in cases where the local entitlement information is corrupted or lost somehow, and the system will be reregistered using the 
+command is useful in cases where the local subscription information is corrupted or lost somehow, and the system will be reregistered using the 
 .B register --consumerid=EXISTING_ID
 command.
 
@@ -518,11 +518,11 @@ The
 .B config
 command changes the 
 .B rhsm.conf
-configuration file used by Subscription Manager. Almost all of the connection information used by Subscription Manager to access the subscription server, content server, and any proxies is set in the configuration file, as well as general configuration parameters like the frequency Subscription Manager checks for entitlements updates. There are major divisions in the 
+configuration file used by Subscription Manager. Almost all of the connection information used by Subscription Manager to access the subscription management service, content server, and any proxies is set in the configuration file, as well as general configuration parameters like the frequency Subscription Manager checks for subscriptions updates. There are major divisions in the 
 .B rhsm.conf
 file, such as 
 .B [server]
-which is used to configure the subscription server. When changing the Subscription Manager configuration, the settings are identified with the format 
+which is used to configure the subscription management service. When changing the Subscription Manager configuration, the settings are identified with the format 
 .I section.name
 and then the new value. For example:
 .nf
@@ -541,7 +541,7 @@ Deletes the current value for the parameter without supplying a new parameter. A
 .B --section.name=VALUE
 Sets a parameter to a new, specified value. This is commonly used for connection settings:
 .IP
-* server.hostname (subscription server)
+* server.hostname (subscription management service)
 .IP
 * server.proxy
 .IP
@@ -561,10 +561,10 @@ Sets a parameter to a new, specified value. This is commonly used for connection
 has two major tasks:
 
 .IP
-1. Handling the registration for a given system to an entitlement service
+1. Handling the registration for a given system to a subscription management service
 
 .IP
-2. Handling the product subscriptions for a machine.
+2. Handling the product subscriptions for installed products on a machine
 
 .PP
 .B subscription-manager 
@@ -575,22 +575,25 @@ makes it easier for network administrators to maintain parity between software s
 .SS REGISTERING AND UNREGISTERING MACHINES
 A machine is either 
 .I registered 
-to an entitlement and content service -- which makes all of the subscriptions available to the machine -- or it is not registered. Unregistered machines necessarily lack valid software entitlements because there is no way to record that the subscriptions have been used or to renew them.
+to a subscription management service -- which makes all of the subscriptions available to the machine -- or it is not registered. Unregistered machines necessarily lack valid software subscriptions because there is no way to record that the subscriptions have been used or to renew them.
 
 .PP
-Machines are usually registered to an entitlement service as part of their initial configuration, such as the firstboot or kickstart process. However, machines can be registered manually after they are configured, can be removed from a content service, or reregistered.
+The default subscription management service in the Subscription Manager configuration is the Customer Portal Subscription Management service. The configuration file can be edited before the system is registered to point to an on-premise subscription management service like Subscription Asset Manager.
+
+.PP
+Machines are usually registered to a subscription management service as part of their initial configuration, such as the firstboot or kickstart process. However, machines can be registered manually after they are configured, can be removed from a content service, or reregistered.
 
 .PP
 If a machine has never been registered (not even during firstboot), then the 
 .B register
-command will register the machine with whatever entitlement service is configured in the 
+command will register the machine with whatever subscription management service is configured in the 
 .B /etc/rhsm/rhsm.conf
-file. This command requires, at a minimum, the username and password for an account to connect to the entitlement service. If the credentials aren't passed with the command, then 
+file. This command requires, at a minimum, the username and password for an account to connect to the subscription management service. If the credentials aren't passed with the command, then 
 .B subscription-manager
 prompts for the username and password interactively.
 
 .PP
-For an environment with a single organization -- such as a hosted system -- all that is required is the username/password set. For example:
+When there is a single organization or when using the Customer Portal Subscription Management service, all that is required is the username/password set. For example:
 
 .nf
 subscription-manager register --username=admin --password=secret
@@ -605,7 +608,7 @@ subscription-manager register --username=admin --password=secret
 .fi
 
 .PP
-Some information is assigned automatically. Subscription Manager automatically generates a unique consumer ID for the system which is used by the entitlement service and it assigns a consumer type, which indicates what kinds of software are available for the machine. The name for the consumer entry can be manually assigned (for use within a local inventory system, for instance). A handful of subscriptions (such as specialized servers for content or identity management) have their own specific consumer type. For example:
+Some information is assigned automatically. Subscription Manager automatically generates a unique ID for the system which is used by the subscription management service and it assigns a consumer type, which indicates what kinds of software are available for the machine. The name for the entry can be manually assigned (for use within a local inventory system, for instance). A handful of subscriptions (such as specialized servers for content or identity management) have their own specific consumer type. For example:
 
 .nf
 subscription-manager register --username=admin 
@@ -621,7 +624,7 @@ provided with the registration request, registration fails with a remote server 
 there will be errors about being unable to load the owners interface.
 
 .PP
-If a system is registered and then somehow its entitlement information is lost -- a drive crashes or the certificates are deleted or corrupted -- the system can be reregistered, with all of its subscriptions restored, by registering with the existing consumer ID.
+If a system is registered and then somehow its subscription information is lost -- a drive crashes or the certificates are deleted or corrupted -- the system can be reregistered, with all of its subscriptions restored, by registering with the existing ID.
 
 .nf
 subscription-manager register --username=admin 
@@ -629,7 +632,7 @@ subscription-manager register --username=admin
 .fi
 
 .PP
-A consumer uses an SSL client certificate (its identity certificate) to authenticate to the entitlements system to check for updates or changes to subscriptions. If the identity certificate is lost or corrupted, it can be regenerated using the 
+A system uses an SSL client certificate (its identity certificate) to authenticate to the subscriptions system to check for updates or changes to subscriptions. If the identity certificate is lost or corrupted, it can be regenerated using the 
 .B identity
 command.
 .RS
@@ -652,9 +655,9 @@ eff9a4c9-3579-49e5-a52f-83f2db29ab52 server.example.com
 
 
 .PP
-A machine is unregistered and removed as a consumer from the entitlements service simply by running the 
+A machine is unregistered and removed from the subscription management service simply by running the 
 .B unregister
-command. Unregistering and unsubscribing a service can free up entitlement subscriptions when a machine is taken offline or moved to a different department. 
+command. Unregistering and unsubscribing a system can free up subscriptions when a machine is taken offline or moved to a different department. 
 .RS
 .nf
 subscription-manager unregister
@@ -663,8 +666,8 @@ subscription-manager unregister
 
 .PP
 An option with registration, 
-.B --autosubscribe
-, will automatically subscribe the newly-registered system to the entitlements pool which best matches the system architecture and configuration. This option allows the system to be subscribed as part of the registration process, rather than separately managing subscriptions.
+.B --autosubscribe,
+will automatically subscribe the newly-registered system to the subscriptions pool which best matches the system architecture and configuration. This option allows the system to be subscribed as part of the registration process, rather than separately managing subscriptions.
 .RS
 .nf
 subscription-manager register --username=admin --password=secret 
@@ -689,9 +692,11 @@ subscription-manager register --username=admin --password=secret
 .SS LISTING, SUBSCRIBING, AND UNSUBSCRIBING TO PRODUCTS
 A 
 .I subscription
-is essentially the right to install, use, and receive updates for a Red Hat product. (Sometimes multiple individual software products are bundled together into a single subscription.) When a machine is registered, the entitlements and content service is aware of the machine and has a list of all of the possible product subscriptions that the machine can install and use. A machine is allocated a product subscription by 
-.I subscribing
-to the entitlement pool that makes that product available. A machine releases that entitlement (meaning, it unassigns that product so that another machine can use that entitlement count) by 
+is essentially the right to install, use, and receive updates for a Red Hat product. (Sometimes multiple individual software products are bundled together into a single subscription.) When a machine is registered, the subscription management service is aware of the machine and has a list of all of the possible product subscriptions that the machine can install and use. A subscription is applied to a system when the system is 
+.I attached
+to the subscription pool that makes that product available. A machine releases or 
+.I removes
+that subscription (meaning, it unassigns that product so that another machine can use that subscription count) by 
 .I unsubscribing.
 
 .PP The 
@@ -706,13 +711,15 @@ subscription-manager list --available --ondate=2012-01-31
 +-------------------------------------------+
     Available Subscriptions
 +-------------------------------------------+
-
-
-ProductName:        Awesome OS Server
-ProductId:          AOS001
-PoolId:             8a90f88e2e3802ab012e380345de0203
-Quantity:           5                        
-Expires:            2012-02-17
+Subscription Name:	Red Hat Enterprise Linux
+SKU:			SYS0395
+Pool Id:		8a85f981302cbaf201302d899adf05a9
+Quantity:		249237
+Service Level:		None
+Service Type:		None
+Multi-Entitlement:	No
+Ends:			01/01/2022
+Machine Type:		physical
 .fi
 .RE
 
@@ -728,25 +735,18 @@ subscription-manager list --installed
     Installed Product Status
 +-------------------------------------------+
 
-ProductName:         Red Hat Enterprise Linux Entitlement
-Status:              Not Subscribed           
-Expires:                                      
-Subscription:                                 
-ContractNumber:                               
-AccountNumber:                                
-
-
-ProductName:         Awesome OS Server 
-Status:              Not Installed            
-Expires:             2012-02-20               
-Subscription:        54129829316535230        
-ContractNumber:      39                       
-AccountNumber:       12331131231
+ProductName:	Red Hat Enterprise Linux Server
+Product ID:	69
+Version: 	6.3
+Arch:		x86_64
+Status:		Subscribed
+Started:	07/26/2012
+Ends:		08/31/2015                             
 .fi
 .RE
 
 .PP
-Subscribing a machine requires the ID for the entitlement pool (the 
+Subscribing a machine requires the ID for the subscription pool (the 
 .I --pool
 option). For example:
 .RS
@@ -783,7 +783,7 @@ subscription-manager subscribe --auto --servicelevel=premium
 .RE
 
 .PP
-Some subscriptions define a count on the consumer, like the number of sockets on the machine or the number of virtual guests on a host. You can 
+Some subscriptions define a count based on attributes of the system itself, like the number of sockets or the number of virtual guests on a host. You can 
 .I stack
 multiple subscriptions together to cover the count. For example, if there is a four socket server, you can use two subscriptions for "RHEL Server for Two Sockets" to cover the socket count. To specify the number of subscriptions to use, 
 use the 
@@ -798,7 +798,7 @@ subscription-manager subscribe
 .RE
 
 .PP
-Unsubscribing a machine removes it from the product or entitlement pool, which releases that entitlement subscription it had consumed. The machine remains registered with the entitlement service. Each product has an identifying X.509 certificate installed with it. To unsubscribe from a subscription for a specific product, specify the serial number of the certificate:
+Unsubscribing a machine removes it from the product or subscription pool, which releases that subscription it had used. The machine remains registered with the subscription management service. Each product has an identifying X.509 certificate installed with it. To unsubscribe from a subscription for a specific product, specify the serial number of the certificate:
 .RS
 .nf
 subscription-manager unsubscribe --serial=1128750306742160
@@ -810,7 +810,7 @@ Giving the
 .B unsubscribe
 command with the 
 .B --all
-option unsubscribes the machine from every subscription it has consumed.
+option unsubscribes the machine from every subscription it has used.
 
 
 .SS REDEEMING EXISTING SUBSCRIPTIONS
@@ -848,9 +848,9 @@ subscription-manager orgs --username=jsmith
 .RE
 
 .SS CHANGING SUBSCRIPTION MANAGER CONFIGURATION
-The Subscription Manager CLI and UI both use the 
+The Subscription Manager CLI and GUI both use the 
 .B /etc/rhsm/rhsm.conf
-file for its configuration, including what content and subscription services to use and management settings like autohealing. This configuration file can be edited directly, or it can be edited using the 
+file for configuration, including what content and subscription management services to use and management settings like autohealing. This configuration file can be edited directly, or it can be edited using the 
 .B config 
 command. Parameters and values are passed as arguments with the 
 .B config
@@ -861,7 +861,7 @@ command in the format
 is the configuration section in the file: server, rhsm, or rhsmcertd.
 
 .PP
-For example, to change the hostname of the subscription service host:
+For example, to change the hostname of the subscription management service host:
 .RS
 .nf
 subscription-manager config --server.hostname=myserver.example.com
@@ -872,7 +872,7 @@ subscription-manager config --server.hostname=myserver.example.com
 .SS UPDATING FACTS
 The information about a system, such as its hardware and CPU, its operating system versions, and memory, are collected by Subscription Manager in a list of 
 .I facts.
-Subscription Manager uses these facts to determine what purchased entitlements are compatible with the system. Whenever these facts change (such as installing an additional CPU), the facts can be updated immediately using the 
+Subscription Manager uses these facts to determine what purchased subscriptions are compatible with the system. Whenever these facts change (such as installing an additional CPU), the facts can be updated immediately using the 
 .B facts
 command.
 
@@ -901,43 +901,16 @@ When these fact files are added, running the
 .B facts
 command will update the collected facts with the new, manual facts or values.
 
-.SS ENTITLEMENTS AND KICKSTART
+.SS SUBSCRIPTIONS AND KICKSTART
 The 
 .B subscription-manager
-tool can be run as a post-install script as part of the kickstart installation process. This allows entitlement management (registration and subscription) to be automated along with installation. For example:
+tool can be run as a post-install script as part of the kickstart installation process. This allows subscription management (registing and applying subscriptions) to be automated along with installation. For example:
 .RS
 .nf
 %post --log=/root/ks-post.log
 /usr/sbin/subscription-manager register --username admin --password secret --org 'east colo' --autosubscribe --servicelevel=premium --force
 .fi
 .RE
-
-.SS GETTING INFORMATION FROM CERTIFICATES
-Both Subscription Manager and product information is contained in X.509 certificates. To obtain this information, use tools like 
-.B openssl
-or
-.B pk12util
-to pretty-print the certificate information. For example:
-.nf
-openssl x509 -text -in /etc/pki/consumer/cert.pem
-
-Certificate:
-    Data:
-        Version: 3 (0x2)
-        Serial Number: 9 (0x9)
-        Signature Algorithm: sha1WithRSAEncryption
-        Issuer: CN=server.example.com, C=US, L=Mountain View
-        Validity
-            Not Before: Sep 21 19:01:01 2010 GMT
-            Not After : Sep 21 19:01:01 2011 GMT
-        Subject: CN=78cf3c59-24ec-4228-a039-1b554ea21319
-        Subject Public Key Info:
-            Public Key Algorithm: rsaEncryption
-                Public-Key: (2048 bit)
-                Modulus:
-                    00:cd:22:86:2b:77:1b:40:b2:be:8e:06:8e:b8:df:
-.fi
-
 
 .SH FILES
 .IP

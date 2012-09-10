@@ -66,7 +66,7 @@ logutil.init_logger()
 def main():
     # execute
     try:
-        return managercli.CLI().main()
+        return managercli.ManagerCLI().main()
     except KeyboardInterrupt:
         systemExit(0, "\nUser interrupted process.")
 

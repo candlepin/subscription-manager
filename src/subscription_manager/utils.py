@@ -18,6 +18,8 @@ import logging
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 from urlparse import urlparse
+import os
+import signal
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -288,16 +290,23 @@ def get_client_versions():
     # than one version of python-rhsm/subscription-manager installed.
     # Versions() will only return one (and I suspect it's not predictable
     # which it will return).
-    versions = Versions()
-    sm_version = get_version(versions, Versions.SUBSCRIPTION_MANAGER)
-    pr_version = get_version(versions, Versions.PYTHON_RHSM)
+    sm_version = _("Unknown")
+    pr_version = _("Unknown")
 
-    return {"subscription manager": sm_version,
+    try:
+        versions = Versions()
+        sm_version = get_version(versions, Versions.SUBSCRIPTION_MANAGER)
+        pr_version = get_version(versions, Versions.PYTHON_RHSM)
+    except Exception, e:
+        log.debug("Client Versions: Unable to check client versions")
+        log.exception(e)
+
+    return {"subscription-manager": sm_version,
             "python-rhsm": pr_version}
 
 
 def get_server_versions(cp):
-    cp_version = _("No connection made to remote entitlement server")
+    cp_version = _("Unable to reach server")
     server_type = _("Unknown")
     if cp:
         server_type = _("subscription management service")
@@ -308,19 +317,45 @@ def get_server_versions(cp):
             else:
                 cp_version = _("Unknown")
         except GoneException, e:
+            log.info("Server Versions: Error: consumer has been deleted, unable to check server version")
             log.info(e)
             raise
         except Exception, e:
             # a more useful error would be handy here
-            print _("Error while checking server version: %s") % e
+            log.error(("Error while checking server version: %s") % e)
             log.exception(e)
 
             server_type = _("Unknown")
             cp_version = _("Unknown")
 
-    if ClassicCheck().is_registered_with_classic():
-        server_type = _("RHN Classic")
-        cp_version = _("Unknown")
+    # this isn't particularly important, so log any exceptions and carry on
+    try:
+        if ClassicCheck().is_registered_with_classic():
+            server_type = _("RHN Classic")
+            cp_version = _("Unknown")
+    except Exception, e:
+        log.debug("Server Versions: Unable to check RHN Classic version")
+        log.exception(e)
 
     return {"candlepin": cp_version,
             "server-type": server_type}
+
+
+def restart_virt_who():
+    """
+    Send a SIGHUP signal to virt-who if it running on the same machine.
+    """
+    try:
+        pidfile = open('/var/run/virt-who.pid', 'r')
+        pid = int(pidfile.read())
+        os.kill(pid, signal.SIGHUP)
+        log.debug("Restarted virt-who")
+    except IOError:
+        # The file was not found, this is ok
+        log.debug("No virt-who pid file, no attempting to restart")
+    except OSError:
+        # The file is referencing an old pid, record this and move on
+        log.error("There virt-who pid file references a non-existent pid")
+    except ValueError:
+        # The file has non numeric data in it
+        log.error("There virt-who pid file contains non numeric data")

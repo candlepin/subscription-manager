@@ -198,19 +198,18 @@ def main():
         if status == RHSM_EXPIRED:
             syslog.openlog("rhsmd")
             syslog.syslog(syslog.LOG_NOTICE,
-                    "This system is missing one or more valid entitlement " +
-                    "certificates. " +
+                    "This system is missing one or more subscriptions. " +
                     "Please run subscription-manager for more information.")
         elif status == RHSM_PARTIALLY_VALID:
             syslog.openlog("rhsmd")
             syslog.syslog(syslog.LOG_NOTICE,
-                    "This system is missing one or more valid entitlement " +
-                    "certificates to fully cover its products. " +
+                    "This system is missing one or more subscriptions " +
+                    "to fully cover its products. " +
                     "Please run subscription-manager for more information.")
         elif status == RHSM_WARNING:
             syslog.openlog("rhsmd")
             syslog.syslog(syslog.LOG_NOTICE,
-                    "This system's entitlements are about to expire. " +
+                    "This system's subscriptions are about to expire. " +
                     "Please run subscription-manager for more information.")
         elif status == RHN_CLASSIC:
             syslog.openlog("rhsmd")
@@ -221,8 +220,8 @@ def main():
             syslog.syslog(syslog.LOG_NOTICE,
                     "In order for Subscription Manager to provide your " +
                     "system with updates, your system must be registered " +
-                    "with RHN. Please enter your Red Hat login to ensure " +
-                    "your system is up-to-date.")
+                    "with the Customer Portal. Please enter your Red Hat " +
+                    "login to ensure your system is up-to-date.")
 
         # Return an exit code for the program. having valid entitlements is
         # good, so it gets an exit status of 0.

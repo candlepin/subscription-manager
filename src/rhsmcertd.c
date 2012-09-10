@@ -96,7 +96,7 @@ void r_log (const char *level, const char *message, ...)
 void
 r_log (const char *level, const char *message, ...)
 {
-	bool use_stdout;
+	bool use_stdout = false;
 	va_list argp;
 	FILE *log_file = fopen (LOGFILE, "a");
 	if (!log_file) {
@@ -113,6 +113,8 @@ r_log (const char *level, const char *message, ...)
 	if (!use_stdout) {
 		fclose (log_file);
 	}
+
+	va_end(argp);
 }
 
 #define info(msg, ...) r_log ("INFO", msg, ##__VA_ARGS__)
@@ -238,11 +240,6 @@ get_option_context ()
 	option_context = g_option_context_new ("");
 	g_option_context_set_ignore_unknown_options (option_context, true);
 	g_option_context_add_main_entries (option_context, entries, NULL);
-	g_option_group_new ("rhsmcertd", "", "rhsmcertd", NULL, NULL);
-	g_option_context_add_group (option_context,
-				    g_option_group_new ("rhsmcertd", "",
-							"rhsmcertd", NULL,
-							NULL));
 	return option_context;
 }
 
@@ -252,10 +249,11 @@ void
 print_argument_error (const char *message, ...)
 {
 	va_list argp;
-	
+
 	va_start (argp, message);
 	vprintf(message, argp);
 	printf(N_("For more information run: rhsmcertd --help\n"));
+	va_end(argp);
 }
 
 void
@@ -310,7 +308,7 @@ Config *
 get_config (int argc, char *argv[])
 {
 	Config *config;
-	config = (Config *) malloc (sizeof (config));
+	config = malloc (sizeof (Config));
 
 	// Set the default values
 	config->cert_interval_seconds = DEFAULT_CERT_INTERVAL_SECONDS;

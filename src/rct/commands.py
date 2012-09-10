@@ -14,22 +14,42 @@
 #
 
 import os
+import sys
 from rhsm import certificate
-from rct.cli import CLICommand, InvalidCLIOptionError
 from rct.printing import printc
 
 import gettext
+from subscription_manager.cli import AbstractCLICommand, InvalidCLIOptionError
 _ = gettext.gettext
 
 
-class CatCertCommand(CLICommand):
+class RCTCliCommand(AbstractCLICommand):
+
+    def __init__(self, name="cli", shortdesc=None, primary=False):
+        AbstractCLICommand.__init__(self, name=name, shortdesc=shortdesc, primary=primary)
+
+    def main(self, args=None):
+        # In testing we sometimes specify args, otherwise use the default:
+        if args is None:
+            # Skip the program name and the command name.
+            args = sys.argv[2:]
+
+        (self.options, self.args) = self.parser.parse_args(args)
+
+        self._validate_options()
+        return_code = self._do_command()
+        if return_code is not None:
+            return return_code
+
+
+class CatCertCommand(RCTCliCommand):
     FILE_ARG_IDX = 0
 
     def __init__(self):
-        CLICommand.__init__(self, "cat-cert",
-                            _("Print certificate info to standard output."))
+        RCTCliCommand.__init__(self, name="cat-cert",
+                               shortdesc=_("Print certificate info to standard output."),
+                               primary=True)
 
-    def _define_custom_opts(self, parser):
         self.parser.add_option("--no-products", dest="no_products", action="store_true",
                                help=_("do not show the cert's product information"))
         self.parser.add_option("--no-content", dest="no_content", action="store_true",
@@ -43,7 +63,7 @@ class CatCertCommand(CLICommand):
         if not os.path.isfile(cert_file):
             raise InvalidCLIOptionError(_("The specified certificate file does not exist."))
 
-    def _run_command(self):
+    def _do_command(self):
         """
         Does the work that this command intends.
         """

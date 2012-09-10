@@ -1,9 +1,9 @@
-.TH rhsmcertd 8 "July 18, 2012" "version 1.1" "Subscription Management Certificate Daemon"  Deon Lackey 
+.TH rhsmcertd 8 "September 6, 2012" "version 1.3" "Subscription Management Certificate Daemon"  Deon Lackey 
 .SH NAME
 rhsmcertd \- Periodically scans and updates the entitlement certificates on a registered system.
 
 .SH SYNOPSIS
-rhsmcertd [--cert-interval=SECONDS] [--heal-interval=SECONDS] [--now] [--debug] [--help]
+rhsmcertd [--cert-interval=MINUTES] [--heal-interval=MINUTES] [--now] [--debug] [--help]
 
 .PP
 .I Deprecated usage
@@ -13,15 +13,15 @@ rhsmcertd [\fIcertInterval healInterval\fP]
 .SH DESCRIPTION
 Red Hat provides content updates and support by issuing 
 .I subscriptions
-for its products. These subscriptions are allocated to systems (machines). Red Hat Subscription Manager is a tool which allows administrators to manage those subscriptions by registering systems and people, assigning subscriptions, and viewing subscriptions. 
+for its products. These subscriptions are applied to systems (machines). Red Hat Subscription Manager is a tool which allows administrators to manage those subscriptions by registering systems and people, applying subscriptions, and viewing subscriptions. 
 
 .PP
-When subscriptions are allocated to a system or when new subscriptions are available, the subscription management system issues that machine an X.509 certificate which contains all of the details of that subscription. The
+When subscriptions are applied to a system or when new subscriptions are available, the subscription management system issues that machine an X.509 certificate which contains all of the details of that subscription. The
 .B rhsmcertd
 process runs periodically to check for changes in the subscriptions available to a machine by updating the entitlement certificates installed on the machine and by installing new entitlement certificates as they're available.
 
 .PP
-At a defined interval, the process checks with the subscription service to see if any new subscriptions are available to the system. If there are, it pulls in the associated subscription certificates. If any subscriptions have expired and new subscriptions are available, then the \fBrhsmcertd\fP process will automatically request those subscriptions (this is called \fIautohealing\fP). 
+At a defined interval, the process checks with the subscription management service to see if any new subscriptions are available to the system. If there are, it pulls in the associated subscription certificates. If any subscriptions have expired and new subscriptions are available, then the \fBrhsmcertd\fP process will automatically request those subscriptions (this is called \fIautohealing\fP). 
 
 .PP
 This \fBrhsmcertd\fP process invokes the 
@@ -50,12 +50,16 @@ Records more verbose output to the \fB/var/log/rhsm/rhsmcertd.log\fP log file.
 Runs the \fBrhsmcertd\fP scan immediately, rather than waiting for the next scheduled interval.
 
 .TP
-.B -c, --cert-interval
-Resets the interval for checking for new subscription certificates. This value is in seconds. The default is 14400, or four hours.
+.B -c, --cert-interval=MINUTES
+Resets the interval for checking for new subscription certificates. This value is in minutes. The default is 240, or four hours. This interval is in effect until the daemon restarts, and then the values in the 
+.B /etc/rhsm/rhsm.conf
+file are used (unless the argument is passed again).
 
 .TP 
-.B -i, --heal-interval
-Resets the interval for checking for and replacing expired subscriptions. This value is in seconds. The default is 86400, or 24 hours.
+.B -i, --heal-interval=MINUTES
+Resets the interval for checking for and replacing expired subscriptions. This value is in minutes. The default is 1440, or 24 hours. This interval is in effect until the daemon restarts, and then the values in the 
+.B /etc/rhsm/rhsm.conf
+file are used (unless the argument is passed again).
 
 .SH USAGE EXAMPLES
 
@@ -63,7 +67,7 @@ Resets the interval for checking for and replacing expired subscriptions. This v
 .B rhsmcertd --cert-interval=1440
 
 .SS RUNNING CERTIFICATE AND HEALING SCANS IMMEDIATELY
-Normally, the certificate and healing scans are run periodically, on a schedule defined in the \fBrhsmcertd\fP configuration. The scans can be run immediately -- which is useful if an administrators knows that there are new subscriptions available -- and then the scans resume their schedules.
+Normally, the certificate and healing scans are run periodically, on a schedule defined in the \fBrhsmcertd\fP configuration. The scans can be run immediately -- which is useful if an administrator knows that there are new subscriptions available -- and then the scans resume their schedules.
 .PP
 .B rhsmcertd -n
 
@@ -74,7 +78,7 @@ Normally, the certificate and healing scans are run periodically, on a schedule 
 .PP
 For example:
 .nf
-rhsmcertd 1440 14400
+rhsmcertd 180 480
 .fi
 .PP 
 This usage is still allowed, but it is deprecated and not recommended.
@@ -88,11 +92,11 @@ This usage is still allowed, but it is deprecated and not recommended.
 * /var/log/rhsm/rhsmcertd.log
 
 .SH BUGS
-This process is part of the subscription management system at Red Hat. To file bugs against this process, go to https://bugzilla.redhat.com/ and select Red Hat > Red Hat Enterprise Linux 6 > subscription-manager.
+This daemon is part of Red Hat Subscription Manager. To file bugs against this daemon, go to https://bugzilla.redhat.com, and select Red Hat > Red Hat Enterprise Linux > subscription-manager.
 
 
 .SH AUTHORS
-Deon Lackey, <dlackey@redhat.com>, and Jeff Ortel, <jortel@redhat.com>. rhsmcertd was written by Jeff Ortel.
+Deon Lackey, <dlackey@redhat.com> and Jeff Ortel, <jortel@redhat.com>. rhsmcertd was written by Jeff Ortel.
 
 .SH COPYRIGHT
 Copyright (c) 2010-2012 Red Hat, Inc. This is licensed under the GNU General Public License, version 2 (GPLv2). A copy of this license is available at http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.

@@ -104,14 +104,22 @@ class CertificateDirectory(Directory):
     def __init__(self, path):
         Directory.__init__(self, path)
         self.create()
+        self._listing = None
+
+    def refresh(self):
+        # simply clear the cache. the next list() will reload.
+        self._listing = None
 
     def list(self):
+        if self._listing is not None:
+            return self._listing
         listing = []
         for p, fn in Directory.list(self):
             if not fn.endswith('.pem') or fn.endswith(self.KEY):
                 continue
             path = self.abspath(fn)
             listing.append(create_from_file(path))
+        self._listing = listing
         return listing
 
     def listValid(self):
@@ -205,7 +213,7 @@ class EntitlementDirectory(CertificateDirectory):
 
             # write the key/cert out again in new style format
             key = Key.read(old_key_path)
-            cert_writer = Writer()
+            cert_writer = Writer(self)
             cert_writer.write(key, cert)
         return True
 
@@ -250,8 +258,8 @@ class Path:
 
 class Writer:
 
-    def __init__(self):
-        self.entdir = EntitlementDirectory()
+    def __init__(self, entitlement_dir=None):
+        self.entdir = entitlement_dir or EntitlementDirectory()
 
     def write(self, key, cert):
         serial = cert.serial

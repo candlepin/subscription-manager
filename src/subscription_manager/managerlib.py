@@ -27,7 +27,7 @@ import datetime
 from rhsm.config import initConfig
 from rhsm.certificate import Key, CertificateException, create_from_pem
 
-from subscription_manager import certlib, certdirectory
+from subscription_manager import certlib
 from subscription_manager.certlib import system_log as inner_system_log
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager.facts import Facts
@@ -81,16 +81,12 @@ def map_status(status):
     return smap[status]
 
 
-def getInstalledProductStatus(product_directory=None,
-        entitlement_directory=None, facts=None):
+def getInstalledProductStatus(product_directory, entitlement_directory,
+        facts=None):
     """
      Returns the Installed products and their subscription states
     """
-    # allow us to stub these out for testing
-    if product_directory is None:
-        product_directory = certdirectory.ProductDirectory()
-    if entitlement_directory is None:
-        entitlement_directory = certdirectory.EntitlementDirectory()
+    # allow us to stub this out for testing
     if facts is None:
         facts = Facts().get_facts()
 
@@ -122,14 +118,6 @@ def getInstalledProductStatus(product_directory=None,
     return product_status
 
 
-def getInstalledProductHashMap():
-    products = certdirectory.ProductDirectory().list()
-    phash = {}
-    for product in products:
-        phash[product.products[0].name] = product.products[0].id
-    return phash
-
-
 class CertificateFetchError(Exception):
     def __init__(self, errors):
         self.errors = errors
@@ -153,15 +141,10 @@ class PoolFilter(object):
     """
     Helper to filter a list of pools.
     """
-    def __init__(self, product_dir=None, entitlement_dir=None):
+    def __init__(self, product_dir, entitlement_dir):
 
         self.product_directory = product_dir
-        if not product_dir:
-            self.product_directory = certdirectory.ProductDirectory()
-
         self.entitlement_directory = entitlement_dir
-        if not entitlement_dir:
-            self.entitlement_directory = certdirectory.EntitlementDirectory()
 
     def filter_product_ids(self, pools, product_ids):
         """
@@ -529,7 +512,8 @@ class PoolStash(object):
             log.debug("\tRemoved %d incompatible pools" % \
                     len(self.incompatible_pools))
 
-        pool_filter = PoolFilter()
+        pool_filter = PoolFilter(self.backend.product_dir,
+                self.backend.entitlement_dir)
 
         # Filter out products that are not installed if necessary:
         if uninstalled:
@@ -728,6 +712,7 @@ class ImportFileExtractor(object):
         return file_parts[0] + "-key" + file_parts[1]
 
     def _create_filename_from_cert_serial_number(self):
+        "create from serial"
         ent_cert = create_from_pem(self.get_cert_content())
         return "%s.pem" % (ent_cert.serial)
 

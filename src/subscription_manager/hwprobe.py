@@ -428,11 +428,12 @@ class Hardware:
             try:
                 hardware_method()
             except Exception, e:
+                log.warn("%s" % hardware_method)
                 log.warn("Hardware detection failed: %s" % e)
 
         #we need to know the DMI info and VirtInfo before determining UUID.
         #Thus, we can't figure it out within the main data collection loop.
-        if self.allhw['virt.is_guest']:
+        if self.allhw.get('virt.is_guest'):
             self._getVirtUUID()
 
         import dmidecode

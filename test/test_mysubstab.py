@@ -19,7 +19,9 @@ from mock import Mock
 import rhsm_display
 rhsm_display.set_display()
 
-from stubs import StubUEP, StubEntitlementCertificate, StubCertificateDirectory, StubProduct, StubBackend, StubFacts
+from stubs import StubUEP, StubEntitlementCertificate, \
+        StubCertificateDirectory, StubProduct, StubBackend, StubFacts, \
+        StubProductDirectory
 from subscription_manager.gui.mysubstab import MySubscriptionsTab, WARNING_IMG, EXPIRED_IMG
 
 
@@ -44,7 +46,7 @@ class MySubscriptionsTabTest(unittest.TestCase):
 
         self.cert_dir = StubCertificateDirectory([self.cert1, self.cert2])
         self.my_subs_tab = MySubscriptionsTab(self.backend, self.consumer,
-                self.facts, None, self.cert_dir)
+                self.facts, None, self.cert_dir, StubProductDirectory([]))
 
     def tearDown(self):
         pass

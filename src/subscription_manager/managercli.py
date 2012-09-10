@@ -28,13 +28,13 @@ from M2Crypto import X509
 from M2Crypto import SSL
 
 import gettext
+from subscription_manager.cli import systemExit, CLI, AbstractCLICommand
 from subscription_manager.jsonwrapper import PoolWrapper
 _ = gettext.gettext
 
 import rhsm.config
 import rhsm.connection as connection
 
-from subscription_manager.i18n_optparse import OptionParser, WrappedIndentedHelpFormatter
 from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib, ConsumerIdentity
 from subscription_manager.repolib import RepoLib, RepoFile
@@ -50,7 +50,7 @@ from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, SUBSCRIBED, \
         NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED
 from subscription_manager.utils import remove_scheme, parse_server_info, \
         ServerUrlParseError, parse_baseurl_info, format_baseurl, is_valid_server_info, \
-        MissingCaCertException, get_client_versions, get_server_versions
+        MissingCaCertException, get_client_versions, get_server_versions, restart_virt_who
 
 log = logging.getLogger('rhsm-app.' + __name__)
 cfg = rhsm.config.initConfig()
@@ -157,7 +157,8 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
 
 
 def show_autosubscribe_output():
-    installed_status = managerlib.getInstalledProductStatus()
+    installed_status = managerlib.getInstalledProductStatus(ProductDirectory(),
+            EntitlementDirectory())
 
     log.info("Attempted to auto-subscribe/heal the system.")
     print _("Installed Product Current Status:")
@@ -169,25 +170,14 @@ def show_autosubscribe_output():
     return subscribed
 
 
-class CliCommand(object):
+class CliCommand(AbstractCLICommand):
     """ Base class for all sub-commands. """
 
     def __init__(self, name="cli", shortdesc=None, primary=False, ent_dir=None,
                  prod_dir=None):
-        self.shortdesc = shortdesc
+        AbstractCLICommand.__init__(self, name=name, shortdesc=shortdesc, primary=primary)
 
-        # usage format strips any leading 'usage' so
-        # do not iclude it
-        usage = _("%%prog %s [OPTIONS]") % name
-
-        # include our own HelpFormatter that doesn't try to break
-        # long words, since that fails on multibyte words
-        self.parser = OptionParser(usage=usage, description=shortdesc,
-                                   formatter=WrappedIndentedHelpFormatter())
         self._add_common_options()
-
-        self.name = name
-        self.primary = primary
 
         self.server_url = None
 
@@ -197,6 +187,9 @@ class CliCommand(object):
 
         self.entitlement_dir = ent_dir or EntitlementDirectory()
         self.product_dir = prod_dir or ProductDirectory()
+
+        self.client_versions = self._default_client_version()
+        self.server_versions = self._default_server_version()
 
     def _request_validity_check(self):
         try:
@@ -246,10 +239,21 @@ class CliCommand(object):
     def require_connection(self):
         return True
 
+    def _default_client_version(self):
+        return {"subscription-manager": _("Unknown"),
+                "python-rhsm": _("Unknown")}
+
+    def _default_server_version(self):
+        return {"candlepin": _("Unknown"),
+                "server-type": _("Unknown")}
+
     def log_client_version(self):
-        log.debug("Client Versions: %s " % get_client_versions())
+        self.client_versions = get_client_versions()
+        log.info("Client Versions: %s " % get_client_versions())
 
     def log_server_version(self):
+        # can't check the server version without a connection
+        # and valid registration
         if not self.require_connection():
             return
 
@@ -257,23 +261,10 @@ class CliCommand(object):
             log.debug("Server Versions: Not registered, unable to check server version")
             return
 
-        # can't check the server version without a connection
-        # and valid registration
-        try:
-            log.debug("Server Versions: %s " % get_server_versions(self.cp))
-        except connection.GoneException, e:
-            log.debug("Server Versions: Error: consumer has been deleted, unable to check server version")
-
-        # we really don't want to break on failing to get the version
-        # info from the server, since it ends up being the first
-        # call made in a lot of paths
-        except Exception, e:
-            log.debug("Server Versions: Unable to check server version")
-            log.exception(e)
-
-    def log_version(self):
-        self.log_client_version()
-        self.log_server_version()
+        # get_server_versions needs to handle any exceptions
+        # and return the server dict
+        self.server_versions = get_server_versions(self.cp)
+        log.info("Server Versions: %s " % get_server_versions(self.cp))
 
     # note, depending on that args, we could get a full
     # fledged uep, a basic auth uep, or an unauthenticate uep
@@ -508,6 +499,9 @@ class CleanCommand(CliCommand):
 
         self._request_validity_check()
 
+        # We have new credentials, restart virt-who
+        restart_virt_who()
+
     def require_connection(self):
         return False
 
@@ -562,10 +556,10 @@ class IdentityCommand(UserPassCommand):
         # check for Classic before doing anything else
         if ClassicCheck().is_registered_with_classic():
             if ConsumerIdentity.existsAndValid():
-                print _("remote entitlement server type: %s") % get_branding().REGISTERED_TO_BOTH_SUMMARY
+                print _("server type: %s") % get_branding().REGISTERED_TO_BOTH_SUMMARY
             else:
                 # no need to continue if user is only registered to Classic
-                print _("remote entitlement server type: %s") % get_branding().REGISTERED_TO_OTHER_SUMMARY
+                print _("server type: %s") % get_branding().REGISTERED_TO_OTHER_SUMMARY
                 return
 
         try:
@@ -576,7 +570,7 @@ class IdentityCommand(UserPassCommand):
             if not self.options.regenerate:
                 owner = self.cp.getOwner(consumerid)
                 ownername = owner['displayName']
-                ownerid = owner['id']
+                ownerid = owner['key']
                 print _('Current identity is: %s') % consumerid
                 print _('name: %s') % consumer_name
                 print _('org name: %s') % ownername
@@ -590,7 +584,7 @@ class IdentityCommand(UserPassCommand):
                 managerlib.persist_consumer_cert(consumer)
                 print _("Identity certificate has been regenerated.")
 
-                log.info("Successfully generated a new identity from Entitlement Platform.")
+                log.info("Successfully generated a new identity from server.")
         except connection.RestlibException, re:
             log.exception(re)
             log.error(u"Error: Unable to generate a new identity for the system: %s" % re)
@@ -614,7 +608,7 @@ class OwnersCommand(UserPassCommand):
             self.cp = self._get_UEP(username=self.username,
                                     password=self.password)
             owners = self.cp.getOwnerList(self.username)
-            log.info("Successfully retrieved org list from Entitlement Platform.")
+            log.info("Successfully retrieved org list from server.")
             if len(owners):
                 print("+-------------------------------------------+")
                 print("          %s %s" % (self.username, _("Organizations")))
@@ -629,10 +623,10 @@ class OwnersCommand(UserPassCommand):
 
         except connection.RestlibException, re:
             log.exception(re)
-            log.error(u"Error: Unable to retrieve org list from Entitlement Platform: %s" % re)
+            log.error(u"Error: Unable to retrieve org list from server: %s" % re)
             systemExit(-1, re.msg)
         except Exception, e:
-            handle_exception(_("Error: Unable to retrieve org list from Entitlement Platform"), e)
+            handle_exception(_("Error: Unable to retrieve org list from server"), e)
 
 
 class EnvironmentsCommand(UserPassCommand):
@@ -648,7 +642,7 @@ class EnvironmentsCommand(UserPassCommand):
 
     def _validate_options(self):
         if not self.options.org:
-            print(_("Error: This command requires that you specify an organizaiton with --org"))
+            print(_("Error: This command requires that you specify an organization with --org"))
             sys.exit(-1)
 
     def _get_enviornments(self, org):
@@ -681,13 +675,13 @@ class EnvironmentsCommand(UserPassCommand):
             else:
                 print _("Error: Server does not support environments.")
 
-            log.info("Successfully retrieved environment list from Entitlement Platform.")
+            log.info("Successfully retrieved environment list from server.")
         except connection.RestlibException, re:
             log.exception(re)
-            log.error(u"Error: Unable to retrieve environment list from Entitlement Platform: %s" % re)
+            log.error(u"Error: Unable to retrieve environment list from server: %s" % re)
             systemExit(-1, re.msg)
         except Exception, e:
-            handle_exception(_("Error: Unable to retrieve environment list from Entitlement Platform"), e)
+            handle_exception(_("Error: Unable to retrieve environment list from server"), e)
 
 
 class ServiceLevelCommand(UserPassCommand):
@@ -713,12 +707,24 @@ class ServiceLevelCommand(UserPassCommand):
                                action='store_true',
                                help=_("unset the service level for this system"))
 
+    def _set_service_level(self, service_level):
+        consumer_uuid = self.consumerIdentity.read().getConsumerId()
+        consumer = self.cp.getConsumer(consumer_uuid)
+        if 'serviceLevel' not in consumer:
+            systemExit(-1, _("Error: The service-level command is not supported "
+                             "by the server."))
+        self.cp.updateConsumer(consumer_uuid, service_level=service_level)
+
     def _validate_options(self):
+
+        if self.options.service_level:
+            self.options.service_level = self.options.service_level.strip()
 
         # Assume --show if run with no args:
         if not self.options.list and \
            not self.options.show and \
            not self.options.service_level and \
+           not self.options.service_level == "" and \
            not self.options.unset:
             self.options.show = True
 
@@ -776,16 +782,14 @@ class ServiceLevelCommand(UserPassCommand):
             handle_exception(_("Error: Unable to retrieve service levels."), e)
 
     def set_service_level(self, service_level):
-        consumer_uuid = self.consumerIdentity.read().getConsumerId()
-        consumer = self.cp.getConsumer(consumer_uuid)
-        if 'serviceLevel' not in consumer:
-            systemExit(-1, _("Error: The service-level command is not supported "
-                             "by the server."))
-        self.cp.updateConsumer(consumer_uuid, service_level=service_level)
-        print(_("Service level set to: %s") % service_level)
+        if service_level == "":
+            self.unset_service_level()
+        else:
+            self._set_service_level(service_level)
+            print(_("Service level set to: %s") % service_level)
 
     def unset_service_level(self):
-        self.set_service_level("")
+        self._set_service_level("")
         print _("Service level preference has been unset")
 
     def show_service_level(self):
@@ -857,7 +861,7 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_option("--activationkey", action='append', dest="activation_keys",
                                help=_("one or more activation keys to use for registration"))
         self.parser.add_option("--servicelevel", dest="service_level",
-                               help=_("service level to apply to this system"))
+                               help=_("system preference used when subscribing automatically"))
 
         self.facts = Facts(ent_dir=self.entitlement_dir,
                            prod_dir=self.product_dir)
@@ -888,6 +892,9 @@ class RegisterCommand(UserPassCommand):
         """
         Executes the command.
         """
+
+        self.log_client_version()
+
         # Always warn the user if registered to old RHN/Spacewalk
         if ClassicCheck().is_registered_with_classic():
             print(get_branding().REGISTERED_TO_OTHER_WARNING)
@@ -947,6 +954,9 @@ class RegisterCommand(UserPassCommand):
 
         consumer_info = self._persist_identity_cert(consumer)
 
+        # We have new credentials, restart virt-who
+        restart_virt_who()
+
         print (_("The system has been registered with id: %s ")) % (consumer_info["uuid"])
 
         cert_file = ConsumerIdentity.certpath()
@@ -995,10 +1005,6 @@ class RegisterCommand(UserPassCommand):
 
         self._request_validity_check()
         return return_code
-
-    def log_version(self):
-        # we will log the server version after registration
-        self.log_client_version()
 
     def _persist_identity_cert(self, consumer):
         """
@@ -1076,6 +1082,9 @@ class UnRegisterCommand(CliCommand):
             pass
 
         self._request_validity_check()
+
+        # We have new credentials, restart virt-who
+        restart_virt_who()
 
         print(_("System has been un-registered."))
 
@@ -1570,7 +1579,7 @@ class ReposCommand(CliCommand):
         if self.options.list:
             if len(repos) > 0:
                 print("+----------------------------------------------------------+")
-                print _("    Entitled Repositories in %s") % rl.get_repo_file()
+                print _("    Available Repositories in %s") % rl.get_repo_file()
                 print("+----------------------------------------------------------+")
                 for repo in repos:
                     print REPOS_LIST % (repo.id,
@@ -1578,7 +1587,7 @@ class ReposCommand(CliCommand):
                         repo["baseurl"],
                         repo["enabled"])
             else:
-                print _("The system is not entitled to use any repositories.")
+                print _("This system has no repositories available through subscriptions.")
 
     def updateFile(self, repos):
         repo_file = RepoFile()
@@ -1751,7 +1760,8 @@ class ListCommand(CliCommand):
         self._validate_options()
 
         if self.options.installed:
-            iproducts = managerlib.getInstalledProductStatus(facts=self.facts.get_facts())
+            iproducts = managerlib.getInstalledProductStatus(self.product_dir,
+                    self.entitlement_dir, self.facts.get_facts())
             if not len(iproducts):
                 print(_("No installed products to list"))
                 sys.exit(0)
@@ -1927,95 +1937,23 @@ class VersionCommand(CliCommand):
         pass
 
     def _do_command(self):
-        client_versions = get_client_versions()
-        server_versions = get_server_versions(self.cp)
-
         # FIXME: slightly odd in that we log that we can't get the version,
         # but then show "unknown" here.
-        print (_("remote entitlement server: %s") % server_versions["candlepin"])
-        print (_("remote entitlement server type: %s") % server_versions["server-type"])
-        print (_("subscription-manager: %s") % client_versions["subscription manager"])
-        print (_("python-rhsm: %s") % client_versions["python-rhsm"])
+        print (_("registered to: %s") % self.server_versions["candlepin"])
+        print (_("server type: %s") % self.server_versions["server-type"])
+        print (_("subscription-manager: %s") % self.client_versions["subscription-manager"])
+        print (_("python-rhsm: %s") % self.client_versions["python-rhsm"])
 
 
-# taken wholseale from rho...
-class CLI:
+class ManagerCLI(CLI):
 
-    def __init__(self):
-
-        self.cli_commands = {}
-        for clazz in [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand, SubscribeCommand,\
+    def __init__(self, command_classes=[]):
+        commands = [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand, SubscribeCommand,\
                        UnSubscribeCommand, FactsCommand, IdentityCommand, OwnersCommand, \
                        RefreshCommand, CleanCommand, RedeemCommand, ReposCommand, ReleaseCommand, \
                        EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand, \
-                       VersionCommand]:
-            cmd = clazz()
-            # ignore the base class
-            if cmd.name != "cli":
-                self.cli_commands[cmd.name] = cmd
-
-    def _add_command(self, cmd):
-        self.cli_commands[cmd.name] = cmd
-
-    def _usage(self):
-        print "\n"
-        print _("Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]") % os.path.basename(sys.argv[0])
-        print "\n"
-        print _("Primary Modules:")
-        print "\r"
-
-        items = self.cli_commands.items()
-        items.sort()
-        for (name, cmd) in items:
-            if (cmd.primary):
-                print("\t%-14s %s" % (name, cmd.shortdesc))
-        print("")
-        print _("Other Modules (Please consult documentation):")
-        print "\r"
-        for (name, cmd) in items:
-            if (not cmd.primary):
-                print("\t%-14s %s" % (name, cmd.shortdesc))
-        print("")
-
-    def _find_best_match(self, args):
-        """
-        Returns the subcommand class that best matches the subcommand specified
-        in the argument list. For example, if you have two commands that start
-        with auth, 'auth show' and 'auth'. Passing in auth show will match
-        'auth show' not auth. If there is no 'auth show', it tries to find
-        'auth'.
-
-        This function ignores the arguments which begin with --
-        """
-        possiblecmd = []
-        for arg in args[1:]:
-            if not arg.startswith("-"):
-                possiblecmd.append(arg)
-
-        if not possiblecmd:
-            return None
-
-        cmd = None
-        i = len(possiblecmd)
-        while cmd == None:
-            key = " ".join(possiblecmd[:i])
-            if key is None or key == "":
-                break
-
-            cmd = self.cli_commands.get(key)
-            i -= 1
-
-        return cmd
-
-    def main(self):
-        managerlib.check_identity_cert_perms()
-
-        cmd = self._find_best_match(sys.argv)
-        if len(sys.argv) < 2 or not cmd:
-            self._usage()
-            sys.exit(0)
-
-        return cmd.main()
+                       VersionCommand]
+        CLI.__init__(self, command_classes=commands)
 
 
 # from http://farmdev.com/talks/unicode/
@@ -2024,33 +1962,6 @@ def to_unicode_or_bust(obj, encoding='utf-8'):
         if not isinstance(obj, unicode):
             obj = unicode(obj, encoding)
     return obj
-
-
-def systemExit(code, msgs=None):
-    "Exit with a code and optional message(s). Saved a few lines of code."
-
-    if msgs:
-        if type(msgs) not in [type([]), type(())]:
-            msgs = (msgs, )
-        for msg in msgs:
-            # see bz #590094 and #744536
-            # most of our errors are just str types, but error's returned
-            # from rhsm.connection are unicode type. This method didn't
-            # really expect that, so make sure msg is unicode, then
-            # try to encode it as utf-8.
-
-            # if we get an exception passed in, and it doesn't
-            # have a str repr, just ignore it. This is to
-            # preserve existing behaviour. see bz#747024
-            if isinstance(msg, Exception):
-                msg = "%s" % msg
-
-            if isinstance(msg, unicode):
-                sys.stderr.write("%s\n" % msg.encode("utf8"))
-            else:
-                sys.stderr.write("%s\n" % msg)
-
-    sys.exit(code)
 
 
 def check_registration():
@@ -2064,4 +1975,4 @@ def check_registration():
     return consumer_info
 
 if __name__ == "__main__":
-    CLI().main()
+    ManagerCLI().main()

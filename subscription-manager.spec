@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.13
+Version: 1.0.17
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -27,6 +27,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:  python-ethtool
 Requires:  python-simplejson
 Requires:  python-iniparse
+Requires:  pygobject2
 Requires:  PyXML
 Requires:  virt-what
 Requires:  python-rhsm >= 1.0.5
@@ -73,7 +74,6 @@ Requires: pygtk2 pygtk2-libglade gnome-python2 gnome-python2-canvas
 Requires: usermode
 Requires: usermode-gtk
 Requires: dbus-x11
-Requires: pygobject2
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
 
@@ -181,6 +181,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/__init__.py*
 %{_datadir}/rhsm/subscription_manager/i18n.py*
 %{_datadir}/rhsm/subscription_manager/i18n_optparse.py*
+%{_datadir}/rhsm/subscription_manager/cli.py*
 %{_datadir}/rhsm/subscription_manager/managercli.py*
 %{_datadir}/rhsm/subscription_manager/managerlib.py*
 %{_datadir}/rhsm/subscription_manager/async.py*
@@ -251,8 +252,14 @@ rm -rf %{buildroot}
 %dir %{_datadir}/rhsm/subscription_manager/gui/data
 %dir %{_datadir}/rhsm/subscription_manager/gui/data/icons
 %{_datadir}/rhsm/subscription_manager/gui/*
-%{_datadir}/icons/hicolor/scalable/apps/subscription-manager.svg
+%{_datadir}/rhsm/subscription_manager/gui/data/icons/*.svg
 %{_datadir}/applications/subscription-manager.desktop
+%{_datadir}/icons/hicolor/16x16/apps/*.png
+%{_datadir}/icons/hicolor/22x22/apps/*.png
+%{_datadir}/icons/hicolor/24x24/apps/*.png
+%{_datadir}/icons/hicolor/32x32/apps/*.png
+%{_datadir}/icons/hicolor/48x48/apps/*.png
+%{_datadir}/icons/hicolor/scalable/apps/*.svg
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %attr(755,root,root) %{_bindir}/subscription-manager-gui
 
@@ -344,6 +351,96 @@ fi
 %endif
 
 %changelog
+* Fri Aug 31 2012 Alex Wood <awood@redhat.com> 1.0.17-1
+- Fix gettext_lint issue with concat string in rhn-migrate (alikins@redhat.com)
+- 851124: Fix GUI unsubscribe. (dgoodwin@redhat.com)
+- fix po version for ta_IN.po (alikins@redhat.com)
+- latest strings (alikins@redhat.com)
+
+* Thu Aug 30 2012 Alex Wood <awood@redhat.com> 1.0.16-1
+- 853187: Verbiage change in install-num-migrate-to-rhsm. (awood@redhat.com)
+- 852894: Abort migration if multiple JBEAP channels are detected.
+  (awood@redhat.com)
+- 850715: Fix malloc for Config (jbowes@redhat.com)
+- 852001: output the orgs key as part of the identity command.
+  (bkearney@redhat.com)
+- fix "make gettext", wrong var name for the find root (alikins@redhat.com)
+- 850715: Fixes based on coverity scans (bkearney@redhat.com)
+- 846316: Use the full name of Subscrition Manager during first boot
+  (bkearney@redhat.com)
+- 851346: Remove special case channel certs before subscribing.
+  (awood@redhat.com)
+- 847354: When printing, translate None type into an empty string
+  (bkearney@redhat.com)
+
+* Wed Aug 29 2012 Alex Wood <awood@redhat.com> 1.0.15-1
+- Replace 16x16 icon with a new version that has no background
+  (bkearney@redhat.com)
+- 852107: Update verbiage in migration script. (awood@redhat.com)
+- 847060: Push dependency higher up in the chain (bkearney@redhat.com)
+- 848534: Change the about dialog icon to be a PNG to ensure accurate
+  representation. (bkearney@redhat.com)
+- 841396: Select first item in My Subscriptions table by default.
+  (awood@redhat.com)
+- 849483: Prompt user for org name if necessary. (awood@redhat.com)
+- 849644: Calls made with --no-auto were not actually registering the system.
+  (awood@redhat.com)
+- 849494: Fix variable name collision. (awood@redhat.com)
+- 846834: Use Subscription instead of entitlement certificate
+  (bkearney@redhat.com)
+- 847859: Expiration highlighting was being set incorrectly. (awood@redhat.com)
+- 847750: Handle bad proxy values in migration script. (awood@redhat.com)
+- 841961: Ignore case when specifying the service level in migration
+  (bkearney@redhat.com)
+- 842020: Remove an extraneous option group for rhsmcertd (bkearney@redhat.com)
+- Refactored some of the shared CLI code in 'rct' (mstead@redhat.com)
+
+* Fri Aug 17 2012 Alex Wood <awood@redhat.com> 1.0.14-1
+- 849171: Remove an extraneous print statement (bkearney@redhat.com)
+- 849105: Fixed a typo in the error message (bkearney@redhat.com)
+- 772161: Notifiy virt who, if running, when the identity changes
+  (bkearney@redhat.com)
+- Reduce reads/parses of certificates (jbowes@redhat.com)
+- remove unused function 'getInstalledProductHashMap' (jbowes@redhat.com)
+- 843191: handle network errors better for 'version' command
+  (alikins@redhat.com)
+- 826739, 827553: Combine Service Level and Service Type and move up in display
+  order. (awood@redhat.com)
+- 847316: Remove the menu path for Subscription Manager from the manual
+  registration screen. (bkearney@redhat.com)
+- 848409,848195,848190,848184: Do not print the exception when attempting to do
+  the server version check (bkearney@redhat.com)
+- 847795: String and terminology clean up (bkearney@redhat.com)
+- 847380: Update the verbiage to prefer the term Subscription Management
+  (bkearney@redhat.com)
+- 846834: Updated verbiage to focus on subsriptions and not on entitlements
+  (bkearney@redhat.com)
+- 846105: Verbiage changes to empasize subscriptions over entitlements
+  (bkearney@redhat.com)
+- 836933: Handle empty spaces for servce levels (bkearney@redhat.com)
+- 836932,835050: Fix the service level lifecycle (bkearney@redhat.com)
+- 836932: Reduce extra loggging when setting the service level
+  (bkearney@redhat.com)
+- About dialog was not working due to key errors from python
+  (bkearney@redhat.com)
+- 833319: Updated the help text for registration and service levels
+  (bkearney@redhat.com)
+- 847060: Add missing requires on pygobject2 (bkearney@redhat.com)
+- 828954: Fix ta_IN.po file error with options (bkearney@redhat.com)
+- 842898: re-implement string fix for it.po (bkearney@redhat.com)
+- 828958: Fix the accidental translation of an option (bkearney@redhat.com)
+- fix up make stylish (jbowes@redhat.com)
+- No longer require root to run rct (mstead@redhat.com)
+- Remove manually_subscribe.py, it's class moved to rhsm_login.py
+  (alikins@redhat.com)
+- Bumping the required python-rhsm version (mstead@redhat.com)
+- Renamed rt command to rct. (mstead@redhat.com)
+- Fix test case failure on 5.9 (Exception.message) (alikins@redhat.com)
+- Refactor ManuallySubscribeScreen to use new Screen api (alikins@redhat.com)
+- Check passed args as None to allow empty args (mstead@redhat.com)
+- Exception.message is deprecated, just let _str_ do it (alikins@redhat.com)
+- use MockStdout intead of nosetests sys.stdout.getvalue() (alikins@redhat.com)
+
 * Thu Aug 09 2012 Alex Wood <awood@redhat.com> 1.0.13-1
 - Fix "Project-Id-Version" for ta_IN.po (alikins@redhat.com)
 - latest strings from zanata (alikins@redhat.com)

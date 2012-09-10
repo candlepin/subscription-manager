@@ -165,11 +165,12 @@ ENTITLEMENT_CERT_V1_0_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path: None
+	Path: 
 	Version: 1.0
 	Serial: 666017019617507769
 	Start Date: 2012-07-05 00:00:00+00:00
 	End Date: 2013-07-05 00:00:00+00:00
+	Content Sets: 4
 
 Subject:
 	CN: ff80808138574bd20138574d85a50b2f
@@ -187,14 +188,14 @@ Order:
 	SKU: awesomeos-x86_64
 	Contract: 66
 	Account: 12331131231
-	Service Level: None
-	Service Type: None
+	Service Level: 
+	Service Type: 
 	Quantity: 5
 	Quantity Used: 2
 	Socket Limit: 1
-	Virt Limit: None
+	Virt Limit: 
 	Virt Only: False
-	Subscription: None
+	Subscription: 
 	Stacking ID: 1
 	Warning Period: 30
 	Provides Management: 0
@@ -246,11 +247,12 @@ ENTITLEMENT_CERT_V2_0_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path: None
+	Path: 
 	Version: 2.0
 	Serial: 6186613310280975296
 	Start Date: 2012-07-19 00:00:00+00:00
 	End Date: 2013-07-19 00:00:00+00:00
+	Content Sets: 4
 
 Subject:
 	CN: ff80808138b430030138b47a325b011f
@@ -268,14 +270,14 @@ Order:
 	SKU: awesomeos-x86_64
 	Contract: 66
 	Account: 12331131231
-	Service Level: None
-	Service Type: None
+	Service Level: 
+	Service Type: 
 	Quantity: 5
 	Quantity Used: 2
 	Socket Limit: 1
-	Virt Limit: None
+	Virt Limit: 
 	Virt Only: False
-	Subscription: None
+	Subscription: 
 	Stacking ID: 1
 	Warning Period: 30
 	Provides Management: False
@@ -327,7 +329,7 @@ PRODUCT_CERT_V1_0_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path: None
+	Path: 
 	Version: 1.0
 	Serial: 168296333
 	Start Date: 2011-08-23 17:41:39+00:00
@@ -351,8 +353,8 @@ IDENTITY_CERT_OUTPUT = """
 +-------------------------------------------+
 
 Certificate:
-	Path: None
-	Version: None
+	Path: 
+	Version: 
 	Serial: 5412106042110780569
 	Start Date: 2012-07-10 12:21:27+00:00
 	End Date: 2028-07-10 12:21:27+00:00

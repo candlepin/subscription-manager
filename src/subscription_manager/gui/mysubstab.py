@@ -20,7 +20,6 @@ from datetime import datetime, timedelta
 
 from rhsm.certificate import GMT
 
-from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 from subscription_manager.certlib import Disconnected
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import widgets
@@ -45,8 +44,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
     # Are facts required here? [mstead]
     def __init__(self, backend, consumer, facts, parent_win,
-                 ent_dir=None,
-                 prod_dir=None):
+                 ent_dir, prod_dir):
         """
         Create a new 'My Subscriptions' tab.
         """
@@ -55,10 +53,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.consumer = consumer
         self.facts = facts
         self.parent_win = parent_win
-        self.entitlement_dir = ent_dir or EntitlementDirectory()
-        self.product_dir = prod_dir or ProductDirectory()
+        self.entitlement_dir = ent_dir
+        self.product_dir = prod_dir
 
-        self.sub_details = widgets.ContractSubDetailsWidget()
+        self.sub_details = widgets.ContractSubDetailsWidget(prod_dir)
 
         # Put the details widget in the middle
         details = self.sub_details.get_widget()
@@ -126,7 +124,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         serial = long(selection['serial'])
 
-        if self.backend.is_registered():
+        if self.consumer.is_valid():
             try:
                 self.backend.uep.unbindBySerial(self.consumer.uuid, serial)
             except Exception, e:
@@ -166,6 +164,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         dbus_iface.check_status(ignore_reply=True)
         self.facts.refresh_validity_facts()
         self.unsubscribe_button.set_property('sensitive', False)
+        # 841396: Select first item in My Subscriptions table by default
+        selection = self.top_view.get_selection()
+        selection.select_path(0)
 
     def _add_group(self, group_idx, group):
         iter = None

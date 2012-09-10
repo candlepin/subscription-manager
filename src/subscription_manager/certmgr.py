@@ -22,6 +22,8 @@ from subscription_manager.factlib import FactLib
 from subscription_manager.facts import Facts
 from subscription_manager.cache import PackageProfileLib, InstalledProductsLib
 
+from rhsm.connection import GoneException
+
 import logging
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -40,7 +42,7 @@ class CertManager:
     @type repolib: L{RepoLib}
     """
 
-    def __init__(self, lock=ActionLock(), uep=None):
+    def __init__(self, lock=ActionLock(), uep=None, product_dir=None):
         self.lock = lock
         self.uep = uep
         self.certlib = CertLib(self.lock, uep=self.uep)
@@ -50,7 +52,8 @@ class CertManager:
         self.installedprodlib = InstalledProductsLib(self.lock, uep=self.uep)
         #healinglib requires a fact set in order to get socket count
         facts = Facts()
-        self.healinglib = HealingLib(self.lock, uep=self.uep, facts_dict=facts.to_dict())
+        self.healinglib = HealingLib(self.lock, self.uep, facts.to_dict(),
+                                     product_dir)
         self.idcertlib = IdentityCertLib(self.lock, uep=self.uep)
 
     def update(self, autoheal=False):
@@ -80,23 +83,34 @@ class CertManager:
             ret = []
             try:
                 ret = self.certlib.update()
+            # see bz#852706, reraise GoneException so that
+            # consumer cert deletion works
+            except GoneException, e:
+                raise
             except Exception, e:
+                log.warning("Exception caught while running certlib update")
                 log.exception(e)
                 print e
+
             # run the certlib update first as it will talk to candlepin,
             # and we can find out if we got deleted or not.
             for lib in libset:
                 try:
                     updates += lib.update()
+                except GoneException, e:
+                    raise
                 except Exception, e:
+                    log.warning("Exception caught while running %s update" % lib)
                     log.exception(e)
                     print e
+
             # NOTE: with no consumer cert, most of these actually
             # fail
             if ret:
                 updates += ret[0]
                 for e in ret[1]:
                     print ' '.join(str(e).split('-')[1:]).strip()
+
         finally:
             lock.release()
         return updates

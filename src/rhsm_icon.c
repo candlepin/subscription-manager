@@ -206,20 +206,20 @@ display_icon (Context * context, StatusType status_type)
 		notification_body =
 			_("In order for Subscription Manager to provide your "
 			  "system with updates, your system must be registered "
-			  "with RHN. Please enter your Red Hat login to ensure "
-			  "your system is up-to-date.");
+			  "with the Customer Portal. Please enter your Red Hat "
+			  "login to ensure your system is up-to-date.");
 	} else if (status_type == RHSM_EXPIRED) {
-		tooltip = _("Invalid or Missing Entitlement Certificates");
+		tooltip = _("Invalid or Missing Entitlement Subscriptions");
 		notification_title = tooltip;
 		notification_body =
 			_("This system is missing one or more "
-			  "valid entitlement certificates.");
+			  "subscriptions.");
 	} else if (status_type == RHSM_PARTIALLY_VALID) {
 		tooltip = _("Partially Entitled Products");
 		notification_title = tooltip;
 		notification_body =
-			_("This system is missing one or more valid "
-			  "entitlement certificates to fully cover its "
+			_("This system is missing one or more "
+			  "subscriptions to fully cover its "
 			  "products.");
 	} else {
 		tooltip = _("This System's Subscriptions Are About to Expire");
@@ -332,7 +332,7 @@ check_status (Context * context)
 	return true;
 }
 
-/* 
+/*
  * initial status check, 4 mins after launch (so the panel can load).
  * return false so it won't run again.
  */

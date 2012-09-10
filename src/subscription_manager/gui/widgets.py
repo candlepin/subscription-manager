@@ -30,7 +30,6 @@ from subscription_manager.gui import storage
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import utils
 from subscription_manager.gui import file_monitor
-from subscription_manager.certdirectory import ProductDirectory
 
 GLADE_DIR = os.path.join(os.path.dirname(__file__), "data")
 UPDATE_FILE = '/var/run/rhsm/update'
@@ -221,7 +220,7 @@ class SelectionWrapper(object):
 
 
 class ProductsTable(object):
-    def __init__(self, table_widget, yes_id=gtk.STOCK_APPLY,
+    def __init__(self, table_widget, product_dir, yes_id=gtk.STOCK_APPLY,
                  no_id=gtk.STOCK_REMOVE):
         """
         Create a new products table, populating the gtk.TreeView.
@@ -236,7 +235,7 @@ class ProductsTable(object):
 
         self.yes_icon = self._render_icon(yes_id)
         self.no_icon = self._render_icon(no_id)
-        self.product_dir = ProductDirectory()
+        self.product_dir = product_dir
 
         name_column = gtk.TreeViewColumn(_("Product"),
                                          gtk.CellRendererText(),
@@ -276,15 +275,15 @@ class ProductsTable(object):
 
 class SubDetailsWidget(GladeWidget):
     widget_names = ["sub_details_vbox", "subscription_text", "products_view",
-                    "support_level_text", "support_type_text", "sku_text"]
+                    "support_level_and_type_text", "sku_text"]
     glade_file = "subdetails.glade"
 
-    def __init__(self):
+    def __init__(self, product_dir):
         super(SubDetailsWidget, self).__init__(self.glade_file)
 
         self.sub_details_vbox.unparent()
 
-        self.bundled_products = ProductsTable(self.products_view)
+        self.bundled_products = ProductsTable(self.products_view, product_dir)
 
         self.expired_color = gtk.gdk.color_parse(EXPIRED_COLOR)
         self.warning_color = gtk.gdk.color_parse(WARNING_COLOR)
@@ -312,8 +311,10 @@ class SubDetailsWidget(GladeWidget):
 
         self._set(self.sku_text, sku)
 
-        self._set(self.support_level_text, support_level)
-        self._set(self.support_type_text, support_type)
+        display_level = support_level
+        if support_level == "":
+            display_level = _("Not Set")
+        self._set(self.support_level_and_type_text, ", ".join([display_level, support_type]))
 
         self._show_other_details(name, contract, start, end, account,
                                  management, support_level, support_type,
@@ -342,8 +343,7 @@ class SubDetailsWidget(GladeWidget):
 
         self._set(self.sku_text, "")
 
-        self._set(self.support_level_text, "")
-        self._set(self.support_type_text, "")
+        self._set(self.support_level_and_type_text, "")
 
         self._clear_other_details()
 
@@ -366,12 +366,10 @@ class SubDetailsWidget(GladeWidget):
 
         self.subscription_text.get_accessible().set_name(
                 "All Available Subscription Text")
-        self.support_type_text.get_accessible().set_name(
+        self.sku_text.get_accessible().set_name(
                 "All Available SKU Text")
-        self.support_type_text.get_accessible().set_name(
-                "All Available Support Type Text")
-        self.support_level_text.get_accessible().set_name(
-                "All Available Support Level Text")
+        self.support_level_and_type_text.get_accessible().set_name(
+                "All Available Support Level And Type Text")
         self.bundled_products.set_accessibility_name(
                 "All Available Bundled Product Table")
 
@@ -387,18 +385,16 @@ class ContractSubDetailsWidget(SubDetailsWidget):
 
     glade_file = "subdetailscontract.glade"
 
-    def __init__(self):
-        super(ContractSubDetailsWidget, self).__init__()
-
-    def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
-                           management=None, support_level="", support_type="",
-                           virt_only=None, products=[], highlight=None, sku=None):
-
+    def __init__(self, product_dir):
+        super(ContractSubDetailsWidget, self).__init__(product_dir)
         # Save the original background color for the
         # start_end_date_text widget so we can restore it in the
         # clear() function.
         self.original_bg = self.start_end_date_text.rc_get_style().base[gtk.STATE_NORMAL]
 
+    def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
+                           management=None, support_level="", support_type="",
+                           virt_only=None, products=[], highlight=None, sku=None):
         self.start_end_date_text.modify_base(gtk.STATE_NORMAL,
                 self._get_date_bg(end))
 

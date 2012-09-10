@@ -73,7 +73,7 @@ options_table = [
            help=_("Service level to subscribe this system to. For no service "
                   "level use --service-level=\"\"")),
     Option("--serverurl", dest='serverurl',
-           help=_("Specify the SAM/System Engine server to migrate TO.")),
+           help=_("Specify the Subscription Management Server to migrate TO.")),
 ]
 
 parser = OptionParser(usage=_("%prog [OPTIONS]"),
@@ -190,10 +190,9 @@ def isHosted():
 
 
 def checkOkToProceed(secreds, serverurl):
-
     # check if this machine is already registered to Certicate-based RHN
     if ConsumerIdentity.existsAndValid():
-        print _("\nThis machine appears to be already registered to Certificate-based RHN.  Exiting.")
+        print _("\nThis machine appears to be already registered to Red Hat Subscription Management.  Exiting.")
         consumer = ConsumerIdentity.read()
         systemExit(1, _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the profile details.") % consumer.getConsumerId())
 
@@ -229,6 +228,24 @@ def checkOkToProceed(secreds, serverurl):
         log.error(traceback.format_exc())
         systemExit(1, CONNECTION_FAILURE % e)
     return cp
+
+
+def getOrg(cp, username):
+    try:
+        owner_list = cp.getOwnerList(username)
+    except Exception, e:
+        log.error(e)
+        log.error(traceback.format_exc())
+        systemExit(1, CONNECTION_FAILURE % e)
+
+    org = None
+    if len(owner_list) == 0:
+        systemExit(1, "%s cannot register to any organizations." % username)
+
+    if len(owner_list) > 1:
+        org = raw_input(_("Org: ")).strip()
+
+    return org
 
 
 def checkIsOrgAdmin(sc, sk, username):
@@ -267,8 +284,9 @@ def selectServiceLevel(cp, consumer, servicelevel):
 
     # The empty string is a valid level so append it to the list.
     levels.append("")
-    if servicelevel is None or servicelevel not in levels:
-        if servicelevel is not None and servicelevel not in levels:
+    if servicelevel is None or \
+        servicelevel.upper() not in (level.upper() for level in levels):
+        if servicelevel is not None:
             print _("\nService level \"%s\" is not available." % servicelevel)
         menu = Menu(slas, _("Please select a service level agreement for this system."))
         servicelevel = menu.choose()
@@ -288,6 +306,16 @@ def getSubscribedChannelsList():
     return subscribedChannels
 
 
+def checkForConflictingChannels(subscribedChannels):
+    jbossChannel = False
+    for channel in subscribedChannels:
+        if channel.startswith("jbappplatform"):
+            if jbossChannel:
+                systemExit(1, _("You are subscribed to more than one jbappplatform channel."
+                                "  This script does not support that configuration.  Exiting."))
+            jbossChannel = True
+
+
 def getSystemId():
     systemIdPath = rhncfg["systemIdPath"]
     p = libxml2.parseDoc(file(systemIdPath).read())
@@ -302,11 +330,11 @@ def connectToRhn(credentials):
         if rhncfg['enableProxy']:
             pt = ProxiedTransport()
             if rhncfg['enableProxyAuth']:
-                credentials = base64.encodestring('%s:%s' % (proxyUser, proxyPass)).strip()
+                proxy_credentials = base64.encodestring('%s:%s' % (proxyUser, proxyPass)).strip()
             else:
-                credentials = ""
+                proxy_credentials = ""
 
-            pt.set_proxy("%s:%s" % (proxyHost, proxyPort), credentials)
+            pt.set_proxy("%s:%s" % (proxyHost, proxyPort), proxy_credentials)
             log.info("Using proxy %s:%s for RHN API methods" % (proxyHost, proxyPort))
             sc = xmlrpclib.Server(server_url, transport=pt)
         else:
@@ -379,7 +407,11 @@ def transferHttpProxySettings():
         httpProxy = rhncfg['httpProxy']
         if httpProxy[:7] == "http://":
             httpProxy = httpProxy[7:]
-        proxyHost, proxyPort = httpProxy.split(':')
+        try:
+            proxyHost, proxyPort = httpProxy.split(':')
+        except ValueError, e:
+            log.exception(e)
+            systemExit(1, _("Unable to read RHN proxy settings."))
 
         log.info("Using proxy %s:%s - transferring settings to rhsm.conf" % (proxyHost, proxyPort))
         rhsmcfg.set('server', 'proxy_hostname', proxyHost)
@@ -395,21 +427,25 @@ def transferHttpProxySettings():
         rhsmcfg.save()
 
 
-def register(credentials, serverurl):
+def register(credentials, serverurl, org):
     # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
-    print _("\nAttempting to register system to Certificate-based RHN ...")
+    print _("\nAttempting to register system to Red Hat Subscription Management ...")
     cmd = ['subscription-manager', 'register', '--username=' + credentials.username, '--password=' + credentials.password]
     if serverurl:
         # insert just after register (not sure if order matters,
         # but just in case)
         cmd.insert(2, '--serverurl=' + serverurl)
+
+    if org:
+        cmd.append('--org=' + org)
+
     result = subprocess.call(cmd)
 
     if result != 0:
         systemExit(2, _("\nUnable to register.\nFor further assistance, please contact Red Hat Global Support Services."))
     else:
         consumer = ConsumerIdentity.read()
-        print _("System '%s' successfully registered to Certificate-based RHN.\n") % consumer.getConsumerName()
+        print _("System '%s' successfully registered to Red Hat Subscription Management.\n") % consumer.getConsumerName()
     return consumer
 
 
@@ -472,7 +508,7 @@ def deployProdCertificates(subscribedChannels):
 
     if unrecognizedChannels:
         print "\n+--------------------------------------------------+",
-        print _("\nUnrecognized channels. Channel to product certificate mapping missing for these channels.")
+        print _("\nNo product certificates are mapped to these RHN Classic channels:")
         print "+--------------------------------------------------+"
         for i in unrecognizedChannels:
             print i
@@ -482,9 +518,11 @@ def deployProdCertificates(subscribedChannels):
             print _("\nUse --force to ignore these channels and continue the migration.\n")
             sys.exit(1)
 
-    log.info("certs to be copied: %s", applicableCerts)
+    log.info("certs to be installed: %s", applicableCerts)
 
-    print _("\nList of channels for which certs are being copied")
+    print "\n+--------------------------------------------------+",
+    print _("\nInstalling product certificates for these RHN Classic channels:")
+    print "+--------------------------------------------------+"
     for i in validRhsmChannels:
         print i
 
@@ -498,7 +536,7 @@ def deployProdCertificates(subscribedChannels):
         destinationpath = str(productDir) + "/" + truncated_cert_name
         log.info("cp %s %s ", sourcepath, destinationpath)
         shutil.copy2(sourcepath, destinationpath)
-    print _("\nProduct certificates copied successfully to %s") % str(productDir)
+    print _("\nProduct certificates installed successfully to %s.") % str(productDir)
 
 
 def getRelease():
@@ -543,7 +581,7 @@ def enableExtraChannels(subscribedChannels, cp):
                 repofile.write()
     except:
         print _("\nUnable to enable extra repositories.")
-        print _("Please ensure system is subscribed to entitlements, and alter /etc/yum.repos.d/redhat.repo to enable extra repositories.")
+        print _("Please ensure system has subscriptions attached, and see 'subscription-manager repos --help' to enable additional repositories")
 
 
 def writeMigrationFacts():
@@ -599,14 +637,20 @@ def authenticate(prompt):
     return UserCredentials(username, password)
 
 
+def validateOptions():
+    if options.servicelevel and options.noauto:
+        systemExit(1, _("The --servicelevel and --no-auto options cannot be used together."))
+
+
 def main():
+    validateOptions()
     serverurl = None
     if options.serverurl:
-        rhncreds = authenticate(_("RHN Username: "))
+        rhncreds = authenticate(_("Red Hat account: "))
         secreds = authenticate(_("System Engine Username: "))
         serverurl = options.serverurl
     else:
-        rhncreds = authenticate(_("RHN Username: "))
+        rhncreds = authenticate(_("Red Hat account: "))
         if not isHosted():
             secreds = authenticate(_("System Engine Username: "))
         else:
@@ -615,6 +659,8 @@ def main():
     transferHttpProxySettings()
     cp = checkOkToProceed(secreds, serverurl)
 
+    org = getOrg(cp, secreds.username)
+
     (sc, sk) = connectToRhn(rhncreds)
     checkIsOrgAdmin(sc, sk, rhncreds.username)
 
@@ -622,20 +668,22 @@ def main():
     print _("\nRetrieving existing RHN Classic subscription information ...")
     subscribedChannels = getSubscribedChannelsList()
     print "+----------------------------------+"
-    print _("System is currently subscribed to:")
+    print _("System is currently subscribed to these RHN Classic Channels:")
     print "+----------------------------------+"
     for channel in subscribedChannels:
         print channel
 
+    checkForConflictingChannels(subscribedChannels)
     deployProdCertificates(subscribedChannels)
+    cleanUp(subscribedChannels)
 
     writeMigrationFacts()
-    print _("\nPreparing to unregister system from RHN classic ...")
+    print _("\nPreparing to unregister system from RHN Classic ...")
     unRegisterSystemFromRhnClassic(sc, sk)
 
     # register the system to Certificate-based RHN and consume a subscription
+    consumer = register(secreds, serverurl, org)
     if not options.noauto:
-        consumer = register(secreds, serverurl)
         if options.servicelevel:
             servicelevel = selectServiceLevel(cp, consumer, options.servicelevel)
             subscribe(consumer, servicelevel)
@@ -643,7 +691,6 @@ def main():
             subscribe(consumer, None)
     # check if we need to enable to supplementary/optional channels
     enableExtraChannels(subscribedChannels, cp)
-    cleanUp(subscribedChannels)
 
 
 if __name__ == '__main__':
