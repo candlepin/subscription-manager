@@ -198,7 +198,6 @@ Certificate:
 	Serial: 60063758564076674
 	Start Date: 2012-09-07 00:00:00+00:00
 	End Date: 2013-09-07 00:00:00+00:00
-	Content Sets: 6
 
 Subject:
 	CN: ff80808139affbb50139b5841809706e
@@ -341,7 +340,6 @@ Certificate:
 	Serial: 1306183239866671852
 	Start Date: 2012-09-18 00:00:00+00:00
 	End Date: 2013-09-18 00:00:00+00:00
-	Content Sets: 4
 
 Subject:
 	CN: ff80808139d9e26c0139da23489a0066
