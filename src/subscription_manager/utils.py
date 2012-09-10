@@ -28,7 +28,7 @@ _ = lambda x: gettext.ldgettext("rhsm", x)
 gettext.textdomain("rhsm")
 
 from rhsm.connection import UEPConnection, RestlibException, GoneException
-from subscription_manager.hwprobe import ClassicCheck
+from subscription_manager import classic_check
 from rhsm.version import Versions
 from M2Crypto.SSL import SSLError
 
@@ -330,7 +330,7 @@ def get_server_versions(cp):
 
     # this isn't particularly important, so log any exceptions and carry on
     try:
-        if ClassicCheck().is_registered_with_classic():
+        if classic_check.ClassicCheck().is_registered_with_classic():
             server_type = _("RHN Classic")
             cp_version = _("Unknown")
     except Exception, e:

@@ -39,7 +39,7 @@ from subscription_manager.branding import get_branding
 from subscription_manager.certlib import CertLib, ConsumerIdentity
 from subscription_manager.repolib import RepoLib, RepoFile
 from subscription_manager.certmgr import CertManager
-from subscription_manager.hwprobe import ClassicCheck
+from subscription_manager import classic_check
 from subscription_manager.cache import ProfileManager, InstalledProductsManager
 from subscription_manager import managerlib
 from subscription_manager.facts import Facts
@@ -554,7 +554,7 @@ class IdentityCommand(UserPassCommand):
 
     def _do_command(self):
         # check for Classic before doing anything else
-        if ClassicCheck().is_registered_with_classic():
+        if classic_check.ClassicCheck().is_registered_with_classic():
             if ConsumerIdentity.existsAndValid():
                 print _("server type: %s") % get_branding().REGISTERED_TO_BOTH_SUMMARY
             else:
@@ -896,7 +896,7 @@ class RegisterCommand(UserPassCommand):
         self.log_client_version()
 
         # Always warn the user if registered to old RHN/Spacewalk
-        if ClassicCheck().is_registered_with_classic():
+        if classic_check.ClassicCheck().is_registered_with_classic():
             print(get_branding().REGISTERED_TO_OTHER_WARNING)
 
         self._validate_options()
