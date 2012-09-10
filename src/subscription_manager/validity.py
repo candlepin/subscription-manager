@@ -219,7 +219,7 @@ class ValidProductDateRangeCalculator(object):
         for group in groups:
             for ent in group:
                 # DateRange is in GMT so convert now to GMT before compare
-                if ent.valid_range.has_date(datetime.now().replace(tzinfo=GMT())):
+                if ent.valid_range.has_date(datetime.now(tz=GMT())):
                     return group
         return []
 
