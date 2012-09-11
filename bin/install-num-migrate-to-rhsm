@@ -141,7 +141,11 @@ def main():
         dest_file = os.path.join(PRODUCT_CERT_DIR, dest_file)
         print _("Installing %s to %s") % (path, dest_file)
         if not options.dryrun:
-            shutil.copyfile(path, dest_file)
+            try:
+                shutil.copyfile(path, dest_file)
+            except IOError, e:
+                print e
+                sys.exit(1)
 
     if not options.dryrun:
         writeMigrationFacts(instnumber)
