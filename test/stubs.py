@@ -159,6 +159,9 @@ class StubProductCertificate(ProductCertificate):
         if provided_products:
             products = products + provided_products
 
+        self.name = product.name
+        version = product.version
+
         # TODO: product should be a StubProduct, check for strings coming in and error out
         self.product = product
         self.provided_products = []
@@ -177,7 +180,8 @@ class StubProductCertificate(ProductCertificate):
         ProductCertificate.__init__(self, products=products,
                 serial=random.randint(1, 10000000),
                 start=start_date,
-                end=end_date)
+                end=end_date,
+                version=version)
 
     def __str__(self):
         s = []
