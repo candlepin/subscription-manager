@@ -31,7 +31,7 @@ from subscription_manager.certlib import ConsumerIdentity
 from subscription_manager.branding import get_branding
 from subscription_manager import certdirectory
 from subscription_manager.cert_sorter import CertSorter
-from subscription_manager.hwprobe import ClassicCheck
+from subscription_manager.classic_check import ClassicCheck
 from subscription_manager.facts import Facts
 import rhsm.certificate as certificate
 
