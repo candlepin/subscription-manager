@@ -172,11 +172,14 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         iter = None
         bg_color = get_cell_background_color(group_idx)
         if group.name and len(group.entitlements) > 1:
-            if len(group.entitlements) - 1 > 1:
+            unique = self.find_unique_name_count(group.entitlements)
+            if unique - 1 > 1:
                 name_string = _("Stack of %s and %s others") % \
-                        (group.name, str(len(group.entitlements) - 1))
-            else:
+                        (group.name, str(unique - 1))
+            elif unique - 1 == 1:
                 name_string = _("Stack of %s and 1 other") % (group.name)
+            else:
+                name_string = _("Stack of %s") % (group.name)
             iter = self.store.add_map(iter, self._create_stacking_header_entry(name_string,
                                                                                bg_color))
         new_parent_image = None
@@ -194,6 +197,12 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         if new_parent_image and iter:
             self.store.set_value(iter, self.store['image'],
                     gtk.gdk.pixbuf_new_from_file_at_size(new_parent_image, 13, 13))
+
+    def find_unique_name_count(self, entitlements):
+        result = dict()
+        for ent in entitlements:
+            result[ent.order.name] = ent.order.name
+        return len(result)
 
     def image_ranks_higher(self, old_image, new_image):
         if old_image == new_image:
