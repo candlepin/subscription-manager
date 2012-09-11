@@ -130,18 +130,24 @@ def main():
     #flatten the list of lists
     paths = [item for sublist in paths for item in sublist]
 
+    path_dict = {}
     for path in paths:
-        dest_file = path.split('-')[-1]
+        dest = path.split('-')[-1]
+        path_dict[dest] = path
 
-        #even though 68.pem is a match, skip it for Workstation
-        #71.pem will be installed instead.
-        if dest_file == '68.pem' and 'Workstation' in repo_dict.keys():
-            continue
+    # Hack for BZ #853233: 68.pem and 71.pem should never coexist.
+    if "68.pem" in path_dict.keys() and "71.pem" in path_dict.keys():
+        del path_dict["68.pem"]
 
+    for dest_file, path in path_dict.items():
         dest_file = os.path.join(PRODUCT_CERT_DIR, dest_file)
         print _("Installing %s to %s") % (path, dest_file)
         if not options.dryrun:
-            shutil.copyfile(path, dest_file)
+            try:
+                shutil.copyfile(path, dest_file)
+            except IOError, e:
+                print e
+                sys.exit(1)
 
     if not options.dryrun:
         writeMigrationFacts(instnumber)
