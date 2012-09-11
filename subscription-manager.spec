@@ -203,6 +203,7 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/subscription_manager/factlib.py*
 %{_datadir}/rhsm/subscription_manager/productid.py*
 %{_datadir}/rhsm/subscription_manager/cache.py*
+%{_datadir}/rhsm/subscription_manager/classic_check.py*
 %{_datadir}/rhsm/subscription_manager/branding
 %{_datadir}/rhsm/subscription_manager/quantity.py*
 %{_datadir}/rhsm/subscription_manager/jsonwrapper.py*
