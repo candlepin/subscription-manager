@@ -195,7 +195,7 @@ class InstalledProductStatusTests(unittest.TestCase):
     # facts for system entitlement valid check for an rhn "classic"
     # susbcription, so mock it out
     def setUp(self):
-        self.rhn_check_patcher = patch('subscription_manager.facts.ClassicCheck')
+        self.rhn_check_patcher = patch('subscription_manager.classic_check.ClassicCheck')
         self.rhn_check_mock = self.rhn_check_patcher.start()
         self.rhn_check_mock_instance = self.rhn_check_mock.return_value
         self.rhn_check_mock_instance.is_registered_with_classic.return_value = False
