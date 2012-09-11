@@ -64,6 +64,7 @@ cfg_buf = cfg_buf_tmp.safe_substitute(testdir=tmpdir)
 test_config_file_path = "%s/etc/rhsm/rhsm.conf" % tmpdir
 test_config_file = open(test_config_file_path, 'w+')
 test_config_file.write(cfg_buf)
+test_config_file.close()
 
 
 class TestConfig(config.RhsmConfigParser):
