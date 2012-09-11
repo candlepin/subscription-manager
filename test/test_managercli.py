@@ -4,7 +4,7 @@ import sys
 import socket
 
 # for monkey patching config
-import stubs
+#import stubs
 
 from subscription_manager import managercli, managerlib
 from stubs import MockStderr, MockStdout, StubProductDirectory, \
@@ -21,8 +21,8 @@ from M2Crypto import SSL
 class TestCli(unittest.TestCase):
     # shut up stdout spew
     def setUp(self):
-        sys.stdout = stubs.MockStdout()
-        sys.stderr = stubs.MockStderr()
+        sys.stdout = MockStdout()
+        sys.stderr = MockStderr()
 
     def _restore_stdout(self):
         sys.stdout = sys.__stdout__
@@ -149,7 +149,10 @@ class TestCliProxyCommand(TestCliCommand):
 
 
 class TestCliCommandServerurl(TestCliCommand):
-    def test_main_server_url(self):
+    @mock.patch.object(managercli, 'is_valid_server_info')
+    def test_main_server_url(self, valid_server_mock):
+        valid_server_mock.return_value = True
+        self._restore_stdout()
         server_url = "https://subscription.rhn.redhat.com/subscription"
         self.cc.main(["--serverurl", server_url])
 
