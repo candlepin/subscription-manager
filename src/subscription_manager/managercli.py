@@ -1076,7 +1076,8 @@ class UnRegisterCommand(CliCommand):
         try:
             # there is no consumer cert at this point, a uep object
             # is not useful
-            certmgr = CertManager(uep=None)
+            certmgr = CertManager(uep=None,
+                                  product_dir=self.product_dir)
             certmgr.update()
         except Exception, e:
             pass
@@ -1267,7 +1268,8 @@ class SubscribeCommand(CliCommand):
         consumer_uuid = check_registration()['uuid']
         self._validate_options()
         try:
-            certmgr = CertManager(uep=self.cp)
+            certmgr = CertManager(uep=self.cp,
+                                  product_dir=self.product_dir)
             certmgr.update()
             return_code = 0
             if self.options.pool:
@@ -1529,7 +1531,8 @@ class ReposCommand(CliCommand):
 
     def _do_command(self):
         self._validate_options()
-        certmgr = CertManager(uep=self.cp)
+        certmgr = CertManager(uep=self.cp,
+                              product_dir=self.product_dir)
         certmgr.update()
         rl = RepoLib(uep=self.cp)
         repos = rl.get_repos()
