@@ -28,7 +28,7 @@ from modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
 from rhsm.certificate import create_from_pem, DateRange
-from mock import Mock
+import mock
 import xml
 
 cfg = rhsm.config.initConfig()
@@ -175,6 +175,32 @@ UFsAtbXIRAREdmZrLABgUgYUvoLQc3+GgVYMo0v4nCxUs8FDbcKkT6Hb8XcVqEhy
 HcikfLxQfRwalftfq5mDxkA8FDxrbGd/N8AviC2JJNL+VzMVthjy0w==
 -----END RSA PRIVATE KEY-----
 """
+
+custom_facts_patcher = None
+validity_facts_patcher = None
+hw_facts_patcher = None
+
+
+def setUp():
+    global custom_facts_patcher
+    global validity_facts_patcher
+    global hw_facts_patcher
+    custom_facts_patcher = mock.patch('subscription_manager.facts.Facts._load_custom_facts')
+    custom_mocker = custom_facts_patcher.start()
+    custom_mocker.return_value = {}
+    validity_facts_patcher = mock.patch('subscription_manager.facts.Facts._get_validity_facts')
+    validity_mocker = validity_facts_patcher.start()
+    validity_mocker.return_value = {}
+
+    hw_facts_patcher = mock.patch('subscription_manager.facts.Facts._load_hw_facts')
+    hw_mocker = hw_facts_patcher.start()
+    hw_mocker.return_value = {}
+
+
+def tearDown():
+    custom_facts_patcher.stop()
+    validity_facts_patcher.stop()
+    hw_facts_patcher.stop()
 
 
 class MergePoolsTests(unittest.TestCase):
@@ -849,7 +875,7 @@ class ParseDateTests(unittest.TestCase):
         # About to monkey patch, store a reference to function so we can
         # restore it.
         function = xml.utils.iso8601.parse
-        xml.utils.iso8601.parse = Mock(side_effect=OverflowError())
+        xml.utils.iso8601.parse = mock.Mock(side_effect=OverflowError())
         parsed = parseDate("9999-09-06T00:00:00.000+0000")
         xml.utils.iso8601.parse = function
 
