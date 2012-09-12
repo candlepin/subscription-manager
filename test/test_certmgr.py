@@ -320,6 +320,56 @@ class TestCertmgr(unittest.TestCase):
         self.assertTrue(self.stub_ent1 in report.expired)
 
     @mock.patch.object(certlib.Action, 'build')
+    def test_expired_with_syslog_report(self, cert_build_mock):
+        cert_build_mock.return_value = (mock.Mock(), self.stub_ent1)
+
+        # unpatch the syslog capturing so we cover the real one
+        self.patcher_certlib_action_syslogreport.stop()
+
+        # this makes the stub_entdir report all ents as being expired
+        # so we fetch new ones
+        self.stub_entdir.expired = True
+
+        # we don't want to find replacements, so this forces a delete
+        self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
+        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
+        mgr.update()
+
+        # repatch syslogReport
+        self.patcher_certlib_action_syslogreport = mock.patch.object(certlib.UpdateAction, 'syslogResults')
+        self.update_action_syslog_mock = self.patcher_certlib_action_syslogreport.start()
+
+    @mock.patch.object(certlib.Action, 'build')
+    def test_expired_show_update_report(self, cert_build_mock):
+        cert_build_mock.return_value = (mock.Mock(), self.stub_ent1)
+
+        # this makes the stub_entdir report all ents as being expired
+        # so we fetch new ones
+        self.stub_entdir.expired = True
+
+        # we don't want to find replacements, so this forces a delete
+        self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
+        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
+        mgr.update()
+
+        # the expired certs should be delete/rogue and expired
+        report = self.update_action_syslog_mock.call_args[0][0]
+
+        # some of this is more certlib testing, but while we have
+        # everything mocked up...
+
+        # UpdateReport.write
+        line_array = []
+        report.write(line_array, 'this is a title', self.local_ent_certs)
+        self.assertTrue(len(line_array) > 0)
+
+        report_str = '%s' % report
+        self.assertTrue(len(report_str) > 0)
+
+        self.assertTrue(self.stub_ent1 in report.rogue)
+        self.assertTrue(self.stub_ent1 in report.expired)
+
+    @mock.patch.object(certlib.Action, 'build')
     @mock.patch('subscription_manager.certlib.log')
     def test_exception_on_cert_write(self, mock_log, mock_cert_build):
         # this is basically the same as test_missing, expect we throw
