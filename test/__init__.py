@@ -2,7 +2,6 @@
 import mock
 import os
 import shutil
-import StringIO
 from string import Template
 
 # Simple test fixture that sets up some widely used mocks

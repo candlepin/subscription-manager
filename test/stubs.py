@@ -13,7 +13,6 @@
 # in this software or its documentation.
 #
 
-import StringIO
 import random
 import tempfile
 
