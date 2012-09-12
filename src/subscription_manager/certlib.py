@@ -337,17 +337,20 @@ class Disconnected(Exception):
 
 class ConsumerIdentity:
 
-    PATH = cfg.get('rhsm', 'consumerCertDir')
     KEY = 'key.pem'
     CERT = 'cert.pem'
 
+    @staticmethod
+    def _get_consumer_certdir_path():
+        return cfg.get('rhsm', 'consumerCertDir')
+
     @classmethod
     def keypath(cls):
-        return Path.join(cls.PATH, cls.KEY)
+        return Path.join(cls._get_consumer_certdir_path(), cls.KEY)
 
     @classmethod
     def certpath(cls):
-        return Path.join(cls.PATH, cls.CERT)
+        return Path.join(cls._get_consumer_certdir_path(), cls.CERT)
 
     @classmethod
     def read(cls):
@@ -416,7 +419,7 @@ class ConsumerIdentity:
             os.unlink(path)
 
     def __mkdir(self):
-        path = Path.abs(self.PATH)
+        path = Path.abs(self._get_consumer_certdir_path())
         if not os.path.exists(path):
             os.mkdir(path)
 

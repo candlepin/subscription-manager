@@ -161,10 +161,12 @@ class CertificateDirectory(Directory):
 
 class ProductDirectory(CertificateDirectory):
 
-    PATH = cfg.get('rhsm', 'productCertDir')
+    @staticmethod
+    def _get_product_certdir():
+        return cfg.get('rhsm', 'productCertDir')
 
     def __init__(self):
-        CertificateDirectory.__init__(self, self.PATH)
+        CertificateDirectory.__init__(self, self._get_product_certdir())
 
     def get_provided_tags(self):
         """
@@ -181,15 +183,17 @@ class ProductDirectory(CertificateDirectory):
 
 class EntitlementDirectory(CertificateDirectory):
 
-    PATH = cfg.get('rhsm', 'entitlementCertDir')
-    PRODUCT = 'product'
+    @staticmethod
+    def _get_entitlement_certdir_path():
+        return cfg.get('rhsm', 'entitlementCertDir')
 
     @classmethod
-    def productpath(cls):
-        return cls.PATH
+    def entitlementpath(cls):
+        return cls._get_entitlement_certdir_path()
 
     def __init__(self):
-        CertificateDirectory.__init__(self, self.productpath())
+        CertificateDirectory.__init__(self,
+                                      self._get_entitlement_certdir_path())
 
     def _check_key(self, cert):
         """
@@ -263,7 +267,7 @@ class Writer:
 
     def write(self, key, cert):
         serial = cert.serial
-        ent_dir_path = self.entdir.productpath()
+        ent_dir_path = self.entdir.entitlementpath()
 
         key_filename = '%s-key.pem' % str(serial)
         key_path = Path.join(ent_dir_path, key_filename)
