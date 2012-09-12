@@ -77,9 +77,19 @@ class TestCertmgr(unittest.TestCase):
 
         self.patcher7 = mock.patch.object(facts.Facts, '_get_validity_facts')
         self.facts_getvalidityfacts = self.patcher7.start()
+        self.facts_getvalidityfacts.return_value = []
 
         self.patcher8 = mock.patch.object(facts.Facts, 'get_last_update')
         self.facts_getlastupdate = self.patcher8.start()
+        self.facts_getlastupdate.return_value = None
+
+        self.facts_load_hw_patcher = mock.patch.object(facts.Facts, '_load_hw_facts')
+        self.facts_load_hw_mock = self.facts_load_hw_patcher.start()
+        self.facts_load_hw_mock.return_value = {}
+
+        self.facts_load_custom_patcher = mock.patch.object(facts.Facts, '_load_custom_facts')
+        self.facts_load_custom_mock = self.facts_load_custom_patcher.start()
+        self.facts_load_custom_mock.return_value = {}
 
         # we end up import EntitlementDirectory differently lots...
         self.patcher9 = mock.patch('subscription_manager.certlib.EntitlementDirectory')
@@ -138,8 +148,6 @@ class TestCertmgr(unittest.TestCase):
         self.certlib_updateaction_getconsumerid.return_value = "234234"
 
         self.repolib_updateaction_perform.return_value = 0
-        self.facts_getvalidityfacts.return_value = []
-        self.facts_getlastupdate.return_value = None
 
         self.factlib_consumeridentity.read.return_value = stubs.StubConsumerIdentity("sdfsdf", "sdfsdf")
         self.certlib_consumeridentity.read.return_value = stubs.StubConsumerIdentity("sdfsdf", "sdfsdf")
@@ -153,6 +161,9 @@ class TestCertmgr(unittest.TestCase):
         self.patcher7.stop()
         self.patcher8.stop()
         self.patcher9.stop()
+
+        self.facts_load_hw_patcher.stop()
+        self.facts_load_custom_patcher.stop()
 
         self.patchcer_certdir_entdir.stop()
         self.patcher_repolib_entdir.stop()
