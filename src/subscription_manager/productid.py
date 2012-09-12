@@ -87,9 +87,16 @@ class ProductManager:
     REPO = 'from_repo'
     PRODUCTID = 'productid'
 
-    def __init__(self):
-        self.pdir = ProductDirectory()
-        self.db = ProductDatabase()
+    def __init__(self, product_dir=None, product_db=None):
+
+        self.pdir = product_dir
+        if not product_dir:
+            self.pdir = ProductDirectory()
+
+        self.db = product_db
+        if not product_db:
+            self.db = ProductDatabase()
+
         self.db.read()
         self.meta_data_errors = []
 
@@ -110,22 +117,24 @@ class ProductManager:
                 self.updateRemoved(active)
         self.updateInstalled(enabled, active)
 
-    def _isWorkstation(self, product):
-        if product.name == "Red Hat Enterprise Linux Workstation" and \
-                "rhel-5-client-workstation" in product.provided_tags and \
-                product.version[0] == '5':
+    def _isWorkstation(self, product_cert):
+        if product_cert.name == "Red Hat Enterprise Linux Workstation" and \
+                "rhel-5-client-workstation" in product_cert.provided_tags and \
+                product_cert.version[0] == '5':
             return True
         return False
 
-    def _isDesktop(self, product):
-        if product.name == "Red Hat Enterprise Linux Desktop" and \
-                "rhel-5-client" in product.provided_tags and \
-                product.version[0] == '5':
+    def _isDesktop(self, product_cert):
+        if product_cert.name == "Red Hat Enterprise Linux Desktop" and \
+                "rhel-5-client" in product_cert.provided_tags and \
+                product_cert.version[0] == '5':
             return True
         return False
 
     def updateInstalled(self, enabled, active):
+        log.debug("Updating installed certificates")
         for cert, repo in enabled:
+            log.debug("product cert: %s repo: %s" % (cert.products[0].id, repo))
             #nothing from this repo is installed
             if repo not in active:
                 continue
@@ -140,27 +149,38 @@ class ProductManager:
                 # is the Desktop product cert installed?
                 for pc in self.pdir.list():
                     if self._isDesktop(pc.products[0]):
+                        log.info("Removing obsolete Desktop cert: %s" % pc.path)
                         # Desktop product cert is installed,
                         # delete the Desktop product cert
                         pc.delete()
-                        self.db.delete(prod_hash)
+                        self.pdir.refresh()  # must refresh to see the removal of the cert
+                        self.db.delete(pc.products[0].id)
                         self.db.write()
 
-            # no point installing desktop only to delete it
+            # If installing Desktop cert, see if Workstation exists on disk and skip
+            # the write if so:
             if self._isDesktop(p):
-                for pc in self.pdir.list():
-                    if self._isWorkstation(pc.products[0]):
-                        # we are installing Desktop, but we already have workstation
-                        return
+                if self._workstation_cert_exists():
+                    log.info("Skipping obsolete Desktop cert")
+                    continue
 
+            # Product cert already exists, no need to write:
             if self.pdir.findByProduct(prod_hash):
                 continue
 
             fn = '%s.pem' % prod_hash
             path = self.pdir.abspath(fn)
             cert.write(path)
+            self.pdir.refresh()  # must refresh product dir to see changes
+            log.info("Installed product cert: %s %s" % (p.name, cert.path))
             self.db.add(prod_hash, repo)
             self.db.write()
+
+    def _workstation_cert_exists(self):
+        for pc in self.pdir.list():
+            if self._isWorkstation(pc.products[0]):
+                return True
+        return False
 
     # We should only delete productcerts if there are no
     # packages from that repo installed (not "active")
@@ -188,6 +208,7 @@ class ProductManager:
 
             log.info("product cert %s for %s is being deleted" % (prod_hash, p.getName()))
             cert.delete()
+            self.pdir.refresh()
 
             self.db.delete(prod_hash)
             self.db.write()
