@@ -55,9 +55,10 @@ class TestConsumerIdenity(unittest.TestCase):
     def test_exists_and_valid(self):
         self.assertTrue(certlib.ConsumerIdentity.existsAndValid())
 
-    def test_exists_and_value_not(self):
+    @mock.patch.object(certlib.ConsumerIdentity, '_get_consumer_certdir_path')
+    def test_exists_and_value_not(self, certdir_mock):
+        certdir_mock.return_value = '/Does/Not/Exist/I/Hope'
         try:
-            certlib.ConsumerIdentity.PATH = '/Does/Not/Exist/I/Hope'
             self.assertFalse(certlib.ConsumerIdentity.existsAndValid())
         finally:
             certlib.ConsumerIdentity.PATH = '/etc/pki/consumer'

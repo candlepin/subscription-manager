@@ -80,13 +80,13 @@ class PathTests(unittest.TestCase):
     def test_sysimage_pathjoin(self):
         Path.ROOT = '/mnt/sysimage'
         ed = EntitlementDirectory()
-        self.assertEquals('/mnt/sysimage%s/1-key.pem' % ed.PATH,
-                Path.join(ed.productpath(), '1-key.pem'))
+        self.assertEquals('/mnt/sysimage%s/1-key.pem' % ed._get_entitlement_certdir_path(),
+                Path.join(ed.entitlementpath(), '1-key.pem'))
 
     def test_normal_pathjoin(self):
         ed = EntitlementDirectory()
-        self.assertEquals('%s/1-key.pem' % ed.PATH,
-                Path.join(ed.productpath(), "1-key.pem"))
+        self.assertEquals('%s/1-key.pem' % ed._get_entitlement_certdir_path(),
+                Path.join(ed.entitlementpath(), "1-key.pem"))
 
 
 # make sure _check_key returns the right value
