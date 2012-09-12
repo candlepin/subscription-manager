@@ -31,6 +31,8 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 CFG = initConfig()
 
+ALLOWED_CONTENT_TYPES = ["yum"]
+
 
 class RepoLib(DataLib):
 
@@ -183,6 +185,10 @@ class UpdateAction:
         tags_we_have = self.prod_dir.get_provided_tags()
 
         for content in ent_cert.content:
+            if not content.content_type in ALLOWED_CONTENT_TYPES:
+                log.debug("Content type %s not allowed, skipping content: %s" % (
+                    content.content_type, content.label))
+                continue
 
             all_tags_found = True
             for tag in content.required_tags:

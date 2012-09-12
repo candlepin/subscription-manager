@@ -253,6 +253,7 @@ Order:
 	Provides Management: 1
 
 Content:
+	Type: yum
 	Name: always-enabled-content
 	Label: always-enabled-content
 	Vendor: test-vendor
@@ -263,6 +264,7 @@ Content:
 	Required Tags: 
 
 Content:
+	Type: yum
 	Name: content
 	Label: content-label
 	Vendor: test-vendor
@@ -273,6 +275,7 @@ Content:
 	Required Tags: 
 
 Content:
+	Type: yum
 	Name: content-emptygpg
 	Label: content-label-empty-gpg
 	Vendor: test-vendor
@@ -283,6 +286,7 @@ Content:
 	Required Tags: 
 
 Content:
+	Type: yum
 	Name: content-nogpg
 	Label: content-label-no-gpg
 	Vendor: test-vendor
@@ -293,6 +297,7 @@ Content:
 	Required Tags: 
 
 Content:
+	Type: yum
 	Name: never-enabled-content
 	Label: never-enabled-content
 	Vendor: test-vendor
@@ -303,6 +308,7 @@ Content:
 	Required Tags: 
 
 Content:
+	Type: yum
 	Name: tagged-content
 	Label: tagged-content
 	Vendor: test-vendor
@@ -354,6 +360,7 @@ Order:
 	Provides Management: False
 
 Content:
+	Type: yum
 	Name: always-enabled-content
 	Label: always-enabled-content
 	Vendor: test-vendor
@@ -364,6 +371,7 @@ Content:
 	Required Tags: 
 
 Content:
+	Type: yum
 	Name: awesomeos
 	Label: awesomeos
 	Vendor: Red Hat
@@ -374,6 +382,7 @@ Content:
 	Required Tags: 
 
 Content:
+	Type: yum
 	Name: awesomeos-x86_64
 	Label: awesomeos-x86_64
 	Vendor: Red Hat
@@ -384,6 +393,7 @@ Content:
 	Required Tags: 
 
 Content:
+	Type: yum
 	Name: never-enabled-content
 	Label: never-enabled-content
 	Vendor: test-vendor
