@@ -148,12 +148,6 @@ class TestCliProxyCommand(TestCliCommand):
         self.assertEquals(proxy_password, self.cc.proxy_password)
 
 
-class TestCliCommandServerurl(TestCliCommand):
-    def test_main_server_url(self):
-        server_url = "https://subscription.rhn.redhat.com/subscription"
-        self.cc.main(["--serverurl", server_url])
-
-
 class TestCleanCommand(TestCliCommand):
     command_class = managercli.CleanCommand
 
@@ -174,9 +168,17 @@ class TestIdentityCommand(TestCliProxyCommand):
 class TestOwnersCommand(TestCliProxyCommand):
     command_class = managercli.OwnersCommand
 
+    def test_main_server_url(self):
+        server_url = "https://subscription.rhn.redhat.com/subscription"
+        self.cc.main(["--serverurl", server_url])
+
 
 class TestEnvironmentsCommand(TestCliProxyCommand):
     command_class = managercli.EnvironmentsCommand
+
+    def test_main_server_url(self):
+        server_url = "https://subscription.rhn.redhat.com/subscription"
+        self.cc.main(["--serverurl", server_url])
 
     def test_no_library(self):
         self.cc.cp = StubUEP()
@@ -232,6 +234,14 @@ class TestRegisterCommand(TestCliProxyCommand):
 
     def test_no_commands(self):
         self._test_no_exception([])
+
+    def test_main_server_url(self):
+        server_url = "https://subscription.rhn.redhat.com/subscription"
+        self._test_no_exception(["--serverurl", server_url])
+
+    def test_main_base_url(self):
+        base_url = "https://cdn.redhat.com"
+        self._test_no_exception(["--baseurl", base_url])
 
 
 class TestListCommand(TestCliProxyCommand):
@@ -333,6 +343,10 @@ class TestUnRegisterCommand(TestCliProxyCommand):
 
 class TestRedeemCommand(TestCliProxyCommand):
     command_class = managercli.RedeemCommand
+
+    def test_main_server_url(self):
+        server_url = "https://subscription.rhn.redhat.com/subscription"
+        self.cc.main(["--serverurl", server_url])
 
 
 class TestReposCommand(TestCliCommand):
@@ -475,6 +489,10 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         TestCliProxyCommand.setUp(self)
         self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
+
+    def test_main_server_url(self):
+        server_url = "https://subscription.rhn.redhat.com/subscription"
+        self.cc.main(["--serverurl", server_url])
 
     def test_org_requires_list_error(self):
         try:
