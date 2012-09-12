@@ -40,7 +40,7 @@ prefix = /candlepin
 port = 8443
 insecure = 1
 ssl_verify_depth = 3
-ca_cert_dir = /$testdir/etc/rhsm/ca/
+ca_cert_dir = $testdir/etc/rhsm/ca/
 proxy_hostname =
 proxy_port =
 proxy_user =
@@ -49,9 +49,9 @@ proxy_password =
 [rhsm]
 baseurl= https://content.example.com
 repo_ca_cert = %(ca_cert_dir)sredhat-uep.pem
-productCertDir = /$testdir/etc/pki/product
-entitlementCertDir = /$testdir/etc/pki/entitlement
-consumerCertDir = /$testdir/{s/etc/pki/consumer
+productCertDir = $testdir/etc/pki/product
+entitlementCertDir = $testdir/etc/pki/entitlement
+consumerCertDir = $testdir/etc/pki/consumer
 
 [rhsmcertd]
 certFrequency = 240
@@ -90,7 +90,6 @@ class TestConfig(config.RhsmConfigParser):
 config.initConfig(config_file=test_config_file_path)
 config.CFG = TestConfig(config_file=test_config_file_path)
 
-# we are not actually reading test/rhsm.conf, it's just a placeholder
 config.CFG.read(test_config_file_path)
 
 
@@ -104,4 +103,5 @@ def setUp():
 
 
 def tearDown():
+
     shutil.rmtree(tmpdir)
