@@ -467,14 +467,3 @@ class UpdateReport:
         self.write(s, _('Deleted (rogue):'), self.rogue)
         self.write(s, _('Expired (deleted):'), self.expired)
         return '\n'.join(s)
-
-
-def main():
-    print _('Updating entitlement certificates')
-    certlib = CertLib()
-    updates = certlib.update()
-    print _('%d updates required') % updates
-    print _('done')
-
-if __name__ == '__main__':
-    main()
