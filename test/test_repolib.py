@@ -176,8 +176,8 @@ class UpdateActionTests(unittest.TestCase):
         content = self.update_action.get_content(self.stub_ent_cert,
                                                  "http://example.com", None)
         self.assertTrue(self._find_content(content, "c1") is not None)
-        self.assertIsNone(self._find_content(content, "c5"))
-        self.assertIsNone(self._find_content(content, "c6"))
+        self.assertTrue(self._find_content(content, "c5") is None)
+        self.assertTrue(self._find_content(content, "c6") is None)
 
 
 class TidyWriterTests(unittest.TestCase):
