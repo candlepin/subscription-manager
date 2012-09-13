@@ -887,6 +887,9 @@ class RegisterCommand(UserPassCommand):
         elif (self.options.service_level and not self.options.autosubscribe):
             print(_("Error: Must use --autosubscribe with --servicelevel."))
             sys.exit(-1)
+        elif (self.options.activation_keys and not self.options.org):
+            print(_("Error: Must provide --org with activation keys."))
+            sys.exit(-1)
 
     def _do_command(self):
         """
