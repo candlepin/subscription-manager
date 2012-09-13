@@ -211,13 +211,13 @@ class CliCommand(AbstractCLICommand):
             # the method to run. So we can safely ignore this.
             pass
 
-    def _add_common_options(self):
-        """ Add options that apply to all sub-commands. """
-
+    def _add_url_options(self):
+        """ Add options that allow the setting of the server URL."""
         self.parser.add_option("--serverurl", dest="server_url",
                                default=None, help=_("server url in the form of https://hostname:443/prefix"))
-        self.parser.add_option("--baseurl", dest="base_url",
-                              default=None, help=_("base url for content in form of https://hostname:443/prefix"))
+
+    def _add_common_options(self):
+        """ Add options that apply to all sub-commands. """
         self.parser.add_option("--proxy", dest="proxy_url",
                                default=None, help=_("proxy url in the form of proxy_hostname:proxy_port"))
         self.parser.add_option("--proxyuser", dest="proxy_user",
@@ -601,6 +601,8 @@ class OwnersCommand(UserPassCommand):
         super(OwnersCommand, self).__init__("orgs", shortdesc, False, ent_dir,
                                             prod_dir)
 
+        self._add_url_options()
+
     def _do_command(self):
 
         try:
@@ -637,6 +639,7 @@ class EnvironmentsCommand(UserPassCommand):
         super(EnvironmentsCommand, self).__init__("environments", shortdesc,
                                                   False, ent_dir, prod_dir)
 
+        self._add_url_options()
         self.parser.add_option("--org", dest="org",
                                help=_("specify org for environment list"))
 
@@ -694,6 +697,7 @@ class ServiceLevelCommand(UserPassCommand):
         super(ServiceLevelCommand, self).__init__("service-level", shortdesc,
                                                   False, ent_dir, prod_dir)
 
+        self._add_url_options()
         self.parser.add_option("--show", dest="show", action='store_true',
                 help=_("show this system's current service level"))
 
@@ -841,6 +845,9 @@ class RegisterCommand(UserPassCommand):
         super(RegisterCommand, self).__init__("register", shortdesc, True,
                                               ent_dir, prod_dir)
 
+        self._add_url_options()
+        self.parser.add_option("--baseurl", dest="base_url",
+                              default=None, help=_("base url for content in form of https://hostname:443/prefix"))
         self.parser.add_option("--type", dest="consumertype", default="system",
                                help=_("the type of consumer to register, defaults to system"))
         self.parser.add_option("--name", dest="consumername",
@@ -1099,6 +1106,7 @@ class RedeemCommand(CliCommand):
         super(RedeemCommand, self).__init__("redeem", shortdesc, False, ent_dir,
                                             prod_dir)
 
+        self._add_url_options()
         self.parser.add_option("--email", dest="email", action='store',
                                help=_("Email address to notify when "
                                "subscription redemption is complete."))
