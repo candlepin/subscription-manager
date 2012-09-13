@@ -157,17 +157,24 @@ class IdentityCertTests(unittest.TestCase):
 class ContentTests(unittest.TestCase):
 
     def test_enabled(self):
-        c = Content(name="mycontent", label="mycontent", enabled=None)
+        c = Content(content_type="yum", name="mycontent", label="mycontent", enabled=None)
         self.assertTrue(c.enabled)
-        c = Content(name="mycontent", label="mycontent", enabled="1")
+        c = Content(content_type="yum", name="mycontent", label="mycontent", enabled="1")
         self.assertTrue(c.enabled)
-        c = Content(name="mycontent", label="mycontent", enabled=True)
+        c = Content(content_type="yum", name="mycontent", label="mycontent", enabled=True)
         self.assertTrue(c.enabled)
-        c = Content(name="mycontent", label="mycontent", enabled="0")
+        c = Content(content_type="yum", name="mycontent", label="mycontent", enabled="0")
         self.assertFalse(c.enabled)
-        self.assertRaises(CertificateException, Content, name="mycontent",
-                label="mycontent", enabled="5")
+        self.assertRaises(CertificateException, Content, content_type="yum",
+                name="mycontent", label="mycontent", enabled="5")
 
+    def test_content_requires_type(self):
+        self.assertRaises(CertificateException, Content, name="testcontent",
+                          label="testcontent", enabled=True)
+        self.assertRaises(CertificateException, Content, content_type=None,
+                          name="testcontent", label="testcontent", enabled=True)
+        self.assertRaises(CertificateException, Content, content_type="",
+                          name="testcontent", label="testcontent", enabled=True)
 
 class ProductTests(unittest.TestCase):
 

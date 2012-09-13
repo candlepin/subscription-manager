@@ -200,11 +200,12 @@ class _CertFactory(object):
 
     def _parse_v1_content(self, extensions):
         content = []
-        ents = extensions.find("2.*.1.1")
+        ents = extensions.find("2.*.*.1")
         for ent in ents:
-            oid = ent[0]
-            content_ext = extensions.branch(oid.rtrim(1))
+            oid = ent[0].rtrim(1)
+            content_ext = extensions.branch(oid)
             content.append(Content(
+                content_type=extensions.get(oid),
                 name=content_ext.get('1'),
                 label=content_ext.get('2'),
                 vendor=content_ext.get('5'),
@@ -305,6 +306,7 @@ class _CertFactory(object):
         for product in payload['products']:
             for c in product['content']:
                 content.append(Content(
+                    content_type=c['type'],
                     name=c['name'],
                     label=c['label'],
                     vendor=c.get('vendor', None),
@@ -546,17 +548,21 @@ class Order(object):
 
 class Content(object):
 
-    def __init__(self, name=None, label=None, vendor=None, url=None,
+    def __init__(self, content_type=None, name=None, label=None, vendor=None, url=None,
             gpg=None, enabled=None, metadata_expire=None, required_tags=None):
 
         if (name is None) or (label is None):
             raise CertificateException("Content missing name/label")
 
+        self.content_type = content_type
         self.name = name
         self.label = label
         self.vendor = vendor
         self.url = url
         self.gpg = gpg
+
+        if not content_type:
+            raise CertificateException("Content does not have a type set.")
 
         if (enabled not in (None, 0, 1, "0", "1")):
             raise CertificateException("Invalid content enabled setting: %s"
@@ -575,5 +581,5 @@ class Content(object):
         return (self.label == other.label)
 
     def __str__(self):
-        return "<Content: name=%s label=%s enabled=%s>" % \
-                (self.name, self.label, self.enabled)
+        return "<Content: content_type=%s name=%s label=%s enabled=%s>" % \
+                (self.content_type, self.name, self.label, self.enabled)
