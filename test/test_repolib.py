@@ -120,6 +120,8 @@ class UpdateActionTests(unittest.TestCase):
                 StubContent("c3", required_tags="TAG1,TAG2,TAG3"),  # should get skipped
                 StubContent("c4", required_tags="TAG1,TAG2,TAG4,TAG5,TAG6",
                     gpg="/gpg.key"),
+                StubContent("c5", content_type="file", required_tags="", gpg=None),
+                StubContent("c6", content_type="file", required_tags="", gpg=None),
         ]
         self.stub_ent_cert = StubEntitlementCertificate(stub_prod, content=stub_content)
         stub_ent_dir = StubCertificateDirectory([self.stub_ent_cert])
@@ -181,6 +183,13 @@ class UpdateActionTests(unittest.TestCase):
             self.update_action.join(base, "baz"))
         self.assertEquals("http://foo/bar/baz",
             self.update_action.join(base, "/baz"))
+
+    def test_only_allow_content_of_type_yum(self):
+        content = self.update_action.get_content(self.stub_ent_cert,
+                                                 "http://example.com", None)
+        self.assertIsNotNone(self._find_content(content, "c1"))
+        self.assertIsNone(self._find_content(content, "c5"))
+        self.assertIsNone(self._find_content(content, "c6"))
 
 
 class TidyWriterTests(unittest.TestCase):
