@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.17
+Version: 1.0.18
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -351,6 +351,30 @@ fi
 %endif
 
 %changelog
+* Thu Sep 13 2012 Alex Wood <awood@redhat.com> 1.0.18-1
+- Increasing version of python-rhsm required. (awood@redhat.com)
+- 856349: rct cat-cert now printing content for all content types
+  (mstead@redhat.com)
+- 840415: Handle copyfile errors gracefully. (awood@redhat.com)
+- 853233: Do not allow 68.pem and 71.pem to coexist after migration.
+  (awood@redhat.com)
+- 854879: Fixes for Anaconda desktop/workstation product cert installation.
+  (dgoodwin@redhat.com)
+- Add test cases for certmgr.py (and make certlib testable)
+  (alikins@redhat.com)
+- 852706: Fix server side certs not being deleted client side
+  (alikins@redhat.com)
+- Adding new line b/w products when printed by rct (mstead@redhat.com)
+- 850920: --servicelevel and --no-auto are mutually exclusive.
+  (awood@redhat.com)
+- adding --unset option to service-level and release cmds
+  (dlackey@redhat.com.com)
+- fixing orderedlist (dlackey@redhat.com.com)
+- updated images for bz840599; changed rhsmcertd intervals, bz853571
+  (dlackey@redhat.com.com)
+- editing manpages and gnome help per UXD feedback; updating manpages for new
+  command arguments; bz852323, bz850881, bz854357 (dlackey@redhat.com.com)
+
 * Fri Aug 31 2012 Alex Wood <awood@redhat.com> 1.0.17-1
 - Fix gettext_lint issue with concat string in rhn-migrate (alikins@redhat.com)
 - 851124: Fix GUI unsubscribe. (dgoodwin@redhat.com)
