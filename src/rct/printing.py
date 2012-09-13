@@ -69,6 +69,8 @@ class ContentPrinter(object):
     def as_str(self, content):
         s = []
         s.append("%s:" % _("Content"))
+        # content-type is required, no need to xstr
+        s.append("\t%s: %s" % (_("Type"), content.content_type))
         s.append("\t%s: %s" % (_("Name"), xstr(content.name)))
         s.append("\t%s: %s" % (_("Label"), xstr(content.label)))
         s.append("\t%s: %s" % (_("Vendor"), xstr(content.vendor)))
