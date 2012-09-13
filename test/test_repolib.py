@@ -175,7 +175,7 @@ class UpdateActionTests(unittest.TestCase):
     def test_only_allow_content_of_type_yum(self):
         content = self.update_action.get_content(self.stub_ent_cert,
                                                  "http://example.com", None)
-        self.assertIsNotNone(self._find_content(content, "c1"))
+        self.assertTrue(self._find_content(content, "c1") is not None)
         self.assertIsNone(self._find_content(content, "c5"))
         self.assertIsNone(self._find_content(content, "c6"))
 
