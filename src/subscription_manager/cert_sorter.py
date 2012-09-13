@@ -323,7 +323,7 @@ class StackingGroupSorter(object):
             if stacking_id:
                 if stacking_id not in stacking_groups:
                     group = EntitlementGroup(entitlement,
-                            self._get_product_name(entitlement))
+                            self._get_identity_name(entitlement))
                     self.groups.append(group)
                     stacking_groups[stacking_id] = group
                 else:
@@ -335,9 +335,9 @@ class StackingGroupSorter(object):
     def _get_stacking_id(self, entitlement):
         raise NotImplementedError("Subclasses must implement: _get_stacking_id")
 
-    def _get_product_name(self, entitlement):
+    def _get_identity_name(self, entitlement):
         raise NotImplementedError(
-                "Subclasses must implement: _get_product_name")
+                "Subclasses must implement: _get_identity_name")
 
 
 class EntitlementGroup(object):
@@ -357,5 +357,5 @@ class EntitlementCertStackingGroupSorter(StackingGroupSorter):
     def _get_stacking_id(self, cert):
         return cert.order.stacking_id
 
-    def _get_product_name(self, cert):
-        return cert.products[0].name
+    def _get_identity_name(self, cert):
+        return cert.order.name
