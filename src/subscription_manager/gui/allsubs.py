@@ -127,17 +127,6 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
     def get_store(self):
         return MappedTreeStore(self.get_type_map())
 
-    def _setup_title_text_renderer(self, column, markup, text_model_idx):
-        title_text_renderer = gtk.CellRendererText()
-        title_text_renderer.set_property('xalign', 0.0)
-        self.pack_start(title_text_renderer, True)
-
-        renderer_attr = "text"
-        if markup:
-            renderer_attr = "markup"
-        self.add_attribute(title_text_renderer, renderer_attr, text_model_idx)
-        return title_text_renderer
-
     def get_type_map(self):
         return {
             'virt_only': gobject.TYPE_PYOBJECT,
