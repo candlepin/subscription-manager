@@ -65,6 +65,10 @@ test_config_file = open(test_config_file_path, 'w+')
 test_config_file.write(cfg_buf)
 test_config_file.close()
 
+# monkey patch the default config dir, facts.py uses
+# it to figure where to look for custom facts
+config.DEFAULT_CONFIG_DIR = "%s/etc/rhsm/" % tmpdir
+
 
 class TestConfig(config.RhsmConfigParser):
     def __init__(self, config_file=None, defaults=config.DEFAULTS):
