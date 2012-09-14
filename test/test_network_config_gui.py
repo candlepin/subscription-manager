@@ -21,5 +21,6 @@ class NetworkConfigDialog(unittest.TestCase):
         nc = networkConfig.NetworkConfigDialog()
         # mock the config so we can simulate a write failure
         nc.cfg = mock.Mock()
+        nc.cfg.fileName = 'not/an/actual/file'
         nc.cfg.save.side_effect = IOError()
         nc.writeValues()
