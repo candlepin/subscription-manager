@@ -138,6 +138,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
             # unregistered, just delete the certs directly
             self.backend.certlib.delete([serial])
 
+        # Ensure that the repo file gets updated right after any
+        # certs are removed.
+        self.backend.repolib.update()
+
         self.update_subscriptions()
 
     def unsubscribe_button_clicked(self, widget):

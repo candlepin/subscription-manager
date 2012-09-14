@@ -1404,9 +1404,15 @@ class UnSubscribeCommand(CliCommand):
             except Exception, e:
                 handle_exception(_("Unable to perform unsubscribe due to the following exception: %s") % e, e)
 
+        # Update the repo file so that it is in sync with our entitlements.
+        self._repolib().update()
+
         # it is okay to call this no matter what happens above,
         # it's just a notification to perform a check
         self._request_validity_check()
+
+    def _repolib(self):
+        return RepoLib(uep=self.cp)
 
 
 class FactsCommand(CliCommand):
