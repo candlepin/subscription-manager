@@ -311,7 +311,7 @@ class PerformRegisterScreen(NoGuiScreen):
                 self._parent.pre_done(SELECT_SLA_PAGE)
 
         except Exception, e:
-            handle_gui_exception(e, REGISTER_ERROR, self._parent.window)
+            handle_gui_exception(e, REGISTER_ERROR, self._parent.parent)
             self._parent.finish_registration(failed=True)
 
     def pre(self):
@@ -341,7 +341,7 @@ class PerformSubscribeScreen(NoGuiScreen):
 
         except Exception, e:
             handle_gui_exception(e, _("Error subscribing: %s"),
-                                 self._parent.window)
+                                 self._parent.parent)
             self._parent.finish_registration(failed=True)
 
     def pre(self):
@@ -546,7 +546,7 @@ class EnvironmentScreen(Screen):
     def _on_get_environment_list_cb(self, result_tuple, error=None):
         environments = result_tuple
         if error != None:
-            handle_gui_exception(error, REGISTER_ERROR, self._parent.window)
+            handle_gui_exception(error, REGISTER_ERROR, self._parent.parent)
             self._parent.finish_registration(failed=True)
             return
 
@@ -616,7 +616,7 @@ class OrganizationScreen(Screen):
             handle_gui_exception(None,
                     _("<b>User %s is not able to register with any orgs.</b>") \
                             % (self._parent.username),
-                    self._parent.window)
+                    self._parent.parent)
             self._parent.finish_registration(failed=True)
             return
 
