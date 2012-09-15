@@ -219,7 +219,7 @@ class MainWindow(widgets.GladeWidget):
                 self.facts)
 
         self.registration_dialog = registergui.RegisterScreen(self.backend,
-                self.consumer, self.facts,
+                self.consumer, self.facts, self._get_window(),
                 callbacks=[self.registration_changed])
 
         self.preferences_dialog = PreferencesDialog(self.backend, self.consumer,
@@ -358,7 +358,6 @@ class MainWindow(widgets.GladeWidget):
             self.redeem_menu_item.hide()
 
     def _register_item_clicked(self, widget):
-        self.registration_dialog.set_parent_window(self._get_window())
         self.registration_dialog.show()
 
     def _preferences_item_clicked(self, widget):
