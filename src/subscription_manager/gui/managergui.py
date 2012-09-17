@@ -55,6 +55,7 @@ import webbrowser
 import urllib2
 
 import gettext
+from subscription_manager.repolib import RepoLib
 _ = gettext.gettext
 gettext.textdomain("rhsm")
 gtk.glade.bindtextdomain("rhsm")
@@ -94,6 +95,7 @@ class Backend(object):
         self.product_dir = ProductDirectory()
         self.entitlement_dir = EntitlementDirectory()
         self.certlib = CertLib(uep=self.uep)
+        self.repolib = RepoLib(uep=self.uep)
 
         self.product_monitor = file_monitor.Monitor(self.product_dir.path)
         self.entitlement_monitor = file_monitor.Monitor(

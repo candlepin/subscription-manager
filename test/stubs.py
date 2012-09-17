@@ -453,9 +453,20 @@ class StubConsumer:
         return "12341234234"
 
 
-class StubCertLib:
+class StubLib:
     def __init__(self, uep=StubUEP()):
         self.uep = uep
+        self.update_called = False
 
     def update(self):
-        pass
+        self.update_called = True
+
+
+class StubCertLib(StubLib):
+    def __init__(self, uep=StubUEP()):
+        StubLib.__init__(self, uep)
+
+
+class StubRepoLib(StubLib):
+    def __init__(self, uep=StubUEP()):
+        StubLib.__init__(self, uep)
