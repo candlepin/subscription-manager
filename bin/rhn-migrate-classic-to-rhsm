@@ -470,6 +470,12 @@ def subscribe(consumer, servicelevel):
         print _("\nPlease visit https://access.redhat.com/management/consumers/%s to view the details, and to make changes if necessary.") % consumer.getConsumerId()
 
 
+def print_banner(msg):
+        print "\n+-----------------------------------------------------+",
+        print msg
+        print "+-----------------------------------------------------+"
+
+
 def deployProdCertificates(subscribedChannels):
     release = getRelease()
     mappingfile = "/usr/share/rhsm/product/" + release + "/channel-cert-mapping.txt"
@@ -500,29 +506,23 @@ def deployProdCertificates(subscribedChannels):
             unrecognizedChannels.append(channel)
 
     if invalidRhsmChannels:
-        print "\n+--------------------------------------------------+"
-        print _("Channels not available on RHSM:")
-        print "+--------------------------------------------------+"
+        print_banner("\n" + _("Channels not available on RHSM:"))
         for i in invalidRhsmChannels:
             print i
 
     if unrecognizedChannels:
-        print "\n+--------------------------------------------------+",
-        print _("\nNo product certificates are mapped to these RHN Classic channels:")
-        print "+--------------------------------------------------+"
+        print_banner(_("\nNo product certificates are mapped to these RHN Classic channels:"))
         for i in unrecognizedChannels:
             print i
 
     if unrecognizedChannels or invalidRhsmChannels:
         if not options.force:
-            print _("\nUse --force to ignore these channels and continue the migration.\n")
+            print(_("\nUse --force to ignore these channels and continue the migration.\n"))
             sys.exit(1)
 
     log.info("certs to be installed: %s", applicableCerts)
 
-    print "\n+--------------------------------------------------+",
-    print _("\nInstalling product certificates for these RHN Classic channels:")
-    print "+--------------------------------------------------+"
+    print_banner(_("\nInstalling product certificates for these RHN Classic channels:"))
     for i in validRhsmChannels:
         print i
 
