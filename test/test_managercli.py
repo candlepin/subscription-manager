@@ -347,10 +347,6 @@ class TestUnRegisterCommand(TestCliProxyCommand):
 class TestRedeemCommand(TestCliProxyCommand):
     command_class = managercli.RedeemCommand
 
-    def test_main_server_url(self):
-        server_url = "https://subscription.rhn.redhat.com/subscription"
-        self.cc.main(["--serverurl", server_url])
-
 
 class TestReposCommand(TestCliCommand):
     command_class = managercli.ReposCommand
