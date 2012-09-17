@@ -183,7 +183,7 @@ def systemExit(code, msgs=None):
 
 def isHosted():
     hostname = rhsmcfg.get('server', 'hostname')
-    if re.search('subscription\.rhn\..*redhat\.com', hostname):
+    if re.search('subscription\.rhn\.(.*\.)*redhat\.com', hostname):
         return True  # re.search doesn't return a boolean
     else:
         return False
