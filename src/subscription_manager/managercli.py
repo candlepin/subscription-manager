@@ -1106,7 +1106,6 @@ class RedeemCommand(CliCommand):
         super(RedeemCommand, self).__init__("redeem", shortdesc, False, ent_dir,
                                             prod_dir)
 
-        self._add_url_options()
         self.parser.add_option("--email", dest="email", action='store',
                                help=_("Email address to notify when "
                                "subscription redemption is complete."))
