@@ -38,8 +38,13 @@ class MySubscriptionsTabTest(unittest.TestCase):
             start_date=datetime.datetime(2010, 1, 1),
             end_date=datetime.datetime(2060, 1, 1),
             quantity="10", stacking_id=None)
+        self.cert2 = StubEntitlementCertificate(
+            StubProduct('product3'),
+            start_date=datetime.datetime(2010, 1, 1),
+            end_date=datetime.datetime(2060, 1, 1),
+            quantity="10", stacking_id=None)
 
-        self.cert_dir = StubCertificateDirectory([self.cert1])
+        self.cert_dir = StubCertificateDirectory([self.cert1, self.cert2])
         self.my_subs_tab = MySubscriptionsTab(self.backend, self.consumer,
                 self.facts, None, self.cert_dir, StubProductDirectory([]))
 
@@ -82,22 +87,36 @@ class MySubscriptionsTabTest(unittest.TestCase):
 
     def test_correct_cert_data_inserted_into_store(self):
         self.cert1.order.stacking_id = None
-        column_entries = self._get_entries_for_test()
+        self.cert2.order.stacking_id = None
 
-        self.assertEquals(1, len(column_entries))
-
-        entry = column_entries[0]
-
-        self._assert_entry(entry)
-
-    def test_stacking_entry_inserted_when_stacking_id_exists(self):
-        self.cert1.order.stacking_id = 1234
         column_entries = self._get_entries_for_test()
 
         self.assertEquals(2, len(column_entries))
 
+        self._assert_entry_1(column_entries[0])
+        self._assert_entry_2(column_entries[1])
+
+    def test_stacking_entry_not_inserted_when_stacking_id_exists(self):
+        self.cert1.order.stacking_id = 1234
+        self.cert2.order.stacking_id = None
+        column_entries = self._get_entries_for_test()
+
+        # single entry with stacking_id: no stacking entry
+        self.assertEquals(2, len(column_entries))
+
+        self._assert_entry_1(column_entries[0])
+        self._assert_entry_2(column_entries[1])
+
+    def test_stacking_entry_inserted_when_stacking_id_exists(self):
+        self.cert1.order.stacking_id = 1234
+        self.cert2.order.stacking_id = 1234
+        column_entries = self._get_entries_for_test()
+
+        self.assertEquals(3, len(column_entries))
+
         self._assert_group_entry(column_entries[0])
-        self._assert_entry(column_entries[1])
+        self._assert_entry_1(column_entries[1])
+        self._assert_entry_2(column_entries[2])
 
     def _get_entries_for_test(self):
         column_entries = []
@@ -110,7 +129,7 @@ class MySubscriptionsTabTest(unittest.TestCase):
         self.my_subs_tab.update_subscriptions()
         return column_entries
 
-    def _assert_entry(self, entry):
+    def _assert_entry_1(self, entry):
         self.assertEquals(self.cert1.order.name, entry['subscription'])
         self.assertEquals(self.cert1.valid_range.begin(), entry['start_date'])
         self.assertEquals(self.cert1.valid_range.end(), entry['expiration_date'])
@@ -120,8 +139,18 @@ class MySubscriptionsTabTest(unittest.TestCase):
         self.assertEquals(self.cert1.serial, entry['serial'])
         self.assertFalse(entry['is_group_row'])
 
+    def _assert_entry_2(self, entry):
+        self.assertEquals(self.cert2.order.name, entry['subscription'])
+        self.assertEquals(self.cert2.valid_range.begin(), entry['start_date'])
+        self.assertEquals(self.cert2.valid_range.end(), entry['expiration_date'])
+        self.assertEquals("0 / 1", entry['installed_text'])
+        self.assertEquals(0, entry['installed_value'])
+        self.assertEquals(self.cert2.order.quantity_used, entry['quantity'])
+        self.assertEquals(self.cert2.serial, entry['serial'])
+        self.assertFalse(entry['is_group_row'])
+
     def _assert_group_entry(self, entry):
-        self.assertEquals(self.cert1.products[0].name,
+        self.assertEquals("Stack of %s and 1 other" % self.cert1.order.name,
                           entry['subscription'])
         self.assertFalse('start_date' in entry)
         self.assertFalse('expiration_date' in entry)
