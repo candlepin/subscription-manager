@@ -385,7 +385,6 @@ class StubUEP:
         self.called_unbind_serial = serial
 
     def getCertificateSerials(self, consumer):
-        print "getCertificateSerials"
         return []
 
 
