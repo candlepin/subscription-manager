@@ -7,6 +7,7 @@ import socket
 import stubs
 
 from subscription_manager import managercli, managerlib
+from subscription_manager.repolib import RepoFile
 from stubs import MockStderr, MockStdout, StubProductDirectory, \
         StubEntitlementDirectory, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP
@@ -362,6 +363,29 @@ class TestReposCommand(TestCliCommand):
     def test_disable(self):
         self.cc.main(["--disable", "one", "--disable", "two"])
         self.cc._validate_options()
+
+    @mock.patch.object(RepoFile, "update")
+    def test_set_repo_status(self, mock_update):
+        repos = mock.MagicMock()
+        repo = mock.MagicMock()
+
+        repos.__iter__.return_value = [repo]
+
+        repo_dict = {'enabled': '1'}
+
+        def getitem(name):
+            return repo_dict[name]
+
+        def setitem(name, val):
+            repo_dict[name] = val
+
+        repo.__getitem__.side_effect = getitem
+        repo.__setitem__.side_effect = setitem
+        repo.id = "foo"
+
+        items = ["foo"]
+        self.cc._set_repo_status(repos, items, False)
+        mock_update.assert_called_with(repo)
 
 
 class TestConfigCommand(TestCliCommand):
