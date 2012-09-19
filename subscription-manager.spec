@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.0
+Version: 1.1.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -351,6 +351,51 @@ fi
 %endif
 
 %changelog
+* Wed Sep 19 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 1.1.1-1
+- updates to stat-cert for cert v3 (jbowes@redhat.com)
+- rct: Check for and handle files that aren't x509 certs (jbowes@redhat.com)
+- rct: remove content set count from cat-cert. use stat-cert instead.
+  (jbowes@redhat.com)
+- implement aliases for cli commands (jbowes@redhat.com)
+- rct: add a stat-cert command (jbowes@redhat.com)
+- Switch certv2 related code to certv3 (jbowes@redhat.com)
+- 852107: Make banner headings equal in length (bkearney@redhat.com)
+- 842768: Remove --serverurl option from redeem command. (awood@redhat.com)
+- Set correct parent for these error dialogs. (awood@redhat.com)
+- set_parent_window() on RegisterScreen has been removed. (awood@redhat.com)
+- make regex better (jesusr@redhat.com)
+- 855762: Set correct parent for error dialog boxes raised by Autobind wizard.
+  (awood@redhat.com)
+- 856349: rct cat-cert now printing content for all content types
+  (mstead@redhat.com)
+- 842768: Limit --serverurl and --baseurl to specific commands.
+  (awood@redhat.com)
+- 854467: Use of activation keys requires an org. (awood@redhat.com)
+  (dgoodwin@rm-rf.ca)
+- 854879: Fixes for Anaconda desktop/workstation product cert installation.
+  (dgoodwin@redhat.com)
+- 840415: Handle copyfile errors gracefully. (awood@redhat.com)
+- Adding new line b/w products when printed by rct (mstead@redhat.com)
+- 850920: --servicelevel and --no-auto are mutually exclusive.
+  (awood@redhat.com)
+- Explicitly set GMT when doing entitlement date math (cduryee@redhat.com)
+- adding --unset option to service-level and release cmds
+  (dlackey@redhat.com.com)
+- updated images for bz840599; changed rhsmcertd intervals, bz853571
+  (dlackey@redhat.com.com)
+- 853233: Do not allow 68.pem and 71.pem to coexist after migration.
+  (awood@redhat.com)
+- 852706: Fix server side certs not being deleted client side
+  (alikins@redhat.com)
+- editing manpages and gnome help per UXD feedback; updating manpages for new
+  command arguments; bz852323, bz850881, bz854357 (dlackey@redhat.com.com)
+  rf.ca)
+- 845349: Support setting unknown values in the yum repo file
+  (jbowes@redhat.com)
+- Add a count of content sets to entitlement certificates (bkearney@redhat.com)
+- 830988: Stacking is showing an odd parent in the My Subscriptions Tab
+  (wpoteat@redhat.com)
+
 * Fri Aug 31 2012 Alex Wood <awood@redhat.com> 1.0.17-1
 - Fix gettext_lint issue with concat string in rhn-migrate (alikins@redhat.com)
 - 851124: Fix GUI unsubscribe. (dgoodwin@redhat.com)
