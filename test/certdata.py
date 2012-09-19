@@ -198,7 +198,6 @@ Certificate:
 	Serial: 60063758564076674
 	Start Date: 2012-09-07 00:00:00+00:00
 	End Date: 2013-09-07 00:00:00+00:00
-	Content Sets: 6
 
 Subject:
 	CN: ff80808139affbb50139b5841809706e
@@ -341,7 +340,6 @@ Certificate:
 	Serial: 1306183239866671852
 	Start Date: 2012-09-18 00:00:00+00:00
 	End Date: 2013-09-18 00:00:00+00:00
-	Content Sets: 4
 
 Subject:
 	CN: ff80808139d9e26c0139da23489a0066
@@ -456,4 +454,19 @@ Certificate:
 Subject:
 	CN: eaadd6ea-852d-4430-94a7-73d5887d48e8
 
+"""
+
+PRODUCT_CERT_V1_0_STAT_OUTPUT = \
+"""Type: Product Certificate
+Version: 1.0
+DER size: 892b
+Subject Key ID size: 20b
+"""
+
+ENTITLEMENT_CERT_V3_0_STAT_OUTPUT = \
+"""Type: Entitlement Certificate
+Version: 3.0
+DER size: 915b
+Subject Key ID size: 20b
+Content sets: 4
 """
