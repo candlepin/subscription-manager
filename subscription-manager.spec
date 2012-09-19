@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.18
+Version: 1.0.19
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -351,6 +351,14 @@ fi
 %endif
 
 %changelog
+* Wed Sep 19 2012 Alex Wood <awood@redhat.com> 1.0.19-1
+- 855762: Set correct parent for error dialog boxes raised by Autobind wizard.
+  (awood@redhat.com)
+- 852107: Make banner headings equal in length (bkearney@redhat.com)
+- 842768: Limit --serverurl and --baseurl to specific commands.
+  (awood@redhat.com)
+- 854467: Use of activation keys requires an org. (awood@redhat.com)
+
 * Thu Sep 13 2012 Alex Wood <awood@redhat.com> 1.0.18-1
 - Increasing version of python-rhsm required. (awood@redhat.com)
 - 856349: rct cat-cert now printing content for all content types
