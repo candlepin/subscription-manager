@@ -78,7 +78,7 @@ class RegisterScreen(widgets.GladeWidget):
                     'register_progressbar', 'register_details_label',
                     'cancel_button', 'register_button']
 
-    def __init__(self, backend, consumer, facts=None, callbacks=[]):
+    def __init__(self, backend, consumer, facts=None, parent=None, callbacks=[]):
         """
         Callbacks will be executed when registration status changes.
         """
@@ -88,6 +88,7 @@ class RegisterScreen(widgets.GladeWidget):
         self.backend = backend
         self.consumer = consumer
         self.facts = facts
+        self.parent = parent
         self.callbacks = callbacks
 
         self.async = AsyncBackend(self.backend)
@@ -100,6 +101,8 @@ class RegisterScreen(widgets.GladeWidget):
         self.glade.signal_autoconnect(dic)
 
         self.window = self.register_dialog
+        self.register_dialog.set_transient_for(self.parent)
+
         screen_classes = [ChooseServerScreen, CredentialsScreen,
                           OrganizationScreen, EnvironmentScreen,
                           PerformRegisterScreen, SelectSLAScreen,
@@ -216,9 +219,6 @@ class RegisterScreen(widgets.GladeWidget):
         self.register_dialog.hide()
         return True
 
-    def set_parent_window(self, window):
-        self.register_dialog.set_transient_for(window)
-
     def _set_register_details_label(self, details):
         self.register_details_label.set_label("<small>%s</small>" % details)
 
@@ -237,8 +237,8 @@ class RegisterScreen(widgets.GladeWidget):
 
 class AutobindWizard(RegisterScreen):
 
-    def __init__(self, backend, consumer, facts):
-        super(AutobindWizard, self).__init__(backend, consumer, facts)
+    def __init__(self, backend, consumer, facts, parent):
+        super(AutobindWizard, self).__init__(backend, consumer, facts, parent)
 
     def show(self):
         super(AutobindWizard, self).show()
@@ -311,7 +311,7 @@ class PerformRegisterScreen(NoGuiScreen):
                 self._parent.pre_done(SELECT_SLA_PAGE)
 
         except Exception, e:
-            handle_gui_exception(e, REGISTER_ERROR, self._parent.window)
+            handle_gui_exception(e, REGISTER_ERROR, self._parent.parent)
             self._parent.finish_registration(failed=True)
 
     def pre(self):
@@ -341,7 +341,7 @@ class PerformSubscribeScreen(NoGuiScreen):
 
         except Exception, e:
             handle_gui_exception(e, _("Error subscribing: %s"),
-                                 self._parent.window)
+                                 self._parent.parent)
             self._parent.finish_registration(failed=True)
 
     def pre(self):
@@ -460,19 +460,23 @@ class SelectSLAScreen(Screen):
         return prod_str
 
     def _on_get_service_levels_cb(self, result, error=None):
+        # The parent for the dialogs is set to the grandparent window
+        # (which is MainWindow) because the parent window is closed
+        # by finish_registration() after displaying the dialogs.  See
+        # BZ #855762.
         if error != None:
             if isinstance(error, ServiceLevelNotSupportedException):
                 OkDialog(_("Unable to auto-subscribe, server does not support service levels."),
-                        parent=self._parent.window)
+                        parent=self._parent.parent)
             elif isinstance(error, NoProductsException):
                 InfoDialog(_("No installed products on system. No need to update subscriptions at this time."),
-                           parent=self._parent.window)
+                           parent=self._parent.parent)
             elif isinstance(error, AllProductsCoveredException):
                 InfoDialog(_("All installed products are covered by valid entitlements. No need to update subscriptions at this time."),
-                           parent=self._parent.window)
+                           parent=self._parent.parent)
             else:
                 handle_gui_exception(error, _("Error subscribing"),
-                                     self._parent.window)
+                                     self._parent.parent)
             self._parent.finish_registration(failed=True)
             return
 
@@ -490,7 +494,7 @@ class SelectSLAScreen(Screen):
                                      "Please use the \"All Available "
                                      "Subscriptions\" tab to manually "
                                      "subscribe this system.") % current_sla,
-                                    self._parent.window)
+                                    self._parent.parent)
                 self._parent.finish_registration(failed=True)
                 return
 
@@ -506,7 +510,7 @@ class SelectSLAScreen(Screen):
                                  _("No service level will cover all installed "
                                  "products. Please use the \"All Available "
                                  "Subscriptions\" tab to manually subscribe "
-                                 "this system."), parent=self._parent.window)
+                                 "this system."), parent=self._parent.parent)
             self._parent.finish_registration(failed=True)
 
     def pre(self):
@@ -542,7 +546,7 @@ class EnvironmentScreen(Screen):
     def _on_get_environment_list_cb(self, result_tuple, error=None):
         environments = result_tuple
         if error != None:
-            handle_gui_exception(error, REGISTER_ERROR, self._parent.window)
+            handle_gui_exception(error, REGISTER_ERROR, self._parent.parent)
             self._parent.finish_registration(failed=True)
             return
 
@@ -612,7 +616,7 @@ class OrganizationScreen(Screen):
             handle_gui_exception(None,
                     _("<b>User %s is not able to register with any orgs.</b>") \
                             % (self._parent.username),
-                    self._parent.window)
+                    self._parent.parent)
             self._parent.finish_registration(failed=True)
             return
 
