@@ -14,8 +14,10 @@
 #
 
 import unittest
-from rct.commands import RCTCliCommand
 
+from mock import patch
+from rhsm.certificate import CertificateException
+from rct.commands import RCTCliCommand
 from subscription_manager.cli import InvalidCLIOptionError
 
 
@@ -37,3 +39,19 @@ class RCTCliCommandTests(unittest.TestCase):
             self.fail("Expected InvalidCLIOptionError since no file does not exist.")
         except InvalidCLIOptionError, e:
             self.assertEqual("The specified certificate file does not exist.", str(e))
+
+    @patch("os.path.isfile")
+    @patch("rhsm.certificate.create_from_file")
+    def test_valid_x509_required(self, mock_create, mock_isfile):
+        mock_create.side_effect = CertificateException("error!")
+        mock_isfile.return_value = True
+        command = RCTCliCommand()
+
+        command._do_command = lambda: command._create_cert()
+        try:
+            command.main(['dummy-file.pem'])
+            self.fail("Expected InvalidCLIOptionError since bad x509 file.")
+        except InvalidCLIOptionError, e:
+            self.assertEqual(
+                    "Unable to read certificate file 'dummy-file.pem': error!",
+                    str(e))

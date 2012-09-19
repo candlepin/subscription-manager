@@ -54,7 +54,13 @@ class RCTCliCommand(AbstractCLICommand):
             raise InvalidCLIOptionError(_("The specified certificate file does not exist."))
 
     def _create_cert(self):
-        return certificate.create_from_file(self._get_file_from_args())
+        cert_file = self._get_file_from_args()
+        try:
+            return certificate.create_from_file(cert_file)
+        except certificate.CertificateException, ce:
+            raise InvalidCLIOptionError(
+                    _("Unable to read certificate file '%s': %s") % (cert_file,
+                        ce))
 
     def _get_usage(self):
         return _("%%prog %s [OPTIONS] CERT_FILE") % self.name
