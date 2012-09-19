@@ -77,9 +77,19 @@ class TestCertmgr(unittest.TestCase):
 
         self.patcher7 = mock.patch.object(facts.Facts, '_get_validity_facts')
         self.facts_getvalidityfacts = self.patcher7.start()
+        self.facts_getvalidityfacts.return_value = []
 
         self.patcher8 = mock.patch.object(facts.Facts, 'get_last_update')
         self.facts_getlastupdate = self.patcher8.start()
+        self.facts_getlastupdate.return_value = None
+
+        self.facts_load_hw_patcher = mock.patch.object(facts.Facts, '_load_hw_facts')
+        self.facts_load_hw_mock = self.facts_load_hw_patcher.start()
+        self.facts_load_hw_mock.return_value = {}
+
+        self.facts_load_custom_patcher = mock.patch.object(facts.Facts, '_load_custom_facts')
+        self.facts_load_custom_mock = self.facts_load_custom_patcher.start()
+        self.facts_load_custom_mock.return_value = {}
 
         # we end up import EntitlementDirectory differently lots...
         self.patcher9 = mock.patch('subscription_manager.certlib.EntitlementDirectory')
@@ -138,8 +148,6 @@ class TestCertmgr(unittest.TestCase):
         self.certlib_updateaction_getconsumerid.return_value = "234234"
 
         self.repolib_updateaction_perform.return_value = 0
-        self.facts_getvalidityfacts.return_value = []
-        self.facts_getlastupdate.return_value = None
 
         self.factlib_consumeridentity.read.return_value = stubs.StubConsumerIdentity("sdfsdf", "sdfsdf")
         self.certlib_consumeridentity.read.return_value = stubs.StubConsumerIdentity("sdfsdf", "sdfsdf")
@@ -153,6 +161,9 @@ class TestCertmgr(unittest.TestCase):
         self.patcher7.stop()
         self.patcher8.stop()
         self.patcher9.stop()
+
+        self.facts_load_hw_patcher.stop()
+        self.facts_load_custom_patcher.stop()
 
         self.patchcer_certdir_entdir.stop()
         self.patcher_repolib_entdir.stop()
@@ -305,6 +316,56 @@ class TestCertmgr(unittest.TestCase):
 
         # the expired certs should be delete/rogue and expired
         report = self.update_action_syslog_mock.call_args[0][0]
+        self.assertTrue(self.stub_ent1 in report.rogue)
+        self.assertTrue(self.stub_ent1 in report.expired)
+
+    @mock.patch.object(certlib.Action, 'build')
+    def test_expired_with_syslog_report(self, cert_build_mock):
+        cert_build_mock.return_value = (mock.Mock(), self.stub_ent1)
+
+        # unpatch the syslog capturing so we cover the real one
+        self.patcher_certlib_action_syslogreport.stop()
+
+        # this makes the stub_entdir report all ents as being expired
+        # so we fetch new ones
+        self.stub_entdir.expired = True
+
+        # we don't want to find replacements, so this forces a delete
+        self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
+        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
+        mgr.update()
+
+        # repatch syslogReport
+        self.patcher_certlib_action_syslogreport = mock.patch.object(certlib.UpdateAction, 'syslogResults')
+        self.update_action_syslog_mock = self.patcher_certlib_action_syslogreport.start()
+
+    @mock.patch.object(certlib.Action, 'build')
+    def test_expired_show_update_report(self, cert_build_mock):
+        cert_build_mock.return_value = (mock.Mock(), self.stub_ent1)
+
+        # this makes the stub_entdir report all ents as being expired
+        # so we fetch new ones
+        self.stub_entdir.expired = True
+
+        # we don't want to find replacements, so this forces a delete
+        self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
+        mgr = certmgr.CertManager(lock=stubs.MockActionLock(), uep=self.mock_uep)
+        mgr.update()
+
+        # the expired certs should be delete/rogue and expired
+        report = self.update_action_syslog_mock.call_args[0][0]
+
+        # some of this is more certlib testing, but while we have
+        # everything mocked up...
+
+        # UpdateReport.write
+        line_array = []
+        report.write(line_array, 'this is a title', self.local_ent_certs)
+        self.assertTrue(len(line_array) > 0)
+
+        report_str = '%s' % report
+        self.assertTrue(len(report_str) > 0)
+
         self.assertTrue(self.stub_ent1 in report.rogue)
         self.assertTrue(self.stub_ent1 in report.expired)
 

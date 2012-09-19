@@ -4,7 +4,7 @@ import sys
 import socket
 
 # for monkey patching config
-import stubs
+#import stubs
 
 from subscription_manager import managercli, managerlib
 from stubs import MockStderr, MockStdout, StubProductDirectory, \
@@ -21,8 +21,8 @@ from M2Crypto import SSL
 class TestCli(unittest.TestCase):
     # shut up stdout spew
     def setUp(self):
-        sys.stdout = stubs.MockStdout()
-        sys.stderr = stubs.MockStderr()
+        sys.stdout = MockStdout()
+        sys.stderr = MockStderr()
 
     def _restore_stdout(self):
         sys.stdout = sys.__stdout__

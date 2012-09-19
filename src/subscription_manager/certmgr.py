@@ -51,7 +51,7 @@ class CertManager:
         self.profilelib = PackageProfileLib(self.lock, uep=self.uep)
         self.installedprodlib = InstalledProductsLib(self.lock, uep=self.uep)
         #healinglib requires a fact set in order to get socket count
-        facts = Facts()
+        facts = Facts(ent_dir=None, prod_dir=None)
         self.healinglib = HealingLib(self.lock, self.uep, facts.to_dict(),
                                      product_dir)
         self.idcertlib = IdentityCertLib(self.lock, uep=self.uep)

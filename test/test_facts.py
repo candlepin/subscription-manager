@@ -129,11 +129,13 @@ def stub_get_facts():
 
 class TestFacts(unittest.TestCase):
     def setUp(self):
+
         self.fact_cache_dir = tempfile.mkdtemp()
         fact_cache = self.fact_cache_dir + "/facts.json"
         fd = open(fact_cache, "w")
         fd.write(facts_buf)
         fd.close()
+
         self.f = facts.Facts(ent_dir=StubEntitlementDirectory([]),
                              prod_dir=StubProductDirectory([]))
         self.f.CACHE_FILE = fact_cache
@@ -193,7 +195,7 @@ class InstalledProductStatusTests(unittest.TestCase):
     # facts for system entitlement valid check for an rhn "classic"
     # susbcription, so mock it out
     def setUp(self):
-        self.rhn_check_patcher = patch('subscription_manager.facts.ClassicCheck')
+        self.rhn_check_patcher = patch('subscription_manager.classic_check.ClassicCheck')
         self.rhn_check_mock = self.rhn_check_patcher.start()
         self.rhn_check_mock_instance = self.rhn_check_mock.return_value
         self.rhn_check_mock_instance.is_registered_with_classic.return_value = False

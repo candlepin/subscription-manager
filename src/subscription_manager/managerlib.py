@@ -40,12 +40,10 @@ from subscription_manager.repolib import RepoLib
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
-
 import gettext
 _ = gettext.gettext
 
 cfg = initConfig()
-ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
 
 # Expected permissions for identity certificates:
 ID_CERT_PERMS = stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP
@@ -618,6 +616,7 @@ class ImportFileExtractor(object):
 
         content = self._read(cert_file_path)
         self.parts = self._process_content(content)
+        self.ent_cert_dir = cfg.get('rhsm', 'entitlementCertDir')
 
     def _read(self, file_path):
         fd = open(file_path, "r")
@@ -684,7 +683,7 @@ class ImportFileExtractor(object):
         Write/copy cert to the entitlement cert dir.
         """
         self._ensure_entitlement_dir_exists()
-        dest_file_path = os.path.join(ENT_CONFIG_DIR,
+        dest_file_path = os.path.join(self.ent_cert_dir,
                                       self._create_filename_from_cert_serial_number())
 
         # Write the key/cert content to new files
@@ -704,8 +703,8 @@ class ImportFileExtractor(object):
             new_file.close()
 
     def _ensure_entitlement_dir_exists(self):
-        if not os.access(ENT_CONFIG_DIR, os.R_OK):
-            os.mkdir(ENT_CONFIG_DIR)
+        if not os.access(self.ent_cert_dir, os.R_OK):
+            os.mkdir(self.ent_cert_dir)
 
     def _get_key_path_from_dest_cert_path(self, dest_cert_path):
         file_parts = os.path.splitext(dest_cert_path)

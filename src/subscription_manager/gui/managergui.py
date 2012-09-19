@@ -32,7 +32,7 @@ from subscription_manager.gui import file_monitor
 from subscription_manager.gui import registergui
 import rhsm.connection as connection
 import rhsm.config as config
-from subscription_manager.hwprobe import ClassicCheck
+from subscription_manager import classic_check
 from subscription_manager.facts import Facts
 from subscription_manager.certdirectory import ProductDirectory, EntitlementDirectory
 from subscription_manager.certlib import ConsumerIdentity, CertLib
@@ -450,7 +450,7 @@ class MainWindow(widgets.GladeWidget):
         self.backend.update()
 
     def _check_rhn_classic(self):
-        if ClassicCheck().is_registered_with_classic():
+        if classic_check.ClassicCheck().is_registered_with_classic():
             prompt = messageWindow.ContinueDialog(
                     linkify(get_branding().REGISTERED_TO_OTHER_WARNING),
                     self.main_window, _("System Already Registered"))
