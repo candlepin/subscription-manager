@@ -32,10 +32,11 @@ class AbstractCLICommand(object):
     Base class for rt commands. This class provides a templated run
     strategy.
     """
-    def __init__(self, name="cli", shortdesc=None, primary=False):
+    def __init__(self, name="cli", aliases=[], shortdesc=None, primary=False):
         self.name = name
         self.shortdesc = shortdesc
         self.primary = primary
+        self.aliases = aliases
 
         # include our own HelpFormatter that doesn't try to break
         # long words, since that fails on multibyte words
@@ -71,11 +72,14 @@ class CLI:
     def __init__(self, command_classes=[]):
 
         self.cli_commands = {}
+        self.cli_aliases = {}
         for clazz in command_classes:
             cmd = clazz()
             # ignore the base class
             if cmd.name != "cli":
                 self.cli_commands[cmd.name] = cmd
+                for alias in cmd.aliases:
+                    self.cli_aliases[alias] = cmd
 
     def _add_command(self, cmd):
         self.cli_commands[cmd.name] = cmd
@@ -92,13 +96,16 @@ class CLI:
         for (name, cmd) in items:
             if (cmd.primary):
                 print("\t%-14s %s" % (name, cmd.shortdesc))
+
         print("")
-        print _("Other Modules (Please consult documentation):")
-        print "\r"
-        for (name, cmd) in items:
-            if (not cmd.primary):
+
+        other = [(item[0], item[1]) for item in items if not item[1].primary]
+        if len(other) > 0:
+            print _("Other Modules (Please consult documentation):")
+            print "\r"
+            for (name, cmd) in other:
                 print("\t%-14s %s" % (name, cmd.shortdesc))
-        print("")
+            print("")
 
     def _find_best_match(self, args):
         """
@@ -120,12 +127,14 @@ class CLI:
 
         cmd = None
         i = len(possiblecmd)
-        while cmd == None:
+        while cmd is None:
             key = " ".join(possiblecmd[:i])
             if key is None or key == "":
                 break
 
             cmd = self.cli_commands.get(key)
+            if cmd is None:
+                cmd = self.cli_aliases.get(key)
             i -= 1
 
         return cmd

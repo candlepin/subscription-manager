@@ -88,7 +88,7 @@ class CertificatePrinter(object):
     def cert_to_str(self, cert):
         s = []
         s.append("\n+-------------------------------------------+")
-        s.append("\t%s" % self._get_type_str(cert))
+        s.append("\t%s" % type_to_string(cert))
         s.append("+-------------------------------------------+\n")
         s.append(_("Certificate:"))
         s.append("\t%s: %s" % (_("Path"), xstr(cert.path)))
@@ -109,16 +109,6 @@ class CertificatePrinter(object):
         for key in sorted(cert.subject):
             s.append("\t%s: %s" % (key, cert.subject[key]))
         return "%s\n" % '\n'.join(s)
-
-    def _get_type_str(self, cert):
-        if isinstance(cert, EntitlementCertificate):
-            return _("Entitlement Certificate")
-        elif isinstance(cert, ProductCertificate):
-            return _("Product Certificate")
-        elif isinstance(cert, IdentityCertificate):
-            return _("Identity Certificate")
-        else:
-            return _("Unknown Certificate Type")
 
     def _append_to_cert_section(self, cert, str_parts_list):
         """
@@ -174,9 +164,6 @@ class EntitlementCertificatePrinter(ProductCertificatePrinter):
         return "%s\n%s%s" % (ProductCertificatePrinter.cert_to_str(self, cert),
                            order_printer.as_str(cert.order), "\n".join(s))
 
-    def _append_to_cert_section(self, cert, str_parts_list):
-        str_parts_list.append("\t%s: %s" % (_("Content Sets"), len(cert.content)))
-
 
 class CertificatePrinterFactory(object):
 
@@ -189,6 +176,17 @@ class CertificatePrinterFactory(object):
             return IdentityCertPrinter(**kwargs)
         else:
             return CertificatePrinter()
+
+
+def type_to_string(cert):
+        if isinstance(cert, EntitlementCertificate):
+            return _("Entitlement Certificate")
+        elif isinstance(cert, ProductCertificate):
+            return _("Product Certificate")
+        elif isinstance(cert, IdentityCertificate):
+            return _("Identity Certificate")
+        else:
+            return _("Unknown Certificate Type")
 
 
 def printc(cert, **kwargs):
