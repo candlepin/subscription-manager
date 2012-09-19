@@ -30,7 +30,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 # Hardcoded value for the version of certificates this version of the client
 # prefers:
-CERT_VERSION = "2.0"
+CERT_VERSION = "3.0"
 
 
 class Facts(CacheManager):

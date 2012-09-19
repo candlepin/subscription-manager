@@ -102,12 +102,12 @@ class CatCertCommandTests(unittest.TestCase):
         cert_output = self.mock_stdout.buffer
         self.assertEqual(certdata.ENTITLEMENT_CERT_V1_0_OUTPUT, cert_output)
 
-    def test_cert_v2_cat(self):
-        command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V2_0)
+    def test_cert_v3_cat(self):
+        command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_0)
         command.main(['will_use_stub'])
 
         cert_output = self.mock_stdout.buffer
-        self.assertEqual(certdata.ENTITLEMENT_CERT_V2_0_OUTPUT, cert_output)
+        self.assertEqual(certdata.ENTITLEMENT_CERT_V3_0_OUTPUT, cert_output)
 
     def test_product_cert_output(self):
         command = CatCertCommandStub(certdata.PRODUCT_CERT_V1_0)
