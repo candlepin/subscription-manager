@@ -219,7 +219,7 @@ class MainWindow(widgets.GladeWidget):
                 self.facts)
 
         self.registration_dialog = registergui.RegisterScreen(self.backend,
-                self.consumer, self.facts,
+                self.consumer, self.facts, self._get_window(),
                 callbacks=[self.registration_changed])
 
         self.preferences_dialog = PreferencesDialog(self.backend, self.consumer,
@@ -358,7 +358,6 @@ class MainWindow(widgets.GladeWidget):
             self.redeem_menu_item.hide()
 
     def _register_item_clicked(self, widget):
-        self.registration_dialog.set_parent_window(self._get_window())
         self.registration_dialog.show()
 
     def _preferences_item_clicked(self, widget):
@@ -416,9 +415,8 @@ class MainWindow(widgets.GladeWidget):
         self.import_sub_dialog.show()
 
     def _update_certificates_button_clicked(self, widget):
-        autobind_wizard = registergui.AutobindWizard(self.backend,
-                                                     self.consumer, self.facts)
-        autobind_wizard.set_parent_window(self._get_window())
+        autobind_wizard = registergui.AutobindWizard(self.backend, self.consumer,
+                 self.facts, self._get_window())
         autobind_wizard.show()
 
     def _redeem_item_clicked(self, widget):
