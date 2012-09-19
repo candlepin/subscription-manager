@@ -5,7 +5,7 @@
 
 
 Name: python-rhsm
-Version: 1.1.0
+Version: 1.1.1
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -63,6 +63,10 @@ rm -rf %{buildroot}
 %attr(640,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed Sep 19 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 1.1.1-1
+- Read certv3 detached format (jbowes@redhat.com)
+- Read file content types from certificates (mstead@redhat.com)
+
 * Wed Aug 29 2012 Alex Wood <awood@redhat.com> 1.0.7-1
 - 851644: Only use the cert file if it exists (bkearney@redhat.com)
 
