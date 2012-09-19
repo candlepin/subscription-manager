@@ -463,10 +463,10 @@ DER size: 892b
 Subject Key ID size: 20b
 """
 
-ENTITLEMENT_CERT_V2_0_STAT_OUTPUT = \
+ENTITLEMENT_CERT_V3_0_STAT_OUTPUT = \
 """Type: Entitlement Certificate
-Version: 2.0
-DER size: 1348b
+Version: 3.0
+DER size: 915b
 Subject Key ID size: 20b
 Content sets: 4
 """

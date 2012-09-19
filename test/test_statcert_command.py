@@ -63,9 +63,9 @@ class StatCertCommandTests(unittest.TestCase):
         self.assertEqual(certdata.PRODUCT_CERT_V1_0_STAT_OUTPUT, cert_output)
 
     def test_entitlement_cert_output_includes_content_sets(self):
-        command = StatCertCommandStub(certdata.ENTITLEMENT_CERT_V2_0)
+        command = StatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_0)
         command.main(['will_use_stub'])
 
         cert_output = self.mock_stdout.buffer
-        self.assertEqual(certdata.ENTITLEMENT_CERT_V2_0_STAT_OUTPUT,
+        self.assertEqual(certdata.ENTITLEMENT_CERT_V3_0_STAT_OUTPUT,
                 cert_output)
