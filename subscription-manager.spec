@@ -30,7 +30,7 @@ Requires:  python-iniparse
 Requires:  pygobject2
 Requires:  PyXML
 Requires:  virt-what
-Requires:  python-rhsm >= 1.1.0
+Requires:  python-rhsm >= 1.1.1
 Requires:  dbus-python
 Requires:  yum >= 3.2.19-15
 
