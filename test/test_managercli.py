@@ -371,12 +371,13 @@ class TestReposCommand(TestCliCommand):
         self.cc.main(["--disable", "one", "--disable", "two"])
         self.cc._validate_options()
 
-    @mock.patch.object(RepoFile, "update")
-    def test_set_repo_status(self, mock_update):
+    @mock.patch("subscription_manager.managercli.RepoFile")
+    def test_set_repo_status(self, mock_repofile):
         repos = mock.MagicMock()
         repo = mock.MagicMock()
+        mock_repofile_inst = mock_repofile.return_value
 
-        repos.__iter__.return_value = [repo]
+        repos.__iter__.return_value = iter([repo])
 
         repo_dict = {'enabled': '1'}
 
@@ -392,7 +393,9 @@ class TestReposCommand(TestCliCommand):
 
         items = ["foo"]
         self.cc._set_repo_status(repos, items, False)
-        mock_update.assert_called_with(repo)
+        mock_repofile_inst.read.assert_called()
+        mock_repofile_inst.update.assert_called_with(repo)
+        mock_repofile_inst.write.assert_called()
 
 
 class TestConfigCommand(TestCliCommand):
