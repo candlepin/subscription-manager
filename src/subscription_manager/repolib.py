@@ -290,7 +290,10 @@ class Repo(dict):
         self._order = []
 
         for key, value in existing_values:
-            self[key] = value
+            # only set keys that have a non-empty value, to not clutter the
+            # file.
+            if value:
+                self[key] = value
 
         # NOTE: This sets the above properties to the default values even if
         # they are not defined on disk. i.e. these properties will always
