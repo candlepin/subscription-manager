@@ -124,8 +124,7 @@ def config_hook(conduit):
     logutil.init_logger_for_yum()
     try:
         update(conduit)
-        if not ClassicCheck().is_registered_with_classic():
-                warnOrGiveUsageMessage(conduit)
-                warnExpired(conduit)
+        warnOrGiveUsageMessage(conduit)
+        warnExpired(conduit)
     except Exception, e:
         conduit.error(2, str(e))
