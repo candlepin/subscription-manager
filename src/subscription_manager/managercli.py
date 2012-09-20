@@ -1580,7 +1580,7 @@ class ReposCommand(CliCommand):
             found = False
             for repo in repos:
                 if repo.id == item:
-                    if repo['enabled'] is not status:
+                    if repo['enabled'] != status:
                         repo['enabled'] = status
                         change_repos.append(repo)
                     repos_modified.append(repo.id)
