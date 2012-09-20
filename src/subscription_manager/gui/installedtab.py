@@ -307,15 +307,18 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
             # Change wording slightly for just one product
             if warn_count > 1:
                 self.subscription_status_label.set_markup(
+                        # I18N: Please add newlines if translation is longer:
                         _("%s installed products do not have valid subscriptions.")
                         % warn_count)
             else:
                 self.subscription_status_label.set_markup(
+                        # I18N: Please add newlines if translation is longer:
                         _("1 installed product does not have a valid subscription."))
 
         elif partial_count > 0:
             self._set_status_icons(PARTIAL)
             self.subscription_status_label.set_markup(
+                # I18N: Please add newlines if translation is longer:
                 _("This system does not match subscription limits."))
 
         else:
@@ -324,6 +327,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
             self._set_status_icons(VALID)
             if first_invalid:
                 self.subscription_status_label.set_markup(
+                        # I18N: Please add newlines if translation is longer:
                         _("System is properly subscribed through %s.") % \
                             managerlib.formatDate(first_invalid))
             else:
@@ -331,10 +335,12 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 # the subscription assistant can't do anything, so we'll disable
                 # the button to launch it:
                 self.subscription_status_label.set_text(
+                        # I18N: Please add newlines if translation is longer:
                         _("No installed products detected."))
 
         if not is_registered:
             self.subscription_status_label.set_text(
+                # I18N: Please add newlines if translation is longer:
                 _("Keep your system up to date by registering."))
 
     def set_registered(self, is_registered):
