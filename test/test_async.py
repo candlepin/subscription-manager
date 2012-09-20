@@ -42,15 +42,14 @@ class TestAsyncPool(unittest.TestCase):
     def setUp(self):
         self.callbacks = []
 
-    def callback(self, data, error):
+    def thread_queue_callback(self, data, error):
         self.callbacks.append((data, error))
 
     def idle_callback(self, *args):
         # hit the refresh a few times, out stubbed
         # refresh doesn't really do anything though
-        self.ap.refresh(datetime.date.today(), self.callback)
-        self.count = self.count + 1
-        if self.count > 3:
+        self.ap.refresh(datetime.date.today(), self.thread_queue_callback)
+        if len(self.callbacks) > 3:
             self.mainloop.quit()
         return True
 
@@ -68,7 +67,6 @@ class TestAsyncPool(unittest.TestCase):
         self.ap = async.AsyncPool(self.pool_stash)
 
         # add a timeout and a idle handler
-        self.count = 0
         self.idle = gobject.idle_add(self.ap.refresh, datetime.date.today(), self.idle_callback)
         self.timer = gobject.timeout_add(50, self.idle_callback)
         self.mainloop = gobject.MainLoop()
@@ -78,7 +76,7 @@ class TestAsyncPool(unittest.TestCase):
 
         self.mainloop.run()
         # verify our callback got called a few times
-        self.assertTrue(len(self.callbacks) > 0)
+        self.assertTrue(len(self.callbacks) > 3)
 
     def test_exception(self):
         self._create_async_pool()
@@ -88,6 +86,6 @@ class TestAsyncPool(unittest.TestCase):
         self.pool_stash.refresh.side_effect = IOError()
 
         self.mainloop.run()
-        self.assertTrue(len(self.callbacks) > 0)
+        self.assertTrue(len(self.callbacks) > 3)
         # we should have an exception in the error from the callback
         self.assertTrue(isinstance(self.callbacks[0][1], IOError))
