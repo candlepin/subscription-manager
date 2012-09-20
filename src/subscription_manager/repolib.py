@@ -94,7 +94,6 @@ class UpdateAction:
             self.manage_repos = int(CFG.get('rhsm', 'manage_repos'))
 
         self.release = None
-        return
 
         # If we are not registered, skip trying to refresh the
         # data from the server
