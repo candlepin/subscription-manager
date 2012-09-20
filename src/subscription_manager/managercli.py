@@ -1546,46 +1546,13 @@ class ReposCommand(CliCommand):
         if cfg.has_option('rhsm', 'manage_repos') and \
                 not int(cfg.get('rhsm', 'manage_repos')):
             print _("Repositories disabled by configuration.")
+
+        rc = 0
         if self.options.enable:
-            repos_enabled = []
-            change_repos = []
-            found = False
-            for enable in self.options.enable:
-                for repo in repos:
-                    if repo.id == enable:
-                        if repo['enabled'] is not '1':
-                            repo['enabled'] = '1'
-                            change_repos.append(repo)
-                        repos_enabled.append(repo.id)
-                        found = True
-                        break
-            if not found:
-                print _("Error: A valid repo id is required. "
-                        "Use --list option to see valid repos.")
-            else:
-                self.updateFile(change_repos)
-                for repo in repos_enabled:
-                    print _("Repo %s is enabled for this system.") % repo
+            rc = rc or self._set_repo_status(repos, self.options.enable, True)
         if self.options.disable:
-            repos_disabled = []
-            change_repos = []
-            found = False
-            for disable in self.options.disable:
-                for repo in repos:
-                    if repo.id == disable:
-                        if repo['enabled'] is not '0':
-                            repo['enabled'] = '0'
-                            change_repos.append(repo)
-                        repos_disabled.append(repo.id)
-                        found = True
-                        break
-            if not found:
-                print _("Error: A valid repo id is required. "
-                        "Use --list option to see valid repos.")
-            else:
-                self.updateFile(change_repos)
-                for repo in repos_disabled:
-                    print _("Repo %s is disabled for this system.") % repo
+            rc = rc or self._set_repo_status(repos, self.options.disable, False)
+
         if self.options.list:
             if len(repos) > 0:
                 print("+----------------------------------------------------------+")
@@ -1598,13 +1565,43 @@ class ReposCommand(CliCommand):
                         repo["enabled"])
             else:
                 print _("This system has no repositories available through subscriptions.")
+        return rc
 
-    def updateFile(self, repos):
-        repo_file = RepoFile()
-        repo_file.read()
-        for repo in repos:
-            repo_file.update(repo)
-        repo_file.write()
+    def _set_repo_status(self, repos, items, enable):
+        repos_modified = []
+        change_repos = []
+        rc = 0
+        if enable:
+            status = '1'
+        else:
+            status = '0'
+
+        for item in items:
+            found = False
+            for repo in repos:
+                if repo.id == item:
+                    if repo['enabled'] != status:
+                        repo['enabled'] = status
+                        change_repos.append(repo)
+                    repos_modified.append(repo.id)
+                    found = True
+                    break
+            if not found:
+                rc = 1
+                print _("Error: %s is not a valid repo id. "
+                        "Use --list option to see valid repos." % item)
+        if change_repos:
+            repo_file = RepoFile()
+            repo_file.read()
+            for repo in change_repos:
+                repo_file.update(repo)
+            repo_file.write()
+        for repo in repos_modified:
+            if enable:
+                print _("Repo %s is enabled for this system.") % repo
+            else:
+                print _("Repo %s is disabled for this system.") % repo
+        return rc
 
 
 class ConfigCommand(CliCommand):
