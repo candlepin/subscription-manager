@@ -17,6 +17,13 @@ import mock
 from rhsm import connection
 from M2Crypto import SSL
 
+# FIXME: temp fix till we merge test fixture merged
+# Note: we don't tear this patch down, everything needs it mocked,
+# and we don't actually test this method
+is_valid_server_patcher = mock.patch("subscription_manager.managercli.is_valid_server_info")
+is_valid_server_mock = is_valid_server_patcher.start()
+is_valid_server_mock.return_value = True
+
 
 class TestCli(unittest.TestCase):
     # shut up stdout spew
