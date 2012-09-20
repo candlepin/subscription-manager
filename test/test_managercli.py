@@ -7,7 +7,6 @@ import socket
 import stubs
 
 from subscription_manager import managercli, managerlib
-from subscription_manager.repolib import RepoFile
 from stubs import MockStderr, MockStdout, StubProductDirectory, \
         StubEntitlementDirectory, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP
