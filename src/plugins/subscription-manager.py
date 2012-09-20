@@ -21,7 +21,6 @@ from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
 
 sys.path.append('/usr/share/rhsm')
 from subscription_manager import logutil
-from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.repolib import RepoLib, EntitlementDirectory
 from rhsm import connection
 
