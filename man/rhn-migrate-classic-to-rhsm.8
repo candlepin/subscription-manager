@@ -62,7 +62,7 @@ system rather than automatically applying best-matched subscriptions based on th
 
 .TP
 .B -n, --no-auto
-Unsubscribes the system from Red Hat Network Classic and registers it to Customer Portal Subscription Management, but does not subscribe the system to any entitlements.
+Unsubscribes the system from Red Hat Network Classic and registers it to Customer Portal Subscription Management, but does not subscribe the system to any subscriptions.
 
 .TP
 .B -s SERVICE_LEVEL, --servicelevel=SERVICE_LEVEL
@@ -101,6 +101,8 @@ After migration, the system facts maintained by Subscription Manager display wha
 [root@server ~]# subscription-manager facts --list | grep migr
 migration.classic_system_id: 09876
 migration.migrated_from: rhn_hosted_classic
+migration.migration_date: 2012-09-14T14:55:29.280519
+
 .fi
 
 .SS MIGRATION AND AUTOSUBSCRIBE
@@ -149,23 +151,28 @@ Optionally, the \fB--servicelevel\fP argument sets an SLA preference to use with
 [root@server ~]# rhn-migrate-classic-to-rhsm --servicelevel=premium
 RHN Username: jsmith@example.com
 Password:
-
-... 8< ...
 .fi
 
 .SS MIGRATION TO ON-PREMISE SERVICES
-The \fBrhn-migrate-classic-to-rhsm\fP tool migrates the system to Customer Portal Subscription Management (hosted) services by default. This uses the default configuration for Subscription Manager. For infrastructures which have an on-premise subscription management service such as Subscription Asset Manager, the .
+The \fBrhn-migrate-classic-to-rhsm\fP tool migrates the system to Customer Portal Subscription Management (hosted) services by default. This uses the default configuration for Subscription Manager, which points to the subscription services for the Customer Portal. For infrastructures which have an on-premise subscription management service such as Subscription Asset Manager, this configuration can be changed so that the migration process registers and subscribes the systems to the on-premise subscription services. 
+
+.PP
+This is done by using the \fB--serverurl\fP option, which specifies the URL of the local service. In this case, the authorization credentials must also be given for the local subscription management service account (which is independent of the RHN account).
 
 .nf
-[root@server ~]# rhn-migrate-classic-to-rhsm
-RHN Username: jsmith@example.com
+[root@server ~]# rhn-migrate-classic-to-rhsm --serverurl=sam.example.com
+Username: jsmith@example.com
 Password:
+.fi
 
 .SS MIGRATION AND MANUALLY SELECTING SUBSCRIPTIONS
-The \fB--no-auto\fP option prevents the autosubscribe step from running, while the \fB--gui\fP option opens the Subscription Manager GUI so that administrators can assign subscriptions to the system. As with the autosubscribe process, the script prompts for the RHN username and password for the user.
+The \fB--no-auto\fP option prevents the autosubscribe step from running. The \fB--gui\fP option not only prevents autosubscribe from running, it automatically opens the Subscription Manager GUI so that administrators can assign subscriptions to the system.
+
+.PP
+As with the autosubscribe process, the script prompts for the RHN username and password for the user.
 
 .nf
-[root@server ~]# rhn-migrate-classic-to-rhsm --gui --no-auto
+[root@server ~]# rhn-migrate-classic-to-rhsm --gui 
 RHN Username: jsmith@example.com
 Password:
 
@@ -190,30 +197,6 @@ System server.example.com successfully registered to RHN.
 Launching the GUI tool to manually subscribe the system ...
 .fi
 
-.SS UNREGISTER FROM RED HAT NETWORK CLASSIC ONLY
-The \fBrhn-migrate-classic-to-rhsm\fP tool can be used simply to unregister a system from Red Hat Network Classic without registering it to Customer Portal Subscription Management or assigning subscriptions to the system.
-
-.nf
-[root@server ~]# rhn-migrate-classic-to-rhsm --no-auto
-RHN Username: jsmith@example.com
-Password:
-
-Retrieving existing RHN classic subscription information ...
-+----------------------------------+
-System is currently subscribed to:
-+----------------------------------+
-rhel-i386-client-5
-
-List of channels for which certs are being copied
-rhel-i386-client-5
-
-Product Certificates copied successfully to /etc/pki/product !!
-
-Preparing to unregister system from RHN classic ...
-System successfully unregistered from RHN Classic.
-.fi
-
-
 .SH FILES
 
 .IP \fI/etc/sysconfig/rhn/systemid\fP
@@ -224,10 +207,7 @@ This file does not exist otherwise.
 The common configuration file used by RHN client programs.
 
 .IP \fI/var/log/rhsm/rhsm.log\fP
-The Subscription Manager log file. This contains any errors registering the system to Customer Portal Subscription Management or with subscribing the system to entitlements.
-
-.IP \fI/etc/rhsm/facts/migration.facts\fP
-The file which contains the migration information. This is displayed as one of the system facts by Subscription Manager.
+The Subscription Manager log file. This contains any errors registering the system to Customer Portal Subscription Management or with subscribing the system to subscriptions.
 
 .IP \fBsubscription-manager-migration-data.rpm\fB
 The package which contains the mappings for the migration script to migrate channels to the appropriate product certificates.
@@ -238,7 +218,7 @@ The package which contains the mappings for the migration script to migrate chan
 
 .SH AUTHORS
 .PP
-Paresh Mutha <pmutha@redhat.com>, Mark Huth <mhuth@redhat.com>, Tasos Papaioannou <tpapaioa@redhat.com>
+Deon Lackey <dlackey@redhat.com>, Paresh Mutha <pmutha@redhat.com>, Mark Huth <mhuth@redhat.com>, Tasos Papaioannou <tpapaioa@redhat.com>
 
 .SH BUGS
 .PP
