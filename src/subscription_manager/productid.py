@@ -206,7 +206,7 @@ class ProductManager:
             if repo in active:
                 continue
 
-            log.info("product cert %s for %s is being deleted" % (prod_hash, p.getName()))
+            log.info("product cert %s for %s is being deleted" % (prod_hash, p.name))
             cert.delete()
             self.pdir.refresh()
 

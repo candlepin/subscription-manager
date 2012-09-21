@@ -13,6 +13,13 @@ class TestProductManager(unittest.TestCase):
         self.prod_mgr = productid.ProductManager(product_dir=self.prod_dir,
                 product_db=self.prod_db_mock)
 
+    def test_removed(self):
+        self.prod_db_mock.findRepo.return_value = "repo1"
+        cert = self._create_desktop_cert()
+        self.prod_dir.certs.append(cert)
+        self.prod_mgr.updateRemoved([])
+        self.assertTrue(cert.delete.called)
+
     def _create_desktop_cert(self):
         cert = stubs.StubProductCertificate(
             stubs.StubProduct("68", "Red Hat Enterprise Linux Desktop",
