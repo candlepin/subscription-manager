@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-30 15:46-0400\n"
-"PO-Revision-Date: 2012-06-28 12:55-0400\n"
+"POT-Creation-Date: 2012-09-21 10:39-0400\n"
+"PO-Revision-Date: 2012-09-14 12:20-0400\n"
 "Last-Translator: eukim <eukim@fedoraproject.org>\n"
 "Language-Team: <ko@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -20,9 +20,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ko\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Zanata 1.6.1\n"
+"X-Generator: Zanata 1.7.1\n"
 
-#: ../src/subscription_manager/gui/managergui.py:371
+#: ../src/subscription_manager/gui/managergui.py:367
 msgid ""
 "Error in preferences dialog. Please see /var/log/rhsm/rhsm.log for more "
 "information."
@@ -30,21 +30,21 @@ msgstr ""
 "설정 대화 상자에서 오류 발생. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 "
 "참조하십시오."
 
-#: ../src/subscription_manager/gui/managergui.py:386
+#: ../src/subscription_manager/gui/managergui.py:382
 msgid "<b>Errors were encountered during unregister.</b>"
 msgstr "<b>등록 해제 도중 오류가 발생했습니다.</b>"
 
-#: ../src/subscription_manager/gui/managergui.py:388
+#: ../src/subscription_manager/gui/managergui.py:384
 #: ../src/subscription_manager/gui/registergui.py:70
 #: ../src/subscription_manager/managercli.py:118
 msgid "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr "보다 자세한 내용은 /var/log/rhsm/rhsm.log 에서 참조하십시오."
 
-#: ../src/subscription_manager/gui/managergui.py:405
+#: ../src/subscription_manager/gui/managergui.py:401
 msgid "<b>Are you sure you want to unregister?</b>"
 msgstr "<b>정말로 등록 취소하시겠습니까?</b>"
 
-#: ../src/subscription_manager/gui/managergui.py:461
+#: ../src/subscription_manager/gui/managergui.py:456
 msgid "System Already Registered"
 msgstr "이미 등록된 시스템"
 
@@ -56,7 +56,7 @@ msgid "Subscription"
 msgstr "서브스크립션"
 
 #: ../src/subscription_manager/gui/allsubs.py:83
-#: ../src/subscription_manager/managercli.py:1802
+#: ../src/subscription_manager/managercli.py:1812
 msgid "Available Subscriptions"
 msgstr "사용 가능한 서브스크립션"
 
@@ -116,7 +116,7 @@ msgstr "서브스크립션을 가져오는 도중 오류 발생: %s"
 #: ../src/subscription_manager/gui/allsubs.py:392
 #, python-format
 msgid "%s applied"
-msgstr ""
+msgstr "%s 적용됨"
 
 #: ../src/subscription_manager/gui/about.py:24
 msgid ""
@@ -173,7 +173,7 @@ msgid "Product"
 msgstr "제품"
 
 #: ../src/subscription_manager/gui/installedtab.py:87
-#: ../src/rct/printing.py:36 ../src/rct/printing.py:93
+#: ../src/rct/printing.py:36 ../src/rct/printing.py:95
 msgid "Version"
 msgstr "버전 "
 
@@ -183,13 +183,13 @@ msgstr "상태 "
 
 #: ../src/subscription_manager/gui/installedtab.py:93
 #: ../src/subscription_manager/gui/contract_selection.py:103
-#: ../src/rct/printing.py:95
+#: ../src/rct/printing.py:97
 msgid "Start Date"
 msgstr "시작 날짜"
 
 #: ../src/subscription_manager/gui/installedtab.py:96
 #: ../src/subscription_manager/gui/contract_selection.py:109
-#: ../src/subscription_manager/gui/mysubstab.py:93 ../src/rct/printing.py:96
+#: ../src/subscription_manager/gui/mysubstab.py:93 ../src/rct/printing.py:98
 msgid "End Date"
 msgstr "종료 날짜"
 
@@ -244,28 +244,28 @@ msgstr "내 설치된 제품"
 #: ../src/subscription_manager/gui/installedtab.py:310
 #, python-format
 msgid "%s installed products do not have valid subscriptions."
-msgstr ""
+msgstr "%s 설치된 제품에는 유효한 서브스크립션이 없습니다."
 
 #: ../src/subscription_manager/gui/installedtab.py:314
 msgid "1 installed product does not have a valid subscription."
-msgstr ""
+msgstr "설치된 제품 중 하나에 유효한 서브스크립션이 없습니다."
 
 #: ../src/subscription_manager/gui/installedtab.py:319
 msgid "This system does not match subscription limits."
-msgstr ""
+msgstr "이 시스템은 서브스크립션 제한과 일치하지 않습니다."
 
 #: ../src/subscription_manager/gui/installedtab.py:327
 #, python-format
 msgid "System is properly subscribed through %s."
-msgstr ""
+msgstr "시스템이 %s를 통해 올바르게 등록되어 있습니다."
 
 #: ../src/subscription_manager/gui/installedtab.py:334
 msgid "No installed products detected."
-msgstr ""
+msgstr "설치된 제품이 감지되지 않았습니다."
 
 #: ../src/subscription_manager/gui/installedtab.py:338
 msgid "Keep your system up to date by registering."
-msgstr ""
+msgstr "등록하여 시스템을 최신 상태로 유지합니다."
 
 #: ../src/subscription_manager/gui/networkConfig.py:150
 msgid "There was an error saving your configuration."
@@ -287,7 +287,7 @@ msgstr "프록시 연결 실패"
 #: ../src/subscription_manager/gui/contract_selection.py:84
 #: ../src/rct/printing.py:50
 msgid "Contract"
-msgstr ""
+msgstr "계약 "
 
 #: ../src/subscription_manager/gui/contract_selection.py:98
 msgid "Used / Total"
@@ -341,10 +341,10 @@ msgstr "설치됨"
 
 #: ../src/subscription_manager/gui/widgets.py:316
 msgid "Not Set"
-msgstr ""
+msgstr "설정되지 않음 "
 
 #: ../src/subscription_manager/gui/widgets.py:336
-#: ../src/subscription_manager/managercli.py:1751
+#: ../src/subscription_manager/managercli.py:1761
 msgid "None"
 msgstr "없음"
 
@@ -374,7 +374,8 @@ msgstr "가상"
 msgid "Both"
 msgstr "모두"
 
-#: ../src/subscription_manager/gui/widgets.py:677
+#. content-type is required, no need to xstr
+#: ../src/subscription_manager/gui/widgets.py:677 ../src/rct/printing.py:73
 msgid "Type"
 msgstr "유형"
 
@@ -432,7 +433,7 @@ msgstr "이전 업데이트가 없음"
 #: ../src/subscription_manager/managercli.py:244
 #: ../src/subscription_manager/managercli.py:247
 #: ../src/subscription_manager/managercli.py:248
-#: ../src/subscription_manager/managercli.py:1435
+#: ../src/subscription_manager/managercli.py:1445
 #: ../src/subscription_manager/utils.py:293
 #: ../src/subscription_manager/utils.py:294
 #: ../src/subscription_manager/utils.py:310
@@ -452,20 +453,22 @@ msgstr ""
 "션 관리자'를 실행하여 수동으로 등록하십시오."
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:44
-#: ../src/subscription_manager/gui/registergui.py:468
+#: ../src/subscription_manager/gui/registergui.py:472
 msgid ""
 "No installed products on system. No need to update subscriptions at this "
 "time."
 msgstr ""
+"시스템에 설치된 제품이 없습니다. 현재로서는 서브스크립션을 업데이트할 필요가 "
+"없습니다."
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:49
 msgid "All installed products are fully subscribed."
-msgstr ""
+msgstr "설치된 모든 제품이 모두 완전히 등록되어 있습니다."
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:53
-#: ../src/subscription_manager/gui/registergui.py:474
+#: ../src/subscription_manager/gui/registergui.py:478
 msgid "Error subscribing"
-msgstr ""
+msgstr "등록 도중 오류 발생"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:66
 #, python-format
@@ -478,6 +481,8 @@ msgid ""
 "No service levels will cover all installed products. Please run "
 "'Subscription Manager' to manually subscribe this system."
 msgstr ""
+"모든 설치된 제품에 적용되는 서비스 레벨이 없습니다. '서브스크립션 관리자'를 "
+"실행하여 수동으로 시스템에 등록합니다. "
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:96
 msgid "You have opted to skip auto-subscribe."
@@ -485,7 +490,7 @@ msgstr "자동 등록을 무시하도록 선택했습니다."
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:115
 msgid "Finish"
-msgstr ""
+msgstr "완료"
 
 #. Firstboot module title
 #. Note: translated title needs to be unique across all
@@ -555,12 +560,12 @@ msgstr "시스템 등록하기"
 
 #: ../src/subscription_manager/gui/registergui.py:334
 msgid "Attaching subscriptions"
-msgstr ""
+msgstr "서브스크립션 첨부"
 
 #: ../src/subscription_manager/gui/registergui.py:343
 #, python-format
 msgid "Error subscribing: %s"
-msgstr ""
+msgstr "등록 도중 오류 발생: %s"
 
 #: ../src/subscription_manager/gui/registergui.py:367
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:7
@@ -570,95 +575,101 @@ msgstr "등록"
 
 #: ../src/subscription_manager/gui/registergui.py:416
 msgid "Finding suitable service levels"
-msgstr ""
+msgstr "적합한 서비스 레벨 검색 중"
 
 # Override the button text to clarify we're not actually registering
 # by pressing that button here.
 #: ../src/subscription_manager/gui/registergui.py:417
-#: ../src/subscription_manager/gui/registergui.py:738
+#: ../src/subscription_manager/gui/registergui.py:742
 msgid "Next"
 msgstr "다음"
 
-#: ../src/subscription_manager/gui/registergui.py:465
+#: ../src/subscription_manager/gui/registergui.py:469
 msgid "Unable to auto-subscribe, server does not support service levels."
 msgstr ""
 "자동 등록을 실행할 수 없습니다, 서버가 서비스 레벨을 지원하지 않습니다."
 
-#: ../src/subscription_manager/gui/registergui.py:471
+#: ../src/subscription_manager/gui/registergui.py:475
 msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "subscriptions at this time."
 msgstr ""
+"설치된 모든 제품에는 유효한 인타이틀먼트가 적용됩니다. 서브스크립션을 업데이"
+"트할 필요가 없습니다. "
 
-#: ../src/subscription_manager/gui/registergui.py:488
+#: ../src/subscription_manager/gui/registergui.py:492
 #, python-format
 msgid ""
 "No available subscriptions at the current service level: %s. Please use the "
 "\"All Available Subscriptions\" tab to manually subscribe this system."
 msgstr ""
+"현재 서비스 레벨에서 사용할 수 있는 서브스크립션이 없습니다: %s. \"사용 가능"
+"한 모든 서브스크립션\"탭에서 수동으로 시스템을 등록하십시오."
 
-#: ../src/subscription_manager/gui/registergui.py:506
+#: ../src/subscription_manager/gui/registergui.py:510
 msgid ""
 "No service level will cover all installed products. Please use the \"All "
 "Available Subscriptions\" tab to manually subscribe this system."
 msgstr ""
+"설치된 모든 제품에 적용되는 서비스 레벨이 없습니다. \"사용 가능한 모든 서브스"
+"크립션\" 탭에서 수동으로 시스템을 등록하십시오."
 
-#: ../src/subscription_manager/gui/registergui.py:536
+#: ../src/subscription_manager/gui/registergui.py:540
 msgid "Fetching list of possible environments"
 msgstr "가능한 환경 목록 가져오기"
 
-#: ../src/subscription_manager/gui/registergui.py:538
+#: ../src/subscription_manager/gui/registergui.py:542
 msgid "Environment"
 msgstr "환경"
 
-#: ../src/subscription_manager/gui/registergui.py:593
+#: ../src/subscription_manager/gui/registergui.py:597
 msgid "Fetching list of possible organizations"
 msgstr "가능한 조직 목록 가져오기"
 
-#: ../src/subscription_manager/gui/registergui.py:596
+#: ../src/subscription_manager/gui/registergui.py:600
 msgid "Organization"
 msgstr "조직"
 
-#: ../src/subscription_manager/gui/registergui.py:613
+#: ../src/subscription_manager/gui/registergui.py:617
 #, python-format
 msgid "<b>User %s is not able to register with any orgs.</b>"
 msgstr "<b>사용자 %s은(는) 어떤 조직에도 등록할 수 없습니다.</b>"
 
-#: ../src/subscription_manager/gui/registergui.py:675
+#: ../src/subscription_manager/gui/registergui.py:679
 msgid "You must enter a system name."
 msgstr "시스템 이름을 입력하셔야 합니다."
 
-#: ../src/subscription_manager/gui/registergui.py:683
+#: ../src/subscription_manager/gui/registergui.py:687
 msgid "You must enter a login."
 msgstr "로그인을 입력하셔야 합니다."
 
-#: ../src/subscription_manager/gui/registergui.py:688
+#: ../src/subscription_manager/gui/registergui.py:692
 msgid "You must enter a password."
 msgstr "암호를 입력하셔야 합니다."
 
-#: ../src/subscription_manager/gui/registergui.py:767
+#: ../src/subscription_manager/gui/registergui.py:771
 #: ../src/subscription_manager/managercli.py:354
 #, python-format
 msgid "Unable to reach the server at %s:%s%s"
 msgstr "%s에 있는 서버에 연결할 수 없습니다:%s%s"
 
-#: ../src/subscription_manager/gui/registergui.py:771
+#: ../src/subscription_manager/gui/registergui.py:775
 msgid "CA certificate for subscription service has not been installed."
 msgstr "서브스크립션 서비스의 CA 인증서가 설치되지 않았습니다."
 
-#: ../src/subscription_manager/gui/registergui.py:776
+#: ../src/subscription_manager/gui/registergui.py:780
 msgid ""
 "Please provide a hostname with optional port and/or prefix: hostname[:port][/"
 "prefix]"
 msgstr ""
 "옵션 포트와 접두어로 호스트 이름을 지정하십시오: 호스트이름[:포트][/접두사]"
 
-#: ../src/subscription_manager/gui/registergui.py:833
+#: ../src/subscription_manager/gui/registergui.py:837
 msgid "Server supports environments, but none are available."
 msgstr "서버가 환경을 지원하지만 사용 가능한 것이 없습니다."
 
 #: ../src/subscription_manager/hwprobe.py:90
-#: ../src/subscription_manager/hwprobe.py:441
+#: ../src/subscription_manager/hwprobe.py:442
 #, python-format
 msgid "Error reading system DMI information: %s"
 msgstr "시스템 DMI 정보를 읽는 도중 오류 발생: %s"
@@ -698,6 +709,8 @@ msgid ""
 "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
 "more details."
 msgstr ""
+"서버에서 시스템 데이터를 업데이트하는 도중 오류 발생. 보다 자세한 내용은 /"
+"var/log/rhsm/rhsm.log에서 확인하십시오. "
 
 #: ../src/subscription_manager/branding/__init__.py:81
 msgid "Register the machine to the server"
@@ -746,13 +759,13 @@ msgstr ""
 
 #: ../src/subscription_manager/branding/redhat_branding.py:10
 msgid "This system is registered to RHN Classic."
-msgstr ""
+msgstr "이 시스템은 RHN 클래식에 등록됩니다."
 
 #: ../src/subscription_manager/branding/redhat_branding.py:13
 msgid ""
 "This system has already been registered with Red Hat using RHN Classic "
 "technology."
-msgstr ""
+msgstr "이 시스템은 RHN 클래식 기술을 사용하여 이미 Red Hat에 등록되었습니다. "
 
 #: ../src/subscription_manager/branding/redhat_branding.py:15
 msgid ""
@@ -760,12 +773,16 @@ msgid ""
 "Subscription Management technology. Red Hat recommends that customers only "
 "register once."
 msgstr ""
+"사용하고 있는 도구는 Red Hat 서브스크립션 관리 기술을 사용하여 다시 등록하려"
+"고 합니다. Red Hat은 고객이 한 번만 등록할 것을 권장합니다."
 
 #: ../src/subscription_manager/branding/redhat_branding.py:17
 msgid ""
 "To learn how to unregister from either service please consult this Knowledge "
 "Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
+"서비스로 부터 등록 해제하는 방법을 습득하려면  Knowledge Base 문서를 참조하십"
+"시오: https://access.redhat.com/kb/docs/DOC-45563"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:18
 #: ../src/subscription_manager/utils.py:334
@@ -781,10 +798,12 @@ msgid ""
 "This system is registered using both RHN Classic and Red Hat Subscription "
 "Management."
 msgstr ""
+"이 시스템은 RHN 클래식과 Red Hat 서브스크립션 관리를 모두 사용하여 등록되어 "
+"있습니다."
 
 #: ../src/subscription_manager/branding/redhat_branding.py:25
 msgid "Red Hat recommends that customers only register to one service."
-msgstr ""
+msgstr "Red Hat은 고객이 하나의 서브스에만 등록할 것을 권장합니다."
 
 #: ../src/subscription_manager/branding/redhat_branding.py:27
 msgid ""
@@ -796,7 +815,7 @@ msgstr ""
 
 #: ../src/subscription_manager/branding/redhat_branding.py:28
 msgid "RHN classic and Red Hat Subscription Management"
-msgstr ""
+msgstr "RHN 클래식 및 Red Hat 서브스크립션 관리"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:30
 msgid ""
@@ -836,11 +855,11 @@ msgstr "옵션"
 
 #: ../src/subscription_manager/i18n_optparse.py:139
 msgid "options"
-msgstr ""
+msgstr "옵션  "
 
 #: ../src/subscription_manager/i18n_optparse.py:140
 msgid "options:"
-msgstr ""
+msgstr "옵션:"
 
 #. stuff for option value sanity checking
 #: ../src/subscription_manager/i18n_optparse.py:143
@@ -985,29 +1004,29 @@ msgid "Status:               \t%s"
 msgstr "상태:               \t%s"
 
 #: ../src/subscription_manager/managercli.py:76
-#: ../src/subscription_manager/managercli.py:1892
+#: ../src/subscription_manager/managercli.py:1902
 #, python-format
 msgid "Starts:               \t%s"
 msgstr "시작:               \t%s"
 
 #: ../src/subscription_manager/managercli.py:77
 #: ../src/subscription_manager/managercli.py:87
-#: ../src/subscription_manager/managercli.py:1894
+#: ../src/subscription_manager/managercli.py:1904
 #, python-format
 msgid "Ends:                 \t%s"
 msgstr "종료:                 \t%s"
 
 #: ../src/subscription_manager/managercli.py:80
-#: ../src/subscription_manager/managercli.py:1865
+#: ../src/subscription_manager/managercli.py:1875
 #, python-format
 msgid "Subscription Name:    \t%s"
 msgstr "서브스크립션 이름:    \t%s"
 
 #: ../src/subscription_manager/managercli.py:81
-#: ../src/subscription_manager/managercli.py:1876
+#: ../src/subscription_manager/managercli.py:1886
 #, python-format
 msgid "SKU:                  \t%s"
-msgstr ""
+msgstr "SKU:                  \t%s"
 
 #: ../src/subscription_manager/managercli.py:82
 #, python-format
@@ -1020,13 +1039,13 @@ msgid "Quantity:             \t%s"
 msgstr "수량:             \t%s"
 
 #: ../src/subscription_manager/managercli.py:84
-#: ../src/subscription_manager/managercli.py:1888
+#: ../src/subscription_manager/managercli.py:1898
 #, python-format
 msgid "Service Level:        \t%s"
 msgstr "서비스 레벨:        \t%s"
 
 #: ../src/subscription_manager/managercli.py:85
-#: ../src/subscription_manager/managercli.py:1890
+#: ../src/subscription_manager/managercli.py:1900
 #, python-format
 msgid "Service Type:         \t%s"
 msgstr "서비스 유형:         \t%s"
@@ -1076,7 +1095,7 @@ msgid "Network error, unable to connect to server."
 msgstr "네트워크 오류, 서버에 연결할 수 없습니다."
 
 #: ../src/subscription_manager/managercli.py:149
-#: ../src/subscription_manager/managercli.py:789
+#: ../src/subscription_manager/managercli.py:793
 #, python-format
 msgid "Service level set to: %s"
 msgstr "서비스 레벨 설정: %s"
@@ -1085,13 +1104,9 @@ msgstr "서비스 레벨 설정: %s"
 msgid "Installed Product Current Status:"
 msgstr "설치된 제품의 현재 상태:"
 
-#: ../src/subscription_manager/managercli.py:218
+#: ../src/subscription_manager/managercli.py:217
 msgid "server url in the form of https://hostname:443/prefix"
 msgstr "https://hostname:443/prefix 형식의 서버 url"
-
-#: ../src/subscription_manager/managercli.py:220
-msgid "base url for content in form of https://hostname:443/prefix"
-msgstr "https://hostname:443/prefix 형식의 컨텐츠 기반 url"
 
 #: ../src/subscription_manager/managercli.py:222
 msgid "proxy url in the form of proxy_hostname:proxy_port"
@@ -1192,10 +1207,10 @@ msgstr "--username 및 --password는 --force와만 함께 사용될 수 있습�
 #. no need to continue if user is only registered to Classic
 #: ../src/subscription_manager/managercli.py:559
 #: ../src/subscription_manager/managercli.py:562
-#: ../src/subscription_manager/managercli.py:1943
+#: ../src/subscription_manager/managercli.py:1953
 #, python-format
 msgid "server type: %s"
-msgstr ""
+msgstr "서버 유형: %s"
 
 #: ../src/subscription_manager/managercli.py:574
 #, python-format
@@ -1229,96 +1244,96 @@ msgstr "오류: 시스템에 새로운 id를 생성할 수 없습니다."
 msgid "Display the orgs against which a user can register a system"
 msgstr "시스템을 등록할 수 있는 사용자에 대한 조직을 표시합니다"
 
-#: ../src/subscription_manager/managercli.py:614
+#: ../src/subscription_manager/managercli.py:616
 msgid "Organizations"
 msgstr "조직"
 
-#: ../src/subscription_manager/managercli.py:618 ../src/rct/printing.py:35
-#: ../src/rct/printing.py:47 ../src/rct/printing.py:72
+#: ../src/subscription_manager/managercli.py:620 ../src/rct/printing.py:35
+#: ../src/rct/printing.py:47 ../src/rct/printing.py:74
 msgid "Name"
 msgstr "이름"
 
-#: ../src/subscription_manager/managercli.py:619
+#: ../src/subscription_manager/managercli.py:621
 msgid "Key"
 msgstr "키"
 
-#: ../src/subscription_manager/managercli.py:622
-#: ../src/subscription_manager/managercli.py:1042
+#: ../src/subscription_manager/managercli.py:624
+#: ../src/subscription_manager/managercli.py:1052
 #, python-format
 msgid "%s cannot register to any organizations."
 msgstr "%s은(는) 어떤 조직에도 등록할 수 없습니다."
 
-#: ../src/subscription_manager/managercli.py:629
+#: ../src/subscription_manager/managercli.py:631
 msgid "Error: Unable to retrieve org list from server"
-msgstr ""
+msgstr "오류: 서버에서 조직 목록을 검색할 수 없음"
 
-#: ../src/subscription_manager/managercli.py:635
+#: ../src/subscription_manager/managercli.py:637
 msgid "Display the environments available for a user"
 msgstr "사용자에 대해 사용가능한 환경 표시"
 
-#: ../src/subscription_manager/managercli.py:641
+#: ../src/subscription_manager/managercli.py:644
 msgid "specify org for environment list"
 msgstr "환경 목록에 대한 조직 지정"
 
-#: ../src/subscription_manager/managercli.py:645
+#: ../src/subscription_manager/managercli.py:648
 msgid ""
 "Error: This command requires that you specify an organization with --org"
-msgstr ""
+msgstr "오류: 이 명령에서는 --org를 사용하여 조직을 지정해야 합니다."
 
-#: ../src/subscription_manager/managercli.py:668
+#: ../src/subscription_manager/managercli.py:671
 msgid "Environments"
 msgstr "환경"
 
-#: ../src/subscription_manager/managercli.py:674
+#: ../src/subscription_manager/managercli.py:677
 msgid "Error: This org does not have environments."
-msgstr ""
+msgstr "오류: 이 조직에는 환경이 없습니다. "
 
-#: ../src/subscription_manager/managercli.py:676
-#: ../src/subscription_manager/managercli.py:1023
+#: ../src/subscription_manager/managercli.py:679
+#: ../src/subscription_manager/managercli.py:1033
 msgid "Error: Server does not support environments."
 msgstr "오류: 서버가 환경을 지원하지 않습니다."
 
-#: ../src/subscription_manager/managercli.py:684
+#: ../src/subscription_manager/managercli.py:687
 msgid "Error: Unable to retrieve environment list from server"
-msgstr ""
+msgstr "오류: 서버에서 환경 목록을 검색할 수 없음"
 
-#: ../src/subscription_manager/managercli.py:692
+#: ../src/subscription_manager/managercli.py:695
 msgid "Manage service levels for this system"
 msgstr "이 시스템의 서비스 레벨 관리"
 
-#: ../src/subscription_manager/managercli.py:698
+#: ../src/subscription_manager/managercli.py:702
 msgid "show this system's current service level"
 msgstr "시스템의 현재 서비스 레벨을 표시"
 
-#: ../src/subscription_manager/managercli.py:701
+#: ../src/subscription_manager/managercli.py:705
 msgid "specify org for service level list"
 msgstr "서비스 레벨 목록의 조직을 지정"
 
-#: ../src/subscription_manager/managercli.py:703
+#: ../src/subscription_manager/managercli.py:707
 msgid "list all service levels available"
 msgstr "사용 가능한 모든 서비스 레벨 목록 나열"
 
-#: ../src/subscription_manager/managercli.py:705
-#: ../src/subscription_manager/managercli.py:1240
+#: ../src/subscription_manager/managercli.py:709
+#: ../src/subscription_manager/managercli.py:1250
 msgid "service level to apply to this system"
 msgstr "시스템에 적용할 서비스 레벨"
 
-#: ../src/subscription_manager/managercli.py:708
+#: ../src/subscription_manager/managercli.py:712
 msgid "unset the service level for this system"
 msgstr "이 시스템의 서버스 레벨 설정 해제"
 
-#: ../src/subscription_manager/managercli.py:714
-#: ../src/subscription_manager/managercli.py:799
-#: ../src/subscription_manager/managercli.py:808
+#: ../src/subscription_manager/managercli.py:718
+#: ../src/subscription_manager/managercli.py:803
+#: ../src/subscription_manager/managercli.py:812
 #: ../bin/rhn-migrate-classic-to-rhsm:262
 msgid "Error: The service-level command is not supported by the server."
 msgstr "오류: service-level 명령은 서버에서 지원하지 않습니다."
 
-#: ../src/subscription_manager/managercli.py:733
+#: ../src/subscription_manager/managercli.py:737
 msgid "Error: --org is only supported with the --list option"
-msgstr ""
+msgstr "오류: --org는 --list 옵션을 사용해서만 지원됩니다"
 
-#: ../src/subscription_manager/managercli.py:739
+#: ../src/subscription_manager/managercli.py:743
 msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
@@ -1326,119 +1341,127 @@ msgstr ""
 "오류: 서비스 레벨을 나열하려면 --username 및 --password를 등록하거나 지정해"
 "야 합니다."
 
-#: ../src/subscription_manager/managercli.py:742
+#: ../src/subscription_manager/managercli.py:746
 msgid "Error: you must register or specify --org."
 msgstr "오류: 등록하거나  --org를 지정하셔야 합니다."
 
-#: ../src/subscription_manager/managercli.py:782
+#: ../src/subscription_manager/managercli.py:786
 msgid "Error: Unable to retrieve service levels."
 msgstr "오류: 서비스 레벨을 검색할 수 없습니다."
 
-#: ../src/subscription_manager/managercli.py:793
+#: ../src/subscription_manager/managercli.py:797
 msgid "Service level preference has been unset"
 msgstr "서비스 레벨 환경 설정이 해제되었습니다"
 
-#: ../src/subscription_manager/managercli.py:803
+#: ../src/subscription_manager/managercli.py:807
 #, python-format
 msgid "Current service level: %s"
 msgstr "현재 서비스 레벨: %s"
 
-#: ../src/subscription_manager/managercli.py:805
+#: ../src/subscription_manager/managercli.py:809
 msgid "Service level preference not set"
 msgstr "서비스 레벨 환경 설정이 구성되지 않았습니다"
 
-#: ../src/subscription_manager/managercli.py:820
+#: ../src/subscription_manager/managercli.py:824
 msgid "Available Service Levels"
 msgstr "사용 가능한 서비스 레벨"
 
-#: ../src/subscription_manager/managercli.py:825
+#: ../src/subscription_manager/managercli.py:829
 msgid "This org does not have any subscriptions with service levels."
 msgstr "이 조직에는 서비스 레벨이 있는 서브스크립션이 없습니다."
 
-#: ../src/subscription_manager/managercli.py:845
+#: ../src/subscription_manager/managercli.py:850
+msgid "base url for content in form of https://hostname:443/prefix"
+msgstr "https://hostname:443/prefix 형식의 컨텐츠 기반 url"
+
+#: ../src/subscription_manager/managercli.py:852
 msgid "the type of consumer to register, defaults to system"
 msgstr "등록할 컨슈머 유형, 시스템이 기본값으로 되어 있음"
 
-#: ../src/subscription_manager/managercli.py:847
+#: ../src/subscription_manager/managercli.py:854
 msgid "name of the consumer to register, defaults to the hostname"
 msgstr "등록할 컨슈머 이름, 호스트 이름이 기본값으로 되어 있음"
 
-#: ../src/subscription_manager/managercli.py:849
+#: ../src/subscription_manager/managercli.py:856
 msgid "the existing consumer data is pulled from the server"
 msgstr "기존 컨슈머 데이터는 서버에서 풀(pull) 됩니다"
 
-#: ../src/subscription_manager/managercli.py:851
+#: ../src/subscription_manager/managercli.py:858
 msgid "register to one of multiple organizations for the user"
 msgstr "사용자에 대한 여러 조직 중 하나에 등록"
 
-#: ../src/subscription_manager/managercli.py:853
+#: ../src/subscription_manager/managercli.py:860
 msgid "register to a specific environment in the destination org"
 msgstr "대상 조직에 있는 특정 환경에 등록"
 
-#: ../src/subscription_manager/managercli.py:855
+#: ../src/subscription_manager/managercli.py:862
 msgid "set a release version"
 msgstr "릴리즈 버전 설정"
 
-#: ../src/subscription_manager/managercli.py:857
-#: ../src/subscription_manager/managercli.py:1237
+#: ../src/subscription_manager/managercli.py:864
+#: ../src/subscription_manager/managercli.py:1247
 msgid ""
 "automatically subscribe this system to                                     "
 "compatible subscriptions."
 msgstr "이 시스템을 자동으로 호환 서브스크립션에 등록."
 
-#: ../src/subscription_manager/managercli.py:860
+#: ../src/subscription_manager/managercli.py:867
 msgid "register the system even if it is already registered"
 msgstr "이미 등록되어 있어도 시스템을 등록"
 
-#: ../src/subscription_manager/managercli.py:862
+#: ../src/subscription_manager/managercli.py:869
 msgid "one or more activation keys to use for registration"
 msgstr "등록에 사용할 하나 이상의 활성키"
 
-#: ../src/subscription_manager/managercli.py:864
+#: ../src/subscription_manager/managercli.py:871
 msgid "system preference used when subscribing automatically"
-msgstr ""
+msgstr "자동 등록 시 사용되는 시스템 환경 설정"
 
-#: ../src/subscription_manager/managercli.py:872
+#: ../src/subscription_manager/managercli.py:879
 msgid "This system is already registered. Use --force to override"
 msgstr "이 시스템은 이미 등록되어 있습니다. 무시하시려면 --force를 사용합니다"
 
-#: ../src/subscription_manager/managercli.py:875
+#: ../src/subscription_manager/managercli.py:882
 msgid "Error: consumer name can not be empty."
 msgstr "오류: 컨슈머 이름을 공백으로 비워둘 수 없습니다."
 
-#: ../src/subscription_manager/managercli.py:878
+#: ../src/subscription_manager/managercli.py:885
 msgid "Error: Activation keys do not require user credentials"
 msgstr "오류: 활성키는 사용자 인증을 필요로 하지 않습니다"
 
-#: ../src/subscription_manager/managercli.py:881
+#: ../src/subscription_manager/managercli.py:888
 msgid "Error: Activation keys can not be used with previously registered ids."
 msgstr "오류: 활성키는 이전에 등록된 ID와 함께 사용할 수 없습니다."
 
-#: ../src/subscription_manager/managercli.py:885
+#: ../src/subscription_manager/managercli.py:892
 msgid "Error: Must specify an activation key"
 msgstr "오류: 활성키를 지정해야 합니다"
 
-#: ../src/subscription_manager/managercli.py:888
+#: ../src/subscription_manager/managercli.py:895
 msgid "Error: Must use --autosubscribe with --servicelevel."
 msgstr "오류: --servicelevel과 함께 --autosubscribe를 사용해야 합니다."
 
-#: ../src/subscription_manager/managercli.py:918
+#: ../src/subscription_manager/managercli.py:898
+msgid "Error: Must provide --org with activation keys."
+msgstr ""
+
+#: ../src/subscription_manager/managercli.py:928
 #, python-format
 msgid "The system with UUID %s has been unregistered"
 msgstr "UUID %s 시스템은 등록 취소되었습니다"
 
-#: ../src/subscription_manager/managercli.py:953
+#: ../src/subscription_manager/managercli.py:963
 #, python-format
 msgid "Error during registration: %s"
 msgstr "등록 도중 오류 발생: %s"
 
-#: ../src/subscription_manager/managercli.py:960
+#: ../src/subscription_manager/managercli.py:970
 #, python-format
 msgid "The system has been registered with id: %s "
 msgstr "시스템 id가 등록되었습니다: %s"
 
-#: ../src/subscription_manager/managercli.py:991
-#: ../src/subscription_manager/managercli.py:1305
+#: ../src/subscription_manager/managercli.py:1001
+#: ../src/subscription_manager/managercli.py:1315
 msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "perform autosubscribe."
@@ -1446,222 +1469,222 @@ msgstr ""
 "오류: --servicelevel 옵션은 서버에서 지원하지 않습니다. 자동 등록을 실행하지 "
 "못했습니다."
 
-#: ../src/subscription_manager/managercli.py:1027
+#: ../src/subscription_manager/managercli.py:1037
 #, python-format
 msgid "No such environment: %s"
 msgstr "해당 환경이 없음: %s"
 
-#: ../src/subscription_manager/managercli.py:1064
+#: ../src/subscription_manager/managercli.py:1074
 msgid "This system is currently not registered."
 msgstr "현재 시스템은 등록되어 있지 않습니다."
 
-#: ../src/subscription_manager/managercli.py:1089
+#: ../src/subscription_manager/managercli.py:1099
 msgid "System has been un-registered."
 msgstr "시스템이 등록 취소되었습니다."
 
-#: ../src/subscription_manager/managercli.py:1095
+#: ../src/subscription_manager/managercli.py:1105
 msgid "Attempt to redeem a subscription for a preconfigured machine"
 msgstr "사전 설정된 컴퓨터에 대해 서브스크립션을 상환하려함"
 
-#: ../src/subscription_manager/managercli.py:1100
+#: ../src/subscription_manager/managercli.py:1110
 msgid "Email address to notify when subscription redemption is complete."
 msgstr "서브스크립션 교환 완료 시 통지하기 위한 이메일 주소"
 
-#: ../src/subscription_manager/managercli.py:1103
+#: ../src/subscription_manager/managercli.py:1113
 msgid ""
 "Optional language to use for email notification when subscription redemption "
 "is complete. Examples: en-us, de-de"
 msgstr ""
 "서브스크립션 교환 완료 시 이메일 통지에 사용할 언어 옵션. 예: en-us, de-de"
 
-#: ../src/subscription_manager/managercli.py:1109
+#: ../src/subscription_manager/managercli.py:1119
 msgid ""
 "Error: This command requires that you specify an email address with --email."
 msgstr "오류: 이 명령에서는 --email을 사용하여 이메일 주소를 지정해야 합니다."
 
-#: ../src/subscription_manager/managercli.py:1146
+#: ../src/subscription_manager/managercli.py:1156
 msgid "Configure what os release to use"
 msgstr "사용할 os 릴리즈 설정"
 
-#: ../src/subscription_manager/managercli.py:1151
+#: ../src/subscription_manager/managercli.py:1161
 msgid "shows current release setting. default command."
 msgstr "현재 릴리즈 설정을 표시합니다. 디폴트 명령입니다."
 
-#: ../src/subscription_manager/managercli.py:1153
+#: ../src/subscription_manager/managercli.py:1163
 msgid "list available releases"
 msgstr "사용 가능한 릴리즈 목록 나열"
 
-#: ../src/subscription_manager/managercli.py:1156
+#: ../src/subscription_manager/managercli.py:1166
 msgid "set the release for this system"
 msgstr "이 시스템의 릴리즈를 설정"
 
-#: ../src/subscription_manager/managercli.py:1159
+#: ../src/subscription_manager/managercli.py:1169
 msgid "unset the release for this system"
 msgstr "이 시스템의 릴리즈를 설정 해제"
 
-#: ../src/subscription_manager/managercli.py:1162
+#: ../src/subscription_manager/managercli.py:1172
 msgid "Error: The 'release' command is not supported by the server."
 msgstr "오류: 'release' 명령은 서버에서 지원되지 않습니다."
 
-#: ../src/subscription_manager/managercli.py:1171
+#: ../src/subscription_manager/managercli.py:1181
 #, python-format
 msgid "Release: %s"
 msgstr "릴리즈: %s"
 
-#: ../src/subscription_manager/managercli.py:1173
+#: ../src/subscription_manager/managercli.py:1183
 msgid "Release not set"
 msgstr "릴리즈가 설정되지 않음"
 
-#: ../src/subscription_manager/managercli.py:1200
+#: ../src/subscription_manager/managercli.py:1210
 msgid "Release preference has been unset"
 msgstr "릴리즈 환경 설정이 해제되었습니다"
 
-#: ../src/subscription_manager/managercli.py:1209
+#: ../src/subscription_manager/managercli.py:1219
 #, python-format
 msgid "No releases match '%s'.  Consult 'release --list' for a full listing."
 msgstr ""
 "'%s'와 일치하는 릴리즈가 없습니다. 전체 목록은 'release --list'로 확인합니다."
 
-#: ../src/subscription_manager/managercli.py:1211
+#: ../src/subscription_manager/managercli.py:1221
 #, python-format
 msgid "Release set to: %s"
 msgstr "릴리즈가 설정됨: %s"
 
-#: ../src/subscription_manager/managercli.py:1216
+#: ../src/subscription_manager/managercli.py:1226
 msgid "No release versions available, please check subscriptions."
 msgstr "사용 가능한 릴리즈 버전이 없습니다. 서브스크립션을 확인하십시오."
 
-#: ../src/subscription_manager/managercli.py:1226
+#: ../src/subscription_manager/managercli.py:1236
 msgid "Subscribe the registered machine to a specified product"
 msgstr "등록된 컴퓨터를 지정된 제품에 가입"
 
-#: ../src/subscription_manager/managercli.py:1233
+#: ../src/subscription_manager/managercli.py:1243
 msgid "the id of the pool to subscribe to"
 msgstr "등록할 풀 ID"
 
-#: ../src/subscription_manager/managercli.py:1235
+#: ../src/subscription_manager/managercli.py:1245
 msgid "number of subscriptions to consume"
 msgstr "사용할 서브스크립션 수"
 
-#: ../src/subscription_manager/managercli.py:1244
+#: ../src/subscription_manager/managercli.py:1254
 msgid ""
 "Error: This command requires that you specify a pool with --pool or use --"
 "auto."
 msgstr ""
 "오류: 이 명령에서는 --pool 또는 --auto를 사용하여 풀을 지정해야 합니다."
 
-#: ../src/subscription_manager/managercli.py:1247
+#: ../src/subscription_manager/managercli.py:1257
 msgid "Error: Only one of --pool or --auto may be used with this command."
 msgstr ""
 "오류: --pool 또는 --auto 중 하나만이 이 명령과 함께 사용될 수 있습니다."
 
-#: ../src/subscription_manager/managercli.py:1254
+#: ../src/subscription_manager/managercli.py:1264
 msgid "Error: Quantity must be a positive integer."
 msgstr "오류: 수량은 양의 정수이어야 합니다."
 
-#: ../src/subscription_manager/managercli.py:1260
+#: ../src/subscription_manager/managercli.py:1270
 msgid "Error: Must use --auto with --servicelevel."
 msgstr "오류: --servicelevel과 함께 --auto를 사용해야 합니다."
 
-#: ../src/subscription_manager/managercli.py:1279
+#: ../src/subscription_manager/managercli.py:1289
 msgid "Please enter a valid numeric pool id."
 msgstr "유효한 숫자 풀 id를 입력하십시오."
 
-#: ../src/subscription_manager/managercli.py:1284
+#: ../src/subscription_manager/managercli.py:1294
 #, python-format
 msgid "Successfully consumed a subscription for: %s"
 msgstr "이 서브스크립션을 성공적으로 사용함: %s"
 
-#: ../src/subscription_manager/managercli.py:1334
+#: ../src/subscription_manager/managercli.py:1344
 msgid "Unsubscribe the machine from all or specific subscriptions"
 msgstr "모든 또는 특정 서브스크립션에서 시스템을 등록 해제합니다"
 
-#: ../src/subscription_manager/managercli.py:1340
+#: ../src/subscription_manager/managercli.py:1350
 msgid "Certificate serial to unsubscribe"
 msgstr "등록 해제를 위한 인증서 일련 번호"
 
-#: ../src/subscription_manager/managercli.py:1342
+#: ../src/subscription_manager/managercli.py:1352
 msgid "Unsubscribe from all subscriptions"
 msgstr "모든 서브스크립션에서 등록 해제"
 
-#: ../src/subscription_manager/managercli.py:1347
+#: ../src/subscription_manager/managercli.py:1357
 #, python-format
 msgid "Error: '%s' is not a valid serial number"
 msgstr "오류: '%s'는 유효한 일련 번호가 아닙니다"
 
-#: ../src/subscription_manager/managercli.py:1350
+#: ../src/subscription_manager/managercli.py:1360
 msgid "Error: This command requires that you specify one of --serial or --all."
 msgstr "오류: 이 명령에서는 --serial 또는 --all 중 하나를 지정해야 합니다."
 
-#: ../src/subscription_manager/managercli.py:1366
+#: ../src/subscription_manager/managercli.py:1376
 msgid "This machine has been unsubscribed from all subscriptions."
 msgstr "이 컴퓨터는 모든 서브스크립션에서 등록 해제되었습니다"
 
-#: ../src/subscription_manager/managercli.py:1368
-#: ../src/subscription_manager/managercli.py:1386
+#: ../src/subscription_manager/managercli.py:1378
+#: ../src/subscription_manager/managercli.py:1396
 #, python-format
 msgid "This machine has been unsubscribed from %s subscriptions"
 msgstr "이 컴퓨터는 %s 개의 서브스크립션에서 등록 해제되었습니다"
 
-#: ../src/subscription_manager/managercli.py:1371
-#: ../src/subscription_manager/managercli.py:1391
+#: ../src/subscription_manager/managercli.py:1381
+#: ../src/subscription_manager/managercli.py:1401
 #, python-format
 msgid ""
 "This machine has been unsubscribed from subscription with serial number %s"
 msgstr ""
 "이 컴퓨터는 일련 번호 %s를 갖는 서브스크립션에서 등록 해제되어 있습니다"
 
-#: ../src/subscription_manager/managercli.py:1377
-#: ../src/subscription_manager/managercli.py:1394
+#: ../src/subscription_manager/managercli.py:1387
+#: ../src/subscription_manager/managercli.py:1404
 #, python-format
 msgid "Unable to perform unsubscribe due to the following exception: %s"
 msgstr "다음과 같은 예외 사항으로 인해 등록 해제를 실행할 수 없습니다: %s"
 
-#: ../src/subscription_manager/managercli.py:1404
+#: ../src/subscription_manager/managercli.py:1414
 msgid "View or update the detected system information"
 msgstr "검색된 시스템 정보를 표시하거나 업데이트"
 
-#: ../src/subscription_manager/managercli.py:1409
+#: ../src/subscription_manager/managercli.py:1419
 msgid "list known facts for this system"
 msgstr "이 시스템의 알려진 정보를 나열"
 
-#: ../src/subscription_manager/managercli.py:1411
+#: ../src/subscription_manager/managercli.py:1421
 msgid "update the system facts"
 msgstr "시스템 정보 업데이트"
 
-#: ../src/subscription_manager/managercli.py:1443
+#: ../src/subscription_manager/managercli.py:1453
 msgid "Successfully updated the system facts."
 msgstr "시스템 정보가 성공적으로 업데이트됨."
 
-#: ../src/subscription_manager/managercli.py:1449
+#: ../src/subscription_manager/managercli.py:1459
 msgid "Import certificates which were provided outside of the tool"
 msgstr "도구 외부에서 제공된 인증서를 가져옵니다"
 
-#: ../src/subscription_manager/managercli.py:1454
+#: ../src/subscription_manager/managercli.py:1464
 msgid ""
 "certificate file to import (for multiple imports, specify this option more "
 "than once)"
 msgstr ""
 "가져올 인증서 파일 (여러 개를 가져오기할 경우 이 옵션을 한 번 이상 지정함)"
 
-#: ../src/subscription_manager/managercli.py:1458
+#: ../src/subscription_manager/managercli.py:1468
 msgid ""
 "Error: This command requires that you specify a certificate with --"
 "certificate."
 msgstr "오류: 이 명령에서는 --certificate를 사용하여 인증서를 지정해야 합니다."
 
-#: ../src/subscription_manager/managercli.py:1477
+#: ../src/subscription_manager/managercli.py:1487
 #, python-format
 msgid "Successfully imported certificate %s"
 msgstr "인증서 %s을(를) 성공적으로 가져왔습니다"
 
-#: ../src/subscription_manager/managercli.py:1483
 #: ../src/subscription_manager/managercli.py:1493
+#: ../src/subscription_manager/managercli.py:1503
 #, python-format
 msgid "%s is not a valid certificate file. Please use a valid certificate."
 msgstr "%s은(는) 유효한 인증서 파일이 아닙니다. 유효한 인증서를 사용하십시오."
 
-#: ../src/subscription_manager/managercli.py:1489
+#: ../src/subscription_manager/managercli.py:1499
 msgid ""
 "An error occurred while importing the certificate. Please check log file for "
 "more information."
@@ -1669,72 +1692,72 @@ msgstr ""
 "인증서를 가져오기하는 동안 오류가 발생했습니다. 자세한 내용은 로그 파일에서 "
 "확인하십시오."
 
-#: ../src/subscription_manager/managercli.py:1511
+#: ../src/subscription_manager/managercli.py:1521
 msgid "List the repos which this machine is entitled to use"
 msgstr "사용 권한이 있는 시스템의 리포지터리를 나열합니다"
 
-#: ../src/subscription_manager/managercli.py:1524
+#: ../src/subscription_manager/managercli.py:1534
 msgid "list known repos for this system"
 msgstr "이 시스템의 알려진 리포지터리를 나열"
 
-#: ../src/subscription_manager/managercli.py:1526
+#: ../src/subscription_manager/managercli.py:1536
 msgid "repo to enable"
 msgstr "활성화할 리포지터리"
 
-#: ../src/subscription_manager/managercli.py:1528
+#: ../src/subscription_manager/managercli.py:1538
 msgid "repo to disable"
 msgstr "비활성화할 리포지터리"
 
-#: ../src/subscription_manager/managercli.py:1538
+#: ../src/subscription_manager/managercli.py:1548
 msgid "Repositories disabled by configuration."
 msgstr "설정에 의해 리포지터리가 비활성화되었습니다."
 
-#: ../src/subscription_manager/managercli.py:1553
-#: ../src/subscription_manager/managercli.py:1573
+#: ../src/subscription_manager/managercli.py:1563
+#: ../src/subscription_manager/managercli.py:1583
 msgid ""
 "Error: A valid repo id is required. Use --list option to see valid repos."
 msgstr ""
 "오류: 유효한 리포지터리가 필요합니다. --list 옵션을 사용하여 유효한 리포지터"
 "리를 확인합니다."
 
-#: ../src/subscription_manager/managercli.py:1558
+#: ../src/subscription_manager/managercli.py:1568
 #, python-format
 msgid "Repo %s is enabled for this system."
 msgstr "리포지터리 %s가 이 시스템에 활성화되어 있습니다."
 
-#: ../src/subscription_manager/managercli.py:1578
+#: ../src/subscription_manager/managercli.py:1588
 #, python-format
 msgid "Repo %s is disabled for this system."
 msgstr "리포지터리 %s가 이 시스템에 비활성화되어 있습니다."
 
-#: ../src/subscription_manager/managercli.py:1582
+#: ../src/subscription_manager/managercli.py:1592
 #, python-format
 msgid "    Available Repositories in %s"
-msgstr ""
+msgstr "%s에서 사용 가능한 리포지터리"
 
-#: ../src/subscription_manager/managercli.py:1590
+#: ../src/subscription_manager/managercli.py:1600
 msgid "This system has no repositories available through subscriptions."
-msgstr ""
+msgstr "이 시스템에는 서브스크립션을 통해 사용 가능한 리포지터리가 없습니다."
 
-#: ../src/subscription_manager/managercli.py:1603
+#: ../src/subscription_manager/managercli.py:1613
 msgid ""
 "List, set, or remove the configuration parameters in use by this machine"
 msgstr "이 시스템에서 사용중인 설정 매개 변수를 나열, 설정, 삭제합니다"
 
-#: ../src/subscription_manager/managercli.py:1609
+#: ../src/subscription_manager/managercli.py:1619
 msgid "list the configuration for this system"
 msgstr "시스템에 대한 설정을 나열합니다"
 
-#: ../src/subscription_manager/managercli.py:1611
+#: ../src/subscription_manager/managercli.py:1621
 msgid "remove configuration entry by section.name"
 msgstr "section.name에 따라 설정 항목을 삭제"
 
-#: ../src/subscription_manager/managercli.py:1615
+#: ../src/subscription_manager/managercli.py:1625
 #, python-format
 msgid "Section: %s, Name: %s"
 msgstr "섹션: %s, 이름: %s"
 
-#: ../src/subscription_manager/managercli.py:1630
+#: ../src/subscription_manager/managercli.py:1640
 msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
@@ -1742,55 +1765,55 @@ msgstr ""
 "오류: 설정을 구성 또는 삭제할 경우 --list는 다른 옵션과 함께 사용하지 않는 것"
 "이 좋습니다."
 
-#: ../src/subscription_manager/managercli.py:1649
+#: ../src/subscription_manager/managercli.py:1659
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
 msgstr ""
 "오류: 삭제하기 위한 설정 항목은 [section.name] 형식으로 지정해야 합니다"
 
-#: ../src/subscription_manager/managercli.py:1661
+#: ../src/subscription_manager/managercli.py:1671
 #, python-format
 msgid "Error: Section %s and name %s does not exist."
 msgstr "오류: 섹션 %s 및 이름 %s 는 존재하지 않습니다."
 
-#: ../src/subscription_manager/managercli.py:1680
+#: ../src/subscription_manager/managercli.py:1690
 msgid "[] - Default value in use"
 msgstr "[] - 사용 중인 기본값"
 
-#: ../src/subscription_manager/managercli.py:1689
-#: ../src/subscription_manager/managercli.py:1692
+#: ../src/subscription_manager/managercli.py:1699
+#: ../src/subscription_manager/managercli.py:1702
 #, python-format
 msgid "You have removed the value for section %s and name %s."
 msgstr "섹션 %s 및 이름 %s에 대한 값이 삭제되었습니다."
 
-#: ../src/subscription_manager/managercli.py:1693
+#: ../src/subscription_manager/managercli.py:1703
 #, python-format
 msgid "The default value for %s will now be used."
 msgstr "%s에 대한 기본값은 현재 사용되고 있습니다."
 
-#: ../src/subscription_manager/managercli.py:1695
+#: ../src/subscription_manager/managercli.py:1705
 #, python-format
 msgid "Section %s and name %s cannot be removed."
 msgstr "섹션 %s 및 이름 %s은 삭제될 수 없습니다."
 
-#: ../src/subscription_manager/managercli.py:1712
+#: ../src/subscription_manager/managercli.py:1722
 msgid "List subscription and product information for this machine"
 msgstr "이 컴퓨터에 대한 서브스크립션 및 제품 정보를 나열합니다"
 
-#: ../src/subscription_manager/managercli.py:1717
+#: ../src/subscription_manager/managercli.py:1727
 msgid "list shows those products which are installed (default)"
 msgstr "목록에는 설치된 제품이 표시됩니다 (디폴트)"
 
-#: ../src/subscription_manager/managercli.py:1719
+#: ../src/subscription_manager/managercli.py:1729
 msgid "show those subscriptions which are available"
 msgstr "사용 가능한 서브스크립션을 표시합니다"
 
-#: ../src/subscription_manager/managercli.py:1721
+#: ../src/subscription_manager/managercli.py:1731
 msgid "used with --available to ensure all subscriptions are returned"
 msgstr " 모든 서브스크립션이 반환되었는지 확인하려면 --available과 함께 사용함"
 
-#: ../src/subscription_manager/managercli.py:1723
+#: ../src/subscription_manager/managercli.py:1733
 #, python-format
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
@@ -1799,11 +1822,11 @@ msgstr ""
 "검색일, 기본값은 오늘로 되어 있으며, --available과 함께 사용해야 합니다 (예: "
 "%s)"
 
-#: ../src/subscription_manager/managercli.py:1726
+#: ../src/subscription_manager/managercli.py:1736
 msgid "show the subscriptions being consumed by this system."
 msgstr "이 시스템에서 사용되고 있는 서브스크립션을 보여줍니다"
 
-#: ../src/subscription_manager/managercli.py:1728
+#: ../src/subscription_manager/managercli.py:1738
 msgid ""
 "show only subscriptions matching the specified service level. Only used with "
 "--available and --consumed"
@@ -1811,104 +1834,104 @@ msgstr ""
 "지정된 서비스 레벨과 일치하는 서브스크립션만 표시합니다. --available과 --"
 "consumed와만 함께 사용"
 
-#: ../src/subscription_manager/managercli.py:1735
+#: ../src/subscription_manager/managercli.py:1745
 msgid "Error: --all is only applicable with --available"
 msgstr "오류: --all은 --available과만 사용 가능"
 
-#: ../src/subscription_manager/managercli.py:1738
+#: ../src/subscription_manager/managercli.py:1748
 msgid "Error: --ondate is only applicable with --available"
 msgstr "오류: --ondate는 --available과만 사용 가능"
 
-#: ../src/subscription_manager/managercli.py:1742
+#: ../src/subscription_manager/managercli.py:1752
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr "오류: --servicelevel은  --available 또는 --consumed와만 사용 가능"
 
-#: ../src/subscription_manager/managercli.py:1766
+#: ../src/subscription_manager/managercli.py:1776
 msgid "No installed products to list"
 msgstr "나열할 설치된 제품이 없음"
 
-#: ../src/subscription_manager/managercli.py:1769
+#: ../src/subscription_manager/managercli.py:1779
 msgid "    Installed Product Status"
 msgstr "설치된 제품 상태"
 
-#: ../src/subscription_manager/managercli.py:1786
+#: ../src/subscription_manager/managercli.py:1796
 msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr ""
 "입력하신 날짜가 유효하지 않습니다. YYYY-MM-DD 형식으로 날짜를 입력해 주십시"
 "오. (예:"
 
-#: ../src/subscription_manager/managercli.py:1799
+#: ../src/subscription_manager/managercli.py:1809
 msgid "No available subscription pools to list"
 msgstr "나열할 사용 가능한 서브스크립션 풀이 없음"
 
-#: ../src/subscription_manager/managercli.py:1809
+#: ../src/subscription_manager/managercli.py:1819
 msgid "virtual"
 msgstr "가상"
 
-#: ../src/subscription_manager/managercli.py:1811
+#: ../src/subscription_manager/managercli.py:1821
 msgid "physical"
 msgstr "물리"
 
-#: ../src/subscription_manager/managercli.py:1856
+#: ../src/subscription_manager/managercli.py:1866
 msgid "No consumed subscription pools to list"
 msgstr "나열하기 위한 사용되는 서브스크립션 풀이 없음"
 
-#: ../src/subscription_manager/managercli.py:1860
+#: ../src/subscription_manager/managercli.py:1870
 msgid "Consumed Subscriptions"
-msgstr ""
+msgstr "소비된 서브스크립션 "
 
-#: ../src/subscription_manager/managercli.py:1868
+#: ../src/subscription_manager/managercli.py:1878
 #, python-format
 msgid "Provides:             \t%s"
 msgstr "제공:             \t%s"
 
-#: ../src/subscription_manager/managercli.py:1871
+#: ../src/subscription_manager/managercli.py:1881
 #, python-format
 msgid "                      \t%s"
 msgstr "                      \t%s"
 
-#: ../src/subscription_manager/managercli.py:1878
+#: ../src/subscription_manager/managercli.py:1888
 #, python-format
 msgid "Contract:             \t%s"
 msgstr "계약:             \t%s"
 
-#: ../src/subscription_manager/managercli.py:1880
+#: ../src/subscription_manager/managercli.py:1890
 #, python-format
 msgid "Account:              \t%s"
 msgstr "계정:              \t%s"
 
-#: ../src/subscription_manager/managercli.py:1882
+#: ../src/subscription_manager/managercli.py:1892
 #, python-format
 msgid "Serial Number:        \t%s"
 msgstr "일련 번호:        \t%s"
 
-#: ../src/subscription_manager/managercli.py:1884
+#: ../src/subscription_manager/managercli.py:1894
 #, python-format
 msgid "Active:               \t%s"
 msgstr "활성:               \t%s"
 
-#: ../src/subscription_manager/managercli.py:1886
+#: ../src/subscription_manager/managercli.py:1896
 #, python-format
 msgid "Quantity Used:        \t%s"
 msgstr "사용 수량:        \t%s"
 
-#: ../src/subscription_manager/managercli.py:1931
+#: ../src/subscription_manager/managercli.py:1941
 msgid "Print version information"
 msgstr "버전 정보 표시"
 
 #. FIXME: slightly odd in that we log that we can't get the version,
 #. but then show "unknown" here.
-#: ../src/subscription_manager/managercli.py:1942
+#: ../src/subscription_manager/managercli.py:1952
 #, python-format
 msgid "registered to: %s"
-msgstr ""
+msgstr "등록처: %s"
 
-#: ../src/subscription_manager/managercli.py:1944
+#: ../src/subscription_manager/managercli.py:1954
 #, python-format
 msgid "subscription-manager: %s"
 msgstr "subscription-manager: %s"
 
-#: ../src/subscription_manager/managercli.py:1945
+#: ../src/subscription_manager/managercli.py:1955
 #, python-format
 msgid "python-rhsm: %s"
 msgstr "python-rhsm: %s"
@@ -1918,7 +1941,7 @@ msgstr "python-rhsm: %s"
 #: ../src/subscription_manager/cli.py:59
 #, python-format
 msgid "%%prog %s [OPTIONS]"
-msgstr ""
+msgstr "%%prog %s [OPTIONS]"
 
 #: ../src/subscription_manager/cli.py:85
 #, python-format
@@ -1956,11 +1979,11 @@ msgstr "서버 URL포트를 구문 분석할 수 없음"
 
 #: ../src/subscription_manager/utils.py:234
 msgid "Server url port should be numeric"
-msgstr ""
+msgstr "서버 url 포트는 숫자이어야 함 "
 
 #: ../src/subscription_manager/utils.py:309
 msgid "Unable to reach server"
-msgstr ""
+msgstr "서버에 연결할 수 없음"
 
 #: ../src/subscription_manager/utils.py:312
 msgid "subscription management service"
@@ -1968,7 +1991,7 @@ msgstr "서브스크립션 관리 서비스"
 
 #: ../src/subscription_manager/gui/data/filters.glade.h:1
 msgid "Contain the text"
-msgstr ""
+msgstr "텍스트를 포함"
 
 #: ../src/subscription_manager/gui/data/filters.glade.h:2
 msgid "Do Not Overlap"
@@ -1976,7 +1999,7 @@ msgstr "중복되지 않음"
 
 #: ../src/subscription_manager/gui/data/filters.glade.h:3
 msgid "Filter Options"
-msgstr ""
+msgstr "필터 옵션"
 
 #: ../src/subscription_manager/gui/data/filters.glade.h:4
 msgid "Match Installed"
@@ -2026,12 +2049,12 @@ msgstr "<b>제품:</b>"
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:2
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:5
 msgid "<b>SKU:</b>"
-msgstr ""
+msgstr "<b>SKU:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:3
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "<b>Service Level, Type:</b>"
-msgstr ""
+msgstr "<b>서비스 레벨, 유형:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:4
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:8
@@ -2053,7 +2076,7 @@ msgstr "번들 제품 표"
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:15
 msgid "SKU Text"
-msgstr ""
+msgstr "SKU 텍스트"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:17
@@ -2063,7 +2086,7 @@ msgstr "서브스크립션 텍스트"
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:9
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:18
 msgid "Support Level And Type Text"
-msgstr ""
+msgstr "지원 레벨 및 유형 텍스트"
 
 #: ../src/subscription_manager/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
@@ -2081,7 +2104,7 @@ msgstr "등록 해제"
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:1
 msgid "<b>Confirm Subscriptions</b>"
-msgstr ""
+msgstr "<b>서브스크립션 확인</b>"
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:2
 msgid "<b>Detected products:</b>"
@@ -2097,6 +2120,8 @@ msgid ""
 "Please select how you\n"
 "want them assigned."
 msgstr ""
+"여러 제품에서 여러 서비스 레벨이 있음이 검색되었습니다. 원하시는 할당 방법을 "
+"선택하십시오."
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:6
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:9
@@ -2137,7 +2162,7 @@ msgstr "서브스크립션 교환"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:1
 msgid "Configure Pro_xy"
-msgstr ""
+msgstr "Proxy 설정 (_X)"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:2
 msgid "R_edeem Subscription"
@@ -2165,7 +2190,7 @@ msgstr "온라인 설명서 (_O)"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:9
 msgid "_Preferences"
-msgstr ""
+msgstr "환경 설정 (_P)"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:10
 msgid "_Register"
@@ -2181,7 +2206,7 @@ msgstr "등록 해제 (_U)"
 
 #: ../src/subscription_manager/gui/data/confirmsubs.glade.h:1
 msgid "<b>Select Service Level</b>"
-msgstr ""
+msgstr "<b>서비스 레벨 선택</b>"
 
 #: ../src/subscription_manager/gui/data/confirmsubs.glade.h:2
 msgid "Core repositories will be enabled for each product."
@@ -2201,19 +2226,19 @@ msgstr "다음에 등록되어 있음:"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:1
 msgid "Configure Proxy"
-msgstr ""
+msgstr "Proxy 설정"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:2
 msgid "Default"
-msgstr ""
+msgstr "디폴트 "
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:3
 msgid "I will register with:"
-msgstr ""
+msgstr "다음을 사용하여 등록합니다: "
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:4
 msgid "If required, please configure your proxy before moving forward."
-msgstr ""
+msgstr "필요한 경우 다음 단계로 진행하기 전 proxy를 설정하십시오."
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:5
 msgid ""
@@ -2221,40 +2246,45 @@ msgid ""
 "System Engine or Candlepin servers can be used to provide your system with "
 "updates and allow management through the selected server's interface."
 msgstr ""
+"고객 포털, 서브스크립션 자산 관리자, CloudForms 시스템 엔진, Candlepin 서버"
+"에 등록하면 시스템에 업데이트가 제공되어 선택한 서버의 인터페이스를 통해 관리"
+"할 수 있습니다. "
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:6
 msgid "Reset to register with Customer Portal."
-msgstr ""
+msgstr "고객 포털에 등록하기 위해 리셋"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:7
 msgid ""
 "The Subscription Management Service you register with will provide your "
 "system with updates and allow additional management."
 msgstr ""
+"등록에 사용한 서브스크립션 관리 서비스는 시스템에 업데이트를 제공하고 추가 관"
+"리를 가능하게 합니다."
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:8
 msgid "choose_server_label"
-msgstr ""
+msgstr "choose_server_label"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:9
 msgid "default_button"
-msgstr ""
+msgstr "default_button"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:10
 msgid "hostname[:port][/prefix]"
-msgstr ""
+msgstr "hostname[:port][/prefix]"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:11
 msgid "proxy_button"
-msgstr ""
+msgstr "proxy_button"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:12
 msgid "server_entry"
-msgstr ""
+msgstr "server_entry"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:13
 msgid "server_label"
-msgstr ""
+msgstr "server_label"
 
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
@@ -2322,7 +2352,7 @@ msgstr "register_progressbar"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:10
 msgid "registration_dialog_action_area"
-msgstr ""
+msgstr "registration_dialog_action_area"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:1
 msgid "* Click to Adjust Quantity"
@@ -2338,7 +2368,7 @@ msgstr "모든 서브스크립션 보기"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:4
 msgid "Filters"
-msgstr ""
+msgstr "필터"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:6
 msgid "Search"
@@ -2530,7 +2560,7 @@ msgstr "제품 텍스트"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:14
 msgid "Register System"
-msgstr ""
+msgstr "시스템 등록 "
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:1
 msgid "<b>Account:</b>"
@@ -2577,12 +2607,16 @@ msgid ""
 "After opening Red Hat Subscription Manager, manually subscribe via the "
 "<b>All Available Subscriptions</b> tab."
 msgstr ""
+"Red Hat 서브스크립션 관리자를 연 다음 <b>사용 가능한 모든 서브스크립션</b> 탭"
+"에서 수동으로 등록합니다. "
 
 #: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
 msgid ""
 "You will need to use Red Hat Subscription Manager to manually subscribe this "
 "system after completing firstboot."
 msgstr ""
+"firstboot를 완료한 후 Red Hat 서브스크립션 관리자를 사용하여 시스템을 수동으"
+"로 등록해야 합니다. "
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1
 msgid ""
@@ -2597,6 +2631,8 @@ msgid ""
 "<small>Your system's service level preference is followed when subscribing "
 "automatically.</small>"
 msgstr ""
+"<small>자동으로 등록할 때 시스템의 서비스 레벨 환경 설정은 다음과 같습니다</"
+"small>"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Release version:"
@@ -2604,7 +2640,7 @@ msgstr "릴리즈 버전:"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid "Service Level Preference:"
-msgstr ""
+msgstr "서비스 레벨 환경 설정:"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "System Preferences"
@@ -2682,10 +2718,10 @@ msgstr ""
 msgid "Could not parse the installation number: %s"
 msgstr "설치 번호를 구문 분석할 수 없습니다: %s"
 
-#: ../bin/install-num-migrate-to-rhsm:142
+#: ../bin/install-num-migrate-to-rhsm:144
 #, c-format
 msgid "Installing %s to %s"
-msgstr ""
+msgstr "%s에 %s 설치 중"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:67
 msgid "Ignore channels not available on RHSM"
@@ -2712,12 +2748,12 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:76
 msgid "Specify the Subscription Management Server to migrate TO."
-msgstr ""
+msgstr "마이그레이션할 서브스크립션 관리 서버를 지정합니다."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:79
 #, c-format
 msgid "%prog [OPTIONS]"
-msgstr ""
+msgstr "%prog [OPTIONS]"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:104
 #, c-format
@@ -2738,6 +2774,9 @@ msgid ""
 "This machine appears to be already registered to Red Hat Subscription "
 "Management.  Exiting."
 msgstr ""
+"\n"
+"이 시스템은 Red Hat 서브스크립션 관리에 이미 등록되어 있습니다. 종료하고 있습"
+"니다. "
 
 #: ../bin/rhn-migrate-classic-to-rhsm:197
 #, c-format
@@ -2752,7 +2791,7 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:246
 msgid "Org: "
-msgstr ""
+msgstr "조직: "
 
 #: ../bin/rhn-migrate-classic-to-rhsm:256
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
@@ -2796,8 +2835,12 @@ msgstr ""
 "등록된 채널 목록을 가져오는 도중 문제가 발생했습니다. 종료하고 있습니다."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:314
-msgid "You are subscribed to more than one jbappplatform channel."
+msgid ""
+"You are subscribed to more than one jbappplatform channel.  This script does "
+"not support that configuration.  Exiting."
 msgstr ""
+"하나 이상의 jbappplatform 채널에 등록되어 있습니다. 이 스크립트는 해당 설정"
+"을 지원하지 않습니다. 종료합니다."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:347
 msgid ""
@@ -2817,13 +2860,15 @@ msgstr "시스템을 RHN 클래식에서 등록해제할 수 없습니다. 종�
 
 #: ../bin/rhn-migrate-classic-to-rhsm:414
 msgid "Unable to read RHN proxy settings."
-msgstr ""
+msgstr "RHN proxy 설정을 읽을 수 없습니다."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:432
 msgid ""
 "\n"
 "Attempting to register system to Red Hat Subscription Management ..."
 msgstr ""
+"\n"
+"시스템을 Red Hat 서브스크립션 관리에 등록 시도하고 있습니다..."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:445
 msgid ""
@@ -2839,7 +2884,7 @@ msgstr ""
 #, c-format
 msgid ""
 "System '%s' successfully registered to Red Hat Subscription Management.\n"
-msgstr ""
+msgstr "시스템 '%s'는 성공적으로 Red Hat 서브스크립션 관리에 등록되었습니다.\n"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:455
 msgid "Launching the GUI tool to manually subscribe the system ..."
@@ -2870,22 +2915,24 @@ msgstr ""
 "https://access.redhat.com/management/consumers/%s에서 정보를 확인하고 필요한 "
 "사항을 변경하십시오."
 
-#: ../bin/rhn-migrate-classic-to-rhsm:482
+#: ../bin/rhn-migrate-classic-to-rhsm:488
 #, c-format
 msgid "Unable to read mapping file: %s"
 msgstr "매핑 파일을 읽을 수 없음: %s"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:504
+#: ../bin/rhn-migrate-classic-to-rhsm:509
 msgid "Channels not available on RHSM:"
 msgstr "RHSM에서 사용 가능하지 않은 채널:"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:511
+#: ../bin/rhn-migrate-classic-to-rhsm:514
 msgid ""
 "\n"
 "No product certificates are mapped to these RHN Classic channels:"
 msgstr ""
+"\n"
+"RHN 클래식 채널에 맵핑된 제품 인증서가 없습니다:"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:518
+#: ../bin/rhn-migrate-classic-to-rhsm:520
 msgid ""
 "\n"
 "Use --force to ignore these channels and continue the migration.\n"
@@ -2893,11 +2940,13 @@ msgstr ""
 "\n"
 "--force를 사용하여 이러한 채널을 무시하고 마이그레이션을 계속합니다.\n"
 
-#: ../bin/rhn-migrate-classic-to-rhsm:524
+#: ../bin/rhn-migrate-classic-to-rhsm:525
 msgid ""
 "\n"
 "Installing product certificates for these RHN Classic channels:"
 msgstr ""
+"\n"
+"RHN 클래식 채널에 대해 제품 인증서를 설치 중:"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:539
 #, c-format
@@ -2905,6 +2954,8 @@ msgid ""
 "\n"
 "Product certificates installed successfully to %s."
 msgstr ""
+"\n"
+"제품 인증서가 성공적으로 %s에 설치되었습니다."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:583
 msgid ""
@@ -2919,18 +2970,24 @@ msgid ""
 "Please ensure system has subscriptions attached, and see 'subscription-"
 "manager repos --help' to enable additional repositories"
 msgstr ""
+"시스템에 서브스크립션이 첨부되어 있느지 확인하십시오. 추가 리포지터리를 활성"
+"화하려면 'subscription-manager repos --help'에서 참조하십시오."
+
+#: ../bin/rhn-migrate-classic-to-rhsm:635
+msgid "The --servicelevel and --no-auto options cannot be used together."
+msgstr ""
+
+#: ../bin/rhn-migrate-classic-to-rhsm:642
+#: ../bin/rhn-migrate-classic-to-rhsm:646
+msgid "Red Hat account: "
+msgstr "Red Hat 계정: "
 
 #: ../bin/rhn-migrate-classic-to-rhsm:643
-#: ../bin/rhn-migrate-classic-to-rhsm:647
-msgid "Red Hat account: "
-msgstr ""
-
-#: ../bin/rhn-migrate-classic-to-rhsm:644
-#: ../bin/rhn-migrate-classic-to-rhsm:649
+#: ../bin/rhn-migrate-classic-to-rhsm:648
 msgid "System Engine Username: "
-msgstr ""
+msgstr "System Engine 사용자 이름: "
 
-#: ../bin/rhn-migrate-classic-to-rhsm:662
+#: ../bin/rhn-migrate-classic-to-rhsm:661
 msgid ""
 "\n"
 "Retrieving existing RHN Classic subscription information ..."
@@ -2938,15 +2995,17 @@ msgstr ""
 "\n"
 "기존 RHN 클래식 서브스크립션 정보를 검색하고 있습니다 ..."
 
-#: ../bin/rhn-migrate-classic-to-rhsm:665
+#: ../bin/rhn-migrate-classic-to-rhsm:664
 msgid "System is currently subscribed to these RHN Classic Channels:"
-msgstr ""
+msgstr "현재 시스템은 RHN 클래식 채널에 등록되어 있습니다: "
 
-#: ../bin/rhn-migrate-classic-to-rhsm:675
+#: ../bin/rhn-migrate-classic-to-rhsm:674
 msgid ""
 "\n"
 "Preparing to unregister system from RHN Classic ..."
 msgstr ""
+"\n"
+"RHN 클래식에서 시스템을 등록 해제 준비하고 있습니다 ..."
 
 #: ../src/rhsm_icon.c:46
 msgid "How often to check for validity (in seconds)"
@@ -2974,14 +3033,17 @@ msgid ""
 "system must be registered with the Customer Portal. Please enter your Red "
 "Hat login to ensure your system is up-to-date."
 msgstr ""
+"서브스크립션 관리자가 시스템을 업데이트하게 하려면 시스템을 반드시 RHN으로 등"
+"록해야 합니다. Red Hat 로그인을 입력하여 시스템이 업데이트되어 있는지 확인하"
+"십시오. "
 
 #: ../src/rhsm_icon.c:212
 msgid "Invalid or Missing Entitlement Subscriptions"
-msgstr ""
+msgstr "유효한 또는 누락된 인타이틀먼트 서브스크립션"
 
 #: ../src/rhsm_icon.c:215
 msgid "This system is missing one or more subscriptions."
-msgstr ""
+msgstr "이 시스템에는 하나 이상의 서브스크립션이 누락되어 있습니다."
 
 #: ../src/rhsm_icon.c:218
 msgid "Partially Entitled Products"
@@ -2991,6 +3053,8 @@ msgstr "부분적 권한을 갖는 제품"
 msgid ""
 "This system is missing one or more subscriptions to fully cover its products."
 msgstr ""
+"이 시스템에는 제품을 완전하게 커버할 하나 이상의 서브스크립션이 누락되어 있습"
+"니다."
 
 #: ../src/rhsm_icon.c:225
 msgid "This System's Subscriptions Are About to Expire"
@@ -3029,44 +3093,44 @@ msgstr "옵션 구문 분석 실패: %s\n"
 
 #: ../src/rhsmcertd.c:54
 msgid "Interval to run cert check (in minutes)"
-msgstr ""
+msgstr "인증서 확인을 실행하는 간격 (분 단위)"
 
 #: ../src/rhsmcertd.c:57
 msgid "Interval to run healing (in minutes)"
-msgstr ""
+msgstr "복구를 실행하는 간격 (분 단위)"
 
 #: ../src/rhsmcertd.c:60
 msgid "Run the initial checks immediatly, with no delay."
-msgstr ""
+msgstr "지연없이 즉시 초기 확인을 실행합니다."
 
 #: ../src/rhsmcertd.c:255
 msgid "For more information run: rhsmcertd --help\n"
-msgstr ""
+msgstr "자세한 정보를 보려면 rhsmcertd --help를 실행하십시오\n"
 
 #: ../src/rhsmcertd.c:281
 msgid "Wrong number of arguments specified.\n"
-msgstr ""
+msgstr "잘못된 인수 번호가 지정되어 있습니다.\n"
 
 #. New style args were used, assume error.
 #. We do not support both at once, other than
 #. debug and wait.
 #: ../src/rhsmcertd.c:339
 msgid "Invalid argument specified.\n"
-msgstr ""
+msgstr "잘못된 인수가 지정되어 있습니다.\n"
 
 #: ../src/rhsmcertd.c:345
 msgid "WARN: Deprecated CLI arguments are being used.\n"
-msgstr ""
+msgstr "경고: 사용권장되지 않는 CLI 인수가 사용되고 있습니다.\n"
 
 #: ../src/rhsmcertd.c:360
 #, c-format
 msgid "Invalid option: %s\n"
-msgstr ""
+msgstr "잘못된 옵션: %s\n"
 
 #: ../src/rhsmcertd.c:374
 #, c-format
 msgid "Invalid argument specified: %s\n"
-msgstr ""
+msgstr "잘못된 인수가 지정됨: %s\n"
 
 #: ../etc-conf/rhsm-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
@@ -3082,7 +3146,7 @@ msgstr "Red Hat 서브스크립션 관리자"
 
 #: ../src/rct/printing.py:34
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: ../src/rct/printing.py:37
 msgid "Arch"
@@ -3090,23 +3154,23 @@ msgstr "아키텍처 "
 
 #: ../src/rct/printing.py:38
 msgid "Tags"
-msgstr ""
+msgstr "태그"
 
 #: ../src/rct/printing.py:46
 msgid "Order"
-msgstr ""
+msgstr "순서"
 
 #: ../src/rct/printing.py:48
 msgid "Number"
-msgstr ""
+msgstr "번호"
 
 #: ../src/rct/printing.py:49
 msgid "SKU"
-msgstr ""
+msgstr "SKU"
 
 #: ../src/rct/printing.py:51
 msgid "Account"
-msgstr ""
+msgstr "계정 "
 
 #: ../src/rct/printing.py:52
 msgid "Service Level"
@@ -3114,125 +3178,125 @@ msgstr "서비스 레벨"
 
 #: ../src/rct/printing.py:53
 msgid "Service Type"
-msgstr ""
+msgstr "서비스 유형"
 
 #: ../src/rct/printing.py:55
 msgid "Quantity Used"
-msgstr ""
+msgstr "사용 수량"
 
 #: ../src/rct/printing.py:56
 msgid "Socket Limit"
-msgstr ""
+msgstr "소켓 제한"
 
 #: ../src/rct/printing.py:57
 msgid "Virt Limit"
-msgstr ""
+msgstr "가상 제한"
 
 #: ../src/rct/printing.py:58
 msgid "Virt Only"
-msgstr ""
+msgstr "가상 전용"
 
 #: ../src/rct/printing.py:60
 msgid "Stacking ID"
-msgstr ""
+msgstr "스태킹 ID"
 
 #: ../src/rct/printing.py:61
 msgid "Warning Period"
-msgstr ""
+msgstr "경고 기간"
 
 #: ../src/rct/printing.py:62
 msgid "Provides Management"
-msgstr ""
+msgstr "관리 제공"
 
 #: ../src/rct/printing.py:71
 msgid "Content"
-msgstr ""
-
-#: ../src/rct/printing.py:73
-msgid "Label"
-msgstr ""
-
-#: ../src/rct/printing.py:74
-msgid "Vendor"
-msgstr ""
+msgstr "컨텐츠"
 
 #: ../src/rct/printing.py:75
-msgid "URL"
-msgstr ""
+msgid "Label"
+msgstr "레이블 "
 
 #: ../src/rct/printing.py:76
-msgid "GPG"
-msgstr ""
+msgid "Vendor"
+msgstr "벤더"
 
 #: ../src/rct/printing.py:77
-msgid "Enabled"
-msgstr ""
+msgid "URL"
+msgstr "URL"
 
 #: ../src/rct/printing.py:78
-msgid "Expires"
-msgstr ""
+msgid "GPG"
+msgstr "GPG"
 
 #: ../src/rct/printing.py:79
+msgid "Enabled"
+msgstr "활성화됨 "
+
+#: ../src/rct/printing.py:80
+msgid "Expires"
+msgstr "만료 "
+
+#: ../src/rct/printing.py:81
 msgid "Required Tags"
-msgstr ""
+msgstr "필요한 태그"
 
-#: ../src/rct/printing.py:91
+#: ../src/rct/printing.py:93
 msgid "Certificate:"
-msgstr ""
-
-#: ../src/rct/printing.py:92
-msgid "Path"
-msgstr ""
+msgstr "인증서: "
 
 #: ../src/rct/printing.py:94
+msgid "Path"
+msgstr "경로"
+
+#: ../src/rct/printing.py:96
 msgid "Serial"
-msgstr ""
+msgstr "시리얼"
 
-#: ../src/rct/printing.py:106
+#: ../src/rct/printing.py:108
 msgid "Subject:"
-msgstr ""
-
-#: ../src/rct/printing.py:113
-msgid "Entitlement Certificate"
-msgstr ""
+msgstr "주제: "
 
 #: ../src/rct/printing.py:115
-msgid "Product Certificate"
-msgstr ""
+msgid "Entitlement Certificate"
+msgstr "인타이틀먼트 인증서 "
 
 #: ../src/rct/printing.py:117
-msgid "Identity Certificate"
-msgstr ""
+msgid "Product Certificate"
+msgstr "제품 인증서"
 
 #: ../src/rct/printing.py:119
-msgid "Unknown Certificate Type"
-msgstr ""
+msgid "Identity Certificate"
+msgstr "ID 인증서"
 
-#: ../src/rct/printing.py:138
+#: ../src/rct/printing.py:121
+msgid "Unknown Certificate Type"
+msgstr "알 수 없는 인증서 유형"
+
+#: ../src/rct/printing.py:140
 msgid "Alt Name"
-msgstr ""
+msgstr "대체 이름 "
 
 #: ../src/rct/commands.py:50
 msgid "Print certificate info to standard output."
-msgstr ""
+msgstr "인증서 정보를 표준 출력으로 인쇄 "
 
 #: ../src/rct/commands.py:54
 msgid "do not show the cert's product information"
-msgstr ""
+msgstr "인증서 제품 정보를 표시하지 않음 "
 
 #: ../src/rct/commands.py:56
 msgid "do not show the cert's content info."
-msgstr ""
+msgstr "인증서 내용 정보를 표시하지 않음"
 
 #: ../src/rct/commands.py:61
 msgid "You must specify a certificate file."
-msgstr ""
+msgstr "인증서 파일을 지정해야 합니다."
 
 #: ../src/rct/commands.py:64
 msgid "The specified certificate file does not exist."
-msgstr ""
+msgstr "지정된 인증서 파일이 존재하지 않습니다."
 
 #: ../src/rct/commands.py:78
 #, python-format
 msgid "%%prog %s [OPTIONS] CERT_FILE"
-msgstr ""
+msgstr "%%prog %s [OPTIONS] CERT_FILE"
