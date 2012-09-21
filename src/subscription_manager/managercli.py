@@ -1962,6 +1962,10 @@ class ManagerCLI(CLI):
                        VersionCommand]
         CLI.__init__(self, command_classes=commands)
 
+    def main(self):
+        managerlib.check_identity_cert_perms()
+        return CLI.main(self)
+
 
 # from http://farmdev.com/talks/unicode/
 def to_unicode_or_bust(obj, encoding='utf-8'):
