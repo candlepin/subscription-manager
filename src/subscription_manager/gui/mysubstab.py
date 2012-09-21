@@ -264,9 +264,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
     def on_no_selection(self):
         """
         Clears out the subscription details panel when no subscription is
-        selected.
+        selected and disables the unsubscribe button.
         """
         self.sub_details.clear()
+        self.unsubscribe_button.set_property('sensitive', False)
 
     def _create_stacking_header_entry(self, title, background_color):
         entry = {}
