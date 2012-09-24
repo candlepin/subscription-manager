@@ -257,14 +257,10 @@ class CliCommand(AbstractCLICommand):
         if not self.require_connection():
             return
 
-        if not self.is_registered():
-            log.debug("Server Versions: Not registered, unable to check server version")
-            return
-
         # get_server_versions needs to handle any exceptions
         # and return the server dict
-        self.server_versions = get_server_versions(self.cp)
-        log.info("Server Versions: %s " % get_server_versions(self.cp))
+        self.server_versions = get_server_versions(self.no_auth_cp)
+        log.info("Server Versions: %s " % get_server_versions(self.no_auth_cp))
 
     # note, depending on that args, we could get a full
     # fledged uep, a basic auth uep, or an unauthenticate uep
@@ -412,6 +408,9 @@ class CliCommand(AbstractCLICommand):
             self.cp = self._get_UEP(cert_file=cert_file,
                                     key_file=key_file)
 
+            # no auth cp for get / (resources) and
+            # get /status (status and versions)
+            self.no_auth_cp = self._get_UEP()
             self.log_server_version()
 
             self.certlib = CertLib(uep=self.cp)
