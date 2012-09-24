@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.1.1
+Version: 1.1.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -351,6 +351,37 @@ fi
 %endif
 
 %changelog
+* Mon Sep 24 2012 Adrian Likins <alikins@redhat.com> 1.1.2-1
+- 829825: Adding tests. (awood@redhat.com)
+- 853876: No need to check for GoneException when getting status
+  (mstead@redhat.com)
+- 829825: Disable unsubscribe button when nothing is selected.
+  (awood@redhat.com)
+- Remove unused import. (awood@redhat.com)
+- 859197: Fix product cert cleanup. (dgoodwin@redhat.com)
+- 781280: Add I18N comments for some string length issues.
+  (dgoodwin@redhat.com)
+- 830193: Ensure logging is not diabled by RHN Classic Registration
+  (bkearney@redhat.com)
+- remove unused RepoFile import (alikins@redhat.com)
+- 855081: Translate Arch as Arq. (bkearney@redhat.com)
+- Check identity cert permissions when running CLI commands (mstead@redhat.com)
+- mock all of RepoFile for the cli tests (alikins@redhat.com)
+- 845349: Don't clutter the repo file with empty keys (jbowes@redhat.com)
+- 845349: remove 'return' left in for debugging (jbowes@redhat.com)
+- Stylish errors for mr.po (bkearney@redhat.com)
+- 855085: Fixed the translation for [OPTIONS] (bkearney@redhat.com)
+- 855087: Fix a mis translated [OPTIONS] in the mr.po file.
+  (bkearney@redhat.com)
+- Strings with the same value are not always the same instance.
+  (awood@redhat.com)
+- updates from sefler for bz850881 (dlackey@redhat.com.com)
+- mock out utils.is_valid_server_info for tests (alikins@redhat.com)
+- 846207: Print error message for each invalid repo. (awood@redhat.com)
+- change test async to check for a number of thread callbacks
+  (alikins@redhat.com)
+- latest strings from zanata (alikins@redhat.com)
+
 * Wed Sep 19 2012 Devan Goodwin <dgoodwin@rm-rf.ca> 1.1.1-1
 - updates to stat-cert for cert v3 (jbowes@redhat.com)
 - rct: Check for and handle files that aren't x509 certs (jbowes@redhat.com)
