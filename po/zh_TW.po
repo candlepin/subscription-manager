@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: zh_TW\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-21 10:39-0400\n"
-"PO-Revision-Date: 2012-09-04 03:12-0400\n"
+"PO-Revision-Date: 2012-09-23 08:46-0400\n"
 "Last-Translator: tchuang <tchuang@redhat.com>\n"
 "Language-Team: Traditional Chinese <zh@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1424,7 +1424,7 @@ msgstr "錯誤：必須使用 --autosubscribe 並搭配 --servicelevel。"
 
 #: ../src/subscription_manager/managercli.py:898
 msgid "Error: Must provide --org with activation keys."
-msgstr ""
+msgstr "錯誤：必須為 --org 提供啟用金鑰。"
 
 #: ../src/subscription_manager/managercli.py:928
 #, python-format
@@ -2824,7 +2824,7 @@ msgstr ""
 #, c-format
 msgid ""
 "System '%s' successfully registered to Red Hat Subscription Management.\n"
-msgstr ""
+msgstr "系統 '%s' 已成功向 Red Hat Subscription Management 註冊。\n"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:455
 msgid "Launching the GUI tool to manually subscribe the system ..."
@@ -2868,6 +2868,8 @@ msgid ""
 "\n"
 "No product certificates are mapped to these RHN Classic channels:"
 msgstr ""
+"\n"
+"沒有產品憑證對映至這些 RHN Classic 頻道："
 
 #: ../bin/rhn-migrate-classic-to-rhsm:520
 msgid ""
@@ -2882,6 +2884,8 @@ msgid ""
 "\n"
 "Installing product certificates for these RHN Classic channels:"
 msgstr ""
+"\n"
+"為這些 RHN Classic 頻道安裝產品憑證："
 
 #: ../bin/rhn-migrate-classic-to-rhsm:539
 #, c-format
@@ -2889,6 +2893,8 @@ msgid ""
 "\n"
 "Product certificates installed successfully to %s."
 msgstr ""
+"\n"
+"產品憑證已成功安裝至 %s。"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:583
 msgid ""
@@ -2903,15 +2909,17 @@ msgid ""
 "Please ensure system has subscriptions attached, and see 'subscription-"
 "manager repos --help' to enable additional repositories"
 msgstr ""
+"請確認系統已連上了訂閱服務，並查看 'subscription-manager repos --help' 以啟用"
+"額外軟體庫"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:635
 msgid "The --servicelevel and --no-auto options cannot be used together."
-msgstr ""
+msgstr "--servicelevel 和 --no-auto 選項不可同時搭配使用。"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:642
 #: ../bin/rhn-migrate-classic-to-rhsm:646
 msgid "Red Hat account: "
-msgstr ""
+msgstr "Red Hat 帳號："
 
 #: ../bin/rhn-migrate-classic-to-rhsm:643
 #: ../bin/rhn-migrate-classic-to-rhsm:648
@@ -2928,13 +2936,15 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:664
 msgid "System is currently subscribed to these RHN Classic Channels:"
-msgstr ""
+msgstr "系統目前已訂閱至這些 RHN Classic 頻道："
 
 #: ../bin/rhn-migrate-classic-to-rhsm:674
 msgid ""
 "\n"
 "Preparing to unregister system from RHN Classic ..."
 msgstr ""
+"\n"
+"正在準備取消系統向 RHN Classic 的註冊..."
 
 #: ../src/rhsm_icon.c:46
 msgid "How often to check for validity (in seconds)"
@@ -2962,14 +2972,16 @@ msgid ""
 "system must be registered with the Customer Portal. Please enter your Red "
 "Hat login to ensure your system is up-to-date."
 msgstr ""
+"為了要讓訂閱管理員為提供系統更新，您的系統必須向 Customer Portal 註冊。請輸"
+"入 Red Hat 的登入名稱，已確保系統處於最新狀態。"
 
 #: ../src/rhsm_icon.c:212
 msgid "Invalid or Missing Entitlement Subscriptions"
-msgstr ""
+msgstr "權利訂閱無效或遺失"
 
 #: ../src/rhsm_icon.c:215
 msgid "This system is missing one or more subscriptions."
-msgstr ""
+msgstr "這部系統缺少一或更多項訂閱服務。"
 
 #: ../src/rhsm_icon.c:218
 msgid "Partially Entitled Products"
@@ -2978,7 +2990,7 @@ msgstr "部分享有權利的產品"
 #: ../src/rhsm_icon.c:221
 msgid ""
 "This system is missing one or more subscriptions to fully cover its products."
-msgstr ""
+msgstr "這部系統遺失一或更多項訂閱服務，以完整支援其產品。"
 
 #: ../src/rhsm_icon.c:225
 msgid "This System's Subscriptions Are About to Expire"
@@ -3202,7 +3214,7 @@ msgstr "其它名稱"
 
 #: ../src/rct/commands.py:50
 msgid "Print certificate info to standard output."
-msgstr ""
+msgstr "將憑證資訊列印至標準輸出。"
 
 #: ../src/rct/commands.py:54
 msgid "do not show the cert's product information"

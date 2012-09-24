@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-21 10:39-0400\n"
-"PO-Revision-Date: 2012-07-13 07:03-0400\n"
+"PO-Revision-Date: 2012-09-24 08:10-0400\n"
 "Last-Translator: Runa Bhattacharjee <runab@redhat.com>\n"
 "Language-Team: Bengali (India) <anubad@lists.ankur.org.in>\n"
 "MIME-Version: 1.0\n"
@@ -241,28 +241,28 @@ msgstr "আমার ইনস্টল করা উৎপাদন"
 #: ../src/subscription_manager/gui/installedtab.py:310
 #, python-format
 msgid "%s installed products do not have valid subscriptions."
-msgstr ""
+msgstr "ইনস্টল করা %s উৎপাদনের জন্য বৈধ সাবস্ক্রিপশন উপলব্ধ নেই"
 
 #: ../src/subscription_manager/gui/installedtab.py:314
 msgid "1 installed product does not have a valid subscription."
-msgstr ""
+msgstr "ইনস্টল করা ১-টি উৎপাদনের জন্য বৈধ সাবস্ক্রিপশন উপলব্ধ নেই"
 
 #: ../src/subscription_manager/gui/installedtab.py:319
 msgid "This system does not match subscription limits."
-msgstr ""
+msgstr "এই সিস্টেমের সাথে সাবস্ক্রিপশনের সীমার মিল হয়নি।"
 
 #: ../src/subscription_manager/gui/installedtab.py:327
 #, python-format
 msgid "System is properly subscribed through %s."
-msgstr ""
+msgstr "%s-র মাধ্যমে সিস্টেমটি সঠিকভাবে সাবস্ক্রাইব করা হয়েছে।"
 
 #: ../src/subscription_manager/gui/installedtab.py:334
 msgid "No installed products detected."
-msgstr ""
+msgstr "ইনস্টল করা কোনো উৎপাদন সনাক্ত করা যায়নি।"
 
 #: ../src/subscription_manager/gui/installedtab.py:338
 msgid "Keep your system up to date by registering."
-msgstr ""
+msgstr "নিবন্ধন করে সিস্টেমটি আপ-টু-ডেট রাখুন।"
 
 #: ../src/subscription_manager/gui/networkConfig.py:150
 msgid "There was an error saving your configuration."
@@ -284,7 +284,7 @@ msgstr "প্রক্সি সংযোগ বিফল হয়েছে"
 #: ../src/subscription_manager/gui/contract_selection.py:84
 #: ../src/rct/printing.py:50
 msgid "Contract"
-msgstr ""
+msgstr "চুক্তি"
 
 #: ../src/subscription_manager/gui/contract_selection.py:98
 msgid "Used / Total"
@@ -338,7 +338,7 @@ msgstr "ইনস্টল করা হয়েছে"
 
 #: ../src/subscription_manager/gui/widgets.py:316
 msgid "Not Set"
-msgstr ""
+msgstr "নির্ধারণ করা হয়নি"
 
 #: ../src/subscription_manager/gui/widgets.py:336
 #: ../src/subscription_manager/managercli.py:1761
@@ -455,16 +455,16 @@ msgstr ""
 msgid ""
 "No installed products on system. No need to update subscriptions at this "
 "time."
-msgstr ""
+msgstr "ইনস্টল করা কোনো উৎপাদন নেই। এই মুহূর্তে সাবস্ক্রিপশন আপডেট করার প্রয়োজন নেই।"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:49
 msgid "All installed products are fully subscribed."
-msgstr ""
+msgstr "ইনস্টল করা সকল উৎপাদন সম্পূর্ণরূপে সাবস্ক্রাইব করা হয়েছে।"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:53
 #: ../src/subscription_manager/gui/registergui.py:478
 msgid "Error subscribing"
-msgstr ""
+msgstr "সাবস্ক্রাইব করতে ত্রুটি"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:66
 #, python-format
@@ -486,7 +486,7 @@ msgstr ""
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:115
 msgid "Finish"
-msgstr ""
+msgstr "সমাপ্তি"
 
 #. Firstboot module title
 #. Note: translated title needs to be unique across all
@@ -560,12 +560,12 @@ msgstr "সিস্টেম নিবন্ধন করা হচ্ছে"
 
 #: ../src/subscription_manager/gui/registergui.py:334
 msgid "Attaching subscriptions"
-msgstr ""
+msgstr "সাবস্ক্রিপশন সংযুক্ত করা হয়েছে"
 
 #: ../src/subscription_manager/gui/registergui.py:343
 #, python-format
 msgid "Error subscribing: %s"
-msgstr ""
+msgstr "সাবস্ক্রাইব করতে ত্রুটি: %s"
 
 #: ../src/subscription_manager/gui/registergui.py:367
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:7
@@ -575,7 +575,7 @@ msgstr "সাবস্ক্রাইব করুন"
 
 #: ../src/subscription_manager/gui/registergui.py:416
 msgid "Finding suitable service levels"
-msgstr ""
+msgstr "যথাযত পরিসেবার স্তর সন্ধান করা হচ্ছে"
 
 # Override the button text to clarify we're not actually registering
 # by pressing that button here.
@@ -754,13 +754,13 @@ msgstr ""
 
 #: ../src/subscription_manager/branding/redhat_branding.py:10
 msgid "This system is registered to RHN Classic."
-msgstr ""
+msgstr "সিস্টেমটি RHN Classic-এ নিবন্ধিত।"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:13
 msgid ""
 "This system has already been registered with Red Hat using RHN Classic "
 "technology."
-msgstr ""
+msgstr "RHN Classic প্রযুক্তি সহযোগে এই সিস্টেমটি পূর্বেই Red Hat- এ নিবন্ধিত হয়েছে।"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:15
 msgid ""
@@ -768,6 +768,8 @@ msgid ""
 "Subscription Management technology. Red Hat recommends that customers only "
 "register once."
 msgstr ""
+"এই ব্যবস্থাটি RHN Subscription Management প্রযুক্তি সহযোগে পুনরায় নিবন্ধনের প্রচেষ্টা "
+"করছে। Red Hat-র পক্ষ থেকে গ্রাহকদেরকে শুধুমাত্র একবার নিবন্ধন করার প্রস্তাব দেওয়া হয়।"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:17
 msgid ""
@@ -793,6 +795,8 @@ msgstr ""
 #: ../src/subscription_manager/branding/redhat_branding.py:25
 msgid "Red Hat recommends that customers only register to one service."
 msgstr ""
+"Red Hat-র পক্ষ থেকে গ্রাহকদের কে শুধুমাত্র একটি পরিসেবায় নিবন্ধন করার প্রস্তাব দেওয়া "
+"হয়।"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:27
 msgid ""
@@ -804,7 +808,7 @@ msgstr ""
 
 #: ../src/subscription_manager/branding/redhat_branding.py:28
 msgid "RHN classic and Red Hat Subscription Management"
-msgstr ""
+msgstr "RHN classic ও Red Hat সাবস্ক্রিপশন পরিসেবা"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:30
 msgid ""
@@ -844,11 +848,11 @@ msgstr "বিকল্প"
 
 #: ../src/subscription_manager/i18n_optparse.py:139
 msgid "options"
-msgstr ""
+msgstr "বিকল্প"
 
 #: ../src/subscription_manager/i18n_optparse.py:140
 msgid "options:"
-msgstr ""
+msgstr "বিকল্প:"
 
 #. stuff for option value sanity checking
 #: ../src/subscription_manager/i18n_optparse.py:143
@@ -1202,7 +1206,7 @@ msgstr ""
 #: ../src/subscription_manager/managercli.py:1953
 #, python-format
 msgid "server type: %s"
-msgstr ""
+msgstr "সার্ভারের ধরন: %s"
 
 #: ../src/subscription_manager/managercli.py:574
 #, python-format
@@ -1259,7 +1263,7 @@ msgstr "%s দ্বারা কোনো প্রতিষ্ঠানের 
 
 #: ../src/subscription_manager/managercli.py:631
 msgid "Error: Unable to retrieve org list from server"
-msgstr ""
+msgstr "ত্রুটি: সার্ভার থেকে org তালিকা প্রাপ্ত করতে ব্যর্থ"
 
 #: ../src/subscription_manager/managercli.py:637
 msgid "Display the environments available for a user"
@@ -1273,6 +1277,7 @@ msgstr "পরিবেশের তালিকা নির্ধারণে�
 msgid ""
 "Error: This command requires that you specify an organization with --org"
 msgstr ""
+"ত্রুটি: এই কমান্ডের ক্ষেত্রে --org সহযোগে একটি প্রতিষ্ঠানের নাম নির্ধারণ করা আবশ্যক।"
 
 #: ../src/subscription_manager/managercli.py:671
 msgid "Environments"
@@ -1280,7 +1285,7 @@ msgstr "পরিবেশ"
 
 #: ../src/subscription_manager/managercli.py:677
 msgid "Error: This org does not have environments."
-msgstr ""
+msgstr "ত্রুটি: এই প্রতিষ্ঠানে কোনো পরিবেশ উপস্থিত নেই।"
 
 #: ../src/subscription_manager/managercli.py:679
 #: ../src/subscription_manager/managercli.py:1033
@@ -1289,7 +1294,7 @@ msgstr "ত্রুটি: সার্ভার দ্বারা পরি�
 
 #: ../src/subscription_manager/managercli.py:687
 msgid "Error: Unable to retrieve environment list from server"
-msgstr ""
+msgstr "ত্রুটি: সার্ভার থেকে পরিবেশের তালিকা প্রাপ্ত করতে ব্যর্থ"
 
 #: ../src/subscription_manager/managercli.py:695
 msgid "Manage service levels for this system"
@@ -1409,7 +1414,7 @@ msgstr "নিবন্ধনের জন্য ব্যবহারযোগ�
 
 #: ../src/subscription_manager/managercli.py:871
 msgid "system preference used when subscribing automatically"
-msgstr ""
+msgstr "স্বয়ংক্রিয়ভাবে সাবস্ক্রাইব করার জন্য ব্যবহৃত সিস্টেমের পছন্দ"
 
 #: ../src/subscription_manager/managercli.py:879
 msgid "This system is already registered. Use --force to override"
@@ -1438,7 +1443,7 @@ msgstr "ত্রুটি: --servicelevel-র সাথে --autosubscribe ব�
 
 #: ../src/subscription_manager/managercli.py:898
 msgid "Error: Must provide --org with activation keys."
-msgstr ""
+msgstr "ত্রুটি: অ্যাক্টিভেশন-কির সাথে --org উল্লেখ করা আবশ্যক।"
 
 #: ../src/subscription_manager/managercli.py:928
 #, python-format
@@ -1738,11 +1743,11 @@ msgstr "এই সিস্টেমের জন্য %s সংগ্রহস
 #: ../src/subscription_manager/managercli.py:1592
 #, python-format
 msgid "    Available Repositories in %s"
-msgstr ""
+msgstr "     %s-এ উপলব্ধ সংগ্রহস্থল"
 
 #: ../src/subscription_manager/managercli.py:1600
 msgid "This system has no repositories available through subscriptions."
-msgstr ""
+msgstr "এই সিস্টেমের জন্য সাবস্ক্রিপশনের মাধ্যমে কোনো সংগ্রহস্থল উপলব্ধ নেই।"
 
 #: ../src/subscription_manager/managercli.py:1613
 msgid ""
@@ -1935,7 +1940,7 @@ msgstr "সংস্করণ সংক্রান্ত তথ্য প্র
 #: ../src/subscription_manager/managercli.py:1952
 #, python-format
 msgid "registered to: %s"
-msgstr ""
+msgstr "এই স্থানে নিবন্ধিত: %s"
 
 #: ../src/subscription_manager/managercli.py:1954
 #, python-format
@@ -1952,7 +1957,7 @@ msgstr "python-rhsm: %s"
 #: ../src/subscription_manager/cli.py:59
 #, python-format
 msgid "%%prog %s [OPTIONS]"
-msgstr ""
+msgstr "%%prog %s [OPTIONS]"
 
 #: ../src/subscription_manager/cli.py:85
 #, python-format
@@ -1993,11 +1998,11 @@ msgstr "সার্ভার url পোর্ট পার্স করা য�
 
 #: ../src/subscription_manager/utils.py:234
 msgid "Server url port should be numeric"
-msgstr ""
+msgstr "সার্ভার url পোর্ট সংখ্যায় উল্লিখিত হওয়া আবশ্যক"
 
 #: ../src/subscription_manager/utils.py:309
 msgid "Unable to reach server"
-msgstr ""
+msgstr "সার্ভারের সাথে সংযোগ স্থাপন করা যায়নি"
 
 #: ../src/subscription_manager/utils.py:312
 msgid "subscription management service"
@@ -2068,7 +2073,7 @@ msgstr "<b>SKU:</b>"
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:3
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "<b>Service Level, Type:</b>"
-msgstr ""
+msgstr "<b>পরিসেবার স্তর, ধরন:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:4
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:8
@@ -2100,7 +2105,7 @@ msgstr "সাবস্ক্রিপশনের টেক্সট"
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:9
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:18
 msgid "Support Level And Type Text"
-msgstr ""
+msgstr "পরিসেবার স্তর ও টেক্সট লিখুন"
 
 #: ../src/subscription_manager/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
@@ -2118,7 +2123,7 @@ msgstr "আন-সাবস্ক্রাইব করুন"
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:1
 msgid "<b>Confirm Subscriptions</b>"
-msgstr ""
+msgstr "<b>সাবস্ক্রিপশন সুনিশ্চিত করুন</b>"
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:2
 msgid "<b>Detected products:</b>"
@@ -2134,6 +2139,8 @@ msgid ""
 "Please select how you\n"
 "want them assigned."
 msgstr ""
+"বিভিন্ন উৎপাদনের জন্য একাধিক পরিসেবার স্তর আপনার ব্যবহারের জন্য উপস্থিত রয়েছে। "
+"সেগুলি কী ভাবে প্রয়োগ করা হবে তা অনুগ্রহ করে চিহ্নিত করুন।"
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:6
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:9
@@ -2175,7 +2182,7 @@ msgstr "সাবস্ক্রিপশনের ব্যবহার"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:1
 msgid "Configure Pro_xy"
-msgstr ""
+msgstr "প্রক্সি কনফিগার করুন (_x)"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:2
 msgid "R_edeem Subscription"
@@ -2203,7 +2210,7 @@ msgstr "অনলাইন উপস্থিত নতিপত্র (_O)"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:9
 msgid "_Preferences"
-msgstr ""
+msgstr "পছন্দ (_P)"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:10
 msgid "_Register"
@@ -2219,7 +2226,7 @@ msgstr "নিবন্ধন বাতিল করুন (_U)"
 
 #: ../src/subscription_manager/gui/data/confirmsubs.glade.h:1
 msgid "<b>Select Service Level</b>"
-msgstr ""
+msgstr "<b>পরিসেবার স্তর নির্বাচন করুন</b>"
 
 #: ../src/subscription_manager/gui/data/confirmsubs.glade.h:2
 msgid "Core repositories will be enabled for each product."
@@ -2365,7 +2372,7 @@ msgstr "register_progressbar"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:10
 msgid "registration_dialog_action_area"
-msgstr ""
+msgstr "registration_dialog_action_area"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:1
 msgid "* Click to Adjust Quantity"
@@ -2729,7 +2736,7 @@ msgstr "ইনস্টলেশন সংখ্যা পার্স করত
 #: ../bin/install-num-migrate-to-rhsm:144
 #, c-format
 msgid "Installing %s to %s"
-msgstr ""
+msgstr "%s-কে %s-এ ইনস্টল করা হচ্ছে"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:67
 msgid "Ignore channels not available on RHSM"
@@ -2977,12 +2984,12 @@ msgstr ""
 #: ../bin/rhn-migrate-classic-to-rhsm:642
 #: ../bin/rhn-migrate-classic-to-rhsm:646
 msgid "Red Hat account: "
-msgstr ""
+msgstr "Red Hat অ্যাকাউন্ট: "
 
 #: ../bin/rhn-migrate-classic-to-rhsm:643
 #: ../bin/rhn-migrate-classic-to-rhsm:648
 msgid "System Engine Username: "
-msgstr ""
+msgstr "সিস্টেম ইঞ্জিনের ব্যবহারকারীর নাম:"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:661
 msgid ""
@@ -2994,13 +3001,15 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:664
 msgid "System is currently subscribed to these RHN Classic Channels:"
-msgstr ""
+msgstr "সিস্টেম বর্তমানে নিম্নলিখিত RHN Classic চ্যানলে সাবস্ক্রাইব করা হয়েছে:"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:674
 msgid ""
 "\n"
 "Preparing to unregister system from RHN Classic ..."
 msgstr ""
+"\n"
+"RHN Classic থেকে সিস্টেমের নিবন্ধন বাতিল করার প্রস্তুতি চলছে..."
 
 #: ../src/rhsm_icon.c:46
 msgid "How often to check for validity (in seconds)"
@@ -3031,11 +3040,11 @@ msgstr ""
 
 #: ../src/rhsm_icon.c:212
 msgid "Invalid or Missing Entitlement Subscriptions"
-msgstr ""
+msgstr "এনটাইটেলমেন্ট সাবস্ক্রিপশন বৈধ নয় অথবা অনুপস্থিত"
 
 #: ../src/rhsm_icon.c:215
 msgid "This system is missing one or more subscriptions."
-msgstr ""
+msgstr "এই সিস্টেমের এক অথবা একাধিক সাবস্ক্রিপশন অনুপস্থিত রয়েছে।"
 
 #: ../src/rhsm_icon.c:218
 msgid "Partially Entitled Products"
@@ -3045,6 +3054,8 @@ msgstr "আংশিক এনটাইটেলমেন্ট সহ উৎপ
 msgid ""
 "This system is missing one or more subscriptions to fully cover its products."
 msgstr ""
+"এই সিস্টেমের সকল উৎপাদনের ক্ষেত্রে প্রযোজ্য এক অথবা একাধিক সাবস্ক্রিপশন ানুপস্থিত "
+"রয়েছে।"
 
 #: ../src/rhsm_icon.c:225
 msgid "This System's Subscriptions Are About to Expire"
@@ -3083,44 +3094,44 @@ msgstr "বিকল্প পার্স করতে বিফল: %s\n"
 
 #: ../src/rhsmcertd.c:54
 msgid "Interval to run cert check (in minutes)"
-msgstr ""
+msgstr "cert check সঞ্চালনার বিরতি (মিনিটে ধার্য)"
 
 #: ../src/rhsmcertd.c:57
 msgid "Interval to run healing (in minutes)"
-msgstr ""
+msgstr "healing সঞ্চালনার বিরতি (মিনিটে ধার্য)"
 
 #: ../src/rhsmcertd.c:60
 msgid "Run the initial checks immediatly, with no delay."
-msgstr ""
+msgstr "কোনো বিলম্ব বিনা, প্রারম্ভিক পরীক্ষাগুলি অবিলম্বে সঞ্চালিত হবে"
 
 #: ../src/rhsmcertd.c:255
 msgid "For more information run: rhsmcertd --help\n"
-msgstr ""
+msgstr "অধিক বিবরণের জন্য, চিহ্নিত কমান্ড প্রয়োগ করুন: rhsmcertd --help\n"
 
 #: ../src/rhsmcertd.c:281
 msgid "Wrong number of arguments specified.\n"
-msgstr ""
+msgstr "সঠিক সংখ্যক আর্গুমেন্ট উল্লিখিত হয়নি।\n"
 
 #. New style args were used, assume error.
 #. We do not support both at once, other than
 #. debug and wait.
 #: ../src/rhsmcertd.c:339
 msgid "Invalid argument specified.\n"
-msgstr ""
+msgstr "অবৈধ আর্গুমেন্ট উল্লিখিত হয়েছে।\n"
 
 #: ../src/rhsmcertd.c:345
 msgid "WARN: Deprecated CLI arguments are being used.\n"
-msgstr ""
+msgstr "সতর্কবার্তা: অবচিত CLI আর্গুমেন্ট ব্যবহার করা হচ্ছে।\n"
 
 #: ../src/rhsmcertd.c:360
 #, c-format
 msgid "Invalid option: %s\n"
-msgstr ""
+msgstr "অবৈধ বিকল্প: %s\n"
 
 #: ../src/rhsmcertd.c:374
 #, c-format
 msgid "Invalid argument specified: %s\n"
-msgstr ""
+msgstr "অবৈধ বিকল্প উল্লিখিত হয়েছে: %s\n"
 
 #: ../etc-conf/rhsm-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
@@ -3136,7 +3147,7 @@ msgstr "Red Hat Subscription Manager"
 
 #: ../src/rct/printing.py:34
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: ../src/rct/printing.py:37
 msgid "Arch"
@@ -3144,23 +3155,23 @@ msgstr "আর্কিটেকচার"
 
 #: ../src/rct/printing.py:38
 msgid "Tags"
-msgstr ""
+msgstr "ট্যাগ"
 
 #: ../src/rct/printing.py:46
 msgid "Order"
-msgstr ""
+msgstr "ক্রমবিন্যাস"
 
 #: ../src/rct/printing.py:48
 msgid "Number"
-msgstr ""
+msgstr "সংখ্যা"
 
 #: ../src/rct/printing.py:49
 msgid "SKU"
-msgstr ""
+msgstr "SKU"
 
 #: ../src/rct/printing.py:51
 msgid "Account"
-msgstr ""
+msgstr "অ্যাকাউন্ট"
 
 #: ../src/rct/printing.py:52
 msgid "Service Level"
@@ -3168,125 +3179,125 @@ msgstr "পরিসেবার স্তর"
 
 #: ../src/rct/printing.py:53
 msgid "Service Type"
-msgstr ""
+msgstr "পরিসেবার স্তর"
 
 #: ../src/rct/printing.py:55
 msgid "Quantity Used"
-msgstr ""
+msgstr "ব্যবহৃত পরিমান"
 
 #: ../src/rct/printing.py:56
 msgid "Socket Limit"
-msgstr ""
+msgstr "সকেটের সীমা"
 
 #: ../src/rct/printing.py:57
 msgid "Virt Limit"
-msgstr ""
+msgstr "Virt-র সীমা"
 
 #: ../src/rct/printing.py:58
 msgid "Virt Only"
-msgstr ""
+msgstr "শুধুমাত্র Virt"
 
 #: ../src/rct/printing.py:60
 msgid "Stacking ID"
-msgstr ""
+msgstr "স্ট্যাকিং ID"
 
 #: ../src/rct/printing.py:61
 msgid "Warning Period"
-msgstr ""
+msgstr "সতর্কতার কাল"
 
 #: ../src/rct/printing.py:62
 msgid "Provides Management"
-msgstr ""
+msgstr "Management উপলব্ধ করা হয়"
 
 #: ../src/rct/printing.py:71
 msgid "Content"
-msgstr ""
+msgstr "তথ্য"
 
 #: ../src/rct/printing.py:75
 msgid "Label"
-msgstr ""
+msgstr "লেবেল"
 
 #: ../src/rct/printing.py:76
 msgid "Vendor"
-msgstr ""
+msgstr "বিক্রেতা"
 
 #: ../src/rct/printing.py:77
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: ../src/rct/printing.py:78
 msgid "GPG"
-msgstr ""
+msgstr "GPG"
 
 #: ../src/rct/printing.py:79
 msgid "Enabled"
-msgstr ""
+msgstr "সক্রিয়"
 
 #: ../src/rct/printing.py:80
 msgid "Expires"
-msgstr ""
+msgstr "মেয়াদপূর্তী"
 
 #: ../src/rct/printing.py:81
 msgid "Required Tags"
-msgstr ""
+msgstr "আবশ্যক ট্যাগ"
 
 #: ../src/rct/printing.py:93
 msgid "Certificate:"
-msgstr ""
+msgstr "সার্টিফিকেট:"
 
 #: ../src/rct/printing.py:94
 msgid "Path"
-msgstr ""
+msgstr "পাথ"
 
 #: ../src/rct/printing.py:96
 msgid "Serial"
-msgstr ""
+msgstr "ক্রমিক"
 
 #: ../src/rct/printing.py:108
 msgid "Subject:"
-msgstr ""
+msgstr "প্রসঙ্গ:"
 
 #: ../src/rct/printing.py:115
 msgid "Entitlement Certificate"
-msgstr ""
+msgstr "এনটাইটেলমেন্ট সার্টিফিকেট"
 
 #: ../src/rct/printing.py:117
 msgid "Product Certificate"
-msgstr ""
+msgstr "উৎপাদনের সার্টিফিকেট"
 
 #: ../src/rct/printing.py:119
 msgid "Identity Certificate"
-msgstr ""
+msgstr "আইডেন্টিটি সার্টিফিকেট"
 
 #: ../src/rct/printing.py:121
 msgid "Unknown Certificate Type"
-msgstr ""
+msgstr "অজানা ধরনের সার্টিফিকেট"
 
 #: ../src/rct/printing.py:140
 msgid "Alt Name"
-msgstr ""
+msgstr "বিকল্প নাম"
 
 #: ../src/rct/commands.py:50
 msgid "Print certificate info to standard output."
-msgstr ""
+msgstr "স্ট্যান্ডার্ড আউটপুটের মধ্যে সার্টিফিকেটের তথ্য প্রিন্ট করুন"
 
 #: ../src/rct/commands.py:54
 msgid "do not show the cert's product information"
-msgstr ""
+msgstr "সার্টিফিকেটের উৎপাদনের তথ্য প্রদর্শন করা হবে না"
 
 #: ../src/rct/commands.py:56
 msgid "do not show the cert's content info."
-msgstr ""
+msgstr "সার্টিফিকেটের মধ্যে অন্তর্ভুক্ত তথ্য সংক্রান্ত তথ্য প্রদর্শন করা হবে না"
 
 #: ../src/rct/commands.py:61
 msgid "You must specify a certificate file."
-msgstr ""
+msgstr "একটি সার্টিফিকেট ফাইল উল্লেখ করা আবশ্যক।"
 
 #: ../src/rct/commands.py:64
 msgid "The specified certificate file does not exist."
-msgstr ""
+msgstr "উল্লিখিত সার্টিফিকেট ফাইল উপস্থিত নেই।"
 
 #: ../src/rct/commands.py:78
 #, python-format
 msgid "%%prog %s [OPTIONS] CERT_FILE"
-msgstr ""
+msgstr "%%prog %s [OPTIONS] CERT_FILE"

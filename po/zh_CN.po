@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-21 10:39-0400\n"
-"PO-Revision-Date: 2012-09-10 10:19-0400\n"
+"PO-Revision-Date: 2012-09-24 01:41-0400\n"
 "Last-Translator: leahliu <lliu@redhat.com>\n"
 "Language-Team: Wei Liu\n"
 "MIME-Version: 1.0\n"
@@ -1415,7 +1415,7 @@ msgstr "错误：必须在 --servicelevel 中使用 --autosubscribe。"
 
 #: ../src/subscription_manager/managercli.py:898
 msgid "Error: Must provide --org with activation keys."
-msgstr ""
+msgstr "错误：必须在提供激活码时提供 --org。"
 
 #: ../src/subscription_manager/managercli.py:928
 #, python-format
@@ -2903,7 +2903,7 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:635
 msgid "The --servicelevel and --no-auto options cannot be used together."
-msgstr ""
+msgstr "--servicelevel 和 --no-auto 选项不能一起使用。"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:642
 #: ../bin/rhn-migrate-classic-to-rhsm:646

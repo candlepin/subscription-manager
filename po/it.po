@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-21 10:39-0400\n"
-"PO-Revision-Date: 2012-08-13 01:40-0400\n"
+"PO-Revision-Date: 2012-09-23 09:45-0400\n"
 "Last-Translator: fvalen <fvalen@fedoraproject.org>\n"
 "Language-Team: <it@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -116,7 +116,7 @@ msgstr "Errore durante l'acquisizione della sottoscrizione: %s"
 #: ../src/subscription_manager/gui/allsubs.py:392
 #, python-format
 msgid "%s applied"
-msgstr ""
+msgstr "%s applicato"
 
 #: ../src/subscription_manager/gui/about.py:24
 msgid ""
@@ -244,28 +244,28 @@ msgstr "I miei prodotti installati"
 #: ../src/subscription_manager/gui/installedtab.py:310
 #, python-format
 msgid "%s installed products do not have valid subscriptions."
-msgstr ""
+msgstr "%s prodotti installati non presentano sottoscrizioni valide."
 
 #: ../src/subscription_manager/gui/installedtab.py:314
 msgid "1 installed product does not have a valid subscription."
-msgstr ""
+msgstr "1 prodotto installato non presenta una sottoscrizione valida."
 
 #: ../src/subscription_manager/gui/installedtab.py:319
 msgid "This system does not match subscription limits."
-msgstr ""
+msgstr "Questo sistema non è corrispondente ai limiti della sottoscrizione."
 
 #: ../src/subscription_manager/gui/installedtab.py:327
 #, python-format
 msgid "System is properly subscribed through %s."
-msgstr ""
+msgstr "Il sistema è sottoscritto correttamente per mezzo di %s."
 
 #: ../src/subscription_manager/gui/installedtab.py:334
 msgid "No installed products detected."
-msgstr ""
+msgstr "Non è stato rilevato alcun prodotto installato."
 
 #: ../src/subscription_manager/gui/installedtab.py:338
 msgid "Keep your system up to date by registering."
-msgstr ""
+msgstr "Mantieni il sistema aggiornato registrandolo."
 
 #: ../src/subscription_manager/gui/networkConfig.py:150
 msgid "There was an error saving your configuration."
@@ -288,7 +288,7 @@ msgstr "Connessione al Proxy fallita"
 #: ../src/subscription_manager/gui/contract_selection.py:84
 #: ../src/rct/printing.py:50
 msgid "Contract"
-msgstr ""
+msgstr "Contratto"
 
 #: ../src/subscription_manager/gui/contract_selection.py:98
 msgid "Used / Total"
@@ -343,7 +343,7 @@ msgstr "Installato"
 
 #: ../src/subscription_manager/gui/widgets.py:316
 msgid "Not Set"
-msgstr ""
+msgstr "Non impostato"
 
 #: ../src/subscription_manager/gui/widgets.py:336
 #: ../src/subscription_manager/managercli.py:1761
@@ -462,15 +462,17 @@ msgid ""
 "No installed products on system. No need to update subscriptions at this "
 "time."
 msgstr ""
+"Nessun prodotto installato sul sistema. Ora non è necessario aggiornare le "
+"sottoscrizioni."
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:49
 msgid "All installed products are fully subscribed."
-msgstr ""
+msgstr "Tutti i prodotti installati sono completamente sottoscritti."
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:53
 #: ../src/subscription_manager/gui/registergui.py:478
 msgid "Error subscribing"
-msgstr ""
+msgstr "Errore durante la sottoscrizione"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:66
 #, python-format
@@ -485,6 +487,9 @@ msgid ""
 "No service levels will cover all installed products. Please run "
 "'Subscription Manager' to manually subscribe this system."
 msgstr ""
+"Nessun livello di servizio ricoprirà tutti i prodotti installati. Eseguire "
+"'Subscription Manager' per ottenere manualmente l'entitlement per questo "
+"sistema."
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:96
 msgid "You have opted to skip auto-subscribe."
@@ -492,7 +497,7 @@ msgstr "Hai scelto di saltare la sottoscrizione automatica."
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:115
 msgid "Finish"
-msgstr ""
+msgstr "Fine"
 
 #. Firstboot module title
 #. Note: translated title needs to be unique across all
@@ -566,12 +571,15 @@ msgstr "Registrazione sistema in corso"
 
 #: ../src/subscription_manager/gui/registergui.py:334
 msgid "Attaching subscriptions"
-msgstr ""
+msgstr "Associazione sottoscrizioni"
 
 #: ../src/subscription_manager/gui/registergui.py:343
 #, python-format
 msgid "Error subscribing: %s"
 msgstr ""
+"Errore di sottoscrizione: %s\n"
+"\n"
+"\t"
 
 #: ../src/subscription_manager/gui/registergui.py:367
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:7
@@ -581,7 +589,7 @@ msgstr "Sottoscrivi"
 
 #: ../src/subscription_manager/gui/registergui.py:416
 msgid "Finding suitable service levels"
-msgstr ""
+msgstr "Ricerca livelli di servizio idonei"
 
 # Override the button text to clarify we're not actually registering
 # by pressing that button here.
@@ -601,6 +609,8 @@ msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "subscriptions at this time."
 msgstr ""
+"Tutti i prodotti installati presentano entitlement validi. Nessun bisogno di "
+"aggiornare le sottoscrizioni."
 
 #: ../src/subscription_manager/gui/registergui.py:492
 #, python-format
@@ -608,12 +618,18 @@ msgid ""
 "No available subscriptions at the current service level: %s. Please use the "
 "\"All Available Subscriptions\" tab to manually subscribe this system."
 msgstr ""
+"Nessuna sottoscrizioni disponibile con il livello di servizio corrente: %s. "
+"Usare \"Tutte le sottoscrizioni disponibili\" per sottoscrivere manualmente "
+"questo sistema."
 
 #: ../src/subscription_manager/gui/registergui.py:510
 msgid ""
 "No service level will cover all installed products. Please use the \"All "
 "Available Subscriptions\" tab to manually subscribe this system."
 msgstr ""
+"Nessun livello di servizio coprirà tutti i prodotti installati. Usare la "
+"scheda \"Tutte le sottoscrizioni disponibili\" per sottoscrivere manualmente "
+"questo sistema."
 
 #: ../src/subscription_manager/gui/registergui.py:540
 msgid "Fetching list of possible environments"
@@ -716,6 +732,8 @@ msgid ""
 "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
 "more details."
 msgstr ""
+"Errore durante l'aggiornamento dei dati del sistema sul server, consultare /"
+"var/log/rhsm/rhsm.log per maggiori informazioni."
 
 #: ../src/subscription_manager/branding/__init__.py:81
 msgid "Register the machine to the server"
@@ -768,13 +786,13 @@ msgstr ""
 
 #: ../src/subscription_manager/branding/redhat_branding.py:10
 msgid "This system is registered to RHN Classic."
-msgstr ""
+msgstr "Questo sistema è registrato con RHN Classic."
 
 #: ../src/subscription_manager/branding/redhat_branding.py:13
 msgid ""
 "This system has already been registered with Red Hat using RHN Classic "
 "technology."
-msgstr ""
+msgstr "Questo sistema è già stato registrato con RHN usando RHN Classic."
 
 #: ../src/subscription_manager/branding/redhat_branding.py:15
 msgid ""
@@ -782,12 +800,18 @@ msgid ""
 "Subscription Management technology. Red Hat recommends that customers only "
 "register once."
 msgstr ""
+"Lo strumento usato sta cercando di eseguire una nuova registrazione usando "
+"Red Hat Subscription Management. Red Hat cosiglia agli utenti di registrarsi "
+"solo una volta."
 
 #: ../src/subscription_manager/branding/redhat_branding.py:17
 msgid ""
 "To learn how to unregister from either service please consult this Knowledge "
 "Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
+"Per saperne di più su come rimuovere la registrazione da entrambi i servizi "
+"consultare l'articolo del Knowledge Base: https://access.redhat.com/kb/docs/"
+"DOC-45563"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:18
 #: ../src/subscription_manager/utils.py:334
@@ -803,10 +827,14 @@ msgid ""
 "This system is registered using both RHN Classic and Red Hat Subscription "
 "Management."
 msgstr ""
+"Questo sistema è registrato usando sia RHN Classic che Red Hat Subscription "
+"Management."
 
 #: ../src/subscription_manager/branding/redhat_branding.py:25
 msgid "Red Hat recommends that customers only register to one service."
 msgstr ""
+"Red Hat consiglia agli utenti di eseguire la registrazione ad un solo "
+"servizio."
 
 #: ../src/subscription_manager/branding/redhat_branding.py:27
 msgid ""
@@ -818,7 +846,7 @@ msgstr ""
 
 #: ../src/subscription_manager/branding/redhat_branding.py:28
 msgid "RHN classic and Red Hat Subscription Management"
-msgstr ""
+msgstr "RHN classic e Red Hat Subscription Management"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:30
 msgid ""
@@ -858,11 +886,11 @@ msgstr "Opzioni"
 
 #: ../src/subscription_manager/i18n_optparse.py:139
 msgid "options"
-msgstr ""
+msgstr "opzioni"
 
 #: ../src/subscription_manager/i18n_optparse.py:140
 msgid "options:"
-msgstr ""
+msgstr "opzioni:"
 
 #. stuff for option value sanity checking
 #: ../src/subscription_manager/i18n_optparse.py:143
@@ -1029,7 +1057,7 @@ msgstr "Nome sottoscrizione:    \t%s"
 #: ../src/subscription_manager/managercli.py:1886
 #, python-format
 msgid "SKU:                  \t%s"
-msgstr ""
+msgstr "SKU:                  \t%s"
 
 #: ../src/subscription_manager/managercli.py:82
 #, python-format
@@ -1219,7 +1247,7 @@ msgstr "--username e --password possono essere usati solo con --force"
 #: ../src/subscription_manager/managercli.py:1953
 #, python-format
 msgid "server type: %s"
-msgstr ""
+msgstr "tipo di server: %s"
 
 #: ../src/subscription_manager/managercli.py:574
 #, python-format
@@ -1274,7 +1302,7 @@ msgstr "%s non può eseguire la registrazione con alcuna organizzazione."
 
 #: ../src/subscription_manager/managercli.py:631
 msgid "Error: Unable to retrieve org list from server"
-msgstr ""
+msgstr "Errore: Impossibile ripristinare l'elenco delle org dal server"
 
 #: ../src/subscription_manager/managercli.py:637
 msgid "Display the environments available for a user"
@@ -1287,7 +1315,7 @@ msgstr "specifica una organizzazione per l'elenco degli ambienti"
 #: ../src/subscription_manager/managercli.py:648
 msgid ""
 "Error: This command requires that you specify an organization with --org"
-msgstr ""
+msgstr "Errore: Con questo comando specificare una organizzazione con --org"
 
 #: ../src/subscription_manager/managercli.py:671
 msgid "Environments"
@@ -1295,7 +1323,7 @@ msgstr "Ambienti"
 
 #: ../src/subscription_manager/managercli.py:677
 msgid "Error: This org does not have environments."
-msgstr ""
+msgstr "Errore: Questa organizzazione non possiede alcun ambiente."
 
 #: ../src/subscription_manager/managercli.py:679
 #: ../src/subscription_manager/managercli.py:1033
@@ -1304,7 +1332,7 @@ msgstr "Errore: Il server non supporta gli ambienti"
 
 #: ../src/subscription_manager/managercli.py:687
 msgid "Error: Unable to retrieve environment list from server"
-msgstr ""
+msgstr "Errore: Impossibile recuperare l'elenco degli ambienti dal server"
 
 #: ../src/subscription_manager/managercli.py:695
 msgid "Manage service levels for this system"
@@ -1340,7 +1368,7 @@ msgstr "Errore: Il comando service-level non è supportato dal server."
 
 #: ../src/subscription_manager/managercli.py:737
 msgid "Error: --org is only supported with the --list option"
-msgstr ""
+msgstr "Errore: --org è solo supportato con l'opzione --list"
 
 #: ../src/subscription_manager/managercli.py:743
 msgid ""
@@ -1427,7 +1455,7 @@ msgstr "una o più chiavi di attivazione da usare per la registrazione"
 
 #: ../src/subscription_manager/managercli.py:871
 msgid "system preference used when subscribing automatically"
-msgstr ""
+msgstr "preferenze del sistema usate con la sottoscrizione automatica"
 
 #: ../src/subscription_manager/managercli.py:879
 msgid "This system is already registered. Use --force to override"
@@ -1459,7 +1487,7 @@ msgstr "Errore: Usare --autosubscribe con --servicelevel."
 
 #: ../src/subscription_manager/managercli.py:898
 msgid "Error: Must provide --org with activation keys."
-msgstr ""
+msgstr "Errore: È necessario specificare --org con le chiavi di attivazione."
 
 #: ../src/subscription_manager/managercli.py:928
 #, python-format
@@ -1759,11 +1787,13 @@ msgstr "Il ripositorio %s risulta disabilitato per questo sistema."
 #: ../src/subscription_manager/managercli.py:1592
 #, python-format
 msgid "    Available Repositories in %s"
-msgstr ""
+msgstr "Repositori disponibili in %s"
 
 #: ../src/subscription_manager/managercli.py:1600
 msgid "This system has no repositories available through subscriptions."
 msgstr ""
+"Questo sistema non presenta alcun repositorio disponibile attraverso le "
+"sottoscrizioni."
 
 #: ../src/subscription_manager/managercli.py:1613
 msgid ""
@@ -1910,7 +1940,7 @@ msgstr "Nessun gruppo di sottoscrizioni consumate da elencare"
 
 #: ../src/subscription_manager/managercli.py:1870
 msgid "Consumed Subscriptions"
-msgstr ""
+msgstr "Sottoscrizioni consumate"
 
 #: ../src/subscription_manager/managercli.py:1878
 #, python-format
@@ -1956,7 +1986,7 @@ msgstr "Stampa le informazioni sulla versione"
 #: ../src/subscription_manager/managercli.py:1952
 #, python-format
 msgid "registered to: %s"
-msgstr ""
+msgstr "registrato a: %s"
 
 #: ../src/subscription_manager/managercli.py:1954
 #, python-format
@@ -1973,7 +2003,7 @@ msgstr "python-rhsm: %s"
 #: ../src/subscription_manager/cli.py:59
 #, python-format
 msgid "%%prog %s [OPTIONS]"
-msgstr ""
+msgstr "%%prog %s [OPTIONS]"
 
 #: ../src/subscription_manager/cli.py:85
 #, python-format
@@ -2015,11 +2045,11 @@ msgstr "Impossibile analizzare la porta dell'url del server"
 
 #: ../src/subscription_manager/utils.py:234
 msgid "Server url port should be numeric"
-msgstr ""
+msgstr "La porta dell'url del server deve avere un valore numerico"
 
 #: ../src/subscription_manager/utils.py:309
 msgid "Unable to reach server"
-msgstr ""
+msgstr "Impossibile raggiungere il server"
 
 #: ../src/subscription_manager/utils.py:312
 msgid "subscription management service"
@@ -2027,7 +2057,7 @@ msgstr "servizio di gestione della sottoscrizione"
 
 #: ../src/subscription_manager/gui/data/filters.glade.h:1
 msgid "Contain the text"
-msgstr ""
+msgstr "Contiene il testo"
 
 #: ../src/subscription_manager/gui/data/filters.glade.h:2
 msgid "Do Not Overlap"
@@ -2035,7 +2065,7 @@ msgstr "Non sovrapporre"
 
 #: ../src/subscription_manager/gui/data/filters.glade.h:3
 msgid "Filter Options"
-msgstr ""
+msgstr "Opzioni di filtraggio"
 
 #: ../src/subscription_manager/gui/data/filters.glade.h:4
 msgid "Match Installed"
@@ -2085,12 +2115,12 @@ msgstr "<b>Prodotti:</b>"
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:2
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:5
 msgid "<b>SKU:</b>"
-msgstr ""
+msgstr "<b>SKU:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:3
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "<b>Service Level, Type:</b>"
-msgstr ""
+msgstr "<b>Livello di servizio, Tipo:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:4
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:8
@@ -2112,7 +2142,7 @@ msgstr "Tabella prodotti inclusi"
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:15
 msgid "SKU Text"
-msgstr ""
+msgstr "Testo SKU"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:17
@@ -2122,7 +2152,7 @@ msgstr "Testo di sottoscrizione"
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:9
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:18
 msgid "Support Level And Type Text"
-msgstr ""
+msgstr "Testo tipo e livello di supporto"
 
 #: ../src/subscription_manager/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
@@ -2140,7 +2170,7 @@ msgstr "Rimuovi sottoscrizione"
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:1
 msgid "<b>Confirm Subscriptions</b>"
-msgstr ""
+msgstr "<b>Conferma sottoscrizioni</b>"
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:2
 msgid "<b>Detected products:</b>"
@@ -2156,6 +2186,9 @@ msgid ""
 "Please select how you\n"
 "want them assigned."
 msgstr ""
+"Abbiamo rilevato che sei in possesso di livelli di servizio multipli su vari "
+"prodotti. Selezionare come \n"
+"assegnarli."
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:6
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:9
@@ -2197,7 +2230,7 @@ msgstr "Utilizzo sottoscrizione"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:1
 msgid "Configure Pro_xy"
-msgstr ""
+msgstr "Configura Pro_xy"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:2
 msgid "R_edeem Subscription"
@@ -2225,7 +2258,7 @@ msgstr "Documentazione _Online"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:9
 msgid "_Preferences"
-msgstr ""
+msgstr "_Preferenze"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:10
 msgid "_Register"
@@ -2241,7 +2274,7 @@ msgstr "(_U)Rimuovi-registrazione"
 
 #: ../src/subscription_manager/gui/data/confirmsubs.glade.h:1
 msgid "<b>Select Service Level</b>"
-msgstr ""
+msgstr "<b>Seleziona il livello di servizio</b>"
 
 #: ../src/subscription_manager/gui/data/confirmsubs.glade.h:2
 msgid "Core repositories will be enabled for each product."
@@ -2261,19 +2294,19 @@ msgstr "Sarai sottoscritto a:"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:1
 msgid "Configure Proxy"
-msgstr ""
+msgstr "Configura il proxy"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:2
 msgid "Default"
-msgstr ""
+msgstr "Predefinito"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:3
 msgid "I will register with:"
-msgstr ""
+msgstr "Eseguirò la registrazione con:"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:4
 msgid "If required, please configure your proxy before moving forward."
-msgstr ""
+msgstr "Se è necessario configurare il proxy prima di procedere."
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:5
 msgid ""
@@ -2281,40 +2314,47 @@ msgid ""
 "System Engine or Candlepin servers can be used to provide your system with "
 "updates and allow management through the selected server's interface."
 msgstr ""
+"La registrazione con il Portale clienti, Subscription Asset Manager, "
+"CloudForms System Engine o con i server di Candlepin può essere usata per "
+"fornire gli aggiornamenti al sistema e permettere la gestione attraverso "
+"l'interfaccia del server selezionata."
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:6
 msgid "Reset to register with Customer Portal."
-msgstr ""
+msgstr "Resetta per la registrazione con il Portale clienti."
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:7
 msgid ""
 "The Subscription Management Service you register with will provide your "
 "system with updates and allow additional management."
 msgstr ""
+"Il Servizio di gestione delle sottoscrizioni con il quale hai eseguito la "
+"registrazione fornirà al sistema gli aggiornamenti e le funzioni di gestione "
+"aggiuntive."
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:8
 msgid "choose_server_label"
-msgstr ""
+msgstr "choose_server_label"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:9
 msgid "default_button"
-msgstr ""
+msgstr "default_button"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:10
 msgid "hostname[:port][/prefix]"
-msgstr ""
+msgstr "hostname[:port][/prefix]"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:11
 msgid "proxy_button"
-msgstr ""
+msgstr "proxy_button"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:12
 msgid "server_entry"
-msgstr ""
+msgstr "server_entry"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:13
 msgid "server_label"
-msgstr ""
+msgstr "server_label"
 
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
@@ -2382,7 +2422,7 @@ msgstr "register_progressbar"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:10
 msgid "registration_dialog_action_area"
-msgstr ""
+msgstr "registration_dialog_action_area"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:1
 msgid "* Click to Adjust Quantity"
@@ -2398,7 +2438,7 @@ msgstr "Vista di tutte le sottoscrizioni"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:4
 msgid "Filters"
-msgstr ""
+msgstr "Filtri"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:6
 msgid "Search"
@@ -2590,7 +2630,7 @@ msgstr "Testo del prodotto"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:14
 msgid "Register System"
-msgstr ""
+msgstr "Registra sistema"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:1
 msgid "<b>Account:</b>"
@@ -2637,12 +2677,17 @@ msgid ""
 "After opening Red Hat Subscription Manager, manually subscribe via the "
 "<b>All Available Subscriptions</b> tab."
 msgstr ""
+"Dopo aver aperto il Subscription Manager, eseguire una sottoscrizione "
+"manuale tramite <b>Tutte le sottoscrizioni disponibili</b>."
 
 #: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
 msgid ""
 "You will need to use Red Hat Subscription Manager to manually subscribe this "
 "system after completing firstboot."
 msgstr ""
+"Dopo il completamento di firstboot sarà necessario usare Red Hat "
+"Subscription Manager per eseguire una sottoscrizione manuale di questo "
+"sistema."
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1
 msgid ""
@@ -2657,6 +2702,8 @@ msgid ""
 "<small>Your system's service level preference is followed when subscribing "
 "automatically.</small>"
 msgstr ""
+"<small>Durante la sottoscrizione automatica verranno seguite le preferenze "
+"del livello del servizio del tuo sistema.</small>"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Release version:"
@@ -2664,7 +2711,7 @@ msgstr "Versione release:"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid "Service Level Preference:"
-msgstr ""
+msgstr "Preferenze livello del servizio:"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "System Preferences"
@@ -2746,7 +2793,7 @@ msgstr "Impossibile analizzare il numero di installazione: %s"
 #: ../bin/install-num-migrate-to-rhsm:144
 #, c-format
 msgid "Installing %s to %s"
-msgstr ""
+msgstr "Installazione %s a %s"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:67
 msgid "Ignore channels not available on RHSM"
@@ -2776,12 +2823,12 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:76
 msgid "Specify the Subscription Management Server to migrate TO."
-msgstr ""
+msgstr "Specificare il Subscription Management Server sul quale migrare."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:79
 #, c-format
 msgid "%prog [OPTIONS]"
-msgstr ""
+msgstr "%prog [OPTIONS]"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:104
 #, c-format
@@ -2802,6 +2849,9 @@ msgid ""
 "This machine appears to be already registered to Red Hat Subscription "
 "Management.  Exiting."
 msgstr ""
+"\n"
+"Questa macchina è già stata registrata al Red Hat Subscription Management. "
+"Uscita in corso."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:197
 #, c-format
@@ -2816,7 +2866,7 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:246
 msgid "Org: "
-msgstr ""
+msgstr "Org: "
 
 #: ../bin/rhn-migrate-classic-to-rhsm:256
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
@@ -2866,6 +2916,8 @@ msgid ""
 "You are subscribed to more than one jbappplatform channel.  This script does "
 "not support that configuration.  Exiting."
 msgstr ""
+"Sei stato registrato a più di un canale jbappplatform. Questo script non "
+"supporta tale configurazione. Uscita in corso."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:347
 msgid ""
@@ -2889,13 +2941,16 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:414
 msgid "Unable to read RHN proxy settings."
-msgstr ""
+msgstr "Impossibile leggere le impostazioni di RHN proxy."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:432
 msgid ""
 "\n"
 "Attempting to register system to Red Hat Subscription Management ..."
 msgstr ""
+"\n"
+"Tentativo di registrazione del sistema con il Red Hat Subscription "
+"Management ..."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:445
 msgid ""
@@ -2912,6 +2967,8 @@ msgstr ""
 msgid ""
 "System '%s' successfully registered to Red Hat Subscription Management.\n"
 msgstr ""
+"Il sistema '%s' è stato registrato con successo al Red Hat Subscription "
+"Management.\n"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:455
 msgid "Launching the GUI tool to manually subscribe the system ..."
@@ -2959,6 +3016,9 @@ msgid ""
 "\n"
 "No product certificates are mapped to these RHN Classic channels:"
 msgstr ""
+"\n"
+"Nessun certificato del prodotto è stato mappato a questi canali di RHN "
+"Classic:"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:520
 msgid ""
@@ -2973,6 +3033,8 @@ msgid ""
 "\n"
 "Installing product certificates for these RHN Classic channels:"
 msgstr ""
+"\n"
+"Installazione certificati dei prodotti per questi canali di RHN Classic:"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:539
 #, c-format
@@ -2980,6 +3042,8 @@ msgid ""
 "\n"
 "Product certificates installed successfully to %s."
 msgstr ""
+"\n"
+"Certificati del prodotto installati con successo su %s."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:583
 msgid ""
@@ -2994,20 +3058,24 @@ msgid ""
 "Please ensure system has subscriptions attached, and see 'subscription-"
 "manager repos --help' to enable additional repositories"
 msgstr ""
+"Assicurarsi che il sistema presenti le sottoscrizioni necessarie e "
+"consultare 'subscription-manager repos --help' per abilitare i repositori "
+"aggiuntivi"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:635
 msgid "The --servicelevel and --no-auto options cannot be used together."
 msgstr ""
+"Le opzioni --servicelevel e --no-auto non possono essere usate insieme."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:642
 #: ../bin/rhn-migrate-classic-to-rhsm:646
 msgid "Red Hat account: "
-msgstr ""
+msgstr "Account di Red Hat:"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:643
 #: ../bin/rhn-migrate-classic-to-rhsm:648
 msgid "System Engine Username: "
-msgstr ""
+msgstr "System Engine Username: "
 
 #: ../bin/rhn-migrate-classic-to-rhsm:661
 msgid ""
@@ -3020,13 +3088,16 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:664
 msgid "System is currently subscribed to these RHN Classic Channels:"
-msgstr ""
+msgstr "Il sistema è attualmente sottoscritto ai seguenti canali RHN Classic:"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:674
 msgid ""
 "\n"
 "Preparing to unregister system from RHN Classic ..."
 msgstr ""
+"\n"
+"Preparazione per la rimozione della registrazione del sistema da RHN classic "
+"in corso ..."
 
 #: ../src/rhsm_icon.c:46
 msgid "How often to check for validity (in seconds)"
@@ -3054,14 +3125,17 @@ msgid ""
 "system must be registered with the Customer Portal. Please enter your Red "
 "Hat login to ensure your system is up-to-date."
 msgstr ""
+"Per gli aggiornamenti provenienti da Subscription Manager il sistema dovrà "
+"essere registrato con il Portale clienti. Inserire il login di Red Hat per "
+"far si che il sistema sia aggiornato."
 
 #: ../src/rhsm_icon.c:212
 msgid "Invalid or Missing Entitlement Subscriptions"
-msgstr ""
+msgstr "Sottoscrizioni di entitlement mancanti o invalidi"
 
 #: ../src/rhsm_icon.c:215
 msgid "This system is missing one or more subscriptions."
-msgstr ""
+msgstr "Una o più sottoscrizioni risultano mancanti su questo sistema."
 
 #: ../src/rhsm_icon.c:218
 msgid "Partially Entitled Products"
@@ -3071,6 +3145,8 @@ msgstr "Prodotti con entitlement parziale"
 msgid ""
 "This system is missing one or more subscriptions to fully cover its products."
 msgstr ""
+"Uno o più sottoscrizioni risultano mancanti per questo sistema per poter "
+"includere tutti i suoi prodotti."
 
 #: ../src/rhsm_icon.c:225
 msgid "This System's Subscriptions Are About to Expire"
@@ -3109,44 +3185,44 @@ msgstr "opzione per l'analisi fallita: %s\n"
 
 #: ../src/rhsmcertd.c:54
 msgid "Interval to run cert check (in minutes)"
-msgstr ""
+msgstr "Intervallo per eseguire il controllo del certificato (in minuti)"
 
 #: ../src/rhsmcertd.c:57
 msgid "Interval to run healing (in minutes)"
-msgstr ""
+msgstr "Intervallo per eseguire la correzione (in minuti)"
 
 #: ../src/rhsmcertd.c:60
 msgid "Run the initial checks immediatly, with no delay."
-msgstr ""
+msgstr "Esegui immediatamente i controlli iniziali senza alcun ritardo."
 
 #: ../src/rhsmcertd.c:255
 msgid "For more information run: rhsmcertd --help\n"
-msgstr ""
+msgstr "Per maggiori informazioni esegui: rhsmcertd --help\n"
 
 #: ../src/rhsmcertd.c:281
 msgid "Wrong number of arguments specified.\n"
-msgstr ""
+msgstr "Specificato un numero errato di argomenti.\n"
 
 #. New style args were used, assume error.
 #. We do not support both at once, other than
 #. debug and wait.
 #: ../src/rhsmcertd.c:339
 msgid "Invalid argument specified.\n"
-msgstr ""
+msgstr "Specificato un argomento non valido.\n"
 
 #: ../src/rhsmcertd.c:345
 msgid "WARN: Deprecated CLI arguments are being used.\n"
-msgstr ""
+msgstr "ATTENZIONE: Sono stati usati argomenti CLI deprecati.\n"
 
 #: ../src/rhsmcertd.c:360
 #, c-format
 msgid "Invalid option: %s\n"
-msgstr ""
+msgstr "Opzione non valida: %s\n"
 
 #: ../src/rhsmcertd.c:374
 #, c-format
 msgid "Invalid argument specified: %s\n"
-msgstr ""
+msgstr "Argomento non valido specificato: %s\n"
 
 #: ../etc-conf/rhsm-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
@@ -3162,7 +3238,7 @@ msgstr "Red Hat Subscription Manager"
 
 #: ../src/rct/printing.py:34
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: ../src/rct/printing.py:37
 msgid "Arch"
@@ -3170,23 +3246,23 @@ msgstr "Arch"
 
 #: ../src/rct/printing.py:38
 msgid "Tags"
-msgstr ""
+msgstr "Tag"
 
 #: ../src/rct/printing.py:46
 msgid "Order"
-msgstr ""
+msgstr "Ordine"
 
 #: ../src/rct/printing.py:48
 msgid "Number"
-msgstr ""
+msgstr "Numero"
 
 #: ../src/rct/printing.py:49
 msgid "SKU"
-msgstr ""
+msgstr "SKU"
 
 #: ../src/rct/printing.py:51
 msgid "Account"
-msgstr ""
+msgstr "Account"
 
 #: ../src/rct/printing.py:52
 msgid "Service Level"
@@ -3194,125 +3270,125 @@ msgstr "Livello di servizio"
 
 #: ../src/rct/printing.py:53
 msgid "Service Type"
-msgstr ""
+msgstr "Tipo di servizio"
 
 #: ../src/rct/printing.py:55
 msgid "Quantity Used"
-msgstr ""
+msgstr "Quantità usata"
 
 #: ../src/rct/printing.py:56
 msgid "Socket Limit"
-msgstr ""
+msgstr "Limite del socket"
 
 #: ../src/rct/printing.py:57
 msgid "Virt Limit"
-msgstr ""
+msgstr "Limite virtuale"
 
 #: ../src/rct/printing.py:58
 msgid "Virt Only"
-msgstr ""
+msgstr "Solo Virt"
 
 #: ../src/rct/printing.py:60
 msgid "Stacking ID"
-msgstr ""
+msgstr "ID dello stack"
 
 #: ../src/rct/printing.py:61
 msgid "Warning Period"
-msgstr ""
+msgstr "Periodo di avvertimento"
 
 #: ../src/rct/printing.py:62
 msgid "Provides Management"
-msgstr ""
+msgstr "Fornisce una gestione"
 
 #: ../src/rct/printing.py:71
 msgid "Content"
-msgstr ""
+msgstr "Contenuto"
 
 #: ../src/rct/printing.py:75
 msgid "Label"
-msgstr ""
+msgstr "Etichetta"
 
 #: ../src/rct/printing.py:76
 msgid "Vendor"
-msgstr ""
+msgstr "Rivenditore"
 
 #: ../src/rct/printing.py:77
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: ../src/rct/printing.py:78
 msgid "GPG"
-msgstr ""
+msgstr "GPG"
 
 #: ../src/rct/printing.py:79
 msgid "Enabled"
-msgstr ""
+msgstr "Abilitato"
 
 #: ../src/rct/printing.py:80
 msgid "Expires"
-msgstr ""
+msgstr "Scade"
 
 #: ../src/rct/printing.py:81
 msgid "Required Tags"
-msgstr ""
+msgstr "Tag necessari"
 
 #: ../src/rct/printing.py:93
 msgid "Certificate:"
-msgstr ""
+msgstr "Certificato:"
 
 #: ../src/rct/printing.py:94
 msgid "Path"
-msgstr ""
+msgstr "Percorso"
 
 #: ../src/rct/printing.py:96
 msgid "Serial"
-msgstr ""
+msgstr "Seriale"
 
 #: ../src/rct/printing.py:108
 msgid "Subject:"
-msgstr ""
+msgstr "Soggetto:"
 
 #: ../src/rct/printing.py:115
 msgid "Entitlement Certificate"
-msgstr ""
+msgstr "Certificato di entitlement"
 
 #: ../src/rct/printing.py:117
 msgid "Product Certificate"
-msgstr ""
+msgstr "Certificato del prodotto"
 
 #: ../src/rct/printing.py:119
 msgid "Identity Certificate"
-msgstr ""
+msgstr "Certificato di identità"
 
 #: ../src/rct/printing.py:121
 msgid "Unknown Certificate Type"
-msgstr ""
+msgstr "Tipo di certificato sconosciuto"
 
 #: ../src/rct/printing.py:140
 msgid "Alt Name"
-msgstr ""
+msgstr "Nome alt."
 
 #: ../src/rct/commands.py:50
 msgid "Print certificate info to standard output."
-msgstr ""
+msgstr "Stampa le informazioni del certificato su un output standard."
 
 #: ../src/rct/commands.py:54
 msgid "do not show the cert's product information"
-msgstr ""
+msgstr "non mostrare le informazioni sul prodotto del certificato"
 
 #: ../src/rct/commands.py:56
 msgid "do not show the cert's content info."
-msgstr ""
+msgstr "non mostrare le informazioni sul contenuto del cert."
 
 #: ../src/rct/commands.py:61
 msgid "You must specify a certificate file."
-msgstr ""
+msgstr "Specificare un file del certificato."
 
 #: ../src/rct/commands.py:64
 msgid "The specified certificate file does not exist."
-msgstr ""
+msgstr "Il file del certificato specificato non esiste."
 
 #: ../src/rct/commands.py:78
 #, python-format
 msgid "%%prog %s [OPTIONS] CERT_FILE"
-msgstr ""
+msgstr "%%prog %s [OPTIONS] CERT_FILE"

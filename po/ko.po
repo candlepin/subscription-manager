@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: ko\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-21 10:39-0400\n"
-"PO-Revision-Date: 2012-09-14 12:20-0400\n"
+"PO-Revision-Date: 2012-09-23 07:58-0400\n"
 "Last-Translator: eukim <eukim@fedoraproject.org>\n"
 "Language-Team: <ko@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1443,7 +1443,7 @@ msgstr "오류: --servicelevel과 함께 --autosubscribe를 사용해야 합니�
 
 #: ../src/subscription_manager/managercli.py:898
 msgid "Error: Must provide --org with activation keys."
-msgstr ""
+msgstr "오류: 활성키와 함께 --org를 지정하셔야 합니다."
 
 #: ../src/subscription_manager/managercli.py:928
 #, python-format
@@ -2975,7 +2975,7 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:635
 msgid "The --servicelevel and --no-auto options cannot be used together."
-msgstr ""
+msgstr "--servicelevel 및 --no-auto 옵션은 함께 사용할 수 없습니다."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:642
 #: ../bin/rhn-migrate-classic-to-rhsm:646

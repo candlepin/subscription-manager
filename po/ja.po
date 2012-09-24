@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-21 10:39-0400\n"
-"PO-Revision-Date: 2012-09-13 12:40-0400\n"
+"PO-Revision-Date: 2012-09-23 07:03-0400\n"
 "Last-Translator: nnakakit <nnakakit@fedoraproject.org>\n"
 "Language-Team: Japanese <jp@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -265,7 +265,7 @@ msgstr "このシステムはサブスクリプションの制限に適合しま
 #: ../src/subscription_manager/gui/installedtab.py:327
 #, python-format
 msgid "System is properly subscribed through %s."
-msgstr "システムは、 %s を介して正しくサブスクライブされています。"
+msgstr "システムは、 %s より正しくサブスクライブされています。"
 
 #: ../src/subscription_manager/gui/installedtab.py:334
 msgid "No installed products detected."
@@ -273,7 +273,7 @@ msgstr "インストール済み製品は検出されませんでした。"
 
 #: ../src/subscription_manager/gui/installedtab.py:338
 msgid "Keep your system up to date by registering."
-msgstr "登録することでご使用のシステムを最新状態に維持して下さい。"
+msgstr "登録を行いご使用のシステムを最新の状態に保ってください。"
 
 #: ../src/subscription_manager/gui/networkConfig.py:150
 msgid "There was an error saving your configuration."
@@ -576,7 +576,7 @@ msgstr "システムの登録"
 
 #: ../src/subscription_manager/gui/registergui.py:334
 msgid "Attaching subscriptions"
-msgstr "サブスクリプションの添付"
+msgstr "サブスクリプションを添付しています"
 
 #: ../src/subscription_manager/gui/registergui.py:343
 #, python-format
@@ -1472,7 +1472,7 @@ msgstr ""
 
 #: ../src/subscription_manager/managercli.py:898
 msgid "Error: Must provide --org with activation keys."
-msgstr ""
+msgstr "エラー:  アクティベーションキーと供に --org を適用する必要があります"
 
 #: ../src/subscription_manager/managercli.py:928
 #, python-format
@@ -2211,7 +2211,7 @@ msgstr "サブスクリプションの償還"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:1
 msgid "Configure Pro_xy"
-msgstr "Pro_xy の設定 (_X)"
+msgstr "Pro_xy を設定 (_X)"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:2
 msgid "R_edeem Subscription"
@@ -2267,11 +2267,11 @@ msgstr "SLA"
 
 #: ../src/subscription_manager/gui/data/confirmsubs.glade.h:4
 msgid "Using service level:"
-msgstr "サービスレベルを使用する:"
+msgstr "使用するサービスレベル:"
 
 #: ../src/subscription_manager/gui/data/confirmsubs.glade.h:5
 msgid "You will be subscribed to:"
-msgstr "サブスクライブされます:"
+msgstr "サブスクライブの対象:"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:1
 msgid "Configure Proxy"
@@ -2805,7 +2805,7 @@ msgstr "移行するサブスクリプション管理サーバーを指定"
 #: ../bin/rhn-migrate-classic-to-rhsm:79
 #, c-format
 msgid "%prog [OPTIONS]"
-msgstr "%prog [OPTIONS]"
+msgstr "%prog [オプション]"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:104
 #, c-format
@@ -3027,7 +3027,7 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:635
 msgid "The --servicelevel and --no-auto options cannot be used together."
-msgstr ""
+msgstr " --servicelevel と --no-auto のオプションは同時に使用できません。"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:642
 #: ../bin/rhn-migrate-classic-to-rhsm:646

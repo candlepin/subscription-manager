@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-21 10:39-0400\n"
-"PO-Revision-Date: 2012-09-21 03:49-0400\n"
+"PO-Revision-Date: 2012-09-24 06:05-0400\n"
 "Last-Translator: mgiri <mgiri@fedoraproject.org>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -241,28 +241,28 @@ msgstr "ମୋର ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ"
 #: ../src/subscription_manager/gui/installedtab.py:310
 #, python-format
 msgid "%s installed products do not have valid subscriptions."
-msgstr ""
+msgstr "%s ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ପାଖରେ ବୈଧ ସଦସ୍ୟତା ନାହିଁ।"
 
 #: ../src/subscription_manager/gui/installedtab.py:314
 msgid "1 installed product does not have a valid subscription."
-msgstr ""
+msgstr "ଗୋଟିଏ ସ୍ଥାପିତ ଉତ୍ପାଦନରେ ବୈଧ ସଦସ୍ୟତା ନାହିଁ।"
 
 #: ../src/subscription_manager/gui/installedtab.py:319
 msgid "This system does not match subscription limits."
-msgstr ""
+msgstr "ଏହି ତନ୍ତ୍ରଟି ସଦସ୍ୟତା ସୀମା ସହିତ ମେଳ ଖାଉ ନାହିଁ।"
 
 #: ../src/subscription_manager/gui/installedtab.py:327
 #, python-format
 msgid "System is properly subscribed through %s."
-msgstr ""
+msgstr "ତନ୍ତ୍ରଟି %s ମାଧ୍ଯମରେ ସଠିକ ଭାବରେ ସଦସ୍ୟତା ଗ୍ରହଣ କରିଛି।"
 
 #: ../src/subscription_manager/gui/installedtab.py:334
 msgid "No installed products detected."
-msgstr ""
+msgstr "କୌଣସି ସ୍ଥାପିତ ଉତ୍ପାଦନ ମିଳି ନାହିଁ।"
 
 #: ../src/subscription_manager/gui/installedtab.py:338
 msgid "Keep your system up to date by registering."
-msgstr ""
+msgstr "ପଞ୍ଜିକରଣ ଦ୍ୱାରା ଆପଣଙ୍କ ତନ୍ତ୍ରକୁ ଅଦ୍ୟତିତ ରଖନ୍ତୁ।"
 
 #: ../src/subscription_manager/gui/networkConfig.py:150
 msgid "There was an error saving your configuration."
@@ -284,7 +284,7 @@ msgstr "ପ୍ରକ୍ସି ସଂଯୋଗ ବିଫଳ ହୋଇଛି"
 #: ../src/subscription_manager/gui/contract_selection.py:84
 #: ../src/rct/printing.py:50
 msgid "Contract"
-msgstr ""
+msgstr "ସମ୍ପର୍କ"
 
 #: ../src/subscription_manager/gui/contract_selection.py:98
 msgid "Used / Total"
@@ -338,7 +338,7 @@ msgstr "ସ୍ଥାପିତ"
 
 #: ../src/subscription_manager/gui/widgets.py:316
 msgid "Not Set"
-msgstr ""
+msgstr "ସେଟ କରାଯାଇନାହିଁ"
 
 #: ../src/subscription_manager/gui/widgets.py:336
 #: ../src/subscription_manager/managercli.py:1761
@@ -455,15 +455,16 @@ msgid ""
 "No installed products on system. No need to update subscriptions at this "
 "time."
 msgstr ""
+"ତନ୍ତ୍ରରେ କୌଣସି ସ୍ଥାପିତ ଉତ୍ପାଦନ ନାହିଁ। ବର୍ତ୍ତମାନ କୌଣସି ସଦସ୍ୟତାକୁ ଅଦ୍ୟତନ କରିବା ଆବଶ୍ୟକ ନାହିଁ।"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:49
 msgid "All installed products are fully subscribed."
-msgstr ""
+msgstr "ସମସ୍ତ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ସମ୍ପୂର୍ଣ୍ଣ ଭାବରେ ସଦସ୍ୟତା ଗ୍ରହଣ କରିଛି।"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:53
 #: ../src/subscription_manager/gui/registergui.py:478
 msgid "Error subscribing"
-msgstr ""
+msgstr "ସଦସ୍ୟତା ଗ୍ରହଣ କରିବାରେ ତ୍ରୁଟି"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:66
 #, python-format
@@ -476,6 +477,8 @@ msgid ""
 "No service levels will cover all installed products. Please run "
 "'Subscription Manager' to manually subscribe this system."
 msgstr ""
+"କୌଣସି ସର୍ଭିସ ସ୍ତର ସମସ୍ତ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକୁ ଗ୍ରହଣ କରିନଥାଏ। \"ସଦସ୍ୟତା ପରିଚାଳକ\" କୁ ଏହି ତନ୍ତ୍ରକୁ "
+"ହସ୍ତକୃତ ଭାବରେ ସଦସ୍ୟତା ଗ୍ରହଣ ପାଇଁ ବ୍ୟବହାର କରନ୍ତୁ।"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:96
 msgid "You have opted to skip auto-subscribe."
@@ -483,7 +486,7 @@ msgstr "ସ୍ୱୟଂ-ସଦସ୍ୟତା ଗ୍ରହଣକୁ ଏଡ଼ା
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:115
 msgid "Finish"
-msgstr ""
+msgstr "ସମାପ୍ତ"
 
 #. Firstboot module title
 #. Note: translated title needs to be unique across all
@@ -557,12 +560,12 @@ msgstr "ଆପଣଙ୍କର ତନ୍ତ୍ରକୁ ପଞ୍ଜିକରଣ 
 
 #: ../src/subscription_manager/gui/registergui.py:334
 msgid "Attaching subscriptions"
-msgstr ""
+msgstr "ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଯୋଡ଼ୁଅଛି"
 
 #: ../src/subscription_manager/gui/registergui.py:343
 #, python-format
 msgid "Error subscribing: %s"
-msgstr ""
+msgstr "ସଦସ୍ୟତା ପାଇବାରେ ତ୍ରୁଟି: %s"
 
 #: ../src/subscription_manager/gui/registergui.py:367
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:7
@@ -572,7 +575,7 @@ msgstr "ସଦସ୍ୟତା ଗ୍ରହଣ କରନ୍ତୁ"
 
 #: ../src/subscription_manager/gui/registergui.py:416
 msgid "Finding suitable service levels"
-msgstr ""
+msgstr "ଉପଯୁକ୍ତ ସର୍ଭିସ ସ୍ତର ଖୋଜୁଅଛି"
 
 # Override the button text to clarify we're not actually registering
 # by pressing that button here.
@@ -590,6 +593,8 @@ msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "subscriptions at this time."
 msgstr ""
+"ସମସ୍ତ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ବୈଧ ଅଧିକାର ପ୍ରାପ୍ତ ହୋଇଛି। ବର୍ତ୍ତମାନ କୌଣସି ସଦସ୍ୟତାକୁ ଅଦ୍ୟତନ କରିବା "
+"ଆବଶ୍ୟକ ନାହିଁ।"
 
 #: ../src/subscription_manager/gui/registergui.py:492
 #, python-format
@@ -597,12 +602,16 @@ msgid ""
 "No available subscriptions at the current service level: %s. Please use the "
 "\"All Available Subscriptions\" tab to manually subscribe this system."
 msgstr ""
+"କୌଣସି ଉପଲବ୍ଧ ସଦସ୍ୟତା ପ୍ରଚଳିତ ସର୍ଭିସ ସ୍ତରରେ ନାହିଁ:%s. \"ସମସ୍ତ ଉପଲବ୍ଧ ସଦସ୍ୟତା\" ଟ୍ୟାବଗୁଡ଼ିକୁ ଏହି "
+"ତନ୍ତ୍ରକୁ ହସ୍ତକୃତ ଭାବରେ ସଦସ୍ୟତା ପାଇବା ପାଇଁ ବ୍ୟବହାର କରନ୍ତୁ।"
 
 #: ../src/subscription_manager/gui/registergui.py:510
 msgid ""
 "No service level will cover all installed products. Please use the \"All "
 "Available Subscriptions\" tab to manually subscribe this system."
 msgstr ""
+"କୌଣସି ସର୍ଭିସ ସ୍ତର ସମସ୍ତ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକୁ ଗ୍ରହଣ କରିନଥାଏ। \"ସମସ୍ତ ଉପଲବ୍ଧ ସଦସ୍ୟତା\" "
+"ଟ୍ୟାବଗୁଡ଼ିକୁ ଏହି ତନ୍ତ୍ରକୁ ହସ୍ତକୃତ ଭାବରେ ସଦସ୍ୟତା ପାଇବା ପାଇଁ ବ୍ୟବହାର କରନ୍ତୁ।"
 
 #: ../src/subscription_manager/gui/registergui.py:540
 msgid "Fetching list of possible environments"
@@ -699,6 +708,8 @@ msgid ""
 "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
 "more details."
 msgstr ""
+"ତନ୍ତ୍ରର ତଥ୍ୟକୁ ସର୍ଭରରେ ଅଦ୍ୟତନ କରିବାରେ ତ୍ରୁଟି, ଅଧିକ ବିବରଣୀ ପାଇଁ /var/log/rhsm/rhsm.log କୁ "
+"ଦେଖନ୍ତୁ।"
 
 #: ../src/subscription_manager/branding/__init__.py:81
 msgid "Register the machine to the server"
@@ -747,13 +758,13 @@ msgstr "କ୍ଲାଏଣ୍ଟକୁ ଗ୍ରାହକ ପୃଷ୍ଠା ଅ
 
 #: ../src/subscription_manager/branding/redhat_branding.py:10
 msgid "This system is registered to RHN Classic."
-msgstr ""
+msgstr "ଏହି ତନ୍ତ୍ରଟି RHN କ୍ଲାସିକରୁ ସହିତ ପଞ୍ଜିକୃତ ହୋଇଛି।"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:13
 msgid ""
 "This system has already been registered with Red Hat using RHN Classic "
 "technology."
-msgstr ""
+msgstr "ଏହି ତନ୍ତ୍ରଟି ପୂର୍ବରୁ RHN କ୍ଲାସିକ ପ୍ରଯୁକ୍ତିଜ୍ଞାନ ବ୍ୟବହାର କରି Red Hat ରେ ପଞ୍ଜିକୃତ ହୋଇଛି।"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:15
 msgid ""
@@ -761,12 +772,17 @@ msgid ""
 "Subscription Management technology. Red Hat recommends that customers only "
 "register once."
 msgstr ""
+"ଆପଣ ବ୍ୟବହାର କରୁଥିବା ଉପକରଣଟି Red Hat ସଦସ୍ୟତା ପରିଚାଳନା ପ୍ରଯୁକ୍ତିଜ୍ଞାନ ବ୍ୟବହାର କରି ପୁନଃ-"
+"ପଞ୍ଜିକରଣ ପାଇଁ ଚେଷ୍ଟା କରୁଅଛି। Red Hat ପରାମର୍ଶ ଦେଇଥାଏ ଯେ ଗ୍ରାହକମାନେ କେବଳ ଥରେ ମାତ୍ର "
+"ପଞ୍ଜିକରଣ କରିପାରିବେ।"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:17
 msgid ""
 "To learn how to unregister from either service please consult this Knowledge "
 "Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
+"ଉଭୟ ସର୍ଭିସରୁ କିପରି ବିସ୍ଥାପନ କରିବେ ତାହା ବିଷୟରେ ଅଧିକ ତଥ୍ୟ ଜାଣିବା ପାଇଁ ଦୟାକରି ଏହି ଜ୍ଞାନ ଆଧାର "
+"ପତ୍ରିକା: https://access.redhat.com/kb/docs/DOC-45563 କୁ ଅନୁସରଣ  କରନ୍ତୁ"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:18
 #: ../src/subscription_manager/utils.py:334
@@ -782,10 +798,11 @@ msgid ""
 "This system is registered using both RHN Classic and Red Hat Subscription "
 "Management."
 msgstr ""
+"ଏହି ତନ୍ତ୍ରଟି ଉଭୟ RHN କ୍ଲାସିକ ଏବଂ Red Hat ସଦସ୍ୟତା ପରିଚାଳନା ବ୍ୟବହାର କରି ପଞ୍ଜିକୃତ ହୋଇଛି।"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:25
 msgid "Red Hat recommends that customers only register to one service."
-msgstr ""
+msgstr "ଗ୍ରାହକମାନ କେବଳ ଗୋଟିଏ ସର୍ଭିସରେ ପଞ୍ଜିକରଣ କରିବା ପାଇଁ Red Hat ପରାମର୍ଶ ଦେଇଥାଏ।"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:27
 msgid ""
@@ -797,7 +814,7 @@ msgstr ""
 
 #: ../src/subscription_manager/branding/redhat_branding.py:28
 msgid "RHN classic and Red Hat Subscription Management"
-msgstr ""
+msgstr "RHN କ୍ଲାସିକ ଏବଂ Red Hat ସଦସ୍ୟତା ପରିଚାଳନା"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:30
 msgid ""
@@ -837,11 +854,11 @@ msgstr "ବିକଳ୍ପଗୁଡିକ"
 
 #: ../src/subscription_manager/i18n_optparse.py:139
 msgid "options"
-msgstr ""
+msgstr "ବିକଳ୍ପଗୁଡିକ"
 
 #: ../src/subscription_manager/i18n_optparse.py:140
 msgid "options:"
-msgstr ""
+msgstr "ବିକଳ୍ପଗୁଡ଼ିକ:"
 
 #. stuff for option value sanity checking
 #: ../src/subscription_manager/i18n_optparse.py:143
@@ -1008,7 +1025,7 @@ msgstr "ସଦସ୍ୟତା ନାମ:    \t%s"
 #: ../src/subscription_manager/managercli.py:1886
 #, python-format
 msgid "SKU:                  \t%s"
-msgstr ""
+msgstr "SKU:                  \t%s"
 
 #: ../src/subscription_manager/managercli.py:82
 #, python-format
@@ -1193,7 +1210,7 @@ msgstr "--username ଏବଂ --password କୁ କେବଳ --force ସହିତ
 #: ../src/subscription_manager/managercli.py:1953
 #, python-format
 msgid "server type: %s"
-msgstr ""
+msgstr "ସର୍ଭର ପ୍ରକାର: %s"
 
 #: ../src/subscription_manager/managercli.py:574
 #, python-format
@@ -1248,7 +1265,7 @@ msgstr "%s କୌଣସି ଅନୁଷ୍ଠାନରେ ପଞ୍ଜିକର�
 
 #: ../src/subscription_manager/managercli.py:631
 msgid "Error: Unable to retrieve org list from server"
-msgstr ""
+msgstr "ତ୍ରୁଟି: ସର୍ଭରରୁ ଅନୁଷ୍ଠାନ ତାଲିକା କାଢ଼ିବାରେ ଅସମର୍ଥ"
 
 #: ../src/subscription_manager/managercli.py:637
 msgid "Display the environments available for a user"
@@ -1261,7 +1278,7 @@ msgstr "ପରିବେଶ ତାଲିକା ପାଇଁ ଅନୁଷ୍ଠା
 #: ../src/subscription_manager/managercli.py:648
 msgid ""
 "Error: This command requires that you specify an organization with --org"
-msgstr ""
+msgstr "ତ୍ରୁଟି: ଏହି ନିର୍ଦ୍ଦେଶଟି ଆବଶ୍ୟକ କରିଥାଏ ଯେ ଆପଣ --org ସହିତ ଗୋଟିଏ ଅନୁଷ୍ଠାନକୁ ଉଲ୍ଲେଖ କରନ୍ତୁ।"
 
 #: ../src/subscription_manager/managercli.py:671
 msgid "Environments"
@@ -1269,7 +1286,7 @@ msgstr "ପରିବେଶ"
 
 #: ../src/subscription_manager/managercli.py:677
 msgid "Error: This org does not have environments."
-msgstr ""
+msgstr "ତ୍ରୁଟି: ଏହି ଅନୁଷ୍ଠାନରେ କୌଣସି ପରିବେଶ ନାହିଁ।"
 
 #: ../src/subscription_manager/managercli.py:679
 #: ../src/subscription_manager/managercli.py:1033
@@ -1278,7 +1295,7 @@ msgstr "ତ୍ରୁଟି: ସର୍ଭର ପରିବେଶଗୁଡ଼ିକ
 
 #: ../src/subscription_manager/managercli.py:687
 msgid "Error: Unable to retrieve environment list from server"
-msgstr ""
+msgstr "ତ୍ରୁଟି: ସର୍ଭରରୁ ପରିବେଶ ତାଲିକା କାଢ଼ିବାରେ ଅସମର୍ଥ"
 
 #: ../src/subscription_manager/managercli.py:695
 msgid "Manage service levels for this system"
@@ -1314,7 +1331,7 @@ msgstr "ତ୍ରୁଟି: ସର୍ଭିସ-ସ୍ତରୀୟ ନିର୍�
 
 #: ../src/subscription_manager/managercli.py:737
 msgid "Error: --org is only supported with the --list option"
-msgstr ""
+msgstr "ତ୍ରୁଟି: --org ଟି କେବଳ ମାତ୍ର --list ବିକଳ୍ପ ସହିତ ସମର୍ଥିତ"
 
 #: ../src/subscription_manager/managercli.py:743
 msgid ""
@@ -1399,7 +1416,7 @@ msgstr "ପଞ୍ଜିକରଣ ପାଇଁ ବ୍ୟବହାର କରିବ
 
 #: ../src/subscription_manager/managercli.py:871
 msgid "system preference used when subscribing automatically"
-msgstr ""
+msgstr "ସ୍ୱୟଂଚାଳିତ ଭାବରେ ସଦସ୍ୟତା ଗ୍ରହଣ କରିବା ସମୟରେ ତନ୍ତ୍ର ପସନ୍ଦକୁ ବ୍ଯବହାର କରାଯାଇଥାଏ"
 
 #: ../src/subscription_manager/managercli.py:879
 msgid "This system is already registered. Use --force to override"
@@ -1427,7 +1444,7 @@ msgstr "ତ୍ରୁଟି: ନିଶ୍ଚିତ ଭାବରେ --autosubscrib
 
 #: ../src/subscription_manager/managercli.py:898
 msgid "Error: Must provide --org with activation keys."
-msgstr ""
+msgstr "ତ୍ରୁଟି: ସକ୍ରିୟଣ କିଗୁଡ଼ିକ ସହିତ ନିଶ୍ଚିତ ଭାବରେ --org କୁ ଉଲ୍ଲେଖ କରିବା ଉଚିତ।"
 
 #: ../src/subscription_manager/managercli.py:928
 #, python-format
@@ -1721,11 +1738,11 @@ msgstr "ଏହି ତନ୍ତ୍ର ପାଇଁ ରେପୋ %s କୁ ନି�
 #: ../src/subscription_manager/managercli.py:1592
 #, python-format
 msgid "    Available Repositories in %s"
-msgstr ""
+msgstr "    %s ରେ ଉପଲବ୍ଧ ରେପୋଜିଟୋରୀଗୁଡ଼ିକ"
 
 #: ../src/subscription_manager/managercli.py:1600
 msgid "This system has no repositories available through subscriptions."
-msgstr ""
+msgstr "ଏହି ତନ୍ତ୍ରରେ ସଦସ୍ୟତାଗୁଡ଼ିକ ମାଧ୍ଯମରେ କୌଣସି ରେପୋଜିଟୋରୀ ଉପଲବ୍ଧ ନାହିଁ।"
 
 #: ../src/subscription_manager/managercli.py:1613
 msgid ""
@@ -1867,7 +1884,7 @@ msgstr "ତାଲିକାରେ କୌଣସି ବ୍ୟବହୃତ ସଦସ
 
 #: ../src/subscription_manager/managercli.py:1870
 msgid "Consumed Subscriptions"
-msgstr ""
+msgstr "ବ୍ୟବହୃତ ସଦସ୍ୟତାଗୁଡ଼ିକ"
 
 #: ../src/subscription_manager/managercli.py:1878
 #, python-format
@@ -1913,7 +1930,7 @@ msgstr "ସଂସ୍କରଣ ସୂଚନା ମୁଦ୍ରଣ କରନ୍ତ
 #: ../src/subscription_manager/managercli.py:1952
 #, python-format
 msgid "registered to: %s"
-msgstr ""
+msgstr "ଏଥିରେ ପଞ୍ଜିକୃତ: %s"
 
 #: ../src/subscription_manager/managercli.py:1954
 #, python-format
@@ -1930,7 +1947,7 @@ msgstr "python-rhsm: %s"
 #: ../src/subscription_manager/cli.py:59
 #, python-format
 msgid "%%prog %s [OPTIONS]"
-msgstr ""
+msgstr "%%prog %s [OPTIONS]"
 
 #: ../src/subscription_manager/cli.py:85
 #, python-format
@@ -1969,11 +1986,11 @@ msgstr "ସର୍ଭର url ପୋର୍ଟକୁ ବିଶ୍ଳେଷଣ କ�
 
 #: ../src/subscription_manager/utils.py:234
 msgid "Server url port should be numeric"
-msgstr ""
+msgstr "ସର୍ଭର url ପୋର୍ଟଟି ଗଣନ ସଂଖ୍ୟା ହେବା ଉଚିତ"
 
 #: ../src/subscription_manager/utils.py:309
 msgid "Unable to reach server"
-msgstr ""
+msgstr "ସର୍ଭରରେ ପହଞ୍ଚିବାରେ ଅସମର୍ଥ"
 
 #: ../src/subscription_manager/utils.py:312
 msgid "subscription management service"
@@ -1981,7 +1998,7 @@ msgstr "ସଦସ୍ୟତା ପରିଚାଳନା ସର୍ଭିସ"
 
 #: ../src/subscription_manager/gui/data/filters.glade.h:1
 msgid "Contain the text"
-msgstr ""
+msgstr "ପାଠ୍ୟ ଧାରଣ କରନ୍ତୁ"
 
 #: ../src/subscription_manager/gui/data/filters.glade.h:2
 msgid "Do Not Overlap"
@@ -1989,7 +2006,7 @@ msgstr "ଆବରଣ କରନ୍ତୁ ନାହିଁ"
 
 #: ../src/subscription_manager/gui/data/filters.glade.h:3
 msgid "Filter Options"
-msgstr ""
+msgstr "ବିକଳ୍ପଗୁଡ଼ିକୁ ଛାଣନ୍ତୁ"
 
 #: ../src/subscription_manager/gui/data/filters.glade.h:4
 msgid "Match Installed"
@@ -2039,12 +2056,12 @@ msgstr "<b>ଉତ୍ପାଦନଗୁଡ଼ିକ:</b>"
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:2
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:5
 msgid "<b>SKU:</b>"
-msgstr ""
+msgstr "<b>SKU:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:3
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:6
 msgid "<b>Service Level, Type:</b>"
-msgstr ""
+msgstr "<b>ସର୍ଭିସ ସ୍ତର, ପ୍ରକାର:</b>"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:4
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:8
@@ -2066,7 +2083,7 @@ msgstr "ବନ୍ଧିତ ଉତ୍ପାଦନ ସାରଣୀ"
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:7
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:15
 msgid "SKU Text"
-msgstr ""
+msgstr "SKU ପାଠ୍ୟ"
 
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:8
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:17
@@ -2076,7 +2093,7 @@ msgstr "ସଦସ୍ୟତା ପାଠ୍ୟ"
 #: ../src/subscription_manager/gui/data/subdetails.glade.h:9
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:18
 msgid "Support Level And Type Text"
-msgstr ""
+msgstr "ସହାୟତା ସ୍ତର ଏବଂ ପ୍ରକାର ପାଠ୍ୟ"
 
 #: ../src/subscription_manager/gui/data/mysubs.glade.h:1
 msgid "My Subscriptions View"
@@ -2094,7 +2111,7 @@ msgstr "ଅସ୍ବୀକାରକ୍ତି କରନ୍ତୁ"
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:1
 msgid "<b>Confirm Subscriptions</b>"
-msgstr ""
+msgstr "<b>ସଦସ୍ୟତାଗୁଡ଼ିକୁ ନିଶ୍ଚିତ କରନ୍ତୁ</b>"
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:2
 msgid "<b>Detected products:</b>"
@@ -2110,6 +2127,8 @@ msgid ""
 "Please select how you\n"
 "want them assigned."
 msgstr ""
+"ଆମ୍ଭେମାନେ ଦେଖିଲୁ ଯେ ଆପଣଙ୍କ ପାଖରେ  ବିଭିନ୍ନ ଉତ୍ପାଦନରେ ଏକାଧିକ ସର୍ଭିସ ସ୍ତର ଅଛି।\n"
+"ଦୟାକରି ସେମାନଙ୍କୁ କିପରି ନ୍ୟସ୍ତ କରିବାକୁ ଚାହାନ୍ତି ତାହା ବାଛନ୍ତୁ।"
 
 #: ../src/subscription_manager/gui/data/selectsla.glade.h:6
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:9
@@ -2151,7 +2170,7 @@ msgstr "ସଦସ୍ୟତା ହ୍ରାସ"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:1
 msgid "Configure Pro_xy"
-msgstr ""
+msgstr "ପ୍ରକ୍ସି ବିନ୍ୟାସ କରନ୍ତୁ (_x)"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:2
 msgid "R_edeem Subscription"
@@ -2179,7 +2198,7 @@ msgstr "ଅନଲାଇନ ଦଲିଲିକରଣ (_O)"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:9
 msgid "_Preferences"
-msgstr ""
+msgstr "ପସନ୍ଦ (_P)"
 
 #: ../src/subscription_manager/gui/data/mainwindow.glade.h:10
 msgid "_Register"
@@ -2195,7 +2214,7 @@ msgstr "ପଞ୍ଜିକରଣ ହୋଇ ନାହିଁ (_U)"
 
 #: ../src/subscription_manager/gui/data/confirmsubs.glade.h:1
 msgid "<b>Select Service Level</b>"
-msgstr ""
+msgstr "<b>ସର୍ଭିସ ସ୍ତର ବାଛନ୍ତୁ</b>"
 
 #: ../src/subscription_manager/gui/data/confirmsubs.glade.h:2
 msgid "Core repositories will be enabled for each product."
@@ -2215,19 +2234,19 @@ msgstr "ଆପଣ ସଦସ୍ୟତା ଗ୍ରହଣ କରିବାକୁ �
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:1
 msgid "Configure Proxy"
-msgstr ""
+msgstr "ପ୍ରକ୍ସି ବିନ୍ୟାସ କରନ୍ତୁ"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:2
 msgid "Default"
-msgstr ""
+msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:3
 msgid "I will register with:"
-msgstr ""
+msgstr "ମୁଁ ଏହା ସହିତ ପଞ୍ଜିକରଣ କରିବି:"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:4
 msgid "If required, please configure your proxy before moving forward."
-msgstr ""
+msgstr "ଯଦି ଆବଶ୍ୟକ ହୁଏ, ତେବେ ଦୟାକରି ଆଗକୁ ବଢ଼ିବା ପୂର୍ବରୁ ପ୍ରକ୍ସି ବିନ୍ୟାସ କରନ୍ତୁ।"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:5
 msgid ""
@@ -2235,40 +2254,45 @@ msgid ""
 "System Engine or Candlepin servers can be used to provide your system with "
 "updates and allow management through the selected server's interface."
 msgstr ""
+"ଗ୍ରାହକ ପୃଷ୍ଠା, ସଦସ୍ୟତା ପୁଞ୍ଜି ପରିଚାଳକ, କ୍ଲାଉଡ ଫର୍ମ ତନ୍ତ୍ରରେ ପଞ୍ଜିକରଣ କରନ୍ତୁ ଅଥବା କ୍ୟାଣ୍ଡଲପିନ "
+"ସର୍ଭରକୁ ଆପଣଙ୍କ ତନ୍ତ୍ରକୁ ଅଦ୍ୟତନ କରିବା ପାଇଁ ବ୍ୟବହାର କରିପାରିବେ ଏବଂ ବଚ୍ଛିତ ସର୍ଭରର ଅନ୍ତରାପୃଷ୍ଠ "
+"ମାଧ୍ଯମରେ ପରିଚାଳନାକୁ ଅନୁମତି ଦେଇପାରିବେ।"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:6
 msgid "Reset to register with Customer Portal."
-msgstr ""
+msgstr "ଗ୍ରାହକ ପୃଷ୍ଠା ସହିତ ପଞ୍ଜିକରଣକୁ ପୁଣି ସେଟ କରନ୍ତୁ।"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:7
 msgid ""
 "The Subscription Management Service you register with will provide your "
 "system with updates and allow additional management."
 msgstr ""
+"ଆପଣ ପଞ୍ଜିକରଣ କରିଥିବା ସଦସ୍ୟତା ପରିଚାଳନା ସର୍ଭିସ ଆପଣଙ୍କ ତନ୍ତ୍ରକୁ ଅଦ୍ୟତନ ଏବଂ ଅତିରିକ୍ତ ପରିଚାଳନା "
+"ପ୍ରଦାନ କରିବ।"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:8
 msgid "choose_server_label"
-msgstr ""
+msgstr "choose_server_label"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:9
 msgid "default_button"
-msgstr ""
+msgstr "default_button"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:10
 msgid "hostname[:port][/prefix]"
-msgstr ""
+msgstr "hostname[:port][/prefix]"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:11
 msgid "proxy_button"
-msgstr ""
+msgstr "proxy_button"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:12
 msgid "server_entry"
-msgstr ""
+msgstr "server_entry"
 
 #: ../src/subscription_manager/gui/data/choose_server.glade.h:13
 msgid "server_label"
-msgstr ""
+msgstr "server_label"
 
 #: ../src/subscription_manager/gui/data/factsdialog.glade.h:1
 msgid "<b>System Facts:</b>"
@@ -2336,7 +2360,7 @@ msgstr "register_progressbar"
 
 #: ../src/subscription_manager/gui/data/registration.glade.h:10
 msgid "registration_dialog_action_area"
-msgstr ""
+msgstr "registration_dialog_action_area"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:1
 msgid "* Click to Adjust Quantity"
@@ -2352,7 +2376,7 @@ msgstr "ସମସ୍ତ ସଦସ୍ୟତାଗୁଡ଼ିକର ପ୍ରଦ�
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:4
 msgid "Filters"
-msgstr ""
+msgstr "ଛାଣକଗୁଡ଼ିକ"
 
 #: ../src/subscription_manager/gui/data/allsubs.glade.h:6
 msgid "Search"
@@ -2544,7 +2568,7 @@ msgstr "ଉତ୍ପାଦନ ପାଠ୍ୟ"
 
 #: ../src/subscription_manager/gui/data/installed.glade.h:14
 msgid "Register System"
-msgstr ""
+msgstr "ତନ୍ତ୍ରକୁ ପଞ୍ଜିକରଣ କରନ୍ତୁ"
 
 #: ../src/subscription_manager/gui/data/subdetailscontract.glade.h:1
 msgid "<b>Account:</b>"
@@ -2591,12 +2615,16 @@ msgid ""
 "After opening Red Hat Subscription Manager, manually subscribe via the "
 "<b>All Available Subscriptions</b> tab."
 msgstr ""
+"Red Hat ସଦସ୍ୟତା ପରିଚାଳନାକୁ ଖୋଲିବା ପରେ, <b>ସମସ୍ତ ଉପଲବ୍ଧ ସଦସ୍ୟତା</b> ଟ୍ୟାବ ମାଧ୍ଯମରେ "
+"ହସ୍ତକୃତ ଭାବରେ ସଦସ୍ୟତା ଗ୍ରହଣ କରନ୍ତୁ।"
 
 #: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
 msgid ""
 "You will need to use Red Hat Subscription Manager to manually subscribe this "
 "system after completing firstboot."
 msgstr ""
+"ହସ୍ତକୃତ ଭାବରେ ଏହି ତନ୍ତ୍ର ପାଇଁ ସଦସ୍ୟତା ପାଇବାକୁ ଆପଣଙ୍କୁ Red Hat ସଦସ୍ୟତା ପରିଚାଳକକୁ firstboot "
+"କରିସାରିବା ପରେ ବ୍ୟବହାର କରିବାକୁ ହେବ।"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1
 msgid ""
@@ -2611,6 +2639,8 @@ msgid ""
 "<small>Your system's service level preference is followed when subscribing "
 "automatically.</small>"
 msgstr ""
+"<small>ସ୍ୱୟଂଚାଳିତ ଭାବରେ ସଦସ୍ୟତା ଗ୍ରହଣ କରିବା ସମୟରେ ଆପଣଙ୍କ ତନ୍ତ୍ରର ସର୍ଭିସ ସ୍ତର ପସନ୍ଦକୁ "
+"ଅନୁସରଣ କରାଯାଇଥାଏ</small>"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Release version:"
@@ -2618,7 +2648,7 @@ msgstr "ପ୍ରକାଶନ ସଂସ୍କରଣ:"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid "Service Level Preference:"
-msgstr ""
+msgstr "ସର୍ଭିସ ସ୍ତର ପସନ୍ଦ:"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "System Preferences"
@@ -2699,7 +2729,7 @@ msgstr "ସ୍ଥାପନ କ୍ରମ ସଂଖ୍ୟାକୁ ବିଶ୍ଳ
 #: ../bin/install-num-migrate-to-rhsm:144
 #, c-format
 msgid "Installing %s to %s"
-msgstr ""
+msgstr "%s କୁ %s ରେ ସ୍ଥାପନ କରୁଅଛି"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:67
 msgid "Ignore channels not available on RHSM"
@@ -2708,6 +2738,8 @@ msgstr "RHSM ରେ ଉପଲବ୍ଧ ନଥିବା ଚ୍ୟାନେଲଗ�
 #: ../bin/rhn-migrate-classic-to-rhsm:69
 msgid "Launch the GUI tool to subscribe the system, instead of autosubscribing"
 msgstr ""
+"ସ୍ୱୟଂଚାଳିତ ଭାବରେ ସଦସ୍ୟତା ଗ୍ରହଣ କରିବା ପରିବର୍ତ୍ତେ ତନ୍ତ୍ର ପାଇଁ ସଦସ୍ୟତା ପାଇବାକୁ GUI ସାଧନକୁ "
+"ଆରମ୍ଭ କରନ୍ତୁ"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:71
 msgid ""
@@ -2720,15 +2752,17 @@ msgid ""
 "Service level to subscribe this system to. For no service level use --"
 "service-level=\"\""
 msgstr ""
+"ଏହି ତନ୍ତ୍ରର ସଦସ୍ୟତା ପାଇଁ ସର୍ଭିସ ସ୍ତର। ବିନା ସର୍ଭିସ ସ୍ତର ପାଇଁ --service-level=\"\" ବ୍ୟବହାର "
+"କରନ୍ତୁ"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:76
 msgid "Specify the Subscription Management Server to migrate TO."
-msgstr ""
+msgstr "ସଦସ୍ୟତା ପରିଚାଳନା ସର୍ଭରକୁ ସ୍ଥାନାନ୍ତରିତ କରିବା ପାଇଁ ଉଲ୍ଲେଖ କରନ୍ତୁ।"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:79
 #, c-format
 msgid "%prog [OPTIONS]"
-msgstr ""
+msgstr "%prog [OPTIONS]"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:104
 #, c-format
@@ -2741,7 +2775,7 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:132
 msgid "You have entered an invalid choice."
-msgstr ""
+msgstr "ଆପଣ ଏକ ଅବୈଧ ପସନ୍ଦକୁ ଭରଣ କରିଛନ୍ତି।"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:195
 msgid ""
@@ -2749,6 +2783,8 @@ msgid ""
 "This machine appears to be already registered to Red Hat Subscription "
 "Management.  Exiting."
 msgstr ""
+"\n"
+"ଏହି ଯନ୍ତ୍ରଟି Red Hat ସଦସ୍ୟତା ପରିଚାଳନା ପୂର୍ବରୁ ପଞ୍ଜିକୃତ ହେଲା ପରି ଲାଗୁଛି।  ପ୍ରସ୍ଥାନ କରୁଅଛି।"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:197
 #, c-format
@@ -2763,7 +2799,7 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:246
 msgid "Org: "
-msgstr ""
+msgstr "ଅନୁଷ୍ଠାନ:"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:256
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
@@ -2775,7 +2811,7 @@ msgstr "ଏହି ସ୍କ୍ରିପ୍ଟକୁ ଚଲାଇବା ପାଇ
 
 #: ../bin/rhn-migrate-classic-to-rhsm:283
 msgid "No service level preference"
-msgstr ""
+msgstr "ସର୍ଭିସ ସ୍ତର ହୀନ ପସନ୍ଦ"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:290
 #, c-format
@@ -2783,10 +2819,12 @@ msgid ""
 "\n"
 "Service level \"%s\" is not available."
 msgstr ""
+"\n"
+"ସର୍ଭିସ ସ୍ତର \"%s\" ଉପଲବ୍ଧ ନାହିଁ।"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:291
 msgid "Please select a service level agreement for this system."
-msgstr ""
+msgstr "ଏହି ତନ୍ତ୍ର ପାଇଁ ଏକ ସର୍ଭିସ ସ୍ତର ରାଜିନାମା ବାଛନ୍ତୁ।"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:300
 msgid "This system is not associated with any channel."
@@ -2805,6 +2843,8 @@ msgid ""
 "You are subscribed to more than one jbappplatform channel.  This script does "
 "not support that configuration.  Exiting."
 msgstr ""
+"ଆପଣ ଗୋଟିଏ ରୁ ଅଧିକ jbappplatform ଚ୍ୟାନେଲରେ ସଦସ୍ୟତା ପାଇଛନ୍ତି।  ଏହି ସ୍କ୍ରିପ୍ଟ ସେହି ବିନ୍ୟାସକୁ "
+"ସହାୟତା କରିନଥାଏ।  ପ୍ରସ୍ଥାନ କରୁଅଛି।"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:347
 msgid ""
@@ -2823,13 +2863,15 @@ msgstr "ତନ୍ତ୍ରକୁ RHN କ୍ଲାସିକରୁ ପଞ୍ଜି
 
 #: ../bin/rhn-migrate-classic-to-rhsm:414
 msgid "Unable to read RHN proxy settings."
-msgstr ""
+msgstr "RHN ପ୍ରକ୍ସି ସଂରଚନାକୁ ପଢ଼ିବାରେ ଅସମର୍ଥ।"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:432
 msgid ""
 "\n"
 "Attempting to register system to Red Hat Subscription Management ..."
 msgstr ""
+"\n"
+"ତନ୍ତ୍ରକୁ Red Hat ସଦସ୍ୟତା ପରିଚାଳନାରେ ପଞ୍ଜିକୃତ କରିବା ପାଇଁ ଚେଷ୍ଟା କରୁଅଛି ..."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:445
 msgid ""
@@ -2845,7 +2887,7 @@ msgstr ""
 #, c-format
 msgid ""
 "System '%s' successfully registered to Red Hat Subscription Management.\n"
-msgstr ""
+msgstr "ତନ୍ତ୍ର '%s' ସଫଳତାର ସହିତ Red Hat ସଦସ୍ୟତା ପରିଚାଳନାରେ ପଞ୍ଜିକୃତ ହୋଇଛି।\n"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:455
 msgid "Launching the GUI tool to manually subscribe the system ..."
@@ -2879,7 +2921,7 @@ msgstr ""
 #: ../bin/rhn-migrate-classic-to-rhsm:488
 #, c-format
 msgid "Unable to read mapping file: %s"
-msgstr ""
+msgstr "ମେଳକ ଫାଇଲକୁ ପଢ଼ିବାରେ ଅସମର୍ଥ: %s"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:509
 msgid "Channels not available on RHSM:"
@@ -2890,6 +2932,8 @@ msgid ""
 "\n"
 "No product certificates are mapped to these RHN Classic channels:"
 msgstr ""
+"\n"
+"ଏହି RHN କ୍ଲାସିକ ଚ୍ୟାନେଲଗୁଡ଼ିକରେ କୌଣସି ଉତ୍ପାଦନ ପ୍ରମାଣପତ୍ର ମେଳାଯାଇ ନାହିଁ:"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:520
 msgid ""
@@ -2905,6 +2949,8 @@ msgid ""
 "\n"
 "Installing product certificates for these RHN Classic channels:"
 msgstr ""
+"\n"
+"ଏହି RHN କ୍ଲାସିକ ଚ୍ୟାନେଲଗୁଡ଼ିକ ପାଇଁ ଉତ୍ପାଦନ ପ୍ରମାଣପତ୍ରଗୁଡ଼ିକୁ ସ୍ଥାପନ କରୁଅଛି:"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:539
 #, c-format
@@ -2912,6 +2958,8 @@ msgid ""
 "\n"
 "Product certificates installed successfully to %s."
 msgstr ""
+"\n"
+"ଉତ୍ପାଦନ ପ୍ରମାଣପତ୍ରଗୁଡ଼ିକୁ %s ରେ ସଫଳତାର ସହିତ ସ୍ଥାପନ କରାଯାଇଛି "
 
 #: ../bin/rhn-migrate-classic-to-rhsm:583
 msgid ""
@@ -2926,20 +2974,22 @@ msgid ""
 "Please ensure system has subscriptions attached, and see 'subscription-"
 "manager repos --help' to enable additional repositories"
 msgstr ""
+"ଦୟାକରି ନିଶ୍ଚିତ କରନ୍ତୁ ଯେ ତନ୍ତ୍ରଟି ସଦସ୍ୟତାପ୍ରାପ୍ତ, ଏବଂ ଅତିରିକ୍ତ ରେପୋଜିଟୋରୀଗୁଡ଼ିକୁ ସକ୍ରିୟ କରିବା ପାଇଁ "
+"'subscription-manager repos --help' କୁ ଦେଖନ୍ତୁ"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:635
 msgid "The --servicelevel and --no-auto options cannot be used together."
-msgstr ""
+msgstr "--servicelevel ଏବଂ --no-auto ବିକଳ୍ପଗୁଡ଼ିକୁ ଏକା ସହିତ ବ୍ୟବହାର କରିପାରିବେ ନାହିଁ।"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:642
 #: ../bin/rhn-migrate-classic-to-rhsm:646
 msgid "Red Hat account: "
-msgstr ""
+msgstr "Red Hat ଖାତା: "
 
 #: ../bin/rhn-migrate-classic-to-rhsm:643
 #: ../bin/rhn-migrate-classic-to-rhsm:648
 msgid "System Engine Username: "
-msgstr ""
+msgstr "ତନ୍ତ୍ର ଚାଳକନାମ:"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:661
 msgid ""
@@ -2951,13 +3001,15 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:664
 msgid "System is currently subscribed to these RHN Classic Channels:"
-msgstr ""
+msgstr "ତନ୍ତ୍ରଟି ବର୍ତ୍ତମାନ ଏହି RHN କ୍ଲାସିକ ଚ୍ୟାନେଲଗୁଡ଼ିକରେ ସଦସ୍ୟତା ଗ୍ରହଣ କରିଛି:"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:674
 msgid ""
 "\n"
 "Preparing to unregister system from RHN Classic ..."
 msgstr ""
+"\n"
+"RHN କ୍ଲାସିକରୁ ତନ୍ତ୍ରକୁ ପଞ୍ଜିକରଣହୀନ କରିବା ପାଇଁ ପ୍ରସ୍ତୁତ କରୁଅଛି ..."
 
 #: ../src/rhsm_icon.c:46
 msgid "How often to check for validity (in seconds)"
@@ -2985,14 +3037,17 @@ msgid ""
 "system must be registered with the Customer Portal. Please enter your Red "
 "Hat login to ensure your system is up-to-date."
 msgstr ""
+"ଆପଣଙ୍କ ତନ୍ତ୍ରକୁ ଅଦ୍ୟତନଗୁଡ଼ିକ ସହିତ ସଦସ୍ୟତା ପରିଚାଳକ ପାଇଁ, ଆପଣଙ୍କ ତନ୍ତ୍ର ନିଶ୍ଚିତ ଭାବରେ ଗ୍ରାହକ "
+"ପୃଷ୍ଠାରେ ପଞ୍ଜିକରଣ କରିବା ଉଚିତ। ଆପଣଙ୍କର ତନ୍ତ୍ର ଅଦ୍ୟତିତ ଅଛି କି ନାହିଁ ନିଶ୍ଚିତ କରିବାକୁ ଦୟାକରି ଆପଣଙ୍କର "
+"Red Hat ଲଗଇନ ଭରଣ କରନ୍ତୁ।"
 
 #: ../src/rhsm_icon.c:212
 msgid "Invalid or Missing Entitlement Subscriptions"
-msgstr ""
+msgstr "ଅବୈଧ ଅଥବା ଅନୁପସ୍ଥିତ ସ୍ୱୀକୃତିପ୍ରାପ୍ତ ସଦସ୍ୟତାଗୁଡ଼ିକ"
 
 #: ../src/rhsm_icon.c:215
 msgid "This system is missing one or more subscriptions."
-msgstr ""
+msgstr "ଏହି ତନ୍ତ୍ରରେ ଗୋଟିଏ କିମ୍ବା ଅନେକ ସଦସ୍ୟତା ଅନୁପସ୍ଥିତ ଅଛି।"
 
 #: ../src/rhsm_icon.c:218
 msgid "Partially Entitled Products"
@@ -3002,6 +3057,7 @@ msgstr "ଆଂଶିକ ଭାବରେ ଅଧିକାରପ୍ରାପ୍ତ 
 msgid ""
 "This system is missing one or more subscriptions to fully cover its products."
 msgstr ""
+"ଏହି ତନ୍ତ୍ରଟି ଗୋଟିଏ କିମ୍ବା ଅଧିକ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଏହାର ଉତ୍ପାଦନଗୁଡ଼ିକୁ ସମ୍ପୂର୍ଣ୍ଣ ଭାବରେ ଧାରଣ କରିଥାଏ।"
 
 #: ../src/rhsm_icon.c:225
 msgid "This System's Subscriptions Are About to Expire"
@@ -3040,44 +3096,44 @@ msgstr "ବିକଳ୍ପ ବିଶ୍ଳେଷଣ ବିଫଳ ହୋଇଛି
 
 #: ../src/rhsmcertd.c:54
 msgid "Interval to run cert check (in minutes)"
-msgstr ""
+msgstr "ପ୍ରମାଣପତ୍ର ଯାଞ୍ଚକୁ ଚଲାଇବା ପାଇଁ ଅନ୍ତରାଳ (ମିନଟରେ)"
 
 #: ../src/rhsmcertd.c:57
 msgid "Interval to run healing (in minutes)"
-msgstr ""
+msgstr "ଉପଚାରକୁ ଚଲାଇବା ପାଇଁ ଅନ୍ତରାଳ (ମିନଟରେ)"
 
 #: ../src/rhsmcertd.c:60
 msgid "Run the initial checks immediatly, with no delay."
-msgstr ""
+msgstr "ବିଳମ୍ବ ନକରି, ପ୍ରାରମ୍ଭିକ ଯାଞ୍ଚଗୁଡ଼ିକୁ ସଙ୍ଗେ ସଙ୍ଗେ ଚଲାନ୍ତୁ।"
 
 #: ../src/rhsmcertd.c:255
 msgid "For more information run: rhsmcertd --help\n"
-msgstr ""
+msgstr "ଅଧିକ ସୂଚନା ପାଇଁ: rhsmcertd --help କୁ ଚଲାନ୍ତୁ\n"
 
 #: ../src/rhsmcertd.c:281
 msgid "Wrong number of arguments specified.\n"
-msgstr ""
+msgstr "ଭୁଲ ସଂଖ୍ୟକ ସ୍ୱତନ୍ତ୍ରଚରଗୁଡ଼ିକୁ ଉଲ୍ଲେଖ କରାଯାଇଛି।\n"
 
 #. New style args were used, assume error.
 #. We do not support both at once, other than
 #. debug and wait.
 #: ../src/rhsmcertd.c:339
 msgid "Invalid argument specified.\n"
-msgstr ""
+msgstr "ଅବୈଧ ସ୍ୱତନ୍ତ୍ରଚର ଉଲ୍ଲେଖ ହୋଇଛି।\n"
 
 #: ../src/rhsmcertd.c:345
 msgid "WARN: Deprecated CLI arguments are being used.\n"
-msgstr ""
+msgstr "ଚେତାବନୀ: ପୁରୁଣା CLI ସ୍ୱତନ୍ତ୍ରଚରଗୁଡ଼ିକ ବ୍ୟବହାର ହେଉଅଛି।\n"
 
 #: ../src/rhsmcertd.c:360
 #, c-format
 msgid "Invalid option: %s\n"
-msgstr ""
+msgstr "ଅବୈଧ ବିକଳ୍ପ: %s\n"
 
 #: ../src/rhsmcertd.c:374
 #, c-format
 msgid "Invalid argument specified: %s\n"
-msgstr ""
+msgstr "ଅବୈଧ ସ୍ୱତନ୍ତ୍ରଚର ଉଲ୍ଲେଖ ହୋଇଛି: %s\n"
 
 #: ../etc-conf/rhsm-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
@@ -3093,7 +3149,7 @@ msgstr "Red Hat ସଦସ୍ୟତା ପରିଚାଳନ"
 
 #: ../src/rct/printing.py:34
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: ../src/rct/printing.py:37
 msgid "Arch"
@@ -3101,23 +3157,23 @@ msgstr "ଚାପ"
 
 #: ../src/rct/printing.py:38
 msgid "Tags"
-msgstr ""
+msgstr "ଟ୍ୟାଗଗୁଡ଼ିକ"
 
 #: ../src/rct/printing.py:46
 msgid "Order"
-msgstr ""
+msgstr "କ୍ରମ"
 
 #: ../src/rct/printing.py:48
 msgid "Number"
-msgstr ""
+msgstr "କ୍ରମସଂଖ୍ୟା"
 
 #: ../src/rct/printing.py:49
 msgid "SKU"
-msgstr ""
+msgstr "SKU"
 
 #: ../src/rct/printing.py:51
 msgid "Account"
-msgstr ""
+msgstr "ଖାତା"
 
 #: ../src/rct/printing.py:52
 msgid "Service Level"
@@ -3125,125 +3181,125 @@ msgstr "ସର୍ଭିସ ସ୍ତର"
 
 #: ../src/rct/printing.py:53
 msgid "Service Type"
-msgstr ""
+msgstr "ସର୍ଭିସ ପ୍ରକାର"
 
 #: ../src/rct/printing.py:55
 msgid "Quantity Used"
-msgstr ""
+msgstr "ବ୍ୟବହୃତ ପରିମାଣ"
 
 #: ../src/rct/printing.py:56
 msgid "Socket Limit"
-msgstr ""
+msgstr "ସକେଟ ସୀମା"
 
 #: ../src/rct/printing.py:57
 msgid "Virt Limit"
-msgstr ""
+msgstr "ଆଭାସୀ ସୀମା"
 
 #: ../src/rct/printing.py:58
 msgid "Virt Only"
-msgstr ""
+msgstr "କେବଳ ଆଭାସୀ"
 
 #: ../src/rct/printing.py:60
 msgid "Stacking ID"
-msgstr ""
+msgstr "ଷ୍ଟାକ ID"
 
 #: ../src/rct/printing.py:61
 msgid "Warning Period"
-msgstr ""
+msgstr "ଚେତାବନୀ ଅବଧି"
 
 #: ../src/rct/printing.py:62
 msgid "Provides Management"
-msgstr ""
+msgstr "ପରିଚାଳନା ପ୍ରଦାନ କରିଥାଏ"
 
 #: ../src/rct/printing.py:71
 msgid "Content"
-msgstr ""
+msgstr "ବିଷୟବସ୍ତୁ"
 
 #: ../src/rct/printing.py:75
 msgid "Label"
-msgstr ""
+msgstr "ସ୍ତର"
 
 #: ../src/rct/printing.py:76
 msgid "Vendor"
-msgstr ""
+msgstr "ବିକ୍ରେତା"
 
 #: ../src/rct/printing.py:77
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: ../src/rct/printing.py:78
 msgid "GPG"
-msgstr ""
+msgstr "GPG"
 
 #: ../src/rct/printing.py:79
 msgid "Enabled"
-msgstr ""
+msgstr "ସକ୍ରିୟ"
 
 #: ../src/rct/printing.py:80
 msgid "Expires"
-msgstr ""
+msgstr "ସମୟ ସମାପ୍ତି"
 
 #: ../src/rct/printing.py:81
 msgid "Required Tags"
-msgstr ""
+msgstr "ଟ୍ୟାଗଗୁଡ଼ିକ ଆବଶ୍ୟକ"
 
 #: ../src/rct/printing.py:93
 msgid "Certificate:"
-msgstr ""
+msgstr "ପ୍ରମାଣପତ୍ର:"
 
 #: ../src/rct/printing.py:94
 msgid "Path"
-msgstr ""
+msgstr "ପଥ"
 
 #: ../src/rct/printing.py:96
 msgid "Serial"
-msgstr ""
+msgstr "କ୍ରମ"
 
 #: ../src/rct/printing.py:108
 msgid "Subject:"
-msgstr ""
+msgstr "ବିଷୟ:"
 
 #: ../src/rct/printing.py:115
 msgid "Entitlement Certificate"
-msgstr ""
+msgstr "ଅଧିକାର ପ୍ରମାଣପତ୍ର"
 
 #: ../src/rct/printing.py:117
 msgid "Product Certificate"
-msgstr ""
+msgstr "ଉତ୍ପାଦନ ପ୍ରମାଣପତ୍ର"
 
 #: ../src/rct/printing.py:119
 msgid "Identity Certificate"
-msgstr ""
+msgstr "ପରିଚୟ ପ୍ରମାଣପତ୍ର"
 
 #: ../src/rct/printing.py:121
 msgid "Unknown Certificate Type"
-msgstr ""
+msgstr "ଅଜଣା ପ୍ରମାଣପତ୍ର ପ୍ରକାର"
 
 #: ../src/rct/printing.py:140
 msgid "Alt Name"
-msgstr ""
+msgstr "ବୈକଳ୍ପିକ ନାମ"
 
 #: ../src/rct/commands.py:50
 msgid "Print certificate info to standard output."
-msgstr ""
+msgstr "ମାନକ ଫଳାଫଳରେ ପ୍ରମାଣପତ୍ର ସୂଚନା ମୁଦ୍ରଣ କରନ୍ତୁ।"
 
 #: ../src/rct/commands.py:54
 msgid "do not show the cert's product information"
-msgstr ""
+msgstr "ପ୍ରମାଣପତ୍ରର ଉତ୍ପାଦନ ସୂଚନା ଦର୍ଶାନ୍ତୁ ନାହିଁ"
 
 #: ../src/rct/commands.py:56
 msgid "do not show the cert's content info."
-msgstr ""
+msgstr "ପ୍ରମାଣପତ୍ରର ବିଷୟବସ୍ତୁ ସୂଚନା ଦର୍ଶାନ୍ତୁ ନାହିଁ।"
 
 #: ../src/rct/commands.py:61
 msgid "You must specify a certificate file."
-msgstr ""
+msgstr "ଆପଣଙ୍କୁ ଏକ ପ୍ରମାଣପତ୍ର ଫାଇଲ ଉଲ୍ଲେଖ କରିବାକୁ ହେବ।"
 
 #: ../src/rct/commands.py:64
 msgid "The specified certificate file does not exist."
-msgstr ""
+msgstr "ଏହି ଉଲ୍ଲିଖିତ ପ୍ରମାଣପତ୍ର ଫାଇଲ ଅବସ୍ଥିତ ନାହିଁ।"
 
 #: ../src/rct/commands.py:78
 #, python-format
 msgid "%%prog %s [OPTIONS] CERT_FILE"
-msgstr ""
+msgstr "%%prog %s [OPTIONS] CERT_FILE"
