@@ -316,13 +316,13 @@ def get_server_versions(cp):
                 cp_version = '-'.join([status['version'], status['release']])
             else:
                 cp_version = _("Unknown")
-        except GoneException, e:
-            log.info("Server Versions: Error: consumer has been deleted, unable to check server version")
-            log.info(e)
-            raise
         except Exception, e:
-            # a more useful error would be handy here
-            log.error(("Error while checking server version: %s") % e)
+            if isinstance(e, GoneException):
+                log.info("Server Versions: Error: consumer has been deleted, unable to check server version")
+            else:
+                # a more useful error would be handy here
+                log.error(("Error while checking server version: %s") % e)
+
             log.exception(e)
 
             server_type = _("Unknown")
