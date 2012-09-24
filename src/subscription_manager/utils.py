@@ -352,10 +352,10 @@ def restart_virt_who():
         log.debug("Restarted virt-who")
     except IOError:
         # The file was not found, this is ok
-        log.debug("No virt-who pid file, no attempting to restart")
+        log.debug("No virt-who pid file, not attempting to restart")
     except OSError:
         # The file is referencing an old pid, record this and move on
-        log.error("There virt-who pid file references a non-existent pid")
+        log.error("The virt-who pid file references a non-existent pid")
     except ValueError:
         # The file has non numeric data in it
-        log.error("There virt-who pid file contains non numeric data")
+        log.error("The virt-who pid file contains non numeric data")
