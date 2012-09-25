@@ -24,7 +24,6 @@ from subscription_manager.gui.autobind import \
 sys.path.append("/usr/share/rhn")
 from up2date_client import config
 
-
 MANUALLY_SUBSCRIBE_PAGE = 8
 
 
@@ -103,6 +102,23 @@ class PerformRegisterScreen(registergui.PerformRegisterScreen):
             handle_gui_exception(e, registergui.REGISTER_ERROR,
                     self._parent.window)
             self._parent.finish_registration(failed=True)
+
+    def pre(self):
+        # Because the RHN client tools check if certs exist and bypass our
+        # firstboot module if so, we know that if we reach this point and
+        # identity certs exist, someone must have hit the back button.
+        # TODO: i'd like this call to be inside the async progress stuff,
+        # since it does take some time
+        if ConsumerIdentity.exists():
+            try:
+                managerlib.unregister(self._parent.backend.uep,
+                        self._parent.consumer.uuid)
+            except socket.error, e:
+                handle_gui_exception(e, e, self._parent.window)
+            self._parent.consumer.reload()
+            self._parent._registration_finished = False
+
+        return registergui.PerformRegisterScreen.pre(self)
 
 
 class ManuallySubscribeScreen(registergui.Screen):
@@ -217,6 +233,10 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         # this time through
         if self._skip_apply_for_page_jump:
             self._skip_apply_for_page_jump = False
+            # Reset back to first screen in our module in case the user hits back.
+            # The firstboot register screen subclass will handle unregistering
+            # if necessary when it runs again.
+            self.show()
             return self._RESULT_SUCCESS
 
         self.interface = interface
@@ -228,7 +248,7 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
         try:
             valid_registration = self.register()
         except socket.error, e:
-            handle_gui_exception(e, e, self.registerWin)
+            handle_gui_exception(e, e, self._parent.window)
             return self._RESULT_FAILURE
 
         if valid_registration:
@@ -273,18 +293,8 @@ class moduleClass(RhsmFirstbootModule, registergui.RegisterScreen):
     def initializeUI(self):
         # Need to make sure that each time the UI is initialized we reset back
         # to the main register screen.
-
-        # if they've already registered during firstboot and have clicked
-        # back to register again, we must first unregister.
-        # XXX i'd like this call to be inside the async progress stuff,
-        # since it does take some time
-        if self._registration_finished and ConsumerIdentity.exists():
-            try:
-                managerlib.unregister(self.backend.uep, self.consumer.uuid)
-            except socket.error, e:
-                handle_gui_exception(e, e, self.registerWin)
-            self.consumer.reload()
-            self._registration_finished = False
+        # NOTE: On EL5 this does not appear to be called when the user
+        # presses Back, only when they go through the first time.
 
         self.show()
 
