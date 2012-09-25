@@ -266,7 +266,7 @@ class _CertFactory(object):
         service_type = None
         if 'service' in sub:
             service_level = sub['service'].get('level', None)
-            service_level = sub['service'].get('type', None)
+            service_type = sub['service'].get('type', None)
 
         return Order(
                 name=sub['name'],
