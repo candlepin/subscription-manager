@@ -106,9 +106,9 @@ class ProductManager:
         enabled = self.getEnabled(yb)
         active = self.getActive(yb)
 
-        #only execute this on versions of yum that track
-        #which repo a package came from
-        if yum.__version_info__[2] >= 28:
+        # only execute this on versions of yum that track
+        # which repo a package came from, aka, 3.2.28 and newer
+        if self._check_yum_version_tracks_repos():
             # check that we have any repo's enabled
             # and that we have some enabled repo's. Not just
             # that we have packages from repo's that are
@@ -116,6 +116,13 @@ class ProductManager:
             if enabled and active:
                 self.updateRemoved(active)
         self.updateInstalled(enabled, active)
+
+    def _check_yum_version_tracks_repos(self):
+        major, minor, micro = yum.__version_info__
+        print major, minor, micro
+        if major >= 3 and minor >= 2 and micro >= 28:
+            return True
+        return False
 
     def _isWorkstation(self, product_cert):
         if product_cert.name == "Red Hat Enterprise Linux Workstation" and \
