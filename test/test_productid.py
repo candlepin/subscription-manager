@@ -2,7 +2,7 @@ import unittest
 
 import stubs
 from subscription_manager import productid
-from mock import Mock
+from mock import Mock, patch
 
 
 class TestProductManager(unittest.TestCase):
@@ -108,3 +108,14 @@ class TestProductManager(unittest.TestCase):
         self.assertFalse(some_other_cert.delete.called)
 
         self.assertFalse(self.prod_db_mock.delete.called)
+
+    @patch("subscription_manager.productid.yum")
+    def test_yum_version_tracks_repos(self, yum_mock):
+        yum_mock.__version_info__ = (1, 2, 2)
+        self.assertFalse(self.prod_mgr._check_yum_version_tracks_repos())
+
+        yum_mock.__version_info__ = (3, 2, 35)
+        self.assertTrue(self.prod_mgr._check_yum_version_tracks_repos())
+
+        yum_mock.__version_info__ = (3, 2, 28)
+        self.assertTrue(self.prod_mgr._check_yum_version_tracks_repos())
