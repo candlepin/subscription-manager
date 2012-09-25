@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.19
+Version: 1.0.20
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -351,6 +351,25 @@ fi
 %endif
 
 %changelog
+* Tue Sep 25 2012 Alex Wood <awood@redhat.com> 1.0.20-1
+- 853876: No need to check for GoneException when getting status
+  (mstead@redhat.com)
+- 847387: Display tooltip for info icon in RHEL 5.9. (awood@redhat.com)
+- 829825: Disable unsubscribe button when nothing is selected.
+  (awood@redhat.com)
+- 859197: Fix product cert cleanup. (dgoodwin@redhat.com)
+- Fix more python 2.7isms in unittests (jbowes@redhat.com)
+- fix python 2.7ism in unittests. (jbowes@redhat.com)
+- Remove unused import. (awood@redhat.com)
+- make style cleanups to fix the build (alikins@redhat.com)
+- latest strings from zanata (alikins@redhat.com)
+- latest string catalog generated (alikins@redhat.com)
+- Add gettext project type to zanata.xml (alikins@redhat.com)
+- 830193: Ensure logging is not diabled by RHN Classic Registration
+  (bkearney@redhat.com)
+- Switch certv2 related code to certv3 (jbowes@redhat.com)
+- updates from sefler for bz850881 (dlackey@redhat.com.com)
+
 * Wed Sep 19 2012 Alex Wood <awood@redhat.com> 1.0.19-1
 - 855762: Set correct parent for error dialog boxes raised by Autobind wizard.
   (awood@redhat.com)
