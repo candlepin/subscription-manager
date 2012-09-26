@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-21 10:39-0400\n"
-"PO-Revision-Date: 2012-09-24 08:10-0400\n"
+"PO-Revision-Date: 2012-09-25 02:58-0400\n"
 "Last-Translator: Runa Bhattacharjee <runab@redhat.com>\n"
 "Language-Team: Bengali (India) <anubad@lists.ankur.org.in>\n"
 "MIME-Version: 1.0\n"
@@ -478,6 +478,8 @@ msgid ""
 "No service levels will cover all installed products. Please run "
 "'Subscription Manager' to manually subscribe this system."
 msgstr ""
+"ইনস্টল করা সকল উৎপাদনের জন্য কোনো পরিসেবার স্তর উপস্থিত নেই। এই সিস্টেমটি স্বয়ং "
+"সাবস্ক্রাইব করার জন্য অনুগ্রহ করে 'Subscription Manager' সঞ্চালন করুন।"
 
 #: ../src/subscription_manager/gui/firstboot/rhsm_login.py:96
 msgid "You have opted to skip auto-subscribe."
@@ -595,6 +597,8 @@ msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "subscriptions at this time."
 msgstr ""
+"ইনস্টল করা সকল উৎপাদনপর জন্য বৈধ এনটাইটেলমেন্ট উপস্থিত রয়েছে। এই মুহূর্তে "
+"সাবস্ক্রিপশন আপডেট করার প্রয়োজন নেই।"
 
 #: ../src/subscription_manager/gui/registergui.py:492
 #, python-format
@@ -602,12 +606,16 @@ msgid ""
 "No available subscriptions at the current service level: %s. Please use the "
 "\"All Available Subscriptions\" tab to manually subscribe this system."
 msgstr ""
+"বর্তমান পরিসেবা স্তরের জন্য কোনো সাবস্ক্রিপশন উপস্থিত নেই।: %s।  \"উপলব্ধ সকল "
+"সাবস্ক্রিপশন\" ট্যাবের সাহায্যে সিস্টেমটি স্বয়ং সাবস্ক্রাইব করুন।"
 
 #: ../src/subscription_manager/gui/registergui.py:510
 msgid ""
 "No service level will cover all installed products. Please use the \"All "
 "Available Subscriptions\" tab to manually subscribe this system."
 msgstr ""
+"কোনো পরিসেবার স্তরের অধীন ইনস্টল করা উৎপাদনগুলির পরিচালনা করা সম্ভব নয়। অনুগ্রহ "
+"করে  স্বয়ং 'সকল উপলব্ধ সাবস্ক্রিপশন' ট্যাব প্রয়োগ করে সিস্টেমটিকে সাবস্ক্রাইব করুন।"
 
 #: ../src/subscription_manager/gui/registergui.py:540
 msgid "Fetching list of possible environments"
@@ -705,6 +713,8 @@ msgid ""
 "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
 "more details."
 msgstr ""
+"সার্ভারের মধ্যে সিস্টেমের তথ্য আপডেট করতে ত্রুটি, অধিক বিবরণের জন্য /var/log/rhsm/"
+"rhsm.log দেখুন।"
 
 #: ../src/subscription_manager/branding/__init__.py:81
 msgid "Register the machine to the server"
@@ -776,6 +786,8 @@ msgid ""
 "To learn how to unregister from either service please consult this Knowledge "
 "Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
+"এই পরিসেবাগুলি থেকে নিবন্ধন বাতিল করার প্রণালী জানার জন্য অনুগ্রহ করে নিম্নলিখিত "
+"Knowledge Base নথিটি পড়ুন: https://access.redhat.com/kb/docs/DOC-45563"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:18
 #: ../src/subscription_manager/utils.py:334
@@ -791,6 +803,8 @@ msgid ""
 "This system is registered using both RHN Classic and Red Hat Subscription "
 "Management."
 msgstr ""
+"RHN Classic ও Red Hat Subscription Management, উভয় সহযোগেই সিস্টেম নিবন্ধিত "
+"হয়েছে।"
 
 #: ../src/subscription_manager/branding/redhat_branding.py:25
 msgid "Red Hat recommends that customers only register to one service."
@@ -2627,12 +2641,16 @@ msgid ""
 "After opening Red Hat Subscription Manager, manually subscribe via the "
 "<b>All Available Subscriptions</b> tab."
 msgstr ""
+"Red Hat Subscription Manager আরম্ভের পর <b>উপলব্ধ সকল সাবস্ক্রিপশন</b> ট্যাবের "
+"সাহায্যে স্বয়ং সাবস্ক্রাইব করুন।"
 
 #: ../src/subscription_manager/gui/data/manually_subscribe.glade.h:2
 msgid ""
 "You will need to use Red Hat Subscription Manager to manually subscribe this "
 "system after completing firstboot."
 msgstr ""
+"Firstboot-র কাজ সমাপ্ত হলে ব্যবহারকারীকে স্বয়ং Red Hat Subscription Manager "
+"ব্যবহার করে সিস্টেমটিকে সাবস্ক্রাইব করতে হবে।"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:1
 msgid ""
@@ -2647,6 +2665,8 @@ msgid ""
 "<small>Your system's service level preference is followed when subscribing "
 "automatically.</small>"
 msgstr ""
+"<small>স্বয়ংক্রিয়ভবে সাবস্ক্রাইব করার সময় সিস্টেমের পরিসেবার স্তরের পছন্দের অনুক্রম "
+"অনুসরণ করা হয়।</small>"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:3
 msgid "Release version:"
@@ -2654,7 +2674,7 @@ msgstr "রিলিজের সংস্করণ:"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:4
 msgid "Service Level Preference:"
-msgstr ""
+msgstr "পরিসেবা স্তর সংক্রান্ত পছন্দ:"
 
 #: ../src/subscription_manager/gui/data/preferences.glade.h:5
 msgid "System Preferences"
@@ -2766,12 +2786,12 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:76
 msgid "Specify the Subscription Management Server to migrate TO."
-msgstr ""
+msgstr "যে Subscription Management সার্ভারের মাইগ্রেট করা হবে তা চিহ্নিত করুন।"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:79
 #, c-format
 msgid "%prog [OPTIONS]"
-msgstr ""
+msgstr "%prog [OPTIONS]"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:104
 #, c-format
@@ -2792,6 +2812,9 @@ msgid ""
 "This machine appears to be already registered to Red Hat Subscription "
 "Management.  Exiting."
 msgstr ""
+"\n"
+"এই সিস্টেমটি সার্টিফিকেট-ভিত্তিক Red Hat Subscription Management-র সাথে পূর্বেই "
+"নিবন্ধন করা হয়েছে। প্রস্থান করা হচ্ছে।"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:197
 #, c-format
@@ -2806,7 +2829,7 @@ msgstr ""
 
 #: ../bin/rhn-migrate-classic-to-rhsm:246
 msgid "Org: "
-msgstr ""
+msgstr "প্রতিষ্ঠান:"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:256
 msgid "Problem encountered determining user roles in RHN Classic.  Exiting."
@@ -2851,6 +2874,8 @@ msgid ""
 "You are subscribed to more than one jbappplatform channel.  This script does "
 "not support that configuration.  Exiting."
 msgstr ""
+"আপনি একাধিক jbappplatform চ্যানেলে সাবস্ক্রাইব করেছেন। এই স্ক্রিপ্ট দ্বারা এই "
+"কনফিগারেশন সমর্থন করা হয় না। প্রস্থান করা হচ্ছে।"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:347
 msgid ""
@@ -2870,13 +2895,15 @@ msgstr "RHN Classic থেকে সিস্টেমের নিবন্ধ�
 
 #: ../bin/rhn-migrate-classic-to-rhsm:414
 msgid "Unable to read RHN proxy settings."
-msgstr ""
+msgstr "RHN প্রক্সির বৈশিষ্ট্য পড়তে ব্যর্থ।"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:432
 msgid ""
 "\n"
 "Attempting to register system to Red Hat Subscription Management ..."
 msgstr ""
+"\n"
+"Red Hat Subscription Management-র সাথে সিস্টেমটি নিবন্ধনের প্রচেষ্টা করা হচ্ছে ..."
 
 #: ../bin/rhn-migrate-classic-to-rhsm:445
 msgid ""
@@ -2894,6 +2921,8 @@ msgstr ""
 msgid ""
 "System '%s' successfully registered to Red Hat Subscription Management.\n"
 msgstr ""
+"'%s' সিস্টেমটি সাফল্যের সাথে Red Hat Subscription Management-এ নিবন্ধন করা "
+"হয়েছে।\n"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:455
 msgid "Launching the GUI tool to manually subscribe the system ..."
@@ -2941,6 +2970,8 @@ msgid ""
 "\n"
 "No product certificates are mapped to these RHN Classic channels:"
 msgstr ""
+"\n"
+"চিহ্নিত RHN Classic চ্যানেলের সাথে কোনো উৎপাদনের সার্টিফিকেট যুক্ত করা হয়নি:"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:520
 msgid ""
@@ -2955,6 +2986,8 @@ msgid ""
 "\n"
 "Installing product certificates for these RHN Classic channels:"
 msgstr ""
+"\n"
+"চিহ্নিত RHN Classic চ্যানেলের জন্য উৎপাদনের সার্টিফিকেট ইনস্টল করা হবে:"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:539
 #, c-format
@@ -2962,6 +2995,8 @@ msgid ""
 "\n"
 "Product certificates installed successfully to %s."
 msgstr ""
+"\n"
+"উৎপাদনের সার্টিফিকেটগুলি %s-এ সাফল্যের সাথে ইনস্টল করা হয়েছে।"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:583
 msgid ""
@@ -2976,10 +3011,12 @@ msgid ""
 "Please ensure system has subscriptions attached, and see 'subscription-"
 "manager repos --help' to enable additional repositories"
 msgstr ""
+"অনুগ্রহ করপ নিশ্চিত করুন সিস্টেমের সাথে সাবস্ক্রিপশন যুক্ত করা হয়েছে কি না, ও অতিরিক্ত "
+"সংগ্রহস্থল সক্রিয় করার পদ্ধতি জানার জন্য 'subscription-manager repos --help' পড়ুন।"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:635
 msgid "The --servicelevel and --no-auto options cannot be used together."
-msgstr ""
+msgstr "--servicelevel ও --no-auto বিকল্পগুলি একসাথে ব্যবহার করা যাবে না।"
 
 #: ../bin/rhn-migrate-classic-to-rhsm:642
 #: ../bin/rhn-migrate-classic-to-rhsm:646
@@ -3037,6 +3074,9 @@ msgid ""
 "system must be registered with the Customer Portal. Please enter your Red "
 "Hat login to ensure your system is up-to-date."
 msgstr ""
+"Subscription Manager-র মাধ্যমে সিস্টেমে আপডেট প্রাপ্ত করার জন্য আপনার সিস্টেমটি "
+"গ্রাহক পোর্ট্যালে নিবন্ধিত করা আবশ্যক। সিস্টেমটি আপ-টু-ডেট রাখার জন্য অনুগ্রহ করে Red "
+"Hat-র লগ-ইন লিখুন।"
 
 #: ../src/rhsm_icon.c:212
 msgid "Invalid or Missing Entitlement Subscriptions"
