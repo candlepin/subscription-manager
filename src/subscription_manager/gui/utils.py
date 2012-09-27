@@ -130,7 +130,7 @@ def apply_highlight(text, highlight):
     if not highlight:
         return gobject.markup_escape_text(text)
 
-    regex = re.compile("(" + highlight + ")", re.I)
+    regex = re.compile("(" + re.escape(highlight) + ")", re.I)
     parts = regex.split(text)
 
     escaped = []
