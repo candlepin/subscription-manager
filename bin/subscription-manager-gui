@@ -18,6 +18,7 @@
 # in this software or its documentation.
 #
 
+import logopen
 
 if __name__ != '__main__':
     raise ImportError("module cannot be imported")
@@ -42,6 +43,8 @@ import gtk
 import logging
 import gettext
 _ = gettext.gettext
+
+
 
 # these def's moved
 try:
