@@ -78,7 +78,7 @@ Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
 
 # Renamed from -gnome, so obsolete it properly
-Obsoletes: %{name}-gnome < %{version}-%{release}
+Obsoletes: %{name}-gnome < 1.0.3-1
 Provides: %{name}-gnome = %{version}-%{release}
 
 # Fedora can figure this out automatically, but RHEL cannot:
