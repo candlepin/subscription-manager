@@ -55,12 +55,10 @@ static GOptionEntry entries[] = {
 };
 
 typedef struct _Context {
-	bool is_visible;
 	bool show_registration;
 	GtkStatusIcon *icon;
 	NotifyNotification *notification;
 	DBusGProxy *entitlement_status_proxy;
-	gulong handler_id;
 } Context;
 
 typedef enum _StatusType {
@@ -116,13 +114,10 @@ create_status_type (int status)
 static void
 hide_icon (Context * context)
 {
-	if (!context->is_visible) {
-		return;
-	}
 	gtk_status_icon_set_visible (context->icon, false);
-	context->is_visible = false;
-
 	notify_notification_close (context->notification, NULL);
+	g_object_unref (context->notification);
+	context->notification = NULL;
 }
 
 static void
@@ -177,20 +172,11 @@ register_now_clicked (NotifyNotification * notification G_GNUC_UNUSED,
 	run_smg (context);
 }
 
-/*
- * This signal handler waits for the status icon to first appear in the status
- * bar after we set its visibility to true. We have to do this for el5 era
- * notification display, which needs a fully initialized status icon to attach
- * to, in order to display in the correct location. We disconnect the signal
- * handler afterwards, because we don't care about the location once we display
- * the icon (and trying to reshow the notification could mess things up).
- */
-static void
-on_icon_size_changed (GtkStatusIcon * icon,
-		      gint size G_GNUC_UNUSED, Context * context)
+static gboolean
+on_icon_visible (Context *context)
 {
 	notify_notification_show (context->notification, NULL);
-	g_signal_handler_disconnect (icon, context->handler_id);
+	return false;
 }
 
 static void
@@ -230,7 +216,11 @@ display_icon (Context * context, StatusType status_type)
 	}
 
 	gtk_status_icon_set_tooltip (context->icon, tooltip);
-	context->is_visible = true;
+
+	if (context->notification) {
+		notify_notification_close (context->notification, NULL);
+		g_object_unref (context->notification);
+	}
 
 	context->notification =
 		notify_notification_new_with_status_icon (notification_title,
@@ -260,10 +250,21 @@ display_icon (Context * context, StatusType status_type)
 						NULL);
 	}
 
-	gtk_status_icon_set_visible (context->icon, true);
-	context->handler_id = g_signal_connect (context->icon, "size-changed",
-						(GCallback)
-						on_icon_size_changed, context);
+	/*
+	 * If the icon is not already visible, add a timer before displaying
+	 * the notification. we want to give enough time for the icon to
+	 * render itself, but not enough time so that it starts to look odd
+	 * that we have an icon sitting around, then a notification pops up.
+	 *
+	 * It's really too bad that this isn't handled with some callbacks
+	 * in the libraries.
+	 */
+	if (!gtk_status_icon_get_visible (context->icon)) {
+		gtk_status_icon_set_visible (context->icon, true);
+		g_timeout_add (250, (GSourceFunc) on_icon_visible, context);
+	} else {
+		notify_notification_show (context->notification, NULL);
+	}
 }
 
 static void
@@ -406,7 +407,7 @@ main (int argc, char **argv)
 	DBusGConnection *connection;
 	guint32 result;
 	Context context;
-	context.is_visible = false;
+	context.notification = NULL;
 	context.show_registration = false;
 
 	setlocale (LC_ALL, "");
@@ -510,7 +511,6 @@ main (int argc, char **argv)
 	g_debug ("past main");
 	g_object_unref (context.entitlement_status_proxy);
 	g_object_unref (context.icon);
-	g_object_unref (context.notification);
 	g_object_unref (proxy);
 	dbus_g_connection_unref (connection);
 	return 0;
