@@ -128,7 +128,6 @@ class ReleaseBackend(object):
             # have a matching rhel-#
             product_split = product_tag.split('-', 2)
             if product_split[0] == "rhel":
-                product_ver = product_split[1]
                 # look for match in content tags
                 for content_tag in content_tags:
                     content_split = content_tag.split('-', 2)
