@@ -196,7 +196,6 @@ def main():
         sys.stderr.write("--immediate must be used with --force-signal\n")
         sys.exit(-2)
 
-
     global enable_debug
     enable_debug = options.debug
 
