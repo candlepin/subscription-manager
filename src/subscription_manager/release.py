@@ -48,7 +48,7 @@ class ReleaseBackend(object):
             self.facts = Facts(ent_dir=self.entitlement_dir,
                                prod_dir=self.product_dir)
 
-       # find entitlements for rhel product? (or vice versa)
+        # find entitlements for rhel product? (or vice versa)
         sorter = CertSorter(self.product_dir,
                             self.entitlement_dir,
                             self.facts.get_facts())
