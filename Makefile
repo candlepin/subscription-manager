@@ -48,19 +48,10 @@ check-syntax:
 	${CC} ${CFLAGS} ${ICON_FLAGS} -o nul -S $(CHK_SOURCES)
 
 
-ICON_FLAGS=`pkg-config --cflags --libs gtk+-2.0 libnotify gconf-2.0`
+ICON_FLAGS=`pkg-config --cflags --libs gtk+-2.0 libnotify gconf-2.0 dbus-glib-1`
 
 rhsm-icon: src/rhsm_icon.c bin
-	# RHSM Status icon needs to be skipped in Fedora 15+ and RHEL7+:
-	if [ ${OS} = Fedora ]; then \
-		if [ ${OS_VERSION} -lt 15 ]; then \
-			${CC} ${CFLAGS} ${ICON_FLAGS} -o bin/rhsm-icon src/rhsm_icon.c;\
-		fi;\
-	else \
-		if [ ${OS_VERSION} -lt 7 ]; then \
-			${CC} ${CFLAGS} ${ICON_FLAGS} -o bin/rhsm-icon src/rhsm_icon.c;\
-		fi;\
-	fi;\
+	${CC} ${CFLAGS} ${ICON_FLAGS} -o bin/rhsm-icon src/rhsm_icon.c;\
 
 dbus-service-install:
 	install -d ${PREFIX}/etc/dbus-1/system.d
@@ -207,20 +198,9 @@ install-files: dbus-service-install compile-po desktop-files
 	install -m 644 man/subscription-manager-gui.8 ${PREFIX}/${INSTALL_DIR}/man/man8/
 	if [ ${OS_VERSION} = 5 ]; then install -m 644 man/install-num-migrate-to-rhsm.8 ${PREFIX}/${INSTALL_DIR}/man/man8/; fi
 
-	# RHSM Status icon needs to be skipped in Fedora 15+ and RHEL7+:
-	if [ ${OS} = Fedora ]; then \
-		if [ ${OS_VERSION} -lt 15 ]; then \
-			install -m 644 etc-conf/rhsm-icon.desktop \
-				${PREFIX}/etc/xdg/autostart;\
-			install bin/rhsm-icon ${PREFIX}/usr/bin;\
-		fi;\
-	else \
-		if [ ${OS_VERSION} -lt 7 ]; then \
-			install -m 644 etc-conf/rhsm-icon.desktop \
-				${PREFIX}/etc/xdg/autostart;\
-			install bin/rhsm-icon ${PREFIX}/usr/bin;\
-		fi;\
-	fi;\
+	install -m 644 etc-conf/rhsm-icon.desktop \
+		${PREFIX}/etc/xdg/autostart;\
+	install bin/rhsm-icon ${PREFIX}/usr/bin;\
 
 	install -m 755 etc-conf/rhsmd.cron \
 		${PREFIX}/etc/cron.daily/rhsmd
