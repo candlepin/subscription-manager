@@ -176,8 +176,7 @@ HcikfLxQfRwalftfq5mDxkA8FDxrbGd/N8AviC2JJNL+VzMVthjy0w==
 -----END RSA PRIVATE KEY-----
 """
 
-CERT_V3_CERTIFICATE = """
------BEGIN CERTIFICATE-----
+EXPECTED_CERT_CONTENT_V3 = """-----BEGIN CERTIFICATE-----
 MIIDrjCCAxegAwIBAgIIPjHvQ1mahX4wDQYJKoZIhvcNAQEFBQAwUjExMC8GA1UE
 AwwoanNlZmxlci1mMTQtY2FuZGxlcGluLnVzZXJzeXMucmVkaGF0LmNvbTELMAkG
 A1UEBhMCVVMxEDAOBgNVBAcMB1JhbGVpZ2gwHhcNMTIwOTI0MDAwMDAwWhcNMTMw
@@ -198,8 +197,9 @@ KUrNSU0sBvMTc8oTK4sZChJLMhgA1NoL9QX6yNyT6DANBgkqhkiG9w0BAQUFAAOB
 gQAMWeuSinQawzoJ8TvcbuC/d3dmJQIPPGNFbFNwADoBEfW4S9bblroMTgms1W5n
 yFwoJo9WNjnDJbnHFdmesXeA07YkdklMkzfbTtTE+GiTLfd5gjYIkTLka8CaYVpw
 6kWfcQe8CI7/15rhjCukzTJvguAMDNlGFNlHwXRA+NWTPw==
------END CERTIFICATE-----
------BEGIN ENTITLEMENT DATA-----
+-----END CERTIFICATE-----"""
+
+EXPECTED_CERT_ENTITLEMENT_V3 = """-----BEGIN ENTITLEMENT DATA-----
 eJy1VV1vmzAU/SvI2iM0NuSD8NZO2l4ybVL6tCqqjLmhqGBTY7eLovz3XUNa0jVk
 2dZFkcDcyzn3nHtttkQo2dgKNElIGM/G8QTSIBLxOhiHGQ3SSUiD6VRkDKYQ80wQ
 nzxYLk1hNiRhPmls2ghd1KZQkiRb0txbROJP0KgKVBM0oB8R3CeSV4CRyy7ifV16
@@ -214,13 +214,15 @@ A2+khLQXQwfESId+QstQ/Fwpcl/9HoEka142cFxNmzskZnogJozGvxkdqU7NjVT/
 bWjCgcIMz/OjBr8J/NmQnDMYGh4slpndIle7Ja8vP7vhxktI+h3P8Hfa1iFD/9LJ
 vlx8Njru66sDaXZwIC0Uz7wrXnIp3vHEiw8IuM7B+1SU4C1tXStt3otk1pMs7zg2
 xlsapfEj9l4E857gy8vX8V/AV7ufwASTMQ==
------END ENTITLEMENT DATA-----
------BEGIN RSA SIGNATURE-----
+-----END ENTITLEMENT DATA-----"""
+
+EXPECTED_CERT_SIGNATURE_V3 = """-----BEGIN RSA SIGNATURE-----
 cN+DtEyAEoB6VRj3JQUiF++Yn/jDEAXpEkU5jtILZmWVBCTm/IgBSoEh8+idrZSF
 nkAyrw5JB7YbKwmcfhyDU4/tE/x4WLZhd7e4Fs3IndY/S/YzYL8mafOK2PbVGxeA
 ZyAnDZPe/CYX/FzNEgk4z62EbvYAtMMx4I3aif5qce8=
------END RSA SIGNATURE-----
------BEGIN RSA PRIVATE KEY-----
+-----END RSA SIGNATURE-----"""
+
+EXPECTED_KEY_CONTENT_V3 = """-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEAr4Orns+ermIi9FP6fK9Iy+HFPLOgFDrsOjcAobQu9GikourS
 A2Oi64kJSstIYhXLbISdsz4c+dc2SH9Auw5zpBRwFJWWcVX9d3+xcH4a1ajLUbNy
 Yw1RSg0Nt0hmOP46Z2bT/y56h8bVAM4fhFkdHbmWq4Oi+RlT9bNK/lcrKKo+oWIe
@@ -246,8 +248,12 @@ y+N1y+1mB7i9v/gaSRYMtcjlHpzSfDhNXio7z/F0Xw44BEyTzhrCcBYj2nL+r9PK
 ndmrxQKBgGJiXMZnKjK9AUUDvsFBSp8Otrf20BoeCiq+tZF95S5jR9/I8nv4NBYp
 59zCR1DOxxbyAHbRCjqZxdpZVAqKBl1BP+cmw93sAwJ3v9m+V4wFHVUFLJGmkXXV
 X2mYlgErL9vzxIQrwfL5JdEo9f+PQ0eVs/lh9MPY2TliwEyXDrVp
------END RSA PRIVATE KEY-----
-"""
+-----END RSA PRIVATE KEY-----"""
+
+EXPECTED_CERT_V3 = create_from_pem(EXPECTED_CERT_CONTENT_V3 + NEW_LINE + EXPECTED_CERT_ENTITLEMENT_V3 + \
+                   NEW_LINE + EXPECTED_CERT_SIGNATURE_V3)
+
+
 class MergePoolsTests(unittest.TestCase):
 
     def test_single_pool(self):
@@ -694,6 +700,10 @@ def MockSystemLog(self, message, priority):
     pass
 
 EXPECTED_CONTENT = EXPECTED_CERT_CONTENT + NEW_LINE + EXPECTED_KEY_CONTENT
+EXPECTED_CONTENT_V3 = EXPECTED_CERT_CONTENT_V3 + NEW_LINE + \
+                      EXPECTED_CERT_ENTITLEMENT_V3 + NEW_LINE + \
+                      EXPECTED_CERT_SIGNATURE_V3 + NEW_LINE + \
+                      EXPECTED_KEY_CONTENT_V3
 
 
 class ExtractorStub(managerlib.ImportFileExtractor):
@@ -721,8 +731,16 @@ class TestImportFileExtractor(unittest.TestCase):
         extractor = ExtractorStub(EXPECTED_CONTENT)
         self.assertTrue(extractor.contains_key_content())
 
+    def test_contains_key_content_when_key_and_cert_exists_in_import_file_v3(self):
+        extractor = ExtractorStub(EXPECTED_CONTENT_V3)
+        self.assertTrue(extractor.contains_key_content())
+
     def test_does_not_contain_key_when_key_does_not_exist_in_import_file(self):
         extractor = ExtractorStub(EXPECTED_CERT_CONTENT)
+        self.assertFalse(extractor.contains_key_content())
+
+    def test_does_not_contain_key_when_key_does_not_exist_in_import_file_v3(self):
+        extractor = ExtractorStub(EXPECTED_CERT_CONTENT_V3)
         self.assertFalse(extractor.contains_key_content())
 
     def test_get_key_content_when_key_exists(self):
@@ -730,8 +748,17 @@ class TestImportFileExtractor(unittest.TestCase):
         self.assertTrue(extractor.contains_key_content())
         self.assertEquals(EXPECTED_KEY_CONTENT, extractor.get_key_content())
 
+    def test_get_key_content_when_key_exists_v3(self):
+        extractor = ExtractorStub(EXPECTED_CONTENT_V3, file_path="12345.pem")
+        self.assertTrue(extractor.contains_key_content())
+        self.assertEquals(EXPECTED_KEY_CONTENT_V3, extractor.get_key_content())
+
     def test_get_key_content_returns_None_when_key_does_not_exist(self):
         extractor = ExtractorStub(EXPECTED_CERT_CONTENT, file_path="12345.pem")
+        self.assertFalse(extractor.get_key_content())
+
+    def test_get_key_content_returns_None_when_key_does_not_exist_v3(self):
+        extractor = ExtractorStub(EXPECTED_CERT_CONTENT_V3, file_path="12345.pem")
         self.assertFalse(extractor.get_key_content())
 
     def test_get_cert_content(self):
@@ -739,16 +766,25 @@ class TestImportFileExtractor(unittest.TestCase):
         self.assertTrue(extractor.contains_key_content())
         self.assertEquals(EXPECTED_CERT_CONTENT, extractor.get_cert_content())
 
+    def test_get_cert_content_v3(self):
+        extractor = ExtractorStub(EXPECTED_CONTENT_V3, file_path="12345.pem")
+        self.assertTrue(extractor.contains_key_content())
+        self.assertEquals(EXPECTED_CERT_CONTENT_V3, extractor.get_cert_content())
+
     def test_get_cert_content_returns_None_when_cert_does_not_exist(self):
         extractor = ExtractorStub(EXPECTED_KEY_CONTENT, file_path="12345.pem")
         self.assertFalse(extractor.get_cert_content())
 
-    def test_verify_valid_entitlement_for_valid_v3_cert(self):
-        extractor = ExtractorStub(CERT_V3_CERTIFICATE, file_path="12345.pem")
-        self.assertTrue(extractor.verify_valid_entitlement())
+    def test_get_cert_content_returns_None_when_cert_does_not_exist_v3(self):
+        extractor = ExtractorStub(EXPECTED_KEY_CONTENT_V3, file_path="12345.pem")
+        self.assertFalse(extractor.get_cert_content())
 
     def test_verify_valid_entitlement_for_invalid_cert(self):
         extractor = ExtractorStub(EXPECTED_KEY_CONTENT, file_path="12345.pem")
+        self.assertFalse(extractor.verify_valid_entitlement())
+
+    def test_verify_valid_entitlement_for_invalid_cert_v3(self):
+        extractor = ExtractorStub(EXPECTED_KEY_CONTENT_V3, file_path="12345.pem")
         self.assertFalse(extractor.verify_valid_entitlement())
 
     def test_verify_valid_entitlement_for_invalid_cert_bundle(self):
@@ -759,6 +795,10 @@ class TestImportFileExtractor(unittest.TestCase):
 
     def test_verify_valid_entitlement_for_no_key(self):
         extractor = ExtractorStub(EXPECTED_CERT_CONTENT, file_path="12345.pem")
+        self.assertFalse(extractor.verify_valid_entitlement())
+
+    def test_verify_valid_entitlement_for_no_key_v3(self):
+        extractor = ExtractorStub(EXPECTED_CERT_CONTENT_V3, file_path="12345.pem")
         self.assertFalse(extractor.verify_valid_entitlement())
 
     def test_verify_valid_entitlement_for_no_cert_content(self):
@@ -776,25 +816,61 @@ class TestImportFileExtractor(unittest.TestCase):
         self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
         self.assertEquals(EXPECTED_CERT_CONTENT, write_one[1])
 
+    def test_write_cert_only_v3(self):
+        expected_cert_file = "%d.pem" % (EXPECTED_CERT_V3.serial)
+        extractor = ExtractorStub(EXPECTED_CERT_CONTENT_V3 + NEW_LINE + \
+                                 EXPECTED_CERT_ENTITLEMENT_V3 + NEW_LINE + \
+                                 EXPECTED_CERT_SIGNATURE_V3, \
+                                 file_path=expected_cert_file)
+        extractor.write_to_disk()
+
+        self.assertEquals(1, len(extractor.writes))
+
+        write_one = extractor.writes[0]
+        self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
+        self.assertEquals(EXPECTED_CERT_CONTENT_V3 + NEW_LINE + \
+                                 EXPECTED_CERT_ENTITLEMENT_V3 + NEW_LINE + \
+                                 EXPECTED_CERT_SIGNATURE_V3, write_one[1])
+
     def test_write_key_and_cert(self):
         filename = "%d.pem" % (EXPECTED_CERT.serial)
         self._assert_correct_cert_and_key_files_generated_with_filename(filename)
+
+    def test_write_key_and_cert_v3(self):
+        filename = "%d.pem" % (EXPECTED_CERT_V3.serial)
+        self._assert_correct_cert_and_key_files_generated_with_filename_v3(filename)
 
     def test_file_renamed_when_imported_with_serial_no_and_custom_extension(self):
         filename = "%d.cert" % (EXPECTED_CERT.serial)
         self._assert_correct_cert_and_key_files_generated_with_filename(filename)
 
+    def test_file_renamed_when_imported_with_serial_no_and_custom_extension_v3(self):
+        filename = "%d.cert" % (EXPECTED_CERT_V3.serial)
+        self._assert_correct_cert_and_key_files_generated_with_filename_v3(filename)
+
     def test_file_renamed_when_imported_with_serial_no_and_no_extension(self):
         filename = str(EXPECTED_CERT.serial)
         self._assert_correct_cert_and_key_files_generated_with_filename(filename)
+
+    def test_file_renamed_when_imported_with_serial_no_and_no_extension_v3(self):
+        filename = str(EXPECTED_CERT_V3.serial)
+        self._assert_correct_cert_and_key_files_generated_with_filename_v3(filename)
 
     def test_file_renamed_when_imported_with_custom_name_and_pem_extension(self):
         filename = "entitlement.pem"
         self._assert_correct_cert_and_key_files_generated_with_filename(filename)
 
+    def test_file_renamed_when_imported_with_custom_name_and_pem_extension_v3(self):
+        filename = "entitlement.pem"
+        self._assert_correct_cert_and_key_files_generated_with_filename_v3(filename)
+
     def test_file_renamed_when_imported_with_custom_name_no_extension(self):
         filename = "entitlement"
         self._assert_correct_cert_and_key_files_generated_with_filename(filename)
+
+    def test_file_renamed_when_imported_with_custom_name_no_extension_v3(self):
+        filename = "entitlement"
+        self._assert_correct_cert_and_key_files_generated_with_filename_v3(filename)
 
     def _assert_correct_cert_and_key_files_generated_with_filename(self, filename):
         expected_file_prefix = "%d" % (EXPECTED_CERT.serial)
@@ -813,6 +889,26 @@ class TestImportFileExtractor(unittest.TestCase):
         write_two = extractor.writes[1]
         self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_key_file), write_two[0])
         self.assertEquals(EXPECTED_KEY_CONTENT, write_two[1])
+
+    def _assert_correct_cert_and_key_files_generated_with_filename_v3(self, filename):
+        expected_file_prefix = "%d" % (EXPECTED_CERT_V3.serial)
+        expected_cert_file = expected_file_prefix + ".pem"
+        expected_key_file = expected_file_prefix + "-key.pem"
+
+        extractor = ExtractorStub(EXPECTED_CONTENT_V3, file_path=filename)
+        extractor.write_to_disk()
+
+        self.assertEquals(2, len(extractor.writes))
+
+        write_one = extractor.writes[0]
+        self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
+        self.assertEquals(EXPECTED_CERT_CONTENT_V3 + NEW_LINE + \
+                          EXPECTED_CERT_ENTITLEMENT_V3 + NEW_LINE + \
+                          EXPECTED_CERT_SIGNATURE_V3, write_one[1])
+
+        write_two = extractor.writes[1]
+        self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_key_file), write_two[0])
+        self.assertEquals(EXPECTED_KEY_CONTENT_V3, write_two[1])
 
 
 class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
