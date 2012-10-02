@@ -184,8 +184,8 @@ class IdentityCertLib(DataLib):
 
 class Action:
 
-    def __init__(self, uep=None):
-        self.entdir = EntitlementDirectory()
+    def __init__(self, uep=None, entdir=None):
+        self.entdir = entdir or EntitlementDirectory()
         self.uep = uep
 
     def build(self, bundle):
@@ -209,6 +209,9 @@ class DeleteAction(Action):
 
 
 class UpdateAction(Action):
+
+    def __init__(self, uep=None, entdir=None):
+        Action.__init__(self, uep=uep, entdir=entdir)
 
     def perform(self):
         report = UpdateReport()
@@ -314,6 +317,16 @@ class UpdateAction(Action):
         for bundle in self.getCertificatesBySerialList(serials):
             try:
                 key, cert = self.build(bundle)
+                # Skip any expired certs coming from the server
+                # as they will be cleaned up during the next refresh
+                # pools, and will be deleted.
+                if cert.is_expired():
+                    log.info("Certificate from server was expired, not installing: %d" %
+                             cert.serial)
+                    if cert.serial in report.expected:
+                        report.expected.remove(cert.serial)
+                    continue
+
                 br.write(key, cert)
                 report.added.append(cert)
             except Exception, e:
