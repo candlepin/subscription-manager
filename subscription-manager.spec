@@ -9,7 +9,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.0.20
+Version: 1.0.21
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -351,6 +351,22 @@ fi
 %endif
 
 %changelog
+* Tue Oct 02 2012 Alex Wood <awood@redhat.com> 1.0.21-1
+- 853006: Wrap label in the manually subscribe firstboot screen.
+  (dgoodwin@redhat.com)
+- 853885: Fix icon notification popup only displaying once.
+  (dgoodwin@redhat.com)
+- 861095: Fix doubled words in hi.po (alikins@redhat.com)
+- 860084: remove unused _x from ja_JP translation (alikins@redhat.com)
+- 860088: remove trailing '.' from de_DE translated urls (alikins@redhat.com)
+- zanata string fixups for msgfmt -c (alikins@redhat.com)
+- 856419, 853349: latest strings from zanata (alikins@redhat.com)
+- New icon set. (awood@redhat.com)
+- 860030: make server_version_check use a non authenticated call
+  (alikins@redhat.com)
+- 847319: Left align manually subscribe firstboot message (jbowes@redhat.com)
+- 853035: Fix firstboot "back" issues. (dgoodwin@redhat.com)
+
 * Tue Sep 25 2012 Alex Wood <awood@redhat.com> 1.0.20-1
 - 853876: No need to check for GoneException when getting status
   (mstead@redhat.com)
