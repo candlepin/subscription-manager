@@ -48,7 +48,7 @@ class ReleaseBackend(object):
             self.facts = Facts(ent_dir=self.entitlement_dir,
                                prod_dir=self.product_dir)
 
-       # find entitlements for rhel product? (or vice versa)
+        # find entitlements for rhel product? (or vice versa)
         sorter = CertSorter(self.product_dir,
                             self.entitlement_dir,
                             self.facts.get_facts())
@@ -77,7 +77,7 @@ class ReleaseBackend(object):
                 if not content.enabled:
                     continue
                 if self._is_correct_rhel(rhel_product.provided_tags,
-                                     content.required_tags):
+                                         content.required_tags):
                     content_url = content.url
                     listing_parts = content_url.split('$releasever', 1)
                     listing_base = listing_parts[0]
@@ -87,7 +87,7 @@ class ReleaseBackend(object):
         # FIXME: not sure how to get the "base" content if we have multiple
         # entitlements for a product
 
-        # for a entitlement, gran the corresponding entitlement cert
+        # for a entitlement, grant the corresponding entitlement cert
         # use it for this connection
 
         # hmm. We are really only supposed to have one product
@@ -117,23 +117,33 @@ class ReleaseBackend(object):
         log.info("No products with RHEL product tags found")
         return False
 
-    #required tags provided by installed products?
+    # require tags provided by installed products?
     def _is_correct_rhel(self, product_tags, content_tags):
-        #easy to pass a string instead of a list
+        # easy to pass a string instead of a list
         assert not isinstance(product_tags, basestring)
         assert not isinstance(content_tags, basestring)
 
         for product_tag in product_tags:
             # we are comparing the lists to see if they
             # have a matching rhel-#
-            # TESTME
             product_split = product_tag.split('-', 2)
             if product_split[0] == "rhel":
                 # look for match in content tags
                 for content_tag in content_tags:
                     content_split = content_tag.split('-', 2)
-                    if content_split[0] == "rhel" and \
-                       content_split[1] == product_split[1]:
+
+                    # ignore non rhel content tags
+                    if content_split[0] != "rhel":
+                        continue
+
+                    # exact match
+                    if product_tag == content_tag:
                         return True
+
+                    # is this content for a base of this variant
+                    if product_tag.startswith(content_tag):
+                        return True
+                    # else, we don't match, keep looking
+
         log.info("No matching products with RHEL product tags found")
         return False
