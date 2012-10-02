@@ -29,6 +29,39 @@
 #include <libnotify/notify.h>
 #include <dbus/dbus-glib.h>
 
+/* 
+ * NOTIFY_CHECK_VERSION is only defined in libnotify versions that don't
+ * support attaching to a status icon.
+ *
+ * Key off this as well to figure out if we're on gnome 3. if so, don't ever
+ * show the status icon.
+ *
+ * To get rid of the status icon stuff, we just #define away all the calls
+ * (having get_visible return true for the notification_show logic we have),
+ * and use NO_STATUS_ICON to stop the status icon signal handlers from ever
+ * being declared.
+ *
+ * Why go to all this work to hide the status icon? In F17 displaying the
+ * status icon makes the notification area tray pop up in an annoying way, even
+ * thoug there is nothing in it from the icon. It would be worthwhile to check
+ * the behaviour in F18/Gnome 3.6 to see if this still happens. If not, we
+ * mayaswell remove this conditional behaviour, even though running the status
+ * icon will be a no-op.
+ */
+#ifdef NOTIFY_CHECK_VERSION
+#define notify_notification_new_with_status_icon(summary,body,icon,status) \
+	notify_notification_new (summary, body, icon)
+
+#define gtk_status_icon_new_from_icon_name(...) NULL
+#define gtk_status_icon_set_tooltip(...)
+#define gtk_status_icon_set_visible(...)
+#define gtk_status_icon_get_visible(...) true
+
+#define register_icon_click_listeners(...)
+
+#define NO_STATUS_ICON 1
+#endif
+
 #define ONE_DAY 86400
 #define INITIAL_DELAY 240
 #define _(STRING)   gettext(STRING)
@@ -76,12 +109,9 @@ static void hide_icon (Context *);
 static void display_icon (Context *, StatusType);
 static void alter_icon (Context *, StatusType);
 static void run_smg (Context *);
-static void icon_clicked (GtkStatusIcon *, Context *);
-static void icon_right_clicked (GtkStatusIcon *, guint, guint, Context *);
 static void remind_me_later_clicked (NotifyNotification *, gchar *, Context *);
 static void manage_subs_clicked (NotifyNotification *, gchar *, Context *);
 static void register_now_clicked (NotifyNotification *, gchar *, Context *);
-static void register_icon_click_listeners (Context *);
 static void do_nothing_logger (const gchar *, GLogLevelFlags, const gchar *,
 			       gpointer);
 static void status_changed_cb (NotifyNotification *, gint, Context *);
@@ -130,22 +160,6 @@ run_smg (Context * context)
 		g_spawn_command_line_async ("subscription-manager-gui", NULL);
 	}
 	hide_icon (context);
-}
-
-static void
-icon_clicked (GtkStatusIcon * icon G_GNUC_UNUSED, Context * context)
-{
-	g_debug ("icon click detected");
-	run_smg (context);
-}
-
-static void
-icon_right_clicked (GtkStatusIcon * icon G_GNUC_UNUSED,
-		    guint button G_GNUC_UNUSED,
-		    guint activate_time G_GNUC_UNUSED, Context * context)
-{
-	g_debug ("icon right click detected");
-	run_smg (context);
 }
 
 static void
@@ -389,6 +403,24 @@ add_signal_listener (Context * context)
 				     NULL);
 }
 
+#ifndef NO_STATUS_ICON
+
+static void
+icon_clicked (GtkStatusIcon * icon G_GNUC_UNUSED, Context * context)
+{
+	g_debug ("icon click detected");
+	run_smg (context);
+}
+
+static void
+icon_right_clicked (GtkStatusIcon * icon G_GNUC_UNUSED,
+		    guint button G_GNUC_UNUSED,
+		    guint activate_time G_GNUC_UNUSED, Context * context)
+{
+	g_debug ("icon right click detected");
+	run_smg (context);
+}
+
 static void
 register_icon_click_listeners (Context * context)
 {
@@ -397,6 +429,8 @@ register_icon_click_listeners (Context * context)
 	g_signal_connect (context->icon, "popup-menu",
 			  G_CALLBACK (icon_right_clicked), context);
 }
+
+#endif
 
 int
 main (int argc, char **argv)
