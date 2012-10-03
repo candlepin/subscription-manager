@@ -51,8 +51,8 @@ def main(options, log):
             log.critical(_("This consumer's profile has been deleted from the server. It's local certificates will now be archived"))
             managerlib.clean_all_data()
             log.critical(_("Certificates archived to '/etc/pki/consumer.old'. Contact your system administrator if you need more information."))
-        else:
-            raise ge
+
+        raise ge
 
 
 if __name__ == '__main__':
