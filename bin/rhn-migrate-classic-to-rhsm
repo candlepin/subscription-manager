@@ -260,7 +260,7 @@ def getEnvironment(cp, owner_key):
 
     environment = None
     if len(environment_list) > 1:
-        environment = raw_input(_("Environment: ")).strip()
+        environment = raw_input(_("Environment") + ": ").strip()
 
     return environment
 
