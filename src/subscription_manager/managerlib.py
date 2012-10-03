@@ -665,19 +665,11 @@ class ImportFileExtractor(object):
         cert_content = None
         if self._CERT_DICT_TAG in self.parts:
             cert_content = self.parts[self._CERT_DICT_TAG]
-        return cert_content
-
-    def get_ent_content(self):
-        ent_content = None
         if self._ENT_DICT_TAG in self.parts:
-            ent_content = self.parts[self._ENT_DICT_TAG]
-        return ent_content
-
-    def get_sig_content(self):
-        sig_content = None
+            cert_content = cert_content + NEW_LINE + self.parts[self._ENT_DICT_TAG]
         if self._SIG_DICT_TAG in self.parts:
-            sig_content = self.parts[self._SIG_DICT_TAG]
-        return sig_content
+            cert_content = cert_content + NEW_LINE + self.parts[self._SIG_DICT_TAG]
+        return cert_content
 
     def verify_valid_entitlement(self):
         """
@@ -687,8 +679,6 @@ class ImportFileExtractor(object):
         """
         try:
             cert_content = self.get_cert_content()
-            if self.get_ent_content():
-                cert_content = cert_content + NEW_LINE + self.get_ent_content()
             cert = create_from_pem(cert_content)
             # Don't want to check class explicitly, instead we'll look for
             # order info, which only an entitlement cert could have:
@@ -712,10 +702,6 @@ class ImportFileExtractor(object):
         # Write the key/cert content to new files
         log.debug("Writing certificate file: %s" % (dest_file_path))
         cert_content = self.get_cert_content()
-        if self.get_ent_content():
-            cert_content = cert_content + NEW_LINE + self.get_ent_content()
-        if self.get_sig_content():
-            cert_content = cert_content + NEW_LINE + self.get_sig_content()
         self._write_file(dest_file_path, cert_content)
 
         if self.contains_key_content():
@@ -741,8 +727,6 @@ class ImportFileExtractor(object):
     def _create_filename_from_cert_serial_number(self):
         "create from serial"
         cert_content = self.get_cert_content()
-        if self.get_ent_content():
-            cert_content = cert_content + NEW_LINE + self.get_ent_content()
         ent_cert = create_from_pem(cert_content)
         return "%s.pem" % (ent_cert.serial)
 

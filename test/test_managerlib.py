@@ -700,9 +700,10 @@ def MockSystemLog(self, message, priority):
     pass
 
 EXPECTED_CONTENT = EXPECTED_CERT_CONTENT + NEW_LINE + EXPECTED_KEY_CONTENT
-EXPECTED_CONTENT_V3 = EXPECTED_CERT_CONTENT_V3 + NEW_LINE + \
+EXPECTED_CERT_CONTENT_V3 = EXPECTED_CERT_CONTENT_V3 + NEW_LINE + \
                       EXPECTED_CERT_ENTITLEMENT_V3 + NEW_LINE + \
-                      EXPECTED_CERT_SIGNATURE_V3 + NEW_LINE + \
+                      EXPECTED_CERT_SIGNATURE_V3
+EXPECTED_CONTENT_V3 = EXPECTED_CERT_CONTENT_V3 + NEW_LINE + \
                       EXPECTED_KEY_CONTENT_V3
 
 
@@ -818,19 +819,14 @@ class TestImportFileExtractor(unittest.TestCase):
 
     def test_write_cert_only_v3(self):
         expected_cert_file = "%d.pem" % (EXPECTED_CERT_V3.serial)
-        extractor = ExtractorStub(EXPECTED_CERT_CONTENT_V3 + NEW_LINE + \
-                                 EXPECTED_CERT_ENTITLEMENT_V3 + NEW_LINE + \
-                                 EXPECTED_CERT_SIGNATURE_V3, \
-                                 file_path=expected_cert_file)
+        extractor = ExtractorStub(EXPECTED_CERT_CONTENT_V3, file_path=expected_cert_file)
         extractor.write_to_disk()
 
         self.assertEquals(1, len(extractor.writes))
 
         write_one = extractor.writes[0]
         self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
-        self.assertEquals(EXPECTED_CERT_CONTENT_V3 + NEW_LINE + \
-                                 EXPECTED_CERT_ENTITLEMENT_V3 + NEW_LINE + \
-                                 EXPECTED_CERT_SIGNATURE_V3, write_one[1])
+        self.assertEquals(EXPECTED_CERT_CONTENT_V3, write_one[1])
 
     def test_write_key_and_cert(self):
         filename = "%d.pem" % (EXPECTED_CERT.serial)
@@ -902,9 +898,7 @@ class TestImportFileExtractor(unittest.TestCase):
 
         write_one = extractor.writes[0]
         self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
-        self.assertEquals(EXPECTED_CERT_CONTENT_V3 + NEW_LINE + \
-                          EXPECTED_CERT_ENTITLEMENT_V3 + NEW_LINE + \
-                          EXPECTED_CERT_SIGNATURE_V3, write_one[1])
+        self.assertEquals(EXPECTED_CERT_CONTENT_V3, write_one[1])
 
         write_two = extractor.writes[1]
         self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_key_file), write_two[0])
