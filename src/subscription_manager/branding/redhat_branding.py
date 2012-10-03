@@ -10,7 +10,7 @@ class Branding(object):
                 _("This system is registered to RHN Classic.")
         self.REGISTERED_TO_OTHER_WARNING = _("WARNING") + \
             "\n\n" + \
-            _("This system has already been registered with Red Hat using RHN Classic technology.") + \
+            _("This system has already been registered with Red Hat using RHN Classic.") + \
             "\n\n" + \
             _("The tool you are using is attempting to re-register using Red Hat Subscription Management technology. Red Hat recommends that customers only register once.") + \
             "\n\n" + \
