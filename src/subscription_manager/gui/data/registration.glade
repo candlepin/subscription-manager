@@ -15,6 +15,7 @@
     <accessibility>
       <atkproperty name="AtkObject::accessible-name">register_dialog</atkproperty>
     </accessibility>
+    <signal name="delete_event" handler="on_register_dialog_delete_event"/>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox6">
         <property name="visible">True</property>
