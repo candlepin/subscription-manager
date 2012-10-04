@@ -85,25 +85,33 @@ class CLI:
         self.cli_commands[cmd.name] = cmd
 
     def _usage(self):
-        print "\n"
-        print _("Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]") % os.path.basename(sys.argv[0])
-        print "\n"
-        print _("Primary Modules:")
         print "\r"
-
+        print _("Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]") % os.path.basename(sys.argv[0])
+        print "\r"
         items = self.cli_commands.items()
         items.sort()
+        items_primary = []
+        items_other = []
         for (name, cmd) in items:
             if (cmd.primary):
-                print("\t%-14s %s" % (name, cmd.shortdesc))
+                items_primary.append((name, cmd))
+            else:
+                items_other.append((name, cmd))
 
-        print("")
-
-        other = [(item[0], item[1]) for item in items if not item[1].primary]
-        if len(other) > 0:
-            print _("Other Modules (Please consult documentation):")
+        if len(items_primary) > 0:
+            print _("Primary Modules:")
             print "\r"
-            for (name, cmd) in other:
+
+            items_primary.sort()
+            for (name, cmd) in items_primary:
+                    print("\t%-14s %s" % (name, cmd.shortdesc))
+
+            print("")
+
+        if (len(items_other)) > 0:
+            print _("Other Modules:")
+            print "\r"
+            for (name, cmd) in items_other:
                 print("\t%-14s %s" % (name, cmd.shortdesc))
             print("")
 
