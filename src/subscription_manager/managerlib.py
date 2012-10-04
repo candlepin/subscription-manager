@@ -23,6 +23,7 @@ import time
 import xml.utils.iso8601
 import logging
 import datetime
+from os import linesep as NEW_LINE
 
 from rhsm.config import initConfig
 from rhsm.certificate import Key, CertificateException, create_from_pem
@@ -611,6 +612,8 @@ class ImportFileExtractor(object):
 
     _CERT_DICT_TAG = "CERTIFICATE"
     _KEY_DICT_TAG = "KEY"
+    _ENT_DICT_TAG = "ENTITLEMENT"
+    _SIG_DICT_TAG = "RSA SIGNATURE"
 
     def __init__(self, cert_file_path):
         self.path = cert_file_path
@@ -638,6 +641,10 @@ class ImportFileExtractor(object):
                 dict_key = self._KEY_DICT_TAG
             elif not start.find(self._CERT_DICT_TAG) < 0:
                 dict_key = self._CERT_DICT_TAG
+            elif not start.find(self._ENT_DICT_TAG) < 0:
+                dict_key = self._ENT_DICT_TAG
+            elif not start.find(self._SIG_DICT_TAG) < 0:
+                dict_key = self._SIG_DICT_TAG
 
             if dict_key is None:
                 continue
@@ -658,6 +665,10 @@ class ImportFileExtractor(object):
         cert_content = None
         if self._CERT_DICT_TAG in self.parts:
             cert_content = self.parts[self._CERT_DICT_TAG]
+        if self._ENT_DICT_TAG in self.parts:
+            cert_content = cert_content + NEW_LINE + self.parts[self._ENT_DICT_TAG]
+        if self._SIG_DICT_TAG in self.parts:
+            cert_content = cert_content + NEW_LINE + self.parts[self._SIG_DICT_TAG]
         return cert_content
 
     def verify_valid_entitlement(self):
@@ -667,7 +678,8 @@ class ImportFileExtractor(object):
         @return: True if valid, False otherwise.
         """
         try:
-            cert = create_from_pem(self.get_cert_content())
+            cert_content = self.get_cert_content()
+            cert = create_from_pem(cert_content)
             # Don't want to check class explicitly, instead we'll look for
             # order info, which only an entitlement cert could have:
             if not hasattr(cert, 'order'):
@@ -689,7 +701,8 @@ class ImportFileExtractor(object):
 
         # Write the key/cert content to new files
         log.debug("Writing certificate file: %s" % (dest_file_path))
-        self._write_file(dest_file_path, self.get_cert_content())
+        cert_content = self.get_cert_content()
+        self._write_file(dest_file_path, cert_content)
 
         if self.contains_key_content():
             dest_key_file_path = self._get_key_path_from_dest_cert_path(dest_file_path)
@@ -713,7 +726,8 @@ class ImportFileExtractor(object):
 
     def _create_filename_from_cert_serial_number(self):
         "create from serial"
-        ent_cert = create_from_pem(self.get_cert_content())
+        cert_content = self.get_cert_content()
+        ent_cert = create_from_pem(cert_content)
         return "%s.pem" % (ent_cert.serial)
 
 
