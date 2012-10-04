@@ -1223,8 +1223,13 @@ class ReleaseCommand(CliCommand):
             releases = self.release_backend.get_releases()
             if not releases:
                 systemExit(-1, _("No release versions available, please check subscriptions."))
+
+            print("+-------------------------------------------+")
+            print("          %s" % (_("Available Releases")))
+            print("+-------------------------------------------+")
             for release in releases:
                 print release
+
         else:
             self.show_current_release()
 
