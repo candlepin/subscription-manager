@@ -75,13 +75,13 @@ class CatCertCommand(RCTCliCommand):
 
     def __init__(self):
         RCTCliCommand.__init__(self, name="cat-cert", aliases=['cc'],
-                               shortdesc=_("Print certificate info to standard output."),
+                               shortdesc=_("Print certificate information"),
                                primary=True)
 
         self.parser.add_option("--no-products", dest="no_products", action="store_true",
                                help=_("do not show the cert's product information"))
         self.parser.add_option("--no-content", dest="no_content", action="store_true",
-                               help=_("do not show the cert's content info."))
+                               help=_("do not show the cert's content info"))
 
     def _do_command(self):
         """
@@ -96,7 +96,7 @@ class StatCertCommand(RCTCliCommand):
 
     def __init__(self):
         RCTCliCommand.__init__(self, name="stat-cert", aliases=['sc'],
-                               shortdesc=_("Print certificate statistics and sizes."),
+                               shortdesc=_("Print certificate statistics and sizes"),
                                primary=True)
 
     def _do_command(self):
