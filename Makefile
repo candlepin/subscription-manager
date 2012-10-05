@@ -204,7 +204,7 @@ install-files: dbus-service-install compile-po desktop-files
 
 	install -m 755 etc-conf/rhsmd.cron \
 		${PREFIX}/etc/cron.daily/rhsmd
-	install -m 644 etc-conf/subscription-manager.desktop \
+	install -m 644 etc-conf/subscription-manager-gui.desktop \
 		${PREFIX}/${INSTALL_DIR}/applications
 
 	ln -sf /usr/bin/consolehelper ${PREFIX}/usr/bin/subscription-manager-gui
@@ -270,7 +270,7 @@ rpm: archive
 	rpmbuild -ta ${PKGNAME}-$(VERSION).tar.gz
 
 desktop-files: etc-conf/rhsm-icon.desktop \
-				etc-conf/subscription-manager.desktop
+				etc-conf/subscription-manager-gui.desktop
 
 %.desktop: %.desktop.in po
 	intltool-merge -d po $< $@
