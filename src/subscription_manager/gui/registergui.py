@@ -96,7 +96,7 @@ class RegisterScreen(widgets.GladeWidget):
         dic = {"on_register_cancel_button_clicked": self.cancel,
                "on_register_button_clicked": self._on_register_button_clicked,
                "hide": self.cancel,
-               "delete_event": self._delete_event,
+               "on_register_dialog_delete_event": self._delete_event,
             }
         self.glade.signal_autoconnect(dic)
 

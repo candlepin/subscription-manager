@@ -55,6 +55,7 @@ class ImportSubDialog(object):
         self.dialog.add_filter(afilter)
 
         self.dialog.connect("response", self._on_dialog_response)
+        self.dialog.connect("delete-event", self._delete_event)
 
     def _on_dialog_response(self, dialog, response_id):
         if response_id == gtk.RESPONSE_CANCEL:
