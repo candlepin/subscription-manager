@@ -132,6 +132,11 @@ class ContractSelectionWindow(object):
         else:
             quantity_available = int(pool['quantity']) - int(pool['consumed'])
 
+        # cap the default selected quantity at the max available
+        # for that pool. See #855257
+        if default_quantity_value > quantity_available:
+            default_quantity_value = quantity_available
+
         row = [pool['contractNumber'],
                 "%s / %s" % (pool['consumed'], quantity),
                managerlib.parseDate(pool['startDate']),
