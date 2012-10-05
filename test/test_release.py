@@ -112,3 +112,33 @@ class TestReleaseBackend(unittest.TestCase):
                                        ["awesomeos", "thisthingimadeup",
                                         "candy", "notasawesome"])
         self.assertFalse(icr)
+
+    def test_is_correct_rhel_content_variant_861151(self):
+        icr = self.rb._is_correct_rhel(["rhel-5", "rhel-5-server"],
+                                       ["rhel-5-workstation"])
+        self.assertFalse(icr)
+
+    def test_is_correct_rhel_content_variant_match(self):
+        icr = self.rb._is_correct_rhel(["rhel-5"],
+                                       ["rhel-5-workstation"])
+        self.assertFalse(icr)
+
+    def test_is_correct_rhel_content_variant_no_match(self):
+        icr = self.rb._is_correct_rhel(["rhel-5-server"],
+                                       ["rhel-5-workstation"])
+        self.assertFalse(icr)
+
+    def test_is_correct_rhel_content_variant_exact_match(self):
+        icr = self.rb._is_correct_rhel(["rhel-5-server"],
+                                       ["rhel-5-server"])
+        self.assertTrue(icr)
+
+    def  test_is_correct_rhel_content_sub_variant_of_product(self):
+        icr = self.rb._is_correct_rhel(["rhel-5-server"],
+                                       ["rhel-5"])
+        self.assertTrue(icr)
+
+    def test_is_correct_rhel_rhel_product_no_rhel_content(self):
+        icr = self.rb._is_correct_rhel(["rhel-5-server"],
+                                       ["awesome-os-7"])
+        self.assertFalse(icr)

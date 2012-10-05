@@ -176,6 +176,83 @@ HcikfLxQfRwalftfq5mDxkA8FDxrbGd/N8AviC2JJNL+VzMVthjy0w==
 -----END RSA PRIVATE KEY-----
 """
 
+EXPECTED_CERT_CONTENT_V3 = """-----BEGIN CERTIFICATE-----
+MIIDrjCCAxegAwIBAgIIPjHvQ1mahX4wDQYJKoZIhvcNAQEFBQAwUjExMC8GA1UE
+AwwoanNlZmxlci1mMTQtY2FuZGxlcGluLnVzZXJzeXMucmVkaGF0LmNvbTELMAkG
+A1UEBhMCVVMxEDAOBgNVBAcMB1JhbGVpZ2gwHhcNMTIwOTI0MDAwMDAwWhcNMTMw
+OTI0MDAwMDAwWjArMSkwJwYDVQQDEyA4YTkwZjgxZDM5ZmFjMGVlMDEzOWZlMzhl
+NGY2MzE3ZjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAK+Dq57Pnq5i
+IvRT+nyvSMvhxTyzoBQ67Do3AKG0LvRopKLq0gNjouuJCUrLSGIVy2yEnbM+HPnX
+Nkh/QLsOc6QUcBSVlnFV/Xd/sXB+GtWoy1GzcmMNUUoNDbdIZjj+Omdm0/8ueofG
+1QDOH4RZHR25lquDovkZU/WzSv5XKyiqPqFiHt+D8QFRXiHb7i6+yLThF4nNdtkk
+97yai3xHRrRVqWhqR8nYIF7dPHsTByMUSaoRz5iKO5rmg9BBrZE4+kDZLFE+28wR
+xtzD/Die2GdJwe7mQ5m0HUJC+1g9lyOruAyUKbJxl95HxGObBQZmVMddOZjNC14W
+Dwt4kLf/qXECAwEAAaOCAS4wggEqMBEGCWCGSAGG+EIBAQQEAwIFoDALBgNVHQ8E
+BAMCBLAwgYIGA1UdIwR7MHmAFIwL3uxPnqv0NKLwhuL/TkX149zOoVakVDBSMTEw
+LwYDVQQDDChqc2VmbGVyLWYxNC1jYW5kbGVwaW4udXNlcnN5cy5yZWRoYXQuY29t
+MQswCQYDVQQGEwJVUzEQMA4GA1UEBwwHUmFsZWlnaIIJAMZok6HSfyb6MB0GA1Ud
+DgQWBBQH/TRkcUo2VBq+LlvyqSpAMaEQiDATBgNVHSUEDDAKBggrBgEFBQcDAjAS
+BgkrBgEEAZIICQYEBQwDMy4wMDsGCSsGAQQBkggJBwQuBCx42stLLUstYkjLz2dQ
+KUrNSU0sBvMTc8oTK4sZChJLMhgA1NoL9QX6yNyT6DANBgkqhkiG9w0BAQUFAAOB
+gQAMWeuSinQawzoJ8TvcbuC/d3dmJQIPPGNFbFNwADoBEfW4S9bblroMTgms1W5n
+yFwoJo9WNjnDJbnHFdmesXeA07YkdklMkzfbTtTE+GiTLfd5gjYIkTLka8CaYVpw
+6kWfcQe8CI7/15rhjCukzTJvguAMDNlGFNlHwXRA+NWTPw==
+-----END CERTIFICATE-----"""
+
+EXPECTED_CERT_ENTITLEMENT_V3 = """-----BEGIN ENTITLEMENT DATA-----
+eJy1VV1vmzAU/SvI2iM0NuSD8NZO2l4ybVL6tCqqjLmhqGBTY7eLovz3XUNa0jVk
+2dZFkcDcyzn3nHtttkQo2dgKNElIGM/G8QTSIBLxOhiHGQ3SSUiD6VRkDKYQ80wQ
+nzxYLk1hNiRhPmls2ghd1KZQkiRb0txbROJP0KgKVBM0oB8R3CeSV4CRyy7ifV16
+yzbkXVmZlZBhyhPXspA5SSKKwErcg2lIEvqk4pLnUIE0JDHaAkbx3UKAYyzhEUpE
+/qahKmyFOGZTO6qFC3gR2e18onTmJG6JtFXaio35nK5jlkXzNRcUgLL2jqWzGaU0
+nrwSOkFGw7VxJlEWBnQehONrSpP2/x1zQWZdMDoSRI+N5sK9PsUlF0JZp4WwMIoY
+i/DCCFZZa5VZ4UTfbEnhAKMZnU569z6WtjGg0STvqsA8n6CDTWs9YRfUYWtxVxgQ
+xmpwOORysSCrroTWv5vVzj8Apydb8yvH9IKdxbEnCKNJ345N25s91z41gKo2m7zO
+MVLytO3jc6hddwlBl/GIJivXOwONCfYrdI2bO3w4Wis1au99gvm3Vjs0XFRgeMYN
+v4UfdaGRnb44wAbK4+UT3zQBSJ7iaAbPwvoiBxPOrHHUAYw+aCiBN9Dtkb7sN4md
+A2+khLQXQwfESId+QstQ/Fwpcl/9HoEka142cFxNmzskZnogJozGvxkdqU7NjVT/
+bWjCgcIMz/OjBr8J/NmQnDMYGh4slpndIle7Ja8vP7vhxktI+h3P8Hfa1iFD/9LJ
+vlx8Njru66sDaXZwIC0Uz7wrXnIp3vHEiw8IuM7B+1SU4C1tXStt3otk1pMs7zg2
+xlsapfEj9l4E857gy8vX8V/AV7ufwASTMQ==
+-----END ENTITLEMENT DATA-----"""
+
+EXPECTED_CERT_SIGNATURE_V3 = """-----BEGIN RSA SIGNATURE-----
+cN+DtEyAEoB6VRj3JQUiF++Yn/jDEAXpEkU5jtILZmWVBCTm/IgBSoEh8+idrZSF
+nkAyrw5JB7YbKwmcfhyDU4/tE/x4WLZhd7e4Fs3IndY/S/YzYL8mafOK2PbVGxeA
+ZyAnDZPe/CYX/FzNEgk4z62EbvYAtMMx4I3aif5qce8=
+-----END RSA SIGNATURE-----"""
+
+EXPECTED_KEY_CONTENT_V3 = """-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEAr4Orns+ermIi9FP6fK9Iy+HFPLOgFDrsOjcAobQu9GikourS
+A2Oi64kJSstIYhXLbISdsz4c+dc2SH9Auw5zpBRwFJWWcVX9d3+xcH4a1ajLUbNy
+Yw1RSg0Nt0hmOP46Z2bT/y56h8bVAM4fhFkdHbmWq4Oi+RlT9bNK/lcrKKo+oWIe
+34PxAVFeIdvuLr7ItOEXic122ST3vJqLfEdGtFWpaGpHydggXt08exMHIxRJqhHP
+mIo7muaD0EGtkTj6QNksUT7bzBHG3MP8OJ7YZ0nB7uZDmbQdQkL7WD2XI6u4DJQp
+snGX3kfEY5sFBmZUx105mM0LXhYPC3iQt/+pcQIDAQABAoIBABHAG0dAcCfqvOZA
+6ABcKdyUxMHS2Mmy+9kXXvT7qBQH0T64yOyW0w9HGK17yaJB2gTrlJdgHMYXweGr
+HPzOBVv+xScPydtEexHu1B8wYb5iB84He/YQjrwSfeSfadcxvu5eM+qG5NV+gmRG
+dGGKMauj7V0DPyQ6L4eVzmvSnQbLpYGmfB8wQFuNRFYCYZ90SyuBn2CcC20sAEYZ
+p76q0qzfdrRjkg//saoh4sU38NgOY3tYSok/14SI+g9EkIHGNFV9/Rq3mvlLcwi/
+m98Mg69Yt0SF6PNTPwF6ZgsH1yWpvK9laycbEYZ44g7nIQOewQ0aKVHfDQt52rrA
+/P2rV1ECgYEA+TevV8QdJei5TFpF8ERvbrFJn64SmqD/u5Wamki0QEoZ+SkdioWj
+1C6jolHj85yVgC5nKBIlNm8f5hqp4p4E0b7BwvH5QbDRg5VDQfV5MBk87LC4Rj7Q
+WQNhcicWF5pdAdgrmy0uZ2q3J386DS9y2dCm3bItIueKC132H4KzpHMCgYEAtEp9
+kAqzmG3QJ+aI37e3OeL2XzUNDP47RaZicH5n3mmIVbffkgYu+wHkv7zukl3kdpsx
+TWTuffjtcueMXmdHsqOukB+XkvcBXsWfweJq66uoxeZhYUQr04NEvapcZ/6wud5t
+ZvMF/ASLL1zXAZ8IT7Xaufzbld1UT4MItYwcZYsCgYA760yIMInFjI/IsMex/fJA
+zfVipAqrDNyPsGeMgsB72JUoF9+XZ4w9Pr1vEHtbHiG/wOhidQJndQ5ZV73S06Va
+/J8/jMgeKDInjeKu4CM0Ek1YpyCXGxEi5bIvLQCdyipkgCHz3EgU605/+5Hsi6T0
+g7srAGTjyIGjPAMqDlW8ywKBgQCVowXYGam6J9qOY17TH+4pU2Dc4HE2iYO0aUZm
+y+N1y+1mB7i9v/gaSRYMtcjlHpzSfDhNXio7z/F0Xw44BEyTzhrCcBYj2nL+r9PK
+3huUAuOPbYkBa81cPiU9rjoH7nHLsvrmaWpcI4FKDCo/pDkHv44Ms/ukxRCG9eCy
+ndmrxQKBgGJiXMZnKjK9AUUDvsFBSp8Otrf20BoeCiq+tZF95S5jR9/I8nv4NBYp
+59zCR1DOxxbyAHbRCjqZxdpZVAqKBl1BP+cmw93sAwJ3v9m+V4wFHVUFLJGmkXXV
+X2mYlgErL9vzxIQrwfL5JdEo9f+PQ0eVs/lh9MPY2TliwEyXDrVp
+-----END RSA PRIVATE KEY-----"""
+
+EXPECTED_CERT_V3 = create_from_pem(EXPECTED_CERT_CONTENT_V3 + NEW_LINE + EXPECTED_CERT_ENTITLEMENT_V3 + \
+                   NEW_LINE + EXPECTED_CERT_SIGNATURE_V3)
+
 
 class MergePoolsTests(unittest.TestCase):
 
@@ -623,6 +700,11 @@ def MockSystemLog(self, message, priority):
     pass
 
 EXPECTED_CONTENT = EXPECTED_CERT_CONTENT + NEW_LINE + EXPECTED_KEY_CONTENT
+EXPECTED_CERT_CONTENT_V3 = EXPECTED_CERT_CONTENT_V3 + NEW_LINE + \
+                      EXPECTED_CERT_ENTITLEMENT_V3 + NEW_LINE + \
+                      EXPECTED_CERT_SIGNATURE_V3
+EXPECTED_CONTENT_V3 = EXPECTED_CERT_CONTENT_V3 + NEW_LINE + \
+                      EXPECTED_KEY_CONTENT_V3
 
 
 class ExtractorStub(managerlib.ImportFileExtractor):
@@ -650,8 +732,16 @@ class TestImportFileExtractor(unittest.TestCase):
         extractor = ExtractorStub(EXPECTED_CONTENT)
         self.assertTrue(extractor.contains_key_content())
 
+    def test_contains_key_content_when_key_and_cert_exists_in_import_file_v3(self):
+        extractor = ExtractorStub(EXPECTED_CONTENT_V3)
+        self.assertTrue(extractor.contains_key_content())
+
     def test_does_not_contain_key_when_key_does_not_exist_in_import_file(self):
         extractor = ExtractorStub(EXPECTED_CERT_CONTENT)
+        self.assertFalse(extractor.contains_key_content())
+
+    def test_does_not_contain_key_when_key_does_not_exist_in_import_file_v3(self):
+        extractor = ExtractorStub(EXPECTED_CERT_CONTENT_V3)
         self.assertFalse(extractor.contains_key_content())
 
     def test_get_key_content_when_key_exists(self):
@@ -659,8 +749,17 @@ class TestImportFileExtractor(unittest.TestCase):
         self.assertTrue(extractor.contains_key_content())
         self.assertEquals(EXPECTED_KEY_CONTENT, extractor.get_key_content())
 
+    def test_get_key_content_when_key_exists_v3(self):
+        extractor = ExtractorStub(EXPECTED_CONTENT_V3, file_path="12345.pem")
+        self.assertTrue(extractor.contains_key_content())
+        self.assertEquals(EXPECTED_KEY_CONTENT_V3, extractor.get_key_content())
+
     def test_get_key_content_returns_None_when_key_does_not_exist(self):
         extractor = ExtractorStub(EXPECTED_CERT_CONTENT, file_path="12345.pem")
+        self.assertFalse(extractor.get_key_content())
+
+    def test_get_key_content_returns_None_when_key_does_not_exist_v3(self):
+        extractor = ExtractorStub(EXPECTED_CERT_CONTENT_V3, file_path="12345.pem")
         self.assertFalse(extractor.get_key_content())
 
     def test_get_cert_content(self):
@@ -668,16 +767,25 @@ class TestImportFileExtractor(unittest.TestCase):
         self.assertTrue(extractor.contains_key_content())
         self.assertEquals(EXPECTED_CERT_CONTENT, extractor.get_cert_content())
 
+    def test_get_cert_content_v3(self):
+        extractor = ExtractorStub(EXPECTED_CONTENT_V3, file_path="12345.pem")
+        self.assertTrue(extractor.contains_key_content())
+        self.assertEquals(EXPECTED_CERT_CONTENT_V3, extractor.get_cert_content())
+
     def test_get_cert_content_returns_None_when_cert_does_not_exist(self):
         extractor = ExtractorStub(EXPECTED_KEY_CONTENT, file_path="12345.pem")
         self.assertFalse(extractor.get_cert_content())
 
-    def test_verify_valid_entitlement_for_valid_cert(self):
-        extractor = ExtractorStub(EXPECTED_CONTENT, file_path="12345.pem")
-        self.assertTrue(extractor.verify_valid_entitlement())
+    def test_get_cert_content_returns_None_when_cert_does_not_exist_v3(self):
+        extractor = ExtractorStub(EXPECTED_KEY_CONTENT_V3, file_path="12345.pem")
+        self.assertFalse(extractor.get_cert_content())
 
     def test_verify_valid_entitlement_for_invalid_cert(self):
         extractor = ExtractorStub(EXPECTED_KEY_CONTENT, file_path="12345.pem")
+        self.assertFalse(extractor.verify_valid_entitlement())
+
+    def test_verify_valid_entitlement_for_invalid_cert_v3(self):
+        extractor = ExtractorStub(EXPECTED_KEY_CONTENT_V3, file_path="12345.pem")
         self.assertFalse(extractor.verify_valid_entitlement())
 
     def test_verify_valid_entitlement_for_invalid_cert_bundle(self):
@@ -688,6 +796,10 @@ class TestImportFileExtractor(unittest.TestCase):
 
     def test_verify_valid_entitlement_for_no_key(self):
         extractor = ExtractorStub(EXPECTED_CERT_CONTENT, file_path="12345.pem")
+        self.assertFalse(extractor.verify_valid_entitlement())
+
+    def test_verify_valid_entitlement_for_no_key_v3(self):
+        extractor = ExtractorStub(EXPECTED_CERT_CONTENT_V3, file_path="12345.pem")
         self.assertFalse(extractor.verify_valid_entitlement())
 
     def test_verify_valid_entitlement_for_no_cert_content(self):
@@ -705,25 +817,56 @@ class TestImportFileExtractor(unittest.TestCase):
         self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
         self.assertEquals(EXPECTED_CERT_CONTENT, write_one[1])
 
+    def test_write_cert_only_v3(self):
+        expected_cert_file = "%d.pem" % (EXPECTED_CERT_V3.serial)
+        extractor = ExtractorStub(EXPECTED_CERT_CONTENT_V3, file_path=expected_cert_file)
+        extractor.write_to_disk()
+
+        self.assertEquals(1, len(extractor.writes))
+
+        write_one = extractor.writes[0]
+        self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
+        self.assertEquals(EXPECTED_CERT_CONTENT_V3, write_one[1])
+
     def test_write_key_and_cert(self):
         filename = "%d.pem" % (EXPECTED_CERT.serial)
         self._assert_correct_cert_and_key_files_generated_with_filename(filename)
+
+    def test_write_key_and_cert_v3(self):
+        filename = "%d.pem" % (EXPECTED_CERT_V3.serial)
+        self._assert_correct_cert_and_key_files_generated_with_filename_v3(filename)
 
     def test_file_renamed_when_imported_with_serial_no_and_custom_extension(self):
         filename = "%d.cert" % (EXPECTED_CERT.serial)
         self._assert_correct_cert_and_key_files_generated_with_filename(filename)
 
+    def test_file_renamed_when_imported_with_serial_no_and_custom_extension_v3(self):
+        filename = "%d.cert" % (EXPECTED_CERT_V3.serial)
+        self._assert_correct_cert_and_key_files_generated_with_filename_v3(filename)
+
     def test_file_renamed_when_imported_with_serial_no_and_no_extension(self):
         filename = str(EXPECTED_CERT.serial)
         self._assert_correct_cert_and_key_files_generated_with_filename(filename)
+
+    def test_file_renamed_when_imported_with_serial_no_and_no_extension_v3(self):
+        filename = str(EXPECTED_CERT_V3.serial)
+        self._assert_correct_cert_and_key_files_generated_with_filename_v3(filename)
 
     def test_file_renamed_when_imported_with_custom_name_and_pem_extension(self):
         filename = "entitlement.pem"
         self._assert_correct_cert_and_key_files_generated_with_filename(filename)
 
+    def test_file_renamed_when_imported_with_custom_name_and_pem_extension_v3(self):
+        filename = "entitlement.pem"
+        self._assert_correct_cert_and_key_files_generated_with_filename_v3(filename)
+
     def test_file_renamed_when_imported_with_custom_name_no_extension(self):
         filename = "entitlement"
         self._assert_correct_cert_and_key_files_generated_with_filename(filename)
+
+    def test_file_renamed_when_imported_with_custom_name_no_extension_v3(self):
+        filename = "entitlement"
+        self._assert_correct_cert_and_key_files_generated_with_filename_v3(filename)
 
     def _assert_correct_cert_and_key_files_generated_with_filename(self, filename):
         expected_file_prefix = "%d" % (EXPECTED_CERT.serial)
@@ -742,6 +885,24 @@ class TestImportFileExtractor(unittest.TestCase):
         write_two = extractor.writes[1]
         self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_key_file), write_two[0])
         self.assertEquals(EXPECTED_KEY_CONTENT, write_two[1])
+
+    def _assert_correct_cert_and_key_files_generated_with_filename_v3(self, filename):
+        expected_file_prefix = "%d" % (EXPECTED_CERT_V3.serial)
+        expected_cert_file = expected_file_prefix + ".pem"
+        expected_key_file = expected_file_prefix + "-key.pem"
+
+        extractor = ExtractorStub(EXPECTED_CONTENT_V3, file_path=filename)
+        extractor.write_to_disk()
+
+        self.assertEquals(2, len(extractor.writes))
+
+        write_one = extractor.writes[0]
+        self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
+        self.assertEquals(EXPECTED_CERT_CONTENT_V3, write_one[1])
+
+        write_two = extractor.writes[1]
+        self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_key_file), write_two[0])
+        self.assertEquals(EXPECTED_KEY_CONTENT_V3, write_two[1])
 
 
 class TestMergedPoolsStackingGroupSorter(unittest.TestCase):

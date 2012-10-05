@@ -18,7 +18,6 @@ import logging
 import gobject
 
 import gettext
-from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.gui.widgets import MachineTypeColumn, MultiEntitlementColumn, \
                                              QuantitySelectionColumn
 from subscription_manager.jsonwrapper import PoolWrapper
@@ -186,7 +185,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.store.clear()
 
         quantity_defaults_calculator = QuantityDefaultValueCalculator(
-                self.facts, EntitlementDirectory().list())
+                self.facts, self.backend.entitlement_dir.list())
 
         # It may seem backwards that incompatible = self.filters.show_compatible
         # etc., but think of it like "if show_compatible is true, then

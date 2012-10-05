@@ -57,7 +57,7 @@ static GOptionEntry entries[] = {
 	 N_("Interval to run healing (in minutes)"),
 	 "MINUTES"},
 	{"now", 'n', 0, G_OPTION_ARG_NONE, &run_now,
-	 N_("Run the initial checks immediatly, with no delay."),
+	 N_("Run the initial checks immediatley, with no delay."),
 	 NULL},
 	{"debug", 'd', 0, G_OPTION_ARG_NONE, &show_debug,
 	 N_("Show debug messages"), NULL},

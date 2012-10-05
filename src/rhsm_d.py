@@ -184,10 +184,17 @@ def main():
     parser.add_option("-f", "--force-signal", dest="force_signal",
             help="Force firing of a signal " +
             "(valid, expired, warning, partial, classic or registration_required)")
+    parser.add_option("-i", "--immediate", dest="immediate",
+            action="store_true", default=False,
+            help="Fire forced signal immediately (requires --force-signal)")
 
     options, args = parser.parse_args()
 
     force_signal = parse_force_signal(options.force_signal)
+
+    if options.immediate and force_signal is None:
+        sys.stderr.write("--immediate must be used with --force-signal\n")
+        sys.exit(-2)
 
     global enable_debug
     enable_debug = options.debug
@@ -229,7 +236,10 @@ def main():
 
     system_bus = dbus.SystemBus()
     loop = gobject.MainLoop()
-    StatusChecker(system_bus, options.keep_alive, force_signal, loop)
+    checker = StatusChecker(system_bus, options.keep_alive, force_signal, loop)
+
+    if options.immediate:
+        checker.entitlement_status_changed(force_signal)
 
     loop.run()
 
