@@ -34,7 +34,7 @@ class RedeemDialog(widgets.GladeWidget):
         super(RedeemDialog, self).__init__('redeem.glade')
 
         self.glade.signal_autoconnect({
-            "on_reeem_dialog_delete_event": self._hide_callback,
+            "on_redeem_dialog_delete_event": self._hide_callback,
             "on_close_button_clicked": self._hide_callback,
             "on_redeem_button_clicked": self._redeem,
         })
@@ -66,8 +66,8 @@ class RedeemDialog(widgets.GladeWidget):
     def set_parent_window(self, window):
         self.redeem_dialog.set_transient_for(window)
 
-    # GTK callback function for hiding this dialog.
     def _hide_callback(self, button, event=None):
+        """ Callback for cancel button and window closed. """
         self.hide()
 
         # Stop the gtk signal from propogating
