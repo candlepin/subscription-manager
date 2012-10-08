@@ -124,7 +124,7 @@ desktop-file-validate \
         %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
 
 desktop-file-validate \
-        %{buildroot}/usr/share/applications/subscription-manager.desktop
+        %{buildroot}/usr/share/applications/subscription-manager-gui.desktop
 %find_lang rhsm
 
 # fix timestamps on our byte compiled files so them match across arches
@@ -249,7 +249,7 @@ rm -rf %{buildroot}
 %dir %{_datadir}/rhsm/subscription_manager/gui/data/icons
 %{_datadir}/rhsm/subscription_manager/gui/*
 %{_datadir}/rhsm/subscription_manager/gui/data/icons/*.svg
-%{_datadir}/applications/subscription-manager.desktop
+%{_datadir}/applications/subscription-manager-gui.desktop
 %{_datadir}/icons/hicolor/16x16/apps/*.png
 %{_datadir}/icons/hicolor/22x22/apps/*.png
 %{_datadir}/icons/hicolor/24x24/apps/*.png
