@@ -290,7 +290,8 @@ class Hardware:
                 for addr in info.get_ipv6_addresses():
                     for mkey in ipv6_metakeys:
                         #Omit mac addresses for sit types. See BZ838123
-                        if not (info.device.startswith(("sit", "lo")) and mkey == 'mac_address'):
+                        if not ((info.device.startswith("sit") or info.device == "lo") and \
+                                mkey == 'mac_address'):
                             # ethtool returns a different scope for "public" IPv6 addresses
                             # on different versions of RHEL.  EL5 is "global", while EL6 is
                             # "universe".  Make them consistent.
@@ -311,7 +312,9 @@ class Hardware:
                 # of 25 Jan 2012 work on a patch was in progress.  See BZ 759150.
                 for mkey in metakeys:
                     # Omit Loopback mac address
-                    if not (info.device == 'lo' and mkey == 'mac_address'):
+
+                    if not ((info.device.startswith("sit") or info.device == 'lo') and \
+                            mkey == 'mac_address'):
                         key = '.'.join(['net.interface', info.device, mkey])
                         attr = getattr(info, mkey)
                         if attr:
