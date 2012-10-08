@@ -881,10 +881,13 @@ class RegisterCommand(UserPassCommand):
             print(_("Error: consumer name can not be empty."))
             sys.exit(-1)
         elif (self.options.username and self.options.activation_keys):
-            print(_("Error: Activation keys do not require user credentials"))
+            print(_("Error: Activation keys do not require user credentials."))
             sys.exit(-1)
         elif (self.options.consumerid and self.options.activation_keys):
             print(_("Error: Activation keys can not be used with previously registered ids."))
+            sys.exit(-1)
+        elif (self.options.environment and self.options.activation_keys):
+            print(_("Error: Activation keys do not allow environments to be specified."))
             sys.exit(-1)
         #746259: Don't allow the user to pass in an empty string as an activation key
         elif (self.options.activation_keys and '' in self.options.activation_keys):
