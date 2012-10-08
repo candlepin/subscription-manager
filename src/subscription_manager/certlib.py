@@ -214,6 +214,7 @@ class UpdateAction(Action):
     def __init__(self, uep=None, entdir=None):
         Action.__init__(self, uep=uep, entdir=entdir)
         raise GoneException('sdf', '410', 'foo')
+
     def perform(self):
         report = UpdateReport()
         local = self.getLocal(report)
