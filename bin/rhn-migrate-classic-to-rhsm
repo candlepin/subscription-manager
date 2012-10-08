@@ -248,6 +248,23 @@ def getOrg(cp, username):
     return org
 
 
+def getEnvironment(cp, owner_key):
+    environment_list = []
+    try:
+        if cp.supports_resource('environments'):
+            environment_list = cp.getEnvironmentList(owner_key)
+    except Exception, e:
+        log.error(e)
+        log.error(traceback.format_exc())
+        systemExit(1, CONNECTION_FAILURE % e)
+
+    environment = None
+    if len(environment_list) > 1:
+        environment = raw_input(_("Environment") + ": ").strip()
+
+    return environment
+
+
 def checkIsOrgAdmin(sc, sk, username):
     try:
         roles = sc.user.listRoles(sk, username)
@@ -427,7 +444,7 @@ def transferHttpProxySettings():
         rhsmcfg.save()
 
 
-def register(credentials, serverurl, org):
+def register(credentials, serverurl, org, environment):
     # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
     print _("\nAttempting to register system to Red Hat Subscription Management ...")
     cmd = ['subscription-manager', 'register', '--username=' + credentials.username, '--password=' + credentials.password]
@@ -438,6 +455,8 @@ def register(credentials, serverurl, org):
 
     if org:
         cmd.append('--org=' + org)
+    if environment:
+        cmd.append('--environment=' + environment)
 
     result = subprocess.call(cmd)
 
@@ -653,6 +672,7 @@ def main():
     cp = checkOkToProceed(secreds, serverurl)
 
     org = getOrg(cp, secreds.username)
+    environment = getEnvironment(cp, org)
 
     (sc, sk) = connectToRhn(rhncreds)
     checkIsOrgAdmin(sc, sk, rhncreds.username)
@@ -675,7 +695,7 @@ def main():
     unRegisterSystemFromRhnClassic(sc, sk)
 
     # register the system to Certificate-based RHN and consume a subscription
-    consumer = register(secreds, serverurl, org)
+    consumer = register(secreds, serverurl, org, environment)
     if not options.noauto:
         if options.servicelevel:
             servicelevel = selectServiceLevel(cp, consumer, options.servicelevel)
